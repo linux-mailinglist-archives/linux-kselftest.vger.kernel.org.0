@@ -1,52 +1,52 @@
-Return-Path: <linux-kselftest+bounces-36888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C84AFF393
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 23:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AA4E1AFF395
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 23:04:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4603F566CB8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:03:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 898E1567996
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:03:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B495F2550CF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF54E2586CE;
 	Wed,  9 Jul 2025 21:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e49MpGRT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNqZPwwF"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0F72494D8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957E62528E1;
 	Wed,  9 Jul 2025 21:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752094971; cv=none; b=s0Ad7xX5aprtXY2izclvKiVoVkU9B3erChdIios6rRpaFRhMT+0ysaf6DZa6fw8pFFiRmV0qmPBGdCEumuk8sV9SXV2VP151p4DhKxoTLRL3wOlcfmLysmJNU5XRFMQQzYhm9pAqfQoAMryGqDdooo199lAfGhDEvF5gTnJhWdg=
+	t=1752094971; cv=none; b=mu3FO+UgB1e1eXhUG4gipBcYPOjsMkTg2mf7ygNLpluabSyU8JZZEdnX4Axrb1Oxpgy6ZGJJKKBaL7NpPCwuadyepVuv84VPIZuw8P/fqluAYfgqGGk66myy7+grKnMzLksHudgDnOySPBt1Dqvl6+yJUogZqxGZVbTy3qqtyBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752094971; c=relaxed/simple;
-	bh=qzQN1/FxrgD81U6ooAWpH7PxpXbtzfixiuy2FxBNv1o=;
+	bh=ZhOpD4uE06bSl49Vy//uqz1o4AjQqGjxPfMTgkddWP8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Wrc9WDRrJska3IA7Vwdw4rkKx1oH8cnQBRbmo3cTs0CtcpXbNsolNraVukkOybobNdRlGANVe4+of+KiqkestopDZnWbJT8d7XM8XrLGWEtFN0vj9rfsd51dJfe0uelEtaXe2z4Vzajq1c3bh2iRKNE53zxvwRXkDshaOmt7e9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e49MpGRT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0043C4CEF5;
+	 In-Reply-To:To:Cc; b=aYUyvqRCIA1Dn00QTMI5hgmNQufYe1/oFtVM/oVsDftpDTUQeOVtm604ihsBYxbwEr+IUDC4DqddgTObPZLCBD+iUo3j8yD68cppCKo6vfIBwGKXRMEf6DAVnw6yMSDg7/cn8lVli0VM5/KZQXxafmuFUxY4eqT8gJ4Jr24kooU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KNqZPwwF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C0186C4CEF4;
 	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752094970;
-	bh=qzQN1/FxrgD81U6ooAWpH7PxpXbtzfixiuy2FxBNv1o=;
+	bh=ZhOpD4uE06bSl49Vy//uqz1o4AjQqGjxPfMTgkddWP8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=e49MpGRTpBHoONoqo70e2/OTRYgwz8gxykhWS2f9YroKwaWYG9wrvgmhPDLe1UyWc
-	 9JhSNU/ufvp3dgiNKxN3b86UDTPIJUnozo7rEqq7455DKYEqdcP9gz32jbL+hXpXq0
-	 +KEwuCeGL/YW9C2NS9Tz75oEWDjWGGHFy1X7Mv4fGsWfrXALqraY8cGIHo47MvqW4S
-	 R9LcNATYlfqz/ikb+X1iBjfR+m7SDGy4e9lp9HCFiraRdDByEK3aRlixsBz14OcFYf
-	 Ue/tJM5dQlD2vaMH16sGrdxXQF3Xa76qbHejHtnl+/My0xS7/bUCrqRsu0s9wloyNL
-	 qsjK983IOuwRA==
+	b=KNqZPwwFz684W2wPS+PjJuhnS/W4TE8vkqqAyGZaynUqWToZcKV34tpW4Xz0jjVsp
+	 hH8DFlp1lRI4eV+FnVimzRCX5+s8yG3hN8Axn09k5KZNKhHEhBT8f5XLUz04N+WK8p
+	 ETP7/9ZINBCj7g1SHtiXX1drGFkTG0ZsAt90QpDeNwhr3MKDRPjQhAfOdeE4m0ocrt
+	 jP1szQX6q0yAwGS6MwYQ+t0YqpiXUSq8mGbLdsynO7JM+dWf94zShdgELnDLtd3AGX
+	 /f/RhI+YeS0D92mcC2I8N6JnVhcuXkYGstd+QCd5LuKfyK0lPRsw27alRhQkSrF9st
+	 e0heJEPtWCIhQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E6FFC83F14;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B11EEC83F18;
 	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
 From: Frank Li via B4 Relay <devnull+Frank.Li.nxp.com@kernel.org>
-Date: Wed, 09 Jul 2025 17:02:19 -0400
-Subject: [PATCH v20 7/9] misc: pci_endpoint_test: Add doorbell test case
+Date: Wed, 09 Jul 2025 17:02:20 -0400
+Subject: [PATCH v20 8/9] selftests: pci_endpoint: Add doorbell test case
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250709-ep-msi-v20-7-43d56f9bd54a@nxp.com>
+Message-Id: <20250709-ep-msi-v20-8-43d56f9bd54a@nxp.com>
 References: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 In-Reply-To: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 To: Kishon Vijay Abraham I <kishon@kernel.org>, 
@@ -81,11 +81,11 @@ Cc: Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us,
  imx@lists.linux.dev, devicetree@vger.kernel.org, 
  Niklas Cassel <cassel@kernel.org>, Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752094968; l=6983;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752094968; l=2413;
  i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=FoxgpA+/NWTzqQeIBBDO30/i05zAkjJdsIvFlu/mx1M=;
- b=Z1H0nfwTl3vAADoVOCUoURRFxKfRD02CD8+M/+vk7Mn0jsbPc1uWkJcrzxngnroefGUR8Mjfc
- m9MrEmTcvxNCNEUkliGUEuldIR+8uRbi3H3fJped5cgLodydp21dCkw
+ bh=DF/gzaI0MKU27j4SEtbbhXRg9y3PEJqjIqoano8U714=;
+ b=a6gnp8u8O795/R0p6ZjiJhEZA5Qk09eT8q9NFI2+fCPfzc1F/KrDN6Ov4sdeNa2sfEKPQH5Wz
+ sUKXPYdiqrcCtzdhAnea1XzTNhJ6/G+CWFkrildTnmpbPr/23Dp9+MG
 X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
  pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
 X-Endpoint-Received: by B4 Relay for Frank.Li@nxp.com/20240130 with
@@ -95,224 +95,82 @@ Reply-To: Frank.Li@nxp.com
 
 From: Frank Li <Frank.Li@nxp.com>
 
-Add three registers: PCIE_ENDPOINT_TEST_DB_BAR, PCIE_ENDPOINT_TEST_DB_ADDR,
-and PCIE_ENDPOINT_TEST_DB_DATA.
-
-Trigger the doorbell by writing data from PCI_ENDPOINT_TEST_DB_DATA to the
-address provided by PCI_ENDPOINT_TEST_DB_OFFSET and wait for endpoint
-feedback.
-
-Add two command to COMMAND_ENABLE_DOORBELL and COMMAND_DISABLE_DOORBELL
-to enable EP side's doorbell support and avoid compatible problem, which
-host side driver miss-match with endpoint side function driver. See below
-table:
-
-		Host side new driver	Host side old driver
-EP: new driver		S			F
-EP: old driver		F			F
-
-S: If EP side support MSI, 'pci_endpoint_test -f pcie_ep_doorbell' return
-success.
-   If EP side doesn't support MSI, the same to 'F'.
-
-F: 'pci_endpoint_test -f pcie_ep_doorbell' return failure, other case as
-usual.
+Add doorbell test case.
 
 Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
-changes in v20
-- add return value check of wait_for_completion_timeout()
-- fix some error message
-- remove Tested-by: Niklas Cassel <cassel@kernel.org>
+change in v20
+- update document
 
 change from v14 to v16
-- none
+- Add set IRQ type
 
-Change from v13 to v14
-- update to use pci_endpoint_test -f pcie_ep_doorbell
-- change ioctrl id to fix conflict
-
-Change from v9 to v13
-- none
-
-Change from v8 to v9
-- change PCITEST_DOORBELL to 0xa
-
-Change form v6 to v8
-- none
-
-Change from v5 to v6
-- %s/PCI_ENDPOINT_TEST_DB_ADDR/PCI_ENDPOINT_TEST_DB_OFFSET/g
-
-Change from v4 to v5
-- remove unused varible
-- add irq_type at pci_endpoint_test_doorbell();
-
-change from v3 to v4
-- Add COMMAND_ENABLE_DOORBELL and COMMAND_DISABLE_DOORBELL.
-- Remove new DID requirement.
+change from v13 to v14
+- merge to selftests framework
 ---
- drivers/misc/pci_endpoint_test.c | 85 +++++++++++++++++++++++++++++++++++++++-
- include/uapi/linux/pcitest.h     |  1 +
- 2 files changed, 85 insertions(+), 1 deletion(-)
+ Documentation/PCI/endpoint/pci-test-howto.rst      | 14 +++++++++++
+ .../selftests/pci_endpoint/pci_endpoint_test.c     | 28 ++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index c4e5e2c977be27adf1451b67ee10cc3ae6fb0cef..254b7f9cbe87b97b4d5d555ffbccc9055fc52330 100644
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -37,6 +37,8 @@
- #define COMMAND_READ				BIT(3)
- #define COMMAND_WRITE				BIT(4)
- #define COMMAND_COPY				BIT(5)
-+#define COMMAND_ENABLE_DOORBELL			BIT(6)
-+#define COMMAND_DISABLE_DOORBELL		BIT(7)
+diff --git a/Documentation/PCI/endpoint/pci-test-howto.rst b/Documentation/PCI/endpoint/pci-test-howto.rst
+index aafc17ef3fd31f6ada38c82c8df133b87f7a1ae1..0cee35dcb29cc938823de53ef6e1a1cd81d49d52 100644
+--- a/Documentation/PCI/endpoint/pci-test-howto.rst
++++ b/Documentation/PCI/endpoint/pci-test-howto.rst
+@@ -203,3 +203,17 @@ controllers, it is advisable to skip this testcase using this
+ command::
  
- #define PCI_ENDPOINT_TEST_STATUS		0x8
- #define STATUS_READ_SUCCESS			BIT(0)
-@@ -48,6 +50,11 @@
- #define STATUS_IRQ_RAISED			BIT(6)
- #define STATUS_SRC_ADDR_INVALID			BIT(7)
- #define STATUS_DST_ADDR_INVALID			BIT(8)
-+#define STATUS_DOORBELL_SUCCESS			BIT(9)
-+#define STATUS_DOORBELL_ENABLE_SUCCESS		BIT(10)
-+#define STATUS_DOORBELL_ENABLE_FAIL		BIT(11)
-+#define STATUS_DOORBELL_DISABLE_SUCCESS		BIT(12)
-+#define STATUS_DOORBELL_DISABLE_FAIL		BIT(13)
- 
- #define PCI_ENDPOINT_TEST_LOWER_SRC_ADDR	0x0c
- #define PCI_ENDPOINT_TEST_UPPER_SRC_ADDR	0x10
-@@ -62,6 +69,7 @@
- #define PCI_ENDPOINT_TEST_IRQ_NUMBER		0x28
- 
- #define PCI_ENDPOINT_TEST_FLAGS			0x2c
+ 	# pci_endpoint_test -f pci_ep_bar -f pci_ep_basic -v memcpy -T COPY_TEST -v dma
 +
- #define FLAG_USE_DMA				BIT(0)
- 
- #define PCI_ENDPOINT_TEST_CAPS			0x30
-@@ -70,6 +78,10 @@
- #define CAP_MSIX				BIT(2)
- #define CAP_INTX				BIT(3)
- 
-+#define PCI_ENDPOINT_TEST_DB_BAR		0x34
-+#define PCI_ENDPOINT_TEST_DB_OFFSET		0x38
-+#define PCI_ENDPOINT_TEST_DB_DATA		0x3c
++Kselftest EP Doorbell
++~~~~~~~~~~~~~~~~~~~~~
 +
- #define PCI_DEVICE_ID_TI_AM654			0xb00c
- #define PCI_DEVICE_ID_TI_J7200			0xb00f
- #define PCI_DEVICE_ID_TI_AM64			0xb010
-@@ -100,6 +112,7 @@ enum pci_barno {
- 	BAR_3,
- 	BAR_4,
- 	BAR_5,
-+	NO_BAR = -1,
- };
- 
- struct pci_endpoint_test {
-@@ -505,7 +518,7 @@ static int pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 
- 	if (irq_type < PCITEST_IRQ_TYPE_INTX ||
- 	    irq_type > PCITEST_IRQ_TYPE_MSIX) {
--		dev_err(dev, "Invalid IRQ type option\n");
-+		dev_err(dev, "Invalid IRQ type\n");
- 		return -EINVAL;
++If EP side have MSI controller, run below command to test doorbell function.
++
++	# pci_endpoint_test -f pcie_ep_doorbell
++
++	# Starting 1 tests from 1 test cases.
++	#  RUN           pcie_ep_doorbell.DOORBELL_TEST ...
++	#            OK  pcie_ep_doorbell.DOORBELL_TEST
++	ok 1 pcie_ep_doorbell.DOORBELL_TEST
++	# PASSED: 1 / 1 tests passed.
++	# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+index ac26481d29d9dce5d07de563048850c55c58c22d..da0db0e7c9693f11b4975ca0e6830174229983ba 100644
+--- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
++++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+@@ -229,4 +229,32 @@ TEST_F(pci_ep_data_transfer, COPY_TEST)
+ 					 test_size[i]);
  	}
- 
-@@ -841,6 +854,73 @@ static int pci_endpoint_test_set_irq(struct pci_endpoint_test *test,
- 	return 0;
  }
- 
-+static int pci_endpoint_test_doorbell(struct pci_endpoint_test *test)
++
++FIXTURE(pcie_ep_doorbell)
 +{
-+	struct pci_dev *pdev = test->pdev;
-+	struct device *dev = &pdev->dev;
-+	int irq_type = test->irq_type;
-+	enum pci_barno bar;
-+	u32 data, status;
-+	u32 addr;
-+	int left;
++	int fd;
++};
 +
-+	if (irq_type < PCITEST_IRQ_TYPE_INTX ||
-+	    irq_type > PCITEST_IRQ_TYPE_MSIX) {
-+		dev_err(dev, "Invalid IRQ type option\n");
-+		return -EINVAL;
-+	}
++FIXTURE_SETUP(pcie_ep_doorbell)
++{
++	self->fd = open(test_device, O_RDWR);
 +
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
-+				 COMMAND_ENABLE_DOORBELL);
++	ASSERT_NE(-1, self->fd) TH_LOG("Can't open PCI Endpoint Test device");
++};
 +
-+	left = wait_for_completion_timeout(&test->irq_raised, msecs_to_jiffies(1000));
++FIXTURE_TEARDOWN(pcie_ep_doorbell)
++{
++	close(self->fd);
++};
 +
-+	status = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
-+	if (!left || (status & STATUS_DOORBELL_ENABLE_FAIL)) {
-+		dev_err(dev, "Failed to enable doorbell\n");
-+		return -EINVAL;
-+	}
++TEST_F(pcie_ep_doorbell, DOORBELL_TEST)
++{
++	int ret;
 +
-+	data = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_DB_DATA);
-+	addr = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_DB_OFFSET);
-+	bar = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_DB_BAR);
++	pci_ep_ioctl(PCITEST_SET_IRQTYPE, PCITEST_IRQ_TYPE_AUTO);
++	ASSERT_EQ(0, ret) TH_LOG("Can't set AUTO IRQ type");
 +
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
-+
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_STATUS, 0);
-+
-+	bar = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_DB_BAR);
-+
-+	writel(data, test->bar[bar] + addr);
-+
-+	left = wait_for_completion_timeout(&test->irq_raised, msecs_to_jiffies(1000));
-+
-+	status = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
-+
-+	if (!left || !(status & STATUS_DOORBELL_SUCCESS))
-+		dev_err(dev, "Failed to trigger doorbell in endpoint\n");
-+
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
-+				 COMMAND_DISABLE_DOORBELL);
-+
-+	wait_for_completion_timeout(&test->irq_raised, msecs_to_jiffies(1000));
-+
-+	status |= pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
-+
-+	if (status & STATUS_DOORBELL_DISABLE_FAIL) {
-+		dev_err(dev, "Failed to disable doorbell\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!(status & STATUS_DOORBELL_SUCCESS))
-+		return -EINVAL;
-+
-+	return 0;
++	pci_ep_ioctl(PCITEST_DOORBELL, 0);
++	EXPECT_FALSE(ret) TH_LOG("Test failed for Doorbell\n");
 +}
-+
- static long pci_endpoint_test_ioctl(struct file *file, unsigned int cmd,
- 				    unsigned long arg)
- {
-@@ -891,6 +971,9 @@ static long pci_endpoint_test_ioctl(struct file *file, unsigned int cmd,
- 	case PCITEST_CLEAR_IRQ:
- 		ret = pci_endpoint_test_clear_irq(test);
- 		break;
-+	case PCITEST_DOORBELL:
-+		ret = pci_endpoint_test_doorbell(test);
-+		break;
- 	}
- 
- ret:
-diff --git a/include/uapi/linux/pcitest.h b/include/uapi/linux/pcitest.h
-index d3aa8715a525ea47485db734a42d13d333399112..d6023a45a9d03416e220c98643c4e86d144898ae 100644
---- a/include/uapi/linux/pcitest.h
-+++ b/include/uapi/linux/pcitest.h
-@@ -21,6 +21,7 @@
- #define PCITEST_SET_IRQTYPE	_IOW('P', 0x8, int)
- #define PCITEST_GET_IRQTYPE	_IO('P', 0x9)
- #define PCITEST_BARS		_IO('P', 0xa)
-+#define PCITEST_DOORBELL	_IO('P', 0xb)
- #define PCITEST_CLEAR_IRQ	_IO('P', 0x10)
- 
- #define PCITEST_IRQ_TYPE_UNDEFINED	-1
+ TEST_HARNESS_MAIN
 
 -- 
 2.34.1
