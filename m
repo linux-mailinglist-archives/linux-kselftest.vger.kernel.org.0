@@ -1,52 +1,53 @@
-Return-Path: <linux-kselftest+bounces-36796-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A32EAFE2C9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 10:37:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8BFCAFE2CC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 10:37:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86CFC3BB3F7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 08:37:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 031163BB292
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 08:37:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE7427AC44;
-	Wed,  9 Jul 2025 08:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A63FC27D77B;
+	Wed,  9 Jul 2025 08:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Jl1vqhvL"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TjKCJY6l"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBE227C866;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6987627AC34;
 	Wed,  9 Jul 2025 08:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752050242; cv=none; b=ZU0WTOrZulmkfvH+E8H7xQLdcJvISHgDwYw4Ke+uqsuRvnaBsZUHFOIqkUhZ5qZqbIdD8Wt2TqUjN9vdK6EBSMdCdHiUqILQqmtCc0NrHwZVIYudDCGWD8maS2f8dBdL1SdnzEtsEa+ZHNIL17qofoT9Tw22fsT0QoUC6kVHbwk=
+	t=1752050243; cv=none; b=VJY2EMPyfIGhc+EaSrn6T7t/nysUda4YwfzdqhPxeFvXyWWJTvUOu2Ouvp+bxuuVhFzN7C4NGSxEJkF0MduWxcjObZismlG8Qdx0D/InHNgNIbDJx7FtFHo/VCBxlvtQ4fFiD3dFnXWC7erzR33XsBN6RJDrszj962kUqs52srU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752050242; c=relaxed/simple;
-	bh=1YP4NdysJPYE5sk5PuPzp1kp7AYvrvG4PkrBB8p3CJU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IVsDB3cdQ4L9DFEMZCaQuC+WPGH6BUgncnqyPeWSqlxeLyzqOa4cfjfgpxWXPHMJbvAPvaXQwSZggWc/Z+IcZKY4T/gvVG+DbWLFz5YSqO+Xf0FjOHveoGdS62Aak37oxkuiYeY9bowQ74ykjxr83n77mQ6QEvz55rKbR79dk9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Jl1vqhvL; arc=none smtp.client-ip=217.70.183.198
+	s=arc-20240116; t=1752050243; c=relaxed/simple;
+	bh=L93bLiNKztx8aB9zhYzQ6xi3GcIgscSsGxcIfpM/DHY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=kg75mDqe2RsCcinNMuuNWr8uKi9bGY6s5Si+jEAcMoRUgbfE9Wsc0A6OYb2UcT7MbVgGOC9m8687kTZ2HolrD6FvNeY7XhgNSrLOKEl2KfqBBuauvdbXdH+x1mSXGfksC+3jULGaUfHpfk8BNW182b3kF+xLEFvJagLsyGP7qyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TjKCJY6l; arc=none smtp.client-ip=217.70.183.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 70C6941C7D;
-	Wed,  9 Jul 2025 08:37:10 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CD30742DFF;
+	Wed,  9 Jul 2025 08:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1752050232;
+	t=1752050234;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KMvv0TAm7AUFg0zF7mpWH4qMZsMiovoNEigxpXVTyQg=;
-	b=Jl1vqhvLD0hPkq6x3gZ3bA6IXyiBYcTaqty0Maa0/2gNGcSeQricKhdJMyM+7oMGyjVhvH
-	HhMq9n74n0oGW2OowAf3eY6ebe+j85d/o6Uv+gPbnPmsSINpqyx2P/nOdKy33Qklgdp+Df
-	PuwYbpGucry6Xs9NrYE0poFCRBWwtHGJERHAYypmC4/l9mXaVLxF5bLMa7hyXS8noucqln
-	r+9E3tjK1Pd/MsF88Ox3RGxJ6ZgkDl1nj+CRjCRJWX2LPWu0LNSwayEOh/09r414/3kzjy
-	gmuGs7+vAEZf5tHP4NqJkpzB2dpnBcmuEO0ZVUZZrHiA+vpGXydhxgKyssL2YA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=R5P8A90l1y12Vp7M4Bmnp36AiCOYYzQNBrh1FfXK/1E=;
+	b=TjKCJY6lX5CKK8PpiMwCcNpCXR104xGzI3YtVayIzqFmu8k1i1CGUT1i0pPwC70wJxiPd6
+	GS5bB6tiuQ51t9UqdRKNj6TU7zsKX2Tqa7GbZUVwwoHEisl9ArShi6tL7CItPfP/Qj8eI/
+	5sUUYTIQm9HH9slEBcli6xMlMk2zlgDH9LcQDk3h2iCoC5wtYPbDyNPePw5QSsfAoD0I5P
+	TDajvD8bDH9wNXdph4XsQ8ZnpZ2Is9i6hQLHyrViq/xLwefmR3rc8Oi7y6TVtCt5MsLTCT
+	eNyjQ6rqkbLU6sdyKr6GOFEMlQ8LCquJKpOsYmfb9YOmMlmtiwpW6Tphzc7Tmw==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH 0/2] bpf, arm64: relax constraint in BPF JIT compiler
-Date: Wed, 09 Jul 2025 10:36:54 +0200
-Message-Id: <20250709-arm64_relax_jit_comp-v1-0-3850fe189092@bootlin.com>
+Date: Wed, 09 Jul 2025 10:36:55 +0200
+Subject: [PATCH 1/2] bpf, arm64: remove structs on stack constraint
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,10 +56,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIACYqbmgC/x3MSQqAMAxA0atI1hZqcYheRaQUGzXiRCoiiHe3u
- HyL/x8IJEwBmuQBoYsD71tElibQT24bSbGPBqNNoSuNysla5lZocbed+bT9vh6KELEu88qjNxD
- TQ2jg+9+23ft+ARVwTmYAAAA=
-X-Change-ID: 20250708-arm64_relax_jit_comp-e8889647d8d2
+Message-Id: <20250709-arm64_relax_jit_comp-v1-1-3850fe189092@bootlin.com>
+References: <20250709-arm64_relax_jit_comp-v1-0-3850fe189092@bootlin.com>
+In-Reply-To: <20250709-arm64_relax_jit_comp-v1-0-3850fe189092@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -80,48 +80,60 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefjedtlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtkeertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrroculdgvuefrhfcuhfhouhhnuggrthhiohhnmdcuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheeuuefggeeiuedutdeghffhtefguefffeelledttdfgjeejueeggeeugfdugfevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvkeemhegvsgeimeduvddtudemrghfugeimeeffhgssgemrggutdekmeekfhelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmeehvggsieemuddvtddumegrfhguieemfehfsggsmegrugdtkeemkehfleeipdhhvghloheplgduledvrdduieekrddurdegjegnpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvjedprhgtphhtthhopehkphhsihhnghhhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhog
- hgvrghrsghogidrnhgvthdprhgtphhtthhopehihhhorhdrshholhhoughrrghisehlihhnuhigrdguvghvpdhrtghpthhtohepvggsphhfsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehpuhhrrghnjhgrhieskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrgh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefjedtlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrroculdgvuefrhfcuhfhouhhnuggrthhiohhnmdcuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteejvdeftdduueeihfeuhfevgfevhedttdeuveeuheefveffudekleekhfeljeffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvdgrtddvmeekgedvkeemhegvsgeimeduvddtudemrghfugeimeeffhgssgemrggutdekmeekfhelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmeehvggsieemuddvtddumegrfhguieemfehfsggsmegrugdtkeemkehfleeipdhhvghloheplgduledvrdduieekrddurdegjegnpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvjedprhgtphhtthhopehkphhsihhnghhhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvt
+ hdprhgtphhtthhopehihhhorhdrshholhhoughrrghisehlihhnuhigrdguvghvpdhrtghpthhtohepvggsphhfsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehpuhhrrghnjhgrhieskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrgh
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hello,
-this series follows up on the one introducing 9+ args for tracing
-programs [1]. It has been observed with this series that there are cases
-for which we can not identify accurately the location of the target
-function arguments to prepare correctly the corresponding BPF
-trampoline. This is the case for example if:
-- the function consumes a struct variable _by value_
-- it is passed on the stack (no more register available for it)
-- it has some __packed__ or __aligned(X)__ attribute
+While introducing support for 9+ arguments for tracing programs on
+ARM64, commit 9014cf56f13d ("bpf, arm64: Support up to 12 function
+arguments") has also introduced a constraint preventing BPF trampolines
+from being generated if the target function consumes a struct argument
+passed on stack, because of uncertainties around the exact struct
+location: if the struct has been marked as packed or with a custom
+alignment, this info is not reflected in BTF data, and so generated
+tracing trampolines could read the target function arguments at wrong
+offsets.
 
-As a consequence, a small restrictive check has been added to the ARM64
-side, highlighting that other arch supporting 9+ args in BPF trampolines
-are already suffering from the same issue.  After a bit of discussions
-and attempts, the chosen solution is, rather than applying the same
-constraint to all JIT compilers, to prevent such function from being
-encoded at all in BTF info([2]). As the pahole side is closed to be
-integrated, we can now remove the restrictive check from kernel side.
- 
-[1] https://lore.kernel.org/bpf/20250527-many_args_arm64-v3-0-3faf7bb8e4a2@bootlin.com/
-[2] https://lore.kernel.org/bpf/20250707-btf_skip_structs_on_stack-v3-0-29569e086c12@bootlin.com/
+This issue is not specific to ARM64: there has been an attempt (see [1])
+to bring the same constraint to other architectures JIT compilers. But
+discussions following this attempt led to the move of this constraint
+out of the kernel (see [2]): instead of preventing the kernel from
+generating trampolines for those functions consuming structs on stack,
+it is simpler to just make sure that those functions with uncertain
+struct arguments location are not encoded in BTF information, and so
+that one can not even attempt to attach a tracing program to such
+function. The task is then deferred to pahole (see [3]).
+
+Now that the constraint is handled by pahole, remove it from the arm64
+JIT compiler to keep it simple.
+
+[1] https://lore.kernel.org/bpf/20250613-deny_trampoline_structs_on_stack-v1-0-5be9211768c3@bootlin.com/
+[2] https://lore.kernel.org/bpf/CAADnVQ+sj9XhscN9PdmTzjVa7Eif21noAUH3y1K6x5bWcL-5pg@mail.gmail.com/
+[3] https://lore.kernel.org/bpf/20250707-btf_skip_structs_on_stack-v3-0-29569e086c12@bootlin.com/
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Alexis Lothoré (eBPF Foundation) (2):
-      bpf, arm64: remove structs on stack constraint
-      selftests/bpf: enable tracing_struct tests for arm64
+ arch/arm64/net/bpf_jit_comp.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
- arch/arm64/net/bpf_jit_comp.c                | 5 -----
- tools/testing/selftests/bpf/DENYLIST.aarch64 | 1 -
- 2 files changed, 6 deletions(-)
----
-base-commit: 8da1e37fc84868b50ba6a7cdf082aa3b0d11e006
-change-id: 20250708-arm64_relax_jit_comp-e8889647d8d2
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index b6c42b5c96688251ea24f5e771fa1effff896541..89b1b8c248c62e09cec61e13318d45b59006dce1 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2240,11 +2240,6 @@ static int calc_arg_aux(const struct btf_func_model *m,
+ 
+ 	/* the rest arguments are passed through stack */
+ 	for (; i < m->nr_args; i++) {
+-		/* We can not know for sure about exact alignment needs for
+-		 * struct passed on stack, so deny those
+-		 */
+-		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+-			return -ENOTSUPP;
+ 		stack_slots = (m->arg_size[i] + 7) / 8;
+ 		a->bstack_for_args += stack_slots * 8;
+ 		a->ostack_for_args = a->ostack_for_args + stack_slots * 8;
 
-Best regards,
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.50.0
 
 
