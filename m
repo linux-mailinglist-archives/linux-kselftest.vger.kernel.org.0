@@ -1,167 +1,257 @@
-Return-Path: <linux-kselftest+bounces-36968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE68FB00456
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 15:55:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FC58B00448
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 15:53:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60477481C3E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:53:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56D0C1C82B1A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:52:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A1D274B2C;
-	Thu, 10 Jul 2025 13:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51941273D7B;
+	Thu, 10 Jul 2025 13:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="jrc78443"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="M2eFFee6";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="7DmfLJuE";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ez2TuBkQ";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mQTgYkI4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C6F27467B;
-	Thu, 10 Jul 2025 13:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A48E727056B
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 13:49:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752155407; cv=none; b=enAOVa9AVf3RhH5U1UdLljgqNZLUWQOJXBdFnqRyhFWA5vhv+/7JRtXsz9v3bkZUZLEL1o42A1/H0GSwJH1+gXUQ2Blsnt7pbk98wzgYx5HF6W4bymlfz5owrLBc+UbWe0V5sVWgSYb7vHdVJFeoLie4VINt9FsKKHtcGso1pco=
+	t=1752155354; cv=none; b=N1X3TE+kqKDTXJYOI+1kZ7QlRKi3MYAz+JHfpT4t+Kc0CfKhkTs7pI3Vki7ySi23rv3gPbgUVp8kbwXWa88uPoxWnfikUIgsPzKpiiIcABC6xYDKo9CQCs1qVE5UIWtnmoY94EGcaVD8dJzvkIN490lKRpGwIgthCvkhb7Dj4NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752155407; c=relaxed/simple;
-	bh=SUWRZ9dxXGm6+zx/mzro3m8Nr7n+JkOPnhEWZD0cam4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jCYKqnEywXp0JBegHkzVDnIfb2IATOjlcLRQBAIvgEGqIX9YEw6b80cVr3/kXpIY+8gh6OTGLHQh/m+BNglZcItZZKM+twGnvgGhfQ+UnC+25IDoJEhWmSFBjPjCMr2W9MmB3qUFNOavD2lOAJZAGOQ4s+1sxgYHLF+qgKPzlAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=jrc78443; arc=none smtp.client-ip=54.204.34.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1752155352;
-	bh=eER373CBKVzjZU12vPfZqu6v9KD+kKd8SlW6nlnHSPM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=jrc78443Mz4tHwjHVtUWntmpM82FBBwwHUxk6kSDZDC9ZiMWMfC0mJ8B6cQ2IJeTa
-	 QMXAD7kyjEvgkC6/P/BQtgT+uWYvy94iH+5l0nz5TPeydTtpuHJNsXM1YLDLcLpZkB
-	 KkaUkV4JC3nQooWSsDwSN6vW/F8HdrXURS42n38U=
-X-QQ-mid: zesmtpip2t1752155310tec24b4f1
-X-QQ-Originating-IP: y3pfuQqVdTiPsuUM2wAolixPa+zMpnrZCdXw+LqGsSI=
-Received: from avenger-e500 ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 10 Jul 2025 21:48:28 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 6548783299079273511
-EX-QQ-RecipientCnt: 9
-From: WangYuli <wangyuli@uniontech.com>
-To: wangyuli@uniontech.com
-Cc: akpm@linux-foundation.org,
-	chelsyratnawat2001@gmail.com,
-	guanwentao@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	niecheng1@uniontech.cm,
-	shuah@kernel.org,
-	zhanjun@uniontech.com
-Subject: [PATCH] selftests/thermal: Remove duplicate newlines in perror calls
-Date: Thu, 10 Jul 2025 21:47:51 +0800
-Message-ID: <F482FB1EC020000C+20250710134751.306096-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <6338CD0E839B770B+20250710130412.284531-1-wangyuli@uniontech.com>
-References: <6338CD0E839B770B+20250710130412.284531-1-wangyuli@uniontech.com>
+	s=arc-20240116; t=1752155354; c=relaxed/simple;
+	bh=tR8PN/J5l9qFBmrP/SR33R7z0CEzTUo5W/W/kAVPGAg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mtqhL7YpG0fTghhs/PcKHrW59gdyJdr2DiI2gqh9uO/4Ign0gJ6A65JIGKjt2RuqApsBdgXZs0MK/IVvj/xrplZrQ69nNTk5ZQkS8mwCyaQJkrlLIRqsUQv/mCgJHEROrSrHXP6782o0GD0M4nXw1B8z60jgKRbIqG+kk44th9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=M2eFFee6; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=7DmfLJuE; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ez2TuBkQ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mQTgYkI4; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id D6D73211EA;
+	Thu, 10 Jul 2025 13:49:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752155350; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=1xNZvFrIzwNQM70BQvlAJOjHYghGvU+dClg4vcHUBic=;
+	b=M2eFFee6np8LoV25m+nrItnopF+n85mcC/0wt7fOi91lualJL6L29W8Pk+bS22lhvoZ/zJ
+	2L/XBf5MhIyCSb0NgDSjoyTpMr6LXRg206hb73px3ByzRCC4GHFVL5nd1Wh9MAhQiWHHkC
+	FnkkfVvv6DtxXr252I2G0EDF/dzGLS0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752155350;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=1xNZvFrIzwNQM70BQvlAJOjHYghGvU+dClg4vcHUBic=;
+	b=7DmfLJuEynaECHVZnb3uL5p6uer81Hdm13VnUq8RJDdiDoud6L5VWUkH0kPJUCBinlklGZ
+	A0Ew4b5ROw4ym6Cg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752155349; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=1xNZvFrIzwNQM70BQvlAJOjHYghGvU+dClg4vcHUBic=;
+	b=ez2TuBkQHKXNLPqCDkyVJjjuZcACTm3moBS1S4uhREacoph2jOSXjXuHJgeMZhU9ukYNha
+	BxWxdND6HLncrYrBKcom4FpY+3uI3w1HE0/B2DHnwZl8vdrL1/ItMzb0xgxOHlhZoXpIRu
+	Pku/Tx7/E0tiEOZU1Yxe+MbKxxsPHAc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752155349;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=1xNZvFrIzwNQM70BQvlAJOjHYghGvU+dClg4vcHUBic=;
+	b=mQTgYkI41XT7EniDepekQgZgib+Pzw1HqxGBlh5YCqN/4uVvhZzneLtuzuwj+IVTlR+3nD
+	DDTZ//CoVLDWTxBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BEED8136CB;
+	Thu, 10 Jul 2025 13:49:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id mM1xLdXEb2hLJwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 10 Jul 2025 13:49:09 +0000
+Message-ID: <277aa9f4-ddb7-4f34-ad15-a98888108cb5@suse.cz>
+Date: Thu, 10 Jul 2025 15:49:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: N+/GyfuFbcLiCJEi0ToNj6nxMYd6PUav400TffcjIuPYO83RisX08Ozs
-	1m8ky8xgCqM/A3ZIax8Ev0dLPz46SpHlBZbu3+HBsBJ4/TarRA3JIS7HBXZnIk8md3r9ET/
-	rHs804FKnhhXSRMrLn/0MeolYYFFy7aggMQy/akDm0oY7UuZWmgDJOG+F9h+eAP1ieWbrke
-	YMRry0X3nsFnFPO03A8aAthsmeRKUdc7vgUBtGRHNUXEhVvUkQNKHX8mURHG/r1YDI7k0LQ
-	RjEN1IDeXp1XCpHEy3JkSabtDW947PKUr5f4+z5bLjeOFnsXTu4Onzzc6HjOfyHGzD1isAf
-	V5nsJf1UMv6GyxZtSueKiSIWhyp/tKsDMyBG+vqmwtJL9xEbxeVl3crsmiOEYqo0iZfs9tm
-	X3trSWqlrrGzBI90wKzy9R3aOh0VVmC1hrUumCp1tv0JevAL9AkpPwWafUrKTXK92Paas1W
-	j9i5es9gZmeRmu7gWOcVP81+VdypGU5SOX0KE+UTk4B9VXQqAEe8hmLEeWW7dtLqIx32FbS
-	HIzCEVUo1a44p7pmY/kneBGpf1ntXIEj6ahoL/p3x4KFxauwxbZvo5LLtVbdu6tJ/3N7kr6
-	9dFz9ma3bTKIStThTJCcQ1bLdPvKx5iODYaFwyQXilFzaSb634KcbtPq/HBrnF0nfJgiK8f
-	OhQ7iXbc3KsARV6d4QfJYcteSwYuGWvL/zHQ+r2eGQziKj6Ql/TQDIqtMxgrLprstFit3R6
-	4ZfOLaWR/peI3fumd5uqGm9HyIqG0oZWL5c9FiyralWfsgsXElSwyMxYoRLAZkF+4I6lHh0
-	uBz7akEnFAIROFGPyA4lTsxgzDj6H7b7CC1ADZQyNl4BMsI1HGm0Nt7wTE9ZTtMlQlm+aUQ
-	v2LrIMUSKu3MjGcPtUDm4fQ//FVyaC/P0MmJ8laBZ+nd0ebA/FoyA7qHkwLuFB2Bk/giL9c
-	xhvdCIna4T760ilpEvSYhMlmDn+ULXHLyu9fjsG81sgE2Nm/QcX4uQMusb8Ukyw3/6eHeOb
-	JUW2RRhAgGsWGQXKDt1DQW5/ox+zo=
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-QQ-RECHKSPAM: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 04/10] mm/mremap: cleanup post-processing stage of mremap
+Content-Language: en-US
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Jann Horn <jannh@google.com>,
+ Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
+ linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1751865330.git.lorenzo.stoakes@oracle.com>
+ <d21f091bb617d0ac31b6e541d6c6ce28afe880c1.1751865330.git.lorenzo.stoakes@oracle.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <d21f091bb617d0ac31b6e541d6c6ce28afe880c1.1751865330.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.997];
+	MIME_GOOD(-0.10)[text/plain];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
 
-The perror() function automatically appends a newline character,
-so the explicit '\n' in the format strings is redundant and results
-in duplicate newlines in the output.
+On 7/7/25 07:27, Lorenzo Stoakes wrote:
+> Separate out the uffd bits so it clear's what's happening.
+> 
+> Don't bother setting vrm->mmap_locked after unlocking, because after this
+> we are done anyway.
+> 
+> The only time we drop the mmap lock is on VMA shrink, at which point
+> vrm->new_len will be < vrm->old_len and the operation will not be performed
+> anyway, so move this code out of the if (vrm->mmap_locked) block.
+> 
+> All addresses returned by mremap() are page-aligned, so the
+> offset_in_page() check on ret seems only to be incorrectly trying to detect
 
-Remove the redundant '\n' characters from perror() calls in
-workload_hint_test.c to fix the formatting.
+"incorrectly" to me implies there's a bug. But AFAIU there's not, so maybe
+e.g. "inappropriately"?
 
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- .../intel/workload_hint/workload_hint_test.c       | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+> whether an error occurred - explicitly check for this.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-diff --git a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-index bda006af8b1b..ba58589a1145 100644
---- a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-+++ b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-@@ -32,12 +32,12 @@ void workload_hint_exit(int signum)
- 
- 	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
- 	if (fd < 0) {
--		perror("Unable to open workload type feature enable file\n");
-+		perror("Unable to open workload type feature enable file");
- 		exit(1);
- 	}
- 
- 	if (write(fd, "0\n", 2) < 0) {
--		perror("Can't disable workload hints\n");
-+		perror("Can't disable workload hints");
- 		exit(1);
- 	}
- 
-@@ -70,12 +70,12 @@ int main(int argc, char **argv)
- 		sprintf(delay_str, "%s\n", argv[1]);
- 		fd = open(WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE, O_RDWR);
- 		if (fd < 0) {
--			perror("Unable to open workload notification delay\n");
-+			perror("Unable to open workload notification delay");
- 			exit(1);
- 		}
- 
- 		if (write(fd, delay_str, strlen(delay_str)) < 0) {
--			perror("Can't set delay\n");
-+			perror("Can't set delay");
- 			exit(1);
- 		}
- 
-@@ -92,12 +92,12 @@ int main(int argc, char **argv)
- 	/* Enable feature via sysfs knob */
- 	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
- 	if (fd < 0) {
--		perror("Unable to open workload type feature enable file\n");
-+		perror("Unable to open workload type feature enable file");
- 		exit(1);
- 	}
- 
- 	if (write(fd, "1\n", 2) < 0) {
--		perror("Can't enable workload hints\n");
-+		perror("Can't enable workload hints");
- 		exit(1);
- 	}
- 
-@@ -108,7 +108,7 @@ int main(int argc, char **argv)
- 	while (1) {
- 		fd = open(WORKLOAD_TYPE_INDEX_ATTRIBUTE, O_RDONLY);
- 		if (fd < 0) {
--			perror("Unable to open workload type file\n");
-+			perror("Unable to open workload type file");
- 			exit(1);
- 		}
- 
--- 
-2.50.0
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+
+Just a nit:
+
+> ---
+>  mm/mremap.c | 22 +++++++++++++---------
+>  1 file changed, 13 insertions(+), 9 deletions(-)
+> 
+> diff --git a/mm/mremap.c b/mm/mremap.c
+> index 60eb0ac8634b..660bdb75e2f9 100644
+> --- a/mm/mremap.c
+> +++ b/mm/mremap.c
+> @@ -1729,6 +1729,15 @@ static int check_prep_vma(struct vma_remap_struct *vrm)
+>  	return 0;
+>  }
+>  
+> +static void notify_uffd(struct vma_remap_struct *vrm, unsigned long ret)
+
+"ret" not "res"? :) Or actually why not name it for what it is,
+mremap_userfaultfd_complete() names the parameter "to". Maybe to_addr or
+new_addr?
+
+> +{
+> +	struct mm_struct *mm = current->mm;
+> +
+> +	userfaultfd_unmap_complete(mm, vrm->uf_unmap_early);
+> +	mremap_userfaultfd_complete(vrm->uf, vrm->addr, ret, vrm->old_len);
+> +	userfaultfd_unmap_complete(mm, vrm->uf_unmap);
+> +}
+> +
+>  static unsigned long do_mremap(struct vma_remap_struct *vrm)
+>  {
+>  	struct mm_struct *mm = current->mm;
+> @@ -1754,18 +1763,13 @@ static unsigned long do_mremap(struct vma_remap_struct *vrm)
+>  	res = vrm_implies_new_addr(vrm) ? mremap_to(vrm) : mremap_at(vrm);
+>  
+>  out:
+> -	if (vrm->mmap_locked) {
+> +	if (vrm->mmap_locked)
+>  		mmap_write_unlock(mm);
+> -		vrm->mmap_locked = false;
+> -
+> -		if (!offset_in_page(res) && vrm->mlocked && vrm->new_len > vrm->old_len)
+> -			mm_populate(vrm->new_addr + vrm->old_len, vrm->delta);
+> -	}
+>  
+> -	userfaultfd_unmap_complete(mm, vrm->uf_unmap_early);
+> -	mremap_userfaultfd_complete(vrm->uf, vrm->addr, res, vrm->old_len);
+> -	userfaultfd_unmap_complete(mm, vrm->uf_unmap);
+> +	if (!IS_ERR_VALUE(res) && vrm->mlocked && vrm->new_len > vrm->old_len)
+> +		mm_populate(vrm->new_addr + vrm->old_len, vrm->delta);
+>  
+> +	notify_uffd(vrm, res);
+>  	return res;
+>  }
+>  
 
 
