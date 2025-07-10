@@ -1,109 +1,119 @@
-Return-Path: <linux-kselftest+bounces-36941-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36942-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2865FAFFAD3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 09:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4B86AFFCA6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 10:43:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09CF6640E8A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 07:27:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D8973B04AC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 08:42:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1318A289E31;
-	Thu, 10 Jul 2025 07:27:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C326A28FABA;
+	Thu, 10 Jul 2025 08:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="CcOZGnCI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8cR+ttK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2251A28982D
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 07:27:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960C028FAAB;
+	Thu, 10 Jul 2025 08:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752132434; cv=none; b=fDL1b3yWltEYBNM1jJpgFLNonQioANRuIjkJvR9QJDoKoPT7bsQaZu34KJdPDPC45lLkuCZkDGWSNsZ7MNvXsr10UsNxq83agEnyrGXMz1nbdsZ5dE2aFzn5UMtMYeSKUxsHVjGb7HgLQXao9beazMocXoS3/bSxSWNIesEewZg=
+	t=1752136953; cv=none; b=O3anZkhH8sXEfvkyFpchWTT69SHdtPItnRVtci4NS+6Kk+BP/eoMTyJTOHe8GAh5uhJxv73NEv21xI8yD0hYdmYyrFE3xFvymUKrUmbQ2N5nvwvF7gGjfKvkzrH+tKaF1ZDKhNNwJoUaPnrqXXlj+7W8KvsfPiacsgqJA6NImIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752132434; c=relaxed/simple;
-	bh=rGPXOLhW/ZBDbbSbCr7CIPthOkxpIALUagVApnO451Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=c7VSIX7h9e3IIz22EwGEKhnzWkIy7Z0egLz6LTZAPeUaXhT6JbGngEvS1gyJIY97QWnAPmTiE34KefIBUYWBOwrtMYa2cI4Ymn4OBkrFiOFELAe9danqzF9x2zzOf+qoyEl2Qji7vzwzoIJI0Zel4mv2EduYJ1J3iP26OxEp69c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=CcOZGnCI; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250710072710euoutp021480c7a955ce8b179db6954389ee9edd~Q0ymMoaIT2579325793euoutp024
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 07:27:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250710072710euoutp021480c7a955ce8b179db6954389ee9edd~Q0ymMoaIT2579325793euoutp024
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1752132430;
-	bh=oTRMdhpVvZM6ziaWR/olIUECYo38sNOd9KGNsVaVt6E=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=CcOZGnCIrleveyg8c3rkylM7kODEMB5dkcxXKpnsK3/cQ1kRBQw9dpILw/FQNL9oJ
-	 Rm1aIO1o0WVqOaHokijac1CY8O88tWqLgURm4u7q03g5DZ69X1vt8GyKt7XlgIn00M
-	 soKB7QH7o1C0LjMpaNIfza92/e0ozGgtdAkaENes=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250710072709eucas1p2631d5fe8d35d10f7de05bd5ceb8ce5bd~Q0ylbGids2385423854eucas1p2Z;
-	Thu, 10 Jul 2025 07:27:09 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250710072707eusmtip2c499c55105ba1e1cb1cd664e35fedc38~Q0yj0B6or0472904729eusmtip2T;
-	Thu, 10 Jul 2025 07:27:07 +0000 (GMT)
-Message-ID: <e0f09c5a-1039-4d16-93c4-ada79929b8e4@samsung.com>
-Date: Thu, 10 Jul 2025 09:27:07 +0200
+	s=arc-20240116; t=1752136953; c=relaxed/simple;
+	bh=N7lVbkdHA3+AaTIpvBFWHX0SAnOFAgo8RQjZ5xhsVRE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VBFl2K7oKph1kHdSMo0tixFX/hzYZ+oFAZ0e2Fu2mTjcXcvfV1AV+mygxHJ3B1lHMX53efAy9eSdZ/6SBik0ZXatT81Su/sCF5YoQGV1YxxygztvGuO5zThFe3ymv9miPEQq1qBYeKLClhlFxirVe6W99GdKaksiSV+plJqBrss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8cR+ttK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F4DC4AF09;
+	Thu, 10 Jul 2025 08:42:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752136953;
+	bh=N7lVbkdHA3+AaTIpvBFWHX0SAnOFAgo8RQjZ5xhsVRE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I8cR+ttKHF9yVAYCEUlvjW+JSd+2z+KUMiWHqhXL87CVS/PTXMKk4lH+VBdypmiux
+	 fvuZccdAMLh7zUdT+bYBXYEiES1dwoezghRhIGJ8KukUKzbYQksVbfIuUD7KpRnPfd
+	 UGm9Z6/B01CQN3mUC7ZIS5ZbLm4MVeZOB5IEDURyJ9vGewFhigSLpMb2LrZos723nY
+	 33OO3+q3IUXDa6jcHrC27IZhyEOacXptEU5JAJhOMNn/82oH/cpuRiBnZHCuHfGrOv
+	 a1kKcLAqY4BnEyi4ZwutYKe98n8vrmUpFqgvnth/7aNZ9x2GSSjsaULPBDDBPuSAis
+	 YgErcO59ZTfEw==
+Date: Thu, 10 Jul 2025 09:42:27 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Zi Yan <ziy@nvidia.com>
+Cc: wang lian <lianux.mm@gmail.com>, Liam.Howlett@oracle.com,
+	akpm@linux-foundation.org, brauner@kernel.org, david@redhat.com,
+	gkwang@linx-info.com, jannh@google.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, lorenzo.stoakes@oracle.com,
+	p1ucky0923@gmail.com, ryncsn@gmail.com, shuah@kernel.org,
+	sj@kernel.org, vbabka@suse.cz, zijing.zhang@proton.me
+Subject: Re: [PATCH v3] selftests/mm: add process_madvise() tests
+Message-ID: <aG9889HWQ8K24z5w@finisterre.sirena.org.uk>
+References: <48D7AAD0-07C9-4E2D-9171-081A503B47AF@nvidia.com>
+ <20250709123224.6593-1-lianux.mm@gmail.com>
+ <A1603D53-03B1-412F-8FE8-851A37E4C08C@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] vdso/gettimeofday: Fix code refactoring
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org, Andy Lutomirski <luto@kernel.org>, Vincenzo
-	Frascino <vincenzo.frascino@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker
-	<frederic@kernel.org>, John Stultz <jstultz@google.com>, Stephen Boyd
-	<sboyd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
-	<will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Richard Cochran
-	<richardcochran@gmail.com>, Christopher Hall <christopher.s.hall@intel.com>,
-	Miroslav Lichvar <mlichvar@redhat.com>, Werner Abt
-	<werner.abt@meinberg-usa.com>, David Woodhouse <dwmw2@infradead.org>, Kurt
-	Kanzenbach <kurt@linutronix.de>, Nam Cao <namcao@linutronix.de>, Antoine
-	Tenart <atenart@kernel.org>
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20250710084337-0c82b93c-85f2-4305-95ba-8cb14042aed2@linutronix.de>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250710072709eucas1p2631d5fe8d35d10f7de05bd5ceb8ce5bd
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250710062301eucas1p1b61431dc31a5933087b45c246866fb17
-X-EPHeader: CA
-X-CMS-RootMailID: 20250710062301eucas1p1b61431dc31a5933087b45c246866fb17
-References: <CGME20250710062301eucas1p1b61431dc31a5933087b45c246866fb17@eucas1p1.samsung.com>
-	<20250710062249.3533485-1-m.szyprowski@samsung.com>
-	<20250710084337-0c82b93c-85f2-4305-95ba-8cb14042aed2@linutronix.de>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="HMq8UWvlx2E25A13"
+Content-Disposition: inline
+In-Reply-To: <A1603D53-03B1-412F-8FE8-851A37E4C08C@nvidia.com>
+X-Cookie: Who is John Galt?
 
-On 10.07.2025 08:45, Thomas Weißschuh wrote:
-> On Thu, Jul 10, 2025 at 08:22:49AM +0200, Marek Szyprowski wrote:
->> Commit fcc8e46f768f ("vdso/gettimeofday: Return bool from clock_gettime()
->> helpers") changed the return value from clock_gettime() helpers, but it
->> missed updating the one call to the do_hres() function, what breaks VDSO
->> operation on some of my ARM 32bit based test boards. Fix this.
-> Thanks again for the report and fix.
-> This change has already been folded into the original commit by tglx.
-> It should show up in todays -next tree.
 
-Okay. I got no information about that, so I decided to send a patch just 
-in case.
+--HMq8UWvlx2E25A13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+On Wed, Jul 09, 2025 at 10:46:07AM -0400, Zi Yan wrote:
+> On 9 Jul 2025, at 8:32, wang lian wrote:
 
+> > Thanks for testing the patch and reporting this build failure.
+> > I don't have an arm64 environment readily available for testing, so I
+> > appreciate you catching this. I suspect this is caused by missing or
+> > older userspace headers in the cross-compilation toolchain.
+
+> Right. My /usr/include/sys does not have pidfd.h. IMHO selftests
+> should not rely on userspace headers, otherwise we cannot test
+> latest kernel changes.
+
+That's not realistic, we need to be able to use things like libc and for
+many areas you'd just end up copying or reimplmenenting the userspace
+libraries.  There's some concerns for sure, for example we used to have
+hideous problems with the BPF tests needing extremely recent versions of
+LLVM which weren't available from distros, but just saying nothing from
+userspace is a big blocker to getting things done.  With some things
+they're widely enough available that you can just assume they're there,
+with other things they're less standard so we need build time checks.
+
+OTOH in a case like this where we can just refer directly to a kernel
+header for some constants or structs then it does make sense to use the
+kernel headers, or in other cases where we're testing things that are
+intended to be controlled by libc it makes sense to use nolibc avoid
+conflicting with libc.
+
+--HMq8UWvlx2E25A13
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhvfPMACgkQJNaLcl1U
+h9CImQf/Qotd6O/HXpyLcvS62Q/sJq8PY9vqEKgtMwJiL4Kh1ix8b1qyKqZyXQwp
+gLgU8WKUsgQccOUaRsyiUP3guh7d4WgmbOdNZDsvUOP0OkJ/GQmyL/X19mZptqKR
+hlvVhP8qRiI0BxVlpuEU6QxeSJZuilN2p9NoRwAGHNoOKb4E8lLZFlFS0w8KvO4Z
+NekttHHsY6wwSZlgiPzM2bRugoYQ7XamUQDm+mjH+3jY87FWFGeR7qA7Zbhuh2Ec
+HV3HMVJk5azHp5HeKUtMy9TyPxq/fnT6rtvC4Chz8nVNUD7hUWCHPZzEu0hZNiJF
+G0oep0VX3ZcNRFem90bLQ5OrkR8ZcA==
+=xV34
+-----END PGP SIGNATURE-----
+
+--HMq8UWvlx2E25A13--
 
