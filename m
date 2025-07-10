@@ -1,252 +1,202 @@
-Return-Path: <linux-kselftest+bounces-36980-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 307D4B0055C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:36:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6EB2B00563
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:36:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07C0C1C45746
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AF9F4E7448
 	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:36:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B846522E3FA;
-	Thu, 10 Jul 2025 14:36:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5678D273813;
+	Thu, 10 Jul 2025 14:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RBt9DDfX"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="pAdfwOwa";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ep8aBKJ8";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xraZaYP7";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="pdQKNJ0k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AFB17B421;
-	Thu, 10 Jul 2025 14:36:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DDA1B78F3
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 14:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752158168; cv=none; b=B7eBx121f1Attk9nlpwkw+38pSa/gG9550Ei5vRrAvbsUQm4nJNzt22VWfwfYY6qPasj+9Y5Yx3H012fxqk8TXc9ndjQzp/uELrFbt5s2Z0cGt9hI137RqiJw9PxI3llBmcWNDmhLh/AaBd2paaqTZ6gXUd/KR8mYaUdIm6JSfg=
+	t=1752158206; cv=none; b=jtY4piC8ybBOHdLcVqx5ivedKZI/KiARSAmR+EBa53cJtM2gyHCafGABqyezZslQVD6fx3MxUJHDjjPHrmkS3SBGn1CEioYnlPxfPJKMHTqnAEj4cZIna8/wiYwW/RlBXuXCYljm+0pTS2+1Pv8MryidDuZIn+IxEX/544qBD00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752158168; c=relaxed/simple;
-	bh=1N4tkziDIAUaH31nEsb55mcNpfly+0L/hLWGifRmUkk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gc4KJKwnPTYu1NnX/aQ08JYn8d5mQKJkMalMjexeIZ9kpEO3khcu5Xs9D6mM1LRn+hBQbDY+ObYc1xU3LX7VYdSx0G/S+Hf6PB2ACLaOLmVqoecBTItSAZvhZRqWSlb0ty9z1wj9FFfAB0Nzayyo/g7kO9Q+d2PL7DDsPN10G9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RBt9DDfX; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6fad8b4c927so9619316d6.0;
-        Thu, 10 Jul 2025 07:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752158165; x=1752762965; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4qJGxOWQ8Up5dWYJdXH7usil2iamd9hTDCPtvQ0awIQ=;
-        b=RBt9DDfX7OBpJP9zAv30TixS52lELUO4rG5zIomgnGGJSytHBxvPpV5Wjv3QNWSW/s
-         zfNh6OfwzgUWodPOaYrfgW/0Nb0hKiiDh8FspcUiG4bSc3MFcHPmjyiBoZrX4bof4nr8
-         Pide9GMbcsjvQgejxW2RffI4QFAqnVXmuuT3a/VBWukph7tEPi9nkT5u3tbTt2IFzZX0
-         7OlvWiIYOUO2Xlijl+eqkPjKBjfLUG+Bpz0xP4rYBFqpJMYugCF0ntj9CWZJ6JbJmOmf
-         ka9fb53uEDcI50dU5k6xcYtApd8zLO7qb9+aHo25ctRUHQpfzkaB9Dl+TnHJbJtAaapS
-         ldcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752158165; x=1752762965;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4qJGxOWQ8Up5dWYJdXH7usil2iamd9hTDCPtvQ0awIQ=;
-        b=dGWyhqCUfdvjUUDhLWFc24LIh3JksCVUNVlNR8gKrqLYsG8hy+SA74fKYdVmhhgC1w
-         NNiCdcQdAIXi7XI/BpnW3DDB6RmDmI0mDtiijwgjyMts9BVG3lDuD1LPjATmXoz+lcT6
-         eKXbjRloyCCr8/B1eXgAbilfr5L4uZutm1xatjeod8KbksnUUSye5XSZircGnfJHeiJa
-         nswftIwUcq9HvHBkEJutkNSHnohZCCjmDDMEkUFjpyn0nvRU9P3dSNxgagHCcIpBCs72
-         tdU5L4++DlWIubyRzI2DCb2LLsO+amBoKG4vjPnoYcwGlBxlYGntQN61o2xeokReBOGK
-         jI6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUaR/fr9DJGVv/+YDBQXqPCU5LoPbJQwlUlB3pkfI2bMDIMVyTV25iYoEEbipu1p+0vGQwarCFCbZLtjSS++6li@vger.kernel.org, AJvYcCWVAlu36FFWZqGhyBcuVM4tYajMF+edDK2yV7+QxH/0ZSzAW4FcTEIYNbc/RE59/jDfR2SFVodj/2R/ONE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8a6JfsH7/yUEc6fjbAjMRgWEoj2msAcpAQTp2grJw7KQqtPmu
-	RJ3pg+ANPH5lNvAs3YH2iRggtLHscrXJoIJf6+UHTANMl3DKl74IMkL9vNBnoN9dRHaKMMSxZGd
-	WTSYY/Rul6h0x2XRcy4sZZA44T93w/54=
-X-Gm-Gg: ASbGncug90UAy+Hj9z8ZoU64FJtbjzuOcBzD/CHchIGlWmQkA/5n6Ft67x0dB8lqDGB
-	2snACb/k3C6tYOH6fvLB3E6EmRUCYpbDSS0hoh2la+xVyTd9LJXpHY7xX/z3yPm3TlgA9QwXV1O
-	H+Y1G4whK+JtyDwBQv7Gzc1O5uF9zS/2TJP9LFG0OmYs8=
-X-Google-Smtp-Source: AGHT+IEKim1PUIFElOcNyHSqrLn01w9htemvtx7RLvrE5/uf9zQTKhdPq+4LhB5J8wrFv+2K0gTROANsR4kOkYJeXQU=
-X-Received: by 2002:ad4:5f0e:0:b0:701:775:70b8 with SMTP id
- 6a1803df08f44-7049505d74emr63722756d6.38.1752158164505; Thu, 10 Jul 2025
- 07:36:04 -0700 (PDT)
+	s=arc-20240116; t=1752158206; c=relaxed/simple;
+	bh=IR2P/D6ooKo2m7WLHUtwQgJ29K62qY0ALNJXBEsEacY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qEInE90DkG4NqzPB3MeveS90T60ZseD1jfDY2BhnArnD+YCn5cfjT36n0IB5OJauEGegoBLqxEgQnO6urzcSChrI/dnSVnnZhXNqFSEM5WXqK1JHjcgTVPVou11X8cX3qjpQw0UBsQerGaPFdkwdGxBwlpR99xS9FzeC56on2lA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=pAdfwOwa; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ep8aBKJ8; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xraZaYP7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=pdQKNJ0k; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id D0D5A1F7F3;
+	Thu, 10 Jul 2025 14:36:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752158203; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=VNbVqyxzglfjWd/zQh3eePfFjpFE0YgPCbGI1XpQ/C4=;
+	b=pAdfwOwaQDBiNo7mYiR7+kAnycYgOopY10VW8fcrvxY5j2/6m7h4ow5fwmPzjl4W6jm+jq
+	WKfEOVwC2kw2iGGQHU1tVLtgfW9wEh/KCv/SHZtukDrZExbzf73Gcgw69oMjKRw6Wlj4So
+	1PyKAnbse4J9dPhOOaW3tlxdMaW2OIg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752158203;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=VNbVqyxzglfjWd/zQh3eePfFjpFE0YgPCbGI1XpQ/C4=;
+	b=Ep8aBKJ8YlwDcLfYYBRaJwkf1SPzSu/QYZ7C6nSeWy4UzeFeEAEODVwexbcF64+F0m3Wxt
+	o7hKYolCMzKxq6CA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=xraZaYP7;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=pdQKNJ0k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752158202; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=VNbVqyxzglfjWd/zQh3eePfFjpFE0YgPCbGI1XpQ/C4=;
+	b=xraZaYP7xUMFER79cMyhEOxdzSHh48Jgzde9D5tA4mbHMwmzr0aUaJovd4TGZfE96qwSEs
+	NjUWYrepPLsRHoc5T9O4dvOTq2fIF2dYNhkriMMrto4WOzJ0+7SwmfmuMD+Ik17seF/J2L
+	wfVGlD7XADD+SkZRI87WqiC3hZI4DAc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752158202;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=VNbVqyxzglfjWd/zQh3eePfFjpFE0YgPCbGI1XpQ/C4=;
+	b=pdQKNJ0kuNczJCAnBEiiBVwpL//PWSit+U6CXCkQHhiUu+j/+iMtn+up6jWUbmJUVIHWj4
+	LbdBKZe+hoZfp5CA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B052D136DC;
+	Thu, 10 Jul 2025 14:36:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id V83rKfrPb2jrNwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 10 Jul 2025 14:36:42 +0000
+Message-ID: <061bfccf-6828-424c-8fca-2498c48c97e7@suse.cz>
+Date: Thu, 10 Jul 2025 16:36:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250709174657.6916-1-suresh.k.chandrappa@gmail.com>
-In-Reply-To: <20250709174657.6916-1-suresh.k.chandrappa@gmail.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Thu, 10 Jul 2025 07:35:53 -0700
-X-Gm-Features: Ac12FXyoLktlmX39quFWyEEFVsEtk0kX_j9HtNIamMLSlCQffuIUqfEi_lx_asM
-Message-ID: <CAKEwX=M6WOoE+A=6DVdAjR6J2tyULLGAqiZ6325Fn7R=Tn=igQ@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests: cachestat: add tests for mmap Refactor and
- enhance mmap test for cachestat validation
-To: Suresh K C <suresh.k.chandrappa@gmail.com>
-Cc: hannes@cmpxchg.org, joshua.hahnjy@gmail.com, shuah@kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/10] mm/mremap: check remap conditions earlier
+Content-Language: en-US
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Jann Horn <jannh@google.com>,
+ Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
+ linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1751865330.git.lorenzo.stoakes@oracle.com>
+ <3a24bca518001fea3a5f2733c55cf727e566b438.1751865330.git.lorenzo.stoakes@oracle.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <3a24bca518001fea3a5f2733c55cf727e566b438.1751865330.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:mid,suse.cz:dkim,suse.cz:email]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Rspamd-Queue-Id: D0D5A1F7F3
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.51
 
-On Wed, Jul 9, 2025 at 10:47=E2=80=AFAM Suresh K C
-<suresh.k.chandrappa@gmail.com> wrote:
->
-> From: Suresh K C <suresh.k.chandrappa@gmail.com>
->
-> This patch merges the previous two patches into a single,
-> cohesive test case that verifies cachestat behavior with memory-mapped fi=
-les using mmap().
-> It also refactors the test logic to reduce redundancy, improve error repo=
-rting, and clarify failure messages for both shmem and mmap file types.
->
-> Changes since v2:
->
-> - Merged the two patches into one as suggested
-> - Improved error messages for better clarity
->
-> Tested on x86_64 with default kernel config.
->
-> Signed-off-by: Suresh K C <suresh.k.chandrappa@gmail.com>
-> ---
->  .../selftests/cachestat/test_cachestat.c      | 66 +++++++++++++++----
->  1 file changed, 55 insertions(+), 11 deletions(-)
->
-> diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/t=
-esting/selftests/cachestat/test_cachestat.c
-> index 632ab44737ec..18188d7c639e 100644
-> --- a/tools/testing/selftests/cachestat/test_cachestat.c
-> +++ b/tools/testing/selftests/cachestat/test_cachestat.c
-> @@ -33,6 +33,11 @@ void print_cachestat(struct cachestat *cs)
->         cs->nr_evicted, cs->nr_recently_evicted);
->  }
->
-> +enum file_type {
-> +       FILE_MMAP,
-> +       FILE_SHMEM
-> +};
-> +
->  bool write_exactly(int fd, size_t filesize)
->  {
->         int random_fd =3D open("/dev/urandom", O_RDONLY);
-> @@ -201,8 +206,19 @@ static int test_cachestat(const char *filename, bool=
- write_random, bool create,
->  out:
->         return ret;
->  }
-> +const char* file_type_str(enum file_type type) {
-> +       switch (type) {
-> +               case FILE_SHMEM:
-> +                       return "shmem";
-> +               case FILE_MMAP:
-> +                       return "mmap";
-> +               default:
-> +                       return "unknown";
-> +       }
-> +}
->
-> -bool test_cachestat_shmem(void)
-> +
-> +bool run_cachestat_test(enum file_type type)
->  {
->         size_t PS =3D sysconf(_SC_PAGESIZE);
->         size_t filesize =3D PS * 512 * 2; /* 2 2MB huge pages */
-> @@ -212,27 +228,49 @@ bool test_cachestat_shmem(void)
->         char *filename =3D "tmpshmcstat";
->         struct cachestat cs;
->         bool ret =3D true;
-> +       int fd;
->         unsigned long num_pages =3D compute_len / PS;
-> -       int fd =3D shm_open(filename, O_CREAT | O_RDWR, 0600);
-> +       if (type =3D=3D FILE_SHMEM)
-> +               fd =3D shm_open(filename, O_CREAT | O_RDWR, 0600);
-> +       else
-> +               fd =3D open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
->
->         if (fd < 0) {
-> -               ksft_print_msg("Unable to create shmem file.\n");
-> +               ksft_print_msg("Unable to create %s file.\n",file_type_st=
-r(type));
->                 ret =3D false;
->                 goto out;
->         }
->
->         if (ftruncate(fd, filesize)) {
-> -               ksft_print_msg("Unable to truncate shmem file.\n");
-> +               ksft_print_msg("Unable to truncate %s file.\n",file_type_=
-str(type));
->                 ret =3D false;
->                 goto close_fd;
->         }
-> -
-> -       if (!write_exactly(fd, filesize)) {
-> -               ksft_print_msg("Unable to write to shmem file.\n");
-> -               ret =3D false;
-> -               goto close_fd;
-> +       switch (type){
-> +               case FILE_SHMEM:
-> +                       if (!write_exactly(fd, filesize)) {
-> +                               ksft_print_msg("Unable to write to file.\=
-n");
-> +                               ret =3D false;
-> +                               goto close_fd;
-> +                       }
-> +                       break;
-> +               case FILE_MMAP:
-> +                       char *map =3D mmap(NULL, filesize, PROT_READ | PR=
-OT_WRITE, MAP_SHARED, fd, 0);
-> +                       if (map =3D=3D MAP_FAILED) {
-> +                               ksft_print_msg("mmap failed.\n");
-> +                               ret =3D false;
-> +                               goto close_fd;
-> +                       }
-> +                       for (int i =3D 0; i < filesize; i++) {
-> +                               map[i] =3D 'A';
-> +                       }
-> +                       break;
-> +               default:
-> +                       ksft_print_msg("Unsupported file type.\n");
-> +                       ret =3D false;
-> +                       goto close_fd;
-> +                       break;
->         }
-> -
->         syscall_ret =3D syscall(__NR_cachestat, fd, &cs_range, &cs, 0);
->
->         if (syscall_ret) {
-> @@ -308,12 +346,18 @@ int main(void)
->                 break;
->         }
->
-> -       if (test_cachestat_shmem())
-> +       if (run_cachestat_test(FILE_SHMEM))
->                 ksft_test_result_pass("cachestat works with a shmem file\=
-n");
->         else {
->                 ksft_test_result_fail("cachestat fails with a shmem file\=
-n");
->                 ret =3D 1;
->         }
->
-> +       if (run_cachestat_test(FILE_MMAP))
-> +               ksft_test_result_pass("cachestat works with a mmap file\n=
-");
-> +       else {
-> +               ksft_test_result_fail("cachestat fails with a mmap file\n=
-");
-> +               ret =3D 1;
-> +       }
->         return ret;
->  }
-> --
-> 2.43.0
->
+On 7/7/25 07:27, Lorenzo Stoakes wrote:
+> When we expand or move a VMA, this requires a number of additional checks
+> to be performed.
+> 
+> Make it really obvious under what circumstances these checks must be
+> performed and aggregate all the checks in one place by invoking this in
+> check_prep_vma().
+> 
+> We have to adjust the checks to account for shrink + move operations by
+> checking new_len <= old_len rather than new_len == old_len.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-Code LGTM, and the test passed on my system (x86-64 too though). FWIW:
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-Tested-by: Nhat Pham <nphamcs@gmail.com>
-Acked-by: Nhat Pham <nphamcs@gmail.com>
-
-Thanks for the test contribution, Suresh! And thanks for the review
-help, Joshua :)
 
