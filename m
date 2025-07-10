@@ -1,675 +1,497 @@
-Return-Path: <linux-kselftest+bounces-36949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E9F7AFFF7C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 12:43:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E4EBAFFF73
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 12:42:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC7857AFE68
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 10:42:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2BF77AA18A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 10:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852D42D8DBE;
-	Thu, 10 Jul 2025 10:43:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F5302D8DDC;
+	Thu, 10 Jul 2025 10:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="KwQ+XrX1"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="KY3P89fa";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="aeYZN/+O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402AA2D97AC
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 10:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752144222; cv=none; b=r5A/J3nGmMjWvNW5lRv3CAp7Z03RR6ETzvwPJpOQLXg4B/DEEdVdb1Kc9wKDN7fFpfKBW22Kw7bv+rqoYqSRi2U+MKAfBt7UNsmG2ozAfB2qDwoKj/5hmNXkYMhJJDgAqjT1+SpIDe8uQ1FBIiEQRSZfScXIsIDbMO/MO3zhIqk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752144222; c=relaxed/simple;
-	bh=KHLXfK8LOHoZCOq/Q97Nxi08t9DxZduEu4Ktdm7Qx/g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DfnmhNd6yG5tK62G9R5aD7QPpDA84EIZHmRgaHT6j1Ak7at/E+yqxjKCzWJVr2AW0JYZYeElVp5YtoDPfGJRVGRuTdI3Vbrfu4VQicklmq8UCgIC4lP6RHmI1Sbjn80zMfBDzixWoFmIb20/rFst3gJrs0KrxPsRmM8ZYNUFtvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=KwQ+XrX1; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=dBY1QZeqaJPtpvC9YHUSj3o3Rvlz6NcC/zaC/yG2fbk=;
-	t=1752144220; x=1753353820; b=KwQ+XrX1b60IuVgxtSnPtJNc9NI9+fH99ERQu8U6XGCRuFm
-	XRk/aOsXPeyfA7+PAAjatuuibE6tMhhh66ikbZ0FUHpcQdY3AAlNbcOvo626IHVAJ2RvwhkSjHizW
-	zuar1Jk/ljbV/TsEvoFKKkMF1+frwIXcgtsZ1QFF4mo1/TpTfBxW2lKZzM0UvbgUbxUcom1ud1pVC
-	VHHMhCtIA2mLEt2XObpjXd9bxpHjf3CY7MVjs5KJdpR60gByHnSqnrKzj3av13IxT+2AhAwbvJ0vx
-	lZyYXc+wDVXXt7Q+iwOqhTzo7F7ETIuM1pLzPnqzxAI2WKM2f57jzD//kBL0ZVKQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uZokT-0000000Eg4e-2LxN;
-	Thu, 10 Jul 2025 12:43:30 +0200
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: Willy Tarreau <w@1wt.eu>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	linux-kselftest@vger.kernel.org
-Cc: Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH v2 4/4] tools/nolibc: add signal support
-Date: Thu, 10 Jul 2025 12:39:50 +0200
-Message-ID: <20250710103950.1272379-5-benjamin@sipsolutions.net>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250710103950.1272379-1-benjamin@sipsolutions.net>
-References: <20250710103950.1272379-1-benjamin@sipsolutions.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3168B1FBEA2;
+	Thu, 10 Jul 2025 10:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752144165; cv=fail; b=ojL7hLTi2r5DqHXzkv6gmE2xF1G7aKF+JQU5rq39Qa5NyN2s7y2JV5T9DG6m+3uS+DJ5P/7vcmYrtGWwLZWVJ0rWJ7V5HOqkGScm7A5mn/kYd99229nlTsM+gdtymHtoptLNuKNjoYCKTdeLhNAJg/maBlgO+xbIhDWgXoJNo04=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752144165; c=relaxed/simple;
+	bh=GHabBIX6rvUyv2aCdEslwnGhf5GzC4mPjDHkrPIQrI8=;
+	h=Date:From:To:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=XXbqH5Y9sKocCfcFGQorF308TRhQmo5oUJIy7OlNHuT+2H70vS+m0uYIIQBd3qtJ8KwEnxXXXLixwjL6rXzNTe0Aqh5aZntKyzi9ZBdCUJV0M+8ajY5IeBA5MfnWqKXb5g/fSrh2fwXfR06w5eiPAHWUnM+8IvV1ins01HV046s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=KY3P89fa; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=aeYZN/+O; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56A9Ysjr026445;
+	Thu, 10 Jul 2025 10:42:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=w/62oqtpA9075/l7uY
+	0gTdvlXf8QdZQsN8NnQY93OWc=; b=KY3P89fato9AeOjz29RAnebxCFGj3HA4Gt
+	lVY7BuhEnO7Dct+T44bB8i9gl2ZoBGO961bHCS6BJuj5PUQOWIqrPtTdOccFdTzy
+	+GKTIWIIXJ78Gpaiv60ioIgkPVXKAhcYxaiSKnC+KJFACvQMGS55UPiA066dlUU8
+	zEDS++xVhJY4PO7KNDCaenRv5uMo9UlF1/05DapJN19blGyznXARG/DKrSuoT6xR
+	IWaHgXoB4NQ+cHUjgH2bEYtzwvFPgqoAf/i0tHzBc3ne1VQOnABjLOeSNcMhA35d
+	hel3gOBKFdQH6JQUAVAs/gluNN2FgXNYQz03yImNDGzYFKs9K56Q==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47takk85jn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 10 Jul 2025 10:42:00 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56AAZ3tq021405;
+	Thu, 10 Jul 2025 10:41:59 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11on2045.outbound.protection.outlook.com [40.107.236.45])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 47ptgc38uw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 10 Jul 2025 10:41:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=aFfC0hTh9RCXg3tVZZcuOoQUoRSbRYuayC4TifI3bcCWxSRKRJhbCcMMG/MR4gre1DRiFYY+sa/nSkbZxnqT0Y56jkOcIblJw2ZUNXB/h7qx76SjsoBn8uMBoGcwFnWbUzZ1+PpIf+uIKK8fTbO9ciMQUSH935YbulKezBcS4ncX0YPezvXPoUWrdbcpBjt54lwSJIAsQRD4EtScMyRbj8SUo0mEFfyr2TtBjvoAy3JiT5JymvN3Wb2GKVZyWSt0Hw63ulehDf49xD/wRnXKZfoEaDz2XEjMOJP06y2Y8Ceky9DQoJYaLv84gbIIFnHrDIrDD7HJpsT/lhrVoP/BMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w/62oqtpA9075/l7uY0gTdvlXf8QdZQsN8NnQY93OWc=;
+ b=wq2hnHV3NpybOsPSi1bISflx/mFISm/xHG9aNzsmFItX8ji3MmTPxs58ATCcp533+ROm+GI7uugqTIWndrwhxldF/ers3+ywxBiRn2kOEz9cgn5Q6nBJlwq9M3DmQokoJAw2EQX/n2jjv1EA6j+t+CWM/jkv/AxGDcz5G3zrJU1Jgm5SlLN1HSgaSCd1A9qXBpJ3sLsPZn50kjwfbdHDs+5ge2ML/UYr0qtLal6oarFZE+T7QpolG0YhiNNb4uzBU98+BTGbrYzUlEvn6PZMtPH0qDkmroQYb9sqXdyGpQ25it6ILKiXUZCxCBbTGC2htmmYskQYdx0ktmKK0eZFTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w/62oqtpA9075/l7uY0gTdvlXf8QdZQsN8NnQY93OWc=;
+ b=aeYZN/+OPxbb0FVibqK1Ivo/d8IzAUwtBl3t8S/e5UEWeGudD820WzRHLbGMjQzUOEf9wN+Mphq84M/KZCKjFaemyqJGsLX5XgZjRUhTUafzhkqRYmtko5GLCYouPiNMHJ6Ym6UpBhvOU5TNI2Y7x2DrAU+NriAQkCrAKmsCrnA=
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
+ by BN0PR10MB4997.namprd10.prod.outlook.com (2603:10b6:408:12b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.21; Thu, 10 Jul
+ 2025 10:41:54 +0000
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2%6]) with mapi id 15.20.8901.024; Thu, 10 Jul 2025
+ 10:41:54 +0000
+Date: Thu, 10 Jul 2025 11:41:51 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 09/10] mm/mremap: permit mremap() move of multiple VMAs
+Message-ID: <a8886e8d-b335-45fa-abaa-559c81247e89@lucifer.local>
+References: <cover.1751865330.git.lorenzo.stoakes@oracle.com>
+ <6797c4613e2b65f64def79acc4621e0fe42ef311.1751865330.git.lorenzo.stoakes@oracle.com>
+ <vn7djxc5cnadmqxsxtd7frgx346fnsvfvlzyh253dxnwn3pe7f@kqci2ing4coj>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <vn7djxc5cnadmqxsxtd7frgx346fnsvfvlzyh253dxnwn3pe7f@kqci2ing4coj>
+X-ClientProxiedBy: LO4P265CA0154.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c7::11) To DM4PR10MB8218.namprd10.prod.outlook.com
+ (2603:10b6:8:1cc::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|BN0PR10MB4997:EE_
+X-MS-Office365-Filtering-Correlation-Id: 04738d90-1e9c-4d57-6f9b-08ddbf9e62b5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|1800799024|376014|366016|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?NLzErYrnzaC6PaGPD5MPUvZ3aZwsEa0X26vpLFMNyr1pWOHmqvIwsGpAIfcc?=
+ =?us-ascii?Q?N6kKoaAEpG6ufQxHrv7RKGlQ7kURuV9dvTMCHJALozbtPrjXe088EJUHiRqO?=
+ =?us-ascii?Q?rT1Amt66nUcK2r/lmlrrdqJ41qTWM7+YdX3cC69xZmOAB7BnViYi8PkpQkmp?=
+ =?us-ascii?Q?406Jr+QOS0qqDKQrb9vtSwf6wSxKaW4QVkOjtv0PCInA3dQob9MMfUQVuSq7?=
+ =?us-ascii?Q?v6BzFLoUa6EMYk8pm7k1c2O2XVXFGxe3yvNMS6N4YQEMSKy7r+1D6UmaAbI1?=
+ =?us-ascii?Q?CoEer71CPAlkl0DhF7jEl87UUP1Q57cOg4cuGkvhXzxYkRiXafmk8ToGQwKk?=
+ =?us-ascii?Q?XnmXz8dQcOSwojFi2LqLMXZNY+gFwUjiywNbKfGsejwASCKd7KPpEmeAmgdt?=
+ =?us-ascii?Q?7S1h+EAmrozY3kD/ySoC/m8NrDXjhLVLli4iFb3E9W4ET/6N7cYG4VXFRehl?=
+ =?us-ascii?Q?wpr8KG1rl0Dhh1tpEKzySMh6wvlFQQfR3YmcnpDBAPwo0ftaw6C/YzydEb0c?=
+ =?us-ascii?Q?efZnAn254Z6ZNj6PNeQW7iH0svIC/FPKLtRbYxvytD59MSYcICzkaAAFs6eu?=
+ =?us-ascii?Q?xb7yt4pwf3HE8PbZydR3vNmv6g1Wii+NLi84erWbEs0KrJkVHZg43wZVP4YM?=
+ =?us-ascii?Q?qJ8graydtqJr+Xl+53y8D+BrD/EyRksQPLUCoXP2kTpXqu9q+0fFp1SmuXxe?=
+ =?us-ascii?Q?Dh3DkNub2ay3pcLLIaPwUKz1Pz74hhJnUQIhxKV+ZlGv15cWa1yBv8TLR/pR?=
+ =?us-ascii?Q?NUTogUTF/0GP5o4jaZ9i8Yj6OHE42ud2BpYBFCHxTHZ13d11cv++kGhs4bNo?=
+ =?us-ascii?Q?r9YNs1va2Cjp7lxKPl+8AndugSLlfndwcyF24IlDncFMU/AtFbukU5xzTi9O?=
+ =?us-ascii?Q?9k3j8zFVkUz1Pm8hDS3qTiadN3YLgqK7pfl2unsRUM5T5A9p1FvR2DZZuRdd?=
+ =?us-ascii?Q?LtuCZYio0wDd+Bhl7oBoceLq1WSnktKrzlRNtKjDEm1BO5DZ1zbhbt/WiMGe?=
+ =?us-ascii?Q?7OTGtTIV2MIXh04VnU2PDTppUsnQLvErHiVf5wx2Q5/9eU4pH7r7wl3isHGe?=
+ =?us-ascii?Q?HcRofTQnrzkR0B5VHwHhWT8YV+Phtpu2atJfrVYoeO7Q0F9y7F9ndhEpD3gJ?=
+ =?us-ascii?Q?RBebETm0mbxoZX+L8zdFE7YQIp6q1+HVUCJNNPkL/sQCGIc5Qc7OlqSz7R2/?=
+ =?us-ascii?Q?iamiluqT8vIE80Pgkjq4uMNLQG8vb6Q4QApk/drZsEMHaXeGUb65UrVyeyz2?=
+ =?us-ascii?Q?aRLT/RO3wLc4PXtMt9draf3ihuYv3bCGhZqI6/0T5DR/OfRH405B3L7w7VhQ?=
+ =?us-ascii?Q?RNb8vFj4YHYYm19SueW+mZs6bt0EwX+OdKB7kjfy6N3HhagrXOkze/9LXmeH?=
+ =?us-ascii?Q?vzajjcDoHdcmw2iccxIPilTLm1rOkTQyz2aHzM7wVnt/BtUJGlGve/l7C/gG?=
+ =?us-ascii?Q?M1G1SukPgy/HPjQMEV7sJ9j78Q7OMOlvMLFzts1TfsqggR7O5jwV7A=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?o0NRPM64Ms12dEs7l7OPr2Lo+CEl2m/UeN1/NeVRwJ2Y6ywHp0Lv5PbmfA4t?=
+ =?us-ascii?Q?kH5fedPlcDQf7aCKSLymyLQGOAYhlGHchJN9dyjBjRUQ5Y3VgoajXJUExd08?=
+ =?us-ascii?Q?UKSlEvw0mtfoflePpnkb9UGVZw/RbIJqtHllT6xnoJgEUkaiSvz+RD/Er49j?=
+ =?us-ascii?Q?jxsUSlrzM+DqopXQIUCUHwQ4hq7WiAiao0tAEFFef3CnKxpk8Lk9MMbMlSx6?=
+ =?us-ascii?Q?27IZE3HA98DPx4s4G5RUD7jHYOhYBMBRi/OrORn6nFzws1RQrDOrqhMeFs3u?=
+ =?us-ascii?Q?fEbLxPdhgDNU4nimDUxDOEZwzqL6+eAgoLZWtvb2SMNRzCrm94corewoiFrO?=
+ =?us-ascii?Q?ztvexzWdNsL98X6K8xSp2hsUkSW9kDgvmRNRTh9bfHJw+tqmJGBAJJApXbIP?=
+ =?us-ascii?Q?8ex+5M+ujT0+vd+7EQoYN3UvD7mn3rqIpjyrZIoi8Gk0WIoOK8N8mUAQFFLD?=
+ =?us-ascii?Q?4v4xGasOLUDPD04cp4bv1xGM8Gv/4hFNi9ccLoGf34XKHshq6WyEOv6QS4Sb?=
+ =?us-ascii?Q?XXWQLXUdaIbsB5a0Of472+qTpl6WtHeV52JDBjuZOCQhj4slf1aOy9VvBTUa?=
+ =?us-ascii?Q?U4X0OA/S1EXqLyvvrIJbYVCt1Nv4QmYI9K2K0/zFj2z0OrfCJZm3mzEuBGCM?=
+ =?us-ascii?Q?BzkstQh0ubntZqAI36ZNzJpdKs5MMiMQVQGWvja53cZoza4QT4evbbKYOCFX?=
+ =?us-ascii?Q?LgWCnzYLpzUk3swNzyCMsfDsODThcXswrM32p7pS8z2XmqcupYjOQSEXSJJi?=
+ =?us-ascii?Q?2jW2nQfDtp1KeWMCrR5bX0SogqN+dLhztcqAHvr0MS0cp7SVoSrz2i6TMUdF?=
+ =?us-ascii?Q?A6bXtMBSy+x0MZf1X/kH5Rj6j8ppvwe1oZZ38XBtqDd3tjq0GOSb02ZRc+ST?=
+ =?us-ascii?Q?9eb7rlujwvW0O9gzGxqFby8s2BZt73lGTfJSUkzLCQFUIcB00qoT9U+bYT1u?=
+ =?us-ascii?Q?9baMlxWU3qzf0JMRJJZmqq/iF1NbL67dQodTq5hKbATMXPwQvoQr13TexAuU?=
+ =?us-ascii?Q?L6xqqjZt3rcalvu2eXe2mltKK6WRUoe7bwVzfpGc4EUPvfrwfMXBoeNbePgZ?=
+ =?us-ascii?Q?N9ynyvivwNcz0mxMufsMKJ+CF3pn6252gudcPxL1VkB3gi87JrjowqLK9lFQ?=
+ =?us-ascii?Q?cAxxeX1eWsZI8pQVd4mpGmdedCdOZeDtiM4j7iJZQrkcq+cR3gmxFKnWlraH?=
+ =?us-ascii?Q?Zu6DvElm7Vzu9g5V0yMaCtUnePmgNFWaEAw9USVwstO/Mxzj55a1WBYE+p5E?=
+ =?us-ascii?Q?1GYW7eqQqyU+NrQv80BT6WqnT/JEKUGks7icbrQofhs3Sl5txJ30V6aPb1gA?=
+ =?us-ascii?Q?LPjQIuDGBl0UBZ8FJVjnnEkheQwyQdzuMosxL3NWtHjG7oUSZRZGKpTcsaJW?=
+ =?us-ascii?Q?nuwfV4gSfcwd0pjLmoux0pXo5If2Irk3URNRqfTqliyZdBW2sSqqM0gfkzrO?=
+ =?us-ascii?Q?eWLdERFNj/azaMP6WRzlmE+cIAnJKF66Z47FoMzn494DGtlGW+3zQafYAGtN?=
+ =?us-ascii?Q?aAsVtGStbpD3dZFHcP6q1cNDRXBp/MT34DJzpByi5BY0msEAgLwEyd1ssHWT?=
+ =?us-ascii?Q?ty2q0UnZ8+zCyjopln+F86WnliW6y8n7Rsl49+6GnAzxHVjdG+wEuS8RzbGk?=
+ =?us-ascii?Q?fg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	49i1Tx5L2wIjahpxpMZGJ6IoShEE1hEgymoOeE77joP8Pn7HNsFL2We2tT1T/4Sd/wZUFIP8EJ7uC4vDIldMPB68HJQPjH/EU8vgJkvtkjO6OUsRCOOeYobEt9LYEeKVAUj/7rA8uSGR2eWZngTslG2o0RiJD8j+sy8BIj2B378HeAorFInlv5OEDOWNEzRJhRIL96hQJa+eGzygIBHLxYuovTK4ZhObGTmfRvvnZEocSNPTMeMj+48ICsZ66GSEZg0iPRQCNuDslytkhACpuZEduqfD4YuqC7jb7kynxe51B2JVbsrbnx3tgo7M5pRCFkg1HEtJNCktzNRJj9MnVYlZwbarDiIt6w5GS+lGJ/C8f3IRRbZKaN/eFDkTmxU5jhdwA42Ry3cSiSwfRkIYFTgjlbmnV74Sik5cvmIDGNumxkmW1wLZcbs0Ogof4/HfTnH6jFdKh3phVHHKGfelaziBspyBZsZjhPkpVsYBjaJJH2tYVBG3KkbRM5De9KhATE9aIC2RM2YXqQ6putohCubYZ2xSv+zg7zgpo1ByXMD6i8qT2P/OEFWJW/FP6m0AO6w+zuyCIAftBEGn1/qD/uFs+bbwNBFV5bzRqy+xR2I=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04738d90-1e9c-4d57-6f9b-08ddbf9e62b5
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2025 10:41:54.0193
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: byGK3i+LJNAjLDUneYycsl5sWSVpTWvu3aWKM2FN1lQb39Edg/rYlEkRL4G/jXl2s4Owoknf5AvsmotfEkzycZYvv0dRbWZITBIWUomKc3Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB4997
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-10_02,2025-07-09_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 phishscore=0 malwarescore=0 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
+ definitions=main-2507100091
+X-Proofpoint-ORIG-GUID: TR4YAE3ZJRRVdjiHbQZ3n9RQc1CN0hOk
+X-Authority-Analysis: v=2.4 cv=SM9CVPvH c=1 sm=1 tr=0 ts=686f98f8 cx=c_pps a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=Wb1JkmetP80A:10 a=GoEa3M9JfhUA:10 a=yPCof4ZbAAAA:8 a=kEiDSiyQGU_OC-y9kSoA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDA5MSBTYWx0ZWRfX2Zjixrr2GaKX xlG3xl6M3LRexgZXnL4sStSChrY+vLyM2Ejlp2obBY5SvmY59LM+yFnsEVKo7/jmYItcwHbbbc5 CKjPT+IhaXR7310y/ID+yVih75mF+zElgX6h8cTqi1cgFZOjuuZ49ARA5Xp32kaLRjYZoChvjR4
+ NF6ZS43OQQ/TxlBtcnPD0ob2QtNs/BpKLekaELugpNCHb0ate+ICO7EwtxQbobHgEmJJGFiAqdv kNrK10BOincFz+kUkMhDdJra5OliJFWhrmjS3hmnLQfDlmAWzI2Qxf6A2BFubs57LX9hTv4ZfEw JzWmdy60Or4jEz5ZDWmHMEhUlJC7l1sIONK1u/+jswAtgvcGxtX1cKUmXMtJ4or1L3NLEvURZ+6
+ rFrLfXKNOLVNx8FhWbpnPL7uMy8N2kD2esvtvlLKTm+yCx7+H/IM6in5+/W4531aexFMCMif
+X-Proofpoint-GUID: TR4YAE3ZJRRVdjiHbQZ3n9RQc1CN0hOk
 
-From: Benjamin Berg <benjamin.berg@intel.com>
+On Wed, Jul 09, 2025 at 02:13:41PM -0400, Liam R. Howlett wrote:
+> * Lorenzo Stoakes <lorenzo.stoakes@oracle.com> [250707 01:28]:
+> > Historically we've made it a uAPI requirement that mremap() may only
+> > operate on a single VMA at a time.
+> >
+> > For instances where VMAs need to be resized, this makes sense, as it
+> > becomes very difficult to determine what a user actually wants should they
+> > indicate a desire to expand or shrink the size of multiple VMAs (truncate?
+> > Adjust sizes individually? Some other strategy?).
+> >
+> > However, in instances where a user is moving VMAs, it is restrictive to
+> > disallow this.
+> >
+> > This is especially the case when anonymous mapping remap may or may not be
+> > mergeable depending on whether VMAs have or have not been faulted due to
+> > anon_vma assignment and folio index alignment with vma->vm_pgoff.
+> >
+> > Often this can result in surprising impact where a moved region is faulted,
+> > then moved back and a user fails to observe a merge from otherwise
+> > compatible, adjacent VMAs.
+> >
+> > This change allows such cases to work without the user having to be
+> > cognizant of whether a prior mremap() move or other VMA operations has
+> > resulted in VMA fragmentation.
+> >
+> > Having refactored mremap code to aggregate per-VMA and parameter checks, we
+> > are now in a position to permit this kind of move.
+> >
+> > We do so by detecting if this is a move-only operation up-front, and then
+> > utilising a separate code path via remap_move() rather than the ordinary
+> > single-VMA path.
+> >
+> > There are two tasks that occur outside of the mmap write lock - userfaultfd
+> > notification and population of unmapped regions of expanded VMAs should the
+> > VMA be mlock()'d.
+> >
+> > The latter doesn't apply, as this is logic for a move only and thus no
+> > expansion can take place. In the former case, we explicitly disallow
+> > multi-VMA operations on uffd-armed VMAs.
+> >
+> > The mmap lock is never dropped in the move-only case, this only occurs on a
+> > VMA shrink.
+> >
+> > We take care to handle cases where a VMA merge has occurred, by resetting
+> > the VMA iterator in such instances.
+> >
+> > We needn't worry about self-merges, as in those cases we would, by
+> > definition, not be spanning multiple VMAs. The overlapping range test is
+> > performed on the whole range so specifically disallows this.
+> >
+> > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> > ---
+> >  mm/mremap.c | 106 ++++++++++++++++++++++++++++++++++++++++++++++++----
+> >  1 file changed, 99 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/mm/mremap.c b/mm/mremap.c
+> > index 28e776cddc08..2e6005e1d22c 100644
+> > --- a/mm/mremap.c
+> > +++ b/mm/mremap.c
+> > @@ -69,6 +69,8 @@ struct vma_remap_struct {
+> >  	enum mremap_type remap_type;	/* expand, shrink, etc. */
+> >  	bool mmap_locked;		/* Is mm currently write-locked? */
+> >  	unsigned long charged;		/* If VM_ACCOUNT, # pages to account. */
+> > +	bool multi_vma;			/* Is >1 VMA being moved? */
+> > +	bool vma_reset;			/* Was the VMA merged/unmap occur? */
+>
+> The name doesn't read well in code.  vmi_reset or reset_iter might be
+> better, but I don't really mind it like this.
 
-Add support for sigaction() and implement the normal sa_mask helpers.
+Yeah it is a bit odd I agree.
 
-On many architectures, linux/signal.h pulls in compatibility definitions
-for the old sigaction syscall instead of rt_sigaction. However, the
-kernel can be compiled without support for this compatibility syscall
-and it also results in sa_mask to be too small for realtime signals.
+>
+> >  };
+> >
+> >  static pud_t *get_old_pud(struct mm_struct *mm, unsigned long addr)
+> > @@ -1111,6 +1113,7 @@ static void unmap_source_vma(struct vma_remap_struct *vrm)
+> >
+> >  	err = do_vmi_munmap(&vmi, mm, addr, len, vrm->uf_unmap, /* unlock= */false);
+> >  	vrm->vma = NULL; /* Invalidated. */
+> > +	vrm->vma_reset = true;
+>
+> I believe the munmap() operation leaves the vmi in the correct position
+> to reuse, so this is cautious that costs an extra walk of the tree.  I
+> don't think it's critical to performance, but if it is we can look here.
+> It would have to be passed through which might be a pain.
 
-To work around this, the includes are handled separately for each
-architecture. This way either linux/signal.h or the asm-generic headers
-can be used to get the correct definition for the rt_sigaction syscall
-including sigset_t.
+Yeah I think this means we _always_ reset the VMI as you mention below, unless
+MREMAP_DONT_UNMAP | MREMAP_FIXED is used.
 
-Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
+It's right to invalidate the vrm->vma here, as this is the source VMA so is now
+a dangling pointer.
 
----
+I think the problem I was worried about here was a partial unmap causing a
+split, and keep in mind we might be moving things backwards also.
 
-v2:
-- Use newly added macros to check signal emission order
-- Add tests for sigset handling
-- Restore the default handler after signal test
-- make signal_check variable static
+But I don't think the _iterator_ should be invalidated by this actually right?
+We'd still be in the correct position.
 
-v1:
-- Update architecture support (adding sh)
-- Move sparc sys_rt_sigaction logic into its header
-- Add sig_atomic_t
-- Use new BITSET_* macros
-- Move test into syscall suite
-- Various other small changes
----
- tools/include/nolibc/arch-arm.h              |   7 ++
- tools/include/nolibc/arch-arm64.h            |   3 +
- tools/include/nolibc/arch-loongarch.h        |   3 +
- tools/include/nolibc/arch-m68k.h             |  10 ++
- tools/include/nolibc/arch-mips.h             |   3 +
- tools/include/nolibc/arch-powerpc.h          |   8 ++
- tools/include/nolibc/arch-riscv.h            |   3 +
- tools/include/nolibc/arch-s390.h             |   8 +-
- tools/include/nolibc/arch-sh.h               |   5 +
- tools/include/nolibc/arch-sparc.h            |  47 ++++++++
- tools/include/nolibc/arch-x86.h              |  13 +++
- tools/include/nolibc/signal.h                | 103 +++++++++++++++++
- tools/include/nolibc/sys.h                   |   2 +-
- tools/include/nolibc/time.h                  |   3 +-
- tools/include/nolibc/types.h                 |   9 ++
- tools/testing/selftests/nolibc/nolibc-test.c | 115 +++++++++++++++++++
- 16 files changed, 338 insertions(+), 4 deletions(-)
+So yeah, I'll drop this.
 
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 1f66e7e5a444..1faf6c2dbeb8 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -10,6 +10,13 @@
- #include "compiler.h"
- #include "crt.h"
- 
-+/* Needed to get the correct struct sigaction definition */
-+#define SA_RESTORER	0x04000000
-+
-+/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
-+#include <asm-generic/signal.h>
-+#include <asm-generic/siginfo.h>
-+
- /* Syscalls for ARM in ARM or Thumb modes :
-  *   - registers are 32-bit
-  *   - stack is 8-byte aligned
-diff --git a/tools/include/nolibc/arch-arm64.h b/tools/include/nolibc/arch-arm64.h
-index 02a3f74c8ec8..ad14fc0ae5cb 100644
---- a/tools/include/nolibc/arch-arm64.h
-+++ b/tools/include/nolibc/arch-arm64.h
-@@ -10,6 +10,9 @@
- #include "compiler.h"
- #include "crt.h"
- 
-+/* Architecture has a usable linux/signal.h */
-+#include <linux/signal.h>
-+
- /* Syscalls for ARM64 :
-  *   - registers are 64-bit
-  *   - stack is 16-byte aligned
-diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
-index 5511705303ea..68d60d04ef59 100644
---- a/tools/include/nolibc/arch-loongarch.h
-+++ b/tools/include/nolibc/arch-loongarch.h
-@@ -10,6 +10,9 @@
- #include "compiler.h"
- #include "crt.h"
- 
-+/* Architecture has a usable linux/signal.h */
-+#include <linux/signal.h>
-+
- /* Syscalls for LoongArch :
-  *   - stack is 16-byte aligned
-  *   - syscall number is passed in a7
-diff --git a/tools/include/nolibc/arch-m68k.h b/tools/include/nolibc/arch-m68k.h
-index 6dac1845f298..981b4cc55a69 100644
---- a/tools/include/nolibc/arch-m68k.h
-+++ b/tools/include/nolibc/arch-m68k.h
-@@ -13,6 +13,16 @@
- #include "compiler.h"
- #include "crt.h"
- 
-+/*
-+ * Needed to get the correct struct sigaction definition. m68k does not use
-+ * sa_restorer, but it is included in the structure.
-+ */
-+#define SA_RESTORER	0x04000000
-+
-+/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
-+#include <asm-generic/signal.h>
-+#include <asm-generic/siginfo.h>
-+
- #define _NOLIBC_SYSCALL_CLOBBERLIST "memory"
- 
- #define my_syscall0(num)                                                      \
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index 0cbac63b249a..fb2f503f151f 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -14,6 +14,9 @@
- #error Unsupported MIPS ABI
- #endif
- 
-+/* Architecture has a usable linux/signal.h */
-+#include <linux/signal.h>
-+
- /* Syscalls for MIPS ABI O32 :
-  *   - WARNING! there's always a delayed slot!
-  *   - WARNING again, the syntax is different, registers take a '$' and numbers
-diff --git a/tools/include/nolibc/arch-powerpc.h b/tools/include/nolibc/arch-powerpc.h
-index 204564bbcd32..c846a7ddcf3c 100644
---- a/tools/include/nolibc/arch-powerpc.h
-+++ b/tools/include/nolibc/arch-powerpc.h
-@@ -10,6 +10,14 @@
- #include "compiler.h"
- #include "crt.h"
- 
-+/* Needed to get the correct struct sigaction definition */
-+#define SA_RESTORER	0x04000000
-+#define _NOLIBC_ARCH_NEEDS_SA_RESTORER
-+
-+/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
-+#include <asm-generic/signal.h>
-+#include <asm-generic/siginfo.h>
-+
- /* Syscalls for PowerPC :
-  *   - stack is 16-byte aligned
-  *   - syscall number is passed in r0
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 885383a86c38..709e6a262d9a 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -10,6 +10,9 @@
- #include "compiler.h"
- #include "crt.h"
- 
-+/* Architecture has a usable linux/signal.h */
-+#include <linux/signal.h>
-+
- /* Syscalls for RISCV :
-  *   - stack is 16-byte aligned
-  *   - syscall number is passed in a7
-diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
-index df4c3cc713ac..0dccb6d1ad64 100644
---- a/tools/include/nolibc/arch-s390.h
-+++ b/tools/include/nolibc/arch-s390.h
-@@ -5,13 +5,19 @@
- 
- #ifndef _NOLIBC_ARCH_S390_H
- #define _NOLIBC_ARCH_S390_H
--#include <linux/signal.h>
- #include <linux/unistd.h>
- 
- #include "compiler.h"
- #include "crt.h"
- #include "std.h"
- 
-+/* Needed to get the correct struct sigaction definition */
-+#define SA_RESTORER	0x04000000
-+
-+/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
-+#include <asm-generic/signal.h>
-+#include <asm-generic/siginfo.h>
-+
- /* Syscalls for s390:
-  *   - registers are 64-bit
-  *   - syscall number is passed in r1
-diff --git a/tools/include/nolibc/arch-sh.h b/tools/include/nolibc/arch-sh.h
-index a96b8914607e..3378afc78e26 100644
---- a/tools/include/nolibc/arch-sh.h
-+++ b/tools/include/nolibc/arch-sh.h
-@@ -7,9 +7,14 @@
- #ifndef _NOLIBC_ARCH_SH_H
- #define _NOLIBC_ARCH_SH_H
- 
-+#include <linux/unistd.h>
-+
- #include "compiler.h"
- #include "crt.h"
- 
-+/* Architecture has a usable linux/signal.h */
-+#include <linux/signal.h>
-+
- /*
-  * Syscalls for SuperH:
-  *   - registers are 32bit wide
-diff --git a/tools/include/nolibc/arch-sparc.h b/tools/include/nolibc/arch-sparc.h
-index ca420d843e25..c9574e7f795a 100644
---- a/tools/include/nolibc/arch-sparc.h
-+++ b/tools/include/nolibc/arch-sparc.h
-@@ -12,6 +12,10 @@
- #include "compiler.h"
- #include "crt.h"
- 
-+/* The includes are sane, if one sets __WANT_POSIX1B_SIGNALS__ */
-+#define __WANT_POSIX1B_SIGNALS__
-+#include <linux/signal.h>
-+
- /*
-  * Syscalls for SPARC:
-  *   - registers are native word size
-@@ -204,4 +208,47 @@ pid_t sys_vfork(void)
- }
- #define sys_vfork sys_vfork
- 
-+#define __nolibc_sa_restorer __nolibc_sa_restorer
-+void __nolibc_sa_restorer(void);
-+void __nolibc_sa_restorer_wrapper(void);
-+void __attribute__((weak,noreturn)) __nolibc_entrypoint __no_stack_protector
-+__nolibc_sa_restorer_wrapper(void)
-+{
-+	/* The C function will have a prologue corrupting "sp" */
-+	__asm__  volatile (
-+		".section .text\n"
-+		".align 4\n"
-+		".type __nolibc_sa_restorer, @function\n"
-+		"__nolibc_sa_restorer:\n"
-+		"nop\n"
-+		"nop\n"
-+		"mov %0, %%g1 \n"
-+#ifdef __arch64__
-+		"t 0x6d\n"
-+#else
-+		"t 0x10\n"
-+#endif
-+		".size __nolibc_sa_restorer, .-__nolibc_sa_restorer\n"
-+		:: "n"(__NR_rt_sigreturn)
-+	);
-+	__nolibc_entrypoint_epilogue();
-+}
-+
-+/*
-+ * sparc has ODD_RT_SIGACTION, we need to pass the restorer as an argument
-+ * to rt_sigaction.
-+ */
-+#define sys_rt_sigaction sys_rt_sigaction
-+static __attribute__((unused))
-+int sys_rt_sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
-+{
-+	struct sigaction real_act = *act;
-+
-+	/* Otherwise we would need to use sigreturn instead of rt_sigreturn */
-+	real_act.sa_flags |= SA_SIGINFO;
-+
-+	return my_syscall5(__NR_rt_sigaction, signum, &real_act, oldact,
-+			   __nolibc_sa_restorer, sizeof(act->sa_mask));
-+}
-+
- #endif /* _NOLIBC_ARCH_SPARC_H */
-diff --git a/tools/include/nolibc/arch-x86.h b/tools/include/nolibc/arch-x86.h
-index d3efc0c3b8ad..1fe75203d834 100644
---- a/tools/include/nolibc/arch-x86.h
-+++ b/tools/include/nolibc/arch-x86.h
-@@ -10,8 +10,21 @@
- #include "compiler.h"
- #include "crt.h"
- 
-+/* Needed to get the correct struct sigaction definition */
-+#define SA_RESTORER	0x04000000
-+
-+/* Restorer must be set on x86 for both 32 and 64 bit */
-+#define _NOLIBC_ARCH_NEEDS_SA_RESTORER
-+
-+/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
-+#include <asm-generic/signal.h>
-+#include <asm-generic/siginfo.h>
-+
- #if !defined(__x86_64__)
- 
-+/* On i386 we need to set SA_SIGINFO to use rt_sigreturn */
-+#define _NOLIBC_ARCH_FORCE_SIG_FLAGS SA_SIGINFO
-+
- /* Syscalls for i386 :
-  *   - mostly similar to x86_64
-  *   - registers are 32-bit
-diff --git a/tools/include/nolibc/signal.h b/tools/include/nolibc/signal.h
-index ac13e53ac31d..16b8b17496bc 100644
---- a/tools/include/nolibc/signal.h
-+++ b/tools/include/nolibc/signal.h
-@@ -14,6 +14,14 @@
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-+#include "string.h"
-+/* other signal definitions are included by arch.h */
-+
-+/* The kernel headers do not provide a sig_atomic_t definition */
-+#ifndef __sig_atomic_t_defined
-+#define __sig_atomic_t_defined 1
-+typedef int sig_atomic_t;
-+#endif
- 
- /* This one is not marked static as it's needed by libgcc for divide by zero */
- int raise(int signal);
-@@ -23,4 +31,99 @@ int raise(int signal)
- 	return sys_kill(sys_getpid(), signal);
- }
- 
-+/*
-+ * sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
-+ */
-+#if defined(_NOLIBC_ARCH_NEEDS_SA_RESTORER) && !defined(__nolibc_sa_restorer)
-+static __no_stack_protector
-+void __nolibc_sa_restorer(void)
-+{
-+	my_syscall0(__NR_rt_sigreturn);
-+}
-+#endif
-+
-+#ifndef sys_rt_sigaction
-+static __attribute__((unused))
-+int sys_rt_sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
-+{
-+	struct sigaction real_act = *act;
-+#if defined(_NOLIBC_ARCH_NEEDS_SA_RESTORER)
-+	if (!(real_act.sa_flags & SA_RESTORER)) {
-+		real_act.sa_flags |= SA_RESTORER;
-+		real_act.sa_restorer = __nolibc_sa_restorer;
-+	}
-+#endif
-+#ifdef _NOLIBC_ARCH_FORCE_SIG_FLAGS
-+	real_act.sa_flags |= _NOLIBC_ARCH_FORCE_SIG_FLAGS;
-+#endif
-+
-+	return my_syscall4(__NR_rt_sigaction, signum, &real_act, oldact,
-+			   sizeof(act->sa_mask));
-+}
-+#endif
-+
-+static __attribute__((unused))
-+int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
-+{
-+	return __sysret(sys_rt_sigaction(signum, act, oldact));
-+}
-+
-+/*
-+ * int sigemptyset(sigset_t *set)
-+ */
-+static __attribute__((unused))
-+int sigemptyset(sigset_t *set)
-+{
-+	__NOLIBC_BITMASK_ZERO(set->sig);
-+	return 0;
-+}
-+
-+/*
-+ * int sigfillset(sigset_t *set)
-+ */
-+static __attribute__((unused))
-+int sigfillset(sigset_t *set)
-+{
-+	__NOLIBC_BITMASK_FILL(set->sig);
-+	return 0;
-+}
-+
-+/*
-+ * int sigaddset(sigset_t *set, int signum)
-+ */
-+static __attribute__((unused))
-+int sigaddset(sigset_t *set, int signum)
-+{
-+	if (signum < 1 || signum > _NSIG)
-+		return __sysret(-EINVAL);
-+
-+	__NOLIBC_BITMASK_SET(signum - 1, set->sig);
-+	return 0;
-+}
-+
-+/*
-+ * int sigdelset(sigset_t *set, int signum)
-+ */
-+static __attribute__((unused))
-+int sigdelset(sigset_t *set, int signum)
-+{
-+	if (signum < 1 || signum > _NSIG)
-+		return __sysret(-EINVAL);
-+
-+	__NOLIBC_BITMASK_CLEAR(signum - 1, set->sig);
-+	return 0;
-+}
-+
-+/*
-+ * int sigismember(sigset_t *set, int signum)
-+ */
-+static __attribute__((unused))
-+int sigismember(sigset_t *set, int signum)
-+{
-+	if (signum < 1 || signum > _NSIG)
-+		return __sysret(-EINVAL);
-+
-+	return __NOLIBC_BITMASK_TEST(signum - 1, set->sig);
-+}
-+
- #endif /* _NOLIBC_SIGNAL_H */
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 295e71d34aba..73b935576561 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -14,7 +14,6 @@
- 
- /* system includes */
- #include <linux/unistd.h>
--#include <linux/signal.h>  /* for SIGCHLD */
- #include <linux/termios.h>
- #include <linux/mman.h>
- #include <linux/fs.h>
-@@ -24,6 +23,7 @@
- #include <linux/fcntl.h> /* for O_* and AT_* */
- #include <linux/sched.h> /* for clone_args */
- #include <linux/stat.h>  /* for statx() */
-+/* signal definitions are included by arch.h */
- 
- #include "errno.h"
- #include "stdarg.h"
-diff --git a/tools/include/nolibc/time.h b/tools/include/nolibc/time.h
-index d02bc44d2643..103574f76515 100644
---- a/tools/include/nolibc/time.h
-+++ b/tools/include/nolibc/time.h
-@@ -14,9 +14,8 @@
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
--
--#include <linux/signal.h>
- #include <linux/time.h>
-+/* signal definitions are included by arch.h */
- 
- static __inline__
- void __nolibc_timespec_user_to_kernel(const struct timespec *ts, struct __kernel_timespec *kts)
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index f7f2ddf41e89..7e205386b72c 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -152,6 +152,15 @@
- 			(*__set)[__idx] = 0;				\
- 	} while (0)
- 
-+#define __NOLIBC_BITMASK_FILL(set) do {					\
-+		__typeof__(set) *__set = &(set);			\
-+		int __idx;						\
-+		int __size = sizeof(*__set) / sizeof(**__set);		\
-+		__typeof__(**__set) __zero = 0;				\
-+		for (__idx = 0; __idx < __size; __idx++)		\
-+			(*__set)[__idx] = ~__zero;			\
-+	} while (0)
-+
- #define FD_SETIDXMASK (8 * sizeof(unsigned long))
- #define FD_SETBITMASK (8 * sizeof(unsigned long)-1)
- 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index d612150d2ea3..fcd44b27cd5e 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1293,6 +1293,120 @@ int test_namespace(void)
- 	return ret;
- }
- 
-+sig_atomic_t signal_check;
-+
-+static void sighandler(int signum)
-+{
-+	if (signum == SIGUSR1) {
-+		kill(getpid(), SIGUSR2);
-+		/* The second step has not run because SIGUSR2 is masked */
-+		MARK_STEP_DONE(signal_check, 0);
-+	} else {
-+		MARK_STEP_DONE(signal_check, 1);
-+	}
-+}
-+
-+int test_signals(int test_idx)
-+{
-+	struct sigaction sa = {
-+		.sa_flags = 0,
-+		.sa_handler = sighandler,
-+	};
-+	struct sigaction sa_old = {
-+		/* Anything other than SIG_DFL */
-+		.sa_handler = sighandler,
-+	};
-+	int llen; /* line length */
-+	int ret = 0;
-+	int res;
-+
-+	signal_check = 0;
-+
-+#ifdef NOLIBC
-+	/* Do some checks on sa_mask handling */
-+	sigfillset(&sa.sa_mask);
-+	llen = printf("    sa_mask.sig[0] (full): ");
-+	EXPECT_EQ(1, sa.sa_mask.sig[0],
-+		     ~(__typeof__(sa.sa_mask.sig[0]))0);
-+	llen = printf("    sa_mask.sig[%d] (full): ", (int)_NSIG_WORDS - 1);
-+	EXPECT_EQ(1, sa.sa_mask.sig[_NSIG_WORDS - 1],
-+		     ~(__typeof__(sa.sa_mask.sig[0]))0);
-+
-+	sigemptyset(&sa.sa_mask);
-+	llen = printf("    sa_mask.sig[0] (empty): ");
-+	EXPECT_EQ(1, sa.sa_mask.sig[0], 0);
-+	llen = printf("    sa_mask.sig[%d] (empty): ", (int)_NSIG_WORDS - 1);
-+	EXPECT_EQ(1, sa.sa_mask.sig[_NSIG_WORDS - 1], 0);
-+
-+	/* SIGUSR2 is always in the first word */
-+	sigaddset(&sa.sa_mask, SIGUSR2);
-+	llen = printf("    sa_mask.sig[0] (SIGUSR2 set): ");
-+	EXPECT_EQ(1, sa.sa_mask.sig[0], 1 << (SIGUSR2 - 1));
-+
-+	llen = printf("    sa_mask.sig[0] (test SIGUSR2): ");
-+	EXPECT_NZ(1, sigismember(&sa.sa_mask, SIGUSR2));
-+
-+	sigdelset(&sa.sa_mask, SIGUSR2);
-+	llen = printf("    sa_mask.sig[0] (SIGUSR2 unset): ");
-+	EXPECT_ZR(1, sigismember(&sa.sa_mask, SIGUSR2));
-+
-+	/* _NSIG is the highest valid number and may not be in the first word */
-+	sigaddset(&sa.sa_mask, _NSIG);
-+	llen = printf("    sa_mask.sig[%d] (_NSIG set): ", (int)_NSIG_WORDS - 1);
-+	EXPECT_EQ(1, sa.sa_mask.sig[_NSIG_WORDS - 1],
-+		     1UL << (_NSIG - (_NSIG_WORDS - 1) * _NSIG_BPW - 1));
-+
-+	llen = printf("    sa_mask.sig[%d] (test _NSIG): ", (int)_NSIG_WORDS - 1);
-+	EXPECT_NZ(1, sigismember(&sa.sa_mask, _NSIG));
-+
-+	sigdelset(&sa.sa_mask, _NSIG);
-+	llen = printf("    sa_mask.sig[%d] (_NSIG unset): ", (int)_NSIG_WORDS - 1);
-+	EXPECT_ZR(1, sigismember(&sa.sa_mask, _NSIG));
-+#endif
-+
-+	/* sa_mask is empty at this point, set SIGUSR2 to verify masking */
-+	sigaddset(&sa.sa_mask, SIGUSR2);
-+
-+	res = sigaction(SIGUSR1, &sa, &sa_old);
-+	llen = printf("    register SIGUSR1: %d", res);
-+	EXPECT_SYSZR(1, res);
-+	if (res)
-+		goto out;
-+
-+	llen = printf("    sa_old.sa_handler: SIG_DFL (%p)", SIG_DFL);
-+	EXPECT_PTREQ(1, SIG_DFL, sa_old.sa_handler);
-+	if (res)
-+		goto out;
-+
-+	res = sigaction(SIGUSR2, &sa, NULL);
-+	llen = printf("    register SIGUSR2: %d", res);
-+	EXPECT_SYSZR(1, res);
-+	if (res)
-+		goto out;
-+
-+	/* Trigger the first signal. */
-+	kill(getpid(), SIGUSR1);
-+
-+	/* Check the two signal handlers ran in the expected order */
-+	llen = printf("    signal emission: ");
-+	EXPECT_STEPS(1, signal_check, 2);
-+
-+out:
-+	sa.sa_handler = SIG_DFL;
-+	res = sigaction(SIGUSR1, &sa, NULL);
-+	llen = printf("    restore SIGUSR1: %d", res);
-+	EXPECT_SYSZR(1, res);
-+
-+	res = sigaction(SIGUSR1, &sa, NULL);
-+	llen = printf("    restore SIGUSR2: %d", res);
-+	EXPECT_SYSZR(1, res);
-+
-+	llen = printf("%d %s", test_idx, "sigaction");
-+	EXPECT_EQ(1, res, 0);
-+
-+	return ret;
-+}
-+
- /* Run syscall tests between IDs <min> and <max>.
-  * Return 0 on success, non-zero on failure.
-  */
-@@ -1421,6 +1535,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
- 		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
- 		CASE_TEST(namespace);         EXPECT_SYSZR(euid0 && proc, test_namespace()); break;
-+		case __LINE__:                ret += test_signals(test); break;
- 		case __LINE__:
- 			return ret; /* must be last */
- 		/* note: do not set any defaults so as to permit holes above */
--- 
-2.50.0
+>
+> >  	if (err) {
+> >  		/* OOM: unable to split vma, just get accounts right */
+> >  		vm_acct_memory(len >> PAGE_SHIFT);
+> > @@ -1181,6 +1184,7 @@ static int copy_vma_and_data(struct vma_remap_struct *vrm,
+> >
+> >  	new_vma = copy_vma(&vma, vrm->new_addr, vrm->new_len, new_pgoff,
+> >  			   &pmc.need_rmap_locks);
+> > +	vrm->vma_reset = vma != vrm->vma;
+> >  	if (!new_vma) {
+> >  		vrm_uncharge(vrm);
+> >  		*new_vma_ptr = NULL;
+> > @@ -1325,6 +1329,7 @@ static unsigned long shrink_vma(struct vma_remap_struct *vrm,
+> >  	res = do_vmi_munmap(&vmi, mm, unmap_start, unmap_bytes,
+> >  			    vrm->uf_unmap, drop_lock);
+> >  	vrm->vma = NULL; /* Invalidated. */
+> > +	vrm->vma_reset = true;
+>
+> Ditto here, lock depending..
 
+We won't ever drop the lock in a move path to be clear. Only on shrink, which is
+disallowed for multi VMA move (as is expand).
+
+So probably this is overcautious and I'll drop it.
+
+>
+> >  	if (res)
+> >  		return res;
+> >
+> > @@ -1362,6 +1367,7 @@ static unsigned long mremap_to(struct vma_remap_struct *vrm)
+> >  		err = do_munmap(mm, vrm->new_addr, vrm->new_len,
+> >  				vrm->uf_unmap_early);
+> >  		vrm->vma = NULL; /* Invalidated. */
+> > +		vrm->vma_reset = true;
+>
+> Pretty sure this one is needed, regardless of passing through (and
+> updating this call).
+
+Yes this one for sure.
+
+>
+> >  		if (err)
+> >  			return err;
+> >
+> > @@ -1581,6 +1587,18 @@ static bool vrm_will_map_new(struct vma_remap_struct *vrm)
+> >  	return false;
+> >  }
+> >
+> > +/* Does this remap ONLY move mappings? */
+> > +static bool vrm_move_only(struct vma_remap_struct *vrm)
+> > +{
+> > +	if (!vrm_implies_new_addr(vrm))
+> > +		return false;
+> > +
+> > +	if (vrm->old_len != vrm->new_len)
+> > +		return false;
+> > +
+> > +	return true;
+> > +}
+> > +
+> >  static void notify_uffd(struct vma_remap_struct *vrm, bool failed)
+> >  {
+> >  	struct mm_struct *mm = current->mm;
+> > @@ -1644,10 +1662,29 @@ static int check_prep_vma(struct vma_remap_struct *vrm)
+> >  			(vma->vm_flags & (VM_DONTEXPAND | VM_PFNMAP)))
+> >  		return -EINVAL;
+> >
+> > -	/* We can't remap across vm area boundaries */
+> > +	/*
+> > +	 * We can't remap across the end of VMAs, as another VMA may be
+> > +	 * adjacent:
+> > +	 *
+> > +	 *       addr   vma->vm_end
+> > +	 *  |-----.----------|
+> > +	 *  |     .          |
+> > +	 *  |-----.----------|
+> > +	 *        .<--------->xxx>
+> > +	 *            old_len
+> > +	 *
+> > +	 * We also require that vma->vm_start <= addr < vma->vm_end.
+> > +	 */
+> >  	if (old_len > vma->vm_end - addr)
+> >  		return -EFAULT;
+> >
+> > +	/*
+> > +	 * We can't support moving multiple uffd VMAs as notify requires mmap
+> > +	 * lock to be dropped.
+> > +	 */
+> > +	if (vrm->multi_vma && userfaultfd_armed(vma))
+> > +		return -EINVAL;
+> > +
+> >  	if (new_len <= old_len)
+> >  		return 0;
+> >
+> > @@ -1744,6 +1781,57 @@ static unsigned long check_mremap_params(struct vma_remap_struct *vrm)
+> >  	return 0;
+> >  }
+> >
+> > +static unsigned long remap_move(struct vma_remap_struct *vrm)
+> > +{
+> > +	struct vm_area_struct *vma;
+> > +	unsigned long start = vrm->addr;
+> > +	unsigned long end = vrm->addr + vrm->old_len;
+> > +	unsigned long new_addr = vrm->new_addr;
+> > +	unsigned long prev_addr = start;
+> > +	VMA_ITERATOR(vmi, current->mm, start);
+> > +
+> > +	/*
+> > +	 * When moving VMAs we allow for batched moves across multiple VMAs,
+> > +	 * with all VMAs in the input range [addr, addr + old_len) being moved
+> > +	 * (and split as necessary).
+> > +	 */
+> > +	for_each_vma_range(vmi, vma, end) {
+> > +		unsigned long addr = max(vma->vm_start, start);
+> > +		unsigned long len = min(end, vma->vm_end) - addr;
+> > +		unsigned long offset = addr - start;
+> > +		unsigned long res;
+> > +
+> > +		/* Merged with self, move on. */
+> > +		if (vrm->multi_vma && prev_addr == addr)
+> > +			continue;
+> > +
+> > +		vrm->vma = vma;
+> > +		vrm->addr = addr;
+> > +		vrm->new_addr = new_addr + offset;
+> > +		vrm->old_len = vrm->new_len = len;
+> > +
+> > +		res = check_prep_vma(vrm);
+> > +		if (!res)
+> > +			res = mremap_to(vrm);
+> > +		if (IS_ERR_VALUE(res))
+> > +			return res;
+> > +
+> > +		/* mmap lock is only dropped on shrink. */
+> > +		VM_WARN_ON_ONCE(!vrm->mmap_locked);
+> > +		/* This is a move, no expand should occur. */
+> > +		VM_WARN_ON_ONCE(vrm->populate_expand);
+> > +
+> > +		if (vrm->vma_reset) {
+> > +			vma_iter_reset(&vmi);
+> > +			vrm->vma_reset = false;
+> > +		}
+>
+> What code path results in vma_reset == false here?
+
+Yeah that's a good point, only MREMAP_DONT_UNMAP | MREMAP_FIXED will fail to hit
+it, so let's drop for unmaps.
+
+I will test this is all good too.
+
+>
+> > +		vrm->multi_vma = true;
+> > +		prev_addr = addr;
+> > +	}
+> > +
+> > +	return new_addr;
+> > +}
+>
+> The iterator use looks good.
+
+Thanks!
+
+>
+> > +
+> >  static unsigned long do_mremap(struct vma_remap_struct *vrm)
+> >  {
+> >  	struct mm_struct *mm = current->mm;
+> > @@ -1761,13 +1849,17 @@ static unsigned long do_mremap(struct vma_remap_struct *vrm)
+> >  		return -EINTR;
+> >  	vrm->mmap_locked = true;
+> >
+> > -	vrm->vma = vma_lookup(current->mm, vrm->addr);
+> > -	res = check_prep_vma(vrm);
+> > -	if (res)
+> > -		goto out;
+> > +	if (vrm_move_only(vrm)) {
+> > +		res = remap_move(vrm);
+> > +	} else {
+> > +		vrm->vma = vma_lookup(current->mm, vrm->addr);
+> > +		res = check_prep_vma(vrm);
+> > +		if (res)
+> > +			goto out;
+> >
+> > -	/* Actually execute mremap. */
+> > -	res = vrm_implies_new_addr(vrm) ? mremap_to(vrm) : mremap_at(vrm);
+> > +		/* Actually execute mremap. */
+> > +		res = vrm_implies_new_addr(vrm) ? mremap_to(vrm) : mremap_at(vrm);
+> > +	}
+> >
+> >  out:
+> >  	failed = IS_ERR_VALUE(res);
+> > --
+> > 2.50.0
+> >
 
