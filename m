@@ -1,103 +1,56 @@
-Return-Path: <linux-kselftest+bounces-36960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09608B000B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:41:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5446B002CD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 15:01:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5D4F7A9E95
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 11:39:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E61F81C43DFA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:02:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD98A241666;
-	Thu, 10 Jul 2025 11:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OVKHIlIb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0846727056A;
+	Thu, 10 Jul 2025 13:01:55 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480841A841A;
-	Thu, 10 Jul 2025 11:40:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0AC0241132;
+	Thu, 10 Jul 2025 13:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752147641; cv=none; b=p65UvWhEg09W5tE+27Q1vGdhtbwi/ws4e41IuUThTFvO18Nuqs3KPxMgWKjORIk5gEN+FY71KrP23/AXRwWyL5EDRnmCKaPsuAL0S6xSPk+cv+eqCL2F2JejHY2fyOj86QlOlXJB7xTZZdsD8tBYRHfZP9NMYz04Edux9NQohE4=
+	t=1752152514; cv=none; b=CPrM9ZPYe9D3uCcVavIbI0dSu0aqfKFGwHcp0RTterGi/4V1HQks1oezkewVP5jQMc/I0ddzKqghnBjadpxhdeEXus1+9lPEZtSLi0Lgf1sG/PZhitNbIrK9xKviPOyN3lFL4PO6Ny/kIgFXEkrmNFgMhnmEKr/666Pdx7ccLjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752147641; c=relaxed/simple;
-	bh=0iRUdl962OfD5WdAy2WaNPadKxxM8rE6jjoKazsAV20=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f0AevxyB+H0PHmjQFYOZJJR1O+R/F4yZaZiNiiY+E4rOLHJwdPGv8qgbf5Px7ErF2FIFUYZzvzEdehUcBW9l0iVa11YBVsP8b6CC9GITu+9xltW1k++CNp2W5R7ErK3AJySs3a/QCuSyxksLPgMOjMQfz4yZbGcw5MjIq3ZMURM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OVKHIlIb; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-74ad4533ac5so1716774b3a.0;
-        Thu, 10 Jul 2025 04:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752147639; x=1752752439; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0iRUdl962OfD5WdAy2WaNPadKxxM8rE6jjoKazsAV20=;
-        b=OVKHIlIbuC7aWrhU4fNKV8+h/imMXidIMjcj5AuYlnmFCuhv24uPw4Lszkq/707czA
-         +imO9iO6ZUKdPY+P9BmJV1vr9I9llPpUWrJ5t/h7VAz0Ok4y4ggC2rWkq7RZrA3VXr8L
-         to6qurSPF/Nw1ZAUFwdsRtnX4Fu0tEgmfRjo2QJGkJlYWI7mB86VQ2Vtr0wmjBdgyPJD
-         a2vPbJM6wFJ5J8fwzIK0NQN6+cN3io5X5o07qtpWwajYzK5ypPVRP74UtBTTT7k6UXIy
-         dAREz0eX35CxPiLycw0vHZMVRHhSfiDTQrMakOt08eAM+7Q/3rTbdHfraYkm4zyIj44B
-         aJ9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752147639; x=1752752439;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0iRUdl962OfD5WdAy2WaNPadKxxM8rE6jjoKazsAV20=;
-        b=PPTuoThNo7SrjvwY+0vKnd3f2InlyQ9PlWkhYpBMl+s/yDYQFCJrYXMGluAkPMh7Jv
-         gX4n2XpXYxo728Ds6oVaz1H2o6jAI///kiBUXhE+U7+svKtf7GauDh3qEXIfR7x3HeYl
-         ASZ2cPHhbLjKQ+4kt1v2AhmaDPNzplngi6insJE9gtXrxoAyHNUovQuzQkUvMQjbLHqS
-         5WqpgFFyOFA/z+Js3L0ZrrNHgfKzmmSVFo6ydPRFrfKu6k8Xp3f7Me+MAsHs6bdkl+TV
-         eAYdrt0455MAgmaUaYgCXh8piVroV1phEKgT66cl6mC6oNlgCPPgDzr72sGEDLM1VBrJ
-         U+gA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqbEmCLGIUXy+mDjceGkE+QI8RgqX+Go+xhgaZyrVhBA0g/HWvV5FrlwJU8kqJg5yssGlXuQwKZE/JfM4=@vger.kernel.org, AJvYcCXoIeH8/umPEUwMP/ECBBhAqLG2kLm2eFOkSMQbIWgJ3WAX7Nj5UMVbqeXkKaST9fVHiCCz1tromQI+M4UKrFQU@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5lbOtt0j7gatgZsjIGflcTIBcgKZGU+Gs5Ob4WcyHksCsYHPY
-	ghyuoi5T7jmAPZBjhO/xkrEfemmT1s8d5IbXMtSus1vNXwXXObAkDiuC
-X-Gm-Gg: ASbGncsmGbLylz4aNe75+9UQM9fXLfW44MEq28Wllu7fzk+EyxCIn9ltjqpCYyGO7r1
-	jUwNvFfwKahN9vHfAu9QeBmGdAMdb7KiZqMdc4LoQccaZkF86Kjsvk5RGcuQenvGyOLTmZKGVyv
-	5rU+lpE5IuR5JfWRmGjip86EwB/kr3r4PUXhCy6DsR4+buiv7cbffpYjd0SjK1i0HrujS33HSXO
-	eoevX3hxJqNtaU8wwMDdWfa2r2VUyF3PrCJwigIw05ZGdQOF7x9GR5lub7T0IAmUz3VL4zCCBxS
-	d/M9XD2D68qBL3rGv7ndCZjmW3A8S6Z1pbHJ1fstyEJCRKKUo518opl93894pFzN5makLhYr4/Y
-	3AuWgrHUbsT4H
-X-Google-Smtp-Source: AGHT+IG4jOvVrFVHKIwUQ3SJ4F00MMttTRUh8ul+FH0UmJKgEUH8VTKbVF2uEvCcsLoGiniMkUBLQg==
-X-Received: by 2002:a05:6a20:158b:b0:224:46a0:25ef with SMTP id adf61e73a8af0-22fc38bc880mr5213931637.16.1752147639233;
-        Thu, 10 Jul 2025 04:40:39 -0700 (PDT)
-Received: from DESKTOP-GIED850.localdomain ([114.247.113.178])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9f1d34dsm2136736b3a.104.2025.07.10.04.40.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 04:40:38 -0700 (PDT)
-From: wang lian <lianux.mm@gmail.com>
-To: ziy@nvidia.com
-Cc: Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org,
-	brauner@kernel.org,
-	david@redhat.com,
-	gkwang@linx-info.com,
-	jannh@google.com,
-	lianux.mm@gmail.com,
+	s=arc-20240116; t=1752152514; c=relaxed/simple;
+	bh=5491tcOvMmeOhV7CHKAE15EGHqNMpbS86rZBXtkRIcs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u7NUwFbuwrTPIQ0pFDu+S3IQ8nL+hYxVCENLr9ZZRXuGFOI3ivUynat9wS+G7xYz2b5TOUllDCUuBYNJvxVgnblqB1V6eWdN8JCu2+cXkea0pF/XLYr9/UMHd0vgwMshs4tquKtQyWDo0EMGRPIO/9xm6d9DsyiAS7J4vFgxOFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bdFNZ2RHvzYQvHB;
+	Thu, 10 Jul 2025 21:01:50 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 221FA1A0E31;
+	Thu, 10 Jul 2025 21:01:49 +0800 (CST)
+Received: from huawei.com (unknown [10.67.174.45])
+	by APP3 (Coremail) with SMTP id _Ch0CgBXtyS0uW9o1jsSBQ--.59794S2;
+	Thu, 10 Jul 2025 21:01:49 +0800 (CST)
+From: Tengda Wu <wutengda@huaweicloud.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Yuanhe Shu <xiangzao@linux.alibaba.com>,
+	linux-trace-kernel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	lorenzo.stoakes@oracle.com,
-	p1ucky0923@gmail.com,
-	ryncsn@gmail.com,
-	shuah@kernel.org,
-	sj@kernel.org,
-	vbabka@suse.cz,
-	zijing.zhang@proton.me
-Subject: Re: [PATCH v3] selftests/mm: add process_madvise() tests
-Date: Thu, 10 Jul 2025 19:40:32 +0800
-Message-ID: <20250710114032.63278-1-lianux.mm@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <A1603D53-03B1-412F-8FE8-851A37E4C08C@nvidia.com>
-References: <A1603D53-03B1-412F-8FE8-851A37E4C08C@nvidia.com>
+	Tengda Wu <wutengda@huaweicloud.com>
+Subject: [PATCH -next] selftests/ftrace: Prevent potential failure in subsystem-enable test case
+Date: Thu, 10 Jul 2025 13:01:34 +0000
+Message-Id: <20250710130134.591066-1-wutengda@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -105,43 +58,74 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgBXtyS0uW9o1jsSBQ--.59794S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr1DZF18Jr4UXw1kZF48Xrb_yoW8trW3p3
+	9rZrnrKrn5Ga4jkas7C3Z3Xry5XrykAryqqrW5Aa43JF15J34ftFn3tr1agF12qrZakry3
+	Aw1I9a47Z3Wjv3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
+	Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
+	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
+	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUonmRUU
+	UUU
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Hi Zi,
+The first 100 lines of trace output don't always contain 3 or more
+distinct events. In busy systems, they may be dominated by repetitive
+events like sched_stat_runtime, causing the `$count -lt 3` check to
+fail. Example trace:
 
-On <Date of Zi's email>, Zi Yan wrote:
-> On 9 Jul 2025, at 8:32, wang lian wrote:
->
->> Hi Zi Yan,
->> Thanks for testing the patch and reporting this build failure.
->> I don't have an arm64 environment readily available for testing, so I
->> appreciate you catching this. I suspect this is caused by missing or
->> older userspace headers in the cross-compilation toolchain.
->
-> Right. My /usr/include/sys does not have pidfd.h. IMHO selftests
-> should not rely on userspace headers, otherwise we cannot test
-> latest kernel changes.
->
->> I will try to fix this in the next version. If the problem persists, a
->> good solution would be to manually define the syscall wrapper to avoid
->> the dependency on <sys/pidfd.h>.
->
-> Based on what I see in other mm tests, the following patch fixes my
-> compilation issue.
->
-> [ ... patch snippet ... ]
+$ head -n 100 trace | grep -v ^#
+ systemd-timesyn-266     [006] d.h2.   738.778482: sched_stat_runtime: comm=systemd-timesyn pid=266 runtime=976854 [ns]
+      ftracetest-8751    [001] d.h2.   738.778512: sched_stat_runtime: comm=ftracetest pid=8751 runtime=938335 [ns]
+ systemd-timesyn-266     [006] d.h1.   738.779531: sched_stat_runtime: comm=systemd-timesyn pid=266 runtime=1044284 [ns]
+      ftracetest-8751    [001] d.h2.   738.779541: sched_stat_runtime: comm=ftracetest pid=8751 runtime=1028575 [ns]
+         systemd-1       [007] d.h5.   738.779657: sched_stat_runtime: comm=systemd pid=1 runtime=642624 [ns]
+[...]
 
-Thank you very much for not only identifying the root cause but also
-providing a concrete patch to fix the compilation issue. Your analysis
-that selftests should be independent of userspace headers is spot on,
-and this approach aligns perfectly with the feedback I've received.
+With trace cleared, simply check `$count -eq 0` to confirm subsystem
+enablement, just like toplevel-enable.tc does.
 
-I have integrated your suggested changes into my local tree and will
-include them in the next version of the patch. I will also be sure
-to add your "Suggested-by" tag in the commit message to properly
-credit your contribution.
+Fixes: 1a4ea83a6e67 ("selftests/ftrace: Limit length in subsystem-enable tests")
+Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+---
+ .../selftests/ftrace/test.d/event/subsystem-enable.tc     | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Your help has been invaluable.
+diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+index b7c8f29c09a9..3a28adc7b727 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+@@ -19,8 +19,8 @@ echo 'sched:*' > set_event
+ yield
+ 
+ count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+-if [ $count -lt 3 ]; then
+-    fail "at least fork, exec and exit events should be recorded"
++if [ $count -eq 0 ]; then
++    fail "none of scheduler events are recorded"
+ fi
+ 
+ do_reset
+@@ -30,8 +30,8 @@ echo 1 > events/sched/enable
+ yield
+ 
+ count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+-if [ $count -lt 3 ]; then
+-    fail "at least fork, exec and exit events should be recorded"
++if [ $count -eq 0 ]; then
++    fail "none of scheduler events are recorded"
+ fi
+ 
+ do_reset
+-- 
+2.34.1
 
-Best regards,
-Wang Lian
 
