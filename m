@@ -1,511 +1,370 @@
-Return-Path: <linux-kselftest+bounces-37037-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37038-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5A8EB00BA2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 20:46:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8401BB00BE8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 21:14:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5FB55A073E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 18:45:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FA6E764C5C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 19:14:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927022FCFF2;
-	Thu, 10 Jul 2025 18:45:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FBA62FD864;
+	Thu, 10 Jul 2025 19:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T7+D0aTy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TaM5tpeD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB222FD861;
-	Thu, 10 Jul 2025 18:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578062FD5A9;
+	Thu, 10 Jul 2025 19:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752173124; cv=none; b=MY9FLggsDOZInTmDsodoUrG83POLl7ppjP5T9OTTCbRr7TWEwBXRNXS0TRHUfrGgR7QsQC4UUxMJ33ZxYo5zTYnbWJN1CSx+X4hFnM3QqLFbm6Hqy2N8uIBlk1Fsopn3owAoaM3sZ9gBkQ07pzYQNlA2tXXKl03MGxu1LLSqKlE=
+	t=1752174838; cv=none; b=g6xyF06hAyUICGLXM6OnBIvRFJ4jmxkRuwzdw4IywAqWDMbcgYD7wzT2rk94AlEZWd4mveG9Vw88KF21ZoTV1rgDOztQ/wmlZYiMYWyXShDUar8PArf9W4xURyoWNKCkYF5oMNcX8NjRqgErxJ6Hu3JF9aM3+q1IsgAmLpGkXfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752173124; c=relaxed/simple;
-	bh=+Zi9V5xrtTxh+Iu1D/HZHND8+nyNqWaKSL4aUsU4OWA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pBgjyacsfggBy6F6CCiebmk7L/9tAdfhZW24RVrL8xxm5xWKks344wd/NGfrfjKyPR/TWJiJ+eheyjv7xaoiOgfbIWQkL0sUM58aldQV/FW/mdqQe/d775VPoQ9M82jwApVTCwUaSjYqD4ZmtJoDTx9pcMkMZ7HTKIKXMtvhPAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T7+D0aTy; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a548a73ff2so1284905f8f.0;
-        Thu, 10 Jul 2025 11:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752173120; x=1752777920; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=llwJe6QbrKI1OYMHC+BQZWZXCr/Kihw4SFrPpmPjIdE=;
-        b=T7+D0aTy13sgYhS5VvlMRgi448c0Iu1r6XRSH4iIrCKjlVswwZEXp6VGgoHbEMua0j
-         D7R8jU3j7ZvMJjLIfwSwmD2fwnCkVu/YiCSelZQmbL0gkoFIBdfaE3uEfl0QJRBlp9a0
-         CzNB/DQtDeedMMGmZ1b1GvwQYh75FTGhd8kv8iFEg/6P8JIPOuO0PGFJt65RQdUkM4V6
-         lAjzh4EraPGqtaS0QbJfpiHCwlPeD/Bst/q4Siv5RH2x+BDOxaLZDmdIa4BueO6phkW0
-         /KuCsKHYmEu5Rtz61sZXF/NVp4A+1NmVsdOPR/hZQxJLzJtTxzK9qg0V9FqTRS0I5Wu7
-         eprA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752173121; x=1752777921;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=llwJe6QbrKI1OYMHC+BQZWZXCr/Kihw4SFrPpmPjIdE=;
-        b=W4RdAAOO7VNCPQKhkbbBLaIV2tcu0qgWQWEVz8cb5Nnzdr81Y/qOYGITZJtsRn7Mcr
-         ffoyX8ORrnvEFL0FkaGUi48tTBe8SEqVuW1QLKcHSmvW7iUL/v1VAQxnzsO+X0g3yRGt
-         mNoNCdkYSIi6hXYGocTQK3WhGZJeiUow+f7zudx8vWRJAsyvhEIMotjLvvVR2BMD60cZ
-         I6lgpcfYA063V9EZ5xLZZRwnSHM0cx+FTX36DWL9QS3u9CBdGPtifTrD5wiBvkNzU7bK
-         pYdtNgL0zTIQ2fjr1KHuS38tH0wRw9L2ewMo6bwEZk52qH4NbH9gYSlHjF1wPM9ljU6/
-         KrRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVN419Co9uCSBVgZl4SF1S7nXcZRE+s4CKHPxn68qAPrcBT6FdRP3Ql/fmNirBpQJi9CMk=@vger.kernel.org, AJvYcCVSU1zcb4YzBiKE7aaty0vrKC/QtMMo3WdEuMSG2yJn0fCC1blYJ8oQUlatSC4qDR9DGopZjUSMVcJa5tGQ4d5I@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6gMMEgAcXqQxAoB+sXJ2hxmTpPmbZ5Rf1OkkX3pMjMMP5N4yU
-	BUOX2NdBrlYnALiWpihp4RrV7f26JnjvCjdu7aA505/4EEZqPojaJrDcXR8c5gCM
-X-Gm-Gg: ASbGnctrqo5w4azgpr8V+qgyGSwR7J3SB8uufAWrpqfIVdUDe9jERCGha//Jz8xyfrj
-	Pjqbedc1ftxFPryadr+5hl8XUTidtYaQA7myiqP3fvOhuFRvYRo12g3kt/F5PjVyevb1hTW8veU
-	Jivz3zVxrxe7Dt+miFYnzSLF+ifLDZyU/7X5mcA7LEVN1SwQjuNpR/80t/AtaV9aqn5W87iKp/Q
-	a2OrxTQB+T9fM245JJSoKiuVmmOeYcKyx+wcpHcSy6Bdv4vUbF2AAphFNTK373R68/e6vqX3Mj1
-	IsejqU7smWMjc2+vP8yafsfcgILGWwQ7IL4QEJ3JL/NlpZq6dNf00AJhZvQ=
-X-Google-Smtp-Source: AGHT+IG+dy7S+C4bGzKO0kxc+T8POjIXuqeNOokb1b8sNsX139jqeKqOjg+pbmtBQJ3lksRFXdmk/g==
-X-Received: by 2002:a05:6000:401e:b0:3b5:d726:f16c with SMTP id ffacd0b85a97d-3b5f18a634fmr588423f8f.47.1752173120356;
-        Thu, 10 Jul 2025 11:45:20 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:4::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8dc229asm2538150f8f.35.2025.07.10.11.45.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 11:45:19 -0700 (PDT)
-From: Mohsin Bashir <mohsin.bashr@gmail.com>
-To: netdev@vger.kernel.org
-Cc: kuba@kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	horms@kernel.org,
-	cratiu@nvidia.com,
-	noren@nvidia.com,
-	cjubran@nvidia.com,
-	mbloch@nvidia.com,
-	mohsin.bashr@gmail.com,
-	jdamato@fastly.com,
-	gal@nvidia.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 5/5] selftests: drv-net: Test head-adjustment support
-Date: Thu, 10 Jul 2025 11:43:51 -0700
-Message-ID: <20250710184351.63797-6-mohsin.bashr@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250710184351.63797-1-mohsin.bashr@gmail.com>
-References: <20250710184351.63797-1-mohsin.bashr@gmail.com>
+	s=arc-20240116; t=1752174838; c=relaxed/simple;
+	bh=RHPw+mzqn4fNV+JTiLhAhP+hp+hIHxxWVGkrR9ghdzQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IpAlGRV4AXE8iARqai+V6+xaMubvLCjM/YsQmZVWZ0arE5yMxztr/toiLiY/CRujm8dyfRkIFM67kiHnPptZ8NauNFvSWMmTf3nrl53+GpejLVNnbwFfSdTQK2Wa3wIWpVl4/u0qGMFNueA5k74CJmwosEAhPar2asjm5WgE4G4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TaM5tpeD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AC120C4CEE3;
+	Thu, 10 Jul 2025 19:13:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752174837;
+	bh=RHPw+mzqn4fNV+JTiLhAhP+hp+hIHxxWVGkrR9ghdzQ=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=TaM5tpeDU/eY3s1qxu9K4BCzucm4uVT4xebskwP+dzS1AqlJ3nPy2cxrDIsCu4XKk
+	 DbyvytB6tIZ2orL+YV2RZaSBEwMai8rco0itLXtBGPWWabHNzQvNEm+T1CWXZ+Q0JF
+	 RPwCFvWq8oGNffBdNIhIZDTjoRdIqB4NvsM7f4EBfnDTclE+HOm6110Mf5vJousws/
+	 atU2ZJ/a10UEMM3Togr9r7OW10a4KeJGItfXCKHBDRrgvCSOfMOCQZFJ8MqBKt/bu7
+	 LlG0apouAkn2z18vOtCPjWixLJJhviRKURv1IkefIOfjHG6ZERK6HLMZal3PClZd91
+	 W5RQkkWY7S3oQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95CEEC83F1A;
+	Thu, 10 Jul 2025 19:13:57 +0000 (UTC)
+From: Frank Li via B4 Relay <devnull+Frank.Li.nxp.com@kernel.org>
+Subject: [PATCH v21 0/9] PCI: EP: Add RC-to-EP doorbell with platform MSI
+ controller
+Date: Thu, 10 Jul 2025 15:13:46 -0400
+Message-Id: <20250710-ep-msi-v21-0-57683fc7fb25@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOoQcGgC/2XSS44bIRAG4KuMep2OqAcFzCr3iLLgmenF2JY7s
+ iYa+e4BS9NgsgTxlYqq/3PZ83XL+/L68rlc823bt/OpHhC+vSzxzZ9+53VL9WJBhQwK1Jov6/u
+ +rTZw9IEoQMhLfXy55rJ9PCr9/FXPb9v+53z9+yh8o3b7VUJ/lbjRqtaYU7TOg0TwP04fl+/x/
+ L60AjceEMGBuCIDJnlMzgW0z0h3BMoeSFfkgZ2GqJJS5hnJgAAPJBWxLs4gZoo4tWdGxAcyFSX
+ 20XhfQsL4jOyI5EC2IilQxJaSIIRn5DpCRQdy7U+iUohUQKf0jECNqvdXN6hWayIZW2WSmcHIX
+ GfQxs7ExVtyJswMBwZ9WXWaaiVKrAmL16gmRiPr64KWDGHJCA5TRJ7YEQ2tUJnOWjacGAhAUjB
+ M2QA9sLHJlo4QfYxQEXg3MemMx0nKY9UOXBLbYjUxM7KhyZYQIfKBtSf4j9mBDbmClpEiLrBzY
+ FjmkbjOZNxbS4kxJJi9Z1umEKPqzAwMW0qYkpbiQtI8sPv9/g9K6275NgQAAA==
+X-Change-ID: 20241010-ep-msi-8b4cab33b1be
+To: Kishon Vijay Abraham I <kishon@kernel.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, Anup Patel <apatel@ventanamicro.com>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>, 
+ Lucas Stach <l.stach@pengutronix.de>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>
+Cc: Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ imx@lists.linux.dev, devicetree@vger.kernel.org, 
+ Niklas Cassel <cassel@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
+ Manivannan Sadhasivam <mani@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752174836; l=12498;
+ i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
+ bh=RHPw+mzqn4fNV+JTiLhAhP+hp+hIHxxWVGkrR9ghdzQ=;
+ b=SFLRFUj2d9FSwrYDdWvRPnrM42iYakQN5tsh+soiw5WD5hi/PvnstmtLm2RR79S0BKxv3Ogx/
+ ZRWPtN9Tg2gDkAAGtH/c1pUSQahcT4cf2t74+Tb5D/E97Lq7ezOIs8Q
+X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
+ pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
+X-Endpoint-Received: by B4 Relay for Frank.Li@nxp.com/20240130 with
+ auth_id=121
+X-Original-From: Frank Li <Frank.Li@nxp.com>
+Reply-To: Frank.Li@nxp.com
 
-Add test to validate the headroom adjustment support for both extension
-and the shrinking cases. For the extension part, eat up space from
-the start of payload data whereas, for the shrinking part, populate
-the newly available space with a tag. In the user-space, validate that a
-test string is manipulated accordingly.
+┌────────────┐   ┌───────────────────────────────────┐   ┌────────────────┐
+│            │   │                                   │   │                │
+│            │   │ PCI Endpoint                      │   │ PCI Host       │
+│            │   │                                   │   │                │
+│            │◄──┤ 1.platform_msi_domain_alloc_irqs()│   │                │
+│            │   │                                   │   │                │
+│ MSI        ├──►│ 2.write_msi_msg()                 ├──►├─BAR<n>         │
+│ Controller │   │   update doorbell register address│   │                │
+│            │   │   for BAR                         │   │                │
+│            │   │                                   │   │ 3. Write BAR<n>│
+│            │◄──┼───────────────────────────────────┼───┤                │
+│            │   │                                   │   │                │
+│            ├──►│ 4.Irq Handle                      │   │                │
+│            │   │                                   │   │                │
+│            │   │                                   │   │                │
+└────────────┘   └───────────────────────────────────┘   └────────────────┘
 
-./drivers/net/xdp.py
-TAP version 13
-1..9
-ok 1 xdp.test_xdp_native_pass_sb
-ok 2 xdp.test_xdp_native_pass_mb
-ok 3 xdp.test_xdp_native_drop_sb
-ok 4 xdp.test_xdp_native_drop_mb
-ok 5 xdp.test_xdp_native_tx_mb
-\# Failed run: pkt_sz 2048, ... offset -256. Reason: Adjustment failed
-ok 6 xdp.test_xdp_native_adjst_tail_grow_data
-ok 7 xdp.test_xdp_native_adjst_tail_shrnk_data
-\# Failed run: pkt_sz 512, ... offset -128. Reason: Adjustment failed
-ok 8 xdp.test_xdp_native_adjst_head_grow_data
-\# Failed run: pkt_sz (2048) > HDS threshold (1536) and offset 64 > 48
-ok 9 xdp.test_xdp_native_adjst_head_shrnk_data
-\# Totals: pass:9 fail:0 xfail:0 xpass:0 skip:0 error:0
+This patches based on old https://lore.kernel.org/imx/20221124055036.1630573-1-Frank.Li@nxp.com/
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
+Original patch only target to vntb driver. But actually it is common
+method.
+
+This patches add new API to pci-epf-core, so any EP driver can use it.
+
+Previous v2 discussion here.
+https://lore.kernel.org/imx/20230911220920.1817033-1-Frank.Li@nxp.com/
+
+Changes in v21:
+- Align to bar size, try to fix Niklas reported problem.
+- Rebase to v6.16-rc5
+- Link to v20: https://lore.kernel.org/r/20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com
+
+Changes in v20:
+- remove set epf of_node's patch and only support one epf now.
+- move imx6's patch to first
+- detail change see each patches' change log
+- Link to v19: https://lore.kernel.org/r/20250609-ep-msi-v19-0-77362eaa48fa@nxp.com
+
+Changes in v19:
+- irq part already in v6.16-rc1, only missed pcie/dts part
+- rebase to v6.16-rc1
+- update commit message for patch IMMUTABLE check.
+- Link to v18: https://lore.kernel.org/r/20250414-ep-msi-v18-0-f69b49917464@nxp.com
+
+Changes in v18:
+- pci-ep.yaml: sort property order, fix maxvalue to 0x7ffff for msi-map-mask and
+iommu-map-mask
+- Link to v17: https://lore.kernel.org/r/20250407-ep-msi-v17-0-633ab45a31d0@nxp.com
+
+Changes in v17:
+- move document part to pci-ep.yaml
+- Link to v16: https://lore.kernel.org/r/20250404-ep-msi-v16-0-d4919d68c0d0@nxp.com
+
+Changes in v16:
+- remove arm64: dts: imx95-19x19-evk: Add PCIe1 endpoint function overlay file
+because there are better patches, which under review.
+- Add document for pcie-ep msi-map usage
+- other change to see each patch's change log
+About IMMUTABLE (No change for this part, tglx provide feedback)
+> - This IMMUTABLE thing serves no purpose, because you don't randomly
+>   plug this end-point block on any MSI controller. They come as part
+>   of an SoC.
+
+"Yes and no. The problem is that the EP implementation is meant to be a
+generic library and while GIC-ITS guarantees immutability of the
+address/data pair after setup, there are architectures (x86, loongson,
+riscv) where the base MSI controller does not and immutability is only
+achieved when interrupt remapping is enabled. The latter can be disabled
+at boot-time and then the EP implementation becomes a lottery across
+affinity changes.
+
+That was my concern about this library implementation and that's why I
+asked for a mechanism to ensure that the underlying irqdomain provides a
+immutable address/data pair.
+
+So it does not matter for GIC-ITS, but in the larger picture it matters.
+
+Thanks,
+
+        tglx
+"
+
+So it does not matter for GIC-ITS, but in the larger picture it matters.
+
+- Link to v15: https://lore.kernel.org/r/20250211-ep-msi-v15-0-bcacc1f2b1a9@nxp.com
+
+Changes in v15:
+- rebase to v6.14-rc1
+- fix build issue find by kernel test robot
+- Link to v14: https://lore.kernel.org/r/20250207-ep-msi-v14-0-9671b136f2b8@nxp.com
+
+Changes in v14:
+Marc Zyngier raised concerns about adding DOMAIN_BUS_DEVICE_PCI_EP_MSI. As
+a result, the approach has been reverted to the v9 method. However, there
+are several improvements:
+
+MSI now supports msi-map in addition to msi-parent.
+  - The struct device: id is used as the endpoint function (EPF) device
+identity to map to the stream ID (sideband information).
+  - The EPC device tree source (DTS) utilizes msi-map to provide such
+information.
+  - The EPF device's of_node is set to the EPC controller’s node. This
+approach is commonly used for multi-function device (MFD) platform child
+devices, allowing them to inherit properties from the MFD device’s DTS,
+such as reset-cells and gpio-cells. This method is well-suited for the
+current case, as the EPF is inherently created/binded to the EPC and
+should inherit the EPC’s DTS node properties.
+
+Additionally:
+
+Since the basic IMX95 LUT support has already been merged into the
+mainline, a DTS and driver increment patch is added to complete the
+solution. The patch is rebased onto the latest linux-next tree and
+aligned with the new pcitest framework.
+
+- Link to v13: https://lore.kernel.org/r/20241218-ep-msi-v13-0-646e2192dc24@nxp.com
+
+Changes in v13:
+- Change to use DOMAIN_BUS_PCI_DEVICE_EP_MSI
+- Change request id as  func | vfunc << 3
+- Remove IRQ_DOMAIN_MSI_IMMUTABLE
+
+Thomas Gleixner:
+
+I hope capture all your points in review comments. If missed, let me know.
+
+- Link to v12: https://lore.kernel.org/r/20241211-ep-msi-v12-0-33d4532fa520@nxp.com
+
+Changes in v12:
+- Change to use IRQ_DOMAIN_MSI_IMMUTABLE and add help function
+irq_domain_msi_is_immuatble().
+- split PCI: endpoint: pci-ep-msi: Add MSI address/data pair mutable check to 3 patches
+- Link to v11: https://lore.kernel.org/r/20241209-ep-msi-v11-0-7434fa8397bd@nxp.com
+
+Changes in v11:
+- Change to use MSI_FLAG_MSG_IMMUTABLE
+- Link to v10: https://lore.kernel.org/r/20241204-ep-msi-v10-0-87c378dbcd6d@nxp.com
+
+Changes in v10:
+
+Thomas Gleixner:
+	There are big change in pci-ep-msi.c. I am sure if go on the
+corrent path. The key improvement is remove only 1 function devices's
+limitation.
+
+	I use new patch for imutable check, which relative additional
+feature compared to base enablement patch.
+
+- Remove patch Add msi_remove_device_irq_domain() in platform_device_msi_free_irqs_all()
+- Add new patch irqchip/gic-v3-its: Avoid overwriting msi_prepare callback if provided by msi_domain_info
+- Remove only support 1 endpoint function limiation.
+- Create one MSI domain for each endpoint function devices.
+- Use "msi-map" in pci ep controler node, instead of of msi-parent. first
+argument is
+	(func_no << 8 | vfunc_no)
+
+- Link to v9: https://lore.kernel.org/r/20241203-ep-msi-v9-0-a60dbc3f15dd@nxp.com
+
+Changes in v9
+- Add patch platform-msi: Add msi_remove_device_irq_domain() in platform_device_msi_free_irqs_all()
+- Remove patch PCI: endpoint: Add pci_epc_get_fn() API for customizable filtering
+- Remove API pci_epf_align_inbound_addr_lo_hi
+- Move doorbell_alloc in to doorbell_enable function.
+- Link to v8: https://lore.kernel.org/r/20241116-ep-msi-v8-0-6f1f68ffd1bb@nxp.com
+
+Changes in v8:
+- update helper function name to pci_epf_align_inbound_addr()
+- Link to v7: https://lore.kernel.org/r/20241114-ep-msi-v7-0-d4ac7aafbd2c@nxp.com
+
+Changes in v7:
+- Add helper function pci_epf_align_addr();
+- Link to v6: https://lore.kernel.org/r/20241112-ep-msi-v6-0-45f9722e3c2a@nxp.com
+
+Changes in v6:
+- change doorbell_addr to doorbell_offset
+- use round_down()
+- add Niklas's test by tag
+- rebase to pci/endpoint
+- Link to v5: https://lore.kernel.org/r/20241108-ep-msi-v5-0-a14951c0d007@nxp.com
+
+Changes in v5:
+- Move request_irq to epf test function driver for more flexiable user case
+- Add fixed size bar handler
+- Some minor improvememtn to see each patches's changelog.
+- Link to v4: https://lore.kernel.org/r/20241031-ep-msi-v4-0-717da2d99b28@nxp.com
+
+Changes in v4:
+- Remove patch genirq/msi: Add cleanup guard define for msi_lock_descs()/msi_unlock_descs()
+- Use new method to avoid compatible problem.
+  Add new command DOORBELL_ENABLE and DOORBELL_DISABLE.
+  pcitest -B send DOORBELL_ENABLE first, EP test function driver try to
+remap one of BAR_N (except test register bar) to ITS MSI MMIO space. Old
+driver don't support new command, so failure return, not side effect.
+  After test, DOORBELL_DISABLE command send out to recover original map, so
+pcitest bar test can pass as normal.
+- Other detail change see each patches's change log
+- Link to v3: https://lore.kernel.org/r/20241015-ep-msi-v3-0-cedc89a16c1a@nxp.com
+
+Change from v2 to v3
+- Fixed manivannan's comments
+- Move common part to pci-ep-msi.c and pci-ep-msi.h
+- rebase to 6.12-rc1
+- use RevID to distingiush old version
+
+mkdir /sys/kernel/config/pci_ep/functions/pci_epf_test/func1
+echo 16 > /sys/kernel/config/pci_ep/functions/pci_epf_test/func1/msi_interrupts
+echo 0x080c > /sys/kernel/config/pci_ep/functions/pci_epf_test/func1/deviceid
+echo 0x1957 > /sys/kernel/config/pci_ep/functions/pci_epf_test/func1/vendorid
+echo 1 > /sys/kernel/config/pci_ep/functions/pci_epf_test/func1/revid
+^^^^^^ to enable platform msi support.
+ln -s /sys/kernel/config/pci_ep/functions/pci_epf_test/func1 /sys/kernel/config/pci_ep/controllers/4c380000.pcie-ep
+
+- use new device ID, which identify support doorbell to avoid broken
+compatility.
+
+    Enable doorbell support only for PCI_DEVICE_ID_IMX8_DB, while other devices
+    keep the same behavior as before.
+
+           EP side             RC with old driver      RC with new driver
+    PCI_DEVICE_ID_IMX8_DB          no probe              doorbell enabled
+    Other device ID             doorbell disabled*       doorbell disabled*
+
+    * Behavior remains unchanged.
+
+Change from v1 to v2
+- Add missed patch for endpont/pci-epf-test.c
+- Move alloc and free to epc driver from epf.
+- Provide general help function for EPC driver to alloc platform msi irq.
+- Fixed manivannan's comments.
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
- tools/testing/selftests/drivers/net/xdp.py    | 147 ++++++++++++++++-
- .../selftests/net/lib/xdp_native.bpf.c        | 155 ++++++++++++++++++
- 2 files changed, 301 insertions(+), 1 deletion(-)
+Frank Li (9):
+      PCI: imx6: Add helper function imx_pcie_add_lut_by_rid()
+      PCI: imx6: Add LUT configuration for MSI/IOMMU in Endpoint mode
+      PCI: endpoint: Add RC-to-EP doorbell support using platform MSI controller
+      PCI: endpoint: pci-ep-msi: Add MSI address/data pair mutable check
+      PCI: endpoint: Add pci_epf_align_inbound_addr() helper for address alignment
+      PCI: endpoint: pci-epf-test: Add doorbell test support
+      misc: pci_endpoint_test: Add doorbell test case
+      selftests: pci_endpoint: Add doorbell test case
+      arm64: dts: imx95: Add msi-map for pci-ep device
 
-diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
-index b62e41c0e708..648fda231728 100755
---- a/tools/testing/selftests/drivers/net/xdp.py
-+++ b/tools/testing/selftests/drivers/net/xdp.py
-@@ -12,7 +12,7 @@ from dataclasses import dataclass
- from enum import Enum
- 
- from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ne, ksft_pr
--from lib.py import KsftFailEx, KsftSkipEx, NetDrvEpEnv
-+from lib.py import KsftFailEx, KsftSkipEx, NetDrvEpEnv, EthtoolFamily, NlError
- from lib.py import bkg, cmd, rand_port
- from lib.py import ip, bpftool, defer
- 
-@@ -31,6 +31,7 @@ class XDPAction(Enum):
-     DROP = 1  # Drop the packet
-     TX = 2    # Route the packet to the remote host
-     TAIL_ADJST = 3  # Adjust the tail of the packet
-+    HEAD_ADJST = 4  # Adjust the head of the packet
- 
- 
- class XDPStats(Enum):
-@@ -490,6 +491,147 @@ def test_xdp_native_adjst_tail_shrnk_data(cfg):
-     _validate_res(res, offset_lst, pkt_sz_lst)
- 
- 
-+def get_hds_thresh(cfg):
-+    """
-+    Retrieves the header data split (HDS) threshold for a network interface.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+
-+    Returns:
-+        The HDS threshold value. If the threshold is not supported or an error occurs,
-+        a default value of 1500 is returned.
-+    """
-+    netnl = cfg.netnl
-+    hds_thresh = 1500
-+
-+    try:
-+        rings = netnl.rings_get({'header': {'dev-index': cfg.ifindex}})
-+        if 'hds-thresh' not in rings:
-+            ksft_pr(f'hds-thresh not supported. Using default: {hds_thresh}')
-+            return hds_thresh
-+        hds_thresh = rings['hds-thresh']
-+    except NlError as e:
-+        ksft_pr(f"Failed to get rings: {e}. Using default: {hds_thresh}")
-+
-+    return hds_thresh
-+
-+
-+def _test_xdp_native_head_adjst(cfg, prog, pkt_sz_lst, offset_lst):
-+    """
-+    Tests the XDP head adjustment action for a multi-buffer case.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+        netnl: Network namespace or link object (not used in this function).
-+
-+    This function sets up the packet size and offset lists, then performs
-+    the head adjustment test by sending and receiving UDP packets.
-+    """
-+    cfg.require_cmd("socat", remote=True)
-+
-+    prog_info = _load_xdp_prog(cfg, BPFProgInfo(prog, "xdp_native.bpf.o", "xdp.frags", 9000))
-+    port = rand_port()
-+
-+    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.HEAD_ADJST.value)
-+    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
-+
-+    hds_thresh = get_hds_thresh(cfg)
-+    for offset in offset_lst:
-+        for pkt_sz in pkt_sz_lst:
-+            # The "head" buffer must contain at least the Ethernet header
-+            # after we eat into it. We send large-enough packets, but if HDS
-+            # is enabled head will only contain headers. Don't try to eat
-+            # more than 28 bytes (UDPv4 + eth hdr left: (14 + 20 + 8) - 14)
-+            l2_cut_off = 28 if cfg.addr_ipver == 4 else 48
-+            if pkt_sz > hds_thresh and offset > l2_cut_off:
-+                ksft_pr(
-+                f"Failed run: pkt_sz ({pkt_sz}) > HDS threshold ({hds_thresh}) and "
-+                f"offset {offset} > {l2_cut_off}"
-+                )
-+                return {"status": "pass"}
-+
-+            test_str = ''.join(random.choice(string.ascii_lowercase) for _ in range(pkt_sz))
-+            tag = format(random.randint(65, 90), '02x')
-+
-+            _set_xdp_map("map_xdp_setup",
-+                     TestConfig.ADJST_OFFSET.value,
-+                     offset)
-+            _set_xdp_map("map_xdp_setup", TestConfig.ADJST_TAG.value, int(tag, 16))
-+            _set_xdp_map("map_xdp_setup", TestConfig.ADJST_OFFSET.value, offset)
-+
-+            recvd_str = _exchg_udp(cfg, port, test_str)
-+
-+            # Check for failures around adjustment and data exchange
-+            failure = _check_for_failures(recvd_str, _get_stats(prog_info['maps']['map_xdp_stats']))
-+            if failure is not None:
-+                return {
-+                    "status": "fail",
-+                    "reason": failure,
-+                    "offset": offset,
-+                    "pkt_sz": pkt_sz
-+                }
-+
-+            # Validate data content based on offset direction
-+            expected_data = None
-+            if offset < 0:
-+                expected_data = chr(int(tag, 16)) * (0 - offset) + test_str
-+            else:
-+                expected_data = test_str[offset:]
-+
-+            if recvd_str != expected_data:
-+                return {
-+                    "status": "fail",
-+                    "reason": "Data mismatch",
-+                    "offset": offset,
-+                    "pkt_sz": pkt_sz
-+                }
-+
-+    return {"status": "pass"}
-+
-+
-+def test_xdp_native_adjst_head_grow_data(cfg):
-+    """
-+    Tests the XDP headroom growth support.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+
-+    This function sets up the packet size and offset lists, then calls the
-+    _test_xdp_native_head_adjst_mb function to perform the actual test. The
-+    test is passed if the headroom is successfully extended for given packet
-+    sizes and offsets.
-+    """
-+    pkt_sz_lst = [512, 1024, 2048]
-+
-+    # Positive value indicates data part is growing by the corresponding value
-+    offset_lst = [-16, -32, -64, -128, -256]
-+    res = _test_xdp_native_head_adjst(cfg, "xdp_prog_frags", pkt_sz_lst, offset_lst)
-+
-+    _validate_res(res, offset_lst, pkt_sz_lst)
-+
-+
-+def test_xdp_native_adjst_head_shrnk_data(cfg):
-+    """
-+    Tests the XDP headroom shrinking support.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+
-+    This function sets up the packet size and offset lists, then calls the
-+    _test_xdp_native_head_adjst_mb function to perform the actual test. The
-+    test is passed if the headroom is successfully shrunk for given packet
-+    sizes and offsets.
-+    """
-+    pkt_sz_lst = [512, 1024, 2048]
-+
-+    # Negative value indicates data part is shrinking by the corresponding value
-+    offset_lst = [16, 32, 64, 128, 256]
-+    res = _test_xdp_native_head_adjst(cfg, "xdp_prog_frags", pkt_sz_lst, offset_lst)
-+
-+    _validate_res(res, offset_lst, pkt_sz_lst)
-+
-+
- def main():
-     """
-     Main function to execute the XDP tests.
-@@ -500,6 +642,7 @@ def main():
-     function to execute the tests.
-     """
-     with NetDrvEpEnv(__file__) as cfg:
-+        cfg.netnl = EthtoolFamily()
-         ksft_run(
-             [
-                 test_xdp_native_pass_sb,
-@@ -509,6 +652,8 @@ def main():
-                 test_xdp_native_tx_mb,
-                 test_xdp_native_adjst_tail_grow_data,
-                 test_xdp_native_adjst_tail_shrnk_data,
-+                test_xdp_native_adjst_head_grow_data,
-+                test_xdp_native_adjst_head_shrnk_data,
-             ],
-             args=(cfg,))
-     ksft_exit()
-diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-index 68341e6f5fba..2560c43219d8 100644
---- a/tools/testing/selftests/net/lib/xdp_native.bpf.c
-+++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-@@ -27,6 +27,7 @@ enum {
- 	XDP_MODE_DROP = 1,
- 	XDP_MODE_TX = 2,
- 	XDP_MODE_TAIL_ADJST = 3,
-+	XDP_MODE_HEAD_ADJST = 4,
- } xdp_map_modes;
- 
- enum {
-@@ -324,6 +325,158 @@ static int xdp_tail_ext(struct xdp_md *ctx, __u16 port)
- 	return XDP_ABORTED;
- }
- 
-+static int xdp_adjst_head_shrnk_data(struct xdp_md *ctx, const __u32 hdr_len,
-+				const __u32 size)
-+{
-+	char tmp_buff[MAX_ADJST_OFFSET];
-+	void *data, *data_end;
-+	void *offset_ptr;
-+
-+	data = (void *)(long)ctx->data;
-+	data_end = (void *)(long)ctx->data_end;
-+
-+	/* Update the length information in the IP and UDP headers before adjusting
-+	 * the headroom. This simplifies accessing the relevant fields in the IP and
-+	 * UDP headers for fragmented packets. Any failure beyond this point will
-+	 * result in the packet being aborted, so we don't need to worry about
-+	 * incorrect length information for passed packets.
-+	 */
-+	update_pkt(data, data_end, (__s16)(0 - size));
-+
-+	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, MAX_ADJST_OFFSET) < 0)
-+		return -1;
-+
-+	if (bpf_xdp_adjust_head(ctx, size) < 0)
-+		return -1;
-+
-+	if (size > MAX_ADJST_OFFSET)
-+		return -1;
-+
-+	if (hdr_len == 0 || hdr_len > MAX_ADJST_OFFSET)
-+		return -1;
-+
-+	if (bpf_xdp_store_bytes(ctx, 0, tmp_buff, hdr_len) < 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int xdp_adjst_head_grow_data(struct xdp_md *ctx, const __u32 hdr_len,
-+			       const __u32 size)
-+{
-+	char tmp_buff[MAX_ADJST_OFFSET];
-+	void *data, *data_end;
-+	void *offset_ptr;
-+	__s32 *val;
-+	__u32 key;
-+	__u8 tag;
-+
-+	if (hdr_len > MAX_ADJST_OFFSET || hdr_len <= 0)
-+		return -1;
-+
-+	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, hdr_len) < 0)
-+		return -1;
-+
-+	if (size > MAX_ADJST_OFFSET)
-+		return -1;
-+
-+	if (bpf_xdp_adjust_head(ctx, 0 - size) < 0)
-+		return -1;
-+
-+	if (bpf_xdp_store_bytes(ctx, 0, tmp_buff, hdr_len) < 0)
-+		return -1;
-+
-+	data = (void *)(long)ctx->data;
-+	data_end = (void *)(long)ctx->data_end;
-+
-+	offset_ptr = data + hdr_len;
-+	if (offset_ptr > data_end)
-+		return -1;
-+
-+	key = XDP_ADJST_TAG;
-+	val = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+	if (!val)
-+		return -1;
-+
-+	tag = (__u8)(*val);
-+
-+	for (int i = 0; i < min(MAX_ADJST_OFFSET, size); i++) {
-+		if (offset_ptr + 1 > data_end)
-+			return -1;
-+
-+		__builtin_memcpy(offset_ptr, &tag, 1);
-+		offset_ptr++;
-+	}
-+
-+	update_pkt(data, data_end, (__s16)(size));
-+
-+	return 0;
-+
-+}
-+
-+static int xdp_head_adjst(struct xdp_md *ctx, __u16 port)
-+{
-+	void *data_end = (void *)(long)ctx->data_end;
-+	void *data = (void *)(long)ctx->data;
-+	struct udphdr *udph_ptr = NULL;
-+	__u32 key, size, hdr_len;
-+	__s32 *val;
-+	int res;
-+
-+	/* Filter packets based on UDP port */
-+	udph_ptr = filter_udphdr(ctx, port);
-+	if (!udph_ptr)
-+		return XDP_PASS;
-+
-+	hdr_len = (void *)udph_ptr - data + sizeof(struct udphdr);
-+
-+	key = XDP_ADJST_OFFSET;
-+	val = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+	if (!val)
-+		return XDP_PASS;
-+
-+	switch (*val) {
-+	case -16:
-+	case 16:
-+		size = 16;
-+		break;
-+	case -32:
-+	case 32:
-+		size = 32;
-+		break;
-+	case -64:
-+	case 64:
-+		size = 64;
-+		break;
-+	case -128:
-+	case 128:
-+		size = 128;
-+		break;
-+	case -256:
-+	case 256:
-+		size = 256;
-+		break;
-+	default:
-+		bpf_printk("Invalid adjustment offset: %d\n", *val);
-+		goto abort;
-+	}
-+
-+	if (*val < 0)
-+		res = xdp_adjst_head_grow_data(ctx, hdr_len, size);
-+	else
-+		res = xdp_adjst_head_shrnk_data(ctx, hdr_len, size);
-+
-+	if (res)
-+		goto abort;
-+
-+	record_stats(ctx, STATS_PASS);
-+	return XDP_PASS;
-+
-+abort:
-+	record_stats(ctx, STATS_ABORT);
-+	return XDP_ABORTED;
-+}
-+
- static int xdp_prog_common(struct xdp_md *ctx)
- {
- 	__u32 key, *port;
-@@ -348,6 +501,8 @@ static int xdp_prog_common(struct xdp_md *ctx)
- 		return xdp_mode_tx_handler(ctx, (__u16)(*port));
- 	case XDP_MODE_TAIL_ADJST:
- 		return xdp_tail_ext(ctx, (__u16)(*port));
-+	case XDP_MODE_HEAD_ADJST:
-+		return xdp_head_adjst(ctx, (__u16)(*port));
- 	}
- 
- 	/* Default action is to simple pass */
--- 
-2.47.1
+ Documentation/PCI/endpoint/pci-test-howto.rst      |  14 +++
+ arch/arm64/boot/dts/freescale/imx95.dtsi           |   1 +
+ drivers/misc/pci_endpoint_test.c                   |  85 ++++++++++++-
+ drivers/pci/controller/dwc/pci-imx6.c              |  25 ++--
+ drivers/pci/endpoint/Kconfig                       |   8 ++
+ drivers/pci/endpoint/Makefile                      |   1 +
+ drivers/pci/endpoint/functions/pci-epf-test.c      | 136 +++++++++++++++++++++
+ drivers/pci/endpoint/pci-ep-msi.c                  |  98 +++++++++++++++
+ drivers/pci/endpoint/pci-epf-core.c                |  36 ++++++
+ include/linux/pci-ep-msi.h                         |  28 +++++
+ include/linux/pci-epf.h                            |  18 +++
+ include/uapi/linux/pcitest.h                       |   1 +
+ .../selftests/pci_endpoint/pci_endpoint_test.c     |  28 +++++
+ 13 files changed, 470 insertions(+), 9 deletions(-)
+---
+base-commit: d7b8f8e20813f0179d8ef519541a3527e7661d3a
+change-id: 20241010-ep-msi-8b4cab33b1be
+
+Best regards,
+--
+Frank Li <Frank.Li@nxp.com>
+
 
 
