@@ -1,96 +1,81 @@
-Return-Path: <linux-kselftest+bounces-36978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51ACFB00530
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:26:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90D7DB00546
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:30:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 879611C8736B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:25:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2E6E3B3D56
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0706F274642;
-	Thu, 10 Jul 2025 14:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D3C12737F6;
+	Thu, 10 Jul 2025 14:29:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="0HbIgALA";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="51/RYDP0";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="0HbIgALA";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="51/RYDP0"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="NWBVZUWG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024AA273D74
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 14:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328438F5E
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 14:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752157488; cv=none; b=STFGAxI7mb88m+FNqtZ6vYI6zaNFYdCYQ/fT2Q0IVFN9T37SwpGoZC1koKqmjA3bMtokufmU6pxB+1KLWdQQHhJ9/yJ4mvIB/q2eSd/Behs8QSxUnM8Uk9ddKcJ7ZSxJhhhcU7ila8tYVJfVEtowK2KmUv1OFRuaHWRGEH2kFsA=
+	t=1752157797; cv=none; b=HJRsaW8a0eE0hEwmJAywHbQ/6L9969hE/1Nw43N9qN7FJLGm0uwWiGgjL4d6/ZPNqlCgeTySCXbF5zugobo8Q3W4Hos8XhOoa2zwGWS4E8km2BUi6zZYuiGjTrydQZVcfaz24hYO4g3vkzn5VUIWGten4UJiHAEo4stEPgE2vxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752157488; c=relaxed/simple;
-	bh=AtMZWsQlDXJPRpoEFsPAN60/fj0W6QkIWL1L+B5H0K0=;
+	s=arc-20240116; t=1752157797; c=relaxed/simple;
+	bh=oZ7OonWWPb3CLzQvpruAiAZiFnf3bbsaJiYraXkrTTc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cI61qb3UbCrEi1t8ySyVyPj812UQMwpZ9hfbty2IG8nSM8dIO6Y/Fe1MwhPW4xaX3mJ3EgQ3Si9S2wWXuqgpLANunUPHPW3E8FqkeSMBIGRrBpQv6Fpn52MTo1lQFEYU1R3cywt8hEIZCnlHGgFbjsHmVm6X+KoqRko16ppmRkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=0HbIgALA; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=51/RYDP0; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=0HbIgALA; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=51/RYDP0; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 408BC2171F;
-	Thu, 10 Jul 2025 14:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1752157484; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=/q0zaMhTWz3v3U9oOzKoU+9z3AL6Ae50OF/szoDKvxw=;
-	b=0HbIgALA+o0njhntDQPPPED0GsuGWOQNi+B9c+E3Xps9sXagNmdoGtMzvDWbRljEqiKiky
-	OXsV4PhvRzkonN9/THPMcWJdyLQ5pgB8NZ59PDvzSv1rwgMCRg3prUxRuGbFLSVdmzCUCC
-	LZUZDsD1PkKWgiTfBc4P2I4uBEUKVvk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1752157484;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=/q0zaMhTWz3v3U9oOzKoU+9z3AL6Ae50OF/szoDKvxw=;
-	b=51/RYDP0Fu6WICVnIkrKXCDm3ajf6rdiUhn5mGEqZA5c6h8Po94hNBnGx9eTKt1+QubfRe
-	4i2X9alW6zmiY4CQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=0HbIgALA;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="51/RYDP0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1752157484; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=/q0zaMhTWz3v3U9oOzKoU+9z3AL6Ae50OF/szoDKvxw=;
-	b=0HbIgALA+o0njhntDQPPPED0GsuGWOQNi+B9c+E3Xps9sXagNmdoGtMzvDWbRljEqiKiky
-	OXsV4PhvRzkonN9/THPMcWJdyLQ5pgB8NZ59PDvzSv1rwgMCRg3prUxRuGbFLSVdmzCUCC
-	LZUZDsD1PkKWgiTfBc4P2I4uBEUKVvk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1752157484;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=/q0zaMhTWz3v3U9oOzKoU+9z3AL6Ae50OF/szoDKvxw=;
-	b=51/RYDP0Fu6WICVnIkrKXCDm3ajf6rdiUhn5mGEqZA5c6h8Po94hNBnGx9eTKt1+QubfRe
-	4i2X9alW6zmiY4CQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1DB87136DC;
-	Thu, 10 Jul 2025 14:24:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id IfK7BSzNb2g0MwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 10 Jul 2025 14:24:44 +0000
-Message-ID: <478a6003-7dc8-444c-b8a6-a29c521abe72@suse.cz>
-Date: Thu, 10 Jul 2025 16:24:43 +0200
+	 In-Reply-To:Content-Type; b=VGuvf/lVaARJjVpcBMSbuTtkX6OgGre2B7M+J6FhM11UD8frECAXMHhxCxj177GCDDeJM5WkmECiMuf26h66hLfylS+JB74fUmR64bCEdBi8mquXKe8r9gYs3xBTlyUbkbgndfIxiuhyKPAgLWMff4t6wdJCMYmg0dlspP/xz/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=NWBVZUWG; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-74b54cead6cso800402b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 07:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1752157794; x=1752762594; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=70T/mtOHoW67bNGMf99k1u6kIp6BUIzmEHFhVe6xe+4=;
+        b=NWBVZUWGh9uoxmAsbhwkX5ajR1Dgt+7wCMG+931urg350JwjgwF0rcZ38mkqF6KtJx
+         GEYG1ZA9cV7SrXWxr3HOESSdyEbIQ6VGVG8UouGNMIuSwoAYnahqrXPIR+4LkaIKgRc/
+         m/PU6vp4wdkAjrRsD3Qt970M7DB/EQuaivplZCXScf6O+teH2RL8zcBKunLVjdVnfG44
+         ckuD9p9KltPZpt2e9nB1IWQJ8KsNBSbrFWp8fkuNNpzMaN/JJXoXk/Mr8/zWza5DXOMN
+         LsfS3is+PpJqxvbrE7ZncJ8rEUv/87uRSpO6P8MMYGYIdPwthiPxoMldZPn1OMYPrKHi
+         /Y0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752157794; x=1752762594;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=70T/mtOHoW67bNGMf99k1u6kIp6BUIzmEHFhVe6xe+4=;
+        b=ZPST4gfnKW+R4mfCe10BrNd6+DUgR1GftvCJ4fp/ofsyXmgPwI+PqjDRESGTOW5Byk
+         KrnIodrQhl5wQl8FG7vzqMkfRHsFVKCujgp6KgUs9SHDXpTIdYLxkGPhL01dZSWxhzke
+         Bcw6Zb/khEOIHznK8N5EgkUJJ7GqrvX8SzdSUIHEH6iMyBq47Jcznr1WAdXSPLZSlNeA
+         f9zIELoNlkzenKDKOTO4bpFIoxk1DNgcVX+3Wxx5NHl+E4iETwE/EhQLK+szSB+c4MQb
+         hgkgr3aWuQH1lGG4T/+7/VHb8W1PrxzgHeYH8clmO+jyhFes7HusT/xUtte19mc9Clh9
+         aN7A==
+X-Forwarded-Encrypted: i=1; AJvYcCULhyMbdG5D4kxsR737Q66fi73zRhslj2KS35P4Fh6umLAeVYI+iqrqPj8KR0PMEBBwjTrWZp7pQTlpERRs7xE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUKOIl0/eVbselZDPdk471agOpoEbPyLYzFQNmxv8Vpr5RLvOI
+	z4RJn/W+JFSI9NecOBhGMtuL2h8TZPg+6tzkYro6cLUea2veKik/TaI/4b/Ccrm1wRA6trrmlJh
+	onWrXh+g=
+X-Gm-Gg: ASbGncsocWqKq+rpHy1SSr8P67rOKnOyyhjJoh22BCaaEBK9Fnuh1y3hqOZwCW2gbwu
+	PbWO76bXQDR+ToMq9rHk2F0UofDpTNHSGMrrCk+knhavwr1H+y+Jr6nq6g1QBddZ/rF5IDtNKQY
+	fqw69Ey7wEXUZ+1dHM5sWTybsOSpT8vl7rhqUEm4UEFqARBWpdxZNu+kbSg51jI/d+9WIoUjtYo
+	R9MhuppGpzNWHueHYEJ1xNSxFK8z0vOdiTV08x74YZyNPRpBrS/jpHcfeWf7ds/efSgjJHVZCGV
+	u2jnq6KmzH6zuDbX+UcIXeUpG88QReb0q0DMv885NXVHytUlW5hFt4zcxniEWOjlopwhcQUwEMh
+	MgH5tZ10Vzp4j6jtgUxVmHmtkEzbsoPW7/f7iUaIzag==
+X-Google-Smtp-Source: AGHT+IE6cvc4FDu4lXrrdeGKWhRLkK/Uxe3lGtKWtoiWILObMjxluEPeqmm80yVTtrJwg3ohULnSwA==
+X-Received: by 2002:a05:6a00:a27:b0:736:54c9:df2c with SMTP id d2e1a72fcca58-74eb558edfcmr4844441b3a.15.1752157794423;
+        Thu, 10 Jul 2025 07:29:54 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe6c5660sm2390825a12.48.2025.07.10.07.29.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Jul 2025 07:29:53 -0700 (PDT)
+Message-ID: <c244c1d4-fef5-439e-8dfe-12c2f8910b18@rivosinc.com>
+Date: Thu, 10 Jul 2025 16:29:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,132 +83,79 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/10] mm/mremap: use an explicit uffd failure path for
- mremap
+Subject: Re: [PATCH v4] selftests: riscv: add misaligned access testing
+To: Andreas Schwab <schwab@suse.de>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-riscv@lists.infradead.org, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>,
+ Alexandre Ghiti <alex@ghiti.fr>
+References: <20250710133506.994476-1-cleger@rivosinc.com>
+ <mvmecuognj7.fsf@suse.de> <5db9ec69-d0e4-4113-a989-ac75d0f1e5dd@rivosinc.com>
+ <mvma55cgm63.fsf@suse.de>
 Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
- linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1751865330.git.lorenzo.stoakes@oracle.com>
- <be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes@oracle.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes@oracle.com>
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+In-Reply-To: <mvma55cgm63.fsf@suse.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,suse.cz:mid,suse.cz:dkim,suse.cz:email];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 408BC2171F
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -4.51
+Content-Transfer-Encoding: 8bit
 
-On 7/7/25 07:27, Lorenzo Stoakes wrote:
-> Right now it appears that the code is relying upon the returned destination
-> address having bits outside PAGE_MASK to indicate whether an error value is
-> specified, and decrementing the increased refcount on the uffd ctx if so.
-> 
-> This is not a safe means of determining an error value, so instead, be
-> specific. It makes far more sense to do so in a dedicated error path, so
-> add mremap_userfaultfd_fail() for this purpose and use this when an error
-> arises.
-> 
-> A vm_userfaultfd_ctx is not established until we are at the point where
-> mremap_userfaultfd_prep() is invoked in copy_vma_and_data(), so this is a
-> no-op until this happens.
-> 
-> That is - uffd remap notification only occurs if the VMA is actually moved
-> - at which point a UFFD_EVENT_REMAP event is raised.
-> 
-> No errors can occur after this point currently, though it's certainly not
-> guaranteed this will always remain the case, and we mustn't rely on this.
-> 
-> However, the reason for needing to handle this case is that, when an error
-> arises on a VMA move at the point of adjusting page tables, we revert this
-> operation, and propagate the error.
-> 
-> At this point, it is not correct to raise a uffd remap event, and we must
-> handle it.
-> 
-> This refactoring makes it abundantly clear what we are doing.
-> 
-> We assume vrm->new_addr is always valid, which a prior change made the case
-> even for mremap() invocations which don't move the VMA, however given no
-> uffd context would be set up in this case it's immaterial to this change
-> anyway.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-Guess that renders my previous nit unimportant.
+On 10/07/2025 16:23, Andreas Schwab wrote:
+> On Jul 10 2025, Clément Léger wrote:
+> 
+>> On 10/07/2025 15:53, Andreas Schwab wrote:
+>>> On Jul 10 2025, Clément Léger wrote:
+>>>
+>>>> This selftest tests all the currently emulated instructions (except for
+>>>> the RV32 compressed ones which are left as a future exercise for a RV32
+>>>> user). For the FPU instructions, all the FPU registers are tested.
+>>>
+>>> If that didn't catch the missing sign extension that I just fixed in
+>>> <https://lore.kernel.org/linux-riscv/mvmikk0goil.fsf@suse.de>, you
+>>> should consider extending the tests.
+>>>
+>>
+>> Hi Andreas, you link doesn't work and I didn't find anything about sign
+>> extension except a patch you wrote for arch_cmpxg().
+> 
+> lore.k.o is currently down, here's the patch I have sent:
+> 
+> From 77c8255da24ee4fac54e2371594d7210d1ddee19 Mon Sep 17 00:00:00 2001
+> From: Andreas Schwab <schwab@suse.de>
+> Date: Thu, 10 Jul 2025 13:52:35 +0200
+> Subject: [PATCH] riscv: traps_misaligned: properly sign extend value in
+>  misaligned load handler
+> 
+> Add missing cast to signed long.
+> 
+> Signed-off-by: Andreas Schwab <schwab@suse.de>
+> ---
+>  arch/riscv/kernel/traps_misaligned.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+> index 93043924fe6c..f760e4fcc052 100644
+> --- a/arch/riscv/kernel/traps_misaligned.c
+> +++ b/arch/riscv/kernel/traps_misaligned.c
+> @@ -461,7 +461,7 @@ static int handle_scalar_misaligned_load(struct pt_regs *regs)
+>  	}
+>  
+>  	if (!fp)
+> -		SET_RD(insn, regs, val.data_ulong << shift >> shift);
+> +		SET_RD(insn, regs, (long)(val.data_ulong << shift) >> shift);
+
+Hi Andreas,
+
+Nice catch, it seems like it was fixed in OpenSBI but never backported
+in the kernel. As you suggested, I'll modify the test to test the sign
+extension.
+
+Thanks,
+
+Clément
+
+>  	else if (len == 8)
+>  		set_f64_rd(insn, regs, val.data_u64);
+>  	else
 
 
