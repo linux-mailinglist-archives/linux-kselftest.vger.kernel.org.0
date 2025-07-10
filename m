@@ -1,138 +1,119 @@
-Return-Path: <linux-kselftest+bounces-36969-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36970-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5F40B00475
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 15:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AE57B00498
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:05:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BDBF1C8695B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:57:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9108C1C87067
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787012749D5;
-	Thu, 10 Jul 2025 13:53:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D51271457;
+	Thu, 10 Jul 2025 14:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vVaSeGDf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="I2F3ZpKF";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vVaSeGDf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="I2F3ZpKF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YylczEb/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB12427466A
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 13:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B95271451;
+	Thu, 10 Jul 2025 14:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752155616; cv=none; b=cs25FKm1btB9W5AijpeTzSp9WOWLPSqk/iOpOKqZE5dplxU7GXNJESRc1bzB9lKr5xyXJh11m4SP1VvXPsrquT3d1wRVtze8srW7YN5hA0B5JNY0vxVJ+FuZGUCdGOPAQDfDo0T2QoyHjB15bO+mP88SEX6Lj0qvCjTPi0zzTCI=
+	t=1752156141; cv=none; b=gueLHtHTC1ynZrgujWqOt4XZAwsL2uCLgQlNTNY4cPWQEt9yEZtLwvCXjmlTQax+VNamMvyJfUooGKsiDUEA2Vw5hNNLLeQanBOS6YNzDvPV6pH6geTt5+rhUUE40UBgxc4/r8/dOboftAE/WsdDoinIWCxGXd2P5Wt9lXD3wis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752155616; c=relaxed/simple;
-	bh=UtxvfRS7dCCelVAqNGRe/33nhtCwjjQBTFWWFgldm/k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=aoSB3zDOF1r/Zk02q9miMo6sZNLAzOP5+A53YMaaOpymXTngcbJC3sH3j+Y3UvhHgebB1rXjCut0EdW9La3EKg9OUkZMQjXvyXDxzwgEpcYGzcCij1bDmiYEctvYxG5fOlRQofl1Q7IngKFARswoTFEbrJlg6JhMSEMzF5t5C0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vVaSeGDf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=I2F3ZpKF; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vVaSeGDf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=I2F3ZpKF; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from hawking.nue2.suse.org (unknown [10.168.4.11])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 0C34B2174F;
-	Thu, 10 Jul 2025 13:53:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1752155613; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dqHAb6A+qGi2SOHcnTAX3cJ4NSLLXaw7K2xbvYD8taY=;
-	b=vVaSeGDfJu/KnM9Cltgj9f2dojKl+74uBYN13F8FRS2moAPpUh9CiYnOo2PLHzBAp3w3Rs
-	3RTNYP2MqgDBC9XJRgZeaw7L8Nf82na3ks901hIvIFwu4xS1Mx4Vg4iNveRq349yDbMVwP
-	5igKMjO3ZrHCN0Mc3ciT3mjO9e5VfxY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1752155613;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dqHAb6A+qGi2SOHcnTAX3cJ4NSLLXaw7K2xbvYD8taY=;
-	b=I2F3ZpKFKYQQ6zf1Q7x6jPjegu89n3KXj82r4B6+dt8WY/1IjsujZ3itop5lHClVHobkca
-	fXf4/Ey3siEMj1Cw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1752155613; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dqHAb6A+qGi2SOHcnTAX3cJ4NSLLXaw7K2xbvYD8taY=;
-	b=vVaSeGDfJu/KnM9Cltgj9f2dojKl+74uBYN13F8FRS2moAPpUh9CiYnOo2PLHzBAp3w3Rs
-	3RTNYP2MqgDBC9XJRgZeaw7L8Nf82na3ks901hIvIFwu4xS1Mx4Vg4iNveRq349yDbMVwP
-	5igKMjO3ZrHCN0Mc3ciT3mjO9e5VfxY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1752155613;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dqHAb6A+qGi2SOHcnTAX3cJ4NSLLXaw7K2xbvYD8taY=;
-	b=I2F3ZpKFKYQQ6zf1Q7x6jPjegu89n3KXj82r4B6+dt8WY/1IjsujZ3itop5lHClVHobkca
-	fXf4/Ey3siEMj1Cw==
-Received: by hawking.nue2.suse.org (Postfix, from userid 17005)
-	id F1C374A0569; Thu, 10 Jul 2025 15:53:32 +0200 (CEST)
-From: Andreas Schwab <schwab@suse.de>
-To: =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>
-Cc: linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-riscv@lists.infradead.org,  Palmer Dabbelt <palmer@dabbelt.com>,
-  Paul Walmsley <paul.walmsley@sifive.com>,  Shuah Khan <shuah@kernel.org>,
-  Alexandre Ghiti <alex@ghiti.fr>
-Subject: Re: [PATCH v4] selftests: riscv: add misaligned access testing
-In-Reply-To: <20250710133506.994476-1-cleger@rivosinc.com> (=?utf-8?Q?=22C?=
- =?utf-8?Q?l=C3=A9ment_L=C3=A9ger=22's?=
-	message of "Thu, 10 Jul 2025 15:35:05 +0200")
-References: <20250710133506.994476-1-cleger@rivosinc.com>
-Date: Thu, 10 Jul 2025 15:53:32 +0200
-Message-ID: <mvmecuognj7.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1752156141; c=relaxed/simple;
+	bh=xXPB/krLKx5YsOpAfTB0Ww2kYd94E1CsAKd5TLeuqrU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uxnSdbv+7hqEQRfgTXAInw+Xv9qlPGw37BsghqEaOoY23hVYVpWXkd4QftlHUnTfD+q8QDdWQ+K4Mu/MLD1qQfEPE+uzyQPuZ5AFGUQUDGttp6ybkOR7YAV3lWWAnbTxoa+KvpZZPMzNrWdDxWsIipRdcYLs267HFXQA++JL2hQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YylczEb/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E26ABC4CEE3;
+	Thu, 10 Jul 2025 14:02:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752156140;
+	bh=xXPB/krLKx5YsOpAfTB0Ww2kYd94E1CsAKd5TLeuqrU=;
+	h=From:Subject:Date:To:Cc:From;
+	b=YylczEb/lpnvmcs+P22XXkdPq/SEHyRIDf3OPwak+WOEA4wZWlKpy/b9/mTwQ6lVI
+	 wRtXJJ0oaQMmxlf/sbfy3i/izV6QaKUz9THsxoLk6yqzRaO5AcXmAxcAoX1THklQq/
+	 6KQGS5BFnIIkSa0gvXI4Asy4OIkbz8K2/2WUN5i+wA3NmXyBG5pp3jh5UYX3QkVUIm
+	 1/B9vOOVktg5jWWMSkDv2Tq8UJ365IKeUHQqUHLYqCA8tUMUM51zz781ABjVd161ta
+	 Gcjygpjmhc6RJYQarpgKBFFvPiS5ekgaQUSoYRpEvBejuk0Aujam+TrucL8kazEF9S
+	 YfkiOWuDFfQYg==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH v2 0/4] HID: core: fix __hid_request when no report ID is
+ used
+Date: Thu, 10 Jul 2025 16:01:32 +0200
+Message-Id: <20250710-report-size-null-v2-0-ccf922b7c4e5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.20 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.989];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_NO_TLS_LAST(0.10)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_ONE(0.00)[1];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid]
-X-Spam-Flag: NO
-X-Spam-Score: -4.20
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALzHb2gC/32NQQ6CMBBFr0Jm7Zi2ilBW3sOwQBxhYtOSKTYq4
+ e5WDuDy/fz//gKRhClCUywglDhy8BnMroB+7PxAyLfMYJQpVaUsCk1BZoz8IfRP5/BQnbSlLhf
+ qGvJsErrza1Ne2swjxznIe3tI+pf+kSWNCrU9Wm2MLvtrf36QeHL7IAO067p+AcPypKixAAAA
+X-Change-ID: 20250709-report-size-null-37619ea20288
+To: Jiri Kosina <jikos@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>, 
+ stable@vger.kernel.org, 
+ syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752156138; l=1787;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=xXPB/krLKx5YsOpAfTB0Ww2kYd94E1CsAKd5TLeuqrU=;
+ b=IFj366RpTlWoirqo7i2wkkLeCbj1DlUUPzN43PDtX5SZJYaE7OIToip08KhVVMdsr4LtEJwOb
+ UPyxz37iaKxDz18vh+RxwYPwsPDqnt6kfPcZKLGmJxO++5UINOtv3Ew
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-On Jul 10 2025, Clément Léger wrote:
+New version (unchanged for patches 1-3), with a test added so we can
+detect this.
 
-> This selftest tests all the currently emulated instructions (except for
-> the RV32 compressed ones which are left as a future exercise for a RV32
-> user). For the FPU instructions, all the FPU registers are tested.
+Followup of https://lore.kernel.org/linux-input/c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu/
 
-If that didn't catch the missing sign extension that I just fixed in
-<https://lore.kernel.org/linux-riscv/mvmikk0goil.fsf@suse.de>, you
-should consider extending the tests.
+This initial series attempt at fixing the various bugs discovered by
+Alan regarding __hid_request().
 
+Syzbot managed to create a report descriptor which presents a feature
+request of size 0 (still trying to extract it) and this exposed the fact
+that __hid_request() was incorrectly handling the case when the report
+ID is not used.
+
+Send a first batch of fixes now so we get the feedback from syzbot ASAP.
+
+Note: in the series, I also mentioned that the report of size 0 should
+be stripped out of the HID device, but I'm not entirely sure this would
+be a good idea in the end.
+
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+---
+Changes in v2:
+- added Tested-by from syzbot (https://lore.kernel.org/r/686e9113.050a0220.385921.0008.GAE@google.com)
+- added a python test for it
+- Link to v1: https://lore.kernel.org/r/20250709-report-size-null-v1-0-194912215cbc@kernel.org
+
+---
+Benjamin Tissoires (4):
+      HID: core: ensure the allocated report buffer can contain the reserved report ID
+      HID: core: ensure __hid_request reserves the report ID as the first byte
+      HID: core: do not bypass hid_hw_raw_request
+      selftests/hid: add a test case for the recent syzbot underflow
+
+ drivers/hid/hid-core.c                          | 19 +++++--
+ tools/testing/selftests/hid/tests/test_mouse.py | 70 +++++++++++++++++++++++++
+ 2 files changed, 84 insertions(+), 5 deletions(-)
+---
+base-commit: 1f988d0788f50d8464f957e793fab356e2937369
+change-id: 20250709-report-size-null-37619ea20288
+
+Best regards,
 -- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+Benjamin Tissoires <bentiss@kernel.org>
+
 
