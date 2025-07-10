@@ -1,115 +1,205 @@
-Return-Path: <linux-kselftest+bounces-36962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 029B6B002DF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 15:06:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 038B9B002F5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 15:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0559418992F6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:06:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D31193A4FA1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:10:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F8625D21A;
-	Thu, 10 Jul 2025 13:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 868D3273818;
+	Thu, 10 Jul 2025 13:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="l+ugFq5o"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KsdKWddc";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="l0sr89q+";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kBf7Qp/c";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CUW2n3DK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D68F1DC9A3;
-	Thu, 10 Jul 2025 13:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5DF206F27
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 13:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752152755; cv=none; b=qRIhfl39LLir2ErruS3V7dBV37rHh0T5DgBXonuh1w/1rMQOVeu58XzsN5KH3MOPEVhQRa7bzIxRCgHHOlThNL+kmw4dn/klwzVLQk7toM57a700lLOYtJA2gJEVolMRyw2oT9LfJT/kjHk3iOSet8h1TMsK+xqBtJVXAf8eURM=
+	t=1752153054; cv=none; b=J10Ujh7HYKGHePD0uHRzCAg8Ux21fAbEBpQfjllOt26XBokvb9eWtxA0Ad6H3s9iaXNzXYKvzJmUimWORbsZzU5Ib+ZAyZGmb3ubO+pave+KIk1SHJlSnbG2FamVFc1jthXgwJTn6LieRF11vpdPx1Ga3zjFfYlBC3KRTYUgd2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752152755; c=relaxed/simple;
-	bh=GQueY1iBB2lYZXp4i4PqpXAZskd6Jwy696NwcKzG8rA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fR3GEO/ZIGETW1u8zmXNILy5iQa8FqE/vRjDDsCYhip3uCi8Sm+cEAgYrcM9QjJfshvBaA2uj6iSIGbptyYABoQCjtTLAByQDGFmQZejmEE5kKHifNv7KPt2rsKmZr4y9/88F5S6p7bbaGtnE0a7r2vNbYfx1TVW6wa6yutbaa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=l+ugFq5o; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1752152707;
-	bh=sMysxZ2PDwu8C55CtOCn+w5tvI/L1SSPhfVKimncbOA=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=l+ugFq5oESjDffIrhFOao4mGFxKLKKFFS1TpSosklqO7An5ASnB2ybb5N27ej36FX
-	 3BbxRZyf/goKQIKgrBcDMadBzTOnU6O+O6S1BJdSsYAG6Dx2c4luTx/LS2GDzEVIbe
-	 VSRxbfM6gR1Cqay6Bv6RaMRDrWlASjHRCatxpMVc=
-X-QQ-mid: zesmtpip2t1752152671t2e6cb732
-X-QQ-Originating-IP: r1IOeWfhp6jcJ9zR2VkDNl+uwXjZnZo6LTTzluZaDHs=
-Received: from avenger-e500 ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 10 Jul 2025 21:04:29 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 10183139680791964204
-EX-QQ-RecipientCnt: 9
-From: WangYuli <wangyuli@uniontech.com>
-To: shuah@kernel.org,
-	wangyuli@uniontech.com,
-	chelsyratnawat2001@gmail.com,
-	akpm@linux-foundation.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zhanjun@uniontech.com,
-	niecheng1@unintech.cm,
-	guanwentao@uniontech.com
-Subject: [PATCH] selftests/thermal: Remove duplicate sprintf() call in workload_hint_test
-Date: Thu, 10 Jul 2025 21:04:12 +0800
-Message-ID: <6338CD0E839B770B+20250710130412.284531-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.50.0
+	s=arc-20240116; t=1752153054; c=relaxed/simple;
+	bh=bfdXTCuzrXCBSWaGEpiQwbnDNf7+C3UO0Ux6PL3r5Z8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P9NgJSZQu8Pm/AksAC+ZNVQu3qd4CQ6KwErl3nhwyTJEcwMoOuxxHe4K1hgdZemlCsGnZLReagxSKFOGQ4GtoWZs3tRUJ76GHrqCxTjuYb3n1uYUzuF+P07qy9E67pKwH6kEIxhQRDj8ermtRTg8/6T9fE8lGbI270PFSaRdRJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KsdKWddc; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=l0sr89q+; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kBf7Qp/c; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CUW2n3DK; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 40EB821195;
+	Thu, 10 Jul 2025 13:10:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752153051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=LupMhjkB/uDWbTEKht+Z/h5iHNYORAW774wAwpd9RY4=;
+	b=KsdKWddcUuQH5t3bCSjGyGfNniWANQv+siXnEuVPW3/OwGA7eN5GwQHXp//2/gXHNoS1Cx
+	qGVDCHt7IkK85YaNpSv/1y3iRu4v6BGuUb9povPCIjA6nStte8wIaDHq8Fe5QiSNCJS+tw
+	LA4yh5inHOwDPGzDWZwvz9hQrNVhcL4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752153051;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=LupMhjkB/uDWbTEKht+Z/h5iHNYORAW774wAwpd9RY4=;
+	b=l0sr89q+KBqqQkH6cE6QikTwTnHYZgySlmD415AD0w37JuhottHnqhpmNyxoj2fejQm7JM
+	TV74Ir9gTszs5qDw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="kBf7Qp/c";
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=CUW2n3DK
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752153049; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=LupMhjkB/uDWbTEKht+Z/h5iHNYORAW774wAwpd9RY4=;
+	b=kBf7Qp/cBduUresleKEkNAtEuRcKSzdAQPepvT4MEQIbplycaUxvOM2kI9718xuINxi3+o
+	iyWq2Z/BLDn4/EOdfhkBydllwjKfYydzqRcwJYKvKX80NBVwllcNzGyHjlB4l2ZiFCgt9+
+	F4WCqGdBdnkh/vcVY1DUU1Tsr3bCBo0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752153049;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=LupMhjkB/uDWbTEKht+Z/h5iHNYORAW774wAwpd9RY4=;
+	b=CUW2n3DKhjlww7xXsik0Ded+2T1pbKCAPtc2a2wYnnWDKwGraiGSQ9+Iv+a7kVAZr2OUyQ
+	2o9R+vwKjA/XhvAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 264B4136CB;
+	Thu, 10 Jul 2025 13:10:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id eBT9CNm7b2j4GQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 10 Jul 2025 13:10:49 +0000
+Message-ID: <6ad9d952-dffc-4766-ad07-de31ede0889a@suse.cz>
+Date: Thu, 10 Jul 2025 15:10:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: NImvdRhE6fHp1TYj7/vl3op8jUW8RaVx1kOeKZm2FdtjyWNZJelIBGec
-	oLm7zuXVfWyQ9cd9VldCOcGhxgxYs9QXTOZgONMVnDqx+tOke5lI45zFVRvsuNUZZ81VB8p
-	8mrr/fC+HawNhi+HjcgShboT11xjjUOufUtNkZUp3dVE2pe5Xt9l3wJ2z3hhhEU5nvvtF2q
-	ZtXmTiybqjRvTG0IXBtziZnp1cktm1U5LGwjk0Bt70suVajNbdzS3f5Er9tzK/U7yZUainW
-	0nftSB8KDh3QiDX5rtw+QEho7QycO8scYD0lmmgDwSl2/q7p5vtGmfu22Y7yE1t27HSVb36
-	4xy+PQ9JryvBGQURjo3a7hiOl2Td7Eo6mURDMiqf1Et4YD2UzXuUOTTZjRm/lyVAIs1L8ke
-	IP7nfm6Mjm4xKc45r0poCCBZAU9Gdphz7uv2miJ7GkTOsr8uIBBc5+z2IYZfNfOKxoIPBvj
-	mP2ShUBHv/4Id/K0Sn8tcje/quOaftSHZ4UuWzbvd1Pv0L1TrNWLkUS3hDLRXMoS3WMBgYk
-	2Sygf1J/uYdWDQJu9/D1jIEJAIyz/IfT/+wE5Musp2Zz9IOkX6QiIBQ4r2VAx7oYc3mTrVr
-	SyhNPAANS79dSLZdn/ceQmteU9xyhLNyfRUgLMHFRkDXfxQHaKi1/CPw2I9WGHNRkvHP05g
-	UMPLFv9Q9xyU5SjEbEX85l/K3fDZMSmiMuvHP9h7cZ8SmzoQGgaRusblrPDq+G+xLZCAtQq
-	Hfagzmp+EwZ8w+raBbq1Lihm1PSEH6nHKpUO6xGjzbKRUQnL9nLRl7AUrUws4LWdwqTieWm
-	qUbJVNQGryX7BAmll59M/LKOyjTkXiCkFkYQ3FpnxB0aDpEslEo8VwpypBzW1wKbvjB7LQC
-	ggciG3nLFTJ2GCa5CG8FYlEGxPsyGWzt8CBrMmLKoPQZV6A1pojTjyulHg164ur3JQDqsPn
-	jtm+b90b+V6QE6tH0zuRlnho5KRRHabfj292/XhywuFSUhBW1X1sX212TLh8OPLCfakR/nW
-	xG1Phn3KVjS4DW9R5fgz3UnunsGBpqWyxQWfm61g==
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-X-QQ-RECHKSPAM: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/10] mm/mremap: put VMA check and prep logic into helper
+ function
+Content-Language: en-US
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Jann Horn <jannh@google.com>,
+ Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
+ linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1751865330.git.lorenzo.stoakes@oracle.com>
+ <a09be10810ca3e3d53aa89408a47d8d2ef12682b.1751865330.git.lorenzo.stoakes@oracle.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <a09be10810ca3e3d53aa89408a47d8d2ef12682b.1751865330.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 40EB821195
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Spam-Score: -4.51
 
-Remove redundant sprintf() call that was duplicating the same operation
-of formatting delay_str with argv[1].
+On 7/7/25 07:27, Lorenzo Stoakes wrote:
+> Rather than lumping everything together in do_mremap(), add a new helper
+> function, check_prep_vma(), to do the work relating to each VMA.
+> 
+> This further lays groundwork for subsequent patches which will allow for
+> batched VMA mremap().
+> 
+> Additionally, if we set vrm->new_addr == vrm->addr when prepping the VMA,
+> this avoids us needing to do so in the expand VMA mlocked case.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- .../selftests/thermal/intel/workload_hint/workload_hint_test.c  | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-index a40097232967..bda006af8b1b 100644
---- a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-+++ b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-@@ -67,8 +67,6 @@ int main(int argc, char **argv)
- 		if (delay < 0)
- 			exit(1);
- 
--		sprintf(delay_str, "%s\n", argv[1]);
--
- 		sprintf(delay_str, "%s\n", argv[1]);
- 		fd = open(WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE, O_RDWR);
- 		if (fd < 0) {
--- 
-2.50.0
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
 
