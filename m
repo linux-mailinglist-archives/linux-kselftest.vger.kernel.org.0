@@ -1,421 +1,207 @@
-Return-Path: <linux-kselftest+bounces-36957-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D18AAB000A1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:36:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E6EBB000AA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:38:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA11E3A4951
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 11:36:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD3AC7A5A8D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 11:37:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32310241673;
-	Thu, 10 Jul 2025 11:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E4F242D76;
+	Thu, 10 Jul 2025 11:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MXQXzyye"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="JzZNeKv7";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qLwj56wh";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="JzZNeKv7";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qLwj56wh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5321E23ABB1
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 11:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79911A841A
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 11:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752147387; cv=none; b=bN8obW2OS6vcFolcajwJSEVDPhzxRmVHaB/+jPCf/olRYBVyPVb8h8pFLVjzu3S/pi6UphmCEJ+yR/ZcKAQvTX7B4EqxtcRqPNBi6ULGNzY+3NaQYTAtwiughMxBDju6bCRzrr1A4mD0r9yjTqmZCDeUvvUn4Io6ul/DymMnFo8=
+	t=1752147501; cv=none; b=VKXxlf529CTej+YvWyHDBGn5q0PUJiOw/WcBy0uqNwngis3OOu0CpH0GqpEv4YsSpfLRoy6brfDZoqscxlp9j3G8X8XvVzmMXFx1d0LIV9uBqcO41IMMBXzEEMKrnJPpaLb4mBgk/8CFabTet0hKyOOPOvowuuFcZvRi04VB0rI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752147387; c=relaxed/simple;
-	bh=UrVre70QQpxPX3cK8KkrQ8iIxZBZksB7bi1biJ1kzFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EZQFoQROTs5lRYUlaQp9ZEClLckFKpvdD+OlBLcJGnAE0/ddhoNW3Cjp3TLYIwYp6mCXRZ6B4hvXG1avkKMVe4WhE6Gf61R6yFl3+qBNrq9jXsg+/j8CEP5z0XDZA0kN3zgJCPo6Qw4W9Qu3zoL/NlEQ7F9N6YgCuGnp24g6m1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MXQXzyye; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-23dd9ae5aacso136405ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 04:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1752147384; x=1752752184; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NllAQfNayY8cb5iLzosXwdI782jVJrwH9mu2C3D5sw0=;
-        b=MXQXzyyeK2p6nxafJR6G96gR8s0LrYk5yeGaon9BUTHndFXoKMdqwWgVy+To3VMcPX
-         sVIjl3cWB/3+T2GBaI82sVjv4+ujubjs2O7iouoK2l9YZAmhxBjwkthXP8xtk5WMmMs5
-         QLvpTzKoRPwQ89VFGCTvieDFSXnB0bloX1URP50LP+SdHlztDcdO3SKPjzUpUUqJ9WJp
-         YB5cBHvzvbZbGFG/RCFvmt0efXae9VuoD3eLRYnfZOwAkrNYrH5VDHY7DZhGXEN8iOpA
-         nJ23rEdaJemZeEIgDbL5albzukOlAKoaJ0LIOFV7Q/zx7c9RCX5B7jXoW07WZpLnBJ6q
-         pc9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752147384; x=1752752184;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NllAQfNayY8cb5iLzosXwdI782jVJrwH9mu2C3D5sw0=;
-        b=oRr3SPF2PvdWStOrpCyFm/vidwgtTMFZhegNmiYUANL/Ocyqo3j1JCvpTDssdRNQRX
-         DYfHz994FVbb2GpskfqzY+1Y8bpNrxZsPpXpsPw2HnKLaBOB6XDzntHHOIaTCbF1taPD
-         ElJ0LAifI0HxZA1CigjVM9YwgIAcuk5dGtF15jlILdK4K4thkTpTxAi6nr73el0Ivrj4
-         jQe6RPMTZr+lllF6T6HHPNKUNcnrdPcwXmsXdEyuZmhEJdjY2w4Ockm4cTB/QnrOkTht
-         CcrGyr3gFl+WQSnI0XIWvGi0Duw7VhKC4iVe++jdAscTNeUjbA04FD+9M7KWrIin919D
-         4Sog==
-X-Forwarded-Encrypted: i=1; AJvYcCWtzGVJnKp4L+5VAOcncXMa+c6eD5gNRjnT3y/F3hITxuSyf8uSHXLdU5glyXmzb+zpPC8gJ1Ahwd3gcsoBNOE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXTfHMr+r/1ZIJtMdL7y/l4a8lRV1om/KBE/vQ4g9IbQGgAWdk
-	woqlSiKYoMc7XL6PnF4RrMZUoMl+HtNJisNaDWCWVMtBe92dqJq2uklNoeUFVGY4MQ==
-X-Gm-Gg: ASbGncvozLPmd+3Oki6G0qmNTrAloaUhgBqYmjOv/pRBr+kQ7EJitWaNClkf2Pm6xVv
-	g5+H76RhmXhctPNvGs+RapOPSYt3mmZ1sXJ+cW89BlrepftexvtZ2JI3xcRtoSDjoO77sINZPRX
-	yiR6xMj3NYTh1s9FtBx2qea/qoXIsOr01qZD52wU4ysrPmx6gU0gF8RYaoirvATek61XvtSPDls
-	tYR0ZwZi2DuylVjJzQDP76uYwDqi9srOH4Mmnsz9U0q6wT0oxzMkMFZjgEm2i79s8ekkoRS3Msx
-	y/24b9uEmc+aklfm79ZeL6+LDfx9Q58YQoJYad7Qnk7XHkl7FlM5tQ7d7d1wSNFKjqdUIlYnsib
-	xZegPPmVcG8BYfLBYaL4a
-X-Google-Smtp-Source: AGHT+IFWWBrqFVRqrzk0Fwyab1Mld4BviLi8cbgIh+j6R1xSHmEyatBRaGWIq1+8HV4NnwrugSgVcw==
-X-Received: by 2002:a17:903:3ba5:b0:215:9ab0:402 with SMTP id d9443c01a7336-23de38137a5mr2696735ad.18.1752147384158;
-        Thu, 10 Jul 2025 04:36:24 -0700 (PDT)
-Received: from google.com (232.98.126.34.bc.googleusercontent.com. [34.126.98.232])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9e07793sm1937009b3a.69.2025.07.10.04.36.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 04:36:23 -0700 (PDT)
-Date: Thu, 10 Jul 2025 11:36:15 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net,
-	bagasdotme@gmail.com, will@kernel.org, robin.murphy@arm.com,
-	joro@8bytes.org, thierry.reding@gmail.com, vdumpa@nvidia.com,
-	jonathanh@nvidia.com, shuah@kernel.org, jsnitsel@redhat.com,
-	nathan@kernel.org, peterz@infradead.org, yi.l.liu@intel.com,
-	mshavit@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
-	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com
-Subject: Re: [PATCH v9 16/29] iommufd/selftest: Add coverage for
- IOMMUFD_CMD_HW_QUEUE_ALLOC
-Message-ID: <aG-lr9nUhwff4GuJ@google.com>
-References: <cover.1752126748.git.nicolinc@nvidia.com>
- <e8a194d187d7ef445f43e4a3c04fb39472050afd.1752126748.git.nicolinc@nvidia.com>
+	s=arc-20240116; t=1752147501; c=relaxed/simple;
+	bh=oV3MUootSFziizbzjSu8DJZhdZWj4QSvyKRbV3bKSxw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=so6sO4/IR2AbVz8kwD7VYBGF3T4y9UDhrF9DWmMdLT1O5wloOS1qATmMFRraRfiUqb85RILRZEfnxX0TeO+SCPCjaRzc9+duMK07KzdkwAhSnrutH5SLLqp2Eij04+hL3hrIGMNy61Jz139Bl4afmMoM5i+YwomU6YMZBc9Prtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=JzZNeKv7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qLwj56wh; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=JzZNeKv7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qLwj56wh; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 0CF822116F;
+	Thu, 10 Jul 2025 11:38:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752147497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=2b5D2h/K7sBKKswvYGb/f9wOl6u5zVKlsgUrUmv6v9U=;
+	b=JzZNeKv7vEGxNg/Y8G6JBnpSKAtlZLjyMF4r6Ti6j1WJ7qaD50KDkCIRl9zN+Co4TtOYm6
+	/Kqtk7Y6VdMUFYiovnbscxhsWif1tO95pS00JCBLnIHYq31gkgMFiGOicp+Z/h5p9WcZju
+	w7mJqeHTWACsW7+JDMTGeCS3R1U9Eb0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752147497;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=2b5D2h/K7sBKKswvYGb/f9wOl6u5zVKlsgUrUmv6v9U=;
+	b=qLwj56whApU3qzO0CltH4XtSu26NZy3sTGZNkOErvG+OR4QrOTSmlZIe6UKUtgWKCvZuTA
+	wD65sk31V7d0doCQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752147497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=2b5D2h/K7sBKKswvYGb/f9wOl6u5zVKlsgUrUmv6v9U=;
+	b=JzZNeKv7vEGxNg/Y8G6JBnpSKAtlZLjyMF4r6Ti6j1WJ7qaD50KDkCIRl9zN+Co4TtOYm6
+	/Kqtk7Y6VdMUFYiovnbscxhsWif1tO95pS00JCBLnIHYq31gkgMFiGOicp+Z/h5p9WcZju
+	w7mJqeHTWACsW7+JDMTGeCS3R1U9Eb0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752147497;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=2b5D2h/K7sBKKswvYGb/f9wOl6u5zVKlsgUrUmv6v9U=;
+	b=qLwj56whApU3qzO0CltH4XtSu26NZy3sTGZNkOErvG+OR4QrOTSmlZIe6UKUtgWKCvZuTA
+	wD65sk31V7d0doCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E7FF3136CB;
+	Thu, 10 Jul 2025 11:38:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id odWONiimb2jjdwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 10 Jul 2025 11:38:16 +0000
+Message-ID: <01c99e22-7b12-4ac0-863a-b177c8ac1041@suse.cz>
+Date: Thu, 10 Jul 2025 13:38:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e8a194d187d7ef445f43e4a3c04fb39472050afd.1752126748.git.nicolinc@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/10] mm/mremap: refactor initial parameter sanity checks
+Content-Language: en-US
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Jann Horn <jannh@google.com>,
+ Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
+ linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1751865330.git.lorenzo.stoakes@oracle.com>
+ <eae3ffbee3c0ba66b4ee872f6bb48ec77ee25609.1751865330.git.lorenzo.stoakes@oracle.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
+ KxRWDHX0R2tgpFDXHnzZcQywawu8eSq0LxzxFNYMvtB7sV1pxYwej2qx9B75qW2plBs+7+YB
+ 87tMFA+u+L4Z5xAzIimfLD5EKC56kJ1CsXlM8S/LHcmdD9Ctkn3trYDNnat0eoAcfPIP2OZ+
+ 9oe9IF/R28zmh0ifLXyJQQz5ofdj4bPf8ecEW0rhcqHfTD8k4yK0xxt3xW+6Exqp9n9bydiy
+ tcSAw/TahjW6yrA+6JhSBv1v2tIm+itQc073zjSX8OFL51qQVzRFr7H2UQG33lw2QrvHRXqD
+ Ot7ViKam7v0Ho9wEWiQOOZlHItOOXFphWb2yq3nzrKe45oWoSgkxKb97MVsQ+q2SYjJRBBH4
+ 8qKhphADYxkIP6yut/eaj9ImvRUZZRi0DTc8xfnvHGTjKbJzC2xpFcY0DQbZzuwsIZ8OPJCc
+ LM4S7mT25NE5kUTG/TKQCk922vRdGVMoLA7dIQrgXnRXtyT61sg8PG4wcfOnuWf8577aXP1x
+ 6mzw3/jh3F+oSBHb/GcLC7mvWreJifUL2gEdssGfXhGWBo6zLS3qhgtwjay0Jl+kza1lo+Cv
+ BB2T79D4WGdDuVa4eOrQ02TxqGN7G0Biz5ZLRSFzQSQwLn8fbwARAQABzSBWbGFzdGltaWwg
+ QmFia2EgPHZiYWJrYUBzdXNlLmN6PsLBlAQTAQoAPgIbAwULCQgHAwUVCgkICwUWAgMBAAIe
+ AQIXgBYhBKlA1DSZLC6OmRA9UCJPp+fMgqZkBQJnyBr8BQka0IFQAAoJECJPp+fMgqZkqmMQ
+ AIbGN95ptUMUvo6aAdhxaOCHXp1DfIBuIOK/zpx8ylY4pOwu3GRe4dQ8u4XS9gaZ96Gj4bC+
+ jwWcSmn+TjtKW3rH1dRKopvC07tSJIGGVyw7ieV/5cbFffA8NL0ILowzVg8w1ipnz1VTkWDr
+ 2zcfslxJsJ6vhXw5/npcY0ldeC1E8f6UUoa4eyoskd70vO0wOAoGd02ZkJoox3F5ODM0kjHu
+ Y97VLOa3GG66lh+ZEelVZEujHfKceCw9G3PMvEzyLFbXvSOigZQMdKzQ8D/OChwqig8wFBmV
+ QCPS4yDdmZP3oeDHRjJ9jvMUKoYODiNKsl2F+xXwyRM2qoKRqFlhCn4usVd1+wmv9iLV8nPs
+ 2Db1ZIa49fJet3Sk3PN4bV1rAPuWvtbuTBN39Q/6MgkLTYHb84HyFKw14Rqe5YorrBLbF3rl
+ M51Dpf6Egu1yTJDHCTEwePWug4XI11FT8lK0LNnHNpbhTCYRjX73iWOnFraJNcURld1jL1nV
+ r/LRD+/e2gNtSTPK0Qkon6HcOBZnxRoqtazTU6YQRmGlT0v+rukj/cn5sToYibWLn+RoV1CE
+ Qj6tApOiHBkpEsCzHGu+iDQ1WT0Idtdynst738f/uCeCMkdRu4WMZjteQaqvARFwCy3P/jpK
+ uvzMtves5HvZw33ZwOtMCgbpce00DaET4y/UzsBNBFsZNTUBCACfQfpSsWJZyi+SHoRdVyX5
+ J6rI7okc4+b571a7RXD5UhS9dlVRVVAtrU9ANSLqPTQKGVxHrqD39XSw8hxK61pw8p90pg4G
+ /N3iuWEvyt+t0SxDDkClnGsDyRhlUyEWYFEoBrrCizbmahOUwqkJbNMfzj5Y7n7OIJOxNRkB
+ IBOjPdF26dMP69BwePQao1M8Acrrex9sAHYjQGyVmReRjVEtv9iG4DoTsnIR3amKVk6si4Ea
+ X/mrapJqSCcBUVYUFH8M7bsm4CSxier5ofy8jTEa/CfvkqpKThTMCQPNZKY7hke5qEq1CBk2
+ wxhX48ZrJEFf1v3NuV3OimgsF2odzieNABEBAAHCwXwEGAEKACYCGwwWIQSpQNQ0mSwujpkQ
+ PVAiT6fnzIKmZAUCZ8gcVAUJFhTonwAKCRAiT6fnzIKmZLY8D/9uo3Ut9yi2YCuASWxr7QQZ
+ lJCViArjymbxYB5NdOeC50/0gnhK4pgdHlE2MdwF6o34x7TPFGpjNFvycZqccSQPJ/gibwNA
+ zx3q9vJT4Vw+YbiyS53iSBLXMweeVV1Jd9IjAoL+EqB0cbxoFXvnjkvP1foiiF5r73jCd4PR
+ rD+GoX5BZ7AZmFYmuJYBm28STM2NA6LhT0X+2su16f/HtummENKcMwom0hNu3MBNPUOrujtW
+ khQrWcJNAAsy4yMoJ2Lw51T/5X5Hc7jQ9da9fyqu+phqlVtn70qpPvgWy4HRhr25fCAEXZDp
+ xG4RNmTm+pqorHOqhBkI7wA7P/nyPo7ZEc3L+ZkQ37u0nlOyrjbNUniPGxPxv1imVq8IyycG
+ AN5FaFxtiELK22gvudghLJaDiRBhn8/AhXc642/Z/yIpizE2xG4KU4AXzb6C+o7LX/WmmsWP
+ Ly6jamSg6tvrdo4/e87lUedEqCtrp2o1xpn5zongf6cQkaLZKQcBQnPmgHO5OG8+50u88D9I
+ rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
+ dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
+ m6M14QORSWTLRg==
+In-Reply-To: <eae3ffbee3c0ba66b4ee872f6bb48ec77ee25609.1751865330.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.997];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:email,suse.cz:mid,oracle.com:email]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
 
-On Wed, Jul 09, 2025 at 10:59:08PM -0700, Nicolin Chen wrote:
-> Some simple tests for IOMMUFD_CMD_HW_QUEUE_ALLOC infrastructure covering
-> the new iommufd_hw_queue_depend/undepend() helpers.
+On 7/7/25 07:27, Lorenzo Stoakes wrote:
+> We are currently checking some things later, and some things
+> immediately. Aggregate the checks and avoid ones that need not be made.
 > 
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> Simplify things by aligning lengths immediately. Defer setting the delta
+> parameter until later, which removes some duplicate code in the hugetlb
+> case.
+> 
+> We can safely perform the checks moved from mremap_to() to
+> check_mremap_params() because:
+> 
+> * If we set a new address via vrm_set_new_addr(), then this is guaranteed
+>   to not overlap nor to position the new VMA past TASK_SIZE, so there's no
+>   need to check these later.
+> 
+> * We can simply page align lengths immediately. We do not need to check for
+>   overlap nor TASK_SIZE sanity after hugetlb alignment as this asserts
+>   addresses are huge-aligned, then huge-aligns lengths, rounding down. This
+>   means any existing overlap would have already been caught.
+> 
+> Moving things around like this lays the groundwork for subsequent changes
+> to permit operations on batches of VMAs.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-Reviewed-by: Pranjal Shrivastava <praan@google.com>
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-> ---
->  drivers/iommu/iommufd/iommufd_test.h          |  3 +
->  tools/testing/selftests/iommu/iommufd_utils.h | 31 ++++++
->  drivers/iommu/iommufd/selftest.c              | 97 +++++++++++++++++++
->  tools/testing/selftests/iommu/iommufd.c       | 59 +++++++++++
->  .../selftests/iommu/iommufd_fail_nth.c        |  6 ++
->  5 files changed, 196 insertions(+)
-> 
-> diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-> index fbf9ecb35a13..51cd744a354f 100644
-> --- a/drivers/iommu/iommufd/iommufd_test.h
-> +++ b/drivers/iommu/iommufd/iommufd_test.h
-> @@ -265,4 +265,7 @@ struct iommu_viommu_event_selftest {
->  	__u32 virt_id;
->  };
->  
-> +#define IOMMU_HW_QUEUE_TYPE_SELFTEST 0xdeadbeef
-> +#define IOMMU_TEST_HW_QUEUE_MAX 2
-> +
->  #endif
-> diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-> index a5d4cbd089ba..9a556f99d992 100644
-> --- a/tools/testing/selftests/iommu/iommufd_utils.h
-> +++ b/tools/testing/selftests/iommu/iommufd_utils.h
-> @@ -956,6 +956,37 @@ static int _test_cmd_vdevice_alloc(int fd, __u32 viommu_id, __u32 idev_id,
->  		     _test_cmd_vdevice_alloc(self->fd, viommu_id, idev_id,   \
->  					     virt_id, vdev_id))
->  
-> +static int _test_cmd_hw_queue_alloc(int fd, __u32 viommu_id, __u32 type,
-> +				    __u32 idx, __u64 base_addr, __u64 length,
-> +				    __u32 *hw_queue_id)
-> +{
-> +	struct iommu_hw_queue_alloc cmd = {
-> +		.size = sizeof(cmd),
-> +		.viommu_id = viommu_id,
-> +		.type = type,
-> +		.index = idx,
-> +		.nesting_parent_iova = base_addr,
-> +		.length = length,
-> +	};
-> +	int ret;
-> +
-> +	ret = ioctl(fd, IOMMU_HW_QUEUE_ALLOC, &cmd);
-> +	if (ret)
-> +		return ret;
-> +	if (hw_queue_id)
-> +		*hw_queue_id = cmd.out_hw_queue_id;
-> +	return 0;
-> +}
-> +
-> +#define test_cmd_hw_queue_alloc(viommu_id, type, idx, base_addr, len, out_qid) \
-> +	ASSERT_EQ(0, _test_cmd_hw_queue_alloc(self->fd, viommu_id, type, idx,  \
-> +					      base_addr, len, out_qid))
-> +#define test_err_hw_queue_alloc(_errno, viommu_id, type, idx, base_addr, len, \
-> +				out_qid)                                      \
-> +	EXPECT_ERRNO(_errno,                                                  \
-> +		     _test_cmd_hw_queue_alloc(self->fd, viommu_id, type, idx, \
-> +					      base_addr, len, out_qid))
-> +
->  static int _test_cmd_veventq_alloc(int fd, __u32 viommu_id, __u32 type,
->  				   __u32 *veventq_id, __u32 *veventq_fd)
->  {
-> diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-> index 38066dfeb2e7..2189e9b119ee 100644
-> --- a/drivers/iommu/iommufd/selftest.c
-> +++ b/drivers/iommu/iommufd/selftest.c
-> @@ -150,6 +150,8 @@ to_mock_nested(struct iommu_domain *domain)
->  struct mock_viommu {
->  	struct iommufd_viommu core;
->  	struct mock_iommu_domain *s2_parent;
-> +	struct mock_hw_queue *hw_queue[IOMMU_TEST_HW_QUEUE_MAX];
-> +	struct mutex queue_mutex;
->  };
->  
->  static inline struct mock_viommu *to_mock_viommu(struct iommufd_viommu *viommu)
-> @@ -157,6 +159,19 @@ static inline struct mock_viommu *to_mock_viommu(struct iommufd_viommu *viommu)
->  	return container_of(viommu, struct mock_viommu, core);
->  }
->  
-> +struct mock_hw_queue {
-> +	struct iommufd_hw_queue core;
-> +	struct mock_viommu *mock_viommu;
-> +	struct mock_hw_queue *prev;
-> +	u16 index;
-> +};
-> +
-> +static inline struct mock_hw_queue *
-> +to_mock_hw_queue(struct iommufd_hw_queue *hw_queue)
-> +{
-> +	return container_of(hw_queue, struct mock_hw_queue, core);
-> +}
-> +
->  enum selftest_obj_type {
->  	TYPE_IDEV,
->  };
-> @@ -670,9 +685,11 @@ static void mock_viommu_destroy(struct iommufd_viommu *viommu)
->  {
->  	struct mock_iommu_device *mock_iommu = container_of(
->  		viommu->iommu_dev, struct mock_iommu_device, iommu_dev);
-> +	struct mock_viommu *mock_viommu = to_mock_viommu(viommu);
->  
->  	if (refcount_dec_and_test(&mock_iommu->users))
->  		complete(&mock_iommu->complete);
-> +	mutex_destroy(&mock_viommu->queue_mutex);
->  
->  	/* iommufd core frees mock_viommu and viommu */
->  }
-> @@ -764,10 +781,86 @@ static int mock_viommu_cache_invalidate(struct iommufd_viommu *viommu,
->  	return rc;
->  }
->  
-> +static size_t mock_viommu_get_hw_queue_size(struct iommufd_viommu *viommu,
-> +					    enum iommu_hw_queue_type queue_type)
-> +{
-> +	if (queue_type != IOMMU_HW_QUEUE_TYPE_SELFTEST)
-> +		return 0;
-> +	return HW_QUEUE_STRUCT_SIZE(struct mock_hw_queue, core);
-> +}
-> +
-> +static void mock_hw_queue_destroy(struct iommufd_hw_queue *hw_queue)
-> +{
-> +	struct mock_hw_queue *mock_hw_queue = to_mock_hw_queue(hw_queue);
-> +	struct mock_viommu *mock_viommu = mock_hw_queue->mock_viommu;
-> +
-> +	mutex_lock(&mock_viommu->queue_mutex);
-> +	mock_viommu->hw_queue[mock_hw_queue->index] = NULL;
-> +	if (mock_hw_queue->prev)
-> +		iommufd_hw_queue_undepend(mock_hw_queue, mock_hw_queue->prev,
-> +					  core);
-> +	mutex_unlock(&mock_viommu->queue_mutex);
-> +}
-> +
-> +/* Test iommufd_hw_queue_depend/undepend() */
-> +static int mock_hw_queue_init_phys(struct iommufd_hw_queue *hw_queue, u32 index,
-> +				   phys_addr_t base_addr_pa)
-> +{
-> +	struct mock_viommu *mock_viommu = to_mock_viommu(hw_queue->viommu);
-> +	struct mock_hw_queue *mock_hw_queue = to_mock_hw_queue(hw_queue);
-> +	struct mock_hw_queue *prev = NULL;
-> +	int rc = 0;
-> +
-> +	if (index >= IOMMU_TEST_HW_QUEUE_MAX)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&mock_viommu->queue_mutex);
-> +
-> +	if (mock_viommu->hw_queue[index]) {
-> +		rc = -EEXIST;
-> +		goto unlock;
-> +	}
-> +
-> +	if (index) {
-> +		prev = mock_viommu->hw_queue[index - 1];
-> +		if (!prev) {
-> +			rc = -EIO;
-> +			goto unlock;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Test to catch a kernel bug if the core converted the physical address
-> +	 * incorrectly. Let mock_domain_iova_to_phys() WARN_ON if it fails.
-> +	 */
-> +	if (base_addr_pa != iommu_iova_to_phys(&mock_viommu->s2_parent->domain,
-> +					       hw_queue->base_addr)) {
-> +		rc = -EFAULT;
-> +		goto unlock;
-> +	}
-> +
-> +	if (prev) {
-> +		rc = iommufd_hw_queue_depend(mock_hw_queue, prev, core);
-> +		if (rc)
-> +			goto unlock;
-> +	}
-> +
-> +	mock_hw_queue->prev = prev;
-> +	mock_hw_queue->mock_viommu = mock_viommu;
-> +	mock_viommu->hw_queue[index] = mock_hw_queue;
-> +
-> +	hw_queue->destroy = &mock_hw_queue_destroy;
-> +unlock:
-> +	mutex_unlock(&mock_viommu->queue_mutex);
-> +	return rc;
-> +}
-> +
->  static struct iommufd_viommu_ops mock_viommu_ops = {
->  	.destroy = mock_viommu_destroy,
->  	.alloc_domain_nested = mock_viommu_alloc_domain_nested,
->  	.cache_invalidate = mock_viommu_cache_invalidate,
-> +	.get_hw_queue_size = mock_viommu_get_hw_queue_size,
-> +	.hw_queue_init_phys = mock_hw_queue_init_phys,
->  };
->  
->  static size_t mock_get_viommu_size(struct device *dev,
-> @@ -784,6 +877,7 @@ static int mock_viommu_init(struct iommufd_viommu *viommu,
->  {
->  	struct mock_iommu_device *mock_iommu = container_of(
->  		viommu->iommu_dev, struct mock_iommu_device, iommu_dev);
-> +	struct mock_viommu *mock_viommu = to_mock_viommu(viommu);
->  	struct iommu_viommu_selftest data;
->  	int rc;
->  
-> @@ -801,6 +895,9 @@ static int mock_viommu_init(struct iommufd_viommu *viommu,
->  	}
->  
->  	refcount_inc(&mock_iommu->users);
-> +	mutex_init(&mock_viommu->queue_mutex);
-> +	mock_viommu->s2_parent = to_mock_domain(parent_domain);
-> +
->  	viommu->ops = &mock_viommu_ops;
->  	return 0;
->  }
-> diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-> index a9dfcce5e1b2..73426de77675 100644
-> --- a/tools/testing/selftests/iommu/iommufd.c
-> +++ b/tools/testing/selftests/iommu/iommufd.c
-> @@ -3032,6 +3032,65 @@ TEST_F(iommufd_viommu, vdevice_cache)
->  	}
->  }
->  
-> +TEST_F(iommufd_viommu, hw_queue)
-> +{
-> +	__u64 iova = MOCK_APERTURE_START, iova2;
-> +	uint32_t viommu_id = self->viommu_id;
-> +	uint32_t hw_queue_id[2];
-> +
-> +	if (!viommu_id)
-> +		SKIP(return, "Skipping test for variant no_viommu");
-> +
-> +	/* Fail IOMMU_HW_QUEUE_TYPE_DEFAULT */
-> +	test_err_hw_queue_alloc(EOPNOTSUPP, viommu_id,
-> +				IOMMU_HW_QUEUE_TYPE_DEFAULT, 0, iova, PAGE_SIZE,
-> +				&hw_queue_id[0]);
-> +	/* Fail queue addr and length */
-> +	test_err_hw_queue_alloc(EINVAL, viommu_id, IOMMU_HW_QUEUE_TYPE_SELFTEST,
-> +				0, iova, 0, &hw_queue_id[0]);
-> +	test_err_hw_queue_alloc(EOVERFLOW, viommu_id,
-> +				IOMMU_HW_QUEUE_TYPE_SELFTEST, 0, ~(uint64_t)0,
-> +				PAGE_SIZE, &hw_queue_id[0]);
-> +	/* Fail missing iova */
-> +	test_err_hw_queue_alloc(ENOENT, viommu_id, IOMMU_HW_QUEUE_TYPE_SELFTEST,
-> +				0, iova, PAGE_SIZE, &hw_queue_id[0]);
-> +
-> +	/* Map iova */
-> +	test_ioctl_ioas_map(buffer, PAGE_SIZE, &iova);
-> +	test_ioctl_ioas_map(buffer + PAGE_SIZE, PAGE_SIZE, &iova2);
-> +
-> +	/* Fail index=1 and =MAX; must start from index=0 */
-> +	test_err_hw_queue_alloc(EIO, viommu_id, IOMMU_HW_QUEUE_TYPE_SELFTEST, 1,
-> +				iova, PAGE_SIZE, &hw_queue_id[0]);
-> +	test_err_hw_queue_alloc(EINVAL, viommu_id, IOMMU_HW_QUEUE_TYPE_SELFTEST,
-> +				IOMMU_TEST_HW_QUEUE_MAX, iova, PAGE_SIZE,
-> +				&hw_queue_id[0]);
-> +
-> +	/* Allocate index=0, declare ownership of the iova */
-> +	test_cmd_hw_queue_alloc(viommu_id, IOMMU_HW_QUEUE_TYPE_SELFTEST, 0,
-> +				iova, PAGE_SIZE, &hw_queue_id[0]);
-> +	/* Fail duplicated index */
-> +	test_err_hw_queue_alloc(EEXIST, viommu_id, IOMMU_HW_QUEUE_TYPE_SELFTEST,
-> +				0, iova, PAGE_SIZE, &hw_queue_id[0]);
-> +	/* Fail unmap, due to iova ownership */
-> +	test_err_ioctl_ioas_unmap(EBUSY, iova, PAGE_SIZE);
-> +	/* The 2nd page is not pinned, so it can be unmmap */
-> +	test_ioctl_ioas_unmap(iova2, PAGE_SIZE);
-> +
-> +	/* Allocate index=1, with an unaligned case */
-> +	test_cmd_hw_queue_alloc(viommu_id, IOMMU_HW_QUEUE_TYPE_SELFTEST, 1,
-> +				iova + PAGE_SIZE / 2, PAGE_SIZE / 2,
-> +				&hw_queue_id[1]);
-> +	/* Fail to destroy, due to dependency */
-> +	EXPECT_ERRNO(EBUSY, _test_ioctl_destroy(self->fd, hw_queue_id[0]));
-> +
-> +	/* Destroy in descending order */
-> +	test_ioctl_destroy(hw_queue_id[1]);
-> +	test_ioctl_destroy(hw_queue_id[0]);
-> +	/* Now it can unmap the first page */
-> +	test_ioctl_ioas_unmap(iova, PAGE_SIZE);
-> +}
-> +
->  FIXTURE(iommufd_device_pasid)
->  {
->  	int fd;
-> diff --git a/tools/testing/selftests/iommu/iommufd_fail_nth.c b/tools/testing/selftests/iommu/iommufd_fail_nth.c
-> index f7ccf1822108..41c685bbd252 100644
-> --- a/tools/testing/selftests/iommu/iommufd_fail_nth.c
-> +++ b/tools/testing/selftests/iommu/iommufd_fail_nth.c
-> @@ -634,6 +634,7 @@ TEST_FAIL_NTH(basic_fail_nth, device)
->  	uint32_t idev_id;
->  	uint32_t hwpt_id;
->  	uint32_t viommu_id;
-> +	uint32_t hw_queue_id;
->  	uint32_t vdev_id;
->  	__u64 iova;
->  
-> @@ -696,6 +697,11 @@ TEST_FAIL_NTH(basic_fail_nth, device)
->  	if (_test_cmd_vdevice_alloc(self->fd, viommu_id, idev_id, 0, &vdev_id))
->  		return -1;
->  
-> +	if (_test_cmd_hw_queue_alloc(self->fd, viommu_id,
-> +				     IOMMU_HW_QUEUE_TYPE_SELFTEST, 0, iova,
-> +				     PAGE_SIZE, &hw_queue_id))
-> +		return -1;
-> +
->  	if (_test_ioctl_fault_alloc(self->fd, &fault_id, &fault_fd))
->  		return -1;
->  	close(fault_fd);
-> -- 
-> 2.43.0
-> 
 
