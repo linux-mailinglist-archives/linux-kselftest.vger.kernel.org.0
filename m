@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-36971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9998B0049C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:05:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10A15B004AA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:07:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 741071889E64
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:03:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B66448464E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:02:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A182727F3;
-	Thu, 10 Jul 2025 14:02:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142B8272E4E;
+	Thu, 10 Jul 2025 14:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IYcut2lz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rd3znu73"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0155D271A9D;
-	Thu, 10 Jul 2025 14:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89E6272E41;
+	Thu, 10 Jul 2025 14:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752156143; cv=none; b=gNpw2HgVBJEsQ35sRR9ZdGLaRgSfS+Gs7eDnE8XI7vrEG+WoaXdZbLURkaojhsC+lKjimlBesKSEIYtHgTMOWIyNO09uT1atGdoauNZlZL+j4oNsRkSEqhG3uMVlOFY3zPLks4VvcpX6JGnD3Y/f9PvkHSjL+XeyfV6G3TZJkhM=
+	t=1752156145; cv=none; b=BKI+sQVj86vPMbP8lhEfzhvCo2zIR/m1x8+ZlwXBQMZ6X9MiLov58K1EvppEx9oIiMl1mVaUupOl47to2S5Vxw4BVxG1hBweRVb1Rwx+KRygPZeRr/KwyF6wjqKzkMv1T9a3qqDGpiP03ZOH9htNTIA4bC9p2HYV74Ev1UIepNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752156143; c=relaxed/simple;
-	bh=Co8as0JEy3sYgEqTMquGxvLRQOzjREC6NPEM+EJDGaA=;
+	s=arc-20240116; t=1752156145; c=relaxed/simple;
+	bh=L8+bJF4j7IK17zKC3J3eZHMafR8FtMP0+RphfMVg0FU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Zlfi/yewHugmNgSwBCAyMgqar8ZmgTBmqz6lSAGJr2Nf+UElOCb+c64plbFQ1y/16fNDQMUxKFw8uRWlRbNK0WpwSiBJGpTDEnfl8QQcWKUpPxY3zrMvDHb4l/4QF1caBAfDNp1r5wYr49HKtx1kXEl6AGkZvY6NDVIO42bJiz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IYcut2lz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02684C4CEED;
-	Thu, 10 Jul 2025 14:02:20 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=iPMSWJNFSMBXPzoAWLPGGDr3e/0+jjkMUshdOheYd/XVGZztHA+/Ykd2daJkNFVBbh7RKCWMjOcNIbL0oPeA0WE85ezDhrMpiKKwiIcf/OVJheMTjD1Zg31DC4kcSSnuJRbytYuYm2fVR1HlhYVfuyUarHet3FpFIZ4Jj3dxxBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rd3znu73; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9F7C4AF09;
+	Thu, 10 Jul 2025 14:02:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752156142;
-	bh=Co8as0JEy3sYgEqTMquGxvLRQOzjREC6NPEM+EJDGaA=;
+	s=k20201202; t=1752156144;
+	bh=L8+bJF4j7IK17zKC3J3eZHMafR8FtMP0+RphfMVg0FU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IYcut2lz3QhniyOh45T7rE82xKzsV9T4PrOO2G9ZbSpCTsOqqbvGmijeO6W2V7EWY
-	 Ts8rp8KA4XZ4D3tC2jRDQvJNu6bl+EUfUMHOGGZH+ZOgAp7wKImOvUPTsCTr8FhNc2
-	 XdBSPgoizJP2ZbwXQ8/pStte9APz95iRRHC7L5uisuEpkQRW69zrLyikXOhzOAd3/I
-	 xF4ZVZouTvnIjbIol+vWKutwb4uzrMNtSOffQ/hBnnkhMALymPx6dnYZQUDdkINxWZ
-	 zbxfoctMPE05jIJbLn4/JK6QIqNDpe2xV+RTwQEQUdbAi5LShqgdTdt7mz3+5tA4p1
-	 ggQGnih5S82fw==
+	b=Rd3znu73D1SyxHcxxNwyHZr9xTkaOys2N6r6jYRcQwUIP7WfIqhnl5LSj0Lffhq5m
+	 QMEp6gBIbu3uJoje9fZUo7GEB45E3BQ+b00nLUfAfQVBNwC6vD46Bwro25S0N2yUdU
+	 lVU5B/rs946fxlNt1+LAgmI2VHIxV26fCuvi+jOllGThFNWz/S8pW5zYfRSMFdDo9f
+	 OuKUtk73P6ViNIZU7A+BQatVRqJj5+CKysdNOr8/rQWu0Z1sN8Iq7Tr3VmA+bKU/PT
+	 FtQaHl9UpOCHylpD564U1qZKAUCSjWMRlWFI4nPOAvrLcKj6mpPdYHl38ZaM5b/dEm
+	 hpXLfgsYdXUdg==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Thu, 10 Jul 2025 16:01:33 +0200
-Subject: [PATCH v2 1/4] HID: core: ensure the allocated report buffer can
- contain the reserved report ID
+Date: Thu, 10 Jul 2025 16:01:34 +0200
+Subject: [PATCH v2 2/4] HID: core: ensure __hid_request reserves the report
+ ID as the first byte
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,55 +53,76 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250710-report-size-null-v2-1-ccf922b7c4e5@kernel.org>
+Message-Id: <20250710-report-size-null-v2-2-ccf922b7c4e5@kernel.org>
 References: <20250710-report-size-null-v2-0-ccf922b7c4e5@kernel.org>
 In-Reply-To: <20250710-report-size-null-v2-0-ccf922b7c4e5@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
  Shuah Khan <shuah@kernel.org>
 Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>, 
+ syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com, 
  stable@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752156138; l=1423;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752156138; l=1990;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=Co8as0JEy3sYgEqTMquGxvLRQOzjREC6NPEM+EJDGaA=;
- b=gPC4tV0NRIY4GQ0pGBpc/9NTIFhSSe5QHrzI2IP5DHO6ZmQWtA4O77giACqp8cb96JJlGtrg3
- JSyhRg7/pzrDneito10Pd7p+CC6XdNF8sK3OYowYoaMCUyoLjqRtNid
+ bh=L8+bJF4j7IK17zKC3J3eZHMafR8FtMP0+RphfMVg0FU=;
+ b=p8JpT/l6x6L7bc9rN5/cXJGtW5BtwLcKq2m0Aam/11DpM8UFb06HMOdiuVT7u1F8mguZrKnT6
+ 437kFiGm6Z6BAnt6BIu3sjrxd0bMS0C+xngaorK+zRbPVIUmbhUDD9b
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-When the report ID is not used, the low level transport drivers expect
-the first byte to be 0. However, currently the allocated buffer not
-account for that extra byte, meaning that instead of having 8 guaranteed
-bytes for implement to be working, we only have 7.
+The low level transport driver expects the first byte to be the report
+ID, even when the report ID is not use (in which case they just shift
+the buffer).
+
+However, __hid_request() whas not offsetting the buffer it used by one
+in this case, meaning that the raw_request() callback emitted by the
+transport driver would be stripped of the first byte.
 
 Reported-by: Alan Stern <stern@rowland.harvard.edu>
 Closes: https://lore.kernel.org/linux-input/c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu/
+Reported-by: syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=8258d5439c49d4c35f43
+Tested-by: syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com
+Fixes: 4fa5a7f76cc7 ("HID: core: implement generic .request()")
 Cc: stable@vger.kernel.org
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- drivers/hid/hid-core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/hid/hid-core.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index b348d0464314ca331da073128f0ec4e0a6a91ed1..1a231dd9e4bc83202f2cbcd8b3a21e8c82b9deec 100644
+index 1a231dd9e4bc83202f2cbcd8b3a21e8c82b9deec..320887c365f7a36f7376556ffd19f99e52b7d732 100644
 --- a/drivers/hid/hid-core.c
 +++ b/drivers/hid/hid-core.c
-@@ -1883,9 +1883,12 @@ u8 *hid_alloc_report_buf(struct hid_report *report, gfp_t flags)
- 	/*
- 	 * 7 extra bytes are necessary to achieve proper functionality
- 	 * of implement() working on 8 byte chunks
-+	 * 1 extra byte for the report ID if it is null (not used) so
-+	 * we can reserve that extra byte in the first position of the buffer
-+	 * when sending it to .raw_request()
- 	 */
+@@ -1976,7 +1976,7 @@ static struct hid_report *hid_get_report(struct hid_report_enum *report_enum,
+ int __hid_request(struct hid_device *hid, struct hid_report *report,
+ 		enum hid_class_request reqtype)
+ {
+-	char *buf;
++	char *buf, *data_buf;
+ 	int ret;
+ 	u32 len;
  
--	u32 len = hid_report_len(report) + 7;
-+	u32 len = hid_report_len(report) + 7 + (report->id == 0);
+@@ -1984,10 +1984,17 @@ int __hid_request(struct hid_device *hid, struct hid_report *report,
+ 	if (!buf)
+ 		return -ENOMEM;
  
- 	return kzalloc(len, flags);
- }
++	data_buf = buf;
+ 	len = hid_report_len(report);
+ 
++	if (report->id == 0) {
++		/* reserve the first byte for the report ID */
++		data_buf++;
++		len++;
++	}
++
+ 	if (reqtype == HID_REQ_SET_REPORT)
+-		hid_output_report(report, buf);
++		hid_output_report(report, data_buf);
+ 
+ 	ret = hid->ll_driver->raw_request(hid, report->id, buf, len,
+ 					  report->type, reqtype);
 
 -- 
 2.49.0
