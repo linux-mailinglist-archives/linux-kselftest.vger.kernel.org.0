@@ -1,95 +1,95 @@
-Return-Path: <linux-kselftest+bounces-36982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36983-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9D7FB0057E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:44:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5FAEB00595
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:48:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 089EA166C5D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:44:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 569145A16EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:48:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACCEF273D89;
-	Thu, 10 Jul 2025 14:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 297912749DF;
+	Thu, 10 Jul 2025 14:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="rFMYMjkf";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SBiN1ceA";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="rFMYMjkf";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SBiN1ceA"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="VQaxOxiG";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="twBTXquX";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="th1vnLCh";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="EysxaZgf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5A7271474
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 14:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3382749C1
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 14:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752158671; cv=none; b=AcqiPJzHy/9JhanwCBXAv2AiE9kd0NxJ4NRtK092iBRFKkcxuI6zpLUx3Ufy1bCpZI4Udg9sp1jqWjGH6ij0hWNLBapLES+wyofH+9v2NrPxJao/IK0GPqXc6X4R/kmmk05rQUJTNLuVyB2IcnQCdCXtFmpidz+1DbhXUU2bF3Q=
+	t=1752158848; cv=none; b=Sgzvg2CxZh4CuljBI0G6yq+Nndn/HVe3kJnfs3BINnE7prlBPEHil6Qsr3/fHRTPuZ6wPgS7zVKCyLVlu6Fqzkwm1iKH4elaWC/+7ZjkKcFwmJ2MNsHjd0S4wrVwWByvT4I44ktf26zzLIH5/NJJ6/A4o7bw6JjrMWcROOCZUnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752158671; c=relaxed/simple;
-	bh=7Xt6M6XaaJjLxvZthkC2P3G9ZL5PAdYy6MwLi1odJvo=;
+	s=arc-20240116; t=1752158848; c=relaxed/simple;
+	bh=y1dnb0eblaUJuGuxTlMfLfmatHKxcGhk7x9nUy4WYz8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OmhiWlL1JwLjKMxWyTy0ON82wq7hmlfT7s8bStilyYZ/Tk/vlFBjU1NKWAVhJgVHrBwHm4vS5roxk6zC0uMlPzitRpM7CpOemJyX6seM7snABRH044tsIzfVJJKzKAnRW7uk69zHto1y9z2aZGQNitqd8at4/Oik+XwOo6CL41A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=rFMYMjkf; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SBiN1ceA; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=rFMYMjkf; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SBiN1ceA; arc=none smtp.client-ip=195.135.223.130
+	 In-Reply-To:Content-Type; b=R9dxx446nbH7CHki9V9GZQmTCiF6FhJ7i7/EE4FSVQR7DDnT4pwUhSCGohbJgZZYkUiF7jaWDoQN1JPPQmuN5tqZJJU9ZpWjpQZ6SI7eAUrDFTIWX3ghp1VcTz3A08HKcFE+tGGi0Guuhe6NB9eLxgDpvmBaN9IvxWp/mZ8+Rp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=VQaxOxiG; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=twBTXquX; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=th1vnLCh; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=EysxaZgf; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2223B216E8;
-	Thu, 10 Jul 2025 14:44:28 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id B84EF21272;
+	Thu, 10 Jul 2025 14:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1752158668; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1752158845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=05ARCkrCzjFNtpWMZ0+Xd5lQOWVNwYspNJyA5AFQkwE=;
-	b=rFMYMjkfeOyTnB73yjoxES2ixb3qhjJlXKnp8N0QtXQTVc4yhvYA7UvT0M2lmKmzsxzi49
-	wRT6Ov/mBHyoz/L1FKTRsPVoEQXNSVcc7dARpeZpLNyd1O31VxQndoxf1gGG5qnG7fGcIF
-	6DUYJmy7rSOForx/kJsRF7b2Pv79u0k=
+	bh=nQN0ZaGOhR62EfLm/kyytZaAhcCxyqEACT60zUXWfpM=;
+	b=VQaxOxiGSWhpDgWZxtWman5OF8SALCrGLT4FwSgaXYFRl1S1TRncle0grFQhCMV4kXD0ng
+	40Yisja0DXcxwBZVHZjAqky6PgXKGO6ag7zQOjPLgjMqquNJL68mRbUB2xFWSblsO7Uzga
+	C67pi49ru2zFCQ6spZWCAfUgUQXaSq0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1752158668;
+	s=susede2_ed25519; t=1752158845;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=05ARCkrCzjFNtpWMZ0+Xd5lQOWVNwYspNJyA5AFQkwE=;
-	b=SBiN1ceA/Ej/AyNPPn03j95S+cS3KkWLERttEO+2E6dSzbf04bINlu8e7gXD5FwAWNwGak
-	F4iLS7dT6gflvMAA==
+	bh=nQN0ZaGOhR62EfLm/kyytZaAhcCxyqEACT60zUXWfpM=;
+	b=twBTXquXyFh1GgYGQpk4sgGRBe/uCX1iOo+cT91QulgCGvyRjj4DTDsLFrRQd4A6LhOCUp
+	GY5fNeQvzJy//TAQ==
 Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1752158668; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1752158843; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=05ARCkrCzjFNtpWMZ0+Xd5lQOWVNwYspNJyA5AFQkwE=;
-	b=rFMYMjkfeOyTnB73yjoxES2ixb3qhjJlXKnp8N0QtXQTVc4yhvYA7UvT0M2lmKmzsxzi49
-	wRT6Ov/mBHyoz/L1FKTRsPVoEQXNSVcc7dARpeZpLNyd1O31VxQndoxf1gGG5qnG7fGcIF
-	6DUYJmy7rSOForx/kJsRF7b2Pv79u0k=
+	bh=nQN0ZaGOhR62EfLm/kyytZaAhcCxyqEACT60zUXWfpM=;
+	b=th1vnLCh6kDbbjFBN0nVBmL66Y97deMiJrJ6Jm5jh0tTJ0dAv1kEINRzaxwBOjWW+c/IRi
+	HYU3qiDfu5H2R9GI3iBl+/DuMMn9DleNiaagDp6eaSBYnF+cq4771ol9xHz2iWdw7vkybO
+	LAYrFFc5f8+BHH6xAUZuxozasxrHn2E=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1752158668;
+	s=susede2_ed25519; t=1752158843;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=05ARCkrCzjFNtpWMZ0+Xd5lQOWVNwYspNJyA5AFQkwE=;
-	b=SBiN1ceA/Ej/AyNPPn03j95S+cS3KkWLERttEO+2E6dSzbf04bINlu8e7gXD5FwAWNwGak
-	F4iLS7dT6gflvMAA==
+	bh=nQN0ZaGOhR62EfLm/kyytZaAhcCxyqEACT60zUXWfpM=;
+	b=EysxaZgfpAoR0nkYIshObgKkpG1l4IZ2u3Y1USs/urWj/7xi0Yj2+BF40Mdcmur3pVk+IA
+	rGEiP5hdi2HuMqAQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 00E53136DC;
-	Thu, 10 Jul 2025 14:44:27 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 94377136DC;
+	Thu, 10 Jul 2025 14:47:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id eGjIOsvRb2hUOgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 10 Jul 2025 14:44:27 +0000
-Message-ID: <8f51f972-36f4-4d87-b20c-65a08011f82e@suse.cz>
-Date: Thu, 10 Jul 2025 16:44:27 +0200
+	id ypEnI3vSb2hEOwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 10 Jul 2025 14:47:23 +0000
+Message-ID: <8074f0b2-c4c0-46ac-aca8-a395f30ab61d@suse.cz>
+Date: Thu, 10 Jul 2025 16:47:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,8 +97,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/10] mm/mremap: move remap_is_valid() into
- check_prep_vma()
+Subject: Re: [PATCH 08/10] mm/mremap: clean up mlock populate behaviour
 Content-Language: en-US
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Andrew Morton <akpm@linux-foundation.org>
@@ -109,7 +108,7 @@ Cc: Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
  linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <cover.1751865330.git.lorenzo.stoakes@oracle.com>
- <a45b7705469cfd139c4727e8898fc3a7c50cb087.1751865330.git.lorenzo.stoakes@oracle.com>
+ <1bea4f7b5093d603ff323570076142eaabc8a480.1751865330.git.lorenzo.stoakes@oracle.com>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -150,10 +149,9 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <a45b7705469cfd139c4727e8898fc3a7c50cb087.1751865330.git.lorenzo.stoakes@oracle.com>
+In-Reply-To: <1bea4f7b5093d603ff323570076142eaabc8a480.1751865330.git.lorenzo.stoakes@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
 X-Spamd-Result: default: False [-4.30 / 50.00];
 	BAYES_HAM(-3.00)[99.99%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
@@ -172,18 +170,19 @@ X-Spamd-Result: default: False [-4.30 / 50.00];
 	FROM_EQ_ENVFROM(0.00)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:mid,oracle.com:email,imap1.dmz-prg2.suse.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:helo]
 X-Spam-Flag: NO
+X-Spam-Level: 
 X-Spam-Score: -4.30
 
 On 7/7/25 07:27, Lorenzo Stoakes wrote:
-> Group parameter check logic together, moving check_mremap_params() next to
-> it.
+> When an mlock()'d VMA is expanded, we need to populate the expanded region
+> to maintain the contract that all mlock()'d memory is present (albeit -
+> with some period after mmap unlock where the expanded part of the mapping
+> remains unfaulted).
 > 
-> This puts all such checks into a single place, and invokes them early so we
-> can simply bail out as soon as we are aware that a condition is not met.
-> 
-> No functional change intended.
+> The current implementation is very unclear, so make it absolutely explicit
+> under what circumstances we do this.
 > 
 > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
