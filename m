@@ -1,207 +1,234 @@
-Return-Path: <linux-kselftest+bounces-36958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E6EBB000AA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:38:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78B30B000B2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 13:40:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD3AC7A5A8D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 11:37:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B9671C85D3A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 11:40:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E4F242D76;
-	Thu, 10 Jul 2025 11:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CBCF241693;
+	Thu, 10 Jul 2025 11:40:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="JzZNeKv7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qLwj56wh";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="JzZNeKv7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qLwj56wh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZwbafXNw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79911A841A
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 11:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336961A841A;
+	Thu, 10 Jul 2025 11:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752147501; cv=none; b=VKXxlf529CTej+YvWyHDBGn5q0PUJiOw/WcBy0uqNwngis3OOu0CpH0GqpEv4YsSpfLRoy6brfDZoqscxlp9j3G8X8XvVzmMXFx1d0LIV9uBqcO41IMMBXzEEMKrnJPpaLb4mBgk/8CFabTet0hKyOOPOvowuuFcZvRi04VB0rI=
+	t=1752147634; cv=none; b=d62n12+GsyjaoOpyLatAxy9zHxdcfZoVJxOmg6349A4wNs9SFoKBHP2qH9+wiFwvbvdrKmc4XMCwmXZes5Lj1CvD/oTNXH/0301bHpY1v//bBSmJLrKepBQA2tgh17SRrLXlTZ31CJlU6Sj4dqRhZV11IQ7Nmk49lp1XAH4ujtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752147501; c=relaxed/simple;
-	bh=oV3MUootSFziizbzjSu8DJZhdZWj4QSvyKRbV3bKSxw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=so6sO4/IR2AbVz8kwD7VYBGF3T4y9UDhrF9DWmMdLT1O5wloOS1qATmMFRraRfiUqb85RILRZEfnxX0TeO+SCPCjaRzc9+duMK07KzdkwAhSnrutH5SLLqp2Eij04+hL3hrIGMNy61Jz139Bl4afmMoM5i+YwomU6YMZBc9Prtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=JzZNeKv7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qLwj56wh; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=JzZNeKv7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qLwj56wh; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0CF822116F;
-	Thu, 10 Jul 2025 11:38:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1752147497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=2b5D2h/K7sBKKswvYGb/f9wOl6u5zVKlsgUrUmv6v9U=;
-	b=JzZNeKv7vEGxNg/Y8G6JBnpSKAtlZLjyMF4r6Ti6j1WJ7qaD50KDkCIRl9zN+Co4TtOYm6
-	/Kqtk7Y6VdMUFYiovnbscxhsWif1tO95pS00JCBLnIHYq31gkgMFiGOicp+Z/h5p9WcZju
-	w7mJqeHTWACsW7+JDMTGeCS3R1U9Eb0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1752147497;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=2b5D2h/K7sBKKswvYGb/f9wOl6u5zVKlsgUrUmv6v9U=;
-	b=qLwj56whApU3qzO0CltH4XtSu26NZy3sTGZNkOErvG+OR4QrOTSmlZIe6UKUtgWKCvZuTA
-	wD65sk31V7d0doCQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1752147497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=2b5D2h/K7sBKKswvYGb/f9wOl6u5zVKlsgUrUmv6v9U=;
-	b=JzZNeKv7vEGxNg/Y8G6JBnpSKAtlZLjyMF4r6Ti6j1WJ7qaD50KDkCIRl9zN+Co4TtOYm6
-	/Kqtk7Y6VdMUFYiovnbscxhsWif1tO95pS00JCBLnIHYq31gkgMFiGOicp+Z/h5p9WcZju
-	w7mJqeHTWACsW7+JDMTGeCS3R1U9Eb0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1752147497;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=2b5D2h/K7sBKKswvYGb/f9wOl6u5zVKlsgUrUmv6v9U=;
-	b=qLwj56whApU3qzO0CltH4XtSu26NZy3sTGZNkOErvG+OR4QrOTSmlZIe6UKUtgWKCvZuTA
-	wD65sk31V7d0doCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E7FF3136CB;
-	Thu, 10 Jul 2025 11:38:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id odWONiimb2jjdwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 10 Jul 2025 11:38:16 +0000
-Message-ID: <01c99e22-7b12-4ac0-863a-b177c8ac1041@suse.cz>
-Date: Thu, 10 Jul 2025 13:38:16 +0200
+	s=arc-20240116; t=1752147634; c=relaxed/simple;
+	bh=1RsuIHRRAuqcGHCQF+P/OS8tKhDFc+7jVpMSz2Nnvvg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LVUucYLg3frz5TsGRUdQqFgvddySbx3PY2cQaNVRFBs3ZrSmAKI5QTrkf/0bK0cWL16BGQJyBNLZtg6K+z0Niat77NWAcpNdQBONRqijJ5uYFCyTI/gSXumQQCn5TgGtFVa1ejLSftxCjhEUF8VXuihxuRMCZClthmK+5VKeYCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZwbafXNw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF30BC4CEE3;
+	Thu, 10 Jul 2025 11:40:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752147633;
+	bh=1RsuIHRRAuqcGHCQF+P/OS8tKhDFc+7jVpMSz2Nnvvg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZwbafXNwxIffsI5cFE+wVdo3GwQzgD9et58i9iA2Vhcrd3NamfBHDIsmyd8vhOn3/
+	 OKbc+3lMPdFOQz0+WHd3/rGT0eVDw1o6yAf0POqKsQq3WU78mY3N/3/PLEoIUpeHo5
+	 gIgReOW9YRwWW/beO4KmTdcOwixMvtzRsdfdtsu4mocg7q0eniBRLs0VsZAiYvo40A
+	 vHoP8yYegdn0seT9UVUMTV8IMTOMwAwmgRcE9vVT9D7v2OV+nW70R2D1OeUX9q2w9N
+	 v6ceJ8uA1clmxy+gXhMW2NuYJk48/l8YXAXBSzOFKC7B9per0ONphmupfawihauGOz
+	 AJ1j7GFoXCyWA==
+Date: Thu, 10 Jul 2025 13:40:25 +0200
+From: Niklas Cassel <cassel@kernel.org>
+To: Frank.Li@nxp.com
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	dlemoal@kernel.org, jdmason@kudzu.us, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, imx@lists.linux.dev,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v20 0/9] PCI: EP: Add RC-to-EP doorbell with platform MSI
+ controller
+Message-ID: <aG-mqWtUu9-CD43U@ryzen>
+References: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/10] mm/mremap: refactor initial parameter sanity checks
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
- linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1751865330.git.lorenzo.stoakes@oracle.com>
- <eae3ffbee3c0ba66b4ee872f6bb48ec77ee25609.1751865330.git.lorenzo.stoakes@oracle.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <eae3ffbee3c0ba66b4ee872f6bb48ec77ee25609.1751865330.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.997];
-	MIME_GOOD(-0.10)[text/plain];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:email,suse.cz:mid,oracle.com:email]
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 
-On 7/7/25 07:27, Lorenzo Stoakes wrote:
-> We are currently checking some things later, and some things
-> immediately. Aggregate the checks and avoid ones that need not be made.
-> 
-> Simplify things by aligning lengths immediately. Defer setting the delta
-> parameter until later, which removes some duplicate code in the hugetlb
-> case.
-> 
-> We can safely perform the checks moved from mremap_to() to
-> check_mremap_params() because:
-> 
-> * If we set a new address via vrm_set_new_addr(), then this is guaranteed
->   to not overlap nor to position the new VMA past TASK_SIZE, so there's no
->   need to check these later.
-> 
-> * We can simply page align lengths immediately. We do not need to check for
->   overlap nor TASK_SIZE sanity after hugetlb alignment as this asserts
->   addresses are huge-aligned, then huge-aligns lengths, rounding down. This
->   means any existing overlap would have already been caught.
-> 
-> Moving things around like this lays the groundwork for subsequent changes
-> to permit operations on batches of VMAs.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Hello Frank,
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+I tested v20 of your series, but unfortunately, it still doesn't work.
 
+When enabling the doorbell, the programming of the inbound iATU fails:
+
+## pci_epf_test_enable_doorbell()
+## keeps the BAR size, and BAR type of a BAR that has already been configured,
+## but changes the address translation for this BAR to redirect to the GIC ITS
+## rather than to the memory allocated by pci_epf_alloc_space()
+## (does not free the memory allocated by pci_epf_alloc_space())
+
+[   39.347502] pci_epf_test_enable_doorbell: msg hi: 0x0 msg low: 0xfe670040
+[   39.348103] pci_epf_test_enable_doorbell: base: 0xfe670000 off: 0x40
+[   39.348658] dw_pcie_ep_inbound_atu index: 1 parent_bus_addr: 0xfe670000 bar: 1 size: 0x100000
+[   39.349403] dw_pcie_prog_ep_inbound_atu parent_bus_addr: 0xfe670000 pci->region_align: 0x10000 IS_ALIGNED: 1
+[   39.350260] dw_pcie_prog_ep_inbound_atu parent_bus_addr: 0xfe670000 size: 0x100000 IS_ALIGNED: 0
+[   39.351028] rockchip-dw-pcie a40000000.pcie-ep: Failed to program IB window
+
+## pci_epf_test_disable_doorbell()
+## changes the address translation for this BAR to redirect to the memory
+## allocated by pci_epf_alloc_space() (which was never freed when enabling the
+## doorbell)
+
+[   39.351656] dw_pcie_ep_inbound_atu index: 1 parent_bus_addr: 0xa2e00000 bar: 1 size: 0x100000
+[   39.352401] dw_pcie_prog_ep_inbound_atu parent_bus_addr: 0xa2e00000 pci->region_align: 0x10000 IS_ALIGNED: 1
+[   39.353257] dw_pcie_prog_ep_inbound_atu parent_bus_addr: 0xa2e00000 size: 0x100000 IS_ALIGNED: 1
+
+
+The reason why pci_epf_test_enable_doorbell() fails is because of this check:
+https://github.com/torvalds/linux/blob/v6.16-rc5/drivers/pci/controller/dwc/pcie-designware.c#L663
+
+If you want to understand why this very important check is there, it is
+because the DWC controller requires that the physical address programmed in
+the iATU is aligned to the size of the BAR (BAR_MASK+1), see this commit:
+https://github.com/torvalds/linux/commit/129f6af747b2
+
+
+Applying the following patch on top of your v20 series makes things work as
+intended and makes the pcie_ep_doorbell.DOORBELL_TEST selftest pass for me:
+
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index dfdd25cfc003..7d356b0201ae 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -738,9 +738,9 @@ static void pci_epf_test_enable_doorbell(struct pci_epf_test *epf_test,
+ 	reg->doorbell_bar = cpu_to_le32(bar);
+ 
+ 	msg = &epf->db_msg[0].msg;
+-	ret = pci_epf_align_inbound_addr(epf, bar, ((u64)msg->address_hi << 32) | msg->address_lo,
++	ret = pci_epf_align_inbound_addr(epf, epf->bar[bar].size,
++					((u64)msg->address_hi << 32) | msg->address_lo,
+ 					&epf_test->db_bar.phys_addr, &offset);
+-
+ 	if (ret)
+ 		goto err_doorbell;
+ 
+diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
+index c21d8e786eb3..b3d4117182e2 100644
+--- a/drivers/pci/endpoint/pci-epf-core.c
++++ b/drivers/pci/endpoint/pci-epf-core.c
+@@ -478,44 +478,36 @@ struct pci_epf *pci_epf_create(const char *name)
+ EXPORT_SYMBOL_GPL(pci_epf_create);
+ 
+ /**
+- * pci_epf_align_inbound_addr() - Align the given address based on the BAR
+- *				 alignment requirement
++ * pci_epf_align_inbound_addr() - Align the given address based on the BAR size
++ *
+  * @epf: the EPF device
++ * @bar_size: the current BAR size
+  * @addr: inbound address to be aligned
+- * @bar: the BAR number corresponding to the given addr
+- * @base: base address matching the @bar alignment requirement.
++ * @base: base address matching the @bar_size alignment requirement.
+  * @off: offset to be added to the @base address.
+  *
+- * Helper function to align input 'addr' to base and offset, which match
+- * BAR's alignment requirement.
++ * Helper function to align input 'addr' to base and offset, when dynamically
++ * changing a BAR.
+  *
+  * The pci_epf_alloc_space() function already accounts for alignment. This is
+  * primarily intended for use with other memory regions not allocated by
+  * pci_epf_alloc_space(), such as peripheral register spaces or the trigger
+  * address for a platform MSI controller.
++ *
++ * Since this function is only used when dynamically changing a BAR (i.e. when
++ * calling set_bar() twice, without ever calling clear_bar(), as calling
++ * clear_bar() would clear the BAR's PCI address assigned by the host), this
++ * function must align to the current BAR size, since we are not clearing the
++ * BAR configuration.
+  */
+-int pci_epf_align_inbound_addr(struct pci_epf *epf, enum pci_barno bar,
+-			      u64 addr, dma_addr_t *base, size_t *off)
++int pci_epf_align_inbound_addr(struct pci_epf *epf, size_t bar_size, u64 addr,
++			      dma_addr_t *base, size_t *off)
+ {
+-	const struct pci_epc_features *epc_features;
+-	u64 align;
+-
+-	if (!base || !off)
++	if (!base || !off || !bar_size)
+ 		return -EINVAL;
+ 
+-	epc_features = pci_epc_get_features(epf->epc, epf->func_no, epf->vfunc_no);
+-	if (!epc_features) {
+-		dev_err(&epf->dev, "epc_features not implemented\n");
+-		return -EOPNOTSUPP;
+-	}
+-
+-	align = epc_features->align;
+-	align = align ? align : 128;
+-	if (epc_features->bar[bar].type == BAR_FIXED)
+-		align = max(epc_features->bar[bar].fixed_size, align);
+-
+-	*base = round_down(addr, align);
+-	*off = addr & (align - 1);
++	*base = round_down(addr, bar_size);
++	*off = addr & (bar_size - 1);
+ 
+ 	return 0;
+ }
+diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
+index 0ca08f0d05d7..bcc8184325d2 100644
+--- a/include/linux/pci-epf.h
++++ b/include/linux/pci-epf.h
+@@ -242,8 +242,8 @@ void *pci_epf_alloc_space(struct pci_epf *epf, size_t size, enum pci_barno bar,
+ void pci_epf_free_space(struct pci_epf *epf, void *addr, enum pci_barno bar,
+ 			enum pci_epc_interface_type type);
+ 
+-int pci_epf_align_inbound_addr(struct pci_epf *epf, enum pci_barno bar,
+-			      u64 addr, dma_addr_t *base, size_t *off);
++int pci_epf_align_inbound_addr(struct pci_epf *epf, size_t bar_size, u64 addr,
++			      dma_addr_t *base, size_t *off);
+ int pci_epf_bind(struct pci_epf *epf);
+ void pci_epf_unbind(struct pci_epf *epf);
+ int pci_epf_add_vepf(struct pci_epf *epf_pf, struct pci_epf *epf_vf);
+
+
+
+
+However, the more I think about it, considering that this alignment requirement
+is inherent to the DWC controller (other controllers might not have this
+requirement), perhaps pci_epf_align_inbound_addr() should not be a function in
+pci-epf-core.c, perhaps this function would be better suited to live in
+drivers/pci/controller/dwc/pcie-designware-ep.c ?
+
+
+Kind regards,
+Niklas
 
