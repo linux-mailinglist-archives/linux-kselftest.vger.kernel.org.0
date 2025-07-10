@@ -1,211 +1,202 @@
-Return-Path: <linux-kselftest+bounces-36902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7EFEAFF88A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 07:35:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86489AFF89F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 07:50:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC1133BFCB2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 05:35:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C49D189450E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 05:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834F221FF23;
-	Thu, 10 Jul 2025 05:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9568286D4D;
+	Thu, 10 Jul 2025 05:49:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="fX/wUKfi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4yRJQ8mq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BCA284665
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 05:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E879F27E7E3
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 05:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752125705; cv=none; b=ZHS/YzEn1nWzdrkuPoTfZ9//gKtYE+Uds8oXWwlGppQNtZjd7N5Dp1MOLkBi7TzsKwJqetPxqupPKf6DFcor+CmeUxlpiYQ89V5cYTqGA7JcmxGbot6cA7J8mkVQ6DWsItlaIPUofrRsb+gWDFdGS1ywN8JEQRh2co8pOBTrSnA=
+	t=1752126596; cv=none; b=O/uT/TLLKRzECkUKIY7AKZzDboYDk44Bm4lE6ISFxRZ26ZOQChZRc7JQQ44Z7gyX4h6ShjZzHuf7kYtdoBsWQ1vGr7DxS4Eo3c0tJ0WJedO+j6QTcinadUqidlClGiJVgyCezUy6KJDva8sqFsZ2B3D5Qbi+qP0MGvBhyXMgQpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752125705; c=relaxed/simple;
-	bh=eiHWOdhVsqBEJQQ7rkUfw5idQMaDzabGdmcivzSrmw4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BAWAd1K8UfTDrpSEJ/bthpO97g/l9S2cz27Tla6cGy2OY/SvGMniVCX0MoUjDkpf8kzIJwj8s+T+xIU7DJ+wq2yivX0FoDtCb6gP2nTZQELHy7C4N8BLwSsns+GwgBkb55C3b9Z40ChEHEQSXCCsu0eUfSV7Cf5MAgJBI+JC200=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=fX/wUKfi; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=DaXyqqCmB6axP8TKvI2sI3ymTSmDZMwkHqFrC8fuiSk=;
-	t=1752125703; x=1753335303; b=fX/wUKfiBUeI7uV+4u/DNs13/J6qb+baDeqa/TV/soO6cHr
-	uYN6jKw95odS4C/QFnyNRJsuDDt4cKO7GFptRBhWk0GaxO/Fyq1Wnq8J322Tri3z28CuOpufR6Ehu
-	IQDDI9w1DMRQb9Z7S02jrdM0AtEv15T0OPengzxF59eWGJ89q5LxzsVLfNPGeCHd7N+484TncsgZN
-	pPrbiB4cn8KOfmaVtNMMbexT2s94sUroRrRk1wsskwC7u0tAkh+aaWetwt9Gw2+dRkHHnXFzIarIe
-	ptH7D6YEy67BO1TP039J4n77zYm7uHHmQ/lai3YpwMkKUchIwsHh8GPo7iXUMcjQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uZjvr-0000000ET5J-2KMY;
-	Thu, 10 Jul 2025 07:34:56 +0200
-Message-ID: <aba37e62148b65c9f127c7f4248c72920f9cf0de.camel@sipsolutions.net>
-Subject: Re: [PATCH 3/3] tools/nolibc: add signal support
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Willy Tarreau <w@1wt.eu>, linux-kselftest@vger.kernel.org
-Date: Thu, 10 Jul 2025 07:34:52 +0200
-In-Reply-To: <7a524c29-6d2e-4676-82cb-28b0af76e1b7@t-8ch.de>
-References: <20250709155512.971080-1-benjamin@sipsolutions.net>
-	 <20250709155512.971080-4-benjamin@sipsolutions.net>
-	 <7a524c29-6d2e-4676-82cb-28b0af76e1b7@t-8ch.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1752126596; c=relaxed/simple;
+	bh=h0KjSpeWdigZAZsRt1k8nf58qKzquiGW74F6JUkVpXg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A4Twg834AZG5ndc+zIxRQR6EdItdde9dj+J4Btsog+Hh5FkSu/3yp4DR6zAQX4XB+w6uxipvs2ifMtrT+LxHKceuBCAFJLJBQPBiOjWsaufTsaflqprh+b3OaRkiX2PjtU+ztky4RKpe0eTizx7R8h9Dy3A1WpbLFgz/xiW0gH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4yRJQ8mq; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4a9e8459f28so205121cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Jul 2025 22:49:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752126592; x=1752731392; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g2DkamPXkqG5QCK86AOwRmXVbMEqNBmAF1PKjGfsOCw=;
+        b=4yRJQ8mqpUDSOh2uiqNou9iyLo1sNhsqpDvPZCNQqfz4RssJl7EfiOhP+l3yAr9ULT
+         ltQV+NQLXLiEXCMZJ+Rj4o8dt3Ee9Jha7R5LRcCbfaOFYlQdKL0QdevEjauyuhWfLWUD
+         9RB56VVVtQv53V6pPNZp6+bQXS/PNVOVaeFa+IM9Ul87A8VzNtZyYQUHO2hgmj78iJdC
+         tHhnU8+xmaoZrtPLeyZVrZVnvcfFG7zbxJo0DcuUNfGJRNwpIChzOFYdaYUv6KjDzfWI
+         SrlMFv8b2kHQ6odQykd1dWGT/iPY/aZo/H7DECb0owkHa5ENJSk5rGhwozqwNf5XANub
+         lOIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752126592; x=1752731392;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g2DkamPXkqG5QCK86AOwRmXVbMEqNBmAF1PKjGfsOCw=;
+        b=i3xl1UiRCpxGCvXpgmV8/M7JyHGJ2CUZUZRh97+bs5Ad76PzONwoGYiPP3BVUotqcE
+         1kaooClOcEbwF/9S2EjvU7iLo1aO/Z19cwH4gQrBaRUSDpR+BGXLtH4BjdJsnRzzcEZg
+         c3WleAGHEkOWoROVOx1sCcOPs/8H6fneNloSsk98ZS/FPgse/yoKuaZQe1iMBV+3WzYk
+         L6o+uxI9ExNTv25fXVlp4NqNiZVXo6FzY1hoFgBRoNbGgGg6PdOiSs/CsFsAny6hQfF+
+         pfWbKXXaGiJnwrVrubmVNyt5oJEalz/ynSQmUhRFDV5Xq1Gu1le6rej+3foErFyW7tbE
+         T5hA==
+X-Forwarded-Encrypted: i=1; AJvYcCVL5x6yxbQlO0ueWte06UUT1YAKXuopcKdAjyiQAwyhxUFWy0T5wa/pJ9fL3RY/Z+M79yHfLRNxb2HPUW+kjYQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUc+xJ3BrzgpCcro8OfOPJDooLn9gtj7khecfgsGzcqMwgsxWS
+	7Y1an9iTStIvGT3AlZoy5NNZJRxsxKFjsjTIHyMo2Grc7adH01hYxeMGeZ510D3ajkX+NbCU1Ta
+	dvPygCTF2bz4rYB6P6LiTRLjTW/eg3BGusz1KcRhI
+X-Gm-Gg: ASbGncvuQSm8M6CUFHl8wZrVCBJnl/aq9eMMbXpN4qJAAk113TnQQoXTzx1wb6uBuv6
+	PiCe2IP4MoX2IFrSY2+3w87KtkONXGhZWgH6CvtsH+4agbTW/gj4cIQrWiU5MPVF1aUEIQyV7fI
+	Pa/wmxJeO1fwKwVA68iiaz24yQ357rRSP6+RsP0Oglcngz/cXdjEfX3fOAQpKhHc1SlCsBWpW9U
+	A==
+X-Google-Smtp-Source: AGHT+IHd9bYNDNAN5ENOSYbR3QqescLdRwV2rs10KxjR/R0bjr3EaIwYCIh2/P1wreAPm2DA7zZ9VtunAr5OldSmhpc=
+X-Received: by 2002:a05:622a:8e0a:b0:4a7:ff6d:e956 with SMTP id
+ d75a77b69052e-4a9ec7d20b7mr1710771cf.3.1752126592089; Wed, 09 Jul 2025
+ 22:49:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+References: <20250704060727.724817-1-surenb@google.com> <20250704060727.724817-7-surenb@google.com>
+ <0e0312c9-9a89-4a1b-a135-4425ea95d6f6@suse.cz>
+In-Reply-To: <0e0312c9-9a89-4a1b-a135-4425ea95d6f6@suse.cz>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 9 Jul 2025 22:49:40 -0700
+X-Gm-Features: Ac12FXxTrq12WEb497yNoTrLUG113kauaA6N6gifPoRES-xwIKd4uwt6gAWXY3I
+Message-ID: <CAJuCfpG+rzpEqDYAOr+CH-4remxJzuGKEH-=zpf_bWcah-1atw@mail.gmail.com>
+Subject: Re: [PATCH v6 6/8] fs/proc/task_mmu: remove conversion of seq_file
+ position to unsigned
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
+	lorenzo.stoakes@oracle.com, david@redhat.com, peterx@redhat.com, 
+	jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, 
+	shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
+	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
+	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
+	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, tjmercier@google.com, 
+	kaleshsingh@google.com, aha310510@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2025-07-09 at 23:21 +0200, Thomas Wei=C3=9Fschuh wrote:
-> On 2025-07-09 17:55:12+0200, Benjamin Berg wrote:
-> (...)
->=20
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -1270,6 +1270,72 @@ int test_namespace(void)
-> > =C2=A0	return ret;
-> > =C2=A0}
-> > =C2=A0
-> > +sig_atomic_t signal_check;
->=20
-> static?
+On Tue, Jul 8, 2025 at 10:37=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
+ote:
+>
+> On 7/4/25 08:07, Suren Baghdasaryan wrote:
+> > Back in 2.6 era, last_addr used to be stored in seq_file->version
+> > variable, which was unsigned long. As a result, sentinels to represent
+> > gate vma and end of all vmas used unsigned values. In more recent
+> > kernels we don't used seq_file->version anymore and therefore conversio=
+n
+> > from loff_t into unsigned type is not needed. Similarly, sentinel value=
+s
+> > don't need to be unsigned. Remove type conversion for set_file position
+> > and change sentinel values to signed.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+>
+> Some stuff in the code gave me a pause but it's out of scope here so just=
+ in
+> case someone wants to do some extra churn...
+>
+> > ---
+> >  fs/proc/task_mmu.c | 14 +++++++-------
+> >  1 file changed, 7 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> > index 751479eb128f..b8bc06d05a72 100644
+> > --- a/fs/proc/task_mmu.c
+> > +++ b/fs/proc/task_mmu.c
+> > @@ -135,7 +135,7 @@ static struct vm_area_struct *proc_get_vma(struct p=
+roc_maps_private *priv,
+> >       if (vma) {
+> >               *ppos =3D vma->vm_start;
+> >       } else {
+> > -             *ppos =3D -2UL;
+> > +             *ppos =3D -2;
+> >               vma =3D get_gate_vma(priv->mm);
+> >       }
+> >
+> > @@ -145,11 +145,11 @@ static struct vm_area_struct *proc_get_vma(struct=
+ proc_maps_private *priv,
+> >  static void *m_start(struct seq_file *m, loff_t *ppos)
+> >  {
+> >       struct proc_maps_private *priv =3D m->private;
+> > -     unsigned long last_addr =3D *ppos;
+> > +     loff_t last_addr =3D *ppos;
+> >       struct mm_struct *mm;
+> >
+> >       /* See m_next(). Zero at the start or after lseek. */
+> > -     if (last_addr =3D=3D -1UL)
+> > +     if (last_addr =3D=3D -1)
+> >               return NULL;
+> >
+> >       priv->task =3D get_proc_task(priv->inode);
+> > @@ -170,9 +170,9 @@ static void *m_start(struct seq_file *m, loff_t *pp=
+os)
+> >               return ERR_PTR(-EINTR);
+> >       }
+> >
+> > -     vma_iter_init(&priv->iter, mm, last_addr);
+> > +     vma_iter_init(&priv->iter, mm, (unsigned long)last_addr);
+>
+> I wonder if this should rather be done only after dealing with the -2 cas=
+e
+> below. It seems wrong to init the iterator with a bogus address. What if =
+it
+> acquires some sanity checks?
+>
+> >       hold_task_mempolicy(priv);
+>
+> It seems suboptimal to do that mempolicy refcount dance for numa_maps sak=
+e
+> even if we're reading a different /proc file... maybe priv could have a f=
+lag
+> to determine?
+>
+> > -     if (last_addr =3D=3D -2UL)
+> > +     if (last_addr =3D=3D -2)
+> >               return get_gate_vma(mm);
+>
+> I think only after the above it makes sense to init the iterator?
 
-Oops.
+Yes makes sense but let me do that outside of this patchset as it's
+rather unrelated.
 
->=20
-> > +
-> > +static void sighandler(int signum)
-> > +{
-> > +	if (signum =3D=3D SIGUSR1) {
-> > +		kill(getpid(), SIGUSR2);
-> > +		signal_check =3D 1;
-> > +	} else {
-> > +		signal_check++;
-> > +	}
->=20
-> This could use some operations which make it clearer which steps
-> occurred in which order. See the constructor tests.
-
-Could it be that the constructor test logic is buggy? It seems to
-simply OR the bottom two bits, but doing that will not verify the
-order.
-
-Maybe something more generic like the below macro? i.e. use the bottom
-bit to store whether the order has been correct.
-
-/* Set BIT(step + 1), BIT(0) shows whether all steps ran in order */
-#define mark_step_done(v, step) do {  \
-        v |=3D v & (1 << ((step) + 1)); \
-        if (v =3D=3D 0 && (step) =3D=3D 0)    \
-            v |=3D 0x1;                 \
-        else if (!(v & (1 << (step))) \
-            v &=3D ~0x1;                \
-    } while (0)
-
-> > +}
-> > +
-> > +int test_signals(int test_idx)
-> > +{
-> > +	struct sigaction sa =3D {
-> > +		.sa_flags =3D 0,
-> > +		.sa_handler =3D sighandler,
-> > +	};
-> > +	struct sigaction sa_old =3D {
-> > +		/* Anything other than SIG_DFL */
-> > +		.sa_handler =3D sighandler,
-> > +	};
-> > +	int llen; /* line length */
-> > +	int ret =3D 0;
-> > +	int res;
-> > +
-> > +	signal_check =3D 0;
-> > +
-> > +	sigemptyset(&sa.sa_mask);
-> > +	sigaddset(&sa.sa_mask, SIGUSR2);
->=20
-> I'd like to see some tests for the sigset functions.
-
-Heh, yeah. sigaddset is kind of tested indirectly when verifying the
-emission order. But that just makes it unclear where the test failed.
-
-Benjamin
-
-> > +
-> > +	res =3D sigaction(SIGUSR1, &sa, &sa_old);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 register SIGUSR1: %d", res);
-> > +	EXPECT_SYSZR(1, res);
-> > +	if (res)
-> > +		goto out;
-> > +
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_old.sa_handler: SIG_DFL (%p)",
-> > SIG_DFL);
-> > +	EXPECT_PTREQ(1, SIG_DFL, sa_old.sa_handler);
-> > +	if (res)
-> > +		goto out;
-> > +
-> > +	res =3D sigaction(SIGUSR2, &sa, NULL);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 register SIGUSR2: %d", res);
-> > +	EXPECT_SYSZR(1, res);
-> > +	if (res)
-> > +		goto out;
-> > +
-> > +	/* Trigger the first signal. */
-> > +	kill(getpid(), SIGUSR1);
-> > +
-> > +	/* If signal_check is 1 or higher, then signal emission
-> > worked */
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 signal emission: 1 <=3D signal_ch=
-eck");
-> > +	EXPECT_GE(1, signal_check, 1);
-> > +
-> > +	/* If it is 2, then signal masking worked */
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 signal masking: 2 =3D=3D signal_c=
-heck");
-> > +	EXPECT_EQ(1, signal_check, 2);
-> > +
-> > +out:
-> > +	llen =3D printf("%d %s", test_idx, "sigaction");
-> > +	EXPECT_EQ(1, res, 0);
->=20
-> Restore the default handler afterwards?
->=20
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > =C2=A0/* Run syscall tests between IDs <min> and <max>.
-> > =C2=A0 * Return 0 on success, non-zero on failure.
-> > =C2=A0 */
-> > @@ -1398,6 +1464,7 @@ int run_syscall(int min, int max)
-> > =C2=A0		CASE_TEST(syscall_noargs);=C2=A0=C2=A0=C2=A0 EXPECT_SYSEQ(1,
-> > syscall(__NR_getpid), getpid()); break;
-> > =C2=A0		CASE_TEST(syscall_args);=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 EXPECT_S=
-YSER(1,
-> > syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
-> > =C2=A0		CASE_TEST(namespace);=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 EXPECT_SYSZR(euid0
-> > && proc, test_namespace()); break;
-> > +		case __LINE__:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret +=3D
-> > test_signals(test); break;
-> > =C2=A0		case __LINE__:
-> > =C2=A0			return ret; /* must be last */
-> > =C2=A0		/* note: do not set any defaults so as to permit
-> > holes above */
-> > --=20
-> > 2.50.0
-> >=20
->=20
-
+>
+> >       return proc_get_vma(priv, ppos);
+> > @@ -180,8 +180,8 @@ static void *m_start(struct seq_file *m, loff_t *pp=
+os)
+> >
+> >  static void *m_next(struct seq_file *m, void *v, loff_t *ppos)
+> >  {
+> > -     if (*ppos =3D=3D -2UL) {
+> > -             *ppos =3D -1UL;
+> > +     if (*ppos =3D=3D -2) {
+> > +             *ppos =3D -1;
+> >               return NULL;
+> >       }
+> >       return proc_get_vma(m->private, ppos);
+>
 
