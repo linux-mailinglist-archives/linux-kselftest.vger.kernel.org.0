@@ -1,133 +1,167 @@
-Return-Path: <linux-kselftest+bounces-37047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37048-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 659D0B00C07
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 21:15:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE387B00C1F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 21:30:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 255387B9B33
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 19:13:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81CC14E63C4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 19:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893E82FE399;
-	Thu, 10 Jul 2025 19:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD742FC3C7;
+	Thu, 10 Jul 2025 19:30:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhZZ3o+B"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D99Dt27d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDE92FE36D;
-	Thu, 10 Jul 2025 19:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342CA21D3C6
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 19:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752174839; cv=none; b=NcbGZEODEM9gYceUwkvXzLFnPgbloI6wJqt1rWtehb57zlq9EAIwam7Uwm4Gw1oad76b8oAGkAP+J4l8hJ/fYhhziCCPEqRqLNQ6v6LAZ7ZXCyGuJUBXpEcpkGLntW78F0OxAizhEKSG7WFP4T9cWsV5L9CbkPRKqi0seaVY54s=
+	t=1752175819; cv=none; b=JSyeWbvm4HGeEGsxKfQqdXqL7+9OGgrXndc8yydaex5T4LXZ0sFpaitQC+QhjXSO0xr2iLW0LSYOD2mgVGDFpyPfKaUY02qf+mk5UXKMSqLhNpyBaQW7O3EWaGEE+5c/PLKybyE0SoOo5YXDmCWs6YrTQUbxKv1EqNb8SSDwM5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752174839; c=relaxed/simple;
-	bh=UfZBgPNXsNVvIoKoizlLf9l//dyhqb8DPMRaq9LzZjs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RjQQzBVkZw93Cd8TN3Steza+S5dTDRkK2KLesJc3hSYqj/Xm8GoLyz+tdRmBXRGouUGOIZR0jRnY7Wj2Qzm+tPgN30zh4Sbk8OB6eCoi4Z1cyhJZ6bv5wC+3Sw2xDDpt0YP3IZaAfDOGTZFO7LtJD2VGRZN95TT/vKP7oD7Tkk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhZZ3o+B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65B66C4CEF4;
-	Thu, 10 Jul 2025 19:13:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752174838;
-	bh=UfZBgPNXsNVvIoKoizlLf9l//dyhqb8DPMRaq9LzZjs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=fhZZ3o+B1YOtPqq/GZDBQRyKrQ3TA+FY7IoW3Vu6T9SZCiKzb77vnw8i9XEQipqI8
-	 WMqg8ezFZbAY1pc+/AIQxlfckXGS2K3ISIu+WtoFIWTrHQY1mZNvEzTXDGJXQh19vx
-	 6b8xfhJpsa/fCfIJbxjJm01axbc1fwN8gfUXhUdyVRY9qxvGS9/1dQEKwLKJQsEhNn
-	 e5ZN2V8W73yZkCLaWqGkx8DZlBF9jrDLv5P0EZk8CyE9O8UEsmxdSQh7KLT9Y8b/Ou
-	 U90yI9q9WncbdbxEoX5jPprj2N1ZEpuu0AD8iqg3Dgb9idLWQfhfuTEAZ2JuPxDVeV
-	 2a91VLn1XDq4A==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B55AC83F22;
-	Thu, 10 Jul 2025 19:13:58 +0000 (UTC)
-From: Frank Li via B4 Relay <devnull+Frank.Li.nxp.com@kernel.org>
-Date: Thu, 10 Jul 2025 15:13:55 -0400
-Subject: [PATCH v21 9/9] arm64: dts: imx95: Add msi-map for pci-ep device
+	s=arc-20240116; t=1752175819; c=relaxed/simple;
+	bh=EJ6s4tjHUT6RtbgUP+qOWodtQci0cx0J74QsTYz4VVo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AWu3Fc2WjkfHxV7g8B6oIoGSWIyJajENM34+O2bqK0bxZ5DIXcxduhYrWrzdKtNnhDdQ5cbSnI+Wtfpe0mK7ImKwkhWdxnfRmIR4wCRwfrD7ITCtwU5EiffeIoLRBLh7tzwYzr1nyjMTppv4WtPRFBJh58RsVAj74ifegM/Go08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D99Dt27d; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6fad8b4c927so12720026d6.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 12:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752175817; x=1752780617; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=USEIpL4apCBHIBMoQ7JPvYpW1LrAcOYziqZdXP5+KWM=;
+        b=D99Dt27d141/r5XQ/AIfIN8sEKybEgVy7KPWWfLB2K8kxh9YeXPGm4liw6icOra0Az
+         RIrzbkR6FkuMImrnm5UBZj3oYgGJ5pDuTkqnjW85R6LZUEeIrG6lTLLCHkbmakuFi/nt
+         5St2wwFFjszvFIhC6rB5PcvHyjNm/+Cta8yC9FYvUus+k8SeQGVSzjmOVyc+8rZtyR19
+         0r+ztu1MFTnXkSE0DKGmZ6QO9K4RusOtR2F1lUDdceRC9W3fpkopsgMkFLPl1lBw80cY
+         L4WmSlDwQf9WrLvhmx6w13iLs2Qc9KMuFcdTVCr5xEfsNwYrXm5d6SMgRN1EhMo0T06C
+         Yp/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752175817; x=1752780617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=USEIpL4apCBHIBMoQ7JPvYpW1LrAcOYziqZdXP5+KWM=;
+        b=bxmcGJEMOeRXKKoeNYIgasG/USAdWC1ssWGVZ00at1+N7RePmDN3yeAL4JORNQC59G
+         lq8derHf3kPylLsCOq1gP/JGLvVp0EnzjgdxVDNcC3gGdUvA0GwCsBFKTSkSG8xG/YiD
+         exrdNwczknkhbD6ujnaMVlf89pGt4VplBLYRPgASI377Qa+EdSfmCXLOs4iVhZAFEYjy
+         AS0Zdbh261OpNLFAVd6vIwOVOHAKCiV6iPjwMdo37vzrOje4PnjgIi4BukE3CEw8TdYP
+         hVk88sJEEr4j3trBTVMf9jZ45DiMj+La/KcdTrXFonz7Fb7f40zbMu3YpwijM4Fonzzb
+         9YmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXcK0a3VPZfNpIY9xpBzJZHXTEpFNHOeMqyGywVjg+DLxqNU43f+Uv40GDfljceEhVtztnZvl8ErqYmO01WhPk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgW5Y+av1LcyzaotiTBkxxxH5IhEM/Q5IGlQYjkL2iQ84hQGnz
+	N4ii3AVHmXQ+UG7ZqpuJOFA8/rzUGv5rKTlcUz1vDpG2OT308wZhx2ln9BHcA8752BWG5DqGZZN
+	YJjQX15bY7VUu/j+hi7Q0SfzqDtYnFh8nP883g/HY
+X-Gm-Gg: ASbGncvtcPc+jB6IKWhFECXsQWtOImHnXN79QQGFKX3OG0UhVskvh5gHhEcJ45m+0Q2
+	f+grQkvNFt2j1HJdoRwfvlpTybPMdDw8To5O2fvDL0zAxZ6Ok248dytyzZr7W4yrq/0IULo4DpU
+	5AwFciv4oT8T6FPp6WE/Ypfd8d6iFBiaJIjUBu+Dt92eyEresm3ka77de3R+PG8u79rXllMgzA
+X-Google-Smtp-Source: AGHT+IGZ42wCwYI6/mUsKs5W1wwGLVBaIdQX9pYAG5+GOjYCAt5QsHm7XxQOSQrB76f5N4QqzG2xfswRS2/KVu8ypPA=
+X-Received: by 2002:a05:6214:1d2b:b0:704:778c:3b9d with SMTP id
+ 6a1803df08f44-704a3976eb8mr7470116d6.30.1752175816350; Thu, 10 Jul 2025
+ 12:30:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250710-ep-msi-v21-9-57683fc7fb25@nxp.com>
-References: <20250710-ep-msi-v21-0-57683fc7fb25@nxp.com>
-In-Reply-To: <20250710-ep-msi-v21-0-57683fc7fb25@nxp.com>
-To: Kishon Vijay Abraham I <kishon@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Anup Patel <apatel@ventanamicro.com>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, Marc Zyngier <maz@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>, 
- Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>, 
- Lucas Stach <l.stach@pengutronix.de>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>
-Cc: Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- imx@lists.linux.dev, devicetree@vger.kernel.org, 
- Niklas Cassel <cassel@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
- Manivannan Sadhasivam <mani@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752174836; l=973;
- i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=wW9Nwm5vAKtBf5Pux9lo/+uSvITxDxxhF8J82uPpSQ8=;
- b=VtcLSyohMB2FbPRKwdeAd1gT+yHIS4yjiZLuRPs9oX0oesyANEabrauubaRWQWZI0Hoa9Tyqq
- pt88S7wZQTQB5u0CTEtvjMU/70Lk/gnk03eIJ59F7pIgZX/e5D2tHlw
-X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
- pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
-X-Endpoint-Received: by B4 Relay for Frank.Li@nxp.com/20240130 with
- auth_id=121
-X-Original-From: Frank Li <Frank.Li@nxp.com>
-Reply-To: Frank.Li@nxp.com
+References: <20250706201855.232451-1-sergio.collado@gmail.com>
+In-Reply-To: <20250706201855.232451-1-sergio.collado@gmail.com>
+From: Rae Moar <rmoar@google.com>
+Date: Thu, 10 Jul 2025 15:30:05 -0400
+X-Gm-Features: Ac12FXx5GXs_yCw2SDS55fJaE3Sbr8VfcBVMKoEwWHmO2efRO1bMOT4Nye6j_po
+Message-ID: <CA+GJov5eXsoKG2eYch8h5HgLCwnE8+9RA0v-+9DW9TpP5SordA@mail.gmail.com>
+Subject: Re: [PATCH v3 RESEND] kunit: fix longest symbol length test
+To: =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>
+Cc: David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Randy Dunlap <rdunlap@infradead.org>, rust-for-linux@vger.kernel.org, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
+	David Laight <david.laight.linux@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>, x86@kernel.org, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Frank Li <Frank.Li@nxp.com>
+On Sun, Jul 6, 2025 at 4:19=E2=80=AFPM Sergio Gonz=C3=A1lez Collado
+<sergio.collado@gmail.com> wrote:
+>
+> The kunit test that checks the longests symbol length [1], has triggered
+> warnings in some pilelines when symbol prefixes are used [2][3]. The test
+> will to depend on !PREFIX_SYMBOLS and !CFI_CLANG as sujested in [4] and
+> on !GCOV_KERNEL.
+>
+> [1] https://lore.kernel.org/rust-for-linux/CABVgOSm=3D5Q0fM6neBhxSbOUHBgN=
+zmwf2V22vsYC10YRBT=3DkN1g@mail.gmail.com/T/#t
+> [2] https://lore.kernel.org/all/20250328112156.2614513-1-arnd@kernel.org/=
+T/#u
+> [3] https://lore.kernel.org/rust-for-linux/bbd03b37-c4d9-4a92-9be2-75aaf8=
+c19815@infradead.org/T/#t
+> [4] https://lore.kernel.org/linux-kselftest/20250427200916.GA1661412@ax16=
+2/T/#t
+>
+> Reviewed-by: Rae Moar <rmoar@google.com>
+> Signed-off-by: Sergio Gonz=C3=A1lez Collado <sergio.collado@gmail.com>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
-Add msi-map for pci-ep device.
+Hello!
 
-Acked-by: Manivannan Sadhasivam <mani@kernel.org>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-change in v20
-- add Manivannan's ACK
+Thanks for resending! I don't believe this has been accepted yet.  So
+I've added it to the list of patches to get accepted for the
+kselftest/kunit branch.
 
-change from v14 to v16
-- none
+Thanks!
+-Rae
 
-change from v13 to v14
-- new patch
----
- arch/arm64/boot/dts/freescale/imx95.dtsi | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx95.dtsi b/arch/arm64/boot/dts/freescale/imx95.dtsi
-index 632631a2911224cadc16a943cdb467e091e43384..c59d11eb7a581a500d381ef96f1e44533052c2a2 100644
---- a/arch/arm64/boot/dts/freescale/imx95.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx95.dtsi
-@@ -1797,6 +1797,7 @@ pcie1_ep: pcie-ep@4c380000 {
- 			assigned-clock-rates = <3600000000>, <100000000>, <10000000>;
- 			assigned-clock-parents = <0>, <0>,
- 						 <&scmi_clk IMX95_CLK_SYSPLL1_PFD1_DIV2>;
-+			msi-map = <0x0 &its 0x98 0x1>;
- 			power-domains = <&scmi_devpd IMX95_PD_HSIO_TOP>;
- 			status = "disabled";
- 		};
-
--- 
-2.34.1
-
-
+> ---
+>  lib/Kconfig.debug                | 1 +
+>  lib/tests/longest_symbol_kunit.c | 3 +--
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index ebe33181b6e6..4a75a52803b6 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2885,6 +2885,7 @@ config FORTIFY_KUNIT_TEST
+>  config LONGEST_SYM_KUNIT_TEST
+>         tristate "Test the longest symbol possible" if !KUNIT_ALL_TESTS
+>         depends on KUNIT && KPROBES
+> +       depends on !PREFIX_SYMBOLS && !CFI_CLANG && !GCOV_KERNEL
+>         default KUNIT_ALL_TESTS
+>         help
+>           Tests the longest symbol possible
+> diff --git a/lib/tests/longest_symbol_kunit.c b/lib/tests/longest_symbol_=
+kunit.c
+> index e3c28ff1807f..9b4de3050ba7 100644
+> --- a/lib/tests/longest_symbol_kunit.c
+> +++ b/lib/tests/longest_symbol_kunit.c
+> @@ -3,8 +3,7 @@
+>   * Test the longest symbol length. Execute with:
+>   *  ./tools/testing/kunit/kunit.py run longest-symbol
+>   *  --arch=3Dx86_64 --kconfig_add CONFIG_KPROBES=3Dy --kconfig_add CONFI=
+G_MODULES=3Dy
+> - *  --kconfig_add CONFIG_RETPOLINE=3Dn --kconfig_add CONFIG_CFI_CLANG=3D=
+n
+> - *  --kconfig_add CONFIG_MITIGATION_RETPOLINE=3Dn
+> + *  --kconfig_add CONFIG_CPU_MITIGATIONS=3Dn --kconfig_add CONFIG_GCOV_K=
+ERNEL=3Dn
+>   */
+>
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>
+> base-commit: 772b78c2abd85586bb90b23adff89f7303c704c7
+> --
+> 2.39.2
+>
 
