@@ -1,59 +1,59 @@
-Return-Path: <linux-kselftest+bounces-36948-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC33BAFFF79
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 12:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40443AFFF7B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 12:43:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C95171C847BB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 10:43:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4257718950AD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 10:44:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 007422D9787;
-	Thu, 10 Jul 2025 10:43:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F152D978A;
+	Thu, 10 Jul 2025 10:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="M0mmErND"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="NWQJGk8L"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA731FBEA2
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 10:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8FB2D9480
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 10:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752144211; cv=none; b=MP61ItlEwHPb1jNFNXsbMeNMSjlPHCImlkXb7XCxaOacbVoUha7Tj2vqbqYfA/lI4b1ECjhVGLBciGtt8Bm8L+173TVvktNgReX9v16uBiW+0foUEPFAluFWv1JPuPSFd6cGGnQzxD0dKOzJ2VVTX3eqgmLOK3e0V/2mlpw7v3U=
+	t=1752144223; cv=none; b=E9McRGvY8X8l0BGM8KotHztDiXqA4ogCmBHnMfu3Ydcwp3zd2QaqmWuG2L7GFB0wckpYzWtNPbEECmyk/CtymxltrJ+yFMtThaZ6VpE5oxS7TLDYiNWkb41cKKK77stkZmtOafIolnTz566ukJc2pJ687DBQnpVnG7mIRBaR+ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752144211; c=relaxed/simple;
-	bh=d3sxZXjRC82xGNolWwhyJmdLgIPOD3WJS5LohzNkaZE=;
+	s=arc-20240116; t=1752144223; c=relaxed/simple;
+	bh=DEP14ZRZiG/sLyBz8iGbUt59dOaqPCdFYH1CPhYm1RQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xnd1/fkqsb4TJxk+RCjNcSDPR2seV+cDGR+B2DwqkR4bBOVIvzminjgW+qK0bb9h4IuZQT2qnOkcL1QaS/0upwXxOD+xskrMq1EzY4ZDHqq342+vqjTYhj5C/1OqVjAAIFsdC8ECNYS4z/MMD9zEtAO7sLXdnjbkSBFdEw8F2Bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=M0mmErND; arc=none smtp.client-ip=168.119.38.16
+	 MIME-Version; b=Dc/HtZItxhb7bhuxCKc4Uyv4yvQCN2v3vbeK1La8+VqN+Lva6F8gFlkoio5n51/KVxPsuwEmw95kAVqj3LCJKtPzf+giHweXZwhpM2OKrwq5vOdgIqNu+WrdzeBWW7Ne8b8f9riOYcbFjpGbNO2G0P/5BUJpV/0Kgouz/DKP/vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=NWQJGk8L; arc=none smtp.client-ip=168.119.38.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=ZoUHxs4e+VTXuo3zHAuSxfrKp6MVarGo+9atE96CX/4=;
-	t=1752144210; x=1753353810; b=M0mmErNDq0Hi32lTouH0xukEuQmWkUglEtfoVsOR/lHLLOM
-	lJ0Lbz826lL68LWlDEKDHllG+rb6o8BOHSmMSGIpvdn0ObjDqBzgqGuJ3FMZW+GYmOXBdhlMWipTH
-	odP1w2iWIoB7cq70/9wMkyni8fUxgD880KV8mgq+x7H9805ze/UorzpHgav+imPWrdvnuoPeY7bOz
-	QVW6AbBOe/DkguvuCnT4ySduA0XSh5a6B5ifbjI/zrNpmgB0GGX9GDBtgfbx15U3I3G0ciGric/AY
-	UQ8XW45kDPG8dyKyS/s9hREkxhZADS3dCiVVWdj57mmuLhAoooW/9In0jA8RbT8Q==;
+	Resent-Cc:Resent-Message-ID; bh=tsPadXZoxbJVZ8LaEhabHsYayQqqmvPpVP/g2wcp5bw=;
+	t=1752144221; x=1753353821; b=NWQJGk8LIPTE3q+zk64+5vi+PP4pqI/3ARlF6MzRI0eOCsD
+	GmbZXGNzaxvNY6s5pyN2XVRcoao2jVSo9U8nVMxKAqfDaqLDZDkseL+ez9ONvKb8blPdubdjRAVo1
+	qE0SQtvmoqH6XuxDyeC2Nesh/YReUshe9mKG09JV5a1ILV4yE8Cely9E9OUptlGkGqWo8iVaVNaam
+	BPQHPO1i6vQHF3hbInu08hX4lpPrZwLw4amWFSUPUXW0ey0OnnMoRMD703zJfUaqvRE52hfmUb7zW
+	XEd/phLML9/xJ58nw9bBV98FY2Kwe6twRQ4Krh6OsM7h20MbXzC0/ow1Ev+lFs7A==;
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.98.2)
 	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uZokM-0000000Eg4e-3Vgz;
-	Thu, 10 Jul 2025 12:43:23 +0200
+	id 1uZokP-0000000Eg4e-3crJ;
+	Thu, 10 Jul 2025 12:43:26 +0200
 From: Benjamin Berg <benjamin@sipsolutions.net>
 To: Willy Tarreau <w@1wt.eu>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	linux-kselftest@vger.kernel.org
 Cc: Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH v2 2/4] selftests/nolibc: validate order of constructor calls
-Date: Thu, 10 Jul 2025 12:39:48 +0200
-Message-ID: <20250710103950.1272379-3-benjamin@sipsolutions.net>
+Subject: [PATCH v2 3/4] tools/nolibc: add more generic bitmask macros for FD_*
+Date: Thu, 10 Jul 2025 12:39:49 +0200
+Message-ID: <20250710103950.1272379-4-benjamin@sipsolutions.net>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250710103950.1272379-1-benjamin@sipsolutions.net>
 References: <20250710103950.1272379-1-benjamin@sipsolutions.net>
@@ -67,131 +67,115 @@ Content-Transfer-Encoding: 8bit
 
 From: Benjamin Berg <benjamin.berg@intel.com>
 
-Add new helpers to track multiple steps as bits in an integer. Store
-each step in a bit and use the lowest bit to store whether all steps
-occurred in the correct order and only once.
-
-Use this for the constructor tests.
+The FD_* macros are assuming a specific type for the bitmask. Add new
+macros that introspect the type of the passed variable in order to know
+the size of the bitmask. This way the same macros can be used for other
+purposes.
 
 Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 
 ---
 
 v2:
-- Newly added patch
+- Rename the macros for consistency and to mark them internal
+- Fix shift to use the correct element type
 ---
- .../selftests/nolibc/nolibc-test-linkage.c    | 17 ++++++++--
- tools/testing/selftests/nolibc/nolibc-test.c  | 31 ++++++++++++++++---
- 2 files changed, 42 insertions(+), 6 deletions(-)
+ tools/include/nolibc/types.h | 72 ++++++++++++++++++++----------------
+ 1 file changed, 40 insertions(+), 32 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test-linkage.c b/tools/testing/selftests/nolibc/nolibc-test-linkage.c
-index 0636d1b6e808..4435f389570b 100644
---- a/tools/testing/selftests/nolibc/nolibc-test-linkage.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test-linkage.c
-@@ -4,6 +4,19 @@
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index 16c6e9ec9451..f7f2ddf41e89 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -115,48 +115,56 @@
+ #define EXIT_SUCCESS 0
+ #define EXIT_FAILURE 1
  
- #include <errno.h>
+-#define FD_SETIDXMASK (8 * sizeof(unsigned long))
+-#define FD_SETBITMASK (8 * sizeof(unsigned long)-1)
+-
+-/* for select() */
+-typedef struct {
+-	unsigned long fds[(FD_SETSIZE + FD_SETBITMASK) / FD_SETIDXMASK];
+-} fd_set;
+-
+-#define FD_CLR(fd, set) do {						\
+-		fd_set *__set = (set);					\
+-		int __fd = (fd);					\
+-		if (__fd >= 0)						\
+-			__set->fds[__fd / FD_SETIDXMASK] &=		\
+-				~(1U << (__fd & FD_SETBITMASK));	\
++#define __NOLIBC_BITMASK_CLEAR(num, set) do {				     \
++		__typeof__(set) *__set = &(set);			     \
++		int __num = (num);					     \
++		__typeof__(**__set) __bit = 1;				     \
++		if (__num >= 0 && __num < 8 * (ssize_t)sizeof(*__set))	     \
++			(*__set)[__num / (8 * sizeof(**__set))] &=	     \
++				~(__bit << (__num % (8 * sizeof(**__set)))); \
+ 	} while (0)
  
-+/*
-+ * Set BIT(step + 1), BIT(0) shows whether all steps ran once and in order
-+ *
-+ * Copied from nolibc-test.c.
-+ */
-+#define MARK_STEP_DONE(val, step) do {					\
-+	if ((val) == 0 && (step) == 0)					\
-+		(val) |= 0x1;						\
-+	else if (!(val & (1 << (step))) || (val) & (1 << ((step) + 1)))	\
-+		(val) &= ~0x1;						\
-+	(val) |= 1 << ((step) + 1);					\
-+	} while (0)
+-#define FD_SET(fd, set) do {						\
+-		fd_set *__set = (set);					\
+-		int __fd = (fd);					\
+-		if (__fd >= 0)						\
+-			__set->fds[__fd / FD_SETIDXMASK] |=		\
+-				1 << (__fd & FD_SETBITMASK);		\
++#define __NOLIBC_BITMASK_SET(num, set) do {				  \
++		__typeof__(set) *__set = &(set);			  \
++		int __num = (num);					  \
++		__typeof__(**__set) __bit = 1;				  \
++		if (__num >= 0 && __num < 8 * (ssize_t)sizeof(*__set))	  \
++			(*__set)[__num / (8 * sizeof(**__set))] |=	  \
++				__bit << (__num % (8 * sizeof(**__set))); \
+ 	} while (0)
+ 
+-#define FD_ISSET(fd, set) ({						\
+-			fd_set *__set = (set);				\
+-			int __fd = (fd);				\
+-		int __r = 0;						\
+-		if (__fd >= 0)						\
+-			__r = !!(__set->fds[__fd / FD_SETIDXMASK] &	\
+-1U << (__fd & FD_SETBITMASK));						\
+-		__r;							\
++#define __NOLIBC_BITMASK_TEST(num, set) ({				  \
++		__typeof__(set) *__set = &(set);			  \
++		int __num = (num);					  \
++		__typeof__(**__set) __r = 0;				  \
++		__typeof__(**__set) __bit = 1;				  \
++		if (__num >= 0 && __num < 8 * (ssize_t)sizeof(*__set))	  \
++			__r = (*__set)[__num / (8 * sizeof(**__set))] &	  \
++			      (__bit << (__num % (8 * sizeof(**__set)))); \
++		!!__r;							  \
+ 	})
+ 
+-#define FD_ZERO(set) do {						\
+-		fd_set *__set = (set);					\
++#define __NOLIBC_BITMASK_ZERO(set) do {					\
++		__typeof__(set) *__set = &(set);			\
+ 		int __idx;						\
+-		int __size = (FD_SETSIZE+FD_SETBITMASK) / FD_SETIDXMASK;\
++		int __size = sizeof(*__set) / sizeof(**__set);		\
+ 		for (__idx = 0; __idx < __size; __idx++)		\
+-			__set->fds[__idx] = 0;				\
++			(*__set)[__idx] = 0;				\
+ 	} while (0)
+ 
++#define FD_SETIDXMASK (8 * sizeof(unsigned long))
++#define FD_SETBITMASK (8 * sizeof(unsigned long)-1)
 +
- void *linkage_test_errno_addr(void)
- {
- 	return &errno;
-@@ -14,11 +27,11 @@ int linkage_test_constructor_test_value = 0;
- __attribute__((constructor))
- static void constructor1(void)
- {
--	linkage_test_constructor_test_value |= 1 << 0;
-+	MARK_STEP_DONE(linkage_test_constructor_test_value, 0);
- }
- 
- __attribute__((constructor))
- static void constructor2(void)
- {
--	linkage_test_constructor_test_value |= 1 << 1;
-+	MARK_STEP_DONE(linkage_test_constructor_test_value, 1);
- }
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 97efc98b6a3d..d612150d2ea3 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -72,6 +72,15 @@ static const int is_nolibc =
- #endif
- ;
- 
-+/* Set BIT(step + 1), BIT(0) shows whether all steps ran once and in order */
-+#define MARK_STEP_DONE(val, step) do {					\
-+	if ((val) == 0 && (step) == 0)					\
-+		(val) |= 0x1;						\
-+	else if ((val) & (1 << ((step) + 1)) || !(val & (1 << (step))))	\
-+		(val) &= ~0x1;						\
-+	(val) |= 1 << ((step) + 1);					\
-+	} while (0)
++/* for select() */
++typedef struct {
++	unsigned long fds[(FD_SETSIZE + FD_SETBITMASK) / FD_SETIDXMASK];
++} fd_set;
 +
- /* definition of a series of tests */
- struct test {
- 	const char *name;              /* test name */
-@@ -389,6 +398,20 @@ int expect_syserr2(int expr, int expret, int experr1, int experr2, int llen)
- }
- 
- 
-+#define EXPECT_STEPS(cond, expr, num_steps)			\
-+	do { if (!(cond)) result(llen, SKIPPED); else ret += expect_steps(expr, llen, num_steps); } while (0)
++#define FD_CLR(fd, set) __NOLIBC_BITMASK_CLEAR(fd, (set)->fds)
++#define FD_SET(fd, set) __NOLIBC_BITMASK_SET(fd, (set)->fds)
++#define FD_ISSET(fd, set) __NOLIBC_BITMASK_TEST(fd, (set)->fds)
++#define FD_ZERO(set) __NOLIBC_BITMASK_ZERO((set)->fds)
 +
-+static __attribute__((unused))
-+int expect_steps(uint64_t expr, int llen, int num_steps)
-+{
-+	int ret = !(expr == ((uint64_t)1 << (num_steps + 1)) - 1);
-+
-+	llen += printf(" = %llx ", (long long)expr);
-+	result(llen, ret ? FAIL : OK);
-+	return ret;
-+}
-+
-+
- #define EXPECT_PTRZR(cond, expr)				\
- 	do { if (!(cond)) result(llen, SKIPPED); else ret += expect_ptrzr(expr, llen); } while (0)
- 
-@@ -690,14 +713,14 @@ int expect_strtox(int llen, void *func, const char *input, int base, intmax_t ex
- __attribute__((constructor))
- static void constructor1(void)
- {
--	constructor_test_value |= 1 << 0;
-+	MARK_STEP_DONE(constructor_test_value, 0);
- }
- 
- __attribute__((constructor))
- static void constructor2(int argc, char **argv, char **envp)
- {
- 	if (argc && argv && envp)
--		constructor_test_value |= 1 << 1;
-+		MARK_STEP_DONE(constructor_test_value, 1);
- }
- 
- int run_startup(int min, int max)
-@@ -736,9 +759,9 @@ int run_startup(int min, int max)
- 		CASE_TEST(environ_HOME);     EXPECT_PTRNZ(1, getenv("HOME")); break;
- 		CASE_TEST(auxv_addr);        EXPECT_PTRGT(test_auxv != (void *)-1, test_auxv, brk); break;
- 		CASE_TEST(auxv_AT_UID);      EXPECT_EQ(1, getauxval(AT_UID), getuid()); break;
--		CASE_TEST(constructor);      EXPECT_EQ(is_nolibc, constructor_test_value, 0x3); break;
-+		CASE_TEST(constructor);      EXPECT_STEPS(is_nolibc, constructor_test_value, 2); break;
- 		CASE_TEST(linkage_errno);    EXPECT_PTREQ(1, linkage_test_errno_addr(), &errno); break;
--		CASE_TEST(linkage_constr);   EXPECT_EQ(1, linkage_test_constructor_test_value, 0x3); break;
-+		CASE_TEST(linkage_constr);   EXPECT_STEPS(1, linkage_test_constructor_test_value, 2); break;
- 		case __LINE__:
- 			return ret; /* must be last */
- 		/* note: do not set any defaults so as to permit holes above */
+ /* for getdents64() */
+ struct linux_dirent64 {
+ 	uint64_t       d_ino;
 -- 
 2.50.0
 
