@@ -1,75 +1,77 @@
-Return-Path: <linux-kselftest+bounces-37032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37033-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8CD4B00B91
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 20:45:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FC35B00B94
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 20:45:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2FDB168D75
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 18:45:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E0A43B779F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 18:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB002FCFCC;
-	Thu, 10 Jul 2025 18:45:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B1A12FCFF4;
+	Thu, 10 Jul 2025 18:45:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OS+1iK8N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P5qkPhzI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0F72FCE13;
-	Thu, 10 Jul 2025 18:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888DB2FCFE1;
+	Thu, 10 Jul 2025 18:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752173111; cv=none; b=B3wCmhS+NDNXH4dv33WYde9pyi8ON/fgtzW4v04kczjsc4U5hP31+4jtyZwULMz1DMBov2wEfj2eAa/c9fHjp7GWxy08iJI5xh27d4s6kY+Nv06OwpmLjngyDH+ECiyo+uouqT1eUzNRDFP9/wcB/x31ZJzSxG/fl8kARmk1zkg=
+	t=1752173114; cv=none; b=a9CbMMqMZzy5xh522wH376JOaBo2j1b5LBVnFI+zwaWj4IZHiaK2M/TeSYqYcD6ZcRYvAwOfbzKRUNPLTav8QCdfkSfmFyhElYs1ssb226+JOipn9K/m1w76j0FKWYK1Qwib/s0D2LCF0lsKdLqz6ydPHmMdOcbgsmdDJik2x/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752173111; c=relaxed/simple;
-	bh=FjuyeMKtCIS0jd6XrsqzjUVLDsLRgSk/4GQsuk9iPHE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ay2Ji8GEIeCaZFFqQzeJviDFXfN1hYE2QNN8+UtoCeS2EqPMrIuwIe6yG4lFtRNKOoOBipb2CN9vBho1X2Nx+Mgt+LQU73XhrZt68Ywz1QNVPXVkh3QVZV/0+P8uBn8uAQ2cGcoSsLqCLhplyLI+7tBjxx9ogDsuGmJlp1taE0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OS+1iK8N; arc=none smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1752173114; c=relaxed/simple;
+	bh=1gZpUDwTSy0yw4iTCi2xeacRJBhw0u5mnJO2WFSvX+A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IZ0aTwiK58VAkngNbwtYr4jes7LN0VAlHMvFrP0gMBtwr7OyJPbKlfba1g7gHFKNnFvnC5ZHGr2PCcEFjowxglIgio1ZXm4kObqG1Hz2aZtqNNGNqvNz+89J/QUu0LBxpbmRpAZ3AXtD86ocgYEbfQbva5tPf/Wwpw0NjPkKP9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P5qkPhzI; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3a6e8b1fa37so1186132f8f.2;
-        Thu, 10 Jul 2025 11:45:09 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-453749aef9eso5109535e9.3;
+        Thu, 10 Jul 2025 11:45:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752173108; x=1752777908; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+tmXGTqg6eeBpnnZy9odoGENAwHa6i1JIVa+JuaL8yY=;
-        b=OS+1iK8Nxwfy6Qwzf4qNCLF7YkrSrZAY7pVBemo67MXhLyxN8lEXkeSuKI1IuV5i0G
-         NTqs4Ak7FHg6ZX7kMTpyhLnqNvkrFViDD1ooexFvSGCmvqCEr4X/7rTX/f0m5klu8AX0
-         RGcinFc6k2GQ5ZtAKBHsJEs4CcjJ3ml+l8/YDb90n45Av1zKuBjitzVbHZIsBKSIj9dR
-         LY5nQr7fdrH5OH8Vzhv/174LYuBZM+GveOeOQ/K5DLS/Zrx+OoeyuLTWFh8KtLHrBqWw
-         5JPn9YmS8XbVRqXa8zc+oGxvHhLuN2ylNuml3PXHICqVPfzuUCpjAgSYalGV14tn2jE9
-         6FIw==
+        d=gmail.com; s=20230601; t=1752173110; x=1752777910; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tI/CdLAUZ4D6ZFVUjUJXlmHQhesmh8grM2Oun3Io+fA=;
+        b=P5qkPhzIT/KXIW8epEP4lt4ZA4rLz5+d/KB7vBocVP1a1a5hV/MWCTLoiPeFzvddT/
+         9fxmCxJDbUN6tUlIXIUN0+wG5kKL3TShO60+MTWNK2+/MM9v3y4J5P5qKMs1yrMnxK9s
+         1s9c4teiBxwQUy1QMmwJqzkBoS3+AaQU3fqUKnnRVxHVVvqqv+BDvCp6p0IcXAbP9p9k
+         hdTwceNGM0vJ5X7sI5RblxeWlU5mA/k/O32FzkW+h+ePSBODlm4STc1+f0tlVwDk4a7a
+         WgpF7u+8zg/FSy+T1J38na9TYAvg7YeTdLJOIUU9CII33F9iL8Efhi/ZgB2nbheF3j/Z
+         1gbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752173108; x=1752777908;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+tmXGTqg6eeBpnnZy9odoGENAwHa6i1JIVa+JuaL8yY=;
-        b=jsGunJjh6jVCFHg3k2SMrcGqSch+o1FnjlehVQHOZ/EcISmoi0MOtX8OkF8oEESrcB
-         nNRdEcaMDTfWGRDC0KHI+l2PxCLEAiiuNNK0CZLIF11Ki8i/pzyUDFA81l9HbhvYB385
-         dk5t+oP7by1Vx8q6Hy40KqzOhvxsh3UYCSZQf8mxwD3MV+uZgg2cmc7D4SA3FiDn4V1V
-         eiegRYlYRp2zqlGpzEGN92o2vmdvBwRUpkbVGbDSbCBtXj+Xw4Iyp+QFn8C3i9tNa3Xi
-         eYOwWai3uuTR0IbFvAb5OcTfTF7ppeVnIwYJ51NNxKNdll2hZ7598b85auvpWMFWaexq
-         K9CA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5V3NcF7eqvgiF0wVXtvPjefVrLDrZyXqQ4BCtB/E4AJtYL9A/5PpBIqfIwGBugReCITE=@vger.kernel.org, AJvYcCWHdmaH18Q94OerLgS2GF0PAFdjTAimqPFW4LzBj9jkqIAzmK1lAUGv0u9nPChOEsIyQ4xtfWoKhvv8/8C/a6N6@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTPhqHpGvMBUH0eq8Q6A3x44pJ0vSam67+6MwuT2nxVcFpmea5
-	jo3L3Rup7i+IE5TlXLmlweYa12LzdbgXDkBoFpFDbyqAiQdkGrkQC0/KUHLHSY9l
-X-Gm-Gg: ASbGncvqtvd3e4cBUXNlpya/wJqvaTxSiUsRgbHp5sE3SKRuMj57kcSgDWtoCUyEOaZ
-	qDZ6xBG/AEPZbx7BufY8HzE0xvcDpYUPxGFqCOiuU9AcKcTdGLn+svEY1MQUtqloQNDIIKCZvMe
-	phee184hMSJeEFvuWkrDePv1Q3ctAOg/uf4HZJgNWPywg6ZNCRER+cAz/CwIsuyJCOrPB7CHWRH
-	77M/qjUtpetfGEqsQKx50S5gz1ki/Bi7KWH9TfDr3bgg+xY+Q7MtesHh4b0IaW1XfN/BtSXJj0K
-	+J7NkXk65RDYItaQoLsmtp7LroYx46hQBXzlkmxKTcP84dNSwhPkb8RsmhPM
-X-Google-Smtp-Source: AGHT+IFOVLXj9+/yGcFNrr1hM2oagcUsAWzlWAvHp3xxFZifqOwLcAH41XMAbdYu7JzvHp+OFoC+Ig==
-X-Received: by 2002:a05:6000:2c04:b0:3b5:e6bf:8379 with SMTP id ffacd0b85a97d-3b5f18d987cmr639004f8f.28.1752173107911;
-        Thu, 10 Jul 2025 11:45:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:4e::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e26c97sm2559318f8f.90.2025.07.10.11.45.07
+        d=1e100.net; s=20230601; t=1752173110; x=1752777910;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tI/CdLAUZ4D6ZFVUjUJXlmHQhesmh8grM2Oun3Io+fA=;
+        b=mF381zuIjZQ6o1sxIQ3uhLumJcwVhQBF/2UO+6Y9lQnso7uaSxQ0OwNxfDElAY/dKs
+         tmKcPGgl9DbOTqQCh1LpfplEO/5nBBA9ioXuxeBfsGKrsdBuzpWjXyKtwaOd02lTWlqI
+         2A3sd1HyqMzJapvEvsOLeKHaBQ0eO6xbuJanymaxtqdB5LpWfHum3WqanH8akHa9SRxH
+         lpSOODuUka4RpBg2dc72WdkB+8T8bv+opziw+H2Azgo4O8mgus4K1ae8oanu6/uYDmjX
+         F6Aa6A34DkURpNmyuOfSiHZD0itE57Yfe3H2VEd+I44TGQBhG6v2J0gRb/6KFbDDVZHH
+         LPAw==
+X-Forwarded-Encrypted: i=1; AJvYcCVUA/z4RCw92wft3cOJ4WtUaGQYhfN2bgee00cf3A/jTIgdAdGJ6tmbMvpl8k20jTxuTBH3PrMsmxT7R8BfOOuW@vger.kernel.org, AJvYcCXtnZ2IzYd+0elAY9HkaRLo7F1WxnxxS+x2c7/g69ipglb21FsppX6BDL7gVovkxLStync=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkmgiEKCR1QYEL1IUoW73QVj0yX6sLmKjU/ukJa5iygV691fiK
+	gbk7jBHqLersrQwu+Czmn/w0uERu9AHzmfMQhsP6A7vR3/U9Gex8MJHP5DuNe4Za
+X-Gm-Gg: ASbGncuqM+JyxqaAUA80CqvgljK2bEsCUtOjhY75Pj3HhotiJAr8mMh3xhBQLzvmIDt
+	ZdYJyOtl24KLjhlnnwRQDYlIX1J/cJjUKv3lQjQzNGSoyT5dlBv3FsGuNVlRJakVKqaWfWv0Dfu
+	anZZ9tX6icuLAX90ns34HsFeSubv45fh5cbPQWQUpQw5J37WqO1bz5oTUqPz0Xras/Dm7uaRV9l
+	BuZpzalJaTLwbosGD/9B8/IHXPRvQ1PpWhlEZh+ZSzIgknvXCeDkuJza9Euu4a4RwYwlFn80X50
+	a8sJDaw3/Z8Dwth0+xMYn5fbofBtXI07Mvn/v8CHsWs4Ney4f4mzYUPojkdO
+X-Google-Smtp-Source: AGHT+IGB4T2HgJ9H9ExzpNYlriCZp/aYASowinUrBAvEmZWc7wj564V55ekUmL4uhxoeQIWQyQgSOw==
+X-Received: by 2002:a05:600c:1c9e:b0:44a:b793:9e4f with SMTP id 5b1f17b1804b1-454db8681d0mr48745055e9.19.1752173110272;
+        Thu, 10 Jul 2025 11:45:10 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:43::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454dd537d07sm26854885e9.25.2025.07.10.11.45.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 11:45:07 -0700 (PDT)
+        Thu, 10 Jul 2025 11:45:09 -0700 (PDT)
 From: Mohsin Bashir <mohsin.bashr@gmail.com>
 To: netdev@vger.kernel.org
 Cc: kuba@kernel.org,
@@ -93,10 +95,12 @@ Cc: kuba@kernel.org,
 	john.fastabend@gmail.com,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next V2 0/5] selftests: drv-net: Test XDP native support
-Date: Thu, 10 Jul 2025 11:43:46 -0700
-Message-ID: <20250710184351.63797-1-mohsin.bashr@gmail.com>
+Subject: [PATCH net-next 1/5] selftests: drv-net: Add bpftool util
+Date: Thu, 10 Jul 2025 11:43:47 -0700
+Message-ID: <20250710184351.63797-2-mohsin.bashr@gmail.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250710184351.63797-1-mohsin.bashr@gmail.com>
+References: <20250710184351.63797-1-mohsin.bashr@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -105,44 +109,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series add tests to validate XDP native support for PASS,
-DROP, ABORT, and TX actions, as well as headroom and tailroom adjustment.
-For adjustment tests, validate support for both the extension and
-shrinking cases across various packet sizes and offset values.
+Add bpf utility to simplify the use of bpftool for XDP tests included in
+this series.
 
-The pass criteria for head/tail adjustment tests require that at-least
-one adjustment value works for at-least one packet size. This ensure
-that the variability in maximum supported head/tail adjustment offset
-across different drivers is being incorporated.
-
-The results reported in this series are based on fbnic. However, the
-series is tested against multiple other drivers including netdevism.
-
-Note: The XDP support for fbnic will be added later.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
 ---
-Change-log:
-V2:
-  - Remove unused and libxdp-devel headers
-  - Fix reverse xmas tree in xdp_native.bpf.c
-  - Reorder headers in xdp_native.bpf.c
-V1: https://lore.kernel.org/netdev/20250709173707.3177206-1-mohsin.bashr@gmail.com
+ tools/testing/selftests/drivers/net/lib/py/__init__.py | 2 +-
+ tools/testing/selftests/net/lib/py/utils.py            | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-Mohsin Bashir (5):
-  selftests: drv-net: Add bpftool util
-  selftests: drv-net: Test XDP_PASS/DROP support
-  selftests: drv-net: Test XDP_TX support
-  selftests: drv-net: Test tail-adjustment support
-  selftests: drv-net: Test head-adjustment support
-
- tools/testing/selftests/drivers/net/Makefile  |   1 +
- .../selftests/drivers/net/lib/py/__init__.py  |   2 +-
- tools/testing/selftests/drivers/net/xdp.py    | 663 ++++++++++++++++++
- tools/testing/selftests/net/lib/py/utils.py   |   4 +
- .../selftests/net/lib/xdp_native.bpf.c        | 524 ++++++++++++++
- 5 files changed, 1193 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/xdp.py
- create mode 100644 tools/testing/selftests/net/lib/xdp_native.bpf.c
-
+diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+index fce5d9218f1d..39968bc3df43 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+@@ -15,7 +15,7 @@ try:
+         NlError, RtnlFamily, DevlinkFamily
+     from net.lib.py import CmdExitFailure
+     from net.lib.py import bkg, cmd, defer, ethtool, fd_read_timeout, ip, \
+-        rand_port, tool, wait_port_listen
++        rand_port, tool, wait_port_listen, bpftool
+     from net.lib.py import fd_read_timeout
+     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 34470d65d871..acf0e2c38614 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -175,6 +175,10 @@ def tool(name, args, json=None, ns=None, host=None):
+     return cmd_obj
+ 
+ 
++def bpftool(args, json=None, ns=None, host=None):
++    return tool('bpftool', args, json=json, ns=ns, host=host)
++
++
+ def ip(args, json=None, ns=None, host=None):
+     if ns:
+         args = f'-netns {ns} ' + args
 -- 
 2.47.1
 
