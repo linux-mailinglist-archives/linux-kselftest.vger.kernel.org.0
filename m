@@ -1,161 +1,252 @@
-Return-Path: <linux-kselftest+bounces-36979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36980-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D7DB00546
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:30:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 307D4B0055C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 16:36:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2E6E3B3D56
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:29:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07C0C1C45746
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Jul 2025 14:36:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D3C12737F6;
-	Thu, 10 Jul 2025 14:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B846522E3FA;
+	Thu, 10 Jul 2025 14:36:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="NWBVZUWG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RBt9DDfX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328438F5E
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 14:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AFB17B421;
+	Thu, 10 Jul 2025 14:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752157797; cv=none; b=HJRsaW8a0eE0hEwmJAywHbQ/6L9969hE/1Nw43N9qN7FJLGm0uwWiGgjL4d6/ZPNqlCgeTySCXbF5zugobo8Q3W4Hos8XhOoa2zwGWS4E8km2BUi6zZYuiGjTrydQZVcfaz24hYO4g3vkzn5VUIWGten4UJiHAEo4stEPgE2vxc=
+	t=1752158168; cv=none; b=B7eBx121f1Attk9nlpwkw+38pSa/gG9550Ei5vRrAvbsUQm4nJNzt22VWfwfYY6qPasj+9Y5Yx3H012fxqk8TXc9ndjQzp/uELrFbt5s2Z0cGt9hI137RqiJw9PxI3llBmcWNDmhLh/AaBd2paaqTZ6gXUd/KR8mYaUdIm6JSfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752157797; c=relaxed/simple;
-	bh=oZ7OonWWPb3CLzQvpruAiAZiFnf3bbsaJiYraXkrTTc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VGuvf/lVaARJjVpcBMSbuTtkX6OgGre2B7M+J6FhM11UD8frECAXMHhxCxj177GCDDeJM5WkmECiMuf26h66hLfylS+JB74fUmR64bCEdBi8mquXKe8r9gYs3xBTlyUbkbgndfIxiuhyKPAgLWMff4t6wdJCMYmg0dlspP/xz/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=NWBVZUWG; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-74b54cead6cso800402b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 07:29:54 -0700 (PDT)
+	s=arc-20240116; t=1752158168; c=relaxed/simple;
+	bh=1N4tkziDIAUaH31nEsb55mcNpfly+0L/hLWGifRmUkk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gc4KJKwnPTYu1NnX/aQ08JYn8d5mQKJkMalMjexeIZ9kpEO3khcu5Xs9D6mM1LRn+hBQbDY+ObYc1xU3LX7VYdSx0G/S+Hf6PB2ACLaOLmVqoecBTItSAZvhZRqWSlb0ty9z1wj9FFfAB0Nzayyo/g7kO9Q+d2PL7DDsPN10G9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RBt9DDfX; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6fad8b4c927so9619316d6.0;
+        Thu, 10 Jul 2025 07:36:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1752157794; x=1752762594; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=70T/mtOHoW67bNGMf99k1u6kIp6BUIzmEHFhVe6xe+4=;
-        b=NWBVZUWGh9uoxmAsbhwkX5ajR1Dgt+7wCMG+931urg350JwjgwF0rcZ38mkqF6KtJx
-         GEYG1ZA9cV7SrXWxr3HOESSdyEbIQ6VGVG8UouGNMIuSwoAYnahqrXPIR+4LkaIKgRc/
-         m/PU6vp4wdkAjrRsD3Qt970M7DB/EQuaivplZCXScf6O+teH2RL8zcBKunLVjdVnfG44
-         ckuD9p9KltPZpt2e9nB1IWQJ8KsNBSbrFWp8fkuNNpzMaN/JJXoXk/Mr8/zWza5DXOMN
-         LsfS3is+PpJqxvbrE7ZncJ8rEUv/87uRSpO6P8MMYGYIdPwthiPxoMldZPn1OMYPrKHi
-         /Y0w==
+        d=gmail.com; s=20230601; t=1752158165; x=1752762965; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4qJGxOWQ8Up5dWYJdXH7usil2iamd9hTDCPtvQ0awIQ=;
+        b=RBt9DDfX7OBpJP9zAv30TixS52lELUO4rG5zIomgnGGJSytHBxvPpV5Wjv3QNWSW/s
+         zfNh6OfwzgUWodPOaYrfgW/0Nb0hKiiDh8FspcUiG4bSc3MFcHPmjyiBoZrX4bof4nr8
+         Pide9GMbcsjvQgejxW2RffI4QFAqnVXmuuT3a/VBWukph7tEPi9nkT5u3tbTt2IFzZX0
+         7OlvWiIYOUO2Xlijl+eqkPjKBjfLUG+Bpz0xP4rYBFqpJMYugCF0ntj9CWZJ6JbJmOmf
+         ka9fb53uEDcI50dU5k6xcYtApd8zLO7qb9+aHo25ctRUHQpfzkaB9Dl+TnHJbJtAaapS
+         ldcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752157794; x=1752762594;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=70T/mtOHoW67bNGMf99k1u6kIp6BUIzmEHFhVe6xe+4=;
-        b=ZPST4gfnKW+R4mfCe10BrNd6+DUgR1GftvCJ4fp/ofsyXmgPwI+PqjDRESGTOW5Byk
-         KrnIodrQhl5wQl8FG7vzqMkfRHsFVKCujgp6KgUs9SHDXpTIdYLxkGPhL01dZSWxhzke
-         Bcw6Zb/khEOIHznK8N5EgkUJJ7GqrvX8SzdSUIHEH6iMyBq47Jcznr1WAdXSPLZSlNeA
-         f9zIELoNlkzenKDKOTO4bpFIoxk1DNgcVX+3Wxx5NHl+E4iETwE/EhQLK+szSB+c4MQb
-         hgkgr3aWuQH1lGG4T/+7/VHb8W1PrxzgHeYH8clmO+jyhFes7HusT/xUtte19mc9Clh9
-         aN7A==
-X-Forwarded-Encrypted: i=1; AJvYcCULhyMbdG5D4kxsR737Q66fi73zRhslj2KS35P4Fh6umLAeVYI+iqrqPj8KR0PMEBBwjTrWZp7pQTlpERRs7xE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUKOIl0/eVbselZDPdk471agOpoEbPyLYzFQNmxv8Vpr5RLvOI
-	z4RJn/W+JFSI9NecOBhGMtuL2h8TZPg+6tzkYro6cLUea2veKik/TaI/4b/Ccrm1wRA6trrmlJh
-	onWrXh+g=
-X-Gm-Gg: ASbGncsocWqKq+rpHy1SSr8P67rOKnOyyhjJoh22BCaaEBK9Fnuh1y3hqOZwCW2gbwu
-	PbWO76bXQDR+ToMq9rHk2F0UofDpTNHSGMrrCk+knhavwr1H+y+Jr6nq6g1QBddZ/rF5IDtNKQY
-	fqw69Ey7wEXUZ+1dHM5sWTybsOSpT8vl7rhqUEm4UEFqARBWpdxZNu+kbSg51jI/d+9WIoUjtYo
-	R9MhuppGpzNWHueHYEJ1xNSxFK8z0vOdiTV08x74YZyNPRpBrS/jpHcfeWf7ds/efSgjJHVZCGV
-	u2jnq6KmzH6zuDbX+UcIXeUpG88QReb0q0DMv885NXVHytUlW5hFt4zcxniEWOjlopwhcQUwEMh
-	MgH5tZ10Vzp4j6jtgUxVmHmtkEzbsoPW7/f7iUaIzag==
-X-Google-Smtp-Source: AGHT+IE6cvc4FDu4lXrrdeGKWhRLkK/Uxe3lGtKWtoiWILObMjxluEPeqmm80yVTtrJwg3ohULnSwA==
-X-Received: by 2002:a05:6a00:a27:b0:736:54c9:df2c with SMTP id d2e1a72fcca58-74eb558edfcmr4844441b3a.15.1752157794423;
-        Thu, 10 Jul 2025 07:29:54 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe6c5660sm2390825a12.48.2025.07.10.07.29.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Jul 2025 07:29:53 -0700 (PDT)
-Message-ID: <c244c1d4-fef5-439e-8dfe-12c2f8910b18@rivosinc.com>
-Date: Thu, 10 Jul 2025 16:29:46 +0200
+        d=1e100.net; s=20230601; t=1752158165; x=1752762965;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4qJGxOWQ8Up5dWYJdXH7usil2iamd9hTDCPtvQ0awIQ=;
+        b=dGWyhqCUfdvjUUDhLWFc24LIh3JksCVUNVlNR8gKrqLYsG8hy+SA74fKYdVmhhgC1w
+         NNiCdcQdAIXi7XI/BpnW3DDB6RmDmI0mDtiijwgjyMts9BVG3lDuD1LPjATmXoz+lcT6
+         eKXbjRloyCCr8/B1eXgAbilfr5L4uZutm1xatjeod8KbksnUUSye5XSZircGnfJHeiJa
+         nswftIwUcq9HvHBkEJutkNSHnohZCCjmDDMEkUFjpyn0nvRU9P3dSNxgagHCcIpBCs72
+         tdU5L4++DlWIubyRzI2DCb2LLsO+amBoKG4vjPnoYcwGlBxlYGntQN61o2xeokReBOGK
+         jI6g==
+X-Forwarded-Encrypted: i=1; AJvYcCUaR/fr9DJGVv/+YDBQXqPCU5LoPbJQwlUlB3pkfI2bMDIMVyTV25iYoEEbipu1p+0vGQwarCFCbZLtjSS++6li@vger.kernel.org, AJvYcCWVAlu36FFWZqGhyBcuVM4tYajMF+edDK2yV7+QxH/0ZSzAW4FcTEIYNbc/RE59/jDfR2SFVodj/2R/ONE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8a6JfsH7/yUEc6fjbAjMRgWEoj2msAcpAQTp2grJw7KQqtPmu
+	RJ3pg+ANPH5lNvAs3YH2iRggtLHscrXJoIJf6+UHTANMl3DKl74IMkL9vNBnoN9dRHaKMMSxZGd
+	WTSYY/Rul6h0x2XRcy4sZZA44T93w/54=
+X-Gm-Gg: ASbGncug90UAy+Hj9z8ZoU64FJtbjzuOcBzD/CHchIGlWmQkA/5n6Ft67x0dB8lqDGB
+	2snACb/k3C6tYOH6fvLB3E6EmRUCYpbDSS0hoh2la+xVyTd9LJXpHY7xX/z3yPm3TlgA9QwXV1O
+	H+Y1G4whK+JtyDwBQv7Gzc1O5uF9zS/2TJP9LFG0OmYs8=
+X-Google-Smtp-Source: AGHT+IEKim1PUIFElOcNyHSqrLn01w9htemvtx7RLvrE5/uf9zQTKhdPq+4LhB5J8wrFv+2K0gTROANsR4kOkYJeXQU=
+X-Received: by 2002:ad4:5f0e:0:b0:701:775:70b8 with SMTP id
+ 6a1803df08f44-7049505d74emr63722756d6.38.1752158164505; Thu, 10 Jul 2025
+ 07:36:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] selftests: riscv: add misaligned access testing
-To: Andreas Schwab <schwab@suse.de>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-riscv@lists.infradead.org, Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>,
- Alexandre Ghiti <alex@ghiti.fr>
-References: <20250710133506.994476-1-cleger@rivosinc.com>
- <mvmecuognj7.fsf@suse.de> <5db9ec69-d0e4-4113-a989-ac75d0f1e5dd@rivosinc.com>
- <mvma55cgm63.fsf@suse.de>
-Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <mvma55cgm63.fsf@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250709174657.6916-1-suresh.k.chandrappa@gmail.com>
+In-Reply-To: <20250709174657.6916-1-suresh.k.chandrappa@gmail.com>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Thu, 10 Jul 2025 07:35:53 -0700
+X-Gm-Features: Ac12FXyoLktlmX39quFWyEEFVsEtk0kX_j9HtNIamMLSlCQffuIUqfEi_lx_asM
+Message-ID: <CAKEwX=M6WOoE+A=6DVdAjR6J2tyULLGAqiZ6325Fn7R=Tn=igQ@mail.gmail.com>
+Subject: Re: [PATCH v3] selftests: cachestat: add tests for mmap Refactor and
+ enhance mmap test for cachestat validation
+To: Suresh K C <suresh.k.chandrappa@gmail.com>
+Cc: hannes@cmpxchg.org, joshua.hahnjy@gmail.com, shuah@kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 10/07/2025 16:23, Andreas Schwab wrote:
-> On Jul 10 2025, Clément Léger wrote:
-> 
->> On 10/07/2025 15:53, Andreas Schwab wrote:
->>> On Jul 10 2025, Clément Léger wrote:
->>>
->>>> This selftest tests all the currently emulated instructions (except for
->>>> the RV32 compressed ones which are left as a future exercise for a RV32
->>>> user). For the FPU instructions, all the FPU registers are tested.
->>>
->>> If that didn't catch the missing sign extension that I just fixed in
->>> <https://lore.kernel.org/linux-riscv/mvmikk0goil.fsf@suse.de>, you
->>> should consider extending the tests.
->>>
->>
->> Hi Andreas, you link doesn't work and I didn't find anything about sign
->> extension except a patch you wrote for arch_cmpxg().
-> 
-> lore.k.o is currently down, here's the patch I have sent:
-> 
-> From 77c8255da24ee4fac54e2371594d7210d1ddee19 Mon Sep 17 00:00:00 2001
-> From: Andreas Schwab <schwab@suse.de>
-> Date: Thu, 10 Jul 2025 13:52:35 +0200
-> Subject: [PATCH] riscv: traps_misaligned: properly sign extend value in
->  misaligned load handler
-> 
-> Add missing cast to signed long.
-> 
-> Signed-off-by: Andreas Schwab <schwab@suse.de>
+On Wed, Jul 9, 2025 at 10:47=E2=80=AFAM Suresh K C
+<suresh.k.chandrappa@gmail.com> wrote:
+>
+> From: Suresh K C <suresh.k.chandrappa@gmail.com>
+>
+> This patch merges the previous two patches into a single,
+> cohesive test case that verifies cachestat behavior with memory-mapped fi=
+les using mmap().
+> It also refactors the test logic to reduce redundancy, improve error repo=
+rting, and clarify failure messages for both shmem and mmap file types.
+>
+> Changes since v2:
+>
+> - Merged the two patches into one as suggested
+> - Improved error messages for better clarity
+>
+> Tested on x86_64 with default kernel config.
+>
+> Signed-off-by: Suresh K C <suresh.k.chandrappa@gmail.com>
 > ---
->  arch/riscv/kernel/traps_misaligned.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-> index 93043924fe6c..f760e4fcc052 100644
-> --- a/arch/riscv/kernel/traps_misaligned.c
-> +++ b/arch/riscv/kernel/traps_misaligned.c
-> @@ -461,7 +461,7 @@ static int handle_scalar_misaligned_load(struct pt_regs *regs)
->  	}
->  
->  	if (!fp)
-> -		SET_RD(insn, regs, val.data_ulong << shift >> shift);
-> +		SET_RD(insn, regs, (long)(val.data_ulong << shift) >> shift);
+>  .../selftests/cachestat/test_cachestat.c      | 66 +++++++++++++++----
+>  1 file changed, 55 insertions(+), 11 deletions(-)
+>
+> diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/t=
+esting/selftests/cachestat/test_cachestat.c
+> index 632ab44737ec..18188d7c639e 100644
+> --- a/tools/testing/selftests/cachestat/test_cachestat.c
+> +++ b/tools/testing/selftests/cachestat/test_cachestat.c
+> @@ -33,6 +33,11 @@ void print_cachestat(struct cachestat *cs)
+>         cs->nr_evicted, cs->nr_recently_evicted);
+>  }
+>
+> +enum file_type {
+> +       FILE_MMAP,
+> +       FILE_SHMEM
+> +};
+> +
+>  bool write_exactly(int fd, size_t filesize)
+>  {
+>         int random_fd =3D open("/dev/urandom", O_RDONLY);
+> @@ -201,8 +206,19 @@ static int test_cachestat(const char *filename, bool=
+ write_random, bool create,
+>  out:
+>         return ret;
+>  }
+> +const char* file_type_str(enum file_type type) {
+> +       switch (type) {
+> +               case FILE_SHMEM:
+> +                       return "shmem";
+> +               case FILE_MMAP:
+> +                       return "mmap";
+> +               default:
+> +                       return "unknown";
+> +       }
+> +}
+>
+> -bool test_cachestat_shmem(void)
+> +
+> +bool run_cachestat_test(enum file_type type)
+>  {
+>         size_t PS =3D sysconf(_SC_PAGESIZE);
+>         size_t filesize =3D PS * 512 * 2; /* 2 2MB huge pages */
+> @@ -212,27 +228,49 @@ bool test_cachestat_shmem(void)
+>         char *filename =3D "tmpshmcstat";
+>         struct cachestat cs;
+>         bool ret =3D true;
+> +       int fd;
+>         unsigned long num_pages =3D compute_len / PS;
+> -       int fd =3D shm_open(filename, O_CREAT | O_RDWR, 0600);
+> +       if (type =3D=3D FILE_SHMEM)
+> +               fd =3D shm_open(filename, O_CREAT | O_RDWR, 0600);
+> +       else
+> +               fd =3D open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
+>
+>         if (fd < 0) {
+> -               ksft_print_msg("Unable to create shmem file.\n");
+> +               ksft_print_msg("Unable to create %s file.\n",file_type_st=
+r(type));
+>                 ret =3D false;
+>                 goto out;
+>         }
+>
+>         if (ftruncate(fd, filesize)) {
+> -               ksft_print_msg("Unable to truncate shmem file.\n");
+> +               ksft_print_msg("Unable to truncate %s file.\n",file_type_=
+str(type));
+>                 ret =3D false;
+>                 goto close_fd;
+>         }
+> -
+> -       if (!write_exactly(fd, filesize)) {
+> -               ksft_print_msg("Unable to write to shmem file.\n");
+> -               ret =3D false;
+> -               goto close_fd;
+> +       switch (type){
+> +               case FILE_SHMEM:
+> +                       if (!write_exactly(fd, filesize)) {
+> +                               ksft_print_msg("Unable to write to file.\=
+n");
+> +                               ret =3D false;
+> +                               goto close_fd;
+> +                       }
+> +                       break;
+> +               case FILE_MMAP:
+> +                       char *map =3D mmap(NULL, filesize, PROT_READ | PR=
+OT_WRITE, MAP_SHARED, fd, 0);
+> +                       if (map =3D=3D MAP_FAILED) {
+> +                               ksft_print_msg("mmap failed.\n");
+> +                               ret =3D false;
+> +                               goto close_fd;
+> +                       }
+> +                       for (int i =3D 0; i < filesize; i++) {
+> +                               map[i] =3D 'A';
+> +                       }
+> +                       break;
+> +               default:
+> +                       ksft_print_msg("Unsupported file type.\n");
+> +                       ret =3D false;
+> +                       goto close_fd;
+> +                       break;
+>         }
+> -
+>         syscall_ret =3D syscall(__NR_cachestat, fd, &cs_range, &cs, 0);
+>
+>         if (syscall_ret) {
+> @@ -308,12 +346,18 @@ int main(void)
+>                 break;
+>         }
+>
+> -       if (test_cachestat_shmem())
+> +       if (run_cachestat_test(FILE_SHMEM))
+>                 ksft_test_result_pass("cachestat works with a shmem file\=
+n");
+>         else {
+>                 ksft_test_result_fail("cachestat fails with a shmem file\=
+n");
+>                 ret =3D 1;
+>         }
+>
+> +       if (run_cachestat_test(FILE_MMAP))
+> +               ksft_test_result_pass("cachestat works with a mmap file\n=
+");
+> +       else {
+> +               ksft_test_result_fail("cachestat fails with a mmap file\n=
+");
+> +               ret =3D 1;
+> +       }
+>         return ret;
+>  }
+> --
+> 2.43.0
+>
 
-Hi Andreas,
+Code LGTM, and the test passed on my system (x86-64 too though). FWIW:
 
-Nice catch, it seems like it was fixed in OpenSBI but never backported
-in the kernel. As you suggested, I'll modify the test to test the sign
-extension.
+Tested-by: Nhat Pham <nphamcs@gmail.com>
+Acked-by: Nhat Pham <nphamcs@gmail.com>
 
-Thanks,
-
-Clément
-
->  	else if (len == 8)
->  		set_f64_rd(insn, regs, val.data_u64);
->  	else
-
+Thanks for the test contribution, Suresh! And thanks for the review
+help, Joshua :)
 
