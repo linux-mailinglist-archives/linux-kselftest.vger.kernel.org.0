@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-37127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72236B02095
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 17:38:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EA8CB02096
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 17:39:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3FB14A8672
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 15:38:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1878A60533
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 15:39:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2355D2D9798;
-	Fri, 11 Jul 2025 15:38:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3473C2EA722;
+	Fri, 11 Jul 2025 15:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C5uDvkop"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SCiOQl9L"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F28B2BAF4
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 15:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821D02EA484
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 15:39:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752248282; cv=none; b=Nhb2cmB1o/gQ5nAu+01MglC0zv/ZPh90F8/BIfCc1J877FC6+twVOfqnk9vGSNWQXd1nb4ysbKWam1VaGpnqBE43ZaYldrys6q6GpkrWOwF+qgWulP7oiOPwtQ8YamlYVESRYFQCcrpepxbFx5E0vgbM5frmLHeOnRh0g17xgGc=
+	t=1752248387; cv=none; b=h8FDkb/QSA9dEW9E1bYT/yfskYvW54NFJ/XY71B6FLSccS2cNPlv0IZS3vWsLMPvr44qt0VahEwRmWXmhSxrDsO6fw/zwp7oY7StnR+xiMMTbOGUtW7rIuvShWueDM6MNQYijL7BBvPTso2ghZBK7fXPWS2XmZAAm8RJWJ08u3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752248282; c=relaxed/simple;
-	bh=J1TQlEBpErPT0lubagiCxGKuVyYl7P3A+G/37YC0akg=;
+	s=arc-20240116; t=1752248387; c=relaxed/simple;
+	bh=iDKvWVGdWzMvrL8epAVRrvAHvMZ70CWnf07tWeBNJM0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mfQilOSKwT/HPFnOgJqWH7T/ux29npMpmBLFlBHAK5TxCeRDuoO0DcvxNa5fWjV4WGy3c3bXX/AwaTwIJ/JZcMMWtjOkD/VR6Y81TOgCIRoB54SrzMMnID+HFHTtvGUjSAwIYGVlDl6J3Cgyv7qblqibmmMcZTi9AQyNw9uCjck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C5uDvkop; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=XCsydviAFtNG1R4M5DlFQLDOeKdjC+q/F/viJqQurjwecHwsJUfcXi39ZY9AQ3FxYHP3AvxKoZpXTF0mTaYYhptmjE1fPo2Bpf4th+hdA0yJzMkyj1dDNXnibqRDH5SDq5Lf6XzkcFK2HdtRX0OQS2j4wbUB+7whxDr/O97QDAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SCiOQl9L; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752248279;
+	s=mimecast20190719; t=1752248383;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=VW10s4xSbWS++T0PM2JylkU43RRqz5v3WojM9W8P4jc=;
-	b=C5uDvkopGTBmG8JC8+rGyeO4m4GkOWiRN0q8FdqCzknDoH+9LhLHCceGw4SQwO71wdaEGg
-	4rotjD7cE8CghN2AO0xD+ao56C0gSF0LJ6QMrSfrjkPDTlHNs+br5BvTU9vZsjb/2U2nOZ
-	JVPPF/nZetFfg/5Qcndb6TWRYD580DY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Op6OwT2dIq7TRp/R6vBF63A8ufBZSZflaHEUGioL84E=;
+	b=SCiOQl9LxR1IGXt+97Xir0Mixj5jLPrdLPkBORGXN4r0/wczxyjORiOxl9NElHYQmoDifP
+	e2kE3gH972/M35wQ1OWwyBvtc5sThBIQZQpuaEaSFSBV5frktZBHUWG/3w8qzG7drvLDC6
+	TuTHSbWQT0p6Xgsm9qDfsITzEhU2bg8=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-685-Devi40OgNE2WKqhy158FfA-1; Fri, 11 Jul 2025 11:37:57 -0400
-X-MC-Unique: Devi40OgNE2WKqhy158FfA-1
-X-Mimecast-MFC-AGG-ID: Devi40OgNE2WKqhy158FfA_1752248277
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a4f3796779so905999f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 08:37:57 -0700 (PDT)
+ us-mta-375-FqavdLcmPv66qHN2k1dDrQ-1; Fri, 11 Jul 2025 11:39:42 -0400
+X-MC-Unique: FqavdLcmPv66qHN2k1dDrQ-1
+X-Mimecast-MFC-AGG-ID: FqavdLcmPv66qHN2k1dDrQ_1752248381
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3a6d1394b07so1552360f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 08:39:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752248277; x=1752853077;
+        d=1e100.net; s=20230601; t=1752248381; x=1752853181;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=VW10s4xSbWS++T0PM2JylkU43RRqz5v3WojM9W8P4jc=;
-        b=gAt6GijF1NypaGvizk4IY+sqXbkJyHT0c9ClSfGFM5kzcRcxvhAwiKmoWVsypnMj4I
-         ITYCIJp/cxDPWNgnjxtuyrPPRkaqYhCVeFfWKXAoWTwXVzkgas9abFkPOlEG9yYms1z/
-         mY1JGuAmJv4w9NzmLdgwLjJKQsyemooIZ5Kqpr3X64WbMdS9ykgl+nQqSIMhSqMnXMN1
-         i7JNittSRzEqHtu0GMu4kkLgINfkmFwRMKPbCcHg35rxSiqV6OdZ8PxrHuB2Lo4+DidH
-         ow2wM7lbX3kNJ3z7noe9r2P+v+sP1tM1JLo7+XaVvEn8h4Hr/gEVtDZfeCy+9qH6WMfP
-         dGCw==
-X-Forwarded-Encrypted: i=1; AJvYcCV6n/f1VMAkef9L4GXQghYgtzLSRtdIRZh0zdu7U+X31KUuUjAsPS29v8yVs9i7k3pLITFaEAXXz9mVM/cVXAg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxB5vruwV+LgoLF3uf+iqGEM/TGHjTNFgSiQWbc1E3eGi556l89
-	ZDcUiXyudVmSaJNIWDxreGWtVGHCaRCIXMecNwDFqS6wOkIH0zXYY0DqvAkk6uBB88qsEmwF7NC
-	PB+Ih8eD6L20EfGTnfjGlWXNHrFUgex9k+5j/0/5NcqbwDeRd5p4EMrsyCTtSSL4UY30wmQ==
-X-Gm-Gg: ASbGnct3kkVEC1AKksRYLwBC8qlzCwDm8Jn8h9l3NPHXIlYjfDcy9b8PyG3aSpUFlx5
-	hVT+o/m2YRPCaZ/ZJ170v8v2SwxeKgPVbFJggdHve4aBOfa7BBGx3Wz7A/poicP+j0gDC1MZt1l
-	z25WJKYCiIV2tsTxxaT6SFZUcBrhI5a6Ef5223Kva+mvpC1rTMzNxbdRWtd3FxxViR3JpPBzxBW
-	JVt1ls8KqFr4FBQlviivHFufXBCbZaLYqEDRwANHZcVp0oHZ4ExJ+WPLhSPH5f0nJjBTrzPFZLA
-	APGyxSOPB9W03G+6i4YJt9AT6v1MPOtWckWy6sc2VOtnxkGxFDkYIae94sok8Qcz63/SBSwcj6d
-	1vuLkhrWvhDYh6/Nb5EQWdJIPGj0P/TS1r6Gd6tfupaeayptCudqWVldOu6bYzDEgf3Q=
-X-Received: by 2002:a05:6000:430a:b0:3a3:65b5:51d7 with SMTP id ffacd0b85a97d-3b5f186ed56mr4041286f8f.26.1752248276615;
-        Fri, 11 Jul 2025 08:37:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGsuwcbyEVKhe8empXAIldfyKwdlIf8zNcDa9WQWEBE8Mfskb+P7pj/L+LuE9MFlS//F4Vr0g==
-X-Received: by 2002:a05:6000:430a:b0:3a3:65b5:51d7 with SMTP id ffacd0b85a97d-3b5f186ed56mr4041258f8f.26.1752248276155;
-        Fri, 11 Jul 2025 08:37:56 -0700 (PDT)
+        bh=Op6OwT2dIq7TRp/R6vBF63A8ufBZSZflaHEUGioL84E=;
+        b=MheotfBvQzxTyqjdf3keF8NRMRorEVjsUlqDLLSuHJ/BsMAWqz/0cVARmNSifdE4Vo
+         NnhslPTi0ERXVdViHDBuad7BRq2gyFmXtMh+5S1Ec69cxRjcJbbqYRTeojdjETH4yW7s
+         19+zrMeefORcmbikRPGVvnsD/JttDQbYyXoRqmiuJ2R/8VRsjMzSgV6h28ZLgUg2TVAj
+         9WeztBt9lnI2t/yDUk7RxcHQcyn8p5RPtWOdAm9SAt6GR6cER5hyz2BLhf2FDAp+wJUO
+         yAhOW9sWl4WGjXasFdTYwS0KkSWcUXxoxi6uh0HlbbDHGygBZhNG4sPSD6vrKqdEhc1T
+         FHFA==
+X-Forwarded-Encrypted: i=1; AJvYcCV6tbEUrD2TXOJK6/08X3olNwy3vsBczcbGPZfSGpLPJqkgD9IWpNexCMhjIJQmo65sAFTjobDcQtlfTN0hNmU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwepxD0O6ho3b6ud2WsezmHDqDXUxjAyK1JHtvR5UfFA5M7QAUn
+	TRAco1n5HUWQBQcRoHzoU+ZmpqSp9GggK6RflLMVB0qYOaSepB8ioePp5NU363gr1LA1TzbP9KZ
+	8O6N1FTvJC+ghAMjF4BTYIkERmCk5KE7JMZbr+xnKa48FsZgzGHOBCo1V64/VhJidgsRtlw==
+X-Gm-Gg: ASbGncu0mgYdgaGbmyZDg0zsjndVoIiAwQ6Gz524PfHyxt3xeQJdKkbeBMxtpeL5rFZ
+	2WBU98DAEKCh0zpcfdtIs4XHnbGZ9EBvCrlD2HYhY3qWVPzKqHAnXvL/oJo4y69nnZePQzA+Vjk
+	5Uu7pgIH+uoUIWuw1X1eJxYpm1NgX7cWovbdWjFtKitq4Dhkqml1E8Aufrh6JQ1C83NzBb2GrLW
+	78VjyQ8W+DxRK6LEUFV8buJ78bO2VIUiqXhFZ33nH/hKgYkjLAd4qOKusqRvJNQjjtYxJMwX2Ye
+	iovzdo0K9Cp32wexChxu6ofgBelNn26NZ2sE/NaDP5BH/XvXpUDRv1IvsLsEaMf7ZWZkI1ryLqR
+	K15Yb+VQ29UUzucvD3DQeL48gPQm48p9cfTZb7raALTotkxaoGV7yN4RfEBtAWgLN7dw=
+X-Received: by 2002:adf:b60b:0:b0:3a8:6260:ea91 with SMTP id ffacd0b85a97d-3b5f1895c8cmr3646522f8f.40.1752248381083;
+        Fri, 11 Jul 2025 08:39:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEnCvzMyyEvyFYKJ/g85mv7riQ/Gzevo+uU0d/PPhHA1F1yEXgvZJwfRI2MzCk0eFRbUWeXug==
+X-Received: by 2002:adf:b60b:0:b0:3a8:6260:ea91 with SMTP id ffacd0b85a97d-3b5f1895c8cmr3646495f8f.40.1752248380600;
+        Fri, 11 Jul 2025 08:39:40 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f3c:3a00:5662:26b3:3e5d:438e? (p200300d82f3c3a00566226b33e5d438e.dip0.t-ipconnect.de. [2003:d8:2f3c:3a00:5662:26b3:3e5d:438e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e0d727sm4812998f8f.51.2025.07.11.08.37.55
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e26c97sm4840237f8f.90.2025.07.11.08.39.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Jul 2025 08:37:55 -0700 (PDT)
-Message-ID: <5f7f1281-c75e-4cfe-b51f-8d6ed001200b@redhat.com>
-Date: Fri, 11 Jul 2025 17:37:54 +0200
+        Fri, 11 Jul 2025 08:39:40 -0700 (PDT)
+Message-ID: <2ee1d2ca-94c5-4c27-b2dc-bcea2b710dcf@redhat.com>
+Date: Fri, 11 Jul 2025 17:39:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,14 +90,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC Patch 1/2] selftests/mm: put general ksm operation into
- vm_util
-To: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
- lorenzo.stoakes@oracle.com, riel@surriel.com, Liam.Howlett@oracle.com,
- vbabka@suse.cz, harry.yoo@oracle.com
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC Patch 2/2] selftests/mm: assert rmap behave as expected
+To: Wei Yang <richard.weiyang@gmail.com>
+Cc: akpm@linux-foundation.org, lorenzo.stoakes@oracle.com, riel@surriel.com,
+ Liam.Howlett@oracle.com, vbabka@suse.cz, harry.yoo@oracle.com,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 References: <20250604082145.13800-1-richard.weiyang@gmail.com>
- <20250604082145.13800-2-richard.weiyang@gmail.com>
+ <20250604082145.13800-3-richard.weiyang@gmail.com>
+ <20250604083441.hilkdzlxmxygivvt@master>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -145,126 +145,30 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250604082145.13800-2-richard.weiyang@gmail.com>
+In-Reply-To: <20250604083441.hilkdzlxmxygivvt@master>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 1357e2d6a7b6..115422e9eb68 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -486,3 +486,74 @@ int close_procmap(struct procmap_fd *procmap)
->   {
->   	return close(procmap->fd);
->   }
-> +
+On 04.06.25 10:34, Wei Yang wrote:
+> On Wed, Jun 04, 2025 at 08:21:45AM +0000, Wei Yang wrote:
+> [...]
+>> +int try_to_move_page(char *region)
+>> +{
+>> +	int ret;
+>> +	int node;
+>> +	int status = 0;
+>> +
+>> +	ksft_print_msg("worker %d move_pages of content: %.15s\n", getpid(), region);
+> 
+> One thing confused me here.
+> 
+> If I don't access region here, the following move_pages() would report
+> -ENOENT occationally. The reason is do_pages_stat_array() ->
+> folio_walk_start() returns NULL.
 
-I think we should just let all these functions open/close the fds. So 
-there will not be a need to pass in the fds.
+Right, the pages were not faulted in. The man page mentions that as
 
-> +int ksm_use_zero_pages(int ksm_use_zero_pages_fd)
-> +{
-> +	return write(ksm_use_zero_pages_fd, "1", 1);
-> +}
-> +
-> +int ksm_start_and_merge(int ksm_fd)
-> +{
-> +	return write(ksm_fd, "1", 1);
- > +}> +
-> +int ksm_stop_and_unmerge(int ksm_fd)
-> +{
-> +	return write(ksm_fd, "2", 1);
-> +}
-
-Can we make all these functions return "0" on success? This, way, the 
-"write" will be an internal implementation detail.
-
-E.g.,
-
-int ksm_stop_and_unmerge(void)
-{
-	int ksm_fd = ...
-	ssize_t ret;
-
-	...
-
-	ret = write(ksm_fd, "2", 1);
-	close(ksm_fd);
-	return ret == 1 ? 0 : ret;
-}
-
-> +
-> +long ksm_get_full_scans(int ksm_full_scans_fd)
-> +{
-> +	char buf[10];
-> +	ssize_t ret;
-> +
-> +	ret = pread(ksm_full_scans_fd, buf, sizeof(buf) - 1, 0);
-> +	if (ret <= 0)
-> +		return -errno;
-> +	buf[ret] = 0;
-> +
-> +	return strtol(buf, NULL, 10);
-> +}
-> +
-> +long ksm_get_self_merging_pages(int proc_self_ksm_merging_pages_fd)
-> +{
-> +	char buf[10];
-> +	ssize_t ret;
-> +
-> +	if (proc_self_ksm_merging_pages_fd < 0)
-> +		return proc_self_ksm_merging_pages_fd;
-> +
-> +	ret = pread(proc_self_ksm_merging_pages_fd, buf, sizeof(buf) - 1, 0);
-> +	if (ret <= 0)
-> +		return -errno;
-> +	buf[ret] = 0;
-> +
-> +	return strtol(buf, NULL, 10);
-> +}
-> +
-> +long ksm_get_self_zero_pages(int proc_self_ksm_stat_fd)
-> +{
-> +	char buf[200];
-> +	char *substr_ksm_zero;
-> +	size_t value_pos;
-> +	ssize_t read_size;
-> +	unsigned long my_ksm_zero_pages;
-> +
-> +	if (!proc_self_ksm_stat_fd)
-> +		return 0;
-> +
-> +	read_size = pread(proc_self_ksm_stat_fd, buf, sizeof(buf) - 1, 0);
-> +	if (read_size < 0)
-> +		return -errno;
-> +
-> +	buf[read_size] = 0;
-> +
-> +	substr_ksm_zero = strstr(buf, "ksm_zero_pages");
-> +	if (!substr_ksm_zero)
-> +		return 0;
-> +
-> +	value_pos = strcspn(substr_ksm_zero, "0123456789");
-> +	my_ksm_zero_pages = strtol(substr_ksm_zero + value_pos, NULL, 10);
-> +
-> +	return my_ksm_zero_pages;
-> +}
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index 9211ba640d9c..99c1b1aa1813 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -95,6 +95,13 @@ static inline int open_self_procmap(struct procmap_fd *procmap_out)
->   	return open_procmap(pid, procmap_out);
->   }
->   
-> +int ksm_use_zero_pages(int ksm_use_zero_pages_fd);
-> +int ksm_start_and_merge(int ksm_fd);
-> +int ksm_stop_and_unmerge(int ksm_fd);
-> +long ksm_get_full_scans(int ksm_full_scans_fd);
-> +long ksm_get_self_merging_pages(int proc_self_ksm_merging_pages_fd);
-> +long ksm_get_self_zero_pages(int proc_self_ksm_stat_fd);
-
-With the fd parameters removed, that interface will look quite neat I think.
+"-ENOENT: The page is not present."
 
 -- 
 Cheers,
