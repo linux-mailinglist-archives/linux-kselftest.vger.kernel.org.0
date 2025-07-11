@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-37053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00910B010BD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 03:21:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D29CCB010D2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 03:29:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF7217660C3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 01:20:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C351B1C26EE9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 01:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D718191F74;
-	Fri, 11 Jul 2025 01:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1805881741;
+	Fri, 11 Jul 2025 01:29:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2n0g5tg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q9cUChS1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CD018DF8D;
-	Fri, 11 Jul 2025 01:20:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E451BA55;
+	Fri, 11 Jul 2025 01:29:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752196813; cv=none; b=cn96bobEKFNAFpR1w/vYzOFx+dlAgr0uWe3J9FVojmBDDn/yK4qm0L0d/LiuYiIki3UC1LAtjUFiKAL0p8Ru5BKPnl09Vr8oncpKPuf2WFfZIvpUfBEw0O5yF7Ej3DIfaliZuVklkebnkiGuUcWKfEXyD0OUMmE3cs3Ndg0Ft04=
+	t=1752197389; cv=none; b=fpEzXAyr4/RuGuUbX7u7edo4SbVKrMEgsJVfqYB93UoKT/JPXRP01c2bsKnaG2McudhStPSnOWB4d+hcZlLmPqmW/9uVMkXhd8mD59zrCKGiQNMP8aUzMxbNX0eaMDhEuX7FHKuSs3ygdrvNEvliPJLxlpLK6tDGU8b2Sa0mHeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752196813; c=relaxed/simple;
-	bh=SJjbaF0jMt9NSas1Z2Zap5OAWI4uDia0JXviSMwQxcU=;
+	s=arc-20240116; t=1752197389; c=relaxed/simple;
+	bh=KhAptPm5ErKi3Ah7j2GOUDAyeUzgBT4bjyIoQgcQQVI=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=kb3QaAf+qiHPaAd0EZwEAUuP62hDXRbLPKWNY9t2ZVHF8xPXMvlPvK2lZgQ14vdgHA4cLaVGKkG+9sojw0HQ9zKTPQ+ksQ4AGCthCNyT9eYeAmjPt9iWS76Sr4hGyIdNHhbXf6zCv2btzHlScwzN3yt+qwMJWq9hbH2v7bmbgIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2n0g5tg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3A35C4CEE3;
-	Fri, 11 Jul 2025 01:20:12 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=sO9ri5B/LZW2+b2MgewKmGs41MNSnhB8gfDeDYu2OiUhpPIMJBUgK15v/inL7YZ1tcTyaxvrnoZ6aAAOY+LD1e4GVGQ9Joq+vzfxGM8VMnpMkndGbBdhZtZxiPs+R2RWk95RWqmuc6dHyrJTZRsdFBhkqDx5Ka6udTkzxdHgdpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q9cUChS1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59B49C4CEE3;
+	Fri, 11 Jul 2025 01:29:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752196812;
-	bh=SJjbaF0jMt9NSas1Z2Zap5OAWI4uDia0JXviSMwQxcU=;
+	s=k20201202; t=1752197388;
+	bh=KhAptPm5ErKi3Ah7j2GOUDAyeUzgBT4bjyIoQgcQQVI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=F2n0g5tgvXkF7JKvBzLjgpbLHesk2/PWGQNN12Hl4Z8nFbjh1eOJyA/QlUmSg20Ck
-	 ORBVwawpEoyEG4jHViuntPb74wTCBGzBc7p/euQ06tAIOXOQAoPG3esSmkr+PjruFq
-	 izuWNfDS6J0J5Ys67L9oFlkCVaSET1NT7jL78pJ/eUl7+CkyXrKIDNCm+stY/FQmdi
-	 fr2g4elZsCsqED2R/j0+91RBo0gP4H2snWUuWBELJ/+t6Hd5bzIPFZYAWdWGiR+sFB
-	 AZ8vrgYfge+CDawT+c8DLEmpHqOVRwsL2FvHBanm+i09MFEoYcWv/AiIV5Pw0NfrQq
-	 7oDaMDGUmbiCA==
+	b=q9cUChS1feolpGmpQYTKA505T9jr8HQvgkVAuB84Wrz9cH93Xs5b3jr9PkRe9gzdK
+	 kL2C4Hz7QDLu+voL6Dk0x3lrR2cNlsOyrhgGl8rp3ErDTQRPEyZm2gCrwCqdFAMmXF
+	 nfLVh1X/ixAjNXyABZulGNj3USoCvtByesXbdlylBzevfkClibGDcZ+oJte0NfKnCs
+	 yWjGkbQUDhQAHeBkqjjSRqi38lL/g2JXe1yOiPZAfJ9F047ZUWP4DP+6M5izsXMsuM
+	 f0AGELaxpaRR8z4Wsn4ja2uWa+F8Y1TaBso1PHWJIcf1zQ4TKTH3FwheZUzm4yBN7+
+	 GhJNRYAYSy1tw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33FB6383B266;
-	Fri, 11 Jul 2025 01:20:36 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD0A383B266;
+	Fri, 11 Jul 2025 01:30:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,70 +52,47 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/5] ethtool: rss: report which fields are
- configured
- for hashing
+Subject: Re: [PATCH net] selftests: net: lib: fix shift count out of range
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <175219683475.1724831.15606568154839115182.git-patchwork-notify@kernel.org>
-Date: Fri, 11 Jul 2025 01:20:34 +0000
-References: <20250708220640.2738464-1-kuba@kernel.org>
-In-Reply-To: <20250708220640.2738464-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- donald.hunter@gmail.com, shuah@kernel.org, maxime.chevallier@bootlin.com,
- ecree.xilinx@gmail.com, gal@nvidia.com, linux-kselftest@vger.kernel.org
+ <175219741051.1728628.4929143730980082069.git-patchwork-notify@kernel.org>
+Date: Fri, 11 Jul 2025 01:30:10 +0000
+References: <20250709091244.88395-1-liuhangbin@gmail.com>
+In-Reply-To: <20250709091244.88395-1-liuhangbin@gmail.com>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, petrm@nvidia.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue,  8 Jul 2025 15:06:35 -0700 you wrote:
-> Add support for reading flow hash configuration via Netlink ethtool.
+On Wed,  9 Jul 2025 09:12:44 +0000 you wrote:
+> I got the following warning when writing other tests:
 > 
->   $ ynl --family ethtool --dump rss-get
->      [{
->         "header": {
->             "dev-index": 1,
->             "dev-name": "enp1s0"
->         },
->         "hfunc": 1,
->         "hkey": b"...",
->         "indir": [0, 1, ...],
->         "flow-hash": {
->             "ether": {"l2da"},
->             "ah-esp4": {"ip-src", "ip-dst"},
->             "ah-esp6": {"ip-src", "ip-dst"},
->             "ah4": {"ip-src", "ip-dst"},
->             "ah6": {"ip-src", "ip-dst"},
->             "esp4": {"ip-src", "ip-dst"},
->             "esp6": {"ip-src", "ip-dst"},
->             "ip4": {"ip-src", "ip-dst"},
->             "ip6": {"ip-src", "ip-dst"},
->             "sctp4": {"ip-src", "ip-dst"},
->             "sctp6": {"ip-src", "ip-dst"},
->             "udp4": {"ip-src", "ip-dst"},
->             "udp6": {"ip-src", "ip-dst"}
->             "tcp4": {"l4-b-0-1", "l4-b-2-3", "ip-src", "ip-dst"},
->             "tcp6": {"l4-b-0-1", "l4-b-2-3", "ip-src", "ip-dst"},
->         },
->      }]
+>   + handle_test_result_pass 'bond 802.3ad' '(lacp_active off)'
+>   + local 'test_name=bond 802.3ad'
+>   + shift
+>   + local 'opt_str=(lacp_active off)'
+>   + shift
+>   + log_test_result 'bond 802.3ad' '(lacp_active off)' ' OK '
+>   + local 'test_name=bond 802.3ad'
+>   + shift
+>   + local 'opt_str=(lacp_active off)'
+>   + shift
+>   + local 'result= OK '
+>   + shift
+>   + local retmsg=
+>   + shift
+>   /net/tools/testing/selftests/net/forwarding/../lib.sh: line 315: shift: shift count out of range
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,1/5] ethtool: rss: make sure dump takes the rss lock
-    https://git.kernel.org/netdev/net-next/c/400244eaa2c9
-  - [net-next,2/5] tools: ynl: decode enums in auto-ints
-    https://git.kernel.org/netdev/net-next/c/f7c595c9d9f4
-  - [net-next,3/5] ethtool: mark ETHER_FLOW as usable for Rx hash
-    https://git.kernel.org/netdev/net-next/c/d7974697de4d
-  - [net-next,4/5] ethtool: rss: report which fields are configured for hashing
-    https://git.kernel.org/netdev/net-next/c/178331743ca8
-  - [net-next,5/5] selftests: drv-net: test RSS header field configuration
-    https://git.kernel.org/netdev/net-next/c/0c8754b75e69
+  - [net] selftests: net: lib: fix shift count out of range
+    https://git.kernel.org/netdev/net/c/47c84997c686
 
 You are awesome, thank you!
 -- 
