@@ -1,111 +1,127 @@
-Return-Path: <linux-kselftest+bounces-37076-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37077-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88B9EB017B4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 11:29:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19349B018E1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 11:57:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A33797BA5EA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 09:28:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 270191CA65F2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 09:57:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED14C27A107;
-	Fri, 11 Jul 2025 09:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1634727EFF5;
+	Fri, 11 Jul 2025 09:57:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SScJ1xeK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SsrFIhsZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27DE128395;
-	Fri, 11 Jul 2025 09:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7170027E1AC
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 09:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752226187; cv=none; b=L49hkLhHQwIzq6omsWF3KQ6/IC43js3c2g5nv5MEVgAs3Va6u0jGewLboBV+lZtEYiSf8H7xOIWMT/LHvMOwMPhXg51IR3x/kMRbyFJJRsAGZCg934YYwWG1suRUgVOamT2pORj9yF3HhQfNz+82Lp1jdMkAueyALyJtbulQ+As=
+	t=1752227831; cv=none; b=O8ct0TIPrfV3zjj4DL4leV3yhv+apsWiHyVTi+G4v3Bt7jdsI0W9dLLoDihDEYbTdjXmT8Uhzh3WAnO0pA+eCwGB0G/fvTDBEoZIQ/taeucyY8FXH63UjDYEh05V1cBMN0EYMHrWDoMy8VZjHc7mIPhjNixLODmiHJkvAdV8Dq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752226187; c=relaxed/simple;
-	bh=ZAZ+5Y11qKAvm1dXLvYH4qKO4T6pRKgWPUaiWkGhIqk=;
+	s=arc-20240116; t=1752227831; c=relaxed/simple;
+	bh=CcCFu81EIf/YY/BJutLKyo09SLthVV/6DIU00FEEjUU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dmYojdk6SVpHVLe61GAGwl67mb+Td88b0QkmYSlCvkAXVJFT5jzNyu8fWKs8J2+Ara94/clDJoQP7rlZ69d2nsy43pjfXglg8GgtfRF7evWcVq31klZqL4+HV57E4e0QGBuhzh7zHeQMBIy7xEfztEVJZWiePFKbYUT4s+6gGug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SScJ1xeK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E201FC4CEED;
-	Fri, 11 Jul 2025 09:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752226187;
-	bh=ZAZ+5Y11qKAvm1dXLvYH4qKO4T6pRKgWPUaiWkGhIqk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SScJ1xeKZ8IadNXhyFKNLEscKZfr/U/LfmpCQ/2lJey+z4CfoQnyw23bugK8Tj196
-	 UIzmms829d5gsgvUK/98teXYjiX64VHcGexQOILcQOb1uRtq4NYI1a1RSY4gJyWunL
-	 YN2cbVXlu/CtMGx37Zdi+K2DK9QcLsDyMDiep8C6ntZXydcmoc4WmQO0VTgiFjO4bz
-	 1JeRBxSZ3W01qgZRIoQ3Ibmgvg1S3AwlmVXUiaOJnjh5rATz4Pnr989bQDT4S3d22u
-	 Kn1WyBCic1pII+wtZQU+B3bFc8UKUQhjVv6U42VfuWxLt1qTsuAQ2oWiM67YN+PqQk
-	 Qowr5XoUMuScw==
-Date: Fri, 11 Jul 2025 10:29:44 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: wang lian <lianux.mm@gmail.com>, akpm@linux-foundation.org,
-	ziy@nvidia.com, david@redhat.com, sj@kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, shuah@kernel.org,
-	Liam.Howlett@oracle.com, brauner@kernel.org, gkwang@linx-info.com,
-	jannh@google.com, p1ucky0923@gmail.com, ryncsn@gmail.com,
-	vbabka@suse.cz, zijing.zhang@proton.me
-Subject: Re: [PATCH v4] selftests/mm: add process_madvise() tests
-Message-ID: <aHDZiOVx4g-MQTKm@finisterre.sirena.org.uk>
-References: <20250710112249.58722-1-lianux.mm@gmail.com>
- <81f9a104-6d7d-4552-851e-8690d4a1b723@lucifer.local>
- <aHDHQzzbtgCh6Ox3@finisterre.sirena.org.uk>
- <569270da-8827-4a3c-84db-91f715ef5c22@lucifer.local>
+	 Content-Type:Content-Disposition:In-Reply-To; b=J4ont4S5PrcetKSKL/DjSW9GDXxaz6pXcQZkM2va+1Fus4msR0vkyrnbP+gpmaGaFcMpLVBkcGwDCCfPbSkkXzIe5+2r4eONvH7hABJZDA1GWL6SQ5i0gz/KTjm1v1bES1KzCyZXaeju+bXI8Rg+iTfQjOAwkUJa7YoDsvsWsf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SsrFIhsZ; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-23dd9ae5aacso105365ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 02:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752227829; x=1752832629; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=034zD2t8+j7QVlHQTTa3rHmzt0sqsL2Mdd151xEc278=;
+        b=SsrFIhsZcmjYKiuhtqGdElOvp4l+++ZSKFHZ4k8VTWpB3d3JZvGAilwD3laej5tM0Y
+         r8QjfSb7vTqSlWINRVzpRw5XhLREMXFYsC7YLTNmDZqBwX+MywyIz8UuGrf1w//LUs0/
+         xWbWoacN/KMtpTBwjjrU2ygKmU90yjfKEB+fbkXVprbm7UXDawjIPP6DOah0odSj+VNm
+         R4eoHYcS7+MmX2vDQM8tfZ8e9mZrnRGOoTALbzFdiU7JkLMOMDP1teFgCCD45MhcohOS
+         BpohdkprnVEMQeLOeZzoNhv2K3m2/ZJsiFvcAXwsbgG/8MLTavEHeWCFPS67/J/B5xTo
+         2eYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752227829; x=1752832629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=034zD2t8+j7QVlHQTTa3rHmzt0sqsL2Mdd151xEc278=;
+        b=hFfa/vBvDj5kqIHeZipCQYk4QzPuncNTus8liuSY60mu3x/PiPMJmIme5jJrWPLgO7
+         yM2CZSViw1rhhYCY81e7TGYC3GgRmuXcoC8RoansrP2jceF8pP3cWbUHfhzHSLNl3Lnq
+         FoDOHNJyYCHrPR3TP4PpigFcd28byW8QOq3npw9NV0rq9mDEGtsGodW9KFzZ7Hwa/1lo
+         7YIz/OzcrB/WnkQ7GaOP/EV5cVRujVL+mrSkqLq48XojHf7B10UcQz8SMc19i6hA4TsH
+         p8e+spzpJ4DCoU9/CR696YhCmk7WJ9Y8BqvvHcmlnDrburoSMxVW9OPZGJpkxXSi9xuU
+         AMFg==
+X-Forwarded-Encrypted: i=1; AJvYcCXxnYT26Uh+aaZtQ/WpRNsHJV+A1eys+pmH9PUkNxkF0rk5nOalyf2dsgdUt1d1GULXfm8dzw5xhDLf5MgObdc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0jChV1f/4XhEoOD0KyXWw1Z5/uvC0S4Xfnba85vKiZ4rQGAuQ
+	/ICato90K1xCkgI/AQUzTt5BdB45apoG9Gx52EQoMT1edOf3mD9sLBtxJTBIsfkFjA==
+X-Gm-Gg: ASbGncu7wJTXLDkZRMhvwAgNazYuBdJYtPaCfJRbYH9S13TLuYwwKc/f89tQ0sRqq8P
+	dog0Ns8Wp6NUxbWH6dVWns0KIHmy96XVsL/lZIz3LKQIEiXuUrzqlGfChC5vvWq791a70swDcGa
+	mekov9sUrucZVf3A19M6Y1ypQFCVSqAq3cd0F9UQ9LIROlaULPWHxJOc2mMaxdJsoi08q/PLhqI
+	y9wZ1N3Ph1PTz87DM7eDQkjHlKLxZrWy3kB/xckhrN0Wp8CcUt+ArvtiTEKbMG9F4sqbbHXYUx5
+	lhRA23fsP9YZA2eL/OcHxVda2SETCCf7hUTnBQDtDzR848tjdWIIyvsSTTpC1OetMXRLN63Qg14
+	7uDCLn79nObA0YM3tBdvqv+qTjdIKupkaGJvMJ+r05VQ+oSPpzawD1D+P
+X-Google-Smtp-Source: AGHT+IG6OJdkdwVAu17LyTkPAnvBK7l4yng4G46N/h54a/NCPDtWUMAP3Y1SEP2980Km3pvxW+HZDg==
+X-Received: by 2002:a17:903:fad:b0:235:e1d6:5343 with SMTP id d9443c01a7336-23dee273e89mr2500075ad.20.1752227828514;
+        Fri, 11 Jul 2025 02:57:08 -0700 (PDT)
+Received: from google.com (232.98.126.34.bc.googleusercontent.com. [34.126.98.232])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c3008a610sm7731211a91.20.2025.07.11.02.57.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jul 2025 02:57:07 -0700 (PDT)
+Date: Fri, 11 Jul 2025 09:56:59 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com,
+	corbet@lwn.net, bagasdotme@gmail.com, will@kernel.org,
+	robin.murphy@arm.com, joro@8bytes.org, thierry.reding@gmail.com,
+	vdumpa@nvidia.com, jonathanh@nvidia.com, shuah@kernel.org,
+	jsnitsel@redhat.com, nathan@kernel.org, peterz@infradead.org,
+	yi.l.liu@intel.com, mshavit@google.com, zhangzekun11@huawei.com,
+	iommu@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-tegra@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	patches@lists.linux.dev, mochs@nvidia.com, alok.a.tiwari@oracle.com,
+	vasant.hegde@amd.com, dwmw2@infradead.org, baolu.lu@linux.intel.com
+Subject: Re: [PATCH v9 22/29] iommufd/selftest: Update hw_info coverage for
+ an input data_type
+Message-ID: <aHDf6w1gFcNKNtGc@google.com>
+References: <cover.1752126748.git.nicolinc@nvidia.com>
+ <f01a1e50cd7366f217cbf192ad0b2b79e0eb89f0.1752126748.git.nicolinc@nvidia.com>
+ <aG-fZv39ci6yip3z@google.com>
+ <20250710153202.GO1599700@nvidia.com>
+ <aG_togvop53dLSZM@google.com>
+ <20250710171216.GR1599700@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="SFZKbjgBQq/vRqfg"
-Content-Disposition: inline
-In-Reply-To: <569270da-8827-4a3c-84db-91f715ef5c22@lucifer.local>
-X-Cookie: Do not cut switchbacks.
-
-
---SFZKbjgBQq/vRqfg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250710171216.GR1599700@nvidia.com>
 
-On Fri, Jul 11, 2025 at 09:53:10AM +0100, Lorenzo Stoakes wrote:
-> On Fri, Jul 11, 2025 at 09:11:47AM +0100, Mark Brown wrote:
+On Thu, Jul 10, 2025 at 02:12:16PM -0300, Jason Gunthorpe wrote:
+> On Thu, Jul 10, 2025 at 04:43:14PM +0000, Pranjal Shrivastava wrote:
+> > On Thu, Jul 10, 2025 at 12:32:02PM -0300, Jason Gunthorpe wrote:
+> > Alright, this was on the `for-next` branch when the head was at:
+> > 3e2a9811f6a9cefd310cc33cab73d5435b4a4caa
+> > iommufd: Apply the new iommufd_object_alloc_ucmd helper
+> > 
+> > But I see that on `for-rc` [1] the fixes are merged.
+> 
+> Yes, Linus discourages back merging rc without a going forward
+> justification, like following patches need the rc patches. Fixes some
+> bug is not a justification...
+> 
 
-> > One thing to watch out for with peering into the private header files of
-> > other selftests is that it's a routine source of build and sometimes
-> > runtime failures, people have a tendency to update one selftest without
-> > thinking that other selftests might be peering at their code.  The cross
-> > tree aspect can make it painful to deal with the resulting issues.
+Ack. Thanks for the clarifying!
 
-> I take it from the lack of reported issues this hasn't happened in reality.
+> Jason
 
-That's a general comment about this pattern over the selftests as a
-whole rather than this specific header - if this one has been working
-well then great (I certainly didn't run into it myself).  In general I'd
-say this pattern is up there as one of the most common individual
-sources of build breaks in the selftests, and often has a relatively
-high level of friction getting things fixed compared to the others.
-
---SFZKbjgBQq/vRqfg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhw2YcACgkQJNaLcl1U
-h9CLEwf/ZWeg29sShJdmo1DWOnsYSf29FpSHfH2135dGeKf0J7qanbDbzlmhfIkX
-UoJgs3j0OFL4hr3g9KTTqdGGevlHT2NBcX1hY3JG3Xqx3tG5i4xbG4tXQaDFxCTf
-qH2gllx8AOhggUSdSAVge4/jLsKcwnovp3chXzCZpBsSBqIgQB0LnSG6TkY0meYJ
-hK0lAxnX3UOBmd3Lsd7qdpuz0r815Z11hntEUjejGwVUaLKMpDmR7AblyUZ6lwSI
-AYdL5Vv447Gjcc6ajl4ORTrNYKh4jsEOQVptictoSwy3iYxuZ24JJ8w0k4HzL2NT
-8s8zrXM5H94bGESAcdET8n6gBKSH+g==
-=WTBl
------END PGP SIGNATURE-----
-
---SFZKbjgBQq/vRqfg--
+Praan
 
