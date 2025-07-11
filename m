@@ -1,407 +1,274 @@
-Return-Path: <linux-kselftest+bounces-37126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 889EFB01F32
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 16:33:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72236B02095
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 17:38:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B40071CA4F76
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 14:33:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3FB14A8672
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 15:38:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26112E92DF;
-	Fri, 11 Jul 2025 14:32:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2355D2D9798;
+	Fri, 11 Jul 2025 15:38:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="e1+ghqTs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C5uDvkop"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011013.outbound.protection.outlook.com [40.107.130.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8B02BAF4;
-	Fri, 11 Jul 2025 14:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752244351; cv=fail; b=g5WmPhf+1JBf1teAk+QO7Y8t8sDvrXPBueCKSWpkATVFnMROwd1rEUurWRYfdjeKHfRnJ/BZ9dE1Jq6PlkCcinrgNcFeFF3nnI3vhFEOA9Grz+6jMc5TuOFuIa9iUbkrx13NbUius6SbjJKwBBaYmGW2NGcbHhKM7uzKwgGpKuo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752244351; c=relaxed/simple;
-	bh=FfE8K0E1bxyIfANuT8ef9bwnkIg7dKViZawzHpmBaoE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rHQoD/Z+AQpus+YKxqS0EcZhJQnOrum0p8ZaOP4V0fx6xKSI7129bnD0hiC05mYG1ZY2vkNj0uwwhNMz7+w1xNcwfhZ9XZ3d48my9M2hkifrsmpStQc+OnsDiM7RSj1SmFySI97aeuF1rUv9ScqzhiKobQafUR2xqOKQXnTk694=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=e1+ghqTs; arc=fail smtp.client-ip=40.107.130.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=I1iBvAME/juv2HUwF8wXJi8smxWuMK+bLhwY1JBRmStBgUP+WZ+53GWQJFn2uWx8YCaqXL9M/TJ3fF+r8Fh23tGzjYIa+GuBt23cp6UR5ds6Ijrsy1kX8bmSw1T8eR3V4CMsWFkC4G/Eop4hdM/YaTgyFciYTRQj+MdqSmWwbe87qJPbfYsJMtvD3uY4XXIBUr2ZivVrKpp7/GOOPLyTlNvcWYdNw5EuOddVsnU0kLZa3PuRDfioM3KelKuOETsBYnww6h7k4RZbqLu9ASB3Xf9Equ/3ieR27P8bYtQX0wRGmXnHuIUsJLyq0rIxC5ikQyuBZpjc92KOf3V9Zl6jiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y92OUkhdcTtpuk/R+YGCswrouhqwC+rX9Ds3aUvQu2s=;
- b=mA8a1LsxMqxx5CvhSZeGJv62BjbU9UOpS93iKUD9t4JK04ec3HDLqjXdlm73gP0F8yj7i4p6BoHROe7zJwOXo/PsRzuAequRyiCed5nKG7eLvUCU9IVz33Vn7KftcaQJlRU3SXesPgRXbm45iU2nQhcewfRRRfpmvMxbaxt5udRaaR9mceATSdLZCAR3z2+g61f/Y2GTDN37My3hNoZE6dJii7xn7yfNE9UuwQPQwYmzC8B32sHKtSs1dD2aGpiJ6RV5KFJLheJ39Hr/og2Fi1fLKjaLtSm3NMOUSyJRY5H0BnwtNLJRGSCgpiCBA15zs26Pd1psVaQKXYEM8WKldQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.6.100) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y92OUkhdcTtpuk/R+YGCswrouhqwC+rX9Ds3aUvQu2s=;
- b=e1+ghqTsOlXaPnvmj/Jq5uTlXj7J2G/05N4kwXyVm1M7GaMyMtD4P9q+IDTIGrkVq/p7/fHZjKybVYegtgU9osURBqcuHrbIbNNfGKGX4XIGZnKiV+lvw2vKmSb3yEP2C83BlvmbrDD5PKzBV247MjYDKvfoiii5ypWlycJoAKYQ4tgUB6PFZOlYIrAhlyauEboqQMbrAwOJv0hnlRmciLlQGCNTBHoCSockgNl2Wkjgz1Ve+nqszEL9sDXwBSYMkjkgXIPv+MxMR8Fu3AxVjgcMN6a/gIMbCDMTGYJ5uHiy74ytj++7dBGRvDNlFTEIVMQHSiVX0YfCHHJ4u7G84Q==
-Received: from AS9PR06CA0677.eurprd06.prod.outlook.com (2603:10a6:20b:49c::22)
- by AM7PR07MB6580.eurprd07.prod.outlook.com (2603:10a6:20b:1a3::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.25; Fri, 11 Jul
- 2025 14:32:25 +0000
-Received: from AM3PEPF00009B9E.eurprd04.prod.outlook.com
- (2603:10a6:20b:49c:cafe::9a) by AS9PR06CA0677.outlook.office365.com
- (2603:10a6:20b:49c::22) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8922.25 via Frontend Transport; Fri,
- 11 Jul 2025 14:32:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
- smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
- designates 131.228.6.100 as permitted sender)
- receiver=protection.outlook.com; client-ip=131.228.6.100;
- helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
-Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
- AM3PEPF00009B9E.mail.protection.outlook.com (10.167.16.23) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8922.22
- via Frontend Transport; Fri, 11 Jul 2025 14:32:25 +0000
-Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fr711usmtp2.zeu.alcatel-lucent.com (Postfix) with ESMTP id 876D9680034;
-	Fri, 11 Jul 2025 17:32:23 +0300 (EEST)
-From: chia-yu.chang@nokia-bell-labs.com
-To: alok.a.tiwari@oracle.com,
-	pctammela@mojatatu.com,
-	horms@kernel.org,
-	donald.hunter@gmail.com,
-	xandfury@gmail.com,
-	netdev@vger.kernel.org,
-	dave.taht@gmail.com,
-	pabeni@redhat.com,
-	jhs@mojatatu.com,
-	kuba@kernel.org,
-	stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	davem@davemloft.net,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	ast@fiberby.net,
-	liuhangbin@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ij@kernel.org,
-	ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com,
-	rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v22 net-next 6/6] Documentation: netlink: specs: tc: Add DualPI2 specification
-Date: Fri, 11 Jul 2025 16:32:08 +0200
-Message-Id: <20250711143208.66722-7-chia-yu.chang@nokia-bell-labs.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250711143208.66722-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20250711143208.66722-1-chia-yu.chang@nokia-bell-labs.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F28B2BAF4
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 15:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752248282; cv=none; b=Nhb2cmB1o/gQ5nAu+01MglC0zv/ZPh90F8/BIfCc1J877FC6+twVOfqnk9vGSNWQXd1nb4ysbKWam1VaGpnqBE43ZaYldrys6q6GpkrWOwF+qgWulP7oiOPwtQ8YamlYVESRYFQCcrpepxbFx5E0vgbM5frmLHeOnRh0g17xgGc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752248282; c=relaxed/simple;
+	bh=J1TQlEBpErPT0lubagiCxGKuVyYl7P3A+G/37YC0akg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mfQilOSKwT/HPFnOgJqWH7T/ux29npMpmBLFlBHAK5TxCeRDuoO0DcvxNa5fWjV4WGy3c3bXX/AwaTwIJ/JZcMMWtjOkD/VR6Y81TOgCIRoB54SrzMMnID+HFHTtvGUjSAwIYGVlDl6J3Cgyv7qblqibmmMcZTi9AQyNw9uCjck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C5uDvkop; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1752248279;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=VW10s4xSbWS++T0PM2JylkU43RRqz5v3WojM9W8P4jc=;
+	b=C5uDvkopGTBmG8JC8+rGyeO4m4GkOWiRN0q8FdqCzknDoH+9LhLHCceGw4SQwO71wdaEGg
+	4rotjD7cE8CghN2AO0xD+ao56C0gSF0LJ6QMrSfrjkPDTlHNs+br5BvTU9vZsjb/2U2nOZ
+	JVPPF/nZetFfg/5Qcndb6TWRYD580DY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-685-Devi40OgNE2WKqhy158FfA-1; Fri, 11 Jul 2025 11:37:57 -0400
+X-MC-Unique: Devi40OgNE2WKqhy158FfA-1
+X-Mimecast-MFC-AGG-ID: Devi40OgNE2WKqhy158FfA_1752248277
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a4f3796779so905999f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 08:37:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752248277; x=1752853077;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VW10s4xSbWS++T0PM2JylkU43RRqz5v3WojM9W8P4jc=;
+        b=gAt6GijF1NypaGvizk4IY+sqXbkJyHT0c9ClSfGFM5kzcRcxvhAwiKmoWVsypnMj4I
+         ITYCIJp/cxDPWNgnjxtuyrPPRkaqYhCVeFfWKXAoWTwXVzkgas9abFkPOlEG9yYms1z/
+         mY1JGuAmJv4w9NzmLdgwLjJKQsyemooIZ5Kqpr3X64WbMdS9ykgl+nQqSIMhSqMnXMN1
+         i7JNittSRzEqHtu0GMu4kkLgINfkmFwRMKPbCcHg35rxSiqV6OdZ8PxrHuB2Lo4+DidH
+         ow2wM7lbX3kNJ3z7noe9r2P+v+sP1tM1JLo7+XaVvEn8h4Hr/gEVtDZfeCy+9qH6WMfP
+         dGCw==
+X-Forwarded-Encrypted: i=1; AJvYcCV6n/f1VMAkef9L4GXQghYgtzLSRtdIRZh0zdu7U+X31KUuUjAsPS29v8yVs9i7k3pLITFaEAXXz9mVM/cVXAg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxB5vruwV+LgoLF3uf+iqGEM/TGHjTNFgSiQWbc1E3eGi556l89
+	ZDcUiXyudVmSaJNIWDxreGWtVGHCaRCIXMecNwDFqS6wOkIH0zXYY0DqvAkk6uBB88qsEmwF7NC
+	PB+Ih8eD6L20EfGTnfjGlWXNHrFUgex9k+5j/0/5NcqbwDeRd5p4EMrsyCTtSSL4UY30wmQ==
+X-Gm-Gg: ASbGnct3kkVEC1AKksRYLwBC8qlzCwDm8Jn8h9l3NPHXIlYjfDcy9b8PyG3aSpUFlx5
+	hVT+o/m2YRPCaZ/ZJ170v8v2SwxeKgPVbFJggdHve4aBOfa7BBGx3Wz7A/poicP+j0gDC1MZt1l
+	z25WJKYCiIV2tsTxxaT6SFZUcBrhI5a6Ef5223Kva+mvpC1rTMzNxbdRWtd3FxxViR3JpPBzxBW
+	JVt1ls8KqFr4FBQlviivHFufXBCbZaLYqEDRwANHZcVp0oHZ4ExJ+WPLhSPH5f0nJjBTrzPFZLA
+	APGyxSOPB9W03G+6i4YJt9AT6v1MPOtWckWy6sc2VOtnxkGxFDkYIae94sok8Qcz63/SBSwcj6d
+	1vuLkhrWvhDYh6/Nb5EQWdJIPGj0P/TS1r6Gd6tfupaeayptCudqWVldOu6bYzDEgf3Q=
+X-Received: by 2002:a05:6000:430a:b0:3a3:65b5:51d7 with SMTP id ffacd0b85a97d-3b5f186ed56mr4041286f8f.26.1752248276615;
+        Fri, 11 Jul 2025 08:37:56 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGsuwcbyEVKhe8empXAIldfyKwdlIf8zNcDa9WQWEBE8Mfskb+P7pj/L+LuE9MFlS//F4Vr0g==
+X-Received: by 2002:a05:6000:430a:b0:3a3:65b5:51d7 with SMTP id ffacd0b85a97d-3b5f186ed56mr4041258f8f.26.1752248276155;
+        Fri, 11 Jul 2025 08:37:56 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f3c:3a00:5662:26b3:3e5d:438e? (p200300d82f3c3a00566226b33e5d438e.dip0.t-ipconnect.de. [2003:d8:2f3c:3a00:5662:26b3:3e5d:438e])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e0d727sm4812998f8f.51.2025.07.11.08.37.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Jul 2025 08:37:55 -0700 (PDT)
+Message-ID: <5f7f1281-c75e-4cfe-b51f-8d6ed001200b@redhat.com>
+Date: Fri, 11 Jul 2025 17:37:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM3PEPF00009B9E:EE_|AM7PR07MB6580:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: bd1564b4-7d08-4ea7-53e5-08ddc087c135
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|7416014|376014|921020|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?BZg01WbUJCNAni/46eGK+H3wktcwUcy6dEn4hpVNKaEDRWOElOas6+mY11Gp?=
- =?us-ascii?Q?Kti4sJUI8L7LIIhweW/G6DmkTQQYzd631ROJc4zeMQ1N+o+UIKK/rLe8hEHo?=
- =?us-ascii?Q?OzBAScOaPlPJdZ0NHbiIzB0siLxq02CvNxReUJ7n/KpKklhI4TqvIEIB4ylz?=
- =?us-ascii?Q?SmC99jHyZ2cgMgIHRNhmAWeQGY67rFAvV3TlNJH+6ze3OTuvLgzuHpL6+KbA?=
- =?us-ascii?Q?udavmaIPn+1f0WtuXtU6wAD/SQNOUs7RfjWIqlxKJwSHtJM6tJeGVPddsiur?=
- =?us-ascii?Q?2Uvz3m9VUmjov1eSTnVdeANwI640ioMzPQZN/9fH4o0/+HFTo32CqjY1Xynw?=
- =?us-ascii?Q?h9ErjEg5sOPzuvg4HWOPrpvzqABBPHKKfF8zcnCggFi2IidikgOQ2+SlWeP7?=
- =?us-ascii?Q?Z/rDt1CS8nN4dQgLvYxtwXIpEBWSDsqun4lMA8v+Zk2fLlJ/d7DSWLPjtpR6?=
- =?us-ascii?Q?KtgkF/gHlWNMOLlWh8S8R5nhQKFDhf2zGs4EvsgQ6ULFmO3wWX7wcwi0z9g7?=
- =?us-ascii?Q?BhSroeGLpX+ld4tsEoO2pZ7kHd2BtzMeEZDoYXi98TZ+KoWNeN+ErSTFN0EU?=
- =?us-ascii?Q?VghvxCIzZ9B0/8L43QH7MEtH08OW5CkikV9XGamM5u5SMrUgFrRwWLHlnyMH?=
- =?us-ascii?Q?P1S3cw1hOUdL8T7A9Vev3VRYL+p3ZhfpO9tUQq/1VITWYOj350ZlBNd3xtxp?=
- =?us-ascii?Q?oUEmaDubGY+Ldn8tCu6uRZuZvutvOpLYQe7j0jfFVemOdxW8SghFoN5oK6Yg?=
- =?us-ascii?Q?ALUL2aX8yOr/YCV38/hW8iOfjFaQfaHlhy96ScvgweaQmOtYgMoWsUG00F1b?=
- =?us-ascii?Q?F+JclwqOU9csoF+NPFOxwWj20Ya2xiwQOXrjCDxbjzqgTyTQQCXKckAwK3CM?=
- =?us-ascii?Q?RGhX1sfSVPmG4wzR0TJP3Gr4KRycCsJD2UjUU+uS2IfoOnSlH5SA3FScNIDL?=
- =?us-ascii?Q?3BbDyMud+g3/yfw/qb80rzPfyYdfwJNzieGvTiykciQJ86chAwcmzj0ZOOv2?=
- =?us-ascii?Q?CS02Mau7/pRmZL9f/1HvfNmwfD3lBUcpmuJW4KUHY9gV7DQ6JmreDY/5lMUz?=
- =?us-ascii?Q?XwddjaQwIb9iKPOh2kP2Pv7g4w9vuMrhYlaDWkZQbEgorZSsK2h26d/yFHnP?=
- =?us-ascii?Q?ifdslVQzIiRgNDJtMurzxMKL863FtFMwhb0bjtfpTqnSlqjLe5Y51aKjvpR1?=
- =?us-ascii?Q?FIDak01GLU+saHV7NWy4CAnK+RVmHrZZj2md0cH41ipfA7C80UjrQnIsmoal?=
- =?us-ascii?Q?MQl0FYorgnTnpRT5ciD9PpB4Omz1pJ6+QpE0PGzt4Qctt8fYneXF6dSBeBKa?=
- =?us-ascii?Q?4DHxjCztBdFXiEAovjNIZyQaOS3mQXWpDLfU2qt01UPj2dHid1r/IUZcBq1c?=
- =?us-ascii?Q?/y5U64ZwSyCElXh86XBodZF27QlqGtzOJ8dglMFrop9JHgpT9lE4heS3btKV?=
- =?us-ascii?Q?euW2xMvtGB5RQnw2+/8Lew8HlW+1xCjbxWse9U6iHRVlu4QYfYrZNIGTrosY?=
- =?us-ascii?Q?KTuj+84MkPNiP5diCbgo41X0+5K1VxE5iRWr+xA7Z+sRUx/FgMp0plGwa0F+?=
- =?us-ascii?Q?i9+26RXUPSvGznuS68Q=3D?=
-X-Forefront-Antispam-Report:
-	CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(7416014)(376014)(921020)(13003099007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2025 14:32:25.0643
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd1564b4-7d08-4ea7-53e5-08ddc087c135
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM3PEPF00009B9E.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR07MB6580
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC Patch 1/2] selftests/mm: put general ksm operation into
+ vm_util
+To: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
+ lorenzo.stoakes@oracle.com, riel@surriel.com, Liam.Howlett@oracle.com,
+ vbabka@suse.cz, harry.yoo@oracle.com
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20250604082145.13800-1-richard.weiyang@gmail.com>
+ <20250604082145.13800-2-richard.weiyang@gmail.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
+ ZW5icmFuZCA8ZGF2aWRAcmVkaGF0LmNvbT7CwZgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQW
+ AgMBAh4BAheAAhkBFiEEG9nKrXNcTDpGDfzKTd4Q9wD/g1oFAl8Ox4kFCRKpKXgACgkQTd4Q
+ 9wD/g1oHcA//a6Tj7SBNjFNM1iNhWUo1lxAja0lpSodSnB2g4FCZ4R61SBR4l/psBL73xktp
+ rDHrx4aSpwkRP6Epu6mLvhlfjmkRG4OynJ5HG1gfv7RJJfnUdUM1z5kdS8JBrOhMJS2c/gPf
+ wv1TGRq2XdMPnfY2o0CxRqpcLkx4vBODvJGl2mQyJF/gPepdDfcT8/PY9BJ7FL6Hrq1gnAo4
+ 3Iv9qV0JiT2wmZciNyYQhmA1V6dyTRiQ4YAc31zOo2IM+xisPzeSHgw3ONY/XhYvfZ9r7W1l
+ pNQdc2G+o4Di9NPFHQQhDw3YTRR1opJaTlRDzxYxzU6ZnUUBghxt9cwUWTpfCktkMZiPSDGd
+ KgQBjnweV2jw9UOTxjb4LXqDjmSNkjDdQUOU69jGMUXgihvo4zhYcMX8F5gWdRtMR7DzW/YE
+ BgVcyxNkMIXoY1aYj6npHYiNQesQlqjU6azjbH70/SXKM5tNRplgW8TNprMDuntdvV9wNkFs
+ 9TyM02V5aWxFfI42+aivc4KEw69SE9KXwC7FSf5wXzuTot97N9Phj/Z3+jx443jo2NR34XgF
+ 89cct7wJMjOF7bBefo0fPPZQuIma0Zym71cP61OP/i11ahNye6HGKfxGCOcs5wW9kRQEk8P9
+ M/k2wt3mt/fCQnuP/mWutNPt95w9wSsUyATLmtNrwccz63XOwU0EVcufkQEQAOfX3n0g0fZz
+ Bgm/S2zF/kxQKCEKP8ID+Vz8sy2GpDvveBq4H2Y34XWsT1zLJdvqPI4af4ZSMxuerWjXbVWb
+ T6d4odQIG0fKx4F8NccDqbgHeZRNajXeeJ3R7gAzvWvQNLz4piHrO/B4tf8svmRBL0ZB5P5A
+ 2uhdwLU3NZuK22zpNn4is87BPWF8HhY0L5fafgDMOqnf4guJVJPYNPhUFzXUbPqOKOkL8ojk
+ CXxkOFHAbjstSK5Ca3fKquY3rdX3DNo+EL7FvAiw1mUtS+5GeYE+RMnDCsVFm/C7kY8c2d0G
+ NWkB9pJM5+mnIoFNxy7YBcldYATVeOHoY4LyaUWNnAvFYWp08dHWfZo9WCiJMuTfgtH9tc75
+ 7QanMVdPt6fDK8UUXIBLQ2TWr/sQKE9xtFuEmoQGlE1l6bGaDnnMLcYu+Asp3kDT0w4zYGsx
+ 5r6XQVRH4+5N6eHZiaeYtFOujp5n+pjBaQK7wUUjDilPQ5QMzIuCL4YjVoylWiBNknvQWBXS
+ lQCWmavOT9sttGQXdPCC5ynI+1ymZC1ORZKANLnRAb0NH/UCzcsstw2TAkFnMEbo9Zu9w7Kv
+ AxBQXWeXhJI9XQssfrf4Gusdqx8nPEpfOqCtbbwJMATbHyqLt7/oz/5deGuwxgb65pWIzufa
+ N7eop7uh+6bezi+rugUI+w6DABEBAAHCwXwEGAEIACYCGwwWIQQb2cqtc1xMOkYN/MpN3hD3
+ AP+DWgUCXw7HsgUJEqkpoQAKCRBN3hD3AP+DWrrpD/4qS3dyVRxDcDHIlmguXjC1Q5tZTwNB
+ boaBTPHSy/Nksu0eY7x6HfQJ3xajVH32Ms6t1trDQmPx2iP5+7iDsb7OKAb5eOS8h+BEBDeq
+ 3ecsQDv0fFJOA9ag5O3LLNk+3x3q7e0uo06XMaY7UHS341ozXUUI7wC7iKfoUTv03iO9El5f
+ XpNMx/YrIMduZ2+nd9Di7o5+KIwlb2mAB9sTNHdMrXesX8eBL6T9b+MZJk+mZuPxKNVfEQMQ
+ a5SxUEADIPQTPNvBewdeI80yeOCrN+Zzwy/Mrx9EPeu59Y5vSJOx/z6OUImD/GhX7Xvkt3kq
+ Er5KTrJz3++B6SH9pum9PuoE/k+nntJkNMmQpR4MCBaV/J9gIOPGodDKnjdng+mXliF3Ptu6
+ 3oxc2RCyGzTlxyMwuc2U5Q7KtUNTdDe8T0uE+9b8BLMVQDDfJjqY0VVqSUwImzTDLX9S4g/8
+ kC4HRcclk8hpyhY2jKGluZO0awwTIMgVEzmTyBphDg/Gx7dZU1Xf8HFuE+UZ5UDHDTnwgv7E
+ th6RC9+WrhDNspZ9fJjKWRbveQgUFCpe1sa77LAw+XFrKmBHXp9ZVIe90RMe2tRL06BGiRZr
+ jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250604082145.13800-2-richard.weiyang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 1357e2d6a7b6..115422e9eb68 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -486,3 +486,74 @@ int close_procmap(struct procmap_fd *procmap)
+>   {
+>   	return close(procmap->fd);
+>   }
+> +
 
-Introduce the specification of tc qdisc DualPI2 stats and attributes,
-which is the reference implementation of IETF RFC9332 DualQ Coupled AQM
-(https://datatracker.ietf.org/doc/html/rfc9332) providing two different
-queues: low latency queue (L-queue) and classic queue (C-queue).
+I think we should just let all these functions open/close the fds. So 
+there will not be a need to pass in the fds.
 
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> +int ksm_use_zero_pages(int ksm_use_zero_pages_fd)
+> +{
+> +	return write(ksm_use_zero_pages_fd, "1", 1);
+> +}
+> +
+> +int ksm_start_and_merge(int ksm_fd)
+> +{
+> +	return write(ksm_fd, "1", 1);
+ > +}> +
+> +int ksm_stop_and_unmerge(int ksm_fd)
+> +{
+> +	return write(ksm_fd, "2", 1);
+> +}
 
----
-v21:
-- Replace step-thresh and step-packets with step-thresh-pkts and step-thresh-us
-- Remove redundant name-prefix and simplify entries of dualpi2 enums
-- Fix some typos and format issues of dualpi2 attributes
+Can we make all these functions return "0" on success? This, way, the 
+"write" will be an internal implementation detail.
 
-v20:
-- Remove double-prefixed of "tc_tc_dualpi2_attrs" in tc-user.h
+E.g.,
 
-v19:
-- Wrap long lines to within 80 characters
+int ksm_stop_and_unmerge(void)
+{
+	int ksm_fd = ...
+	ssize_t ret;
 
-v18:
-- Fix name and name-prefix of DualPI2 enum and attribute
+	...
 
-v17:
-- Rebase tc.yaml on commit ba5a199b2401d and commit f9aec8025ab5f
----
- Documentation/netlink/specs/tc.yaml | 151 +++++++++++++++++++++++++++-
- 1 file changed, 149 insertions(+), 2 deletions(-)
+	ret = write(ksm_fd, "2", 1);
+	close(ksm_fd);
+	return ret == 1 ? 0 : ret;
+}
 
-diff --git a/Documentation/netlink/specs/tc.yaml b/Documentation/netlink/specs/tc.yaml
-index e983c0c82eb9..b1afc7ab3539 100644
---- a/Documentation/netlink/specs/tc.yaml
-+++ b/Documentation/netlink/specs/tc.yaml
-@@ -56,6 +56,23 @@ definitions:
-       - tundf
-       - tunoam
-       - tuncrit
-+  -
-+    name: dualpi2-drop-overload
-+    type: enum
-+    entries: [overflow, drop]
-+  -
-+    name: dualpi2-drop-early
-+    type: enum
-+    entries: [drop-dequeue, drop-enqueue]
-+  -
-+    name: dualpi2-ecn-mask
-+    type: enum
-+    value-start: 1
-+    entries: [l4s-ect, cla-ect, any-ect]
-+  -
-+    name: dualpi2-split-gso
-+    type: enum
-+    entries: [no-split-gso, split-gso]
-   -
-     name: tc-stats
-     type: struct
-@@ -825,6 +842,58 @@ definitions:
-       -
-         name: drop-overmemory
-         type: u32
-+  -
-+    name: tc-dualpi2-xstats
-+    type: struct
-+    members:
-+      -
-+        name: prob
-+        type: u32
-+        doc: Current base PI probability
-+      -
-+        name: delay-c
-+        type: u32
-+        doc: Current C-queue delay in microseconds
-+      -
-+        name: delay-l
-+        type: u32
-+        doc: Current L-queue delay in microseconds
-+      -
-+        name: pkts-in-c
-+        type: u32
-+        doc: Number of packets enqueued in the C-queue
-+      -
-+        name: pkts-in-l
-+        type: u32
-+        doc: Number of packets enqueued in the L-queue
-+      -
-+        name: maxq
-+        type: u32
-+        doc: Maximum number of packets seen by the DualPI2
-+      -
-+        name: ecn-mark
-+        type: u32
-+        doc: All packets marked with ECN
-+      -
-+        name: step-mark
-+        type: u32
-+        doc: Only packets marked with ECN due to L-queue step AQM
-+      -
-+        name: credit
-+        type: s32
-+        doc: Current credit value for WRR
-+      -
-+        name: memory-used
-+        type: u32
-+        doc: Memory used in bytes by the DualPI2
-+      -
-+        name: max-memory-used
-+        type: u32
-+        doc: Maximum memory used in bytes by the DualPI2
-+      -
-+        name: memory-limit
-+        type: u32
-+        doc: Memory limit in bytes
-   -
-     name: tc-fq-pie-xstats
-     type: struct
-@@ -848,7 +917,7 @@ definitions:
-       -
-         name: ecn-mark
-         type: u32
--        doc: Packets marked with ecn
-+        doc: Packets marked with ECN
-       -
-         name: new-flow-count
-         type: u32
-@@ -991,7 +1060,7 @@ definitions:
-       -
-         name: ecn-mark
-         type: u32
--        doc: Packets marked with ecn
-+        doc: Packets marked with ECN
-   -
-     name: tc-red-xstats
-     type: struct
-@@ -2284,6 +2353,78 @@ attribute-sets:
-       -
-         name: quantum
-         type: u32
-+  -
-+    name: dualpi2-attrs
-+    name-prefix: tca-dualpi2-
-+    attributes:
-+      -
-+        name: limit
-+        type: u32
-+        doc: Limit of total number of packets in queue
-+      -
-+        name: memory-limit
-+        type: u32
-+        doc: Memory limit of total number of packets in queue
-+      -
-+        name: target
-+        type: u32
-+        doc: Classic target delay in microseconds
-+      -
-+        name: tupdate
-+        type: u32
-+        doc: Drop probability update interval time in microseconds
-+      -
-+        name: alpha
-+        type: u32
-+        doc: Integral gain factor in Hz for PI controller
-+      -
-+        name: beta
-+        type: u32
-+        doc: Proportional gain factor in Hz for PI controller
-+      -
-+        name: step-thresh-pkts
-+        type: u32
-+        doc: L4S step marking threshold in packets
-+      -
-+        name: step-thresh-us
-+        type: u32
-+        doc: L4S Step marking threshold in microseconds
-+      -
-+        name: min-qlen-step
-+        type: u32
-+        doc: Packets enqueued to the L-queue can apply the step threshold
-+             when the queue length of L-queue is larger than this value.
-+             (0 is recommended)
-+      -
-+        name: coupling
-+        type: u8
-+        doc: Probability coupling factor between Classic and L4S
-+             (2 is recommended)
-+      -
-+        name: drop-overload
-+        type: u8
-+        doc: Control the overload strategy (drop to preserve latency or
-+             let the queue overflow)
-+        enum: dualpi2-drop-overload
-+      -
-+        name: drop-early
-+        type: u8
-+        doc: Decide where the Classic packets are PI-based dropped or marked
-+        enum: dualpi2-drop-early
-+      -
-+        name: c-protection
-+        type: u8
-+        doc: Classic WRR weight in percentage (from 0 to 100)
-+      -
-+        name: ecn-mask
-+        type: u8
-+        doc: Configure the L-queue ECN classifier
-+        enum: dualpi2-ecn-mask
-+      -
-+        name: split-gso
-+        type: u8
-+        doc: Split aggregated skb or not
-+        enum: dualpi2-split-gso
-   -
-     name: ematch-attrs
-     name-prefix: tca-ematch-
-@@ -3708,6 +3849,9 @@ sub-messages:
-       -
-         value: drr
-         attribute-set: drr-attrs
-+      -
-+        value: dualpi2
-+        attribute-set: dualpi2-attrs
-       -
-         value: etf
-         attribute-set: etf-attrs
-@@ -3875,6 +4019,9 @@ sub-messages:
-       -
-         value: codel
-         fixed-header: tc-codel-xstats
-+      -
-+        value: dualpi2
-+        fixed-header: tc-dualpi2-xstats
-       -
-         value: fq
-         fixed-header: tc-fq-qd-stats
+> +
+> +long ksm_get_full_scans(int ksm_full_scans_fd)
+> +{
+> +	char buf[10];
+> +	ssize_t ret;
+> +
+> +	ret = pread(ksm_full_scans_fd, buf, sizeof(buf) - 1, 0);
+> +	if (ret <= 0)
+> +		return -errno;
+> +	buf[ret] = 0;
+> +
+> +	return strtol(buf, NULL, 10);
+> +}
+> +
+> +long ksm_get_self_merging_pages(int proc_self_ksm_merging_pages_fd)
+> +{
+> +	char buf[10];
+> +	ssize_t ret;
+> +
+> +	if (proc_self_ksm_merging_pages_fd < 0)
+> +		return proc_self_ksm_merging_pages_fd;
+> +
+> +	ret = pread(proc_self_ksm_merging_pages_fd, buf, sizeof(buf) - 1, 0);
+> +	if (ret <= 0)
+> +		return -errno;
+> +	buf[ret] = 0;
+> +
+> +	return strtol(buf, NULL, 10);
+> +}
+> +
+> +long ksm_get_self_zero_pages(int proc_self_ksm_stat_fd)
+> +{
+> +	char buf[200];
+> +	char *substr_ksm_zero;
+> +	size_t value_pos;
+> +	ssize_t read_size;
+> +	unsigned long my_ksm_zero_pages;
+> +
+> +	if (!proc_self_ksm_stat_fd)
+> +		return 0;
+> +
+> +	read_size = pread(proc_self_ksm_stat_fd, buf, sizeof(buf) - 1, 0);
+> +	if (read_size < 0)
+> +		return -errno;
+> +
+> +	buf[read_size] = 0;
+> +
+> +	substr_ksm_zero = strstr(buf, "ksm_zero_pages");
+> +	if (!substr_ksm_zero)
+> +		return 0;
+> +
+> +	value_pos = strcspn(substr_ksm_zero, "0123456789");
+> +	my_ksm_zero_pages = strtol(substr_ksm_zero + value_pos, NULL, 10);
+> +
+> +	return my_ksm_zero_pages;
+> +}
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index 9211ba640d9c..99c1b1aa1813 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -95,6 +95,13 @@ static inline int open_self_procmap(struct procmap_fd *procmap_out)
+>   	return open_procmap(pid, procmap_out);
+>   }
+>   
+> +int ksm_use_zero_pages(int ksm_use_zero_pages_fd);
+> +int ksm_start_and_merge(int ksm_fd);
+> +int ksm_stop_and_unmerge(int ksm_fd);
+> +long ksm_get_full_scans(int ksm_full_scans_fd);
+> +long ksm_get_self_merging_pages(int proc_self_ksm_merging_pages_fd);
+> +long ksm_get_self_zero_pages(int proc_self_ksm_stat_fd);
+
+With the fd parameters removed, that interface will look quite neat I think.
+
 -- 
-2.34.1
+Cheers,
+
+David / dhildenb
 
 
