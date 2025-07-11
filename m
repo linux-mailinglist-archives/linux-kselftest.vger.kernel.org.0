@@ -1,160 +1,171 @@
-Return-Path: <linux-kselftest+bounces-37094-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37096-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4213B01B63
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 14:02:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6927FB01B87
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 14:09:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 371D31CA2BDC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 12:02:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECA33648322
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 12:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 399F828B50A;
-	Fri, 11 Jul 2025 12:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EB0E28CF5F;
+	Fri, 11 Jul 2025 12:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezirXcrw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ia9o9Iau"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC9827AC43;
-	Fri, 11 Jul 2025 12:02:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFAE1F4C8C;
+	Fri, 11 Jul 2025 12:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752235349; cv=none; b=SW3PE4yW/qQZZWweQKfCeb8Ozl912MCRlx2dx2pRmceB0CRuKFDMyopgmMCknamM2aqhYHHJZMDCRBfzh6XWiaNQhcSUXEuDJpZU7GFzB4Nk5KraE+LXOlaXVaxfLhAvuB/UuuEoSrL0px86krnJbg24mS2fmCJ3qkxNVgg4KV4=
+	t=1752235790; cv=none; b=bVmw8bA+Z0bqRBmfcf3BhvR4VuS9BMpc/HwPOt8B6b81yYkIqMJAAeU7W3orBNXeO+GjXhYw1DdtFOGOQh1b88TD5pTzgZjf95lqbR8hu8XWfa5LFACI7Oa1ks8m430ySIr0X+BwtTDTAgys19JCqdg/tz7x7ZLTFTuiHAphGrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752235349; c=relaxed/simple;
-	bh=YzGUBDblhCNeSMFr4wgOeXaK4kq/G4RnWlOaMEMdEXU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XOYG/FB7pcLvHyToVQ4it0JEj4H3W3MbM8wA3ik826i5q8QhyVV9uQyhMrZ28N4l/l6D89Yi4BBbbI66vZsf1P6oc8BjzMXBps1QWdQEWya96Z1HBPy+n2abUm2xpwepuY/YtbG+Bv8c07tXia0kmrm8nA4j1kM0mzPeNqDhJcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezirXcrw; arc=none smtp.client-ip=209.85.210.181
+	s=arc-20240116; t=1752235790; c=relaxed/simple;
+	bh=1mUysb+8o08SdBBmYbBUyKMVp31ubQlaOrJqMOyPPks=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=D/5k38YPBSgOdD/lRfwv2S8i20zG8F179hIxIfwQmDPNULXrsg9ok2fLgaljGrSrdVRVzVlzg6mMhMfNtoNFi+6Qzheh4cx2YIkvQyEtL6k6bnN3UCrw+8bL/dMd0u+ffdZAm3PVe9phiGWLIisNPyWrmkNmXxJjrs4h81K6u4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ia9o9Iau; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7426c44e014so1960112b3a.3;
-        Fri, 11 Jul 2025 05:02:27 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-73972a54919so1811763b3a.3;
+        Fri, 11 Jul 2025 05:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752235347; x=1752840147; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YzGUBDblhCNeSMFr4wgOeXaK4kq/G4RnWlOaMEMdEXU=;
-        b=ezirXcrwy0SOSJLKlTf+CTLX267/AbhOYwMSIofOecNgikIfYkBbjORosNXLPSy9Cb
-         DgUAFsAFH1yc7la6dOMc1na1i3tFmMD1raJziTwQYJTPfo25ZUnDQfQVBOqWIWJhdQhx
-         z2xDpu7XsRenJRLeOIehAF9i2w29sOOo2rlklyk8MDDPILNjjxtPu7TXjxJthYLhOONr
-         hpLSzlTBgf98vxYfNAAIh0ND953J1IyuT5v1FemQ29lf+uA0UrcVk/FfWcDRTwrD1ues
-         g2zYWZk6/hsCbNpg8wvRYXTey7K1/FK1O66cQVR2OfQo0kwla6JKE2BUSKGKACKySmmL
-         qC4A==
+        d=gmail.com; s=20230601; t=1752235788; x=1752840588; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RZh+h9FkEGoNBmFQ/fWxX9YZY8n00mTm9exBYWyxMyE=;
+        b=Ia9o9Iau06WfbNNgeNWenOCOT/YMZjrI1fBkrN8Tv6jy04w0T1oArsOvkhkJrMU8pD
+         RHEZU5u/Bo5n14oHuYoPJXOouCuQbzwMZjTDphy3OoDSKot+E5ddVZ5gdNA4FSWxJz9n
+         pl6RaRqR5owwko5ImcQE5QHZgFhb7rmRDyj9J0AIe7ZPUCA2l7sjOkENQwnDKQVupfda
+         8UGHFJZSZcCauXO5Wtrj9Ch58WCpOle+Gh20OopFfJVqqILovfkSekCYyEKHPtHCOmyS
+         laCUmkm/7gHLSU/7w0UlhYK1TdJuxqG2m+jJ5kmu/zer4Yw7ep6Zvdwu5cO0BhMakZgm
+         vSWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752235347; x=1752840147;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YzGUBDblhCNeSMFr4wgOeXaK4kq/G4RnWlOaMEMdEXU=;
-        b=K2tDd8tttI1sy78ne5PS8BNsXIv2O7uMSAsCxdIsiztiolcXmoknJSxyqTjxU5iqZB
-         clN508CPE/DR1GbddXC1rEC10OF7FY5OxVpuxwWcQeJlIdcXwdOEFDCxdWfDz1dmvrja
-         VxlDDfaVPa16CTk8pTH0S903iOcFM0SZ6V7jnrfliTT+qDEP14ubD1wwyyrvKPyj+0c+
-         6UFS1oUEBPRZ5jc35oIzbDQo6UpGmcws0D2FUSAQTiqhNWU0vaO45KNKidYqCSpYi5DM
-         t3kFa5bDyRGOR0I03xNqlkO5dF6Z2WB7u03jSc5NMJzA0OaAwDgkqOUT4srjbTuG/mGM
-         tKnA==
-X-Forwarded-Encrypted: i=1; AJvYcCUXmHwMIvjtdERp2PhmnD5Mv+EM7RM6aRb7JkKEPqCMBOq7MZBHCltjA/O9zynZX/EINLIFF/WH+VFKyHOEFH8R@vger.kernel.org, AJvYcCVKRTMcT1UMxWRMkQPTAJMuffnHfySbFHlAZx25/g+enREUCOu7DhLwwoknFI0z7sfKMFw=@vger.kernel.org, AJvYcCXUlgsdK+Lz/CtTIJR5mF6il89av2CrhLel/JseBbmZIxBUlhuWiBuYaP+9UtCVgksrX0JT6rO+NTjOvaee@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIqvtH1bpRjRHpLWKrD/Udz+sf0wQ3rcTh3MKYo4qGf7MxJLIP
-	J94mLETsfZXxA0QFyRf9UosNqS3YXEgS8nNF4MKNgJwcbjHWHcFViqke
-X-Gm-Gg: ASbGncuRH2DlF1Zm/4GqDxn6pXyM0TZ1hpeaqnbU2otrAjggA0LlgAgTRK0+J9dj5c+
-	cLyEnPsoUjLKvFKAGt2A3s7UD1wUS1ApgMx/yTWDVh1JqRxwrMY3U6VvAzk3DSQzhSpvopgkE34
-	lefyXtzpvoE2TeLslnroaIkonfbLTgoGJKQ7YYRWgM+cDhDVwx8oiCT2epIYHuzKuewDarTMZjY
-	pZkLOo9DcWcKIv4aVp2mF3JVe4DmAvWBSYGuFxEBS56iDEKuZgjYK+BS9VMXU1yB2C5t87liLXx
-	ijjzs1OHHFAUhnIWrJ0ZAqBfY1Brv2kOgO1TUumX2RMQEloUTPRwOEJMaDvr28DcuEyNxdwdCrc
-	yicGK/4fuy+z+h/U8bUzVeA==
-X-Google-Smtp-Source: AGHT+IHNe58Ys1UMnITCoG7gp86G2b2/FSlpZzgnXSypLHA/Edm862V/yzRhw2fvS0mIuhzW0JNKLA==
-X-Received: by 2002:a05:6a00:c95:b0:748:f6a0:7731 with SMTP id d2e1a72fcca58-74f1efc0e27mr2976860b3a.23.1752235346465;
-        Fri, 11 Jul 2025 05:02:26 -0700 (PDT)
-Received: from [127.0.0.1] ([62.192.175.167])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9f8cd75sm4954105b3a.164.2025.07.11.05.02.19
+        d=1e100.net; s=20230601; t=1752235788; x=1752840588;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RZh+h9FkEGoNBmFQ/fWxX9YZY8n00mTm9exBYWyxMyE=;
+        b=a9p4p/FNUAgEdgLkLc4g+qxbEW22hjzOFhVvJkVcDrCWt+kiq+Qwz/xwSRuySVlIRp
+         yRZGO/mjIpUHW+9eOkjZzO/cojM+YkKerGHLR5UYBO7GWJAEkvtC2aaLvvbkQa5LU1uG
+         /foCIF8Fvz97+PXZAzyI2C76SyNgpivGMSCX+v8oAdGkOwSEkD5Sq7VemSrNiZxny7ax
+         DtHJM2tHAxECsN4PG35M1YkYw+MAtBK9feuStPdy3oUxBdYEJvzywJk2okTXXHm6kPTL
+         131RMcpQV2HGByOFYtlNIJtSynUe/UYK4y/XSXK1tnjtt56XzVFUW484z87sF568/w/B
+         iE0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUgexyf/qbqRymTez8zYuNgThhqEmtGv5mR1Tu8rNxGdQ6DEguP9lPX0Zd8Tap2oPk+hs+khKY2Vn3/tEY=@vger.kernel.org, AJvYcCXQqD62FAzGVasz6s0Te5ypqNIYtCWD/bW3LjTT6loJiSTqDEcM3gRFkXDOP+nYsLPeeX4dgt9VAtJyAb+NSDEK@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQbbwR8+iQhCbVLi5302x6wld+tQzV9P7ytp/NSBXwQMV4DbNp
+	+rtD6LmAiPPNN9vV0w3y7vWx570tZxHYvfM5k2cVui/65R1yfqpCEO/O
+X-Gm-Gg: ASbGncuIZ385z/5FADu25CYII/uc6AccIyYXCQupv+RM11GQkBaxKcmhwYmziyZI7si
+	lAaL0BxD4Lxzmtlz7ZJpwiHGopjdLGsFwqp8joNOXp3W08Tks/MHx6q/++NDvcy4E+S9QyCv6JN
+	h4PKRT/53Xj6C7UoeJ9gYDBsXk9KMa5M/mgF+mNVLk9W0OYunVpRmk3dDn82O324trp1NUKur7W
+	2a6Vz1MUWJlbJyAoxl4eeSKxvOG/0YXlTAJiFwmnx9cGclkFto7ST4F7+L3Yi/N/7xuOl2lq6sb
+	SZO6pyVKnxHHiwEc9MjCfruQTHs6eqid2gnUNe82JqeliH5CJSoWW7ItHJ77teoIbeGJWNjm8gc
+	VDijamqMnHAZyVa3yO4dPXDVypYHbbwzVFd8ud/jCLhxRVh1o
+X-Google-Smtp-Source: AGHT+IE2NZ0+J8d0OK9Iy+YWW1/9BUq73Ob8bE/TFoBEJqMyC+uapo8S3f7XGSDKa5bAQ5+00q06WA==
+X-Received: by 2002:a05:6a21:8dc7:b0:222:1802:2dd7 with SMTP id adf61e73a8af0-2313504f6f3mr4547110637.13.1752235787862;
+        Fri, 11 Jul 2025 05:09:47 -0700 (PDT)
+Received: from DESKTOP-GIED850.localdomain ([114.247.113.178])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe72913csm4944545a12.72.2025.07.11.05.09.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jul 2025 05:02:26 -0700 (PDT)
-Message-ID: <10c6fff555875e23453b5e524ad27839805e51f2.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: Show precise rejected function when
- attaching to __btf_id functions
-From: KaFai Wan <mannkafai@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  John Fastabend <john.fastabend@gmail.com>, Andrii
- Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>,  Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,  Shuah Khan
- <shuah@kernel.org>, Yafang Shao <laoar.shao@gmail.com>, LKML
- <linux-kernel@vger.kernel.org>,  bpf <bpf@vger.kernel.org>, "open
- list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Date: Fri, 11 Jul 2025 20:02:17 +0800
-In-Reply-To: <CAADnVQ+Ca43c757zaT80B+4RJesRozx39mLoz3hOdKXEaXLBLg@mail.gmail.com>
-References: <20250710162717.3808020-1-mannkafai@gmail.com>
-	 <20250710162717.3808020-3-mannkafai@gmail.com>
-	 <CAADnVQ+Ca43c757zaT80B+4RJesRozx39mLoz3hOdKXEaXLBLg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.0-1build2 
+        Fri, 11 Jul 2025 05:09:47 -0700 (PDT)
+From: wang lian <lianux.mm@gmail.com>
+To: lorenzo.stoakes@oracle.com
+Cc: Liam.Howlett@oracle.com,
+	akpm@linux-foundation.org,
+	brauner@kernel.org,
+	broonie@kernel.org,
+	david@redhat.com,
+	gkwang@linx-info.com,
+	jannh@google.com,
+	lianux.mm@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	p1ucky0923@gmail.com,
+	ryncsn@gmail.com,
+	shuah@kernel.org,
+	sj@kernel.org,
+	vbabka@suse.cz,
+	zijing.zhang@proton.me,
+	ziy@nvidia.com
+Subject: Re: [PATCH v3] selftests/mm: add process_madvise() tests
+Date: Fri, 11 Jul 2025 20:09:38 +0800
+Message-ID: <20250711120938.15270-1-lianux.mm@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <e05e7e0d-02e3-435c-bb82-91200a868448@lucifer.local>
+References: <e05e7e0d-02e3-435c-bb82-91200a868448@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2025-07-10 at 10:19 -0700, Alexei Starovoitov wrote:
-> On Thu, Jul 10, 2025 at 9:27=E2=80=AFAM KaFai Wan <mannkafai@gmail.com>
-> wrote:
-> >=20
-> > Show the precise rejected function name when attaching tracing to
-> > __btf_id functions.
-> >=20
-> > $ ./fentry
-> > libbpf: prog 'migrate_disable': BPF program load failed: -EINVAL
-> > libbpf: prog 'migrate_disable': -- BEGIN PROG LOAD LOG --
-> > Attaching tracing to __btf_id function 'migrate_disable' is
-> > rejected.
-> >=20
-> > Signed-off-by: KaFai Wan <mannkafai@gmail.com>
-> > ---
-> > =C2=A0kernel/bpf/verifier.c | 2 ++
-> > =C2=A01 file changed, 2 insertions(+)
-> >=20
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 275d82fb1a1a..2779d63e1f8b 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -23938,6 +23938,8 @@ static int check_attach_btf_id(struct
-> > bpf_verifier_env *env)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 retur=
-n ret;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else if (prog->type =3D=3D=
- BPF_PROG_TYPE_TRACING &&
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 btf_id_set_contains(&btf_id_deny, b=
-tf_id)) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 verbose(env, "Attaching tracing to __btf_id
-> > function '%s' is rejected.\n",
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tgt_info.tg=
-t_name);
->=20
-> "Attaching tracing to __btf_id" ?! What does it mean?
-> Drop "__btf_id" and "tracing" bits.
->=20
+Hi Lorenzo Stoakes,
 
-My fault, I mean=C2=A0"Attaching tracing programs to function" in
-'btf_id_deny'.
+> On Fri, Jul 11, 2025 at 09:34:38AM +0100, Mark Brown wrote:
+> > On Thu, Jul 10, 2025 at 12:28:13PM -0400, Zi Yan wrote:
+> > > On 10 Jul 2025, at 4:42, Mark Brown wrote:
+> > > > On Wed, Jul 09, 2025 at 10:46:07AM -0400, Zi Yan wrote:
+> > > >
+> > > > > Right. My /usr/include/sys does not have pidfd.h. IMHO selftests
+> > > > > should not rely on userspace headers, otherwise we cannot test
+> > > > > latest kernel changes.
+> > > >
+> > > > That's not realistic, we need to be able to use things like libc and for
+> > > > many areas you'd just end up copying or reimplmenenting the userspace
+> > > > libraries.  There's some concerns for sure, for example we used to have
+> > >
+> > > Sure. For libraries like libc, it is unrealistic to not rely on it.
+> > > But for header files, are we expecting to install any kernel headers
+> > > to the running system to get selftests compiled? If we are testing
+> > > RC versions and header files might change before the actual release,
+> > > that would pollute the system header files, right?
+> >
+> > Right, for the kernel's headers there's two things - we use a
+> > combination of tools/include and 'make headers_install' which populates
+> > usr/include in the kernel tree (apparently mm rejects the latter but it
+> > is widely used in the selftests, especially for architecture specifics).
+> > These install locally and used before the system headers.
+> >
+> > > > OTOH in a case like this where we can just refer directly to a kernel
+> > > > header for some constants or structs then it does make sense to use the
+> > > > kernel headers, or in other cases where we're testing things that are
+> >
+> > > That is exactly my point above.
+> >
+> > What was said was a bit stronger though, and might lead people down a
+> > wheel reinvention path.
+>
+> Let's PLEASE not rehash all this again...
+>
+> This patch literally just needs PIDFD_SELF, I've provided a couple of ways
+> of doing that without introducing this requirement.
+>
+> We already have a test that uses this with no problems ever reported on
+> which this patch was based.
+>
+> Thanks.
 
-I will change it in v2.
+You are absolutely right, and my apologies for introducing this
+unnecessary header dependency.
 
-> --
-> pw-bot: cr
+Just to clarify, the build failure Zi Yan reported on arm64 was not
+caused by PIDFD_SELF. It was from my use of the pidfd_open() glibc
+wrapper in the test, which incorrectly pulled in the system's
+<sys/pidfd.h>.
 
---=20
-Thanks,
-KaFai
+Based on our discussion and a review of other tests, I understand the
+correct approach is to avoid such dependencies. I will fix this properly
+in the next version by using a direct syscall wrapper for pidfd_open.
+Thank you for the guidance.
+
+Best regards,
+Wang Lian
 
