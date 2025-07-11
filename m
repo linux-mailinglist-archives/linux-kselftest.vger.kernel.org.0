@@ -1,209 +1,219 @@
-Return-Path: <linux-kselftest+bounces-37097-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37098-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 604EAB01BDA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 14:20:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C04E0B01C03
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 14:29:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 477BF7A2374
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 12:18:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 765873BADD2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 12:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 017CF293462;
-	Fri, 11 Jul 2025 12:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hSCVCpX+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A32F296178;
+	Fri, 11 Jul 2025 12:29:30 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B6C23ED6F;
-	Fri, 11 Jul 2025 12:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803167464;
+	Fri, 11 Jul 2025 12:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.136.29.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752236401; cv=none; b=gj1dj85Edakf2QCiMWC5cjB1WmztJNyWxm5mCIMIeSJ/4Dq/FJpnZaccprF5zXDpaQads1MZ5ysxk/+P5KOILRCPL1CHiFX3GgPMBdQMXNgwjlionBfutZmrPGU0fVY66veeMrRrv6HriT8UNtvSnyouVrO/22GZHn+hgtmDhE4=
+	t=1752236970; cv=none; b=u893Xzlt8SaXZRUo1lErhssURXtRX8ce/wfx1d6s4MCeIDtalh3eZ3PLLEH6RnJkKCbPRTI24UAFgFDdcTQlV7w/wY4m8zO9XlzGCKxKenNkdr5Vh3VNlK1ZVIwlTv2CKZ30OmYr6hJLFtEBlyU5Aqy47W4k047gV/lsHEnAHTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752236401; c=relaxed/simple;
-	bh=5QrNAvXeMUk7y37R7Zu/tN58cr40TcjK1OVyDOV63P8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pVoCyh+Dk6dZFmQ3DeBTVB4wSc4WUbTYOj01Cw87TrdgTlxnBBdqNPEfCXco1cZ+gcCaAdktfJH3cgLPfm9XuuI1Bls2FqCBmiwX88GdgTHX7WQz8cyVXcVqXlNmORbvdQfHNQdBvPjxZuA4IJrUT0AIEo1pxSMD+0IXvggsl3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hSCVCpX+; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-74264d1832eso2739527b3a.0;
-        Fri, 11 Jul 2025 05:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752236399; x=1752841199; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TtD/R9U6PRpAzS1nHpzjgk1+bYjlX29GjraDajvp0u0=;
-        b=hSCVCpX+ORNXMIKTl94ndv4vFRPmht6WOtRbAr+RLyv9wljOYKa9iWPt86wW2Bk1ff
-         1Sfwb9SQvE4nt0BHF3STrdDudgrfjsfsHjx07ZD3K1ptJqNzR078Wl0E9rzTLSlV7Sqy
-         Np278C1bsgbZk8djprt9iAx+rMIwpJTJV85FdPUrEUAeaT6nzr1lSB7zHm4KlU6rjk+N
-         +acKFeQj6UtxtvZa1ZcMAXM7SBnrAtyOnFj3GirZKXiTB6C8HVVCE2rqU5R+ip/ULIYx
-         kFKec3HfuWiDb//i7qLS0eFIUWkJZW/dM0fhu2qns6qjM2WQrJ3P5zp8jaj2i5ArDlX5
-         gKFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752236399; x=1752841199;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TtD/R9U6PRpAzS1nHpzjgk1+bYjlX29GjraDajvp0u0=;
-        b=ONQEaKGaoy+VAvgFdLs1PL8GbPmSrr6NBW2+4C72JbTNJkW+4AbXDtir6BSGopk9+B
-         F8+k89fMdiOX2Mv76PQhkN9hV+ao8ho4HOBgkhqAh9r36QGtecwTnXqrXaOceFpWfdPH
-         EZjfKZ06EzpcEnZ9gyURREAs/2kk2YFSjg8b3Ol/OLgPx41XsNIgcGaS5wT7IWqNUCkD
-         rNG2vO2vZ3Z4In1E1dJxbg9D1Mn8ylJ9aP35NDr2T4afMvOEF9zPSgc1VL6kpeY2w+pz
-         zZii4EmhxEM8CSdpfLGiYECQZtpukExfqd4ZOlfge0TM2MUdwolLOqsBAoztrqIv8E3o
-         2CWA==
-X-Forwarded-Encrypted: i=1; AJvYcCXsP6Jw2pigMnDR2d8Ay58MedE7gCr6fVEWvDUTFvUv57qW0jMP3aesGn7JFSgVgHXz/k7BlcnplLN7jOg=@vger.kernel.org, AJvYcCXzLTC+tKa7df0tuWPxvny+C6kq2GsqAHZSliMvEAz1cH9ihD+LHkIHTb+CQz1yqRN3cSqEOPZtC1feCxlXtQ8H@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyPNM2Jk3cMjZ+g5a1PEolQFbCSrCr6vcWKykJAxiLE7V620TT
-	nAQ8x8hpuFHxIUxZkwLGBu3XBxfmI1sYjqisLxx5rRA3jAf5VHKbJ/ej
-X-Gm-Gg: ASbGnct2nz7760+4VKw/c2aDbNrEZTpUOvoB6sleNeGG6YKZ074EbltrB1ZPncPSPvg
-	0sK4vIt5tJyhhvy/zYAhxqADg6dKwOScML22yaxi26fcIzJTbAyswt/KxTg/0xJAj9MgIsKr6Cq
-	QjnXY/rY+hWK5jXw8C/PFDpalpcrQbZ7GixLHNzhqxfwW3/xn0j7FLHHFvY8pU9xLbNFdffgZJx
-	x3iyxe4n2h5seyKhAcC6R5+wy2PwStOzo2LZavLpmVMXwyQZ4ZQeaResGNOQ7BoyWJOZ/Ik2N0o
-	k4vicsYIeRHTPRSf9kLiyb6U9Td9uXcCcYKnYO0cwYdZuMKn+y+KZELa8+8DVhaB1HsnEA8D2D7
-	Dhi73uVSzCjN/QtPG2qPWNLaTfniYhqKyVkmZgiLSOdbhex7S
-X-Google-Smtp-Source: AGHT+IFir+KTTk8mgUXFq5lbtUVSMfktmgJYRFls6w9p8Eajyy/4y3kuXXHD32P4jlxeEkBaynv8ew==
-X-Received: by 2002:a05:6a21:3318:b0:1fa:9819:c0a5 with SMTP id adf61e73a8af0-231363657d3mr4445241637.11.1752236399289;
-        Fri, 11 Jul 2025 05:19:59 -0700 (PDT)
-Received: from DESKTOP-GIED850.localdomain ([114.247.113.178])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe6bd97fsm4963163a12.36.2025.07.11.05.19.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jul 2025 05:19:58 -0700 (PDT)
-From: wang lian <lianux.mm@gmail.com>
-To: broonie@kernel.org
-Cc: Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org,
-	brauner@kernel.org,
-	david@redhat.com,
-	gkwang@linx-info.com,
-	jannh@google.com,
-	lianux.mm@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	lorenzo.stoakes@oracle.com,
-	p1ucky0923@gmail.com,
-	ryncsn@gmail.com,
-	shuah@kernel.org,
-	sj@kernel.org,
-	vbabka@suse.cz,
-	zijing.zhang@proton.me,
-	ziy@nvidia.com
-Subject: Re: [PATCH v3] selftests/mm: add process_madvise() tests
-Date: Fri, 11 Jul 2025 20:19:48 +0800
-Message-ID: <20250711121952.17380-1-lianux.mm@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <aG_DPLhtZ5qDuWHY@finisterre.sirena.org.uk>
-References: <aG_DPLhtZ5qDuWHY@finisterre.sirena.org.uk>
+	s=arc-20240116; t=1752236970; c=relaxed/simple;
+	bh=fIitV8uS/kxmTYFxFGDGgZ/5RFXqlgUXQMoiW7LTyAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T249YAtxky5i8M8yt9bJLYuTGfuJBv6T3BO4RCCELLBjHbcL3IlKglFApPvhBE3e7xhEUnOM/D4+OvXxawfrSF/s3nReE9qX3mGSV5t6OCEvjdSeyJxR3jl1adD+3Q9J6RoTxCMzXT4uvExsODQGTEdMU4EfugIUAzD3vuGthwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com; spf=pass smtp.mailfrom=proxmox.com; arc=none smtp.client-ip=94.136.29.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
+Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
+	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 910D2472EB;
+	Fri, 11 Jul 2025 14:29:17 +0200 (CEST)
+Date: Fri, 11 Jul 2025 14:29:16 +0200
+From: Gabriel Goller <g.goller@proxmox.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v5] ipv6: add `force_forwarding` sysctl to
+ enable per-interface forwarding
+Message-ID: <mo6dtede26twve7umo6tu6q3tajxetc2nxgy3et5mhdoxfuwxe@br4vg5h73k5k>
+Mail-Followup-To: Paolo Abeni <pabeni@redhat.com>, 
+	Nicolas Dichtel <nicolas.dichtel@6wind.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250707094307.223975-1-g.goller@proxmox.com>
+ <858eb643-bf0a-480e-b7f7-103b7bd94707@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=yes
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <858eb643-bf0a-480e-b7f7-103b7bd94707@redhat.com>
+User-Agent: NeoMutt/20241002-35-39f9a6
 
-Hi Mark Brown,
-
-> On Thu, Jul 10, 2025 at 07:22:49PM +0800, wang lian wrote:
+On 10.07.2025 15:26, Paolo Abeni wrote:
+>On 7/7/25 11:43 AM, Gabriel Goller wrote:
+>> It is currently impossible to enable ipv6 forwarding on a per-interface
+>> basis like in ipv4. To enable forwarding on an ipv6 interface we need to
+>> enable it on all interfaces and disable it on the other interfaces using
+>> a netfilter rule. This is especially cumbersome if you have lots of
+>> interface and only want to enable forwarding on a few. According to the
+>> sysctl docs [0] the `net.ipv6.conf.all.forwarding` enables forwarding
+>> for all interfaces, while the interface-specific
+>> `net.ipv6.conf.<interface>.forwarding` configures the interface
+>> Host/Router configuration.
+>>
+>> Introduce a new sysctl flag `force_forwarding`, which can be set on every
+>> interface. The ip6_forwarding function will then check if the global
+>> forwarding flag OR the force_forwarding flag is active and forward the
+>> packet.
+>>
+>> To preserver backwards-compatibility reset the flag (on all interfaces)
+>> to 0 if the net.ipv6.conf.all.forwarding flag is set to 0.
+>>
+>> Add a short selftest that checks if a packet gets forwarded with and
+>> without `force_forwarding`.
+>>
+>> [0]: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
+>>
+>> Signed-off-by: Gabriel Goller <g.goller@proxmox.com>
 >
-> > Add tests for process_madvise(), focusing on verifying behavior under
-> > various conditions including valid usage and error cases.
+>Does not apply cleanly anymore, please rebase and repost.
 >
-> > --- a/tools/testing/selftests/mm/guard-regions.c
-> > +++ b/tools/testing/selftests/mm/guard-regions.c
+>Also a few nits below...
+
+Will do.
+
+>> @@ -857,6 +859,9 @@ static void addrconf_forward_change(struct net *net, __s32 newf)
+>>  		idev = __in6_dev_get_rtnl_net(dev);
+>>  		if (idev) {
+>>  			int changed = (!idev->cnf.forwarding) ^ (!newf);
+>> +			/* Disabling all.forwarding sets 0 to force_forwarding for all interfaces */
+>> +			if (newf == 0)
+>> +				WRITE_ONCE(idev->cnf.force_forwarding, newf);
 >
-> > -static void handle_fatal(int c)
-> > -{
-> > -	if (!signal_jump_set)
-> > -		return;
-> > -
-> > -	siglongjmp(signal_jmp_buf, c);
-> > -}
-
-> I see from looking later in the patch that you're factoring this out of
-> the guard regions test into vm_util.c so that it can be used by your new
-> test.  This is good and sensible but it's a bit surprising, especially
-> since your changelog only said you were adding a new test.  It would be
-> better to split this out into a separate refactoring patch that just
-> does the code motion, as covered in submitting-patches.rst it's better
-> if changes just do one thing.
-
-Thanks for the suggestion. I’ll split this out into a separate patch
-that just moves the helper to vm_util.c, and follow up with the new
-test in a second patch.
-
-> > +#include <linux/pidfd.h>
-> > +#include <linux/uio.h>
+>You could use:
 >
-> Does this work without 'make headers_install' for the systems that were
-> affectd by missing headers?  Lorenzo mentioned that we shouldn't depend
-> on that for the mm tests (I'm not enthusiastic about that approach
-> myself, but if it's what mm needs).
+>			WRITE_ONCE(idev->cnf.force_forwarding, 0);
+>				
 
-You're right, and I’ve seen build issues due to that as well. I’ll drop
-<linux/pidfd.h> and define PIDFD_SELF locally to avoid requiring
-installed headers.
+Agree, thanks!
 
-> > +	ret = read(pipe_info[0], &info, sizeof(info));
-> > +	if (ret <= 0) {
-> > +		waitpid(self->child_pid, NULL, 0);
-> > +		ksft_exit_skip("Failed to read child info from pipe.\n");
-> > +	}
+>>
+>>  			WRITE_ONCE(idev->cnf.forwarding, newf);
+>>  			if (changed)
+>> @@ -5719,6 +5724,7 @@ static void ipv6_store_devconf(const struct ipv6_devconf *cnf,
+>>  	array[DEVCONF_ACCEPT_UNTRACKED_NA] =
+>>  		READ_ONCE(cnf->accept_untracked_na);
+>>  	array[DEVCONF_ACCEPT_RA_MIN_LFT] = READ_ONCE(cnf->accept_ra_min_lft);
+>> +	array[DEVCONF_FORCE_FORWARDING] = READ_ONCE(cnf->force_forwarding);
+>>  }
+>>
+>>  static inline size_t inet6_ifla6_size(void)
+>> @@ -6747,6 +6753,76 @@ static int addrconf_sysctl_disable_policy(const struct ctl_table *ctl, int write
+>>  	return ret;
+>>  }
+>>
+>> +static void addrconf_force_forward_change(struct net *net, __s32 newf)
+>> +{
+>> +	struct net_device *dev;
+>> +	struct inet6_dev *idev;
+>> +
+>> +	for_each_netdev(net, dev) {
+>> +		idev = __in6_dev_get_rtnl_net(dev);
+>> +		if (idev) {
+>> +			int changed = (!idev->cnf.force_forwarding) ^ (!newf);
+>> +
+>> +			WRITE_ONCE(idev->cnf.force_forwarding, newf);
+>> +			if (changed) {
+>> +				inet6_netconf_notify_devconf(dev_net(dev), RTM_NEWNETCONF,
+>> +							     NETCONFA_FORCE_FORWARDING,
+>> +							     dev->ifindex, &idev->cnf);
+>> +			}
+>
+>Brakets not needed for the above statement. Either drop them or move the
+>WRITE_ONCE() inside the if ()
 
-> If you're using the harness you should use SKIP() rather than the ksft
-> APIs for reporting test results.  Don't mix and match the result
-> reporting APIs, harness will call the ksft_ APIs appropriately for you.
+Agree, thanks!
 
-Understood. I’ll convert this and other cases to use SKIP() and ensure
-the test consistently uses the test harness macros.
+>> diff --git a/tools/testing/selftests/net/ipv6_force_forwarding.sh b/tools/testing/selftests/net/ipv6_force_forwarding.sh
+>> new file mode 100644
+>> index 000000000000..62adc9d4afc9
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/net/ipv6_force_forwarding.sh
+>> @@ -0,0 +1,105 @@
+>> +#!/bin/bash
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +#
+>> +# Test IPv6 force_forwarding interface property
+>> +#
+>> +# This test verifies that the force_forwarding property works correctly:
+>> +# - When global forwarding is disabled, packets are not forwarded normally
+>> +# - When force_forwarding is enabled on an interface, packets are forwarded
+>> +#   regardless of the global forwarding setting
+>> +
+>> +source lib.sh
+>> +
+>> +cleanup() {
+>> +    cleanup_ns $ns1 $ns2 $ns3
+>> +}
+>> +
+>> +trap cleanup EXIT
+>> +
+>> +setup_test() {
+>> +    # Create three namespaces: sender, router, receiver
+>> +    setup_ns ns1 ns2 ns3
+>> +
+>> +    # Create veth pairs: ns1 <-> ns2 <-> ns3
+>> +    ip link add name veth12 type veth peer name veth21
+>> +    ip link add name veth23 type veth peer name veth32
+>> +
+>> +    # Move interfaces to namespaces
+>> +    ip link set veth12 netns $ns1
+>> +    ip link set veth21 netns $ns2
+>> +    ip link set veth23 netns $ns2
+>> +    ip link set veth32 netns $ns3
+>> +
+>> +    # Configure interfaces
+>> +    ip -n $ns1 addr add 2001:db8:1::1/64 dev veth12
+>> +    ip -n $ns2 addr add 2001:db8:1::2/64 dev veth21
+>> +    ip -n $ns2 addr add 2001:db8:2::1/64 dev veth23
+>> +    ip -n $ns3 addr add 2001:db8:2::2/64 dev veth32
+>
+>The above will trigger DaD...
+>
+>> +
+>> [snip[
+>> +    # Test 2: With force_forwarding enabled, ping should succeed
+>> +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.veth21.force_forwarding=1
+>> +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.veth23.force_forwarding=1
+>> +
+>> +    if ip netns exec $ns1 ping -6 -c 1 -W 2 2001:db8:2::2 &>/dev/null; then
+>> +        echo "PASS: force_forwarding enabled forwarding"
+>
+>... I'm wondering if it could sometimes race with the ping and cause
+>sporadic failures? Possible using 'nodad' option for address creation
+>could help.
 
-> > +			if (errno == EAGAIN) {
-> > +				ksft_test_result_skip(
-> > +					"THP is 'always', process_madvise returned EAGAIN due to an expected race with khugepaged.\n");
-> > +			} else {
-> > +				ksft_test_result_fail(
-> > +					"process_madvise failed with unexpected errno %d in 'always' mode.\n",
-> > +					errno);
-> > +			}
+Good catch!
+I'll add `nodad` to the addresses.
 
-> Similarly, to fail use an ASSERT or EXPECT.  Note also that when using
-> the ksft_ API for reporting results each test should report a consistent
-> test name as the string, if you want to report an error message print it
-> separately to the test result.
+>/P
 
-I’ll revise this to use ASSERT/EXPECT, and separate error output from
-test result strings, as you suggested.
+Thanks for the review!
 
-> > + * Test process_madvise() with various invalid pidfds to ensure correct
-> > + * error handling. This includes negative fds, non-pidfd fds, and pidfds for
-> > + * processes that no longer exist.
+I'll send a v6 soon!
 
-> This sounds like it should be a series of small tests rather than a
-> single omnibus test, that'd result in clearer error reporting from test
-> frameworks since they will say which operation failed directly rather
-> than having to look at the logs then match them to the source.
-
-That makes sense. I’ll break this out into multiple smaller tests so
-each case reports independently.
-
-> > +	pidfd = syscall(__NR_pidfd_open, child_pid, 0);
-> > +	ASSERT_GE(pidfd, 0);
-
-> This is particularly the case given the use of ASSERTs, we'll not report
-> any issues other than the first one we hit.
-
-Thanks, I’ll switch to EXPECT_* where appropriate to allow multiple
-checks per test case.
-
-Thanks again for the detailed review!
-
-
-Best regards,
-Wang Lian
 
