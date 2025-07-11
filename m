@@ -1,108 +1,124 @@
-Return-Path: <linux-kselftest+bounces-37138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4562B02320
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 19:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 159F6B0245B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 21:13:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF49CA440AE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 17:49:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FF08A65FB9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 19:13:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1999C2F199A;
-	Fri, 11 Jul 2025 17:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4002ECEA5;
+	Fri, 11 Jul 2025 19:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Un5vH3Ov"
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="LgV75rzR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A612F0E59;
-	Fri, 11 Jul 2025 17:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2381621504E
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 19:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752256196; cv=none; b=TUxMtw3+vO933vHT/OElj+g+/66nYcJ/VNHY2PLXxnDX5eXJjaA5R5STQ5rWI/hp4XKqv9kwZzkDiTBarUm9L5+gF97++9HjA93V+TXvQeZczCcOWhtlQdd8PjSdvNXWaFtUvIQkXfeRww11zE+yuIai57I9dQ4H2nrAs4p3Qf8=
+	t=1752261233; cv=none; b=Q5eMThVHql7aWtfKxa0bjthpDlgi8wIPV+mySJBr1cd6TIpioS1F8P84eTlXUKsrTWSuFjORPlKCjNHe4tRoSLniCQOH29pvN4rwBFwd8FAlLcVRrb3XpmRoAs6hKDPs6u9UrjI0FpdWYH+pGR/d0g2F/ZHG9e30zrxp9vlmjEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752256196; c=relaxed/simple;
-	bh=/MkA07c+dWNbSLuFOP7iyIQHic2zDExuAjUmWhSOOhQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=MxOO/pUlBAtWDwPa/yIL3wewXLLfpJ+jfMNrdicD4fMJZHaxe+KMnBqGKh86NxgJspTazqCJlSFFbWOkRAI3/XM5VCb802LB+y5OPlDBHJA67x9WS9/jD/kcqnVFs3VL2aSbw3oobTj5/eyZmrvHB4/o67PgvGV0fRJAN4Duv50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Un5vH3Ov; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 574A4C4CEED;
-	Fri, 11 Jul 2025 17:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752256195;
-	bh=/MkA07c+dWNbSLuFOP7iyIQHic2zDExuAjUmWhSOOhQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Un5vH3OvTCpmFaFPoo9XKUkWb6U/VcoVFLkxaE1R0zNnV9isQ3CBiMJZ8hxHrCkVh
-	 PQ59ofal99qxQoi2ERPb/+aLmAPszgBaNDSlXngaSUsLJfkP/GZ/5XATkq/XLnyEcb
-	 tGGoj6ZPmHb8BnqPXiAGRnnHK6cLenY8+6F+xVUiBkUHuvMtT0qS0K4vqGfSsMVwOw
-	 DQ6M3YBMYqtSOKC/SOiQthkbMwiOgZ5G6gfe/CLI3v35HyeIcpd9uXXJnrsCe+Q4KY
-	 FZ0OY8KunHUaL/GaOKLY+ye0er/5RZyCoPWm6z2/mZHNqg7/AlRMGBasOKjEDbkoXN
-	 rqWA4pW2CYJyw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D36383B275;
-	Fri, 11 Jul 2025 17:50:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1752261233; c=relaxed/simple;
+	bh=8BcgoOo7d/63OSh4rLBJxxOjFAkETtCGtPh9tO6j+qY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=bBWXeAGZutxZosoxVkc3sBkfDAdy3qRKr9yYa3G1o5SY1d3oWXWZRNtUDy7lMcSYM2uLqY/HKOUPeetMgB6Qezf0ZvtgX0AzSgRDqFOTZ4/SIbDA/kTv5y/B0twINaEHPEUxCLWur9tCTpYxmeW2qbVV7GorgikqdxY6JVzrZVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=LgV75rzR; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-74b50c71b0aso1537159b3a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 12:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1752261231; x=1752866031; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Pw8tMXj6rdfFqpDgsVOf13IKaNoTZhX9xFiQLvS94yg=;
+        b=LgV75rzRHB2Fdyj5hHJ7d9m/lI+WGAhFn02MxEeEdIKicncdN0ARzLJsqZOMNnPi2w
+         sYxPHSQ1MXfX0a7gjNd8AozqriuISyCTgrDxB4/ghRZRN2N8MOD5JVnSBEOlERygKLVm
+         +7gFkDp4D5EK8L08fKTK5CWoQRn73vVgjiqJKQ53Z4ZpmEY3xlA1/23QoAk/O26GcqNB
+         asqDMB9IKQ/KhTLsI5N/PCWFqFlRpYzRqc6821bJiXlcIvbzCG/OLUxDS1XJRdtw6yaf
+         jgA5psXfEw6AEmn4Iww4ynyiIlC3/tVWWbAcO+UwWNikB7UPegYHnmiopGniR8xN23wG
+         SPjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752261231; x=1752866031;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pw8tMXj6rdfFqpDgsVOf13IKaNoTZhX9xFiQLvS94yg=;
+        b=FRHq2eCw1o/gbJW1eVcVgIKCHvZEL+n9//2lrlGYyyz38/deT/oEKO8a6QQAPHgqQM
+         664gMWRtXtL1InN0RZAZYffNVOD83ManD/A12fYSOIb9p5pWzg9Xrv3XBJPcBsTvqwIP
+         IDGatju2Rgfk/dibfEjR7DSbi2Wt2fCQ/epTXnCrKY2BNpE1a6u1sMLJa1yZlKY8zmU9
+         JYm94fWrXX9O1tk72dsCqhN8l4h/QaUgcUcj3tGufIzmsyibWhYXNdBYOHd+SYkk98vW
+         E3VwNrbAfupThI5o+N73denwZ/zwtMmx9fNATqifISc8Cr+FZgTSRWpeXSFMQXm+WlEs
+         JKjw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBZGx84xKL9hQCQiyWRny8qVh2x4GH+0X4DYJc+uCqqccoItpbN8MvuUHTyar3lNJeFKsfXo9P5X6Bc99/bfc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw52m2mDHj4SREXynjqHCb8F/oNojhGEf+0J8ERWRZhigIST1Ko
+	K+JI0aYWJ5QqnIFIu3sJ1aqZ0csEqwBkY57MTonMxXSqU5jDo39nq7EHESXIVgsyMA==
+X-Gm-Gg: ASbGncuAZ4HquxfblY4jxbm/cPzqn6nUMGbo76a0V9lOjg1t4NOLFvKb8XNRAgSEQx3
+	YCS3x7XzjyyTxSjW7eL3M57Cym5myAkNlh1u0Q66nACqney5P74i1nXTe9mntsovADNPy6S+1wu
+	2Dd+UD6fXDZhODBPc0U0Z0shbo1BDBxuzdJPxxQCzWnWkzKLk6A36IJJxRS1stjxuw92WptBU+T
+	LzKLAqLi42tWVp2O7RNglurPJUi6NoS3zWuVTZ1SCHBcyBcUEAqJUa4bMtSY7ai+Ouh1WP5pKkc
+	AiyDlO/IdjVU81V1D9ja/PSXtb1dArFMhppZRsdUrVHH1focCc+emXuJ8FpmBTgvH8sEptMggba
+	UahnfOVc9mga/t4vZnWoCoGl6t7jd4QXdPzidPKAixLXrjlgQSG5AR1zQrIUl0uo=
+X-Google-Smtp-Source: AGHT+IEzJq7kKuHcKxI7SDNUkv1XPsZWGFsK3Uidxo93DA1wc2S/2yvIBurC0Sbg+3Bd5W2zZyl8hw==
+X-Received: by 2002:aa7:8886:0:b0:73e:23be:11fc with SMTP id d2e1a72fcca58-74ee3237980mr5280760b3a.22.1752261231255;
+        Fri, 11 Jul 2025 12:13:51 -0700 (PDT)
+Received: from ?IPV6:2804:7f1:e2c2:381b:47:222f:5788:dacb? ([2804:7f1:e2c2:381b:47:222f:5788:dacb])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9f9762esm6198861b3a.148.2025.07.11.12.13.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Jul 2025 12:13:50 -0700 (PDT)
+Message-ID: <01a580b4-0c8d-4d22-a3e4-264335d7a947@mojatatu.com>
+Date: Fri, 11 Jul 2025 16:13:42 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next V2 0/5] selftests: drv-net: Test XDP native
- support
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175225621699.2353625.7561288622143737480.git-patchwork-notify@kernel.org>
-Date: Fri, 11 Jul 2025 17:50:16 +0000
-References: <20250710184351.63797-1-mohsin.bashr@gmail.com>
-In-Reply-To: <20250710184351.63797-1-mohsin.bashr@gmail.com>
-To: Mohsin Bashir <mohsin.bashr@gmail.com>
-Cc: netdev@vger.kernel.org, kuba@kernel.org, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- shuah@kernel.org, horms@kernel.org, cratiu@nvidia.com, noren@nvidia.com,
- cjubran@nvidia.com, mbloch@nvidia.com, jdamato@fastly.com, gal@nvidia.com,
- sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v22 net-next 5/6] selftests/tc-testing: Add selftests for
+ qdisc DualPI2
+To: chia-yu.chang@nokia-bell-labs.com, alok.a.tiwari@oracle.com,
+ pctammela@mojatatu.com, horms@kernel.org, donald.hunter@gmail.com,
+ xandfury@gmail.com, netdev@vger.kernel.org, dave.taht@gmail.com,
+ pabeni@redhat.com, jhs@mojatatu.com, kuba@kernel.org,
+ stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+ davem@davemloft.net, edumazet@google.com, andrew+netdev@lunn.ch,
+ ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
+ koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
+ ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
+ cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
+ vidhi_goel@apple.com
+References: <20250711143208.66722-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250711143208.66722-6-chia-yu.chang@nokia-bell-labs.com>
+Content-Language: en-US
+From: Victor Nogueira <victor@mojatatu.com>
+In-Reply-To: <20250711143208.66722-6-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 10 Jul 2025 11:43:46 -0700 you wrote:
-> This patch series add tests to validate XDP native support for PASS,
-> DROP, ABORT, and TX actions, as well as headroom and tailroom adjustment.
-> For adjustment tests, validate support for both the extension and
-> shrinking cases across various packet sizes and offset values.
+On 7/11/25 11:32, chia-yu.chang@nokia-bell-labs.com wrote:
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 > 
-> The pass criteria for head/tail adjustment tests require that at-least
-> one adjustment value works for at-least one packet size. This ensure
-> that the variability in maximum supported head/tail adjustment offset
-> across different drivers is being incorporated.
+> Update configuration of tc-tests and preload DualPI2 module for self-tests,
+> and add following self-test cases for DualPI2:
 > 
-> [...]
+>    Test a4c7: Create DualPI2 with default setting
 
-Here is the summary with links:
-  - [net-next,1/5] selftests: drv-net: Add bpftool util
-    https://git.kernel.org/netdev/net-next/c/a339dd699a7a
-  - [net-next,2/5] selftests: drv-net: Test XDP_PASS/DROP support
-    (no matching commit)
-  - [net-next,3/5] selftests: drv-net: Test XDP_TX support
-    (no matching commit)
-  - [net-next,4/5] selftests: drv-net: Test tail-adjustment support
-    (no matching commit)
-  - [net-next,5/5] selftests: drv-net: Test head-adjustment support
-    (no matching commit)
+This test case is failing now:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Test a4c7: Create DualPI2 with default setting
+exit: 2
+exit: 0
+Error: sch_dualpi2: Dualpi2 options are required.
 
-
+cheers,
+Victor
 
