@@ -1,205 +1,104 @@
-Return-Path: <linux-kselftest+bounces-37064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37065-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C53BDB01391
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 08:29:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7511EB013DF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 08:49:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AEAC763FE4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 06:28:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 546C61C80081
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 06:49:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB74F1D6DDD;
-	Fri, 11 Jul 2025 06:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E86D41E04BD;
+	Fri, 11 Jul 2025 06:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="f7KZVhBi";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="P/C1yBrC"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="lOIUw6wi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7661A92E;
-	Fri, 11 Jul 2025 06:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522682110E;
+	Fri, 11 Jul 2025 06:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752215350; cv=none; b=Qio8YcBTZl6npyS0l+R1zDqhc01Ip/bNhQ22zdvZ5wbyb0HbPMB4XmLTg5JjLjkDgErakpkYsXT7/7Q8YvcGLbKh1XI1U9/OViuf4URbXgbWfmICS54QPWfkCsoZOeX22GACs0FcMANOzuW2ntOEVxIGh9ygV4MUJYtiLnIMUzA=
+	t=1752216560; cv=none; b=aBi7iTSMi0SLZCjPn/vuKNNrjBi0GK08BHyQ1RBlqvbdectnJbEyZmx/iKG05CuOoCawpOPld/u8N/VLL9HrY96Mxa2FgNmcd5Plji+JLWbjpAtlWLNiGmaRIhyEom6WKunnXSgLHG8tXoJU6QcXlFuW6XGIvxLGdnToyvp1BuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752215350; c=relaxed/simple;
-	bh=WYOIK6GVMqapmq065fCiDBgTvxy0j7JyBvG8D0bAQ5A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TD+bHogYafJ/OupMkacLy+IV04Uts1WwA100LuZ/B/YMbIsXkgHrS2MIJMRy6w6qeN/Kua/mlDUzQoJW8qcazZAA6lcNTb07T8dSLdPBrJ7ifYOGfZIgFsPUlkDKpm2O14FcQe+DxQc8GP3RHWuSZMUSWK7Wk9ckNKtCghL3CyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=f7KZVhBi; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=P/C1yBrC; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 11 Jul 2025 08:29:06 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1752215346;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2LpGMm1o7zQgu78tbfllcqNpB+021zUZQxffxbGNBeE=;
-	b=f7KZVhBiKW/ToUXjyooJTXextQQJ1lbQBw+ZGZ8NX+EAH5LWrFE9zm7xsP4sGNgotWZD9/
-	kzw+eeJJtnCw+sqj9fHtS8307S6NbRSYjg8Gq35VdYZG0ofiKwEyJJAdgILjT3UFBn/pV0
-	By1/SdnbGOtR5Ug3A31ZtwIGeBZzDKpEUMw5qzj3UeXOSaal1jPPgnPWs0gCubdLiac3pL
-	yWC6LkDfxngXPd1VHKvqsjiiybxdw+/6d+uffb1QvGJKW9Yv67ffN2W/tlWVefUsc98e2Y
-	koZu3cqQ4dQ7KMAeekcIcJiQXJZHQnNGDJrOm/59qwu/oTZnRY/0VJLFa7xPLw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1752215346;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2LpGMm1o7zQgu78tbfllcqNpB+021zUZQxffxbGNBeE=;
-	b=P/C1yBrCppCXTk7jTRetWspPADUr2fAtZz2Bj24U1MK3CIWcRSiDC/TdXzNMrQktssn6/b
-	Hi2u9PJZBAoQyBDg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Daniel Gomez <da.gomez@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com
-Subject: Re: [PATCH 2/3] module: make structure definitions always visible
-Message-ID: <20250711081047-ea2c1e83-1b87-4331-acad-cbbfe6be67d8@linutronix.de>
-References: <20250612-kunit-ifdef-modules-v1-0-fdccd42dcff8@linutronix.de>
- <20250612-kunit-ifdef-modules-v1-2-fdccd42dcff8@linutronix.de>
- <a9eade27-9b77-431f-b7c8-24c3fb891673@kernel.org>
+	s=arc-20240116; t=1752216560; c=relaxed/simple;
+	bh=44pCLGpLaIC4GmvuWhJV0PyvAaAXyESqQI2KW62Nrvo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JygIDoqpTXnrO0ZnsoeZyWFExGludXz/Mjs8U7ohN3gzxS7HlPoOwvpwnSn4Vr0atbaj2/racbfTwZPAhHcmGXwMuvN6o72Uky1OnKLs9vpYlqrhnVBf8YmoLLLMfqLEPb1xSWArMiFtWfkIaSQQB2qesjM86P9wzPJCgbruEog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=lOIUw6wi; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=44pCLGpLaIC4GmvuWhJV0PyvAaAXyESqQI2KW62Nrvo=;
+	t=1752216559; x=1753426159; b=lOIUw6wimgs3mdats3vc/iM60lBMJQl8IIA0XLRVcN/9yVv
+	Chf8ViZJqX3ycQ6ZL7YtRHmDEzPTWnyCA3P4J9RUVQrHJ22JnVB29QVV0SfEBWNg+RRzFg7O/Ly3S
+	hg+o29z8CIn9yAUF1OrYKuRT8RgYsAR45HD68p1qdQaw8MwrBAy9vir2wAgM1uYu1ZBs14ktSe15k
+	ZoTTZUJ+ijW2OtIDxQRSS/QR+u76tEAa/vsgAf4Cz9PdaJ6Fi9E91CIp3qInZDCEdW0QCbk8ZQZR/
+	GdbW3zIJwQfhteRMpY4UEbegd37NsaSA5XkSpoXLIIJ9P4r8vkxD8hIrSc0dylkA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1ua7Z1-0000000FwWs-2LAn;
+	Fri, 11 Jul 2025 08:48:57 +0200
+Message-ID: <d88d15047569b57c7e7cd751670f56ffb4d5c1a8.camel@sipsolutions.net>
+Subject: Re: [PATCH] kunit: Enable PCI on UML without triggering WARN()
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Rae Moar <rmoar@google.com>,  Richard Weinberger	
+ <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org
+Date: Fri, 11 Jul 2025 08:48:45 +0200
+In-Reply-To: <20250627-kunit-uml-pci-v1-1-a622fa445e58@linutronix.de>
+References: <20250627-kunit-uml-pci-v1-1-a622fa445e58@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a9eade27-9b77-431f-b7c8-24c3fb891673@kernel.org>
+X-malware-bazaar: not-scanned
 
-On Mon, Jul 07, 2025 at 09:11:05PM +0200, Daniel Gomez wrote:
-> On 12/06/2025 16.53, Thomas Wei√schuh wrote:
-> > To write code that works with both CONFIG_MODULES=y and CONFIG_MODULES=n
-> > it is convenient to use "if (IS_ENABLED(CONFIG_MODULES))" over raw #ifdef.
-> > The code will still fully typechecked but the unreachable parts are
-> > discarded by the compiler. This prevents accidental breakage when a certain
-> > kconfig combination was not specifically tested by the developer.
-> > This pattern is already supported to some extend by module.h defining
-> > empty stub functions if CONFIG_MODULES=n.
-> > However some users of module.h work on the structured defined by module.h.
-> > 
-> > Therefore these structure definitions need to be visible, too.
-> 
-> We are missing here which structures are needed. + we are making more things
-> visible than what we actually need.
-> 
-> > 
-> > Many structure members are still gated by specific configuration settings.
-> > The assumption for those is that the code using them will be gated behind
-> > the same configuration setting anyways.
-> 
-> I think code and kconfig need to reflect the actual dependencies. For example,
-> if CONFIG_LIVEPATCH depends on CONFIG_MODULES, we need to specify that in
-> Kconfig with depends on, as well as keep the code gated by these 2 configs with
-> ifdef/IS_ENABLED.
+On Fri, 2025-06-27 at 17:21 +0200, Thomas Wei=C3=9Fschuh wrote:
+> Various KUnit tests require PCI infrastructure to work.
+> All normal platforms enable PCI by default, but UML does not.
+> Enabling PCI from .kunitconfig files is problematic as it would not be
+> portable. So in commit 6fc3a8636a7b ("kunit: tool: Enable virtio/PCI by d=
+efault on UML")
+> PCI was enabled by way of CONFIG_UML_PCI_OVER_VIRTIO=3Dy.
+> However CONFIG_UML_PCI_OVER_VIRTIO requires additional configuration of
+> CONFIG_UML_PCI_OVER_VIRTIO_DEVICE_ID or will otherwise trigger a WARN() i=
+n
+> virtio_pcidev_init(). However there is no one correct value for
+> UML_PCI_OVER_VIRTIO_DEVICE_ID which could be used by default.
+>=20
+> This warning is confusing when debugging test failures.
+>=20
+> On the other hand, the functionality of CONFIG_UML_PCI_OVER_VIRTIO is not
+> used at all, given that it is completely non-functional as indicated by
+> the WARN() in question. Instead it is only used as a way to enable
+> CONFIG_UML_PCI which itself is not directly configurable.
+>=20
+> Instead of going through CONFIG_UML_PCI_OVER_VIRTIO, introduce a custom
+> configuration option which enables CONFIG_UML_PCI without triggering
+> warnings or building dead code.
 
-If CONFIG_LIVEPATCH depends on CONFIG_MODULES in kconfig then
-IS_ENABLED(CONFIG_LIVEPATCH) will depend on CONFIG_MODULES automatically.
-There is no need for another explicit IS_ENABLED(CONFIG_MODULES).
+Alright, so looked like Thomas wanted this to not be merged via the UML
+tree, which does make sense, so I've dropped it.
 
-> > 
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > ---
-> >  include/linux/module.h | 23 ++++++++++++-----------
-> >  1 file changed, 12 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/include/linux/module.h b/include/linux/module.h
-> > index 52f7b0487a2733c56e2531a434887e56e1bf45b2..7f783e71636542b99db3dd869a9387d14992df45 100644
-> > --- a/include/linux/module.h
-> > +++ b/include/linux/module.h
-> > @@ -302,17 +302,6 @@ static typeof(name) __mod_device_table__##type##__##name		\
-> >  
-> >  struct notifier_block;
-> >  
-> > -#ifdef CONFIG_MODULES
-> > -
-> > -extern int modules_disabled; /* for sysctl */
-> > -/* Get/put a kernel symbol (calls must be symmetric) */
-> > -void *__symbol_get(const char *symbol);
-> > -void *__symbol_get_gpl(const char *symbol);
-> > -#define symbol_get(x)	({ \
-> > -	static const char __notrim[] \
-> > -		__used __section(".no_trim_symbol") = __stringify(x); \
-> > -	(typeof(&x))(__symbol_get(__stringify(x))); })
-> > -
-> >  enum module_state {
-> >  	MODULE_STATE_LIVE,	/* Normal state. */
-> >  	MODULE_STATE_COMING,	/* Full formed, running module_init. */
-> > @@ -598,6 +587,18 @@ struct module {
-> >  	struct _ddebug_info dyndbg_info;
-> >  #endif
-> >  } ____cacheline_aligned __randomize_layout;
-> > +
-> > +#ifdef CONFIG_MODULES
-> > +
-> > +extern int modules_disabled; /* for sysctl */
-> > +/* Get/put a kernel symbol (calls must be symmetric) */
-> > +void *__symbol_get(const char *symbol);
-> > +void *__symbol_get_gpl(const char *symbol);
-> > +#define symbol_get(x)	({ \
-> > +	static const char __notrim[] \
-> > +		__used __section(".no_trim_symbol") = __stringify(x); \
-> > +	(typeof(&x))(__symbol_get(__stringify(x))); })
-> > +
-> 
-> The patch exposes data structures that are not needed. + breaks the
-> config dependencies.
+For the kunit tree then you can add:
 
-If we want to expose 'struct module' to !CONFIG_MODULES code, all it's
-effective member types also need to be included.
-With my patch these member types are actually still implictly gated behind
-CONFIG_MODULES as they depend on it through kconfig.
+Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
 
-> 
-> For example, before this patch:
-> 
-> #ifdef CONFIG_MODULES
-> 
-> {...}
-> 
-> struct mod_tree_node {
-> 
-> {...}
-> 
-> struct module_memory {
-> 	void *base;
-> 	bool is_rox;
-> 	unsigned int size;
-> 
-> #ifdef CONFIG_MODULES_TREE_LOOKUP
-> 	struct mod_tree_node mtn;
-> #endif
-> };
-> 
-> {...}
-> #endif /* CONFIG_MODULES */
-> 
-> After the patch, mod_tree_node is not needed externally.
-
-Can you explain what you mean with "not needed externally"?
-'struct mod_tree_node' is only ever used by core module code.
-It is only public because it is embedded in the public 'struct module'
-
-> And the mtn field
-> in module_memory is exposed only under MODULES_TREE_LOOKUP and not MODULES
-> + MODULES_TREE_LOOKUP.
-
-As mentioned above, MODULES_TREE_LOOKUP && !MODULES can never happen.
-
-> I general, I see the issues I mentioned with LIVEPATCH, mod_tree_node, macros,
-> and LOOKUP.
-> 
-> >  #define MODULE_ARCH_INIT {}
-> >  #endif
-> > 
+johannes
 
