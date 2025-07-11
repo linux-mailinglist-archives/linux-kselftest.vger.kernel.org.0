@@ -1,368 +1,144 @@
-Return-Path: <linux-kselftest+bounces-37066-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37067-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED2CEB0148F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 09:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A6308B0151D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 09:47:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1998C763CBA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 07:25:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12C403B9396
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Jul 2025 07:46:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E94921E9B1C;
-	Fri, 11 Jul 2025 07:25:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48536205AA1;
+	Fri, 11 Jul 2025 07:45:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="MH+l+2QO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V0+Xv5Xl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80561E9915
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Jul 2025 07:25:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118C4202C5C;
+	Fri, 11 Jul 2025 07:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752218746; cv=none; b=EDr3q9vyKU4cTeylYh2H8LvUyEJJ16lErOP+Mpjbq7QedyzwdSskN2FczSjdAijpkX3OsXFqXS3MJUGTTZxSyxSEUXvxfIuZZ+oqOcAASnUaLA/SBeZx4FsmbVUaDiDEV2VetfM3ibErxsaIdTRnGcZzIVomCbbcfA5/wPwVkEg=
+	t=1752219939; cv=none; b=quE+InjpjzwrWQ1Umgr9lq5BKgNoBkfzFjFlYMAAV9uaT9yO3rg6vyczbmXqfP61I6qRKpRjHLtblo8n1lUyqZSPEK5LSOL7gZsrTiOm+y5rSvo/k56BKXHRUiJNrQVrx7XKad/bxgfwSELB6X7n7kXkkhTkVRxbAwo4kHOdaqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752218746; c=relaxed/simple;
-	bh=5THOdq4Srt85LMmib2c4S+O66dO0y9b0wHhyu9Hy5Wc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qeJRl6GwTbejtHRziu7IVcpmbIUNy451ZPGBK2K5pVXFyM+i8B5EPMiWqsfxhaFRp+8Caw/fj7ggg7rq10ObPXB5nwje+4GV0iivAHtD/zdrPCY5iQM5spclUViH0JLR2mE7GHs39aX6/lSeBG1v8HcbsFJDNIGIxUB3+BhT/X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=MH+l+2QO; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=wD0BUrDVSjLK0DgQfKX+MIzwBwlkEDfhnDHlZfXng4E=;
-	t=1752218745; x=1753428345; b=MH+l+2QOAHYKwQiuQS23NigyUUKta7ZZCedQDRMMlGMUGTP
-	rWveuWFvI3H4QD2m5UOE4IYib4EAL7ZCckL70F/FWpZkiDchSLP/0VLUY7y92lYDtPY22/0PAKrD4
-	eeBIKq9+LBukUgrZJFEpnsFlTUG3saADA9zaPdJyOm05Kxmdc41ZIudeJNvDozZwAbkavCE9fkk0o
-	RKKy3ZkxgsPEbmGg8AGai6USFNivtltJ3Fdok6tE8XnWQOzRRqKHS16ZSmVEhbd3eVtSPBPQmPIqg
-	g698HJqyz+HBrAzY+cfn3gpCK3puTjJWK6J8w/twk8GK3iGdB/ZwBKamsWHwBPQA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1ua88S-0000000FzFq-2VlM;
-	Fri, 11 Jul 2025 09:25:33 +0200
-Message-ID: <b1c3684e1e299f787a88c58a063ab4d0485a59a7.camel@sipsolutions.net>
-Subject: Re: [PATCH v2 4/4] tools/nolibc: add signal support
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Willy Tarreau <w@1wt.eu>, linux-kselftest@vger.kernel.org
-Date: Fri, 11 Jul 2025 09:25:26 +0200
-In-Reply-To: <f72ddf71-40e4-49d0-92b6-da219e33bd29@t-8ch.de>
-References: <20250710103950.1272379-1-benjamin@sipsolutions.net>
-	 <20250710103950.1272379-5-benjamin@sipsolutions.net>
-	 <f72ddf71-40e4-49d0-92b6-da219e33bd29@t-8ch.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1752219939; c=relaxed/simple;
+	bh=gpOEXh/tkkdMvtKnEFy+UBpnu0hmbuwIrGzuHPvq4sg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZSjBr5NJmQV+2bY4yXFON7AKLez36ZOlTqAVmQ3z53vPuip8QFkqMnvHnCrhm5STTOEDVVGoqobQhLm74FxbwYhO5pOHCWYqXQNxcodQH1wDHYBHZPQlxSNCGNzFsTrWrVhooGg8DAClON/11xWuuKZH8Rc9bzqwd9iIKgjPCJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V0+Xv5Xl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA952C4CEED;
+	Fri, 11 Jul 2025 07:45:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752219937;
+	bh=gpOEXh/tkkdMvtKnEFy+UBpnu0hmbuwIrGzuHPvq4sg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V0+Xv5Xl46ARoxRuBAaUWmx+tLBkwAcZ3S4k9GUD4qOrdj9uB9Md+LgH7ZcksYDR6
+	 mStpaawxXo5K02FGAwzNYZ4ns3h3V0u9IQFDN6ozeim1zg1ZjdZDe98sLyeZdlOXhh
+	 EL7aFlqhUBNTmJiWUAgbkmQ72rVKbJpZNL5kr2IreoSBqMgkZBv+/h0iBotkztuIpu
+	 VhYXsUzT29yMClmmATnBEDwdp9bBfRbSl7mt6t7a57ZnuwPShB8+SDAIL0rPruh3TU
+	 IL6sltjrYxDFiU+o6o1GDCNaLYfRSyB9iBjQzZeD0kTTIPsaJyT9CJNj7FARpbjQFl
+	 DS/dzbEISNUsA==
+Date: Fri, 11 Jul 2025 09:45:28 +0200
+From: Niklas Cassel <cassel@kernel.org>
+To: Frank.Li@nxp.com
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	dlemoal@kernel.org, jdmason@kudzu.us, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, imx@lists.linux.dev,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v21 0/9] PCI: EP: Add RC-to-EP doorbell with platform MSI
+ controller
+Message-ID: <aHDBGDFnYZF_2luF@ryzen>
+References: <20250710-ep-msi-v21-0-57683fc7fb25@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250710-ep-msi-v21-0-57683fc7fb25@nxp.com>
 
-On Fri, 2025-07-11 at 07:40 +0200, Thomas Wei=C3=9Fschuh wrote:
-> On 2025-07-10 12:39:50+0200, Benjamin Berg wrote:
-> > From: Benjamin Berg <benjamin.berg@intel.com>
-> >=20
-> > Add support for sigaction() and implement the normal sa_mask helpers.
-> >=20
-> > On many architectures, linux/signal.h pulls in compatibility
-> > definitions
-> > for the old sigaction syscall instead of rt_sigaction. However, the
-> > kernel can be compiled without support for this compatibility
-> > syscall
-> > and it also results in sa_mask to be too small for realtime
-> > signals.
-> >=20
-> > To work around this, the includes are handled separately for each
-> > architecture. This way either linux/signal.h or the asm-generic
-> > headers
-> > can be used to get the correct definition for the rt_sigaction
-> > syscall
-> > including sigset_t.
->=20
-> I checked this against my WIP alpha support and there this scheme
-> breaks. linux/signal.h provides the old compat types but
-> the asm-generic variant provides an incorrect SIGCHLD.
->=20
-> Any ideas?
+On Thu, Jul 10, 2025 at 03:13:46PM -0400, Frank Li via B4 Relay wrote:
+> Frank Li (9):
+>       PCI: imx6: Add helper function imx_pcie_add_lut_by_rid()
+>       PCI: imx6: Add LUT configuration for MSI/IOMMU in Endpoint mode
+>       PCI: endpoint: Add RC-to-EP doorbell support using platform MSI controller
+>       PCI: endpoint: pci-ep-msi: Add MSI address/data pair mutable check
+>       PCI: endpoint: Add pci_epf_align_inbound_addr() helper for address alignment
+>       PCI: endpoint: pci-epf-test: Add doorbell test support
+>       misc: pci_endpoint_test: Add doorbell test case
+>       selftests: pci_endpoint: Add doorbell test case
+>       arm64: dts: imx95: Add msi-map for pci-ep device
+> 
+>  Documentation/PCI/endpoint/pci-test-howto.rst      |  14 +++
+>  arch/arm64/boot/dts/freescale/imx95.dtsi           |   1 +
+>  drivers/misc/pci_endpoint_test.c                   |  85 ++++++++++++-
+>  drivers/pci/controller/dwc/pci-imx6.c              |  25 ++--
+>  drivers/pci/endpoint/Kconfig                       |   8 ++
+>  drivers/pci/endpoint/Makefile                      |   1 +
+>  drivers/pci/endpoint/functions/pci-epf-test.c      | 136 +++++++++++++++++++++
+>  drivers/pci/endpoint/pci-ep-msi.c                  |  98 +++++++++++++++
+>  drivers/pci/endpoint/pci-epf-core.c                |  36 ++++++
+>  include/linux/pci-ep-msi.h                         |  28 +++++
+>  include/linux/pci-epf.h                            |  18 +++
+>  include/uapi/linux/pcitest.h                       |   1 +
+>  .../selftests/pci_endpoint/pci_endpoint_test.c     |  28 +++++
+>  13 files changed, 470 insertions(+), 9 deletions(-)
+> ---
+> base-commit: d7b8f8e20813f0179d8ef519541a3527e7661d3a
+> change-id: 20241010-ep-msi-8b4cab33b1be
+> 
+> Best regards,
+> --
+> Frank Li <Frank.Li@nxp.com>
+> 
+> 
 
-I had a quick look, and I don't have a good idea really. For sparc
-there was at least a #define that permitted to get the correct version.
-But here, there is nothing.
+Tested on rock5b (which uses the rk3588 SoC), by adding the same msi-map to
+the pcie3x4_ep DT node as (what already exists in) the pcie3x4 (RC) DT node:
 
-Probably the best is to just copy in a modified version of signal.h
-with the correct definitions present. i.e. replace the "ifndef
-__KERNEL__" sections with something reasonable.
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-extra.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-extra.dtsi
+index 90414486e466..c0121aea791d 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-extra.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-extra.dtsi
+@@ -389,6 +389,7 @@ pcie3x4_ep: pcie-ep@fe150000 {
+                interrupt-names = "sys", "pmc", "msg", "legacy", "err",
+                                  "dma0", "dma1", "dma2", "dma3";
+                max-link-speed = <3>;
++               msi-map = <0x0000 &its1 0x0000 0x1000>;
+                num-lanes = <4>;
+                phys = <&pcie30phy>;
+                phy-names = "pcie-phy";
 
->=20
-> > Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
-> >=20
-> > ---
-> >=20
-> > v2:
-> > - Use newly added macros to check signal emission order
-> > - Add tests for sigset handling
-> > - Restore the default handler after signal test
-> > - make signal_check variable static
-> >=20
-> > v1:
-> > - Update architecture support (adding sh)
-> > - Move sparc sys_rt_sigaction logic into its header
-> > - Add sig_atomic_t
-> > - Use new BITSET_* macros
-> > - Move test into syscall suite
-> > - Various other small changes
-> > ---
-> > =C2=A0tools/include/nolibc/arch-arm.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 7 ++
-> > =C2=A0tools/include/nolibc/arch-arm64.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 3 +
-> > =C2=A0tools/include/nolibc/arch-loongarch.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 3 +
-> > =C2=A0tools/include/nolibc/arch-m68k.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 10 ++
-> > =C2=A0tools/include/nolibc/arch-mips.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 3 +
-> > =C2=A0tools/include/nolibc/arch-powerpc.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 8 ++
-> > =C2=A0tools/include/nolibc/arch-riscv.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 3 +
-> > =C2=A0tools/include/nolibc/arch-s390.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 8 +-
-> > =C2=A0tools/include/nolibc/arch-sh.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 5 +
-> > =C2=A0tools/include/nolibc/arch-sparc.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 47 ++++++++
-> > =C2=A0tools/include/nolibc/arch-x86.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 13 +++
-> > =C2=A0tools/include/nolibc/signal.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 103
-> > +++++++++++++++++
-> > =C2=A0tools/include/nolibc/sys.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
-=A0=C2=A0 2 +-
-> > =C2=A0tools/include/nolibc/time.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=
-=C2=A0 3 +-
-> > =C2=A0tools/include/nolibc/types.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 =
-9 ++
-> > =C2=A0tools/testing/selftests/nolibc/nolibc-test.c | 115
-> > +++++++++++++++++++
-> > =C2=A016 files changed, 338 insertions(+), 4 deletions(-)
-> >=20
->=20
-> (...)
->=20
-> > diff --git a/tools/include/nolibc/signal.h
-> > b/tools/include/nolibc/signal.h
-> > index ac13e53ac31d..16b8b17496bc 100644
-> > --- a/tools/include/nolibc/signal.h
-> > +++ b/tools/include/nolibc/signal.h
-> > @@ -14,6 +14,14 @@
-> > =C2=A0#include "arch.h"
-> > =C2=A0#include "types.h"
-> > =C2=A0#include "sys.h"
-> > +#include "string.h"
->=20
-> Unnecessary now as memset() is not used anymore.
->=20
-> > +/* other signal definitions are included by arch.h */
-> > +
-> > +/* The kernel headers do not provide a sig_atomic_t definition */
-> > +#ifndef __sig_atomic_t_defined
-> > +#define __sig_atomic_t_defined 1
-> > +typedef int sig_atomic_t;
-> > +#endif
->=20
-> (...)
->=20
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c
-> > b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index d612150d2ea3..fcd44b27cd5e 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -1293,6 +1293,120 @@ int test_namespace(void)
-> > =C2=A0	return ret;
-> > =C2=A0}
-> > =C2=A0
-> > +sig_atomic_t signal_check;
->=20
-> Still not static :-)
 
-Eeks.
+The new selftest passes:
+#  RUN           pcie_ep_doorbell.DOORBELL_TEST ...
+#            OK  pcie_ep_doorbell.DOORBELL_TEST
+ok 17 pcie_ep_doorbell.DOORBELL_TEST
 
->=20
-> > +
-> > +static void sighandler(int signum)
-> > +{
-> > +	if (signum =3D=3D SIGUSR1) {
-> > +		kill(getpid(), SIGUSR2);
-> > +		/* The second step has not run because SIGUSR2 is
-> > masked */
-> > +		MARK_STEP_DONE(signal_check, 0);
-> > +	} else {
-> > +		MARK_STEP_DONE(signal_check, 1);
-> > +	}
-> > +}
-> > +
-> > +int test_signals(int test_idx)
-> > +{
-> > +	struct sigaction sa =3D {
-> > +		.sa_flags =3D 0,
-> > +		.sa_handler =3D sighandler,
-> > +	};
-> > +	struct sigaction sa_old =3D {
-> > +		/* Anything other than SIG_DFL */
-> > +		.sa_handler =3D sighandler,
-> > +	};
-> > +	int llen; /* line length */
-> > +	int ret =3D 0;
-> > +	int res;
-> > +
-> > +	signal_check =3D 0;
-> > +
-> > +#ifdef NOLIBC
-> > +	/* Do some checks on sa_mask handling */
-> > +	sigfillset(&sa.sa_mask);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[0] (full): ");
-> > +	EXPECT_EQ(1, sa.sa_mask.sig[0],
-> > +		=C2=A0=C2=A0=C2=A0=C2=A0 ~(__typeof__(sa.sa_mask.sig[0]))0);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[%d] (full): ",
-> > (int)_NSIG_WORDS - 1);
-> > +	EXPECT_EQ(1, sa.sa_mask.sig[_NSIG_WORDS - 1],
-> > +		=C2=A0=C2=A0=C2=A0=C2=A0 ~(__typeof__(sa.sa_mask.sig[0]))0);
-> > +
-> > +	sigemptyset(&sa.sa_mask);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[0] (empty): ");
-> > +	EXPECT_EQ(1, sa.sa_mask.sig[0], 0);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[%d] (empty): ",
-> > (int)_NSIG_WORDS - 1);
-> > +	EXPECT_EQ(1, sa.sa_mask.sig[_NSIG_WORDS - 1], 0);
-> > +
-> > +	/* SIGUSR2 is always in the first word */
-> > +	sigaddset(&sa.sa_mask, SIGUSR2);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[0] (SIGUSR2 set): ");
-> > +	EXPECT_EQ(1, sa.sa_mask.sig[0], 1 << (SIGUSR2 - 1));
-> > +
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[0] (test SIGUSR2): ")=
-;
-> > +	EXPECT_NZ(1, sigismember(&sa.sa_mask, SIGUSR2));
-> > +
-> > +	sigdelset(&sa.sa_mask, SIGUSR2);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[0] (SIGUSR2 unset): "=
-);
-> > +	EXPECT_ZR(1, sigismember(&sa.sa_mask, SIGUSR2));
-> > +
-> > +	/* _NSIG is the highest valid number and may not be in the
-> > first word */
-> > +	sigaddset(&sa.sa_mask, _NSIG);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[%d] (_NSIG set): ",
-> > (int)_NSIG_WORDS - 1);
-> > +	EXPECT_EQ(1, sa.sa_mask.sig[_NSIG_WORDS - 1],
-> > +		=C2=A0=C2=A0=C2=A0=C2=A0 1UL << (_NSIG - (_NSIG_WORDS - 1) * _NSIG_B=
-PW
-> > - 1));
-> > +
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[%d] (test _NSIG): ",
-> > (int)_NSIG_WORDS - 1);
-> > +	EXPECT_NZ(1, sigismember(&sa.sa_mask, _NSIG));
-> > +
-> > +	sigdelset(&sa.sa_mask, _NSIG);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_mask.sig[%d] (_NSIG unset): ",
-> > (int)_NSIG_WORDS - 1);
-> > +	EXPECT_ZR(1, sigismember(&sa.sa_mask, _NSIG));
-> > +#endif
->=20
-> This is more testing than expected, but that's good.
-> Could you move it to a dedicated test function, gated on "is_nolibc" and
-> the #ifdef.
 
-It did find the bit shift type bug in the macros :-)
-
-Benjamin
-
->=20
-> > +
-> > +	/* sa_mask is empty at this point, set SIGUSR2 to verify
-> > masking */
-> > +	sigaddset(&sa.sa_mask, SIGUSR2);
-> > +
-> > +	res =3D sigaction(SIGUSR1, &sa, &sa_old);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 register SIGUSR1: %d", res);
-> > +	EXPECT_SYSZR(1, res);
-> > +	if (res)
-> > +		goto out;
-> > +
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 sa_old.sa_handler: SIG_DFL (%p)",
-> > SIG_DFL);
-> > +	EXPECT_PTREQ(1, SIG_DFL, sa_old.sa_handler);
-> > +	if (res)
-> > +		goto out;
-> > +
-> > +	res =3D sigaction(SIGUSR2, &sa, NULL);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 register SIGUSR2: %d", res);
-> > +	EXPECT_SYSZR(1, res);
-> > +	if (res)
-> > +		goto out;
-> > +
-> > +	/* Trigger the first signal. */
-> > +	kill(getpid(), SIGUSR1);
-> > +
-> > +	/* Check the two signal handlers ran in the expected order
-> > */
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 signal emission: ");
-> > +	EXPECT_STEPS(1, signal_check, 2);
-> > +
-> > +out:
-> > +	sa.sa_handler =3D SIG_DFL;
-> > +	res =3D sigaction(SIGUSR1, &sa, NULL);
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 restore SIGUSR1: %d", res);
-> > +	EXPECT_SYSZR(1, res);
-> > +
-> > +	res =3D sigaction(SIGUSR1, &sa, NULL);
->=20
-> SIGUSR2?
->=20
-> > +	llen =3D printf("=C2=A0=C2=A0=C2=A0 restore SIGUSR2: %d", res);
-> > +	EXPECT_SYSZR(1, res);
-> > +
-> > +	llen =3D printf("%d %s", test_idx, "sigaction");
-> > +	EXPECT_EQ(1, res, 0);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > =C2=A0/* Run syscall tests between IDs <min> and <max>.
-> > =C2=A0 * Return 0 on success, non-zero on failure.
-> > =C2=A0 */
-> > @@ -1421,6 +1535,7 @@ int run_syscall(int min, int max)
-> > =C2=A0		CASE_TEST(syscall_noargs);=C2=A0=C2=A0=C2=A0 EXPECT_SYSEQ(1,
-> > syscall(__NR_getpid), getpid()); break;
-> > =C2=A0		CASE_TEST(syscall_args);=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 EXPECT_S=
-YSER(1,
-> > syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
-> > =C2=A0		CASE_TEST(namespace);=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 EXPECT_SYSZR(euid0
-> > && proc, test_namespace()); break;
-> > +		case __LINE__:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret +=3D
-> > test_signals(test); break;
-> > =C2=A0		case __LINE__:
-> > =C2=A0			return ret; /* must be last */
-> > =C2=A0		/* note: do not set any defaults so as to permit
-> > holes above */
-> > --=20
-> > 2.50.0
-> >=20
->=20
-
+Thus:
+Tested-by: Niklas Cassel <cassel@kernel.org>
 
