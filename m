@@ -1,76 +1,78 @@
-Return-Path: <linux-kselftest+bounces-37178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B744B02843
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 02:27:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85935B02846
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 02:27:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AE9F3B8A72
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 00:26:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EC3E1BC6360
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 00:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE5D1CAA4;
-	Sat, 12 Jul 2025 00:27:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986C93D561;
+	Sat, 12 Jul 2025 00:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dEMSwKAk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GMNX3Bcn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C95A6AA7;
-	Sat, 12 Jul 2025 00:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DA635966;
+	Sat, 12 Jul 2025 00:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752280022; cv=none; b=YRPerTbtEUz6PWA+HjKaiR9QusU18fk0bKP/BTmzVIUQ31cDgSQYjrKo+cSVc1Qo5znVzzG1/8syZ33AhP1e2xGjV/vQPJ4Px/SDhjIT14EewxMUcV7bSTubJ5HhXdV0ph8LdR1JWVif3e8m3YGfrCnit7N0/jP3p8PksqdrXSI=
+	t=1752280025; cv=none; b=QNhLCr6+qYqQLUFLXb4IGBlMNAxlTwUDxE86xpmVnMdwd0z/4DM6Pn1B0nVP9klfIfzxNUa2RMRdLzDXt5r/JyV8jtHlrbx5dw61G6Tmev1oshewJP1xOCk5mQjduKJ1ZMfO5TKwNgpwIsE/AiuLm8i5csjlgmINNiTdZBELVAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752280022; c=relaxed/simple;
-	bh=c+UdfulwcqBq40Di09xQxHMVNQVk1BeRih3Qe64f+hM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ai3jkdFgyxapc4vINuoBTZid+OFBe3Ur29sJXcUJ8XfZlpGF8Rm/KeNIMU9FIIAc47iDf4WoNR49qIjqgaoS2i41/Ui7DU1abquvlCpUii6nYeZwJ6W9Sby6RH6Xt6WQZckRveUWeBF8UDXSjW/dLCSmMvfVKS+8GCB3rYQDscQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dEMSwKAk; arc=none smtp.client-ip=209.85.128.52
+	s=arc-20240116; t=1752280025; c=relaxed/simple;
+	bh=QcEmOh9pguWrHzU7a2SdMoxYZccrEohl/xIflrf1J2o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NMWZ6Bib1fWf7N79trNBLojNJavZ24vS4LZ5CTQdiUtOKXolwOckMK6mEhOY7TeWI6O+ALA1JnHyslYrrpiUKhyOaB+XzdWpnt5tfq3gnsJjxgBhyxIdPgNugYm6oDWYXq/2Sxe2gY1A+0raMB9AmRqVoA374YfOsbjPzMZiQ4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GMNX3Bcn; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-453398e90e9so19854035e9.1;
-        Fri, 11 Jul 2025 17:27:00 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-455b00283a5so6330645e9.0;
+        Fri, 11 Jul 2025 17:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752280018; x=1752884818; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lWsL9ULyx92cLusCqLiEtLRqLtcJ2pY8MuhC9YyGufM=;
-        b=dEMSwKAkCQ5LpJRERIZwcv5WCWww3xKLG/CMzXEWR2eP5SC740voDw+k6TMY/4sPt/
-         vdkBtWtjPB7wWTS+Mw7ImNfHY49GunCQla+grWph92e+qQposMU3tjW40VuO7JM2XKHE
-         42/ki2jQ0pnD1JrZespFJaPg1F35WmqPxeZGtEJZk0z7/QCqHkZzHSu7OiOCK622VcLr
-         xCN+M4kQofqev+bJC7Vu2PLXlFt1kQE3cbtSrLZmdt50ZXk1xVJmv9VyFndXFurjE1XD
-         OSBrMTBVMqpr057GgpMaMN5pDQmWXl329vNT/Us2Nbpx5aLdkUT4SoQDO2+JCUvusute
-         36nQ==
+        d=gmail.com; s=20230601; t=1752280021; x=1752884821; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R70/A2Jb36PbDOMQMF3oGggV90skPDbHV73eX9pSlsE=;
+        b=GMNX3BcnTTnPcmC4Zm2wXffkpuhquZBznxYIc6ZUCwR2JeMaMdRm3So/LHXoBJEcBQ
+         wHLS4hqxf3C7Mi8ekdbTY6ClaK+OES7J/5kgOoieLu3GZAWEeglbPPGvnqAwAsmr8k++
+         GmCWjST0te2AKTWl7F+dMRokxEMSVRLwpnMq4d4j1naABonhUXRExCyck7LKk9k/4sdi
+         fbutuOuQOVASGlv9daX7XCUgW6cc+bLXdMAFhpCJleeGRXQ0LLBrHWKhVktj4B6i+3mK
+         fqZB9a2tUPseFNrJl6TupYp5j//Y+Wg+OW5bg+LY3Wdet//FqIIddy3L1mj0nvs37MTV
+         sNYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752280018; x=1752884818;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lWsL9ULyx92cLusCqLiEtLRqLtcJ2pY8MuhC9YyGufM=;
-        b=dHipbbGWVHMLixK78krPg9hzYG+OZbjIMebFX1o8ueMDYXyAXMO5744VOl89iGlXKu
-         gAo6UGYnidOJxqZHpLkW8H7aoPFgBz9yOrJka6DaaQX/5cP4kallVoDIsiLmG5LTMIk4
-         v+jp9RusT3oaVPX3FzzFrWWqybZ3uHVtSeKygfQhWc+Jv/OOXnScfDBv731yn9CF/QaM
-         luPbznYRlVhpTjthOBVbnZbtBrYCEXwQRW2iUU7DI0ksQOtRMgxZd8jVMFOvIIUBLrxt
-         7rbWFTGXfETCWyGmP3qgI9AVdylJarMyEbWgRb7zzIC5oxjW79vxz26ZsWRGHnP2pJLf
-         wRFw==
-X-Forwarded-Encrypted: i=1; AJvYcCU/MjHbGzBziJYEVfj9/MEjszMHoFbvAH2Ry8alU45borBnk0/z7cdKekmDThn9TnvcImE=@vger.kernel.org, AJvYcCWLgKuvlPBUKDEwkguRsPc6iVdnSjzK5h9yKmb+Dw3ybdfvMczFryvO730dIs0bRgCYCcMcC2arx6fUbmD3dbr6@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHGQ/zvZnshxsXutGTTJzom/tsXVTDNzs5T1m+puelfMJKGK9Y
-	4fAmxuzIz8MDGcxFxssOgbKtodsazLRMDrRqBEKO/VmOPCGRrtsT7GNaSXWR/vWL
-X-Gm-Gg: ASbGncupReNhbRddzsOZp/gXdo8I4ex+awZOSdjCaYFqG8NNT3Amm/h879v4Lp1TjBk
-	xvUwLVjSyI/fau1yvPBKQ9v5Nu7kkicwc5qFLR3KadkLDJAVjwe9SmrMczhc9oVV2Rfubq50OLS
-	2v/CPAjjEvczQGepLqYACc/uKmE4EGmUzT5BHBw5hCcaYarYrNEhUn7Zx32PnpC8NaEWt8IQJ0l
-	wrguYIH9hEJwzWIuITV7CPcZ3Yrc7yBOVkfjeQkr3U5n/fjuFBtqBqx5jteeDAqC/nZIHuCcoks
-	OQ3QzfClYspdM9C279cE8aX1I4Ok8fP7e7A+QSA4Onwnkg7LqczdyICv/FN89dFhmlb9USpjZQN
-	MExa1fyfw1/MQ0/e5KnKGMyyHgfjb05o=
-X-Google-Smtp-Source: AGHT+IEy6omEzmWN06l6ot8O9pk7YdXoHmKtmN4mRenqUP2baUdtv6jBY2xlAvGqriy2sk0h6CXLYQ==
-X-Received: by 2002:a05:600c:5246:b0:44a:b9e4:4e6f with SMTP id 5b1f17b1804b1-454f42599b3mr51795425e9.16.1752280018130;
-        Fri, 11 Jul 2025 17:26:58 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:73::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454dd43915dsm61428805e9.7.2025.07.11.17.26.57
+        d=1e100.net; s=20230601; t=1752280021; x=1752884821;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R70/A2Jb36PbDOMQMF3oGggV90skPDbHV73eX9pSlsE=;
+        b=P9v1I4/OLWD126cMtaLGN+SwcizEvLJU4Tng2FmvGSI197AcSrHRixMqUuqiJdO16H
+         DrqRpXSvrQbGC5ALLw2S10mY868VI3k98TDaT/7QGaYrB5vj7KK3AcnTdGJdRAvu9SKb
+         e40LmN8ITgIrlI6PffiCjRgPd6qpkf0lVNuRdoakaifSeSAYXYmDd7KI9p0fJ3b+mqQL
+         ETN8xbI7ofsuNAfaEq2NF/BZP7YoothpgGlsF4NDupfsjB+VYvOHmRUd4+AYY7tWOIYR
+         /SFkiHtHC+poxPerttd/r/yyMTjcCojRyJKDMHpOUUAsWet7Ze58wsQs4AUEI/iPDbNI
+         bUkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7FDsI5NzT9xFhqWnUnPIqULAVfkOUpW3WI584c5Rkxs+JjqPB4hu0oqIxb/2ILJBPsY6Gl7wGFSzKlH+H3+0K@vger.kernel.org, AJvYcCUz2vsfrGL2tBBrXv5luF/6VXEaCaCK0hviKC7m3FoSQDX7j+HLAg7hatMKGxpUG60S6EE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4GSkTbSh1sX7yXpbw7gbjEaoGkF361060UaI1zc1wX0LcPqat
+	h5LJ/ywH1NSGDU3vNVY7bWT0AmShASoe8oZw+BohorR7aMI/FmGEWVSr5ePfwObb
+X-Gm-Gg: ASbGncud5kXm/aYuhxTCPp/bnMOKL4Y8jL1qZJuZZOTO983QN3iLhes8eLwVQquDnR1
+	cB/JTHT3bUwVQK1UWQ54RLB1E/eNEnD+00oDWwAZcaNRmOIcUke5+/ErJXxuAlfFspHlD7CWDpg
+	ap6p17XjDDUPWeUsyTDIruGShMpbL1l/TXxDj2tTaAQxutCpTRhFyhMeE3jhsO5MMvbrUTX6xhF
+	m60y0cNMiIR/EVVMpb21lL4yiFnuYWwNcqjeLs5seYjSzks6SyaIUolgvKsEzL62zyDRsRYylS8
+	bn72G4eQL1O19qJfSejyBfxjDMzkxIPO7sB6Jnkh73N3jVPRwbXVUgjXEm8dF+v8bWaSg3VZg6E
+	GK99Pd7o60sVoC9YyMkE=
+X-Google-Smtp-Source: AGHT+IERn0Cbqi+9wyecaZzlmv+bQ9bazI5lUdyYqXmFvgDL9wkUbksoxDl06MR7ceWyanlRAkDQtA==
+X-Received: by 2002:adf:ec02:0:b0:3b4:98f6:dd77 with SMTP id ffacd0b85a97d-3b5f18ceb99mr4328188f8f.36.1752280020931;
+        Fri, 11 Jul 2025 17:27:00 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:5::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-455f222e4f4sm20861235e9.10.2025.07.11.17.27.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jul 2025 17:26:57 -0700 (PDT)
+        Fri, 11 Jul 2025 17:27:00 -0700 (PDT)
 From: Mohsin Bashir <mohsin.bashr@gmail.com>
 To: netdev@vger.kernel.org
 Cc: kuba@kernel.org,
@@ -94,10 +96,12 @@ Cc: kuba@kernel.org,
 	john.fastabend@gmail.com,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next V3 0/4] selftests: drv-net: Test XDP native support
-Date: Fri, 11 Jul 2025 17:26:44 -0700
-Message-ID: <20250712002648.2385849-1-mohsin.bashr@gmail.com>
+Subject: [PATCH net-next V3 1/4] selftests: drv-net: Test XDP_PASS/DROP support
+Date: Fri, 11 Jul 2025 17:26:45 -0700
+Message-ID: <20250712002648.2385849-2-mohsin.bashr@gmail.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250712002648.2385849-1-mohsin.bashr@gmail.com>
+References: <20250712002648.2385849-1-mohsin.bashr@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -106,43 +110,512 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series add tests to validate XDP native support for PASS,
-DROP, ABORT, and TX actions, as well as headroom and tailroom adjustment.
-For adjustment tests, validate support for both the extension and
-shrinking cases across various packet sizes and offset values.
+Test XDP_PASS/DROP in single buffer and multi buffer mode when
+XDP native support is available.
 
-The pass criteria for head/tail adjustment tests require that at-least
-one adjustment value works for at-least one packet size. This ensure
-that the variability in maximum supported head/tail adjustment offset
-across different drivers is being incorporated.
+./drivers/net/xdp.py
+TAP version 13
+1..6
+ok 1 xdp.test_xdp_native_pass_sb
+ok 2 xdp.test_xdp_native_pass_mb
+ok 3 xdp.test_xdp_native_drop_sb
+ok 4 xdp.test_xdp_native_drop_mb
 
-The results reported in this series are based on fbnic. However, the
-series is tested against multiple other drivers including netdevism.
-
-Note: The XDP support for fbnic will be added later.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
 ---
-Change-log:
-V3:
-  P1: Remove exception handling upon xdp attachment failure for better
-      debuggability
-  P4: Handle the bound issue with the use of bpf_xdp_load_bytes()
-
-V2: https://lore.kernel.org/netdev/20250710184351.63797-1-mohsin.bashr@gmail.com
-V1: https://lore.kernel.org/netdev/20250709173707.3177206-1-mohsin.bashr@gmail.com
-
-Mohsin Bashir (4):
-  selftests: drv-net: Test XDP_PASS/DROP support
-  selftests: drv-net: Test XDP_TX support
-  selftests: drv-net: Test tail-adjustment support
-  selftests: drv-net: Test head-adjustment support
-
  tools/testing/selftests/drivers/net/Makefile  |   1 +
- tools/testing/selftests/drivers/net/xdp.py    | 656 ++++++++++++++++++
- .../selftests/net/lib/xdp_native.bpf.c        | 538 ++++++++++++++
- 3 files changed, 1195 insertions(+)
+ tools/testing/selftests/drivers/net/xdp.py    | 303 ++++++++++++++++++
+ .../selftests/net/lib/xdp_native.bpf.c        | 158 +++++++++
+ 3 files changed, 462 insertions(+)
  create mode 100755 tools/testing/selftests/drivers/net/xdp.py
  create mode 100644 tools/testing/selftests/net/lib/xdp_native.bpf.c
 
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index bd309b2d3909..2ba7ae2bfe11 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -21,6 +21,7 @@ TEST_PROGS := \
+ 	stats.py \
+ 	shaper.py \
+ 	hds.py \
++	xdp.py \
+ # end of TEST_PROGS
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
+new file mode 100755
+index 000000000000..79a8156ed416
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/xdp.py
+@@ -0,0 +1,303 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""
++This file contains tests to verify native XDP support in network drivers.
++The tests utilize the BPF program `xdp_native.bpf.o` from the `selftests.net.lib`
++directory, with each test focusing on a specific aspect of XDP functionality.
++"""
++import random
++import string
++from dataclasses import dataclass
++from enum import Enum
++
++from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ne
++from lib.py import KsftFailEx, NetDrvEpEnv
++from lib.py import bkg, cmd, rand_port
++from lib.py import ip, bpftool, defer
++
++
++class TestConfig(Enum):
++    """Enum for XDP configuration options."""
++    MODE = 0  # Configures the BPF program for a specific test
++    PORT = 1  # Port configuration to communicate with the remote host
++
++
++class XDPAction(Enum):
++    """Enum for XDP actions."""
++    PASS = 0  # Pass the packet up to the stack
++    DROP = 1  # Drop the packet
++
++
++class XDPStats(Enum):
++    """Enum for XDP statistics."""
++    RX = 0    # Count of valid packets received for testing
++    PASS = 1  # Count of packets passed up to the stack
++    DROP = 2  # Count of packets dropped
++
++
++@dataclass
++class BPFProgInfo:
++    """Data class to store information about a BPF program."""
++    name: str               # Name of the BPF program
++    file: str               # BPF program object file
++    xdp_sec: str = "xdp"    # XDP section name (e.g., "xdp" or "xdp.frags")
++    mtu: int = 1500         # Maximum Transmission Unit, default is 1500
++
++
++def _exchg_udp(cfg, port, test_string):
++    """
++    Exchanges UDP packets between a local and remote host using the socat tool.
++
++    Args:
++        cfg: Configuration object containing network settings.
++        port: Port number to use for the UDP communication.
++        test_string: String that the remote host will send.
++
++    Returns:
++        The string received by the test host.
++    """
++    cfg.require_cmd("socat", remote=True)
++
++    rx_udp_cmd = f"socat -{cfg.addr_ipver} -T 2 -u UDP-RECV:{port},reuseport STDOUT"
++    tx_udp_cmd = f"echo {test_string} | socat -t 2 -u STDIN UDP:{cfg.baddr}:{port}"
++
++    with bkg(rx_udp_cmd, exit_wait=True) as nc:
++        cmd(tx_udp_cmd, host=cfg.remote, shell=True)
++
++    return nc.stdout.strip()
++
++
++def _test_udp(cfg, port, size=256):
++    """
++    Tests UDP packet exchange between a local and remote host.
++
++    Args:
++        cfg: Configuration object containing network settings.
++        port: Port number to use for the UDP communication.
++        size: The length of the test string to be exchanged, default is 256 characters.
++
++    Returns:
++        bool: True if the received string matches the sent string, False otherwise.
++    """
++    test_str = "".join(random.choice(string.ascii_lowercase) for _ in range(size))
++    recvd_str = _exchg_udp(cfg, port, test_str)
++
++    return recvd_str == test_str
++
++
++def _load_xdp_prog(cfg, bpf_info):
++    """
++    Loads an XDP program onto a network interface.
++
++    Args:
++        cfg: Configuration object containing network settings.
++        bpf_info: BPFProgInfo object containing information about the BPF program.
++
++    Returns:
++        dict: A dictionary containing the XDP program ID, name, and associated map IDs.
++    """
++    abs_path = cfg.net_lib_dir / bpf_info.file
++    prog_info = {}
++
++    cmd(f"ip link set dev {cfg.remote_ifname} mtu {bpf_info.mtu}", shell=True, host=cfg.remote)
++    defer(ip, f"link set dev {cfg.remote_ifname} mtu 1500", host=cfg.remote)
++
++    cmd(
++    f"ip link set dev {cfg.ifname} mtu {bpf_info.mtu} xdp obj {abs_path} sec {bpf_info.xdp_sec}",
++    shell=True
++    )
++    defer(ip, f"link set dev {cfg.ifname} mtu 1500 xdp off")
++
++    xdp_info = ip(f"-d link show dev {cfg.ifname}", json=True)[0]
++    prog_info["id"] = xdp_info["xdp"]["prog"]["id"]
++    prog_info["name"] = xdp_info["xdp"]["prog"]["name"]
++    prog_id = prog_info["id"]
++
++    map_ids = bpftool(f"prog show id {prog_id}", json=True)["map_ids"]
++    prog_info["maps"] = {}
++    for map_id in map_ids:
++        name = bpftool(f"map show id {map_id}", json=True)["name"]
++        prog_info["maps"][name] = map_id
++
++    return prog_info
++
++
++def format_hex_bytes(value):
++    """
++    Helper function that converts an integer into a formatted hexadecimal byte string.
++
++    Args:
++        value: An integer representing the number to be converted.
++
++    Returns:
++        A string representing hexadecimal equivalent of value, with bytes separated by spaces.
++    """
++    hex_str = value.to_bytes(4, byteorder='little', signed=True)
++    return ' '.join(f'{byte:02x}' for byte in hex_str)
++
++
++def _set_xdp_map(map_name, key, value):
++    """
++    Updates an XDP map with a given key-value pair using bpftool.
++
++    Args:
++        map_name: The name of the XDP map to update.
++        key: The key to update in the map, formatted as a hexadecimal string.
++        value: The value to associate with the key, formatted as a hexadecimal string.
++    """
++    key_formatted = format_hex_bytes(key)
++    value_formatted = format_hex_bytes(value)
++    bpftool(
++        f"map update name {map_name} key hex {key_formatted} value hex {value_formatted}"
++    )
++
++
++def _get_stats(xdp_map_id):
++    """
++    Retrieves and formats statistics from an XDP map.
++
++    Args:
++        xdp_map_id: The ID of the XDP map from which to retrieve statistics.
++
++    Returns:
++        A dictionary containing formatted packet statistics for various XDP actions.
++        The keys are based on the XDPStats Enum values.
++
++    Raises:
++        KsftFailEx: If the stats retrieval fails.
++    """
++    stats_dump = bpftool(f"map dump id {xdp_map_id}", json=True)
++    if not stats_dump:
++        raise KsftFailEx(f"Failed to get stats for map {xdp_map_id}")
++
++    stats_formatted = {}
++    for key in range(0, 4):
++        val = stats_dump[key]["formatted"]["value"]
++        if stats_dump[key]["formatted"]["key"] == XDPStats.RX.value:
++            stats_formatted[XDPStats.RX.value] = val
++        elif stats_dump[key]["formatted"]["key"] == XDPStats.PASS.value:
++            stats_formatted[XDPStats.PASS.value] = val
++        elif stats_dump[key]["formatted"]["key"] == XDPStats.DROP.value:
++            stats_formatted[XDPStats.DROP.value] = val
++
++    return stats_formatted
++
++
++def _test_pass(cfg, bpf_info, msg_sz):
++    """
++    Tests the XDP_PASS action by exchanging UDP packets.
++
++    Args:
++        cfg: Configuration object containing network settings.
++        bpf_info: BPFProgInfo object containing information about the BPF program.
++        msg_sz: Size of the test message to send.
++    """
++
++    prog_info = _load_xdp_prog(cfg, bpf_info)
++    port = rand_port()
++
++    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.PASS.value)
++    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
++
++    ksft_eq(_test_udp(cfg, port, msg_sz), True, "UDP packet exchange failed")
++    stats = _get_stats(prog_info["maps"]["map_xdp_stats"])
++
++    ksft_ne(stats[XDPStats.RX.value], 0, "RX stats should not be zero")
++    ksft_eq(stats[XDPStats.RX.value], stats[XDPStats.PASS.value], "RX and PASS stats mismatch")
++
++
++def test_xdp_native_pass_sb(cfg):
++    """
++    Tests the XDP_PASS action for single buffer case.
++
++    Args:
++        cfg: Configuration object containing network settings.
++    """
++    bpf_info = BPFProgInfo("xdp_prog", "xdp_native.bpf.o", "xdp", 1500)
++
++    _test_pass(cfg, bpf_info, 256)
++
++
++def test_xdp_native_pass_mb(cfg):
++    """
++    Tests the XDP_PASS action for a multi-buff size.
++
++    Args:
++        cfg: Configuration object containing network settings.
++    """
++    bpf_info = BPFProgInfo("xdp_prog_frags", "xdp_native.bpf.o", "xdp.frags", 9000)
++
++    _test_pass(cfg, bpf_info, 8000)
++
++
++def _test_drop(cfg, bpf_info, msg_sz):
++    """
++    Tests the XDP_DROP action by exchanging UDP packets.
++
++    Args:
++        cfg: Configuration object containing network settings.
++        bpf_info: BPFProgInfo object containing information about the BPF program.
++        msg_sz: Size of the test message to send.
++    """
++
++    prog_info = _load_xdp_prog(cfg, bpf_info)
++    port = rand_port()
++
++    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.DROP.value)
++    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
++
++    ksft_eq(_test_udp(cfg, port, msg_sz), False, "UDP packet exchange should fail")
++    stats = _get_stats(prog_info["maps"]["map_xdp_stats"])
++
++    ksft_ne(stats[XDPStats.RX.value], 0, "RX stats should be zero")
++    ksft_eq(stats[XDPStats.RX.value], stats[XDPStats.DROP.value], "RX and DROP stats mismatch")
++
++
++def test_xdp_native_drop_sb(cfg):
++    """
++    Tests the XDP_DROP action for a signle-buff case.
++
++    Args:
++        cfg: Configuration object containing network settings.
++    """
++    bpf_info = BPFProgInfo("xdp_prog", "xdp_native.bpf.o", "xdp", 1500)
++
++    _test_drop(cfg, bpf_info, 256)
++
++
++def test_xdp_native_drop_mb(cfg):
++    """
++    Tests the XDP_DROP action for a multi-buff case.
++
++    Args:
++        cfg: Configuration object containing network settings.
++    """
++    bpf_info = BPFProgInfo("xdp_prog_frags", "xdp_native.bpf.o", "xdp.frags", 9000)
++
++    _test_drop(cfg, bpf_info, 8000)
++
++
++def main():
++    """
++    Main function to execute the XDP tests.
++
++    This function runs a series of tests to validate the XDP support for
++    both the single and multi-buffer. It uses the NetDrvEpEnv context
++    manager to manage the network driver environment and the ksft_run
++    function to execute the tests.
++    """
++    with NetDrvEpEnv(__file__) as cfg:
++        ksft_run(
++            [
++                test_xdp_native_pass_sb,
++                test_xdp_native_pass_mb,
++                test_xdp_native_drop_sb,
++                test_xdp_native_drop_mb,
++            ],
++            args=(cfg,))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
+new file mode 100644
+index 000000000000..90b34b2a4fef
+--- /dev/null
++++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
+@@ -0,0 +1,158 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <stddef.h>
++#include <linux/bpf.h>
++#include <linux/in.h>
++#include <linux/if_ether.h>
++#include <linux/ip.h>
++#include <linux/ipv6.h>
++#include <linux/udp.h>
++#include <bpf/bpf_endian.h>
++#include <bpf/bpf_helpers.h>
++
++enum {
++	XDP_MODE = 0,
++	XDP_PORT = 1,
++} xdp_map_setup_keys;
++
++enum {
++	XDP_MODE_PASS = 0,
++	XDP_MODE_DROP = 1,
++} xdp_map_modes;
++
++enum {
++	STATS_RX = 0,
++	STATS_PASS = 1,
++	STATS_DROP = 2,
++} xdp_stats;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, __u32);
++	__type(value, __s32);
++} map_xdp_setup SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 4);
++	__type(key, __u32);
++	__type(value, __u64);
++} map_xdp_stats SEC(".maps");
++
++static void record_stats(struct xdp_md *ctx, __u32 stat_type)
++{
++	__u64 *count;
++
++	count = bpf_map_lookup_elem(&map_xdp_stats, &stat_type);
++
++	if (count)
++		__sync_fetch_and_add(count, 1);
++}
++
++static struct udphdr *filter_udphdr(struct xdp_md *ctx, __u16 port)
++{
++	void *data_end = (void *)(long)ctx->data_end;
++	void *data = (void *)(long)ctx->data;
++	struct udphdr *udph = NULL;
++	struct ethhdr *eth = data;
++
++	if (data + sizeof(*eth) > data_end)
++		return NULL;
++
++	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
++		struct iphdr *iph = data + sizeof(*eth);
++
++		if (iph + 1 > (struct iphdr *)data_end ||
++		    iph->protocol != IPPROTO_UDP)
++			return NULL;
++
++		udph = (void *)eth + sizeof(*iph) + sizeof(*eth);
++	} else if (eth->h_proto  == bpf_htons(ETH_P_IPV6)) {
++		struct ipv6hdr *ipv6h = data + sizeof(*eth);
++
++		if (ipv6h + 1 > (struct ipv6hdr *)data_end ||
++		    ipv6h->nexthdr != IPPROTO_UDP)
++			return NULL;
++
++		udph = (void *)eth + sizeof(*ipv6h) + sizeof(*eth);
++	} else {
++		return NULL;
++	}
++
++	if (udph + 1 > (struct udphdr *)data_end)
++		return NULL;
++
++	if (udph->dest != bpf_htons(port))
++		return NULL;
++
++	record_stats(ctx, STATS_RX);
++
++	return udph;
++}
++
++static int xdp_mode_pass(struct xdp_md *ctx, __u16 port)
++{
++	struct udphdr *udph = NULL;
++
++	udph = filter_udphdr(ctx, port);
++	if (!udph)
++		return XDP_PASS;
++
++	record_stats(ctx, STATS_PASS);
++
++	return XDP_PASS;
++}
++
++static int xdp_mode_drop_handler(struct xdp_md *ctx, __u16 port)
++{
++	struct udphdr *udph = NULL;
++
++	udph = filter_udphdr(ctx, port);
++	if (!udph)
++		return XDP_PASS;
++
++	record_stats(ctx, STATS_DROP);
++
++	return XDP_DROP;
++}
++
++static int xdp_prog_common(struct xdp_md *ctx)
++{
++	__u32 key, *port;
++	__s32 *mode;
++
++	key = XDP_MODE;
++	mode = bpf_map_lookup_elem(&map_xdp_setup, &key);
++	if (!mode)
++		return XDP_PASS;
++
++	key = XDP_PORT;
++	port = bpf_map_lookup_elem(&map_xdp_setup, &key);
++	if (!port)
++		return XDP_PASS;
++
++	switch (*mode) {
++	case XDP_MODE_PASS:
++		return xdp_mode_pass(ctx, (__u16)(*port));
++	case XDP_MODE_DROP:
++		return xdp_mode_drop_handler(ctx, (__u16)(*port));
++	}
++
++	/* Default action is to simple pass */
++	return XDP_PASS;
++}
++
++SEC("xdp")
++int xdp_prog(struct xdp_md *ctx)
++{
++	return xdp_prog_common(ctx);
++}
++
++SEC("xdp.frags")
++int xdp_prog_frags(struct xdp_md *ctx)
++{
++	return xdp_prog_common(ctx);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.47.1
 
