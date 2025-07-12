@@ -1,98 +1,136 @@
-Return-Path: <linux-kselftest+bounces-37192-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37193-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D884B02C06
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 18:54:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56168B02CB3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 21:47:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FD39A6038C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 16:54:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80717189F1AD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 19:48:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 619582882B7;
-	Sat, 12 Jul 2025 16:54:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE0B288C09;
+	Sat, 12 Jul 2025 19:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="corG6KK+"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ri65r+c5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFE619DF60;
-	Sat, 12 Jul 2025 16:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794FD1FBEBD
+	for <linux-kselftest@vger.kernel.org>; Sat, 12 Jul 2025 19:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752339293; cv=none; b=ScQj0ummtjCOaY0k2VfFvTWTnaYr8NYbgptdGNV+WxkbcutrvUsWXkQ+O2EL3rIlpcRl5zAGW3R17my934ytHWHmGn2qxXRISkgiQBMidTYaWri+bTRCID22igP/VHbp/u7f6Xm81N1gI8Tf0yKHOdFmXMUcEU+bLW32mLkwtnI=
+	t=1752349663; cv=none; b=roL0BmfDwEwhOpBUTdS5qudEZ/iBxdTXr+cEhnsMGRtgyWwoNGXPXEmY+O5ZzA5/E+JPQI/mMmgN/3bALHcZZmXePYOp+CqhsUGmohyZo0LboGl9yrS/WTOd5wy4VYWkEPH5pDWcj1BruhgtNTr9X0DkxeQtq6YXKUP+xGd57rM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752339293; c=relaxed/simple;
-	bh=7ulItuDfjo0fn2spkVsfqLm+frVP3gh8Mp2EkflyQ+k=;
+	s=arc-20240116; t=1752349663; c=relaxed/simple;
+	bh=f7jirJngtZPmjp6nUuToVUR1+33dys87/8xXFSMeddQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wn9X7SorsiYu5EpwvKoNUlG5Egene5Sg1IEPiCe+Q0IptuUkf6NOcac8xGfNQBx2VenMbkc3bLdErMrYcKsmgC+R8sJu5GQKEu/qy+SjJFerlx2qb6VGXH374KR/IeC8ZwDv3YMs0Uec2vXBHn7u5f4Z1Nxl1nc2kMsaM+oyof8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=corG6KK+; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=u7JZxNPnwYbwyAWArXhk9IJzZ+TGZ4/LK+Ux1qSIQMQ=; b=corG6KK+bALYtQfb4jLjqXA+J+
-	/KMHP1asfC5K1q/Rod527h1tEiV1a8m4/MMK2s+S/u/9fbk1Tu+PnV03YhDT/6jMSgmZiUXjlTpKz
-	EuB2b4QfdORml3EeArXyJlUL7PWdrW6LF8BAzu4UGMXFM6loNUW5oRgqYfdRfEOgPww8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uadUk-001JnS-SD; Sat, 12 Jul 2025 18:54:38 +0200
-Date: Sat, 12 Jul 2025 18:54:38 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	=?iso-8859-1?Q?K=F6ry?= Maincent <kory.maincent@bootlin.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v3 1/3] net: netdevsim: Add PHY support in
- netdevsim
-Message-ID: <560e7969-b859-45ed-b368-350a62cec678@lunn.ch>
-References: <20250710062248.378459-1-maxime.chevallier@bootlin.com>
- <20250710062248.378459-2-maxime.chevallier@bootlin.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OL/cEoRh6aYITZ8yjkDgaIpGhNDxSvwyWM9IxxVVLraSWd3AeknKMDYIWHWEdp2uDtZ+xLYJGizQYRgEfdq0UJ5zFxoKq+XL/HhFk9zIA0ktIoFfPNedGASPVWysWGLoIPuZYRPxQQecUKCTqD0Ke5fHyAj2dJUanicnTvwz5oI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ri65r+c5; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Sat, 12 Jul 2025 12:47:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1752349649;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=t/KO7cxY55TZXEuxm/aJMlnOT2I2d5MUZFj4P6QELUY=;
+	b=Ri65r+c54bI2Dx0vVIuVeDzldrENr3nFiK2CbHP8HII66ewc/paI3WssyPiPfNrGcdB//4
+	Z14A96Kb4SwBP+zq6/FtDPWBPhETyDJXYfATv3PnpWMTj34Qn4ihFcM7hWAG6/gm0+ONYp
+	AgolM6pN6cUvnHKnZ+EXg6jN/91qaTg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Jiaqi Yan <jiaqiyan@google.com>
+Cc: maz@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com,
+	yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+	pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org,
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	duenwen@google.com, rananta@google.com, jthoughton@google.com
+Subject: Re: [PATCH v2 3/6] KVM: arm64: Allow userspace to inject external
+ instruction aborts
+Message-ID: <aHK7w4TTEm7a1mco@linux.dev>
+References: <20250604050902.3944054-1-jiaqiyan@google.com>
+ <20250604050902.3944054-4-jiaqiyan@google.com>
+ <aHFpIpIfqVCQZVgG@linux.dev>
+ <CACw3F51xRWr5LXz4-JhK+mjizY7D7Oa+GrJ-OZHktfPzFGKeiw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250710062248.378459-2-maxime.chevallier@bootlin.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACw3F51xRWr5LXz4-JhK+mjizY7D7Oa+GrJ-OZHktfPzFGKeiw@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-> +static int nsim_mdio_read(struct mii_bus *bus, int phy_addr, int reg_num)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int nsim_mdio_write(struct mii_bus *bus, int phy_addr, int reg_num,
-> +			   u16 val)
-> +{
-> +	return 0;
-> +}
+On Fri, Jul 11, 2025 at 04:58:57PM -0700, Jiaqi Yan wrote:
+> On Fri, Jul 11, 2025 at 12:42 PM Oliver Upton <oliver.upton@linux.dev> wrote:
+> >
+> > On Wed, Jun 04, 2025 at 05:08:58AM +0000, Jiaqi Yan wrote:
+> > > From: Raghavendra Rao Ananta <rananta@google.com>
+> > >
+> > > When KVM returns to userspace for KVM_EXIT_ARM_SEA, the userspace is
+> > > encouraged to inject the abort into the guest via KVM_SET_VCPU_EVENTS.
+> > >
+> > > KVM_SET_VCPU_EVENTS currently only allows injecting external data aborts.
+> > > However, the synchronous external abort that caused KVM_EXIT_ARM_SEA
+> > > is possible to be an instruction abort. Userspace is already able to
+> > > tell if an abort is due to data or instruction via kvm_run.arm_sea.esr,
+> > > by checking its Exception Class value.
+> > >
+> > > Extend the KVM_SET_VCPU_EVENTS ioctl to allow injecting instruction
+> > > abort into the guest.
+> > >
+> > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> >
+> > Hmm. Since we expose an ESR value to userspace I get the feeling that we
+> > should allow the user to supply an ISS for the external abort, similar
+> > to what we already do for SErrors.
+> 
+> Oh, I will create something in v3, by extending kvm_vcpu_events to
+> something like:
+> 
+> struct {
+>   __u8 serror_pending;
+>   __u8 serror_has_esr;
+>   __u8 ext_dabt_pending;
+>   __u8 ext_iabt_pending;
+>   __u8 ext_abt_has_esr;  // <= new
+>   /* Align it to 8 bytes */
+>   __u8 pad[3];
+>   union {
+>     __u64 serror_esr;
+>     __u64 ext_abt_esr;  // <= new
 
-If i'm reading the code correctly, each PHY has its own MDIO bus? And
-the PHY is always at address 0?
+This doesn't work. The ABI allows userspace to pend both an SError and
+SEA, so we can't use the same storage for the ESR.
 
-Maybe for address != 0, these should return -ENODEV?
+>   };
+> } exception;
+> 
+> One question about the naming since we cannot change it once
+> committed. Taking the existing SError injection as example, although
+> the name in kvm_vcpu_events is serror_has_esr, it is essentially just
+> the ISS fields of the ESR (which is also written in virt/kvm/api.rst).
+> Why named after "esr" instead of "iss"? The only reason I can think of
+> is, KVM wants to leave the room to accept more fields than ISS from
+> userspace. Does this reason apply to external aborts? Asking in case
+> if "iss" is a better name in kvm_vcpu_events, maybe for external
+> aborts, we should use ext_abt_has_iss?
 
-I'm guessing the PHY core is going to perform reads/writes for things
-like EEE? And if the MAC driver has an IOCTL handler, it could also do
-reads/writes. So something is needed here, but i do wounder if hard
-coded 0 is going to work out O.K? Have you looked at what accesses the
-core actually does?
+We will probably need to include more ESR fields in the future, like
+ESR_ELx.ISS2. So let's just keep the existing naming if that's OK with
+you.
 
-     Andrew
+Thanks,
+Oliver
 
