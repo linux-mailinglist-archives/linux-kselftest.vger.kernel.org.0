@@ -1,303 +1,218 @@
-Return-Path: <linux-kselftest+bounces-37194-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37195-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAE0EB02CC5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 21:57:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0174CB02E70
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Jul 2025 04:42:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 184B74A096B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Jul 2025 19:57:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29D423B8779
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Jul 2025 02:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C708E27584E;
-	Sat, 12 Jul 2025 19:57:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FC9C145323;
+	Sun, 13 Jul 2025 02:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gkwpo2EO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KEllP/8V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCEC267B94
-	for <linux-kselftest@vger.kernel.org>; Sat, 12 Jul 2025 19:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA9C7FBA2
+	for <linux-kselftest@vger.kernel.org>; Sun, 13 Jul 2025 02:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752350233; cv=none; b=DYORPi3LBunyvTHePbbDoOtXEmDm7v5CdTx0YVjVETZvaGRlILlhteNcjMYm308n2KhmzKhfNLFd8PFPYP5/cXnFatUHv8h3K8Pvcc9V8LjY0Q1n8DzXmUpuGTgN/cdNZD/LjiTWT7CDfJxXARJ/klWMSbwYBgPOx0tmu2FY3wo=
+	t=1752374550; cv=none; b=ZRPMMIP7H6Nt9UVOamjG0HraaCGqGTWAgvuJoiUoFag2V/IUp1Oss2yIWxPA/Fod+E+UfWuoEWO2xllAN+tNQOPaZCg5B6FWkFo15XWNq5Fp5lORycQWlWi7eG9177aQXIZshK6VQsWOc3Y9qOpVSZCBX69qFrHKm2q2gOIE88Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752350233; c=relaxed/simple;
-	bh=6jN5+l5I0cHef6UJuE/R6DD+UMezEAvvIu+9rpyJa4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KiRFY1Y8OOovEYLNU3APsNTco0CvxeDAvNiaoUF1uMIyis370DD4hwFDetYThsKs+BRHbNtLrj7rN9n+5QEbJDqLOxtnKCDikGZM+yCkkrXWrfzw99R3+26z1/WnT3zvm3Q6zzx4NgA2Ksv+polxHYsQNFmyw2tsR1WZlXfCDtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gkwpo2EO; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Sat, 12 Jul 2025 12:57:00 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1752350227;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+pCn5NGmkecFI7kg7iK/GSw/y8sj0MDaaDl/qTKpLnM=;
-	b=gkwpo2EOYiCDeoEXLJ4zYlSYl/QS8QftdcAuc1TyMKl9JOwTFE/Tfc8Arh9BUbM/1SBbmO
-	PRpFzZ0DQyjRyC+P82l45BeuP0+X+GvEXKngzM+pS5x17SDdbXr58rdFV2sHSwUOqyZT2/
-	iH4G/vd6b03weXckn3UxUrJgHqGxV3s=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Jiaqi Yan <jiaqiyan@google.com>
-Cc: maz@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-	pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org,
-	kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	duenwen@google.com, rananta@google.com, jthoughton@google.com
-Subject: Re: [PATCH v2 1/6] KVM: arm64: VM exit to userspace to handle SEA
-Message-ID: <aHK-DPufhLy5Dtuk@linux.dev>
-References: <20250604050902.3944054-1-jiaqiyan@google.com>
- <20250604050902.3944054-2-jiaqiyan@google.com>
- <aHFohmTb9qR_JG1E@linux.dev>
- <CACw3F509B=AHhpaTcuH9O851rrDdHh1baC8uRYy7bDa7BSMhgg@mail.gmail.com>
+	s=arc-20240116; t=1752374550; c=relaxed/simple;
+	bh=5bX1npMW4eRdsgUzazLqr3N4PDD7Cv9Oex66u7+0x44=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R6D2Me/ktHMeu2ogaZM4O8blPydZUHZ2VMfBq+5WVKamtOC5nlEW42jWemJfMGtZsWs/hurgY+xiuSUCsNtwfGmkxg9xcZ5lYiGMkCiI7uQJ5RHNA5saUYvjZcZVEIgVmg9YnRm6DbARzU0JQKMw5AuxoOlKmCnJSu6s1FXHrbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KEllP/8V; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-453663b7bf1so56815e9.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Jul 2025 19:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752374546; x=1752979346; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=30Xr3GjHx9JM48k5qZe/WnzL0VPEvAcLel6Lrxu+plE=;
+        b=KEllP/8VJ3NnCOiy3bfiB0NGEdfycr+UqBRPaebbwpKTu0hCLgJRThRzZkZOICrw0t
+         b8Blg5h6PJ+Cu0qUntI6NciOx7PKcAbnG4WodzhNLR6pVJ7qi/JKV5KGQREf0wKJK/XQ
+         iQg63lAyHMQg9TcRHuyODqljiP+n1mq0Kxzc0Ffa4ql4i6sx37NfRWNiQTa2PLOstfPr
+         6KWMCVdboZnM9d7pm1qLd5YskMWzrIPESUMDmeZt/rPgs+tU9BSnMAOckRGchl4PLV7P
+         UvLvVpPgOik9aB/pdhJIAZb4UG8bbUzDLDsUmfpf9oNs2vvT9RS9VGWY5llbmRKCDmZs
+         +7iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752374546; x=1752979346;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=30Xr3GjHx9JM48k5qZe/WnzL0VPEvAcLel6Lrxu+plE=;
+        b=f6Zq4MPPFrj/4MUiWPgWOmHMrQ5H1YR8U5IV9+VxxKYVBmDtrYacDdtXks7UHJZLHm
+         xcnEXSroGVEUD/HeWawKRfWEz0wRxTBEpN1RC9vS8RNMakU9C5bPeIx6guukYKkSDwgS
+         sStJFAIGO9gQ5LBPTKVhs2aeMU2DJTyhCAzoOOz8UqmM/hDBGzR6U26JEf+p4uBMnBhf
+         cCUGIwuSeU87yi5hnsoIQLlUwR6KBuOTKZIGdNxpehzADZuSRhapmZFIFo3O1o+Gg+NO
+         Fhx8t70OTmA75DoqyRZzFYrH1KlbAYUD20s2NuEjy91PrPzcjTZiym8aToTjzeVTAkhu
+         IpTA==
+X-Forwarded-Encrypted: i=1; AJvYcCVLOH/GaPmwY+Z2ImHinLUd+pMH7k264mp5d9m/Zure3yhIYWtk1lfry42Xn9CMi2Oqw77ngKBF84RmD2hU5+Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZTdoRr1twiqnkncfrQQxgIBtST+PoCCL8w0X0ToYds5T0ysOd
+	oCgMKtjDg5ACH1hfmsIfOIbY0kU3Tov3RFs69dFgo34VB4wh6a4qAt6mQ4OXcgBurGfSji5Y6R/
+	BszvNNEEInKnpkiBnbb7EvNz31GtNqLMOfPNQM0Ln
+X-Gm-Gg: ASbGncvUnodcrTzYcRe14W+WpWE0viJrh+906LeUju66oaeOjaZKXzjSUHgqaHSSFsG
+	YF6pkG83hU8r0UZ8Bm6inulwXeiG090Hs7RE6wH+n2/kplYkqS5uOO7qmwZ2BJxmotGY1/mOpAu
+	1CAlDHkhpi1JjI+vA1iHTI6npPjGorDo+1suXsLeBZJz9VQYWzlDuFSvvLTaSMRHPXvG6I/7m0q
+	zdwLqlwuZTPEo361y6giuf/30dIffLqF5oDX6xF
+X-Google-Smtp-Source: AGHT+IEleF8ivksR26XpmTWXy3KCMqLtp7lcXHp94NqMETszAgAyRO8FnYgynO7hXWeiXu6R0Q4pDW3VdH8z0Y3FkYk=
+X-Received: by 2002:a05:600c:5023:b0:453:79c3:91d6 with SMTP id
+ 5b1f17b1804b1-45604733553mr1556035e9.1.1752374546338; Sat, 12 Jul 2025
+ 19:42:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACw3F509B=AHhpaTcuH9O851rrDdHh1baC8uRYy7bDa7BSMhgg@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20250604050902.3944054-1-jiaqiyan@google.com> <20250604050902.3944054-4-jiaqiyan@google.com>
+ <aHFpIpIfqVCQZVgG@linux.dev> <CACw3F51xRWr5LXz4-JhK+mjizY7D7Oa+GrJ-OZHktfPzFGKeiw@mail.gmail.com>
+ <aHK7w4TTEm7a1mco@linux.dev>
+In-Reply-To: <aHK7w4TTEm7a1mco@linux.dev>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Sat, 12 Jul 2025 19:42:15 -0700
+X-Gm-Features: Ac12FXxcNa4e9HwM2rPqBWqAlsG9UDRsiS6fK2kefjn5JOWhY0L8gHWyQHAnvJ0
+Message-ID: <CACw3F50mTCB0h4GbdcERz4j=CcnwVCfA0Mc9OL-u0nJCJPEVnA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] KVM: arm64: Allow userspace to inject external
+ instruction aborts
+To: Oliver Upton <oliver.upton@linux.dev>
+Cc: maz@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, 
+	yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, 
+	pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, kvm@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, duenwen@google.com, rananta@google.com, 
+	jthoughton@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 11, 2025 at 04:59:11PM -0700, Jiaqi Yan wrote:
-> >  - Add some detail about FEAT_RAS where we may still exit to userspace
-> >    for host-controlled memory, as we cannot differentiate between a
-> >    stage-1 or stage-2 TTW SEA when taken on the descriptor PA
-> 
-> Ah, IIUC, you are saying even if the FSC code tells fault is on TTW
-> (esr_fsc_is_secc_ttw or esr_fsc_is_sea_ttw), it can either be guest
-> stage-1's or stage-2's descriptor PA, and we can tell which from
-> which.
-> 
-> However, if ESR_ELx_S1PTW is set, we can tell this is a sub-case of
-> stage-2 descriptor PA, their usage is for stage-1 PTW but they are
-> stage-2 memory.
-> 
-> Is my current understanding right?
+On Sat, Jul 12, 2025 at 12:47=E2=80=AFPM Oliver Upton <oliver.upton@linux.d=
+ev> wrote:
+>
+> On Fri, Jul 11, 2025 at 04:58:57PM -0700, Jiaqi Yan wrote:
+> > On Fri, Jul 11, 2025 at 12:42=E2=80=AFPM Oliver Upton <oliver.upton@lin=
+ux.dev> wrote:
+> > >
+> > > On Wed, Jun 04, 2025 at 05:08:58AM +0000, Jiaqi Yan wrote:
+> > > > From: Raghavendra Rao Ananta <rananta@google.com>
+> > > >
+> > > > When KVM returns to userspace for KVM_EXIT_ARM_SEA, the userspace i=
+s
+> > > > encouraged to inject the abort into the guest via KVM_SET_VCPU_EVEN=
+TS.
+> > > >
+> > > > KVM_SET_VCPU_EVENTS currently only allows injecting external data a=
+borts.
+> > > > However, the synchronous external abort that caused KVM_EXIT_ARM_SE=
+A
+> > > > is possible to be an instruction abort. Userspace is already able t=
+o
+> > > > tell if an abort is due to data or instruction via kvm_run.arm_sea.=
+esr,
+> > > > by checking its Exception Class value.
+> > > >
+> > > > Extend the KVM_SET_VCPU_EVENTS ioctl to allow injecting instruction
+> > > > abort into the guest.
+> > > >
+> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> > >
+> > > Hmm. Since we expose an ESR value to userspace I get the feeling that=
+ we
+> > > should allow the user to supply an ISS for the external abort, simila=
+r
+> > > to what we already do for SErrors.
+> >
+> > Oh, I will create something in v3, by extending kvm_vcpu_events to
+> > something like:
+> >
+> > struct {
+> >   __u8 serror_pending;
+> >   __u8 serror_has_esr;
+> >   __u8 ext_dabt_pending;
+> >   __u8 ext_iabt_pending;
+> >   __u8 ext_abt_has_esr;  // <=3D new
+> >   /* Align it to 8 bytes */
+> >   __u8 pad[3];
+> >   union {
+> >     __u64 serror_esr;
+> >     __u64 ext_abt_esr;  // <=3D new
+>
+> This doesn't work. The ABI allows userspace to pend both an SError and
+> SEA, so we can't use the same storage for the ESR.
 
-Yep, that's exactly what I'm getting at. As you note, stage-2 aborts
-during a stage-1 walk are sufficiently described, but not much else.
+You are right, the implementation (__kvm_arm_vcpu_set_events) indeed
+continues to inject SError after injecting SEA.
 
-> > +/*
-> > + * Returns true if the SEA should be handled locally within KVM if the abort is
-> > + * caused by a kernel memory allocation (e.g. stage-2 table memory).
-> > + */
-> > +static bool host_owns_sea(struct kvm_vcpu *vcpu, u64 esr)
-> > +{
-> > +       /*
-> > +        * Without FEAT_RAS HCR_EL2.TEA is RES0, meaning any external abort
-> > +        * taken from a guest EL to EL2 is due to a host-imposed access (e.g.
-> > +        * stage-2 PTW).
-> > +        */
-> > +       if (!cpus_have_final_cap(ARM64_HAS_RAS_EXTN))
-> > +               return true;
-> > +
-> > +       /* KVM owns the VNCR when the vCPU isn't in a nested context. */
-> > +       if (is_hyp_ctxt(vcpu) && (esr & ESR_ELx_VNCR))
-> > +               return true;
-> > +
-> > +       /*
-> > +        * Determining if an external abort during a table walk happened at
-> > +        * stage-2 is only possible with S1PTW is set. Otherwise, since KVM
-> > +        * sets HCR_EL2.TEA, SEAs due to a stage-1 walk (i.e. accessing the PA
-> > +        * of the stage-1 descriptor) can reach here and are reported with a
-> > +        * TTW ESR value.
-> > +        */
-> > +       return esr_fsc_is_sea_ttw(esr) && (esr & ESR_ELx_S1PTW);
-> 
-> Should we include esr_fsc_is_secc_ttw? like
->   (esr_fsc_is_sea_ttw(esr) || esr_fsc_is_secc_ttw(esr)) && (esr & ESR_ELx_S1PTW)
+Then we may have to extend the size of exception and meanwhile reduce
+the size of reserved, because I believe we want to place ext_abt_esr
+into kvm_vcpu_events.exception. Something like:
+struct kvm_vcpu_events {
+  struct {
+    __u8 serror_pending;
+    __u8 serror_has_esr;
+    __u8 ext_dabt_pending;
+    __u8 ext_iabt_pending;
+    __u8 ext_abt_has_esr;
+    __u8 pad[3];
+    __u64 serror_esr;
+    __u64 ext_abt_esr;  // <=3D +64 bits
+  } exception;
+  __u32 reserved[10];  // <=3D -64 bits
+};
 
-Parity / ECC errors are not permitted if FEAT_RAS is implemented (which
-is tested for up front).
+The offset to kvm_vcpu_events .reserved changes; I don' think
+userspace will read/write reserved (so its offset is probably not very
+important?), but theoretically this is an ABI break.
 
-> > +}
-> > +
-> >  int kvm_handle_guest_sea(struct kvm_vcpu *vcpu)
-> >  {
-> > +       u64 esr = kvm_vcpu_get_esr(vcpu);
-> > +       struct kvm_run *run = vcpu->run;
-> > +       struct kvm *kvm = vcpu->kvm;
-> > +       u64 esr_mask = ESR_ELx_EC_MASK  |
-> > +                      ESR_ELx_FnV      |
-> > +                      ESR_ELx_EA       |
-> > +                      ESR_ELx_CM       |
-> > +                      ESR_ELx_WNR      |
-> > +                      ESR_ELx_FSC;
-> 
-> Do you (and why) exclude ESR_ELx_IL on purpose?
+Another safer but not very readable way is to add at the end:
+struct kvm_vcpu_events {
+  struct {
+    __u8 serror_pending;
+    __u8 serror_has_esr;
+    __u8 ext_dabt_pending;
+    __u8 ext_iabt_pending;
+    __u8 ext_abt_has_esr;
+    __u8 pad[3];
+    __u64 serror_esr;
+  } exception;
+  __u32 reserved[10];  // <=3D -64 bits
+  __u64 ext_abt_esr;  // <=3D +64 bits
+};
 
-Unintended :)
+Any better suggestions?
 
-> BTW, if my previous statement about TTW SEA is correct, then I also
-> understand why we need to explicitly exclude ESR_ELx_S1PTW.
+>
+> >   };
+> > } exception;
+> >
+> > One question about the naming since we cannot change it once
+> > committed. Taking the existing SError injection as example, although
+> > the name in kvm_vcpu_events is serror_has_esr, it is essentially just
+> > the ISS fields of the ESR (which is also written in virt/kvm/api.rst).
+> > Why named after "esr" instead of "iss"? The only reason I can think of
+> > is, KVM wants to leave the room to accept more fields than ISS from
+> > userspace. Does this reason apply to external aborts? Asking in case
+> > if "iss" is a better name in kvm_vcpu_events, maybe for external
+> > aborts, we should use ext_abt_has_iss?
+>
+> We will probably need to include more ESR fields in the future, like
+> ESR_ELx.ISS2. So let's just keep the existing naming if that's OK with
+> you.
 
-Right, we shouldn't be exposing genuine stage-2 external aborts to userspace.
+Ack to "esr", thanks Oliver!
 
-> > +       u64 ipa;
-> > +
-> > +
-> >         /*
-> >          * Give APEI the opportunity to claim the abort before handling it
-> >          * within KVM. apei_claim_sea() expects to be called with IRQs
-> > @@ -1824,7 +1864,32 @@ int kvm_handle_guest_sea(struct kvm_vcpu *vcpu)
-> >         if (apei_claim_sea(NULL) == 0)
-> 
-> I assume kvm should still lockdep_assert_irqs_enabled(), right? That
-> is, a WARN_ON_ONCE is still useful in case?
-
-Ah, this is diffed against my VNCR prefix which has this context. Yes, I
-want to preserve the lockdep assertion.
-
-
-From eb63dbf07b3d1f42b059f5c94abd147d195299c8 Mon Sep 17 00:00:00 2001
-From: Oliver Upton <oliver.upton@linux.dev>
-Date: Thu, 10 Jul 2025 17:14:51 -0700
-Subject: [PATCH] KVM: arm64: nv: Handle SEAs due to VNCR redirection
-
-Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
----
- arch/arm64/include/asm/kvm_mmu.h |  1 +
- arch/arm64/include/asm/kvm_ras.h | 25 -------------------------
- arch/arm64/kvm/mmu.c             | 30 ++++++++++++++++++------------
- arch/arm64/kvm/nested.c          |  3 +++
- 4 files changed, 22 insertions(+), 37 deletions(-)
- delete mode 100644 arch/arm64/include/asm/kvm_ras.h
-
-diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
-index ae563ebd6aee..e4069f2ce642 100644
---- a/arch/arm64/include/asm/kvm_mmu.h
-+++ b/arch/arm64/include/asm/kvm_mmu.h
-@@ -180,6 +180,7 @@ void kvm_free_stage2_pgd(struct kvm_s2_mmu *mmu);
- int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
- 			  phys_addr_t pa, unsigned long size, bool writable);
- 
-+int kvm_handle_guest_sea(struct kvm_vcpu *vcpu);
- int kvm_handle_guest_abort(struct kvm_vcpu *vcpu);
- 
- phys_addr_t kvm_mmu_get_httbr(void);
-diff --git a/arch/arm64/include/asm/kvm_ras.h b/arch/arm64/include/asm/kvm_ras.h
-deleted file mode 100644
-index 9398ade632aa..000000000000
---- a/arch/arm64/include/asm/kvm_ras.h
-+++ /dev/null
-@@ -1,25 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/* Copyright (C) 2018 - Arm Ltd */
--
--#ifndef __ARM64_KVM_RAS_H__
--#define __ARM64_KVM_RAS_H__
--
--#include <linux/acpi.h>
--#include <linux/errno.h>
--#include <linux/types.h>
--
--#include <asm/acpi.h>
--
--/*
-- * Was this synchronous external abort a RAS notification?
-- * Returns '0' for errors handled by some RAS subsystem, or -ENOENT.
-- */
--static inline int kvm_handle_guest_sea(void)
--{
--	/* apei_claim_sea(NULL) expects to mask interrupts itself */
--	lockdep_assert_irqs_enabled();
--
--	return apei_claim_sea(NULL);
--}
--
--#endif /* __ARM64_KVM_RAS_H__ */
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index 1c78864767c5..6934f4acdc45 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -4,19 +4,20 @@
-  * Author: Christoffer Dall <c.dall@virtualopensystems.com>
-  */
- 
-+#include <linux/acpi.h>
- #include <linux/mman.h>
- #include <linux/kvm_host.h>
- #include <linux/io.h>
- #include <linux/hugetlb.h>
- #include <linux/sched/signal.h>
- #include <trace/events/kvm.h>
-+#include <asm/acpi.h>
- #include <asm/pgalloc.h>
- #include <asm/cacheflush.h>
- #include <asm/kvm_arm.h>
- #include <asm/kvm_mmu.h>
- #include <asm/kvm_pgtable.h>
- #include <asm/kvm_pkvm.h>
--#include <asm/kvm_ras.h>
- #include <asm/kvm_asm.h>
- #include <asm/kvm_emulate.h>
- #include <asm/virt.h>
-@@ -1811,6 +1812,20 @@ static void handle_access_fault(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa)
- 	read_unlock(&vcpu->kvm->mmu_lock);
- }
- 
-+int kvm_handle_guest_sea(struct kvm_vcpu *vcpu)
-+{
-+	/*
-+	 * Give APEI the opportunity to claim the abort before handling it
-+	 * within KVM. apei_claim_sea() expects to be called with IRQs
-+	 * enabled.
-+	 */
-+	lockdep_assert_irqs_enabled();
-+	if (apei_claim_sea(NULL) == 0)
-+		return 1;
-+
-+	return kvm_inject_serror(vcpu);
-+}
-+
- /**
-  * kvm_handle_guest_abort - handles all 2nd stage aborts
-  * @vcpu:	the VCPU pointer
-@@ -1834,17 +1849,8 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
- 	gfn_t gfn;
- 	int ret, idx;
- 
--	/* Synchronous External Abort? */
--	if (kvm_vcpu_abt_issea(vcpu)) {
--		/*
--		 * For RAS the host kernel may handle this abort.
--		 * There is no need to pass the error into the guest.
--		 */
--		if (kvm_handle_guest_sea())
--			return kvm_inject_serror(vcpu);
--
--		return 1;
--	}
-+	if (kvm_vcpu_abt_issea(vcpu))
-+		return kvm_handle_guest_sea(vcpu);
- 
- 	esr = kvm_vcpu_get_esr(vcpu);
- 
-diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
-index 096747a61bf6..38b0e3a9a6db 100644
---- a/arch/arm64/kvm/nested.c
-+++ b/arch/arm64/kvm/nested.c
-@@ -1289,6 +1289,9 @@ int kvm_handle_vncr_abort(struct kvm_vcpu *vcpu)
- 
- 	BUG_ON(!(esr & ESR_ELx_VNCR_SHIFT));
- 
-+	if (kvm_vcpu_abt_issea(vcpu))
-+		return kvm_handle_guest_sea(vcpu);
-+
- 	if (esr_fsc_is_permission_fault(esr)) {
- 		inject_vncr_perm(vcpu);
- 	} else if (esr_fsc_is_translation_fault(esr)) {
--- 
-2.39.5
-
+>
+> Thanks,
+> Oliver
 
