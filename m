@@ -1,174 +1,240 @@
-Return-Path: <linux-kselftest+bounces-37224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 838A9B03688
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 08:08:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28581B036BA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 08:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BBF9189B1DF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 06:09:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E0B81650A1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 06:14:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99B321771C;
-	Mon, 14 Jul 2025 06:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6345B21C174;
+	Mon, 14 Jul 2025 06:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="aDQRSUNA";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NMOIB9oI"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="tDOPrq/e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012053.outbound.protection.outlook.com [52.101.66.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F05E17736;
-	Mon, 14 Jul 2025 06:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752473328; cv=none; b=KqN1gdTR6K3yTi8L5FqNRy786Esgr/kNBX6jpG+KMSWWCyxl2IsfqKi+uER3Jw91Icv2yHq9ynHRdpe3eNhLI8r5IxYwyepMZ7jhCckdzOO6fWD52WVIptHh8Q+yaISZRTSRhekK28gUEuQ866xOB+CXmjh9Cxaaizk3G5edVH4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752473328; c=relaxed/simple;
-	bh=IT52CMMNQVZe/JpsyeRDyVjFNpZ1hXZyOCPsnriWGuY=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=hQeTcZ/KiF3ujRi3wVOfAdtXCxUu78/FQqg112QL9Vngr6Fqsi4/Zyjeriw0uIRoO2wDhf0d9CAbeTKsnWvvm+1WeDaeHWRyqTJ/QztsTObAFC+d6K0a5QFHigy67n2DHx8ZuMlSTMjcVlJR5sAu6C+hLrRyzigWvbXe/fWRoI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=aDQRSUNA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NMOIB9oI; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 75D78EC0453;
-	Mon, 14 Jul 2025 02:08:45 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 14 Jul 2025 02:08:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1752473325;
-	 x=1752559725; bh=RC+CFVWd/VWYy7402scfBHaFNOZ1+z4P3lAFBCgGdWQ=; b=
-	aDQRSUNAXm+/DcRr8JHFpYax0uaM0MtbIvLQBkPE0LGP414DcT3gKnoamV8T8SEN
-	xYDBlC2feBCzsPE8RIOl9gJX/ikFb2POYxKMPEA05S+M8ypfatJ8ALGNrb5cALTL
-	KDCKokVRPEcA/wH7mmkvLR21BSJnfsWKsmCPIHbSqW3OM967bPW7ofJ0SSVIqSJx
-	3LMnM/KApSyk04F8E1kcEeNy8Yh8Bz3/lpnj04X5uLq2XaQLMgFVQdx3k352jNpu
-	6MHc13Lzk98yPzAMgNkUOlqeSsAqcThKlOyCRgE+3WdAUM9G2skt5RrdeoJrr4+v
-	WcchmnE45GeMCekZhRbOAw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1752473325; x=
-	1752559725; bh=RC+CFVWd/VWYy7402scfBHaFNOZ1+z4P3lAFBCgGdWQ=; b=N
-	MOIB9oIK4aFGz/MAFD2nsL3q6bVhYxOa+1rkg2f7yWSgVHnNep35yY+c0xwQzgsP
-	vMRwxeJnGvzwwxmEaQjimrah2ANgib3/waRIs7J0MBff5JWK2BuRG3V/gs48X2mH
-	vlSX0MrI8YV61X2YvowWrBpkGbPwwZgKMONU56Du0DBDjQ5pvBmdCMh/Ak6cISlM
-	7YxINbF6R4HK3hpbeP6adI/ZbzcjdrSk1IZzjIJr2ToCdWjW9MBjV3kknOLRcbC1
-	bAbloGmDZcko0XSzOVQtxTfXl9rd+Dx5DcSZgsIirq7CM+sIpLRzc9Enub5Y6Rzk
-	eo+eEwiVAq6EJ3fdKbTeg==
-X-ME-Sender: <xms:6550aNISqkL_c_gKSI1GS6zwoONBMO-j0aQrHirsA-Dx9-qhip8wJw>
-    <xme:6550aJLL4Ox0N4jUEaYXAg0enHEgZ0Hvj03HUlMKvtRESzvOZlCtNu5UrKmGPZXjZ
-    N-Z2U0G_l8VX-cujzE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehuddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeefuddpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepjhhorhhoseeksgihthgvshdrohhrghdprhgtphhtthhopehvrghsrg
-    hnthdrhhgvghguvgesrghmugdrtghomhdprhgtphhtthhopehrohgsihhnrdhmuhhrphhh
-    hiesrghrmhdrtghomhdprhgtphhtthhopegsrghgrghsughothhmvgesghhmrghilhdrtg
-    homhdprhgtphhtthhopehthhhivghrrhihrdhrvgguihhnghesghhmrghilhdrtghomhdp
-    rhgtphhtthhopehmshhhrghvihhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehprh
-    grrghnsehgohhoghhlvgdrtghomhdprhgtphhtthhopeiihhgrnhhgiigvkhhunhduudes
-    hhhurgifvghirdgtohhmpdhrtghpthhtohepugifmhifvdesihhnfhhrrgguvggrugdroh
-    hrgh
-X-ME-Proxy: <xmx:6550aCsD6On8GiPFBuhmhjg2cQ8kX7cKAjv83xfvNnNf8nYQRggg1w>
-    <xmx:6550aKpYGV3_6_Cw9r9zZqL9Q_5umAHi98hyl4oNeTYJZsfFeuThwA>
-    <xmx:6550aEmSWAshMXkV1Pf880BQ9xBOxPKTnOyiXYTu6frVsoV0UZLpTA>
-    <xmx:6550aCT8AC-3Qk2ejJ1a-d5tfh-z3Z7Ik7HcexIq2X1piS7MnP9Efw>
-    <xmx:7Z50aC55r5eujMz0Dvb8Ej99ArwfSU_zftLIRLdUgHJFaXhmzaUc6tH4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id AB571700068; Mon, 14 Jul 2025 02:08:43 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3155D218596;
+	Mon, 14 Jul 2025 06:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752473653; cv=fail; b=cpdu/hefC32vbQ/DlWlRvtKihkV7pKROh061klxYlYPF7P7KwtbZkrjbjZLNGizPW1k//e5c572MJ2G0mokUqIfeekHw6tI6Kl+kF8x81VQyx8V41+AaIxstoGKRjMcF7oxHyjC44af/5cjiluXvG/eliwRSoAzjmqYrUrvV+/Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752473653; c=relaxed/simple;
+	bh=owIYnV4SEqyeQic9rvA0V8bM+L02etgsQMPyeknJ0BY=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=uRO+5EtHzeMXMKQJesyRPSwVHnh3V5NGaB8Qiap5n0kap47GDxXTyBRNzcowDItVq6TIJ8t53hZTkI2GvSuWWzBBtyEIXm2CZHEdSqNMzyD8IQYPpzaMWAAe433rixZFzbE40CBvDl+1uHHs/YrRNSLRj2sRRU5/E1AqRtoj0HU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=tDOPrq/e; arc=fail smtp.client-ip=52.101.66.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RQJRDDcn5wic9AfybP0W3nMPUDoAp06x0UfBBw+vPUg5xWNku8wIsF1uQ8V00Bego2VQihVDO/QhruP0yqVEzxtzbovzb2Tg5wxWwsetr/bEemIp15ogP4AEhAjuBpPlGq3ZVevFndRykS3o6ZwNqoBL4Cr7usURG+lxcPPOLMlsSfiNTX20i6TEEtQTcRC74xRufTpOVQ3lMF91jgO8p7tsZmeWp8st2EQHUz6g78zu7kRN3BErr1ZyX1uOg7scIIeR1iMEd3qnXfFw4deUtxDAev2GeISV4ogV5iXKwa1KTTcD+1BoXP2WnlDJm0imNdPLJlRvGE17g5sPGvKPjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OrSBfvJNFpjRAAXlemAbM4YVdIm1sXZA12o576VMPg4=;
+ b=DRxnBC54tpyDxozjVauZSffVDcxpNJWA4vowlUJ9BuYI8EnHi52rwPhs/AUt8ysBYxNDc1StNVCgZGhoayz8VaofSbsps9Fnlf6WNfdTulRv43b+7NBdxkbGwICsgtxwTTw/3xwQRnemr4RsLgKWpr1NyK+4FcirEldVbfYeQO6gKyh3HjxY21d5xIkCMY8uvISVJ7HlpywXPQjtiiA+qSQr5dSAq7SjtGDK4Ysae4O82rgdtFK7/z9MIaKtoondPLPGYcX/iPu6nlczEO1kZvGL1D/Xa6hVwL3MhDrnV1IwYK8w6+/gAfwcrCqF/kvYlJwx7iSm4ymzn6EEv7iZfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OrSBfvJNFpjRAAXlemAbM4YVdIm1sXZA12o576VMPg4=;
+ b=tDOPrq/eGm9zh/R18o96uKMTz2lFNOtHZcYO6433pYSyEIY7EyY7dFLZ77xpiswa70CWTmDz7f/CXRPlLMIsUo2Y9l4Cy/G1CL4IHJ0WybDCX0NWz81ibRd9n9oINGYHyfjInCLTp2uPuPC4VGELXOujMg6w3A9da/eIrCbCM3Z143b7Zh/BRV4voKlhTXPScNGGRsQQv0qdusUT/QuCLWR3nyKhkjOElM0UrLK5d04m+nSjgwS60wie5TOviiYky3wCp+DvS45a2ZnN9Ygglu6FmgH4vdzJqZoo6oH+jdgjaCd/2v2mbJ6ueQQ2113Y9jzwJTZ6+xYEPbWbpupVjg==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by PA4PR07MB7311.eurprd07.prod.outlook.com (2603:10a6:102:d3::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.32; Mon, 14 Jul
+ 2025 06:14:08 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56%6]) with mapi id 15.20.8922.028; Mon, 14 Jul 2025
+ 06:14:08 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Victor Nogueira <victor@mojatatu.com>, "alok.a.tiwari@oracle.com"
+	<alok.a.tiwari@oracle.com>, "pctammela@mojatatu.com"
+	<pctammela@mojatatu.com>, "horms@kernel.org" <horms@kernel.org>,
+	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "xandfury@gmail.com"
+	<xandfury@gmail.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"dave.taht@gmail.com" <dave.taht@gmail.com>, "pabeni@redhat.com"
+	<pabeni@redhat.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org"
+	<kuba@kernel.org>, "stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
+	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
+	"edumazet@google.com" <edumazet@google.com>, "andrew+netdev@lunn.ch"
+	<andrew+netdev@lunn.ch>, "ast@fiberby.net" <ast@fiberby.net>,
+	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: RE: [PATCH v22 net-next 5/6] selftests/tc-testing: Add selftests for
+ qdisc DualPI2
+Thread-Topic: [PATCH v22 net-next 5/6] selftests/tc-testing: Add selftests for
+ qdisc DualPI2
+Thread-Index: AQHb8nCgdyoY2HJck0ybSTf6+6zluLQtSvMAgAPb80A=
+Date: Mon, 14 Jul 2025 06:14:07 +0000
+Message-ID:
+ <PAXPR07MB798429728A10CA40CEEDB0DCA354A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20250711143208.66722-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250711143208.66722-6-chia-yu.chang@nokia-bell-labs.com>
+ <01a580b4-0c8d-4d22-a3e4-264335d7a947@mojatatu.com>
+In-Reply-To: <01a580b4-0c8d-4d22-a3e4-264335d7a947@mojatatu.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|PA4PR07MB7311:EE_
+x-ms-office365-filtering-correlation-id: 42306967-8bce-4fc5-1d88-08ddc29da46c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|7416014|376014|366016|7053199007|38070700018|921020;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?Vih9kBtNPyFHfBukWThoLxxeePqPzclq+aUbL75zfYoUIBzeCCv7B7OZmlV3?=
+ =?us-ascii?Q?Cz7kYCPoQl5KNYtAPTsHwe3HRgaex5NUVqKY+4yKF/sRl/oXo7ZnxuhommvS?=
+ =?us-ascii?Q?4rb65wc7GZ1VDFtLu/cUDhxzFVyJHdp0J4AXaAkhaT88pl8wHV8vIxVgS5Ra?=
+ =?us-ascii?Q?grlaLHJz6mQUjNQb2SPaq2CPgK4XyFLJTA668iT4liFa+1chEpSAa08YkoC2?=
+ =?us-ascii?Q?CgScQ76b9gaDYIuU4bmqumWAVy559gpipvBcYlYD7rIrAuFKfgnS/qjQqUWx?=
+ =?us-ascii?Q?l3+WC8QTaGaTFTiyDY+Hu2LFmlEzz00fKY1olVfHyWlMrBnTV5Y/qb2SARhz?=
+ =?us-ascii?Q?Ps4OSCM+QQQREaqpQMvOSjz9I6Y+KqgeTtnz4b4NWIe7fvxLOXyBn0ITDltl?=
+ =?us-ascii?Q?DAAfcwzVFLZorNWu2MrZ5ZoCWofO0+qVnt7y2tXVMOaBv1L0Q45gN7sfENV4?=
+ =?us-ascii?Q?yBGG4J98Zm+GdZ1KxyivlSctJoUGxNtUhSfJif7PxiZqE/CHvsoWA8xNR+Ow?=
+ =?us-ascii?Q?Kv0Iwc3zK7qnYWnEfPsXaHJHoK4SaFVKGszMyq01lih/jQLAeDW+lstm4vOH?=
+ =?us-ascii?Q?wVO5ug/lh80ZeImGxOGUPLXZ2JlpXtIaP1u37uPpEDrfZgTFiEuYyFVY8C9s?=
+ =?us-ascii?Q?10aTj9BueXOVTWDBtrmYwW40t04e6uleVY7++0uzlVnJBRy+qhpSWTA41y5b?=
+ =?us-ascii?Q?4mxIW/7zZ0qn0RpxPx1Pvw9DGsT0HzmZhPbaxcBRo7kRZIFNqQpOTFNSRqTT?=
+ =?us-ascii?Q?QakYMqvpPS1S/0udyrsmBKYnEYQfI/G1Jom/456fWT1x4JNPVdaknaOgT7s1?=
+ =?us-ascii?Q?QrTPtzv+ccx58tyui4eVpRk1YImu3vVYYZJH91PRYYyKENRGz5OI0WDdJfk7?=
+ =?us-ascii?Q?0Z6vU1dvkZGPL4j3J209AQJPFWLAUNw8V80mMeJF7LY26uc7zx+AQYN0V9YI?=
+ =?us-ascii?Q?YaB/6htnd6uTi395NFbH+4GD1gLid6orhRZSSBc7ugusiIOxzu6VVLCtj02l?=
+ =?us-ascii?Q?SUysEjk60SVSyPvUzfKxCcBEyY/t/Cw4cNQN6KuLkdenSwz+LEaC/NEIlyrP?=
+ =?us-ascii?Q?NZsrzdRv2o6PX3EWfrdWy4putp1B1mOL6VSG7zUPosaHoU1S50ynxpMcUsHw?=
+ =?us-ascii?Q?2iD+vt6fSRoS5hDVM9iG8zYb7RAOTQBGiZP80nbFONXWnk7YgmKkTAW/K0jS?=
+ =?us-ascii?Q?bgeO9INHNFKoSaCToNswhxU/Y5li1t1P/6Q9L2trK2Pbx4LxGzQJYjAUOdUe?=
+ =?us-ascii?Q?fXzk1bXj6AZS4NDadGxbUv3GO4UDnuAc1T+Znn8aU5bdAtko0AflSgB6JhEk?=
+ =?us-ascii?Q?gvlGz/JoRFB8D8hjiMZLMUlUX2MM7eFZKUyEeVcvMlNrIfqyZ1uD1Gv+h+sC?=
+ =?us-ascii?Q?i0EfkDMeYU7zDXCNq+dcSurp+fjDlVPhpOhSmdbNBKwW5q660hzt1h1bdZo1?=
+ =?us-ascii?Q?hDT16tWzJRibXatLRhR20+byCI9eyAUUtDF5ujyrZ/miUDFppFwzZoDPilY6?=
+ =?us-ascii?Q?kOTkXDex3Di9p4Z9h4o67OLrTAWp7idl7J1F?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(7053199007)(38070700018)(921020);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?LAFOCvxKAZZpqkwMSG/FO2h7yQejRMhD1LI0P9TlS8DVCnnBU4Ou5ooYcmTc?=
+ =?us-ascii?Q?8zUcJUY5Vzbgvpey6PouIdHPh+wI55jrVmnCywEcxURKwIwC1u4WqQgMR2ji?=
+ =?us-ascii?Q?jm8cAeQ4c59Oxxu4I+Hd5Ry8FkfTqX/KxCLlcTkbbLAuot+y668whkSxrH8G?=
+ =?us-ascii?Q?vcj9RA6hYZCRyxK3j1mxd28T8kqqdV0t44En89VusC2pQ8skxcb3scqb/ur7?=
+ =?us-ascii?Q?37bnNg0PqQx2YJbRID5d/qlrMVz36uWhIQkuW6TEjpp0VMCDsWtLrUSybEKk?=
+ =?us-ascii?Q?iBJ9322/B/Bnq6bI5KGyZf82Ae9Hw5Y794XnfLNKj1FPAOOCr7vr3fQncvqB?=
+ =?us-ascii?Q?tytawMS/MkTL/Uesl895B+dSWUg53zIXT0vCmgQP2tx9P/ivzXtst+EBCteq?=
+ =?us-ascii?Q?C04b9ZVi8qIomiS3oGnoRSDoerb/6r+xdeDY9r0V6eGTIRC1YUFgosenlso7?=
+ =?us-ascii?Q?VhJNX53UVPb2iPXNeRV35vPrtWpWF/7+f1u6c4RQp6Sq2N3daWa6tirCh73x?=
+ =?us-ascii?Q?sWhLqYQAJ+Oga3bVDJAQvoDjRrfz+gxQpnvWruElwsXEgSXkRV4DXGxE0vOw?=
+ =?us-ascii?Q?sD5z+OsFoQA1lvurvTo7KbZzkZDsQJSg3dMf6a26sNHNA1qXBx6pgVYvr3AI?=
+ =?us-ascii?Q?rVlg+7SHB4CelcwvUR4laGKfCdFxu3jTTeVZEvSOPF24aSumo0ZhSOVO9Q84?=
+ =?us-ascii?Q?OAeKr5VKFGUAMrEU2xu2STCqKQQntxccH8PLv/imSkqss0Nic5tYHbepiDwV?=
+ =?us-ascii?Q?fLfU0BC8Y6tMdidYpwqHU6kb5rAQkeImY00JC64vGq0ES2hrtNwOxR66vb7T?=
+ =?us-ascii?Q?y76qnk16dEj3VFUKr4Aos2OMWBzoVGK+3bn/wMrpl17Jg+XwtJaVtvLegLOD?=
+ =?us-ascii?Q?sUI0z2oE+beahhnyHQYG4Ao8gBO/Tw9HXNYXcRf27yf4PdkYOhdiw2zqU/Sy?=
+ =?us-ascii?Q?vVuUTczuQMyX7LMMbd0uZdrygt6t1Lgnr3/Mix17CIS9XoT2Vq2iKQp9F9o0?=
+ =?us-ascii?Q?lCGRdnOhiRdANXjZe094FD/gWIcbRYvFIteDp+6x7k2Cf4XRoA2EnqiIaI7d?=
+ =?us-ascii?Q?D7v1Ek3jYfBXU5qfozw2VmSf7axKKf4V6oycWBJURzf9jqkd6f3LK7yRr7mr?=
+ =?us-ascii?Q?b7+icBSUFwWaw1TSb8LgE97rRxMjE0azz9XPi05ajtX/2SVFwDTieYQ8h3aQ?=
+ =?us-ascii?Q?AYUxvmpV56Pf4iO9phhtD4fEQwO8tXruo00uozSeeOt+WvExLOU2mgueKtXD?=
+ =?us-ascii?Q?ibHNnpj705wo/jYfcURiy/NjYOiC2xhATRG1ToJdOvveUZldVBGT7DQ1t1V/?=
+ =?us-ascii?Q?rYCr8mH+312BPIjHsEUlwGZ4WDNMzr8AXbxd2VJK7eSsmxiGSEJ6YUy1d0Z/?=
+ =?us-ascii?Q?kDG6pZtrjl/YkyjB5pWZA4H+8TsYoUnrAJWl9/4E5tPPXBMX3AHfN8ufhruL?=
+ =?us-ascii?Q?VM6sL3zreREeG2oP8MI+nYntuKwirEn5/Z4Im64qZ/evbtzrLZ0XexWhLF7X?=
+ =?us-ascii?Q?kPMeC3gKM/OAzyVAGjlt/IIsd9nXtgwwkrXqmmuwdMMrgxKgeazgtrJVlaSb?=
+ =?us-ascii?Q?CAQj+MrQ3gf4DuSLlXurl1uavb8SmwFLVvcS9SCssLT7T4qk+Wo18OHLYSBD?=
+ =?us-ascii?Q?/A=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T0ce86a4a9bc2801a
-Date: Mon, 14 Jul 2025 08:08:21 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nicolin Chen" <nicolinc@nvidia.com>, "Jason Gunthorpe" <jgg@nvidia.com>
-Cc: "Kevin Tian" <kevin.tian@intel.com>, "Jonathan Corbet" <corbet@lwn.net>,
- "Bagas Sanjaya" <bagasdotme@gmail.com>, "Will Deacon" <will@kernel.org>,
- "Robin Murphy" <robin.murphy@arm.com>, "Joerg Roedel" <joro@8bytes.org>,
- "Thierry Reding" <thierry.reding@gmail.com>, vdumpa@nvidia.com,
- "Jon Hunter" <jonathanh@nvidia.com>, shuah <shuah@kernel.org>,
- jsnitsel@redhat.com, "Nathan Chancellor" <nathan@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Yi Liu" <yi.l.liu@intel.com>,
- mshavit@google.com, praan@google.com, zhangzekun11@huawei.com,
- iommu@lists.linux.dev, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-tegra@vger.kernel.org, linux-kselftest@vger.kernel.org,
- patches@lists.linux.dev, mochs@nvidia.com,
- "ALOK TIWARI" <alok.a.tiwari@oracle.com>, vasant.hegde@amd.com,
- "David Woodhouse" <dwmw2@infradead.org>,
- "Baolu Lu" <baolu.lu@linux.intel.com>
-Message-Id: <db221336-2694-4fcf-a2b2-8fcb46ba3c9e@app.fastmail.com>
-In-Reply-To: 
- <9a888a326b12aa5fe940083eae1156304e210fe0.1752126748.git.nicolinc@nvidia.com>
-References: <cover.1752126748.git.nicolinc@nvidia.com>
- <9a888a326b12aa5fe940083eae1156304e210fe0.1752126748.git.nicolinc@nvidia.com>
-Subject: Re: [PATCH v9 17/29] iommufd: Add mmap interface
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42306967-8bce-4fc5-1d88-08ddc29da46c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2025 06:14:08.0149
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JfAbIVNed7Vmt6DuRmivNFcpky84vFGxmMpC1+UW+MhJKyq0yvk+KHjMjXcNr4WIgf7CvLmve3U+zL0QSUAj/+3ZS0gZNZ5l3BqnuW7P1qIS0/E3NOt4bfnDIT5iTdRW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR07MB7311
 
-On Thu, Jul 10, 2025, at 07:59, Nicolin Chen wrote:
->  EXPORT_SYMBOL_NS_GPL(_iommufd_object_undepend, "IOMMUFD");
-> 
-> +/*
-> + * Allocate an @offset to return to user space to use for an mmap() 
-> syscall
-> + *
-> + * Driver should use a per-structure helper in include/linux/iommufd.h
-> + */
-> +int _iommufd_alloc_mmap(struct iommufd_ctx *ictx, struct 
-> iommufd_object *owner,
-> +			phys_addr_t mmio_addr, size_t length,
-> +			unsigned long *offset)
-> +{
-...
-> +
-> +	/* Skip the first page to ease caller identifying the returned offset 
-> */
-> +	rc = mtree_alloc_range(&ictx->mt_mmap, &startp, immap, immap->length,
-> +			       PAGE_SIZE, PHYS_ADDR_MAX, GFP_KERNEL);
+> -----Original Message-----
+> From: Victor Nogueira <victor@mojatatu.com>=20
+> Sent: Friday, July 11, 2025 9:14 PM
+> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; alok.a.tiw=
+ari@oracle.com; pctammela@mojatatu.com; horms@kernel.org; donald.hunter@gma=
+il.com; xandfury@gmail.com; netdev@vger.kernel.org; dave.taht@gmail.com; pa=
+beni@redhat.com; jhs@mojatatu.com; kuba@kernel.org; stephen@networkplumber.=
+org; xiyou.wangcong@gmail.com; jiri@resnulli.us; davem@davemloft.net; eduma=
+zet@google.com; andrew+netdev@lunn.ch; ast@fiberby.net; liuhangbin@gmail.co=
+m; shuah@kernel.org; linux-kselftest@vger.kernel.org; ij@kernel.org; ncardw=
+ell@google.com; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-labs.=
+com>; g.white@cablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kuehle=
+wind@ericsson.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comc=
+ast.com; vidhi_goel@apple.com
+> Subject: Re: [PATCH v22 net-next 5/6] selftests/tc-testing: Add selftests=
+ for qdisc DualPI2
+>=20
+> [You don't often get email from victor@mojatatu.com. Learn why this is im=
+portant at https://aka.ms/LearnAboutSenderIdentification ]
+>=20
+> CAUTION: This is an external email. Please be very careful when clicking =
+links or opening attachments. See the URL nok.it/ext for additional informa=
+tion.
+>=20
+>=20
+>=20
+> On 7/11/25 11:32, chia-yu.chang@nokia-bell-labs.com wrote:
+> > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> >
+> > Update configuration of tc-tests and preload DualPI2 module for=20
+> > self-tests, and add following self-test cases for DualPI2:
+> >
+> >    Test a4c7: Create DualPI2 with default setting
+>=20
+> This test case is failing now:
+>=20
+> Test a4c7: Create DualPI2 with default setting
+> exit: 2
+> exit: 0
+> Error: sch_dualpi2: Dualpi2 options are required.
+>=20
+> cheers,
+> Victor
 
+Hi Victor and All,
 
-This produces a warning on 32-bit targets with a 64-bit phys_addr_t,
-in practice this would be ARM Cortex-A15 or -A17 systems:
+The above issue of v22 is fixed in the re-submitted v23.
+However, I see v23 now is labelled as "Changes Requested" but I do not see =
+email.
+Would it be possible to let me know which changes are needed for v23? Thank=
+s.
 
-In file included from include/linux/overflow.h:6,
-                 ...
-                 from drivers/iommu/iommufd/driver.c:4:
-drivers/iommu/iommufd/driver.c: In function '_iommufd_alloc_mmap':
-include/linux/limits.h:11:25: error: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '18446744073709551615' to '4294967295' [-Werror=overflow]
-   11 | #define PHYS_ADDR_MAX   (~(phys_addr_t)0)
-      |                         ^~~~~~~~~~~~~~~~~
-drivers/iommu/iommufd/driver.c:61:43: note: in expansion of macro 'PHYS_ADDR_MAX'
-   61 |                                PAGE_SIZE, PHYS_ADDR_MAX, GFP_KERNEL);
-      |                                           ^~~~~~~~~~~~~
-
-
-The mtree_alloc_range() interface explicitly operates on 'unsigned long'
-address values, so I don't see an immediate workaround for this that would
-make it work on these machines. On the other hand, 
-
-At the moment, the only drivers that select CONFIG_IOMMUFD_DRIVER
-on 32-bit Arm systems are CONFIG_PDS_VFIO_PCI and CONFIG_MLX5_VFIO_PCI.
-It's probably fine to make all three symbols "depends on 64BIT" for
-now, but I don't know if there may be more drivers like this in the
-future that actually could make sense on embedded systems.
-
-     Arnd
+Best Regards,
+Chia-Yu
 
