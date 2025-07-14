@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-37244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14535B03EAF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 14:28:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A4F0B03ECF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 14:35:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29528174051
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 12:28:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 533523A2E4C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 12:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D03232472B1;
-	Mon, 14 Jul 2025 12:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C836248886;
+	Mon, 14 Jul 2025 12:35:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lOMiTO0B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTAt0zcR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D5C23C4E1;
-	Mon, 14 Jul 2025 12:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F7D20AF67;
+	Mon, 14 Jul 2025 12:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752496133; cv=none; b=NlRe+adHU0bU/kqq0lpl6FTWZdx526IDyEyznFmSwyiHCF5bRdObSVArUvgApBKibZlIUu/iO7rXn9pQsVWJpA0v8F2PdwNVf0kurQrNBDqjHcylnYa2svlCCqs7gZIM7Qzg/1aEe7wQXKVNmaEM1Tl5o4kiacgzU+Eq5I3g6NU=
+	t=1752496538; cv=none; b=WSP+SrOLrUtkA52/yRePv9IzpAhPMzUOlZ5ni+gfDDJrNhTC6a2vYuHpFZO8Ah5kpf/g0fS+fl5q1z5Z9Go/Vltda7sCQe6Jw7+MAcsomlImZWNUO/fyJK2iDY7dwW78mReLpBF1WkHOfbq1Ry2pjnOGfIAigwOPSSoKjyg13s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752496133; c=relaxed/simple;
-	bh=VhjsyGfVk/NYPkxf3dUl3ag4ZXP4DikybPpZX89jZFE=;
+	s=arc-20240116; t=1752496538; c=relaxed/simple;
+	bh=rKnLYV6EmHmE3mzoMHqDHoN8VPsmF1S4gphrWDmSfbw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tgKKWwFtRFaPSJAQJEjiYvk5pY/ucMBV+0mutzY3TtoRHY53vuHCv7kW7sLL89Zp5sE/VI+6pY/tuH8XhhLdef3QurPZcMa036UWy4DYXLXTUX0Bq288s2NaEYkyTrJY7wxoN77NU/mZ5y8wiq44nzuua383HktasmXkqAQTN4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lOMiTO0B; arc=none smtp.client-ip=209.85.208.175
+	 To:Cc:Content-Type; b=CGnI4HktYvVhhlJz46hhInURiQFJqVHhCZ2zSiBgiDGvEi+3y2J7xGP9hpHj5SOsmmWQfm+ZscV2PwtucXz9pjl+VEg31AQUBZ+8xYF/sM/i9rV9TWKhSQve2XoqulA3z1pIyCxo1OlFubt4zI5yD9HvFL1uJzDfN5lyNxgFFeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HTAt0zcR; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-32cd0dfbdb8so34196881fa.0;
-        Mon, 14 Jul 2025 05:28:51 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-605b9488c28so7703239a12.2;
+        Mon, 14 Jul 2025 05:35:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752496130; x=1753100930; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752496534; x=1753101334; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SbUxRDt1V115BL2AgQxJUishMrxXTwdY/Gt4NlJymo0=;
-        b=lOMiTO0B2YTNiSCrl+ZvRtoZ98lAhynFz1dmUxHF79iSRytHCZL+crfJl/ZYoubxfl
-         z9NG2U8v9EjaTemKOx0nGA/XZdmeagJmGKjEydKdPl5isnmWASZJ34+JB1oIsWMYXqPo
-         KLYHDj0EbqhWFdILgZMcirT3hhL8NOTWdwN2f+5xweI9Xjqhf8fMS7zJOMvxGXBs/9iB
-         kvxaQ7iy7Mgn68KoMx12V86Yo6J3Po2iOuUnsVcLkTnN6ieL4dnxw3MGJEr4EVSZ7B6V
-         /uJ/KIThHJ9qVHzYLfNcUZDiJnOq+Yf2vwDMTDkVogtaAnsHpOqHzxtYg7XGGu0gmJAc
-         oA1g==
+        bh=/JJkBY6StLlPiYYNcDOCRaSTmquHRBX1aQ9fP/9Yejg=;
+        b=HTAt0zcRenTTuIAy7QHrcU+NnxaEGPRAQN9tSIyMGU2SdFMzuERaYQkPMBRCKOybbw
+         0k8BpL9X/XScJYwSDCfdrF0KKHbp/B2nEzQaxsXKA8/NjJi07ke0ijq29Vl2QIRIC6Yg
+         QtV5qHL8h2Z/PvebG+ICoQfRVycUlL4205resx/Nx9/PJRBdVjQ9tProGmRMUnovfDnu
+         igDleclR2O207edI+QvD6KfccH+f3bZOX9DCtIW8amYahRj0Jkhy55yLUIkEPFxNskJv
+         MKt44ZoyH/p+yH9MZ8tAUa32+X1//Fmkd3shyBAJ7UnIQdtxehxMNpWN9MT7eVBbiLeS
+         eBWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752496130; x=1753100930;
+        d=1e100.net; s=20230601; t=1752496534; x=1753101334;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SbUxRDt1V115BL2AgQxJUishMrxXTwdY/Gt4NlJymo0=;
-        b=RU+IE5tWIWzaz8RAXxLYlhEZVkzFynVSCe/Ay08/S6LD2IRuxm1WhMkfN8QTi8wjqM
-         t6qZ5ce6wS1ohLe2645SPQ0qwv6sagu9bok9f4UKBbi4XWCpxv2yK/kh31k96G05xdqr
-         llchz9sa/9dvwqKyifJyuUcn72GvH6aw0zB9Yky0ZoRXrog39VBK3uLkHPvQ32CtcBB4
-         8ilXF9KzER6c9tCZDMd6jtB1nteLmU5Vpf2kgTCk/8NR21AbyQ5DCVQQgTp2Ikh9U66u
-         grqAJlKfzc4qccvaOpigMYzDw3IgQj3lF2MmOfeQmHUtoaTKqDrL2iuDsGQ+XCNDr6ju
-         plrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUYdt9Z0redpu3PgAlxy3YM9zjWVbG/oFXMmSSWYSCbpqaIbnT6eVy8gnmlfgeGPGYQTQYRu0+U6euvKOjU@vger.kernel.org, AJvYcCW6ks7v2fNsNs6yBAtlCTJ+SpP1jhc7A7NtQMB3uPo2KC+2yBqd6QQyjS7EfXIoIIw7itV2eLFM5hQXUYT7b0A=@vger.kernel.org, AJvYcCWj3eNRE6w4HNQQYTIrYS9WS/76foJTtmbskLw832SpneCKGgCctOr1EDQVboLfLy708RN7RTtyDACA@vger.kernel.org, AJvYcCXHGm+Hs7wcSZKG1KiShqWFZUbYB7nBRWrDYSwjvTu0eOHZQcEZ5gZCWNa6ZRiGRQp0jxuP7o49FyinAE691Pa3@vger.kernel.org, AJvYcCXMi/2YI4HO8d84iMtrln4ETDc8Oh0d/oyYU4oezrXRtCj7GSM6Wlg/S8neeplI0KGJTUfwh6tf@vger.kernel.org, AJvYcCXuA5rnfUtruG3RHZWAuHRpE+RFqjj4aa6ZvAu73WH4tHLuvwmMSPiGAEOVDWXPtFRaI959hUtjyLE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRm8oXPWILPjaV9akEciCXyBtcq2VHdvF2bPcbyNX9dweB8MlQ
-	crBqEgnhAk/lICQhE7GLyOpxnk+lMGDcJlQNxgr4tEGpxm0S6916uisfXpiQzBaOokRgbivD5HH
-	BuZoAF+aYWm3s+0bx20ve6lFNv5NL/nE=
-X-Gm-Gg: ASbGncsH8CJC47vwTo/RcthQZcwakpV3sn5eTFwFeu0AnITy/qkJhOSd0E0I+HqZwMb
-	q260G5JyW8C1mpZkR6oLU0C8lANHw2P942KkAXcX5RNPetzpLV/dTolFuJHKXslU/jcPV+XTXb5
-	3xt+r056+BlXmIrJdzCM55xXSJYiv1L59WzOroT/NcR7kNEh+pgmy1NpGIyUJABC3MvVnwAEJTF
-	3sRPlFf0Xlpu9Iyl275IU5i6padEU8gGRa4B+vlsz27Vo+z3pC+
-X-Google-Smtp-Source: AGHT+IHrSBkjEoqU/I5DY/nGtzSq30SG70sPRuWAgDJvgCsJU9oDbgAOubBSXw4/LD+Vz0YhYyXX8s9x0cDKBQKVndA=
-X-Received: by 2002:a2e:b5da:0:b0:32b:7111:95a7 with SMTP id
- 38308e7fff4ca-330535da03dmr27580171fa.41.1752496129946; Mon, 14 Jul 2025
- 05:28:49 -0700 (PDT)
+        bh=/JJkBY6StLlPiYYNcDOCRaSTmquHRBX1aQ9fP/9Yejg=;
+        b=kYJ1xbP+l5WXe9PtCXHI5Zz28Gg9Um6sBSTxWHHdhRSJ4ETTJAbKveK808FeTv/nVL
+         OVno4qOQhqxodsWPRdWXzAwftXlbA76ENN+6Gd615nIxQF1kIDUNSUhap9dF9+OYr2Y1
+         6MOltHL2uJ+G4QP8CECKG8A0MBAVo0ogsm+7WZV0wUKl8DXxkm4MSvUlbeWyBTCZBz/o
+         sXYG608Q0TiiNvY9c0YVjtXPV1vbFgPw5IlkZ4ja7FPODI483JNJgQeFnap1LCXochuB
+         PG+sl6Umwn5PJ5j8pu1xefw6hGb21wFAESVQsPm2babWBIe5CoHuVbv5koU1MR35a0au
+         FmcA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+3RgLUvf2NiU381lhtaSRkoWLEdJpTi6FmN8UGTjCURjAn1kRXksGHdXGZTOPvQMrhRWnTVEji3NeO7mb@vger.kernel.org, AJvYcCUhGBCuCfY+pNyWG4OtLUYeyOkH2+TEqGj8u07G/PaiJFSobQSiNQMWwPRqG0kv2pWonmTftT5DAOE=@vger.kernel.org, AJvYcCVNGUiRgJa3d4MjJmaVQ+3HaX87Bp9agYs9YFc2L6WcmqwYdSOLBxJjMtwamlkoud5eO4K3Ff3B+5ez5V3Jpno=@vger.kernel.org, AJvYcCXLlJTpvLULoU66O+bpqEMLejFaWROSk0YSdyYGrL0gALk/5JPT5kq5dSv+z85/24HS4J208GZY1OCi@vger.kernel.org, AJvYcCXWrTKpfQvGrIzreTDNoRWT8uqf1C9majubdMA6OSC+Jf7xcZlbg6GxVW58nWPR7a57QAT+tHtp@vger.kernel.org, AJvYcCXiSl7mbii0oZ3nc6nA/32wlOCYSPyGvILEe7z62cuowD4lTHCWwMJA0f+0FsFUBRdaXF8zBI55crjEIu72uZOc@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRY67yT44xp7eMkHjBIKftmuf6PvahA25X0nhhrlLOVRwLkJAc
+	3WV3chcsbeMt8Fdf+jE1p5ipzRgnf/6E810wE02yVxd4PUGNnF0fY+dxpcD24QhYrIrgjaSzZRq
+	SDjZqXnxEjMJdIC+UsAG/V7IILal3WHI=
+X-Gm-Gg: ASbGncsQvZBOTswBI3UQQaNwNy/oQT9c5D1K9S+CfGQlIjQl6+QKPqFvbaO7gSssTgr
+	A0bXv80UYm7/ueigk5wnlIxkTD2Q1WReGvCRFOCRjuUnbmx3NjVUzsMhZYNADaNffhPgZC/W2fh
+	XGbyuZA7vpTS9w3QyD9Y3BNZR3H59n4XsM966fIcnvVYwxZQ4FbhhJSGA/rH1Vg2zM4fJN2vM6r
+	rE1wiBgvyoW7bXzmU60uFOCsddBf1ZgScURuxKR1sjCYiMXbaAu
+X-Google-Smtp-Source: AGHT+IEHpxC5111y9Cj6JQaRaXgMXbAFzbh9lkbxM7Yb2ILuf+3IGoAWfMQm4cez9+Bj4NXuw+pe+X+/AUAJqf9Zudk=
+X-Received: by 2002:a17:906:d7d5:b0:ae3:6744:3675 with SMTP id
+ a640c23a62f3a-ae6fc0c3796mr1235555966b.48.1752496533691; Mon, 14 Jul 2025
+ 05:35:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,13 +76,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250709-core-cstr-fanout-1-v1-0-fd793b3e58a2@gmail.com>
- <20250709-core-cstr-fanout-1-v1-5-fd793b3e58a2@gmail.com> <DBBQCHNN1N7F.3O470V9YDXE70@kernel.org>
-In-Reply-To: <DBBQCHNN1N7F.3O470V9YDXE70@kernel.org>
+ <20250709-core-cstr-fanout-1-v1-1-fd793b3e58a2@gmail.com> <DBBQE3GJ0CHT.5PEF7RLS6C33@kernel.org>
+In-Reply-To: <DBBQE3GJ0CHT.5PEF7RLS6C33@kernel.org>
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 14 Jul 2025 08:28:13 -0400
-X-Gm-Features: Ac12FXxlpQphBeoscQniP1NYfXjAeRGBqEAxGkTlGCPTLLtOzVyVDIQfLGYMkU0
-Message-ID: <CAJ-ks9k2jyVpc6g9bGK4fUHbqUBUnH-aHawi5YKvhtpAEcqr2A@mail.gmail.com>
-Subject: Re: [PATCH 05/10] rust: drm: use `core::ffi::CStr` method names
+Date: Mon, 14 Jul 2025 08:34:56 -0400
+X-Gm-Features: Ac12FXyt7LMvW07NA5KJthMOxTToFChah-hJr4NBCGuAbPJrhV6AWz6kEkIvvTw
+Message-ID: <CAJ-ks9=ZHtzeyyFSZaVuA1t-3C8-hc40n6r8qFWxn628qT-OeA@mail.gmail.com>
+Subject: Re: [PATCH 01/10] gpu: nova-core: use `core::ffi::CStr` method names
 To: Danilo Krummrich <dakr@kernel.org>
 Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
 	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
@@ -101,11 +101,11 @@ Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripar
 	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
 	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	kunit-dev@googlegroups.com, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org
+	devicetree@vger.kernel.org, Javier Martinez Canillas <javierm@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 14, 2025 at 7:09=E2=80=AFAM Danilo Krummrich <dakr@kernel.org> =
+On Mon, Jul 14, 2025 at 7:11=E2=80=AFAM Danilo Krummrich <dakr@kernel.org> =
 wrote:
 >
 > On Wed Jul 9, 2025 at 9:58 PM CEST, Tamir Duberstein wrote:
@@ -118,30 +118,12 @@ y
 > > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 > > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 > > ---
-> >  rust/kernel/drm/device.rs | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/rust/kernel/drm/device.rs b/rust/kernel/drm/device.rs
-> > index b7ee3c464a12..998b942b6dd8 100644
-> > --- a/rust/kernel/drm/device.rs
-> > +++ b/rust/kernel/drm/device.rs
-> > @@ -83,8 +83,8 @@ impl<T: drm::Driver> Device<T> {
-> >          major: T::INFO.major,
-> >          minor: T::INFO.minor,
-> >          patchlevel: T::INFO.patchlevel,
-> > -        name: T::INFO.name.as_char_ptr().cast_mut(),
-> > -        desc: T::INFO.desc.as_char_ptr().cast_mut(),
-> > +        name: crate::str::as_char_ptr_in_const_context(T::INFO.name).c=
-ast_mut(),
-> > +        desc: crate::str::as_char_ptr_in_const_context(T::INFO.desc).c=
-ast_mut(),
+> >  drivers/gpu/drm/drm_panic_qr.rs | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Maybe looks slightly cleaner to import this function, not a blocker thoug=
-h.
+> This doesn't look like nova-core. :)
 
-I don't feel strongly. I think I chose not to import it because of the
-potential for conflicts.
+Oops :(
 
-See also https://github.com/rust-lang/rfcs/pull/3490 which would
-obviate the need for this method.
+How should I respin this one? the subject should be drm/panic, I think.
 
