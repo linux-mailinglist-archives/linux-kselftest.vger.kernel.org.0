@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-37296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72054B04B32
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 01:00:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96184B04B34
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 01:00:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A18CC3B30F4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 23:00:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E74D51A65BD9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 23:00:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7E4287265;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5AE7287502;
 	Mon, 14 Jul 2025 22:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="15Gj6shk"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zpKodP4t"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f73.google.com (mail-io1-f73.google.com [209.85.166.73])
+Received: from mail-oa1-f74.google.com (mail-oa1-f74.google.com [209.85.160.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0951827A134
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Jul 2025 22:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49846280328
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Jul 2025 22:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752533978; cv=none; b=h6mIgbyPic+oxei8B1E44kdSz9dqfLZSFSaRVzkOSUuIYFKGjpWE8ffB5DpqaJpUAhcoz95S4CeiapvTQUc2kLZkL0k4x1PrzJnFwkcn5YhQXuYHKySo9Zb5qotqlMqCptJQHAGC9An2p9IfsXAMYfl9avZl8G7syk8XMG1jSvw=
+	t=1752533978; cv=none; b=imgBFr4HxbEXg+c8PXoZ8qfz5VYrMlZiblrEfMo7e5XEm5SUbgNZkdCmTXsgnutEDlTEqAoB04HzBjXz49exrXH0YNRbTlH4mkNNULKCZcKbQxmdjRfhdUB1FEra1yYf+fvzCYiuo5XmnQYEZCN4EGxhgsGoPchIPOhoQVcL7CA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752533978; c=relaxed/simple;
-	bh=othQALCNyOm+wGAvU8/627th09/kFPGwbtOm5z9Z9UI=;
+	bh=DhNJxwtbMKN1Xjxkk4G2N2kwb2YustWbLKIc6yhbgV0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=heOO6ngBr87n/DQ1TCUrLXmmt0N+NhnFqS3+3eteN3klqrWRca1fJeNmRSLbNxvXnPYVvjSjLb1eDaqO66KD2tp7p+V1aF0hZSh6zTqo2ia1P61UeZqgAaNceVp4swsN7m3sWfx9AiXJIHU4yYEhlx4SdpccD5HjCEZ7pLmK2lA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=15Gj6shk; arc=none smtp.client-ip=209.85.166.73
+	 To:Cc:Content-Type; b=A3hSGp+tD9TN3vlp7aqxsa0LxCVgMzKviFNFuHcwpCZNAzsYec7+hBjJ5wu/RAnZPzvbTz5XSzozGyNIp7QN1gmwXAbIqCYQ85EUUH+u2eXCzkjPvAICFJ9m1t3ZgUcGBXpjI8fZek7gByCzrvoJ34L6vAll2oGGzGUhRkHvpFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zpKodP4t; arc=none smtp.client-ip=209.85.160.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-io1-f73.google.com with SMTP id ca18e2360f4ac-8649be94fa1so960747239f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Jul 2025 15:59:33 -0700 (PDT)
+Received: by mail-oa1-f74.google.com with SMTP id 586e51a60fabf-2f75a1bb0easo2222048fac.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Jul 2025 15:59:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1752533973; x=1753138773; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1752533974; x=1753138774; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yj1d2O4si27ynA5c551P+Zfs7Ln+MSdwgpjmb0x1hL8=;
-        b=15Gj6shkEmzWvUwOFKAgHcGBEcJrZve/sgdyDIJPYQapcuaw4jg2d2XRBMNoxkmOE8
-         uUXfpgz6Hbz93ljVAph13YCPwirWVgaavuIwdHtJdGul3GsaNmVMJ9Nh8mNy2K98tKTO
-         UhIgONoiSInM0ZtphC4Mw+MkpupRC/R/TAYuWpfiypTDD/zjkoYtym9pFC6TIrynEqzX
-         fwY3NpzQAVPmOciDjD8upuNXyiwPntY81OXD1McsCtd73KVdoTRjuvbjvjXk6+pfiMN0
-         v4s//7e64s45Or4OBrU3SygbVAg67aoaB7jYpqnzrBUOsjld8MzzvqjeTuQ+3eWNB4mt
-         PR8Q==
+        bh=UHPilczBMGoAee/NxsWPBSFL6RDSqf4UCYQezF4YOII=;
+        b=zpKodP4tinAhx/VsIb4Kc0Woi5Je7zKRvFbJw7pwes1f9E1OIy4CtMD2bAIuk1wSO+
+         ekmZIzFiEzo0zw0+KsbelsZ9vvgaD0XNam6ZR5CURsG/LtdzdbbP5O9WjLlYMa3cgMP5
+         pZLflIVxuW/nYNNeL94Qw335iqa5d1gElCRSRtcn6cVxcmqrq7mrGnpjKYrmO1KlCoqe
+         O14DRgqC9/yFhgjxS8ENNU6TBdzIYnJO8cbtDZAZu+8KyF8pAmrkflzzjJak2DvZLP2j
+         vQYSOP+ppu4vZewJh/f3C3hjvJotk//fkp6bRQdn9wB/JiPgGjZGFfVfEnNuprz7ArDK
+         ws5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752533973; x=1753138773;
+        d=1e100.net; s=20230601; t=1752533974; x=1753138774;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yj1d2O4si27ynA5c551P+Zfs7Ln+MSdwgpjmb0x1hL8=;
-        b=bkI1+P84TeIT77UkZ3ONrFOT8Nu4dWbQNOH0EkKAgGMWERsyKh1rou0anYarPbE2od
-         Su6j8H6Lzi421vBOqxp+ypBddCrlDsTeCZ82vE3Qq/NloyIt5WDBgNvdXypNNrzlUTsM
-         oczNhtQqYeWBCDa8Ksz88gS+OgqZJSjQF2Jf5CJB6cuG2xnwSWChwN8DV1aPGmtjWPAD
-         b9FzurqBHiFolIejkT25MJnWSyF97Cml1RBBOAg46zFmKpeL4KdYNx9adJS78fh5xzM5
-         1Rp7Bqw+8cPm2iNJUpwbLvPTxnBXLTxlCNa7mb/X9WTF0+KbIYXSzQfoOmwwaD6pwbwJ
-         8w2A==
-X-Forwarded-Encrypted: i=1; AJvYcCWFuttIjS19XSrGMzUkVV0dF42zfj6I8uBpt6k7Z4Agt/0G0gZ6hnZ+8spsyyzDkgg5r81TrsAXZPIITXjZBkY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz66/t461sC9CntOxB2JxBmXUXHyTqDnXciv4xnxb/SPDLY3i/T
-	H6ymxNryz/psTpVtmHXSWtTAoSnP2MVFmxuDz/eDTv59/Ityndwgyzd4pmHpJr35WgljhkerSJD
-	ASUXN/xdEB5S4WGve7ETedm4Rvw==
-X-Google-Smtp-Source: AGHT+IE6m3OV9C9WhafiqNDWUgM/SPyyFj0uO1JQbx0lCfDxaiYoAG40Gt8hPMCh6HqT1UEUS+mqhQ/SVyZg0yYLbQ==
-X-Received: from iobee17.prod.google.com ([2002:a05:6602:4891:b0:879:8855:6961])
+        bh=UHPilczBMGoAee/NxsWPBSFL6RDSqf4UCYQezF4YOII=;
+        b=w6+5MCC5CyqeDDlLYPFrvrHix5FB6+sgsvM0qFt7tjh8jpR/Z0VFx61GGzu2bXmcwE
+         WzB4Hgsoc5eg/mpzEhn2yzZekQ1gFPJ7TB2/Y2N+iptaBd+zJRaVKIs+rBgV5qN+hNjw
+         XdcqPSfCWYmqDVqPe+P+uwuZcNagq5g5jyzroOgAeF8iluzgU9wR1fy7d8SUjGAMP2jy
+         c1uJiUpysPL/k7Ii1H9E/YAAyc0wOqEjspoEi5jfJa6EaXWqlqyopgxrPx9nAynO5Czo
+         penYmPAQTLHYk+5Xawi8mjiayZYGFTrOFnIEc34P/9SKmwdNZtn+YRvhQ46xgU882IqK
+         KlYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUAbf1tyk+syOhqpypEnrx5yVc/DyoRoHZCEYlvXPT/7wwz9aeFjKLXAgIwJp8JbFt46xvM/YEMyIZwedBIIco=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1NEwRV4Eg0K85/3vhSZ+iq2DQpRVkrujxoYuEOUu2rIpVe90R
+	FLfoN+m8+sRKofg2FN5gFnHO5IWIfvlq7JBlJkgZgwPXsvGAEFIzqt/2QIT1CvTBIzVrRWQZT0C
+	Rfni2X5bOQqPajLToxKbmEzdVTA==
+X-Google-Smtp-Source: AGHT+IEAWWYG/VIKx8r6iZPZ1qTs8MCzlnhG4Qeg0PPUlKt/cLSyfJW7JBrJ/5M/Zp6SVe/k2s23ZgEdNfoQV0rAxQ==
+X-Received: from oabna17.prod.google.com ([2002:a05:6870:6c11:b0:2ef:e9aa:27e6])
  (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6602:6004:b0:85b:58b0:7ac9 with SMTP id ca18e2360f4ac-879b0b31ac1mr65009539f.10.1752533973276;
- Mon, 14 Jul 2025 15:59:33 -0700 (PDT)
-Date: Mon, 14 Jul 2025 22:58:57 +0000
+ 2002:a05:6871:a987:b0:2e9:365:d0d3 with SMTP id 586e51a60fabf-2ff26a28925mr10157294fac.21.1752533974416;
+ Mon, 14 Jul 2025 15:59:34 -0700 (PDT)
+Date: Mon, 14 Jul 2025 22:58:58 +0000
 In-Reply-To: <20250714225917.1396543-1-coltonlewis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250714225917.1396543-1-coltonlewis@google.com>
 X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
-Message-ID: <20250714225917.1396543-4-coltonlewis@google.com>
-Subject: [PATCH v4 03/23] KVM: arm64: Reorganize PMU functions
+Message-ID: <20250714225917.1396543-5-coltonlewis@google.com>
+Subject: [PATCH v4 04/23] perf: arm_pmuv3: Introduce method to partition the PMU
 From: Colton Lewis <coltonlewis@google.com>
 To: kvm@vger.kernel.org
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
@@ -89,1466 +89,286 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
 	linux-kselftest@vger.kernel.org, Colton Lewis <coltonlewis@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-A lot of functions in pmu-emul.c aren't specific to the emulated PMU
-implementation. Move them to the more appropriate pmu.c file where
-shared PMU functions should live.
+For PMUv3, the register field MDCR_EL2.HPMN partitiones the PMU
+counters into two ranges where counters 0..HPMN-1 are accessible by
+EL1 and, if allowed, EL0 while counters HPMN..N are only accessible by
+EL2.
+
+Create module parameter reserved_host_counters to reserve a number of
+counters for the host. This number is set at boot because the perf
+subsystem assumes the number of counters will not change after the PMU
+is probed.
+
+Introduce the function armv8pmu_partition() to modify the PMU driver's
+cntr_mask of available counters to exclude the counters being reserved
+for the guest and record reserved_guest_counters as the maximum
+allowable value for HPMN.
+
+Due to the difficulty this feature would create for the driver running
+in nVHE mode, partitioning is only allowed in VHE mode. In order to
+support a partitioned on nVHE we'd need to explicitly disable guest
+counters on every exit and reset HPMN to place all counters in the
+first range.
 
 Signed-off-by: Colton Lewis <coltonlewis@google.com>
 ---
- arch/arm64/include/asm/kvm_pmu.h |   3 +
- arch/arm64/kvm/pmu-emul.c        | 672 +-----------------------------
- arch/arm64/kvm/pmu.c             | 675 +++++++++++++++++++++++++++++++
- 3 files changed, 679 insertions(+), 671 deletions(-)
+ arch/arm/include/asm/arm_pmuv3.h   | 14 ++++++
+ arch/arm64/include/asm/arm_pmuv3.h |  5 ++
+ arch/arm64/include/asm/kvm_pmu.h   |  6 +++
+ arch/arm64/kvm/Makefile            |  2 +-
+ arch/arm64/kvm/pmu-direct.c        | 22 +++++++++
+ drivers/perf/arm_pmuv3.c           | 74 +++++++++++++++++++++++++++++-
+ include/linux/perf/arm_pmu.h       |  1 +
+ 7 files changed, 121 insertions(+), 3 deletions(-)
+ create mode 100644 arch/arm64/kvm/pmu-direct.c
 
+diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
+index 2ec0e5e83fc9..49b1f2d7842d 100644
+--- a/arch/arm/include/asm/arm_pmuv3.h
++++ b/arch/arm/include/asm/arm_pmuv3.h
+@@ -221,6 +221,10 @@ static inline bool kvm_pmu_counter_deferred(struct perf_event_attr *attr)
+ 	return false;
+ }
+ 
++static inline bool kvm_pmu_partition_supported(void)
++{
++	return false;
++}
+ static inline bool kvm_set_pmuserenr(u64 val)
+ {
+ 	return false;
+@@ -228,6 +232,11 @@ static inline bool kvm_set_pmuserenr(u64 val)
+ 
+ static inline void kvm_vcpu_pmu_resync_el0(void) {}
+ 
++static inline bool has_vhe(void)
++{
++	return false;
++}
++
+ /* PMU Version in DFR Register */
+ #define ARMV8_PMU_DFR_VER_NI        0
+ #define ARMV8_PMU_DFR_VER_V3P1      0x4
+@@ -242,6 +251,11 @@ static inline bool pmuv3_implemented(int pmuver)
+ 		 pmuver == ARMV8_PMU_DFR_VER_NI);
+ }
+ 
++static inline bool is_pmuv3p1(int pmuver)
++{
++	return pmuver >= ARMV8_PMU_DFR_VER_V3P1;
++}
++
+ static inline bool is_pmuv3p4(int pmuver)
+ {
+ 	return pmuver >= ARMV8_PMU_DFR_VER_V3P4;
+diff --git a/arch/arm64/include/asm/arm_pmuv3.h b/arch/arm64/include/asm/arm_pmuv3.h
+index cf2b2212e00a..27c4d6d47da3 100644
+--- a/arch/arm64/include/asm/arm_pmuv3.h
++++ b/arch/arm64/include/asm/arm_pmuv3.h
+@@ -171,6 +171,11 @@ static inline bool pmuv3_implemented(int pmuver)
+ 		 pmuver == ID_AA64DFR0_EL1_PMUVer_NI);
+ }
+ 
++static inline bool is_pmuv3p1(int pmuver)
++{
++	return pmuver >= ID_AA64DFR0_EL1_PMUVer_V3P1;
++}
++
+ static inline bool is_pmuv3p4(int pmuver)
+ {
+ 	return pmuver >= ID_AA64DFR0_EL1_PMUVer_V3P4;
 diff --git a/arch/arm64/include/asm/kvm_pmu.h b/arch/arm64/include/asm/kvm_pmu.h
-index ad3247b46838..6c961e877804 100644
+index 6c961e877804..8a2ed02e157d 100644
 --- a/arch/arm64/include/asm/kvm_pmu.h
 +++ b/arch/arm64/include/asm/kvm_pmu.h
-@@ -51,13 +51,16 @@ u64 kvm_pmu_get_counter_value(struct kvm_vcpu *vcpu, u64 select_idx);
+@@ -46,6 +46,7 @@ struct arm_pmu_entry {
+ };
+ 
+ bool kvm_supports_guest_pmuv3(void);
++bool kvm_pmu_partition_supported(void);
+ #define kvm_arm_pmu_irq_initialized(v)	((v)->arch.pmu.irq_num >= VGIC_NR_SGIS)
+ u64 kvm_pmu_get_counter_value(struct kvm_vcpu *vcpu, u64 select_idx);
  void kvm_pmu_set_counter_value(struct kvm_vcpu *vcpu, u64 select_idx, u64 val);
- void kvm_pmu_set_counter_value_user(struct kvm_vcpu *vcpu, u64 select_idx, u64 val);
- u64 kvm_pmu_implemented_counter_mask(struct kvm_vcpu *vcpu);
-+u64 kvm_pmu_hyp_counter_mask(struct kvm_vcpu *vcpu);
- u64 kvm_pmu_accessible_counter_mask(struct kvm_vcpu *vcpu);
-+u32 kvm_pmu_event_mask(struct kvm *kvm);
- u64 kvm_pmu_get_pmceid(struct kvm_vcpu *vcpu, bool pmceid1);
- void kvm_pmu_vcpu_init(struct kvm_vcpu *vcpu);
- void kvm_pmu_vcpu_destroy(struct kvm_vcpu *vcpu);
- void kvm_pmu_reprogram_counter_mask(struct kvm_vcpu *vcpu, u64 val);
- void kvm_pmu_flush_hwstate(struct kvm_vcpu *vcpu);
- void kvm_pmu_sync_hwstate(struct kvm_vcpu *vcpu);
-+bool kvm_pmu_overflow_status(struct kvm_vcpu *vcpu);
- bool kvm_pmu_should_notify_user(struct kvm_vcpu *vcpu);
- void kvm_pmu_update_run(struct kvm_vcpu *vcpu);
- void kvm_pmu_software_increment(struct kvm_vcpu *vcpu, u64 val);
-diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-index dcdd80ffd49d..bcaa9f7a8ca2 100644
---- a/arch/arm64/kvm/pmu-emul.c
-+++ b/arch/arm64/kvm/pmu-emul.c
-@@ -17,19 +17,10 @@
- 
- #define PERF_ATTR_CFG1_COUNTER_64BIT	BIT(0)
- 
--static LIST_HEAD(arm_pmus);
--static DEFINE_MUTEX(arm_pmus_lock);
--
- static void kvm_pmu_create_perf_event(struct kvm_pmc *pmc);
- static void kvm_pmu_release_perf_event(struct kvm_pmc *pmc);
- static bool kvm_pmu_counter_is_enabled(struct kvm_pmc *pmc);
- 
--bool kvm_supports_guest_pmuv3(void)
--{
--	guard(mutex)(&arm_pmus_lock);
--	return !list_empty(&arm_pmus);
--}
--
- static struct kvm_vcpu *kvm_pmc_to_vcpu(const struct kvm_pmc *pmc)
- {
- 	return container_of(pmc, struct kvm_vcpu, arch.pmu.pmc[pmc->idx]);
-@@ -40,46 +31,6 @@ static struct kvm_pmc *kvm_vcpu_idx_to_pmc(struct kvm_vcpu *vcpu, int cnt_idx)
- 	return &vcpu->arch.pmu.pmc[cnt_idx];
+@@ -115,6 +116,11 @@ static inline bool kvm_supports_guest_pmuv3(void)
+ 	return false;
  }
  
--static u32 __kvm_pmu_event_mask(unsigned int pmuver)
--{
--	switch (pmuver) {
--	case ID_AA64DFR0_EL1_PMUVer_IMP:
--		return GENMASK(9, 0);
--	case ID_AA64DFR0_EL1_PMUVer_V3P1:
--	case ID_AA64DFR0_EL1_PMUVer_V3P4:
--	case ID_AA64DFR0_EL1_PMUVer_V3P5:
--	case ID_AA64DFR0_EL1_PMUVer_V3P7:
--		return GENMASK(15, 0);
--	default:		/* Shouldn't be here, just for sanity */
--		WARN_ONCE(1, "Unknown PMU version %d\n", pmuver);
--		return 0;
--	}
--}
--
--static u32 kvm_pmu_event_mask(struct kvm *kvm)
--{
--	u64 dfr0 = kvm_read_vm_id_reg(kvm, SYS_ID_AA64DFR0_EL1);
--	u8 pmuver = SYS_FIELD_GET(ID_AA64DFR0_EL1, PMUVer, dfr0);
--
--	return __kvm_pmu_event_mask(pmuver);
--}
--
--u64 kvm_pmu_evtyper_mask(struct kvm *kvm)
--{
--	u64 mask = ARMV8_PMU_EXCLUDE_EL1 | ARMV8_PMU_EXCLUDE_EL0 |
--		   kvm_pmu_event_mask(kvm);
--
--	if (kvm_has_feat(kvm, ID_AA64PFR0_EL1, EL2, IMP))
--		mask |= ARMV8_PMU_INCLUDE_EL2;
--
--	if (kvm_has_feat(kvm, ID_AA64PFR0_EL1, EL3, IMP))
--		mask |= ARMV8_PMU_EXCLUDE_NS_EL0 |
--			ARMV8_PMU_EXCLUDE_NS_EL1 |
--			ARMV8_PMU_EXCLUDE_EL3;
--
--	return mask;
--}
--
- /**
-  * kvm_pmc_is_64bit - determine if counter is 64bit
-  * @pmc: counter context
-@@ -272,59 +223,6 @@ void kvm_pmu_vcpu_destroy(struct kvm_vcpu *vcpu)
- 	irq_work_sync(&vcpu->arch.pmu.overflow_work);
- }
++static inline bool kvm_pmu_partition_supported(void)
++{
++	return false;
++}
++
+ #define kvm_arm_pmu_irq_initialized(v)	(false)
+ static inline u64 kvm_pmu_get_counter_value(struct kvm_vcpu *vcpu,
+ 					    u64 select_idx)
+diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
+index 86035b311269..7ce842217575 100644
+--- a/arch/arm64/kvm/Makefile
++++ b/arch/arm64/kvm/Makefile
+@@ -23,7 +23,7 @@ kvm-y += arm.o mmu.o mmio.o psci.o hypercalls.o pvtime.o \
+ 	 vgic/vgic-mmio-v3.o vgic/vgic-kvm-device.o \
+ 	 vgic/vgic-its.o vgic/vgic-debug.o vgic/vgic-v3-nested.o
  
--static u64 kvm_pmu_hyp_counter_mask(struct kvm_vcpu *vcpu)
--{
--	unsigned int hpmn, n;
--
--	if (!vcpu_has_nv(vcpu))
--		return 0;
--
--	hpmn = SYS_FIELD_GET(MDCR_EL2, HPMN, __vcpu_sys_reg(vcpu, MDCR_EL2));
--	n = vcpu->kvm->arch.nr_pmu_counters;
--
--	/*
--	 * Programming HPMN to a value greater than PMCR_EL0.N is
--	 * CONSTRAINED UNPREDICTABLE. Make the implementation choice that an
--	 * UNKNOWN number of counters (in our case, zero) are reserved for EL2.
--	 */
--	if (hpmn >= n)
--		return 0;
--
--	/*
--	 * Programming HPMN=0 is CONSTRAINED UNPREDICTABLE if FEAT_HPMN0 isn't
--	 * implemented. Since KVM's ability to emulate HPMN=0 does not directly
--	 * depend on hardware (all PMU registers are trapped), make the
--	 * implementation choice that all counters are included in the second
--	 * range reserved for EL2/EL3.
--	 */
--	return GENMASK(n - 1, hpmn);
--}
--
--bool kvm_pmu_counter_is_hyp(struct kvm_vcpu *vcpu, unsigned int idx)
--{
--	return kvm_pmu_hyp_counter_mask(vcpu) & BIT(idx);
--}
--
--u64 kvm_pmu_accessible_counter_mask(struct kvm_vcpu *vcpu)
--{
--	u64 mask = kvm_pmu_implemented_counter_mask(vcpu);
--
--	if (!vcpu_has_nv(vcpu) || vcpu_is_el2(vcpu))
--		return mask;
--
--	return mask & ~kvm_pmu_hyp_counter_mask(vcpu);
--}
--
--u64 kvm_pmu_implemented_counter_mask(struct kvm_vcpu *vcpu)
--{
--	u64 val = FIELD_GET(ARMV8_PMU_PMCR_N, kvm_vcpu_read_pmcr(vcpu));
--
--	if (val == 0)
--		return BIT(ARMV8_PMU_CYCLE_IDX);
--	else
--		return GENMASK(val - 1, 0) | BIT(ARMV8_PMU_CYCLE_IDX);
--}
--
- static void kvm_pmc_enable_perf_event(struct kvm_pmc *pmc)
- {
- 	if (!pmc->perf_event) {
-@@ -370,7 +268,7 @@ void kvm_pmu_reprogram_counter_mask(struct kvm_vcpu *vcpu, u64 val)
-  * counter where the values of the global enable control, PMOVSSET_EL0[n], and
-  * PMINTENSET_EL1[n] are all 1.
-  */
--static bool kvm_pmu_overflow_status(struct kvm_vcpu *vcpu)
-+bool kvm_pmu_overflow_status(struct kvm_vcpu *vcpu)
- {
- 	u64 reg = __vcpu_sys_reg(vcpu, PMOVSSET_EL0);
+-kvm-$(CONFIG_HW_PERF_EVENTS)  += pmu-emul.o pmu.o
++kvm-$(CONFIG_HW_PERF_EVENTS)  += pmu-emul.o pmu-direct.o pmu.o
+ kvm-$(CONFIG_ARM64_PTR_AUTH)  += pauth.o
+ kvm-$(CONFIG_PTDUMP_STAGE2_DEBUGFS) += ptdump.o
  
-@@ -393,24 +291,6 @@ static bool kvm_pmu_overflow_status(struct kvm_vcpu *vcpu)
- 	return reg;
- }
- 
--static void kvm_pmu_update_state(struct kvm_vcpu *vcpu)
--{
--	struct kvm_pmu *pmu = &vcpu->arch.pmu;
--	bool overflow;
--
--	overflow = kvm_pmu_overflow_status(vcpu);
--	if (pmu->irq_level == overflow)
--		return;
--
--	pmu->irq_level = overflow;
--
--	if (likely(irqchip_in_kernel(vcpu->kvm))) {
--		int ret = kvm_vgic_inject_irq(vcpu->kvm, vcpu,
--					      pmu->irq_num, overflow, pmu);
--		WARN_ON(ret);
--	}
--}
--
- bool kvm_pmu_should_notify_user(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_pmu *pmu = &vcpu->arch.pmu;
-@@ -436,43 +316,6 @@ void kvm_pmu_update_run(struct kvm_vcpu *vcpu)
- 		regs->device_irq_level |= KVM_ARM_DEV_PMU;
- }
- 
--/**
-- * kvm_pmu_flush_hwstate - flush pmu state to cpu
-- * @vcpu: The vcpu pointer
-- *
-- * Check if the PMU has overflowed while we were running in the host, and inject
-- * an interrupt if that was the case.
-- */
--void kvm_pmu_flush_hwstate(struct kvm_vcpu *vcpu)
--{
--	kvm_pmu_update_state(vcpu);
--}
--
--/**
-- * kvm_pmu_sync_hwstate - sync pmu state from cpu
-- * @vcpu: The vcpu pointer
-- *
-- * Check if the PMU has overflowed while we were running in the guest, and
-- * inject an interrupt if that was the case.
-- */
--void kvm_pmu_sync_hwstate(struct kvm_vcpu *vcpu)
--{
--	kvm_pmu_update_state(vcpu);
--}
--
--/*
-- * When perf interrupt is an NMI, we cannot safely notify the vcpu corresponding
-- * to the event.
-- * This is why we need a callback to do it once outside of the NMI context.
-- */
--static void kvm_pmu_perf_overflow_notify_vcpu(struct irq_work *work)
--{
--	struct kvm_vcpu *vcpu;
--
--	vcpu = container_of(work, struct kvm_vcpu, arch.pmu.overflow_work);
--	kvm_vcpu_kick(vcpu);
--}
--
- /*
-  * Perform an increment on any of the counters described in @mask,
-  * generating the overflow if required, and propagate it as a chained
-@@ -784,132 +627,6 @@ void kvm_pmu_set_counter_event_type(struct kvm_vcpu *vcpu, u64 data,
- 	kvm_pmu_create_perf_event(pmc);
- }
- 
--void kvm_host_pmu_init(struct arm_pmu *pmu)
--{
--	struct arm_pmu_entry *entry;
--
--	/*
--	 * Check the sanitised PMU version for the system, as KVM does not
--	 * support implementations where PMUv3 exists on a subset of CPUs.
--	 */
--	if (!pmuv3_implemented(kvm_arm_pmu_get_pmuver_limit()))
--		return;
--
--	guard(mutex)(&arm_pmus_lock);
--
--	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
--	if (!entry)
--		return;
--
--	entry->arm_pmu = pmu;
--	list_add_tail(&entry->entry, &arm_pmus);
--}
--
--static struct arm_pmu *kvm_pmu_probe_armpmu(void)
--{
--	struct arm_pmu_entry *entry;
--	struct arm_pmu *pmu;
--	int cpu;
--
--	guard(mutex)(&arm_pmus_lock);
--
--	/*
--	 * It is safe to use a stale cpu to iterate the list of PMUs so long as
--	 * the same value is used for the entirety of the loop. Given this, and
--	 * the fact that no percpu data is used for the lookup there is no need
--	 * to disable preemption.
--	 *
--	 * It is still necessary to get a valid cpu, though, to probe for the
--	 * default PMU instance as userspace is not required to specify a PMU
--	 * type. In order to uphold the preexisting behavior KVM selects the
--	 * PMU instance for the core during vcpu init. A dependent use
--	 * case would be a user with disdain of all things big.LITTLE that
--	 * affines the VMM to a particular cluster of cores.
--	 *
--	 * In any case, userspace should just do the sane thing and use the UAPI
--	 * to select a PMU type directly. But, be wary of the baggage being
--	 * carried here.
--	 */
--	cpu = raw_smp_processor_id();
--	list_for_each_entry(entry, &arm_pmus, entry) {
--		pmu = entry->arm_pmu;
--
--		if (cpumask_test_cpu(cpu, &pmu->supported_cpus))
--			return pmu;
--	}
--
--	return NULL;
--}
--
--static u64 __compute_pmceid(struct arm_pmu *pmu, bool pmceid1)
--{
--	u32 hi[2], lo[2];
--
--	bitmap_to_arr32(lo, pmu->pmceid_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
--	bitmap_to_arr32(hi, pmu->pmceid_ext_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
--
--	return ((u64)hi[pmceid1] << 32) | lo[pmceid1];
--}
--
--static u64 compute_pmceid0(struct arm_pmu *pmu)
--{
--	u64 val = __compute_pmceid(pmu, 0);
--
--	/* always support SW_INCR */
--	val |= BIT(ARMV8_PMUV3_PERFCTR_SW_INCR);
--	/* always support CHAIN */
--	val |= BIT(ARMV8_PMUV3_PERFCTR_CHAIN);
--	return val;
--}
--
--static u64 compute_pmceid1(struct arm_pmu *pmu)
--{
--	u64 val = __compute_pmceid(pmu, 1);
--
--	/*
--	 * Don't advertise STALL_SLOT*, as PMMIR_EL0 is handled
--	 * as RAZ
--	 */
--	val &= ~(BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT - 32) |
--		 BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT_FRONTEND - 32) |
--		 BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT_BACKEND - 32));
--	return val;
--}
--
--u64 kvm_pmu_get_pmceid(struct kvm_vcpu *vcpu, bool pmceid1)
--{
--	struct arm_pmu *cpu_pmu = vcpu->kvm->arch.arm_pmu;
--	unsigned long *bmap = vcpu->kvm->arch.pmu_filter;
--	u64 val, mask = 0;
--	int base, i, nr_events;
--
--	if (!pmceid1) {
--		val = compute_pmceid0(cpu_pmu);
--		base = 0;
--	} else {
--		val = compute_pmceid1(cpu_pmu);
--		base = 32;
--	}
--
--	if (!bmap)
--		return val;
--
--	nr_events = kvm_pmu_event_mask(vcpu->kvm) + 1;
--
--	for (i = 0; i < 32; i += 8) {
--		u64 byte;
--
--		byte = bitmap_get_value8(bmap, base + i);
--		mask |= byte << i;
--		if (nr_events >= (0x4000 + base + 32)) {
--			byte = bitmap_get_value8(bmap, 0x4000 + base + i);
--			mask |= byte << (32 + i);
--		}
--	}
--
--	return val & mask;
--}
--
- void kvm_vcpu_reload_pmu(struct kvm_vcpu *vcpu)
- {
- 	u64 mask = kvm_pmu_implemented_counter_mask(vcpu);
-@@ -921,393 +638,6 @@ void kvm_vcpu_reload_pmu(struct kvm_vcpu *vcpu)
- 	kvm_pmu_reprogram_counter_mask(vcpu, mask);
- }
- 
--int kvm_arm_pmu_v3_enable(struct kvm_vcpu *vcpu)
--{
--	if (!vcpu->arch.pmu.created)
--		return -EINVAL;
--
--	/*
--	 * A valid interrupt configuration for the PMU is either to have a
--	 * properly configured interrupt number and using an in-kernel
--	 * irqchip, or to not have an in-kernel GIC and not set an IRQ.
--	 */
--	if (irqchip_in_kernel(vcpu->kvm)) {
--		int irq = vcpu->arch.pmu.irq_num;
--		/*
--		 * If we are using an in-kernel vgic, at this point we know
--		 * the vgic will be initialized, so we can check the PMU irq
--		 * number against the dimensions of the vgic and make sure
--		 * it's valid.
--		 */
--		if (!irq_is_ppi(irq) && !vgic_valid_spi(vcpu->kvm, irq))
--			return -EINVAL;
--	} else if (kvm_arm_pmu_irq_initialized(vcpu)) {
--		   return -EINVAL;
--	}
--
--	return 0;
--}
--
--static int kvm_arm_pmu_v3_init(struct kvm_vcpu *vcpu)
--{
--	if (irqchip_in_kernel(vcpu->kvm)) {
--		int ret;
--
--		/*
--		 * If using the PMU with an in-kernel virtual GIC
--		 * implementation, we require the GIC to be already
--		 * initialized when initializing the PMU.
--		 */
--		if (!vgic_initialized(vcpu->kvm))
--			return -ENODEV;
--
--		if (!kvm_arm_pmu_irq_initialized(vcpu))
--			return -ENXIO;
--
--		ret = kvm_vgic_set_owner(vcpu, vcpu->arch.pmu.irq_num,
--					 &vcpu->arch.pmu);
--		if (ret)
--			return ret;
--	}
--
--	init_irq_work(&vcpu->arch.pmu.overflow_work,
--		      kvm_pmu_perf_overflow_notify_vcpu);
--
--	vcpu->arch.pmu.created = true;
--	return 0;
--}
--
--/*
-- * For one VM the interrupt type must be same for each vcpu.
-- * As a PPI, the interrupt number is the same for all vcpus,
-- * while as an SPI it must be a separate number per vcpu.
-- */
--static bool pmu_irq_is_valid(struct kvm *kvm, int irq)
--{
--	unsigned long i;
--	struct kvm_vcpu *vcpu;
--
--	kvm_for_each_vcpu(i, vcpu, kvm) {
--		if (!kvm_arm_pmu_irq_initialized(vcpu))
--			continue;
--
--		if (irq_is_ppi(irq)) {
--			if (vcpu->arch.pmu.irq_num != irq)
--				return false;
--		} else {
--			if (vcpu->arch.pmu.irq_num == irq)
--				return false;
--		}
--	}
--
--	return true;
--}
--
--/**
-- * kvm_arm_pmu_get_max_counters - Return the max number of PMU counters.
-- * @kvm: The kvm pointer
-- */
--u8 kvm_arm_pmu_get_max_counters(struct kvm *kvm)
--{
--	struct arm_pmu *arm_pmu = kvm->arch.arm_pmu;
--
--	/*
--	 * PMUv3 requires that all event counters are capable of counting any
--	 * event, though the same may not be true of non-PMUv3 hardware.
--	 */
--	if (cpus_have_final_cap(ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS))
--		return 1;
--
--	/*
--	 * The arm_pmu->cntr_mask considers the fixed counter(s) as well.
--	 * Ignore those and return only the general-purpose counters.
--	 */
--	return bitmap_weight(arm_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS);
--}
--
--static void kvm_arm_set_nr_counters(struct kvm *kvm, unsigned int nr)
--{
--	kvm->arch.nr_pmu_counters = nr;
--
--	/* Reset MDCR_EL2.HPMN behind the vcpus' back... */
--	if (test_bit(KVM_ARM_VCPU_HAS_EL2, kvm->arch.vcpu_features)) {
--		struct kvm_vcpu *vcpu;
--		unsigned long i;
--
--		kvm_for_each_vcpu(i, vcpu, kvm) {
--			u64 val = __vcpu_sys_reg(vcpu, MDCR_EL2);
--			val &= ~MDCR_EL2_HPMN;
--			val |= FIELD_PREP(MDCR_EL2_HPMN, kvm->arch.nr_pmu_counters);
--			__vcpu_assign_sys_reg(vcpu, MDCR_EL2, val);
--		}
--	}
--}
--
--static void kvm_arm_set_pmu(struct kvm *kvm, struct arm_pmu *arm_pmu)
--{
--	lockdep_assert_held(&kvm->arch.config_lock);
--
--	kvm->arch.arm_pmu = arm_pmu;
--	kvm_arm_set_nr_counters(kvm, kvm_arm_pmu_get_max_counters(kvm));
--}
--
--/**
-- * kvm_arm_set_default_pmu - No PMU set, get the default one.
-- * @kvm: The kvm pointer
-- *
-- * The observant among you will notice that the supported_cpus
-- * mask does not get updated for the default PMU even though it
-- * is quite possible the selected instance supports only a
-- * subset of cores in the system. This is intentional, and
-- * upholds the preexisting behavior on heterogeneous systems
-- * where vCPUs can be scheduled on any core but the guest
-- * counters could stop working.
-- */
--int kvm_arm_set_default_pmu(struct kvm *kvm)
--{
--	struct arm_pmu *arm_pmu = kvm_pmu_probe_armpmu();
--
--	if (!arm_pmu)
--		return -ENODEV;
--
--	kvm_arm_set_pmu(kvm, arm_pmu);
--	return 0;
--}
--
--static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
--{
--	struct kvm *kvm = vcpu->kvm;
--	struct arm_pmu_entry *entry;
--	struct arm_pmu *arm_pmu;
--	int ret = -ENXIO;
--
--	lockdep_assert_held(&kvm->arch.config_lock);
--	mutex_lock(&arm_pmus_lock);
--
--	list_for_each_entry(entry, &arm_pmus, entry) {
--		arm_pmu = entry->arm_pmu;
--		if (arm_pmu->pmu.type == pmu_id) {
--			if (kvm_vm_has_ran_once(kvm) ||
--			    (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
--				ret = -EBUSY;
--				break;
--			}
--
--			kvm_arm_set_pmu(kvm, arm_pmu);
--			cpumask_copy(kvm->arch.supported_cpus, &arm_pmu->supported_cpus);
--			ret = 0;
--			break;
--		}
--	}
--
--	mutex_unlock(&arm_pmus_lock);
--	return ret;
--}
--
--static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
--{
--	struct kvm *kvm = vcpu->kvm;
--
--	if (!kvm->arch.arm_pmu)
--		return -EINVAL;
--
--	if (n > kvm_arm_pmu_get_max_counters(kvm))
--		return -EINVAL;
--
--	kvm_arm_set_nr_counters(kvm, n);
--	return 0;
--}
--
--int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
--{
--	struct kvm *kvm = vcpu->kvm;
--
--	lockdep_assert_held(&kvm->arch.config_lock);
--
--	if (!kvm_vcpu_has_pmu(vcpu))
--		return -ENODEV;
--
--	if (vcpu->arch.pmu.created)
--		return -EBUSY;
--
--	switch (attr->attr) {
--	case KVM_ARM_VCPU_PMU_V3_IRQ: {
--		int __user *uaddr = (int __user *)(long)attr->addr;
--		int irq;
--
--		if (!irqchip_in_kernel(kvm))
--			return -EINVAL;
--
--		if (get_user(irq, uaddr))
--			return -EFAULT;
--
--		/* The PMU overflow interrupt can be a PPI or a valid SPI. */
--		if (!(irq_is_ppi(irq) || irq_is_spi(irq)))
--			return -EINVAL;
--
--		if (!pmu_irq_is_valid(kvm, irq))
--			return -EINVAL;
--
--		if (kvm_arm_pmu_irq_initialized(vcpu))
--			return -EBUSY;
--
--		kvm_debug("Set kvm ARM PMU irq: %d\n", irq);
--		vcpu->arch.pmu.irq_num = irq;
--		return 0;
--	}
--	case KVM_ARM_VCPU_PMU_V3_FILTER: {
--		u8 pmuver = kvm_arm_pmu_get_pmuver_limit();
--		struct kvm_pmu_event_filter __user *uaddr;
--		struct kvm_pmu_event_filter filter;
--		int nr_events;
--
--		/*
--		 * Allow userspace to specify an event filter for the entire
--		 * event range supported by PMUVer of the hardware, rather
--		 * than the guest's PMUVer for KVM backward compatibility.
--		 */
--		nr_events = __kvm_pmu_event_mask(pmuver) + 1;
--
--		uaddr = (struct kvm_pmu_event_filter __user *)(long)attr->addr;
--
--		if (copy_from_user(&filter, uaddr, sizeof(filter)))
--			return -EFAULT;
--
--		if (((u32)filter.base_event + filter.nevents) > nr_events ||
--		    (filter.action != KVM_PMU_EVENT_ALLOW &&
--		     filter.action != KVM_PMU_EVENT_DENY))
--			return -EINVAL;
--
--		if (kvm_vm_has_ran_once(kvm))
--			return -EBUSY;
--
--		if (!kvm->arch.pmu_filter) {
--			kvm->arch.pmu_filter = bitmap_alloc(nr_events, GFP_KERNEL_ACCOUNT);
--			if (!kvm->arch.pmu_filter)
--				return -ENOMEM;
--
--			/*
--			 * The default depends on the first applied filter.
--			 * If it allows events, the default is to deny.
--			 * Conversely, if the first filter denies a set of
--			 * events, the default is to allow.
--			 */
--			if (filter.action == KVM_PMU_EVENT_ALLOW)
--				bitmap_zero(kvm->arch.pmu_filter, nr_events);
--			else
--				bitmap_fill(kvm->arch.pmu_filter, nr_events);
--		}
--
--		if (filter.action == KVM_PMU_EVENT_ALLOW)
--			bitmap_set(kvm->arch.pmu_filter, filter.base_event, filter.nevents);
--		else
--			bitmap_clear(kvm->arch.pmu_filter, filter.base_event, filter.nevents);
--
--		return 0;
--	}
--	case KVM_ARM_VCPU_PMU_V3_SET_PMU: {
--		int __user *uaddr = (int __user *)(long)attr->addr;
--		int pmu_id;
--
--		if (get_user(pmu_id, uaddr))
--			return -EFAULT;
--
--		return kvm_arm_pmu_v3_set_pmu(vcpu, pmu_id);
--	}
--	case KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS: {
--		unsigned int __user *uaddr = (unsigned int __user *)(long)attr->addr;
--		unsigned int n;
--
--		if (get_user(n, uaddr))
--			return -EFAULT;
--
--		return kvm_arm_pmu_v3_set_nr_counters(vcpu, n);
--	}
--	case KVM_ARM_VCPU_PMU_V3_INIT:
--		return kvm_arm_pmu_v3_init(vcpu);
--	}
--
--	return -ENXIO;
--}
--
--int kvm_arm_pmu_v3_get_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
--{
--	switch (attr->attr) {
--	case KVM_ARM_VCPU_PMU_V3_IRQ: {
--		int __user *uaddr = (int __user *)(long)attr->addr;
--		int irq;
--
--		if (!irqchip_in_kernel(vcpu->kvm))
--			return -EINVAL;
--
--		if (!kvm_vcpu_has_pmu(vcpu))
--			return -ENODEV;
--
--		if (!kvm_arm_pmu_irq_initialized(vcpu))
--			return -ENXIO;
--
--		irq = vcpu->arch.pmu.irq_num;
--		return put_user(irq, uaddr);
--	}
--	}
--
--	return -ENXIO;
--}
--
--int kvm_arm_pmu_v3_has_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
--{
--	switch (attr->attr) {
--	case KVM_ARM_VCPU_PMU_V3_IRQ:
--	case KVM_ARM_VCPU_PMU_V3_INIT:
--	case KVM_ARM_VCPU_PMU_V3_FILTER:
--	case KVM_ARM_VCPU_PMU_V3_SET_PMU:
--	case KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS:
--		if (kvm_vcpu_has_pmu(vcpu))
--			return 0;
--	}
--
--	return -ENXIO;
--}
--
--u8 kvm_arm_pmu_get_pmuver_limit(void)
--{
--	unsigned int pmuver;
--
--	pmuver = SYS_FIELD_GET(ID_AA64DFR0_EL1, PMUVer,
--			       read_sanitised_ftr_reg(SYS_ID_AA64DFR0_EL1));
--
--	/*
--	 * Spoof a barebones PMUv3 implementation if the system supports IMPDEF
--	 * traps of the PMUv3 sysregs
--	 */
--	if (cpus_have_final_cap(ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS))
--		return ID_AA64DFR0_EL1_PMUVer_IMP;
--
--	/*
--	 * Otherwise, treat IMPLEMENTATION DEFINED functionality as
--	 * unimplemented
--	 */
--	if (pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF)
--		return 0;
--
--	return min(pmuver, ID_AA64DFR0_EL1_PMUVer_V3P5);
--}
--
--/**
-- * kvm_vcpu_read_pmcr - Read PMCR_EL0 register for the vCPU
-- * @vcpu: The vcpu pointer
-- */
--u64 kvm_vcpu_read_pmcr(struct kvm_vcpu *vcpu)
--{
--	u64 pmcr = __vcpu_sys_reg(vcpu, PMCR_EL0);
--	u64 n = vcpu->kvm->arch.nr_pmu_counters;
--
--	if (vcpu_has_nv(vcpu) && !vcpu_is_el2(vcpu))
--		n = FIELD_GET(MDCR_EL2_HPMN, __vcpu_sys_reg(vcpu, MDCR_EL2));
--
--	return u64_replace_bits(pmcr, n, ARMV8_PMU_PMCR_N);
--}
--
- void kvm_pmu_nested_transition(struct kvm_vcpu *vcpu)
- {
- 	bool reprogrammed = false;
-diff --git a/arch/arm64/kvm/pmu.c b/arch/arm64/kvm/pmu.c
-index 6b48a3d16d0d..79b7ea037153 100644
---- a/arch/arm64/kvm/pmu.c
-+++ b/arch/arm64/kvm/pmu.c
-@@ -8,8 +8,21 @@
- #include <linux/perf/arm_pmu.h>
- #include <linux/perf/arm_pmuv3.h>
- 
-+#include <asm/kvm_emulate.h>
+diff --git a/arch/arm64/kvm/pmu-direct.c b/arch/arm64/kvm/pmu-direct.c
+new file mode 100644
+index 000000000000..9423d6f65059
+--- /dev/null
++++ b/arch/arm64/kvm/pmu-direct.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2025 Google LLC
++ * Author: Colton Lewis <coltonlewis@google.com>
++ */
++
++#include <linux/kvm_host.h>
++
 +#include <asm/kvm_pmu.h>
 +
-+static LIST_HEAD(arm_pmus);
-+static DEFINE_MUTEX(arm_pmus_lock);
- static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
- 
-+#define kvm_arm_pmu_irq_initialized(v)	((v)->arch.pmu.irq_num >= VGIC_NR_SGIS)
-+
-+bool kvm_supports_guest_pmuv3(void)
++/**
++ * kvm_pmu_partition_supported() - Determine if partitioning is possible
++ *
++ * Partitioning is only supported in VHE mode (with PMUv3, assumed
++ * since we are in the PMUv3 driver)
++ *
++ * Return: True if partitioning is possible, false otherwise
++ */
++bool kvm_pmu_partition_supported(void)
 +{
-+	guard(mutex)(&arm_pmus_lock);
-+	return !list_empty(&arm_pmus);
++	return has_vhe();
 +}
+diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+index c2e3672e1228..294ccbdc3816 100644
+--- a/drivers/perf/arm_pmuv3.c
++++ b/drivers/perf/arm_pmuv3.c
+@@ -40,6 +40,12 @@
+ #define ARMV8_THUNDER_PERFCTR_L1I_CACHE_PREF_ACCESS		0xEC
+ #define ARMV8_THUNDER_PERFCTR_L1I_CACHE_PREF_MISS		0xED
+ 
++static int reserved_host_counters __read_mostly = -1;
++
++module_param(reserved_host_counters, int, 0);
++MODULE_PARM_DESC(reserved_host_counters,
++		 "PMU Partition: -1 = No partition; +N = Reserve N counters for the host");
 +
  /*
-  * Given the perf event attributes and system type, determine
-  * if we are going to need to switch counters at guest entry/exit.
-@@ -209,3 +222,665 @@ void kvm_vcpu_pmu_resync_el0(void)
- 
- 	kvm_make_request(KVM_REQ_RESYNC_PMU_EL0, vcpu);
+  * ARMv8 Architectural defined events, not all of these may
+  * be supported on any given implementation. Unsupported events will
+@@ -505,6 +511,11 @@ static void armv8pmu_pmcr_write(u64 val)
+ 	write_pmcr(val);
  }
-+
-+void kvm_host_pmu_init(struct arm_pmu *pmu)
+ 
++static u64 armv8pmu_pmcr_n_read(void)
 +{
-+	struct arm_pmu_entry *entry;
-+
-+	/*
-+	 * Check the sanitised PMU version for the system, as KVM does not
-+	 * support implementations where PMUv3 exists on a subset of CPUs.
-+	 */
-+	if (!pmuv3_implemented(kvm_arm_pmu_get_pmuver_limit()))
-+		return;
-+
-+	guard(mutex)(&arm_pmus_lock);
-+
-+	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return;
-+
-+	entry->arm_pmu = pmu;
-+	list_add_tail(&entry->entry, &arm_pmus);
++	return FIELD_GET(ARMV8_PMU_PMCR_N, armv8pmu_pmcr_read());
 +}
 +
-+static struct arm_pmu *kvm_pmu_probe_armpmu(void)
-+{
-+	struct arm_pmu_entry *entry;
-+	struct arm_pmu *pmu;
-+	int cpu;
-+
-+	guard(mutex)(&arm_pmus_lock);
-+
-+	/*
-+	 * It is safe to use a stale cpu to iterate the list of PMUs so long as
-+	 * the same value is used for the entirety of the loop. Given this, and
-+	 * the fact that no percpu data is used for the lookup there is no need
-+	 * to disable preemption.
-+	 *
-+	 * It is still necessary to get a valid cpu, though, to probe for the
-+	 * default PMU instance as userspace is not required to specify a PMU
-+	 * type. In order to uphold the preexisting behavior KVM selects the
-+	 * PMU instance for the core during vcpu init. A dependent use
-+	 * case would be a user with disdain of all things big.LITTLE that
-+	 * affines the VMM to a particular cluster of cores.
-+	 *
-+	 * In any case, userspace should just do the sane thing and use the UAPI
-+	 * to select a PMU type directly. But, be wary of the baggage being
-+	 * carried here.
-+	 */
-+	cpu = raw_smp_processor_id();
-+	list_for_each_entry(entry, &arm_pmus, entry) {
-+		pmu = entry->arm_pmu;
-+
-+		if (cpumask_test_cpu(cpu, &pmu->supported_cpus))
-+			return pmu;
-+	}
-+
-+	return NULL;
-+}
-+
-+static u64 __compute_pmceid(struct arm_pmu *pmu, bool pmceid1)
-+{
-+	u32 hi[2], lo[2];
-+
-+	bitmap_to_arr32(lo, pmu->pmceid_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
-+	bitmap_to_arr32(hi, pmu->pmceid_ext_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
-+
-+	return ((u64)hi[pmceid1] << 32) | lo[pmceid1];
-+}
-+
-+static u64 compute_pmceid0(struct arm_pmu *pmu)
-+{
-+	u64 val = __compute_pmceid(pmu, 0);
-+
-+	/* always support SW_INCR */
-+	val |= BIT(ARMV8_PMUV3_PERFCTR_SW_INCR);
-+	/* always support CHAIN */
-+	val |= BIT(ARMV8_PMUV3_PERFCTR_CHAIN);
-+	return val;
-+}
-+
-+static u64 compute_pmceid1(struct arm_pmu *pmu)
-+{
-+	u64 val = __compute_pmceid(pmu, 1);
-+
-+	/*
-+	 * Don't advertise STALL_SLOT*, as PMMIR_EL0 is handled
-+	 * as RAZ
-+	 */
-+	val &= ~(BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT - 32) |
-+		 BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT_FRONTEND - 32) |
-+		 BIT_ULL(ARMV8_PMUV3_PERFCTR_STALL_SLOT_BACKEND - 32));
-+	return val;
-+}
-+
-+u64 kvm_pmu_get_pmceid(struct kvm_vcpu *vcpu, bool pmceid1)
-+{
-+	struct arm_pmu *cpu_pmu = vcpu->kvm->arch.arm_pmu;
-+	unsigned long *bmap = vcpu->kvm->arch.pmu_filter;
-+	u64 val, mask = 0;
-+	int base, i, nr_events;
-+
-+	if (!pmceid1) {
-+		val = compute_pmceid0(cpu_pmu);
-+		base = 0;
-+	} else {
-+		val = compute_pmceid1(cpu_pmu);
-+		base = 32;
-+	}
-+
-+	if (!bmap)
-+		return val;
-+
-+	nr_events = kvm_pmu_event_mask(vcpu->kvm) + 1;
-+
-+	for (i = 0; i < 32; i += 8) {
-+		u64 byte;
-+
-+		byte = bitmap_get_value8(bmap, base + i);
-+		mask |= byte << i;
-+		if (nr_events >= (0x4000 + base + 32)) {
-+			byte = bitmap_get_value8(bmap, 0x4000 + base + i);
-+			mask |= byte << (32 + i);
-+		}
-+	}
-+
-+	return val & mask;
-+}
-+
-+/*
-+ * When perf interrupt is an NMI, we cannot safely notify the vcpu corresponding
-+ * to the event.
-+ * This is why we need a callback to do it once outside of the NMI context.
-+ */
-+static void kvm_pmu_perf_overflow_notify_vcpu(struct irq_work *work)
-+{
-+	struct kvm_vcpu *vcpu;
-+
-+	vcpu = container_of(work, struct kvm_vcpu, arch.pmu.overflow_work);
-+	kvm_vcpu_kick(vcpu);
-+}
-+
-+static u32 __kvm_pmu_event_mask(unsigned int pmuver)
-+{
-+	switch (pmuver) {
-+	case ID_AA64DFR0_EL1_PMUVer_IMP:
-+		return GENMASK(9, 0);
-+	case ID_AA64DFR0_EL1_PMUVer_V3P1:
-+	case ID_AA64DFR0_EL1_PMUVer_V3P4:
-+	case ID_AA64DFR0_EL1_PMUVer_V3P5:
-+	case ID_AA64DFR0_EL1_PMUVer_V3P7:
-+		return GENMASK(15, 0);
-+	default:		/* Shouldn't be here, just for sanity */
-+		WARN_ONCE(1, "Unknown PMU version %d\n", pmuver);
-+		return 0;
-+	}
-+}
-+
-+u32 kvm_pmu_event_mask(struct kvm *kvm)
-+{
-+	u64 dfr0 = kvm_read_vm_id_reg(kvm, SYS_ID_AA64DFR0_EL1);
-+	u8 pmuver = SYS_FIELD_GET(ID_AA64DFR0_EL1, PMUVer, dfr0);
-+
-+	return __kvm_pmu_event_mask(pmuver);
-+}
-+
-+u64 kvm_pmu_evtyper_mask(struct kvm *kvm)
-+{
-+	u64 mask = ARMV8_PMU_EXCLUDE_EL1 | ARMV8_PMU_EXCLUDE_EL0 |
-+		   kvm_pmu_event_mask(kvm);
-+
-+	if (kvm_has_feat(kvm, ID_AA64PFR0_EL1, EL2, IMP))
-+		mask |= ARMV8_PMU_INCLUDE_EL2;
-+
-+	if (kvm_has_feat(kvm, ID_AA64PFR0_EL1, EL3, IMP))
-+		mask |= ARMV8_PMU_EXCLUDE_NS_EL0 |
-+			ARMV8_PMU_EXCLUDE_NS_EL1 |
-+			ARMV8_PMU_EXCLUDE_EL3;
-+
-+	return mask;
-+}
-+
-+static void kvm_pmu_update_state(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_pmu *pmu = &vcpu->arch.pmu;
-+	bool overflow;
-+
-+	overflow = kvm_pmu_overflow_status(vcpu);
-+	if (pmu->irq_level == overflow)
-+		return;
-+
-+	pmu->irq_level = overflow;
-+
-+	if (likely(irqchip_in_kernel(vcpu->kvm))) {
-+		int ret = kvm_vgic_inject_irq(vcpu->kvm, vcpu,
-+					      pmu->irq_num, overflow, pmu);
-+		WARN_ON(ret);
-+	}
-+}
-+
+ static int armv8pmu_has_overflowed(u64 pmovsr)
+ {
+ 	return !!(pmovsr & ARMV8_PMU_OVERFLOWED_MASK);
+@@ -1200,6 +1211,58 @@ struct armv8pmu_probe_info {
+ 	bool present;
+ };
+ 
 +/**
-+ * kvm_pmu_flush_hwstate - flush pmu state to cpu
-+ * @vcpu: The vcpu pointer
++ * armv8pmu_reservation_is_valid() - Determine if reservation is allowed
++ * @host_counters: Number of host counters to reserve
 + *
-+ * Check if the PMU has overflowed while we were running in the host, and inject
-+ * an interrupt if that was the case.
-+ */
-+void kvm_pmu_flush_hwstate(struct kvm_vcpu *vcpu)
-+{
-+	kvm_pmu_update_state(vcpu);
-+}
-+
-+/**
-+ * kvm_pmu_sync_hwstate - sync pmu state from cpu
-+ * @vcpu: The vcpu pointer
++ * Determine if the number of host counters in the argument is an
++ * allowed reservation, 0 to NR_COUNTERS inclusive.
 + *
-+ * Check if the PMU has overflowed while we were running in the guest, and
-+ * inject an interrupt if that was the case.
++ * Return: True if reservation allowed, false otherwise
 + */
-+void kvm_pmu_sync_hwstate(struct kvm_vcpu *vcpu)
++static bool armv8pmu_reservation_is_valid(int host_counters)
 +{
-+	kvm_pmu_update_state(vcpu);
-+}
-+
-+int kvm_arm_pmu_v3_enable(struct kvm_vcpu *vcpu)
-+{
-+	if (!vcpu->arch.pmu.created)
-+		return -EINVAL;
-+
-+	/*
-+	 * A valid interrupt configuration for the PMU is either to have a
-+	 * properly configured interrupt number and using an in-kernel
-+	 * irqchip, or to not have an in-kernel GIC and not set an IRQ.
-+	 */
-+	if (irqchip_in_kernel(vcpu->kvm)) {
-+		int irq = vcpu->arch.pmu.irq_num;
-+		/*
-+		 * If we are using an in-kernel vgic, at this point we know
-+		 * the vgic will be initialized, so we can check the PMU irq
-+		 * number against the dimensions of the vgic and make sure
-+		 * it's valid.
-+		 */
-+		if (!irq_is_ppi(irq) && !vgic_valid_spi(vcpu->kvm, irq))
-+			return -EINVAL;
-+	} else if (kvm_arm_pmu_irq_initialized(vcpu)) {
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int kvm_arm_pmu_v3_init(struct kvm_vcpu *vcpu)
-+{
-+	if (irqchip_in_kernel(vcpu->kvm)) {
-+		int ret;
-+
-+		/*
-+		 * If using the PMU with an in-kernel virtual GIC
-+		 * implementation, we require the GIC to be already
-+		 * initialized when initializing the PMU.
-+		 */
-+		if (!vgic_initialized(vcpu->kvm))
-+			return -ENODEV;
-+
-+		if (!kvm_arm_pmu_irq_initialized(vcpu))
-+			return -ENXIO;
-+
-+		ret = kvm_vgic_set_owner(vcpu, vcpu->arch.pmu.irq_num,
-+					 &vcpu->arch.pmu);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	init_irq_work(&vcpu->arch.pmu.overflow_work,
-+		      kvm_pmu_perf_overflow_notify_vcpu);
-+
-+	vcpu->arch.pmu.created = true;
-+	return 0;
-+}
-+
-+/*
-+ * For one VM the interrupt type must be same for each vcpu.
-+ * As a PPI, the interrupt number is the same for all vcpus,
-+ * while as an SPI it must be a separate number per vcpu.
-+ */
-+static bool pmu_irq_is_valid(struct kvm *kvm, int irq)
-+{
-+	unsigned long i;
-+	struct kvm_vcpu *vcpu;
-+
-+	kvm_for_each_vcpu(i, vcpu, kvm) {
-+		if (!kvm_arm_pmu_irq_initialized(vcpu))
-+			continue;
-+
-+		if (irq_is_ppi(irq)) {
-+			if (vcpu->arch.pmu.irq_num != irq)
-+				return false;
-+		} else {
-+			if (vcpu->arch.pmu.irq_num == irq)
-+				return false;
-+		}
-+	}
-+
-+	return true;
++	return host_counters >= 0 &&
++		host_counters <= armv8pmu_pmcr_n_read();
 +}
 +
 +/**
-+ * kvm_arm_pmu_get_max_counters - Return the max number of PMU counters.
-+ * @kvm: The kvm pointer
-+ */
-+u8 kvm_arm_pmu_get_max_counters(struct kvm *kvm)
-+{
-+	struct arm_pmu *arm_pmu = kvm->arch.arm_pmu;
-+
-+	/*
-+	 * PMUv3 requires that all event counters are capable of counting any
-+	 * event, though the same may not be true of non-PMUv3 hardware.
-+	 */
-+	if (cpus_have_final_cap(ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS))
-+		return 1;
-+
-+	/*
-+	 * The arm_pmu->cntr_mask considers the fixed counter(s) as well.
-+	 * Ignore those and return only the general-purpose counters.
-+	 */
-+	return bitmap_weight(arm_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS);
-+}
-+
-+static void kvm_arm_set_nr_counters(struct kvm *kvm, unsigned int nr)
-+{
-+	kvm->arch.nr_pmu_counters = nr;
-+
-+	/* Reset MDCR_EL2.HPMN behind the vcpus' back... */
-+	if (test_bit(KVM_ARM_VCPU_HAS_EL2, kvm->arch.vcpu_features)) {
-+		struct kvm_vcpu *vcpu;
-+		unsigned long i;
-+
-+		kvm_for_each_vcpu(i, vcpu, kvm) {
-+			u64 val = __vcpu_sys_reg(vcpu, MDCR_EL2);
-+
-+			val &= ~MDCR_EL2_HPMN;
-+			val |= FIELD_PREP(MDCR_EL2_HPMN, kvm->arch.nr_pmu_counters);
-+			__vcpu_assign_sys_reg(vcpu, MDCR_EL2, val);
-+		}
-+	}
-+}
-+
-+static void kvm_arm_set_pmu(struct kvm *kvm, struct arm_pmu *arm_pmu)
-+{
-+	lockdep_assert_held(&kvm->arch.config_lock);
-+
-+	kvm->arch.arm_pmu = arm_pmu;
-+	kvm_arm_set_nr_counters(kvm, kvm_arm_pmu_get_max_counters(kvm));
-+}
-+
-+/**
-+ * kvm_arm_set_default_pmu - No PMU set, get the default one.
-+ * @kvm: The kvm pointer
++ * armv8pmu_partition() - Partition the PMU
++ * @pmu: Pointer to pmu being partitioned
++ * @host_counters: Number of host counters to reserve
 + *
-+ * The observant among you will notice that the supported_cpus
-+ * mask does not get updated for the default PMU even though it
-+ * is quite possible the selected instance supports only a
-+ * subset of cores in the system. This is intentional, and
-+ * upholds the preexisting behavior on heterogeneous systems
-+ * where vCPUs can be scheduled on any core but the guest
-+ * counters could stop working.
++ * Partition the given PMU by taking a number of host counters to
++ * reserve and, if it is a valid reservation, recording the
++ * corresponding HPMN value in the hpmn_max field of the PMU and
++ * clearing the guest-reserved counters from the counter mask.
++ *
++ * Return: 0 on success, -ERROR otherwise
 + */
-+int kvm_arm_set_default_pmu(struct kvm *kvm)
++static int armv8pmu_partition(struct arm_pmu *pmu, int host_counters)
 +{
-+	struct arm_pmu *arm_pmu = kvm_pmu_probe_armpmu();
++	u8 nr_counters;
++	u8 hpmn;
 +
-+	if (!arm_pmu)
-+		return -ENODEV;
++	if (!armv8pmu_reservation_is_valid(host_counters))
++		return -EINVAL;
 +
-+	kvm_arm_set_pmu(kvm, arm_pmu);
++	nr_counters = armv8pmu_pmcr_n_read();
++	hpmn = nr_counters - host_counters;
++
++	pmu->hpmn_max = hpmn;
++
++	bitmap_clear(pmu->cntr_mask, 0, hpmn);
++	bitmap_set(pmu->cntr_mask, hpmn, host_counters);
++	clear_bit(ARMV8_PMU_CYCLE_IDX, pmu->cntr_mask);
++
++	if (pmuv3_has_icntr())
++		clear_bit(ARMV8_PMU_INSTR_IDX, pmu->cntr_mask);
++
++	pr_info("Partitioned PMU with HPMN %u", hpmn);
++
 +	return 0;
 +}
 +
-+static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
-+{
-+	struct kvm *kvm = vcpu->kvm;
-+	struct arm_pmu_entry *entry;
-+	struct arm_pmu *arm_pmu;
-+	int ret = -ENXIO;
-+
-+	lockdep_assert_held(&kvm->arch.config_lock);
-+	mutex_lock(&arm_pmus_lock);
-+
-+	list_for_each_entry(entry, &arm_pmus, entry) {
-+		arm_pmu = entry->arm_pmu;
-+		if (arm_pmu->pmu.type == pmu_id) {
-+			if (kvm_vm_has_ran_once(kvm) ||
-+			    (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
-+				ret = -EBUSY;
-+				break;
-+			}
-+
-+			kvm_arm_set_pmu(kvm, arm_pmu);
-+			cpumask_copy(kvm->arch.supported_cpus, &arm_pmu->supported_cpus);
-+			ret = 0;
-+			break;
-+		}
-+	}
-+
-+	mutex_unlock(&arm_pmus_lock);
-+	return ret;
-+}
-+
-+static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
-+{
-+	struct kvm *kvm = vcpu->kvm;
-+
-+	if (!kvm->arch.arm_pmu)
-+		return -EINVAL;
-+
-+	if (n > kvm_arm_pmu_get_max_counters(kvm))
-+		return -EINVAL;
-+
-+	kvm_arm_set_nr_counters(kvm, n);
-+	return 0;
-+}
-+
-+int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
-+{
-+	struct kvm *kvm = vcpu->kvm;
-+
-+	lockdep_assert_held(&kvm->arch.config_lock);
-+
-+	if (!kvm_vcpu_has_pmu(vcpu))
-+		return -ENODEV;
-+
-+	if (vcpu->arch.pmu.created)
-+		return -EBUSY;
-+
-+	switch (attr->attr) {
-+	case KVM_ARM_VCPU_PMU_V3_IRQ: {
-+		int __user *uaddr = (int __user *)(long)attr->addr;
-+		int irq;
-+
-+		if (!irqchip_in_kernel(kvm))
-+			return -EINVAL;
-+
-+		if (get_user(irq, uaddr))
-+			return -EFAULT;
-+
-+		/* The PMU overflow interrupt can be a PPI or a valid SPI. */
-+		if (!(irq_is_ppi(irq) || irq_is_spi(irq)))
-+			return -EINVAL;
-+
-+		if (!pmu_irq_is_valid(kvm, irq))
-+			return -EINVAL;
-+
-+		if (kvm_arm_pmu_irq_initialized(vcpu))
-+			return -EBUSY;
-+
-+		kvm_debug("Set kvm ARM PMU irq: %d\n", irq);
-+		vcpu->arch.pmu.irq_num = irq;
-+		return 0;
-+	}
-+	case KVM_ARM_VCPU_PMU_V3_FILTER: {
-+		u8 pmuver = kvm_arm_pmu_get_pmuver_limit();
-+		struct kvm_pmu_event_filter __user *uaddr;
-+		struct kvm_pmu_event_filter filter;
-+		int nr_events;
-+
-+		/*
-+		 * Allow userspace to specify an event filter for the entire
-+		 * event range supported by PMUVer of the hardware, rather
-+		 * than the guest's PMUVer for KVM backward compatibility.
-+		 */
-+		nr_events = __kvm_pmu_event_mask(pmuver) + 1;
-+
-+		uaddr = (struct kvm_pmu_event_filter __user *)(long)attr->addr;
-+
-+		if (copy_from_user(&filter, uaddr, sizeof(filter)))
-+			return -EFAULT;
-+
-+		if (((u32)filter.base_event + filter.nevents) > nr_events ||
-+		    (filter.action != KVM_PMU_EVENT_ALLOW &&
-+		     filter.action != KVM_PMU_EVENT_DENY))
-+			return -EINVAL;
-+
-+		if (kvm_vm_has_ran_once(kvm))
-+			return -EBUSY;
-+
-+		if (!kvm->arch.pmu_filter) {
-+			kvm->arch.pmu_filter = bitmap_alloc(nr_events, GFP_KERNEL_ACCOUNT);
-+			if (!kvm->arch.pmu_filter)
-+				return -ENOMEM;
-+
-+			/*
-+			 * The default depends on the first applied filter.
-+			 * If it allows events, the default is to deny.
-+			 * Conversely, if the first filter denies a set of
-+			 * events, the default is to allow.
-+			 */
-+			if (filter.action == KVM_PMU_EVENT_ALLOW)
-+				bitmap_zero(kvm->arch.pmu_filter, nr_events);
-+			else
-+				bitmap_fill(kvm->arch.pmu_filter, nr_events);
-+		}
-+
-+		if (filter.action == KVM_PMU_EVENT_ALLOW)
-+			bitmap_set(kvm->arch.pmu_filter, filter.base_event, filter.nevents);
+ static void __armv8pmu_probe_pmu(void *info)
+ {
+ 	struct armv8pmu_probe_info *probe = info;
+@@ -1214,10 +1277,10 @@ static void __armv8pmu_probe_pmu(void *info)
+ 
+ 	cpu_pmu->pmuver = pmuver;
+ 	probe->present = true;
++	cpu_pmu->hpmn_max = -1;
+ 
+ 	/* Read the nb of CNTx counters supported from PMNC */
+-	bitmap_set(cpu_pmu->cntr_mask,
+-		   0, FIELD_GET(ARMV8_PMU_PMCR_N, armv8pmu_pmcr_read()));
++	bitmap_set(cpu_pmu->cntr_mask, 0, armv8pmu_pmcr_n_read());
+ 
+ 	/* Add the CPU cycles counter */
+ 	set_bit(ARMV8_PMU_CYCLE_IDX, cpu_pmu->cntr_mask);
+@@ -1226,6 +1289,13 @@ static void __armv8pmu_probe_pmu(void *info)
+ 	if (pmuv3_has_icntr())
+ 		set_bit(ARMV8_PMU_INSTR_IDX, cpu_pmu->cntr_mask);
+ 
++	if (reserved_host_counters >= 0) {
++		if (kvm_pmu_partition_supported())
++			WARN_ON(armv8pmu_partition(cpu_pmu, reserved_host_counters));
 +		else
-+			bitmap_clear(kvm->arch.pmu_filter, filter.base_event, filter.nevents);
-+
-+		return 0;
-+	}
-+	case KVM_ARM_VCPU_PMU_V3_SET_PMU: {
-+		int __user *uaddr = (int __user *)(long)attr->addr;
-+		int pmu_id;
-+
-+		if (get_user(pmu_id, uaddr))
-+			return -EFAULT;
-+
-+		return kvm_arm_pmu_v3_set_pmu(vcpu, pmu_id);
-+	}
-+	case KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS: {
-+		unsigned int __user *uaddr = (unsigned int __user *)(long)attr->addr;
-+		unsigned int n;
-+
-+		if (get_user(n, uaddr))
-+			return -EFAULT;
-+
-+		return kvm_arm_pmu_v3_set_nr_counters(vcpu, n);
-+	}
-+	case KVM_ARM_VCPU_PMU_V3_INIT:
-+		return kvm_arm_pmu_v3_init(vcpu);
++			pr_err("PMU partition is not supported");
 +	}
 +
-+	return -ENXIO;
-+}
-+
-+int kvm_arm_pmu_v3_get_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
-+{
-+	switch (attr->attr) {
-+	case KVM_ARM_VCPU_PMU_V3_IRQ: {
-+		int __user *uaddr = (int __user *)(long)attr->addr;
-+		int irq;
-+
-+		if (!irqchip_in_kernel(vcpu->kvm))
-+			return -EINVAL;
-+
-+		if (!kvm_vcpu_has_pmu(vcpu))
-+			return -ENODEV;
-+
-+		if (!kvm_arm_pmu_irq_initialized(vcpu))
-+			return -ENXIO;
-+
-+		irq = vcpu->arch.pmu.irq_num;
-+		return put_user(irq, uaddr);
-+	}
-+	}
-+
-+	return -ENXIO;
-+}
-+
-+int kvm_arm_pmu_v3_has_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
-+{
-+	switch (attr->attr) {
-+	case KVM_ARM_VCPU_PMU_V3_IRQ:
-+	case KVM_ARM_VCPU_PMU_V3_INIT:
-+	case KVM_ARM_VCPU_PMU_V3_FILTER:
-+	case KVM_ARM_VCPU_PMU_V3_SET_PMU:
-+	case KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS:
-+		if (kvm_vcpu_has_pmu(vcpu))
-+			return 0;
-+	}
-+
-+	return -ENXIO;
-+}
-+
-+u8 kvm_arm_pmu_get_pmuver_limit(void)
-+{
-+	unsigned int pmuver;
-+
-+	pmuver = SYS_FIELD_GET(ID_AA64DFR0_EL1, PMUVer,
-+			       read_sanitised_ftr_reg(SYS_ID_AA64DFR0_EL1));
-+
-+	/*
-+	 * Spoof a barebones PMUv3 implementation if the system supports IMPDEF
-+	 * traps of the PMUv3 sysregs
-+	 */
-+	if (cpus_have_final_cap(ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS))
-+		return ID_AA64DFR0_EL1_PMUVer_IMP;
-+
-+	/*
-+	 * Otherwise, treat IMPLEMENTATION DEFINED functionality as
-+	 * unimplemented
-+	 */
-+	if (pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF)
-+		return 0;
-+
-+	return min(pmuver, ID_AA64DFR0_EL1_PMUVer_V3P5);
-+}
-+
-+u64 kvm_pmu_implemented_counter_mask(struct kvm_vcpu *vcpu)
-+{
-+	u64 val = FIELD_GET(ARMV8_PMU_PMCR_N, kvm_vcpu_read_pmcr(vcpu));
-+
-+	if (val == 0)
-+		return BIT(ARMV8_PMU_CYCLE_IDX);
-+	else
-+		return GENMASK(val - 1, 0) | BIT(ARMV8_PMU_CYCLE_IDX);
-+}
-+
-+u64 kvm_pmu_hyp_counter_mask(struct kvm_vcpu *vcpu)
-+{
-+	unsigned int hpmn, n;
-+
-+	if (!vcpu_has_nv(vcpu))
-+		return 0;
-+
-+	hpmn = SYS_FIELD_GET(MDCR_EL2, HPMN, __vcpu_sys_reg(vcpu, MDCR_EL2));
-+	n = vcpu->kvm->arch.nr_pmu_counters;
-+
-+	/*
-+	 * Programming HPMN to a value greater than PMCR_EL0.N is
-+	 * CONSTRAINED UNPREDICTABLE. Make the implementation choice that an
-+	 * UNKNOWN number of counters (in our case, zero) are reserved for EL2.
-+	 */
-+	if (hpmn >= n)
-+		return 0;
-+
-+	/*
-+	 * Programming HPMN=0 is CONSTRAINED UNPREDICTABLE if FEAT_HPMN0 isn't
-+	 * implemented. Since KVM's ability to emulate HPMN=0 does not directly
-+	 * depend on hardware (all PMU registers are trapped), make the
-+	 * implementation choice that all counters are included in the second
-+	 * range reserved for EL2/EL3.
-+	 */
-+	return GENMASK(n - 1, hpmn);
-+}
-+
-+bool kvm_pmu_counter_is_hyp(struct kvm_vcpu *vcpu, unsigned int idx)
-+{
-+	return kvm_pmu_hyp_counter_mask(vcpu) & BIT(idx);
-+}
-+
-+u64 kvm_pmu_accessible_counter_mask(struct kvm_vcpu *vcpu)
-+{
-+	u64 mask = kvm_pmu_implemented_counter_mask(vcpu);
-+
-+	if (!vcpu_has_nv(vcpu) || vcpu_is_el2(vcpu))
-+		return mask;
-+
-+	return mask & ~kvm_pmu_hyp_counter_mask(vcpu);
-+}
-+
-+/**
-+ * kvm_vcpu_read_pmcr - Read PMCR_EL0 register for the vCPU
-+ * @vcpu: The vcpu pointer
-+ */
-+u64 kvm_vcpu_read_pmcr(struct kvm_vcpu *vcpu)
-+{
-+	u64 pmcr = __vcpu_sys_reg(vcpu, PMCR_EL0);
-+	u64 n = vcpu->kvm->arch.nr_pmu_counters;
-+
-+	if (vcpu_has_nv(vcpu) && !vcpu_is_el2(vcpu))
-+		n = FIELD_GET(MDCR_EL2_HPMN, __vcpu_sys_reg(vcpu, MDCR_EL2));
-+
-+	return u64_replace_bits(pmcr, n, ARMV8_PMU_PMCR_N);
-+}
+ 	pmceid[0] = pmceid_raw[0] = read_pmceid0();
+ 	pmceid[1] = pmceid_raw[1] = read_pmceid1();
+ 
+diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+index 6dc5e0cd76ca..2c79dc0f09af 100644
+--- a/include/linux/perf/arm_pmu.h
++++ b/include/linux/perf/arm_pmu.h
+@@ -122,6 +122,7 @@ struct arm_pmu {
+ 
+ 	/* Only to be used by ACPI probing code */
+ 	unsigned long acpi_cpuid;
++	int		hpmn_max; /* MDCR_EL2.HPMN: counter partition pivot */
+ };
+ 
+ #define to_arm_pmu(p) (container_of(p, struct arm_pmu, pmu))
 -- 
 2.50.0.727.gbf7dc18ff4-goog
 
