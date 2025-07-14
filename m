@@ -1,88 +1,86 @@
-Return-Path: <linux-kselftest+bounces-37263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67754B04219
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 16:46:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C6E6B04241
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 16:55:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F09214A2F6D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 14:46:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEE003A5364
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 14:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2640415B0EC;
-	Mon, 14 Jul 2025 14:46:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33AFE258CED;
+	Mon, 14 Jul 2025 14:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TKHfk9Gj"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AvV3ek8Q"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CE6EAD7
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Jul 2025 14:46:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B44B2528F3
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Jul 2025 14:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752504369; cv=none; b=Tn5ioKA3CysD+8eQGnvhDF4AULJ/l/pHlufLYXJWi0nt5Vthd+3zw8z3nsz5hKiDIE4atYj6aALRV+DNTrW+JWh5Suf0TSP1PMfaZdwZ45uuISyZ3a+vXCneFo1FBEHpX8o+TuutQe2DbOWIOShxGyIrxtMUVCeV4xW3kpRta1M=
+	t=1752504908; cv=none; b=DAi038AZT6SDUw4DmwXwuAU0h5pLm+jl93dLpao0hhbJ0eoeGUgqP/AYQpJNMRA2RsQQwt8kQx5kukqn7BZFj3p5bSJbo6QAKH8PvvhnwLcngHJgIygUXMsBddR14I8bz8fRiu9uueTrZ3gyJdQsWrZvffp47SdhVKk01TbQBlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752504369; c=relaxed/simple;
-	bh=He2uz5sBbuDQkUiB/RFIploS3A4kVN6JkXe5PzPkJh4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a9YPChasziNmE//n8oQYgYD0zURC6M84Be473smI2xTsLfiLfTkNp32bBDGeyHO4jxDeOHCOp1OJVkITJSSohhIOwmAZaOOz2VgfJG7xkNcIJUd8Pm7JrRgsy7hox/K4ZpXbIsLvTdcykE64kkVj8XP+hkKC268GmYML9Mkhp3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TKHfk9Gj; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1752504908; c=relaxed/simple;
+	bh=JyG/AJppLSffr5nyP8a8dgSsegV2gn4CUhImXqjMdRI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=dfzq8jRIaGAaRQ/5MqXuIM6FwhKcwskSXOxEksLU+vPyXeTFk6klWmbJ2gNLs/qNs73CeqbjlmKUvWCWN4ssZO30jgHmqHAE1ti/k/YEyys5GKC9u1Iv3KNjO7nHs69aYQ5RDhih2xITgDAVXZxyWAwnJqkiFzHnRWm/wbiIX1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AvV3ek8Q; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752504366;
+	s=mimecast20190719; t=1752504905;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FFvWUbvYOMPAFeZVSRMsNONk4G4QFR5pZQmr1EAVpzU=;
-	b=TKHfk9Gj9JQWmVvuT5xx3NNRTm2H61j3X7UgHgzeP8UyZS74jpKuYfjW7I1r3wYqrw09tU
-	VGc0aLIsBNq4HZRmadNPDCIY/LNfEwpdGH3YqqNPWqXTi8noktfYG7h90c4fqpq9KzLzm2
-	PoC3ZXE/zo9Hxtxx/SNrclKK9c2aPzM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=d4czQZKucpykxaQ1IUiKG7YZbA5p+JpK4GLzUGwBBME=;
+	b=AvV3ek8QwGS4/XpjWNO+Zjng2s/DBPNr6HHy9E6nsWTia7WpSJJH02t21EbYZHUF2eXJna
+	MjpmPkq8HMnRcIXUaiw1HX16A3Bsrd+SnUM+WC4v8bv7VvWb6eBp/cI7EzHy7//QG6Vf/3
+	s88XSMuy2gqt8zx82Me3oldNnRTF3Jk=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-660-OGDmt1ohPpi-RaZkqH7EYw-1; Mon, 14 Jul 2025 10:46:02 -0400
-X-MC-Unique: OGDmt1ohPpi-RaZkqH7EYw-1
-X-Mimecast-MFC-AGG-ID: OGDmt1ohPpi-RaZkqH7EYw_1752504362
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-455f7b86aeeso13585965e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Jul 2025 07:46:02 -0700 (PDT)
+ us-mta-660-ZDqrUCBFMGSUhMJqdAXTfQ-1; Mon, 14 Jul 2025 10:55:04 -0400
+X-MC-Unique: ZDqrUCBFMGSUhMJqdAXTfQ-1
+X-Mimecast-MFC-AGG-ID: ZDqrUCBFMGSUhMJqdAXTfQ_1752504903
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a4f7f1b932so2621367f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Jul 2025 07:55:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752504361; x=1753109161;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FFvWUbvYOMPAFeZVSRMsNONk4G4QFR5pZQmr1EAVpzU=;
-        b=BzjVGFDAfpL2bsiPWkKI6Zs9/GRKzUbA3wdqd4g/SdP7t3sLHQZxeWRU3GXQHf/48x
-         9Uk5fbOE+9FqIUudwM1L0yjY7wLp/LNrHmE/YLMktE9qwuKh9Kr9EpGflz4W9limEhHl
-         yW2MWF32cmc+8qNSV+31jcHCZUFcxSrBd5zXgT6WuU0D6bgN1pQ7hosifnzkBYUXlrou
-         jvKWhDE7/sYsB6V6P35MVY5VIwMm0VF9uFCCNKNQRh5DAnP97TWmrVeBbe9b0uBoSGtD
-         x5F+4yotctCzRVvrt68sKL84jFROC0jWdy8Ktu+JxaZ48rUTEcwAkwJqUuAH8EhufDul
-         OsIw==
-X-Forwarded-Encrypted: i=1; AJvYcCVclHWbd1C5Gawxo+fUm42n7u+44L0hN3/jYeWNmbONWrefF5EViqS8BBXsUPl/P1yvkdNG0yLiX8usiki38dw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLrvjQauH8ZPmF+3cSzdbSEeEfxHX3RpcGS3j9qhVUgGN1XvfF
-	EOjpwZ1LtolK+wm+A1T0DAHIHgK59qPpF+FBD0WcDFkg75SGlhSH16NiTjpbOnNWemZeVa9f/3r
-	K4fs6EfH4YbwWe7Z4J9nNjoYdTHtr+/lKrifGmN+JZBe6KakxckDkSMiBy4+Q1Qk+Vxxrxg==
-X-Gm-Gg: ASbGnctgaCZC2dExdJh7lEam8Ll+FLVaK1B/No9Ib1YIFcGJNP0KhZ7q0MNZldLAd6m
-	1jaJpGCL/1BRbKYvPO5HWUY0LuIGZ0dfciFosPiWP83j7Tua7XZBUK4K8u7Jacn2dLbitulqZF6
-	uv81JDKWK2xg5fY+y+3e1PeFEySX17COoBiaHijtH2YKnyG6sDPfJvZf3WJy/Uhctbdslrj1yLc
-	x6tdl17ShuCAgZkPFbi2sQK2vjWGQcb5IGu/bfVcSfLct4M19DGLDG5UM1n+aa5FmZ4wl+4UNjx
-	13nzlL7j/ALNPaOvPUz0N2X32siN494tL/evjGs8Ypd/c1WDk2toVzUacghbG0uBBvjvsv5RuJS
-	A52UBXkX3HWkcpvSMOPHgV6ID7AQ3viWLZFUOLTc7uewSez8b7dcAV/duNcovpUtK
-X-Received: by 2002:a05:6000:2088:b0:3b3:a6e1:135c with SMTP id ffacd0b85a97d-3b5f2e32f4fmr9267473f8f.42.1752504361432;
-        Mon, 14 Jul 2025 07:46:01 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGenZg7oquFIg2YohZBIDiWhyyzgKEdWWdgmEJ/zEzda7h5UoZedqpmDLCPCuVQ4P+Ykj5sWw==
-X-Received: by 2002:a05:6000:2088:b0:3b3:a6e1:135c with SMTP id ffacd0b85a97d-3b5f2e32f4fmr9267458f8f.42.1752504361042;
-        Mon, 14 Jul 2025 07:46:01 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f38:ca00:ca3a:83da:653e:234? (p200300d82f38ca00ca3a83da653e0234.dip0.t-ipconnect.de. [2003:d8:2f38:ca00:ca3a:83da:653e:234])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8dc3a54sm12812499f8f.39.2025.07.14.07.45.59
+        d=1e100.net; s=20230601; t=1752504903; x=1753109703;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d4czQZKucpykxaQ1IUiKG7YZbA5p+JpK4GLzUGwBBME=;
+        b=pSksZEwS6ZQL35DsiZiT8VaTxIeOWcAVuQ2Qtu16XivVMdEM2LzGzgztz1hqAM+x1I
+         pHcrssRu6Foj7WhbLC6X/8o3XbW0dHN1ossPdLRZ9rzMqdNLulb/aTEJj5GgboRinU69
+         1xnFI1TRvE2YW5Q2aIFky2j3g3PVRyKZOvUrHQ/8sbj6PTWmXyFyWXj23ojxQBr/Xs7f
+         sF8Y3yB3UfewbKkL9cMlaqWyWUA/pFdAiAF/FxcGWBeUPSMBrPvxlYQB2zm2nMZnH5QA
+         B7Vp+PZVRyqthCK82B66r8DDoxkpaGcrNTON+iS36BrVWy7P0atLOh3ZCVkefTNrPUcS
+         2v0w==
+X-Forwarded-Encrypted: i=1; AJvYcCVNoKjBpPNc+VKeHT4Kq3OFv/QbK13fZJJh8Hu5I9ZaT33bOH3ITxHHhLN4vhiQYKV5fHqejVmKID8bFU/nmWc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqLFB23ESUDf7qKzEMxfr97C/xN/NsaJomHrs+cvs9wX+kVsNs
+	9siWQOCELWLElmlgSQndzg/Ot6jLkXMmZSeP29Zv8Xd12u9rv94X99aXQDv9NPvMnj20CdvBaKU
+	H+3iIInRiSYQ/hMsd4ry1NqCNBd29nQziuOlJPd/Fc8W54WEUW465ztQIXwyfU0hFXhW9qA==
+X-Gm-Gg: ASbGncvI7W2rnxoYNtY35FzzJiQtuXWRnuacttI0PbdEM2n4I1yf8eYJoJiFLAHMyZa
+	XJ1M8rWIikykUf7mLVZsjGVz8CeweKig2IZNuz/8RVJizmZ7bkF39N276Zgad0C844OeLiVw2U+
+	HMsCIFSdQ3B5b6j17E91vpCr4AAjZF4ejUWMbyBAuHJ9dxldSnVkDAquvez1eD8RrM0zOFz3+71
+	sK5rSj2kNO035syB2vngHw56O/sYvrSAbgcrFfC+nL49u7odxPDhyVGzMZSkkX2QlCIlIWhSKOX
+	pIcHubgzNs47NteviHXBFveo8rAgtosbd4ak3q+SPTw=
+X-Received: by 2002:a05:6000:18a5:b0:3a6:d5fd:4687 with SMTP id ffacd0b85a97d-3b5f2dc2906mr7617438f8f.18.1752504902649;
+        Mon, 14 Jul 2025 07:55:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IERlxdXbSclUMLbYuj4ecUcsIzdJdVAuc2ie1F4jKPNjqTeVSRJVRcaIsaZVJV8X9Sn1hIeGQ==
+X-Received: by 2002:a05:6000:18a5:b0:3a6:d5fd:4687 with SMTP id ffacd0b85a97d-3b5f2dc2906mr7617398f8f.18.1752504902111;
+        Mon, 14 Jul 2025 07:55:02 -0700 (PDT)
+Received: from [192.168.0.115] ([212.105.155.228])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8bd1776sm12844954f8f.12.2025.07.14.07.54.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jul 2025 07:46:00 -0700 (PDT)
-Message-ID: <fe12384b-4410-4bac-afee-77523b7957ff@redhat.com>
-Date: Mon, 14 Jul 2025 16:45:58 +0200
+        Mon, 14 Jul 2025 07:55:01 -0700 (PDT)
+Message-ID: <b2c0653e-077f-4609-922e-777f1d868dd0@redhat.com>
+Date: Mon, 14 Jul 2025 16:54:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,76 +88,98 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC Patch 2/2] selftests/mm: assert rmap behave as expected
-To: Wei Yang <richard.weiyang@gmail.com>
-Cc: akpm@linux-foundation.org, lorenzo.stoakes@oracle.com, riel@surriel.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, harry.yoo@oracle.com,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20250604082145.13800-1-richard.weiyang@gmail.com>
- <20250604082145.13800-3-richard.weiyang@gmail.com>
- <20250604083441.hilkdzlxmxygivvt@master>
- <2ee1d2ca-94c5-4c27-b2dc-bcea2b710dcf@redhat.com>
- <20250714144248.54d4rhboeq2wn6x4@master>
-From: David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v12 net-next 12/15] tcp: accecn: AccECN option send
+ control
+To: chia-yu.chang@nokia-bell-labs.com, edumazet@google.com,
+ linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+ dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+ kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+References: <20250704085345.46530-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250704085345.46530-13-chia-yu.chang@nokia-bell-labs.com>
 Content-Language: en-US
-Organization: Red Hat
-In-Reply-To: <20250714144248.54d4rhboeq2wn6x4@master>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250704085345.46530-13-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 14.07.25 16:42, Wei Yang wrote:
-> On Fri, Jul 11, 2025 at 05:39:39PM +0200, David Hildenbrand wrote:
->> On 04.06.25 10:34, Wei Yang wrote:
->>> On Wed, Jun 04, 2025 at 08:21:45AM +0000, Wei Yang wrote:
->>> [...]
->>>> +int try_to_move_page(char *region)
->>>> +{
->>>> +	int ret;
->>>> +	int node;
->>>> +	int status = 0;
->>>> +
->>>> +	ksft_print_msg("worker %d move_pages of content: %.15s\n", getpid(), region);
->>>
->>> One thing confused me here.
->>>
->>> If I don't access region here, the following move_pages() would report
->>> -ENOENT occationally. The reason is do_pages_stat_array() ->
->>> folio_walk_start() returns NULL.
->>
->> Right, the pages were not faulted in. The man page mentions that as
->>
->> "-ENOENT: The page is not present."
->>
-> 
-> Thanks I see the man page, but from the code point of view, I don't follow it.
-> 
-> The move_pages() return -ENOENT in a child process, and the child duplicate it
-> memory space during fork().
-> 
-> dup_mmap()
->      for_each_vma()
->          copy_page_range()
-> 	...
->              copy_pte_range() -> copy_present_ptes()
->                  __copy_present_ptes()
->                      set_ptes()
-> 
-> Even we map the range by MAP_SHARED, we don't need to wrprotect it.
-> But we still set_ptes() in the child process page table.
-> 
-> 
-> So it looks the child has prepared the page table and not need to fault in to
-> setup it.
-> 
-> Do I miss something?
+On 7/4/25 10:53 AM, chia-yu.chang@nokia-bell-labs.com wrote:
+> @@ -285,9 +297,33 @@ static inline void tcp_ecn_received_counters(struct sock *sk,
+>  
+>  		if (len > 0) {
+>  			u8 minlen = tcp_ecnfield_to_accecn_optfield(ecnfield);
+> +			u32 oldbytes = tp->received_ecn_bytes[ecnfield - 1];
+> +
+>  			tp->received_ecn_bytes[ecnfield - 1] += len;
+>  			tp->accecn_minlen = max_t(u8, tp->accecn_minlen,
+>  						  minlen);
+> +
+> +			/* Demand AccECN option at least every 2^22 bytes to
+> +			 * avoid overflowing the ECN byte counters.
+> +			 */
+> +			if ((tp->received_ecn_bytes[ecnfield - 1] ^ oldbytes) &
+> +			    ~((1 << 22) - 1)) {
 
-See copy_page_range() -> vma_needs_copy(), where we essentially 
-optimize-out copying of page tables for most MAP_SHARED mappings (or 
-MAP_PRIVATE mappings when we never placed private pages).
+I don't understand the above statement, I don't think it yield the
+result expected according to the above comment.
 
--- 
-Cheers,
+> @@ -365,6 +401,7 @@ static inline void tcp_accecn_init_counters(struct tcp_sock *tp)
+>  	__tcp_accecn_init_bytes_counters(tp->received_ecn_bytes);
+>  	__tcp_accecn_init_bytes_counters(tp->delivered_ecn_bytes);
+>  	tp->accecn_minlen = 0;
+> +	tp->accecn_opt_demand = 0;
+>  	tp->est_ecnfield = 0;
+>  }
+>  
+> @@ -447,6 +484,7 @@ static inline void tcp_ecn_rcv_synack(struct sock *sk, const struct tcphdr *th,
+>  	default:
+>  		tcp_ecn_mode_set(tp, TCP_ECN_MODE_ACCECN);
+>  		tp->syn_ect_rcv = ip_dsfield & INET_ECN_MASK;
+> +		tp->accecn_opt_demand = 2;
+>  		if (INET_ECN_is_ce(ip_dsfield) &&
+>  		    tcp_accecn_validate_syn_feedback(sk, ace,
+>  						     tp->syn_ect_snt)) {
+> @@ -467,6 +505,7 @@ static inline void tcp_ecn_rcv_syn(struct tcp_sock *tp, const struct tcphdr *th,
+>  		} else {
+>  			tp->syn_ect_rcv = TCP_SKB_CB(skb)->ip_dsfield &
+>  					  INET_ECN_MASK;
+> +			tp->prev_ecnfield = tp->syn_ect_rcv;
+>  			tcp_ecn_mode_set(tp, TCP_ECN_MODE_ACCECN);
+>  		}
+>  	}
+> @@ -565,4 +604,16 @@ tcp_ecn_make_synack(const struct request_sock *req, struct tcphdr *th)
+>  		th->ece = 1;
+>  }
+>  
+> +static inline bool tcp_accecn_option_beacon_check(const struct sock *sk)
+> +{
+> +	const struct tcp_sock *tp = tcp_sk(sk);
+> +
+> +	if (!READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option_beacon))
+> +		return false;
+> +
+> +	return tcp_stamp_us_delta(tp->tcp_mstamp, tp->accecn_opt_tstamp) *
+> +	       READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option_beacon) >=
+> +	       (tp->srtt_us >> 3);
 
-David / dhildenb
+To be consistent:
+
+	u32 ecn_beacon =
+READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option_beacon);
+
+	if (!ecn_beacon)
+		return false;
+
+	return tcp_stamp_us_delta(tp->tcp_mstamp, tp->accecn_opt_tstamp) *
+ecn_beacon // ...
+
+/P
 
 
