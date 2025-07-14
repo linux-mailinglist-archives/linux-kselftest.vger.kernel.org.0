@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-37241-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37242-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D0E6B03E3D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 14:08:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1726B03E6A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 14:14:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA0FC1A64A56
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 12:08:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C8947B1098
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 12:07:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1BF32512E6;
-	Mon, 14 Jul 2025 12:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C4F25392C;
+	Mon, 14 Jul 2025 12:04:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WSmkUx2D"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OGR6LNpV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2646124EAAB;
-	Mon, 14 Jul 2025 12:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBC1252903;
+	Mon, 14 Jul 2025 12:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752494678; cv=none; b=AjVy00Va6CfJUAF+ICdJ8HqXzg3rN4jxPB8Bel/vk3H1h8j6F1vD2TK0t45una+ZP26vLFeranvsUcvBDkvrAqBJjdFp7ek8vOB0A2OzJ1qyGKX1RoZGAG+ZkzzzM9NZf65NBHLeO2RUpY1nMd1z5PxTB5DJ73cTe59ClW7rXjY=
+	t=1752494684; cv=none; b=Fdu8957e5mhiq/LcEC/+n+cleGGvX3ZXyI+erezK1s2HJljjP9if/SGgBEZCEvfeuy2dCmCMS/9440mRgpYGFzZ+xqYsjDDKHtrPH7ERJ9c/jNR/DLQkw4VsH5y0CEHFmBzAoDER9frwcAnO9TvZ4E+fwTgQ6AK8GRSjcFF9mdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752494678; c=relaxed/simple;
-	bh=H7oTJFuFIyERsBW2ISyPbfXtY1Ablg22jLepeE+FjN8=;
+	s=arc-20240116; t=1752494684; c=relaxed/simple;
+	bh=Sb3yv+JqKpM0MAcQFhT2Ve4KM+mgKbcnc9vvK1V9ZZw=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GeJWs5iYzRkBc7Lq5utZmpesWYr57Ko0mR55I8QIzM1EgbGQvd7+3z54W19SCB8KUdVVhL1nRsxup6WCHrmL5CEomMa3VhltxzYDtUwkZ6AtDj9tqgIpFtTpBfHVLePu1Tm9u9A/xUS11IOP7bZYAvzCnDkQOqOUBGr+EEFU6pM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WSmkUx2D; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=pRa31I1f5RMa7jOd6tOIXb/MloI5PzYx4GRwAE3/qyhUHuNzsmmyWsj8F7E1l+JDZx2SswoRUt2tz40XYMTNYmuRPPTHgSEBv8SZ+5AwVH+O2EBhwUV+RepdKaT9BfKyEr0QTdNeoqmmNmqaGUJXxNSdsCtFgi/Rjj5EnLZAX+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OGR6LNpV; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-23aeac7d77aso32519465ad.3;
-        Mon, 14 Jul 2025 05:04:35 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-23636167b30so37096925ad.1;
+        Mon, 14 Jul 2025 05:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752494675; x=1753099475; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752494682; x=1753099482; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4HOL4OxklywxiGA5iGidxlIY2WERw1fjUeWMUL/th7g=;
-        b=WSmkUx2D/ZtLGNwz26zVXriNhBrSG4jC7FgfUiPMKkphr8WLrj/zdMaS9Gfu8PhsX8
-         laV2wRiLO9Z38MEmtMfHhIdL5+TYJk5XjBHzCCzx9Wzip5c/bE6SBV0UeJZW2OJQh/MO
-         Q1YENhOJFc9iEuNEHJ44HmUgMv3acVhL0UmqgXYtDlCNFiLEaZsPAQv8Go3lVhcxaYBa
-         Z+CFN+NNNxIgCycM7DvWcOKtgkLQjrFR4qbbeJB7gyi0AdPrIdVPPPUDP4NiDvWKSx27
-         2rI5Nxd8OjH/p0wojB3LKe00zgkYO5KqfOEypAUHJR6gi83S9uTAgC44zGTyfgi/UFNp
-         +BvQ==
+        bh=WoQlpGmhS0hNGH57+qjnBbK1O65fEwT14C8Vm4CmUQw=;
+        b=OGR6LNpVE43YydCktNlxOjfY5P4O45W4acomV4F/QVmn3+nPPCmrKP9st3jYNh2f6/
+         oIogkXJ/xDgQYdEu4ZfAeOuExNR44JdIyLvPcse3t7GKb8GNc23Kbut77ayKy9cBdrjl
+         04/ZWt6N6j08VyxdrXW30BMjGJ4uthO/LTTbMh0UaumLLF2NwNuCv0t9V6nxOvxXkTAF
+         sliWxPIp03dvMafiv32yv/xBQDzAP2ILSYZXRY+qr6ZVTqlWry4Ezlsrcc8AgTeTWLRk
+         1zMFXBl/YZ0WgsS1DpR0zKobFNzerC4iUwU4XblforHhDDOlcPmNs/rN+D/BSnIZpNFi
+         P7mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752494675; x=1753099475;
+        d=1e100.net; s=20230601; t=1752494682; x=1753099482;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4HOL4OxklywxiGA5iGidxlIY2WERw1fjUeWMUL/th7g=;
-        b=q98BVRZxnusyQJfqi0AvIhvUqrlG8x1S4XmGWoB07+eBrOS/O6kPtJQqGbrdTj200b
-         d3O64LT/u5/6kn1PhP4rKSYLL9vXru5hzAUpGEUVUSw7iUcUI1wEQknyDO4o3/MAfcVI
-         PWUAedO8+vDztN6I15IzpVj8LMghgTVNLqmJz665KmNYYHeyru1yvxfhNF7JBv42DNns
-         ckBZYhqLMhhjhwYJ58E7cmFQm6pH0CBKXQNglPf4PJN3yNbXJCqs2UJATfNUkMukTpmY
-         wnqY2VIx48uJFVvUSf3OkuaYjvyM61KnTnspfVVyEaXmCmqTeLRotJ+iu3oOLSpRBAT6
-         pNQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUAAXzx5J9rd888Clu6peyLEoKaGB2g2XDofoT9VpKHHbvnxPUSKn3gMhtPWEtrxfNro9g=@vger.kernel.org, AJvYcCVDWSpuElTF4YlFbSeiWwOqeW3Q/xw+MkT7UQCen6fx0hAxgQlEadMyXozOMfDz89sj8FRrdAt+r9o/gvko@vger.kernel.org, AJvYcCX0lVeyhyOJ/T9zd+utqW9pyG42p723LQz6Vp/LACTpBURPbjvp2xUwBGg401imK/n9hZup25PB7TBjp6MMmezb@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7mm+0K3bRqNk+DWirOj/ItHE8M3T3TtIepFwunJc+gZcPiN2s
-	g6aACWNubaOUPTWGJpQ5EolEqDgiMINTnIwcLekDUCySe1xgBGXfVcRo
-X-Gm-Gg: ASbGncsqYmdnD9jC8VgjB2bc5wuDej5NkfW6RZgOI6dtC4ZXlNwSmG9YI10dXhJlKTb
-	lOtY5OcXFB/jgCmFJAOm38AwwW/ulzQOhsx7B2T6HHZH8IJwLMwt5QzDJ4s5GssahSsrZrttE+g
-	oVdgMZbYjAscZ2/5Ft3HquXYqmIQTxhavSGySrWMyJ9VW6zXqX9cwQZF1KRkusMqJ0+B9RxNLur
-	LmJjXk/+5PuZ59xsekYsXLgAYauJRITMdnjmD41lpztuYe5rrGTq8dQ8+nGBFeDN1nPKzUx8tiz
-	jIKAeb+GtBczzh3Pc12RcuDx8juALf9Ucez4tshlRkFQGicezWwlruPLXjTt0ROhZYtZOLf2IlM
-	/J8rf1v9WBDaPcYW4ge/eUrU=
-X-Google-Smtp-Source: AGHT+IGvcE+Uo9+SjSTryk+Utr4kLRnWYxF4cqz82SFWAFSEkRbgN7g7SO36Q1K4EQXyhIpV7bA51A==
-X-Received: by 2002:a17:902:e5d1:b0:234:8ef1:aa7b with SMTP id d9443c01a7336-23df08394b3mr143544155ad.20.1752494675192;
-        Mon, 14 Jul 2025 05:04:35 -0700 (PDT)
+        bh=WoQlpGmhS0hNGH57+qjnBbK1O65fEwT14C8Vm4CmUQw=;
+        b=g2PVdl26gJ5yiJYJ/4Utw+TJ6vH5pt4xsFtJxIU5BuSYtVoGQrFoH+yTmJuR2J+jKd
+         Rh8slRrspvktHHphDYfpT/LJfoH2dPIq5vzh/imF6HyLkAALAYG3ekIteUiU6wEiKNKP
+         EMZ6HnrgaSlxPOlbfbF/t25iyye/dYDIhN4myRndeVZhyJXgrkva5oTWumrrZQzTBXtS
+         YPUQTKEhufI8hu/HIy5BQXoi8B3a+jNEvlQeb2571xd0/4gXOL4+QwCFF16+uqaUGfal
+         l4XYhvasLjMvjigmsp/Qu7lEosLjSBfdW+POlkQ8iiQSQN6hyjctk8sIxMi3UlWSx8Ad
+         J9/A==
+X-Forwarded-Encrypted: i=1; AJvYcCWJF89nWGflj2G8Ls/j7dXEGj2NsSa8S3FV8tLynv+p6t/+PSDy0YQAY8OeHF786vnwL1c=@vger.kernel.org, AJvYcCWtY5Vm26F8bJeJbH7Z/PvI43cQCVTMP9hxb2TJzPh6hZjMoa7bpre352ARo/CxGDdQHcTJu+F2gL+gBsCBL7E0@vger.kernel.org, AJvYcCXBjB27GmxUSQp++hARD8yIKE2uo6dbo7bXR8drwlys66pIenumMgsfL73Ld6ABfPMo65Xqya80sTV/cQhG@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye8AduixQjdzp8KQHj5fE54AuBDZuoOALMo2U6oSGOFk/efAhs
+	mzrvuFydKGbIx0z181drYHgJXDQl+mu9rO+AuRixEzO8zifYnvLBPzKL
+X-Gm-Gg: ASbGncuDgdI/q9nvRjmQNYXq/SCEsLrypE9PATzYZ1UHcjrA3KbJZdUOJGOXe2/KSMv
+	aSRqyiJck2Cp+pGrUIEFiuqQBagTwbOIOj+QwpQJ9FkaZ19ooQoI6hpro8roLFTC048EqO59ykQ
+	weIsgKbq3tXv6twYF+/dlo5+rtv+dujDs6pccZF5T2lh3hz0igyFwvlboU9LxQFIQM3apzCD39Y
+	itKltYAw0ww4PVO2UA+qZH4jggTmKIZjUgZKEYQdgAPzl+ulJQjc1pgQFtr8g98AqOwLxfJKf+2
+	nwFQ37+VL4DKvtCFxLeR5d0UOfqMHuYiw/kx/1HGykloD9IAWb/0JUBxs9FFVutWIERWgPyKEma
+	ETxKxZHEtq88thfWgGdlaOsw=
+X-Google-Smtp-Source: AGHT+IG9fCd86FnMGI6fXYzAJXBKuwfwdYzSw1TxcbzID5VsVYmvX6L7vo/Z0i7t7JpsmZR9xGXdEg==
+X-Received: by 2002:a17:902:e94c:b0:234:c8f6:1b05 with SMTP id d9443c01a7336-23dee0e01f3mr189181775ad.52.1752494682267;
+        Mon, 14 Jul 2025 05:04:42 -0700 (PDT)
 Received: from ubuntu2404.. ([125.120.99.224])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de4359e4bsm89612895ad.215.2025.07.14.05.04.28
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de4359e4bsm89612895ad.215.2025.07.14.05.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jul 2025 05:04:34 -0700 (PDT)
+        Mon, 14 Jul 2025 05:04:41 -0700 (PDT)
 From: KaFai Wan <mannkafai@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -94,9 +94,9 @@ To: ast@kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	leon.hwang@linux.dev
-Subject: [PATCH bpf-next v2 2/3] bpf: Add log for attaching tracing programs to functions in deny list
-Date: Mon, 14 Jul 2025 20:04:07 +0800
-Message-ID: <20250714120408.1627128-3-mannkafai@gmail.com>
+Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Add selftest for attaching tracing programs to functions in deny list
+Date: Mon, 14 Jul 2025 20:04:08 +0800
+Message-ID: <20250714120408.1627128-4-mannkafai@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250714120408.1627128-1-mannkafai@gmail.com>
 References: <20250714120408.1627128-1-mannkafai@gmail.com>
@@ -108,36 +108,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Show the rejected function name when attaching tracing programs to
-functions in deny list.
+The reuslt:
 
-With this change, we know why tracing programs can't attach to functions
-like migrate_disable() from log.
+  $ tools/testing/selftests/bpf/test_progs --name=tracing_deny
+  #467/1   tracing_deny/migrate_disable:OK
+  #467     tracing_deny:OK
+  Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
 
-$ ./fentry
-libbpf: prog 'migrate_disable': BPF program load failed: -EINVAL
-libbpf: prog 'migrate_disable': -- BEGIN PROG LOAD LOG --
-Attaching tracing programs to function 'migrate_disable' is rejected.
-
-Suggested-by: Leon Hwang <leon.hwang@linux.dev>
 Signed-off-by: KaFai Wan <mannkafai@gmail.com>
 ---
- kernel/bpf/verifier.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../selftests/bpf/prog_tests/tracing_deny.c       | 11 +++++++++++
+ tools/testing/selftests/bpf/progs/tracing_deny.c  | 15 +++++++++++++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_deny.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_deny.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 00d287814f12..c24c0d57e595 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -23942,6 +23942,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 			return ret;
- 	} else if (prog->type == BPF_PROG_TYPE_TRACING &&
- 		   btf_id_set_contains(&btf_id_deny, btf_id)) {
-+		verbose(env, "Attaching tracing programs to function '%s' is rejected.\n",
-+			tgt_info.tgt_name);
- 		return -EINVAL;
- 	} else if ((prog->expected_attach_type == BPF_TRACE_FEXIT ||
- 		   prog->expected_attach_type == BPF_MODIFY_RETURN) &&
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_deny.c b/tools/testing/selftests/bpf/prog_tests/tracing_deny.c
+new file mode 100644
+index 000000000000..460c59a9667f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_deny.c
+@@ -0,0 +1,11 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include "tracing_deny.skel.h"
++
++void test_tracing_deny(void)
++{
++	/* migrate_disable depends on CONFIG_SMP */
++	if (libbpf_find_vmlinux_btf_id("migrate_disable", BPF_TRACE_FENTRY) > 0)
++		RUN_TESTS(tracing_deny);
++}
+diff --git a/tools/testing/selftests/bpf/progs/tracing_deny.c b/tools/testing/selftests/bpf/progs/tracing_deny.c
+new file mode 100644
+index 000000000000..98ef834f0b6d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_deny.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++SEC("fentry/migrate_disable")
++__failure __msg("Attaching tracing programs to function 'migrate_disable' is rejected.")
++int BPF_PROG(migrate_disable)
++{
++	return 0;
++}
 -- 
 2.43.0
 
