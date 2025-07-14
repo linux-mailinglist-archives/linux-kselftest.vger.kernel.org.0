@@ -1,129 +1,135 @@
-Return-Path: <linux-kselftest+bounces-37245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A4F0B03ECF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 14:35:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EE8FB03F03
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 14:52:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 533523A2E4C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 12:35:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7417167A7C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 12:52:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C836248886;
-	Mon, 14 Jul 2025 12:35:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DD4E246BD9;
+	Mon, 14 Jul 2025 12:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTAt0zcR"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="uEf3Y9xH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F7D20AF67;
-	Mon, 14 Jul 2025 12:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045B28635C
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Jul 2025 12:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752496538; cv=none; b=WSP+SrOLrUtkA52/yRePv9IzpAhPMzUOlZ5ni+gfDDJrNhTC6a2vYuHpFZO8Ah5kpf/g0fS+fl5q1z5Z9Go/Vltda7sCQe6Jw7+MAcsomlImZWNUO/fyJK2iDY7dwW78mReLpBF1WkHOfbq1Ry2pjnOGfIAigwOPSSoKjyg13s4=
+	t=1752497549; cv=none; b=JbgoOu4VnBb2eGvsWKw819u//iHZ7t7H9uBdBoSFF30DRiNczq8euIp93t6fJkfXSGy16EI/gZOKcq5ZqUULmzVjV4314C1/bkW7B11m5dAk5rvMXIFwFBAcc1ANGsG0jbHKIamqHsyodWtVi7ke/PLK4dK2oOjECd4x0QMn1tY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752496538; c=relaxed/simple;
-	bh=rKnLYV6EmHmE3mzoMHqDHoN8VPsmF1S4gphrWDmSfbw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CGnI4HktYvVhhlJz46hhInURiQFJqVHhCZ2zSiBgiDGvEi+3y2J7xGP9hpHj5SOsmmWQfm+ZscV2PwtucXz9pjl+VEg31AQUBZ+8xYF/sM/i9rV9TWKhSQve2XoqulA3z1pIyCxo1OlFubt4zI5yD9HvFL1uJzDfN5lyNxgFFeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HTAt0zcR; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-605b9488c28so7703239a12.2;
-        Mon, 14 Jul 2025 05:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752496534; x=1753101334; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/JJkBY6StLlPiYYNcDOCRaSTmquHRBX1aQ9fP/9Yejg=;
-        b=HTAt0zcRenTTuIAy7QHrcU+NnxaEGPRAQN9tSIyMGU2SdFMzuERaYQkPMBRCKOybbw
-         0k8BpL9X/XScJYwSDCfdrF0KKHbp/B2nEzQaxsXKA8/NjJi07ke0ijq29Vl2QIRIC6Yg
-         QtV5qHL8h2Z/PvebG+ICoQfRVycUlL4205resx/Nx9/PJRBdVjQ9tProGmRMUnovfDnu
-         igDleclR2O207edI+QvD6KfccH+f3bZOX9DCtIW8amYahRj0Jkhy55yLUIkEPFxNskJv
-         MKt44ZoyH/p+yH9MZ8tAUa32+X1//Fmkd3shyBAJ7UnIQdtxehxMNpWN9MT7eVBbiLeS
-         eBWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752496534; x=1753101334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/JJkBY6StLlPiYYNcDOCRaSTmquHRBX1aQ9fP/9Yejg=;
-        b=kYJ1xbP+l5WXe9PtCXHI5Zz28Gg9Um6sBSTxWHHdhRSJ4ETTJAbKveK808FeTv/nVL
-         OVno4qOQhqxodsWPRdWXzAwftXlbA76ENN+6Gd615nIxQF1kIDUNSUhap9dF9+OYr2Y1
-         6MOltHL2uJ+G4QP8CECKG8A0MBAVo0ogsm+7WZV0wUKl8DXxkm4MSvUlbeWyBTCZBz/o
-         sXYG608Q0TiiNvY9c0YVjtXPV1vbFgPw5IlkZ4ja7FPODI483JNJgQeFnap1LCXochuB
-         PG+sl6Umwn5PJ5j8pu1xefw6hGb21wFAESVQsPm2babWBIe5CoHuVbv5koU1MR35a0au
-         FmcA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+3RgLUvf2NiU381lhtaSRkoWLEdJpTi6FmN8UGTjCURjAn1kRXksGHdXGZTOPvQMrhRWnTVEji3NeO7mb@vger.kernel.org, AJvYcCUhGBCuCfY+pNyWG4OtLUYeyOkH2+TEqGj8u07G/PaiJFSobQSiNQMWwPRqG0kv2pWonmTftT5DAOE=@vger.kernel.org, AJvYcCVNGUiRgJa3d4MjJmaVQ+3HaX87Bp9agYs9YFc2L6WcmqwYdSOLBxJjMtwamlkoud5eO4K3Ff3B+5ez5V3Jpno=@vger.kernel.org, AJvYcCXLlJTpvLULoU66O+bpqEMLejFaWROSk0YSdyYGrL0gALk/5JPT5kq5dSv+z85/24HS4J208GZY1OCi@vger.kernel.org, AJvYcCXWrTKpfQvGrIzreTDNoRWT8uqf1C9majubdMA6OSC+Jf7xcZlbg6GxVW58nWPR7a57QAT+tHtp@vger.kernel.org, AJvYcCXiSl7mbii0oZ3nc6nA/32wlOCYSPyGvILEe7z62cuowD4lTHCWwMJA0f+0FsFUBRdaXF8zBI55crjEIu72uZOc@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRY67yT44xp7eMkHjBIKftmuf6PvahA25X0nhhrlLOVRwLkJAc
-	3WV3chcsbeMt8Fdf+jE1p5ipzRgnf/6E810wE02yVxd4PUGNnF0fY+dxpcD24QhYrIrgjaSzZRq
-	SDjZqXnxEjMJdIC+UsAG/V7IILal3WHI=
-X-Gm-Gg: ASbGncsQvZBOTswBI3UQQaNwNy/oQT9c5D1K9S+CfGQlIjQl6+QKPqFvbaO7gSssTgr
-	A0bXv80UYm7/ueigk5wnlIxkTD2Q1WReGvCRFOCRjuUnbmx3NjVUzsMhZYNADaNffhPgZC/W2fh
-	XGbyuZA7vpTS9w3QyD9Y3BNZR3H59n4XsM966fIcnvVYwxZQ4FbhhJSGA/rH1Vg2zM4fJN2vM6r
-	rE1wiBgvyoW7bXzmU60uFOCsddBf1ZgScURuxKR1sjCYiMXbaAu
-X-Google-Smtp-Source: AGHT+IEHpxC5111y9Cj6JQaRaXgMXbAFzbh9lkbxM7Yb2ILuf+3IGoAWfMQm4cez9+Bj4NXuw+pe+X+/AUAJqf9Zudk=
-X-Received: by 2002:a17:906:d7d5:b0:ae3:6744:3675 with SMTP id
- a640c23a62f3a-ae6fc0c3796mr1235555966b.48.1752496533691; Mon, 14 Jul 2025
- 05:35:33 -0700 (PDT)
+	s=arc-20240116; t=1752497549; c=relaxed/simple;
+	bh=dc8DUL8Wo8Y7qvSAyRZhIhWq8ghnFS7tDUafdMsN3jE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=euU86mGSJhW2zBQAHuxGYj691wvYgHKa7YphnuAlI40OH5Gu0w8Qw/xLt7dNigYXx8ufmZ1gAPPZCyI/5IdsniXmsoqaNilU8XIXNR+9B/3pvErbJxa0wr3kcYMEkSdVVR7YMUpE5CX5ceBqtJ/YVg/k+wQdksuA2NqL0ktgWd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=uEf3Y9xH; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=dc8DUL8Wo8Y7qvSAyRZhIhWq8ghnFS7tDUafdMsN3jE=;
+	t=1752497548; x=1753707148; b=uEf3Y9xHhOCFdkiWE/5Kv0MGRodGtTo21lrmoBQcbEz3kp3
+	I9cKjU8L2a+4OTysPPztZKBIT9lu5tPCw1ArLyGWT18Au+MEEqHb64evqvSPb75yggoo2RXRkw5Ka
+	TqgXV3cBLvljwVu7TBpe+SWSTkfQiOwawk0gM58MWUtwAzlWoLbKljvy4w5PygEf5WKMScCgWwAUM
+	S7MzZoqlrAM4ei+bmWqLSqGQeLwJ6cNfHk/sDAy72l3ML4PjEAvAIywUoBjeh8234G7HEn8MLWlOl
+	CxpXj6LiFu/TtwbLyt0nzyVruvUknsYfS4oHmEzV2OhJjzJ4/Zd/4lhsyDWZNrQA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <benjamin@sipsolutions.net>)
+	id 1ubIfQ-000000045gg-41Xe;
+	Mon, 14 Jul 2025 14:52:25 +0200
+Message-ID: <e4dd8d10c8d27fa9b939a3381df86a82a4d791f0.camel@sipsolutions.net>
+Subject: Re: [PATCH v2 4/4] tools/nolibc: add signal support
+From: Benjamin Berg <benjamin@sipsolutions.net>
+To: Willy Tarreau <w@1wt.eu>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
+	 <linux@weissschuh.net>
+Cc: linux-kselftest@vger.kernel.org
+Date: Mon, 14 Jul 2025 14:52:23 +0200
+In-Reply-To: <20250713155002.GA25876@1wt.eu>
+References: <20250710103950.1272379-1-benjamin@sipsolutions.net>
+	 <20250710103950.1272379-5-benjamin@sipsolutions.net>
+	 <f72ddf71-40e4-49d0-92b6-da219e33bd29@t-8ch.de>
+	 <b1c3684e1e299f787a88c58a063ab4d0485a59a7.camel@sipsolutions.net>
+	 <3f901ecb-d6d1-4fb4-9159-a6b817b0dd39@t-8ch.de>
+	 <20250713155002.GA25876@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250709-core-cstr-fanout-1-v1-0-fd793b3e58a2@gmail.com>
- <20250709-core-cstr-fanout-1-v1-1-fd793b3e58a2@gmail.com> <DBBQE3GJ0CHT.5PEF7RLS6C33@kernel.org>
-In-Reply-To: <DBBQE3GJ0CHT.5PEF7RLS6C33@kernel.org>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 14 Jul 2025 08:34:56 -0400
-X-Gm-Features: Ac12FXyt7LMvW07NA5KJthMOxTToFChah-hJr4NBCGuAbPJrhV6AWz6kEkIvvTw
-Message-ID: <CAJ-ks9=ZHtzeyyFSZaVuA1t-3C8-hc40n6r8qFWxn628qT-OeA@mail.gmail.com>
-Subject: Re: [PATCH 01/10] gpu: nova-core: use `core::ffi::CStr` method names
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman <david.m.ertman@intel.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org, Javier Martinez Canillas <javierm@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-malware-bazaar: not-scanned
 
-On Mon, Jul 14, 2025 at 7:11=E2=80=AFAM Danilo Krummrich <dakr@kernel.org> =
-wrote:
->
-> On Wed Jul 9, 2025 at 9:58 PM CEST, Tamir Duberstein wrote:
-> > Prepare for `core::ffi::CStr` taking the place of `kernel::str::CStr` b=
-y
-> > avoid methods that only exist on the latter.
-> >
-> > Link: https://github.com/Rust-for-Linux/linux/issues/1075
-> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> > ---
-> >  drivers/gpu/drm/drm_panic_qr.rs | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> This doesn't look like nova-core. :)
+On Sun, 2025-07-13 at 17:50 +0200, Willy Tarreau wrote:
+> On Sun, Jul 13, 2025 at 05:02:27PM +0200, Thomas Wei=C3=9Fschuh wrote:
+> > On 2025-07-11 09:25:26+0200, Benjamin Berg wrote:
+> > > On Fri, 2025-07-11 at 07:40 +0200, Thomas Wei=C3=9Fschuh wrote:
+> > > > On 2025-07-10 12:39:50+0200, Benjamin Berg wrote:
+> > > > > From: Benjamin Berg <benjamin.berg@intel.com>
+> > > > >=20
+> > > > > Add support for sigaction() and implement the normal sa_mask help=
+ers.
+> > > > >=20
+> > > > > On many architectures, linux/signal.h pulls in compatibility
+> > > > > definitions
+> > > > > for the old sigaction syscall instead of rt_sigaction. However, t=
+he
+> > > > > kernel can be compiled without support for this compatibility
+> > > > > syscall
+> > > > > and it also results in sa_mask to be too small for realtime
+> > > > > signals.
+> > > > >=20
+> > > > > To work around this, the includes are handled separately for each
+> > > > > architecture. This way either linux/signal.h or the asm-generic
+> > > > > headers
+> > > > > can be used to get the correct definition for the rt_sigaction
+> > > > > syscall
+> > > > > including sigset_t.
+> > > >=20
+> > > > I checked this against my WIP alpha support and there this scheme
+> > > > breaks. linux/signal.h provides the old compat types but
+> > > > the asm-generic variant provides an incorrect SIGCHLD.
+> > > >=20
+> > > > Any ideas?
+> > >=20
+> > > I had a quick look, and I don't have a good idea really. For sparc
+> > > there was at least a #define that permitted to get the correct versio=
+n.
+> > > But here, there is nothing.
+> > >=20
+> > > Probably the best is to just copy in a modified version of signal.h
+> > > with the correct definitions present. i.e. replace the "ifndef
+> > > __KERNEL__" sections with something reasonable.
+> >=20
+> > But then we can just have our own copy for every architecture, no?
+> > To me that looks like the best solution right now.
+>=20
+> I generally agree. Originally in nolibc, lots of stuff was copied and
+> we only used very little of UAPI. As new architectures were supported,
+> we took this opportunity for cleaning this up and relying more on UAPI,
+> but that doesn't mean we need to get rid of our local definitions all
+> the time, so if that helps, yeah clearly we can have our local copies
+> and definitions.
 
-Oops :(
+Not sure our own copy for every architecture is the best solution. Many
+of them work fine with the asm-generic headers, and using those where
+they apply seems pretty reasonable to me.
 
-How should I respin this one? the subject should be drm/panic, I think.
+So, maybe that would be a good compromise? i.e. use asm-generic where
+possible and copy in a file otherwise. That seems slightly less
+convoluted and still avoids having to actually fix the architecture
+headers.
+
+Benjamin
 
