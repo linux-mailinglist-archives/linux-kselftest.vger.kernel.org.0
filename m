@@ -1,120 +1,120 @@
-Return-Path: <linux-kselftest+bounces-37272-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E1E7B044C5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 17:53:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6154B0455B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 18:23:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFCC11744EA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 15:53:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E74AA1A641B5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 16:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF87C25F973;
-	Mon, 14 Jul 2025 15:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5243B25F98A;
+	Mon, 14 Jul 2025 16:17:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pq5hB+B3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLleniQE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A0C25A655;
-	Mon, 14 Jul 2025 15:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C684C1DE4E1;
+	Mon, 14 Jul 2025 16:17:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752508377; cv=none; b=qqKnjGO9JHH385OTY/8itobVRzdP5wGFSj9oI7EXThj34XfG7cmSySNpfzjVDjdHf0wOAnv86CLUgLR/bqbPdF6B9XEW43ZC0A02t1M1aibQPrGnIaNUuY8ejTqNZwySmLjBR3nQrxyfkucEWWN8Ici2q1Vw4hhfkDPFSpcBLIg=
+	t=1752509867; cv=none; b=I3lcA0h9WbFpmZFnK9R5oF1ej+yTXQxWhPg7mxQ6m4on2/FhQtZNMVT47wccqM5gPbWdVDUPsCqykniT00IbZ4D1BbnG+UG78qtDiG+ja+WmmBgojkIhJ3NViCnlEAznNczrf8M8ywaOwcCSEGTisxgycW99rN73SxqrmyCQKqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752508377; c=relaxed/simple;
-	bh=aY7+lwqzjxq2+7DTmWOz7PzESoPsMgwuJgkQHk5+Jik=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Jm2URLi4kIe0V7Q22MVRwEfLAaVmgDUdXmn5KC17LDuBymjMQdfQcEiG02TJzLd+wZScOFVVbUEXUxW3wPWns74pvRZy1YkMWkc39FS7I+0reDWr/ftWpnBnINl0+n9PZYTPqNk7jd9AkwLt0NMV43/0TwUZlPl0elUY2QMEl3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pq5hB+B3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275AAC4CEF0;
-	Mon, 14 Jul 2025 15:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752508377;
-	bh=aY7+lwqzjxq2+7DTmWOz7PzESoPsMgwuJgkQHk5+Jik=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Pq5hB+B30PSCHFfDR6z4xbk/uJNmrBJs3/fOCJ2YA7SZwWsy6w+MpN8tXki3WKep5
-	 Yl5o8l+sPsqXK/nAgw9gPKeISUHzfQ2KHlRNGL0SP0Zg53TMvDGTsbC9ahynRaaa0V
-	 ecFKdSAfjE3VnQnuqkatlI9FERV11avUs+pq/0blzoKqku+2V7lDy3sWFGhUbi2vn7
-	 Qad1x7WaPp2SbUgHwwqeWQcq4QvGJ22Zoy+7vuU9Xn3z7zMUg7B0de3eKeFSp7OB8V
-	 ysmQYSKCB87v7NF7Ms1jaTqA5JdzPviDseq7mfZpmwSI5RNgpz+6OurTXuJ4oSeJ3Z
-	 uQVROr6Jk3Meg==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 14 Jul 2025 17:52:33 +0200
-Subject: [PATCH net 2/2] selftests: mptcp: connect: also cover checksum
+	s=arc-20240116; t=1752509867; c=relaxed/simple;
+	bh=VgOAVJdh0mPlo3j6MglPtse4vJgYOB+5e63dn1DdYVk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q2jdsAB0u9WZrC0kJJgKK86LvAVjbr7rpjqbT7IoDAn2I3Hw9B2KQiG49gQN0jWJqSZXXYvgbysXgbbwFz01elqGTaPGTSEXbEPb3A9JNwvbPmmFMVep+7CDQNswVkbqgkGlrJaQiDAdTyts6pCtijJtJTo72zwYSC127+dPbpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JLleniQE; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-31308f52248so823014a91.2;
+        Mon, 14 Jul 2025 09:17:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752509865; x=1753114665; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VgOAVJdh0mPlo3j6MglPtse4vJgYOB+5e63dn1DdYVk=;
+        b=JLleniQEBR7+nZ/QjyiFh8UAatyPt4jHT8XulgW/OF3SMLAZZi9ADOjcuBj0aTPw0g
+         uQNH5kwgqHg20YZg60CHZP8KG2+IapyQAW3aTNOjYyJDamotyB0ZDQFr5iAs9wQmm9Xx
+         eJYV2nhp75wUqy87rIQBBhJQa6FMzh/7YhaRRTxce5Dhl3kgXbM3vqV4f7zR1BB5SYnL
+         q7oovtM3y4PAMffeiSux8esRQYJEzoRWmO66Kh9BxTkCCTy69oOg6VBVh5azCk+leCqC
+         DYotJ7hxXb09U1EMifjfvy1bMlqGDsU9WV0CqhKs4iK/X3CExbucDy0dCYL9P3Xi4Ps+
+         9iCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752509865; x=1753114665;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VgOAVJdh0mPlo3j6MglPtse4vJgYOB+5e63dn1DdYVk=;
+        b=w2MphnyYJqpoJVIFMX6P5kua66ixysn+rWbufYu8uI8HEItAAf4lFUexeBl05/erQo
+         pVLK35dSEg8PBHncvEWTuvvGnzm66UEZGZJ3uMZ1guo4JVYr67fcoWQi5gEoBZi05jJh
+         QKiTdccHYGmrrA+xiHA06/urXl/gKp4tkvhEAzQFtsgN9iVzT7cTDMqKpeX+7pvHcVY6
+         xeA/P7pavM5BGX5CIO72u20JJo94GvBEiPpDxgaCdIWBYwRXb7loAE/0KBgBKaJwt1xu
+         P1B7ZKH/SHTAyhIaDhflF3dxd7FYEHVYu4PAvXF/Cm00TULIa4FA6tzn/95O4njMnpTL
+         AzOA==
+X-Forwarded-Encrypted: i=1; AJvYcCUErB3AJUM1xATCrVdVp/OrBjpaZ/jIG0pY8n+WcPjlZPYHrTSVL1i0UKU/AqEQRq4BwLLY7DV7w72yUkin@vger.kernel.org, AJvYcCUVOYcmX5jjSlnSckjYpsCcKhVLjeEPXoutHq8fkI8d9UvgrGdmM9d6wL4z9ea5/tuAqbivH1jKxscKcUuiqts=@vger.kernel.org, AJvYcCV+GgalBdmh33P7C05fpWwWRDZKuWE360I3FUy3UoNe1eZt6iY0TW8P4v3dmlp7Kk+9P5KEFum40we6@vger.kernel.org, AJvYcCVuQAA/Zb0SUViYTm1Nk8HWcFDNJ0x1tt6jT92QpOr96twJeOY7D1WoTHM2ggxwTJF606dOViNTSCM2SXianRyP@vger.kernel.org, AJvYcCWMnDm9KWaoijN+srPg/PWNsFnywLmtjY/NYYuXlJHldXeXOQW5R8kfq5RmqB6vTXYLnyI9LJ23V2Q=@vger.kernel.org, AJvYcCXhIFCyPh1BQiUvjFg+O45IkB2ttCv4Q8s+dUAat7gxppD/seTnehwZ8gM+ZUF9BSfQKV1Y+doa@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIImNOPzTSQVQhUthALhdlWTuKp7Z+C2cmalJ+UMg/SI4vkU+u
+	ZyMvbBRVtClVqYZOiD6+VtPHKuI+KrfiwoKsDgLx42mex/M8oc7mkckgk0T3NHBWlxYTDIF4zO/
+	ArNHWCzCpwv9BIeyU3xiiOgwKCc7WuXw=
+X-Gm-Gg: ASbGncuTjwTSSev6myW3rZfAQuoxz8ek14JtxzXaetQwaW85jYTpcc/Ku2OCjBFOSkK
+	Y/jPrhWJd09UJPAAkZV1FDVtZ0kTdx2/c+0Fy9S3XBeZ073yhO3CJ+gr6J90gFfSVETSKkPzPjF
+	Tlnqwkjy6lEWs3yXc0rSJd+S5DTF+TTtx5T/YD5F+zQIEGU45oDi1Z0Ya6FWCTN2T5dZrU16Ufs
+	oHP6l3o
+X-Google-Smtp-Source: AGHT+IGRQOu48QZ3mSOJsBHbjURxIkyxYFERFZsWKzgGSlimLJJQz2LvTrTHmfQM/LmM3Tkm9Qh/bL9/Pra9XmQbDxI=
+X-Received: by 2002:a17:90b:2541:b0:313:14b5:2521 with SMTP id
+ 98e67ed59e1d1-31c4cd0e25dmr8267765a91.5.1752509865051; Mon, 14 Jul 2025
+ 09:17:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250714-net-mptcp-sft-connect-alt-v1-2-bf1c5abbe575@kernel.org>
-References: <20250714-net-mptcp-sft-connect-alt-v1-0-bf1c5abbe575@kernel.org>
-In-Reply-To: <20250714-net-mptcp-sft-connect-alt-v1-0-bf1c5abbe575@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Christoph Paasch <cpaasch@apple.com>, 
- Davide Caratti <dcaratti@redhat.com>
-Cc: Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1975; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=aY7+lwqzjxq2+7DTmWOz7PzESoPsMgwuJgkQHk5+Jik=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDJK1c89+nb1W1HlnAdvFTZ+ELooJhsy54n/tAM3Z08Xs
- Io24OHd11HKwiDGxSArpsgi3RaZP/N5FW+Jl58FzBxWJpAhDFycAjCRtN+MDDtePNK7sLCcz+BA
- 5xTGL+/2dcZ4zWKv0mT8Gf5sBcdhS3dGhiNezdeMgj/krKp7/qZQfbbg8p++/vveuDVH615UDkh
- 6wQUA
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+References: <20250709-core-cstr-fanout-1-v1-0-fd793b3e58a2@gmail.com>
+ <20250709-core-cstr-fanout-1-v1-1-fd793b3e58a2@gmail.com> <DBBQE3GJ0CHT.5PEF7RLS6C33@kernel.org>
+ <CAJ-ks9=ZHtzeyyFSZaVuA1t-3C8-hc40n6r8qFWxn628qT-OeA@mail.gmail.com>
+ <CANiq72kyQQMutGDkHH=McRQens+V+wkHLpiSfivmnAwwgXE62w@mail.gmail.com> <CAJ-ks9kzrihJ7Jb8kAp0LpbPCfdouDQdFK06AHN3xi9pXNWZ9w@mail.gmail.com>
+In-Reply-To: <CAJ-ks9kzrihJ7Jb8kAp0LpbPCfdouDQdFK06AHN3xi9pXNWZ9w@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 14 Jul 2025 18:17:31 +0200
+X-Gm-Features: Ac12FXx-lgQiOZYDq083Q8BlSadihlGOqb-DL3tgO7LiWlt3h_pXYA1OcdWdN3A
+Message-ID: <CANiq72mgKqm+Dq98R6Tf99GWPE-n7vKOzKSTiYQR6UdddEboEA@mail.gmail.com>
+Subject: Re: [PATCH 01/10] gpu: nova-core: use `core::ffi::CStr` method names
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman <david.m.ertman@intel.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, Javier Martinez Canillas <javierm@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The checksum mode has been added a while ago, but it is only validated
-when manually launching mptcp_connect.sh with "-C".
+On Mon, Jul 14, 2025 at 5:28=E2=80=AFPM Tamir Duberstein <tamird@gmail.com>=
+ wrote:
+>
+> Yep, that's what I was going to do - but do I resend the whole series,
+> or somehow just this patch?
 
-The different CIs were then not validating these MPTCP Connect tests
-with checksum enabled. To make sure they do, add a new test program
-executing mptcp_connect.sh with the checksum mode.
+Whole series is simpler, I think.
 
-Fixes: 94d66ba1d8e4 ("selftests: mptcp: enable checksum in mptcp_connect.sh")
-Cc: stable@vger.kernel.org
-Reviewed-by: Geliang Tang <geliang@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
- tools/testing/selftests/net/mptcp/Makefile                  | 2 +-
- tools/testing/selftests/net/mptcp/mptcp_connect_checksum.sh | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
-index c6b030babba8cf888101d6af44f3e56fe5ab831b..4c7e51336ab25c662f02719f1632fa2d27d148f1 100644
---- a/tools/testing/selftests/net/mptcp/Makefile
-+++ b/tools/testing/selftests/net/mptcp/Makefile
-@@ -5,7 +5,7 @@ top_srcdir = ../../../../..
- CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
- 
- TEST_PROGS := mptcp_connect.sh mptcp_connect_mmap.sh mptcp_connect_sendfile.sh \
--	      pm_netlink.sh mptcp_join.sh diag.sh \
-+	      mptcp_connect_checksum.sh pm_netlink.sh mptcp_join.sh diag.sh \
- 	      simult_flows.sh mptcp_sockopt.sh userspace_pm.sh
- 
- TEST_GEN_FILES = mptcp_connect pm_nl_ctl mptcp_sockopt mptcp_inq mptcp_diag
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect_checksum.sh b/tools/testing/selftests/net/mptcp/mptcp_connect_checksum.sh
-new file mode 100755
-index 0000000000000000000000000000000000000000..569340d4f00ae2e4655b30220bcfce695549a686
---- /dev/null
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect_checksum.sh
-@@ -0,0 +1,4 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"$(dirname "${0}")/mptcp_connect.sh" -C "${@}"
-
--- 
-2.48.1
-
+Cheers,
+Miguel
 
