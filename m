@@ -1,76 +1,78 @@
-Return-Path: <linux-kselftest+bounces-37283-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37284-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA795B04901
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 23:04:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08B4AB0490A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 23:04:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13C974A261F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 21:03:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B74C9169C56
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Jul 2025 21:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A9B23AB8B;
-	Mon, 14 Jul 2025 21:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1EC22609D4;
+	Mon, 14 Jul 2025 21:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NCNb9MQ/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LBiaaEEf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9839815C158;
-	Mon, 14 Jul 2025 21:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D592586EF;
+	Mon, 14 Jul 2025 21:04:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752527057; cv=none; b=bEkEnY7/AeAVgJ1f4fQwLqB3jFObCiTO/2rasDTORtSp3pOQWPATDeQQYir3REaykhQ9/DwelLAP+PcaY7Fu4UIORBYwmbN8m2sFK28OmtcRQGe75xs6JqWoTuAE6LPcVSHQTxQ2lj054cvJQBWOyyJ2dEPFZow+6aXvTEEjgGE=
+	t=1752527059; cv=none; b=T1xP3qNp4/i/FzNn4ikd2Q9qpbwGd1Z1SrSXOTrAKnBceDporb5tOpHusDO+0KIpsxYNbymWsaC34kGT+uXsa6jbmVaVv4JkiPd9t+fcfCqEXmKET8tFI5ipDE3p+AkGtPtPqyuazPVp8HWoGFgRJ8qjDmY0tC3PMVnFg4U2qGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752527057; c=relaxed/simple;
-	bh=XWC0zxNYZfIjRWOG7IoJiPS5eyTrWieCg+q04+Ow2d0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EMs0DA49FLo8ityGySoEnbmr9RCe5xdqJouMIrBmpVJwg7O5pI3rRFDilEMjLKA/Ucvu5XnMdXy1IexNFlN46VgBTUcoqMZU5tYGL/YosIPi/JTGg4RmQZhQFcPorVp0m9D+Gq7ruwLh+NqglFOBlHaJnUpUCnsAi8RCbJC1t38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NCNb9MQ/; arc=none smtp.client-ip=209.85.128.51
+	s=arc-20240116; t=1752527059; c=relaxed/simple;
+	bh=wA/E5+JOmOUD6QGm2lQJtFQRXT31mbSkz/JyDNyumnQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JgdXVLNFRHahuGaSiBkBqaORBid+fahq5XgqxkyrL7j7pvwmSQ7HRDJxb4Ahg3mmiHwuapGsMhXeiqrK4eyFdzdnXHZ+BFeZCx1sQcpSTKgMPWuq4oqbTGOzVxI+IZH23/B8wyBolBA6USFvxuhyGq39dWiGwz49cipAVMjKm40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LBiaaEEf; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-451d41e1ad1so33447735e9.1;
-        Mon, 14 Jul 2025 14:04:14 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-451d3f72391so47148305e9.3;
+        Mon, 14 Jul 2025 14:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752527052; x=1753131852; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mouR0tzYVYgaU9BwCE8alLNv2Rg+cKwIajr55xzq3Io=;
-        b=NCNb9MQ/QzEiPl+AjCNda7ZSJDFm5STuDzcV4G3z+LE6z52/58mquzKJm3qoPCClsy
-         YVXXMwTZ/N0y9LbLIvvqx6WUG8ldgnLydZBQA1n95HJqVkMF1SDNFbI8WMllcwiCNT90
-         lpe7ixfqmPiGtv9NILtIb6biZ2N3cj8uBFgllxTkpHMJq36VQjW6ECscG3yoApqfRVzZ
-         QWzoN2RJ+T+Tu6JYewKSIdg+lVM3xGPwyFyu3rsIoSFeEL8Uh+3+7ECZhsU6MEgzBQx6
-         Ql6D0CJQRqKX/9xBUgcBegxF/oCgN4QMQPnAxlX+H5azv1ywM7EdhEJgA60vXNKBE6AO
-         XkBQ==
+        d=gmail.com; s=20230601; t=1752527056; x=1753131856; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pPvaZZJy6KQO4+hpnGAfzGnnzy/nMfkrJi1aRs1pXjE=;
+        b=LBiaaEEfjPcA98B3Th6EW2eX7j5048njHSWZfgsK4EKeoXA/7o6I+i83A+SJ4ZP2lO
+         xXQfMNkL8z6l7Fg2D9831SXOiUopfHLSiWXa0UP29rufQk75MWZXftNETLBEKXED/xcc
+         R8crRavhwebeXOpfa4st4zx7ldtFvvQ+C8jPJ3hbW1UNq10E5mEqg/jF0HYeFrqoKaRR
+         Jl6WI4NXeyTm9tTsAQHL9PNYsRtk83Aa0YE4Mb9WbgJSWsMKYwpXx4u62TtuuWT+hHcJ
+         0M8XKOtv93yZDJ1AxkCuFLyBFMokEF9E92tw0wYQ4OJUt6wuqv79m24tsSTIb/f0E0JV
+         GZKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752527052; x=1753131852;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mouR0tzYVYgaU9BwCE8alLNv2Rg+cKwIajr55xzq3Io=;
-        b=Jw4Jcsl4oFJp1SqvIWzOR9Dwy/NXvjdtgnygOVhYDkoM4iPeuJ1MuS/jN0Etc4c67Y
-         mjvf62K5tnRtqo9lQDCfm7z52wG+MCdvpRzWvInaqEVaWjuLEjaBRuAd76TTYe4I/vg3
-         wKFnCis8rgBab0NbKc3xHbAwLrHtcyb+tjZJKHvE0Mlk1neGkssClKhO+shthtDKHaKc
-         rlArdYdKqQtbp+58Do2gmsMrlgZyh5DyqHaYUzNjBhVzX0iSOJC0aYsfILC4XklKa7Tu
-         j3NPYuLdxOTXBoPvt/dJEQn73XwyVW7SB14P7uNleagPpBNEid9yXcbIxctLCncZcyF5
-         elGA==
-X-Forwarded-Encrypted: i=1; AJvYcCVV230zqE6CeR4lRbPhVAJClfMyyxqBub4ompt508UvmKJjZ/MMOqgsg/PKbWRdjP+Ho47rOXsnNc89nOcjSWyd@vger.kernel.org, AJvYcCW9DB0xwrTYiv+nm+Kf5HvRBOuPV5swvuSA1DF51lOFo9nwG6Wq0EnJPXZy5r/+NMV4xOE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9r2hEAKOJz/vSbgNk+oEB0WKo+yj1/Ob8qSY4g1/irnS910Bg
-	eJz8Tv1TqDpEKk11KPwCmZ8WuvvdVFZsTqQ1Ret5QLAzR9Pw8T0mnVa725J0c6GL
-X-Gm-Gg: ASbGnctpOwcQ99xJ3HgP5OZV96Ek4C5N7KjWbZfcM5zDWqzaM7ZDsSd9UJcUzCWB7BR
-	RM826EoRZseorr86Ql6TFbzLaDzgrCCd4ufFLDAHiFwQlPPRjujecpOhJU9vT9XVJutZux4r+SE
-	XrtnSzUM47kta5kxqRII6VFwY5Ml+FzYCIWT1OQy9PynC0wDRfJM79eQL3UFUOhg/ncxWgv4WFE
-	fSfiy9UEeS4zmKJxY1rcUG5wOkOlcEbJIoTpaIkBV31ocYxu9HJ4jPlm5ramnyxzji2t7KX9V9H
-	mZGmKdeAtKigWmEH1w1wMkdvV/vIPJ0rUsKPo7I10jashNl0steb58gXoKOmiqWvVtLdnqveSbi
-	Q8+HNY2YCBJCTTC5fvpY=
-X-Google-Smtp-Source: AGHT+IH6zXTxX+LNCWcxRTcfW/J/nHlhc1PThiqfATIeWBU6atdA9tOZZyTYRLPbCj8P4NRFR2HI9w==
-X-Received: by 2002:a05:600c:8505:b0:442:e0f9:394d with SMTP id 5b1f17b1804b1-45565edc90dmr113035265e9.24.1752527052297;
-        Mon, 14 Jul 2025 14:04:12 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:8::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4561b176f87sm40748325e9.35.2025.07.14.14.04.10
+        d=1e100.net; s=20230601; t=1752527056; x=1753131856;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pPvaZZJy6KQO4+hpnGAfzGnnzy/nMfkrJi1aRs1pXjE=;
+        b=AVBVjkh8e7aiOnsP8jTtdZSLbXYMRv2BiPxLA+Z0Mat52H6yK/OqjvGrk6zkApL0+M
+         OW0uhkHb7xTwwgSiDsqwjfnoQW7kIn8vq2xSA6MfYhN5eBWa0A/jr4D+bgsKJx2tVBek
+         SE0bn4HcI8NnS1Vy1K74qPfvNgZ79jwVxaX2aSwv004nf6QkIBkQWHFuGd2bnzLdJHTK
+         UDNLjJRB+bnHKpvT7ObPYQr1gVcl5ZH4mxDtV749IG5VAOIpd9difrzrM3O7TkZJfLyR
+         VFmSZJpTvaFBA3nJ4qaavcScFC5X+5HlGbSeTkahlE8jBE7X/t3zYM8ZLaw2mfC8ZGrG
+         rgTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUh17IDNhSBDbxnDteNvYE2QnqgmsMXxodfX1KIanCp5IdWM3ksVIbRM8F+ytULq3zoydQ=@vger.kernel.org, AJvYcCVUgYFUuZNvL1LVsmNz+TDnKtg2M72Qn612/W+6WF/41Zga69kcyE3U4sczV8mrnTeWv9fGoPBkm6LTbUWf2ngz@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEWsr3JteqWgyW5FEmTkbbLsbn5JbJH/QkkaoSteBObQkGGbGM
+	SmqDz5hkzUqrB+/fQFyN+FNs9lvgqJWP0KIdxo61udRX2nFB2D9SlSSR1hxx+3Me
+X-Gm-Gg: ASbGncuiXY03DxXnXqgNVvtpm59G+Db8Z+cD3pwZuAniIsp/32I4eKrc2h1GvvEtC3L
+	TUS9TwrSnGKtk+yPsT8yKHzL9FbGPeKiDsvX7IWWQpa6PS+1If9yOf0p4Osibm8Vj6Xou2Bur03
+	m656/dzMRSKGcSc8ZvYPpEM8cIDGFD44ckWVnP+znUX4AWY5h1Fi4aUH08yrLDcgJHsoOlMZfeD
+	IgrapeiXmvIYLXqvON13Sp/iES5ws8Q95MMDxfyAnA0Zs2D2nPVXoB1JPkRtFmKL4zWa+SgB6qU
+	HUubZrzQDhxhhogKU8qMqWazBiIFcVb0prxww9BRdbP0ncYSZXIUTBKLg6HczShk05ya1hFQkGM
+	Kh9iQ3imPqCwXVvTXFl4=
+X-Google-Smtp-Source: AGHT+IHEZ3LhJZDT17IVQpaXd2iM8w8nvGGTrjRUngW8VoVdJWJUxTOVg+hS6v2DCx6sNcv8IZobYw==
+X-Received: by 2002:a05:600c:6387:b0:441:b3eb:574e with SMTP id 5b1f17b1804b1-455fffb208fmr86755555e9.5.1752527055768;
+        Mon, 14 Jul 2025 14:04:15 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:2::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-455f8fc5a01sm96112865e9.32.2025.07.14.14.04.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jul 2025 14:04:11 -0700 (PDT)
+        Mon, 14 Jul 2025 14:04:15 -0700 (PDT)
 From: Mohsin Bashir <mohsin.bashr@gmail.com>
 To: netdev@vger.kernel.org
 Cc: kuba@kernel.org,
@@ -98,10 +100,12 @@ Cc: kuba@kernel.org,
 	justinstitt@google.com,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next V4 0/5] selftests: drv-net: Test XDP native support
-Date: Mon, 14 Jul 2025 14:03:47 -0700
-Message-ID: <20250714210352.1115230-1-mohsin.bashr@gmail.com>
+Subject: [PATCH net-next V4 1/5] net: netdevsim: hook in XDP handling
+Date: Mon, 14 Jul 2025 14:03:48 -0700
+Message-ID: <20250714210352.1115230-2-mohsin.bashr@gmail.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250714210352.1115230-1-mohsin.bashr@gmail.com>
+References: <20250714210352.1115230-1-mohsin.bashr@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -110,48 +114,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series add tests to validate XDP native support for PASS,
-DROP, ABORT, and TX actions, as well as headroom and tailroom adjustment.
-For adjustment tests, validate support for both the extension and
-shrinking cases across various packet sizes and offset values.
+From: Jakub Kicinski <kuba@kernel.org>
 
-The pass criteria for head/tail adjustment tests require that at-least
-one adjustment value works for at-least one packet size. This ensure
-that the variability in maximum supported head/tail adjustment offset
-across different drivers is being incorporated.
+Add basic XDP support by hooking in do_xdp_generic().
+This should be enough to validate most basic XDP tests.
 
-The results reported in this series are based on fbnic. However, the
-series is tested against multiple other drivers including netdevism.
-
-Note: The XDP support for fbnic will be added later.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
 ---
-Change-log:
-V4:
-  - Support XDP handling for netdevsim
-  - Fix pylint warning with P4
-  - Update commit message for P2,P3 to show pass/fail summary
-V3: https://lore.kernel.org/netdev/20250712002648.2385849-1-mohsin.bashr@gmail.com
-V2: https://lore.kernel.org/netdev/20250710184351.63797-1-mohsin.bashr@gmail.com
-V1: https://lore.kernel.org/netdev/20250709173707.3177206-1-mohsin.bashr@gmail.com
+ drivers/net/netdevsim/netdev.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-
-Jakub Kicinski (1):
-  net: netdevsim: hook in XDP handling
-
-Mohsin Bashir (4):
-  selftests: drv-net: Test XDP_PASS/DROP support
-  selftests: drv-net: Test XDP_TX support
-  selftests: drv-net: Test tail-adjustment support
-  selftests: drv-net: Test head-adjustment support
-
- drivers/net/netdevsim/netdev.c                |  19 +-
- tools/testing/selftests/drivers/net/Makefile  |   1 +
- tools/testing/selftests/drivers/net/xdp.py    | 656 ++++++++++++++++++
- .../selftests/net/lib/xdp_native.bpf.c        | 538 ++++++++++++++
- 4 files changed, 1213 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/xdp.py
- create mode 100644 tools/testing/selftests/net/lib/xdp_native.bpf.c
-
+diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
+index f316e44130f7..ab2cdbf968a7 100644
+--- a/drivers/net/netdevsim/netdev.c
++++ b/drivers/net/netdevsim/netdev.c
+@@ -332,15 +332,32 @@ static int nsim_get_iflink(const struct net_device *dev)
+ static int nsim_rcv(struct nsim_rq *rq, int budget)
+ {
+ 	struct net_device *dev = rq->napi.dev;
++	struct bpf_prog *xdp_prog;
++	struct netdevsim *ns;
+ 	struct sk_buff *skb;
+ 	unsigned int skblen;
+ 	int i, ret;
+ 
++	ns = netdev_priv(dev);
++	xdp_prog = rcu_dereference(ns->xdp.prog);
++
+ 	for (i = 0; i < budget; i++) {
+ 		if (skb_queue_empty(&rq->skb_queue))
+ 			break;
+ 
+ 		skb = skb_dequeue(&rq->skb_queue);
++
++		if (xdp_prog) {
++			/* skb might be freed directly by XDP, save the len */
++			skblen = skb->len;
++
++			ret = do_xdp_generic(xdp_prog, &skb);
++			if (ret != XDP_PASS) {
++				dev_dstats_rx_add(dev, skblen);
++				continue;
++			}
++		}
++
+ 		/* skb might be discard at netif_receive_skb, save the len */
+ 		skblen = skb->len;
+ 		skb_mark_napi_id(skb, &rq->napi);
+@@ -882,7 +899,7 @@ static void nsim_setup(struct net_device *dev)
+ 			    NETIF_F_TSO;
+ 	dev->pcpu_stat_type = NETDEV_PCPU_STAT_DSTATS;
+ 	dev->max_mtu = ETH_MAX_MTU;
+-	dev->xdp_features = NETDEV_XDP_ACT_HW_OFFLOAD;
++	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_HW_OFFLOAD;
+ }
+ 
+ static int nsim_queue_init(struct netdevsim *ns)
 -- 
 2.47.1
 
