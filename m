@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-37375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37376-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 238BDB0662C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 20:43:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8725B06632
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 20:44:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27BEF3BB279
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 18:43:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44B0956748C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 18:44:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D3E52BE63B;
-	Tue, 15 Jul 2025 18:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 939052BEC42;
+	Tue, 15 Jul 2025 18:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJbhMDqn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9xDQptl"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BAE1DE2BF;
-	Tue, 15 Jul 2025 18:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF1B2BE644;
+	Tue, 15 Jul 2025 18:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752605025; cv=none; b=elq/EdMlCm9bFqA9oOHeRWauwPZ0PL+vC7DL2yPc1N+/HbPAudomxoKh9TxeABe9Z0iA5Z6Y71T22hq8sF8HrOs/xwgzS7DT71umHhgXmr/zwEEW/kYoHrwkgHpsXGw6ZK3SSSd8hoR++Cu9Dgm3K9XpAVSZMDireDYfmzjWCf0=
+	t=1752605028; cv=none; b=jCiDKVOC1f3D+RQP9jjDGAefSYyu++cr/+wpjm6Ra3irIwHqefHrpbVyS8u9HnGxT1DWhMsviTP895XQB3XIeHlEye6RczstRycmWf1Nlg/t1APne2y2muaaDYjj0Ub81NXd2U0CW4AhahDFYHWxGFeFuDfivikt67hF1F06aes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752605025; c=relaxed/simple;
-	bh=hnwA/Cl94G/uuXZ1hoCLu04p0joBovLqTgYpqqTRKGQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CneSrd/R/md5eDs6S2jopMMzUpRtztk9Gxz0aaeq+UuRmOr3Tkfui7dXgKQYBio7sq31DghoMfL+g/5WO0Gf1btMS94Q1LWPtBPUe74nSmL5RaTsIJsAoytBMZeijVO81w4p7p3/t9U5o7uFj6ijflfyvYxhzBF0rk1EezhSL/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJbhMDqn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 928DDC4CEE3;
-	Tue, 15 Jul 2025 18:43:41 +0000 (UTC)
+	s=arc-20240116; t=1752605028; c=relaxed/simple;
+	bh=4xuV//Yw8N8IriUHaqCqs3ZkGyGudb2qnXCVaEqiGlE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=EhPRXsCuVxLj8o9pqfx8TgeDjNVNQRWbnacpWfGhMxQ1K20l7pz7uQD4CR5Ypu6xF+lTUIhoFEy/MrFn5oqoO0+MjhkiizlS+2YI1tfkN7w+fy5dDej4l4DqpNo6iZOk4dGPtKqZwtw/37pJS4h3gRqn5R88FNLKXUmPyW1PPo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9xDQptl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9777C4CEF8;
+	Tue, 15 Jul 2025 18:43:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752605024;
-	bh=hnwA/Cl94G/uuXZ1hoCLu04p0joBovLqTgYpqqTRKGQ=;
-	h=From:Subject:Date:To:Cc:From;
-	b=jJbhMDqn4U5Gp9wyAsC8aGRzjq6bXIFKvNCXMrOiVH/YzQJft8dvtlBdsiZCJDVkJ
-	 kMXmO2W0q4IYsPDh8FGHA2T2D6HnoKoqPNwoudFz35UKFFy1W79+rYcqoYGH5zPgsN
-	 MT+eOYLYWtLx9yDjzgI9pJNgJyDrZRA1TSopUXYJ8JICpKslmMTiJRW/s5IoyYVT0G
-	 ro8DJWFEsbhxVIwpAUT02soKuUhXfy2CqMYftgrGAKfMT1rhS6HswURzz35woUXt7m
-	 YPeWzVfPsX51st98KyN0DDOPqYmVtGOCePrzM/5KI5EttGmKWqAe3/XTqArL4BmUST
-	 CpN3W8ZJmmxCA==
+	s=k20201202; t=1752605027;
+	bh=4xuV//Yw8N8IriUHaqCqs3ZkGyGudb2qnXCVaEqiGlE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=s9xDQptlV5hi3Ug+OYKBvyU36EfoaVP0KczkaXteUd+ObXGQbW0hbauZnboVufCzK
+	 y6wkWsy5cNsNt6eGYCujfL4eU5w22lpSbrDfKP3pIj/9mbvXEkSMIkt/sZspCQGa60
+	 2yIE+XmMwKssWt5XRIzzcHvxiX4RmwjfkRweu1jt79gM9/hZPvytz2euoIWoBgIbkN
+	 97cM9pXBCNGEgurhkqfxCiSLjBYgSski5v2GWBbZOIzp4GxItxblfxCYOmo7ECPzIS
+	 0DuQbWqcO2uSQhYyyjMJ4FIUNO8tLVCBsPPgo5yZfOmR6dqLEgs/5KwlbywXS1bFLU
+	 XLXT5tAVw7MZw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net v2 0/2] selftests: mptcp: connect: cover alt modes
-Date: Tue, 15 Jul 2025 20:43:27 +0200
-Message-Id: <20250715-net-mptcp-sft-connect-alt-v2-0-8230ddd82454@kernel.org>
+Date: Tue, 15 Jul 2025 20:43:28 +0200
+Subject: [PATCH net v2 1/2] selftests: mptcp: connect: also cover alt modes
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,11 +52,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFChdmgC/42NQQrDIBRErxL+ur+ojQS66j1KFsZ+E2mq4SuSE
- rx7JSfobt4MM3NAIvaU4N4dwFR88jE0UJcO7GLCTOhfjUEJpcUgewyU8bNlu2FyGW0MgWxGszY
- tjXFiuJHrCVp/Y3J+P7ef0GowNnPxKUf+nn9FntEf00WiwMlJq800kR70400caL1GnmGstf4An
- AUV3cgAAAA=
-X-Change-ID: 20250714-net-mptcp-sft-connect-alt-c1aaf073ef4e
+Message-Id: <20250715-net-mptcp-sft-connect-alt-v2-1-8230ddd82454@kernel.org>
+References: <20250715-net-mptcp-sft-connect-alt-v2-0-8230ddd82454@kernel.org>
+In-Reply-To: <20250715-net-mptcp-sft-connect-alt-v2-0-8230ddd82454@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
  Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -67,53 +65,79 @@ Cc: Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
  netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1651; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=hnwA/Cl94G/uuXZ1hoCLu04p0joBovLqTgYpqqTRKGQ=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLKFkadUrrUPXOiTVhTyaIT+rqyklab7u9xTM9fYuzH8
- +iclzdHRykLgxgXg6yYIot0W2T+zOdVvCVefhYwc1iZQIYwcHEKwESsTjP8FTu3WUx65cr8fdZS
- l3sOLJBVvbt6i8BNY7svJ9forj4qeZzhf+5GzncPp/dt+fYj97jml3cKeyZ5Xyifv5xHlUkyubI
- 3iRcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2981; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=4xuV//Yw8N8IriUHaqCqs3ZkGyGudb2qnXCVaEqiGlE=;
+ b=kA0DAAoWfCLwwvNHCpcByyZiAGh2oVugMaWmErWbSCvcCyozlz/tMN8MAFj6/Mgd5V7RIK442
+ Yh1BAAWCgAdFiEEG4ZZb5nneg10Sk44fCLwwvNHCpcFAmh2oVsACgkQfCLwwvNHCpd1+AEAqE9n
+ tFif75S+l+KTfAFU7//prn8IkWJ50x3nLUI5K/UBAK/nC+6vtSdsrJyck/lvkHigSgfWBJpWoGZ
+ Pg9RAiAEI
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-mptcp_connect.sh can be executed manually with "-m <MODE>" and "-C" to
-make sure everything works as expected when using "mmap" and "sendfile"
-modes instead of "poll", and with the MPTCP checksum support.
+The "mmap" and "sendfile" alternate modes for mptcp_connect.sh/.c are
+available from the beginning, but only tested when mptcp_connect.sh is
+manually launched with "-m mmap" or "-m sendfile", not via the
+kselftests helpers.
 
-These modes should be validated, but they are not when the selftests are
-executed via the kselftest helpers. It means that most CIs validating
-these selftests, like NIPA for the net development trees and LKFT for
-the stable ones, are not covering these modes.
+The MPTCP CI was manually running "mptcp_connect.sh -m mmap", but not
+"-m sendfile". Plus other CIs, especially the ones validating the stable
+releases, were not validating these alternate modes.
 
-To fix that, new test programs have been added, simply calling
-mptcp_connect.sh with the right parameters.
+To make sure these modes are validated by these CIs, add two new test
+programs executing mptcp_connect.sh with the alternate modes.
 
-The first patch can be backported up to v5.6, and the second one up to
-v5.14.
-
+Fixes: 048d19d444be ("mptcp: add basic kselftest for mptcp")
+Cc: stable@vger.kernel.org
+Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Changes in v2:
-- force using a different prefix in the subtests to avoid having the
-  same test names in all mptcp_connect*.sh selftests.
-- Link to v1: https://lore.kernel.org/r/20250714-net-mptcp-sft-connect-alt-v1-0-bf1c5abbe575@kernel.org
-
+Notes:
+ - v2: force using a different prefix in the subtests to avoid having
+       the same test names in all mptcp_connect*.sh selftests.
 ---
-Matthieu Baerts (NGI0) (2):
-      selftests: mptcp: connect: also cover alt modes
-      selftests: mptcp: connect: also cover checksum
-
  tools/testing/selftests/net/mptcp/Makefile                  | 3 ++-
- tools/testing/selftests/net/mptcp/mptcp_connect_checksum.sh | 5 +++++
  tools/testing/selftests/net/mptcp/mptcp_connect_mmap.sh     | 5 +++++
  tools/testing/selftests/net/mptcp/mptcp_connect_sendfile.sh | 5 +++++
- 4 files changed, 17 insertions(+), 1 deletion(-)
----
-base-commit: b640daa2822a39ff76e70200cb2b7b892b896dce
-change-id: 20250714-net-mptcp-sft-connect-alt-c1aaf073ef4e
+ 3 files changed, 12 insertions(+), 1 deletion(-)
 
-Best regards,
+diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
+index e47788bfa671313f21d5ba95821121cdc3e5d2c7..c6b030babba8cf888101d6af44f3e56fe5ab831b 100644
+--- a/tools/testing/selftests/net/mptcp/Makefile
++++ b/tools/testing/selftests/net/mptcp/Makefile
+@@ -4,7 +4,8 @@ top_srcdir = ../../../../..
+ 
+ CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
+ 
+-TEST_PROGS := mptcp_connect.sh pm_netlink.sh mptcp_join.sh diag.sh \
++TEST_PROGS := mptcp_connect.sh mptcp_connect_mmap.sh mptcp_connect_sendfile.sh \
++	      pm_netlink.sh mptcp_join.sh diag.sh \
+ 	      simult_flows.sh mptcp_sockopt.sh userspace_pm.sh
+ 
+ TEST_GEN_FILES = mptcp_connect pm_nl_ctl mptcp_sockopt mptcp_inq mptcp_diag
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect_mmap.sh b/tools/testing/selftests/net/mptcp/mptcp_connect_mmap.sh
+new file mode 100755
+index 0000000000000000000000000000000000000000..5dd30f9394af6a88b14936a64c50ac9566be2e6e
+--- /dev/null
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect_mmap.sh
+@@ -0,0 +1,5 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++MPTCP_LIB_KSFT_TEST="$(basename "${0}" .sh)" \
++	"$(dirname "${0}")/mptcp_connect.sh" -m mmap "${@}"
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect_sendfile.sh b/tools/testing/selftests/net/mptcp/mptcp_connect_sendfile.sh
+new file mode 100755
+index 0000000000000000000000000000000000000000..1d16fb1cc9bb6d1f88a9fdc11206237ca2b790bb
+--- /dev/null
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect_sendfile.sh
+@@ -0,0 +1,5 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++MPTCP_LIB_KSFT_TEST="$(basename "${0}" .sh)" \
++	"$(dirname "${0}")/mptcp_connect.sh" -m sendfile "${@}"
+
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.48.1
 
 
