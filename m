@@ -1,160 +1,292 @@
-Return-Path: <linux-kselftest+bounces-37379-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37380-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD03CB06667
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 21:01:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DAF1B06794
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 22:13:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC68C1734E5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 19:01:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F17B5015FA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 20:13:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA8FC1EDA3C;
-	Tue, 15 Jul 2025 19:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3573129B220;
+	Tue, 15 Jul 2025 20:13:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="YlqART+8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0noSifIr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747371F19A;
-	Tue, 15 Jul 2025 19:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491C3283FCF
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Jul 2025 20:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752606069; cv=none; b=SwoBYjo2Uwp9gybbGLreqWkyINXmb9fGmUz3KRPnj6IzSrKKkPxEjWC1d4u7CpSiGR7cSopEhlpfST8I3VvOLQVjJP0R2lmWmargkcFHqo/bV3M1FvOObE0YZywDJU104n0AJspNLTvmOFdyCScFRV6UNwJhE429NnAX8zuubs0=
+	t=1752610431; cv=none; b=VX1Z5IJWikcUkKVHz7kxPF9Qa3ib8V7FfUKs1eYXn39yI1TcXSuGzkVyKnCILCpBQ8COr1gVePpRFmuDueW0FurhpO+p+EAajtnZdrMnlBbHe8gu1AhaJ1Li2UzGEtm5cy0sfzIBtk6kN+SIkZJhgCsm2Qmtr7D7BBEuWwz3Oe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752606069; c=relaxed/simple;
-	bh=DzC7FSQt83sXsaK/PxNQFpXQ0m8C+erLEI5dnUrtrxY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=djw4d25y0n1h5vvRTkSy3cgC7MWd+SSJDhicLvbbjdDJ28lTsmSPUQ18Xu+b1SkjUolQ0S7Dc1GMn487Mk5X1QWpqnaRDgRfjMqBbo7RT4gxiH2Qh6lRqd7TjQmnKRTpPkoGaRhoBF7GR8NdpGNQWFLbdOLC1LMqnjflrOgPydM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=YlqART+8; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1752606046; x=1753210846; i=markus.elfring@web.de;
-	bh=07Pa+856qEFo2V8QLHWyjRVReH2nqIS67HTT5nxhfOk=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=YlqART+8hV4BjX8nIa1p1U1XIq6cMK4oq/sNYbg+BRCAgkbFyU3hy8SF6VJYB6Bd
-	 j1zljrTLkiJP4BeqcT4Fxu4J+tcjCd1VzV6GevRjADnnfYJkkusgl6h8hxuQZwD/9
-	 g8KGrSHju4LPMI40i/se8wkgTluvtmSKUm+Gio+6bXt5pu6WR7YdrFZAueSWehD13
-	 nji8FJe9Cn4QCp5mGTF6nfW9UmUSBK2ygpELGBG5hinTScx2L4JZvB0FkrZTcozuY
-	 etYcKaW3ykkUB5LAurgQL3gE4BeE7vNB9pPE2ibwgxSeTtftG6rNM0jk81EOjoj94
-	 RnDYwDzn/nPjeX0t3A==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.93.1]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1Mmymz-1v0bWr1u3L-00dCx2; Tue, 15
- Jul 2025 21:00:46 +0200
-Message-ID: <01498bc3-4885-4b6e-a437-af3dca58f187@web.de>
-Date: Tue, 15 Jul 2025 21:00:43 +0200
+	s=arc-20240116; t=1752610431; c=relaxed/simple;
+	bh=tuJwKXRuFX+8Hv424txa6xR8j28WXqvE6aD7LyPgTkU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=efOnf1/3Grz97VV24XFw9hdCt3JoRYXRr7Q+L3bDIoA3V6gGv97SIC8ZaINh41Y6GTV3CVdKpGXV/1H/GA0GOL/KK3Yaqsc3ENIM7Nuh0qn4dTxYxLnaygN3LDVDO9RlcfIABdWst4gr2+0Ah/ZNGukiotIxzIF/th5BF3/CXl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0noSifIr; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4aaf43cbbdcso9171cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Jul 2025 13:13:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752610428; x=1753215228; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PnqN+9qSxUNQ+71q6fpzACj+u3aM7v+GPckeC6rcpuk=;
+        b=0noSifIr0rccNqW2eoaJF0wT4cUmPRnkDqWbLvjlNunTSzQBgtpzflZDWrg7PXSH/9
+         dm758K6WtAanexHM+RsZwUTvSFRDf4gYohZ6hMwOuOOsS0xtSqbcwvMNO2F0bGVxevw1
+         yIV9ITnaHdUeoF40DWkuV1k4wzh5Lv65IcHjBwEOLMzJDPJcxtEY2aSm5DROF9kCVy1f
+         tqe8Qbd/eJ0jQ3g+8AwUHBl5FqZbxKjOchIiHJZ0aCWxfi8gYzQ9IDIvtQdDFyymhh98
+         jOS2PCiuzYeeW4us1bK4YvMdHXLB2n3OcKXkMuwozGx84ezR3RZ+xqBwS1LQceKwLo7O
+         wpdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752610428; x=1753215228;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PnqN+9qSxUNQ+71q6fpzACj+u3aM7v+GPckeC6rcpuk=;
+        b=WMLbnN68x5ivPvws5GnpKzx2X2vLqmhRnXQ4NiKFLnem04PAWomOUxT34iqqnhm2F7
+         Fl+ZZxZANiSBseNwCLWnaSHv+9rtXZr1kdKdB46W796Swqy+XWYajB9OCf1c+5w/fgOH
+         9xtrGhgMuFSdmME/S2dSUvAdpkuhWcqET8nqJfLaQYSiyTxb0tpIsSawAke+ZdoExNxF
+         7o/4x/wwl+06T6c4qtvYOGGFWu+hbewTgv6S3qcpNZeiX4GCl8LyUuDGnbPPImvrwHqx
+         lXrhLBNFW/V+ETmpaluzpa0IW6rpIh/v/A3S+Uzk8J9wGs+9GqP8cCZmaI0INTELZtSy
+         t64w==
+X-Forwarded-Encrypted: i=1; AJvYcCWW1FUEXUyGp2vuEPS+zSRg7AsUkr4aDL8HSe1swGPJSivHIli8G6gfo0AvlMZkApwYVVVTTRrd/Awp51mYeQM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8y7GUSLsI1zpP7IP3eGTE+7nq4hqzRaJ465uyIhKErOZHzun2
+	PE4ZOR2y97bvz2bIHl0fY+0Qm2yO3c49x+X03qP4ZoYmLUAxZwoMGCaTYSzPjpYM5p/8X4Yf84c
+	LlSFEnrrZZJ74zi5ayjtehnIYZ/xK1uxWW99cUiWU
+X-Gm-Gg: ASbGncuMNNE0ToIg86BLOcCuW2zy/4Emprv3KfGHVcWpHDgtv6kLRVdVDWKzes5jPcm
+	Cqj88yN9o5VNvRY1pLgbxhnNWZLEoQi+Z7F0IweHXmhMeNxvPw2m31Y6n9VBiCJuSH7NsrWZEfF
+	qaxpMKy9N/rWolgCGFzG42oBpY+g5TO1tRxHODNGoAf/LdMAVkJs3GB6I2r3UKUXjUvaXpa6LXK
+	+JIZMUTeasPjDHUnyyQg4r68H/ftX9CKMmv
+X-Google-Smtp-Source: AGHT+IHz0yCVAXbdoe681ITqxZohUJiYZlX8ylfbpQbm8VmW93+o3sQapqeMltiltwk3XwTrVWx4XRtCYFhEMy9XuIg=
+X-Received: by 2002:ac8:7dd1:0:b0:497:75b6:e542 with SMTP id
+ d75a77b69052e-4ab92567edemr844891cf.10.1752610427738; Tue, 15 Jul 2025
+ 13:13:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Gabriel Goller <g.goller@proxmox.com>, netdev@vger.kernel.org
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, David Ahern <dsahern@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Nicolas Dichtel <nicolas.dichtel@6wind.com>, Paolo Abeni
- <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Simon Horman <horms@kernel.org>
-References: <20250711124243.526735-1-g.goller@proxmox.com>
-Subject: Re: [PATCH net-next v6] ipv6: add `force_forwarding` sysctl to enable
- per-interface forwarding
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20250711124243.526735-1-g.goller@proxmox.com>
-Content-Type: text/plain; charset=UTF-8
+References: <20250704060727.724817-1-surenb@google.com> <20250704060727.724817-8-surenb@google.com>
+ <f532558b-b19a-40ea-b594-94d1ba92188d@lucifer.local> <CAJuCfpGegZkgmnGd_kAsR8Wh5SRv_gtDxKbfHdjpG491u5U5fA@mail.gmail.com>
+ <f60a932f-71c0-448f-9434-547caa630b72@suse.cz> <CAJuCfpE2H9-kRz6xSC43Ja0dmW+drcJa29hwQwQ53HRsuqRnwg@mail.gmail.com>
+ <3b3521f6-30c8-419e-9615-9228f539251e@suse.cz> <CAJuCfpEgwdbEXKoMyMFiTHJMV15_g77-7N-m6ykReHLjD9rFLQ@mail.gmail.com>
+ <bulkje7nsdfikukca4g6lqnwda6ll7eu2pcdn5bdhkqeyl7auh@yzzc6xkqqllm>
+ <CAJuCfpFKNm6CEcfkuy+0o-Qu8xXppCFbOcYVXUFLeg10ztMFPw@mail.gmail.com>
+ <CAJuCfpG_dRLVDv1DWveJWS5cQS0ADEVAeBxJ=5MaPQFNEvQ1+g@mail.gmail.com>
+ <CAJuCfpH0HzM97exh92mpkuimxaen2Qh+tj_tZ=QBHQfi-3ejLQ@mail.gmail.com> <5ec10376-6a5f-4a94-9880-e59f1b6d425f@suse.cz>
+In-Reply-To: <5ec10376-6a5f-4a94-9880-e59f1b6d425f@suse.cz>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Tue, 15 Jul 2025 13:13:36 -0700
+X-Gm-Features: Ac12FXx1qtrIEv4cPL5REuI2yEHzLi9rHCGSMPDn5j2m4o0efnabufB8WvT1p3k
+Message-ID: <CAJuCfpH8zsboafV1UWufYhbVXN-yKgMOKm=vr2vBYAPNmPtrvw@mail.gmail.com>
+Subject: Re: [PATCH v6 7/8] fs/proc/task_mmu: read proc/pid/maps under per-vma lock
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	akpm@linux-foundation.org, david@redhat.com, peterx@redhat.com, 
+	jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, 
+	shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
+	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
+	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
+	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, tjmercier@google.com, 
+	kaleshsingh@google.com, aha310510@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:7kGtyvJj1FDTVdwnxIFDmsgAERx5RXZBaqIFcRPYJYMOMJdR7JC
- 0gOhI0j81bFvBKKRANw8p/bqAJv+UhuNLhig9jvowCOr2T0tB3tYYTpQ3pnCakyim5XpjRy
- 9iEqMkoFME6TaZ6DH6GzhMuYVFKWsWgcxEZbfZuJHPz0KJvgo9oPNwIMIaBlFWqM5DhR6/x
- QRjrO4CZCd6QmvTEXiJww==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:VEMtaAZMOok=;kH4kcySVQdCULVBcGPtpLlS1G41
- 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
- 5JzMNgP8gGUPlSzbQPlPeZJkIc20C0SiANI
 
-=E2=80=A6
-> a netfilter rule. This is especially cumbersome if you have lots of
-> interface and only want to enable forwarding on a few. According to the
+On Tue, Jul 15, 2025 at 1:16=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
+ote:
+>
+> On 7/10/25 19:02, Suren Baghdasaryan wrote:
+> > On Thu, Jul 10, 2025 at 12:03=E2=80=AFAM Suren Baghdasaryan <surenb@goo=
+gle.com> wrote:
+> >>
+> >> On Wed, Jul 9, 2025 at 10:47=E2=80=AFAM Suren Baghdasaryan <surenb@goo=
+gle.com> wrote:
+> >> >
+> >> > On Wed, Jul 9, 2025 at 4:12=E2=80=AFPM Liam R. Howlett <Liam.Howlett=
+@oracle.com> wrote:
+> >> > >
+> >> > > * Suren Baghdasaryan <surenb@google.com> [250709 11:06]:
+> >> > > > On Wed, Jul 9, 2025 at 3:03=E2=80=AFPM Vlastimil Babka <vbabka@s=
+use.cz> wrote:
+> >> > > > >
+> >> > > > > On 7/9/25 16:43, Suren Baghdasaryan wrote:
+> >> > > > > > On Wed, Jul 9, 2025 at 1:57=E2=80=AFAM Vlastimil Babka <vbab=
+ka@suse.cz> wrote:
+> >> > > > > >>
+> >> > > > > >> On 7/8/25 01:10, Suren Baghdasaryan wrote:
+> >> > > > > >> >>> +     rcu_read_unlock();
+> >> > > > > >> >>> +     vma =3D lock_vma_under_mmap_lock(mm, iter, addres=
+s);
+> >> > > > > >> >>> +     rcu_read_lock();
+> >> > > > > >> >> OK I guess we hold the RCU lock the whole time as we tra=
+verse except when
+> >> > > > > >> >> we lock under mmap lock.
+> >> > > > > >> > Correct.
+> >> > > > > >>
+> >> > > > > >> I wonder if it's really necessary? Can't it be done just in=
+side
+> >> > > > > >> lock_next_vma()? It would also avoid the unlock/lock dance =
+quoted above.
+> >> > > > > >>
+> >> > > > > >> Even if we later manage to extend this approach to smaps an=
+d employ rcu
+> >> > > > > >> locking to traverse the page tables, I'd think it's best to=
+ separate and
+> >> > > > > >> fine-grain the rcu lock usage for vma iterator and page tab=
+les, if only to
+> >> > > > > >> avoid too long time under the lock.
+> >> > > > > >
+> >> > > > > > I thought we would need to be in the same rcu read section w=
+hile
+> >> > > > > > traversing the maple tree using vma_next() but now looking a=
+t it,
+> >> > > > > > maybe we can indeed enter only while finding and locking the=
+ next
+> >> > > > > > vma...
+> >> > > > > > Liam, would that work? I see struct ma_state containing a no=
+de field.
+> >> > > > > > Can it be freed from under us if we find a vma, exit rcu rea=
+d section
+> >> > > > > > then re-enter rcu and use the same iterator to find the next=
+ vma?
+> >> > > > >
+> >> > > > > If the rcu protection needs to be contigous, and patch 8 avoid=
+s the issue by
+> >> > > > > always doing vma_iter_init() after rcu_read_lock() (but does i=
+t really avoid
+> >> > > > > the issue or is it why we see the syzbot reports?) then I gues=
+s in the code
+> >> > > > > quoted above we also need a vma_iter_init() after the rcu_read=
+_lock(),
+> >> > > > > because although the iterator was used briefly under mmap_lock=
+ protection,
+> >> > > > > that was then unlocked and there can be a race before the rcu_=
+read_lock().
+> >> > > >
+> >> > > > Quite true. So, let's wait for Liam's confirmation and based on =
+his
+> >> > > > answer I'll change the patch by either reducing the rcu read sec=
+tion
+> >> > > > or adding the missing vma_iter_init() after we switch to mmap_lo=
+ck.
+> >> > >
+> >> > > You need to either be under rcu or mmap lock to ensure the node in=
+ the
+> >> > > maple state hasn't been freed (and potentially, reallocated).
+> >> > >
+> >> > > So in this case, in the higher level, we can hold the rcu read loc=
+k for
+> >> > > a series of walks and avoid re-walking the tree then the performan=
+ce
+> >> > > would be better.
+> >> >
+> >> > Got it. Thanks for confirming!
+> >> >
+> >> > >
+> >> > > When we return to userspace, then we should drop the rcu read lock=
+ and
+> >> > > will need to vma_iter_set()/vma_iter_invalidate() on return.  I th=
+ought
+> >> > > this was being done (through vma_iter_init()), but syzbot seems to
+> >> > > indicate a path that was missed?
+> >> >
+> >> > We do that in m_start()/m_stop() by calling
+> >> > lock_vma_range()/unlock_vma_range() but I think I have two problems
+> >> > here:
+> >> > 1. As Vlastimil mentioned I do not reset the iterator when falling
+> >> > back to mmap_lock and exiting and then re-entering rcu read section;
+> >> > 2. I do not reset the iterator after exiting rcu read section in
+> >> > m_stop() and re-entering it in m_start(), so the later call to
+> >> > lock_next_vma() might be using an iterator with a node that was free=
+d
+> >> > (and possibly reallocated).
+> >> >
+> >> > >
+> >> > > This is the same thing that needed to be done previously with the =
+mmap
+> >> > > lock, but now under the rcu lock.
+> >> > >
+> >> > > I'm not sure how to mitigate the issue with the page table, maybe =
+we
+> >> > > guess on the number of vmas that we were doing for 4k blocks of ou=
+tput
+> >> > > and just drop/reacquire then.  Probably a problem for another day
+> >> > > anyways.
+> >> > >
+> >> > > Also, I think you can also change the vma_iter_init() to vma_iter_=
+set(),
+> >> > > which is slightly less code under the hood.  Vlastimil asked about=
+ this
+> >> > > and it's probably a better choice.
+> >> >
+> >> > Ack.
+> >> > I'll update my series with these fixes and all comments I received s=
+o
+> >> > far, will run the reproducers to confirm no issues and repost them
+> >> > later today.
+> >>
+> >> I have the patchset ready but would like to test it some more. Will
+> >> post it tomorrow.
+> >
+> > Ok, I found a couple of issues using the syzbot reproducer [1] (which
+> > is awesome BTW!):
+> > 1. rwsem_acquire_read() inside vma_start_read() at [2] should be moved
+> > after the last check, otherwise the lock is considered taken on
+> > vma->vm_refcnt overflow;
+>
+> I think it's fine because if the last check fails there's a
+> vma_refcount_put() that includes rwsem_release(), no?
 
-  interfaces?
+Ah, yes, you are right. This is fine. Obviously trying to figure out
+the issue right before a flight is not a good idea :)
 
+>
+> > 2. query_matching_vma() is missing unlock_vma() call when it does
+> > "goto next_vma;" and re-issues query_vma_find_by_addr(). The previous
+> > vma is left locked;
+> >
+> > [1] https://syzkaller.appspot.com/x/repro.c?x=3D101edf70580000
+> > [2] https://elixir.bootlin.com/linux/v6.15.5/source/include/linux/mm.h#=
+L747
+> >
+> > After these fixes it's much harder to fail but I still get one more
+> > error copied below. I will continue the investigation and will hold
+> > off reposting until this is fixed. That will be next week since I'll
+> > be out of town the rest of this week.
+> >
+> > Andrew, could you please remove this patchset from mm-unstable for now
+> > until I fix the issue and re-post the new version?
+>
+> Andrew can you do that please? We keep getting new syzbot reports.
+>
+> > The error I got after these fixes is:
+>
+> I suspect the root cause is the ioctls are not serialized against each ot=
+her
+> (probably not even against read()) and yet we treat m->private as safe to
+> work on. Now we have various fields that are dangerous to race on - for
+> example locked_vma and iter races would explain a lot of this.
+>
+> I suspect as long as we used purely seq_file workflow, it did the right
+> thing for us wrt serialization, but the ioctl addition violates that. We
+> should rather recheck even the code before this series, if dangerous ioct=
+l
+> vs read() races are possible. And the ioctl implementation should be
+> refactored to use an own per-ioctl-call private context, not the seq_file=
+'s
+> per-file-open context.
 
-=E2=80=A6
-> To preserver backwards-compatibility reset the flag (on all interfaces)
-=E2=80=A6
-
-  preserve?
-
-
-=E2=80=A6
-> ---
-> v6:=20
->     * rebase
->     * remove brackts around single line
-=E2=80=A6
-
-               brackets?
-
-
-Regards,
-Markus
+Huh, I completely failed to consider this. In hindsight it is quite
+obvious... Thanks Vlastimil, I owe you a beer or two.
 
