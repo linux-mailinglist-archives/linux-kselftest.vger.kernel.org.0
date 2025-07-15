@@ -1,194 +1,140 @@
-Return-Path: <linux-kselftest+bounces-37327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2478B05186
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 08:08:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98AFBB051BF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 08:28:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 266E41AA7149
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 06:09:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F09F25603EC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 06:28:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2780A2D3757;
-	Tue, 15 Jul 2025 06:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FL3YtFnb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3BCD2D3EDD;
+	Tue, 15 Jul 2025 06:28:36 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay16.mail.gandi.net (relay16.mail.gandi.net [217.70.178.236])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EA12D29CD;
-	Tue, 15 Jul 2025 06:08:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.236
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2DC82D0283;
+	Tue, 15 Jul 2025 06:28:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752559725; cv=none; b=oPvrweweZvUeO7CZrpA5XOZaM2Dtx3LEz9N8fjLShVPmjeMVZNl9/8wXuLrTB6865idhE8GT+ySG5kKWUMHsGkcJGg66CngR2z+61UcJcQFgyBXohrUq3kde88G8x7/0MFEkyv9w8Dl3WphtMdbi/O0ZlgcHhzhaG9WfKeegWcQ=
+	t=1752560916; cv=none; b=mfeb9Tkp6Bm6O5Wuxq8Zu96oalp2/1wb4HugiOFuYc8oXjSuMd2cJ8rRqVTomZnc42hDnNB6LlF2KgqBITtibFqHx28dCwSRTr40JEMWSYrowKgxDPqbissmCmudOiAvHaxhiTZbsBa9vBC5uUsm+/V5ZUpfMbwnIMDTMcVMAGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752559725; c=relaxed/simple;
-	bh=sHNNy41ZchjJYhjkgZlkZaOxhThztJMGb/eo2DxdCqo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MLyUvfEhHlub53dQl9oQ/HJ7YLxPNQWLklkD9TFzci5jDyQ6RF0gU+kVMwSAWStJXJ9lqh2X/0Z9VNDokt5j+ldUWSIz4WYLUA8RKDKKUOJBd9pbdz50Xxg2xGN+IIeIsIHfjhqtuDR62gHdz/4c3QkbUUzuwPtzA/Fm2AKNhos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FL3YtFnb; arc=none smtp.client-ip=217.70.178.236
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A220C44A1C;
-	Tue, 15 Jul 2025 06:08:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1752559720;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0tOZktrYT4fpzyCPv7EqQuQ/zV//e8X9GJdSl7TB5LE=;
-	b=FL3YtFnbN1gjy9855J0Qbii5j3/f3m9kN0wV4K/I9bvgSG4cJwsDcaKZrM8H4P2xWIVTuw
-	/PFKDz4wConScqL1Cv/3kUhiIbLHQYkrhQHxMjYeecubgGW4x2pBsl28cxmePEq9DC9kIo
-	MCh+Pknl1cJlb+G+MEFWcRMT9LRP/VEuwST716f6Vqo+USktaZ+M+20/H96wkmYNb5E+Kk
-	QTnScV97ODulv7dHlsVBfL5UF0cDn+01fEAxBGVwMm3pOinstlwkJsfJ9VD/t4RtwgMjbt
-	Sq75sPbfYdW2sYp4w3SgQ2mYulyfUsKFeW8hI/LtFA76gyu+Ih1J0KQoVrZ/OA==
-Date: Tue, 15 Jul 2025 08:08:37 +0200
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com, Andrew Lunn
- <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>, Florian Fainelli
- <f.fainelli@gmail.com>, Heiner Kallweit <hkallweit1@gmail.com>, Vladimir
- Oltean <vladimir.oltean@nxp.com>, =?UTF-8?B?S8O2cnk=?= Maincent
- <kory.maincent@bootlin.com>, Oleksij Rempel <o.rempel@pengutronix.de>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v3 1/3] net: netdevsim: Add PHY support in
- netdevsim
-Message-ID: <20250715080837.1aa0e9dd@fedora.home>
-In-Reply-To: <20250711165541.586f51e8@kernel.org>
-References: <20250710062248.378459-1-maxime.chevallier@bootlin.com>
-	<20250710062248.378459-2-maxime.chevallier@bootlin.com>
-	<20250711165541.586f51e8@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1752560916; c=relaxed/simple;
+	bh=NRAKPipTn7XBaLaJuYTXRaaKr7Jvhummy7DyQx9NvCQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o217fExosq3ywXOuQMinrVCXpb9eVgF4feCfueiL0smlr2BtiiDfaCYSbkqH5boDFNlAaIKmh+bcA90VLv+dzna1mw5ik2g0aQ3vTkOxy6o+DNqU76yUv09ybc1ljaH5yOZBD3aJZwM3G97FlDZGzvDCggN8ITOmzcRGg7lmhqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 56F6S9eY028621;
+	Tue, 15 Jul 2025 08:28:09 +0200
+Date: Tue, 15 Jul 2025 08:28:09 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Richard Henderson <richard.henderson@linaro.org>,
+        Shuah Khan <shuah@kernel.org>, Matt Turner <mattst88@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-alpha@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Subject: Re: [PATCH] tools/nolibc: add support for Alpha
+Message-ID: <20250715062809.GA28609@1wt.eu>
+References: <20250713-nolibc-alpha-v1-1-10216333d308@weissschuh.net>
+ <ceef9e43-5591-4c03-ba51-af1ccc68a05b@linaro.org>
+ <6cb31334-8b39-4920-810e-de123898a2e0@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehgedtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegveeltddvveeuhefhvefhlefhkeevfedtgfeiudefffeiledttdfgfeeuhfeukeenucfkphepvdgrtddumegtsgduleemkegugeehmeegledttdemieehieekmedvlegsudemlegvfhehmegvkegtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekugegheemgeeltddtmeeiheeikeemvdelsgdumeelvghfheemvgektgejpdhhvghlohepfhgvughorhgrrdhhohhmvgdpmhgrihhlfhhrohhmpehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedujedprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtp
- hhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6cb31334-8b39-4920-810e-de123898a2e0@t-8ch.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, 11 Jul 2025 16:55:41 -0700
-Jakub Kicinski <kuba@kernel.org> wrote:
+Hi,
 
-> On Thu, 10 Jul 2025 08:22:45 +0200 Maxime Chevallier wrote:
-> > @@ -1098,6 +1101,10 @@ static int __init nsim_module_init(void)
-> >  {
-> >  	int err;
-> >  
-> > +	err = nsim_phy_drv_register();
-> > +	if (err)
-> > +		return err;
-> > +
-> >  	err = nsim_dev_init();
-> >  	if (err)
-> >  		return err;  
+On Mon, Jul 14, 2025 at 07:21:38AM +0200, Thomas Weißschuh wrote:
+> Hi Richard,
 > 
-> I think you're missing error handling in this function if something
-> after drv_register fails.
-
-Ah true... Thanks
-
-> > @@ -1124,6 +1131,7 @@ static void __exit nsim_module_exit(void)
-> >  	rtnl_link_unregister(&nsim_link_ops);
-> >  	nsim_bus_exit();
-> >  	nsim_dev_exit();
-> > +	nsim_phy_drv_unregister();
-> >  }  
+> On 2025-07-13 16:21:58-0600, Richard Henderson wrote:
+> > On 7/13/25 14:08, Thomas Weißschuh wrote:
+> > > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > > @@ -709,6 +709,10 @@ int run_startup(int min, int max)
+> > >   	/* checking NULL for argv/argv0, environ and _auxv is not enough, let's compare with sbrk(0) or &end */
+> > >   	extern char end;
+> > >   	char *brk = sbrk(0) != (void *)-1 ? sbrk(0) : &end;
+> > > +#if defined(__alpha__)
+> > > +	/* the ordering above does not work on an alpha kernel */
+> > > +	brk = NULL;
+> > > +#endif
+> > 
+> > The syscall api is different for brk on alpha.
+> > A change to sys_brk or brk in include/nolibc/sys.h is required.
 > 
-> > +free_mdiobus:
-> > +	atomic_dec(&bus_num);
-> > +	mdiobus_free(mb->mii);
-> > +free_pdev:
-> > +	platform_device_unregister(mb->pdev);
-> > +free_mb:  
-> 
-> Others have added netdevsim code so the entire code base doesn't follow
-> what I'm about to say, but if you dont mind indulging my personal coding
-> style - error handling labels on a path disjoint from the success path
-> should be prefixed with err_$first-undo-action. If the error handling
-> shares the path with success the label prefix should be exit_$..
-> You can look at drivers/net/netdevsim/bpf.c for examples
+> You are referring to osf_brk, right?
+> I think that should work as-is with the current wrappers.
 
-That's totally fine by me, it makes sense :)
+I finally managed to reinstall my DS10 to build and test this and FWIW
+the test passes:
 
-> > +	kfree(mb);
-> > +
-> > +	return NULL;
-> > +}
-> > +
-> > +static ssize_t
-> > +nsim_phy_add_write(struct file *file, const char __user *data,
-> > +		   size_t count, loff_t *ppos)
-> > +{
-> > +	struct net_device *dev = file->private_data;
-> > +	struct netdevsim *ns = netdev_priv(dev);
-> > +	struct nsim_phy_device *ns_phy;
-> > +	struct phy_device *pphy;
-> > +	u32 parent_id;
-> > +	char buf[10];
-> > +	ssize_t ret;
-> > +	int err;
-> > +
-> > +	if (*ppos != 0)
-> > +		return 0;
-> > +
-> > +	if (count >= sizeof(buf))
-> > +		return -ENOSPC;
-> > +
-> > +	ret = copy_from_user(buf, data, count);
-> > +	if (ret)
-> > +		return -EFAULT;
-> > +	buf[count] = '\0';
-> > +
-> > +	ret = kstrtouint(buf, 10, &parent_id);
-> > +	if (ret)
-> > +		return -EINVAL;
-> > +
-> > +	ns_phy = nsim_phy_register();
-> > +	if (IS_ERR(ns_phy))
-> > +		return PTR_ERR(ns_phy);
-> > +
-> > +	if (!parent_id) {
-> > +		if (!dev->phydev) {
-> > +			err = phy_connect_direct(dev, ns_phy->phy, nsim_adjust_link,
-> > +						 PHY_INTERFACE_MODE_NA);
-> > +			if (err)
-> > +				return err;
-> > +
-> > +			phy_attached_info(ns_phy->phy);
-> > +
-> > +			phy_start(ns_phy->phy);
-> > +		} else {
-> > +			phy_link_topo_add_phy(dev, ns_phy->phy, PHY_UPSTREAM_MAC, dev);
-> > +		}
-> > +	} else {
-> > +		pphy = phy_link_topo_get_phy(dev, parent_id);
-> > +		if (!pphy)
-> > +			return -EINVAL;
-> > +
-> > +		phy_link_topo_add_phy(dev, ns_phy->phy, PHY_UPSTREAM_PHY, pphy);
-> > +	}
-> > +
-> > +	nsim_phy_debugfs_create(ns->nsim_dev_port, ns_phy);
-> > +
-> > +	list_add(&ns_phy->node, &ns->nsim_dev->phy_list);  
-> 
-> No locks needed.. for any of this.. ?
+  $ ./nolibc-test 
+  Running test 'startup'
+  0 argc = 1                                                        [OK]
+  1 argv_addr = <0x11fc7b428>                                       [OK]
+  2 argv_environ = <0x11fc7b428>                                    [OK]
+  3 argv_total = 1                                                  [OK]
+  4 argv0_addr = <0x11fc7b665>                                      [OK]
+  5 argv0_str = <./nolibc-test>                                     [OK]
+  6 argv0_len = 13                                                  [OK]
+  7 environ_addr = <0x11fc7b438>                                    [OK]
+  8 environ_envp = <0x11fc7b438>                                    [OK]
+  9 environ_auxv = <0x11fc7b438>                                    [OK]
+  10 environ_total = 175                                            [OK]
+  11 environ_HOME = <0x11fc7b6f4>                                   [OK]
+  12 auxv_addr = <0x11fc7b4e8>                                      [OK]
+  13 auxv_AT_UID = 509                                              [OK]
+  14 constructor = 3                                                [OK]
+  15 linkage_errno = <0x1200200f8>                                  [OK]
+  16 linkage_constr = 3                                             [OK]
+  Errors during this test: 0
+  
+  Running test 'syscall'
+  0 access = 0                                                      [OK]
+  1 access_bad = -1 EPERM                                           [OK]
+  2 clock_getres = 0                                                [OK]
+  3 clock_gettime = 0                                               [OK]
+  4 clock_settime = -1 EINVAL                                       [OK]
+  5 getpid = 9201                                                   [OK]
+  6 getppid = 419                                                   [OK]
+  7 gettid = 9201                                                   [OK]
+  8 getpgid_self = 9201                                             [OK]
+  9 getpgid_bad = -1 ESRCH                                          [OK]
+  10 kill_0 = 0                                                     [OK]
+  11 kill_CONT = 0                                                  [OK]
+  12 kill_BADPID = -1 ESRCH                                         [OK]
+  13 sbrk_0 = <0x120024000>                                         [OK]
+  14 sbrk = 0                                                       [OK]
+  15 brk = 0                                                        [OK]
+  (...)
+  Total number of errors: 0
+  Exiting with status 0
 
-Heh I guess some locking is needed indeed... Let me add that in the
-next round...
+The result is exactly the same if I comment that line that resets brk,
+as brk was apparently already NULL:
 
-Maxime
+  13 sbrk_0 = <0x120024000>                                         [OK]
+  14 sbrk = 0                                                       [OK]
+  15 brk = 0                                                        [OK]
+
+> On alpha, mm->brk and mm->arg_start are ordered differently from other
+> architectures. Personally I think the nolibc tests are a bit bogus here.
+
+I seem to remember that these are among the older minimal consistency
+tests and that it could be time to revisit this :-/
+
+Willy
 
