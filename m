@@ -1,190 +1,189 @@
-Return-Path: <linux-kselftest+bounces-37366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04D40B06332
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 17:41:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56F55B064DF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 19:06:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 371CE1AA275F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 15:41:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 709F24E29A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 17:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7839224337B;
-	Tue, 15 Jul 2025 15:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DCB527A455;
+	Tue, 15 Jul 2025 17:06:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQyysHlf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UFl0h5jj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA0F2AD2D;
-	Tue, 15 Jul 2025 15:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD28D1DE4E1;
+	Tue, 15 Jul 2025 17:06:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752594076; cv=none; b=IblhCEzSUrtD9EjWoc6KKH6HoCxRdOLyPEDqfQmjVg34OGhtLuUt3ScBN5bTo8KRGZaIEdy71/KY5ULoFfM+Uy33kOz465wAk6nEPIYheuJfxKo2nrTWM152Q4h6aFrEvHp5BlwyPuXXmhcBjJECHCFq++VPdgf9CK6LpZSyIiw=
+	t=1752599166; cv=none; b=qXfDkfGBtJebg+NZJZubsTsoY3h6heYdUJqmnqZJSdXfvjZSp2Kb3MviFsVi70r6xFVUa+rpFWoAz9lblDnTLVfWFmMO1ECpM2UoriXxAQrWk4zmbLh1rb4powkZUnQUfWesryPgjfeEsj8vEooDU9MhcKGIeywAT1HpirTv2qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752594076; c=relaxed/simple;
-	bh=nsrtnQIEqo/9toTmS791NZyWW4l5LXFWwuQd8lEs75E=;
+	s=arc-20240116; t=1752599166; c=relaxed/simple;
+	bh=nNVdOuKoan23VnHElyXa1O9OQOwkYvq2YE9Vv0XlCJQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=inTCba7cGEQCYzEvKgmtUcrHredoscvCtiMJpRPsMmOHZqclCGSEG0c7YC6M16/FHpX2zgOahtlKZ8I8rb5W65pGS7/Q7HfYiDO4jz4Ya2FwhUJgXjPrYwIjwdq/TNvtBjTkxXhKoYC4f1OHfIC6et5sE4m1beD7VNzqtU5WZrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TQyysHlf; arc=none smtp.client-ip=209.85.128.52
+	 To:Cc:Content-Type; b=ipqHA1cFkJ6RSH/b02qUgHQeW+eCSFijwl0y/owiyD/16ZRHvL1W7Fi2QJ0gZ/1Md+fLvT8HsRH/BScYXY+SiIKCBaTaT37zsDxYivBZ1KLvlLrJMUQ2G0uszFT1dpMDXo3E4Na5LNr5+7f86fuRhNAQ4ooBTINTGp3r9reIL4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UFl0h5jj; arc=none smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-455b00283a5so24871995e9.0;
-        Tue, 15 Jul 2025 08:41:14 -0700 (PDT)
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b3507b63c6fso6133613a12.2;
+        Tue, 15 Jul 2025 10:06:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752594073; x=1753198873; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752599164; x=1753203964; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vP/jid/lwTMuSUYEVvS3TKkMNboILXns6WgZgd7cJYQ=;
-        b=TQyysHlfyd+MY/H0hig/TyBlHx85Z2r6n4J9g1EVlFNLwO6AOSBVqUwJ/N/Va/upUt
-         sxrbl/SHsF0Ukk+3eGyyKqIOaCr6wqqIpJwjFyc3ZPVXOKa6to/BW9HfvyggA8xqmvip
-         BEUNwlYPr7BE9RZx1w4+PfCDypLVv6qLw1rjvetQf4F6e0n7JsZwBV9qJKhXH4V6YQyf
-         eWqmmVdLlFqGr2Bv9A+W4t8o5cp4ghzfO1Nla1TvpL00ZEOAlF5+z5fx4cOk8mdRLi3D
-         s7oglV6m6nODrtrIcZoMgn1OSdhlAASP6KyhdZExfOqugZiJMm5r2DKBCmnTS0cV8H5b
-         mHKQ==
+        bh=nNVdOuKoan23VnHElyXa1O9OQOwkYvq2YE9Vv0XlCJQ=;
+        b=UFl0h5jjPzwm5dELWqu9G6Skc5hDjRRfPX23AZ9KSTd51CoG7HmkNppDHXvw1blUYp
+         A/hxQs4d9vugzfU2iL6c17gsZg2SlVsEco4KNeloSOLhNIa/6ahj0m5fguZQ0HREi9Yf
+         7GeoFxjtwvEEvp5FtQWYnXnbc1GILx5EDIqkYfMJn9x1/DYrO01DCZKg968kbaNjmKdk
+         jxm36i1hwFMv1501SIyruqxII3JsRfEgsz7Xh2SyCsCixdj+QJN2j0FU9UL3szsBwknf
+         MUQC6e6afB/hZYMmXhMavHsistCoKlSNDBaLXysYAar5+utOma+x4l8pueS/Z6UGfyWe
+         vYXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752594073; x=1753198873;
+        d=1e100.net; s=20230601; t=1752599164; x=1753203964;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vP/jid/lwTMuSUYEVvS3TKkMNboILXns6WgZgd7cJYQ=;
-        b=QtzJuVx0SJSHPlUAocN3izv0MNCmWA4qH/0U7iv7KhpvSQ5QvulACbiHHAwv+e2jWR
-         x0ZDdEwnjzXWS6IIUVZvu3lJOLoCFLz1tAyMU1nHmEmpRnqJRMswQW2Lgl3nhDp+VVnn
-         xMpOgA98iO/uvBR8x1TNJQ9vVK1/htaAMR6NQKuMeZ/H29KStrOm9J4raViFOq6gTrTD
-         LafYKqKaxeuTMC3TgJMpqkcfmRaea8rVd68in4GVXV6W7Dezx4BAQ5AJd9TPTrqRNcOO
-         JTMMPPS8AfSwK+YINsYiFgSQUFFieqV0NbB1tszuqUxgXYoUv07KRUd9JXNaE46YUpUZ
-         oW6w==
-X-Forwarded-Encrypted: i=1; AJvYcCVvMoPGcGC2Ccrf8vYF+6mGrORoJsMb6HaAhLwY6CFYVOhoo+thyBjd+lQY6pjtW0p55fM=@vger.kernel.org, AJvYcCW//1SbJXfe3KZEHAz1kG+QwR5N3ml4JyzrDS7x9qRbVbU+JoCTvCQK7vbYIdYLbRDNEOrk2TkmfxqmrbCW@vger.kernel.org, AJvYcCWWNZZjqHVnPZSE/m29e+FmqfvYr9JGVDFR/jG8o0vPOHwoi6ZEsD0dKaHwkKtzmI17mvOwXTnxfbDKREVDgum1@vger.kernel.org
-X-Gm-Message-State: AOJu0YyR0x1AqT9J2+2+CqkVAt3hbTcQ/WQS8s6gRXomIKQbVpRBr82g
-	RoQp24ourFLnCzZtmeco0K5Q853hXGKtV4IlMduQKBglRX4M6+mSXgFE1njvmofHScOavjj3Khd
-	pLqE8Iw6Lz7wr0cuggxn6xPlBBsILMuM=
-X-Gm-Gg: ASbGncsVM02FPFnkFJu85MNZ6gF5mFsJVrfJB5qvSTud1/yb8vaxI1JAqLnMGUcjEPT
-	9ZL7d39rjKgqVxaKVlu/u6oNwgopGjKs9VbXknJj6qJLEkN/C+6E7csBBDEw9FOzI2nDgye7id/
-	WWXbloOuNi2mLwses9/+oo261VIY3cUzRA+mC9AtgRJel3f8tU7UgTZjtaXhNQchqatRyhjtJVC
-	JeMClFsaOtlMONS7MejMtc=
-X-Google-Smtp-Source: AGHT+IHUe55CPlfoXQFNA46EX3tD2L+zAmA4ABcayvzkZKklLjj2akBlQVEyroKE2ImpxzjeHZRCNGen3/yjsDKdInE=
-X-Received: by 2002:adf:edd0:0:b0:3a5:2cb5:6429 with SMTP id
- ffacd0b85a97d-3b5f18d96camr13102332f8f.43.1752594072711; Tue, 15 Jul 2025
- 08:41:12 -0700 (PDT)
+        bh=nNVdOuKoan23VnHElyXa1O9OQOwkYvq2YE9Vv0XlCJQ=;
+        b=ZH6CnMUxx4yw3Y9xnEMnNnhGizPPRuQOblw8uWedVOy0F+XUDyq90t+3IXKQy6l1Wz
+         l7waJ8eyMZbx9JVLjwPqWOeY7FxpN5VA7YCSO81DfvFdVxGwsL/4VSfK2a8QSj6fVnFF
+         Yawzp6sVsG4s0R7wVQ6BY0aA3Pe+DVtbiKf8kaRgGrKuaO+TLOQiqISFVjFnHCC12eO7
+         qySCCReoGeEcMGLfY7hTHIQu803ALwmBmHy9Jg3nH5XUPEbSB80ZIYDFfFLp/iXXAoN9
+         eiyShRIA7H3cBfSpECo1Ce16BpmuWwKe/EQ91/UX3rSzAswoUDm0iA29jYPZOWpxA1IG
+         5jtw==
+X-Forwarded-Encrypted: i=1; AJvYcCUb5rcJzB66919eXlM26g611o316gUTxjqUDAIR8/oKBgFaLA5HxeVSLhX6v5ilQzVspUBMBbalKNMfEuRC@vger.kernel.org, AJvYcCVt591P0ujrCV+XYB1gNP2zdW4Ir8dmVkwnAxr4ZW4WlgidDem+zirZo4lOMKv9V1hSTtmyJ1p97ec9cLJUzEtX@vger.kernel.org, AJvYcCXQiELyYWnz5oxKtpb3HNMx2dW8d1qNvkHU/8sK67cAyMLWuCYzttYqHbk8yi+Eno9d5bWKXx2z0gG3VkJ0@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrtwQzaJ2uliLAtQsT+Xyq5iEgUEBrjo7BW1uVCorAC7+iSZD3
+	8xBJNbJwnG/p3WTv3Hh4flJUA4/QnJ3reEc8PaQ4sVxEqcTs1E6uJLiafF8zIfUrN7rgdb4HBB6
+	rPneLaoOebUkepoIfNGqbQHg7iZSbVZA=
+X-Gm-Gg: ASbGncuLaZK1r5athSZLRijU8S95hOXLZwRWI5eAnIOfr7qip+ba0fBaF76Bq7JeD+a
+	V5/Xo1GJ4X/cb/Ie5TJRfnPtvX+Aub8a4VFpBxbKpOZHgAEvPLmUVD3v0qjabiwEx6Mv9XY/0Cf
+	jF7bbGrsl5IoXcqOPEA5lrtTq9xfg64FFzSuw+fSsdn7mH6R5ippMhJ9o67xxCbZhDjGEBA53GC
+	Uh7DCNpkwSFG3bW/kAnAZ8=
+X-Google-Smtp-Source: AGHT+IHWqURmLszmS2cR9qYVf+7DTyCLlk2oIrQTrSNPf7Sik3aoVs3pk12vcxBQJlr2vazV6C5tHVX8fcy6hAcG1xY=
+X-Received: by 2002:a17:90b:1d89:b0:31a:b92c:d679 with SMTP id
+ 98e67ed59e1d1-31c4f5e3054mr25099820a91.35.1752599163826; Tue, 15 Jul 2025
+ 10:06:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250709-arm64_relax_jit_comp-v1-0-3850fe189092@bootlin.com>
- <20250709-arm64_relax_jit_comp-v1-1-3850fe189092@bootlin.com>
- <aHZYcY_9JtK8so3C@willie-the-truck> <DBCONB7XHN7E.2UQMMG6RICMFY@bootlin.com> <aHZmOVpcoyTvGY1u@willie-the-truck>
-In-Reply-To: <aHZmOVpcoyTvGY1u@willie-the-truck>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 15 Jul 2025 08:40:59 -0700
-X-Gm-Features: Ac12FXzvpz_ddy7GAzzzXQfSfZjOu2uIdytRA66-cTwOPYu3QFq5bNb__jBKM6M
-Message-ID: <CAADnVQK=x7p6zjvNbv0iqOfE73DM3j0nGSGrFX+pVExLMkJb=w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] bpf, arm64: remove structs on stack constraint
-To: Will Deacon <will@kernel.org>
-Cc: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <3b3521f6-30c8-419e-9615-9228f539251e@suse.cz> <CAJuCfpEgwdbEXKoMyMFiTHJMV15_g77-7N-m6ykReHLjD9rFLQ@mail.gmail.com>
+ <bulkje7nsdfikukca4g6lqnwda6ll7eu2pcdn5bdhkqeyl7auh@yzzc6xkqqllm>
+ <CAJuCfpFKNm6CEcfkuy+0o-Qu8xXppCFbOcYVXUFLeg10ztMFPw@mail.gmail.com>
+ <CAJuCfpG_dRLVDv1DWveJWS5cQS0ADEVAeBxJ=5MaPQFNEvQ1+g@mail.gmail.com>
+ <CAJuCfpH0HzM97exh92mpkuimxaen2Qh+tj_tZ=QBHQfi-3ejLQ@mail.gmail.com>
+ <5ec10376-6a5f-4a94-9880-e59f1b6d425f@suse.cz> <19d46c33-bd5e-41d1-88ad-3db071fa1bed@lucifer.local>
+ <0b8617c1-a150-426f-8fa6-9ab3b5bcfa1e@redhat.com> <8026c455-6237-47e3-98af-e3acb90dba25@suse.cz>
+ <5f8d3100-a0dd-4da3-8797-f097e063ca97@lucifer.local>
+In-Reply-To: <5f8d3100-a0dd-4da3-8797-f097e063ca97@lucifer.local>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 15 Jul 2025 10:05:49 -0700
+X-Gm-Features: Ac12FXwuHfagbWZ-YO4ikvn0k0dO4RWKvyLjInqotU51-B4cAdEKuZJSujCN-MQ
+Message-ID: <CAEf4BzaEouFx8EuZF_PUKdc5wsq-5FYNyAE19VRxV7_YJkrfww@mail.gmail.com>
+Subject: Re: [PATCH v6 7/8] fs/proc/task_mmu: read proc/pid/maps under per-vma lock
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>, David Hildenbrand <david@redhat.com>, 
+	Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, akpm@linux-foundation.org, 
+	peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org, 
+	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
+	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
+	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
+	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, tjmercier@google.com, 
+	kaleshsingh@google.com, aha310510@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 15, 2025 at 7:31=E2=80=AFAM Will Deacon <will@kernel.org> wrote=
-:
+On Tue, Jul 15, 2025 at 3:31=E2=80=AFAM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
 >
-> On Tue, Jul 15, 2025 at 04:02:25PM +0200, Alexis Lothor=C3=A9 wrote:
-> > On Tue Jul 15, 2025 at 3:32 PM CEST, Will Deacon wrote:
-> > > On Wed, Jul 09, 2025 at 10:36:55AM +0200, Alexis Lothor=C3=A9 (eBPF F=
-oundation) wrote:
-> > >> While introducing support for 9+ arguments for tracing programs on
-> > >> ARM64, commit 9014cf56f13d ("bpf, arm64: Support up to 12 function
-> > >> arguments") has also introduced a constraint preventing BPF trampoli=
-nes
-> > >> from being generated if the target function consumes a struct argume=
-nt
-> > >> passed on stack, because of uncertainties around the exact struct
-> > >> location: if the struct has been marked as packed or with a custom
-> > >> alignment, this info is not reflected in BTF data, and so generated
-> > >> tracing trampolines could read the target function arguments at wron=
-g
-> > >> offsets.
+> On Tue, Jul 15, 2025 at 12:23:31PM +0200, Vlastimil Babka wrote:
+> > On 7/15/25 11:52, David Hildenbrand wrote:
+> > > On 15.07.25 11:40, Lorenzo Stoakes wrote:
+> > >> On Tue, Jul 15, 2025 at 10:16:41AM +0200, Vlastimil Babka wrote:
+> > >>>> Andrew, could you please remove this patchset from mm-unstable for=
+ now
+> > >>>> until I fix the issue and re-post the new version?
+> > >>>
+> > >>> Andrew can you do that please? We keep getting new syzbot reports.
 > > >>
-> > >> This issue is not specific to ARM64: there has been an attempt (see =
-[1])
-> > >> to bring the same constraint to other architectures JIT compilers. B=
-ut
-> > >> discussions following this attempt led to the move of this constrain=
+> > >> I also pinged up top :P just to be extra specially clear...
+> > >>
+> > >>>
+> > >>>> The error I got after these fixes is:
+> > >>>
+> > >>> I suspect the root cause is the ioctls are not serialized against e=
+ach other
+> > >>> (probably not even against read()) and yet we treat m->private as s=
+afe to
+> > >>> work on. Now we have various fields that are dangerous to race on -=
+ for
+> > >>> example locked_vma and iter races would explain a lot of this.
+> > >>>
+> > >>> I suspect as long as we used purely seq_file workflow, it did the r=
+ight
+> > >>> thing for us wrt serialization, but the ioctl addition violates tha=
+t. We
+> > >>> should rather recheck even the code before this series, if dangerou=
+s ioctl
+> > >>> vs read() races are possible. And the ioctl implementation should b=
+e
+> > >>> refactored to use an own per-ioctl-call private context, not the se=
+q_file's
+> > >>> per-file-open context.
+> > >>
+> > >> Entirely agree with this analysis. I had a look at most recent repor=
+t, see:
+> > >>
+> > >> https://lore.kernel.org/linux-mm/f13cda37-06a0-4281-87d1-042678a38a6=
+b@lucifer.local/
+> > >>
+> > >> AFAICT we either have to lock around the ioctl or find a new way of =
+storing
+> > >> per-ioctl state.
+> > >>
+> > >> We'd probably need to separate out the procmap query stuff to do tha=
 t
-> > >> out of the kernel (see [2]): instead of preventing the kernel from
-> > >> generating trampolines for those functions consuming structs on stac=
-k,
-> > >> it is simpler to just make sure that those functions with uncertain
-> > >> struct arguments location are not encoded in BTF information, and so
-> > >> that one can not even attempt to attach a tracing program to such
-> > >> function. The task is then deferred to pahole (see [3]).
-> > >>
-> > >> Now that the constraint is handled by pahole, remove it from the arm=
-64
-> > >> JIT compiler to keep it simple.
-> > >>
-> > >> [1] https://lore.kernel.org/bpf/20250613-deny_trampoline_structs_on_=
-stack-v1-0-5be9211768c3@bootlin.com/
-> > >> [2] https://lore.kernel.org/bpf/CAADnVQ+sj9XhscN9PdmTzjVa7Eif21noAUH=
-3y1K6x5bWcL-5pg@mail.gmail.com/
-> > >> [3] https://lore.kernel.org/bpf/20250707-btf_skip_structs_on_stack-v=
-3-0-29569e086c12@bootlin.com/
-> > >>
-> > >> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore=
-@bootlin.com>
-> > >> ---
-> > >>  arch/arm64/net/bpf_jit_comp.c | 5 -----
-> > >>  1 file changed, 5 deletions(-)
+> > >> though. Probably.
 > > >
-> > > This is a question born more out of ignorance that insight, but how d=
-o
-> > > we ensure that the version of pahole being used is sufficiently
-> > > up-to-date that the in-kernel check is not required?
+> > > When I skimmed that series the first time, I was wondering "why are w=
+e
+> > > even caring about PROCMAP_QUERY that in the context of this patch ser=
+ies".
+> > >
+> > > Maybe that helps :)
 > >
-> > Based on earlier discussions, I am not convinced it is worth maintainin=
-g
-> > the check depending on the pahole version used in BTF. Other architectu=
-res
-> > exposing a JIT compiler don't have the in-kernel check and so are alrea=
-dy
-> > exposed to this very specific case, but discussions around my attempt t=
-o
-> > enforce the check on other JIT comp showed that the rarity of this case=
- do
-> > not justify protecting it on kernel side (see [1]).
+> > Yeah seems like before patch 8/8 the ioctl handling, specifically
+> > do_procmap_query() only looks at priv->mm and nothing else so it should=
+ be
+> > safe as that's a stable value.
+> >
+> > So it should be also enough to drop the last patch from mm for now, not
+> > whole series.
 >
-> I can understand why doing this in pahole rather than in each individual
-> JIT is preferable, but I don't think there's any harm leaving the
-> existing two line check in arm64 as long as older versions of pahole
-> might be used, is there? I wouldn't say that removing it really
-> simplifies the JIT compiler when you consider the rest of the
-> implementation.
+> Yeah to save the mothership we can ditch the landing craft :P
 >
-> Of course, once the kernel requires a version of pahole recent enough
-> to contain [3], we should drop the check in the JIT compiler as the
-> one in pahole looks like it's more selective about the functions it
-> rejects.
+> Maybe worth doing that, and figure out in a follow up how to fix this.
 
-I frankly don't see the point in adding and maintaining such checks
-and code in the kernel for hypothetical cases that are not present
-in the kernel and highly unlikely ever be.
-The arm64 jit check was added out of abundance of caution.
-There was way too much "caution".
+For PROCMAP_QUERY, we need priv->mm, but the newly added locked_vma
+and locked_vma don't need to be persisted between ioctl calls. So we
+can just add those two fields into a small struct, and for seq_file
+case have it in priv, but for PROCMAP_QUERY just have it on the stack.
+The code can be written to accept this struct to maintain the state,
+which for PROCMAP_QUERY ioctl will be very short-lived on the stack
+one.
+
+Would that work?
+
+>
+> Or we could just sling in a cheeky spinlock
 
