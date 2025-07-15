@@ -1,59 +1,56 @@
-Return-Path: <linux-kselftest+bounces-37329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61592B051D6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 08:34:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2478B05186
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 08:08:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DE524E203D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 06:33:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 266E41AA7149
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Jul 2025 06:09:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF841262FD2;
-	Tue, 15 Jul 2025 06:33:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2780A2D3757;
+	Tue, 15 Jul 2025 06:08:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VkJuX+M2"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FL3YtFnb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+Received: from relay16.mail.gandi.net (relay16.mail.gandi.net [217.70.178.236])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74014B672;
-	Tue, 15 Jul 2025 06:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EA12D29CD;
+	Tue, 15 Jul 2025 06:08:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.236
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752561238; cv=none; b=R64eqBFUFXtOicstF0q9lZmB36aMNTAUZGXBYe8v+MlydeOLr3q8Jphso521mbi2xLmKLiYXTpJ0dL76LHoYnEQh2KPo4PfcPoVjhxmq0M8RdY5a7YRpu94d2HbPKzVx3m/Dh3bOHK3JOJEiYnoPZqOmSOmdFCdxBetmpegcai0=
+	t=1752559725; cv=none; b=oPvrweweZvUeO7CZrpA5XOZaM2Dtx3LEz9N8fjLShVPmjeMVZNl9/8wXuLrTB6865idhE8GT+ySG5kKWUMHsGkcJGg66CngR2z+61UcJcQFgyBXohrUq3kde88G8x7/0MFEkyv9w8Dl3WphtMdbi/O0ZlgcHhzhaG9WfKeegWcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752561238; c=relaxed/simple;
-	bh=WC45c/DnzmSKE85Z1Qai86T8LgFzFt5mXdfv7rXwSO0=;
+	s=arc-20240116; t=1752559725; c=relaxed/simple;
+	bh=sHNNy41ZchjJYhjkgZlkZaOxhThztJMGb/eo2DxdCqo=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dVOcVpYxzLANZk2/YmVgVR+5mi1e+XHmBPKc4WxQieqpUXA/vXdye58fszg3WhXF52SsMoFHNtm0njD9iev4TKCv367itgrUHCCzzgk/rLQ87zJ4V2O+eM1lH1gbmoAnYosUJgekO2qXxQxoEbuN+yhySycqrUqfekwfg6B+5WY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VkJuX+M2; arc=none smtp.client-ip=217.70.178.249
+	 MIME-Version:Content-Type; b=MLyUvfEhHlub53dQl9oQ/HJ7YLxPNQWLklkD9TFzci5jDyQ6RF0gU+kVMwSAWStJXJ9lqh2X/0Z9VNDokt5j+ldUWSIz4WYLUA8RKDKKUOJBd9pbdz50Xxg2xGN+IIeIsIHfjhqtuDR62gHdz/4c3QkbUUzuwPtzA/Fm2AKNhos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FL3YtFnb; arc=none smtp.client-ip=217.70.178.236
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-	by mslow3.mail.gandi.net (Postfix) with ESMTP id C11B8587043;
-	Tue, 15 Jul 2025 06:05:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A02E44354;
-	Tue, 15 Jul 2025 06:05:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A220C44A1C;
+	Tue, 15 Jul 2025 06:08:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1752559535;
+	t=1752559720;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9vRRRofKzYTk4D1n78QDRieI6X+rxdAzS6AVWnX1z1A=;
-	b=VkJuX+M2u8O9YDU70VOX5FCojosBhI8llh9v5jiH+jd27KMO5RVflqQX+rDLZmZmOptQIB
-	S04bNJ5t/QKOVxc+qJ6hAoJ09ZMl4nvxEHmQQ7n32u0IoEGKdj1j155KJnHfbVxFUf6vku
-	S6Fadh5pANHce0LFYSpI8KTZ+HWb1agKX8jbACJjR44yrzCcD+t83r9oI8fl7xMFrKSr6V
-	ioZZ0nEpQBR+nwEDnuVEX1KOQD29IBRa4oioNTeniKDxizJffYOJwWaapVJ0I1q/1mWXlF
-	pRpMroalkrMQfOWbBfxaGXZ+WG8w83j1Myw+WAAdqtghs6vVnvhCjhw5JX/B+g==
-Date: Tue, 15 Jul 2025 08:05:32 +0200
+	bh=0tOZktrYT4fpzyCPv7EqQuQ/zV//e8X9GJdSl7TB5LE=;
+	b=FL3YtFnbN1gjy9855J0Qbii5j3/f3m9kN0wV4K/I9bvgSG4cJwsDcaKZrM8H4P2xWIVTuw
+	/PFKDz4wConScqL1Cv/3kUhiIbLHQYkrhQHxMjYeecubgGW4x2pBsl28cxmePEq9DC9kIo
+	MCh+Pknl1cJlb+G+MEFWcRMT9LRP/VEuwST716f6Vqo+USktaZ+M+20/H96wkmYNb5E+Kk
+	QTnScV97ODulv7dHlsVBfL5UF0cDn+01fEAxBGVwMm3pOinstlwkJsfJ9VD/t4RtwgMjbt
+	Sq75sPbfYdW2sYp4w3SgQ2mYulyfUsKFeW8hI/LtFA76gyu+Ih1J0KQoVrZ/OA==
+Date: Tue, 15 Jul 2025 08:08:37 +0200
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: Andrew Lunn <andrew@lunn.ch>
+To: Jakub Kicinski <kuba@kernel.org>
 Cc: davem@davemloft.net, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com, Jakub Kicinski
- <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com, Andrew Lunn
+ <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
  <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>, Florian Fainelli
  <f.fainelli@gmail.com>, Heiner Kallweit <hkallweit1@gmail.com>, Vladimir
  Oltean <vladimir.oltean@nxp.com>, =?UTF-8?B?S8O2cnk=?= Maincent
@@ -62,11 +59,11 @@ Cc: davem@davemloft.net, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH net-next v3 1/3] net: netdevsim: Add PHY support in
  netdevsim
-Message-ID: <20250715080532.07883d74@fedora.home>
-In-Reply-To: <560e7969-b859-45ed-b368-350a62cec678@lunn.ch>
+Message-ID: <20250715080837.1aa0e9dd@fedora.home>
+In-Reply-To: <20250711165541.586f51e8@kernel.org>
 References: <20250710062248.378459-1-maxime.chevallier@bootlin.com>
 	<20250710062248.378459-2-maxime.chevallier@bootlin.com>
-	<560e7969-b859-45ed-b368-350a62cec678@lunn.ch>
+	<20250711165541.586f51e8@kernel.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
@@ -76,90 +73,122 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehgedtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthhqredtredtvdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeevieevgeehgfekgedtledvleeuieelheegiefftdeuhfelvddufeelheegteevgeenucfkphepvdgrtddumegtsgduleemkegugeehmeegledttdemieehieekmedvlegsudemlegvfhehmegvkegtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekugegheemgeeltddtmeeiheeikeemvdelsgdumeelvghfheemvgektgejpdhhvghlohepfhgvughorhgrrdhhohhmvgdpmhgrihhlfhhrohhmpehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedujedprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpt
- hhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomh
-X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehgedtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegveeltddvveeuhefhvefhlefhkeevfedtgfeiudefffeiledttdfgfeeuhfeukeenucfkphepvdgrtddumegtsgduleemkegugeehmeegledttdemieehieekmedvlegsudemlegvfhehmegvkegtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekugegheemgeeltddtmeeiheeikeemvdelsgdumeelvghfheemvgektgejpdhhvghlohepfhgvughorhgrrdhhohhmvgdpmhgrihhlfhhrohhmpehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedujedprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtp
+ hhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomh
 
-On Sat, 12 Jul 2025 18:54:38 +0200
-Andrew Lunn <andrew@lunn.ch> wrote:
+On Fri, 11 Jul 2025 16:55:41 -0700
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-> > +static int nsim_mdio_read(struct mii_bus *bus, int phy_addr, int reg_n=
-um)
-> > +{
-> > +	return 0;
+> On Thu, 10 Jul 2025 08:22:45 +0200 Maxime Chevallier wrote:
+> > @@ -1098,6 +1101,10 @@ static int __init nsim_module_init(void)
+> >  {
+> >  	int err;
+> >  
+> > +	err = nsim_phy_drv_register();
+> > +	if (err)
+> > +		return err;
+> > +
+> >  	err = nsim_dev_init();
+> >  	if (err)
+> >  		return err;  
+> 
+> I think you're missing error handling in this function if something
+> after drv_register fails.
+
+Ah true... Thanks
+
+> > @@ -1124,6 +1131,7 @@ static void __exit nsim_module_exit(void)
+> >  	rtnl_link_unregister(&nsim_link_ops);
+> >  	nsim_bus_exit();
+> >  	nsim_dev_exit();
+> > +	nsim_phy_drv_unregister();
+> >  }  
+> 
+> > +free_mdiobus:
+> > +	atomic_dec(&bus_num);
+> > +	mdiobus_free(mb->mii);
+> > +free_pdev:
+> > +	platform_device_unregister(mb->pdev);
+> > +free_mb:  
+> 
+> Others have added netdevsim code so the entire code base doesn't follow
+> what I'm about to say, but if you dont mind indulging my personal coding
+> style - error handling labels on a path disjoint from the success path
+> should be prefixed with err_$first-undo-action. If the error handling
+> shares the path with success the label prefix should be exit_$..
+> You can look at drivers/net/netdevsim/bpf.c for examples
+
+That's totally fine by me, it makes sense :)
+
+> > +	kfree(mb);
+> > +
+> > +	return NULL;
 > > +}
 > > +
-> > +static int nsim_mdio_write(struct mii_bus *bus, int phy_addr, int reg_=
-num,
-> > +			   u16 val)
+> > +static ssize_t
+> > +nsim_phy_add_write(struct file *file, const char __user *data,
+> > +		   size_t count, loff_t *ppos)
 > > +{
-> > +	return 0;
-> > +} =20
->=20
-> If i'm reading the code correctly, each PHY has its own MDIO bus? And
-> the PHY is always at address 0?
+> > +	struct net_device *dev = file->private_data;
+> > +	struct netdevsim *ns = netdev_priv(dev);
+> > +	struct nsim_phy_device *ns_phy;
+> > +	struct phy_device *pphy;
+> > +	u32 parent_id;
+> > +	char buf[10];
+> > +	ssize_t ret;
+> > +	int err;
+> > +
+> > +	if (*ppos != 0)
+> > +		return 0;
+> > +
+> > +	if (count >= sizeof(buf))
+> > +		return -ENOSPC;
+> > +
+> > +	ret = copy_from_user(buf, data, count);
+> > +	if (ret)
+> > +		return -EFAULT;
+> > +	buf[count] = '\0';
+> > +
+> > +	ret = kstrtouint(buf, 10, &parent_id);
+> > +	if (ret)
+> > +		return -EINVAL;
+> > +
+> > +	ns_phy = nsim_phy_register();
+> > +	if (IS_ERR(ns_phy))
+> > +		return PTR_ERR(ns_phy);
+> > +
+> > +	if (!parent_id) {
+> > +		if (!dev->phydev) {
+> > +			err = phy_connect_direct(dev, ns_phy->phy, nsim_adjust_link,
+> > +						 PHY_INTERFACE_MODE_NA);
+> > +			if (err)
+> > +				return err;
+> > +
+> > +			phy_attached_info(ns_phy->phy);
+> > +
+> > +			phy_start(ns_phy->phy);
+> > +		} else {
+> > +			phy_link_topo_add_phy(dev, ns_phy->phy, PHY_UPSTREAM_MAC, dev);
+> > +		}
+> > +	} else {
+> > +		pphy = phy_link_topo_get_phy(dev, parent_id);
+> > +		if (!pphy)
+> > +			return -EINVAL;
+> > +
+> > +		phy_link_topo_add_phy(dev, ns_phy->phy, PHY_UPSTREAM_PHY, pphy);
+> > +	}
+> > +
+> > +	nsim_phy_debugfs_create(ns->nsim_dev_port, ns_phy);
+> > +
+> > +	list_add(&ns_phy->node, &ns->nsim_dev->phy_list);  
+> 
+> No locks needed.. for any of this.. ?
 
-Yes indeed.=20
-
-> Maybe for address !=3D 0, these should return -ENODEV?
-
-That could be done yes, but I don't think this will ever happen as this
-is only ever going to be used in netdevsim, which also controls the PHY
-instantiation. I'm OK to add the ENODEV though :)
-
-For the record, the first draft implementation I had locally used a
-single MDIO bus on which we could register up to 32 netdevsim PHYs, but
-that wasn't enough. At some point Jakub pointed me to the case of
-netlink DUMP requests that would be too large to fit in a single
-netlink message (default threshold for that is > 4K messages), so to
-test that with the phy_link_topology stuff, I had to add around 150
-PHYs...
-
-> I'm guessing the PHY core is going to perform reads/writes for things
-> like EEE? And if the MAC driver has an IOCTL handler, it could also do
-> reads/writes. So something is needed here, but i do wounder if hard
-> coded 0 is going to work out O.K? Have you looked at what accesses the
-> core actually does?
-
-I don't see that driver being useful outside of netdevsim, so at
-least we have a good idea of what the MAC driver will do.
-
-There'e no ioctl, but we can be on the safe side and stub it a bit more.
-
-=46rom the tests I've been running, I didn't encounter any side-effect
-but I only tested very simple cases (set link up, run ethtool, etc.)
-
-I've considered re-using swphy for example, and using an emulated MDIO
-bus for netdevsim PHY, but my fear was that this would in the end get
-too complex. Let's say we want to add a new netdevsim debugfs
-file that allows us to control what is the speed reported by the phy,
-if we want to report say 10G speeds, we also need to emulate C45, etc.
-
-I guess at some point, we will run into scenarios where phylib is going
-to call some genphy helpers, it really depends on how deep we want to go
-with this netdevsim PHY driver.
-
-The use-cases that I saw were :
- - Being able to test the netlink stuff now that we have the ability to
-know which PHY handles which command
- - In the future, write some tests for the linkmode reporting (that I
-broke once with phy_caps)
- - When PHY Muxes eventually get there, I'd also like to netdevsim
-that.
-
-However that's just my view of the thing, we could also consider having
-this driver rely purely on MDIO emulation, where the MDIO registers
-would behave exactly as specified in C22/C37/C45, but that's quite more
-complex :)
-
-I'm open for any improvement or ideas on that driver :)
-
->      Andrew
-
-Thanks for the review,
+Heh I guess some locking is needed indeed... Let me add that in the
+next round...
 
 Maxime
 
