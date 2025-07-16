@@ -1,142 +1,156 @@
-Return-Path: <linux-kselftest+bounces-37435-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5A40B07833
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 16:33:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B3EDB0783B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 16:35:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A545A188E7D2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 14:33:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF5997B66BF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 14:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D620321D583;
-	Wed, 16 Jul 2025 14:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C421B25A2BB;
+	Wed, 16 Jul 2025 14:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QcLJt75D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dt45FC45"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE859199EAD;
-	Wed, 16 Jul 2025 14:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9747519AD5C;
+	Wed, 16 Jul 2025 14:35:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752676360; cv=none; b=JhwZHlihs3OheHpikYRFpS+z/c2j9ELbIs+gt4rzOqGVKtUAbDQ3Elxv/w8lhUaLSUwk4Nw2Z0U/dQWVq6/4+Z0VANSAGBmqmsg16AuFPlhbtMIPyPTW4czSvl18wSy/0FlK8M3Ifg3INfgA7o/fX4TTvHlIRy8B7YaheGnTz4I=
+	t=1752676519; cv=none; b=Rk2qAOQ1++My9bdSUwtSMbgA3YqUQkn8KQhAi8XtQPWGl8sN2xDDYCrNiyV1mcwtGjaj9U80f01GEuWiMrE+w2CEOwkGicpQB44Fls/u+xzX7zs05zHq+zF9Z5zr2ZGDQgR9hmP2hDMHwXXHZyJdpbujut7bbBbT2h64FF9KGkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752676360; c=relaxed/simple;
-	bh=iJjFq4iVDGYBdl/PZSOEsMEM1mXkUuP5CDCnmv+x5iI=;
+	s=arc-20240116; t=1752676519; c=relaxed/simple;
+	bh=m6dMr4mmc+ehuhuOcxxv5TIdC9hKtCvMg4Uo67cqnrQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PBnO7w9f6q3bltZ126l6uZZ0OxKhxc3VzHxvS150iWv3VS5JHbCA9akszSsZIkXg8iCfJPZbgmtAB8mH00lvLssVQ9vPVvBPNiDueWrUTemqOHmDNAFcoVlCmqSzE/EcwvYj+lc7jV+6e4yn7upmq71vfu06oyx8f8bd0i9k8TI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QcLJt75D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38826C4CEE7;
-	Wed, 16 Jul 2025 14:32:40 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=OtLv/tuR3GVYoidNhCQ9NJXcWbr0aTNne08Hg9JUVxYkQN6oMNfg35Ceh3layWK1DYTku2lsmHTlWB94oKfBi63xwb5KYLHAf/huAUpeHPm/yLEJWGDt0gfmKSZNeBk5e/YwEPyteI5C7wCK9JEtkpbUJCRJYq0HF7fFsYxARrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dt45FC45; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14A3C4CEEB;
+	Wed, 16 Jul 2025 14:35:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752676360;
-	bh=iJjFq4iVDGYBdl/PZSOEsMEM1mXkUuP5CDCnmv+x5iI=;
+	s=k20201202; t=1752676517;
+	bh=m6dMr4mmc+ehuhuOcxxv5TIdC9hKtCvMg4Uo67cqnrQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QcLJt75D/DW/MlFyAUTWtTUzB6QAiaDZeAAjWqHkfpzfRwXMvVmnqiq1c+u2KcRrF
-	 fp3qcx49V/ukjwBn30bsl59TW9WTFpM94EGO34UNpB326jceYocRqUM2Icp4iF0fvG
-	 E9L/TtPMXfQo3P6Nw0hA479m31iIu+nR38syDHtNlU0tPo3mThQo0/k7LdusVLxXYb
-	 0oWWj0G7+i+WRG6w/+NlfL1iZNhWxOwz2j4zyt0lzhENxneqiIC1aE2U4CpPwfr88w
-	 rdbsLKlQeBLycDuEKk8SE1NvhPlyY/agkmXou3M447hBA7K/ssiNDzEBUy2DfAdqra
-	 dVK/Je3ytAjQA==
-Date: Wed, 16 Jul 2025 07:32:39 -0700
-From: Kees Cook <kees@kernel.org>
-To: Tiffany Yang <ynaffit@google.com>
-Cc: linux-kernel@vger.kernel.org, kernel-team@android.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Carlos Llamas <cmllamas@google.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH v3 3/6] kunit: test: Export kunit_attach_mm()
-Message-ID: <202507160731.5F7752691@keescook>
-References: <20250714185321.2417234-1-ynaffit@google.com>
- <20250714185321.2417234-4-ynaffit@google.com>
+	b=dt45FC45lr4Y5Yj3uPvtIZIp6ciObQ9O2GVHJqBWqI/DLPZcpWsBg+1utqSq+YDw+
+	 TTJ19/zC3kTV+soJUz1OQg6F20EoxtqkYFznrlG07TYT9OwefLF+uUOoxgh73ZfBBh
+	 8SLneOMyK6P6c1iwB2WDkSzSjY245qEG5+H7F2QqcQx2Mh9mjqPlZFwKhRcF5+24Ct
+	 cNsz5f+KIF7vHtSZJm9SAA2iNaGsi09yJS4bgJ5Rq9l9ZvQpLb37Tq3YiEMeKhwgUF
+	 3O9gxF1imLn9OunEnp/rcY/rLf2AqX97EG5ibd/BdzyrfVM1RgO08vlXbJqogYNczt
+	 9YD87lNN0ufMw==
+Date: Wed, 16 Jul 2025 15:35:09 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andy Lutomirski <luto@kernel.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+	Richard Cochran <richardcochran@gmail.com>,
+	Christopher Hall <christopher.s.hall@intel.com>,
+	Miroslav Lichvar <mlichvar@redhat.com>,
+	Werner Abt <werner.abt@meinberg-usa.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Kurt Kanzenbach <kurt@linutronix.de>,
+	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
+Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
+ clock_gettime() helpers
+Message-ID: <69499cb9-b13b-4eec-a7c4-c219a77c6260@sirena.org.uk>
+References: <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
+ <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
+ <CGME20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2@eucas1p1.samsung.com>
+ <e8c6b9a7-eaa6-4947-98e1-9d6fecc958d4@samsung.com>
+ <20250709092958-37148883-ed89-40fe-8cd5-ded5dd60957e@linutronix.de>
+ <eb5feef3-0a7d-438c-9dbb-00d1d72fad66@samsung.com>
+ <6bee5ae0-2a9e-4793-a5bd-9e6c72b03f27@sirena.org.uk>
+ <20250716142933-41089f40-0628-4821-83a3-fddbd4c4f9bf@linutronix.de>
+ <3a9504d1-2c6a-459a-a98e-3010d34b546c@sirena.org.uk>
+ <20250716152041-189100b1-7f5e-4388-8ada-b79ec09d18f5@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BuIqEQ3Xb0IJOloe"
 Content-Disposition: inline
-In-Reply-To: <20250714185321.2417234-4-ynaffit@google.com>
+In-Reply-To: <20250716152041-189100b1-7f5e-4388-8ada-b79ec09d18f5@linutronix.de>
+X-Cookie: osteopornosis:
 
-On Mon, Jul 14, 2025 at 11:53:16AM -0700, Tiffany Yang wrote:
-> Tests can allocate from virtual memory using kunit_vm_mmap(), which
-> transparently creates and attaches an mm_struct to the test runner if
-> one is not already attached. This is suitable for most cases, except for
-> when the code under test must access a task's mm before performing an
-> mmap. Expose kunit_attach_mm() as part of the interface for those
-> cases. This does not change the existing behavior.
-> 
-> Cc: David Gow <davidgow@google.com>
-> Signed-off-by: Tiffany Yang <ynaffit@google.com>
-> ---
->  include/kunit/test.h   | 12 ++++++++++++
->  lib/kunit/user_alloc.c |  4 ++--
->  2 files changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 39c768f87dc9..d958ee53050e 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -531,6 +531,18 @@ static inline char *kunit_kstrdup(struct kunit *test, const char *str, gfp_t gfp
->   */
->  const char *kunit_kstrdup_const(struct kunit *test, const char *str, gfp_t gfp);
->  
-> +/**
-> + * kunit_attach_mm() - Create and attach a new mm if it doesn't already exist.
-> + *
-> + * Allocates a &struct mm_struct and attaches it to @current. In most cases, call
-> + * kunit_vm_mmap() without calling kunit_attach_mm() directly. Only necessary when
-> + * code under test accesses the mm before executing the mmap (e.g., to perform
-> + * additional initialization beforehand).
-> + *
-> + * Return: 0 on success, -errno on failure.
-> + */
 
-Yay kern-doc! :)
+--BuIqEQ3Xb0IJOloe
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +int kunit_attach_mm(void);
-> +
->  /**
->   * kunit_vm_mmap() - Allocate KUnit-tracked vm_mmap() area
->   * @test: The test context object.
-> diff --git a/lib/kunit/user_alloc.c b/lib/kunit/user_alloc.c
-> index 46951be018be..b8cac765e620 100644
-> --- a/lib/kunit/user_alloc.c
-> +++ b/lib/kunit/user_alloc.c
-> @@ -22,8 +22,7 @@ struct kunit_vm_mmap_params {
->  	unsigned long offset;
->  };
->  
-> -/* Create and attach a new mm if it doesn't already exist. */
-> -static int kunit_attach_mm(void)
-> +int kunit_attach_mm(void)
->  {
->  	struct mm_struct *mm;
->  
-> @@ -49,6 +48,7 @@ static int kunit_attach_mm(void)
->  
->  	return 0;
->  }
-> +EXPORT_SYMBOL_GPL(kunit_attach_mm);
->  
->  static int kunit_vm_mmap_init(struct kunit_resource *res, void *context)
->  {
-> -- 
-> 2.50.0.727.gbf7dc18ff4-goog
+On Wed, Jul 16, 2025 at 03:23:24PM +0200, Thomas Wei=DFschuh wrote:
 
-Reviewed-by: Kees Cook <kees@kernel.org>
+> Can you try the following?
+> I missed this despite the double-checking after the last reported issue.
 
--- 
-Kees Cook
+I needed to fix that up a bit, it was missing an update of the final ret
+in the function and didn't apply directly to -next for some reason so I
+had to manually apply but it seems to do the trick, thanks!
+
+Tested-by: Mark Brown <broonie@kernel.org>
+
+with this against -next:
+
+diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+index 97aa9059a5c97..487e3458e536e 100644
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -365,18 +365,18 @@ __cvdso_clock_gettime32_data(const struct vdso_time_d=
+ata *vd, clockid_t clock,
+ 			     struct old_timespec32 *res)
+ {
+ 	struct __kernel_timespec ts;
+-	int ret;
++	bool ok;
+=20
+-	ret =3D __cvdso_clock_gettime_common(vd, clock, &ts);
++	ok =3D __cvdso_clock_gettime_common(vd, clock, &ts);
+=20
+-	if (unlikely(ret))
++	if (unlikely(!ok))
+ 		return clock_gettime32_fallback(clock, res);
+=20
+-	/* For ret =3D=3D 0 */
++	/* For ok =3D=3D true */
+ 	res->tv_sec =3D ts.tv_sec;
+ 	res->tv_nsec =3D ts.tv_nsec;
+=20
+-	return ret;
++	return 0;
+ }
+=20
+ static __maybe_unused int
+
+--BuIqEQ3Xb0IJOloe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmh3uJ0ACgkQJNaLcl1U
+h9CA4Af/Tjt27XD+sH0XsHGiqrvVkfVxva7ofqhkGScEh/mKgfSbmkbXHANzMMcN
+i0cqh+YA1JvkdO9PRMQKygFdjOmHF6f8fLJ89tv362PI4fWlABSmiorpUwrX/J76
+1DnAJBk3+BI/Ea4E5KVldzfU+figgDJeX1YWeicBcnGCnMrdHPub+24Wgclm4MIs
+mxPCfZnczo7mLioF3QxjetxtWIFrsPNxoRJp7kJN0Kyz6lGJQBmZc+dY1UzEVtyR
+GBCX/hWkjFxJzX9EBQ3d7C/LgP6AuvykylzYC2M5AZC9TOzvRpEhjp6WGJHCRrwa
+K72ju7AAJ/9Vit9ykmOIMbQUpAZUYA==
+=rAsr
+-----END PGP SIGNATURE-----
+
+--BuIqEQ3Xb0IJOloe--
 
