@@ -1,156 +1,458 @@
-Return-Path: <linux-kselftest+bounces-37436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B3EDB0783B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 16:35:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3666DB07841
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 16:37:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF5997B66BF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 14:33:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D14B56534E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 14:37:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C421B25A2BB;
-	Wed, 16 Jul 2025 14:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0CBD25A2BB;
+	Wed, 16 Jul 2025 14:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dt45FC45"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V0lxSpKk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9747519AD5C;
-	Wed, 16 Jul 2025 14:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B171C5D44;
+	Wed, 16 Jul 2025 14:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752676519; cv=none; b=Rk2qAOQ1++My9bdSUwtSMbgA3YqUQkn8KQhAi8XtQPWGl8sN2xDDYCrNiyV1mcwtGjaj9U80f01GEuWiMrE+w2CEOwkGicpQB44Fls/u+xzX7zs05zHq+zF9Z5zr2ZGDQgR9hmP2hDMHwXXHZyJdpbujut7bbBbT2h64FF9KGkY=
+	t=1752676672; cv=none; b=dq5FyBm/CQnlvYwsk6HdjnHpWlgBDXqvJEmgZ630pjWVO4GgztyR0m2Oo3rbj/khnIvIQ46+dIErViqVleiN0Wc6xjPIKii7yhMlBJ5g5U5Eiyii3g6wY+vaDrR39PYkVP8DT8alPXSTsMsp2t/roQj45oD0kGTBM8UpV/4GiSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752676519; c=relaxed/simple;
-	bh=m6dMr4mmc+ehuhuOcxxv5TIdC9hKtCvMg4Uo67cqnrQ=;
+	s=arc-20240116; t=1752676672; c=relaxed/simple;
+	bh=EY4JWSDCGyxx1eGOtz5OXXZbV4zTumfSnv0toLDHIk8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OtLv/tuR3GVYoidNhCQ9NJXcWbr0aTNne08Hg9JUVxYkQN6oMNfg35Ceh3layWK1DYTku2lsmHTlWB94oKfBi63xwb5KYLHAf/huAUpeHPm/yLEJWGDt0gfmKSZNeBk5e/YwEPyteI5C7wCK9JEtkpbUJCRJYq0HF7fFsYxARrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dt45FC45; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14A3C4CEEB;
-	Wed, 16 Jul 2025 14:35:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=M0uPv6uCXwf6iCs+f13JDtJgPU6XIVY+DlHpa5BwMwE8Z+u6JUq1KwnLm5BQQffsScKONt6ILDpGDTJ3qkcTD5V1DEBE4anG9czEYt/6L4n2/KdweABbm/v078ntbQbtHNH37ojkJc0iALZklxGDIXcAk3hsm30gkfaeh/drvgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V0lxSpKk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23030C4CEE7;
+	Wed, 16 Jul 2025 14:37:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752676517;
-	bh=m6dMr4mmc+ehuhuOcxxv5TIdC9hKtCvMg4Uo67cqnrQ=;
+	s=k20201202; t=1752676672;
+	bh=EY4JWSDCGyxx1eGOtz5OXXZbV4zTumfSnv0toLDHIk8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dt45FC45lr4Y5Yj3uPvtIZIp6ciObQ9O2GVHJqBWqI/DLPZcpWsBg+1utqSq+YDw+
-	 TTJ19/zC3kTV+soJUz1OQg6F20EoxtqkYFznrlG07TYT9OwefLF+uUOoxgh73ZfBBh
-	 8SLneOMyK6P6c1iwB2WDkSzSjY245qEG5+H7F2QqcQx2Mh9mjqPlZFwKhRcF5+24Ct
-	 cNsz5f+KIF7vHtSZJm9SAA2iNaGsi09yJS4bgJ5Rq9l9ZvQpLb37Tq3YiEMeKhwgUF
-	 3O9gxF1imLn9OunEnp/rcY/rLf2AqX97EG5ibd/BdzyrfVM1RgO08vlXbJqogYNczt
-	 9YD87lNN0ufMw==
-Date: Wed, 16 Jul 2025 15:35:09 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Andy Lutomirski <luto@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-	Richard Cochran <richardcochran@gmail.com>,
-	Christopher Hall <christopher.s.hall@intel.com>,
-	Miroslav Lichvar <mlichvar@redhat.com>,
-	Werner Abt <werner.abt@meinberg-usa.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Kurt Kanzenbach <kurt@linutronix.de>,
-	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
-Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
- clock_gettime() helpers
-Message-ID: <69499cb9-b13b-4eec-a7c4-c219a77c6260@sirena.org.uk>
-References: <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
- <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
- <CGME20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2@eucas1p1.samsung.com>
- <e8c6b9a7-eaa6-4947-98e1-9d6fecc958d4@samsung.com>
- <20250709092958-37148883-ed89-40fe-8cd5-ded5dd60957e@linutronix.de>
- <eb5feef3-0a7d-438c-9dbb-00d1d72fad66@samsung.com>
- <6bee5ae0-2a9e-4793-a5bd-9e6c72b03f27@sirena.org.uk>
- <20250716142933-41089f40-0628-4821-83a3-fddbd4c4f9bf@linutronix.de>
- <3a9504d1-2c6a-459a-a98e-3010d34b546c@sirena.org.uk>
- <20250716152041-189100b1-7f5e-4388-8ada-b79ec09d18f5@linutronix.de>
+	b=V0lxSpKkgIpC87ek53RvnnPF5XsKTuyZwHys6v8IsHE4XLD7IMagRI+BJ5FUGv715
+	 0rPsO9OH5A5u7BJmZ7GTCIdLP61AzCjpPqueN6nfj19ttXND0bhWhz06c3igNywZ2b
+	 CWzSH0MtqvhRKaTSzISeqskQrgCP/c5o0gxxbvrjj6gH00aERBwxAVNjPURawJM5Pa
+	 S1HPImJV6wLKSDx584Yr0Fc4B/aVuL0myZ1Rib9CYAzl8uuVIgL2hpozT7fWiGBXbF
+	 39LzZYieH1N+7plV2Ba1Lm+H6wVQxikP7MFORyquP+8pjnhFIZzBFZbasSeQ4xopFZ
+	 KsZGYCz7EW3XA==
+Date: Wed, 16 Jul 2025 07:37:51 -0700
+From: Kees Cook <kees@kernel.org>
+To: Tiffany Yang <ynaffit@google.com>
+Cc: linux-kernel@vger.kernel.org, kernel-team@android.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Carlos Llamas <cmllamas@google.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH v3 4/6] binder: Scaffolding for binder_alloc KUnit tests
+Message-ID: <202507160735.C76466BB@keescook>
+References: <20250714185321.2417234-1-ynaffit@google.com>
+ <20250714185321.2417234-5-ynaffit@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BuIqEQ3Xb0IJOloe"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250716152041-189100b1-7f5e-4388-8ada-b79ec09d18f5@linutronix.de>
-X-Cookie: osteopornosis:
+In-Reply-To: <20250714185321.2417234-5-ynaffit@google.com>
+
+On Mon, Jul 14, 2025 at 11:53:17AM -0700, Tiffany Yang wrote:
+> Add setup and teardown for testing binder allocator code with KUnit.
+> Include minimal test cases to verify that tests are initialized
+> correctly.
+> 
+> Tested-by: Rae Moar <rmoar@google.com>
+> Signed-off-by: Tiffany Yang <ynaffit@google.com>
+> ---
+> v2:
+> * Added tested-by tag
+> v3:
+> * Split kunit lib change into separate change
+> ---
+>  drivers/android/Kconfig                    |  11 ++
+>  drivers/android/Makefile                   |   1 +
+>  drivers/android/binder.c                   |   5 +-
+>  drivers/android/binder_alloc.c             |  15 +-
+>  drivers/android/binder_alloc.h             |   6 +
+>  drivers/android/binder_internal.h          |   4 +
+>  drivers/android/tests/.kunitconfig         |   3 +
+>  drivers/android/tests/Makefile             |   3 +
+>  drivers/android/tests/binder_alloc_kunit.c | 166 +++++++++++++++++++++
+>  9 files changed, 208 insertions(+), 6 deletions(-)
+>  create mode 100644 drivers/android/tests/.kunitconfig
+>  create mode 100644 drivers/android/tests/Makefile
+>  create mode 100644 drivers/android/tests/binder_alloc_kunit.c
+> 
+> diff --git a/drivers/android/Kconfig b/drivers/android/Kconfig
+> index 07aa8ae0a058..b1bc7183366c 100644
+> --- a/drivers/android/Kconfig
+> +++ b/drivers/android/Kconfig
+> @@ -47,4 +47,15 @@ config ANDROID_BINDER_IPC_SELFTEST
+>  	  exhaustively with combinations of various buffer sizes and
+>  	  alignments.
+>  
+> +config ANDROID_BINDER_ALLOC_KUNIT_TEST
+> +	tristate "KUnit Tests for Android Binder Alloc" if !KUNIT_ALL_TESTS
+> +	depends on ANDROID_BINDER_IPC && KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  This feature builds the binder alloc KUnit tests.
+> +
+> +	  Each test case runs using a pared-down binder_alloc struct and
+> +	  test-specific freelist, which allows this KUnit module to be loaded
+> +	  for testing without interfering with a running system.
+> +
+>  endmenu
+> diff --git a/drivers/android/Makefile b/drivers/android/Makefile
+> index c9d3d0c99c25..74d02a335d4e 100644
+> --- a/drivers/android/Makefile
+> +++ b/drivers/android/Makefile
+> @@ -4,3 +4,4 @@ ccflags-y += -I$(src)			# needed for trace events
+>  obj-$(CONFIG_ANDROID_BINDERFS)		+= binderfs.o
+>  obj-$(CONFIG_ANDROID_BINDER_IPC)	+= binder.o binder_alloc.o
+>  obj-$(CONFIG_ANDROID_BINDER_IPC_SELFTEST) += binder_alloc_selftest.o
+> +obj-$(CONFIG_ANDROID_BINDER_ALLOC_KUNIT_TEST)	+= tests/
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index c463ca4a8fff..9dfe90c284fc 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -68,6 +68,8 @@
+>  #include <linux/sizes.h>
+>  #include <linux/ktime.h>
+>  
+> +#include <kunit/visibility.h>
+> +
+>  #include <uapi/linux/android/binder.h>
+>  
+>  #include <linux/cacheflush.h>
+> @@ -5956,10 +5958,11 @@ static void binder_vma_close(struct vm_area_struct *vma)
+>  	binder_alloc_vma_close(&proc->alloc);
+>  }
+>  
+> -static vm_fault_t binder_vm_fault(struct vm_fault *vmf)
+> +VISIBLE_IF_KUNIT vm_fault_t binder_vm_fault(struct vm_fault *vmf)
+>  {
+>  	return VM_FAULT_SIGBUS;
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(binder_vm_fault);
+>  
+>  static const struct vm_operations_struct binder_vm_ops = {
+>  	.open = binder_vma_open,
+> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> index 2e89f9127883..c79e5c6721f0 100644
+> --- a/drivers/android/binder_alloc.c
+> +++ b/drivers/android/binder_alloc.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/uaccess.h>
+>  #include <linux/highmem.h>
+>  #include <linux/sizes.h>
+> +#include <kunit/visibility.h>
+>  #include "binder_alloc.h"
+>  #include "binder_trace.h"
+>  
+> @@ -57,13 +58,14 @@ static struct binder_buffer *binder_buffer_prev(struct binder_buffer *buffer)
+>  	return list_entry(buffer->entry.prev, struct binder_buffer, entry);
+>  }
+>  
+> -static size_t binder_alloc_buffer_size(struct binder_alloc *alloc,
+> -				       struct binder_buffer *buffer)
+> +VISIBLE_IF_KUNIT size_t binder_alloc_buffer_size(struct binder_alloc *alloc,
+> +						 struct binder_buffer *buffer)
+>  {
+>  	if (list_is_last(&buffer->entry, &alloc->buffers))
+>  		return alloc->vm_start + alloc->buffer_size - buffer->user_data;
+>  	return binder_buffer_next(buffer)->user_data - buffer->user_data;
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(binder_alloc_buffer_size);
+>  
+>  static void binder_insert_free_buffer(struct binder_alloc *alloc,
+>  				      struct binder_buffer *new_buffer)
+> @@ -959,7 +961,7 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
+>  			   failure_string, ret);
+>  	return ret;
+>  }
+> -
+> +EXPORT_SYMBOL_IF_KUNIT(binder_alloc_mmap_handler);
+>  
+>  void binder_alloc_deferred_release(struct binder_alloc *alloc)
+>  {
+> @@ -1028,6 +1030,7 @@ void binder_alloc_deferred_release(struct binder_alloc *alloc)
+>  		     "%s: %d buffers %d, pages %d\n",
+>  		     __func__, alloc->pid, buffers, page_count);
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(binder_alloc_deferred_release);
+>  
+>  /**
+>   * binder_alloc_print_allocated() - print buffer info
+> @@ -1122,6 +1125,7 @@ void binder_alloc_vma_close(struct binder_alloc *alloc)
+>  {
+>  	binder_alloc_set_mapped(alloc, false);
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(binder_alloc_vma_close);
+>  
+>  /**
+>   * binder_alloc_free_page() - shrinker callback to free pages
+> @@ -1229,8 +1233,8 @@ binder_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+>  
+>  static struct shrinker *binder_shrinker;
+>  
+> -static void __binder_alloc_init(struct binder_alloc *alloc,
+> -				struct list_lru *freelist)
+> +VISIBLE_IF_KUNIT void __binder_alloc_init(struct binder_alloc *alloc,
+> +					  struct list_lru *freelist)
+>  {
+>  	alloc->pid = current->group_leader->pid;
+>  	alloc->mm = current->mm;
+> @@ -1239,6 +1243,7 @@ static void __binder_alloc_init(struct binder_alloc *alloc,
+>  	INIT_LIST_HEAD(&alloc->buffers);
+>  	alloc->freelist = freelist;
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(__binder_alloc_init);
+>  
+>  /**
+>   * binder_alloc_init() - called by binder_open() for per-proc initialization
+> diff --git a/drivers/android/binder_alloc.h b/drivers/android/binder_alloc.h
+> index aa05a9df1360..dc8dce2469a7 100644
+> --- a/drivers/android/binder_alloc.h
+> +++ b/drivers/android/binder_alloc.h
+> @@ -188,5 +188,11 @@ int binder_alloc_copy_from_buffer(struct binder_alloc *alloc,
+>  				  binder_size_t buffer_offset,
+>  				  size_t bytes);
+>  
+> +#if IS_ENABLED(CONFIG_KUNIT)
+> +void __binder_alloc_init(struct binder_alloc *alloc, struct list_lru *freelist);
+> +size_t binder_alloc_buffer_size(struct binder_alloc *alloc,
+> +				struct binder_buffer *buffer);
+> +#endif
+> +
+>  #endif /* _LINUX_BINDER_ALLOC_H */
+>  
+> diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
+> index 1ba5caf1d88d..b5d3014fb4dc 100644
+> --- a/drivers/android/binder_internal.h
+> +++ b/drivers/android/binder_internal.h
+> @@ -592,4 +592,8 @@ void binder_add_device(struct binder_device *device);
+>   */
+>  void binder_remove_device(struct binder_device *device);
+>  
+> +#if IS_ENABLED(CONFIG_KUNIT)
+> +vm_fault_t binder_vm_fault(struct vm_fault *vmf);
+> +#endif
+
+I'm used to the "#ifdef CONFIG_..." idiom, but looking at the tree, I
+see that "#if IS_ENANLED(CONFIG...)" is relatively common too. I don't
+think there is a function difference, so I leave the style choice up to
+you! ;)
+
+> +
+>  #endif /* _LINUX_BINDER_INTERNAL_H */
+> diff --git a/drivers/android/tests/.kunitconfig b/drivers/android/tests/.kunitconfig
+> new file mode 100644
+> index 000000000000..a73601231049
+> --- /dev/null
+> +++ b/drivers/android/tests/.kunitconfig
+> @@ -0,0 +1,3 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_ANDROID_BINDER_IPC=y
+> +CONFIG_ANDROID_BINDER_ALLOC_KUNIT_TEST=y
+> diff --git a/drivers/android/tests/Makefile b/drivers/android/tests/Makefile
+> new file mode 100644
+> index 000000000000..6780967e573b
+> --- /dev/null
+> +++ b/drivers/android/tests/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +obj-$(CONFIG_ANDROID_BINDER_ALLOC_KUNIT_TEST)	+= binder_alloc_kunit.o
+> diff --git a/drivers/android/tests/binder_alloc_kunit.c b/drivers/android/tests/binder_alloc_kunit.c
+> new file mode 100644
+> index 000000000000..4b68b5687d33
+> --- /dev/null
+> +++ b/drivers/android/tests/binder_alloc_kunit.c
+> @@ -0,0 +1,166 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test cases for binder allocator code
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <kunit/test.h>
+> +#include <linux/anon_inodes.h>
+> +#include <linux/err.h>
+> +#include <linux/file.h>
+> +#include <linux/fs.h>
+> +#include <linux/mm.h>
+> +#include <linux/mman.h>
+> +#include <linux/sizes.h>
+> +
+> +#include "../binder_alloc.h"
+> +#include "../binder_internal.h"
+> +
+> +MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
+> +
+> +#define BINDER_MMAP_SIZE SZ_128K
+> +
+> +struct binder_alloc_test {
+> +	struct binder_alloc alloc;
+> +	struct list_lru binder_test_freelist;
+> +	struct file *filp;
+> +	unsigned long mmap_uaddr;
+> +};
+> +
+> +static void binder_alloc_test_init_freelist(struct kunit *test)
+> +{
+> +	struct binder_alloc_test *priv = test->priv;
+> +
+> +	KUNIT_EXPECT_PTR_EQ(test, priv->alloc.freelist,
+> +			    &priv->binder_test_freelist);
+> +}
+> +
+> +static void binder_alloc_test_mmap(struct kunit *test)
+> +{
+> +	struct binder_alloc_test *priv = test->priv;
+> +	struct binder_alloc *alloc = &priv->alloc;
+> +	struct binder_buffer *buf;
+> +	struct rb_node *n;
+> +
+> +	KUNIT_EXPECT_EQ(test, alloc->mapped, true);
+> +	KUNIT_EXPECT_EQ(test, alloc->buffer_size, BINDER_MMAP_SIZE);
+> +
+> +	n = rb_first(&alloc->allocated_buffers);
+> +	KUNIT_EXPECT_PTR_EQ(test, n, NULL);
+> +
+> +	n = rb_first(&alloc->free_buffers);
+> +	buf = rb_entry(n, struct binder_buffer, rb_node);
+> +	KUNIT_EXPECT_EQ(test, binder_alloc_buffer_size(alloc, buf),
+> +			BINDER_MMAP_SIZE);
+> +	KUNIT_EXPECT_TRUE(test, list_is_last(&buf->entry, &alloc->buffers));
+> +}
+> +
+> +/* ===== End test cases ===== */
+> +
+> +static void binder_alloc_test_vma_close(struct vm_area_struct *vma)
+> +{
+> +	struct binder_alloc *alloc = vma->vm_private_data;
+> +
+> +	binder_alloc_vma_close(alloc);
+> +}
+> +
+> +static const struct vm_operations_struct binder_alloc_test_vm_ops = {
+> +	.close = binder_alloc_test_vma_close,
+> +	.fault = binder_vm_fault,
+> +};
+> +
+> +static int binder_alloc_test_mmap_handler(struct file *filp,
+> +					  struct vm_area_struct *vma)
+> +{
+> +	struct binder_alloc *alloc = filp->private_data;
+> +
+> +	vm_flags_mod(vma, VM_DONTCOPY | VM_MIXEDMAP, VM_MAYWRITE);
+> +
+> +	vma->vm_ops = &binder_alloc_test_vm_ops;
+> +	vma->vm_private_data = alloc;
+> +
+> +	return binder_alloc_mmap_handler(alloc, vma);
+> +}
+> +
+> +static const struct file_operations binder_alloc_test_fops = {
+> +	.mmap = binder_alloc_test_mmap_handler,
+> +};
+> +
+> +static int binder_alloc_test_init(struct kunit *test)
+> +{
+> +	struct binder_alloc_test *priv;
+> +	int ret;
+> +
+> +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +	test->priv = priv;
+> +
+> +	ret = list_lru_init(&priv->binder_test_freelist);
+> +	if (ret) {
+> +		kunit_err(test, "Failed to initialize test freelist\n");
+> +		return ret;
+> +	}
+> +
+> +	/* __binder_alloc_init requires mm to be attached */
+> +	ret = kunit_attach_mm();
+> +	if (ret) {
+> +		kunit_err(test, "Failed to attach mm\n");
+> +		return ret;
+> +	}
+> +	__binder_alloc_init(&priv->alloc, &priv->binder_test_freelist);
+> +
+> +	priv->filp = anon_inode_getfile("binder_alloc_kunit",
+> +					&binder_alloc_test_fops, &priv->alloc,
+> +					O_RDWR | O_CLOEXEC);
+> +	if (IS_ERR_OR_NULL(priv->filp)) {
+> +		kunit_err(test, "Failed to open binder alloc test driver file\n");
+> +		return priv->filp ? PTR_ERR(priv->filp) : -ENOMEM;
+> +	}
+> +
+> +	priv->mmap_uaddr = kunit_vm_mmap(test, priv->filp, 0, BINDER_MMAP_SIZE,
+> +					 PROT_READ, MAP_PRIVATE | MAP_NORESERVE,
+> +					 0);
+> +	if (!priv->mmap_uaddr) {
+> +		kunit_err(test, "Could not map the test's transaction memory\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void binder_alloc_test_exit(struct kunit *test)
+> +{
+> +	struct binder_alloc_test *priv = test->priv;
+> +
+> +	/* Close the backing file to make sure binder_alloc_vma_close runs */
+> +	if (!IS_ERR_OR_NULL(priv->filp))
+> +		fput(priv->filp);
+> +
+> +	if (priv->alloc.mm)
+> +		binder_alloc_deferred_release(&priv->alloc);
+> +
+> +	/* Make sure freelist is empty */
+> +	KUNIT_EXPECT_EQ(test, list_lru_count(&priv->binder_test_freelist), 0);
+> +	list_lru_destroy(&priv->binder_test_freelist);
+> +}
+> +
+> +static struct kunit_case binder_alloc_test_cases[] = {
+> +	KUNIT_CASE(binder_alloc_test_init_freelist),
+> +	KUNIT_CASE(binder_alloc_test_mmap),
+> +	{}
+> +};
+> +
+> +static struct kunit_suite binder_alloc_test_suite = {
+> +	.name = "binder_alloc",
+> +	.test_cases = binder_alloc_test_cases,
+> +	.init = binder_alloc_test_init,
+> +	.exit = binder_alloc_test_exit,
+> +};
+> +
+> +kunit_test_suite(binder_alloc_test_suite);
+> +
+> +MODULE_AUTHOR("Tiffany Yang <ynaffit@google.com>");
+> +MODULE_DESCRIPTION("Binder Alloc KUnit tests");
+> +MODULE_LICENSE("GPL");
+
+Reviewed-by: Kees Cook <kees@kernel.org>
 
 
---BuIqEQ3Xb0IJOloe
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jul 16, 2025 at 03:23:24PM +0200, Thomas Wei=DFschuh wrote:
-
-> Can you try the following?
-> I missed this despite the double-checking after the last reported issue.
-
-I needed to fix that up a bit, it was missing an update of the final ret
-in the function and didn't apply directly to -next for some reason so I
-had to manually apply but it seems to do the trick, thanks!
-
-Tested-by: Mark Brown <broonie@kernel.org>
-
-with this against -next:
-
-diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index 97aa9059a5c97..487e3458e536e 100644
---- a/lib/vdso/gettimeofday.c
-+++ b/lib/vdso/gettimeofday.c
-@@ -365,18 +365,18 @@ __cvdso_clock_gettime32_data(const struct vdso_time_d=
-ata *vd, clockid_t clock,
- 			     struct old_timespec32 *res)
- {
- 	struct __kernel_timespec ts;
--	int ret;
-+	bool ok;
-=20
--	ret =3D __cvdso_clock_gettime_common(vd, clock, &ts);
-+	ok =3D __cvdso_clock_gettime_common(vd, clock, &ts);
-=20
--	if (unlikely(ret))
-+	if (unlikely(!ok))
- 		return clock_gettime32_fallback(clock, res);
-=20
--	/* For ret =3D=3D 0 */
-+	/* For ok =3D=3D true */
- 	res->tv_sec =3D ts.tv_sec;
- 	res->tv_nsec =3D ts.tv_nsec;
-=20
--	return ret;
-+	return 0;
- }
-=20
- static __maybe_unused int
-
---BuIqEQ3Xb0IJOloe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmh3uJ0ACgkQJNaLcl1U
-h9CA4Af/Tjt27XD+sH0XsHGiqrvVkfVxva7ofqhkGScEh/mKgfSbmkbXHANzMMcN
-i0cqh+YA1JvkdO9PRMQKygFdjOmHF6f8fLJ89tv362PI4fWlABSmiorpUwrX/J76
-1DnAJBk3+BI/Ea4E5KVldzfU+figgDJeX1YWeicBcnGCnMrdHPub+24Wgclm4MIs
-mxPCfZnczo7mLioF3QxjetxtWIFrsPNxoRJp7kJN0Kyz6lGJQBmZc+dY1UzEVtyR
-GBCX/hWkjFxJzX9EBQ3d7C/LgP6AuvykylzYC2M5AZC9TOzvRpEhjp6WGJHCRrwa
-K72ju7AAJ/9Vit9ykmOIMbQUpAZUYA==
-=rAsr
------END PGP SIGNATURE-----
-
---BuIqEQ3Xb0IJOloe--
+-- 
+Kees Cook
 
