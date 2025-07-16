@@ -1,179 +1,265 @@
-Return-Path: <linux-kselftest+bounces-37444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37445-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81376B07B6D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 18:44:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB134B07C23
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 19:35:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D22E77A44C2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 16:43:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8CC5E7A773C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 17:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C282F5493;
-	Wed, 16 Jul 2025 16:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED5B6274B30;
+	Wed, 16 Jul 2025 17:35:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fHQ6Y515"
+	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="e9GdmvUZ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Nzqt6DUZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD882F5484
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 16:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0EB1E0E14;
+	Wed, 16 Jul 2025 17:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752684285; cv=none; b=AF6Twtn3sIsg9N4BDuAhN++iCTjvpiXRgzGSTt9fBzx2oqBJjxxqBK28oFspIfSaBkMMo/gvzE/E8AJkrq6bgZr4YA4GhHH7TQ0/ZvWCKrn2RI4bntSBZWf5opBJoJZ+W1AevosUgfl31Mn7oPUO67iAgnKtgu32yfYfI7I3+yk=
+	t=1752687339; cv=none; b=GCaTWoQnGiHPXipWkfjvhkHHD2yggrufMEaeWfowk6bOv6ZVtfz2qaqdH5rR6DM2TFeFXGnc7RKR+eALDZ1l7btm6Ip6pXC6zcHSFeodSP5dQPNYAlvQa3XgHHXAdKsF7DAREfl18d8hsJs9NxSL/GlONlH3p90bIVvszZ9JXI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752684285; c=relaxed/simple;
-	bh=om9te+97F76PGNBhbFcuJXmcwMoZvSGcYcM1x3bmX70=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kr2p3ELJW2uwsEeq7WUXYJjJ3swFnPjMJ+3qoDwyVx/l6QClU1WQ+UHTH5tAx9yR2IqBPyBY/XRdxOlZOjSeimQtZ/r8VEzpAKMSNkiuLyQnV4jcHYqMkHsPbjZG//I0j+qtcTUpfeAm5+Xsu59ptJaE2LFlK/gKQwzVYxN2hvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fHQ6Y515; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4ab86a29c98so9341cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 09:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1752684279; x=1753289079; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pr8a/nJOVFR57sghJCiLBSkmwBnZhxckE8XZH1omS8M=;
-        b=fHQ6Y5157xD0wxpr686hYE8yTu0t+esN/CUvuJ6OVtzvxUQEcWmBZPw7Yc5Vyel9j4
-         hmLioYJf93F5P52/1Ccqj6CxT2uuOPA0fFV+783WEvxPCsw+kqEffPxZifpxzDPocdye
-         uHckitaeOUT2+Lb4N1L8enqVi4Y4JqnXIhhlxrUjO0X11XBRXDdAWelrQipvBsdxAbKk
-         yp5ikSMcraf0uqwz9goQ5gROJ5LF+TbeCsZJwfONk33tqItMXxTADS6dlUGFZGG9S1ZB
-         P+1OH6D9eUNIbraRh75eoTHpGeFPy7M+jjV316stjkqakX65S1SsW/u0ty9KDwuH8lpE
-         M3zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752684279; x=1753289079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pr8a/nJOVFR57sghJCiLBSkmwBnZhxckE8XZH1omS8M=;
-        b=d+kKCqganMlqO2C77C6K7JIhgnhMIEGPRvqbglpm9GiDqOezSq/WNEO36Dxu12LWtE
-         c4Hnhf/XIsFpgqT4VRrXiOpLxJy3A65+Sn1r7ASG9Abx7v/1TiNwcFcMAHp7Zz1c1htx
-         5G2AZ+EcGZ+UkoE/krfHfaNdWDL5bf9gbFslvDY5uGx5JQXMZl0GraN/V3JYO2naljAh
-         moBtoMUlLVWd2OrQntdjia5zZ90NhoFty3Avhf5Yfx9wBAZbtqWO1mqgqqDOiqjP6d3+
-         HfKi3bkhoswZ1zlfweGbD+hI93Q4eXZal2qpjWi2hPwuGeBC1LmuOKLri2LiXmURP1xG
-         hUQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXdM0zWWg2TeqLGLIdJ5ErNhhKAU4qKlUBdxFAOILe3Gilkpz5IGN/5/AJSYwMifTqJtDECb2sWJUJx0nZ4qBA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+6DjF7vd8OgX4a0kyR6Xg5CIy8wldqF8/l9GViLxGoR0XVFli
-	Jk7or7FQ21s3xgcSyDxS8Wtx/dJEMtq9FJq8q/u+AcAao9YLTb2n60VfXzZtGZc5SzCkYfcwh7d
-	Ufy2KqedT5Khskkkc3Ob1/uyuyFr6OdtrEduMBfH8
-X-Gm-Gg: ASbGnctnuOcShmp0XDpdt5Bj+wjE0A3pKJg20rbL0c1Dy978qkG+qaOj2RDd9jh4uAl
-	UvrVrXxgbvxClhd0Im3yxCIKFUUyWFgVU6p5kQdo5Tk5aF8iy72RWhx2Mqj6qevj5eM4iIN6n47
-	jAg3gsKlfM3pmWBUy1wVdXW+gWeGhrh09VEq2kirohWIVPYRQFhHnqtEeZtYdCluwMGtmftvdsO
-	CBwtwPp5E+XcQJmSMRMrAK94lX7FkBcxxY=
-X-Google-Smtp-Source: AGHT+IG+ehUHUArWfJVHAp+OzP5yI34RIUIkLr/x2rq0UCqLebrEaMpW3c9cNGLeH/AY19CGqIu0yi2B1KpZNp4PSHU=
-X-Received: by 2002:a05:622a:a38d:b0:479:1958:d81a with SMTP id
- d75a77b69052e-4ab953aab8amr3489301cf.6.1752684278667; Wed, 16 Jul 2025
- 09:44:38 -0700 (PDT)
+	s=arc-20240116; t=1752687339; c=relaxed/simple;
+	bh=H4tA6tL4LcE8mwAvrvhVgrsW7SeJrgIEWaM1hmXloM8=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=nn0ZSlVZHZ+mOtzw55oAViyeD4WAcXbGEt13EWFiA8YrN5XVIyACodAiNrXW4TI0ueYjbxZU7bWKBnGInURgBhVYpOPQrprxhsoxF/LR1stDKPQrrO/OqttSOEfUkL8Vtbkd+MVDVjuf+6HlxTwBv+SM8cVCEb283Ij/NQxTmH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=e9GdmvUZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Nzqt6DUZ; arc=none smtp.client-ip=103.168.172.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 7945A14000B1;
+	Wed, 16 Jul 2025 13:35:36 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Wed, 16 Jul 2025 13:35:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
+	 t=1752687336; x=1752773736; bh=hWHT0GcvfH2wLJvLNk5Y1/WWazVacGml
+	q8wDdUqXph4=; b=e9GdmvUZ5xYH933973IHi7dlIjUDQgi/aEKqvO/VYh2nwBr7
+	5MkyHQJq44zSFN8Chc5mc9lNt/glUe1naLTo+uW+E+6vojfBNz37LqodNIEVpu7x
+	+YbJwXL8dqget6nFLwSoEzFn5A8eEoyGLto37jXzqVkQ1SkigUWbN4YKTgPWp9DO
+	iLulbNygSZjy489nwVNyLj+pkdWzR2Cte99U1KozTq4SeQ+ahMNdG1G19Gx441sp
+	MaUaccdf0dGHmyHJCmVY/APswVhFuflrIdmeIpVRzF+W/B1Voh42kthfIdc/BzB8
+	UUiVXok+207tVG7kOwI9xwKT3dEHZJWpaERQ1w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1752687336; x=
+	1752773736; bh=hWHT0GcvfH2wLJvLNk5Y1/WWazVacGmlq8wDdUqXph4=; b=N
+	zqt6DUZGmu+wMyGp8pOQZOERFFCrqrm34jgtZVNOo9nGDBasXRdtSc3zr0/xPZ3u
+	XcNIWSjiKCOkF297eTcHOdqnnIGK/s7f7JP3mO7Ioo72CSvKUOOOxBVb9AwZDSFa
+	ZhW1Oe81nT+2GpovTHAzhQ2ocB5TkHXbs3TTE20XCJ+aJ7z4NaKH0mGqMAIExvXW
+	SG6umm+geDyqMfuCwwylUH0rN3K4hNSOhmW8MTGLeZFPxf/6KaMfVmAEbu9Hmx52
+	MaAMPLmMuvCoCJFbUW09+bn99SsmBReMpLvgN9YknRZY8QMLTs4MwknNJ2Gmgq4k
+	Wk5jMqYZ+0Pie2gUYe04g==
+X-ME-Sender: <xms:5-J3aC8cIY7OMYxib3pwBGQG-B_gZElujadRBuO_F3-hWlmyGJ0VwQ>
+    <xme:5-J3aNJHWMo5_TqfWtXDYdhi8xLReOuK7Tq-hfG5UNpbHqzw52iviufk7mLCiBp2p
+    4pi34U15jNE29-V9C8>
+X-ME-Received: <xmr:5-J3aPi-HxyGPNDng1YJEW3bUHk02iEmROeSqA2RjGRmfRUAdnEhYmnxokIwu6W6iiTnog>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehkeefvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefhvfevufgjfhfogggtgfffkfesthhqredtredtjeenucfhrhhomheplfgrhicuggho
+    shgsuhhrghhhuceojhhvsehjvhhoshgsuhhrghhhrdhnvghtqeenucggtffrrghtthgvrh
+    hnpeegfefghffghffhjefgveekhfeukeevffethffgtddutdefffeuheelgeelieeuhfen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjvhesjh
+    hvohhssghurhhghhdrnhgvthdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhp
+    ohhuthdprhgtphhtthhopehrrgiiohhrsegslhgrtghkfigrlhhlrdhorhhgpdhrtghpth
+    htohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehlihhuhhgr
+    nhhgsghinhesghhmrghilhdrtghomhdprhgtphhtthhopegvughumhgriigvthesghhooh
+    hglhgvrdgtohhmpdhrtghpthhtohephhhorhhmsheskhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdr
+    tghhpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomh
+X-ME-Proxy: <xmx:5-J3aB9BpxjoUDlbwEtXtoT9wwIvSuNPTG2W7lRzc-lgf8eBrqn7AA>
+    <xmx:5-J3aMMzuhNFWQJGNz9Bso9t5xwu_wj_2sb4hunQLJ9Q9pAxy0xRQw>
+    <xmx:5-J3aNBGdxtxmEl74q8fQFs9HSSyWmlYte-olD_IMsyazHXOyd0OKw>
+    <xmx:5-J3aINS0pCOrZr-HkJhaipv-r1qu8YX6WJCCWrYm2W44LOIaIQkUg>
+    <xmx:6OJ3aBygjsroqXGM--me2ep7lp6_y6DzecUgUROjFCneu7hns0Pb2KVT>
+Feedback-ID: i53714940:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 16 Jul 2025 13:35:35 -0400 (EDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+	id 5F47D9FC97; Wed, 16 Jul 2025 10:35:34 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+	by famine.localdomain (Postfix) with ESMTP id 5E37D9FB65;
+	Wed, 16 Jul 2025 10:35:34 -0700 (PDT)
+From: Jay Vosburgh <jv@jvosburgh.net>
+To: Hangbin Liu <liuhangbin@gmail.com>
+cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+    "David S. Miller" <davem@davemloft.net>,
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+    Paolo Abeni <pabeni@redhat.com>,
+    Nikolay Aleksandrov <razor@blackwall.org>,
+    Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 1/2] bonding: update ntt to true in passive mode
+In-reply-to: <aHd4ddc1YzeT1lN3@fedora>
+References: <20250709090344.88242-1-liuhangbin@gmail.com> <20250709090344.88242-2-liuhangbin@gmail.com> <765825.1752639589@famine> <aHd4ddc1YzeT1lN3@fedora>
+Comments: In-reply-to Hangbin Liu <liuhangbin@gmail.com>
+   message dated "Wed, 16 Jul 2025 10:01:25 -0000."
+X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250716030557.1547501-1-surenb@google.com> <20250716030557.1547501-2-surenb@google.com>
- <f041e611-9d28-4a30-8515-97080f742360@redhat.com> <ac9c5912-e19e-4653-9b6c-e68ca3a058f7@lucifer.local>
- <CAJuCfpE+Nj9rQL=_pOtnAXSDnd9xEZt=r-j7guJnkXSy8wFNrw@mail.gmail.com>
-In-Reply-To: <CAJuCfpE+Nj9rQL=_pOtnAXSDnd9xEZt=r-j7guJnkXSy8wFNrw@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 16 Jul 2025 09:44:27 -0700
-X-Gm-Features: Ac12FXwMqgI_Oz3q7ppzUAq9TXL2qBpNKmPsgpp-I-Bf07X3_mrNGzIRSlP7_bg
-Message-ID: <CAJuCfpHQf6oVx44VaiyVOb4ABAkhGe8NAN+juU-q99OhJCFhUQ@mail.gmail.com>
-Subject: Re: [PATCH v7 1/7] selftests/proc: add /proc/pid/maps tearing from
- vma split test
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
-	vbabka@suse.cz, peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, 
-	mhocko@kernel.org, paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
-	brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com, 
-	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de, 
-	andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
-	tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+Date: Wed, 16 Jul 2025 10:35:34 -0700
+Message-ID: <807057.1752687334@famine>
 
-On Wed, Jul 16, 2025 at 7:20=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Wed, Jul 16, 2025 at 3:50=E2=80=AFAM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> >
-> > On Wed, Jul 16, 2025 at 12:44:23PM +0200, David Hildenbrand wrote:
-> > > On 16.07.25 05:05, Suren Baghdasaryan wrote:
-> > > > The /proc/pid/maps file is generated page by page, with the mmap_lo=
-ck
-> > > > released between pages.  This can lead to inconsistent reads if the
-> > > > underlying vmas are concurrently modified. For instance, if a vma s=
-plit
-> > > > or merge occurs at a page boundary while /proc/pid/maps is being re=
-ad,
-> > > > the same vma might be seen twice: once before and once after the ch=
-ange.
-> > > > This duplication is considered acceptable for userspace handling.
-> > > > However, observing a "hole" where a vma should be (e.g., due to a v=
-ma
-> > > > being replaced and the space temporarily being empty) is unacceptab=
-le.
-> > > >
-> > > > Implement a test that:
-> > > > 1. Forks a child process which continuously modifies its address sp=
-ace,
-> > > > specifically targeting a vma at the boundary between two pages.
-> > > > 2. The parent process repeatedly reads the child's /proc/pid/maps.
-> > > > 3. The parent process checks the last vma of the first page and
-> > > > the first vma of the second page for consistency, looking for the
-> > > > effects of vma splits or merges.
-> > > >
-> > > > The test duration is configurable via the -d command-line parameter
-> > > > in seconds to increase the likelihood of catching the race conditio=
-n.
-> > > > The default test duration is 5 seconds.
-> > > >
-> > > > Example Command: proc-maps-race -d 10
-> > > >
-> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > >
-> > > Why is this selftest not making use of any kselftest framework?
-> > >
-> > > I'm sure there is a very good reason :)
->
-> It used to be a part of proc-pid-vm.c and after the split I kept its
-> overall structure. I'll look into using the kselftest framework.
-> Thanks!
->
-> > >
-> > > Reading assert() feels very weird compared to other selftests.
-> >
-> > Sorry to meta-review via your review again David :P
-> >
-> > But just to say tools/testing/selftests/kselftest_harness.h is really g=
-ood, and
-> > makes life simple. See tools/testing/selftests/mm/guard-regions.c for a=
-n example
-> > of how they can be used - pretty straightforward and avoids a lot of ks=
-elftest
-> > boilerplate.
->
-> Thanks for the pointers. I need to figure out a way to pass
-> command-line parameters to my test. Maybe I can use fixtures for
-> that... Let me read more about it.
+Hangbin Liu <liuhangbin@gmail.com> wrote:
 
-Ok, I think I'll use environment variables to set verbosity and test
-duration. That seems like the cleanest approach.
-
+>On Tue, Jul 15, 2025 at 09:19:49PM -0700, Jay Vosburgh wrote:
+>> Hangbin Liu <liuhangbin@gmail.com> wrote:
+>>=20
+>> >When lacp_active is set to off, the bond operates in passive mode, mean=
+ing it
+>> >will only "speak when spoken to." However, the current kernel implement=
+ation
+>> >only sends an LACPDU in response when the partner's state changes.
+>> >
+>> >In this situation, once LACP negotiation succeeds, the actor stops send=
+ing
+>> >LACPDUs until the partner times out and sends an "expired" LACPDU.
+>> >This leads to endless LACP state flapping.
+>>=20
+>> 	From the above, I suspect our implementation isn't compliant to
+>> the standard.  Per IEEE 802.1AX-2014 6.4.1 LACP design elements:
+>>=20
+>> c)	Active or passive participation in LACP is controlled by
+>> 	LACP_Activity, an administrative control associated with each
+>> 	Aggregation Port, that can take the value Active LACP or Passive
+>> 	LACP. Passive LACP indicates the Aggregation Port=E2=80=99s preference
+>> 	for not transmitting LACPDUs unless its Partner=E2=80=99s control value
+>> 	is Active LACP (i.e., a preference not to speak unless spoken
+>> 	to). Active LACP indicates the Aggregation Port=E2=80=99s preference to
 >
-> >
-> > >
-> > > --
-> > > Cheers,
-> > >
-> > > David / dhildenb
-> > >
-> > >
+>OK, so this means the passive side should start sending LACPDUs when recei=
+ve
+>passive actor's LACPDUs, with the slow/fast rate based on partner's rate?
+
+	Did you mean "receive active actor's LACPDUs"?
+
+	Regardless, the standard requires both sides to initiate
+periodic LACPDU transmission if either or both enable LACP_Activity in
+their LACPDUs.
+
+	So, if a received LACPDU from the partner has LACP_Activity set,
+then, yes, we would enable periodic LACPDU transmission, regardless of
+our local setting of "lacp_active" / LACP_Activity.
+
+>Hmm, then when we should stop sending LACPDUs? After
+>port->sm_mux_state =3D=3D AD_MUX_DETACHED ?
+
+	We stop sending when the criteria for NO_PERIODIC in the
+periodic state machine is met (IEEE 802.1AX-2014 6.4.13, Figure 6-19).
+
+	Practically speaking, this happens when a BEGIN event occurs,
+due to a port being reinitialized.  The ad_mux_machine() will set the
+mux state to AD_MUX_DETACHED when BEGIN occurs, so I don't think we need
+to test for DETACHED explicitly.
+
+	The NO_PERIODIC check is the first "if" block in
+ad_periodic_machine() that I referenced below.  The code currently tests
+all of the criteria from Figure 6-19, but adds a test of "!lacp_active",
+which is why I suspect that removing that bit and managing the
+lacp_active option via the LACP_Activity in the actor port state would
+do the right thing.
+
+	-J
+
+>> 	participate in the protocol regardless of the Partner=E2=80=99s control
+>> 	value (i.e., a preference to speak regardless).
+>>=20
+>> d)	Periodic transmission of LACPDUs occurs if the LACP_Activity
+>> 	control of either the Actor or the Partner is Active LACP. These
+>> 	periodic transmissions will occur at either a slow or fast
+>> 	transmission rate depending upon the expressed LACP_Timeout
+>> 	preference (Long Timeout or Short Timeout) of the Partner
+>> 	System.
+>>=20
+>> 	Which, in summary, means that if either end (actor or partner)
+>> has LACP_Activity set, both ends must send periodic LACPDUs at the rate
+>> specified by their respective partner's LACP_Timeout rate.
+>>=20
+>> >To avoid this, we need update ntt to true once received an LACPDU from =
+the
+>> >partner, ensuring an immediate reply. With this fix, the link becomes s=
+table
+>> >in most cases, except for one specific scenario:
+>> >
+>> >Actor: lacp_active=3Doff, lacp_rate=3Dslow
+>> >Partner: lacp_active=3Don, lacp_rate=3Dfast
+>> >
+>> >In this case, the partner expects frequent LACPDUs (every 1 second), bu=
+t the
+>> >actor only responds after receiving an LACPDU, which, in this setup, the
+>> >partner sends every 30 seconds due to the actor's lacp_rate=3Dslow. By =
+the time
+>> >the actor replies, the partner has already timed out and sent an "expir=
+ed"
+>> >LACPDU.
+>>=20
+>> 	Presuming that I'm correct that we're not implementing 6.4.1 d),
+>> above, correctly, then I don't think this is a proper fix, as it kind of
+>> band-aids over the problem a bit.
+>>=20
+>> 	Looking at the code, I suspect the problem revolves around the
+>> "lacp_active" check in ad_periodic_machine():
+>>=20
+>> static void ad_periodic_machine(struct port *port, struct bond_params *b=
+ond_params)
+>> {
+>> 	periodic_states_t last_state;
+>>=20
+>> 	/* keep current state machine state to compare later if it was changed =
+*/
+>> 	last_state =3D port->sm_periodic_state;
+>>=20
+>> 	/* check if port was reinitialized */
+>> 	if (((port->sm_vars & AD_PORT_BEGIN) || !(port->sm_vars & AD_PORT_LACP_=
+ENABLED) || !port->is_enabled) ||
+>> 	    (!(port->actor_oper_port_state & LACP_STATE_LACP_ACTIVITY) && !(por=
+t->partner_oper.port_state & LACP_STATE_LACP_ACTIVITY)) ||
+>> 	    !bond_params->lacp_active) {
+>> 		port->sm_periodic_state =3D AD_NO_PERIODIC;
+>> 	}
+>>=20
+>> 	In the above, because all the tests are chained with ||, the
+>> lacp_active test overrides the two correct-looking
+>> LACP_STATE_LACP_ACTIVITY tests.
+>>=20
+>> 	It looks like ad_initialize_port() always sets
+>> LACP_STATE_LACP_ACTIVITY in the port->actor_oper_port_state, and nothing
+>> ever clears it.
+>>=20
+>> 	Thinking out loud, perhaps this could be fixed by
+>>=20
+>> 	a) remove the test of bond_params->lacp_active here, and,
+>>=20
+>> 	b) The lacp_active option setting controls whether LACP_ACTIVITY
+>> is set in port->actor_oper_port_state.
+>>=20
+>> 	Thoughts?
+>
+>As the upper question. When should we stop sending the LACPDUs?
+>
+>Thanks
+>Hangbin
+
+---
+	-Jay Vosburgh, jv@jvosburgh.net
+
 
