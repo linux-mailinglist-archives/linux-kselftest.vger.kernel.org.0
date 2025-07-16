@@ -1,165 +1,138 @@
-Return-Path: <linux-kselftest+bounces-37420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1907DB0749C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 13:23:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 181B3B07586
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 14:25:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18EDB5084DB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 11:23:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C75E1AA3D9E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 12:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D5A2F3622;
-	Wed, 16 Jul 2025 11:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB40C2F4A0B;
+	Wed, 16 Jul 2025 12:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="grOv132y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QgJX3G9s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234352F2C5B;
-	Wed, 16 Jul 2025 11:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB4428C00D;
+	Wed, 16 Jul 2025 12:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752665020; cv=none; b=bnAa8l9osp1kSTpPaBOQvGifcZWgABQ9OI86fEexDWhK+nB7MrdLdxaDKD67/Y0jSAYbRqjfr2x10Ia4fZoiTv3R3ZpYKTvOiWypjkBQReH/IFj8l3JRmaGNoyQHvVHPRCOCxuvLHPQE6BXDfzZVoLUvW1j9Qk1veBZ5ART9YOI=
+	t=1752668714; cv=none; b=O+241b7cU1w/cd/L8BCCk13KYjfITSO/9MjPfEadDmLrMWA+83fCDYY7LgPOSdam9Plt5q5iAY34bZj55C8eplQV3zVLNNNTWOj9z3NdUcbqNf8ynMpCY7crYpGhHZVxpoNzhkyxQbr+oI6hrmijUVnJ35jux3EyIotiDVdRgZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752665020; c=relaxed/simple;
-	bh=JwC/4hGvFPQBmgJVtmn3OCu1w02qve0nG2/V6tlCorE=;
+	s=arc-20240116; t=1752668714; c=relaxed/simple;
+	bh=HnQuLJNDufQH+NJlbQVdqNkKpgfX14m2aqApSayEub4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WJD6OGi8IwIQfooCxGJQ4+1UPsBTPN+ffu2UwxaBMapozBssV7cXw/B3mWw1Js7qEQWKIPij4JGGrbUtOvmXQJz0Q887mohYGn4yTMnKum8szrmd/1Xe7BcyG90/x3qfOKWQkFcx+wGHJEwgpzIrlwLfh3OGzwDBx5FbS2gHtVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=grOv132y; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2350fc2591dso7657765ad.1;
-        Wed, 16 Jul 2025 04:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752665017; x=1753269817; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yJkYWyPvLjCn2J/SM7UK6829MtGCaON4tomRphmbLQw=;
-        b=grOv132y04vvcRmcXw6QjjGWVLbGNbm9cCFIkpuMPRY49rKt76LyWmedQDHfTZjHnm
-         grgBjucWMs0Mz9gazbkdOu0EPm4ZrsZVnobQqUOurbUMpMKJMiXqTIq/oEqDGY18v3Uc
-         HcQoerowSH25uEVJnprMiRNL2xTcdffxUuM8U+Zbq9zl5aVHJ9o31RUaOw5lo2Tgz7z+
-         yIYDLXWF1Iw7AivX0XcHJHQK0lzVlBaANF13+oudo3S3++dOEXzhQb10EPAJMUyW9QDo
-         cXr/rber7igHPVh0HcKvrqxPhhGKmE4wWipbLP8q0M7vvlUnSfLcM4cUXHLMNhdoSv4/
-         wDug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752665017; x=1753269817;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yJkYWyPvLjCn2J/SM7UK6829MtGCaON4tomRphmbLQw=;
-        b=fFD+tnY/UfSb5vfZvsTDDlx/GqR309iqWa4/kKXJRwSbGtcpCbmZGuQPCQj9i+e4d/
-         0n4FSl19UbjYu/4piz5Ao1xvhVAE0KtcE0FrqWKzuoJ3uKu4LBuJ6HN8P7EYEGWXVI2o
-         OTdeZSkqRQD3Kq44Gv0GfsQ7Y7fAP09UjlT57MV5jO+zEqKhyO51JnTSU1iXxmXXSGIk
-         9/dklotcVVpj/Otqu+TsY8XsWawWr3tG/tKN50K1Tnb/oRq7tlYBQzgzP+Fx11LfDzfN
-         iPrD21VI+NQiMRU1XsZ2EF7j/nCrIFb8C70DmH10DFHJIGaTaGlcusmK7Y5fMMSYkUiu
-         fN2A==
-X-Forwarded-Encrypted: i=1; AJvYcCWRevB+0l03dBQewqm2jE41fQb3zA5QG5sTxcnCA7COMz0MjXFF2iEQ+tYx6b04v4OZjbtSPopRhxSVwiEiOiZ6@vger.kernel.org, AJvYcCWlfNRT0/KKf4P8IBLIa6fYEr7D59E7dDAwj/jkOFL8R3cly4CKqbQH6MAADOyLnNeamasgAjnKaabqfyc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5kRJW52uesbuSF5HM3PwiUauX3Scv8dQ8GZj009tEMzQQcYMF
-	gvoujJcJl1KAHxVJf908tCq0avSQ54D2QDcgYo0uCti+bB8BlYrgjopv
-X-Gm-Gg: ASbGncsqTqH5kkex49kuWhEFqJ4IDYtS8ayl4D0QQmgUTrcaXNZtl73hqvhGdjlJ5OH
-	c7uGzEEzgzHvvLugMPRwFka0lt37PJDlxOuRwB4UrOeJuxp4FKTBAvPa99FsEnfWwicT7n2aCJV
-	6g6c9pkbeGAJBi6AesFt3qC4fOXibwgHJTJQ4I92Sw2bWCXc8SiMR78Ksr3EWug5pbOD4woDzQJ
-	Jlccn6TT2gEE8tP4RgUOgy+HRD9DpF1gYTMfi/vk82KqGI3VXdlMgyBk9N26qZqCOTY7S19nORf
-	Y/l76PcjKjCt5N8ICCG4YbeJF36g3dyeawwbkeP5xPIvZ5dIIyK/D1Mfk5SuqUDmZBa47/hMIdi
-	yGBtd7e0jQp9xeaGEieb8BcO7vlGuYSL6c2b8Hg==
-X-Google-Smtp-Source: AGHT+IFQlVfWg5grXxTKOXvjVYbxEblgPRnNt7BWpI4bJ24g6U/kAc+R3I6KUTpxqgyu7ycqjlCKqQ==
-X-Received: by 2002:a17:902:f78a:b0:235:f091:11e5 with SMTP id d9443c01a7336-23e249b1b20mr38051645ad.10.1752665017153;
-        Wed, 16 Jul 2025 04:23:37 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de42864a8sm124970345ad.42.2025.07.16.04.23.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jul 2025 04:23:36 -0700 (PDT)
-Date: Wed, 16 Jul 2025 11:23:28 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 2/2] selftests: bonding: add test for passive LACP
- mode
-Message-ID: <aHeLsNbhvqTFge3J@fedora>
-References: <20250709090344.88242-1-liuhangbin@gmail.com>
- <20250709090344.88242-3-liuhangbin@gmail.com>
- <6d4bbed3-472f-4002-abb9-47edf7743779@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RPRZcXpqRcTTtVDsb8TfLfHD6vLeKygCf342fs6mbXdufu2Th1V99+GeEVFe5/ttVUyQF67aUYLmy/M8z+x8O2n8cN96yYNQ/DpKfFndR5QZq5tp0A1tKeoz+0CHV2lNrBONdC/U2ja+nWmQBlB+MVlx/vddQsS+tKb+BUEjxDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QgJX3G9s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5AE5C4CEF0;
+	Wed, 16 Jul 2025 12:25:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752668714;
+	bh=HnQuLJNDufQH+NJlbQVdqNkKpgfX14m2aqApSayEub4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QgJX3G9spBWVSY9bG71ob2ZdWIzMqINBff/MyCdEsAXrwOch57QR2aWxrKym9gciS
+	 CBHU2pYV6dwDYQZnptW+cK//5/KsuSwlgF3tKa/v2XAM9N0qdzYDRt7Q71aLzbPMIX
+	 BTtX6PMwdPaepW5PYcwf+OIVjqHEfw5jxIUUcE8w9M/7cAGgJ1OmAylteTWXr8JGbl
+	 JwdslBkcElxlRgDIbn0Mf29UYeI4cMfr6O3RqFJU1YIiNsc702r+jss9RXIrj9ZnIe
+	 NV5wqTm2rAZkyyGX6BTctfD5e3pdKHBTAvvNj8Bz0EzjrG9iS7bD8YLSj5l49e/fCX
+	 IsmbUVLNbBsZw==
+Date: Wed, 16 Jul 2025 13:25:06 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andy Lutomirski <luto@kernel.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+	Richard Cochran <richardcochran@gmail.com>,
+	Christopher Hall <christopher.s.hall@intel.com>,
+	Miroslav Lichvar <mlichvar@redhat.com>,
+	Werner Abt <werner.abt@meinberg-usa.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Kurt Kanzenbach <kurt@linutronix.de>,
+	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
+Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
+ clock_gettime() helpers
+Message-ID: <6bee5ae0-2a9e-4793-a5bd-9e6c72b03f27@sirena.org.uk>
+References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
+ <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
+ <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
+ <CGME20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2@eucas1p1.samsung.com>
+ <e8c6b9a7-eaa6-4947-98e1-9d6fecc958d4@samsung.com>
+ <20250709092958-37148883-ed89-40fe-8cd5-ded5dd60957e@linutronix.de>
+ <eb5feef3-0a7d-438c-9dbb-00d1d72fad66@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rZ9x4sZFElGFq5dB"
 Content-Disposition: inline
-In-Reply-To: <6d4bbed3-472f-4002-abb9-47edf7743779@redhat.com>
+In-Reply-To: <eb5feef3-0a7d-438c-9dbb-00d1d72fad66@samsung.com>
+X-Cookie: Trouble always comes at the wrong time.
 
-On Tue, Jul 15, 2025 at 11:37:54AM +0200, Paolo Abeni wrote:
-> On 7/9/25 11:03 AM, Hangbin Liu wrote:
-> > Add a selftest to verify bonding behavior when lacp_active is set to off.
-> > 
-> > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> > ---
-> >  .../drivers/net/bonding/bond_passive_lacp.sh  | 21 +++++
-> >  .../drivers/net/bonding/bond_topo_lacp.sh     | 77 +++++++++++++++++++
-> >  2 files changed, 98 insertions(+)
-> >  create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-> >  create mode 100644 tools/testing/selftests/drivers/net/bonding/bond_topo_lacp.sh
-> 
-> New test should be listed in the relevant makefile
 
-Ah, yes, I forgot this.
+--rZ9x4sZFElGFq5dB
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > diff --git a/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-> > new file mode 100755
-> > index 000000000000..4cf8a5999aaa
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-> > @@ -0,0 +1,21 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# Testing if bond works with lacp_active = off
-> > +
-> > +lib_dir=$(dirname "$0")
-> > +source ${lib_dir}/bond_topo_lacp.sh
-> 
-> shellcheck is not super happy about 'source' usage:
-> 
-> In bond_passive_lacp.sh line 7:
-> source ${lib_dir}/bond_topo_lacp.sh
-> ^-- SC3046 (warning): In POSIX sh, 'source' in place of '.' is undefined.
-> ^-- SC3051 (warning): In POSIX sh, 'source' in place of '.' is undefined.
-> 
-> either switch to '. ' or use bash instead of 'sh'.
+On Wed, Jul 09, 2025 at 10:04:21AM +0200, Marek Szyprowski wrote:
+> On 09.07.2025 09:34, Thomas Wei=DFschuh wrote:
+> > On Tue, Jul 08, 2025 at 05:49:18PM +0200, Marek Szyprowski wrote:
 
-OK, I will fix this and other warns.
+> > This fix looks correct to me.
 
-Thanks
-Hangbin
-> 
-> > +lacp_bond_reset "${c_ns}" "lacp_active off"
-> > +# make sure the switch state is not expired [A,T,G,S,Ex]
-> > +if slowwait 15 ip netns exec ${s_ns} grep -q 'port state: 143' /proc/net/bonding/bond0; then
-> 
-> Shellcheck wants double quote everywhere. Since in many cases (all the
-> blamed ones in this patch) we know the variable is really a single word,
-> I think you could simply disable the warning with:
-> 
-> #shellcheck disable=SC2086
-> 
-> (same in the other test file)
-> 
-> > +	RET=1
-> > +else
-> > +	RET=0
-> > +fi
-> 
-> /P
-> 
+> > tglx:
+
+> > Are you going to fold the fix into the commit or do you want a proper p=
+atch?
+
+> > Marek:
+
+> > If a new patch is required, do you want to send it? You found and fixed=
+ the
+> > issue after all. If not, I'll take care of it.
+
+> If it is possible to fold it into original patch then go ahead, it would=
+=20
+> make less noise imho. If you need a formal patch, I can send it in a few=
+=20
+> minutes.
+
+This issue has been present in -next for a week and is causing a bunch
+of disruption to tests that end up relying on the vDSO - do we have any
+news on getting a fix merged?  Perhaps it makes sense for Marek to just
+send his patch so that it's there if needed?
+
+--rZ9x4sZFElGFq5dB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmh3miIACgkQJNaLcl1U
+h9AwsQf8Dh4Am3MMQ0T4kXwpbSzQlrBQ4irGhUtIF5FnACyGfWqHDPzRIY90+ktY
+swfIUjZlYKOGsj4YFd0rx2Bvz7iqtVIaBWbDvwSLZHn9QSwBrWV/+p4tb+z7BZCv
+CHvdRfuI4lshyLOAV/kRok5EZIIJo7NjT7DmNTlB6ihRNhPPyEL2SNnSYuUBf7z0
+0zixH/gSQcD/7J13PVFQywUxWp3c3h6mhQF+ulqEMBI7H4y/EqrvgVkFFx+Od0kt
+LVx2o34PMyloMfc63TnCSYJPGZTpYfmAl/aXeoZ2uPekpvhwG2KlIIlEz0cVUKQl
+/dVL2JSUa+QaMUyxqvPtOobl6/XukQ==
+=5BAm
+-----END PGP SIGNATURE-----
+
+--rZ9x4sZFElGFq5dB--
 
