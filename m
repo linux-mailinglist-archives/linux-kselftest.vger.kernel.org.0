@@ -1,495 +1,190 @@
-Return-Path: <linux-kselftest+bounces-37438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78081B078AA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 16:55:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56296B078FD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 17:04:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72A043BB5C3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 14:54:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29DC67AD33F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 14:55:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F38112620FC;
-	Wed, 16 Jul 2025 14:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6A52620FC;
+	Wed, 16 Jul 2025 14:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xfleh06H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n1qYKzn0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAEDD2236E3;
-	Wed, 16 Jul 2025 14:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465B4199EAD;
+	Wed, 16 Jul 2025 14:55:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752677600; cv=none; b=YW1t87m3mrE82HryStScEBSrqvIozXXjm9tkfroAusiScbWzYj8+J9iKLRF5mvp4ROtJstlZUUA4ZQkmxPcyWie9gHfymK7HHTpayYjqrFzxxHJTeabSUKRMKcbuD4NLGQ51a8JTpceUtzUaBEOLcamRsvsdzwBOqLGopf+RhkA=
+	t=1752677730; cv=none; b=kyCVrH6mWT2ERHc+4ks2i/ruJV0DeaWilROvElMzsrR66FgHloFtR8Hauuft5xwbYrEXMzj7YXGW9L9tqmfIik4WFfOGpUlgeXKcMqdxX1T8sTP8+HLp/HBSO1h6MwP2OaH1EamypmNYVYbkwmYqrMz8peG2D/Nwh5hkaXZax0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752677600; c=relaxed/simple;
-	bh=tjBIkOcDJ6yyvvaX5mZQqHQR0lbb8AXk9MaeiLCxRm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aO2vCG46da9cmFEThwu+LAlYWgRgbJ8TLthtP61KpXctOVrMXhz58+QrbL8ek7tYnbhp1+vgSNk3nJcE+PDoYoS1TilcVqG9Q6iaFNWHKvfiY/OWNpXLeKOqT2ePL7K1MTv+M4TLCcPBE8nZkV4vh0BaEUJgnNEQbUG3dHu6dLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xfleh06H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F2BCC4CEEB;
-	Wed, 16 Jul 2025 14:53:20 +0000 (UTC)
+	s=arc-20240116; t=1752677730; c=relaxed/simple;
+	bh=SSReJtbBfV0veA8X/z68WJ/t9z1BMBY8PzraC8gu5yU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YJ/lZPEz3i4An0Uk5TQUWg36DBj2oxqtcG5eJ9SQtNFkIOcKCilRGdkgKpW8ZkM6rql9oeum8pGOiu4rG3J60pehOK9tq0RLKAq605gfLVrMR5IBKTMOdvQkKE3fkVSeQBW6Jg7wHvvO/e0yPTnbX4Gxp3umNiipLU0ZMK1D5RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n1qYKzn0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CF0C4CEE7;
+	Wed, 16 Jul 2025 14:55:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752677600;
-	bh=tjBIkOcDJ6yyvvaX5mZQqHQR0lbb8AXk9MaeiLCxRm0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xfleh06HWjK38dlpTLwEBM/U8phRilJ6y/3k8wR9d4JJXQFemrJ2Xb0R0zVaIGZh1
-	 kWGVMB/F0zWXm5rFwDGB+sB9c2C0T05NzkAQOxB+gWm8s1DdisllH1sjZro8tsuZKU
-	 ujNNgUeOjGkUG2Q9uHtPVxYsBjNaE62eBA0WKyX7KFdLqNH5c5WmE3Q2QtFnaT0UiW
-	 sbYUMZykz5r1EvhTzS6llVSYhH1OoTu0pZRRv0Zck5FDMtvrZy79VLqXrXB9+0zYyJ
-	 bhIaH2PrIwiO2WYXdrcznOyohLgGHotkmwfPIDlPjc/LcHgcMPjziU4aFYz+6xbYRc
-	 gAumSafVIV8MQ==
-Date: Wed, 16 Jul 2025 07:53:19 -0700
-From: Kees Cook <kees@kernel.org>
-To: Tiffany Yang <ynaffit@google.com>
-Cc: linux-kernel@vger.kernel.org, kernel-team@android.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Carlos Llamas <cmllamas@google.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH v3 6/6] binder: encapsulate individual alloc test cases
-Message-ID: <202507160743.15E8044@keescook>
-References: <20250714185321.2417234-1-ynaffit@google.com>
- <20250714185321.2417234-7-ynaffit@google.com>
+	s=k20201202; t=1752677729;
+	bh=SSReJtbBfV0veA8X/z68WJ/t9z1BMBY8PzraC8gu5yU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=n1qYKzn03Wc9+yFw8JqV8ahTpJfCeQG/DtQ5e2WZ88DPzmzCRj+ykJSkoeW+SpwS7
+	 JZEDMBT4m7b+zEYGViiu2FcdKozcNKUlVr6w1O8VHOn+eOp0JCcazI01fzJYKP/Xc3
+	 MOGB8czviloprHFvxcq2yoBfc4y0ebCHr778FkCfINmVk5/CaRqLp1PufSbRz4ZKEc
+	 CRGiwrDGavzrXSO8yV/olz/dVVkZdgueCNxwNY2l6BoEurYqxINmsamtC5rgeKTcFv
+	 ZBkHRH3l5k1lHEI+G4O7ZJ0+67vIoGFQ48lRwkkONFTQvaFBOG642e1yUrBb62ajxE
+	 j9tSK4qF1O7XA==
+Message-ID: <ae6d333a-f3b2-4463-b930-b4caf56b39f8@kernel.org>
+Date: Wed, 16 Jul 2025 16:55:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250714185321.2417234-7-ynaffit@google.com>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net v2 0/2] selftests: mptcp: connect: cover alt modes
+Content-Language: en-GB, fr-BE
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Christoph Paasch <cpaasch@openai.com>, Davide Caratti <dcaratti@redhat.com>,
+ Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20250715-net-mptcp-sft-connect-alt-v2-0-8230ddd82454@kernel.org>
+ <20250715185308.2ad30691@kernel.org> <20250716072602.386a8963@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20250716072602.386a8963@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 14, 2025 at 11:53:19AM -0700, Tiffany Yang wrote:
-> Each case tested by the binder allocator test is defined by 3 parameters:
-> the end alignment type of each requested buffer allocation, whether those
-> buffers share the front or back pages of the allotted address space, and
-> the order in which those buffers should be released. The alignment type
-> represents how a binder buffer may be laid out within or across page
-> boundaries and relative to other buffers, and it's used along with
-> whether the buffers cover part (sharing the front pages) of or all
-> (sharing the back pages) of the vma to calculate the sizes passed into
-> each test.
+Hi Jakub,
+
+On 16/07/2025 16:26, Jakub Kicinski wrote:
+> On Tue, 15 Jul 2025 18:53:08 -0700 Jakub Kicinski wrote:
+>> On Tue, 15 Jul 2025 20:43:27 +0200 Matthieu Baerts (NGI0) wrote:
+>>> mptcp_connect.sh can be executed manually with "-m <MODE>" and "-C" to
+>>> make sure everything works as expected when using "mmap" and "sendfile"
+>>> modes instead of "poll", and with the MPTCP checksum support.
+>>>
+>>> These modes should be validated, but they are not when the selftests are
+>>> executed via the kselftest helpers. It means that most CIs validating
+>>> these selftests, like NIPA for the net development trees and LKFT for
+>>> the stable ones, are not covering these modes.
+>>>
+>>> To fix that, new test programs have been added, simply calling
+>>> mptcp_connect.sh with the right parameters.
+>>>
+>>> The first patch can be backported up to v5.6, and the second one up to
+>>> v5.14.  
+>>
+>> Looks like the failures that Paolo flagged yesterday:
+>>
+>> https://lore.kernel.org/all/a7a89aa2-7354-42c7-8219-99a3cafd3b33@redhat.com/
+>>
+>> are back as soon as this hit NIPA :(
+>>
+>> https://netdev.bots.linux.dev/contest.html?branch=net-next-2025-07-16--00-00&executor=vmksft-mptcp&pw-n=0&pass=0
+>>
+>> No idea why TBH, the tests run sequentially and connect.sh run before
+>> any of the new ones.
+
+And just to be sure, no CPU or IO overload at that moment? I didn't see
+such errors reported by our CI, but I can try to reproduce them locally
+in different conditions.
+
+>> I'm gonna leave it in patchwork in case the next run is clean,
+>> please use pw-bot to discard them if they keep failing.
+
+Oops, sorry I forgot to reply: when I checked in the morning, the last
+two builds were clean. I wanted to check the next one, then I forgot :)
+
+> It failed again on the latest run, in a somewhat more concerning way :(
 > 
-> binder_alloc_test_alloc recursively generates each possible arrangement
-> of alignment types and then tests that the binder_alloc code tracks pages
-> correctly when those buffers are allocated and then freed in every
-> possible order at both ends of the address space. While they provide
-> comprehensive coverage, they are poor candidates to be represented as
-> KUnit test cases, which must be statically enumerated. For 5 buffers and
-> 5 end alignment types, the test case array would have 750,000 entries.
-> This change structures the recursive calls into meaningful test cases so
-> that failures are easier to interpret.
+> # (duration 30279ms) [FAIL] file received by server does not match (in, out):
+> # -rw------- 1 root root 5171914 Jul 16 05:24 /tmp/tmp.W2c96hxSIz
+> # Trailing bytes are: 
+> # w,ѐ)-rw------- 1 root root 5166208 Jul 16 05:24 /tmp/tmp.s33PNcrN6M
+> # Trailing bytes are: 
+> # (<v /&^<rnFsaC7INFO: with peek mode: saveAfterPeek
 > 
-> Signed-off-by: Tiffany Yang <ynaffit@google.com>
-> ---
-> v2:
-> * Fix build warning Reported-by: kernel test robot <lkp@intel.com>
->   Closes: https://lore.kernel.org/oe-kbuild-all/202506281959.hfOTIUjS-lkp@intel.com/
-> ---
->  drivers/android/tests/binder_alloc_kunit.c | 234 ++++++++++++++++-----
->  1 file changed, 181 insertions(+), 53 deletions(-)
-> 
-> diff --git a/drivers/android/tests/binder_alloc_kunit.c b/drivers/android/tests/binder_alloc_kunit.c
-> index 9e185e2036e5..02aa4a135eb5 100644
-> --- a/drivers/android/tests/binder_alloc_kunit.c
-> +++ b/drivers/android/tests/binder_alloc_kunit.c
-> @@ -24,7 +24,16 @@ MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
->  #define BUFFER_NUM 5
->  #define BUFFER_MIN_SIZE (PAGE_SIZE / 8)
->  
-> -static int binder_alloc_test_failures;
-> +#define FREESEQ_BUFLEN ((3 * BUFFER_NUM) + 1)
-> +
-> +#define ALIGN_TYPE_STRLEN (12)
-> +
-> +#define ALIGNMENTS_BUFLEN (((ALIGN_TYPE_STRLEN + 6) * BUFFER_NUM) + 1)
-> +
-> +#define PRINT_ALL_CASES (0)
-> +
-> +/* 5^5 alignment combinations * 2 places to share pages * 5! free sequences */
-> +#define TOTAL_EXHAUSTIVE_CASES (3125 * 2 * 120)
->  
->  /**
->   * enum buf_end_align_type - Page alignment of a buffer
-> @@ -86,18 +95,49 @@ enum buf_end_align_type {
->  	LOOP_END,
->  };
->  
-> -static void pr_err_size_seq(struct kunit *test, size_t *sizes, int *seq)
-> +static const char *const buf_end_align_type_strs[LOOP_END] = {
-> +	[SAME_PAGE_UNALIGNED] = "SP_UNALIGNED",
-> +	[SAME_PAGE_ALIGNED]   = " SP_ALIGNED ",
-> +	[NEXT_PAGE_UNALIGNED] = "NP_UNALIGNED",
-> +	[NEXT_PAGE_ALIGNED]   = " NP_ALIGNED ",
-> +	[NEXT_NEXT_UNALIGNED] = "NN_UNALIGNED",
-> +};
-> +
-> +struct binder_alloc_test_case_info {
-> +	size_t *buffer_sizes;
-> +	int *free_sequence;
-> +	char alignments[ALIGNMENTS_BUFLEN];
-> +	bool front_pages;
-> +};
-> +
-> +static void stringify_free_seq(struct kunit *test, int *seq, char *buf,
-> +			       size_t buf_len)
->  {
-> +	size_t bytes = 0;
->  	int i;
->  
-> -	kunit_err(test, "alloc sizes: ");
-> -	for (i = 0; i < BUFFER_NUM; i++)
-> -		pr_cont("[%zu]", sizes[i]);
-> -	pr_cont("\n");
-> -	kunit_err(test, "free seq: ");
-> -	for (i = 0; i < BUFFER_NUM; i++)
-> -		pr_cont("[%d]", seq[i]);
-> -	pr_cont("\n");
-> +	for (i = 0; i < BUFFER_NUM; i++) {
-> +		bytes += snprintf(buf + bytes, buf_len - bytes, "[%d]", seq[i]);
-> +		if (bytes >= buf_len)
-> +			break;
-> +	}
-> +	KUNIT_EXPECT_LT(test, bytes, buf_len);
-> +}
-> +
-> +static void stringify_alignments(struct kunit *test, int *alignments,
-> +				 char *buf, size_t buf_len)
-> +{
-> +	size_t bytes = 0;
-> +	int i;
-> +
-> +	for (i = 0; i < BUFFER_NUM; i++) {
-> +		bytes += snprintf(buf + bytes, buf_len - bytes, "[ %d:%s ]", i,
-> +				  buf_end_align_type_strs[alignments[i]]);
-> +		if (bytes >= buf_len)
-> +			break;
-> +	}
-> +
-> +	KUNIT_EXPECT_LT(test, bytes, buf_len);
->  }
+> https://netdev-3.bots.linux.dev/vmksft-mptcp/results/211121/4-mptcp-connect-sh/stdout
 
-For both stringify functions, snprintf is potentially unsafe. In the
-spirit of recent string API discussions, please switch to using a
-seq_buf:
+I see, the error can be a bit scary :)
+
+If I'm not mistaken, there was a poll timeout error before. When it is
+detected, the test is stopped. After each test, even in case of errors,
+the received file is compared with the sending one. So here, this
+concerning error is expected.
+
+Anyway, even if the errors are not caused by this series, I think it is
+better to delay these patches while we are investigating that:
+
+pw-bot: cr
 
 
-static void stringify_free_seq(struct kunit *test, int *seq, seq_buf *buf)
-{
-	unsigned int i;
+> BTW feeding the random data into hexdump-like formatter seems
+> advisable? :P
 
-	for (i = 0; i < BUFFER_NUM; i++)
-		seq_buf_printf(buf, "[%d]", seq[i])
-	KUNIT_EXPECT_FALSE(test, seq_buf_has_overflowed(buf));
-}
-...
+It is just to check that the CIs can correctly parse random data :-D
 
-	DECLARE_SEQ_BUF(freeseq_buf, FREESEQ_BUFLEN);
-	...
-	stringify_free_seq(test, tc->free_sequence, &freeseq_buf);
-
-
-
->  
->  static bool check_buffer_pages_allocated(struct kunit *test,
-> @@ -124,28 +164,30 @@ static bool check_buffer_pages_allocated(struct kunit *test,
->  	return true;
->  }
->  
-> -static void binder_alloc_test_alloc_buf(struct kunit *test,
-> -					struct binder_alloc *alloc,
-> -					struct binder_buffer *buffers[],
-> -					size_t *sizes, int *seq)
-> +static unsigned long binder_alloc_test_alloc_buf(struct kunit *test,
-> +						 struct binder_alloc *alloc,
-> +						 struct binder_buffer *buffers[],
-> +						 size_t *sizes, int *seq)
->  {
-> +	unsigned long failures = 0;
->  	int i;
->  
->  	for (i = 0; i < BUFFER_NUM; i++) {
->  		buffers[i] = binder_alloc_new_buf(alloc, sizes[i], 0, 0, 0);
->  		if (IS_ERR(buffers[i]) ||
-> -		    !check_buffer_pages_allocated(test, alloc, buffers[i], sizes[i])) {
-> -			pr_err_size_seq(test, sizes, seq);
-> -			binder_alloc_test_failures++;
-> -		}
-> +		    !check_buffer_pages_allocated(test, alloc, buffers[i], sizes[i]))
-> +			failures++;
->  	}
-> +
-> +	return failures;
->  }
->  
-> -static void binder_alloc_test_free_buf(struct kunit *test,
-> -				       struct binder_alloc *alloc,
-> -				       struct binder_buffer *buffers[],
-> -				       size_t *sizes, int *seq, size_t end)
-> +static unsigned long binder_alloc_test_free_buf(struct kunit *test,
-> +						struct binder_alloc *alloc,
-> +						struct binder_buffer *buffers[],
-> +						size_t *sizes, int *seq, size_t end)
->  {
-> +	unsigned long failures = 0;
->  	int i;
->  
->  	for (i = 0; i < BUFFER_NUM; i++)
-> @@ -153,17 +195,19 @@ static void binder_alloc_test_free_buf(struct kunit *test,
->  
->  	for (i = 0; i <= (end - 1) / PAGE_SIZE; i++) {
->  		if (list_empty(page_to_lru(alloc->pages[i]))) {
-> -			pr_err_size_seq(test, sizes, seq);
->  			kunit_err(test, "expect lru but is %s at page index %d\n",
->  				  alloc->pages[i] ? "alloc" : "free", i);
-> -			binder_alloc_test_failures++;
-> +			failures++;
->  		}
->  	}
-> +
-> +	return failures;
->  }
->  
-> -static void binder_alloc_test_free_page(struct kunit *test,
-> -					struct binder_alloc *alloc)
-> +static unsigned long binder_alloc_test_free_page(struct kunit *test,
-> +						 struct binder_alloc *alloc)
->  {
-> +	unsigned long failures = 0;
->  	unsigned long count;
->  	int i;
->  
-> @@ -177,27 +221,70 @@ static void binder_alloc_test_free_page(struct kunit *test,
->  			kunit_err(test, "expect free but is %s at page index %d\n",
->  				  list_empty(page_to_lru(alloc->pages[i])) ?
->  				  "alloc" : "lru", i);
-> -			binder_alloc_test_failures++;
-> +			failures++;
->  		}
->  	}
-> +
-> +	return failures;
->  }
->  
-> -static void binder_alloc_test_alloc_free(struct kunit *test,
-> +/* Executes one full test run for the given test case. */
-> +static bool binder_alloc_test_alloc_free(struct kunit *test,
->  					 struct binder_alloc *alloc,
-> -					 size_t *sizes, int *seq, size_t end)
-> +					 struct binder_alloc_test_case_info *tc,
-> +					 size_t end)
->  {
-> +	unsigned long pages = PAGE_ALIGN(end) / PAGE_SIZE;
->  	struct binder_buffer *buffers[BUFFER_NUM];
-> -
-> -	binder_alloc_test_alloc_buf(test, alloc, buffers, sizes, seq);
-> -	binder_alloc_test_free_buf(test, alloc, buffers, sizes, seq, end);
-> +	unsigned long failures;
-> +	bool failed = false;
-> +
-> +	failures = binder_alloc_test_alloc_buf(test, alloc, buffers,
-> +					       tc->buffer_sizes,
-> +					       tc->free_sequence);
-> +	failed = failed || failures;
-> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
-> +			    "Initial allocation failed: %lu/%u buffers with errors",
-> +			    failures, BUFFER_NUM);
-> +
-> +	failures = binder_alloc_test_free_buf(test, alloc, buffers,
-> +					      tc->buffer_sizes,
-> +					      tc->free_sequence, end);
-> +	failed = failed || failures;
-> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
-> +			    "Initial buffers not freed correctly: %lu/%lu pages not on lru list",
-> +			    failures, pages);
->  
->  	/* Allocate from lru. */
-> -	binder_alloc_test_alloc_buf(test, alloc, buffers, sizes, seq);
-> -	if (list_lru_count(alloc->freelist))
-> -		kunit_err(test, "lru list should be empty but is not\n");
-> -
-> -	binder_alloc_test_free_buf(test, alloc, buffers, sizes, seq, end);
-> -	binder_alloc_test_free_page(test, alloc);
-> +	failures = binder_alloc_test_alloc_buf(test, alloc, buffers,
-> +					       tc->buffer_sizes,
-> +					       tc->free_sequence);
-> +	failed = failed || failures;
-> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
-> +			    "Reallocation failed: %lu/%u buffers with errors",
-> +			    failures, BUFFER_NUM);
-> +
-> +	failures = list_lru_count(alloc->freelist);
-> +	failed = failed || failures;
-> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
-> +			    "lru list should be empty after reallocation but still has %lu pages",
-> +			    failures);
-> +
-> +	failures = binder_alloc_test_free_buf(test, alloc, buffers,
-> +					      tc->buffer_sizes,
-> +					      tc->free_sequence, end);
-> +	failed = failed || failures;
-> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
-> +			    "Reallocated buffers not freed correctly: %lu/%lu pages not on lru list",
-> +			    failures, pages);
-> +
-> +	failures = binder_alloc_test_free_page(test, alloc);
-> +	failed = failed || failures;
-> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
-> +			    "Failed to clean up allocated pages: %lu/%lu pages still installed",
-> +			    failures, (alloc->buffer_size / PAGE_SIZE));
-> +
-> +	return failed;
->  }
->  
->  static bool is_dup(int *seq, int index, int val)
-> @@ -213,24 +300,44 @@ static bool is_dup(int *seq, int index, int val)
->  
->  /* Generate BUFFER_NUM factorial free orders. */
->  static void permute_frees(struct kunit *test, struct binder_alloc *alloc,
-> -			  size_t *sizes, int *seq, int index, size_t end)
-> +			  struct binder_alloc_test_case_info *tc,
-> +			  unsigned long *runs, unsigned long *failures,
-> +			  int index, size_t end)
->  {
-> +	bool case_failed;
->  	int i;
->  
->  	if (index == BUFFER_NUM) {
-> -		binder_alloc_test_alloc_free(test, alloc, sizes, seq, end);
-> +		char freeseq_buf[FREESEQ_BUFLEN];
-> +
-> +		case_failed = binder_alloc_test_alloc_free(test, alloc, tc, end);
-> +		*runs += 1;
-> +		*failures += case_failed;
-> +
-> +		if (case_failed || PRINT_ALL_CASES) {
-> +			stringify_free_seq(test, tc->free_sequence, freeseq_buf,
-> +					   FREESEQ_BUFLEN);
-> +			kunit_err(test, "case %lu: [%s] | %s - %s - %s", *runs,
-> +				  case_failed ? "FAILED" : "PASSED",
-> +				  tc->front_pages ? "front" : "back ",
-> +				  tc->alignments, freeseq_buf);
-> +		}
-> +
->  		return;
->  	}
->  	for (i = 0; i < BUFFER_NUM; i++) {
-> -		if (is_dup(seq, index, i))
-> +		if (is_dup(tc->free_sequence, index, i))
->  			continue;
-> -		seq[index] = i;
-> -		permute_frees(test, alloc, sizes, seq, index + 1, end);
-> +		tc->free_sequence[index] = i;
-> +		permute_frees(test, alloc, tc, runs, failures, index + 1, end);
->  	}
->  }
->  
-> -static void gen_buf_sizes(struct kunit *test, struct binder_alloc *alloc,
-> -			  size_t *end_offset)
-> +static void gen_buf_sizes(struct kunit *test,
-> +			  struct binder_alloc *alloc,
-> +			  struct binder_alloc_test_case_info *tc,
-> +			  size_t *end_offset, unsigned long *runs,
-> +			  unsigned long *failures)
->  {
->  	size_t last_offset, offset = 0;
->  	size_t front_sizes[BUFFER_NUM];
-> @@ -238,31 +345,45 @@ static void gen_buf_sizes(struct kunit *test, struct binder_alloc *alloc,
->  	int seq[BUFFER_NUM] = {0};
->  	int i;
->  
-> +	tc->free_sequence = seq;
->  	for (i = 0; i < BUFFER_NUM; i++) {
->  		last_offset = offset;
->  		offset = end_offset[i];
->  		front_sizes[i] = offset - last_offset;
->  		back_sizes[BUFFER_NUM - i - 1] = front_sizes[i];
->  	}
-> +	back_sizes[0] += alloc->buffer_size - end_offset[BUFFER_NUM - 1];
-> +
->  	/*
->  	 * Buffers share the first or last few pages.
->  	 * Only BUFFER_NUM - 1 buffer sizes are adjustable since
->  	 * we need one giant buffer before getting to the last page.
->  	 */
-> -	back_sizes[0] += alloc->buffer_size - end_offset[BUFFER_NUM - 1];
-> -	permute_frees(test, alloc, front_sizes, seq, 0,
-> +	tc->front_pages = true;
-> +	tc->buffer_sizes = front_sizes;
-> +	permute_frees(test, alloc, tc, runs, failures, 0,
->  		      end_offset[BUFFER_NUM - 1]);
-> -	permute_frees(test, alloc, back_sizes, seq, 0, alloc->buffer_size);
-> +
-> +	tc->front_pages = false;
-> +	tc->buffer_sizes = back_sizes;
-> +	permute_frees(test, alloc, tc, runs, failures, 0, alloc->buffer_size);
->  }
->  
->  static void gen_buf_offsets(struct kunit *test, struct binder_alloc *alloc,
-> -			    size_t *end_offset, int index)
-> +			    size_t *end_offset, int *alignments,
-> +			    unsigned long *runs, unsigned long *failures,
-> +			    int index)
->  {
->  	size_t end, prev;
->  	int align;
->  
->  	if (index == BUFFER_NUM) {
-> -		gen_buf_sizes(test, alloc, end_offset);
-> +		struct binder_alloc_test_case_info tc = {0};
-> +
-> +		stringify_alignments(test, alignments, tc.alignments,
-> +				     ALIGNMENTS_BUFLEN);
-> +
-> +		gen_buf_sizes(test, alloc, &tc, end_offset, runs, failures);
->  		return;
->  	}
->  	prev = index == 0 ? 0 : end_offset[index - 1];
-> @@ -276,7 +397,9 @@ static void gen_buf_offsets(struct kunit *test, struct binder_alloc *alloc,
->  		else
->  			end += BUFFER_MIN_SIZE;
->  		end_offset[index] = end;
-> -		gen_buf_offsets(test, alloc, end_offset, index + 1);
-> +		alignments[index] = align;
-> +		gen_buf_offsets(test, alloc, end_offset, alignments, runs,
-> +				failures, index + 1);
->  	}
->  }
->  
-> @@ -328,10 +451,15 @@ static void binder_alloc_exhaustive_test(struct kunit *test)
->  {
->  	struct binder_alloc_test *priv = test->priv;
->  	size_t end_offset[BUFFER_NUM];
-> +	int alignments[BUFFER_NUM];
-> +	unsigned long failures = 0;
-> +	unsigned long runs = 0;
->  
-> -	gen_buf_offsets(test, &priv->alloc, end_offset, 0);
-> +	gen_buf_offsets(test, &priv->alloc, end_offset, alignments, &runs,
-> +			&failures, 0);
->  
-> -	KUNIT_EXPECT_EQ(test, binder_alloc_test_failures, 0);
-> +	KUNIT_EXPECT_EQ(test, runs, TOTAL_EXHAUSTIVE_CASES);
-> +	KUNIT_EXPECT_EQ(test, failures, 0);
->  }
->  
->  /* ===== End test cases ===== */
-> -- 
-> 2.50.0.727.gbf7dc18ff4-goog
-> 
-
-Otherwise looks good to me.
-
+Cheers,
+Matt
 -- 
-Kees Cook
+Sponsored by the NGI0 Core fund.
+
 
