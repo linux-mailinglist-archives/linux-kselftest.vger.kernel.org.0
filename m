@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-37416-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37417-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55D43B073BA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 12:42:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6055EB073CE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 12:44:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B9D65837F2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 10:42:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 781D1189BDE5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 10:45:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AFCA2F363F;
-	Wed, 16 Jul 2025 10:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C402E424D;
+	Wed, 16 Jul 2025 10:44:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ORJW5SIO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cG4PqXW2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224F02E36EE
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 10:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB41F2BE647
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 10:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752662525; cv=none; b=AGtqZcFR/vlqYruroUMVksUoqol5CJqR/2TkZAc7547DhCSgUSCqBP4KXzPZe12tiddGfkOTv2ryHj8RaFRsW8H4Ww0PfU06G++G98AR3nlfB7OopBH0xQOHsB2ET3dertA5xyu/THf1emPaF8/+vjNJVK+slRBMWrqI1OBmI8c=
+	t=1752662672; cv=none; b=b/622Z+PyVVIa9K8u0v+MgnxoBbBw3HeW5opsA0uvE2uEQQIgZTROwwavywgs3hYtgx9/+VOcT+/ohwVPZChf2MKbfcCGit43ZJ77jBPq0V4fBTuJzKDUB28LZpZc/O6VScjF8BgIt+LuuSvnqjV2bidU1+GpTLPjqH8RLlZrkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752662525; c=relaxed/simple;
-	bh=t/j835raHd3VaE5W+kUfYlVRw+/b2dX64MqgC9/XWhc=;
+	s=arc-20240116; t=1752662672; c=relaxed/simple;
+	bh=BM2RWK92PKISCA1wSUFtzN01XGb8/Ifi8vvkpRHlV08=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ALixYOmok2rsQR+IhSPyqYLQ9Opu281/AU4wkhNM6FiyahGR2GyRBb/LbnQ8D+EaRmAswUVKxx406bMNUX0Kjqwjy5BNydFg0cXlBnliQh7Kb79yvAavf4whgij9FGSSpM6nWVHlHQFT1Sl8xo5tf9EHcz2S9w7VKezAEW95L6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ORJW5SIO; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=GBqA16x85YXGXBUuHvZ5EHJIoLItqLD6zmkvAm/OYvrKm6Sn3wtIkGa2+2OzPG+0h9gJfaUHrHbbQNlywN+lk6j/kZNJe4eXK5C50/aACvoE1XcKaprFjCskMZW0MQx/jqV6SFrzV6Tf1L682vMs+40w+lsx5mH7Dq4WrTICl+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cG4PqXW2; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752662521;
+	s=mimecast20190719; t=1752662668;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=KZvGvSA7aEFcJN8ESUaEjxX/jyrkl9OEvc1HbXBJCbA=;
-	b=ORJW5SIOvqfj7QUIz6GOoquZwEq8OZggRAPQDEkCa1HNv+z6tCVgfQuxFni2z8YgremFdm
-	u7GyszaeVXFx75o7HC+PDihzaPYsVnpKRs2HLIKjVaEXDom0ZvTW+kTfa8mUv8zk3lrpRp
-	yg35c+DWL9rd1EZ9/z4vvKLSidR3eq4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=H0DrpHFYox10/T2b5Nsf8Ll/oRGOI12jubzByP7raXI=;
+	b=cG4PqXW2SyF04gfzz0+6cbszuJZxchjTbE0+N0/oYTDB2LoKbtlFs0p0QzuSzNAXTGP56c
+	ndcEDauNFaY6ZbDIaZhZIn7o0xW9jo8mbm95qDfeT5cVxCdmeXT8b4yzvDcPtDbgLnagR2
+	qQf0YRTVK4ZbcSMkrT5WEwMLMhIsEng=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-139-vtzvA6K-OwKYtYyxIy_Csw-1; Wed, 16 Jul 2025 06:41:59 -0400
-X-MC-Unique: vtzvA6K-OwKYtYyxIy_Csw-1
-X-Mimecast-MFC-AGG-ID: vtzvA6K-OwKYtYyxIy_Csw_1752662519
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a58939191eso2505442f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 03:41:59 -0700 (PDT)
+ us-mta-136-enLmKVxeMC2cp5dKwMV4VA-1; Wed, 16 Jul 2025 06:44:27 -0400
+X-MC-Unique: enLmKVxeMC2cp5dKwMV4VA-1
+X-Mimecast-MFC-AGG-ID: enLmKVxeMC2cp5dKwMV4VA_1752662666
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a4f65a705dso4205373f8f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 03:44:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752662519; x=1753267319;
+        d=1e100.net; s=20230601; t=1752662666; x=1753267466;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=KZvGvSA7aEFcJN8ESUaEjxX/jyrkl9OEvc1HbXBJCbA=;
-        b=GWRxWxQg+hDKgzj1m4+7kENkYy3j7HFTDwCRHoJ3lDnBMJAvH5Rgob5H+BgxbX/9e6
-         WQD/44SygIl9R/iM28TDiJqYhnx9aOSLdTMF2tix8nWij8+knq7UkPjWm9PQUQUG1mH9
-         QDhRUdXXf+f8rMUWPeL9SbBlz2XI0hec8BV0BZAdBwSWy6x/ZIz+5SU0HHCYP1K3Gr4G
-         5no0xMAz/53JiJ4ESOG7q/RHCj29t23Z390vq2AuUtlMqQ415Kq/MHCH8Eah2Piwp5FS
-         031KicxKBGCgLLJCjyDc9ttj3/UCCLt1fYJ4oK9OA3epHkeIBgHpICa+f/aAXrt4+Gvg
-         p6Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCUK4RnWGDfBuxbuPzTYfKsfDt3be7qVvbpZ559BrsDbs2EeqHZkGLQy5lA9g/RBU8aYAmGCJclGykr0EKmZMTI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9Unu30Lx/ijPhYaSh2MEbxNa37xxsc7+I7vL2+vbdqguawPlC
-	YnAM/OCDAAJrUWaH/jGN0KrdWzMgKobqIYhZMWCV2iDjdZhU23zUQ+TEzbV9U+rR3bs+BmGc7xa
-	gMTB1aoW8GP6G1NZ5jsKbRV/dG+pN4QA8deqmwJqbzDPfsk9KavPMuwNhxMvg4xPrg0BtfQ==
-X-Gm-Gg: ASbGncuNXYfdbrHz3oQ06BCckR/HVG4QkUYQdbJwi7m4yxvMxaKat6pjVmgDiXwUYyJ
-	EnizYsQeadvrwPEtSH7YxZESTQAA1G4LV9HXVZ9jvE/Px2xwdRQYLGW3bTIMB7VQNVMGS4B5l6q
-	bS/IjyApurweJuQ+qFTAR6VJKUwVqs4q8BsKloMBz2qlfW7oZZBJ2oXkjrWatEr5Xw38xllqzEc
-	BgHqqrOt/6nnUIqAKr1sdWNekjL3oRYoOG8VcejyBZ4fmhw8LIno/6rvHbb7mOk4AIz40nCwJ7L
-	tMP5RO0WHXNvLIosk+ughqs5+hUwtLVsz3qOEC0+aTm0eyLeVDnMeBjC5DYrfeih7GRscrp8dkg
-	M3L2eEvyc5A2pvO84Mvu1vQgl/olU+6l/em68tySYt6xqvzvzCQFipYlwqXpG7xfEeB0=
-X-Received: by 2002:a5d:6f15:0:b0:3a5:3b56:974e with SMTP id ffacd0b85a97d-3b60e4c51admr1372870f8f.6.1752662518794;
-        Wed, 16 Jul 2025 03:41:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHjjhAa5WDswEwk0O9wV4JS64Gunk3AYrtcQlTaN7TDrrKomRBIYR6DAIAzxO0Qptve83NGNQ==
-X-Received: by 2002:a5d:6f15:0:b0:3a5:3b56:974e with SMTP id ffacd0b85a97d-3b60e4c51admr1372841f8f.6.1752662518390;
-        Wed, 16 Jul 2025 03:41:58 -0700 (PDT)
+        bh=H0DrpHFYox10/T2b5Nsf8Ll/oRGOI12jubzByP7raXI=;
+        b=mTBwfgJEQ4GLoTI1KACwC14wsOlu6JCU0T9K4/DxHhhs8HhXw4zvrHGQ3aIc6zA9aL
+         rKtmkgA/2eDU4uLqXMeGsfw9AaV70Furf5riERqlgMElz++kz/shO5PvNIBjaGKpOatI
+         lJteX9W4sosWn0dwWmAtcSbji17uoCUg2OpEzOivvgUkI94Fj4u9gCJsIgJctvqIyu1g
+         iH2NNiSocRgeWnEL3UOVxQ9DQ2OKLDZJ2aAiSw0VZhNW08LoiVcnj/E/rk5V7NBWXfwQ
+         P2RLXHbmviQ8YYeS+Hx+pdDiq0w0ABPhVI7XmLsbmBTQ56ISI5xnF6U9orTnwOyRjk28
+         88rg==
+X-Forwarded-Encrypted: i=1; AJvYcCVwCGoAtP6q4XQDmHmHYjF2l1x1Z6xbEVs/rWGlBbh957Bi/0RMn0vG+9RlavvUlQ+gDrdMOc5sLoDsdJkoOn0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDum74BO1H97fO2KeGYFkjtKbXFHbq5D/rORCqruWt+V+fF5q9
+	3+8ZoBR0CD057EImkZOhkwUWZnbbAMirnpsCSwVoadytTlcGVBZAASn0DFhmAJeYmC44nS49X8k
+	vY2GJcm0KzYsoI4fqHcaBcFLggcGHSD8S2GrK2/y3xxsyb+mVCizEpWRUSCBueBSOkkNoPQ==
+X-Gm-Gg: ASbGncujg6L3HucRl6fB1dGO/RJ38UgMgV2NLqKMidVS0IAfsANOVcaABu9ue4B3kVV
+	XWtgydDyteAFPrrEbGvkW/urQiYc7YV4n/AFrqgXT/YWkzmFWqxyTaG5mumrgsVtNwT20hfV261
+	LNMu0k84h78UBOVp6/4s4cM+KfNeTyxlhVSrh7di5Am9PgK2OK0qSccfW7bzSJtV905DNVIMhmY
+	92lQTelwIdesx6fIxBWIpWM5JWic3omAjdU4LVwPGFE5a5g6kJQpxOY1C9iMjILOzkESX8J/2So
+	pnPNDPhy16bvaVfqsCMyeh/I5cGPhOsieBx6xm82mU0sq8v+rwNWpXjP25FBcsh0AziBLhApNQa
+	RcFK08Sg+QbHrPjrZzP+h8SZtj0JLYdGzEYRi163EHIyDFzWrkDq6NIIJMprSg/G2N0o=
+X-Received: by 2002:a05:6000:3cb:b0:3a4:e629:6504 with SMTP id ffacd0b85a97d-3b60e5246a5mr1354311f8f.49.1752662666356;
+        Wed, 16 Jul 2025 03:44:26 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEWua8wVVW9bKulQ0ObMl//Eo2vwfpPgEkZ+TqYQycNsZHWW4bjQYPv7qQsGur2N+pi10FAMQ==
+X-Received: by 2002:a05:6000:3cb:b0:3a4:e629:6504 with SMTP id ffacd0b85a97d-3b60e5246a5mr1354275f8f.49.1752662665920;
+        Wed, 16 Jul 2025 03:44:25 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f1d:ed00:1769:dd7c:7208:eb33? (p200300d82f1ded001769dd7c7208eb33.dip0.t-ipconnect.de. [2003:d8:2f1d:ed00:1769:dd7c:7208:eb33])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e0dbddsm17753487f8f.63.2025.07.16.03.41.56
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4562eb63551sm16517585e9.24.2025.07.16.03.44.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jul 2025 03:41:57 -0700 (PDT)
-Message-ID: <13a09edb-4fba-4887-a809-acd0745dc261@redhat.com>
-Date: Wed, 16 Jul 2025 12:41:56 +0200
+        Wed, 16 Jul 2025 03:44:25 -0700 (PDT)
+Message-ID: <f041e611-9d28-4a30-8515-97080f742360@redhat.com>
+Date: Wed, 16 Jul 2025 12:44:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,8 +90,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 6/7] fs/proc/task_mmu: remove conversion of seq_file
- position to unsigned
+Subject: Re: [PATCH v7 1/7] selftests/proc: add /proc/pid/maps tearing from
+ vma split test
 To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
 Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, vbabka@suse.cz,
  peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org,
@@ -103,7 +103,7 @@ Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, vbabka@suse.cz,
  linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
  linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 References: <20250716030557.1547501-1-surenb@google.com>
- <20250716030557.1547501-7-surenb@google.com>
+ <20250716030557.1547501-2-surenb@google.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -151,25 +151,41 @@ Autocrypt: addr=david@redhat.com; keydata=
  WBe5lqcozu9LpNDH/brVSzHCSb7vjNGvvSVESDuoiHK8gNlf0v+epy5WYd7CGAgODPvDShGN
  g3eXuA==
 Organization: Red Hat
-In-Reply-To: <20250716030557.1547501-7-surenb@google.com>
+In-Reply-To: <20250716030557.1547501-2-surenb@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 16.07.25 05:05, Suren Baghdasaryan wrote:
-> Back in 2.6 era, last_addr used to be stored in seq_file->version
-> variable, which was unsigned long. As a result, sentinels to represent
-> gate vma and end of all vmas used unsigned values. In more recent
-> kernels we don't used seq_file->version anymore and therefore conversion
-> from loff_t into unsigned type is not needed. Similarly, sentinel values
-> don't need to be unsigned. Remove type conversion for set_file position
-> and change sentinel values to signed.
+> The /proc/pid/maps file is generated page by page, with the mmap_lock
+> released between pages.  This can lead to inconsistent reads if the
+> underlying vmas are concurrently modified. For instance, if a vma split
+> or merge occurs at a page boundary while /proc/pid/maps is being read,
+> the same vma might be seen twice: once before and once after the change.
+> This duplication is considered acceptable for userspace handling.
+> However, observing a "hole" where a vma should be (e.g., due to a vma
+> being replaced and the space temporarily being empty) is unacceptable.
+> 
+> Implement a test that:
+> 1. Forks a child process which continuously modifies its address space,
+> specifically targeting a vma at the boundary between two pages.
+> 2. The parent process repeatedly reads the child's /proc/pid/maps.
+> 3. The parent process checks the last vma of the first page and
+> the first vma of the second page for consistency, looking for the
+> effects of vma splits or merges.
+> 
+> The test duration is configurable via the -d command-line parameter
+> in seconds to increase the likelihood of catching the race condition.
+> The default test duration is 5 seconds.
+> 
+> Example Command: proc-maps-race -d 10
 > 
 > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Why is this selftest not making use of any kselftest framework?
+
+I'm sure there is a very good reason :)
+
+Reading assert() feels very weird compared to other selftests.
 
 -- 
 Cheers,
