@@ -1,202 +1,317 @@
-Return-Path: <linux-kselftest+bounces-37408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF964B06F21
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 09:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BCF0B07094
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 10:30:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CD22503C2C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 07:37:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F174B50619D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 08:29:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 574B328C5AB;
-	Wed, 16 Jul 2025 07:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D90D42EBDF9;
+	Wed, 16 Jul 2025 08:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hK4Bw9jR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eUQHXOu4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB7D277C96;
-	Wed, 16 Jul 2025 07:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3552EACE1
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 08:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752651491; cv=none; b=nmSRc6BaRxaMZkDYlDZFw1s025IPTwPDnFXOPz4w1ZbmY8Hfy7pLycBPacihVCb28lSddQs3+3h89f5mj7b77T7LKNdCnYPzbJfA3ogFp9SGoTVxBgcyRc9sg1u9wTcRSnJv9L6PPEo/R3jO64OcsD22BbfPLsFKmWg8KGNrqUw=
+	t=1752654578; cv=none; b=mO8FWDIxSVesrwexUfBaFwPGAl5IQNTSvXi6aVrlVjT06FO8NGTh6N3Vc132VHVFG/uvjdUgOhOSAFz0fAyzs+3Vl/qZ4jcVhyhCmzfAseQVFZWr8vo/LZkzj30JyjHqcvlBHIFUKraN46Krjjrw+ZAtcC6qwwOkw+fUF6RyOjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752651491; c=relaxed/simple;
-	bh=H1UPlPEJREKcCU4RNh+fzA9yvu8XBt8zMrtL+6tBB84=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=h8Pkg86LbYeZHpaNEfr1ddswCQBfTLjUUhJlxi00r7wb43uF6y6FGw9j8Xm6zYtln6w8yhf/A+JVuGT1fYoCwQCGFmgUxomcopxMe7EJEUjUxpKMfk+8C4NEhhM9ZLE0do3EdrMJeBXmV4n4ZHr9rFrVv3pSLi1goBT1OqpOAcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hK4Bw9jR; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 525E1444FC;
-	Wed, 16 Jul 2025 07:37:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1752651481;
+	s=arc-20240116; t=1752654578; c=relaxed/simple;
+	bh=RXd93FrMXhD6nQlRw5UhfdK/Fc7hARdOf1IOkW55cdI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=oKwzTTV463+aPwWNUpr73WmfloL1Cb0eLXGfXzPak5AS7baqze9SefFIXN8p5+ciszPJh7olWmeqR8n0pX4kVSOHViyKMvWoBDClUtrLMz+9x2SqM1YTWKvzWTaK6UF5XiymW0vUU0seWpZvQQ3tXY8WE6ZNVej1J8Q63lLeQ9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eUQHXOu4; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1752654576;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dOqyrEbThUNu8kjTdwYn5QaXe7g+9MiXUqx8MLf4IGE=;
-	b=hK4Bw9jRab/6Cok5R5487qjPcLp0nbakwx4NSy24zxfV/91Rhu8aVKvFIXXiTcoS6bBLgI
-	jhDMkJbcEvaGsA5dojIPFtavKMWASnsdwGoTR7z7RtGCtF6yH8vkG3B4PHp0vNcKO67cqW
-	mr97hFp1KdYsxF6YS6IhPSV7YnIMqhruGQCj1p8cREYw1a3c2I3/1GzYzh6W8jWB8Mc5Hr
-	kkXUgWKMDSdiOBQqiin/iBNIe91TGzvDQP1voXbxPYBF2rtLgeufyYRIxBhfPsx//1mKuK
-	YyGXecYfTJah/5AL2Mhic946zySddzeg4EJPVTbCrWAhj7QDr+hmmFYuNq0qIg==
+	bh=Ffz+MsDbG4Gm1eq6U3qZmEbUy+20PK+4pgl+eju8lOY=;
+	b=eUQHXOu4i20AEyHyclVjvy0nsSasjq3HbXfCEaJVROZ7GNV9xx12K23+wKCE5ubpo9Oh+B
+	uBZMbVWdKjM8ig4e8KVAkhSGawLK2J2C0uY6BtC84cIsIcwzGeDUi2JpX0TJnUDgx4PY3X
+	lF81C04EAsPoNPV6IfEl71AMuyZd0uo=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-575-MfZI5zqiP1O4GgIYBVqIaQ-1; Wed, 16 Jul 2025 04:29:32 -0400
+X-MC-Unique: MfZI5zqiP1O4GgIYBVqIaQ-1
+X-Mimecast-MFC-AGG-ID: MfZI5zqiP1O4GgIYBVqIaQ_1752654571
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-456013b59c1so24099195e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 01:29:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752654571; x=1753259371;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ffz+MsDbG4Gm1eq6U3qZmEbUy+20PK+4pgl+eju8lOY=;
+        b=YvjeXfF0/VzCvyNqEhXWowT7V+TtLd+HZouBYAnoDxM1NRYN7rCsWJbGrNXDuy1rvA
+         7OS8tNh+QTgzPrHwocHVZ/Se72wIrvLeDyEPG9MBwicl09GLzRDmNI4nYk6JsHqTPJmq
+         oOmR34Ry7OFJqDVGcyR+xPTygK5fq3BVBEx6+1Qpy8Xl2JATf0XhWeBoYxQYlzrax/Ob
+         OPKKl8dx0rcvlUwiSpTCeV/pOntszB0XB4eH1fMcPg85lMetGhMOjwUWq4/VUKtH7P69
+         qzC7qXmMKb9S16Hsg47fYg94i9ybkjG7YIRjhTKAcZWtW05QKdNXgVil9fbIthNnNZPm
+         H1Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCUgyjH+TM+Vso8+qcvApQTA0Bobrr6maeT8gBULGEVlPwdczfcR9wmjSxAmuGbn3TfpWnRXP40LM4b+hXHy3mI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMpVceOqadP0gbcRZYnlv8Jmfpy69TCorzv0jwoh9n1yeijYvC
+	+sCAcQnJ+W2ZIZvIRxP6EImqHeY3QAIBgSTQDhjPLuGTGE0wDWrpypTK3SrGdBGS3VjZbhkcf99
+	oENiueROfGqBEH2HGWNz5Ta+PrrAi/ekdaYfX4wnw7wz5x9NzcIh8IhDN6bwOYh0fHA2zhA==
+X-Gm-Gg: ASbGncuBVJb7lC5swNZH9h5gRv9V26K34Q4afGzAfWrSe0m39rhMwTya4aFPxGpvypg
+	AQEyQbKwB1wUUlZpWNkUyELfIoWPhFTDPU5qnYV01hj7MGdaqO1TQjWZ10EKAY5c8z4Hs4ETQFO
+	1ctg6K4GiD6vTiNBgFiq7WyKPG+KpnT8SRswelxgJoEHFjE3Guk66Jbdd1q09e9NATyJ4q4Uxi+
+	NlRG5ia4kdDTonr+Dj41grM+HRBddEVWS19h+v6TVzbgK0MkWQJE8v4SOV80B/EbAJqRJCy5RQp
+	Lw2G6jbFOv84DqiWjwvIZt9oFmmjoA+941gyI8R6kNCYdbxbbRD/4vJOXyY+bbqacJGaUq2NAYT
+	lo5oqRaNyBfM=
+X-Received: by 2002:a05:6000:3113:b0:3a4:cb4f:ac2a with SMTP id ffacd0b85a97d-3b60e4c225fmr1234136f8f.21.1752654571245;
+        Wed, 16 Jul 2025 01:29:31 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHLiGksmElCYFmj6deUhZX70Iugn3d4BK4R3BF8eDMEuaPTLbQdgfRYY0kjWfYoS6K8Me3pxQ==
+X-Received: by 2002:a05:6000:3113:b0:3a4:cb4f:ac2a with SMTP id ffacd0b85a97d-3b60e4c225fmr1234094f8f.21.1752654570753;
+        Wed, 16 Jul 2025 01:29:30 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e1e2cfsm16961144f8f.75.2025.07.16.01.29.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Jul 2025 01:29:30 -0700 (PDT)
+Message-ID: <f60c5ef5-47b6-4132-bd7c-9707c81289a2@redhat.com>
+Date: Wed, 16 Jul 2025 10:29:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 net-next 11/15] tcp: accecn: AccECN option
+To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>,
+ "edumazet@google.com" <edumazet@google.com>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "corbet@lwn.net" <corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>,
+ "dsahern@kernel.org" <dsahern@kernel.org>,
+ "kuniyu@amazon.com" <kuniyu@amazon.com>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "dave.taht@gmail.com" <dave.taht@gmail.com>,
+ "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
+ "stephen@networkplumber.org" <stephen@networkplumber.org>,
+ "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
+ "jiri@resnulli.us" <jiri@resnulli.us>,
+ "davem@davemloft.net" <davem@davemloft.net>,
+ "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+ "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
+ "ast@fiberby.net" <ast@fiberby.net>,
+ "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+ "shuah@kernel.org" <shuah@kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
+ <ncardwell@google.com>,
+ "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>,
+ "g.white@cablelabs.com" <g.white@cablelabs.com>,
+ "ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
+ "mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
+ "cheshire@apple.com" <cheshire@apple.com>, "rs.ietf@gmx.at"
+ <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+ <Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
+References: <20250704085345.46530-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250704085345.46530-12-chia-yu.chang@nokia-bell-labs.com>
+ <0ddc5daf-adb4-4d97-9e8e-e60fdf9a007f@redhat.com>
+ <PAXPR07MB7984F66EB2AD576D2385C351A357A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <PAXPR07MB7984F66EB2AD576D2385C351A357A@PAXPR07MB7984.eurprd07.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 16 Jul 2025 09:37:59 +0200
-Message-Id: <DBDB3I5H4PW1.39J6V9NEXG2LI@bootlin.com>
-Subject: Re: [PATCH 1/2] bpf, arm64: remove structs on stack constraint
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "John Fastabend" <john.fastabend@gmail.com>, "KP Singh"
- <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
- <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Puranjay Mohan"
- <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Catalin
- Marinas" <catalin.marinas@arm.com>, "Mykola Lysenko" <mykolal@fb.com>,
- "Shuah Khan" <shuah@kernel.org>, <ebpf@linuxfoundation.org>, "Thomas
- Petazzoni" <thomas.petazzoni@bootlin.com>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- "bpf" <bpf@vger.kernel.org>, "linux-arm-kernel"
- <linux-arm-kernel@lists.infradead.org>, "LKML"
- <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Will Deacon"
- <will@kernel.org>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
-References: <20250709-arm64_relax_jit_comp-v1-0-3850fe189092@bootlin.com>
- <20250709-arm64_relax_jit_comp-v1-1-3850fe189092@bootlin.com>
- <aHZYcY_9JtK8so3C@willie-the-truck>
- <DBCONB7XHN7E.2UQMMG6RICMFY@bootlin.com>
- <aHZmOVpcoyTvGY1u@willie-the-truck>
- <CAADnVQK=x7p6zjvNbv0iqOfE73DM3j0nGSGrFX+pVExLMkJb=w@mail.gmail.com>
-In-Reply-To: <CAADnVQK=x7p6zjvNbv0iqOfE73DM3j0nGSGrFX+pVExLMkJb=w@mail.gmail.com>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehjedufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggfgtgffkffuvefhvffofhgjsehtqhertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrrocuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieekgeelvdekvdevhfdvgfeiffeuieelfffgleeivdelheelvdeiveetfedtiedtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdejpdhrtghpthhtoheprghlvgigvghirdhsthgrrhhovhhoihhtohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesi
- hhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhg
-X-GND-Sasl: alexis.lothore@bootlin.com
+Content-Transfer-Encoding: 7bit
 
-On Tue Jul 15, 2025 at 5:40 PM CEST, Alexei Starovoitov wrote:
-> On Tue, Jul 15, 2025 at 7:31=E2=80=AFAM Will Deacon <will@kernel.org> wro=
-te:
+On 7/15/25 4:49 PM, Chia-Yu Chang (Nokia) wrote:
+> On 7/4/25 10:53 AM, chia-yu.chang@nokia-bell-labs.com wrote:
+> [...]
+>>> +}
+>>> +
+>>> +/* Handles AccECN option ECT and CE 24-bit byte counters update into
+>>> + * the u32 value in tcp_sock. As we're processing TCP options, it is
+>>> + * safe to access from - 1.
+>>> + */
+>>> +static inline s32 tcp_update_ecn_bytes(u32 *cnt, const char *from,
+>>> +                                    u32 init_offset) {
+>>> +     u32 truncated = (get_unaligned_be32(from - 1) - init_offset) &
+>>> +                     0xFFFFFFU;
+>>> +     u32 delta = (truncated - *cnt) & 0xFFFFFFU;
+>>> +
+>>> +     /* If delta has the highest bit set (24th bit) indicating
+>>> +      * negative, sign extend to correct an estimation using
+>>> +      * sign_extend32(delta, 24 - 1)
+>>> +      */
+>>> +     delta = sign_extend32(delta, 23);
 >>
->> On Tue, Jul 15, 2025 at 04:02:25PM +0200, Alexis Lothor=C3=A9 wrote:
->> > On Tue Jul 15, 2025 at 3:32 PM CEST, Will Deacon wrote:
->> > > On Wed, Jul 09, 2025 at 10:36:55AM +0200, Alexis Lothor=C3=A9 (eBPF =
-Foundation) wrote:
->> > >> While introducing support for 9+ arguments for tracing programs on
->> > >> ARM64, commit 9014cf56f13d ("bpf, arm64: Support up to 12 function
->> > >> arguments") has also introduced a constraint preventing BPF trampol=
-ines
->> > >> from being generated if the target function consumes a struct argum=
-ent
->> > >> passed on stack, because of uncertainties around the exact struct
->> > >> location: if the struct has been marked as packed or with a custom
->> > >> alignment, this info is not reflected in BTF data, and so generated
->> > >> tracing trampolines could read the target function arguments at wro=
-ng
->> > >> offsets.
->> > >>
->> > >> This issue is not specific to ARM64: there has been an attempt (see=
- [1])
->> > >> to bring the same constraint to other architectures JIT compilers. =
-But
->> > >> discussions following this attempt led to the move of this constrai=
-nt
->> > >> out of the kernel (see [2]): instead of preventing the kernel from
->> > >> generating trampolines for those functions consuming structs on sta=
-ck,
->> > >> it is simpler to just make sure that those functions with uncertain
->> > >> struct arguments location are not encoded in BTF information, and s=
-o
->> > >> that one can not even attempt to attach a tracing program to such
->> > >> function. The task is then deferred to pahole (see [3]).
->> > >>
->> > >> Now that the constraint is handled by pahole, remove it from the ar=
-m64
->> > >> JIT compiler to keep it simple.
->> > >>
->> > >> [1] https://lore.kernel.org/bpf/20250613-deny_trampoline_structs_on=
-_stack-v1-0-5be9211768c3@bootlin.com/
->> > >> [2] https://lore.kernel.org/bpf/CAADnVQ+sj9XhscN9PdmTzjVa7Eif21noAU=
-H3y1K6x5bWcL-5pg@mail.gmail.com/
->> > >> [3] https://lore.kernel.org/bpf/20250707-btf_skip_structs_on_stack-=
-v3-0-29569e086c12@bootlin.com/
->> > >>
->> > >> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothor=
-e@bootlin.com>
->> > >> ---
->> > >>  arch/arm64/net/bpf_jit_comp.c | 5 -----
->> > >>  1 file changed, 5 deletions(-)
->> > >
->> > > This is a question born more out of ignorance that insight, but how =
-do
->> > > we ensure that the version of pahole being used is sufficiently
->> > > up-to-date that the in-kernel check is not required?
->> >
->> > Based on earlier discussions, I am not convinced it is worth maintaini=
-ng
->> > the check depending on the pahole version used in BTF. Other architect=
-ures
->> > exposing a JIT compiler don't have the in-kernel check and so are alre=
-ady
->> > exposed to this very specific case, but discussions around my attempt =
-to
->> > enforce the check on other JIT comp showed that the rarity of this cas=
-e do
->> > not justify protecting it on kernel side (see [1]).
+>> I'm under the impression that delta could be simply:
 >>
->> I can understand why doing this in pahole rather than in each individual
->> JIT is preferable, but I don't think there's any harm leaving the
->> existing two line check in arm64 as long as older versions of pahole
->> might be used, is there? I wouldn't say that removing it really
->> simplifies the JIT compiler when you consider the rest of the
->> implementation.
+>>         delta = (truncated - *cnt)
 >>
->> Of course, once the kernel requires a version of pahole recent enough
->> to contain [3], we should drop the check in the JIT compiler as the
->> one in pahole looks like it's more selective about the functions it
->> rejects.
->
-> I frankly don't see the point in adding and maintaining such checks
-> and code in the kernel for hypothetical cases that are not present
-> in the kernel and highly unlikely ever be.
-> The arm64 jit check was added out of abundance of caution.
-> There was way too much "caution".
+>> What am I missing?
+> 
+> Hi Paolo,
+> 
+> I think this code is necessary to ensure delta will not a super large value in case of wrap adound.
+> 
+> For instance, if truncated = 0x0000001F and *cnt = 0x00FFFFFF, then (truncated - *cnt) = 0xFF000020
+> 
+> But sign_extend32(((truncated - *cnt) & 0xFFFFFFU, 23) = 0x00000020, which shall be corrrect.
+> 
+> Another example, if truncated = 0x0000001F and *cnt = 0x0000003F, then (truncated - *cnt) = 0xFFFFFFE0
+> 
+> And sign_extend32(((truncated - *cnt) & 0xFFFFFFU, 23) = 0xFFFFFFE0.
+> 
+> In this latter example, both are correct.
 
-To complete Alexei's point: the check currently implemented in ARM64 JIT
-comp is filtering _too many_ functions. It prevents attachment to any
-function consuming a struct passed by value on the stack. But what we
-really want is only about filtering those _when their alignment is
-altered_, which is something that can not currently be deduced at runtime
-in JIT comps. That's part of the reason why this has been moved to pahole.
+Ok, I missed the fact that *cnt is a 24 bit integer, too. Your code
+looks good.
 
-I would also add that there is another small drawback about keeping this
-check on ARM64 only, while not adding it to other JIT comps: we have to
-keep filtering out some tests for ARM64, while the feature set is actually
-the same as for the other archs. Sure, this discrepancy could be eliminated
-once pahole minimum version in kernel build system contains the needed
-development, as Will suggests, but I don't see that hapenning before many
-months/years.
+> 
+> [...]
+>>> a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c index 
+>>> d98a1a17eb52..2169fd28594e 100644
+>>> --- a/net/ipv4/tcp_output.c
+>>> +++ b/net/ipv4/tcp_output.c
+>>> @@ -385,6 +385,7 @@ static inline bool tcp_urg_mode(const struct tcp_sock *tp)
+>>>  #define OPTION_SMC           BIT(9)
+>>>  #define OPTION_MPTCP         BIT(10)
+>>>  #define OPTION_AO            BIT(11)
+>>> +#define OPTION_ACCECN                BIT(12)
+>>>
+>>>  static void smc_options_write(__be32 *ptr, u16 *options)  { @@ -406,6 
+>>> +407,8 @@ struct tcp_out_options {
+>>>       u16 mss;                /* 0 to disable */
+>>>       u8 ws;                  /* window scale, 0 to disable */
+>>>       u8 num_sack_blocks;     /* number of SACK blocks to include */
+>>> +     u8 num_accecn_fields:7, /* number of AccECN fields needed */
+>>> +        use_synack_ecn_bytes:1; /* Use synack_ecn_bytes or not */
+>>>       u8 hash_size;           /* bytes in hash_location */
+>>>       u8 bpf_opt_len;         /* length of BPF hdr option */
+>>>       __u8 *hash_location;    /* temporary pointer, overloaded */
+>>> @@ -621,6 +624,8 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
+>>>                             struct tcp_out_options *opts,
+>>>                             struct tcp_key *key)  {
+>>> +     u8 leftover_highbyte = TCPOPT_NOP; /* replace 1st NOP if avail */
+>>> +     u8 leftover_lowbyte = TCPOPT_NOP;  /* replace 2nd NOP in 
+>>> + succession */
+>>>       __be32 *ptr = (__be32 *)(th + 1);
+>>>       u16 options = opts->options;    /* mungable copy */
+>>>
+>>> @@ -656,15 +661,79 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
+>>>               *ptr++ = htonl(opts->tsecr);
+>>>       }
+>>>
+>>> +     if (OPTION_ACCECN & options) {
+>>> +             /* Initial values for AccECN option, ordered is based on ECN field bits
+>>> +              * similar to received_ecn_bytes. Used for SYN/ACK AccECN option.
+>>> +              */
+>>> +             static u32 synack_ecn_bytes[3] = { 0, 0, 0 };
+>>
+>> I think this does not address Eric's concern on v9 WRT global variable, as every CPU will still touch the same memory while accessing the above array.
+>>
+>>> +             const u8 ect0_idx = INET_ECN_ECT_0 - 1;
+>>> +             const u8 ect1_idx = INET_ECN_ECT_1 - 1;
+>>> +             const u8 ce_idx = INET_ECN_CE - 1;
+>>> +             u32 e0b;
+>>> +             u32 e1b;
+>>> +             u32 ceb;
+>>> +             u8 len;
+>>> +
+>>> +             if (opts->use_synack_ecn_bytes) {
+>>> +                     e0b = synack_ecn_bytes[ect0_idx] + TCP_ACCECN_E0B_INIT_OFFSET;
+>>> +                     e1b = synack_ecn_bytes[ect1_idx] + TCP_ACCECN_E1B_INIT_OFFSET;
+>>> +                     ceb = synack_ecn_bytes[ce_idx] + 
+>>> + TCP_ACCECN_CEB_INIT_OFFSET;
+>>
+>> On the flip side I don't see such array modified here, not in later patches?!? If so you could make it const and a global variable would be ok.
+> 
+> Sure, I will make it as static const global variable, which I hope this is ok for you.
+> 
+> 
+>>> +/* Calculates how long AccECN option will fit to @remaining option space.
+>>> + *
+>>> + * AccECN option can sometimes replace NOPs used for alignment of 
+>>> +other
+>>> + * TCP options (up to @max_combine_saving available).
+>>> + *
+>>> + * Only solutions with at least @required AccECN fields are accepted.
+>>> + *
+>>> + * Returns: The size of the AccECN option excluding space repurposed 
+>>> +from
+>>> + * the alignment of the other options.
+>>> + */
+>>> +static int tcp_options_fit_accecn(struct tcp_out_options *opts, int required,
+>>> +                               int remaining) {
+>>> +     int size = TCP_ACCECN_MAXSIZE;
+>>> +     int max_combine_saving;
+>>> +
+>>> +     if (opts->use_synack_ecn_bytes)
+>>> +             max_combine_saving = tcp_synack_options_combine_saving(opts);
+>>> +     else
+>>> +             max_combine_saving = opts->num_sack_blocks > 0 ? 2 : 0;
+>>> +     opts->num_accecn_fields = TCP_ACCECN_NUMFIELDS;
+>>> +     while (opts->num_accecn_fields >= required) {
+>>> +             int leftover_size = size & 0x3;
+>>> +             /* Pad to dword if cannot combine */
+>>> +             if (leftover_size > max_combine_saving)
+>>> +                     leftover_size = -((4 - leftover_size) & 0x3);
+>>
+>> I *think* that with the above you mean something alike:
+>>
+>>                         size = ALIGN(size, 4);
+>>                         leftover_size = 0
+>>
+>> ?
+>>
+>> The used code looks quite obscure to me.
+>>
+>> /P
+> 
+> Indeed, I will make below changes in the next version by using ALIGN() and ALIGN_DOWN()
+> 
+> Here the aim is to pad up (if max_combine_saving is not enough) or trim down (if max_combine saving is enough) to DWORD.
+> 
+> And the final return size will be the the a multiple of DWORD.
+> 
+> Would it be more readable?
+> 
+> /* Pad to DWORD if cannot combine. Align_size represents
+>  * the final size to be used by AccECN options.
+>  * +======+=============+====================+============+
+>  * | size | size exceed | max_combine_saving | align_size |
+>  * |      |    DWORD    |                    |            |
+>  * +======+=============+====================+============+
+>  * |   2  |       2     |         < 2        |      4     |
+>  * |   2  |       2     |         >=2        |      0     |
+>  * |   5  |       1     |         < 1        |      8     |
+>  * |   5  |       1     |         >=1        |      4     |
+>  * |   8  |       0     |         Any        |      8     |
+>  * |  11  |       3     |         < 3        |     12     |
+>  * |  11  |       3     |         >=3        |      8     |
+>  * +======+=============+====================+============+
+>  */
+> if ((size & 0x3) > max_combine_saving)
+>         align_size = ALIGN(size, 4);
+> else
+>         align_size = ALIGN_DOWN(size, 4);
+> 
+> if (remaining >= align_size) {
+>         size = align_size;
+>         break;
+> }
 
-Alexis
+Yes, IMHO is more readable. No need to add the table, the original
+comment is clear enough.
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks,
+
+Paolo
 
 
