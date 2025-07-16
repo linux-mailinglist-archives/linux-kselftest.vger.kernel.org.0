@@ -1,123 +1,142 @@
-Return-Path: <linux-kselftest+bounces-37434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37435-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC47AB07828
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 16:32:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5A40B07833
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 16:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7929B7B5175
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 14:30:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A545A188E7D2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 14:33:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D8626B76D;
-	Wed, 16 Jul 2025 14:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D620321D583;
+	Wed, 16 Jul 2025 14:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QGqOXs1u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QcLJt75D"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92155263C9F;
-	Wed, 16 Jul 2025 14:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE859199EAD;
+	Wed, 16 Jul 2025 14:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752676250; cv=none; b=T09tE91Sue3efDA+1emlkw24trNOUbxx85KfKf/QbtO/e6K7UBc03Ux8RFNd8cOMxAh/A7O+3Z3ttBCBtqvKtlG1AL8lLxFWA2WAiRQufsAP2DCkAAwjt5O6wGtu5m0Lvw6oSTkVeicaeZ1WR2U4aXa7XQodde8V1mq8Q4Oi3sQ=
+	t=1752676360; cv=none; b=JhwZHlihs3OheHpikYRFpS+z/c2j9ELbIs+gt4rzOqGVKtUAbDQ3Elxv/w8lhUaLSUwk4Nw2Z0U/dQWVq6/4+Z0VANSAGBmqmsg16AuFPlhbtMIPyPTW4czSvl18wSy/0FlK8M3Ifg3INfgA7o/fX4TTvHlIRy8B7YaheGnTz4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752676250; c=relaxed/simple;
-	bh=+7GaLCQmfxsw2Ze83ywPS5OxpKBvvXdTtasxk+627lU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E8BOA693WXQ+f4i49kWDtj0sXDH/XVHVGJHer9EuKVnJ7gcqHKvtiIKLz5R4oUN5aqoCbBgbiLLy4Cf+XC+b+af0CQxpGkmKcZWS6N8GZGx/jbBNwe4ABUSEcRqC3EpBPg89GmJzxwK3fIBREXHS2GxEFT+WfmtNoTpflWUfLCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QGqOXs1u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A9A7C4CEE7;
-	Wed, 16 Jul 2025 14:30:49 +0000 (UTC)
+	s=arc-20240116; t=1752676360; c=relaxed/simple;
+	bh=iJjFq4iVDGYBdl/PZSOEsMEM1mXkUuP5CDCnmv+x5iI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PBnO7w9f6q3bltZ126l6uZZ0OxKhxc3VzHxvS150iWv3VS5JHbCA9akszSsZIkXg8iCfJPZbgmtAB8mH00lvLssVQ9vPVvBPNiDueWrUTemqOHmDNAFcoVlCmqSzE/EcwvYj+lc7jV+6e4yn7upmq71vfu06oyx8f8bd0i9k8TI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QcLJt75D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38826C4CEE7;
+	Wed, 16 Jul 2025 14:32:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752676250;
-	bh=+7GaLCQmfxsw2Ze83ywPS5OxpKBvvXdTtasxk+627lU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QGqOXs1u0zySTLcUmFrIDYXDkv2yPNs1SuBpeQt/Re5xhNXypKTWDW7vNlCCbSLpo
-	 xlr9MYwyVcddC6UmAPn4bl+dYJ1QOV1V3MdCDsmEJr6etSlz9Q7DtpeXa7lEpqRbrL
-	 2z/YD75gDjbWNjTXokItmjd9xF7aSrSwig5MG1twuoa+Oh/jNEsleJFMZ43OLeg5zP
-	 cRK5TEVHo6t4uuxxdXnoN0818O4zVPqewc0uv/qDqagsq+lAuZBiux3Zg1i4XYngWj
-	 qnTlHpMwqpVTwQBh7u5pgpPlifRJtRa6fLU+uLLAwXWYTQr8hfbPhfN6dURQfAoL7E
-	 Got7FyN64ebKg==
-Date: Wed, 16 Jul 2025 07:30:48 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mohsin Bashir <mohsin.bashr@gmail.com>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, shuah@kernel.org, horms@kernel.org,
- cratiu@nvidia.com, noren@nvidia.com, cjubran@nvidia.com, mbloch@nvidia.com,
- jdamato@fastly.com, gal@nvidia.com, sdf@fomichev.me, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
- justinstitt@google.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next V5 0/5] net: netdevsim: hook in XDP handling
-Message-ID: <20250716073048.03e117a1@kernel.org>
-In-Reply-To: <20250715210553.1568963-1-mohsin.bashr@gmail.com>
-References: <20250715210553.1568963-1-mohsin.bashr@gmail.com>
+	s=k20201202; t=1752676360;
+	bh=iJjFq4iVDGYBdl/PZSOEsMEM1mXkUuP5CDCnmv+x5iI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QcLJt75D/DW/MlFyAUTWtTUzB6QAiaDZeAAjWqHkfpzfRwXMvVmnqiq1c+u2KcRrF
+	 fp3qcx49V/ukjwBn30bsl59TW9WTFpM94EGO34UNpB326jceYocRqUM2Icp4iF0fvG
+	 E9L/TtPMXfQo3P6Nw0hA479m31iIu+nR38syDHtNlU0tPo3mThQo0/k7LdusVLxXYb
+	 0oWWj0G7+i+WRG6w/+NlfL1iZNhWxOwz2j4zyt0lzhENxneqiIC1aE2U4CpPwfr88w
+	 rdbsLKlQeBLycDuEKk8SE1NvhPlyY/agkmXou3M447hBA7K/ssiNDzEBUy2DfAdqra
+	 dVK/Je3ytAjQA==
+Date: Wed, 16 Jul 2025 07:32:39 -0700
+From: Kees Cook <kees@kernel.org>
+To: Tiffany Yang <ynaffit@google.com>
+Cc: linux-kernel@vger.kernel.org, kernel-team@android.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Carlos Llamas <cmllamas@google.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH v3 3/6] kunit: test: Export kunit_attach_mm()
+Message-ID: <202507160731.5F7752691@keescook>
+References: <20250714185321.2417234-1-ynaffit@google.com>
+ <20250714185321.2417234-4-ynaffit@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250714185321.2417234-4-ynaffit@google.com>
 
-On Tue, 15 Jul 2025 14:05:48 -0700 Mohsin Bashir wrote:
-> This patch series add tests to validate XDP native support for PASS,
-> DROP, ABORT, and TX actions, as well as headroom and tailroom adjustment.
-> For adjustment tests, validate support for both the extension and
-> shrinking cases across various packet sizes and offset values.
+On Mon, Jul 14, 2025 at 11:53:16AM -0700, Tiffany Yang wrote:
+> Tests can allocate from virtual memory using kunit_vm_mmap(), which
+> transparently creates and attaches an mm_struct to the test runner if
+> one is not already attached. This is suitable for most cases, except for
+> when the code under test must access a task's mm before performing an
+> mmap. Expose kunit_attach_mm() as part of the interface for those
+> cases. This does not change the existing behavior.
 > 
-> The pass criteria for head/tail adjustment tests require that at-least
-> one adjustment value works for at-least one packet size. This ensure
-> that the variability in maximum supported head/tail adjustment offset
-> across different drivers is being incorporated.
+> Cc: David Gow <davidgow@google.com>
+> Signed-off-by: Tiffany Yang <ynaffit@google.com>
+> ---
+>  include/kunit/test.h   | 12 ++++++++++++
+>  lib/kunit/user_alloc.c |  4 ++--
+>  2 files changed, 14 insertions(+), 2 deletions(-)
 > 
-> The results reported in this series are based on fbnic. However, the
-> series is tested against multiple other drivers including netdevism.
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 39c768f87dc9..d958ee53050e 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -531,6 +531,18 @@ static inline char *kunit_kstrdup(struct kunit *test, const char *str, gfp_t gfp
+>   */
+>  const char *kunit_kstrdup_const(struct kunit *test, const char *str, gfp_t gfp);
+>  
+> +/**
+> + * kunit_attach_mm() - Create and attach a new mm if it doesn't already exist.
+> + *
+> + * Allocates a &struct mm_struct and attaches it to @current. In most cases, call
+> + * kunit_vm_mmap() without calling kunit_attach_mm() directly. Only necessary when
+> + * code under test accesses the mm before executing the mmap (e.g., to perform
+> + * additional initialization beforehand).
+> + *
+> + * Return: 0 on success, -errno on failure.
+> + */
 
-Not much luck, on netdevsim with a debug kernel build the test seems to
-time out after 3min 30sec without printing anything.
+Yay kern-doc! :)
 
-A normal VM it doesn't time out but it seems to reliably fail as follows:
+> +int kunit_attach_mm(void);
+> +
+>  /**
+>   * kunit_vm_mmap() - Allocate KUnit-tracked vm_mmap() area
+>   * @test: The test context object.
+> diff --git a/lib/kunit/user_alloc.c b/lib/kunit/user_alloc.c
+> index 46951be018be..b8cac765e620 100644
+> --- a/lib/kunit/user_alloc.c
+> +++ b/lib/kunit/user_alloc.c
+> @@ -22,8 +22,7 @@ struct kunit_vm_mmap_params {
+>  	unsigned long offset;
+>  };
+>  
+> -/* Create and attach a new mm if it doesn't already exist. */
+> -static int kunit_attach_mm(void)
+> +int kunit_attach_mm(void)
+>  {
+>  	struct mm_struct *mm;
+>  
+> @@ -49,6 +48,7 @@ static int kunit_attach_mm(void)
+>  
+>  	return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(kunit_attach_mm);
+>  
+>  static int kunit_vm_mmap_init(struct kunit_resource *res, void *context)
+>  {
+> -- 
+> 2.50.0.727.gbf7dc18ff4-goog
 
-TAP version 13
-1..1
-# timeout set to 180
-# selftests: drivers/net: xdp.py
-# TAP version 13
-# 1..9
-# ok 1 xdp.test_xdp_native_pass_sb
-# ok 2 xdp.test_xdp_native_pass_mb
-# ok 3 xdp.test_xdp_native_drop_sb
-# ok 4 xdp.test_xdp_native_drop_mb
-# ok 5 xdp.test_xdp_native_tx_mb
-# # Exception| Traceback (most recent call last):
-# # Exception|   File "/home/virtme/testing-17/tools/testing/selftests/net/lib/py/ksft.py", line 243, in ksft_run
-# # Exception|     case(*args)
-# # Exception|   File "/home/virtme/testing-17/tools/testing/selftests/drivers/net/./xdp.py", line 466, in test_xdp_native_adjst_tail_grow_data
-# # Exception|     _validate_res(res, offset_lst, pkt_sz_lst)
-# # Exception|   File "/home/virtme/testing-17/tools/testing/selftests/drivers/net/./xdp.py", line 337, in _validate_res
-# # Exception|     raise KsftFailEx(f"{res['reason']}")
-# # Exception| net.lib.py.ksft.KsftFailEx: Adjustment failed
-# not ok 6 xdp.test_xdp_native_adjst_tail_grow_data
-# ok 7 xdp.test_xdp_native_adjst_tail_shrnk_data
-# # Failed run: pkt_sz 512, offset -256. Last successful run: pkt_sz 512, offset -128. Reason: Adjustment failed
-# ok 8 xdp.test_xdp_native_adjst_head_grow_data
-# # Exception| Traceback (most recent call last):
-# # Exception|   File "/home/virtme/testing-17/tools/testing/selftests/net/lib/py/ksft.py", line 243, in ksft_run
-# # Exception|     case(*args)
-# # Exception|   File "/home/virtme/testing-17/tools/testing/selftests/drivers/net/./xdp.py", line 625, in test_xdp_native_adjst_head_shrnk_data
-# # Exception|     _validate_res(res, offset_lst, pkt_sz_lst)
-# # Exception|   File "/home/virtme/testing-17/tools/testing/selftests/drivers/net/./xdp.py", line 337, in _validate_res
-# # Exception|     raise KsftFailEx(f"{res['reason']}")
-# # Exception| net.lib.py.ksft.KsftFailEx: Data exchange failed
-# not ok 9 xdp.test_xdp_native_adjst_head_shrnk_data
-# # Totals: pass:7 fail:2 xfail:0 xpass:0 skip:0 error:0
-not ok 1 selftests: drivers/net: xdp.py # exit=1
+Reviewed-by: Kees Cook <kees@kernel.org>
+
 -- 
-pw-bot: cr
+Kees Cook
 
