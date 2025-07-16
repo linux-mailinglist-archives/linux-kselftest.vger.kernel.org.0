@@ -1,84 +1,84 @@
-Return-Path: <linux-kselftest+bounces-37451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDF6AB08085
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 00:28:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21BF8B0808A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 00:31:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F63F7A1CA7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 22:27:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21F5A568018
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 22:31:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F28291C35;
-	Wed, 16 Jul 2025 22:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65EC727281F;
+	Wed, 16 Jul 2025 22:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="diKb9C16"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RHNDsdS0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-ot1-f73.google.com (mail-ot1-f73.google.com [209.85.210.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B9426A0DF
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 22:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A2F23CF12
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 22:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752704933; cv=none; b=qG9Y8bcKId/N/c0zUSU+YLg84n1vBEDpbPLXbtcMtyBFN8WB0lOAZEifVtf/xk1z7mS5MTPgS88GN87RWHGE8fIeXyR85uSRgX8eOG2Fq2i0U+oj0DrnqYRWZNtMb568N/vvGcpND+3Tu3bWnsCvKh3sViHnxCZbQtSgkTh5MkA=
+	t=1752705063; cv=none; b=aY6gpqFTe/QB9ScWz45mujyNfFkxxdu0BcrQEedHSu2ubwFOvtur3/5d4bKL3VeviU0vuxgUVdBwd1detvF3T1I4JHAt5/TkcznLABK9243iV+ZXkB4PsF6RwSLYMs9iNqzdeQ/8ypBjQcc8CMG4yXawERziFyfPEuJjD+wQ+e0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752704933; c=relaxed/simple;
-	bh=ykOgo4+A9qk5wgoO8dpUtvcXviSdygtbrOBUfEIyyGE=;
+	s=arc-20240116; t=1752705063; c=relaxed/simple;
+	bh=zFDZ6jBd78CfXoOTnM1xT+gFaqaZUTFfTyekF5jYwi0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TWjmRkptdl/aqkh3XbZ82J/rblKVh1uWN5Gqmh0nHIwqtpjeY9ZSTSDtH3/EE5D3K2+QKBBwXeqUfywSlEDLhNXnKlr7kBxn/bmb0mej2XqGlI03JH4OM/H/pcyH1oETUr6ne3hHICqf3iHQO1xzahX0hAEggB/IIAkGlpys1Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=diKb9C16; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=WeUNPzItT/OK4r0zbgUsIbUZH3ewVf79gG1X4s94gGmF3SEG0jr/vqZm1qEsVGHEcXMhGJiU6KekQTiWoiWO7lOgKive4ZeQfLsx7AAylpUjWVmZzuGcktRUfpu9eGW3/nsanqU41Cdcrh63X8QlUBEFx67DK7dJ1hDhTHIAR5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RHNDsdS0; arc=none smtp.client-ip=209.85.210.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3138e65efe2so284948a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 15:28:51 -0700 (PDT)
+Received: by mail-ot1-f73.google.com with SMTP id 46e09a7af769-73ced02f415so149976a34.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 15:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1752704931; x=1753309731; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1752705060; x=1753309860; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:user-agent:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=15czGDWr7Av2AvYISrTaYu5BE5KphOq8Xz2cmMY6+AI=;
-        b=diKb9C16a1LLfKia8x+8v/w2d9eZkgP0btuV64jVfHM49X3YE8FJBiaYoxKmsbN99z
-         0XYXk27D+MNwStQFDMa58z7iNID5G7DPckWxRdmskDzXRZLldG67+4GxbEDIKMThes/v
-         gzUJn2ovum3xnxPcpAmjnHzOwef9mzFR6VYmgXHUkg2x4rSd2O4lm379jOCVOrGXEU01
-         R8M5S91e7zI266+EYEXKdjGBmHRwh5UEhAJNtSVdjSV37gmK6U0EyH3rGHn10K6RtC4z
-         QBE70eCq0OqtGI+EunJ7xM5CCi6wHbAce7kXBJOXel7Ngw6o24VNm4jiGzGk9Jtvz0Qt
-         WNqA==
+        bh=NnL6EwkK//4BRL3fe9Zhzql5MxphF3o/wnp7Ix6fo0M=;
+        b=RHNDsdS0WwhVsrrsx5p51nSlMu7WoVPDtyYJS60LQKbHrG8OsxulGDXgQ1Dxfkb2Fq
+         qBGa3xdmZ7B0kdf5zRqx85j/LSXtOR4IpzMHWfNcPT7TN1XHLjo9IT5AB4oDrvr+9y06
+         fT8Ty91pGUsjBEhlP+wBk/eePZBS2L3Ts3kHENElS23buCJ9H6S1ZMly7AvoOxDGOIQW
+         48Tz+V83TUPdLvW/LdDrK7Zo33Cp4nZiEA8o6UYduULhTr15HaM447duOcdbBXAyh3wY
+         xxTIrRUC6ere+jD6Z11p7RDDuSLg5Me+E6Tsf9evTBh422wlYo6EW/37CLytfV0XTx+v
+         QBlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752704931; x=1753309731;
+        d=1e100.net; s=20230601; t=1752705060; x=1753309860;
         h=cc:to:from:subject:message-id:user-agent:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=15czGDWr7Av2AvYISrTaYu5BE5KphOq8Xz2cmMY6+AI=;
-        b=jMrAYRGy2jGJwXbU4L7MPzIaMhn1B/8DI3NwamKLfjOMDRUV50h4Gfiyv9vvN4qf6H
-         5gbkFa4S2X+hnk3Yo91EUuAbV7xVOBp54nFPQ4CAC43mFQkTCWQNjD8fGT8ujp6K+ceW
-         3SivfgKvR0SLSF8DJmfck2+dMN+2pwn+uQBVVbWoBMgDy6dSDsj7cVFUY7ck/wBuaMuu
-         pNJLBMRpRf+vOfN4KoQcqFaCn9YDCeCdZljWrD2ke1KJC5Hd+ezz6Dn3V7/njgJrbyMh
-         1HoUldXggAGE9WjGNPXxO0gK+rJnJfgo9qIfdl0HCjZbOxKJJCvfo61edVcGaYrp9O5P
-         Ulhg==
-X-Forwarded-Encrypted: i=1; AJvYcCVIgE+3EemNFwCNDoKSxhR6+fXem/V1ylt8NGk/hC66MqS2D+XqoyglPNyAL2X4cc5Sq2sLlU1tzppM8CIz/AU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEguz2k7y/lgDu3XmvH0WSTeDu2R6V4GSgsGpN0ZcWEniMJj2k
-	/mNv4OpN65NR4UYOI8ksDRWnkty2hzZyls1TSjIjY3qQ9QODUaaX8qTmXNuOQMEX5nAyUqAzTwg
-	fbQehb6toWg==
-X-Google-Smtp-Source: AGHT+IGlaI9dHBfTHBGYmlQ9O6eaSEOflYyGrE07FMmFWZU0MYHYTEDRhkfEO4kx9V4K+hW05Pm4fRgwkPtF
-X-Received: from pja3.prod.google.com ([2002:a17:90b:5483:b0:312:1af5:98c9])
- (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1c83:b0:315:9cae:bd8
- with SMTP id 98e67ed59e1d1-31c9e76b79dmr6302352a91.23.1752704930917; Wed, 16
- Jul 2025 15:28:50 -0700 (PDT)
-Date: Wed, 16 Jul 2025 15:28:49 -0700
-In-Reply-To: <202507160735.C76466BB@keescook> (Kees Cook's message of "Wed, 16
- Jul 2025 07:37:51 -0700")
+        bh=NnL6EwkK//4BRL3fe9Zhzql5MxphF3o/wnp7Ix6fo0M=;
+        b=gdMd8iajRCHxT5vdBsnY1hUsRWKex5B0yTpKpDTMZ9x58LivRDp54kOaLFlx1FZ/KM
+         Z6NdPhaBs5ZZSCXIvMx4B9qA2bA6NRpPWD8XEppb2VLT0trib1J7DXD9Af3rDXnv8TGC
+         1RLD60KO16FTdI2Bzukgy01/7V77bnNSyhN4NAj3yvKjX3gekmFAL6TqelI1vSVyP7pq
+         on8jVjmRmxamEAJ1wosyZOPnw2vYB1HcNXjuj9BhUoGW5uUSrOiPpBoDlK2BXtvlddQQ
+         QMPZDMh4eqt/m3yszb/9oIbnlHRSuIfN6xLfmHP6FoZ1Xhd1XVWueMShl2m/QKpv4MGJ
+         eqKA==
+X-Forwarded-Encrypted: i=1; AJvYcCWIzV/7RMXXCcm07T85g/0xOglaYrTH5kNV04TJw7xJ+UWrBd1PgOxkKWxG80O741M6Rc2aJQ/Si6bDkO17Dzw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0sdu61za7WcwVKMwXR8tzBeCcCbmoCQF0KTJlzqovvrbsJ4AS
+	qz5ZHBfZGBQ/QbEYVwFlpZ53tRBzsBNJaR/zDHJs6HZ0733H77yWopVwA3ufbzDQX1X0inhx41e
+	idGsbBMe/3A==
+X-Google-Smtp-Source: AGHT+IGgEOrnxmdJv8AFdnIqAllBgXdIDoc04sRvyC1o2HQJ66JZ+ZGEHFGJcxigSEzomTXlRjBbf+Vir+6q
+X-Received: from oabpd16.prod.google.com ([2002:a05:6870:1f10:b0:2e9:2323:d48f])
+ (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6830:4d86:b0:72a:1a9f:7dc7
+ with SMTP id 46e09a7af769-73e64a046e7mr3896876a34.7.1752705060656; Wed, 16
+ Jul 2025 15:31:00 -0700 (PDT)
+Date: Wed, 16 Jul 2025 15:30:59 -0700
+In-Reply-To: <202507160743.15E8044@keescook> (Kees Cook's message of "Wed, 16
+ Jul 2025 07:53:19 -0700")
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20250714185321.2417234-1-ynaffit@google.com> <20250714185321.2417234-5-ynaffit@google.com>
- <202507160735.C76466BB@keescook>
+References: <20250714185321.2417234-1-ynaffit@google.com> <20250714185321.2417234-7-ynaffit@google.com>
+ <202507160743.15E8044@keescook>
 User-Agent: mu4e 1.12.9; emacs 30.1
-Message-ID: <dbx8seiv4voe.fsf@ynaffit-andsys.c.googlers.com>
-Subject: Re: [PATCH v3 4/6] binder: Scaffolding for binder_alloc KUnit tests
+Message-ID: <dbx8jz474vks.fsf@ynaffit-andsys.c.googlers.com>
+Subject: Re: [PATCH v3 6/6] binder: encapsulate individual alloc test cases
 From: Tiffany Yang <ynaffit@google.com>
 To: Kees Cook <kees@kernel.org>
 Cc: linux-kernel@vger.kernel.org, kernel-team@android.com, 
@@ -93,219 +93,334 @@ Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
 Kees Cook <kees@kernel.org> writes:
 
->> ...
 
-> I'm used to the "#ifdef CONFIG_..." idiom, but looking at the tree, I
-> see that "#if IS_ENANLED(CONFIG...)" is relatively common too. I don't
-> think there is a function difference, so I leave the style choice up to
-> you! ;)
+> For both stringify functions, snprintf is potentially unsafe. In the
+> spirit of recent string API discussions, please switch to using a
+> seq_buf:
 
 
-IIRC, I had tried using the #ifdef to inject test-specific code in some
-places, but that created issues when we were loading KUnit as a module
-because it causes the built-in code to be built as though the
-"CONFIG_..." is undefined. Consequently, I started using IS_ENABLED by
-default, but I'm not sure if it's strictly necessary for exposing
-functions with a header file since I'd assume "CONFIG_..." will be
-defined when we're building the module?
+> static void stringify_free_seq(struct kunit *test, int *seq, seq_buf *buf)
+> {
+> 	unsigned int i;
 
->> +
->>   #endif /* _LINUX_BINDER_INTERNAL_H */
->> diff --git a/drivers/android/tests/.kunitconfig  
->> b/drivers/android/tests/.kunitconfig
->> new file mode 100644
->> index 000000000000..a73601231049
->> --- /dev/null
->> +++ b/drivers/android/tests/.kunitconfig
->> @@ -0,0 +1,3 @@
->> +CONFIG_KUNIT=y
->> +CONFIG_ANDROID_BINDER_IPC=y
->> +CONFIG_ANDROID_BINDER_ALLOC_KUNIT_TEST=y
->> diff --git a/drivers/android/tests/Makefile  
->> b/drivers/android/tests/Makefile
->> new file mode 100644
->> index 000000000000..6780967e573b
->> --- /dev/null
->> +++ b/drivers/android/tests/Makefile
->> @@ -0,0 +1,3 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +
->> +obj-$(CONFIG_ANDROID_BINDER_ALLOC_KUNIT_TEST)	+= binder_alloc_kunit.o
->> diff --git a/drivers/android/tests/binder_alloc_kunit.c  
->> b/drivers/android/tests/binder_alloc_kunit.c
->> new file mode 100644
->> index 000000000000..4b68b5687d33
->> --- /dev/null
->> +++ b/drivers/android/tests/binder_alloc_kunit.c
->> @@ -0,0 +1,166 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Test cases for binder allocator code
->> + */
->> +
->> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->> +
->> +#include <kunit/test.h>
->> +#include <linux/anon_inodes.h>
->> +#include <linux/err.h>
->> +#include <linux/file.h>
->> +#include <linux/fs.h>
->> +#include <linux/mm.h>
->> +#include <linux/mman.h>
->> +#include <linux/sizes.h>
->> +
->> +#include "../binder_alloc.h"
->> +#include "../binder_internal.h"
->> +
->> +MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
->> +
->> +#define BINDER_MMAP_SIZE SZ_128K
->> +
->> +struct binder_alloc_test {
->> +	struct binder_alloc alloc;
->> +	struct list_lru binder_test_freelist;
->> +	struct file *filp;
->> +	unsigned long mmap_uaddr;
->> +};
->> +
->> +static void binder_alloc_test_init_freelist(struct kunit *test)
->> +{
->> +	struct binder_alloc_test *priv = test->priv;
->> +
->> +	KUNIT_EXPECT_PTR_EQ(test, priv->alloc.freelist,
->> +			    &priv->binder_test_freelist);
->> +}
->> +
->> +static void binder_alloc_test_mmap(struct kunit *test)
->> +{
->> +	struct binder_alloc_test *priv = test->priv;
->> +	struct binder_alloc *alloc = &priv->alloc;
->> +	struct binder_buffer *buf;
->> +	struct rb_node *n;
->> +
->> +	KUNIT_EXPECT_EQ(test, alloc->mapped, true);
->> +	KUNIT_EXPECT_EQ(test, alloc->buffer_size, BINDER_MMAP_SIZE);
->> +
->> +	n = rb_first(&alloc->allocated_buffers);
->> +	KUNIT_EXPECT_PTR_EQ(test, n, NULL);
->> +
->> +	n = rb_first(&alloc->free_buffers);
->> +	buf = rb_entry(n, struct binder_buffer, rb_node);
->> +	KUNIT_EXPECT_EQ(test, binder_alloc_buffer_size(alloc, buf),
->> +			BINDER_MMAP_SIZE);
->> +	KUNIT_EXPECT_TRUE(test, list_is_last(&buf->entry, &alloc->buffers));
->> +}
->> +
->> +/* ===== End test cases ===== */
->> +
->> +static void binder_alloc_test_vma_close(struct vm_area_struct *vma)
->> +{
->> +	struct binder_alloc *alloc = vma->vm_private_data;
->> +
->> +	binder_alloc_vma_close(alloc);
->> +}
->> +
->> +static const struct vm_operations_struct binder_alloc_test_vm_ops = {
->> +	.close = binder_alloc_test_vma_close,
->> +	.fault = binder_vm_fault,
->> +};
->> +
->> +static int binder_alloc_test_mmap_handler(struct file *filp,
->> +					  struct vm_area_struct *vma)
->> +{
->> +	struct binder_alloc *alloc = filp->private_data;
->> +
->> +	vm_flags_mod(vma, VM_DONTCOPY | VM_MIXEDMAP, VM_MAYWRITE);
->> +
->> +	vma->vm_ops = &binder_alloc_test_vm_ops;
->> +	vma->vm_private_data = alloc;
->> +
->> +	return binder_alloc_mmap_handler(alloc, vma);
->> +}
->> +
->> +static const struct file_operations binder_alloc_test_fops = {
->> +	.mmap = binder_alloc_test_mmap_handler,
->> +};
->> +
->> +static int binder_alloc_test_init(struct kunit *test)
->> +{
->> +	struct binder_alloc_test *priv;
->> +	int ret;
->> +
->> +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
->> +	if (!priv)
->> +		return -ENOMEM;
->> +	test->priv = priv;
->> +
->> +	ret = list_lru_init(&priv->binder_test_freelist);
->> +	if (ret) {
->> +		kunit_err(test, "Failed to initialize test freelist\n");
->> +		return ret;
->> +	}
->> +
->> +	/* __binder_alloc_init requires mm to be attached */
->> +	ret = kunit_attach_mm();
->> +	if (ret) {
->> +		kunit_err(test, "Failed to attach mm\n");
->> +		return ret;
->> +	}
->> +	__binder_alloc_init(&priv->alloc, &priv->binder_test_freelist);
->> +
->> +	priv->filp = anon_inode_getfile("binder_alloc_kunit",
->> +					&binder_alloc_test_fops, &priv->alloc,
->> +					O_RDWR | O_CLOEXEC);
->> +	if (IS_ERR_OR_NULL(priv->filp)) {
->> +		kunit_err(test, "Failed to open binder alloc test driver file\n");
->> +		return priv->filp ? PTR_ERR(priv->filp) : -ENOMEM;
->> +	}
->> +
->> +	priv->mmap_uaddr = kunit_vm_mmap(test, priv->filp, 0, BINDER_MMAP_SIZE,
->> +					 PROT_READ, MAP_PRIVATE | MAP_NORESERVE,
->> +					 0);
->> +	if (!priv->mmap_uaddr) {
->> +		kunit_err(test, "Could not map the test's transaction memory\n");
->> +		return -ENOMEM;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static void binder_alloc_test_exit(struct kunit *test)
->> +{
->> +	struct binder_alloc_test *priv = test->priv;
->> +
->> +	/* Close the backing file to make sure binder_alloc_vma_close runs */
->> +	if (!IS_ERR_OR_NULL(priv->filp))
->> +		fput(priv->filp);
->> +
->> +	if (priv->alloc.mm)
->> +		binder_alloc_deferred_release(&priv->alloc);
->> +
->> +	/* Make sure freelist is empty */
->> +	KUNIT_EXPECT_EQ(test, list_lru_count(&priv->binder_test_freelist), 0);
->> +	list_lru_destroy(&priv->binder_test_freelist);
->> +}
->> +
->> +static struct kunit_case binder_alloc_test_cases[] = {
->> +	KUNIT_CASE(binder_alloc_test_init_freelist),
->> +	KUNIT_CASE(binder_alloc_test_mmap),
->> +	{}
->> +};
->> +
->> +static struct kunit_suite binder_alloc_test_suite = {
->> +	.name = "binder_alloc",
->> +	.test_cases = binder_alloc_test_cases,
->> +	.init = binder_alloc_test_init,
->> +	.exit = binder_alloc_test_exit,
->> +};
->> +
->> +kunit_test_suite(binder_alloc_test_suite);
->> +
->> +MODULE_AUTHOR("Tiffany Yang <ynaffit@google.com>");
->> +MODULE_DESCRIPTION("Binder Alloc KUnit tests");
->> +MODULE_LICENSE("GPL");
+> 	for (i = 0; i < BUFFER_NUM; i++)
+> 		seq_buf_printf(buf, "[%d]", seq[i])
+> 	KUNIT_EXPECT_FALSE(test, seq_buf_has_overflowed(buf));
+> }
+> ...
 
-> Reviewed-by: Kees Cook <kees@kernel.org>
+> 	DECLARE_SEQ_BUF(freeseq_buf, FREESEQ_BUFLEN);
+> 	...
+> 	stringify_free_seq(test, tc->free_sequence, &freeseq_buf);
+
+
+
+
+Thanks for calling attention to this! Will be fixed for v4!
+
+
+>>   static bool check_buffer_pages_allocated(struct kunit *test,
+>> @@ -124,28 +164,30 @@ static bool check_buffer_pages_allocated(struct  
+>> kunit *test,
+>>   	return true;
+>>   }
+
+>> -static void binder_alloc_test_alloc_buf(struct kunit *test,
+>> -					struct binder_alloc *alloc,
+>> -					struct binder_buffer *buffers[],
+>> -					size_t *sizes, int *seq)
+>> +static unsigned long binder_alloc_test_alloc_buf(struct kunit *test,
+>> +						 struct binder_alloc *alloc,
+>> +						 struct binder_buffer *buffers[],
+>> +						 size_t *sizes, int *seq)
+>>   {
+>> +	unsigned long failures = 0;
+>>   	int i;
+
+>>   	for (i = 0; i < BUFFER_NUM; i++) {
+>>   		buffers[i] = binder_alloc_new_buf(alloc, sizes[i], 0, 0, 0);
+>>   		if (IS_ERR(buffers[i]) ||
+>> -		    !check_buffer_pages_allocated(test, alloc, buffers[i], sizes[i]))  
+>> {
+>> -			pr_err_size_seq(test, sizes, seq);
+>> -			binder_alloc_test_failures++;
+>> -		}
+>> +		    !check_buffer_pages_allocated(test, alloc, buffers[i], sizes[i]))
+>> +			failures++;
+>>   	}
+>> +
+>> +	return failures;
+>>   }
+
+>> -static void binder_alloc_test_free_buf(struct kunit *test,
+>> -				       struct binder_alloc *alloc,
+>> -				       struct binder_buffer *buffers[],
+>> -				       size_t *sizes, int *seq, size_t end)
+>> +static unsigned long binder_alloc_test_free_buf(struct kunit *test,
+>> +						struct binder_alloc *alloc,
+>> +						struct binder_buffer *buffers[],
+>> +						size_t *sizes, int *seq, size_t end)
+>>   {
+>> +	unsigned long failures = 0;
+>>   	int i;
+
+>>   	for (i = 0; i < BUFFER_NUM; i++)
+>> @@ -153,17 +195,19 @@ static void binder_alloc_test_free_buf(struct  
+>> kunit *test,
+
+>>   	for (i = 0; i <= (end - 1) / PAGE_SIZE; i++) {
+>>   		if (list_empty(page_to_lru(alloc->pages[i]))) {
+>> -			pr_err_size_seq(test, sizes, seq);
+>>   			kunit_err(test, "expect lru but is %s at page index %d\n",
+>>   				  alloc->pages[i] ? "alloc" : "free", i);
+>> -			binder_alloc_test_failures++;
+>> +			failures++;
+>>   		}
+>>   	}
+>> +
+>> +	return failures;
+>>   }
+
+>> -static void binder_alloc_test_free_page(struct kunit *test,
+>> -					struct binder_alloc *alloc)
+>> +static unsigned long binder_alloc_test_free_page(struct kunit *test,
+>> +						 struct binder_alloc *alloc)
+>>   {
+>> +	unsigned long failures = 0;
+>>   	unsigned long count;
+>>   	int i;
+
+>> @@ -177,27 +221,70 @@ static void binder_alloc_test_free_page(struct  
+>> kunit *test,
+>>   			kunit_err(test, "expect free but is %s at page index %d\n",
+>>   				  list_empty(page_to_lru(alloc->pages[i])) ?
+>>   				  "alloc" : "lru", i);
+>> -			binder_alloc_test_failures++;
+>> +			failures++;
+>>   		}
+>>   	}
+>> +
+>> +	return failures;
+>>   }
+
+>> -static void binder_alloc_test_alloc_free(struct kunit *test,
+>> +/* Executes one full test run for the given test case. */
+>> +static bool binder_alloc_test_alloc_free(struct kunit *test,
+>>   					 struct binder_alloc *alloc,
+>> -					 size_t *sizes, int *seq, size_t end)
+>> +					 struct binder_alloc_test_case_info *tc,
+>> +					 size_t end)
+>>   {
+>> +	unsigned long pages = PAGE_ALIGN(end) / PAGE_SIZE;
+>>   	struct binder_buffer *buffers[BUFFER_NUM];
+>> -
+>> -	binder_alloc_test_alloc_buf(test, alloc, buffers, sizes, seq);
+>> -	binder_alloc_test_free_buf(test, alloc, buffers, sizes, seq, end);
+>> +	unsigned long failures;
+>> +	bool failed = false;
+>> +
+>> +	failures = binder_alloc_test_alloc_buf(test, alloc, buffers,
+>> +					       tc->buffer_sizes,
+>> +					       tc->free_sequence);
+>> +	failed = failed || failures;
+>> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+>> +			    "Initial allocation failed: %lu/%u buffers with errors",
+>> +			    failures, BUFFER_NUM);
+>> +
+>> +	failures = binder_alloc_test_free_buf(test, alloc, buffers,
+>> +					      tc->buffer_sizes,
+>> +					      tc->free_sequence, end);
+>> +	failed = failed || failures;
+>> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+>> +			    "Initial buffers not freed correctly: %lu/%lu pages not on lru  
+>> list",
+>> +			    failures, pages);
+
+>>   	/* Allocate from lru. */
+>> -	binder_alloc_test_alloc_buf(test, alloc, buffers, sizes, seq);
+>> -	if (list_lru_count(alloc->freelist))
+>> -		kunit_err(test, "lru list should be empty but is not\n");
+>> -
+>> -	binder_alloc_test_free_buf(test, alloc, buffers, sizes, seq, end);
+>> -	binder_alloc_test_free_page(test, alloc);
+>> +	failures = binder_alloc_test_alloc_buf(test, alloc, buffers,
+>> +					       tc->buffer_sizes,
+>> +					       tc->free_sequence);
+>> +	failed = failed || failures;
+>> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+>> +			    "Reallocation failed: %lu/%u buffers with errors",
+>> +			    failures, BUFFER_NUM);
+>> +
+>> +	failures = list_lru_count(alloc->freelist);
+>> +	failed = failed || failures;
+>> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+>> +			    "lru list should be empty after reallocation but still has %lu  
+>> pages",
+>> +			    failures);
+>> +
+>> +	failures = binder_alloc_test_free_buf(test, alloc, buffers,
+>> +					      tc->buffer_sizes,
+>> +					      tc->free_sequence, end);
+>> +	failed = failed || failures;
+>> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+>> +			    "Reallocated buffers not freed correctly: %lu/%lu pages not on  
+>> lru list",
+>> +			    failures, pages);
+>> +
+>> +	failures = binder_alloc_test_free_page(test, alloc);
+>> +	failed = failed || failures;
+>> +	KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+>> +			    "Failed to clean up allocated pages: %lu/%lu pages still  
+>> installed",
+>> +			    failures, (alloc->buffer_size / PAGE_SIZE));
+>> +
+>> +	return failed;
+>>   }
+
+>>   static bool is_dup(int *seq, int index, int val)
+>> @@ -213,24 +300,44 @@ static bool is_dup(int *seq, int index, int val)
+
+>>   /* Generate BUFFER_NUM factorial free orders. */
+>>   static void permute_frees(struct kunit *test, struct binder_alloc  
+>> *alloc,
+>> -			  size_t *sizes, int *seq, int index, size_t end)
+>> +			  struct binder_alloc_test_case_info *tc,
+>> +			  unsigned long *runs, unsigned long *failures,
+>> +			  int index, size_t end)
+>>   {
+>> +	bool case_failed;
+>>   	int i;
+
+>>   	if (index == BUFFER_NUM) {
+>> -		binder_alloc_test_alloc_free(test, alloc, sizes, seq, end);
+>> +		char freeseq_buf[FREESEQ_BUFLEN];
+>> +
+>> +		case_failed = binder_alloc_test_alloc_free(test, alloc, tc, end);
+>> +		*runs += 1;
+>> +		*failures += case_failed;
+>> +
+>> +		if (case_failed || PRINT_ALL_CASES) {
+>> +			stringify_free_seq(test, tc->free_sequence, freeseq_buf,
+>> +					   FREESEQ_BUFLEN);
+>> +			kunit_err(test, "case %lu: [%s] | %s - %s - %s", *runs,
+>> +				  case_failed ? "FAILED" : "PASSED",
+>> +				  tc->front_pages ? "front" : "back ",
+>> +				  tc->alignments, freeseq_buf);
+>> +		}
+>> +
+>>   		return;
+>>   	}
+>>   	for (i = 0; i < BUFFER_NUM; i++) {
+>> -		if (is_dup(seq, index, i))
+>> +		if (is_dup(tc->free_sequence, index, i))
+>>   			continue;
+>> -		seq[index] = i;
+>> -		permute_frees(test, alloc, sizes, seq, index + 1, end);
+>> +		tc->free_sequence[index] = i;
+>> +		permute_frees(test, alloc, tc, runs, failures, index + 1, end);
+>>   	}
+>>   }
+
+>> -static void gen_buf_sizes(struct kunit *test, struct binder_alloc  
+>> *alloc,
+>> -			  size_t *end_offset)
+>> +static void gen_buf_sizes(struct kunit *test,
+>> +			  struct binder_alloc *alloc,
+>> +			  struct binder_alloc_test_case_info *tc,
+>> +			  size_t *end_offset, unsigned long *runs,
+>> +			  unsigned long *failures)
+>>   {
+>>   	size_t last_offset, offset = 0;
+>>   	size_t front_sizes[BUFFER_NUM];
+>> @@ -238,31 +345,45 @@ static void gen_buf_sizes(struct kunit *test,  
+>> struct binder_alloc *alloc,
+>>   	int seq[BUFFER_NUM] = {0};
+>>   	int i;
+
+>> +	tc->free_sequence = seq;
+>>   	for (i = 0; i < BUFFER_NUM; i++) {
+>>   		last_offset = offset;
+>>   		offset = end_offset[i];
+>>   		front_sizes[i] = offset - last_offset;
+>>   		back_sizes[BUFFER_NUM - i - 1] = front_sizes[i];
+>>   	}
+>> +	back_sizes[0] += alloc->buffer_size - end_offset[BUFFER_NUM - 1];
+>> +
+>>   	/*
+>>   	 * Buffers share the first or last few pages.
+>>   	 * Only BUFFER_NUM - 1 buffer sizes are adjustable since
+>>   	 * we need one giant buffer before getting to the last page.
+>>   	 */
+>> -	back_sizes[0] += alloc->buffer_size - end_offset[BUFFER_NUM - 1];
+>> -	permute_frees(test, alloc, front_sizes, seq, 0,
+>> +	tc->front_pages = true;
+>> +	tc->buffer_sizes = front_sizes;
+>> +	permute_frees(test, alloc, tc, runs, failures, 0,
+>>   		      end_offset[BUFFER_NUM - 1]);
+>> -	permute_frees(test, alloc, back_sizes, seq, 0, alloc->buffer_size);
+>> +
+>> +	tc->front_pages = false;
+>> +	tc->buffer_sizes = back_sizes;
+>> +	permute_frees(test, alloc, tc, runs, failures, 0, alloc->buffer_size);
+>>   }
+
+>>   static void gen_buf_offsets(struct kunit *test, struct binder_alloc  
+>> *alloc,
+>> -			    size_t *end_offset, int index)
+>> +			    size_t *end_offset, int *alignments,
+>> +			    unsigned long *runs, unsigned long *failures,
+>> +			    int index)
+>>   {
+>>   	size_t end, prev;
+>>   	int align;
+
+>>   	if (index == BUFFER_NUM) {
+>> -		gen_buf_sizes(test, alloc, end_offset);
+>> +		struct binder_alloc_test_case_info tc = {0};
+>> +
+>> +		stringify_alignments(test, alignments, tc.alignments,
+>> +				     ALIGNMENTS_BUFLEN);
+>> +
+>> +		gen_buf_sizes(test, alloc, &tc, end_offset, runs, failures);
+>>   		return;
+>>   	}
+>>   	prev = index == 0 ? 0 : end_offset[index - 1];
+>> @@ -276,7 +397,9 @@ static void gen_buf_offsets(struct kunit *test,  
+>> struct binder_alloc *alloc,
+>>   		else
+>>   			end += BUFFER_MIN_SIZE;
+>>   		end_offset[index] = end;
+>> -		gen_buf_offsets(test, alloc, end_offset, index + 1);
+>> +		alignments[index] = align;
+>> +		gen_buf_offsets(test, alloc, end_offset, alignments, runs,
+>> +				failures, index + 1);
+>>   	}
+>>   }
+
+>> @@ -328,10 +451,15 @@ static void binder_alloc_exhaustive_test(struct  
+>> kunit *test)
+>>   {
+>>   	struct binder_alloc_test *priv = test->priv;
+>>   	size_t end_offset[BUFFER_NUM];
+>> +	int alignments[BUFFER_NUM];
+>> +	unsigned long failures = 0;
+>> +	unsigned long runs = 0;
+
+>> -	gen_buf_offsets(test, &priv->alloc, end_offset, 0);
+>> +	gen_buf_offsets(test, &priv->alloc, end_offset, alignments, &runs,
+>> +			&failures, 0);
+
+>> -	KUNIT_EXPECT_EQ(test, binder_alloc_test_failures, 0);
+>> +	KUNIT_EXPECT_EQ(test, runs, TOTAL_EXHAUSTIVE_CASES);
+>> +	KUNIT_EXPECT_EQ(test, failures, 0);
+>>   }
+
+>>   /* ===== End test cases ===== */
+>> --
+>> 2.50.0.727.gbf7dc18ff4-goog
+
+
+> Otherwise looks good to me.
 
 -- 
 Tiffany Y. Yang
