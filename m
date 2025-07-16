@@ -1,155 +1,250 @@
-Return-Path: <linux-kselftest+bounces-37424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36951B076D0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 15:23:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24245B07777
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 15:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6FB3C7A2A9A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 13:22:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B4FA3B9E89
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 13:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4717F1A4E70;
-	Wed, 16 Jul 2025 13:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 490A61EF38F;
+	Wed, 16 Jul 2025 13:57:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uDYmdz3x";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JbbGSXV0"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="dGOVqCn7";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="VzLCJMvA";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="dGOVqCn7";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="VzLCJMvA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA0135972;
-	Wed, 16 Jul 2025 13:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB5B1CAA92
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 13:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752672208; cv=none; b=dHwbUqOE8QOtQS9ZalwaGL2CS/0zngp1YcjKEESZ/mBrbFclaVPJlr3EGazdrULe8DJ2bdm3MusntjiIiktOcpmICjQXNiWjAfLpo/zmtPv8d80eyqXa2MkCD8AZI8q0Vd8kYBYBOG8YnBP2wj2PJ2oZ+pWU32MWvFchbyvX47g=
+	t=1752674231; cv=none; b=VvPPxkr8AX6C+WPNKmNgSPzIfQxG5d+m1kMoIkizM8MLTnk9s4VYuWwNG1nPCFbwazWa7/hn+qRT4vcsR+Nj8/CUtLyS1s52d3O67+xfN2P8gTfgD+OJ760lP3ws5uFWn9gGACplIweNCYj5pT7+QxmI2a02vP78SsNLXxrwDMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752672208; c=relaxed/simple;
-	bh=agoDhpTHHL7HDDO0SSBqzE+Bq/vsN2KR3cVVfaEDCP8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nARnZCh9LIVEmakgoFgG1asWkRQw9qf4ZKCuybFRbtBZxel8N/qKMrBetxH+NXsiKODyfcE8S4P5O0IrZt+Lbx4IBcFTnxAjc/IGmKaDeEr6fJpO0MM+bzdaHMExhYHPOdR3D+QC6dNN3CYKbgVp7WsqyG+3K5kJukvlto4LpyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uDYmdz3x; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JbbGSXV0; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Wed, 16 Jul 2025 15:23:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1752672204;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	s=arc-20240116; t=1752674231; c=relaxed/simple;
+	bh=nbScDiUVIO7f7kyiunHXDlEmH2bwUGV6+EFhjNaX7Iw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SAogZl+jNukKhUK/JlqY/QnHC+WUdul5opTe8AWYB9RUmpc4/dOqSWKDTsS0NqIg0j+ujS1f8mqrjHXbgNNBdZcZx9YwrzKMyl7ueCwAfptdV6Nk/euU4UIClhfXxel+eDsWqUGYxhxLTyzDl0jRriRL8h6PfAzV3EjU7H+7joE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=dGOVqCn7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=VzLCJMvA; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=dGOVqCn7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=VzLCJMvA; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 9E2C41F799;
+	Wed, 16 Jul 2025 13:57:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752674226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3X1gOZP+goNDIuh3AgJjOXNlqikB6fvLUSRY30PSEnM=;
-	b=uDYmdz3xJBu77jfXv2NJHZokL7soAtCFcstMwIVdJwh/xQGph1nuhSs9J1nU2fiOMN8zMf
-	esXWDddlzCNlG7bkDdzVNT+IGO7xEDiQcgnwJqBIvUKr0izZslxzFhxv3Sv/JCjVLB9gG9
-	vzcPEfXqWmh9Ra6fGMdAKjpxjZ6AZ1S4yeJUnAJCWGzvZu8qrHCp4CIWI+hyGHsinFmqms
-	CUBFukY0V6dKPaP3oRN/G1cZDzlfJUhHw7mVkd0FWXrCKQXFHCxBcegpaCpDi67DsQdeMK
-	lxq1G5AOKdpa6HUtMhdpWSxIndSLR2RGTYM2fqWRWf2y8TjPFw9yzWSzMqT0OA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1752672204;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=rwnWGicdVAughpBbGHvo31mHshgZJT044k4Ot0D8V/I=;
+	b=dGOVqCn7cVRM8lT200YvVonjbyIGQcrN6uXxx/b6iV2dHVTEFjjEesWMxRuDlpAQFVtnnn
+	wnvWqLr87UucMJqiy/frxY8wTjrBIsxBqcApN3nnxAC3U0nEoIDbuxiS3bvMwFtUWl/SRV
+	1afFmD5qhJLxnDH5liD4OCoO4ibLZDw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752674226;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3X1gOZP+goNDIuh3AgJjOXNlqikB6fvLUSRY30PSEnM=;
-	b=JbbGSXV0n1YRvysHljC1CPzDU5AjFc60+H3pSSxq0PzWMJughRLCOcj+nWQAFJyAHP/ymb
-	ByWtOGBZkMUCEMDA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Andy Lutomirski <luto@kernel.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan <shuah@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, 
-	Richard Cochran <richardcochran@gmail.com>, Christopher Hall <christopher.s.hall@intel.com>, 
-	Miroslav Lichvar <mlichvar@redhat.com>, Werner Abt <werner.abt@meinberg-usa.com>, 
-	David Woodhouse <dwmw2@infradead.org>, Kurt Kanzenbach <kurt@linutronix.de>, 
-	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
-Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
- clock_gettime() helpers
-Message-ID: <20250716152041-189100b1-7f5e-4388-8ada-b79ec09d18f5@linutronix.de>
-References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
- <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
- <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
- <CGME20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2@eucas1p1.samsung.com>
- <e8c6b9a7-eaa6-4947-98e1-9d6fecc958d4@samsung.com>
- <20250709092958-37148883-ed89-40fe-8cd5-ded5dd60957e@linutronix.de>
- <eb5feef3-0a7d-438c-9dbb-00d1d72fad66@samsung.com>
- <6bee5ae0-2a9e-4793-a5bd-9e6c72b03f27@sirena.org.uk>
- <20250716142933-41089f40-0628-4821-83a3-fddbd4c4f9bf@linutronix.de>
- <3a9504d1-2c6a-459a-a98e-3010d34b546c@sirena.org.uk>
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=rwnWGicdVAughpBbGHvo31mHshgZJT044k4Ot0D8V/I=;
+	b=VzLCJMvA1iPjm6MbEUwvzW6+DUNJC9vlbmVaeT/4gv+HMy/vAlBdaZuPIt41KVi+L3kAhj
+	zzK+iZH0xp04IbBQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=dGOVqCn7;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=VzLCJMvA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752674226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=rwnWGicdVAughpBbGHvo31mHshgZJT044k4Ot0D8V/I=;
+	b=dGOVqCn7cVRM8lT200YvVonjbyIGQcrN6uXxx/b6iV2dHVTEFjjEesWMxRuDlpAQFVtnnn
+	wnvWqLr87UucMJqiy/frxY8wTjrBIsxBqcApN3nnxAC3U0nEoIDbuxiS3bvMwFtUWl/SRV
+	1afFmD5qhJLxnDH5liD4OCoO4ibLZDw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752674226;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=rwnWGicdVAughpBbGHvo31mHshgZJT044k4Ot0D8V/I=;
+	b=VzLCJMvA1iPjm6MbEUwvzW6+DUNJC9vlbmVaeT/4gv+HMy/vAlBdaZuPIt41KVi+L3kAhj
+	zzK+iZH0xp04IbBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6E169138D2;
+	Wed, 16 Jul 2025 13:57:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 81mRGrKvd2iDAwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 16 Jul 2025 13:57:06 +0000
+Message-ID: <dd88b2fc-6963-454b-8cc0-7bd3360a562e@suse.cz>
+Date: Wed, 16 Jul 2025 15:57:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3a9504d1-2c6a-459a-a98e-3010d34b546c@sirena.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 7/7] fs/proc/task_mmu: read proc/pid/maps under per-vma
+ lock
+Content-Language: en-US
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com,
+ peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org,
+ paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com,
+ brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com,
+ linux@weissschuh.net, willy@infradead.org, osalvador@suse.de,
+ andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu,
+ tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20250716030557.1547501-1-surenb@google.com>
+ <20250716030557.1547501-8-surenb@google.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <20250716030557.1547501-8-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 9E2C41F799
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[oracle.com,redhat.com,google.com,cmpxchg.org,kernel.org,gmail.com,toxicpanda.com,huawei.com,weissschuh.net,infradead.org,suse.de,arm.com,csgroup.eu,vger.kernel.org,kvack.org];
+	R_RATELIMIT(0.00)[to_ip_from(RLfsxmn1qwoupcjwdqfx65548p)];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:mid,suse.cz:email];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Spam-Score: -4.51
 
-On Wed, Jul 16, 2025 at 01:50:22PM +0100, Mark Brown wrote:
-> On Wed, Jul 16, 2025 at 02:34:52PM +0200, Thomas Weißschuh wrote:
-> > On Wed, Jul 16, 2025 at 01:25:06PM +0100, Mark Brown wrote:
+On 7/16/25 05:05, Suren Baghdasaryan wrote:
+> With maple_tree supporting vma tree traversal under RCU and per-vma
+> locks, /proc/pid/maps can be read while holding individual vma locks
+> instead of locking the entire address space.
+> A completely lockless approach (walking vma tree under RCU) would be
+> quite complex with the main issue being get_vma_name() using callbacks
+> which might not work correctly with a stable vma copy, requiring
+> original (unstable) vma - see special_mapping_name() for example.
 > 
-> > > This issue has been present in -next for a week and is causing a bunch
-> > > of disruption to tests that end up relying on the vDSO - do we have any
-> > > news on getting a fix merged?  Perhaps it makes sense for Marek to just
-> > > send his patch so that it's there if needed?
+> When per-vma lock acquisition fails, we take the mmap_lock for reading,
+> lock the vma, release the mmap_lock and continue. This fallback to mmap
+> read lock guarantees the reader to make forward progress even during
+> lock contention. This will interfere with the writer but for a very
+> short time while we are acquiring the per-vma lock and only when there
+> was contention on the vma reader is interested in.
 > 
-> > That fix has been in -next since next-20250710.
-> > If you still have issues, I'll take a look.
+> We shouldn't see a repeated fallback to mmap read locks in practice, as
+> this require a very unlikely series of lock contentions (for instance
+> due to repeated vma split operations). However even if this did somehow
+> happen, we would still progress.
 > 
-> Ah, sorry - I'd not seen followup mails in the thread and was still
-> seeing issues that appeared at the same time that had previously
-> bisected here.  One is:
+> One case requiring special handling is when a vma changes between the
+> time it was found and the time it got locked. A problematic case would
+> be if a vma got shrunk so that its vm_start moved higher in the address
+> space and a new vma was installed at the beginning:
 > 
-> | INFO: Generating a skipfile based on /lava-4170058/1/tests/6_kselftest-dev-errlogs/automated/linux/kselftest/skipfile-lkft.yaml
-> | fatal error: nanotime returning zero
-> | goroutine 1 [running, locked to thread]:
-> | runtime.throw(0x132d83, 0x17)
-> | 	/usr/lib/golang/src/runtime/panic.go:774 +0x5c fp=0x42c7a4 sp=0x42c790 pc=0x3b740
-> | runtime.main()
-> | 	/usr/lib/golang/src/runtime/proc.go:152 +0x350 fp=0x42c7e4 sp=0x42c7a4 pc=0x3d308
-> |A runtime.goexit()
-> | 	/usr/lib/golang/src/runtime/asm_arm.s:868 +0x4 fp=0x42c7e4 sp=0x42c7e4 pc=0x645dc
-> | ERROR: skipgen failed to generate a skipfile: 2
+> reader found:               |--------VMA A--------|
+> VMA is modified:            |-VMA B-|----VMA A----|
+> reader locks modified VMA A
+> reader reports VMA A:       |  gap  |----VMA A----|
 > 
-> I'll just kick of a clean bisect for that and see what it comes up with.
+> This would result in reporting a gap in the address space that does not
+> exist. To prevent this we retry the lookup after locking the vma, however
+> we do that only when we identify a gap and detect that the address space
+> was changed after we found the vma.
+> 
+> This change is designed to reduce mmap_lock contention and prevent a
+> process reading /proc/pid/maps files (often a low priority task, such
+> as monitoring/data collection services) from blocking address space
+> updates. Note that this change has a userspace visible disadvantage:
+> it allows for sub-page data tearing as opposed to the previous mechanism
+> where data tearing could happen only between pages of generated output
+> data. Since current userspace considers data tearing between pages to be
+> acceptable, we assume is will be able to handle sub-page data tearing
+> as well.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-Can you try the following?
-I missed this despite the double-checking after the last reported issue.
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index 97aa9059a5c9..5e0106130e07 100644
---- a/lib/vdso/gettimeofday.c
-+++ b/lib/vdso/gettimeofday.c
-@@ -365,14 +365,14 @@ __cvdso_clock_gettime32_data(const struct vdso_time_data *vd, clockid_t clock,
-                             struct old_timespec32 *res)
- {
-        struct __kernel_timespec ts;
--       int ret;
-+       bool ok;
- 
--       ret = __cvdso_clock_gettime_common(vd, clock, &ts);
-+       ok = __cvdso_clock_gettime_common(vd, clock, &ts);
- 
--       if (unlikely(ret))
-+       if (unlikely(!ok))
-                return clock_gettime32_fallback(clock, res);
- 
--       /* For ret == 0 */
-+       /* For ok == true */
-        res->tv_sec = ts.tv_sec;
-        res->tv_nsec = ts.tv_nsec;
+Nit: the previous patch changed lines with e.g. -2UL to -2 and this seems
+changing the same lines to add a comment e.g. *ppos = -2; /* -2 indicates
+gate vma */
 
+That comment could have been added in the previous patch already. Also if
+you feel the need to add the comments, maybe it's time to just name those
+special values with a #define or something :)
 
-Sorry for all the breakage.
-
-
-Thomas
 
