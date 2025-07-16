@@ -1,307 +1,199 @@
-Return-Path: <linux-kselftest+bounces-37411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39898B070F7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 10:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81159B0726E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 12:01:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21E543AA631
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 08:55:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 921213A41C0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Jul 2025 10:01:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1C312EF9CE;
-	Wed, 16 Jul 2025 08:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58BA02F234D;
+	Wed, 16 Jul 2025 10:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gm1MINn9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hz0B7jlF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C456F2EF66A
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 08:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA281E1A17;
+	Wed, 16 Jul 2025 10:01:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752656141; cv=none; b=klCyb/yTGQsCEEH2NF5ufxuxUZhIsgquA3kJB77NnWdgEd4Dg0RJk/Jp42xDscRiqpu4NY8E576ogK7AyqjjT6E41a+V/jO9ZjSo8oxXoocTp0ZFDaDynoRuxAzU2GcSkmZ3Wv9i/5DD7wWpdESWz0lSniOrdUKxkPFXy3cOjBY=
+	t=1752660096; cv=none; b=C/tY48rFd245VnYwCoZGs0b9iAJRYPQ8Z9p1eBcMyu/hWegPur0x1l/yZ8dmj6KfmuDpKbjjIpOcPByX5Ji9pi3Wmz1Wzn0eHzb3T3tEolUiAaMQzrCk1vRbbwBSEngh6/B0IBRFkAovySKVmm8KEPv4WTmJmCTex+exxkVXgrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752656141; c=relaxed/simple;
-	bh=3XujhVuiu4yaKX8VdtoT8L7ry694S9HL3N/1pn8FpHE=;
+	s=arc-20240116; t=1752660096; c=relaxed/simple;
+	bh=F1e3od86GWp18tAJQqHphAbdUx2CQFKA8BOYukDggbE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rHB3Fyy17fyk9TNjE6l3IMnlO+O60QXOtmltI5tj5sSgj9AwgNYNdCVo3ABuyy0GJtFtLHpE5bZxnnbBhq2bf9IfED/bOJ/cca1OZvjmNSp2iDnO7xlzAbiEOxkYbMahvC8t94VaF5/KldtxWkBvhTC12tgmx/hJS0LTjZXOqTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gm1MINn9; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752656138;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KJc5h/pWyKQ+w9Bq81OUahiAahZ/ZW6ST7tvA1a1o5A=;
-	b=Gm1MINn9K/y7W01Ows2FwWQY8oATFbsUjn5LS42aZnDOnu9aWsTQbttjDXhndSUtEeolQ2
-	zMQ0F2KY6nI4hZaEopvD54C7sGkYtJw8cJ5WZT8c7Apyfr8HXwz0OM9l+ai7KygRwc+x+f
-	ASlUijx39Ml1nCQl5p21CIRuamJ8mzw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-338-rEGegikHMoydxYbHYLEoAg-1; Wed, 16 Jul 2025 04:55:37 -0400
-X-MC-Unique: rEGegikHMoydxYbHYLEoAg-1
-X-Mimecast-MFC-AGG-ID: rEGegikHMoydxYbHYLEoAg_1752656136
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-454dee17a91so49516395e9.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 01:55:36 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hP2Os6TTvuovBO+I4k6XIfQF8kf5E9jcLupkBe2F74ZTcIUTfgbQPtnjghWLtMFOQ3PLF9n7rUbRa4U9ziMUA1LOArLxRsrbWaE0RCTyQtlhhM86w+MtBhl9a82Doiu9B46fiy2eiEqhUCDD0kir5Fn1JcyjQtXyISNKd1537M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hz0B7jlF; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b350704f506so619671a12.0;
+        Wed, 16 Jul 2025 03:01:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752660094; x=1753264894; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lBVUcNuqA3qfhYBvm1KQnYeeoyTvAgFUysKMSPuuX/Q=;
+        b=Hz0B7jlF8p5QPLuBB4wuFQXTD5rgKk6S9HfDiBjLrYX1+3ky7aSEwpguajasNP7wJW
+         aRLQvHGL6ATq5g5Yy6BvJ20D05OYCOknzWELeas1XBs3ajdibMMy4IeumZ9BEi1UaFAj
+         ssviTigb0bJReOzPIzCPGe7g3+jIstoFbe3HeEn22uNJlHlwOEsCZRdGs24LTAnpI5Kl
+         UyPvs6VX+lLkx80w3aEzmKxg+dspoUzXFjJqfKIl6uZJwUmQmwVH+/OIorXmaWQZaYnF
+         yAJOSbAMaZTxLwnk2ukBVhhsSHYfc4V3lfRetotS3aSPOg2EWvy7Nr0VeJtogojDHddw
+         zhlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752656135; x=1753260935;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KJc5h/pWyKQ+w9Bq81OUahiAahZ/ZW6ST7tvA1a1o5A=;
-        b=JDMi+IdNJfvT5ISHOItDYhe7NlSOcfyT1OMrTIsAQmgPPxTPPOHCRCytw/B4L6LVuy
-         nOc2eboxEzbcVrvfxOt0H90UnVryM/sH63u/mJID7wa2dILfkAQWAh/8yzv9owKQ0f9w
-         VZfS4v9Wyd6hmt0D/hpRCHIettOuv26jPGiUsSysKStGsmhgBgomEU3QoZboCAe10Az3
-         bCJy3bBDPvrqftlvrXOPBLsW1AsdJ0I6VqGg6kkCrbx5nzN71MhXwZwrnCIPbEXari5r
-         5JO5ZSEG4ILiYFf8Vd6eKcr5dfjPl/U1YsaZjCJtgiMbjxhTLwekmTtZLu/koYgyMBVo
-         oXvw==
-X-Forwarded-Encrypted: i=1; AJvYcCVN65+2phZcccMYKoOpEpfctBzHG0zQavqrpvbEmpE2qAAcZ9om2Yxg9aVALvI2Cr2Idepb73JH95+YO4Z9qVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNoH1Wpp171TMyo1jE8WH2JqJCY47FrQm3RgTT7pz3NT/isVQ9
-	iy2sZEPVFRG3iiDHIVL7JTUWSoKW7ukgfLOmg3tX0kGq9THuwLB8rfEeIvceRqiJ4Mn3N8Qhv4K
-	tHZCEmRjLM07NSP05gPCYKHtYXPrQvnLFQDY3sqDUyhZNRnG1WsAHHtbvMRXlFxB8bgW0jA==
-X-Gm-Gg: ASbGncvraRLBsU+Jqx5DQ1DsVHyWUzTwGp+F4KrlEn1j5/gMxQ6KmvA2FGJe768own/
-	S0EvK5NaAji5Rnz4j074z07CXR2esmxPP1PFLCW3uBrA3SvkgMKjpnJQz6AHY296fxRyV5KXKWo
-	6ERriQ9/DpbYwo2o6PhJ9yYE0Z9gkuPVu4N8KhstZ004BdRjUIUg/FsjpIePbqMLUGda6kuuZ2s
-	PBVMVXtGZ63PmTPQLandyoKeFIt2TIy5YYNaPW5e1G3hYUuZuZoPF7xO1xudj6yl51GG2Sj2xV+
-	UlOU7cLlv/ZV0bzY8f/MGrB8Txlt60nr
-X-Received: by 2002:a05:600c:35d3:b0:456:18ca:68db with SMTP id 5b1f17b1804b1-4562e371b1fmr17014615e9.8.1752656134976;
-        Wed, 16 Jul 2025 01:55:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFIeeddWD/zXeNIK28bnOIs260/kSZeIsxuV6ecZ6mZpopBKmOyYwzIAIRkqbaMPhqIXtY3WA==
-X-Received: by 2002:a05:600c:35d3:b0:456:18ca:68db with SMTP id 5b1f17b1804b1-4562e371b1fmr17014325e9.8.1752656134500;
-        Wed, 16 Jul 2025 01:55:34 -0700 (PDT)
-Received: from redhat.com ([2a0d:6fc0:150d:fc00:de3:4725:47c6:6809])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4562e81ccb4sm14628415e9.17.2025.07.16.01.55.32
+        d=1e100.net; s=20230601; t=1752660094; x=1753264894;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lBVUcNuqA3qfhYBvm1KQnYeeoyTvAgFUysKMSPuuX/Q=;
+        b=EQD+dj+MgsDKpJi/bDnq/+IOhp7RJX5GkGPyHw496xW+cpjZvRT7W+OmXxBakSG3J1
+         df3+jxFHliPPtPDDS5nDiRTC21ic6a6NJkN4yi9dEaNPw6ef5APHpXapits2U04Frrgv
+         NEwEo+dQo45Ci0Wbu0n8RMrxBqzK+rRqrD34TceFN4Xfld3EwjSRcC8pqGyFz2UrBu/p
+         bk6csCO3GP2lgorEeFzEasSc0PBg8BICmDHNb10Bd42uD5U6yWW3Yv+NaJFbJDc/xDKI
+         /PvA+cpk0YV8r6eG+ho84X+nCVWQZZImVrOmE8pFI+3Wh+pLv8ttD6KNkj4DlIZlgMr7
+         ChZA==
+X-Forwarded-Encrypted: i=1; AJvYcCUXphPenjlfUup8gDpxj7op2VxmHq0CXfPGNC0gi+jeGZV+HRbv7LRGDuzED5miNbsoa8eW35KyJ6ujszpO+G19@vger.kernel.org, AJvYcCXMZWZZ83kvu5yNLzpWHW68kEthziks4fRSIi9PgaQ9geVFAo4akVVZFw7vu57Lj+gO4zKvcnqTIbY6Af8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQBTIn3+vm2aqGHrs/YrletB66PYqHYRUlNb+NIZ0jvRcqGVQ6
+	Ekg+2H4vkDboCNgVpqpL/oD7O0AX9o0S2IxPkVupj3HLTuwRtRuaCdbl
+X-Gm-Gg: ASbGncvOIcw+Hqf/uvxlTonlGVukvZvL+BnyDt32pYOfNTmncV7FAe7NR/FiHmCROUA
+	wPaPfPwOGo4LEyf2syFGnemHuiEI++hjP5b6PiT2VhaRBEWYLlC9r23T7YF2oGv3OCq2vqoLvOI
+	lyNH10kOHWFm8Wke6WPNU4mUx/fTooqENcJSiZQOIE7IBgvbGmTB1nC7ww5qtEMdiKI/s+uSvc+
+	Q23EyBJiw4qNcOP6F7AWh1Q6+bvUQeuB8RSvXwA7sEuH4yhG3kwtHSbspAV9ugK9rSWZLWl46wW
+	gaz2i4FRs9yMJvadT623L98PEM9IWvqYGxzHBoELxQmkX5dPnvAdIliTbyPF+6yQy9L3RoAHxRa
+	9SjQWlXT973fNjTT+iDUghGQkX8A=
+X-Google-Smtp-Source: AGHT+IGu0vl7a8IpcxbiAM6bYbghrCeBRJAqOGsujg3WsE9DK32zJWSkRhUg70YdqcXoa6xfK+v+pg==
+X-Received: by 2002:a17:903:1205:b0:234:7837:91de with SMTP id d9443c01a7336-23e1a4e4086mr103843035ad.26.1752660093710;
+        Wed, 16 Jul 2025 03:01:33 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe727e33sm13665636a12.68.2025.07.16.03.01.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jul 2025 01:55:33 -0700 (PDT)
-Date: Wed, 16 Jul 2025 04:55:30 -0400
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Jason Wang <jasowang@redhat.com>,
+        Wed, 16 Jul 2025 03:01:33 -0700 (PDT)
+Date: Wed, 16 Jul 2025 10:01:25 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jay Vosburgh <jv@jvosburgh.net>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-	linux-kselftest@vger.kernel.org,
-	Yuri Benditovich <yuri.benditovich@daynix.com>,
-	Andrew Melnychenko <andrew@daynix.com>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	gur.stavi@huawei.com, Lei Yang <leiyang@redhat.com>,
-	Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH net-next v12 00/10] tun: Introduce virtio-net hashing
- feature
-Message-ID: <20250716045513-mutt-send-email-mst@kernel.org>
-References: <20250530-rss-v12-0-95d8b348de91@daynix.com>
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 1/2] bonding: update ntt to true in passive mode
+Message-ID: <aHd4ddc1YzeT1lN3@fedora>
+References: <20250709090344.88242-1-liuhangbin@gmail.com>
+ <20250709090344.88242-2-liuhangbin@gmail.com>
+ <765825.1752639589@famine>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250530-rss-v12-0-95d8b348de91@daynix.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <765825.1752639589@famine>
 
-On Fri, May 30, 2025 at 01:50:04PM +0900, Akihiko Odaki wrote:
-> NOTE: I'm leaving Daynix Computing Ltd., for which I worked on this
-> patch series, by the end of this month.
+On Tue, Jul 15, 2025 at 09:19:49PM -0700, Jay Vosburgh wrote:
+> Hangbin Liu <liuhangbin@gmail.com> wrote:
 > 
-> While net-next is closed, this is the last chance for me to send another
-> version so let me send the local changes now.
+> >When lacp_active is set to off, the bond operates in passive mode, meaning it
+> >will only "speak when spoken to." However, the current kernel implementation
+> >only sends an LACPDU in response when the partner's state changes.
+> >
+> >In this situation, once LACP negotiation succeeds, the actor stops sending
+> >LACPDUs until the partner times out and sends an "expired" LACPDU.
+> >This leads to endless LACP state flapping.
 > 
-> Please contact Yuri Benditovich, who is CCed on this email, for anything
-> about this series.
+> 	From the above, I suspect our implementation isn't compliant to
+> the standard.  Per IEEE 802.1AX-2014 6.4.1 LACP design elements:
 > 
-> virtio-net have two usage of hashes: one is RSS and another is hash
-> reporting. Conventionally the hash calculation was done by the VMM.
-> However, computing the hash after the queue was chosen defeats the
-> purpose of RSS.
-> 
-> Another approach is to use eBPF steering program. This approach has
-> another downside: it cannot report the calculated hash due to the
-> restrictive nature of eBPF.
-> 
-> Introduce the code to compute hashes to the kernel in order to overcome
-> thse challenges.
-> 
-> An alternative solution is to extend the eBPF steering program so that it
-> will be able to report to the userspace, but it is based on context
-> rewrites, which is in feature freeze. We can adopt kfuncs, but they will
-> not be UAPIs. We opt to ioctl to align with other relevant UAPIs (KVM
-> and vhost_net).
-> 
-> The patches for QEMU to use this new feature was submitted as RFC and
-> is available at:
-> https://patchew.org/QEMU/20250530-hash-v5-0-343d7d7a8200@daynix.com/
-> 
-> This work was presented at LPC 2024:
-> https://lpc.events/event/18/contributions/1963/
+> c)	Active or passive participation in LACP is controlled by
+> 	LACP_Activity, an administrative control associated with each
+> 	Aggregation Port, that can take the value Active LACP or Passive
+> 	LACP. Passive LACP indicates the Aggregation Port’s preference
+> 	for not transmitting LACPDUs unless its Partner’s control value
+> 	is Active LACP (i.e., a preference not to speak unless spoken
+> 	to). Active LACP indicates the Aggregation Port’s preference to
 
+OK, so this means the passive side should start sending LACPDUs when receive
+passive actor's LACPDUs, with the slow/fast rate based on partner's rate?
 
-It's been a while, do you intend to post v13?
+Hmm, then when we should stop sending LACPDUs? After
+port->sm_mux_state == AD_MUX_DETACHED ?
 
-> V1 -> V2:
->   Changed to introduce a new BPF program type.
+> 	participate in the protocol regardless of the Partner’s control
+> 	value (i.e., a preference to speak regardless).
 > 
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
-> ---
-> Changes in v12:
-> - Updated tools/testing/selftests/net/config.
-> - Split TUNSETVNETHASH.
-> - Link to v11: https://lore.kernel.org/r/20250317-rss-v11-0-4cacca92f31f@daynix.com
+> d)	Periodic transmission of LACPDUs occurs if the LACP_Activity
+> 	control of either the Actor or the Partner is Active LACP. These
+> 	periodic transmissions will occur at either a slow or fast
+> 	transmission rate depending upon the expressed LACP_Timeout
+> 	preference (Long Timeout or Short Timeout) of the Partner
+> 	System.
 > 
-> Changes in v11:
-> - Added the missing code to free vnet_hash in patch
->   "tap: Introduce virtio-net hash feature".
-> - Link to v10: https://lore.kernel.org/r/20250313-rss-v10-0-3185d73a9af0@daynix.com
+> 	Which, in summary, means that if either end (actor or partner)
+> has LACP_Activity set, both ends must send periodic LACPDUs at the rate
+> specified by their respective partner's LACP_Timeout rate.
 > 
-> Changes in v10:
-> - Split common code and TUN/TAP-specific code into separate patches.
-> - Reverted a spurious style change in patch "tun: Introduce virtio-net
->   hash feature".
-> - Added a comment explaining disable_ipv6 in tests.
-> - Used AF_PACKET for patch "selftest: tun: Add tests for
->   virtio-net hashing". I also added the usage of FIXTURE_VARIANT() as
->   the testing function now needs access to more variant-specific
->   variables.
-> - Corrected the message of patch "selftest: tun: Add tests for
->   virtio-net hashing"; it mentioned validation of configuration but
->   it is not scope of this patch.
-> - Expanded the description of patch "selftest: tun: Add tests for
->   virtio-net hashing".
-> - Added patch "tun: Allow steering eBPF program to fall back".
-> - Changed to handle TUNGETVNETHASHCAP before taking the rtnl lock.
-> - Removed redundant tests for tun_vnet_ioctl().
-> - Added patch "selftest: tap: Add tests for virtio-net ioctls".
-> - Added a design explanation of ioctls for extensibility and migration.
-> - Removed a few branches in patch
->   "vhost/net: Support VIRTIO_NET_F_HASH_REPORT".
-> - Link to v9: https://lore.kernel.org/r/20250307-rss-v9-0-df76624025eb@daynix.com
+> >To avoid this, we need update ntt to true once received an LACPDU from the
+> >partner, ensuring an immediate reply. With this fix, the link becomes stable
+> >in most cases, except for one specific scenario:
+> >
+> >Actor: lacp_active=off, lacp_rate=slow
+> >Partner: lacp_active=on, lacp_rate=fast
+> >
+> >In this case, the partner expects frequent LACPDUs (every 1 second), but the
+> >actor only responds after receiving an LACPDU, which, in this setup, the
+> >partner sends every 30 seconds due to the actor's lacp_rate=slow. By the time
+> >the actor replies, the partner has already timed out and sent an "expired"
+> >LACPDU.
 > 
-> Changes in v9:
-> - Added a missing return statement in patch
->   "tun: Introduce virtio-net hash feature".
-> - Link to v8: https://lore.kernel.org/r/20250306-rss-v8-0-7ab4f56ff423@daynix.com
+> 	Presuming that I'm correct that we're not implementing 6.4.1 d),
+> above, correctly, then I don't think this is a proper fix, as it kind of
+> band-aids over the problem a bit.
 > 
-> Changes in v8:
-> - Disabled IPv6 to eliminate noises in tests.
-> - Added a branch in tap to avoid unnecessary dissection when hash
->   reporting is disabled.
-> - Removed unnecessary rtnl_lock().
-> - Extracted code to handle new ioctls into separate functions to avoid
->   adding extra NULL checks to the code handling other ioctls.
-> - Introduced variable named "fd" to __tun_chr_ioctl().
-> - s/-/=/g in a patch message to avoid confusing Git.
-> - Link to v7: https://lore.kernel.org/r/20250228-rss-v7-0-844205cbbdd6@daynix.com
+> 	Looking at the code, I suspect the problem revolves around the
+> "lacp_active" check in ad_periodic_machine():
 > 
-> Changes in v7:
-> - Ensured to set hash_report to VIRTIO_NET_HASH_REPORT_NONE for
->   VHOST_NET_F_VIRTIO_NET_HDR.
-> - s/4/sizeof(u32)/ in patch "virtio_net: Add functions for hashing".
-> - Added tap_skb_cb type.
-> - Rebased.
-> - Link to v6: https://lore.kernel.org/r/20250109-rss-v6-0-b1c90ad708f6@daynix.com
+> static void ad_periodic_machine(struct port *port, struct bond_params *bond_params)
+> {
+> 	periodic_states_t last_state;
 > 
-> Changes in v6:
-> - Extracted changes to fill vnet header holes into another series.
-> - Squashed patches "skbuff: Introduce SKB_EXT_TUN_VNET_HASH", "tun:
->   Introduce virtio-net hash reporting feature", and "tun: Introduce
->   virtio-net RSS" into patch "tun: Introduce virtio-net hash feature".
-> - Dropped the RFC tag.
-> - Link to v5: https://lore.kernel.org/r/20241008-rss-v5-0-f3cf68df005d@daynix.com
+> 	/* keep current state machine state to compare later if it was changed */
+> 	last_state = port->sm_periodic_state;
 > 
-> Changes in v5:
-> - Fixed a compilation error with CONFIG_TUN_VNET_CROSS_LE.
-> - Optimized the calculation of the hash value according to:
->   https://git.dpdk.org/dpdk/commit/?id=3fb1ea032bd6ff8317af5dac9af901f1f324cab4
-> - Added patch "tun: Unify vnet implementation".
-> - Dropped patch "tap: Pad virtio header with zero".
-> - Added patch "selftest: tun: Test vnet ioctls without device".
-> - Reworked selftests to skip for older kernels.
-> - Documented the case when the underlying device is deleted and packets
->   have queue_mapping set by TC.
-> - Reordered test harness arguments.
-> - Added code to handle fragmented packets.
-> - Link to v4: https://lore.kernel.org/r/20240924-rss-v4-0-84e932ec0e6c@daynix.com
+> 	/* check if port was reinitialized */
+> 	if (((port->sm_vars & AD_PORT_BEGIN) || !(port->sm_vars & AD_PORT_LACP_ENABLED) || !port->is_enabled) ||
+> 	    (!(port->actor_oper_port_state & LACP_STATE_LACP_ACTIVITY) && !(port->partner_oper.port_state & LACP_STATE_LACP_ACTIVITY)) ||
+> 	    !bond_params->lacp_active) {
+> 		port->sm_periodic_state = AD_NO_PERIODIC;
+> 	}
 > 
-> Changes in v4:
-> - Moved tun_vnet_hash_ext to if_tun.h.
-> - Renamed virtio_net_toeplitz() to virtio_net_toeplitz_calc().
-> - Replaced htons() with cpu_to_be16().
-> - Changed virtio_net_hash_rss() to return void.
-> - Reordered variable declarations in virtio_net_hash_rss().
-> - Removed virtio_net_hdr_v1_hash_from_skb().
-> - Updated messages of "tap: Pad virtio header with zero" and
->   "tun: Pad virtio header with zero".
-> - Fixed vnet_hash allocation size.
-> - Ensured to free vnet_hash when destructing tun_struct.
-> - Link to v3: https://lore.kernel.org/r/20240915-rss-v3-0-c630015db082@daynix.com
+> 	In the above, because all the tests are chained with ||, the
+> lacp_active test overrides the two correct-looking
+> LACP_STATE_LACP_ACTIVITY tests.
 > 
-> Changes in v3:
-> - Reverted back to add ioctl.
-> - Split patch "tun: Introduce virtio-net hashing feature" into
->   "tun: Introduce virtio-net hash reporting feature" and
->   "tun: Introduce virtio-net RSS".
-> - Changed to reuse hash values computed for automq instead of performing
->   RSS hashing when hash reporting is requested but RSS is not.
-> - Extracted relevant data from struct tun_struct to keep it minimal.
-> - Added kernel-doc.
-> - Changed to allow calling TUNGETVNETHASHCAP before TUNSETIFF.
-> - Initialized num_buffers with 1.
-> - Added a test case for unclassified packets.
-> - Fixed error handling in tests.
-> - Changed tests to verify that the queue index will not overflow.
-> - Rebased.
-> - Link to v2: https://lore.kernel.org/r/20231015141644.260646-1-akihiko.odaki@daynix.com
+> 	It looks like ad_initialize_port() always sets
+> LACP_STATE_LACP_ACTIVITY in the port->actor_oper_port_state, and nothing
+> ever clears it.
 > 
-> ---
-> Akihiko Odaki (10):
->       virtio_net: Add functions for hashing
->       net: flow_dissector: Export flow_keys_dissector_symmetric
->       tun: Allow steering eBPF program to fall back
->       tun: Add common virtio-net hash feature code
->       tun: Introduce virtio-net hash feature
->       tap: Introduce virtio-net hash feature
->       selftest: tun: Test vnet ioctls without device
->       selftest: tun: Add tests for virtio-net hashing
->       selftest: tap: Add tests for virtio-net ioctls
->       vhost/net: Support VIRTIO_NET_F_HASH_REPORT
+> 	Thinking out loud, perhaps this could be fixed by
 > 
->  Documentation/networking/tuntap.rst  |   7 +
->  drivers/net/Kconfig                  |   1 +
->  drivers/net/ipvlan/ipvtap.c          |   2 +-
->  drivers/net/macvtap.c                |   2 +-
->  drivers/net/tap.c                    |  80 +++++-
->  drivers/net/tun.c                    |  92 +++++--
->  drivers/net/tun_vnet.h               | 165 +++++++++++-
->  drivers/vhost/net.c                  |  68 ++---
->  include/linux/if_tap.h               |   4 +-
->  include/linux/skbuff.h               |   3 +
->  include/linux/virtio_net.h           | 188 ++++++++++++++
->  include/net/flow_dissector.h         |   1 +
->  include/uapi/linux/if_tun.h          |  80 ++++++
->  net/core/flow_dissector.c            |   3 +-
->  net/core/skbuff.c                    |   4 +
->  tools/testing/selftests/net/Makefile |   2 +-
->  tools/testing/selftests/net/config   |   1 +
->  tools/testing/selftests/net/tap.c    | 131 +++++++++-
->  tools/testing/selftests/net/tun.c    | 485 ++++++++++++++++++++++++++++++++++-
->  19 files changed, 1234 insertions(+), 85 deletions(-)
-> ---
-> base-commit: 5cb8274d66c611b7889565c418a8158517810f9b
-> change-id: 20240403-rss-e737d89efa77
+> 	a) remove the test of bond_params->lacp_active here, and,
 > 
-> Best regards,
-> -- 
-> Akihiko Odaki <akihiko.odaki@daynix.com>
+> 	b) The lacp_active option setting controls whether LACP_ACTIVITY
+> is set in port->actor_oper_port_state.
+> 
+> 	Thoughts?
 
+As the upper question. When should we stop sending the LACPDUs?
+
+Thanks
+Hangbin
 
