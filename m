@@ -1,167 +1,114 @@
-Return-Path: <linux-kselftest+bounces-37466-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D79C1B0827B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 03:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3282AB08280
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 03:38:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C42763BA1A3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 01:36:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 253B44A7473
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 01:38:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E85143C61;
-	Thu, 17 Jul 2025 01:37:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7021E3761;
+	Thu, 17 Jul 2025 01:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h34KecRM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OxxRZTSX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE9A2F509;
-	Thu, 17 Jul 2025 01:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA861C8611
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Jul 2025 01:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752716240; cv=none; b=Wwd6NYRA3JWaLDrWuFg3yq0aB7tr++vK/MAKSK1NOCHGJcb+wlxpmZ/8PFqh/6QDdCojKD9AKAOI3r/7ASxskB1aMbH3yrcIYOo790zVorPO7mTrMsvaMwMoJVxiotKtPLkWdx8eaTvh2Og07yMAs/gVCUN7Wn5/M034AtjMILQ=
+	t=1752716298; cv=none; b=UqRN4H30+0lpHMLjZkwROOIoKmknAJ3BHyrqwk6+WX2QrG5tzJMBaekA14FaRWc5LmNDEtTiaS8WOs6wHTo6nZnnD+cZ9j32BgRtjM51yhNEU+d1YCvcWU0yTr3kqnMDGZRmTHwPpzIul73XzVNTBYfITO7OV6XDNphQA999HX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752716240; c=relaxed/simple;
-	bh=fMo1n/FvRV5iyO+K3WHcXIK+6Whi7Zr0qbAPz05a1Ps=;
+	s=arc-20240116; t=1752716298; c=relaxed/simple;
+	bh=XEl9xWdkm001s4BWnfLogzuaUUgUnWcQGefbm9+v6Uk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e03/rkAbj5SMYTh/+kUiAoefoxG8Lx70Iv90Qw+0ImxdnsaTlf4NPCiyDeHaQC4I8Prr8c4gDTfj3l3kL9GvSwMT7/mvcEXicbVZnBocKFZ7ZBps8tLzIXOfNVegBA/7X3Q04U3KO8woRMrMmYMdBFPy3jvvYa815NVSmtCQxRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h34KecRM; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4561514c7f0so4063535e9.0;
-        Wed, 16 Jul 2025 18:37:18 -0700 (PDT)
+	 To:Cc:Content-Type; b=SNdjbGhggIvo9DdRIFo0EhK1TdVwf2zpIZD/h5ly8fgZnL/A8kmKVEQLEhvnLQMR6A9S/R+4lgy8PTcirGjFh7KvbCbuNK5lWASoDbnmGflSLC2zD6RsZ6mCM2uDtOBovpLjOnvH7dF3YIQUBJbV78aKNtxS3ft1h7nMbYodcro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OxxRZTSX; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4aaf43cbbdcso51361cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jul 2025 18:38:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752716237; x=1753321037; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1752716295; x=1753321095; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N1wYYVCoFZRUOZZtbrCGDeTHy7mPiZt2di/nk1haH1g=;
-        b=h34KecRMbZmumcuT3o+rxP3uqE27bRRfMF5xQdeeHuQQo3SbokPnOo3PtuEasg6VTb
-         3GeSbk1uA9UDGTDaad+f8c47qBinN321Xd04hfTT6zPrms8oZuEIrZCtLsa0IUVdQF5Z
-         IkvmZZ/EbX4WVfe+9caV/bBHWt2TZfyyBVnXO1ojkNC5HSLXLvBQzEYAOe0ALhTkeGcN
-         JJj1fhm5/j+VnbaVX28Ox1fyZyxySaWbgFZ69ka/wplvrIMW7BZBaHOsOzMOzzIM4P+g
-         Q3IgPllJqXW5ZBVm+z86A6wBYnEOYnEbGX3yfT4daKlHZjYWTeXp1A9k5hj6tLEareGy
-         mhOQ==
+        bh=lHi1gfOxjmldjSqGVDMu9tqxYC0kWW1LbdeHYepUyWU=;
+        b=OxxRZTSXtTD9FlCZefwGZvtN6zgTd/mAAiQ9U9Mo/GrseOIKTaNUvUz8B0epqcT0iB
+         QzmkABZYq33cQD3Psg9WEmpue9OKSgCv6zkuSsv3+1HFIxJ228ZUvuuqWCe5gCsHGI3n
+         hrKYRiD8GDocH6Ivg/ge/qeKQnVkETWEcKqqSVWyoyGeiNzeDrRpu4/AmLBfvAE0RUTT
+         S4yNB2zd6Fafe0q7I9Bu/jqW81nOZzXqQLaLoA9OrkhKJ1GPgIBaLlXyiWR/300MhtxX
+         wOBWdEzAX9m4DcqUwniHM0LkSwm1XXsUpFQt/oqIUSaVMf+12uyghXdG2Fd6opuF9vlw
+         Xvzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752716237; x=1753321037;
+        d=1e100.net; s=20230601; t=1752716295; x=1753321095;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N1wYYVCoFZRUOZZtbrCGDeTHy7mPiZt2di/nk1haH1g=;
-        b=JXRHOxmIlyh/Nr/MjgujLprpcCAmkWxwAfj5ow/rB88tJXlmAXCnExhE2nHj2j55+a
-         H+jlgZc/XJdmNn4HXr4WVxFA/5UzIPjhPJ/348RkUl9oE2GIjXgA6E12Ftt/v1lkoTU9
-         tmrldJaEkl6p8DzhvMRKKivlVE2u+qvqPqxtkXyAmrewhV3mgYS4P6T3k5Qq9X0hpUGo
-         SKSkWgoAv1J03QDMojEdWghTx1LsLR73biF1c478GdlDn2+tAesT+90zmYFnvOrpGfOT
-         PTzVlUvnNV5EKNxL6XMIf88432a0gI9Yt+6Ax83/hmwThd4ts4HV7N4byxWUGN4i+SL6
-         zr0g==
-X-Forwarded-Encrypted: i=1; AJvYcCU/Zyd0AwmwMsMcFj0fEZ4XUkTVio3fQxD0z1WgoQP48gA7InIM5wMCtS/GC62vjZ2tB+H0kxhtgdR0YOe/igM9@vger.kernel.org, AJvYcCUS5AzY1Tx9Ut0aWWzIsff4XGwW07QqjbEax9Co8d693IKQQPs9KvD1yPDGIP8f2Csgr70=@vger.kernel.org, AJvYcCV9nbNAHaf4AfVzfGSrzxbCiWFLRS6kXVlHQ8o9WfX2s+s3Xcy9Iis9b4/wwhIqjU4f/q81JkYCVk6RzBkh@vger.kernel.org
-X-Gm-Message-State: AOJu0YwD1T6TtNl7BakN5OG4xGmRySByxAueOw5ZEYFu4UUe/OFqF+Pu
-	oW+RpZOMebO24Jo2w0+p/W9pluBlNSpTDDvfpCbS1qe1u1SJ9o6ZbveQEJs/q42WCRFasPlDJtn
-	f7bEjxs4VbU8zlRmssOTa4jSBHKnHn7w=
-X-Gm-Gg: ASbGncuZwLvgLCdtGi7hKnmEtWu+PS/UjJiTwWJi/V/wPYxHKKudThj2TtJ9B74dRfx
-	o5cZ9E1WnIfJj/VtsQ9iNyesuteqWsgi7t5z+87x10UGRD4vzr4iXm7J5l1vR0BwEOiT1icEfvo
-	jWernSG5dJlOWcxC+GyLTgyjo1I1EpcE8k8mdtG+/FE0EyGbk27B+tP0xvh97RpvaPMeEVBuy4K
-	D+3k5jBFsXmUSIzynv9SThydFeAYkdKIVD4
-X-Google-Smtp-Source: AGHT+IGgV6MdxSmi6TQO5PCsDGnID2h2AYYqZv+RgBvrOCAatiFMutwhoHVVe0kXdaQxyhlEINYmbYtkTBm/JZ3X4WI=
-X-Received: by 2002:a05:600c:3e09:b0:453:dbe:7574 with SMTP id
- 5b1f17b1804b1-4562edaa0b3mr47452695e9.12.1752716236784; Wed, 16 Jul 2025
- 18:37:16 -0700 (PDT)
+        bh=lHi1gfOxjmldjSqGVDMu9tqxYC0kWW1LbdeHYepUyWU=;
+        b=VSofGVeCzpay3f8QHEW8G2r4EcYkCLDD1PwHULJh5VVVDdfGeYFd+W8D3lLjejWgBj
+         HfrtgYkGv2CSGwSXc1w4/jc41NVnT9nqCcJuURO4W68jSw5LR4ljqksy7ex4KFJ1hDAs
+         1U/E4+Dl114b7d2AGzDB17/PdGbxgleLBhADzusKmQymGvyCrPnLPLmSyzQhpbvJ3ELN
+         E7rh6eU8OltwyFgVkLhIvQg2XDX/0WwMvF/+e9/kTZNexNQay6gpZfKa9vGy0CW9P9ko
+         alOLzrbbbcjMDrXFJMxllPGmqlixmJ0mSZAtJKHTQRAkTLx3ESIO9/g43EaxlpBjkeZu
+         XQqw==
+X-Forwarded-Encrypted: i=1; AJvYcCW8IiGZbmdPmKgGWJLFTH01zBEPR+H8h60pHlit1usCPgcgkB5B7Wf6h6Vsq24NfDRBeNRuMmi/KyvBwqH8snc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwE/J8JqbqpPTu4XLop6v7IuzCb7dT4GUY1UjUfL9sj5NM6KhE8
+	78ajAAHodAE9jwRuVH7ZAp+S6WXRYGTgmh0HhlfwAsk0Kn5GZo1Z/eUx76KyQYMukfyjChTPU0/
+	v6kfUMoUBtogk9pq73pR6jy7i0cD0ZQYPEq/ybPHT
+X-Gm-Gg: ASbGncssMN/+gX+ktlJoKXoSHq8d9IKitZqP5gTcplgh+s54XajX0YoaD+qJKIHt95U
+	U3Yn8MHd01eGiRaDeFkPOk8P/rs04r9xmBM4zaJ/momoj/9bmOHZuht+B+tvN5SU62ufCt/vdur
+	yQCrCR0sdR9olp3yoE6nBkFaIxGog+jLyecd5/CmnOvBX73FCOLStghuow8l39KRNAGgZqEKekD
+	ne6rDw0JNfLtJOx
+X-Google-Smtp-Source: AGHT+IFhiaeqzK2nQ8VSVgEqrMotFK2LCspw+YJrQhNSUfoYY0N+Vy0kgJUtxif7ZxBwweEETtv622z4tIyINzqhXvw=
+X-Received: by 2002:a05:622a:a492:b0:497:75b6:e542 with SMTP id
+ d75a77b69052e-4aba2bcfa11mr1814001cf.10.1752716294281; Wed, 16 Jul 2025
+ 18:38:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250714120408.1627128-1-mannkafai@gmail.com> <20250714120408.1627128-4-mannkafai@gmail.com>
-In-Reply-To: <20250714120408.1627128-4-mannkafai@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 16 Jul 2025 18:37:05 -0700
-X-Gm-Features: Ac12FXx3K0NczfO52DOfjKkMx8MTLQOgGs2G-OeBUYMXF1gUhlhYGLeeOWQSvBk
-Message-ID: <CAADnVQ+H6oHMFPvWkXuHv9oanHT57F_HrD_ZpxB0X=37vdAoyw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Add selftest for attaching
- tracing programs to functions in deny list
-To: KaFai Wan <mannkafai@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Yafang Shao <laoar.shao@gmail.com>, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Leon Hwang <leon.hwang@linux.dev>
+References: <20250716030557.1547501-1-surenb@google.com> <20250716155545.ad2efdd41c85d6812bf328bb@linux-foundation.org>
+In-Reply-To: <20250716155545.ad2efdd41c85d6812bf328bb@linux-foundation.org>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 16 Jul 2025 18:38:03 -0700
+X-Gm-Features: Ac12FXxcylNiHfdNrzrYc5xn0C76o-sRxtUR8Ak1vbrrsG08KbBBjpmWceaRzxY
+Message-ID: <CAJuCfpE7TAZmk+y-BC9WAYMTH31Ao1PNd9H8h=0GCLEyXygUdg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/7] use per-vma locks for /proc/pid/maps reads
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
+	vbabka@suse.cz, peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, 
+	mhocko@kernel.org, paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
+	brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com, 
+	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de, 
+	andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
+	tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 14, 2025 at 5:04=E2=80=AFAM KaFai Wan <mannkafai@gmail.com> wro=
-te:
+On Wed, Jul 16, 2025 at 3:55=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
 >
-> The reuslt:
+> On Tue, 15 Jul 2025 20:05:49 -0700 Suren Baghdasaryan <surenb@google.com>=
+ wrote:
 >
->   $ tools/testing/selftests/bpf/test_progs --name=3Dtracing_deny
->   #467/1   tracing_deny/migrate_disable:OK
->   #467     tracing_deny:OK
->   Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+> > This patchset switches from holding mmap_lock while reading /proc/pid/m=
+aps
+> > to taking per-vma locks as we walk the vma tree.
 >
-> Signed-off-by: KaFai Wan <mannkafai@gmail.com>
-> ---
->  .../selftests/bpf/prog_tests/tracing_deny.c       | 11 +++++++++++
->  tools/testing/selftests/bpf/progs/tracing_deny.c  | 15 +++++++++++++++
->  2 files changed, 26 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_deny.c
->  create mode 100644 tools/testing/selftests/bpf/progs/tracing_deny.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_deny.c b/tool=
-s/testing/selftests/bpf/prog_tests/tracing_deny.c
-> new file mode 100644
-> index 000000000000..460c59a9667f
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_deny.c
-> @@ -0,0 +1,11 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <test_progs.h>
-> +#include "tracing_deny.skel.h"
-> +
-> +void test_tracing_deny(void)
-> +{
-> +       /* migrate_disable depends on CONFIG_SMP */
-> +       if (libbpf_find_vmlinux_btf_id("migrate_disable", BPF_TRACE_FENTR=
-Y) > 0)
-> +               RUN_TESTS(tracing_deny);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/tracing_deny.c b/tools/tes=
-ting/selftests/bpf/progs/tracing_deny.c
-> new file mode 100644
-> index 000000000000..98ef834f0b6d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/tracing_deny.c
-> @@ -0,0 +1,15 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include "bpf_misc.h"
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> +
-> +SEC("fentry/migrate_disable")
-> +__failure __msg("Attaching tracing programs to function 'migrate_disable=
-' is rejected.")
-> +int BPF_PROG(migrate_disable)
-> +{
-> +       return 0;
-> +}
+> Thanks, I added this v7 series to mm-new.  Which I usually push out
+> mid-evening California time.
 
-Please roll these two tiny files into existing files in progs/ and prog_tes=
-ts/
-directories.
-Every file takes time to compile 4 times, so let's avoid unnecessary overhe=
-ad.
-
---
-pw-bot: cr
+Thanks! There are some comments on the last version as well, so
+unfortunately I'll have to respin and bother you again once that's
+addressed but this update should at least remove the syzbot noise.
 
