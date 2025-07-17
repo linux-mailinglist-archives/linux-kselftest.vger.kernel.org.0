@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-37474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE010B08650
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 09:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EFA5B08657
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 09:17:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4505117FA99
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 07:16:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D81F168332
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 07:17:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FDF420A5DD;
-	Thu, 17 Jul 2025 07:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C349721772D;
+	Thu, 17 Jul 2025 07:17:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="IScBnWiC"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="c6ulECsP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012021.outbound.protection.outlook.com [52.101.66.21])
+Received: from AS8PR03CU001.outbound.protection.outlook.com (mail-westeuropeazon11012030.outbound.protection.outlook.com [52.101.71.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB051D554;
-	Thu, 17 Jul 2025 07:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74C41F4717;
+	Thu, 17 Jul 2025 07:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.71.30
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752736587; cv=fail; b=gGZ1b4GwNq+CpIX5QsyBoz8wVVzuV/ocnj/NyJBU/S22RSj4ZDtW57lMhZ/e9CB9+O6whj0SmwCLXJ8ZkZZujnfx/E36GooAhVrgioIOgah5fAZB7ifxRCk87AtqKztdyfZ1d4WrdvPEJWzP47d2mb+uogTVaFzZ6b2ei79pZ0A=
+	t=1752736630; cv=fail; b=uhGkt92u0cVvJIdhSjIQ3x/1v0kxCKqUdCqKrjNa4E7AY/+ntXQPXmKdsXzbzLd8dtWcipDZeGSOMXbERHPKkdnXFKs5RhMm4dMEkLgp2lei8re62hqH2FVntJhQ20hF+C0YjVHPPtKStJzbdeplg5ioiR6drvi/gN5Q2MuMaAQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752736587; c=relaxed/simple;
-	bh=4N6ltMHnOLCl7VF4npTUG2NSXXOYcoGNMTzV7qwHMyo=;
+	s=arc-20240116; t=1752736630; c=relaxed/simple;
+	bh=yrEg89NbsZ1Xxnhxw9d2Lc1BnwdPBabf4ePwKppdcds=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Mzr6Q6LsTDWg8yIw0Lit2Z4PHtCFooHqfU+f2sXWp2zYEsNye/tRx/MgMqdryEZJ8IQ5B2/bJfROk013QJeUGlr4H9f4PKitVQxH4rep4/dqMq8UzhB2IlYubRYX+JhjqJ6UarILmwMDF76963JHd5zsyDLsRw/f7nE0jnL++ok=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=IScBnWiC; arc=fail smtp.client-ip=52.101.66.21
+	 Content-Type:MIME-Version; b=QvXBaEx5lB7aP6Dh3TKz9SIGDNk15m6tSjZ9lGqdFQG0C72yaDeqlSkA414PyNQY9HZzmcXbujgwICUpF7cVgOLe+XvwlVi1vJ60Rpc+Kw2+MUJ5BReYWEL9wvKIVPpf/Z232PE3I1DsnNuFAE0zJcUw66DXBbFFBKz9WPEtN38=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=c6ulECsP; arc=fail smtp.client-ip=52.101.71.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OZyr40ua+IbLK46scjtJLeZogG4kimbqppL5HyW897GQDf210uh9QPWLhc33CD/BHoBCbD2SyzEmN44Kp1NW52ZiF9ujTYLpy4+LGv/odRgMLYmd3upH1Kl/k78Neqq5lA/UYZHrIubh9OTg7MH+NdMKCiOXyyTpLvxvk2LRybHYodHZw/OTWnLfFyqRNwSrxjLCRIZQ/wzud9485OnIcXTwlSMLZmpX5ckzdcLp8IVVpEszjbM0lpmdxAbzLsRzZwHo620V4rWHTt14T0csK7jEN/5bm94hX2ZDGL+BZQ09aH88bms4j60W7DCcJC4/paE7Cf+ka6oEwiRdN6Lgmg==
+ b=Hj0zZsAA9LvIY2xp4tzz42UmBgVVt/4/AVXIDr92JgeVP0iTQ+gWT83TgppSJfouWSMJzDrCmzh0DzGxC2f4oX4AE5VZyzOhEtObCVjCtUAGwI6gEEzOEKjcQrezGi9qO62otjoyt5BvLvM6n+kWS2tJxhzms+aw7zHT9jSj0Tb6B/p8T0eQVUt4BU8Ip+LstqYhixMQKxLW1gbu10VUZOSaRP4g4gFZ8kkZdl7P24bnLprKaIXurAWLYPAcgvT4It4TNRT7z6TaZHYhePGgubzJ95cs+kwkNRzg4p/PycROMv7kbEZeFpXdN1YUil6aFQO+Uqkc57xMMNB04ES7Gg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6+OSXSI8MCjth+iHUXBweXXR3gDTsZW9B+g8i7/awU4=;
- b=aV1zFx5PecZwWJALVpnngzHN43gWK6igfypy2YVVpV84Ic5Y2Ou4AOy7xKGPwl0bhQdX/fjeISkzewejf5qV33mQaYl1uHlPqWTY02sZj69iSScg2kzq4A7oXReqjLYGz9+yd8IymN5D30eZggOPYZ5jYs3iBG3hLj3z4OQWqMc/Wi5+RxOdo5rKS6xwhr3/4WpHlU91jgHd9KnQqUbbISaQGXRAJJJ/OM9c0+fGx4lrBfopx4x2HgHIHkxMVd/UzFqTEx4ClnwgtpHG2z0Tm09W61e3ohS/OFZSaYsF9p7aLF1GNaquWwRiCvDk/U3Zaldjj1eaP4LnE72PJ6WDSA==
+ bh=hUFpa6vn2QOJ6/09qEhqCjkj0RkO/1YMNAFt4jT2XKg=;
+ b=QC6aKr8CsXhBb00vFOIniTF8D7hhBVbY50qdnjoIprizNRslh6JuXG60xQI1fybOscdWGGZU89GgVRGmpoot9rTPDsrR+ObiQkq8tt4OFkywFjf7QtGN9xJ1fALUiTfO76U98+lcd+8DuOBSrnYV2f4p+Lex3OdSm3KC3LPoaprPJx+tW0OgWwUdozSADlo2Hvg0QsDLuFqi4sr6pMc/KZiRX6Gk1ZAqMclG/FRffFAuch1wVeJ7I9sw4ColkhYL3UNCmUWKJWzQKedE89XvCQd6sft+ZQQ76bUzDYKyWJLqFIciDpZH+rPAh8kfz3iV0tdcZNLEpGik6qe1rBxERA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
  header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
@@ -45,17 +45,17 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6+OSXSI8MCjth+iHUXBweXXR3gDTsZW9B+g8i7/awU4=;
- b=IScBnWiCiEMrGnbE6k/ZZeaUdQjvcWX2cRB9sA4pfD+/ti4P+Zx1PK/8Hxa4cGctpvEHBtjYY0q8PemAG+76KEQThaxW1klgoCKLl8QPuorVrPpVah3yRhls5X0u17X3jTefyWKqR6e56EWcq+4QWpQG64atVTON+StR+K6Tbcixve7tF2et8zg89Usr4orDL3JH/+8z0D6D8jTnBKTIevISQkornEa/jSfRhVQM7nejIWMGe/chRHdup280GDv3ArRChZV/utmtbcRVxrO0lAvkM3xtWBEhwd2r42tIoepVlvWr1JKqHLqDg9ZSPzFMNPZpnw6vTXCRRAGwB9qajg==
+ bh=hUFpa6vn2QOJ6/09qEhqCjkj0RkO/1YMNAFt4jT2XKg=;
+ b=c6ulECsPgynvm3IgnneKECV1gE3NgD68qtG2QjuffgscyqBF0pqhYSmCaHBpM3TCUh5UPJMeefTXxk82+6c4shw5+gBgUURmDZJWiBE79FUEMfetin1unpCsjiqDqYZaKBGO7e4WmUVbmtjfhaXxdec2Zm/Z1aAjLmtXd9L4IKooERBvgiu7AghNOcoH5ZtRcUw4wVe27Bcx4AaqQBbLwMiN1KHki0tC4dBpA2KZuBeiXSubV89KxoMD37jQyNRnbs/mQ8bPpouilh2q0YCd+Hxjkn/8FP5VhvcQYj3Ms5R8Lp9y2I18H83u9VtyBfGCvWhsRBsWL+AjXN3ay3WrSg==
 Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
  by DB9PR07MB9714.eurprd07.prod.outlook.com (2603:10a6:10:4c0::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.36; Thu, 17 Jul
- 2025 07:16:21 +0000
+ 2025 07:17:05 +0000
 Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
  ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
  ([fe80::b7f8:dc0a:7e8d:56%6]) with mapi id 15.20.8922.037; Thu, 17 Jul 2025
- 07:16:21 +0000
+ 07:17:05 +0000
 From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
 To: Jakub Kicinski <kuba@kernel.org>
 CC: "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
@@ -84,14 +84,14 @@ Subject: RE: [PATCH v23 net-next 1/6] sched: Struct definition and parsing of
  dualpi2 qdisc
 Thread-Topic: [PATCH v23 net-next 1/6] sched: Struct definition and parsing of
  dualpi2 qdisc
-Thread-Index: AQHb8+RE8DDWpYvQaEawmS20VPZnHLQ1b7iAgAB7nDA=
-Date: Thu, 17 Jul 2025 07:16:21 +0000
+Thread-Index: AQHb8+RE8DDWpYvQaEawmS20VPZnHLQ1cGMAgAB9PWA=
+Date: Thu, 17 Jul 2025 07:17:05 +0000
 Message-ID:
- <PAXPR07MB7984AFFA35DA43805C02E542A351A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <PAXPR07MB79841BB73CDB3C6B441D0851A351A@PAXPR07MB7984.eurprd07.prod.outlook.com>
 References: <20250713105234.11618-1-chia-yu.chang@nokia-bell-labs.com>
 	<20250713105234.11618-2-chia-yu.chang@nokia-bell-labs.com>
- <20250716164547.6d415024@kernel.org>
-In-Reply-To: <20250716164547.6d415024@kernel.org>
+ <20250716164810.60cb683f@kernel.org>
+In-Reply-To: <20250716164810.60cb683f@kernel.org>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -100,70 +100,70 @@ authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|DB9PR07MB9714:EE_
-x-ms-office365-filtering-correlation-id: dfab0ea1-2853-4877-6680-08ddc501d4d7
+x-ms-office365-filtering-correlation-id: 83d52451-b5e7-48eb-7973-08ddc501ef60
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam:
  BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700018;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?buGCIrjBRApyY7fczCVM7HZoFzfcnfe/fndwSn6V9fX5402yj6+1pqSojAgJ?=
- =?us-ascii?Q?mO43vSbzDbQqM05HRIRP4F0jioUo4FWDdrWnOmw5mdmF5xh+0OgDNLMnri1k?=
- =?us-ascii?Q?uFUXc3tH+zLAxCs+1JsZjPYkwI3MzXwZqtb0zTnU7ZnRGBbajm9IOsvxUG6i?=
- =?us-ascii?Q?JWcwhRCfUeiQLdzsmHc6T2aqYcY5k1R6I2GpuXpVtXkoaFVgKbQY0Z00Noe2?=
- =?us-ascii?Q?dNyQiBseqfIR/n+Nk42JM50t23a3oy7JRhF41icwlV9TdfF6Q5EQ9bDN+G58?=
- =?us-ascii?Q?QNy6whvaeC9hrV9LzGQ8bEGakIuDajXQV3xz4jNXki9qNVzX8pftvATlG20u?=
- =?us-ascii?Q?W+1zMcXoKtKdKjXL6P3+C7/9CQOngeFLpmc1J9VAGXeKR4qn3JoFsC9Q40ez?=
- =?us-ascii?Q?QOMrM6TnROqzQci9RnrLmNe6+9lAjtBHOgrcI+2WN3QMqlklYo3zuEzpTWRp?=
- =?us-ascii?Q?KvzzcywoHmBpuSfo7mJYdtxvz3Tfo9XR4kAkF1V0ej97q6mHprYPxEs2skUv?=
- =?us-ascii?Q?hQw3NVAJx12KeWeGh+TB8mYpsKuri0xeg3O0h5ksj4coZ6zHIZPhbGCOPcCE?=
- =?us-ascii?Q?YC0XmgXBCmGW97H2FfA8XrDtdvr1BkINTlt69wDWvXduE0HcmLvCfAXIAUrV?=
- =?us-ascii?Q?VXl3WQhj8F4q9vAvo1BJ7L5IOYhJcvXskjuClzZrFtxi+9hHFBoySpuf0nBA?=
- =?us-ascii?Q?lLpY+Py6tH/W7iOPyJaUghBWDx5U1utR143ZJ69QyEdr7oqXFcQbzgM19DJu?=
- =?us-ascii?Q?HvKIbZDeHj9FIIW+0m2yY+bZE/QVzk8bNjBeEMW8SVqjHIhQAl2IdO7YTgbA?=
- =?us-ascii?Q?QIojEtmkQPXSsh9hhqi2f0YtnaHlO5ZFXL1y2HUY8JH71uvFacoK6S4HNKCl?=
- =?us-ascii?Q?yhQQOTXavsuUlH1z3Gr6Q+yf4iYWwBy011WETmcOQaLnJr4L1ta54CEBuLrG?=
- =?us-ascii?Q?FP6vd0W7teFYE3wGd9u/6wkjcvnJQAmvCGICij945fV+RTEOkC+7gYFM1yI5?=
- =?us-ascii?Q?C726mYWOKKFUGxUG7cOCTa7WPWdVNX6xptO4I1cKNoem6e8zevM01g3/Lxfq?=
- =?us-ascii?Q?8tos2Valh3Gow7LUNbwZgORxhp+E5f6ZmsZwMJhVIPkgLe4yUouww1MGKLws?=
- =?us-ascii?Q?wMgLwWtPafJ9LNxOfLAuVnD8Iy1f3pzn8FV2R2nhxq/HlxbntOmOJcz3lUD4?=
- =?us-ascii?Q?lpsytld8HJtiEFjuRMWee9fHIMLl/B4ZAjWr7QqJxnNE4kjFMLmwdSqLu+W4?=
- =?us-ascii?Q?InyBY4umt9srMofbrPWRMLrRDOtVCzEkf3GE9FldKXIK/fET5TGOsdg2ItN1?=
- =?us-ascii?Q?gjW0w5AF1NTjV/hjkCgfnrMmBKHcqmMEGNcfrcU9LVYlRT2kWmdoVTvEEZji?=
- =?us-ascii?Q?NU70BowSk5QKgh+wzV79nV3eD+lTAqObUwULf/OUlljG6PqFd7Cy70bEDLWP?=
- =?us-ascii?Q?E4ouehJUcZP9EOGgcSz9OYG8HIymLGJuKnlvVW7eOBdapmQpwqsk5grgHrwF?=
- =?us-ascii?Q?e0Hi/R+vgu0lsuQ=3D?=
+ =?us-ascii?Q?b4DQpJSdNOilp3bwO3F27yxa32/BhLwjO+Gl0HCSq+45fyLwV3hG3ivVMAlS?=
+ =?us-ascii?Q?YS3uvJ0DSIwlfZwbkBI1KvHkHgXhPCTdeFeg6S5lcIXL0hSFOp7X0F+GY7zf?=
+ =?us-ascii?Q?Ui5/wCgE+voYZgErVBWPIavZGRxtWaIyiSEGmuNfHULt5UbmRCEuxDZ7T/3A?=
+ =?us-ascii?Q?6A91iWzI5/lwSXDu6Jrt452L9Pa7XSIlOdBYoNhZf2tRN6/SbNVDhVPdjzWC?=
+ =?us-ascii?Q?0IvmfkW1Wtgke7J2rQslH37BLdNpNrPFOMuE4cpZHHIIlAvboZkg46pBXrt4?=
+ =?us-ascii?Q?TNVuXOF4j0YHaTRIXIyvmVI1cuongch8wwZKZkkSDqndZDBiV8wcDGWVoFBj?=
+ =?us-ascii?Q?/bIY9ylEm2EK97V7zgQwNj18qMikbP/lKgZIURUC5IJtAw/twe7K4zngRFJc?=
+ =?us-ascii?Q?TN88FBjHQwysxNcp8hPX6xcwDNYyRES/VDY5HupEgOzbd8cTCX5juWuWwHGH?=
+ =?us-ascii?Q?jS2Fn0thKMHRFutSwFPGjmQyf3XhsAUt3VFAhUycyoriHbnFOMdJlhJAvSxk?=
+ =?us-ascii?Q?bRImRkVfCH/QcXSGbmfLhFkaJLEMaFTQ0VnteXOMx9egpfZPftRsQVb0yeoB?=
+ =?us-ascii?Q?Gq/Oxxo1DI8ibi5uMWEJYVrqdwf02IEAsvMmCrNidLoRtS28JQItfsmV6xzY?=
+ =?us-ascii?Q?Q4fCt84LIaSlKYKM+nNAoE7wxrrv4XSTF8mN/Fnt0zAzGx621Nlmo32qmHIS?=
+ =?us-ascii?Q?HrnImzMvjhuZiieK1fSVWbnGcz5JeEa4BK2NV8mlOx1LN92WNGD6A9jlyHNp?=
+ =?us-ascii?Q?nv8wHsYz4k9jWHdrvNZRNFfbdkdRglHhIAQ0ZJjeoMgfA6LQjw02ffEA1Fp8?=
+ =?us-ascii?Q?ZEV3zbXYSxPsuDApkOpCIs5mDU3Gj/XZlcTZWTgfiz8+UZvQoslVaVgQveJ7?=
+ =?us-ascii?Q?PZhBvxn9A6Ag7KZuA4jsLXWPVgJPVxSUxeDcD4LIOpQJe8IZQXGlJ8p6K411?=
+ =?us-ascii?Q?E/yRmtsTJHawieqQPpENeDuCYjcnN5OB/6/D/CcWFH9X+rCQ8yMQu2ozOYti?=
+ =?us-ascii?Q?9Y1yQQAKCHRpi+0ZgAq+U81hFPkVcP4kZffnKSnhyOmu7Pwuzb8m+saPFzoo?=
+ =?us-ascii?Q?5FV5AojSE4MN6eQbyVOAGkACDd+8s8YR6zbZeXpMg1M+KO56v6SKdBNpPbpE?=
+ =?us-ascii?Q?PYfTKAVc3S9h1JnYxjnqkC/n9Ccg555C18pv7swVEPzycAp6wsybpNLlzEof?=
+ =?us-ascii?Q?xlIi2JNjRTivOdYVDuaL19emzJsCEbEHBkVmMezh6IGtQpfbDibX3l+N88bZ?=
+ =?us-ascii?Q?RBoJDUoZCn44pNZekF3lxl9T+GZlqAYxWwQJsiEqYfxRw2F+CnP/4Jfj3E9Q?=
+ =?us-ascii?Q?q9C3wTGUKbQa6e1TTeE+1pdFlYVtsIGFszqJ3btte5RZ0wf1Rk7QCGiPugBv?=
+ =?us-ascii?Q?C8VPWObrNp3oWGeYHmykaStPDk79G4ZXHosMOJV8jAMJSA/hozqPyvIpw4KO?=
+ =?us-ascii?Q?MZh3qEmuz9LvZPnEgTUz7LSFIdNDowEoM4pGJObYhSkXiCVlscZZ9jjcrSvi?=
+ =?us-ascii?Q?UdjNj/TBtoK7ZkI=3D?=
 x-forefront-antispam-report:
  CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Ej3F7tRew4QLIPtWGEUVWXvxpo5Atf3UhHollrjq3/ALFF1tJpl2Bf2TY3GB?=
- =?us-ascii?Q?qtlKvnWIltt4KFBdkxATHgRA7gqXsX50lr8VpUlFSrbgd4yHGjC1/pRN/8AI?=
- =?us-ascii?Q?Pf/gVk/HQMTJUf99SITToN9DbeTy2EXashEtxL7vdRyjBsB+KlypN7P+nl6s?=
- =?us-ascii?Q?7dTBBiOGCGqkiYdMbIWKGY2iy9we94sgPTifb+pZV1HrQkgVkTfVdHrhyorr?=
- =?us-ascii?Q?ntbOBF3ZMf1mOD1bEZyxMfTHxypD7m+p+3KBds9Fr/qGcYkUdeByZ2cBt22d?=
- =?us-ascii?Q?pp1HQgmq63UolTD56gZDz/Cm2bE1MjL2thJMylT2efk0mb87ctkLfnkF6LIN?=
- =?us-ascii?Q?kTUoAEUu28yMh3xvxlkl+O3vO43ZOtoQNTLJ83JwIDWF7MSjz6HXLW0CTMJk?=
- =?us-ascii?Q?54QORxGolloYCdfoGnNC/e3uIJP+224qV7ddlK3J0vLhyak2RWvViceoxVUv?=
- =?us-ascii?Q?xU3ejJ0SlCkMr257uCaCtn4EQeTycbNa0i2+oQ/xNsE9OcE/stiI5VDfU3vP?=
- =?us-ascii?Q?Yv8bGviTcKiyFgiF7d+xRf3ucmZRC1RASV4ESaJS656kbMS9XOCO9f9bzaGi?=
- =?us-ascii?Q?dKdp2pEF6UdX3U+deFt7rJkSU9Orw3CBOJM12D38c0Ga9hXO+AHtZFcfGo8R?=
- =?us-ascii?Q?GEU8efY/ZnhcUh3N6tRVvGJamH70xcPoyWxHlccR3iRt03lxHd9U0YZM3ks5?=
- =?us-ascii?Q?1aWuprktrlHwjt9ogwhz6Ckm64leAK2yPABBDEQSzd4Cpibj4qjBWdK/sJ7+?=
- =?us-ascii?Q?Ad79fZ8DBIjy0kf7VgGGVV7rWyHLwEDAIMvEleRhRiI2x2oaw+/YNRrCYkGq?=
- =?us-ascii?Q?PVJOYFXihjkQAUi/4LY0S6PcXL3oqjcYe2vg72s4kFSfTIByVVpDH8cSzC52?=
- =?us-ascii?Q?K2kdLw10+gkDoHoyraNWPAzy9cqOvfz8CRX9BvNfjgqZb+CUo0nSqFBPYM2b?=
- =?us-ascii?Q?xCp/7pJyHZQRKheZzSqMFvMLP+08G+dZyzmvLNr9nzg5tKiUWiy253yMBEBd?=
- =?us-ascii?Q?qHIJruRDglu99SYWIxxXz1DuWHSkNt47EJgOviZkCTvgvTR0M7lxRxkIeewD?=
- =?us-ascii?Q?0W0B0IE0YcO4C+SD1RhKWCTURno4xUOMZPk3FNlwY6os4V8IISyIEwsb6NAv?=
- =?us-ascii?Q?kZ082P2h3ouGKrq9GeBABAiFpPh06CDjpcLCppukOJFQBdwLRXbuOTa4M4aC?=
- =?us-ascii?Q?X3ZFQmP6tIUoovLtkiFIkUKc3YLmnURNHt6QxIYLO/SLEVkye1cg/NN10Cw8?=
- =?us-ascii?Q?hIxwJP2kAgWMUFuUeQnPHkr1LdZaWbE+0Kk/Athb8IVtsDMqkX0OkjQvU0E9?=
- =?us-ascii?Q?j+Vugyn/oqgO9ObqT7YI+pidkzsswH8mKQZyMNP8ph+c/2Y355sMdUDqj9Ww?=
- =?us-ascii?Q?wK9g/Tn1i31r+3JGh6s/jQK7Rvbj/bkMr03iUym8UFFUc43R18bdq3mCzDNT?=
- =?us-ascii?Q?dkwjysBcYs+u6R1OYPrwD6ezV+zVV9s/gELZ1mrhrDxX5yBiduDikQFsJ1FH?=
- =?us-ascii?Q?2WUlOEmFLmN72RJaUHwtu7M2nYMWL84cTNUW21zxeB7YAL0MK8xsXRSSpbhR?=
- =?us-ascii?Q?bt4ugQzi72QWMiFMKpERzF/X3raZJlbttSs+09Tkz+gSIZuwlHJchdXhSVwI?=
- =?us-ascii?Q?LQ=3D=3D?=
+ =?us-ascii?Q?E02FfvR7511/F9D2OYSXtAh47KQtMboQJLn/SeEo42+kPlzuqr90zo7z2s7+?=
+ =?us-ascii?Q?cW/bfmJmQpVhSJR/W9sF5s2GViY7cyxgOLgAxkH/SEDAmZ70WsrB/WQN8kAV?=
+ =?us-ascii?Q?g81ICsZAFB5oF9wAMR/IQ61237n4x4wLoPorysJbGU+PDRqzuTZJ4Vl9+5AU?=
+ =?us-ascii?Q?vYncUUnWmsFqA0L4rCmagqgxDtcF09TxD4FvVKorK2d+7NSXy8pqMDMHbkjD?=
+ =?us-ascii?Q?pOBFuTe1n04C7wKKy9E9LSWWqpgqZrNLW23lklvyZTOk9SdD6574sBx9XSH1?=
+ =?us-ascii?Q?QrVzUcDe2Vn3MOyMkxZFNQtgV/wOuAKOMkr6p5QXti1WYyjBMVEZHZPZybAX?=
+ =?us-ascii?Q?C6PmvsiT08d/xoasXLy1E0V20APfP+z8T0w24XcASkX8Zx5z6Of2CZO+5Yo+?=
+ =?us-ascii?Q?UiPMMgY6jbfp1QvdL9p63Id9UvpMN+0c1xNnTv4KcGY8p2BtoHQJFLgwpQuS?=
+ =?us-ascii?Q?MlmkdUI+1kp4ce7TKbOcsfb08LgSo0G7ec9i75ptlq5Qc5gvLTWNndpvLLJQ?=
+ =?us-ascii?Q?HAVvPnYYZ+6HnvheqVNcKfqmxfk5Jmn05fp5etp+i24DR7tzMRvb9hC6I8QD?=
+ =?us-ascii?Q?vejLUB5CWcrrKyg8skUKNzRvpoG2c3zuu/OvsQmhD934k9fv8Ti7q+3TIiS0?=
+ =?us-ascii?Q?AiiKLtmuIXsTRYhPJheZ4bgGqHiAHhpwn5z9qtcUZjh7+Hr6yXe/MZYs4su3?=
+ =?us-ascii?Q?e5PWGtydNiBqaZfSRuqpwo04rqv/JZDJ4+dIQG8ECD32SfBj/OFbL4qOxz4l?=
+ =?us-ascii?Q?9XhU1Pl8YG2wfpkcJEPQngNzPFp1rY0TndB5CNrI+TZKNLl4sYYhZoQzJmDc?=
+ =?us-ascii?Q?kB6eQs0b3SMse13iPCX+9AI5Fmnli8ZGGf21cmS5HK0neXZ+Xezlafa2jJ9w?=
+ =?us-ascii?Q?290iaEksTgYsIy8kTPJzBF5mHpzGWxEwV846phCwg1JFxpHGgxQUJctmYfFR?=
+ =?us-ascii?Q?pb/uPjF+T/BaKq+oTJeBfPoNfVDKdQ6M0yopdS4PHml7UFSbnd0J3wL8BaBB?=
+ =?us-ascii?Q?dfeSDqSUZkwkfQYTkQdazbrpiCUlrX3xygAJLgm4iITFQyWXl+eQVvaDaYQb?=
+ =?us-ascii?Q?ZYmV7wAsnHCJrAVEvGYYisLmXQtp5eWWInl7qq3mGvwnAsxpvnp6ec7JDLya?=
+ =?us-ascii?Q?zy08c2TrtO9RufdyGuNVzYJfOFFRP5GBx2mv5PVJoY7DRJGFnukRt03pLNrM?=
+ =?us-ascii?Q?armHQgsBJm37Vo18DQPiY/h3XSZ7qIGW5kJZjWQD9EY2hiy1iQJ1SPTVAF6y?=
+ =?us-ascii?Q?qrhkWUo1EH6ryJu1Of0DnSZN1iOySm0c2qqAefxdBOx70t1rNxVS9geonbPf?=
+ =?us-ascii?Q?GVKtikA4IeInfUzwjTI0SL3zxfNNnzjinJLNbm5dYGXB/X0gLhdjFtcXMrcp?=
+ =?us-ascii?Q?YLkytrit7vpw+vIb/dntlXSO3RhGSJPnnfhFYBGB4J0dgJ/Z7L9a6+Zrd5LM?=
+ =?us-ascii?Q?zwKP/249/ohyZiICBVaPxnAb1eRTphgtDFF8rryUv3XFA5ofxPE8K+jkWGNN?=
+ =?us-ascii?Q?JcGhiEJkKKi1hkyI13pRyr64oWKozZFFHyUbuOwVXaioF3UNIodWK9YL+o4D?=
+ =?us-ascii?Q?CDxGVQTv2DaYeVoS7dAssPUy+ZUaqKnV/IyvKcxju8Tbh68JUH6v9WIJntUq?=
+ =?us-ascii?Q?WA=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -175,18 +175,18 @@ MIME-Version: 1.0
 X-OriginatorOrg: nokia-bell-labs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dfab0ea1-2853-4877-6680-08ddc501d4d7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jul 2025 07:16:21.2646
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83d52451-b5e7-48eb-7973-08ddc501ef60
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jul 2025 07:17:05.7952
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tXsOXDZ67TaVPXZDUM4BsXeyDs+8VQYbXhU1hjfVukT78rAadoMEOndqRx+o5YUX9KT5BLh4hbTQd3Py+0Z4ZsJw6LzYPL6WNw9Wmf3Orjk7VjIjWoHahk3S7ilb7PWm
+X-MS-Exchange-CrossTenant-userprincipalname: VgnBAhoLewcu1EN921B8Vnq5DAb95OnwDv/cfUorKRhZG19/Y8DEkFrG1QDkfmbT+YzXe2RUFabttOCEwNZPGcetx2AtQA8/j7Yv+uX6taUdDCgvECM8mZekPderi+fw
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB9714
 
 > -----Original Message-----
 > From: Jakub Kicinski <kuba@kernel.org>=20
-> Sent: Thursday, July 17, 2025 1:46 AM
+> Sent: Thursday, July 17, 2025 1:48 AM
 > To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
 > Cc: alok.a.tiwari@oracle.com; pctammela@mojatatu.com; horms@kernel.org; d=
 onald.hunter@gmail.com; xandfury@gmail.com; netdev@vger.kernel.org; dave.ta=
@@ -210,106 +210,22 @@ tion.
 >=20
 > On Sun, 13 Jul 2025 12:52:29 +0200 chia-yu.chang@nokia-bell-labs.com
 > wrote:
-> > +/* DUALPI2 */
-> > +enum tc_dualpi2_drop_overload {
-> > +     TCA_DUALPI2_DROP_OVERLOAD_OVERFLOW =3D 0,
-> > +     TCA_DUALPI2_DROP_OVERLOAD_DROP =3D 1,
-> > +     __TCA_DUALPI2_DROP_OVERLOAD_MAX, }; #define=20
-> > +TCA_DUALPI2_DROP_OVERLOAD_MAX (__TCA_DUALPI2_DROP_OVERLOAD_MAX - 1)
-> > +
-> > +enum tc_dualpi2_drop_early {
-> > +     TCA_DUALPI2_DROP_EARLY_DROP_DEQUEUE =3D 0,
-> > +     TCA_DUALPI2_DROP_EARLY_DROP_ENQUEUE =3D 1,
-> > +     __TCA_DUALPI2_DROP_EARLY_MAX,
-> > +};
-> > +#define TCA_DUALPI2_DROP_EARLY_MAX (__TCA_DUALPI2_DROP_EARLY_MAX - 1)
-> > +
-> > +enum tc_dualpi2_ecn_mask {
-> > +     TCA_DUALPI2_ECN_MASK_L4S_ECT =3D 1,
-> > +     TCA_DUALPI2_ECN_MASK_CLA_ECT =3D 2,
-> > +     TCA_DUALPI2_ECN_MASK_ANY_ECT =3D 3,
-> > +     __TCA_DUALPI2_ECN_MASK_MAX,
-> > +};
-> > +#define TCA_DUALPI2_ECN_MASK_MAX (__TCA_DUALPI2_ECN_MASK_MAX - 1)
-> > +
-> > +enum tc_dualpi2_split_gso {
-> > +     TCA_DUALPI2_SPLIT_GSO_NO_SPLIT_GSO =3D 0,
-> > +     TCA_DUALPI2_SPLIT_GSO_SPLIT_GSO =3D 1,
-> > +     __TCA_DUALPI2_SPLIT_GSO_MAX,
-> > +};
-> > +#define TCA_DUALPI2_SPLIT_GSO_MAX (__TCA_DUALPI2_SPLIT_GSO_MAX - 1)
+> > +     err =3D nla_parse_nested(tb, TCA_DUALPI2_MAX, opt, dualpi2_policy=
+,
+> > +                            extack);
+> > +     if (err < 0)
+> > +             return err;
 >=20
-> Looks like you fixed the type name but not the entry names :( Once again,=
- TCA_ stands for TC Attribute. These are not attribute IDs but values. YNL =
-will expect them to be prefixed with TC_DUALPI2, for example:
+> We should probably have:
 >=20
-> static const char * const tc_dualpi2_ecn_mask_strmap[] =3D {
->         [TC_DUALPI2_ECN_MASK_L4S_ECT] =3D "l4s-ect",
->         [TC_DUALPI2_ECN_MASK_CLA_ECT] =3D "cla-ect",
->         [TC_DUALPI2_ECN_MASK_ANY_ECT] =3D "any-ect", };
+> +       if (tb[TCA_DUALPI2_STEP_THRESH_PKTS] && tb[TCA_DUALPI2_STEP_THRES=
+H_US]) {
+> +               NL_SET_ERR_MSG_MOD(extack, "multiple step thresh attribut=
+es");
+> +               return -EINVAL;
+> +       }
 >=20
-> Only the last enum you're adding in this file, which defines the attribut=
-es IDs should use the TCA_ prefix.
+> here?
 
-Thanks for feedback.
-May I ask is it fine if I put the enum like below?
-
-enum tc_dualpi2_drop_overload {
-       TC_DUALPI2_DROP_OVERLOAD_OVERFLOW =3D 0,
-       TC_DUALPI2_DROP_OVERLOAD_DROP =3D 1,
-       __TCA_DUALPI2_DROP_OVERLOAD_MAX,
-};
-#define TCA_DUALPI2_DROP_OVERLOAD_MAX (__TCA_DUALPI2_DROP_OVERLOAD_MAX - 1)
-
-enum tc_dualpi2_drop_early {
-       TC_DUALPI2_DROP_EARLY_DROP_DEQUEUE =3D 0,
-       TC_DUALPI2_DROP_EARLY_DROP_ENQUEUE =3D 1,
-       __TCA_DUALPI2_DROP_EARLY_MAX,
-};
-#define TCA_DUALPI2_DROP_EARLY_MAX (__TCA_DUALPI2_DROP_EARLY_MAX - 1)
-
-enum tc_dualpi2_ecn_mask {
-       TC_DUALPI2_ECN_MASK_L4S_ECT =3D 1,
-       TC_DUALPI2_ECN_MASK_CLA_ECT =3D 2,
-       TC_DUALPI2_ECN_MASK_ANY_ECT =3D 3,
-       __TCA_DUALPI2_ECN_MASK_MAX,
-};
-#define TCA_DUALPI2_ECN_MASK_MAX (__TCA_DUALPI2_ECN_MASK_MAX - 1)
-
-enum tc_dualpi2_split_gso {
-       TC_DUALPI2_SPLIT_GSO_NO_SPLIT_GSO =3D 0,
-       TC_DUALPI2_SPLIT_GSO_SPLIT_GSO =3D 1,
-       __TCA_DUALPI2_SPLIT_GSO_MAX,
-};
-#define TCA_DUALPI2_SPLIT_GSO_MAX (__TCA_DUALPI2_SPLIT_GSO_MAX - 1)
-=20
-=20
-And shall such change also been applied to Dualpi2 attributes below? As the=
-se are more attribute-like, so I assume no.
-
-enum {
-        TCA_DUALPI2_UNSPEC,
-        TCA_DUALPI2_LIMIT,              /* Packets */
-        TCA_DUALPI2_MEMORY_LIMIT,       /* Bytes */
-        TCA_DUALPI2_TARGET,             /* us */
-        TCA_DUALPI2_TUPDATE,            /* us */
-        TCA_DUALPI2_ALPHA,              /* Hz scaled up by 256 */
-        TCA_DUALPI2_BETA,               /* Hz scaled up by 256 */
-        TCA_DUALPI2_STEP_THRESH_PKTS,   /* Step threshold in packets */
-        TCA_DUALPI2_STEP_THRESH_US,     /* Step threshold in microseconds *=
-/
-        TCA_DUALPI2_MIN_QLEN_STEP,      /* Minimum qlen to apply STEP_THRES=
-H */
-        TCA_DUALPI2_COUPLING,           /* Coupling factor between queues *=
-/
-        TCA_DUALPI2_DROP_OVERLOAD,      /* Whether to drop on overload */
-        TCA_DUALPI2_DROP_EARLY,         /* Whether to drop on enqueue */
-        TCA_DUALPI2_C_PROTECTION,       /* Percentage */
-        TCA_DUALPI2_ECN_MASK,           /* L4S queue classification mask */
-        TCA_DUALPI2_SPLIT_GSO,          /* Split GSO packets at enqueue */
-        TCA_DUALPI2_PAD,
-        __TCA_DUALPI2_MAX
-};
-
-#define TCA_DUALPI2_MAX   (__TCA_DUALPI2_MAX - 1)
+Yes, you are right. I will add that in the next version.
 
