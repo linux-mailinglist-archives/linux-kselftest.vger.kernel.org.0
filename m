@@ -1,132 +1,212 @@
-Return-Path: <linux-kselftest+bounces-37489-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24C09B0886B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 10:52:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82A03B0891E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 11:19:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 142223AEDF9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 08:51:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C300816230F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 09:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F1B2877ED;
-	Thu, 17 Jul 2025 08:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lOSFBXon"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 395A0288526;
+	Thu, 17 Jul 2025 09:19:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A5C2853E3;
-	Thu, 17 Jul 2025 08:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD873286D79
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Jul 2025 09:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752742186; cv=none; b=Uul8sWlVTomaex982JqSC8EbBKpVxEX5L2kKwhkJ6Hpav+q2z9xZWvmEYcAuamGBRoT1haz8PgvlWlpoV2ckRKH9CkMJfdcGe8yjupa6HX1wARcDSO9QMX06P1/4uXOtHdGF5ZS7a4blva+xD93Pcnlze5bel0KXAu+dzuM3b4U=
+	t=1752743981; cv=none; b=fxp4OZrq0NnKjcZU+XCf4F9IeJITV41ndFS/HwE1NzRy/2q04hvZPqWVjs/agE5e52WvzpB0PS8MLs5r/JV+hY2h9jacR3dF/ffI/GPpZ8VuBskPXsvjeKM42kkx87CKp3pakLkbFskrff9dhSx0NDcQjC5zAe3kMlnQOCJHvVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752742186; c=relaxed/simple;
-	bh=1LaZMmufVKTiGZ1B+WdO3aR89rghURP6uEd2rsuld3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bL9e5oKlUjS9ucQ5mjvUh0BU+g6Brv0/KYcuskKS5IiJ5gO/O9ejZfHvaT7wdQQxAbncbTszZJ6Ar3tQUoqCR1qXM1h/GqGkV6bE0/KFYryhjpPIDQC9eTIi1vqTSivu0pVsN5eDbZZLv4Z5Vihy50P8PEbKVnJNvUyU327jMSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lOSFBXon; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DE7C4CEED;
-	Thu, 17 Jul 2025 08:49:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752742185;
-	bh=1LaZMmufVKTiGZ1B+WdO3aR89rghURP6uEd2rsuld3s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lOSFBXonALTq4dkOywT4xN2hhzCqX0iqVkTVuJJXa9C+H+FN9PkqbyO++9Mocnm5o
-	 TlSekzaBH6Pn6oaDakF4NIRz9K9B0pwRmhyf+81WMF80SRwwOorv57DUCjzoItdwyd
-	 fdIzVUxI4Yl0bgZ+BGfo5jzvRmFTSlYhMP3KZDlQmlmYMRbLb8vbR96EOxqttldm3L
-	 CFoa7CpqGqfB6RZzgn4zJcdDjgdvfFCG1ShybgH1FM1Ka+fDvFUC076bL5DklbnXZE
-	 fOQ+SImE0z8OiZQtbxTElodRLlanUXmH1gehrnxsHT95TTc4+Ty6LK1an5NU6FSeg6
-	 vSiIYpw/35h/g==
-Date: Thu, 17 Jul 2025 09:49:37 +0100
-From: Will Deacon <will@kernel.org>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net,
-	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
-	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
-	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
-	praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
-	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com
-Subject: Re: [PATCH v9 23/29] iommu/arm-smmu-v3-iommufd: Add vsmmu_size/type
- and vsmmu_init impl ops
-Message-ID: <aHi5IUXqHJZGB67M@willie-the-truck>
-References: <cover.1752126748.git.nicolinc@nvidia.com>
- <375ac2b056764534bb7c10ecc4f34a0bae82b108.1752126748.git.nicolinc@nvidia.com>
- <aHE4Y-fbucm-j-yi@willie-the-truck>
- <aHahEP0+LKmeA/Tf@Asurada-Nvidia>
+	s=arc-20240116; t=1752743981; c=relaxed/simple;
+	bh=feRLhAz6yHFNQv6pOMS3bpp408aUpG91j9XZ8RDuEBs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jgJwDNJP5XJ9nkbqXRc/A50TRS7ffy8KVYMCSx605qxhH1WJcnwN7rzWuX7BKT814vEliA/NuCZwIOCZmUdNosj5UrsenwxHkbbvaVPpsc7Of892NqqnB1wjpgxKiSSGxYRbVlD+5jTDaoqogWhOHYUGzF8TTOn4tHYjQ9qLMbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 2466df3862ef11f0b29709d653e92f7d-20250717
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:d1cc04a4-92c2-4a47-9981-69cf60e6f942,IP:10,
+	URL:0,TC:0,Content:31,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:26
+X-CID-INFO: VERSION:1.1.45,REQID:d1cc04a4-92c2-4a47-9981-69cf60e6f942,IP:10,UR
+	L:0,TC:0,Content:31,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:26
+X-CID-META: VersionHash:6493067,CLOUDID:ad2b09e67e01a10f9c39128f94cd93f4,BulkI
+	D:2507171717256IUM6FKL,BulkQuantity:1,Recheck:0,SF:17|19|24|44|66|78|102,T
+	C:nil,Content:4|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:n
+	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: 2466df3862ef11f0b29709d653e92f7d-20250717
+X-User: lienze@kylinos.cn
+Received: from kylin.. [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lienze@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 334625521; Thu, 17 Jul 2025 17:19:29 +0800
+From: Enze Li <lienze@kylinos.cn>
+To: sj@kernel.org,
+	shuah@kernel.org
+Cc: damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	enze.li@gmx.com,
+	Enze Li <lienze@kylinos.cn>
+Subject: [PATCH] selftests/damon: introduce _common.sh to host shared function
+Date: Thu, 17 Jul 2025 17:19:02 +0800
+Message-ID: <20250717091902.104466-1-lienze@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aHahEP0+LKmeA/Tf@Asurada-Nvidia>
+Content-Transfer-Encoding: 8bit
 
-Hi Nicolin,
+The current test scripts contain duplicated root permission checks
+in multiple locations.  This patch consolidates these checks into
+_common.sh to eliminate code redundancy.
 
-On Tue, Jul 15, 2025 at 11:42:24AM -0700, Nicolin Chen wrote:
-> Sorry for the late response.
+Signed-off-by: Enze Li <lienze@kylinos.cn>
+---
+ tools/testing/selftests/damon/_common.sh           | 14 ++++++++++++++
+ tools/testing/selftests/damon/lru_sort.sh          |  9 ++-------
+ tools/testing/selftests/damon/reclaim.sh           |  9 ++-------
+ tools/testing/selftests/damon/sysfs.sh             | 12 +-----------
+ .../damon/sysfs_update_removed_scheme_dir.sh       |  9 ++-------
+ 5 files changed, 21 insertions(+), 32 deletions(-)
+ create mode 100644 tools/testing/selftests/damon/_common.sh
 
-No problem at all.
+diff --git a/tools/testing/selftests/damon/_common.sh b/tools/testing/selftests/damon/_common.sh
+new file mode 100644
+index 000000000000..3920b619c30f
+--- /dev/null
++++ b/tools/testing/selftests/damon/_common.sh
+@@ -0,0 +1,14 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# Kselftest frmework requirement - SKIP code is 4.
++ksft_skip=4
++
++check_dependencies()
++{
++	if [ $EUID -ne 0 ]
++	then
++		echo "Run as root"
++		exit $ksft_skip
++	fi
++}
+diff --git a/tools/testing/selftests/damon/lru_sort.sh b/tools/testing/selftests/damon/lru_sort.sh
+index 61b80197c896..0d128d809fd3 100755
+--- a/tools/testing/selftests/damon/lru_sort.sh
++++ b/tools/testing/selftests/damon/lru_sort.sh
+@@ -1,14 +1,9 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
++source _common.sh
+ 
+-if [ $EUID -ne 0 ]
+-then
+-	echo "Run as root"
+-	exit $ksft_skip
+-fi
++check_dependencies
+ 
+ damon_lru_sort_enabled="/sys/module/damon_lru_sort/parameters/enabled"
+ if [ ! -f "$damon_lru_sort_enabled" ]
+diff --git a/tools/testing/selftests/damon/reclaim.sh b/tools/testing/selftests/damon/reclaim.sh
+index 78dbc2334cbe..41e450a696ae 100755
+--- a/tools/testing/selftests/damon/reclaim.sh
++++ b/tools/testing/selftests/damon/reclaim.sh
+@@ -1,14 +1,9 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
++source _common.sh
+ 
+-if [ $EUID -ne 0 ]
+-then
+-	echo "Run as root"
+-	exit $ksft_skip
+-fi
++check_dependencies
+ 
+ damon_reclaim_enabled="/sys/module/damon_reclaim/parameters/enabled"
+ if [ ! -f "$damon_reclaim_enabled" ]
+diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
+index e9a976d296e2..0326b9ad55ca 100755
+--- a/tools/testing/selftests/damon/sysfs.sh
++++ b/tools/testing/selftests/damon/sysfs.sh
+@@ -1,8 +1,7 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-# Kselftest frmework requirement - SKIP code is 4.
+-ksft_skip=4
++source _common.sh
+ 
+ ensure_write_succ()
+ {
+@@ -364,14 +363,5 @@ test_damon_sysfs()
+ 	test_kdamonds "$damon_sysfs/kdamonds"
+ }
+ 
+-check_dependencies()
+-{
+-	if [ $EUID -ne 0 ]
+-	then
+-		echo "Run as root"
+-		exit $ksft_skip
+-	fi
+-}
+-
+ check_dependencies
+ test_damon_sysfs "/sys/kernel/mm/damon/admin"
+diff --git a/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh b/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
+index ade35576e748..730165bd7f03 100755
+--- a/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
++++ b/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
+@@ -1,14 +1,9 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
++source _common.sh
+ 
+-if [ $EUID -ne 0 ]
+-then
+-	echo "Run as root"
+-	exit $ksft_skip
+-fi
++check_dependencies
+ 
+ damon_sysfs="/sys/kernel/mm/damon/admin"
+ if [ ! -d "$damon_sysfs" ]
 
-> On Fri, Jul 11, 2025 at 05:14:27PM +0100, Will Deacon wrote:
-> > >  /* MMIO registers */
-> > >  #define ARM_SMMU_IDR0			0x0
-> > > @@ -720,6 +721,10 @@ struct arm_smmu_impl_ops {
-> > >  	int (*init_structures)(struct arm_smmu_device *smmu);
-> > >  	struct arm_smmu_cmdq *(*get_secondary_cmdq)(
-> > >  		struct arm_smmu_device *smmu, struct arm_smmu_cmdq_ent *ent);
-> > > +	const size_t vsmmu_size;
-> > > +	const enum iommu_viommu_type vsmmu_type;
-> > > +	int (*vsmmu_init)(struct arm_vsmmu *vsmmu,
-> > > +			  const struct iommu_user_data *user_data);
-> > 
-> > It would be nice to avoid adding data members to the ops structure, if
-> 
-> You mean the "vsmmu_size" and "vsmmu_type" right?
+base-commit: e2291551827fe5d2d3758c435c191d32b6d1350e
+-- 
+2.43.0
 
-Yup.
-
-> So you want them to be removed, by having two impl_ops:
-> 	size_t get_vsmmu_size(enum iommu_viommu_type vsmmu_type);
-> 	int (*vsmmu_init)(struct arm_vsmmu *vsmmu,
-> 			  const struct iommu_user_data *user_data);
-> 
-> right?
-
-Yes, please.
-
-> > at all possible. The easiest thing would probably be to add a function
-> > for getting the vsmmu size and then pushing the two checks against
-> > 'vsmmu_type' down into the impl_ops callbacks so that:
-> > 
-> >   1. If the type is IOMMU_VIOMMU_TYPE_ARM_SMMUV3, we don't bother with
-> >      the impl_ops at all in arm_vsmmu_init() and arm_smmu_get_viommu_size()
-> 
-> Hmm, I was hoping for an implementation could support the default
-> IOMMU_VIOMMU_TYPE_ARM_SMMUV3 while having its own viommu_ops or so.
-> But I think your suggestion is fine since there is no such a use
-> case at this moment :)
-> 
-> >   2. Otherwise, we pass the type into the impl_ops and they can check it
-> > 
-> > Of course, that can be a patch on top of the series as there's no point
-> > respinning the whole just for this.
-> 
-> Thanks for that! I can draft a patch to send later this week once
-> the requirements are confirmed.
-
-Thank you!
-
-Will
 
