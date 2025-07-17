@@ -1,157 +1,191 @@
-Return-Path: <linux-kselftest+bounces-37503-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05B1FB08E99
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 15:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AD5CB08EF2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 16:19:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAEF84E201D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 13:54:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 077D63B4979
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 14:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6D792F5C50;
-	Thu, 17 Jul 2025 13:54:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEF5729DB92;
+	Thu, 17 Jul 2025 14:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iuO3wo6W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWNc4+Nh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A612F0051
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Jul 2025 13:54:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320332E3700;
+	Thu, 17 Jul 2025 14:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752760481; cv=none; b=lyNbRmTpYFPPguD7my2OjedTsF6jkgK+jY5BYqDh9okfZZHUO7/hYeQS4t54TYWohEkuDCWNWzUWXSS63EYbDqqm3+BP+nS6CGSzIpLsZQr0dDNB++3ZR4LO+x8eMWY4t0FTlV5MqOfhrGVNG4RxiqtJMUJExFNp53hef2w4q3s=
+	t=1752761936; cv=none; b=ZTuUafjg8GHZfKW4aSqBRY3h8no1t/CLq3oH9xfRneYFbzwgYQsdC638QTZP03MdS7awhdmNj5/G+QdEeZm7TS4hZfiFa9POYoaQ547rJ5GJ2rVywbBkf5IMMg9xZgIEHuf3CrT7PRLsmMtsS8lWO1ZIZcD+M3kDN0O5XXy3PJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752760481; c=relaxed/simple;
-	bh=eF+P4f19b0QyAl7TlGhMccNo7dMJbWQmVvtTDedLGao=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h0IqUs+YfLJIyx3/TI8jhsKRa+6yRULFezL7aAmICF2xTE0iga1EgZWP3+PKExpke35r88eBWChmClhN5StyBPaP+Qt5LQHeufehYzoIlvTr7CoDM+x02GG4xqXeMu6AjRmJekvzijxIo1ZovEXthJnyr7XGzPJhA+3Thoy2JXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iuO3wo6W; arc=none smtp.client-ip=209.85.128.181
+	s=arc-20240116; t=1752761936; c=relaxed/simple;
+	bh=XctmZo9SvD03oJXci75LIEr7H5ii62ha/tjuZuMJEB4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mL2x5NmgdoFzUZcTT5xiVVRsMLPREnR6aH2IGB2C1io1R5uz2nit0LSNe0BTRPqUWJYG2w55FSWR0EW5cBoQigcmXgW3vCZOiwQusE3UDdStCrDdfuDF84KC80WpRtzi7p82hozT5ug75E1J6Hn/qYOp9uV9XcT3BncyPwefRrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWNc4+Nh; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-70f94fe1e40so23959997b3.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jul 2025 06:54:36 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-311e2cc157bso972102a91.2;
+        Thu, 17 Jul 2025 07:18:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752760476; x=1753365276; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SE+lVLd28H9PV/25rWHSLkzfrRbXfoqSo8ScR+iaAiE=;
-        b=iuO3wo6WNEa9Raq0PNpzaJO0+7gSQjEIvPXZ0Pt8Q9o2/7cVbeTOBe21JZW7cfxNVt
-         4zPCBzf6NyOcYTDqlgKni5sDN6HHTKzFD3R7YewWMDuKlGrglzm2gUTz88gF0ZBc+uSq
-         7G638ut19id/PLgL9CK9C4tK1CILqO3ganWRlDzWWZ20mPy6gQNPCkxxAp/GiMaV5mkc
-         vV4agDIQkuaJBmVSzKucmroS2Y94cU0Av0VleGoBHyVnUeRlXP4rOv/7fJMvdet2QLJ7
-         dzB54yhoULcuYbm9+ViIEYDlmNpODGGuCz9ahSZhkV9NhtmVJCSC7Fp4f+h4LmeNPR28
-         apig==
+        d=gmail.com; s=20230601; t=1752761934; x=1753366734; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XctmZo9SvD03oJXci75LIEr7H5ii62ha/tjuZuMJEB4=;
+        b=JWNc4+NhzgVtgGoB8DpQ+rxQ6fS6el6WRgZPJeCEcuEbGOspoySukKzOVYLxY704ok
+         dxYuFU+4SwWm7vcP8cCevPJroc6nu51W95JnNygl3+Ffn8RmSt6HnyoHo1I9tlf1qFBn
+         Q51ziLQ2irRShBVIzv3kzPT5BcTxurvvoOrKFQdkX8emDhnINESL+jYWSQUJ455jPKYh
+         0mQsSy6veQSR/qzmUrGe3qoqOnV4m8xBV56V8kbN6PRHjcWRrbihyHlPkhuugaSNxaE9
+         WNsv/0K8VxXAm3JAqYmr+XysuSfAdfpbJoSrsBkN9Vt6WPEVXB5hDRPcEOoT5buei1Xy
+         xFvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752760476; x=1753365276;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SE+lVLd28H9PV/25rWHSLkzfrRbXfoqSo8ScR+iaAiE=;
-        b=NBRL30/JMoxAbcAGvbyxEbUewWASYTbKp9U+3lMThAhruUAn1SZHQltJXWVG+cbEXt
-         hrxQWeITOyRNnVU96YILKqsmcm78BHkaAYWd0ee2RkXbe9HuIc4SwJP5LaPRZ7IalXlW
-         yOYDSk7tSa6IZ/txOZPfLChXUAJ/+SVEIkJtzlRv/IonhL1oHAGBNUfzPeJXuYOhOoJb
-         zXNf4wLhOEBNqZ6civ1fxqC3lEDtsi8CfTqk4+zhYIyeJP/Tau6Q6ugGe2koQGAe+4eo
-         chDN8bAKMEd/CWClKVPRUmnPJrQtX/wT9AGFvc9qwGvOs7/Vst1BdZNcv2H1E9meCKHu
-         vmiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW0S7GSSoPWW/5MFR3aruSYQvdf3B6m0NlSRqVu9f/s5dp3IZmoKi1x9nsZUE6oapdD55i0p93Yv2N3xR+qjLA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7cfExGB0tvZ79j1Z/z5HS9HsBjONItlwOe3fUwnGufByFVBsG
-	avf/Vqysr7/MSEb1mVNeu2jC+FF0i0WKlUikltjaiPC2Mp693mXw2efLi7mQOQ==
-X-Gm-Gg: ASbGncu64/oQtBmuPEbqRI2xjvQFFBfPLsY0R302E0WjgZZQKa1FH1tuChi8P8deFeh
-	UFiZUxogtyqztHKJRm3xP+EJWB011T+Mz26jGr55dGxLCFt7e1ONnx/38nhNTJT4v94ftlN66lE
-	oLGKnJeHZ8m9SNd0OKnOUFVleJ0mYV4l7NK39JjMfYVWzpddQan53un+41NROiN9jVZbPNwi9YS
-	YxDGsyyA60Ss5S/LILGKy40ut9N6hQ5DdnWPUR0RHmoL4Ac+Ss71jBERRjAhwZeNqVDUNIvkRdd
-	9o8r7/f17Ti5GZbofiyfQ2HL3KsZ6ovvw1vIFscS6UkOYqYC0kYr2bHT2RvVzDK4kjyMshRj8l+
-	WkL0YwbnySGMrnQLkxkBKfQ==
-X-Google-Smtp-Source: AGHT+IGJ91zBhJRwn6R01ikOQLvXOIZU1TaryxbQhyFlluCHcWDeWQFq1vpOp0wNRV7XN0ii9tlhow==
-X-Received: by 2002:a05:690c:4884:b0:718:38c1:5f92 with SMTP id 00721157ae682-7184f8401afmr49291087b3.20.1752760474983;
-        Thu, 17 Jul 2025 06:54:34 -0700 (PDT)
-Received: from localhost ([2a03:2880:25ff:49::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-717c620d5c1sm34242367b3.109.2025.07.17.06.54.34
+        d=1e100.net; s=20230601; t=1752761934; x=1753366734;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XctmZo9SvD03oJXci75LIEr7H5ii62ha/tjuZuMJEB4=;
+        b=vsd5Xg3R7tMz0HLuYIkYgJ39w0Igs+e7aCCPn5tGL+LLKjvIRCWhvO69bvUtr/nVZL
+         zh4Tyi5yByKPWHU67rme1y9BxPPxluA0hDFfAzZjhf6YwBNA8zxvMTUYYRxYEeo4ca3g
+         ykzXpInGrgiwIrQ7g1DGpc5TAb9QCBwytOdU31+I60tYuUHHms3m2gYesrg0Upfa92Hr
+         5u/+XQ1rmIWfgp/krecsAFlXmw6Ncvmrc3uQrJgIrNG6eiEurd0ZSTD6oZqc2ecQztzH
+         sBfaSstpDBlLrJyjUYFWgB+4S7mGrkkSGu8tDEWSvOtjPIyIanXLFFWzYTNxpay/cR3K
+         qEKA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7lyH/qzhSvJPLoz9/vb/YcUxVLnbAK+fpwNWdNJW9CGLk5oMAvXaPiOOU/8rb+YGuEeAAf+t5f5xhHFJ7@vger.kernel.org, AJvYcCXOeVZIlYIe8OIBZDg5gFXWcM8aNrhexoeAQw5u7eKOIfCUTHzjTFXGeGxhCr/1f7FLNjuJm5c8TXxTxhDje7pY@vger.kernel.org, AJvYcCXieiI0/beAiWtemFHda9P932yOrwSnEXUp/Pg7Opv8kxISV4XJSbrJk/kZATIQxpSRhs0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTj+8Oiei7O6q13M9CnbcQ5q7y4x/o4eUto5/75QO1gSukioU0
+	GCbIVY4TDkDdce9ixWECeMXW7xIay7Sue8rlQFM65hXMiN5b8LrWaIdu
+X-Gm-Gg: ASbGncswK7rwD7xCCe1hgInfFNar7eL2PEMzhMmgBN00ZcKGyDmrHB0smDhwaDVW8Pl
+	m4KR6YWQBAk9GrQmfOlGCI7N3+Mm9RECy64dq+WuicCu9MomPt7H0wAtbtHNMhd6wmlWOFWs3Sn
+	1W6X8CYHgzu8JhJxg9AaNph1OKkWiTTSupT1Bqc2oz+9IwxvPn3OQOcoifnN36eytcA4PWwRbnV
+	CXVZ9GzohCVLBJivi0aWkAbeILdaZULqkOrykU+a/zZ5aG0JV67SRy7qf8lpQAPbsZq7auAjcuP
+	nvTVZ8l/LSgMisJyHDWU9PEldjsnWdN3lmgAfhoi78LMDe8dlM/LojfQHBB8c/ZHSPmA60eVJYv
+	skcZrsU74lnxe/95Q0eKT
+X-Google-Smtp-Source: AGHT+IGuxnZt9hKB3LiaRFtAjSyz8kcQOd2eGpull1QNd1vam25zcF6spQZ/+RWeF3qGI3lE0gdePw==
+X-Received: by 2002:a17:90b:48c8:b0:315:b07a:ac12 with SMTP id 98e67ed59e1d1-31c9e6f71b8mr11185576a91.14.1752761934264;
+        Thu, 17 Jul 2025 07:18:54 -0700 (PDT)
+Received: from [127.0.0.1] ([115.205.228.8])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31caf835438sm1662990a91.45.2025.07.17.07.18.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 06:54:34 -0700 (PDT)
-From: Joshua Hahn <joshua.hahnjy@gmail.com>
-To: Enze Li <lienze@kylinos.cn>
-Cc: sj@kernel.org,
-	shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	enze.li@gmx.com
-Subject: Re: [PATCH] selftests/damon: introduce _common.sh to host shared function
-Date: Thu, 17 Jul 2025 06:54:32 -0700
-Message-ID: <20250717135433.2113596-1-joshua.hahnjy@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250717091902.104466-1-lienze@kylinos.cn>
-References: 
+        Thu, 17 Jul 2025 07:18:53 -0700 (PDT)
+Message-ID: <2a3a90e4672d497e430ce40d039a90613c4390c0.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Add selftest for
+ attaching tracing programs to functions in deny list
+From: KaFai Wan <mannkafai@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  John Fastabend <john.fastabend@gmail.com>, Andrii
+ Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>,  Yonghong Song
+ <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>,  Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,  Shuah Khan
+ <shuah@kernel.org>, Yafang Shao <laoar.shao@gmail.com>, LKML
+ <linux-kernel@vger.kernel.org>,  bpf <bpf@vger.kernel.org>, "open
+ list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Leon
+ Hwang <leon.hwang@linux.dev>
+Date: Thu, 17 Jul 2025 22:18:42 +0800
+In-Reply-To: <CAADnVQ+H6oHMFPvWkXuHv9oanHT57F_HrD_ZpxB0X=37vdAoyw@mail.gmail.com>
+References: <20250714120408.1627128-1-mannkafai@gmail.com>
+	 <20250714120408.1627128-4-mannkafai@gmail.com>
+	 <CAADnVQ+H6oHMFPvWkXuHv9oanHT57F_HrD_ZpxB0X=37vdAoyw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.0-1build2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-On Thu, 17 Jul 2025 17:19:02 +0800 Enze Li <lienze@kylinos.cn> wrote:
+On Wed, 2025-07-16 at 18:37 -0700, Alexei Starovoitov wrote:
+> On Mon, Jul 14, 2025 at 5:04=E2=80=AFAM KaFai Wan <mannkafai@gmail.com>
+> wrote:
+> >=20
+> > The reuslt:
+> >=20
+> > =C2=A0 $ tools/testing/selftests/bpf/test_progs --name=3Dtracing_deny
+> > =C2=A0 #467/1=C2=A0=C2=A0 tracing_deny/migrate_disable:OK
+> > =C2=A0 #467=C2=A0=C2=A0=C2=A0=C2=A0 tracing_deny:OK
+> > =C2=A0 Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+> >=20
+> > Signed-off-by: KaFai Wan <mannkafai@gmail.com>
+> > ---
+> > =C2=A0.../selftests/bpf/prog_tests/tracing_deny.c=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 | 11 +++++++++++
+> > =C2=A0tools/testing/selftests/bpf/progs/tracing_deny.c=C2=A0 | 15
+> > +++++++++++++++
+> > =C2=A02 files changed, 26 insertions(+)
+> > =C2=A0create mode 100644
+> > tools/testing/selftests/bpf/prog_tests/tracing_deny.c
+> > =C2=A0create mode 100644
+> > tools/testing/selftests/bpf/progs/tracing_deny.c
+> >=20
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_deny.c
+> > b/tools/testing/selftests/bpf/prog_tests/tracing_deny.c
+> > new file mode 100644
+> > index 000000000000..460c59a9667f
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/prog_tests/tracing_deny.c
+> > @@ -0,0 +1,11 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +#include <test_progs.h>
+> > +#include "tracing_deny.skel.h"
+> > +
+> > +void test_tracing_deny(void)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* migrate_disable depends on CON=
+FIG_SMP */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (libbpf_find_vmlinux_btf_id("m=
+igrate_disable",
+> > BPF_TRACE_FENTRY) > 0)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 RUN_TESTS(tracing_deny);
+> > +}
+> > diff --git a/tools/testing/selftests/bpf/progs/tracing_deny.c
+> > b/tools/testing/selftests/bpf/progs/tracing_deny.c
+> > new file mode 100644
+> > index 000000000000..98ef834f0b6d
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/progs/tracing_deny.c
+> > @@ -0,0 +1,15 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +#include <linux/bpf.h>
+> > +#include <bpf/bpf_helpers.h>
+> > +#include <bpf/bpf_tracing.h>
+> > +#include "bpf_misc.h"
+> > +
+> > +char _license[] SEC("license") =3D "GPL";
+> > +
+> > +SEC("fentry/migrate_disable")
+> > +__failure __msg("Attaching tracing programs to function
+> > 'migrate_disable' is rejected.")
+> > +int BPF_PROG(migrate_disable)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+> > +}
+>=20
+> Please roll these two tiny files into existing files in progs/ and
+> prog_tests/
+> directories.
+> Every file takes time to compile 4 times, so let's avoid unnecessary
+> overhead.
+>=20
 
-Hi Enze,
+Okay, will update it in v3.
 
-Thank you for the patch! I just have a few comments about the patch.
+> --
+> pw-bot: cr
 
-> The current test scripts contain duplicated root permission checks
-> in multiple locations.  This patch consolidates these checks into
-> _common.sh to eliminate code redundancy.
-
-Is there a reason we named the file _common.sh? IIRC there are no other files
-that begin with an underscore, so it might be confusing for users. Maybe
-remaining it to damon_common.sh might fit better with the convention used
-by other selftests. 
-
-[...snip...]
-
-> diff --git a/tools/testing/selftests/damon/_common.sh b/tools/testing/selftests/damon/_common.sh
-> new file mode 100644
-> index 000000000000..3920b619c30f
-> --- /dev/null
-> +++ b/tools/testing/selftests/damon/_common.sh
-> @@ -0,0 +1,14 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# Kselftest frmework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
-> +check_dependencies()
-> +{
-> +	if [ $EUID -ne 0 ]
-> +	then
-> +		echo "Run as root"
-> +		exit $ksft_skip
-> +	fi
-> +}
-> diff --git a/tools/testing/selftests/damon/lru_sort.sh b/tools/testing/selftests/damon/lru_sort.sh
-> index 61b80197c896..0d128d809fd3 100755
-> --- a/tools/testing/selftests/damon/lru_sort.sh
-> +++ b/tools/testing/selftests/damon/lru_sort.sh
-> @@ -1,14 +1,9 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -# Kselftest framework requirement - SKIP code is 4.
-> -ksft_skip=4
-
-Hm, I think factoring out check_dependencies() is a good idea, but maybe we
-should keep ksft_skip in here since other checks in the script use the value?
-My 2c is that it might make it unnecessarily opaque for others.
-Same comment applies for the other files as well. 
-
-But I will let SJ comment on this more ;)
-
-Thank you for your patch, I hope you have a great day!
-Joshua
-
-Sent using hkml (https://github.com/sjp38/hackermail)
+--=20
+Thanks,
+KaFai
 
