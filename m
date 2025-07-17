@@ -1,119 +1,156 @@
-Return-Path: <linux-kselftest+bounces-37535-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37539-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E15DDB09785
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 01:26:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B200EB098A4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 01:49:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E4794A772F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 23:26:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F3451C44C40
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Jul 2025 23:49:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E8F626E700;
-	Thu, 17 Jul 2025 23:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC3D023BD06;
+	Thu, 17 Jul 2025 23:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDQPJoue"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IwysKk9h"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4FF262FFF;
-	Thu, 17 Jul 2025 23:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3C949641;
+	Thu, 17 Jul 2025 23:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752794721; cv=none; b=UM1oaHxt+lyXIxtkUqw2rLm+2YrrjkeGSPyWU4+JHxKSSn+NTuX+qbWDkygzTidXgKih7YrmEzqXqeH0t26tvnMCvIzJJxwbMPVbtFU781MGptJJV+dSGNs26xWtoVlTfyQ7oIOkZpSUy5HoxTrefjYDv6SZr8Dgj+Ar5k/n+90=
+	t=1752796170; cv=none; b=dkgy4qG5ZIGgnp5tRtnxXwwqRRhBbVYwqqtCX4+D6pItYxYz9qrVX34re3Ljnb4WAmCHqpexMIuB5ag9GHcCMV9uZaBQtR5667Ir0Cdpi/SW+HkYbpPwgx2F/Z8ZcEYJpZmT1xHkAvTo/tLwhrBFiGfDHErZQ1sN4BK7lAQeql0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752794721; c=relaxed/simple;
-	bh=qfrc6vYarbMRQKv1a7xZvSfoxfkNIKlLJL8wJGuWS5I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DC7zM2wkAME8tBtzUxE4DKbcl5Wt/itdtLMY0Hz6lg2GVQ5ao6jQlrRAKGGXvdeT3iyuPFBKgWPixL9z57mxDPFmId4QrOudHc0a43xy5fJq3yJrb/kB7Okj/6W+GQ9gryOmHfi54EWliGLOCgsb1lBB8Ul/yqRaS09EziZ2+9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDQPJoue; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B75F1C2BCC6;
-	Thu, 17 Jul 2025 23:25:20 +0000 (UTC)
+	s=arc-20240116; t=1752796170; c=relaxed/simple;
+	bh=Cq5Mb8Ty0pSJRETR6msxyZq2CIyD0ENwG1KIzU6IlZY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FJ6IPCbhJRh1B+DH2iwFbEH76Dbq4DPygsjI2EUV9G0ihnRmivqCYaHwG0h01PR/Le8dbYrbE6RXvjqqnBMLuzKdszfZ1rzOXWlCM9B5yLZ5Prs1tuTcQb/KVmv7EOTLgvZmscAn+0W04EtaGJFYEX6uMnkRm9CHgT5DTZ5kJpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwysKk9h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166E5C4CEE3;
+	Thu, 17 Jul 2025 23:49:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752794720;
-	bh=qfrc6vYarbMRQKv1a7xZvSfoxfkNIKlLJL8wJGuWS5I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TDQPJoue8FZRuS/LJrGq2GchrAASLibnSmGeRRoSUGpvH3awBC+7kUb1yyaVYH89y
-	 ULfO45CeKqJRVGvpXRA0BcyHOvq/18F0odTwMODSsaKPhyZ6a5RObjGBHyzV8F/o67
-	 bRdab3eThDwtbXMkLCf7OvDiOrTOIwe/+HGDzhnD0XxLPtqyR6jgFUfqETsGM1mdv+
-	 bnFaNOMq8O4teU/HwNwUrtNBKmLU5MLmrmRF+Dfv34p8l9jQ3mz2PYnKIToPImVNxa
-	 KM1ucd9mD0unIDTP+r5FbWZidX3EtXT5OQTFbfBDNgNkXEVraPMIWLffBOUAzwljDl
-	 L3ZGqkwchCdPg==
-From: Kees Cook <kees@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-hardening@vger.kernel.org,
-	Ingo Molnar <mingo@kernel.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v3 13/13] configs/hardening: Enable CONFIG_INIT_ON_FREE_DEFAULT_ON
-Date: Thu, 17 Jul 2025 16:25:18 -0700
-Message-Id: <20250717232519.2984886-13-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250717231756.make.423-kees@kernel.org>
-References: <20250717231756.make.423-kees@kernel.org>
+	s=k20201202; t=1752796170;
+	bh=Cq5Mb8Ty0pSJRETR6msxyZq2CIyD0ENwG1KIzU6IlZY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IwysKk9hK55wp0s40tpFq0FJaGdXT3fBVuRsgcwTY2b4PikHBECgcX7hWobbtH02d
+	 SyCaMenwQY4z2/ELRZUUX+TUOhIjqPJpP1PRz3gwWJiHdn/XuLhAK059cHIsz7yn8s
+	 7g0oIm39p4AIdmaJSKba/msqYMi31gUbrh0swxnCIr9uhwHPNjwVmyn8C/j2MWeLeJ
+	 R+leE+CIC862qdTM9oCLcgJK3afjaudHiWIzODec6ms5GDL+mHH8LQyjCbV53OYzqK
+	 EHQERsD5FBJJneDBbOAGJLKDCac5ZJYBxnoGbTBw9Kz3Lv2yWL34hoc8+gO8rjS5J3
+	 8s0lisJfycLMg==
+Message-ID: <9175b633-b61f-4ca0-9023-c99dff4f53f0@kernel.org>
+Date: Fri, 18 Jul 2025 01:49:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=961; i=kees@kernel.org; h=from:subject; bh=qfrc6vYarbMRQKv1a7xZvSfoxfkNIKlLJL8wJGuWS5I=; b=owGbwMvMwCVmps19z/KJym7G02pJDBmVbbGrLRYky9XJyFyITXiqam157PKKj7mdDyYc/Xw7s uRv7WSGjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgIkc62Vk+Hwt/L3Rbm1tn84l unrT0jgulm5lD+LgcnL+WfbLeJOREcN/7/17erb+Zmw+2dikfKTxS9XuurzmRR6/80+FfF6/xlG FFQA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net v2 0/2] selftests: mptcp: connect: cover alt modes
+Content-Language: en-GB, fr-BE
+To: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Christoph Paasch <cpaasch@openai.com>,
+ Davide Caratti <dcaratti@redhat.com>, Florian Westphal <fw@strlen.de>,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20250715-net-mptcp-sft-connect-alt-v2-0-8230ddd82454@kernel.org>
+ <20250715185308.2ad30691@kernel.org> <20250716072602.386a8963@kernel.org>
+ <ae6d333a-f3b2-4463-b930-b4caf56b39f8@kernel.org>
+ <20250716083632.72854bd5@kernel.org>
+ <e46aadbf-51c6-4e09-bdaa-374698b406f3@kernel.org>
+ <20250717074242.1ef5d441@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20250717074242.1ef5d441@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-To reduce stale data lifetimes, enable CONFIG_INIT_ON_FREE_DEFAULT_ON as
-well. This matches the addition of CONFIG_STACKLEAK=y, which is doing
-similar for stack memory.
+Hi Jakub,
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: <linux-hardening@vger.kernel.org>
----
- kernel/configs/hardening.config | 3 +++
- 1 file changed, 3 insertions(+)
+On 17/07/2025 16:42, Jakub Kicinski wrote:
+> On Wed, 16 Jul 2025 18:35:11 +0200 Matthieu Baerts wrote:
+>>>> And just to be sure, no CPU or IO overload at that moment? I didn't see
+>>>> such errors reported by our CI, but I can try to reproduce them locally
+>>>> in different conditions.  
+>>>
+>>> None that I can see. The test run ~10min after all the builds completed,
+>>> and we wait now for the CPU load to die down and writeback to finish
+>>> before we kick off VMs. The VMs for various tests are running at that
+>>> point, the CPU util averaged across cores is 66%.  
+>>
+>> Thank you for having checked, and for the explanations!
+>>
+>> OK, so maybe running stress-ng in parallel to be able to reproduce the
+>> issue might not help. We will investigate.
+> 
+> connect tests failed again overnight. Now I see why Paolo was
+> responding on Eric's series, that seems like a more likely culprit..
 
-diff --git a/kernel/configs/hardening.config b/kernel/configs/hardening.config
-index d24c2772d04d..64caaf997fc0 100644
---- a/kernel/configs/hardening.config
-+++ b/kernel/configs/hardening.config
-@@ -60,6 +60,9 @@ CONFIG_LIST_HARDENED=y
- # Initialize all heap variables to zero on allocation.
- CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
- 
-+# Initialize all heap variables to zero on free to reduce stale data lifetime.
-+CONFIG_INIT_ON_FREE_DEFAULT_ON=y
-+
- # Initialize all stack variables to zero on function entry.
- CONFIG_INIT_STACK_ALL_ZERO=y
- 
+Good point, Paolo was certainly right, as always :)
+
+We do need to investigate. Note that it might be hard for me to do that
+the next few days as I'm travelling for work, but we are tracking the issue:
+
+  https://github.com/multipath-tcp/mptcp_net-next/issues/574
+
+I see that you already marked the mptcp-connect-sh selftest as ignored,
+so I guess we are not causing other troubles with the CI. (We could then
+also apply this series here and ignore the new tests, but it is also
+fine for me to wait.)
+
+Cheers,
+Matt
 -- 
-2.34.1
+Sponsored by the NGI0 Core fund.
 
 
