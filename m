@@ -1,85 +1,93 @@
-Return-Path: <linux-kselftest+bounces-37582-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17C62B0A86D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 18:30:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BBC2B0A8E1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 18:49:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 589415A308F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 16:30:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F600A88381
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 16:47:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07E02E6D04;
-	Fri, 18 Jul 2025 16:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7FD2EA17C;
+	Fri, 18 Jul 2025 16:44:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d4ORMrF1"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="rBc4oqcI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795EC2E62C0;
-	Fri, 18 Jul 2025 16:30:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D07E2E8E12;
+	Fri, 18 Jul 2025 16:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752856213; cv=none; b=jpv2AILrBeAETGEoRFcXNaWv+gyrSG9Wtb7y1ZaEy3FlwQAX2r69eMCaKHctGYMwr9GBbyLm67Q01GQEp/zoC22ssaQg55MogkrJ+1t3xtx3gB+B4pyIAMR1ATDlgf4LYtccd6Zi52gY5d8KlX1y2Bp5O682q04uUGd6CzQ1748=
+	t=1752857086; cv=none; b=OXy6ckaNX2B/6csYjxXX0rKAvwIRPS1WqnnSq1NK4T+bt46MJbaUAtVuJzTxXwlCbQqjCmMjPRo5MhVfDDspNYnBrttJq00l7LHMZR1mgX6+8itvY+TEUT16c6Saw8RuUL/8kPECzywSx4B9E4oWnfucitthY66f+pRTc3pJWOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752856213; c=relaxed/simple;
-	bh=YGC91E1l1DSQcb9kcxNTx91MB8JFQkKUz2qanJ8u79c=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CLhKPbMxpVXdQvASsiXZCoDT3poLIqnr3if1qsx6tGREfinKAZwS3aPb3zyXRfzDCoAb5XGw0vMnyXvKC0qaD2L3WUjRPBoepBR0qDAbuJIKlzChrqezk02+nMLLhSbiZajyaDkjigbbye8HLBJcIk7qixW5oVu/fPVYQweTSQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d4ORMrF1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA69FC4CEEB;
-	Fri, 18 Jul 2025 16:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752856212;
-	bh=YGC91E1l1DSQcb9kcxNTx91MB8JFQkKUz2qanJ8u79c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d4ORMrF1dm2Kj9GfCsCY4Pjw+XXRYh03Lk4T9A9sF+jOcad3bi7kDxJVxnDWGECAZ
-	 rcmk/hYLqR3sSyypnqME8m7/2BO6cjoUfvQ9NEUnpBoNM9/3sbfc8FUoinzhg6IgAe
-	 SMJp3oEThQbGklSWPdygYV6bNDoOzBYNo+58xfdQh6nUp1QEnI94rntxbLdgFmTORP
-	 Q2JR3WjeGDpWgxEqHuStqa//25zdaOfr09bsQr+s16sfAGThEzE9JAjwfSxQOzd+Xu
-	 jYheXvVnpNDfcJ4mheNbBK8f2HobUpNiXKSenkp4iLRQQvGEUKHA201W630Lg6vtNG
-	 +NO7gSz3wMCBw==
-From: SeongJae Park <sj@kernel.org>
-To: Enze Li <lienze@kylinos.cn>
-Cc: SeongJae Park <sj@kernel.org>,
-	shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	enze.li@gmx.com
-Subject: Re: [PATCH v2] selftests/damon: introduce _common.sh to host shared function
-Date: Fri, 18 Jul 2025 09:30:10 -0700
-Message-Id: <20250718163010.59681-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250718064217.299300-1-lienze@kylinos.cn>
-References: 
+	s=arc-20240116; t=1752857086; c=relaxed/simple;
+	bh=j2UJ9FOO66mq/xih2emKqjIh6oJ0U5eMySQykubT36I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YqC1Evh4WYDeSK5tagsGznK40VeHmWu9oq5T49xzgyOKByVx80khRcQk8/hsufbwkhl6GMPGDNhEheE0+M+sMlT2IycipLhRemOOZ3AwRmAhfZgWVot3Yd90RVa54KPDXxJE2EJwuevd7V9Dyiru9g9UBE2ZMp5suTu+MKn8ULQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=rBc4oqcI; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=+0KHRWq6i37ZM7MezYdHPmtRz/2NspRTQD/ZZBbyTv0=; b=rBc4oqcIYo5r0vfEnlB/XqXlky
+	M5UHceSwD77kirjCboTRNk2dVrD7IF8NF7+QQfNFgzIn2Twsc97+JsVC0ORwNG18ssxg8d19OzjUE
+	ARligVVJNckW8nH/IQRvSwmhuIP+H02qICEJzIIIx5tLpLFvupfRA1/tIq1Z58HfavsxSe23bqkaP
+	9BwDhmBxba/wJsS7ZJKvwRFahWhorfM65kduv+yaTCMOWmAkKDCH1CojtBfk4tXMuidgo2sdPfmDj
+	pBCxg/jBoDJwbRtBH8f6SVeSnkV/4n8eo5x5jsJgnVr7I79QlszalVck1qgUqv5560DI8nMnkoECu
+	M0Wer/bg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1ucoBw-0000000CMH5-3Ggd;
+	Fri, 18 Jul 2025 16:44:12 +0000
+Date: Fri, 18 Jul 2025 17:44:12 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Kees Cook <kees@kernel.org>, Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org, workflows@vger.kernel.org,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v5 06/15] fs,fork,exit: export symbols necessary for
+ KUnit UAPI support
+Message-ID: <20250718164412.GD2580412@ZenIV>
+References: <20250717-kunit-kselftests-v5-0-442b711cde2e@linutronix.de>
+ <20250717-kunit-kselftests-v5-6-442b711cde2e@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250717-kunit-kselftests-v5-6-442b711cde2e@linutronix.de>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Fri, 18 Jul 2025 14:42:17 +0800 Enze Li <lienze@kylinos.cn> wrote:
-
-> The current test scripts contain duplicated root permission checks
-> in multiple locations.  This patch consolidates these checks into
-> _common.sh to eliminate code redundancy.
-
-Selftests are very important parts of DAMON project.  Thank you for making it
-better, Enze!
-
+On Thu, Jul 17, 2025 at 10:48:08AM +0200, Thomas Weiﬂschuh wrote:
+> The KUnit UAPI infrastructure starts userspace processes.
+> As it should be able to be built as a module, export the necessary symbols.
 > 
-> Signed-off-by: Enze Li <lienze@kylinos.cn>
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
-[...]
+No.  This is just plain wrong.  This is way too low-level; teach kernel/umh.c
+to provide what you need, but do *not* add more kernel_execve() callers.
+And the situation with ramfs needs cleaning up, but "export put_filesystem()"
+is not a solution.
 
