@@ -1,136 +1,208 @@
-Return-Path: <linux-kselftest+bounces-37550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 262E6B09E24
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 10:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D5CCB09E30
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 10:39:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6872616BB1B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 08:37:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E68B5670DB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 08:39:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A268F29290A;
-	Fri, 18 Jul 2025 08:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52A56293C5C;
+	Fri, 18 Jul 2025 08:39:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GmH8kuFD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Hqz89RGu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D450EEDE;
-	Fri, 18 Jul 2025 08:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 759EF29346F
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 08:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752827814; cv=none; b=eyntYJaOy4gIbuISg5O630Y3+5gvaeJoIPU5cSsM1zFktkufsRKTpjqpx2pgpt+IPwN7XBU8WWtLt0tmjLElX0aObU4eKT+vhvg5ZmeV+wp+xWFYOduL2bGAPGrdT5VPR/k8Tp5GEKT31wuC57UESjfPK1YoN/M9qoGuEDP9WlU=
+	t=1752827948; cv=none; b=teUpko/lsvIl0mOS1x9xRM3r10t+s2PwSQJnqyvK7qhSP+EAbTXj+LbvRdlUNxxVxLfmboHk7VgT8fHkx37EqnehFIG/EY3XMJHeZlmXx1vd4DSi1JgZzdEcnuorUFWVghROaIhSOwyl/qEeSM467ovUV9yVdJwJG6cJ+54Ss2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752827814; c=relaxed/simple;
-	bh=HL/2nr+vhFKcEcF58riyFRNQttwiCB/9fGbm+q71Dgg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S+ghDL96vtdztCGorIA7DWIOOdf3DXo+Wqg5kLolqXr6ayiQzjOmRia/r8q4X1I14CjPThK4ekcYbFzW8537oqCW9rsqJ8wtvZcqT91ucl1IZaajfkMJtQqhTCr7hJw42ia2cDlSM1WIbLcEyX3ka6/I+xVulGxVk8ujaDDQRhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GmH8kuFD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E585C4CEEB;
-	Fri, 18 Jul 2025 08:36:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752827813;
-	bh=HL/2nr+vhFKcEcF58riyFRNQttwiCB/9fGbm+q71Dgg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GmH8kuFDP69wLkOjDvdpYL8g4oErm+tCxzSYFjNficaE3yVU2VDi2CVybyh3k2vzL
-	 ktrs4o3SmHh9+Ti01m0+zENfWaUVs3rPEOFccIDJ8JzUuMBm7vzDhfYqgJjGzyUfX2
-	 tzprzSBZDHn6R6ZCy1S+ooHnVTZn0aRQWwJVACdL/lb02WuONW5CmJoAQ+l6IEgvXV
-	 YUoaFOXIVofvTGsxJhTxgxblsj38dHI42GL2cErPbWSgZ0WyDVaDQIEbTqk0zRmB/4
-	 6UGfFtVoeLA7gIVsJdymOjI/f87nJMUh+D/2j397DUryS3KRRsJ57CDJHeSOO9dNdu
-	 VnRo0rjVmoxGg==
-Date: Fri, 18 Jul 2025 11:36:32 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Michal Wilczynski <michal.wilczynski@intel.com>,
-	Juergen Gross <jgross@suse.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Roger Pau Monne <roger.pau@citrix.com>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	Usama Arif <usama.arif@bytedance.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>,
-	kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
-	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-mm@kvack.org, Ingo Molnar <mingo@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v3 04/13] x86: Handle KCOV __init vs inline mismatches
-Message-ID: <aHoHkDvvp4AHIzU1@kernel.org>
-References: <20250717231756.make.423-kees@kernel.org>
- <20250717232519.2984886-4-kees@kernel.org>
+	s=arc-20240116; t=1752827948; c=relaxed/simple;
+	bh=HV3mPl6MSYbW9XmYhqL0JUwYQluuDEhKVGZbLd7tbSg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LYjckQ7PKELfCEcrzUxf5koIhnr4jj7biK2YO9vFVLgdwouO5Bt14vAxl8qF6XceWJVPGnA6jln87VnykTPuTef1R5igu24dOE1NHSzNJskPpsIFQGJg+8I13p6LQ7aRH0R0YC34G10zM2CTHiwzxfanzejjariWcmgEauV8YI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Hqz89RGu; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4aaf43cbbdcso113501cf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 01:39:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752827945; x=1753432745; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=udrYzqsG6zKD6Rhq5jUrYPXE4BiEAdJOTycG7GhLQII=;
+        b=Hqz89RGuZzHtgoSGE0C2o/r7a2QPvNrH6QeHhYgAoP0xAud5ybplO1qSUCxNLBalwQ
+         pg8E+JD4/inzjLF2C/sRb6U1b/ddTXvrc93Lw5x1E8eDdOXb06wFdLtdIlq/W9yLUJos
+         On4JrQVSwo+kOmPrygJSvfCTmpRIE2u989OVoR51KICPlJ7qFHjHL5mHbIDFpmOMcRBN
+         iVJMDp4uzg9rQoFNoILxflbqh2y1mq4/RLnphtiu+24tNYVvJhObmzPXRO7cMJR2aP/R
+         mSx9IY/m3LBl95Si9EGoU/YfV/SjPPTC1VZ+P1nztduAgqfMJ+31NccE2K/JraxGsvnN
+         0UeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752827945; x=1753432745;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=udrYzqsG6zKD6Rhq5jUrYPXE4BiEAdJOTycG7GhLQII=;
+        b=WA6/Gho/GK7EOjPNcbu8PogFjjwFms4u+0lJMhWRHiEXr8dc+3+8kFgzltUpiRw4ZK
+         nVCC1UvZULEXWTGXdZItYAXEEJ8ip+EWgkglalJUYNqb4fCX557rFY9ar6eILH+O9p78
+         1xUdTejnF90cdFbsce9AFtpzPwbwRY5KWZds2yt4njOBRkNQYadlAQlNzi7xQcoGKMWQ
+         XqkFZdnbIOBzYCqHJcxhklowtG891NRorHCETSA+XFo/EXhj3M6Q/BRHTHDtE/fRqPaU
+         uq0cvi/9i+oOOO6flIFN+y/O218D+OaCXH6pPxaeq/MVUXM6B9rG1I0HsxSQsujpmc4A
+         stYg==
+X-Forwarded-Encrypted: i=1; AJvYcCX9teVXTTozlJsu5Eik3woKqT0U+DVn1M5Y8Xj8qwIOP6wpGB82ikid0dmdxbfgQXqZ5qXk+BN+bip6YBVM75w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysKUepcf3a4dXxNPYGu+RhLNYv6wXWeIML7pon6fOS7oezo5cF
+	+/7qZecGzPyKbkkaACv4kdzKcePqAikJy076DbJiaym5bRgXwAdTpMBtuzympiDgxsCEkJyfZ1r
+	ujVLZhE7AfcawVFspGM0eIZ2AlYSgSDZNJWQTGQIE
+X-Gm-Gg: ASbGncvn/o/THmXY2NxrwslhVjxbBx++7z4k17QRE8b01BCIERo/sMg4ZCIV+xg/Ukf
+	BsiY+EmAjwTOshrsVMTmhtlIRNkRlXtfIIr7Wyqb3+CLm/Gsvjmy7KW6+hraFVF8MocdSyT3iS1
+	4q6xfuDbQstt/LSgnXdQmSgBz8Utd8S/AyXPkX1yJjxew7jqvS9s5o2d7fD7QDsrdAIMLI9opzU
+	qt6SbtgasmDjv/9zKiDx4Z3JaQoUSiX0PY01A==
+X-Google-Smtp-Source: AGHT+IFZWhzx20M9Gw8trywQy21X6aj6Ujnf+GXyOsXwiCt5Tl0RmCoH6sEvHzscHL3TaCOr5PVWkjpGBEYykqUGK0g=
+X-Received: by 2002:a05:622a:4a87:b0:4a8:19d5:e9bb with SMTP id
+ d75a77b69052e-4abb13dfdf4mr4200641cf.13.1752827944683; Fri, 18 Jul 2025
+ 01:39:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250717232519.2984886-4-kees@kernel.org>
+References: <cover.1752824628.git.namcao@linutronix.de> <43d64ad765e2c47e958f01246320359b11379466.1752824628.git.namcao@linutronix.de>
+In-Reply-To: <43d64ad765e2c47e958f01246320359b11379466.1752824628.git.namcao@linutronix.de>
+From: Soheil Hassas Yeganeh <soheil@google.com>
+Date: Fri, 18 Jul 2025 09:38:27 +0100
+X-Gm-Features: Ac12FXzgn06jDeUNMyDy69uNTY69aPVmkscuVzoPHZoBvxff8P-gX2NCfWFyWn0
+Message-ID: <CACSApvZT5F4F36jLWEc5v_AbqZVQpmH1W7UK21tB9nPu=OtmBA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] eventpoll: Fix epoll_wait() report false negative
+To: Nam Cao <namcao@linutronix.de>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Shuah Khan <shuah@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, 
+	Khazhismel Kumykov <khazhy@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Eric Dumazet <edumazet@google.com>, Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kees,
+On Fri, Jul 18, 2025 at 8:52=E2=80=AFAM Nam Cao <namcao@linutronix.de> wrot=
+e:
+>
+> ep_events_available() checks for available events by looking at ep->rdlli=
+st
+> and ep->ovflist. However, this is done without a lock, therefore the
+> returned value is not reliable. Because it is possible that both checks o=
+n
+> ep->rdllist and ep->ovflist are false while ep_start_scan() or
+> ep_done_scan() is being executed on other CPUs, despite events are
+> available.
+>
+> This bug can be observed by:
+>
+>   1. Create an eventpoll with at least one ready level-triggered event
+>
+>   2. Create multiple threads who do epoll_wait() with zero timeout. The
+>      threads do not consume the events, therefore all epoll_wait() should
+>      return at least one event.
+>
+> If one thread is executing ep_events_available() while another thread is
+> executing ep_start_scan() or ep_done_scan(), epoll_wait() may wrongly
+> return no event for the former thread.
 
-On Thu, Jul 17, 2025 at 04:25:09PM -0700, Kees Cook wrote:
-> When KCOV is enabled all functions get instrumented, unless the
-> __no_sanitize_coverage attribute is used. To prepare for
-> __no_sanitize_coverage being applied to __init functions, we have to
-> handle differences in how GCC's inline optimizations get resolved. For
-> x86 this means forcing several functions to be inline with
-> __always_inline.
-> 
-> Signed-off-by: Kees Cook <kees@kernel.org>
+That is the whole point of epoll_wait with a zero timeout.  We would want t=
+o
+opportunistically poll without much overhead, which will have more
+false positives.
+A caller that calls with a zero timeout should retry later, and will
+at some point
+observe the event.
 
-...
+I'm not sure if we would want to add much more overheads, for higher precis=
+ion.
 
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index bb19a2534224..b96746376e17 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -463,7 +463,7 @@ static inline void *memblock_alloc_raw(phys_addr_t size,
->  					  NUMA_NO_NODE);
+Thanks,
+Soheil
+
+> This reproducer is implemented as TEST(epoll65) in
+> tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c
+>
+> Fix it by skipping ep_events_available(), just call ep_try_send_events()
+> directly.
+>
+> epoll_sendevents() (io_uring) suffers the same problem, fix that as well.
+>
+> There is still ep_busy_loop() who uses ep_events_available() without lock=
+,
+> but it is probably okay (?) for busy-polling.
+>
+> Fixes: c5a282e9635e ("fs/epoll: reduce the scope of wq lock in epoll_wait=
+()")
+> Fixes: e59d3c64cba6 ("epoll: eliminate unnecessary lock for zero timeout"=
+)
+> Fixes: ae3a4f1fdc2c ("eventpoll: add epoll_sendevents() helper")
+> Signed-off-by: Nam Cao <namcao@linutronix.de>
+> Cc: stable@vger.kernel.org
+> ---
+>  fs/eventpoll.c | 16 ++--------------
+>  1 file changed, 2 insertions(+), 14 deletions(-)
+>
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index 0fbf5dfedb24..541481eafc20 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -2022,7 +2022,7 @@ static int ep_schedule_timeout(ktime_t *to)
+>  static int ep_poll(struct eventpoll *ep, struct epoll_event __user *even=
+ts,
+>                    int maxevents, struct timespec64 *timeout)
+>  {
+> -       int res, eavail, timed_out =3D 0;
+> +       int res, eavail =3D 1, timed_out =3D 0;
+>         u64 slack =3D 0;
+>         wait_queue_entry_t wait;
+>         ktime_t expires, *to =3D NULL;
+> @@ -2041,16 +2041,6 @@ static int ep_poll(struct eventpoll *ep, struct ep=
+oll_event __user *events,
+>                 timed_out =3D 1;
+>         }
+>
+> -       /*
+> -        * This call is racy: We may or may not see events that are being=
+ added
+> -        * to the ready list under the lock (e.g., in IRQ callbacks). For=
+ cases
+> -        * with a non-zero timeout, this thread will check the ready list=
+ under
+> -        * lock and will add to the wait queue.  For cases with a zero
+> -        * timeout, the user by definition should not care and will have =
+to
+> -        * recheck again.
+> -        */
+> -       eavail =3D ep_events_available(ep);
+> -
+>         while (1) {
+>                 if (eavail) {
+>                         res =3D ep_try_send_events(ep, events, maxevents)=
+;
+> @@ -2496,9 +2486,7 @@ int epoll_sendevents(struct file *file, struct epol=
+l_event __user *events,
+>          * Racy call, but that's ok - it should get retried based on
+>          * poll readiness anyway.
+>          */
+> -       if (ep_events_available(ep))
+> -               return ep_try_send_events(ep, events, maxevents);
+> -       return 0;
+> +       return ep_try_send_events(ep, events, maxevents);
 >  }
->  
-> -static inline void *memblock_alloc_from(phys_addr_t size,
-> +static __always_inline void *memblock_alloc_from(phys_addr_t size,
->  						phys_addr_t align,
->  						phys_addr_t min_addr)
-
-I'm curious why from all memblock_alloc* wrappers this is the only one that
-needs to be __always_inline?
-
--- 
-Sincerely yours,
-Mike.
+>
+>  /*
+> --
+> 2.39.5
+>
 
