@@ -1,179 +1,166 @@
-Return-Path: <linux-kselftest+bounces-37608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF15BB0AC5C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 00:54:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57C12B0AC53
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 00:51:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4225567645
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 22:54:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24BC67BA431
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 22:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93BD221CC5A;
-	Fri, 18 Jul 2025 22:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85534225A35;
+	Fri, 18 Jul 2025 22:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Q+NoIop9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VmiVcikE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4401799F
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 22:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D2D224AFB;
+	Fri, 18 Jul 2025 22:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752879269; cv=none; b=nccEzSc15KPK+/65TnFDvuo7hwPJrQFW0DUkmyLtKsg88lOa0RgkmTyOJsVrVntl8mP1yPI7iGNPXI9Vok1Z3eFDDjDsnqXVIRhWZ1LDIhTc2XUbTscD9EC6u3LyckAchw9w7Eo/GJw3KG7CX4Ho90cH3QvNfUNZbK+sYglDV30=
+	t=1752879089; cv=none; b=S3MILflS8Cf19q+M1ugUM9nr3hCErwhnmRs4Qeh2HM2Uy7IPGii8uqPCudEWjUEtX34LZYs8qH0Je5AYBSPGWhdV7Dv74trvZCru2ggaDKIwSKz1pXODf+sM16Hfs8Im8guWp4c7ereH5PUKWbcy3d1LTGyZZCKapX9NeBORdq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752879269; c=relaxed/simple;
-	bh=qo67utYF/ovAn2X4y/cKDIWgVFy2L9OSLb/CZy1qQmg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B7ptmtGChhqYhhD04/eWSWZVbKL3jQb8GKNr+mB2bAGNK18ElrUbVD3lYJFSwBJSp4FcKwM40Z16B/czjOWVusy/mUvIsZ5KYebWBcmQw8VDWXbGJsRrjfFN8JBU5gBC9T5nAaGL3THXi2qcQRRspyw0C9JQ3IrkezfWJ1LXAwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Q+NoIop9; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-32f1df58f21so26546371fa.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 15:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1752879265; x=1753484065; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UqwKREBTKqb14178is+L3e4wy7hqQP2KCNVEXG6C+zY=;
-        b=Q+NoIop9E4ou3xNqtTYpyFp9sSMjfEC35GGDi9+NEoEIeW+tH+LVRQqhCaA7pce+vg
-         8ujkhIoeWS2Jct/rOPGUJ0NQlQf948iiwu8iDv7Qw4lTg/I9pN7YIwvg06VZhjd/hT24
-         cGFiQk+cA6Az5eaIRkTK96n6IEskFrvpj1YsE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752879265; x=1753484065;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UqwKREBTKqb14178is+L3e4wy7hqQP2KCNVEXG6C+zY=;
-        b=r4Fy+9cytZ0NYKnHIvV1peclWckYuVM6z8Nw1HgsZ2991MI5ob+02t5XsGRl642UL1
-         xlnPG2OuQJNrhA8WWvV7LQILf2RjB7uQyDQtOSVFb30pgMh+5pSAma4cNRfq05VuiYSU
-         BxMQxRpLeRfFkkx2o+6si7PW7RlvPIar4g/63LuC1bRcIRjcSk8U3Y5NXmNDrGjxQVom
-         Pw7vO0vpJhSoy6+PN+HWSXA+wUa1DaN+uy0swoRvBL97WWnxKdnu5kjR4KVmvla1x6hn
-         kCtZbpBoquis/9Z5ICKBUE9r0/IBrpXnyvuYCDEd2rcP+EtptUeI8HO7/qemCr+eQmo1
-         y2Rw==
-X-Forwarded-Encrypted: i=1; AJvYcCX/3wsC7EXKHuMx/OjDE8HAV1qJAizKvd/uBAo7yedHkKiFF2DpKfUvS2yqnMAK2H7Cpy7pyuHNooiGQ8paOYY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFTuY1bwTL/rtW/WRTCgRVM6iQMGk5JI8ZISWczChsm7eKYpc+
-	rz6sVG+aXJ+YjdiNolyxy+qDgbNMbO/L15jSDT1j5Q3qN32aY4OyzI5vBWEkPYIjWWCtIUfknBf
-	nsWVoc8W+Lw==
-X-Gm-Gg: ASbGncttnDtC+QglJdNeM3yh8I7z7D2dff5po3wI108i9PJkGGW/zL72sXmcdM5kBQj
-	CW6TrjIMjbu1mqVqALy6MVZA8dojdYJtYZOWD7Si5h/XPeFYNfqmDzEjTlez5MvsSj8YbljhDyu
-	oFsaoJckbiVTyjevDrFgRbx3dxOLnch8Dt8z82aXMaEUFCHJa6bPAM8HhRK++rh5nEfDxuXMOIE
-	rsl3F0JulR6QK7mY5P/vd+FniNSihrl9BHFlrP1aGJUpUFksGvF3YPIZbugNuaUYkvomeLlrawQ
-	oM/2af7v8iOI4lFeQ5RFMDezv7+l/NVxy4qxwKOIRx4V8BJuyEg4iDZPe02Zu0faS7uwUjyExWH
-	WxPT7cC2kdx7a1wvN0MOq7jkNJ1kWrZNBGYxdKo5F95G1RawOrbQQiyIEvEVQDcrTrhBbAf8F
-X-Google-Smtp-Source: AGHT+IEmtGVrglqAZs/rxU3W/nm+/BTsg9HtmwmC5jJeemgxQ6i3RmrbkSdW52DVSN0y2944q7fzbQ==
-X-Received: by 2002:a05:651c:1109:20b0:30b:ba06:b6f9 with SMTP id 38308e7fff4ca-3308f5e1ebemr30504061fa.26.1752879264674;
-        Fri, 18 Jul 2025 15:54:24 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-330a90d4ffasm3494291fa.6.2025.07.18.15.54.23
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Jul 2025 15:54:23 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-55502821bd2so3249681e87.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 15:54:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWMyy2b5HFowsttg/iw0VzSBwTPYgEf6AzmTM+cI5OwXdNbYFNut01zua0pGyHbUKPHgUzmbEI4wkOO+AoZQt8=@vger.kernel.org
-X-Received: by 2002:a05:6402:84d:b0:60c:3f77:3f44 with SMTP id
- 4fb4d7f45d1cf-61285ba5366mr11281504a12.17.1752878941898; Fri, 18 Jul 2025
- 15:49:01 -0700 (PDT)
+	s=arc-20240116; t=1752879089; c=relaxed/simple;
+	bh=9wq1gPYvCplHPaY4Wm5XgoLMe+aODde2O7VcmHcmk98=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uPLgdyUatVim0CECah6F4FPsKF/Ls5gb4V26IYBlQ1t173MdwVyCoWuoCPsOvoYdTionaiaKpw/1zEypEwH8hQ3ac8ZeL+s+ZrJ3IowNbuL9fEz1xfQN0oSbLJgtdU8JIsb0nKL4BcNLpdplupJAQ+SQ37o8H60Ag8plhzcuNkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VmiVcikE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0591C4CEF1;
+	Fri, 18 Jul 2025 22:51:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752879088;
+	bh=9wq1gPYvCplHPaY4Wm5XgoLMe+aODde2O7VcmHcmk98=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VmiVcikElcqZk72BFs7/zWioNVg/RlBsEZTqUIs6HsScTtVwOS6j7B3ua7R/5a+8f
+	 B/Xx/QRZM/EQh/lO2RicrfWNUj4TspYI7v5C1esxaGnMy5qNgSFrlaLuHCW1KuRQE/
+	 vwjy0/1yadEDESYc6Jup2r2d1g6hRKk98N3uI9FiR3pIjtw/6N8d9/1A9DF/kI7Ptp
+	 /KtF2y8xo3+DKYzmZGh9ileKlyQIK4tsMmB+vc1VQguKTRnI0Md6sJRL9kCLGWssqH
+	 x60/sDs7wvwXbxMyYV4GlknlF8akcqkSZPz9pRU1nNtV+O7XtlJK1/hNvPy3K6SwqK
+	 vqLjSPHvQBQpQ==
+Date: Fri, 18 Jul 2025 15:51:28 -0700
+From: Kees Cook <kees@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>, Will Deacon <will@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Michal Wilczynski <michal.wilczynski@intel.com>,
+	Juergen Gross <jgross@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Roger Pau Monne <roger.pau@citrix.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Usama Arif <usama.arif@bytedance.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>,
+	kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-mm@kvack.org, Ingo Molnar <mingo@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 04/13] x86: Handle KCOV __init vs inline mismatches
+Message-ID: <202507181541.B8CFAC7E@keescook>
+References: <20250717231756.make.423-kees@kernel.org>
+ <20250717232519.2984886-4-kees@kernel.org>
+ <aHoHkDvvp4AHIzU1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250718213252.2384177-1-hpa@zytor.com> <20250718213252.2384177-5-hpa@zytor.com>
- <CAHk-=whGcopJ_wewAtzfTS7=cG1yvpC90Y-xz5t-1Aw0ew682w@mail.gmail.com>
-In-Reply-To: <CAHk-=whGcopJ_wewAtzfTS7=cG1yvpC90Y-xz5t-1Aw0ew682w@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 18 Jul 2025 15:48:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whrbqBn_rCnPNwtLuoGHwjkqsLgDXYgjA0NW2ShAwqNkw@mail.gmail.com>
-X-Gm-Features: Ac12FXwPQm0wFuMqO4T5e7rkg71dcrU60Bx64WOT68AUbiGf34w2BtStF_AEh5c
-Message-ID: <CAHk-=whrbqBn_rCnPNwtLuoGHwjkqsLgDXYgjA0NW2ShAwqNkw@mail.gmail.com>
-Subject: Re: [PATCH 4/7] arch/nios: replace "__auto_type" with "auto"
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Alexei Starovoitov <ast@kernel.org>, Alexey Dobriyan <adobriyan@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Arnd Bergmann <arnd@kernel.org>, Borislav Petkov <bp@alien8.de>, Cong Wang <cong.wang@bytedance.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Laight <David.Laight@aculab.com>, 
-	David Lechner <dlechner@baylibre.com>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Gatlin Newhouse <gatlin.newhouse@gmail.com>, 
-	Hao Luo <haoluo@google.com>, Ingo Molnar <mingo@redhat.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Jan Hendrik Farr <kernel@jfarr.cc>, Jason Wang <jasowang@redhat.com>, 
-	Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Marc Herbert <Marc.Herbert@linux.intel.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Mateusz Guzik <mjguzik@gmail.com>, Michal Luczaj <mhal@rbox.co>, 
-	Miguel Ojeda <ojeda@kernel.org>, Mykola Lysenko <mykolal@fb.com>, NeilBrown <neil@brown.name>, 
-	Peter Zijlstra <peterz@infradead.org>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Thomas Gleixner <tglx@linutronix.de>, 
-	Thorsten Blum <thorsten.blum@linux.dev>, Uros Bizjak <ubizjak@gmail.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Yafang Shao <laoar.shao@gmail.com>, 
-	Ye Bin <yebin10@huawei.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Yufeng Wang <wangyufeng@kylinos.cn>, bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, virtualization@lists.linux.dev, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aHoHkDvvp4AHIzU1@kernel.org>
 
-On Fri, 18 Jul 2025 at 14:49, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, 18 Jul 2025 at 14:34, H. Peter Anvin <hpa@zytor.com> wrote:
-> >
-> > -       __auto_type __pu_ptr = (ptr);                                   \
-> > +       auto __pu_ptr = (ptr);                                  \
-> >         typeof(*__pu_ptr) __pu_val = (typeof(*__pu_ptr))(x);            \
->
-> But that second case obviously is exactly the "auto type" case, just
-> written using __typeof__.
+On Fri, Jul 18, 2025 at 11:36:32AM +0300, Mike Rapoport wrote:
+> Hi Kees,
+> 
+> On Thu, Jul 17, 2025 at 04:25:09PM -0700, Kees Cook wrote:
+> > When KCOV is enabled all functions get instrumented, unless the
+> > __no_sanitize_coverage attribute is used. To prepare for
+> > __no_sanitize_coverage being applied to __init functions, we have to
+> > handle differences in how GCC's inline optimizations get resolved. For
+> > x86 this means forcing several functions to be inline with
+> > __always_inline.
+> > 
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> 
+> ...
+> 
+> > diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> > index bb19a2534224..b96746376e17 100644
+> > --- a/include/linux/memblock.h
+> > +++ b/include/linux/memblock.h
+> > @@ -463,7 +463,7 @@ static inline void *memblock_alloc_raw(phys_addr_t size,
+> >  					  NUMA_NO_NODE);
+> >  }
+> >  
+> > -static inline void *memblock_alloc_from(phys_addr_t size,
+> > +static __always_inline void *memblock_alloc_from(phys_addr_t size,
+> >  						phys_addr_t align,
+> >  						phys_addr_t min_addr)
+> 
+> I'm curious why from all memblock_alloc* wrappers this is the only one that
+> needs to be __always_inline?
 
-Actually, looking at it, I actually think the NIOS2 header is a bit
-buggy here, exactly because it should *not* have that cast to force
-the types the same.
+Thread-merge[1], adding Will Deacon, who was kind of asking the same
+question.
 
-It's the exact same situation that on x86 is inside
-do_put_user_call(), and on x86 uses that
+Based on what I can tell, GCC has kind of fragile inlining logic, in the
+sense that it can change whether or not it inlines something based on
+optimizations. It looks like the kcov instrumentation being added (or in
+this case, removed) from a function changes the optimization results,
+and some functions marked "inline" are _not_ inlined. In that case, we end up
+with __init code calling a function not marked __init, and we get the
+build warnings I'm trying to eliminate.
 
-        __typeof__(*(ptr)) __x = (x); /* eval x once */
+So, to Will's comment, yes, the problem is somewhat fragile (though
+using either __always_inline or __init will deterministically solve it).
+We've tripped over this before with GCC and the solution has usually
+been to just use __always_inline and move on.
 
-pattern instead: we don't want a cast, because we actually want just
-the implicit type conversions, and a warning if the types aren't
-compatible. Writing things to user space is still supposed to catch
-type safety issues.
+For memblock_alloc*, it appears to be that the heuristic GCC uses
+resulted in only memblock_alloc_from() being a problem in this case. I
+can certainly mark them all as __always_inline if that is preferred.
 
-So having that '(typeof(*__pu_ptr))' cast of the value of '(x)' is
-actually wrong, because it will silently (for example) convert a
-pointer into a 'unsigned long' or vice versa, and __put_user() just
-shouldn't do that.
+Some maintainers have wanted things marked __init, some have wanted
+__always_inline. I opted for __always_inline since that was basically
+the intent of marking a function "inline" in the first place. I am happy
+to do whatever. :)
 
-If the user access is to a 'unsigned long __user *' location, the
-kernel shouldn't be writing pointers into it.
+-Kees
 
-Do we care? No. This is obviously nios2-specific, and the x86 version
-will catch any generic mis-uses where somebody would try to
-'put_user()' the wrong type.
+[1] https://lore.kernel.org/lkml/aHouXI5-tyQw78Ht@willie-the-truck/
 
-And any "auto" conversion wouldn't change the bug anyway. But I
-thought I'd mention it since it started bothering me and I went and
-looked closer at that case I quoted.
-
-And while looking at this, I think we have a similar mis-feature / bug
-on x86 too: the unsafe_put_user() macro does exactly that cast:
-
-  #define unsafe_put_user(x, ptr, label)  \
-        __put_user_size((__typeof__(*(ptr)))(x), ..
-
-and I think that cast is wrong.
-
-I wonder if it's actively hiding some issue with unsafe_put_user(), or
-if I'm just missing something.
-
-            Linus
+-- 
+Kees Cook
 
