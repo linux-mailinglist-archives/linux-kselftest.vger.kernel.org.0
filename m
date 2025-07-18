@@ -1,207 +1,149 @@
-Return-Path: <linux-kselftest+bounces-37589-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37590-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C751B0AB00
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 22:16:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BE1DB0AB41
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 23:03:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D05F1C81A35
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 20:17:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE0D0587B93
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 21:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B8C2116E7;
-	Fri, 18 Jul 2025 20:16:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D7B21018A;
+	Fri, 18 Jul 2025 21:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="j5fTCvq7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="X5DFOfRg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2070.outbound.protection.outlook.com [40.107.223.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444EC3597E;
-	Fri, 18 Jul 2025 20:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752869811; cv=fail; b=VzWYQB538EdT8I9lYILG1YuOJ+9IdlWuo39qeioRiw7yCmn82AQggA6w8ht0Q8/ikXoXB1EmPF0evCkT7NvmNVQIy7Johv63k7vTVs6JnAheI4X1lroRnuUAdlnR2I3BxVFuHK307FYlONtUJbDwy74KtxLG0QsIdqt57NF1Teg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752869811; c=relaxed/simple;
-	bh=dYkut7s9XPCp/XAlonFbnXK+eUcF1cvBTc7fmMIfF18=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=miDoohgJY0BnNFxAX+1wZJDlu0sRCHF46Ls087DDeuagWkA1mJgYETcBRuWlflX2oLHhrddmJzE1DMAXlFmBhUj9ZH4CZSU9WyLc5dovDYhss/YIPfa57DKvT7OO8mgFTYkZ4M4ApopW928rKUZ7oRZpdItqiWnO6QpvBmHdhYM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=j5fTCvq7; arc=fail smtp.client-ip=40.107.223.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GJgzgkiJiBbgZQaHAuCQBBj3k34w0zxdVtLxO51d+0pRYPY8grQavNEZqkqPtpFyMqqKzFHgnd+KYjvtKy5GnL6p9v02wKQd82SUjgqQr8oM+B5sM62lIHdDw5IQiBAeG//hSUh10PXQez6kjJsQatTlwtplUgSacbowmRcAEEPAqn1f/dFU45jzPagOJEdMUqBWZLiZSqPl2jS4RTalOn18baL8BlIbEC7TA7U7H247JskAcje/JA5I9ioDdryHNbZGd0IKBwy6KzWS7+8lxb8JXPyejBRYqb7KdJTMst2SW0taA4uoWD0FKorK/1NtLfnc18NHLA7y5jjQ+qse2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=58xZ8/g0tJr+vgxrL9NsBB0zBw/CNuqAvgQN5MlIOwU=;
- b=hQ/4dPtwsN3WuV4tlcJ7XNoO6cVl0cv3j2gir17xWcm24wVu3U0+X2Zcuk2dhcrUJPl7UOdD005jXTNjWaMQTviwAG9B0bsCk5Lx+k8vVK4cP2EeaKe/5vtxKE17gxxDTpuKSSaLWZh2qR0Co2Y0BQX8Q3JPZQAsDN6+yucgL9L0WbW1MmoNZQ+ZaNfWNARW1FeZQ+0cxEBQWsZv3LlNrM3rLte612gizJ61WdfT9Jsu09e0vHjgsSNX6M8oSou2enRZdFFJRcpWvXmkqEuJESEZuGb13MryeT5ZmVhaFfY6dm6k8aUIQH853VuIkUy1zNjpPNr23Yjyl25e8v08vg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=58xZ8/g0tJr+vgxrL9NsBB0zBw/CNuqAvgQN5MlIOwU=;
- b=j5fTCvq72Idm4khGFK1dm1rPvd08XCZnecC1QGmex5GHRkwKTJB5BbyjyBVViM3bOTkQshMgYiOI/KX0/Jxuj6/2jvgDGo/USKwyJyPjSV1858elNteOAduoZ5ceyMeZ237XjAINz+W7VUsjsSvTf/QZKR54Nag/NTm1Wk+ZYcf63iItkFKWvK0AOYxc6gXnWcUMxU3viVdo0t1qQ1rvmg9FIq1SYQaI53M5rneSty0nwu6WrtEB5f5a/x6CKqhHfUIn2vwAojGhML7q/MwIQuC3rxswB8OjrhFe/qOIPUhPbQ+FSZt2zcZkG6dmIOsbgcCNqWdB4avolqHEeCv5EA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by MW4PR12MB7467.namprd12.prod.outlook.com (2603:10b6:303:212::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.28; Fri, 18 Jul
- 2025 20:16:47 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8901.033; Fri, 18 Jul 2025
- 20:16:46 +0000
-Date: Fri, 18 Jul 2025 17:16:45 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	Will Deacon <will@kernel.org>, Lixiao Yang <lixiao.yang@intel.com>,
-	Matthew Rosato <mjrosato@linux.ibm.com>, patches@lists.linux.dev,
-	stable@vger.kernel.org,
-	syzbot+c2f65e2801743ca64e08@syzkaller.appspotmail.com,
-	Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH 2/2] iommufd/selftest: Test reserved regions near
- ULONG_MAX
-Message-ID: <20250718201645.GH2250220@nvidia.com>
-References: <0-v1-7b4a16fc390b+10f4-iommufd_alloc_overflow_jgg@nvidia.com>
- <2-v1-7b4a16fc390b+10f4-iommufd_alloc_overflow_jgg@nvidia.com>
- <aHm1WRAGgk/6HZMC@Asurada-Nvidia>
- <aHoCOnOAlwpoiDNe@Asurada-Nvidia>
- <d18d7013-e82e-456a-87da-8acffc90d8db@arm.com>
- <aHqXdjJbuO4e7r+X@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aHqXdjJbuO4e7r+X@Asurada-Nvidia>
-X-ClientProxiedBy: MN2PR13CA0012.namprd13.prod.outlook.com
- (2603:10b6:208:160::25) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2438218E20
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 21:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752872628; cv=none; b=YTWrJjESqdWchQ8+MoegLpeefF3QqBMCcRg6EcJqn+9vh2aRXMyqxkCgAMFfSbguCAlDRB1j1FhoqR+rlBsy3Qq8FX73j94BirjGJhmziKi3LH8FRodKjRWPfkzA+b7m/peCa2g/x690fpDh8K1m2K/ryUvsNxB3EV1U9r7yBqQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752872628; c=relaxed/simple;
+	bh=zzDMsAr4GKtcuWrnhtEidzhWRDh+qnVii9IM37m6u1s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mDVE4sWy/S2qJG5xWa/uNg9MLWgmVOWRE5Pm/DRnqDlP7JIYiyKoLgCRDlbKSRqt13vspkHewNWwolhpmf2z2dYg/6Ea6eSZQFY4WAzvVV3XxS5t0ujAkwHzUda37CqDj1Xq5TBV+T1zOcklNMuiWOI8AbjmeoltPa6dLhMsoAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=X5DFOfRg; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3de1875bf9dso21747305ab.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 14:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1752872625; x=1753477425; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L5QtuVUnIsXqjvxXCcqU+T0dmbm8qNp5jDvLDftyQas=;
+        b=X5DFOfRg8vBu012kibh3JARLtXO/R3QgTDdtxxkTxkSvhqx4SFq4zu0qlvqKGj2RER
+         HcoJvk0x6RelKuqnLdRrkf8AbnPRifbhY/kgbYzTz/XJsV/B38c+s+8yOXlQ/Lg8oqey
+         E/vKKvrtaA+cXXWlbNw7tpM8axAnblhDHefD0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752872625; x=1753477425;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L5QtuVUnIsXqjvxXCcqU+T0dmbm8qNp5jDvLDftyQas=;
+        b=nhsnfPDBfspyC4HSaIBLEgQpEn1fGlClgFJE8pOOKKUaynPBtcLWnlTsG1gfsHTiUO
+         a9j7M6uacuyHJWgMHDBn+/bJ37arIVYdM9sO1nEKbyuhHw9YKphv/3s+g9mNUZznZ4rN
+         mpr59OfUrhSnlhCqKWUCP0/q6xyq/CZCKXQNYkHL8oU6+U967EetFgM5P3fn69iVA4fr
+         YhyTud91GjKis4KwmRxuM6yrmQAkzsZM9PHX93NyslO9zEu74G9E7hvb1D/Tg6Zi9J0z
+         FSeulBf1BuOZ9UC04JKiK/nEwdzAPIiAD5gclS+r+j5tdiHXRs40k+SVYyL1iHw0k7vE
+         hnog==
+X-Forwarded-Encrypted: i=1; AJvYcCXpt3mINbSUHJxvs8Fu+xzr7ul8LH3lyvJYHKmMKFkWbvjwbtP1MEdATVSRwLzr4XjSq92pCqKK+uJSUfnkJmU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAnLaMTJCxUB9NDmKPKhrbff7iYgGHEJEJn3y/ihtFna+WJ/Iz
+	o8pR2hBTRaINP8QYMMZbv8vG/A62WheihQCqVEUWplMiJm2eQpHmZQ6jjvFMM/zTzDQ=
+X-Gm-Gg: ASbGncu54hbfOsY8MT6FF1iFVoW8gIF0nKwixdOzNLaagS7LfJpkU/aLEfB99FyAI6d
+	oGpjW6KPak5cLHto73KntzyR+qkxGwuIyS9T1qylVfIS+Lwiu3Is0SsF0qr1lYWATtA0vqxarQe
+	1V4DlV5k2LzeOJEoEValDSayijk7PGa57LpXpnOm40OxGaP86PFKFg383VAIoeoq7zkfVedwFhf
+	Nb4lwyQ8Hn9YERisV1+yQUzim3OHqO4z2pSLepPIldaK2rRCAHCpBIxEBLUpMzOrDTOuxL4edon
+	7Qp1DPFeAfNB8Ts2bcjDVET4hfIfbjWbV4u+bYAd4Mp5NHNskdbG9CVZnp9ZHfdRpiH1thvOq43
+	xvD/zwD0rzvB7doUi5Bb233k1sb/DOeTmbg==
+X-Google-Smtp-Source: AGHT+IEOA9GEgGphdbPmdovYsa3GM3V4jtxaUIbKpm4MtRPTor5ojw9boEjHzikfUxMJUDj+Bfs+yQ==
+X-Received: by 2002:a05:6e02:12eb:b0:3e2:a139:9489 with SMTP id e9e14a558f8ab-3e2a1399731mr2045355ab.11.1752872625057;
+        Fri, 18 Jul 2025 14:03:45 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3e2982c9ab1sm6371975ab.57.2025.07.18.14.03.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Jul 2025 14:03:44 -0700 (PDT)
+Message-ID: <f82e3092-31ab-4ceb-a51f-208d13e7b2ec@linuxfoundation.org>
+Date: Fri, 18 Jul 2025 15:03:43 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|MW4PR12MB7467:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e212fc9-91fd-4391-0af7-08ddc6380558
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?WtmHFO+rOkxl9MTYckMXw8PK0TYU4aqeBBdRRWROZOOS7zaK6cJ93KdeB7J5?=
- =?us-ascii?Q?WZZpqlkGWL8KS2I/0ahJGjM1lObxWd8Yc+FJwJjfJDzy1jgvsN2uxy2jHz4u?=
- =?us-ascii?Q?EwwVeEhv78IcKRWo9KNvh+fM01CdIgclpSAPk0AXeHYYYEaSuJ8OXzL4icz9?=
- =?us-ascii?Q?DXt7p43Xwir4TlW0Nq8YOHJy4QQgi41Sxm/soYiDlad83UFNGEuACQbmaWfN?=
- =?us-ascii?Q?DR1QvKvYtKdQgdtXARr3mTyviMrOHmJAIfK7RtX+VIP9lU184B6e5axkJ8y+?=
- =?us-ascii?Q?AiE1nFSilSX0nu1zwt3OY88qcuZu0cBM+zCus3Cay4q+jbNGs2vsdvF/H6zk?=
- =?us-ascii?Q?D7pSi/IU20yeLoV9/AHtz3CYErnNqZQ/rKkIy203nqX+/W1lmoHs+vWUL+Jp?=
- =?us-ascii?Q?H8Wqt0GrP3Qw/NsHY1Pc2QXs1cLEyTv/1iK3ATiTsIkMe+TZ0rkD5tL3s9qI?=
- =?us-ascii?Q?tsX/C21PXcHNsA/IHkbTzi/J6g9eu6ia19KRnl9YNqKvWaL5p3G5NX1PDC7K?=
- =?us-ascii?Q?maGM68xXIHZYQRpzweRPfupn2mXX5Ev0MB00m0qAj5+yErG10VcvkKl3toZE?=
- =?us-ascii?Q?Ev8KcQm/+7cNILtvCCnLfKaDeH19AD9HsZrsZVjHg3E8cKRncSSxrP/Vx7dN?=
- =?us-ascii?Q?kDUWy1w3mMZWHGf/CeAlQ+8YR8YBX3bWnUXYJvwKC3tm+V3hqSqsx9nb6TEF?=
- =?us-ascii?Q?5PD+fiCQY3JiBU6AO13IKqpdmuhMjTNk8HOfy0CjRDsG8C4flC2gkOAB7TO7?=
- =?us-ascii?Q?KnW9sXOJI2J6huUULaS/Avpabdxiprc/v8FbwvpYjtFWTabez4KO6bBYDsSH?=
- =?us-ascii?Q?mNHqlFyCnYKmJW3geoN1I9Of7X7/bDrb/bDw4TO5tUIVlX+PItix3SJVyGnv?=
- =?us-ascii?Q?WRUZYg4hUTszw56ygMSCiQ0I+IfluRwSySSgkP4NENXBrGmZKnh1LNmTjiib?=
- =?us-ascii?Q?FbH8RkKQxUDTp8Y8kSzKqK+JHk4SBUFoQLtENqIRkFprD4CH6ZKYpIjRXB3Q?=
- =?us-ascii?Q?VrUnlZdiC11lP+akLtBQhQD8aS4UGXyOSF8/TYFPo6ofmJbvyVVH01lBYsx7?=
- =?us-ascii?Q?Ko+bxmnLN0l1pJjfA2q2kQjHgnxDZKGmhokVUG0JDyaMJYPReaCzZ699E/Og?=
- =?us-ascii?Q?FFcVvlMLA/ABmNFXzSwnDpIownUWslVHHvfZoJJ/v/0Qom5zOnT5rwZW3tFU?=
- =?us-ascii?Q?Y4EpaOFaBLzKZZxfVUlLUN6Of7yLk5AoM50MIp1q1Tf+fTb5IK9Vifb7I/Dy?=
- =?us-ascii?Q?8W3muF4lUKmKgPwSlHjmmGhZZcKJPfxsXcLUeCzvNfnMimb5fBQEaPK2NERw?=
- =?us-ascii?Q?5HT9D333hUNarGzpnIWrtkCWzT0x2LwTjvIvMdsaKlVuI7ypvvO7p1GXrmAg?=
- =?us-ascii?Q?FbQZ8t7VyNEESpltWCm/wWmaNk4NyqHcg6yWVDEsesdsKBwJJQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?BzxNa2BSzozCRhf0fXKufr0DuJ6WxsZ2/LJZ8W5N8wv4DJCsubAZd9hKgCos?=
- =?us-ascii?Q?vie0ChLh1dnDWC5Wbf4sxuVRy3i3n8VpM48k2iPYsNfBBrUDfuT2Aq20/xwp?=
- =?us-ascii?Q?iZkC4QIBaZNIVRTHKBMMkTubLrwS5moOn27mJyr08VzJT3H2urfgfp/QATiB?=
- =?us-ascii?Q?fPxCEsAocH0gL0IbC3bB6HEW7K8T0vVIxIji0vryEBCI8w+86+7leRe8u1Yg?=
- =?us-ascii?Q?OORJzHPg2pb1QFBc1dzEPXf041SKuRAJpV3fuF4/T2qoIC+RggVHL5mNI12J?=
- =?us-ascii?Q?wadfQJZl02SgNXzpRp+EwUf9JEC6qvrByVBCWcQxvnGdFWLFlbwCb0AWHfmi?=
- =?us-ascii?Q?PXL41O3aoJRgdrl/Vy7LXPdzWhimJ3WhdmsZ6xemS01cMlLpF8jZInspPB1L?=
- =?us-ascii?Q?IV1K1iqY8Dqfx30JAQFidtxRhnYyZj5MNJ90qzMF2HQkAY9bO15iXiOocqAx?=
- =?us-ascii?Q?59LmCNlNbZ7ZFajgXIizSRcMZA32Q4JO6u97nKsDEhN7qa+dWmHnT0VFOaqn?=
- =?us-ascii?Q?OEY62CXCyeFlgmlDcCDkp1oiZU8RycQmaBjco7ioLgKgOR6lZtjrli/aMoN9?=
- =?us-ascii?Q?jP6/AOCQ+veG3jpB1QysT516CjBmsXQxEJ6GErEbnIq4XHil/dpRs+BxB3yd?=
- =?us-ascii?Q?XjSxea9dIK2OFWtlbb+WtnlYQZ+TxfLtAbJbOr5DPjmJQDv4E8JAmag+7+U0?=
- =?us-ascii?Q?E4MvWs7FQKXCXduy3CzAv8VpZKIZCpE/JMWpzrBRO03T0CbscWu6D6WRqa5o?=
- =?us-ascii?Q?1fBz8OyXqtj2J6Ndu8E4Tn+C8a9X4QGu9aYT+N0qZjq1qZ5DiBJhR0iN66xN?=
- =?us-ascii?Q?LgBUXZgid6jLtpVoKSS+I7112Pa06PUjf4fBK6y9zv9xLATOyU9XmsrC2KP2?=
- =?us-ascii?Q?W2je6bHx8LnVm56Dt0ir99La9sGAl8TItLdhxgLI7AVTV8/atQxJ3DwDqfAs?=
- =?us-ascii?Q?ub4ORT6JRPMZwxKYDoOCnN8/zwAW7iZBPp/uP2W9lzcEIh5M01y10O80c4VQ?=
- =?us-ascii?Q?tRxU02syFfILpXMAkod6uS4K5FrxW0XJ/7LKTB/VYZuCaoRk4b1W1Iu1xUAU?=
- =?us-ascii?Q?PlLnsEbZiLsgR/l/oDB+vuCc8cegUJRFC1VYPXCB/gpfS0BEwfcZ7Wux9B1F?=
- =?us-ascii?Q?PYPGAdI+fPICCZsk+bsEyIMCO/p9BFA4iqrmTVnzGKwPTSrODRCBPFqnmABm?=
- =?us-ascii?Q?ngANlmj54KQHqESF3/Tnyx3sOdbph6QmVwvd8L20oFDPrmQMyFlThJy6Wd9y?=
- =?us-ascii?Q?sL0opczGvwd+2CWuUZ4X05RHuAgS76GePBRrA+s+YX1TfYtlTQKzSQz/jd84?=
- =?us-ascii?Q?o1VFi4Q7SUWIENnhSmh/lLLP+0H9fGUbhjEq88ewNhMTXkFqlpomRnqC/4Wj?=
- =?us-ascii?Q?TSrLjoR8iTixIHPVmUOvWZNpjxwtElDxwqP4+qed8NeYovbmu/YY++qnAE/Q?=
- =?us-ascii?Q?K6FD9prCMweY+h5Nt05UOThKe3bt91JmMkkEKaa4Fno1blvedkUDh2+y8Qdj?=
- =?us-ascii?Q?EINt/BQfF4D0FzKNSZvYTbleXB+riypj5V7w1B1hIIvKZC89ggDJlgEo4m5E?=
- =?us-ascii?Q?0s/uQpyP/IPwJAL/BQOPWqCmVOhNPvuFp8W+6r4p?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e212fc9-91fd-4391-0af7-08ddc6380558
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2025 20:16:46.8067
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DDuGwdi3mR8FFHjHncXD+9xu53JVuzwisDiaxI7GlPb9k/fi4VnKcdIEs8CJw3fC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7467
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC] selftests/pidfd: Fix duplicate-symbol warnings for
+ SCHED_ CPP symbols
+To: paulmck@kernel.org, Christian Brauner <brauner@kernel.org>,
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <5b53702c-0dab-46c4-9cb0-448b4da36c2e@paulmck-laptop>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <5b53702c-0dab-46c4-9cb0-448b4da36c2e@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 18, 2025 at 11:50:30AM -0700, Nicolin Chen wrote:
+On 7/14/25 17:01, Paul E. McKenney wrote:
+> The pidfd selftests run in userspace and include both userspace and kernel
+> header files.  On some distros (for example, CentOS), this results in
+> duplicate-symbol warnings in allmodconfig builds, while on other distros
+> (for example, Ubuntu) it does not.  (This happens in recent -next trees,
+> including next-20250714.)
+> 
+> Therefore, use #undef to get rid of the userspace definitions in favor
+> of the kernel definitions.
+> 
+> Other ways of handling this include splitting up the selftest code so
+> that the userspace definitions go into one translation unit and the
+> kernel definitions into another (which might or might not be feasible)
+> or to adjust compiler command-line options to suppress the warnings
+> (which might or might not be desirable).
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: <linux-kselftest@vger.kernel.org>
+> 
+> ---
+>   pidfd.h |    4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
+> index efd74063126eb..6ff495398e872 100644
+> --- a/tools/testing/selftests/pidfd/pidfd.h
+> +++ b/tools/testing/selftests/pidfd/pidfd.h
+> @@ -16,6 +16,10 @@
+>   #include <sys/types.h>
+>   #include <sys/wait.h>
+>   
 
-> 0xfffffffffff80001 and 0x50000 could repro with 64K pages,
-> exactly what your math works :)
+Please add comments here about why we are adding this so there
+won't be any confusion later.
 
-Okay, I was also worried we'd get into trouble with how iova_alignment
-might be working but if it's fine lets do this then:
+> +#undef SCHED_NORMAL
+> +#undef SCHED_FLAG_KEEP_ALL
+> +#undef SCHED_FLAG_UTIL_CLAMP
+> +
+>   #include "../kselftest.h"
+>   #include "../clone3/clone3_selftests.h"
+>   
 
-@@ -975,18 +975,24 @@ TEST_F(iommufd_ioas, reserved_overflow)
-                .size = sizeof(test_cmd),
-                .op = IOMMU_TEST_OP_ADD_RESERVED,
-                .id = self->ioas_id,
--               .add_reserved = { .start = 6,
--                                 .length = 0xffffffffffff8001 },
-+               .add_reserved.start = 6,
-        };
-+       unsigned int map_len;
-        __u64 iova;
- 
--       if (PAGE_SIZE != 4096)
--               SKIP(return, "Test requires 4k PAGE_SIZE");
-+       if (PAGE_SIZE == 4096) {
-+               test_cmd.add_reserved.length = 0xffffffffffff8001;
-+               map_len = 0x5000;
-+       } else {
-+               test_cmd.add_reserved.length =
-+                       0xffffffffffffffff - MOCK_PAGE_SIZE * 16;
-+               map_len = MOCK_PAGE_SIZE * 10;
-+       }
- 
-        ASSERT_EQ(0,
-                  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ADD_RESERVED),
-                        &test_cmd));
--       test_err_ioctl_ioas_map(ENOSPC, buffer, 0x5000, &iova);
-+       test_err_ioctl_ioas_map(ENOSPC, buffer, map_len, &iova);
- }
- 
- TEST_F(iommufd_ioas, area_allowed)
+With that change:
 
-Thanks,
-Jason
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+I am assuming this will go through Christian's tree. If not I can
+take it through mine.
+
+thanks,
+-- Shuah
 
