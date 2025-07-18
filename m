@@ -1,138 +1,169 @@
-Return-Path: <linux-kselftest+bounces-37542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ABDFB09B46
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 08:22:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3099FB09B6D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 08:29:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71EFF7B8435
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 06:21:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DB5A5858F4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 06:29:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0AB1F3B97;
-	Fri, 18 Jul 2025 06:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pgW4XT1V";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="26bpvT2r"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610DF211A35;
+	Fri, 18 Jul 2025 06:28:08 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5041C861E;
-	Fri, 18 Jul 2025 06:22:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BFC153BD9
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 06:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752819755; cv=none; b=TEYlTWNw/MSndhzyqyFLx3OspW4DaW0wZI7b6NIbOPx9n9U85GnUvg800nZuNSSNeG+s9bJ8KFXCbVC4yR59cafXe4+2aMCp5JuJT6eYqXIj12GsyiIPnFW+oRTTdKzjb5gGxVkkFQmAql7omjP2+5fjaRY8XkHMKiQ9gUBsx9g=
+	t=1752820088; cv=none; b=iPAONcq2Xu+A4I2b3s4QTYxPFx2U60hT7lUfWHZU3FmOn4Wqgf+7k0btW2nTtvZuPh7gWF6+ABzx5ZQKpbcbjRnwXcjBKhU4c2bBRa27HyK2olP6xpkACNnkvi9vBXUqRtfthEAWERWk2Qx6+qjUZkGLxrVVjOBtDs7+792mRPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752819755; c=relaxed/simple;
-	bh=ICoPDyL2R75Iu7QQ1/kG+OuXPgtdLyK2qH53nhmr100=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c+aLMJSEDfoE0g66/IkrwI7h2EJ3jBkoH4BfbwKVlv/CqejLAGtsVKsL4kQKYUJmkOihXg6CH655E2e1Paao+8a9b2Qs7dqvQD4/vFxraalyLoPPPE4q68+wF32NK7PAJgJNunkG6U3FFy+JnKscYrDlBXYSeZzX62evraFC8Po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pgW4XT1V; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=26bpvT2r; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 18 Jul 2025 08:22:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1752819750;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=r15MXxvdvuJjkg2dcxT5OmMbq5ijcwE+26Y6C9Smhh8=;
-	b=pgW4XT1VmFV5nWy0E58ydruyYpt1gnI1VRPiYxoBNM5pJxEII+vO0ZJSLj31AAOU1a0V4X
-	hC2kuGioG9WquczLzyVQ34xvvyXs3bZX4pyvei4WuKKFlqjb6F5MhZiAQrBxJ3iEm+rjzR
-	E2dpnPABOqx7JndQXnwJPDbRJxDedZD7dUjeEJh3/ipMh/jjvHA/xsg8PWyBEmgntKsrQH
-	LIwRN1hsH27w4Qyz5OkkWzPxepT0Df3WbRpAVMNLvzJWeGyiEaGCdKfUvctio5K2p/w1lF
-	5Lv7lQTkeYARXuEWZ7ytGwdxzHbG8nYF/X73l3B1wu2SljbX7Dwt8WFmW0m8Nw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1752819750;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=r15MXxvdvuJjkg2dcxT5OmMbq5ijcwE+26Y6C9Smhh8=;
-	b=26bpvT2r5Gg6wqblcqwvNsj8QyQRBJSt2YcdRWznzsotPK6Oh5ANbFa38/u4eDdO80CSXT
-	9372IrTxpC1ydzAg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Kees Cook <kees@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-doc@vger.kernel.org, workflows@vger.kernel.org, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v5 00/15] kunit: Introduce UAPI testing framework
-Message-ID: <20250718073743-d4a1f713-f81b-4e89-b3f8-7eed838798e6@linutronix.de>
-References: <20250717-kunit-kselftests-v5-0-442b711cde2e@linutronix.de>
- <20250717132259.GA25835@lst.de>
+	s=arc-20240116; t=1752820088; c=relaxed/simple;
+	bh=sd8Ij5g8+ZRuI71bObPWyKWOa48/VmLz/gTmRodz6z4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=hGunNGa0Q8HjCvgS4e6I8RDfNAKilxufsmX4G1gdnBva2Rh7QSwLSBqtmClAyG3xqSrQJqOtf6dyAp1fh0TLXvJSb6ztAwj4kYDJyl65YjyHj0i+ROLzZuJt5tpK3H/WEpscSveW6g7n6F055krDWEajcNCg6WWk4cM1/Ot4FqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 553cefd863a011f0b29709d653e92f7d-20250718
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:0555c4eb-0c45-4a6e-9089-85163eb6ee26,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-5
+X-CID-INFO: VERSION:1.1.45,REQID:0555c4eb-0c45-4a6e-9089-85163eb6ee26,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6493067,CLOUDID:46f8f2ff3d95a167e0444120511bf509,BulkI
+	D:250717215444LBUIQCD2,BulkQuantity:2,Recheck:0,SF:17|19|24|44|64|66|78|80
+	|81|82|83|102|841,TC:nil,Content:0|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,B
+	ulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
+	0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
+X-UUID: 553cefd863a011f0b29709d653e92f7d-20250718
+X-User: lienze@kylinos.cn
+Received: from kylin [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lienze@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 408332628; Fri, 18 Jul 2025 14:27:52 +0800
+From: Enze Li <lienze@kylinos.cn>
+To: SeongJae Park <sj@kernel.org>
+Cc: Joshua Hahn <joshua.hahnjy@gmail.com>,  shuah@kernel.org,
+  damon@lists.linux.dev,  linux-mm@kvack.org,
+  linux-kselftest@vger.kernel.org,  enze.li@gmx.com
+Subject: Re: [PATCH] selftests/damon: introduce _common.sh to host shared
+ function
+In-Reply-To: <20250717161454.62245-1-sj@kernel.org> (SeongJae Park's message
+	of "Thu, 17 Jul 2025 09:14:54 -0700")
+References: <20250717161454.62245-1-sj@kernel.org>
+Date: Fri, 18 Jul 2025 14:27:48 +0800
+Message-ID: <87jz46rp23.fsf@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250717132259.GA25835@lst.de>
-
-On Thu, Jul 17, 2025 at 03:23:00PM +0200, Christoph Hellwig wrote:
-> On Thu, Jul 17, 2025 at 10:48:02AM +0200, Thomas Weißschuh wrote:
-
-(...)
-
-> > This series aims to combine kselftests and kunit, avoiding both their
-> > limitations. It works by compiling the userspace kselftests as part of
-> > the regular kernel build, embedding them into the kunit kernel or module
-> > and executing them from there.
-
-(...)
-
-> I had my own fair share of problems with kselftests,
-> mostly because of the lack of structure and automated way to run them,
-
-How did you overcome these issues? Why does everbody need to reinvent the
-wheel here? KUnit already exists and provides a lot of structure and tooling.
-
-> but adding them to the kernel (or a module) is overshooting the target
-> by far.
-
-That's a subjective statement without any reasoning I can engange with.
-I would be happy to do so, but for now I can only say that I disagree.
-The patches have been on the testing-related lists for
-some time and so far nobody had an issue with this aspect.
-
-> > If the kernel toolchain is not fit to
-> > produce userspace because of a missing libc, the kernel's own nolibc can
-> > be used instead.
-> 
-> Is nolibc enough to run all the selftests?
-
-It is not and most probably won't ever be. The maintainers of each testcase
-will decide which libc to use. Like it is in tools/testing/selftests/ today.
-Some use glibc, some nolibc and some can do both.
-
-> If so we should just do it unconditionally, but linking to different
-> libraries by availability seems a bit problematic.
-
-Agreed. But as mentioned above it will be the maintainers decision.
-
-Only the preinit executable will need to support all configurations so needs
-the availability check. For the framework selftest it also makes sense to
-support as many configurations as possible. For the example test, any
-configuration is fine. 
-
-(...)
-
-While having this discussion, can we also work on dealing with the symbol
-exports, as discussed before?
+Content-Type: text/plain
 
 
-Thomas
+Hi SJ, Joshua,
+
+On Thu, Jul 17 2025 at 09:14:54 AM -0700, SeongJae Park wrote:
+
+> Hi Joshua,
+>
+> On Thu, 17 Jul 2025 06:54:32 -0700 Joshua Hahn <joshua.hahnjy@gmail.com> wrote:
+>
+>> On Thu, 17 Jul 2025 17:19:02 +0800 Enze Li <lienze@kylinos.cn> wrote:
+>> 
+>> Hi Enze,
+>> 
+>> Thank you for the patch! I just have a few comments about the patch.
+>> 
+>> > The current test scripts contain duplicated root permission checks
+>> > in multiple locations.  This patch consolidates these checks into
+>> > _common.sh to eliminate code redundancy.
+>> 
+>> Is there a reason we named the file _common.sh? IIRC there are no other files
+>> that begin with an underscore, so it might be confusing for users. Maybe
+>> remaining it to damon_common.sh might fit better with the convention used
+>> by other selftests. 
+>
+> This is my personal pattern that I sometimes use, to distinguish files that
+> aimed to be only indirectly be used.  We already have a file of the pattern,
+> namely _damon_sysfs.py.
+>
+> I don't think this pattern is particularly good, but not making something
+> worse, so I'm ok with current file name.
+
+Yes, I've noted the naming convention from _damon_sysfs.py and have
+maintained consistency with the existing pattern in this patch. :)
+
+>
+>> 
+>> [...snip...]
+>> 
+>> > diff --git a/tools/testing/selftests/damon/_common.sh b/tools/testing/selftests/damon/_common.sh
+>> > new file mode 100644
+>> > index 000000000000..3920b619c30f
+>> > --- /dev/null
+>> > +++ b/tools/testing/selftests/damon/_common.sh
+>> > @@ -0,0 +1,14 @@
+>> > +#!/bin/bash
+>> > +# SPDX-License-Identifier: GPL-2.0
+>> > +
+>> > +# Kselftest frmework requirement - SKIP code is 4.
+>> > +ksft_skip=4
+>> > +
+>> > +check_dependencies()
+>> > +{
+>> > +	if [ $EUID -ne 0 ]
+>> > +	then
+>> > +		echo "Run as root"
+>> > +		exit $ksft_skip
+>> > +	fi
+>> > +}
+>> > diff --git a/tools/testing/selftests/damon/lru_sort.sh b/tools/testing/selftests/damon/lru_sort.sh
+>> > index 61b80197c896..0d128d809fd3 100755
+>> > --- a/tools/testing/selftests/damon/lru_sort.sh
+>> > +++ b/tools/testing/selftests/damon/lru_sort.sh
+>> > @@ -1,14 +1,9 @@
+>> >  #!/bin/bash
+>> >  # SPDX-License-Identifier: GPL-2.0
+>> >  
+>> > -# Kselftest framework requirement - SKIP code is 4.
+>> > -ksft_skip=4
+>> 
+>> Hm, I think factoring out check_dependencies() is a good idea, but maybe we
+>> should keep ksft_skip in here since other checks in the script use the value?
+>> My 2c is that it might make it unnecessarily opaque for others.
+>> Same comment applies for the other files as well. 
+>> 
+>> But I will let SJ comment on this more ;)
+>
+> I agree Joshua's point.  I'd prefer keeping ksft_skip definition here.
+>
+
+Thank you for the review.  I'll send v2 addressing your comments to the
+list soon.
+
+BR,
+Enze
+
+>> 
+>> Thank you for your patch, I hope you have a great day!
+>
+> Thank you for your valuable comments, Joshua :)
+>
+>
+> Thanks,
+> SJ
+>
+> [...]
 
