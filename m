@@ -1,182 +1,138 @@
-Return-Path: <linux-kselftest+bounces-37591-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37592-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13267B0AB47
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 23:10:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F34FB0AB87
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 23:35:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 855051C27C8E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 21:11:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A22081C8248D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Jul 2025 21:35:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 967B621CC4D;
-	Fri, 18 Jul 2025 21:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBFFE21A420;
+	Fri, 18 Jul 2025 21:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N+tn9SBV"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="QZ5S+p32"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C449518E20
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 21:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F7F1F4623;
+	Fri, 18 Jul 2025 21:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752873038; cv=none; b=n7TQkyhba+LDjgbyGVJc3dkk6DBlF0K5Dj9P3wEpJg8wwrhNI88G/AAo5S6kvXr6zC2MwY8CJliGE7l4o0K5iwVF4BzaZMgdi88yzwqouR4azH59AlJrxsBZICb1l2iESKySQcVYvgdmt8Qqvwgxyqk/5gOW2Wg/DwmQDyL90Gg=
+	t=1752874519; cv=none; b=fs5HxK2hWRchQntrtAO+SAEFmTXWUB0wLt1aYXRXBpZRTQPGCnywOJ9p2Z1TOCUWBW+d4BtfF2B/rvSRbwx2Co4hQAjAa3J7/dJx5bA47zcgaGVzI5ahhZaB5KyqnlIeitgPltU7Dhsq0yd8QInznHUUZj6Wk7H/xSs7H7MrZrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752873038; c=relaxed/simple;
-	bh=eoeq2lfkKQQfblu8s5uJwmmDlVAzN3yXJqVPP+2D0MY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V4EewcXf82oW/DTCDPjEttCxfFaQGX3TmTTXrrAZC1rfxzOZMElsnvnxrSsfxDAtrZ+F19vP+eMpuTu8r3I9d7FWe5NYz4fLWuot+sIjjdWITWrD0E0EaCN+7jyH51kygi3JJ5YhASyTbicYwSXt2h1Poh6PQYZOFbKD1qkN0SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N+tn9SBV; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-879502274cfso85172339f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 14:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1752873035; x=1753477835; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZGhXZyOJNCmIt8fGNKAY+r1NcPVJKPwyIQ57/sp4SqQ=;
-        b=N+tn9SBV1LyRRQV23UL8H17kdtO6fGArP0dFg//ZCO0gwi2IZfv9r7o0rO7e4NowiJ
-         l3gNVpbGeRRkRXDRAcLO0vuCz1MNVXdOQa85UGLw3i51INycRHpERSlQ3vTG5DYSEK4U
-         UyHOX/n44SKEx/QzRZR7+qIuB+SxLQ2KOGp24=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752873035; x=1753477835;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZGhXZyOJNCmIt8fGNKAY+r1NcPVJKPwyIQ57/sp4SqQ=;
-        b=MQfRfShsF9t8eJxCP2gDcpFqrvz2i+mIJCvLglJv7PjawNPTZ5nzRiTEZDo8MnWLFg
-         heqxUzABOXgc4j58tyHsH6VKmofzZUIrO5v61qFheL2D36RNh8gOhU1SnTKuyIDEECUB
-         GgR1VlOTWimRxNDlbPzhWFKA32tFDcp6TTwl/Mfw+RmcTtYA2GbSqXJzqi5F9KoGPxEP
-         WRu14fYaRF1V/OzODzplu9IAqJ7OmR8KRe3EaEBEhfm+VhL2kRGF9GrOneC0H6whuvMS
-         y2Eqs0/0PLB/BU2Bm7Lp49LE5V9yicl5REGOgVi6TFWSwQE1tnkY5epyC4UF1HoovQgi
-         3oPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXca6iidalipitYynDsP3R0Ib3uJYDR2MNRNgTXONhR6S0Tq/XW5zAk1U8CFx6GB1dgrqX0XC03+ZnQwmvMDro=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkZ2HKFCych/Lg5FWBTTTVJMX1W6D9YzZt85ewG/0Dc/pZE5cc
-	N9Dil21uqsN3I7FY/v/zePGXG2jhevCdgIEPOMenkfc2avMd41WnszO3OsF1xsxL+Hw=
-X-Gm-Gg: ASbGnct6TkRj5HlY4/+KkCb8F+HMeCv/r9AREU7gjxvwA/WX2YtxqHylNuPshY/tEIi
-	aNobzRFnuhcs3hAaKwCXCgrWMeTq8pd5Sa9D4qX0ImvqkrXOYiQ0fHfCkv/2o/t2zRVUPV/S0P4
-	Nq7TNhsTVmVMKJUqf01OF0G2stVwKjBkgT469mimIoZ8m48+cwblJmDdwdaDmV28nhZEz02PVK4
-	LziU81oNYk4GocVVQiofr9uD/qEamK+tABRzRC+1bHbBXKp3CPGR7PNwfqAaH5siv/eFutBm0PU
-	qvztCwOQNTYTubzCjrT1H1uo0nZubF4l0NGiJ7twgU11eV5kS47jSYTxeNT6L86/FzsJssY9vng
-	fuuYdap9C3lxjo9HFkmSWBMNE4/FjyFiUtA==
-X-Google-Smtp-Source: AGHT+IEzr9jrK3MqEFYKMgLIWYTjssE2U6iSeHK3JVv5WiuQYDYPp5VXlS4Rx6IaMtKrDNjdUXWfqA==
-X-Received: by 2002:a05:6e02:4506:10b0:3e2:8e44:8240 with SMTP id e9e14a558f8ab-3e28e448353mr59141415ab.11.1752873034702;
-        Fri, 18 Jul 2025 14:10:34 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5084c7bce49sm520209173.28.2025.07.18.14.10.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Jul 2025 14:10:33 -0700 (PDT)
-Message-ID: <c6dca956-d0ea-4c63-a48f-d02f21d38b9d@linuxfoundation.org>
-Date: Fri, 18 Jul 2025 15:10:32 -0600
+	s=arc-20240116; t=1752874519; c=relaxed/simple;
+	bh=e26wcrCpgtY0ThMsVaf6VETi8cowQt0T8Wlu/NYupfY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gkGQpYbbQFaSRkij1qYGboUgUzCvhqlGk4imPGu6LD50C4C6ZgrtNr50ekoA2/WYnMpa0pNJk4O9yIost630fj2y54L2l/DvT+Gj1/ZT+R4VpnYDIPvTvVsbfxHBHrExEtIY8zUUUXd0NXE4AAZiQKjwDO7zaGsyPG0ihc/t8Nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=QZ5S+p32; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from mail.zytor.com ([IPv6:2601:646:8081:9482:197f:c1e5:8ae9:2d06])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56ILX0si2795198
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Fri, 18 Jul 2025 14:33:00 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56ILX0si2795198
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025062101; t=1752874388;
+	bh=gldC6YCEbu9Wrkqgglu65d8d6ydEAjRPt571KpQxh08=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QZ5S+p32GsU27K2XDsJHVIHXIncdLYMVx9WkzgY9upJ2iSoAd8fOE6NLZvS2z8pHx
+	 prhlzCi6T6l62vb9elhydX5NGbcUOL15dyvEwc51AyEsiTYSDTmUgUZzGm0Jpifvg0
+	 p4Pb2759nqiqNKXHrvRbkNlUhkGC+y3LpLGwlZ6No42OS0Kq7x+ONSxKb+AgGAGM2j
+	 Iazr3VxtTbJ+oPkfc1/FSKWp7rpY/KwlZkkLO56MZTHbhHz4JNPcfsS9E02xOWOanE
+	 rr9BJ0ie8/pESWhCvoLLLxODingDn66IzCZnsV2qSKV8NUMyX9IqT3Uo48ddW3zo4v
+	 W9YbGSw7reB9Q==
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: 
+Cc: "H. Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Alexei Starovoitov <ast@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Cong Wang <cong.wang@bytedance.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        David Lechner <dlechner@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Gatlin Newhouse <gatlin.newhouse@gmail.com>,
+        Hao Luo <haoluo@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Jan Hendrik Farr <kernel@jfarr.cc>, Jason Wang <jasowang@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Kees Cook <kees@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Marc Herbert <Marc.Herbert@linux.intel.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mateusz Guzik <mjguzik@gmail.com>, Michal Luczaj <mhal@rbox.co>,
+        Miguel Ojeda <ojeda@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        NeilBrown <neil@brown.name>, Peter Zijlstra <peterz@infradead.org>,
+        Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+        Sami Tolvanen <samitolvanen@google.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thorsten Blum <thorsten.blum@linux.dev>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Yafang Shao <laoar.shao@gmail.com>, Ye Bin <yebin10@huawei.com>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        Yufeng Wang <wangyufeng@kylinos.cn>, bpf@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-sparse@vger.kernel.org,
+        virtualization@lists.linux.dev, x86@kernel.org
+Subject: [PATCH 0/7] Replace "__auto_type" with "auto"
+Date: Fri, 18 Jul 2025 14:32:43 -0700
+Message-ID: <20250718213252.2384177-1-hpa@zytor.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH] selftests/pidfd: align stack to fix SP alignment
- exception
-To: Shuai Xue <xueshuai@linux.alibaba.com>, brauner@kernel.org,
- shuah@kernel.org, will@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: baolin.wang@linux.alibaba.com, tianruidong@linux.alibaba.com,
- catalin.marinas@arm.com, mark.rutland@arm.com,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250616050648.58716-1-xueshuai@linux.alibaba.com>
- <ee095fdd-b3c1-4c41-9b06-a8e3695c1863@linuxfoundation.org>
- <0a8d5fdb-28b9-41f5-a601-cf36641bddbf@linux.alibaba.com>
- <821acc51-1429-4625-bae5-daa67bddc7bc@linux.alibaba.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <821acc51-1429-4625-bae5-daa67bddc7bc@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/16/25 01:00, Shuai Xue wrote:
-> 
-> 
-> 在 2025/6/19 10:26, Shuai Xue 写道:
->>
->>
->> 在 2025/6/19 05:36, Shuah Khan 写道:
->>> On 6/15/25 23:06, Shuai Xue wrote:
->>>> The pidfd_test fails on the ARM64 platform with the following error:
->>>>
->>>>      Bail out! pidfd_poll check for premature notification on child thread exec test: Failed
->>>>
->>>> When exception-trace is enabled, the kernel logs the details:
->>>>
->>>>      #echo 1 > /proc/sys/debug/exception-trace
->>>>      #dmesg | tail -n 20
->>>>      [48628.713023] pidfd_test[1082142]: unhandled exception: SP Alignment, ESR 0x000000009a000000, SP/PC alignment exception in pidfd_test[400000+4000]
->>>>      [48628.713049] CPU: 21 PID: 1082142 Comm: pidfd_test Kdump: loaded Tainted: G        W   E      6.6.71-3_rc1.al8.aarch64 #1
->>>>      [48628.713051] Hardware name: AlibabaCloud AliServer-Xuanwu2.0AM-1UC1P-5B/AS1111MG1, BIOS 1.2.M1.AL.P.157.00 07/29/2023
->>>>      [48628.713053] pstate: 60001800 (nZCv daif -PAN -UAO -TCO -DIT +SSBS BTYPE=-c)
->>>>      [48628.713055] pc : 0000000000402100
->>>>      [48628.713056] lr : 0000ffff98288f9c
->>>>      [48628.713056] sp : 0000ffffde49daa8
->>>>      [48628.713057] x29: 0000000000000000 x28: 0000000000000000 x27: 0000000000000000
->>>>      [48628.713060] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
->>>>      [48628.713062] x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000400e80
->>>>      [48628.713065] x20: 0000000000000000 x19: 0000000000402650 x18: 0000000000000000
->>>>      [48628.713067] x17: 00000000004200d8 x16: 0000ffff98288f40 x15: 0000ffffde49b92c
->>>>      [48628.713070] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
->>>>      [48628.713072] x11: 0000000000001011 x10: 0000000000402100 x9 : 0000000000000010
->>>>      [48628.713074] x8 : 00000000000000dc x7 : 3861616239346564 x6 : 000000000000000a
->>>>      [48628.713077] x5 : 0000ffffde49daa8 x4 : 000000000000000a x3 : 0000ffffde49daa8
->>>>      [48628.713079] x2 : 0000ffffde49dadc x1 : 0000ffffde49daa8 x0 : 0000000000000000
->>>>
->>>> According to ARM ARM D1.3.10.2 SP alignment checking:
->>>>
->>>>> When the SP is used as the base address of a calculation, regardless of
->>>>> any offset applied by the instruction, if bits [3:0] of the SP are not
->>>>> 0b0000, there is a misaligned SP.
->>>>
->>>> To fix it, align the stack with 16 bytes.
->>>>
->>>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->>>> ---
->>>
->>> Assuming this is going through Christian's tree.
->>>
->>> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
->>>
->>> Let me know if you would like me to pick it up.
->>>
->>> thanks,
->>> -- Shuah
->>
->> Hi, Shuah
->>
->> Thanks for your review.
->>
->> I send this fix in Mar, but it missed last linux version.
->> I think I need your help to pick it up.
->>
->> Thanks.
->> Shuai
->>
-> 
-> Hi, Shuah,
-> 
-> Gentle ping,
-> 
-> Thanks.
-> Shuai
-> 
+"auto" was defined as a keyword back in the K&R days, but as a storage
+type specifier.  No one ever used it, since it was and is the default
+storage type for local variables.
 
-Will, Christian,
+C++11 recycled the keyword to allow a type to be declared based on the
+type of an initializer.  This was finally adopted into standard C in
+C23.
 
-Can you take a look at this and let me know if this change looks
-good to you both.
+gcc and clang provide the "__auto_type" alias keyword as an extension
+for pre-C23, however, there is no reason to pollute the bulk of the
+source base with this temporary keyword; instead define "auto" as a
+macro unless the compiler is running in C23+ mode.
 
-I can take this through my tree after your reviews.
+This macro is added in <linux/compiler_types.h> because that header is
+included in some of the tools headers, wheres <linux/compiler.h> is
+not as it has a bunch of very kernel-specific things in it.
 
-thanks,
--- Shuah
+--- 
+ arch/nios2/include/asm/uaccess.h                        |  4 ++--
+ arch/x86/include/asm/bug.h                              |  2 +-
+ arch/x86/include/asm/string_64.h                        |  6 +++---
+ arch/x86/include/asm/uaccess_64.h                       |  2 +-
+ fs/proc/inode.c                                         | 16 ++++++++--------
+ include/linux/cleanup.h                                 |  4 ++--
+ include/linux/compiler.h                                |  2 +-
+ include/linux/compiler_types.h                          | 13 +++++++++++++
+ include/linux/minmax.h                                  |  6 +++---
+ tools/testing/selftests/bpf/prog_tests/socket_helpers.h |  9 +++++++--
+ tools/virtio/linux/compiler.h                           |  2 +-
+ 11 files changed, 42 insertions(+), 24 deletions(-)
 
