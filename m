@@ -1,114 +1,160 @@
-Return-Path: <linux-kselftest+bounces-37613-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37614-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AE5DB0AE9B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 10:22:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE4F3B0AEB0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 10:31:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36AAB1C201DC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 08:22:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68D2F3B3F0E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 08:31:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C5923507E;
-	Sat, 19 Jul 2025 08:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBFC233713;
+	Sat, 19 Jul 2025 08:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dJd5L2vA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ui2PjVOs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02AFA1D90C8;
-	Sat, 19 Jul 2025 08:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C490A145B16;
+	Sat, 19 Jul 2025 08:31:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752913316; cv=none; b=EEf9DKcwpHTSGdSw9Tn466bmE8sIhM+ThmlxYLx3NI7wYy5bMoHM5glnyYtvQXJt/WqMIutpXN8W0EFGWV3IDt6FUDbcuxv00iyuOmUyt6VfSTrTgtd268uA88ij9AixjwPaIdMenXdJiQ47kbiXpQS/97E6uQJvhCoye72EHn4=
+	t=1752913887; cv=none; b=YJ+kTO67ovnaEQkA5V2PmPPkxOl5rayi/2OokbU5rbb19ShXzTN5aneCAW1HJ+m/MXLX5GVctsAfAh72JT1iVi2T9Zxl/P1JPF245eXsdOqh8bKnUEBlZramZV2jr6aBUzHzA0NqKshF3H9t08U/g144sdiXVy+ab42n+1swbvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752913316; c=relaxed/simple;
-	bh=K3obeuqOlZ0dOsy9POpDIMdiMQA5/BwRN6ASQEjGPL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p8J/R+yqOr9HoCyMg7NFp8aYpnJ41y2yfOwDiXq5u7JwpMix+0hqB71pMqTqNYoCuNOnTx5qeJGcsZbyiit3rKQJ8QZnzIZh+CsvaCJOMKI8SfiodpkTtlLO5Q+x4k3FyKG7vYMvyFVY1itPtRpb4GRy1ZcNHqopEHunMAMmBCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dJd5L2vA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30A0C4CEF4;
-	Sat, 19 Jul 2025 08:21:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752913315;
-	bh=K3obeuqOlZ0dOsy9POpDIMdiMQA5/BwRN6ASQEjGPL4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dJd5L2vAZ3K4Zas346UWsng/P35XCs8z8hc2xSX+/KHx6hCr7ihi9CoLbdDu00uWJ
-	 zRKNkNstvdtQ2VHxPgI0XQ/NDy+WiqPEDGLGsCrwUuFB6LOYT+7npgUxrDCHfNh20f
-	 i7G3k0PFTV9vLfQbYku6SwKoMXoCDtSG1E7dNEvgS+p9W45uFeM8kc2sMnFK+30OVC
-	 pJX0+z2xAn04DZnhGvFQNXDCl4nquEc637Xhb8p5FM35YR8rkw/ej8XX+z8IR95UvI
-	 woI8vB1wOT4PpUlBLSZ18A9Sw9UiFb/FMbJb/4hcSjV/okUivVEaVviUYJelHt8uWy
-	 bnpPNEcnoCtMA==
-Date: Sat, 19 Jul 2025 09:21:47 +0100
-From: Simon Horman <horms@kernel.org>
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: pabeni@redhat.com, edumazet@google.com, linux-doc@vger.kernel.org,
-	corbet@lwn.net, dsahern@kernel.org, kuniyu@amazon.com,
-	bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com,
-	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net,
-	liuhangbin@gmail.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, ij@kernel.org,
-	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Subject: Re: [PATCH v13 net-next 11/14] tcp: accecn: AccECN option send
- control
-Message-ID: <20250719082147.GP2459@horms.kernel.org>
-References: <20250718142032.10725-1-chia-yu.chang@nokia-bell-labs.com>
- <20250718142032.10725-12-chia-yu.chang@nokia-bell-labs.com>
+	s=arc-20240116; t=1752913887; c=relaxed/simple;
+	bh=zwnxSqe5lR8Z6HseY/ne9r6SGeGP6t2w8+L+UYBZQyY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SNJggBXfccMrwijdJ5G2aRMGtR5E+ggrH+SGF8aN36tk/vvxbn2S248YXRLpS0Vcq7CBLMUUgsJkBFHDvSdLeMKCrx3ABqWIlXL9HBlySa5qSCZ3RQFu/1jse0w4yMonBt6QalfIruNpZJ7O87WaO2ZFR5h7R3bEL6220I8CrQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ui2PjVOs; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4563cfac19cso14920275e9.2;
+        Sat, 19 Jul 2025 01:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752913883; x=1753518683; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=upc4TWlnuNsOW0c1XS4mh7IqE7Z1IE4YYMUxgjQnKz8=;
+        b=Ui2PjVOsvtM9yRG+fKp1GiFPVu+H+9RAS2F/tByCJhYdJG/a8n73PwnBfcYZagPsAS
+         MjZ+tv6xOYq1tGlbcpCTk4N6JuM9tKlPstAgGRpx9z7VJ61rPyeaHK1cGa0qA049BtDH
+         LN1D1Gsh80kJuOEowOOuGHy3iIRd9Px+HZIrBH5OOg8vzf+HlJf02w/2N8ebD80LSggh
+         pDTFoiXn1NyFYOT5i4ZZiQfYlZltxrU+YA09tmfN1Z/nIj3ZkO/un9RnuwstRvypOaRr
+         biUm1Mdz87wUGRqhuST6BAspLc7aElQY4F4VsTIFKpBobnnBE4IgCZwurEPxcEERzf5q
+         X+mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752913883; x=1753518683;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=upc4TWlnuNsOW0c1XS4mh7IqE7Z1IE4YYMUxgjQnKz8=;
+        b=lRUSQTtlYdnUOPQo5ufHoGyN2uqhV7XhtU32yDyUS7j/AhD9DfDFeq/Jep2OWbUIhb
+         29cvORACVFgUuZ87sbpPgKVyGKrgfDPfsoH0Izf7PgWdxak0eiGAgltvW/Aci0kEbSPw
+         6lmDKVa08nahuhlnmj6s1uzhOlI+7HygC8nnvd9eMORPX7bs7CySu9ce48rdopj74vSW
+         U7e6SYpGB1hIfZVlQ83So+056sGuDKwwqP90x9hwzwLkKjZzJZ4hDbp8weu7iyKPFNMd
+         14hX0bxyHdmZzP4DGHpgHVHNo9/aPKqUVsJw+my52w8Wbfbk6KpYkGOZw31od5xqD9BW
+         Vbng==
+X-Forwarded-Encrypted: i=1; AJvYcCUCtHh3+UrxjJST+NVTEJAthZoqyg4XrCy1SxW9AY2CErRbhagMBbjLr/zoPfWp7h7erpg=@vger.kernel.org, AJvYcCVRxDtVu1PC5sSDCKU4F2aY2cJt6uLtt5fdEERqJf8mtG7YsZI/LoSS5TTfXAhp7hhlUFQ/lwY3VpO6W4+bd1nw@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywcl89QnZY33Qe2nlzaJw8F+tqyI3ZTsi/blil+fzDMMZhfQFur
+	+Cj+tfUg7RAVixZVhO2q2LG2brxLGg68iAcnZkFX9gntIsT9uGtvfMpcRkJ5bdPj
+X-Gm-Gg: ASbGncvNOtORusFnKQb3nV6rDRQoNTrl4BeUisX3FD5CqC+dS23vs9Bz/BhrAhs2PDk
+	aqUTr4pJ3zG6lfBIqXBYV7Hmd9UIRANOEDYqQBozLPM73AkYWmiaPLp2SI9fhr8C8KA+JWYqPvw
+	cHHid16/uDhw0FfZa+V2VmPO2QCe5RaVIK4ipFEeVXmeT+Yff6/DxCNq9+mz+fSX+KkOFCBG5RF
+	1gP/pTXte1k3xDdDFxTCWMBPRD81zeRMEjEDA1msZR8x+mbfi/DVxZhg/ANMTQL7LU2Yf8pnoSs
+	tTgvo0yTk5c+UDfEosobroH/xYDIW2tNBjbgpyokNYwjYUuPYtv/1eloYJNsAqcnG1EsQLeQRE2
+	49Qsczcz4ue2aNY+QJtA1/ETjZvPkpQ==
+X-Google-Smtp-Source: AGHT+IGtF8TGIcqmn0ui84fLs1cq0Ilz5RNbdZIoWXiX85pAFJw5eEaw1Zh2+qhIQXEp8vvhvpoVmw==
+X-Received: by 2002:a05:600c:310b:b0:453:9b7:c214 with SMTP id 5b1f17b1804b1-4562e29c33emr121180535e9.29.1752913883134;
+        Sat, 19 Jul 2025 01:31:23 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:5::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4563b74f78bsm40594775e9.27.2025.07.19.01.31.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Jul 2025 01:31:22 -0700 (PDT)
+From: Mohsin Bashir <mohsin.bashr@gmail.com>
+To: netdev@vger.kernel.org
+Cc: kuba@kernel.org,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	horms@kernel.org,
+	cratiu@nvidia.com,
+	noren@nvidia.com,
+	cjubran@nvidia.com,
+	mbloch@nvidia.com,
+	mohsin.bashr@gmail.com,
+	jdamato@fastly.com,
+	gal@nvidia.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net-next V6 0/5] selftests: drv-net: Test XDP native support
+Date: Sat, 19 Jul 2025 01:30:54 -0700
+Message-ID: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250718142032.10725-12-chia-yu.chang@nokia-bell-labs.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jul 18, 2025 at 04:20:29PM +0200, chia-yu.chang@nokia-bell-labs.com wrote:
+This patch series add tests to validate XDP native support for PASS,
+DROP, ABORT, and TX actions, as well as headroom and tailroom adjustment.
+For adjustment tests, validate support for both the extension and
+shrinking cases across various packet sizes and offset values.
 
-> @@ -549,4 +589,16 @@ tcp_ecn_make_synack(const struct request_sock *req, struct tcphdr *th)
->  		th->ece = 1;
->  }
->  
-> +static inline bool tcp_accecn_option_beacon_check(const struct sock *sk)
-> +{
-> +	u32 ecn_beacon = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option_beacon);
-> +	struct tcp_sock *tp = tcp_sk(sk);
+The pass criteria for head/tail adjustment tests require that at-least
+one adjustment value works for at-least one packet size. This ensure
+that the variability in maximum supported head/tail adjustment offset
+across different drivers is being incorporated.
 
-Hi Chia-Yu Chang,
+The results reported in this series are based on netdevsim. However, the
+series is tested against multiple other drivers including fbnic.
 
-This is not a full review, but I have observed a minor problem with this
-patch.
+Note: The XDP support for fbnic will be added later.
+---
+Change-log:
+- Force checksum computation in netdevsim xdp hook
+- Update checksum when updating packet for head/tail adjustment cases
+- Use 1 as the minimum value for the data growth while adjusting tail
 
-Commit e9d9da91548b ("tcp: preserve const qualifier in tcp_sk()")
-updated tcp_sk so that, as it's subject says, the const qualifier
-of it's argument is preserved.
+V5: https://lore.kernel.org/netdev/20250715210553.1568963-6-mohsin.bashr@gmail.com
+V4: https://lore.kernel.org/netdev/20250714210352.1115230-1-mohsin.bashr@gmail.com
+V3: https://lore.kernel.org/netdev/20250712002648.2385849-1-mohsin.bashr@gmail.com
+V2: https://lore.kernel.org/netdev/20250710184351.63797-1-mohsin.bashr@gmail.com
+V1: https://lore.kernel.org/netdev/20250709173707.3177206-1-mohsin.bashr@gmail.com
 
-But here sk is not const while tp is not.
+Jakub Kicinski (1):
+  net: netdevsim: hook in XDP handling
 
-I think the solution here is to make tp const.
+Mohsin Bashir (4):
+  selftests: drv-net: Test XDP_PASS/DROP support
+  selftests: drv-net: Test XDP_TX support
+  selftests: drv-net: Test tail-adjustment support
+  selftests: drv-net: Test head-adjustment support
 
-	const struct tcp_sock *tp = tcp_sk(sk);
-
-Flagged by GCC 15.1.0 and Clang 20.1.8 allmodconfig builds.
-
-> +
-> +	if (!ecn_beacon)
-> +		return false;
-> +
-> +	return tcp_stamp_us_delta(tp->tcp_mstamp, tp->accecn_opt_tstamp) * ecn_beacon >=
-> +	       (tp->srtt_us >> 3);
-> +}
-> +
->  #endif /* _LINUX_TCP_ECN_H */
+ drivers/net/netdevsim/netdev.c                |  21 +-
+ tools/testing/selftests/drivers/net/Makefile  |   1 +
+ tools/testing/selftests/drivers/net/xdp.py    | 656 ++++++++++++++++++
+ .../selftests/net/lib/xdp_native.bpf.c        | 621 +++++++++++++++++
+ 4 files changed, 1298 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/drivers/net/xdp.py
+ create mode 100644 tools/testing/selftests/net/lib/xdp_native.bpf.c
 
 -- 
-pw-bot: changes-requested
+2.47.1
+
 
