@@ -1,86 +1,114 @@
-Return-Path: <linux-kselftest+bounces-37612-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37613-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CAC7B0AD5B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 03:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AE5DB0AE9B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 10:22:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEF871C26100
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 01:35:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36AAB1C201DC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 08:22:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B61185E7F;
-	Sat, 19 Jul 2025 01:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C5923507E;
+	Sat, 19 Jul 2025 08:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q3+3boCm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dJd5L2vA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BBE1487F6;
-	Sat, 19 Jul 2025 01:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02AFA1D90C8;
+	Sat, 19 Jul 2025 08:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752888930; cv=none; b=W/XhuDhlkUjyH1zL8teRTTbXhQY5GvOfn2MMhRCVYQb55ZbpnbZY7meMnD1QuGt58i3hiZHI/O/hPhr4QHE3skafQm/RlSVGRJvSI0O8hGtTdIz8QfG5z52qUfhm9WS/MjrVhG7raclRJxacWyMZQKxQQSUUyFOFXJBM1iXVUHk=
+	t=1752913316; cv=none; b=EEf9DKcwpHTSGdSw9Tn466bmE8sIhM+ThmlxYLx3NI7wYy5bMoHM5glnyYtvQXJt/WqMIutpXN8W0EFGWV3IDt6FUDbcuxv00iyuOmUyt6VfSTrTgtd268uA88ij9AixjwPaIdMenXdJiQ47kbiXpQS/97E6uQJvhCoye72EHn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752888930; c=relaxed/simple;
-	bh=Nvvd1IlDe+KIcuRyeOQh16dqqPrbvD1IBlN598V/r9s=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FH4AnncdJU/W8Uhek/pdHjZsqHK+Xh+jOaPgVfmC2pDyxaOUC16i2Beigj+2RgtI6tplk/ULTUCzZqX993L6cqV79Lzah+5W8GoYx0qLoUXIUyvcAgVy7qmqQSSZagSj4IpX8y51OSwmd/EPPMgW4Ja9ojE2K9Py2EVTaia6ZvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q3+3boCm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 185E1C4CEEB;
-	Sat, 19 Jul 2025 01:35:30 +0000 (UTC)
+	s=arc-20240116; t=1752913316; c=relaxed/simple;
+	bh=K3obeuqOlZ0dOsy9POpDIMdiMQA5/BwRN6ASQEjGPL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p8J/R+yqOr9HoCyMg7NFp8aYpnJ41y2yfOwDiXq5u7JwpMix+0hqB71pMqTqNYoCuNOnTx5qeJGcsZbyiit3rKQJ8QZnzIZh+CsvaCJOMKI8SfiodpkTtlLO5Q+x4k3FyKG7vYMvyFVY1itPtRpb4GRy1ZcNHqopEHunMAMmBCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dJd5L2vA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30A0C4CEF4;
+	Sat, 19 Jul 2025 08:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752888930;
-	bh=Nvvd1IlDe+KIcuRyeOQh16dqqPrbvD1IBlN598V/r9s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=q3+3boCmssV/gkbSksi66+2m9x7gUAhUnPUINqyE1YjdJxmHOu8dGZrQ7kDbMIkbr
-	 Zu8Up72zOp7882A+nVFImoVFdaDQkgMcRf7uQad26TsXZeFba3sb4mBJEalZcVLZOB
-	 s2VMqpgjUA3eo2L2eWR+zchxUEgAq+xcTkPj9XIt2g/dXd52ScSk4opN5dV//J5zlN
-	 RuWEpKYZkvC7rZvd5/Df56Yko3TasWnblPoRRWstt///P8NBm9FiGhEtMqmm/aA1n5
-	 j8cWquvfzx+6TD9sqRQi/3IHzUaOqe4lqQsLoQcw0saLdLITUAiqGtmDmce8UA5nDs
-	 Z0yALrTe/NRSw==
-Date: Fri, 18 Jul 2025 18:35:29 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>, mptcp@lists.linux.dev, Mat Martineau
- <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Simon
- Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Christoph Paasch
- <cpaasch@openai.com>, Davide Caratti <dcaratti@redhat.com>, Florian
- Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2 0/2] selftests: mptcp: connect: cover alt modes
-Message-ID: <20250718183529.062adb42@kernel.org>
-In-Reply-To: <20250717183346.06576698@kernel.org>
-References: <20250715-net-mptcp-sft-connect-alt-v2-0-8230ddd82454@kernel.org>
-	<20250715185308.2ad30691@kernel.org>
-	<20250716072602.386a8963@kernel.org>
-	<ae6d333a-f3b2-4463-b930-b4caf56b39f8@kernel.org>
-	<20250716083632.72854bd5@kernel.org>
-	<e46aadbf-51c6-4e09-bdaa-374698b406f3@kernel.org>
-	<20250717074242.1ef5d441@kernel.org>
-	<9175b633-b61f-4ca0-9023-c99dff4f53f0@kernel.org>
-	<20250717183346.06576698@kernel.org>
+	s=k20201202; t=1752913315;
+	bh=K3obeuqOlZ0dOsy9POpDIMdiMQA5/BwRN6ASQEjGPL4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dJd5L2vAZ3K4Zas346UWsng/P35XCs8z8hc2xSX+/KHx6hCr7ihi9CoLbdDu00uWJ
+	 zRKNkNstvdtQ2VHxPgI0XQ/NDy+WiqPEDGLGsCrwUuFB6LOYT+7npgUxrDCHfNh20f
+	 i7G3k0PFTV9vLfQbYku6SwKoMXoCDtSG1E7dNEvgS+p9W45uFeM8kc2sMnFK+30OVC
+	 pJX0+z2xAn04DZnhGvFQNXDCl4nquEc637Xhb8p5FM35YR8rkw/ej8XX+z8IR95UvI
+	 woI8vB1wOT4PpUlBLSZ18A9Sw9UiFb/FMbJb/4hcSjV/okUivVEaVviUYJelHt8uWy
+	 bnpPNEcnoCtMA==
+Date: Sat, 19 Jul 2025 09:21:47 +0100
+From: Simon Horman <horms@kernel.org>
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, edumazet@google.com, linux-doc@vger.kernel.org,
+	corbet@lwn.net, dsahern@kernel.org, kuniyu@amazon.com,
+	bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com,
+	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net,
+	liuhangbin@gmail.com, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, ij@kernel.org,
+	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Subject: Re: [PATCH v13 net-next 11/14] tcp: accecn: AccECN option send
+ control
+Message-ID: <20250719082147.GP2459@horms.kernel.org>
+References: <20250718142032.10725-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250718142032.10725-12-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250718142032.10725-12-chia-yu.chang@nokia-bell-labs.com>
 
-On Thu, 17 Jul 2025 18:33:46 -0700 Jakub Kicinski wrote:
-> On Fri, 18 Jul 2025 01:49:24 +0200 Matthieu Baerts wrote:
-> > I see that you already marked the mptcp-connect-sh selftest as ignored,
-> > so I guess we are not causing other troubles with the CI. (We could then
-> > also apply this series here and ignore the new tests, but it is also
-> > fine for me to wait.)  
-> 
-> If you're okay either way I'd rather wait. From our perspective the new
-> tests would go straight into the ignore bucket.
+On Fri, Jul 18, 2025 at 04:20:29PM +0200, chia-yu.chang@nokia-bell-labs.com wrote:
 
-Restoring now, given Paolo's fixes.
+> @@ -549,4 +589,16 @@ tcp_ecn_make_synack(const struct request_sock *req, struct tcphdr *th)
+>  		th->ece = 1;
+>  }
+>  
+> +static inline bool tcp_accecn_option_beacon_check(const struct sock *sk)
+> +{
+> +	u32 ecn_beacon = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option_beacon);
+> +	struct tcp_sock *tp = tcp_sk(sk);
+
+Hi Chia-Yu Chang,
+
+This is not a full review, but I have observed a minor problem with this
+patch.
+
+Commit e9d9da91548b ("tcp: preserve const qualifier in tcp_sk()")
+updated tcp_sk so that, as it's subject says, the const qualifier
+of it's argument is preserved.
+
+But here sk is not const while tp is not.
+
+I think the solution here is to make tp const.
+
+	const struct tcp_sock *tp = tcp_sk(sk);
+
+Flagged by GCC 15.1.0 and Clang 20.1.8 allmodconfig builds.
+
+> +
+> +	if (!ecn_beacon)
+> +		return false;
+> +
+> +	return tcp_stamp_us_delta(tp->tcp_mstamp, tp->accecn_opt_tstamp) * ecn_beacon >=
+> +	       (tp->srtt_us >> 3);
+> +}
+> +
+>  #endif /* _LINUX_TCP_ECN_H */
+
+-- 
+pw-bot: changes-requested
 
