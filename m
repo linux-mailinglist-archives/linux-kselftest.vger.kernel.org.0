@@ -1,82 +1,83 @@
-Return-Path: <linux-kselftest+bounces-37669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A618B0B294
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 00:47:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 066E0B0B298
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 00:48:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83E4B17F9C3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 22:47:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26D1117F858
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 22:48:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB9728DEE8;
-	Sat, 19 Jul 2025 22:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B18128E594;
+	Sat, 19 Jul 2025 22:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LhRsjEeQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iDE7kosJ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0DD28D8F7;
-	Sat, 19 Jul 2025 22:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7891128DEF8;
+	Sat, 19 Jul 2025 22:42:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752964974; cv=none; b=Gu9lzbGyuMmDEEI4SC7i43XUBErduZpB2+tCOeyHGVbslWPlmyCdAxEhe+2tH2sgWVR/YGObDG0NcsEKR+uvrmdEqNjxcFhFT9qEIb5W2ztnk3xvpkDOpm4ybOAQ5v2B4VB0ltydKRt5/omovt05qGp8kdBF5kj6i9UMM/j0Zac=
+	t=1752964977; cv=none; b=QOA7iqAbYsemmyFkofgEm3q7sJYZBW4ZyBCbS8J6K+L15EQ/3wEs4a6dwTh3029QV19gNrAl2kzbOtCoybX2/Hrc+4Y7xBDR+7Y6ifGnNQ5bdh1U8bGx99g6S7hsKH9eibb8phpWHRqFf+n6bQxXZwMWXFpvupHCX4seEpNYlXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752964974; c=relaxed/simple;
-	bh=csKsHCFbalTxJs2cYRiqc+aWsYXh/UqWq0VHOjKXa4U=;
+	s=arc-20240116; t=1752964977; c=relaxed/simple;
+	bh=lZfqelYwV8zIrJ8mC1Q2efKvp9yb5zIZ8TIX1qUdauE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NJYD7flHcWb6Z1tChe0s7tPj+E6mQdQTIUgvd1ZM+ag2jPFZhuF9f3d/rvtDSnIGuc1rduNxxHoAYIjW7G5Zjivf2+zOj9jj+qNzYPNjxE9jzuQWpolD5GKncpEq7YArwMhp/Mgsqa54ko6yY4Dgg+iPxiT+4J2IBA9JkDObKrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LhRsjEeQ; arc=none smtp.client-ip=209.85.160.172
+	 In-Reply-To:To:Cc; b=h+I6MRM4P/6CrQI1ZcJH1yRfEqqT4VosPXHSWUnCw9yAqXoMTTePmK7VHKIOSj9Bg5GRRSg4omkmFNi7f9fS48IRX5nLE1XWoBX6FCfXUbozGpuwSFdMX3j15wQ5VvVn66HC6PXfOjuG6XxBkzjX4OD+dPchDkBvTGYc6au2Fbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iDE7kosJ; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4ab6e66ea68so43304641cf.1;
-        Sat, 19 Jul 2025 15:42:52 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4abac5b1f28so26401911cf.0;
+        Sat, 19 Jul 2025 15:42:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752964971; x=1753569771; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752964973; x=1753569773; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NVwZZ6Mo9+UIM4MULp9oEI1KWAAVmyUYypitaepCOB0=;
-        b=LhRsjEeQKPvONJbUwuD82NvnL5LUBVzh0+RiuUYt/CWSKtJ+pSnBgQtuwegtuNzGU9
-         IXh5Ip4Y9vrFVW5UIUQlXF6MoVCfigWsULfrFCPJ9VQ8KDD1HoVdj8NeoqifYhlPQRV8
-         9ByKdJTHRXURG4+CADJnuWbrws9BXvPuNbN7Kss2OOugs/yzQV2PrmrNVhS9Mn46nWRE
-         /OXyaNnVCg1Hb5mJUjWYdM2F/N0qDWh0wE+13udWbnKlCaXW6BmPnAfEBeKvDVxTh06L
-         OjOhmq4b7ssvACD0XQxu6Lw/P3OOOxJ38AHs6JTqik+pVwzlSjsFTWiZmk6DLjyfJReb
-         0ddQ==
+        bh=dNvCZ3pjMtqtkb7kluvKanA1YBUxX9SYGV79cPChZl4=;
+        b=iDE7kosJoNXl6hpkITXJMPUItow4UN3XAud8QqithLH68QaQhIjCO9GdE2jmqzMQRR
+         LCPKFrZYnxxqet6rwCoxUP29mnexJxagtlER+1tcVdWQ9tORyp+A4O+opQfoK1aIVx8+
+         j5O3VgSgx4Y/vblPJ7xMnkpv62c37ghVZM8262R/hUAOUTP7knwjRcVQaF1KeAGJ+lUU
+         4kAoZS7U/u98rSHz43W3+GtuWZErqr06j6UNbFxZuXBl4h5lBndcEkF73QirYqSANLpd
+         thaXGQU3I+4orgWQPbbs1l19WyclFMMdAHgmjTT5OnZwLDuqq38d+BfrraMx6A7iGMI6
+         k5nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752964971; x=1753569771;
+        d=1e100.net; s=20230601; t=1752964973; x=1753569773;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NVwZZ6Mo9+UIM4MULp9oEI1KWAAVmyUYypitaepCOB0=;
-        b=Dq/MbxfOUSkOu7EaT3SQOJD0Z5naFkfuBEcS1ZdvxcE2NgFuO34vudx/sjvjO5uF1h
-         OxRbm/Ykm9O2+InORl+yl3/Yb1L5T2EIJ/73rB0HOvAzJGsT5Jb4J94XfP/ChGIpez4z
-         +nhdrjgqw51J+OiIU9PybgfuTaL4VHFf9MJ7U18XHyajYU8Vhnih2seqBehtcopTCFKq
-         7GXhvauX7iOzXbIanBoyqF6Q/HlgxqVuOhf5JZi5zKFOYVYuOhnQRQCA199CyR1Vesm2
-         HUmKmt5RZNLCyna4FP6YGKkz5REvOwlswGXcgyQEoiuS4SYd3bKcIEZAfZomPvdsewSr
-         /e9w==
-X-Forwarded-Encrypted: i=1; AJvYcCUIlYrBt+E0K/P0VtI4SrvGnIxincpViMZqv3GWoHFQ2G8MIgtte9E5E6395c2m1pwEk6R682zHinJjcGjNn5c=@vger.kernel.org, AJvYcCVi0h/eVcLhaYB3JsnNLEvZ9yatxAohWiVMh+B2jSxoqXoHWDFdD4ZorgbwY1jeK9ba2Sdw9L1PzdRd@vger.kernel.org, AJvYcCWr0S0x12owhf8uBYnKh8p8U+AIwvVQCCXzTUkQZLpRWJjIskdKtt0jwVPH17xNIfOKEy+WpRt76HVKBpDZorPz@vger.kernel.org, AJvYcCXCFW7qA9hHwHPmlUJ+fhGsgUxZhw0njIW7pQRXY3e5SdQvDDv960q7RD0mRmcPio13LMhcIGqk@vger.kernel.org, AJvYcCXjFtN0tmVNxQDypiwnUGxIPsl0UcuWH98biiCzekE5X6wvkWBeQDRj4Hd142a/r6+7iV15J4L+/+bIbB4v@vger.kernel.org, AJvYcCXl1kPIALBq7MMvcmdRMAWwaPqEaxpuhx40BKn4uJDzDfHbGhQ13aUnlV/qEcaeelWxbaMo8NliUPM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsGC+2jGBc1TAeJr71P2L3f34LopM0jC4gtKIcj3zy/nGrJc6J
-	+HZy/BXIn7+2VoiqerFSm4/FkpOJgTOmoQ0q3jxWgNC6dBauHFtHp7PN
-X-Gm-Gg: ASbGnctAkQW6cmizN8dwtOTqC8IlsTCcKiqO44ol6wOmmIZm4SUVS78lwEP1MYvRZOK
-	/j+oEcmMLDomJd7JCFwxgDZcF+cJnLdVUEw6IUr/yQYNCTncdUUuB7QFQNi8+E8lCS1LpTDte66
-	cdqG8OMT+8hSARrg30fF/MM/jikukKoyjhJo3fq+UsqowJC7jKilvgaLQtA9h7gaMouUAlhQo8d
-	AcRhQrq7f+Ki2RJYvZwvqrMAREXCp36nylGDG8mgbN5vzCl+0dBSSiHv19+JqgHge9XYyrhPnWa
-	ckkcE8eJgwXom3CB/47r2prRnivKmSmN8v/BnoFFAmSBgQAEF2oCF5OW5E6iPeFzhfDm8RbEX+K
-	k7zuCuYF4+qgJ6/8HWP9//K//VS2M485E02O4+9C0RoJUJYUATcwoTNp1+NTsknV5pQL2muQcbz
-	0ZW55CvLUfC8evXSPrQCt/y9Tj6Vat
-X-Google-Smtp-Source: AGHT+IGrDAPhwT5uKgChUAOHQtHYjjVfCjGcgBqOR6dnOpB3dSPlP6wDfXu7rVGYdgsmj8RAJZS9ig==
-X-Received: by 2002:a05:622a:258e:b0:4ab:5941:a919 with SMTP id d75a77b69052e-4aba3df1b41mr175208651cf.40.1752964971453;
-        Sat, 19 Jul 2025 15:42:51 -0700 (PDT)
+        bh=dNvCZ3pjMtqtkb7kluvKanA1YBUxX9SYGV79cPChZl4=;
+        b=JkBbMlTd4qfvi1acrlcf1u15RvQ5G7m+DYnY4QPoggO2CYMFtamX9EJh25gVWJIi03
+         COokCbEU4iWlWjk7bHhB0l/lIgJlmEQaLdl4cdnN90km4XvyVoS6Pp3bKVNrEvUMfNhF
+         osIk6cbgfKPiVLwdwdIbFcgogr/tH/4GYp6R5SRuCGytEULjZ6npYtnQWzJ/VtIWSz2Z
+         3whLJg2LsWrKfJ6nNoR+6Z6gr9EVg8VNmLe9QZ0K4QFeiUlClKFLHumBzQlSqYU7FbzE
+         aOo12UrFlM4G6yvqcq279aNvLHwNUskV2js4RELMP8sSI1Uhb/rKPiX6rusouje3vir5
+         H9EA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZh0QfYS2iMgjM9tGxoUWGXnImwq/4gFHXVP7t3hROWzoZXQzkULtG83Q57cORzi/fLqKS1FoR@vger.kernel.org, AJvYcCV/YKbl2n4Q9NCMKqLRUuqEzCSBIGxJiSsr4QB70lXNtjSz+efQNM8G4ah/OSnpsmXJ4lIorOPXHxU=@vger.kernel.org, AJvYcCVBEKPE3lEGveRddqzDZZ08Tk6aK67MO+S4BfLrwpjfETXtd3vBaNpDTh9Tp6ByKvhCf9a1NQcawvVI1hX7J3so@vger.kernel.org, AJvYcCVCHWr5CTE/SwaW5r+9GFoE2C30adKTY4Te6/6qUWKT+MKejcdfy4iN+n/R8B2jh6/ZYjbTY5THQDND35Sj@vger.kernel.org, AJvYcCW0IxQAli7oYZ3FcGVNCybMLXf+eW+jVzFdeXMDFp6a/XaCUfBdiNoCgfWUVUr6djUBoDQYQ4EEda1v@vger.kernel.org, AJvYcCXAw4yARgr7MYgftq1ZWTP8R+AD19QI+Afp3pyQtFuAfIKmP3PtHAzjJ+ylKrtK+p1wRnZZxmTOw4IbIyD1qQU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKZFTf47eKbjebWO/yxp7tOGzTqZQpgH6PPp+nUe0vn5ER4GGl
+	J1Jwer9p46AHKRB+ivLItNlxlwtMftRChQ+Wv7TWzx82CL170XaD1kw4
+X-Gm-Gg: ASbGncvvLaoLYpt43LAUp48qlpAONvqjIN6mQOHboEni3Y1DVRfTvyNIrBkPcatDv9a
+	lDNvTxAVyOiSCDHGujWOcZVSZqoZRzHOF8OUxDhCAKuHWc+CeTrVAkB1ZVmokOvNIsNVoNp61Vx
+	WE/8xl22U+kVppAVEQ47numNDyOiaf0l/pEmYAke5TztsGyYYWuoV460derIU+thikakNxpNh4X
+	sxv8Rep3HFRtHkguFZXXdaGi4448AKZD6Rm4ATpYAf/H8Ozl7AT+rbOTIfIFAaD09U4s6GbW2Ag
+	8KKkLVgqGneZDKIg7hEgzWIwJ20F0+EVNICqXccxx0HjSJiE6Hh2d7eQ4BGvP9HOqrdWQO8LBkp
+	8V2NHrwaPoI0XMR/qh5ff6GcctV4Lh6ptG2Be8GrbihI902nK76FOd0Zhufu9JEt73KkcknHIDz
+	3r+2HuIdAaBey2YHI0MoLHIwAtX2WI
+X-Google-Smtp-Source: AGHT+IGuVgalovnA+HCQB1axFBvdtzKf0ypyaad2YVYZ3IyuazjlnfCCWqKMExbkm60aghoSvVdt5w==
+X-Received: by 2002:ac8:7d51:0:b0:4ab:377c:b6be with SMTP id d75a77b69052e-4aba3cca75emr161850101cf.22.1752964973336;
+        Sat, 19 Jul 2025 15:42:53 -0700 (PDT)
 Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2600:4041:5c29:e400:78d6:5625:d350:50d1])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4abb4b1f1d5sm23671841cf.50.2025.07.19.15.42.49
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4abb4b1f1d5sm23671841cf.50.2025.07.19.15.42.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Jul 2025 15:42:50 -0700 (PDT)
+        Sat, 19 Jul 2025 15:42:52 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Sat, 19 Jul 2025 18:42:36 -0400
-Subject: [PATCH v2 07/10] rust: kunit: use `core::ffi::CStr` method names
+Date: Sat, 19 Jul 2025 18:42:37 -0400
+Subject: [PATCH v2 08/10] rust: miscdevice: use `core::ffi::CStr` method
+ names
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,7 +86,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250719-core-cstr-fanout-1-v2-7-e1cb53f6d233@gmail.com>
+Message-Id: <20250719-core-cstr-fanout-1-v2-8-e1cb53f6d233@gmail.com>
 References: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
 In-Reply-To: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -113,13 +114,13 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  netdev@vger.kernel.org, devicetree@vger.kernel.org, 
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1752964955; l=1799;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1752964955; l=1231;
  i=tamird@gmail.com; h=from:subject:message-id;
- bh=csKsHCFbalTxJs2cYRiqc+aWsYXh/UqWq0VHOjKXa4U=;
+ bh=lZfqelYwV8zIrJ8mC1Q2efKvp9yb5zIZ8TIX1qUdauE=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
  MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QOCZHQE3BNkYXCKJ+RyA32p/mSSS2r3g8aNiyzb0jETg6Ga0rgHtLN1SgqEcI0cBAzwMZUvRsRy
- Exo2ggC1/0gs=
+ QNgVoP5fUEeNshHPuiSNpSaABih144IwAS+Gk+Fr79lMmJelh+Zmxg2GxFCxv0BmRtW8iB/JzKp
+ oMNvetu19nwo=
 X-Developer-Key: i=tamird@gmail.com; a=openssh;
  fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
@@ -133,37 +134,22 @@ Reviewed-by: Benno Lossin <lossin@kernel.org>
 Acked-by: Danilo Krummrich <dakr@kernel.org>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- rust/kernel/kunit.rs | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ rust/kernel/miscdevice.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 099a61bbb8f4..3fd33c0c5ecc 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -102,12 +102,12 @@ unsafe impl Sync for Location {}
-             unsafe impl Sync for UnaryAssert {}
- 
-             static LOCATION: Location = Location($crate::bindings::kunit_loc {
--                file: FILE.as_char_ptr(),
-+                file: $crate::str::as_char_ptr_in_const_context(FILE),
-                 line: LINE,
-             });
-             static ASSERTION: UnaryAssert = UnaryAssert($crate::bindings::kunit_unary_assert {
-                 assert: $crate::bindings::kunit_assert {},
--                condition: CONDITION.as_char_ptr(),
-+                condition: $crate::str::as_char_ptr_in_const_context(CONDITION),
-                 expected_true: true,
-             });
- 
-@@ -202,7 +202,7 @@ pub const fn kunit_case(
- ) -> kernel::bindings::kunit_case {
-     kernel::bindings::kunit_case {
-         run_case: Some(run_case),
--        name: name.as_char_ptr(),
-+        name: kernel::str::as_char_ptr_in_const_context(name),
-         attr: kernel::bindings::kunit_attributes {
-             speed: kernel::bindings::kunit_speed_KUNIT_SPEED_NORMAL,
-         },
+diff --git a/rust/kernel/miscdevice.rs b/rust/kernel/miscdevice.rs
+index ad51ffc549b8..585cfbcb8a2f 100644
+--- a/rust/kernel/miscdevice.rs
++++ b/rust/kernel/miscdevice.rs
+@@ -35,7 +35,7 @@ pub const fn into_raw<T: MiscDevice>(self) -> bindings::miscdevice {
+         // SAFETY: All zeros is valid for this C type.
+         let mut result: bindings::miscdevice = unsafe { MaybeUninit::zeroed().assume_init() };
+         result.minor = bindings::MISC_DYNAMIC_MINOR as ffi::c_int;
+-        result.name = self.name.as_char_ptr();
++        result.name = crate::str::as_char_ptr_in_const_context(self.name);
+         result.fops = MiscdeviceVTable::<T>::build();
+         result
+     }
 
 -- 
 2.50.1
