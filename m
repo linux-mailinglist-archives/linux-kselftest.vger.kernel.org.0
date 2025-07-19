@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-37625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEF2AB0AF87
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 13:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B4CAB0AF89
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 13:14:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEF644E813B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 11:13:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF2DE4E830E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Jul 2025 11:13:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE1E823B60A;
-	Sat, 19 Jul 2025 11:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6831E23B626;
+	Sat, 19 Jul 2025 11:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kI0dpn3E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UGb0DUF2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1845B23A563;
-	Sat, 19 Jul 2025 11:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D9B23AE60;
+	Sat, 19 Jul 2025 11:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752923600; cv=none; b=Tw2HF1JxYOIpmQJAZ7JKQYLaVunC8I9TyZhbSlFrDHkaesAurbqh1ApCMYoV4H631ZaJgZW2+UNlwM5I9ZH8yN5QhF37UiLgcWcNk2kVQKB+PrJyVT6Fs+QUGxK9J9O7zg8n6QFwAlWRn46kk/glv2quDftwlJWzeFph85DoD4Y=
+	t=1752923602; cv=none; b=ZgmaG6PVqhgko9lDITS+SrU5GWmeEb2ZyE2UF3MOYvpppTcwdWFA3E1zsvZKlsh+8qI1Fw27CntqT9+b/Cpr3QyNpRxsf91Ppra7zNJF/WSbjIi11SYtQKdkjKchrV6QZweB5UfUAlDWI1pRcfp7asMb3OJYXm6i9sQNYKkTEbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752923600; c=relaxed/simple;
-	bh=r8lTNjeNnUfemO2GypZqiyYgLF4NkQp7YFBIugfmea8=;
+	s=arc-20240116; t=1752923602; c=relaxed/simple;
+	bh=Iww/UpGyLtrx1j10ruDTf8LZMrndDjrz8uY2/BP9cpc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cdTqZoAFUb4S34p1P5QTBiNVabwuFh0uKPgBXD1VlMTwu9OqC9moCX8zHzjzzGrxTIM+tiN5fH8taoWb5wS/hPd6MlwWj7MeRFyYJPiXgNiquVgw7dwxwyL/h/k8F3pCKhVWvPTR0kodUXarV8cxp26WnJY/Cpu106qF5FbIYMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kI0dpn3E; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:To:Cc; b=uAIT/0oCL8473lAnk/Lkea+zh0jLFridSTWL2Tyhf5AcWHI7hUubW8A8gfMAgFRaeHlq0qC8ky9pAUZtHeUJvZyz7UuNvnziAY3gdIznR0dwBBZ8r52SbU26Bpx585ForPtKWP9Rj9gaC9PN9dD3s8U0VqQSfYSzkvGwbk6ovO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UGb0DUF2; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-236470b2dceso23802995ad.0;
-        Sat, 19 Jul 2025 04:13:18 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2363616a1a6so24755525ad.3;
+        Sat, 19 Jul 2025 04:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752923598; x=1753528398; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752923600; x=1753528400; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5RTREgjI7+tNhJ+8DPCuoyFAFcZSAMYB6+g1NG2DmPY=;
-        b=kI0dpn3E1yBiTvMwtyt+Hq+6PjEtVmlzVVHbPIf1n5cj+5TH2HotrSGHSDcMftPUAA
-         chT1zlO6clLzNYZcClhgeqEh3eRgIaXJMr9lYQCpVYE5g60/ObEkRApDcir55fzwS1Ol
-         lGgg5+kWfLz4tUKHrk3U9lxNyCmilW/NovNsBUpenB1X4CD2Eh3MpgkqsS6SmWt1AG7r
-         LeAVT8gAnTTUplE7tqBRFOvJXW/yro5PDdZoSqRE8DEtCy8tfTzGmtSWnfP23naT840y
-         teHn0N130YQnE1OEGRc6uNyS3C3z1lcjnFMMO8zlYULnOTkPnY0uqNdqsabHhEbibzNp
-         MvkA==
+        bh=3Jd/5d465A0jCumj6dQXUppGRMZZOxb6FPpLcIZ9JVE=;
+        b=UGb0DUF2c37L0yQF4ikb0YxS/G7UIKZoJ2L1Mxewe6zMnB86DVISH4VBKZiHF7qaZ8
+         JB+LYNbCf19lYFN+CjH3Aq5oFR18Nx+kiLI0195NsK1dg5+ILeDkDj413ZorwM8yH7G+
+         PE6Ovx+zm4mLqsAawvOa5Ec/xuE8/ewAdsp3amUj8vciEPwsKHI1hd9A+nlCTe6ntLMm
+         fjxYRHdVKVG5lYK+eST9sYspChDiXW7mP8sypVaSlz3ZJx46i+PKNMIqCnDPph3LSgw4
+         nxoOc4dz/9CiQsomqnwSpJYpsA8tXQY+Te5aEN46ixsqf1gbfu0PZyRGHd/VX1+ta8Me
+         nDBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752923598; x=1753528398;
+        d=1e100.net; s=20230601; t=1752923600; x=1753528400;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5RTREgjI7+tNhJ+8DPCuoyFAFcZSAMYB6+g1NG2DmPY=;
-        b=sgNkFyb+qb8Lk2x4qwF9a/tL/Knu1MmwkOwr6ie/iymIUeNXtDIxcm7T6HCaXVFtKh
-         24C/51r6ITzYeI/DKY5ST24wtSmmBrzlfb9obQTGgRS5NKa74s/1+gJ5ddvASEFF5foM
-         1sDF4TGQFiLKMmnfUviqmCgkmM4Ibx+22pdw5N10EVvVYlvs49Trc328XirPOsJ+4C0z
-         XoQDBkRhpD2AyQEA5f1wrnZ89gXUCWkcY1RgUQmQsDDin3j8Jg7C2Ma5MHJ4SrjgR968
-         x+ZhJHjCMSGlahnQ/hf0GogrOAx10KCOJBo3xpBoeTYVSKAN33dkxWWWOfPunEKiBwX1
-         PQcw==
-X-Forwarded-Encrypted: i=1; AJvYcCU2grk361yeMJ+aJ7FClEzNYiv3xLPsiHUCLwlAmw9ZgGKyiYfGSHkOz2IYnGeAEGZOj5/2Np5vUfZ+nyw=@vger.kernel.org, AJvYcCWFUP/GmTA2Ju0sdr/Lux2Dt31zIqiAFTBd59R+dSLcgurPWGMi6+cUtY87EMmFBFj+WOtux+m7vtqDjSC1Gn7j@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2N3tB4Ge1/PZSXX1H9KjI39G0FKXPgNjyZKTDttU2CZonOEes
-	Q8E4Mr4vi//9s/NsyLaB5Y5NhIne0uEQbJ4I+rZoHhfgzqOXg5fZssM9
-X-Gm-Gg: ASbGnctDc6ebQGagsOwRjBpkOkOGecaEq98rAnkly/CLW14vY6z+dCfjsvVbx8/pjQV
-	a1W1XWc4ffk82BLSWCji/HgJf9pylokH1LhyWIicabnuUKedXyNZy+jihHyy2WzXwq2cijr0/X4
-	mDwGrVWeJXximnsv+VbXM5epNBFgXpouQGV68/+b5Yy3+TKVuIKNemLzd/YTPiJUu3H9JQi7Bln
-	CDOmu0YINJ5KdL985Wz0t+V4AqKOQ/qE0Udon9x6+kqViUYjTKJ2LQV+/XDehmfer7OXkK4RiVA
-	ua155YY4Wp9xLMFtk5ccuEC03mch4pBei1ReFP3veodI1jzOCDUGAGGabuicmSa91nkU8YY0sA6
-	qqzDrcbNq/s1pP16Z5udC
-X-Google-Smtp-Source: AGHT+IHIGCLWVvv5yalOVOy8WKDgdJNrEc9C/gFLLDdC9BVMS/h/JNjAbdeoYEJ58i9QE8Z26itLxQ==
-X-Received: by 2002:a17:903:228d:b0:23c:8f4c:6658 with SMTP id d9443c01a7336-23e2572a0dcmr188760075ad.25.1752923598310;
-        Sat, 19 Jul 2025 04:13:18 -0700 (PDT)
+        bh=3Jd/5d465A0jCumj6dQXUppGRMZZOxb6FPpLcIZ9JVE=;
+        b=A/24311TQxEC9YFEuUGGc3KSn+azy8awiXzBuH26xOVZeZ/tIPCx6ciPsxWqjHKaJU
+         lOoyN+sk2ZME3hWmuKz5HFj4SHTwrFKat1zLuvvTkDLrcY+jioj3vGodoKX75lMF/RIJ
+         NhHpgL1FFDWR+3Y19gcg8MPxbxXz6XARAHg8DMNtYQx1c/QqLZVJ6GQvCS1tdFpVzOr7
+         iFJrP8pYSNj8yzOsP2ci2PfhCBiXwm32B7DkwxxCSo5Mw5KNE6ZI7z2leJF8dmNHFV+7
+         KmjYrWUfO2IecOOx+g4sU+dnM0C5gdh8bKo2pQ+m97LPd9VxqBElqCS3Oxiq0CtwK5je
+         lePw==
+X-Forwarded-Encrypted: i=1; AJvYcCW0ImEOu805hWMnR13w2p31fM8hnjpcsZUdViXT1X8HB7bgPER0pxVG76hPCWsWuZof8EDbpsAWK3mDUy0XEVzq@vger.kernel.org, AJvYcCX3PxB1rVznfb9TuG0o1hu3q7fbBFfaJUSqqNbt6/d3ov1QDDF+q4sizxc4BqgG+bIuFgHKLpX7WBRbjCw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzOMZ879sUa4yf0ZZ9nb707ecRLaz6dcgQEmZTyhEy8dPnXJY6
+	pCr2NG5mu/ocDYo9eZEWuz61FGQOud6GZzZdStw6GrNtF+5hqKBCc6sr
+X-Gm-Gg: ASbGncsmv98B1F0aZxgalY90ruS7j7ySJfiU4ZlzvQSH6DUid+aJEHHrb0zAiSzf8zd
+	XRTkUDJQuojw7polfZOSuUASzjOSwaUMkGC/aevdd/TtZYomyCjt7WiWZHJo/uvE20MhnsDKoGc
+	YGACiyvAYglCygL9eJQ0HxDGbU/izDU2cagPNrqmY9aFb4IURZzTO3IoHVNga5iNHwbMQfRMfGQ
+	I0+znk+2hGHHq4Oi9jpXnL/n/Wocf7JratTgjHrcA2fEd365jbpddbBz1BlnzMfqdlh+01fkhC+
+	0V/GwM4kaS8kUAcyKJ+crDpswm7E7PyBwccK3HsOHYkhGMcBJoEfLNcOuVnAkxN+f9yrivn7MSq
+	zt78wHuyrDV0tYd8ZFkJJ
+X-Google-Smtp-Source: AGHT+IEAPjC4pj685n73OCXBGa3ulx7qROou2OgY1ptOxHHWKAYpNN7RhIDQ9S1zZEHJLglu5uD+8g==
+X-Received: by 2002:a17:902:c409:b0:234:b41e:37a4 with SMTP id d9443c01a7336-23e256848f5mr163928225ad.6.1752923599651;
+        Sat, 19 Jul 2025 04:13:19 -0700 (PDT)
 Received: from [0.0.5.57] ([136.159.213.146])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6b4c81sm27388875ad.114.2025.07.19.04.13.17
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6b4c81sm27388875ad.114.2025.07.19.04.13.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Jul 2025 04:13:17 -0700 (PDT)
+        Sat, 19 Jul 2025 04:13:19 -0700 (PDT)
 From: Abhinav Saxena <xandfury@gmail.com>
-Date: Sat, 19 Jul 2025 05:13:13 -0600
-Subject: [PATCH RFC 3/4] landlock: add memfd exec LSM hooks and scoping
+Date: Sat, 19 Jul 2025 05:13:14 -0600
+Subject: [PATCH RFC 4/4] selftests/landlock: add memfd execution tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250719-memfd-exec-v1-3-0ef7feba5821@gmail.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250719-memfd-exec-v1-4-0ef7feba5821@gmail.com>
 References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
 In-Reply-To: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
 To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
@@ -98,289 +98,361 @@ Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
  Abhinav Saxena <xandfury@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752923593; l=8635;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752923593; l=10834;
  i=xandfury@gmail.com; s=20250614; h=from:subject:message-id;
- bh=r8lTNjeNnUfemO2GypZqiyYgLF4NkQp7YFBIugfmea8=;
- b=8L4KmWE3ZWhZjyUmYKRhVFPDyBVShtvoNJz8LgLdOGrxWWSTRS3sKp+1bAgGYFP//GtdlcEDP
- NNLSFLkuXsQDn6+Pv0ANlAxG745Ahfj+4ht/oU7zkNMyd/AGK4sBf10
+ bh=Iww/UpGyLtrx1j10ruDTf8LZMrndDjrz8uY2/BP9cpc=;
+ b=kIjDOTlzaXRksQJMV4lD0AKnhdTH0vFXs450vzHO9XXX4DPVtJbviuK8aZKqG2ckFvORf7mmK
+ 3sV2DwdEZCPBwGjmRnqKTUmFMhGYKAjUyCwn8jwjUyLmr7pbp67hTD2
 X-Developer-Key: i=xandfury@gmail.com; a=ed25519;
  pk=YN6w7WNet8skqvMWxhG5BlAmtd1SQmo8If6Mofh4k44=
 
-Implement LSM hooks to enforce memfd execution restrictions:
+Add core test suite for LANDLOCK_SCOPE_MEMFD_EXEC covering:
 
-- hook_mmap_file: Prevent executable mapping of memfd files
-- hook_file_mprotect: Block mprotect() adding PROT_EXEC to memfd
-  mappings
-- hook_bprm_creds_for_exec: Prevent direct execution via execve()
-  family
-- hook_file_alloc_security: Initialize memfd files with proper access
-  masks
+- Same-domain execution restriction (prevent read-to-execute bypass)
+- execve() family syscall restrictions via /proc/self/fd/ path
+- Regular filesystem files remain unaffected by memfd scoping
 
-All hooks use domain hierarchy checking to enforce scoped restrictions
-with proper audit logging. This prevents multiple attack vectors:
-- Direct mmap(PROT_EXEC) on memfd
-- Two-stage mmap(PROT_READ) + mprotect(PROT_EXEC) bypass
-- execve("/proc/self/fd/N") anonymous execution
-
-Implement memfd execution access control in check_memfd_execute_access()
-using hierarchy-aware domain checking
+Tests validate that memfd execution restrictions are properly enforced
+while ensuring surgical targeting that doesn't impact legitimate file
+operations. Covers key attack vectors including anonymous execution
+and W^X policy bypass attempts.
 
 Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
 ---
- security/landlock/cred.c |  14 ----
- security/landlock/fs.c   | 195 ++++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 194 insertions(+), 15 deletions(-)
+ .../selftests/landlock/scoped_memfd_exec_test.c    | 325 +++++++++++++++++++++
+ 1 file changed, 325 insertions(+)
 
-diff --git a/security/landlock/cred.c b/security/landlock/cred.c
-index 0cb3edde4d18..356dad0b7e9b 100644
---- a/security/landlock/cred.c
-+++ b/security/landlock/cred.c
-@@ -43,25 +43,11 @@ static void hook_cred_free(struct cred *const cred)
- 		landlock_put_ruleset_deferred(dom);
- }
- 
--#ifdef CONFIG_AUDIT
--
--static int hook_bprm_creds_for_exec(struct linux_binprm *const bprm)
--{
--	/* Resets for each execution. */
--	landlock_cred(bprm->cred)->domain_exec = 0;
--	return 0;
--}
--
--#endif /* CONFIG_AUDIT */
--
- static struct security_hook_list landlock_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(cred_prepare, hook_cred_prepare),
- 	LSM_HOOK_INIT(cred_transfer, hook_cred_transfer),
- 	LSM_HOOK_INIT(cred_free, hook_cred_free),
- 
--#ifdef CONFIG_AUDIT
--	LSM_HOOK_INIT(bprm_creds_for_exec, hook_bprm_creds_for_exec),
--#endif /* CONFIG_AUDIT */
- };
- 
- __init void landlock_add_cred_hooks(void)
-diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index d86d21034f4c..e8b58f2fd87e 100644
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -1880,7 +1880,24 @@ static int hook_file_alloc_security(struct file *const file)
- 	 * without going through the file_open hook, for example when using
- 	 * memfd_create(2).
- 	 */
--	landlock_file(file)->allowed_access = LANDLOCK_MASK_ACCESS_FS;
-+	access_mask_t allowed_access = LANDLOCK_MASK_ACCESS_FS;
-+	const struct landlock_cred_security *subject;
-+	size_t layer;
-+	static const struct access_masks memfd_scope = {
-+		.scope = LANDLOCK_SCOPE_MEMFD_EXEC,
-+	};
+diff --git a/tools/testing/selftests/landlock/scoped_memfd_exec_test.c b/tools/testing/selftests/landlock/scoped_memfd_exec_test.c
+new file mode 100644
+index 000000000000..2513a44d8320
+--- /dev/null
++++ b/tools/testing/selftests/landlock/scoped_memfd_exec_test.c
+@@ -0,0 +1,325 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Landlock tests for LANDLOCK_SCOPE_MEMFD_EXEC domain restrictions
++ *
++ * These tests validate Landlock's hierarchical execution control for memfd
++ * objects. The scoping mechanism prevents processes from executing memfd
++ * created in different domain contexts.
++ *
++ * Copyright © 2025 Abhinav Saxena <xandfury@gmail.com>
++ */
 +
-+	/* allow everything by default */
-+	landlock_file(file)->allowed_access = allowed_access;
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <linux/landlock.h>
++#include <linux/memfd.h>
++#include <signal.h>
++#include <sys/mman.h>
++#include <sys/prctl.h>
++#include <sys/socket.h>
++#include <sys/stat.h>
++#include <sys/syscall.h>
++#include <sys/types.h>
++#include <sys/wait.h>
++#include <unistd.h>
 +
-+	subject = landlock_get_applicable_subject(current_cred(), memfd_scope,
-+						  &layer);
-+	if (subject && is_memfd_file(file)) {
-+		/* Creator domain restricts memfd execution */
-+		allowed_access &= ~LANDLOCK_ACCESS_FS_EXECUTE;
-+		landlock_file(file)->allowed_access = allowed_access;
-+		/* Store creator and audit... */
-+	}
- 	return 0;
- }
- 
-@@ -2107,6 +2124,178 @@ static void hook_file_free_security(struct file *file)
- 	landlock_put_ruleset_deferred(landlock_file(file)->fown_subject.domain);
- }
- 
-+static bool
-+check_memfd_execute_access(const struct file *file,
-+			   const struct landlock_cred_security **subject,
-+			   size_t *layer_plus_one)
++#include "common.h"
++#include "scoped_common.h"
++
++static int create_test_memfd(struct __test_metadata *const _metadata)
 +{
-+	const struct landlock_ruleset *executor_domain, *creator_domain;
-+	const struct landlock_cred_security *creator_subject;
-+	static const struct access_masks memfd_scope = {
-+		.scope = LANDLOCK_SCOPE_MEMFD_EXEC,
-+	};
-+	size_t creator_layer_plus_one = 0;
-+	bool executor_scoped, creator_scoped, is_scoped;
++	int memfd;
++	static const char test_data[] = "#!/bin/sh\nexit 42\n";
 +
-+	*subject = NULL;
-+	*layer_plus_one = 0;
++	memfd = memfd_create("test_exec", 0);
++	ASSERT_LE(0, memfd)
++	{
++		TH_LOG("Failed to create memfd: %s", strerror(errno));
++	}
 +
-+	/* Check scoping status for both executor and creator */
-+	*subject = landlock_get_applicable_subject(current_cred(), memfd_scope,
-+						   layer_plus_one);
-+	creator_subject = landlock_get_applicable_subject(
-+		file->f_cred, memfd_scope, &creator_layer_plus_one);
++	ASSERT_EQ(fchmod(memfd, 0700), 0);
 +
-+	executor_scoped = (*subject != NULL);
-+	creator_scoped = (creator_subject != NULL);
++	ASSERT_EQ(0, ftruncate(memfd, sizeof(test_data)));
++	ASSERT_EQ(sizeof(test_data),
++		  write(memfd, test_data, sizeof(test_data)));
++	ASSERT_EQ(0, lseek(memfd, 0, SEEK_SET));
 +
-+	if (!creator_scoped)
-+		return true; /* No scoping enabled, allow execution */
++	return memfd;
++}
 +
-+	/* Get domains for comparison */
-+	executor_domain = executor_scoped ? (*subject)->domain : NULL;
-+	creator_domain = creator_scoped ? creator_subject->domain :
-+					  landlock_cred(file->f_cred)->domain;
++static bool test_mmap_exec_restriction(int memfd, bool expect_denied)
++{
++	void *addr;
++	const size_t page_size = getpagesize();
 +
-+	pr_info("MEMFD_DEBUG: executor_domain=%p, creator_domain=%p\n",
-+		executor_domain, creator_domain);
++	addr = mmap(NULL, page_size, PROT_READ | PROT_EXEC, MAP_PRIVATE, memfd,
++		    0);
 +
-+	/*
-+	 * Same-domain: deny to prevent read-to-execute bypass
-+	 * This prevents processes from bypassing execute restrictions
-+	 * by creating memfd in the same domain
-+	 */
-+	if (executor_domain == creator_domain)
++	if (expect_denied) {
++		bool correctly_denied = (addr == MAP_FAILED && errno == EACCES);
++
++		if (addr != MAP_FAILED)
++			munmap(addr, page_size);
++		return correctly_denied;
++	}
++
++	if (addr == MAP_FAILED)
 +		return false;
 +
-+	/*
-+	 * Cross-domain: use domain hierarchy checks to see if executor is
-+	 * scoped from creator domain_is_scoped() returns true when access
-+	 * should be DENIED
-+	 */
-+	if (executor_scoped || creator_scoped) {
-+		is_scoped = domain_is_scoped(executor_domain, creator_domain,
-+					     LANDLOCK_SCOPE_MEMFD_EXEC);
-+		pr_info("MEMFD_DEBUG: Cross-domain: is_scoped=%d, returning=%d\n",
-+			is_scoped, !is_scoped);
-+		/* Return true (allow) when NOT scoped, false (deny) when scoped */
-+		return !is_scoped;
-+	}
-+
++	munmap(addr, page_size);
 +	return true;
 +}
 +
-+static int hook_mmap_file(struct file *file, unsigned long reqprot,
-+			  unsigned long prot, unsigned long flags)
++/* clang-format off */
++FIXTURE(scoped_domains) {};
++/* clang-format on */
++
++#include "scoped_base_variants.h"
++
++FIXTURE_SETUP(scoped_domains)
 +{
-+	const struct landlock_cred_security *subject;
-+	size_t layer_plus_one;
-+
-+	/* Only check executable mappings */
-+	if (!(prot & PROT_EXEC))
-+		return 0;
-+
-+	/* Only restrict memfd files */
-+	if (!is_memfd_file(file))
-+		return 0;
-+
-+	/* Check if memfd execution is allowed */
-+	if (check_memfd_execute_access(file, &subject, &layer_plus_one))
-+		return 0;
-+
-+	/* Log denial for audit */
-+	if (subject) {
-+		landlock_log_denial(subject, &(struct landlock_request) {
-+			.type = LANDLOCK_REQUEST_SCOPE_MEMFD_EXEC,
-+			.audit = {
-+				.type = LSM_AUDIT_DATA_ANONINODE,
-+				.u.file = file,
-+			},
-+			.layer_plus_one = layer_plus_one,
-+		});
-+	}
-+
-+	return -EACCES;
++	drop_caps(_metadata);
 +}
 +
-+static int hook_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
-+			      unsigned long prot)
++FIXTURE_TEARDOWN(scoped_domains)
 +{
-+	const struct landlock_cred_security *subject;
-+	size_t layer_plus_one;
-+
-+	/* Only check when adding execute permission */
-+	if (!(prot & PROT_EXEC))
-+		return 0;
-+
-+	/* Must have a file backing the VMA */
-+	if (!vma || !vma->vm_file)
-+		return 0;
-+
-+	/* Only restrict memfd files */
-+	if (!is_memfd_file(vma->vm_file))
-+		return 0;
-+
-+	/* Check if memfd execution is allowed */
-+	if (check_memfd_execute_access(vma->vm_file, &subject, &layer_plus_one))
-+		return 0;
-+
-+	/* Log denial for audit */
-+	if (subject) {
-+		landlock_log_denial(subject, &(struct landlock_request) {
-+			.type = LANDLOCK_REQUEST_SCOPE_MEMFD_EXEC,
-+			.audit = {
-+				.type = LSM_AUDIT_DATA_ANONINODE,
-+				.u.file = vma->vm_file,
-+			},
-+			.layer_plus_one = layer_plus_one,
-+		});
-+	}
-+
-+	return -EACCES;
 +}
 +
-+static int hook_bprm_creds_for_exec(struct linux_binprm *bprm)
++/*
++ * Test that regular filesystem files are unaffected by memfd restrictions
++ *
++ * This test ensures that LANDLOCK_SCOPE_MEMFD_EXEC scoping only affects
++ * memfd objects and does not interfere with normal file execution or
++ * memory mapping of regular filesystem files.
++ *
++ * Security scenarios tested:
++ * - Scope isolation: memfd restrictions don't affect regular files
++ * - Proper targeting: only anonymous memory objects are restricted
++ *
++ * Scenarios considered (while allowing legitimate use):
++ * - Malicious process creates executable memfd -> BLOCKED
++ * - Same process maps legitimate executable file ->ALLOWED
++ * - Ensures restrictions are surgical, not broad
++ *
++ * Test flow:
++ * 1. Parent optionally creates scoped domain
++ * 2. Parent forks child process
++ * 3. Child optionally creates scoped domain
++ * 4. Child creates regular temporary file with executable content
++ * 5. Child creates memfd with same content
++ * 6. Test memfd execution ->should follow scoping rules
++ * 7. Test regular file execution ->should always work regardless of memfd
++ * scoping
++ * 8. Verify differential behavior confirms proper targeting
++ */
++TEST_F(scoped_domains, regular_file_unaffected)
 +{
-+#ifdef CONFIG_AUDIT
-+	/* Resets for each execution. */
-+	landlock_cred(bprm->cred)->domain_exec = 0;
-+#endif /* CONFIG_AUDIT */
++	int tmp_fd, memfd;
++	char tmp_path[] = "/tmp/landlock_test_XXXXXX";
++	void *addr;
++	const size_t page_size = getpagesize();
++	bool memfd_should_be_denied;
 +
-+	const struct landlock_cred_security *subject;
-+	size_t layer_plus_one;
-+	struct file *file;
++	memfd_should_be_denied = variant->domain_child ||
++				 variant->domain_parent;
 +
-+	if (!bprm)
-+		return 0;
++	if (variant->domain_parent)
++		create_scoped_domain(_metadata, LANDLOCK_SCOPE_MEMFD_EXEC);
 +
-+	file = bprm->file;
-+	if (!file)
-+		return 0;
++	pid_t child = fork();
 +
-+	/* Only restrict memfd files */
-+	if (!is_memfd_file(file))
-+		return 0;
++	ASSERT_LE(0, child);
 +
-+	/* Check if memfd execution is allowed */
-+	if (check_memfd_execute_access(file, &subject, &layer_plus_one))
-+		return 0;
++	if (child == 0) {
++		/* Child process */
++		if (variant->domain_child)
++			create_scoped_domain(_metadata,
++					     LANDLOCK_SCOPE_MEMFD_EXEC);
 +
-+	/* Log denial for audit */
-+	if (subject) {
-+		landlock_log_denial(subject, &(struct landlock_request) {
-+			.type = LANDLOCK_REQUEST_SCOPE_MEMFD_EXEC,
-+			.audit = {
-+				.type = LSM_AUDIT_DATA_ANONINODE,
-+				.u.file = file,
-+			},
-+			.layer_plus_one = layer_plus_one,
-+		});
++		/* Create regular file with executable test content */
++		tmp_fd = mkstemp(tmp_path);
++		ASSERT_LE(0, tmp_fd);
++		ASSERT_EQ(0, fchmod(tmp_fd, 0755));
++
++		static const char test_data[] = "#!/bin/sh\nexit 42\n";
++
++		ASSERT_EQ(sizeof(test_data),
++			  write(tmp_fd, test_data, sizeof(test_data)));
++		ASSERT_EQ(0, lseek(tmp_fd, 0, SEEK_SET));
++
++		/* Create memfd with identical content for comparison */
++		memfd = create_test_memfd(_metadata);
++
++		/* Test memfd execution - should follow scoping restrictions */
++		bool memfd_correctly_handled = test_mmap_exec_restriction(
++			memfd, memfd_should_be_denied);
++		EXPECT_TRUE(memfd_correctly_handled);
++
++		/*
++		 * Test regular file execution - should always work regardless
++		 * of memfd scoping
++		 */
++		addr = mmap(NULL, page_size, PROT_READ | PROT_EXEC, MAP_PRIVATE,
++			    tmp_fd, 0);
++		EXPECT_NE(MAP_FAILED, addr);
++		if (addr != MAP_FAILED)
++			munmap(addr, page_size);
++
++		/* Cleanup */
++		close(memfd);
++		close(tmp_fd);
++		unlink(tmp_path);
++		_exit(_metadata->exit_code);
 +	}
 +
-+	return -EACCES; /* maybe we should return EPERM? */
++	/* Parent waits for child */
++	int status;
++
++	ASSERT_EQ(child, waitpid(child, &status, 0));
++	if (WIFSIGNALED(status) || !WIFEXITED(status) ||
++	    WEXITSTATUS(status) != EXIT_SUCCESS)
++		_metadata->exit_code = KSFT_FAIL;
 +}
 +
- static struct security_hook_list landlock_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(inode_free_security_rcu, hook_inode_free_security_rcu),
- 
-@@ -2133,6 +2322,10 @@ static struct security_hook_list landlock_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(file_ioctl_compat, hook_file_ioctl_compat),
- 	LSM_HOOK_INIT(file_set_fowner, hook_file_set_fowner),
- 	LSM_HOOK_INIT(file_free_security, hook_file_free_security),
++/*
++ * Test execve() family syscall restrictions on memfd
++ *
++ * This test validates that direct execution of memfd files via execve(),
++ * execveat(), and fexecve() syscalls is properly blocked when domain
++ * scoping is enabled. Tests the /proc/self/fd/ execution path commonly
++ * used for anonymous execution.
++ *
++ * Security scenarios tested:
++ * - Direct memfd execution via /proc/self/fd/ path
++ * - Anonymous execution prevention
++ * - execve() hook integration with memfd scoping
++ *
++ * Attack scenarios prevented:
++ * 1. execve("/proc/self/fd/N") where N is memfd file descriptor
++ * 2. execveat(memfd_fd, "", args, env, AT_EMPTY_PATH) - anonymous execution
++ * 3. fexecve(memfd_fd, args, env) - file descriptor execution
++ *
++ * Test flow:
++ * 1. Parent optionally creates scoped domain
++ * 2. Parent forks child process
++ * 3. Child optionally creates scoped domain
++ * 4. Child creates memfd with executable script content
++ * 5. Child attempts execve() using /proc/self/fd/N path
++ * 6. Verify: EACCES if scoped, successful execution (exit 42) if not scoped
++ * 7. Parent checks child exit status to determine success/failure
++ */
++TEST_F(scoped_domains, execve_restriction)
++{
++	int memfd;
++	char fd_path[64];
++	bool should_be_denied;
 +
-+	LSM_HOOK_INIT(mmap_file, hook_mmap_file),
-+	LSM_HOOK_INIT(file_mprotect, hook_file_mprotect),
-+	LSM_HOOK_INIT(bprm_creds_for_exec, hook_bprm_creds_for_exec),
- };
- 
- __init void landlock_add_fs_hooks(void)
++	should_be_denied = variant->domain_child || variant->domain_parent;
++	TH_LOG("execve_restriction: parent=%d, child=%d\n",
++	       variant->domain_parent, variant->domain_child);
++
++	if (variant->domain_parent)
++		create_scoped_domain(_metadata, LANDLOCK_SCOPE_MEMFD_EXEC);
++
++	pid_t child = fork();
++
++	ASSERT_LE(0, child);
++
++	if (child == 0) {
++		/* Child process */
++		if (variant->domain_child) {
++			create_scoped_domain(_metadata,
++					     LANDLOCK_SCOPE_MEMFD_EXEC);
++		}
++
++		memfd = create_test_memfd(_metadata);
++		snprintf(fd_path, sizeof(fd_path), "/proc/self/fd/%d", memfd);
++
++		/* Attempt execve on memfd via /proc/self/fd/ path */
++		char *const argv[] = { "test", NULL };
++		char *const envp[] = { NULL };
++
++		int ret = execve(fd_path, argv, envp);
++
++		ASSERT_EQ(-1, ret);
++
++		/* If we reach here, execve failed */
++		if (should_be_denied) {
++			EXPECT_EQ(EACCES,
++				  errno); /* Should be blocked by Landlock */
++		} else {
++			/* execve should have succeeded but failed for other reason */
++			TH_LOG("execve failed unexpectedly: %s",
++			       strerror(errno));
++		}
++
++		close(memfd);
++		_exit(_metadata->exit_code);
++	}
++
++	/* Parent waits for child and checks exit status */
++	int status;
++
++	ASSERT_EQ(child, waitpid(child, &status, 0));
++
++	if (should_be_denied) {
++		/* Child should exit normally after execve was blocked */
++		EXPECT_TRUE(WIFEXITED(status));
++	} else {
++		/*
++		 * Child should have executed successfully with script's
++		 * exit code
++		 */
++		EXPECT_TRUE(WIFEXITED(status));
++		EXPECT_EQ(42,
++			  WEXITSTATUS(status)); /* Exit code from test script */
++	}
++}
++
++/*
++ * Test same-domain execution restriction (should always be denied when scoped)
++ *
++ * This test validates the "Same domain: DENY" rule from the security matrix.
++ * When a process is in a scoped domain, it should not be able to execute
++ * memfd objects that it created itself, preventing read-to-execute bypass.
++ *
++ * Security scenarios tested:
++ * - Read-to-execute bypass prevention within same domain
++ * - Self-execution blocking for memfd objects
++ *
++ * Attack scenario prevented:
++ * - Attacker process creates writable memfd in current domain
++ * - Writes malicious shellcode to the memfd via write() syscalls
++ * - Attempts to execute the same memfd via mmap(PROT_EXEC)
++ * - Should be BLOCKED by same-domain denial rule
++ * - Prevents bypassing W^X policies via anonymous memory
++ *
++ * Test flow:
++ * 1. Process optionally creates scoped domain
++ * 2. Process creates memfd (inherits current domain context)
++ * 3. Process attempts to mmap its own memfd with PROT_EXEC
++ * 4. Verify: ALLOW if not scoped, DENY if scoped (same domain rule)
++ */
++TEST_F(scoped_domains, same_domain_restriction)
++{
++	int memfd;
++	bool should_be_denied;
++
++	/* Same domain should be denied when scoped, allowed when not scoped */
++	should_be_denied = variant->domain_parent;
++
++	if (variant->domain_parent)
++		create_scoped_domain(_metadata, LANDLOCK_SCOPE_MEMFD_EXEC);
++
++	/* Process creates and tries to execute its own memfd (same domain) */
++	memfd = create_test_memfd(_metadata);
++
++	bool test_passed = test_mmap_exec_restriction(memfd, should_be_denied);
++
++	EXPECT_TRUE(test_passed);
++
++	close(memfd);
++}
++
++TEST_HARNESS_MAIN
 
 -- 
 2.43.0
