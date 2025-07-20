@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-37719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 547D7B0B8BF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 00:30:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCA09B0B8C2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 00:30:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC1C83BB834
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 22:29:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A84F17870D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 22:30:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9AB8238C25;
-	Sun, 20 Jul 2025 22:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E8D1239E80;
+	Sun, 20 Jul 2025 22:29:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="rE3nk+Gu"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="KR9O36ZD"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEFB22B5A5;
-	Sun, 20 Jul 2025 22:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29068238D49;
+	Sun, 20 Jul 2025 22:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753050566; cv=none; b=A4P2rR1yxaSUJHd3fWDzTAyiDw0L/QuH8jyGJ7cqHVMqhTvwKXxe7y8Z/INKp4FrrnTzc8ApJMZqUbGocGHlr5T9CQ+rDal9s1yYr2UnpjuOxeYsIRVKArpJxvph1eXkNr50ii2uSswgTNm7c/A0zWpt6A8jPFRNT/rP3lZ+TuU=
+	t=1753050569; cv=none; b=uJt689DozicYAkj2xULD0zgwVo0l9lgP4a5nasgClp43F04s3Oc5Oydonn5q3xbYvHdIdecrj2UELrnf9017G+jWQub1NOsjeSXjCcSxq0uw9wtvEnMmiFuQuPeHUfpzU3+aZ/iOS+JJVrPmWAOBgCASHSdUFAXUYXfSAgaBxSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753050566; c=relaxed/simple;
-	bh=Hq2+xjGIy2DzCfd4T5+mZsHyWUKRy+1sCAwvwDxSK0Q=;
+	s=arc-20240116; t=1753050569; c=relaxed/simple;
+	bh=H4iYYSR1EPw1jXLUZmghYgvFBscXdY9RcVjwSwSzzp0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=khYw5pPJz6YJ9PA2kvV5JIjLeJMdeWmhgyF4I4LblmKGFiR0mFz3t/nlW2WxHPnGnNBGOZ2jzFk1DtNU0//982qNCKtZzBuVdg7ylJAK6z+3ExO5y04VXavUeZVIX/rmh9kjBJjBwAqzeOuawv9PpGt6sVyHnR3wwkYHLjiMAFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=rE3nk+Gu; arc=none smtp.client-ip=213.97.179.56
+	 In-Reply-To:To:Cc; b=OhxxmzcoiCAJpgm5LV3nwZhwAEdt4gVcOJHgY6QNeTLG1FvR+o7gee6oJOObAtHVucDOFMusdWaQ11+BNw0lKgcEjDBz8YHNvlIWy9JRZOFZfRkPu+LJYvDn6t7auPpN/Hn5glS21dEfOe7cSXTFMKVzjtYMpNhUF8wUU3mcofo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=KR9O36ZD; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,20 +37,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=YPNXWndBWQ8xrGjO6eUsAfMTH8DWeRtjGlmmP8sYh8k=; b=rE3nk+GuwQLOjVvngu9E6JZxlS
-	e2gTUfjsM7IlZetxnXUMSlkDM0/tunRr7H+sIUnnP9iSmzDno/XqVYafGJXgn1uRoYm9mX5+0qwhH
-	cBm4/1nF6BHQY/ThPUqpo2Em1ynMoxfOd4YNhn5aehN9w7In5zXS9I8tGf6EPs215SzQPusgZN3gn
-	xStXsP8UYW290ZEPkJL/JH1cxGknUsgzEz85P+6phElQme8q3lhU+xLmV98BASBVs5Xn/TcTjXaMN
-	gkp+j6ANJetUT0wKoipYlzDpqqPsnTwCbg/QkCO9MsQrR8i9r/ULjbR3JtFiyx2JW+qG7U4dOXQ0n
-	xFNO857w==;
+	bh=fXIsA7YZCbRiiS349P0/OiXuHW47QjimRmCZkkvInyA=; b=KR9O36ZDOvUAB7birLKVZ0pTQn
+	gmwt+UHTXuChgelqRp+V6vY9i2MuUpBQqSreiA/ILZNtDJPEEqo93QtlZ+x14fTTc9Fd6geRR6dzo
+	maVd9mBAwybXtKMVG1kfXSzwV8ikEIpya7tXBU27puy7dTkrCSQms6sWayGMpl+n8EeZGLk66qUW8
+	TpnI54BBbeeledbQ2LYE9L+FRKLHC2mQuGKous/KLRVqRAlAcsFznZOTFmLLKsrB7d3vEFE0sCOHf
+	lMuDUouQaiZp1u2Exjd3qOyl0dRDHTh6bO2hBHjspdTPND7I4WKyWJQCmuzrRM1eHwrcwdQfJK6y4
+	fIWNXlZg==;
 Received: from [187.57.76.50] (helo=[192.168.15.100])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1udcX4-001Sqt-EZ; Mon, 21 Jul 2025 00:29:22 +0200
+	id 1udcX7-001Sqt-3T; Mon, 21 Jul 2025 00:29:25 +0200
 From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Date: Sun, 20 Jul 2025 19:29:04 -0300
-Subject: [PATCH v2 06/15] selftests/futex: Refactor futex_wait_wouldblock
- with kselftest_harness.h
+Date: Sun, 20 Jul 2025 19:29:05 -0300
+Subject: [PATCH v2 07/15] selftests/futex: Refactor
+ futex_wait_unitialized_heap with kselftest_harness.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,7 +59,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250720-tonyk-robust_test_cleanup-v2-6-1f9bcb5b7294@igalia.com>
+Message-Id: <20250720-tonyk-robust_test_cleanup-v2-7-1f9bcb5b7294@igalia.com>
 References: <20250720-tonyk-robust_test_cleanup-v2-0-1f9bcb5b7294@igalia.com>
 In-Reply-To: <20250720-tonyk-robust_test_cleanup-v2-0-1f9bcb5b7294@igalia.com>
 To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -71,31 +71,34 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
 X-Mailer: b4 0.14.2
 
-To reduce the boilerplate code, refactor futex_wait_wouldblock test to
-use kselftest_harness header instead of futex's logging header.
+To reduce the boilerplate code, refactor futex_wait_unitialized_heap
+test to use kselftest_harness header instead of futex's logging header.
 
 Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
- .../futex/functional/futex_wait_wouldblock.c       | 75 +++++++---------------
+ .../functional/futex_wait_uninitialized_heap.c     | 76 +++++-----------------
  tools/testing/selftests/futex/functional/run.sh    |  2 +-
- 2 files changed, 23 insertions(+), 54 deletions(-)
+ 2 files changed, 19 insertions(+), 59 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/futex_wait_wouldblock.c b/tools/testing/selftests/futex/functional/futex_wait_wouldblock.c
-index 2d8230da906429cd9f1f9021e8df23e12398429e..7bb4ff4dcd9d5fef289b1012975558f19e1490e0 100644
---- a/tools/testing/selftests/futex/functional/futex_wait_wouldblock.c
-+++ b/tools/testing/selftests/futex/functional/futex_wait_wouldblock.c
-@@ -21,72 +21,43 @@
- #include <stdlib.h>
- #include <string.h>
- #include <time.h>
-+
- #include "futextest.h"
- #include "futex2test.h"
+diff --git a/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c b/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c
+index ed9cd07e31c1a980bb505bb97617282411b6085a..ce2301500d839ca7b2d527ab4e072b9f00d1146a 100644
+--- a/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c
++++ b/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c
+@@ -29,95 +29,55 @@
+ #include <linux/futex.h>
+ #include <libgen.h>
+ 
 -#include "logging.h"
+ #include "futextest.h"
 +#include "../../kselftest_harness.h"
  
--#define TEST_NAME "futex-wait-wouldblock"
- #define timeout_ns 100000
+-#define TEST_NAME "futex-wait-uninitialized-heap"
+ #define WAIT_US 5000000
+ 
+ static int child_blocked = 1;
+-static int child_ret;
++static bool child_ret;
+ void *buf;
  
 -void usage(char *prog)
 -{
@@ -106,21 +109,32 @@ index 2d8230da906429cd9f1f9021e8df23e12398429e..7bb4ff4dcd9d5fef289b1012975558f1
 -	       VQUIET, VCRITICAL, VINFO);
 -}
 -
--int main(int argc, char *argv[])
-+TEST(futex_wait_wouldblock)
+ void *wait_thread(void *arg)
  {
- 	struct timespec to = {.tv_sec = 0, .tv_nsec = timeout_ns};
- 	futex_t f1 = FUTEX_INITIALIZER;
--	int res, ret = RET_PASS;
--	int c;
--	struct futex_waitv waitv = {
--			.uaddr = (uintptr_t)&f1,
--			.val = f1+1,
--			.flags = FUTEX_32,
--			.__reserved = 0
--		};
+ 	int res;
+ 
+-	child_ret = RET_PASS;
++	child_ret = true;
+ 	res = futex_wait(buf, 1, NULL, 0);
+ 	child_blocked = 0;
+ 
+ 	if (res != 0 && errno != EWOULDBLOCK) {
+-		error("futex failure\n", errno);
+-		child_ret = RET_ERROR;
++		ksft_exit_fail_msg("futex failure\n");
++		child_ret = false;
+ 	}
+ 	pthread_exit(NULL);
+ }
+ 
+-int main(int argc, char **argv)
++TEST(futex_wait_uninitialized_heap)
+ {
+-	int c, ret = RET_PASS;
+ 	long page_size;
+ 	pthread_t thr;
 -
--	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
+-	while ((c = getopt(argc, argv, "chv:")) != -1) {
 -		switch (c) {
 -		case 'c':
 -			log_color(1);
@@ -136,80 +150,67 @@ index 2d8230da906429cd9f1f9021e8df23e12398429e..7bb4ff4dcd9d5fef289b1012975558f1
 -			exit(1);
 -		}
 -	}
++	int ret;
+ 
+ 	page_size = sysconf(_SC_PAGESIZE);
+ 
+ 	buf = mmap(NULL, page_size, PROT_READ|PROT_WRITE,
+ 		   MAP_PRIVATE|MAP_ANONYMOUS, 0, 0);
+-	if (buf == (void *)-1) {
+-		error("mmap\n", errno);
+-		exit(1);
+-	}
 -
 -	ksft_print_header();
--	ksft_set_plan(2);
--	ksft_print_msg("%s: Test the unexpected futex value in FUTEX_WAIT\n",
+-	ksft_set_plan(1);
+-	ksft_print_msg("%s: Test the uninitialized futex value in FUTEX_WAIT\n",
 -	       basename(argv[0]));
-+	int res;
- 
--	info("Calling futex_wait on f1: %u @ %p with val=%u\n", f1, &f1, f1+1);
-+	ksft_print_dbg_msg("Calling futex_wait on f1: %u @ %p with val=%u\n", f1, &f1, f1+1);
- 	res = futex_wait(&f1, f1+1, &to, FUTEX_PRIVATE_FLAG);
- 	if (!res || errno != EWOULDBLOCK) {
- 		ksft_test_result_fail("futex_wait returned: %d %s\n",
- 				      res ? errno : res,
- 				      res ? strerror(errno) : "");
--		ret = RET_FAIL;
- 	} else {
- 		ksft_test_result_pass("futex_wait\n");
- 	}
-+}
- 
--	if (clock_gettime(CLOCK_MONOTONIC, &to)) {
--		error("clock_gettime failed\n", errno);
--		return errno;
--	}
-+TEST(futex_waitv_wouldblock)
-+{
-+	struct timespec to = {.tv_sec = 0, .tv_nsec = timeout_ns};
-+	futex_t f1 = FUTEX_INITIALIZER;
-+	int res;
-+	struct futex_waitv waitv = {
-+			.uaddr = (uintptr_t)&f1,
-+			.val = f1+1,
-+			.flags = FUTEX_32,
-+			.__reserved = 0
-+		};
-+	if (clock_gettime(CLOCK_MONOTONIC, &to))
-+		ksft_exit_fail_msg("clock_gettime failed %d\n", errno);
- 
- 	to.tv_nsec += timeout_ns;
- 
-@@ -95,17 +66,15 @@ int main(int argc, char *argv[])
- 		to.tv_nsec -= 1000000000;
- 	}
- 
--	info("Calling futex_waitv on f1: %u @ %p with val=%u\n", f1, &f1, f1+1);
-+	ksft_print_dbg_msg("Calling futex_waitv on f1: %u @ %p with val=%u\n", f1, &f1, f1+1);
- 	res = futex_waitv(&waitv, 1, 0, &to, CLOCK_MONOTONIC);
- 	if (!res || errno != EWOULDBLOCK) {
- 		ksft_test_result_fail("futex_waitv returned: %d %s\n",
- 				      res ? errno : res,
- 				      res ? strerror(errno) : "");
--		ret = RET_FAIL;
- 	} else {
- 		ksft_test_result_pass("futex_waitv\n");
- 	}
 -
--	ksft_print_cnts();
++	if (buf == (void *)-1)
++		ksft_exit_fail_msg("mmap\n");
+ 
+ 	ret = pthread_create(&thr, NULL, wait_thread, NULL);
+-	if (ret) {
+-		error("pthread_create\n", errno);
+-		ret = RET_ERROR;
+-		goto out;
+-	}
++	if (ret)
++		ksft_exit_fail_msg("pthread_create\n");
+ 
+-	info("waiting %dus for child to return\n", WAIT_US);
++	ksft_print_dbg_msg("waiting %dus for child to return\n", WAIT_US);
+ 	usleep(WAIT_US);
+ 
+-	ret = child_ret;
+-	if (child_blocked) {
+-		fail("child blocked in kernel\n");
+-		ret = RET_FAIL;
+-	}
++	if (child_blocked)
++		ksft_test_result_fail("child blocked in kernel\n");
+ 
+- out:
+-	print_result(TEST_NAME, ret);
 -	return ret;
++	if (!child_ret)
++		ksft_test_result_fail("child error\n");
  }
 +
 +TEST_HARNESS_MAIN
 diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index d42a8f4cf0a3d4361fd9d1196cb385a3ae38a04a..4a4fe9891f1ef8d69bb968a3a2be6c7dccd3575f 100755
+index 4a4fe9891f1ef8d69bb968a3a2be6c7dccd3575f..a93eb2a21d4aa23f874bf11ccc852838a4c3866f 100755
 --- a/tools/testing/selftests/futex/functional/run.sh
 +++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -44,7 +44,7 @@ echo
- ./futex_wait_timeout
+@@ -47,7 +47,7 @@ echo
+ ./futex_wait_wouldblock
  
  echo
--./futex_wait_wouldblock $COLOR
-+./futex_wait_wouldblock
+-./futex_wait_uninitialized_heap $COLOR
++./futex_wait_uninitialized_heap
+ ./futex_wait_private_mapped_file $COLOR
  
  echo
- ./futex_wait_uninitialized_heap $COLOR
 
 -- 
 2.50.1
