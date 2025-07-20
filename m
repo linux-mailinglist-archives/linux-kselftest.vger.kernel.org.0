@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-37703-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37704-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE943B0B734
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 19:19:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68EAAB0B739
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 19:20:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53D9A7A70B4
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 17:18:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA5AA3B8DD7
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 17:19:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6835322156D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7882367CB;
 	Sun, 20 Jul 2025 17:17:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sXB5Von2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sf17WfHO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D93723ABBF;
-	Sun, 20 Jul 2025 17:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9C823AE60;
+	Sun, 20 Jul 2025 17:17:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753031835; cv=none; b=BCv9lpA2kO289WYTF2oWUoasU+i1PcmSy9y2XBGnaiFGJhS0SL0NizX62+teLs7V9Q9yEy6RmN44OjBOdQMzI/cBNrAr5/GAbhhurb3rR1WHtU6DG9Uuf6S6VhyoLPX3GiNSineIT1MUbCCd3aczRUlrpFF1dQGh5f0N6M6Vv3Y=
+	t=1753031835; cv=none; b=ZiGSven2DYGkzvutwNN3B2I8SdYleOs+k/VqcmHGmOevUgX5E8IXbVtVyzMkjOp+rZqEYzUK1FzXKaiiatvEQysUnoPNnpSLHyagNmta2VY5jZ3Gfi9/lqd+oFv5BK/+jKt1oaA5go3Dpd73mgMCeAnzP+RgVTCrmcx5ebaY5w4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1753031835; c=relaxed/simple;
-	bh=C+MxPYrYclaVcjxNdOPDcCVwFLKAkLjsoAGfPMtg1OA=;
+	bh=bR51yZnycsbgoJiidDex0kuSAciWqmDBKUStvRDYoIQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Nyi5YTpTW7//ubhDP8BLV+YSgBNUt+VwmhtOKSY68pNOgID0eGWa/eBVDGOwXymUDMwhzHq22hKzedYqB+3Sdtkd7IC2u7s7Bb56eZzKrR8pAAEZfuOP2efGSGGd7mCGjYv/jHyGl69ncQDycuOkSqbLhNbZKw2s0xdShJknIyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sXB5Von2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECB5C4CEEB;
-	Sun, 20 Jul 2025 17:17:13 +0000 (UTC)
+	 MIME-Version; b=kffvNUDwDIrPp9Q4mST8XnUrcXEcOdjIcZVh2L2InHhZgfzWibliR8bJoRsEovmyEOFJQQTr9aEysumokuSufCocXkGz9QciAsfX7wF5l6sPXAsqB9czWw9FHzYgZjako54z/CQAEkOY+ZOYCqCNXUR/CQ8wnQDb71H3e72uPeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sf17WfHO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B771EC4CEE7;
+	Sun, 20 Jul 2025 17:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753031833;
-	bh=C+MxPYrYclaVcjxNdOPDcCVwFLKAkLjsoAGfPMtg1OA=;
+	s=k20201202; t=1753031834;
+	bh=bR51yZnycsbgoJiidDex0kuSAciWqmDBKUStvRDYoIQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sXB5Von2EQuwiNj2cE5N7Xo2r4+0Urh50yw+hf7Jyb8tgbWzn3FBGP+eZSDWpMOGA
-	 NmJ62BsRk8eMKEKWUIH8QVdT5XRxJ2UNgU9IJsU5F972j4Kd3fhrL1d9b2atb7xXCd
-	 yO6BobtBGJOBBcTj5NS0y2hpF6gRTBd6M9J9TAFkcU2WQzRttzz2coueEawxG419BA
-	 gUr6I2MvtB+d+KzTDaD37SnqNyo5HbNjxrO/Fo1xjofMziYvUNYJQ5DGbS1JeQHQSk
-	 8v0MyiDOaakxx4+7ZyGpiiFJxwYg5Xh24bUa7R4StMH8bnr3R7nAt9d/A0iv93c1Oh
-	 dN7KxJ3gPTHdQ==
+	b=sf17WfHOk3fh7lglUV7XUILRreRNOxM/D0Cm6Z6PcSrE5tS5jn0RWHTWMs2OgWzU4
+	 3SC16LP+Sxe1FnyDCA9lRIBGhz431LToMGG1Mnqe3LiNjUWYHuduHvzTUhqMK2xID1
+	 bWw2vcPjd9+sHG/ymDtn7s4VXFsNxt8df41yl4DqzCcNde4fMDCBaiT8XlzTyw9xpx
+	 dIK48SahW2jn6UqJVqeIogfYMpkWqFViHE44zrpYtE6fKl+yxHBwc12tbjgUOPca5P
+	 czYKNs73Rpi2nGFIk5aE8u2iHO8Huo4ETq8qK9nJ6ol9UIAbMSXbn1vGHWxuRlgUNO
+	 9RaJaJaAKbblw==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -50,9 +50,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 16/22] selftests/damon/sysfs.py: generalize DAMOS schemes commit assertion
-Date: Sun, 20 Jul 2025 10:16:46 -0700
-Message-Id: <20250720171652.92309-17-sj@kernel.org>
+Subject: [PATCH 17/22] selftests/damon/sysfs.py: test DAMOS filters commitment
+Date: Sun, 20 Jul 2025 10:16:47 -0700
+Message-Id: <20250720171652.92309-18-sj@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250720171652.92309-1-sj@kernel.org>
 References: <20250720171652.92309-1-sj@kernel.org>
@@ -64,92 +64,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-DAMOS scheme commitment assertion is hard-coded for a specific test
-case.  Split it out into a general version that can be reused for
-different test cases.
+Current DAMOS scheme commitment assertion is not testing DAMOS filters.
+Add the test.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- tools/testing/selftests/damon/sysfs.py | 59 ++++++++++++++++----------
- 1 file changed, 37 insertions(+), 22 deletions(-)
+ tools/testing/selftests/damon/sysfs.py | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index 803f38b61ab3..584a71cbb891 100755
+index 584a71cbb891..a32871b9b0f2 100755
 --- a/tools/testing/selftests/damon/sysfs.py
 +++ b/tools/testing/selftests/damon/sysfs.py
-@@ -76,6 +76,42 @@ def assert_migrate_dests_committed(dests, dump):
+@@ -76,6 +76,21 @@ def assert_migrate_dests_committed(dests, dump):
          assert_true(dump['node_id_arr'][idx] == dest.id, 'node_id', dump)
          assert_true(dump['weight_arr'][idx] == dest.weight, 'weight', dump)
  
-+def assert_access_pattern_committed(pattern, dump):
-+    assert_true(dump['min_sz_region'] == pattern.size[0], 'min_sz_region',
-+                dump)
-+    assert_true(dump['max_sz_region'] == pattern.size[1], 'max_sz_region',
-+                dump)
-+    assert_true(dump['min_nr_accesses'] == pattern.nr_accesses[0],
-+                'min_nr_accesses', dump)
-+    assert_true(dump['max_nr_accesses'] == pattern.nr_accesses[1],
-+                'max_nr_accesses', dump)
-+    assert_true(dump['min_age_region'] == pattern.age[0], 'min_age_region',
-+                dump)
-+    assert_true(dump['max_age_region'] == pattern.age[1], 'miaxage_region',
-+                dump)
++def assert_filter_committed(filter_, dump):
++    assert_true(filter_.type_ == dump['type'], 'type', dump)
++    assert_true(filter_.matching == dump['matching'], 'matching', dump)
++    assert_true(filter_.allow == dump['allow'], 'allow', dump)
++    # TODO: check memcg_path and memcg_id if type is memcg
++    if filter_.type_ == 'addr':
++        assert_true([filter_.addr_start, filter_.addr_end] ==
++                    dump['addr_range'], 'addr_range', dump)
++    elif filter_.type_ == 'target':
++        assert_true(filter_.target_idx == dump['target_idx'], 'target_idx',
++                    dump)
++    elif filter_.type_ == 'hugepage_size':
++        assert_true([filter_.min_, filter_.max_] == dump['sz_range'],
++                    'sz_range', dump)
 +
-+def assert_scheme_committed(scheme, dump):
-+    assert_access_pattern_committed(scheme.access_pattern, dump['pattern'])
-+    action_val = {
-+            'willneed': 0,
-+            'cold': 1,
-+            'pageout': 2,
-+            'hugepage': 3,
-+            'nohugeapge': 4,
-+            'lru_prio': 5,
-+            'lru_deprio': 6,
-+            'migrate_hot': 7,
-+            'migrate_cold': 8,
-+            'stat': 9,
-+            }
-+    assert_true(dump['action'] == action_val[scheme.action], 'action', dump)
-+    assert_true(dump['apply_interval_us'] == scheme. apply_interval_us,
-+                'apply_interval_us', dump)
-+    assert_true(dump['target_nid'] == scheme.target_nid, 'target_nid', dump)
-+    assert_migrate_dests_committed(scheme.dests, dump['migrate_dests'])
-+    assert_quota_committed(scheme.quota, dump['quota'])
-+    assert_watermarks_committed(scheme.watermarks, dump['wmarks'])
-+
+ def assert_access_pattern_committed(pattern, dump):
+     assert_true(dump['min_sz_region'] == pattern.size[0], 'min_sz_region',
+                 dump)
+@@ -111,6 +126,11 @@ def assert_scheme_committed(scheme, dump):
+     assert_migrate_dests_committed(scheme.dests, dump['migrate_dests'])
+     assert_quota_committed(scheme.quota, dump['quota'])
+     assert_watermarks_committed(scheme.watermarks, dump['wmarks'])
++    # TODO: test filters directory
++    for idx, f in enumerate(scheme.core_filters.filters):
++        assert_filter_committed(f, dump['filters'][idx])
++    for idx, f in enumerate(scheme.ops_filters.filters):
++        assert_filter_committed(f, dump['ops_filters'][idx])
+ 
  def main():
      kdamonds = _damon_sysfs.Kdamonds(
-             [_damon_sysfs.Kdamond(
-@@ -122,28 +158,7 @@ def main():
-     if len(ctx['schemes']) != 1:
-         fail('number of schemes', status)
- 
--    scheme = ctx['schemes'][0]
--    if scheme['pattern'] != {
--            'min_sz_region': 0,
--            'max_sz_region': 2**64 - 1,
--            'min_nr_accesses': 0,
--            'max_nr_accesses': 2**32 - 1,
--            'min_age_region': 0,
--            'max_age_region': 2**32 - 1,
--            }:
--        fail('damos pattern', status)
--    if scheme['action'] != 9:   # stat
--        fail('damos action', status)
--    if scheme['apply_interval_us'] != 0:
--        fail('damos apply interval', status)
--    if scheme['target_nid'] != -1:
--        fail('damos target nid', status)
--
--    assert_migrate_dests_committed(_damon_sysfs.DamosDests(),
--                                   scheme['migrate_dests'])
--    assert_quota_committed(_damon_sysfs.DamosQuota(), scheme['quota'])
--    assert_watermarks_committed(_damon_sysfs.DamosWatermarks(),
--                                scheme['wmarks'])
-+    assert_scheme_committed(_damon_sysfs.Damos(), ctx['schemes'][0])
- 
-     kdamonds.stop()
- 
 -- 
 2.39.5
 
