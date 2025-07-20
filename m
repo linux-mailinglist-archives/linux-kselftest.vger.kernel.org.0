@@ -1,206 +1,163 @@
-Return-Path: <linux-kselftest+bounces-37683-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D3C7B0B402
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 09:00:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A2FEB0B419
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 09:33:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B2A317C377
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 07:00:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5B383C0E17
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 07:32:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 151791D8A0A;
-	Sun, 20 Jul 2025 07:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7071AAE13;
+	Sun, 20 Jul 2025 07:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="X/ZNv9Uw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WIdEM+FG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FEE1C84D5;
-	Sun, 20 Jul 2025 07:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E230318B0F;
+	Sun, 20 Jul 2025 07:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752994815; cv=none; b=Xh5K4HqMH+dE76ei2ufIgFl5LyvwU3LRbAnqhTUgRTLYbWHRHLUhqdtcaq0dMdnBPgT1cSkXZHv8fdURoil5VSOuITwLAQlxNrR0dOtWlHGXNoh9dOHIUVML09n+WC2oY5XdUxuqhtvxq/JT2654uv5RZU7O72XraLMN5XigutU=
+	t=1752996782; cv=none; b=uYksHege3qfwed1x61lXDpt/uo72W4JB7nBdlSOCp6nbLgIvfcZiaVIfSrnHKKYBwFOBuDv2sJn16EJ6L4Kvvpzogo9rjeOg0M19rYXJhidfxbhJ/zzdwZND42/KDcwtI9SHMxKwINeKi8EvKgFgU5b58IAu2GHA+UB3RacHFvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752994815; c=relaxed/simple;
-	bh=jAgN3a59HW0jFBgp7fJXfejPjGPuyVLybrmtNNuLGZA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DuEhKumEt0lTGQcfRW3OjAu6Z5kaRGzj7UkQQdu01MqC52FTtRm8Hy58D4aINLBkKoKq8EksTnCLgFJd1SGP+sFDBb+luOySkLCQKBPOcbt059TLpXPfgQTXopBX3c1mrx03gcwUtq3JxSMWo66VfGV6hoSnTIQcV89PJn0syDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=X/ZNv9Uw; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from mail.zytor.com ([IPv6:2601:646:8081:9484:f04a:f27d:fd66:5c61])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56K6woIr3558364
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Sat, 19 Jul 2025 23:58:51 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56K6woIr3558364
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025062101; t=1752994735;
-	bh=qWkl5KkNltsuNThUh3tqROvdQvDotGvMGGERi6Uh9Rs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=X/ZNv9Uw1SvFZpCH3dxz1ibqkF2nY9hpqTHSvNP45WMauA9ovKJTK0SQ1mAGUnKXK
-	 5RMV/KtpYvt4zIqwwlluOZ7jjlIlIQWIEJnz2jG9DZ5cqpHeEo3NXYCmQMuvi1np5I
-	 /LEh6bB+Zwkih2cKhduFKCnDM04ZsoJHas36/UHGWNotFC/hsucPpehZr8Rdy73pph
-	 NlJdyStrt02WvcD7WThBw8x+0MR7YfpkEyUI+MoIeeFvRyUYVUVVecN9L/6cDu5ewH
-	 l6M2ToSTJZCdjWl0oxn8Mz3qrJmpm+xdAArLw0rSVcog7WrTiy+2nJbynUVpFTGlF8
-	 68mw9pqkJMMgA==
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: 
-Cc: "H. Peter Anvin" <hpa@zytor.com>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Alexei Starovoitov <ast@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        David Lechner <dlechner@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Gatlin Newhouse <gatlin.newhouse@gmail.com>,
-        Hao Luo <haoluo@google.com>, Ingo Molnar <mingo@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Jan Hendrik Farr <kernel@jfarr.cc>, Jason Wang <jasowang@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Kees Cook <kees@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Marc Herbert <Marc.Herbert@linux.intel.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Mateusz Guzik <mjguzik@gmail.com>, Michal Luczaj <mhal@rbox.co>,
-        Miguel Ojeda <ojeda@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        NeilBrown <neil@brown.name>, Peter Zijlstra <peterz@infradead.org>,
-        Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-        Sami Tolvanen <samitolvanen@google.com>, Shuah Khan <shuah@kernel.org>,
-        Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Blum <thorsten.blum@linux.dev>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Yafang Shao <laoar.shao@gmail.com>, Ye Bin <yebin10@huawei.com>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        Yufeng Wang <wangyufeng@kylinos.cn>, bpf@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-sparse@vger.kernel.org,
-        virtualization@lists.linux.dev, x86@kernel.org
-Subject: [PATCH v2.1 3/7] fs/proc: replace "__auto_type" with "const auto"
-Date: Sat, 19 Jul 2025 23:58:43 -0700
-Message-ID: <20250720065844.2860000-1-hpa@zytor.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250720065045.2859105-4-hpa@zytor.com>
-References: 
+	s=arc-20240116; t=1752996782; c=relaxed/simple;
+	bh=GUf6N3TqKM3NlAZc3TkaUseabajlOnvUW3B1TeZqF2g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Btl9RqtozmSexxejP6Q8qgyxVVj6rtnuv+JZuxuHRF7pm3TXFnUMAkZDZdU6RfGC9c/+xWgZ78r+ui38o+hxygHuxmug7NdufD4b4dvYtm5XV/FubBPQmFz7C9qbEuk5HPDNfmCLbPP/wJbAC2hFfll2RM7lzxV/HPOrvl+CRKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WIdEM+FG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896C4C4CEFA;
+	Sun, 20 Jul 2025 07:33:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752996781;
+	bh=GUf6N3TqKM3NlAZc3TkaUseabajlOnvUW3B1TeZqF2g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WIdEM+FGmgqw7d5Ow5RRj2eJFVnGzRZAH2SQcPMs5HlVLhXED6o9vu4EyHelH6bSN
+	 8lZexpZgFWmnRn7lM1S0SIJlVUFpH4H5/1RdHGKHBjPSZ2E15mWgS390se+GXUma1D
+	 P9RNNxu+pHQt/Mku+9k+VcNBwuMcpUnD9M+O3nosI4DSmfnRaIadkfA2i6FyVPWi+c
+	 BqottYw3OPAqU2RQzbg0uIZ6AoIlqLSOCQFBRSwFBF3Tj0rM73MYQgzYQwXluLe07F
+	 qu+NU0SD9eunGyWxHF6sB7fGsZY+VQNAKRRWDVo1MkeGUayi0e/YsWvjJHcKfre/VH
+	 +YszUogZ7J0zw==
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-711d4689084so29684307b3.0;
+        Sun, 20 Jul 2025 00:33:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUdjXD+dYoaAU1XagmLcq30dlCEySnfD2DRfaYgL2UMl9KpaHs5f/z8N3aS0EOorAke1pXhZLj8ueyk8mTTQIgb@vger.kernel.org, AJvYcCUuKK3uBN8RqWsYtBsh3gbYBOhr97ISfhiA2t+XI713zzimJqsfIktkwHCJJmouQLM+PSXq+sgVX6mPHwhc7slfBH2c52C9@vger.kernel.org, AJvYcCWFeUWRZ6LGnVmuOtsuvbI5ng2m68e8NKEPuVkr4y7Qh6pKF85SH/p3EIixs002Z5yo6Ww+pgc3ANIPA6g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx615i89ytRkSdvDMkKP2pLbztUyETX2RMMu+nI6VljNgibYraX
+	YPyHLxvRRPCfYNfKCNKQxdefmORvIy3ZDaspBodIu+kkENp8fy9K8RSyb++guW32vZnFZps6EDI
+	F8KXvrdfBxlVlD7ZutzxJP0yYceuyNQo=
+X-Google-Smtp-Source: AGHT+IF1VxxR+4HdNpFLZwc7UhA2IPzQimfkylbquxsG4X+5YY29CDKhDrh1yAjgYaYXhcX5RSmunUxONBPEJavLmbA=
+X-Received: by 2002:a05:690c:6d06:b0:70e:2d30:43d6 with SMTP id
+ 00721157ae682-7183517c58fmr221992957b3.38.1752996780713; Sun, 20 Jul 2025
+ 00:33:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Supercedes: <20250720065045.2859105-4-hpa@zytor.com>
-Content-Transfer-Encoding: 8bit
+References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com> <20250719-memfd-exec-v1-2-0ef7feba5821@gmail.com>
+In-Reply-To: <20250719-memfd-exec-v1-2-0ef7feba5821@gmail.com>
+From: Fan Wu <wufan@kernel.org>
+Date: Sun, 20 Jul 2025 00:32:50 -0700
+X-Gmail-Original-Message-ID: <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
+X-Gm-Features: Ac12FXwM5d9XENWMfedXVCr4EtwnEwR84CVbOz6P-hi7ZGkZgUIUwlZziX0dfMw
+Message-ID: <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/4] landlock: implement memfd detection
+To: Abhinav Saxena <xandfury@gmail.com>
+Cc: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Replace use of "__auto_type" in fs/proc/inode.c with "const auto".
+On Sat, Jul 19, 2025 at 4:13=E2=80=AFAM Abhinav Saxena <xandfury@gmail.com>=
+ wrote:
+>
+> Add is_memfd_file() function to reliably detect memfd files by checking
+> for "memfd:" prefix in dentry names on shmem-backed files. This
+> distinguishes true memfd files from regular shmem files.
+>
+> Move domain_is_scoped() to domain.c for reuse across subsystems.
+> Add comprehensive kunit tests for memfd detection edge cases.
+>
+> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> ---
+>  security/landlock/domain.c |  67 +++++++++++++++
+>  security/landlock/domain.h |   4 +
+>  security/landlock/fs.c     | 210 +++++++++++++++++++++++++++++++++++++++=
+++++++
+>  security/landlock/task.c   |  67 ---------------
+>  4 files changed, 281 insertions(+), 67 deletions(-)
 
-Suggested-by: Alexey Dobriyan <adobriyan@gmail.com>
-Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Reviewed-by: Alexey Dobriyan <adobriyan@gmail.com>
----
- fs/proc/inode.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+...
 
-[ v2 of this patch was an obvious thinko, this is the correct one ]
+>
+> +/**
+> + * is_memfd_file - Check if file was created via memfd_create()
+> + * @file: File to check
+> + *
+> + * Returns true if @file was created via memfd_create(), false otherwise=
+.
+> + *
+> + * memfd files are shmem-backed files with "memfd:" prefix in their dent=
+ry name.
+> + * This is the definitive way to distinguish memfd files from regular sh=
+mem
+> + * files.
+> + */
+> +static bool is_memfd_file(struct file *file)
+> +{
+> +       const struct dentry *dentry;
+> +       const unsigned char *name;
+> +       size_t name_len;
+> +
+> +       /* Fast path: basic validation */
+> +       if (unlikely(!file))
+> +               return false;
+> +
+> +       /* Must be shmem-backed first - this is the cheapest definitive c=
+heck */
+> +       if (!shmem_file(file))
+> +               return false;
+> +
+> +#ifdef CONFIG_MEMFD_CREATE
+> +
+> +       /* Validate dentry and get name info */
+> +       dentry =3D file->f_path.dentry;
+> +       if (unlikely(!dentry))
+> +               return false;
+> +
+> +       name_len =3D dentry->d_name.len;
+> +       name =3D dentry->d_name.name;
+> +
+> +       /* memfd files always have "memfd:" prefix (6 characters) */
+> +       if (name_len < 6 || unlikely(!name))
+> +               return false;
+> +
+> +       /* Check for exact "memfd:" prefix */
+> +       return memcmp(name, "memfd:", 6) =3D=3D 0;
+> +#else
+> +       return false;
+> +#endif
 
-diff --git a/fs/proc/inode.c b/fs/proc/inode.c
-index 3604b616311c..8b90ab9b9cfc 100644
---- a/fs/proc/inode.c
-+++ b/fs/proc/inode.c
-@@ -303,7 +303,7 @@ static ssize_t proc_reg_read_iter(struct kiocb *iocb, struct iov_iter *iter)
- 
- static ssize_t pde_read(struct proc_dir_entry *pde, struct file *file, char __user *buf, size_t count, loff_t *ppos)
- {
--	__auto_type read = pde->proc_ops->proc_read;
-+	const auto read = pde->proc_ops->proc_read;
- 	if (read)
- 		return read(file, buf, count, ppos);
- 	return -EIO;
-@@ -325,7 +325,7 @@ static ssize_t proc_reg_read(struct file *file, char __user *buf, size_t count,
- 
- static ssize_t pde_write(struct proc_dir_entry *pde, struct file *file, const char __user *buf, size_t count, loff_t *ppos)
- {
--	__auto_type write = pde->proc_ops->proc_write;
-+	const auto write = pde->proc_ops->proc_write;
- 	if (write)
- 		return write(file, buf, count, ppos);
- 	return -EIO;
-@@ -347,7 +347,7 @@ static ssize_t proc_reg_write(struct file *file, const char __user *buf, size_t
- 
- static __poll_t pde_poll(struct proc_dir_entry *pde, struct file *file, struct poll_table_struct *pts)
- {
--	__auto_type poll = pde->proc_ops->proc_poll;
-+	const auto poll = pde->proc_ops->proc_poll;
- 	if (poll)
- 		return poll(file, pts);
- 	return DEFAULT_POLLMASK;
-@@ -369,7 +369,7 @@ static __poll_t proc_reg_poll(struct file *file, struct poll_table_struct *pts)
- 
- static long pde_ioctl(struct proc_dir_entry *pde, struct file *file, unsigned int cmd, unsigned long arg)
- {
--	__auto_type ioctl = pde->proc_ops->proc_ioctl;
-+	const auto ioctl = pde->proc_ops->proc_ioctl;
- 	if (ioctl)
- 		return ioctl(file, cmd, arg);
- 	return -ENOTTY;
-@@ -392,7 +392,7 @@ static long proc_reg_unlocked_ioctl(struct file *file, unsigned int cmd, unsigne
- #ifdef CONFIG_COMPAT
- static long pde_compat_ioctl(struct proc_dir_entry *pde, struct file *file, unsigned int cmd, unsigned long arg)
- {
--	__auto_type compat_ioctl = pde->proc_ops->proc_compat_ioctl;
-+	const auto compat_ioctl = pde->proc_ops->proc_compat_ioctl;
- 	if (compat_ioctl)
- 		return compat_ioctl(file, cmd, arg);
- 	return -ENOTTY;
-@@ -414,7 +414,7 @@ static long proc_reg_compat_ioctl(struct file *file, unsigned int cmd, unsigned
- 
- static int pde_mmap(struct proc_dir_entry *pde, struct file *file, struct vm_area_struct *vma)
- {
--	__auto_type mmap = pde->proc_ops->proc_mmap;
-+	const auto mmap = pde->proc_ops->proc_mmap;
- 	if (mmap)
- 		return mmap(file, vma);
- 	return -EIO;
-@@ -497,7 +497,7 @@ static int proc_reg_open(struct inode *inode, struct file *file)
- 	if (!use_pde(pde))
- 		return -ENOENT;
- 
--	__auto_type release = pde->proc_ops->proc_release;
-+	const auto release = pde->proc_ops->proc_release;
- 	if (release) {
- 		pdeo = kmem_cache_alloc(pde_opener_cache, GFP_KERNEL);
- 		if (!pdeo) {
-@@ -534,10 +534,9 @@ static int proc_reg_release(struct inode *inode, struct file *file)
- 	struct pde_opener *pdeo;
- 
- 	if (pde_is_permanent(pde)) {
--		__auto_type release = pde->proc_ops->proc_release;
--		if (release) {
-+		const auto release = pde->proc_ops->proc_release;
-+		if (release)
- 			return release(inode, file);
--		}
- 		return 0;
- 	}
- 
--- 
-2.50.1
+I was trying to do something similar early this year but didn't hear
+feedback from the linux-mm folks.
+https://lore.kernel.org/linux-security-module/20250129203932.22165-1-wufan@=
+kernel.org/
 
+I have considered this approach but didn't use it. My concern is,
+potentially a malicious user can create a file in a shmem fs, e.g.
+tmpfs , with the "memfd:" prefix, which can be used to bypass security
+policy.
+(Resending this message due to a misconfiguration with my email
+client. Apologies for any inconvenience.)
+
+-Fan
 
