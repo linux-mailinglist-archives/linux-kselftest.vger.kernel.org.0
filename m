@@ -1,56 +1,55 @@
-Return-Path: <linux-kselftest+bounces-37713-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37714-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E109B0B8B5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 00:29:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E743EB0B8B4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 00:29:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9092B7A3584
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 22:27:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28167177EC9
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 22:29:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 581A822A7FC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C257522B594;
 	Sun, 20 Jul 2025 22:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="QZI4e7QO"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="dTjDz/Sd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFBB22A4E4;
-	Sun, 20 Jul 2025 22:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA5B229B02;
+	Sun, 20 Jul 2025 22:29:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753050554; cv=none; b=Hi/Px4LW/6wrJ8B0UwS84FSWr/sOPJjoA6ZXamslBaDMs4zNS4sA6wmCrkBVj8ZQUBena7Qy2BH93s3yz05fpwSV3D3QvjOdJWWFHSFo+FocNII2H0fH9MGz5wpC9pO+XHNJZLijJQNnqDYasKBKkRTeS6f0m/bebctRhQnxvzc=
+	t=1753050554; cv=none; b=pMIC2XpH6PIXlHO/lb45xa/ifoGv7NTwo94+eEKbAvW4hlP2zl+pSfBdMO4cZ8aiY81mjEZQmSXH8UlKmYT+foqZaTrFkfQEkH5+eeSmyhe7Fhbj0OgS7WQzZiSvZJpWuVpzLVExUHiXbkzQNr9W7LB4Qnk70ONAm/hx+1Dea4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1753050554; c=relaxed/simple;
-	bh=4fi13IptO9I7IQ2mQDhfsp+T+Sr6cBdKqgB2uRsOv3U=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IX/Ymz78vYaRUPOVXfY2qmXx4vBNbXy4ACTGEo6pfmlMXdoCdvyBLz6R3uOAmPouOAPbmxqToiaLNeZtmQ9sQusqaWMzpiTsCFMyqSp2BdnwJfIgL6M98+s4cb445Vnn7KlqDpYhzc1D2Vo3Nq9KTKAKz/GE5qO9rylYffxb4gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=QZI4e7QO; arc=none smtp.client-ip=213.97.179.56
+	bh=AFmdDtN93AWpeL4SyIL9tqeMBmxaVRSurT8mPUheOrk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=KLgs/RN9L2PN2rL9GEherdbXzbWHznstOoRQA7L/ufTcjoyyLfBzu9HqCy/nl6OcHDoCa5A/n8vzOkgWCpXryLwLNM/+ZdGbSH5VL8/YbBHwpkRRDulL3Jb1A6HoBtbafdGsCOA8Xhk8CCCFxlrfRyEc2hG6k0pqBcAswZxqFws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=dTjDz/Sd; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=MArfY4QX9yzCgxszYchqKjhK20OrChAEgRapbpg4+Xk=; b=QZI4e7QOJohnml8io0i/lXMhkM
-	E3RMaWpJnFOJH5/xGnKd44q0i2H8YVl+7o0Fura2FW8K+n0I6zTEHCJWhJOS6YX343+hxOw0AlQSB
-	HoxF5FRn5beIGx9c+smdCkbIeD2cy8lNWOBIaBXyoy/oQw8iw+KYr6KRHjl3wqh5ISp9YMW6kP5H5
-	dGC6VbMzEp2tM5iKsZBLk1R7LULuoz5JDWeBNwE5m9PdLq6HwoSwBbItCwGeY6aRzqPIdfwGFI/Y6
-	ckb22ataEnSfFD2i5zpjPoF59OI9rkahopP5SIjIKVunecqcRt5JQpwLuh6YodsM5etyi50IrtPY0
-	G0HhVVfg==;
+	s=20170329; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=S0QF9mt70w+w7iAGsdoekW2bSLatUNvYvevM7UKuPP0=; b=dTjDz/SdFY+e2ol98cNWCQWBgw
+	JihSXBg2ufsL3jNKj+Hlh0GTgVcwgbsvZpRYHY0MIphdlPawusGF9OSdk7q8EirO5Mwup6m9SoP8j
+	8eLAeQxRd1IwASSkZg6kXKS4gvEctzcww5cl6VXVP6UQQQS2SP8xaaixoz+sOA3X8IGF4XV38EDYf
+	SmYwlBPA9Zjmu7MyG7OR45fvVGtdNxHll/R8dtV82gPJ/FW8SkIHleVT4O9vDNE8PogW0dKY6YKrD
+	3GyGjpx6guqd7+/N1mqsq0awD3KF8crmU6S/fuC8fhGZRly/RjdF8NAXgcM56+axahDvXHRTjGtpR
+	jalAhpvA==;
 Received: from [187.57.76.50] (helo=[192.168.15.100])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1udcWo-001Sqt-A2; Mon, 21 Jul 2025 00:29:06 +0200
+	id 1udcWq-001Sqt-VL; Mon, 21 Jul 2025 00:29:09 +0200
 From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Subject: [PATCH v2 00/15] selftests/futex: Refactor tests to use
- kselftest_harness.h
-Date: Sun, 20 Jul 2025 19:28:58 -0300
-Message-Id: <20250720-tonyk-robust_test_cleanup-v2-0-1f9bcb5b7294@igalia.com>
+Date: Sun, 20 Jul 2025 19:28:59 -0300
+Subject: [PATCH v2 01/15] selftests: kselftest: Create ksft_print_dbg_msg()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,11 +58,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAKptfWgC/32NQQqDMBREryJ/3ZQkRku76j2KlDT+6Kc2kSRKR
- bx7U6HbbgbewLxZIWIgjHApVgg4UyTvMshDAabXrkNGbWaQXFb8xEuWvFueLPjHFNM9YQ4zoHb
- TyFphS8Xrsq7aM+T9GNDSe3ffmsw9xeTDsl/N4tv+rOqPdRaMM8OtVVYqo1BcqdMD6aPxL2i2b
- fsAKGu0X8MAAAA=
-X-Change-ID: 20250703-tonyk-robust_test_cleanup-d1f3406365d9
+Message-Id: <20250720-tonyk-robust_test_cleanup-v2-1-1f9bcb5b7294@igalia.com>
+References: <20250720-tonyk-robust_test_cleanup-v2-0-1f9bcb5b7294@igalia.com>
+In-Reply-To: <20250720-tonyk-robust_test_cleanup-v2-0-1f9bcb5b7294@igalia.com>
 To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
  Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
  Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
@@ -73,97 +70,99 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
 X-Mailer: b4 0.14.2
 
-This patch series refactors all futex selftests to use
-kselftest_harness.h instead of futex's logging.h, as discussed here [1].
+Create ksft_print_dbg_msg() so testers can enable extra debug messages
+when running a test with the flag -d.
 
-This allows to remove a lot of boilerplate code and to simplify some
-parts of the test logic, mainly when the test needs to exit early. The
-result of this is more than 500 lines removed from
-tools/testing/selftests/futex/. Also, this enables new tests to use
-kselftest.h features like ASSERT_s and such.
-
-There are some caveats around this refactor:
- - logging.h had verbosity levels, while kselftest_harness.h doesn't. I
-   created a new print function called ksft_print_dbg_msg() that prints
-   the message if the user uses the -d flag, so now there's an
-   equivalent of this feature.
- - futex_requeue_pi test accepted command line arguments to be used as
-   test parameters (e.g. ./futex_requeue_pi -b -l -t 500000). This
-   doesn't work with kselftest_harness.h because there's no
-   straightforward way to send command line arguments to the test.
-   I used FIXTURE_VARIANT() to achieve the same result, but now the
-   parameters live inside of the test file, instead of on
-   functional/run.sh. This increased a little bit the number of test
-   cases for futex_requeue_pi, from 22 to 24.
- - test_harness_run() calls mmap(MAP_SHARED) before running the test and
-   this has caused a side effect on test futex_numa_mpol.c. This test
-   also calls mmap() and then try to access an address out of
-   boundaries of this mapped memory for a "Memory out of range" subtest,
-   where the kernel should return -EACCESS. After the refactor, the test
-   address might be fall inside the first memory mapped region, thus
-   being a valid address and succeeding the syscall, making the test
-   fail. To fix that, I created a small "buffer zone" with
-   mmap(PROT_NONE) between both mmaps.
-
-I have compared the results of run.sh before and after this patchset and
-didn't find any regression from the test results.
-
-Thanks,
-	André
-
-[1] https://lore.kernel.org/lkml/87ecv6p364.ffs@tglx/
-
+Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
-Changes in v2:
-- Rebased on top of tip/master
-- Dropped priv_hash global test variant now that this feature was
-  dropped
-- Added include <stdbool.h> in the first patch
-- Link to v1: https://lore.kernel.org/r/20250704-tonyk-robust_test_cleanup-v1-0-c0ff4f24c4e1@igalia.com
+ tools/testing/selftests/kselftest.h         | 14 ++++++++++++++
+ tools/testing/selftests/kselftest_harness.h | 13 +++++++++----
+ 2 files changed, 23 insertions(+), 4 deletions(-)
 
----
-André Almeida (15):
-      selftests: kselftest: Create ksft_print_dbg_msg()
-      selftests/futex: Refactor futex_requeue_pi with kselftest_harness.h
-      selftests/futex: Refactor futex_requeue_pi_mismatched_ops with kselftest_harness.h
-      selftests/futex: Refactor futex_requeue_pi_signal_restart with kselftest_harness.h
-      selftests/futex: Refactor futex_wait_timeout with kselftest_harness.h
-      selftests/futex: Refactor futex_wait_wouldblock with kselftest_harness.h
-      selftests/futex: Refactor futex_wait_unitialized_heap with kselftest_harness.h
-      selftests/futex: Refactor futex_wait_private_mapped_file with kselftest_harness.h
-      selftests/futex: Refactor futex_wait with kselftest_harness.h
-      selftests/futex: Refactor futex_requeue with kselftest_harness.h
-      selftests/futex: Refactor futex_waitv with kselftest_harness.h
-      selftests/futex: Refactor futex_priv_hash with kselftest_harness.h
-      selftests/futex: Refactor futex_numa_mpol with kselftest_harness.h
-      selftests/futex: Drop logging.h include from futex_numa
-      selftests/futex: Remove logging.h file
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index c3b6d2604b1e486af5a224a11386f75fe0a83495..8deeb4b72e7338abde47e2369a9728c3eb29907b 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -54,6 +54,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <stdarg.h>
++#include <stdbool.h>
+ #include <string.h>
+ #include <stdio.h>
+ #include <sys/utsname.h>
+@@ -104,6 +105,7 @@ struct ksft_count {
+ 
+ static struct ksft_count ksft_cnt;
+ static unsigned int ksft_plan;
++static bool ksft_debug_enabled;
+ 
+ static inline unsigned int ksft_test_num(void)
+ {
+@@ -175,6 +177,18 @@ static inline __printf(1, 2) void ksft_print_msg(const char *msg, ...)
+ 	va_end(args);
+ }
+ 
++static inline void ksft_print_dbg_msg(const char *msg, ...)
++{
++	va_list args;
++
++	if (!ksft_debug_enabled)
++		return;
++
++	va_start(args, msg);
++	ksft_print_msg(msg, args);
++	va_end(args);
++}
++
+ static inline void ksft_perror(const char *msg)
+ {
+ 	ksft_print_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 2925e47db995d7197ed1f55bd9cc657669df9bd3..ffefd2704ca8f60f329b5d85870253fe26c61b52 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -1091,7 +1091,7 @@ static int test_harness_argv_check(int argc, char **argv)
+ {
+ 	int opt;
+ 
+-	while ((opt = getopt(argc, argv, "hlF:f:V:v:t:T:r:")) != -1) {
++	while ((opt = getopt(argc, argv, "dhlF:f:V:v:t:T:r:")) != -1) {
+ 		switch (opt) {
+ 		case 'f':
+ 		case 'F':
+@@ -1104,12 +1104,16 @@ static int test_harness_argv_check(int argc, char **argv)
+ 		case 'l':
+ 			test_harness_list_tests();
+ 			return KSFT_SKIP;
++		case 'd':
++			ksft_debug_enabled = true;
++			break;
+ 		case 'h':
+ 		default:
+ 			fprintf(stderr,
+-				"Usage: %s [-h|-l] [-t|-T|-v|-V|-f|-F|-r name]\n"
++				"Usage: %s [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name]\n"
+ 				"\t-h       print help\n"
+ 				"\t-l       list all tests\n"
++				"\t-d       enable debug prints\n"
+ 				"\n"
+ 				"\t-t name  include test\n"
+ 				"\t-T name  exclude test\n"
+@@ -1142,8 +1146,9 @@ static bool test_enabled(int argc, char **argv,
+ 	int opt;
+ 
+ 	optind = 1;
+-	while ((opt = getopt(argc, argv, "F:f:V:v:t:T:r:")) != -1) {
+-		has_positive |= islower(opt);
++	while ((opt = getopt(argc, argv, "dF:f:V:v:t:T:r:")) != -1) {
++		if (opt != 'd')
++			has_positive |= islower(opt);
+ 
+ 		switch (tolower(opt)) {
+ 		case 't':
 
- tools/testing/selftests/futex/functional/Makefile  |   3 +-
- .../selftests/futex/functional/futex_numa.c        |   3 +-
- .../selftests/futex/functional/futex_numa_mpol.c   |  57 ++---
- .../selftests/futex/functional/futex_priv_hash.c   |  49 +---
- .../selftests/futex/functional/futex_requeue.c     |  76 ++----
- .../selftests/futex/functional/futex_requeue_pi.c  | 261 ++++++++++-----------
- .../functional/futex_requeue_pi_mismatched_ops.c   |  80 ++-----
- .../functional/futex_requeue_pi_signal_restart.c   | 129 +++-------
- .../selftests/futex/functional/futex_wait.c        | 103 +++-----
- .../functional/futex_wait_private_mapped_file.c    |  83 ++-----
- .../futex/functional/futex_wait_timeout.c          | 139 +++++------
- .../functional/futex_wait_uninitialized_heap.c     |  76 ++----
- .../futex/functional/futex_wait_wouldblock.c       |  75 ++----
- .../selftests/futex/functional/futex_waitv.c       |  98 ++++----
- tools/testing/selftests/futex/functional/run.sh    |  62 +----
- tools/testing/selftests/futex/include/logging.h    | 148 ------------
- tools/testing/selftests/kselftest.h                |  14 ++
- tools/testing/selftests/kselftest_harness.h        |  13 +-
- 18 files changed, 465 insertions(+), 1004 deletions(-)
----
-base-commit: ed0272f0675f31642c3d445a596b544de9db405b
-change-id: 20250703-tonyk-robust_test_cleanup-d1f3406365d9
-
-Best regards,
 -- 
-André Almeida <andrealmeid@igalia.com>
+2.50.1
 
 
