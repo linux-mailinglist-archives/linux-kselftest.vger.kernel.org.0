@@ -1,146 +1,120 @@
-Return-Path: <linux-kselftest+bounces-37686-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37687-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69467B0B6F3
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 18:36:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 712BAB0B714
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 19:17:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C773D3A570C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 16:35:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F6B9175D2A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 17:17:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834CE21D5AA;
-	Sun, 20 Jul 2025 16:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74F531EE033;
+	Sun, 20 Jul 2025 17:16:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jLm3QLX0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vBoPJ0m9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EAD18FDBD;
-	Sun, 20 Jul 2025 16:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF301CFBC;
+	Sun, 20 Jul 2025 17:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753029376; cv=none; b=W7+G7rSWoKOqA24Yp/A4sZtWxCGILwlCjhN2pOIMdoJE+OvmxtolSUM8M8dtQiMHHRcRNBVkn64x5XJ96AJBRht0xNbKvb3K2wHoekg3mqb5z+DVNgYPkcNhFNbhis+QgeYP+2dzg9Y2p1O+rDNtI51R/MhHbIGKJ4RMWFTO4S8=
+	t=1753031817; cv=none; b=MhSMKLv9WE/oSH7lcUaJrpeHP+OGRhuQkiQxASCkKi0sQAJPAHM0XPy2cMA7LSiBLsr8bvxKXelpKOJDt/iM5kCiAheC2lFYptiCTGmGZPMGlJS8ad6QrQRLVxPHbYZ8lGSLzRuqbj4xkJmlEsUpUlW4ETSUmNyVDB+7TrFYU08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753029376; c=relaxed/simple;
-	bh=bvrkXmR36adZ41cNSDTbguwL1Foz+xHv842/MR+nR2s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NW5moLfww4qXvlS86lWxLp5ocvoPsRK5fBb+uZ50sxkRbFQLeIl39PprB8P2FBKYw7mgFuZmqgMAZagcSK3mia1rUdLRYHFbuF7FiVOZKqzKaCiQBkJnGkHjABrAnD8ywvyacQFmml9ZOqtdNWovTbY8a1ppXL7rQcSuSJHUH5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jLm3QLX0; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-b34dde96cbfso171407a12.2;
-        Sun, 20 Jul 2025 09:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753029374; x=1753634174; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+kfkCmoQKEDkofij+kUTFNmulT0YX5tsOABpETlCkRo=;
-        b=jLm3QLX0I1W466YLQHkZZeyccqoWdCQECwSukqoxvMiNClkHz2z6IAic0D3Kjy2qqG
-         GOTV7Rxs3+sM+F7Ec5Rq1s7J6ehw0VbMaKu3sG2fCBTphJEAJJjMTjshP+3Xsy37tl3m
-         ZqB88aHFBivuW7pIT7Y7e3Mc/jSeyBlR83NKQHo0ILGPdqv2MzUNBVpbXoQE2nCFutRm
-         SnccFezp9s/8kimXWo1qqSfg36+na6Z9rE+roJSesglOO4cH0AY8AsyuO9OU2kGsvE9M
-         cwTkkmaLJxUsjZayGizKflejyebrSO/rtSyb5n4/JAAXUlptrnSGirUvLS/N6zl1PXg7
-         xw6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753029374; x=1753634174;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+kfkCmoQKEDkofij+kUTFNmulT0YX5tsOABpETlCkRo=;
-        b=czYyAcTHiyYNo94Ghn6X1EaFuLx+K+mELZWzw+ekFMirKPHVe6ZOXoy0hG4SQ9JCb1
-         twxq3I6riYzy27Gw1Jewr5Fb1uoBvY3BIiH8sZZcNGoZSH7B5ZF3bxGjlgfviGT9ABVb
-         WKgmV7m2EzjMxmLcaclquu1gJisccgHL+n4WbP4cLX8qbK+nuwn8VSPlwC45bMPYRQ+A
-         3SCeJenSziIkW92UPX4cbsVPgCt7HH3x9rVBGmCEFuXfdwOVJO4EtZtbR0yN45NY0syM
-         nWUwfG/k5VB93qH9eh5y6Go7pl6gMfOwRilAYDO8qC008gM3Kv00vp0p5+EuSsl5Wu2E
-         tF9A==
-X-Forwarded-Encrypted: i=1; AJvYcCU6lAVacWyNNinZuO17Z6tL+rqUopUpA5jeIAYoTRST28fB4q4RC5d3vPoUgnZ4RxQJEMEeSDRQkEywYi58sg==@vger.kernel.org, AJvYcCVUHCY551Ebn44KYZ1WuLmyilUPGBzMT/BiMpr+qfyWHOwZ6tlmURn/nlgUg0ObFaoWU//OmX33c/BhK0xU@vger.kernel.org, AJvYcCVd/scAxIXflggE4/TWGcG7//6n1rNol3zfZXXy51cxKokW3gl+HGodJiSQBgIJ7JMWnh8=@vger.kernel.org, AJvYcCX03hCeYS5eSYwxUejuz6tkyp9+P3TnZUeL1mQkMyciIwt7piMhIw5x7DjFG9RyjBDpZHA4O0aMXrYHeVxk@vger.kernel.org, AJvYcCXaSZGll6YjLOnk8FzdvT5u3cP/zgYOpioYoJFRSeoPbOTE1IFgrI9EOqTzCz5A6JmzwJfDzVsMfBAI3e9Gf5m6@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsIXfxHN49ug7Ga2QloFn7o8w8PhYT1wP0laKEtyHe7FnhR7UP
-	KcAoYqsBw+sV8PxQ755pvjUXlavLZOgkwsJuPHFA0xPnzF9olPsgZA3n295X1W2XwZk9Z61Se5l
-	sF2lisbnp60vK14wxwwjz4u5cd8ZjWCo=
-X-Gm-Gg: ASbGncs0D9u5kKISP12OsU+mu/+ghPj4KzXazgogv0tmIKZ0Hqis0EGtHODy1Vg/lQn
-	FAdVapgbtOw8I91sfq0L4YiWg0bL8ieRRXmCfdYBAABzAuR747bZJOPqXNRFiPfIMkHVOcrETMt
-	sOXifVZBJ42ULqWyGb6jDTkzRmswoPJIuJiggrztzxmTb6+hf6vLleh6vZU1sCak+QsfweAn4HD
-	HVsw5i/
-X-Google-Smtp-Source: AGHT+IH50oSkAuvxv6uZUvE/Ve2TuI3Fxok9m8jWgL04NiDIsbgPX9U+P5yFyAh5qDxK3l4vBipk9lXgFQKQQ9R90bI=
-X-Received: by 2002:a17:90a:e18c:b0:311:a314:c2dd with SMTP id
- 98e67ed59e1d1-31c9e77394emr9950764a91.4.1753029374267; Sun, 20 Jul 2025
- 09:36:14 -0700 (PDT)
+	s=arc-20240116; t=1753031817; c=relaxed/simple;
+	bh=CcG3DB5w4RBV9H55Eghl8rFNG8gQYXS7ULzywhnSNGg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=s/yhlUJNl4wRpwuFxfK+R+/K//+7PnbLkjpZZjstq8VLq8ro60txD4j2iOYwuFegdjn5MO56+R5uFZtt5LXeZThu6mHPOHnhOWz1o83+rYi8OChsYs72AbjJ3t+JuFGzMh7+MwnaPiySmDTvOMhjSeDKgypOAJKsQ5owSKp3s30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vBoPJ0m9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A71C6C4CEE7;
+	Sun, 20 Jul 2025 17:16:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753031816;
+	bh=CcG3DB5w4RBV9H55Eghl8rFNG8gQYXS7ULzywhnSNGg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=vBoPJ0m9l4O6ITYbJQknF5WDIYk/HVLZvJT2c33e+MYIWfyz4mZCaw8uUZR/wZcSC
+	 EEqJ6+FQjSNgCu/LIb6T9VkE6xoPunTdpYh10yH8QJeu2RJx2DbCUz77i+9/C6kEWd
+	 fas32jb7wH0Q0Lr1gzNil1mMf6cdBrR/ojnAnUw4ceOIj/7kWNI6ik6rvBoKTu3pgO
+	 tOXs2A8EAq7xGdzlvnafwCjxUfco4jzpec2Jnc3+G/bW46ykmIbe9HDMBa++RFM3Dt
+	 2ATHC000gEXyHduR3GA1SaWh0IZVWzalXA8rPk2cW3RXKAFu2cWxVsZtxrA8KU2Z8l
+	 AVsJaWHaUJK8w==
+From: SeongJae Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	kernel-team@meta.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 00/22] selftests/damon/sysfs.py: test all parameters
+Date: Sun, 20 Jul 2025 10:16:30 -0700
+Message-Id: <20250720171652.92309-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250720065045.2859105-1-hpa@zytor.com> <20250720065045.2859105-2-hpa@zytor.com>
-In-Reply-To: <20250720065045.2859105-2-hpa@zytor.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 20 Jul 2025 18:36:01 +0200
-X-Gm-Features: Ac12FXzsFbO3wDRf2U_8K-azeesJPixu1ntYI5bLlTM6iCxpMmbGfGJVOtGHyH0
-Message-ID: <CANiq72kE5AznnA81sb5S-KVx3VCef20zcMBfbRUO41g3uAtQ+Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] compiler_types.h: add "auto" as a macro for "__auto_type"
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Alexei Starovoitov <ast@kernel.org>, Alexey Dobriyan <adobriyan@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Arnd Bergmann <arnd@kernel.org>, Borislav Petkov <bp@alien8.de>, Dan Williams <dan.j.williams@intel.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	David Laight <David.Laight@aculab.com>, David Lechner <dlechner@baylibre.com>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Gatlin Newhouse <gatlin.newhouse@gmail.com>, Hao Luo <haoluo@google.com>, 
-	Ingo Molnar <mingo@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Jan Hendrik Farr <kernel@jfarr.cc>, Jason Wang <jasowang@redhat.com>, 
-	Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Marc Herbert <Marc.Herbert@linux.intel.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Mateusz Guzik <mjguzik@gmail.com>, Michal Luczaj <mhal@rbox.co>, 
-	Miguel Ojeda <ojeda@kernel.org>, Mykola Lysenko <mykolal@fb.com>, NeilBrown <neil@brown.name>, 
-	Peter Zijlstra <peterz@infradead.org>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Thomas Gleixner <tglx@linutronix.de>, 
-	Thorsten Blum <thorsten.blum@linux.dev>, Uros Bizjak <ubizjak@gmail.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Yafang Shao <laoar.shao@gmail.com>, 
-	Ye Bin <yebin10@huawei.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Yufeng Wang <wangyufeng@kylinos.cn>, bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, virtualization@lists.linux.dev, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jul 20, 2025 at 8:52=E2=80=AFAM H. Peter Anvin <hpa@zytor.com> wrot=
-e:
->
-> gcc and clang provide the "__auto_type" alias keyword as an extension
-> for pre-C23, however, there is no reason to pollute the bulk of the
-> source base with this temporary keyword; instead define "auto" as a
-> macro unless the compiler is running in C23+ mode.
->
-> This macro is added in <linux/compiler_types.h> because that header is
-> included in some of the tools headers, wheres <linux/compiler.h> is
-> not as it has a bunch of very kernel-specific things in it.
+sysfs.py tests if DAMON sysfs interface is passing the user-requested
+parameters to DAMON as expected.  But only the default (minimum)
+parameters are being tested.  This is partially because _damon_sysfs.py,
+which is the library for making the parameter requests, is not
+supporting the entire parameters.  The internal DAMON status dump script
+(drgn_dump_damon_status.py) is also not dumping entire parameters.
+Extend the test coverage by updating parameters input and status dumping
+scripts to support all parameters, and writing additional tests using
+those.
 
-Sounds good. I guess we could need a workaround if someone happened to
-invent an attribute which requires using "auto" in it, since it is not
-reserved there in C23 AFAIU. So FWIW:
+This increased test coverage actually found one real bug
+(https://lore.kernel.org/20250719181932.72944-1-sj@kernel.org).
 
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
+First seven patches (1-7) extend _damon_sysfs.py for all parameters
+setup.  The eight patch (8) fixes _damon_sysfs.py to use correct max
+nr_acceses and age values for their type.  Following three patches
+(9-11) extend drgn_dump_damon_status.py to dump full DAMON parameters.
+Following nine patches (12-20) refactor sysfs.py for general testing
+code reuse, and extend it for full parameters check.  Finally, two
+patches (21 and 22) add test cases in sysfs.py for full parameters
+testing.
 
-> + * so it has always been "namespace reserved."
+SeongJae Park (22):
+  selftests/damon/_damon_sysfs: support DAMOS watermarks setup
+  selftests/damon/_damon_sysfs: support DAMOS filters setup
+  selftests/damon/_damon_sysfs: support monitoring intervals goal setup
+  selftests/damon/_damon_sysfs: support DAMOS quota weights setup
+  selftests/damon/_damon_sysfs: support DAMOS quota goal nid setup
+  selftests/damon/_damon_sysfs: support DAMOS action dests setup
+  selftests/damon/_damon_sysfs: support DAMOS target_nid setup
+  selftests/damon/_damon_sysfs: use 2**32 - 1 as max nr_accesses and age
+  selftests/damon/drgn_dump_damon_status: dump damos->migrate_dests
+  selftests/damon/drgn_dump_damon_status: dump ctx->ops.id
+  selftests/damon/drgn_dump_damon_status: dump DAMOS filters
+  selftests/damon/sysfs.py: generalize DAMOS Watermarks commit assertion
+  selftests/damon/sysfs.py: generalize DamosQuota commit assertion
+  selftests/damon/sysfs.py: test quota goal commitment
+  selftests/damon/sysfs.py: test DAMOS destinations commitment
+  selftests/damon/sysfs.py: generalize DAMOS schemes commit assertion
+  selftests/damon/sysfs.py: test DAMOS filters commitment
+  selftests/damon/sysfs.py: generalize DAMOS schemes commit assertion
+  selftests/damon/sysfs.py: generalize monitoring attributes commit
+    assertion
+  selftests/damon/sysfs.py: generalize DAMON context commit assertion
+  selftests/damon/sysfs.py: test non-default parameters runtime commit
+  selftests/damon/sysfs.py: test runtime reduction of DAMON parameters
 
-Not sure what this means (could we just say reserved?).
+ tools/testing/selftests/damon/_damon_sysfs.py | 301 +++++++++++++++++-
+ .../selftests/damon/drgn_dump_damon_status.py |  63 +++-
+ tools/testing/selftests/damon/sysfs.py        | 284 +++++++++++++----
+ 3 files changed, 568 insertions(+), 80 deletions(-)
 
-Thanks!
 
-Relatedly, there are some proposed, further changes to `auto` for C2y:
-
-    https://www.open-std.org/jtc1/sc22/WG14/www/docs/n3579.htm
-
-Cheers,
-Miguel
+base-commit: fc8066077f44a4fd43f8fdb12bc238f8fbeaa3c5
+-- 
+2.39.5
 
