@@ -1,110 +1,169 @@
-Return-Path: <linux-kselftest+bounces-37712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37713-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A28BB0B87A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 00:20:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E109B0B8B5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 00:29:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E6DF3B9789
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 22:20:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9092B7A3584
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 22:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 274691F181F;
-	Sun, 20 Jul 2025 22:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 581A822A7FC;
+	Sun, 20 Jul 2025 22:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EdE7sah4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="QZI4e7QO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62551DE8A4;
-	Sun, 20 Jul 2025 22:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFBB22A4E4;
+	Sun, 20 Jul 2025 22:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753050042; cv=none; b=soC1y6u7++itk3hkTZe1Iya05eZc/s9ZGomGEf/+mLvSqEoHV5xY/UUlZk3nzCwn5iJxB7LXyt4YlDeUbGQvqOvIYoSoTnFL006C2RrQ1rq15/hYXT3veL7JdYGY1NhzVMi8XMjQq3PoKlq1lL7w4Cy7+no8L1Xc5QVc9YJ7qnc=
+	t=1753050554; cv=none; b=Hi/Px4LW/6wrJ8B0UwS84FSWr/sOPJjoA6ZXamslBaDMs4zNS4sA6wmCrkBVj8ZQUBena7Qy2BH93s3yz05fpwSV3D3QvjOdJWWFHSFo+FocNII2H0fH9MGz5wpC9pO+XHNJZLijJQNnqDYasKBKkRTeS6f0m/bebctRhQnxvzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753050042; c=relaxed/simple;
-	bh=mpgqK+O0m6zO53aSXcw4x5Rvxxj3q7jMk1YJQoBS47Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jVnKWSOlvh+zWF7JMcI1ZzQsbatQRyLWw5lX0iJzr1/qsAeQpAu2KPQwy2EsgYfXy5kg6wUToVUcMvsn+MpGBjxEibNdePBn01K78+5RQNVEKydVjaA+H7BDRwsPusZHiT41bWQhm4yEQmKkPMVXHqCttzvxtcGX0OuYn/ofatI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EdE7sah4; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3138e64fc73so1022079a91.2;
-        Sun, 20 Jul 2025 15:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753050040; x=1753654840; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T2IA3sMXL8MfYHWrx6ejWU6QjqsZ3Jj7kffCWQM2MQg=;
-        b=EdE7sah4XaX1iBn4bNP4kBs7EXDLnTBbg3J9uibh1GMjOnpwqlMWAZNYWhNKpjZ6FZ
-         rtqa9x1NTS5AO6SwI2EiTvP4bWpxQc/jwYMXAfu+NzxMsc4orGh/LK0CB8YRBcO2KL/b
-         kdZScn7ekAONqvkspCRpxfVgDVg9ORJBm9HOM9LyK1YL2qKuNWAHvtqPqhvJqq6KOix7
-         lu04rh+iaSqlCLnph0LpINPmx049EQAIUM6KewTX0ggRtoH1rSk1HZsnYe+fCet2v/jI
-         68wNdTvxfgui/3f02Kz7OHF+ks1ycX87T9icArmSI8y0JqX0YKpg5SDCSjVmbZBYVTnR
-         DcGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753050040; x=1753654840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T2IA3sMXL8MfYHWrx6ejWU6QjqsZ3Jj7kffCWQM2MQg=;
-        b=LyNE1jD+5HE1iRhOg8To69MLvOXSOs7CazQZOaerpd5jn18Gf1l3zAisfK47Jj9tbv
-         6y3j5/J/AF/nJfZR6z3PJVbIKOT7ihi2rtnxXR2VxUUlTLXYBfzQymEtBeaIrYfna5go
-         xs0uI8ilPEmpxtTqZWLNqCt+ODJnpIxUgxqzrCMuIG/pO6O0PM/mknNZ7hj3lETZDU1W
-         R3vbOKKSidR02CKElfjkJyEsrKtRRj4mPHb54o11IunrtwlmtAtJB10KsstZan8URVKh
-         ynSAbvsPQ7NYJ2aM1/S80vzSMmtr6d80Peo0MkIxiplCODGWXKzW0vpOKFYNxGhr0SEE
-         jJmA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+2tUsw9jpxl2A9c58+990ID6eh2w0Bm4ApaJOoHrsEfH7g6ocQg/DpKF622efYuGjumydJWQJgg+TAZQ=@vger.kernel.org, AJvYcCUq7FtUzNBTTEJndUeSr/iMIXQL0VgjeSe482Zc7L0EHTsS91WWVerWJya4nBTxEpf8OrLz7QJBIRwy3xGp016r@vger.kernel.org, AJvYcCXMiKoh7ydekB/i2QovnZujnH/OAUeFtT7eqaL7+PiSy/kXAbKMSqo7gtvTztpofIrCJL41Y/iGZ78XKZjRaKs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVKOB4Lh6qQLjfMoJVEhgej2BgAmi06ml4Md45mXPu2QAik65a
-	U5DKiz9OaN8TSki6Tty1yzbNEIozxHU1wonq9i7cakJ7AvGbUsfyTFhA9EUP6xN6s5gbO4wrQ3Z
-	pXwuMLSUgAFWFYW3sdXSSQiDDyahHTeg=
-X-Gm-Gg: ASbGnctS6ORvGarfMIS3SjpSSbLfJ+Q8uC5I8txHTycXGtBI3qzbUOuTJzGaxJWCHTd
-	ee3ih8FpN2vlaUppPqcYbcxMUCYhEyS8Ev3XR6bLv0mPP1OWvhnlNHBkXtLGdR5nCpjZxfm1BTY
-	/GlKhbdohUuuceIYlyRzIdNwGIsKWNXCiAMIsPyb+DLuidNRluIXG1jwvIiE1Us43eW7oE4fdaz
-	Jxm8QSS
-X-Google-Smtp-Source: AGHT+IHDtz6azWEF/xGmb9dqZOj2H3tX8J7UDfAhEpXoe7djUPf2x1euDZPU4WxseqamxBJUAo9cNkVVoajiO78BgtM=
-X-Received: by 2002:a17:90b:55cb:b0:312:e9d:4001 with SMTP id
- 98e67ed59e1d1-31c9e7a4b17mr10406175a91.8.1753050039987; Sun, 20 Jul 2025
- 15:20:39 -0700 (PDT)
+	s=arc-20240116; t=1753050554; c=relaxed/simple;
+	bh=4fi13IptO9I7IQ2mQDhfsp+T+Sr6cBdKqgB2uRsOv3U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IX/Ymz78vYaRUPOVXfY2qmXx4vBNbXy4ACTGEo6pfmlMXdoCdvyBLz6R3uOAmPouOAPbmxqToiaLNeZtmQ9sQusqaWMzpiTsCFMyqSp2BdnwJfIgL6M98+s4cb445Vnn7KlqDpYhzc1D2Vo3Nq9KTKAKz/GE5qO9rylYffxb4gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=QZI4e7QO; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=MArfY4QX9yzCgxszYchqKjhK20OrChAEgRapbpg4+Xk=; b=QZI4e7QOJohnml8io0i/lXMhkM
+	E3RMaWpJnFOJH5/xGnKd44q0i2H8YVl+7o0Fura2FW8K+n0I6zTEHCJWhJOS6YX343+hxOw0AlQSB
+	HoxF5FRn5beIGx9c+smdCkbIeD2cy8lNWOBIaBXyoy/oQw8iw+KYr6KRHjl3wqh5ISp9YMW6kP5H5
+	dGC6VbMzEp2tM5iKsZBLk1R7LULuoz5JDWeBNwE5m9PdLq6HwoSwBbItCwGeY6aRzqPIdfwGFI/Y6
+	ckb22ataEnSfFD2i5zpjPoF59OI9rkahopP5SIjIKVunecqcRt5JQpwLuh6YodsM5etyi50IrtPY0
+	G0HhVVfg==;
+Received: from [187.57.76.50] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1udcWo-001Sqt-A2; Mon, 21 Jul 2025 00:29:06 +0200
+From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH v2 00/15] selftests/futex: Refactor tests to use
+ kselftest_harness.h
+Date: Sun, 20 Jul 2025 19:28:58 -0300
+Message-Id: <20250720-tonyk-robust_test_cleanup-v2-0-1f9bcb5b7294@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250529-idiomatic-match-slice-v2-0-4925ca2f1550@gmail.com> <20250529-idiomatic-match-slice-v2-2-4925ca2f1550@gmail.com>
-In-Reply-To: <20250529-idiomatic-match-slice-v2-2-4925ca2f1550@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 21 Jul 2025 00:20:27 +0200
-X-Gm-Features: Ac12FXyLsz1bmwVkFG-DrTCV5JzIvjpyMKUulmGV4UeLKeC-0LFpqJp96ApQGpI
-Message-ID: <CANiq72nb4LuwkZVjEseMubSX4VOMNTX-8wUV7LtS5FN80cMjyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] rust: emit path candidates in panic message
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKptfWgC/32NQQqDMBREryJ/3ZQkRku76j2KlDT+6Kc2kSRKR
+ bx7U6HbbgbewLxZIWIgjHApVgg4UyTvMshDAabXrkNGbWaQXFb8xEuWvFueLPjHFNM9YQ4zoHb
+ TyFphS8Xrsq7aM+T9GNDSe3ffmsw9xeTDsl/N4tv+rOqPdRaMM8OtVVYqo1BcqdMD6aPxL2i2b
+ fsAKGu0X8MAAAA=
+X-Change-ID: 20250703-tonyk-robust_test_cleanup-d1f3406365d9
+To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel-dev@igalia.com, 
+ =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+X-Mailer: b4 0.14.2
 
-On Thu, May 29, 2025 at 3:15=E2=80=AFPM Tamir Duberstein <tamird@gmail.com>=
- wrote:
->
-> +                write!(&mut candidates, "    {path:?}").unwrap();
+This patch series refactors all futex selftests to use
+kselftest_harness.h instead of futex's logging.h, as discussed here [1].
 
-I assume this was supposed to be `writeln!`; otherwise, we lose the
-newlines and the indent does not make much sense.
+This allows to remove a lot of boilerplate code and to simplify some
+parts of the test logic, mainly when the test needs to exit early. The
+result of this is more than 500 lines removed from
+tools/testing/selftests/futex/. Also, this enables new tests to use
+kselftest.h features like ASSERT_s and such.
 
-I will fix it when applying.
+There are some caveats around this refactor:
+ - logging.h had verbosity levels, while kselftest_harness.h doesn't. I
+   created a new print function called ksft_print_dbg_msg() that prints
+   the message if the user uses the -d flag, so now there's an
+   equivalent of this feature.
+ - futex_requeue_pi test accepted command line arguments to be used as
+   test parameters (e.g. ./futex_requeue_pi -b -l -t 500000). This
+   doesn't work with kselftest_harness.h because there's no
+   straightforward way to send command line arguments to the test.
+   I used FIXTURE_VARIANT() to achieve the same result, but now the
+   parameters live inside of the test file, instead of on
+   functional/run.sh. This increased a little bit the number of test
+   cases for futex_requeue_pi, from 22 to 24.
+ - test_harness_run() calls mmap(MAP_SHARED) before running the test and
+   this has caused a side effect on test futex_numa_mpol.c. This test
+   also calls mmap() and then try to access an address out of
+   boundaries of this mapped memory for a "Memory out of range" subtest,
+   where the kernel should return -EACCESS. After the refactor, the test
+   address might be fall inside the first memory mapped region, thus
+   being a valid address and succeeding the syscall, making the test
+   fail. To fix that, I created a small "buffer zone" with
+   mmap(PROT_NONE) between both mmaps.
 
-Cheers,
-Miguel
+I have compared the results of run.sh before and after this patchset and
+didn't find any regression from the test results.
+
+Thanks,
+	André
+
+[1] https://lore.kernel.org/lkml/87ecv6p364.ffs@tglx/
+
+---
+Changes in v2:
+- Rebased on top of tip/master
+- Dropped priv_hash global test variant now that this feature was
+  dropped
+- Added include <stdbool.h> in the first patch
+- Link to v1: https://lore.kernel.org/r/20250704-tonyk-robust_test_cleanup-v1-0-c0ff4f24c4e1@igalia.com
+
+---
+André Almeida (15):
+      selftests: kselftest: Create ksft_print_dbg_msg()
+      selftests/futex: Refactor futex_requeue_pi with kselftest_harness.h
+      selftests/futex: Refactor futex_requeue_pi_mismatched_ops with kselftest_harness.h
+      selftests/futex: Refactor futex_requeue_pi_signal_restart with kselftest_harness.h
+      selftests/futex: Refactor futex_wait_timeout with kselftest_harness.h
+      selftests/futex: Refactor futex_wait_wouldblock with kselftest_harness.h
+      selftests/futex: Refactor futex_wait_unitialized_heap with kselftest_harness.h
+      selftests/futex: Refactor futex_wait_private_mapped_file with kselftest_harness.h
+      selftests/futex: Refactor futex_wait with kselftest_harness.h
+      selftests/futex: Refactor futex_requeue with kselftest_harness.h
+      selftests/futex: Refactor futex_waitv with kselftest_harness.h
+      selftests/futex: Refactor futex_priv_hash with kselftest_harness.h
+      selftests/futex: Refactor futex_numa_mpol with kselftest_harness.h
+      selftests/futex: Drop logging.h include from futex_numa
+      selftests/futex: Remove logging.h file
+
+ tools/testing/selftests/futex/functional/Makefile  |   3 +-
+ .../selftests/futex/functional/futex_numa.c        |   3 +-
+ .../selftests/futex/functional/futex_numa_mpol.c   |  57 ++---
+ .../selftests/futex/functional/futex_priv_hash.c   |  49 +---
+ .../selftests/futex/functional/futex_requeue.c     |  76 ++----
+ .../selftests/futex/functional/futex_requeue_pi.c  | 261 ++++++++++-----------
+ .../functional/futex_requeue_pi_mismatched_ops.c   |  80 ++-----
+ .../functional/futex_requeue_pi_signal_restart.c   | 129 +++-------
+ .../selftests/futex/functional/futex_wait.c        | 103 +++-----
+ .../functional/futex_wait_private_mapped_file.c    |  83 ++-----
+ .../futex/functional/futex_wait_timeout.c          | 139 +++++------
+ .../functional/futex_wait_uninitialized_heap.c     |  76 ++----
+ .../futex/functional/futex_wait_wouldblock.c       |  75 ++----
+ .../selftests/futex/functional/futex_waitv.c       |  98 ++++----
+ tools/testing/selftests/futex/functional/run.sh    |  62 +----
+ tools/testing/selftests/futex/include/logging.h    | 148 ------------
+ tools/testing/selftests/kselftest.h                |  14 ++
+ tools/testing/selftests/kselftest_harness.h        |  13 +-
+ 18 files changed, 465 insertions(+), 1004 deletions(-)
+---
+base-commit: ed0272f0675f31642c3d445a596b544de9db405b
+change-id: 20250703-tonyk-robust_test_cleanup-d1f3406365d9
+
+Best regards,
+-- 
+André Almeida <andrealmeid@igalia.com>
+
 
