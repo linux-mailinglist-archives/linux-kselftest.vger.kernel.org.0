@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-37715-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37716-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D37FBB0B8B8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 00:29:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 683FBB0B8BB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 00:29:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 932723B2E2B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 22:29:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E35521898BC5
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 22:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE9D2309BE;
-	Sun, 20 Jul 2025 22:29:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F1E233736;
+	Sun, 20 Jul 2025 22:29:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="lsYzLs+p"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="YyDsdhMQ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DAD2288F9;
-	Sun, 20 Jul 2025 22:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D715122FF59;
+	Sun, 20 Jul 2025 22:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753050557; cv=none; b=obpAeLskedj+VlmBTml+5gXw+yDwfuVeJEL7hJWKZoolNgO6TLpsyQPcuEMyL3l61Zk46YRhRGNlVQ1eV35hIGaukdHeoXlPj3q1fItbKPLVZXW+mHb5bw49MdXZ3Hpfxe5Czl3Z+iZWGusxu0X/5hl1Mc71mSl9ctXIR6ja1MM=
+	t=1753050559; cv=none; b=MzFn+pHT8hpd9UTiq1NhnSN6K08Bv31B/sH+t16pTfkVy0lXODdgF6hLvsLfYpUwhdKuDDvF6kD07xjR6rUnn4oHbvYBzp0tBDsLds258Rwjt1JhUJEoPrZn/8DLtwhZQviCHQ4li0sF4Dni/n2l8p1qWaREEo0V+xqhQwgE5cE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753050557; c=relaxed/simple;
-	bh=tAX0tCSo+oJIdRtG7GRETfyiSthDYxyLYrXrAgiCk0M=;
+	s=arc-20240116; t=1753050559; c=relaxed/simple;
+	bh=GKtEFeCo514u1wKsFDo08o+UT7jfqiYDezgKWNMq/30=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=txAvr8OWX0X1ACtkhSEb0J9JC0sr/6rXfUV/GGqQHFKN8cqIdcgV0Eqp0ICzJaK+wfBuUKn1QZBtua5akMjKS7IIyHfgwIeJYBykHsme81pXWSjyT+iY8Zs8FN56Qu0PzYfZqXEeTYQpQb430DrEjUvXPIhxftw3HKLPlN9qjls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=lsYzLs+p; arc=none smtp.client-ip=213.97.179.56
+	 In-Reply-To:To:Cc; b=sMspmI+9q1/lyJayCVKSMwfDPejyqVnNcD68O4oinZEszUJSgrEadz3voEMNzAkyZu8v7D8QIe8ehcij0wrW2ijpUn0kNCo8/Kd9Mjjkxk9/wFy8QP8HjKIsEt35MfRGxp+1skWuWXlezT2s22CRyfnc/n6pk0rcfZnyFlHis04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=YyDsdhMQ; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,20 +37,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=mZrYdT01ifPMOwizMWrdAsR1d3gTxcMRSM4Bvdqsjww=; b=lsYzLs+pbPdbRzS1N6FWTx7CIo
-	+RPmeACeh8rvA31kbXpfw4d97dLBSsVXlXurrXfwltVGrAECz2uV6htBv0pU59Kmta3VxNjyI+d8O
-	qRuOFC/qOTkgPpYSXWOd3e79LJ/tznHyA3/OsSNq7hOCz40HQUXEpIOEIMU7A4yEjTL1RTB9XYozS
-	u1tqAku2vkVrYXhaeWlig8cq684hbyxRl7Wj4hkBbpMaoLmrCfSQE7m6FMdQkPNIfESXvIP5/tzpt
-	0lLbSrIC6nWsBWjTOgc+23IW/jzxcK+1jk+FnEaSY0qJxalhiOcWhmEh1z63/bXFV4WW8xFSzH7Lg
-	ZYq6bLHg==;
+	bh=Mr2e+rlsJ5apJz0E+qT1KGLSehvmEcLH0q1bt0ykTj4=; b=YyDsdhMQmkfJKTBIKtiBKzoJid
+	ZxFd/TCv8BvFJSbYJ3uQmOBy8nncnThsYAVuM+cIsCfXkHAyNmPNB6ZfMy6+GvOFDzhzO2C95QHeX
+	H8CMubhyjbRbEj7BVAwnwHaIkgrHFa+N5zCKNKA2yFuBT2xPjvyjpo7NCB8Anhi6yynvTXY3w32Yx
+	GkvdtVtfD0zle+vjgwnBWcgWGE0bc18i73V1a/NK1XSzZiz7OXA0zByV7s4iJo9fQi0OPNNl0UTBa
+	mMJ9qRgpImXR29SKyALmonbJ5O4jACV8UNTpUYHihbvjmibbOArlfw2wxjeB4OIOAw1iYGrssqyzI
+	5xAT0CBA==;
 Received: from [187.57.76.50] (helo=[192.168.15.100])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1udcWt-001Sqt-KK; Mon, 21 Jul 2025 00:29:12 +0200
+	id 1udcWw-001Sqt-FK; Mon, 21 Jul 2025 00:29:14 +0200
 From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Date: Sun, 20 Jul 2025 19:29:00 -0300
-Subject: [PATCH v2 02/15] selftests/futex: Refactor futex_requeue_pi with
- kselftest_harness.h
+Date: Sun, 20 Jul 2025 19:29:01 -0300
+Subject: [PATCH v2 03/15] selftests/futex: Refactor
+ futex_requeue_pi_mismatched_ops with kselftest_harness.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,7 +59,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250720-tonyk-robust_test_cleanup-v2-2-1f9bcb5b7294@igalia.com>
+Message-Id: <20250720-tonyk-robust_test_cleanup-v2-3-1f9bcb5b7294@igalia.com>
 References: <20250720-tonyk-robust_test_cleanup-v2-0-1f9bcb5b7294@igalia.com>
 In-Reply-To: <20250720-tonyk-robust_test_cleanup-v2-0-1f9bcb5b7294@igalia.com>
 To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -71,456 +71,70 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
 X-Mailer: b4 0.14.2
 
-To reduce the boilerplate code, refactor futex_requeue_pi test to use
-kselftest_harness header instead of futex's logging header.
-
-Use kselftest fixture feature to make it easy to repeat the same test
-with different parameters. With that, drop all repetitive test calls
-from run.sh.
+To reduce the boilerplate code, refactor futex_requeue_pi_mismatched_ops
+test to use kselftest_harness header instead of futex's logging header.
 
 Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
- .../selftests/futex/functional/futex_requeue_pi.c  | 261 ++++++++++-----------
- tools/testing/selftests/futex/functional/run.sh    |  26 +-
- 2 files changed, 122 insertions(+), 165 deletions(-)
+ .../functional/futex_requeue_pi_mismatched_ops.c   | 80 +++++-----------------
+ tools/testing/selftests/futex/functional/run.sh    |  2 +-
+ 2 files changed, 19 insertions(+), 63 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi.c b/tools/testing/selftests/futex/functional/futex_requeue_pi.c
-index 215c6cb539b4abc7a48fb00b545ae26e52fd118a..699642f08a5d1324984ca94082cb040c04a97496 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue_pi.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue_pi.c
-@@ -26,11 +26,11 @@
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c b/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c
+index d0a4d332ea44131d5e78a4c7d0cd36d36ae468d2..a956fdf931b3b50b25ed71d9034a5f1a5001f77e 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c
+@@ -23,67 +23,32 @@
  #include <stdlib.h>
- #include <signal.h>
  #include <string.h>
-+
- #include "atomic.h"
- #include "futextest.h"
+ #include <time.h>
+-#include "futextest.h"
 -#include "logging.h"
+ 
+-#define TEST_NAME "futex-requeue-pi-mismatched-ops"
++#include "futextest.h"
 +#include "../../kselftest_harness.h"
  
--#define TEST_NAME "futex-requeue-pi"
- #define MAX_WAKE_ITERS 1000
- #define THREAD_MAX 10
- #define SIGNAL_PERIOD_US 100
-@@ -42,12 +42,6 @@ futex_t f1 = FUTEX_INITIALIZER;
+ futex_t f1 = FUTEX_INITIALIZER;
  futex_t f2 = FUTEX_INITIALIZER;
- futex_t wake_complete = FUTEX_INITIALIZER;
- 
--/* Test option defaults */
--static long timeout_ns;
--static int broadcast;
--static int owner;
--static int locked;
--
- struct thread_arg {
- 	long id;
- 	struct timespec *timeout;
-@@ -56,18 +50,73 @@ struct thread_arg {
- };
- #define THREAD_ARG_INITIALIZER { 0, NULL, 0, 0 }
+ int child_ret = 0;
  
 -void usage(char *prog)
-+FIXTURE(args)
- {
+-{
 -	printf("Usage: %s\n", prog);
--	printf("  -b	Broadcast wakeup (all waiters)\n");
 -	printf("  -c	Use color\n");
 -	printf("  -h	Display this help message\n");
--	printf("  -l	Lock the pi futex across requeue\n");
--	printf("  -o	Use a third party pi futex owner during requeue (cancels -l)\n");
--	printf("  -t N	Timeout in nanoseconds (default: 0)\n");
 -	printf("  -v L	Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
 -	       VQUIET, VCRITICAL, VINFO);
 -}
-+};
-+
-+FIXTURE_SETUP(args)
-+{
-+};
-+
-+FIXTURE_TEARDOWN(args)
-+{
-+};
-+
-+FIXTURE_VARIANT(args)
-+{
-+	long timeout_ns;
-+	bool broadcast;
-+	bool owner;
-+	bool locked;
-+};
-+
-+/*
-+ * For a given timeout value, this macro creates a test input with all the
-+ * possible combinations of valid arguments
-+ */
-+#define FIXTURE_VARIANT_ADD_TIMEOUT(timeout)		\
-+							\
-+FIXTURE_VARIANT_ADD(args, t_##timeout)			\
-+{							\
-+	.timeout_ns = timeout,				\
-+};							\
-+							\
-+FIXTURE_VARIANT_ADD(args, t_##timeout##_broadcast)	\
-+{							\
-+	.timeout_ns = timeout,				\
-+	.broadcast = true,				\
-+};							\
-+							\
-+FIXTURE_VARIANT_ADD(args, t_##timeout##_broadcast_locked) \
-+{							\
-+	.timeout_ns = timeout,				\
-+	.broadcast = true,				\
-+	.locked = true,					\
-+};							\
-+							\
-+FIXTURE_VARIANT_ADD(args, t_##timeout##_broadcast_owner) \
-+{							\
-+	.timeout_ns = timeout,				\
-+	.broadcast = true,				\
-+	.owner = true,					\
-+};							\
-+							\
-+FIXTURE_VARIANT_ADD(args, t_##timeout##_locked)		\
-+{							\
-+	.timeout_ns = timeout,				\
-+	.locked = true,					\
-+};							\
-+							\
-+FIXTURE_VARIANT_ADD(args, t_##timeout##_owner)		\
-+{							\
-+	.timeout_ns = timeout,				\
-+	.owner = true,					\
-+};							\
-+
-+FIXTURE_VARIANT_ADD_TIMEOUT(0);
-+FIXTURE_VARIANT_ADD_TIMEOUT(5000);
-+FIXTURE_VARIANT_ADD_TIMEOUT(500000);
-+FIXTURE_VARIANT_ADD_TIMEOUT(2000000000);
- 
- int create_rt_thread(pthread_t *pth, void*(*func)(void *), void *arg,
- 		     int policy, int prio)
-@@ -81,26 +130,26 @@ int create_rt_thread(pthread_t *pth, void*(*func)(void *), void *arg,
- 
- 	ret = pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
- 	if (ret) {
--		error("pthread_attr_setinheritsched\n", ret);
-+		ksft_exit_fail_msg("pthread_attr_setinheritsched\n");
- 		return -1;
- 	}
- 
- 	ret = pthread_attr_setschedpolicy(&attr, policy);
- 	if (ret) {
--		error("pthread_attr_setschedpolicy\n", ret);
-+		ksft_exit_fail_msg("pthread_attr_setschedpolicy\n");
- 		return -1;
- 	}
- 
- 	schedp.sched_priority = prio;
- 	ret = pthread_attr_setschedparam(&attr, &schedp);
- 	if (ret) {
--		error("pthread_attr_setschedparam\n", ret);
-+		ksft_exit_fail_msg("pthread_attr_setschedparam\n");
- 		return -1;
- 	}
- 
- 	ret = pthread_create(pth, &attr, func, arg);
- 	if (ret) {
--		error("pthread_create\n", ret);
-+		ksft_exit_fail_msg("pthread_create\n");
- 		return -1;
- 	}
- 	return 0;
-@@ -112,7 +161,7 @@ void *waiterfn(void *arg)
- 	struct thread_arg *args = (struct thread_arg *)arg;
- 	futex_t old_val;
- 
--	info("Waiter %ld: running\n", args->id);
-+	ksft_print_dbg_msg("Waiter %ld: running\n", args->id);
- 	/* Each thread sleeps for a different amount of time
- 	 * This is to avoid races, because we don't lock the
- 	 * external mutex here */
-@@ -120,26 +169,25 @@ void *waiterfn(void *arg)
- 
- 	old_val = f1;
- 	atomic_inc(&waiters_blocked);
--	info("Calling futex_wait_requeue_pi: %p (%u) -> %p\n",
-+	ksft_print_dbg_msg("Calling futex_wait_requeue_pi: %p (%u) -> %p\n",
- 	     &f1, f1, &f2);
- 	args->ret = futex_wait_requeue_pi(&f1, old_val, &f2, args->timeout,
- 					  FUTEX_PRIVATE_FLAG);
- 
--	info("waiter %ld woke with %d %s\n", args->id, args->ret,
-+	ksft_print_dbg_msg("waiter %ld woke with %d %s\n", args->id, args->ret,
- 	     args->ret < 0 ? strerror(errno) : "");
- 	atomic_inc(&waiters_woken);
- 	if (args->ret < 0) {
- 		if (args->timeout && errno == ETIMEDOUT)
- 			args->ret = 0;
- 		else {
--			args->ret = RET_ERROR;
--			error("futex_wait_requeue_pi\n", errno);
-+			ksft_exit_fail_msg("futex_wait_requeue_pi\n");
- 		}
- 		futex_lock_pi(&f2, NULL, 0, FUTEX_PRIVATE_FLAG);
- 	}
- 	futex_unlock_pi(&f2, FUTEX_PRIVATE_FLAG);
- 
--	info("Waiter %ld: exiting with %d\n", args->id, args->ret);
-+	ksft_print_dbg_msg("Waiter %ld: exiting with %d\n", args->id, args->ret);
- 	pthread_exit((void *)&args->ret);
- }
- 
-@@ -152,14 +200,14 @@ void *broadcast_wakerfn(void *arg)
- 	int nr_wake = 1;
- 	int i = 0;
- 
--	info("Waker: waiting for waiters to block\n");
-+	ksft_print_dbg_msg("Waker: waiting for waiters to block\n");
- 	while (waiters_blocked.val < THREAD_MAX)
- 		usleep(1000);
- 	usleep(1000);
- 
--	info("Waker: Calling broadcast\n");
-+	ksft_print_dbg_msg("Waker: Calling broadcast\n");
- 	if (args->lock) {
--		info("Calling FUTEX_LOCK_PI on mutex=%x @ %p\n", f2, &f2);
-+		ksft_print_dbg_msg("Calling FUTEX_LOCK_PI on mutex=%x @ %p\n", f2, &f2);
- 		futex_lock_pi(&f2, NULL, 0, FUTEX_PRIVATE_FLAG);
- 	}
-  continue_requeue:
-@@ -167,16 +215,14 @@ void *broadcast_wakerfn(void *arg)
- 	args->ret = futex_cmp_requeue_pi(&f1, old_val, &f2, nr_wake, nr_requeue,
- 				   FUTEX_PRIVATE_FLAG);
- 	if (args->ret < 0) {
--		args->ret = RET_ERROR;
--		error("FUTEX_CMP_REQUEUE_PI failed\n", errno);
-+		ksft_exit_fail_msg("FUTEX_CMP_REQUEUE_PI failed\n");
- 	} else if (++i < MAX_WAKE_ITERS) {
- 		task_count += args->ret;
- 		if (task_count < THREAD_MAX - waiters_woken.val)
- 			goto continue_requeue;
- 	} else {
--		error("max broadcast iterations (%d) reached with %d/%d tasks woken or requeued\n",
--		       0, MAX_WAKE_ITERS, task_count, THREAD_MAX);
--		args->ret = RET_ERROR;
-+		ksft_exit_fail_msg("max broadcast iterations (%d) reached with %d/%d tasks woken or requeued\n",
-+		       MAX_WAKE_ITERS, task_count, THREAD_MAX);
- 	}
- 
- 	futex_wake(&wake_complete, 1, FUTEX_PRIVATE_FLAG);
-@@ -187,7 +233,7 @@ void *broadcast_wakerfn(void *arg)
- 	if (args->ret > 0)
- 		args->ret = task_count;
- 
--	info("Waker: exiting with %d\n", args->ret);
-+	ksft_print_dbg_msg("Waker: exiting with %d\n", args->ret);
- 	pthread_exit((void *)&args->ret);
- }
- 
-@@ -200,20 +246,20 @@ void *signal_wakerfn(void *arg)
- 	int nr_wake = 1;
- 	int i = 0;
- 
--	info("Waker: waiting for waiters to block\n");
-+	ksft_print_dbg_msg("Waker: waiting for waiters to block\n");
- 	while (waiters_blocked.val < THREAD_MAX)
- 		usleep(1000);
- 	usleep(1000);
- 
- 	while (task_count < THREAD_MAX && waiters_woken.val < THREAD_MAX) {
--		info("task_count: %d, waiters_woken: %d\n",
-+		ksft_print_dbg_msg("task_count: %d, waiters_woken: %d\n",
- 		     task_count, waiters_woken.val);
- 		if (args->lock) {
--			info("Calling FUTEX_LOCK_PI on mutex=%x @ %p\n",
--			     f2, &f2);
-+			ksft_print_dbg_msg("Calling FUTEX_LOCK_PI on mutex=%x @ %p\n",
-+			    f2, &f2);
- 			futex_lock_pi(&f2, NULL, 0, FUTEX_PRIVATE_FLAG);
- 		}
--		info("Waker: Calling signal\n");
-+		ksft_print_dbg_msg("Waker: Calling signal\n");
- 		/* cond_signal */
- 		old_val = f1;
- 		args->ret = futex_cmp_requeue_pi(&f1, old_val, &f2,
-@@ -221,28 +267,23 @@ void *signal_wakerfn(void *arg)
- 						 FUTEX_PRIVATE_FLAG);
- 		if (args->ret < 0)
- 			args->ret = -errno;
--		info("futex: %x\n", f2);
-+		ksft_print_dbg_msg("futex: %x\n", f2);
- 		if (args->lock) {
--			info("Calling FUTEX_UNLOCK_PI on mutex=%x @ %p\n",
--			     f2, &f2);
-+			ksft_print_dbg_msg("Calling FUTEX_UNLOCK_PI on mutex=%x @ %p\n",
-+			    f2, &f2);
- 			futex_unlock_pi(&f2, FUTEX_PRIVATE_FLAG);
- 		}
--		info("futex: %x\n", f2);
--		if (args->ret < 0) {
--			error("FUTEX_CMP_REQUEUE_PI failed\n", errno);
--			args->ret = RET_ERROR;
--			break;
--		}
-+		ksft_print_dbg_msg("futex: %x\n", f2);
-+		if (args->ret < 0)
-+			ksft_exit_fail_msg("FUTEX_CMP_REQUEUE_PI failed\n");
- 
- 		task_count += args->ret;
- 		usleep(SIGNAL_PERIOD_US);
- 		i++;
- 		/* we have to loop at least THREAD_MAX times */
- 		if (i > MAX_WAKE_ITERS + THREAD_MAX) {
--			error("max signaling iterations (%d) reached, giving up on pending waiters.\n",
--			      0, MAX_WAKE_ITERS + THREAD_MAX);
--			args->ret = RET_ERROR;
--			break;
-+			ksft_exit_fail_msg("max signaling iterations (%d) reached, giving up on pending waiters.\n",
-+			      MAX_WAKE_ITERS + THREAD_MAX);
- 		}
- 	}
- 
-@@ -251,8 +292,8 @@ void *signal_wakerfn(void *arg)
- 	if (args->ret >= 0)
- 		args->ret = task_count;
- 
--	info("Waker: exiting with %d\n", args->ret);
--	info("Waker: waiters_woken: %d\n", waiters_woken.val);
-+	ksft_print_dbg_msg("Waker: exiting with %d\n", args->ret);
-+	ksft_print_dbg_msg("Waker: waiters_woken: %d\n", waiters_woken.val);
- 	pthread_exit((void *)&args->ret);
- }
- 
-@@ -269,15 +310,13 @@ void *third_party_blocker(void *arg)
- 	ret2 = futex_unlock_pi(&f2, FUTEX_PRIVATE_FLAG);
- 
-  out:
--	if (args->ret || ret2) {
--		error("third_party_blocker() futex error", 0);
--		args->ret = RET_ERROR;
--	}
-+	if (args->ret || ret2)
-+		ksft_exit_fail_msg("third_party_blocker() futex error");
- 
- 	pthread_exit((void *)&args->ret);
- }
- 
--int unit_test(int broadcast, long lock, int third_party_owner, long timeout_ns)
-+TEST_F(args, futex_requeue_pi)
+-
+ void *blocking_child(void *arg)
  {
- 	void *(*wakerfn)(void *) = signal_wakerfn;
- 	struct thread_arg blocker_arg = THREAD_ARG_INITIALIZER;
-@@ -286,18 +325,26 @@ int unit_test(int broadcast, long lock, int third_party_owner, long timeout_ns)
- 	struct timespec ts, *tsp = NULL;
- 	struct thread_arg args[THREAD_MAX];
- 	int *waiter_ret;
--	int i, ret = RET_PASS;
-+	int i, ret = 0;
-+	bool lock = variant->locked;
-+	bool third_party_owner = variant->owner;
-+	bool broadcast = variant->broadcast;
-+	long timeout_ns = variant->timeout_ns;
-+
-+	ksft_print_msg(
-+		"\tArguments: broadcast=%d locked=%d owner=%d timeout=%ldns\n",
-+		broadcast, lock, third_party_owner, timeout_ns);
- 
- 	if (timeout_ns) {
- 		time_t secs;
- 
--		info("timeout_ns = %ld\n", timeout_ns);
-+		ksft_print_dbg_msg("timeout_ns = %ld\n", timeout_ns);
- 		ret = clock_gettime(CLOCK_MONOTONIC, &ts);
- 		secs = (ts.tv_nsec + timeout_ns) / 1000000000;
- 		ts.tv_nsec = ((int64_t)ts.tv_nsec + timeout_ns) % 1000000000;
- 		ts.tv_sec += secs;
--		info("ts.tv_sec  = %ld\n", ts.tv_sec);
--		info("ts.tv_nsec = %ld\n", ts.tv_nsec);
-+		ksft_print_dbg_msg("ts.tv_sec  = %ld\n", ts.tv_sec);
-+		ksft_print_dbg_msg("ts.tv_nsec = %ld\n", ts.tv_nsec);
- 		tsp = &ts;
+ 	child_ret = futex_wait(&f1, f1, NULL, FUTEX_PRIVATE_FLAG);
+ 	if (child_ret < 0) {
+ 		child_ret = -errno;
+-		error("futex_wait\n", errno);
++		ksft_exit_fail_msg("futex_wait\n");
  	}
- 
-@@ -307,10 +354,7 @@ int unit_test(int broadcast, long lock, int third_party_owner, long timeout_ns)
- 	if (third_party_owner) {
- 		if (create_rt_thread(&blocker, third_party_blocker,
- 				     (void *)&blocker_arg, SCHED_FIFO, 1)) {
--			error("Creating third party blocker thread failed\n",
--			      errno);
--			ret = RET_ERROR;
--			goto out;
-+			ksft_exit_fail_msg("Creating third party blocker thread failed\n");
- 		}
- 	}
- 
-@@ -318,20 +362,16 @@ int unit_test(int broadcast, long lock, int third_party_owner, long timeout_ns)
- 	for (i = 0; i < THREAD_MAX; i++) {
- 		args[i].id = i;
- 		args[i].timeout = tsp;
--		info("Starting thread %d\n", i);
-+		ksft_print_dbg_msg("Starting thread %d\n", i);
- 		if (create_rt_thread(&waiter[i], waiterfn, (void *)&args[i],
- 				     SCHED_FIFO, 1)) {
--			error("Creating waiting thread failed\n", errno);
--			ret = RET_ERROR;
--			goto out;
-+			ksft_exit_fail_msg("Creating waiting thread failed\n");
- 		}
- 	}
- 	waker_arg.lock = lock;
- 	if (create_rt_thread(&waker, wakerfn, (void *)&waker_arg,
- 			     SCHED_FIFO, 1)) {
--		error("Creating waker thread failed\n", errno);
--		ret = RET_ERROR;
--		goto out;
-+		ksft_exit_fail_msg("Creating waker thread failed\n");
- 	}
- 
- 	/* Wait for threads to finish */
-@@ -345,7 +385,6 @@ int unit_test(int broadcast, long lock, int third_party_owner, long timeout_ns)
- 		pthread_join(blocker, NULL);
- 	pthread_join(waker, NULL);
- 
--out:
- 	if (!ret) {
- 		if (*waiter_ret)
- 			ret = *waiter_ret;
-@@ -355,66 +394,8 @@ int unit_test(int broadcast, long lock, int third_party_owner, long timeout_ns)
- 			ret = blocker_arg.ret;
- 	}
- 
--	return ret;
-+	if (ret)
-+		ksft_test_result_fail("fail");
+ 	return (void *)&child_ret;
  }
  
 -int main(int argc, char *argv[])
--{
--	char *test_name;
--	int c, ret;
--
--	while ((c = getopt(argc, argv, "bchlot:v:")) != -1) {
++TEST(requeue_pi_mismatched_ops)
+ {
+-	int ret = RET_PASS;
+ 	pthread_t child;
+-	int c;
++	int ret;
+ 
+-	while ((c = getopt(argc, argv, "chv:")) != -1) {
 -		switch (c) {
--		case 'b':
--			broadcast = 1;
--			break;
 -		case 'c':
 -			log_color(1);
 -			break;
 -		case 'h':
 -			usage(basename(argv[0]));
 -			exit(0);
--		case 'l':
--			locked = 1;
--			break;
--		case 'o':
--			owner = 1;
--			locked = 0;
--			break;
--		case 't':
--			timeout_ns = atoi(optarg);
--			break;
 -		case 'v':
 -			log_verbosity(atoi(optarg));
 -			break;
@@ -532,67 +146,78 @@ index 215c6cb539b4abc7a48fb00b545ae26e52fd118a..699642f08a5d1324984ca94082cb040c
 -
 -	ksft_print_header();
 -	ksft_set_plan(1);
--	ksft_print_msg("%s: Test requeue functionality\n", basename(argv[0]));
--	ksft_print_msg(
--		"\tArguments: broadcast=%d locked=%d owner=%d timeout=%ldns\n",
--		broadcast, locked, owner, timeout_ns);
--
--	ret = asprintf(&test_name,
--		       "%s broadcast=%d locked=%d owner=%d timeout=%ldns",
--		       TEST_NAME, broadcast, locked, owner, timeout_ns);
--	if (ret < 0) {
--		ksft_print_msg("Failed to generate test name\n");
--		test_name = TEST_NAME;
+-	ksft_print_msg("%s: Detect mismatched requeue_pi operations\n",
+-	       basename(argv[0]));
++	if (pthread_create(&child, NULL, blocking_child, NULL))
++		ksft_exit_fail_msg("pthread_create\n");
+ 
+-	if (pthread_create(&child, NULL, blocking_child, NULL)) {
+-		error("pthread_create\n", errno);
+-		ret = RET_ERROR;
+-		goto out;
 -	}
+ 	/* Allow the child to block in the kernel. */
+ 	sleep(1);
+ 
+@@ -102,34 +67,25 @@ int main(int argc, char *argv[])
+ 			 * FUTEX_WAKE.
+ 			 */
+ 			ret = futex_wake(&f1, 1, FUTEX_PRIVATE_FLAG);
+-			if (ret == 1) {
+-				ret = RET_PASS;
+-			} else if (ret < 0) {
+-				error("futex_wake\n", errno);
+-				ret = RET_ERROR;
+-			} else {
+-				error("futex_wake did not wake the child\n", 0);
+-				ret = RET_ERROR;
+-			}
++			if (ret == 1)
++				ksft_test_result_pass("pass");
++			else if (ret < 0)
++				ksft_exit_fail_msg("futex_wake\n");
++			else
++				ksft_exit_fail_msg("futex_wake did not wake the child\n");
+ 		} else {
+-			error("futex_cmp_requeue_pi\n", errno);
+-			ret = RET_ERROR;
++			ksft_exit_fail_msg("futex_cmp_requeue_pi\n");
+ 		}
+ 	} else if (ret > 0) {
+-		fail("futex_cmp_requeue_pi failed to detect the mismatch\n");
+-		ret = RET_FAIL;
++		ksft_test_result_fail("futex_cmp_requeue_pi failed to detect the mismatch\n");
+ 	} else {
+-		error("futex_cmp_requeue_pi found no waiters\n", 0);
+-		ret = RET_ERROR;
++		ksft_exit_fail_msg("futex_cmp_requeue_pi found no waiters\n");
+ 	}
+ 
+ 	pthread_join(child, NULL);
+ 
+ 	if (!ret)
+ 		ret = child_ret;
 -
--	/*
--	 * FIXME: unit_test is obsolete now that we parse options and the
--	 * various style of runs are done by run.sh - simplify the code and move
--	 * unit_test into main()
--	 */
--	ret = unit_test(broadcast, locked, owner, timeout_ns);
--
--	print_result(test_name, ret);
+- out:
+-	/* If the kernel crashes, we shouldn't return at all. */
+-	print_result(TEST_NAME, ret);
 -	return ret;
--}
+ }
++
 +TEST_HARNESS_MAIN
 diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index 81739849f2994d52c336df00f1072db71b35573a..49edfad884869c7dffce2f482c434003b9cc49d1 100755
+index 49edfad884869c7dffce2f482c434003b9cc49d1..f9d598ef43ec3fb7580ab59bf6fc70b6ecd8a82d 100755
 --- a/tools/testing/selftests/futex/functional/run.sh
 +++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -32,31 +32,7 @@ fi
- 
- 
- echo
--# requeue pi testing
--# without timeouts
--./futex_requeue_pi $COLOR
--./futex_requeue_pi $COLOR -b
--./futex_requeue_pi $COLOR -b -l
--./futex_requeue_pi $COLOR -b -o
--./futex_requeue_pi $COLOR -l
--./futex_requeue_pi $COLOR -o
--# with timeouts
--./futex_requeue_pi $COLOR -b -l -t 5000
--./futex_requeue_pi $COLOR -l -t 5000
--./futex_requeue_pi $COLOR -b -l -t 500000
--./futex_requeue_pi $COLOR -l -t 500000
--./futex_requeue_pi $COLOR -b -t 5000
--./futex_requeue_pi $COLOR -t 5000
--./futex_requeue_pi $COLOR -b -t 500000
--./futex_requeue_pi $COLOR -t 500000
--./futex_requeue_pi $COLOR -b -o -t 5000
--./futex_requeue_pi $COLOR -l -t 5000
--./futex_requeue_pi $COLOR -b -o -t 500000
--./futex_requeue_pi $COLOR -l -t 500000
--# with long timeout
--./futex_requeue_pi $COLOR -b -l -t 2000000000
--./futex_requeue_pi $COLOR -l -t 2000000000
--
-+./futex_requeue_pi
+@@ -35,7 +35,7 @@ echo
+ ./futex_requeue_pi
  
  echo
- ./futex_requeue_pi_mismatched_ops $COLOR
+-./futex_requeue_pi_mismatched_ops $COLOR
++./futex_requeue_pi_mismatched_ops
+ 
+ echo
+ ./futex_requeue_pi_signal_restart $COLOR
 
 -- 
 2.50.1
