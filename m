@@ -1,190 +1,212 @@
-Return-Path: <linux-kselftest+bounces-37759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03C13B0C757
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 17:18:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44F74B0C75E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 17:19:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB8D11AA2CCB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 15:18:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEA7F18916A4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 15:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7C22DC34A;
-	Mon, 21 Jul 2025 15:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 343822DC34A;
+	Mon, 21 Jul 2025 15:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DAiCgRJw"
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="ZqA5dv5G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B696A2BE02C
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Jul 2025 15:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B1C5383;
+	Mon, 21 Jul 2025 15:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753111104; cv=none; b=VewBYSfv2QfN8a1xl6r5lWuOuZfrQ0AbmANguVqPwqHDhYg6LF6zFV/h7FyxoPW2gRssmexZm02RBoons75TCKPj+3q++as6D+mPJa7DHSq6cJNqnelsoE3vnPnix8BGXNmTHRiafbH4qM6waRai8+kmgbuOrsQw6nW8Est8Sgg=
+	t=1753111161; cv=none; b=POUHlNSk0HNM1eKNSBBjulqvihlbWDvwSF8enOdnAOjbXlHZQEXK+1lsla8eWk5ktqDAlGrpIrtUTuEEWsSAdVHvUarydwkkEU7dhE8Yzau4nYuDEN9B9/gMAo4S52T+lhFsUquihLw4VT3oKWmljsHju6086hXwx2Ly4UrS1jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753111104; c=relaxed/simple;
-	bh=SXL92SK6RLnjeu4TR611q3PmOYh1uO3csbhddbYMOKU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=V2/Sy5Ih45pjHbTUdWQlYk6Lzmx2F1YIDbA0Q06rWZXsVwz4X8p6F8vVScOu0SD+IQpOuh44SYk6uPyjVZ7jhqUlKOfEAlr000ir63IPQBr1i9t6oaZgsoCgWt0QeZDl+DYxEoThB+2DWAM5uCcN/pIRPKZsQO2NVoMHFlTJ9OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DAiCgRJw; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56LEf4Ha012705
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Jul 2025 15:18:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	1BdmigYJpjrB18BbkMDFazSUEuKPPs8PoGZmiojEMqI=; b=DAiCgRJw2OwUoLBo
-	xejOmvcpDQLO32S7cxefoMsenyKV6lyVx3Mgr+0bXGlUDkurKUXh3a9TpZ0bTpVQ
-	k+2hMswXU+uio/dDzKepfL0Ae3Lwyvvn2lTcW+vVpGmTH20vO7vrrZQ2Wq6rSU8H
-	tO4kqDkizXuo87O8miuGQZab/fegso4cuYYGnqWnSh3ub6GjRdIbShDSR8YVWGgo
-	Tfys32Rqf0/dnLVlpzxsOyorWJv2xB3duHLxsGLwglfbp7llmCbBLPZLP2ljmbeD
-	XaFY/I8bu4ksT8QxSAIOnPA1awLGBEmoiWzSt5OOqskUPLy2A0yC01BZO7IEPrIh
-	SrKZlA==
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 481qh6g5hm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Jul 2025 15:18:21 +0000 (GMT)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-235e1d70d67so40863115ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Jul 2025 08:18:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753111100; x=1753715900;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1BdmigYJpjrB18BbkMDFazSUEuKPPs8PoGZmiojEMqI=;
-        b=ZV1+yGQ097S7YZ0yL4xgGQnBcVgk5rz4h05BBIEdwRhKuvmHlcvBJIQ+FgDyQ7tH9E
-         5KwgeAP7tPcdCFol/Z40uCdd3B2o7nCYc9WgpXyxMwUtoCX22nsbfM0+My9zCSIVEI4y
-         8pp13GRMyFB2Tgn2lIgAn5hg5fjF4iVO4e+3d7HOM1pcVF0zMwZrZg8biY8U45IEds1q
-         PEgXwU0Tv7h1vY2opvUSzLzMLzjgkpACgWgNdgfE9lDzKSPnAPrc7kBNHKApqeiIdzWM
-         WsHyCzCNDXVejnTb/q8c88JEptulRJJK9vMLr5GDs/n9V9VrKQ0tGEX16hG85yqBGFR4
-         7QsA==
-X-Forwarded-Encrypted: i=1; AJvYcCViND8zNLTAbKvYCeeS0G5N3FE7eizZ5+K2vx/yjuRXXtylUL89tye0BWuG0qeyh/pIXdP4I1l7fYlnI+SxDdE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLrtFwl4L2SSA8kd+SKgORkp0zxb6zzRQCgfrZrRV9V8yULqi0
-	H8PaX+CYc3Tfe6YNbg4KyqWUOj9L73pqE0TzmoKpw8QhxU8ojfN5vbMnbDJbiD+fBmjQtyZbi28
-	NEr1ioe3MEWFBMVUTVN/EDr4QUI/ed5Gd0YzgUzQ26TvdvfKeE6DoMoSwIde3t+2vIeHLUvo=
-X-Gm-Gg: ASbGnctawGzhBw5xIDAPaJjqf1dfD6ay/Glf32uIjQVLvb6zpPVydm1DCbikgh87PMj
-	sHiMukPvD/jBIrYaKmduiY+QB2wars5my1xDvTxL7cxgkIv+hvFu1fBmuFCzs807rwv90GCtQ+d
-	bQQUSgU5K16Xb3NkRbTtmvC0chwtFUSNu6fKOUdQUBcB9XEQAuRx6+mAGYH64FAH9NGz7K/ogPP
-	WbAyBrE8oGRpOGRKvVEZ3c3Ou+6KYRZ0TSRPjqZz2aDCUfwAuQzFA3GY1KvJLvzzWyvChJLNhyS
-	5jqNxHmDchBPKqc5PMFEsxKtnhuEV+AJKw==
-X-Received: by 2002:a17:902:ccce:b0:235:f143:9b07 with SMTP id d9443c01a7336-23e25684c62mr307165955ad.5.1753111100272;
-        Mon, 21 Jul 2025 08:18:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG8ugeT+tg1rObYeMWRAE4o7TCFabu2wYnT3Pq2XvXvsVUV+/A6SbpWkAPzmNqqOT48gw/5Cw==
-X-Received: by 2002:a17:902:ccce:b0:235:f143:9b07 with SMTP id d9443c01a7336-23e25684c62mr307165455ad.5.1753111099767;
-        Mon, 21 Jul 2025 08:18:19 -0700 (PDT)
-Received: from [192.168.1.17] ([120.60.76.1])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6d22e4sm60329335ad.153.2025.07.21.08.18.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 08:18:19 -0700 (PDT)
-From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-X-Google-Original-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Kishon Vijay Abraham I <kishon@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Danilo Krummrich <dakr@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-        Frank Li <Frank.Li@nxp.com>
-Cc: Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        imx@lists.linux.dev, devicetree@vger.kernel.org,
-        Niklas Cassel <cassel@kernel.org>
-In-Reply-To: <20250710-ep-msi-v21-0-57683fc7fb25@nxp.com>
-References: <20250710-ep-msi-v21-0-57683fc7fb25@nxp.com>
-Subject: Re: (subset) [PATCH v21 0/9] PCI: EP: Add RC-to-EP doorbell with
- platform MSI controller
-Message-Id: <175311109182.25848.8880954995049551501.b4-ty@kernel.org>
-Date: Mon, 21 Jul 2025 20:48:11 +0530
+	s=arc-20240116; t=1753111161; c=relaxed/simple;
+	bh=lR9DhaHkYhiIlmXUci5r2sc4oWISTeQIQOFn7N7h9C4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FuFDaAOPXJA5MaBepXenO+9wE3pFsYOWXlGAECpXt+zG7qWEs32LrUA2Crglz+ZiXiPthu8f/4cFJq3s5C4MMAlwCZIqVWYZxI+v4UcPhhjDFGdIHIjYSSyGdLHIV79sVR5KEq2FSOr1/qBoGr/2tbe2gqndBADa1vQKRSjC2ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=ZqA5dv5G; arc=none smtp.client-ip=80.241.56.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4bm3w24T6Qz9thl;
+	Mon, 21 Jul 2025 17:19:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1753111154;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=27ePGKfk1IpGb39mFKtSkLv7SdmqONl0QJ7+stsT6hM=;
+	b=ZqA5dv5GvcMVj639SK6l4HlrSwxA4acrTPV6xpW3cmG5jX7uUkBvVlG8JBoTWgyFx9Fox3
+	0o8ddFzdXjEUYc49+If0V+I6aRC34Ryq5bb8uZR9CSVOFrQ+BpuUKFrOaV2QoUB3sUPdrp
+	cej4+6ndOPbS6REA8Z+dtgzVYzLMAxXeXu2ZCmqdaMIQwoRTZ+cs5tD2fV1EoPKYisna6b
+	uK3BzSzHfNuNAXNOgSKCfr8jkUSQebithqevIrG4l7lLOC1w+D+jndmfxlcpxfIHfc5tdr
+	ObuATqX4b6E5RRCqomu5+WEP4bN4dSx0KJCcCp9N+LeZoLyGcFRlNPpKTEl+3g==
+Date: Tue, 22 Jul 2025 01:19:00 +1000
+From: Aleksa Sarai <cyphar@cyphar.com>
+To: Andy Lutomirski <luto@amacapital.net>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-api@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 0/4] procfs: make reference pidns more user-visible
+Message-ID: <20250721.150803-lavish.ninja.rigid.racism-OCjeOw80sO9@cyphar.com>
+References: <20250721-procfs-pidns-api-v1-0-5cd9007e512d@cyphar.com>
+ <CALCETrVo+Mdj7as2R0R+FqTBbjqwTkXu5Zkj=dg8EVM9xRhBPw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.14.2
-X-Authority-Analysis: v=2.4 cv=CZ4I5Krl c=1 sm=1 tr=0 ts=687e5a3d cx=c_pps
- a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=5oemJFBbzWj47VPNxq3P8A==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=FZZ2ILZgcEXfV6c6dVwA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
-X-Proofpoint-ORIG-GUID: -k8oGE85ZgvqblWsO1VIFK2i8cx6QGse
-X-Proofpoint-GUID: -k8oGE85ZgvqblWsO1VIFK2i8cx6QGse
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIxMDEzNiBTYWx0ZWRfX4rHSYD1k5467
- gxv6JVQa7c/MTow93iZSmUrYbF0kkRepXdsk0Gt+VL8tuIbELTA03Yg8TgDPFoctJmlMiD7JSWr
- hg8CYrqTHRd5DQjCMTW0RSyZwZKSQFwg9M2ghPP114veeluo70uGvYzgrJRddLAQ59vQlSJjnQH
- ixwJD9K9/uI/CX/7E/+24e5+nmRfRT5EQn8T9Ttu9g4jJj6dTSMQAt1f5RitnTfszXAuNLs10zX
- inD5higLdfZKRfnd53lshQI9d41JhdF4cWbJEjI713m9EjhIS4WjEetFrh1eedpJtYzy8H81k4R
- QaIoA5TwWWwuM8+//SPjXQgFr6hDpZtCuk6TcYPAXc8IMYSOp1Z2vax3BXFrFQ+SGbGN/SdRknC
- ZX1rwpigZ62+kcb3BkUs4SN3ecp5qfDDu5egayW3eljNAmehE85xga98/84gteGNXNIFlU6O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-21_04,2025-07-21_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 mlxlogscore=839 impostorscore=0
- clxscore=1015 mlxscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
- bulkscore=0 spamscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2507210136
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4hmpcw27chbaxqg4"
+Content-Disposition: inline
+In-Reply-To: <CALCETrVo+Mdj7as2R0R+FqTBbjqwTkXu5Zkj=dg8EVM9xRhBPw@mail.gmail.com>
 
 
-On Thu, 10 Jul 2025 15:13:46 -0400, Frank Li wrote:
-> ┌────────────┐   ┌───────────────────────────────────┐   ┌────────────────┐
-> │            │   │                                   │   │                │
-> │            │   │ PCI Endpoint                      │   │ PCI Host       │
-> │            │   │                                   │   │                │
-> │            │◄──┤ 1.platform_msi_domain_alloc_irqs()│   │                │
-> │            │   │                                   │   │                │
-> │ MSI        ├──►│ 2.write_msi_msg()                 ├──►├─BAR<n>         │
-> │ Controller │   │   update doorbell register address│   │                │
-> │            │   │   for BAR                         │   │                │
-> │            │   │                                   │   │ 3. Write BAR<n>│
-> │            │◄──┼───────────────────────────────────┼───┤                │
-> │            │   │                                   │   │                │
-> │            ├──►│ 4.Irq Handle                      │   │                │
-> │            │   │                                   │   │                │
-> │            │   │                                   │   │                │
-> └────────────┘   └───────────────────────────────────┘   └────────────────┘
-> 
-> [...]
+--4hmpcw27chbaxqg4
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH RFC 0/4] procfs: make reference pidns more user-visible
+MIME-Version: 1.0
 
-Applied, thanks!
+On 2025-07-21, Andy Lutomirski <luto@amacapital.net> wrote:
+> On Mon, Jul 21, 2025 at 1:44=E2=80=AFAM Aleksa Sarai <cyphar@cyphar.com> =
+wrote:
+> >
+> > Ever since the introduction of pid namespaces, procfs has had very
+> > implicit behaviour surrounding them (the pidns used by a procfs mount is
+> > auto-selected based on the mounting process's active pidns, and the
+> > pidns itself is basically hidden once the mount has been constructed).
+> > This has historically meant that userspace was required to do some
+> > special dances in order to configure the pidns of a procfs mount as
+> > desired. Examples include:
+> >
+> >  * In order to bypass the mnt_too_revealing() check, Kubernetes creates
+> >    a procfs mount from an empty pidns so that user namespaced containers
+> >    can be nested (without this, the nested containers would fail to
+> >    mount procfs). But this requires forking off a helper process because
+> >    you cannot just one-shot this using mount(2).
+> >
+> >  * Container runtimes in general need to fork into a container before
+> >    configuring its mounts, which can lead to security issues in the case
+> >    of shared-pidns containers (a privileged process in the pidns can
+> >    interact with your container runtime process). While
+> >    SUID_DUMP_DISABLE and user namespaces make this less of an issue, the
+> >    strict need for this due to a minor uAPI wart is kind of unfortunate.
+> >
+> > Things would be much easier if there was a way for userspace to just
+> > specify the pidns they want. Patch 1 implements a new "pidns" argument
+> > which can be set using fsconfig(2):
+> >
+> >     fsconfig(procfd, FSCONFIG_SET_FD, "pidns", NULL, nsfd);
+> >     fsconfig(procfd, FSCONFIG_SET_STRING, "pidns", "/proc/self/ns/pid",=
+ 0);
+> >
+> > or classic mount(2) / mount(8):
+> >
+> >     // mount -t proc -o pidns=3D/proc/self/ns/pid proc /tmp/proc
+> >     mount("proc", "/tmp/proc", "proc", MS_..., "pidns=3D/proc/self/ns/p=
+id");
+> >
+> > The initial security model I have in this RFC is to be as conservative
+> > as possible and just mirror the security model for setns(2) -- which
+> > means that you can only set pidns=3D... to pid namespaces that your
+> > current pid namespace is a direct ancestor of. This fulfils the
+> > requirements of container runtimes, but I suspect that this may be too
+> > strict for some usecases.
+> >
+> > The pidns argument is not displayed in mountinfo -- it's not clear to me
+> > what value it would make sense to show (maybe we could just use ns_dname
+> > to provide an identifier for the namespace, but this number would be
+> > fairly useless to userspace). I'm open to suggestions.
+> >
+> > In addition, being able to figure out what pid namespace is being used
+> > by a procfs mount is quite useful when you have an administrative
+> > process (such as a container runtime) which wants to figure out the
+> > correct way of mapping PIDs between its own namespace and the namespace
+> > for procfs (using NS_GET_{PID,TGID}_{IN,FROM}_PIDNS). There are
+> > alternative ways to do this, but they all rely on ancillary information
+> > that third-party libraries and tools do not necessarily have access to.
+> >
+> > To make this easier, add a new ioctl (PROCFS_GET_PID_NAMESPACE) which
+> > can be used to get a reference to the pidns that a procfs is using.
+> >
+> > It's not quite clear what is the correct security model for this API,
+> > but the current approach I've taken is to:
+> >
+> >  * Make the ioctl only valid on the root (meaning that a process without
+> >    access to the procfs root -- such as only having an fd to a procfs
+> >    file or some open_tree(2)-like subset -- cannot use this API).
+> >
+> >  * Require that the process requesting either has access to
+> >    /proc/1/ns/pid anyway (i.e. has ptrace-read access to the pidns
+> >    pid1), has CAP_SYS_ADMIN access to the pidns (i.e. has administrative
+> >    access to it and can join it if they had a handle), or is in a pidns
+> >    that is a direct ancestor of the target pidns (i.e. all of the pids
+> >    are already visible in the procfs for the current process's pidns).
+>=20
+> What's the motivation for the ptrace-read option?  While I don't see
+> an attack off the top of my head, it seems like creating a procfs
+> mount may give write-ish access to things in the pidns (because the
+> creator is likely to have CAP_DAC_OVERRIDE, etc) and possibly even
+> access to namespace-wide things that aren't inherently visible to
+> PID1.
 
-[3/9] PCI: endpoint: Add RC-to-EP doorbell support using platform MSI controller
-      commit: b537ffe0eb2ab458f20ec135cc2b565c63a2ea00
-[4/9] PCI: endpoint: pci-ep-msi: Add MSI address/data pair mutable check
-      commit: 1f2ed78e43abb9ac0856a82867f64d472368a832
-[5/9] PCI: endpoint: Add pci_epf_align_inbound_addr() helper for address alignment
-      commit: 1c2c5f9855a5cf4617bcda721c22dbd3345f06a1
-[6/9] PCI: endpoint: pci-epf-test: Add doorbell test support
-      commit: 5d4da5f8092e5a77ae371ae1112283b59790ac22
-[7/9] misc: pci_endpoint_test: Add doorbell test case
-      commit: a1a293e709a4ec0fa2e4253993a4b75f581c6cf2
-[8/9] selftests: pci_endpoint: Add doorbell test case
-      commit: b964b4894fcfc72e7496cf52a33cbba39d094c5b
+This latter section is about the privilege model for
+ioctl(PROCFS_GET_PID_NAMESPACE), not the pidns=3D mount flag. pidns=3D
+requires CAP_SYS_ADMIN for pidns->user_ns, in addition to the same
+restrictions as pidns_install() (must be a direct ancestor). Maybe I
+should add some headers in this cover letter for v2...
 
-Best regards,
--- 
-Manivannan Sadhasivam <mani@kernel.org>
+For the ioctl -- if the user can ptrace-read pid1 in the pidns, they can
+open a handle to /proc/1/ns/pid which is exactly the same thing they'd
+get from PROCFS_GET_PID_NAMESPACE.
 
+> Even the ancestor check seems dicey.  Imagine that uid 1000 makes an
+> unprivileged container complete with a userns.  Then uid 1001 (outside
+> the container) makes its own userns and mountns but stays in the init
+> pidns and then mounts (and owns, with all filesystem-related
+> capabilities) that mount.  Is this really safe?
+
+As for the ancestor check (for the ioctl), the logic I had was that
+being in an ancestor pidns means that you already can see all of the
+subprocesses in your own pidns, so it seems strange to not be able to
+get a handle to their pidns. Maybe this isn't quite right, idk.
+
+Ultimately there isn't too much you can do with a pidns fd if you don't
+have privileges to join it (the only thing I can think of is that you
+could bind-mount it, which could maybe be used to trick an
+administrative process if they trusted your mountns for some reason).
+
+> CAP_SYS_ADMIN seems about right.
+
+For pidns=3D, sure. For the ioctl, I think this is overkill.
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+https://www.cyphar.com/
+
+--4hmpcw27chbaxqg4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaH5aYwAKCRAol/rSt+lE
+bxwJAPsExwFlCYmv56CAhmcD4tOiYjdj4rRodrWoLlDHqXc2QwD+OcuhtT7gwFY5
+kPb4AgmTUiYufiAlBeMVvO42bxZK/A8=
+=EH6N
+-----END PGP SIGNATURE-----
+
+--4hmpcw27chbaxqg4--
 
