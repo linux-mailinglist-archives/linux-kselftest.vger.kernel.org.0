@@ -1,228 +1,319 @@
-Return-Path: <linux-kselftest+bounces-37768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37769-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9824AB0CA9B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 20:34:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C177BB0CB1F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 21:44:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB38F17E58C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 18:34:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7509918899AF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 19:44:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC54528D840;
-	Mon, 21 Jul 2025 18:34:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B44923643E;
+	Mon, 21 Jul 2025 19:44:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="J7bZlhBO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZOstkqiX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2074.outbound.protection.outlook.com [40.107.243.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45B781FE44B;
-	Mon, 21 Jul 2025 18:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753122860; cv=fail; b=IewVIZTOmyAVSRbzK3PUzNZDOBP79edR9Clrkpq9PvdQDkQevPBkiqtt4ptlojKle/NH48qtNukRAsQvlyAcGDZVjDoJERT6aSMfW+RyzfM2RrvZdeZmDFDtlDMrrvagNxsl/XuoBTiOEFpWaTzhm0MqMG7i4Ay1kQTAhImz7bE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753122860; c=relaxed/simple;
-	bh=ZHWZMdZYqB5ZhFIT/FK0RpE92jxfkvy6UFTOG5CZX7A=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=kX8gukat/wxaqS+8cuKMscQ/5YdpfaJm7+46AM2K7OZFJiRFbRjRx8dJQ4qREJ6HiJ3lbpwhzAgaWjqiUGlkOdGdeVtVSH+jT/nc6+SWgR6eqYyiVZrKvgcI6XZV0knnwoaycdyJ1be5PofVziEjo5P2kb9ax1uQxqe+UTe0bvc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=J7bZlhBO; arc=fail smtp.client-ip=40.107.243.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=roGt6yZQIka3rVpuWlmjO5WEgHo5wp7RFuo7QqhcnIrmQ47UnMhYRj9/HgD+N1PP232oRzYCrsX4KJJUbRBoxfbkH4rHzefcSNVqtAvtIWNLmNicDuKzL4DvvFNzlC/R34bhjXCCsxPx64W+BEJ3TBlC9DlbsREvrFpSJkMSWe4GQtkF1my9BYrS3xflMap6FvzsuOF8FCfgf6PsP5JzLmzcLzxJBYdXltcy6sAKjj/oN4YQYCatgcpsawXcNUOYl9bJNC25UIYkY/pnV+iVfTub92qJuUvkxVxkqPYxJRh27544fcck2wtRAmRFqL+HICOjZL0TjtHxHh86R9Tuxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hHZpxWc47/fPKtrx8v5CsxOXSjnJ0cQJbjY5gz30YLw=;
- b=yiIhidnXAxjEvCBu4oQA6r2kL6E16J7NNWdEHe0qaMZ937r33Sy3y2bbjVhcJnCd8hR8kY8euAFGSaz7rkFkUmRj9PaLR+1pG6Go45eIKehX+4iT3L4l3IJVHh3g1+yoPVkT3lXBScmo1Y63OIP0HuYoOIzeocIzV8EXyiyTfsORJa74s2dQo297lT/Q3CsywNF5u8LgCwCD/a/Ve5q7C4oAN7F7F6oFuw2CLnXxcz1WqtutJRFwrv5TrJGmFuxs+1BExQYcSnLDUhwSqfH41MqrWcDLxAs1xbG4mEB43ubz1oN8IwuI8hdXgWjvgMZD4T44OrLVJ54orx9SFHoYuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hHZpxWc47/fPKtrx8v5CsxOXSjnJ0cQJbjY5gz30YLw=;
- b=J7bZlhBOJ3pZ9gwJzmY/PK+G/HnKP8NQykVOVHs1Ab8NGQiHwAQ8Q8qydLPeRvjEqDBItseDBdrchH0ovegdj0TCnLluQKBWtQoADNob1vOn5pK9TqP57MhMhicSDvow1XF1ve0/dxHPyeF2mjjOzoymaSKE47E9SOYuYuD/buJ9kCdOyK/rp57huQLGSeRFg+O5m/6nxG5RGpK4z70x4rR49E5SnvNgMbz9HuQzJN1AuQZYloDVdGqBk3bqfbKBVbaTSH55Ifw827VGuS0o/BZp7bDB7bm0h4KI6AWOu8LMjFMg7dshE8mTEmBZaVvnU/simtuvlQ4Tn98eMtBeow==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB7500.namprd12.prod.outlook.com (2603:10b6:610:148::17)
- by IA0PPFF4B476A86.namprd12.prod.outlook.com (2603:10b6:20f:fc04::bea) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.26; Mon, 21 Jul
- 2025 18:34:14 +0000
-Received: from CH3PR12MB7500.namprd12.prod.outlook.com
- ([fe80::7470:5626:d269:2bf2]) by CH3PR12MB7500.namprd12.prod.outlook.com
- ([fe80::7470:5626:d269:2bf2%4]) with mapi id 15.20.8943.029; Mon, 21 Jul 2025
- 18:34:14 +0000
-Message-ID: <eaca90db-897c-45a0-8eed-92c36dbec825@nvidia.com>
-Date: Mon, 21 Jul 2025 21:34:05 +0300
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next V6 2/5] selftests: drv-net: Test XDP_PASS/DROP
- support
-To: Jakub Kicinski <kuba@kernel.org>, Nimrod Oren <noren@nvidia.com>
-Cc: Mohsin Bashir <mohsin.bashr@gmail.com>, netdev@vger.kernel.org,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, horms@kernel.org, cratiu@nvidia.com,
- cjubran@nvidia.com, mbloch@nvidia.com, jdamato@fastly.com, sdf@fomichev.me,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- tariqt@nvidia.com, thoiland@redhat.com
-References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
- <20250719083059.3209169-3-mohsin.bashr@gmail.com>
- <ab65545f-c79c-492b-a699-39f7afa984ea@nvidia.com>
- <20250721084046.5659971c@kernel.org>
-Content-Language: en-US
-From: Gal Pressman <gal@nvidia.com>
-In-Reply-To: <20250721084046.5659971c@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TLZP290CA0007.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:9::7)
- To CH3PR12MB7500.namprd12.prod.outlook.com (2603:10b6:610:148::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54A1218EB7
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Jul 2025 19:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753127049; cv=none; b=Ou+OUXpeix9SXXsvqp2hgLiyT/jDlOP28UOYGX8fdTP41IfH/ly/FOzX0qU3X8Mh8oD+ud+gKrriYTC/K5r7thexXqUzqN4NCtuuFBMY1/wmxywk/mnFgQNymKWd8CaPIpZ6Id0R59QEIcylsCkae3SY0XG12clmxSyQvx9x7Gc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753127049; c=relaxed/simple;
+	bh=xWPuZPyD6AD4ttWXNLenqhc/vYTYd/LsIesyNd1rCps=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AZCq1KAu7+oPlFQgko+QibS+FL0pPyYG4SBpFRAHbfz/2FiVYYlrb9IEVoa5UnwX2PC2IQGm+9oONdFttWVmoc+BW2crBDrj8vyGdY49Zq67NncguA1B9bBBk1aWtIya70W/iFds1QNnH9QOByl48nApgJ4PVTctKywjgCX/f2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZOstkqiX; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3e283b2d065so6145ab.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Jul 2025 12:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1753127046; x=1753731846; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VsK5pnoT1g+F/vi1tUc8e94tYZEFjRh7lpAcZTfaDso=;
+        b=ZOstkqiXwEB9hVES6NtdFC6g3pJoOMllMoZUHgRYe3ZY6YgCKdc9ADkGPOEqJ9xgde
+         aAh6PFSkGUC2YrW07dMATrZyc8WpQDzZkEAeTMEtryu2gjNuIcLr/seHUOdyI22oPD7h
+         3cWZP0c7G+UulUoju9fHRHPFZ86RbaogfSVTOKFdvRWexZ4vIWXD+YdNMPr+Wd4x6lwV
+         MRN/Do+VmXZTM/NRxUjeDhcMPHxTCz13oOhonjrMqGmCnAG+bT3o9H+WUHKVP1kDlRgt
+         RHFY/9JUrGmvpyVWjhpoNKzZYw0NveFLrKcuvSN1twJTyXN/SDjyERlcUJIFV0aMlnmz
+         1ZJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753127046; x=1753731846;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VsK5pnoT1g+F/vi1tUc8e94tYZEFjRh7lpAcZTfaDso=;
+        b=w6+UiIc5jodQW+EPapZQ19v9TrvD2uDmRzh4o6AsPIR2YP9oaI/4KT/vMuHOKeADph
+         bwuAoy0kUq/+R8zbJrK5ZOudAmgWmtEDZ7XAPubJIIaG5xO8uA8M54871WFK5yTEwEM4
+         eVP25wIAhSqdHjwH4AmeMGu6Hd/M2fcpTzoXq9qx41luxliS/zyi4jp+84aRTmAbHX+c
+         s/5M7t9MzZDBvxqyaDNVkIr2fdygNhdthEbrXONEJeridPQwJVQbbvZMq5sifrzrXydp
+         EaO4T669V1ufoG5PahngoonAy8GKxFOcq+oQBK+d9aXVlyUoccvLm4dNirq8Ldq8dSxG
+         yeDw==
+X-Forwarded-Encrypted: i=1; AJvYcCV4Rh71w+88YM0UT47iRAM0nRf+qdulI/+3mQS4rJ8hIZmrFTx6S0MhQSKu0mLNt9khDcjHoiG30umC8XDf8AE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/s6l6GcynAze0P1jgiNYjro+Czmf9KmaIapxGQVKZI3g9DBWd
+	gu3iKZVf04RmeXrF+RsvLSlyYlSPlf4BdmPrmD+qXJIABrEcG2akAlZHllSZEYD7Gd2+oXi4xwX
+	j2lt6uQ7iHzis+GzQdE2Wymt/BTPoudTVTsnO5xWo
+X-Gm-Gg: ASbGncthl5d1d0azL2Hr4wawQEFFA6xBssstQvG2N5txLiSuKEUCw4RN/m5RdPwOIAS
+	T2c119h5C3SHHBjj5yKYjGbF8pxHPP09llX8aTS0fxbyU06nGRf2s2Vt2uH4Kxl+SPVfCvZXdgv
+	5MBYO65mBmaNboL4F6v1AHsroJnH7UYB8dycbav5kILGaWMOgw1p9fngQkcS/BUnfJ9YDvdWF/f
+	paB+ocgH5q/ISg+HRt/j4RxrrYVlmsHVnp/
+X-Google-Smtp-Source: AGHT+IEM/lS6y4DuHKiIEoKKoyTfjmEUxznON4WUoGrg1CsBYoBN3tBLUNLNmCEDnbtoPfWUe0tncsmQ32lIXB4Djf4=
+X-Received: by 2002:a05:6e02:1b01:b0:3dd:a562:ce54 with SMTP id
+ e9e14a558f8ab-3e2bf33d62emr419775ab.15.1753127045578; Mon, 21 Jul 2025
+ 12:44:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB7500:EE_|IA0PPFF4B476A86:EE_
-X-MS-Office365-Filtering-Correlation-Id: fe273949-874d-46ca-3c32-08ddc8853158
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ek1GRzNnelRNYytobDI3SDBWSHBqYVpGTGVGN1dXLzc4OWJTeHdPYlNUSmFG?=
- =?utf-8?B?MFZaTGVvbTNXNjdEVUsvVnZyUlladWlKY3pZSDVFeU5XMUZLS0hXdDhxUksr?=
- =?utf-8?B?c2hyN0JCcDg4bWg1SS9Ld3A5RlpXOHBkR0N5OHNiRDVWM1VDNlQ1Qko5Y0JE?=
- =?utf-8?B?a05qWWlidjRHc0pXOFA4OEJMcm1QSUpVT2R2N0pnV0NISmF5bklJZ29zeW1R?=
- =?utf-8?B?QUtlU010WVA5WUNRelVYNUJsSjRtT2JXRUtRbnZBdDNkUW1SRTBxTTFNeUh0?=
- =?utf-8?B?SVlxUml2L2ZuWExvZ0VTUTdKVHRtK2s4bEJmbURsbkJjR1dZWDlTREF6SFl6?=
- =?utf-8?B?VWVqNlFPMkdUU1p6MU56OWFRSThwdzRZS3NqbDRDOEZhMFkrZXJCd1JtM0Jx?=
- =?utf-8?B?bHhpQi83ZWlybFJSV01WeUpBVjVsZ1RCZVRiRC96RzMzdjlSOUZGaG9hT0kv?=
- =?utf-8?B?ZHJkZjdLYkRwVG4xb2J3Q1hhK21UMi91WjU2akJsRXhQeklCVVJaMlRwNzlV?=
- =?utf-8?B?Z0xMNSt2aGxaRi9CYkxmRlNtemhSNzJOVjNHK29zVW9ZbXFiYy95bjMwajRR?=
- =?utf-8?B?ZnZ6NzRRMG1pWk1lQVpPWWF4NG1abjZ3TE9VRGtrRFZ2YjRRNm1TcjNVN2Vw?=
- =?utf-8?B?YktCd2VFTmZWVndhVFRDSFRpdVlVa2J4TDErdzc2bUlVRUgwUy9yMzNacExB?=
- =?utf-8?B?L3h3dGIzbFhMTnRVaUNuZzJKNnJkRE5HQnJydnloc2VJZTUrNllNSXowbk10?=
- =?utf-8?B?a0xRMUxzdTAxRTlJVVphTkNlR3cyUFVQVVh2VUNpV1pveDZXNVVtSG9vQ1Rz?=
- =?utf-8?B?S2tSMm03L1h0bTRvMGRFVHFybG43VEcwK0lHR3lNNUl0OGM1RXlwWDZheHNK?=
- =?utf-8?B?WU0rVGtKL2JOa2V1eGtUeW9aYmZmTVRLQTJzdHU5VGhmMDh5VFFMUURvRDlG?=
- =?utf-8?B?OGRDYWdFQ3FGTnVNYmYvMFBMbnBRTkNtWmhIb3FzcTY0ZTloWnJsQVpkT2JN?=
- =?utf-8?B?eGxOenRuK3hITkFIUHpOSU4wVzhSbmRPQkdjZDlLZ21oWkFkcitEN2pvMHln?=
- =?utf-8?B?eWNhcXp0ZVRjMXhSb3VSOE9WZ0VTOFN6Z3FWdm5rRXg5QmdDbldUMUh5VFQ5?=
- =?utf-8?B?SS91VUFQSUs2aXNldWMzWE1YTXQ4eW8zOXdyQ2kxZW41ZytmTG1FL1lrZkxX?=
- =?utf-8?B?TDZwcUJKQndWWUNzRGE4TmdFZGdweFZWYVB1M2NucUVjQkx3MUE1WmJhdmlH?=
- =?utf-8?B?TXlOTE84cFhsdTJhYTg5L1RldTBVSUw2ZWJqSDZuUVdUL1FZUEE3ZHlvMUxV?=
- =?utf-8?B?MUQxRjNSNVl2RUJ2MngvU0htZFZWOG5hMzNmQ1JEUXB6NGpUUTdYK1ZSNFdp?=
- =?utf-8?B?aTdvdllLYUhrWUhRRjdDMmVOQnlUc1NWbHcxYWhZTDd1eHF6ZHlvTUFyalBX?=
- =?utf-8?B?YWFNVUpzSTFMdzI5aENPQVpPZE1BRTFDNWVTQUNydUVscUk3R2svdzJ2UEVi?=
- =?utf-8?B?YnVjT29SODNzby9iYWlpOGF2c0xBUCtBNFJXampoT1NEdWZMS1M0MllGS3ZZ?=
- =?utf-8?B?dVJEbnhyV0pad2gwQTdzTWxmT3Y3bGZ5T25DeVBhNHJjazdqVG5MbFZ4bmd0?=
- =?utf-8?B?TXBQaU91Mkd6Vk9JaU5UbmpQSUwzTTJ1ZVlSZmdMM2lxNysyRDdRUHdTc2hk?=
- =?utf-8?B?b1BaczlVSTZBVHg4UlRxNlIveCtkS2JZWmdHV2lEdEVYV1pUM1BGdHRDb2J3?=
- =?utf-8?B?ci9jVmJHcjVXWjAvL0h1MUtnV2N1QmovempIZk5vd0R2eXpMR3pZL1orYS8y?=
- =?utf-8?B?OWUvQkhCZmFsUi8xY1h1NVdKYXFTQWdHYUpWbTBvS1FHY1NRU08yMWNnN1lo?=
- =?utf-8?B?U0VSSWNObEhzY3V4bGZKVVJ1TnBPdTBVRE9zeGxaTFpPbUt2U2JzR1dQeHhU?=
- =?utf-8?Q?S9DZtqoD6Z8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB7500.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M3N5anB0K1A3cHFkck5nU0M5WUJqc1U0NlpNY2tCZEwzVmMxczlEb1BvYTVi?=
- =?utf-8?B?TDdTdHpON3Vpd1JoS2pUcG1KU2hCQWVFUDhZc095UDA5aEtqblVTS1JnbnFl?=
- =?utf-8?B?SnJ2MDdRK0ZIdE80TFRZUVNlUGpBRE85NlRvRmtWOVdjZUtpc0dQVTZGQ0xh?=
- =?utf-8?B?Vm1lclpPTUFjSnlWTTc1YyszaWNWcXcrV29oNmNQS1Faclhib1hHdS9TZXo3?=
- =?utf-8?B?SVBKVWM0a2t2ZEdXOHFJWUJWTXpla2EydS9zMUNIdWlYZzAwNlNpRzROdVQz?=
- =?utf-8?B?OTBCOGpJcEtTUEpSRkM3Q0RDd3NjbkxIdVhCSUZKQ01qWkhiUnRIZVBrMUUy?=
- =?utf-8?B?STZCTEtOL0RBS3BNYmVtTkh5TUowV1BsTmo3cXVuS2pxVHhBci90UHZ4Qmsz?=
- =?utf-8?B?UDczUEVvdlBSem1sZTlZUjJCb3ZqUWxFOFdqRnpOTWRKK2ZLb0dYSEF0eWVK?=
- =?utf-8?B?TUh1L0hFVzgwbUZqbkNrTi9mTlRINEtJSDFHMGpvQmZBQzlFdEFLSHdhc1NU?=
- =?utf-8?B?MjdpamIzeVJRby9oQ0NIYVZ4K1JHdlMyK3lCSmNnU0xiMEVuR0ZWMTZvWnpW?=
- =?utf-8?B?Mnh5emJnZmdxQ3daM2tsbktyaXdWUUhoUWxpUTJBTExVZCtkSDFmbFBoRVV4?=
- =?utf-8?B?QmZYU3JLZ25rVEJlaFZKcTVMa1lQWHhyMHBhZFhhQWRsWWRHcnAyS0Uwd2d2?=
- =?utf-8?B?bDF5cVoyRmdKOWNqMlpralNqYUsvOGRVMm5DS2xkRzJGRjQrRXo2Y1hRb0k0?=
- =?utf-8?B?S0N2U0F4dDd0SnZTaUlFMUUvQm5uZ1ZJdHM4TDg3ckd6N3FNN2VjcmtrMVBV?=
- =?utf-8?B?L2U0SzJPK1VpS0hMT0c3bDcrcVJDdXdkWDFOYmtmRmtKSUNvL2M0UGdHU0FB?=
- =?utf-8?B?YWtFZUZkQTFtZlBWZFJ4UDI5Q2FyV0wrNy9aejF0aHhVMmtyVE1rVVROMitP?=
- =?utf-8?B?YTB1Y0ducVd3TlppUnZqbjNzdjJFRU12ZXFUQW9ZYkV2YVFnbUFvOXJlNHBi?=
- =?utf-8?B?ekl1cUk3N0pKSG9RSklhT3AvaWNOSW9zbHR4bWJyc0w4RVFtWk8wT09Jb1Fy?=
- =?utf-8?B?TWlqK1NDN3paMUorU2JDRnZzd0l0Zkx2ZTBUWnpyMUV4ZTVyRVloWDRWU1lX?=
- =?utf-8?B?YXVsbVJ1MTFWQ0QxeXVxeGJzTXlaeWRJd3BxL2FFMmNCTEtNY0liMjEySkpi?=
- =?utf-8?B?MklkRVh1RXBGaGp1RWVxU2xLaWlXZWMzUWI5S0psNFFoVm9kSVpLUmVHOGJW?=
- =?utf-8?B?UW9HSmREV2V3VnhFOWVVZkhxTEIyR3pDNWpyVXEzQVd3cVRoQkxVU0FQT2gy?=
- =?utf-8?B?UEFDRHZqOVZUK1dTaGNtQWRsSFdUQjFjUjVJZXdlalIvTGxtSStmVjI5TVo0?=
- =?utf-8?B?eFJrbFNuUWR4cklBTUQyVXJ4R0RpUW1xNlZ2TjFqYkx2NFl2WDZkOUl4Mmt6?=
- =?utf-8?B?Z05NaDE3U056OEtHL2ZOV0Q2cWExNzZmdUp3VmR1M0NlM1hINDUzYmhwV2Fh?=
- =?utf-8?B?RzQxcjFxUGh6ZEc2eUVwL0NycWxlbXdBcG50bmNVYzQxYjNYaUV0dmY2a2xT?=
- =?utf-8?B?Y1VSUUcxcGpybHNYQm9mOWpsVVVkaFRTRmlyZElySWZoTDZVQ1ludVl3T2ZN?=
- =?utf-8?B?dVBUd1V3bDEzNW9VUkJldSs0bnlpRUlMUHA3OG5Ddmpya1JESk9OVTZsVTRr?=
- =?utf-8?B?L1ZCRnJybDZwNjFoVTcvYUYvdnpvRGhXcGprZ1BSRDNDS0ovNk91N2tlMlBR?=
- =?utf-8?B?VzgybkRjTVREN3F4UGpnQm9JWEZTTUQ1YXFrblQ5bWtvZ3crMHRBOFpPT0Za?=
- =?utf-8?B?VGNBOVFjVnhPa3g2blgvL2ZKN080K09WejAwMlExT3lkNy9FeXI2eEZOTXdZ?=
- =?utf-8?B?aTR6TGs1c3c5U3Z5UnFORVQ1N1ZRQlh1aEFMc3FlOUtkNktERnB0SVRwU2Fa?=
- =?utf-8?B?endDMC9WZFB1VERrN3dBZGNzNEZtNitndUxla0srTXBhK0pNQWhPb1ZsdDNE?=
- =?utf-8?B?UWpEV3d0Z3R6UDJidVdGSXRFVmZ2alpPU1BJMzNyemltdkcrUDhDMEI0SmFu?=
- =?utf-8?B?dFk3KzRCZGJ2WEJFSC9lbFI1VEp1dmdhNENGazNHcE9rTmVMSlRzN0RtNXhW?=
- =?utf-8?Q?T1zc=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe273949-874d-46ca-3c32-08ddc8853158
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB7500.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2025 18:34:14.4440
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lbjGXXVjcOQURz569EN38pzT63caEXtakORTCp8DBHnR4KhN4Kej5JLIX36Svx9i
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PPFF4B476A86
+References: <20250113182605.130719-1-vmolnaro@redhat.com> <20250721132642.40906-1-jbrnak@redhat.com>
+ <20250721132642.40906-6-jbrnak@redhat.com>
+In-Reply-To: <20250721132642.40906-6-jbrnak@redhat.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 21 Jul 2025 12:43:53 -0700
+X-Gm-Features: Ac12FXyMSWqy1antYF9o2QJZ8vpA9I3p3hka_tbci7eW7keA-TpusPEJVHwUZ8E
+Message-ID: <CAP-5=fXMdXu+MN9-VRnKPe7n9FmbyZc+x5myrq-X1JgOV9vf_A@mail.gmail.com>
+Subject: Re: [PATCH v3 5/7] perf test: Introduce storing logs for shell tests
+To: Jakub Brnak <jbrnak@redhat.com>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Cc: vmolnaro@redhat.com, acme@kernel.org, acme@redhat.com, 
+	linux-perf-users@vger.kernel.org, mpetlan@redhat.com, namhyung@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 21/07/2025 18:40, Jakub Kicinski wrote:
-> On Mon, 21 Jul 2025 14:43:15 +0300 Nimrod Oren wrote:
->>> +static struct udphdr *filter_udphdr(struct xdp_md *ctx, __u16 port)
->>> +{
->>> +	void *data_end = (void *)(long)ctx->data_end;
->>> +	void *data = (void *)(long)ctx->data;
->>> +	struct udphdr *udph = NULL;
->>> +	struct ethhdr *eth = data;
->>> +
->>> +	if (data + sizeof(*eth) > data_end)
->>> +		return NULL;
->>> +  
->>
->> This check assumes that the packet headers reside in the linear part of
->> the xdp_buff. However, this assumption does not hold across all drivers.
->> For example, in mlx5, the linear part is empty when using multi-buffer
->> mode with striding rq configuration. This causes all multi-buffer test
->> cases to fail over mlx5.
->>
->> To ensure correctness across all drivers, all direct accesses to packet
->> data should use these safer helper functions instead:
->> bpf_xdp_load_bytes() and bpf_xdp_store_bytes().
->>
->> Related discussion and context can be found here:
->> https://github.com/xdp-project/xdp-tools/pull/409
-> 
-> That's a reasonable way to modify the test. But I'm not sure it's
-> something that should be blocking merging the patches.
-> Or for that matter whether it's Mohsin's responsibility to make the
-> test cater to quirks of mlx5, 
+On Mon, Jul 21, 2025 at 6:27=E2=80=AFAM Jakub Brnak <jbrnak@redhat.com> wro=
+te:
+>
+> From: Veronika Molnarova <vmolnaro@redhat.com>
+>
+> Create temporary directories for storing log files for shell tests
+> that could help while debugging. The log files are necessary for
+> perftool testsuite test cases also. If the variable KEEP_TEST_LOGS
+> is set keep the logs, else delete them.
 
-Definitely not a quirk, you cannot assume the headers are in the linear
-part, especially if you're going to put this program as reference in the
-kernel tree.
+Is there perhaps a kunit equivalent of log files so we could keep the
+implementations as similar as possible?
 
-This issue has nothing to do with mlx5, but a buggy XDP program.
+Thanks,
+Ian
 
-> which is not even part of NIPA testing -
-> we have no way of knowing what passes for mlx5, what regresses it etc.
-
-People have been developing XDP code that runs on mlx5 long before NIPA
-even existed 🤷‍♂️..
-And as you know, we run these selftests on mlx5 hardware, as evident by
-Nimrod's mail, and others you've seen on the list. You know what regresses.
+> Signed-off-by: Michael Petlan <mpetlan@redhat.com>
+> Signed-off-by: Veronika Molnarova <vmolnaro@redhat.com>
+> Signed-off-by: Jakub Brnak <jbrnak@redhat.com>
+> ---
+>  tools/perf/tests/builtin-test.c  | 90 ++++++++++++++++++++++++++++++++
+>  tools/perf/tests/tests-scripts.c |  3 ++
+>  tools/perf/tests/tests-scripts.h |  1 +
+>  3 files changed, 94 insertions(+)
+>
+> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-t=
+est.c
+> index 4e3d2f779b01..89b180798224 100644
+> --- a/tools/perf/tests/builtin-test.c
+> +++ b/tools/perf/tests/builtin-test.c
+> @@ -6,6 +6,7 @@
+>   */
+>  #include <ctype.h>
+>  #include <fcntl.h>
+> +#include <ftw.h>
+>  #include <errno.h>
+>  #ifdef HAVE_BACKTRACE_SUPPORT
+>  #include <execinfo.h>
+> @@ -282,6 +283,86 @@ static bool test_exclusive(const struct test_suite *=
+t, int test_case)
+>         return t->test_cases[test_case].exclusive;
+>  }
+>
+> +static int delete_file(const char *fpath, const struct stat *sb __maybe_=
+unused,
+> +                                                int typeflag, struct FTW=
+ *ftwbuf)
+> +{
+> +       int rv =3D -1;
+> +
+> +       /* Stop traversal if going too deep */
+> +       if (ftwbuf->level > 5) {
+> +               pr_err("Tree traversal reached level %d, stopping.", ftwb=
+uf->level);
+> +               return rv;
+> +       }
+> +
+> +       /* Remove only expected directories */
+> +       if (typeflag =3D=3D FTW_D || typeflag =3D=3D FTW_DP){
+> +               const char *dirname =3D fpath + ftwbuf->base;
+> +
+> +               if (strcmp(dirname, "logs") && strcmp(dirname, "examples"=
+) &&
+> +                       strcmp(dirname, "header_tar") && strncmp(dirname,=
+ "perf_", 5)) {
+> +                               pr_err("Unknown directory %s", dirname);
+> +                               return rv;
+> +                        }
+> +       }
+> +
+> +       /* Attempt to remove the file */
+> +       rv =3D remove(fpath);
+> +       if (rv)
+> +               pr_err("Failed to remove file: %s", fpath);
+> +
+> +       return rv;
+> +}
+> +
+> +static bool create_logs(struct test_suite *t, int pass){
+> +       bool store_logs =3D t->priv && ((struct shell_info*)(t->priv))->s=
+tore_logs;
+> +       if (pass =3D=3D 1 && (!test_exclusive(t, 0) || sequential || dont=
+_fork)) {
+> +               /* Sequential and non-exclusive tests run on the first pa=
+ss. */
+> +               return store_logs;
+> +       }
+> +       else if (pass !=3D 1 && test_exclusive(t, 0) && !sequential && !d=
+ont_fork) {
+> +               /* Exclusive tests without sequential run on the second p=
+ass. */
+> +               return store_logs;
+> +       }
+> +       return false;
+> +}
+> +
+> +static char *setup_shell_logs(const char *name)
+> +{
+> +       char template[PATH_MAX];
+> +       char *temp_dir;
+> +
+> +       if (snprintf(template, PATH_MAX, "/tmp/perf_test_%s.XXXXXX", name=
+) < 0) {
+> +               pr_err("Failed to create log dir template");
+> +               return NULL; /* Skip the testsuite */
+> +       }
+> +
+> +       temp_dir =3D mkdtemp(template);
+> +       if (temp_dir) {
+> +               setenv("PERFSUITE_RUN_DIR", temp_dir, 1);
+> +               return strdup(temp_dir);
+> +       }
+> +       else {
+> +               pr_err("Failed to create the temporary directory");
+> +       }
+> +
+> +       return NULL; /* Skip the testsuite */
+> +}
+> +
+> +static void cleanup_shell_logs(char *dirname)
+> +{
+> +       char *keep_logs =3D getenv("PERFTEST_KEEP_LOGS");
+> +
+> +       /* Check if logs should be kept or do cleanup */
+> +       if (dirname) {
+> +               if (!keep_logs || strcmp(keep_logs, "y") !=3D 0) {
+> +                       nftw(dirname, delete_file, 8, FTW_DEPTH | FTW_PHY=
+S);
+> +               }
+> +               free(dirname);
+> +       }
+> +
+> +       unsetenv("PERFSUITE_RUN_DIR");
+> +}
+> +
+>  static bool perf_test__matches(const char *desc, int suite_num, int argc=
+, const char *argv[])
+>  {
+>         int i;
+> @@ -626,6 +707,7 @@ static int __cmd_test(struct test_suite **suites, int=
+ argc, const char *argv[],
+>                 for (struct test_suite **t =3D suites; *t; t++, curr_suit=
+e++) {
+>                         int curr_test_case;
+>                         bool suite_matched =3D false;
+> +                       char *tmpdir =3D NULL;
+>
+>                         if (!perf_test__matches(test_description(*t, -1),=
+ curr_suite, argc, argv)) {
+>                                 /*
+> @@ -655,6 +737,13 @@ static int __cmd_test(struct test_suite **suites, in=
+t argc, const char *argv[],
+>                         }
+>
+>                         for (unsigned int run =3D 0; run < runs_per_test;=
+ run++) {
+> +                               /* Setup temporary log directories for sh=
+ell test suites */
+> +                               if (create_logs(*t, pass)) {
+> +                                       tmpdir =3D setup_shell_logs((*t)-=
+>desc);
+> +
+> +                                       if (tmpdir =3D=3D NULL)  /* Could=
+n't create log dir, skip test suite */
+> +                                               ((struct shell_info*)((*t=
+)->priv))->has_setup =3D FAILED_SETUP;
+> +                               }
+>                                 test_suite__for_each_test_case(*t, curr_t=
+est_case) {
+>                                         if (!suite_matched &&
+>                                             !perf_test__matches(test_desc=
+ription(*t, curr_test_case),
+> @@ -667,6 +756,7 @@ static int __cmd_test(struct test_suite **suites, int=
+ argc, const char *argv[],
+>                                                 goto err_out;
+>                                 }
+>                         }
+> +                       cleanup_shell_logs(tmpdir);
+>                 }
+>                 if (!sequential) {
+>                         /* Parallel mode starts tests but doesn't finish =
+them. Do that now. */
+> diff --git a/tools/perf/tests/tests-scripts.c b/tools/perf/tests/tests-sc=
+ripts.c
+> index d680a878800f..d4e382898a30 100644
+> --- a/tools/perf/tests/tests-scripts.c
+> +++ b/tools/perf/tests/tests-scripts.c
+> @@ -251,6 +251,7 @@ static struct test_suite* prepare_test_suite(int dir_=
+fd)
+>
+>         test_info->base_path =3D strdup_check(dirpath);           /* Abso=
+lute path to dir */
+>         test_info->has_setup =3D NO_SETUP;
+> +       test_info->store_logs =3D false;
+>
+>         test_suite->priv =3D test_info;
+>         test_suite->desc =3D NULL;
+> @@ -427,6 +428,8 @@ static void append_suits_in_dir(int dir_fd,
+>                         continue;
+>                 }
+>
+> +               /* Store logs for testsuite is sub-directories */
+> +               ((struct shell_info*)(test_suite->priv))->store_logs =3D =
+true;
+>                 if (is_test_script(fd, SHELL_SETUP)) {  /* Check for setu=
+p existance */
+>                         char *desc =3D shell_test__description(fd, SHELL_=
+SETUP);
+>                         test_suite->desc =3D desc;        /* Set the suit=
+e name by the setup description */
+> diff --git a/tools/perf/tests/tests-scripts.h b/tools/perf/tests/tests-sc=
+ripts.h
+> index da4dcd26140c..41da0a175e4e 100644
+> --- a/tools/perf/tests/tests-scripts.h
+> +++ b/tools/perf/tests/tests-scripts.h
+> @@ -16,6 +16,7 @@ enum shell_setup {
+>  struct shell_info {
+>         const char *base_path;
+>         enum shell_setup has_setup;
+> +       bool store_logs;
+>  };
+>
+>  struct test_suite **create_script_test_suites(void);
+> --
+> 2.50.1
+>
 
