@@ -1,63 +1,64 @@
-Return-Path: <linux-kselftest+bounces-37763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C119EB0C921
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 18:55:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9637AB0C91F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 18:54:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B3B41C21C60
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 16:54:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5ED64545D4A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 16:54:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF2F2E0B6C;
-	Mon, 21 Jul 2025 16:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 400C12E1C54;
+	Mon, 21 Jul 2025 16:54:28 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E5AB2E092A;
-	Mon, 21 Jul 2025 16:54:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795D92C15B2;
+	Mon, 21 Jul 2025 16:54:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753116867; cv=none; b=KKlLKlMQeCieubDPamFEsac0szpaToYNyO2GxruM9yyFO5U3zMHn80m6pE/f/VL59cP0Q1RCAz94zSIpqyhiMfJXAgs/vwOidm0OmM6LB67xsWvsdb42sYu4VCBg0WUGj83eE9kwRkYVlBfJDa2+RQLgZB3kWTk36UcKJDVjVdw=
+	t=1753116868; cv=none; b=ElPpeQLQE5vQCzZE58905RD1VEEPIXdoZV0jmwAs1fBpKQm6mcHhn+bD+8Up6F56MQMIkBrcbQmGeF79CkJ5xikeLzX0bX5O2Zp/VxF1N3OQy+6O+Jkg1h/f2aCsfRH8p9F7fZWZnzykBPI93E3DnXWCVZ4N7gjcY2VtG09tGcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753116867; c=relaxed/simple;
-	bh=9zScX5PNe0+7/FgZals5GcxzDyjHrEVpWnihwf3NZ3Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jJziPqhc9LHsYecBE9CRf/hMheT6dVOhUVPKm3QyNEKsJnp1wWiSxVudaupPBAS5gGUpOi2nuO7+pPy2gCyRg32Svl8WeGxKH9Q45xZPDinpSs2qq/12fcggixoPwDA6P0+vSwYnaLmreqvkHlx+K5alyPkNLt6JPiTrJ5kxQ8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1753116868; c=relaxed/simple;
+	bh=GBqbUp6sE8f/rXc4E4JiViq7VpsWdjKXsX+n56O6qVA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WTqcq9TfxcckEt5Cbfkct6b9xZMPnxIIOZsb72raF8ou0UTavneYY1TCMPBSMJRkzbN8I7yQw60wx8qEvQu5q5GG9wD86TFStfLy53xFlKFUMrvxqI9yhhYjjxxFVPQbSBEAiwrcEiWvOfMpUmjWklJ+fGecYf/wEjzncc0Xn4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-234d3261631so36192645ad.1;
-        Mon, 21 Jul 2025 09:54:25 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-748d982e97cso4078348b3a.1;
+        Mon, 21 Jul 2025 09:54:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753116864; x=1753721664;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L0iZETPpNVIspnegsemsZ7mwLpZ1Y/g9GMuYWlB+K90=;
-        b=dylWwJGoCSEXUSaBf2+iV1wH0M9j6OYK/8c+MdgirwTT/5xWU+0SPze6RYtzw3SDC7
-         tgVeEO0/lyCDg4Ohy1xwsUE8oguS0G8TfAAmmVVDQc6Ozr4gosNJ5XZJrt3dpdjcQFoQ
-         IxmAQmnI9PQiUU2gZGqGrFIRiKIK+mPk4F0V7VssHqFNWa/ZtuqPVi7OZWuFEEOwsjtP
-         zCRejMtz3XedWmBZJjV5o0TStIkkBOn+MbUJbeWodjAbyyAXyLvZEHMNtmZPO3uJliqr
-         uAf0n8PPBwGdiGpQxep/n0Bzci9GXVcwVc+e/6YaGB1BXnVt9eM2hY1MsE0OnQ2HVP2i
-         eGbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUhND4mFEFu11YK8SQwt/Wzi3Im9RGIL/Kdau3c0mL/yiqUCi3BuFd365haUPTthHThvDS9p8n+VsAe4usZ1KmJ@vger.kernel.org, AJvYcCXkQ9k7HtglUEJysqRp/bkynvWpXGIvpz38Url7LM/nA1WxQ4THZRbP/0i3xgoorQ0JWO5aFxNxtenjoHk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxvegPJVjawXPxU3R1S6upDHVWHavUhggwufjTxG0I5Txz0/5s
-	i+cLGmjN37q1ol/VKzGwVdPzlwqKNCXnhP5yOAZIaLqhm8LgCJn3bWKhHjss
-X-Gm-Gg: ASbGncv6Ro2GED4BaQzOR9Aj7pCsvjlhwrKs7z2DUFh9evQ5YgZou2cYIsK34Rpm9RN
-	3L6gBdMWO4A9qniI5iKpCvjDPeAc3cRvh3KcrNLb3CQ+y+g2BXtETBvn3V9tfy1NRNkARIKEboy
-	k+2f2cY80oizLb1+aj63y7bjUQiV6liKamCU1x0cFBwa7WnvIb1dbAurWWvDlsDwTU9hruaBHRJ
-	MBDLnmw9A1xtpqN0zlMhaNCm9j07OYJSK7YshlYcgMR1wz7NSHQt/iX8C+e3MVI3Hjcm0fL2nUz
-	g2gBdrlT6lx4JJtWfiR1q8yxlYbXMUkOWw9jEVN7WEG/ea4G+WxCKenI2sBCnuWGLxpkS6HsXG8
-	qzeMSxoXWqIUVQ4gnTLKj8vohnZkfJEnW5jhBW+JXhekRmGyxFtIeGPtZI0g=
-X-Google-Smtp-Source: AGHT+IG4I834Pck48TSvkbY8IpDj4iVjmIr8H73mP5ZcsJhvdJqECZS2+m8rFtqDwo0CMscLP0VA8w==
-X-Received: by 2002:a17:902:f906:b0:234:d1f2:da31 with SMTP id d9443c01a7336-23e3b766079mr140974035ad.2.1753116864398;
-        Mon, 21 Jul 2025 09:54:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1753116865; x=1753721665;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bpdVYv0nYpd9DC0WlvTylBOxeD8UZphYAJMRGZuk9pY=;
+        b=fMYNKa+7Jjwx8M4VsKNsc2HhjaUdr6YfCe/vYJmH+1bSzKMGCrK37zVs/LXP5MQyJ2
+         GoGh6C8X1Q1bqm2s5qpk/XktWF8PGxX7kkDPsr0Rd//J8YOO0+VBI7AdOSWwLx7HLshx
+         zfoytJoxgP9X/hUXRLPVmrl2yMnnvawY61IgM/S/K+R7dDCovKi4YIlIs5UfsZaM1A8O
+         75vuX6+lJtUxVSlm913bOxfjDpLgG6lDfMXm3ESjHDkVxl4cdxn57wJ1TRiA3GZir9gS
+         aD/ycmMJ6+ty8kTsFKVZdlC5Hr3S+eKzen00lulyCUsqEf9Woz9AygxcXPMffW0GTaEw
+         zKSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUlsut1ccC5YZP9bl6sarD45wpulKMIBF/zgMiPdqMV24AeA2fzH/KL05IATEsjlb6u5+gL6fmGNCFrLcwUmiMz@vger.kernel.org, AJvYcCV3Pjw6WuviqpReVW0v33ndGt2SrGxHcq4Z1NZ2XPDycIPt3vDjNDcy31hNEmMv3zPsAnQYGJfYFPL1ZgM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywj8q+HFJkAEn/rcv30dgLHlcxGgoZ5P/VPDAr7Lc+nIcd3adyw
+	5hu3CkqztY5bAVNublT/lqTm/luNn6oeo9qNNP96SMbAGjLMnIjQ8odC9mww
+X-Gm-Gg: ASbGncsRNfm4ycdPNPnJpI5iZmVwn4kP/I4Ox8wVoNs2ZX+XdISxLHm1zri0GG8fP9v
+	9YoCi6vYoAv1UKmhMfAYqwx1Gp/NW1ByVC7B477biLbS7LKrFgJrcCBv4K1BL3uDxua7s7gzGUv
+	4hkX+ROdoNlhSh1FkjKxBaPrqGlUMRRjRk1y+o70ZWyoD/9NXKCK4DyPnRRAGImTl/BmSuUYlWT
+	KeqOBVIN2J3B/840Vmvwysx/H3AIF2wsXWTGL9fRGvKJMzGljt9gdwgagNo3b6gRWiOFPXQKV/I
+	6oK/T9MPqWslOXEbUGo7vj83JGR++SVpsFbsjk6gf9I+jNBWjjB/Pn4OjudKs9aZ3wXl3n2TLox
+	GycofKozsgBIxpsD1VpG0brB84Qd12krsbaSm0lfOLFb73I2a4DMCoe1NVCs=
+X-Google-Smtp-Source: AGHT+IG5Uy/FsGnbWhF/hvFAxsmFmvd3oxdR/RA86cte6CdxbKUKzDhwmPOq40RbZ4D6xmOaINcawA==
+X-Received: by 2002:a05:6a00:2e92:b0:748:ef3d:3247 with SMTP id d2e1a72fcca58-75724876e61mr28357344b3a.20.1753116865452;
+        Mon, 21 Jul 2025 09:54:25 -0700 (PDT)
 Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-23e3b6b6032sm60833035ad.86.2025.07.21.09.54.23
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-759cb155de8sm6126517b3a.84.2025.07.21.09.54.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 09:54:24 -0700 (PDT)
+        Mon, 21 Jul 2025 09:54:25 -0700 (PDT)
 From: Stanislav Fomichev <sdf@fomichev.me>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -70,12 +71,13 @@ Cc: davem@davemloft.net,
 	shuah@kernel.org,
 	sdf@fomichev.me,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Cosmin Ratiu <cratiu@nvidia.com>
-Subject: [PATCH net 1/2] macsec: set IFF_UNICAST_FLT priv flag
-Date: Mon, 21 Jul 2025 09:54:22 -0700
-Message-ID: <20250721165423.990313-1-sdf@fomichev.me>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net 2/2] selftests: rtnetlink: add macsec and vlan nesting test
+Date: Mon, 21 Jul 2025 09:54:23 -0700
+Message-ID: <20250721165423.990313-2-sdf@fomichev.me>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250721165423.990313-1-sdf@fomichev.me>
+References: <20250721165423.990313-1-sdf@fomichev.me>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,61 +86,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Cosmin reports the following locking issue:
+Add reproducer for [0] with a dummy device.
 
-  # BUG: sleeping function called from invalid context at
-  kernel/locking/mutex.c:275
-  #   dump_stack_lvl+0x4f/0x60
-  #   __might_resched+0xeb/0x140
-  #   mutex_lock+0x1a/0x40
-  #   dev_set_promiscuity+0x26/0x90
-  #   __dev_set_promiscuity+0x85/0x170
-  #   __dev_set_rx_mode+0x69/0xa0
-  #   dev_uc_add+0x6d/0x80
-  #   vlan_dev_open+0x5f/0x120 [8021q]
-  #  __dev_open+0x10c/0x2a0
-  #  __dev_change_flags+0x1a4/0x210
-  #  netif_change_flags+0x22/0x60
-  #  do_setlink.isra.0+0xdb0/0x10f0
-  #  rtnl_newlink+0x797/0xb00
-  #  rtnetlink_rcv_msg+0x1cb/0x3f0
-  #  netlink_rcv_skb+0x53/0x100
-  #  netlink_unicast+0x273/0x3b0
-  #  netlink_sendmsg+0x1f2/0x430
-
-Which is similar to recent syzkaller reports in [0] and [1] and triggers
-because macsec does not advertise IFF_UNICAST_FLT although it has proper
-ndo_set_rx_mode callback that takes care of pushing uc/mc addresses
-down to the real device.
-
-In general, dev_uc_add call path is problematic for stacking
-non-IFF_UNICAST_FLT because we might grab netdev instance lock under
-addr_list_lock spinlock, so this is not a systemic fix.
-
-0: https://lore.kernel.org/netdev/686d55b4.050a0220.1ffab7.0014.GAE@google.com
-1: https://lore.kernel.org/netdev/68712acf.a00a0220.26a83e.0051.GAE@google.com/
-Link: 2aff4342b0f5b1539c02ffd8df4c7e58dd9746e7.camel@nvidia.com
-Fixes: 7e4d784f5810 ("net: hold netdev instance lock during rtnetlink operations")
-Reported-by: Cosmin Ratiu <cratiu@nvidia.com>
-Tested-by: Cosmin Ratiu <cratiu@nvidia.com>
+0: https://lore.kernel.org/netdev/2aff4342b0f5b1539c02ffd8df4c7e58dd9746e7.camel@nvidia.com/
 Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 ---
- drivers/net/macsec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/rtnetlink.sh | 36 ++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-index 7edbe76b5455..4c75d1fea552 100644
---- a/drivers/net/macsec.c
-+++ b/drivers/net/macsec.c
-@@ -3868,7 +3868,7 @@ static void macsec_setup(struct net_device *dev)
- 	ether_setup(dev);
- 	dev->min_mtu = 0;
- 	dev->max_mtu = ETH_MAX_MTU;
--	dev->priv_flags |= IFF_NO_QUEUE;
-+	dev->priv_flags |= IFF_NO_QUEUE | IFF_UNICAST_FLT;
- 	dev->netdev_ops = &macsec_netdev_ops;
- 	dev->needs_free_netdev = true;
- 	dev->priv_destructor = macsec_free_netdev;
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index 2e8243a65b50..d786aa07829b 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -21,6 +21,7 @@ ALL_TESTS="
+ 	kci_test_vrf
+ 	kci_test_encap
+ 	kci_test_macsec
++	kci_test_macsec_vlan
+ 	kci_test_ipsec
+ 	kci_test_ipsec_offload
+ 	kci_test_fdb_get
+@@ -561,6 +562,41 @@ kci_test_macsec()
+ 	end_test "PASS: macsec"
+ }
+ 
++# Test __dev_set_rx_mode call from dev_uc_add under addr_list_lock spinlock.
++# Make sure __dev_set_promiscuity is not grabbing (sleeping) netdev instance
++# lock.
++# https://lore.kernel.org/netdev/2aff4342b0f5b1539c02ffd8df4c7e58dd9746e7.camel@nvidia.com/
++kci_test_macsec_vlan()
++{
++	msname="test_macsec1"
++	vlanname="test_vlan1"
++	local ret=0
++	run_cmd_grep "^Usage: ip macsec" ip macsec help
++	if [ $? -ne 0 ]; then
++		end_test "SKIP: macsec: iproute2 too old"
++		return $ksft_skip
++	fi
++	run_cmd ip link add link "$devdummy" "$msname" type macsec port 42 encrypt on
++	if [ $ret -ne 0 ];then
++		end_test "FAIL: can't add macsec interface, skipping test"
++		return 1
++	fi
++
++	run_cmd ip link set dev "$msname" up
++	ip link add link "$msname" name "$vlanname" type vlan id 1
++	ip link set dev "$vlanname" address 00:11:22:33:44:88
++	ip link set dev "$vlanname" up
++	run_cmd ip link del dev "$vlanname"
++	run_cmd ip link del dev "$msname"
++
++	if [ $ret -ne 0 ];then
++		end_test "FAIL: macsec_vlan"
++		return 1
++	fi
++
++	end_test "PASS: macsec_vlan"
++}
++
+ #-------------------------------------------------------------------
+ # Example commands
+ #   ip x s add proto esp src 14.0.0.52 dst 14.0.0.70 \
 -- 
 2.50.1
 
