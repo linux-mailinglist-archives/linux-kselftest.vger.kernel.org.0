@@ -1,106 +1,127 @@
-Return-Path: <linux-kselftest+bounces-37778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37780-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 367EBB0CBDF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 22:33:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC493B0CC17
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 22:49:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 658AD7B0610
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 20:32:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A67BF1AA5E04
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 20:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E694C23BF9E;
-	Mon, 21 Jul 2025 20:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F99E23AB85;
+	Mon, 21 Jul 2025 20:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rmql/4N5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EYPNb6bP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6475238C21;
-	Mon, 21 Jul 2025 20:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39401B4242;
+	Mon, 21 Jul 2025 20:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753130007; cv=none; b=OTpopedD8YcgBdUv8FLaIO3utQymWH+64zcYm7lhD6ubARFf6Q+F8jlreF5Q7Qifv6HfA6PtYmBDnAVvz6g+TCRAQ7PsgYTsXwGxRdVgcTq2D8iDNUUDbg56BOdflL+7T9u57fuf9Di08RZilEUWF/75ZekXwhBwyVOejf7uUv8=
+	t=1753130975; cv=none; b=m05V7HfHZUH0OJSCokcKrzzra4IqMSpUNw060/AoLqQnj2ItNHH7dytkLJ9X0TwFs8J5Bd98cOl3qZlZT6sn9Pxw8KizGoN8XX3rWMoIUfcD+XbfLqxoJ4hTiOffIhyCuECszBK47XndE8XaUTTWbFvArv6WAawfOCVNB1LOrDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753130007; c=relaxed/simple;
-	bh=NkElqSwao4iqS7o3LqdWn2vxjTj6xjtIto9GSbXCCUo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tKOA/bNdylrC0Shhcs8p9x2gV4BaxSOHacl89HHZpOb6zQyAYqq0KHqoCC5EnOP2g4wBM2Mv+uix/jN87lX3mJCBconZK7IsTpxoGt7lNlrvJuIYTcd+uBa4vfNRiWEk484dWymY9ICGKJnLrUs4JRWdRWUcIe9/YofcbmkpjZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rmql/4N5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56AE6C4CEED;
-	Mon, 21 Jul 2025 20:33:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753130007;
-	bh=NkElqSwao4iqS7o3LqdWn2vxjTj6xjtIto9GSbXCCUo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rmql/4N57BK1Zo7FOFbT340tlIQIjV7l0g1tU3+GZsZ7Qn5xSbYr0byGj8risLuwa
-	 tymrLiMydZlBAfONMHKcV1ngQDThmnKsdGaIs2IxyAhxkynOlXe6kp8J2yVr2uyd2a
-	 WphCzcbjl7uhtvlbK6EaB0iNM7R2CUNc9/AMgRcTxQ0USef24eT6fTkSXk8JAgkv88
-	 ptxl8AxJTwxxXTMr0VXuj2A+8WiP6oirOywWN5m2UritGQiq9U+wlCASXnJ/OhKRTU
-	 ZGPEkSJPK/gBWAdMqGTEvtkazVj2mxbZAfyYflmLFRqn7YISs/gl+s1PdRXVqYaoIo
-	 SqzTmopklmEtQ==
-Date: Mon, 21 Jul 2025 13:33:25 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Gal Pressman <gal@nvidia.com>
-Cc: Nimrod Oren <noren@nvidia.com>, Mohsin Bashir <mohsin.bashr@gmail.com>,
- netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, shuah@kernel.org, horms@kernel.org,
- cratiu@nvidia.com, cjubran@nvidia.com, mbloch@nvidia.com,
- jdamato@fastly.com, sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, john.fastabend@gmail.com, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- tariqt@nvidia.com, thoiland@redhat.com
-Subject: Re: [PATCH net-next V6 2/5] selftests: drv-net: Test XDP_PASS/DROP
- support
-Message-ID: <20250721133325.73e2f076@kernel.org>
-In-Reply-To: <eaca90db-897c-45a0-8eed-92c36dbec825@nvidia.com>
-References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
-	<20250719083059.3209169-3-mohsin.bashr@gmail.com>
-	<ab65545f-c79c-492b-a699-39f7afa984ea@nvidia.com>
-	<20250721084046.5659971c@kernel.org>
-	<eaca90db-897c-45a0-8eed-92c36dbec825@nvidia.com>
+	s=arc-20240116; t=1753130975; c=relaxed/simple;
+	bh=Jm4/f5kXKS+Wl1CcII+41ZXoz6y4+E758tZ9swKVMQI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j+a/a4gGDwasNxLbdzZisf9KoNAorPQxk44+zrjzKKrn3Ko2UlKTaWVGarGFgBxg+3wTYVIC1fGktnvNyga+AemDEdJpYwwvs7SwfWwhUQMLFh2VvJplcIqdVJIfyI0AJcEk9cqG48lBCAgfsGWZ0I7eBvlVCW8JJ0kR7Fw9klM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EYPNb6bP; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-313756c602fso944364a91.3;
+        Mon, 21 Jul 2025 13:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753130973; x=1753735773; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jm4/f5kXKS+Wl1CcII+41ZXoz6y4+E758tZ9swKVMQI=;
+        b=EYPNb6bPD2Q88Pi99uq8bOWN1khOfdFoCPE9cXE5+5g88t7v5LHjZ60VbgLfa84I17
+         M91JprxHaefCkg/1H9sa6BkGLSYSM2QaFxD9YT4z6jj92fv2dCYi6Mfl8djfH6l6Kem0
+         9257kJemoAiUXoSvOE+7w0C59+et641IiuQ95NOo7YeW3g/chM9B6Cr3jvjRUNNCZxq6
+         e3lO6vwkP6Ld2iXn3GJfUSVg4xJA6Pa49D3RVN2SqVMv7WU0kN3qq4corBdD914nfJmY
+         ReZH3ix8CCb38knP/lKWJaizm1mlfmrT9jdrsH+J5xCFO4VG3R9ea4NjSnZl5IAgK2ZS
+         +yIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753130973; x=1753735773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jm4/f5kXKS+Wl1CcII+41ZXoz6y4+E758tZ9swKVMQI=;
+        b=NOaBSJmwoEzYerfqClggKjttIbIbfoX2HNmr11de1ybna8o7q9LWwsgkwaxZWY0hP2
+         MW4nyMLBUuujLGcqnztZwdcBjKM9QRwQRyKHP+7DVv8a2Tzxx9B9+CmnnQZm49+bgm/p
+         hk//5C6+CCh/jxcscHRkTThpeGfo0/AmgIW3jJJtm8EH3WAHxnGXInD6bV6i28rm4ne4
+         sLwv8SMAsD7OpnMJXEYhy2gdR3gVy8jIQFDjKrLWOxs9fXYTMmPFrF9aeoRTirzwDD6p
+         FoWzhHrO5w0oXou4FcmwbkWQULR50AJpIDKIhL7/AEXBhf1wXUTFOaesBMCwu/XzkWNV
+         S8hg==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ30gdsVrC48jt+v952B14GUiKkdjfWDWbrHAUkT8QUzINedI545OL0E8Pmufaqk212jvnrRaW@vger.kernel.org, AJvYcCUbqZat11GBrfJOCY4p/qWA2TuVPINL4wOlesQ17ij6mQHbDj22rrn2364lwT9h7TBp7qw8qCe0wYgGTon8Y+8=@vger.kernel.org, AJvYcCVQHv17a54c8oGVs38MJPS3oL57ucksbPKw71oWPY1R79bm96Epi9TNIEMreoI9BrOhyFnsDdoJDFiYmc1e@vger.kernel.org, AJvYcCVphFqyA5bQYVihQ05ZPbh2tyESKBfAK+cUceFuUVXqEd47FR8rhFBhzIdLXem2bjfIeF8/my25LElI@vger.kernel.org, AJvYcCW8cVvtM+C1406j6sEBoONqlBnG1cjycZuMfgXDwt4ic6qSgQwIRWiP6YxCxAWM9Bp89QVAMFiy3Bk=@vger.kernel.org, AJvYcCWc4jvhhl7WtURhYio4uFlSJwRgfnWnQETLFfy9X/0U9ilVc5ukgheVZUIpeH5pfISEmShZp1PWay0gaMvjhtTK@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfhQrauNQ21kuehqBmVwnPWkQAzHT8Hbpm3oLC2MzH3PqPYP2V
+	dqBB9q4I/8gZ8yF4sgpx+29hPkbBUc39MtpKjKBeipf2Bw3qSuqtsW8UBPbQvD0BpHU+l1fUs4M
+	05TwBGRu6sROndcTXw48YH++5Jxj4i/o=
+X-Gm-Gg: ASbGncu3t/lMV39KodE1s8fom3fCVvYbT7hrtYGfHqbnn/rxvArDJznSwQpUBCv1vBL
+	3aJ1mydRHCHljqhuNUP/WJyl6m0eBpz4FG8wGb/7pHqjoXJXbd/+0p+7tbBd2Q5efXSrMXts/X8
+	Ufh8CftIuQVPqyXW9Qi8UAn30B8DJBscE6ny2CO+oiSJyhztMgkg7BxCis1a71aO+KK8noVrAhO
+	EUrBhlx
+X-Google-Smtp-Source: AGHT+IGyu0ZkPugEWXzEljdlyIx6mfONy+WiSMjlOMcnsFBAw2hx+lOle+FP3aaXLnvDiZ06RuT2JKWt9T9VrBBHr2E=
+X-Received: by 2002:a17:90a:da8d:b0:311:e8cc:4250 with SMTP id
+ 98e67ed59e1d1-31c9e75ef95mr11696365a91.3.1753130972963; Mon, 21 Jul 2025
+ 13:49:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20250719-core-cstr-fanout-1-v2-0-e1cb53f6d233@gmail.com>
+ <CANiq72mRWuQRFaouOSazi3GTXoHFaeVpyNMZcP0Lkymb+aXrqA@mail.gmail.com> <CAJ-ks9ne+YFezFvQ8nZH2UTjwqb3+3JtG0ztqecN-A46tC5SSw@mail.gmail.com>
+In-Reply-To: <CAJ-ks9ne+YFezFvQ8nZH2UTjwqb3+3JtG0ztqecN-A46tC5SSw@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 21 Jul 2025 22:49:19 +0200
+X-Gm-Features: Ac12FXxJIljI0Qgyxggn4RfqwM5u2m4U83LSCHwh8qf8prqbA__S0tFkUzwI8nA
+Message-ID: <CANiq72nWsKd1DA=3O_XNYipw0PQ5iOX0gDyqYdGzMqTDZAdukg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/10] rust: use `core::ffi::CStr` method names
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-IOn Mon, 21 Jul 2025 21:34:05 +0300 Gal Pressman wrote:
-> > That's a reasonable way to modify the test. But I'm not sure it's
-> > something that should be blocking merging the patches.
-> > Or for that matter whether it's Mohsin's responsibility to make the
-> > test cater to quirks of mlx5,  =20
->=20
-> Definitely not a quirk, you cannot assume the headers are in the linear
-> part, especially if you're going to put this program as reference in the
-> kernel tree.
->=20
-> This issue has nothing to do with mlx5, but a buggy XDP program.
+On Mon, Jul 21, 2025 at 10:31=E2=80=AFPM Tamir Duberstein <tamird@gmail.com=
+> wrote:
+>
+> Yes, please do. I did indeed use b4 - and Alice also let me know that
+> this was not correct. Sorry about that! Same is true for 2a, I'll
+> reply to that email as well.
 
-We put the tests in the tree to foster collaboration. If you think the
-test should be improved please send patches. I don't think the kernel
-will allow pulling headers if they are not in the linear section.
-But that's your problem to solve.
+Sounds good, thanks for confirming!
 
-> > which is not even part of NIPA testing -
-> > we have no way of knowing what passes for mlx5, what regresses it etc. =
-=20
->=20
-> People have been developing XDP code that runs on mlx5 long before NIPA
-> even existed =F0=9F=A4=B7=E2=80=8D=E2=99=82=EF=B8=8F..
-> And as you know we run these selftests on mlx5 hardware, as evident by
-> Nimrod's mail, and others you've seen on the list. You know what regresse=
-s.
+> I believe it was for everything, as he didn't specify otherwise.
 
-No, please don't try to dispute facts. It's not integrated, if you go
-on a vacation upstream will have no idea what broke in mlx5. Either you
-are reporting the results upstream or our guarantees on regressions are
-best effort. BTW I don't understand how you can claim that a new test
-regresses something. It never passed on mlx5 =3D=3D not a regression.
+Sometimes maintainers may mean it only for the things they actually
+maintain, especially for big series where it may be obvious -- in
+Greg's case, it is harder to assess since the series is small and he
+is a top maintainer anyway.
+
+Cheers,
+Miguel
 
