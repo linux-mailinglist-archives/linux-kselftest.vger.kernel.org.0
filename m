@@ -1,313 +1,518 @@
-Return-Path: <linux-kselftest+bounces-37745-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 217E7B0C38A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 13:45:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61AD5B0C39E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 13:49:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 309BF1650D5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 11:45:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE06D3AC603
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 11:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E58B02C327E;
-	Mon, 21 Jul 2025 11:44:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E820C2BF007;
+	Mon, 21 Jul 2025 11:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="1Y0U/RV7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="2shmLIXc";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ZiNxp/l1";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="X5eysvCX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PT63x/U7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3022298CD7
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Jul 2025 11:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09CA02D29B5;
+	Mon, 21 Jul 2025 11:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753098287; cv=none; b=pYAtyWRZnVwW/EfYvRq2JQvSbbuG3AfZe+khEVYMNg5P8By7CUUlAfJz4k0RUerEyQxvpoRHm2MXFhpCSfatSLjr1rPUCd83EZYau6wE7lT9t4vzA9J5anZJjsEnGvYpBlPcrsd4V2Pb/oPGO6NtsG/72A9zw2i0ZCEKJ+HW1Fg=
+	t=1753098536; cv=none; b=BY8JaBb5vNdow4sDyUF6vJ1df+mt2ppz468Ut1rSk7adP3aL4Db5jk/6FsMfB8XL1pbAH1niIeftSYPZGEAG1vKo9LmuEa4dE4oe8uAqKaauZzmB3xpF6t9VzutB55j+GHlDRkVuvFfKwwoy0y2oRjoTQwBbuR+t/x/Hn0Azclg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753098287; c=relaxed/simple;
-	bh=y2ZY6q5DHvBrjnCU7EvVvqgu4wCoeygwatNPsmLRFaA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IbZ63Q6koAUnmXwxbiMogPSjbPIAzUFm0ZmV5uYwjU9LJzSwsXJQNl8wrX7P5py5HZ94b+AsRERwo8mi0Ftmx4z59fUk2XQVy228frGN9orCnDE5lZvBRulxMOHo3OnBBRlp0ItrqJI68C7+WyweZDpvhNis61JsGZBZoRR9q3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=1Y0U/RV7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=2shmLIXc; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ZiNxp/l1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=X5eysvCX; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id DC56C21B43;
-	Mon, 21 Jul 2025 11:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1753098283; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=NUmNYP0zD96NJMt2QiJF3yH4rGim2UQsUeVCtMOyHVk=;
-	b=1Y0U/RV7y6jdLP39ld2T8fNtJm+RxB2r5KWi4u6f3i9FKz0/m+UqO5x+6ljcTc8SLLFC+N
-	fswGbzhRxaU5AldqhJbY4bJg6Bpt2nTbWar2tbpkLM0ZX+uAs5b3VW5pjGWdQgugTJhesP
-	9porNnODmkQBr/jpgB1JUihfnMYSxfk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1753098283;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=NUmNYP0zD96NJMt2QiJF3yH4rGim2UQsUeVCtMOyHVk=;
-	b=2shmLIXcpt9sF7Gt05RDg5czHIluPVLQifJKYHwvlyvefDzErx5HKJh6cq4MpMOzfLO5OT
-	h8TO/AohfNI3FhCg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="ZiNxp/l1";
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=X5eysvCX
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1753098282; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=NUmNYP0zD96NJMt2QiJF3yH4rGim2UQsUeVCtMOyHVk=;
-	b=ZiNxp/l1ik8lvzeCSoaGr/IzgCefVwK2VlvCYGdFMoEyTbfIaODdp3+z92+wGWZYZAYbEx
-	8T3k/Tsh0SfiuLyfJ5m6n9PLCbVG9ANUT8qS9v9MUGfl0O4jCmT9MbwV8ZSLILVcGN8sRf
-	A570qiXiMTa2Hguvs3tzK3kLMR1oosg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1753098282;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=NUmNYP0zD96NJMt2QiJF3yH4rGim2UQsUeVCtMOyHVk=;
-	b=X5eysvCXZRU7ogAWyK98TQUiKwA56IzcSvOJO9ZMkfcYWm4BFBhRZjf8LxR8pPClwbLFA9
-	XdraXbSvp72r9tBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 71EF813A88;
-	Mon, 21 Jul 2025 11:44:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id nelPGyoofmjUMgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Mon, 21 Jul 2025 11:44:42 +0000
-Message-ID: <78f3032d-dfa4-4907-be42-6a7e8a34371e@suse.cz>
-Date: Mon, 21 Jul 2025 13:44:42 +0200
+	s=arc-20240116; t=1753098536; c=relaxed/simple;
+	bh=FPZUoVzQ1k2Jl40SR1sDvMO7mt9dYAITqWdmmM3E9K0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KL3P/S6gxA3bdfhxIB6nMSx0m5vCA7C/lQ82g8oeUlS7J9enmy+OHzuoY38s5/QfUJxdzOfyzw0jp5/H0nbKIErBlLmDzaS3uaOBQ1EmW8JoVvg4dKggeQItpOCUwiv0yaat/opJA4VRDqPXI6WtD3BiRV7X4pxyedyG3e/St0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PT63x/U7; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-234b440afa7so39332265ad.0;
+        Mon, 21 Jul 2025 04:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753098534; x=1753703334; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9sReXXIx9NMJXCRfkoLRAwZrYfbcdFD69IH+Y22/p/w=;
+        b=PT63x/U7cZ7sCuMFRpeR0N5pVeH8Ssm4cRvMC8U79AXtPO+5pL+p5gLfer7Z/aLIDL
+         DiP0t1ndFycQjYz4PbdlUwZv0eA+UA+dc4BfDg4lAmUQ7lmstnPxeAEJGDUWBIBbKQj5
+         z5TU5SZU6kTbC6HvQCKUXYvnB1bQD9DoP5hAO8R2Mdyak3k28bINaWmEgZNxFJaqwnOu
+         wD3k8F2iWxMssiL72pnVVpx6n10jeYVYh7afw+/VRsbzmQsE7ecy5c/3jo3jn62j6hIA
+         qgOZsEdxRnh81+LBwUGeiStEztNSJmq8lsCizIZdmKIyMMj7W30S+6exEfxPCkG/ajSA
+         mfMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753098534; x=1753703334;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9sReXXIx9NMJXCRfkoLRAwZrYfbcdFD69IH+Y22/p/w=;
+        b=cY2GBIKdI1prdiuY2VRbuQc3jJnM4skLySl/yurT8tbZrZZdaH3cjHLtlQEmWYo+eO
+         WVGXosmXFziB737a6yDxHMqlDxbMqv2Zr9B5Vpe0dk0wnF4rErzfgqcz1kwFCaIlpPi/
+         /PyfPIoiusj3olRKNQ1NaBmbX6i/IU25Qyn9RS6YVzYqZdmJTd2LmDunY3yx63+MWT+4
+         I2Ywnyn2Nk9Q6bWGrDTT3Yq3ntv6IwwPAYTPPlR9IxKwaB9L4mfJ0dkUgt5r8lii+YLm
+         sCD+1RoucfhPLpCSz5THieJvWzZY58bDBuxn9LQ+BdXtjGvK+bfoMmzZ6GNBxiOFb3rI
+         lPXA==
+X-Forwarded-Encrypted: i=1; AJvYcCXDeLdbXnxJNzG7TtwCqbJBD86tBPn2Br8653/Aw1Zfz09kimptC5wX5YnR31RVc2ksRqoMqwDiZwRRp749vB0n@vger.kernel.org, AJvYcCXrSk9aMnsAF7tJh6pK246vhlINIK+bjtYiPzix2z3Jbdr1Dd8Wvja5eVePhXUPzEB/LKAUJ+y4kF5ZM44=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtBNJ2gKQItr5+JDHH6e7qTWOASp+elY+lrzIZrSOXHPyJ1X9q
+	5hXGBpNUH3tIZCKKsMu/cNHQxLd7izVjAh8JgkuKTbjCnPpfNOWZWs/e
+X-Gm-Gg: ASbGncsjsHpuDyU143Q+/r+p6jKrqRi54Y+uYSYMQ2dWxrvQLrQavhWsvIq7tvBxOsZ
+	ZbcDZkSsU8qRHIcu385021GHHBvwX/sSe8tXb7huqjmsQXoODHhuIHkWlwJXcq5DNK4OkYcDhR7
+	ac6chBeLcbynLNx/3Cpb75hWB3Zxq8GX4hlZLRhkIgAVFfz+DgjhYogE85CNXQy/vDUoE7lx8nr
+	fz5SF030+kG0LWNj3ZZxQ6wiJCAQefcYTWg3ujiuJphnDKCpA5/XUJxCRpb/NB41qwboPrQaKoE
+	QsCJRU3QNDEld81bKvRIGcXtcJvXEcHgEbsMqLh6fBV5HpwJhZVXNPZpGhoTDQONu5lk5vo6+L9
+	yAah9Ey+hEQmW2mBuTPfVv06iEzixijbguha+GfQBbi65auOL
+X-Google-Smtp-Source: AGHT+IHsUogxyxa7Su4xFJsizeA4Qw7ICRea3y4pr9fiZSlnKvxn857hLpw1XX1ViVgvxDlDgxPzKQ==
+X-Received: by 2002:a17:903:2ac7:b0:235:779:edfe with SMTP id d9443c01a7336-23e3035fd75mr233353325ad.43.1753098533948;
+        Mon, 21 Jul 2025 04:48:53 -0700 (PDT)
+Received: from DESKTOP-GIED850.localdomain ([114.247.113.178])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b4adeb8sm57038675ad.0.2025.07.21.04.48.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jul 2025 04:48:53 -0700 (PDT)
+From: wang lian <lianux.mm@gmail.com>
+To: akpm@linux-foundation.org,
+	broonie@kernel.org,
+	david@redhat.com,
+	sj@kernel.org,
+	lorenzo.stoakes@oracle.com,
+	ziy@nvidia.com,
+	lianux.mm@gmail.com,
+	linux-kernel@vger.kernel.org
+Cc: brauner@kernel.org,
+	jannh@google.com,
+	Liam.Howlett@oracle.com,
+	shuah@kernel.org,
+	vbabka@suse.cz,
+	gkwang@linx-info.com,
+	p1ucky0923@gmail.com,
+	ryncsn@gmail.com,
+	zijing.zhang@proton.me,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v6] selftests/mm: add process_madvise() tests
+Date: Mon, 21 Jul 2025 19:46:14 +0800
+Message-ID: <20250721114614.40996-1-lianux.mm@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V9 5/7] KVM: guest_memfd: Add slab-allocated inode cache
-Content-Language: en-US
-To: Shivank Garg <shivankg@amd.com>, seanjc@google.com, david@redhat.com,
- willy@infradead.org, akpm@linux-foundation.org, shuah@kernel.org,
- pbonzini@redhat.com, brauner@kernel.org, viro@zeniv.linux.org.uk
-Cc: ackerleytng@google.com, paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com, pvorel@suse.cz, bfoster@redhat.com, tabba@google.com,
- vannapurve@google.com, chao.gao@intel.com, bharata@amd.com, nikunj@amd.com,
- michael.day@amd.com, shdhiman@amd.com, yan.y.zhao@intel.com,
- Neeraj.Upadhyay@amd.com, thomas.lendacky@amd.com, michael.roth@amd.com,
- aik@amd.com, jgg@nvidia.com, kalyazin@amazon.com, peterx@redhat.com,
- jack@suse.cz, rppt@kernel.org, hch@infradead.org, cgzones@googlemail.com,
- ira.weiny@intel.com, rientjes@google.com, roypat@amazon.co.uk,
- ziy@nvidia.com, matthew.brost@intel.com, joshua.hahnjy@gmail.com,
- rakie.kim@sk.com, byungchul@sk.com, gourry@gourry.net,
- kent.overstreet@linux.dev, ying.huang@linux.alibaba.com, apopple@nvidia.com,
- chao.p.peng@intel.com, amit@infradead.org, ddutile@redhat.com,
- dan.j.williams@intel.com, ashish.kalra@amd.com, gshan@redhat.com,
- jgowans@amazon.com, pankaj.gupta@amd.com, papaluri@amd.com,
- yuzhao@google.com, suzuki.poulose@arm.com, quic_eberman@quicinc.com,
- aneeshkumar.kizhakeveetil@arm.com, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-security-module@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-coco@lists.linux.dev
-References: <20250713174339.13981-2-shivankg@amd.com>
- <20250713174339.13981-8-shivankg@amd.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <20250713174339.13981-8-shivankg@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: DC56C21B43
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TAGGED_RCPT(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[google.com,paul-moore.com,namei.org,hallyn.com,suse.cz,redhat.com,intel.com,amd.com,nvidia.com,amazon.com,kernel.org,infradead.org,googlemail.com,amazon.co.uk,gmail.com,sk.com,gourry.net,linux.dev,linux.alibaba.com,arm.com,quicinc.com,vger.kernel.org,kvack.org,lists.linux.dev];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[66];
-	RCVD_COUNT_TWO(0.00)[2];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Score: -3.01
+Content-Transfer-Encoding: 8bit
 
-On 7/13/25 19:43, Shivank Garg wrote:
-> Add dedicated inode structure (kvm_gmem_inode_info) and slab-allocated
-> inode cache for guest memory backing, similar to how shmem handles inodes.
-> 
-> This adds the necessary allocation/destruction functions and prepares
-> for upcoming guest_memfd NUMA policy support changes.
-> 
-> Signed-off-by: Shivank Garg <shivankg@amd.com>
-> ---
->  virt/kvm/guest_memfd.c | 58 ++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 56 insertions(+), 2 deletions(-)
-> 
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index dabcc2317291..989e2b26b344 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -17,6 +17,15 @@ struct kvm_gmem {
->  	struct list_head entry;
->  };
->  
-> +struct kvm_gmem_inode_info {
-> +	struct inode vfs_inode;
-> +};
-> +
-> +static inline struct kvm_gmem_inode_info *KVM_GMEM_I(struct inode *inode)
-> +{
-> +	return container_of(inode, struct kvm_gmem_inode_info, vfs_inode);
-> +}
-> +
->  /**
->   * folio_file_pfn - like folio_file_page, but return a pfn.
->   * @folio: The folio which contains this index.
-> @@ -392,8 +401,33 @@ static struct file_operations kvm_gmem_fops = {
->  	.fallocate	= kvm_gmem_fallocate,
->  };
->  
-> +static struct kmem_cache *kvm_gmem_inode_cachep;
-> +
-> +static struct inode *kvm_gmem_alloc_inode(struct super_block *sb)
-> +{
-> +	struct kvm_gmem_inode_info *info;
-> +
-> +	info = alloc_inode_sb(sb, kvm_gmem_inode_cachep, GFP_KERNEL);
-> +	if (!info)
-> +		return NULL;
-> +
-> +	return &info->vfs_inode;
-> +}
-> +
-> +static void kvm_gmem_destroy_inode(struct inode *inode)
-> +{
-> +}
-> +
-> +static void kvm_gmem_free_inode(struct inode *inode)
-> +{
-> +	kmem_cache_free(kvm_gmem_inode_cachep, KVM_GMEM_I(inode));
-> +}
-> +
->  static const struct super_operations kvm_gmem_super_operations = {
->  	.statfs		= simple_statfs,
-> +	.alloc_inode	= kvm_gmem_alloc_inode,
-> +	.destroy_inode	= kvm_gmem_destroy_inode,
-> +	.free_inode	= kvm_gmem_free_inode,
->  };
->  
->  static int kvm_gmem_init_fs_context(struct fs_context *fc)
-> @@ -426,17 +460,37 @@ static int kvm_gmem_init_mount(void)
->  	return 0;
->  }
->  
-> +static void kvm_gmem_init_inode(void *foo)
-> +{
-> +	struct kvm_gmem_inode_info *info = foo;
-> +
-> +	inode_init_once(&info->vfs_inode);
-> +}
-> +
->  int kvm_gmem_init(struct module *module)
->  {
-> -	kvm_gmem_fops.owner = module;
-> +	int ret;
->  
-> -	return kvm_gmem_init_mount();
-> +	kvm_gmem_fops.owner = module;
-> +	kvm_gmem_inode_cachep = kmem_cache_create("kvm_gmem_inode_cache",
-> +						  sizeof(struct kvm_gmem_inode_info),
-> +						  0, SLAB_ACCOUNT,
-> +						  kvm_gmem_init_inode);
+Add tests for process_madvise(), focusing on verifying behavior under
+various conditions including valid usage and error cases.
 
-Since this is new code, please use the new variant of kmem_cache_create()
-that takes the args parameter.
+Signed-off-by: wang lian <lianux.mm@gmail.com>
+Suggested-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Suggested-by: David Hildenbrand <david@redhat.com>
+Suggested-by: Zi Yan <ziy@nvidia.com>
+Suggested-by: Mark Brown <broonie@kernel.org>
+Acked-by: SeongJae Park <sj@kernel.org>
 
-> +	if (!kvm_gmem_inode_cachep)
-> +		return -ENOMEM;
-> +	ret = kvm_gmem_init_mount();
-> +	if (ret) {
-> +		kmem_cache_destroy(kvm_gmem_inode_cachep);
-> +		return ret;
-> +	}
-> +	return 0;
->  }
->  
->  void kvm_gmem_exit(void)
->  {
->  	kern_unmount(kvm_gmem_mnt);
->  	kvm_gmem_mnt = NULL;
-> +	kmem_cache_destroy(kvm_gmem_inode_cachep);
->  }
->  
->  static int kvm_gmem_migrate_folio(struct address_space *mapping,
+---
+Changelog v6:
+- Refactor child process and pidfd management to use the kselftest
+  fixture's setup and teardown mechanism. This ensures that child
+  processes are reliably terminated and file descriptors are closed, even
+  when a test is aborted by an ASSERT or SKIP macro. This resolves the
+  issue where a failed assertion could lead to a leaked child process.
+
+Changelog v5: https://lore.kernel.org/lkml/20250714122533.3135-1-lianux.mm@gmail.com/
+- Refactor the remote_collapse test to concentrate on its primary goal
+  confirming the successful remote invocation of process_madvise() on a child process.
+- Split the validation logic for invalid pidfds out of the remote test and into two new
+  (`exited_process_pidfd` and `bad_pidfd`).
+- Based mm-new branch, can ensure clean application
+
+
+Changelog v4: https://lore.kernel.org/lkml/20250710112249.58722-1-lianux.mm@gmail.com/
+- Refine resource cleanup logic in test teardown to be more robust.
+- Improve remote_collapse test to correctly handle different THP
+  (Transparent Huge Page) policies ('always', 'madvise', 'never'),
+  including handling race conditions with khugepaged.
+- Resolve build errors
+
+Changelog v3: https://lore.kernel.org/lkml/20250703044326.65061-1-lianux.mm@gmail.com/
+- Rebased onto the latest mm-stable branch to ensure clean application.
+- Refactor common signal handling logic into vm_util to reduce code duplication.
+- Improve test robustness and diagnostics based on community feedback.
+- Address minor code style and script corrections.
+
+Changelog v2: https://lore.kernel.org/lkml/20250630140957.4000-1-lianux.mm@gmail.com/
+- Drop MADV_DONTNEED tests based on feedback.
+- Focus solely on process_madvise() syscall.
+- Improve error handling and structure.
+- Add future-proof flag test.
+- Style and comment cleanups.
+
+-V1: https://lore.kernel.org/lkml/20250621133003.4733-1-lianux.mm@gmail.com/
+ tools/testing/selftests/mm/.gitignore     |   1 +
+ tools/testing/selftests/mm/Makefile       |   1 +
+ tools/testing/selftests/mm/process_madv.c | 302 ++++++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh |   5 +
+ 4 files changed, 309 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/process_madv.c
+
+diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+index f2dafa0b700b..e7b23a8a05fe 
+--- a/tools/testing/selftests/mm/.gitignore
++++ b/tools/testing/selftests/mm/.gitignore
+@@ -21,6 +21,7 @@ on-fault-limit
+ transhuge-stress
+ pagemap_ioctl
+ pfnmap
++process_madv
+ *.tmp*
+ protection_keys
+ protection_keys_32
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index ae6f994d3add..d13b3cef2a2b 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -85,6 +85,7 @@ TEST_GEN_FILES += mseal_test
+ TEST_GEN_FILES += on-fault-limit
+ TEST_GEN_FILES += pagemap_ioctl
+ TEST_GEN_FILES += pfnmap
++TEST_GEN_FILES += process_madv
+ TEST_GEN_FILES += thuge-gen
+ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += uffd-stress
+diff --git a/tools/testing/selftests/mm/process_madv.c b/tools/testing/selftests/mm/process_madv.c
+new file mode 100644
+index 000000000000..8a83eac3bfab
+--- /dev/null
++++ b/tools/testing/selftests/mm/process_madv.c
+@@ -0,0 +1,302 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#define _GNU_SOURCE
++#include "../kselftest_harness.h"
++#include <errno.h>
++#include <setjmp.h>
++#include <signal.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <linux/mman.h>
++#include <sys/syscall.h>
++#include <unistd.h>
++#include <sched.h>
++#include "vm_util.h"
++
++#include "../pidfd/pidfd.h"
++
++FIXTURE(process_madvise)
++{
++	unsigned long page_size;
++	pid_t child_pid;
++	int remote_pidfd;
++	int pidfd;
++};
++
++FIXTURE_SETUP(process_madvise)
++{
++	self->page_size = (unsigned long)sysconf(_SC_PAGESIZE);
++	self->pidfd = PIDFD_SELF;
++	self->remote_pidfd = -1;
++	self->child_pid = -1;
++};
++
++FIXTURE_TEARDOWN_PARENT(process_madvise)
++{
++	/* This teardown is guaranteed to run, even if tests SKIP or ASSERT */
++	if (self->child_pid > 0) {
++		kill(self->child_pid, SIGKILL);
++		waitpid(self->child_pid, NULL, 0);
++	}
++
++	if (self->remote_pidfd >= 0)
++		close(self->remote_pidfd);
++}
++
++static ssize_t sys_process_madvise(int pidfd, const struct iovec *iovec,
++				   size_t vlen, int advice, unsigned int flags)
++{
++	return syscall(__NR_process_madvise, pidfd, iovec, vlen, advice, flags);
++}
++
++/*
++ * This test uses PIDFD_SELF to target the current process. The main
++ * goal is to verify the basic behavior of process_madvise() with
++ * a vector of non-contiguous memory ranges, not its cross-process
++ * capabilities.
++ */
++TEST_F(process_madvise, basic)
++{
++	const unsigned long pagesize = self->page_size;
++	const int madvise_pages = 4;
++	struct iovec vec[madvise_pages];
++	int pidfd = self->pidfd;
++	ssize_t ret;
++	char *map;
++
++	/*
++	 * Create a single large mapping. We will pick pages from this
++	 * mapping to advise on. This ensures we test non-contiguous iovecs.
++	 */
++	map = mmap(NULL, pagesize * 10, PROT_READ | PROT_WRITE,
++		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (map == MAP_FAILED)
++		SKIP(return, "mmap failed, not enough memory.\n");
++
++	/* Fill the entire region with a known pattern. */
++	memset(map, 'A', pagesize * 10);
++
++	/*
++	 * Setup the iovec to point to 4 non-contiguous pages
++	 * within the mapping.
++	 */
++	vec[0].iov_base = &map[0 * pagesize];
++	vec[0].iov_len = pagesize;
++	vec[1].iov_base = &map[3 * pagesize];
++	vec[1].iov_len = pagesize;
++	vec[2].iov_base = &map[5 * pagesize];
++	vec[2].iov_len = pagesize;
++	vec[3].iov_base = &map[8 * pagesize];
++	vec[3].iov_len = pagesize;
++
++	ret = sys_process_madvise(pidfd, vec, madvise_pages, MADV_DONTNEED, 0);
++	if (ret == -1 && errno == EPERM)
++		SKIP(return,
++			   "process_madvise() unsupported or permission denied, try running as root.\n");
++	else if (errno == EINVAL)
++		SKIP(return,
++			   "process_madvise() unsupported or parameter invalid, please check arguments.\n");
++
++	/* The call should succeed and report the total bytes processed. */
++	ASSERT_EQ(ret, madvise_pages * pagesize);
++
++	/* Check that advised pages are now zero. */
++	for (int i = 0; i < madvise_pages; i++) {
++		char *advised_page = (char *)vec[i].iov_base;
++
++		/* Content must be 0, not 'A'. */
++		ASSERT_EQ(*advised_page, '\0');
++	}
++
++	/* Check that an un-advised page in between is still 'A'. */
++	char *unadvised_page = &map[1 * pagesize];
++
++	for (int i = 0; i < pagesize; i++)
++		ASSERT_EQ(unadvised_page[i], 'A');
++
++	/* Cleanup. */
++	ASSERT_EQ(munmap(map, pagesize * 10), 0);
++}
++
++/*
++ * This test deterministically validates process_madvise() with MADV_COLLAPSE
++ * on a remote process, other advices are difficult to verify reliably.
++ *
++ * The test verifies that a memory region in a child process,
++ * focus on process_madv remote result, only check addresses and lengths.
++ * The correctness of the MADV_COLLAPSE can be found in the relevant test examples in khugepaged.
++ */
++TEST_F(process_madvise, remote_collapse)
++{
++	const unsigned long pagesize = self->page_size;
++	long huge_page_size;
++	int pipe_info[2];
++	ssize_t ret;
++	struct iovec vec;
++
++	struct child_info {
++		pid_t pid;
++		void *map_addr;
++	} info;
++
++	huge_page_size = default_huge_page_size();
++	if (huge_page_size <= 0)
++		SKIP(return, "Could not determine a valid huge page size.\n");
++
++	ASSERT_EQ(pipe(pipe_info), 0);
++
++	self->child_pid = fork();
++	ASSERT_NE(self->child_pid, -1);
++
++	if (self->child_pid == 0) {
++		char *map;
++		size_t map_size = 2 * huge_page_size;
++
++		close(pipe_info[0]);
++
++		map = mmap(NULL, map_size, PROT_READ | PROT_WRITE,
++			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++		ASSERT_NE(map, MAP_FAILED);
++
++		/* Fault in as small pages */
++		for (size_t i = 0; i < map_size; i += pagesize)
++			map[i] = 'A';
++
++		/* Send info and pause */
++		info.pid = getpid();
++		info.map_addr = map;
++		ret = write(pipe_info[1], &info, sizeof(info));
++		ASSERT_EQ(ret, sizeof(info));
++		close(pipe_info[1]);
++
++		pause();
++		exit(0);
++	}
++
++	close(pipe_info[1]);
++
++	/* Receive child info */
++	ret = read(pipe_info[0], &info, sizeof(info));
++	if (ret <= 0) {
++		waitpid(self->child_pid, NULL, 0);
++		SKIP(return, "Failed to read child info from pipe.\n");
++	}
++	ASSERT_EQ(ret, sizeof(info));
++	close(pipe_info[0]);
++	self->child_pid = info.pid;
++
++	self->remote_pidfd = syscall(__NR_pidfd_open, self->child_pid, 0);
++	ASSERT_GE(self->remote_pidfd, 0);
++
++	vec.iov_base = info.map_addr;
++	vec.iov_len = huge_page_size;
++
++	ret = sys_process_madvise(self->remote_pidfd, &vec, 1, MADV_COLLAPSE, 0);
++	if (ret == -1) {
++		if (errno == EINVAL)
++			SKIP(return, "PROCESS_MADV_ADVISE is not supported.\n");
++		else if (errno == EPERM)
++			SKIP(return,
++				   "No process_madvise() permissions, try running as root.\n");
++		return;
++	}
++
++	ASSERT_EQ(ret, huge_page_size);
++}
++
++/*
++ * Test process_madvise() with a pidfd for a process that has already
++ * exited to ensure correct error handling.
++ */
++TEST_F(process_madvise, exited_process_pidfd)
++{
++	struct iovec vec;
++	ssize_t ret;
++	int pidfd;
++
++	vec.iov_base = (void *)0x1234;
++	vec.iov_len = 4096;
++
++	/*
++	 * Using a pidfd for a process that has already exited should fail
++	 * with ESRCH.
++	 */
++	self->child_pid = fork();
++	ASSERT_NE(self->child_pid, -1);
++
++	if (self->child_pid == 0)
++		exit(0);
++
++	pidfd = syscall(__NR_pidfd_open, self->child_pid, 0);
++	ASSERT_GE(pidfd, 0);
++
++	/* Wait for the child to ensure it has terminated. */
++	waitpid(self->child_pid, NULL, 0);
++
++	ret = sys_process_madvise(pidfd, &vec, 1, MADV_DONTNEED, 0);
++	ASSERT_EQ(ret, -1);
++	ASSERT_EQ(errno, ESRCH);
++	close(pidfd);
++}
++
++/*
++ * Test process_madvise() with bad pidfds to ensure correct error
++ * handling.
++ */
++TEST_F(process_madvise, bad_pidfd)
++{
++	struct iovec vec;
++	ssize_t ret;
++
++	vec.iov_base = (void *)0x1234;
++	vec.iov_len = 4096;
++
++	/* Using an invalid fd number (-1) should fail with EBADF. */
++	ret = sys_process_madvise(-1, &vec, 1, MADV_DONTNEED, 0);
++	ASSERT_EQ(ret, -1);
++	ASSERT_EQ(errno, EBADF);
++
++	/*
++	 * Using a valid fd that is not a pidfd (e.g. stdin) should fail
++	 * with EBADF.
++	 */
++	ret = sys_process_madvise(STDIN_FILENO, &vec, 1, MADV_DONTNEED, 0);
++	ASSERT_EQ(ret, -1);
++	ASSERT_EQ(errno, EBADF);
++}
++
++/*
++ * Test process_madvise() with an invalid flag value. Currently, only a flag
++ * value of 0 is supported. This test is reserved for the future, e.g., if
++ * synchronous flags are added.
++ */
++TEST_F(process_madvise, flag)
++{
++	const unsigned long pagesize = self->page_size;
++	unsigned int invalid_flag;
++	int pidfd = self->pidfd;
++	struct iovec vec;
++	char *map;
++	ssize_t ret;
++
++	map = mmap(NULL, pagesize, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1,
++		   0);
++	if (map == MAP_FAILED)
++		SKIP(return, "mmap failed, not enough memory.\n");
++
++	vec.iov_base = map;
++	vec.iov_len = pagesize;
++
++	invalid_flag = 0x80000000;
++
++	ret = sys_process_madvise(pidfd, &vec, 1, MADV_DONTNEED, invalid_flag);
++	ASSERT_EQ(ret, -1);
++	ASSERT_EQ(errno, EINVAL);
++
++	/* Cleanup. */
++	ASSERT_EQ(munmap(map, pagesize), 0);
++}
++
++TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index a38c984103ce..471e539d82b8 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -65,6 +65,8 @@ separated by spaces:
+ 	test pagemap_scan IOCTL
+ - pfnmap
+ 	tests for VM_PFNMAP handling
++- process_madv
++	test for process_madv
+ - cow
+ 	test copy-on-write semantics
+ - thp
+@@ -425,6 +427,9 @@ CATEGORY="madv_guard" run_test ./guard-regions
+ # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
+ CATEGORY="madv_populate" run_test ./madv_populate
+ 
++# PROCESS_MADV test
++CATEGORY="process_madv" run_test ./process_madv
++
+ CATEGORY="vma_merge" run_test ./merge
+ 
+ if [ -x ./memfd_secret ]
+-- 
+2.43.0
 
 
