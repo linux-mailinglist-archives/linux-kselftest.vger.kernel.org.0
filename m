@@ -1,47 +1,78 @@
-Return-Path: <linux-kselftest+bounces-37732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FC41B0BB0F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 04:57:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E620BB0BCDE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 08:42:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6386917417A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 02:57:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01EA8167E3A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 06:42:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BAA21EB5D6;
-	Mon, 21 Jul 2025 02:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67AB527F006;
+	Mon, 21 Jul 2025 06:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bDfUUXio";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GqCH6LtS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35E8749625;
-	Mon, 21 Jul 2025 02:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DB927F187;
+	Mon, 21 Jul 2025 06:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753066658; cv=none; b=b3jBH3wrj/M+qOS4smB7I5ZsLtiCB308fGTgs0rJdCZiYyryqjqrDLoez4An+nklRIY68290raRBeMVdZl7zuDjofWj5byzczgneXjuEQFpCflB2XG6carILBEa4akjAvnIiIisKDD1R5l7TRN73sUazGltiYEizvcBkYolXGzk=
+	t=1753080167; cv=none; b=QWioLANpvkpcEs4yuHpXIqD/UpkS64uqzHIl0uUZJyd+SAAFE2fXWt5adgpzYUoWV1Gli9VQk/GTKvEyeNj9RTCNMrvUmqgedJ5mSBUHLQ4M20jbYFhngJuLPRMu+oTvkwfaoAFCfj+Cybt9Ln0mOIH++92BdF8Mjle3G4AeZaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753066658; c=relaxed/simple;
-	bh=DT2qFUbrALMb/Ihn2YKx1cwZ7lLCygvn87yXHQHlcD0=;
+	s=arc-20240116; t=1753080167; c=relaxed/simple;
+	bh=Y87bhy5daZH8/4KCjU0hN1yCQ/40lLvGcZ4NSSiWxvQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Slz9BUIM5LLQCVkgy7/EZgO5y/sKxdthy9dERU7HwkqKxYF7nyveD8aHYEtRor6iffIHbCoExr7h90N6SC+C//QkVVzP/+L1nODfDFOursejAQf9scPxx10xXoHJ1DkiryzbHGsjOOLx1BEo2o+RsXKQVeoE1IDoEJm6Hc22Uc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 56L2vUKA001992;
-	Mon, 21 Jul 2025 04:57:30 +0200
-Date: Mon, 21 Jul 2025 04:57:30 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/3] selftests/nolibc: enable qemu-system tests with LLVM
- builds
-Message-ID: <20250721025730.GC1886@1wt.eu>
-References: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rzg+V14IR86TPkjy3arSv9iaMw7Aacdois8YoOQ5IAOanc22+mbry0MWpF3+3QPs71hfe52GdrIYdER1eDAAoSHHJ1gnQ8c7hNxwQ8UpCtMQtJbq9Nz4531ak6Glnq4HRhxs/rH4e/2HYvmx1l6lngH//GaS8Xb/6frT6oiSw2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bDfUUXio; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GqCH6LtS; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Mon, 21 Jul 2025 08:42:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1753080163;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tyczl2pXIS5un450KeY12IY1AEuLzrL/JOTCmCTx0/Y=;
+	b=bDfUUXioek9CJPvHOobeJUFRkzBLUB4SxeE7NHC9ODhWlWmij0QEEU8AaC+a4Y8vHB+v/r
+	vjqq+jqE5ZJPQU9dvC9XKUfiDg9mOwznhjswrKSpysrWTHy5bRLE8uikKkLAD5Zj0iFTjz
+	YXKOIGPO6+m9pAIAi/Nk6QdDKFHyxPdQvI8ZCZgn0G+D8O2rGhRAhX4avhjPm65L3mMfhM
+	eLvE5drLzj0rJJtQaAS8tyxQnx5wSj6EFvrjmz8b2CZyh0b1b4xFdszwhisYWCEd4xlKfm
+	pCtRWmAXiLHgtnDgqW1LBlID3Jn6KiabOxhgfhscrpLFti4df0DlUCjKu7wZSQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1753080163;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tyczl2pXIS5un450KeY12IY1AEuLzrL/JOTCmCTx0/Y=;
+	b=GqCH6LtSDPllEmiW8hSXADeWdGxHElcJ8pEB2JVXeLV0OpRpMGQktzjDkwXz4EWuGmvo5Z
+	z33lXSs4UrMWhWAA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Kees Cook <kees@kernel.org>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-doc@vger.kernel.org, workflows@vger.kernel.org, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v5 06/15] fs,fork,exit: export symbols necessary for
+ KUnit UAPI support
+Message-ID: <20250721075849-b3cf33b6-2516-4707-bab6-53fe95afbffa@linutronix.de>
+References: <20250717-kunit-kselftests-v5-0-442b711cde2e@linutronix.de>
+ <20250717-kunit-kselftests-v5-6-442b711cde2e@linutronix.de>
+ <20250718164412.GD2580412@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,22 +82,35 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20250718164412.GD2580412@ZenIV>
 
-On Sat, Jul 19, 2025 at 05:38:26PM +0200, Thomas Weiﬂschuh wrote:
-> Currently the test setup does not support running nolibc-test built with
-> LLVM in qemu-system. Enable this.
+On Fri, Jul 18, 2025 at 05:44:12PM +0100, Al Viro wrote:
+> On Thu, Jul 17, 2025 at 10:48:08AM +0200, Thomas Weiﬂschuh wrote:
+> > The KUnit UAPI infrastructure starts userspace processes.
+> > As it should be able to be built as a module, export the necessary symbols.
+> > 
+> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 > 
-> FYI, sparc32 on LLVM seems to be broken at the moment. To me this looks
-> like a LLVM regression, emitting invalid object code.
-> 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> No.  This is just plain wrong.  This is way too low-level; teach kernel/umh.c
+> to provide what you need, but do *not* add more kernel_execve() callers.
 
-For the series, once the help message is adjusted:
+Sounds good.
 
-  Acked-by: Willy Tarreau <w@1wt.eu>
+> And the situation with ramfs needs cleaning up, but "export put_filesystem()"
+> is not a solution.
 
-Thanks!
-Willy
+Cleaning up would mean to stop calling put_filesystem(), as it is a no-op
+here anyways, right?
+
+
+This would still leave the exports for replace_fd(), create_pipe_files()
+and set_fs_pwd(). Instead of using kernel/umh.c, I can also extend
+kernel/usermode_driver.c to provide these in a way that works for me.
+But kernel/usermode_driver.c is dead code, unused since commit
+98e20e5e13d2 ("bpfilter: remove bpfilter")
+Would it be fine to export those symbols? And delete usermode_driver.c,
+as carrying around an unused generic framework seems pointless.
+
+
+Thomas
 
