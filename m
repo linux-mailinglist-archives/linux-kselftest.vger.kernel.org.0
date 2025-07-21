@@ -1,166 +1,133 @@
-Return-Path: <linux-kselftest+bounces-37748-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37749-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84740B0C45E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 14:48:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 685B4B0C4A7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 15:01:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E66A18938AF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 12:48:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4DAE3A3E5E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 13:01:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58F772D46A2;
-	Mon, 21 Jul 2025 12:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740282D836C;
+	Mon, 21 Jul 2025 13:01:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R8evXuR+"
+	dkim=pass (2048-bit key) header.d=readmodwrite-com.20230601.gappssmtp.com header.i=@readmodwrite-com.20230601.gappssmtp.com header.b="jxC2utf4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E424502F;
-	Mon, 21 Jul 2025 12:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 138FE2D12F5
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Jul 2025 13:01:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753102089; cv=none; b=E8jZoPuVMg3Fp8eB1JExRdlxpUXTxuyaHxIVIDqfiW1CnTqRG7QkKUnTN7AwmtWQTfvIh3DHlGy0G/ojCya/Yc2/lTCjfQgahjwWT41RMTZNNiR5xC9xuOpyFcKRS4dnHEf72GjmTsfDQcK6QtLQCxnW1/FEfqH3Ns72O2GwfWc=
+	t=1753102907; cv=none; b=YsV9Mrx3Q04R5mP8ZurKouqZgS4mW+mXK1ZjFw1RvjJwisKc/c2ebDNONcmDpiq6VHpE1mT3H3SjnsnMCveZEa20oPJX3tRLtECPwbveT5ug3ge2iwiAOlKgNa2zAshJMCFlRYtMsguL93+65QCOGT7cA0MGyvpwcSRuj4QAw8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753102089; c=relaxed/simple;
-	bh=fhUrUAac/iSii6E8bCY5/2OzAP/25KtTiniEKeJQXGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PdSKdNjtBboMgd832HDbP+uXPaRLqk5gH43+jq8vlM1Hc4dWSbJ50xkdj0WNZbdnrejhlZFh0alyVYXwTE1HxqaXdlipy/qcX255Zo/Sd8XhRxZIm5OMID6J0an5xZ63VZTx10Wb++nILTSxyC0qtE01UAmwtUiiRLoJ/+c1UNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R8evXuR+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2550C4CEED;
-	Mon, 21 Jul 2025 12:47:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753102088;
-	bh=fhUrUAac/iSii6E8bCY5/2OzAP/25KtTiniEKeJQXGA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R8evXuR+wAan3GKqOPc31OKb0HXwT1fcr9RAvjn3iXq9AafrC9dr+uhqKKHXhydc/
-	 ommMgMhlPSa10h8tXea70KugAvoZCogNM+Xt21kS9UmsttjWDnOELNHjux+Ju59MNY
-	 /URVoorMncYyCzvX9VeofQFk7WldoN/Ri5qk6rB1XFXfi+hA14lKHW1R2sRPlxfo/E
-	 LGLDW2D8KsMU/Gla3tq/bXrtgsgK9NPEPhMAYMtEgjB4rEKVqgNW9ZLANwHmFPzbv2
-	 KyzNMpjT5XzFw+NFZx3vex8f/0R9leYdi3PuQeMO27/gBBOFaJYqsNHIsKj7h+b3pJ
-	 6c41KggZR4CKg==
-Date: Mon, 21 Jul 2025 13:47:55 +0100
-From: Will Deacon <will@kernel.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Michal Wilczynski <michal.wilczynski@intel.com>,
-	Juergen Gross <jgross@suse.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Roger Pau Monne <roger.pau@citrix.com>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	Usama Arif <usama.arif@bytedance.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>,
-	kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
-	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-mm@kvack.org, Ingo Molnar <mingo@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v3 04/13] x86: Handle KCOV __init vs inline mismatches
-Message-ID: <aH42--h-ARsvX5Wk@willie-the-truck>
-References: <20250717231756.make.423-kees@kernel.org>
- <20250717232519.2984886-4-kees@kernel.org>
- <aHoHkDvvp4AHIzU1@kernel.org>
- <202507181541.B8CFAC7E@keescook>
- <CAMj1kXGAwjChyFvjQcTbL8dFXkFWnn9n47bkN7FP=+EsLNsJdg@mail.gmail.com>
+	s=arc-20240116; t=1753102907; c=relaxed/simple;
+	bh=lObe4xQq7y7sV9eXXp3dYC3/nrQJ+ma8WyXvYw9iWKc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pX6KGamHXWDs4lRmUFveAZ5fZC7KOqREKP9NE2Fb/L41T98UlPf+wOPZTZOnTNc7dneb5+Eq8XMcPBzb28AcEcLVOwouhyDBFS+T4BfOOl5/PkDWDqnVtfosszazXJlotqFj5vjEC00GU7s9fh/H/eg0SyghPKQgf+/agPkFAfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readmodwrite.com; spf=none smtp.mailfrom=readmodwrite.com; dkim=pass (2048-bit key) header.d=readmodwrite-com.20230601.gappssmtp.com header.i=@readmodwrite-com.20230601.gappssmtp.com header.b=jxC2utf4; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readmodwrite.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=readmodwrite.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-31223a4cddeso3263771a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Jul 2025 06:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=readmodwrite-com.20230601.gappssmtp.com; s=20230601; t=1753102905; x=1753707705; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qxRzWZ3OiN4FOr/n1+PHB32FHELlvgJzpX0WolbMnx0=;
+        b=jxC2utf42a6g7aCyFmrDQyWxPDj6WeqAKU5QsUEk9rzK0HlcY5z/SEQ+MBtHf1XZoy
+         lRWgDPwZiAsl+w+3wPF5c7QrPcXZq5mmx6k2WE+V9ADipCAMoCgXPjzKFdqvSuOTMus8
+         KvgkYfWlz47j98/AZ+vcxA4mlPkMK/cNeOEtRhA1Si0ytX5CBBSrYt6WtaQOR+nfL1ZY
+         YISlEu6f+bMWHHo8lzWDgiQcaKJmst8gyp80/oab+XKQ8lLvEAuKft5cbYlRGLgQm4Na
+         7nxMLJNhZ00T264XJQbsbC5CAAoswgy7ozDFNCiixhHaFGKOj+IlBc+GXAqSgSihfFLp
+         ilSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753102905; x=1753707705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qxRzWZ3OiN4FOr/n1+PHB32FHELlvgJzpX0WolbMnx0=;
+        b=rsEifmiMqfss7vsDqivrFkzcj99EWSfIcthG4shAOCA4PnSl9B3hVFaLKn1fv7TBfX
+         82f4ajRml71fU6Rk4NS/A+0JZtWBQLju1XB9+nXjaGH2EJpSX5REnIKqp7ITzWK99ciZ
+         hGpjPWDDsgrTOsEsLBCjtloxvKAXEkY0yyxtHOvazb1DyhXaroKWCV7QmsvnZh2IX6IM
+         vpmUHMI2f9dcQdneK0NmSbxIqVrw5x+/5Q4JGTjebZpyaY6H429N+kTNMgvm1KejGz3d
+         wE3C/w8Lf423ixnGWW4Uyrn2PSoIGC1mWKO85X7ru2tscVgtSRkbKoSETH1I//NgEZLq
+         zcgA==
+X-Forwarded-Encrypted: i=1; AJvYcCWeIkVpgL3BwdhqOz9D9K5tkIvm74KSIuT35A3uJ7KwYeYi1A+HWrZyQ1k+VCvvW6h4H/Zsownyq3LICotpO14=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysTFRCiypC/jLNKVUPMuCcnyNGDrHhi9bnb0SdoHAtbnBCsV3H
+	xBldSaIqLsaxueRfga9UGh1O35a1m7G2cf52G3C/9VFZaeU5/C7G1HrG7jCbkHvWt5AVD4fQqFP
+	P0SaeSBTzUl4oGoeU8J4+gT9rxFF79ww0hSUTrZkBRQ==
+X-Gm-Gg: ASbGnctBx9WeYOOjje02Wh4yezqDp7hXzZtR19E7rQswA6s0DsF6LhckmYccRscnutN
+	ytf9S3hAnkUckbpQJLhPs8h6G8K6kwrNq8v49E0ylMPl4hz1LWa7Kbrs7jSF/pdTANyx0P5VbCk
+	TOLTxSB+ZfCU6VM8VVoifzka7toaRIf2v+KrveljbEoIt3VvRG6hagJhkBD5ECV8+SzL7zEmREN
+	EJKUbzKiibqAyEJNHEPgcc=
+X-Google-Smtp-Source: AGHT+IGzAppY+Mxy5qmnlvBrX3tf7sTF4dGXTD7KnY/IuDlf5WJgBbAFdO38e7rnT91cKVn/9FtpLq3NJZ1TQj3C21g=
+X-Received: by 2002:a17:90b:1fc3:b0:30c:540b:9ba with SMTP id
+ 98e67ed59e1d1-31c9f44bc2dmr32037532a91.10.1753102903531; Mon, 21 Jul 2025
+ 06:01:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGAwjChyFvjQcTbL8dFXkFWnn9n47bkN7FP=+EsLNsJdg@mail.gmail.com>
+References: <20250718150554.48210-1-matt@readmodwrite.com> <81cd8749-6212-4fcf-8e1a-5eba5a8e2a73@kernel.org>
+In-Reply-To: <81cd8749-6212-4fcf-8e1a-5eba5a8e2a73@kernel.org>
+From: Matt Fleming <matt@readmodwrite.com>
+Date: Mon, 21 Jul 2025 14:01:32 +0100
+X-Gm-Features: Ac12FXzd0fWwBUJ6czP3EpQRC9Pxf3NK5Ala9zRsgvMp5hrQxZvDDxiuCtMHrac
+Message-ID: <CAENh_ST_8XN2+QT8xz1gcKyovwEGwO-j2-YHbMj6GrWuZcgRag@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Add LPM trie microbenchmarks
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@cloudflare.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Matt Fleming <mfleming@cloudflare.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jul 20, 2025 at 04:10:01PM +1000, Ard Biesheuvel wrote:
-> On Sat, 19 Jul 2025 at 08:51, Kees Cook <kees@kernel.org> wrote:
-> > On Fri, Jul 18, 2025 at 11:36:32AM +0300, Mike Rapoport wrote:
-> > > On Thu, Jul 17, 2025 at 04:25:09PM -0700, Kees Cook wrote:
-> > > > When KCOV is enabled all functions get instrumented, unless the
-> > > > __no_sanitize_coverage attribute is used. To prepare for
-> > > > __no_sanitize_coverage being applied to __init functions, we have to
-> > > > handle differences in how GCC's inline optimizations get resolved. For
-> > > > x86 this means forcing several functions to be inline with
-> > > > __always_inline.
-> > > >
-> > > > Signed-off-by: Kees Cook <kees@kernel.org>
-> > >
-> > > ...
-> > >
-> > > > diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> > > > index bb19a2534224..b96746376e17 100644
-> > > > --- a/include/linux/memblock.h
-> > > > +++ b/include/linux/memblock.h
-> > > > @@ -463,7 +463,7 @@ static inline void *memblock_alloc_raw(phys_addr_t size,
-> > > >                                       NUMA_NO_NODE);
-> > > >  }
-> > > >
-> > > > -static inline void *memblock_alloc_from(phys_addr_t size,
-> > > > +static __always_inline void *memblock_alloc_from(phys_addr_t size,
-> > > >                                             phys_addr_t align,
-> > > >                                             phys_addr_t min_addr)
-> > >
-> > > I'm curious why from all memblock_alloc* wrappers this is the only one that
-> > > needs to be __always_inline?
-> >
-> > Thread-merge[1], adding Will Deacon, who was kind of asking the same
-> > question.
-> >
-> > Based on what I can tell, GCC has kind of fragile inlining logic, in the
-> > sense that it can change whether or not it inlines something based on
-> > optimizations. It looks like the kcov instrumentation being added (or in
-> > this case, removed) from a function changes the optimization results,
-> > and some functions marked "inline" are _not_ inlined. In that case, we end up
-> > with __init code calling a function not marked __init, and we get the
-> > build warnings I'm trying to eliminate.
+On Sat, Jul 19, 2025 at 2:15=E2=80=AFPM Jesper Dangaard Brouer <hawk@kernel=
+.org> wrote:
+>
+> On 18/07/2025 17.05, Matt Fleming wrote:
+>
+> > [...]
+> > diff --git a/tools/testing/selftests/bpf/progs/lpm_trie_bench.c b/tools=
+/testing/selftests/bpf/progs/lpm_trie_bench.c
+> > new file mode 100644
+> > index 000000000000..c335718cc240
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/progs/lpm_trie_bench.c
+> > @@ -0,0 +1,175 @@
+> [...]
+> > +
+> > +static __always_inline void atomic_inc(long *cnt)
+> > +{
+> > +     __atomic_add_fetch(cnt, 1, __ATOMIC_SEQ_CST);
+> > +}
+> > +
+> > +static __always_inline long atomic_swap(long *cnt, long val)
+> > +{
+> > +     return __atomic_exchange_n(cnt, val, __ATOMIC_SEQ_CST);
+> > +}
+>
+> For userspace includes we have similar defines in bench.h.
+> Except they use __ATOMIC_RELAXED and here __ATOMIC_SEQ_CST.
+> Which is the correct to use?
+>
+> For BPF kernel-side do selftests have another header file that define
+> these `atomic_inc` and `atomic_swap` ?
 
-Got it, thanks for the explanation!
+Actually, we can side step this problem completely by consistently
+using __sync_fetch_and_add() for duration_ns and hits and removing the
+atomic operations for DELETE, which doesn't need atomicity anyway
+since only a single producer can run.
 
-> > So, to Will's comment, yes, the problem is somewhat fragile (though
-> > using either __always_inline or __init will deterministically solve it).
-> > We've tripped over this before with GCC and the solution has usually
-> > been to just use __always_inline and move on.
-> >
-> 
-> Given that 'inline' is already a macro in the kernel, could we just
-> add __attribute__((__always_inline__)) to it when KCOV is enabled?
-
-That sounds like a more robust approach and, by the sounds of it, we
-could predicate it on GCC too. That would also provide a neat place for
-a comment describing the problem.
-
-Kees, would that work for you?
-
-Will
+I'll send a v2.
 
