@@ -1,115 +1,187 @@
-Return-Path: <linux-kselftest+bounces-37730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD890B0B904
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 01:02:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 432ADB0B9D5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 03:54:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FC101895AAD
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Jul 2025 23:02:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FB963B8A67
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 01:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C9F1DDA31;
-	Sun, 20 Jul 2025 23:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YhI1/6sI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C68E71714B7;
+	Mon, 21 Jul 2025 01:54:30 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0B0CA4E;
-	Sun, 20 Jul 2025 23:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039518F40;
+	Mon, 21 Jul 2025 01:54:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753052543; cv=none; b=U/5nyZWfIAZTIX8SQYGAd2OmUJGNDLb3FwokfLD/j8etxMV+0LfOsBxa6VDbLC8hlrPmOyFdRiGYk8KGxj64b7q88i+YYvgrpGBGFKXwfzTMI/ZXNIqMpO3tlmPM9hB8Db3FuZnHck+N+vXFxXzULvnSBYuK1gSYXcF/3BRVCf8=
+	t=1753062870; cv=none; b=NjPNERGLPPKCCF9ebaNUAzFsrb37N7Q/ZJO8CRdEVVL9pvNaYKwoxGCTOgY5hK8wu58+5I4y+qnkaDEjepq+ct/BQsyuy7J8HKQI7f5R5Iw4/9yhonTIkiNFnDYliOvaFjO4w1uJGF+ghHgs9X0seLcBxZGjw/R5E261Ir8Zqvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753052543; c=relaxed/simple;
-	bh=bojz5YeZggk/9lojFQ3d6xcEP4ZQqP/6SS0bDQKkrxI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YNRlWTHvp3ryACAxcIs8C4+bTimXsg3DBv5HPreHTe+JUFpgfVgsOEuq79X3g6h6d/nweF2rkxQNXM5g3CasD9VBZzft+oPXJHA9U5/a2H+NfqupO4t/KDV+GNwfb+J+NsWbHUBQ/oYjcSHcxQPrBtiQ8/eEleit3Fo/mrI4UPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YhI1/6sI; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5561ab55c4dso3847122e87.2;
-        Sun, 20 Jul 2025 16:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753052540; x=1753657340; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AJ95xvQUm/kBpw7gVlmEOuHhj67FGfKcDHTGipklSuM=;
-        b=YhI1/6sIyJnRbLItWeUMeddwaSW1FwWbxdQtRCspQu5JR5y1mD+GAjbKuK/wYRT5CK
-         Sj+TYXEEJ04vnstafhH3CV7R/wXNAWrPZBTKqQuIbevHF3Uch2xsD3c6BngnypdM+eZr
-         nMhLpXeYcZ5JQ+XmMPlr536k2G+Qtyl/1q2gQCodAGgc+INu4Xn8v7YF8h9InVGdu2PG
-         qs1qymthlf8E+5pKgxWgVSzQrEjmONPc/3FdHm+YjhbrcFk2LWswEZF5MiBTYgdd73J0
-         jcR9pk7VEe7KjzGKhCgt/f6oE/mx7m+C5kuBpGrcxSAyE3j8cRAm8cK8oHnnGpLFox/6
-         68rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753052540; x=1753657340;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AJ95xvQUm/kBpw7gVlmEOuHhj67FGfKcDHTGipklSuM=;
-        b=R415/yaJToQ4eE+CmBCfY6y8Lk33xNrpvbjz3EUBgleEMQPaha+nPohUVqG/+Jjz69
-         +Gvp888YicWRidTzS0kODIHZjWGVfWDfz3DcgTdp+5Z3aQot6+QeYKvuBAiQt8RXaWMW
-         UsbTI9U//qNL8ozxQWipnMuPWSkAIRvBls5DeLcIEPohdRzsJ9QEAQNd3QV2he51N4Fe
-         rkmiqV9BLbTd6OwPXQQS2EaNPtlGttljTGKBvBkzVNulPuAn9Y9Vn9ICyIW9nE8i6TfP
-         0UvyfTGYUfALvQ1w/Ah7tE7Ozo3TvTK6DQZ1715NyYHgnyo38p2FpkdxqGSpoRuN1Wci
-         9Xvg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3E0sH2ai56o1+F7nx/40RvpXHPDCf4n3W16PSqMjz+XHisyT5DWwCxTYOWgvZsE/OPupslCUwTCiStLB/+tQB@vger.kernel.org, AJvYcCWnqk/D49s0YjNCi9IbObCrv3nAydcJ46YHT+O9P46roATtBD9KiChW8XljgO5NmL4VMCsIMysHM7em6Z8ABVQ=@vger.kernel.org, AJvYcCXa8D1WmPDPwEhjgf9J5gbP/s7YqaJjYrLFt7F/RB9FRbzs1XQ56KgI+DPPy2WkYMte+ZnNOHO+0U28hB8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0zc3NcJawAWxZCtlgf+w5wz0yukZVxuofjZph9epogemN7Eje
-	s+jA7Z1Ifj6kpkEnXl2NDyKpNzqwmCxBHsN/PY8PrM4wKwJAM9dDDLFehiwPveYq5K3HqqCEOQd
-	SJrDJjr+Wrg+UMuoGit3ttjxbJg/hu2paVybkKEiCdA==
-X-Gm-Gg: ASbGncu8j8n/oWhAxGVuohQ2sR7l77pJRZ6AV0NbhpzdA7GdSMoc6i2JVPUQuL36Nqc
-	xpn41WRyzoO0AjcWWjFlJFhuvPnPzfiir3vnDON5MxEQHg5n7OAdf9UVrxlVNHzWvhMcfRHLygL
-	JS8iV9PuqqOfomcb0NywbV6hl1FGC4zaSOcZVysauzQa8nk76EVHquob9l0oyBxfyKJXoUwoA7x
-	7IyATZ2rt01tZ/L4rYDPuB2eyywW0v9m7PKvTIxWg==
-X-Google-Smtp-Source: AGHT+IE+FCX6UtXA190qovvKWqmj9Qc7kYrLAljsuFf21aT7QM/McGfFwDZUlU+YBrUNaOJ996gDs2QpBz6dlSHgjxE=
-X-Received: by 2002:a05:6512:3e0e:b0:55a:2735:fe6a with SMTP id
- 2adb3069b0e04-55a3177a061mr2942491e87.0.1753052539912; Sun, 20 Jul 2025
- 16:02:19 -0700 (PDT)
+	s=arc-20240116; t=1753062870; c=relaxed/simple;
+	bh=lKAzAIp3dgL4Rokm+Bq94JJNgfNlAz5gm+nJYk/NyW0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MHkA/EDXY0KCl+nRD7ABWWfNNC1xaYzJRwR7ngSIlZU8jc2ouAgQLaGdD9k0+r2lOziRiNOKFkpm6GMoPX5s/C8qJOSZjza+LFz6AjD8esw05YLx4gCIQVNcC60i1883ihrP0mpI8xGQ6KYC3s+Grihyy/X8yi0zntrkpCM0N5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4blk3N6xS3zYQv5V;
+	Mon, 21 Jul 2025 09:54:24 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id AC2271A0A5A;
+	Mon, 21 Jul 2025 09:54:23 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP4 (Coremail) with SMTP id gCh0CgAnoxPOnX1olwnVAw--.52220S2;
+	Mon, 21 Jul 2025 09:54:23 +0800 (CST)
+Message-ID: <88286bd2-a833-47e3-a0f0-896fbdd3fcbb@huaweicloud.com>
+Date: Mon, 21 Jul 2025 09:54:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250529-idiomatic-match-slice-v2-0-4925ca2f1550@gmail.com>
- <20250529-idiomatic-match-slice-v2-2-4925ca2f1550@gmail.com> <CANiq72nb4LuwkZVjEseMubSX4VOMNTX-8wUV7LtS5FN80cMjyQ@mail.gmail.com>
-In-Reply-To: <CANiq72nb4LuwkZVjEseMubSX4VOMNTX-8wUV7LtS5FN80cMjyQ@mail.gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Sun, 20 Jul 2025 19:01:43 -0400
-X-Gm-Features: Ac12FXwksZ7ly4zRrODQBvaHDTk-pZqsw5wqhXOkkFG8bCEizzAQktr9SrphcoQ
-Message-ID: <CAJ-ks9mq_bPH84Mjb0csMQWNHMXuxBK3syuvAdkiRp5FiXOJLw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] rust: emit path candidates in panic message
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next] selftests/ftrace: Prevent potential failure in
+ subsystem-enable test case
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Shuah Khan <shuah@kernel.org>, Yuanhe Shu <xiangzao@linux.alibaba.com>,
+ linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20250710130134.591066-1-wutengda@huaweicloud.com>
+ <20250710153409.3135fb17@batman.local.home>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <20250710153409.3135fb17@batman.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgAnoxPOnX1olwnVAw--.52220S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJFWrGF15XFy3Xr45ur4xCrg_yoW5AF15p3
+	4xAasIkwn3GFWYk3sag3Z5XFyrXrWvyrZ0ya15Jr15Ar1DAryxXFn7Kr45WF47WrZYv3s3
+	A3WI93W3ZFyqy3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUylb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
+	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUwxhLUUUUU
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-On Sun, Jul 20, 2025 at 6:20=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Thu, May 29, 2025 at 3:15=E2=80=AFPM Tamir Duberstein <tamird@gmail.co=
-m> wrote:
-> >
-> > +                write!(&mut candidates, "    {path:?}").unwrap();
->
-> I assume this was supposed to be `writeln!`; otherwise, we lose the
-> newlines and the indent does not make much sense.
 
-Duh, yes, that's right.
 
-> I will fix it when applying.
+On 2025/7/11 3:34, Steven Rostedt wrote:
+> On Thu, 10 Jul 2025 13:01:34 +0000
+> Tengda Wu <wutengda@huaweicloud.com> wrote:
+> 
+> 
+>>
+>> Fixes: 1a4ea83a6e67 ("selftests/ftrace: Limit length in subsystem-enable tests")
+>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>> ---
+>>  .../selftests/ftrace/test.d/event/subsystem-enable.tc     | 8 ++++----
+>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+>> index b7c8f29c09a9..3a28adc7b727 100644
+>> --- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+>> +++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+>> @@ -19,8 +19,8 @@ echo 'sched:*' > set_event
+>>  yield
+>>  
+>>  count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+>> -if [ $count -lt 3 ]; then
+>> -    fail "at least fork, exec and exit events should be recorded"
+>> +if [ $count -eq 0 ]; then
+>> +    fail "none of scheduler events are recorded"
+>>  fi
+>>  
+>>  do_reset
+>> @@ -30,8 +30,8 @@ echo 1 > events/sched/enable
+>>  yield
+>>  
+>>  count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+>> -if [ $count -lt 3 ]; then
+>> -    fail "at least fork, exec and exit events should be recorded"
+>> +if [ $count -eq 0 ]; then
+>> +    fail "none of scheduler events are recorded"
+> 
+> So if there's a bug that causes the system enable to only enable a
+> single event, this will no longer catch it?
+> 
+> I rather not let the slide.
+> 
+> Can you test this to see if this works for you?
+> 
+> -- Steve
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+> index b7c8f29c09a9..46a9e6d92730 100644
+> --- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+> @@ -14,11 +14,32 @@ fail() { #msg
+>      exit_fail
+>  }
+>  
+> +check_unique() {
+> +    cat trace_pipe | grep -v '^#' | awk '
+> +	BEGIN { cnt = 0; }
+> +	{
+> +	    for (i = 0; i < cnt; i++) {
+> +		if (event[i] == $5) {
+> +		    break;
+> +		}
+> +	    }
+> +	    if (i == cnt) {
+> +		event[cnt++] = $5;
+> +		if (cnt > 2) {
+> +		    exit;
+> +		}
+> +	    }
+> +	}
+> +	END {
+> +	    printf "%d", cnt;
+> +	}'
+> +}
+> +
+>  echo 'sched:*' > set_event
+>  
+>  yield
+>  
+> -count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+> +count=`check_unique`
+>  if [ $count -lt 3 ]; then
+>      fail "at least fork, exec and exit events should be recorded"
+>  fi
+> @@ -29,7 +50,7 @@ echo 1 > events/sched/enable
+>  
+>  yield
+>  
+> -count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+> +count=`check_unique`
+>  if [ $count -lt 3 ]; then
+>      fail "at least fork, exec and exit events should be recorded"
+>  fi
 
-Thank you!
+
+Hi, Steve
+
+I noticed this patch hasn't been merged yet. Do you plan to merge it soon?
+If you're too busy, would you like me to help submit it instead?
+
+Regards,
+Tengda
+
 
