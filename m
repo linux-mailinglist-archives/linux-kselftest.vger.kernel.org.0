@@ -1,140 +1,125 @@
-Return-Path: <linux-kselftest+bounces-37784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37785-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB34BB0CC86
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 23:24:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5794EB0CC8D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 23:25:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C7A03B0CFB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 21:23:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AAAC3AFABC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 21:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA9024169A;
-	Mon, 21 Jul 2025 21:24:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A35FE23E358;
+	Mon, 21 Jul 2025 21:25:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eS3ZRP5V"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PE+R3/tZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C586115530C;
-	Mon, 21 Jul 2025 21:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F061917F1;
+	Mon, 21 Jul 2025 21:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753133051; cv=none; b=umZH9c4cMdjaIxukuRDP97s8R12Skl90fBD5poSA2ANPydnt3WSXruN/ludo4dmMyz3SV5k3cos6WeeKaRSg/i0g9GAF7YI4fpuhYUTfh4Hnq23utIX/MVXwCXFrrdPaxAo4dEgHtU22BSDQ/EgjoYfHChafDPip6cx9JF/xuZg=
+	t=1753133100; cv=none; b=Q5TXlYnoz9pg7kFa1PqzcY91cnRAKCml45t2/VmftJmQUJdotHJro1ncUl3T7kyJ3bWImhUWhu1gsUBBGZTIx/s+BRLGYnAlKGpAe34qLE06KJ8lRXXklJX2ICAropctigXgrrFXt1R8URaVrY8Xf1s6O/Okdyj3EFu91rDyCBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753133051; c=relaxed/simple;
-	bh=sEjviTPRhYqGP5Y8/0bVLkQrZaSsat98TC4r3HprGO4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ClcZr+sCe5Wv7aAFXFJJ/bxUyBdoHVFOK4K94MLdJkyThZ2B58gSgWImwPPq6Kf8U9gGAWR8xvP2Q85ucaSRmi0qaqkoVCQRbbM32eQlutzFN1ZzcOmjOdxyKxPqVA9Dh2eP/tptTKSIcl0F72sOYHlj9VEib2M2XYsk5wVZO5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eS3ZRP5V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31029C4CEED;
-	Mon, 21 Jul 2025 21:24:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753133051;
-	bh=sEjviTPRhYqGP5Y8/0bVLkQrZaSsat98TC4r3HprGO4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=eS3ZRP5VuL1f3ENZR0CLErw67WCY3JKZSPanNvtSDJSGjVj7QVk9aDgBmTQPlxELr
-	 IxtiFZCkVgmY+8lPq9+qGAxfqfsbhuzsXSE6IZAL3sCcwXSDWswA59mHE7hqN+Ot11
-	 BTC2PyXAy22jBCC82mwLs06fkrxrjBHm0ln/hUmbygcRN44rxIq/9bYm63bSAW5YJ6
-	 Ya3TwgxS6DyJfF3bh6DbP6CxFehStHG+o6biioRYjAckrGtTLpVDGppWRJTOy6vX7b
-	 T9Ei1eek3auIDkurVzzOlBk7Fec4ZCjGo7mZmwxwWIe31fCRNhEvQm3I2sv/dz7d8J
-	 NU+Nzj44Vx5xA==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Mon, 21 Jul 2025 23:23:36 +0200
-Subject: [PATCH nf-next v5 2/2] selftests: netfilter: nft_flowtable.sh: Add
- IPIP flowtable selftest
+	s=arc-20240116; t=1753133100; c=relaxed/simple;
+	bh=9iFLdp2ndiNM8RNps+ppve+VMxv1HIOTDVN1LN5NGOw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Tex1Krzbcl1AgggMjridpPxPZoV7XPq1Zu9Y8rko5AdhpHcPAWiUmddUG29oE/1sSO9Hi1I+6NfYTVVsNpoUxDjn34nm6SsT3ChmcddcuhGE14z4XY//le4Mabc6UQSmJzjNTI1lwbS854eoXFZVBphm/SQVY3mXmzZTV1daVvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PE+R3/tZ; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-313067339e9so942416a91.2;
+        Mon, 21 Jul 2025 14:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753133098; x=1753737898; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9iFLdp2ndiNM8RNps+ppve+VMxv1HIOTDVN1LN5NGOw=;
+        b=PE+R3/tZyqhwQOlpgSV33dTVqT3DNpgMpvaAAz0gvK5oHFZy09B7AMl4fKI3XfX0y2
+         pvUTYY5zQZNdK4lx3oP0s+7hGu5Wk53G0MEo6MLrp/VZ+F6H02/Il3QWJaKoTM1BYTR+
+         cuO/1SWyusGvXWxIdAqB6ebecanLRMu8tMq/1CXQfnUbIOPurPiIAi7x73W+QNGkMk4q
+         6XJHqDut0JkEqwhaCFkT051oZZuKlKJgBsJr3L7GiWNi+S/fhDlja2pVUYRrXNHKqHVe
+         6S0XanLh9ufpbNVTxrl/s2/qu4mXAbb/0+HsrqGl0fKtf2+ewp+rlDTYekQXQbuBlm1r
+         rzUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753133098; x=1753737898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9iFLdp2ndiNM8RNps+ppve+VMxv1HIOTDVN1LN5NGOw=;
+        b=RTMDhW9UTFfCI3JMQbaKvs6FjD6QVkWJF5rGMkpWZq4vP928Gpgggv7Wzt9AkosGQN
+         2RBHCTtPnKAhQfWZjur61Aqj4gUTggDIUQQ9xQTXrG2crFpob7dm5dZ7rou3yPTj3HJR
+         optRPm9HWOkTexeuarLsAmUqeblzpE2ezW80DmofTTfPpHw75xICH2xYN1zP1xQyzIiU
+         DuQt11iJtUyMJs2wfYG/6U/jg58g62ulm5UAhm4NrjpjInnZMYRbid0CVdPOUslrKXqQ
+         Whc+ofYsv94J+YsYcWag6O4ny2w/I/yre0fEh8vFr1PeXXA8kDAlr7KVJEAk0O8hpwqu
+         g5VA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhU48E7cbg/BF8X6CzfWSroPRFiBqNmIKY9+jXgERrVkcs5F+G5LlR4s464BszqmCu4HYyk/HWpzJlR7JZq9s8@vger.kernel.org, AJvYcCViublJbrU5hEBVk9puwLMCHbSPcHND/wyZ+IbyJY6NzDPLqsHPJdth9Sz60Lhj8NWyWFgD2YsYZmY+ppt4ZQ==@vger.kernel.org, AJvYcCVkYmTiTLBJ3XSkFR769lo4nvKsbCxBlwUbkWq85XBybLjApMaM0hz/56CEXoyk4r41WxuyOLsaPhzQMQ==@vger.kernel.org, AJvYcCX28vXVjVz19S3jlNfXZODsT6Im651v++BuCLcGS0AFT0H/e/o5mRS8rwEm0+DcN885xTeFQMZ2G4LQ5QXJnrk=@vger.kernel.org, AJvYcCXaL3xjfr+/ii+Z7TcLAS/f0eYytY3T4cgbG2zTeZZO8lEbL4uThzGuCMBUFAShnypcUgwH32LuKsV/CoN3@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvQcYUDRuJlkDyaXvJ9lYZzT8ZAAatS8OfiOLy459fijsaWdpd
+	4Jmas12eo+TS0WRhLhhubhDxswGxCHtErOlrJPNleZA1+bgIFjOhllhMcj6j4cz5DfY0ULf7X+m
+	0hOFuuOBmMfWotk32Z8njepHM+RuWtsw=
+X-Gm-Gg: ASbGnctQS5e/AYhaXMjk0TBoBOIuoyLXk7GKJcFe6LgWt1ozpXkDMjRX4M+ov/vhWxC
+	1BZ2h85sJAfOvvHfA02mklKSktT94RmyPnB2LyGtXFkqaH8D15dVQfQ/Sf5sR5awpphD4wunKGB
+	Bgr+cT701Fj2xMxOAp5JT8QguOwtUnQNPNNwSKiVlYXBYKe8cyf4oBEWb8L66m0NM5qW81ysyya
+	rL0kmTK
+X-Google-Smtp-Source: AGHT+IE0OY7j57nPCKJ0BdsYahqNyN4nWsTb/RzoD5KDOD/WbbJfSbNPT9Nrk4IsCyqaxcHOFNn3XGvOFDRdAz5jjUw=
+X-Received: by 2002:a17:90b:1cc3:b0:311:c5d9:2c8b with SMTP id
+ 98e67ed59e1d1-31c9e7767fbmr12172720a91.5.1753133098418; Mon, 21 Jul 2025
+ 14:24:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250721-nf-flowtable-ipip-v5-2-0865af9e58c6@kernel.org>
-References: <20250721-nf-flowtable-ipip-v5-0-0865af9e58c6@kernel.org>
-In-Reply-To: <20250721-nf-flowtable-ipip-v5-0-0865af9e58c6@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>, 
- David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>, 
- Jozsef Kadlecsik <kadlec@netfilter.org>, Shuah Khan <shuah@kernel.org>, 
- Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org, 
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
- linux-kselftest@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.2
+References: <20250719-core-cstr-fanout-1-v2-0-1ab5ba189c6e@gmail.com> <20250719-core-cstr-fanout-1-v2-5-1ab5ba189c6e@gmail.com>
+In-Reply-To: <20250719-core-cstr-fanout-1-v2-5-1ab5ba189c6e@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 21 Jul 2025 23:24:45 +0200
+X-Gm-Features: Ac12FXyOfRpHyH2Hg4yjOdknVbhdKtQMd07LdKW2ll06eE6NGx73z6HhQYfeb4A
+Message-ID: <CANiq72=wxjOwpbSKvmRV4Nb1Na_fsvajGYCbaiCdD7NwZkgc7A@mail.gmail.com>
+Subject: Re: [PATCH v2 5/8] rust: file: use `kernel::{fmt,prelude::fmt!}`
+To: Tamir Duberstein <tamird@gmail.com>, Christian Brauner <brauner@kernel.org>
+Cc: Danilo Krummrich <dakr@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Jens Axboe <axboe@kernel.dk>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, nouveau@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-block@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Introduce specific selftest for IPIP flowtable SW acceleration in
-nft_flowtable.sh
+On Sun, Jul 20, 2025 at 12:42=E2=80=AFAM Tamir Duberstein <tamird@gmail.com=
+> wrote:
+>
+> Reduce coupling to implementation details of the formatting machinery by
+> avoiding direct use for `core`'s formatting traits and macros.
+>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Benno Lossin <lossin@kernel.org>
+> Acked-by: Danilo Krummrich <dakr@kernel.org>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- .../selftests/net/netfilter/nft_flowtable.sh       | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+VFS should be Cc'd on this one, so doing so here.
 
-diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-index a4ee5496f2a17cedf1ee71214397012c7906650f..d1c9d3eeda2c9874008f9d6de6cabaabea79b9fb 100755
---- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-+++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-@@ -519,6 +519,44 @@ if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 ""; then
- 	ip netns exec "$nsr1" nft list ruleset
- fi
- 
-+# IPIP tunnel test:
-+# Add IPIP tunnel interfaces and check flowtable acceleration.
-+test_ipip() {
-+if ! ip -net "$nsr1" link add name tun0 type ipip \
-+     local 192.168.10.1 remote 192.168.10.2 >/dev/null;then
-+	echo "SKIP: could not add ipip tunnel"
-+	[ "$ret" -eq 0 ] && ret=$ksft_skip
-+	return
-+fi
-+ip -net "$nsr1" link set tun0 up
-+ip -net "$nsr1" addr add 192.168.100.1/24 dev tun0
-+ip netns exec "$nsr1" sysctl net.ipv4.conf.tun0.forwarding=1 > /dev/null
-+
-+ip -net "$nsr2" link add name tun0 type ipip local 192.168.10.2 remote 192.168.10.1
-+ip -net "$nsr2" link set tun0 up
-+ip -net "$nsr2" addr add 192.168.100.2/24 dev tun0
-+ip netns exec "$nsr2" sysctl net.ipv4.conf.tun0.forwarding=1 > /dev/null
-+
-+ip -net "$nsr1" route change default via 192.168.100.2
-+ip -net "$nsr2" route change default via 192.168.100.1
-+ip -net "$ns2" route add default via 10.0.2.1
-+
-+ip netns exec "$nsr1" nft -a insert rule inet filter forward 'meta oif tun0 accept'
-+ip netns exec "$nsr1" nft -a insert rule inet filter forward \
-+	'meta oif "veth0" tcp sport 12345 ct mark set 1 flow add @f1 counter name routed_repl accept'
-+
-+if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IPIP tunnel"; then
-+	echo "FAIL: flow offload for ns1/ns2 with IPIP tunnel" 1>&2
-+	ip netns exec "$nsr1" nft list ruleset
-+	ret=1
-+fi
-+
-+# Restore the previous configuration
-+ip -net "$nsr1" route change default via 192.168.10.2
-+ip -net "$nsr2" route change default via 192.168.10.1
-+ip -net "$ns2" route del default via 10.0.2.1
-+}
-+
- # Another test:
- # Add bridge interface br0 to Router1, with NAT enabled.
- test_bridge() {
-@@ -604,6 +642,8 @@ ip -net "$nsr1" addr add dead:1::1/64 dev veth0 nodad
- ip -net "$nsr1" link set up dev veth0
- }
- 
-+test_ipip
-+
- test_bridge
- 
- KEY_SHA="0x"$(ps -af | sha1sum | cut -d " " -f 1)
+Christian: I will eventually apply this series, so please let me know
+if you are against this one (Acked-by's appreciated, of course),
+thanks!
 
--- 
-2.50.1
-
+Cheers,
+Miguel
 
