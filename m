@@ -1,212 +1,105 @@
-Return-Path: <linux-kselftest+bounces-37760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44F74B0C75E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 17:19:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2046B0C7D3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 17:40:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEA7F18916A4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 15:19:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22FE43AE699
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 15:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 343822DC34A;
-	Mon, 21 Jul 2025 15:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D3862DECBC;
+	Mon, 21 Jul 2025 15:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="ZqA5dv5G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DgbipwdA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B1C5383;
-	Mon, 21 Jul 2025 15:19:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD9F1ADC90;
+	Mon, 21 Jul 2025 15:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753111161; cv=none; b=POUHlNSk0HNM1eKNSBBjulqvihlbWDvwSF8enOdnAOjbXlHZQEXK+1lsla8eWk5ktqDAlGrpIrtUTuEEWsSAdVHvUarydwkkEU7dhE8Yzau4nYuDEN9B9/gMAo4S52T+lhFsUquihLw4VT3oKWmljsHju6086hXwx2Ly4UrS1jw=
+	t=1753112449; cv=none; b=YEYB+JDgpVHjUf17TH+LGBShIq/XX7Hpt47BVlTUw7IDq14dRVKhhSzJ3h848jxSvePhTApPIkInaw24f81A7+n3h+6DqIrUNeU2KFpDKCfQPhQVwAHHpldiNg7q1BBZ60k6uGY99djma1zbXc+//q7AQnl8CP+uOTI8hxjkgL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753111161; c=relaxed/simple;
-	bh=lR9DhaHkYhiIlmXUci5r2sc4oWISTeQIQOFn7N7h9C4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FuFDaAOPXJA5MaBepXenO+9wE3pFsYOWXlGAECpXt+zG7qWEs32LrUA2Crglz+ZiXiPthu8f/4cFJq3s5C4MMAlwCZIqVWYZxI+v4UcPhhjDFGdIHIjYSSyGdLHIV79sVR5KEq2FSOr1/qBoGr/2tbe2gqndBADa1vQKRSjC2ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=ZqA5dv5G; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4bm3w24T6Qz9thl;
-	Mon, 21 Jul 2025 17:19:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1753111154;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=27ePGKfk1IpGb39mFKtSkLv7SdmqONl0QJ7+stsT6hM=;
-	b=ZqA5dv5GvcMVj639SK6l4HlrSwxA4acrTPV6xpW3cmG5jX7uUkBvVlG8JBoTWgyFx9Fox3
-	0o8ddFzdXjEUYc49+If0V+I6aRC34Ryq5bb8uZR9CSVOFrQ+BpuUKFrOaV2QoUB3sUPdrp
-	cej4+6ndOPbS6REA8Z+dtgzVYzLMAxXeXu2ZCmqdaMIQwoRTZ+cs5tD2fV1EoPKYisna6b
-	uK3BzSzHfNuNAXNOgSKCfr8jkUSQebithqevIrG4l7lLOC1w+D+jndmfxlcpxfIHfc5tdr
-	ObuATqX4b6E5RRCqomu5+WEP4bN4dSx0KJCcCp9N+LeZoLyGcFRlNPpKTEl+3g==
-Date: Tue, 22 Jul 2025 01:19:00 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Andy Lutomirski <luto@amacapital.net>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 0/4] procfs: make reference pidns more user-visible
-Message-ID: <20250721.150803-lavish.ninja.rigid.racism-OCjeOw80sO9@cyphar.com>
-References: <20250721-procfs-pidns-api-v1-0-5cd9007e512d@cyphar.com>
- <CALCETrVo+Mdj7as2R0R+FqTBbjqwTkXu5Zkj=dg8EVM9xRhBPw@mail.gmail.com>
+	s=arc-20240116; t=1753112449; c=relaxed/simple;
+	bh=DgSOmx6CYfdPt7+e2WdBwvaKwxEtjgphHOCiRnjXtZo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h+GbIOmG/xJvQCRep8HLDNNOmwq3PM0Citp361a3zm7K9ruOM9qaMKQxt5n9fa/8BbXg9xp2LszU4lOy5pjejjpuPxapeU2sVuXsTa5Tw6Q2G9cE9WVfOoDZqe0yekRBL7ZjZcZ2AZbjES1filRjD9c0+8VYPta+t06a6kYtMh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DgbipwdA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D713C4CEED;
+	Mon, 21 Jul 2025 15:40:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753112448;
+	bh=DgSOmx6CYfdPt7+e2WdBwvaKwxEtjgphHOCiRnjXtZo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=DgbipwdAAx2zGAN2XoiTG4uovy2DPLWpJcb64mQnfoxOeUK4DUxxArYiam1/bie/N
+	 OjFIbjr3d/gRfefLGE21r1h1FlwRCC5off8vGDRaNBcBjSmzzBckwVdxdYp3xVE3OF
+	 4n6pM+W2nhqvarobVMm76vv4KGBvCDbcBWWAKSiWSEnYh5tg5ibRsmoFIJZhWpJfip
+	 YgTkcM14e94Eg3U0sXLdADgBHbjY1UlazUOHP80+ahVb6ZDKfZBMqrLXT+HYZ+D/XR
+	 SBZrcVHoqVBqJ3JLoXNolzd3J3nfXhywFOfLJUYQSjSzR+7Qk8ddGJl5wMcEnVDruR
+	 as1CoggGZroCA==
+Date: Mon, 21 Jul 2025 08:40:46 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nimrod Oren <noren@nvidia.com>
+Cc: Mohsin Bashir <mohsin.bashr@gmail.com>, netdev@vger.kernel.org,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, shuah@kernel.org, horms@kernel.org, cratiu@nvidia.com,
+ cjubran@nvidia.com, mbloch@nvidia.com, jdamato@fastly.com, gal@nvidia.com,
+ sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, nathan@kernel.org,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ tariqt@nvidia.com, thoiland@redhat.com
+Subject: Re: [PATCH net-next V6 2/5] selftests: drv-net: Test XDP_PASS/DROP
+ support
+Message-ID: <20250721084046.5659971c@kernel.org>
+In-Reply-To: <ab65545f-c79c-492b-a699-39f7afa984ea@nvidia.com>
+References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
+	<20250719083059.3209169-3-mohsin.bashr@gmail.com>
+	<ab65545f-c79c-492b-a699-39f7afa984ea@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4hmpcw27chbaxqg4"
-Content-Disposition: inline
-In-Reply-To: <CALCETrVo+Mdj7as2R0R+FqTBbjqwTkXu5Zkj=dg8EVM9xRhBPw@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Mon, 21 Jul 2025 14:43:15 +0300 Nimrod Oren wrote:
+> > +static struct udphdr *filter_udphdr(struct xdp_md *ctx, __u16 port)
+> > +{
+> > +	void *data_end = (void *)(long)ctx->data_end;
+> > +	void *data = (void *)(long)ctx->data;
+> > +	struct udphdr *udph = NULL;
+> > +	struct ethhdr *eth = data;
+> > +
+> > +	if (data + sizeof(*eth) > data_end)
+> > +		return NULL;
+> > +  
+> 
+> This check assumes that the packet headers reside in the linear part of
+> the xdp_buff. However, this assumption does not hold across all drivers.
+> For example, in mlx5, the linear part is empty when using multi-buffer
+> mode with striding rq configuration. This causes all multi-buffer test
+> cases to fail over mlx5.
+> 
+> To ensure correctness across all drivers, all direct accesses to packet
+> data should use these safer helper functions instead:
+> bpf_xdp_load_bytes() and bpf_xdp_store_bytes().
+> 
+> Related discussion and context can be found here:
+> https://github.com/xdp-project/xdp-tools/pull/409
 
---4hmpcw27chbaxqg4
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH RFC 0/4] procfs: make reference pidns more user-visible
-MIME-Version: 1.0
+That's a reasonable way to modify the test. But I'm not sure it's
+something that should be blocking merging the patches.
+Or for that matter whether it's Mohsin's responsibility to make the
+test cater to quirks of mlx5, which is not even part of NIPA testing -
+we have no way of knowing what passes for mlx5, what regresses it etc.
 
-On 2025-07-21, Andy Lutomirski <luto@amacapital.net> wrote:
-> On Mon, Jul 21, 2025 at 1:44=E2=80=AFAM Aleksa Sarai <cyphar@cyphar.com> =
-wrote:
-> >
-> > Ever since the introduction of pid namespaces, procfs has had very
-> > implicit behaviour surrounding them (the pidns used by a procfs mount is
-> > auto-selected based on the mounting process's active pidns, and the
-> > pidns itself is basically hidden once the mount has been constructed).
-> > This has historically meant that userspace was required to do some
-> > special dances in order to configure the pidns of a procfs mount as
-> > desired. Examples include:
-> >
-> >  * In order to bypass the mnt_too_revealing() check, Kubernetes creates
-> >    a procfs mount from an empty pidns so that user namespaced containers
-> >    can be nested (without this, the nested containers would fail to
-> >    mount procfs). But this requires forking off a helper process because
-> >    you cannot just one-shot this using mount(2).
-> >
-> >  * Container runtimes in general need to fork into a container before
-> >    configuring its mounts, which can lead to security issues in the case
-> >    of shared-pidns containers (a privileged process in the pidns can
-> >    interact with your container runtime process). While
-> >    SUID_DUMP_DISABLE and user namespaces make this less of an issue, the
-> >    strict need for this due to a minor uAPI wart is kind of unfortunate.
-> >
-> > Things would be much easier if there was a way for userspace to just
-> > specify the pidns they want. Patch 1 implements a new "pidns" argument
-> > which can be set using fsconfig(2):
-> >
-> >     fsconfig(procfd, FSCONFIG_SET_FD, "pidns", NULL, nsfd);
-> >     fsconfig(procfd, FSCONFIG_SET_STRING, "pidns", "/proc/self/ns/pid",=
- 0);
-> >
-> > or classic mount(2) / mount(8):
-> >
-> >     // mount -t proc -o pidns=3D/proc/self/ns/pid proc /tmp/proc
-> >     mount("proc", "/tmp/proc", "proc", MS_..., "pidns=3D/proc/self/ns/p=
-id");
-> >
-> > The initial security model I have in this RFC is to be as conservative
-> > as possible and just mirror the security model for setns(2) -- which
-> > means that you can only set pidns=3D... to pid namespaces that your
-> > current pid namespace is a direct ancestor of. This fulfils the
-> > requirements of container runtimes, but I suspect that this may be too
-> > strict for some usecases.
-> >
-> > The pidns argument is not displayed in mountinfo -- it's not clear to me
-> > what value it would make sense to show (maybe we could just use ns_dname
-> > to provide an identifier for the namespace, but this number would be
-> > fairly useless to userspace). I'm open to suggestions.
-> >
-> > In addition, being able to figure out what pid namespace is being used
-> > by a procfs mount is quite useful when you have an administrative
-> > process (such as a container runtime) which wants to figure out the
-> > correct way of mapping PIDs between its own namespace and the namespace
-> > for procfs (using NS_GET_{PID,TGID}_{IN,FROM}_PIDNS). There are
-> > alternative ways to do this, but they all rely on ancillary information
-> > that third-party libraries and tools do not necessarily have access to.
-> >
-> > To make this easier, add a new ioctl (PROCFS_GET_PID_NAMESPACE) which
-> > can be used to get a reference to the pidns that a procfs is using.
-> >
-> > It's not quite clear what is the correct security model for this API,
-> > but the current approach I've taken is to:
-> >
-> >  * Make the ioctl only valid on the root (meaning that a process without
-> >    access to the procfs root -- such as only having an fd to a procfs
-> >    file or some open_tree(2)-like subset -- cannot use this API).
-> >
-> >  * Require that the process requesting either has access to
-> >    /proc/1/ns/pid anyway (i.e. has ptrace-read access to the pidns
-> >    pid1), has CAP_SYS_ADMIN access to the pidns (i.e. has administrative
-> >    access to it and can join it if they had a handle), or is in a pidns
-> >    that is a direct ancestor of the target pidns (i.e. all of the pids
-> >    are already visible in the procfs for the current process's pidns).
->=20
-> What's the motivation for the ptrace-read option?  While I don't see
-> an attack off the top of my head, it seems like creating a procfs
-> mount may give write-ish access to things in the pidns (because the
-> creator is likely to have CAP_DAC_OVERRIDE, etc) and possibly even
-> access to namespace-wide things that aren't inherently visible to
-> PID1.
-
-This latter section is about the privilege model for
-ioctl(PROCFS_GET_PID_NAMESPACE), not the pidns=3D mount flag. pidns=3D
-requires CAP_SYS_ADMIN for pidns->user_ns, in addition to the same
-restrictions as pidns_install() (must be a direct ancestor). Maybe I
-should add some headers in this cover letter for v2...
-
-For the ioctl -- if the user can ptrace-read pid1 in the pidns, they can
-open a handle to /proc/1/ns/pid which is exactly the same thing they'd
-get from PROCFS_GET_PID_NAMESPACE.
-
-> Even the ancestor check seems dicey.  Imagine that uid 1000 makes an
-> unprivileged container complete with a userns.  Then uid 1001 (outside
-> the container) makes its own userns and mountns but stays in the init
-> pidns and then mounts (and owns, with all filesystem-related
-> capabilities) that mount.  Is this really safe?
-
-As for the ancestor check (for the ioctl), the logic I had was that
-being in an ancestor pidns means that you already can see all of the
-subprocesses in your own pidns, so it seems strange to not be able to
-get a handle to their pidns. Maybe this isn't quite right, idk.
-
-Ultimately there isn't too much you can do with a pidns fd if you don't
-have privileges to join it (the only thing I can think of is that you
-could bind-mount it, which could maybe be used to trick an
-administrative process if they trusted your mountns for some reason).
-
-> CAP_SYS_ADMIN seems about right.
-
-For pidns=3D, sure. For the ioctl, I think this is overkill.
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-https://www.cyphar.com/
-
---4hmpcw27chbaxqg4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaH5aYwAKCRAol/rSt+lE
-bxwJAPsExwFlCYmv56CAhmcD4tOiYjdj4rRodrWoLlDHqXc2QwD+OcuhtT7gwFY5
-kPb4AgmTUiYufiAlBeMVvO42bxZK/A8=
-=EH6N
------END PGP SIGNATURE-----
-
---4hmpcw27chbaxqg4--
+Not related to this series, but I'd be curious what the perf hit is for
+having to load the headers.
 
