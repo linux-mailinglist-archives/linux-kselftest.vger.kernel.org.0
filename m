@@ -1,53 +1,48 @@
-Return-Path: <linux-kselftest+bounces-37765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C203B0C9B1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 19:30:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98370B0C9E3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 19:42:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F0DD17A549
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 17:30:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9CD45421C5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Jul 2025 17:42:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3B752E175E;
-	Mon, 21 Jul 2025 17:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E4C2E0B5F;
+	Mon, 21 Jul 2025 17:42:26 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3582E0B6D;
-	Mon, 21 Jul 2025 17:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B661F8690;
+	Mon, 21 Jul 2025 17:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753119008; cv=none; b=T9qR7A3hAn3YtwjrbZlMKqTUgnfNG/6TjjMRpD7Ah8ktrpuDCjW4/bBQCAAAZ8gTsLnGfMQPpcvr095yz7Sg5S3AmhkFi4bohQTY86QlrubjX2725riiontzoNVsB0/F1Z7/R0mTf3On6+tuOhoOsgrqFthAsyeQFZJX00xbQxw=
+	t=1753119746; cv=none; b=b3k/anDW13Q+xvPNIRZVE1Bfs9LhJUjI0ZB2Fl/I/Fy1RSfLRoUx2ePUYakO4+LdzqtMNxfra2Nn1kpDd6wW8IOJXeJjSuGgWh7ehFoqG2uRqhJgRCHVjDSNd3/tnD7OApgQYHa81/9SmCWd5fv4LESfCg2E+/BZxm/pgfvkyXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753119008; c=relaxed/simple;
-	bh=F7maQntHBPrJOJLjnzlyFAGLjbw/d7g5uW++1kP44vA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OoeLv/agf91GX9O3ZrfHuA//g8cvQ5vdCJ5AfG73x77Fbe5IgWr6a8XgSarqtZ64FzKSpJS0GT2mbs/vNx8zCkMCfZJvMNZ5Du4YOmwS5uyyIcbzk+FIFafwrh8hxnkwefI9VIwP/R7tThHdEdHOKlxL6Ljs0LfcwjpPx64JUl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+	s=arc-20240116; t=1753119746; c=relaxed/simple;
+	bh=w/2j9ClBxq0pV31rPFeVzo+iLovp//XDRhOvxyXxZRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WMojLRW6nmVBBCQmLxxcWNh4YzMvMEiVIsHGdL3C+eJxFTFCqw+NNZocMZjjAcNpLcdSPLSg9dhhJXfn2XrQ+ZSwwaboi7aaoZqIgg3evq1Hj74uenGTu2CW8eHyoWlW8xcYoW7ouE8yoR95FIIic54mexGsVwr3eqeX459paIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 149DCB5E03;
-	Mon, 21 Jul 2025 17:30:00 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 0FAA230;
-	Mon, 21 Jul 2025 17:29:57 +0000 (UTC)
-Date: Mon, 21 Jul 2025 13:29:57 -0400
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 98F7512C62A;
+	Mon, 21 Jul 2025 17:42:16 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id B3EE720026;
+	Mon, 21 Jul 2025 17:42:13 +0000 (UTC)
+Date: Mon, 21 Jul 2025 13:42:12 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
-To: Tengda Wu <wutengda@huaweicloud.com>
+To: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
+ <linux-trace-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org
 Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>, Yuanhe Shu
- <xiangzao@linux.alibaba.com>, linux-trace-kernel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH -next] selftests/ftrace: Prevent potential failure in
- subsystem-enable test case
-Message-ID: <20250721132957.5184cd68@batman.local.home>
-In-Reply-To: <88286bd2-a833-47e3-a0f0-896fbdd3fcbb@huaweicloud.com>
-References: <20250710130134.591066-1-wutengda@huaweicloud.com>
-	<20250710153409.3135fb17@batman.local.home>
-	<88286bd2-a833-47e3-a0f0-896fbdd3fcbb@huaweicloud.com>
+ <mathieu.desnoyers@efficios.com>, Shuah Khan <shuahkhan@gmail.com>, Shuah
+ Khan <skhan@linuxfoundation.org>, Tengda Wu <wutengda@huaweicloud.com>
+Subject: [PATCH] selftests/tracing: Fix false failure of subsystem event
+ test
+Message-ID: <20250721134212.53c3e140@batman.local.home>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -57,22 +52,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 0FAA230
-X-Stat-Signature: yssnn1bek5w4f8twbwp6a84n5tkr9cr3
-X-Rspamd-Server: rspamout02
+X-Stat-Signature: 3izyokdfko365m1434hke7w4gc1khgow
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: B3EE720026
 X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX189Bj2Mf4RhqEdtHJSWyYsHXpwTyP6gX5o=
-X-HE-Tag: 1753118997-575904
-X-HE-Meta: U2FsdGVkX18DopyuBuxu403tiBJ+SMPubd2Jnikyp/tWroxX1tAefMOJnAEEpFPre4BDuZwRyx4IFcgjzWGg8SnA5uAyucnl0wXAG203pE8Fp4NDhxV3zjWakjA3+x2vlZmzB1hezH4p4nGiC6P8npYlkHZPzXw8NMsnnjqVFLUh4DrSJ+kzV3LvVh3xkiBUb3VgAECTCIUlfbzWDLNtVOUydoFtZ30pnVaHob9hnLi+a59jY8KKI2czyX7L9ncEj+UsXKXQdIxqV6gW9hk86eHOwMGeDrqb69A3b5ZU1QQv2K7XKtd94mRpLe0IkyiZFWXTlo5SaPeCI0oo9tsZjgIoBaXpAT/d
+X-Session-ID: U2FsdGVkX1+8Ghli5wRqbA0bgMbeMKMIikC8MX5Gc0A=
+X-HE-Tag: 1753119733-523282
+X-HE-Meta: U2FsdGVkX1/AvunrBznBj7dzqK3kyYT1D73eWM3WQ09tue0xVMFXytS+JsyVXTKfk+php50gA3v3XMUfF5MMhykePKQlRvqB1ZB7ajCQpM20XjM3BjYqn+42zV+F54DSc+1K8bR4Hr1NaSBpHFqrLxQyDW+NMKuBvKc3GkN0z9MKP/vahcq9zecZ8nnj+h9tBYjp0KdGX/7x4LdEY3DNkcA4rJBYdHYBWmsX7YD98Eg3xLOB7SdBhjbKShPfLrzrJX3amHsl1n4z2hb8H9oP2Ro9QYX/nhpi04NcPV1+OeWKHHD4kE5btHS57K9oRvElX9vt+TSJvLtGPDkyTNTFRJOTdQGfFfK1+/TpI3kzAOlWsN4/IPbgFUOnZ8y0wMHlgIbppJgptvYEnDo3kQORuqucKK8c25YsQP6s/bGx5Vw=
 
-On Mon, 21 Jul 2025 09:54:22 +0800
-Tengda Wu <wutengda@huaweicloud.com> wrote:
+From: Steven Rostedt <rostedt@goodmis.org>
 
-> I noticed this patch hasn't been merged yet. Do you plan to merge it soon?
-> If you're too busy, would you like me to help submit it instead?
+The subsystem event test enables all "sched" events and makes sure there's
+at least 3 different events in the output. It used to cat the entire trace
+file to | wc -l, but on slow machines, that could last a very long time.
+To solve that, it was changed to just read the first 100 lines of the
+trace file. This can cause false failures as some events repeat so often,
+that the 100 lines that are examined could possibly be of only one event.
 
-Nah, I simply forgot about it. Let me go write up a patch and send it
-out.
+Instead, create an awk script that looks for 3 different events and will
+exit out after it finds them. This will find the 3 events the test looks
+for (eventually if it works), and still exit out after the test is
+satisfied and not cause slower machines to run forever.
 
--- Steve
+Reported-by: Tengda Wu <wutengda@huaweicloud.com>
+Closes: https://lore.kernel.org/all/20250710130134.591066-1-wutengda@huaweicloud.com/
+Fixes: 1a4ea83a6e67 ("selftests/ftrace: Limit length in subsystem-enable tests")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ .../ftrace/test.d/event/subsystem-enable.tc   | 28 +++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+index b7c8f29c09a9..65916bb55dfb 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+@@ -14,11 +14,35 @@ fail() { #msg
+     exit_fail
+ }
+ 
++# As reading trace can last forever, simply look for 3 different
++# events then exit out of reading the file. If there's not 3 different
++# events, then the test has failed.
++check_unique() {
++    cat trace | grep -v '^#' | awk '
++	BEGIN { cnt = 0; }
++	{
++	    for (i = 0; i < cnt; i++) {
++		if (event[i] == $5) {
++		    break;
++		}
++	    }
++	    if (i == cnt) {
++		event[cnt++] = $5;
++		if (cnt > 2) {
++		    exit;
++		}
++	    }
++	}
++	END {
++	    printf "%d", cnt;
++	}'
++}
++
+ echo 'sched:*' > set_event
+ 
+ yield
+ 
+-count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
++count=`check_unique`
+ if [ $count -lt 3 ]; then
+     fail "at least fork, exec and exit events should be recorded"
+ fi
+@@ -29,7 +53,7 @@ echo 1 > events/sched/enable
+ 
+ yield
+ 
+-count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
++count=`check_unique`
+ if [ $count -lt 3 ]; then
+     fail "at least fork, exec and exit events should be recorded"
+ fi
+-- 
+2.47.2
+
 
