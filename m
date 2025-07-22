@@ -1,160 +1,216 @@
-Return-Path: <linux-kselftest+bounces-37853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D0EDB0E380
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Jul 2025 20:29:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7C6DB0E76F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 02:02:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B166C540448
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Jul 2025 18:29:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3DA17B2AE7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 00:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70CF928000F;
-	Tue, 22 Jul 2025 18:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3354D1FB3;
+	Wed, 23 Jul 2025 00:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YsWODkJ2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IAj2DzIM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51F5279DCA;
-	Tue, 22 Jul 2025 18:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF5B1FDA;
+	Wed, 23 Jul 2025 00:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753208944; cv=none; b=kbMoJeVUiA3NCwbJGVJq67WJVBocDE+bt9bNCtfukpXkKPJuCoFTUpQ2fzMoQotGGDmCa1XyxmIuqdEupngSGx3/Av1jOLo6hau2yF2GlPIHhi7XVN79TmvtOtTN1SuOamo/rKxynar9Pzhh1SEMdK9pSY6J+TnGaonBXD0odlI=
+	t=1753228931; cv=none; b=l9FNM/R1lurZeUVX97yXPmoP2pemdK3f/Lm3cukS2aS7n3L0eJKPeb60mV2c6aR2NBCo3unZXeO1Sg1qrqmIMYd6CtT+Btww4AMJEVzppADcAlN6JalgH718SuYnXN0ebeFwc9++fnITZjAMCMBUXN2GXqOFJcZM8V0nQpICnjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753208944; c=relaxed/simple;
-	bh=RkkNdI9vuLQPiw+fmWHYyUPaYD/kN0qVxA2pr7pBEqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dbpgAx5/jnRCx2+iomG7TpD1paITJ7i2q45/cDQgdL2Hqn5udcajfpi5M3RHrU3TAMVqKpLqWzhddifU5Q5JlBYc1YASgGeuVcW9xBIfcW19+yDSnyTOMtJO+XVu0TIezdlJC0aIvhK1e+FVuUdPaHnnUg2PmcLUrrctYnNZe8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YsWODkJ2; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1753228931; c=relaxed/simple;
+	bh=dewk3TAValYYQExAPJkqLo7eeu1mdvuRf3ddUbYlT50=;
+	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=YmK/14Nl7fU5ab5jTt4e4HY+ooqXSRnx4BP9KXSMR+go/i0/YcbsImItJa0NMybuKrCM1YHJlOB67RO5wUGLIyDOUWr9R9SeyppsFf1eqWXbZhiULyb9hgItS8003BVav3g6HQzn+Dp8wBlShbZoZnZg3wMPO/qWRdYabO9MxK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IAj2DzIM; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-234bfe37cccso45744515ad.0;
-        Tue, 22 Jul 2025 11:29:02 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-748d982e92cso4089496b3a.1;
+        Tue, 22 Jul 2025 17:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753208942; x=1753813742; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ncnqQH/L5XHCltFY0Cw0EuBCxvGsfMZiIzARQQHUSw8=;
-        b=YsWODkJ2KwwgVCs4OkqmvuBqz78mJw1dhm0L3TTTtT5RxYC4Xe+KzT1yjh6gSSnNQ4
-         LYZzilxrOlBJ1qlxrNw1oP7/DYL8d/Vv1LcePh3qyPsAYHen3U6gulXev7aP2GrCquYF
-         pfyhYiN1wKy3CVt9XQfTX0kQCTL2PjMTwUQlOC6mgIjmK4omZYGpUsrIZ4k8tOdHuEvS
-         K4UXf9vgwuYy+0wEdhnLQLOF1ZrIHXPUiOtpt13qb8A0Laz8U+NQ7yM7NTw04+lsJPYg
-         NCSYqD+7thrh6SBV74K1ciSyX5jU+vmENVDzX74petSuFX0VJYR6tme/if6ROh6Cfkqh
-         /n6A==
+        d=gmail.com; s=20230601; t=1753228929; x=1753833729; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=afioNrw39xivAx0anOKx/PDNnLStyhXg1rvkkGxqeuY=;
+        b=IAj2DzIMXqzjWTLRYOTSEOCVkh1q4c/3h+3dkF0IaRLHtWFZAbzBLJcDHm9FoBMxRW
+         lX9F/tF5ewl6OixEhAeOHgQiQr+PKM0Bq1/EWpcuK6FjEIKxrbUxKGrkDWpcS9b4uz12
+         8L41N2BrgfHx69/7ae9qLZpa+o7sndemJDAJnUoxxQ0FNuEhan7pUaDt81V3iXmWjgz9
+         p4JC0zS172mNy/KJnc9hD1TvlRSHf37sPu2e3fH345LDeQpGgnmIM+DnQi+VwbptFxcB
+         4MupB26J+4Lq/xQz61gOJRXvFQ04UvGPZ7QkTpbTTp5r9IVIZC3dOWFyqVfAtMCTHHs6
+         DamQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753208942; x=1753813742;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1753228929; x=1753833729;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ncnqQH/L5XHCltFY0Cw0EuBCxvGsfMZiIzARQQHUSw8=;
-        b=XaG+LHJaQyRiJmOtVtKP4JiYFmW5g222K/nXUDNtOwO/AVV1wlsdAH0Y7wz7HWFhv8
-         /UJzvtj1chRrIN9LQFe9CZ4sW0S7gWf4fIxOWh4tgdW2Abqkd73eo85owha2pdqjEjYg
-         QNpnOASx3yEnYvLkWjycMMQfN0BICDgN3rgQZouxKpT2qleTJ1Ttl/xO23Qfr29SW7XR
-         EOpnQBRQKAX5pOMvvlsaQ3IikoodyYqaMhoxKlit5GF/hxEz3UT13poDX3YPNaJUiJNn
-         vyxbp8ExudwL5lQpqeOc7sQuRCvU9mz+jNhkWv/v4n4xPx+vQ2Us3h6MBKTPgOYF+Ex7
-         5FXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV8xe2wj3LkgtdbFU5PZ0Fq6YdgvoSfy8/XhaYoO11IGeOabbF5OoFjs17c1w0A/wOSs/xCcIhYQXZ9lPFMadmN@vger.kernel.org, AJvYcCVuFnt52sNkMM047SaPP50uJ4BHz/BdBJiFmJVzKbi+xzkMo3+fOaapfPFe7fC7/WJLvHVrGee6cQILt+M=@vger.kernel.org, AJvYcCWMLpzx3/DE4/PFdiNooABCjVnYb2jew9xNFblDN6DOHbVqn+GVtZpu6yPEgf+TzCgUcMoMpKRQ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+EA+N5uZcZP5P09XxLI3BfsbkqRY8TBffETTflMmIKkdBXw+1
-	Yzh3dycX9yIIb5v/FpqxDJogufVv9kQYmoBAXU4rwQb5QaQzngV5Gtg=
-X-Gm-Gg: ASbGncsnceepDqvE15+Ky45ST5P5PQNVSg8IiLBEv/t7jPXIqGivpv8f+6fhL3E94HF
-	YCnriGV3x3pylHac1DjKp2cguZsyLBUjmg+clzmyDXZIioApvbesYUoYlrJYk05MMilaz1ML7+1
-	KESvzZmpiG7XnwvJrJvuaK+55Ql6P2LVZ5vO0nPmxvJ5z+6qeYUpLEhRHFdizdsEtdHs9vVTXlI
-	ucBtLL8gGaV0gkxT1kiD8yqkc17+MOugpT3MALiiVL19jhURM16PLPed+6jJGJMyVJnZaDHb42O
-	p3AJdkgJSbybeEFIc+lmBVjZqBZZr4kZrWgQhBL5SZepE2kwbtITMz6NRABhRZi6xj0Ff/iRGU7
-	lS+ZhjAFbtxoZHhAlLRyeFLMr47RIQCxAEfTQJ3VkyA6OsFlBp4WFurQcJ4I=
-X-Google-Smtp-Source: AGHT+IFRqRgH5nBI3wyQnIhjc30c5pwMRyVnycr06EYwVUjXAPmUT7KBxaujhM7aPhesuvyYhscZsQ==
-X-Received: by 2002:a17:903:19e4:b0:234:c65f:6c0c with SMTP id d9443c01a7336-23f98171bbbmr47285ad.15.1753208942004;
-        Tue, 22 Jul 2025 11:29:02 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-23e3b6b48e5sm80681325ad.101.2025.07.22.11.29.00
+        bh=afioNrw39xivAx0anOKx/PDNnLStyhXg1rvkkGxqeuY=;
+        b=c0nSV5MBMpH6zN6RxtS/t7bu3rqU/rV2lDx4KkJ/L4QQ53I2/60uIStL7zPs1DK90u
+         UPwwJrU3Mootf1+7FIaqVCkoC9sPrKNBhF4o40HVmac2zgUcHebmks5ByGdSiZro46HH
+         YsrZQ4TSgMljQIXKFd8EwgiEOCZfjQQgJ4eHGXdavx82dqoPLvuciIZ1OfZqFfCTqQGo
+         Y31tbsCgwbPrDTq2dFT4S+SmaiA9CIE/p4zYC6OxyP2aEokP6kXXrfelF9tyqjzLtNJo
+         fqaAUG7GMNIwhe38fZrF33RseezxPtEJpIelRMq1eWRcslLcXYXBm2ytQ0jb3LfhFnCy
+         JyHw==
+X-Forwarded-Encrypted: i=1; AJvYcCUP0ni5f/ddLuckEOSAd7fIAWWZ9iJUwDZ8GV1W6NbFdtLRL9GD4ChV4/keAJem5bY4365CzEIFqhMt5nGbDYH9gEG6LCfa@vger.kernel.org, AJvYcCWOF1j42vDL04S/zZJ5/cRX6z1Hd4/buQcN+60Emb3r24aRPHY3Fk+9hU0pR/hL8SJM0sD507B15Y28Rng=@vger.kernel.org, AJvYcCXOqvU6CBiDR3Zrap1et1If2KiMFJO58szIEKopUQbYve8zqC99yHddVW8/KSOGHV3BS6kR82KgoM22tdAGrq6P@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKDZN69PheFDG9BgpZnXyH+WY+u/CKjXVBKwU9EUx2Y/tjvzPe
+	fsXIkEi74xkx+TsCXIfo/1YsJ88yt/PMIQdmdaZisYNN4r6MPck7PUpz
+X-Gm-Gg: ASbGncuNkP4hYe28R2dXw3AgvhPijJQ/Uqd9+uDcegEvc0xeq8xYDVz2np2AjG/5U8k
+	JdWOt2RD43pxLGNKaZY9pmljPZPMpV6m6ykJqOx35T+I88MGT7viTUSocaDXi97d68J80CNqU1f
+	c410PqnIH2inur4Anwl/9q8fOw2hBScs1MpkZB97nQawOUEOvZlYThlD2zQiE3hAbOPW1PyGP0M
+	bNb+aOesEyG3tDuFWC0GsPM0A/S7OHYC5uoVqHT8Vrybt95odJgrEMmYKct9kD/3oJnX38GF/C4
+	otLyQdaD87ZOnabgdvrn0pWOjrLJCAS0OrPxyANpxJ3eGR7m5h0qr24BR6Iwp6S8YCjbNs07MuV
+	vC3K2HzuJTLVVCCKQKcXG7BY=
+X-Google-Smtp-Source: AGHT+IEOrOtE3x8MeA1SKBJMd59JULb3/k3gDSOBVNnDEa6DvuyNQgbznfPDnTFZY/cLR7sKgxhnHQ==
+X-Received: by 2002:a05:6a21:6b0d:b0:222:d191:5bbd with SMTP id adf61e73a8af0-23d491446f0mr1142486637.39.1753228928763;
+        Tue, 22 Jul 2025 17:02:08 -0700 (PDT)
+Received: from 1337 ([136.159.213.219])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-759c89d5820sm8437213b3a.52.2025.07.22.17.02.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jul 2025 11:29:00 -0700 (PDT)
-Date: Tue, 22 Jul 2025 11:28:59 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Simon Horman <horms@kernel.org>
-Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, sd@queasysnail.net, andrew+netdev@lunn.ch,
-	shuah@kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Cosmin Ratiu <cratiu@nvidia.com>
-Subject: Re: [PATCH net 1/2] macsec: set IFF_UNICAST_FLT priv flag
-Message-ID: <aH_Ya_81eYzoiZZT@mini-arch>
-References: <20250721165423.990313-1-sdf@fomichev.me>
- <20250722163645.GP2459@horms.kernel.org>
+        Tue, 22 Jul 2025 17:02:08 -0700 (PDT)
+From: Abhinav Saxena <xandfury@gmail.com>
+To: Fan Wu <wufan@kernel.org>
+Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G?=
+ =?utf-8?Q?=C3=BCnther?= Noack <gnoack@google.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge
+ E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>,
+ linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH RFC 2/4] landlock: implement memfd detection
+Date: Tue, 22 Jul 2025 15:56:38 -0600
+References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
+ <20250719-memfd-exec-v1-2-0ef7feba5821@gmail.com>
+ <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
+User-agent: mu4e 1.10.8; emacs 30.1
+In-reply-to: <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
+Message-ID: <87v7nj7p1d.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="=-=-="
+
+--=-=-=
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250722163645.GP2459@horms.kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-On 07/22, Simon Horman wrote:
-> On Mon, Jul 21, 2025 at 09:54:22AM -0700, Stanislav Fomichev wrote:
-> > Cosmin reports the following locking issue:
-> > 
-> >   # BUG: sleeping function called from invalid context at
-> >   kernel/locking/mutex.c:275
-> >   #   dump_stack_lvl+0x4f/0x60
-> >   #   __might_resched+0xeb/0x140
-> >   #   mutex_lock+0x1a/0x40
-> >   #   dev_set_promiscuity+0x26/0x90
-> >   #   __dev_set_promiscuity+0x85/0x170
-> >   #   __dev_set_rx_mode+0x69/0xa0
-> >   #   dev_uc_add+0x6d/0x80
-> >   #   vlan_dev_open+0x5f/0x120 [8021q]
-> >   #  __dev_open+0x10c/0x2a0
-> >   #  __dev_change_flags+0x1a4/0x210
-> >   #  netif_change_flags+0x22/0x60
-> >   #  do_setlink.isra.0+0xdb0/0x10f0
-> >   #  rtnl_newlink+0x797/0xb00
-> >   #  rtnetlink_rcv_msg+0x1cb/0x3f0
-> >   #  netlink_rcv_skb+0x53/0x100
-> >   #  netlink_unicast+0x273/0x3b0
-> >   #  netlink_sendmsg+0x1f2/0x430
-> > 
-> > Which is similar to recent syzkaller reports in [0] and [1] and triggers
-> > because macsec does not advertise IFF_UNICAST_FLT although it has proper
-> > ndo_set_rx_mode callback that takes care of pushing uc/mc addresses
-> > down to the real device.
-> > 
-> > In general, dev_uc_add call path is problematic for stacking
-> > non-IFF_UNICAST_FLT because we might grab netdev instance lock under
-> > addr_list_lock spinlock, so this is not a systemic fix.
-> > 
-> > 0: https://lore.kernel.org/netdev/686d55b4.050a0220.1ffab7.0014.GAE@google.com
-> > 1: https://lore.kernel.org/netdev/68712acf.a00a0220.26a83e.0051.GAE@google.com/
-> > Link: 2aff4342b0f5b1539c02ffd8df4c7e58dd9746e7.camel@nvidia.com
-> 
-> I think that Link: should be followed by a URL
-> 
-> Link: https://lore.kernel.org/netdev/2aff4342b0f5b1539c02ffd8df4c7e58dd9746e7.camel@nvidia.com
+Fan Wu <wufan@kernel.org> writes:
 
-Whoops, sorry, forgot to prefix the message id with a URL :-( If this
-gets a CR, I'll repost with a fix. (presumably should be easy to fix
-during git am)
- 
-> > Fixes: 7e4d784f5810 ("net: hold netdev instance lock during rtnetlink operations")
-> > Reported-by: Cosmin Ratiu <cratiu@nvidia.com>
-> > Tested-by: Cosmin Ratiu <cratiu@nvidia.com>
-> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> 
-> Hi Stan,
-> 
-> I ran the test provided by patch 2/2.
-> When run with with a debug kernel using VNG.
-> 
-> It reliably passes with patch 1/2 applied. And fails without patch 1/2 applied.
-> Where fails means the kernel panics along the lines of the stack trace in
-> the commit message.
-> 
-> Reviewed-by: Simon Horman <horms@kernel.org>
-> Tested-by: Simon Horman <horms@kernel.org>
+> On Sat, Jul 19, 2025 at 4:13=E2=80=AFAM Abhinav Saxena <xandfury@gmail.co=
+m> wrote:
+>>
+>> Add is_memfd_file() function to reliably detect memfd files by checking
+>> for =E2=80=9Cmemfd:=E2=80=9D prefix in dentry names on shmem-backed file=
+s. This
+>> distinguishes true memfd files from regular shmem files.
+>>
+>> Move domain_is_scoped() to domain.c for reuse across subsystems.
+>> Add comprehensive kunit tests for memfd detection edge cases.
+>>
+>> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+>> =E2=80=94
+>>  security/landlock/domain.c |  67 +++++++++++++++
+>>  security/landlock/domain.h |   4 +
+>>  security/landlock/fs.c     | 210 ++++++++++++++++++++++++++++++++++++++=
++++++++
+>>  security/landlock/task.c   |  67 =E2=80=94=E2=80=94=E2=80=94=E2=80=94=
+=E2=80=94
+>>  4 files changed, 281 insertions(+), 67 deletions(-)
+>
+> =E2=80=A6
+>
+>>
+>> +/**
+>> + * is_memfd_file - Check if file was created via memfd_create()
+>> + * @file: File to check
+>> + *
+>> + * Returns true if @file was created via memfd_create(), false otherwis=
+e.
+>> + *
+>> + * memfd files are shmem-backed files with =E2=80=9Cmemfd:=E2=80=9D pre=
+fix in their dentry name.
+>> + * This is the definitive way to distinguish memfd files from regular s=
+hmem
+>> + * files.
+>> + */
+>> +static bool is_memfd_file(struct file *file)
+>> +{
+>> +       const struct dentry *dentry;
+>> +       const unsigned char *name;
+>> +       size_t name_len;
+>> +
+>> +       /* Fast path: basic validation */
+>> +       if (unlikely(!file))
+>> +               return false;
+>> +
+>> +       /* Must be shmem-backed first - this is the cheapest definitive =
+check */
+>> +       if (!shmem_file(file))
+>> +               return false;
+>> +
+>> +#ifdef CONFIG_MEMFD_CREATE
+>> +
+>> +       /* Validate dentry and get name info */
+>> +       dentry =3D file->f_path.dentry;
+>> +       if (unlikely(!dentry))
+>> +               return false;
+>> +
+>> +       name_len =3D dentry->d_name.len;
+>> +       name =3D dentry->d_name.name;
+>> +
+>> +       /* memfd files always have =E2=80=9Cmemfd:=E2=80=9D prefix (6 ch=
+aracters) */
+>> +       if (name_len < 6 || unlikely(!name))
+>> +               return false;
+>> +
+>> +       /* Check for exact =E2=80=9Cmemfd:=E2=80=9D prefix */
+>> +       return memcmp(name, =E2=80=9Cmemfd:=E2=80=9D, 6) =3D=3D 0;
+>> +#else
+>> +       return false;
+>> +#endif
+>
+> I was trying to do something similar early this year but didn=E2=80=99t h=
+ear
+> feedback from the linux-mm folks.
+> <https://lore.kernel.org/linux-security-module/20250129203932.22165-1-wuf=
+an@kernel.org/>
+>
+> I have considered this approach but didn=E2=80=99t use it. My concern is,
+> potentially a malicious user can create a file in a shmem fs, e.g.
+> tmpfs , with the =E2=80=9Cmemfd:=E2=80=9D prefix, which can be used to by=
+pass security
+> policy.
+> (Resending this message due to a misconfiguration with my email
+> client. Apologies for any inconvenience.)
+>
+> -Fan
 
-Thank you for testing!
+Hi Fan,
+
+Thanks for your comments.
+
+I agree that an LSM hook into memfd_create() would be a much better
+solution. In the absence of such a function, do you think adding a
+`d_unlinked(dentry)` check could serve as an additional verification?
+
+I say things since I *think* that legitimate memfd files are always
+unlinked while spoofed tmpfs files remain linked. I could be wrong
+though.
+
+In any case, we can test this approach using kprobes to validate
+the behavior.
+
+-Abhinav
+
+--=-=-=--
 
