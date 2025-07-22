@@ -1,216 +1,120 @@
-Return-Path: <linux-kselftest+bounces-37860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7C6DB0E76F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 02:02:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D625FB0E6E9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 01:07:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3DA17B2AE7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 00:00:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E07303B1231
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Jul 2025 23:07:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3354D1FB3;
-	Wed, 23 Jul 2025 00:02:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE89289E0F;
+	Tue, 22 Jul 2025 23:07:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IAj2DzIM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3oBXBwjH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF5B1FDA;
-	Wed, 23 Jul 2025 00:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588F4287275
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Jul 2025 23:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753228931; cv=none; b=l9FNM/R1lurZeUVX97yXPmoP2pemdK3f/Lm3cukS2aS7n3L0eJKPeb60mV2c6aR2NBCo3unZXeO1Sg1qrqmIMYd6CtT+Btww4AMJEVzppADcAlN6JalgH718SuYnXN0ebeFwc9++fnITZjAMCMBUXN2GXqOFJcZM8V0nQpICnjY=
+	t=1753225658; cv=none; b=TCJ2NXq2zpVGgMEPzUviUtoWyW8buWY0/tRpMVTs87I6EFGaO3z1Zc/7xUFtQC2G4SbWt5zPQKUUk9+v7GThSv6Zyn/y8yzQJXUr3o8tEC+sZJKdBEy1CFQx6/2fb60nXolZT4tVwCfIzrO/MSm6Cfzp+gd+SVG/++XMf9BBZeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753228931; c=relaxed/simple;
-	bh=dewk3TAValYYQExAPJkqLo7eeu1mdvuRf3ddUbYlT50=;
-	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=YmK/14Nl7fU5ab5jTt4e4HY+ooqXSRnx4BP9KXSMR+go/i0/YcbsImItJa0NMybuKrCM1YHJlOB67RO5wUGLIyDOUWr9R9SeyppsFf1eqWXbZhiULyb9hgItS8003BVav3g6HQzn+Dp8wBlShbZoZnZg3wMPO/qWRdYabO9MxK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IAj2DzIM; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-748d982e92cso4089496b3a.1;
-        Tue, 22 Jul 2025 17:02:09 -0700 (PDT)
+	s=arc-20240116; t=1753225658; c=relaxed/simple;
+	bh=i9Topy5p8+oRB1ybTn3eGTjAdmW4So/zy81PHcCSQws=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=h0FONT6Tf0guroLc43nXpFeS1/4n1j320UJc1uVgf0K0RYN57pZPqrg1gF3v/uDOEAuUy8RwLYLHa0cVQuQ5PVMZCueeqr4M34fm3mbCBsUfAhfABd8zFg7en3g/aBjP5Vm1Up31pXJWZeuyfpSXVTCtxjZp5YChmjckP6jefME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3oBXBwjH; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3132e7266d3so6061321a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Jul 2025 16:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753228929; x=1753833729; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:user-agent:references:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=afioNrw39xivAx0anOKx/PDNnLStyhXg1rvkkGxqeuY=;
-        b=IAj2DzIMXqzjWTLRYOTSEOCVkh1q4c/3h+3dkF0IaRLHtWFZAbzBLJcDHm9FoBMxRW
-         lX9F/tF5ewl6OixEhAeOHgQiQr+PKM0Bq1/EWpcuK6FjEIKxrbUxKGrkDWpcS9b4uz12
-         8L41N2BrgfHx69/7ae9qLZpa+o7sndemJDAJnUoxxQ0FNuEhan7pUaDt81V3iXmWjgz9
-         p4JC0zS172mNy/KJnc9hD1TvlRSHf37sPu2e3fH345LDeQpGgnmIM+DnQi+VwbptFxcB
-         4MupB26J+4Lq/xQz61gOJRXvFQ04UvGPZ7QkTpbTTp5r9IVIZC3dOWFyqVfAtMCTHHs6
-         DamQ==
+        d=google.com; s=20230601; t=1753225656; x=1753830456; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f+m6qI30JHvrm3ONaGCpQMi0L8lxI7PYDb1Mu/Pb3F4=;
+        b=3oBXBwjHNB/20r0hYHUo9vZehvohDETqWCUjsCDEyL+kRBgH4IOWq6ZyqqnhLOvxXE
+         Ol9d1WAShIZs29mgPsEl2AANInab5X7lTu38QVCnI+8gAdxo4BtQ/mbDzmJUL3PmlYzM
+         3tY29xS1MbB928GRSQSaDAABmfc7vxaAik5oQbM5dsiNMQx6tUZoSlJCusNNJzrsBpKR
+         HiQFpV4DuZastDN6Fqywl1v5FIiC6zu2vbea3np75HcthenrRXt04v1+wDeFE6puqlXY
+         S4lxz9g/X7uGpGABuuT003TMROQDqgCPxScrE+Q9JJBiFkWkUa4n4aboTYaNVQqSyNf3
+         I3ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753228929; x=1753833729;
-        h=mime-version:message-id:in-reply-to:user-agent:references:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=afioNrw39xivAx0anOKx/PDNnLStyhXg1rvkkGxqeuY=;
-        b=c0nSV5MBMpH6zN6RxtS/t7bu3rqU/rV2lDx4KkJ/L4QQ53I2/60uIStL7zPs1DK90u
-         UPwwJrU3Mootf1+7FIaqVCkoC9sPrKNBhF4o40HVmac2zgUcHebmks5ByGdSiZro46HH
-         YsrZQ4TSgMljQIXKFd8EwgiEOCZfjQQgJ4eHGXdavx82dqoPLvuciIZ1OfZqFfCTqQGo
-         Y31tbsCgwbPrDTq2dFT4S+SmaiA9CIE/p4zYC6OxyP2aEokP6kXXrfelF9tyqjzLtNJo
-         fqaAUG7GMNIwhe38fZrF33RseezxPtEJpIelRMq1eWRcslLcXYXBm2ytQ0jb3LfhFnCy
-         JyHw==
-X-Forwarded-Encrypted: i=1; AJvYcCUP0ni5f/ddLuckEOSAd7fIAWWZ9iJUwDZ8GV1W6NbFdtLRL9GD4ChV4/keAJem5bY4365CzEIFqhMt5nGbDYH9gEG6LCfa@vger.kernel.org, AJvYcCWOF1j42vDL04S/zZJ5/cRX6z1Hd4/buQcN+60Emb3r24aRPHY3Fk+9hU0pR/hL8SJM0sD507B15Y28Rng=@vger.kernel.org, AJvYcCXOqvU6CBiDR3Zrap1et1If2KiMFJO58szIEKopUQbYve8zqC99yHddVW8/KSOGHV3BS6kR82KgoM22tdAGrq6P@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKDZN69PheFDG9BgpZnXyH+WY+u/CKjXVBKwU9EUx2Y/tjvzPe
-	fsXIkEi74xkx+TsCXIfo/1YsJ88yt/PMIQdmdaZisYNN4r6MPck7PUpz
-X-Gm-Gg: ASbGncuNkP4hYe28R2dXw3AgvhPijJQ/Uqd9+uDcegEvc0xeq8xYDVz2np2AjG/5U8k
-	JdWOt2RD43pxLGNKaZY9pmljPZPMpV6m6ykJqOx35T+I88MGT7viTUSocaDXi97d68J80CNqU1f
-	c410PqnIH2inur4Anwl/9q8fOw2hBScs1MpkZB97nQawOUEOvZlYThlD2zQiE3hAbOPW1PyGP0M
-	bNb+aOesEyG3tDuFWC0GsPM0A/S7OHYC5uoVqHT8Vrybt95odJgrEMmYKct9kD/3oJnX38GF/C4
-	otLyQdaD87ZOnabgdvrn0pWOjrLJCAS0OrPxyANpxJ3eGR7m5h0qr24BR6Iwp6S8YCjbNs07MuV
-	vC3K2HzuJTLVVCCKQKcXG7BY=
-X-Google-Smtp-Source: AGHT+IEOrOtE3x8MeA1SKBJMd59JULb3/k3gDSOBVNnDEa6DvuyNQgbznfPDnTFZY/cLR7sKgxhnHQ==
-X-Received: by 2002:a05:6a21:6b0d:b0:222:d191:5bbd with SMTP id adf61e73a8af0-23d491446f0mr1142486637.39.1753228928763;
-        Tue, 22 Jul 2025 17:02:08 -0700 (PDT)
-Received: from 1337 ([136.159.213.219])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-759c89d5820sm8437213b3a.52.2025.07.22.17.02.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jul 2025 17:02:08 -0700 (PDT)
-From: Abhinav Saxena <xandfury@gmail.com>
-To: Fan Wu <wufan@kernel.org>
-Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G?=
- =?utf-8?Q?=C3=BCnther?= Noack <gnoack@google.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge
- E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH RFC 2/4] landlock: implement memfd detection
-Date: Tue, 22 Jul 2025 15:56:38 -0600
-References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
- <20250719-memfd-exec-v1-2-0ef7feba5821@gmail.com>
- <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
-User-agent: mu4e 1.10.8; emacs 30.1
-In-reply-to: <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
-Message-ID: <87v7nj7p1d.fsf@gmail.com>
+        d=1e100.net; s=20230601; t=1753225656; x=1753830456;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f+m6qI30JHvrm3ONaGCpQMi0L8lxI7PYDb1Mu/Pb3F4=;
+        b=Lj6mpXE7iq1JP1HeCUNw5xFFtwcA8f+7iqIsbmWDJeCtsDsk56st+kRvwHD9sRrGa3
+         0eqqXDmuZMX77q4fPHC7NpEzEj2r5hqlMO+CjOufXtBzcdSydSYWovi1fU7AbWnv0xWH
+         ucLePMUROwJmt9LG4YZZg7VCnuPE+aiNKHGmuWt+sLyIQ/iahYbfB2ws4Z8NV1XvaJhp
+         ilBR7QApFKp5RgUHxvyWX7j95WmhWhm9IJ2fhaQ93X5wqSMhR4ie7FhJoctip2j3+vq/
+         J+KHXI9kJlZWDTcHY0omtnKSNXu3r7A3AzEfHpCH1WRDTxajqQP69nWZjzRtvbIJuSii
+         S/EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV6NVi3aCDRDN2zVmqt2q8u5901nRArYTat6Ymxli0TYrgWMTEDSksY8k5bJF2DPhdSqna+h4MEEPDFXjbhJDk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1Mq1jycfyIA+cIj8oDd/Q5ZJBLO/6ew56xpb+hlqN4orQjHko
+	y244MiSibhuN2/MPzGYJwt5jBE+Z2I/h1wDX7gcqjHDzh3KJAuPQ3knKXi0gVQr1yNDxVRJL/5x
+	tEfhePg==
+X-Google-Smtp-Source: AGHT+IFOb8KYXXobVAAvvjW+Fe1YbH8mwfp6V2E801ROWDybd0+20juthdBHS5x4qZEtLjQQN6CpBVqzr4M=
+X-Received: from pjuj4.prod.google.com ([2002:a17:90a:d004:b0:313:242b:1773])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5647:b0:311:fc8b:31b5
+ with SMTP id 98e67ed59e1d1-31e507abbc6mr1697551a91.14.1753225656408; Tue, 22
+ Jul 2025 16:07:36 -0700 (PDT)
+Date: Tue, 22 Jul 2025 16:07:34 -0700
+In-Reply-To: <80a047e2-e0fb-40cd-bb88-cce05ca017ac@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
+Mime-Version: 1.0
+References: <20250713174339.13981-2-shivankg@amd.com> <bdce1a12-ab73-4de1-892b-f8e849a8ab51@redhat.com>
+ <aH-j8bOXMfOKdpHp@google.com> <80a047e2-e0fb-40cd-bb88-cce05ca017ac@redhat.com>
+Message-ID: <aIAZtgtdy5Fw1OOi@google.com>
+Subject: Re: [PATCH V9 0/7] Add NUMA mempolicy support for KVM guest-memfd
+From: Sean Christopherson <seanjc@google.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Shivank Garg <shivankg@amd.com>, vbabka@suse.cz, willy@infradead.org, 
+	akpm@linux-foundation.org, shuah@kernel.org, pbonzini@redhat.com, 
+	brauner@kernel.org, viro@zeniv.linux.org.uk, ackerleytng@google.com, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, pvorel@suse.cz, 
+	bfoster@redhat.com, tabba@google.com, vannapurve@google.com, 
+	chao.gao@intel.com, bharata@amd.com, nikunj@amd.com, michael.day@amd.com, 
+	shdhiman@amd.com, yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com, 
+	thomas.lendacky@amd.com, michael.roth@amd.com, aik@amd.com, jgg@nvidia.com, 
+	kalyazin@amazon.com, peterx@redhat.com, jack@suse.cz, rppt@kernel.org, 
+	hch@infradead.org, cgzones@googlemail.com, ira.weiny@intel.com, 
+	rientjes@google.com, roypat@amazon.co.uk, ziy@nvidia.com, 
+	matthew.brost@intel.com, joshua.hahnjy@gmail.com, rakie.kim@sk.com, 
+	byungchul@sk.com, gourry@gourry.net, kent.overstreet@linux.dev, 
+	ying.huang@linux.alibaba.com, apopple@nvidia.com, chao.p.peng@intel.com, 
+	amit@infradead.org, ddutile@redhat.com, dan.j.williams@intel.com, 
+	ashish.kalra@amd.com, gshan@redhat.com, jgowans@amazon.com, 
+	pankaj.gupta@amd.com, papaluri@amd.com, yuzhao@google.com, 
+	suzuki.poulose@arm.com, quic_eberman@quicinc.com, 
+	aneeshkumar.kizhakeveetil@arm.com, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 22, 2025, David Hildenbrand wrote:
+> On 22.07.25 16:45, Sean Christopherson wrote:
+> > On Tue, Jul 22, 2025, David Hildenbrand wrote:
+> > > Just to clarify: this is based on Fuad's stage 1 and should probably still be
+> > > tagged "RFC" until stage-1 is finally upstream.
+> > > 
+> > > (I was hoping stage-1 would go upstream in 6.17, but I am not sure yet if that is
+> > > still feasible looking at the never-ending review)
+> > 
+> > 6.17 is very doable.
+> 
+> I like your optimism :)
 
-Fan Wu <wufan@kernel.org> writes:
-
-> On Sat, Jul 19, 2025 at 4:13=E2=80=AFAM Abhinav Saxena <xandfury@gmail.co=
-m> wrote:
->>
->> Add is_memfd_file() function to reliably detect memfd files by checking
->> for =E2=80=9Cmemfd:=E2=80=9D prefix in dentry names on shmem-backed file=
-s. This
->> distinguishes true memfd files from regular shmem files.
->>
->> Move domain_is_scoped() to domain.c for reuse across subsystems.
->> Add comprehensive kunit tests for memfd detection edge cases.
->>
->> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
->> =E2=80=94
->>  security/landlock/domain.c |  67 +++++++++++++++
->>  security/landlock/domain.h |   4 +
->>  security/landlock/fs.c     | 210 ++++++++++++++++++++++++++++++++++++++=
-+++++++
->>  security/landlock/task.c   |  67 =E2=80=94=E2=80=94=E2=80=94=E2=80=94=
-=E2=80=94
->>  4 files changed, 281 insertions(+), 67 deletions(-)
->
-> =E2=80=A6
->
->>
->> +/**
->> + * is_memfd_file - Check if file was created via memfd_create()
->> + * @file: File to check
->> + *
->> + * Returns true if @file was created via memfd_create(), false otherwis=
-e.
->> + *
->> + * memfd files are shmem-backed files with =E2=80=9Cmemfd:=E2=80=9D pre=
-fix in their dentry name.
->> + * This is the definitive way to distinguish memfd files from regular s=
-hmem
->> + * files.
->> + */
->> +static bool is_memfd_file(struct file *file)
->> +{
->> +       const struct dentry *dentry;
->> +       const unsigned char *name;
->> +       size_t name_len;
->> +
->> +       /* Fast path: basic validation */
->> +       if (unlikely(!file))
->> +               return false;
->> +
->> +       /* Must be shmem-backed first - this is the cheapest definitive =
-check */
->> +       if (!shmem_file(file))
->> +               return false;
->> +
->> +#ifdef CONFIG_MEMFD_CREATE
->> +
->> +       /* Validate dentry and get name info */
->> +       dentry =3D file->f_path.dentry;
->> +       if (unlikely(!dentry))
->> +               return false;
->> +
->> +       name_len =3D dentry->d_name.len;
->> +       name =3D dentry->d_name.name;
->> +
->> +       /* memfd files always have =E2=80=9Cmemfd:=E2=80=9D prefix (6 ch=
-aracters) */
->> +       if (name_len < 6 || unlikely(!name))
->> +               return false;
->> +
->> +       /* Check for exact =E2=80=9Cmemfd:=E2=80=9D prefix */
->> +       return memcmp(name, =E2=80=9Cmemfd:=E2=80=9D, 6) =3D=3D 0;
->> +#else
->> +       return false;
->> +#endif
->
-> I was trying to do something similar early this year but didn=E2=80=99t h=
-ear
-> feedback from the linux-mm folks.
-> <https://lore.kernel.org/linux-security-module/20250129203932.22165-1-wuf=
-an@kernel.org/>
->
-> I have considered this approach but didn=E2=80=99t use it. My concern is,
-> potentially a malicious user can create a file in a shmem fs, e.g.
-> tmpfs , with the =E2=80=9Cmemfd:=E2=80=9D prefix, which can be used to by=
-pass security
-> policy.
-> (Resending this message due to a misconfiguration with my email
-> client. Apologies for any inconvenience.)
->
-> -Fan
-
-Hi Fan,
-
-Thanks for your comments.
-
-I agree that an LSM hook into memfd_create() would be a much better
-solution. In the absence of such a function, do you think adding a
-`d_unlinked(dentry)` check could serve as an additional verification?
-
-I say things since I *think* that legitimate memfd files are always
-unlinked while spoofed tmpfs files remain linked. I could be wrong
-though.
-
-In any case, we can test this approach using kprobes to validate
-the behavior.
-
--Abhinav
-
---=-=-=--
+I'm not optimistic, just incompetent.  I forgot what kernel we're on.  **6.18**
+is very doable, 6.17 not so much.
 
