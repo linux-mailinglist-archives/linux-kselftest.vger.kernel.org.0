@@ -1,143 +1,128 @@
-Return-Path: <linux-kselftest+bounces-37876-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37877-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D78E0B0F164
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 13:38:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF301B0F476
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 15:49:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1F4B7A934A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 11:37:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B732176954
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 13:49:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F3ED2E0924;
-	Wed, 23 Jul 2025 11:38:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7068A2E7F06;
+	Wed, 23 Jul 2025 13:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I8nScVSA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nO9Ngr4U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A119230268;
-	Wed, 23 Jul 2025 11:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1D4286D53;
+	Wed, 23 Jul 2025 13:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753270714; cv=none; b=Qlk2r/+0XJlrn/tGlupUI/jSwybGI2oYHfQHe0CkV5/LhVZWbXXGl3yl9dYmzMWE7m63kQ67qHOYyaYNBf4+dj4eQFv9lQAA616g+/dJFxWDZtp4+J7HuGE5dpabi4RzOU90FeSqul7vKL3cHsCfkkX2+deN4JaDbfX6ucF1KZY=
+	t=1753278571; cv=none; b=ndXpeWv0R3TDl7NQrIwtH1z2cdYViBTJZ31Hkyvi4L4u6FxyGyaPHpSGokqLT/FHHs4IdUs7RtL+RO0n79bNX4vmxVBlfE/IiLqN+Twhrts4ZffY8+Vrjsi2ynMjhmwCHE8F1ItEIGsxV3kWRZIbAvme3d9aXEZWQnqRSybwgV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753270714; c=relaxed/simple;
-	bh=3xNIgfbZkuKToBVIaIN0T6qtZj1CAu2xNWY1oErB7vo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SsVGl/ahge8Y7PTfHE1AvmDEd1iY1ZlFgJ9JIwIZ6O8/LaziAr096OnwB8ECqa6j2z6JNeKjlDfBFJ99Iv7bbnSdRCmTz8QU9ut+ppTClQBiKfJCPW3cnaBHJu9RB2iIq7Agbf/rx4aoZ2HA67i4OupnYFw/7uNizII7m2u/yDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I8nScVSA; arc=none smtp.client-ip=209.85.219.43
+	s=arc-20240116; t=1753278571; c=relaxed/simple;
+	bh=JoDy7FfTu5QQZxsmlGCHwMmuOCveJWFmXjgaMY+XgrA=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=hw9X9j0E0OckQ0qssa2KXaM8OLfNmxk+9FpaFAynNI1DWJrUaqvlDRzqyuV3d3QYwUBPCv416GE6WXm0NGxVfq9aYXJNqreI9ajqcJeUSLP6qwg7DsS4R5u1cSFl2UffsbwoGZKlvTcRh/RiLnU49QKjmX0sbEjQcojDTRiUJw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nO9Ngr4U; arc=none smtp.client-ip=209.85.219.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6fa980d05a8so44396746d6.2;
-        Wed, 23 Jul 2025 04:38:32 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e8da9b7386dso1135255276.1;
+        Wed, 23 Jul 2025 06:49:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753270711; x=1753875511; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1753278569; x=1753883369; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GW8o4VpBFB3CJWAxgh6hNHP7douwh8bC//NQp5568N4=;
-        b=I8nScVSAy0AMeq43njTSqQJXOfYNxyLJ5a+IkhOhifKEByjgoNLfP8ea+9NL9YeLAu
-         5ulkjqE4eBmflI9ayvm9Q6fiXcVShriMYpkx5datKfqlAn6XTcA1c3H5bN/mY/cOhaZz
-         OOXQ9d2eVPwNMWe0CMB67DROtTjPbAzTMkcUk27XNJJ8zDev5ui3gFnE0ywcru8OjjHV
-         6jeA7TW/u/nCcxX/N9ANhxJGR1lHTTrlJsc1a+94OZJVpDv9PgikyTSvfza7RKzYRJ34
-         Qrg1Rm53hncJgrFRvtuWFgqwWMRzvH72EoEM0HI+uLF7wJziJ7E3m0FY3tlejOFGkif+
-         edew==
+        bh=FuCl1xIHuMkalNyYAAcG7/35zrIQQKnvBH3pF153sRk=;
+        b=nO9Ngr4UftlkMTxA4CI6l2+ULz31n2CxABH3raqLZjq0ATSb0WsJWFB9ptdyk1/oS7
+         jSw1GGkF46UVCeBtKL9a7bt7dMI7xC3SRRMrwmt1GFWgFaATxrC4nNi3exNEgIuKYKPl
+         RF1psQL/Vkg7w3G8XdkV619bsN+J4MHGjfPmuqu0kVQq7c19lMq8N+GElBm3u/VlVi4V
+         m/g0+I8YtamzF7kyIGT+mos0ml2viR3HEOJ2FXjV5Nex5Rxxq17gs5yMyNHKUu72je7p
+         FyHfwB+O76ajflHoGxnqKfUXo2gaHVGmxJ7OAR55aby4eIum5q+aqb/cf2qr0tm9vFGg
+         eM9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753270711; x=1753875511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GW8o4VpBFB3CJWAxgh6hNHP7douwh8bC//NQp5568N4=;
-        b=DpDq64y87otuH+hV9/Del8XUrFnB0+CFx1zPi92Kqo+i193ZELjpHZZFamdgNof+67
-         KrYzVqw3ImbBKpjMUzSGT0EgriJ6sVucE19z5GLCryOvDbON4zsZFfeO3pVDfsoCC+Y5
-         4GinYseF7Q8Kcu0POv6y02u1OkHVogwMMceCyL47wg1k8qDnh5RptrWHg8VMPdUuYsE8
-         Iwqj6mfK3qneIkBVjbz45cfXx/1+vbePmYZGMK90rFt3gkOiEHIiNO2LSMuAibwAcjMq
-         VAPaR2PVmZs7Q06apBA1/qecoeBcRLi3gPVCkI4tB3xfpr0Kyo/wJuxAAOUnZctLw/+Z
-         e/SA==
-X-Forwarded-Encrypted: i=1; AJvYcCUUUL+ewwGqtM4rVd7rOVHLwEU0+Hmlmq15BTc9bb2Q3YpzyjWa6JBGGCeR2mAzm1QlJZSPh4v0Wt7/RnboO0Kh@vger.kernel.org, AJvYcCV7QbutCXUgWTRooar29VagJrQyvfAhzCdvHY+I60yZDLwqN6+iMVszc1SfEx5Ov+AjPEsJNUlwLNHFZWG9@vger.kernel.org, AJvYcCVro313zHL4BFESIffZjB9riO49Hh1l3lnKb4H55afyG/g3Gpx2ZaLw4iQ82etTvtJkQhc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7XMN7pmRx4smdpV6/RHO0Vhpcm1WrT6dX+vs/6XJPDKlEwjK1
-	QYuxNsjeAYYuph34bKh1aDdW4g0q/MKQgfPOjWQZzkIKvx9atlhx6xC1a7ElkZWhKWMiRFYxPiT
-	8OTSar5AhSUd3cXQACMi7339piZHrabQ=
-X-Gm-Gg: ASbGncslPWnNsXD7qshd2IHRR0sME3KLCiZ1u4tqs9Yhkz+ZdpHgfDiap8MB4q6kfaM
-	BQWxoOKjs7Bc2eNrnHiomDttkWyAeGCkmvV87FhXIrAUvjIVEvR4SEo1QFfA2FrJfSmhrFMnvT7
-	kD7UpoOtpR8xk60VDen65ENq8Ha0PNUos5W11UmjlkDMo90lR3jDRD+OdVWzXpBP91Whfa0UN8z
-	ZFHiANF
-X-Google-Smtp-Source: AGHT+IEjlRHPDytTHYrrd955Vf1ODftEruHfWOsFzh9HDDs6+tB8jBjR8Lw+tapL9nDRT/0PVtC+I5YRsiTIzT6WO0s=
-X-Received: by 2002:a05:6214:f08:b0:6fd:5cf4:cbb0 with SMTP id
- 6a1803df08f44-70700651e04mr33085726d6.25.1753270711509; Wed, 23 Jul 2025
- 04:38:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1753278569; x=1753883369;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FuCl1xIHuMkalNyYAAcG7/35zrIQQKnvBH3pF153sRk=;
+        b=KgL56UTJZwNrZSHgLXn9smgbP4sb6q82TAzEzkagmqYGEKedFHhoZF4HSYaI97oW5z
+         jNVR+k++KvNagIRsOILdE+8+mv6T1BZYpO0doBwRhwQaWPUnWlQ7N+QpeKzmyXTFg0Ug
+         oOGBXYzSmtMdG+nSsG2ZJJsecwshFa++ibu3ZJ/Jl4XDOjqIMrJCW0p5LVT0CvKCurTl
+         UZjRbonoAyWerkEpJAVyoLjHBS5AkDgk+IIqUFEqcfNrRvKPcVSkN0jRSwrMpt3N0kC2
+         TwL8Wn0zogWFt30HR3k7U8/PuFuO7LdawfNmdFuYlerFJ42cVSXdDLw7CmW/UqA8or1B
+         cZGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUmxDRMRXr2QOV2us8GmVvh0TkiTHWpf19W9363jMvOpa2sxgV3zXi9iHYn5BU5WdfitLCFqVIZcPsx7ashkJU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTwwlmVDMK1DQWU0R8+vXF/QMXAk2jgD42aCvnp0Ji/L9cqFEd
+	x+ajdzC0q/pD7vmb10M3VC3IFUynU7zLbkbw+jLITcmNB81y0Ng1q2Xp
+X-Gm-Gg: ASbGnctMUGEa2DFTMv5N98XgX1GLVssO1f7lhK6fW4uNIOQiX7Uky3Tu+sAjSv7Fhf6
+	8HK5jROstvWkIz/IY3/7EMBQA7VlQupbRhmg6/gmQ79EZOHdxY7Pv/QT/pyPnUaiaF0/l+kjjs0
+	7jPpta328BXpPD4ZYuKHP/JC9OGRP0dqRmRII0UckKOySPd4AiQGnEvhkX4YiDHkUU5pME8JufD
+	HvaA7PlDlVlfVcrn5oqMZteCbl8MnxOoqyof+UHXTzttIJm8alNxc/K5tYkmahVEucLKWWtwlpr
+	Seg57vPB/h4MHm1U+0979HLv3YDC3zgAf2WUV1S6qB58+LIyJ0bng+FlpvqpWvLSOHxjB+MY0lb
+	gYtXeBf03QP/3zS+NY2LWOMEav7zoOteLgZ1d7hONvBgBG/dBeEMCyDsNqHMobhnsskDgxQ==
+X-Google-Smtp-Source: AGHT+IFikcDxVY8RMqjf/7PoRbRzfp4/Se0YkLnDQwL6itn0XK6hcI/45uzBuDfoJcI/azhpUIqiQw==
+X-Received: by 2002:a05:6902:1141:b0:e8b:c3f4:d3 with SMTP id 3f1490d57ef6-e8db6dc7df7mr8212986276.11.1753278568509;
+        Wed, 23 Jul 2025 06:49:28 -0700 (PDT)
+Received: from localhost (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
+        by smtp.gmail.com with UTF8SMTPSA id 3f1490d57ef6-e8d7ce0e246sm3949677276.28.2025.07.23.06.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jul 2025 06:49:27 -0700 (PDT)
+Date: Wed, 23 Jul 2025 09:49:27 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ davem@davemloft.net
+Cc: netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ donald.hunter@gmail.com, 
+ michael.chan@broadcom.com, 
+ pavan.chebbi@broadcom.com, 
+ gal@nvidia.com, 
+ andrew@lunn.ch, 
+ willemdebruijn.kernel@gmail.com, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ shuah@kernel.org, 
+ sdf@fomichev.me, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <6880e8674626d_334c6729439@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250722014915.3365370-5-kuba@kernel.org>
+References: <20250722014915.3365370-1-kuba@kernel.org>
+ <20250722014915.3365370-5-kuba@kernel.org>
+Subject: Re: [PATCH net-next v2 4/4] selftests: drv-net: add test for RSS on
+ flow label
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250722153434.20571-1-kafai.wan@linux.dev> <20250722153434.20571-3-kafai.wan@linux.dev>
-In-Reply-To: <20250722153434.20571-3-kafai.wan@linux.dev>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 23 Jul 2025 19:37:55 +0800
-X-Gm-Features: Ac12FXyoLyhROuZ3og-7LF8VQDwAYshHthJdDYvrXEO7gAj--0Brx3rF8n6nXvU
-Message-ID: <CALOAHbCtiBFZP8GF63g1HmKWko_35uj34+wx5K3QU95QDLaedg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/4] bpf: Add log for attaching tracing
- programs to functions in deny list
-To: KaFai Wan <kafai.wan@linux.dev>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, leon.hwang@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jul 22, 2025 at 11:35=E2=80=AFPM KaFai Wan <kafai.wan@linux.dev> wr=
-ote:
->
-> Show the rejected function name when attaching tracing programs to
-> functions in deny list.
->
-> With this change, we know why tracing programs can't attach to functions
-> like migrate_disable() from log.
->
-> $ ./fentry
-> libbpf: prog 'migrate_disable': BPF program load failed: -EINVAL
-> libbpf: prog 'migrate_disable': -- BEGIN PROG LOAD LOG --
-> Attaching tracing programs to function 'migrate_disable' is rejected.
->
-> Suggested-by: Leon Hwang <leon.hwang@linux.dev>
-> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+Jakub Kicinski wrote:
+> Add a simple test for checking that RSS on flow label works,
+> and that its rejected for IPv4 flows.
+> 
+>  # ./tools/testing/selftests/drivers/net/hw/rss_flow_label.py
+>  TAP version 13
+>  1..2
+>  ok 1 rss_flow_label.test_rss_flow_label
+>  ok 2 rss_flow_label.test_rss_flow_label_6only
+>  # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Acked-by: Yafang Shao <laoar.shao@gmail.com>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-> ---
->  kernel/bpf/verifier.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 00d287814f12..c24c0d57e595 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -23942,6 +23942,8 @@ static int check_attach_btf_id(struct bpf_verifie=
-r_env *env)
->                         return ret;
->         } else if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
->                    btf_id_set_contains(&btf_id_deny, btf_id)) {
-> +               verbose(env, "Attaching tracing programs to function '%s'=
- is rejected.\n",
-> +                       tgt_info.tgt_name);
->                 return -EINVAL;
->         } else if ((prog->expected_attach_type =3D=3D BPF_TRACE_FEXIT ||
->                    prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN) &=
-&
-> --
-> 2.43.0
->
-
-
---=20
-Regards
-Yafang
+RFS/RPS could mess with the SO_INCOMING_CPU reports if enabled.
+Maybe check cfg.ifname rx-0 that they are disabled?
 
