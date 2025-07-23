@@ -1,145 +1,159 @@
-Return-Path: <linux-kselftest+bounces-37874-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37875-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB9EBB0F131
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 13:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F3EFAB0F161
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 13:38:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0038545DC3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 11:31:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20B9B562A28
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 11:38:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571CE28B4F8;
-	Wed, 23 Jul 2025 11:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 575B52E49A7;
+	Wed, 23 Jul 2025 11:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dSHYJCZi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K0e76lPI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45DC212D83;
-	Wed, 23 Jul 2025 11:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A4A2E425F;
+	Wed, 23 Jul 2025 11:37:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753270258; cv=none; b=gtRkOP0s8xzn+mBcgg+UaDR4pKcjxbX+DCZepgOLnPsRI3+A0RJK6JcbDMF4LleWgiYkNbkMjOhKW2C969O9+c1OfmfqebvfEpcnsFORhFSMUe6SjLPEhS9ij6RwxkIF0xrxc7A/aoU2jBlxIpv6E0qE7jy3PQD11YvtLIBJAf0=
+	t=1753270675; cv=none; b=gn2as6eC8dt6NfU7BvgWiANF4Jc3J8dw+bE9w1putoSTDp0gZi6cIaKyDSh17C5Bw+R8AHZBafejcrzU+AkALq3ARu60r/NIYbGNe8MnR3Z3eQApibTokE2SE+k0jY8awpzxLsr96N3BgquDU2uK5D+JyrywLA5Ngz9W6v1e0kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753270258; c=relaxed/simple;
-	bh=PjHlmcHM0vDaqDjO7m2BVsQkGBz61UdSwEmfp9JfljM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cBv3u3ACj8eIetVeXbaKHPHrkxcD9Px547hJiFMOFH+90aSI4jwGyJWmyvk01wlckNcMkG9+Ui2++vn4gryZEXQyjVg02kER9VqeK+I3apvllAy9o8fDZ9T/IZyUeq2gl9NmF/EbV92TNhxs4xMFSaOPbHoG/dX1T3OtQqswo/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dSHYJCZi; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1753270675; c=relaxed/simple;
+	bh=ZkcHNvpotnL38pl0rs1lk6tuyqmjt6tu/+Bvckg+BcQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=crm6hvNx7HVWPl02E4bRGbGbvxyh0r0SgD6wz5wL/ApwDYXNiILY7bQBb7EvOk1n2X7Itp6iofvqfCUSZyK5SekuC9AMMf6IjFXxXXNy9Jp8gVw/qZzPGBK+Kq/jgLoE9AN9ed+de4lQBdDsPNIcSZDZ3VKJ742jGoR92AidCMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K0e76lPI; arc=none smtp.client-ip=209.85.219.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-234f17910d8so59385305ad.3;
-        Wed, 23 Jul 2025 04:30:56 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-706f2d1036eso15806976d6.1;
+        Wed, 23 Jul 2025 04:37:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753270256; x=1753875056; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1753270672; x=1753875472; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M9FdRXwfhMMRbD/Zbezab/R43oU6uWy4/YgTXhpJSC8=;
-        b=dSHYJCZiNotHpmg1xQOzmLarl3SSc0z6P9a/c3sO/73y/519846CpxN1tfQ34yLIOE
-         iPqAR5vCMWrm1yUk1rl9tVU57m8NHBg8+DvtHB5n+zfLKGzMzgbMXSs1CI1DOu9DSzeQ
-         jS63pF9HIytR8A01kZK8PYkcecaadnFe+278kV0xY+PGRUtc5h5yML9D3wu8iwkde0To
-         JdWxxCBvD55/P+ZmgqSuWZTb0L0E1dCfZON3k6kejZtorVRjukIGQH7onoIahMVVGLqH
-         0unYoaA4lGPzbdofKCipftznIiWo6izzmgghnDj6UnbIXm1iyjkcuO4llNPtjP0H4tqm
-         1GuA==
+        bh=4r0acKUtIgG0BNmeCcBirboiV0YSTk5TYAPhMsLxnHQ=;
+        b=K0e76lPIp1IfXFF6x6ABSZncAlbXQd/rdunCu4CraXXLCgkgFG5SgQvv/sImwV0jgM
+         iT8XtkmiNItgJgzacADdF9BxlFOlMTkprK+eOz3k3iUzYGajhs6SnlBWTOo9D35xcw1i
+         Km9BEgr0XDMf5oFrlevHYBHLXpLi4Znfl961S5leAewjf1632bA5Hk4rCyIUjTw4rDG6
+         Kypn8xeK17q2CY7uwkxeFdKtvflZBnoARQUg1b6i8Fo5amPE98r51i1IK5jkcAHNazqr
+         uk5U6XjYgSEgbAaid81xbBcDXo/ca0TvarHxSkRPmKfNUl8jI5YxkmG02r2s9hfp/unK
+         J5Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753270256; x=1753875056;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1753270672; x=1753875472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M9FdRXwfhMMRbD/Zbezab/R43oU6uWy4/YgTXhpJSC8=;
-        b=AdOzmhEIhlH4kS1fldAIeWRGg9JFS0FvocOdT9fMOuH/my0LPnZCzXYn/ay41ThrOd
-         hjm0xjhBquj8xgj0V1XsdQbyMmy1KVdK5mDFRfVyU8UWBQzpwrYwUu3rIAiD+0vJ/+sn
-         XFo63hpaLSZaG0iLeiYC9C/7cDo8q27QXvdxFUMRkrHK/C8px8Pzi2qNPGT8ng3MlKcs
-         T+8l4M607mlfiFl6JTAsaS6oUvevtz3LGBz+PBOBYEnTUuNhj9SvG5P7mmTYHKXd6li9
-         aIjPVqDykFBrGKzmGKSMBfJDVprFlTlT7zBJ2ZC9sRXhEorzu8+he2A5Uatna93lcGqB
-         ZFvw==
-X-Forwarded-Encrypted: i=1; AJvYcCV3bl+/opgt0YsdmeRZwkFMLDRper2atwGWMkadOn2iXUwFj2zJrDL4rcKmxghAf1zYb6YCuihtQ8JZE9Y=@vger.kernel.org, AJvYcCWwM/U9OXZ2mU+UwjNi2IHLvqW9QquEix5X7v1bcv5XUe1GoL/mtO0kjAhjYoFt9/KFVRCYqALl0VtVvFOjROxd@vger.kernel.org
-X-Gm-Message-State: AOJu0YygVQ3cqZWBik6rvL2AnFTtSa+Q8pHUnuKBF1do2MKTamy9pc2d
-	vZAMtFjeNeIDeFdlXCiy9duxakybqYx1pBP8pJAQOwX1BpYNmy92l3fnp+Dqq/gh
-X-Gm-Gg: ASbGncvYtdFFEpdsahlEvBPIwnoOZpOvwJolMVgcB/tZLVvjypZSiSo/vsGyRT6iZ6l
-	T3jCB0wN5f1vxCdU2LcRG9ljk7fj651ZOb6sTdULQvE0RRUTb5pDFaBqjm8aFKEwDlozpN7eptX
-	skm2VAvZEik5G9Knz30wNZsQZh+Gd1G6DBFlz+WZoxf3eoGhqkjjgofmNs/NW6IGgYkZz5VyTG4
-	Bea6VMmeAPhHj40RGlvC/G1ibT9VXdXDtDQm7+7Lq4Xh5/K+sGtz6ymz87m1nOAoi5b+/YjBvSD
-	KiZo0jnd2kzqT5fRoWy7YkM65jtPAoKt9luyuxQtXdUJ5QfsvNIx0ZxmPwpipGnWbiuON+bmGFd
-	opbl9AQekCqgDh8rgW8wU3+0PexhHNqzpomrRg7/JfGAmv9a/SHA=
-X-Google-Smtp-Source: AGHT+IFm5D42A8rW7gtmyR7fdzi/MOVmHdHVNS5Z+T+85KD48ZLmyVV+6boqMsrgb0UOxUyG/J0QjA==
-X-Received: by 2002:a17:902:dcc5:b0:23f:9a4d:2764 with SMTP id d9443c01a7336-23f9a4d28bbmr17820135ad.30.1753270256034;
-        Wed, 23 Jul 2025 04:30:56 -0700 (PDT)
-Received: from localhost.localdomain ([114.247.113.178])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b5e2de8sm94712285ad.11.2025.07.23.04.30.50
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 23 Jul 2025 04:30:55 -0700 (PDT)
-From: wang lian <lianux.mm@gmail.com>
-To: ziy@nvidia.com
-Cc: Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org,
-	brauner@kernel.org,
-	broonie@kernel.org,
-	david@redhat.com,
-	gkwang@linx-info.com,
-	jannh@google.com,
-	lianux.mm@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	lorenzo.stoakes@oracle.com,
-	p1ucky0923@gmail.com,
-	ryncsn@gmail.com,
-	shuah@kernel.org,
-	sj@kernel.org,
-	vbabka@suse.cz,
-	zijing.zhang@proton.me
-Subject: Re: [PATCH v6] selftests/mm: add process_madvise() tests
-Date: Wed, 23 Jul 2025 19:30:44 +0800
-Message-Id: <20250723113044.40876-1-lianux.mm@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <1C468AC6-C55B-41A3-9335-65B03EF65B83@nvidia.com>
-References: <1C468AC6-C55B-41A3-9335-65B03EF65B83@nvidia.com>
+        bh=4r0acKUtIgG0BNmeCcBirboiV0YSTk5TYAPhMsLxnHQ=;
+        b=dDqzmJ/Awhv7xovySC1Hug+gpNBAZ0cF2M/9ve7CppOSZWRbAW+UZ4Uz5m7Ti76jSs
+         gOouZZjKAYTuzBF0b3Ll76tT03Macw7wgb2Se/yC+qYFnnml4s0LO+O1UzSNLC1UYaNR
+         kiZe6dyen7GmGb26+YQ3+i1QtaASReptlVl6lltzQRJjCrg9TXIuO3v1ph0xZddZzkMR
+         /zE9dbu/g038487mo8mfoM38unHthRoX0sByHGd/E5t+V+pMuOnr+z+3SjQt2Fv6bxoU
+         4J3NhajlngmkhGUJSJcSjTAnoMoEkZ6JQ5XrLzbt2Vu88QJ+00gQ0X93QfG9TT+bBENM
+         lWTA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9jxsi+qWAn2bICB+6WXHwkbSX4OAwx7OO+0+YiolFRT7q4u25/VyfEoaRo/bpVk9y/FY=@vger.kernel.org, AJvYcCVsSRL81d+HX/cjjnXDYH4zlngD08s/+WmK6+nGH4IL7n9gVQOt4hI5/jC6Q8BdMOI9C0mMZjlI44qznXG2BNZJ@vger.kernel.org, AJvYcCWny7Y21MSiWEhVmDqQNPkY8/jGUEg8bSBM4ANBsYrauX3/+RODbgJNE5S6KucxoWCCA4qgPI6xnmm7FzBr@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0kxhhH4oWKyrjUwqB+himvjaARfkNQPH9aVePJQqKBmwQ3Ug7
+	G1q08XiggD1zrqN3CJ4QAgHUWgKpaAQLTAdnLlQAwaVDebynHitxXv6tH9tzJ8PzOYSXg6AFMyI
+	QFaiSPsWGk3MYHKWqvqSG4Qo86NPz2VQ=
+X-Gm-Gg: ASbGncvxTPTHSEM9WephLPsjStbOKvAT0lF0WXH2mznfj7iYSozGMEfLrdnusVKLD+q
+	9s0ZtOCDtp8H4OOIxFXeG7G4SUHarKpo2VCfynBhodHQymPL9AJLtylKlaoE/oyuayAdvv7JHtQ
+	kP46i1+t27OyXhIivscOiQy1WEmEdhbHrPyBA4g9XY1LPHtLjUTAK7gsJG+SWToKFE1t901pj7s
+	Zb+YvMK
+X-Google-Smtp-Source: AGHT+IHfzrN0XURHsxFE1H5k9Ar5f+CjQwiySYo3EN5+pbFc5mubrHERyBOo+KIqR4Rf80FzdZH5KoEofsAQxFnmGKE=
+X-Received: by 2002:a05:6214:5004:b0:706:ee47:5019 with SMTP id
+ 6a1803df08f44-7070062e5e3mr37107266d6.28.1753270672469; Wed, 23 Jul 2025
+ 04:37:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250722153434.20571-1-kafai.wan@linux.dev> <20250722153434.20571-2-kafai.wan@linux.dev>
+In-Reply-To: <20250722153434.20571-2-kafai.wan@linux.dev>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Wed, 23 Jul 2025 19:37:16 +0800
+X-Gm-Features: Ac12FXyQmNj6tPmK7LiLXHHUX3s2nC26DXXQfMfSohafTiKKl4f8NYV9ESM-Kck
+Message-ID: <CALOAHbAbZtdY8hCbFAjTBDjzCkeNFMd2qWzHBG-fAbOsFpqmpA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: Show precise rejected function when
+ attaching fexit/fmod_ret to __noreturn functions
+To: KaFai Wan <kafai.wan@linux.dev>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, leon.hwang@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Here an invalid address range is provided, since pid is checked before
-> address ranges are checked.
+On Tue, Jul 22, 2025 at 11:35=E2=80=AFPM KaFai Wan <kafai.wan@linux.dev> wr=
+ote:
+>
+> With this change, we know the precise rejected function name when
+> attaching fexit/fmod_ret to __noreturn functions from log.
+>
+> $ ./fexit
+> libbpf: prog 'fexit': BPF program load failed: -EINVAL
+> libbpf: prog 'fexit': -- BEGIN PROG LOAD LOG --
+> Attaching fexit/fmod_ret to __noreturn function 'do_exit' is rejected.
+>
+> Suggested-by: Leon Hwang <leon.hwang@linux.dev>
+> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 
-> BTW, the size of iovec array cannot be bigger than IOV_MAX. It might be
-> worth testing as well, if you want to.
+Acked-by: Yafang Shao <laoar.shao@gmail.com>
 
-> With default_huge_page_size() -> read_pmd_pagesize() fix, feel free to
-> add:
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> Tested-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  kernel/bpf/verifier.c                               | 3 ++-
+>  tools/testing/selftests/bpf/progs/fexit_noreturns.c | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e2fcea860755..00d287814f12 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -23946,7 +23946,8 @@ static int check_attach_btf_id(struct bpf_verifie=
+r_env *env)
+>         } else if ((prog->expected_attach_type =3D=3D BPF_TRACE_FEXIT ||
+>                    prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN) &=
+&
+>                    btf_id_set_contains(&noreturn_deny, btf_id)) {
+> -               verbose(env, "Attaching fexit/fmod_ret to __noreturn func=
+tions is rejected.\n");
+> +               verbose(env, "Attaching fexit/fmod_ret to __noreturn func=
+tion '%s' is rejected.\n",
+> +                       tgt_info.tgt_name);
+>                 return -EINVAL;
+>         }
+>
+> diff --git a/tools/testing/selftests/bpf/progs/fexit_noreturns.c b/tools/=
+testing/selftests/bpf/progs/fexit_noreturns.c
+> index 54654539f550..b1c33d958ae2 100644
+> --- a/tools/testing/selftests/bpf/progs/fexit_noreturns.c
+> +++ b/tools/testing/selftests/bpf/progs/fexit_noreturns.c
+> @@ -8,7 +8,7 @@
+>  char _license[] SEC("license") =3D "GPL";
+>
+>  SEC("fexit/do_exit")
+> -__failure __msg("Attaching fexit/fmod_ret to __noreturn functions is rej=
+ected.")
+> +__failure __msg("Attaching fexit/fmod_ret to __noreturn function 'do_exi=
+t' is rejected.")
+>  int BPF_PROG(noreturns)
+>  {
+>         return 0;
+> --
+> 2.43.0
+>
 
-> I am able to compile and run the test on arm64. Thanks.
 
-> Best Regards,
-> Yan, Zi
-
-
-Hi Zi,
-Thanks a lot for your review and the valuable feedback! The issues you've pointed out are very helpful.
-
-Regarding the logic where the PID is checked before the address ranges, 
-that was an oversight on my part and I will fix it. 
-I'll also add the test case for the iovec array size against IOV_MAX as you suggested.
-
-And thank you for adding your Reviewed-by and Tested-by tags when i fix this.
-
-I plan to collect all the review comments, revise the patches, and send out a new version 
-with your tags included in the next 2-3 days.
-
-Thanks again!
-
-
-
-Best Regards,
-Wang Lian
+--=20
+Regards
+Yafang
 
