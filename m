@@ -1,164 +1,175 @@
-Return-Path: <linux-kselftest+bounces-37869-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8089CB0EEF4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 11:58:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 457F6B0EFCC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 12:28:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9042F6C4D70
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 09:57:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C664A7B24D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 10:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6469C28C016;
-	Wed, 23 Jul 2025 09:57:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B88D28C2A2;
+	Wed, 23 Jul 2025 10:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LqFGwRRs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPqO3BtN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64D9281351
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Jul 2025 09:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D5428C5DE;
+	Wed, 23 Jul 2025 10:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753264632; cv=none; b=PTeA0+x9W5aJ9fVXGgO9jV8+N8IAwpqGwizM8jvVIr6MrdPNmwWGeR8K6U4cDrOiZulIHRAgd1Ng7fNio/NE2yjAhEHmIsbaxfkRTuBMDCqXNpYBcESGNVQyuRRp1PTjiyIYgzpSKgzf8lTkFU/uUOGrQ/WJYMj9icHvq3viGYY=
+	t=1753266473; cv=none; b=iCQzpaG88Wbm9l0aVgUq1cizGAhiF1GnfNI4H46weVr+0uTmPFzyjcS2J3AtlUH/jglEMgX4w/EnNsBYlfArhsH9/+aK4HIk3XpqTWxGeg+Deatn/UtQGEqn+yADAM2Tdsvd8kccQ0cjvjf2MUiliZcsgN69KJUUOttz9q3iIgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753264632; c=relaxed/simple;
-	bh=0wER1sdDpf0YByTkUTnsflZux/fcWM4DuADoOCL19vg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RvW4elWCOaUlv4aw58Y+2zwpd9RuLQRGbZQMoUcfsFHy+2TXe9p/KXsrk/i2JKfZ1p7sdpYhue46RLeC40Yp47RSWwX9mXqmq9UHvHgixoiI2QIh7LgOcj8f2lduOf8qyPv5F9RYXDcGEgfwL/jBn6Pye2IaM27zjpqHI1Yk1Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LqFGwRRs; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1753264628;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=mSuQe5TZfFo2TDAjQDLuVsg6M8GZKLj4opJx5Te6VLQ=;
-	b=LqFGwRRswXc6uPvnUMS/gkpjFKsdEOcocTR+AbqEP+Z13QkVnGLgeH+80WYfjuXVBupd6K
-	NUpI0L/7iFK3S1WfxRp831n8E86EZ53BinYZni/tZIbNuEe4fequx6ck7JoyoaFr8Sx84Y
-	XdzjngDLdf/ptA/USS5f9Mbu3EcySvo=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-658-74hullokP4u_thSUKeNQqg-1; Wed, 23 Jul 2025 05:57:07 -0400
-X-MC-Unique: 74hullokP4u_thSUKeNQqg-1
-X-Mimecast-MFC-AGG-ID: 74hullokP4u_thSUKeNQqg_1753264626
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3a4e713e05bso2777698f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jul 2025 02:57:06 -0700 (PDT)
+	s=arc-20240116; t=1753266473; c=relaxed/simple;
+	bh=DCYNcGOnoipFp5qeRNoTGN+oBlg7O5HSR1iAcWEd6C0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f+P3YTovycsQ8y7pHWiw1iNBYUqRJHfO32PnPclF0IyjV3K25tt9mPdPvFcUuIPcprWwnTLHJBL7q3rSLypioEYI5kQXvzbOjewaIt0B2mlgWNIWijxt4wc1EPelh9L255bZFO8rSpNLAtjG3vIN8ibKruO/D6Ypuc+PXZWVEIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPqO3BtN; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-236470b2dceso53197775ad.0;
+        Wed, 23 Jul 2025 03:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753266471; x=1753871271; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Rm3XRCn+Di3N/rWanYn9EVpo3gmry4TW5aKLBEAX3Jg=;
+        b=jPqO3BtNeygxJZFpHtrsKHnyqjE3PYkW5MXJzL1GGTV3WNMEtpfCN/npBWymjIOedH
+         XggRYXesCcu+sNwIKIqPukHZCEywnZBTeB32AUmb/VdXUxaZvtw5QQ9TBW1+DenlEGNA
+         Nx17+9HO6SHL1jeJ1prGNZ2V4MLNj6uE+mRvq2wTu3K016Q7bDwNGqELo1mpllALp6L+
+         FZvR3X2Ls0dQ69RW+eh2aiD4+SRGIA7kfbfdqqO4SW6MiCtXeO0yizjnHin1R0B84LlC
+         MhZ2BSVlwxozZobIiQOcIcgss2gNiMR+TKWNAycnxuhNbjGQX9hQYKeVan+PEhwcKApx
+         /Vrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753264626; x=1753869426;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mSuQe5TZfFo2TDAjQDLuVsg6M8GZKLj4opJx5Te6VLQ=;
-        b=oFOkjP1djPTMDYwDNn5ix9AdiZaxA97gazET52nyHTpb0eRfm+zIJG1+l4lNYWal1r
-         bFHTNE7Qa86DvgoLKBZk1c0jG+i9G7jaNNgjPn8NUwvU+fQ8fJ86ycIH0Xsc072mHO5x
-         K5+chbmn2Tuzw6nF7A/JXXAJMZoPck7lYbu54TwE54wanbCdgkpsWLzqCOBhGIMwYBcL
-         XGfEDTSdq61E8puBrNX5B3OrC+3r3LFR3R7wgrmxm3nVQyktijeBIg0yssAXs0t1tByx
-         EtrQfjd9s4fz/fKoMD6ylbnOevfkSJ3hDdmrruA+3SDTeAr7n6/uF+AqetNPMr3uQ4LI
-         BYow==
-X-Forwarded-Encrypted: i=1; AJvYcCV77hU/1XjJ3hPZwAbqrw3TC/wM+MD3434jNfwtdYyoHyg/p41DnGkWkOGd/ATLFySKFBKRWUMFS/yE9zywYus=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzW8Y+k1s1WDe2E0NXDxWE+j2krcPcW0mYIV4ur0fGS0oN+bYv1
-	k+D8drvwtvQp9FWPGq0KOJZBn32WJDBjPaIFCLjBJwkK/spyahtDzfv9DNFmaabqXGFIp/JavSx
-	jwKEjDKj/5jJ+ZIt01ZVQWgXvqEUk6963ZDpsvJ9T4QLv6uFYljY+KknLaYePLy5nNcw3/g==
-X-Gm-Gg: ASbGncsqE/mnG9VBU7ZDAytRJ8MGe19MfOTDLUXRLDQaAH/0M5ju1PINqKlGgPCMinh
-	hBaNu1tfIxwVyQdoIpUkbwXUHzz5gJZHXT3jFSP9DLODc7J0csQXiKEH9F4vFTPWhm5Rcgjdz+Z
-	7sIFxk1haXvbhb1rRB5EaqlUV8J9qHTxlox+tQlzpkEojreh9yIZMvRSTNFfgFW3uuUxeGOTYiD
-	77Zp+CGkA4imfwOX1RqWqpl8PX+m804iH0BudHWgEKiTBtPR4/pTkjRzPCJERe4Aa5ApFeuZJI5
-	IfUzA+6Sb1L8rb5LC4Ws9PnTTd9nxXycNOabltWiry6BGIGooE+r8FUA+YYzGnIXUrFUOYrzpam
-	b7uAxcy770rqs1VQWYKaRL1JbDt90ZmWl9Whd/zDUWnPGpcTm0suB0Me7A4cYZlHMPos=
-X-Received: by 2002:a05:6000:2506:b0:3b4:9dfa:b7 with SMTP id ffacd0b85a97d-3b768ec1e6fmr2044929f8f.25.1753264625577;
-        Wed, 23 Jul 2025 02:57:05 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGl73Vv5SZsEFpgMGgi837EdpzryiyNAai0v+xTUvEkF0zaqjrdbQ6xETFDhH2xtsYCmD/VEA==
-X-Received: by 2002:a05:6000:2506:b0:3b4:9dfa:b7 with SMTP id ffacd0b85a97d-3b768ec1e6fmr2044895f8f.25.1753264625096;
-        Wed, 23 Jul 2025 02:57:05 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f00:4000:a438:1541:1da1:723a? (p200300d82f004000a43815411da1723a.dip0.t-ipconnect.de. [2003:d8:2f00:4000:a438:1541:1da1:723a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-458691aafadsm18545845e9.24.2025.07.23.02.57.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Jul 2025 02:57:04 -0700 (PDT)
-Message-ID: <1524727f-aa6d-4286-8ef4-bcd224c50c62@redhat.com>
-Date: Wed, 23 Jul 2025 11:57:03 +0200
+        d=1e100.net; s=20230601; t=1753266471; x=1753871271;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rm3XRCn+Di3N/rWanYn9EVpo3gmry4TW5aKLBEAX3Jg=;
+        b=p6u7CIiiF63u0W4uvwDyCwl6zBm5nfppg+htefwN7NlqfxURJchB4VzjpSHrMfO8wy
+         5YJqn3ZD2IMJ/LwuV5owZdy09zlDUcIW7oI5edSpZjj6faudVHAXgNbPG6yy4+wZbFHD
+         YRA+Oyrs5rgVXbXuYZSv+0AJ4eO/YBCWaIpNsU7NND0qBO77S8bF9l5N67MNxzWTQL+L
+         hgbRD8TZwlDwhwElVbDcUi03EyMBBOeiRHwWeho/Wm03Y7vFy/91+oxnCcTMd7wQsgrz
+         sf3UvlA0IfIrrUbF76OR3jZlVPv3XOBsBBmDllSWvJUU25/wXUxaqWMrfEEoKEhwmTSx
+         YyvA==
+X-Forwarded-Encrypted: i=1; AJvYcCX/qEQRpLlQe2h8HwU09NIderc0czHDL8pW4pXJXzgYeQO6CwhUlOiokZG11pbO6bUaZqJR0yL7Uicxq3U=@vger.kernel.org, AJvYcCXRJOA8nv/k4UpLxRIqdYF5YKtFN93llsva5KSutZc6TdYCLWRrFe5kYbxgH+RYFEEO4JN0sjG6DJHcU8lz5/4s@vger.kernel.org
+X-Gm-Message-State: AOJu0YyT4gM59Okv6hnlChF9pg/tvTqnBPtVqD2q7z6KXuG3El0wJBX1
+	m1wNcDh3Qspoe2uVsfQVDlU4ZYctkOQS/F4G0Bmlm9k0OTdWY2NP93uqBDrxOPaD
+X-Gm-Gg: ASbGncvy38r22JK1xYjsUggquobFbx7DPyrdfkJfwwVjXzLlhRNsqv8MgA2VG24CAFk
+	UvWzAyKY67NKoHAGUXVe+jzbNAa7dFAewZfIyChhroeLt5PuxXfPw0EkyM5K3F1zp7H/06aKVD3
+	JTKG1ebjb5auMPD4ajdWxyEqwJh6dupyLBSQH1rPq96tx+S+OcwLmvhHm1Uug/W2EPfCQQkI3a1
+	S00/2PjARcIGwFU/wqLSaZIAVGBz42x5R7ZVq2wPbeGN3DBDLxdxsLYEmlsQ3qDVCHfe+hHSDL6
+	nIwVB0Tp+d66RZbeQaEs7UJg78GNlFjZGycEOtpaNvmeobg5itispsRLBr6S6r4nGRzH7d3SqtY
+	UZYoNcrbLsZd4fHDqshr/AmIrRvI=
+X-Google-Smtp-Source: AGHT+IG5HdX1lhvkl+xukOzoouzn1VYzVj1xDr6rM5FYHWRSYf6xU0iUA5bPyHyxvghqOr4crhkXxA==
+X-Received: by 2002:a17:902:fc43:b0:236:6f5f:cab4 with SMTP id d9443c01a7336-23f98140225mr34938205ad.5.1753266470585;
+        Wed, 23 Jul 2025 03:27:50 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6b49ecsm93180095ad.98.2025.07.23.03.27.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jul 2025 03:27:50 -0700 (PDT)
+Date: Wed, 23 Jul 2025 10:27:42 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jay Vosburgh <jv@jvosburgh.net>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 1/2] bonding: update ntt to true in passive mode
+Message-ID: <aIC5HrE9js_YtSCB@fedora>
+References: <20250709090344.88242-1-liuhangbin@gmail.com>
+ <20250709090344.88242-2-liuhangbin@gmail.com>
+ <765825.1752639589@famine>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] tools/testing/selftests: Fix spelling mistake
- "unnmap" -> "unmap"
-To: Colin Ian King <colin.i.king@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250723095027.3999094-1-colin.i.king@gmail.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- g3eXuA==
-Organization: Red Hat
-In-Reply-To: <20250723095027.3999094-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <765825.1752639589@famine>
 
-On 23.07.25 11:50, Colin Ian King wrote:
-> There is a spelling mistake in ksft_test_result_fail messages. Fix them.
+On Tue, Jul 15, 2025 at 09:19:49PM -0700, Jay Vosburgh wrote:
+> 	Presuming that I'm correct that we're not implementing 6.4.1 d),
+> above, correctly, then I don't think this is a proper fix, as it kind of
+> band-aids over the problem a bit.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
+> 	Looking at the code, I suspect the problem revolves around the
+> "lacp_active" check in ad_periodic_machine():
+> 
+> static void ad_periodic_machine(struct port *port, struct bond_params *bond_params)
+> {
+> 	periodic_states_t last_state;
+> 
+> 	/* keep current state machine state to compare later if it was changed */
+> 	last_state = port->sm_periodic_state;
+> 
+> 	/* check if port was reinitialized */
+> 	if (((port->sm_vars & AD_PORT_BEGIN) || !(port->sm_vars & AD_PORT_LACP_ENABLED) || !port->is_enabled) ||
+> 	    (!(port->actor_oper_port_state & LACP_STATE_LACP_ACTIVITY) && !(port->partner_oper.port_state & LACP_STATE_LACP_ACTIVITY)) ||
+> 	    !bond_params->lacp_active) {
+> 		port->sm_periodic_state = AD_NO_PERIODIC;
+> 	}
+> 
+> 	In the above, because all the tests are chained with ||, the
+> lacp_active test overrides the two correct-looking
+> LACP_STATE_LACP_ACTIVITY tests.
+> 
+> 	It looks like ad_initialize_port() always sets
+> LACP_STATE_LACP_ACTIVITY in the port->actor_oper_port_state, and nothing
+> ever clears it.
+> 
+> 	Thinking out loud, perhaps this could be fixed by
+> 
+> 	a) remove the test of bond_params->lacp_active here, and,
+> 
+> 	b) The lacp_active option setting controls whether LACP_ACTIVITY
+> is set in port->actor_oper_port_state.
+> 
+> 	Thoughts?
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Hi Jay,
 
--- 
-Cheers,
+I did some investigation and testing. In addition to your previous change,
+we also need to initialize the partner's state to 0 in ad_initialize_port_tmpl().
+Otherwise, the check:
+```
+!(port->partner_oper.port_state & LACP_STATE_LACP_ACTIVITY)
+```
+in ad_periodic_machine() will fail even when the actor is in passive mode.
 
-David / dhildenb
+Also, the line:
+```
+port->partner_oper.port_state |= LACP_STATE_LACP_ACTIVITY;
+```
+in ad_rx_machine() should be removed, since we can't assume the partner is in
+active mode. [1]
 
+With these two changes, we can ensure:
+1. In passive mode, the actor will not send LACPDU before receiving any LACPDU from the partner.
+2. Once it receives the partner’s LACPDU, it will start sending periodic LACPDUs as expected.
+
+Do you agree with making these changes? If so, I can post a patch for your review.
+
+[1] IEEE 8021AX-2020, Figure 6-14—LACP Receive state diagram, the AD_RX_EXPIRED
+statue should be
+```
+Partner_Oper_Port_State.Synchronization = FALSE;
+Partner_Oper_Port_State.Short_Timeout = TRUE;
+Actor_Oper_Port_State.Expired = TRUE;
+LACP_currentWhile = Short_Timeout_Time;
+```
+
+Thanks,
+Hangbin
 
