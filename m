@@ -1,127 +1,144 @@
-Return-Path: <linux-kselftest+bounces-37892-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 507CAB0FA2C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 20:21:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A715B0FA73
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 20:47:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AF74582247
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 18:21:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4EFF61CC332D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 18:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55F1422E3FA;
-	Wed, 23 Jul 2025 18:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3060E1F560B;
+	Wed, 23 Jul 2025 18:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3JTOj3tO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KsOWDbxt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F141227574
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Jul 2025 18:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2821E9B2A;
+	Wed, 23 Jul 2025 18:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753294907; cv=none; b=HF8At3HU1Ka/PPvSbSTfkSIuIx1z+VuvAbQ5yp8/un0+2QZPrgEE2rYyyzZ3tAkM0t8oP2YZ2eBFUizWM/trB7X4vi/qNt1NfZC6iwOlFQdiXp3GOQQZiwt+Jf7tWR4FfmjB8t84HxTAbLmis7YG7X2H067HYjg/9jkrUh51lcs=
+	t=1753296464; cv=none; b=aWKZ191gWlv8awX4pFSNeZ3cvlBkaX87SdedufYW9k6D86lsAPTuOTKplXGBAZRwHXcK0wTH2Mpq74LodDLi3N16P9HwxUr4DfrjWyqy49iSV0VL9eqNsJf6qhvqqJkXQjCwS17KPJgqMEh3GSgD3z/rnDNGMDENUVdL1ovUl/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753294907; c=relaxed/simple;
-	bh=VqIngfHCPjNn2aJvm/JpMowD1ulG5Y/mqzv4IonmpQ8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=QJpUx/cUNWgwp0gl803b/wIIrognLu2qGOYcG8X2AJd9O4/OvuIci2fKjmkpn9ShmNKLHamqwcWwQGfAL9yVYro/QJ43o/uwX6R9fXf6QNnK65wlv06UmWn/ut0UPuwomAu/p/wXF2JRry3S/d5mVwz/2BJlQDKMtiIq6JhAjfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3JTOj3tO; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-31332dc2b59so124998a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jul 2025 11:21:44 -0700 (PDT)
+	s=arc-20240116; t=1753296464; c=relaxed/simple;
+	bh=DdYVadvsY35Ud71INeD3ebjZEFHB3mg7oGNs/y6zwDY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Dk+5Hr+/5rIOacqPVr0QoEspOYaDQh/we17lVJMQgPT/giNUoU3ggpR2XTcPzkYoISvKQAy1fh1Uh+bq27APrVXRGkKfAlBW+Yn7SHmvbjHw8GATpPEPPr6wcUnooknvOYhHP60jUipequluTU5DeIWnV0/9WsI1O5FlVMFIP0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KsOWDbxt; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7183dae670dso2155747b3.2;
+        Wed, 23 Jul 2025 11:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1753294904; x=1753899704; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DG7M6lyjDlWLPjJAB3sObE4Is8Lu2eOsJs2zd5O8jM8=;
-        b=3JTOj3tOW7Yt1MCWqdu7IwMjj0v+5YXRWjIdmkdWaI62r2br9zqQkqtPCyEc9DVXXo
-         ui1ADSh0WXU9Yo5RgduVzgw6y8RgyRlBkbSeSXUXrFb8oLtUKQ0aHyru5wSzRkhC8a4L
-         riqy+raHP1XnR65GLwtW2vVVHM3xNnehrzp1R5OSMxmvgy6Q2PnS9azlG9js1VeoMXR9
-         eEu4ocjoAv9kaVduhTbqRaRpurUGegfcn1GE0Q/Ma2crthsvhPso03MQYMB9PAUeDCOl
-         eFfTNNCI3V/ozXI4jOsBA1rm3RiFbwuSSrPnHzRcmhqL8zA5GA7ge2VOO4o1yWoL0++N
-         kbxQ==
+        d=gmail.com; s=20230601; t=1753296461; x=1753901261; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PqFohHRiXqGvBYv49UrafWYnwFNT1c2OPFaOkxIbOwk=;
+        b=KsOWDbxttAqBRQyH9cryTDp7mYUOA7v1qBKwG/42PQVWCTJ49KwwgA1g2SAJeZGwtO
+         PHelTe59VvmOkSJP8Xn3yGGKioaHn6ztr/ky2uE1tgFFyjk+QbagmY8W+BF32IxSOSZm
+         AkZzMeY+LLA8Lsepvxvnl3FkgADErxaHb5jBrAgTmU9JFgzH8GG5osOFMbKRgp0/HS7f
+         4Rmt06N//pyFSUE129RiiAM1zDt1J62OdlOBwl6q61PO6WPEwI8FDVosCsT+8wD/EW7L
+         J+/yaGYq0KZPMuzFBxRFSfKqMq1jcN58s1MIpFISNVh7AgUVG/mgWr5TxbKOTsg5Ow3i
+         wwtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753294904; x=1753899704;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DG7M6lyjDlWLPjJAB3sObE4Is8Lu2eOsJs2zd5O8jM8=;
-        b=ml9pmSZEke50Z1OIn9gaptOGOHHG9z3q90FOnQ9LRtEm/UjmxAyXFMoG/OkKlchYPe
-         24udYe0Fqnnotq9HPzE1eQmZsuXrFmD3ezzQ36nFRu+wWMJNCqn2jQKUlwxHpkPc271J
-         cnthryELLeSundPDqKMy9106R6SC2JHf4ZZRMp7dJlnDwKgGc7WYT7brOGTGNpXwTuou
-         VHmXC52EenAPC6ezqNbLOebZRAGQOqe6qWUerwS1dRdN0KyNGodse5x3Ne6VW5gntDWE
-         5j0Ta0wtypW+Xlpgx9omkJMnEAcMTbL5LCzIJotClAaS+pQAdTWBEj4ZvFv5BddRJbxJ
-         mlaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVR5zHFfupZ+3M9AaYtOj2NW1SWxdrHq+wyZ8LaidFh3MKx6ZTc+rwkfGL32JyTMpaC7sDBphHrDil+fK/Y4z4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwthfOGpr20coFsKTbpY3MVxwsucD50kGIDYl8ivuvPKX/9VsLv
-	T0dd98cFPogzXn0MNmQDyiDdrIBW5g7jbT9p5+CI3kiPp1XGnM2wpY/7Cxm5P/L0pxdwCtXeWow
-	OqWQ2BQ==
-X-Google-Smtp-Source: AGHT+IEoG6geTciHyN2JVzYp6ADYGYP+/NlO7+c7gYm1psQpKmX7ZKOFLzHimcilfZBXWxvlIN7WpZ2A2HE=
-X-Received: from pjq6.prod.google.com ([2002:a17:90b:5606:b0:313:246f:8d54])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:530f:b0:311:ffe8:20ee
- with SMTP id 98e67ed59e1d1-31e5071ccdfmr6939359a91.11.1753294903836; Wed, 23
- Jul 2025 11:21:43 -0700 (PDT)
-Date: Wed, 23 Jul 2025 11:21:42 -0700
-In-Reply-To: <20250422161304.579394-6-zack.rusin@broadcom.com>
+        d=1e100.net; s=20230601; t=1753296461; x=1753901261;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PqFohHRiXqGvBYv49UrafWYnwFNT1c2OPFaOkxIbOwk=;
+        b=f6Tx7QA8SFWzjjalZiqe4bEnnD9OGShWzzJiTVP8EY/pDrmEG7m9O/y5PD95AiGanM
+         +haRe7S+sKFcU5ZqlOxbcsI4A8lStpUDlStPfYYCQjMdwaA5+zz7LQoqlFmq2ku9IBrV
+         5e3G7ERdKPNN/O2aQZQRqh9w5JdI7tuM2c8Zbr0diGpDjs9rq/uPzr/dtftKkCb3LViy
+         Dl44sAGIMLOUfUrlJwQQD2D1ZC0KAMZ80XYcBt30DHzZ3d1etCua5iyAN0FRcTKEBdny
+         xO6htbSE3yZQvUgqjp9EFjdOKVPw2kK7AkLTEzdh2n3j7PoejjuqrQDK/XqFinHtavQe
+         Ru6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUAlb4XQhQt0fA4BAZIPbmi9iTR2Vv8yIFwACE8ltZk9fPj+RcN7+vhaqtRhwnYOv3zbv2pJX1v@vger.kernel.org, AJvYcCX0MFy+7AGgWprTnINr6zzyuKLVvOa+rCT+Gwe/kcvdDTHRNKB5LSA7UJsneJz2tOa5bA+yNy6L9X6bmf+7XdA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJYbq5QROrWszOEaMklrmgQAO5V3PxAmwjKJWSeoLDhk0ZL1aE
+	l6H404FVWZK0b5IdIfBaaEHPt0gMMjgpcNJJtFCuUWr8u+pO+Rp5JbDE
+X-Gm-Gg: ASbGnctfixnLrggRtraJ8JBISBcjgnyckouAG5qTK7L0uMDexSCfRmwI2etA6ZgkGJD
+	Cs5qMK1h2qauXbDh9d+azZopKd+bXj+Ba1qCGfe6gIokcA8q/z3yKpQughZyZQqnZJA9TT0DHhy
+	F/mQKidLP1jrrn7taqS5d0/pPECFxl1z3QUiXui+nLja/7fddhS7wYepiS6VweKZEeV0OQshy6h
+	BdHDV0W7dnxsN+YHoYPOeIO3LzccE5xSLWpk3MQ5RPEyTBAoYkjN3R5MpguQnFCsjqgyl2Gjz9x
+	87zey8tv4MOy08uVzzKJVdzfBDLQwKB8XkF8jh3G41WzYn8FUyZd1cuQVlmtq5W+wAmZ5iYHwy8
+	71a1hN00uUa1ibjTXisXQ
+X-Google-Smtp-Source: AGHT+IEWVbfI5ewEiUI/MiTgNpOPn0UA3J6ZxMvww9eTXYPsFxlerapqPXWcNk6Ew81/bMPZ36w3OQ==
+X-Received: by 2002:a05:690c:3812:b0:717:af29:865f with SMTP id 00721157ae682-719b4256a45mr64002407b3.28.1753296461385;
+        Wed, 23 Jul 2025 11:47:41 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:40::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7195335e895sm30514167b3.105.2025.07.23.11.47.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jul 2025 11:47:40 -0700 (PDT)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net 0/3] selftests: drv-net: tso: fix issues with tso selftest
+Date: Wed, 23 Jul 2025 11:47:35 -0700
+Message-ID: <20250723184740.4075410-1-daniel.zahka@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250422161304.579394-1-zack.rusin@broadcom.com> <20250422161304.579394-6-zack.rusin@broadcom.com>
-Message-ID: <aIEoNpe-LFoH6LBm@google.com>
-Subject: Re: [PATCH v2 5/5] KVM: selftests: x86: Add a test for KVM_CAP_X86_VMWARE_HYPERCALL
-From: Sean Christopherson <seanjc@google.com>
-To: Zack Rusin <zack.rusin@broadcom.com>
-Cc: linux-kernel@vger.kernel.org, Doug Covelli <doug.covelli@broadcom.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Joel Stanley <joel@jms.id.au>, 
-	Isaku Yamahata <isaku.yamahata@intel.com>, Arnaldo Carvalho de Melo <acme@redhat.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 22, 2025, Zack Rusin wrote:
-> Add a testcase to exercise KVM_CAP_X86_VMWARE_HYPERCALL and validate
-> that KVM exits to userspace on hypercalls and registers are correctly
-> preserved.
-> 
-> Signed-off-by: Zack Rusin <zack.rusin@broadcom.com>
-> Cc: Doug Covelli <doug.covelli@broadcom.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Zack Rusin <zack.rusin@broadcom.com>
-> Cc: Isaku Yamahata <isaku.yamahata@intel.com>
-> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> ---
->  tools/include/uapi/linux/kvm.h                |   3 +
->  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
->  .../selftests/kvm/x86/vmware_hypercall_test.c | 121 ++++++++++++++++++
->  3 files changed, 125 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86/vmware_hypercall_test.c
-> 
-> diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
-> index 502ea63b5d2e..3b3ad1827245 100644
-> --- a/tools/include/uapi/linux/kvm.h
-> +++ b/tools/include/uapi/linux/kvm.h
-> @@ -933,6 +933,9 @@ struct kvm_enable_cap {
->  #define KVM_CAP_PRE_FAULT_MEMORY 236
->  #define KVM_CAP_X86_APIC_BUS_CYCLES_NS 237
->  #define KVM_CAP_X86_GUEST_MODE 238
-> +#define KVM_CAP_X86_VMWARE_BACKDOOR 239
-> +#define KVM_CAP_X86_VMWARE_HYPERCALL 240
-> +#define KVM_CAP_X86_VMWARE_NESTED_BACKDOOR_L0 241
+There are a couple issues with the tso selftest.
 
-Can I bribe/convince you to port KVM-Unit-Tests' x86/vmware_backdoors.c to a KVM
-selftest that verifies KVM's behavior for the various combination of module param
-and capability values?
+ - Features required for test cases are detected by searching the set
+   of active features at test start, so if a feature is supported by
+   hw, but disabled, the test will report that the feature under test
+   is not available and fail.
+ - The vxlan test cases do not use the correct ip link flags based on
+   the gso feature under test
+ - The non-tunneled tso6 test case is showing up with the wrong name.
+
+With all patches applied test output is:
+
+  # Detected qstat for LSO wire-packets
+  TAP version 13
+  1..14
+  ok 1 tso.ipv4
+  # Testing with mangleid enabled
+  ok 2 tso.vxlan4_ipv4
+  ok 3 tso.vxlan4_ipv6
+  # Testing with mangleid enabled
+  ok 4 tso.vxlan_csum4_ipv4
+  ok 5 tso.vxlan_csum4_ipv6
+  # Testing with mangleid enabled
+  ok 6 tso.gre4_ipv4
+  ok 7 tso.gre4_ipv6
+  ok 8 tso.ipv6
+  # Testing with mangleid enabled
+  ok 9 tso.vxlan6_ipv4
+  ok 10 tso.vxlan6_ipv6
+  # Testing with mangleid enabled
+  ok 11 tso.vxlan_csum6_ipv4
+  ok 12 tso.vxlan_csum6_ipv6
+  # Testing with mangleid enabled
+  ok 13 tso.gre6_ipv4
+  ok 14 tso.gre6_ipv6
+  # Totals: pass:14 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Daniel Zahka (3):
+  selftests: drv-net: tso: enable test cases based on hw_features
+  selftests: drv-net: tso: fix vxlan tunnel flags to get correct
+    gso_type
+  selftests: drv-net: tso: fix non-tunneled tso6 test case name
+
+ tools/testing/selftests/drivers/net/hw/tso.py | 99 +++++++++++--------
+ 1 file changed, 59 insertions(+), 40 deletions(-)
+
+-- 
+2.47.1
+
 
