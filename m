@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-37875-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37876-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3EFAB0F161
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 13:38:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D78E0B0F164
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 13:38:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20B9B562A28
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 11:38:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1F4B7A934A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 11:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 575B52E49A7;
-	Wed, 23 Jul 2025 11:37:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F3ED2E0924;
+	Wed, 23 Jul 2025 11:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K0e76lPI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I8nScVSA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A4A2E425F;
-	Wed, 23 Jul 2025 11:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A119230268;
+	Wed, 23 Jul 2025 11:38:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753270675; cv=none; b=gn2as6eC8dt6NfU7BvgWiANF4Jc3J8dw+bE9w1putoSTDp0gZi6cIaKyDSh17C5Bw+R8AHZBafejcrzU+AkALq3ARu60r/NIYbGNe8MnR3Z3eQApibTokE2SE+k0jY8awpzxLsr96N3BgquDU2uK5D+JyrywLA5Ngz9W6v1e0kk=
+	t=1753270714; cv=none; b=Qlk2r/+0XJlrn/tGlupUI/jSwybGI2oYHfQHe0CkV5/LhVZWbXXGl3yl9dYmzMWE7m63kQ67qHOYyaYNBf4+dj4eQFv9lQAA616g+/dJFxWDZtp4+J7HuGE5dpabi4RzOU90FeSqul7vKL3cHsCfkkX2+deN4JaDbfX6ucF1KZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753270675; c=relaxed/simple;
-	bh=ZkcHNvpotnL38pl0rs1lk6tuyqmjt6tu/+Bvckg+BcQ=;
+	s=arc-20240116; t=1753270714; c=relaxed/simple;
+	bh=3xNIgfbZkuKToBVIaIN0T6qtZj1CAu2xNWY1oErB7vo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=crm6hvNx7HVWPl02E4bRGbGbvxyh0r0SgD6wz5wL/ApwDYXNiILY7bQBb7EvOk1n2X7Itp6iofvqfCUSZyK5SekuC9AMMf6IjFXxXXNy9Jp8gVw/qZzPGBK+Kq/jgLoE9AN9ed+de4lQBdDsPNIcSZDZ3VKJ742jGoR92AidCMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K0e76lPI; arc=none smtp.client-ip=209.85.219.43
+	 To:Cc:Content-Type; b=SsVGl/ahge8Y7PTfHE1AvmDEd1iY1ZlFgJ9JIwIZ6O8/LaziAr096OnwB8ECqa6j2z6JNeKjlDfBFJ99Iv7bbnSdRCmTz8QU9ut+ppTClQBiKfJCPW3cnaBHJu9RB2iIq7Agbf/rx4aoZ2HA67i4OupnYFw/7uNizII7m2u/yDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I8nScVSA; arc=none smtp.client-ip=209.85.219.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-706f2d1036eso15806976d6.1;
-        Wed, 23 Jul 2025 04:37:53 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6fa980d05a8so44396746d6.2;
+        Wed, 23 Jul 2025 04:38:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753270672; x=1753875472; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753270711; x=1753875511; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4r0acKUtIgG0BNmeCcBirboiV0YSTk5TYAPhMsLxnHQ=;
-        b=K0e76lPIp1IfXFF6x6ABSZncAlbXQd/rdunCu4CraXXLCgkgFG5SgQvv/sImwV0jgM
-         iT8XtkmiNItgJgzacADdF9BxlFOlMTkprK+eOz3k3iUzYGajhs6SnlBWTOo9D35xcw1i
-         Km9BEgr0XDMf5oFrlevHYBHLXpLi4Znfl961S5leAewjf1632bA5Hk4rCyIUjTw4rDG6
-         Kypn8xeK17q2CY7uwkxeFdKtvflZBnoARQUg1b6i8Fo5amPE98r51i1IK5jkcAHNazqr
-         uk5U6XjYgSEgbAaid81xbBcDXo/ca0TvarHxSkRPmKfNUl8jI5YxkmG02r2s9hfp/unK
-         J5Jg==
+        bh=GW8o4VpBFB3CJWAxgh6hNHP7douwh8bC//NQp5568N4=;
+        b=I8nScVSAy0AMeq43njTSqQJXOfYNxyLJ5a+IkhOhifKEByjgoNLfP8ea+9NL9YeLAu
+         5ulkjqE4eBmflI9ayvm9Q6fiXcVShriMYpkx5datKfqlAn6XTcA1c3H5bN/mY/cOhaZz
+         OOXQ9d2eVPwNMWe0CMB67DROtTjPbAzTMkcUk27XNJJ8zDev5ui3gFnE0ywcru8OjjHV
+         6jeA7TW/u/nCcxX/N9ANhxJGR1lHTTrlJsc1a+94OZJVpDv9PgikyTSvfza7RKzYRJ34
+         Qrg1Rm53hncJgrFRvtuWFgqwWMRzvH72EoEM0HI+uLF7wJziJ7E3m0FY3tlejOFGkif+
+         edew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753270672; x=1753875472;
+        d=1e100.net; s=20230601; t=1753270711; x=1753875511;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4r0acKUtIgG0BNmeCcBirboiV0YSTk5TYAPhMsLxnHQ=;
-        b=dDqzmJ/Awhv7xovySC1Hug+gpNBAZ0cF2M/9ve7CppOSZWRbAW+UZ4Uz5m7Ti76jSs
-         gOouZZjKAYTuzBF0b3Ll76tT03Macw7wgb2Se/yC+qYFnnml4s0LO+O1UzSNLC1UYaNR
-         kiZe6dyen7GmGb26+YQ3+i1QtaASReptlVl6lltzQRJjCrg9TXIuO3v1ph0xZddZzkMR
-         /zE9dbu/g038487mo8mfoM38unHthRoX0sByHGd/E5t+V+pMuOnr+z+3SjQt2Fv6bxoU
-         4J3NhajlngmkhGUJSJcSjTAnoMoEkZ6JQ5XrLzbt2Vu88QJ+00gQ0X93QfG9TT+bBENM
-         lWTA==
-X-Forwarded-Encrypted: i=1; AJvYcCU9jxsi+qWAn2bICB+6WXHwkbSX4OAwx7OO+0+YiolFRT7q4u25/VyfEoaRo/bpVk9y/FY=@vger.kernel.org, AJvYcCVsSRL81d+HX/cjjnXDYH4zlngD08s/+WmK6+nGH4IL7n9gVQOt4hI5/jC6Q8BdMOI9C0mMZjlI44qznXG2BNZJ@vger.kernel.org, AJvYcCWny7Y21MSiWEhVmDqQNPkY8/jGUEg8bSBM4ANBsYrauX3/+RODbgJNE5S6KucxoWCCA4qgPI6xnmm7FzBr@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0kxhhH4oWKyrjUwqB+himvjaARfkNQPH9aVePJQqKBmwQ3Ug7
-	G1q08XiggD1zrqN3CJ4QAgHUWgKpaAQLTAdnLlQAwaVDebynHitxXv6tH9tzJ8PzOYSXg6AFMyI
-	QFaiSPsWGk3MYHKWqvqSG4Qo86NPz2VQ=
-X-Gm-Gg: ASbGncvxTPTHSEM9WephLPsjStbOKvAT0lF0WXH2mznfj7iYSozGMEfLrdnusVKLD+q
-	9s0ZtOCDtp8H4OOIxFXeG7G4SUHarKpo2VCfynBhodHQymPL9AJLtylKlaoE/oyuayAdvv7JHtQ
-	kP46i1+t27OyXhIivscOiQy1WEmEdhbHrPyBA4g9XY1LPHtLjUTAK7gsJG+SWToKFE1t901pj7s
-	Zb+YvMK
-X-Google-Smtp-Source: AGHT+IHfzrN0XURHsxFE1H5k9Ar5f+CjQwiySYo3EN5+pbFc5mubrHERyBOo+KIqR4Rf80FzdZH5KoEofsAQxFnmGKE=
-X-Received: by 2002:a05:6214:5004:b0:706:ee47:5019 with SMTP id
- 6a1803df08f44-7070062e5e3mr37107266d6.28.1753270672469; Wed, 23 Jul 2025
- 04:37:52 -0700 (PDT)
+        bh=GW8o4VpBFB3CJWAxgh6hNHP7douwh8bC//NQp5568N4=;
+        b=DpDq64y87otuH+hV9/Del8XUrFnB0+CFx1zPi92Kqo+i193ZELjpHZZFamdgNof+67
+         KrYzVqw3ImbBKpjMUzSGT0EgriJ6sVucE19z5GLCryOvDbON4zsZFfeO3pVDfsoCC+Y5
+         4GinYseF7Q8Kcu0POv6y02u1OkHVogwMMceCyL47wg1k8qDnh5RptrWHg8VMPdUuYsE8
+         Iwqj6mfK3qneIkBVjbz45cfXx/1+vbePmYZGMK90rFt3gkOiEHIiNO2LSMuAibwAcjMq
+         VAPaR2PVmZs7Q06apBA1/qecoeBcRLi3gPVCkI4tB3xfpr0Kyo/wJuxAAOUnZctLw/+Z
+         e/SA==
+X-Forwarded-Encrypted: i=1; AJvYcCUUUL+ewwGqtM4rVd7rOVHLwEU0+Hmlmq15BTc9bb2Q3YpzyjWa6JBGGCeR2mAzm1QlJZSPh4v0Wt7/RnboO0Kh@vger.kernel.org, AJvYcCV7QbutCXUgWTRooar29VagJrQyvfAhzCdvHY+I60yZDLwqN6+iMVszc1SfEx5Ov+AjPEsJNUlwLNHFZWG9@vger.kernel.org, AJvYcCVro313zHL4BFESIffZjB9riO49Hh1l3lnKb4H55afyG/g3Gpx2ZaLw4iQ82etTvtJkQhc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7XMN7pmRx4smdpV6/RHO0Vhpcm1WrT6dX+vs/6XJPDKlEwjK1
+	QYuxNsjeAYYuph34bKh1aDdW4g0q/MKQgfPOjWQZzkIKvx9atlhx6xC1a7ElkZWhKWMiRFYxPiT
+	8OTSar5AhSUd3cXQACMi7339piZHrabQ=
+X-Gm-Gg: ASbGncslPWnNsXD7qshd2IHRR0sME3KLCiZ1u4tqs9Yhkz+ZdpHgfDiap8MB4q6kfaM
+	BQWxoOKjs7Bc2eNrnHiomDttkWyAeGCkmvV87FhXIrAUvjIVEvR4SEo1QFfA2FrJfSmhrFMnvT7
+	kD7UpoOtpR8xk60VDen65ENq8Ha0PNUos5W11UmjlkDMo90lR3jDRD+OdVWzXpBP91Whfa0UN8z
+	ZFHiANF
+X-Google-Smtp-Source: AGHT+IEjlRHPDytTHYrrd955Vf1ODftEruHfWOsFzh9HDDs6+tB8jBjR8Lw+tapL9nDRT/0PVtC+I5YRsiTIzT6WO0s=
+X-Received: by 2002:a05:6214:f08:b0:6fd:5cf4:cbb0 with SMTP id
+ 6a1803df08f44-70700651e04mr33085726d6.25.1753270711509; Wed, 23 Jul 2025
+ 04:38:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250722153434.20571-1-kafai.wan@linux.dev> <20250722153434.20571-2-kafai.wan@linux.dev>
-In-Reply-To: <20250722153434.20571-2-kafai.wan@linux.dev>
+References: <20250722153434.20571-1-kafai.wan@linux.dev> <20250722153434.20571-3-kafai.wan@linux.dev>
+In-Reply-To: <20250722153434.20571-3-kafai.wan@linux.dev>
 From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 23 Jul 2025 19:37:16 +0800
-X-Gm-Features: Ac12FXyQmNj6tPmK7LiLXHHUX3s2nC26DXXQfMfSohafTiKKl4f8NYV9ESM-Kck
-Message-ID: <CALOAHbAbZtdY8hCbFAjTBDjzCkeNFMd2qWzHBG-fAbOsFpqmpA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/4] bpf: Show precise rejected function when
- attaching fexit/fmod_ret to __noreturn functions
+Date: Wed, 23 Jul 2025 19:37:55 +0800
+X-Gm-Features: Ac12FXyoLyhROuZ3og-7LF8VQDwAYshHthJdDYvrXEO7gAj--0Brx3rF8n6nXvU
+Message-ID: <CALOAHbCtiBFZP8GF63g1HmKWko_35uj34+wx5K3QU95QDLaedg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/4] bpf: Add log for attaching tracing
+ programs to functions in deny list
 To: KaFai Wan <kafai.wan@linux.dev>
 Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
 	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
@@ -96,13 +96,16 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Jul 22, 2025 at 11:35=E2=80=AFPM KaFai Wan <kafai.wan@linux.dev> wr=
 ote:
 >
-> With this change, we know the precise rejected function name when
-> attaching fexit/fmod_ret to __noreturn functions from log.
+> Show the rejected function name when attaching tracing programs to
+> functions in deny list.
 >
-> $ ./fexit
-> libbpf: prog 'fexit': BPF program load failed: -EINVAL
-> libbpf: prog 'fexit': -- BEGIN PROG LOAD LOG --
-> Attaching fexit/fmod_ret to __noreturn function 'do_exit' is rejected.
+> With this change, we know why tracing programs can't attach to functions
+> like migrate_disable() from log.
+>
+> $ ./fentry
+> libbpf: prog 'migrate_disable': BPF program load failed: -EINVAL
+> libbpf: prog 'migrate_disable': -- BEGIN PROG LOAD LOG --
+> Attaching tracing programs to function 'migrate_disable' is rejected.
 >
 > Suggested-by: Leon Hwang <leon.hwang@linux.dev>
 > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
@@ -110,44 +113,25 @@ ote:
 Acked-by: Yafang Shao <laoar.shao@gmail.com>
 
 > ---
->  kernel/bpf/verifier.c                               | 3 ++-
->  tools/testing/selftests/bpf/progs/fexit_noreturns.c | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  kernel/bpf/verifier.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e2fcea860755..00d287814f12 100644
+> index 00d287814f12..c24c0d57e595 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -23946,7 +23946,8 @@ static int check_attach_btf_id(struct bpf_verifie=
+> @@ -23942,6 +23942,8 @@ static int check_attach_btf_id(struct bpf_verifie=
 r_env *env)
+>                         return ret;
+>         } else if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
+>                    btf_id_set_contains(&btf_id_deny, btf_id)) {
+> +               verbose(env, "Attaching tracing programs to function '%s'=
+ is rejected.\n",
+> +                       tgt_info.tgt_name);
+>                 return -EINVAL;
 >         } else if ((prog->expected_attach_type =3D=3D BPF_TRACE_FEXIT ||
 >                    prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN) &=
 &
->                    btf_id_set_contains(&noreturn_deny, btf_id)) {
-> -               verbose(env, "Attaching fexit/fmod_ret to __noreturn func=
-tions is rejected.\n");
-> +               verbose(env, "Attaching fexit/fmod_ret to __noreturn func=
-tion '%s' is rejected.\n",
-> +                       tgt_info.tgt_name);
->                 return -EINVAL;
->         }
->
-> diff --git a/tools/testing/selftests/bpf/progs/fexit_noreturns.c b/tools/=
-testing/selftests/bpf/progs/fexit_noreturns.c
-> index 54654539f550..b1c33d958ae2 100644
-> --- a/tools/testing/selftests/bpf/progs/fexit_noreturns.c
-> +++ b/tools/testing/selftests/bpf/progs/fexit_noreturns.c
-> @@ -8,7 +8,7 @@
->  char _license[] SEC("license") =3D "GPL";
->
->  SEC("fexit/do_exit")
-> -__failure __msg("Attaching fexit/fmod_ret to __noreturn functions is rej=
-ected.")
-> +__failure __msg("Attaching fexit/fmod_ret to __noreturn function 'do_exi=
-t' is rejected.")
->  int BPF_PROG(noreturns)
->  {
->         return 0;
 > --
 > 2.43.0
 >
