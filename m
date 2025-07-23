@@ -1,695 +1,197 @@
-Return-Path: <linux-kselftest+bounces-37865-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 902AEB0EB2F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 09:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D311BB0EB7F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 09:12:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C08E580B46
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 07:02:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E9AB580B27
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Jul 2025 07:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7EF5272E55;
-	Wed, 23 Jul 2025 07:02:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66FBE271A6F;
+	Wed, 23 Jul 2025 07:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fBJ7RkYL"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pECi4EFX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD5726C3A5;
-	Wed, 23 Jul 2025 07:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753254133; cv=none; b=NEUhAA2kzf47xGET/uxiIumx2jIzo1zoGgGE3xGBsoWAdoD0Q4dlmKuEjqhZEvaByrrKtiX4f3VPnBc7Zi9PfagpXqeljPrgoaRW1c1wEHmHp87S6bxFkLBJa4DEs9tTOuL47jklOKScyIiNQk04oARDxxiD2FWlHZeuXWkRKAg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753254133; c=relaxed/simple;
-	bh=tkl4gPER+y4+Akg5DZMGXLfG2YKaqFBo2J9vprBL+YY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DVfP7ZEJu+CcwzWtGxTm+2oNDAqZodqAhUiZk9yoqX9THQHoBjtUDuia1GHmWil8X1IAk0mQ88HwmTGJ1eiv2Yc90Jg/0ROol/0AIv442jW3qNeTiIbT11HuQZ6GLEI15qM2jteHLBd+h3ftIcNGZH7+obJ4BXfhsp2I21e/TuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fBJ7RkYL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C047C4CEE7;
-	Wed, 23 Jul 2025 07:02:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753254133;
-	bh=tkl4gPER+y4+Akg5DZMGXLfG2YKaqFBo2J9vprBL+YY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fBJ7RkYLPMWM3MezXPPQfLIO2Ywhs2B03q5bLIn6J1R4duLR5PA4UmKbRjY4Pwa2w
-	 A/5hCZ8T7d7x0NzgqedBaeGy1tNhTLivvXqa45P/+ZynXQ1EZQFXQlaxUW/GpVtZN0
-	 tzQ3GdbYLRDdVPFUTVN03OV+oYVUHx1rnr+7b0XKS1M082o5lh7bcQhM1yNVSZBzPs
-	 sUYGGy4Xyts8WV2LVeySFKhSEe+cxmkcDtgiAwLXDTcBbNT3iT/KuDQ46907NZjnc/
-	 QSStfe8a1DKwFh11oxoNtFVrPI0fi+53sD4fUX7XL0cfYqDVP9ASsIuwjBjVojAwbH
-	 2klGo14SBPtnQ==
-Date: Wed, 23 Jul 2025 00:02:12 -0700
-From: Kees Cook <kees@kernel.org>
-To: xandfury@gmail.com
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] selftests/tty: add TIOCSTI test suite
-Message-ID: <202507222329.D44E6AC@keescook>
-References: <20250713-toicsti-bug-v2-1-b183787eea29@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22BE2253B0;
+	Wed, 23 Jul 2025 07:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753254731; cv=fail; b=pe7VNkAPJJn+gFWFx1u8zJK6W+qojNrQqD3Klk+iDRH6THvt9TP46LhDdhtkojAH6/GIKDaxY3U7fDeh9aroymDTG547XIe7XX+rMCgvLc0uFnx9i2YaDuFn4QRh4Zf1YyiotcaGcvapT8AGtLbOoPpynZARC6VCLnZSPv5UyCo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753254731; c=relaxed/simple;
+	bh=q2yUfc9CzuRbCLMFsowlyHYBrKMpl8QHlOM2+tX+2gE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=BmHsTq0c3dpCokZGxiPEE1IrUu8ZsPaJT7CACXyijxwzMO77aC2m2pZYkBnNO3EbKSpGO9v6BWXYl1Y+osbLLv4hyKSs55Pv/9XRG3zUoEvudLmWgOgmyAUvV/aXPGezkkWPcLzejuM3r+eNolIgdNAmJOA0EfVYxv/2e/6odnA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pECi4EFX; arc=fail smtp.client-ip=40.107.237.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BYdkHk4xnmywe8JfFsPdu2m09f/u4ZO38NS0QjT0qIXYb1EGWUVwFdndL2fXaESiWxNLCyOvXXuaHA5Zek4I7TIAwU4wGjrjMvezdSmrv0CO2bqgJ0uqHT1SagVheiHYEkZ2YgH2nPLHt/GKO3zKH7chPhR4n62whD7yPqfa4wZou9JnP8vFQMYD2XvZXvIqo1ifUoA3r3RSy4mD9p2Zi8xHCElcmuZ+n4MrRjCINSs/AnGiiUeWLWlYWL8E7Nf5ElvtKLfIMTqEBJIPMrmGGJeD5h3CUZtwPmoclxWZEq3rJOZiafisXi+0knBoLWp40c5/oA0RbYixMpkZg0grWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jeDJ2BZBssLbyYQDFMvG4cRuUfP88RqkXOySqFGsPqk=;
+ b=Zbi7SmoIvkWX4cPv0hz9xcq6Wx05DWAsE2WqtSdEgIyZ9Ebk44C7brwCv1p+GCq85l5TVvIwta4N/lK4MZNMEIbesVrPj85TO8iDaC741c7sDe86crodtwy2pEf+52bP2HLX38YXVIX2HA6bG+fm2cFndg3O6e0dhGhh1+yhVhVdtqeWGH+XXiPP4zA8nmy15GZQ7OqLVExlIaAP7U2M9vHa8VQ1ZJZzU5njPT3joPWS/JhbNgUxDQvuywgCph5Pi/5mbXaxLPd5c/lc/Gwu2mu8+IwytE3bDJ9svU+7tGhXPgqtlL+PB25aAanWAXM6tsFxmgk5tVuME3gZr7ViEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jeDJ2BZBssLbyYQDFMvG4cRuUfP88RqkXOySqFGsPqk=;
+ b=pECi4EFXADZCy1OFMqFbddre/Fohhq2E1nFD5hH28FC+NoVpLPRcNx6aLIRy+oE8n6hT8GS/+DkdxUIuZgCe20if9cXo9+TVQMQnQzeG3vPThIISLEowybsAVP31WuLfzCGZmZAyYrZCMyM38C8xau8cPI6k3txOdc/plG/JWD6nRdCYODZpTpHd4y3OO2bEywz58HvbkYWQpC2ZLQX52Jf1W0Z468OkgewwRp4lMhQgChgdZfWn0xtl2+2JcHikXdlO1PKTrBOUbF4BcxqabIXTDHdMMGC6qVB+meF9mEVBO4aQeb/HwylIdPor2utnvruDviJ00+wsP5OMh+AY0w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB7500.namprd12.prod.outlook.com (2603:10b6:610:148::17)
+ by CY8PR12MB7731.namprd12.prod.outlook.com (2603:10b6:930:86::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.21; Wed, 23 Jul
+ 2025 07:12:07 +0000
+Received: from CH3PR12MB7500.namprd12.prod.outlook.com
+ ([fe80::7470:5626:d269:2bf2]) by CH3PR12MB7500.namprd12.prod.outlook.com
+ ([fe80::7470:5626:d269:2bf2%6]) with mapi id 15.20.8964.019; Wed, 23 Jul 2025
+ 07:12:07 +0000
+Message-ID: <48bb190e-073c-4ad8-841b-f6d0572cb0fd@nvidia.com>
+Date: Wed, 23 Jul 2025 10:11:57 +0300
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next V6 0/5] selftests: drv-net: Test XDP native
+ support
+To: kuba@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, shuah@kernel.org
+Cc: netdev@vger.kernel.org, horms@kernel.org, cratiu@nvidia.com,
+ noren@nvidia.com, cjubran@nvidia.com, mbloch@nvidia.com, jdamato@fastly.com,
+ sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, nathan@kernel.org,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ Mohsin Bashir <mohsin.bashr@gmail.com>, patchwork-bot+netdevbpf@kernel.org
+References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
+ <175323423849.1016544.9128937268934260157.git-patchwork-notify@kernel.org>
+Content-Language: en-US
+From: Gal Pressman <gal@nvidia.com>
+In-Reply-To: <175323423849.1016544.9128937268934260157.git-patchwork-notify@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TLZP290CA0001.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:9::14) To CH3PR12MB7500.namprd12.prod.outlook.com
+ (2603:10b6:610:148::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250713-toicsti-bug-v2-1-b183787eea29@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB7500:EE_|CY8PR12MB7731:EE_
+X-MS-Office365-Filtering-Correlation-Id: 66d62a0b-e365-4ddb-f762-08ddc9b83b68
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?emxGWldMOU16WFVPa1FUcE0rT3hzSnpGK1hvbFE1Ym9PYmxGLzgwUmNYbng3?=
+ =?utf-8?B?T2hkVEdlbnQrbG4vdnhwZGJ1Kzk5cm1rOXNaYWhTTVdkM1pobVp5dmpHNG9G?=
+ =?utf-8?B?UW5zZDNsdGlud3laZmFSWU9kODBteFVyZHJEUnR5dTVqWTN4YlJydGNoeFh2?=
+ =?utf-8?B?aE5KTVhhRUZaaGpNZ0cwOCtEVThWdVpqK09vWnNYd1ZIcWhleEFGZ0ZEbkEx?=
+ =?utf-8?B?a1FtTjRSemRua0l6TlpxWktvaXlUZlp0V0hpbCs2WWN3VjljZmt3aG52WHo4?=
+ =?utf-8?B?aDZmaWxRYU9ydE4yRmh6cVQ2SE52L3RzZFg0UTdVVVZreVNMMnNnOEhCM2k2?=
+ =?utf-8?B?dFhUMXVURWl2N0NhN0xzSXNuV0JTUjBxcTNEQmNJV2p4ajV4b25YY3FNMGFL?=
+ =?utf-8?B?WVNMaGxYS3h2N1paS2JFUis0OUlXNDZGaGJkam9WZzdsRXdmTUhIcmUyaG1K?=
+ =?utf-8?B?SHNKcU5ZcyswNnpiMHludTlrb2p5bm4razgrMFBnMlFrb2g3VmNZeEFVN0Vt?=
+ =?utf-8?B?RjdZb0ZwN25pbFd3NXNXY24yNS9TMkFwam5yRTR2UW1RSy92RVFvRHp0Uzkv?=
+ =?utf-8?B?SHE2WGpYKzRENFl4NUFqR3pCTHFlc0J2R3lNQUNlKy8vYmpuc3UrNG5BTWdF?=
+ =?utf-8?B?UEV0U2ZYQlRmdWluUldLQzlVdVhMcHpmUWZqdXVuL21TaEFoQ2NPRXRhVEpt?=
+ =?utf-8?B?MXNWTmdXMHgyM3kxbGtqTFlFSUg4dytRMllOUjgvZFR0ajBuTDEvTDhMaHlk?=
+ =?utf-8?B?eFkzNWVGeDhEV250d0ZVOC9RNkxqbGttRWdkcGY4akFzZStEeE1lYjVSbEVw?=
+ =?utf-8?B?bFNKWWRsUmNXSTliR0xhZjNFS3E5K3RuMlo5Y1BidmFMaERBa2lObDdOcElw?=
+ =?utf-8?B?WUxWTm9kREpFR1YyZDVhV0ZGYXAxUkZZQXNPMUVQNWVCOHpKOW1TMnNKQnpU?=
+ =?utf-8?B?N1haT1hGTDNiNmNNYVVpUWRldTk1RHdWRlNmQnVEYXJqL2NMZGNCYkFkZmhW?=
+ =?utf-8?B?Ty85Z25iZHkvenFmKytSUHJDOWVpWlAydjlhS0gzVlhMejQrWFU2RnpUQm5L?=
+ =?utf-8?B?N1UvRUUvSVZtKzBlN0F4VUFMOW5TQXJPVDA1S05VYVNmVFQ4ZGNjL3lNcUNl?=
+ =?utf-8?B?c0swc1RTMzNDTURHcTZoOXRqdnhMbDREdkFSUGptMXBlcU9JUUl2bDc5ck5F?=
+ =?utf-8?B?SmlwN3RBZmtTanplNy9idUJ6dXdEYy9zb3NzaVJmY2hSRlhNQzBaeG1kY1Bs?=
+ =?utf-8?B?bm81QW4wa0lVMGxOUS9OMzBkVmpCVG03UWxVcXdDSC9vU3NXTTEyL2o3Qndy?=
+ =?utf-8?B?Y3VZUnhObUowVWErN3pSTUoyRVFIYVN6UDkxeFBzN25qVGxxU1l0bDdVQmky?=
+ =?utf-8?B?OFBkMTlyenM0RGUya1U2bGtsYXhRU3JrQ3RMUGxjd2tmTXZUMmpnRGtkSmRJ?=
+ =?utf-8?B?Mkt3bDdYZXNBL08zR2pDREVTdGYrVXJodjdaQnZKOXdHVFJpazhmMVEyV0F2?=
+ =?utf-8?B?ajY4MTZ3WWlleDRIdkZlQnA4NU9JeDAwbkgyR2xwbkZPdkptc2lLdXdBdWUy?=
+ =?utf-8?B?cXJDZ3VDYjdvbkFBODhPb1RVMVVIc3lSS3NkbHpWcTZrNWg3SG12bHhYK1F4?=
+ =?utf-8?B?RWhGVGJSMFhCN0ZjMzF3c0s0amVQdzl2amNpYlp6MHJGQXpVK0orZkQ1M2Rm?=
+ =?utf-8?B?dXhrUVQzam5qa0NVYlF3N2l3ZmlqdEZkNDFCYnVVUXdjS0toNTlVeC82MndI?=
+ =?utf-8?B?enl0aTE1UGdpeml2NHM3SkVkU2VlOWx1VVREUnoxOEYwNzh0MitnYjNhdVZn?=
+ =?utf-8?B?Y0cwNmtrenpBempsSWJFZFc0a3ViNnllMzIxQ1lJamFvakZxdnZVNTZmLzVt?=
+ =?utf-8?B?eUk3RmRGdVVsOUtNeGhEVnRUZENuaVBnKzdBMVRLKzhHbXc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB7500.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?KzJNQVpBdkp6L3JsOWlxUE9aVnRUOXdOcXNEMmQxbm53dmJFOTVOYzBUNXZM?=
+ =?utf-8?B?WktiVkJMWnVsSlJVVk56aVNPMnA5YVlBeTdzU3VBakhkdnpDSnNubnFKaUNR?=
+ =?utf-8?B?NzdSUEN0OWd1a0k3SUU4OHRrR2ZNdUE1YVlhUmd4N3NzS09wTURtVzVZNHJB?=
+ =?utf-8?B?T3hTVncyeTROK21sdkZabHlOcnZmREVxb0xZR1BkMnNmbDd2ZGUyN3pZSDNX?=
+ =?utf-8?B?aTI2ZDljNXBQbFErTG9Gdkp0aVJkSHhEV2M2SFR1L1BwclBFUXF2QUlEK3p0?=
+ =?utf-8?B?U3plakJaM1JiYkZNZC9qNit5U3lnWExZWmN5SXkvaThzemxUQ0hYWUZwZUZ2?=
+ =?utf-8?B?SXlGTDE3ZEl4ZDA1TE5qQ2pNeThHNU51MWhsK1ZWa2F0bEtEU2ExTGFjYWQx?=
+ =?utf-8?B?bDdNVEdkSkpWSUl6eG1qWnJyZ0Q0VUg5dTJSS2tTMVJhUkRaK1N6MUdJVUY3?=
+ =?utf-8?B?bHZmcmVtZXZ2bzIvYTROTEk4SjFrcVRBcDdKNmdZYzlrZk8rSmlpRkhPY1Bk?=
+ =?utf-8?B?RDRJRm9SYXpISGhxZDBqTE9VLzFGcldDeW1kcXNQYW9MQjdaKzVRZ0ZCN1BY?=
+ =?utf-8?B?OVhpVzlkWUtOVGxQYkpibWFXSGE2RHdWdVI2c1d1UHZ2eEp0U0hPQTh0ajZx?=
+ =?utf-8?B?QXcwL25QeGJYMmpVeGQxazcwcXgxamNuclljdWZ6VzFJU0txUy9GQ3JLUU81?=
+ =?utf-8?B?VVRibGIwY2xnUW11UFNrTlI1ZTZDNU01dktvWkZ2WWQ2UE9zdDI0VURMTzcy?=
+ =?utf-8?B?NkN1SG55RmVlSkdDdjB6aFJLNktrYytidXhNcjJBVDB4cmZUaCtobXBvd2xF?=
+ =?utf-8?B?NllVc1g4UkgzUkFRemhmWVlqd3FiUmtOMVNWSUd2bXFTSFNqYUV5dHhWdjFh?=
+ =?utf-8?B?bnRJWVFwZlVvWXVxYkFhK2JqRFFSN28wTmcwMUwwSVRHM3pqZ0lwSEwrZEVa?=
+ =?utf-8?B?YkVnbkdWSmZQNXN0L1RidkY5QTc2aGZFZFk2ZlB1Skt5SHMvRm5VdFB1M0RR?=
+ =?utf-8?B?TXlCcUdJNGovQTdnM3ExUnd5M1BIVCtpTFRhSys3bS9Ic0o3NHNRcjBnZG1P?=
+ =?utf-8?B?Z1Uzb3Ewa3k4ekovTm5NUXdsVlgzTjlSUVVmSm94S3F4TkU3ZUdZVCtkakFa?=
+ =?utf-8?B?Yy9VWDBnUC9NeU9pUXU0OGVwRVY5N3J2cU9MZW1tYjR2QnJYNU5mSldOekNB?=
+ =?utf-8?B?d2VPbk96K2gzcVBkMCthSmNCZ00rdmhkTXo1bkg2SE5vSE9XSXN2WS9ZZ1F1?=
+ =?utf-8?B?cXdRUitiZFY2S01wTmd1OG45eWptZERYaDBXdkY4MmRZcSt1bTZFWUloUE1T?=
+ =?utf-8?B?KzU2eE5ZWG51VjJJdGhuSHJNcmMrbUZVWjYvR0dPRy9ZZTF0TWVudHFIemNK?=
+ =?utf-8?B?TUR1NzBwaEtVSktIVGcxWlhzSmdLWEpyZVdjcW1xc2ZDOFk3Y3N6T3dxd2Np?=
+ =?utf-8?B?NnhRai9EcmJ4RnZlQ1BJMjR3MUlDWlNxV2cycy9Pb2tuU3E1WXFHdnhNNE5C?=
+ =?utf-8?B?em1ka0F1bHFyYjZOYURjRjAzQjVIdU9CUytORTVpeFBVc1ZkaFZsa2pFdU1W?=
+ =?utf-8?B?L3h1eDZTQTd1UzZ5S0lmQWtVeFppNFJOTDVDREt2Q1NNVTJNSGxVQm1uOTk5?=
+ =?utf-8?B?RlNMMVpNbURSdUJ0MkxvZWZDa25od0FsbGVFOWJkL1BjMk5xZld5OWYycGhF?=
+ =?utf-8?B?ZnJkVm5TeTJuN2Fib0VONitHVzhyd0xmWVZDUTh1RXgzOXpROXREb1ZlMzJV?=
+ =?utf-8?B?d0R5eXpMOUVSbkN1bkt2U3VJZ2YxRnpSTGJJc3NHMUFyOTg1RDlpd290WnJM?=
+ =?utf-8?B?N0t2Mncvd2hnTGtKdTV4Ym1VZjN1b0NQQWpsSC91cHBGQWFpOCs5MnpFU3BM?=
+ =?utf-8?B?RERnZGRwR3F3R0duQTR3dERiekUwV1ArTTZGOENTdGROaGVacGRZMFMvaUE5?=
+ =?utf-8?B?QmtTZmhGSjR5MmZReFU3REtmY2xlWENja2Q0U2RvSCtuQ0VCdlArSVpKYVFI?=
+ =?utf-8?B?OHJyNVh0cG84UW5DMVhkQU1Zc2dobXFuZnUvZ1BNM3ZTNXJTek80SHNzTDg1?=
+ =?utf-8?B?SFo4Vy9iNWo4QlF5Q1k3dTltL29XRE9IMFBTQ1prQWEvM293ekIzcmZYaUM4?=
+ =?utf-8?Q?aOJKpfPvHqSOOeL4hkuzysS35?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66d62a0b-e365-4ddb-f762-08ddc9b83b68
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB7500.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2025 07:12:06.8414
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qp9IKbGfKYY54IlNvSXY6vFQp+Qe+r+yzugMwfd94cIz+cqjhbrkcPZfVt5mCZSx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7731
 
-On Sun, Jul 13, 2025 at 06:38:55PM -0600, Abhinav Saxena via B4 Relay wrote:
-> From: Abhinav Saxena <xandfury@gmail.com>
+On 23/07/2025 4:30, patchwork-bot+netdevbpf@kernel.org wrote:
+> Hello:
 > 
-> TIOCSTI is a TTY ioctl command that allows inserting characters into
-> the terminal input queue, making it appear as if the user typed those
-> characters.
-> 
-> Add a test suite with four tests to verify TIOCSTI behaviour in
-> different scenarios when dev.tty.legacy_tiocsti is both enabled and
-> disabled:
-> 
-> - Test TIOCSTI functionality when legacy support is enabled
-> - Test TIOCSTI rejection when legacy support is disabled
-> - Test capability requirements for TIOCSTI usage
-> - Test TIOCSTI security with file descriptor passing
-> 
-> The tests validate proper enforcement of the legacy_tiocsti sysctl
-> introduced in commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled").
-> See tty_ioctl(4) for details on TIOCSTI behavior and security
-> requirements.
-> 
-> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
-> ---
-> This patch adds comprehensive selftests for the TIOCSTI ioctl to validate
-> proper behaviour under different system configurations.
+> This series was applied to netdev/net-next.git (main)
+> by Jakub Kicinski <kuba@kernel.org>:
 
-Much of the text under the --- line is useful details; I would merge it
-with the short commit log above to make a comprehensive commit message.
+Jakub, the test was still under active discussion, and you knowingly
+merged it with buggy code, ignoring our comments.
 
-> 
-> ===============
-> 
-> The TIOCSTI ioctl allows inserting characters into the terminal input
-> queue, making it appear as if the user typed those characters. This
-> functionality has security implications and behaviour that varies based
-> on system configuration.
-> 
-> Background
-> ==========
-> 
-> CONFIG_LEGACY_TIOCSTI controls the default value for the dev.tty.legacy_tiocsti
-> sysctl, which remains runtime-configurable. The dev.tty.legacy_tiocsti sysctl
-> was introduced in commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
-> to provide administrators control over TIOCSTI usage.
-> 
-> When legacy_tiocsti is disabled, TIOCSTI requires CAP_SYS_ADMIN capability.
-> However, the current implementation only checks the current process's
-> credentials via capable(CAP_SYS_ADMIN), which doesn't validate against
-> the file opener's credentials stored in file->f_cred.
-> 
-> This creates a potential security scenario where an unprivileged process
-> can open a TTY fd and pass it to a privileged process via SCM_RIGHTS.
-> 
-> Testing
-> =======
-> 
-> The test suite includes four comprehensive tests:
-> - Test TIOCSTI functionality when legacy support is enabled
-> - Test TIOCSTI rejection when legacy support is disabled  
-> - Test capability requirements for TIOCSTI usage
-> - Test TIOCSTI security with file descriptor passing
-> 
-> All patches have been validated using:
-> - scripts/checkpatch.pl --strict (0 errors, 0 warnings)
-> - Functional testing on kernel v6.16-rc2
-> - File descriptor passing security test scenarios
-> 
-> The fd_passing_security test demonstrates the security concern.
-> To verify, disable legacy TIOCSTI and run the test:
-> 
-> $ echo "0" | sudo tee /proc/sys/dev/tty/legacy_tiocsti
-> $ sudo ./tools/testing/selftests/tty/tty_tiocsti_test -t fd_passing_security
-> 
-> Patch Overview
-> ==============
-> 
-> PATCH 1/1: selftests/tty: add TIOCSTI test suite
-> Comprehensive test suite demonstrating the issue and fix validation
-> 
-> References
-> ==========
-> 
-> - tty_ioctl(4) - documents TIOCSTI ioctl and capability requirements
-> - commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
-> - Documentation/security/credentials.rst
-> - https://github.com/KSPP/linux/issues/156
-> - https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad/
-> - drivers/tty/Kconfig
-> 
-> Configuration References:
-> [1] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/tty/Kconfig#n149
-> [2] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/tty/Kconfig#n162
-> [3] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/tty/Kconfig#n188
-> 
-> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
-> 
-> Changes in v2:
-> - Focused series on selftests only
-> - Removed SELinux capability checking patch for separate submission
-> - Link to v1: https://lore.kernel.org/r/20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com
-> ---
->  tools/testing/selftests/tty/Makefile           |   6 +-
->  tools/testing/selftests/tty/config             |   1 +
->  tools/testing/selftests/tty/tty_tiocsti_test.c | 421 +++++++++++++++++++++++++
->  3 files changed, 427 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
-> index 50d7027b2ae3..7f6fbe5a0cd5 100644
-> --- a/tools/testing/selftests/tty/Makefile
-> +++ b/tools/testing/selftests/tty/Makefile
-> @@ -1,5 +1,9 @@
->  # SPDX-License-Identifier: GPL-2.0
->  CFLAGS = -O2 -Wall
-> -TEST_GEN_PROGS := tty_tstamp_update
-> +TEST_GEN_PROGS := tty_tstamp_update tty_tiocsti_test
-> +LDLIBS += -lcap
->  
->  include ../lib.mk
-> +
-> +# Add libcap for TIOCSTI test
-> +$(OUTPUT)/tty_tiocsti_test: LDLIBS += -lcap
-> diff --git a/tools/testing/selftests/tty/config b/tools/testing/selftests/tty/config
-> new file mode 100644
-> index 000000000000..c6373aba6636
-> --- /dev/null
-> +++ b/tools/testing/selftests/tty/config
-> @@ -0,0 +1 @@
-> +CONFIG_LEGACY_TIOCSTI=y
-> diff --git a/tools/testing/selftests/tty/tty_tiocsti_test.c b/tools/testing/selftests/tty/tty_tiocsti_test.c
-> new file mode 100644
-> index 000000000000..6a4b497078b0
-> --- /dev/null
-> +++ b/tools/testing/selftests/tty/tty_tiocsti_test.c
-> @@ -0,0 +1,421 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * TTY Tests - TIOCSTI
-> + *
-> + * Copyright © 2025 Abhinav Saxena <xandfury@gmail.com>
-> + */
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <fcntl.h>
-> +#include <sys/ioctl.h>
-> +#include <errno.h>
-> +#include <stdbool.h>
-> +#include <string.h>
-> +#include <sys/socket.h>
-> +#include <sys/wait.h>
-> +#include <pwd.h>
-> +#include <termios.h>
-> +#include <grp.h>
-> +#include <sys/capability.h>
-> +#include <sys/prctl.h>
-> +
-> +#include "../kselftest_harness.h"
-> +
-> +/* Helper function to send FD via SCM_RIGHTS */
-> +static int send_fd_via_socket(int socket_fd, int fd_to_send)
-> +{
-> +	struct msghdr msg = { 0 };
-> +	struct cmsghdr *cmsg;
-> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
-> +	char dummy_data = 'F';
-> +	struct iovec iov = { .iov_base = &dummy_data, .iov_len = 1 };
-> +
-> +	msg.msg_iov = &iov;
-> +	msg.msg_iovlen = 1;
-> +	msg.msg_control = cmsg_buf;
-> +	msg.msg_controllen = sizeof(cmsg_buf);
-> +
-> +	cmsg = CMSG_FIRSTHDR(&msg);
-> +	cmsg->cmsg_level = SOL_SOCKET;
-> +	cmsg->cmsg_type = SCM_RIGHTS;
-> +	cmsg->cmsg_len = CMSG_LEN(sizeof(int));
-> +
-> +	memcpy(CMSG_DATA(cmsg), &fd_to_send, sizeof(int));
-> +
-> +	return sendmsg(socket_fd, &msg, 0) < 0 ? -1 : 0;
-> +}
-> +
-> +/* Helper function to receive FD via SCM_RIGHTS */
-> +static int recv_fd_via_socket(int socket_fd)
-> +{
-> +	struct msghdr msg = { 0 };
-> +	struct cmsghdr *cmsg;
-> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
-> +	char dummy_data;
-> +	struct iovec iov = { .iov_base = &dummy_data, .iov_len = 1 };
-> +	int received_fd = -1;
-> +
-> +	msg.msg_iov = &iov;
-> +	msg.msg_iovlen = 1;
-> +	msg.msg_control = cmsg_buf;
-> +	msg.msg_controllen = sizeof(cmsg_buf);
-> +
-> +	if (recvmsg(socket_fd, &msg, 0) < 0)
-> +		return -1;
-> +
-> +	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
-> +		if (cmsg->cmsg_level == SOL_SOCKET &&
-> +		    cmsg->cmsg_type == SCM_RIGHTS) {
-> +			memcpy(&received_fd, CMSG_DATA(cmsg), sizeof(int));
-> +			break;
-> +		}
-> +	}
-> +
-> +	return received_fd;
-> +}
-> +
-> +static inline bool has_cap_sys_admin(void)
-> +{
-> +	cap_t caps = cap_get_proc();
-> +
-> +	if (!caps)
-> +		return false;
-> +
-> +	cap_flag_value_t cap_val;
-> +	bool has_cap = (cap_get_flag(caps, CAP_SYS_ADMIN, CAP_EFFECTIVE,
-> +				     &cap_val) == 0) &&
-> +		       (cap_val == CAP_SET);
-> +
-> +	cap_free(caps);
-> +	return has_cap;
-> +}
-> +
-> +/*
-> + * Simple privilege drop that just changes uid/gid in current process
-> + * and also capabilities like CAP_SYS_ADMIN
-> + */
-> +static inline bool drop_to_nobody(void)
-> +{
-> +	/* Drop supplementary groups */
-> +	if (setgroups(0, NULL) != 0) {
-> +		printf("setgroups failed: %s", strerror(errno));
-> +		return false;
-> +	}
-> +
-> +	/* Change group to nobody */
-> +	if (setgid(65534) != 0) {
-> +		printf("setgid failed: %s", strerror(errno));
-> +		return false;
-> +	}
-> +
-> +	/* Change user to nobody (this drops capabilities) */
-> +	if (setuid(65534) != 0) {
-> +		printf("setuid failed: %s", strerror(errno));
-> +		return false;
-> +	}
-> +
-> +	/* Verify we no longer have CAP_SYS_ADMIN */
-> +	if (has_cap_sys_admin()) {
-> +		printf("ERROR: Still have CAP_SYS_ADMIN after changing to nobody");
-> +		return false;
-> +	}
-> +
-> +	printf("Successfully changed to nobody (uid:%d gid:%d)\n", getuid(),
-> +	       getgid());
-> +	return true;
-> +}
+This is *extremely disrespectful* towards people that spent time
+reviewing, replying and participating in the netdev mailing list.
 
-All of the bare printfs above should use TH_LOG()
-
-> +
-> +static inline int get_legacy_tiocsti_setting(void)
-> +{
-> +	FILE *fp;
-> +	int value = -1;
-> +
-> +	fp = fopen("/proc/sys/dev/tty/legacy_tiocsti", "r");
-> +	if (!fp) {
-> +		if (errno == ENOENT) {
-> +			printf("legacy_tiocsti sysctl not available (kernel < 6.2)\n");
-> +		} else {
-> +			printf("Cannot read legacy_tiocsti: %s\n",
-> +			       strerror(errno));
-> +		}
-> +		return -1;
-> +	}
-> +
-> +	if (fscanf(fp, "%d", &value) == 1) {
-> +		printf("legacy_tiocsti setting=%d\n", value);
-> +
-> +		if (value < 0 || value > 1) {
-> +			printf("legacy_tiocsti unexpected value %d\n", value);
-> +			value = -1;
-> +		} else {
-> +			printf("legacy_tiocsti=%d (%s mode)\n", value,
-> +			       value == 0 ? "restricted" : "permissive");
-> +		}
-> +	} else {
-> +		printf("Failed to parse legacy_tiocsti value");
-> +		value = -1;
-> +	}
-> +
-> +	fclose(fp);
-> +	return value;
-> +}
-
-Same observation as above that reporting should go through the kselftest
-harness APIs.
-
-> +
-> +static inline int test_tiocsti_injection(int fd)
-> +{
-> +	int ret;
-> +	char test_char = 'X';
-> +
-> +	ret = ioctl(fd, TIOCSTI, &test_char);
-> +	if (ret == 0) {
-> +		/* Clear the injected character */
-> +		printf("TIOCSTI injection succeeded\n");
-> +	} else {
-> +		printf("TIOCSTI injection failed: %s (errno=%d)\n",
-> +		       strerror(errno), errno);
-> +	}
-> +	return ret == 0 ? 0 : -1;
-> +}
-
-Same. Note for each of these you'll need to pass in the test metadata
-(struct __test_metadata *_metadata). See helper examples that do this
-in tools/testing/selftests/seccomp/seccomp_bpf.c like tracer_poke(),
-get_syscall(), etc.
-
-> +
-> +FIXTURE(tty_tiocsti)
-> +{
-> +	int tty_fd;
-> +	char *tty_name;
-> +	bool has_tty;
-> +	bool initial_cap_sys_admin;
-> +	int legacy_tiocsti_setting;
-> +};
-> +
-> +FIXTURE_SETUP(tty_tiocsti)
-> +{
-> +	TH_LOG("Running as UID: %d with effective UID: %d", getuid(),
-> +	       geteuid());
-> +
-> +	self->tty_fd = open("/dev/tty", O_RDWR);
-> +	self->has_tty = (self->tty_fd >= 0);
-> +
-> +	if (self->tty_fd < 0)
-> +		TH_LOG("Cannot open /dev/tty: %s", strerror(errno));
-
-I would expect this to be:
-
-	ASSERT_GE(self->tty_fd, 0) {
-		TH_LOG("Cannot open /dev/tty: %s", strerror(errno));
-	}
-
-> +
-> +	self->tty_name = ttyname(STDIN_FILENO);
-> +	TH_LOG("Current TTY: %s", self->tty_name ? self->tty_name : "none");
-> +
-> +	self->initial_cap_sys_admin = has_cap_sys_admin();
-> +	TH_LOG("Initial CAP_SYS_ADMIN: %s",
-> +	       self->initial_cap_sys_admin ? "yes" : "no");
-> +
-> +	self->legacy_tiocsti_setting = get_legacy_tiocsti_setting();
-> +}
-> +
-> +FIXTURE_TEARDOWN(tty_tiocsti)
-> +{
-> +	if (self->has_tty && self->tty_fd >= 0)
-> +		close(self->tty_fd);
-> +}
-> +
-> +/* Test case 1: legacy_tiocsti != 0 (permissive mode) */
-> +TEST_F(tty_tiocsti, permissive_mode)
-> +{
-> +	// clang-format off
-
-While there are instances in the tree of "//" please use /* */ for
-comments, even these format pragmas.
-
-> +	if (self->legacy_tiocsti_setting < 0)
-> +		SKIP(return,
-> +		     "legacy_tiocsti sysctl not available (kernel < 6.2)");
-
-I notice this check is in every test. I think it'd be cleaner to put it
-into FIXTURE_SETUP() instead.
-
-> +
-> +	if (self->legacy_tiocsti_setting == 0)
-> +		SKIP(return,
-> +		     "Test requires permissive mode (legacy_tiocsti=1)");
-
-What about changing this value during FIXTURE_SETUP() and restoring it
-in FIXTURE_TEARDOWN()?
-
-> +	// clang-format on
-> +
-> +	ASSERT_TRUE(self->has_tty);
-
-Can opening a pty (i.e. openpty(3)) be used to always have a tty
-available?
-
-> +
-> +	if (self->initial_cap_sys_admin) {
-> +		ASSERT_TRUE(drop_to_nobody());
-> +		ASSERT_FALSE(has_cap_sys_admin());
-> +	}
-> +
-> +	/* In permissive mode, TIOCSTI should work without CAP_SYS_ADMIN */
-> +	EXPECT_EQ(test_tiocsti_injection(self->tty_fd), 0)
-
-With openpty() I think it would also mean you can trivially throw
-away injected characters instead of having them actually end up on the
-real tty? But it's been a while since I did tty work, so maybe I'm
-confusing myself about what openpty() gets you.
-
-> +	{
-> +		TH_LOG("TIOCSTI should succeed in permissive mode without CAP_SYS_ADMIN");
-> +	}
-> +}
-> +
-> +/* Test case 2: legacy_tiocsti == 0, without CAP_SYS_ADMIN (should fail) */
-> +TEST_F(tty_tiocsti, restricted_mode_nopriv)
-> +{
-> +	// clang-format off
-> +	if (self->legacy_tiocsti_setting < 0)
-> +		SKIP(return,
-> +		     "legacy_tiocsti sysctl not available (kernel < 6.2)");
-> +
-> +	if (self->legacy_tiocsti_setting != 0)
-> +		SKIP(return,
-> +		     "Test requires restricted mode (legacy_tiocsti=0)");
-
-I think it should be possible to _set_ the state you want (if running as
-root) and if not settable, then do the SKIP.
-
-> +	// clang-format on
-> +
-> +	ASSERT_TRUE(self->has_tty);
-> +
-> +	if (self->initial_cap_sys_admin) {
-> +		ASSERT_TRUE(drop_to_nobody());
-> +		ASSERT_FALSE(has_cap_sys_admin());
-> +	}
-> +	/* In restricted mode, TIOCSTI should fail without CAP_SYS_ADMIN */
-> +	EXPECT_EQ(test_tiocsti_injection(self->tty_fd), -1);
-> +
-> +	/*
-> +	 * it might fail with either EPERM or EIO
-> +	 * EXPECT_TRUE(errno == EPERM || errno == EIO)
-> +	 * {
-> +	 *      TH_LOG("Expected EPERM, got: %s", strerror(errno));
-> +	 * }
-> +	 */
-
-Why are these commented out?
-
-> +}
-> +
-> +/* Test case 3: legacy_tiocsti == 0, with CAP_SYS_ADMIN (should succeed) */
-> +TEST_F(tty_tiocsti, restricted_mode_priv)
-> +{
-> +	// clang-format off
-> +	if (self->legacy_tiocsti_setting < 0)
-> +		SKIP(return,
-> +		     "legacy_tiocsti sysctl not available (kernel < 6.2)");
-> +
-> +	if (self->legacy_tiocsti_setting != 0)
-> +		SKIP(return,
-> +		     "Test requires restricted mode (legacy_tiocsti=0)");
-> +	// clang-format on
-> +
-> +	/* Must have CAP_SYS_ADMIN for this test */
-> +	if (!self->initial_cap_sys_admin)
-> +		SKIP(return, "Test requires CAP_SYS_ADMIN");
-> +
-> +	ASSERT_TRUE(self->has_tty);
-> +	ASSERT_TRUE(has_cap_sys_admin());
-> +
-> +	/* In restricted mode, TIOCSTI should succeed with CAP_SYS_ADMIN */
-> +	EXPECT_EQ(test_tiocsti_injection(self->tty_fd), 0)
-> +	{
-> +		TH_LOG("TIOCSTI should succeed in restricted mode with CAP_SYS_ADMIN");
-> +	}
-> +}
-> +
-> +/* Test TIOCSTI security with file descriptor passing */
-> +TEST_F(tty_tiocsti, fd_passing_security)
-> +{
-> +	// clang-format off
-> +	if (self->legacy_tiocsti_setting < 0)
-> +		SKIP(return,
-> +		     "legacy_tiocsti sysctl not available (kernel < 6.2)");
-> +
-> +	if (self->legacy_tiocsti_setting != 0)
-> +		SKIP(return,
-> +		     "Test requires restricted mode (legacy_tiocsti=0)");
-> +	// clang-format on
-> +
-> +	/* Must start with CAP_SYS_ADMIN */
-> +	if (!self->initial_cap_sys_admin)
-> +		SKIP(return, "Test requires initial CAP_SYS_ADMIN");
-> +
-> +	int sockpair[2];
-> +	pid_t child_pid;
-> +
-> +	ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, sockpair), 0);
-> +
-> +	child_pid = fork();
-> +	ASSERT_GE(child_pid, 0)
-> +	TH_LOG("Fork failed: %s", strerror(errno));
-> +
-> +	if (child_pid == 0) {
-> +		/* Child process - become unprivileged, open TTY, send FD to parent */
-> +		close(sockpair[0]);
-> +
-> +		TH_LOG("Child: Dropping privileges...");
-> +
-> +		/* Drop to nobody user (loses all capabilities) */
-> +		drop_to_nobody();
-> +
-> +		/* Verify we no longer have CAP_SYS_ADMIN */
-> +		if (has_cap_sys_admin()) {
-> +			TH_LOG("Child: Failed to drop CAP_SYS_ADMIN");
-> +			_exit(1);
-> +		}
-
-Please double check the behavior but I think you can use ASSERTs in the
-child and you don't need the "_exit(1)" stuff.
-
-> +
-> +		TH_LOG("Child: Opening TTY as unprivileged user...");
-> +
-> +		int unprivileged_tty_fd = open("/dev/tty", O_RDWR);
-> +
-> +		if (unprivileged_tty_fd < 0) {
-> +			TH_LOG("Child: Cannot open TTY: %s", strerror(errno));
-> +			_exit(1);
-> +		}
-> +
-> +		/* Test that we can't use TIOCSTI directly (should fail) */
-> +
-> +		char test_char = 'X';
-> +
-> +		if (ioctl(unprivileged_tty_fd, TIOCSTI, &test_char) == 0) {
-> +			TH_LOG("Child: ERROR - Direct TIOCSTI succeeded unexpectedly!");
-> +			close(unprivileged_tty_fd);
-> +			_exit(1);
-> +		}
-> +		TH_LOG("Child: Good - Direct TIOCSTI failed as expected: %s",
-> +		       strerror(errno));
-> +
-> +		/* Send the TTY FD to privileged parent via SCM_RIGHTS */
-> +		TH_LOG("Child: Sending TTY FD to privileged parent...");
-> +		if (send_fd_via_socket(sockpair[1], unprivileged_tty_fd) != 0) {
-> +			TH_LOG("Child: Failed to send FD");
-> +			close(unprivileged_tty_fd);
-> +			_exit(1);
-> +		}
-> +
-> +		close(unprivileged_tty_fd);
-> +		close(sockpair[1]);
-> +		_exit(0); /* Child success */
-> +
-> +	} else {
-
-This doesn't need an else nor indenting: it is the parent no matter what
-due to the _exit above.
-
-> +		/* Parent process - keep CAP_SYS_ADMIN, receive FD, test TIOCSTI */
-> +		close(sockpair[1]);
-> +
-> +		TH_LOG("Parent: Waiting for TTY FD from unprivileged child...");
-> +
-> +		/* Verify we still have CAP_SYS_ADMIN */
-> +		ASSERT_TRUE(has_cap_sys_admin());
-> +
-> +		/* Receive the TTY FD from unprivileged child */
-> +		int received_fd = recv_fd_via_socket(sockpair[0]);
-> +
-> +		ASSERT_GE(received_fd, 0)
-> +		TH_LOG("Parent: Received FD %d (opened by unprivileged process)",
-> +		       received_fd);
-> +
-> +		/*
-> +		 * VULNERABILITY TEST: Try TIOCSTI with FD opened by unprivileged process
-> +		 * This should FAIL even though parent has CAP_SYS_ADMIN
-> +		 * because the FD was opened by unprivileged process
-> +		 */
-> +		char attack_char = 'V'; /* V for Vulnerability */
-> +		int ret = ioctl(received_fd, TIOCSTI, &attack_char);
-
-Doesn't the child need to stay alive long enough to receive the
-character? i.e. is it a problem that the child immediately exits 0 after
-sending the fd to the parent?
-
-> +
-> +		TH_LOG("Parent: Testing TIOCSTI on FD from unprivileged process...");
-> +		if (ret == 0) {
-> +			TH_LOG("*** VULNERABILITY DETECTED ***");
-> +			TH_LOG("Privileged process can use TIOCSTI on unprivileged FD");
-> +		} else {
-> +			TH_LOG("TIOCSTI failed on unprivileged FD: %s",
-> +			       strerror(errno));
-> +			EXPECT_EQ(errno, EPERM);
-> +		}
-
-Shouldn't this be arranged with an expect on ret == 0 ?
-
-
-> +		close(received_fd);
-> +		close(sockpair[0]);
-> +
-> +		/* Wait for child */
-> +		int status;
-> +
-> +		ASSERT_EQ(waitpid(child_pid, &status, 0), child_pid);
-> +		EXPECT_EQ(WEXITSTATUS(status), 0);
-> +		ASSERT_NE(ret, 0);
-> +	}
-> +}
-> +
-> +TEST_HARNESS_MAIN
-
-Looks like you're on the right track!
-
--Kees
-
--- 
-Kees Cook
+I expect better from you, and other netdev maintainers which allow this
+to happen. Please uphold your responsibilities as maintainers towards
+the community, this is unacceptable behavior.
 
