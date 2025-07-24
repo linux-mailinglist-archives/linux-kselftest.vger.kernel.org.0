@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-37913-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D077B10086
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 08:27:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12955B1008D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 08:28:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FE774E86B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 06:27:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4883A5827D6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 06:28:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D47E221703;
-	Thu, 24 Jul 2025 06:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51790230BD9;
+	Thu, 24 Jul 2025 06:27:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NyJSOk6v";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4+HHiGxU"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3qeOlGYx";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gEtwxibg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B2D1FE455;
-	Thu, 24 Jul 2025 06:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BEED22257E;
+	Thu, 24 Jul 2025 06:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753338439; cv=none; b=XBf2xIde4ezfGyBREyrmHBfeO59Kmnnw5sdp6AJ4sX+Fiq3XQdeWVjnm2d+2k4YPEsBAY+h52C4CKvxnGpU4PQ1mzIwwQiHPsyY+ZpqP5Y0XUpTWyOEh8SNb1Wi1bhcOK2gdX8p3pCuyONuijitJkhkFpUPs5mAci5EpjT9rtso=
+	t=1753338441; cv=none; b=CioW2NLV/9OaC5RLVZBOv3yWdEsEoLlsGYuWQZI9bNmIafWqoD/PfVkJy9JMdhMjneQsL3vEgY7jg9iaUpIbcgqSCEhaMy7VungQZJFnNDUXXUqWvzvlFZzQ+0UWwpko39xwv/YGVcltijtnjg0iE34H1kHhlqmoySDH4tmNXug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753338439; c=relaxed/simple;
-	bh=OF0zs863T2ln/hf9t9vv6cwCgjqYJUskdPhzQ1YPMKg=;
+	s=arc-20240116; t=1753338441; c=relaxed/simple;
+	bh=/d7Kjsadf0MQRlQ8rFqan/QHEDoMwt3EGw/m83TdkFo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PauWpv22odr8OOlVP9XmAZc2gYj45pQUjXYSN3RTSc9lTJIo860P9KhCsrNURn9SFTphn75xi7AvGMrt1w5E8lqLyNY4dmkBxLpXJUpUjIY/lcxXfmt40TUzGxREFx/B4Q+xFPbN6rxPq+Q0FoEEAv8yiVXY9oVcJdjpMWDk3/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NyJSOk6v; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4+HHiGxU; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=gT8/JVsho8hmEJxE+U1iDKJepSjyKDNlw/RJkH0uyzv+6n9v0M96fvgwxCxIYnGw2m7Szl2EKkVUJ24VX7swZYJqH7Gvm7K+ye75fScvAi0joem+9yYDm0/wXdko7Hi/JwbyDwHZYUEJazFs5ogVy5W+1dXD/6Vx8vgzFtSd8Dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3qeOlGYx; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gEtwxibg; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,23 +39,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fTyVW1AyH2uYz1KpZUjxr56LsdGe11sv/GpweXPS2O0=;
-	b=NyJSOk6vmdU2uR614yz7FfBgf3go2QgYZQAlrtpMoJuSLCDNl2I0mcYAY3a7+bunmXY74q
-	6rEa8evverZGj0Ky1l5ehcFjfbW8whLbW8MBvtBgXLIeFLAfKkQ0WiJEtiCdPU8jiETe3M
-	EFrsiwZrr+ph7hAz9Vujnmg/WDReqSw7GAMbnCuptfKXpJpNdYQPfxmS9J3+IKOK+zGCJl
-	mJ3dm+hYcFaa+42uFsyUs4XnwAWFUiTEWsfwlLWNsnUK9ZO8V0yrZX0jhssOgg7W7f9B8e
-	JTJuToJwq6nhShVj6fq9GGc6V3IQkV9Uji+ooafE7UCdxYhP9iItVg/dgABL0w==
+	bh=qnPjxZaxoUQoAn4OPvNzydHs4g6dzmGoN+Wts/M/WYo=;
+	b=3qeOlGYxH01gD3LGaNeCUPCa4f084EZfqzvIreiyxUe3B4m7QcmpfI9rIO2VA5txiXfEzH
+	JzRiaX+GJJ+naQ2niRQocgjoth62deT9eSLoBj2dtMaZZjxYj00Qtfn73rKlKaHwQvdaoh
+	hUb7fuqlSXwf9DzdcZzzSbO3QGnE5+E6C2aBRG6U68GhhpBl4Qi8aTw7stNS7E4/+NWYEm
+	c96+gEXv6ow4+RHYs8OlSAun5PSYEQPR2teZZ1txMDY82Hsifnes2PecHPbCFfkuqXrONF
+	YeMupxFxCAlSi1roAaT8xQosKCaYN8hNv3eRFxMHxXN4TkU26Y+bapXTxh+2nQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1753338436;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fTyVW1AyH2uYz1KpZUjxr56LsdGe11sv/GpweXPS2O0=;
-	b=4+HHiGxUHuRmwwcmfh5CxrgGvE8R+R40NMGmb0L3JXm/z+0gPWS6w/ZyTFCAwTAaXxV81g
-	PBKlSKlLsbD454BQ==
-Date: Thu, 24 Jul 2025 08:26:54 +0200
-Subject: [PATCH RFC 04/14] sparc64: vdso: Link with -z noexecstack
+	bh=qnPjxZaxoUQoAn4OPvNzydHs4g6dzmGoN+Wts/M/WYo=;
+	b=gEtwxibgHE9oKBSiANKZQmaaZwidwb5LeW3MFTE5H+x3QPEeS3MlvALGpAr460bc9RAcw2
+	qvMKWZMNn1s+AqAw==
+Date: Thu, 24 Jul 2025 08:26:55 +0200
+Subject: [PATCH RFC 05/14] sparc64: vdso: Remove obsolete "fake section
+ table" reservation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250724-vdso-sparc64-generic-2-v1-4-e376a3bd24d1@linutronix.de>
+Message-Id: <20250724-vdso-sparc64-generic-2-v1-5-e376a3bd24d1@linutronix.de>
 References: <20250724-vdso-sparc64-generic-2-v1-0-e376a3bd24d1@linutronix.de>
 In-Reply-To: <20250724-vdso-sparc64-generic-2-v1-0-e376a3bd24d1@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -79,42 +80,98 @@ To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
  John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  sparclinux@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- Arnd Bergmann <arnd@kernel.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753338429; l=1408;
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753338429; l=2564;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=OF0zs863T2ln/hf9t9vv6cwCgjqYJUskdPhzQ1YPMKg=;
- b=R+X3+xK2CwadfNOR4CPiR5eAEEabRClKLgOhBCa55Ojln/l7oDGiRfTteLyH6slfTaiyw+N+m
- OWtlAE+CvjaDJt3ejfEkRbfA4r5MxsvHgSQpjZn0YKl83D0uiI3xN8f
+ bh=/d7Kjsadf0MQRlQ8rFqan/QHEDoMwt3EGw/m83TdkFo=;
+ b=1bxswy2EUvZBfEj28hof6i7LepniZLsXdxfY5zXKFbSN/FbVBhMzKC1fHd4NooKMuW9baL0vS
+ EIMiKFNUntkCuMb8+De5qEfB9lo6ZX/Rk2ROtFhTLrA6sdBfcmdysH5
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The vDSO stack does not need to be executable. Prevent the linker from
-creating executable. For more background see commit ffcf9c5700e4 ("x86:
-link vdso and boot with -z noexecstack --no-warn-rwx-segments").
+When the vDSO logic was copied from x86 to SPARC some unused remnants of
+the fake section handling were copied, too. In x86 the original fake
+section handling had already been removed incompletely in commit
+da861e18eccc ("x86, vdso: Get rid of the fake section mechanism").
+On x86 the reservation was only cleaned up in commit 24b7c77bbb24
+("x86/vdso: Remove obsolete "fake section table" reservation").
 
-Also prevent the following warning from the linker:
-sparc64-linux-ld: warning: arch/sparc/vdso/vdso-note.o: missing .note.GNU-stack section implies executable stack
-sparc64-linux-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+Remove the reservation for SPARC, too.
 
-Suggested-by: Arnd Bergmann <arnd@kernel.org>
-Link: https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
 Fixes: 9a08862a5d2e ("vDSO for sparc")
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/sparc/vdso/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/sparc/vdso/vdso-layout.lds.S | 21 ---------------------
+ arch/sparc/vdso/vdso2c.c          |  8 --------
+ 2 files changed, 29 deletions(-)
 
-diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
-index fdc4a8f5a49c5b27fbaee861b24e8b31cfe64477..e8315c6acb743137089d8e77d3539db63979e959 100644
---- a/arch/sparc/vdso/Makefile
-+++ b/arch/sparc/vdso/Makefile
-@@ -103,4 +103,4 @@ quiet_cmd_vdso = VDSO    $@
- 		       $(VDSO_LDFLAGS) $(VDSO_LDFLAGS_$(filter %.lds,$(^F))) \
- 		       -T $(filter %.lds,$^) $(filter %.o,$^)
+diff --git a/arch/sparc/vdso/vdso-layout.lds.S b/arch/sparc/vdso/vdso-layout.lds.S
+index d31e57e8a3bbffd3afb187cd631e2491fde64148..9e0804789d11696948f11be367480b530a1f18d9 100644
+--- a/arch/sparc/vdso/vdso-layout.lds.S
++++ b/arch/sparc/vdso/vdso-layout.lds.S
+@@ -4,16 +4,6 @@
+  * This script controls its layout.
+  */
  
--VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 -Bsymbolic --no-undefined
-+VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 -Bsymbolic --no-undefined -z noexecstack
+-#if defined(BUILD_VDSO64)
+-# define SHDR_SIZE 64
+-#elif defined(BUILD_VDSO32)
+-# define SHDR_SIZE 40
+-#else
+-# error unknown VDSO target
+-#endif
+-
+-#define NUM_FAKE_SHDRS 7
+-
+ SECTIONS
+ {
+ 	/*
+@@ -47,19 +37,8 @@ SECTIONS
+ 		*(.bss*)
+ 		*(.dynbss*)
+ 		*(.gnu.linkonce.b.*)
+-
+-		/*
+-		 * Ideally this would live in a C file: kept in here for
+-		 * compatibility with x86-64.
+-		 */
+-		VDSO_FAKE_SECTION_TABLE_START = .;
+-		. = . + NUM_FAKE_SHDRS * SHDR_SIZE;
+-		VDSO_FAKE_SECTION_TABLE_END = .;
+ 	}						:text
+ 
+-	.fake_shstrtab	: { *(.fake_shstrtab) }		:text
+-
+-
+ 	.note		: { *(.note.*) }		:text	:note
+ 
+ 	.eh_frame_hdr	: { *(.eh_frame_hdr) }		:text	:eh_frame_hdr
+diff --git a/arch/sparc/vdso/vdso2c.c b/arch/sparc/vdso/vdso2c.c
+index dc81240aab6fd31a72b8a751cc2a4a821a3c4e4e..b97af5ec9f35c01f2a976b6213b1768b677ad231 100644
+--- a/arch/sparc/vdso/vdso2c.c
++++ b/arch/sparc/vdso/vdso2c.c
+@@ -61,8 +61,6 @@ const char *outfilename;
+ /* Symbols that we need in vdso2c. */
+ enum {
+ 	sym_vvar_start,
+-	sym_VDSO_FAKE_SECTION_TABLE_START,
+-	sym_VDSO_FAKE_SECTION_TABLE_END,
+ };
+ 
+ struct vdso_sym {
+@@ -72,12 +70,6 @@ struct vdso_sym {
+ 
+ struct vdso_sym required_syms[] = {
+ 	[sym_vvar_start] = {"vvar_start", 1},
+-	[sym_VDSO_FAKE_SECTION_TABLE_START] = {
+-		"VDSO_FAKE_SECTION_TABLE_START", 0
+-	},
+-	[sym_VDSO_FAKE_SECTION_TABLE_END] = {
+-		"VDSO_FAKE_SECTION_TABLE_END", 0
+-	},
+ };
+ 
+ __attribute__((format(printf, 1, 2))) __attribute__((noreturn))
 
 -- 
 2.50.1
