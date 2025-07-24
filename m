@@ -1,78 +1,100 @@
-Return-Path: <linux-kselftest+bounces-37930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 788D5B102D4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 10:07:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE54B10342
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 10:19:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0941164B21
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 08:07:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 100E71886486
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 08:17:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C07C2727F8;
-	Thu, 24 Jul 2025 08:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A4A273D75;
+	Thu, 24 Jul 2025 08:17:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XiE/NPua"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h58J0Wne"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C9521D5BC
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 08:07:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEED91A4F3C;
+	Thu, 24 Jul 2025 08:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753344431; cv=none; b=CR68nECsAphisK53q0n4mFWqgiXw10iPsx7tKs9pVQFYR8apXFDC49UADptjBG2ei8I6p2iGYE6iNCEXLwXFNtb8h/0w5y6dPq1CMKamE+a+ZV/vY5Ag81hobzyp00llCSjtHNrQ19qcP9YUXoV+YXYvtep0biMURgp9uHUNXxY=
+	t=1753345023; cv=none; b=E21hWCqWGnberLQYITkbU1nmC0mIshA5Cl1KZF2h9pjwD4DDt32LOplGCfbZhltRRP8JlEf0QqDx7KHNsCtWE/5d6V1mEoV67GzYrQi/9sM6Bolg/cIuS5cbus8daMCfwiGRM8h7/A92EucDcAyw/SsZ5rpZGbjyHVAdmNxcZFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753344431; c=relaxed/simple;
-	bh=3GfbGSqWVEhIf20dNOMc0fp14qcTv6XZ5FmBTnLwA+s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BNA1cvj19ZHVVP8QzLDpMse37JiA6E6YnEQJDy79L+4G80dsJ+map30UHCuq+dHWodKy4AVGzl4AEO8t8N3drdCmknSy5iJuSuLInkPOnYq8mXfmXapSijVBCh7un8ad+LYlXJjhlhI4G2ZhQYUBiiZXXAm/9gzrD7t1w+P+bGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XiE/NPua; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1753344429;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yds5vhOzn4LpdsxnEOz220TpuASpaZwH3IpQhzpEW5I=;
-	b=XiE/NPuaue4/X8ln3Xf4oWGKlNrNbPR6DcvXVlfY+yDD5N/+jMOVDM43pUTKbeGeYJbkpm
-	Jpt4GbcF4sZFGjbX8dQ2eKoeF0FpvnKc++n+0mrSkupv5zvh03EMJdigmpgOhKCM9sEE7c
-	5GqLLA8WPJFfh9uryx7KWol/HYyhHuw=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-441-l7vBBadIMIenRZy1RjtSJA-1; Thu,
- 24 Jul 2025 04:07:05 -0400
-X-MC-Unique: l7vBBadIMIenRZy1RjtSJA-1
-X-Mimecast-MFC-AGG-ID: l7vBBadIMIenRZy1RjtSJA_1753344423
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 17E8318002B6;
-	Thu, 24 Jul 2025 08:07:03 +0000 (UTC)
-Received: from yiche-laptop.redhat.com (unknown [10.72.112.178])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E176218002AF;
-	Thu, 24 Jul 2025 08:06:55 +0000 (UTC)
-From: Yi Chen <yiche@redhat.com>
+	s=arc-20240116; t=1753345023; c=relaxed/simple;
+	bh=wptEVqnmBc1ZGct6J0t7hxveJYyKzsJlWIx61MzWRbA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ANITx5XHVHflHQ7NWiBU4GuL6qiczeqxTK/HwJD1ig+9NY54+vkd1VH762g931ruDyIabZjy/2Jn3MraZgrsVd9w71ELkAl5eWRVGdXb/DZqu4BUlsUHzDKINTti0cLDmaLLtnwUS364Zb/g7ACcwwWjvLFgHj6pNkZd/DD6Raw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h58J0Wne; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-748d982e92cso494606b3a.1;
+        Thu, 24 Jul 2025 01:17:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753345021; x=1753949821; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bemT7jVEV2L5HIRvoWrvjFbWT8mOk0f0AWRK4b4eQmE=;
+        b=h58J0Wne4z4iql3a80RHtQ5nnhC7akV74/1GoqhQi91WPmTQCmsEmmZ5b0jonl2LRw
+         rhNpVfCNM/CY3b6j50H929BCYqvyZULt+qVpHon7T/cVV4MLXYQrxbIMOr1i7JWTH/8d
+         FtceHQ2fh4+sOS1EHPfnykXzdX45iowSG6gnYbjTyRpnpRwIWZniVYWziLuVGbT+OpmY
+         p9uwXDMPgMXGiSbUNYw7+zSxJ9hMpt2SSopf5AptjHJxxVGOWwljgWbWffKxqXTs6f5H
+         p8wODh7oyonbd/cJOIe4CRcUa3FmHecpc6b73kg8IkAFwObG/l46/mKOH4NlapZYtTbT
+         ZS4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753345021; x=1753949821;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bemT7jVEV2L5HIRvoWrvjFbWT8mOk0f0AWRK4b4eQmE=;
+        b=GupURPd5DpiDu5v5dBa8bGmp3l1/I0SMbgnbi5xksQwIz314US/qKlfwwmylKlVxC6
+         tWE0tub49dT/DuRUcMbu1O6qtqA1rGhPySEekNIm/JNyaxr+9CO8krrQ3M2pHehTHvK4
+         zlGUn38S0WdJ7TJHYRdGhU4E3aFG1PeKlcEDVhi419EkL7MtF9zMqkGHJ2QIrhfN0ndD
+         rh55SaW0HPBaWa1KEWgBhvgOxDJBnB21N89upRGjaFmkwAzIacDA0KwkjBEfpBamKGCc
+         Xs8rW5J+K2q+/F1EqjBchjih2ncLOYbZqIYrR4SCWSFqlaM5joe6CZ97Pk8/B05gmkiP
+         wiNg==
+X-Forwarded-Encrypted: i=1; AJvYcCU52K3UK8zlxLtWo0sT1lnuQt41NAX9QEdLJzx3B+ojgJqH99cR/UFuAm/zPYSczdzQnJBetWsozwkpRArS@vger.kernel.org, AJvYcCUtW/LgS9t2SVCF6T9MEXGXOenin+4g2G4xK0BPzqmnXa0W6mS0zFbYICkK50HaNvSMzqei/CBO4xs=@vger.kernel.org, AJvYcCVFveJhSlr3FGzXu80o3SUEDxZxhPietO4IVOavVKA8HRLnS923wdvrCBLSxo7YHjPGvm10hpkYalnPxnIwbEQL@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw400bkIuvugCKayM0HwHN2T3azKezLow/7HPvgXt9FoKbD+4Ww
+	qzqrUZqoe4zyQxsdiO4/BdxAoYPClIBrvRe360r8lFLgfa/orhtSeUXSRYx33Hbe
+X-Gm-Gg: ASbGnctR8j1bcIF3l7tjX47K2fYPkll80KFGUGt8zl6zFtuGDtsEKPPHy+g2JdnV3Bv
+	a5aH8r2RfRsntaGSIA2jg5gQLMIr6yQVjW6EMkdIdPeJkNdx/BZBsuzFQZyhLNBZHml/crozkX/
+	HYY6oLDcdmmSSrrGCJ9JZRmkZ4OTiHIB3tZVNr1xZGQumjd/okBidVjgOOpCmWFouUZwpBwCmLM
+	lV3M2NWFFahOen/ydnPq9nWp8TgjeWvhy0fe0uV8J2OgRQay593vSUgCVPuSs2Hzz62/gYkTnGd
+	FstdTnwKrffX9HvCXRIuUrK7Ias2sSBAQM7NecYDeAOv1Yw3NK2Od9vbPfkwUD8A/TWNnQUsXaR
+	KJM77W65WSRnAy/qCgG7sJfLbBF/2B/RaI/XgyKGhGrQ4yjY=
+X-Google-Smtp-Source: AGHT+IHaYBCozI7SqHxrLah+Edbfhj9bliokCAp+L0ubN3e6km2nUgJuI2Xx4ak+xa7g2BmQyMxOHQ==
+X-Received: by 2002:a05:6a20:6a0a:b0:239:d43:4815 with SMTP id adf61e73a8af0-23d490e7f3amr10149916637.28.1753345020922;
+        Thu, 24 Jul 2025 01:17:00 -0700 (PDT)
+Received: from localhost.localdomain ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-761adb7bbeesm1074704b3a.24.2025.07.24.01.16.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jul 2025 01:17:00 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
-Cc: netfilter-devel@vger.kernel.org,
+Cc: Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Petr Machata <petrm@nvidia.com>,
+	Amit Cohen <amcohen@nvidia.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Alessandro Zanni <alessandro.zanni87@gmail.com>,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	pablo@netfilter.org,
-	kadlec@netfilter.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	horms@kernel.org,
-	coreteam@netfilter.org,
-	fw@strlen.de
-Subject: [PATCH net v2] selftests: netfilter: ipvs.sh: Explicity disable rp_filter on interface tunl0
-Date: Thu, 24 Jul 2025 16:06:53 +0800
-Message-ID: <20250724080653.20723-1-yiche@redhat.com>
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net-next 0/3] bonding: support aggregator selection based on port priority
+Date: Thu, 24 Jul 2025 08:16:29 +0000
+Message-ID: <20250724081632.12921-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,60 +102,35 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Although setup_ns() set net.ipv4.conf.default.rp_filter=0,
-loading certain module such as ipip will automatically create a tunl0 interface
-in all netns including new created ones. In the script, this is before than
-default.rp_filter=0 applied, as a result tunl0.rp_filter remains set to 1
-which causes the test report FAIL when ipip module is preloaded.
+This patchset introduces a new per-port bonding option: `ad_actor_port_prio`.
 
-Before fix:
-Testing DR mode...
-Testing NAT mode...
-Testing Tunnel mode...
-ipvs.sh: FAIL
+It allows users to configure the actor's port priority, which can then be used
+by the bonding driver for aggregator selection based on port priority.
 
-After fix:
-Testing DR mode...
-Testing NAT mode...
-Testing Tunnel mode...
-ipvs.sh: PASS
+This provides finer control over LACP aggregator choice, especially in setups
+with multiple eligible aggregators over 2 switches.
 
-Fixes: 7c8b89ec506e ("selftests: netfilter: remove rp_filter configuration")
+Hangbin Liu (3):
+  bonding: add support for per-port LACP actor priority
+  bonding: support aggregator selection based on port priority
+  selftests: bonding: add test for LACP actor port priority
 
-v2: Fixed the format of Fixes tag.
-Signed-off-by: Yi Chen <yiche@redhat.com>
----
- tools/testing/selftests/net/netfilter/ipvs.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/networking/bonding.rst          | 18 ++++-
+ drivers/net/bonding/bond_3ad.c                | 31 ++++++++
+ drivers/net/bonding/bond_netlink.c            | 16 ++++
+ drivers/net/bonding/bond_options.c            | 36 +++++++++
+ include/net/bond_3ad.h                        |  2 +
+ include/net/bond_options.h                    |  1 +
+ include/uapi/linux/if_link.h                  |  1 +
+ .../selftests/drivers/net/bonding/Makefile    |  3 +-
+ .../drivers/net/bonding/bond_lacp_prio.sh     | 73 +++++++++++++++++++
+ tools/testing/selftests/net/forwarding/lib.sh | 24 ------
+ tools/testing/selftests/net/lib.sh            | 24 ++++++
+ 11 files changed, 203 insertions(+), 26 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
 
-diff --git a/tools/testing/selftests/net/netfilter/ipvs.sh b/tools/testing/selftests/net/netfilter/ipvs.sh
-index 6af2ea3ad6b8..9c9d5b38ab71 100755
---- a/tools/testing/selftests/net/netfilter/ipvs.sh
-+++ b/tools/testing/selftests/net/netfilter/ipvs.sh
-@@ -151,7 +151,7 @@ test_nat() {
- test_tun() {
- 	ip netns exec "${ns0}" ip route add "${vip_v4}" via "${gip_v4}" dev br0
- 
--	ip netns exec "${ns1}" modprobe -q ipip
-+	modprobe -q ipip
- 	ip netns exec "${ns1}" ip link set tunl0 up
- 	ip netns exec "${ns1}" sysctl -qw net.ipv4.ip_forward=0
- 	ip netns exec "${ns1}" sysctl -qw net.ipv4.conf.all.send_redirects=0
-@@ -160,10 +160,10 @@ test_tun() {
- 	ip netns exec "${ns1}" ipvsadm -a -i -t "${vip_v4}:${port}" -r ${rip_v4}:${port}
- 	ip netns exec "${ns1}" ip addr add ${vip_v4}/32 dev lo:1
- 
--	ip netns exec "${ns2}" modprobe -q ipip
- 	ip netns exec "${ns2}" ip link set tunl0 up
- 	ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.arp_ignore=1
- 	ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.arp_announce=2
-+	ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.tunl0.rp_filter=0
- 	ip netns exec "${ns2}" ip addr add "${vip_v4}/32" dev lo:1
- 
- 	test_service
 -- 
-2.50.1
+2.46.0
 
 
