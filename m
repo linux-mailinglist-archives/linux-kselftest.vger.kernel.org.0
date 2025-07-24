@@ -1,145 +1,120 @@
-Return-Path: <linux-kselftest+bounces-37907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37908-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A82BB0FF77
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 06:12:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C06CB0FFBA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 06:55:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60473583727
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 04:12:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7581E4E5A01
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 04:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27F7D1EF09D;
-	Thu, 24 Jul 2025 04:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF891EA7DF;
+	Thu, 24 Jul 2025 04:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ik3yM+nT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eRM7d8aF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A045B1E9B35;
-	Thu, 24 Jul 2025 04:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0516A2E3706
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 04:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753330332; cv=none; b=DxoMqOKFPYBqybPZtT2+IhBuJ5twMi2GlAf0J5dfZ+rhmtDzx+fvzw+uqaEG8euw8o46Exq0IAQVUo2TcZM9tc1+iFV5sPe50SxTwdZCxb0a7WsweMBzMol4lQqDf9tMlET62aSMalx7NqzDUBk+Ab9FNQYZROQzAnOXw6M9Lrw=
+	t=1753332932; cv=none; b=Ts9MJ1f7Li5J7pWpyrCajLXNDOwhyOp5i+DPkBoU4ZglIUpmH7iRVv7PNpR47+Yf6gpqHRCP3of3+o/A0/ayVu/2oSL7cdhAgXC1375F9LE4BxBPCtAocWKPPEO8irdLCl+X7fASvI0H1mKitAm5ICKyxOm7LwD+4WIoEc2zBCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753330332; c=relaxed/simple;
-	bh=6VKMCH1Us1nM0K8CvkNqJ0TvwrTEUGLCkVM0LrzAHjU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CZv+L1jI5IuAfqklz3KpEUIN0wpGToWKBD6zCfQFGW10kCChE7lHCf0BUec30bJRfZoZnewRgf91p2UdIFy96ME7mTV0S6eHPfeuafx3yBoYQXPXONWwXVBpOpovg3fOp0DIad792jBuDTzjyzwfbIISmUEagCc+42pCin9Qhjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ik3yM+nT; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3134c67a173so528432a91.1;
-        Wed, 23 Jul 2025 21:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753330330; x=1753935130; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oWtqDkyX9ikR9LR827V7SFbtjO4Wh2UCgplUtKgRB6E=;
-        b=Ik3yM+nTTxyJPFgIcYo80PXEPzA1aPLRha0Y3mfRQz+tRFLtIvjUWvH72rEPdUebkV
-         Q7GCECiy3EBjp00c125XrM0sdh9UZMBNp70vHvJAbjAeXjRCbI6TFtfj1nTpwM0OheOm
-         WBffF7LKHw86xYPQ57ncIONLL585BkPxxIpAOkgOaOF5up38mg0EVgFk3TwaHClGOlUk
-         1VMD8DODWUvypxWcFlZgGJYGd+8j1aPMy+WpKEg9qGbdAf8/cjWeaLyKgjhn5VZokxgH
-         HrrzeKm68+fMjdq21Wdwv4sGSj8y0mfPBOOQ7+xfjMVq0iQ+B/CQoYJ++h96xQ+b7FpX
-         pthg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753330330; x=1753935130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oWtqDkyX9ikR9LR827V7SFbtjO4Wh2UCgplUtKgRB6E=;
-        b=vBY2oU0EqMh7m+SXHAIL6fl4iE9VfRs5z1UClIHDGxbMPlNEXzdnYzKQ+05VYJ7vZO
-         VDUr5EaIwc39gI4yTcs6p2Y46/ygAdMMW3KIM1+mPRBsV2NZULtf0XmRxOiLhX5xknRx
-         J4SGsVIwsEpQ5WSXY58lRzCVDQxR3QXP1nspVF8BcNkZkKMQceo8QoRqi88mNSIhvKHZ
-         T5QG9xm5j+cN5Vieicilfe2zp/V2EtUUO4EbDZGc8MzxauL3iQ4nrpmvI96TavwG6a5L
-         eKPP9VwH7p26QvBYW8yraSvnWi+PBVACRgeqL57zEeuz/F6EpupMAznpzIL5bak/BEg1
-         XcMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUeQkBx0EOuiCWvTVUuRjhSAP313OZ/jDHlbbw4+dP+bAhE82Kch2THQVE8/Pw994oYissJ7YfHsXo8jFkmqv6s@vger.kernel.org, AJvYcCXphLPY9KEoGE9KWer9Sf+uH3A9IzFT8q6phUSooDY7rC9QLuq0lhuqSAvCzx4qKKZhjbpULbjcpBI0rbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWL8OfWnYQPFe99b5E3M6Ls/3c6OlmbEexM/po2PjY/sv2BvIu
-	dRy8iysQIKHc6Un5zGAAFg+3+49T3I4uOVZBY65k4djrUzYHHEF4OqyP
-X-Gm-Gg: ASbGncuExrfAIK46cLXu5o1SAaGIW9Rzea8kTD9EkbpFlFgDpC5AhKTCsE1aIslEYLr
-	d2PWVPp0yGKotR9L3ttbrgOcII3mJiO7xyAZ887T5SSuIlhqOSPZQ8tHX/4PyMboKM3Guqif9GH
-	Ta1iWyJQvms3rKMxh9qDKec6VN/9VcaEXBXD2ysgudrrlJQTSg+3BNpvqB5tnuleZhjqqj0iadP
-	zM76jW3fpJKUiYSOQ1XBo6bksaQEXLjYqt8R1qpJJv/xOwu55AFZ3jSdDfH7Z/40jO929JKSxd8
-	erI5k9QvBoRzPUstY4pVTm3jKc/9m+whnm9NCeXkRD0MGGX0/Aqbd3UtvmGrp6phZ6skiEucpvE
-	1Su97S2QDX2VFpCloWMOZXT01FY8=
-X-Google-Smtp-Source: AGHT+IEeF2772Sf/TgusqVHhnfW6E7OxIs/UqdSMx7ltEelfqZKV9ssEHVr5i/X1kofub69Yr6nabA==
-X-Received: by 2002:a17:90b:4e90:b0:30e:3718:e9d with SMTP id 98e67ed59e1d1-31e507e84f0mr8587105a91.35.1753330329756;
-        Wed, 23 Jul 2025 21:12:09 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e6631a358sm264644a91.22.2025.07.23.21.12.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jul 2025 21:12:09 -0700 (PDT)
-Date: Thu, 24 Jul 2025 04:12:02 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
+	s=arc-20240116; t=1753332932; c=relaxed/simple;
+	bh=WBrmB23zqf17QstavV6HWjSUrFh/p2tqMwe3/b9u46A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DiMqQkBwttz6PAN+SB8n8z7Ay7FHNDizvwwH1ATxgLnBtTBXoKFITQTUV3fnhrv15EPustOODcurf+ye7JiWYDqEVXptcqpsq31EJ7Dm8jeMdyrs4lKR6SvgmVYYLJ1vXwLtM9oKl+nRfO6cEfUiHbjgxlExYLGLS8vV4oGtg8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eRM7d8aF; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1753332929;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6aGM+vPHWZhwm3WRlGCSLPtcgnNJ0f9Z26DvH8FdAxc=;
+	b=eRM7d8aF79nQJwFYqinj6D5qRQIKAV/2K2iBR9dPMuqrMFT04oyy8NLyyyMZ5H/RmDkcfG
+	YnXfaJQN4vOdIZrQIUTWpYVXV82clb3f/gjsa4EdtTFT98uWwN+qM1mbiTom1+EfPJPyOa
+	usijm2JEUXpuRJKLBxs+BEgezC+YFAk=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-689-m-jDCLADNiOYw7AmlQbZkA-1; Thu,
+ 24 Jul 2025 00:55:27 -0400
+X-MC-Unique: m-jDCLADNiOYw7AmlQbZkA-1
+X-Mimecast-MFC-AGG-ID: m-jDCLADNiOYw7AmlQbZkA_1753332926
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 97F4319560B0;
+	Thu, 24 Jul 2025 04:55:25 +0000 (UTC)
+Received: from xmu-thinkpadx1carbon3rd.raycom.csb (unknown [10.72.120.34])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CA41218002AF;
+	Thu, 24 Jul 2025 04:55:19 +0000 (UTC)
+From: Xiumei Mu <xmu@redhat.com>
+To: "David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 2/2] selftests: bonding: add test for passive LACP
- mode
-Message-ID: <aIGykkgqktjgLvVI@fedora>
-References: <20250709090344.88242-1-liuhangbin@gmail.com>
- <20250709090344.88242-3-liuhangbin@gmail.com>
- <6d4bbed3-472f-4002-abb9-47edf7743779@redhat.com>
- <aIGxI_ctF5RPEph8@fedora>
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Long Xin <lxin@redhat.com>,
+	Sabrina Dubroca <sd@queasysnail.net>
+Subject: [PATCH net] selftests: rtnetlink.sh: remove esp4_offload after test
+Date: Thu, 24 Jul 2025 12:55:02 +0800
+Message-ID: <238b803af900dfc5f87f6ddc03805cc42da2ca35.1753332902.git.xmu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aIGxI_ctF5RPEph8@fedora>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Thu, Jul 24, 2025 at 04:06:03AM +0000, Hangbin Liu wrote:
-> On Tue, Jul 15, 2025 at 11:37:54AM +0200, Paolo Abeni wrote:
-> > > diff --git a/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-> > > new file mode 100755
-> > > index 000000000000..4cf8a5999aaa
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-> > > @@ -0,0 +1,21 @@
-> > > +#!/bin/sh
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +#
-> > > +# Testing if bond works with lacp_active = off
-> > > +
-> > > +lib_dir=$(dirname "$0")
-> > > +source ${lib_dir}/bond_topo_lacp.sh
-> > 
-> > shellcheck is not super happy about 'source' usage:
-> > 
-> > In bond_passive_lacp.sh line 7:
-> > source ${lib_dir}/bond_topo_lacp.sh
-> > ^-- SC3046 (warning): In POSIX sh, 'source' in place of '.' is undefined.
-> > ^-- SC3051 (warning): In POSIX sh, 'source' in place of '.' is undefined.
-> > 
-> > either switch to '. ' or use bash instead of 'sh'.
-> 
-> Hi Paolo,
-> 
-> I updated the case and remove the source file bond_topo_lacp.sh.
-> Instead I source the forwarding lib directly like:
-> 
-> lib_dir=$(dirname "$0")
-> source "$lib_dir"/../../../net/forwarding/lib.sh
-> 
-> But this cause shell check unable to find the lib.sh as $lib_dir is get
-> dynamically. This usage is common in selftest. How should we resolves this
-> problem?
+The esp4_offload module, loaded during IPsec offload tests, should
+be reset to its default settings after testing.
+Otherwise, leaving it enabled could unintentionally affect subsequence
+test cases by keeping offload active.
 
-OK, I just disabled this warning.
+Fixes: 2766a11161cc ("selftests: rtnetlink: add ipsec offload API test")
+Signed-off-by: Xiumei Mu <xmu@redhat.com>
+---
+ tools/testing/selftests/net/rtnetlink.sh | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-# shellcheck disable=SC1091
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index 2e8243a65b50..5cc1b5340a1a 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -673,6 +673,11 @@ kci_test_ipsec_offload()
+ 	sysfsf=$sysfsd/ipsec
+ 	sysfsnet=/sys/bus/netdevsim/devices/netdevsim0/net/
+ 	probed=false
++	esp4_offload_probed_default=false
++
++	if lsmod | grep -q esp4_offload; then
++		esp4_offload_probed_default=true
++	fi
+ 
+ 	if ! mount | grep -q debugfs; then
+ 		mount -t debugfs none /sys/kernel/debug/ &> /dev/null
+@@ -766,6 +771,7 @@ EOF
+ 	fi
+ 
+ 	# clean up any leftovers
++	[ $esp4_offload_probed_default == false ] && rmmod esp4_offload
+ 	echo 0 > /sys/bus/netdevsim/del_device
+ 	$probed && rmmod netdevsim
+ 
+-- 
+2.50.1
 
-Hangbin
 
