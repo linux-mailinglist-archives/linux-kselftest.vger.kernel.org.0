@@ -1,121 +1,134 @@
-Return-Path: <linux-kselftest+bounces-37944-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE616B109F4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 14:15:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE86FB10B09
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 15:11:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5ED41C256BC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 12:16:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA82F584175
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 13:11:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 803CC254844;
-	Thu, 24 Jul 2025 12:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4222D63F7;
+	Thu, 24 Jul 2025 13:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dYjMU76V"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BB61TH7B"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180A58834;
-	Thu, 24 Jul 2025 12:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4AF2D5C9E
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 13:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753359345; cv=none; b=qLEvSZ7miENlPxUrZPHtxj04E0qKWrHA9Qo0JW9PmTl864MZ5ZMBfG305iTGoFVLgaq4rSR6sROW9tkUPY8nOpidj2v1QyvqFtDaFzxNnFO4FN7mwP8fZ/pkEZQyw8bXU1aWBIn1voxqeHABK/U25uQfFSn2c7wmhD2UMTwRj0s=
+	t=1753362667; cv=none; b=GMvqH7WRzFJD5UpkUflcQfFPjAZKQpT4qFBNMPgGgojudzQMKxRj8hHWxx5brblrZTWpgz91QcWMTLGjXGjhrqJGlfCY9TXF1fi7eDFZRIk4e0zZgeRF23AZUqZuuztwcgcXQ6t5OAruI50494+Si8W8KXmZrjLt/vqmJBxrKn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753359345; c=relaxed/simple;
-	bh=asfmr4rOQnvrw7yzut+6DJuDhK4w1DZ69L0O1PkbDFU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O0sUxtLyjg3Vy9hAgQ0GdQGI9XAYXV3ukBUYp8NWN0DTJVVcNEEOKzWPMty9I7OFV5CuGAblbEN8flQEOM6/VO5Vw4+P5gyYsoT89L14fybBtp3McUVpQrW3STb5DvrBgjpVPfdzovEgjhkM2cRSSzs+Zk1jq6nLC9DxA2jWgjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dYjMU76V; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-23636167b30so8095185ad.1;
-        Thu, 24 Jul 2025 05:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753359343; x=1753964143; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OHZQzmMWAwBPsuS3Psxa4083og+pE96ufIozoaGrWAo=;
-        b=dYjMU76VyyPJAwQcIkzH9hrWplRznR+O4VVCfcmNpRDwZ6y/kneuoH9ifvQ7MK2bjY
-         DdpJNoVLqW3iOsDPbp3vkZhNfZxM/e95pV9sELNTwMdPhUCq22jxE8hzWfgnwi3t4RMr
-         8vH8czrXHhGNMokSstNmL3v+KKr5cCFWEHS9DMj2wkgUGPorpq1jhok6+Z0H9OuA9D6G
-         6qrF//fSDcs57MTewU37jElvkXpDI7va93Z0V3L2hsJ7LXfw01jvFTmHQlQDGqhwPCGN
-         yeRzN+ueT1ZDrBc15ha4ccNPvlVGIf+zZammRFJANHB9RLYMK0P6VS5AoYdCbzwqOGuV
-         cHow==
+	s=arc-20240116; t=1753362667; c=relaxed/simple;
+	bh=keOlY8IaAAP4UK7nEyK2eSAQe1k4TUyTEO0v5TsdGIg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=uNnfBKpFOY7TRi1N3E8syxoiLkeGd56jeq+nH0rfJZfLQ900Nw6OMh4EJJeTOgrLxTRAIxMaQ7ixtgc5swq7LHpOu0wneWxiVOowr90qMhLkGDVgkn8EAu09kygG6W22jwslv9sbb07Ly0+GxXlANhlSJptaJ/Flr7HKH8oLKwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BB61TH7B; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1753362664;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DzMToL0msrSZ/KKMxmuznJBdXGU3S4ZL56R4KdRa7go=;
+	b=BB61TH7BPG1btsSu7D7dR3xBvBvLYcCcE/21W8XHYGHowQsP6fZS76T5cDEfNuIUreic+2
+	L9STSFrUeWtdrvWE7FyEzLvSGZYk1KzXNS2+iidFQXlxxYGILRY5gX2oo480mydDDrv4B3
+	e+fLceLxuc2atV+DaLHPxImnL70AGlQ=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-556-58BglqZwMYKjtI-dpCMDkA-1; Thu, 24 Jul 2025 09:11:03 -0400
+X-MC-Unique: 58BglqZwMYKjtI-dpCMDkA-1
+X-Mimecast-MFC-AGG-ID: 58BglqZwMYKjtI-dpCMDkA_1753362662
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3a4edf5bb4dso669562f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 06:11:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753359343; x=1753964143;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OHZQzmMWAwBPsuS3Psxa4083og+pE96ufIozoaGrWAo=;
-        b=uYIIYYTNIOvVICfIcDjyH8ty1kp0/FHr+w5+fEi//uK/l6RW4NJ3Qsf+4yqnVk+CLW
-         pu8o4LqLuRLb4zNE+sOMYoiLHgj+1eNTEZUW5z9StyjpUcMwgDZZLXGgBrn9zoWEQK3h
-         lnG2TAc/30OG21x9Bd/4aVdv7YuD0Y6RtKEbqUNCyS8bH3UdWXHNt7gmdVDKfXDIH1gZ
-         M8m2QqD9heIFoCIEZfdcEgDFqPYE4lAwKz8/iyFdMUumA8mCLfuHAj35zr9R24cUMphB
-         /IwEb3RRSVhizWT3Mk2Hf/CUEn4OwCyEmxdcR7jpLKTaRBTzYwReZ3Nvn6uqwyALtdrv
-         zlYA==
-X-Forwarded-Encrypted: i=1; AJvYcCVB/MHALpXUpFeznPvWlDvlt4IRDBZUKIw90k2NR9x0SXLaPmuNwsgPKpgVsyx3aww2yC451gsFTIonJd8wrbUb@vger.kernel.org, AJvYcCWY3Y5pB6+ivtsJnyyOtDM2TdtYsElvCVnFscbOzGJ0P1IAhqg/azSOSgZbfBRGQQGcEOl25yn0PUyXyck=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6yfiBOX2tf/TXdFmuMGWgvUbs8X0QwgaqIl5hGDKhaG2IPv0U
-	HOGZezh+iQetqblIDxaaE78hdJXEQ+lvt4BkmtdqRPmSMxVNFncqIflc
-X-Gm-Gg: ASbGncsH+7mmVy+SJ394HOuQYfHMAlHKEqAq/9vdVK/z3iXq41r7lseN9cLjzjS9QHl
-	ytMa95fFLkSuKyccLa+hhhBcLB4uBVG67Se5xoRPk8TRx258TNZnJFSt9bvUFnb44Z7L+9jwz+Y
-	qwCRbJrWKSWDP00FvCy+g4DjiOmx+t02aZ0GrKRjP+7yYRSRbUj6xoTrjpPdG989t7L7WDSLEdc
-	rp7fCbOPMVg3B+/+7EQzUYKxnRftiWfPy79Xn0oINE+A+u5j7wOoeguVDMb6cpU+94pEvaBRAWV
-	nhKy5udC0kEa+pBDkKaoDqS63ocfEfX87yAYwp/bDgW261GGdwsuj6/hV+oCKB78fqrjkGE4wiM
-	1t3n5WaFp25UCPtCa27oP5IrQvtk=
-X-Google-Smtp-Source: AGHT+IGCxsSCdGJq/UJPi8LRZwhEvL7R1RXDJmYIQXcKfr6IoRgEog1I3IfPKR0J9hC5TTE8Ru7/Wg==
-X-Received: by 2002:a17:902:e541:b0:23d:da5b:f819 with SMTP id d9443c01a7336-23f9818c63bmr106981765ad.12.1753359343190;
-        Thu, 24 Jul 2025 05:15:43 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fa475f83asm14756085ad.41.2025.07.24.05.15.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jul 2025 05:15:42 -0700 (PDT)
-Date: Thu, 24 Jul 2025 12:15:34 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jay Vosburgh <jv@jvosburgh.net>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/2] bonding: update ntt to true in passive mode
-Message-ID: <aIIj5v8E_CpQaDVP@fedora>
-References: <20250709090344.88242-1-liuhangbin@gmail.com>
- <20250709090344.88242-2-liuhangbin@gmail.com>
- <765825.1752639589@famine>
- <aIC5HrE9js_YtSCB@fedora>
- <309184.1753351073@vermin>
+        d=1e100.net; s=20230601; t=1753362662; x=1753967462;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DzMToL0msrSZ/KKMxmuznJBdXGU3S4ZL56R4KdRa7go=;
+        b=ReEWH2GApccL1Fn3ElNpdvNHsKP+heyUWFE2DUGN0ojEWwSfWBB/b1vHLeOWVOuvqK
+         yB4N8rNByPHnk5ZMewmBG1aZo2ftgKXe7gI+hDIe3mSVbTpHHTbgOWmnRZrRkBGdZDF0
+         stpXqG5oHNTe7huAhPs1AX/kBcKbTqhgvp4ifmnvqC69OqfPTccIkV4eGaZwziZhk+7e
+         QDPVxXobeeibglhWlqkrVNAy5Z8TkDtllhGQWjtO8B+hyJ1UrylbQKh4RkDm0DTfSOj9
+         /JjMN7O8K5kQKU2dyc9/2VhYS5L8Erh858BjR+t3jUVox4FcKPDpcHfpljb6GMHvng4z
+         TQ8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUHoBD/eq1J7/Rxd2Rvm9lZQMTT8SSeoyhHcwOpxFrcR+UHyjv9txTmVeNY4fYtpSLpsif0VvXkUCZ2xk+qoHg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg0+7Nug5aEYGue08AdDJcyJ7EDXFw0EUgHNw0lsM1fKZSjf85
+	5YEUe93PfkdAL3Ed3frmHNQF/c9yhIPdhKLGTT+mKD9vB8gGbi5hdL3+qUBMoYY1Tm0jrOlhtca
+	ZjCHQNJoK/+VZ9hnXut532T22s4alFBYHIzjZFfIq/Lk6+bwjrDgekWqN14bhnzmq1lK20w==
+X-Gm-Gg: ASbGncvINSN1QhCg4rkdZ13Vjfut3H0qCwNWdjVgk+YJk8SOkTKpX35kJZFNckxO6sJ
+	J1AmvCX4eJL9465+NA+LHjIy16CRvE4ff8Pcowm/0yIHmwR8oeUIZiJFrzRA4lrUJ2Dpl7rS4SZ
+	SdSiYwwmZnnnP/RdTQlkxT/uOOXq7XQv3O1+7hpajwhInRCpeusgcKsc+DHljy03Vhs5zIMCS9R
+	IYEhaUOzBfnBq9Hp04p7OA6hI5qs6jCLuQsc1gZBXSgwBUYYLBrR6yuuZpsoTJWL9che73efEJf
+	GqTUU1AnGBMCQ95MgQSut3fMDxAdgcizbMHjL0lwLJTZOj6x2o0/+IDtnhIqGifdj5fOJ9kQzqJ
+	NOThzfQsyCNU=
+X-Received: by 2002:a05:6000:40db:b0:3a6:d2ae:1503 with SMTP id ffacd0b85a97d-3b768ef6f18mr6952672f8f.34.1753362662162;
+        Thu, 24 Jul 2025 06:11:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF9uXjjqVyQTr1AvkZtxeDHHOZSkmpUhu0Uhy7GWwFd3tbgN6rpLR2iWPHM6a6vJBIw8pnGSQ==
+X-Received: by 2002:a05:6000:40db:b0:3a6:d2ae:1503 with SMTP id ffacd0b85a97d-3b768ef6f18mr6952627f8f.34.1753362661709;
+        Thu, 24 Jul 2025 06:11:01 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b76fcc3ccasm2177679f8f.80.2025.07.24.06.10.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Jul 2025 06:11:01 -0700 (PDT)
+Message-ID: <e79b4382-9421-498d-8b8c-6157ff070a34@redhat.com>
+Date: Thu, 24 Jul 2025 15:10:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <309184.1753351073@vermin>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 net-next 00/14] AccECN protocol patch series
+To: chia-yu.chang@nokia-bell-labs.com, edumazet@google.com,
+ linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+ dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+ kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+References: <20250722095931.24510-1-chia-yu.chang@nokia-bell-labs.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250722095931.24510-1-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 24, 2025 at 11:57:53AM +0200, Jay Vosburgh wrote:
-> 	FWIW, I usually reference the older standards 2008 or 2014, as
-> the 2020 edition changes a lot of things and bonding isn't necessarily
-> conformant to those changes (e.g., many of the state machines are
-> different in large or small ways).  Technically, the bonding
-> implementation was written to the pre-802.1AX standard when it was still
-> part of 802.3 (hence the name 802.3ad), clause 43.
+Hi,
+
+On 7/22/25 11:59 AM, chia-yu.chang@nokia-bell-labs.com wrote:
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 > 
-> 	This particular bit (the EXPIRED state actions) is the same,
-> but, for example, the transition test from EXPIRED to DEFAULTED is
-> different in the 2014 vs 2020 editions, and we need to be careful not to
-> implement the state machines piecemeal from different editions of the
-> standard.
+> Please find the v14 AccECN protocol patch series, which covers the core
+> functionality of Accurate ECN, AccECN negotiation, AccECN TCP options,
+> and AccECN failure handling. The Accurate ECN draft can be found in
+> https://datatracker.ietf.org/doc/html/draft-ietf-tcpm-accurate-ecn-28
+> 
+> This patch series is part of the full AccECN patch series, which is available at
+> https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
 
-Thanks for this info. I will download 2014 version and recheck my
-changes.
+I don't have any additional comments, but let's wait for Eric's review.
 
-Cheers
-Hangbin
+Also we are very far in the development cycle, likely this will have to
+be postponed to the next cycle.
+
+Thanks,
+
+Paolo
+
 
