@@ -1,50 +1,78 @@
-Return-Path: <linux-kselftest+bounces-37904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B231B0FE9A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 04:01:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E960B0FEE8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 04:44:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 610945881AC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 02:01:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 750D87A391A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 02:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 146D51D86DC;
-	Thu, 24 Jul 2025 02:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BDB61C6FF5;
+	Thu, 24 Jul 2025 02:44:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DT8YoktX"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZrEb3W8p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16D51D63C6;
-	Thu, 24 Jul 2025 02:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0DA1B4F0A
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 02:43:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753322427; cv=none; b=hwkPl2LEXJ3IVhKeieNBIufaCKOl4VE6DNsSkjGrKnPTwNibeWFzLxhT5ArgX0NCEBhj/8hmYm50PNJh+YEkI7vkpIyn/LieVtS7RSGee+09nB/ilnQWTQllGm1Ig8xVWM5FqrgZCtUlFOw9M5KYSANwgpBxBigLLCnag/INIxY=
+	t=1753325040; cv=none; b=IZxJPw4lE/o51zUVIIC8V8NiefDKyXriqARYdz1E2PMW5ticmho8QkRjMToBhXWXwNsoV2tjlfS/7e9YuGJB9JWuLHaUJXwGftmlSQ6mZE2m1KD0nQj3MG4cKxb4xKIr/vNk3KhYQqmio3WpF59oal4RetF6VKmK2r8g7FGbLzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753322427; c=relaxed/simple;
-	bh=vW1Y82bQz5Cnb0iD9jSF+gH9byMYZIWwv4s7PFcNCv4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cQKlRfIYAmCnkAdR/lYlvzMTt/3pJj1dWa/D6VQoNxnXv/rRTxwy3tbisddjmPkbdLFda59klOuUi1mC1TA1Psli7B5maMfKjNipABX+xVfj7pyxcFYVRsk/aplrb5I1mrBFZdh0vOBPxfxBXyV66WQ3jF9tcGavvsj1M5Cf7g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DT8YoktX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F455C4CEE7;
-	Thu, 24 Jul 2025 02:00:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753322426;
-	bh=vW1Y82bQz5Cnb0iD9jSF+gH9byMYZIWwv4s7PFcNCv4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=DT8YoktXzkQW9yfEzPUCG0UyswGa5KjG7w2pMnMkA1wacjof4OtSoyYF5Uwa2kUfX
-	 RzCsC0xMl1GAGgCDgGJW9rVY2gfbtBa7hAAu4L3p2f95kpMfU2B54yI7Gbq8UdIxPw
-	 FNOFgEDfhR1AfWKju2ypfeHJJsvmSj2CFuIdbSKAQN0be8i+qE42HdeNqGy43DepXP
-	 0k/0n3jcRAmBQFGv3us2zvxbuRxAmj4HWER+71apunJ41sIAU0IfbvnZJse20Fb307
-	 CsZKEVYpOyiMBWcK6TGBLbygGj8om8mls/HczCYRpmwR7qEbqgn+uzkD9bMunlbFCY
-	 6iOJW2Q6hHfBQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADC7F383BF4E;
-	Thu, 24 Jul 2025 02:00:45 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1753325040; c=relaxed/simple;
+	bh=sI5HoohiMh0dJoXH8Vn8sqbTfP+fPsv61JOjgpUYAGk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=acEiq5tEQNob1Q2CkGZSIlEIiZfQuYMJfAvsHPTOxTvU6s8gbNpd4icaHSYRoaNttz7t8GGX8n3KJtf7gVE/SDEq9CYntz8m3ZMVxxhKDnSAzVTvGcmUSOR47Q2Yaae1oRcVubeH/CFZQZUm9PM/1RYalCl3csN/gn7i2KhW+Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZrEb3W8p; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1753325037;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=W+z2/dCvz+mstswbVtlHckvv536KTI/pOMjzMb8SkxU=;
+	b=ZrEb3W8p39g7hIWvamnWUu6u8DxI08w/Oc5YvEG1I8+MsTOFdXZcpWRn6fjQ7+s3tcogSK
+	mB9wSx0gM+gDGN2EdjBzR3qntpAM7Vg9fsnjGVip64859S06JCSwlh1SKVwr4Jg4WC8SKs
+	ao5MD+uYlcWxhOHdHjQzt4x2lOKhuQk=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-474-AF4RkuWpMK6iofgrW7DZmQ-1; Wed,
+ 23 Jul 2025 22:43:52 -0400
+X-MC-Unique: AF4RkuWpMK6iofgrW7DZmQ-1
+X-Mimecast-MFC-AGG-ID: AF4RkuWpMK6iofgrW7DZmQ_1753325030
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 69375195FD06;
+	Thu, 24 Jul 2025 02:43:49 +0000 (UTC)
+Received: from yiche-laptop.redhat.com (unknown [10.72.112.178])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DEEFF195608D;
+	Thu, 24 Jul 2025 02:43:41 +0000 (UTC)
+From: Yi Chen <yiche@redhat.com>
+To: netdev@vger.kernel.org
+Cc: netfilter-devel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	pablo@netfilter.org,
+	kadlec@netfilter.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	horms@kernel.org,
+	coreteam@netfilter.org,
+	fw@strlen.de
+Subject: [PATCH] selftests: netfilter: ipvs.sh: Explicity disable rp_filter on interface tunl0
+Date: Thu, 24 Jul 2025 10:43:39 +0800
+Message-ID: <20250724024339.11799-1-yiche@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,65 +80,59 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v26 net-next 0/6] DUALPI2 patch
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175332244424.1844642.13296732935919605611.git-patchwork-notify@kernel.org>
-Date: Thu, 24 Jul 2025 02:00:44 +0000
-References: <20250722095915.24485-1-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20250722095915.24485-1-chia-yu.chang@nokia-bell-labs.com>
-To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
-Cc: alok.a.tiwari@oracle.com, pctammela@mojatatu.com, horms@kernel.org,
- donald.hunter@gmail.com, xandfury@gmail.com, netdev@vger.kernel.org,
- dave.taht@gmail.com, pabeni@redhat.com, jhs@mojatatu.com, kuba@kernel.org,
- stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- davem@davemloft.net, edumazet@google.com, andrew+netdev@lunn.ch,
- ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
- koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
- ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
- cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
- vidhi_goel@apple.com
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Hello:
+Although setup_ns() set net.ipv4.conf.default.rp_filter=0,
+loading certain module such as ipip will automatically create a tunl0 interface
+in all netns including new created ones, this in script is before than
+default.rp_filter=0 applied, as a result tunl0.rp_filter remains set to 1
+which causes the test report FAIL when ipip module is preloaded.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Before fix:
+Testing DR mode...
+Testing NAT mode...
+Testing Tunnel mode...
+ipvs.sh: FAIL
 
-On Tue, 22 Jul 2025 11:59:09 +0200 you wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> 
-> Hello,
-> 
->   Please find the DualPI2 patch v26.
-> 
->   This patch serise adds DualPI Improved with a Square (DualPI2) with following features:
-> * Supports congestion controls that comply with the Prague requirements in RFC9331 (e.g. TCP-Prague)
-> * Coupled dual-queue that separates the L4S traffic in a low latency queue (L-queue), without harming remaining traffic that is scheduled in classic queue (C-queue) due to congestion-coupling using PI2 as defined in RFC9332
-> * Configurable overload strategies
-> * Use of sojourn time to reliably estimate queue delay
-> * Supports ECN L4S-identifier (IP.ECN==0b*1) to classify traffic into respective queues
-> 
-> [...]
+After fix:
+Testing DR mode...
+Testing NAT mode...
+Testing Tunnel mode...
+ipvs.sh: PASS
 
-Here is the summary with links:
-  - [v26,net-next,1/6] sched: Struct definition and parsing of dualpi2 qdisc
-    https://git.kernel.org/netdev/net-next/c/320d031ad6e4
-  - [v26,net-next,2/6] sched: Dump configuration and statistics of dualpi2 qdisc
-    https://git.kernel.org/netdev/net-next/c/d4de8bffbef4
-  - [v26,net-next,3/6] sched: Add enqueue/dequeue of dualpi2 qdisc
-    https://git.kernel.org/netdev/net-next/c/8f9516daedd6
-  - [v26,net-next,4/6] selftests/tc-testing: Fix warning and style check on tdc.sh
-    https://git.kernel.org/netdev/net-next/c/51217c659e74
-  - [v26,net-next,5/6] selftests/tc-testing: Add selftests for qdisc DualPI2
-    https://git.kernel.org/netdev/net-next/c/032f0e9e15a4
-  - [v26,net-next,6/6] Documentation: netlink: specs: tc: Add DualPI2 specification
-    https://git.kernel.org/netdev/net-next/c/68db0ff2f76a
+Fixes: ("7c8b89ec5 selftests: netfilter: remove rp_filter configuration")
 
-You are awesome, thank you!
+Signed-off-by: Yi Chen <yiche@redhat.com>
+---
+ tools/testing/selftests/net/netfilter/ipvs.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/net/netfilter/ipvs.sh b/tools/testing/selftests/net/netfilter/ipvs.sh
+index 6af2ea3ad6b8..9c9d5b38ab71 100755
+--- a/tools/testing/selftests/net/netfilter/ipvs.sh
++++ b/tools/testing/selftests/net/netfilter/ipvs.sh
+@@ -151,7 +151,7 @@ test_nat() {
+ test_tun() {
+ 	ip netns exec "${ns0}" ip route add "${vip_v4}" via "${gip_v4}" dev br0
+ 
+-	ip netns exec "${ns1}" modprobe -q ipip
++	modprobe -q ipip
+ 	ip netns exec "${ns1}" ip link set tunl0 up
+ 	ip netns exec "${ns1}" sysctl -qw net.ipv4.ip_forward=0
+ 	ip netns exec "${ns1}" sysctl -qw net.ipv4.conf.all.send_redirects=0
+@@ -160,10 +160,10 @@ test_tun() {
+ 	ip netns exec "${ns1}" ipvsadm -a -i -t "${vip_v4}:${port}" -r ${rip_v4}:${port}
+ 	ip netns exec "${ns1}" ip addr add ${vip_v4}/32 dev lo:1
+ 
+-	ip netns exec "${ns2}" modprobe -q ipip
+ 	ip netns exec "${ns2}" ip link set tunl0 up
+ 	ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.arp_ignore=1
+ 	ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.arp_announce=2
++	ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.tunl0.rp_filter=0
+ 	ip netns exec "${ns2}" ip addr add "${vip_v4}/32" dev lo:1
+ 
+ 	test_service
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.50.1
 
 
