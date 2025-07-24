@@ -1,287 +1,195 @@
-Return-Path: <linux-kselftest+bounces-37934-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37935-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77D18B1034F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 10:20:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4033EB10363
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 10:22:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02F571CE2B2D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 08:18:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9139A161F1C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 08:20:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 953DF275B0E;
-	Thu, 24 Jul 2025 08:17:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F232749E0;
+	Thu, 24 Jul 2025 08:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e7ixM7ZV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h71r/Vgw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE46E275108;
-	Thu, 24 Jul 2025 08:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A612749CE
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 08:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753345044; cv=none; b=Q3XlFHo1XYcdG2yjo1848g48VQfBX1vEP93B/uT76c7uiEWo8oTZqm8I3f5z4uv55QUVJmjy4zJLrLBvprb/wzC4S+qMjUKtdCmb5iYrpixvxL1HYpCa9sHXm5C51U1k2oBWKmQ11QpF14Jk+Pwd6ZdIe0YUnMneDe52iS61+sU=
+	t=1753345248; cv=none; b=rNRBWJIk61lthQmqOH7ma016LmsF/VPnHLqQYAqB/0dXJMMQ0y08SXSNjciMJZGXEHNnxAdMxRc1TKHxMnXFKWPBWt0+m/i2GCVKnO79BNKu+uJQLiR1WKLlkjFXC2Wy8ZZIyDt3ZGdz+X79LwnriV5w6/msE26L+jArkAiyiCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753345044; c=relaxed/simple;
-	bh=MTLT+lV2JBdNmKXaYJ4ZG4ljY/MiMAjjGFtyVb/rW0I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ccgqWAoZA0uXlOPEgNEr60CiOwbHm8W/y/XSILdVIQ7Qtiy9x4etgR3CZBYyS1eId5hT+4QHwuniuKiYiGVE2JUipf/OMeksY6O24dayWQwNgJL4Onwjpk0rmRNd1lFLg6fqe7TzzVc25lrkYjs2gwvmzKk2BJGrwj6KiPZToVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e7ixM7ZV; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-75b5be236deso661534b3a.0;
-        Thu, 24 Jul 2025 01:17:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753345042; x=1753949842; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jij+PHwZT95YPs+MTYNdJ41MK7aCYN1i16ExsqGoWoA=;
-        b=e7ixM7ZVlAjk5muFRDwodYOauJ05EXCL3pSZmMfUSNtl8ZwkDp26SgJoNGd8gx9YyH
-         gWqE0Eh1IEfy+wwV3rm0FyGtd6rGsoJNzt4BR9GV7V3PoY73jWgkBlkZXXFJtYukdHFz
-         VHs7jWo/lRHVDFoCyEKf+ruKSYPCVLcwPdRFelUKHyGgZykin83QaMYW1fJwOuDICEYb
-         d+1YQb5rCWzz6beRGP3kco/V72KhYtXycHCNuP9b/zoiQgS2V4xCd4mtVTLZsp/S9rxw
-         NypvWZ2ZDCX8UgaaDcxQKp0E+AszQpgPjIKAWztA1E1AabH2BWU+a21LsJrN0fdC07LM
-         DRPA==
+	s=arc-20240116; t=1753345248; c=relaxed/simple;
+	bh=PY6FA72lx+rsHdWf/O1btP/hvDoM5PWlZyolAQrsaaw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WpLaI8qg0AZlM74SYVLW+HwiyX4NGY4jvPX4ZzT+x9UKZbthPH2Nk/TK4J2uiPR5mHo5CB+3SKN10Hyn+wWrCOA8y1cJO8qjDeUpGXPkxS0s7voDAAZQODvBXxnpnjfmf970UzmPB0PKUt7hgtUixgJo3V4Vv/StPW94RIdpx8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h71r/Vgw; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1753345245;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ty1Nmgr/yohBN38P9mzD5LZanNswcBU4P2JN0tNImlQ=;
+	b=h71r/VgwubB1cae1WsAI0QVWAvw0P3FY3VhTeFHD/2/ZtGgEV9w6WTyyn5ixpkec/LDXLD
+	7FxJuKGub+V1vWUiFlQPe1OhiYbvvdmETVOtcbZF+NpdAHzvdN1KBacDFhpI7yc+NAq2RH
+	qV9VOB9CjSOfo/3EpKgwurcpzbXPLvQ=
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
+ [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-538-O3wtJevrOVy78kUnfrXT4Q-1; Thu, 24 Jul 2025 04:20:44 -0400
+X-MC-Unique: O3wtJevrOVy78kUnfrXT4Q-1
+X-Mimecast-MFC-AGG-ID: O3wtJevrOVy78kUnfrXT4Q_1753345243
+Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-e8bc709c7daso890990276.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 01:20:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753345042; x=1753949842;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1753345243; x=1753950043;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jij+PHwZT95YPs+MTYNdJ41MK7aCYN1i16ExsqGoWoA=;
-        b=NykoKrv3uXh6gVWMRvoo3UUzd27J8YH9H0s21YbKb4jmXuaxTLS7cHzrTaAfm9mha+
-         U8Fq7oFE6z/yN8rf8qs/b3fOqrD/m2Va7xuBsrp3YdTOpTzmwlXlNmXAuAu+bMy1O8n1
-         Zmd0y8Kf+t7BQ15nG6f5DJefRuh5n0bdwI9BKFUxx+4uQGUJaaOAeIL+Sljlggd7fD5W
-         UZ4atULEWKN56sWGNZ2ajewSutz2VRJxhGALhHVBGImrcc22jadz2sMNUHsxowTh4yQU
-         K7B7ppzt81hDCNNp2Mo43E2ZMMDnZsvckBBSa9Dw9O3UjaK6sDN73PsXyZRliJRH7U4K
-         f7hw==
-X-Forwarded-Encrypted: i=1; AJvYcCWqoDyY/vBCZuidqgSWcvIAIQF67aUTZ8In4TtwQ9Zo7pazLbi9++2qMwLI+pLOnL24ALEoGpbaQkE=@vger.kernel.org, AJvYcCX7acDiWVeuuE0068cStlb85lCDgEtCQbXDBiE5s46YD6PufWMeJZDFCvDl9QUbCm0ktUCpOUDL7UtGBdh3/8Ca@vger.kernel.org, AJvYcCXhOEDP6jso1D2oExynthQ4QCbWg0uMpJ5BpoRsc/OMAjLedg19GxpyS5WLNDlNHh3S632E5uqrcDLDSRkc@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywy9OZEQ07XSqatCxtWnpZf0MtRIxn3KLVPCmJPVLxEfamjk149
-	nJqlO6QnVMQ2q5HrJBNuHGMBXVShSYMKeMWvUS/UDBwM4lXF8j38akL2DVQ14Ipy
-X-Gm-Gg: ASbGncvRGwiCpRRfDpUa7symkNM7g0rqPMNVdcatYpHjhp0iHd/aaour0xPcZZOlWN0
-	R2u5ZkiEycgl/DosWaLg8mrUlaJj+fMh0wyeSnGpjm5vI9yJg25g5cEzaUv9h+HVBCMw587b5qi
-	69W/I7+ABVa+YpWd8+ugp94zbTRDFVCDTf9iGU0qFPiqil+EVRBwRcniU85q/zBwHKY3kz5Aqu7
-	c19oFIkZ03B1N6MHiDo97IfOdLH5xVe/hIRq8jOn+VD34ZwxQ7YKZDrdVLW1Vi1VsOtiS+45SAB
-	4EcZ357k4Cb2v4uugQbpgJ/1ClxjkvP630GsHp4uF0KfCDBwqRchh9DhNgPDoyq/wOKzMJpP0po
-	g/RHWfSz1A2nogaTTekr79x2MlO3+/rOjhzxrJxe7vBcZbVk=
-X-Google-Smtp-Source: AGHT+IG7o3xn5h0i2rZGdHetDDcR0Hu2ewY93q2gD+ugrQIMAHSSbaUTHJHe7hr7X3bCbDKiAOPqSA==
-X-Received: by 2002:a05:6a00:a589:b0:747:aa79:e2f5 with SMTP id d2e1a72fcca58-76031771dd1mr8605525b3a.0.1753345041938;
-        Thu, 24 Jul 2025 01:17:21 -0700 (PDT)
-Received: from localhost.localdomain ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-761adb7bbeesm1074704b3a.24.2025.07.24.01.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jul 2025 01:17:21 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Petr Machata <petrm@nvidia.com>,
-	Amit Cohen <amcohen@nvidia.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Alessandro Zanni <alessandro.zanni87@gmail.com>,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 3/3] selftests: bonding: add test for LACP actor port priority
-Date: Thu, 24 Jul 2025 08:16:32 +0000
-Message-ID: <20250724081632.12921-4-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250724081632.12921-1-liuhangbin@gmail.com>
-References: <20250724081632.12921-1-liuhangbin@gmail.com>
+        bh=ty1Nmgr/yohBN38P9mzD5LZanNswcBU4P2JN0tNImlQ=;
+        b=rFwN8tQ2DhITOm7eKA807zmMQMlKwMfC2wOtafrNzdUgZUuVCZ/qmJOPwifEovniIC
+         ilqTUJOfmDrd6UGop+rSGBWXShbYhQLcwQtT7Bz9gbmstRjSG9RDyJbf3ANC0D3huGw/
+         PLWCEq8S981RgXwWW8v1llqs9UMRZgR9ibi2gP8lA9FOj3NTJzOKowJhmhQsz/rK1rgj
+         nkJB0Y4PoPBoeo5ELAMTPyuiMQH01wVQhOG+/jhpzQBD9u9Uqoqek/Hcr+szKiMuyMWJ
+         3dNovNPZi7hiWvVDw2W6sq02MaOVgHkT03ZyxCpk1jZbH4pkUcRyD1dCk4NY1vQ7XJCz
+         Aefw==
+X-Forwarded-Encrypted: i=1; AJvYcCXYb01Xt7/WbOyv0gRpb4rzefM29UE198iE5iRuU0bdJQS2BAZ9Scy/4BJDpNjkjv9A17qFfyzM6NuCvcNdAIQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWOvrxC1zPnRLkPZFU2ml+Op7NsmHim+IRfQoAeWdDUah+o5vm
+	wZmRxk3rs+eNwhfV9Y0GlGLQDlXxTMesRr+1nVe7Pxl9pIMJRYRSI3Y7jNjaiy/Zjm+B1+09nvM
+	ISihrQwoKZFJhM/Nph2RddhaP+ynUGYdOSkW5F21qnI19Fc7km+0K3sNYhcaglC+/ouUvk3DS8V
+	JQyweXBpAgYkmU/TZbrGw95ywxWucuHyZxE6f5aVarU41h
+X-Gm-Gg: ASbGnctfrqqsU34tisMnjLkgYVQv1sVnUbDARQgkC8KayK1jeogRmMe9mEsrCTbqqlM
+	Kln8Ey6I0miyypg9W3s8MaQywoz4Pk6ISJy0PCaL/oxXOhUttHIXIBrCLl4lRZIHQ8iiL0FaDi1
+	rEFun2TZz4pPFyYUXo52Nb+Q==
+X-Received: by 2002:a05:6902:310f:b0:e87:b33c:7981 with SMTP id 3f1490d57ef6-e8dc595b0abmr6776116276.33.1753345243438;
+        Thu, 24 Jul 2025 01:20:43 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHhtmOQZoG8MJqXUBbHZjrjfL2o69nkUHbskfHC38XgsD1gmsQVJ+5FqH2fq1iw+bluM/HBXchsFWiPGsWmksc=
+X-Received: by 2002:a05:6902:310f:b0:e87:b33c:7981 with SMTP id
+ 3f1490d57ef6-e8dc595b0abmr6776091276.33.1753345242975; Thu, 24 Jul 2025
+ 01:20:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <238b803af900dfc5f87f6ddc03805cc42da2ca35.1753332902.git.xmu@redhat.com>
+ <aIHRwwOl-FS8KOV0@fedora>
+In-Reply-To: <aIHRwwOl-FS8KOV0@fedora>
+From: Xiumei Mu <xmu@redhat.com>
+Date: Thu, 24 Jul 2025 16:20:31 +0800
+X-Gm-Features: Ac12FXzu1I7NXeznfsc628RU_1n_SK2CsVM_ZFesDKVFeRN_1fJs6j-4D1IwnIg
+Message-ID: <CADdRzaF5Ck86fyEYaeWjvoVt=8qEhNKJ8J3ye+x0cb9EATqQ7Q@mail.gmail.com>
+Subject: Re: [PATCH net] selftests: rtnetlink.sh: remove esp4_offload after test
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Long Xin <lxin@redhat.com>, 
+	Sabrina Dubroca <sd@queasysnail.net>, Shannon Nelson <sln@onemain.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a selftest to verify that per-port actor priority (ad_actor_port_prio)
-is correctly applied and affects aggregator selection as expected.
+resent the reply again with "plain text mode"
 
-Move cmd_jq from forwarding/lib.sh to net/lib.sh.
+On Thu, Jul 24, 2025 at 2:25=E2=80=AFPM Hangbin Liu <liuhangbin@gmail.com> =
+wrote:
+>
+> Hi Xiumei,
+> On Thu, Jul 24, 2025 at 12:55:02PM +0800, Xiumei Mu wrote:
+> > The esp4_offload module, loaded during IPsec offload tests, should
+> > be reset to its default settings after testing.
+> > Otherwise, leaving it enabled could unintentionally affect subsequence
+> > test cases by keeping offload active.
+>
+> Would you please show which subsequence test will be affected?
+>
+Any general ipsec case, which expects to be tested by default
+behavior(without offload).
+esp4_offload will affect the performance.
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- .../selftests/drivers/net/bonding/Makefile    |  3 +-
- .../drivers/net/bonding/bond_lacp_prio.sh     | 73 +++++++++++++++++++
- tools/testing/selftests/net/forwarding/lib.sh | 24 ------
- tools/testing/selftests/net/lib.sh            | 24 ++++++
- 4 files changed, 99 insertions(+), 25 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
+> >
+> > Fixes: 2766a11161cc ("selftests: rtnetlink: add ipsec offload API test"=
+)
+>
+> It would be good to Cc the fix commit author. You can use
+> `./scripts/get_maintainer.pl your_patch_file` to get the contacts you
+> need to Cc.
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-index 2b10854e4b1e..32617a834a6b 100644
---- a/tools/testing/selftests/drivers/net/bonding/Makefile
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -10,7 +10,8 @@ TEST_PROGS := \
- 	mode-2-recovery-updelay.sh \
- 	bond_options.sh \
- 	bond-eth-type-change.sh \
--	bond_macvlan_ipvlan.sh
-+	bond_macvlan_ipvlan.sh \
-+	bond_lacp_prio.sh
- 
- TEST_FILES := \
- 	lag_lib.sh \
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh b/tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
-new file mode 100755
-index 000000000000..a3f939d12143
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
-@@ -0,0 +1,73 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Testing if bond lacp per port priority works
-+
-+lib_dir=$(dirname "$0")
-+# shellcheck disable=SC1091
-+source "$lib_dir"/../../../net/lib.sh
-+
-+# create client, switch, backup switch netns
-+setup_ns c_ns s_ns b_ns
-+defer cleanup_all_ns
-+
-+# setup links
-+# shellcheck disable=SC2154
-+ip -n "${c_ns}" link add eth0 type veth peer name eth0 netns "${s_ns}"
-+ip -n "${c_ns}" link add eth1 type veth peer name eth1 netns "${s_ns}"
-+# shellcheck disable=SC2154
-+ip -n "${c_ns}" link add eth2 type veth peer name eth0 netns "${b_ns}"
-+ip -n "${c_ns}" link add eth3 type veth peer name eth1 netns "${b_ns}"
-+
-+ip -n "${c_ns}" link add bond0 type bond mode 802.3ad miimon 100 lacp_rate fast ad_select prio
-+ip -n "${s_ns}" link add bond0 type bond mode 802.3ad miimon 100 lacp_rate fast
-+ip -n "${b_ns}" link add bond0 type bond mode 802.3ad miimon 100 lacp_rate fast
-+
-+ip -n "${c_ns}" link set eth0 master bond0
-+ip -n "${c_ns}" link set eth1 master bond0
-+ip -n "${c_ns}" link set eth2 master bond0
-+ip -n "${c_ns}" link set eth3 master bond0
-+ip -n "${s_ns}" link set eth0 master bond0
-+ip -n "${s_ns}" link set eth1 master bond0
-+ip -n "${b_ns}" link set eth0 master bond0
-+ip -n "${b_ns}" link set eth1 master bond0
-+
-+ip -n "${c_ns}" link set bond0 up
-+ip -n "${s_ns}" link set bond0 up
-+ip -n "${b_ns}" link set bond0 up
-+
-+# set ad actor port priority, default 255
-+ip -n "${c_ns}" link set eth0 type bond_slave ad_actor_port_prio 1000
-+prio=$(cmd_jq "ip -n ${c_ns} -d -j link show eth0" ".[].linkinfo.info_slave_data.ad_actor_port_prio")
-+[ "$prio" -ne 1000 ] && RET=1
-+ip -n "${c_ns}" link set eth2 type bond_slave ad_actor_port_prio 10
-+prio=$(cmd_jq "ip -n ${c_ns} -d -j link show eth2" ".[].linkinfo.info_slave_data.ad_actor_port_prio")
-+[ "$prio" -ne 10 ] && RET=1
-+log_test "bond 802.3ad" "ad_actor_port_prio setting"
-+
-+# Trigger link state change to reselect the aggregator
-+ip -n "${c_ns}" link set eth1 down
-+ip -n "${c_ns}" link set eth1 up
-+# the active agg should be connect to switch
-+bond_agg_id=$(cmd_jq "ip -n ${c_ns} -d -j link show bond0" ".[].linkinfo.info_data.ad_info.aggregator")
-+eth0_agg_id=$(cmd_jq "ip -n ${c_ns} -d -j link show eth0" ".[].linkinfo.info_slave_data.ad_aggregator_id")
-+if [ "${bond_agg_id}" -ne "${eth0_agg_id}" ]; then
-+	RET=1
-+fi
-+
-+# Change the actor port prio and re-test
-+ip -n "${c_ns}" link set eth0 type bond_slave ad_actor_port_prio 10
-+ip -n "${c_ns}" link set eth2 type bond_slave ad_actor_port_prio 1000
-+# Trigger link state change to reselect the aggregator
-+ip -n "${c_ns}" link set eth1 down
-+ip -n "${c_ns}" link set eth1 up
-+# now the active agg should be connect to backup switch
-+bond_agg_id=$(cmd_jq "ip -n ${c_ns} -d -j link show bond0" ".[].linkinfo.info_data.ad_info.aggregator")
-+eth2_agg_id=$(cmd_jq "ip -n ${c_ns} -d -j link show eth2" ".[].linkinfo.info_slave_data.ad_aggregator_id")
-+# shellcheck disable=SC2034
-+if [ "${bond_agg_id}" -ne "${eth2_agg_id}" ]; then
-+	RET=1
-+fi
-+log_test "bond 802.3ad" "ad_actor_port_prio switch"
-+
-+exit "${EXIT_STATUS}"
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 508f3c700d71..09b63c6f3dbd 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -551,30 +551,6 @@ wait_for_dev()
-         fi
- }
- 
--cmd_jq()
--{
--	local cmd=$1
--	local jq_exp=$2
--	local jq_opts=$3
--	local ret
--	local output
--
--	output="$($cmd)"
--	# it the command fails, return error right away
--	ret=$?
--	if [[ $ret -ne 0 ]]; then
--		return $ret
--	fi
--	output=$(echo $output | jq -r $jq_opts "$jq_exp")
--	ret=$?
--	if [[ $ret -ne 0 ]]; then
--		return $ret
--	fi
--	echo $output
--	# return success only in case of non-empty output
--	[ ! -z "$output" ]
--}
--
- pre_cleanup()
- {
- 	if [ "${PAUSE_ON_CLEANUP}" = "yes" ]; then
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index 006fdadcc4b9..4c278829e04c 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -616,3 +616,27 @@ wait_local_port_listen()
- 		sleep 0.1
- 	done
- }
-+
-+cmd_jq()
-+{
-+	local cmd=$1
-+	local jq_exp=$2
-+	local jq_opts=$3
-+	local ret
-+	local output
-+
-+	output="$($cmd)"
-+	# it the command fails, return error right away
-+	ret=$?
-+	if [[ $ret -ne 0 ]]; then
-+		return $ret
-+	fi
-+	output=$(echo $output | jq -r $jq_opts "$jq_exp")
-+	ret=$?
-+	if [[ $ret -ne 0 ]]; then
-+		return $ret
-+	fi
-+	echo $output
-+	# return success only in case of non-empty output
-+	[ ! -z "$output" ]
-+}
--- 
-2.46.0
+I used the script to generate the cc list.
+and I double checked the old email of the author is invalid
+added his personal email in the cc list:
+
+Shannon Nelson <shannon.nelson@oracle.com>. -----> Shannon Nelson
+<sln@onemain.com>
+
+ get the information from here:
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=
+=3Da1113cefd7d6
+
+>
+> > Signed-off-by: Xiumei Mu <xmu@redhat.com>
+> > ---
+> >  tools/testing/selftests/net/rtnetlink.sh | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/s=
+elftests/net/rtnetlink.sh
+> > index 2e8243a65b50..5cc1b5340a1a 100755
+> > --- a/tools/testing/selftests/net/rtnetlink.sh
+> > +++ b/tools/testing/selftests/net/rtnetlink.sh
+> > @@ -673,6 +673,11 @@ kci_test_ipsec_offload()
+> >       sysfsf=3D$sysfsd/ipsec
+> >       sysfsnet=3D/sys/bus/netdevsim/devices/netdevsim0/net/
+> >       probed=3Dfalse
+> > +     esp4_offload_probed_default=3Dfalse
+> > +
+> > +     if lsmod | grep -q esp4_offload; then
+> > +             esp4_offload_probed_default=3Dtrue
+> > +     fi
+>
+> If the mode is loaded by default, how to avoid the subsequence test to be
+> failed?
+
+The module is not loaded by default, but some users or testers may
+need to load esp4_offload in their own environments.
+Therefore, resetting it to the default configuration is the best
+practice to prevent this self-test case from impacting subsequent
+tests
+
+>
+> >
+> >       if ! mount | grep -q debugfs; then
+> >               mount -t debugfs none /sys/kernel/debug/ &> /dev/null
+> > @@ -766,6 +771,7 @@ EOF
+> >       fi
+> >
+> >       # clean up any leftovers
+> > +     [ $esp4_offload_probed_default =3D=3D false ] && rmmod esp4_offlo=
+ad
+>
+> The new patch need to pass shellcheck. We need to double quote the variab=
+le.
+
+Thanks your comment, I will add double quote in patchv2
+
+>
+> Thanks
+> Hangbin
+> >       echo 0 > /sys/bus/netdevsim/del_device
+> >       $probed && rmmod netdevsim
+> >
+> > --
+> > 2.50.1
+> >
+>
 
 
