@@ -1,183 +1,121 @@
-Return-Path: <linux-kselftest+bounces-37943-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37944-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D029B1088C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 13:06:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE616B109F4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 14:15:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C9A77B4546
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 11:05:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5ED41C256BC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 12:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE6A826B747;
-	Thu, 24 Jul 2025 11:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 803CC254844;
+	Thu, 24 Jul 2025 12:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iA9dw+XV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dYjMU76V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA5026B2AD
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 11:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180A58834;
+	Thu, 24 Jul 2025 12:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753355198; cv=none; b=LGguWKM6eE4uQXir5XhZe+lYuZ2nratIspz8i70f1UBSLdGxGDEx67TadrPHo+PRYuaViF/Ux7EJ7LGeojVbWP4QphAbEsaKZ4TDKC/dJh4wdJ5rzHuIOMLHlrDSf26TwobUGMHsJenMNzgUDjOzJgm5LxN1N6mMYlgH5uGbmLs=
+	t=1753359345; cv=none; b=qLEvSZ7miENlPxUrZPHtxj04E0qKWrHA9Qo0JW9PmTl864MZ5ZMBfG305iTGoFVLgaq4rSR6sROW9tkUPY8nOpidj2v1QyvqFtDaFzxNnFO4FN7mwP8fZ/pkEZQyw8bXU1aWBIn1voxqeHABK/U25uQfFSn2c7wmhD2UMTwRj0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753355198; c=relaxed/simple;
-	bh=opm30Mzetdwrd7yWGQcLIe/0luJxPk8qFHzjfEF1aug=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g9zdDmqzSlkQiqDcYJeC8k2Ahnfyz+baV8BlEtyUEmICxw0s962tH08HdvX3oAIjPbwjby4pcy475LCsZVYb9Cpwfe8G7K3xR8sCy+KDy58wdPg6dndXWYTplRfgU1VMiyP7mBgKrltQ8QqMb3QtnotKOpzZmm94pu0W0noXPkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iA9dw+XV; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <94c81ecec7e0653705ba8c989ea4842783152232.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1753355193;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tWpGthS9MjyXwtp3VTshonwOqfoau0taDH5LLAGEf+s=;
-	b=iA9dw+XV++8/wyHEipuog15Fg6WUH8OAQvXjxWeuXg8SfjEVre/mhWhKC8eliNewXM0H0E
-	kHp4Tt1Yge+Sl9oW7brQ8IeSPAK42HMWd9YN2n6RiUw0zkyMNuzGFx3wxnQbMCkUWQQsM/
-	nppiSByRrILpas1x3pjbgJurWWRZoI8=
-Subject: Re: [PATCH bpf-next v3 3/4] selftests/bpf: Add selftest for
- attaching tracing programs to functions in deny list
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Yonghong Song <yonghong.song@linux.dev>, ast@kernel.org, 
- daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- kpsingh@kernel.org,  sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- mykolal@fb.com,  shuah@kernel.org, laoar.shao@gmail.com,
- linux-kernel@vger.kernel.org,  bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, leon.hwang@linux.dev
-Date: Thu, 24 Jul 2025 19:05:55 +0800
-In-Reply-To: <af8ceac7-851c-438d-8112-c1586427f58a@linux.dev>
-References: <20250722153434.20571-1-kafai.wan@linux.dev>
-	 <20250722153434.20571-4-kafai.wan@linux.dev>
-	 <af8ceac7-851c-438d-8112-c1586427f58a@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1753359345; c=relaxed/simple;
+	bh=asfmr4rOQnvrw7yzut+6DJuDhK4w1DZ69L0O1PkbDFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O0sUxtLyjg3Vy9hAgQ0GdQGI9XAYXV3ukBUYp8NWN0DTJVVcNEEOKzWPMty9I7OFV5CuGAblbEN8flQEOM6/VO5Vw4+P5gyYsoT89L14fybBtp3McUVpQrW3STb5DvrBgjpVPfdzovEgjhkM2cRSSzs+Zk1jq6nLC9DxA2jWgjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dYjMU76V; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-23636167b30so8095185ad.1;
+        Thu, 24 Jul 2025 05:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753359343; x=1753964143; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OHZQzmMWAwBPsuS3Psxa4083og+pE96ufIozoaGrWAo=;
+        b=dYjMU76VyyPJAwQcIkzH9hrWplRznR+O4VVCfcmNpRDwZ6y/kneuoH9ifvQ7MK2bjY
+         DdpJNoVLqW3iOsDPbp3vkZhNfZxM/e95pV9sELNTwMdPhUCq22jxE8hzWfgnwi3t4RMr
+         8vH8czrXHhGNMokSstNmL3v+KKr5cCFWEHS9DMj2wkgUGPorpq1jhok6+Z0H9OuA9D6G
+         6qrF//fSDcs57MTewU37jElvkXpDI7va93Z0V3L2hsJ7LXfw01jvFTmHQlQDGqhwPCGN
+         yeRzN+ueT1ZDrBc15ha4ccNPvlVGIf+zZammRFJANHB9RLYMK0P6VS5AoYdCbzwqOGuV
+         cHow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753359343; x=1753964143;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OHZQzmMWAwBPsuS3Psxa4083og+pE96ufIozoaGrWAo=;
+        b=uYIIYYTNIOvVICfIcDjyH8ty1kp0/FHr+w5+fEi//uK/l6RW4NJ3Qsf+4yqnVk+CLW
+         pu8o4LqLuRLb4zNE+sOMYoiLHgj+1eNTEZUW5z9StyjpUcMwgDZZLXGgBrn9zoWEQK3h
+         lnG2TAc/30OG21x9Bd/4aVdv7YuD0Y6RtKEbqUNCyS8bH3UdWXHNt7gmdVDKfXDIH1gZ
+         M8m2QqD9heIFoCIEZfdcEgDFqPYE4lAwKz8/iyFdMUumA8mCLfuHAj35zr9R24cUMphB
+         /IwEb3RRSVhizWT3Mk2Hf/CUEn4OwCyEmxdcR7jpLKTaRBTzYwReZ3Nvn6uqwyALtdrv
+         zlYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVB/MHALpXUpFeznPvWlDvlt4IRDBZUKIw90k2NR9x0SXLaPmuNwsgPKpgVsyx3aww2yC451gsFTIonJd8wrbUb@vger.kernel.org, AJvYcCWY3Y5pB6+ivtsJnyyOtDM2TdtYsElvCVnFscbOzGJ0P1IAhqg/azSOSgZbfBRGQQGcEOl25yn0PUyXyck=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6yfiBOX2tf/TXdFmuMGWgvUbs8X0QwgaqIl5hGDKhaG2IPv0U
+	HOGZezh+iQetqblIDxaaE78hdJXEQ+lvt4BkmtdqRPmSMxVNFncqIflc
+X-Gm-Gg: ASbGncsH+7mmVy+SJ394HOuQYfHMAlHKEqAq/9vdVK/z3iXq41r7lseN9cLjzjS9QHl
+	ytMa95fFLkSuKyccLa+hhhBcLB4uBVG67Se5xoRPk8TRx258TNZnJFSt9bvUFnb44Z7L+9jwz+Y
+	qwCRbJrWKSWDP00FvCy+g4DjiOmx+t02aZ0GrKRjP+7yYRSRbUj6xoTrjpPdG989t7L7WDSLEdc
+	rp7fCbOPMVg3B+/+7EQzUYKxnRftiWfPy79Xn0oINE+A+u5j7wOoeguVDMb6cpU+94pEvaBRAWV
+	nhKy5udC0kEa+pBDkKaoDqS63ocfEfX87yAYwp/bDgW261GGdwsuj6/hV+oCKB78fqrjkGE4wiM
+	1t3n5WaFp25UCPtCa27oP5IrQvtk=
+X-Google-Smtp-Source: AGHT+IGCxsSCdGJq/UJPi8LRZwhEvL7R1RXDJmYIQXcKfr6IoRgEog1I3IfPKR0J9hC5TTE8Ru7/Wg==
+X-Received: by 2002:a17:902:e541:b0:23d:da5b:f819 with SMTP id d9443c01a7336-23f9818c63bmr106981765ad.12.1753359343190;
+        Thu, 24 Jul 2025 05:15:43 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fa475f83asm14756085ad.41.2025.07.24.05.15.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jul 2025 05:15:42 -0700 (PDT)
+Date: Thu, 24 Jul 2025 12:15:34 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jay Vosburgh <jv@jvosburgh.net>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 1/2] bonding: update ntt to true in passive mode
+Message-ID: <aIIj5v8E_CpQaDVP@fedora>
+References: <20250709090344.88242-1-liuhangbin@gmail.com>
+ <20250709090344.88242-2-liuhangbin@gmail.com>
+ <765825.1752639589@famine>
+ <aIC5HrE9js_YtSCB@fedora>
+ <309184.1753351073@vermin>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <309184.1753351073@vermin>
 
-On Wed, 2025-07-23 at 09:42 -0700, Yonghong Song wrote:
->=20
->=20
-> On 7/22/25 8:34 AM, KaFai Wan wrote:
-> > The result:
-> >=20
-> > =C2=A0 $ tools/testing/selftests/bpf/test_progs -t
-> > tracing_failure/tracing_deny
-> > =C2=A0 #468/3=C2=A0=C2=A0 tracing_failure/tracing_deny:OK
-> > =C2=A0 #468=C2=A0=C2=A0=C2=A0=C2=A0 tracing_failure:OK
-> > =C2=A0 Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
-> >=20
-> > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
->=20
-> LGTM but see a nit below.
->=20
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
->=20
-> > ---
-> > =C2=A0 .../bpf/prog_tests/tracing_failure.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 33
-> > +++++++++++++++++++
-> > =C2=A0 .../selftests/bpf/progs/tracing_failure.c=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0 6 ++++
-> > =C2=A0 2 files changed, 39 insertions(+)
-> >=20
-> > diff --git
-> > a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-> > b/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-> > index a222df765bc3..140fb0d175cf 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-> > @@ -28,10 +28,43 @@ static void test_bpf_spin_lock(bool
-> > is_spin_lock)
-> > =C2=A0=C2=A0	tracing_failure__destroy(skel);
-> > =C2=A0 }
-> > =C2=A0=20
-> > +static void test_tracing_deny(void)
-> > +{
-> > +	struct tracing_failure *skel;
-> > +	char log_buf[256];
-> > +	int btf_id, err;
-> > +
-> > +	/* migrate_disable depends on CONFIG_SMP */
-> > +	btf_id =3D libbpf_find_vmlinux_btf_id("migrate_disable",
-> > BPF_TRACE_FENTRY);
-> > +	if (btf_id <=3D 0) {
-> > +		test__skip();
-> > +		return;
-> > +	}
->=20
-> There is a discussion about inlining migrate_disable(). See
-> =C2=A0=C2=A0
-> https://lore.kernel.org/bpf/CAADnVQ+Afov4E=3D9t=3D3M=3DzZmO9z4ZqT6imWD5xi=
-jDHshTf3J=3DRA@mail.gmail.com/
->=20
-> Maybe trying to find a different function? Otherwise, if
-> migrate_disable
-> is inlined and this test will become useless.
->=20
-Okey, I will use __rcu_read_lock() instead.
-> > +
-> > +	skel =3D tracing_failure__open();
-> > +	if (!ASSERT_OK_PTR(skel, "tracing_failure__open"))
-> > +		return;
-> > +
-> > +	bpf_program__set_autoload(skel->progs.tracing_deny, true);
-> > +	bpf_program__set_log_buf(skel->progs.tracing_deny,
-> > log_buf, sizeof(log_buf));
-> > +
-> > +	err =3D tracing_failure__load(skel);
-> > +	if (!ASSERT_ERR(err, "tracing_failure__load"))
-> > +		goto out;
-> > +
-> > +	ASSERT_HAS_SUBSTR(log_buf,
-> > +			=C2=A0 "Attaching tracing programs to function
-> > 'migrate_disable' is rejected.",
-> > +			=C2=A0 "log_buf");
-> > +out:
-> > +	tracing_failure__destroy(skel);
-> > +}
-> > +
-> > =C2=A0 void test_tracing_failure(void)
-> > =C2=A0 {
-> > =C2=A0=C2=A0	if (test__start_subtest("bpf_spin_lock"))
-> > =C2=A0=C2=A0		test_bpf_spin_lock(true);
-> > =C2=A0=C2=A0	if (test__start_subtest("bpf_spin_unlock"))
-> > =C2=A0=C2=A0		test_bpf_spin_lock(false);
-> > +	if (test__start_subtest("tracing_deny"))
-> > +		test_tracing_deny();
-> > =C2=A0 }
-> > diff --git a/tools/testing/selftests/bpf/progs/tracing_failure.c
-> > b/tools/testing/selftests/bpf/progs/tracing_failure.c
-> > index d41665d2ec8c..dfa152e8194e 100644
-> > --- a/tools/testing/selftests/bpf/progs/tracing_failure.c
-> > +++ b/tools/testing/selftests/bpf/progs/tracing_failure.c
-> > @@ -18,3 +18,9 @@ int BPF_PROG(test_spin_unlock, struct
-> > bpf_spin_lock *lock)
-> > =C2=A0 {
-> > =C2=A0=C2=A0	return 0;
-> > =C2=A0 }
-> > +
-> > +SEC("?fentry/migrate_disable")
-> > +int BPF_PROG(tracing_deny)
-> > +{
-> > +	return 0;
-> > +}
->=20
+On Thu, Jul 24, 2025 at 11:57:53AM +0200, Jay Vosburgh wrote:
+> 	FWIW, I usually reference the older standards 2008 or 2014, as
+> the 2020 edition changes a lot of things and bonding isn't necessarily
+> conformant to those changes (e.g., many of the state machines are
+> different in large or small ways).  Technically, the bonding
+> implementation was written to the pre-802.1AX standard when it was still
+> part of 802.3 (hence the name 802.3ad), clause 43.
+> 
+> 	This particular bit (the EXPIRED state actions) is the same,
+> but, for example, the transition test from EXPIRED to DEFAULTED is
+> different in the 2014 vs 2020 editions, and we need to be careful not to
+> implement the state machines piecemeal from different editions of the
+> standard.
 
---=20
-Thanks,
-KaFai
+Thanks for this info. I will download 2014 version and recheck my
+changes.
+
+Cheers
+Hangbin
 
