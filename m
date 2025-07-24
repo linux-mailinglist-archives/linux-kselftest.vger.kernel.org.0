@@ -1,119 +1,153 @@
-Return-Path: <linux-kselftest+bounces-37955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9B38B110D5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 20:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2397B11150
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 21:00:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A28C23AA367
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 18:25:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D41EAE4D58
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 18:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF9E2EBDD7;
-	Thu, 24 Jul 2025 18:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3142ED15C;
+	Thu, 24 Jul 2025 19:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VzrLbIo/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MDbbsQXz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5C72EBB81
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 18:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE6A2ED14F
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 18:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753381585; cv=none; b=V0Gs4V9O2dPQBjnQ4zykwKw2u6GmA7W3106euLCdBQQviNQ1qwVlRSDGyQQrw6wzHMpiw/oo5iYtK4hQiS2ySHr1Tyw/b0FgoOf4sWv3PMU5L6KJnu0MNnpIjOfYhkrOCWIT3U9tYxkcJr3691uNGW+heuN5xRWJS33Y/6CZPv8=
+	t=1753383602; cv=none; b=qUu7abZ0DzkUONaVIvBbP0QhT7NS/bAtv1VVXL9nFVvJ4X+k/tQ2FJ6aVOoOLMszeXUBeUYT/GBToTrV/gg5pFhC1EVp2WLCt6GNOhiaQ/vzPDKncyELIyUBbjPyuxnAO+EZAGS8IMV0feYckGc1SZnrWi6vgWbX10f78X+g3t4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753381585; c=relaxed/simple;
-	bh=TXNQ1dQYoFfA5ydiwjnJAvHRo1WgmH9K/hwSeP3YA1E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ubRR4Z9MgjZvgliasjHrX2s9nNXhMwxUEQBsi3GpFy5lq7L2R57tHl9xWzY5OEj94EUkZnfayC8qMW3vWhp0Ji4QkxSkNu9WINlAk13u+AgCRMDi0WUQM7mKiqGGPU9drPYETEAwJD0bXc3Sbrfjft/Xr2S6zvlYeiTsOGPYq98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VzrLbIo/; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3ddd2710d14so10016485ab.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 11:26:23 -0700 (PDT)
+	s=arc-20240116; t=1753383602; c=relaxed/simple;
+	bh=w3B6eMOHBjLahJirDSZ+qk4aNUA7eTY19kZ8xkUuHVM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ndNDs6XNewcFlMloIW15e3NfPRTtHAEu71DHA+h/HvXkvmrTAAF7lJO0S7R0scbpY/VnWAXlMWtu5NgL59mwxKgoXaqRCALPJzhjtyqz64+xLrAZmKaNCoXx1bT0ovNbJfqS3nuhuxr5Ya6HLFtRxiWiZ79bnr/B3CyEgTiA3WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MDbbsQXz; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-31cb5cc3edcso1233729a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 11:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1753381582; x=1753986382; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JP/Q9c1F0J5OzCcFyiKpcsCDFDVLpA+plFcxQ8cGq2k=;
-        b=VzrLbIo/M5f/x1QHBKiT1A25YoW6GtYUkFAEJr/WY9drHPN9TnWHE+0M+H59Sr8WPD
-         Sxdons+LLO7x3xKTST623W2+ZsnmFXtSLbirnLyagkuioCJ6/erjou7e3l+/pKbZT7WW
-         JZnG3VBXA/AiJou5cy4gZtAHZUrZQmDtI13sU=
+        d=google.com; s=20230601; t=1753383599; x=1753988399; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0tolIyg+onFM/Vs+iMbCZXFo1uDxs6ZbvglnTYfZXx4=;
+        b=MDbbsQXz7SrhjWMZtLw+00dvixeovCdUXkMAdtUcPQ95XFzNEEa/3o///0vaxQ5VJ1
+         X1NWrVjZPYnqDnD/pXyXhsJG7bJA+YkW9wYf2o4cJ2JLIB67pMTtylQt/pLYzugU8oMg
+         yOlP9dyf4gOrKc/iY09qha1qK5NNjTXPf3uDOk9Rhaf1YwIgYqWo2n7i2Il5dmlDZlwJ
+         7h0Nm5Woa9hMcbcWyrYVALMTT5ak1YTUJyxkblu5tdiT9SQ1vBcSB+BCR9WIeSj9ftrC
+         lRMVlJzf97T0o+7NoIEYTN+uPiWcA2oLu9Bkt9vcNlq1ymCqRbH9gf5ia31xNlXc7emZ
+         Rjvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753381582; x=1753986382;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JP/Q9c1F0J5OzCcFyiKpcsCDFDVLpA+plFcxQ8cGq2k=;
-        b=k7YlSwQjonWE81Qubi+BCsnu04ZYUW3RbO2xSsRzqBpGTs5FkDFtzNKWMX/cGleVkN
-         9JMvbUngTS6KqC+HD1Ig/bie1czzFXxmf2Z7uMgWRxDeVBV/yq8ZZXkxRwJm2yb2y83Y
-         u4cgB941WimAUlnjdbLW+KxsLI/UT1/LXI4pZUV5FcpLKyPYjsad6wxajEsxtmO11saI
-         OQ5l3QG1ivaM98Bp48RWmOyeR6Odvozszafv4jwPUhGuAgdQY4DE+ytz0hjGCXBzA1Ez
-         9auwIAxmSrWim8/C1cuKMxvmW7lwgkt8pPwhEYkpt7m95aHQFEbxxJoBAh8jI6ljBRo9
-         pnDw==
-X-Forwarded-Encrypted: i=1; AJvYcCWCQLIJ87WqgkzjXcJtdJTTAxEoaXHxDc40wIOUehQa+2sSKCEQIqdnH8fcWhga7MuZ72rt6ubozzpZiL1hiDM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydZlbIAgJyZqB24GEBRVMtMsXOrNUpzoFZl2UeOxBiqxnBYrFR
-	wpp+3OojWzp0/WITi/psqAJlQkF6WXXXvofPCyOU2/CO/T4M4vifwR+Wfl6QO9dlYHY=
-X-Gm-Gg: ASbGncsbZSoog8RZO5ENInZK2DJywAei4LQT/QIqRH4Qo5TYxEFYpEqGGBbOLzP+T3/
-	9DE4naL5cLavt/uSw/8+nyDz686+7AzCh9hN/RRKcR5d5T122RMlSltDrxJRzPoZoRzm+NfOHUv
-	/cYOxdOoVs9S9jp0QxwbTMdmvyFA7dWWFEH57kJ1RZqGAFtRXY4Ibcvxbm5zFS73pQ1d3craBFm
-	q38zKHPiL5UhBi2NusTRIW+205jifV25PBbqRL+TFmdtoWoLkFKYw8mi/7ElW60S6gsrHL4+Lpk
-	yo0WpvNQOrxqTcikXsLKS814CKjY6UzLl5jerCjdOa9n9gLcejPaDF6JgXM2i2C72qezp1ea0iP
-	uXnAnBJ9vJNzRZhQzi9zDfrMe4MCPa18stA==
-X-Google-Smtp-Source: AGHT+IGxGg2PimE89nzDS27+nd+r7DTRhNNw6kwLpoYVpMTkB9Sco1x4a5uD4TwwRC93Q4bw645b2g==
-X-Received: by 2002:a05:6e02:338e:b0:3e2:9bc2:8be7 with SMTP id e9e14a558f8ab-3e3354de804mr125742155ab.10.1753381582336;
-        Thu, 24 Jul 2025 11:26:22 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3e3b7012bb0sm7810905ab.0.2025.07.24.11.26.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jul 2025 11:26:21 -0700 (PDT)
-Message-ID: <90c793c3-91fd-4808-8fea-cbd07d2098e0@linuxfoundation.org>
-Date: Thu, 24 Jul 2025 12:26:21 -0600
+        d=1e100.net; s=20230601; t=1753383599; x=1753988399;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0tolIyg+onFM/Vs+iMbCZXFo1uDxs6ZbvglnTYfZXx4=;
+        b=PPCoxM8ekMTSkQ7M4thbGhVduYeraQ4Tlg+uahZHD90/pRcCVhAPtuONYGLtG2DkNO
+         zMuoRqXzkZASzoG7T6jZDuv96RqGymZqs+tjK8PKWZliKM6+miQNvSV1vdBBIgJ0sxRY
+         Tsxjx+iJmutlE5HT9XH4VRp6FnxxPgSBMAtrjQSOVBB67dcnCKFwnJ5KPwRJmjOU8mDs
+         seUx4anBsSLRwRszEedjNT17h87B6FFY8MSswsZcK5ObEDsRe3AmbQ4jVtD3b6R2WarK
+         gTSYMuiUF4Txt0SRDy248O1umVsitDgd9FK9NwcvoCJ2K6cHkyHbPvC7uQjywUTOkTud
+         6GKg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/jsOrzle3te2nf6YApbmpajjDmv3nvdDVjgDyhJ/qo0dBsYV0158eQg9p+tFGtVXjCfDiLXFcpBQ0bH3DWTI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw95gCpkxR2F5IwaXMZM2adpsEWxAMOzRo3r+15p3TX2i2bXNxG
+	LfYOBUU9aKY1BLoUuB4FLJePE0EyNnS2mGuKDkGB32ROIamUvISOeHrW6DsbfBN1IUnOsJ65kvX
+	A3TKy9U3FhQbo9Q==
+X-Google-Smtp-Source: AGHT+IHdSmYA7tBV+nhnrXBegpyUFMJCJUqsFgS7Y3VIienq0ec66CAODnssF5FCA5QAA0NO/7OfjfuiK5hPRw==
+X-Received: from pjbsp12.prod.google.com ([2002:a17:90b:52cc:b0:312:1af5:98c9])
+ (user=cmllamas job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:4e88:b0:313:5d2f:54f8 with SMTP id 98e67ed59e1d1-31e507e916emr10640089a91.33.1753383599400;
+ Thu, 24 Jul 2025 11:59:59 -0700 (PDT)
+Date: Thu, 24 Jul 2025 18:58:58 +0000
+In-Reply-To: <20250724185922.486207-1-cmllamas@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/pidfd: Fix duplicate-symbol warnings for
- SCHED_ CPP symbols
-To: paulmck@kernel.org
-Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <5b53702c-0dab-46c4-9cb0-448b4da36c2e@paulmck-laptop>
- <f82e3092-31ab-4ceb-a51f-208d13e7b2ec@linuxfoundation.org>
- <dbb9ca63-15d5-4547-beb4-5c4044938967@paulmck-laptop>
- <cc7e4fe7-299f-4bf3-af46-df6551d61997@paulmck-laptop>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <cc7e4fe7-299f-4bf3-af46-df6551d61997@paulmck-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20250724185922.486207-1-cmllamas@google.com>
+X-Mailer: git-send-email 2.50.1.470.g6ba607880d-goog
+Message-ID: <20250724185922.486207-5-cmllamas@google.com>
+Subject: [PATCH v18 4/5] binder: add transaction_report feature entry
+From: Carlos Llamas <cmllamas@google.com>
+To: Alice Ryhl <aliceryhl@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>, Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Christian Brauner <brauner@kernel.org>, 
+	Carlos Llamas <cmllamas@google.com>, Suren Baghdasaryan <surenb@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Li Li <dualli@google.com>, Yu-Ting Tseng <yutingtseng@google.com>, 
+	Ba Jing <bajing@cmss.chinamobile.com>
+Cc: Tiffany Yang <ynaffit@google.com>, John Stultz <jstultz@google.com>, 
+	Shai Barack <shayba@google.com>, "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, kernel-team@android.com, 
+	"open list:ANDROID DRIVERS" <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 7/23/25 17:13, Paul E. McKenney wrote:
-> The pidfd selftests run in userspace and include both userspace and kernel
-> header files.  On some distros (for example, CentOS), this results in
-> duplicate-symbol warnings in allmodconfig builds, while on other distros
-> (for example, Ubuntu) it does not.
-> 
-> Therefore, use #undef to get rid of the userspace definitions in favor
-> of the kernel definitions.
-> 
-> Other ways of handling this include splitting up the selftest code so
-> that the userspace definitions go into one translation unit and the
-> kernel definitions into another (which might or might not be feasible)
-> or to adjust compiler command-line options to suppress the warnings
-> (which might or might not be desirable).
-> 
-> [ paulmck: Apply Shuah Khan feedback. ]
+From: Li Li <dualli@google.com>
 
-Looks good to me.
+Add "transaction_report" to the binderfs feature list, to help userspace
+determine if the "BINDER_CMD_REPORT" generic netlink api is supported by
+the binder driver.
 
-thanks,
--- Shuah
+Signed-off-by: Li Li <dualli@google.com>
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+---
+ drivers/android/binderfs.c                                | 8 ++++++++
+ .../selftests/filesystems/binderfs/binderfs_test.c        | 1 +
+ 2 files changed, 9 insertions(+)
+
+diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+index 4f827152d18e..f74a7e380261 100644
+--- a/drivers/android/binderfs.c
++++ b/drivers/android/binderfs.c
+@@ -59,6 +59,7 @@ struct binder_features {
+ 	bool oneway_spam_detection;
+ 	bool extended_error;
+ 	bool freeze_notification;
++	bool transaction_report;
+ };
+ 
+ static const struct constant_table binderfs_param_stats[] = {
+@@ -76,6 +77,7 @@ static struct binder_features binder_features = {
+ 	.oneway_spam_detection = true,
+ 	.extended_error = true,
+ 	.freeze_notification = true,
++	.transaction_report = true,
+ };
+ 
+ static inline struct binderfs_info *BINDERFS_SB(const struct super_block *sb)
+@@ -616,6 +618,12 @@ static int init_binder_features(struct super_block *sb)
+ 	if (IS_ERR(dentry))
+ 		return PTR_ERR(dentry);
+ 
++	dentry = binderfs_create_file(dir, "transaction_report",
++				      &binder_features_fops,
++				      &binder_features.transaction_report);
++	if (IS_ERR(dentry))
++		return PTR_ERR(dentry);
++
+ 	return 0;
+ }
+ 
+diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+index 81db85a5cc16..39a68078a79b 100644
+--- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
++++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+@@ -65,6 +65,7 @@ static int __do_binderfs_test(struct __test_metadata *_metadata)
+ 		"oneway_spam_detection",
+ 		"extended_error",
+ 		"freeze_notification",
++		"transaction_report",
+ 	};
+ 
+ 	change_mountns(_metadata);
+-- 
+2.50.1.470.g6ba607880d-goog
+
 
