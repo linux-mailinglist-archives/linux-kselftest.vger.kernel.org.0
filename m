@@ -1,134 +1,151 @@
-Return-Path: <linux-kselftest+bounces-37945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37946-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE86FB10B09
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 15:11:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C723B10C32
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 15:54:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA82F584175
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 13:11:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5EA8B7BA7BF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Jul 2025 13:53:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4222D63F7;
-	Thu, 24 Jul 2025 13:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BB61TH7B"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309B02E0910;
+	Thu, 24 Jul 2025 13:53:23 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4AF2D5C9E
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 13:11:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7E42DCF5F;
+	Thu, 24 Jul 2025 13:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753362667; cv=none; b=GMvqH7WRzFJD5UpkUflcQfFPjAZKQpT4qFBNMPgGgojudzQMKxRj8hHWxx5brblrZTWpgz91QcWMTLGjXGjhrqJGlfCY9TXF1fi7eDFZRIk4e0zZgeRF23AZUqZuuztwcgcXQ6t5OAruI50494+Si8W8KXmZrjLt/vqmJBxrKn4=
+	t=1753365203; cv=none; b=M7rLZ951iI47Jz3dmo5xLhIY3y9wZ9F9PAM8JBso5/O4yuXm7jkq8QYCMGh4Ka9/eT9/38PGlSlrhrFGIxTn9RLaI2ssOzBDwuEssaY/2Azlk402Rfz2fqWawD50F5dtrKmsAWq/BBmkyfYYpZwEkXd5jUCbxxP8n8zuSO4kjFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753362667; c=relaxed/simple;
-	bh=keOlY8IaAAP4UK7nEyK2eSAQe1k4TUyTEO0v5TsdGIg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=uNnfBKpFOY7TRi1N3E8syxoiLkeGd56jeq+nH0rfJZfLQ900Nw6OMh4EJJeTOgrLxTRAIxMaQ7ixtgc5swq7LHpOu0wneWxiVOowr90qMhLkGDVgkn8EAu09kygG6W22jwslv9sbb07Ly0+GxXlANhlSJptaJ/Flr7HKH8oLKwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BB61TH7B; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1753362664;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DzMToL0msrSZ/KKMxmuznJBdXGU3S4ZL56R4KdRa7go=;
-	b=BB61TH7BPG1btsSu7D7dR3xBvBvLYcCcE/21W8XHYGHowQsP6fZS76T5cDEfNuIUreic+2
-	L9STSFrUeWtdrvWE7FyEzLvSGZYk1KzXNS2+iidFQXlxxYGILRY5gX2oo480mydDDrv4B3
-	e+fLceLxuc2atV+DaLHPxImnL70AGlQ=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-556-58BglqZwMYKjtI-dpCMDkA-1; Thu, 24 Jul 2025 09:11:03 -0400
-X-MC-Unique: 58BglqZwMYKjtI-dpCMDkA-1
-X-Mimecast-MFC-AGG-ID: 58BglqZwMYKjtI-dpCMDkA_1753362662
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3a4edf5bb4dso669562f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 06:11:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753362662; x=1753967462;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DzMToL0msrSZ/KKMxmuznJBdXGU3S4ZL56R4KdRa7go=;
-        b=ReEWH2GApccL1Fn3ElNpdvNHsKP+heyUWFE2DUGN0ojEWwSfWBB/b1vHLeOWVOuvqK
-         yB4N8rNByPHnk5ZMewmBG1aZo2ftgKXe7gI+hDIe3mSVbTpHHTbgOWmnRZrRkBGdZDF0
-         stpXqG5oHNTe7huAhPs1AX/kBcKbTqhgvp4ifmnvqC69OqfPTccIkV4eGaZwziZhk+7e
-         QDPVxXobeeibglhWlqkrVNAy5Z8TkDtllhGQWjtO8B+hyJ1UrylbQKh4RkDm0DTfSOj9
-         /JjMN7O8K5kQKU2dyc9/2VhYS5L8Erh858BjR+t3jUVox4FcKPDpcHfpljb6GMHvng4z
-         TQ8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUHoBD/eq1J7/Rxd2Rvm9lZQMTT8SSeoyhHcwOpxFrcR+UHyjv9txTmVeNY4fYtpSLpsif0VvXkUCZ2xk+qoHg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg0+7Nug5aEYGue08AdDJcyJ7EDXFw0EUgHNw0lsM1fKZSjf85
-	5YEUe93PfkdAL3Ed3frmHNQF/c9yhIPdhKLGTT+mKD9vB8gGbi5hdL3+qUBMoYY1Tm0jrOlhtca
-	ZjCHQNJoK/+VZ9hnXut532T22s4alFBYHIzjZFfIq/Lk6+bwjrDgekWqN14bhnzmq1lK20w==
-X-Gm-Gg: ASbGncvINSN1QhCg4rkdZ13Vjfut3H0qCwNWdjVgk+YJk8SOkTKpX35kJZFNckxO6sJ
-	J1AmvCX4eJL9465+NA+LHjIy16CRvE4ff8Pcowm/0yIHmwR8oeUIZiJFrzRA4lrUJ2Dpl7rS4SZ
-	SdSiYwwmZnnnP/RdTQlkxT/uOOXq7XQv3O1+7hpajwhInRCpeusgcKsc+DHljy03Vhs5zIMCS9R
-	IYEhaUOzBfnBq9Hp04p7OA6hI5qs6jCLuQsc1gZBXSgwBUYYLBrR6yuuZpsoTJWL9che73efEJf
-	GqTUU1AnGBMCQ95MgQSut3fMDxAdgcizbMHjL0lwLJTZOj6x2o0/+IDtnhIqGifdj5fOJ9kQzqJ
-	NOThzfQsyCNU=
-X-Received: by 2002:a05:6000:40db:b0:3a6:d2ae:1503 with SMTP id ffacd0b85a97d-3b768ef6f18mr6952672f8f.34.1753362662162;
-        Thu, 24 Jul 2025 06:11:02 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF9uXjjqVyQTr1AvkZtxeDHHOZSkmpUhu0Uhy7GWwFd3tbgN6rpLR2iWPHM6a6vJBIw8pnGSQ==
-X-Received: by 2002:a05:6000:40db:b0:3a6:d2ae:1503 with SMTP id ffacd0b85a97d-3b768ef6f18mr6952627f8f.34.1753362661709;
-        Thu, 24 Jul 2025 06:11:01 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b76fcc3ccasm2177679f8f.80.2025.07.24.06.10.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jul 2025 06:11:01 -0700 (PDT)
-Message-ID: <e79b4382-9421-498d-8b8c-6157ff070a34@redhat.com>
-Date: Thu, 24 Jul 2025 15:10:58 +0200
+	s=arc-20240116; t=1753365203; c=relaxed/simple;
+	bh=LCWhsWslZhOW+qCG4ubZBPPYZz1UAXtYtfxFEVuONr0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dP4kwSNx3K5qJDMMOFclnvtR35zNI4YU7DJcD6CICeBySQjMyMnuQ2hoSOFLYemYbUXxV2zeLNbnYIxVD+TF+eCHACzRiM1bRYfkf+ZnBVH/lqcbh9ATftMG1IFbmCHvzZU7AG4/RzLKAeG+e0YxVa5xvld6fJyCvMsb3zaKqqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 6F8A51A03D0;
+	Thu, 24 Jul 2025 13:53:13 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id C7A6620027;
+	Thu, 24 Jul 2025 13:53:10 +0000 (UTC)
+Date: Thu, 24 Jul 2025 09:53:09 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
+ <linux-trace-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+ Shuah Khan <shuahkhan@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Tengda Wu <wutengda@huaweicloud.com>
+Subject: Re: [PATCH] selftests/tracing: Fix false failure of subsystem event
+ test
+Message-ID: <20250724095309.480882c8@batman.local.home>
+In-Reply-To: <20250721134212.53c3e140@batman.local.home>
+References: <20250721134212.53c3e140@batman.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 net-next 00/14] AccECN protocol patch series
-To: chia-yu.chang@nokia-bell-labs.com, edumazet@google.com,
- linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
- dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
- kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
- jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
- donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
- ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
-References: <20250722095931.24510-1-chia-yu.chang@nokia-bell-labs.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250722095931.24510-1-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: C7A6620027
+X-Stat-Signature: awohrkpw4ihisad4ihe3fycjqcmjqbhy
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19T2I2qyibGxEwWSVE1GKbSgDm/oeBzoRA=
+X-HE-Tag: 1753365190-817813
+X-HE-Meta: U2FsdGVkX193fLY4CeoYpDrs4CA4BoNns1C7wVQrrT3oSNH/ACFa1J+jpGsuuMhK/cJaseviy/ZGeOX25QCVx6kAlcIsEvofxqau3lkDeaRNcyU/oC5fHBfQwtjlWI5B/hJM4HVU3GbyKWwLvJ7L6D5n2c142/HmIXuISevaIA3SHFxpLsUCIoxiB1qHta+HMBH3aGDx6a80UChfkF3m2UNtljqX0qRu3cxBf8EQZNZtKQGldOtwUjWVspRhyWSCctUIGM76CKgPR4myIlfDh/Ru/hLPw8gOaSES6evWA2NXnt762GM0nkr3Cfi0dCeA8FMwETswcEtl6wzjI1zkaxp9aZweIwRCUIYGY5QVNzq6ZkXeeugqKG2S9npjxsgB8nr6RNQC+06YcZNn+ezfn+sk+9ROj1XV4AVK3FFSSws=
 
-Hi,
+Shuah,
 
-On 7/22/25 11:59 AM, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> 
-> Please find the v14 AccECN protocol patch series, which covers the core
-> functionality of Accurate ECN, AccECN negotiation, AccECN TCP options,
-> and AccECN failure handling. The Accurate ECN draft can be found in
-> https://datatracker.ietf.org/doc/html/draft-ietf-tcpm-accurate-ecn-28
-> 
-> This patch series is part of the full AccECN patch series, which is available at
-> https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
-
-I don't have any additional comments, but let's wait for Eric's review.
-
-Also we are very far in the development cycle, likely this will have to
-be postponed to the next cycle.
+Can you take this patch?
 
 Thanks,
 
-Paolo
+-- Steve
+
+
+On Mon, 21 Jul 2025 13:42:12 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> From: Steven Rostedt <rostedt@goodmis.org>
+> 
+> The subsystem event test enables all "sched" events and makes sure there's
+> at least 3 different events in the output. It used to cat the entire trace
+> file to | wc -l, but on slow machines, that could last a very long time.
+> To solve that, it was changed to just read the first 100 lines of the
+> trace file. This can cause false failures as some events repeat so often,
+> that the 100 lines that are examined could possibly be of only one event.
+> 
+> Instead, create an awk script that looks for 3 different events and will
+> exit out after it finds them. This will find the 3 events the test looks
+> for (eventually if it works), and still exit out after the test is
+> satisfied and not cause slower machines to run forever.
+> 
+> Reported-by: Tengda Wu <wutengda@huaweicloud.com>
+> Closes: https://lore.kernel.org/all/20250710130134.591066-1-wutengda@huaweicloud.com/
+> Fixes: 1a4ea83a6e67 ("selftests/ftrace: Limit length in subsystem-enable tests")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  .../ftrace/test.d/event/subsystem-enable.tc   | 28 +++++++++++++++++--
+>  1 file changed, 26 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+> index b7c8f29c09a9..65916bb55dfb 100644
+> --- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+> @@ -14,11 +14,35 @@ fail() { #msg
+>      exit_fail
+>  }
+>  
+> +# As reading trace can last forever, simply look for 3 different
+> +# events then exit out of reading the file. If there's not 3 different
+> +# events, then the test has failed.
+> +check_unique() {
+> +    cat trace | grep -v '^#' | awk '
+> +	BEGIN { cnt = 0; }
+> +	{
+> +	    for (i = 0; i < cnt; i++) {
+> +		if (event[i] == $5) {
+> +		    break;
+> +		}
+> +	    }
+> +	    if (i == cnt) {
+> +		event[cnt++] = $5;
+> +		if (cnt > 2) {
+> +		    exit;
+> +		}
+> +	    }
+> +	}
+> +	END {
+> +	    printf "%d", cnt;
+> +	}'
+> +}
+> +
+>  echo 'sched:*' > set_event
+>  
+>  yield
+>  
+> -count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+> +count=`check_unique`
+>  if [ $count -lt 3 ]; then
+>      fail "at least fork, exec and exit events should be recorded"
+>  fi
+> @@ -29,7 +53,7 @@ echo 1 > events/sched/enable
+>  
+>  yield
+>  
+> -count=`head -n 100 trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+> +count=`check_unique`
+>  if [ $count -lt 3 ]; then
+>      fail "at least fork, exec and exit events should be recorded"
+>  fi
 
 
