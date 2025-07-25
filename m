@@ -1,242 +1,130 @@
-Return-Path: <linux-kselftest+bounces-37975-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37976-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C00FB1188B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 08:30:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0DA4B11993
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 10:12:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A8D15A239C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 06:29:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D4FF1CC7BD6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 08:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AAD7288C08;
-	Fri, 25 Jul 2025 06:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RYVv7DBy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C6A2BE7B2;
+	Fri, 25 Jul 2025 08:12:00 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D403B2882CA;
-	Fri, 25 Jul 2025 06:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7408220F2D;
+	Fri, 25 Jul 2025 08:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753424957; cv=none; b=Ho5xXiSslTsU+X3jBqFfDBwoddglyaVfZHvfviiZ9jLhAUC9t02SXMobGtj+URpXLvA302bsrG/CjoR1TLmkZTbTGumI5GNK0T9expXh7TQ1Q8HvPNjn3EQa4lRWY+JV1jU57AugaNYIpp6iCg3RlxuK0Pw2ImrkjBWLYiNTk0E=
+	t=1753431120; cv=none; b=WDBO5YctJJfpSjiXM80J3w6jab908vd8Fg4L2IUwYERz3N0tFhAw3+gsOOS330TZgycj8GxyaXpe+IUON/UgGEciOzX3nOcY/UCpFiRWZW2byNxYMj8rU8VK7w0Ic2xaFIciX4uvIBx4fXoCS9DJClmf1lYxPqHqngGzStaBqbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753424957; c=relaxed/simple;
-	bh=UoJ0MLyQYkeXIw8hsmrGf0Zx+0T+ufTiZpIxgruMik8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oInYkjtyf7KD79+XIGnCEDXpA2WWJ94E+xoWCRgvQAbB9cYfhtKLb0Rup7fVlUBGntwe7if+io1sP+szcb3yyun4a4QCWIxT+w8QwjXG5SvYSWr9dQMVt+tN13FHePU7SJJnXjKAbVMZqeUTi16DMJmNWT3qV0l4cPxuayxAzJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RYVv7DBy; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1753431120; c=relaxed/simple;
+	bh=CM5Oea36uZvfoiK7/r+AcRjxy2phxOcl8b1GZzZwgQg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UZ67r3VitPwtj+6rNj4TclhPLI14QMF1ShRtPcHPxkLVhnwP60qsmK2TRJMCRiWw6gvyUUKVUtwHFx69CUO1hO0hc8+dj6U/EvdE9KEgqqMKjfL/Hxr3n471Y2A3KI3PsYPtWJFYOd3AJE5001uX1CpYbfMGvWxitUH3OIf59Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b3226307787so1548338a12.1;
-        Thu, 24 Jul 2025 23:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753424955; x=1754029755; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tp+n7vwcyjj/ZiGkoHkKkkxW2SBrgsntY3ZqFgrCTyE=;
-        b=RYVv7DByVT2ldE7p+q1t9WRWyPgvLfsX527H7EeQxyT2e7q0bNhnBHj9w+W+qbCFEt
-         duR8oy/9rSNwVLRDIeARYWeNs9MYtkS4WL9jfb6x6qVdlLh5anC5Dlqo4ntUZqXkm09t
-         tqAnrQtmwHZXpQdGQKoYicWSBzHrFMw49jucdTR/1WTqhAfcMReqAciavN/MqIt9UsJ8
-         7KURD/DTZW+1QTaipmNaeVNsaWUZqUF+DSKYLxXqh6S8IE1xVMvZiSZzhXJQTFCoLhO2
-         NmZNyr9auRGCU9csFI7TNnx9VXn75DX0SibBEGK64Z5d9dDp2rE84KLB795LcNQKuEm+
-         dKUQ==
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-af2a2a54a95so289625466b.0;
+        Fri, 25 Jul 2025 01:11:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753424955; x=1754029755;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tp+n7vwcyjj/ZiGkoHkKkkxW2SBrgsntY3ZqFgrCTyE=;
-        b=pUGm7FtGOhewAjDEL/sclcZEUYiEgAYw0sF3MGyC9kmXUZcSt5a82h7/8TwJF7tVGG
-         7DeSEnvGbj7zvpBG/hTPNq3e7sNs7WzMQ+LNgacepQWPYJtpTUtWIk/17ofxtlVUNF+y
-         uFNtMKoRyims+/AVL+A/Ws4W9wDVWkl1IBDqt5xLEXTQHfr16TMScjl0XWoQ18Tv1Iy2
-         Ipkdn7Yr+Yxif4IjK34YaCspwe/kYyDYoS20m05Ro2Zq53kF6dBl8XrLX+AG7KpbryuY
-         ktnjoIIp4klsShZ0NjXsLG7WSWWonvD7LcvbSY3meaN9LFVqNy9uvBkyQyj1FcgsHKn4
-         zNiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUS1wx8NWS5CmxV2p3VL+BgOW0h6cpzgxytYMu9LueB2gIkKfDEylt4+NMyu7UoAAYETO3uoflhtkU=@vger.kernel.org, AJvYcCUzWaSPNDDsZ0ip7GqzAetQs5JhQ4K7R+l2GnENQFjg2eNcPzMVxgBNhxtEnuyc9Jp4Y0YjoChMPiE++aqbsFee@vger.kernel.org, AJvYcCVI4pKRXG/pg04GP0ap+zXrxsPPOqdXszV9ASwDMoU93EkJYyzx0tINJyqY+dpET1lIGYlq8rpRiC/zmw//@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvBQ7u2/HPr1zi2T1UEntusln9dhRvpWErc8fDluMui6E7OODO
-	c6re/LNy45YIZsS5TBkJL/i+BpB/ZphCVEczNQnpQT+owJ87P8dnyqmbZa8baXRu
-X-Gm-Gg: ASbGnctPT5kfwoSSEUcBmLxWxwvT/Clt9KyE5o1REftYfEwERDuybs2UQI/JGft3SmI
-	Be30FCRYHP5y1nug7If2o31nsobTDxNpjNg4gNmjgvZ4cfEN/JCUGeVy9QejDMsrFxje98jlIdo
-	+CWlwlW7FlegQqFXHNwfY0nvm7Z0MFgITpeaSd5CWqE4s4uEHs+z+yG1kNpG2pRjBjyHjFTlhLS
-	zroa4kwsjITZOuAt1P+HmwXpgqYSWKUO//mjvNkRvdRYkR54Q3c6ORTs3C9r8tIfbhG9b92wpOI
-	M8vlXRydUwG4soptSWfUKEDRfB3gEVUM4tcHuq2MzphweqQNoP60NnwY4PA2Hfv7RHxukka+unM
-	sY0hvHb9jKNrpUhmFbGTnRYLnZ6KwPXAZ4jWDJr9u6udIrMw=
-X-Google-Smtp-Source: AGHT+IEe9RTKqbc6PNoN0QvqDtlJz9XyB0yFHMLudxA71L7ky76POavm6tuXekDEpp9fIZYWhsYIeg==
-X-Received: by 2002:a05:6a20:918e:b0:222:d817:2f4a with SMTP id adf61e73a8af0-23d70052992mr1039617637.17.1753424954746;
-        Thu, 24 Jul 2025 23:29:14 -0700 (PDT)
-Received: from localhost.localdomain ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3f6c09b532sm2667917a12.25.2025.07.24.23.29.07
+        d=1e100.net; s=20230601; t=1753431117; x=1754035917;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sAKrd+LD+XDBmFxqxGAliD+PzOnak8xlMGa/MN+UIZM=;
+        b=qP0BpN40xgMvtKwaGWW3V24acoW342K3NtpgFrMpvyCEygs2bogmWzuO8WBCXVpIrt
+         pZuKF8WNncGtf/wDE8Pogy36fVKRAlAh5QbvTB08Q0U9dF/I2BAAK7ViaRpRcCMChgn3
+         DUv6kphG8rPqcVgat6gkuwkFqmzbdKGMD7Z7NMnp43pAgH05y2nAOTAxX0U8yu86fKQm
+         UHFgU0O26WQo3ZsEKwfmPPwm/nNa+GcVpDQI6/1vz/CglCWKuBcaKK1YYApm9LLwF/sM
+         jPrInGfMy6V0zeUCNo+kPrXgLURB6sL2JddYYRLaO20/i7CXT6hGlNNLiIGYKx8NWSJK
+         Buug==
+X-Forwarded-Encrypted: i=1; AJvYcCVhNI51sXzypv/OWU9DjBVqU83U/EiUkucS29UtSelZjFQtdcThAaU2NkvEzxmUbGUVplpZd2h/@vger.kernel.org, AJvYcCXeEylBckb75J26b2O965bgVH9mbFnyXW/0he+YCYS3kKZ+8wWwiPvA3VqsF4pvBTq+Y1PVck+PqFfDPuw=@vger.kernel.org, AJvYcCXfx1Y0c8/EaybwUyHGLTU3bWjHp4d6RHHNPjXl0sYuHE1+witTdWMDi0LtlzK3lu/mdORL0K7bXwt0Jd/Bk/+1@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBikQhxJzq6nK+WrMgE1KohvSx/87sWDntBJVTzkmkenyUdIkk
+	tfoLelqCNnoZoTVUQKrD5v4Gw7WB8KDZyQv8N51Hr08bsgSfqZ7ilVcr
+X-Gm-Gg: ASbGncsSKvJ3Rp9+1fI29y29GDvL7KIDCf1PydkxtZeuCSYdxVA2KofoCDhElRzPbBf
+	NQ39fhuZVlUHOqzjD7HfWG8skKalbINSWlLLKHQO315H7LxodqkQJCO5GuNAu1or9ZfQeMfHh0c
+	JomM0h6aePNWUvHchd35/R2nGgKrzjwFz7pS74ZG4HvaNGitUgsIMTMUUIQGsYPg8aTVHaF86kp
+	4M7f5MJ/mkMHb4L/+S2WJ/q4gep+6/0WCmOb0IwY+uyd31m+EyNtimcjaQrFfXOJfat7gujLK8B
+	/KksAZi6y3Kh7wx0tRq+Lq3sjhDOUmGAQBdyKqVoJVdIBAMqbT+adOY6Vh/jERGiC2AZD/xudNW
+	eV0RnC7vhXWu7
+X-Google-Smtp-Source: AGHT+IFPX0c0Ndbx/2iAsFsxKcF7ID2/9I3H+CH1/uhcG0UBdqcuIER/o/Dwg7+S2WsxGNYL9nmpRQ==
+X-Received: by 2002:a17:907:7209:b0:af2:7ccd:3429 with SMTP id a640c23a62f3a-af61c2aaad7mr92257966b.9.1753431116776;
+        Fri, 25 Jul 2025 01:11:56 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af47f85ea59sm232531566b.101.2025.07.25.01.11.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jul 2025 23:29:14 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Petr Machata <petrm@nvidia.com>,
-	Amit Cohen <amcohen@nvidia.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Alessandro Zanni <alessandro.zanni87@gmail.com>,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net 2/2] selftests: bonding: add test for passive LACP mode
-Date: Fri, 25 Jul 2025 06:28:48 +0000
-Message-ID: <20250725062848.18889-3-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250725062848.18889-1-liuhangbin@gmail.com>
-References: <20250725062848.18889-1-liuhangbin@gmail.com>
+        Fri, 25 Jul 2025 01:11:56 -0700 (PDT)
+Date: Fri, 25 Jul 2025 01:11:50 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next] selftests: net: Skip test if IPv6 is not
+ configured
+Message-ID: <eutsqoc6f7xcaez2ttuce4uqtfvs3hyit6dradikvfcgxdev75@3senqada4nzn>
+References: <20250723-netcons_test_ipv6-v1-1-41c9092f93f9@debian.org>
+ <20250724182427.5ece92e8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250724182427.5ece92e8@kernel.org>
 
-Add a selftest to verify bonding behavior when `lacp_active` is set to `off`.
+Hello Jakub,
 
-The test checks the following:
-- The passive LACP bond should not send LACPDUs before receiving a partner's
-  LACPDU.
-- The transmitted LACPDUs must not include the active flag.
-- After transitioning to EXPIRED and DEFAULTED states, the passive side should
-  still not initiate LACPDUs.
+On Thu, Jul 24, 2025 at 06:24:27PM -0700, Jakub Kicinski wrote:
+> On Wed, 23 Jul 2025 10:35:06 -0700 Breno Leitao wrote:
+> > Extend the `check_for_dependencies()` function in `lib_netcons.sh` to check
+> > whether IPv6 is enabled by verifying the existence of
+> > `/proc/net/if_inet6`. Having IPv6 is a now a dependency of netconsole
+> > tests. If the file does not exist, the script will skip the test with an
+> > appropriate message suggesting to verify if `CONFIG_IPV6` is enabled.
+> > 
+> > This prevents the test to misbehave if IPv6 is not configured.
+> 
+> IDK. I think this is related to some of the recent patches?
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- .../selftests/drivers/net/bonding/Makefile    |  3 +-
- .../drivers/net/bonding/bond_passive_lacp.sh  | 93 +++++++++++++++++++
- 2 files changed, 95 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
+Yes, commit 3dc6c76391cbe (“selftests: net: Add IPv6 support to
+netconsole basic tests”) introduced IPv6 support to the netconsole basic
+tests.
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-index 2b10854e4b1e..44b98f17f8ff 100644
---- a/tools/testing/selftests/drivers/net/bonding/Makefile
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -10,7 +10,8 @@ TEST_PROGS := \
- 	mode-2-recovery-updelay.sh \
- 	bond_options.sh \
- 	bond-eth-type-change.sh \
--	bond_macvlan_ipvlan.sh
-+	bond_macvlan_ipvlan.sh \
-+	bond_passive_lacp.sh
- 
- TEST_FILES := \
- 	lag_lib.sh \
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-new file mode 100755
-index 000000000000..017d96a319a3
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-@@ -0,0 +1,93 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test if a bond interface works with lacp_active=off.
-+
-+# shellcheck disable=SC2034
-+REQUIRE_MZ=no
-+NUM_NETIFS=0
-+lib_dir=$(dirname "$0")
-+# shellcheck disable=SC1091
-+source "$lib_dir"/../../../net/forwarding/lib.sh
-+
-+check_port_state()
-+{
-+	local netns=$1
-+	local port=$2
-+	local state=$3
-+
-+	ip -n "${netns}" -d -j link show "$port" | \
-+		jq -e ".[].linkinfo.info_slave_data.ad_actor_oper_port_state_str | index(\"${state}\") != null" > /dev/null
-+}
-+
-+trap cleanup EXIT
-+setup_ns c_ns s_ns
-+defer cleanup_all_ns
-+
-+# shellcheck disable=SC2154
-+ip -n "${c_ns}" link add eth0 type veth peer name eth0 netns "${s_ns}"
-+ip -n "${c_ns}" link add eth1 type veth peer name eth1 netns "${s_ns}"
-+ip -n "${s_ns}" link set eth0 up
-+ip -n "${s_ns}" link set eth1 up
-+ip -n "${c_ns}" link add bond0 type bond mode 802.3ad lacp_active off lacp_rate fast
-+ip -n "${c_ns}" link set eth0 master bond0
-+ip -n "${c_ns}" link set eth1 master bond0
-+ip -n "${c_ns}" link set bond0 up
-+
-+# 1. The passive side shouldn't send LACPDU.
-+RET=0
-+client_mac=$(cmd_jq "ip -j -n ${c_ns} link show bond0" ".[].address")
-+# Wait for the first LACPDU due to state change.
-+sleep 2
-+timeout 62 ip netns exec "${c_ns}" tcpdump --immediate-mode -c 1 -i eth0 \
-+	-nn -l -vvv ether proto 0x8809 2> /dev/null > /tmp/client_init.out
-+grep -q "System $client_mac" /tmp/client_init.out && RET=1
-+log_test "802.3ad" "init port pkt lacp_active off"
-+
-+# 2. The passive side should not have the 'active' flag.
-+RET=0
-+check_port_state "${c_ns}" "eth0" "active" && RET=1
-+log_test "802.3ad" "port state lacp_active off"
-+
-+# Set up the switch side with active mode.
-+ip -n "${s_ns}" link set eth0 down
-+ip -n "${s_ns}" link set eth1 down
-+ip -n "${s_ns}" link add bond0 type bond mode 802.3ad lacp_active on lacp_rate fast
-+ip -n "${s_ns}" link set eth0 master bond0
-+ip -n "${s_ns}" link set eth1 master bond0
-+ip -n "${s_ns}" link set bond0 up
-+
-+# 3. The active side should have the 'active' flag.
-+RET=0
-+check_port_state "${s_ns}" "eth0" "active" || RET=1
-+log_test "802.3ad" "port state lacp_active on"
-+
-+# 4. Make sure the connection has not expired.
-+RET=0
-+slowwait 15 check_port_state "${s_ns}" "eth0" "expired" && RET=1
-+slowwait 15 check_port_state "${s_ns}" "eth1" "expired" && RET=1
-+log_test "bond 802.3ad" "port connect lacp_active off"
-+
-+# After testing, disconnect one port on each side to check the state.
-+ip -n "${s_ns}" link set eth0 nomaster
-+ip -n "${s_ns}" link set eth0 up
-+ip -n "${c_ns}" link set eth1 nomaster
-+ip -n "${c_ns}" link set eth1 up
-+# 5. The passive side shouldn't send LACPDU anymore.
-+RET=0
-+# Wait for LACPDU due to state change.
-+sleep 5
-+timeout 62 ip netns exec "${c_ns}" tcpdump --immediate-mode -c 1 -i eth0 \
-+	-nn -l -vvv ether proto 0x8809 2> /dev/null > /tmp/client_dis.out
-+grep -q "System $client_mac" /tmp/client_dis.out && RET=1
-+log_test "bond 802.3ad" "disconnect port pkt lacp_active off"
-+
-+# 6. The active side keeps sending LACPDU.
-+RET=0
-+switch_mac=$(cmd_jq "ip -j -n ${s_ns} link show bond0" ".[].address")
-+timeout 62 ip netns exec "${s_ns}" tcpdump --immediate-mode -c 1 -i eth1 \
-+	-nn -l -vvv ether proto 0x8809 2> /dev/null > /tmp/switch.out
-+grep -q "System $switch_mac" /tmp/switch.out || RET=1
-+log_test "bond 802.3ad" "disconnect port pkt lacp_active on"
-+
-+exit "$EXIT_STATUS"
--- 
-2.46.0
+Because the NIPA config enables IPv6, the tests pass in that
+environment. However, if the tests are run somewhere without IPv6
+support such as in a test I was doing regarding another patch, they will
+fail, when it should be skipped.
 
+> The context would be helpful in the commit message.
+
+Apologies for not including more context in the commit message.
+
+> Otherwise, as networking people, I think we are obligated 
+> to respond with hostility to "IPv6 may not be enabled"..
+
+As for handling systems without IPv6, if IPv6 isn’t available, the
+intention is for the test to be skipped. That’s exactly what this patch
+addresses.
+
+I did consider making the test adaptable so it would just run with
+whichever protocol (IPv4 or IPv6) is present, but rejected that
+approach. Allowing the test to “pass” in such cases doesn’t really
+demonstrate meaningful coverage, since the test isn’t actually being
+exercised as intended.
+
+In short, it seems more appropriate to skip the test entirely if all
+conditions aren’t met, so, you know that your .config needs adjustment.
+
+Thanks for your review,
+--breno
 
