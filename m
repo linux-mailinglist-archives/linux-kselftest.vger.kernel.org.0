@@ -1,103 +1,136 @@
-Return-Path: <linux-kselftest+bounces-37996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E3C0B12227
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 18:39:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95BBCB1224A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 18:48:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FDA63A3F29
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 16:38:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F9E61675C1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 16:48:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901572EE975;
-	Fri, 25 Jul 2025 16:39:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9A5D2EF655;
+	Fri, 25 Jul 2025 16:48:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qWgDiHJP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="noJl4hdw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635D73BBF2;
-	Fri, 25 Jul 2025 16:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A3B239E75
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 16:48:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753461557; cv=none; b=CSR8ARAAzUYYKqfPRIOD+HW4Sm37zMMkFjZZNU2ZvtGe89v06yiUbUd9e+ohXtla9QUGkw+O+9M/QDe43TLlUQRV9YnMSLaVwMItmjpU4cf0Q5uDi6IdM54FwQENTuOiWFUnn4MpOCAOv4paxSVJvLrozSUhR/AbMZQhjznQOJk=
+	t=1753462100; cv=none; b=aP5Xc9nTJpu/T0UZQV2NUz+VRxwQW+u1Z6WXY/OjcHpwCy+5YKJ3hamSHjSbnyfNXO1zOyIkBy+LW2h+7EaWjhXVRrgc8xzYf8ESx54FIEczpzsri2mMHZAi4r9br1G4vX/pMI5ujqBzXRa5uCq72NMCNNQInXh9mXOuN+0C0PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753461557; c=relaxed/simple;
-	bh=pF4lunaFqYdrewdH6GkDToqh/eM283/KV5aQ/8yrPMY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Asre5FQQvIXSIiLzuwMLCpC+5iTUCNEMAHjw2RfSEZkFtrJtfw7f9o2ZWLETuUiEph/mx9ck6TCQPFPPax5xT2kjUkbu62ZUvgjOSnw+WFSq+JCzB29KyGcqY2QFnF44AerXPSVvrUOzrcz/uQwelfX2TGpiCHclvouA0zhVqnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qWgDiHJP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A40CC4CEE7;
-	Fri, 25 Jul 2025 16:39:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753461556;
-	bh=pF4lunaFqYdrewdH6GkDToqh/eM283/KV5aQ/8yrPMY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qWgDiHJPG8S2mHa8wUfniNuw6zAthW2OBoNLgq9pkrAp/jpiJWnMp3QzrRI8ZJfLr
-	 kypTbAzegglrxnYBASHgz1oXKT2soysAVu3o4/vhkiEahR/+GQRh8NxOzGrEmin+hs
-	 J+KobOkQpzQSDBQp9jAf8qMIVzz1GIctXji/3ifCAnMYgFfNPkUjgTHwc+cQ1N5JGs
-	 qLoAnqXnErMGuJTZYDT6uzQ2DF2V7oGd6bCdk5oNQKo4VOegUvWywoL4IsHtqPsLti
-	 o7zGEum57Udc2tAktVf48Ht7lLAR/PZDkwNhTVNLWX063R93xGVBe+cz4Uxg1Z+WIz
-	 Gc0G6T/8J49xA==
-Date: Fri, 25 Jul 2025 17:39:12 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: workflows@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: Crediting test authors
-Message-ID: <aIOzMLPiC8gN5t2Y@finisterre.sirena.org.uk>
-References: <20250725080023.6425488c@kernel.org>
+	s=arc-20240116; t=1753462100; c=relaxed/simple;
+	bh=ppQd582oZginp+3pcQAfvhafTXmi3sug/cDu6IWhOMw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HFrclm1WT6PVoFaCxHT2bN98hjBmwm95a/YVzMcHFuuCwuLOKO5yb6qzx58OUxlAa68+zH2rrH54H9j8j0/slh4nK77kp+NyXur1t1tOqY8Bt/wpgzwLn9KEDfSJT0914m95fu66odoa9CjbcOzUyRF1wfLHulR+JKIdTiSGA+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=noJl4hdw; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-55628eaec6cso2175082e87.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 09:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1753462096; x=1754066896; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ppQd582oZginp+3pcQAfvhafTXmi3sug/cDu6IWhOMw=;
+        b=noJl4hdwx2RCEnbOzgDSRQFrGxhSfQkotnKKfRVP8Qiodk2eN+UWq2+lNgX9915l66
+         RZEBtjt+IpEVCCFDzon++/VNPf68Sg7vF3NlQ1b6W1ULYE3UBTylCZAdc7w2PvZNRrj1
+         p2VK6pB2rCdj8PAvE1BiIaRkdpaEnWqD5k6C6J5R8JtJ37ayISSM5HceuswfsoaZNVew
+         5dw6dYKKIHbmxYG55rqpFuuhCpL5lO1GAbYKRBJTuY+PIi8B5XTofkkSfzeVu9f/8h3e
+         59ACh+6uOpTU603NCQvxKu7hwBz/LBSM21MdLDDys4QmYFBRLCdxlylmeH2bTIn7hnx+
+         r3Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753462096; x=1754066896;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ppQd582oZginp+3pcQAfvhafTXmi3sug/cDu6IWhOMw=;
+        b=FGSPtl/Ri9XpvFB51PYyCfBnv2t00U37CClvKE9S594uN8AaCXqoccofLPRflg1A4m
+         rAH4jdX0rKYVqkPJj9taqRCBJI14f5WaQt6zFAJUeWIFAi23Sb2zmatJIT8rZEP6ms2F
+         XoJPONJ1Hzq9aBafsDSauCy6r3NJgLm2eKbZXM1873Niu7chPe0ceEi7Jtgg584ndRMj
+         jNpdHNfzlgeRFWa5Fzb4XYmW3YMu6GPY+t74e6hRBk4N5fe0blnkV0oYuQeSfzSIp9SG
+         RH/W4V6qc9ehAqc0+ulcr87Tqr+ZCwbd+Q6GbZg/i5kJuYznmJG1Vg97M98uk30QGjyh
+         ykxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnF21hN7GYK/oaJg60DWw50mih0nBP8CZGYtvs7qhHb7v3tZWeFTR6AtWEe9nwmrU+NYoo6QIjwG7Zy/YeBJg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUXlUbrmMby0/Uqy6cxM0Yuv1aBjY+ZQ5pyILojfH7zcAMUdbT
+	GmbEXpwZjCEMOL6xmfnFwli78CYg11OKzfnqYe4COsQnQa7dRPTWxkfKINjNFqKEA73qrB3sC7V
+	BtSl3BbT8v2WxdbtQ9xgL5JNWSg8X2OIy5WyAdJrB
+X-Gm-Gg: ASbGncuL6m19eLE3pUTRaQI89YaU2ANG6GIo6K18rJkajMQv5a8dbphv4MaHcle+YAL
+	K2d1MuCALM0ZFBox6NDwiMWhT9nUX25LkkwIkKDp//6GyAQ62fLmnd+yN4fBU7CdFhhQPsabSKo
+	AtYStzK/ALFAmkAXVL0Tgo/NQXlRBWbbMylPe+ac9QMBho/ZQ0/0pXfs7D1uogsmSE01b/z4ypV
+	kHVJlo=
+X-Google-Smtp-Source: AGHT+IHRFHPeqj4nIOtWh6Ys6eD3VO7gQX4V7dsVKR085JKaRqkPB/v1BUD9NdFQ0WfSjcyFuM7LsqS6dpAfH6dAKiQ=
+X-Received: by 2002:a05:6512:3050:b0:553:a632:c7df with SMTP id
+ 2adb3069b0e04-55b5f3cf5cfmr661229e87.11.1753462095911; Fri, 25 Jul 2025
+ 09:48:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="79jlyhnSeLm+Ouc2"
-Content-Disposition: inline
-In-Reply-To: <20250725080023.6425488c@kernel.org>
-X-Cookie: Do not cut switchbacks.
+References: <20250620232031.2705638-1-dmatlack@google.com>
+In-Reply-To: <20250620232031.2705638-1-dmatlack@google.com>
+From: David Matlack <dmatlack@google.com>
+Date: Fri, 25 Jul 2025 09:47:48 -0700
+X-Gm-Features: Ac12FXxyagwElMOCi051dyM63Ch611iKG5b_MU_nG8G_LbqFaLPO58JmZEy3jU8
+Message-ID: <CALzav=dVYqS8oQNbygVjgA69EQMBBP4CyzydyUoAjnN2mb_yUQ@mail.gmail.com>
+Subject: Re: [PATCH 00/33] vfio: Introduce selftests for VFIO
+To: Alex Williamson <alex.williamson@redhat.com>
+Cc: Aaron Lewis <aaronlewis@google.com>, 
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>, Bibo Mao <maobibo@loongson.cn>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org, 
+	Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, 
+	Jason Gunthorpe <jgg@nvidia.com>, Joel Granados <joel.granados@kernel.org>, 
+	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, 
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Vinicius Costa Gomes <vinicius.gomes@intel.com>, Vipin Sharma <vipinsh@google.com>, 
+	Wei Yang <richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Jun 20, 2025 at 4:21=E2=80=AFPM David Matlack <dmatlack@google.com>=
+ wrote:
+>
+> This series introduces VFIO selftests, located in
+> tools/testing/selftests/vfio/.
 
---79jlyhnSeLm+Ouc2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Alex,
 
-On Fri, Jul 25, 2025 at 08:00:23AM -0700, Jakub Kicinski wrote:
+I wanted to discuss how you would like to proceed with this series.
 
-> Does anyone have ideas about crediting test authors or tests for bugs
-> discovered?  We increasingly see situations where someone adds a test
-> then our subsystem CI uncovers a (1 in a 100 runs) bug using that test.
+The series is quite large, so one thing I was wondering is if you
+think it should be split up into separate series to make it easier to
+review and merge. Something like this:
 
-> Using reported-by doesn't feel right. But credit should go to the
-> person who wrote the test. Is anyone else having this dilemma?
+ - Patches 01-08 + 30 (VFIO selftests library, some basic tests, and run sc=
+ript)
+ - Patches 09-22 (driver framework)
+ - Patches 23-28 (iommufd support)
+ - Patches 31-33 (integration with KVM selftests)
 
-Usually I'd do a reported-by for whoever actually looked at the test
-system, triaged the issue and reported it.  Trying to credit test
-authorship separately to the testsuite gets cumbersome over time, tests
-get updated over time for a range of reasons (toolchain updates, adding
-more coverage, improvements in the testsuite's frameworks...) so it's
-often not just a single person.  Hopefully the testsuite is keeping
-track of things well enough so mentioning the test will point people in
-the right direction.
+I also was curious about your thoughts on maintenance of VFIO
+selftests, since I don't think we discussed that in the RFC. I am
+happy to help maintain VFIO selftests in whatever way makes the most
+sense. For now I added tools/testing/selftests/vfio under the
+top-level VFIO section in MAINTAINERS (so you would be the maintainer)
+and then also added a separate section for VFIO selftests with myself
+as a Reviewer (see PATCH 01). Reviewer felt like a better choice than
+Maintainer for myself since I am new to VFIO upstream (I've primarily
+worked on KVM in the past).
 
---79jlyhnSeLm+Ouc2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiDsygACgkQJNaLcl1U
-h9ANLwf+KrFsMmrl+/vvfwCKrbgLCgyN+NiEvXJuhjtuIu7K8J/zLlal7IAr9hEz
-yR5CEQcBOXEiNv/LSqpYWXpBEIye9gkHW1oYHkzB1PeNe14KMAxrg5P3jxl2shxW
-jh6q8HgIVDh5kFteE7D6+UnTIkSoD9M0hG7APga9y88YEG3YGeWcaGkKZmIk94xL
-WrZMNauJJceZSmoNJZHVRqFJfVP6VZQj1Go4zJ5ZKD+g0zx3ONVI1lo/omuFg1vf
-1wRUmKBa9Zn70pADOy01RTtWsTynb+USj3HnxEuQXSUu1EJyzLKJ4M28CK7+f5nW
-24DWjp4S6bEidMREKpizRKiQA/bK3A==
-=Dzig
------END PGP SIGNATURE-----
-
---79jlyhnSeLm+Ouc2--
+Thanks.
+--David
 
