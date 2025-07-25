@@ -1,90 +1,103 @@
-Return-Path: <linux-kselftest+bounces-37992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64810B120EA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 17:28:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6F90B12208
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 18:31:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B6005A1701
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 15:28:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B65D31C82BA3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 16:32:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 187A72EE616;
-	Fri, 25 Jul 2025 15:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB591E7C03;
+	Fri, 25 Jul 2025 16:31:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="nQqHSjAr"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=nixdorf.dev header.i=@nixdorf.dev header.b="AsYQsMT1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from shadowice.org (shadowice.org [95.216.8.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEAC2EE615
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 15:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988394A3C;
+	Fri, 25 Jul 2025 16:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.216.8.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753457236; cv=none; b=u2ry6iwo5s9k/Rz+Esc/cKeaiwOrHb7LP03+m1oWHKTI7mT1AsH6x4ED27At7QMrFJThcjSQJ874QmY8oA2LU7HaLM4JJHDdrPUpWcc9ZvyCROc/M5Dto8nNV0OYNfNzEJ2+Bbw/zoqCpvFnmkxfxWkbAp4elpZKYv2iEdODNNo=
+	t=1753461113; cv=none; b=lGWDP5R/jq7XVEZ9TvjNO6JOtxxflkegAt1LjTZ6TnwWJV68UZgtch/6bVl8Kcuw44RpNQW30g2pWfu37ZxILjZLyt07BIlqZk7QcGPwYTxvynaMeehX0ZC2GC1gpQ8fB1IV8Ac0eS6znvei2AyaPrxxmm7u3xW8rzDInDA+gJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753457236; c=relaxed/simple;
-	bh=4XUbrRL0YD1KlBsBsyBzOc11nCYHw2nNmqKf2Kh7fTs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J5v3nRcwY2jGQDxLvqe2nkC2xVHsoNEoH6Q1VLjKjcpU/mynWOJwmvMUiFkgvHpGez7w2G9Rou4OuiQIt6ULe7SmXhKCVrbntUUn5+ZkWBzau77Qos7v8uFIOaY2x1lNuA12GJCxrvZHB83///L4SV/d1RUHWY8xLxGffjWEyEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=nQqHSjAr; arc=none smtp.client-ip=18.9.28.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
-Received: from trampoline.thunk.org (pool-173-48-116-187.bstnma.fios.verizon.net [173.48.116.187])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 56PFQwjk026198
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Jul 2025 11:26:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1753457220; bh=By+urOWaG/ajZlSNQ/vduTd8yEF1RnUec8nS30xxTnI=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=nQqHSjArwp98eVqDtB8jcbcV1+yiikon7Pd/RCZZz3hSzRmLvfrHwqpF0B65kvAJi
-	 HMGuQj/XSH0eHLqheuzFe60fXjjmU/G7ASWatXSU344vj5vJ8GoxKelsQcuYmci78X
-	 CgPrBUFWnExL3RUJYezEd+qfk4rZygCH1r5bWPci7zpLLr2YhJa23E/hbGJOSQXPNH
-	 wZIZG/8pUk7m8fdU/ySy+nA1YLLxqd8O1D+rwchethvhgYrZ+FJx035R5bHZDp54ok
-	 z61244xgVKkWfMNKVyzgYBRH4AeXdbOcHNKEs+z/utp3FY7z5TuuLe1J7tVhuiDRFG
-	 UMxCvFbmOXEYg==
-Received: by trampoline.thunk.org (Postfix, from userid 15806)
-	id 58DAB2E00D6; Fri, 25 Jul 2025 11:26:58 -0400 (EDT)
-Date: Fri, 25 Jul 2025 11:26:58 -0400
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: workflows@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: Crediting test authors
-Message-ID: <20250725152658.GA236659@mit.edu>
-References: <20250725080023.6425488c@kernel.org>
+	s=arc-20240116; t=1753461113; c=relaxed/simple;
+	bh=BYLMmfKdHqqqte66H+kkCpcGf5Bi4CVUPD0Q81YCp9w=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KcA5pb/C7/6wuYv1RT9/cRkIlumd92aTpmt84z8ZDjaj/4kZCM2clJhjfWg3oUxnQx4fJ2SJKTgny6ZR4bfqqpteAT80ECpLyLuiUunrXDi/2H1tBxlIfCbHi5romPCWTlPcCoGN4BJLZ5hsxye5jN7gFl6XAGoJEfCQnBQBz0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nixdorf.dev; spf=none smtp.mailfrom=nixdorf.dev; dkim=fail (0-bit key) header.d=nixdorf.dev header.i=@nixdorf.dev header.b=AsYQsMT1 reason="key not found in DNS"; arc=none smtp.client-ip=95.216.8.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nixdorf.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=nixdorf.dev
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=default; bh=BYLMmfKdHqqq
+	te66H+kkCpcGf5Bi4CVUPD0Q81YCp9w=; h=cc:to:date:subject:from;
+	d=nixdorf.dev; b=AsYQsMT1rsydPNtSerIssGJhn97mafP4IoZRPZ7vePEeETaovDeN7
+	93KAWO0YzdTtYWfsJiGgNYXTfu+Yazh72N/xfPzb8+VO8LzmqspwNPXkXwG1IEzxirh1tP
+	GawJF4AFgS7ysQAWfs+Pga5FX+h10x55xjKhiWaUPNSrt62s=
+Received: from [127.0.0.1] (p4fc61662.dip0.t-ipconnect.de [79.198.22.98])
+	by shadowice.org (OpenSMTPD) with ESMTPSA id 4a911d07 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 25 Jul 2025 18:31:41 +0200 (CEST)
+From: Johannes Nixdorf <johannes@nixdorf.dev>
+Subject: [PATCH v2 0/2] seccomp: Fix a race with WAIT_KILLABLE_RECV if the
+ tracer replies too fast
+Date: Fri, 25 Jul 2025 18:31:17 +0200
+Message-Id: <20250725-seccomp-races-v2-0-cf8b9d139596@nixdorf.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250725080023.6425488c@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFWxg2gC/13MQQ6CMBCF4auQWTumLdIKK+9hWJR2kFlISWsaD
+ OHuVhI3Lv+XvG+DRJEpQVdtEClz4jCXUKcK3GTnByH70qCEaoRREhM5F54LRusoIbXm2hqvfXs
+ ZoHyWSCOvh3fvS0+cXiG+Dz7L7/qT6j8pS5Q40NhobRzVwt5mXn2I49lThn7f9w/onpRArAAAA
+ A==
+X-Change-ID: 20250721-seccomp-races-e97897d6d94b
+To: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
+ Will Drewry <wad@chromium.org>, Sargun Dhillon <sargun@sargun.me>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Ali Polatel <alip@chesswob.org>, 
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+ Johannes Nixdorf <johannes@nixdorf.dev>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753461100; l=1116;
+ i=johannes@nixdorf.dev; s=20250722; h=from:subject:message-id;
+ bh=BYLMmfKdHqqqte66H+kkCpcGf5Bi4CVUPD0Q81YCp9w=;
+ b=P55r56q3X8LbXz81/SOfoUrmqntdwwpp5+/04jojKTV0Wrf+bKOXSmYro+VpW0ZZxYEvg0+VR
+ GL8szP9rx72C3VyiZJqW2TNr3fI+UfRuXzvbMZIOla8MtrCRGZ1kAIM
+X-Developer-Key: i=johannes@nixdorf.dev; a=ed25519;
+ pk=6Mv9a34ZxWm/f3K6MdzLRKgty83xawuXPS5bMkbLzWs=
 
-On Fri, Jul 25, 2025 at 08:00:23AM -0700, Jakub Kicinski wrote:
-> 
-> Does anyone have ideas about crediting test authors or tests for bugs
-> discovered?  We increasingly see situations where someone adds a test
-> then our subsystem CI uncovers a (1 in a 100 runs) bug using that test.
+If WAIT_KILLABLE_RECV was specified, and an event is received, the
+tracee's syscall is not supposed to be interruptible. This was not properly
+ensured if the reply was sent too fast, and an interrupting signal was
+received before the reply was processed on the tracee side.
 
-I just list the test that discovered the bug and which was cleared by
-the commit, and assume that the test author will get credited in the
-upstream test repository (e.g., such as generic/750 from fstests or
-inotify02 from ltp).  So it's not something that I've worried about.
+This series fixes the bug and adds a test case for it to the selftests.
 
-I suppose if the test repository isn't as well known, or if the test
-hasn't been checked anywhere at all, your concern that the test author
-should be credited is something I can understand.  But it hasn't come
-up for me.
+Signed-off-by: Johannes Nixdorf <johannes@nixdorf.dev>
+---
+Changes in v2:
+- Added a selftest for the bug.
+- Link to v1: https://lore.kernel.org/r/20250723-seccomp-races-v1-1-bef5667ce30a@nixdorf.dev
 
-In other cases, if the commit hasn't been stable yet (say for kunit or
-kselftests coming from some other tree), I'll just throw in a Link:
-tag pointing at lore.kernel.org.
+---
+Johannes Nixdorf (2):
+      seccomp: Fix a race with WAIT_KILLABLE_RECV if the tracer replies too fast
+      selftests/seccomp: Add a test for the WAIT_KILLABLE_RECV fast reply race
 
-						- Ted
+ kernel/seccomp.c                              |  13 ++-
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 130 ++++++++++++++++++++++++++
+ 2 files changed, 136 insertions(+), 7 deletions(-)
+---
+base-commit: 89be9a83ccf1f88522317ce02f854f30d6115c41
+change-id: 20250721-seccomp-races-e97897d6d94b
+
+Best regards,
+-- 
+Johannes Nixdorf <johannes@nixdorf.dev>
+
 
