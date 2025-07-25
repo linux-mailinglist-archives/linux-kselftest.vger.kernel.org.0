@@ -1,122 +1,88 @@
-Return-Path: <linux-kselftest+bounces-37999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 799D9B122BD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 19:12:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC6CBB122D8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 19:16:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40B223AE983
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 17:12:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDC551CC6795
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 17:16:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8A62EF66B;
-	Fri, 25 Jul 2025 17:12:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC7924503C;
+	Fri, 25 Jul 2025 17:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E9teVUjs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y/9Gmykh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911E37080D
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 17:12:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA024A3E;
+	Fri, 25 Jul 2025 17:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753463550; cv=none; b=AFJiAXenC2LaOZTLBOgd1gYImUq0qJaMLV7mG18RI8pfv43sBuIBUJn2Ibm7ERh+q2v5alTvwXiMNXxAWa5MxQsr13/VPGVALPLPxzJyI/Uyw80GKlwtkz3Boq50ZyyxxonqItyym3hAUgJ+SO+cFDs4oI1Mq2M7mi7lIpHdN70=
+	t=1753463733; cv=none; b=kPGJucrYgSD38NqgSG1tM40rz+RUWk9bq/QMklQ5EpLcPTKaZVgDGxwsxCzRB/IO7YBwVZrAc7+XYF5nyC9Vtjio3gDQCM0IfERZc8gMPxP5q9XCUjaHPchFUYCFahoBU9XZ93Cl2QuW5sQOSK84CmaBEhpXHV+LWTw9n8cdNvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753463550; c=relaxed/simple;
-	bh=LR/1fr+927w5gHz+7V9YvJuD7wXmf2oW8T6mJhnxcas=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B/T8tDL3jDd0NKppd/bVznpF/iSAw8wHSHtstDcm3R6muzHdHRlznFfLuErqCAcmdxc6tmpObA+TGu33a7RnLd1EXem9juZsPfyZwTd0ohaurCtY5+sxR3VCT/ACV8XdPc4JVS+MoVFRSg+Zj/IjH7fC9DFsHu9AeTlvPpWd4pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E9teVUjs; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4561b43de62so4745e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 10:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1753463547; x=1754068347; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LR/1fr+927w5gHz+7V9YvJuD7wXmf2oW8T6mJhnxcas=;
-        b=E9teVUjspWShKsMgc1oLy+m9iwkIFL+C/fjG0YE/EIYK/XzXXxa23KCQz3naomeZi8
-         Y8HxbHREoCTKbCdWMqpi2V+pL5yhNCwb3XjQOpjt6PtPOvZuTlPg7RcJAUwnhXriZhS/
-         N99P2J2YKRZFR7pKAsOCoTwBmdLM5Jqj8qGv1XHcn5KjgQJYMYIbDlgWyHFUkRoYQF4y
-         1j+lHWwY0JnAJesKI32cLe5FJ6iYckQpFND98nOQLNJL/+FOLyytMGPuyCrCj08wDxmy
-         idRL64mD3bs2vITGHRXBzT4/FnvvsbQ94mIFPvde9MQ6j7mvhKRS8sEYdovkMvVIDRUV
-         SbFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753463547; x=1754068347;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LR/1fr+927w5gHz+7V9YvJuD7wXmf2oW8T6mJhnxcas=;
-        b=QyoRmmQWmLtA3ms3NQiKQSKYYOw10K0JFN+ZKAeM7c7U74V6d0YZtAw3ZGiJlP100l
-         aQJzS02SwrPiOGh/cgalrZrQfnp8+9hg3t7/IoPkyDtpG+Iho554hTEXmXrshpOANyxD
-         3G+nM0Yu7Yq400KBwpXyTuUWqZqSuM3HPIDYwOzdsPXUqknzbb7dU5+zUNZNbFgOfLun
-         DfEUI1977AaJOVNOz44Qlkty/W0RoUJUQaPUXLSVzdYy4pXSdmlGpDurRtQwP/DdilxE
-         UHLga+iTRdiXMQ0SVRCv4gEFv1iFoQTSOLRykK6i4Tv5wLUfq9up4unYIH54LrmHfoOr
-         9NLg==
-X-Forwarded-Encrypted: i=1; AJvYcCVdrDpbGLsDKGaYEKwEMzvG2LumpCKkWm0RHOyFwmE+pSSIUES8C6esdDeCQQbkqI8Zj/9Dev8Q1fQERT6owP4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo7spKg7dHivzzVOWiuseu8/2VvxXgTtFuOe4eyB4WZYdeNfnZ
-	WBcRNb4TdmTw8qNRq/RExlj7WYIh+DQ70tdrHqDvahi9RE0LnTfiQpyhq9wEVsZfSwhl5EnPxYR
-	blpE0b5A2zU47aXf0xO09AQrl473Xic73Iycto+FK
-X-Gm-Gg: ASbGncvR5kcupt5uuAVXDDHD5m9taPuTsU9J/5uUTigDgRsD0AY6DRBGmhWgADx3pQC
-	w4DuBXh2R+w754p9lL9z50qHZLq2Mb7IVW4r4LMujPf/jP9Z8vWz9uX5IZ6sYEO6AOvNZpM/DeP
-	4fe7SEm3P3F/m3vdYBLfHW2D1k6UzZClw7vVe0UpqzGQwTL0/kDR3h/FVTDOOGNM8a5yY9EStDg
-	ZwSyVS8vBYY5L3w4VMp6lmCF9UKhXVy4wufcs3uCB2e+g==
-X-Google-Smtp-Source: AGHT+IFhxhJzavWiG8TnAC5bSyEUCITgigk6eSOkbePzjanT6OdYE8Du+O+akeu9UoPZ+9VboPkoI9eK3HhR7G1bjjE=
-X-Received: by 2002:a05:600c:1c86:b0:453:65f4:f4c8 with SMTP id
- 5b1f17b1804b1-45874e2b93cmr1367085e9.3.1753463546532; Fri, 25 Jul 2025
- 10:12:26 -0700 (PDT)
+	s=arc-20240116; t=1753463733; c=relaxed/simple;
+	bh=YkAOTwkgSU8S5IAf/JPYEqkhQz8KoTsyAO4vK1HXBds=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HUgIzL49/rcI/DggpBWItr3qgAwiXJRJPrAQoQVpHtMhLU6KvR5g4LzwXRt1jN3xseAvzQOWitcyVrx8iKyZKtqueTd5M9oaK8F0TyrRKXd3Q5z2gtjIk8NXA455eE/SPyqtffJbVG+nl+tFpiHehnvW4TqI2d0aFlkQrF686KE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y/9Gmykh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D84C4CEE7;
+	Fri, 25 Jul 2025 17:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753463733;
+	bh=YkAOTwkgSU8S5IAf/JPYEqkhQz8KoTsyAO4vK1HXBds=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Y/9GmykhCX26z2zIwt6ix4XZJenoSHpcqKNqlThVly+zB853nSKkE+WDom6X6G1GQ
+	 hSr8U6RScke1aosl9R1/lmfRQcAxIhUMszWKMCD2qf6Rd5fN0Ws4kPH6tyLU2CzXFf
+	 LB1ewMTSJCpja5jucAZqAbFbVbf9N6WkT+sqh+xIxyOjZdITrlk/a1akI/i6JlXsur
+	 cmQKmkgjW83bwko9jotycB1IAZhhrlR/j2xL/eh1EwZRVS85Q3gj+UrToy7mocKNVq
+	 2ExVE2gPBxqjy+T+oW/mK6eAZG4PcWD8bRuRyRPE+QLBmbAiE0Ac8ZTN4/0flcD4BF
+	 wz35foTC3jY8A==
+Date: Fri, 25 Jul 2025 10:15:32 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: Crediting test authors
+Message-ID: <20250725101532.5a3bf75b@kernel.org>
+In-Reply-To: <aIOzMLPiC8gN5t2Y@finisterre.sirena.org.uk>
+References: <20250725080023.6425488c@kernel.org>
+	<aIOzMLPiC8gN5t2Y@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1752232673.git.lorenzo.stoakes@oracle.com> <8f41e72b0543953d277e96d5e67a52f287cdbac3.1752232673.git.lorenzo.stoakes@oracle.com>
-In-Reply-To: <8f41e72b0543953d277e96d5e67a52f287cdbac3.1752232673.git.lorenzo.stoakes@oracle.com>
-From: Jann Horn <jannh@google.com>
-Date: Fri, 25 Jul 2025 19:11:49 +0200
-X-Gm-Features: Ac12FXz5v7hwHYZVZo-PcQftTdDT8-58CkHFg3QHIWJWk_i7JJUmY1B0j5KtsNs
-Message-ID: <CAG48ez0KjHHAWsJo76GuuYYaFCH=3n7axN2ryxy7-Vabp5JA-Q@mail.gmail.com>
-Subject: Re: [PATCH v3 09/10] mm/mremap: permit mremap() move of multiple VMAs
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 11, 2025 at 1:38=E2=80=AFPM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
-> Note that any failures encountered will result in a partial move. Since a=
-n
-> mremap() can fail at any time, this might result in only some of the VMAs
-> being moved.
->
-> Note that failures are very rare and typically require an out of a memory
-> condition or a mapping limit condition to be hit, assuming the VMAs being
-> moved are valid.
+On Fri, 25 Jul 2025 17:39:12 +0100 Mark Brown wrote:
+> On Fri, Jul 25, 2025 at 08:00:23AM -0700, Jakub Kicinski wrote:
+> 
+> > Does anyone have ideas about crediting test authors or tests for bugs
+> > discovered?  We increasingly see situations where someone adds a test
+> > then our subsystem CI uncovers a (1 in a 100 runs) bug using that test.  
+> 
+> > Using reported-by doesn't feel right. But credit should go to the
+> > person who wrote the test. Is anyone else having this dilemma?  
+> 
+> Usually I'd do a reported-by for whoever actually looked at the test
+> system, triaged the issue and reported it.  Trying to credit test
+> authorship separately to the testsuite gets cumbersome over time, tests
+> get updated over time for a range of reasons (toolchain updates, adding
+> more coverage, improvements in the testsuite's frameworks...) so it's
+> often not just a single person.  Hopefully the testsuite is keeping
+> track of things well enough so mentioning the test will point people in
+> the right direction.
 
-Hrm. So if userspace tries to move a series of VMAs with mremap(), and
-the operation fails, and userspace assumes the old syscall semantics,
-userspace could assume that its memory is still at the old address,
-when that's actually not true; and if userspace tries to access it
-there, userspace UAF happens?
+Ack, it does get murky overtime. Also with pre-commit testing there
+usually wouldn't even be a bug in the tree to credit fixing. 
 
-If we were explicitly killing the userspace process on this error
-path, that'd be fine; but since we're just returning an error, we're
-kind of making userspace believe that the move hasn't happened? (You
-might notice that I'm generally in favor of killing userspace
-processes when userspace does sufficiently weird things.)
-
-I guess it's not going to happen particularly often since mremap()
-with MREMAP_FIXED is a weirdly specific operation in the first place;
-normal users of mremap() (like libc's realloc()) wouldn't have a
-reason to use it...
+I guess we just had a lucky(?) string of very clear cut cases where
+a good selftest led the maintainer noticing a crash in the CI, and 
+fixing something.
 
