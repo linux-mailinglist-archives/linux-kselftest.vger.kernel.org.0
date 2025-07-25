@@ -1,136 +1,122 @@
-Return-Path: <linux-kselftest+bounces-37998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95BBCB1224A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 18:48:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 799D9B122BD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 19:12:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F9E61675C1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 16:48:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40B223AE983
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 17:12:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9A5D2EF655;
-	Fri, 25 Jul 2025 16:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8A62EF66B;
+	Fri, 25 Jul 2025 17:12:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="noJl4hdw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E9teVUjs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A3B239E75
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 16:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911E37080D
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 17:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753462100; cv=none; b=aP5Xc9nTJpu/T0UZQV2NUz+VRxwQW+u1Z6WXY/OjcHpwCy+5YKJ3hamSHjSbnyfNXO1zOyIkBy+LW2h+7EaWjhXVRrgc8xzYf8ESx54FIEczpzsri2mMHZAi4r9br1G4vX/pMI5ujqBzXRa5uCq72NMCNNQInXh9mXOuN+0C0PA=
+	t=1753463550; cv=none; b=AFJiAXenC2LaOZTLBOgd1gYImUq0qJaMLV7mG18RI8pfv43sBuIBUJn2Ibm7ERh+q2v5alTvwXiMNXxAWa5MxQsr13/VPGVALPLPxzJyI/Uyw80GKlwtkz3Boq50ZyyxxonqItyym3hAUgJ+SO+cFDs4oI1Mq2M7mi7lIpHdN70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753462100; c=relaxed/simple;
-	bh=ppQd582oZginp+3pcQAfvhafTXmi3sug/cDu6IWhOMw=;
+	s=arc-20240116; t=1753463550; c=relaxed/simple;
+	bh=LR/1fr+927w5gHz+7V9YvJuD7wXmf2oW8T6mJhnxcas=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HFrclm1WT6PVoFaCxHT2bN98hjBmwm95a/YVzMcHFuuCwuLOKO5yb6qzx58OUxlAa68+zH2rrH54H9j8j0/slh4nK77kp+NyXur1t1tOqY8Bt/wpgzwLn9KEDfSJT0914m95fu66odoa9CjbcOzUyRF1wfLHulR+JKIdTiSGA+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=noJl4hdw; arc=none smtp.client-ip=209.85.167.41
+	 To:Cc:Content-Type; b=B/T8tDL3jDd0NKppd/bVznpF/iSAw8wHSHtstDcm3R6muzHdHRlznFfLuErqCAcmdxc6tmpObA+TGu33a7RnLd1EXem9juZsPfyZwTd0ohaurCtY5+sxR3VCT/ACV8XdPc4JVS+MoVFRSg+Zj/IjH7fC9DFsHu9AeTlvPpWd4pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E9teVUjs; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-55628eaec6cso2175082e87.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 09:48:17 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4561b43de62so4745e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 10:12:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1753462096; x=1754066896; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1753463547; x=1754068347; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ppQd582oZginp+3pcQAfvhafTXmi3sug/cDu6IWhOMw=;
-        b=noJl4hdwx2RCEnbOzgDSRQFrGxhSfQkotnKKfRVP8Qiodk2eN+UWq2+lNgX9915l66
-         RZEBtjt+IpEVCCFDzon++/VNPf68Sg7vF3NlQ1b6W1ULYE3UBTylCZAdc7w2PvZNRrj1
-         p2VK6pB2rCdj8PAvE1BiIaRkdpaEnWqD5k6C6J5R8JtJ37ayISSM5HceuswfsoaZNVew
-         5dw6dYKKIHbmxYG55rqpFuuhCpL5lO1GAbYKRBJTuY+PIi8B5XTofkkSfzeVu9f/8h3e
-         59ACh+6uOpTU603NCQvxKu7hwBz/LBSM21MdLDDys4QmYFBRLCdxlylmeH2bTIn7hnx+
-         r3Hg==
+        bh=LR/1fr+927w5gHz+7V9YvJuD7wXmf2oW8T6mJhnxcas=;
+        b=E9teVUjspWShKsMgc1oLy+m9iwkIFL+C/fjG0YE/EIYK/XzXXxa23KCQz3naomeZi8
+         Y8HxbHREoCTKbCdWMqpi2V+pL5yhNCwb3XjQOpjt6PtPOvZuTlPg7RcJAUwnhXriZhS/
+         N99P2J2YKRZFR7pKAsOCoTwBmdLM5Jqj8qGv1XHcn5KjgQJYMYIbDlgWyHFUkRoYQF4y
+         1j+lHWwY0JnAJesKI32cLe5FJ6iYckQpFND98nOQLNJL/+FOLyytMGPuyCrCj08wDxmy
+         idRL64mD3bs2vITGHRXBzT4/FnvvsbQ94mIFPvde9MQ6j7mvhKRS8sEYdovkMvVIDRUV
+         SbFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753462096; x=1754066896;
+        d=1e100.net; s=20230601; t=1753463547; x=1754068347;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ppQd582oZginp+3pcQAfvhafTXmi3sug/cDu6IWhOMw=;
-        b=FGSPtl/Ri9XpvFB51PYyCfBnv2t00U37CClvKE9S594uN8AaCXqoccofLPRflg1A4m
-         rAH4jdX0rKYVqkPJj9taqRCBJI14f5WaQt6zFAJUeWIFAi23Sb2zmatJIT8rZEP6ms2F
-         XoJPONJ1Hzq9aBafsDSauCy6r3NJgLm2eKbZXM1873Niu7chPe0ceEi7Jtgg584ndRMj
-         jNpdHNfzlgeRFWa5Fzb4XYmW3YMu6GPY+t74e6hRBk4N5fe0blnkV0oYuQeSfzSIp9SG
-         RH/W4V6qc9ehAqc0+ulcr87Tqr+ZCwbd+Q6GbZg/i5kJuYznmJG1Vg97M98uk30QGjyh
-         ykxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnF21hN7GYK/oaJg60DWw50mih0nBP8CZGYtvs7qhHb7v3tZWeFTR6AtWEe9nwmrU+NYoo6QIjwG7Zy/YeBJg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUXlUbrmMby0/Uqy6cxM0Yuv1aBjY+ZQ5pyILojfH7zcAMUdbT
-	GmbEXpwZjCEMOL6xmfnFwli78CYg11OKzfnqYe4COsQnQa7dRPTWxkfKINjNFqKEA73qrB3sC7V
-	BtSl3BbT8v2WxdbtQ9xgL5JNWSg8X2OIy5WyAdJrB
-X-Gm-Gg: ASbGncuL6m19eLE3pUTRaQI89YaU2ANG6GIo6K18rJkajMQv5a8dbphv4MaHcle+YAL
-	K2d1MuCALM0ZFBox6NDwiMWhT9nUX25LkkwIkKDp//6GyAQ62fLmnd+yN4fBU7CdFhhQPsabSKo
-	AtYStzK/ALFAmkAXVL0Tgo/NQXlRBWbbMylPe+ac9QMBho/ZQ0/0pXfs7D1uogsmSE01b/z4ypV
-	kHVJlo=
-X-Google-Smtp-Source: AGHT+IHRFHPeqj4nIOtWh6Ys6eD3VO7gQX4V7dsVKR085JKaRqkPB/v1BUD9NdFQ0WfSjcyFuM7LsqS6dpAfH6dAKiQ=
-X-Received: by 2002:a05:6512:3050:b0:553:a632:c7df with SMTP id
- 2adb3069b0e04-55b5f3cf5cfmr661229e87.11.1753462095911; Fri, 25 Jul 2025
- 09:48:15 -0700 (PDT)
+        bh=LR/1fr+927w5gHz+7V9YvJuD7wXmf2oW8T6mJhnxcas=;
+        b=QyoRmmQWmLtA3ms3NQiKQSKYYOw10K0JFN+ZKAeM7c7U74V6d0YZtAw3ZGiJlP100l
+         aQJzS02SwrPiOGh/cgalrZrQfnp8+9hg3t7/IoPkyDtpG+Iho554hTEXmXrshpOANyxD
+         3G+nM0Yu7Yq400KBwpXyTuUWqZqSuM3HPIDYwOzdsPXUqknzbb7dU5+zUNZNbFgOfLun
+         DfEUI1977AaJOVNOz44Qlkty/W0RoUJUQaPUXLSVzdYy4pXSdmlGpDurRtQwP/DdilxE
+         UHLga+iTRdiXMQ0SVRCv4gEFv1iFoQTSOLRykK6i4Tv5wLUfq9up4unYIH54LrmHfoOr
+         9NLg==
+X-Forwarded-Encrypted: i=1; AJvYcCVdrDpbGLsDKGaYEKwEMzvG2LumpCKkWm0RHOyFwmE+pSSIUES8C6esdDeCQQbkqI8Zj/9Dev8Q1fQERT6owP4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywo7spKg7dHivzzVOWiuseu8/2VvxXgTtFuOe4eyB4WZYdeNfnZ
+	WBcRNb4TdmTw8qNRq/RExlj7WYIh+DQ70tdrHqDvahi9RE0LnTfiQpyhq9wEVsZfSwhl5EnPxYR
+	blpE0b5A2zU47aXf0xO09AQrl473Xic73Iycto+FK
+X-Gm-Gg: ASbGncvR5kcupt5uuAVXDDHD5m9taPuTsU9J/5uUTigDgRsD0AY6DRBGmhWgADx3pQC
+	w4DuBXh2R+w754p9lL9z50qHZLq2Mb7IVW4r4LMujPf/jP9Z8vWz9uX5IZ6sYEO6AOvNZpM/DeP
+	4fe7SEm3P3F/m3vdYBLfHW2D1k6UzZClw7vVe0UpqzGQwTL0/kDR3h/FVTDOOGNM8a5yY9EStDg
+	ZwSyVS8vBYY5L3w4VMp6lmCF9UKhXVy4wufcs3uCB2e+g==
+X-Google-Smtp-Source: AGHT+IFhxhJzavWiG8TnAC5bSyEUCITgigk6eSOkbePzjanT6OdYE8Du+O+akeu9UoPZ+9VboPkoI9eK3HhR7G1bjjE=
+X-Received: by 2002:a05:600c:1c86:b0:453:65f4:f4c8 with SMTP id
+ 5b1f17b1804b1-45874e2b93cmr1367085e9.3.1753463546532; Fri, 25 Jul 2025
+ 10:12:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250620232031.2705638-1-dmatlack@google.com>
-In-Reply-To: <20250620232031.2705638-1-dmatlack@google.com>
-From: David Matlack <dmatlack@google.com>
-Date: Fri, 25 Jul 2025 09:47:48 -0700
-X-Gm-Features: Ac12FXxyagwElMOCi051dyM63Ch611iKG5b_MU_nG8G_LbqFaLPO58JmZEy3jU8
-Message-ID: <CALzav=dVYqS8oQNbygVjgA69EQMBBP4CyzydyUoAjnN2mb_yUQ@mail.gmail.com>
-Subject: Re: [PATCH 00/33] vfio: Introduce selftests for VFIO
-To: Alex Williamson <alex.williamson@redhat.com>
-Cc: Aaron Lewis <aaronlewis@google.com>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>, Bibo Mao <maobibo@loongson.cn>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org, 
-	Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, 
-	Jason Gunthorpe <jgg@nvidia.com>, Joel Granados <joel.granados@kernel.org>, 
-	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, 
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>, Vipin Sharma <vipinsh@google.com>, 
-	Wei Yang <richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
+References: <cover.1752232673.git.lorenzo.stoakes@oracle.com> <8f41e72b0543953d277e96d5e67a52f287cdbac3.1752232673.git.lorenzo.stoakes@oracle.com>
+In-Reply-To: <8f41e72b0543953d277e96d5e67a52f287cdbac3.1752232673.git.lorenzo.stoakes@oracle.com>
+From: Jann Horn <jannh@google.com>
+Date: Fri, 25 Jul 2025 19:11:49 +0200
+X-Gm-Features: Ac12FXz5v7hwHYZVZo-PcQftTdDT8-58CkHFg3QHIWJWk_i7JJUmY1B0j5KtsNs
+Message-ID: <CAG48ez0KjHHAWsJo76GuuYYaFCH=3n7axN2ryxy7-Vabp5JA-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 09/10] mm/mremap: permit mremap() move of multiple VMAs
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 20, 2025 at 4:21=E2=80=AFPM David Matlack <dmatlack@google.com>=
- wrote:
+On Fri, Jul 11, 2025 at 1:38=E2=80=AFPM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+> Note that any failures encountered will result in a partial move. Since a=
+n
+> mremap() can fail at any time, this might result in only some of the VMAs
+> being moved.
 >
-> This series introduces VFIO selftests, located in
-> tools/testing/selftests/vfio/.
+> Note that failures are very rare and typically require an out of a memory
+> condition or a mapping limit condition to be hit, assuming the VMAs being
+> moved are valid.
 
-Hi Alex,
+Hrm. So if userspace tries to move a series of VMAs with mremap(), and
+the operation fails, and userspace assumes the old syscall semantics,
+userspace could assume that its memory is still at the old address,
+when that's actually not true; and if userspace tries to access it
+there, userspace UAF happens?
 
-I wanted to discuss how you would like to proceed with this series.
+If we were explicitly killing the userspace process on this error
+path, that'd be fine; but since we're just returning an error, we're
+kind of making userspace believe that the move hasn't happened? (You
+might notice that I'm generally in favor of killing userspace
+processes when userspace does sufficiently weird things.)
 
-The series is quite large, so one thing I was wondering is if you
-think it should be split up into separate series to make it easier to
-review and merge. Something like this:
-
- - Patches 01-08 + 30 (VFIO selftests library, some basic tests, and run sc=
-ript)
- - Patches 09-22 (driver framework)
- - Patches 23-28 (iommufd support)
- - Patches 31-33 (integration with KVM selftests)
-
-I also was curious about your thoughts on maintenance of VFIO
-selftests, since I don't think we discussed that in the RFC. I am
-happy to help maintain VFIO selftests in whatever way makes the most
-sense. For now I added tools/testing/selftests/vfio under the
-top-level VFIO section in MAINTAINERS (so you would be the maintainer)
-and then also added a separate section for VFIO selftests with myself
-as a Reviewer (see PATCH 01). Reviewer felt like a better choice than
-Maintainer for myself since I am new to VFIO upstream (I've primarily
-worked on KVM in the past).
-
-Thanks.
---David
+I guess it's not going to happen particularly often since mremap()
+with MREMAP_FIXED is a weirdly specific operation in the first place;
+normal users of mremap() (like libc's realloc()) wouldn't have a
+reason to use it...
 
