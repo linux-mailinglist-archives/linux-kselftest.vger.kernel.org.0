@@ -1,260 +1,220 @@
-Return-Path: <linux-kselftest+bounces-37995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37997-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E670B1220E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 18:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EDFBBB12228
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 18:39:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD43B564613
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 16:32:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 234FE587CB1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 16:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2710D2EF9B2;
-	Fri, 25 Jul 2025 16:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7FB82EF2B0;
+	Fri, 25 Jul 2025 16:39:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=nixdorf.dev header.i=@nixdorf.dev header.b="va3MpInR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eSo02WMK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from shadowice.org (shadowice.org [95.216.8.22])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644AA2EE97B;
-	Fri, 25 Jul 2025 16:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.216.8.22
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753461116; cv=none; b=GZHSIBh0GcBOIal2j9DnnE7yTJLy6Wnncqb5ZRuvW/zH1P4qLE6phf7hx941JbLrItGDvxQdiVIe9Uq1BPbLONF0XWlTL+GVTc0R7O+ge1hbLsu6RdaTTYdfWC29xWMmXFvB65lUzXzJiT7w11SKsS7WCEM0nOQ3Wkrv7zX4914=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753461116; c=relaxed/simple;
-	bh=hDmbRW3zz/0YLNsUObf/IWESbvBcteoW7UzuedfnR64=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YXdG6x7PDjrJteqijbOGn5zrM6ItPWkl1hytge8ffsjyupry3VE06PDLtfLr4WK/3cNj5beF8Cv8lDzur363ydn0JcqiwlT8sC6H0ylitsMwlkFUuTh8N/9udpz48xeddTpJqhnsX0D5awtvUNpUhG97U/+zHH5h56sWkLJvHn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nixdorf.dev; spf=none smtp.mailfrom=nixdorf.dev; dkim=fail (0-bit key) header.d=nixdorf.dev header.i=@nixdorf.dev header.b=va3MpInR reason="key not found in DNS"; arc=none smtp.client-ip=95.216.8.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nixdorf.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=nixdorf.dev
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=default; bh=hDmbRW3zz/0Y
-	LNsUObf/IWESbvBcteoW7UzuedfnR64=; h=cc:to:in-reply-to:references:
-	subject:date:from; d=nixdorf.dev; b=va3MpInRWbE9JfduRIp/DtcS8tnSRvxHJD
-	Wn8iZcRErHvsaUzOC09/H6b+gOAhh3XG5LCLbylY/T5LU9u0M36iexMkl9eGYUkFbX1/o0
-	PjxSL3rTccP9mqIcSBnCSDwwniOyZaEToUvDEdZIhvAjeIAnKETvxnKs0VRjX7P/Ddk=
-Received: from [127.0.0.1] (p4fc61662.dip0.t-ipconnect.de [79.198.22.98])
-	by shadowice.org (OpenSMTPD) with ESMTPSA id 4da8dc46 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Fri, 25 Jul 2025 18:31:42 +0200 (CEST)
-From: Johannes Nixdorf <johannes@nixdorf.dev>
-Date: Fri, 25 Jul 2025 18:31:19 +0200
-Subject: [PATCH v2 2/2] selftests/seccomp: Add a test for the
- WAIT_KILLABLE_RECV fast reply race
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D19C2EBBB8;
+	Fri, 25 Jul 2025 16:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753461558; cv=fail; b=ioDY8Hpdgr4X6YFmoYtRS0NzYIylCKOvwg0Fo0RuXooyFpYsviEWQo6iA/QdzsN7yJ/F4bWc+tcMfrkFrnvWDGGbrVQvWdmvpj8E9K/j3jrVfNso1JY9eNwG6j1+NfMFiPhNJT8ncw2AVvFK8jQhUrEAPpKrZ3ri8y9QPLVHHfM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753461558; c=relaxed/simple;
+	bh=Hcs6QauDf++OAvcXmxwQqHlm7knRS5myTvwiKtcqg7M=;
+	h=From:Date:To:CC:Message-ID:In-Reply-To:References:Subject:
+	 Content-Type:MIME-Version; b=jpX40Q60jIS+Jz4tMDMtl97jt8M692NUvZr8AeJePkqh1m01Gfx2K5pf51doQf+9GBR03dyijWET4w4rwPV2ZdZkv+sVjgOf5bjQMi5aMwXY1O4g7jkqU83aEPt/Uy65Wn2bZUGEFTDKqOt7rJKiPngzZj2F3xX9A9N/25feEzk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eSo02WMK; arc=fail smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753461557; x=1784997557;
+  h=from:date:to:cc:message-id:in-reply-to:references:
+   subject:content-transfer-encoding:mime-version;
+  bh=Hcs6QauDf++OAvcXmxwQqHlm7knRS5myTvwiKtcqg7M=;
+  b=eSo02WMKR/DJUtXuAM501MOhBb42RSPtnLI/Znw6axf6NnmtgT01bTd2
+   AdmnfolvtBTVbCCDEmVlTsSA4yqRHfrhqnC30UqY/RFuUk5aMUwhtBrLh
+   Q7V6PNtd4NfT+VZNrdrtsBdg81z6Shhd0TNRbkFMrAWjxg4uSWq5BjoK9
+   eCxM2fRPCqEdATZ7uqB1qckTzlXE38sXvj9imRwAZ1hcI/lElzXi0uSdR
+   aZSltYtqeBJHIcTLGel+w4M5FQUoC63wx+6MafJ9MtEdijgQXGqcQ+EgV
+   RhYST/cVacwfoaXAE4fky0IFXQAN7MXirpziQV2ljGqxpkeGWCMa2BgHq
+   A==;
+X-CSE-ConnectionGUID: CiuzO0d0TrC/68z0fchgOQ==
+X-CSE-MsgGUID: uUku4irsT4Wnw3iNR8hwLg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="43414773"
+X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
+   d="scan'208";a="43414773"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2025 09:39:15 -0700
+X-CSE-ConnectionGUID: Ld9Pdb00QM+xtYbcwAKfQA==
+X-CSE-MsgGUID: qurzh0WNSU2/ALA537rnFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
+   d="scan'208";a="198183865"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2025 09:39:15 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Fri, 25 Jul 2025 09:39:14 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26 via Frontend Transport; Fri, 25 Jul 2025 09:39:14 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (40.107.243.46)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Fri, 25 Jul 2025 09:39:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mxYGByK6y+97rDPCoePve1+QBbNiwdgLiFxQNSsDm+aXWkNKVKMBU8qcm7o58AX8axsZ1yIyI2iHkfu+nQ2SR/TLoyE7YqU5t9nmiZTFRjC2+H9+w2b1FqFCvwnjNUSiQ+oiIpj4iQ36YsAY6jhy50DPg9tYdGnoB7ukFC3Scu7KsPl4jwK8H0b7+F7qEtkzWi9cOxa66KpO7IYZ2VAs7SPJDi8XKvmjdojy1HPcHEqmB+poEdTo8MVILD5T2YuO1QaRtint+QUU7tMLtA7N7htbsaFNOyk7ypYtxb2qs58Y4apYioM9NfPh8F2QraLheTPIdvPj+qqwfxiH9Iq7Sg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+SCVd1RNfhXhguJZAPica0TaPyYkcLjvDtIbWC9ZOwE=;
+ b=W1chEtJDQ5Lj34S9c/MitFv1IOenGZAzpxOvf8aMCwLhJLeGs5NtbRanoEoaPJZQDRFHvlx2lf9xwaIpV53pvse9a2GYYJq1l4iPxiED+4qQUqnf/nFe5x37ruZqQzdXWV13VDBYsWYgtMjQWyTRdUMut1ykwMlzo6iNjkDodVcUr2rBLOKSxpzCOiSC1l00F9Rgc3o2vF6Lvm4BS9NHrPbtgY+FFLccVQFPnvHeaQizHr7PLNZgbRDCSlLEclHdgNmpnTTPfRjdM1YL9Q8suJZNkK96dSjeAQTWTIXsaijCsJqQEZRbuCeYAZ2F4XH+qELusBVunPrAc9R/erIU2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by SJ0PR11MB5815.namprd11.prod.outlook.com (2603:10b6:a03:426::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.21; Fri, 25 Jul
+ 2025 16:38:32 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6b05:74cf:a304:ecd8]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6b05:74cf:a304:ecd8%6]) with mapi id 15.20.8964.019; Fri, 25 Jul 2025
+ 16:38:30 +0000
+From: <dan.j.williams@intel.com>
+Date: Fri, 25 Jul 2025 09:38:28 -0700
+To: Jakub Kicinski <kuba@kernel.org>, <workflows@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: Paolo Abeni <pabeni@redhat.com>
+Message-ID: <6883b3046b640_134cc7100ad@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <20250725080023.6425488c@kernel.org>
+References: <20250725080023.6425488c@kernel.org>
+Subject: Re: Crediting test authors
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0113.namprd03.prod.outlook.com
+ (2603:10b6:a03:333::28) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250725-seccomp-races-v2-2-cf8b9d139596@nixdorf.dev>
-References: <20250725-seccomp-races-v2-0-cf8b9d139596@nixdorf.dev>
-In-Reply-To: <20250725-seccomp-races-v2-0-cf8b9d139596@nixdorf.dev>
-To: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
- Will Drewry <wad@chromium.org>, Sargun Dhillon <sargun@sargun.me>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Ali Polatel <alip@chesswob.org>, 
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
- Johannes Nixdorf <johannes@nixdorf.dev>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753461100; l=5633;
- i=johannes@nixdorf.dev; s=20250722; h=from:subject:message-id;
- bh=hDmbRW3zz/0YLNsUObf/IWESbvBcteoW7UzuedfnR64=;
- b=IHqyetDCVDnPPfDjQ9CjfsnYJlu/q+HgM3eYlQuf6AIMdkrtjZse0J2+P5IlUirryjLWt0l+o
- 0Wso+Mjwe1oAV4/eYROKTDI5WRBMy8KAMoFupbcMt899M5A/b2cRhxh
-X-Developer-Key: i=johannes@nixdorf.dev; a=ed25519;
- pk=6Mv9a34ZxWm/f3K6MdzLRKgty83xawuXPS5bMkbLzWs=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SJ0PR11MB5815:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6758a43d-a354-4a1c-01bf-08ddcb99b02b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?QzV1K2xGVEt4b2UrUkZyU2xCbFNUZU41b2FVUU9oR3ptandrL1J5c0pnd1Ey?=
+ =?utf-8?B?VnRiUmRlOHRZdmVWZkVtbzE4T2QvNVBDUkxuSDE1Zzg1YWRNQk1WY1gvOEVj?=
+ =?utf-8?B?UG02cUF1ekhvRlRwa3BUaFN3N3E5eDB1Nmg2bnhnWHUxenhnL3B0c2xqakUv?=
+ =?utf-8?B?azl6N0k1aEtmUDJQTFVHOHZFb0wzUXJERXNzRmpHaVVPTmo2ZmdmNExacHVU?=
+ =?utf-8?B?SUVvN0I2akFVZkgwcDdjVFJUd3R2cmcrYkFMVm01TFR0T0ZMWDhLTU92VFlj?=
+ =?utf-8?B?cng5QXg5QnJ5TTVGTUhTZWFVdlRYblhDSnRPNnk1b01nUEZKY1pkZ1EzeWlo?=
+ =?utf-8?B?S1dZZWx2QnRzUkZwU0F0UW1tMWM0M2x6WkdwVUtYeVozWk5LYjkvN3lLdGFH?=
+ =?utf-8?B?OXMrdHV6cTR4RlZ3NjAzcTFibFo0M2V6eTVleXVIZjBJUkJGL0tCRmVGMEFj?=
+ =?utf-8?B?eFVkRlh4b3NaUXZ2NlFxeU5FSnZaZldzZG5ZbGE0UGlZb0tGYzZLczgwbU9V?=
+ =?utf-8?B?WTVpdFRMR0hmQkhXMXZBU040bGh4N09oTmVzUXdHcFI4Rm1aSjZBbGttdVkv?=
+ =?utf-8?B?b1FwN0VWSEpvR2thRENucWliZDBERDhiZWdxWXg1SCtYZWgzRjY0ZGNhQm9l?=
+ =?utf-8?B?SXY0WkdtcnJyUHRzMGJjbU9GdG9lV3hHUHNFNytZa3VmeUFLempVN3hvQjBI?=
+ =?utf-8?B?QnRDcVMwdkRSbHBhaENQOU5kbk9heEpkUjE5MkYxSjFScldFdFFmWTlYNDl5?=
+ =?utf-8?B?TzFLcDRLSnZtcHBpZUFqRmhmK0lsdDFCbXNnZFMxQ3NzK0JscFJkY1h6bTJx?=
+ =?utf-8?B?R3ZxU1ozZnJBV0lpOHNXY0tvdzhISmlKWkhZb2dCbngrSVIwR1FzZGNGVWJu?=
+ =?utf-8?B?RXdEZG1GSmhTb2F5WHlLWFhPalpoYUJrTG5OdjAwY1o3N1VRUFVtV3U2cW9i?=
+ =?utf-8?B?T3BhTGVxSmZGa3BJMktqUXpPdkpCRE9iazZ3TCs4ellyWSsvcjc5ZjhLUGpv?=
+ =?utf-8?B?eXdkWEg5Nmt3TVB2aXZBUEd1ZjJKNUxFa043a1JPeHQvNlRNSGdSZmlWZFRC?=
+ =?utf-8?B?T1lZcHQ5anR4bDlTdW9UYW1WQnhoa2JxeGwrRHRiWlpCMzRTd0JhcGJEM3BX?=
+ =?utf-8?B?b2I3bkhzVlRTQTV1WTlwU1BqR2lOeURqTUV5OGR4T28zbFNRV1VMQXhlT2d3?=
+ =?utf-8?B?QmpzVndXRnBkM2V1Z1ZveHRKODcxZ1F5Z1BWTEVVY1gyMlR3OU05ZHovZ2tN?=
+ =?utf-8?B?MUM0cURadlpjYkNZSGF0cG9LWHlhemJDMmZlY2g2MDcwR1I5Ylp6Skk4aFh5?=
+ =?utf-8?B?UnREc2N3QmN3N1BpZ3EydTBDYXFma1BSSG9BemVkNkQxRW1UYTJ4TXV5a29l?=
+ =?utf-8?B?bThLMW40QnlRRWM0bWNtK0NyUHIyQ2hweVBSQ25UYU41UUxWa2t3YlRsemJL?=
+ =?utf-8?B?RmRSUWdIM2FSd1lHWko1WUx3d1YrKzZCVHYyaWNTelhydElhWXhVaHR0c2c2?=
+ =?utf-8?B?UkVod1ltcStWaVhmTGJQbFFCN2cwRlJ2cWdoUzFzMHh0RGJsVEMrYnlWQU1N?=
+ =?utf-8?B?N2FUdm43N2hWMlBiUVMwdUhodmh3eHlXR2lHankycDBCUHlBMnZPZ3dkZEVI?=
+ =?utf-8?B?MkFiNU5WYXZaTDBDNXZZUUF6RGprTU85R3VuWnMxdHQwaW9lSHMycFdUY09D?=
+ =?utf-8?B?RFhoVFREdnhkYXo1eDFRbnFQYlBZczBvT0wxbTl3V1YyTnM1dUw1VXNROUF0?=
+ =?utf-8?B?SmhUUEFUcm1oWkVacjh2S2ZxYklZT2NTWWpFM0FCOSs2N016em9ubDlPQTcv?=
+ =?utf-8?B?QzQ2VkpuS2lkZk9nQ2M2N2d4ekQ5UWtETmIzejZvckFlWk90Sy9xRDJlVzFR?=
+ =?utf-8?B?Z09ib0ozano0R0pPend4RDdjSGwvaEpaUTA3dGN2b1hXRVdtMjdXMWJDV1BQ?=
+ =?utf-8?Q?NrGEmC9XtTE=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWZaK0Irb2dtSEhFN2FXYU1NcGd6RDQ2dzFmR2VvMW1GRElNTWdLMDBFalFC?=
+ =?utf-8?B?c2labXNkNjBSUWdFYnVRWXB6YnQ3akpYbDZkK3M4WDJhM3ExUXhCMGZaRWls?=
+ =?utf-8?B?SUEzdGV2THJoR3FzajVBbU1IdzUrUEFrN3JQMTNIcVR2OWZ3N2ljUzNGSmx3?=
+ =?utf-8?B?VjdtMU9WMytBb3MzblNvdm5KdmoreE5OOHNyWHRiQnptcjV3bjhYNXIrMU9F?=
+ =?utf-8?B?ZDRNZVN1bE5pM0UwM3podVBTVDlRQ04yUmVxVmJUNG4xSUpmc0ZrNkxEMmxG?=
+ =?utf-8?B?R0pQcGMzZ0lycEFoaWtDM2dSZTRwQmVMRWsrdVJwWXFIQVduQy9CMDZYY3li?=
+ =?utf-8?B?TkJITjFTcktSQ0hXWC9JcjJjcUcyVVV6Z3FXZnErVlhjRmNoQzN1eThKWEV6?=
+ =?utf-8?B?cmw3dmIvQkY1RVphenduekQvRXpSbkxJTnlPS2JOOVNjM2NGV0dpdHVCSzlh?=
+ =?utf-8?B?T21TbWRCa0FDVjd5VEwwbFgyeTRPdkJOYTlCZVk0NjMrNlEyM1ZtWTVDVVlP?=
+ =?utf-8?B?WnlMVk1WbFJpeVAzZnVWQVBDdVArR2pFSU9YdXNvWHkwMFJFZVhKYzJkTmFU?=
+ =?utf-8?B?U0NocWFVZzV6QVRzb2dkRTROVFJUZ0NVU0tJTVZDeEJVSXdOVTJrVmJJWG9K?=
+ =?utf-8?B?Sk5lcEZjWUFoYlc3ZFpDNDRZL1dHbDJ4OHNMWVoveC9TSW5STGxqNnhQSlJW?=
+ =?utf-8?B?U2V5RjY3ZFR1UXZDUTdqMEExSGtOQWFXMURpMmJvUVoxQkV6cjM2RTA1YTlK?=
+ =?utf-8?B?TUp2Ylg5ek55emVOMzlZMms5ZGtla29qc1FHQ0tMOFJXdStwTTB5ck9wYnFU?=
+ =?utf-8?B?N2dEUCsweVYvK0lYZWdEQ0JwZnhXdWhPZ01IWDRwU3VHeW9QK3lBZk1DaW5S?=
+ =?utf-8?B?TmFNK0Z4Z3oyUEQwM2J1cU1iTUw1UmZlN2lzUWFQV2E3OGRIcGI5OUpSaHJR?=
+ =?utf-8?B?Ym1qc1NDalZaVUFnN0VncG40SEticmszVUsrSXR4dFpUNlhsQ3ZObTlaYkdt?=
+ =?utf-8?B?bWJZekF2SHQ1eXl2TkVKWTlpbllIWEdBQ0g4L3c3d0V2Sy9TU0o1cEQ2b2Rq?=
+ =?utf-8?B?Q2oxYlhFdVJ4OGI5MGpwZWp5anQ5aHQrUjMrK3lQWVNab0RJanluWkpDMGVr?=
+ =?utf-8?B?dWh6Tk83aEdtclJJZEcrNVU2MG9rSmpobVg3NmxMNHREdU8wN2xJMFlzdHhR?=
+ =?utf-8?B?L3hCa3lvdUJGK0cvL0JvU2d4UlFWUC82ZEVUdGg1NW1KYXEvN1NzMEluWCth?=
+ =?utf-8?B?eGtGY0dmbkpiOVRHZXZqWktqd05SVThVM0wwRkQ5WnJTdlIwOE1Ba2w5K0VK?=
+ =?utf-8?B?NmsrYVZNL0lneXBMTW9VaFN2UE80cUF2VVhzRHVIaE5TWU1RcTI5NWw1OHlS?=
+ =?utf-8?B?SmhuVkl5RGJpQ1NZV1dyWVFXcGV0SnRLMnRva1RNVUI4OUtlRVlWSmpBRWNR?=
+ =?utf-8?B?SFl5VEhPOEZ1UTgya1M0R3lPbzgrdXVWbyt1UTRUaWwrMzllMXcvZmM5ZUt6?=
+ =?utf-8?B?bUZQUmFQcjM2S25DRWNhY0lvVFpzcksxYk9PY3l0Z1dJMGNPdGpLRWFaQzR4?=
+ =?utf-8?B?d3h0OTVWWVVKTmZsYXRpSGJZRjVWeVRaNTcvRnNNM2UwOHlpTHlOWkZBaWpi?=
+ =?utf-8?B?anhLc3BxYjV4NEhDWHd4cFh2ZkpicCtJTHA3SXFyc1RpM05yVHRkMEw2WUwy?=
+ =?utf-8?B?NnlvQzZ0MjdqcUswS00yRkFRVjVsTzVUK3U0cllVRXVrdk5makVPTjNBelFE?=
+ =?utf-8?B?NHlaekJNR0RHdkNGNVVBWVBJSFNpMXVYeWhOMVZ1TE9rZEdsSGxwNXVDOFJT?=
+ =?utf-8?B?MkJ3T0dtZDgwaEs2a2VGMjJtTmFaeFJLWXhoUzRUY1lkem0yeHg5cStYM3dK?=
+ =?utf-8?B?Mm5pa2EvNTVheXJ2VzZ0S0pWYmc5T3NuTXVxKzZXYjNYOGdFYjI0NkhrMDF6?=
+ =?utf-8?B?dnEvMVVZcG5HalJ1dXlLUldDZ1E3ekt2SlluSVFvWFBZa05SekF0ZVc0Mmlr?=
+ =?utf-8?B?c3FCc0pQUUtUWnBDM2cwZEVIdklXaEQzdXpZSlNoK01wdmNqR1VWRURJZWZU?=
+ =?utf-8?B?YjBVbG9XR09uUzRuU2Y3YTdDVzB5UnVYSzR2ZzRQenZzaFpndUxlUDJIb1VY?=
+ =?utf-8?B?aEgwNW9na2VETW10ZHFvR1VaSUI2WEdEdmdTMndHK3FVMi9JOVpiUjJFbHgz?=
+ =?utf-8?B?VVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6758a43d-a354-4a1c-01bf-08ddcb99b02b
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2025 16:38:30.3987
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iyUDrXW/mp1OVErvsuB6oRYh3q1O1CITBwYSQtP4Io4cdnUYOMrfk+K71HHwgw7VzT9IDbS+zjzoAFuWwHRybxW9mlT3UVIwGwJaYQN95TM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5815
+X-OriginatorOrg: intel.com
 
-If WAIT_KILLABLE_RECV was specified, and an event is received, the
-tracee's syscall is not supposed to be interruptible. This was not properly
-ensured if the reply was sent too fast, and an interrupting signal was
-received before the reply was processed on the tracee side.
+Jakub Kicinski wrote:
+> Hi!
+> 
+> Does anyone have ideas about crediting test authors or tests for bugs
+> discovered?  We increasingly see situations where someone adds a test
+> then our subsystem CI uncovers a (1 in a 100 runs) bug using that test.
+> 
+> Using reported-by doesn't feel right. But credit should go to the
+> person who wrote the test. Is anyone else having this dilemma?
 
-Add a test for this, that consists of:
+Is that not a "credit in the changelog" situation?
 
- - a tracee with a timer that keeps sending it signals while repeatedly
-   running a traced syscall in a loop,
- - a tracer that repeatedly handles all syscalls from the tracee in a
-   loop, and
- - a shared pipe between both, on which the tracee sends one byte per
-   syscall attempted and the tracer reads one byte per syscall handled.
+"Big thanks to DeveloperX for their recent TestY added with CommitZ for
+ catching this case."
 
-If the syscall for the tracee is restarted after the tracer received the
-event for it due to this bug, the tracee will not have sent a second
-token on the pipe, which the tracer will notice and fail the test.
-
-The tests also uses SECCOMP_IOCTL_NOTIF_ADDFD with SECCOMP_ADDFD_FLAG_SEND
-for the reply, as the fix for the bug has an additional code path
-change for handling addfd, which would not be exercised by a simple
-SECCOMP_IOCTL_NOTIF_SEND, and it is possible to fix the bug while leaving
-the same race intact for the addfd case.
-
-This test is not guaranteed to reproduce the bug on every run, but the
-parameters (signal frequency and number of repeated syscalls) have been
-chosen so that on my machine this test:
-
- - takes ~0.8s in the good case (+1s in the failure case), and
- - detects the bug in 999 of 1000 runs.
-
-Signed-off-by: Johannes Nixdorf <johannes@nixdorf.dev>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 130 ++++++++++++++++++++++++++
- 1 file changed, 130 insertions(+)
-
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 61acbd45ffaaf87b180c8dff2324a02282356fcd..b24d0cbe88b4499a7635c6a075bfc6a660409792 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -3547,6 +3547,10 @@ static void signal_handler(int signal)
- 		perror("write from signal");
- }
- 
-+static void signal_handler_nop(int signal)
-+{
-+}
-+
- TEST(user_notification_signal)
- {
- 	pid_t pid;
-@@ -4819,6 +4823,132 @@ TEST(user_notification_wait_killable_fatal)
- 	EXPECT_EQ(SIGTERM, WTERMSIG(status));
- }
- 
-+/* Ensure signals after the reply do not interrupt */
-+TEST(user_notification_wait_killable_after_reply)
-+{
-+	int i, max_iter = 100000;
-+	int listener, status;
-+	int pipe_fds[2];
-+	pid_t pid;
-+	long ret;
-+
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret)
-+	{
-+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+	}
-+
-+	listener = user_notif_syscall(
-+		__NR_dup, SECCOMP_FILTER_FLAG_NEW_LISTENER |
-+			  SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV);
-+	ASSERT_GE(listener, 0);
-+
-+	/*
-+	 * Used to count invocations. One token is transferred from the child
-+	 * to the parent per syscall invocation, the parent tries to take
-+	 * one token per successful RECV. If the syscall is restarted after
-+	 * RECV the parent will try to get two tokens while the child only
-+	 * provided one.
-+	 */
-+	ASSERT_EQ(pipe(pipe_fds), 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		struct sigaction new_action = {
-+			.sa_handler = signal_handler_nop,
-+			.sa_flags = SA_RESTART,
-+		};
-+		struct itimerval timer = {
-+			.it_value = { .tv_usec = 1000 },
-+			.it_interval = { .tv_usec = 1000 },
-+		};
-+		char c = 'a';
-+
-+		close(pipe_fds[0]);
-+
-+		/* Setup the sigaction with SA_RESTART */
-+		if (sigaction(SIGALRM, &new_action, NULL)) {
-+			perror("sigaction");
-+			exit(1);
-+		}
-+
-+		/*
-+		 * Kill with SIGALRM repeatedly, to try to hit the race when
-+		 * handling the syscall.
-+		 */
-+		if (setitimer(ITIMER_REAL, &timer, NULL) < 0)
-+			perror("setitimer");
-+
-+		for (i = 0; i < max_iter; ++i) {
-+			int fd;
-+
-+			/* Send one token per iteration to catch repeats. */
-+			if (write(pipe_fds[1], &c, sizeof(c)) != 1) {
-+				perror("write");
-+				exit(1);
-+			}
-+
-+			fd = syscall(__NR_dup, 0);
-+			if (fd < 0) {
-+				perror("dup");
-+				exit(1);
-+			}
-+			close(fd);
-+		}
-+
-+		exit(0);
-+	}
-+
-+	close(pipe_fds[1]);
-+
-+	for (i = 0; i < max_iter; ++i) {
-+		struct seccomp_notif req = {};
-+		struct seccomp_notif_addfd addfd = {};
-+		struct pollfd pfd = {
-+			.fd = pipe_fds[0],
-+			.events = POLLIN,
-+		};
-+		char c;
-+
-+		/*
-+		 * Try to receive one token. If it failed, one child syscall
-+		 * was restarted after RECV and needed to be handled twice.
-+		 */
-+		ASSERT_EQ(poll(&pfd, 1, 1000), 1)
-+			kill(pid, SIGKILL);
-+
-+		ASSERT_EQ(read(pipe_fds[0], &c, sizeof(c)), 1)
-+			kill(pid, SIGKILL);
-+
-+		/*
-+		 * Get the notification, reply to it as fast as possible to test
-+		 * whether the child wrongly skips going into the non-preemptible
-+		 * (TASK_KILLABLE) state.
-+		 */
-+		do
-+			ret = ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req);
-+		while (ret < 0 && errno == ENOENT); /* Accept interruptions before RECV */
-+		ASSERT_EQ(ret, 0)
-+			kill(pid, SIGKILL);
-+
-+		addfd.id = req.id;
-+		addfd.flags = SECCOMP_ADDFD_FLAG_SEND;
-+		addfd.srcfd = 0;
-+		ASSERT_GE(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), 0)
-+			kill(pid, SIGKILL);
-+	}
-+
-+	/*
-+	 * Wait for the process to exit, and make sure the process terminated
-+	 * with a zero exit code..
-+	 */
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+}
-+
- struct tsync_vs_thread_leader_args {
- 	pthread_t leader;
- };
-
--- 
-2.50.1
-
+Reported-by: Some CI Bot
 
