@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-37978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A772CB11A3A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 10:49:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A862B11A4F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 10:56:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6ACF16F2BE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 08:49:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E63A7BBCAE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 08:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FDB1F5437;
-	Fri, 25 Jul 2025 08:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F62251791;
+	Fri, 25 Jul 2025 08:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="IfN/1RrF"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="TZiyWJ17"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF921C84A2
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 08:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC64238C36
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 08:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753433347; cv=none; b=MJf3TDgfcw21waYm61h+bCZPh5lduCVIZ9xCI0ghUClMUv7Tx7P2UgNm4kaNiDulDLS3qWULw6oKY9Zm+CdsglSNX6Qsiqql4WEjstsZO+MIvv3Fw8catiNHMnFKVqmLHce+3NQzfZywjhI9p644l8I9w3ZFvcdpzm0WZnVE440=
+	t=1753433761; cv=none; b=eUqb/dUeyPU8X8wHTKb0Bwgqd2l2lWcW8GoV2yarLtDxfNV1365QUwpkQRL7OLpIS2zlBaC0xNsE1M27ZAK/lxuOlJ3gDX3RJMW7ytIHB0Lkh66Nfffthf0BQzi8wLVJZk8lmeOCnSfVFBRkE2UnJ0WEbzBxPf+Yei1Z2CoY0Nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753433347; c=relaxed/simple;
-	bh=mLb2N9Sk52gxfDFaR98oVbkimyev4kEyhPLHisBUWOk=;
+	s=arc-20240116; t=1753433761; c=relaxed/simple;
+	bh=JuuHd3/JWJkWh66N+Da1iNzdDmWdmTZCjsHYbDE9L68=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AxCpHpvtxYzv6cDc9jiDkdhUp+8f/w/5Rawa/wG028wt8Qp+4jeteVhRxdOuQIPkAVvoPb4ANv3AzJJkAjiCNdioTkm2JDgFV1EIpEhdJsDWyjzgfR0a5s2EZlEW+uJD9Nh3CzRalnDQAGbL0M+xfHVy2Q7w55lIHSLZp7rDtFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=IfN/1RrF; arc=none smtp.client-ip=209.85.208.53
+	 In-Reply-To:Content-Type; b=dx4i+kVu6MVRll4vOlMyqz0UgwDlpUZEtJqne2+Jmd4cJKbvM86i2vfF6BdhN5dmd6Zp0Zkvtph2lW8R+4klGMzobIVIuHtwarXAnsJr4VKUiQyall8lATYHr5h9JzrSmajaCboCI0OZ+Z9Bm8PZkEpoURZyy2lbMymYp8fh/j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=TZiyWJ17; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-60c01b983b6so4176442a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 01:49:04 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-aec5a714ae9so255353166b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jul 2025 01:55:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1753433343; x=1754038143; darn=vger.kernel.org;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1753433757; x=1754038557; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wbgBxVqvuAaSCTHnKyGAvWS3c7FK3JV6irIi80dt/AA=;
-        b=IfN/1RrFygL+ZxwARMQ11mpRaZn4LauNY1cGiOE5F55rnCEbD3nsumjGn3dWlocqXO
-         9qmco4aZkXo0tcAqEKNc5ClmKQbLBNRMJXNy7MFwB9v1U+84WCz94nGqaln5Rs+OPnEv
-         nMySxJomILi2wJ92QbSwEja4a0LHsT+USdTa9EqGgn0TBxLvS9uRZD4IMVA8dFVnc0Wn
-         y+0Gho9j986qI5NuTNYeIXKihMbLurHQPodqF+fjOy/CcYXjyD46S0DRJJjV9DNpdBIR
-         gxe9lf496P2+ygJi+AOL3yLWyXwIs/DML8DyDXarWhv4NOXvpNPyZNNToTbXI6tfAkDz
-         5G4w==
+        bh=6LeP8D1ee7qumndKzatfF7n5JacNT1J8VdXDhVO9bUU=;
+        b=TZiyWJ17XFqxg00XS6PN1aalVO00Fgdh5v11SNZvC56YP7pinWhR0w4Uz+9WbmmHoL
+         vbBtWsQpak2+JkgdfpwpnTT6NICsUWNY9nD1LmgbU//B96OZbvYvsL4pbt8Q1cfFdgBJ
+         PUpBGZ+rvLjUZxAiEAJeAjNzHPTt20MUamPesDjSax7bYI+TlN74d9hmOFosuGnixuEF
+         81dKX5uHO633S0VLG6pFHvAyFs2e0DB5Ajc+1AgSqk5fHZxk8sqGAlqKYDgCnEmi1LUt
+         xBN/SPbf8RX0v1LBqjF0gIZnkZiho/8xaiZd8hUSi60QRSqA6OkacUuvXauywfPLlZ2t
+         Pv4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753433343; x=1754038143;
+        d=1e100.net; s=20230601; t=1753433757; x=1754038557;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wbgBxVqvuAaSCTHnKyGAvWS3c7FK3JV6irIi80dt/AA=;
-        b=RxzbkvkU6tHt34mFq4hobcgBeIyZdjLzfr+OPgdcDV+bjMZt9JtOiitdwDzii/2Goy
-         KeFeodU/+Fa8+Gf/y1c+vI2Gmjjp/I/u/5Yzrj1NB0EdG2dtktWHlckz6LXbujix8H79
-         VOzNseq8nkwkacNoHJzTrkzzioHB+ugziBGAjwWK0j/CyPJWedNqD2/SEsINrqUkkdbW
-         Nqsy4vFFIkfhm9RxIgaCtBJJ8wAU6mmkbCbsHoI8z0N+n5lDCeQbsTuNXBP8UjGuPC+I
-         Vr7eHgN3BeoBNGBvsQWzBSZUzLx0UR13TNDNhSJPja8cx0D5iMeoVzT5MdQW4dV6iEJ9
-         aiag==
-X-Forwarded-Encrypted: i=1; AJvYcCXAkS9n95KwlfGFm+6cclFu0JTNlhH6Wrj2GC/bpdF+ccb9yTrKB/NlRz/hei1EdSrurb7RhzWP7P5FOHwpvZw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywl/JDF9KCsOmJMlGOEcqjLPGTaOS3DFjpND/A4xtZgX5Xoa7bB
-	PYb3nRU6tVAKEvkV9m50op/EcxjNTraEKQlP2kxd2jytjk5jCxz1isfx7HPE0nF3GeE=
-X-Gm-Gg: ASbGncuOViGeqSV/fhjGkKaCQbm31MwGCR3IB4cz6NlcNHga/wnLo31q6XNgWGaezOK
-	wdwCNfvRsUNj06InktDXqGuT2YfxiKarcixqaXbu9o4fJ3C0qTQKfy1d8e575FlRZGexqSTvTMU
-	YD1Rveq3wemtw7HR9LxdnQbKY3FmD9WKwW9iygceCaOjiWq8CJOyC838NXhHzufBRSWAXlso9TY
-	77IWHdGw3bPLKGd5HEs6s5L/zxqZR7VkCsdqAS1gnKoBklAAewLgWds0/HnEwK98UJUxIjfAYzn
-	57AwcEnEww0nTXcWOFyrqKwEm9NNaEJ3WzzeL/KKLOcOR/3QLH4XKwg/xt8x3ApZb4/Mw0J1Kug
-	2pdxFh0WyDR9ijw1vjtah6ltXK9H6Z6Akk5AHqqMBRPodYD9ToszTan61fyVA8ZdG
-X-Google-Smtp-Source: AGHT+IGp/h33UX4VuxGPj+pY0fYttSnIKhYoSPyGHW4EMhc9+8Q1n1iPPrKA8O8mMIX/IrOuoIiu3w==
-X-Received: by 2002:a05:6402:50cb:b0:607:2e08:f3e6 with SMTP id 4fb4d7f45d1cf-614f05f6207mr1099160a12.17.1753433342161;
-        Fri, 25 Jul 2025 01:49:02 -0700 (PDT)
+        bh=6LeP8D1ee7qumndKzatfF7n5JacNT1J8VdXDhVO9bUU=;
+        b=w7Rt7wUbCR2WRq6CAmZtmIB731H48SVF6UKbXvyvDg6Lw/gPVausyN+DADzHqqpoXs
+         YoykGsX/axa9p3R6Zs4x/0IQUmxnyPAhOawuIiiy3tSZwezjjKT7qRVDLV18focK2SXh
+         sPTSgg8nzT+ytgMtM9nQOAh8So3cv6P3qLbX1/RhkGPbuvESe3Yq4xJbFTlEOMQ5C/AJ
+         /1hpL1zwOd5SmK7nwSVbGCAw3VH6Cfuiu5DnxqNngcA6Q4b+b/f9IaLUnMYlkpNqeOAB
+         nJoEUPXROvHT3UX0nrOwgar9PAMqdEBNMcA4/abUpACiJe9qNmisUYEjAFFgYw32VmbA
+         RpAw==
+X-Forwarded-Encrypted: i=1; AJvYcCVQved7JmkMDaGnLKS8Hld+NQG/uAtXMPDbpCNV/VNYe3L1MfnLyosbXPPidUJs4v4Hb3iq4MiW/JWE49KLbR8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyE9gCmgOvGR+Rbaf/FNGPJbMpHyVcfA6xoYa+AXi32PTgrSoS+
+	nf+zp7lOJGQ5Ejm0VuLvhSHViL5UOSZNyRQaUoLiv4c/MaOlPZ1mGy29V4cnONixuQE=
+X-Gm-Gg: ASbGncs0Bsqi3ICC7by2Kwcue3W1Bo/E14ylVAiplYzNBtnZIDNp2stlwCvyKFHFohq
+	jLhv3KESVOZzzeU5nlIEZ1jU8z14W9tpjMmNHynVrcXExmmmQkmxQPjaA/YwCFw9vCTtf+yfK47
+	RibFkLCOb2vkbN9eqXLwjOJId5lI5F4J0fHDJ5+QkyfRAO1a2K4mwlly8TsIcX85ksBiO9If6a2
+	cyr4Vxd1IfkKI5GWstj0mWsZixyDlO+We8uP5YeR+hR54riAUEEFA5fRAmDnCH/S+2f5O+y/07O
+	UdVBQq2+P8Mi0qxcdGSYx+dHFcxz2rLPmVFAJCqATrMwj2lMndti+riR898yD4wNysA2HCfBMWl
+	ZIKCpLWW8npQpGj+rHPFTcf1QVL38jFqohxek/xTsy06S6Hfhsm0LLMD7urirN+qZ
+X-Google-Smtp-Source: AGHT+IESbgTMAbbOOQ4dkuWrJjDXut0veR7I0Y4h2kmNN5sqbg78IY81j+SvSd3mO/Y8gY1M5e4CZw==
+X-Received: by 2002:a17:906:794b:b0:ae6:c555:8dcf with SMTP id a640c23a62f3a-af61cf980afmr167109166b.26.1753433756789;
+        Fri, 25 Jul 2025 01:55:56 -0700 (PDT)
 Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-614cd336253sm1883539a12.65.2025.07.25.01.49.00
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af47c496250sm240609066b.13.2025.07.25.01.55.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jul 2025 01:49:01 -0700 (PDT)
-Message-ID: <367f9bbb-537b-4828-b8c8-cfc9d8ca8c2c@blackwall.org>
-Date: Fri, 25 Jul 2025 11:49:00 +0300
+        Fri, 25 Jul 2025 01:55:56 -0700 (PDT)
+Message-ID: <a1f88a9d-14b8-4547-a6c1-b880633775a5@blackwall.org>
+Date: Fri, 25 Jul 2025 11:55:54 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,8 +82,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/2] bonding: send LACPDUs periodically in passive
- mode after receiving partner's LACPDU
+Subject: Re: [PATCH net-next 1/3] bonding: add support for per-port LACP actor
+ priority
 To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
 Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
@@ -93,247 +93,233 @@ Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
  Amit Cohen <amcohen@nvidia.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
  Alessandro Zanni <alessandro.zanni87@gmail.com>, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250725062848.18889-1-liuhangbin@gmail.com>
- <20250725062848.18889-2-liuhangbin@gmail.com>
+References: <20250724081632.12921-1-liuhangbin@gmail.com>
+ <20250724081632.12921-2-liuhangbin@gmail.com>
 Content-Language: en-US
 From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20250725062848.18889-2-liuhangbin@gmail.com>
+In-Reply-To: <20250724081632.12921-2-liuhangbin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/25/25 09:28, Hangbin Liu wrote:
-> When `lacp_active` is set to `off`, the bond operates in passive mode, meaning
-> it only "speaks when spoken to." However, the current kernel implementation
-> only sends an LACPDU in response when the partner's state changes.
+On 7/24/25 11:16, Hangbin Liu wrote:
+> Introduce a new option ad_actor_port_prio, allowing users to set the actor
+> port priority on a per-port basis in LACPDU.
 > 
-> As a result, once LACP negotiation succeeds, the actor stops sending LACPDUs
-> until the partner times out and sends an "expired" LACPDU. This causes
-> continuous LACP state flapping.
+> This priority can be used in future enhancements to influence aggregator
+> selection via ad_select policy.
 > 
-> According to IEEE 802.1AX-2014, 6.4.13 Periodic Transmission machine. The
-> values of Partner_Oper_Port_State.LACP_Activity and
-> Actor_Oper_Port_State.LACP_Activity determine whether periodic transmissions
-> take place. If either or both parameters are set to Active LACP, then periodic
-> transmissions occur; if both are set to Passive LACP, then periodic
-> transmissions do not occur.
-> 
-> To comply with this, we remove the `!bond->params.lacp_active` check in
-> `ad_periodic_machine()`. Instead, we initialize the actor's port's
-> `LACP_STATE_LACP_ACTIVITY` state based on `lacp_active` setting.
-> 
-> Additionally, we avoid setting the partner's state to
-> `LACP_STATE_LACP_ACTIVITY` in the EXPIRED state, since we should not assume
-> the partner is active by default.
-> 
-> This ensures that in passive mode, the bond starts sending periodic LACPDUs
-> after receiving one from the partner, and avoids flapping due to inactivity.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
-Shouldn't the fixes tag be lacp_active commit id?
-E.g. 3a755cd8b7c6 ("bonding: add new option lacp_active")
-
 > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 > ---
->  drivers/net/bonding/bond_3ad.c     | 72 ++++++++++++++++++++++--------
->  drivers/net/bonding/bond_options.c |  1 +
->  include/net/bond_3ad.h             |  1 +
->  3 files changed, 56 insertions(+), 18 deletions(-)
+>  Documentation/networking/bonding.rst |  9 +++++++
+>  drivers/net/bonding/bond_3ad.c       |  2 ++
+>  drivers/net/bonding/bond_netlink.c   | 16 +++++++++++++
+>  drivers/net/bonding/bond_options.c   | 35 ++++++++++++++++++++++++++++
+>  include/net/bond_3ad.h               |  1 +
+>  include/net/bond_options.h           |  1 +
+>  include/uapi/linux/if_link.h         |  1 +
+>  7 files changed, 65 insertions(+)
 > 
+> diff --git a/Documentation/networking/bonding.rst b/Documentation/networking/bonding.rst
+> index a4c1291d2561..5e105e7ac8e6 100644
+> --- a/Documentation/networking/bonding.rst
+> +++ b/Documentation/networking/bonding.rst
+> @@ -193,6 +193,15 @@ ad_actor_sys_prio
+>  	This parameter has effect only in 802.3ad mode and is available through
+>  	SysFs interface.
+>  
+> +ad_actor_port_prio
+> +
+> +	In an AD system, this specifies the port priority. The allowed range
+> +	is 1 - 65535. If the value is not specified, it takes 255 as the
+
+
+Leaving this as a note: it is set to 255 because actor_port_priorty is initialized to 255
+                        and port_priority is initialized to actor_port_priority at slave
+                        bind time.
+
+> +	default value.
+> +
+> +	This parameter has effect only in 802.3ad mode and is available through
+> +	netlink interface.
+> +
+>  ad_actor_system
+>  
+>  	In an AD system, this specifies the mac-address for the actor in
 > diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-> index 2fca8e84ab10..aa64b397bb19 100644
+> index c6807e473ab7..4a1b2f01fe37 100644
 > --- a/drivers/net/bonding/bond_3ad.c
 > +++ b/drivers/net/bonding/bond_3ad.c
-> @@ -95,13 +95,13 @@ static int ad_marker_send(struct port *port, struct bond_marker *marker);
->  static void ad_mux_machine(struct port *port, bool *update_slave_arr);
->  static void ad_rx_machine(struct lacpdu *lacpdu, struct port *port);
->  static void ad_tx_machine(struct port *port);
-> -static void ad_periodic_machine(struct port *port, struct bond_params *bond_params);
-> +static void ad_periodic_machine(struct port *port);
->  static void ad_port_selection_logic(struct port *port, bool *update_slave_arr);
->  static void ad_agg_selection_logic(struct aggregator *aggregator,
->  				   bool *update_slave_arr);
->  static void ad_clear_agg(struct aggregator *aggregator);
->  static void ad_initialize_agg(struct aggregator *aggregator);
-> -static void ad_initialize_port(struct port *port, int lacp_fast);
-> +static void ad_initialize_port(struct port *port, struct bond_params *bond_params);
->  static void ad_enable_collecting(struct port *port);
->  static void ad_disable_distributing(struct port *port,
->  				    bool *update_slave_arr);
-> @@ -1307,10 +1307,16 @@ static void ad_rx_machine(struct lacpdu *lacpdu, struct port *port)
->  			 * case of EXPIRED even if LINK_DOWN didn't arrive for
->  			 * the port.
->  			 */
-> -			port->partner_oper.port_state &= ~LACP_STATE_SYNCHRONIZATION;
->  			port->sm_vars &= ~AD_PORT_MATCHED;
-> +			/* Based on IEEE 8021AX-2014, Figure 6-18 - Receive
-> +			 * machine state diagram, the statue should be
-> +			 * Partner_Oper_Port_State.Synchronization = FALSE;
-> +			 * Partner_Oper_Port_State.LACP_Timeout = Short Timeout;
-> +			 * start current_while_timer(Short Timeout);
-> +			 * Actor_Oper_Port_State.Expired = TRUE;
-> +			 */
-> +			port->partner_oper.port_state &= ~LACP_STATE_SYNCHRONIZATION;
->  			port->partner_oper.port_state |= LACP_STATE_LACP_TIMEOUT;
-> -			port->partner_oper.port_state |= LACP_STATE_LACP_ACTIVITY;
->  			port->sm_rx_timer_counter = __ad_timer_to_ticks(AD_CURRENT_WHILE_TIMER, (u16)(AD_SHORT_TIMEOUT));
->  			port->actor_oper_port_state |= LACP_STATE_EXPIRED;
->  			port->sm_vars |= AD_PORT_CHURNED;
-> @@ -1417,11 +1423,10 @@ static void ad_tx_machine(struct port *port)
->  /**
->   * ad_periodic_machine - handle a port's periodic state machine
->   * @port: the port we're looking at
-> - * @bond_params: bond parameters we will use
->   *
->   * Turn ntt flag on priodically to perform periodic transmission of lacpdu's.
->   */
-> -static void ad_periodic_machine(struct port *port, struct bond_params *bond_params)
-> +static void ad_periodic_machine(struct port *port)
->  {
->  	periodic_states_t last_state;
+> @@ -436,6 +436,7 @@ static void __ad_actor_update_port(struct port *port)
 >  
-> @@ -1430,8 +1435,7 @@ static void ad_periodic_machine(struct port *port, struct bond_params *bond_para
->  
->  	/* check if port was reinitialized */
->  	if (((port->sm_vars & AD_PORT_BEGIN) || !(port->sm_vars & AD_PORT_LACP_ENABLED) || !port->is_enabled) ||
-> -	    (!(port->actor_oper_port_state & LACP_STATE_LACP_ACTIVITY) && !(port->partner_oper.port_state & LACP_STATE_LACP_ACTIVITY)) ||
-> -	    !bond_params->lacp_active) {
-> +	    (!(port->actor_oper_port_state & LACP_STATE_LACP_ACTIVITY) && !(port->partner_oper.port_state & LACP_STATE_LACP_ACTIVITY))) {
->  		port->sm_periodic_state = AD_NO_PERIODIC;
->  	}
->  	/* check if state machine should change state */
-> @@ -1955,16 +1959,16 @@ static void ad_initialize_agg(struct aggregator *aggregator)
->  /**
->   * ad_initialize_port - initialize a given port's parameters
->   * @port: the port we're looking at
-> - * @lacp_fast: boolean. whether fast periodic should be used
-> + * @bond_params: bond parameters we will use
->   */
-> -static void ad_initialize_port(struct port *port, int lacp_fast)
-> +static void ad_initialize_port(struct port *port, struct bond_params *bond_params)
->  {
->  	static const struct port_params tmpl = {
->  		.system_priority = 0xffff,
->  		.key             = 1,
->  		.port_number     = 1,
->  		.port_priority   = 0xff,
-> -		.port_state      = 1,
-> +		.port_state      = 0,
-
-1 == LACP_STATE_ACTIVITY :)
-Just noting that this lets LACP_STATE_ACTIVITY to be set based on lacp_active.
-
->  	};
->  	static const struct lacpdu lacpdu = {
->  		.subtype		= 0x01,
-> @@ -1982,12 +1986,14 @@ static void ad_initialize_port(struct port *port, int lacp_fast)
->  		port->actor_port_priority = 0xff;
->  		port->actor_port_aggregator_identifier = 0;
->  		port->ntt = false;
-> -		port->actor_admin_port_state = LACP_STATE_AGGREGATION |
-> -					       LACP_STATE_LACP_ACTIVITY;
-> -		port->actor_oper_port_state  = LACP_STATE_AGGREGATION |
-> -					       LACP_STATE_LACP_ACTIVITY;
-> +		port->actor_admin_port_state = LACP_STATE_AGGREGATION;
-> +		port->actor_oper_port_state  = LACP_STATE_AGGREGATION;
-> +		if (bond_params->lacp_active) {
-> +			port->actor_admin_port_state |= LACP_STATE_LACP_ACTIVITY;
-> +			port->actor_oper_port_state  |= LACP_STATE_LACP_ACTIVITY;
-> +		}
->  
-> -		if (lacp_fast)
-> +		if (bond_params->lacp_fast)
->  			port->actor_oper_port_state |= LACP_STATE_LACP_TIMEOUT;
->  
->  		memcpy(&port->partner_admin, &tmpl, sizeof(tmpl));
-> @@ -2201,7 +2207,7 @@ void bond_3ad_bind_slave(struct slave *slave)
->  		/* port initialization */
->  		port = &(SLAVE_AD_INFO(slave)->port);
->  
-> -		ad_initialize_port(port, bond->params.lacp_fast);
-> +		ad_initialize_port(port, &bond->params);
->  
->  		port->slave = slave;
->  		port->actor_port_number = SLAVE_AD_INFO(slave)->id;
-> @@ -2513,7 +2519,7 @@ void bond_3ad_state_machine_handler(struct work_struct *work)
->  		}
->  
->  		ad_rx_machine(NULL, port);
-> -		ad_periodic_machine(port, &bond->params);
-> +		ad_periodic_machine(port);
->  		ad_port_selection_logic(port, &update_slave_arr);
->  		ad_mux_machine(port, &update_slave_arr);
->  		ad_tx_machine(port);
-> @@ -2883,6 +2889,36 @@ void bond_3ad_update_lacp_rate(struct bonding *bond)
->  	spin_unlock_bh(&bond->mode_lock);
+>  	port->actor_system = BOND_AD_INFO(bond).system.sys_mac_addr;
+>  	port->actor_system_priority = BOND_AD_INFO(bond).system.sys_priority;
+> +	port->actor_port_priority = SLAVE_AD_INFO(port->slave)->port_priority;
 >  }
 >  
-> +/**
-> + * bond_3ad_update_lacp_active - change the lacp active
-> + * @bond: bonding struct
-> + *
-> + * When modify lacp_active parameter via sysfs,
-> + * update actor_oper_port_state of each port.
-
-It could also be netlink, right? I'd just say something like:
-Update actor_oper_port_state when lacp_active is modified.
-
-> + *
-> + * Hold bond->mode_lock,
-> + * so we can modify port->actor_oper_port_state,
-> + * no matter bond is up or down.
-
-nit: this last part about bond up/down is unnecessary
-
-> + */
-> +void bond_3ad_update_lacp_active(struct bonding *bond)
-> +{
-> +	struct port *port = NULL;
-> +	struct list_head *iter;
-> +	struct slave *slave;
-> +	int lacp_active;
+>  /* Conversions */
+> @@ -2197,6 +2198,7 @@ void bond_3ad_bind_slave(struct slave *slave)
+>  		port->actor_admin_port_key = bond->params.ad_user_port_key << 6;
+>  		ad_update_actor_keys(port, false);
+>  		/* actor system is the bond's system */
+> +		SLAVE_AD_INFO(slave)->port_priority = port->actor_port_priority;
+>  		__ad_actor_update_port(port);
+>  		/* tx timer(to verify that no more than MAX_TX_IN_SECOND
+>  		 * lacpdu's are sent in one second)
+> diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bond_netlink.c
+> index ac5e402c34bc..ad91b93cbdac 100644
+> --- a/drivers/net/bonding/bond_netlink.c
+> +++ b/drivers/net/bonding/bond_netlink.c
+> @@ -28,6 +28,7 @@ static size_t bond_get_slave_size(const struct net_device *bond_dev,
+>  		nla_total_size(sizeof(u8)) +	/* IFLA_BOND_SLAVE_AD_ACTOR_OPER_PORT_STATE */
+>  		nla_total_size(sizeof(u16)) +	/* IFLA_BOND_SLAVE_AD_PARTNER_OPER_PORT_STATE */
+>  		nla_total_size(sizeof(s32)) +	/* IFLA_BOND_SLAVE_PRIO */
+> +		nla_total_size(sizeof(u16)) +	/* IFLA_BOND_SLAVE_AD_ACTOR_PORT_PRIO */
+>  		0;
+>  }
+>  
+> @@ -77,6 +78,10 @@ static int bond_fill_slave_info(struct sk_buff *skb,
+>  					ad_port->partner_oper.port_state))
+>  				goto nla_put_failure;
+>  		}
 > +
-> +	lacp_active = bond->params.lacp_active;
-> +	spin_lock_bh(&bond->mode_lock);
-> +	bond_for_each_slave(bond, slave, iter) {
-> +		port = &(SLAVE_AD_INFO(slave)->port);
-> +		if (lacp_active)
-> +			port->actor_oper_port_state |= LACP_STATE_LACP_ACTIVITY;
-> +		else
-> +			port->actor_oper_port_state &= ~LACP_STATE_LACP_ACTIVITY;
-> +	}
-> +	spin_unlock_bh(&bond->mode_lock);
-> +}
-> +
->  size_t bond_3ad_stats_size(void)
->  {
->  	return nla_total_size_64bit(sizeof(u64)) + /* BOND_3AD_STAT_LACPDU_RX */
-> diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
-> index 1d639a3be6ba..3b6f815c55ff 100644
-> --- a/drivers/net/bonding/bond_options.c
-> +++ b/drivers/net/bonding/bond_options.c
-> @@ -1660,6 +1660,7 @@ static int bond_option_lacp_active_set(struct bonding *bond,
->  	netdev_dbg(bond->dev, "Setting LACP active to %s (%llu)\n",
->  		   newval->string, newval->value);
->  	bond->params.lacp_active = newval->value;
-> +	bond_3ad_update_lacp_active(bond);
-
-To me it looks like this fix needs to be in a separate patch.
-
+> +		if (nla_put_u16(skb, IFLA_BOND_SLAVE_AD_ACTOR_PORT_PRIO,
+> +				SLAVE_AD_INFO(slave)->port_priority))
+> +			goto nla_put_failure;
+>  	}
 >  
 >  	return 0;
+> @@ -129,6 +134,7 @@ static const struct nla_policy bond_policy[IFLA_BOND_MAX + 1] = {
+>  static const struct nla_policy bond_slave_policy[IFLA_BOND_SLAVE_MAX + 1] = {
+>  	[IFLA_BOND_SLAVE_QUEUE_ID]	= { .type = NLA_U16 },
+>  	[IFLA_BOND_SLAVE_PRIO]		= { .type = NLA_S32 },
+> +	[IFLA_BOND_SLAVE_AD_ACTOR_PORT_PRIO]	= { .type = NLA_U16 },
+>  };
+>  
+>  static int bond_validate(struct nlattr *tb[], struct nlattr *data[],
+> @@ -179,6 +185,16 @@ static int bond_slave_changelink(struct net_device *bond_dev,
+>  			return err;
+>  	}
+>  
+> +	if (data[IFLA_BOND_SLAVE_AD_ACTOR_PORT_PRIO]) {
+> +		u16 ad_prio = nla_get_u16(data[IFLA_BOND_SLAVE_AD_ACTOR_PORT_PRIO]);
+> +
+> +		bond_opt_slave_initval(&newval, &slave_dev, ad_prio);
+> +		err = __bond_opt_set(bond, BOND_OPT_AD_ACTOR_PORT_PRIO, &newval,
+> +				     data[IFLA_BOND_SLAVE_AD_ACTOR_PORT_PRIO], extack);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+>  	return 0;
 >  }
+>  
+> diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
+> index 91893c29b899..2b8606b4e4f5 100644
+> --- a/drivers/net/bonding/bond_options.c
+> +++ b/drivers/net/bonding/bond_options.c
+> @@ -79,6 +79,8 @@ static int bond_option_tlb_dynamic_lb_set(struct bonding *bond,
+>  				  const struct bond_opt_value *newval);
+>  static int bond_option_ad_actor_sys_prio_set(struct bonding *bond,
+>  					     const struct bond_opt_value *newval);
+> +static int bond_option_ad_actor_port_prio_set(struct bonding *bond,
+> +					      const struct bond_opt_value *newval);
+>  static int bond_option_ad_actor_system_set(struct bonding *bond,
+>  					   const struct bond_opt_value *newval);
+>  static int bond_option_ad_user_port_key_set(struct bonding *bond,
+> @@ -221,6 +223,12 @@ static const struct bond_opt_value bond_ad_actor_sys_prio_tbl[] = {
+>  	{ NULL,      -1,    0},
+>  };
+>  
+> +static const struct bond_opt_value bond_ad_actor_port_prio_tbl[] = {
+> +	{ "minval",  1,     BOND_VALFLAG_MIN},
+> +	{ "maxval",  65535, BOND_VALFLAG_MAX},
+
+
+You can add one more value: { "default", 255, BOND_VALFLAG_DEFAULT }
+
+
+> +	{ NULL,      -1,    0},
+> +};
+> +
+>  static const struct bond_opt_value bond_ad_user_port_key_tbl[] = {
+>  	{ "minval",  0,     BOND_VALFLAG_MIN | BOND_VALFLAG_DEFAULT},
+>  	{ "maxval",  1023,  BOND_VALFLAG_MAX},
+> @@ -476,6 +484,13 @@ static const struct bond_option bond_opts[BOND_OPT_LAST] = {
+>  		.values = bond_ad_actor_sys_prio_tbl,
+>  		.set = bond_option_ad_actor_sys_prio_set,
+>  	},
+> +	[BOND_OPT_AD_ACTOR_PORT_PRIO] = {
+> +		.id = BOND_OPT_AD_ACTOR_PORT_PRIO,
+> +		.name = "ad_actor_port_prio",
+> +		.unsuppmodes = BOND_MODE_ALL_EX(BIT(BOND_MODE_8023AD)),
+> +		.values = bond_ad_actor_port_prio_tbl,
+> +		.set = bond_option_ad_actor_port_prio_set,
+> +	},
+>  	[BOND_OPT_AD_ACTOR_SYSTEM] = {
+>  		.id = BOND_OPT_AD_ACTOR_SYSTEM,
+>  		.name = "ad_actor_system",
+> @@ -1793,6 +1808,26 @@ static int bond_option_ad_actor_sys_prio_set(struct bonding *bond,
+>  	return 0;
+>  }
+>  
+> +static int bond_option_ad_actor_port_prio_set(struct bonding *bond,
+> +					      const struct bond_opt_value *newval)
+> +{
+> +	struct slave *slave;
+> +
+> +	slave = bond_slave_get_rtnl(newval->slave_dev);
+> +	if (!slave) {
+> +		netdev_dbg(bond->dev, "%s called on NULL slave\n", __func__);
+> +		return -ENODEV;
+> +	}
+> +
+> +	netdev_dbg(newval->slave_dev, "Setting ad_actor_port_prio to %llu\n",
+> +		   newval->value);
+> +
+> +	SLAVE_AD_INFO(slave)->port_priority = newval->value;
+> +	bond_3ad_update_ad_actor_settings(bond);
+> +
+> +	return 0;
+> +}
+> +
+>  static int bond_option_ad_actor_system_set(struct bonding *bond,
+>  					   const struct bond_opt_value *newval)
+>  {
 > diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
-> index 2053cd8e788a..dba369a2cf27 100644
+> index 2053cd8e788a..bf551ca70359 100644
 > --- a/include/net/bond_3ad.h
 > +++ b/include/net/bond_3ad.h
-> @@ -307,6 +307,7 @@ int bond_3ad_lacpdu_recv(const struct sk_buff *skb, struct bonding *bond,
->  			 struct slave *slave);
->  int bond_3ad_set_carrier(struct bonding *bond);
->  void bond_3ad_update_lacp_rate(struct bonding *bond);
-> +void bond_3ad_update_lacp_active(struct bonding *bond);
->  void bond_3ad_update_ad_actor_settings(struct bonding *bond);
->  int bond_3ad_stats_fill(struct sk_buff *skb, struct bond_3ad_stats *stats);
->  size_t bond_3ad_stats_size(void);
+> @@ -274,6 +274,7 @@ struct ad_slave_info {
+>  	struct port port;		/* 802.3ad port structure */
+>  	struct bond_3ad_stats stats;
+>  	u16 id;
+> +	u16 port_priority;
+>  };
+>  
+>  static inline const char *bond_3ad_churn_desc(churn_state_t state)
+> diff --git a/include/net/bond_options.h b/include/net/bond_options.h
+> index 18687ccf0638..4aee1935e0e7 100644
+> --- a/include/net/bond_options.h
+> +++ b/include/net/bond_options.h
+> @@ -77,6 +77,7 @@ enum {
+>  	BOND_OPT_NS_TARGETS,
+>  	BOND_OPT_PRIO,
+>  	BOND_OPT_COUPLED_CONTROL,
+> +	BOND_OPT_AD_ACTOR_PORT_PRIO,
+>  	BOND_OPT_LAST
+>  };
+>  
+> diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+> index 3ad2d5d98034..79bcbbc264a7 100644
+> --- a/include/uapi/linux/if_link.h
+> +++ b/include/uapi/linux/if_link.h
+> @@ -1562,6 +1562,7 @@ enum {
+>  	IFLA_BOND_SLAVE_AD_ACTOR_OPER_PORT_STATE,
+>  	IFLA_BOND_SLAVE_AD_PARTNER_OPER_PORT_STATE,
+>  	IFLA_BOND_SLAVE_PRIO,
+> +	IFLA_BOND_SLAVE_AD_ACTOR_PORT_PRIO,
+>  	__IFLA_BOND_SLAVE_MAX,
+>  };
+>  
 
 
