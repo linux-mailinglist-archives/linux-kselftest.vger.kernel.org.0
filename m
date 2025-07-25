@@ -1,98 +1,98 @@
-Return-Path: <linux-kselftest+bounces-37987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-37988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 115E7B11F17
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 14:58:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E855B11F23
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 15:03:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBB8F1CE1ADB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 12:59:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88058586DA4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Jul 2025 13:03:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 360092ED15F;
-	Fri, 25 Jul 2025 12:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA4C523F405;
+	Fri, 25 Jul 2025 13:02:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nPdO80B9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z8EZ5tKd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0F52ED153;
-	Fri, 25 Jul 2025 12:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388462405F9;
+	Fri, 25 Jul 2025 13:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753448326; cv=none; b=NBLN+8j6pkkk9uUUWVbo0BmO926cSfI3iJZ6WESEiIBqo1fuk28typUY92/PRKP1f8/F4o7nwYJ8SYGQaDCZBBs6jgurgBJPN5S3GOxbUD0+OIuA7a8i+8aLNmFWq3PX/k9TiFCEnxpdIxrD6oT26f4jNNCwbm16Y2O7TKxEzCc=
+	t=1753448575; cv=none; b=hTpmSxMT18yI4XBFYIxELHmF4OKrRF+wPcFDEE+qXvbheU5izERlSbCT2uMIqMcypSAEBOhfJKDAxlwOTgiiKHvioPj6Mv+PzwdLLQfMYhuhdYmuSM5VX4TCwePr+oHZrb0yxwGvq7oTzOm8VYQCchBP57t+Lwy1nqIr9S/6XlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753448326; c=relaxed/simple;
-	bh=U+l2daCSxoxZop8pSJd81XPpmelPZZWa2K/uyjIKm9U=;
+	s=arc-20240116; t=1753448575; c=relaxed/simple;
+	bh=pnQvmNBIWePPKU4vyT0ztIsbhKrl6w5UhNYkRPp35is=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V2O/2Q6uH9eiQ6m5ya1rlbbEwJuw/3JsboN0iOzlyOXfhSPglcWs0Ey0IonKiQt1MbjlufcUs1y7WclNMxP+xcyD7D6k1zBjlzIlLO0lcB3FNCGJG48HjaUE6G06bxDLLH5N0Aka6mkTbAPJjYjT9uWmsv5K4hRCi2OY2UZjknI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nPdO80B9; arc=none smtp.client-ip=209.85.214.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=e/dPT25ugHGTyomKG86+wZ/hhYP4CCNLpH8VC3AKuto6UFYeYRGBpckv0ipEsuJOWfEUiWLX4mN1mvfD9uymI4AJjk9G5sDvnCsk13a2rk6I8Qu1E+r2b4/0J5Fm+FO+2A6wWuCJgAyNDmW26wdGCIID3qirWbTDXAh5CKtJokQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z8EZ5tKd; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-235e1d710d8so27074995ad.1;
-        Fri, 25 Jul 2025 05:58:43 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-236192f8770so14744005ad.0;
+        Fri, 25 Jul 2025 06:02:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753448323; x=1754053123; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753448573; x=1754053373; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IRzi0ZZ7lzn256rqqzO9OVR+xH0dahkcse6WfaiH0cE=;
-        b=nPdO80B9jTFuMzhve0uXt2bdD9x2G6QfzgLV5HZbNUMBz+RMEASlMICFTxwBmTMhQv
-         g4Mdzr23ie3WsyMRI0KrEya6CCKuZojAkK2tMz53N5cjLQSgJd/eYD3iqS+NeHheIJBk
-         JU0za/1HU4EfzIeNyW7tx3AcHibYe4CAm55kQxt6V6P+8aNWPmf4G4rbMeOJpFt35j/y
-         N+naT1lgtzR8RzLGgGDZ2ydTmYhuVbkVkcZJiDAC1U0SaaG0tx3JqieoX2diMRK7TdyB
-         mMc3RhX603aOTr1aRbBcdXjmvnS5E5JoDCCrubmW45Y/nd/oTUotRYUZliHnkkAcfg3M
-         tbAw==
+        bh=rvnuCWC++P2rSLplAPzOWf1/FSno9Iwm1i2Ll6MyWVQ=;
+        b=Z8EZ5tKd1/UkHx2SzsGlfgZasnGc81ZZxUc/+84O+/AnYcY8kg7P83PeV+LFUf8skg
+         uel7l+5p0AJekgkuks4hXegy4pBluMuw+UTQ1tKstuyuTOMZnX4vII+VX+jwwCEzNI4U
+         Pt5fyvAEP0dRa+E5MFWYm9f/unM/hvlNKxLFQiiD4exoCgwbvirFjYUKUsqJ5D3gY/aW
+         yAvE1wWBU4ZplqDPGa8aXyk+0P37Mdcg22wZIAutPskwB8IcNS08jo6MSq6/JqniKZUw
+         WRrFM+e70ACQ8uIS0SggKkeV9HffCaopYitSqncPMFJVXPfZbQHsxOtGVkkXXkA5oi3s
+         bh2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753448323; x=1754053123;
+        d=1e100.net; s=20230601; t=1753448573; x=1754053373;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IRzi0ZZ7lzn256rqqzO9OVR+xH0dahkcse6WfaiH0cE=;
-        b=urY59oqh1UQcqJYrE3ktuvlXb8CwwGyjx8prBcXvZVLIebK5xcl/hI5lxNy9jb0ogJ
-         sJfYCnsVPmGWlu7oRavvbHC4FzXsfBWbzc8Fbn9nbj4+DK0wjy6LtkJuTb/D6+womhMi
-         uYojxSVgf4c8+Z7MfHtRL7yldF/hcGLUctgydleS/7fbAB3jjCFYw/XxVUSYXvv7BvDh
-         SBQaQn5nL7fSWz3IFP1drdClzN0GWqSEBPWWELrQGjuA4v9SyR3RA3eBQCH++Ml7ljrh
-         ROwuCg7eAGL2QPSB/Wfa65YebNiYaCXiq9wf1RtvSpbyu33aWPuRN1646+mvgTkTWMwN
-         dxWg==
-X-Forwarded-Encrypted: i=1; AJvYcCVNTsNCa/I5hd4RBHAoZIfDXwgLHtK8dDMTKJZY9lC2ry9Iuegz9jfobmrAoaVCE5GK31o51KoRdWM=@vger.kernel.org, AJvYcCWCEkjMs+JYZQzNR+//CJT8bBPZ28NqOiaZ28hBAVgFQsO7WAnWZrw8ZGd4pTv5wAW2CDF8gGH9Q10OHmbk@vger.kernel.org, AJvYcCWvYlIV+33YdHkMYM6POZLUmbwl8C5oV4dxPGdTtrv3hDtr4ZQop6Dmu2k5AQ86N8+wr2xmBC7kefZkyVbSyamV@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBohJtLNGygDs0PzKzYRWR4GJX+sGieLN3oX2EuKe+LZw5y2sO
-	vdPxrnrYXlZgpXGV05EJCyE+Mot3ZVKwAs1iH0gXQc+2wzMyLxFIe8A8
-X-Gm-Gg: ASbGncvx+vBvypUhglum1LKI+1gv1wCFU3vyN3+Arm5CULAqplffeECFUkjaVF8IA8p
-	GZxEnAAi5sUVjLApp8CLypQGIELurbe4H3pQSqfkcBwf8Qbfp0Tu27mJ3u3+cjcqfzdDeidbmpS
-	OtppZ1qFJhjijd/txFY+Ve+6h6tcCNMYCGWtfNkhDDeS58xcLpHjTCNra6p1yLp4cfdU8dlIPIu
-	OqMIV5W+44vVHUDaeIz8ERWbdR3dJ4QnQUcVLc32ZvJOWKek+j8BZsAM2sk6w0dYWIiZA4yZqdq
-	b6lzujEDE0xx+4xS3j9jLdissPR9nClrCPubooboc+5cAuBp/8nsd5XUzoQ3hSHnUk05Zg8p0w+
-	fbKYD0UkCpTxTIAbIF1lK22Qcyf8=
-X-Google-Smtp-Source: AGHT+IGAlITfVYzd8DhScqugYjRH2Umn84vSkWnZzDqtOwuyZIYx5kzZZ3ufcrPHnIufB7PqwcJY1w==
-X-Received: by 2002:a17:903:4405:b0:23d:da20:1685 with SMTP id d9443c01a7336-23fb3065804mr32846585ad.4.1753448322695;
-        Fri, 25 Jul 2025 05:58:42 -0700 (PDT)
+        bh=rvnuCWC++P2rSLplAPzOWf1/FSno9Iwm1i2Ll6MyWVQ=;
+        b=wYXJY7PRoGOdHWAbLQ/7WMoHEepHAdPFh5Ew4n0DXeH8A/hrPsyORhBU+IrfM+FW2p
+         X4qb355FbCbQLWvCmFQBRE/iPLExPpwq9xiaRFau/xr9Gi4ATVbaTciEo3d7pduZVwzC
+         5C/7bfTYzFR3Gk3tfs34bVIK0dFO92Z6W74Ap6BO3KwyWIN3SfT7NFGxlcgB+7pXo4JB
+         O7+cSGZZJquic/+dme4TSw13Sg4sY0RqRkBYRgdRJHtBXw8K09FWtS9u30Ju7JmY8wGR
+         9gQilDzbejdDIuZSrnJk9wnxKCmpSMH9Hpcm5DXDN0vzcFqukBjdltXhIzarFjFgQxdy
+         M9bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVdiJ3a2NzU3h2Y7Mfyeo7zxf5OAHkfIHEiJEAxDS4H4fTBS8PWxqo6bwB6YuwOphK0RX+qR/JwNyU4DBjEwOzm@vger.kernel.org, AJvYcCVzwd4rTPdLUGJonf/oqjW1LmD7TAvGfpaj1iBu6K8C4O8diorquicTvds4blPerE73xHurPZttk+smRjU=@vger.kernel.org, AJvYcCX03X6daJFgs7rWdApAkn2tc+PdCVmAr2/IXvoDEmdzD1mOpU9DyP4rVkmVgsCeQcUQ5K/BFdsL@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwvofykOxzJhBZX0K/llQk58x2sVQSGi6dVw9Xcy3A1N87Xu1W
+	ceGRIBJuOrfqD0+YW3C9xO/z2Of+TfnhIfABzCJDDxH4KWhPKnw0qGNxPviDn17ahZc=
+X-Gm-Gg: ASbGncu7c0oGycCNpP358+NxsLnCjF59T+ftqnk/7nyFaofQLCEL7RNOsGN+4oEsSfh
+	l+AOLymHLhPToCpkt+nGoLgo+OJ8910a8erT6NYYY+XsHd7vHOjdodOAMC6LKNsX4mYkOmwOk5b
+	X6Ytxb0jmA2Y21m+axtvrCtpQWfEyAqPWWWX0hoMYSM2RZm0SMiljSt8+aF4oQseKMpmVzfvQFP
+	0z6IY7bySCTiJoFhjJMslRJjmTESwUysuG2SmhYFRJr68nti4a+KfGESlTZ/iU25OHpUjgKMq+W
+	JJKoDclDRmqu0kkBg6hztuCtIlbQs9abdZhL3E2RcD1Gnvc3zYX2/xXepEUeIAwkP4anQL9x5b3
+	3YuQ36ZPuwwQLjuZ3mSwIMp7EpxA=
+X-Google-Smtp-Source: AGHT+IEwVtEPJ4Wk23wiO0WMIjQ0EiztpjidWUR6uUpP9DUtmExgj76cb72uWpB+tJ+lclx10mlBKg==
+X-Received: by 2002:a17:903:2b0f:b0:235:e94b:62dd with SMTP id d9443c01a7336-23fa5d7420emr90326485ad.12.1753448573239;
+        Fri, 25 Jul 2025 06:02:53 -0700 (PDT)
 Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fadc8f669sm16852005ad.12.2025.07.25.05.58.36
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fa476ea42sm36966305ad.67.2025.07.25.06.02.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Jul 2025 05:58:42 -0700 (PDT)
-Date: Fri, 25 Jul 2025 12:48:58 +0000
+        Fri, 25 Jul 2025 06:02:52 -0700 (PDT)
+Date: Fri, 25 Jul 2025 12:53:10 +0000
 From: Hangbin Liu <liuhangbin@gmail.com>
-To: Nikolay Aleksandrov <razor@blackwall.org>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+To: Petr Machata <petrm@nvidia.com>
+Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+	Jay Vosburgh <jv@jvosburgh.net>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
 	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Petr Machata <petrm@nvidia.com>,
-	Amit Cohen <amcohen@nvidia.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Alessandro Zanni <alessandro.zanni87@gmail.com>,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/3] bonding: support aggregator selection based
- on port priority
-Message-ID: <aIN9OtPcnPtkqrks@fedora>
-References: <20250724081632.12921-1-liuhangbin@gmail.com>
- <20250724081632.12921-3-liuhangbin@gmail.com>
- <d5b2f8df-8a2e-4319-809a-ec06d8381038@blackwall.org>
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] selftests: bonding: add test for passive LACP
+ mode
+Message-ID: <aIN-Nv_w0N6jdSsD@fedora>
+References: <20250709090344.88242-1-liuhangbin@gmail.com>
+ <20250709090344.88242-3-liuhangbin@gmail.com>
+ <6d4bbed3-472f-4002-abb9-47edf7743779@redhat.com>
+ <aIGxI_ctF5RPEph8@fedora>
+ <aIGykkgqktjgLvVI@fedora>
+ <87ikjgd5yq.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -101,107 +101,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d5b2f8df-8a2e-4319-809a-ec06d8381038@blackwall.org>
+In-Reply-To: <87ikjgd5yq.fsf@nvidia.com>
 
-On Fri, Jul 25, 2025 at 12:02:02PM +0300, Nikolay Aleksandrov wrote:
-> > diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-> > index 4a1b2f01fe37..6f8a406ed34a 100644
-> > --- a/drivers/net/bonding/bond_3ad.c
-> > +++ b/drivers/net/bonding/bond_3ad.c
-> > @@ -747,6 +747,20 @@ static int __agg_active_ports(struct aggregator *agg)
-> >  	return active;
-> >  }
-> >  
-> > +static unsigned int __agg_ports_priority(struct aggregator *agg)
+On Fri, Jul 25, 2025 at 10:27:48AM +0200, Petr Machata wrote:
 > 
-> const agg?
+> Hangbin Liu <liuhangbin@gmail.com> writes:
 > 
-> > +{
-> > +	struct port *port;
-> > +	unsigned int prio = 0;
+> > On Thu, Jul 24, 2025 at 04:06:03AM +0000, Hangbin Liu wrote:
+> >> On Tue, Jul 15, 2025 at 11:37:54AM +0200, Paolo Abeni wrote:
+> >> > > diff --git a/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
+> >> > > b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
+> >> > > new file mode 100755
+> >> > > index 000000000000..4cf8a5999aaa
+> >> > > --- /dev/null
+> >> > > +++ b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
+> >> > > @@ -0,0 +1,21 @@
+> >> > > +#!/bin/sh
+> >> > > +# SPDX-License-Identifier: GPL-2.0
+> >> > > +#
+> >> > > +# Testing if bond works with lacp_active = off
+> >> > > +
+> >> > > +lib_dir=$(dirname "$0")
+> >> > > +source ${lib_dir}/bond_topo_lacp.sh
+> >> > 
+> >> > shellcheck is not super happy about 'source' usage:
+> >> > 
+> >> > In bond_passive_lacp.sh line 7:
+> >> > source ${lib_dir}/bond_topo_lacp.sh
+> >> > ^-- SC3046 (warning): In POSIX sh, 'source' in place of '.' is undefined.
+> >> > ^-- SC3051 (warning): In POSIX sh, 'source' in place of '.' is undefined.
+> >> > 
+> >> > either switch to '. ' or use bash instead of 'sh'.
+> >> 
+> >> Hi Paolo,
+> >> 
+> >> I updated the case and remove the source file bond_topo_lacp.sh.
+> >> Instead I source the forwarding lib directly like:
+> >> 
+> >> lib_dir=$(dirname "$0")
+> >> source "$lib_dir"/../../../net/forwarding/lib.sh
+> >> 
+> >> But this cause shell check unable to find the lib.sh as $lib_dir is get
+> >> dynamically. This usage is common in selftest. How should we resolves this
+> >> problem?
+> >
+> > OK, I just disabled this warning.
+> >
+> > # shellcheck disable=SC1091
 > 
-> reverse xmas tree or alternatively you can save a line below with
-> port = agg->lag_ports above
+> I believe the point was only about using "." instead of "source". The
+> following should have fixed it:
+> 
+> . ${lib_dir}/bond_topo_lacp.sh
+> 
+> ... or just use bash as the interpreter, I suspect lib.sh is not
+> actually POSIX clean.
 
-Thanks, I will fix this.
+Thanks Petr, I know Paolo means to use "." to fix this. The issue is that
+I changed the script to source forwarding lib. And shell check could only
+analyse static path. Unless use -x to supply the real source path. But I guess
+the CI can't do this. So I disabled the SC1091 checking as a workaround.
 
+Regards
 Hangbin
-> 
-> > +
-> > +	for (port = agg->lag_ports; port;
-> > +	     port = port->next_port_in_aggregator) {
-> > +		if (port->is_enabled)
-> > +			prio += port->actor_port_priority;
-> > +	}
-> 
-> minor nit: {} are unnecessary
-> 
-> > +
-> > +	return prio;
-> > +}
-> > +
-> >  /**
-> >   * __get_agg_bandwidth - get the total bandwidth of an aggregator
-> >   * @aggregator: the aggregator we're looking at
-> > @@ -1695,6 +1709,9 @@ static struct aggregator *ad_agg_selection_test(struct aggregator *best,
-> >  	 * BOND_AD_COUNT: Select by count of ports.  If count is equal,
-> >  	 *     select by bandwidth.
-> >  	 *
-> > +	 * BOND_AD_PRIO: Select by total priority of ports. If priority
-> > +	 *     is equal, select by count.
-> > +	 *
-> >  	 * BOND_AD_STABLE, BOND_AD_BANDWIDTH: Select by bandwidth.
-> >  	 */
-> >  	if (!best)
-> > @@ -1713,6 +1730,14 @@ static struct aggregator *ad_agg_selection_test(struct aggregator *best,
-> >  		return best;
-> >  
-> >  	switch (__get_agg_selection_mode(curr->lag_ports)) {
-> > +	case BOND_AD_PRIO:
-> > +		if (__agg_ports_priority(curr) > __agg_ports_priority(best))
-> > +			return curr;
-> > +
-> > +		if (__agg_ports_priority(curr) < __agg_ports_priority(best))
-> > +			return best;
-> > +
-> > +		fallthrough;
-> >  	case BOND_AD_COUNT:
-> >  		if (__agg_active_ports(curr) > __agg_active_ports(best))
-> >  			return curr;
-> > @@ -1778,6 +1803,10 @@ static int agg_device_up(const struct aggregator *agg)
-> >   * (slaves), and reselect whenever a link state change takes place or the
-> >   * set of slaves in the bond changes.
-> >   *
-> > + * BOND_AD_PRIO: select the aggregator with highest total priority of ports
-> > + * (slaves), and reselect whenever a link state change takes place or the
-> > + * set of slaves in the bond changes.
-> > + *
-> >   * FIXME: this function MUST be called with the first agg in the bond, or
-> >   * __get_active_agg() won't work correctly. This function should be better
-> >   * called with the bond itself, and retrieve the first agg from it.
-> > diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
-> > index 2b8606b4e4f5..708ca1f18a00 100644
-> > --- a/drivers/net/bonding/bond_options.c
-> > +++ b/drivers/net/bonding/bond_options.c
-> > @@ -163,6 +163,7 @@ static const struct bond_opt_value bond_ad_select_tbl[] = {
-> >  	{ "stable",    BOND_AD_STABLE,    BOND_VALFLAG_DEFAULT},
-> >  	{ "bandwidth", BOND_AD_BANDWIDTH, 0},
-> >  	{ "count",     BOND_AD_COUNT,     0},
-> > +	{ "prio",      BOND_AD_PRIO,      0},
-> >  	{ NULL,        -1,                0},
-> >  };
-> >  
-> > diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
-> > index bf551ca70359..34495df965f0 100644
-> > --- a/include/net/bond_3ad.h
-> > +++ b/include/net/bond_3ad.h
-> > @@ -26,6 +26,7 @@ enum {
-> >  	BOND_AD_STABLE = 0,
-> >  	BOND_AD_BANDWIDTH = 1,
-> >  	BOND_AD_COUNT = 2,
-> > +	BOND_AD_PRIO = 3,
-> >  };
-> >  
-> >  /* rx machine states(43.4.11 in the 802.3ad standard) */
-> 
 
