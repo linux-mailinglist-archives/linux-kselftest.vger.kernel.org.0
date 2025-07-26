@@ -1,76 +1,71 @@
-Return-Path: <linux-kselftest+bounces-38018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FEECB12B45
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Jul 2025 17:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 27193B12BCE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Jul 2025 20:08:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 164EDAA199A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Jul 2025 15:53:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACF414E802C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Jul 2025 18:07:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33A96254846;
-	Sat, 26 Jul 2025 15:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06805244690;
+	Sat, 26 Jul 2025 18:08:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RHCDniFl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hf2zXa9S"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071A11DD889;
-	Sat, 26 Jul 2025 15:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C0E1DA62E;
+	Sat, 26 Jul 2025 18:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753545233; cv=none; b=ODaYvTlh7i7KyfG+9iDjhoZLO76jFePRDBJqwc6Uqdd9OwHbosIT1GHnjqpQbtbnMPXwlDT8UNxXzP3XwXEf+rGs4K7b47QlPOuycKF6RLy3eRxnIBR2DN5cyOBWVypzI+Nt+RFo2nh0Ugtu4+Yxcm8vX7Lmahu/u7B3kuERg2A=
+	t=1753553284; cv=none; b=V6zpTgwVamaHwJP5VMzuQp9Sj1ixwl3YUpZRL7CCYKcUkYv/HDcE8gC5X25uzD3nXOuSBGW9NWzMwL/XX9I4PMIDRESBu2K7k2mSarORTMxGgxGKnQgAKDzfPWSYSztM3tOybRF8DBcTuXxsDp4pbk4Ge+jBfKGpZrbNn+VsQrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753545233; c=relaxed/simple;
-	bh=UBc+BZmaMOHH7cTVN1EGrbdqthdjOH/VQjkGtqKtNCU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OYudaygoCMGnHzRGu6tE/zS73G5mirWV2SNEDaZECKCsBBjUjRgntC5Zh06uM1mJwFDfNbtyUIOEk5z0GBmthLrzUsnECUfRESEiHEmY8QAycX4t9CmIu64mH2T/pOCEUL5Adt2cGeh5v/16Y8pA3ZVkmjNCjMgLjxcgGyDtK1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RHCDniFl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF07C4CEED;
-	Sat, 26 Jul 2025 15:53:51 +0000 (UTC)
+	s=arc-20240116; t=1753553284; c=relaxed/simple;
+	bh=2HQCDh8l8G5D1AwzrgCWpThQCBs2spd9mekjd1oxUcc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mYkPV/Qj0DJh90WlITAeq5ujzyEMvgzsyDXrm9j3HzG0zgc42ExNhVPOdJJHO5WkI8UG4Yu6ZoinZ0UTuNWNrDuN7mIPfy247xOnkgUV7oS9ABkggmasup24Jn+g8L0C/m6NQP95TP7FrSb2RXiPyslwTEUEKkKSwIFwdM2fIBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hf2zXa9S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CDB8C4CEED;
+	Sat, 26 Jul 2025 18:07:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753545232;
-	bh=UBc+BZmaMOHH7cTVN1EGrbdqthdjOH/VQjkGtqKtNCU=;
+	s=k20201202; t=1753553284;
+	bh=2HQCDh8l8G5D1AwzrgCWpThQCBs2spd9mekjd1oxUcc=;
 	h=From:To:Cc:Subject:Date:From;
-	b=RHCDniFlzoCJRm+a1vKsqj47hOGKq3YK74Q3k8ldgmPDRyWCgD8P8HOVznuIxBHV3
-	 cs/YD1iJH0dH/M4MCU2Bi9gvF4WhH9T1947vBLmBV84pYig64y1t0AJl1KIYsEFF9N
-	 zpQZjZHzlwkDE8QZ2j7WeCgTIVvEQCCn79UEMsGTHBUvHFzl972vqvQr+i5PYVV98k
-	 MePVquesowwpVZ8foPMoidCT4Ts/BZDmoqDCbh3Fw5ajzcBwyFY5iUdpPO3LAULjuQ
-	 xFPYpONa+g76mKlag+kxxVQyX2Lve74DQMhNZpYvH0ipgAkeQvK03+nIrqqh+nAeP+
-	 AlOp404kPPtEw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	pablo@netfilter.org,
-	bigeasy@linutronix.de,
-	fw@strlen.de,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: bpf: fix legacy netfilter options
-Date: Sat, 26 Jul 2025 08:53:49 -0700
-Message-ID: <20250726155349.1161845-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.50.1
+	b=Hf2zXa9S3SH9inWMxDx4H3qZy0WvG3uqmv0dqCyyGo+haVZVW9GzdoMYdA+82lnAJ
+	 /57x3MVjOIC4M1ueTFSZgKeC34elPyOT9T4O/nXgS0A8ykYMiJLxV2Mzg9t6UdqfFM
+	 ZRc8BSRdrmUpM601yLAwKqnHCP8VzobEO+dBo3KweuSsfBhwJDA4y1BPpdanzAg2pj
+	 e+7FExJLhAlox3MDjANDpseJ8bphDlypHprk3zneUYsoyxxjGfTPd4RVjhoMLQFExR
+	 ykdzapaeTLALvKVVDvelaX+gF2ZiOFNV0Jvr8RfVQBCyPNC2FlV/ZnaTTHVydKC9Gf
+	 ucxsGccE+Wv9w==
+From: Miguel Ojeda <ojeda@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	rust-for-linux@vger.kernel.org,
+	Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev
+Subject: [PATCH] rust: kernel: remove support for unused host `#[test]`s
+Date: Sat, 26 Jul 2025 20:07:50 +0200
+Message-ID: <20250726180750.2735836-1-ojeda@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,53 +74,118 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Recent commit to add NETFILTER_XTABLES_LEGACY missed setting
-a couple of configs to y. They are still enabled but as modules
-which appears to have upset BPF CI, e.g.:
+Since commit 028df914e546 ("rust: str: convert `rusttest` tests into
+KUnit"), we do not have anymore host `#[test]`s that run in the host.
 
-   test_bpf_nf_ct:FAIL:iptables-legacy -t raw -A PREROUTING -j CONNMARK --set-mark 42/0 unexpected error: 768 (errno 0)
+Moreover, we do not plan to add any new ones -- tests should generally
+run within KUnit, since there they are built the same way the kernel
+does. While we may want to have some way to define tests that can also
+be run outside the kernel, we still want to test within the kernel too
+[1], and thus would likely use a custom syntax anyway to define them.
 
-Fixes: 3c3ab65f00eb ("selftests: net: Enable legacy netfilter legacy options.")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Thus simplify the `rusttest` target by removing support for host
+`#[test]`s for the `kernel` crate.
+
+This still maintains the support for the `macros` crate, even though we
+do not have any such tests there.
+
+Link: https://lore.kernel.org/rust-for-linux/CABVgOS=AKHSfifp0S68K3jgNZAkALBr=7iFb=niryG5WDxjSrg@mail.gmail.com/ [1]
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
-Targeting net-next 'cause that's where the bad commit is.
+ rust/Makefile        | 9 +--------
+ rust/kernel/alloc.rs | 6 +++---
+ rust/kernel/error.rs | 4 ++--
+ rust/kernel/lib.rs   | 2 +-
+ 4 files changed, 7 insertions(+), 14 deletions(-)
 
-CC: ast@kernel.org
-CC: daniel@iogearbox.net
-CC: andrii@kernel.org
-CC: martin.lau@linux.dev
-CC: eddyz87@gmail.com
-CC: song@kernel.org
-CC: yonghong.song@linux.dev
-CC: john.fastabend@gmail.com
-CC: kpsingh@kernel.org
-CC: sdf@fomichev.me
-CC: haoluo@google.com
-CC: jolsa@kernel.org
-CC: mykolal@fb.com
-CC: shuah@kernel.org
-CC: pablo@netfilter.org
-CC: bigeasy@linutronix.de
-CC: fw@strlen.de
-CC: bpf@vger.kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/bpf/config | 2 ++
- 1 file changed, 2 insertions(+)
+diff --git a/rust/Makefile b/rust/Makefile
+index 115b63b7d1e3..5290b37868dd 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -235,7 +235,7 @@ quiet_cmd_rustc_test = $(RUSTC_OR_CLIPPY_QUIET) T  $<
+ 	$(objtree)/$(obj)/test/$(subst rusttest-,,$@) $(rust_test_quiet) \
+ 		$(rustc_test_run_flags)
+ 
+-rusttest: rusttest-macros rusttest-kernel
++rusttest: rusttest-macros
+ 
+ rusttest-macros: private rustc_target_flags = --extern proc_macro \
+ 	--extern macros --extern kernel --extern pin_init
+@@ -245,13 +245,6 @@ rusttest-macros: $(src)/macros/lib.rs \
+ 	+$(call if_changed,rustc_test)
+ 	+$(call if_changed,rustdoc_test)
+ 
+-rusttest-kernel: private rustc_target_flags = --extern ffi --extern pin_init \
+-    --extern build_error --extern macros --extern bindings --extern uapi
+-rusttest-kernel: $(src)/kernel/lib.rs rusttestlib-ffi rusttestlib-kernel \
+-    rusttestlib-build_error rusttestlib-macros rusttestlib-bindings \
+-    rusttestlib-uapi rusttestlib-pin_init FORCE
+-	+$(call if_changed,rustc_test)
+-
+ ifdef CONFIG_CC_IS_CLANG
+ bindgen_c_flags = $(c_flags)
+ else
+diff --git a/rust/kernel/alloc.rs b/rust/kernel/alloc.rs
+index a2c49e5494d3..335ae3271fa8 100644
+--- a/rust/kernel/alloc.rs
++++ b/rust/kernel/alloc.rs
+@@ -2,16 +2,16 @@
+ 
+ //! Implementation of the kernel's memory allocation infrastructure.
+ 
+-#[cfg(not(any(test, testlib)))]
++#[cfg(not(testlib))]
+ pub mod allocator;
+ pub mod kbox;
+ pub mod kvec;
+ pub mod layout;
+ 
+-#[cfg(any(test, testlib))]
++#[cfg(testlib)]
+ pub mod allocator_test;
+ 
+-#[cfg(any(test, testlib))]
++#[cfg(testlib)]
+ pub use self::allocator_test as allocator;
+ 
+ pub use self::kbox::Box;
+diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+index 3dee3139fcd4..7812aca1b6ef 100644
+--- a/rust/kernel/error.rs
++++ b/rust/kernel/error.rs
+@@ -157,7 +157,7 @@ pub fn to_ptr<T>(self) -> *mut T {
+     }
+ 
+     /// Returns a string representing the error, if one exists.
+-    #[cfg(not(any(test, testlib)))]
++    #[cfg(not(testlib))]
+     pub fn name(&self) -> Option<&'static CStr> {
+         // SAFETY: Just an FFI call, there are no extra safety requirements.
+         let ptr = unsafe { bindings::errname(-self.0.get()) };
+@@ -174,7 +174,7 @@ pub fn name(&self) -> Option<&'static CStr> {
+     /// When `testlib` is configured, this always returns `None` to avoid the dependency on a
+     /// kernel function so that tests that use this (e.g., by calling [`Result::unwrap`]) can still
+     /// run in userspace.
+-    #[cfg(any(test, testlib))]
++    #[cfg(testlib)]
+     pub fn name(&self) -> Option<&'static CStr> {
+         None
+     }
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index e13d6ed88fa6..8a0153f61732 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -197,7 +197,7 @@ pub const fn as_ptr(&self) -> *mut bindings::module {
+     }
+ }
+ 
+-#[cfg(not(any(testlib, test)))]
++#[cfg(not(testlib))]
+ #[panic_handler]
+ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
+     pr_emerg!("{}\n", info);
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 521836776733..e8c6c77b96cb 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -97,6 +97,8 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NF_TABLES_IPV4=y
- CONFIG_NF_TABLES_IPV6=y
- CONFIG_NETFILTER_INGRESS=y
-+CONFIG_IP_NF_IPTABLES_LEGACY=y
-+CONFIG_IP6_NF_IPTABLES_LEGACY=y
- CONFIG_NETFILTER_XTABLES_LEGACY=y
- CONFIG_NF_FLOW_TABLE=y
- CONFIG_NF_FLOW_TABLE_INET=y
+base-commit: 89be9a83ccf1f88522317ce02f854f30d6115c41
 -- 
 2.50.1
 
