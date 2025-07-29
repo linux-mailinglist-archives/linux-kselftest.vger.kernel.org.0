@@ -1,566 +1,214 @@
-Return-Path: <linux-kselftest+bounces-38049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CD13B14D0A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 13:32:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2DB6B14EDD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 15:56:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AE973B6D9E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 11:31:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18252189404C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 13:56:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EA928CF6F;
-	Tue, 29 Jul 2025 11:32:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA891CBEAA;
+	Tue, 29 Jul 2025 13:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Clw7hP4q"
+	dkim=pass (2048-bit key) header.d=readmodwrite-com.20230601.gappssmtp.com header.i=@readmodwrite-com.20230601.gappssmtp.com header.b="PTA1ouYO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3521F2248A0;
-	Tue, 29 Jul 2025 11:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68AA19D08F
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Jul 2025 13:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753788744; cv=none; b=itMhVooPKmzIjV/ssazfOj74ATTwMuJKnr3BrRiVcNcmiHqeZ16jQwif1Y82Iev3smx3MvmlN6Eub7c3f74A7/wQhH5vrqWRF22YS7jGFKOuJZ96KjjgPgA+x5R3dTGDMRAwSdZYSJ414NyWUnbMI12Gi2sFJPreMQIRzVNIBLg=
+	t=1753797382; cv=none; b=an+LIRSDHF3mXQcjMSZjXq+WuPFwZpybTRhsTQzPwQGF9o7WRpyKkpHGEWqUscuDHtDXbGqQrdmP93bnIbhvNKu2hbaQJXHVzPleA8NaQmRkWeP8geTVeNODhVMLyb48GxmJ+lreJU240DihSS6+DAtrEXn6NDHbb96Wze2dNBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753788744; c=relaxed/simple;
-	bh=Q9rmyPq3LvSHj4kkNv9xYeGBakz/Mkv/1LFIDRNPtqo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PkP6CYFJmgGENbl/g+CWHrc9GsTel0USfrcDGPNfwpDCGEGAN6Ab4cGrUD3B8lEqqcj6z2OAuIqE4zZCF3nfCZHYKq8VaGB7kgl2WootsYDEbZLaxgHd1i+vMR5sHmgDnGxtjCgHT8YhaVfG2GtP4nZTox7hNVGzkS7kNERulc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Clw7hP4q; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-23ffa7b3b30so24906645ad.1;
-        Tue, 29 Jul 2025 04:32:21 -0700 (PDT)
+	s=arc-20240116; t=1753797382; c=relaxed/simple;
+	bh=5l+kX3TlXyRbsgOTyGA3oWiH4eVSrFAAaoihgsCn8ek=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SFwnAe9LLorcMXvSh+imv7/QXby9AqygLHLINMgsC6IlxBtyLmMCrycUzn+Xpsec74H2My9zEIJNs1D2dj12nfyGSIZpstE3BP83nx07Z+W0vY0SI/wa8gonzRZROCuN8KDHgVUz3PaRXUMVzLfeBrQsY0lgjSg+GLYy3fI8Q7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readmodwrite.com; spf=none smtp.mailfrom=readmodwrite.com; dkim=pass (2048-bit key) header.d=readmodwrite-com.20230601.gappssmtp.com header.i=@readmodwrite-com.20230601.gappssmtp.com header.b=PTA1ouYO; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readmodwrite.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=readmodwrite.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2401b855980so19550985ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Jul 2025 06:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753788740; x=1754393540; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OHhUFJOea/Pd7a6BTVGSEExEjw5vXu28unEpKBj3Ibs=;
-        b=Clw7hP4qLhr/MeYXVs3+XWvObvKJibYqA+CcRcuhLxkKPsy3EjN2VWwH9adkQ9x9O8
-         lIJ3uD5QKxnFnCIct/qSoqj3GTLBFa/XGYcQjNICnE7Vu5EpWgusqtzbOUIadAdD/KkT
-         beegCoQM9nmAnamDovUFbeDX283kZ1oIvMa38kL5kQRpRXsGQWnBQLvrPBm7SLe//e7y
-         UNTonOnTPWL1zhzdqDKRmY57IuYt8gegq9YWljjreTOLgDvkPLFQPBAja2ce48jnwFMX
-         d6f8T4FLQvcVrXSEH+f0nulralf7zy+Fr676ryxI8pGhynXupYAT1JTLrt4ii8KJfh/Y
-         SReQ==
+        d=readmodwrite-com.20230601.gappssmtp.com; s=20230601; t=1753797379; x=1754402179; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mv8soW1s35ahL418D8VF6q42tDzqNXV2suiJtYXndw0=;
+        b=PTA1ouYOCta6b9E2k13otpsr1iRxjwhcz9xBk5iuvLUR2TdBxwGpU2kyo9RS2gM3cQ
+         hfE/EERq9kzJltnYLeDIaoveE6nTXYG/21mXimsgKRVL7t5MDADKPBmrcwtaDsEz64Xm
+         6/djBTZMN2XfljN7PYi+70GdCCRJMa13+jsTL+5IBJl8Fo4I0/dHumNgcWKYsYXwArle
+         CZs7gIYEsV/bvIk3yIxMRbICV4kAoaPs5c3EBtyvYmshMCv1q7OvKtfITx9cib4oOmhx
+         0J6QIFbjaBUtetMlc+OQR8ak6BhksrOdb+OoxRJ4et5quIXpzLlfHmbcWqsBRllQbPFS
+         RvZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753788740; x=1754393540;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OHhUFJOea/Pd7a6BTVGSEExEjw5vXu28unEpKBj3Ibs=;
-        b=Nss854mdkI8WxaYXvps/V8pJwcWDyKpS5RPeLwO4BCmsBmi96XnQS2OTJt5wTDN8Xw
-         RzFP6i5aw7kZ8YxSM9hlTDHW05SHDrR7rq+NjH+FBODQSitb+SdbXXcvQdxnqLfOUQnZ
-         sTKOVDE5ya+ytoVXdh+IMTWM9ED4ZfDqAzJyf8EGwXtuaoUcQY4oouLr+kqdLc9Wm7/c
-         mADmnLqUVY1JbzMra1H/8rIrbZIq4Qaw9FwK4AyAvhqXwGapUjwp1UiWKuKCDFC6EuQH
-         idtfVoLGNRq/a7/B/a06Gbd+lALH/P/ZSDvQKjBg3rx81GZ0boD8INuHWtN8C6AteUpz
-         BzkA==
-X-Forwarded-Encrypted: i=1; AJvYcCUjeLuUsj7BO2mk1ce6gf/QYZJ9T/H9iCab7hJegQYnC8v3MUbWQVGtW86CiPnhbf3/Y2Y6AT1ZKRMO4JON/cEw@vger.kernel.org, AJvYcCXm4b8NyjZupusCEtg1MTLlWL7farmYb/n/h9Wjw0+auCdLy9M/g3IBkaa2Q29hrHdb8cxDwourpqrdgh0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxI9mnugUeZ2pdyYcY5XAKBF105RYD87AFsUO7imkqcJoGR7tpn
-	ZkYqM/N9MKuxDFar/A+rRJyFI9y09Sykhb+XiTb8afxxFTgVdLeneHQF
-X-Gm-Gg: ASbGncv18MRGh6+eh4ypd/xzyNXczVEaJ6Gk1nxvOKUpLAbxfd4/v/VrK/Wa5VZefMG
-	Sfnx0cxwZZbYJfWs2HMfe8E6B34TOHVmSuu9gjboRTjWnUSSpPAM3gF3lE66zxGLjTwQS06beHI
-	WuE2MAVFFn6pBHmPxL6WQbUkuLHjobVnlhUiWzIynhUCtTN+zv59R6UtkKP2cMqE+wH/73Br51u
-	tNzgghLSp0YMuflueJ7SEUUSUek0IyYO3mIw9XE0pxKWl0+0mAtUOMgL32XLTEmiI9qplqBifex
-	XnS7iYuIizpsxgHBI04lHklrq8mrSHmuwxCR02bXZ6yGqb89hCoi6VVvIPyOGHhRlBlrjswFzde
-	SXecJ8OWWqzj52JS9ftdNR6zYF1JZ/ApQ9MFSI+T7qRvmbbP2CuKLNAdfVCE=
-X-Google-Smtp-Source: AGHT+IFXzwzJWyCGho6shdLUUQN2sDwdI0rFz44svVIJGV/mIzME36PR/iNv/78wzMWtsb/GOcsAUQ==
-X-Received: by 2002:a17:902:d484:b0:240:640a:c560 with SMTP id d9443c01a7336-240640ac6d1mr55978525ad.24.1753788740276;
-        Tue, 29 Jul 2025 04:32:20 -0700 (PDT)
-Received: from DESKTOP-GIED850.localdomain ([114.255.249.137])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24007d9a31bsm54092565ad.103.2025.07.29.04.32.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jul 2025 04:32:19 -0700 (PDT)
-From: wang lian <lianux.mm@gmail.com>
-To: akpm@linux-foundation.org,
-	broonie@kernel.org,
-	david@redhat.com,
-	sj@kernel.org,
-	lorenzo.stoakes@oracle.com,
-	ziy@nvidia.com,
-	lianux.mm@gmail.com,
-	linux-kernel@vger.kernel.org
-Cc: brauner@kernel.org,
-	jannh@google.com,
-	Liam.Howlett@oracle.com,
-	shuah@kernel.org,
-	vbabka@suse.cz,
-	gkwang@linx-info.com,
-	p1ucky0923@gmail.com,
-	ryancsn@gmail.com,
-	zijing.zhang@proton.me,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v7] selftests/mm: add process_madvise() tests
-Date: Tue, 29 Jul 2025 19:31:09 +0800
-Message-ID: <20250729113109.12272-1-lianux.mm@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1753797379; x=1754402179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mv8soW1s35ahL418D8VF6q42tDzqNXV2suiJtYXndw0=;
+        b=T9QoP10Ak/U5hbqRclRS0FURwJ33nyodL78dFiRrJPXcDFw2c7fD/NKItzdjuWSb4b
+         K0DAH1WHkGN4M4mNsWxFHDhkQAwcet2Z65PKNGwrcSsL5L3Le+4yQ9W9CRfhsKKt9CbX
+         W6s9IqtNOD6xCXKl2lu8r9Z8On7VyknR8B8DWTATca26jMw+iQeZO72F9s76xkC6EmjO
+         fh3myCTgfVKBAgCTBYa8OToGWV/omBDrpwBJPyi9+bPHYxXgO7VYjHzJ6tKykD+8Aqb1
+         GUMEdm51+GbP+wXM+EHow6V2U397frmMQFV0xsZNNN3K4clC3UN8i4ACfNs7yQlJBnHo
+         XotQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVehfWZrN6FATSACYdC5aGneSGO5SO0++ExGHkBdOG7eMCnTedzgzxZHluAiSZ20FzszAq/N9DRboQ2VCJ8J/o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWSNvRKkg8U8yd9TtVZcNyI/ZnaPS6vqf8vA54t99Kn1YuPjlM
+	1vwHcHy2c0GsXDgD6YnXhiSf/oxC+/ZHiPSOMat55yEFm9GjTYwzCSLGBM/ZSOZA8D5MhzuHUeN
+	9nb2KQhx9eVQJnlEtjsSIOXwdYHWQUwM89BP6ZdOAlg==
+X-Gm-Gg: ASbGncsz54UdgZOWZJJdt/wzkFfJhF4UU/+Z5OxFa0dS1SW6UFP/VTMUUICK3rSVAWU
+	zmW1zgXx4saSrsKq9rT4+fitUzxxfHQQTgioHaMv/9kFbnjwoUpH6Mael0ghPGX0YabcXhe6J/r
+	Iz5Sno3mjGa0OMrKNRSwSQ3if9syAiIeB6WPqCjczhyXaYiGitJz4hEPC/obwFBkoRZTm8p8Wgg
+	JEijaTP5d8NTBY/b+agedM=
+X-Google-Smtp-Source: AGHT+IF6uEUYENM3G9dCl88PHF00oq2dRXfczisPYmPfnfZrmOLAxA2y+iiVlrzNEWcQwWHX0TDJK6HbPzYzjVZQifM=
+X-Received: by 2002:a17:902:e0d2:b0:23f:ed09:f7b with SMTP id
+ d9443c01a7336-23fed091110mr101344245ad.48.1753797378920; Tue, 29 Jul 2025
+ 06:56:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250722150152.1158205-1-matt@readmodwrite.com> <CAADnVQ+rLJwKVbhd6LyGxDQwGUfg9EANcA5wOpA3C3pjaLdRQw@mail.gmail.com>
+In-Reply-To: <CAADnVQ+rLJwKVbhd6LyGxDQwGUfg9EANcA5wOpA3C3pjaLdRQw@mail.gmail.com>
+From: Matt Fleming <matt@readmodwrite.com>
+Date: Tue, 29 Jul 2025 14:56:07 +0100
+X-Gm-Features: Ac12FXxSY86YYUNk9ahjFEIXjGzaAjdeUoQ5VugkiuP2RpgzCdnBA11sRvUpiYc
+Message-ID: <CAENh_SS2R3aQByV_=WRCO=ZHknk_+pV7RhXA4qx5OGMBN1SnOA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: Add LPM trie microbenchmarks
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	kernel-team <kernel-team@cloudflare.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Network Development <netdev@vger.kernel.org>, 
+	Matt Fleming <mfleming@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add tests for process_madvise(), focusing on verifying behavior under
-various conditions including valid usage and error cases.
+On Mon, Jul 28, 2025 at 3:35=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> Please make a full description of what the test does,
+> since it's not trivial to decipher from the code.
+> If I'm reading it correctly, first, the user space
+> makes the LPM completely full and then lookup/update
+> use random key-s within range.
 
-Signed-off-by: wang lian <lianux.mm@gmail.com>
-Suggested-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Suggested-by: David Hildenbrand <david@redhat.com>
-Suggested-by: Mark Brown <broonie@kernel.org>
-Acked-by: SeongJae Park <sj@kernel.org>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-Tested-by: Zi Yan <ziy@nvidia.com>
+Yep, that's correct. I'll provide a more comprehensive description in v4.
 
----
-Changelog v7:
-- In the remote_collapse test, replace default_huge_page_size() with read_pmd_pagesize()
-- Add a new test, invalid_vlen, to verify that process_madvise() correctly 
- fails with EINVAL when the vlen argument exceeds UIO_MAXIOV.
+> But delete looks different. It seems the kernel delete
+> operation can interleave with user space refilling the LPM,
+> so ...
+>
+> >   lookup: throughput    7.423 =C2=B1 0.023 M ops/s (  7.423M ops/prod),=
+ latency  134.710 ns/op
+> >   update: throughput    2.643 =C2=B1 0.015 M ops/s (  2.643M ops/prod),=
+ latency  378.310 ns/op
+> >   delete: throughput    0.712 =C2=B1 0.008 M ops/s (  0.712M ops/prod),=
+ latency 1405.152 ns/op
+>
+> this comparison doesn't look like apples to apples,
+> since delete will include user space refill time.
 
-Changelog v6: https://lore.kernel.org/lkml/20250721114614.40996-1-lianux.mm@gmail.com/
-- Refactor child process and pidfd management to use the kselftest
-  fixture's setup and teardown mechanism. This ensures that child
-  processes are reliably terminated and file descriptors are closed, even
-  when a test is aborted by an ASSERT or SKIP macro. This resolves the
-  issue where a failed assertion could lead to a leaked child process.
+Yeah, you're right. Though we only measure the delete time from in the
+BPF prog, delete throughput is essentially blocked while the refill
+happens and because things are measured with a 1-second timer
+(bench.c:sigalarm_handler) the refill time gets accounted for anyway.
+I could try extrapolating the delete time like I've done for the free
+op, i.e. we calculate how many ops were completed in what fraction of
+a second.
 
-Changelog v5: https://lore.kernel.org/lkml/20250714122533.3135-1-lianux.mm@gmail.com/
-- Refactor the remote_collapse test to concentrate on its primary goal
-  confirming the successful remote invocation of process_madvise() on a child process.
-- Split the validation logic for invalid pidfds out of the remote test and into two new
-  (`exited_process_pidfd` and `bad_pidfd`).
-- Based mm-new branch, can ensure clean application
+> >     free: throughput    0.574 =C2=B1 0.003 K ops/s (  0.574K ops/prod),=
+ latency    1.743 ms/op
+>
+> Does this measure the free-ing of full LPM ?
 
+Yes, this measures the total time to free every element in the trie.
 
-Changelog v4: https://lore.kernel.org/lkml/20250710112249.58722-1-lianux.mm@gmail.com/
-- Refine resource cleanup logic in test teardown to be more robust.
-- Improve remote_collapse test to correctly handle different THP
-  (Transparent Huge Page) policies ('always', 'madvise', 'never'),
-  including handling race conditions with khugepaged.
-- Resolve build errors
+> > +static void __lpm_validate(void)
+>
+> why double underscore ?
+> Just lpm_validate() ?
 
-Changelog v3: https://lore.kernel.org/lkml/20250703044326.65061-1-lianux.mm@gmail.com/
-- Rebased onto the latest mm-stable branch to ensure clean application.
-- Refactor common signal handling logic into vm_util to reduce code duplication.
-- Improve test robustness and diagnostics based on community feedback.
-- Address minor code style and script corrections.
+The double underscore is used for the common validation parts, but
+I'll rename this to include "_common()" (along with all other uses of
+__).
 
-Changelog v2: https://lore.kernel.org/lkml/20250630140957.4000-1-lianux.mm@gmail.com/
-- Drop MADV_DONTNEED tests based on feedback.
-- Focus solely on process_madvise() syscall.
-- Improve error handling and structure.
-- Add future-proof flag test.
-- Style and comment cleanups.
+> > +       /*
+> > +        * Ideally we'd have access to the map ID but that's already
+> > +        * freed before we enter trie_free().
+> > +        */
+> > +       BPF_CORE_READ_STR_INTO(&name, map, name);
+> > +       if (bpf_strncmp(name, BPF_OBJ_NAME_LEN, "trie_free_map"))
+> > +               return 0;
+> > +
+> > +       val =3D bpf_ktime_get_ns();
+> > +       bpf_map_update_elem(&latency_free_start, &map, &val, BPF_ANY);
+>
+> Looks like there is only one lpm map.
+> What's the point of that extra map ?
+> Just have a global var for start time ?
 
--V1: https://lore.kernel.org/lkml/20250621133003.4733-1-lianux.mm@gmail.com/
- tools/testing/selftests/mm/.gitignore     |   1 +
- tools/testing/selftests/mm/Makefile       |   1 +
- tools/testing/selftests/mm/process_madv.c | 344 ++++++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh |   5 +
- 4 files changed, 351 insertions(+)
- create mode 100644 tools/testing/selftests/mm/process_madv.c
+Sure, I can make this a global variable for the start time instead.
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index f2dafa0b700b..e7b23a8a05fe 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -21,6 +21,7 @@ on-fault-limit
- transhuge-stress
- pagemap_ioctl
- pfnmap
-+process_madv
- *.tmp*
- protection_keys
- protection_keys_32
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index ae6f994d3add..d13b3cef2a2b 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -85,6 +85,7 @@ TEST_GEN_FILES += mseal_test
- TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += pagemap_ioctl
- TEST_GEN_FILES += pfnmap
-+TEST_GEN_FILES += process_madv
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += uffd-stress
-diff --git a/tools/testing/selftests/mm/process_madv.c b/tools/testing/selftests/mm/process_madv.c
-new file mode 100644
-index 000000000000..471cae8427f1
---- /dev/null
-+++ b/tools/testing/selftests/mm/process_madv.c
-@@ -0,0 +1,344 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#define _GNU_SOURCE
-+#include "../kselftest_harness.h"
-+#include <errno.h>
-+#include <setjmp.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <linux/mman.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <sched.h>
-+#include "vm_util.h"
-+
-+#include "../pidfd/pidfd.h"
-+
-+FIXTURE(process_madvise)
-+{
-+	unsigned long page_size;
-+	pid_t child_pid;
-+	int remote_pidfd;
-+	int pidfd;
-+};
-+
-+FIXTURE_SETUP(process_madvise)
-+{
-+	self->page_size = (unsigned long)sysconf(_SC_PAGESIZE);
-+	self->pidfd = PIDFD_SELF;
-+	self->remote_pidfd = -1;
-+	self->child_pid = -1;
-+};
-+
-+FIXTURE_TEARDOWN_PARENT(process_madvise)
-+{
-+	/* This teardown is guaranteed to run, even if tests SKIP or ASSERT */
-+	if (self->child_pid > 0) {
-+		kill(self->child_pid, SIGKILL);
-+		waitpid(self->child_pid, NULL, 0);
-+	}
-+
-+	if (self->remote_pidfd >= 0)
-+		close(self->remote_pidfd);
-+}
-+
-+static ssize_t sys_process_madvise(int pidfd, const struct iovec *iovec,
-+				   size_t vlen, int advice, unsigned int flags)
-+{
-+	return syscall(__NR_process_madvise, pidfd, iovec, vlen, advice, flags);
-+}
-+
-+/*
-+ * This test uses PIDFD_SELF to target the current process. The main
-+ * goal is to verify the basic behavior of process_madvise() with
-+ * a vector of non-contiguous memory ranges, not its cross-process
-+ * capabilities.
-+ */
-+TEST_F(process_madvise, basic)
-+{
-+	const unsigned long pagesize = self->page_size;
-+	const int madvise_pages = 4;
-+	struct iovec vec[madvise_pages];
-+	int pidfd = self->pidfd;
-+	ssize_t ret;
-+	char *map;
-+
-+	/*
-+	 * Create a single large mapping. We will pick pages from this
-+	 * mapping to advise on. This ensures we test non-contiguous iovecs.
-+	 */
-+	map = mmap(NULL, pagesize * 10, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (map == MAP_FAILED)
-+		SKIP(return, "mmap failed, not enough memory.\n");
-+
-+	/* Fill the entire region with a known pattern. */
-+	memset(map, 'A', pagesize * 10);
-+
-+	/*
-+	 * Setup the iovec to point to 4 non-contiguous pages
-+	 * within the mapping.
-+	 */
-+	vec[0].iov_base = &map[0 * pagesize];
-+	vec[0].iov_len = pagesize;
-+	vec[1].iov_base = &map[3 * pagesize];
-+	vec[1].iov_len = pagesize;
-+	vec[2].iov_base = &map[5 * pagesize];
-+	vec[2].iov_len = pagesize;
-+	vec[3].iov_base = &map[8 * pagesize];
-+	vec[3].iov_len = pagesize;
-+
-+	ret = sys_process_madvise(pidfd, vec, madvise_pages, MADV_DONTNEED, 0);
-+	if (ret == -1 && errno == EPERM)
-+		SKIP(return,
-+			   "process_madvise() unsupported or permission denied, try running as root.\n");
-+	else if (errno == EINVAL)
-+		SKIP(return,
-+			   "process_madvise() unsupported or parameter invalid, please check arguments.\n");
-+
-+	/* The call should succeed and report the total bytes processed. */
-+	ASSERT_EQ(ret, madvise_pages * pagesize);
-+
-+	/* Check that advised pages are now zero. */
-+	for (int i = 0; i < madvise_pages; i++) {
-+		char *advised_page = (char *)vec[i].iov_base;
-+
-+		/* Content must be 0, not 'A'. */
-+		ASSERT_EQ(*advised_page, '\0');
-+	}
-+
-+	/* Check that an un-advised page in between is still 'A'. */
-+	char *unadvised_page = &map[1 * pagesize];
-+
-+	for (int i = 0; i < pagesize; i++)
-+		ASSERT_EQ(unadvised_page[i], 'A');
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(map, pagesize * 10), 0);
-+}
-+
-+/*
-+ * This test deterministically validates process_madvise() with MADV_COLLAPSE
-+ * on a remote process, other advices are difficult to verify reliably.
-+ *
-+ * The test verifies that a memory region in a child process,
-+ * focus on process_madv remote result, only check addresses and lengths.
-+ * The correctness of the MADV_COLLAPSE can be found in the relevant test examples in khugepaged.
-+ */
-+TEST_F(process_madvise, remote_collapse)
-+{
-+	const unsigned long pagesize = self->page_size;
-+	long huge_page_size;
-+	int pipe_info[2];
-+	ssize_t ret;
-+	struct iovec vec;
-+
-+	struct child_info {
-+		pid_t pid;
-+		void *map_addr;
-+	} info;
-+
-+	huge_page_size = read_pmd_pagesize();
-+	if (huge_page_size <= 0)
-+		SKIP(return, "Could not determine a valid huge page size.\n");
-+
-+	ASSERT_EQ(pipe(pipe_info), 0);
-+
-+	self->child_pid = fork();
-+	ASSERT_NE(self->child_pid, -1);
-+
-+	if (self->child_pid == 0) {
-+		char *map;
-+		size_t map_size = 2 * huge_page_size;
-+
-+		close(pipe_info[0]);
-+
-+		map = mmap(NULL, map_size, PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+		ASSERT_NE(map, MAP_FAILED);
-+
-+		/* Fault in as small pages */
-+		for (size_t i = 0; i < map_size; i += pagesize)
-+			map[i] = 'A';
-+
-+		/* Send info and pause */
-+		info.pid = getpid();
-+		info.map_addr = map;
-+		ret = write(pipe_info[1], &info, sizeof(info));
-+		ASSERT_EQ(ret, sizeof(info));
-+		close(pipe_info[1]);
-+
-+		pause();
-+		exit(0);
-+	}
-+
-+	close(pipe_info[1]);
-+
-+	/* Receive child info */
-+	ret = read(pipe_info[0], &info, sizeof(info));
-+	if (ret <= 0) {
-+		waitpid(self->child_pid, NULL, 0);
-+		SKIP(return, "Failed to read child info from pipe.\n");
-+	}
-+	ASSERT_EQ(ret, sizeof(info));
-+	close(pipe_info[0]);
-+	self->child_pid = info.pid;
-+
-+	self->remote_pidfd = syscall(__NR_pidfd_open, self->child_pid, 0);
-+	ASSERT_GE(self->remote_pidfd, 0);
-+
-+	vec.iov_base = info.map_addr;
-+	vec.iov_len = huge_page_size;
-+
-+	ret = sys_process_madvise(self->remote_pidfd, &vec, 1, MADV_COLLAPSE,
-+				  0);
-+	if (ret == -1) {
-+		if (errno == EINVAL)
-+			SKIP(return, "PROCESS_MADV_ADVISE is not supported.\n");
-+		else if (errno == EPERM)
-+			SKIP(return,
-+				   "No process_madvise() permissions, try running as root.\n");
-+		return;
-+	}
-+
-+	ASSERT_EQ(ret, huge_page_size);
-+}
-+
-+/*
-+ * Test process_madvise() with a pidfd for a process that has already
-+ * exited to ensure correct error handling.
-+ */
-+TEST_F(process_madvise, exited_process_pidfd)
-+{
-+	const unsigned long pagesize = self->page_size;
-+	struct iovec vec;
-+	char *map;
-+	ssize_t ret;
-+
-+	map = mmap(NULL, pagesize, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1,
-+		   0);
-+	if (map == MAP_FAILED)
-+		SKIP(return, "mmap failed, not enough memory.\n");
-+
-+	vec.iov_base = map;
-+	vec.iov_len = pagesize;
-+
-+	/*
-+	 * Using a pidfd for a process that has already exited should fail
-+	 * with ESRCH.
-+	 */
-+	self->child_pid = fork();
-+	ASSERT_NE(self->child_pid, -1);
-+
-+	if (self->child_pid == 0)
-+		exit(0);
-+
-+	self->remote_pidfd = syscall(__NR_pidfd_open, self->child_pid, 0);
-+	ASSERT_GE(self->remote_pidfd, 0);
-+
-+	/* Wait for the child to ensure it has terminated. */
-+	waitpid(self->child_pid, NULL, 0);
-+
-+	ret = sys_process_madvise(self->remote_pidfd, &vec, 1, MADV_DONTNEED,
-+				  0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, ESRCH);
-+}
-+
-+/*
-+ * Test process_madvise() with bad pidfds to ensure correct error
-+ * handling.
-+ */
-+TEST_F(process_madvise, bad_pidfd)
-+{
-+	const unsigned long pagesize = self->page_size;
-+	struct iovec vec;
-+	char *map;
-+	ssize_t ret;
-+
-+	map = mmap(NULL, pagesize, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1,
-+		   0);
-+	if (map == MAP_FAILED)
-+		SKIP(return, "mmap failed, not enough memory.\n");
-+
-+	vec.iov_base = map;
-+	vec.iov_len = pagesize;
-+
-+	/* Using an invalid fd number (-1) should fail with EBADF. */
-+	ret = sys_process_madvise(-1, &vec, 1, MADV_DONTNEED, 0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EBADF);
-+
-+	/*
-+	 * Using a valid fd that is not a pidfd (e.g. stdin) should fail
-+	 * with EBADF.
-+	 */
-+	ret = sys_process_madvise(STDIN_FILENO, &vec, 1, MADV_DONTNEED, 0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EBADF);
-+}
-+
-+/*
-+ * Test that process_madvise() rejects vlen > UIO_MAXIOV.
-+ * The kernel should return -EINVAL when the number of iovecs exceeds 1024.
-+ */
-+TEST_F(process_madvise, invalid_vlen)
-+{
-+	const unsigned long pagesize = self->page_size;
-+	int pidfd = self->pidfd;
-+	struct iovec vec;
-+	char *map;
-+	ssize_t ret;
-+
-+	map = mmap(NULL, pagesize, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1,
-+		   0);
-+	if (map == MAP_FAILED)
-+		SKIP(return, "mmap failed, not enough memory.\n");
-+
-+	vec.iov_base = map;
-+	vec.iov_len = pagesize;
-+
-+	ret = sys_process_madvise(pidfd, &vec, 1025, MADV_DONTNEED, 0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(map, pagesize), 0);
-+}
-+
-+/*
-+ * Test process_madvise() with an invalid flag value. Currently, only a flag
-+ * value of 0 is supported. This test is reserved for the future, e.g., if
-+ * synchronous flags are added.
-+ */
-+TEST_F(process_madvise, flag)
-+{
-+	const unsigned long pagesize = self->page_size;
-+	unsigned int invalid_flag;
-+	int pidfd = self->pidfd;
-+	struct iovec vec;
-+	char *map;
-+	ssize_t ret;
-+
-+	map = mmap(NULL, pagesize, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1,
-+		   0);
-+	if (map == MAP_FAILED)
-+		SKIP(return, "mmap failed, not enough memory.\n");
-+
-+	vec.iov_base = map;
-+	vec.iov_len = pagesize;
-+
-+	invalid_flag = 0x80000000;
-+
-+	ret = sys_process_madvise(pidfd, &vec, 1, MADV_DONTNEED, invalid_flag);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(map, pagesize), 0);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index a38c984103ce..471e539d82b8 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -65,6 +65,8 @@ separated by spaces:
- 	test pagemap_scan IOCTL
- - pfnmap
- 	tests for VM_PFNMAP handling
-+- process_madv
-+	test for process_madv
- - cow
- 	test copy-on-write semantics
- - thp
-@@ -425,6 +427,9 @@ CATEGORY="madv_guard" run_test ./guard-regions
- # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
- CATEGORY="madv_populate" run_test ./madv_populate
- 
-+# PROCESS_MADV test
-+CATEGORY="process_madv" run_test ./process_madv
-+
- CATEGORY="vma_merge" run_test ./merge
- 
- if [ -x ./memfd_secret ]
--- 
-2.43.0
+> bpf_get_prandom_u32() is not free
+> and modulo operation isn't free either.
+> The benchmark includes their time.
+> It's ok to have it, but add a mode where the bench
+> tests linear lookup/update too with simple key.data++
 
+Good idea.
+
+> Since the map suppose to full before we start all keys
+> should be there, right?
+
+Yes.
+
+> Let's add a sanity check that update() succeeds.
+
+Will do.
+
+> > +static int delete (__u32 index, bool *need_refill)
+> > +{
+> > +       struct trie_key key =3D {
+> > +               .data =3D deleted_entries,
+> > +               .prefixlen =3D prefixlen,
+> > +       };
+> > +
+> > +       bpf_map_delete_elem(&trie_map, &key);
+> > +
+> > +       /* Do we need to refill the map? */
+> > +       if (++deleted_entries =3D=3D nr_entries) {
+> > +               /*
+> > +                * Atomicity isn't required because DELETE only support=
+s
+> > +                * one producer running concurrently. What we need is a
+> > +                * way to track how many entries have been deleted from
+> > +                * the trie between consecutive invocations of the BPF
+> > +                * prog because a single bpf_loop() call might not
+> > +                * delete all entries, e.g. when NR_LOOPS < nr_entries.
+> > +                */
+> > +               deleted_entries =3D 0;
+> > +               *need_refill =3D true;
+> > +               return 1;
+>
+> This early break is another reason that makes
+> 'delete' op different from 'lookup/update'.
+> Pls make all 3 consistent, so they can be compared to each other.
+
+Hmm.. I'm not quite sure how to do that. lookup/update don't modify
+the number of entries in the map whereas delete does (update only
+updates existing entries, it doesn't create new ones). So when the map
+is empty it needs to be refilled. You're right that somehow the time
+to refill needs to be removed from the delete throughput/latency
+numbers but fundamentally these 3 ops are not the same and I don't see
+how to treat them as such.
 
