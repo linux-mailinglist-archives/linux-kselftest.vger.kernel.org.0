@@ -1,78 +1,79 @@
-Return-Path: <linux-kselftest+bounces-38039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3031FB1479B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 07:34:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FD83B1479D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 07:34:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66A1B17268D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 05:34:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49CF51713EC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 05:34:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF7F234964;
-	Tue, 29 Jul 2025 05:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD09237163;
+	Tue, 29 Jul 2025 05:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OI/gnrMH"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FJmQlAu6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B0586250;
-	Tue, 29 Jul 2025 05:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205D922D7A5;
+	Tue, 29 Jul 2025 05:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753767275; cv=none; b=Tkn7lF2hNSFgjn/XE6kUY+b+GTg7onebi1CQFgz3x9MyVGOXT/+4KPzHtW0U9MCL6TfYzigMFL0vDGppjhvaBGHF1FauhS+ssVtrhSWFlOn7FsMS9EpaxohlY1qSpBR4CFpQdp+WvtzFWxx5NJIiFENoNX0p6G9Ibh0nkSYEclI=
+	t=1753767282; cv=none; b=i2eC66Gu6JnF7lIy53YhDuDxIc18hgCt8YvS1qrzhrC1Ls/+Jqm/pAjVah/zIc02/sSThMagZIrP4g1H+zTMBAPPwufhqm0zWr40Uh7RLEd2kToo1bv/9B2OUQKIlh+beUS7iaimY6bBsX9BpN/cmm6Gh8dt2g5JJNcm4DfiV+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753767275; c=relaxed/simple;
-	bh=E6bO+NN4m7iteU5PTu8cUKpjoqYLZ+L3iL28EY+wspA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mGSVlqR2GC55vCdue88LuXwH9XOmulRg9JVlcKuVkKz/Jt/5ZaoHB8Bj8bZwXeL87fXQVMtFc9dUiZy9bAM8RbNG+zCpeW+ZvQnkO/uuQcuK+i+2/gdHjjCseLG/AkAncggLL6/uXTtxzTS178Ds8QZQNffm7dCPLkAND8czeRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OI/gnrMH; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1753767282; c=relaxed/simple;
+	bh=Uivxq4CcyJ6EjkoIeZ8RQfVHF9NuxUvEDacDvIXaI34=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NTP6C7YGcfl3Xi7lIKcb3pt+jhEuCycxxRfF59rKs1dVYRuRQXGX4UlO+BW+egKGdLwKI6LLEaKZFqcTNbVmxELz4soKbZkR8FSaE5eJ2b1xqSrUkHtoan5a/oVv7R+z6bM+h1aqmHn9PpLAY8josRUdPIL76sJ5z0e8/vbYeaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FJmQlAu6; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56T4ZPIk015929;
-	Tue, 29 Jul 2025 05:34:16 GMT
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56T4ZEiL017211;
+	Tue, 29 Jul 2025 05:34:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=BzKXBqbp/faCAopeARB3w/J9fSxnLWo9rSJqyHdAM
-	3o=; b=OI/gnrMHKGpSl8VLpprhPuUyTh6AUHfZENXhFs8AwYabXqP90KbxrrI3E
-	l7v/RuzDAaiOrHvONgIA6xqBQOBN3aZSjme44it9kYzaMPhlAGo3NoPWHw+pj9vO
-	r3M/6k4nHXPn66k7tdDJOzzC/5jrYh6ghmWqrUeRKHgrQjpmxSo7dkV2/BiPWG6b
-	TJ/5L1VhjEfKnWK0SlWr1tsb8d3W8k1Sy6inVjCCLCl0DgaR0NdHts87gyiFS8Kw
-	XLDUync5KlOfjRhRtzV+EAMGEOJgdlVodiJKFN6JR0LiTm6ljJ9RD0C4p8cXubfh
-	L6WHFDw/yPnEz1kR9fhn3Hl/+TWZQ==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=tVp2jxW3gsshZpoJa
+	cr5kNhvPrUc1+lm5rLjVwVsfB8=; b=FJmQlAu6bbxvmVB5JXkkTM/fhY6xCoVj7
+	1sb4fB2eHFT0Adv5ltczADkQEEjQK8UETghMA9LEhN+OCG/HF464xZiJJKblmFzo
+	fBlrH9pY68BexxfxGRGu8SxEh9RR/WyfJAxEA+3822+GiKavFutARlmxn0fujP5t
+	NAA9ETXG+LU8yNsssdnaIlvfJB45851dEAp1db7Hb9BGqt31m9zaebelctM5hCbW
+	3v9L2SV80pF9js/jaAki79gjHuridgoDZ6o+KCpcp9Zes5RJ6Xr1cOx8iZ+8U8Ly
+	0EdWqV9Qn8yJ+NVl1RX+Pgm2U6yCwKxzUOp54NHNJ7RRc3uC1OC8w==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 484qfqmq5w-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4864k7n8hq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Jul 2025 05:34:16 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 56T5YFFs000501;
-	Tue, 29 Jul 2025 05:34:15 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 484qfqmq5g-1
+	Tue, 29 Jul 2025 05:34:21 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 56T5YLRk004087;
+	Tue, 29 Jul 2025 05:34:21 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4864k7n8hd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Jul 2025 05:34:15 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56T4JAqa015952;
-	Tue, 29 Jul 2025 05:34:14 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 485aumgws4-1
+	Tue, 29 Jul 2025 05:34:21 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56T0osw4028728;
+	Tue, 29 Jul 2025 05:34:20 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 485c22gq9a-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Jul 2025 05:34:14 +0000
+	Tue, 29 Jul 2025 05:34:20 +0000
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 56T5YABO48693738
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 56T5YGpe40960468
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 29 Jul 2025 05:34:10 GMT
+	Tue, 29 Jul 2025 05:34:16 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1668720043;
+	by IMSVA (Postfix) with ESMTP id 523FA2004D;
+	Tue, 29 Jul 2025 05:34:16 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B7EB120040;
 	Tue, 29 Jul 2025 05:34:10 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ED14F20040;
-	Tue, 29 Jul 2025 05:34:04 +0000 (GMT)
 Received: from aboo.ibm.com.com (unknown [9.150.11.63])
 	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 29 Jul 2025 05:34:04 +0000 (GMT)
+	Tue, 29 Jul 2025 05:34:10 +0000 (GMT)
 From: Aboorva Devarajan <aboorvad@linux.ibm.com>
 To: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
         lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
@@ -82,10 +83,12 @@ To: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, donettom@linux.ibm.com,
         ritesh.list@gmail.com, aboorvad@linux.ibm.com
-Subject: [PATCH v3 0/7] selftests/mm: Fix false positives and skip unsupported tests
-Date: Tue, 29 Jul 2025 11:03:56 +0530
-Message-ID: <20250729053403.1071807-1-aboorvad@linux.ibm.com>
+Subject: [PATCH v3 1/7] mm/selftests: Fix incorrect pointer being passed to mark_range()
+Date: Tue, 29 Jul 2025 11:03:57 +0530
+Message-ID: <20250729053403.1071807-2-aboorvad@linux.ibm.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250729053403.1071807-1-aboorvad@linux.ibm.com>
+References: <20250729053403.1071807-1-aboorvad@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,82 +97,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI5MDAzOCBTYWx0ZWRfX8hAUANN1wq0Z
- xjxSK5pUzlUOHIJMn+FZmhiDfOiCRFV0Ms/uKu8pUVh2GQaUmxXR32fVKo3xutEG7BupHvFB9OM
- 4SRVAOi9Yz2ZGZ3fSkY1Ofag02wV+E4PB9QLO15bUG2f6i69SHZEVN1cp8E/G/dQZWyj8MiQGKs
- aoNrEBRoj5wZCU1hbelEXyzXbX6FJyL7gvHYyHXoSrBNsALALPewKbIftu+2KZQobJVKYYaIPhX
- QnjbZRtjpc+Jzkk3DA7p4/uFKG23qzY9ZOe4wBq9QT8T3Cw9K+Tctct9mrBEer6O8CN5lU/nNdG
- wRTnFt1VlIcM2WtFUqFYb5s05I56EYQSo9dlDPuQu/n3AHGbfEyzTze/n2PnX9W7m1ze3AQgzBg
- aKvvnzt06OqMAaVljKi2yieAaV6HNoezxJ9X05nAuZ8WEfHtV2qJu1PhXHFq6PVtKhNIUfW8
-X-Authority-Analysis: v=2.4 cv=Je28rVKV c=1 sm=1 tr=0 ts=68885d58 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=irm_vNLxJShBRlos8zwA:9
-X-Proofpoint-GUID: pw61ZIEWy7RakHmY0YtrLFjMg38otVvq
-X-Proofpoint-ORIG-GUID: fqFVTppS9lOwJEJZYn1nMtUcYHS1_3iu
+X-Proofpoint-ORIG-GUID: D__wZ5AViJXGYz87T-6nXF7ExHIzFUtF
+X-Proofpoint-GUID: dKgDLYsOgFphMGf_RokuWg65kcFQFwD9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI5MDAzOCBTYWx0ZWRfX/+W//Ctohoc8
+ p5knvb8YutA96ws9OSpQt301EIQV2mBZ8B+dP+8pKjfv4cqXC+JU1ROrUut+CSwmsD0fThjoJDU
+ pz5BqPbr/mYHRkTOzr1ObC1C+XtBf9ReI4PScF4LaPKB7Wdipz8jHEJJ2uF9TZ6Tjh0zugUWYeM
+ K5HwLX9izDqZlILCQHb4epLgljjblTUc56Apc0ftMMLmU3iLtzy2ToXFcfy265fOSLXix0xayE/
+ R2Cki7tXa/rs29kjEGlYEFlceZOHK4JA1spBiVAa+0NFZxvK43Tn7lzq3i8HRJD+1I8QQ4WwEii
+ Wq5FkxOsfnKaA3WOdxC5HuP43E4R/yWv9at8kUhFStt4UzdRkBrsm+J3RAv1O+zKN1dRcPPIdX9
+ N+LdRGYsI1vhQx6BPnWKFToQ+oOH7kgAgYERCdrJgTG3OzfAS5S4FCelKiQ+oUy64MPuSUx+
+X-Authority-Analysis: v=2.4 cv=ZoDtK87G c=1 sm=1 tr=0 ts=68885d5d cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=7CQSdrXTAAAA:8 a=20KFwNOVAAAA:8
+ a=Ikd4Dj_1AAAA:8 a=UadLiVKD9PNbdUwwWnMA:9 a=a-qgeE7W1pNrGK8U0ZQC:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-07-29_01,2025-07-28_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxlogscore=999 clxscore=1015 lowpriorityscore=0 spamscore=0 adultscore=0
- suspectscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 phishscore=0
- mlxscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0 clxscore=1015
+ adultscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
  definitions=main-2507290038
 
-Hi all,
+From: Donet Tom <donettom@linux.ibm.com>
 
-This patch series addresses false positives in the generic mm selftests
-and skips tests that cannot run correctly due to missing features or system
-limitations.
+In main(), the high address is stored in hptr, but for mark_range(),
+the address passed is ptr, not hptr. Fixed this by changing ptr[i] to
+hptr[i] in mark_range() function call.
 
-
-v2: https://lore.kernel.org/all/20250703060656.54345-1-aboorvad@linux.ibm.com/
-
-Changes in v3:
-
-  - Rebased onto the latest mm-new branch, top commit of the base is commit 0709ddf8951f ("mm: add zblock allocator").
-  - Minor refactor based on the review comments.
-  - Included the tags from the previous version.
-
+Fixes: b2a79f62133a ("selftests/mm: virtual_address_range: unmap chunks after validation")
+Reviewed-by: Dev Jain <dev.jain@arm.com>
+Acked-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+Co-developed-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+Signed-off-by: Donet Tom <donettom@linux.ibm.com>
 ---
+ tools/testing/selftests/mm/virtual_address_range.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v1: https://lore.kernel.org/all/20250616160632.35250-1-aboorvad@linux.ibm.com/
-
-Changes in v2:
-
-   - Rebased onto the mm-new branch, top commit of the base is commit 3b4a8ad89f7e ("mm: add zblock allocator").
-   - Split some patches for clarity.
-   - Updated virtual_address_range test to support testing 4PB VA on PPC64.
-   - Added proper Fixes: tags.
-   - Included a patch to skip a failing userfaultfd test when unsupported,
-     instead of reporting a failure.
-
----
-
-Please let us know if you have any further comments.
-
-Thanks,
-Aboorva
-
-Aboorva Devarajan (3):
-  selftests/mm: Fix child process exit codes in ksm_functional_tests
-  selftests/mm: Skip thuge-gen test if system is not setup properly
-  selftests/mm: Skip hugepage-mremap test if userfaultfd unavailable
-
-Donet Tom (4):
-  mm/selftests: Fix incorrect pointer being passed to mark_range()
-  selftests/mm: Add support to test 4PB VA on PPC64
-  selftest/mm: Fix ksm_funtional_test failures
-  mm/selftests: Fix split_huge_page_test failure on systems with 64KB
-    page size
-
- tools/testing/selftests/mm/hugepage-mremap.c  | 16 +++++++++--
- .../selftests/mm/ksm_functional_tests.c       | 28 +++++++++++++------
- .../selftests/mm/split_huge_page_test.c       | 23 +++++++++------
- tools/testing/selftests/mm/thuge-gen.c        | 11 +++++---
- .../selftests/mm/virtual_address_range.c      | 13 ++++++++-
- 5 files changed, 67 insertions(+), 24 deletions(-)
-
+diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+index 169dbd692bf5..e24c36a39f22 100644
+--- a/tools/testing/selftests/mm/virtual_address_range.c
++++ b/tools/testing/selftests/mm/virtual_address_range.c
+@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
+ 		if (hptr[i] == MAP_FAILED)
+ 			break;
+ 
+-		mark_range(ptr[i], MAP_CHUNK_SIZE);
++		mark_range(hptr[i], MAP_CHUNK_SIZE);
+ 		validate_addr(hptr[i], 1);
+ 	}
+ 	hchunks = i;
 -- 
 2.47.1
 
