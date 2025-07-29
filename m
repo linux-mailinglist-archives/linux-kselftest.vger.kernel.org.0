@@ -1,257 +1,353 @@
-Return-Path: <linux-kselftest+bounces-38069-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38070-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 067B1B15541
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jul 2025 00:26:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 116B6B1561E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jul 2025 01:45:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 237103AF47C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 22:26:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DED15A19FD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 23:45:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4400283FF2;
-	Tue, 29 Jul 2025 22:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F257213E66;
+	Tue, 29 Jul 2025 23:45:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CH6SMMxA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h6DLbujK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53907192D6B;
-	Tue, 29 Jul 2025 22:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753828001; cv=fail; b=CHUATvQF8SsevDrSzyDiXaurlkHpIpMCrGGpOrskP5xOj4CX7+3Z4LJ/zfN/eEQxzgmzoSlxoZtKMHMxdjk6akG+9yhfKpr6ab36qn8NCc4xUW8Kl0bKe+MMcQgm6zBZisWEqj3ofvLw4BEkG8dv3dC3BqmVHCaAb7vNcmXuxT8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753828001; c=relaxed/simple;
-	bh=wh7BjJ8aFs2VfSUAYjYRhrb3APWSOnCdmR+08+6B/es=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=bppu1vxdh/MClrfWRTsLJuQkxidcNS8Ckq+Wa+M2ggaj4yRkPk00+Dg7ZexcnPpIx1NAStIOu/+DZtfjAPJ076eFAyH6YhCE5h71B3UXKEE9iWB/vypj2ot6G/CV9KFht142FDLUgYs4FZmafWJmzhGwG5tgPaLxsEzVIZf458I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CH6SMMxA; arc=fail smtp.client-ip=40.107.220.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WR3CpZkFvteQY3Uh9HJEBUZcPfJW4na13aSYS7n9GapN1fofWBM9df8a+9gXdoO6SsBl4lYi4dky5m3NzF8ukqQASNAXQgwoWE9ZntQ0h076yYhPgpx97+pIlXtkHsMHaG2rEzn5sQ5bYCB7Dw0M1uFn96+uIOhqwuuIhbG1tqxZZqeoPXkkky0V2xmvzSG4L+DlcjFyeiPczTSOlm4cjIpse20KxSQ9ax0TU6Qa0PAYBW1RLdBwIB8mMLWWGV7ZCtr3yCqrkfP8s20+OjNcuaTJKauKvdScTyBtIVqZxUoGq6wP+VjB9BAiipQhm+nwQgdDluwdIeFAoAIZtz3OIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fU9/ZTe7aigLvtHH4lR4aD2xka76wNZuzppitQ0T+XU=;
- b=ivMV1Ozki3Y43pFeeg4LehW2Ye/isLgvcClHB4Y9B5wIfpfqgRvDFinJJlR8t3uo574wv/dVNgL6t70q+1phRW8+fXiLpBrX1l8umeaChnspcaSf1zBLsXyx77P+NDrbNCkBco59SP+r7LjwRK+abfMZ0tov/9qmP4QLqxwU4PE+RvsPz5RNg9G4Skyr+G7sJYJmlcTcSeIClgq0x6odMPxEMsyfjw5kYo8EGGA6rRzlv3JeUNBynh48721XiNH8RDH8DbjHYaREqtZziZMFRHWd1Yp16qvoDeMfEFDQ9SdqwcrZd4vkt/Zc0AeUXFs5SeHPp72/Q9HO5BB+GEmLeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fU9/ZTe7aigLvtHH4lR4aD2xka76wNZuzppitQ0T+XU=;
- b=CH6SMMxAV6FgYIN6YjPwNqwnDzjCBdJrlweu46lDAVmPpFdFtwXsncsZTqsmy/MIzqQlGsdxQp5aB6DA3Ho4iJMkfS39/TPe8EVOhr0J+A6VupBB7i4LPDXwa48b8Rl6IUqcOromuwJTXnmBIql9cVXV3NI62fZzV2/8TVNclSWTCu++ixibpv786APzFXSIiJ3lFy+VZ6ImRJ8xp3CIztVXuKBiRI8cax3wh/n151TCdY+bC2gVFGEybntKUJ3xLEmegaYaszgFtveJ9g0XN8TfqgqAa3oJ/V0DkM7jfqIfNB8WU7vlUOoJWcbVVH2HHlQVk78tDJI9vPYTb+o8fg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by MN0PR12MB5810.namprd12.prod.outlook.com (2603:10b6:208:376::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.26; Tue, 29 Jul
- 2025 22:26:36 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8964.024; Tue, 29 Jul 2025
- 22:26:36 +0000
-Date: Tue, 29 Jul 2025 19:26:35 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Alex Williamson <alex.williamson@redhat.com>
-Cc: David Matlack <dmatlack@google.com>,
-	Aaron Lewis <aaronlewis@google.com>,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Adithya Jayachandran <ajayachandra@nvidia.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Bibo Mao <maobibo@loongson.cn>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org,
-	Huacai Chen <chenhuacai@kernel.org>,
-	James Houghton <jthoughton@google.com>,
-	Joel Granados <joel.granados@kernel.org>,
-	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	"Pratik R. Sampat" <prsampat@amd.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-	Vipin Sharma <vipinsh@google.com>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	"Yury Norov [NVIDIA]" <yury.norov@gmail.com>
-Subject: Re: [PATCH 00/33] vfio: Introduce selftests for VFIO
-Message-ID: <20250729222635.GU36037@nvidia.com>
-References: <20250620232031.2705638-1-dmatlack@google.com>
- <CALzav=dVYqS8oQNbygVjgA69EQMBBP4CyzydyUoAjnN2mb_yUQ@mail.gmail.com>
- <20250728102737.5b51e9da.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250728102737.5b51e9da.alex.williamson@redhat.com>
-X-ClientProxiedBy: YT4PR01CA0177.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:110::28) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13EB22AE90;
+	Tue, 29 Jul 2025 23:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753832730; cv=none; b=FSLohcOTmtmGvoocfvAibGZBSl/iNFvWZiw84cYy/ROzEOB/sX7dP6aB2ETy/BtFptUsqs8EW8cpwlAXJhMueaT9KSkR9DtNhO0UO195uVhPCwIqcss1TryVhRsvPuqFEdrmKN/QYQxi2aIlUbYLsnqKkTGp99qv0MydrwhX0Lc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753832730; c=relaxed/simple;
+	bh=hHkDg3Mtor7U7Fgnz0VPldH2YUiM8ke7GMdPtNrE6yU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d1nomP/d5gcB0idoLggI8fGsX4dqo0XdnUrUTebrlBpAy4LmsIa/gVAf93+ECQPOQcGf3gRRiywfRxfcSQcsrOgN735J7CCMaVEli/XoinMZJ9x4EXx8W5MgrZO11oAUBewEiRjROfk9eUwa9FwCLhrF7xfXuN+ELU3QmpFbcfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h6DLbujK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466A9C4CEEF;
+	Tue, 29 Jul 2025 23:45:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753832729;
+	bh=hHkDg3Mtor7U7Fgnz0VPldH2YUiM8ke7GMdPtNrE6yU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=h6DLbujKpTNjSm7sCpCsI0XPJ5TGkxuUizs1UDqTYEHXOxF4Mjw/0JGmOEnxesD4y
+	 SKtkkg2exeLsu8n2AZi5OW83EPOYZajowMG5mRShTSqEHF7txlH1yKU9nF7wsshAd/
+	 R/eutjCqIQlLDhAOejdF0LyeOa9C4Jy5GvJ6BdjPpla7RQQGi89FQnwmodpnt6nz5P
+	 cblYnexBWuYo/xRMYwVwzgNefERIWfmyieMdEJHxP1ecQmSQZnw2Cw/nQjusCBIy6l
+	 OIkDQcPPh77NeqGmXBPJ7CbvCXH9eCaryIznoEuR87kZszYyWBKW/17SsXwXaLywxD
+	 M8TnqfNY3zF3A==
+Message-ID: <ad4c6ff2-afd3-48ce-b55b-c9ea51168c79@kernel.org>
+Date: Tue, 29 Jul 2025 17:45:27 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|MN0PR12MB5810:EE_
-X-MS-Office365-Filtering-Correlation-Id: f8f99f13-421f-46c6-3f1d-08ddceeefaec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MVJybG51L2FGZGVaOTV5MTdtMnUvZnVmbTFxU3B3cS85bjhNRVpYS2N2aGRJ?=
- =?utf-8?B?ZTA4V2toWVF1V3kzL3ByYVo2Nm1xeWNNYzRpOStMelVBa0ZLY3JPSlBWQ2Jt?=
- =?utf-8?B?NW9rckV3b1FqVW5xZm1sakZHb1Z3SHZ5RjV3TFV3L1htMW1yQXVrZnVnVktZ?=
- =?utf-8?B?VFF3SGd3U0VvSkEwTkk0b0U3MGJIMGJuZHpNZ2piaU95VUcvMEF3ZVpuMUN3?=
- =?utf-8?B?Ti9IQlhiQkdJZ0hibUQyMkdqS0R6YlljbE84OC9sNEhUeVVUV0hYNDJWRzcx?=
- =?utf-8?B?SGZocVNjSW04THRNNk5RdEVTZnQvYlNDZ1VrYVBwOGxrYzY0T2gwdmRmU2gw?=
- =?utf-8?B?SHlQVnFDVS9heGRhYUtVSVpQVFJBTHpuVHBGTFFodkxQa2lRRy95Ym00V0d3?=
- =?utf-8?B?OWNEd3JKZXJpWG5renNxVExoTW1sbEVhQWRCMzMreHdJZHQvM0hzeVFBa1Q0?=
- =?utf-8?B?VzZHWC9qcFdyRDdPUzdqa3h2aFU1S21mTTNiSDZVS3NwSzh6cGVldHd1WTAz?=
- =?utf-8?B?TkVGWklqaXZiMkdhdnlwN1dPVFhvZExsMVFUdTRNeTF5R3plOXh1T1I3d2x2?=
- =?utf-8?B?T2xsZEQxZ3M4TUFFaEVlSnhlV241dFVRZWVSS3cycWdKcndubGp2WTlOLytj?=
- =?utf-8?B?R2tYR0ZwNlgzWHVUeHYyZ2JKWTdwaFI0WWU1amNCY1pUazlKVWV0VFovcmZk?=
- =?utf-8?B?aTBaTUxzdkpVL3Y2OXgyN1pxVk5Cd1NxNzdkd2NWajVoeno5SWVzT25MWUYv?=
- =?utf-8?B?M2ZkR2txb0d4QmRrZmVyVWFmdDh3SXgybzFiMndMZjlsL0xUdWhyN1VkQnBt?=
- =?utf-8?B?KytrYjYySTMxQWdVdjlVOEtxaVkyOWRoZjNiUE5jZVNPdUpVT1pKM3dtOUV0?=
- =?utf-8?B?WlY3cmVrcURhNXFiME9UN05KZUdoZWovUXFXekhjcVJEZmpSWmFrOFJURC9l?=
- =?utf-8?B?cTgwSVlxb01GVmJwbEQ0R3lveVJ3OXRDc0hEajdLNW8rdGZHVFZienIwa0pn?=
- =?utf-8?B?Mkg0Q0VRSWh1cjFaSE0wSkxFNC9VK3JJRXlsM05xMDUzMHhLZzU1UXdrWlU5?=
- =?utf-8?B?N09OdXg5UnI5eU05RGFMZWNvZmZlYlZNRTM2UlY3c3BnT1F0WUVnSTlQQTJ5?=
- =?utf-8?B?bkpVR2Y5Nk1kVHhKdW1wSGFRcDVYUkMxbnhvanNqbW03WXlFOTNUYWJhOXRm?=
- =?utf-8?B?RmxVSUZWSjV6eGd3dHFaUE1Vc1liUVJnL1Q3WlhRb0dpYlE2VmR3a3pETFI1?=
- =?utf-8?B?akFMZkdid0I0WWVFOEk4TisvV2ZmRHJ3NUYzS3ZLSjdZU2dOczRuNHBhMzRN?=
- =?utf-8?B?cVdnQ2pRTEc1c2dUVEloLzB3Zkc4aFFTOHVGK2p6WGF6KzM1WFplT1FOZy9F?=
- =?utf-8?B?V0x1aDNXSTNDYmFVTU9BOVd4ZWpyTGM5KzdSUEwxYnVCREhHd1o2c1lSd29K?=
- =?utf-8?B?TVo2OUNXVk0zZk8ybFV4REkxUWZUR2FaR29OZTRtcFR3SS91ZFkwa0NIVTVL?=
- =?utf-8?B?eDBnTU1UcUxQWWpxbENvcUZKU2M5NThady9CN1RTS2YxY0xQRXBrK24vN2tp?=
- =?utf-8?B?NW1pQkhMRWdUKzU4eCtmeXFSZU0ybkdsY1EwNWkwZ1FncFhvdHkyRXE0RGRZ?=
- =?utf-8?B?Mytlc0s1Y0RZc0dicHh3R3YzT1VTeXd4ZHM2K1R5Sjlqc0NmVytoSnd2MnQx?=
- =?utf-8?B?a1FvTUlxVVRDdHhWY21xb0xjRTZKdGZzbWc4TmZyUkFkZ2tuZUZWOUVHRlZ1?=
- =?utf-8?B?RzZBNSs1Rjl3WFpScG5XYmVnYlZnbExKRXJ3SVF5MjJhbDJaS2hOajFVakRy?=
- =?utf-8?B?UTE5MmtQaVlZU3pHZDBHSVJXWjJEUjdBL0tGK2lNdWc4S25QdFVOVldGd0tj?=
- =?utf-8?B?WlpKbDhpY3FyZmtvalFIVmdka3BQRHlkcUlDMzJIekpkc2VUR0VDeTI4dmtq?=
- =?utf-8?Q?OmTDqMT/nGw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bjdZZ2EyZGJJbEVkellHeGFoUnFqamJZQmtZVVJUd0hYVWF5WEpqTy9KMFpD?=
- =?utf-8?B?T2lOOGM1elhxUXF1V1hYMFdNVkY2WlJqTnB5YWRKZjNyOEhBRUlMUlA0bmVy?=
- =?utf-8?B?c0Npbjd6S0RqZGZsam9OUDJUSXhGeWY3eDFwUEYvRkRiMXNxbk5WOS9OSFFx?=
- =?utf-8?B?S0JYT2FJU0JyWDFUZkVPbk1WRzFGQ2N6VDZ3QXR2bCtTODhKT1NEdGNCZlF4?=
- =?utf-8?B?K0V2Z055OG03MC9XNWpwbmJHTDBoaUN5RHRydFpsVHRNK1RBbElPRmVWVms1?=
- =?utf-8?B?QlI5cTVKK2ZMeUpTMFhTenhOdGsyUlFlUm10eWVvT2ZnMjZTY0Rrdm1zOVFF?=
- =?utf-8?B?RmtCck9mSVBWUVR1MTdXQ3VlSW1aQ1JTVnNRN3d6WkVqcFdPMytpQnJ5ZTFO?=
- =?utf-8?B?aVc2MHNiVEdZa24xOTZ5UEh4YmVxSExxb05hTEpSdDZiSUpUSGQxeXN4Unlu?=
- =?utf-8?B?eUNYR01td1JjRDEzeG14VnZIVGIrNDFJUzlQZ3ZEa2FyRndkTmRNZC90ZUZI?=
- =?utf-8?B?UTJnSUVuQlJEODhQUXluRWp1aUwzWU1WQVczMk5FVkkyVEhRQmE4Nm05OTly?=
- =?utf-8?B?eHU5MVhxZXJxOXRjT1d2MytZaHI2UkFaZEU5aVQrV3B3SUZqMzNlbTI2a09M?=
- =?utf-8?B?TEkzbTgvZDBPMDB1YVV4NWFNSy90QTlDOTJvcXJ6aVZsN0xEMHZCWmNPUi9z?=
- =?utf-8?B?Y2VYYy83bVFiTzhNQU9mY2pFaTFqejVEN0J1T3JDRktYam1xcC9ZZzN2b1U3?=
- =?utf-8?B?R2JwMS9UUW5NSC9XU0g0b09wZUo5M3BrUUgxOEhISWcrQnA1bXhtRk9SZ09U?=
- =?utf-8?B?MEJFTFE2cUJjMGV2MlQ3UGZ1Z0d3djhlNjZtZkcyaW1DVWVOdWtiRHVIL0JS?=
- =?utf-8?B?VkxUT1AxSEczQys2Zm5Eb3VtSGVWN0Ixc2FQRHJQU1ptRU9ZK29GZG12U1B1?=
- =?utf-8?B?V0JJanZWSWp0ZHUzbWhEZ1pzdEliV1hmMXlyeXVhbVNEY0JJb2oxZHVGb0Rm?=
- =?utf-8?B?cURybTdoUW1Rd0xidlRnWWt0ZjFBcE1qR0x2bGl0MXRMS2o4YXlJdUdaU2tu?=
- =?utf-8?B?c1A3NzVYMlBsSGwyWTUzRFl5bG91cjVCWmZLbSt1bG1LZW84WHEza2c0emQv?=
- =?utf-8?B?MnlHdnc2dS9tM2YzSkQwbmFHUVNlVmc1QXhCSkE3SEpTbENLTStpU3ZoRW5P?=
- =?utf-8?B?eEdSZTdmMjcvTmVJamQvZm52dnBNZWE1cUwwbFdwYzdUTHpIb2RYNDZYNjNB?=
- =?utf-8?B?a0NXRTMxZXVSblRnakVsbXQyUkZ1MGgvVzd6VUJqOHllS3JlK095WTZVMlRR?=
- =?utf-8?B?M002bWxoMXRjd3JoVUk4UjM5UWxWa2g1dUZLOXgzbERodzJPNndsY1I4aGlW?=
- =?utf-8?B?cTRvRnRSOW03QjdnNTh4anA0ZGRLRnJEOUJvSVlrVlBGRHI1TURDNWJNVzky?=
- =?utf-8?B?SnI4d044Z0QzdVVmNEdJRVY4M2ZpOTViQW9MQTR5bERNUmMvelp0RU1iNk5H?=
- =?utf-8?B?WnFDeUw3eXVpeE8vWDBlWE1oaTZvVW9mVjVicHNRMDdvclFFSHcwYzFuWGFs?=
- =?utf-8?B?b3g4WjVYZzQvcENiUGNqR2c3WGFqNGhlV2NZd05xVzdTajgzUlRSK21jOHJo?=
- =?utf-8?B?dGRoeC9lQVFTTXRSa0FMSmI1RTFRWmZkajVDUnVaNjVNaCszSGp3KzhyNkJ3?=
- =?utf-8?B?RjRZNjQ4K3dsZDBmMmEwOVFoSitYMHhZWVJta1EzSVBjdFR1RkUrUmZ1R0d6?=
- =?utf-8?B?MFd6bm5JZXV6ek9lb0dCYmI0azJGanluV05BY0NQdC92bm9NdUd6SDFZcWQ2?=
- =?utf-8?B?K0VURGxOZjAzd05zYzQ2aW5FYzFLaTNzZ0dWYkQxcU4zemZvNHpnL3ZYcEI5?=
- =?utf-8?B?eDJRZlBaR0NWdWVDSXJZK3g5MEQ0Z1djOU9ybTN0YjRNNDlCYytPY1Zucit4?=
- =?utf-8?B?clNrTm44UXg4UTNReWVyRFVVaXVhUjJ5UzhJZXhEQXpEeFlFbFhkQ2kyT0xI?=
- =?utf-8?B?QkdzV3JKbEVIYVdmT1dCVjNaQVFodUtQVmtITXVickxwREltVDZ6ZncxT3Jn?=
- =?utf-8?B?NTcyYzZZYjNENzNCQXU0VWZ2dlI0RWliRUdCK2pGbzlneERUNmdXNG1MNGNh?=
- =?utf-8?Q?8NhQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8f99f13-421f-46c6-3f1d-08ddceeefaec
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2025 22:26:36.5321
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OWY+WaHq8VEBFywj+IsW88bIb4Rjp/VRLl5tF+kny08bjp0wOTNyehgeXsHibyYt
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5810
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 iproute2-next 1/1] tc: add dualpi2 scheduler module
+Content-Language: en-US
+To: chia-yu.chang@nokia-bell-labs.com, alok.a.tiwari@oracle.com,
+ donald.hunter@gmail.com, xandfury@gmail.com, netdev@vger.kernel.org,
+ dave.taht@gmail.com, pabeni@redhat.com, jhs@mojatatu.com, kuba@kernel.org,
+ stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+ davem@davemloft.net, edumazet@google.com, horms@kernel.org,
+ andrew+netdev@lunn.ch, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Cc: Olga Albisser <olga@albisser.org>,
+ Oliver Tilmans <olivier.tilmans@nokia.com>,
+ Bob Briscoe <research@bobbriscoe.net>, Henrik Steen <henrist@henrist.net>
+References: <20250717232357.69185-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250717232357.69185-2-chia-yu.chang@nokia-bell-labs.com>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20250717232357.69185-2-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 28, 2025 at 10:27:37AM -0600, Alex Williamson wrote:
-> On Fri, 25 Jul 2025 09:47:48 -0700
-> David Matlack <dmatlack@google.com> wrote:
-> 
-> > On Fri, Jun 20, 2025 at 4:21 PM David Matlack <dmatlack@google.com> wrote:
-> > >
-> > > This series introduces VFIO selftests, located in
-> > > tools/testing/selftests/vfio/.  
-> > 
-> > Hi Alex,
-> > 
-> > I wanted to discuss how you would like to proceed with this series.
-> > 
-> > The series is quite large, so one thing I was wondering is if you
-> > think it should be split up into separate series to make it easier to
-> > review and merge. Something like this:
-> > 
-> >  - Patches 01-08 + 30 (VFIO selftests library, some basic tests, and run script)
-> >  - Patches 09-22 (driver framework)
-> >  - Patches 23-28 (iommufd support)
-> >  - Patches 31-33 (integration with KVM selftests)
-> > 
-> > I also was curious about your thoughts on maintenance of VFIO
-> > selftests, since I don't think we discussed that in the RFC. I am
-> > happy to help maintain VFIO selftests in whatever way makes the most
-> > sense. For now I added tools/testing/selftests/vfio under the
-> > top-level VFIO section in MAINTAINERS (so you would be the maintainer)
-> > and then also added a separate section for VFIO selftests with myself
-> > as a Reviewer (see PATCH 01). Reviewer felt like a better choice than
-> > Maintainer for myself since I am new to VFIO upstream (I've primarily
-> > worked on KVM in the past).
-> 
-> Hi David,
-> 
-> There's a lot of potential here and I'd like to see it proceed.  
+On 7/17/25 5:23 PM, chia-yu.chang@nokia-bell-labs.com wrote:
+> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
+> index 958d9407..15d1a37a 100644
+> --- a/include/uapi/linux/pkt_sched.h
+> +++ b/include/uapi/linux/pkt_sched.h
 
-+1 too, I really lack time at the moment to do much with this but I'm
-half inclined to suggest Alex should say it should be merged in 6
-weeks (to motivate any reviewing) and we can continue to work on it
-in-tree.
+you can drop the uapi changes.
 
-As they are self tests I think there is alot more value in having the
-tests than having perfect tests.
+> diff --git a/include/utils.h b/include/utils.h
+> index 9a81494d..91e6e31f 100644
+> --- a/include/utils.h
+> +++ b/include/utils.h
+> @@ -146,6 +146,8 @@ int read_prop(const char *dev, char *prop, long *value);
+>  int get_long(long *val, const char *arg, int base);
+>  int get_integer(int *val, const char *arg, int base);
+>  int get_unsigned(unsigned *val, const char *arg, int base);
+> +int get_float(float *val, const char *arg);
+> +int get_float_min_max(float *val, const char *arg, float min, float max);
+>  int get_time_rtt(unsigned *val, const char *arg, int *raw);
+>  #define get_byte get_u8
+>  #define get_ushort get_u16
+> diff --git a/ip/iplink_can.c b/ip/iplink_can.c
+> index fcffa852..9f6084e6 100644
+> --- a/ip/iplink_can.c
+> +++ b/ip/iplink_can.c
+> @@ -67,20 +67,6 @@ static void usage(void)
+>  	print_usage(stderr);
+>  }
+>  
+> -static int get_float(float *val, const char *arg)
+> -{
+> -	float res;
+> -	char *ptr;
+> -
+> -	if (!arg || !*arg)
+> -		return -1;
+> -	res = strtof(arg, &ptr);
+> -	if (!ptr || ptr == arg || *ptr)
+> -		return -1;
+> -	*val = res;
+> -	return 0;
+> -}
+> -
+>  static void set_ctrlmode(char *name, char *arg,
+>  			 struct can_ctrlmode *cm, __u32 flags)
+>  {
+> diff --git a/lib/utils.c b/lib/utils.c
+> index 706e93c3..dd242d4d 100644
+> --- a/lib/utils.c
+> +++ b/lib/utils.c
+> @@ -220,6 +220,36 @@ int get_unsigned(unsigned int *val, const char *arg, int base)
+>  	return 0;
+>  }
+>  
+> +int get_float(float *val, const char *arg)
+> +{
+> +	float res;
+> +	char *ptr;
+> +
+> +	if (!arg || !*arg)
+> +		return -1;
+> +	res = strtof(arg, &ptr);
+> +	if (!ptr || ptr == arg || *ptr)
+> +		return -1;
+> +	*val = res;
+> +	return 0;
+> +}
 
-> Something that we should continue to try to improve is the automation.
-> These tests are often targeting a specific feature, so matching a
-> device to a unit test becomes a barrier to automated runs.  I wonder if
-> we might be able to reach a point where the test runner can select
-> appropriate devices from a pool of devices specified via environment
-> variables.
+Put the move of get_float in a standlone patch indicating it is a code
+move.
 
-Makes a lot of sense to me!
 
-I'd just put Dave as the VFIO selftest co-maintainer though - a
-pennance for doing so much work :)
+> +
+> +int get_float_min_max(float *val, const char *arg, float min, float max)
+> +{
+> +	float res;
+> +	char *ptr;
+> +
+> +	if (!arg || !*arg)
+> +		return -1;
+> +	res = strtof(arg, &ptr);
+> +	if (!ptr || ptr == arg || *ptr)
+> +		return -1;
+> +	if (res < min || res > max)
+> +		return -1;
+> +	*val = res;
+> +	return 0;
+> +}
+> +
+>  /*
+>   * get_time_rtt is "translated" from a similar routine "get_time" in
+>   * tc_util.c.  We don't use the exact same routine because tc passes
 
-Jason
+Add get_float_min_max in a standalone patch.
+
+
+
+> diff --git a/tc/q_dualpi2.c b/tc/q_dualpi2.c
+> new file mode 100644
+> index 00000000..50d52aad
+> --- /dev/null
+> +++ b/tc/q_dualpi2.c
+> @@ -0,0 +1,528 @@
+> +// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +/* Copyright (C) 2024 Nokia
+> + *
+> + * Author: Koen De Schepper <koen.de_schepper@nokia-bell-labs.com>
+> + * Author: Olga Albisser <olga@albisser.org>
+> + * Author: Henrik Steen <henrist@henrist.net>
+> + * Author: Olivier Tilmans <olivier.tilmans@nokia.com>
+> + * Author: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> + *
+> + * DualPI Improved with a Square (dualpi2):
+> + * - Supports congestion controls that comply with the Prague requirements
+> + *   in RFC9331 (e.g. TCP-Prague)
+> + * - Supports coupled dual-queue with PI2 as defined in RFC9332
+> + * - Supports ECN L4S-identifier (IP.ECN==0b*1)
+> + *
+> + * note: Although DCTCP and BBRv3 can use shallow-threshold ECN marks,
+> + *   they do not meet the 'Prague L4S Requirements' listed in RFC 9331
+> + *   Section 4, so they can only be used with DualPI2 in a datacenter
+> + *   context.
+> + *
+> + * References:
+> + * - RFC9332: https://datatracker.ietf.org/doc/html/rfc9332
+> + * - De Schepper, Koen, et al. "PI 2: A linearized AQM for both classic and
+> + *   scalable TCP."  in proc. ACM CoNEXT'16, 2016.
+> + */
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <syslog.h>
+> +#include <fcntl.h>
+> +#include <sys/socket.h>
+> +#include <netinet/in.h>
+> +#include <arpa/inet.h>
+> +#include <string.h>
+> +#include <math.h>
+> +#include <errno.h>
+> +
+> +#include "utils.h"
+> +#include "tc_util.h"
+> +
+> +#define MAX_PROB ((uint32_t)(~0U))
+> +#define DEFAULT_ALPHA_BETA ((uint32_t)(~0U))
+> +#define ALPHA_BETA_MAX ((2 << 23) - 1) /* see net/sched/sch_dualpi2.c */
+> +#define ALPHA_BETA_SCALE (1 << 8)
+> +#define RTT_TYP_TO_MAX 6
+> +
+> +static const char *get_credit_queue(int credit)
+> +{
+> +	return credit > 0 ? "C-queue" : "L-queue";
+> +}
+> +
+> +static const char *get_ecn_type(uint8_t ect)
+> +{
+> +	switch (ect & TC_DUALPI2_ECN_MASK_ANY_ECT) {
+> +	case TC_DUALPI2_ECN_MASK_L4S_ECT: return "l4s_ect";
+> +	case TC_DUALPI2_ECN_MASK_CLA_ECT:
+> +	case TC_DUALPI2_ECN_MASK_ANY_ECT: return "any_ect";
+> +	default:
+> +		fprintf(stderr,
+> +			"Warning: Unexpected ecn type %u!\n", ect);
+> +		return "";
+> +	}
+> +}
+> +
+> +static const char *get_ecn_type_json(uint8_t ect)
+> +{
+> +	switch (ect & TC_DUALPI2_ECN_MASK_ANY_ECT) {
+> +	case TC_DUALPI2_ECN_MASK_L4S_ECT: return "l4s-ect";
+> +	case TC_DUALPI2_ECN_MASK_CLA_ECT:
+> +	case TC_DUALPI2_ECN_MASK_ANY_ECT: return "any-ect";
+> +	default:
+> +		fprintf(stderr,
+> +			"Warning: Unexpected ecn type %u!\n", ect);
+> +		return "";
+> +	}
+> +}
+> +
+> +static void explain(void)
+> +{
+> +	fprintf(stderr, "Usage: ... dualpi2\n");
+> +	fprintf(stderr, "               [limit PACKETS]\n");
+> +	fprintf(stderr, "               [memlimit BYTES]\n");
+> +	fprintf(stderr, "               [coupling_factor NUMBER]\n");
+> +	fprintf(stderr, "               [step_thresh TIME|PACKETS]\n");
+> +	fprintf(stderr, "               [min_qlen_step PACKETS]\n");
+> +	fprintf(stderr, "               [drop_on_overload|overflow]\n");
+> +	fprintf(stderr, "               [drop_enqueue|drop_dequeue]\n");
+> +	fprintf(stderr, "               [classic_protection PERCENTAGE]\n");
+> +	fprintf(stderr, "               [max_rtt TIME [typical_rtt TIME]]\n");
+> +	fprintf(stderr, "               [target TIME] [tupdate TIME]\n");
+> +	fprintf(stderr, "               [alpha ALPHA] [beta BETA]\n");
+> +	fprintf(stderr, "               [split_gso|no_split_gso]\n");
+> +}
+> +
+> +static int get_packets(uint32_t *val, const char *arg)
+> +{
+> +	unsigned long res;
+> +	char *ptr;
+> +
+> +	if (!arg || !*arg)
+> +		return -1;
+> +	res = strtoul(arg, &ptr, 10);
+> +	if (!ptr || ptr == arg ||
+> +	    !(matches(ptr, "pkts") == 0 || matches(ptr, "packets") == 0))
+
+we are not allowing any more uses of "matches".
+
+
+> +		return -1;
+> +	if (res == ULONG_MAX && errno == ERANGE)
+> +		return -1;
+> +	if (res > 0xFFFFFFFFUL)
+> +		return -1;
+> +	*val = res;
+> +
+> +	return 0;
+> +}
+> +
+> +static int parse_alpha_beta(const char *name, char *argv, uint32_t *field)
+> +{
+> +
+> +	float field_f;
+> +
+> +	if (get_float_min_max(&field_f, argv, 0.0, ALPHA_BETA_MAX)) {
+> +		fprintf(stderr, "Illegal \"%s\"\n", name);
+> +		return -1;
+> +	} else if (field_f < 1.0f / ALPHA_BETA_SCALE)
+> +		fprintf(stderr,
+> +			"Warning: \"%s\" is too small and will be rounded to zero.\n",
+> +			name);
+> +	*field = (uint32_t)(field_f * ALPHA_BETA_SCALE);
+> +
+> +	return 0;
+> +}
+> +
+> +static int try_get_percent(int *val, const char *arg)
+> +{
+> +	double per;
+> +
+> +	if (parse_percent(&per, arg))
+> +		return -1;
+> +
+> +	*val = rint(per * 100);
+> +
+> +	return 0;
+> +}
+> +
+> +static int dualpi2_parse_opt(const struct qdisc_util *qu, int argc,
+> +			     char **argv, struct nlmsghdr *n, const char *dev)
+> +{
+> +	uint32_t limit = 0;
+> +	uint32_t memory_limit = 0;
+> +	uint32_t target = 0;
+> +	uint32_t tupdate = 0;
+> +	uint32_t alpha = DEFAULT_ALPHA_BETA;
+> +	uint32_t beta = DEFAULT_ALPHA_BETA;
+> +	int32_t coupling_factor = -1;
+> +	uint8_t ecn_mask = 0;
+> +	int step_unit = __TCA_DUALPI2_MAX;
+> +	uint32_t step_thresh = 0;
+> +	uint32_t min_qlen_step =  0;
+> +	bool set_min_qlen_step = false;
+> +	int c_protection = -1;
+> +	uint8_t drop_early = __TCA_DUALPI2_DROP_EARLY_MAX;
+> +	uint8_t drop_overload = __TCA_DUALPI2_DROP_OVERLOAD_MAX;
+> +	uint8_t split_gso = __TCA_DUALPI2_SPLIT_GSO_MAX;
+> +	uint32_t rtt_max = 0;
+> +	uint32_t rtt_typ = 0;
+> +	struct rtattr *tail;
+
+iproute2 follows kernel coding standards and netdev's preference for
+reverse xmas tree listing of variables.
+
 
