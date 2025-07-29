@@ -1,92 +1,199 @@
-Return-Path: <linux-kselftest+bounces-38067-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38068-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14AABB1545C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 22:34:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB564B154A5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 23:28:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FE4F18A42DB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 20:35:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0051B3BCAF3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 21:28:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A0E0272E56;
-	Tue, 29 Jul 2025 20:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4392E279917;
+	Tue, 29 Jul 2025 21:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wako6R1Q"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lhsW2pTc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A43C272E43;
-	Tue, 29 Jul 2025 20:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C7B2561C5
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Jul 2025 21:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753821280; cv=none; b=sY68jO3YyW+5pN9+aGcDZiugUpP8gv9DGq0blrZEU31kr0ROSFBIWbozFBLFTHU+0tIMVfvr0FDmsJieQ7vLuR4cxACNDSUrvWnL96IQjA/Rhl+hN5plqcSMrxPzQwr04okVULaCRnvurwSKArCquitq5AP+L11DiGmhzsBEL04=
+	t=1753824523; cv=none; b=FaTFYHGA1lM+tlyqkwzK5qHBUikIA7xCS2oq5ikrtdQGyDni9ENRJguW33Dz7f2q32NAIVBF1Ixlh7YSLYni3lutzJh7AQh/bFw8mEa4Rf1QlWLod4ImAKvkS0zYwHH5LjV26/tn6vY6V0oIH8cca19XPIor3B+39OecMAOxa8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753821280; c=relaxed/simple;
-	bh=ZwSuK/RTuYCFAVr+NkGfCj7BKRlN3w5TsrLdxs5eF88=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JiHHOxowmZAEWUm2f9LkWtj56Hz42Zj+9f3wWCqHLK18Ms41oTOAW8BBXoInfKubdpj6DvkgpwTglbgnpKnuXLb+A3F1xR80fL7hgi61qdZ5VVrQfqUsKPxouDiSPtAF+Oue63JxuOp0+Z8VaN3Rag4YxB8cFLmYgSvINSF7sXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wako6R1Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3BA8C4CEF6;
-	Tue, 29 Jul 2025 20:34:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753821279;
-	bh=ZwSuK/RTuYCFAVr+NkGfCj7BKRlN3w5TsrLdxs5eF88=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Wako6R1QV2fX3AR8woOWygSqg8VAlXE6xf7o9NsaNMDpXiZs+JBts9eP21ACN4stU
-	 5Cvw1UiV3OUFZYSJn2RNjHjgMXwI1pLPcEO/gLWddLSIjPe+AKxKOK3dRfyxlR8+XG
-	 3qGikNiIvgb1vJKlWhC0H16z3drvvGsqYj9Nq4lc/5qs1Mly7rUc8tEkuiDz4KPqtm
-	 f3gum2zXUGR8OgTkPs/36FNu8/TAtDdzIlJNVtHHC4eh3WSBltjUrE0AFOK+EhVSYB
-	 +8NgZ7MZ5MEmTuzDgQgI9PTfdDQHJV9LVgr/DMzH9bEgs/y8K8MC49VHLZV7xbzx9W
-	 u54nNRaP7CI7A==
-From: Kees Cook <kees@kernel.org>
-To: Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Sargun Dhillon <sargun@sargun.me>,
-	Shuah Khan <shuah@kernel.org>,
-	Johannes Nixdorf <johannes@nixdorf.dev>
-Cc: Kees Cook <kees@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Ali Polatel <alip@chesswob.org>,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] seccomp: Fix a race with WAIT_KILLABLE_RECV if the tracer replies too fast
-Date: Tue, 29 Jul 2025 13:34:21 -0700
-Message-Id: <175382125844.1703528.15225839014415526576.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250725-seccomp-races-v2-0-cf8b9d139596@nixdorf.dev>
-References: <20250725-seccomp-races-v2-0-cf8b9d139596@nixdorf.dev>
+	s=arc-20240116; t=1753824523; c=relaxed/simple;
+	bh=wWr0PMMX8zXIq+UZH9Hw6e+QTKOqH5uI2PfCLe/lLZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=luKlDVVT6roSMRLCzOgYDzUY7lbsLTIts5EqpnZRvTpkAyoixkDanlxK0qBWI5dHRgVHH1xAoF05MYQnGNhGH92NimHLGfZaaek0ZUM9l9jRHcfv5OuYigc3jhyL7hrxiTFy9X6UZuX4pDxiT3iAWCD/5AfNEOY4H+/DBUKwpQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lhsW2pTc; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Tue, 29 Jul 2025 14:28:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753824508;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NR9slzoUcFOnPOoSMrOV4yposz1NlG4bkgRYfak492c=;
+	b=lhsW2pTcB10VQHQ789IqoXJswxckQki4VJ3/2loOEW2BzG6PgAfa2kj9NJPn524jv0WgfP
+	MjYAlqeTx1ZzRP990X7EM/qgcaHk5t/9IMRbFKRswJP+taDNsnL+hGCJ99RzwPHiQQ/vVN
+	YBCJ0Z4l9hzEspcc7A/hA8yTNEKhxYc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Jiaqi Yan <jiaqiyan@google.com>
+Cc: maz@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com,
+	yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+	pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org,
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	duenwen@google.com, rananta@google.com, jthoughton@google.com
+Subject: Re: [PATCH v2 1/6] KVM: arm64: VM exit to userspace to handle SEA
+Message-ID: <aIk88sBA2eIEF7w-@linux.dev>
+References: <20250604050902.3944054-1-jiaqiyan@google.com>
+ <20250604050902.3944054-2-jiaqiyan@google.com>
+ <aHFohmTb9qR_JG1E@linux.dev>
+ <CACw3F509B=AHhpaTcuH9O851rrDdHh1baC8uRYy7bDa7BSMhgg@mail.gmail.com>
+ <aHK-DPufhLy5Dtuk@linux.dev>
+ <CACw3F53TYZ1KFv0Yc-GCyOxn7TF3iYjTNSE8bd3nte=KaCN0UQ@mail.gmail.com>
+ <CACw3F50Q_G75wf2rBm-P-NkyyO72i1NKqR9se99QrgipfD62yg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACw3F50Q_G75wf2rBm-P-NkyyO72i1NKqR9se99QrgipfD62yg@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 25 Jul 2025 18:31:17 +0200, Johannes Nixdorf wrote:
-> If WAIT_KILLABLE_RECV was specified, and an event is received, the
-> tracee's syscall is not supposed to be interruptible. This was not properly
-> ensured if the reply was sent too fast, and an interrupting signal was
-> received before the reply was processed on the tracee side.
+On Fri, Jul 25, 2025 at 03:54:10PM -0700, Jiaqi Yan wrote:
+> On Sat, Jul 19, 2025 at 2:24 PM Jiaqi Yan <jiaqiyan@google.com> wrote:
+> >
+> > On Sat, Jul 12, 2025 at 12:57 PM Oliver Upton <oliver.upton@linux.dev> wrote:
+> > >
+> > > On Fri, Jul 11, 2025 at 04:59:11PM -0700, Jiaqi Yan wrote:
+> > > > >  - Add some detail about FEAT_RAS where we may still exit to userspace
+> > > > >    for host-controlled memory, as we cannot differentiate between a
+> > > > >    stage-1 or stage-2 TTW SEA when taken on the descriptor PA
+> > > >
+> > > > Ah, IIUC, you are saying even if the FSC code tells fault is on TTW
+> > > > (esr_fsc_is_secc_ttw or esr_fsc_is_sea_ttw), it can either be guest
+> > > > stage-1's or stage-2's descriptor PA, and we can tell which from
+> > > > which.
+> > > >
+> > > > However, if ESR_ELx_S1PTW is set, we can tell this is a sub-case of
+> > > > stage-2 descriptor PA, their usage is for stage-1 PTW but they are
+> > > > stage-2 memory.
+> > > >
+> > > > Is my current understanding right?
+> > >
+> > > Yep, that's exactly what I'm getting at. As you note, stage-2 aborts
+> > > during a stage-1 walk are sufficiently described, but not much else.
+> >
+> > Got it, thanks!
+> >
+> > >
+> > > > > +/*
+> > > > > + * Returns true if the SEA should be handled locally within KVM if the abort is
+> > > > > + * caused by a kernel memory allocation (e.g. stage-2 table memory).
+> > > > > + */
+> > > > > +static bool host_owns_sea(struct kvm_vcpu *vcpu, u64 esr)
+> > > > > +{
+> > > > > +       /*
+> > > > > +        * Without FEAT_RAS HCR_EL2.TEA is RES0, meaning any external abort
+> > > > > +        * taken from a guest EL to EL2 is due to a host-imposed access (e.g.
+> > > > > +        * stage-2 PTW).
+> > > > > +        */
+> > > > > +       if (!cpus_have_final_cap(ARM64_HAS_RAS_EXTN))
+> > > > > +               return true;
+> > > > > +
+> > > > > +       /* KVM owns the VNCR when the vCPU isn't in a nested context. */
+> > > > > +       if (is_hyp_ctxt(vcpu) && (esr & ESR_ELx_VNCR))
+> > > > > +               return true;
+> > > > > +
+> > > > > +       /*
+> > > > > +        * Determining if an external abort during a table walk happened at
+> > > > > +        * stage-2 is only possible with S1PTW is set. Otherwise, since KVM
+> > > > > +        * sets HCR_EL2.TEA, SEAs due to a stage-1 walk (i.e. accessing the PA
+> > > > > +        * of the stage-1 descriptor) can reach here and are reported with a
+> > > > > +        * TTW ESR value.
+> > > > > +        */
+> > > > > +       return esr_fsc_is_sea_ttw(esr) && (esr & ESR_ELx_S1PTW);
+> > > >
+> > > > Should we include esr_fsc_is_secc_ttw? like
+> > > >   (esr_fsc_is_sea_ttw(esr) || esr_fsc_is_secc_ttw(esr)) && (esr & ESR_ELx_S1PTW)
+> > >
+> > > Parity / ECC errors are not permitted if FEAT_RAS is implemented (which
+> > > is tested for up front).
+> >
+> > Ah, thanks for pointing this out.
+> >
+> > >
+> > > > > +}
+> > > > > +
+> > > > >  int kvm_handle_guest_sea(struct kvm_vcpu *vcpu)
+> > > > >  {
+> > > > > +       u64 esr = kvm_vcpu_get_esr(vcpu);
+> > > > > +       struct kvm_run *run = vcpu->run;
+> > > > > +       struct kvm *kvm = vcpu->kvm;
+> > > > > +       u64 esr_mask = ESR_ELx_EC_MASK  |
+> > > > > +                      ESR_ELx_FnV      |
+> > > > > +                      ESR_ELx_EA       |
+> > > > > +                      ESR_ELx_CM       |
+> > > > > +                      ESR_ELx_WNR      |
+> > > > > +                      ESR_ELx_FSC;
+> > > >
+> > > > Do you (and why) exclude ESR_ELx_IL on purpose?
+> > >
+> > > Unintended :)
+> >
+> > Will add into my patch.
+> >
+> > >
+> > > > BTW, if my previous statement about TTW SEA is correct, then I also
+> > > > understand why we need to explicitly exclude ESR_ELx_S1PTW.
+> > >
+> > > Right, we shouldn't be exposing genuine stage-2 external aborts to userspace.
+> > >
+> > > > > +       u64 ipa;
+> > > > > +
+> > > > > +
+> > > > >         /*
+> > > > >          * Give APEI the opportunity to claim the abort before handling it
+> > > > >          * within KVM. apei_claim_sea() expects to be called with IRQs
+> > > > > @@ -1824,7 +1864,32 @@ int kvm_handle_guest_sea(struct kvm_vcpu *vcpu)
+> > > > >         if (apei_claim_sea(NULL) == 0)
+> > > >
+> > > > I assume kvm should still lockdep_assert_irqs_enabled(), right? That
+> > > > is, a WARN_ON_ONCE is still useful in case?
+> > >
+> > > Ah, this is diffed against my VNCR prefix which has this context. Yes, I
+> > > want to preserve the lockdep assertion.
+> >
+> > Thanks for sharing the patch! Should I wait for you to send and queue
+> > to kvmarm/next and rebase my v3 to it? Or should I insert it into my
+> > v3 patch series with you as the commit author, and Signed-off-by you?
 > 
-> This series fixes the bug and adds a test case for it to the selftests.
+> Friendly ping for this question, my v3 is ready but want to confirm
+> the best option here.
 > 
-> [...]
+> Recently we found even the newer ARM64 platforms used by our org has
+> to rely on KVM to more gracefully handle SEA (lacking support from
+> APEI), so we would really want to work with upstream to lock down the
+> proposed approach/UAPI asap.
 
-With minor edits, applied to for-next/seccomp, thanks!
+Posted the VNCR fix which I plan on taking in 6.17. Feel free to rebase
+your work on top of kvmarm-6.17 or -rc1 when it comes out.
 
-[1/2] seccomp: Fix a race with WAIT_KILLABLE_RECV if the tracer replies too fast
-      https://git.kernel.org/kees/c/cce436aafc2a
-[2/2] selftests/seccomp: Add a test for the WAIT_KILLABLE_RECV fast reply race
-      https://git.kernel.org/kees/c/b0c9bfbab925
+https://lore.kernel.org/kvmarm/20250729182342.3281742-1-oliver.upton@linux.dev/
 
-Take care,
-
--- 
-Kees Cook
-
+Thanks,
+Oliver
 
