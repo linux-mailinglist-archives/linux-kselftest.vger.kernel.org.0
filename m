@@ -1,353 +1,198 @@
-Return-Path: <linux-kselftest+bounces-38070-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38071-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 116B6B1561E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jul 2025 01:45:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB939B15689
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jul 2025 02:31:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DED15A19FD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Jul 2025 23:45:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B0925609A0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jul 2025 00:31:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F257213E66;
-	Tue, 29 Jul 2025 23:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6537053365;
+	Wed, 30 Jul 2025 00:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h6DLbujK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qZjT7dil"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13EB22AE90;
-	Tue, 29 Jul 2025 23:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE6118B0F
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Jul 2025 00:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753832730; cv=none; b=FSLohcOTmtmGvoocfvAibGZBSl/iNFvWZiw84cYy/ROzEOB/sX7dP6aB2ETy/BtFptUsqs8EW8cpwlAXJhMueaT9KSkR9DtNhO0UO195uVhPCwIqcss1TryVhRsvPuqFEdrmKN/QYQxi2aIlUbYLsnqKkTGp99qv0MydrwhX0Lc=
+	t=1753835496; cv=none; b=mdW7xQBQgJ3RswgUIAg7+6La42MkPfg5vwyK9MttzQioja9gnySAbMmKFuNPAEXsL+Ff9BUryqp8iwBzAl0yAkeEEIZhAJPH9pIw4EYbpsNRm0IOn6BC2qwNpMKwHR8zuA2ltMiL6/fNe2FHCmFqR5VkogBjtCnF5ArfLO0bbPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753832730; c=relaxed/simple;
-	bh=hHkDg3Mtor7U7Fgnz0VPldH2YUiM8ke7GMdPtNrE6yU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d1nomP/d5gcB0idoLggI8fGsX4dqo0XdnUrUTebrlBpAy4LmsIa/gVAf93+ECQPOQcGf3gRRiywfRxfcSQcsrOgN735J7CCMaVEli/XoinMZJ9x4EXx8W5MgrZO11oAUBewEiRjROfk9eUwa9FwCLhrF7xfXuN+ELU3QmpFbcfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h6DLbujK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466A9C4CEEF;
-	Tue, 29 Jul 2025 23:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753832729;
-	bh=hHkDg3Mtor7U7Fgnz0VPldH2YUiM8ke7GMdPtNrE6yU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=h6DLbujKpTNjSm7sCpCsI0XPJ5TGkxuUizs1UDqTYEHXOxF4Mjw/0JGmOEnxesD4y
-	 SKtkkg2exeLsu8n2AZi5OW83EPOYZajowMG5mRShTSqEHF7txlH1yKU9nF7wsshAd/
-	 R/eutjCqIQlLDhAOejdF0LyeOa9C4Jy5GvJ6BdjPpla7RQQGi89FQnwmodpnt6nz5P
-	 cblYnexBWuYo/xRMYwVwzgNefERIWfmyieMdEJHxP1ecQmSQZnw2Cw/nQjusCBIy6l
-	 OIkDQcPPh77NeqGmXBPJ7CbvCXH9eCaryIznoEuR87kZszYyWBKW/17SsXwXaLywxD
-	 M8TnqfNY3zF3A==
-Message-ID: <ad4c6ff2-afd3-48ce-b55b-c9ea51168c79@kernel.org>
-Date: Tue, 29 Jul 2025 17:45:27 -0600
+	s=arc-20240116; t=1753835496; c=relaxed/simple;
+	bh=xBqYcPOMq93xlyP7/znvTXGQJiBTxVO/kOVZXtDD+9o=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=uyPCJ5qeltvzYijdRTruLc0wbUNz2ViFRivHD9XAq7P9cdx2cgIRoijAHnJjLxzeXnbxjsSfrT7Hz5HkUmd6j8a7mGMEE7qhx69cInAbnqrxNjmymgGwPkbd0XKrCFvFHX3zm5pxfu6WiWDYG6vVG4iMEX3QiTEtPG3ckuivgzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qZjT7dil; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-31366819969so338255a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Jul 2025 17:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1753835494; x=1754440294; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZsvMJHxi0Jk9Ob0YWIw4MQPlATsEKQhQD2Gx/yz9Pks=;
+        b=qZjT7dilcKyMf/lvgv27m7hyyBEdKOZnkBehHV4Mss+NyQ9odaIWC9lg0qEyfFPO7m
+         pYlXPEIgzrYA67FazKBqBUKrawlEfD1ncIIpQYewKOF8J/2PA/UP/EhE0HnmuGITW8z3
+         QjuD/GvaA7bpVN/J640iYJENKnqMRVztOx8KGpYYZ5iI8AqXWil4A1pCsTUpg6Q7AJHq
+         2dQGOzsjQxXR45pIGMrVlH5gHNtv7CTwoI9BoOF8WFRdgD1HZRcozqR97Td4NLW91Emh
+         fr3K32lr42r/hjszsPi5e4bs3Ab44FvJWENh581r7lheKE494WfqWv4RHLbAf6X0THIH
+         6kPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753835494; x=1754440294;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZsvMJHxi0Jk9Ob0YWIw4MQPlATsEKQhQD2Gx/yz9Pks=;
+        b=jdRJ87z2u5AzfOdubK5KzOyE8iDlEKsrAtcTHn7CwQbgYZj6XzFpZCFsBg+LKiGxLF
+         iddfMjyN3xMUBFjFjap7W033S6Wj2MYocqkBReaQ7gpAGbo2/3InDFH8wKu/InAVHk+e
+         EXBjWXIndXiRysP2N3woIimuLJP6wbXWZ5jt3/GG1YUNI2z82G1+mIxqOkV6FmKofrh0
+         ES0qRiEtJKeJN1czW/7ihJBiw47MoWtVGOmZ1ZY0uffv9IcbNDoTj0el1YEJ43/V7QPx
+         0yTl7ZmW33t39rZKpHSANOBbqZE6+FjTUqoDYlBGe27UU8wDLGnvfgKr0fnhZEVWgpKG
+         2BtA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJT7HTyFDhSTPVk9xO2VxmzsS8Li5V+NNBAg4nNwZp2DymexeFT/TFPaLG3I+D+4mADyia32b9gS/JS302g8A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyX0agnWP5Cp66+eUGmVFo/dKrptzmpzwxV3C82nL2L7Qjl9LCH
+	bRXTssK2pzNkLDqUZyqD48aPWASTb5/byMlnZ2j36p/zJh3jVwQDJWmoBmGY3LNhIf8Sz2WQSSf
+	sO0LToQ==
+X-Google-Smtp-Source: AGHT+IFCF3M3I1KqAW7n7dx3RKk9sCzbdlNYVQtyXACNkKIW9/xqHIXRzHtQZzgpVcJKkggbqyQ4NVMy3mQ=
+X-Received: from pjg6.prod.google.com ([2002:a17:90b:3f46:b0:31c:bd1d:516])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2784:b0:312:e76f:5213
+ with SMTP id 98e67ed59e1d1-31f5de6c813mr1791644a91.28.1753835494079; Tue, 29
+ Jul 2025 17:31:34 -0700 (PDT)
+Date: Tue, 29 Jul 2025 17:31:32 -0700
+In-Reply-To: <dacd4a8e-5104-4043-b647-63e2df6d6a94@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 iproute2-next 1/1] tc: add dualpi2 scheduler module
-Content-Language: en-US
-To: chia-yu.chang@nokia-bell-labs.com, alok.a.tiwari@oracle.com,
- donald.hunter@gmail.com, xandfury@gmail.com, netdev@vger.kernel.org,
- dave.taht@gmail.com, pabeni@redhat.com, jhs@mojatatu.com, kuba@kernel.org,
- stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- davem@davemloft.net, edumazet@google.com, horms@kernel.org,
- andrew+netdev@lunn.ch, ast@fiberby.net, liuhangbin@gmail.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
- ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Cc: Olga Albisser <olga@albisser.org>,
- Oliver Tilmans <olivier.tilmans@nokia.com>,
- Bob Briscoe <research@bobbriscoe.net>, Henrik Steen <henrist@henrist.net>
-References: <20250717232357.69185-1-chia-yu.chang@nokia-bell-labs.com>
- <20250717232357.69185-2-chia-yu.chang@nokia-bell-labs.com>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20250717232357.69185-2-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20250324173121.1275209-1-mizhang@google.com> <20250324173121.1275209-11-mizhang@google.com>
+ <20250425111531.GG1166@noisy.programming.kicks-ass.net> <e2f3b1d5-ed91-47a1-aead-28675bcca2c8@linux.intel.com>
+ <20250425134323.GA35881@noisy.programming.kicks-ass.net> <dacd4a8e-5104-4043-b647-63e2df6d6a94@linux.intel.com>
+Message-ID: <aIln5KlHYlIg3Ui-@google.com>
+Subject: Re: [PATCH v4 10/38] perf/x86: Support switch_guest_ctx interface
+From: Sean Christopherson <seanjc@google.com>
+To: Kan Liang <kan.liang@linux.intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Mingwei Zhang <mizhang@google.com>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, Liang@google.com, 
+	"H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Yongwei Ma <yongwei.ma@intel.com>, 
+	Xiong Zhang <xiong.y.zhang@linux.intel.com>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
+	Jim Mattson <jmattson@google.com>, Sandipan Das <sandipan.das@amd.com>, 
+	Zide Chen <zide.chen@intel.com>, Eranian Stephane <eranian@google.com>, 
+	Shukla Manali <Manali.Shukla@amd.com>, Nikunj Dadhania <nikunj.dadhania@amd.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On 7/17/25 5:23 PM, chia-yu.chang@nokia-bell-labs.com wrote:
-> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
-> index 958d9407..15d1a37a 100644
-> --- a/include/uapi/linux/pkt_sched.h
-> +++ b/include/uapi/linux/pkt_sched.h
+On Fri, Apr 25, 2025, Kan Liang wrote:
+> On 2025-04-25 9:43 a.m., Peter Zijlstra wrote:
+> > On Fri, Apr 25, 2025 at 09:06:26AM -0400, Liang, Kan wrote:
+> >>
+> >>
+> >> On 2025-04-25 7:15 a.m., Peter Zijlstra wrote:
+> >>> On Mon, Mar 24, 2025 at 05:30:50PM +0000, Mingwei Zhang wrote:
+> >>>> From: Kan Liang <kan.liang@linux.intel.com>
+> >>>>
+> >>>> Implement switch_guest_ctx interface for x86 PMU, switch PMI to dedicated
+> >>>> KVM_GUEST_PMI_VECTOR at perf guest enter, and switch PMI back to
+> >>>> NMI at perf guest exit.
+> >>>>
+> >>>> Signed-off-by: Xiong Zhang <xiong.y.zhang@linux.intel.com>
+> >>>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+> >>>> Tested-by: Yongwei Ma <yongwei.ma@intel.com>
+> >>>> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> >>>> ---
+> >>>>  arch/x86/events/core.c | 12 ++++++++++++
+> >>>>  1 file changed, 12 insertions(+)
+> >>>>
+> >>>> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> >>>> index 8f218ac0d445..28161d6ff26d 100644
+> >>>> --- a/arch/x86/events/core.c
+> >>>> +++ b/arch/x86/events/core.c
+> >>>> @@ -2677,6 +2677,16 @@ static bool x86_pmu_filter(struct pmu *pmu, int cpu)
+> >>>>  	return ret;
+> >>>>  }
+> >>>>  
+> >>>> +static void x86_pmu_switch_guest_ctx(bool enter, void *data)
+> >>>> +{
+> >>>> +	u32 guest_lvtpc = *(u32 *)data;
+> >>>> +
+> >>>> +	if (enter)
+> >>>> +		apic_write(APIC_LVTPC, guest_lvtpc);
+> >>>> +	else
+> >>>> +		apic_write(APIC_LVTPC, APIC_DM_NMI);
+> >>>> +}
+> >>>
+> >>> This, why can't it use x86_pmu.guest_lvtpc here and call it a day? Why
+> >>> is that argument passed around through the generic code only to get back
+> >>> here?
+> >>
+> >> The vector has to be from the KVM. However, the current interfaces only
+> >> support KVM read perf variables, e.g., perf_get_x86_pmu_capability and
+> >> perf_get_hw_event_config.
+> >> We need to add an new interface to allow the KVM write a perf variable,
+> >> e.g., perf_set_guest_lvtpc.
+> > 
+> > But all that should remain in x86, there is no reason what so ever to
+> > leak this into generic code.
 
-you can drop the uapi changes.
+Finally prepping v5, and this is one of two <knock wood> comments that isn't fully
+addressed.
 
-> diff --git a/include/utils.h b/include/utils.h
-> index 9a81494d..91e6e31f 100644
-> --- a/include/utils.h
-> +++ b/include/utils.h
-> @@ -146,6 +146,8 @@ int read_prop(const char *dev, char *prop, long *value);
->  int get_long(long *val, const char *arg, int base);
->  int get_integer(int *val, const char *arg, int base);
->  int get_unsigned(unsigned *val, const char *arg, int base);
-> +int get_float(float *val, const char *arg);
-> +int get_float_min_max(float *val, const char *arg, float min, float max);
->  int get_time_rtt(unsigned *val, const char *arg, int *raw);
->  #define get_byte get_u8
->  #define get_ushort get_u16
-> diff --git a/ip/iplink_can.c b/ip/iplink_can.c
-> index fcffa852..9f6084e6 100644
-> --- a/ip/iplink_can.c
-> +++ b/ip/iplink_can.c
-> @@ -67,20 +67,6 @@ static void usage(void)
->  	print_usage(stderr);
->  }
->  
-> -static int get_float(float *val, const char *arg)
-> -{
-> -	float res;
-> -	char *ptr;
-> -
-> -	if (!arg || !*arg)
-> -		return -1;
-> -	res = strtof(arg, &ptr);
-> -	if (!ptr || ptr == arg || *ptr)
-> -		return -1;
-> -	*val = res;
-> -	return 0;
-> -}
-> -
->  static void set_ctrlmode(char *name, char *arg,
->  			 struct can_ctrlmode *cm, __u32 flags)
->  {
-> diff --git a/lib/utils.c b/lib/utils.c
-> index 706e93c3..dd242d4d 100644
-> --- a/lib/utils.c
-> +++ b/lib/utils.c
-> @@ -220,6 +220,36 @@ int get_unsigned(unsigned int *val, const char *arg, int base)
->  	return 0;
->  }
->  
-> +int get_float(float *val, const char *arg)
-> +{
-> +	float res;
-> +	char *ptr;
-> +
-> +	if (!arg || !*arg)
-> +		return -1;
-> +	res = strtof(arg, &ptr);
-> +	if (!ptr || ptr == arg || *ptr)
-> +		return -1;
-> +	*val = res;
-> +	return 0;
-> +}
+The vector isn't a problem; that's *always* PERF_GUEST_MEDIATED_PMI_VECTOR and
+so doesn't even require anything in x86_pmu.
 
-Put the move of get_float in a standlone patch indicating it is a code
-move.
+But whether or not the entry should be masked comes from the guest's LVTPC entry,
+and I don't see a cleaner way to get that information into x86, especially since
+the switch between host and guest PMI needs to happen in the "perf context disabled"
+section.
 
+I think/hope I dressed up the code so that it's not _so_ ugly, and so that it's
+fully extensible in the unlikely event a non-x86 arch were to ever support a
+mediated vPMU, e.g. @data could be used to pass a pointer to a struct.
 
-> +
-> +int get_float_min_max(float *val, const char *arg, float min, float max)
-> +{
-> +	float res;
-> +	char *ptr;
-> +
-> +	if (!arg || !*arg)
-> +		return -1;
-> +	res = strtof(arg, &ptr);
-> +	if (!ptr || ptr == arg || *ptr)
-> +		return -1;
-> +	if (res < min || res > max)
-> +		return -1;
-> +	*val = res;
-> +	return 0;
-> +}
-> +
->  /*
->   * get_time_rtt is "translated" from a similar routine "get_time" in
->   * tc_util.c.  We don't use the exact same routine because tc passes
+  void perf_load_guest_context(unsigned long data)
+  {
+	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
 
-Add get_float_min_max in a standalone patch.
+	lockdep_assert_irqs_disabled();
 
+	guard(perf_ctx_lock)(cpuctx, cpuctx->task_ctx);
 
+	if (WARN_ON_ONCE(__this_cpu_read(guest_ctx_loaded)))
+		return;
 
-> diff --git a/tc/q_dualpi2.c b/tc/q_dualpi2.c
-> new file mode 100644
-> index 00000000..50d52aad
-> --- /dev/null
-> +++ b/tc/q_dualpi2.c
-> @@ -0,0 +1,528 @@
-> +// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +/* Copyright (C) 2024 Nokia
-> + *
-> + * Author: Koen De Schepper <koen.de_schepper@nokia-bell-labs.com>
-> + * Author: Olga Albisser <olga@albisser.org>
-> + * Author: Henrik Steen <henrist@henrist.net>
-> + * Author: Olivier Tilmans <olivier.tilmans@nokia.com>
-> + * Author: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> + *
-> + * DualPI Improved with a Square (dualpi2):
-> + * - Supports congestion controls that comply with the Prague requirements
-> + *   in RFC9331 (e.g. TCP-Prague)
-> + * - Supports coupled dual-queue with PI2 as defined in RFC9332
-> + * - Supports ECN L4S-identifier (IP.ECN==0b*1)
-> + *
-> + * note: Although DCTCP and BBRv3 can use shallow-threshold ECN marks,
-> + *   they do not meet the 'Prague L4S Requirements' listed in RFC 9331
-> + *   Section 4, so they can only be used with DualPI2 in a datacenter
-> + *   context.
-> + *
-> + * References:
-> + * - RFC9332: https://datatracker.ietf.org/doc/html/rfc9332
-> + * - De Schepper, Koen, et al. "PI 2: A linearized AQM for both classic and
-> + *   scalable TCP."  in proc. ACM CoNEXT'16, 2016.
-> + */
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <syslog.h>
-> +#include <fcntl.h>
-> +#include <sys/socket.h>
-> +#include <netinet/in.h>
-> +#include <arpa/inet.h>
-> +#include <string.h>
-> +#include <math.h>
-> +#include <errno.h>
-> +
-> +#include "utils.h"
-> +#include "tc_util.h"
-> +
-> +#define MAX_PROB ((uint32_t)(~0U))
-> +#define DEFAULT_ALPHA_BETA ((uint32_t)(~0U))
-> +#define ALPHA_BETA_MAX ((2 << 23) - 1) /* see net/sched/sch_dualpi2.c */
-> +#define ALPHA_BETA_SCALE (1 << 8)
-> +#define RTT_TYP_TO_MAX 6
-> +
-> +static const char *get_credit_queue(int credit)
-> +{
-> +	return credit > 0 ? "C-queue" : "L-queue";
-> +}
-> +
-> +static const char *get_ecn_type(uint8_t ect)
-> +{
-> +	switch (ect & TC_DUALPI2_ECN_MASK_ANY_ECT) {
-> +	case TC_DUALPI2_ECN_MASK_L4S_ECT: return "l4s_ect";
-> +	case TC_DUALPI2_ECN_MASK_CLA_ECT:
-> +	case TC_DUALPI2_ECN_MASK_ANY_ECT: return "any_ect";
-> +	default:
-> +		fprintf(stderr,
-> +			"Warning: Unexpected ecn type %u!\n", ect);
-> +		return "";
-> +	}
-> +}
-> +
-> +static const char *get_ecn_type_json(uint8_t ect)
-> +{
-> +	switch (ect & TC_DUALPI2_ECN_MASK_ANY_ECT) {
-> +	case TC_DUALPI2_ECN_MASK_L4S_ECT: return "l4s-ect";
-> +	case TC_DUALPI2_ECN_MASK_CLA_ECT:
-> +	case TC_DUALPI2_ECN_MASK_ANY_ECT: return "any-ect";
-> +	default:
-> +		fprintf(stderr,
-> +			"Warning: Unexpected ecn type %u!\n", ect);
-> +		return "";
-> +	}
-> +}
-> +
-> +static void explain(void)
-> +{
-> +	fprintf(stderr, "Usage: ... dualpi2\n");
-> +	fprintf(stderr, "               [limit PACKETS]\n");
-> +	fprintf(stderr, "               [memlimit BYTES]\n");
-> +	fprintf(stderr, "               [coupling_factor NUMBER]\n");
-> +	fprintf(stderr, "               [step_thresh TIME|PACKETS]\n");
-> +	fprintf(stderr, "               [min_qlen_step PACKETS]\n");
-> +	fprintf(stderr, "               [drop_on_overload|overflow]\n");
-> +	fprintf(stderr, "               [drop_enqueue|drop_dequeue]\n");
-> +	fprintf(stderr, "               [classic_protection PERCENTAGE]\n");
-> +	fprintf(stderr, "               [max_rtt TIME [typical_rtt TIME]]\n");
-> +	fprintf(stderr, "               [target TIME] [tupdate TIME]\n");
-> +	fprintf(stderr, "               [alpha ALPHA] [beta BETA]\n");
-> +	fprintf(stderr, "               [split_gso|no_split_gso]\n");
-> +}
-> +
-> +static int get_packets(uint32_t *val, const char *arg)
-> +{
-> +	unsigned long res;
-> +	char *ptr;
-> +
-> +	if (!arg || !*arg)
-> +		return -1;
-> +	res = strtoul(arg, &ptr, 10);
-> +	if (!ptr || ptr == arg ||
-> +	    !(matches(ptr, "pkts") == 0 || matches(ptr, "packets") == 0))
+	perf_ctx_disable(&cpuctx->ctx, EVENT_GUEST);
+	ctx_sched_out(&cpuctx->ctx, NULL, EVENT_GUEST);
+	if (cpuctx->task_ctx) {
+		perf_ctx_disable(cpuctx->task_ctx, EVENT_GUEST);
+		task_ctx_sched_out(cpuctx->task_ctx, NULL, EVENT_GUEST);
+	}
 
-we are not allowing any more uses of "matches".
+	arch_perf_load_guest_context(data);
 
+	...
+  }
 
-> +		return -1;
-> +	if (res == ULONG_MAX && errno == ERANGE)
-> +		return -1;
-> +	if (res > 0xFFFFFFFFUL)
-> +		return -1;
-> +	*val = res;
-> +
-> +	return 0;
-> +}
-> +
-> +static int parse_alpha_beta(const char *name, char *argv, uint32_t *field)
-> +{
-> +
-> +	float field_f;
-> +
-> +	if (get_float_min_max(&field_f, argv, 0.0, ALPHA_BETA_MAX)) {
-> +		fprintf(stderr, "Illegal \"%s\"\n", name);
-> +		return -1;
-> +	} else if (field_f < 1.0f / ALPHA_BETA_SCALE)
-> +		fprintf(stderr,
-> +			"Warning: \"%s\" is too small and will be rounded to zero.\n",
-> +			name);
-> +	*field = (uint32_t)(field_f * ALPHA_BETA_SCALE);
-> +
-> +	return 0;
-> +}
-> +
-> +static int try_get_percent(int *val, const char *arg)
-> +{
-> +	double per;
-> +
-> +	if (parse_percent(&per, arg))
-> +		return -1;
-> +
-> +	*val = rint(per * 100);
-> +
-> +	return 0;
-> +}
-> +
-> +static int dualpi2_parse_opt(const struct qdisc_util *qu, int argc,
-> +			     char **argv, struct nlmsghdr *n, const char *dev)
-> +{
-> +	uint32_t limit = 0;
-> +	uint32_t memory_limit = 0;
-> +	uint32_t target = 0;
-> +	uint32_t tupdate = 0;
-> +	uint32_t alpha = DEFAULT_ALPHA_BETA;
-> +	uint32_t beta = DEFAULT_ALPHA_BETA;
-> +	int32_t coupling_factor = -1;
-> +	uint8_t ecn_mask = 0;
-> +	int step_unit = __TCA_DUALPI2_MAX;
-> +	uint32_t step_thresh = 0;
-> +	uint32_t min_qlen_step =  0;
-> +	bool set_min_qlen_step = false;
-> +	int c_protection = -1;
-> +	uint8_t drop_early = __TCA_DUALPI2_DROP_EARLY_MAX;
-> +	uint8_t drop_overload = __TCA_DUALPI2_DROP_OVERLOAD_MAX;
-> +	uint8_t split_gso = __TCA_DUALPI2_SPLIT_GSO_MAX;
-> +	uint32_t rtt_max = 0;
-> +	uint32_t rtt_typ = 0;
-> +	struct rtattr *tail;
+  void arch_perf_load_guest_context(unsigned long data)
+  {
+	u32 masked = data & APIC_LVT_MASKED;
 
-iproute2 follows kernel coding standards and netdev's preference for
-reverse xmas tree listing of variables.
+	apic_write(APIC_LVTPC,
+		   APIC_DM_FIXED | PERF_GUEST_MEDIATED_PMI_VECTOR | masked);
+	this_cpu_write(x86_guest_ctx_loaded, true);
+  }
 
+Holler if you have a better idea.  I'll plan on posting v5 in the next day or so
+no matter what, so that it's not delayed for this one thing (it's already been
+delayed more than I was hoping, and there are a lot of changes relative to v4).
 
