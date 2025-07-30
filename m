@@ -1,67 +1,82 @@
-Return-Path: <linux-kselftest+bounces-38080-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38081-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BE1B15F0B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jul 2025 13:09:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF887B1604B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jul 2025 14:26:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C22383B3792
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jul 2025 11:09:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F197189E3AE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Jul 2025 12:26:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44BDA29A300;
-	Wed, 30 Jul 2025 11:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79BAF29899A;
+	Wed, 30 Jul 2025 12:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="YZwzA9gH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TMd1KkW3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE56294A1C;
-	Wed, 30 Jul 2025 11:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45FB2980A5;
+	Wed, 30 Jul 2025 12:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753873551; cv=none; b=ktqykuy9Mne8AzJ9t8egOOxk0cYLj7s97SWmHfKjeR/KpS8CnDnd3ksBKxh+8bmvMhsCBd753o/mJXozlmxGFoWLOGzz23UY+sMIMRraXGY+DzPgB/HvYVxn6i7hGEnrRhl+frwF6B4/dJvykGnKkpo0EKiID9kgewM4rnNJ3pg=
+	t=1753878382; cv=none; b=aotoanqFTsa7AebHyn1hEPmjy5shnGHIuBGx1opFoCwDLGBVsdnnZcbaWrfqVPKI7APlcrCxBreC1G3A6lDTJ3QobewpxvasL9C1Kh947tRwAmG1leDsNiOVmcCq+CnhNj2Ysyi1gby0EO7tsMtrpc74NQM+zj9vcW5waWOVPtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753873551; c=relaxed/simple;
-	bh=gN/rgofoovU80nYhL5B9i6uDmcuQm71jhYXUwm0kwqg=;
+	s=arc-20240116; t=1753878382; c=relaxed/simple;
+	bh=Yqt9k3FEoN2rn755DspRcdnjCj8ruGaUo76ndianeec=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QgaYYjp2w+U4DKW4fRCaa/0omgZG5q9x6C6NUaG+Xldwxxf7/lFMt+vuovIW6fgOflApiwPrs1NV2l28jc5RZG4ktPkBXHciyfFAE+n1cnsclrrxsTMRFZnmnOmZcSHKWKaTAPhuyAc1OTZVot6zD5D7GUbqjn5AlllYoqQMvE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=YZwzA9gH; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=0k4CeBRPRQzj6qo4MD4PdQtTm2NxuKCF0igS9Zlaies=; b=YZwzA9gHquDHe/JgfBHz7fTwK9
-	+cFmCvuZ8zjF1dviirVbEDhRCXrSOu+hZxA3AjJ5pH1uyd2NPsII5jdfgCm5MM8AG3VnhaKj5oj5u
-	qaj0EU9hAzfA+OJkg7uCdcDzbL/7FhxhTLmLUcYp/LE9uc/ZKbBRoDyFUctY7iCedYaWLAHNiwuM+
-	PbznVMavEs57qFWdnffOE+/6wSNJfdx75yty4eYR7bkzNSGOFqn5uH/YX1awZ3RE6K7DZqjTBJO1p
-	wAx5TnRnmTiGjQfbxYUKFQhCbFeLdxWFbfCN576tfT+VGKdmomeO8go/GkJOIcRbzdATpaeFp9QMP
-	w1lEFOnw==;
-Received: from 179-125-70-183-dinamico.pombonet.net.br ([179.125.70.183] helo=quatroqueijos.cascardo.eti.br)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uh4ct-005tWS-CE; Wed, 30 Jul 2025 13:05:39 +0200
-Date: Wed, 30 Jul 2025 08:05:32 -0300
-From: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Dirk VanDerMerwe <dirk.vandermerwe@sophos.com>,
-	Vimal Agrawal <vimal.agrawal@sophos.com>,
-	linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	KUnit Development <kunit-dev@googlegroups.com>
-Subject: Re: [PATCH v5] char: misc: add test cases
-Message-ID: <aIn8fDpGz7MCACQ3@quatroqueijos.cascardo.eti.br>
-References: <20250612-misc-dynrange-v5-1-6f35048f7273@igalia.com>
- <CAMuHMdVxTW-6Wpw6qDc_ZoSE-f21WvJ478j+0jQURL+SiM_n7A@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dovJoIuJcFOUlQtxR5cAfoM2NPjseIFQqfJwtrZmWBDXj8T7fDRKR0EeBr+can6MDbN4MWlO+coqSqzYDiCESi423fC1eX1F3Yqi6XU7pHk8qEjUCZiyu823F3PlgyEZy6pPNfQm8SFUWmb9BHLDr5i6/pFlHHjFEZfSgoTm5Mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TMd1KkW3; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753878381; x=1785414381;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Yqt9k3FEoN2rn755DspRcdnjCj8ruGaUo76ndianeec=;
+  b=TMd1KkW3QNLEoDmxJ7j5DCmm3nBkTCCDRV1KQeyd7bEQvsDDqRjUlKdB
+   bVpvtYcb/B+ue3P653MxGKsFX/fXJuYwiFvUJ7GeoC7v8E7FZqrOkOFAu
+   tidCcL9qCbJrFCtCBN0fDS9DE+KnFuC30p/k9RrLT32++l3C4jSS56Osm
+   XHFD2XWwt50xKz80tGNQxLZJBwWyAUMVIhbD/13+YNGvf7hxxjDUzA7IN
+   62Yi2J79E+83woUkCqP8s9mKAWQLBWUBLdrseIB5EhEVHy742QGfK0hJ0
+   mCJMFiY9f0fBc26rECR/Ih7U0iv5a8tjIrB3UzUnS58qATGvxwBevQN2V
+   A==;
+X-CSE-ConnectionGUID: oI1QIkhXQICs0/mSRBpPtA==
+X-CSE-MsgGUID: 0FycXf1KQF2HgITbY7o4Jg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56142550"
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="56142550"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 05:26:21 -0700
+X-CSE-ConnectionGUID: QsyMguNhTASkZtzr+udzvw==
+X-CSE-MsgGUID: vuxavx1ZQKGyIClQO/DVXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="163427193"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 30 Jul 2025 05:26:16 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uh5sr-0002ie-31;
+	Wed, 30 Jul 2025 12:26:13 +0000
+Date: Wed, 30 Jul 2025 20:25:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marie Zhussupova <marievic@google.com>, rmoar@google.com,
+	davidgow@google.com, shuah@kernel.org, brendan.higgins@linux.dev
+Cc: oe-kbuild-all@lists.linux.dev, elver@google.com, dvyukov@google.com,
+	lucas.demarchi@intel.com, thomas.hellstrom@linux.intel.com,
+	rodrigo.vivi@intel.com, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	Marie Zhussupova <marievic@google.com>
+Subject: Re: [PATCH 7/9] kunit: Add example parameterized test with shared
+ resources and direct static parameter array setup
+Message-ID: <202507302042.9Aw3rrmW-lkp@intel.com>
+References: <20250729193647.3410634-8-marievic@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,90 +85,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdVxTW-6Wpw6qDc_ZoSE-f21WvJ478j+0jQURL+SiM_n7A@mail.gmail.com>
+In-Reply-To: <20250729193647.3410634-8-marievic@google.com>
 
-On Wed, Jul 30, 2025 at 09:08:57AM +0200, Geert Uytterhoeven wrote:
-> Hi Thadeu,,
-> 
-> On Sun, 15 Jun 2025 at 23:31, Thadeu Lima de Souza Cascardo
-> <cascardo@igalia.com> wrote:
-> >
-> > Add test cases for static and dynamic minor number allocation and
-> > deallocation.
-> >
-> > While at it, improve description and test suite name.
-> >
-> > Some of the cases include:
-> >
-> > - that static and dynamic allocation reserved the expected minors.
-> >
-> > - that registering duplicate minors or duplicate names will fail.
-> >
-> > - that failing to create a sysfs file (due to duplicate names) will
-> >   deallocate the dynamic minor correctly.
-> >
-> > - that dynamic allocation does not allocate a minor number in the static
-> >   range.
-> >
-> > - that there are no collisions when mixing dynamic and static allocations.
-> >
-> > - that opening devices with various minor device numbers work.
-> >
-> > - that registering a static number in the dynamic range won't conflict with
-> >   a dynamic allocation.
-> >
-> > This last test verifies the bug fixed by commit 6d04d2b554b1 ("misc:
-> > misc_minor_alloc to use ida for all dynamic/misc dynamic minors") has not
-> > regressed.
-> >
-> > Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-> 
-> Thanks for your patch, which is now commit 74d8361be3441dff ("char:
-> misc: add test cases") in linus/master stable/master
-> 
-> > Changes in v5:
-> > - Make miscdevice unit test built-in only
-> > - Make unit test require CONFIG_KUNIT=y
-> 
-> Why were these changes made? This means the test is no longer available
-> if KUNIT=m, and I can no longer just load the module when I want to
-> run the test.
-> 
+Hi Marie,
 
-These were made because a bug was found that devices with minor > 255 could
-not be opened. So I added a test for that, which used __init functions, so
-the test now had to be built-in. The alternative is to make these functions
-not __init anymore and export them. Those functions are init_mknod and
-init_unlink.
+kernel test robot noticed the following build errors:
 
-I will see if I can cook an RFC later today.
+[auto build test ERROR on shuah-kselftest/kunit]
+[also build test ERROR on shuah-kselftest/kunit-fixes drm-xe/drm-xe-next linus/master v6.16 next-20250730]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cascardo.
+url:    https://github.com/intel-lab-lkp/linux/commits/Marie-Zhussupova/kunit-Add-parent-kunit-for-parameterized-test-context/20250730-033818
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
+patch link:    https://lore.kernel.org/r/20250729193647.3410634-8-marievic%40google.com
+patch subject: [PATCH 7/9] kunit: Add example parameterized test with shared resources and direct static parameter array setup
+config: arc-randconfig-001-20250730 (https://download.01.org/0day-ci/archive/20250730/202507302042.9Aw3rrmW-lkp@intel.com/config)
+compiler: arc-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507302042.9Aw3rrmW-lkp@intel.com/reproduce)
 
-> > - Link to v4: https://lore.kernel.org/r/20250423-misc-dynrange-v4-0-133b5ae4ca18@igalia.com
-> 
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -2506,8 +2506,8 @@ config TEST_IDA
-> >         tristate "Perform selftest on IDA functions"
-> >
-> >  config TEST_MISC_MINOR
-> > -       tristate "miscdevice KUnit test" if !KUNIT_ALL_TESTS
-> > -       depends on KUNIT
-> > +       bool "miscdevice KUnit test" if !KUNIT_ALL_TESTS
-> > +       depends on KUNIT=y
-> >         default KUNIT_ALL_TESTS
-> >         help
-> >           Kunit test for miscdevice API, specially its behavior in respect to
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507302042.9Aw3rrmW-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "kunit_get_next_param_and_desc" [lib/kunit/kunit-example-test.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
