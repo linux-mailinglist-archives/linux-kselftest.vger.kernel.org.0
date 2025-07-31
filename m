@@ -1,209 +1,113 @@
-Return-Path: <linux-kselftest+bounces-38095-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38096-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F863B16F9E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 12:31:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88F96B172A2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 15:58:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E0733A3028
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 10:31:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E6F64E1514
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 13:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BED520B1F4;
-	Thu, 31 Jul 2025 10:31:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 333712D0C8C;
+	Thu, 31 Jul 2025 13:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sr61EaQQ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dv/wFPjl";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GTnPA4/n"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D681118B47E;
-	Thu, 31 Jul 2025 10:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939BA23536A;
+	Thu, 31 Jul 2025 13:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753957906; cv=none; b=oYDRp3vvnvE0jTaZj+1sXx/9k9CFYhBProNMoTpn8Pev1VQYtfcmDi5GCO4+gyQgUe3q57+RG8XJ4+fkJrcPs/UJQlvT7qlNvRotL6hQ25twafngxB50tTEV7nBCHxFqwvAP/uAxUmjIK1Ylfuq3SpT0c0Pt0ui2UMXThkHLySo=
+	t=1753970299; cv=none; b=gQVbjXD23bUdfOzVkc3h5zUtjC1kKcs0qsNfaSnSiFJx4fffV1pplaaH3CLeFW+kSmpx7LuiCLNdNPZhDrCAiJLUUXmTXjKyVpvb7g4GpLVoS6kOrjsS5qGjQ6a3CJIpfxd8SxBiu4rzoY30aBCJv933fCY1Mlghl/J/AkpucqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753957906; c=relaxed/simple;
-	bh=7xI6SJc8l9/QF0tfKjYTzIOTaOS8WPagl3vTWmYZeWA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bvr/QcAlsEyekKN4qD81YLiNZSvy6ruw23vPz1A0TiKBvWtxRjNMtGOd1sdjQ/gJe+ceFw7ljk+eYlnRcEia7+zPrZ/Kb0teqVD3m6zbBiSBNcFyDi9gQOy0PvAFn19U3E+lpBS41Gc2fwFg2QT89awaKDbi6YNhkukdb8EmI9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sr61EaQQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4FEC4CEEF;
-	Thu, 31 Jul 2025 10:31:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753957905;
-	bh=7xI6SJc8l9/QF0tfKjYTzIOTaOS8WPagl3vTWmYZeWA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Sr61EaQQUfTWnAlFOaOhqudSv8vSNwOB3AO0uRxg2KrfomncIJWsicQ3eznZ8ujBC
-	 Wy9EYW/n+BRFAiCIfY1NzAQgrXaaqe36mnxo10s39ybtrDqHkUf3c6feXBSTNLcbbF
-	 GyAxcZ8QwI3/UOgtyc/pJJfxHhXW/pSzG9wgN+T1K0yATiuQxnxupO6ulrMs2IQR1+
-	 pXaRohdhO6cGaoip+XbzFc4pv/7bBqYB+MU37WPF1T/IsjDJxKfN2XXCQfRJ76jd7T
-	 uYMMfnK1XzjAFhwJ6KQNeD59Uulstz46YvETr6i0sV/NS4Nr0T30uVfHLd5/HQZKDr
-	 jo5+7zo7O9wnQ==
-Date: Thu, 31 Jul 2025 12:31:40 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 3/4] procfs: add PROCFS_GET_PID_NAMESPACE ioctl
-Message-ID: <20250731-angliederung-mahlt-9e5811969817@brauner>
-References: <20250723-procfs-pidns-api-v2-0-621e7edd8e40@cyphar.com>
- <20250723-procfs-pidns-api-v2-3-621e7edd8e40@cyphar.com>
- <20250724-beobachten-verfassen-9a39c0318341@brauner>
- <2025-07-25.1753409614-vile-track-icky-epidemic-frail-antidote-d7NYuu@cyphar.com>
+	s=arc-20240116; t=1753970299; c=relaxed/simple;
+	bh=QBd0pefYh+td5X4uaS/l2areTAr44b2USwB596vvfsE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=gtJMe+q/VogkVw6vClcKu12Q2LOat42ddPMPc0MjowmbouDkFYdvo4dRX1NxeGrxCxQWiNXRZxYIEUa1XfxsKexxYZ1ykae19Rq14mpVsMXfrGSwqSs8n/uYD+l3CUHU6I71afBW6CUPMIaMekexlDA6qArhh7+/ZFGgEpCzSGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dv/wFPjl; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GTnPA4/n; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1753970294;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JY9R7tyBArJkfNbVWcneAgmEfp9mLBB0a5xwIKDKlOI=;
+	b=dv/wFPjlxc/zfq9HoLrUxibcsBxVlBpiJmPuKSkwWk4XA78PdaUtwlOL6nJ96odXNJNdSi
+	YDj11ozn3I88NM0NRiGlKm058uUlnGLDdlFPvFGmCvgKOU6FORej+0n8i7V4cx/eBf9Oet
+	YrHC/MZjXUQfyuZTmyQmLgXGAujSS6ugnk5+u0Hpu1QtWkGM5WKSovfw4LdoSCLYqf2uVb
+	5S1OwdadTkXgOGsKcRAYegJNmb76QC24BP8xS1/vvZBMTSQLRKMryg/N0iTmPyhS6Yg5tu
+	MCGfvLbMENw0VzQgZ8HxSFrBrqAiNFnS5tLOnFO/+av7EkjY4mtwj+WHgSH5eQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1753970294;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JY9R7tyBArJkfNbVWcneAgmEfp9mLBB0a5xwIKDKlOI=;
+	b=GTnPA4/nnpm/YaZS87D/W1DNNc6aXTTqReaVyuRDEIWXohWRifVbP0jb/ZDpIW7fJYy7Eh
+	bh2ClypK9MwrBiDQ==
+To: Vishal Parmar <vishistriker@gmail.com>, John Stultz <jstultz@google.com>
+Cc: shuah@kernel.org, anna-maria@linutronix.de, frederic@kernel.org,
+ sboyd@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: timers: improve adjtick output readability
+In-Reply-To: <CAEOVoRwsHdAmn1d_SekD+ddWeUDJCooNsK_wDHxEyvtqkDXQZw@mail.gmail.com>
+References: <20250728160304.929942-1-vishistriker@gmail.com>
+ <CANDhNCpp5DxzRufL9iVj8p0tpNSXG7WPEcTDpLbb2TzrY9HyOw@mail.gmail.com>
+ <CAEOVoRwsHdAmn1d_SekD+ddWeUDJCooNsK_wDHxEyvtqkDXQZw@mail.gmail.com>
+Date: Thu, 31 Jul 2025 15:58:12 +0200
+Message-ID: <877bzoihsb.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2025-07-25.1753409614-vile-track-icky-epidemic-frail-antidote-d7NYuu@cyphar.com>
+Content-Type: text/plain
 
-On Fri, Jul 25, 2025 at 12:24:28PM +1000, Aleksa Sarai wrote:
-> On 2025-07-24, Christian Brauner <brauner@kernel.org> wrote:
-> > On Wed, Jul 23, 2025 at 09:18:53AM +1000, Aleksa Sarai wrote:
-> > > /proc has historically had very opaque semantics about PID namespaces,
-> > > which is a little unfortunate for container runtimes and other programs
-> > > that deal with switching namespaces very often. One common issue is that
-> > > of converting between PIDs in the process's namespace and PIDs in the
-> > > namespace of /proc.
-> > > 
-> > > In principle, it is possible to do this today by opening a pidfd with
-> > > pidfd_open(2) and then looking at /proc/self/fdinfo/$n (which will
-> > > contain a PID value translated to the pid namespace associated with that
-> > > procfs superblock). However, allocating a new file for each PID to be
-> > > converted is less than ideal for programs that may need to scan procfs,
-> > > and it is generally useful for userspace to be able to finally get this
-> > > information from procfs.
-> > > 
-> > > So, add a new API for this in the form of an ioctl(2) you can call on
-> > > the root directory of procfs. The returned file descriptor will have
-> > > O_CLOEXEC set. This acts as a sister feature to the new "pidns" mount
-> > > option, finally allowing userspace full control of the pid namespaces
-> > > associated with procfs instances.
-> > > 
-> > > The permission model for this is a bit looser than that of the "pidns"
-> > > mount option, but this is mainly because /proc/1/ns/pid provides the
-> > > same information, so as long as you have access to that magic-link (or
-> > > something equivalently reasonable such as privileges with CAP_SYS_ADMIN
-> > > or being in an ancestor pid namespace) it makes sense to allow userspace
-> > > to grab a handle. setns(2) will still have their own permission checks,
-> > > so being able to open a pidns handle doesn't really provide too many
-> > > other capabilities.
-> > > 
-> > > Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
-> > > ---
-> > >  Documentation/filesystems/proc.rst |  4 +++
-> > >  fs/proc/root.c                     | 54 ++++++++++++++++++++++++++++++++++++--
-> > >  include/uapi/linux/fs.h            |  3 +++
-> > >  3 files changed, 59 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> > > index c520b9f8a3fd..506383273c9d 100644
-> > > --- a/Documentation/filesystems/proc.rst
-> > > +++ b/Documentation/filesystems/proc.rst
-> > > @@ -2398,6 +2398,10 @@ pidns= specifies a pid namespace (either as a string path to something like
-> > >  will be used by the procfs instance when translating pids. By default, procfs
-> > >  will use the calling process's active pid namespace.
-> > >  
-> > > +Processes can check which pid namespace is used by a procfs instance by using
-> > > +the `PROCFS_GET_PID_NAMESPACE` ioctl() on the root directory of the procfs
-> > > +instance.
-> > > +
-> > >  Chapter 5: Filesystem behavior
-> > >  ==============================
-> > >  
-> > > diff --git a/fs/proc/root.c b/fs/proc/root.c
-> > > index 057c8a125c6e..548a57ec2152 100644
-> > > --- a/fs/proc/root.c
-> > > +++ b/fs/proc/root.c
-> > > @@ -23,8 +23,10 @@
-> > >  #include <linux/cred.h>
-> > >  #include <linux/magic.h>
-> > >  #include <linux/slab.h>
-> > > +#include <linux/ptrace.h>
-> > >  
-> > >  #include "internal.h"
-> > > +#include "../internal.h"
-> > >  
-> > >  struct proc_fs_context {
-> > >  	struct pid_namespace	*pid_ns;
-> > > @@ -418,15 +420,63 @@ static int proc_root_readdir(struct file *file, struct dir_context *ctx)
-> > >  	return proc_pid_readdir(file, ctx);
-> > >  }
-> > >  
-> > > +static long int proc_root_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-> > > +{
-> > > +	switch (cmd) {
-> > > +#ifdef CONFIG_PID_NS
-> > > +	case PROCFS_GET_PID_NAMESPACE: {
-> > > +		struct pid_namespace *active = task_active_pid_ns(current);
-> > > +		struct pid_namespace *ns = proc_pid_ns(file_inode(filp)->i_sb);
-> > > +		bool can_access_pidns = false;
-> > > +
-> > > +		/*
-> > > +		 * If we are in an ancestors of the pidns, or have join
-> > > +		 * privileges (CAP_SYS_ADMIN), then it makes sense that we
-> > > +		 * would be able to grab a handle to the pidns.
-> > > +		 *
-> > > +		 * Otherwise, if there is a root process, then being able to
-> > > +		 * access /proc/$pid/ns/pid is equivalent to this ioctl and so
-> > > +		 * we should probably match the permission model. For empty
-> > > +		 * namespaces it seems unlikely for there to be a downside to
-> > > +		 * allowing unprivileged users to open a handle to it (setns
-> > > +		 * will fail for unprivileged users anyway).
-> > > +		 */
-> > > +		can_access_pidns = pidns_is_ancestor(ns, active) ||
-> > > +				   ns_capable(ns->user_ns, CAP_SYS_ADMIN);
-> > 
-> > This seems to imply that if @ns is a descendant of @active that the
-> > caller holds privileges over it. Is that actually always true?
-> > 
-> > IOW, why is the check different from the previous pidns= mount option
-> > check. I would've expected:
-> > 
-> > ns_capable(_no_audit)(ns->user_ns) && pidns_is_ancestor(ns, active)
-> > 
-> > and then the ptrace check as a fallback.
-> 
-> That would mirror pidns_install(), and I did think about it. The primary
-> (mostly handwave-y) reasoning I had for making it less strict was that:
-> 
->  * If you are in an ancestor pidns, then you can already see those
->    processes in your own /proc. In theory that means that you will be
->    able to access /proc/$pid/ns/pid for at least some subprocess there
->    (even if some subprocesses have SUID_DUMP_DISABLE, that flag is
->    cleared on ).
-> 
->    Though hypothetically if they are all running as a different user,
->    this does not apply (and you could create scenarios where a child
->    pidns is owned by a userns that you do not have privileges over -- if
->    you deal with setuid binaries). Maybe that risk means we should just
->    combine them, I'm not sure.
-> 
->  * If you have CAP_SYS_ADMIN permissions over the pidns, it seems
->    strange to disallow access even if it is not in an ancestor
->    namespace. This is distinct to pidns_install(), where you want to
->    ensure you cannot escape to a parent pid namespace, this is about
->    getting a handle to do other operations (i.e. NS_GET_{P,TG}ID_*_PIDNS).
-> 
-> Maybe they should be combined to match pidns_install(), but then I would
-> expect the ptrace_may_access() check to apply to all processes in the
-> pidns to make it less restrictive, which is not something you can
-> practically do (and there is a higher chance that pid1 will have
-> SUID_DUMP_DISABLE than some random subprocess, which almost certainly
-> will not be SUID_DUMP_DISABLE).
-> 
-> Fundamentally, I guess I'm still trying to see what the risk is of
-> allowing a process to get a handle to a pidns that they have some kind
-> of privilege over (whether it's CAP_SYS_ADMIN, or by the virtue of being
+Vishal!
 
-There shouldn't be. For example, you kinda implicitly do that with a
-pidfd, no? Because you can pass the pidfd to setns() instead of a
-namespace fd itself. Maybe that's the argument you're lookin for?
+On Wed, Jul 30 2025 at 23:35, Vishal Parmar wrote:
+
+Please do not top-post and trim your replies.
+
+> The intent behind this change is to make output useful as is.
+> for example, to provide a performance report in case of regression.
+
+The point John was making:
+
+>> So it might be worth looking into getting the output to be happy with
+>> TAP while you're tweaking things here.
+
+The kernel selftests are converting over to standardized TAP output
+format, which is intended to aid automated testing.
+
+So if we change the outpot format of this test, then we switch it over to
+TAP format and do not invent yet another randomized output scheme.
+
+> CSV format is also a good alternative if the maintainer prefers that.
+
+The most important information is whether the test succeeded or not and
+CSV format is not helping either to conform with the test output
+standards.
+
+For the success case, the actual numbers are uninteresting. In the
+failure case it's sufficient to emit:
+
+        ksft_test_result_fail("Req: NNNN, Exp: $MMMM, Res: $LLLL\n", ...);
+
+In case of regressions (fail), a report providing this output is good
+enough for the relevant maintainer/developer to start investigating.
+
+No?
+
+Thanks,
+
+        tglx
 
