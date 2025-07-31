@@ -1,56 +1,56 @@
-Return-Path: <linux-kselftest+bounces-38102-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FA67B17499
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 18:04:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77F6DB174A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 18:06:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5DE3A8305F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 16:03:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D2D01885C0A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 16:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F8C51FBCAE;
-	Thu, 31 Jul 2025 16:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FADD27A913;
+	Thu, 31 Jul 2025 16:04:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="XrTVbySq"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="bcQ9Gw+j"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2EE1F7569;
-	Thu, 31 Jul 2025 16:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE29323F403;
+	Thu, 31 Jul 2025 16:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753977788; cv=pass; b=Mw6abGQq4UqigHb8lmMVX1cg27/dSeR41qnyXMQdm7vtvfXZacGBuTo7avIz1jdEpjtjT+IEgEznulpfBwnbrAmFlpIaS9r6NXOu2lyp2pCeADBsAJ0IXibd16ads/Q9Npo3kxO2v690x4UvYjCJeGCbGf8DbSPiSIu4rhFnuvw=
+	t=1753977840; cv=pass; b=bAXpntElUsHCGgTVEvbjzkciHWHG5dnwugh7Lf48LXgkz03WBv8pPg97PX+HGIkJukYfnPhqh8PJmfhRoD7aNI5i3PK+u/kXtBVVnaHP9MlubfbIa+qSW0nrC/JS3whO1Ad6lGCWklTBzq4wET4/3m7IY7Kk9qtSsoesSGUat8w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753977788; c=relaxed/simple;
-	bh=No24s4T5i2jffXqMefP6oST480RjYux7jXeoFxtjyu8=;
+	s=arc-20240116; t=1753977840; c=relaxed/simple;
+	bh=eDKzkMDZF/mxj5E5sFDQz9q7rcAf5JyA7EJM+AuDcIo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=glWa02uPx/xdMxjs0W5DuZlZi8NwAWqA4aYcxThCe6N3AoYAXfSjQ5sK8ywuPC3siOLwLt8/vXHlYgBTODHL9wYQkhAol0OEePg+MQlXlnvsXZG905S15+KQi828q5Fa6oGolhZusmy05Od176rgvTn6LNA8FggLljc0kZPqdSI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=XrTVbySq; arc=pass smtp.client-ip=136.143.188.112
+	 MIME-Version; b=fRLOrV2vWE8fng2IyVAYyW8fApZh3d+0PSsqJWvtZ8gUkGQrx/c1pxfoeJR/4zWATbqYY+4+xeMan9Z32fKZHTMNhvELYtOyc/uDT6k0NPx5bNY2BQo/6ZJeBNNT3aeK0jqTfozw1rQ4WNwtkkxMQlX//m/f0oY0E4d787zNxFI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=bcQ9Gw+j; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1753977741; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1753977750; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=kZrcr8lGjCQ/uaYK88EneYfN9ao5iMrIBdWosfJasMphAJ+cPsUae+MsXRWpNTJQ2tuMMoGDsQJGfRUlk6ZZ31RYSYDRaPmFnRO97x1qjXvufx2sdQPsUXSfy7CS8HV2xD0sJcH4tywWNZM8rogeXywoqIdoG/S/1TiSGyyRNwI=
+	b=DGVGICaTwhhJr59gs+cfZIQtxM2SepPnYLR/ivuLXW+6ONYxfFOmF/m90Avpb5zRkiM1CFHFsumMTL5pQP5LO1apBSZ7JW974L42i0iGtZSOqi4uwI3I8+yLa6jQUhNFDDrbLhA4XVB9LBEQb0FMYKWiQMPUu36H2bUQlgA1vE8=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1753977741; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=0rIUsTPjbY2X209n7mDn3VwLafDt4aFcMM5+u+5YCmk=; 
-	b=F5IMe+DOqWDoDKoKKGDgGGaQmw31nvnJ+KztuVci0qh25Ojm+uUW8vJm66LWSJjuAE1wrn2whXV2iEjB42gYvFVPfIVvQ4YIKKdGl5NxztAboLrRE8LDmwf48uhBxhsvEoTLC3CATq3OPWcb/7T4aGdDCgzEtc54jz4WwPOPbQc=
+	t=1753977750; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=jsundmjk432Nmx+yxivH/Xk7ers/4Sj7qV5Y59avV5g=; 
+	b=jXJ5PIT9OftLeQJq9Mgv/O2RwZNvlA+Z3/MdnDE2IeJIf3jCRszZlUXaespC1q5Mk6PBc2z0B9VvyXApz7fOQZoih+KbUnPvx40pLpTlBGtYPffCH1x2waK7hFVc/SGJtRiNLorQwf95kuIHn8kXKMqQbLcC73lXCUFlrR1blZE=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
 	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753977741;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753977749;
 	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=0rIUsTPjbY2X209n7mDn3VwLafDt4aFcMM5+u+5YCmk=;
-	b=XrTVbySq+/g7c2Lj1WWTvNchEk/DPefYFSW+l/DPiM3RTR1jK97eeN6kQWi/uqCn
-	4TbpNczuDUhU3hmlpg/ORIfQKY88frscvRFeoHjMi0OKR26mWrB5qGFMGKNajkvOkba
-	y3oqaKPZCEbduEF/ife2TlXQ0ee2aLNB2MrSDlsA=
-Received: by mx.zohomail.com with SMTPS id 1753977738812600.6316331219836;
-	Thu, 31 Jul 2025 09:02:18 -0700 (PDT)
+	bh=jsundmjk432Nmx+yxivH/Xk7ers/4Sj7qV5Y59avV5g=;
+	b=bcQ9Gw+jfHYzvDinaxptTQseABCW6dyLRb4HAE/vHF5+bg6OQXjqZtEp9b2szz6N
+	kw6Iy4yI6w830plPR6802G9dUD4zErzqq7DnRMDJwv+r/eeEeorIPNi2MJYsXxMd65y
+	3aSpCymxEyWj7fLqY8U5Q2VgOHl1NstMwA1xXyMc=
+Received: by mx.zohomail.com with SMTPS id 17539777482221004.5959311406996;
+	Thu, 31 Jul 2025 09:02:28 -0700 (PDT)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@redhat.com>,
@@ -81,9 +81,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v2 1/8] selftests/mm: Add -Wunreachable-code and fix warnings
-Date: Thu, 31 Jul 2025 21:01:25 +0500
-Message-Id: <20250731160132.1795351-2-usama.anjum@collabora.com>
+Subject: [PATCH v2 2/8] selftests/mm: protection_keys: Fix dead code
+Date: Thu, 31 Jul 2025 21:01:26 +0500
+Message-Id: <20250731160132.1795351-3-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250731160132.1795351-1-usama.anjum@collabora.com>
 References: <20250731160132.1795351-1-usama.anjum@collabora.com>
@@ -96,92 +96,39 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-Enable -Wunreachable-code flag to catch dead code and fix them.
+The while loop doesn't execute and following warning gets generated:
 
-1. Remove the dead code and write a comment instead:
-hmm-tests.c:2033:3: warning: code will never be executed
+protection_keys.c:561:15: warning: code will never be executed
 [-Wunreachable-code]
-                perror("Should not reach this\n");
-                ^~~~~~
+                int rpkey = alloc_random_pkey();
 
-2. ksft_exit_fail_msg() calls exit(). Remove the dead code.
-split_huge_page_test.c:301:3: warning: code will never be executed
-[-Wunreachable-code]
-                goto cleanup;
-                ^~~~~~~~~~~~
-
-3. Remove duplicate inline.
-pkey_sighandler_tests.c:44:15: warning: duplicate 'inline' declaration
-specifier [-Wduplicate-decl-specifier]
-static inline __always_inline
+Let's enable the while loop such that it gets executed nr_iterations
+times. Simplify the code a bit as well.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/mm/Makefile                | 1 +
- tools/testing/selftests/mm/hmm-tests.c             | 5 ++---
- tools/testing/selftests/mm/pkey_sighandler_tests.c | 2 +-
- tools/testing/selftests/mm/split_huge_page_test.c  | 4 +---
- 4 files changed, 5 insertions(+), 7 deletions(-)
+ tools/testing/selftests/mm/protection_keys.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index d13b3cef2a2b2..23d4bf6215465 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -34,6 +34,7 @@ endif
- MAKEFLAGS += --no-builtin-rules
+diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+index 23ebec367015f..6281d4c61b50e 100644
+--- a/tools/testing/selftests/mm/protection_keys.c
++++ b/tools/testing/selftests/mm/protection_keys.c
+@@ -557,13 +557,11 @@ int mprotect_pkey(void *ptr, size_t size, unsigned long orig_prot,
+ 	int nr_iterations = random() % 100;
+ 	int ret;
  
- CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
-+CFLAGS += -Wunreachable-code
- LDLIBS = -lrt -lpthread -lm
+-	while (0) {
++	while (nr_iterations-- >= 0) {
+ 		int rpkey = alloc_random_pkey();
+ 		ret = sys_mprotect_pkey(ptr, size, orig_prot, pkey);
+ 		dprintf1("sys_mprotect_pkey(%p, %zx, prot=0x%lx, pkey=%ld) ret: %d\n",
+ 				ptr, size, orig_prot, pkey, ret);
+-		if (nr_iterations-- < 0)
+-			break;
  
- # Some distributions (such as Ubuntu) configure GCC so that _FORTIFY_SOURCE is
-diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-index 141bf63cbe05e..15aadaf24a667 100644
---- a/tools/testing/selftests/mm/hmm-tests.c
-+++ b/tools/testing/selftests/mm/hmm-tests.c
-@@ -2027,11 +2027,10 @@ TEST_F(hmm, hmm_cow_in_device)
- 	if (pid == -1)
- 		ASSERT_EQ(pid, 0);
- 	if (!pid) {
--		/* Child process waitd for SIGTERM from the parent. */
-+		/* Child process waits for SIGTERM from the parent. */
- 		while (1) {
- 		}
--		perror("Should not reach this\n");
--		exit(0);
-+		/* Should not reach this */
- 	}
- 	/* Parent process writes to COW pages(s) and gets a
- 	 * new copy in system. In case of device private pages,
-diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index b5e076a564c95..302fef54049c8 100644
---- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
-+++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -41,7 +41,7 @@ static siginfo_t siginfo = {0};
-  * syscall will attempt to access the PLT in order to call a library function
-  * which is protected by MPK 0 which we don't have access to.
-  */
--static inline __always_inline
-+static __always_inline
- long syscall_raw(long n, long a1, long a2, long a3, long a4, long a5, long a6)
- {
- 	unsigned long ret;
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index 05de1fc0005b7..a85b2e393e4e8 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -296,10 +296,8 @@ void split_file_backed_thp(int order)
- 		ksft_exit_fail_msg("Unable to create a tmpfs for testing\n");
- 
- 	status = snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_loc);
--	if (status >= INPUT_MAX) {
-+	if (status >= INPUT_MAX)
- 		ksft_exit_fail_msg("Fail to create file-backed THP split testing file\n");
--		goto cleanup;
--	}
- 
- 	fd = open(testfile, O_CREAT|O_RDWR, 0664);
- 	if (fd == -1) {
+ 		dprintf1("%s()::%d, ret: %d pkey_reg: 0x%016llx"
+ 			" shadow: 0x%016llx\n",
 -- 
 2.39.5
 
