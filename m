@@ -1,243 +1,145 @@
-Return-Path: <linux-kselftest+bounces-38114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64E57B17515
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 18:41:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D25FB17664
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 21:04:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DA3C3BB2E6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 16:41:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B35D567C1D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Jul 2025 19:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D98F023CEFF;
-	Thu, 31 Jul 2025 16:41:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28FE523C8CE;
+	Thu, 31 Jul 2025 19:04:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kEY2Uz3p"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FDtgMzPA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CE723BCEB;
-	Thu, 31 Jul 2025 16:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4BF23B61E
+	for <linux-kselftest@vger.kernel.org>; Thu, 31 Jul 2025 19:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753980101; cv=none; b=jY/VgGkigumQf6cT5mEiZss2FLNqoknkk89eb/MJ4QSascR8xysWXjkVjQGrS44RzdbkwAmbFqzA1ireuwDyitT78dMX9YLCb5bhIu9OWevEe7XHoMG3TP12VSA2a9oZg/DQn70697osDxl7GVo9zoJ8DxSoLZa43Q9p3iKPjFs=
+	t=1753988650; cv=none; b=OtDYeT4i23/V+hgLC6sxh0wLoERPH1kLm2NqQDO3T0xTcG8/KXp/0kLOYtlctQPF9HLLDCi18fla/nH3i6U42XeT+jStYEWZdF4refo7JQvIWA8LhrJw+c3gHhYDnu1b/bLXpZWB15c5v4Mms8TFzeODQAMoJZb12W0QEWd3hcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753980101; c=relaxed/simple;
-	bh=FOn/6rSOFrcvFlub8uI3wyAurRPAFWyHtW66MMdoEnQ=;
+	s=arc-20240116; t=1753988650; c=relaxed/simple;
+	bh=173rFFhLa/OnlYlgXY0qu0rl5EpYwN3Ri319nR2Dtbk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AXtpzm9mM/ZDzcLAsB+IfL3XZ9TJ1qsmBH3ohf5leepRGi3sl1ONJ90E4gZMhWZFbLlEzY73hcUPEurxV17e2HDys50MtvKqpeQCM0HjKa/RHuyE9/rSnkxpEuaJxvtQF15nXj8mTb826xgIvevAPjM7zP+Ou8etKXFpFDFiiNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kEY2Uz3p; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4563cfac2d2so10809795e9.3;
-        Thu, 31 Jul 2025 09:41:39 -0700 (PDT)
+	 To:Cc:Content-Type; b=gF4awDMgxa+cecsn4yB2IY2CxomaPSlsgeTG+AvBj7W0NtgWyV7+V3H+/4JFeSdYlR1QZIXDgR4OE9rw6Cq0SpqK+xGP7v/uTzxd6ARASpdj8pFM/ekI8rES8EIuuZXxqpwASE3Tn76za5OOI6A0MK8Pzg3psDuJSi3A+Qd/ECY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FDtgMzPA; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-7074bad03ceso8001606d6.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 31 Jul 2025 12:04:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753980098; x=1754584898; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1753988647; x=1754593447; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xsu6ObGdZ62l8P/qwUGJQLtAjhbxoXSmlIgJ/7hyZRU=;
-        b=kEY2Uz3pVoapjD4YJJrkPwogcO+4fxuB5IqT+mfSwaOP11pYN4Ba/eFbwtVr+l5QlQ
-         bTYfLt6gHitGsN2UPf6PCXql1uQw6gLwJjrb5DA5WUiEp2CX1KWJwVXKpwTUBAj1e/FA
-         J+nt923sbDoLRdm7V+WWrPrWZCnQwopjQpWOko9BPkGfpVNwo3LINmFdh7PPG7bOHmvR
-         G2VfxdZMrziTypJXMDLWOgt0AoO3rxy9gAOQBzjgZHUv35K5eYCTM/afFTvymjHMzbix
-         EwU/admIy6YCGr/bSsIC00teeEbu5XxNFvBhq2IK0zK50348qCkawWt+Rzhdy7VAUY4g
-         AyEw==
+        bh=pj/7Gsrvh9XPHuAkUidAPLI16es4G/O+kKjv0mm7Cl4=;
+        b=FDtgMzPAsLxs9EDUG6P+xNoIXInRefKdMdI+koiGvuZpktcXT71GkLKQ322w9K+rlr
+         iprtvBfGi0znsTC5r5bOrKq7b88RGBSpbovdKQCTH7T+Wj8/qrUSyrEdufUzAKtrwBCE
+         yA7DCH7wXhGQJQpUbMXobUVTNqdhYu+tqA0/lmo3IdEphJ/vsznAGAu0COPZeXxxplM7
+         /S6WpoNRczpuc//EuWpFH72zOIyXU8bWNckuSh9euE2if1v/pXh7yON4BFRLZay51fo9
+         3vItItONkpU6+L1ViR+0oSYUYXf6AAITn/pctO1D8dViAkdJetLHN4ufg5SITZBovE8h
+         UYKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753980098; x=1754584898;
+        d=1e100.net; s=20230601; t=1753988647; x=1754593447;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Xsu6ObGdZ62l8P/qwUGJQLtAjhbxoXSmlIgJ/7hyZRU=;
-        b=F0ejwvQWVwk+3aBagI4AcUd9UNgP5p5uuiRcNrWphLvUwNs764zLjvUPtT8OpgX3Di
-         0gvFdUC2NSHJX2Yi5OLqKu6h2dArZ/l4HGnuiyyzHXKqdua6qp7WbQ1qtZKtJIu68g8Z
-         H/bUavib3wxeL2PUVGw3N6GANg5aqobDPc5MOHP8BeiJadxVCnpf1bjIkylE3bXU8CLJ
-         uTXVe0RAIA3YzgxjhBpxPzBh26uvxMd44q1a0VXY7ZvbS7+PlprPm6akQzKBnP3nD2bG
-         agKig/jX5KdbTG0fF9tK2u51IhEtQs1R7qhuZLI/m8mmRJEWYQg3mL2tZ4ctDgFJGJ75
-         FftA==
-X-Forwarded-Encrypted: i=1; AJvYcCWJlBBdrnVjLxuVtyo89cQh19w++3NkkLyXIruY+wS2mUPwlBrIJYDL04632uuYvrccx9tyHQVTwbiQUD2F@vger.kernel.org, AJvYcCWgmg7S8gubYy713E066aHIDmSOccS1L4gAhfSjZRHHJLKdrqPw35QTSH8CtTTV3xODLaXdxTYN9XVKSxKEMZx6@vger.kernel.org, AJvYcCWqThGoNqMI7+/cDMwLy3p+iv95TjoXeP7j+SBas5K1dalnvG2uHuaQ/neLL0fbr20JxzrjDJem@vger.kernel.org, AJvYcCX3aNdWMluw+sAX6KGTPu9VxNSboeKPAZeMLf1FaiXbJPTDJo2yPzDn7wF0nckHkPpcPs8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYCsH8rQlst0r3wuzVnCGriCNWkWjdgvusEjWExSw5owiQRbLU
-	p4HAe+f9C0bX181iQB7TVsoW+HYkZ79vYfk2C3aeDNh9TrzFSGAzmx8E4xYR8q3Hy2G2IAL4bB9
-	GQ7twV7JPwFJIKmX35lmjCTQW6GvHuoibcg==
-X-Gm-Gg: ASbGncunMnqRES0/Q7nOx6l1qfzu+waGbJXz6UKffI0WMaFKHZMep/t1w0V3t6OOREk
-	HJzxuFguFSMGZ673d0CoOrSYA1z6z8PbRihYhfDvGvDequ7hyGLBma59OIlfzFxdh29EP5sjzoU
-	Ym/fxKj7PxyCdf8/ajW+hKc+hHj1ABPK215tn5XJCsc9BeeyIQbVnUJPM1uSvz3Wo1dvI50ifSB
-	0KkgXWNEiibkm8mi/iUavs=
-X-Google-Smtp-Source: AGHT+IFM8ZRUhTMMFPoPU9m6U65rQihPR6DTHa7d6s2IreKPbGglE506/v94vJCHwTLm/k801E+rGxEYCdn9O+Ebt44=
-X-Received: by 2002:a05:600c:3145:b0:453:81a:2f3f with SMTP id
- 5b1f17b1804b1-45892bed97emr80555055e9.30.1753980097839; Thu, 31 Jul 2025
- 09:41:37 -0700 (PDT)
+        bh=pj/7Gsrvh9XPHuAkUidAPLI16es4G/O+kKjv0mm7Cl4=;
+        b=AuaYbsLvhW0X//ZSD555gl5tJ9AeBO5ED4mvOh1vEyJ0Kuf7bkJa1aD8HvAiWPmgOV
+         vadluM20d1ERMS2zmkbeFufhuPaUJhtWJedfuZtvi75mlVfUfjr5te7YR/01Et91HUBF
+         dTGJ/I4L6xbGaLAZRz7rwnS9BHAx9Ax9DUwCsZqkFqk5s0lWB9EaMtbsG0mogYJLd59n
+         mpcrsu2aAGYWHTiwfm97HLepPri3NUI4mCue3T/4zSPKg4k+OaGmD1p7d/lpxQDMM3yh
+         PHwGv2HtA23X00r5ayYYLuRBzxx3vOg2w5ejmNFk8TnfO4pqVFUBt+iQ5aPKwt87xeO2
+         vOUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWCAcyaYLFej4la2+YTr/vEKjonxDRu22NX2qAi+sGEnlaLPxK91ottrogKc8qdMgqcH+FTAB8eCkgCWWGaTUc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzuj7TXQy5c/rJo+0ocritoTmRG6heOJl+GZZeAhMTfxF12ccyZ
+	FiKyoOePpUiv9d3HauwKg8t+2ZseDelKrtymiGxmr7jEpLUellndI3rYYbEM/i4gQxxYulgz6pU
+	nuAmVY4mGy0MAFgA4lH6uEezHJ7bbpNMGijNrkLEk
+X-Gm-Gg: ASbGncvnnZzmGCdAgLM6GTRMRC5Bvk+hsOE/rFUsx84wSN95pVBkb8SVuLUiLosS1xC
+	XjfQVjbz0vKHU52xBDZB8SnUPqrUVF5Gm02TLV6fpGw9h7zFoYmj1oCWyo3ijZkJWO7zPT2N8VL
+	S6tUBwNLMs1/wwY7Ec+w8Z2dfU0SUcRNfLLHWeOekuD/SojCDdu79qAUAKJfqAIYJZ3ELYIzdy+
+	cunO/QwvPxiEdMBtW/HsuaiviOQVUGFtlzIL6/45L4bZXvi
+X-Google-Smtp-Source: AGHT+IFKS2GeUVe6FWBJVJU6SOTZLx4X2NE0Kzqy0x5kMMXSkS9rNfTmSV21NQ16rogLb7+sEFXLHVy3p8jipDdFZk0=
+X-Received: by 2002:ad4:5aaf:0:b0:707:62c5:975b with SMTP id
+ 6a1803df08f44-70766e312d7mr98014696d6.15.1753988647091; Thu, 31 Jul 2025
+ 12:04:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250722150152.1158205-1-matt@readmodwrite.com>
- <CAADnVQ+rLJwKVbhd6LyGxDQwGUfg9EANcA5wOpA3C3pjaLdRQw@mail.gmail.com> <CAENh_SS2R3aQByV_=WRCO=ZHknk_+pV7RhXA4qx5OGMBN1SnOA@mail.gmail.com>
-In-Reply-To: <CAENh_SS2R3aQByV_=WRCO=ZHknk_+pV7RhXA4qx5OGMBN1SnOA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 31 Jul 2025 09:41:22 -0700
-X-Gm-Features: Ac12FXxYox-ZTydO-9bGxcV7tjEfh_Od76qWoqE9ySEFca9hzhP54c2ZNF2ytCk
-Message-ID: <CAADnVQLnicTicjJhH8gUJK+mpngg5rVoJuQGMiypwtmyC01ZOw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Add LPM trie microbenchmarks
-To: Matt Fleming <matt@readmodwrite.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	kernel-team <kernel-team@cloudflare.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Network Development <netdev@vger.kernel.org>, 
-	Matt Fleming <mfleming@cloudflare.com>
+References: <20250730031624.1911689-1-davidgow@google.com>
+In-Reply-To: <20250730031624.1911689-1-davidgow@google.com>
+From: Rae Moar <rmoar@google.com>
+Date: Thu, 31 Jul 2025 15:03:55 -0400
+X-Gm-Features: Ac12FXyzGTyDZsjXhNlZ9t5Yhlq75GG_emhxAeVKyOddKo_zXsUrHdrlu6KKoE0
+Message-ID: <CA+GJov76O5e31p05W0HNUAaXLfz2DhgAsKHtuWpPMCC=PFf1mg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Accept --raw_output=full as an alias of 'all'
+To: David Gow <davidgow@google.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 29, 2025 at 6:56=E2=80=AFAM Matt Fleming <matt@readmodwrite.com=
-> wrote:
+On Tue, Jul 29, 2025 at 11:16=E2=80=AFPM David Gow <davidgow@google.com> wr=
+ote:
 >
-> On Mon, Jul 28, 2025 at 3:35=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > Please make a full description of what the test does,
-> > since it's not trivial to decipher from the code.
-> > If I'm reading it correctly, first, the user space
-> > makes the LPM completely full and then lookup/update
-> > use random key-s within range.
+> I can never remember whether --raw_output takes 'all' or 'full'. No
+> reason we can't support both.
 >
-> Yep, that's correct. I'll provide a more comprehensive description in v4.
+> For the record, 'all' is the recommended, documented option.
 >
-> > But delete looks different. It seems the kernel delete
-> > operation can interleave with user space refilling the LPM,
-> > so ...
-> >
-> > >   lookup: throughput    7.423 =C2=B1 0.023 M ops/s (  7.423M ops/prod=
-), latency  134.710 ns/op
-> > >   update: throughput    2.643 =C2=B1 0.015 M ops/s (  2.643M ops/prod=
-), latency  378.310 ns/op
-> > >   delete: throughput    0.712 =C2=B1 0.008 M ops/s (  0.712M ops/prod=
-), latency 1405.152 ns/op
-> >
-> > this comparison doesn't look like apples to apples,
-> > since delete will include user space refill time.
->
-> Yeah, you're right. Though we only measure the delete time from in the
-> BPF prog, delete throughput is essentially blocked while the refill
-> happens and because things are measured with a 1-second timer
-> (bench.c:sigalarm_handler) the refill time gets accounted for anyway.
-> I could try extrapolating the delete time like I've done for the free
-> op, i.e. we calculate how many ops were completed in what fraction of
-> a second.
->
-> > >     free: throughput    0.574 =C2=B1 0.003 K ops/s (  0.574K ops/prod=
-), latency    1.743 ms/op
-> >
-> > Does this measure the free-ing of full LPM ?
->
-> Yes, this measures the total time to free every element in the trie.
->
-> > > +static void __lpm_validate(void)
-> >
-> > why double underscore ?
-> > Just lpm_validate() ?
->
-> The double underscore is used for the common validation parts, but
-> I'll rename this to include "_common()" (along with all other uses of
-> __).
+> Signed-off-by: David Gow <davidgow@google.com>
 
-No. It's also wrong.
-Double underscore or _common suffix are both meaningless.
-The helper name should describe what it's for.
+Hello!
 
-> > > +       /*
-> > > +        * Ideally we'd have access to the map ID but that's already
-> > > +        * freed before we enter trie_free().
-> > > +        */
-> > > +       BPF_CORE_READ_STR_INTO(&name, map, name);
-> > > +       if (bpf_strncmp(name, BPF_OBJ_NAME_LEN, "trie_free_map"))
-> > > +               return 0;
-> > > +
-> > > +       val =3D bpf_ktime_get_ns();
-> > > +       bpf_map_update_elem(&latency_free_start, &map, &val, BPF_ANY)=
-;
-> >
-> > Looks like there is only one lpm map.
-> > What's the point of that extra map ?
-> > Just have a global var for start time ?
->
-> Sure, I can make this a global variable for the start time instead.
->
-> > bpf_get_prandom_u32() is not free
-> > and modulo operation isn't free either.
-> > The benchmark includes their time.
-> > It's ok to have it, but add a mode where the bench
-> > tests linear lookup/update too with simple key.data++
->
-> Good idea.
->
-> > Since the map suppose to full before we start all keys
-> > should be there, right?
->
-> Yes.
->
-> > Let's add a sanity check that update() succeeds.
->
-> Will do.
->
-> > > +static int delete (__u32 index, bool *need_refill)
-> > > +{
-> > > +       struct trie_key key =3D {
-> > > +               .data =3D deleted_entries,
-> > > +               .prefixlen =3D prefixlen,
-> > > +       };
-> > > +
-> > > +       bpf_map_delete_elem(&trie_map, &key);
-> > > +
-> > > +       /* Do we need to refill the map? */
-> > > +       if (++deleted_entries =3D=3D nr_entries) {
-> > > +               /*
-> > > +                * Atomicity isn't required because DELETE only suppo=
-rts
-> > > +                * one producer running concurrently. What we need is=
- a
-> > > +                * way to track how many entries have been deleted fr=
-om
-> > > +                * the trie between consecutive invocations of the BP=
-F
-> > > +                * prog because a single bpf_loop() call might not
-> > > +                * delete all entries, e.g. when NR_LOOPS < nr_entrie=
-s.
-> > > +                */
-> > > +               deleted_entries =3D 0;
-> > > +               *need_refill =3D true;
-> > > +               return 1;
-> >
-> > This early break is another reason that makes
-> > 'delete' op different from 'lookup/update'.
-> > Pls make all 3 consistent, so they can be compared to each other.
->
-> Hmm.. I'm not quite sure how to do that. lookup/update don't modify
-> the number of entries in the map whereas delete does (update only
-> updates existing entries, it doesn't create new ones). So when the map
-> is empty it needs to be refilled. You're right that somehow the time
-> to refill needs to be removed from the delete throughput/latency
-> numbers but fundamentally these 3 ops are not the same and I don't see
-> how to treat them as such.
+Happy to add the ability to use 'full'. Thanks!
 
-well, random-key update when the map is full is also quite different from
-random-key update when the map is empty.
+Reviewed-by: Rae Moar <rmoar@google.com>
 
-Instead doing an update from user space do timed ops:
-1 start with empty map, update (aka insert) all keys sequentially
-2 lookup all sequentially
-3 delete all sequentially
-4 update (aka insert) all sequentially
-5 lookup random
-6 update random
-7 delete all random
-
-The elapsed time for 1 and 4 should be exactly the same.
-While all others might have differences,
-but all can be compared to each other and reasoned about.
+> ---
+>  tools/testing/kunit/kunit.py | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 7f9ae55fd6d5..cd99c1956331 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -228,7 +228,7 @@ def parse_tests(request: KunitParseRequest, metadata:=
+ kunit_json.Metadata, input
+>                 fake_test.counts.passed =3D 1
+>
+>                 output: Iterable[str] =3D input_data
+> -               if request.raw_output =3D=3D 'all':
+> +               if request.raw_output =3D=3D 'all' or request.raw_output =
+=3D=3D 'full':
+>                         pass
+>                 elif request.raw_output =3D=3D 'kunit':
+>                         output =3D kunit_parser.extract_tap_lines(output)
+> @@ -425,7 +425,7 @@ def add_parse_opts(parser: argparse.ArgumentParser) -=
+> None:
+>         parser.add_argument('--raw_output', help=3D'If set don\'t parse o=
+utput from kernel. '
+>                             'By default, filters to just KUnit output. Us=
+e '
+>                             '--raw_output=3Dall to show everything',
+> -                            type=3Dstr, nargs=3D'?', const=3D'all', defa=
+ult=3DNone, choices=3D['all', 'kunit'])
+> +                            type=3Dstr, nargs=3D'?', const=3D'all', defa=
+ult=3DNone, choices=3D['all', 'full', 'kunit'])
+>         parser.add_argument('--json',
+>                             nargs=3D'?',
+>                             help=3D'Prints parsed test results as JSON to=
+ stdout or a file if '
+> --
+> 2.50.1.552.g942d659e1b-goog
+>
 
