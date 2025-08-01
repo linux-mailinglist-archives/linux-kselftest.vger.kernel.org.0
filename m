@@ -1,187 +1,113 @@
-Return-Path: <linux-kselftest+bounces-38181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA371B184AD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 17:11:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B94F3B184EF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 17:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5F5D7B5E7E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 15:09:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46B2E1C8254A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 15:27:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D5DC26D4DE;
-	Fri,  1 Aug 2025 15:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9A327280E;
+	Fri,  1 Aug 2025 15:27:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="hZ4hDsBJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CDoHhWs5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058262367AD
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Aug 2025 15:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5012727F5;
+	Fri,  1 Aug 2025 15:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754060961; cv=none; b=N17tL1Ml7Dn6pbJ5lqtpO6b0cs1xPIj6yjQj/AtqNLGGsypZbzdJfcyf+hemW0AGXAy40HGsAHaj126t/u/SnKI411xoVNd94QPbEFnG6KtrklKG+f+UwFs3J0n4ycJ2ZRonWlWCmxGUKXBuuq9HSty/atwTEVILnUCA8WwJ3Dc=
+	t=1754062052; cv=none; b=OaUulMDBo5DE9fFubyCYeLRnFa0b3citTDlTQQH6Y3oXn72L4CW1jT6fB6ZBsLITHYFOsses5EC/AOfg5wYqMGVECP3XCdf9L4nyIek8BIsviqpy88g+QC1gANoZZTduZ1vEF84m0G03dyJEvhs3/1R7qWLfE3fAoRdzhURDSm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754060961; c=relaxed/simple;
-	bh=kK1dgmTZsHkEElXKMPmNcnLYqTgRpHUQEJnHr+zgSTg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NADvAKtnjGg4jOYpq/xWhDOCX9+UwESFYyR2MMR6WSU7d+1cLHRBcH5yueWqgi1Qne2bhZU03z4yoWf5t8F06nph4zbZlgxk7GnS04ZNxudzBzX1Z7IGc6xc0yf0es1c8sMf8lJvQyWdziJNqtwx4dpslHMZLjo+vvOhpR3UsAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=hZ4hDsBJ; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1754060957;
-	bh=kK1dgmTZsHkEElXKMPmNcnLYqTgRpHUQEJnHr+zgSTg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hZ4hDsBJoxjqNIrtYINpnmnIbidLeVMokm+RZrjVTEpva8DcEDM62uMDyFfB/JOT9
-	 +edAb6ijm836vMdgZtldRU2v+ixzD+eAl85D8k8+klDur0SccQ84kziu9eVCsxDQ1K
-	 /M6w/20EDHclp0JL9druvQ0YLpO2qutxEC26iP/M=
-Date: Fri, 1 Aug 2025 17:09:17 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Benjamin Berg <benjamin@sipsolutions.net>
-Cc: Willy Tarreau <w@1wt.eu>, linux-kselftest@vger.kernel.org, 
-	Benjamin Berg <benjamin.berg@intel.com>
-Subject: Re: [PATCH v3 4/4] tools/nolibc: add signal support
-Message-ID: <fbd9add3-dd99-4deb-979d-79ecfdae2f6c@t-8ch.de>
-References: <20250731201225.323254-1-benjamin@sipsolutions.net>
- <20250731201225.323254-5-benjamin@sipsolutions.net>
+	s=arc-20240116; t=1754062052; c=relaxed/simple;
+	bh=tPFNf88/PzuSkUeVAm5dy4etBtBV6c4QjPdPYxo9cuc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RSuLb+8fUtYiP36RjDX1XlFvC4T1uujqa3ae67t8DzeGOPP9CYNj8Ed1MTUoo5w4kPpM5rhfHoTobnBUgKVnc0vLYvOXawMsAwrJM3Pl8fZVboCxqI73Z3ivkXfuG3OwyF5A05uVNULm0ZDrGr9y4D32KqabMd5oj5PTfEol8ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CDoHhWs5; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-710e344bbf9so10789917b3.2;
+        Fri, 01 Aug 2025 08:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754062050; x=1754666850; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tPFNf88/PzuSkUeVAm5dy4etBtBV6c4QjPdPYxo9cuc=;
+        b=CDoHhWs5gZztermd/XytKgURFmfIAhF4y/YDfanYEdoU8s0iLICJhxX6oSOvSX9jHM
+         WCKfhu/w/r56QzpScKg9Y2+pz1CVE3A0pd8Lh0J8NXQE+iP+P+CML9wvjB2pGRA8ADl/
+         dhKEIHuSk1QQGTQjBnsOLApx02QKzzIO8mZ0moxIQUwV2m94WBfPgWCU0vsU0j6k62fK
+         IbQmaIvEcMWzZbipIqL01DS53NjFYABzAqLpyKV2M/nFCVy/hWoYqNzSleZqcFvL6lqD
+         Oupqzy6w7Id0y03VbMgNKm/g/re88ntF4vbyZaF9Y1JPCslnee5TRGNQWa3juMTKo9Fj
+         ukLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754062050; x=1754666850;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tPFNf88/PzuSkUeVAm5dy4etBtBV6c4QjPdPYxo9cuc=;
+        b=qbntusHQMqr/upUJHv+/5Gc6J0i2FeBOBCKT8qeXp0SNBYztMx66qj6FHGy9kPJ7bW
+         1jv70W4ohM7izx3Zg5323EUp7b7rI4rURiImSiS1YvwGQLxo6VzgtdPrhb+IZHGgVal6
+         k9F7b6p4mBCED966cH+xdXB+qV1NO0KVn3ahyWvlycIr8e1KqkQFAZyZ823HOLbWC4O1
+         fmX0R8lqKi45ILfNlGOvjtYVPQ/Sqb+MfddnphrrCmggEnmVOYYg0V6hq/fz4hgWwbl3
+         jJ1B4tAdLG2BIEbZdYY3MQY5xPLDp/rJW53YOeyy0d1G1MTVi4OSDmjCfRYGofzWE0NO
+         vlPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUne84E74TuPPUdb7figF0vZefznuBfmNQr2EtFSzm0XLLnci7zEXqPLBb6Z8grds5BSg7b6xdLeDt/mKXagSJ7@vger.kernel.org, AJvYcCVfUuqp5LgDpo80Ar1A9mch6/pgIy0MIbJyzAjSkoqdtdN1Tv6gDEo59LqL36AvKVxroWJlSP7X8FVTigw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxn9DaAHrF/QHqr8/IeQ2PlfNqZ/e3Jl4Kn1EH+SAd9E5YUmp21
+	+fXEDntEdLuOHvpEn7LcJS77DponoZgDQre9tooHFzgkGmw3UJLoS4pHY07FUpkVKLIcjDowjJJ
+	VBuZwJnJs/v7i/j2JaAt95DK23Jum88w=
+X-Gm-Gg: ASbGncthEjndZ3SRTeqqJge+Pyn6wkUoYhiV13xSjIpN3fCBt0ssLUuNWtUxxc7sel6
+	f6+cKqi1YHm+ANMFIWioattsRYs1m6ybqrSD3g3L6CfvDLwv17Lwbb9QNvQmRk+oZUSCt4t8qvg
+	CoiueHGA6T8KT1ugictbVIsrpVx9qx/JuYftJgu5GNVAis7i+nqM5gbGHi6MZk6lWOY/sPCM7XC
+	Bud1syI
+X-Google-Smtp-Source: AGHT+IGtTnwydBRnNDx1iAloAetjLiySJJ7mxnI12Sn/8rX+pN11KBeKORsT1zOrEsLTa+z+33OXuzmdh2Ph/3TovVo=
+X-Received: by 2002:a05:690c:17:b0:71a:1f26:5d1a with SMTP id
+ 00721157ae682-71b7ed84355mr855347b3.11.1754062050019; Fri, 01 Aug 2025
+ 08:27:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250731201225.323254-5-benjamin@sipsolutions.net>
+References: <20250626191626.36794-1-moonhee.lee.ca@gmail.com> <c6272a2f-e157-485a-ab16-c3610a969a00@softathome.com>
+In-Reply-To: <c6272a2f-e157-485a-ab16-c3610a969a00@softathome.com>
+From: Moon Hee Lee <moonhee.lee.ca@gmail.com>
+Date: Fri, 1 Aug 2025 08:27:19 -0700
+X-Gm-Features: Ac12FXy7UTnL_9RJVqYwWc5gIlHD3mHgBEy5GMm-vXZBqx-aCsd2gBpkALaQ6BA
+Message-ID: <CAF3JpA4G4+cHmthLYbXF1sSatQB8SCMe4YUa-kHZwAgAJ2rgtQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: breakpoints: use suspend_stats to reliably
+ check suspend success
+To: Olivier Blin <olivier.blin@softathome.com>
+Cc: shuah@kernel.org, yifei.l.liu@oracle.com, zhujun2@cmss.chinamobile.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kernel-mentees@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Benjamin,
+Hi Olivier,
 
-On 2025-07-31 22:12:25+0200, Benjamin Berg wrote:
-> From: Benjamin Berg <benjamin.berg@intel.com>
-> 
-> Add support for sigaction() using the rt_sigaction syscall and implement
-> the normal sa_mask helpers.
-> 
-> For the uapi definitions, everything is copied into nolibc. This avoids
-> issues with kernel architecture headers that are not usable with the
-> rt_sigaction syscall.
-> 
-> Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
-> 
-> ---
-> 
-> v3:
-> - put everything into signal.h and the new asm-signal.h
+On Fri, Aug 1, 2025 at 5:39=E2=80=AFAM Olivier Blin <olivier.blin@softathom=
+e.com> wrote:
+> Shouldn't you also remove the timerfd variable?
+> It seems to be of no functional use after this change.
 
-Hm, did we decide on that? We don't want the per-architecture include
-dance, but static overrides should still be fine I think.
-Keeping the architecture ifdeffery inside the respective arch header.
-And all the generic stuff in a shared header.
+The timerfd is still required because it provides the wake-up event for
+this test. Just before suspend the code programs a CLOCK_BOOTTIME_ALARM
+to expire in five seconds. While the system is asleep it needs an
+interrupt to resume; this timer supplies it. The patch only changes how
+success is checked: we read /sys/power/suspend_stats/success after
+resume, instead of comparing time diffs on the timerfd. If the timerfd
+were removed, the machine could suspend with no scheduled event to bring
+it back, turning the test into a hang rather than yielding a result.
 
-> - split out sigset_t tests
-> - actually mark signal_check static
-> - remove unused string.h include
-> - fix SIGUSR2 reset
-> - Use integer for signal_check as the signals are emitted from the
->   syscall context.
+Thanks for the review.
 
-I don't understand this point, isn't it a signal handler?
-
-> v2:
-> - Use newly added macros to check signal emission order
-> - Add tests for sigset handling
-> - Restore the default handler after signal test
-> - make signal_check variable static
-> 
-> v1:
-> - Update architecture support (adding sh)
-> - Move sparc sys_rt_sigaction logic into its header
-> - Add sig_atomic_t
-> - Use new BITSET_* macros
-> - Move test into syscall suite
-> - Various other small changes
-> ---
->  tools/include/nolibc/Makefile                |   1 +
->  tools/include/nolibc/arch-s390.h             |   4 +-
->  tools/include/nolibc/asm-signal.h            | 237 +++++++++++++++++++
->  tools/include/nolibc/signal.h                | 179 ++++++++++++++
->  tools/include/nolibc/sys.h                   |   2 +-
->  tools/include/nolibc/sys/wait.h              |   1 +
->  tools/include/nolibc/time.h                  |   2 +-
->  tools/include/nolibc/types.h                 |   9 +
->  tools/testing/selftests/nolibc/nolibc-test.c | 134 +++++++++++
->  9 files changed, 566 insertions(+), 3 deletions(-)
->  create mode 100644 tools/include/nolibc/asm-signal.h
-
-(...)
-
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index 295e71d34aba..a790e816565b 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -14,7 +14,6 @@
->  
->  /* system includes */
->  #include <linux/unistd.h>
-> -#include <linux/signal.h>  /* for SIGCHLD */
->  #include <linux/termios.h>
->  #include <linux/mman.h>
->  #include <linux/fs.h>
-> @@ -28,6 +27,7 @@
->  #include "errno.h"
->  #include "stdarg.h"
->  #include "types.h"
-> +#include "asm-signal.h" /* for SIGCHLD */
-
-#include "signal.h"
-
->  /* Syscall return helper: takes the syscall value in argument and checks for an
-> diff --git a/tools/include/nolibc/sys/wait.h b/tools/include/nolibc/sys/wait.h
-> index 56ddb806da7f..e2aa90cc3cf3 100644
-> --- a/tools/include/nolibc/sys/wait.h
-> +++ b/tools/include/nolibc/sys/wait.h
-> @@ -10,6 +10,7 @@
->  #ifndef _NOLIBC_SYS_WAIT_H
->  #define _NOLIBC_SYS_WAIT_H
->  
-> +#include <asm/siginfo.h>
-
-#include "signal.h"
-
-The asm/ usage should be hidden.
-
->  #include "../arch.h"
->  #include "../std.h"
->  #include "../types.h"
-
-(...)
-
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 180f0436127a..75b96eaa4c65 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -1269,6 +1269,138 @@ int test_namespace(void)
->  	return ret;
->  }
->  
-> +int test_sigset_t(int test_idx)
-> +{
-> +	int llen;
-> +	int ret = 0;
-> +
-> +#ifdef NOLIBC
-> +	if (is_nolibc) {
-
-This looks unnecessary. The #ifdef should be sufficient.
-
-> +		sigset_t sigset;
-> +
-
-(...)
-
-
-Looks nice, thanks!
+Regards,
+Moon
 
