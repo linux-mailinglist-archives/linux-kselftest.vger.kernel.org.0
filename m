@@ -1,135 +1,119 @@
-Return-Path: <linux-kselftest+bounces-38183-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AE0DB18508
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 17:33:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07E0AB1858E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 18:16:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6F991744EB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 15:33:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B41143BA051
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 16:16:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AAF214B96E;
-	Fri,  1 Aug 2025 15:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D54D2279333;
+	Fri,  1 Aug 2025 16:16:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pmGrHBPS"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="FrgcFUGb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AB026CE36
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Aug 2025 15:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61AC0156C40;
+	Fri,  1 Aug 2025 16:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754062418; cv=none; b=aCf8vvByqVAst3f9xNgI4VcZQyWaCwtSn6GA22w5rcIP4/NNC37Gvs1g0TBjuM8YS5RSyUJ3Ru2S3nnu5yfzKoZ88xsvr8jLtQAfYEjUuur6GmkY2RMwnI3yyF/GS/CcQgPhHCWmaHclTD53+X/Gv+oBVMB+b9z9+lXW/CielLw=
+	t=1754064974; cv=none; b=pDK4TVddynM5VofubbZIHnOzCcYei7TTu3WUtqAgljr720X2d3Dl6sgHAyw/xB7nNDJoWYMWWj/JVrNe/CAA1ImMMjUHb7yiMjEo+AJGFerzh0Fg+0eIJw8SdMWmxLHsIvn9QFWbiY+q4CC+FsQXA/cOopE21PUGtxT22rxqxPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754062418; c=relaxed/simple;
-	bh=Hlg5IiIUSg37cw8hEXFqC6WPT7GHYQIYrncw2fqeeFs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jhaH5ii3ZZctbVpmWcFd3FkA00ftca9fxijiwSlmLgVw/tIUtHiaVFHNl2DpAwrJseRpYemTnmJyRKnP9IkbqTlxOfmv3JWW0PTu9JuN5Is1yPy1U/iZnIwME3p/kMSyOigOG8cxuRLjE8A3VB1FhT6yu2D1cAPG56+dn/Rg2sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pmGrHBPS; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4ab3ad4c61fso481711cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Aug 2025 08:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754062416; x=1754667216; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hlg5IiIUSg37cw8hEXFqC6WPT7GHYQIYrncw2fqeeFs=;
-        b=pmGrHBPSRxXBV1OSQ7R6Hr0nBWQrrtE3INbqCauaijfJpLKw/GOL+eHypTKyS8G+dr
-         VSc/4oXlN7WwcPY0ZP+t8XGkwIYqn+OT+YJusKYEB6fsuYgU/I2la2+vSbpgCbAB9H6Y
-         rHhG7agLldSS90BG1kf+ASUt1T+fYncjKBN4NN6dXb2Dp6fexe+xhupgkbTOgmFv2D27
-         EfFIbZ/xwahEBaGu6bHXZsuwJjKDSBkm7jE3nj3vCVrYuT7oFYOO8JPNEcb1Qkns+XMj
-         b7ugjf13JV86x1/MdFyBlptOmPQkSd+zFoIRtFvAD/0UY1FY8dd/J8bXuD7yzN9lrHZk
-         zpGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754062416; x=1754667216;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hlg5IiIUSg37cw8hEXFqC6WPT7GHYQIYrncw2fqeeFs=;
-        b=LjsKeuLhKgl5RqYzOlDf3nyKC4jqd32IK19Ac0Wi4ouL0dCuFXbzVlhSt4Cvdsydem
-         QKDX4fy2plRfz09R9m1yX9ymXx2Luw+LHekfqUpESUHiPavSRz5kTgK9jqxJ+7B5Ipyg
-         +7mtPUNflgKx14GNldZNT6vOgpSdCp6HIvuQ6rGKy/1cas6BzKc66OHh+o6zi/HlnBQO
-         Q3kXcOOJ7dWsqhdIxuLZq8E5ncqsQL5Rpn4G5QLT+fiLtdkgd4Qd7ELqgMWvvZ24zsL2
-         pZCeUCPF9iOBoC0jb2XOWzLfDJiZ0H0QyWGnarHA1k626dJX/ilmoST+3j/fi8w3uzWa
-         RF2w==
-X-Forwarded-Encrypted: i=1; AJvYcCVzE90qQcN3ArtG9JfPO88db9+t55JmI0E9tx3zglAyMVC39/1aa0Jhvvv4TbKuVExzn1milbwl03JyhXWR9E0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZtYeoZvU/4mj2/ZRGB28vzotr/qGqJRpynTJ9TSPjkMoNfFFo
-	1iAKYSrmjIf6TtusDtFHo1fj/VFBR5sG09zSUepymbyOxtWkEDU39G/PF5+r2iCs/eWrhkL27DG
-	FPIr7nFuWveQj6rzm5dcmRILFFRYZMZjxU2XoE7lX
-X-Gm-Gg: ASbGncvwP+QWyvCYYivZYN672vPcjfpxHliU3V6xR2vorh0p0itzUcxELSARJZkTSI/
-	Rm2YnZ60RhH7J+wh7e8m6+4OckHdhVk06Q8nYmn8Vi2SkT7vSg3tQv6CMbzkR/6c0tDM+w3jy7T
-	+3k7FglWqp9glozWAw6NXk4+HYnKrNMXzmrFm1kns1PQCNaRoQcxMOZgZyTKQ22hFLbyI/uZjb9
-	zgimA==
-X-Google-Smtp-Source: AGHT+IEsz7cqbW/kEbKXp/wzbnkRSdJg8iPGlbcCDsMA3W/EALhw5TKX2XX+IJPal4VjoqUJ4+13OZd6BTyXLQ5Nvpk=
-X-Received: by 2002:a05:622a:1652:b0:4ab:54d2:3666 with SMTP id
- d75a77b69052e-4af00896fccmr5243681cf.25.1754062415661; Fri, 01 Aug 2025
- 08:33:35 -0700 (PDT)
+	s=arc-20240116; t=1754064974; c=relaxed/simple;
+	bh=/GDEpl+GURi2gAZ/4OZLKfziUx0o790Aio1JqXoFxrI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZDNre8gGozv9aeGO/TneO4B8is1LzoLLqP/NH650+heooCzY6CP4o4uCszEgKPr3Hy+TFIZdH01h2G+HAZ2ClxoU29m2vQk2CTXsvvHkp1dUhcfhgMP9iLHwt1KLiDzrWita/k5nnvUfGk/sqHZpcS1c+D+Bwpyu5d9zrjEQfHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=FrgcFUGb; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=JZ
+	a4skPiXvCUobP8vOxW8boDrK4GqUNk6XWkfc60IGk=; b=FrgcFUGbminkPCG0mS
+	c0MJFr97vSUl3ZcPk9roHXMtCIk5r5GmUdq/LYFjP02uQOBhZIRW1HHx/mj0LzRW
+	CVS+lER9wO0/IeNfyGBydRHUxgz+N07OEWDJwWx1S96pe8k8BQUYkK7ayKEPosel
+	lFXgXqA+UXFoTwtuI2l2Zi/tY=
+Received: from phoenix.. (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wDn7c0j6IxoIAufIw--.10599S2;
+	Sat, 02 Aug 2025 00:15:34 +0800 (CST)
+From: Jiawei Zhao <phoenix500526@163.com>
+To: andrii@kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	yonghong.song@linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 0/1] libbpf: fix USDT SIB argument handling causing unrecognized register error
+Date: Fri,  1 Aug 2025 16:15:29 +0000
+Message-ID: <20250801161531.816845-1-phoenix500526@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250731220024.702621-1-surenb@google.com> <20250731220024.702621-3-surenb@google.com>
- <7821b672-eae7-4730-afe4-b72b80ac6ea2@suse.cz>
-In-Reply-To: <7821b672-eae7-4730-afe4-b72b80ac6ea2@suse.cz>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Fri, 1 Aug 2025 08:33:24 -0700
-X-Gm-Features: Ac12FXwW-ZHVyxPhLTgiyxybxi8oKVAlrLZn75JD6yLNdxGMHYIyQEgr1Szxvd0
-Message-ID: <CAJuCfpEhC77ZD7Zvg+9nqb=DAj2kufnLGpD72gXFbQ5Bbp-ayQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] fs/proc/task_mmu: factor out proc_maps_private fields
- used by PROCMAP_QUERY
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
-	lorenzo.stoakes@oracle.com, david@redhat.com, peterx@redhat.com, 
-	jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, 
-	shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
-	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
-	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
-	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, tjmercier@google.com, 
-	kaleshsingh@google.com, aha310510@gmail.com, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDn7c0j6IxoIAufIw--.10599S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJrWxGr13ZF17Cw1UKr4xXrb_yoW8ZFWUpF
+	WrKwn8KFWkta43GrsxXrsrtrWfWFZ5JF4UGF17Xw1YyF4rGFnrZrWxKay3Jr9xGas3Xay3
+	ZF12yr98G3WrA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnhL8UUUUU=
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBgAmciGiM5e83nQAAsZ
 
-On Fri, Aug 1, 2025 at 3:55=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wro=
-te:
->
-> On 8/1/25 00:00, Suren Baghdasaryan wrote:
-> > Refactor struct proc_maps_private so that the fields used by PROCMAP_QU=
-ERY
-> > ioctl are moved into a separate structure. In the next patch this allow=
-s
-> > ioctl to reuse some of the functions used for reading /proc/pid/maps
-> > without using file->private_data. This prevents concurrent modification
-> > of file->private_data members by ioctl and /proc/pid/maps readers.
-> >
-> > The change is pure code refactoring and has no functional changes.
->
-> I think you'll need to adjust task_nommu.c as well, minimally I see it al=
-so
-> has m_start() acceding priv->mm directly so it won't compile now?
+When using GCC on x86-64 to compile an usdt prog with -O1 or higher
+optimization, the compiler will generate SIB addressing mode for global
+array and PC-relative addressing mode for global variable,
+e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
 
-Ugh, yes, you are right. I'll need to adjust NOMMU code as well. And
-kernel test bot seems to be complaining already :)
+The current USDT implementation in libbpf cannot parse these two formats,
+causing `bpf_program__attach_usdt()` to fail with -ENOENT
+(unrecognized register).
 
->
-> Also not sure about the naming, struct is named "proc_maps_query_data" an=
-d
-> priv field named "query" but the read() implementation uses it too, via
-> priv->query, although it does no PROCMAP_QUERY.
->
-> Seems to me it's actually something like a mm+vma locking context? Which =
-can
-> be either stored in proc_maps_private for read() operations, or local
-> on-stack for ioctl().
+This patch series adds support for SIB addressing mode in USDT probes.
+The main changes include:
+- add correct handling logic for SIB-addressed arguments in
+  `parse_usdt_arg`.
+- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
+  argument spec.
+- change the global variable t1 to a local variable, to avoid compiler
+  generating PC-relative addressing mode for it.
 
-Yes, I struggled with the naming of this structure. Any help with this
-is highly appreciated.
+
+Testing shows that the SIB probe correctly generates 8@(%rcx,%rax,8) 
+argument spec and passes all validation checks.
+
+The modification history of this patch series:
+Change since v1:
+- refactor the code to make it more readable
+- modify the commit message to explain why and how
+
+Change since v2:
+- fix the `scale` uninitialized error
+
+Change since v3:
+- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
+  and pass all test cases.
+
+
+Do we need to add support for PC-relative USDT argument spec handling in libbpf?
+I have some interest in this question, but currently have no ideas. Getting offsets
+based on symbols requires dependency on the symbol table. However, once the binary
+file is stripped, the symtab will also be removed, which will cause this approach
+to fail. Does anyone have any thoughts on this?
+
+Jiawei Zhao (1):
+  libbpf: fix USDT SIB argument handling causing unrecognized register
+    error
+
+ tools/lib/bpf/usdt.bpf.h                      | 33 +++++++++++++-
+ tools/lib/bpf/usdt.c                          | 43 ++++++++++++++++---
+ tools/testing/selftests/bpf/Makefile          |  5 +++
+ tools/testing/selftests/bpf/prog_tests/usdt.c | 18 +++++---
+ 4 files changed, 86 insertions(+), 13 deletions(-)
+
+-- 
+2.43.0
+
 
