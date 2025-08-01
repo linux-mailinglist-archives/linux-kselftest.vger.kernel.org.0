@@ -1,184 +1,457 @@
-Return-Path: <linux-kselftest+bounces-38179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9C0DB18206
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 14:56:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5625B18372
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 16:13:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C71B7542D85
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 12:56:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 446551899E83
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 14:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93C172472A5;
-	Fri,  1 Aug 2025 12:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497AB26A1D9;
+	Fri,  1 Aug 2025 14:13:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SHE97O80"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cIPDeZgw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C434524467B;
-	Fri,  1 Aug 2025 12:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23AB126A095;
+	Fri,  1 Aug 2025 14:13:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754052975; cv=none; b=i7i70QyxrkrAGJDgAo81iZJGcCZiOxolpM2dgLHzVQX50TuuBjrKN8FXQJbNF7UJRrpLqStnEagehUPVwgFhznXl2J+XjXlsAJIBrgzrcFaGrA+KOWg4HIoHyKrgAImiNhgltC6DDV2s7W+tL0mmft4xxC3rjpUD4l/w0OMCky8=
+	t=1754057619; cv=none; b=aRxTXhK9/LC6Xta+lljd6VOkgDZZBiUBi1UBEejaX6cnh1XGFNISH2dKrCoHasLoQbsIwMT8MSbm1z+th9RPwja/iE7FhQ103gtxkwQNb+3bvHuobBA4MjnmrS2yF3FAOht0IXyfd4eKD1Eh8U+tW368HifmJi7adaJfQ3uLMKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754052975; c=relaxed/simple;
-	bh=Rtzfcvwkul30C1tQ3bVX6Wtto5iApIgC11igXrCtIyY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bJss9XlcmxfR5djrsPKxLNYqtVNObuyypHDV72uhty8liRHY3tKuk3rQM6s2TtUs9xpHcOUgbK3Nf4JPwAkj8NDXExFdoz4EPHnequCSCqi4Q8LS0/FtF2l7ng+DK5EEx/KLwXJEWT1j0x3J7wV82G/WAQD6lC0ghpAWri5AquU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SHE97O80; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754052974; x=1785588974;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Rtzfcvwkul30C1tQ3bVX6Wtto5iApIgC11igXrCtIyY=;
-  b=SHE97O80f0KOsTklh14ECZD0S8NxW2WzWVhnPfMfX6bmBSvnehURjw+D
-   GcghGjdNOgUNeqpMz05L6X7S5EBdz7PaMKjFiX0b+6EgnmcBBOXdeYQHM
-   aoO4//iI6fIV0xQNIKsMrXlc2YIAKY52WLqd6dyLCscVsAmc65fqcec1C
-   Vtp9oAKp0Ip1V7byepRbOPvr/TKDuRCmWYc/QGr1+NhhFaJHn56HYIaas
-   NLjj/a30lUfMBWZ4K2IDFb3eldUIhZbD+ptUhdMsgEveToQbjNcYbnzaj
-   kAUvmPmCVi7vsjubAyp3Wem/G94oSE7jo1BZb9Z2105CuVivVz4kCyPnB
-   w==;
-X-CSE-ConnectionGUID: S7p8VNFlS5egxdNpzp+yBQ==
-X-CSE-MsgGUID: x1YMLABIRQ6i8GDYQzkFug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="56478317"
-X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
-   d="scan'208";a="56478317"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 05:56:13 -0700
-X-CSE-ConnectionGUID: BGb912eYQgiEW6HwicwKVQ==
-X-CSE-MsgGUID: WW8OaP5zRP2oOXCNEXCcJw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
-   d="scan'208";a="167820732"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 01 Aug 2025 05:56:06 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uhpIq-0004dA-0y;
-	Fri, 01 Aug 2025 12:56:04 +0000
-Date: Fri, 1 Aug 2025 20:56:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com,
-	david@redhat.com, vbabka@suse.cz, peterx@redhat.com,
-	jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org,
-	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com,
-	brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com,
-	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de,
-	andrii@kernel.org, ryan.roberts@arm.com,
-	christophe.leroy@csgroup.eu, tjmercier@google.com,
-	kaleshsingh@google.com, aha310510@gmail.com,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	surenb@google.com
-Subject: Re: [PATCH 2/3] fs/proc/task_mmu: factor out proc_maps_private
- fields used by PROCMAP_QUERY
-Message-ID: <202508012010.9IA7JflG-lkp@intel.com>
-References: <20250731220024.702621-3-surenb@google.com>
+	s=arc-20240116; t=1754057619; c=relaxed/simple;
+	bh=gsmM1hlpa9ZTykeARSywzNo3kKIbp5DEz7gzKeF6uak=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=as41lig7K2S39ODuyU0GRQdP+ZvDCq92/d/x02J5p7LrHUC0eUCVdf+dab/eSTyenuzjN/LBeMfbrXPGuD0f1/9xrbNNHoWONeG6YVbHI2irKS7GaGd7v88hWRkCeRb/BViRUi2CN4MLX9QqdRvgO6uqcEQS+KaaPSaCjiLpsMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cIPDeZgw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE5DC4CEF6;
+	Fri,  1 Aug 2025 14:13:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754057615;
+	bh=gsmM1hlpa9ZTykeARSywzNo3kKIbp5DEz7gzKeF6uak=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=cIPDeZgwK4SYF7yWAXbPhD60yge2cS6B7a0EUK3SX5psD+jOSs90ScbGS1VumwZC4
+	 nNYptv+zIczG3GNxk20cRU3usdeDj6nvIYJc5sUjYBSLhzFZUaqwFpcwTG13qAAZAd
+	 trJ3MwiCd4mL26DkN94j29fayTTA+XVJb4S+X1YH2IVsVp2+4cpD0D+2cJ8s86RRdi
+	 5IDlP4iIssX1+7XLB/ngKt8VcYNkr8WcwhBj9fn6OTkFcS0e3sbXV8kJyECiD8M0Lm
+	 4B2BpID1xq2EFEXIXRJ3OnzoTh6Rq9arI09MdbU+vKZISWOwGYs7SYiYh6GEicY1YR
+	 ZVxRNojV3VJBA==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,  Alexander Graf
+ <graf@amazon.com>,  Changyuan Lyu <changyuanl@google.com>,  Pasha Tatashin
+ <pasha.tatashin@soleen.com>,  Pratyush Yadav <pratyush@kernel.org>,  Shuah
+ Khan <shuah@kernel.org>,  Thomas Weischuh <linux@weissschuh.net>,
+  kexec@lists.infradead.org,  linux-kernel@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org
+Subject: Re: [PATCH v2] kho: add test for kexec handover
+In-Reply-To: <20250801100630.3473918-1-rppt@kernel.org>
+References: <20250801100630.3473918-1-rppt@kernel.org>
+Date: Fri, 01 Aug 2025 16:13:32 +0200
+Message-ID: <mafs0zfcjcepf.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250731220024.702621-3-surenb@google.com>
+Content-Type: text/plain
 
-Hi Suren,
+Hi Mike,
 
-kernel test robot noticed the following build errors:
+On Fri, Aug 01 2025, Mike Rapoport wrote:
 
-[auto build test ERROR on 01da54f10fddf3b01c5a3b80f6b16bbad390c302]
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+>
+> Testing kexec handover requires a kernel driver that will generate some
+> data and preserve it with KHO on the first boot and then restore that
+> data and verify it was preserved properly after kexec.
+>
+> To facilitate such test, along with the kernel driver responsible for
+> data generation, preservation and restoration add a script that runs a
+> kernel in a VM with a minimal /init. The /init enables KHO, loads a
+> kernel image for kexec and runs kexec reboot. After the boot of the
+> kexeced kernel, the driver verifies that the data was properly
+> preserved.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/selftests-proc-test-PROCMAP_QUERY-ioctl-while-vma-is-concurrently-modified/20250801-060200
-base:   01da54f10fddf3b01c5a3b80f6b16bbad390c302
-patch link:    https://lore.kernel.org/r/20250731220024.702621-3-surenb%40google.com
-patch subject: [PATCH 2/3] fs/proc/task_mmu: factor out proc_maps_private fields used by PROCMAP_QUERY
-config: riscv-randconfig-002-20250801 (https://download.01.org/0day-ci/archive/20250801/202508012010.9IA7JflG-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250801/202508012010.9IA7JflG-lkp@intel.com/reproduce)
+Nice! Thanks for working on this.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508012010.9IA7JflG-lkp@intel.com/
+I see that a lot of the driver assumes KHO cleans everything up on free.
+That stops being true with Pasha' proposed LUO patches. The series also
+gets rid of the notifier chain. So this test would need a bit of a
+refactor once those patches land.
 
-All errors (new ones prefixed by >>):
+Other than this, I only have some minor comments below.
 
->> fs/proc/task_nommu.c:207:13: error: no member named 'mm' in 'struct proc_maps_private'
-     207 |         mm = priv->mm;
-         |              ~~~~  ^
-   fs/proc/task_nommu.c:229:31: error: no member named 'mm' in 'struct proc_maps_private'
-     229 |         struct mm_struct *mm = priv->mm;
-         |                                ~~~~  ^
-   fs/proc/task_nommu.c:262:8: error: no member named 'mm' in 'struct proc_maps_private'
-     262 |         priv->mm = proc_mem_open(inode, PTRACE_MODE_READ);
-         |         ~~~~  ^
-   fs/proc/task_nommu.c:263:27: error: no member named 'mm' in 'struct proc_maps_private'
-     263 |         if (IS_ERR_OR_NULL(priv->mm)) {
-         |                            ~~~~  ^
-   fs/proc/task_nommu.c:264:19: error: no member named 'mm' in 'struct proc_maps_private'
-     264 |                 int err = priv->mm ? PTR_ERR(priv->mm) : -ESRCH;
-         |                           ~~~~  ^
-   fs/proc/task_nommu.c:264:38: error: no member named 'mm' in 'struct proc_maps_private'
-     264 |                 int err = priv->mm ? PTR_ERR(priv->mm) : -ESRCH;
-         |                                              ~~~~  ^
-   fs/proc/task_nommu.c:279:12: error: no member named 'mm' in 'struct proc_maps_private'
-     279 |         if (priv->mm)
-         |             ~~~~  ^
-   fs/proc/task_nommu.c:280:16: error: no member named 'mm' in 'struct proc_maps_private'
-     280 |                 mmdrop(priv->mm);
-         |                        ~~~~  ^
-   8 errors generated.
+>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+> v2 changes:
+> * fix section mismatch warning in lib/test_kho.c
+> * address Thomas' comments about nolibc and initrd generation
+>
+> v1: https://lore.kernel.org/all/20250727083733.2590139-1-rppt@kernel.org
+>
+[...
+> diff --git a/lib/test_kho.c b/lib/test_kho.c
+> new file mode 100644
+> index 000000000000..c2eb899c3b45
+> --- /dev/null
+> +++ b/lib/test_kho.c
+> @@ -0,0 +1,305 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Test module for KHO
+> + * Copyright (c) 2025 Microsoft Corporation.
+> + *
+> + * Authors:
+> + *   Saurabh Sengar <ssengar@microsoft.com>
+> + *   Mike Rapoport <rppt@kernel.org>
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/mm.h>
+> +#include <linux/gfp.h>
+> +#include <linux/slab.h>
+> +#include <linux/kexec.h>
+> +#include <linux/libfdt.h>
+> +#include <linux/module.h>
+> +#include <linux/printk.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/kexec_handover.h>
+> +
+> +#include <net/checksum.h>
+> +
+> +#define KHO_TEST_MAGIC	0x4b484f21	/* KHO! */
+> +#define KHO_TEST_FDT	"kho_test"
+> +#define KHO_TEST_COMPAT "kho-test-v1"
+> +
+> +static long max_mem = (PAGE_SIZE << MAX_PAGE_ORDER) * 2;
+> +module_param(max_mem, long, 0644);
+> +
+> +struct kho_test_state {
+> +	unsigned int nr_folios;
+> +	struct folio **folios;
+> +	struct folio *fdt;
+> +	__wsum csum;
+> +};
+> +
+> +static struct kho_test_state kho_test_state;
+> +
+> +static int kho_test_notifier(struct notifier_block *self, unsigned long cmd,
+> +			     void *v)
+> +{
+> +	struct kho_test_state *state = &kho_test_state;
+> +	struct kho_serialization *ser = v;
+> +	int err = 0;
+> +
+> +	switch (cmd) {
+> +	case KEXEC_KHO_ABORT:
+> +		return NOTIFY_DONE;
+> +	case KEXEC_KHO_FINALIZE:
+> +		/* Handled below */
+> +		break;
+> +	default:
+> +		return NOTIFY_BAD;
+> +	}
+> +
+> +	err |= kho_preserve_folio(state->fdt);
+> +	err |= kho_add_subtree(ser, KHO_TEST_FDT, folio_address(state->fdt));
+> +
+> +	return err ? NOTIFY_BAD : NOTIFY_DONE;
+> +}
+> +
+> +static struct notifier_block kho_test_nb = {
+> +	.notifier_call = kho_test_notifier,
+> +};
+> +
+> +static int kho_test_save_data(struct kho_test_state *state, void *fdt)
+> +{
+> +	phys_addr_t *folios_info __free(kvfree) = NULL;
+> +	int err = 0;
+> +
+> +	folios_info = kvmalloc_array(state->nr_folios, sizeof(*folios_info),
+> +				     GFP_KERNEL);
 
+Since you copy this data into the FDT anyway, why not use
+fdt_property_placeholder() instead? You can just build the list directly
+in the FDT then and avoid the memcpy().
 
-vim +207 fs/proc/task_nommu.c
+> +	if (!folios_info)
+> +		return -ENOMEM;
+> +
+> +	for (int i = 0; i < state->nr_folios; i++) {
+> +		struct folio *folio = state->folios[i];
+> +		unsigned int order = folio_order(folio);
+> +
+> +		folios_info[i] = virt_to_phys(folio_address(folio)) | order;
 
-fe441980161751 Ben Wolsieffer          2023-09-15  191  
-fe441980161751 Ben Wolsieffer          2023-09-15  192  static void *m_start(struct seq_file *m, loff_t *ppos)
-^1da177e4c3f41 Linus Torvalds          2005-04-16  193  {
-dbf8685c8e2140 David Howells           2006-09-27  194  	struct proc_maps_private *priv = m->private;
-fe441980161751 Ben Wolsieffer          2023-09-15  195  	unsigned long last_addr = *ppos;
-dbf8685c8e2140 David Howells           2006-09-27  196  	struct mm_struct *mm;
-0c563f14804356 Matthew Wilcox (Oracle  2022-09-06  197) 
-fe441980161751 Ben Wolsieffer          2023-09-15  198  	/* See proc_get_vma(). Zero at the start or after lseek. */
-fe441980161751 Ben Wolsieffer          2023-09-15  199  	if (last_addr == -1UL)
-0c563f14804356 Matthew Wilcox (Oracle  2022-09-06  200) 		return NULL;
-dbf8685c8e2140 David Howells           2006-09-27  201  
-dbf8685c8e2140 David Howells           2006-09-27  202  	/* pin the task and mm whilst we play with them */
-2c03376d2db005 Oleg Nesterov           2014-10-09  203  	priv->task = get_proc_task(priv->inode);
-dbf8685c8e2140 David Howells           2006-09-27  204  	if (!priv->task)
-ec6fd8a4355cda Al Viro                 2011-02-15  205  		return ERR_PTR(-ESRCH);
-dbf8685c8e2140 David Howells           2006-09-27  206  
-27692cd56e2aa6 Oleg Nesterov           2014-10-09 @207  	mm = priv->mm;
-578d7699e5c2ad Ben Wolsieffer          2023-09-14  208  	if (!mm || !mmget_not_zero(mm)) {
-578d7699e5c2ad Ben Wolsieffer          2023-09-14  209  		put_task_struct(priv->task);
-578d7699e5c2ad Ben Wolsieffer          2023-09-14  210  		priv->task = NULL;
-27692cd56e2aa6 Oleg Nesterov           2014-10-09  211  		return NULL;
-578d7699e5c2ad Ben Wolsieffer          2023-09-14  212  	}
-dbf8685c8e2140 David Howells           2006-09-27  213  
-d8ed45c5dcd455 Michel Lespinasse       2020-06-08  214  	if (mmap_read_lock_killable(mm)) {
-8a713e7df3352b Konstantin Khlebnikov   2019-07-11  215  		mmput(mm);
-578d7699e5c2ad Ben Wolsieffer          2023-09-14  216  		put_task_struct(priv->task);
-578d7699e5c2ad Ben Wolsieffer          2023-09-14  217  		priv->task = NULL;
-8a713e7df3352b Konstantin Khlebnikov   2019-07-11  218  		return ERR_PTR(-EINTR);
-8a713e7df3352b Konstantin Khlebnikov   2019-07-11  219  	}
-8a713e7df3352b Konstantin Khlebnikov   2019-07-11  220  
-fe441980161751 Ben Wolsieffer          2023-09-15  221  	vma_iter_init(&priv->iter, mm, last_addr);
-47fecca15c0944 Oleg Nesterov           2014-10-09  222  
-fe441980161751 Ben Wolsieffer          2023-09-15  223  	return proc_get_vma(priv, ppos);
-dbf8685c8e2140 David Howells           2006-09-27  224  }
-dbf8685c8e2140 David Howells           2006-09-27  225  
+I did something similar for memfd preservation -- stashed some extra
+data into the unused bits in the physical address. Perhaps we should
+come up with a neat abstraction to do it more cleanly?
+
+Not needed for this patch, just thinking out loud.
+
+> +
+> +		err = kho_preserve_folio(folio);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	err |= fdt_begin_node(fdt, "data");
+> +	err |= fdt_property(fdt, "nr_folios", &state->nr_folios,
+> +			    sizeof(state->nr_folios));
+> +	err |= fdt_property(fdt, "folios_info", folios_info,
+> +			    state->nr_folios * sizeof(*folios_info));
+> +	err |= fdt_property(fdt, "csum", &state->csum, sizeof(state->csum));
+> +	err |= fdt_end_node(fdt);
+> +
+> +	return err;
+> +}
+> +
+> +static int kho_test_prepare_fdt(struct kho_test_state *state)
+> +{
+> +	const char compatible[] = KHO_TEST_COMPAT;
+> +	unsigned int magic = KHO_TEST_MAGIC;
+> +	ssize_t fdt_size;
+> +	int err = 0;
+> +	void *fdt;
+> +
+> +	fdt_size = state->nr_folios * sizeof(phys_addr_t) + PAGE_SIZE;
+> +	state->fdt = folio_alloc(GFP_KERNEL, get_order(fdt_size));
+> +	if (!state->fdt)
+> +		return -ENOMEM;
+> +
+> +	fdt = folio_address(state->fdt);
+> +
+> +	err |= fdt_create(fdt, fdt_size);
+> +	err |= fdt_finish_reservemap(fdt);
+> +
+> +	err |= fdt_begin_node(fdt, "");
+> +	err |= fdt_property(fdt, "compatible", compatible, sizeof(compatible));
+> +	err |= fdt_property(fdt, "magic", &magic, sizeof(magic));
+
+Doesn't the compatible pretty much do what magic does? Instead of a
+magic number, it is a "magic" string, no?
+
+> +	err |= kho_test_save_data(state, fdt);
+> +	err |= fdt_end_node(fdt);
+> +
+> +	err |= fdt_finish(fdt);
+> +
+> +	if (err)
+> +		folio_put(state->fdt);
+> +
+> +	return err;
+> +}
+> +
+> +static int kho_test_generate_data(struct kho_test_state *state)
+> +{
+> +	size_t alloc_size = 0;
+> +	__wsum csum = 0;
+> +
+> +	while (alloc_size < max_mem) {
+> +		int order = get_random_u32() % NR_PAGE_ORDERS;
+> +		struct folio *folio;
+> +		unsigned int size;
+> +		void *addr;
+> +
+> +		/* cap allocation so that we won't exceed max_mem */
+> +		if (alloc_size + (PAGE_SIZE << order) > max_mem) {
+> +			order = get_order(max_mem - alloc_size);
+> +			if (order)
+> +				order--;
+
+I'm guessing this is because get_order() rounds up, so you want to make
+sure you don't exceed max_mem due to the rounding up. If so, a comment
+would be nice here.
+
+> +		}
+> +		size = PAGE_SIZE << order;
+> +
+> +		folio = folio_alloc(GFP_KERNEL | __GFP_NORETRY, order);
+> +		if (!folio)
+> +			goto err_free_folios;
+> +
+> +		state->folios[state->nr_folios++] = folio;
+> +		addr = folio_address(folio);
+> +		get_random_bytes(addr, size);
+> +		csum = csum_partial(addr, size, csum);
+> +		alloc_size += size;
+> +	}
+> +
+> +	state->csum = csum;
+> +	return 0;
+> +
+> +err_free_folios:
+> +	for (int i = 0; i < state->nr_folios; i++)
+> +		folio_put(state->folios[i]);
+
+Reset state->nr_folios as well? kho_test_cleanup() reads it.
+
+> +	return -ENOMEM;
+> +}
+> +
+> +static int kho_test_save(void)
+> +{
+> +	struct kho_test_state *state = &kho_test_state;
+> +	struct folio **folios __free(kvfree) = NULL;
+
+The __free causes a use-after-free and double-free in
+kho_test_cleanup().
+
+> +	unsigned long max_nr;
+> +	int err;
+> +
+> +	max_mem = PAGE_ALIGN(max_mem);
+> +	max_nr = max_mem >> PAGE_SHIFT;
+> +
+> +	folios = kvmalloc_array(max_nr, sizeof(*state->folios), GFP_KERNEL);
+> +	if (!folios)
+> +		return -ENOMEM;
+> +	state->folios = folios;
+> +
+> +	err = kho_test_generate_data(state);
+> +	if (err)
+> +		return err;
+> +
+> +	err = kho_test_prepare_fdt(state);
+> +	if (err)
+> +		return err;
+> +
+> +	return register_kho_notifier(&kho_test_nb);
+> +}
+> +
+> +static int kho_test_restore_data(const void *fdt, int node)
+> +{
+> +	const unsigned int *nr_folios;
+> +	const phys_addr_t *folios_info;
+> +	const __wsum *old_csum;
+> +	__wsum csum = 0;
+> +	int len;
+> +
+> +	node = fdt_path_offset(fdt, "/data");
+> +
+> +	nr_folios = fdt_getprop(fdt, node, "nr_folios", &len);
+> +	if (!nr_folios || len != sizeof(*nr_folios))
+
+Thinking out loud, this kind of pattern is repeated throughout the memfd
+preservation code, and likely will be used by other users of KHO as
+well. I suppose something like the proposed KSTATE mechanism would let
+us abstract these away. Something for later down the line...
+
+> +		return -EINVAL;
+> +
+> +	old_csum = fdt_getprop(fdt, node, "csum", &len);
+> +	if (!old_csum || len != sizeof(*old_csum))
+> +		return -EINVAL;
+> +
+> +	folios_info = fdt_getprop(fdt, node, "folios_info", &len);
+> +	if (!folios_info || len != sizeof(*folios_info) * *nr_folios)
+> +		return -EINVAL;
+> +
+> +	for (int i = 0; i < *nr_folios; i++) {
+> +		unsigned int order = folios_info[i] & ~PAGE_MASK;
+> +		phys_addr_t phys = folios_info[i] & PAGE_MASK;
+> +		unsigned int size = PAGE_SIZE << order;
+> +		struct folio *folio;
+> +
+> +		folio = kho_restore_folio(phys);
+> +		if (!folio)
+> +			break;
+> +
+> +		if (folio_order(folio) != order)
+
+Restore and put the rest of the folios as well so they aren't leaked?
+
+> +			break;
+> +
+> +		csum = csum_partial(folio_address(folio), size, csum);
+> +		folio_put(folio);
+> +	}
+> +
+> +	if (csum != *old_csum)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int kho_test_restore(phys_addr_t fdt_phys)
+> +{
+> +	void *fdt = phys_to_virt(fdt_phys);
+> +	const unsigned int *magic;
+> +	int node, len, err;
+> +
+> +	node = fdt_path_offset(fdt, "/");
+> +	if (node < 0)
+> +		return -EINVAL;
+> +
+> +	if (fdt_node_check_compatible(fdt, node, KHO_TEST_COMPAT))
+> +		return -EINVAL;
+> +
+> +	magic = fdt_getprop(fdt, node, "magic", &len);
+> +	if (!magic || len != sizeof(*magic))
+> +		return -EINVAL;
+> +
+> +	if (*magic != KHO_TEST_MAGIC)
+> +		return -EINVAL;
+> +
+> +	err = kho_test_restore_data(fdt, node);
+> +	if (err)
+> +		return err;
+> +
+> +	pr_info("KHO restore succeeded\n");
+> +	return 0;
+> +}
+> +
+> +static int __init kho_test_init(void)
+> +{
+> +	phys_addr_t fdt_phys;
+> +	int err;
+> +
+> +	err = kho_retrieve_subtree(KHO_TEST_FDT, &fdt_phys);
+> +	if (!err)
+> +		return kho_test_restore(fdt_phys);
+> +
+> +	if (err != -ENOENT) {
+> +		pr_warn("failed to retrieve %s FDT: %d\n", KHO_TEST_FDT, err);
+> +		return err;
+> +	}
+> +
+> +	return kho_test_save();
+> +}
+> +module_init(kho_test_init);
+> +
+> +static void kho_test_cleanup(void)
+> +{
+> +	for (int i = 0; i < kho_test_state.nr_folios; i++)
+> +		folio_put(kho_test_state.folios[i]);
+> +
+> +	kvfree(kho_test_state.folios);
+
+Free state->fdt as well?
+
+> +}
+> +
+> +static void __exit kho_test_exit(void)
+> +{
+> +	unregister_kho_notifier(&kho_test_nb);
+> +	kho_test_cleanup();
+> +}
+> +module_exit(kho_test_exit);
+> +
+> +MODULE_AUTHOR("Mike Rapoport <rppt@kernel.org>");
+> +MODULE_DESCRIPTION("KHO test module");
+[...]
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Pratyush Yadav
 
