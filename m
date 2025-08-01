@@ -1,137 +1,127 @@
-Return-Path: <linux-kselftest+bounces-38171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C58AB17EA0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 10:55:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BB8CB17EBE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 11:02:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9723B5801CF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 08:55:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A28BE3B87DC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Aug 2025 09:02:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA802213E9F;
-	Fri,  1 Aug 2025 08:54:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B95213E90;
+	Fri,  1 Aug 2025 09:02:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ym77SURc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YvdfuEoR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BC521421D
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Aug 2025 08:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1168918C02E;
+	Fri,  1 Aug 2025 09:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754038498; cv=none; b=f9g9yEd3Qt68+fV5swLuWB1B0IoMoQJIikR0tuMCMckgExYji0oha6dWJweSi/EK2r8UbefTgtLVc4gReLDRlzoPxO5oa2ubLzRUz93cDdbM7F+GYAKAPzo9PocpO76B6G6L0kta0tTYmjSJbeuYeeQUkuzwAbWRAqeDm8UwOd4=
+	t=1754038924; cv=none; b=BvIjAhQXaRuJTatsCXer3PaPbakfxKHYKrVpTrQrwZzSHylnvBwMS2bkqYWTHn6ZfE/DtX8JOM6eu2wDO4MkZ9uJ2nAxhSwBM64hRXqP5Yoy4f40V1GTXMYo45oVEF9Cyxht75lx/YeTIwlzErTB3FdyqLLpDRBpHbvA45zmFPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754038498; c=relaxed/simple;
-	bh=lfL2grWKViqTBwcoomF5oXgApZotCUrPhoRP/HyAKjU=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=P60qEwi/v4wC7/xVOCoWkimegzqBRU87OxMWS72ke+VMyL8GvHu6969KIcmETE9NO/YTUa/sjN9WDCg/axb78QWJ1BrvrjApx/m30aHcUZSCo1c1h9jR/OyaZu+jT5vmEtJtKcMCrD0INF342uqkH0IuAfw6zgW6YDCvbM1rmqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ym77SURc; arc=none smtp.client-ip=209.85.218.42
+	s=arc-20240116; t=1754038924; c=relaxed/simple;
+	bh=LQAn9Z74ApWpKknEzR5YdobzGb9ilQ/9BWm/QkLbzYI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h9VxyrnHD8pJch1OMaU2J2iCxzUxhXWGdAqDDsZB9OHD/wmwt/S8NoS7ET+eWT7YqCyzqdduI0IZA9TCK2Rlrx0DTJXOOstwxs1fh5akVh2s30qMf2q6gNMqkrIidf3cWJJ6ISTwmmAwuNipwHMI+92C8p/4iDeoTqhA3LJGxAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YvdfuEoR; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ae361e8ec32so341800466b.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Aug 2025 01:54:56 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-240763b322fso13722325ad.0;
+        Fri, 01 Aug 2025 02:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754038495; x=1754643295; darn=vger.kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y3AB98eeKucxvuyx0BTmR/h9RGShiBxVhNzuqMeHWSo=;
-        b=Ym77SURcPu+8VRMWVj0D1cbAxQ3H89hAXHX9L2sV2gD6gDMstTtp+MKpWpMTUdJmtg
-         6Ng0rW0vZTIztzCavm4Du2cF8mMRR2AVSh7DDU7tnznpMt4in+z/Jcbc9VJa7N5KzXMd
-         Vlo8J2KFOatP+gpv/26SGxk98h7J7C286zFVaCQZZ7kbT9u0ON6/JeO/EUwWQitZ/RER
-         e6GEyzKljMmB9Sb1t3paGPuyVN4b1S+qwoWjrJhu3XFwZ9XPNKkPySB+E2233ffFKXrH
-         9xSEebE2BvIaV/+wAQsVrT8T4Rp9+3XGq+4BJKof45/0JcASst52WBBZ2mVuFhfZrCk9
-         4z/g==
+        d=gmail.com; s=20230601; t=1754038922; x=1754643722; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WNVpnicvngUWIcQSeSIW5UVxijfvMDVXuIS6fIxxIrQ=;
+        b=YvdfuEoRk0rRwVd9iVbxWzBJg71ozVQwCwN02h18PnUAfWPmNyAH8nNDUpM2to9Xot
+         gCJSFffLQ8uKqDkqyCuUfWFo4eWncgBuBQHrWCsz1Zw5PYKWm4bd/pRzJSqS9ZtsQDGa
+         rGYCPZRAHy+1RCylwp6nagbhDab6KwLKyyeVp4UlrdwUzdvqWHmfQv/kLFNZt6Wq9YmH
+         wCyWwSK/V92TJxJeHMpQmyWP7+//mwWuRswNDM+zYRkoalSNPbvLq7pkXMmOBEyfQD9v
+         OjEOZ9cTHLEHM4qFCsnW1mhMp+VG1qnxzRPbs4DVY0qmPmWcJw5Blgn3Up+MryrBrT3R
+         bAGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754038495; x=1754643295;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y3AB98eeKucxvuyx0BTmR/h9RGShiBxVhNzuqMeHWSo=;
-        b=ou68BsQeWdg3YObMtEWD0dv20oleBhtm/fWkrh4ji3Y1NISM4YB8HEKOX0ay6jaBhy
-         6CJHzQDqIMeiqbXz8nuuyeoZiAxdPHAdEVOWXdI8KrX4vkCGy+xZ0SRD5AydYHY9+ZLQ
-         yvhLrYUf8ugj97OL1Y9CDhRIjEwPSNup+IYsRIDaD1cv6yS4cWOlxFZe+v4pvx/qDrAD
-         C6LJwoRQXqxWz4gffN7TWr4LscVzsYKCJT+U0dZZyCjqHH/ZsNy7VIN9lfsRDsv2OCEd
-         c2UDMmMhKbjKwMM0jIrhDA4Zlqx5TWgF/wjSJoOj1ApO7RoXP2yZpwAPmQ8yU9E6aU1N
-         r3Iw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8k7iar+AWhl9vOc1CXP26q8CeMKctvOF2ydSy76hxU7Tc3v39FV+14URlqew0ceqrFiOHk5JIUMi2OCDZF8o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytuL9Oz59WqHXQsKnHmxh1JgCboUzp4KqFyRw0XY/RqgEh136S
-	XhZ/LJIcVaOOdG/Pufv/ymWiM74O2doDvnU3gLqhJHD+/iVmYCZY4oKQ
-X-Gm-Gg: ASbGnct2JDB6Vwmmmw35/mRY3OL6xQqBBBDSUAUUW8X5dJ7ton8DgAQq/Tv7eVVm9vj
-	KxqP6lss5ZnhtdNIqr3746hLG4Stg+Af0UnOZzi9aXUIhEHLfZQ90APnTC9sonOApPgivXFR15x
-	SQWsIoMLGi3YY2SrGi8qY+X1F9cb0fra+onvhuyAAQKEPxrawF7sUlaWR9FCqCCa2K/ct69fQzo
-	w3Zr+cG0aEu2g1zWUA3Ri5QXJi1MUZb8x9bO1fubpBAcgNeg45JIS0isFqBWrATI51TYOwSK1iE
-	j2g4z9MezTr5Nb06EILSElFwuesJ/taJ/wHLy+SqXa7e35QRVtbqSykebOr4M+PW+i3p2kxkdOR
-	os95jLhRWitRULU6pYYEaZg==
-X-Google-Smtp-Source: AGHT+IE11O24u0tms2LfFyxN8pzbR53soXNrbtbLeno8ALixj998fuXTqYMIWsbeqsHnubUB+/vITw==
-X-Received: by 2002:a17:907:3ea0:b0:ae0:b3cd:b7f8 with SMTP id a640c23a62f3a-af8fda3d2dbmr1218378666b.40.1754038494834;
-        Fri, 01 Aug 2025 01:54:54 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0a1bf9sm255151466b.31.2025.08.01.01.54.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 01 Aug 2025 01:54:54 -0700 (PDT)
-From: Wei Yang <richard.weiyang@gmail.com>
-To: akpm@linux-foundation.org,
-	david@redhat.com,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Ryan Roberts <ryan.roberts@arm.com>
-Subject: [PATCH] selftests/mm: link with thp_settings when necessary
-Date: Fri,  1 Aug 2025 08:54:44 +0000
-Message-Id: <20250801085444.27182-1-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        d=1e100.net; s=20230601; t=1754038922; x=1754643722;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WNVpnicvngUWIcQSeSIW5UVxijfvMDVXuIS6fIxxIrQ=;
+        b=dR5XsFhtHWVK5PWj3BNjEqsepsjTs8hX0zZBzNx93vlsyWFs2zItDYHKh+YMCoY5pZ
+         /W35uV/RdqZg/EarNuSz28fQPcsiOdIRWuE22VMgkQ66SjgIeETcWkwduxstoyWCMyNB
+         UVU0F8W1zN09kn8MhcDnDFcxSKiIQeP1Ueu7gSk/2wJDePGQxzO3lxNtsxa7l1ELovja
+         vWXNpF7Ovv41nB8XKnaqxz2YdpwGvNPtVzyolqwjF0MnlROg99Z7xNwe/Hd3UnYr1wcb
+         p+inXxFu+EeZkpaKppZWGoqaRF6Kip3YzPoyPqPHyAKOJXX+R4MHKyo+LRd/4L1gOyVL
+         w7jQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU0/GjDXB6iAOTr27Clxuai36UURmV9K94rY+8pLauQSBoZZUSlVj8ftMmHhaM8oisQsP7WO7l/Ru+YUbtp@vger.kernel.org, AJvYcCW97/0a0cyezgkxc8KQZHrHZNdq6Kje+CxEDWlyeSRjyBezC8cMPVWWlNYZPUhUoIsZ7sZm5Mwqmfk=@vger.kernel.org, AJvYcCWG/WzwrQ6kRRdb1GLtX/v0eGSprYTjJuEb80T80H65ib7r+BhXX/UfTUEQQtD26xWxA7O879AKSFLXd2proaa8@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzIM/G4ZewE4FP38HRlzxSWbAKO6DK6RfaUSmbMV/v8ciH6mZi
+	2VPkUdg562h5DExHYftDOAz/c1rWxCc/2dK0T1ZSrtojQm/grWhZg03Y
+X-Gm-Gg: ASbGncu485R8IybyuSMGCLBVCU5w0pVGNeI97+52YVF37o9vPYvhULoxnO+VsCA1XwR
+	I/TlAbuLE/0TxYaKvDloT+Fj84mi9vFnL65fxHC/rnVlXvFmXhTGy4n8T35tpUMRDK7BLOafpk8
+	l9BuFqQNAYXLjfJMh8/tQGZgAo3k/N1AwfX0SJdEPFg8T2oDON3P1hhO4laQxyGbRoxIqV1E+VL
+	JdbbbmYHkzw7UxRJR8EeyxFB1uq1HDyePEmiQZFlGVfCfU5hjDenR4ueUN2bBO4d1KsU45btBPQ
+	scE3GyvdbE2fvmV5QmbDKSbXpzJmqYssHwpVn0F/6CptBzl12QX9zePIiPoIHaWeQYChtgMUQiX
+	O4bWO1R3bJMjKkgXAW0nNt/Z0jWA=
+X-Google-Smtp-Source: AGHT+IFYvnKgARqKCy9fJNB6z4QxA4wIrT54OgyyEjOC446jlLt0Q9WKuoFiFZZl35o6xiFvSIKMcQ==
+X-Received: by 2002:a17:903:1aee:b0:23f:d861:bd4b with SMTP id d9443c01a7336-24096a63f17mr180276215ad.5.1754038922100;
+        Fri, 01 Aug 2025 02:02:02 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241d1ef678dsm37997035ad.39.2025.08.01.02.01.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Aug 2025 02:02:00 -0700 (PDT)
+Date: Fri, 1 Aug 2025 09:01:51 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Petr Machata <petrm@nvidia.com>,
+	Amit Cohen <amcohen@nvidia.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Alessandro Zanni <alessandro.zanni87@gmail.com>,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] selftests: bonding: add test for passive LACP
+ mode
+Message-ID: <aIyCfz3KUcYoE4Ix@fedora>
+References: <20250725062848.18889-1-liuhangbin@gmail.com>
+ <20250725062848.18889-3-liuhangbin@gmail.com>
+ <20250725072112.6b3c4f83@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250725072112.6b3c4f83@kernel.org>
 
-Currently all test cases are linked with thp_settings, while only 6
-out of 50+ targets rely on it.
+On Fri, Jul 25, 2025 at 07:21:12AM -0700, Jakub Kicinski wrote:
+> On Fri, 25 Jul 2025 06:28:48 +0000 Hangbin Liu wrote:
+> > Add a selftest to verify bonding behavior when `lacp_active` is set to `off`.
+> > 
+> > The test checks the following:
+> > - The passive LACP bond should not send LACPDUs before receiving a partner's
+> >   LACPDU.
+> > - The transmitted LACPDUs must not include the active flag.
+> > - After transitioning to EXPIRED and DEFAULTED states, the passive side should
+> >   still not initiate LACPDUs.
+> 
+> Strangely this test fails on a normal kernel build but passes with
+> debug options enabled:
+> 
+> https://netdev.bots.linux.dev/contest.html?branch=net-next-2025-07-25--09-00&test=bond-passive-lacp-sh
 
-Instead of making thp_settings as a common dependency, link it only
-when necessary.
+I guess on the normal kernel, the checking starts too soon before negotiation
+finished. I will add some sleep time before checking.
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-Cc: Ryan Roberts <ryan.roberts@arm.com>
----
- tools/testing/selftests/mm/Makefile | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index d4f19f87053b..eea4881c918a 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -158,14 +158,19 @@ TEST_FILES += write_hugetlb_memory.sh
- 
- include ../lib.mk
- 
--$(TEST_GEN_PROGS): vm_util.c thp_settings.c
--$(TEST_GEN_FILES): vm_util.c thp_settings.c
-+$(TEST_GEN_PROGS): vm_util.c
-+$(TEST_GEN_FILES): vm_util.c
- 
- $(OUTPUT)/uffd-stress: uffd-common.c
- $(OUTPUT)/uffd-unit-tests: uffd-common.c
--$(OUTPUT)/uffd-wp-mremap: uffd-common.c
-+$(OUTPUT)/uffd-wp-mremap: uffd-common.c thp_settings.c
- $(OUTPUT)/protection_keys: pkey_util.c
- $(OUTPUT)/pkey_sighandler_tests: pkey_util.c
-+$(OUTPUT)/cow: thp_settings.c
-+$(OUTPUT)/migration: thp_settings.c
-+$(OUTPUT)/khugepaged: thp_settings.c
-+$(OUTPUT)/ksm_tests: thp_settings.c
-+$(OUTPUT)/soft-dirty: thp_settings.c
- 
- ifeq ($(ARCH),x86_64)
- BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
--- 
-2.34.1
-
+Thanks
+Hangbin
 
