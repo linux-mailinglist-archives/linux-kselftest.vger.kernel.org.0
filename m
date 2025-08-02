@@ -1,155 +1,127 @@
-Return-Path: <linux-kselftest+bounces-38200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75A8EB18A4F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 03:54:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB0BCB18A6B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 04:22:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6527567065
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 01:54:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87E7762215B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 02:22:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEFE192B75;
-	Sat,  2 Aug 2025 01:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EE7EEB2;
+	Sat,  2 Aug 2025 02:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="P7gN6f4j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l6R21FMM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444EE143748;
-	Sat,  2 Aug 2025 01:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14812139E
+	for <linux-kselftest@vger.kernel.org>; Sat,  2 Aug 2025 02:22:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754099670; cv=none; b=gnBte+T7BN71wOJztrWjy46GVXSLmGjvo2sqjnuHpW5d23z/4zGPbkTqCsZFqw78L5Z9q3PLCBhQfK6tdla6NtUGpIV+VHlrFUmEjBydp7cSgN1NmAEcM/qwdKhJ4cYRo1A+JXJOxj8RwB+VAbZBzDQTmjbOk6xMwovOC4cKbPs=
+	t=1754101347; cv=none; b=PRjCEhauKIHV2thncEW+XCfv7FRm+JJdo6SzJubvZszHcXyKfazZVbJHvodyUBgXcTiyvjPnHK4pG1HcAJZluFaiSG1o/tz3gEj0VTOWDxL9kNpG5s8SZeTGMM+2EymOxiR97g4W/X6856G0g7Hlag8etsVyzfK9yEu4FUBFQCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754099670; c=relaxed/simple;
-	bh=ZzvXMMEd2VKZRyx2UGIotKUKMVqbiSAPuF9PKhhLeL8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AvFWfWZYT+j5u4TxNsetD6pAowIQsCaJwgRPLnxQF6i69jD7KboSV6eSb8uurwo1obfqk2GbKDfbjP8sPGHAOdLmxiV+GDfr5RXIIUjOXPNAG+xqt6cGW3lCjbvdu54JEIFcV+rng1qwpN1sEG8pILF2cLmxdEbFz04CgMrWmlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=P7gN6f4j; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=b8
-	+eKxxlAXpU1PrZbIB9ESPWyVrT7xYsLsdYc4aRzr8=; b=P7gN6f4jTnBKA1pRbC
-	NWJReEgCawaRe+kO4YgEkDxp+/GEHWL25eNGMAyA8+2uqhdbNFH6oqvJDabBMYGL
-	JRj5i4hpgtEQUP1vBvEpGRHf08hdriIZtBbO+o6we+GhoCTQM5WWiSG/uB8+gtkz
-	w727LOHLWxgMcJWLKo4MobcMw=
-Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wAn9dGhb41owA7sJQ--.1054S4;
-	Sat, 02 Aug 2025 09:53:40 +0800 (CST)
-From: Jiawei Zhao <phoenix500526@163.com>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org,
+	s=arc-20240116; t=1754101347; c=relaxed/simple;
+	bh=kXYrRSg2JD+bzbe3qtTUC+WfJmIjjXSC4tJN2qisO+g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gJHRNuWgIvInsfB9fyT1Zk0R1YKJkgMSarCE4NFpghxHNwTyBwMV0v4FhDUbzomBgPDTv8bg3LZqfHdToRMGiyxQ9mCcAhXLRNeOhO1gLoxVdLBGWqIna6qAeKeXMaruqvRZBBSai68mMZz6Ui/El7Fko7M0v/j8YAUHNFQS1qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l6R21FMM; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-615aa7de35bso5364709a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Aug 2025 19:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754101344; x=1754706144; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hSG1LeV3cVwQV3wuVeNb8LQrAKUqxETgJKTWaJErw04=;
+        b=l6R21FMM8T6gr+3j0olRbrbusOV91Dd2OVREBISswVwyfrSxOxP/oiX1PwFpl8+kcE
+         /VLtpyvjrlCuhcIhtkoMK2EUR3ypu0bPDVh40VLk9NPf4NYW/GzWnwo9kBNdaOALvL51
+         IwGo1pWmSOOwvR3z2m0gabIn58UAezNyY1KVBExkhwWmM9fbCviAG1lFBeoZHt9AVeLn
+         hB5J5WJeZGi12y9iBFgeYtcnJud82CZhBHIPbGAPDMdEcdCZAk4tpme7m4bDU1/zY7pZ
+         /hiTdGzU8Q4e+IzSGIXVjq5iKQjvvze2aDa+xsSsTBnb3xMx8MjHBCBFe2t4dWD5m+cF
+         b3Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754101344; x=1754706144;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hSG1LeV3cVwQV3wuVeNb8LQrAKUqxETgJKTWaJErw04=;
+        b=oFZGiAHaIyxSBYhi0vzI/ghSnAKmC7dHhOAP+h53r99TvvMLdkbzQTeEJ/j9Qih0hY
+         nRSlHe7fAroo3r96gnuvciCrh6meIMBCbpGLnrDcUi8GvRxwvXIzKCnz8DTXA+xJIp6R
+         tgjWZrJtjPOMSpP7KExmwBN3oB6RJPT9CGoVNeH8Tez1HERjCrojF1oU9mVq3wFTyfxO
+         hgLXjqdXIS9J15CqnVAY0wxM/8DAmHDPlouDO+eTqp+RsPSMczjmSl83VeHZVdCYzYq1
+         K9cqg5/q15QSQadeqpHwkeIHWAlj85UIRvZ80aoBiyHE5xmxyc96j73Asba90yvAS34N
+         ApHw==
+X-Forwarded-Encrypted: i=1; AJvYcCU+NkcY1k4y486ei+Uis56zUrcUxg7NJ7UqE5gRmEhOyqB+OyKFsDT7KvmcUd5HhJt5x5NtNuHfJotcxtqbCOg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQ+JRNt5YDEBXTnEwTfDxJJ1MVuH0wSzbVYjRJs63n8Cde/E5z
+	lYxOo2I6YIb/ddTyloPCb6r2bHdvsl59WvrZ1bOWio0TMvZ9454p8+g/
+X-Gm-Gg: ASbGncsKZzkZERBBd54RjH1UPyVROi6tqOHmPbYCeUQxVgksuVfyPb/dgGtr4xdLnaP
+	0Ql46zJNJkEfYvb3KtBnbbJI+U9PGha7R1IvnsKpU0zpHPC4iRn/UPMiHLl2pN3FDurdiKBaZ9C
+	1YYzVw/r++0TSGZsrSzqHUEog3yDb2IdrxaAiBZ8Z+xwG0+i4FSIAEP2/7yYvrSGODispI8cfZA
+	YYxXlwW3/+3y19Zza/9XdeCVjw2PW310tuRxw44qYgRJbhAj+083bgDpph4xjzL78qKrhqSGO5P
+	f7nVVci2VuklvsL/Dhp+ublHXsTHZ1LXHk6KQVl1xEcqASba5hlN+DMdrOmrc60BZEUiIbg3Cid
+	J/jyZd6m5zeo1bR8GAslZAw==
+X-Google-Smtp-Source: AGHT+IHDiFo+GXkK3xhr9Jlv8TPjtoUbMQljTtFnbkUlqH0I7+/3roo41mHr6kloA0aNXAxwf4/OXg==
+X-Received: by 2002:a17:907:3d90:b0:ad5:3a97:8438 with SMTP id a640c23a62f3a-af9401c3e49mr199013266b.41.1754101344137;
+        Fri, 01 Aug 2025 19:22:24 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a2436c2sm361389366b.141.2025.08.01.19.22.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 01 Aug 2025 19:22:23 -0700 (PDT)
+Date: Sat, 2 Aug 2025 02:22:23 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	rppt@kernel.org, surenb@google.com, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] selftests/bpf: Force -O2 for USDT selftests to cover SIB handling logic
-Date: Sat,  2 Aug 2025 01:53:35 +0000
-Message-ID: <20250802015336.823054-3-phoenix500526@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250802015336.823054-1-phoenix500526@163.com>
-References: <20250802015336.823054-1-phoenix500526@163.com>
+	Ryan Roberts <ryan.roberts@arm.com>
+Subject: Re: [PATCH] selftests/mm: link with thp_settings when necessary
+Message-ID: <20250802022223.qjzvuuhwm43hprpl@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20250801085444.27182-1-richard.weiyang@gmail.com>
+ <566ff1f0-e6f4-4888-a901-4995a84d15b7@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAn9dGhb41owA7sJQ--.1054S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5WrWDCF4kGw48JFb_yoW5tr1kpa
-	ykWw1jyFySqa17tan7ZrnrXr45WFs7JFWFyr1UXryFvr4kJF97XFZ7t3yUKFnxW393Xaya
-	y392gry3GF4rAwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jzUDJUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBgAydiGiNYdH42AAAss
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <566ff1f0-e6f4-4888-a901-4995a84d15b7@redhat.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
+On Fri, Aug 01, 2025 at 11:02:35AM +0200, David Hildenbrand wrote:
+>On 01.08.25 10:54, Wei Yang wrote:
+>> Currently all test cases are linked with thp_settings, while only 6
+>> out of 50+ targets rely on it.
+>> 
+>> Instead of making thp_settings as a common dependency, link it only
+>> when necessary.
+>
+>
+>You don't state why we should care about that? I don't see how binary size is
+>a problem, why do you think it is?
+>
 
-In this patch:
-- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
-  argument spec.
-- change the global variable t1 to a local variable, to avoid compiler
-  generating PC-relative addressing mode for it.
+Yes, it doesn't help on the binary size perspective.
 
-Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
----
- tools/testing/selftests/bpf/Makefile          |  5 +++++
- tools/testing/selftests/bpf/prog_tests/usdt.c | 18 ++++++++++++------
- 2 files changed, 17 insertions(+), 6 deletions(-)
+I come up with this when doing some test. Each time a change in thp_settings
+would rebuild all the tests. My intent is to speed up the build during coding.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 910d8d6402ef..f53c86023334 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -759,6 +759,11 @@ TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
- TRUNNER_BPF_CFLAGS :=
- $(eval $(call DEFINE_TEST_RUNNER,test_maps))
- 
-+# Force usdt.c to use -O2 optimization to generate SIB addressing
-+$(OUTPUT)/usdt.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
-+$(OUTPUT)/cpuv4/usdt.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
-+$(OUTPUT)/no_alu32/usdt.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
-+
- # Define test_verifier test runner.
- # It is much simpler than test_maps/test_progs and sufficiently different from
- # them (e.g., test.h is using completely pattern), that it's worth just
-diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-index 495d66414b57..86f354d25aef 100644
---- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-@@ -14,10 +14,15 @@ static volatile int idx = 2;
- static volatile __u64 bla = 0xFEDCBA9876543210ULL;
- static volatile short nums[] = {-1, -2, -3, -4};
- 
--static volatile struct {
--	int x;
--	signed char y;
--} t1 = { 1, -127 };
-+/*
-+ * TODO:  At O2 optimization level, t1's USDT argument spec becomes -1@4+t1(%rip).
-+ * Since libbpf doesn't support RIP addressing mode yet, this causes "unrecognized register" errors.
-+ * This test will be re-enabled once libbpf supports RIP addressing mode.
-+ */
-+// static volatile struct {
-+//	int x;
-+//	signed char y;
-+// } t1 = { 1, -127 };
- 
- #define SEC(name) __attribute__((section(name), used))
- 
-@@ -27,6 +32,7 @@ unsigned short test_usdt12_semaphore SEC(".probes");
- 
- static void __always_inline trigger_func(int x) {
- 	long y = 42;
-+	signed char t1 = -127;
- 
- 	if (test_usdt0_semaphore)
- 		STAP_PROBE(test, usdt0);
-@@ -36,7 +42,7 @@ static void __always_inline trigger_func(int x) {
- 		STAP_PROBE12(test, usdt12,
- 			     x, x + 1, y, x + y, 5,
- 			     y / 7, bla, &bla, -9, nums[x],
--			     nums[idx], t1.y);
-+			     nums[idx], t1);
- 	}
- }
- 
-@@ -106,7 +112,7 @@ static void subtest_basic_usdt(void)
- 	ASSERT_EQ(bss->usdt12_args[8], -9, "usdt12_arg9");
- 	ASSERT_EQ(bss->usdt12_args[9], nums[1], "usdt12_arg10");
- 	ASSERT_EQ(bss->usdt12_args[10], nums[idx], "usdt12_arg11");
--	ASSERT_EQ(bss->usdt12_args[11], t1.y, "usdt12_arg12");
-+	ASSERT_EQ(bss->usdt12_args[11], -127, "usdt12_arg12");
- 
- 	int usdt12_expected_arg_sizes[12] = { 4, 4, 8, 8, 4, 8, 8, 8, 4, 2, 2, 1 };
- 
+Not sure it worth a change.
+
+>Cheers,
+>
+>David / dhildenb
+
 -- 
-2.43.0
-
+Wei Yang
+Help you, Help me
 
