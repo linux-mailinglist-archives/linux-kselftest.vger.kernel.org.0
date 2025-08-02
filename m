@@ -1,57 +1,95 @@
-Return-Path: <linux-kselftest+bounces-38203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38206-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D70AB18B6F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 10:48:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB17AB18BCC
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 11:27:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EAD97ABA32
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 08:47:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A8483A1957
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 09:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 617851F17EB;
-	Sat,  2 Aug 2025 08:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D7B221267;
+	Sat,  2 Aug 2025 09:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PYhV47+l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I0/A75IE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9652188CC9;
-	Sat,  2 Aug 2025 08:48:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C55220AF87;
+	Sat,  2 Aug 2025 09:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754124528; cv=none; b=mbwofYcNNgDcsyl7HJpn72X4fQXMyE65iWefl47rL5+LduBuvLCm52jNC6Wva5ABNCt2c4WtsUifjM2bm5Qd+Buw2pbArtuvjiA6dn5/8dB9+GfC90+gSrlbOqMDT5SEgO+tj4QZnAdxWRrQtTPBodcQl1QhFLE7NK+pPBgqjXs=
+	t=1754126688; cv=none; b=PhS67p1NOyEeotYWnDllUhN9C2QMeIWjEwGCm8VZTjJUoJ98vOAjl8f3TSmPde4J/MLVfe1Rs5Zy59nXEmPDPi8Hh4QTpYiVAQiMp3kl6HBnzeQcUOvvwU9QzrUoIOEOQJ7kZONlKjbsMeTnUVo2Lph3wHidoHxvSNiVjpguH2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754124528; c=relaxed/simple;
-	bh=5kxnT9Xzx93uaXYnSAt1yHdetnLLHCQ/S8LS14DVt7M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rUvc+pBWSkokDomEMfw+ypybN2K1zEYparaKFFnBMWRrPSq8NUzzPOY9nkrmRSKKztqu/gYZ1dlZxaxBjCZlIYwyF2+PeKVD8XOAJt3aLy63k4iX+bfahsUcbDi+EQGtGiTC41CMzRVYwNQ2VzpS4WNJIcfTji6Hc2/nEjkPu7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PYhV47+l; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=ht
-	j7auQ2DJotB/9/cDAg+sQhVrxsQ5LPGiEPy66on4E=; b=PYhV47+l2srGQVZ7af
-	ODjv5Ohf+U6IkOH8oMfPIWzAVWYe5xZhKE+AZtU9zA0r0wthjIDZy8V2kO+dnjcq
-	HSDL6kjCDpU0LqtGMPGlpHHw9V/ulN32UcRbQHmjljUqDA3RObLa378btRef4oBg
-	ZO/thLHaN3HkG6wdBzZmiOqec=
-Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDX0bXE0I1oWsxLJQ--.56694S4;
-	Sat, 02 Aug 2025 16:48:07 +0800 (CST)
-From: Jiawei Zhao <phoenix500526@163.com>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 2/2] selftests/bpf: Force -O2 for USDT selftests to cover SIB handling logic
-Date: Sat,  2 Aug 2025 08:48:03 +0000
-Message-ID: <20250802084803.108777-3-phoenix500526@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250802084803.108777-1-phoenix500526@163.com>
-References: <20250802084803.108777-1-phoenix500526@163.com>
+	s=arc-20240116; t=1754126688; c=relaxed/simple;
+	bh=h2teT3pd09OM+PIVXgepBlvaOtU0HtakDUYKutozKGg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z1+DzCy31vkuG5v1kJQkbidTzFw35+p/GstCf9A4EXv9ClnTL0dnczXJUAn4aF0DAmMTjrPIQwq1zlKmbp1tcLDCAeuANWt0wzlaqCItt5Y38CKbavVXkLTa1RAR7Kh3e5VyxY3kCzfzGDOjvuCBvZm/cMHSEHEBdVIBDWRYkEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I0/A75IE; arc=none smtp.client-ip=209.85.210.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-76aea119891so3681483b3a.1;
+        Sat, 02 Aug 2025 02:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754126684; x=1754731484; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KF2s+yc2RxKLUVYHR8inXYwOSGhSIe86MFGDiyC5+rI=;
+        b=I0/A75IE7+ogIYXmGZxG6qQRbZ4AO9S8L2GJiOQzehy0hlAfOUbz2VQ1qlUsjAeSot
+         ATJ2BmHPLOaAcQuiS9YRDjeS60puvyNQ5eAdGaYB52SSMz8nvzHqE7P1h1rYWtrAb/QU
+         ulbn0CS4/yW6I6vZLZreqj/5fTMnVR0Zyp6XDuM4+/DW5TfVH7DddWiVVQzZIjfvocdR
+         nybTpUDqITaOW+Rfv2zHhnKLH2/wL2vFqT6TbDd9h5mf0UMAmITde/S85fWV6qViL5QJ
+         WHX6O+GSyvQ/NRm7t4XsmLwASc4MZEmU6V1lNR1+FeaKT8vcrmHvUSbjtXri8q+N4UWB
+         +Gcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754126684; x=1754731484;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KF2s+yc2RxKLUVYHR8inXYwOSGhSIe86MFGDiyC5+rI=;
+        b=pjim3xU1NNK+1zmUYeh0HDBCPCqV1xUCv/SVHZXNnpeMgf7fsGV+M57BBr566Dowbs
+         WLsqhdbnkC6lj2g3C+ID5TUwebRTo0/UqyjHKd9Vw8xpWsuCbpEG/lvhUkaagdLliOAc
+         Ex+DrQ47iBwZlSt1Yc2wLviiqX4/bDzDqqWdx/Sx8hoY0gvwNj9bSMtcHLqye8W+7udN
+         XjyarLMkz3PZQCrn453oJqLXGFjCz+NUNvMBiDkoxEoa++GcY6bWIDG4hoXbH1B844L0
+         36t4ZbC1BI5YRl6kkaFxy0LFZcQezLSsU/cF898hptyspxbhJmByLkEwZC66xwAB6YKR
+         Zc8A==
+X-Forwarded-Encrypted: i=1; AJvYcCVEoUWCENh92iagEKdwB14im46jUvMk01LqMNvRiiEQI8+elqXJQgtU7CIcfbMx4bG4PRsq11pw@vger.kernel.org, AJvYcCVXEfTbT85HAjV8JO/5V/5jCotKd1tAKu8f5FUSLlvK/8c0qXGbHkqlRjpxWSRCWm1GamGlPxfxFBG/fPA=@vger.kernel.org, AJvYcCVauZpqYGM43JUJBFfJ35+3J/XT6AQpWt3dxNxi0bF+mMdWuBicSaIFJ6K11CEe+fgvdJq+Ash41F0nMstDxdM4@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWPdSpnGzJwlP5Xw8dYj35hG9ee9BPDYkjrYhwFj7QvDP0gdWd
+	G4HxgMM7mTBs2HOVCyDOJkAat/u7W8LerCq8/Zux060YsaT3OxmBnD7fdvLCfiyfE/U=
+X-Gm-Gg: ASbGncva+QaOWxGk1oL1N8BpJ/DdDkegP3TQlhd5SkFPIVeOKgh5onDPEl/i4LxpWLR
+	tYNLeCoTAoDYvv/SUwfi6Xt8S64/3xIrtXxBMy0BCOXSgoir24rLF/fFTarSbzWR3HskVOv9L6s
+	XPdlOiAHrlPKXdlDrCHsph/N5bmT7WMAU8ti6CwK7DgnRpTQOc5Ikwypzo5Yk0JDWeCw729mac2
+	DfAkXUx8nPwQD4hmvnzKnwQP3+Eu6xYQ3I4aBQqeXiKue4VPw0Hj5W5+PASKlZvD/af7WUkuIYD
+	V4lTdtDd4U98uMkBa58pmA2zCbk6f2TB12dDkzesX2RPIQnFbaBr7gyg2uxlfkwHpG3z3EC27d+
+	DzGnXvYg34QPFq0VARuM=
+X-Google-Smtp-Source: AGHT+IF9/s8KH5iC2ZE5PVK55qaK5lCRWkSkkYH9v3t3I5I73Z+TFu2uVgdqoAtzaa+67HA8+8vK8g==
+X-Received: by 2002:a05:6a20:7d8b:b0:222:ca3f:199 with SMTP id adf61e73a8af0-23df915254emr4190532637.18.1754126683708;
+        Sat, 02 Aug 2025 02:24:43 -0700 (PDT)
+Received: from 7950hx ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bd7887522sm4799161b3a.20.2025.08.02.02.24.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Aug 2025 02:24:43 -0700 (PDT)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: edumazet@google.com,
+	kuniyu@google.com
+Cc: ncardwell@google.com,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	kraig@google.com,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v3 0/2] net: tcp: lookup the best matched listen socket
+Date: Sat,  2 Aug 2025 17:24:33 +0800
+Message-ID: <20250802092435.288714-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,100 +97,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDX0bXE0I1oWsxLJQ--.56694S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5WrWDCF4kGw48JFb_yoW5tw45pa
-	95Ww1UtFySq3W7JFs3ZrnrXr45WFs7JFWFyr1UXryFvr4kJF97XFZ7t3yUKFnxW393Xaya
-	v392gry7GF45AwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jzUDJUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFAGdiGiNynRtRQAAsz
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
+For now, the tcp socket lookup will terminate if the socket is reuse port
+in inet_lhash2_lookup(), which makes the socket is not the best match.
 
-In this patch:
-- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
-  argument spec.
-- change the global variable t1 to a local variable, to avoid compiler
-  generating PC-relative addressing mode for it.
+For example, we have socket1 and socket2 both listen on "0.0.0.0:1234",
+but socket1 bind on "eth0". We create socket1 first, and then socket2.
+Then, all connections will goto socket2, which is not expected, as socket1
+has higher priority.
 
-Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
----
- tools/testing/selftests/bpf/Makefile          |  8 ++++++++
- tools/testing/selftests/bpf/prog_tests/usdt.c | 18 ++++++++++++------
- 2 files changed, 20 insertions(+), 6 deletions(-)
+The 1st patch fix this problem, and the 2nd patch is a selftests for this
+problem. Without the 1st patch, the selftests will fail with:
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 910d8d6402ef..4b77d06d5c42 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -759,6 +759,14 @@ TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
- TRUNNER_BPF_CFLAGS :=
- $(eval $(call DEFINE_TEST_RUNNER,test_maps))
- 
-+# Force usdt.c to use -O2 optimization to generate SIB addressing
-+# Only apply on x86 architecture where SIB addressing is relevant
-+ifeq ($(ARCH), x86)
-+$(OUTPUT)/usdt.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
-+$(OUTPUT)/cpuv4/usdt.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
-+$(OUTPUT)/no_alu32/usdt.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
-+endif
-+
- # Define test_verifier test runner.
- # It is much simpler than test_maps/test_progs and sufficiently different from
- # them (e.g., test.h is using completely pattern), that it's worth just
-diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-index 495d66414b57..86f354d25aef 100644
---- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-@@ -14,10 +14,15 @@ static volatile int idx = 2;
- static volatile __u64 bla = 0xFEDCBA9876543210ULL;
- static volatile short nums[] = {-1, -2, -3, -4};
- 
--static volatile struct {
--	int x;
--	signed char y;
--} t1 = { 1, -127 };
-+/*
-+ * TODO:  At O2 optimization level, t1's USDT argument spec becomes -1@4+t1(%rip).
-+ * Since libbpf doesn't support RIP addressing mode yet, this causes "unrecognized register" errors.
-+ * This test will be re-enabled once libbpf supports RIP addressing mode.
-+ */
-+// static volatile struct {
-+//	int x;
-+//	signed char y;
-+// } t1 = { 1, -127 };
- 
- #define SEC(name) __attribute__((section(name), used))
- 
-@@ -27,6 +32,7 @@ unsigned short test_usdt12_semaphore SEC(".probes");
- 
- static void __always_inline trigger_func(int x) {
- 	long y = 42;
-+	signed char t1 = -127;
- 
- 	if (test_usdt0_semaphore)
- 		STAP_PROBE(test, usdt0);
-@@ -36,7 +42,7 @@ static void __always_inline trigger_func(int x) {
- 		STAP_PROBE12(test, usdt12,
- 			     x, x + 1, y, x + y, 5,
- 			     y / 7, bla, &bla, -9, nums[x],
--			     nums[idx], t1.y);
-+			     nums[idx], t1);
- 	}
- }
- 
-@@ -106,7 +112,7 @@ static void subtest_basic_usdt(void)
- 	ASSERT_EQ(bss->usdt12_args[8], -9, "usdt12_arg9");
- 	ASSERT_EQ(bss->usdt12_args[9], nums[1], "usdt12_arg10");
- 	ASSERT_EQ(bss->usdt12_args[10], nums[idx], "usdt12_arg11");
--	ASSERT_EQ(bss->usdt12_args[11], t1.y, "usdt12_arg12");
-+	ASSERT_EQ(bss->usdt12_args[11], -127, "usdt12_arg12");
- 
- 	int usdt12_expected_arg_sizes[12] = { 4, 4, 8, 8, 4, 8, 8, 8, 4, 2, 2, 1 };
- 
+$ ./tcp_reuseport.py
+TAP version 13
+1..1
+FAIL: wrong assignment
+not ok 1 tcp_reuseport.test_reuseport_select
+Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+
+With the 1st patch, it will success:
+$ ./tcp_reuseport.py
+TAP version 13
+1..1
+SUCCESS: assigned properly: (<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 33787), raddr=('127.0.0.1', 43140)>, ('127.0.0.1', 43140))
+SUCCESS: assigned properly: (<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 33787), raddr=('127.0.0.1', 43146)>, ('127.0.0.1', 43146))
+SUCCESS: assigned properly: (<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 33787), raddr=('127.0.0.1', 43162)>, ('127.0.0.1', 43162))
+ok 1 tcp_reuseport.test_reuseport_select
+Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Changes since V2:
+* use the approach in V1
+* add the Fixes tag in the 1st patch
+* introduce the selftests
+
+Menglong Dong (2):
+  net: tcp: lookup the best matched listen socket
+  selftests/net: test TCP reuseport socket selection
+
+ net/ipv4/inet_hashtables.c                   | 13 +++----
+ net/ipv6/inet6_hashtables.c                  | 13 +++----
+ tools/testing/selftests/net/Makefile         |  1 +
+ tools/testing/selftests/net/tcp_reuseport.py | 36 ++++++++++++++++++++
+ 4 files changed, 51 insertions(+), 12 deletions(-)
+ create mode 100755 tools/testing/selftests/net/tcp_reuseport.py
+
 -- 
-2.43.0
+2.50.1
 
 
