@@ -1,172 +1,232 @@
-Return-Path: <linux-kselftest+bounces-38221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68350B18E93
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 15:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 52A81B190E1
+	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Aug 2025 01:36:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C609CAA4B55
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 13:06:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06E4B3BBE6D
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 23:36:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19BF4238144;
-	Sat,  2 Aug 2025 13:06:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A70D2116F6;
+	Sat,  2 Aug 2025 23:36:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzDCcA0/"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="o34KiYrZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2067.outbound.protection.outlook.com [40.107.237.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF8520296C;
-	Sat,  2 Aug 2025 13:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754139976; cv=none; b=LYi9OK6grZ1fqkDrFHItHVNa8cNNRATvLc9Z9aNpQtoFyTnyNrvY1RnEWDIdkOuHRRGQFDM8D6AWk0Y4qZgTAOjWHLc16xmVnGvZZ/+bT25GpfxFoWnYHtHisEMztejp3lGcfk8XNBrU9FFDzMNpXYMixaJrXk472hqVCVeW/bc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754139976; c=relaxed/simple;
-	bh=4y4BBMpRTlGCIWdhx/iujTMekc86BpwM2Byf2EHcVwI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YAN94vbjYwoau8ObtUD0z0STkEdK3x5EyO9ZA3Aj1Je5HledKxJF+0XL3Mj11yUseZpyR39L8Zyf99M3b2hun6As0Y4FXO7vZfiOUtbvx4WivL2rAsfusTPQqvxav8ujFNgiNq3cCLjpkuDpxFfW+Y5yFaESStj2g36vLUBSEQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LzDCcA0/; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3e40ac40940so10551465ab.0;
-        Sat, 02 Aug 2025 06:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754139972; x=1754744772; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zmonmtKoAvELfCzQBfuBaiOtioQAYepmYG58Tt5t4Vk=;
-        b=LzDCcA0/fpMSlq9RWiSG+6iddiJsoy5Y/ej6mgeWlYFJTjCWOwr4L56cj4CRWGRr0x
-         UQIrR/9yIePCqY1LUx5dEOq/8qXjMC3jtkhyCTMm90P3E8OUt4Fv5I769/5qJDdW3vW6
-         V0O9W5I/stwlSCj5FUWn/IXRACNIYahvBiw4KbSa+76+n+FORs+FRmp/cHi6pui7xYHO
-         uKTAAmZm78Brx1HJbcrbWDidnZn/oGzQPGRt99+j5SOuu24uMjdfDZ1ww5gYmvXskLJf
-         lEnWSI87YLYIxBrmmtK+G+EEWpvmZNv/PDzhzzoaDuT3JvL74PdD/z4h8wKWjNcow0O4
-         uNoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754139972; x=1754744772;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zmonmtKoAvELfCzQBfuBaiOtioQAYepmYG58Tt5t4Vk=;
-        b=Nu2+zDc1WjJBcTqGiclXhVF2JtMKxprz03iIx6YavUON99UlN0QURGZ+04C/AjZtYK
-         3RSVkJqGZciFeBTXdZ8RvGb8hzlBk5HcdWUqa3N0ljmNQUOV/dpQy2RJmcLjGmDL0C4W
-         7Y46BMguizlz9E8h5v2w729ST9bkQiTgwbbSWCGMQ/bs6CFifMfhXgUJzLbNG7nwZj+F
-         SuDCm09ccmcfxLN6ptHH5NWFLtG/qycBdpjj2EaFk4nZO10AxxsGfFJiWeioOGwbJqY7
-         YDhkBdLhvEIUjedF/52hU8KxRaspLxAgHq59VmPadAA9FPSAdXA66mx8BAPXL9b5fOEY
-         390Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUq6FYqyRR+VtuOMlqcwmPyD7X7s/oOpaT/LIjbwkrz8AjCRm47MCV3AO+QSUICuFBwU+doPeHlMKAOx1o=@vger.kernel.org, AJvYcCUxR4UPvvEzaOc/b86Q3e9SyNo1bAcBw9BMuHPuq/OBvs3rc/T7WymTtiIvYMFukOkd7a1lhhKr@vger.kernel.org, AJvYcCXPyiswZASiLua80DT9JJa9rFRQn/FKQqXjhv9YsTMToIbUYMFCEvhLpcgkyyqyJyevpE74uCsj4xa1iJTJVr2T@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk2DUCFble4cpbemOhoNJxOs/XWG+IVgjNXhPAZ94wOVV1zrg5
-	LW1GMJ9iubJUF3zoRMOuFmTNSlkLzv0QtqGo0iUN31N+c+l0/ulVAjhEjXKZgtl9JKdA0zwmENI
-	TTFj8TE77/PpCVwjZh7Vr9LiRaXmDLvY=
-X-Gm-Gg: ASbGnct0MGLUkF8Vovv2TObudf3fohr/4NKoy/kCI9lvn3vKqY/A39yfhsDa4OVS2G6
-	OrXH/+CKJVqebkiX2YO6YFFcTAw5p63J5SP3fqTMZMv/IdXpPfyIhOAQEjw7yiAJlRqBQ4uJS7h
-	CaXduy2zz+2oW4iKCWWnJVG07z4u4pjbBV8pdZ9Se7wPkqbwQgJDtXdWoR2iwN9SMIvYkNvgUNL
-	fZSq/Q60yF+oSQi
-X-Google-Smtp-Source: AGHT+IHpd35+kT9HdI5ApiKpoS8VgCg9bl6wjNctPoyEhnXzMQiFoSmDe+xgrsbVS76z0H4HD3/mJtYGgjbw29dVPsk=
-X-Received: by 2002:a05:6e02:2194:b0:3e3:d224:c652 with SMTP id
- e9e14a558f8ab-3e415e6cca8mr47665065ab.11.1754139972399; Sat, 02 Aug 2025
- 06:06:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A770717736;
+	Sat,  2 Aug 2025 23:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754177765; cv=fail; b=SyrUlKG0fmEcBy6jHQWNsdbkJ4vNaD9ZOg6JTT642LyT2e+JbTVAn1tcOO7RCaRYF5Ezgh8Elxc1cPekA75OfunKTrcSVzg8U4ORS0AWHVCApnOoMYn96dyd46YY/goZan8IY9HbTNs/l+rFtelp6c2WrtEKeKwscRvmWsA6iUQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754177765; c=relaxed/simple;
+	bh=iYVEV5neEyTRLSKX4T60p2ZHhniGFU1iIz1VEHHw9M0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=NC0Q8HOpQQOMG/ihM424aGEcS0rBumCzPWkKmttdCzQmWDf+SrSXjhuyyl7UjA0YINz55sNvBTQ4mLGfzSn/l+Lxb7dRJedIMpXEVafs12nsWode5cYkr+uIfDYs0c7LQvmxguNlmFTQg5QJrxT3yp9qWefcOM4TfXEiCTFxJwQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=o34KiYrZ; arc=fail smtp.client-ip=40.107.237.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QV5XeLrq4GQSi1vB4V9BhNgrSeQkqyflVJlOacbxGCFR4tqvV4Ayui7fGUdD0zyWIS0sGULU3+rzvQVkoXCc98pSnti/ZyibdqW06x9WiEmddls7fkmqkK7/UYFSs+ItrykA0hX8cjmZle2wFGMonDlEDW6c4UVqUv75n9nZKbJevghZbeJvQCZGUJKxfNB9PhHa+KUZhXsp4s/obLEZFPgsKnJR+gy/kv8VhiKcB4ruXf/qO3xhkZOGkxLiVhgGi9qPIrKxhRoYFhMocn36M8m8rkAKQ9jDbe/68Hs9GA2R+dHRb8QHJtWOWccgvLtM0Z2wmhnEKSvlNW76L0bR2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mR/ALa54VTUVWVRprPLUXk9xw9Oz5Lxd8cl9Y7R3TQ8=;
+ b=WuAYCuGeDhaTEDHEPsGM8lkBF9KUBqn/iuVugCJQdYUT0GXN6ItHQFRORIzWQH9hg9Ph8eSk3N1lLQ4OFDnpe8zFRozl4dxbdFQ9qRxbWqJj9ppebq+hJDyrViH9wKtHxmgM0gx8vPQ39+QLdIgoAvQ6syZoPLq6maT+q50LCr2mTn+2Zn5ut/9cVUKzS7vuK/LEDUK5ljklFS2C0aDpsBaZwJyG0IbF46nDxNKFNaNzmOt+VRtTXTbso6jlp+FT6MjjyXKwO+85I0r5gZC/TkzIyMiZ+uP/JuWS4IsN4CinrM+4l1i6y/Gk5nLsNgbu4T26ZRdREEQhLE2ijW2fwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mR/ALa54VTUVWVRprPLUXk9xw9Oz5Lxd8cl9Y7R3TQ8=;
+ b=o34KiYrZzxCv1Wn1C/B0TMTnWAjzXpTQ1CImxk89K4+DroViajf7ljIwfP1Uyva99vl2jViWQ+P3gSkc1wfevAaVf8jVb19hpCm5VFYWUAPaf/LW1oGw0HqH7x0Pu81V6SxK7hM/juQges/8iwyWbOnEujBiCo/DKor1RZeMvBoQM3U5koIw1AW+tZUyDjXU5iNaulDLqQNR+zySW2n2ZFB9XESZ++Ps9CCnCiaV0t9mV95XuUEiifbrxM9Z/4MwWMUJieZoeDSVAuS5sD6QV+efDnPNETpiP8T/Qg7q8m1CEEzBTyYP7SScBcP/I65Qs/rdlFb8ksBHqC2EYPppPA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5968.namprd12.prod.outlook.com (2603:10b6:408:14f::7)
+ by LV3PR12MB9188.namprd12.prod.outlook.com (2603:10b6:408:19b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.18; Sat, 2 Aug
+ 2025 23:35:59 +0000
+Received: from LV2PR12MB5968.namprd12.prod.outlook.com
+ ([fe80::e6dd:1206:6677:f9c4]) by LV2PR12MB5968.namprd12.prod.outlook.com
+ ([fe80::e6dd:1206:6677:f9c4%7]) with mapi id 15.20.8989.017; Sat, 2 Aug 2025
+ 23:35:59 +0000
+Message-ID: <c17610f8-b34c-4abb-8d79-9c1678106add@nvidia.com>
+Date: Sat, 2 Aug 2025 16:35:55 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/8] selftests: kselftest.h: Add __unused macro
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@redhat.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Peter Xu <peterx@redhat.com>,
+ Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com
+References: <20250731160132.1795351-1-usama.anjum@collabora.com>
+ <20250731160132.1795351-4-usama.anjum@collabora.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20250731160132.1795351-4-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY1P220CA0001.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:a03:59d::14) To LV2PR12MB5968.namprd12.prod.outlook.com
+ (2603:10b6:408:14f::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250802092435.288714-1-dongml2@chinatelecom.cn> <20250802092435.288714-2-dongml2@chinatelecom.cn>
-In-Reply-To: <20250802092435.288714-2-dongml2@chinatelecom.cn>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sat, 2 Aug 2025 21:05:36 +0800
-X-Gm-Features: Ac12FXyl1Z17710ZsvGZEcG3nKUw1BENEpT2KZPZWCpTbIBZTcW63ECEgxt-fVk
-Message-ID: <CAL+tcoA9Lvc4Cj9zjWVx1FzEQA=d=OnvZRDWA4nE_1GNbEDaRw@mail.gmail.com>
-Subject: Re: [PATCH net v3 1/2] net: tcp: lookup the best matched listen socket
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: edumazet@google.com, kuniyu@google.com, ncardwell@google.com, 
-	davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, shuah@kernel.org, kraig@google.com, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5968:EE_|LV3PR12MB9188:EE_
+X-MS-Office365-Filtering-Correlation-Id: ecc0170f-88bb-41a3-253d-08ddd21d55f8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?L1FaMGlrTER1cDV2dnZGL2FkV05BN1RhWjRzYUFRdk1JSU5wemhMZGxwMjRh?=
+ =?utf-8?B?S3BlWWtOSi9DL1BIbmR4OWlacUNrUzNzRmh4ZVRBOEdKSFhhKzdUV2VnMURH?=
+ =?utf-8?B?WUhibHNlVTdTQ1FJRFJKUklLUTYwcWxodFYxZ3dnVUFkMCtSVmwxYnVnQWhl?=
+ =?utf-8?B?djVYU2NveEVkeGtXeUlrYUY4aE1sYnMzV2xMcXVJYnJDbGxaTHNPWFJMa0RY?=
+ =?utf-8?B?QW1aM0ZHenJtT29ybGkwQVlCdG5ESk85eE43cUFaVFN1N1FRVUdRb2Y2Z2NW?=
+ =?utf-8?B?alN5UWtLMnRnbmpXRXo0aHpnZW5Ia2djWGM5aDcrK2ZpUjBkbHYxVlJOQyt0?=
+ =?utf-8?B?NzBHeUh2Q2JyUVRqczBOdDlUbHBvRnlqMS9ZMzhWbEpVdGlDUnBTd256a0hJ?=
+ =?utf-8?B?MTEzdkVvZDJrOG1NNUg3MVVpdUVURHlRWHVGMThobEFPZjBSa2VuSVpTRyt4?=
+ =?utf-8?B?UWpHMVR2RzQ0cERSQzZvalJHUkRGTUVIWk1Pc2FSZyszSEErRUU2N1FTenpl?=
+ =?utf-8?B?dE5qRkllQ29vTVIwbDJvZk9NSmdvTGpFTWJjME9TK09JS0hEUFRxSElPSGQy?=
+ =?utf-8?B?Um1TUkxOeTdLdXpzZExNQWFzUFJqWlJ4OUY2WHpsYVphZG14MkdkM0haVkZR?=
+ =?utf-8?B?ODRWMFlqZTZZdUlDV3JIb2I1L2ZFeE10WWlJeDIzaW50dnFKSjRpdWsvVFpO?=
+ =?utf-8?B?S1E2Nk11V2NMckV3V1BqZEZVQllpeXV4RkRzRlV3aE5yamJTSVMvMlV6cVhK?=
+ =?utf-8?B?anZGOWdyOGhxZXB0VGkyT044N3hxNU5WM1ZJWTlMLzkzVWhTUWI3enNISFRB?=
+ =?utf-8?B?Vmo1V2E1eHdyeS94VDk1SFdvY0MwYjBZdHBIRUcvL0tNNUhwZFo5TVBhcXF1?=
+ =?utf-8?B?U2dqS2tBNktkUWw1SjRPMkVxajJmRUc5NTlRZkVxckQ4NXY4VUpqQlBuYm1Z?=
+ =?utf-8?B?RHkzblNyTDMyK05kTDFsdWtlQm5IdXBqM3htUDgvSEh1Zjcxd3Z6ZlhNbktQ?=
+ =?utf-8?B?emJkbm8wQXhXcE9MUGVpVFpYRjFSVFc3N09UQVY3dUdSc1VWWmFFeFZRbENt?=
+ =?utf-8?B?S2ZscWcxWWVSajN5bEptV0tDVG5vN1RVaG5XajFNK3BFQlE0L3MzRFV4MGpH?=
+ =?utf-8?B?Z2YrTnFVcGVMS3BMVHFxUHJKZkEzT3ZyOU9UdGxPVnNyeEdFdkdoWENSTzhz?=
+ =?utf-8?B?R2I4QUpXUzdtR0lDY3ZTZy82K3haVG4reDZ2dUxHdnY2NEFmL25obUNCTWkw?=
+ =?utf-8?B?cnlDU2lWUnJTSUE3dWk1RVlvaFQ1amNERWhZVklrS1NKUktrRHl6OUduZmZE?=
+ =?utf-8?B?ckNaYkd6MTY4bTltQURLbmx3VVpUc1dMcmJlVTJ5aHpPaHFZQnFXWVJ4Wjd0?=
+ =?utf-8?B?L1B5N0FDZTNIZU4wSFhrSFhBRWlJK3NncTFsLzlZU2ZpVE82RmVJbkc3ZUlE?=
+ =?utf-8?B?VlNEQnArWGhWeUFyNXBIK0p0S0FGSnl3YXBBOFlpRjdUSGhaTmF3dTl2RWE1?=
+ =?utf-8?B?ZzAvWDVrVkJGVi9oY1ZlSlUvNmhqVG5hckJyN2o0Q0dLYmt0aUt4cnlJekVo?=
+ =?utf-8?B?STFBbUJ6akgrL2dxTlF0UUJMakQrMURLUG5UVVhJaHNOa2htUGFGNTdlbFN1?=
+ =?utf-8?B?R0RqMVNIRFJRNS82eFN2OTZvc3ZIRHBOUTVMajBZaVBuNVlma0lKalFtc1lS?=
+ =?utf-8?B?dndmUmdLazVpOHJxZXJXU3dQQTZXOVJZUTVHNHVNUTlFNktxRUZSMkVYbWZo?=
+ =?utf-8?B?V2c3VCtrVmplY3RZdUJEY3NxRUZuQXRZQ3U4Z2xTZlRCZCtMZDcydk9aTmdI?=
+ =?utf-8?B?bUJnZHpHU0RSSm5FcUltVENvTFlWL3dTVG9FSXRyRGpXaXlrM2hyS3ZUb3pu?=
+ =?utf-8?B?a054amFzam1PQTZTcGE3amdQL2R0S3hwbWlEYXNMYUtoNEtrZzRYOTVqWm9K?=
+ =?utf-8?B?TG1JczJOK2c0eXcydVR1OEMvdGpGbTQ4M2tKSkFVVTJvbmlCUU1ZVWd2U1dY?=
+ =?utf-8?B?QVh6UVAwcG93PT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5968.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?K3VFSE00SmhaV0V5OTEvMDJkTStQSm9LUyt0QjljUThOT2VYVXhsMy9lSU85?=
+ =?utf-8?B?UW9KcHoyWTVsaTlTQXljc1JXOW1LNlR1b2UweEd6cTFXaThFZlNDK1Brbmoy?=
+ =?utf-8?B?SFB4UWZRZUlqS01XdVVYbTljUFd6QnlaR3BrVEpndk85UFZmZU0zVWhyTHZK?=
+ =?utf-8?B?bTM3cGFUbmxBUzRwVXFjTUxwdnJNOG9JNjU4dThNUTFzUDNEQXYxWkQxbFM5?=
+ =?utf-8?B?ZGczeGVPWEVsMVpPT0FUU1pXN1NkaGFaMGVqZWRHbXV6eHJOVHh2bkx5aEE4?=
+ =?utf-8?B?Z0ExazgyV0FkTytkYTFPc3pLTlBTaG55TUN6eEhRZnUrU3plT3dTaXZ6NnA3?=
+ =?utf-8?B?MjkxdUN2Q1c2OVRsNXNTOHBaMHVQRmN4YW1BSjQwNUp3TS9URkczRk92U3pI?=
+ =?utf-8?B?VGhPdFhXMVFiVlppTEJ3VUlZSy9LeWpMNGRxZndmTGxBb09QaU1UODRnOG5C?=
+ =?utf-8?B?RjNINSttN1A5VFp2K0RxaWFnWldzbDNDd3JGMWxuTmI4SEY4VFdDUk1uMG5u?=
+ =?utf-8?B?SzlHMDVIZWxWa0J1WW1JcDJTeUJkNmQ3UUJFcHZLbVlsQ0xET1JuS1R2bjNr?=
+ =?utf-8?B?R01mcHVNNHZFWjRJUmEwK1BGMGVSdXYwd0Zoci9ZaUNpL0lrSzZwdGhVdE9K?=
+ =?utf-8?B?S1NKSXgyWWl6dkY1d2NSaDhhb1FZcUZkN2tnNFJsaFVBdzlxNG1aL0JqWSta?=
+ =?utf-8?B?TkwyaXFYNDZ2ZC9kZGxQTVhnSWV4VEE3aUxjSjN5ZHo3TlluVFFNbzFCWFFF?=
+ =?utf-8?B?WWtXaDgybVk4bUJHTDBTRE1XLzlzcU9ZMzd3Y0pTN3R5c0N4NjkwcWg1SE1M?=
+ =?utf-8?B?RFJxL2s3c1ZkMlVCTldtMWNhQW14ZXJ5azFEejZGd2VwVUNYOU1xWUw2R3Rm?=
+ =?utf-8?B?OFNPbUdlaDFBK1A3eGFtOTUrK0NuOCtHQm12KzdaT1dXRTZwUGdKejIvUXNp?=
+ =?utf-8?B?U1REa2lUUTlqVTM0Lzl6S09iRlhweExYT0U4RFdKVVFvSytudkQ1QXlGNUZF?=
+ =?utf-8?B?emdJbjhDODh1ZTRtVi9PUjNuanEvS3QrNVljOG84S2ZaWkdQSlFTWExjNHE0?=
+ =?utf-8?B?KzN2UHg0djN4SXFJQktTelNHV0xJYXZJNlN0K0JTVlorMHQxbC9RTTVrY3hq?=
+ =?utf-8?B?cmY4RGRSTFg4U2txb2VLZGR1bXZJN2dHRVdNMVBud083NGduWklxOWhXWUdM?=
+ =?utf-8?B?Vm15clhKdmxQOU5kMFZER2FRR01DcVpkYklROE45MEpYMkhkcTVhcXhRa29a?=
+ =?utf-8?B?cndLN0hsMmNBNGhreG5LK05Qc2l5RFAweFRrWEUyUFJUSngvUFUxM1NYTTBp?=
+ =?utf-8?B?N0xyQVNxcExHK01tQlA2TzdvRFQ4NGdyV24vYXdZengxYXlBT1pFZEhuRzll?=
+ =?utf-8?B?NTIxR1N2NnFiVlV5L0NqU2c0K1hueHZhclFCSXQ4bXAzTDN5Z21heVZqeDcv?=
+ =?utf-8?B?cXM2ODUyVWpzcU9Qb29qazlEeEtzK210VGcxOFU0TUtnb3ExQTlreU1JTDVD?=
+ =?utf-8?B?anJUN1BsSUhXRVNsVElqeGk4WlU0bi9mRitabkhpQ01kTGRDU05uTEE1SDQ2?=
+ =?utf-8?B?VWJuUzBHVUUrZXQ1eSthTkhYaGUrZzJYWnQ4WGpLcGRKZHRZMWdNemFLMDJr?=
+ =?utf-8?B?TVM3QUFmNXE3Tmx3QjUxb0xiZG9JdXVRRzNTV0JqZDUzR3dZMlFsUi9tL0s4?=
+ =?utf-8?B?K1lhcnMvazNsbDU5MklieERrcU5KRkdpTldxSkdaVGJlTVdYcURuTmtoZExj?=
+ =?utf-8?B?WjlRNm9Kb1dRRVZVQnhYeXYyOFRqZlVvbUxPaGpEV2pveTNyMlovZTNNbE1D?=
+ =?utf-8?B?OXcwZW1wWFVxSlA1anVqQk50R3pZQnYwR0hMaXR6ZmtHNHNhTnNONkhzeHlq?=
+ =?utf-8?B?Uy8vM1IwUjcyQlNkVHVSTHQyNmVockdYeFNjK0xpZ05HNjJjTFlkK0kxMDJL?=
+ =?utf-8?B?TEUxTEpqakJUbTErb3BrQTVxVjJpbG1reEUyYkpVU2J4TEE0Wk1JVkI2MnAz?=
+ =?utf-8?B?b29XYXg0bklJUS96NDdJWUNVUGRUREl2ZDlJSFlTZHBEYmhINktSMmNHbk5O?=
+ =?utf-8?B?NXNHUU9Mbld2RE5MRjdQVGdxS3JRTVIycm1yL3l4NDJEZXkrUG5Qbjg1N09D?=
+ =?utf-8?Q?jkaihi/HtGMd26Jk9l0nJoBg+?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecc0170f-88bb-41a3-253d-08ddd21d55f8
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5968.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2025 23:35:59.6916
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8tkLEJTwsYW0n/udKnr6EXF38xhOsk7E+Mvf2Hqx7L6nG7ejh+VeF+h38pUBqonlpzGbTjxbxjNalG82LiUPWQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9188
 
-Hi Menglong,
+On 7/31/25 9:01 AM, Muhammad Usama Anjum wrote:
+...
+> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> index c3b6d2604b1e4..8d17036d88396 100644
+> --- a/tools/testing/selftests/kselftest.h
+> +++ b/tools/testing/selftests/kselftest.h
+> @@ -92,6 +92,10 @@
+>  #endif
+>  #define __printf(a, b)   __attribute__((format(printf, a, b)))
+>  
+> +#ifndef __unused
+> +#define __unused         __attribute__((__unused__))
+> +#endif
 
-On Sat, Aug 2, 2025 at 5:28=E2=80=AFPM Menglong Dong <menglong8.dong@gmail.=
-com> wrote:
->
-> For now, the tcp socket lookup will terminate if the socket is reuse port
-> in inet_lhash2_lookup(), which makes the socket is not the best match.
->
-> For example, we have socket1 and socket2 both listen on "0.0.0.0:1234",
-> but socket1 bind on "eth0". We create socket1 first, and then socket2.
-> Then, all connections will goto socket2, which is not expected, as socket=
-1
-> has higher priority.
->
-> This can cause unexpected behavior if TCP MD5 keys is used, as described
-> in Documentation/networking/vrf.rst -> Applications.
->
-> Therefor, we lookup the best matched socket first, and then do the reuse
+Hi Muhammad,
 
-s/Therefor/Therefore
+In case you're interested in going slightly deeper on this:
 
-> port logic. This can increase some overhead if there are many reuse port
-> socket :/
->
-> Fixes: c125e80b8868 ("soreuseport: fast reuseport TCP socket selection")
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> ---
-> v3:
-> * use the approach in V1
-> * add the Fixes tag
-> ---
->  net/ipv4/inet_hashtables.c  | 13 +++++++------
->  net/ipv6/inet6_hashtables.c | 13 +++++++------
->  2 files changed, 14 insertions(+), 12 deletions(-)
->
-> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> index ceeeec9b7290..51751337f394 100644
-> --- a/net/ipv4/inet_hashtables.c
-> +++ b/net/ipv4/inet_hashtables.c
-> @@ -389,17 +389,18 @@ static struct sock *inet_lhash2_lookup(const struct=
- net *net,
->         sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
->                 score =3D compute_score(sk, net, hnum, daddr, dif, sdif);
->                 if (score > hiscore) {
-> -                       result =3D inet_lookup_reuseport(net, sk, skb, do=
-ff,
-> -                                                      saddr, sport, dadd=
-r, hnum, inet_ehashfn);
-> -                       if (result)
-> -                               return result;
-> -
->                         result =3D sk;
->                         hiscore =3D score;
->                 }
->         }
->
-> -       return result;
-> +       if (!result)
-> +               return NULL;
-> +
-> +       sk =3D inet_lookup_reuseport(net, result, skb, doff,
-> +                                  saddr, sport, daddr, hnum, inet_ehashf=
-n);
-> +
-> +       return sk ? sk : result;
->  }
+Entertainingly, there are several kselftest dirs that also use this
+attribute directly, and I quite enjoyed seeing that the *same* attribute
+is now defined as:
 
-IMHO, I don't see it as a bugfix. So can you elaborate on what the exact
-side effect you're faced with is when the algorithm finally prefers
-socket2 (without
-this patch)?
+    __maybe_unused
+    __always_unused
+    __unused         # from your patch here
 
-AFAIK, the current approach breaks the initial design and might make
-the whole lookup process take a longer time in certain cases like you menti=
-oned.
+$ git grep -n  '__attribute__((__unused__))'
+bpf/prog_tests/sockmap_helpers.h:11:#define __always_unused     __attribute__((__unused__))
+landlock/audit.h:28:#define __maybe_unused __attribute__((__unused__))
+landlock/common.h:26:#define __maybe_unused __attribute__((__unused__))
+mm/pkey-helpers.h:88:# define __maybe_unused __attribute__((__unused__))
+mm/protection_keys.c:1307:      __attribute__((__unused__)) int peek_result;
+net/ovpn/ovpn-cli.c:37:#define __always_unused __attribute__((__unused__))
+perf_events/watermark_signal.c:20:#define __maybe_unused __attribute__((__unused__))
 
-Thanks,
-Jason
+
+
+thanks,
+-- 
+John Hubbard
+
 
