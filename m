@@ -1,747 +1,312 @@
-Return-Path: <linux-kselftest+bounces-38217-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2351FB18DCD
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 11:54:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3552B18DF3
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 12:27:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36E5C176A21
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 09:54:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0A7817FE00
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Aug 2025 10:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C65B72459F2;
-	Sat,  2 Aug 2025 09:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D96F1FE444;
+	Sat,  2 Aug 2025 10:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mkvmXhu6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XGypQ3D9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538202459EA
-	for <linux-kselftest@vger.kernel.org>; Sat,  2 Aug 2025 09:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754127920; cv=none; b=H7Lix8qbbkcG3Vfb1hBY05IzykNPKn0k3IKm0aT5zflqXvbZicqrdjU1X+8n1w+XhCtuAJPhV1AaKH1K2m7njago630Fk+hlnWOXutajNi5E3lI1ePNAZPt0YjplpsYiyzlteKpkTtNUwIWb7iRj2N9+OhEKvyoZmSc2xu1KfNo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754127920; c=relaxed/simple;
-	bh=MW69kZt8kfBdU4JV8RQEluMjhhMK5MbgKXnnztMTCf4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wi2lK6xk9HPTJoOaoIitKegkiSL1XfKEgcR/e1O/jXqR/DtA5InhhTtwUMJpsvjtbkPDW5Ama/4aJcwm3XcW1ZAqUeD/Q0AVxWiboBmBjqXVzL+Jf4Z+2LckcZRDoHCxWUcbXgx07MBTsr5o6CPpaakF4fBmvpYNmKqPn3Mvlmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mkvmXhu6; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-70748a0e13dso25316506d6.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 02 Aug 2025 02:45:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754127916; x=1754732716; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=I0zesJPKKOqOqafkYIS9zu/pVVtnqPrwT2UWa2YaCog=;
-        b=mkvmXhu6k+bxmzCpX9HeE+Q5EZPE0/wjhxVqP80ADfwUSOlxy0/OoUe+eT0G2ZALQi
-         tMywlGxUWASuFVAjmHGivlvUq5Lv3cQNfVv+Ykp5atHitLH7HFuK9cHEpo25dQnfJmhj
-         5SRmC5xbnATUFT410rvNiVXxR8sSwRRKnMTgWdb6kKcZmr7vEpGg/f2QMOz6YYYpGhqi
-         KczEG/BlWsjuomojMKdtJqSMwgfsDddVpM9F6hsTgkUyPjkxruAncX6aNSD7oAUvrpP3
-         YMlrtSd6q2j8xCBbqdB4GW5a7eclaguuZCmi84aiZ5Md1yiSOF98qrRC//BDT0IcRaiq
-         8SOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754127916; x=1754732716;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I0zesJPKKOqOqafkYIS9zu/pVVtnqPrwT2UWa2YaCog=;
-        b=SSXtj5LI8UVtsMG0nuko/GBsqCvEL5ul10lrubD3LiUj+P5aycTbcpb8gct71PQAjc
-         TOZ8o6bxBhHjWzhIiwgKo3aCwF3B34ihUJJWc8ftK6uQiFRPaMO74jlS6SFjtoDOQ2Kf
-         /1JblbSPN4wuC0G/6BJeSNj5N9/ZKuq0nJc17JSJcyp2M2Hg9c74r0lm7kpG/1hhLUHE
-         y0+4E1mMfKOtfuDxKrFB+9gip0tDxqOVc/gYWsjlggAuQDyv3462YujSdHHZL/124dWX
-         5wu5E+QoUN8jIEd9T8hZam2LujlpoigDmRVIyIawzGlgUo2jxBs8ZK7GqGYJPLXWrujB
-         Ifig==
-X-Forwarded-Encrypted: i=1; AJvYcCUGwbYwc4DAiXMpCCHDqEJ+8WgMbHAnTVwW/a2gPNcndrnNcPPscDRVHKnXSFqMLnSoN4D6hagQ5TaUyWnF1bw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9xgAM1YbpczSZgUcLSxJ1fazGzEq2g1uxOWo4ovnrC6Kc84uV
-	vsvbnVqj0DKvap0IoQ9ivq5I4t1tJ2qEvUzvSpQZ7jMnS+LT+0MTbX0h+sjntGJCUeku7qqV5l2
-	B7tpEeJ4ig2CzeJf53U8+WxKdIypgYmTEEenbLzJ3
-X-Gm-Gg: ASbGnctJRTmZizNwsvRTsQ1e0sUobWH1bca/hA/qfks8K9iWhgGNjies8nQlter73/r
-	jwuo2M9ZVVg9ZXBB3yWb/V5+qNeeBbTNQaOkV1E72yHZf2sOGFUrPGY+uCodEVxB3sSywQ2D/AG
-	0BMd7AJYWXHSBUpbLMVXJCGWMCBE5Z8bAEo4AQvlhbnVOfqD7JX/20/YNP25xQHiSHOX9fsvGaF
-	R7wiWoR
-X-Google-Smtp-Source: AGHT+IG5KrIx3Vln0wHRyMbEn9wfXa3nzst/J0KJwSmMdshEKTwJHOoSUPWhXO2HXuHzcba+9H0b0q+gxvwMpFhdxEY=
-X-Received: by 2002:ad4:5747:0:b0:6fb:25f:ac8c with SMTP id
- 6a1803df08f44-7093626cec8mr41067216d6.31.1754127915668; Sat, 02 Aug 2025
- 02:45:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22961F78E6
+	for <linux-kselftest@vger.kernel.org>; Sat,  2 Aug 2025 10:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754130419; cv=fail; b=Hzps/RGz+ezqqFUj3FUtqv/wM+3JjVumah5PYHsR6uLw3BTUas5Jz5XNgm8niSOtdo3Cgr4Z6PBvkua/gzivK55fwVDIBE7dEKV5vJ1wWNLe73M8Eo28yOT1Z0uX/JOzs0VpEXtcka2uYYYOLEv6ZxBPukUH4KqkCqJedK+6Tmw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754130419; c=relaxed/simple;
+	bh=JqFWo9zXEAR9YWmXVJs7El+3aYCjhTtR4ewK9XuL1z8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=XVPt18mqb16S+6yeVbdkqZV0Wy9+9wn8UKVdudqfNRe2CkkgLiycl85TCE24LwU0Qz4P2EB/8YoPpM8BwNDi7LNMQjI76rAZF5aYfUFN77n4B6rBEvGYggISDQogQaP1OCdAJ1DuUvLcEZXN3SOAXkJYHLKm1OfNUTFGMskjuh4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XGypQ3D9; arc=fail smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754130417; x=1785666417;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:mime-version:
+   content-transfer-encoding;
+  bh=JqFWo9zXEAR9YWmXVJs7El+3aYCjhTtR4ewK9XuL1z8=;
+  b=XGypQ3D9212vDIhgVRygtrewiH5uFzPK0yyou/oHm7/3x2B9aDK3PRrv
+   HDooc7bfftJNa3/iGm0tFrN11FIWhniyqNHqvE5TfzF6kgVcLmN6uNJwp
+   UtmL/mCwBy3pwOxcwZCtacONAX7tljDX6U+4Yiq/3VfMTX5x3XyUkdqMT
+   87DzLfcIOes4s2/Q9e/7FbZbe+yXyDmpWpd1LEEmJ7/fHRoE71Y0N96rx
+   TG2sVCy2cju6EF0UnJTpamNI1L7cDZNUGOEeXWM8en3VY89S2zsxo+S1p
+   WO3UjHjfH4ZJeShknTj25IgHaR+TilP186wKpsyyKezR4tMN7ZKOiNcfr
+   A==;
+X-CSE-ConnectionGUID: UJT+lTqkTe6R/fkJONxLAw==
+X-CSE-MsgGUID: VlqYUswKSEW29b2YT/utwA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="79014615"
+X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
+   d="scan'208";a="79014615"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2025 03:26:57 -0700
+X-CSE-ConnectionGUID: M9zm2PybSDKN2vK6B0ZWyQ==
+X-CSE-MsgGUID: f+JSLmvvQaOgaZpegS98Ew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
+   d="scan'208";a="167951628"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2025 03:26:56 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Sat, 2 Aug 2025 03:26:55 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26 via Frontend Transport; Sat, 2 Aug 2025 03:26:55 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (40.107.244.56)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Sat, 2 Aug 2025 03:26:55 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=v3+kPwajFJP7gz8TxHqV/01gQ3kVsJisysdbaSkcTNw6NT2XBGhnEfAhuZjIwFtbgedjdQR2Rqp9wxgXmHRnND1j2KeHXIt25aBVajSo+0FD5Ul9U0FRBEEeou93Ae92J3Wu5VjLZmfado9Y6wlJHOjLrZJpN4dzyRC/U6BWF0NYniN4nzITWWxikN9Vh+Qofgme5hs78Y91/kVozhUE+IpGqeJt6NFM51rdI4WQ0Sd06LJ1P7INQNNJEvu1cGO5t2hFbGCEftNp9xpZ/CWkucnYkGhRg1Ja38nNUK3mYp9bmvaq317FNOb9beeE1g1u0adfTDsM7dVes3TKKmd44w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jNrcZnpiMMSOXzhHBbujN2shUHHnbX/K/Z+3k+dT1tA=;
+ b=SxF6FJ9JtoIVdHys8n51xDCrMH0qhC2tMz9Ud93yjZkHbOwKnw/8ug7/Mq+6Bv77rj3eYmHP3JdFoXIvyEHd0bDIHrH4A/7KRuX9Pwg6ofHABVvOetebx8O5hTUYiUrWNJV/teU8G8VqTcOkgysq0cf6x10+g8i+lYPUfIZ2wSocBLHksySxhydmiZYUSPOkjWghv/Znz8s3ffNoHjLKecxRnZtXbW9mSZqqBBcjokbIby4U4ONcul5wAdiQGi4hUw6gTNFqe7KIv151g5uEWVkegq8ZdKv10UEIgHRbWAqD7Pm/ymS4SmQNYn3tuETOS1URh+/wJwiyiXdZ/ipiOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH7PR11MB7964.namprd11.prod.outlook.com (2603:10b6:510:247::9)
+ by DM4PR11MB6552.namprd11.prod.outlook.com (2603:10b6:8:8f::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8989.13; Sat, 2 Aug 2025 10:26:34 +0000
+Received: from PH7PR11MB7964.namprd11.prod.outlook.com
+ ([fe80::1b60:d7c9:1b2a:2a7f]) by PH7PR11MB7964.namprd11.prod.outlook.com
+ ([fe80::1b60:d7c9:1b2a:2a7f%7]) with mapi id 15.20.8989.015; Sat, 2 Aug 2025
+ 10:26:34 +0000
+From: "Berg, Benjamin" <benjamin.berg@intel.com>
+To: "linux@weissschuh.net" <linux@weissschuh.net>
+CC: "w@1wt.eu" <w@1wt.eu>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v3 4/4] tools/nolibc: add signal support
+Thread-Topic: [PATCH v3 4/4] tools/nolibc: add signal support
+Thread-Index: AQHcAlebACylJcYnlEK6eTyMPMAidrRN59CAgAFDVoA=
+Date: Sat, 2 Aug 2025 10:26:34 +0000
+Message-ID: <bae0c68a9cb24aa5d16f0df74959207ea4385c66.camel@intel.com>
+References: <20250731201225.323254-1-benjamin@sipsolutions.net>
+	 <20250731201225.323254-5-benjamin@sipsolutions.net>
+	 <fbd9add3-dd99-4deb-979d-79ecfdae2f6c@t-8ch.de>
+In-Reply-To: <fbd9add3-dd99-4deb-979d-79ecfdae2f6c@t-8ch.de>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR11MB7964:EE_|DM4PR11MB6552:EE_
+x-ms-office365-filtering-correlation-id: dfec5d29-bece-490f-90b8-08ddd1af0e64
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|10070799003|376014|38070700018;
+x-microsoft-antispam-message-info: =?utf-8?B?NE1tdURRc01ENmNnZ0ROOHdmQ0R4U0ZwWEMrSE82STlGZHljQXkvRy9SbjRn?=
+ =?utf-8?B?azY5NVk4VHJubW9JWkJoTDdab2pZKzFFd0NVZFNPS1BIYkhjMzFRUlBBckE0?=
+ =?utf-8?B?eE41T0o3N2xzdUJCK1N1TjZvVXFnSkg4bFZoSXlpZnQrVkVra0VXZEV1UDBr?=
+ =?utf-8?B?OXo4ZnlzQUlsY0ZodWFhazJtRFJvSkdGOHhKZTA2YWhwdEY5aXlES2J4aGRN?=
+ =?utf-8?B?SndzRW9LVWFodnVnUU83Q1NGaC9LaVc0WDdFVWp6NW1MT1hTWVcvRHBkbzVL?=
+ =?utf-8?B?WTliTng4TkJ1U1ZvdmpXdnFFSUdYK0lpME8rZXlYOXA2VWprOGpkaTRVM1hR?=
+ =?utf-8?B?THR2UDlsNlREb3hZU0t6RnM0aEtoUUdHMkcxNmo0dUl1RGtkcFBJakc2d0lT?=
+ =?utf-8?B?bWpiM1Q3Yzg3SlhzM1FVVjNZVW5WMlNINlA2SVo5K2w4UU9MZmFlZm1hVmtr?=
+ =?utf-8?B?MFFWUjVsUmsyUkxGNkV5SzVJYk5oc1BETytXOTlSUFgvUlBQRU9rZGtLbDY0?=
+ =?utf-8?B?RGMzZDR4ZmNDa1JGMHFWTGRzVDh6eHRxNkNsRXN0RXMzSDlQaGIxekFQK0NH?=
+ =?utf-8?B?L0NRVTdBc2pCSUs1eEZxN28ySStkZFBGS0JBK2p1Q3BxOE5xMEc5Znc4OUlS?=
+ =?utf-8?B?dFd4N1NNY21oV3h1SnhJcDBRZFpkTDVQT1ZLQlpHTXRnNE8zdGZaWkJlUnh3?=
+ =?utf-8?B?NmNDWE5NbDFpaE9tbURKNCtVLzFjMUhTN2o4cnVQMWlxSVJDWTlLZjVuWUxu?=
+ =?utf-8?B?N2RRTFlaN0svejNYeGZXN0FBZkRNdys2aXdnNlN0bUc4M2gwUW00Qm9rNTA1?=
+ =?utf-8?B?UFF6K3VicnRFK2ZTM1RDbFkxalBodEZjN2I2aEJ4TDIyN1BvZitXZitLeWE1?=
+ =?utf-8?B?eDNOc2NHYTZJbUtXYUZPZXB1NDJnZW1jSXdJTytOZlR5V1JEeENXMExpWkI2?=
+ =?utf-8?B?WGtwZElkQlo2S1VBYWNWcXZvWVBJSG56Z2xkOENxZzk0U1Q5UHZlKzkzSGQ2?=
+ =?utf-8?B?c2FPZDRvVkNWNTkwNVQ1NXdXcHV3YWVvQWhNWERQNU5iMXpOWlJoQ25pcUVZ?=
+ =?utf-8?B?SVA2U1dheXc0YmMzdEFXU09USzQwYjlwemRiZkphenBUSnllM2oreHk2cTRS?=
+ =?utf-8?B?aHF2ZzAzSlpHZDZJMnYvRGVZbHFVZWQrbC9MUWVzQ21CL2pGaUV1TkRlZHlz?=
+ =?utf-8?B?SFZtdzZ3bHhXT2RZVm84ODVQRFA4VmNFbll5bHNEcDdwQWszLzFQak9UeG9z?=
+ =?utf-8?B?OVlWakF3WHlZUjJCRk5xUks1T2FZZEZmTndjQjRlek5YT2J1QlZGZUNtTWZm?=
+ =?utf-8?B?aWZ2cm9RQWMxRHNmRjMvOWIyeCs3OGpQelZXWFJHMForbU03QlNEOW9PNVFi?=
+ =?utf-8?B?aWxjNFQ0YkFIazNtTFpwRzY1U3NrMS9ZMGZKYUlQY01sNXFkNVc5eTEvV1JM?=
+ =?utf-8?B?NG9yZ0ptT3BackovdExDd1ZrTkNBdXB1U3l0UTRlZkhLZzN1anFEb3dxKzFT?=
+ =?utf-8?B?ZXAveWFycGZMMUR4T3pIQldFdDJiNjYvU1BJRnVPTkJkMEEwWFFseWpvNWEv?=
+ =?utf-8?B?NktXK2tHUUlTQ0Y5YUdLV2xIODV1RHF1eVByRnd6c3p1TnhHWGFDMVNtaHZB?=
+ =?utf-8?B?L3JIbnpMbVJHWWFPTGsxU0YwTm5lb3VXbitJclhzN3dkTy9DektwK3E1MWhz?=
+ =?utf-8?B?cjVkZlMydHc2aGd4dk9rbFBRWGhrWDRWZFM1djdqNk5EbDdNQmpUbmxWNGlJ?=
+ =?utf-8?B?b3NHajhMR3V5eUZBbEpLMTIwckZYU040dy92UlE2cC9GdXRvaFAvRWI3YkRo?=
+ =?utf-8?B?SDVlVDI3bzBOdVYxckJXUzdjY21xT0pva2tpNCs0QmgzU0VscS9ING5jZUFD?=
+ =?utf-8?B?cFJXNGlxUDlURWpCd2pkZzVPZzI5M1NnMnFiejV3K0F2c2pnc0lqZHFXeVI0?=
+ =?utf-8?B?aTV1NEdRSTJFbFd5dldtU2RIR1R3YytCUDVJeGh2RHlNbFBoZlFPK2xaQzYw?=
+ =?utf-8?B?ZE5xRGF1NXNBPT0=?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB7964.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(10070799003)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Um0yZ1BXRGU4REdrWHEwQ3FPNUJyS0Zjd0VUcGVtWFRRSjR5MHRmeUdGVHFs?=
+ =?utf-8?B?R1VETGlOTXJzVStFV09pbWpaeU04NkhYVTRmYW80aG5hbDQ5cHZzcjVwT2o1?=
+ =?utf-8?B?OVJRVFZvQmdpb2E1Njh2cjdCeFUvRVpjQnhwWk9aS3pkeG56WXVKS1J2R2Fi?=
+ =?utf-8?B?TFplbVNMUDNteU11aXhscytGRmFsRmhSNlV4dldlTHR3T1h5UGN1SFdCVWEx?=
+ =?utf-8?B?NWFaMEYwUytSL0F5cFNvZXZUNEo1NTJzNGtOOGZGTE4vMDFXbEt4L2RYMmJx?=
+ =?utf-8?B?UTdOMTkvSFNRVFVCOEZsbjVyLytwdXFwQmh6bFlOaVhyeUVOVGJqNTNtdXBQ?=
+ =?utf-8?B?ZVduVUVjeTVpVlBjMHFqZzJweE9wSllRK2k3Mk1Ka2o4S25STTJIVEdQWStT?=
+ =?utf-8?B?eTVjOVluZVNwQVNSMjRIdnBNNXRXUTNVRlpwMFpBSDd3R3dHL1B2VDg3SUtW?=
+ =?utf-8?B?T3hweTFuSXpNOHA1UTlYREVQeG9vZUtoZkFhSXNVNUhpT3RzMXJwdFh6N0Yy?=
+ =?utf-8?B?eHhtektCTUJZOGhZNWYyZ2FXNkhNUmdLKzV0VS9Ldzh6dC81LzMySG9OYVVF?=
+ =?utf-8?B?TGxxZnVjd1FWWkNBK1JSVUxEMTRXc21NZFVsMnVSZ0o3dGhOTGUyK29pb2Fz?=
+ =?utf-8?B?dFJ0RVJNdldhU3JOZVM2SFhwOUVXSEltd3dsYllUT2tERVExT1JTR1hTTkdn?=
+ =?utf-8?B?VktTdjRCS0lCYk5DS3k1Tm4zR1YrU2ZMVTZGOTJlRTF0dWw2MjNLREF5L0JJ?=
+ =?utf-8?B?OVlYb0dkcVYramlqc1VFRFBBNU1vbkNweHhVSGpjTzl0UVF3a0hIWWVwaFo5?=
+ =?utf-8?B?WDJSUTc2aVlrTW5ZaHhBbk9Sc3I2SUZ1eS9EYmlmQnhZS1R2b1A0cFo2Q3E0?=
+ =?utf-8?B?ZHF6Q3ZoWklPOWw0UExFTFFRZHFTYSt1eTRQVHh3WTUrNCtBZER2MGhJZlFj?=
+ =?utf-8?B?RjRNNk9VUkJwaW5TTHNFT0llalhyanh5S0F3TmZLWFgxdVo1QVB5WUdtRjFY?=
+ =?utf-8?B?WUhSalExK0JaYmlmR3hEY0NlU1I4ZENaOUJodWZqVzZ1Z1NzYXZ2MFc2UXpa?=
+ =?utf-8?B?d1JUaklZTGhhb2kwUzNLVHRPRzM4N2V3RFd1S2NiWG4rMVc3L2pDb1cxRTBY?=
+ =?utf-8?B?MHN4UnMzWEZmNW9IUUU5MUhxb243a1FIVzFMbitqM1psZGgwemp0SXljYWlQ?=
+ =?utf-8?B?TGg4cE8yWGtKNm14a2NwRyt4VlVaWXlEckFSNXZFdjJxeGdXZVFkNVFxSEl3?=
+ =?utf-8?B?Q2k5M1I3bTd6KzhiOXRlenVlSHNzSGFDOU5YdUhSNFI2RmdweVoyZ1c5OGZs?=
+ =?utf-8?B?amVwMUxkMm1RMU44NzRkZ2ltaDRFYXl6WlA2L2Y0SXdoWjVYbUY5aWFVZ0Qx?=
+ =?utf-8?B?VTNmWjlkM3NEZTUrdnR1clFqWmVqWFRzMHhOK0FNc3BTUDh2YTl1QzAzNTR2?=
+ =?utf-8?B?MytnQ0VxR01mRnUvZytZZDYxTVB5VVU1OFNuRGVGS1R3UTdnek9PUGY0RXhM?=
+ =?utf-8?B?YSt3S1FlbHZXQUZiT2xhWFc5dXEzbXBlNlR5SnIwa1BUQlRZb0E2TlhGQ2Zi?=
+ =?utf-8?B?aXVUWFNLeWR6M3V6UGx1QzZ5MnRSSmh4M0g1SHJFTURna3RNN0FLd3huakpw?=
+ =?utf-8?B?dUNvQnJ0eFh0Z25HZU85N2YvY29uWlVQUDlBODU4Z2pvOERyN09RdE8yOUpk?=
+ =?utf-8?B?UWIzUmF3UGdtRkM4VUhXL2NLUTh0aEZpTXZqYkhXN3NJY1dBVGhTY1ZTcS95?=
+ =?utf-8?B?Vmd3TmYycmlkNEgyRldQbTYwR1QzVnFtMlBlVkhVZzZCSGwzNlhodEszTnEv?=
+ =?utf-8?B?ekVnRENJSTQ1eDdaeEFtVjJZWmllNVRUUFlVemZHRS9rbmxZL0hvTHRjWnVU?=
+ =?utf-8?B?aHF5MENMeTVOdXR5RjQyVS9lbmo5RE9pUk40eDRISWFnZHdZMjd4WWRPM0xh?=
+ =?utf-8?B?Q2VBNCsyQ3NqS3pzUTVLRDdSVkExWm1Bb2laWlZJMi81amQ5S3l5cnY4Rzdn?=
+ =?utf-8?B?ajNGWW0walNjSE8vaHFMSll2VXJaKzYrdEUzdURjRVZnU3JORm0xZEFDSHEw?=
+ =?utf-8?B?dU9VaUlUNVRkZlloaHkvZ1cweW1sZTkvbWIzYW00VEZVUG1PMVR1QTQ3UWFF?=
+ =?utf-8?B?RmVqVkoxcU1QRStsQTRoY1ZFTHo4QjZVZ3FOT0U3SWJlVDJMTS9yTlR4UlhC?=
+ =?utf-8?B?ZFg5UDREWWZMT3UrQzVuZDdLYmZoRlcrRGpYWXlyWmxkOWs2SFFkcE9Xd1Vt?=
+ =?utf-8?B?K0N5V2FYTGxIUjVSRzlTUXJ1WHZBPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <11F88A40F0E4CA4FB983489F977562F8@namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250729193647.3410634-1-marievic@google.com> <20250729193647.3410634-10-marievic@google.com>
-In-Reply-To: <20250729193647.3410634-10-marievic@google.com>
-From: David Gow <davidgow@google.com>
-Date: Sat, 2 Aug 2025 17:45:02 +0800
-X-Gm-Features: Ac12FXztqWwaOCI5qNeFoZ80YlZQbPxDxxsBqBADT-CQI0GZH_gqfj5Bz6a0BDc
-Message-ID: <CABVgOSnWF=xnfSJjCJ4KYAPhnY7OyeU7w1e2MXi5U25nwaT+MQ@mail.gmail.com>
-Subject: Re: [PATCH 9/9] Documentation: kunit: Document new parameterized test features
-To: Marie Zhussupova <marievic@google.com>
-Cc: rmoar@google.com, shuah@kernel.org, brendan.higgins@linux.dev, 
-	elver@google.com, dvyukov@google.com, lucas.demarchi@intel.com, 
-	thomas.hellstrom@linux.intel.com, rodrigo.vivi@intel.com, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	kasan-dev@googlegroups.com, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000005b4deb063b5ebb59"
-
---0000000000005b4deb063b5ebb59
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, 30 Jul 2025 at 03:37, Marie Zhussupova <marievic@google.com> wrote:
->
-> -Update the KUnit documentation to explain the concept
-> of a parent parameterized test.
-> -Add examples demonstrating different ways of passing
-> parameters to parameterized tests and how to manage
-> shared resources between them.
->
-
-Nit: We don't need the dot points ('-') here. Just make them paragraphs.
-
-> Signed-off-by: Marie Zhussupova <marievic@google.com>
-> ---
-
-Thanks very, very much for including such detailed documentation.
-
-I do think some of the examples could be trimmed / left in the
-kunit-example-test.c file and referenced, as they're long enough that
-it's difficult to focus on the essentials. But otherwise, this looks
-great.
-
-A few small notes below, but otherwise:
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  Documentation/dev-tools/kunit/usage.rst | 455 +++++++++++++++++++++++-
->  1 file changed, 449 insertions(+), 6 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 066ecda1dd98..be1d656053cf 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -542,11 +542,21 @@ There is more boilerplate code involved, but it can:
->  Parameterized Testing
->  ~~~~~~~~~~~~~~~~~~~~~
->
-> -The table-driven testing pattern is common enough that KUnit has special
-> -support for it.
-> -
-> -By reusing the same ``cases`` array from above, we can write the test as a
-> -"parameterized test" with the following.
-> +To efficiently and elegantly validate a test case against a variety of inputs,
-> +KUnit also provides a parameterized testing framework. This feature formalizes
-> +and extends the concept of table-driven tests discussed previously, offering
-> +a more integrated and flexible way to handle multiple test scenarios with
-> +minimal code duplication.
-
-Nit: maybe we can tone down the adjectives slightly here. I do like
-parameterised testing a lot, but it probably doesn't need to be
-"efficient", "elegant", "integrated", and "flexible".
-
-> +
-> +Passing Parameters to the Test Cases
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> +There are three main ways to provide the parameters to a test case:
-> +
-> +Array Parameter Macros (``KUNIT_ARRAY_PARAM`` or ``KUNIT_ARRAY_PARAM_DESC``):
-> +   KUnit provides special support for the common table-driven testing pattern.
-> +   By applying either ``KUNIT_ARRAY_PARAM`` or ``KUNIT_ARRAY_PARAM_DESC`` to the
-> +   ``cases`` array from the previous section, we can create a parameterized test
-> +   as shown below:
->
->  .. code-block:: c
->
-> @@ -555,7 +565,7 @@ By reusing the same ``cases`` array from above, we can write the test as a
->                 const char *str;
->                 const char *sha1;
->         };
-> -       const struct sha1_test_case cases[] = {
-> +       static const struct sha1_test_case cases[] = {
->                 {
->                         .str = "hello world",
->                         .sha1 = "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
-> @@ -590,6 +600,439 @@ By reusing the same ``cases`` array from above, we can write the test as a
->                 {}
->         };
->
-> +Custom Parameter Generator (``generate_params``):
-> +   You can pass your own ``generate_params`` function to the ``KUNIT_CASE_PARAM``
-> +   or ``KUNIT_CASE_PARAM_WITH_INIT`` macros. This function is responsible for
-> +   generating parameters one by one. It receives the previously generated parameter
-> +   as the ``prev`` argument (which is ``NULL`` on the first call) and can also
-> +   access any context available from the parent ``struct kunit`` passed as the
-> +   ``test`` argument. KUnit calls this function repeatedly until it returns
-> +   ``NULL``. Below is an example of how it works:
-> +
-> +.. code-block:: c
-> +
-> +       #define MAX_TEST_BUFFER_SIZE 8
-> +
-> +       // Example generator function. It produces a sequence of buffer sizes that
-> +       // are powers of two, starting at 1 (e.g., 1, 2, 4, 8).
-> +       static const void *buffer_size_gen_params(struct kunit *test, const void *prev, char *desc)
-> +       {
-> +               long prev_buffer_size = (long)prev;
-> +               long next_buffer_size = 1; // Start with an initial size of 1.
-> +
-> +               // Stop generating parameters if the limit is reached or exceeded.
-> +               if (prev_buffer_size >= MAX_TEST_BUFFER_SIZE)
-> +                       return NULL;
-> +
-> +               // For subsequent calls, calculate the next size by doubling the previous one.
-> +               if (prev)
-> +                       next_buffer_size = prev_buffer_size << 1;
-> +
-> +               return (void *)next_buffer_size;
-> +       }
-> +
-> +       // Simple test to validate that kunit_kzalloc provides zeroed memory.
-> +       static void buffer_zero_test(struct kunit *test)
-> +       {
-> +               long buffer_size = (long)test->param_value;
-> +               // Use kunit_kzalloc to allocate a zero-initialized buffer. This makes the
-> +               // memory "parameter managed," meaning it's automatically cleaned up at
-> +               // the end of each parameter execution.
-> +               int *buf = kunit_kzalloc(test, buffer_size * sizeof(int), GFP_KERNEL);
-> +
-> +               // Ensure the allocation was successful.
-> +               KUNIT_ASSERT_NOT_NULL(test, buf);
-> +
-> +               // Loop through the buffer and confirm every element is zero.
-> +               for (int i = 0; i < buffer_size; i++)
-> +                       KUNIT_EXPECT_EQ(test, buf[i], 0);
-> +       }
-> +
-> +       static struct kunit_case buffer_test_cases[] = {
-> +               KUNIT_CASE_PARAM(buffer_zero_test, buffer_size_gen_params),
-> +               {}
-> +       };
-> +
-> +Direct Registration in Parameter Init Function (using ``kunit_register_params_array``):
-
-Maybe we should highlight this as being array-based more explicitly.
-"Runtime Array Registration in the Init function" or similar?
-
-> +   For more complex scenarios, you can directly register a parameter array with
-> +   a test case instead of using a ``generate_params`` function. This is done by
-> +   passing the array to the ``kunit_register_params_array`` macro within an
-> +   initialization function for the parameterized test series
-> +   (i.e., a function named ``param_init``). To better understand this mechanism
-> +   please refer to the "Adding Shared Resources" section below.
-> +
-> +   This method supports both dynamically built and static arrays.
-> +
-> +   As the following code shows, the ``example_param_init_dynamic_arr`` function
-> +   utilizes ``make_fibonacci_params`` to create a dynamic array, which is then
-> +   registered using ``kunit_register_params_array``. The corresponding exit
-> +   function, ``example_param_exit``, is responsible for freeing this dynamically
-> +   allocated params array after the parameterized test series ends.
-> +
-> +.. code-block:: c
-> +
-> +       /*
-> +        * Helper function to create a parameter array of Fibonacci numbers. This example
-> +        * highlights a parameter generation scenario that is:
-> +        * 1. Not feasible to fully pre-generate at compile time.
-> +        * 2. Challenging to implement with a standard 'generate_params' function,
-> +        * as it typically only provides the immediately 'prev' parameter, while
-> +        * Fibonacci requires access to two preceding values for calculation.
-> +        */
-> +       static void *make_fibonacci_params(int seq_size)
-> +       {
-> +               int *seq;
-> +
-> +               if (seq_size <= 0)
-> +                       return NULL;
-> +
-> +               seq = kmalloc_array(seq_size, sizeof(int), GFP_KERNEL);
-> +
-> +               if (!seq)
-> +                       return NULL;
-> +
-> +               if (seq_size >= 1)
-> +                       seq[0] = 0;
-> +               if (seq_size >= 2)
-> +                       seq[1] = 1;
-> +               for (int i = 2; i < seq_size; i++)
-> +                       seq[i] = seq[i - 1] + seq[i - 2];
-> +               return seq;
-> +       }
-> +
-> +       // This is an example of a function that provides a description for each of the
-> +       // parameters.
-> +       static void example_param_dynamic_arr_get_desc(const void *p, char *desc)
-> +       {
-> +               const int *fib_num = p;
-> +
-> +               snprintf(desc, KUNIT_PARAM_DESC_SIZE, "fibonacci param: %d", *fib_num);
-> +       }
-> +
-> +       // Example of a parameterized test init function that registers a dynamic array.
-> +       static int example_param_init_dynamic_arr(struct kunit *test)
-> +       {
-> +               int seq_size = 6;
-> +               int *fibonacci_params = make_fibonacci_params(seq_size);
-> +
-> +               if (!fibonacci_params)
-> +                       return -ENOMEM;
-> +
-> +               /*
-> +                * Passes the dynamic parameter array information to the parent struct kunit.
-> +                * The array and its metadata will be stored in test->parent->params_data.
-> +                * The array itself will be located in params_data.params.
-> +                */
-> +               kunit_register_params_array(test, fibonacci_params, seq_size,
-> +                                           example_param_dynamic_arr_get_desc);
-> +               return 0;
-> +       }
-> +
-> +       // Function to clean up the parameterized test's parent kunit struct if
-> +       // there were custom allocations.
-> +       static void example_param_exit_dynamic_arr(struct kunit *test)
-> +       {
-> +               /*
-> +                * We allocated this array, so we need to free it.
-> +                * Since the parent parameter instance is passed here,
-> +                * we can directly access the array via `test->params_data.params`
-> +                * instead of `test->parent->params_data.params`.
-> +                */
-> +               kfree(test->params_data.params);
-> +       }
-> +
-> +       /*
-> +        * Example of test that uses the registered dynamic array to perform assertions
-> +        * and expectations.
-> +        */
-> +       static void example_params_test_with_init_dynamic_arr(struct kunit *test)
-> +       {
-> +               const int *param = test->param_value;
-> +               int param_val;
-> +
-> +               /* By design, param pointer will not be NULL. */
-> +               KUNIT_ASSERT_NOT_NULL(test, param);
-> +
-> +               param_val = *param;
-> +               KUNIT_EXPECT_EQ(test, param_val - param_val, 0);
-> +       }
-> +
-> +       static struct kunit_case example_tests[] = {
-> +               // The NULL here stands in for the generate_params function
-> +               KUNIT_CASE_PARAM_WITH_INIT(example_params_test_with_init_dynamic_arr, NULL,
-> +                                          example_param_init_dynamic_arr,
-> +                                          example_param_exit_dynamic_arr),
-> +               {}
-> +       };
-> +
-
-This is a long example, which already exists in the source code
-(kunit-example-test.c). Could we just include some highlights (e.g.,
-the init function and the KUNIT_CASE_PARAM_WITH_INIT call), and link
-to the source code for the rest?
-
-> +Adding Shared Resources
-> +^^^^^^^^^^^^^^^^^^^^^^^
-> +All parameterized test executions in this framework have a parent test of type
-> +``struct kunit``. This parent is not used to execute any test logic itself;
-> +instead, it serves as a container for shared context that can be accessed by
-> +all its individual test executions (or parameters). Therefore, each individual
-> +test execution holds a pointer to this parent, accessible via a field named
-> +``parent``.
-> +
-> +It's possible to add resources to share between the individual test executions
-> +within a parameterized test series by using the ``KUNIT_CASE_PARAM_WITH_INIT``
-> +macro, to which you pass custom ``param_init`` and ``param_exit`` functions.
-> +These functions run once before and once after the entire parameterized test
-> +series, respectively. The ``param_init`` function can be used for adding any
-> +resources to the resources field of a parent test and also provide an additional
-> +way of setting the parameter array. The ``param_exit`` function can be used
-> +release any resources that were not test managed i.e. not automatically cleaned
-> +up after the test ends.
-> +
-> +.. note::
-> +   If both a ``generate_params`` function is passed to ``KUNIT_CASE_PARAM_WITH_INIT``
-> +   and an array is registered via ``kunit_register_params_array`` in
-> +   ``param_init``, the ``generate_params`` function will be used to get
-> +   the parameters.
-
-Maybe note that the ``generate_params`` function can use the array
-passed, though?
-
-> +
-> +Both ``param_init`` and ``param_exit`` are passed the parent instance of a test
-> +(parent ``struct kunit``) behind the scenes. However, the test case function
-> +receives the individual instance of a test for each parameter. Therefore, to
-> +manage and access shared resources from within a test case function, you must use
-> +``test->parent``.
-> +
-> +.. note::
-> +   The ``suite->init()`` function, which runs before each parameter execution,
-> +   receives the individual instance of a test for each parameter. Therefore,
-> +   resources set up in ``suite->init()`` are reset for each individual
-> +   parameterized test execution and are only visible within that specific test.
-> +
-> +For instance, finding a shared resource allocated by the Resource API requires
-> +passing ``test->parent`` to ``kunit_find_resource()``. This principle extends to
-> +all other APIs that might be used in the test case function, including
-> +``kunit_kzalloc()``, ``kunit_kmalloc_array()``, and others (see
-> +Documentation/dev-tools/kunit/api/test.rst and the
-> +Documentation/dev-tools/kunit/api/resource.rst).
-> +
-> +The code below shows how you can add the shared resources. Note that this code
-> +utilizes the Resource API, which you can read more about here:
-> +Documentation/dev-tools/kunit/api/resource.rst.
-> +
-> +.. code-block:: c
-> +
-> +       /* An example parameter array. */
-> +       static const struct example_param {
-> +               int value;
-> +       } example_params_array[] = {
-> +               { .value = 3, },
-> +               { .value = 2, },
-> +               { .value = 1, },
-> +               { .value = 0, },
-> +       };
-> +
-> +       /*
-> +        * This custom function allocates memory for the kunit_resource data field.
-> +        * The function is passed to kunit_alloc_resource() and executed once
-> +        * by the internal helper __kunit_add_resource().
-> +        */
-> +       static int example_resource_init(struct kunit_resource *res, void *context)
-> +       {
-> +               int *info = kmalloc(sizeof(*info), GFP_KERNEL);
-> +
-> +               if (!info)
-> +                       return -ENOMEM;
-> +               *info = *(int *)context;
-> +               res->data = info;
-> +               return 0;
-> +       }
-> +
-> +       /*
-> +        * This function deallocates memory for the 'kunit_resource' data field.
-> +        * The function is passed to kunit_alloc_resource() and automatically
-> +        * executes within kunit_release_resource() when the resource's reference
-> +        * count, via kunit_put_resource(), drops to zero. KUnit uses reference
-> +        * counting to ensure that resources are not freed prematurely.
-> +        */
-> +       static void example_resource_free(struct kunit_resource *res)
-> +       {
-> +               kfree(res->data);
-> +       }
-> +
-> +       /*
-> +        * This match function is invoked by kunit_find_resource() to locate
-> +        * a test resource based on defined criteria. The current example
-> +        * uniquely identifies the resource by its free function; however,
-> +        * alternative custom criteria can be implemented. Refer to
-> +        * lib/kunit/platform.c and lib/kunit/static_stub.c for further examples.
-> +        */
-> +       static bool example_resource_alloc_match(struct kunit *test,
-> +                                                struct kunit_resource *res,
-> +                                                void *match_data)
-> +       {
-> +               return res->data && res->free == example_resource_free;
-> +       }
-> +
-> +       /*
-> +        * This is an example of a function that provides a description for each of the
-> +        * parameters.
-> +       */
-> +       static void example_param_array_get_desc(const void *p, char *desc)
-> +       {
-> +               const struct example_param *param = p;
-> +
-> +               snprintf(desc, KUNIT_PARAM_DESC_SIZE,
-> +                       "example check if %d is less than or equal to 3", param->value);
-> +       }
-> +
-> +       /*
-> +        * Initializes the parent kunit struct for parameterized KUnit tests.
-> +        * This function enables sharing resources across all parameterized
-> +        * tests by adding them to the `parent` kunit test struct. It also supports
-> +        * registering either static or dynamic arrays of test parameters.
-> +        */
-> +       static int example_param_init(struct kunit *test)
-> +       {
-> +               int ctx = 3; /* Data to be stored. */
-> +               int arr_size = ARRAY_SIZE(example_params_array);
-> +
-> +               /*
-> +                * This allocates a struct kunit_resource, sets its data field to
-> +                * ctx, and adds it to the kunit struct's resources list. Note that
-> +                * this is test managed so we don't need to have a custom exit function
-> +                * to free it.
-> +                */
-> +               void *data = kunit_alloc_resource(test, example_resource_init, example_resource_free,
-> +                                                 GFP_KERNEL, &ctx);
-> +
-> +               if (!data)
-> +                       return -ENOMEM;
-> +               /* Pass the static param array information to the parent struct kunit. */
-> +               kunit_register_params_array(test, example_params_array, arr_size,
-> +                                           example_param_array_get_desc);
-> +               return 0;
-> +       }
-> +
-> +       /*
-> +       * This is an example of a parameterized test that uses shared resources
-> +       * available from the struct kunit parent field of the kunit struct.
-> +       */
-> +       static void example_params_test_with_init(struct kunit *test)
-> +       {
-> +               int threshold;
-> +               struct kunit_resource *res;
-> +               const struct example_param *param = test->param_value;
-> +
-> +               /* By design, param pointer will not be NULL. */
-> +               KUNIT_ASSERT_NOT_NULL(test, param);
-> +
-> +               /* Here we need to access the parent pointer of the test to find the shared resource. */
-> +               res = kunit_find_resource(test->parent, example_resource_alloc_match, NULL);
-> +
-> +               KUNIT_ASSERT_NOT_NULL(test, res);
-> +
-> +               /* Since the data field in kunit_resource is a void pointer we need to typecast it. */
-> +               threshold = *((int *)res->data);
-> +
-> +               /* Assert that the parameter is less than or equal to a certain threshold. */
-> +               KUNIT_ASSERT_LE(test, param->value, threshold);
-> +
-> +               /* This decreases the reference count after calling kunit_find_resource(). */
-> +               kunit_put_resource(res);
-> +       }
-> +
-> +
-> +       static struct kunit_case example_tests[] = {
-> +               KUNIT_CASE_PARAM_WITH_INIT(example_params_test_with_init, NULL,
-> +                                          example_param_init, NULL),
-> +               {}
-> +       };
-> +
-
-This is a really long example, which already exists in
-kunit-example-test.c. Can we either link to it there (and just include
-the most critical lines here), or have a smaller, less-complete
-example inline here?
-
-
-> +As an alternative to using the KUnit Resource API for shared resources, you can
-> +place them in ``test->parent->priv``. It can store data that needs to persist
-> +and be accessible across all executions within a parameterized test series.
-> +
-> +As stated previously ``param_init`` and ``param_exit`` receive the parent
-> +``struct kunit`` instance. So, you can directly use ``test->priv`` within them
-> +to manage shared resources. However, from within the test case function, you must
-> +navigate up to the parent i.e. use ``test->parent->priv`` to access those same
-> +resources.
-> +
-> +The resources placed in ``test->parent-priv`` will also need to be allocated in
-> +memory to persist across the parameterized tests executions. If memory is
-
-Nit: 'parameterized test executions' singular?
-
-> +allocated using the memory allocation APIs provided by KUnit (described more in
-> +the section below), you will not need to worry about deallocating them as they
-> +will be managed by the parent parameterized test that gets automatically cleaned
-> +up upon the end of the parameterized test series.
-> +
-> +The code below demonstrates example usage of the ``priv`` field for shared
-> +resources:
-> +
-> +.. code-block:: c
-> +
-> +       /* An example parameter array. */
-> +       static const struct example_param {
-> +               int value;
-> +       } example_params_array[] = {
-> +               { .value = 3, },
-> +               { .value = 2, },
-> +               { .value = 1, },
-> +               { .value = 0, },
-> +       };
-> +
-> +       /*
-> +        * Initializes the parent kunit struct for parameterized KUnit tests.
-> +        * This function enables sharing resources across all parameterized
-> +        * tests.
-> +        */
-> +       static int example_param_init_priv(struct kunit *test)
-> +       {
-> +               int ctx = 3; /* Data to be stored. */
-> +               int arr_size = ARRAY_SIZE(example_params_array);
-> +
-> +               /*
-> +                * Allocate memory using kunit_kzalloc(). Since the `param_init`
-> +                * function receives the parent instance of test, this memory
-> +                * allocation will be scoped to the lifetime of the whole
-> +                * parameterized test series.
-> +                */
-> +               test->priv = kunit_kzalloc(test, sizeof(int), GFP_KERNEL);
-> +
-> +               /* Assign the context value to test->priv.*/
-> +               *((int *)test->priv) = ctx;
-> +
-> +               /* Pass the static param array information to the parent struct kunit. */
-> +               kunit_register_params_array(test, example_params_array, arr_size, NULL);
-> +               return 0;
-> +       }
-> +
-> +       /*
-> +       * This is an example of a parameterized test that uses shared resources
-> +       * available from the struct kunit parent field of the kunit struct.
-> +       */
-> +       static void example_params_test_with_init_priv(struct kunit *test)
-> +       {
-> +               int threshold;
-> +               const struct example_param *param = test->param_value;
-> +
-> +               /* By design, param pointer will not be NULL. */
-> +               KUNIT_ASSERT_NOT_NULL(test, param);
-> +
-> +               /* By design, test->parent will also not be NULL. */
-> +               KUNIT_ASSERT_NOT_NULL(test, test->parent);
-> +
-> +               /* Assert that test->parent->priv has data. */
-> +               KUNIT_ASSERT_NOT_NULL(test, test->parent->priv);
-> +
-> +               /* Here we need to use test->parent->priv to access the shared resource. */
-> +               threshold = *(int *)test->parent->priv;
-> +
-> +               /* Assert that the parameter is less than or equal to a certain threshold. */
-> +               KUNIT_ASSERT_LE(test, param->value, threshold);
-> +       }
-> +
-> +
-> +       static struct kunit_case example_tests[] = {
-> +               KUNIT_CASE_PARAM_WITH_INIT(example_params_test_with_init_priv, NULL,
-> +                                          example_param_init_priv, NULL),
-> +               {}
-> +       };
-> +
-
-Again, this is a little long, but it's not as bad as the others, and
-isn't in the example tests, so I'm okay with leaving it. Though maybe
-we could get rid of some of the asserts for the purpose of keeping the
-documentation focused and readable.
-
-
->  Allocating Memory
->  -----------------
->
-> --
-> 2.50.1.552.g942d659e1b-goog
->
-
---0000000000005b4deb063b5ebb59
-Content-Type: application/pkcs7-signature; name="smime.p7s"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB7964.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfec5d29-bece-490f-90b8-08ddd1af0e64
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2025 10:26:34.7137
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: y3tJISvegcRy1570RNSgkkuQyDEHsvMEAbj5v/Q7p/lFvQ6B/ihoT2mD9/l8O5A7/dvem4bxN2dNTsNHXto8PA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6552
+X-OriginatorOrg: intel.com
 Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
 
-MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-jmkLAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFBp5bTxrTm/d
-WMmRETO8lNkA4c7fMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBF
-tO3/N2l9hTaij/K0xCpLwIlrqpNo0nMAvvG5LPQQjSeHnTh06tWTgsPCOJ65GX+bqWRDwGTu8WTq
-c5ihCNOikBs25j82yeLkfdbeN/tzRGUb2RD+8n9I3CnyMSG49U2s0ZdncsrIVFh47KW2TpHTF7R8
-N1dri01wPg8hw4u0+XoczR2TiBrBOISKmAlkAi+P9ivT31gSHdbopoL4x0V2Ow9IOp0chrQQUZtP
-KBytLhzUzd9wIsE0QMNDbw6jeG8+a4sd17zpXSbBywIGw7sEvPtnBjMaf5ib3kznlOne6tuDVx4y
-QFExTCSrP3OTMUkNbpIdgzg2CHQ2aB8i8YsTZ8Q8Q8ztPJ+xDNsqBUeYxILLjTjxQQovToqipB3f
-6IMyk+lWCdDS+iCLYZULV1BTHSdwp1NM3t4jZ8TMlV+JzAyRqz4lzSl8ptkFhKBJ7w2tDrZ3BEXB
-8ASUByRxeh+pC1Z5/HhqfiWMVPjaWmlRRJVlRk+ObKIv2CblwxMYlo2Mn8rrbEDyfum1RTMW55Z6
-Vumvw5QTHe29TYxSiusovM6OD5y0I+4zaIaYDx/AtF0mMOFXb1MDyynf1CDxhtkgnrBUseHSOU2e
-MYs7IqzRap5xsgpJS+t7cp/P8fdlCNvsXss9zZa279tKwaxR0U2IzGxRGsWKGxDysn1HT6pqMDGC
-Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAUXA7LnOuRz2DvkWTeMc
-0TANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgMlPxF0+izsK8o7kKHV/l72mZXhae
-ld6iIER2m5x23JswGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-ODAyMDk0NTE2WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAKJB0ew8D2koWJTeZP10lr6jNuFBETUTmjJ/w70FaxwA0+iAMgZXg8DrrQ4H7Mhsy
-ZqZj+Kt+ztKhImSC/YiHgxVN96KaiDWo04arNHo13K5biQkJALrB+sMWRsKcRsQ6aYaCeIMB3M9N
-EfQ8yZpeJFX0KEzOePiQVt2oTduz30fAQuXpB66yIcYC790qDtppQoyLqQpKDvZNo1k0ZTEkCHAy
-6wFvOgYYQY1lW7fvloByUTEflbv8GwXvgieTBBxrWhL/tkBhs3r/YjazPKcrhrkXTALDtauiG3nx
-TBdIuQurQJUlXEiFSw0SzUm3YGZo78D1dtAey5I8RaTiIqfeow==
---0000000000005b4deb063b5ebb59--
+SGkgVGhvbWFzLA0KDQpPbiBGcmksIDIwMjUtMDgtMDEgYXQgMTc6MDkgKzAyMDAsIFRob21hcyBX
+ZWnDn3NjaHVoIHdyb3RlOg0KPiBPbiAyMDI1LTA3LTMxIDIyOjEyOjI1KzAyMDAsIEJlbmphbWlu
+IEJlcmcgd3JvdGU6DQo+ID4gRnJvbTogQmVuamFtaW4gQmVyZyA8YmVuamFtaW4uYmVyZ0BpbnRl
+bC5jb20+DQo+ID4gDQo+ID4gQWRkIHN1cHBvcnQgZm9yIHNpZ2FjdGlvbigpIHVzaW5nIHRoZSBy
+dF9zaWdhY3Rpb24gc3lzY2FsbCBhbmQgaW1wbGVtZW50DQo+ID4gdGhlIG5vcm1hbCBzYV9tYXNr
+IGhlbHBlcnMuDQo+ID4gDQo+ID4gRm9yIHRoZSB1YXBpIGRlZmluaXRpb25zLCBldmVyeXRoaW5n
+IGlzIGNvcGllZCBpbnRvIG5vbGliYy4gVGhpcyBhdm9pZHMNCj4gPiBpc3N1ZXMgd2l0aCBrZXJu
+ZWwgYXJjaGl0ZWN0dXJlIGhlYWRlcnMgdGhhdCBhcmUgbm90IHVzYWJsZSB3aXRoIHRoZQ0KPiA+
+IHJ0X3NpZ2FjdGlvbiBzeXNjYWxsLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEJlbmphbWlu
+IEJlcmcgPGJlbmphbWluLmJlcmdAaW50ZWwuY29tPg0KPiA+IA0KPiA+IC0tLQ0KPiA+IA0KPiA+
+IHYzOg0KPiA+IC0gcHV0IGV2ZXJ5dGhpbmcgaW50byBzaWduYWwuaCBhbmQgdGhlIG5ldyBhc20t
+c2lnbmFsLmgNCj4gDQo+IEhtLCBkaWQgd2UgZGVjaWRlIG9uIHRoYXQ/IFdlIGRvbid0IHdhbnQg
+dGhlIHBlci1hcmNoaXRlY3R1cmUgaW5jbHVkZQ0KPiBkYW5jZSwgYnV0IHN0YXRpYyBvdmVycmlk
+ZXMgc2hvdWxkIHN0aWxsIGJlIGZpbmUgSSB0aGluay4NCj4gS2VlcGluZyB0aGUgYXJjaGl0ZWN0
+dXJlIGlmZGVmZmVyeSBpbnNpZGUgdGhlIHJlc3BlY3RpdmUgYXJjaCBoZWFkZXIuDQo+IEFuZCBh
+bGwgdGhlIGdlbmVyaWMgc3R1ZmYgaW4gYSBzaGFyZWQgaGVhZGVyLg0KDQpJIHByb2JhYmx5IGp1
+c3QgZGlkbid0IHJlYWxseSB1bmRlcnN0YW5kIHdoYXQgeW91IG1lYW50IDotKQ0KDQpZb3UgYXJl
+IHJpZ2h0LCB3ZSBjYW4gaGF2ZSB0aGUgY29tbW9uIGRlZmluaXRpb25zIGluIHNpZ25hbC5oIGFu
+ZCBqdXN0DQpza2lwIHRoZW0gaWYgdGhlIGFyY2hpdGVjdHVyZSBoZWFkZXIgZGlkIGFscmVhZHkg
+ZGVmaW5lIHRoZW0uDQoNCkkgdGhpbmsgSSdsbCBhbHNvIGRyb3AgYXNtLXNpZ25hbC5oIGFnYWlu
+LCBzZWUgYmVsb3cuDQoNCj4gPiAtIHNwbGl0IG91dCBzaWdzZXRfdCB0ZXN0cw0KPiA+IC0gYWN0
+dWFsbHkgbWFyayBzaWduYWxfY2hlY2sgc3RhdGljDQo+ID4gLSByZW1vdmUgdW51c2VkIHN0cmlu
+Zy5oIGluY2x1ZGUNCj4gPiAtIGZpeCBTSUdVU1IyIHJlc2V0DQo+ID4gLSBVc2UgaW50ZWdlciBm
+b3Igc2lnbmFsX2NoZWNrIGFzIHRoZSBzaWduYWxzIGFyZSBlbWl0dGVkIGZyb20gdGhlDQo+ID4g
+wqAgc3lzY2FsbCBjb250ZXh0Lg0KPiANCj4gSSBkb24ndCB1bmRlcnN0YW5kIHRoaXMgcG9pbnQs
+IGlzbid0IGl0IGEgc2lnbmFsIGhhbmRsZXI/DQoNCk15IHJlYXNvbmluZyBpcywgdGhhdCB0aGUg
+c2lnbmFsIGVtaXNzaW9uIGJ5IHRoZSBrZXJuZWwgaGFwcGVucyBmcm9tDQp0aGUga2lsbCBzeXNj
+YWxsIG9yIGZ1bmN0aW9uIHJldHVybi4gQm90aCBjYXNlcyBpbXBsaWNpdGx5IGFjdCBhcyBhDQpt
+ZW1vcnkgYmFycmllci4gU28gaW4gdGhpcyBzcGVjaWZpYyBjYXNlIHdlIGRvIG5vdCBhY3R1YWxs
+eSBuZWVkIGFuDQphdG9taWMgdmFyaWFibGUuDQoNCj4gPiB2MjoNCj4gPiAtIFVzZSBuZXdseSBh
+ZGRlZCBtYWNyb3MgdG8gY2hlY2sgc2lnbmFsIGVtaXNzaW9uIG9yZGVyDQo+ID4gLSBBZGQgdGVz
+dHMgZm9yIHNpZ3NldCBoYW5kbGluZw0KPiA+IC0gUmVzdG9yZSB0aGUgZGVmYXVsdCBoYW5kbGVy
+IGFmdGVyIHNpZ25hbCB0ZXN0DQo+ID4gLSBtYWtlIHNpZ25hbF9jaGVjayB2YXJpYWJsZSBzdGF0
+aWMNCj4gPiANCj4gPiB2MToNCj4gPiAtIFVwZGF0ZSBhcmNoaXRlY3R1cmUgc3VwcG9ydCAoYWRk
+aW5nIHNoKQ0KPiA+IC0gTW92ZSBzcGFyYyBzeXNfcnRfc2lnYWN0aW9uIGxvZ2ljIGludG8gaXRz
+IGhlYWRlcg0KPiA+IC0gQWRkIHNpZ19hdG9taWNfdA0KPiA+IC0gVXNlIG5ldyBCSVRTRVRfKiBt
+YWNyb3MNCj4gPiAtIE1vdmUgdGVzdCBpbnRvIHN5c2NhbGwgc3VpdGUNCj4gPiAtIFZhcmlvdXMg
+b3RoZXIgc21hbGwgY2hhbmdlcw0KPiA+IC0tLQ0KPiA+IMKgdG9vbHMvaW5jbHVkZS9ub2xpYmMv
+TWFrZWZpbGXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqAgMSArDQo+ID4gwqB0
+b29scy9pbmNsdWRlL25vbGliYy9hcmNoLXMzOTAuaMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8
+wqDCoCA0ICstDQo+ID4gwqB0b29scy9pbmNsdWRlL25vbGliYy9hc20tc2lnbmFsLmjCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHwgMjM3ICsrKysrKysrKysrKysrKysrKysNCj4gPiDCoHRvb2xzL2lu
+Y2x1ZGUvbm9saWJjL3NpZ25hbC5owqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMTc5
+ICsrKysrKysrKysrKysrDQo+ID4gwqB0b29scy9pbmNsdWRlL25vbGliYy9zeXMuaMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCAyICstDQo+ID4gwqB0b29scy9pbmNs
+dWRlL25vbGliYy9zeXMvd2FpdC5owqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqAgMSAr
+DQo+ID4gwqB0b29scy9pbmNsdWRlL25vbGliYy90aW1lLmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHzCoMKgIDIgKy0NCj4gPiDCoHRvb2xzL2luY2x1ZGUvbm9saWJjL3R5cGVz
+LmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCA5ICsNCj4gPiDCoHRvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL25vbGliYy9ub2xpYmMtdGVzdC5jIHwgMTM0ICsrKysrKysrKysr
+DQo+ID4gwqA5IGZpbGVzIGNoYW5nZWQsIDU2NiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygt
+KQ0KPiA+IMKgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL2luY2x1ZGUvbm9saWJjL2FzbS1zaWdu
+YWwuaA0KPiANCj4gKC4uLikNCj4gDQo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL2luY2x1ZGUvbm9s
+aWJjL3N5cy5oIGIvdG9vbHMvaW5jbHVkZS9ub2xpYmMvc3lzLmgNCj4gPiBpbmRleCAyOTVlNzFk
+MzRhYmEuLmE3OTBlODE2NTY1YiAxMDA2NDQNCj4gPiAtLS0gYS90b29scy9pbmNsdWRlL25vbGli
+Yy9zeXMuaA0KPiA+ICsrKyBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL3N5cy5oDQo+ID4gQEAgLTE0
+LDcgKzE0LDYgQEANCj4gPiDCoA0KPiA+IMKgLyogc3lzdGVtIGluY2x1ZGVzICovDQo+ID4gwqAj
+aW5jbHVkZSA8bGludXgvdW5pc3RkLmg+DQo+ID4gLSNpbmNsdWRlIDxsaW51eC9zaWduYWwuaD7C
+oCAvKiBmb3IgU0lHQ0hMRCAqLw0KPiA+IMKgI2luY2x1ZGUgPGxpbnV4L3Rlcm1pb3MuaD4NCj4g
+PiDCoCNpbmNsdWRlIDxsaW51eC9tbWFuLmg+DQo+ID4gwqAjaW5jbHVkZSA8bGludXgvZnMuaD4N
+Cj4gPiBAQCAtMjgsNiArMjcsNyBAQA0KPiA+IMKgI2luY2x1ZGUgImVycm5vLmgiDQo+ID4gwqAj
+aW5jbHVkZSAic3RkYXJnLmgiDQo+ID4gwqAjaW5jbHVkZSAidHlwZXMuaCINCj4gPiArI2luY2x1
+ZGUgImFzbS1zaWduYWwuaCIgLyogZm9yIFNJR0NITEQgKi8NCj4gDQo+ICNpbmNsdWRlICJzaWdu
+YWwuaCINCg0KUmlnaHQsIHRoaXMgYW5kIGFzbS1zaWduYWwuaCBoYXBwZW5lZCBiZWNhdXNlIHNp
+Z25hbC5oIHVzZXMgc3lzX2tpbGwoKQ0KZm9yIHJhaXNlKCksIHJlc3VsdGluZyBpbiBhIGNpcmN1
+bGFyIGRlcGVuZGVuY3kuDQoNClRoZSBzaW1wbGVzdCBzb2x1dGlvbiBpcyBwcm9iYWJseSB0byBh
+dm9pZCB0aGUgY2lyY3VsYXIgaW5jbHVkZSBieQ0KaW1wbGVtZW50aW5nIHJhaXNlKCkgYXM6DQoN
+CmludCByYWlzZShpbnQgc2lnbmFsKTsNCl9fYXR0cmlidXRlX18oKHdlYWssdW51c2VkLHNlY3Rp
+b24oIi50ZXh0Lm5vbGliY19yYWlzZSIpKSkNCmludCByYWlzZShpbnQgc2lnbmFsKQ0Kew0KCXJl
+dHVybiBteV9zeXNjYWxsMihfX05SX2tpbGwsIG15X3N5c2NhbGwwKF9fTlJfZ2V0cGlkKSwgc2ln
+bmFsKTsNCn0NCg0KPiA+IMKgLyogU3lzY2FsbCByZXR1cm4gaGVscGVyOiB0YWtlcyB0aGUgc3lz
+Y2FsbCB2YWx1ZSBpbiBhcmd1bWVudCBhbmQgY2hlY2tzIGZvciBhbg0KPiA+IGRpZmYgLS1naXQg
+YS90b29scy9pbmNsdWRlL25vbGliYy9zeXMvd2FpdC5oIGIvdG9vbHMvaW5jbHVkZS9ub2xpYmMv
+c3lzL3dhaXQuaA0KPiA+IGluZGV4IDU2ZGRiODA2ZGE3Zi4uZTJhYTkwY2MzY2YzIDEwMDY0NA0K
+PiA+IC0tLSBhL3Rvb2xzL2luY2x1ZGUvbm9saWJjL3N5cy93YWl0LmgNCj4gPiArKysgYi90b29s
+cy9pbmNsdWRlL25vbGliYy9zeXMvd2FpdC5oDQo+ID4gQEAgLTEwLDYgKzEwLDcgQEANCj4gPiDC
+oCNpZm5kZWYgX05PTElCQ19TWVNfV0FJVF9IDQo+ID4gwqAjZGVmaW5lIF9OT0xJQkNfU1lTX1dB
+SVRfSA0KPiA+IMKgDQo+ID4gKyNpbmNsdWRlIDxhc20vc2lnaW5mby5oPg0KPiANCj4gI2luY2x1
+ZGUgInNpZ25hbC5oIg0KPiANCj4gVGhlIGFzbS8gdXNhZ2Ugc2hvdWxkIGJlIGhpZGRlbi4NCj4g
+DQo+ID4gwqAjaW5jbHVkZSAiLi4vYXJjaC5oIg0KPiA+IMKgI2luY2x1ZGUgIi4uL3N0ZC5oIg0K
+PiA+IMKgI2luY2x1ZGUgIi4uL3R5cGVzLmgiDQo+IA0KPiAoLi4uKQ0KPiANCj4gPiBkaWZmIC0t
+Z2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbm9saWJjL25vbGliYy10ZXN0LmMgYi90b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9ub2xpYmMvbm9saWJjLXRlc3QuYw0KPiA+IGluZGV4IDE4MGYw
+NDM2MTI3YS4uNzViOTZlYWE0YzY1IDEwMDY0NA0KPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL25vbGliYy9ub2xpYmMtdGVzdC5jDQo+ID4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvbm9saWJjL25vbGliYy10ZXN0LmMNCj4gPiBAQCAtMTI2OSw2ICsxMjY5LDEzOCBAQCBp
+bnQgdGVzdF9uYW1lc3BhY2Uodm9pZCkNCj4gPiDCoAlyZXR1cm4gcmV0Ow0KPiA+IMKgfQ0KPiA+
+IMKgDQo+ID4gK2ludCB0ZXN0X3NpZ3NldF90KGludCB0ZXN0X2lkeCkNCj4gPiArew0KPiA+ICsJ
+aW50IGxsZW47DQo+ID4gKwlpbnQgcmV0ID0gMDsNCj4gPiArDQo+ID4gKyNpZmRlZiBOT0xJQkMN
+Cj4gPiArCWlmIChpc19ub2xpYmMpIHsNCj4gDQo+IFRoaXMgbG9va3MgdW5uZWNlc3NhcnkuIFRo
+ZSAjaWZkZWYgc2hvdWxkIGJlIHN1ZmZpY2llbnQuDQo+IA0KPiA+ICsJCXNpZ3NldF90IHNpZ3Nl
+dDsNCj4gPiArDQo+IA0KPiAoLi4uKQ0KPiANCj4gDQo+IExvb2tzIG5pY2UsIHRoYW5rcyENCg0K
+R3JlYXQsIHRoYW5rcyBmb3IgdGhlIHJldmlld3MhDQoNCkJlbmphbWluDQpJbnRlbCBEZXV0c2No
+bGFuZCBHbWJIDQpSZWdpc3RlcmVkIEFkZHJlc3M6IEFtIENhbXBlb24gMTAsIDg1NTc5IE5ldWJp
+YmVyZywgR2VybWFueQ0KVGVsOiArNDkgODkgOTkgODg1My0wLCB3d3cuaW50ZWwuZGUNCk1hbmFn
+aW5nIERpcmVjdG9yczogU2VhbiBGZW5uZWxseSwgSmVmZnJleSBTY2huZWlkZXJtYW4sIFRpZmZh
+bnkgRG9vbiBTaWx2YQ0KQ2hhaXJwZXJzb24gb2YgdGhlIFN1cGVydmlzb3J5IEJvYXJkOiBOaWNv
+bGUgTGF1DQpSZWdpc3RlcmVkIE9mZmljZTogTXVuaWNoDQpDb21tZXJjaWFsIFJlZ2lzdGVyOiBB
+bXRzZ2VyaWNodCBNdWVuY2hlbiBIUkIgMTg2OTI4Cg==
+
 
