@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-38230-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38229-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21870B19A2F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 04:27:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B224B19A2C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 04:27:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D0A616D659
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 02:27:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44B1C3AF35D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 02:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D51F20E717;
-	Mon,  4 Aug 2025 02:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF887202F71;
+	Mon,  4 Aug 2025 02:27:11 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1E71E3DDB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1881D5CED;
 	Mon,  4 Aug 2025 02:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754274432; cv=none; b=r/p+tXfW/usxMOkotFV8znC6UMcKXHl8ohLNNmVvRutHhG5ufKSe4/CcO1avFR0Vu1jDFEbSgWLsQXZVkfTStiGHwL6/PnW7oAy2o2xifS5Rl6NAEJ2q2NbM+Or0zRrdFDfJBnsVvzK/Buhkuf0gkKK1equpADIkUXetKmz9rbs=
+	t=1754274431; cv=none; b=F4iLSyPtX72ovEtd5JyHrJ6bb33Eqre1dmcOzdUcOjAPFSPtZWkmAYk2qRcA2N9UrFWF9q0nP/zgCiab4w47fcE2MkWvnqbEtoUvE3L7hXORkcGgjFkfKL5OIhYYieVEQ797eZXnJl3I6bp+r5ZRKJVYfA6JtA5FAmp1OkfXIQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754274432; c=relaxed/simple;
-	bh=B+jm6axNN8eKPZKwHfaIwnhbv47UYaZtTGu9HqYUqBQ=;
+	s=arc-20240116; t=1754274431; c=relaxed/simple;
+	bh=zbLc9HNo6kfz862yttepKCrbMBfcWHmcVBEZgDvKJQI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W2WLpH8DSuBTvM0yjp8u+r0Uy/+h9d7htOIgOz0+cpOOkPGKaMBsIsOymcN7mfz7rDVLu7CeB6uSQD7JVr8RM12SEP5ZQyzOvOzJR5hqLnJEzZo19D2SYzVWageEFM0TENZH+DQt/CklPrYyjq17tPwPPHIQJILkHOn4696//+s=
+	 MIME-Version; b=BCyq+37gMZx5wXe0W145xy11uhz8Q8rkkr/kTDH1KHB7A3y+rEvwJ4OEeQU4zzNjZejoVdMQLXoOyqOZ2s8U0gRA73rdOLvEucsgH20sqIJZBmlDDHLXZ5q7hclWbQvtkczO2ZpSd3k8Tfk5hTTr5SAXFG5OHIXcrT/+xFLjhkc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bwL6h0HkgzYQtLW;
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bwL6h6GY1zYQtLW;
 	Mon,  4 Aug 2025 10:27:08 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id A96761A0E40;
-	Mon,  4 Aug 2025 10:27:06 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 86A631A0E9A;
+	Mon,  4 Aug 2025 10:27:07 +0800 (CST)
 Received: from k-arm6401.huawei.com (unknown [7.217.19.243])
-	by APP4 (Coremail) with SMTP id gCh0CgAX4BBsGpBoTUL9CQ--.242S3;
-	Mon, 04 Aug 2025 10:27:06 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgAX4BBsGpBoTUL9CQ--.242S4;
+	Mon, 04 Aug 2025 10:27:07 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -63,9 +63,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tao Chen <chen.dylane@linux.dev>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin Kelly <martin.kelly@crowdstrike.com>
-Subject: [PATCH bpf-next 1/4] bpf: Add overwrite mode for bpf ring buffer
-Date: Mon,  4 Aug 2025 10:20:57 +0800
-Message-ID: <20250804022101.2171981-2-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf-next 2/4] libbpf: ringbuf: Add overwrite ring buffer process
+Date: Mon,  4 Aug 2025 10:20:58 +0800
+Message-ID: <20250804022101.2171981-3-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
 References: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
@@ -75,487 +75,196 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAX4BBsGpBoTUL9CQ--.242S3
-X-Coremail-Antispam: 1UD129KBjvAXoW3Cr1xJF4UKFW5KFyDXryUGFg_yoW8Ar13to
-	WSqayfua1vkr1q9rW3Kas7GF1rAryqkF9rCF43uwnxAF9rCrZFqr9xtFs5X3Z8XFs8GF4D
-	C3Z8tF1YqFs8JF1Dn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUOy7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
-	4l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
-	Av7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
-	6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14
-	v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCY02Avz4vEIxC_Gr1l42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
+X-CM-TRANSID:gCh0CgAX4BBsGpBoTUL9CQ--.242S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw4UGry3Ww4UAr1rXw18Krg_yoWrKFykpF
+	4Y93W5Ar9rZr17ZrySgFZavFyrGws7Zr4IkFyxJa48Zw1DKF15WFyI9FyYyr4rGr9rKr1S
+	krZ8Jas7Kr1UWwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQ2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_GFv_Wrylc7CjxVAKzI0EY4vE52x082I5MxkIecxEwVCI4VW8JwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+	vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+	x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8V
 	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUSK9aDUUUU
+	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUhjjgDUUUU
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-When the bpf ring buffer is full, new events can not be recorded util
-the consumer consumes some events to free space. This may cause critical
-events to be discarded, such as in fault diagnostic, where recent events
-are more critical than older ones.
-
-So add ovewrite mode for bpf ring buffer. In this mode, the new event
-overwrites the oldest event when the buffer is full.
-
-The scheme is as follows:
-
-1. producer_pos tracks the next position to write new data. When there
-   is enough free space, producer simply moves producer_pos forward to
-   make space for the new event.
-
-2. To avoid waiting for consumer to free space when the buffer is full,
-   a new variable overwrite_pos is introduced for producer. overwrite_pos
-   tracks the next event to be overwritten (the oldest event committed) in
-   the buffer. producer moves it forward to discard the oldest events when
-   the buffer is full.
-
-3. pending_pos tracks the oldest event under committing. producer ensures
-   producers_pos never passes pending_pos when making space for new events.
-   So multiple producers never write to the same position at the same time.
-
-4. producer wakes up consumer every half a round ahead to give it a chance
-   to retrieve data. However, for an overwrite-mode ring buffer, users
-   typically only cares about the ring buffer snapshot before a fault occurs.
-   In this case, the producer should commit data with BPF_RB_NO_WAKEUP flag
-   to avoid unnecessary wakeups.
-
-The performance data for overwrite mode will be provided in a follow-up
-patch that adds overwrite mode benchs.
-
-A sample of performance data for non-overwrite mode on an x86_64 and arm64
-CPU, before and after this patch, is shown below. As we can see, no obvious
-performance regression occurs.
-
-- x86_64 (AMD EPYC 9654)
-
-Before:
-
-Ringbuf, multi-producer contention
-==================================
-  rb-libbpf nr_prod 1  13.218 ± 0.039M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 2  15.684 ± 0.015M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 3  7.771 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 4  6.281 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 8  2.842 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 12 2.001 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 16 1.833 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 20 1.508 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 24 1.421 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 28 1.309 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 32 1.265 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 36 1.198 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 40 1.174 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 44 1.113 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 48 1.097 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 52 1.070 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-
-After:
-
-Ringbuf, multi-producer contention
-==================================
-  rb-libbpf nr_prod 1  13.751 ± 0.673M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 2  15.592 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 3  7.776 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 4  6.463 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 8  2.883 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 12 2.017 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 16 1.816 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 20 1.512 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 24 1.396 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 28 1.303 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 32 1.267 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 36 1.210 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 40 1.181 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 44 1.136 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 48 1.090 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 52 1.091 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-
-- arm64 (HiSilicon Kunpeng 920)
-
-Before:
-
-  Ringbuf, multi-producer contention
-  ==================================
-  rb-libbpf nr_prod 1  11.602 ± 0.423M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 2  9.599 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 3  6.669 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 4  4.806 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 8  3.856 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 12 3.368 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 16 3.210 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 20 3.003 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 24 2.944 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 28 2.863 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 32 2.819 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 36 2.887 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 40 2.837 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 44 2.787 ± 0.012M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 48 2.738 ± 0.010M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 52 2.700 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-
-After:
-
-  Ringbuf, multi-producer contention
-  ==================================
-  rb-libbpf nr_prod 1  11.614 ± 0.268M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 2  9.917 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 3  6.920 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 4  4.803 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 8  3.898 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 12 3.426 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 16 3.320 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 20 3.029 ± 0.013M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 24 3.068 ± 0.012M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 28 2.890 ± 0.009M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 32 2.950 ± 0.012M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 36 2.812 ± 0.006M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 40 2.834 ± 0.009M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 44 2.803 ± 0.010M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 48 2.766 ± 0.010M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 52 2.754 ± 0.009M/s (drops 0.000 ± 0.000M/s)
+In overwrite mode, the producer does not wait for the consumer, so the
+consumer is responsible for handling conflicts. An optimistic method
+is used to resolve the conflicts: the consumer first reads consumer_pos,
+producer_pos and overwrite_pos, then calculates a read window and copies
+data in the window from the ring buffer. After copying, it checks the
+positions to decide if the data in the copy window have been overwritten
+by be the producer. If so, it discards the copy and tries again. Once
+success, the consumer processes the events in the copy.
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- include/uapi/linux/bpf.h       |   4 +
- kernel/bpf/ringbuf.c           | 159 +++++++++++++++++++++++++++------
- tools/include/uapi/linux/bpf.h |   4 +
- 3 files changed, 141 insertions(+), 26 deletions(-)
+ tools/lib/bpf/ringbuf.c | 103 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 102 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 233de8677382..d3b2fd2ae527 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1430,6 +1430,9 @@ enum {
- 
- /* Do not translate kernel bpf_arena pointers to user pointers */
- 	BPF_F_NO_USER_CONV	= (1U << 18),
-+
-+/* bpf ringbuf works in overwrite mode? */
-+	BPF_F_OVERWRITE		= (1U << 19),
+diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+index 9702b70da444..9c072af675ff 100644
+--- a/tools/lib/bpf/ringbuf.c
++++ b/tools/lib/bpf/ringbuf.c
+@@ -27,10 +27,13 @@ struct ring {
+ 	ring_buffer_sample_fn sample_cb;
+ 	void *ctx;
+ 	void *data;
++	void *read_buffer;
+ 	unsigned long *consumer_pos;
+ 	unsigned long *producer_pos;
++	unsigned long *overwrite_pos;
+ 	unsigned long mask;
+ 	int map_fd;
++	bool overwrite_mode;
  };
  
- /* Flags for BPF_PROG_QUERY. */
-@@ -6215,6 +6218,7 @@ enum {
- 	BPF_RB_RING_SIZE = 1,
- 	BPF_RB_CONS_POS = 2,
- 	BPF_RB_PROD_POS = 3,
-+	BPF_RB_OVER_POS = 4,
- };
- 
- /* BPF ring buffer constants */
-diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index 719d73299397..6ca41d01f187 100644
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -13,7 +13,7 @@
- #include <linux/btf_ids.h>
- #include <asm/rqspinlock.h>
- 
--#define RINGBUF_CREATE_FLAG_MASK (BPF_F_NUMA_NODE)
-+#define RINGBUF_CREATE_FLAG_MASK (BPF_F_NUMA_NODE | BPF_F_OVERWRITE)
- 
- /* non-mmap()'able part of bpf_ringbuf (everything up to consumer page) */
- #define RINGBUF_PGOFF \
-@@ -27,7 +27,8 @@
- struct bpf_ringbuf {
- 	wait_queue_head_t waitq;
- 	struct irq_work work;
--	u64 mask;
-+	u64 mask:48;
-+	u64 overwrite_mode:1;
- 	struct page **pages;
- 	int nr_pages;
- 	rqspinlock_t spinlock ____cacheline_aligned_in_smp;
-@@ -72,6 +73,7 @@ struct bpf_ringbuf {
- 	 */
- 	unsigned long consumer_pos __aligned(PAGE_SIZE);
- 	unsigned long producer_pos __aligned(PAGE_SIZE);
-+	unsigned long overwrite_pos;  /* to be overwritten in overwrite mode */
- 	unsigned long pending_pos;
- 	char data[] __aligned(PAGE_SIZE);
- };
-@@ -166,7 +168,8 @@ static void bpf_ringbuf_notify(struct irq_work *work)
-  * considering that the maximum value of data_sz is (4GB - 1), there
-  * will be no overflow, so just note the size limit in the comments.
-  */
--static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
-+static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node,
-+					     int overwrite_mode)
- {
- 	struct bpf_ringbuf *rb;
- 
-@@ -183,17 +186,25 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
- 	rb->consumer_pos = 0;
- 	rb->producer_pos = 0;
- 	rb->pending_pos = 0;
-+	rb->overwrite_mode = overwrite_mode;
- 
- 	return rb;
- }
- 
- static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
- {
-+	int overwrite_mode = 0;
- 	struct bpf_ringbuf_map *rb_map;
- 
- 	if (attr->map_flags & ~RINGBUF_CREATE_FLAG_MASK)
- 		return ERR_PTR(-EINVAL);
- 
-+	if (attr->map_flags & BPF_F_OVERWRITE) {
-+		if (attr->map_type == BPF_MAP_TYPE_USER_RINGBUF)
-+			return ERR_PTR(-EINVAL);
-+		overwrite_mode = 1;
-+	}
-+
- 	if (attr->key_size || attr->value_size ||
- 	    !is_power_of_2(attr->max_entries) ||
- 	    !PAGE_ALIGNED(attr->max_entries))
-@@ -205,7 +216,8 @@ static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
- 
- 	bpf_map_init_from_attr(&rb_map->map, attr);
- 
--	rb_map->rb = bpf_ringbuf_alloc(attr->max_entries, rb_map->map.numa_node);
-+	rb_map->rb = bpf_ringbuf_alloc(attr->max_entries, rb_map->map.numa_node,
-+				       overwrite_mode);
- 	if (!rb_map->rb) {
- 		bpf_map_area_free(rb_map);
- 		return ERR_PTR(-ENOMEM);
-@@ -295,11 +307,16 @@ static int ringbuf_map_mmap_user(struct bpf_map *map, struct vm_area_struct *vma
- 
- static unsigned long ringbuf_avail_data_sz(struct bpf_ringbuf *rb)
- {
--	unsigned long cons_pos, prod_pos;
-+	unsigned long cons_pos, prod_pos, over_pos;
- 
- 	cons_pos = smp_load_acquire(&rb->consumer_pos);
- 	prod_pos = smp_load_acquire(&rb->producer_pos);
--	return prod_pos - cons_pos;
-+
-+	if (likely(!rb->overwrite_mode))
-+		return prod_pos - cons_pos;
-+
-+	over_pos = READ_ONCE(rb->overwrite_pos);
-+	return min(prod_pos - max(cons_pos, over_pos), rb->mask + 1);
- }
- 
- static u32 ringbuf_total_data_sz(const struct bpf_ringbuf *rb)
-@@ -402,11 +419,43 @@ bpf_ringbuf_restore_from_rec(struct bpf_ringbuf_hdr *hdr)
- 	return (void*)((addr & PAGE_MASK) - off);
- }
- 
-+
-+static bool bpf_ringbuf_has_space(const struct bpf_ringbuf *rb,
-+				  unsigned long new_prod_pos,
-+				  unsigned long cons_pos,
-+				  unsigned long pend_pos)
-+{
-+	/* no space if oldest not yet committed record until the newest
-+	 * record span more than (ringbuf_size - 1)
-+	 */
-+	if (new_prod_pos - pend_pos > rb->mask)
-+		return false;
-+
-+	/* ok, we have space in ovewrite mode */
-+	if (unlikely(rb->overwrite_mode))
-+		return true;
-+
-+	/* no space if producer position advances more than (ringbuf_size - 1)
-+	 * ahead than consumer position when not in overwrite mode
-+	 */
-+	if (new_prod_pos - cons_pos > rb->mask)
-+		return false;
-+
-+	return true;
-+}
-+
-+static u32 ringbuf_round_up_hdr_len(u32 hdr_len)
-+{
-+	hdr_len &= ~BPF_RINGBUF_DISCARD_BIT;
-+	return round_up(hdr_len + BPF_RINGBUF_HDR_SZ, 8);
-+}
-+
- static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- {
--	unsigned long cons_pos, prod_pos, new_prod_pos, pend_pos, flags;
-+	unsigned long flags;
- 	struct bpf_ringbuf_hdr *hdr;
--	u32 len, pg_off, tmp_size, hdr_len;
-+	u32 len, pg_off, hdr_len;
-+	unsigned long cons_pos, prod_pos, new_prod_pos, pend_pos, over_pos;
- 
- 	if (unlikely(size > RINGBUF_MAX_RECORD_SZ))
- 		return NULL;
-@@ -429,24 +478,39 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- 		hdr_len = READ_ONCE(hdr->len);
- 		if (hdr_len & BPF_RINGBUF_BUSY_BIT)
- 			break;
--		tmp_size = hdr_len & ~BPF_RINGBUF_DISCARD_BIT;
--		tmp_size = round_up(tmp_size + BPF_RINGBUF_HDR_SZ, 8);
--		pend_pos += tmp_size;
-+		pend_pos += ringbuf_round_up_hdr_len(hdr_len);
- 	}
- 	rb->pending_pos = pend_pos;
- 
--	/* check for out of ringbuf space:
--	 * - by ensuring producer position doesn't advance more than
--	 *   (ringbuf_size - 1) ahead
--	 * - by ensuring oldest not yet committed record until newest
--	 *   record does not span more than (ringbuf_size - 1)
--	 */
--	if (new_prod_pos - cons_pos > rb->mask ||
--	    new_prod_pos - pend_pos > rb->mask) {
-+	if (!bpf_ringbuf_has_space(rb, new_prod_pos, cons_pos, pend_pos)) {
- 		raw_res_spin_unlock_irqrestore(&rb->spinlock, flags);
- 		return NULL;
+ struct ring_buffer {
+@@ -69,6 +72,9 @@ static void ringbuf_free_ring(struct ring_buffer *rb, struct ring *r)
+ 		r->producer_pos = NULL;
  	}
  
-+	/* In overwrite mode, move overwrite_pos to the next record to be
-+	 * overwritten if the ring buffer is full
-+	 */
-+	if (unlikely(rb->overwrite_mode)) {
-+		over_pos = rb->overwrite_pos;
-+		while (new_prod_pos - over_pos > rb->mask) {
-+			hdr = (void *)rb->data + (over_pos & rb->mask);
-+			hdr_len = READ_ONCE(hdr->len);
-+			/* since pending_pos is the first record with BUSY
-+			 * bit set and overwrite_pos is never bigger than
-+			 * pending_pos, no need to check BUSY bit here.
-+			 */
-+			over_pos += ringbuf_round_up_hdr_len(hdr_len);
++	if (r->read_buffer)
++		free(r->read_buffer);
++
+ 	free(r);
+ }
+ 
+@@ -119,6 +125,14 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 	r->sample_cb = sample_cb;
+ 	r->ctx = ctx;
+ 	r->mask = info.max_entries - 1;
++	r->overwrite_mode = info.map_flags & BPF_F_OVERWRITE;
++	if (unlikely(r->overwrite_mode)) {
++		r->read_buffer = malloc(info.max_entries);
++		if (!r->read_buffer) {
++			err = -ENOMEM;
++			goto err_out;
 +		}
-+		/* smp_store_release(&rb->producer_pos, new_prod_pos) at
-+		 * the end of the function ensures that when consumer sees
-+		 * the updated rb->producer_pos, it always sees the updated
-+		 * rb->overwrite_pos, so when consumer reads overwrite_pos
-+		 * after smp_load_acquire(r->producer_pos), the overwrite_pos
-+		 * will always be valid.
-+		 */
-+		WRITE_ONCE(rb->overwrite_pos, over_pos);
 +	}
-+
- 	hdr = (void *)rb->data + (prod_pos & rb->mask);
- 	pg_off = bpf_ringbuf_rec_pg_off(rb, hdr);
- 	hdr->len = size | BPF_RINGBUF_BUSY_BIT;
-@@ -479,7 +543,50 @@ const struct bpf_func_proto bpf_ringbuf_reserve_proto = {
- 	.arg3_type	= ARG_ANYTHING,
- };
  
--static void bpf_ringbuf_commit(void *sample, u64 flags, bool discard)
-+static __always_inline
-+bool ringbuf_should_wakeup(const struct bpf_ringbuf *rb,
-+			   unsigned long rec_pos,
-+			   unsigned long cons_pos,
-+			   u32 len, u64 flags)
-+{
-+	unsigned long rec_end;
-+
-+	if (flags & BPF_RB_FORCE_WAKEUP)
-+		return true;
-+
-+	if (flags & BPF_RB_NO_WAKEUP)
-+		return false;
-+
-+	/* for non-overwrite mode, if consumer caught up and is waiting for
-+	 * our record, notify about new data availability
-+	 */
-+	if (likely(!rb->overwrite_mode))
-+		return cons_pos == rec_pos;
-+
-+	/* for overwrite mode, to give the consumer a chance to catch up
-+	 * before being overwritten, wake up consumer every half a round
-+	 * ahead.
-+	 */
-+	rec_end = rec_pos + ringbuf_round_up_hdr_len(len);
-+
-+	cons_pos &= (rb->mask >> 1);
-+	rec_pos &= (rb->mask >> 1);
-+	rec_end &= (rb->mask >> 1);
-+
-+	if (cons_pos == rec_pos)
-+		return true;
-+
-+	if (rec_pos < cons_pos && cons_pos < rec_end)
-+		return true;
-+
-+	if (rec_end < rec_pos && (cons_pos > rec_pos || cons_pos < rec_end))
-+		return true;
-+
-+	return false;
-+}
-+
-+static __always_inline
-+void bpf_ringbuf_commit(void *sample, u64 flags, bool discard)
- {
- 	unsigned long rec_pos, cons_pos;
- 	struct bpf_ringbuf_hdr *hdr;
-@@ -495,15 +602,10 @@ static void bpf_ringbuf_commit(void *sample, u64 flags, bool discard)
- 	/* update record header with correct final size prefix */
- 	xchg(&hdr->len, new_len);
+ 	/* Map writable consumer page */
+ 	tmp = mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
+@@ -148,6 +162,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 		goto err_out;
+ 	}
+ 	r->producer_pos = tmp;
++	r->overwrite_pos = r->producer_pos + 1; /* overwrite_pos is next to producer_pos */
+ 	r->data = tmp + rb->page_size;
  
--	/* if consumer caught up and is waiting for our record, notify about
--	 * new data availability
--	 */
- 	rec_pos = (void *)hdr - (void *)rb->data;
- 	cons_pos = smp_load_acquire(&rb->consumer_pos) & rb->mask;
- 
--	if (flags & BPF_RB_FORCE_WAKEUP)
--		irq_work_queue(&rb->work);
--	else if (cons_pos == rec_pos && !(flags & BPF_RB_NO_WAKEUP))
-+	if (ringbuf_should_wakeup(rb, rec_pos, cons_pos, new_len, flags))
- 		irq_work_queue(&rb->work);
+ 	e = &rb->events[rb->ring_cnt];
+@@ -232,7 +247,7 @@ static inline int roundup_len(__u32 len)
+ 	return (len + 7) / 8 * 8;
  }
  
-@@ -576,6 +678,8 @@ BPF_CALL_2(bpf_ringbuf_query, struct bpf_map *, map, u64, flags)
- 		return smp_load_acquire(&rb->consumer_pos);
- 	case BPF_RB_PROD_POS:
- 		return smp_load_acquire(&rb->producer_pos);
-+	case BPF_RB_OVER_POS:
-+		return READ_ONCE(rb->overwrite_pos);
- 	default:
- 		return 0;
- 	}
-@@ -749,6 +853,9 @@ BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
+-static int64_t ringbuf_process_ring(struct ring *r, size_t n)
++static int64_t ringbuf_process_normal_ring(struct ring *r, size_t n)
+ {
+ 	int *len_ptr, len, err;
+ 	/* 64-bit to avoid overflow in case of extreme application behavior */
+@@ -278,6 +293,92 @@ static int64_t ringbuf_process_ring(struct ring *r, size_t n)
+ 	return cnt;
+ }
  
- 	rb = container_of(map, struct bpf_ringbuf_map, map)->rb;
- 
-+	if (unlikely(rb->overwrite_mode))
-+		return -EOPNOTSUPP;
++static int64_t ringbuf_process_overwrite_ring(struct ring *r, size_t n)
++{
 +
- 	/* If another consumer is already consuming a sample, wait for them to finish. */
- 	if (!atomic_try_cmpxchg(&rb->busy, &busy, 1))
- 		return -EBUSY;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 233de8677382..d3b2fd2ae527 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1430,6 +1430,9 @@ enum {
- 
- /* Do not translate kernel bpf_arena pointers to user pointers */
- 	BPF_F_NO_USER_CONV	= (1U << 18),
++	int err;
++	uint32_t *len_ptr, len;
++	/* 64-bit to avoid overflow in case of extreme application behavior */
++	int64_t cnt = 0;
++	size_t size, offset;
++	unsigned long cons_pos, prod_pos, over_pos, tmp_pos;
++	bool got_new_data;
++	void *sample;
++	bool copied;
 +
-+/* bpf ringbuf works in overwrite mode? */
-+	BPF_F_OVERWRITE		= (1U << 19),
- };
- 
- /* Flags for BPF_PROG_QUERY. */
-@@ -6215,6 +6218,7 @@ enum {
- 	BPF_RB_RING_SIZE = 1,
- 	BPF_RB_CONS_POS = 2,
- 	BPF_RB_PROD_POS = 3,
-+	BPF_RB_OVER_POS = 4,
- };
- 
- /* BPF ring buffer constants */
++	size = r->mask + 1;
++
++	cons_pos = smp_load_acquire(r->consumer_pos);
++	do {
++		got_new_data = false;
++
++		/* grab a copy of data */
++		prod_pos = smp_load_acquire(r->producer_pos);
++		do {
++			over_pos = READ_ONCE(*r->overwrite_pos);
++			/* prod_pos may be outdated now */
++			if (over_pos < prod_pos) {
++				tmp_pos = max(cons_pos, over_pos);
++				/* smp_load_acquire(r->producer_pos) before
++				 * READ_ONCE(*r->overwrite_pos) ensures that
++				 * over_pos + r->mask < prod_pos never occurs,
++				 * so size is never larger than r->mask
++				 */
++				size = prod_pos - tmp_pos;
++				if (!size)
++					goto done;
++				memcpy(r->read_buffer,
++				       r->data + (tmp_pos & r->mask), size);
++				copied = true;
++			} else {
++				copied = false;
++			}
++			prod_pos = smp_load_acquire(r->producer_pos);
++		/* retry if data is overwritten by producer */
++		} while (!copied || prod_pos - tmp_pos > r->mask);
++
++		cons_pos = tmp_pos;
++
++		for (offset = 0; offset < size; offset += roundup_len(len)) {
++			len_ptr = r->read_buffer + (offset & r->mask);
++			len = *len_ptr;
++
++			if (len & BPF_RINGBUF_BUSY_BIT)
++				goto done;
++
++			got_new_data = true;
++			cons_pos += roundup_len(len);
++
++			if ((len & BPF_RINGBUF_DISCARD_BIT) == 0) {
++				sample = (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
++				err = r->sample_cb(r->ctx, sample, len);
++				if (err < 0) {
++					/* update consumer pos and bail out */
++					smp_store_release(r->consumer_pos,
++							  cons_pos);
++					return err;
++				}
++				cnt++;
++			}
++
++			if (cnt >= n)
++				goto done;
++		}
++	} while (got_new_data);
++
++done:
++	smp_store_release(r->consumer_pos, cons_pos);
++	return cnt;
++}
++
++static int64_t ringbuf_process_ring(struct ring *r, size_t n)
++{
++	if (likely(!r->overwrite_mode))
++		return ringbuf_process_normal_ring(r, n);
++	else
++		return ringbuf_process_overwrite_ring(r, n);
++}
++
+ /* Consume available ring buffer(s) data without event polling, up to n
+  * records.
+  *
 -- 
 2.43.0
 
