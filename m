@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-38243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1720FB1A50D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 16:34:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85691B1A515
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 16:36:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D507B18A2369
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 14:34:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AC953BA141
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 14:36:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C29272E6E;
-	Mon,  4 Aug 2025 14:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39D3271A9A;
+	Mon,  4 Aug 2025 14:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bpO2mG45"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MqRN3aXx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E463FC2
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 Aug 2025 14:33:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA94C2701DA
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 Aug 2025 14:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754318041; cv=none; b=jefCHUprmSU2svS1+KvupDJ3DOsvHXokskLCmYKAn531+TSo3JUaBBXVbi8WrmX2yJFjNnMZOQiEe4xyjFc8tggw3T2kNILfbzc8HAbsVr2tSNqvfGGGQldfWZD88MgKWlfJR27gEdcf8HdO8meodwU3azPuWZBloL2wUK5KIG8=
+	t=1754318179; cv=none; b=e3KKgarwRESZ3qzsjcuyIKAM6jr6T0lVtG7OdZ6Z/mIp/w4/r+35+KMFPl3JjaMc7un8/MpvPtYc9ACp0gIXnq37vTlW6PUxERdQvN8ljwcFV2+842jIjeEEQ+WLxw+PgAyfaX9xcvRpFNtEO6DKYCiGjPxN++s6qR+JnvDOD8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754318041; c=relaxed/simple;
-	bh=JHX6wnh4Y6JkizkpbmpV4IPl1gfgNXxOHw8DU/5hs/E=;
+	s=arc-20240116; t=1754318179; c=relaxed/simple;
+	bh=qymuip9h5QJXklpbzM6kg7N6sxHI8OBQUJjeeIqKpLs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dyR01scL2/Qz9yFeKrXXYsNg3dPsO0VwqGIJN5fzCEmyGzCUNWV9Z+bgoLTOdeRtwPrvO80g0pkuguF9Oalv/jeJMvMC5yGvH/kXLD9nFiuf+Qk0S9B71mjPOZql1EKtAGaZ0W7hzSfWw+O6nQvR/LM6/ujKoBvy8OA8DPYPZP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bpO2mG45; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=ArrJJekcG2SXtBKPqAR7sgD5Kj2Q9Jh/SP+uQGBCfzLS4MFsBctnRhH+02Na2YbTl2GLWdKuFi4lfh15Awj+ElLZjPxHIgbxgLrOQynyZcyhvcq734uMQSrv6fb7HjyKfKrtAfp86uNW8waH7CVRZ0tYWnqJm/RO3acXRpnpwfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MqRN3aXx; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754318038;
+	s=mimecast20190719; t=1754318176;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=qnwjgp1X7LASZtDmn58svtbysI3EXnkYQZBZvIKEyhU=;
-	b=bpO2mG45LBi5+P82yce8d0yo8Ki48cTiJnRDS77vZJgg0wc+qIRL0D/6xHt5Y7mzPIa+P4
-	ulBXoApadNi3olhxTdg1uuH9w2JmbCDZrsE9W2jIVIZtt3FOCCDBPI5fmdT3ZRn1t85av3
-	cPz18VOLSLk2MjNS+T0IAQgKP39Sf2g=
+	bh=bKInsm6bnVNCfi59KtVGbMO4lX6gaZZcpWuiTBk1kCI=;
+	b=MqRN3aXxLDmqmQ6Nw2ws6Xz4L/zZrG4R/8R034CZJoC+P8ZxbRs3cBL9szhflwpqdnuEQO
+	7iNLtFgygNz98HoTz5dc7YCubtS23SbAPvv1VBuGnDaZBdLpe3f8PYcPIJ+mJWA8xqRIGd
+	PbIEznvY2UsEuWe5P0ax3RBaGkf2DLM=
 Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
  [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-581-6-8EwCkWM9ib8ssRrYwUQA-1; Mon, 04 Aug 2025 10:33:57 -0400
-X-MC-Unique: 6-8EwCkWM9ib8ssRrYwUQA-1
-X-Mimecast-MFC-AGG-ID: 6-8EwCkWM9ib8ssRrYwUQA_1754318035
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-459d7ed90baso7909495e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Aug 2025 07:33:56 -0700 (PDT)
+ us-mta-349-PodsVg-KPQ2_smqPUwE0Pw-1; Mon, 04 Aug 2025 10:36:15 -0400
+X-MC-Unique: PodsVg-KPQ2_smqPUwE0Pw-1
+X-Mimecast-MFC-AGG-ID: PodsVg-KPQ2_smqPUwE0Pw_1754318173
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-459d7da3647so8345595e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Aug 2025 07:36:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754318035; x=1754922835;
+        d=1e100.net; s=20230601; t=1754318173; x=1754922973;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=qnwjgp1X7LASZtDmn58svtbysI3EXnkYQZBZvIKEyhU=;
-        b=JHP+A5ClXAqPOrm4wRQ6tQUcDQkAHL7prRetqWthNX0d6nk36WVC4KmTlTvWpZe9vt
-         tbzEMvoMEyLanIUhPZh2/jK+rRYmX3ZypxjGGdkz8qyD6x3dRV8uHCvNWuHRL5AYSpGZ
-         IGdnbaColeuz174lBFCYD6ovLbwaSawTOg15BXA7dxdFHmN8PWvwevyTON97G07jjIeS
-         PbANzpv+sdZY2TGuKfTUX6ykn5AOv9NZjpSqhBnnsxBgAMyOdtuPdlX1ncBtgX7kW4Hk
-         7JNEBkB2kPgVCgwQj2Pskh9a2B/AIzbY/ZLDmBYVbNEwUkMWi4+gpE6/Iz4MDfwUDGtL
-         54Nw==
-X-Forwarded-Encrypted: i=1; AJvYcCVbAKwd4JIZ05ZN2EkXYM+4/jqYExn/Sm9FDME3DmtU6Zv5d0Kg0+EAXU7TOQiVfcGPCsRg+1Q0dxDoH4GgGO4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3AboHcsn0FSnQ7h+uRVhlfqkyquXhtS1UN02rIQCQi3Zhk3p+
-	NbjA6u+k+j+80iEZTMBUZR4AvGO1IvKgxr2FdF+JLIwZGT7WQba3LEgHICRHW4PUvi5UvVSV37o
-	qIn5E+SFj4DFr7TiEVfCXc4aGG6i/7F/dt5MQCwGPzt/Tyl4+QQfcezGgcTx5RZKBrxRsCQ==
-X-Gm-Gg: ASbGnctmCxi9hneG9G8aS7iEbM+kmtY0a4c/CV6EURDVIvG4SzGZCVPeZlCd21CwVEL
-	3Tci1WYhK2+aQaUR//bUDvJ7/uJfmg0h60RYOnFLPMI9lOvGZ3YTac5M5RtGg/l6XtSkBA/ENYw
-	wGhazJ7Xl4n6+csnUy6kXjBoYxtpyEYOEpKOAGetYCzPRB4LuHD1xlavD6Y0EkwBhl6kCUruQtr
-	yEhys7i25KuoGc8GszFlujWfWacuZjJ7xL9hve5YFRH6F+aXb+ujUhuRw3t19Ol2i/k7X1TZVJZ
-	IXkbmwfmDhyA/fm0Yj2eyNhcxb97LvOsEaTs55NtPVKBiyiEzbWGrLOfxB/wYeIUKS4vFpl+PPL
-	9Z1tuHpgm+80d1dRVwYaH2Vt4NKlxGsiHZoILG5W4hvj4dY4Y1rhoTBN52oDoN7wOhBY=
-X-Received: by 2002:a05:600c:45d0:b0:456:1ac8:cac8 with SMTP id 5b1f17b1804b1-458b69ef2damr90293125e9.15.1754318034922;
-        Mon, 04 Aug 2025 07:33:54 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFkojQLTR5ipihpzKt5Dlu57CS4vEd/SulHz0nsTGiqo0H36lZUWBrM02TTnUIZ/b9tx/UK7Q==
-X-Received: by 2002:a05:600c:45d0:b0:456:1ac8:cac8 with SMTP id 5b1f17b1804b1-458b69ef2damr90292755e9.15.1754318034458;
-        Mon, 04 Aug 2025 07:33:54 -0700 (PDT)
+        bh=bKInsm6bnVNCfi59KtVGbMO4lX6gaZZcpWuiTBk1kCI=;
+        b=Y1iK2PndzEf+DOklydmxHUszleOoLzZdnxplOhOoVO/kh8Zq0OPQNPsva5fzk0802c
+         PLNTWeIQTX4KMcVy+ZtBcjd3wzRCCpJXKzjfFmzhOcQljHK/L0yip4psT5E189JdAFfe
+         B9ZW0pyEzkgKa5+cPRxungYHglUUBgxVrLQRrE2jDixtfFUWYMN7IYan/u88yq5BfiD3
+         fT7xsEITmHg54GqOnaLnku4lPK6rB4o2s4MoHALUWT33GGqibotjbKt0fc7PtM2RFm3f
+         OA8lpq7TA3cg4n6YbMvJXUY8414fL0LVsO4SPtZSHf/Gx4ux0c3cgwP566fbZFrhjV5Q
+         vTSg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGRsEhKmrvkmRaadkE0OLN/5aAv8APgapL8GtAN+Qgw+IoY/KtgQjBFICrdSTgptfzqagGfMOppQ7y5vdO9l0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1ZVHT29dV9oXtTI4rtEgvd9q1v19uMxt+XBJn5fmfH+0fFIV2
+	FkSPLm+nCn9z/9IjOiN4YPKFoAvEex4y67QpPzsHGTrTPLVwoLnNZDn407dXX/z49dUOzjmjr8F
+	aN7KffoKV47xkEYyWTKzVKdMkuperUTAF3b2xU/IUfVsmGZusL8cOdI0+JO9/7TBV+S8BTg==
+X-Gm-Gg: ASbGnctNLyQahI+Z7qI9/u/9Rb48a2LlsAo6oCstLFJnLXIzat728RcFsxxRCx2K062
+	o64TeKdbwmoZW0HE5/PEIXVU35zqC4J86mIVqtNzoWxMEnrgeFnmORYZ6NgVXyz1iyTIXPHVyA9
+	2QpQc5KP4+pChPNUKlQ2vXL3vO2hJdHrmmmo/KjOgiZlLeL4wl9dPtmT2zLQXZ6x0CcGBHPZpjd
+	3quv+6JJJ5/dUh1HGqLUNklMXOduqp1/RF63ZvnctZcD0Ayx49J/j752Y3+mTLaAQF/Ogaw5dO4
+	DrYi0B6uJW7e5qjhtKa2Xp7sxNM3kMhxCue9A3HaVIaCQiuYb9eMO7jbjSOmgOehiwo4FD2ycmY
+	g7m5AtPPBq5e2sHJJnkWn5RSMGdDvi/AgIqTGG5JHYFhXB/OUWeJ7QAh+VdOpuevnfek=
+X-Received: by 2002:a05:6000:4202:b0:3b7:9617:c9d6 with SMTP id ffacd0b85a97d-3b8d94c4853mr6430788f8f.45.1754318173078;
+        Mon, 04 Aug 2025 07:36:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHgF7WdMM20TEgdrxz26bfqmzRB7DX+Wy1M6x4RxWiGvkCMPMJ2Regb4dTIbgWyxWvwdHL0cw==
+X-Received: by 2002:a05:6000:4202:b0:3b7:9617:c9d6 with SMTP id ffacd0b85a97d-3b8d94c4853mr6430750f8f.45.1754318172621;
+        Mon, 04 Aug 2025 07:36:12 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f0e:2c00:d6bb:8859:fbbc:b8a9? (p200300d82f0e2c00d6bb8859fbbcb8a9.dip0.t-ipconnect.de. [2003:d8:2f0e:2c00:d6bb:8859:fbbc:b8a9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c3bf956sm16049440f8f.24.2025.08.04.07.33.53
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b8e9464f46sm1633873f8f.19.2025.08.04.07.36.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Aug 2025 07:33:53 -0700 (PDT)
-Message-ID: <65660d5f-a856-4244-8a81-1359a03f16be@redhat.com>
-Date: Mon, 4 Aug 2025 16:33:52 +0200
+        Mon, 04 Aug 2025 07:36:11 -0700 (PDT)
+Message-ID: <9f4e1263-c3d4-45be-a964-3eb0de828d95@redhat.com>
+Date: Mon, 4 Aug 2025 16:36:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,8 +90,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/7] mm/selftests: Fix split_huge_page_test failure on
- systems with 64KB page size
+Subject: Re: [PATCH v3 3/7] selftest/mm: Fix ksm_funtional_test failures
 To: Wei Yang <richard.weiyang@gmail.com>,
  Aboorva Devarajan <aboorvad@linux.ibm.com>
 Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
@@ -101,8 +100,8 @@ Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
  linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, donettom@linux.ibm.com, ritesh.list@gmail.com
 References: <20250729053403.1071807-1-aboorvad@linux.ibm.com>
- <20250729053403.1071807-5-aboorvad@linux.ibm.com>
- <20250804090410.of5xwrlker665bdp@master>
+ <20250729053403.1071807-4-aboorvad@linux.ibm.com>
+ <20250804091141.ifwryfmgjepwrog4@master>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -150,81 +149,54 @@ Autocrypt: addr=david@redhat.com; keydata=
  WBe5lqcozu9LpNDH/brVSzHCSb7vjNGvvSVESDuoiHK8gNlf0v+epy5WYd7CGAgODPvDShGN
  g3eXuA==
 Organization: Red Hat
-In-Reply-To: <20250804090410.of5xwrlker665bdp@master>
+In-Reply-To: <20250804091141.ifwryfmgjepwrog4@master>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 04.08.25 11:04, Wei Yang wrote:
-> On Tue, Jul 29, 2025 at 11:04:00AM +0530, Aboorva Devarajan wrote:
->> From: Donet Tom <donettom@linux.ibm.com>
->>
->> The split_huge_page_test fails on systems with a 64KB base page size.
->> This is because the order of a 2MB huge page is different:
->>
->> On 64KB systems, the order is 5.
->>
->> On 4KB systems, it's 9.
->>
->> The test currently assumes a maximum huge page order of 9, which is only
->> valid for 4KB base page systems. On systems with 64KB pages, attempting
->> to split huge pages beyond their actual order (5) causes the test to fail.
->>
->> In this patch, we calculate the huge page order based on the system's base
->> page size. With this change, the tests now run successfully on both 64KB
->> and 4KB page size systems.
->>
->> Fixes: fa6c02315f745 ("mm: huge_memory: a new debugfs interface for splitting THP tests")
->> Reviewed-by: Dev Jain <dev.jain@arm.com>
->> Reviewed-by: Zi Yan <ziy@nvidia.com>
->> Co-developed-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->> Signed-off-by: Donet Tom <donettom@linux.ibm.com>
->> ---
->> .../selftests/mm/split_huge_page_test.c       | 23 ++++++++++++-------
->> 1 file changed, 15 insertions(+), 8 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
->> index 05de1fc0005b..718daceb5282 100644
->> --- a/tools/testing/selftests/mm/split_huge_page_test.c
->> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
->> @@ -36,6 +36,7 @@ uint64_t pmd_pagesize;
->>
->> #define PFN_MASK     ((1UL<<55)-1)
->> #define KPF_THP      (1UL<<22)
->> +#define GET_ORDER(nr_pages)    (31 - __builtin_clz(nr_pages))
->>
->> int is_backed_by_thp(char *vaddr, int pagemap_file, int kpageflags_file)
->> {
->> @@ -522,6 +523,9 @@ int main(int argc, char **argv)
->> 	const char *fs_loc;
->> 	bool created_tmp;
->> 	int offset;
->> +	unsigned int max_order;
->> +	unsigned int nr_pages;
->> +	unsigned int tests;
->>
->> 	ksft_print_header();
->>
->> @@ -533,35 +537,38 @@ int main(int argc, char **argv)
->> 	if (argc > 1)
->> 		optional_xfs_path = argv[1];
->>
->> -	ksft_set_plan(1+8+1+9+9+8*4+2);
->> -
->> 	pagesize = getpagesize();
->> 	pageshift = ffs(pagesize) - 1;
->> 	pmd_pagesize = read_pmd_pagesize();
->> 	if (!pmd_pagesize)
->> 		ksft_exit_fail_msg("Reading PMD pagesize failed\n");
->>
->> +	nr_pages = pmd_pagesize / pagesize;
->> +	max_order = GET_ORDER(nr_pages);
-> 
-> There is a sz2ord() in cow.c and uffd-wp-mremap.c.
-> 
-> Maybe we can factor it into vm_util.h and use it here.
 
-That sounds reasonable to me.
+>> }
+>>
+>> @@ -338,6 +341,7 @@ static void test_unmerge_zero_pages(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			"KSM zero pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -366,6 +370,7 @@ static void test_unmerge_discarded(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			 "Pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -452,6 +457,7 @@ static void test_unmerge_uffd_wp(void)
+>> close_uffd:
+>> 	close(uffd);
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>> #endif
+>> @@ -515,6 +521,7 @@ static int test_child_ksm(void)
+>> 	else if (map == MAP_MERGE_SKIP)
+>> 		return -3;
+>>
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> 	return 0;
+>> }
+>> @@ -548,6 +555,7 @@ static void test_prctl_fork(void)
+>>
+>> 	child_pid = fork();
+>> 	if (!child_pid) {
+>> +		init_global_file_handles();
+> 
+> Would this leave fd in parent as orphan?
+
+Probably yes, but only until the child quits, so likely we don't care.
 
 -- 
 Cheers,
