@@ -1,162 +1,126 @@
-Return-Path: <linux-kselftest+bounces-38254-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41275B1AB18
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 00:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AA8C1B1AB4E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 01:16:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE9013B3A1F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 22:57:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BDC13B16C2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 23:16:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 331A92900AF;
-	Mon,  4 Aug 2025 22:57:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F189522B8BD;
+	Mon,  4 Aug 2025 23:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bB6h0nfE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jUOCTCL9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EEFC23B0;
-	Mon,  4 Aug 2025 22:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3681DDC1E
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 Aug 2025 23:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754348232; cv=none; b=RekKPov8w5zSchGzqTOOO1j3vhMZ5Q/mLyZ1BhEvkudUTlcAokw0nCnP0221BZMJsm20WlaFG5M2WaTVbWdSvSAB1ueQ9rJqAhfhgLIvtmb21y7/4nl9QuCknsAehd4W8BbxEXrDWb+12l8PbArvEamNlzMfvEGtIFkRB2k5Ao8=
+	t=1754349357; cv=none; b=XByqXwl8buYer0uk9bE1qh4tKdYkqxC7TrPkSrwizARtXfRB22FJeYyLMgHP+vPfuhz+MUCk8ePwawiiinG3mIwT7bwLFd+QvuiGcHegn+H/9EenI+a6ycUCj+s3ENYLz1kmjlTni4WakUBqCkoBVAow0BkX5BFurit5OLDiGp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754348232; c=relaxed/simple;
-	bh=9oKXtOqT/7ZhZjt2DGH7GRuX05WLiaM2Ad5p+ORGuJg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rzJoBBz4VTEKOICpAE91gWkzsUlxYTjufWSRs+k+XBmzSev4e9SS0x5aSAeZm/AT5GQ6Sq0NQelLX6786xCiLURgoMhL6e8NatI75jrv35/hiCXiS95wQD9qbtANrW071InW4OsgX27R56HRfvUcv1mucWUU3tT9ICC7GMyu7Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bB6h0nfE; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6156a162537so7770768a12.2;
-        Mon, 04 Aug 2025 15:57:10 -0700 (PDT)
+	s=arc-20240116; t=1754349357; c=relaxed/simple;
+	bh=aLD/mc6gQzsIeMbR4/fU38vrGMY6ASni5WoEO50oRKc=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Mso4G4lfYsyHd00VEeZf/1mAQxPdK5MBRSKTElbOpe1G9m6E5rWQyva5owVtGzenilR6cqllJ4j1z47n/NrekyEkw9wGdW+u63u7z//idmieUNg3jJNTqETA32UvSLe87owck9rVcC47cjnUPrD7wYiOKe4CytfGlUxcGwX4+V8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jUOCTCL9; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b423dcff27aso5406228a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Aug 2025 16:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754348229; x=1754953029; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rr2agJDZBQmVW9FUU147Ibs/lRl/y87H55FoFWi7jBs=;
-        b=bB6h0nfEIM4xmOJP6F2z5UYVCUO6OYZfcb4pP8SAQk9SymskNG7MAn4JcCV7G3TrMD
-         tJ5hT8RHL7njTXsIcnM7AO9i064oLckuUqzIQd5NRuuCV3y8++ZJ0WWz6yr2aPU3y4EP
-         KcE43UHfDhI+lD+67KZUpd8ZXmJLdtI8VfBuczwLw5ZPyRUW6algPMDvc6M/qHW7PiHj
-         /0eRXUMwueqyIINWNBM8LtauvfaQerSAZDcfNPcFBqCef2LLT0EgMGhZV0aLlxXLmeJT
-         XgRIv0bTDjmshZm4i0KFjBLlz2/30x3e3TgxB4+WdRqMD1hnEVLCh8gcxJoqY6fX/MHj
-         cCbg==
+        d=google.com; s=20230601; t=1754349356; x=1754954156; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=C8NgMA0HX6GfrkP4AehXbgu9Qzh9g7nw7slgx4SS+9M=;
+        b=jUOCTCL9cdlB88x2O5dDxoLZTx9JMu2tQcoRTsm+Z85wtpQoH/5W15Q1dbGrso6RhC
+         aH970OhJdlNGCY5gJ3uRCL+iWImyAbs9qkzjerMOldzudBwIh26R3zf0O8vUZq1a7qKW
+         D82/OwFCHBhBH2mYUXwUBbDok262nsjEyC3p7nx6bfRBf7kTeDVgfCbT38wt8G9xrc/C
+         dq16kv7zNdHDm80y7Fnj7GbzPi1ARnFQSV4/GRxlp1FXPqqwjmWKoaEM+Kx8M818/7SJ
+         Ob6rjzz+QxEy+i/f3UhGbd2qqxUYco4Lxd6PGIxNej3s3PeWkFK3pg5jp5c5mFYV7Eom
+         ZEKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754348229; x=1754953029;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Rr2agJDZBQmVW9FUU147Ibs/lRl/y87H55FoFWi7jBs=;
-        b=HLv/RQBfxzIgb5dpy+hO23aIes31fa2HGLgIg7wMWTQR8NTAHMnwujrtKFfR+wLP5W
-         6HKJS12LAqn4vDXd1bJW1UI1hrDFPis/EXAnkELGhus6Fvz+pAzBHzP3Iz/0DQkfwfYQ
-         QghpQZv3tebUzOcugW5aHeDNcmE7vY5ooMEj/tOKHqgQcyum6ApKtOiP/KjUko6vK9F5
-         GiodaXkx4nlt1EBCgrHRb/QEnXpSIT1Mk+2T4vgNakagHkcyUQkui0wMAReJCczlJeFe
-         QX3z/D+tB5iw2FOONf03u+crev09AYV10eNjfMB7GCGjR7op3WSUaZ8Q7JG9vlV6cCuz
-         GMFg==
-X-Forwarded-Encrypted: i=1; AJvYcCV4k5ZiWi+7D2MnzNF26mCAYK4lzEThJUXXWQ5V/JWNQZhchBowFVYiEfsdZ21tiAtdeHcFIfVld2M9q/Pb@vger.kernel.org, AJvYcCVjPOII+8ZVrbTYRqjUGy/0vNVNzlssRmmztQn7yEZx6LL8Mo7g1SAChLPW2x+snk8P0vk4SaBtkbkmNNBQ@vger.kernel.org, AJvYcCVkMOe1Id8kVzWPMDO5aCrfRLLQnGCC3y5DjrjwasQ4beIzPyrAq+su1kuCu9JjleOXB56oksSy3tOY6f4ny8II@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBF7rY8nh4p2ktGxo4qb0hD6OkevJUAwez+fdza1xzDtaFF6QP
-	Xlv24Y30iasLqgmX7oM5zWeWy+8XBzY4G8OPWeee3ltLV4T/CevJnGhG
-X-Gm-Gg: ASbGncs5XnAp8TxKFR/d0HK9GsHUSUjIF8KniqfE94KeH3W+95PE2EmZCtkgGCpf18/
-	VESenfSQvqwpvB0VWTzR7OujXjSOwS0vvWKF09IOiHL5unJsrtvqsm/pTDAc2qvRcE236lG2rFc
-	ICB7kKbYkPjrj59nsbWjgGFrUpzPWGaaw3nVo7GBbx5ENSf0ot5jUh7lnz9V4haUUK4OJjlbBoZ
-	qofDazdEf5FevjvlVrE8s34TIP0mp1VmuJEtTIm+Wo3080mk7BKiVX1aEESBTySnf7EgG9DTQKm
-	C0NNvjf8nThIFBrAxoFiLaZRT5zLiOBUeSIeRnwouAIqxZVxygA6/Rsf9n5xauByPkp4ETWwkxZ
-	X3FndmiMTJvP04wI=
-X-Google-Smtp-Source: AGHT+IHifYLUrYrD0a96WpNHE6XmhRmOU49DTRryYgiHod6ocIc9uDWzMDgfTzrhxCU7Y8NuvXV8vw==
-X-Received: by 2002:a17:907:6d14:b0:ae3:cc60:8ce7 with SMTP id a640c23a62f3a-af94001fea2mr1132451866b.19.1754348228543;
-        Mon, 04 Aug 2025 15:57:08 -0700 (PDT)
-Received: from hsukr3.. ([141.70.88.200])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0a3b77sm798173366b.51.2025.08.04.15.57.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Aug 2025 15:57:08 -0700 (PDT)
-From: Sukrut Heroorkar <hsukrut3@gmail.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Sukrut Heroorkar <hsukrut3@gmail.com>,
-	linux-kernel@vger.kernel.org (open list:PROC FILESYSTEM),
-	linux-fsdevel@vger.kernel.org (open list:PROC FILESYSTEM),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Cc: skhan@linuxfoundation.org,
-	david.hunter.linux@gmail.com
-Subject: [PATCH v2] selftests/proc: Fix string literal warning in proc-maps-race.c
-Date: Tue,  5 Aug 2025 00:56:14 +0200
-Message-ID: <20250804225633.841777-1-hsukrut3@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1754349356; x=1754954156;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C8NgMA0HX6GfrkP4AehXbgu9Qzh9g7nw7slgx4SS+9M=;
+        b=SF27u18OWwfdHl5MmvRBVXJlk5MQj2z38ItwqgoJ7J5iIZmahucnKVa4CWMYMLj07a
+         rXD8cDcVAZZMM9QQSLUOBVtvORIFH3lTEGsspHr+l/gNVDEhP7LJuKkvaRz3R6f2+qdh
+         eF6YiggMjgwNyE2ONoWsIe0s4TgvjIHP2cd/ylGwYXrcN+YMLFoi+rVqagoGjdR5kZSs
+         WBN7Qf40si1QAUjWiMf0lbKUZJ8PBbhsEtrQx/jX5RjL7I7iGWCqwTBA59Mh9el+hYD6
+         bLUA8HnXQjNMKZVGhZ+GN35tt/kD/H2WYfaLT9NnCHGOVHsNcq4opheDW8Q5MtoNnDNj
+         FrJw==
+X-Forwarded-Encrypted: i=1; AJvYcCUeG41QgLCkUSLkojtDlVxiAhIu5ZQNCwlLRAwuUrhsZ9ubtjfQKeMAkTHWcTBP+m8PUiM55owAg2y1Ws96VbU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6QE6vfmbYPjMDpc9JOfhXcrRZjcpZEeB/ClZy2xy3jV2U767N
+	FCIclYJSynkDXEXYtECH6JnGaKHKkSSkLZ47X/7JgyaJFfuuXv+SYp5nGQYrBJqYn81cif/VGdI
+	G+9qAdg==
+X-Google-Smtp-Source: AGHT+IG2q4Q/icGmfZqa/AQL4Y/7ixWiXboOhyChxpBm5zefJHZYEBLAPMKg6t2vVqdvtV/Sahk/uwOkeqs=
+X-Received: from pgan189.prod.google.com ([2002:a63:40c6:0:b0:b42:da4:ef4])
+ (user=surenb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:9994:b0:23f:fd87:424b
+ with SMTP id adf61e73a8af0-23ffd874f47mr10654460637.44.1754349355847; Mon, 04
+ Aug 2025 16:15:55 -0700 (PDT)
+Date: Mon,  4 Aug 2025 16:15:48 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.1.565.gc32cd1483b-goog
+Message-ID: <20250804231552.1217132-1-surenb@google.com>
+Subject: [PATCH v2 0/3] execute PROCMAP_QUERY ioctl under per-vma lock
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
+	vbabka@suse.cz, peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, 
+	mhocko@kernel.org, paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
+	brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com, 
+	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de, 
+	andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
+	tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-This change resolves non literal string format warning invoked
-for proc-maps-race.c while compiling.
+With /proc/pid/maps now being read under per-vma lock protection we can
+reuse parts of that code to execute PROCMAP_QUERY ioctl also without
+taking mmap_lock. The change is designed to reduce mmap_lock contention
+and prevent PROCMAP_QUERY ioctl calls from blocking address space updates.
 
-proc-maps-race.c:205:17: warning: format not a string literal and no format arguments [-Wformat-security]
- 205 |                 printf(text);
-     |                 ^~~~~~
-proc-maps-race.c:209:17: warning: format not a string literal and no format arguments [-Wformat-security]
- 209 |                 printf(text);
-     |                 ^~~~~~
-proc-maps-race.c: In function ‘print_last_lines’:
-proc-maps-race.c:224:9: warning: format not a string literal and no format arguments [-Wformat-security]
- 224 |         printf(start);
-     |         ^~~~~~
+This patchset was split out of the original patchset [1] that introduced
+per-vma lock usage for /proc/pid/maps reading. It contains PROCMAP_QUERY
+tests, code refactoring patch to simplify the main change and the actual
+transition to per-vma lock.
 
-Added string format specifier %s for the printf calls
-in both print_first_lines() and print_last_lines() thus
-resolving the warnings invoked.
+Changes since v1 [2]
+- Added Tested-by and Acked-by, per SeongJae Park
+- Fixed NOMMU case, per Vlastimil Babka
+- Renamed proc_maps_query_data to proc_maps_locking_ctx,
+per Vlastimil Babka
 
-The test executes fine after this change thus causing no
-affect to the functional behavior of the test.
+[1] https://lore.kernel.org/all/20250704060727.724817-1-surenb@google.com/
+[2] https://lore.kernel.org/all/20250731220024.702621-1-surenb@google.com/
+
+Suren Baghdasaryan (3):
+  selftests/proc: test PROCMAP_QUERY ioctl while vma is concurrently
+    modified
+  fs/proc/task_mmu: factor out proc_maps_private fields used by
+    PROCMAP_QUERY
+  fs/proc/task_mmu: execute PROCMAP_QUERY ioctl under per-vma locks
+
+ fs/proc/internal.h                            |  15 +-
+ fs/proc/task_mmu.c                            | 149 ++++++++++++------
+ fs/proc/task_nommu.c                          |  14 +-
+ tools/testing/selftests/proc/proc-maps-race.c |  65 ++++++++
+ 4 files changed, 181 insertions(+), 62 deletions(-)
 
 
-Fixes: aadc099c480f ("selftests/proc: add verbose mode for /proc/pid/maps tearing tests")
-Signed-off-by: Sukrut Heroorkar <hsukrut3@gmail.com>
-Acked-by: Suren Baghdasaryan <surenb@google.com>
----
-
-Changes since v1:
-- Added Fixes tag
-- Included Acked-by Suren Baghdasaryan
-https://lore.kernel.org/all/CAHCkknoxpKV80-S3jByY1xnRXd1Pr=v=D2a0ZcgnY0-Hnya56Q@mail.gmail.com/
-
- tools/testing/selftests/proc/proc-maps-race.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/proc/proc-maps-race.c b/tools/testing/selftests/proc/proc-maps-race.c
-index 66773685a047..94bba4553130 100644
---- a/tools/testing/selftests/proc/proc-maps-race.c
-+++ b/tools/testing/selftests/proc/proc-maps-race.c
-@@ -202,11 +202,11 @@ static void print_first_lines(char *text, int nr)
- 		int offs = end - text;
- 
- 		text[offs] = '\0';
--		printf(text);
-+		printf("%s", text);
- 		text[offs] = '\n';
- 		printf("\n");
- 	} else {
--		printf(text);
-+		printf("%s", text);
- 	}
- }
- 
-@@ -221,7 +221,7 @@ static void print_last_lines(char *text, int nr)
- 		nr--;
- 		start--;
- 	}
--	printf(start);
-+	printf("%s", start);
- }
- 
- static void print_boundaries(const char *title, FIXTURE_DATA(proc_maps_race) *self)
+base-commit: 01da54f10fddf3b01c5a3b80f6b16bbad390c302
 -- 
-2.43.0
+2.50.1.565.gc32cd1483b-goog
 
 
