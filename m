@@ -1,251 +1,251 @@
-Return-Path: <linux-kselftest+bounces-38232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05000B19A35
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 04:28:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0EF0B19D8C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 10:26:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DFD51723C6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 02:28:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E3887AB1FE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 08:24:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81AEA218E91;
-	Mon,  4 Aug 2025 02:27:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B0E224166D;
+	Mon,  4 Aug 2025 08:26:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RGiMNGMe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8464720127B;
-	Mon,  4 Aug 2025 02:27:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CE81DF985
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 Aug 2025 08:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754274434; cv=none; b=t1b154R4ebf4qmJSin6gzLCGDn2ViZ/6xJlIilQWuzWVfW5Cpzl600eAoGocceBalOmqCRE74W33Nvwy492YKa1XeIobgbJMf1bCkjsOBzKmPlrGu5BDPyqFiyoqppti1L+19FWQifAlMPF8sc0DUxnHjSd6+N9fhFqzbCNpbv4=
+	t=1754295960; cv=none; b=D283LxqdFZM8LQaDk+dXoFRsl2RSEgB1WA2eqEmDfFR1cOg+4yJs/qleeHIEs1EFX1+Nsl9Kpk6r4Hs9tgOjTHYSk+n1/pFV5xnWpY6eDu2jbUZ+W9hULU9K/okDjLtqvRv73ePnb2LEJhUv8zq+XUYRCnzAj2nqc1ofOgli5Vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754274434; c=relaxed/simple;
-	bh=UW1WmWLA5hqVf8AQJiB3mCG4tYSWQTkhlPbwBNCJnik=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Iuok66QA+f2LhF5SjZayj2h+mpq/9E+baDJ8OIk6tkgGGzTnSW1xKUEFRmRpdYLGV1WxrYvDYTQbWvAQ+y6hqbI690OFNXSJn6HRwA8bqIq/nwGGlNNPN/TMeWDYji5TpA3U/SJuaLKHq6gLXGk+poqOdEDuUku7XYMwYkurQ78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bwL6k4KDNzYQtxF;
-	Mon,  4 Aug 2025 10:27:10 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 40CCA1A018D;
-	Mon,  4 Aug 2025 10:27:09 +0800 (CST)
-Received: from k-arm6401.huawei.com (unknown [7.217.19.243])
-	by APP4 (Coremail) with SMTP id gCh0CgAX4BBsGpBoTUL9CQ--.242S6;
-	Mon, 04 Aug 2025 10:27:08 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yhs@fb.com>,
-	Song Liu <song@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Paul Chaignon <paul.chaignon@gmail.com>,
-	Tao Chen <chen.dylane@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin Kelly <martin.kelly@crowdstrike.com>
-Subject: [PATCH bpf-next 4/4] selftests/bpf/benchs: Add overwrite mode bench for rb-libbpf
-Date: Mon,  4 Aug 2025 10:21:00 +0800
-Message-ID: <20250804022101.2171981-5-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
-References: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
+	s=arc-20240116; t=1754295960; c=relaxed/simple;
+	bh=54mq18CDCFm4MZxwX/8v/9zlf+8hqTtcpk74yoc4DXo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AB7MGHs0LQeP3/dGEo+S7vHvzNTyNwIsMQi15rVt40EwgFy/SqEhS79FKnNt4ncN/eCITnfVcep578RwqRS7DSvVOO3GixshUHva+byCujwm7y4USO+0A1BNHWMu+jhHaGk4ajTmCPXQsLnkhlfUKCl++Sj1gHUSOhKCpjXvpWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RGiMNGMe; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1754295957;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=YadyPmR0dQe/epD1NUXfvpXcI1CVozsoweeY4VWaFzU=;
+	b=RGiMNGMeUlg5eki+CtrSwSqbIo9loS4vCQz8jHjziwMocA5XiARWQBepRE3LwDyJymQJBK
+	UEby8LH1XCoxqWizZ32Lz9ae+PSu3UfHHmhKkWKH+pn1y8/MBSnm5kVQEBSryOVc6xmLvA
+	uZ3Ynjj0cpwv/v6wgP0rg6+HkBGjLbE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-195-A_WDz5AKOMOK62kiE_XJBw-1; Mon, 04 Aug 2025 04:25:56 -0400
+X-MC-Unique: A_WDz5AKOMOK62kiE_XJBw-1
+X-Mimecast-MFC-AGG-ID: A_WDz5AKOMOK62kiE_XJBw_1754295955
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-458c0c8d169so6615665e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Aug 2025 01:25:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754295955; x=1754900755;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YadyPmR0dQe/epD1NUXfvpXcI1CVozsoweeY4VWaFzU=;
+        b=LwyyCRCYwc6hQM14qssW+ATrTfCxoR40wjeGomvFyug1NuTmLD+LmR10szi3nIhxEq
+         Mbgthp8XMGwxzYngsCNE6I+Ig7HQClyWfjKzuBEMU+SIfpSQBVCwZ3ro7hnjfSDtNjIn
+         OnbAIdz3O0qDrog9FpCxPxJ7O/j4nkV07hK8+oNZigJSkC3v4lNQ3Orl4hUEENR3x1KO
+         omC1mHvqRgHSY7cJh6m0li0Dxor2E3G2KwuxtH3dhGVyBKDggqEso4bAGvyKxxqRU4DH
+         uOqJ3LHjD8xYyxzz9cBVvFO5q2LN1LZFUdoZXn+5qUwpooCLaAxgzmKbi1oPaiv2vW5a
+         7QZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWDpnPHLyMoBTA/jS4U7SP5kgJMm5iYHwWOMnJ4cpPO5QSDDa2zwHSM9LUwdtIL8mWXDxiYkgpXDo7NgzQWFzg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw73YcG4kKvHCWIYmtAZURS7KlSN4RIpk/1uK23ohfzk0YGAVre
+	kORwcPsQDc7W6VdtVqgifNHjTfskVJRzH0kwbd2jZGpOsDYNv3giv5BXwIVZa7x+Pt+yPf/MaqJ
+	+MOOVb3JcVgZjvWwAQqjTEP10y/wt846NI+dq9arKJ1ybBJ1Ucr4mmbc0NOcKcQwoR5asXtQfAn
+	QkzA==
+X-Gm-Gg: ASbGncsQMqHLyedKqlm0qAGsoIkEv3s/8aPank/j0ANmG9f71l1Yq11FKzR6Ug7ROLv
+	5SRifbPnnty5uWb9jSWpwrfOHH9UIHqZJ2wNCr9oSGTytYihY6adllaXteO2a0TyNh5H2aiM9iK
+	jPSoLFiKztSHUR3WSJ7JlA4/31uRLkQiMg6vguwM1nLjMuSHUkbTybX1gkTXuBf8WabHzDMOrel
+	EWV02LZ26Pnjrs7pnJymuJP+RsdJQloCfOx3xqnDTBNZ88maEFv1QlriONDv81UgIUqTZocpz7a
+	GsWHTjZgkXHzdT5U2F2cnJySoN6jQd8CaNQ8txrkR/aSGXskEZr8gUhh/VgD74qy+xQlp3TovIg
+	ZJ4lpIawQ+IpsiBav+wGts9DYehfl3/43fE+yiwENgmw9eWiQQNApruI2T1g0FkB68x8=
+X-Received: by 2002:a05:600c:1554:b0:458:7005:2ac3 with SMTP id 5b1f17b1804b1-458b6b34cb7mr62843985e9.21.1754295954884;
+        Mon, 04 Aug 2025 01:25:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFVo07/GjP+xQ7W9mHtwrvAbGwAzbvjOvrLEMx90aOibW103VrfdK7vNJDbsTMBmrNMWhDZLg==
+X-Received: by 2002:a05:600c:1554:b0:458:7005:2ac3 with SMTP id 5b1f17b1804b1-458b6b34cb7mr62843705e9.21.1754295954411;
+        Mon, 04 Aug 2025 01:25:54 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f0e:2c00:d6bb:8859:fbbc:b8a9? (p200300d82f0e2c00d6bb8859fbbcb8a9.dip0.t-ipconnect.de. [2003:d8:2f0e:2c00:d6bb:8859:fbbc:b8a9])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-458b501f22dsm64751025e9.0.2025.08.04.01.25.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Aug 2025 01:25:53 -0700 (PDT)
+Message-ID: <8c609741-c2b8-426c-8f83-8a79022b67d7@redhat.com>
+Date: Mon, 4 Aug 2025 10:25:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAX4BBsGpBoTUL9CQ--.242S6
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xw45ZrWUAr45urWDtw4xWFg_yoWxGF4fpF
-	WDCFWfCw1xtr93XF1vkw48JrW7ZrnrZ3W5CFyfta17Zw1xWan0q3yxK3yUt3Z8G348C3WS
-	v34ktryrGw1UJwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_GFv_Wrylc7CjxVAKzI0EY4vE52x082I5MxkIecxEwVCI4VW8JwCF04k20xvY0x0E
-	wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6x
-	AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-	1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jtsqXUUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/mm: pass filename as input param to
+ VM_PFNMAP tests
+To: Sudarsan Mahendran <sudarsanm@google.com>, linux-kselftest@vger.kernel.org
+Cc: Shuah Khan <shuah@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>,
+ linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+ linux-kernel@vger.kernel.org, trivial@kernel.org
+References: <20250801234559.1178521-1-sudarsanm@google.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ g3eXuA==
+Organization: Red Hat
+In-Reply-To: <20250801234559.1178521-1-sudarsanm@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On 02.08.25 01:45, Sudarsan Mahendran wrote:
+> Enable these tests to be run on other pfnmap'ed memory like
+> NVIDIA's EGM.
+> 
+> Add '--' as a separator to pass in file path. This allows
+> passing of cmd line arguments to kselftest_harness.
+> Use '/dev/mem' as default filename.
+> 
+> Existing test passes:
+> 	pfnmap
+> 	TAP version 13
+> 	1..6
+> 	# Starting 6 tests from 1 test cases.
+> 	# PASSED: 6 / 6 tests passed.
+> 	# Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Pass params to kselftest_harness:
+> 	pfnmap -r pfnmap:mremap_fixed
+> 	TAP version 13
+> 	1..1
+> 	# Starting 1 tests from 1 test cases.
+> 	#  RUN           pfnmap.mremap_fixed ...
+> 	#            OK  pfnmap.mremap_fixed
+> 	ok 1 pfnmap.mremap_fixed
+> 	# PASSED: 1 / 1 tests passed.
+> 	# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Pass non-existent file name as input:
+> 	pfnmap -- /dev/blah
+> 	TAP version 13
+> 	1..6
+> 	# Starting 6 tests from 1 test cases.
+> 	#  RUN           pfnmap.madvise_disallowed ...
+> 	#      SKIP      Cannot open '/dev/blah'
+> 
+> Pass non pfnmap'ed file as input:
+> 	pfnmap -r pfnmap.madvise_disallowed -- randfile
+> 	TAP version 13
+> 	1..1
+> 	# Starting 1 tests from 1 test cases.
+> 	#  RUN           pfnmap.madvise_disallowed ...
+> 	#      SKIP      Invalid file: 'randfile'. Not pfnmap'ed
+> 
+> Signed-off-by: Sudarsan Mahendran <sudarsanm@google.com>
+> ---
+> 
+> v1 -> v2:
+> * Add verify_pfnmap func to sanity check the input param
+> * mmap with zero offset if filename != '/dev/mem'
+> 
+> ---
+>   tools/testing/selftests/mm/pfnmap.c | 62 ++++++++++++++++++++++++-----
+>   1 file changed, 53 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
+> index 866ac023baf5..e078b961c333 100644
+> --- a/tools/testing/selftests/mm/pfnmap.c
+> +++ b/tools/testing/selftests/mm/pfnmap.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   /*
+> - * Basic VM_PFNMAP tests relying on mmap() of '/dev/mem'
+> + * Basic VM_PFNMAP tests relying on mmap() of input file provided.
+> + * Use '/dev/mem' as default.
+>    *
+>    * Copyright 2025, Red Hat, Inc.
+>    *
+> @@ -25,6 +26,7 @@
+>   #include "vm_util.h"
+>   
+>   static sigjmp_buf sigjmp_buf_env;
+> +static char *file = "/dev/mem";
+>   
+>   static void signal_handler(int sig)
+>   {
+> @@ -98,6 +100,30 @@ static int find_ram_target(off_t *phys_addr,
+>   	return -ENOENT;
+>   }
+>   
+> +static int verify_pfnmap(void)
 
-Add overwrite mode bench for ring buffer.
+You really want to pass in the address, and verify that that very 
+mapping is a PFNMAP. (not something unrelated, like the vdso or 
+something odd like that)
 
-For reference, below are bench numbers collected from x86_64 and arm64.
+We have a helper in vm_util.c that might be useful: __get_smap_entry()
 
-- x86_64 (AMD EPYC 9654)
+We also have a check_vmflag_io() in there. So likely you want to add a 
+helper check_vmflag_pfnmap().
 
-  Ringbuf, multi-producer contention, overwrite mode
-  ==================================================
-  rb-libbpf nr_prod 1  14.970 ± 0.012M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 2  14.064 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 3  7.493 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 4  6.575 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 8  3.696 ± 0.011M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 12 2.612 ± 0.012M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 16 2.335 ± 0.005M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 20 2.079 ± 0.005M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 24 1.965 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 28 1.846 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 32 1.790 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 36 1.735 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 40 1.701 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 44 1.669 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 48 1.749 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 52 1.709 ± 0.001M/s (drops 0.000 ± 0.000M/s)
 
-- arm64 (HiSilicon Kunpeng 920)
+Nothing else jumped at me, except that phys_addr might be better called 
+something like "offset" now.
 
-  Ringbuf, multi-producer contention, overwrite mode
-  ==================================================
-  rb-libbpf nr_prod 1  10.319 ± 0.231M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 2  9.219 ± 0.006M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 3  6.699 ± 0.013M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 4  4.608 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 8  3.905 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 12 3.282 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 16 3.182 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 20 3.029 ± 0.006M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 24 3.116 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 28 2.869 ± 0.005M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 32 3.075 ± 0.010M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 36 2.795 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 40 2.947 ± 0.005M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 44 2.748 ± 0.006M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 48 2.767 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 52 2.858 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- .../selftests/bpf/benchs/bench_ringbufs.c     | 22 ++++++++++++++++++-
- .../bpf/benchs/run_bench_ringbufs.sh          |  4 ++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-index e1ee979e6acc..6fdfc61c721b 100644
---- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-@@ -19,6 +19,7 @@ static struct {
- 	int ringbuf_sz; /* per-ringbuf, in bytes */
- 	bool ringbuf_use_output; /* use slower output API */
- 	int perfbuf_sz; /* per-CPU size, in pages */
-+	bool overwrite_mode;
- } args = {
- 	.back2back = false,
- 	.batch_cnt = 500,
-@@ -27,6 +28,7 @@ static struct {
- 	.ringbuf_sz = 512 * 1024,
- 	.ringbuf_use_output = false,
- 	.perfbuf_sz = 128,
-+	.overwrite_mode = false,
- };
- 
- enum {
-@@ -35,6 +37,7 @@ enum {
- 	ARG_RB_BATCH_CNT = 2002,
- 	ARG_RB_SAMPLED = 2003,
- 	ARG_RB_SAMPLE_RATE = 2004,
-+	ARG_RB_OVERWRITE = 2005,
- };
- 
- static const struct argp_option opts[] = {
-@@ -43,6 +46,7 @@ static const struct argp_option opts[] = {
- 	{ "rb-batch-cnt", ARG_RB_BATCH_CNT, "CNT", 0, "Set BPF-side record batch count"},
- 	{ "rb-sampled", ARG_RB_SAMPLED, NULL, 0, "Notification sampling"},
- 	{ "rb-sample-rate", ARG_RB_SAMPLE_RATE, "RATE", 0, "Notification sample rate"},
-+	{ "rb-overwrite", ARG_RB_OVERWRITE, NULL, 0, "overwrite mode"},
- 	{},
- };
- 
-@@ -72,6 +76,9 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
- 			argp_usage(state);
- 		}
- 		break;
-+	case ARG_RB_OVERWRITE:
-+		args.overwrite_mode = true;
-+		break;
- 	default:
- 		return ARGP_ERR_UNKNOWN;
- 	}
-@@ -104,6 +111,11 @@ static void bufs_validate(void)
- 		fprintf(stderr, "back-to-back mode makes sense only for single-producer case!\n");
- 		exit(1);
- 	}
-+
-+	if (args.overwrite_mode && strcmp(env.bench_name, "rb-libbpf") != 0) {
-+		fprintf(stderr, "rb-overwrite mode only supports rb-libbpf!\n");
-+		exit(1);
-+	}
- }
- 
- static void *bufs_sample_producer(void *input)
-@@ -134,6 +146,8 @@ static void ringbuf_libbpf_measure(struct bench_res *res)
- 
- static struct ringbuf_bench *ringbuf_setup_skeleton(void)
- {
-+	__u32 flags;
-+	struct bpf_map *ringbuf;
- 	struct ringbuf_bench *skel;
- 
- 	setup_libbpf();
-@@ -151,7 +165,13 @@ static struct ringbuf_bench *ringbuf_setup_skeleton(void)
- 		/* record data + header take 16 bytes */
- 		skel->rodata->wakeup_data_size = args.sample_rate * 16;
- 
--	bpf_map__set_max_entries(skel->maps.ringbuf, args.ringbuf_sz);
-+	ringbuf = skel->maps.ringbuf;
-+	if (args.overwrite_mode) {
-+		flags = bpf_map__map_flags(ringbuf) | BPF_F_OVERWRITE;
-+		bpf_map__set_map_flags(ringbuf,  flags);
-+	}
-+
-+	bpf_map__set_max_entries(ringbuf, args.ringbuf_sz);
- 
- 	if (ringbuf_bench__load(skel)) {
- 		fprintf(stderr, "failed to load skeleton\n");
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
-index 91e3567962ff..4e758bc52b73 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
-@@ -49,3 +49,7 @@ for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
- 	summarize "rb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-batch-cnt 50 rb-libbpf)"
- done
- 
-+header "Ringbuf, multi-producer contention, overwrite mode"
-+for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
-+	summarize "rb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-overwrite --rb-batch-cnt 50 rb-libbpf)"
-+done
 -- 
-2.43.0
+Cheers,
+
+David / dhildenb
 
 
