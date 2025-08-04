@@ -1,42 +1,42 @@
-Return-Path: <linux-kselftest+bounces-38231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8830B19A31
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 04:27:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05000B19A35
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 04:28:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74C703AFB9B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 02:27:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DFD51723C6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 02:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F9A214814;
-	Mon,  4 Aug 2025 02:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81AEA218E91;
+	Mon,  4 Aug 2025 02:27:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF5C1F4615;
-	Mon,  4 Aug 2025 02:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8464720127B;
+	Mon,  4 Aug 2025 02:27:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754274432; cv=none; b=k41bg19ZowWTHvnmgMY870uQVhVBK16QTng9zHbo2oST2kCPtxGkpNQWJuaFXo8DOeffBphUvnD556pTw2CMjC3LatlixFswzCS/SuwuKscdU82ZmIXmJRMGgoDqxevsR81HT3HRdo0KKwceMBWc+hqpznyCWUfFyDA4mKn55ww=
+	t=1754274434; cv=none; b=t1b154R4ebf4qmJSin6gzLCGDn2ViZ/6xJlIilQWuzWVfW5Cpzl600eAoGocceBalOmqCRE74W33Nvwy492YKa1XeIobgbJMf1bCkjsOBzKmPlrGu5BDPyqFiyoqppti1L+19FWQifAlMPF8sc0DUxnHjSd6+N9fhFqzbCNpbv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754274432; c=relaxed/simple;
-	bh=OoovgL1ZzFbR8jZdYMpd1kECZyijvXmDIUYgrqzgZak=;
+	s=arc-20240116; t=1754274434; c=relaxed/simple;
+	bh=UW1WmWLA5hqVf8AQJiB3mCG4tYSWQTkhlPbwBNCJnik=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o6HsX+ktFFnwQsU/1G2e27M9ZhbCnC/zGrIMmQh6aiytI4jva80uwwbm4DS5jGdaYug58LtM6NprMj+0Jdi8NEG1bc5ospC7gvgUyYX440596Q63a26sPIF4evnKJYlxFPPdRz7XHvvYOu5Y1ObEyb9IcMnH6XYxv3dz1leXmYY=
+	 MIME-Version:Content-Type; b=Iuok66QA+f2LhF5SjZayj2h+mpq/9E+baDJ8OIk6tkgGGzTnSW1xKUEFRmRpdYLGV1WxrYvDYTQbWvAQ+y6hqbI690OFNXSJn6HRwA8bqIq/nwGGlNNPN/TMeWDYji5TpA3U/SJuaLKHq6gLXGk+poqOdEDuUku7XYMwYkurQ78=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bwL6j5LlRzYQtwl;
-	Mon,  4 Aug 2025 10:27:09 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bwL6k4KDNzYQtxF;
+	Mon,  4 Aug 2025 10:27:10 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 64EC91A06DD;
-	Mon,  4 Aug 2025 10:27:08 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 40CCA1A018D;
+	Mon,  4 Aug 2025 10:27:09 +0800 (CST)
 Received: from k-arm6401.huawei.com (unknown [7.217.19.243])
-	by APP4 (Coremail) with SMTP id gCh0CgAX4BBsGpBoTUL9CQ--.242S5;
+	by APP4 (Coremail) with SMTP id gCh0CgAX4BBsGpBoTUL9CQ--.242S6;
 	Mon, 04 Aug 2025 10:27:08 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -63,9 +63,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tao Chen <chen.dylane@linux.dev>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin Kelly <martin.kelly@crowdstrike.com>
-Subject: [PATCH bpf-next 3/4] selftests/bpf: Add test for overwrite ring buffer
-Date: Mon,  4 Aug 2025 10:20:59 +0800
-Message-ID: <20250804022101.2171981-4-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf-next 4/4] selftests/bpf/benchs: Add overwrite mode bench for rb-libbpf
+Date: Mon,  4 Aug 2025 10:21:00 +0800
+Message-ID: <20250804022101.2171981-5-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
 References: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
@@ -75,254 +75,176 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAX4BBsGpBoTUL9CQ--.242S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxKw13tF4xXr48JF1rGF1Dtrb_yoWxKw17pa
-	yFgr1YkryIg3WFgrWxuFyIvFW8ur4DAw4rKrsrXw1rZr1DuFsxXr1Ikr1Ut3Z8XrW8Xr1Y
-	k34a9FZxA3WUGF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQ2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_GFv_Wrylc7CjxVAKzI0EY4vE52x082I5MxkIecxEwVCI4VW8JwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-	vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-	x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUStC7UUUUU
+X-CM-TRANSID:gCh0CgAX4BBsGpBoTUL9CQ--.242S6
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xw45ZrWUAr45urWDtw4xWFg_yoWxGF4fpF
+	WDCFWfCw1xtr93XF1vkw48JrW7ZrnrZ3W5CFyfta17Zw1xWan0q3yxK3yUt3Z8G348C3WS
+	v34ktryrGw1UJwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wrylc7CjxVAKzI0EY4vE52x082I5MxkIecxEwVCI4VW8JwCF04k20xvY0x0E
+	wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
+	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6x
+	AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+	1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jtsqXUUUUU=
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Add test for overwiret mode ring buffer.
+Add overwrite mode bench for ring buffer.
+
+For reference, below are bench numbers collected from x86_64 and arm64.
+
+- x86_64 (AMD EPYC 9654)
+
+  Ringbuf, multi-producer contention, overwrite mode
+  ==================================================
+  rb-libbpf nr_prod 1  14.970 ± 0.012M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 2  14.064 ± 0.007M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 3  7.493 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 4  6.575 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 8  3.696 ± 0.011M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 12 2.612 ± 0.012M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 16 2.335 ± 0.005M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 20 2.079 ± 0.005M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 24 1.965 ± 0.004M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 28 1.846 ± 0.004M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 32 1.790 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 36 1.735 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 40 1.701 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 44 1.669 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 48 1.749 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 52 1.709 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+
+- arm64 (HiSilicon Kunpeng 920)
+
+  Ringbuf, multi-producer contention, overwrite mode
+  ==================================================
+  rb-libbpf nr_prod 1  10.319 ± 0.231M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 2  9.219 ± 0.006M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 3  6.699 ± 0.013M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 4  4.608 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 8  3.905 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 12 3.282 ± 0.004M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 16 3.182 ± 0.008M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 20 3.029 ± 0.006M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 24 3.116 ± 0.004M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 28 2.869 ± 0.005M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 32 3.075 ± 0.010M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 36 2.795 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 40 2.947 ± 0.005M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 44 2.748 ± 0.006M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 48 2.767 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+  rb-libbpf nr_prod 52 2.858 ± 0.002M/s (drops 0.000 ± 0.000M/s)
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- tools/testing/selftests/bpf/Makefile          |  3 +-
- .../selftests/bpf/prog_tests/ringbuf.c        | 74 ++++++++++++++
- .../bpf/progs/test_ringbuf_overwrite.c        | 98 +++++++++++++++++++
- 3 files changed, 174 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_overwrite.c
+ .../selftests/bpf/benchs/bench_ringbufs.c     | 22 ++++++++++++++++++-
+ .../bpf/benchs/run_bench_ringbufs.sh          |  4 ++++
+ 2 files changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 4863106034df..8a3796a2e5f5 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -499,7 +499,8 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- LSKELS := fentry_test.c fexit_test.c fexit_sleep.c atomics.c 		\
- 	trace_printk.c trace_vprintk.c map_ptr_kern.c 			\
- 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
--	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c
-+	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
-+	test_ringbuf_overwrite.c
+diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+index e1ee979e6acc..6fdfc61c721b 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
++++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+@@ -19,6 +19,7 @@ static struct {
+ 	int ringbuf_sz; /* per-ringbuf, in bytes */
+ 	bool ringbuf_use_output; /* use slower output API */
+ 	int perfbuf_sz; /* per-CPU size, in pages */
++	bool overwrite_mode;
+ } args = {
+ 	.back2back = false,
+ 	.batch_cnt = 500,
+@@ -27,6 +28,7 @@ static struct {
+ 	.ringbuf_sz = 512 * 1024,
+ 	.ringbuf_use_output = false,
+ 	.perfbuf_sz = 128,
++	.overwrite_mode = false,
+ };
  
- # Generate both light skeleton and libbpf skeleton for these
- LSKELS_EXTRA := test_ksyms_module.c test_ksyms_weak.c kfunc_call_test.c \
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-index d1e4cb28a72c..205a51c725a7 100644
---- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-@@ -17,6 +17,7 @@
- #include "test_ringbuf_n.lskel.h"
- #include "test_ringbuf_map_key.lskel.h"
- #include "test_ringbuf_write.lskel.h"
-+#include "test_ringbuf_overwrite.lskel.h"
+ enum {
+@@ -35,6 +37,7 @@ enum {
+ 	ARG_RB_BATCH_CNT = 2002,
+ 	ARG_RB_SAMPLED = 2003,
+ 	ARG_RB_SAMPLE_RATE = 2004,
++	ARG_RB_OVERWRITE = 2005,
+ };
  
- #define EDONE 7777
+ static const struct argp_option opts[] = {
+@@ -43,6 +46,7 @@ static const struct argp_option opts[] = {
+ 	{ "rb-batch-cnt", ARG_RB_BATCH_CNT, "CNT", 0, "Set BPF-side record batch count"},
+ 	{ "rb-sampled", ARG_RB_SAMPLED, NULL, 0, "Notification sampling"},
+ 	{ "rb-sample-rate", ARG_RB_SAMPLE_RATE, "RATE", 0, "Notification sample rate"},
++	{ "rb-overwrite", ARG_RB_OVERWRITE, NULL, 0, "overwrite mode"},
+ 	{},
+ };
  
-@@ -497,6 +498,77 @@ static void ringbuf_map_key_subtest(void)
- 	test_ringbuf_map_key_lskel__destroy(skel_map_key);
+@@ -72,6 +76,9 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 			argp_usage(state);
+ 		}
+ 		break;
++	case ARG_RB_OVERWRITE:
++		args.overwrite_mode = true;
++		break;
+ 	default:
+ 		return ARGP_ERR_UNKNOWN;
+ 	}
+@@ -104,6 +111,11 @@ static void bufs_validate(void)
+ 		fprintf(stderr, "back-to-back mode makes sense only for single-producer case!\n");
+ 		exit(1);
+ 	}
++
++	if (args.overwrite_mode && strcmp(env.bench_name, "rb-libbpf") != 0) {
++		fprintf(stderr, "rb-overwrite mode only supports rb-libbpf!\n");
++		exit(1);
++	}
  }
  
-+static void ringbuf_overwrite_mode_subtest(void)
-+{
-+	unsigned long size, len1, len2, len3, len4, len5;
-+	unsigned long expect_avail_data, expect_prod_pos, expect_over_pos;
-+	struct test_ringbuf_overwrite_lskel *skel;
-+	int err;
-+
-+	skel = test_ringbuf_overwrite_lskel__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	size = 0x1000;
-+	len1 = 0x800;
-+	len2 = 0x400;
-+	len3 = size - len1 - len2 - BPF_RINGBUF_HDR_SZ * 3; /* 0x3e8 */
-+	len4 = len3 - 8; /* 0x3e0 */
-+	len5 = len3; /* retry with len3 */
-+
-+	skel->maps.ringbuf.max_entries = size;
-+	skel->rodata->LEN1 = len1;
-+	skel->rodata->LEN2 = len2;
-+	skel->rodata->LEN3 = len3;
-+	skel->rodata->LEN4 = len4;
-+	skel->rodata->LEN5 = len5;
-+
-+	skel->bss->pid = getpid();
-+
-+	err = test_ringbuf_overwrite_lskel__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	err = test_ringbuf_overwrite_lskel__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	syscall(__NR_getpgid);
-+
-+	ASSERT_EQ(skel->bss->reserve1_fail, 0, "reserve 1");
-+	ASSERT_EQ(skel->bss->reserve2_fail, 0, "reserve 2");
-+	ASSERT_EQ(skel->bss->reserve3_fail, 1, "reserve 3");
-+	ASSERT_EQ(skel->bss->reserve4_fail, 0, "reserve 4");
-+	ASSERT_EQ(skel->bss->reserve5_fail, 0, "reserve 5");
-+
-+	CHECK(skel->bss->ring_size != size,
-+	      "check_ring_size", "exp %lu, got %lu\n",
-+	      size, skel->bss->ring_size);
-+
-+	expect_avail_data = len2 + len4 + len5 + 3 * BPF_RINGBUF_HDR_SZ;
-+	CHECK(skel->bss->avail_data != expect_avail_data,
-+	      "check_avail_size", "exp %lu, got %lu\n",
-+	      expect_avail_data, skel->bss->avail_data);
-+
-+	CHECK(skel->bss->cons_pos != 0,
-+	      "check_cons_pos", "exp 0, got %lu\n",
-+	      skel->bss->cons_pos);
-+
-+	expect_prod_pos = len1 + len2 + len4 + len5 + 4 * BPF_RINGBUF_HDR_SZ;
-+	CHECK(skel->bss->prod_pos != expect_prod_pos,
-+	      "check_prod_pos", "exp %lu, got %lu\n",
-+	      expect_prod_pos, skel->bss->prod_pos);
-+
-+	expect_over_pos = len1 + BPF_RINGBUF_HDR_SZ;
-+	CHECK(skel->bss->over_pos != expect_over_pos,
-+	      "check_over_pos", "exp %lu, got %lu\n",
-+	      (unsigned long)expect_over_pos, skel->bss->over_pos);
-+
-+	test_ringbuf_overwrite_lskel__detach(skel);
-+cleanup:
-+	test_ringbuf_overwrite_lskel__destroy(skel);
-+}
-+
- void test_ringbuf(void)
+ static void *bufs_sample_producer(void *input)
+@@ -134,6 +146,8 @@ static void ringbuf_libbpf_measure(struct bench_res *res)
+ 
+ static struct ringbuf_bench *ringbuf_setup_skeleton(void)
  {
- 	if (test__start_subtest("ringbuf"))
-@@ -507,4 +579,6 @@ void test_ringbuf(void)
- 		ringbuf_map_key_subtest();
- 	if (test__start_subtest("ringbuf_write"))
- 		ringbuf_write_subtest();
-+	if (test__start_subtest("ringbuf_overwrite_mode"))
-+		ringbuf_overwrite_mode_subtest();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_overwrite.c b/tools/testing/selftests/bpf/progs/test_ringbuf_overwrite.c
-new file mode 100644
-index 000000000000..da89ba12a75c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ringbuf_overwrite.c
-@@ -0,0 +1,98 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2025. Huawei Technologies Co., Ltd */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(map_flags, BPF_F_OVERWRITE);
-+} ringbuf SEC(".maps");
-+
-+int pid;
-+
-+const volatile unsigned long LEN1;
-+const volatile unsigned long LEN2;
-+const volatile unsigned long LEN3;
-+const volatile unsigned long LEN4;
-+const volatile unsigned long LEN5;
-+
-+long reserve1_fail = 0;
-+long reserve2_fail = 0;
-+long reserve3_fail = 0;
-+long reserve4_fail = 0;
-+long reserve5_fail = 0;
-+
-+unsigned long avail_data = 0;
-+unsigned long ring_size = 0;
-+unsigned long cons_pos = 0;
-+unsigned long prod_pos = 0;
-+unsigned long over_pos = 0;
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int test_overwrite_ringbuf(void *ctx)
-+{
-+	char *rec1, *rec2, *rec3, *rec4, *rec5;
-+	int cur_pid = bpf_get_current_pid_tgid() >> 32;
-+
-+	if (cur_pid != pid)
-+		return 0;
-+
-+	rec1 = bpf_ringbuf_reserve(&ringbuf, LEN1, 0);
-+	if (!rec1) {
-+		reserve1_fail = 1;
-+		return 0;
++	__u32 flags;
++	struct bpf_map *ringbuf;
+ 	struct ringbuf_bench *skel;
+ 
+ 	setup_libbpf();
+@@ -151,7 +165,13 @@ static struct ringbuf_bench *ringbuf_setup_skeleton(void)
+ 		/* record data + header take 16 bytes */
+ 		skel->rodata->wakeup_data_size = args.sample_rate * 16;
+ 
+-	bpf_map__set_max_entries(skel->maps.ringbuf, args.ringbuf_sz);
++	ringbuf = skel->maps.ringbuf;
++	if (args.overwrite_mode) {
++		flags = bpf_map__map_flags(ringbuf) | BPF_F_OVERWRITE;
++		bpf_map__set_map_flags(ringbuf,  flags);
 +	}
 +
-+	rec2 = bpf_ringbuf_reserve(&ringbuf, LEN2, 0);
-+	if (!rec2) {
-+		bpf_ringbuf_discard(rec1, 0);
-+		reserve2_fail = 1;
-+		return 0;
-+	}
-+
-+	rec3 = bpf_ringbuf_reserve(&ringbuf, LEN3, 0);
-+	/* expect failure */
-+	if (!rec3) {
-+		reserve3_fail = 1;
-+	} else {
-+		bpf_ringbuf_discard(rec1, 0);
-+		bpf_ringbuf_discard(rec2, 0);
-+		bpf_ringbuf_discard(rec3, 0);
-+		return 0;
-+	}
-+
-+	rec4 = bpf_ringbuf_reserve(&ringbuf, LEN4, 0);
-+	if (!rec4) {
-+		reserve4_fail = 1;
-+		bpf_ringbuf_discard(rec1, 0);
-+		bpf_ringbuf_discard(rec2, 0);
-+		return 0;
-+	}
-+
-+	bpf_ringbuf_submit(rec1, 0);
-+	bpf_ringbuf_submit(rec2, 0);
-+	bpf_ringbuf_submit(rec4, 0);
-+
-+	rec5 = bpf_ringbuf_reserve(&ringbuf, LEN5, 0);
-+	if (!rec5) {
-+		reserve5_fail = 1;
-+		return 0;
-+	}
-+
-+	for (int i = 0; i < LEN3; i++)
-+		rec5[i] = 0xdd;
-+
-+	bpf_ringbuf_submit(rec5, 0);
-+
-+	ring_size = bpf_ringbuf_query(&ringbuf, BPF_RB_RING_SIZE);
-+	avail_data = bpf_ringbuf_query(&ringbuf, BPF_RB_AVAIL_DATA);
-+	cons_pos = bpf_ringbuf_query(&ringbuf, BPF_RB_CONS_POS);
-+	prod_pos = bpf_ringbuf_query(&ringbuf, BPF_RB_PROD_POS);
-+	over_pos = bpf_ringbuf_query(&ringbuf, BPF_RB_OVER_POS);
-+
-+	return 0;
-+}
++	bpf_map__set_max_entries(ringbuf, args.ringbuf_sz);
+ 
+ 	if (ringbuf_bench__load(skel)) {
+ 		fprintf(stderr, "failed to load skeleton\n");
+diff --git a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
+index 91e3567962ff..4e758bc52b73 100755
+--- a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
++++ b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
+@@ -49,3 +49,7 @@ for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
+ 	summarize "rb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-batch-cnt 50 rb-libbpf)"
+ done
+ 
++header "Ringbuf, multi-producer contention, overwrite mode"
++for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
++	summarize "rb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-overwrite --rb-batch-cnt 50 rb-libbpf)"
++done
 -- 
 2.43.0
 
