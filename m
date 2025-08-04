@@ -1,288 +1,248 @@
-Return-Path: <linux-kselftest+bounces-38238-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38239-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22BCDB19FAA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 12:24:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD71EB1A142
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 14:22:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0008A7A154D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 10:22:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F8EA16626D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 12:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B97524BBFD;
-	Mon,  4 Aug 2025 10:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3C2258CF2;
+	Mon,  4 Aug 2025 12:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U83iXZpO"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="SLAOF1L5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013048.outbound.protection.outlook.com [40.107.162.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6982D4A07;
-	Mon,  4 Aug 2025 10:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754303045; cv=none; b=dMQcbHO4jrnfrY82GYKOE8/ooI5tH6X+0EQzw6bWh2t2+6gGCXHOR/zhgIEIaNZmQCYqb7ZIsHHzRadXoHxMYADh/O1WofEsP8WJb/Q7bQmDqFouf8+Vrtm01JuwT01jeNRBvuzvmI0oMeq/FJUp281niRkG+EdMpSkCquY3yB8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754303045; c=relaxed/simple;
-	bh=w6peR6m+7jZbZfFC9MGuKD7AYm9oxWmlaVTj3ejKf/w=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZdK+Epe1K4ZeGzg426zUsEDdT0rqPOMXP7NDIPvcSFLTIHUmzE9rpxxzu+TniwkgLIv1zH7p9wr+yJnDe8MQpCWo81WtGxuobCmqOEqh4mUF6l5NtHOr7VqdLuF3SDZe6RYsHSWsZeGy/QhFxQAJTFdVFm48bSUA+4dgdOg9E7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U83iXZpO; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-605b9488c28so7434382a12.2;
-        Mon, 04 Aug 2025 03:24:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754303042; x=1754907842; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ODqZllmQ7MG6tJZiiLCQv7qmnxSWZfG+uWxo/YH5lb8=;
-        b=U83iXZpO16R0CDvkY1xh8UzdpytEse6GmR7BG8pnJ0/kLspmHXOIza05IEmNEogG1e
-         LgEBzgFVjoCJUfTMDqzWqzqjEt3f832gRMvK7jpmcjPkXQnfMrM4athyrGE4GtHOkHK/
-         tzD4O1k6LeoetilyDA4t+z8xfzAf3yEgJ4ktCduGzQEUX8k0Ff8Xg8N2DbBoShhVSteD
-         n6issCzj3tLtVE6jZNPE6/DYovtFVe/FZYsWbA7VYFnUvHKrTGNC/Rhd90YXgoOK6R65
-         dkGxAbpNmkp1fszr/GLIjzsaecPIleGYKvhZLxabKJkDP/R7gShYoWWQILaYh8jKfJ2k
-         zQYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754303042; x=1754907842;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ODqZllmQ7MG6tJZiiLCQv7qmnxSWZfG+uWxo/YH5lb8=;
-        b=JYhGyIxm7Ao0cUZBl4UA/U69W+Kg7Y0dA8K8KmPzSzQw0dIMDc7VLz616JHebF/XS7
-         T7I8eZcMJkfAW63I1FpQCjy1r3koN09vCEeTxzLtG1IA+lqT/krJ8PtsIylEnaW72/r3
-         anQnKEWBmUomtBDo18Myc7GcAAb3V4MRYVT7rqnExuu1rF6S4Ad2EkxluA3vvPMuNZLQ
-         r9ipEk0f6NTt7ek9NDH6TSdwJ5QkDRCLoYBqdP3S4b/UbZcluSHE6RtPJgK4thrHpypK
-         tFQo2k/waHgOfgWM8VK1t1B6T/qFFIwnpsLMvED+4HszhTZRNL5SfwiS/liHEbp9SX/u
-         G2SA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHFdOzEw+ipDDXUWb4/magcuqe7mspUC12c+4TS1VZ6N8XLzAh5EekGNngr7fdueFo1fJ5X9ktIOUYU/I2@vger.kernel.org, AJvYcCVX0Rtjv0a0MAXf5jNqvTSJMXBLfK62b0viMqcdQrwLIjAG+eubF/uhWn0y6AYu97SU+aUPjv4dcS6fM875y7wC@vger.kernel.org, AJvYcCXQcRq5OsfP49gs3brj5+KN5rj4QaqjNyqA3O4SQf9Z6T3c8xTL3r7UXgNCWy5wsaUzxd8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQiUePvpoXvxxY1ICNc36Uq/xC4dgo6sFCZm6gPps7qc9lJOrR
-	kv89sgAsaS3DoEcgKh1Tt7OAmF+35MQ95xRA44KaZ4Heh5yON3VaBr4R
-X-Gm-Gg: ASbGncvVHru8FEKxjjtoUlYu+Ru1fBn7Ck2P1sIxEf39B7OUrCfryMYwfMHanrWmjzW
-	D0ZsKPIOSDpwldLwke+Mndj3yCK5UDVBgCbGbCLldp7QOGrmUZ5jelX88UgiG9y1UPVmi8Og4tl
-	3Nf12F3bEcEZ0BTuoxQPEwVCpkHtrEqu1RR6bp6JuAaN4R6PXgNgcw/nq+HfCePSJhYysHlv9v7
-	qODFAl/2ml09YBPkRbwjyAFxG9gliJInDRHuYPYZ+WHVJip6Rpn7t6lAYnZFR6iHyj6wSyahuxM
-	xZr26703ubtSUma+TZ8RfdgL89yeV/fYEMXLkI8vdpmL4D9PjUnV6b3sNlZ3f5liqlNZyftw9Cs
-	D5uRjhdKl
-X-Google-Smtp-Source: AGHT+IHb0ZITpm6CBI91qSNUMi1uKmXv5hmfMz1eldIsixXme+2JH3CntR+FJ0kHEOADsOvE8Dpmxg==
-X-Received: by 2002:a05:6402:84a:b0:615:b6b9:d87c with SMTP id 4fb4d7f45d1cf-615e6eb5fbamr8145984a12.3.1754303041267;
-        Mon, 04 Aug 2025 03:24:01 -0700 (PDT)
-Received: from krava ([173.38.220.40])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8ffb8d7sm6701166a12.47.2025.08.04.03.24.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Aug 2025 03:24:00 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 4 Aug 2025 12:23:59 +0200
-To: Jiawei Zhao <phoenix500526@163.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	yonghong.song@linux.dev, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] libbpf: fix USDT SIB argument handling causing
- unrecognized register error
-Message-ID: <aJCKP1Cja3DCm0EG@krava>
-References: <20250802084803.108777-1-phoenix500526@163.com>
- <20250802084803.108777-2-phoenix500526@163.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91525258CEF;
+	Mon,  4 Aug 2025 12:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754310049; cv=fail; b=QQEWfSnVYj1WbxUhZy5uqgbJQoY6NQuM7HlxQkmd8Dbnya5d5N2ugWWCamMbk9/pz74DW9ZllA+4P14GivruqH8Wru199vggNEc0sYGSdzG1NxmR+jgY2e+G5pPNlyha5pzyfzT3gDcZt9nVr7HXRxbIW9xwCSOL+QRTyZApx4c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754310049; c=relaxed/simple;
+	bh=xfz4DpUZEVusoPXIUjDP27jSKWSYMSfcDWFGdBEqd+k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=uH6zX/0qVYHt+HnZAhOsVRbJuRp9As7+Evk/TjSBXFHfD7cFZzrlmRnbilwCQfPZWLmMNgBmOrxj8dN6S5Vt8gqZ2tpO7Vxhos3aeSx/+PZH4XDOYBKV48GufHYnxhoga3TQqfAu7X3KcABOEoGTq51eQjiAVy1wEj2GsDf+S4w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=SLAOF1L5; arc=fail smtp.client-ip=40.107.162.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eeo/hT8l1WQ0W2XycqNTjIzuzW1CvQ1kiWyMnXN7i+NjliIikozW2GSAiji+DBiNUHhVMHl2JYBso55TSZpPYKBPgxOYwMahbV6ou8O+IdN3e6NW95eOlYe61j4I8mvXOESJ+ZEc6ogRAuqRNoxfF3RtvHGvYxMc3SJHqWzuGb5mQWDFUEigp+ZVO1BOHSvCqyW+U1PnRRMOiJS37EDX9sWHoHBN7iVPXDwFGuMPKSAg5L7hxzqy2+BvLsIK2LmNoYZEOwoNTSB398sUq2EGRiS58QhP3fB4acTD+AzOzmrSeR8zwXACbGGL1yKkUYl0ZKYPQcsIh4d2Svz2UaBFFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x/tP2H0sJckkKoJ68u4R2tICGb4xN2TVNx4fH46FQRQ=;
+ b=HKzS5hB54JryBGHX8dMhaXphrOYq7UUzqXJc5C3D8BxNyWw1vtXJQ3RHJJXITQEeF5QsezHdPSzUL3KnVsxxtWCvXCO4SRUL0jPo7X89rgyf4RZ2jyxqJyvH5VkWur629XCLOUYNAIVevzFlUBTqbEWBbx2iRHiOPTkf+NWXonfHRrqcsHndAWPQdsNwyyN+csikmD2/Xn2Y/FrnY7jvyBT1onpiUBD0kCO0xADYMNabEH5zcg8vtiV505a1KX4qNNQWK3Ur0uxmkKfGz3TgieQ015uLKst9cy2cpuqLx2tcOCq4VhR0Y1PNAADVAg4FI8Z+CZknZ70x8awwPtStwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.6.100) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x/tP2H0sJckkKoJ68u4R2tICGb4xN2TVNx4fH46FQRQ=;
+ b=SLAOF1L5iHK64RPkvzdEBwj7ejkIVi8WgcAazvY5EM7eoBvrN+ftmawDyQhQeL0TwwlObJF8amKYdZtYuPrEn112J0EDcBdrMe6HbXx4mDxu/8d4rw0rxlDTe3t2vMvu1B/AGKH6Nl0L4fVDCJKOzMvtMka8xc8IO4A42ALCEzvp9k1p7XzO5Zk85T6w/P4cDbU2WpdaGRmG2K1tnJebHtXoohBUxoCGxqaAoA0+l+f+Xi5WYAaVmB5zbsOVa3t1gCJ4wFmvs+G+OXSgEk5cdmbqLJygGbGhRlPIdXX5pg+rjNU4Jd0uYig9Cgd7h2Uf1ptU33NfiyCfne37Rsz88A==
+Received: from AM0PR02CA0109.eurprd02.prod.outlook.com (2603:10a6:20b:28c::6)
+ by VI1PR07MB6334.eurprd07.prod.outlook.com (2603:10a6:800:13d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.20; Mon, 4 Aug
+ 2025 12:20:44 +0000
+Received: from AM2PEPF0001C714.eurprd05.prod.outlook.com
+ (2603:10a6:20b:28c:cafe::2d) by AM0PR02CA0109.outlook.office365.com
+ (2603:10a6:20b:28c::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8989.21 via Frontend Transport; Mon,
+ 4 Aug 2025 12:20:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.6.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.6.100;
+ helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
+Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
+ AM2PEPF0001C714.mail.protection.outlook.com (10.167.16.184) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9009.8
+ via Frontend Transport; Mon, 4 Aug 2025 12:20:44 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fr711usmtp2.zeu.alcatel-lucent.com (Postfix) with ESMTP id BEDA568003C;
+	Mon,  4 Aug 2025 15:20:42 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: dsahern@kernel.org,
+	alok.a.tiwari@oracle.com,
+	donald.hunter@gmail.com,
+	xandfury@gmail.com,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	edumazet@google.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v12 iproute2-next 0/3] DUALPI2 iproute2 patch
+Date: Mon,  4 Aug 2025 14:20:16 +0200
+Message-Id: <20250804122019.57829-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250802084803.108777-2-phoenix500526@163.com>
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM2PEPF0001C714:EE_|VI1PR07MB6334:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 48627ba0-4945-4901-8afa-08ddd35155e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014|7416014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?9HH1+X3fNSJgcBTWRn2EQ1FYl73OlWGRu4I88p4+ANuRX0A/99rNwfcvBrVc?=
+ =?us-ascii?Q?TWss6OjPPgTQHlsJ2/v2HGvXeYT43e53gnMb3XUkbMB06Tps0G0Due2PiCEa?=
+ =?us-ascii?Q?6gvW6Gie7aPakfgHyKuA/M8tSgmGu9wUirv5RKF/OxaoIH4rA5bEtg93wFim?=
+ =?us-ascii?Q?E9K9gA+ZK5dapiIfeietWI6/bYE4+EjvyxDQ/JOc13W4cRFE2c0GwklR1XHP?=
+ =?us-ascii?Q?klvqF30XU0Guw6LcZt6mMrDr3c5tJELpjd3CbhpdIcwW0Wgj7SREeBdG2Tq+?=
+ =?us-ascii?Q?d2oGZ/JgM0s/NqiVir8ZRDe/7Ocp5rZtcvqKgv+zId5k5C+gSZZyq43miDL7?=
+ =?us-ascii?Q?yQ/eaP2+HTbWbR2yNWwWlY0SKBqHmjJaFLAWJkbQdZTBCbbj45ZbtmPHhDxC?=
+ =?us-ascii?Q?LyX44ij0V/L/idJMj70y7q91IoAu+N1+W8RnVZqvqXks60+M04ioC6ystjbA?=
+ =?us-ascii?Q?diqxpDvpHHpPNCsK9R5Oo4MGSIhIq3HqNC7/JDYvfBCZtkMVO0hZmgRZvGjg?=
+ =?us-ascii?Q?f8uVi4nzarx3r/JmF6lTht495VJGMQTRfCYQ4K7e7NDBxRFA5bcYo0OYlIrB?=
+ =?us-ascii?Q?Pt2ODa+sc0UTyHT561QOefQd6UVdu1uk6Cu6F+Ew6JJeAlPfek17Xv6Z+NSJ?=
+ =?us-ascii?Q?f6LbBXgTbicX0SRWsp9+k7g1+kB7V2ErejPZR2zfTHuOJ2/zMsikS375ay4L?=
+ =?us-ascii?Q?YBud1sHfJpZ9kk1itw5I1Df+rZromKVb3Rdcjm7/ZJnfLig6OeYgd24O69q2?=
+ =?us-ascii?Q?dLVHo2FAKMW3WbHIpLnAtI+6O7LcrQ3+M/O9H6YKLi1iY38oYLLfNzExfGZ+?=
+ =?us-ascii?Q?sLLNnlfFtxkoa+dpte5kpSpTLgzAmKEKncLHb78E3CD87/oyy5Zv4N+9zov0?=
+ =?us-ascii?Q?SJj/B+blJXY/YpDrTF8wyeopIS4h097AozCdr8AcL/cYNeVV7dIvE4OFvDSp?=
+ =?us-ascii?Q?dlYYuPYjIGk5+18T/etf/PQ8JuG9C2Jw5NtiHocghxcNA+hFAy1z5ueC9iKX?=
+ =?us-ascii?Q?FadvBR4JxVqf9tcLXg6jBQvO1SqNl9yPzIgF4KahncXeo4d/OaS132T0UNTO?=
+ =?us-ascii?Q?6bbQHAxgEtCwgyIEwPzdmce7gSphScAfHgNnbOpqQgGfZ/CPAL062uylO3x9?=
+ =?us-ascii?Q?3rUXmVguufg6Q0E7wD+TYVmqQq2isPxq6RpqyChuypU/t0zI5ErNYy/HT5jG?=
+ =?us-ascii?Q?bf5WDSm4u+Y+jIGjYr7yLsj2HIaZwPmslchGRpECC16vrulpeokPpzQKU+FO?=
+ =?us-ascii?Q?tppjWf8pdhZfzrtx1RG5qioQe9IVKY240NpKEGMRbgWtE6PrSV1UGvd/DTJb?=
+ =?us-ascii?Q?iuYOHXhB4ZIssQmydRHl62JwLVHYWKifWhOjc9Ox969AkTLvZkSnCAihSjz1?=
+ =?us-ascii?Q?+SEOcvguYI1FeKDQT13iz6yI5EMjw8qnICM4z8mJ2MPJHaHYGz9QskWpxN6P?=
+ =?us-ascii?Q?ri32VAoX+62FIPagFun/sRODH/0/rnP0VVQOk6CW/UNsmxKjQ1RDQjPAwudX?=
+ =?us-ascii?Q?YI9UGCw3trw8w4PL2vx1RcUGw2B6EjgOoY2s4bii3vKTM/ocNrvoUoSNRg?=
+ =?us-ascii?Q?=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2025 12:20:44.2574
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 48627ba0-4945-4901-8afa-08ddd35155e5
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM2PEPF0001C714.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB6334
 
-On Sat, Aug 02, 2025 at 08:48:02AM +0000, Jiawei Zhao wrote:
-> On x86-64, USDT arguments can be specified using Scale-Index-Base (SIB)
-> addressing, e.g. "1@-96(%rbp,%rax,8)". The current USDT implementation
-> in libbpf cannot parse this format, causing `bpf_program__attach_usdt()`
-> to fail with -ENOENT (unrecognized register).
-> 
-> This patch fixes this by implementing the necessary changes:
-> - add correct handling for SIB-addressed arguments in `bpf_usdt_arg`.
-> - add adaptive support to `__bpf_usdt_arg_type` and
->   `__bpf_usdt_arg_spec` to represent SIB addressing parameters.
-> 
-> Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
-> ---
->  tools/lib/bpf/usdt.bpf.h | 33 +++++++++++++++++++++++++++++-
->  tools/lib/bpf/usdt.c     | 43 ++++++++++++++++++++++++++++++++++------
->  2 files changed, 69 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
-> index 2a7865c8e3fe..246513088c3a 100644
-> --- a/tools/lib/bpf/usdt.bpf.h
-> +++ b/tools/lib/bpf/usdt.bpf.h
-> @@ -34,6 +34,7 @@ enum __bpf_usdt_arg_type {
->  	BPF_USDT_ARG_CONST,
->  	BPF_USDT_ARG_REG,
->  	BPF_USDT_ARG_REG_DEREF,
-> +	BPF_USDT_ARG_SIB,
->  };
->  
->  struct __bpf_usdt_arg_spec {
-> @@ -43,6 +44,10 @@ struct __bpf_usdt_arg_spec {
->  	enum __bpf_usdt_arg_type arg_type;
->  	/* offset of referenced register within struct pt_regs */
->  	short reg_off;
-> +	/* offset of index register in pt_regs, only used in SIB mode */
-> +	short idx_reg_off;
-> +	/* scale factor for index register, only used in SIB mode */
-> +	short scale;
->  	/* whether arg should be interpreted as signed value */
->  	bool arg_signed;
->  	/* number of bits that need to be cleared and, optionally,
-> @@ -149,7 +154,7 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
->  {
->  	struct __bpf_usdt_spec *spec;
->  	struct __bpf_usdt_arg_spec *arg_spec;
-> -	unsigned long val;
-> +	unsigned long val, idx;
->  	int err, spec_id;
->  
->  	*res = 0;
-> @@ -202,6 +207,32 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
->  			return err;
->  #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
->  		val >>= arg_spec->arg_bitshift;
-> +#endif
-> +		break;
-> +	case BPF_USDT_ARG_SIB:
-> +		/* Arg is in memory addressed by SIB (Scale-Index-Base) mode
-> +		 * (e.g., "-1@-96(%rbp,%rax,8)" in USDT arg spec). Register
-> +		 * is identified like with BPF_USDT_ARG_SIB case, the offset
-> +		 * is in arg_spec->val_off, the scale factor is in arg_spec->scale.
-> +		 * Firstly, we fetch the base register contents and the index
-> +		 * register contents from pt_regs. Secondly, we multiply the
-> +		 * index register contents by the scale factor, then add the
-> +		 * base address and the offset to get the final address. Finally,
-> +		 * we do another user-space probe read to fetch argument value
-> +		 * itself.
-> +		 */
-> +		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec->reg_off);
-> +		if (err)
-> +			return err;
-> +		err = bpf_probe_read_kernel(&idx, sizeof(idx), (void *)ctx + arg_spec->idx_reg_off);
-> +		if (err)
-> +			return err;
-> +		err = bpf_probe_read_user(&val, sizeof(val),
-> +				(void *)val + idx * arg_spec->scale + arg_spec->val_off);
-> +		if (err)
-> +			return err;
-> +#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-> +		val >>= arg_spec->arg_bitshift;
->  #endif
->  		break;
->  	default:
-> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-> index 4e4a52742b01..1f8b9e1c9819 100644
-> --- a/tools/lib/bpf/usdt.c
-> +++ b/tools/lib/bpf/usdt.c
-> @@ -200,6 +200,7 @@ enum usdt_arg_type {
->  	USDT_ARG_CONST,
->  	USDT_ARG_REG,
->  	USDT_ARG_REG_DEREF,
-> +	USDT_ARG_SIB,
->  };
->  
->  /* should match exactly struct __bpf_usdt_arg_spec from usdt.bpf.h */
-> @@ -207,6 +208,8 @@ struct usdt_arg_spec {
->  	__u64 val_off;
->  	enum usdt_arg_type arg_type;
->  	short reg_off;
-> +	short idx_reg_off;
-> +	short scale;
->  	bool arg_signed;
->  	char arg_bitshift;
->  };
-> @@ -1283,11 +1286,39 @@ static int calc_pt_regs_off(const char *reg_name)
->  
->  static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg, int *arg_sz)
->  {
-> -	char reg_name[16];
-> -	int len, reg_off;
-> -	long off;
-> +	char reg_name[16] = {0}, idx_reg_name[16] = {0};
-> +	int len, reg_off, idx_reg_off, scale = 1;
-> +	long off = 0;
-> +
-> +	if (sscanf(arg_str, " %d @ %ld ( %%%15[^,] , %%%15[^,] , %d ) %n",
-> +				arg_sz, &off, reg_name, idx_reg_name, &scale, &len) == 5 ||
-> +		sscanf(arg_str, " %d @ ( %%%15[^,] , %%%15[^,] , %d ) %n",
-> +				arg_sz, reg_name, idx_reg_name, &scale, &len) == 4 ||
-> +		sscanf(arg_str, " %d @ %ld ( %%%15[^,] , %%%15[^)] ) %n",
-> +				arg_sz, &off, reg_name, idx_reg_name, &len) == 4 ||
-> +		sscanf(arg_str, " %d @ ( %%%15[^,] , %%%15[^)] ) %n",
-> +				arg_sz, reg_name, idx_reg_name, &len) == 3
-> +		) {
-> +		/* Scale Index Base case, e.g., 1@-96(%rbp,%rax,8)
-> +		 * 1@(%rbp,%rax,8)
-> +		 * 1@-96(%rbp,%rax)
-> +		 * 1@(%rbp,%rax)
-> +		 */
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-hi,
-I'm getting following error from the test:
+Hello,
 
-subtest_multispec_usdt:PASS:skel_open 0 nsec
-libbpf: usdt: unrecognized arg #10 spec '-2@nums(%rax,%rax) -1@$-127'
-libbpf: prog 'usdt12': failed to auto-attach: -EINVAL
-subtest_multispec_usdt:FAIL:skel_attach unexpected error: -22 (errno 22)
-#480/2   usdt/multispec:FAIL
+Please find DUALPI2 iproute2 patch v12.
 
-arguments look like:
-    Arguments: -4@$3 -4@$4 -8@$42 -8@$45 -4@$5 -8@$6 8@%rdx 8@%rsi -4@$-9 -2@%cx -2@nums(%rax,%rax) -1@$-127
+For more details of DualPI2, please refer IETF RFC9332
+(https://datatracker.ietf.org/doc/html/rfc9332).
 
-not sure why there's variable name in the arg10 definition
+Best Regards,
+Chia-Yu
 
-gcc (GCC) 15.1.1 20250521 (Red Hat 15.1.1-2)
-clang version 20.1.8 (Fedora 20.1.8-3.fc42)
+---
+v12 (04-Aug-2025)
+- Split into 3 patches: one move get_float(), one add get_float_min_max(), one for dualpi2 (David Ahern <dsahern@kernel.org>)
+- Repalce matches() with strcmp() within get_packets() (David Ahern <dsahern@kernel.org>)
+- Apply reverse xmas tree listing of variables (David Ahern <dsahern@kernel.org>)
 
-thanks,
-jirka
+v11 (18-Jul-2025)
+- Replace TCA_DUALPI2 prefix with TC_DUALPI2 prefix for enums (Jakub Kicinski <kuba@kernel.org>)
 
+v10 (02-Jul-2025)
+- Replace STEP_THRESH and STEP_PACKETS w/ STEP_THRESH_PKTS and STEP_THRESH_US of net-next patch (Jakub Kicinski <kuba@kernel.org>)
 
-> +		arg->arg_type = USDT_ARG_SIB;
-> +		arg->val_off = off;
-> +		arg->scale = scale;
-> +
-> +		reg_off = calc_pt_regs_off(reg_name);
-> +		if (reg_off < 0)
-> +			return reg_off;
-> +		arg->reg_off = reg_off;
->  
-> -	if (sscanf(arg_str, " %d @ %ld ( %%%15[^)] ) %n", arg_sz, &off, reg_name, &len) == 3) {
-> +		idx_reg_off = calc_pt_regs_off(idx_reg_name);
-> +		if (idx_reg_off < 0)
-> +			return idx_reg_off;
-> +		arg->idx_reg_off = idx_reg_off;
-> +	} else if (sscanf(arg_str, " %d @ %ld ( %%%15[^)] ) %n",
-> +				arg_sz, &off, reg_name, &len) == 3) {
->  		/* Memory dereference case, e.g., -4@-20(%rbp) */
->  		arg->arg_type = USDT_ARG_REG_DEREF;
->  		arg->val_off = off;
-> @@ -1298,7 +1329,7 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
->  	} else if (sscanf(arg_str, " %d @ ( %%%15[^)] ) %n", arg_sz, reg_name, &len) == 2) {
->  		/* Memory dereference case without offset, e.g., 8@(%rsp) */
->  		arg->arg_type = USDT_ARG_REG_DEREF;
-> -		arg->val_off = 0;
-> +		arg->val_off = off;
->  		reg_off = calc_pt_regs_off(reg_name);
->  		if (reg_off < 0)
->  			return reg_off;
-> @@ -1306,7 +1337,7 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
->  	} else if (sscanf(arg_str, " %d @ %%%15s %n", arg_sz, reg_name, &len) == 2) {
->  		/* Register read case, e.g., -4@%eax */
->  		arg->arg_type = USDT_ARG_REG;
-> -		arg->val_off = 0;
-> +		arg->val_off = off;
->  
->  		reg_off = calc_pt_regs_off(reg_name);
->  		if (reg_off < 0)
-> -- 
-> 2.43.0
-> 
-> 
+v9 (13-Jun-2025)
+- Fix space issue and typos (ALOK TIWARI <alok.a.tiwari@oracle.com>)
+- Change 'rtt_typical' to 'typical_rtt' in tc/q_dualpi2.c (ALOK TIWARI <alok.a.tiwari@oracle.com>)
+- Add the num of enum used by DualPI2 in pkt_sched.h
+
+v8 (09-May-2025)
+- Update pkt_sched.h with the one in nex-next
+- Correct a typo in the comment within pkt_sched.h (ALOK TIWARI <alok.a.tiwari@oracle.com>)
+- Update manual content in man/man8/tc-dualpi2.8 (ALOK TIWARI <alok.a.tiwari@oracle.com>)
+- Update tc/q_dualpi2.c to fix missing blank lines and add missing case (ALOK TIWARI <alok.a.tiwari@oracle.com>)
+
+v7 (05-May-2025)
+- Align pkt_sched.h with the v14 version of net-next due to spec modification in tc.yaml
+- Reorganize dualpi2_print_opt() to match the order in tc.yaml
+- Remove credit-queue in PRINT_JSON
+
+v6 (26-Apr-2025)
+- Update JSON file output due to spec modification in tc.yaml of net-next
+
+v5 (25-Mar-2025)
+- Use matches() to replace current strcmp() (Stephen Hemminger <stephen@networkplumber.org>)
+- Use general parse_percent() for handling scaled percentage values (Stephen Hemminger <stephen@networkplumber.org>)
+- Add print function for JSON of dualpi2 stats (Stephen Hemminger <stephen@networkplumber.org>)
+
+v4 (16-Mar-2025)
+- Add min_qlen_step to the dualpi2 attribute as the minimum queue length in number of packets in the L-queue to start step marking.
+
+v3 (21-Feb-2025)
+- Add memlimit to the dualpi2 attribute, and add memory_used, max_memory_used, and memory_limit in dualpi2 stats (Dave Taht <dave.taht@gmail.com>)
+- Update the manual to align with the latest implementation and clarify the queue naming and default unit
+- Use common "get_scaled_alpha_beta" and clean print_opt for Dualpi2
+
+v2 (23-Oct-2024)
+- Rename get_float in dualpi2 to get_float_min_max in utils.c
+- Move get_float from iplink_can.c in utils.c (Stephen Hemminger <stephen@networkplumber.org>)
+- Add print function for JSON of dualpi2 (Stephen Hemminger <stephen@networkplumber.org>)
+
+---
+Chia-Yu Chang (3):
+  Move get_float() from ip/iplink_can.c to lib/utils.c
+  Add get_float_min_max() in lib/utils.c
+  tc: add dualpi2 scheduler module
+
+ bash-completion/tc    |  11 +-
+ include/utils.h       |   2 +
+ ip/iplink_can.c       |  14 --
+ lib/utils.c           |  30 +++
+ man/man8/tc-dualpi2.8 | 249 ++++++++++++++++++++
+ tc/Makefile           |   1 +
+ tc/q_dualpi2.c        | 535 ++++++++++++++++++++++++++++++++++++++++++
+ 7 files changed, 827 insertions(+), 15 deletions(-)
+ create mode 100644 man/man8/tc-dualpi2.8
+ create mode 100644 tc/q_dualpi2.c
+
+-- 
+2.34.1
+
 
