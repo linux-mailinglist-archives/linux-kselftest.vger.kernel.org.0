@@ -1,247 +1,153 @@
-Return-Path: <linux-kselftest+bounces-38236-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DDB8B19E88
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 11:11:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E70AB19F1F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 11:59:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67E77178E06
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 09:11:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDDDE189BF35
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 09:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990DA239E79;
-	Mon,  4 Aug 2025 09:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B122451F0;
+	Mon,  4 Aug 2025 09:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J39PZCBi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s6SrOArQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79C01C6FF5;
-	Mon,  4 Aug 2025 09:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB16C1DE2DE;
+	Mon,  4 Aug 2025 09:59:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754298706; cv=none; b=WDDI10spvHb2YqdLizoKlMEh7sWD6k21DVZbGZ+7AcCrKItzvH7LOBL3YyqmC4sDD3NqureTU3tZWKHDdA/muu8FzfgQh+ZSzz3idqR1ECYGs6/DR53+xaE4+hJCKRnDY68QlrQkhohM5z64yX+WBPqp+Py15s0vsYtzYUTUQXM=
+	t=1754301542; cv=none; b=gRv/KlqZpsr7J4Y+XbK/FbdhGM3rNI86MrcZBIwPGaflBZ/PfEjxdOortv8AH6TxOCH/SZw27oOlCmFAzLB6QM4A3P9gFVKIO3OTzBwPCaC5eJZHflP67GtIc1D3VoSiBZlFOAMnVT8RRFAMO6zcMgvy/+3LbeptsgulRt0cNUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754298706; c=relaxed/simple;
-	bh=UF5gVpXP9Ubm1gTeYZJatWudtPvnSI23l2ki/Kcf0R8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q8sb7JguvmTxlmqvHTYtuVNzF334219uByPu+prrrEbqjJ3OyB+XwpVDgwDiFs/qQ0wl4Q9PU/V9BUC2hm97mHs14beiVh4lWvjiOQDAzNRtR2CO3khfhzaw3rRzSFxsfQ0RcrTxEsn3nCPJVTC8GQ/PtYAVW6h94w4zEvPzZGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J39PZCBi; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-61580eb7995so9178180a12.0;
-        Mon, 04 Aug 2025 02:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754298703; x=1754903503; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pugdPG7uA4O/On86pd0XfQDtWdJcBWVZDEqtuwJC78Q=;
-        b=J39PZCBiMR2L+lhMBcwUar9bFXqZuzi+kPv8BV5XCoXRnWelkCSVwF23tMLpINRUtW
-         Ba1RJY724vxl6b328ZUH7Sj5HSyNAo0B89xuixeECCk0wkTDWyg/zCZDOhelzsbxzG5G
-         +my/NeFmPPsTGtMK8mzI5x/qCjJsxyeKL1go1U0PzfqrUYRvGmn+XuHh5TbfuU+kKfCH
-         8EU6bXWa7LWz2uMU7lzlhVTRHOKnKfOcy8CT3YLqxvfJ6kWME1d2O3DHPMMmxQsGYdNH
-         KQRCutE2jl0xVsUDUMCFiUaC2St1SEdKDk62vCQbl9VXUd1ZYnIuVdTouYEf4jVcJPiQ
-         Eamw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754298703; x=1754903503;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=pugdPG7uA4O/On86pd0XfQDtWdJcBWVZDEqtuwJC78Q=;
-        b=l469RNxQuwmPNIrMEJD17muLXjbvfv0hu8m42GrztiUocxpqX7GyJOlPDez1fcJ10S
-         tQLffD+wUJLCYnPdCwTYQXMCfENov3hg60viwBN9BF/1FR7m3WQkIMyv6cntDti1LGWB
-         OGgrG4DH8b70ZU/S7Z3/iIB6mKnP6teaQxUNnAbprpaVIs+QuaPiIFmTtpLZV1ExGLUs
-         G21UZ1BBwv2sM0CJ0NBYkTBbXmenpp4wci7VcsH+yzqw0H24A+FMbo15QLzI0fieRjFG
-         uZzCPOXrGEygn49FINrs+cBOuQj6VZ05p0BzB/l962Oe1csxU4WhWxyRdKh9HGA/FbMD
-         voSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUZxZHTLTSWR7TawFdWFOCMKpvxF8y7JnkGRjMSWmAKtJQn/pCdjylCCLPZADWg68SlTt/AZyG+7A3e8OF9Fzkn@vger.kernel.org, AJvYcCWR+5vWlerD4Vox4ufHuj0Aw49u4MdlRHahAH8mH+k1Tv0+e8FsHCCT2fXN+9/UVNmt68U9qIzbbdPLzFI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrbvwT5AXtIlziB9YH/f0EPRWtyllRraxSXPwyoShWkUeL3fMS
-	QhBIfWo0oa/HJR0HW7x7l4PZ7a48uaTeKstGtij0xJivJuMw8Fk8qIas
-X-Gm-Gg: ASbGncsR/2bFfmVRWRj3l3M0PSF2EH+ATsp5yjagN3Fhvbb7e5O0kUhhdKfqx5iswul
-	XqMFaqy9stvXlYSaeRAlQbE7TqJoa7M2cHt1FHmmXWWQekLIlroIoqQL4TDrRCZDmSIP/QYBm8M
-	M83+on6OI12r/5MuxKYTmoSmWvpSJAd6PfGtoQ75booyEziJHJn6ZQUxAWz9+Xo0ujBfup3Z+s0
-	EAbUSX95gmKNS8KgCQWkFDL13LtSIw/7pKLsbJNvvFQqdC6dzPdygHsZrsdSchP06GP3XuTAmZT
-	6PAsCZ1gyWyElHLupnjitpvhJad285b750a5t70tXKbIDfI5Ab+iFZFNS+kMPgh4iDRtLa2AqRg
-	ps1WCcx9Sn+0NrZWWoslb3nWdowqRd195bp9dcm1xUCk=
-X-Google-Smtp-Source: AGHT+IHM3K4OZ+XP8yHHt8iGAEQo+9QHGcIwmPD9Lmbdp7R1ga5jUT96EJoH/t1FQUDctW0UjWXQkw==
-X-Received: by 2002:a05:6402:2355:b0:615:3667:f4eb with SMTP id 4fb4d7f45d1cf-615e5dd9a53mr7855785a12.6.1754298702785;
-        Mon, 04 Aug 2025 02:11:42 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a911567fsm6396175a12.61.2025.08.04.02.11.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 04 Aug 2025 02:11:42 -0700 (PDT)
-Date: Mon, 4 Aug 2025 09:11:41 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
-	lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
-	david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-	baohua@kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	donettom@linux.ibm.com, ritesh.list@gmail.com
-Subject: Re: [PATCH v3 3/7] selftest/mm: Fix ksm_funtional_test failures
-Message-ID: <20250804091141.ifwryfmgjepwrog4@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20250729053403.1071807-1-aboorvad@linux.ibm.com>
- <20250729053403.1071807-4-aboorvad@linux.ibm.com>
+	s=arc-20240116; t=1754301542; c=relaxed/simple;
+	bh=PfXG0y/uT6Sh3+8w9sEkgBSv0GsvkI9O3hS4R2wxk5c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mZWtnGlxlHgv7GPZlsp4g5gRVDQ0Zq9sGvV9m9dvO0GJHx/mwXtukzs9VAYdHnQnb1EdDd4/bFPyB3v2idp9cHSCVyRMcgekQMURZ5nW5SRhatVc8L87JD+lvviF0puWifWLP1tZoRMiZxCHZelEkAyVjR3XJ+a7WWE+1C91F9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s6SrOArQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FEBC4CEE7;
+	Mon,  4 Aug 2025 09:58:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754301541;
+	bh=PfXG0y/uT6Sh3+8w9sEkgBSv0GsvkI9O3hS4R2wxk5c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=s6SrOArQ0CHnr6400POZE1gBYZasggm0ND1DooTqCNLVBptAixZYR0OvwoDc2f2GX
+	 1kAZOip4FQj7Qw3UwtihwAbTeIkx+SPKSsNOU/POTWUepXrErmXlTWBZiINznFOqfM
+	 j2JlXzPWEtjCJ6iP0Pkw1144/3lb7Q8ky1WU8dh1TvKaangib30XIykl5kA2S0A7HC
+	 F9aMxWck1Q+ytjovgVjnAr/EdbofLjOUSvf0tyqsD5TWAT7Fa3kkVuXPK074z6YGxL
+	 UmCoAdx/JoyLQ6tPedqoQuE7Qptc0QsT8qKZ6XNA+EjewErauMrOAs+MB8vNy6uFr3
+	 BvUMt/VcwYFjA==
+Message-ID: <88a51699-e913-4dba-992d-e923509ec754@kernel.org>
+Date: Mon, 4 Aug 2025 11:58:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250729053403.1071807-4-aboorvad@linux.ibm.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net] selftests: net: packetdrill: xfail all problems on
+ slow machines
+Content-Language: en-GB, fr-BE
+To: Jakub Kicinski <kuba@kernel.org>, willemb@google.com
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, davem@davemloft.net
+References: <20250801181638.2483531-1-kuba@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20250801181638.2483531-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jul 29, 2025 at 11:03:59AM +0530, Aboorva Devarajan wrote:
->From: Donet Tom <donettom@linux.ibm.com>
->
->This patch fixed 2 issues.
->
->1) After fork() in test_prctl_fork, the child process uses the file
->descriptors from the parent process to read ksm_stat and
->ksm_merging_pages. This results in incorrect values being read (parent
->process ksm_stat and ksm_merging_pages will be read in child), causing
->the test to fail.
->
->This patch calls init_global_file_handles() in the child process to
->ensure that the current process's file descriptors are used to read
->ksm_stat and ksm_merging_pages.
->
->2) All tests currently call ksm_merge to trigger page merging.
->To ensure the system remains in a consistent state for subsequent
->tests, it is better to call ksm_unmerge during the test cleanup phase.
->
->In the test_prctl_fork test, after a fork(), reading ksm_merging_pages
->in the child process returns a non-zero value because a previous test
->performed a merge, and the child's memory state is inherited from the
->parent.
->
->Although the child process calls ksm_unmerge, the ksm_merging_pages
->counter in the parent is reset to zero, while the child's counter
->remains unchanged. This discrepancy causes the test to fail.
->
->To avoid this issue, each test should call ksm_unmerge during cleanup
->to ensure the counter is reset and the system is in a clean state for
->subsequent tests.
->
->execv argument is an array of pointers to null-terminated strings.
->In this patch we also added NULL in the execv argument.
->
->Fixes: 6c47de3be3a0 ("selftest/mm: ksm_functional_tests: extend test case for ksm fork/exec")
->Co-developed-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->Signed-off-by: Donet Tom <donettom@linux.ibm.com>
->---
-> tools/testing/selftests/mm/ksm_functional_tests.c | 12 +++++++++++-
-> 1 file changed, 11 insertions(+), 1 deletion(-)
->
->diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
->index d8bd1911dfc0..996dc6645570 100644
->--- a/tools/testing/selftests/mm/ksm_functional_tests.c
->+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
->@@ -46,6 +46,8 @@ static int ksm_use_zero_pages_fd;
-> static int pagemap_fd;
-> static size_t pagesize;
-> 
->+static void init_global_file_handles(void);
->+
-> static bool range_maps_duplicates(char *addr, unsigned long size)
-> {
-> 	unsigned long offs_a, offs_b, pfn_a, pfn_b;
->@@ -274,6 +276,7 @@ static void test_unmerge(void)
-> 	ksft_test_result(!range_maps_duplicates(map, size),
-> 			 "Pages were unmerged\n");
-> unmap:
->+	ksm_unmerge();
+Hi Jakub, Willem,
 
-In __mmap_and_merge_range(), we call ksm_unmerge(). Why this one not help?
+On 01/08/2025 20:16, Jakub Kicinski wrote:
+> We keep seeing flakes on packetdrill on debug kernels, while
+> non-debug kernels are stable, not a single flake in 200 runs.
+> Time to give up, debug kernels appear to suffer from 10msec
+> latency spikes and any timing-sensitive test is bound to flake.
 
-Not very familiar with ksm stuff. Would you mind giving more on how this fix
-the failure you see?
+Thank you for the patch!
 
-> 	munmap(map, size);
-> }
-> 
->@@ -338,6 +341,7 @@ static void test_unmerge_zero_pages(void)
-> 	ksft_test_result(!range_maps_duplicates(map, size),
-> 			"KSM zero pages were unmerged\n");
-> unmap:
->+	ksm_unmerge();
-> 	munmap(map, size);
-> }
-> 
->@@ -366,6 +370,7 @@ static void test_unmerge_discarded(void)
-> 	ksft_test_result(!range_maps_duplicates(map, size),
-> 			 "Pages were unmerged\n");
-> unmap:
->+	ksm_unmerge();
-> 	munmap(map, size);
-> }
-> 
->@@ -452,6 +457,7 @@ static void test_unmerge_uffd_wp(void)
-> close_uffd:
-> 	close(uffd);
-> unmap:
->+	ksm_unmerge();
-> 	munmap(map, size);
-> }
-> #endif
->@@ -515,6 +521,7 @@ static int test_child_ksm(void)
-> 	else if (map == MAP_MERGE_SKIP)
-> 		return -3;
-> 
->+	ksm_unmerge();
-> 	munmap(map, size);
-> 	return 0;
-> }
->@@ -548,6 +555,7 @@ static void test_prctl_fork(void)
-> 
-> 	child_pid = fork();
-> 	if (!child_pid) {
->+		init_global_file_handles();
+Another solution might be to increase the tolerance, but I don't think
+it will fix all issues. I quickly looked at the last 100 runs, and I
+think most failures might be fixed by a higher tolerance, e.g.
 
-Would this leave fd in parent as orphan?
+> # tcp_ooo-before-and-after-accept.pkt:19: timing error: expected inbound packet at 0.101619 sec but happened at 0.115894 sec; tolerance 0.014000 sec
 
-> 		exit(test_child_ksm());
-> 	} else if (child_pid < 0) {
-> 		ksft_test_result_fail("fork() failed\n");
->@@ -595,7 +603,7 @@ static void test_prctl_fork_exec(void)
-> 		return;
-> 	} else if (child_pid == 0) {
-> 		char *prg_name = "./ksm_functional_tests";
->-		char *argv_for_program[] = { prg_name, FORK_EXEC_CHILD_PRG_NAME };
->+		char *argv_for_program[] = { prg_name, FORK_EXEC_CHILD_PRG_NAME, NULL };
-> 
-> 		execv(prg_name, argv_for_program);
-> 		return;
->@@ -644,6 +652,7 @@ static void test_prctl_unmerge(void)
-> 	ksft_test_result(!range_maps_duplicates(map, size),
-> 			 "Pages were unmerged\n");
-> unmap:
->+	ksm_unmerge();
-> 	munmap(map, size);
-> }
-> 
->@@ -677,6 +686,7 @@ static void test_prot_none(void)
-> 	ksft_test_result(!range_maps_duplicates(map, size),
-> 			 "Pages were unmerged\n");
-> unmap:
->+	ksm_unmerge();
-> 	munmap(map, size);
-> }
-> 
->-- 
->2.47.1
->
+(0.275ms above the limit!)
 
+On MPTCP, we used to have a very high tolerance with debug kernels
+(>0.5s) when public CIs were very limited in terms of CPU resources. I
+guess having a tolerance of 0.1s would be enough, but for these MPTCP
+packetdrill tests, I put 0.2s for the tolerance with a debug kernel,
+just to be on the safe side.
+
+Still, I think increasing the tolerance would not fix all issues. On
+MPTCP side, the latency introduced by debug kernel caused unexpected
+retransmissions due to too low RTO. I took the time to make sure
+injected packets were always done with enough delay, but with the TCP
+packetdrill tests here, it is possibly not enough to do that when I look
+at some recent errors, e.g.
+
+> tcp_zerocopy_batch.pkt:26: error handling packet: live packet payload: expected 4000 bytes vs actual 5000 bytes
+At the end, and as previously mentioned, these adaptations for debug
+kernel are perhaps not worth it: in this environment, it is probably
+enough to ignore packetdrill results and focus on kernel warnings.
+
+Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
+Cheers,
+Matt
 -- 
-Wei Yang
-Help you, Help me
+Sponsored by the NGI0 Core fund.
+
 
