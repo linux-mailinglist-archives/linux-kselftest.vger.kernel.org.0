@@ -1,89 +1,70 @@
-Return-Path: <linux-kselftest+bounces-38227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A40DB1955C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Aug 2025 22:48:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B03A1B19A29
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 04:27:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B977E18933F6
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Aug 2025 20:49:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71B3E7A9530
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Aug 2025 02:25:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFCE91F91D6;
-	Sun,  3 Aug 2025 20:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c/Z7EFiX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22381F5838;
+	Mon,  4 Aug 2025 02:27:10 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CBE12BF24;
-	Sun,  3 Aug 2025 20:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726AE4C83;
+	Mon,  4 Aug 2025 02:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754254117; cv=none; b=gwyf9RZvfduXE6XVtoTc4FqMCPDAJYXlGkCc/t3Uh6cEnnJvBcgNnFet8AOD0YS854Jgw/WNt0S0FtFkeQs4PC2zqfORTVYGkDkZZgvr6hsY1kbMppFQF8uTHRGcry/20tulZLRTrO+UrccEOFcyHU7uibxycb8mnDk2qMIXByI=
+	t=1754274430; cv=none; b=ikhEQI+y6rsi08DU+YEYtgDXJpX95wUdzGc6Z+rr1ncTCgFuaP+9d9Ox/sYTcB1Q1IhVxQrk1mRsc2/XLHTUJFO/kwfIIAj5lDn19kANWaXbAmYPVpi8GZ5XMjtbfsTZ4ZDfLjfKvwyPGWbDKRS5QUbgDnYzIsH4+KcEqcVO4Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754254117; c=relaxed/simple;
-	bh=zzC0veX4U38w95i1qqvR/sj3J+MM6e8Lc6c6kYzUZV8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MBqAgzPOZ5QK6f1WOrahdIaypH42bO0zuoENs0OPJoKJ8kugA1/hhaWHZSUWTvPMcJpp32VByPh36/f7ERV2jCEj/nYrbMWpsJzWfi6Rz+m6NZJHq3J7Vsm6BYRjwG0431CcsXGhkFaq9py2r/HhmAQgPviJHh0nn/XUgDwv/6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c/Z7EFiX; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-af95ecfbd5bso119580966b.1;
-        Sun, 03 Aug 2025 13:48:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754254114; x=1754858914; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lwy9S+seQCh1gpHswr4BPXe5Cl0mTG2Hkawb//nlLoc=;
-        b=c/Z7EFiXTcw+kEczsToH6kKe0+64ggW4YwH6ZzlP19ZQxZ7UqV5oG+dr3HQQ91mFtd
-         Sgvz5WdmgnXezXHYY74NXWklJ6CWCTVFQngb+C3Lgs6fhedqooJsqNZuYdaBLrC/iRmZ
-         ZnlLOd30NkDrBbCHb21X1Ob4TnVuCJJDkXUui5tAPaIIRKmOh08K2segC7wKrn3O67/b
-         qMpDAw2laRtz6fUrHXBOcWbAzjL0NfNkEJzsvKpXwhPhWAzSgfU8qz6ZaMV7OINBo7+R
-         YyOw5SkLAYXp5O2YtvBhuz0myWzuBG/BUPBgEWHldrwtMwU6h+RNZmsN5qQ6USEjSaR8
-         YVsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754254114; x=1754858914;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lwy9S+seQCh1gpHswr4BPXe5Cl0mTG2Hkawb//nlLoc=;
-        b=LTf3wly5vt2ZrT/skQsMXWXlvauIyXlhgMq3sVI5GtmHsiQMa11GSbUVICcJ7m7GV7
-         fslAUzrOqNGFpiGuT0wiv0lGmO3YYJaB6i4XIZnvHV3DHlql9xv786drOD9e3Fn4H0Ah
-         7apbLOp9chC2Rl7R9qeEWofCwwTGhhaOWHc3Ww+fIabsZrX22XZsi+MAM8FtKQOoOIhH
-         3qV94ic4BeQKFy4/jQznRl8PARqUy9iU1JU7lgP5vfUIcyU3FU8vOLmlbbBb+iARmmfi
-         JtDxibRqfiuDGiLEH44IK5CJKYxNLt3GYE97GoavV2dsOc2VxtGcgu80QFJsckN02AT8
-         p2Zg==
-X-Forwarded-Encrypted: i=1; AJvYcCWHu/CJkJl8PgSCoedka4iFdHk1+366xbj4hhMFB1Nfo/RNmAYW5eOreyzGkQK81c6j4f+UVwgWjvZy9Llg@vger.kernel.org, AJvYcCWm3ELwEvfvZsw1vVfPcFjo3NwNvLBzdly9+aE07gH0aX0jn45XGTLOOVX+sPhdNGMt4rVd6E2mtLY4UW5Kc8Pp@vger.kernel.org, AJvYcCXeXGzwEK/P4Jwr/FEVq9epOOQL9X1+NPvDo9FQZNMRopWiAbfPIO4xn7fzSkZkeHs3kv9lU+dbmiJox0AR@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCMHM/wluDBvEk2tCKl1okAGVhMj+chCSomCesXizZl1hO1E2D
-	JqB4s768iyaZ0Gggzq/cC/PjhSaXWfmD8SqZa4uazNjrGDdkl3QeblNM
-X-Gm-Gg: ASbGncupAmpnhZ5EZMZQ1TBsOEfeEdaVX2OKhar/vcgZT7UeGrvVo214RQCSZ0ftlPs
-	Ld+/7p14PfsdNv9Eyut7bhmDXs2vyZ4H+U5rappL5AJBHQ4YuHW/8UHIyk/bDzbFr/TbeaLxsTP
-	Lfs77/W3O14izgKFloUXRtx6+k5nt3eAaIF+7cNVCeZkL47+Ti62zIV+i4MKQ7aCt/rUfhb4b8x
-	gtE9HmajUGXZBneHNhbKYo4nUTNRs1jGXNWOVsDprn/QBsKJYvkFqQCkjMgxbrqhDY3OizKOHoU
-	hmIY7qyXwG+94POpoXRHSJ9DwDueZN07Io42E8UIgyHPdGEAeI00Vcn9fUF29sNvZQhT8Vorxx9
-	LV/Mm1qS+Kh5wFeY=
-X-Google-Smtp-Source: AGHT+IED2U86NMVTRqP/XDEpeRpB+DYiVCnbANSQwHQ90TIg/gegMf7X5EOI193KklAwzpnqqt/v+Q==
-X-Received: by 2002:a17:906:f192:b0:af9:44fe:dea1 with SMTP id a640c23a62f3a-af944fee3b8mr478126866b.23.1754254113813;
-        Sun, 03 Aug 2025 13:48:33 -0700 (PDT)
-Received: from hsukr3.. ([141.70.88.200])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0761f2sm629695266b.11.2025.08.03.13.48.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Aug 2025 13:48:33 -0700 (PDT)
-From: Sukrut Heroorkar <hsukrut3@gmail.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Sukrut Heroorkar <hsukrut3@gmail.com>,
-	linux-kernel@vger.kernel.org (open list:PROC FILESYSTEM),
-	linux-fsdevel@vger.kernel.org (open list:PROC FILESYSTEM),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Cc: skhar@linuxfoundation.org,
-	david.hunter.linux@gmail.com
-Subject: [PATCH] selftests/proc: Fix string literal warning in proc-maps-race.c
-Date: Sun,  3 Aug 2025 22:47:26 +0200
-Message-ID: <20250803204746.1899942-1-hsukrut3@gmail.com>
+	s=arc-20240116; t=1754274430; c=relaxed/simple;
+	bh=SH2VsF0c2qYDhnX+O5sTl/7AV/kWTXVbVc1G+MkUcgs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lpDUiy3lfnE4pdku5P1+cf+Osu2apLbBd5iIZnAleUqJOWNV1BJ2bfuMGtbug/Fbc2BGMriA+6fJJPG/Muf1alqnGY5v/mGSBGZCMfJB8YFKEuoJQQr95Rdat0EJoB9QmG6K0dNCx5e0e4M2xRpUnbDBxcocaaHejrxMwC0beto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4bwL6f5x5DzKHMRl;
+	Mon,  4 Aug 2025 10:27:06 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id CC4BE1A06DD;
+	Mon,  4 Aug 2025 10:27:05 +0800 (CST)
+Received: from k-arm6401.huawei.com (unknown [7.217.19.243])
+	by APP4 (Coremail) with SMTP id gCh0CgAX4BBsGpBoTUL9CQ--.242S2;
+	Mon, 04 Aug 2025 10:27:05 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yhs@fb.com>,
+	Song Liu <song@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin Kelly <martin.kelly@crowdstrike.com>
+Subject: [PATCH bpf-next 0/4] Add overwrite mode for bpf ring buffer
+Date: Mon,  4 Aug 2025 10:20:56 +0800
+Message-ID: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -93,60 +74,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgAX4BBsGpBoTUL9CQ--.242S2
+X-Coremail-Antispam: 1UD129KBjvJXoWruFy3GFyDZr4rXryxurWrGrg_yoW8Jryxpa
+	n5KFy5trn2ka4xuwn3uF4IqryrArs7Zr4fKw47Xw15Zry5JFW5XFyI9r15JrnxJrWxJr1F
+	kr90gryrG34jqFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCY02Avz4vEIxC_Gr1l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUh89NDUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-This change resolves non literal string format warning invoked
-for proc-maps-race.c while compiling.
+From: Xu Kuohai <xukuohai@huawei.com>
 
-proc-maps-race.c:205:17: warning: format not a string literal and no format arguments [-Wformat-security]
-  205 |                 printf(text);
-      |                 ^~~~~~
-proc-maps-race.c:209:17: warning: format not a string literal and no format arguments [-Wformat-security]
-  209 |                 printf(text);
-      |                 ^~~~~~
-proc-maps-race.c: In function ‘print_last_lines’:
-proc-maps-race.c:224:9: warning: format not a string literal and no format arguments [-Wformat-security]
-  224 |         printf(start);
-      |         ^~~~~~
+When the bpf ring buffer is full, new events can not be recorded util
+the consumer consumes some events to free space. This may cause critical
+events to be discarded, such as in fault diagnostic, where recent events
+are more critical than older ones.
 
-Added string format specifier %s for the printf calls
-in both print_first_lines() and print_last_lines() thus
-resolving the warnings invoked.
+So add ovewrite mode for bpf ring buffer. In this mode, the new event
+overwrites the oldest event when the buffer is full.
 
-The test executes fine after this change thus causing no
-affect to the functional behavior of the test.
+Xu Kuohai (4):
+  bpf: Add overwrite mode for bpf ring buffer
+  libbpf: ringbuf: Add overwrite ring buffer process
+  selftests/bpf: Add test for overwrite ring buffer
+  selftests/bpf/benchs: Add overwrite mode bench for rb-libbpf
 
-Signed-off-by: Sukrut Heroorkar <hsukrut3@gmail.com>
----
- tools/testing/selftests/proc/proc-maps-race.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/uapi/linux/bpf.h                      |   4 +
+ kernel/bpf/ringbuf.c                          | 159 +++++++++++++++---
+ tools/include/uapi/linux/bpf.h                |   4 +
+ tools/lib/bpf/ringbuf.c                       | 103 +++++++++++-
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ .../selftests/bpf/benchs/bench_ringbufs.c     |  22 ++-
+ .../bpf/benchs/run_bench_ringbufs.sh          |   4 +
+ .../selftests/bpf/prog_tests/ringbuf.c        |  74 ++++++++
+ .../bpf/progs/test_ringbuf_overwrite.c        |  98 +++++++++++
+ 9 files changed, 442 insertions(+), 29 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_overwrite.c
 
-diff --git a/tools/testing/selftests/proc/proc-maps-race.c b/tools/testing/selftests/proc/proc-maps-race.c
-index 66773685a047..94bba4553130 100644
---- a/tools/testing/selftests/proc/proc-maps-race.c
-+++ b/tools/testing/selftests/proc/proc-maps-race.c
-@@ -202,11 +202,11 @@ static void print_first_lines(char *text, int nr)
- 		int offs = end - text;
- 
- 		text[offs] = '\0';
--		printf(text);
-+		printf("%s", text);
- 		text[offs] = '\n';
- 		printf("\n");
- 	} else {
--		printf(text);
-+		printf("%s", text);
- 	}
- }
- 
-@@ -221,7 +221,7 @@ static void print_last_lines(char *text, int nr)
- 		nr--;
- 		start--;
- 	}
--	printf(start);
-+	printf("%s", start);
- }
- 
- static void print_boundaries(const char *title, FIXTURE_DATA(proc_maps_race) *self)
 -- 
 2.43.0
 
