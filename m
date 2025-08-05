@@ -1,437 +1,298 @@
-Return-Path: <linux-kselftest+bounces-38270-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38272-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09C15B1ADB5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 07:46:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DBFCB1ADDD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 08:09:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62A413BFADC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 05:46:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96691163806
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 06:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A20721CC4B;
-	Tue,  5 Aug 2025 05:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8130A2063FD;
+	Tue,  5 Aug 2025 06:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="bU24rnvI"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PCyEjKdV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2F621CA08;
-	Tue,  5 Aug 2025 05:45:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F691078F;
+	Tue,  5 Aug 2025 06:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754372757; cv=none; b=aOLg058OOB5eFIrsiTceA4Uk20NNfHbtvS95yT/dmNDDzrx/HJ2bpvY7+9JaDfVhBCZgNSgk/w9au7fwD8xH6Ak9zf3+s6jYy5hxX+f7fVK0bZ6pRG4+CA1FwGoSuFEU27lB3tA/Z1nUIdg4HpGkAupK3cv7YRNIdCqBZxHR+7s=
+	t=1754374192; cv=none; b=J3buCkJPV1WpyjzZqbXoc+rCRkcM3ilhITkXTLtabtbe7SwbNVMCaBnQcrCrERthEgs4soDoLeqJPFLL8BJAyDVdzVEFRr0bI/UDsknsrLb7eC+UWk7YSBr5yO3qRCZWILM2xK6925NSJXZDEBMmSEIAZErbAVeOGzXdx4QJKR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754372757; c=relaxed/simple;
-	bh=40vUJ0jC1FNCskPUMlIRHQw/7AqXNiyfzz/oz1EbBMs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E9q3IExcb6EPrFmAsL0nf3ozNmqQJNJv/PTaLrIA9c4dQ5z/vc5wSPkYwo86hTKQDPvpjirx2K5Pl2NJ/Q6woiYXd1v7rl2AqzuqyU4FNiy7uZ0IOgbJ0LKDJ7JnoxtS4skEn+/YRYM00O1bjCbHcUq5MXmYwhL2QijKqhHFVY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=bU24rnvI; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4bx2TW344Vz9sWC;
-	Tue,  5 Aug 2025 07:45:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1754372751;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M0UA9Hr24iLGhfKjvVdc9u7HZA7KbxdOYa3vKq7R6ls=;
-	b=bU24rnvI85XF+YJCV59nAXeWYAZyfR7nAy3ygq+GTJgIOWWxdUV46c0rElSImrZxrtON9Q
-	uH2GT2V/ML7Il5EmYJwFepX+iQFZUB86Fc/ZjZo/6qiaxu84fqOJSk0rqqCfFpepsPIjys
-	yFtjq8zvwvvQTPloBm6ehE4DqeJONf1l204r7YGGHN50rGoYOTvvToDEXJ9LUbZr1Pa9Sm
-	t4sVQYcEpVMTwo6CNGgrQNv2Qg96nAw0Ugeq6OP7ps9cutuhZvJILwckMQaLsG3ZPixP7J
-	1p/ODrpFPlmYNBO6HfWJD4wgxZ9txNlLxXn3S0yh8l/gUqFXsh/NvxbRtJcV3Q==
-From: Aleksa Sarai <cyphar@cyphar.com>
-Date: Tue, 05 Aug 2025 15:45:11 +1000
-Subject: [PATCH v4 4/4] selftests/proc: add tests for new pidns APIs
+	s=arc-20240116; t=1754374192; c=relaxed/simple;
+	bh=udjhgi6qxAFlIcnadf+oQO8aauar43fffLw4K8xogfw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P3hjHdDu65UperVxALaA5+6I7KVKJo2PP8aVuz3sdjUrz9B0i+ElSwg8f4300JnjMiUEWnv95ASBc/4jgKmarB7+zbQxsSo+ylzqGW57oenPzX7X9AB/7GAzzv4DAcbN39SxJkOFBNEiEGiMeGjA9WZNZainFdjvlr5946xvAF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PCyEjKdV; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5754twoK000914;
+	Tue, 5 Aug 2025 06:09:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=KZIUdY
+	nSrH8hLHLCb8+749ChGGZ8R8KtKeM+yeFqK6M=; b=PCyEjKdVzoiKo7aeakZCBD
+	dTtxSd/6ikCQAd/elqlWw/JDFE3i/qLg9FPEWM3MXUBDcLVODJ3da1DtZyNlZLCt
+	PJg1nPYoti3+TEwYu2F2bKv6Q68DrVat19dAA5HQZTlSnKgq/CdSitHvvhsCHBS9
+	Rvxx26efTAqktt5ODblTPJtJs5MOFevZ55e7/t2vAf20PuoC5J6SEwPNeoN5BbJ1
+	SQhKtWKi4THkgIgO0tktTSRHk+C6eFARkU67zMsa349ajaZxfa1wG3GS1ICSYjMx
+	vm0aZQkJ5c7c1dqNKaEQJFlbHtoHv28/w7vSmXFJFX7KwuKtp/h5o4pJ3RP3IQQw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bbbq07wp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Aug 2025 06:09:32 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 57569WLr013800;
+	Tue, 5 Aug 2025 06:09:32 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bbbq07wf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Aug 2025 06:09:32 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5754fB0T006873;
+	Tue, 5 Aug 2025 06:09:31 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 489xgmh2dy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Aug 2025 06:09:31 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 57569UgB22282868
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 5 Aug 2025 06:09:30 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 754B35813E;
+	Tue,  5 Aug 2025 06:09:30 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 71EF858124;
+	Tue,  5 Aug 2025 06:09:17 +0000 (GMT)
+Received: from [9.109.245.113] (unknown [9.109.245.113])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  5 Aug 2025 06:09:17 +0000 (GMT)
+Message-ID: <20fb853c-7d79-4d26-9c8a-f6ce9367d424@linux.ibm.com>
+Date: Tue, 5 Aug 2025 11:39:15 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250805-procfs-pidns-api-v4-4-705f984940e7@cyphar.com>
-References: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
-In-Reply-To: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
-To: Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Aleksa Sarai <cyphar@cyphar.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11255; i=cyphar@cyphar.com;
- h=from:subject:message-id; bh=40vUJ0jC1FNCskPUMlIRHQw/7AqXNiyfzz/oz1EbBMs=;
- b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMWRMnJUv/TapQPDr8huGIcv+zPZ78MXLqb7zBMN9dY9D9
- 06Zsxd/6ChlYRDjYpAVU2TZ5ucZumn+4ivJn1aywcxhZQIZwsDFKQATWXKa4X/Yfp8nWUHMbQtv
- ihcd3LJVePbEtxeXXnsnFJO+zPn8Tu6vDP+TV4jGNzfGil3ZsD5gWejiqjj2VoYj9R/u1ErnXpd
- vY2UFAA==
-X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
- fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/7] selftest/mm: Fix ksm_funtional_test failures
+To: Wei Yang <richard.weiyang@gmail.com>,
+        Aboorva Devarajan <aboorvad@linux.ibm.com>
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
+        lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
+        david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+        npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+        baohua@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
+References: <20250729053403.1071807-1-aboorvad@linux.ibm.com>
+ <20250729053403.1071807-4-aboorvad@linux.ibm.com>
+ <20250804091141.ifwryfmgjepwrog4@master>
+Content-Language: en-US
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <20250804091141.ifwryfmgjepwrog4@master>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: k3p7J4adTRlrZ9ZmUW45SmpQ7mAGp2RF
+X-Authority-Analysis: v=2.4 cv=M65NKzws c=1 sm=1 tr=0 ts=6891a01c cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VnNF1IyMAAAA:8 a=0R2oKJRu712hfJE7rpUA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: aDV2fjvZ8eW6TQSfXuRrIfKTplaaXBqG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA1MDAzNyBTYWx0ZWRfX0Zx4ttLZjAVU
+ MkjHC9a9E8hxGzo8KaSa/xD5kERSTjlpLOEGXz+LwvGVu9ypduqLtuTSLO5wAtsNC38EaLaoxn9
+ jGPGGwSl7oVPr1lriJlIVPWFmYvLpJBLDxWCZmvCLtz23b00//y4Io6jTJF1ppg5dqZj5+N7Dfe
+ u7UxmqJBiSuLLlNTOPo4hRUdjoNwoeG4XJR1S65Oeu2sZ4ev4CCt9toK02E9/wHHAjlsSGKg1AQ
+ 8xXnZVffvG21nJmOx68m16pKWYy6TRWsznfAN0hCSnR0KoGobD3zO42BIfPv00En1Y0cao60Ud1
+ qJAZNVTQ2RXAEMkfdYp5wUPjeO9qvWt9i92VEbscnusnoc/iuT9SXjP2doH/uNjQ3Rb4iA9zkQu
+ P/zzPLVUmAwqq6Ihgj+Rl5/TdFRucHTt0z09PBgyYyqbFsMThb7ezLTeoaXpW3R5Evp6Gf/G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-05_01,2025-08-04_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 malwarescore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1015 mlxscore=0 phishscore=0 priorityscore=1501
+ mlxlogscore=999 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2508050037
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- tools/testing/selftests/proc/.gitignore   |   1 +
- tools/testing/selftests/proc/Makefile     |   1 +
- tools/testing/selftests/proc/proc-pidns.c | 315 ++++++++++++++++++++++++++++++
- 3 files changed, 317 insertions(+)
 
-diff --git a/tools/testing/selftests/proc/.gitignore b/tools/testing/selftests/proc/.gitignore
-index 973968f45bba..2dced03e9e0e 100644
---- a/tools/testing/selftests/proc/.gitignore
-+++ b/tools/testing/selftests/proc/.gitignore
-@@ -17,6 +17,7 @@
- /proc-tid0
- /proc-uptime-001
- /proc-uptime-002
-+/proc-pidns
- /read
- /self
- /setns-dcache
-diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
-index b12921b9794b..c6f7046b9860 100644
---- a/tools/testing/selftests/proc/Makefile
-+++ b/tools/testing/selftests/proc/Makefile
-@@ -27,5 +27,6 @@ TEST_GEN_PROGS += setns-sysvipc
- TEST_GEN_PROGS += thread-self
- TEST_GEN_PROGS += proc-multiple-procfs
- TEST_GEN_PROGS += proc-fsconfig-hidepid
-+TEST_GEN_PROGS += proc-pidns
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/proc/proc-pidns.c b/tools/testing/selftests/proc/proc-pidns.c
-new file mode 100644
-index 000000000000..f7dd80a2c150
---- /dev/null
-+++ b/tools/testing/selftests/proc/proc-pidns.c
-@@ -0,0 +1,315 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Author: Aleksa Sarai <cyphar@cyphar.com>
-+ * Copyright (C) 2025 SUSE LLC.
-+ */
-+
-+#include <assert.h>
-+#include <errno.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <sys/ioctl.h>
-+#include <sys/prctl.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#define ASSERT_ERRNO(expected, _t, seen)				\
-+	__EXPECT(expected, #expected,					\
-+		({__typeof__(seen) _tmp_seen = (seen);			\
-+		  _tmp_seen >= 0 ? _tmp_seen : -errno; }), #seen, _t, 1)
-+
-+#define ASSERT_ERRNO_EQ(expected, seen) \
-+	ASSERT_ERRNO(expected, ==, seen)
-+
-+#define ASSERT_SUCCESS(seen) \
-+	ASSERT_ERRNO(0, <=, seen)
-+
-+static int touch(char *path)
-+{
-+	int fd = open(path, O_WRONLY|O_CREAT|O_CLOEXEC, 0644);
-+	if (fd < 0)
-+		return -1;
-+	return close(fd);
-+}
-+
-+FIXTURE(ns)
-+{
-+	int host_mntns, host_pidns;
-+	int dummy_pidns;
-+};
-+
-+FIXTURE_SETUP(ns)
-+{
-+	/* Stash the old mntns. */
-+	self->host_mntns = open("/proc/self/ns/mnt", O_RDONLY|O_CLOEXEC);
-+	ASSERT_SUCCESS(self->host_mntns);
-+
-+	/* Create a new mount namespace and make it private. */
-+	ASSERT_SUCCESS(unshare(CLONE_NEWNS));
-+	ASSERT_SUCCESS(mount(NULL, "/", NULL, MS_PRIVATE|MS_REC, NULL));
-+
-+	/*
-+	 * Create a proper tmpfs that we can use and will disappear once we
-+	 * leave this mntns.
-+	 */
-+	ASSERT_SUCCESS(mount("tmpfs", "/tmp", "tmpfs", 0, NULL));
-+
-+	/*
-+	 * Create a pidns we can use for later tests. We need to fork off a
-+	 * child so that we get a usable nsfd that we can bind-mount and open.
-+	 */
-+	ASSERT_SUCCESS(mkdir("/tmp/dummy", 0755));
-+	ASSERT_SUCCESS(touch("/tmp/dummy/pidns"));
-+	ASSERT_SUCCESS(mkdir("/tmp/dummy/proc", 0755));
-+
-+	self->host_pidns = open("/proc/self/ns/pid", O_RDONLY|O_CLOEXEC);
-+	ASSERT_SUCCESS(self->host_pidns);
-+	ASSERT_SUCCESS(unshare(CLONE_NEWPID));
-+
-+	pid_t pid = fork();
-+	ASSERT_SUCCESS(pid);
-+	if (!pid) {
-+		prctl(PR_SET_PDEATHSIG, SIGKILL);
-+		ASSERT_SUCCESS(mount("/proc/self/ns/pid", "/tmp/dummy/pidns", NULL, MS_BIND, NULL));
-+		ASSERT_SUCCESS(mount("proc", "/tmp/dummy/proc", "proc", 0, NULL));
-+		exit(0);
-+	}
-+
-+	int wstatus;
-+	ASSERT_EQ(waitpid(pid, &wstatus, 0), pid);
-+	ASSERT_TRUE(WIFEXITED(wstatus));
-+	ASSERT_EQ(WEXITSTATUS(wstatus), 0);
-+
-+	ASSERT_SUCCESS(setns(self->host_pidns, CLONE_NEWPID));
-+
-+	self->dummy_pidns = open("/tmp/dummy/pidns", O_RDONLY|O_CLOEXEC);
-+	ASSERT_SUCCESS(self->dummy_pidns);
-+}
-+
-+FIXTURE_TEARDOWN(ns)
-+{
-+	ASSERT_SUCCESS(setns(self->host_mntns, CLONE_NEWNS));
-+	ASSERT_SUCCESS(close(self->host_mntns));
-+
-+	ASSERT_SUCCESS(close(self->host_pidns));
-+	ASSERT_SUCCESS(close(self->dummy_pidns));
-+}
-+
-+TEST_F(ns, pidns_mount_string_path)
-+{
-+	ASSERT_SUCCESS(mkdir("/tmp/proc-host", 0755));
-+	ASSERT_SUCCESS(mount("proc", "/tmp/proc-host", "proc", 0, "pidns=/proc/self/ns/pid"));
-+	ASSERT_SUCCESS(access("/tmp/proc-host/self/", X_OK));
-+
-+	ASSERT_SUCCESS(mkdir("/tmp/proc-dummy", 0755));
-+	ASSERT_SUCCESS(mount("proc", "/tmp/proc-dummy", "proc", 0, "pidns=/tmp/dummy/pidns"));
-+	ASSERT_ERRNO_EQ(-ENOENT, access("/tmp/proc-dummy/1/", X_OK));
-+	ASSERT_ERRNO_EQ(-ENOENT, access("/tmp/proc-dummy/self/", X_OK));
-+}
-+
-+TEST_F(ns, pidns_fsconfig_string_path)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_SUCCESS(fsfd);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_STRING, "pidns", "/tmp/dummy/pidns", 0));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_SUCCESS(mountfd);
-+
-+	ASSERT_ERRNO_EQ(-ENOENT, faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_ERRNO_EQ(-ENOENT, faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(mountfd));
-+}
-+
-+TEST_F(ns, pidns_fsconfig_fd)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_SUCCESS(fsfd);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_FD, "pidns", NULL, self->dummy_pidns));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_SUCCESS(mountfd);
-+
-+	ASSERT_ERRNO_EQ(-ENOENT, faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_ERRNO_EQ(-ENOENT, faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(mountfd));
-+}
-+
-+TEST_F(ns, pidns_reconfigure_remount)
-+{
-+	ASSERT_SUCCESS(mkdir("/tmp/proc", 0755));
-+	ASSERT_SUCCESS(mount("proc", "/tmp/proc", "proc", 0, ""));
-+
-+	ASSERT_SUCCESS(access("/tmp/proc/1/", X_OK));
-+	ASSERT_SUCCESS(access("/tmp/proc/self/", X_OK));
-+
-+	ASSERT_ERRNO_EQ(-EBUSY, mount(NULL, "/tmp/proc", NULL, MS_REMOUNT, "pidns=/tmp/dummy/pidns"));
-+
-+	ASSERT_SUCCESS(access("/tmp/proc/1/", X_OK));
-+	ASSERT_SUCCESS(access("/tmp/proc/self/", X_OK));
-+}
-+
-+TEST_F(ns, pidns_reconfigure_fsconfig_string_path)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_SUCCESS(fsfd);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_SUCCESS(mountfd);
-+
-+	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_ERRNO_EQ(-EBUSY, fsconfig(fsfd, FSCONFIG_SET_STRING, "pidns", "/tmp/dummy/pidns", 0));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_RECONFIGURE, NULL, NULL, 0)); /* noop */
-+
-+	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(mountfd));
-+}
-+
-+TEST_F(ns, pidns_reconfigure_fsconfig_fd)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_SUCCESS(fsfd);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_SUCCESS(mountfd);
-+
-+	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_ERRNO_EQ(-EBUSY, fsconfig(fsfd, FSCONFIG_SET_FD, "pidns", NULL, self->dummy_pidns));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_RECONFIGURE, NULL, NULL, 0)); /* noop */
-+
-+	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(mountfd));
-+}
-+
-+int is_same_inode(int fd1, int fd2)
-+{
-+	struct stat stat1, stat2;
-+
-+	assert(fstat(fd1, &stat1) == 0);
-+	assert(fstat(fd2, &stat2) == 0);
-+
-+	return stat1.st_ino == stat2.st_ino && stat1.st_dev == stat2.st_dev;
-+}
-+
-+#define PROCFS_IOCTL_MAGIC 'f'
-+#define PROCFS_GET_PID_NAMESPACE	_IO(PROCFS_IOCTL_MAGIC, 32)
-+
-+TEST_F(ns, host_get_pidns_ioctl)
-+{
-+	int procfs = open("/proc", O_RDONLY|O_CLOEXEC);
-+	ASSERT_SUCCESS(procfs);
-+
-+	int procfs_pidns = ioctl(procfs, PROCFS_GET_PID_NAMESPACE);
-+	ASSERT_SUCCESS(procfs_pidns);
-+
-+	ASSERT_TRUE(is_same_inode(self->host_pidns, procfs_pidns));
-+	ASSERT_FALSE(is_same_inode(self->dummy_pidns, procfs_pidns));
-+
-+	ASSERT_SUCCESS(close(procfs));
-+	ASSERT_SUCCESS(close(procfs_pidns));
-+}
-+
-+TEST_F(ns, mount_implicit_get_pidns_ioctl)
-+{
-+	int procfs = open("/tmp/dummy/proc", O_RDONLY|O_CLOEXEC);
-+	ASSERT_SUCCESS(procfs);
-+
-+	int procfs_pidns = ioctl(procfs, PROCFS_GET_PID_NAMESPACE);
-+	ASSERT_SUCCESS(procfs_pidns);
-+
-+	ASSERT_FALSE(is_same_inode(self->host_pidns, procfs_pidns));
-+	ASSERT_TRUE(is_same_inode(self->dummy_pidns, procfs_pidns));
-+
-+	ASSERT_SUCCESS(close(procfs));
-+	ASSERT_SUCCESS(close(procfs_pidns));
-+}
-+
-+TEST_F(ns, mount_pidns_get_pidns_ioctl)
-+{
-+	ASSERT_SUCCESS(mkdir("/tmp/proc-host", 0755));
-+	ASSERT_SUCCESS(mount("proc", "/tmp/proc-host", "proc", 0, "pidns=/proc/self/ns/pid"));
-+
-+	int host_procfs = open("/tmp/proc-host", O_RDONLY|O_CLOEXEC);
-+	ASSERT_SUCCESS(host_procfs);
-+	int host_procfs_pidns = ioctl(host_procfs, PROCFS_GET_PID_NAMESPACE);
-+	ASSERT_SUCCESS(host_procfs_pidns);
-+
-+	ASSERT_TRUE(is_same_inode(self->host_pidns, host_procfs_pidns));
-+	ASSERT_FALSE(is_same_inode(self->dummy_pidns, host_procfs_pidns));
-+
-+	ASSERT_SUCCESS(mkdir("/tmp/proc-dummy", 0755));
-+	ASSERT_SUCCESS(mount("proc", "/tmp/proc-dummy", "proc", 0, "pidns=/tmp/dummy/pidns"));
-+
-+	int dummy_procfs = open("/tmp/proc-dummy", O_RDONLY|O_CLOEXEC);
-+	ASSERT_SUCCESS(dummy_procfs);
-+	int dummy_procfs_pidns = ioctl(dummy_procfs, PROCFS_GET_PID_NAMESPACE);
-+	ASSERT_SUCCESS(dummy_procfs_pidns);
-+
-+	ASSERT_FALSE(is_same_inode(self->host_pidns, dummy_procfs_pidns));
-+	ASSERT_TRUE(is_same_inode(self->dummy_pidns, dummy_procfs_pidns));
-+
-+	ASSERT_SUCCESS(close(host_procfs));
-+	ASSERT_SUCCESS(close(host_procfs_pidns));
-+	ASSERT_SUCCESS(close(dummy_procfs));
-+	ASSERT_SUCCESS(close(dummy_procfs_pidns));
-+}
-+
-+TEST_F(ns, fsconfig_pidns_get_pidns_ioctl)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_SUCCESS(fsfd);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_FD, "pidns", NULL, self->dummy_pidns));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_SUCCESS(mountfd);
-+
-+	/* fsmount returns an O_PATH, which ioctl(2) doesn't accept. */
-+	int new_mountfd = openat(mountfd, ".", O_RDONLY|O_DIRECTORY|O_CLOEXEC);
-+	ASSERT_SUCCESS(new_mountfd);
-+
-+	ASSERT_SUCCESS(close(mountfd));
-+	mountfd = -EBADF;
-+
-+	int procfs_pidns = ioctl(new_mountfd, PROCFS_GET_PID_NAMESPACE);
-+	ASSERT_SUCCESS(procfs_pidns);
-+
-+	ASSERT_NE(self->dummy_pidns, procfs_pidns);
-+	ASSERT_FALSE(is_same_inode(self->host_pidns, procfs_pidns));
-+	ASSERT_TRUE(is_same_inode(self->dummy_pidns, procfs_pidns));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(new_mountfd));
-+	ASSERT_SUCCESS(close(procfs_pidns));
-+}
-+
-+TEST_HARNESS_MAIN
+On 8/4/25 2:41 PM, Wei Yang wrote:
+> On Tue, Jul 29, 2025 at 11:03:59AM +0530, Aboorva Devarajan wrote:
+>> From: Donet Tom <donettom@linux.ibm.com>
+>>
+>> This patch fixed 2 issues.
+>>
+>> 1) After fork() in test_prctl_fork, the child process uses the file
+>> descriptors from the parent process to read ksm_stat and
+>> ksm_merging_pages. This results in incorrect values being read (parent
+>> process ksm_stat and ksm_merging_pages will be read in child), causing
+>> the test to fail.
+>>
+>> This patch calls init_global_file_handles() in the child process to
+>> ensure that the current process's file descriptors are used to read
+>> ksm_stat and ksm_merging_pages.
+>>
+>> 2) All tests currently call ksm_merge to trigger page merging.
+>> To ensure the system remains in a consistent state for subsequent
+>> tests, it is better to call ksm_unmerge during the test cleanup phase.
+>>
+>> In the test_prctl_fork test, after a fork(), reading ksm_merging_pages
+>> in the child process returns a non-zero value because a previous test
+>> performed a merge, and the child's memory state is inherited from the
+>> parent.
+>>
+>> Although the child process calls ksm_unmerge, the ksm_merging_pages
+>> counter in the parent is reset to zero, while the child's counter
+>> remains unchanged. This discrepancy causes the test to fail.
+>>
+>> To avoid this issue, each test should call ksm_unmerge during cleanup
+>> to ensure the counter is reset and the system is in a clean state for
+>> subsequent tests.
+>>
+>> execv argument is an array of pointers to null-terminated strings.
+>> In this patch we also added NULL in the execv argument.
+>>
+>> Fixes: 6c47de3be3a0 ("selftest/mm: ksm_functional_tests: extend test case for ksm fork/exec")
+>> Co-developed-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+>> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+>> Signed-off-by: Donet Tom <donettom@linux.ibm.com>
+>> ---
+>> tools/testing/selftests/mm/ksm_functional_tests.c | 12 +++++++++++-
+>> 1 file changed, 11 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+>> index d8bd1911dfc0..996dc6645570 100644
+>> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
+>> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+>> @@ -46,6 +46,8 @@ static int ksm_use_zero_pages_fd;
+>> static int pagemap_fd;
+>> static size_t pagesize;
+>>
+>> +static void init_global_file_handles(void);
+>> +
+>> static bool range_maps_duplicates(char *addr, unsigned long size)
+>> {
+>> 	unsigned long offs_a, offs_b, pfn_a, pfn_b;
+>> @@ -274,6 +276,7 @@ static void test_unmerge(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			 "Pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+> In __mmap_and_merge_range(), we call ksm_unmerge(). Why this one not help?
+>
+> Not very familiar with ksm stuff. Would you mind giving more on how this fix
+> the failure you see?
 
--- 
-2.50.1
 
+The issue I was facing here was test_prctl_fork was failing.
+
+# [RUN] test_prctl_fork
+# Still pages merged
+#
+
+This issue occurred because the previous test performed a merge, causing
+the value of /proc/self/ksm_merging_pages to reflect the number of
+deduplicated pages. After that, a fork() was called. Post-fork, the 
+child process
+inherited the parent's ksm_merging_pages value.
+
+Then, the child process invoked __mmap_and_merge_range(), which resulted
+in unmerging the pages and resetting the value. However, since the 
+parent process
+had performed the merge, its ksm_merging_pages value also got reset to 0.
+Meanwhile, the child process had not performed any merge itself, so the 
+inherited
+value remained unchanged. That’s why get_my_merging_page() in the child was
+returning a non-zero value.
+
+Initially, I fixed the issue by calling ksm_unmerge() before the fork(), 
+and that
+resolved the problem. Later, I decided it would be cleaner to move the
+ksm_unmerge() call to the test cleanup phase.
+
+
+>
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -338,6 +341,7 @@ static void test_unmerge_zero_pages(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			"KSM zero pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -366,6 +370,7 @@ static void test_unmerge_discarded(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			 "Pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -452,6 +457,7 @@ static void test_unmerge_uffd_wp(void)
+>> close_uffd:
+>> 	close(uffd);
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>> #endif
+>> @@ -515,6 +521,7 @@ static int test_child_ksm(void)
+>> 	else if (map == MAP_MERGE_SKIP)
+>> 		return -3;
+>>
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> 	return 0;
+>> }
+>> @@ -548,6 +555,7 @@ static void test_prctl_fork(void)
+>>
+>> 	child_pid = fork();
+>> 	if (!child_pid) {
+>> +		init_global_file_handles();
+> Would this leave fd in parent as orphan?
+>
+>> 		exit(test_child_ksm());
+>> 	} else if (child_pid < 0) {
+>> 		ksft_test_result_fail("fork() failed\n");
+>> @@ -595,7 +603,7 @@ static void test_prctl_fork_exec(void)
+>> 		return;
+>> 	} else if (child_pid == 0) {
+>> 		char *prg_name = "./ksm_functional_tests";
+>> -		char *argv_for_program[] = { prg_name, FORK_EXEC_CHILD_PRG_NAME };
+>> +		char *argv_for_program[] = { prg_name, FORK_EXEC_CHILD_PRG_NAME, NULL };
+>>
+>> 		execv(prg_name, argv_for_program);
+>> 		return;
+>> @@ -644,6 +652,7 @@ static void test_prctl_unmerge(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			 "Pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -677,6 +686,7 @@ static void test_prot_none(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			 "Pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> -- 
+>> 2.47.1
+>>
 
