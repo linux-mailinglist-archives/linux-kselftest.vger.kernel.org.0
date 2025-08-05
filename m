@@ -1,811 +1,224 @@
-Return-Path: <linux-kselftest+bounces-38265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0B35B1ACC0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 05:30:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2328B1AD0F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 06:16:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E10FB7A5CB7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 03:29:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81C083BADEC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 04:16:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02ADC1F0984;
-	Tue,  5 Aug 2025 03:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6A44200127;
+	Tue,  5 Aug 2025 04:16:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l/mUcFmC"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="GumbmVYV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF071E8322
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Aug 2025 03:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1BB814885D;
+	Tue,  5 Aug 2025 04:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754364608; cv=none; b=d3ISlgfHjJVBL5ZszGZW1SpDiBU4r2L4eS15DC9xcU/ny95VRNg8AK814F8NFUPLwkLkdWB4DPhJG9gr/Ruc8vJOx7V+MZh5YbmIhqoVnktyz7pt9uUL4F11IVmCcvzE6zs4V6IOOCIp+SzAOZqFT4eGUvQr8xNeLDHBzpBwtsE=
+	t=1754367373; cv=none; b=kvzJXGm3McC+sBXFMm6AsKT6OucsUPYWSG7pBcZwCXK5nSBIKP4NLeNl2ajeuII835G95G+0vnBs5cHowo1a9Bmka3H6UvFqN0zzAPW9pbc/rWrK6q7gRGT4Qu7XUvlJ48r5y2vXAA1i/uaSx9dqtVvQPwoZaAPxGr9epb9Ez/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754364608; c=relaxed/simple;
-	bh=ysWe7TnoOFnH8lxx33hmcXOlweoL+Bbh0q78mUcHxng=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=E35JMd6vDemmHwh9+dMNWKUhkDGaN0MVhkGzr7A+jcffrV46eJhTG9gBQZngranCJP2yd9Mr6ozrX4um+Upf9zFeYh8keMgtxIwq08CBiSSFGzoZdwuhGn3wgkrLmcMQbNZP2suKU4r4L63frbKEAS8BTFJuk1R2HiwkhVhfH0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l/mUcFmC; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-24283069a1cso11040455ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Aug 2025 20:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754364606; x=1754969406; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DExi0VtMWJacoQVv1mFzUvUcPh2EilKcKwfkrYmyue0=;
-        b=l/mUcFmCWoKXD2OoJfa+sO4CdV2TjeJm5QBWSLlzOoCeeHECMJUPdP4MZRpyvIRvJ0
-         3Vhp3GccZ4u6FuxtbF18nJtyBDr+qMvFTPpumtoM7MI+KOaSQDhEkijFnMugzp11oKxF
-         2wmt6cFjNpeKsCRYERtMWLL9isijT6n3F0JPFL/vk4L9GzdQJTq3ddeP0ytqJl2AVJrd
-         6xVKVjAmOxRsKjBLrC2zS/WKiLeAbKE5PRX1VhRblIdqDkguTDdT9g9VBm5sp+zqprPo
-         Pb1Nhm0pdXKcEwHTq8mg5DKk/hT267rhV2FD7gqGBxN0QbokDwNYblgUytilrbMSnXs6
-         yTSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754364606; x=1754969406;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DExi0VtMWJacoQVv1mFzUvUcPh2EilKcKwfkrYmyue0=;
-        b=pwBiOcHiVFIXzlo6/Y3QxKc6m9BZBEPCdqRU9VjPCMBzyly+KIeTg5kofc2xAXnkVR
-         JIdElSnlaiG1u8KwcJuWcbl4xWMDubNjD4WdCTcvU2PFZFyV0Wvlt6x6AGp81fdZtJhq
-         nQPBSOipIDmxs3qE8iwRz/5H5Tn2nvV8wR7YRjCQngYf8QpOrHwjow9hztxwr47Jcj7e
-         9HKplgLr6NGvBeDrjc4/XQ4YwKtDUB5XRsIVKus0A8temL+dfYvNOrIDqWBHkNIykUJO
-         LTCmrgvYmA9UDyEepkZyRBp9lqCVvMqgyJVuC0Ur4aRZzty/RCW54LQHNvg2UmUc6ht7
-         17tA==
-X-Forwarded-Encrypted: i=1; AJvYcCXozS6yNGs0zZ33tGPU+ysXGWW0Rz9F8xI2IQAZse+VDFQ5gr5EeB72JTqKqNy1K2E1m1N8uJUNwhPGDD++aRA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZN3sQDZpg5q+zSmMAX7QQ3HVQYZAP0G5mliS8U2xgMZj0EWLH
-	ygxt64WwEJplT1G1m8uZZpvsoM3Ivdh/OnFCBhUKf1YxIdEdOAYKcMi24U6M+IS3EdJm+klTznh
-	dKZ37AlAQiQ==
-X-Google-Smtp-Source: AGHT+IGdakJcbBe+tQwW4UnsZqdEi1ZIwNj4IVWQVkGFg5s//P7OXZj0OmQJJmxF8FOEGdw9b2hDUM2m0rii
-X-Received: from plq11.prod.google.com ([2002:a17:903:2f8b:b0:23f:d929:167b])
- (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ea06:b0:240:887c:7b95
- with SMTP id d9443c01a7336-24246f30415mr182640075ad.5.1754364606134; Mon, 04
- Aug 2025 20:30:06 -0700 (PDT)
-Date: Mon,  4 Aug 2025 20:29:42 -0700
-In-Reply-To: <20250805032940.3587891-4-ynaffit@google.com>
+	s=arc-20240116; t=1754367373; c=relaxed/simple;
+	bh=o+ssrMN3R0tCneTP8BnCsRalwo0Dtmpy4cR5Pmqs5sI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=FDOda5/qAiFX70CeM4M8TTz09kAFnajM64WZvSaoMJAAh4rIRWON8BebpxbHtV27B+XRgSue3K42up9cv/KTWoJEaR0PNR+rIir7++vKQlVwc31uv0ZDN9o3p+Bu3TAs29kFW3erg+WZQ9vrRYMp2HdSiS/ANMluoYsLnilC8P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=GumbmVYV reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=XNQY0F1vHSHGHdNRVjDBV2xfDzvJgmJgDnLk3c/SAKI=; b=G
+	umbmVYVdRPM5VwJoVbCWvFxFw/VDISpq11H+ZhiAJBLYBhvOCZgXIi3uhzpQNyx5
+	wEw/7IMWYPfUuc4e7E/84GMHw/PFxWqQZXP9nVlKJdKprHHJOpEkBW2lmYP2Xm9j
+	+txvebo+VO5dx2yF4TSXP4XDaqaUswaDNzOlOstE/k=
+Received: from phoenix500526$163.com ( [120.230.124.59] ) by
+ ajax-webmail-wmsvr-40-129 (Coremail) ; Tue, 5 Aug 2025 12:15:42 +0800 (CST)
+Date: Tue, 5 Aug 2025 12:15:42 +0800 (CST)
+From: =?UTF-8?B?6LW15L2z54Kc?= <phoenix500526@163.com>
+To: "Jiri Olsa" <olsajiri@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	yonghong.song@linux.dev, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH v6 1/2] libbpf: fix USDT SIB argument handling
+ causing unrecognized register error
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <aJCKP1Cja3DCm0EG@krava>
+References: <20250802084803.108777-1-phoenix500526@163.com>
+ <20250802084803.108777-2-phoenix500526@163.com> <aJCKP1Cja3DCm0EG@krava>
+X-NTES-SC: AL_Qu2eBv+duEsv5CaaYekfmUsVh+o9X8K1vfsk3oZfPJp+jADp9CwiW3RSBEbQ+ca0ExCMmgmGbjRU8cFlcrthXJwxtWFWB3UVc5R65qJB/oQR/A==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250805032940.3587891-4-ynaffit@google.com>
-X-Mailer: git-send-email 2.50.1.565.gc32cd1483b-goog
-Message-ID: <20250805032940.3587891-6-ynaffit@google.com>
-Subject: [RFC PATCH v3 2/2] cgroup: selftests: Add tests for freezer time
-From: Tiffany Yang <ynaffit@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Chen Ridong <chenridong@huawei.com>, 
-	kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Message-ID: <2a70a21a.3e23.19878713825.Coremail.phoenix500526@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:gSgvCgDHT6luhZFoI8gSAA--.42683W
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBaxqgiGiRbW-uWQALse
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-Test cgroup v2 freezer time stat. Freezer time accounting should
-be independent of other cgroups in the hierarchy and should increase
-iff a cgroup is CGRP_FREEZE (regardless of whether it reaches
-CGRP_FROZEN).
-
-Skip these tests on systems without freeze time accounting.
-
-Signed-off-by: Tiffany Yang <ynaffit@google.com>
----
- tools/testing/selftests/cgroup/test_freezer.c | 686 ++++++++++++++++++
- 1 file changed, 686 insertions(+)
-
-diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
-index 8730645d363a..c0880ecfa814 100644
---- a/tools/testing/selftests/cgroup/test_freezer.c
-+++ b/tools/testing/selftests/cgroup/test_freezer.c
-@@ -804,6 +804,685 @@ static int test_cgfreezer_vfork(const char *root)
- 	return ret;
- }
- 
-+/*
-+ * Get the current freeze_time_total for the cgroup.
-+ */
-+static long cg_check_freezetime(const char *cgroup)
-+{
-+	return cg_read_key_long(cgroup, "cgroup.freeze.stat.local",
-+				"freeze_time_total ");
-+}
-+
-+/*
-+ * Test that the freeze time will behave as expected for an empty cgroup.
-+ */
-+static int test_cgfreezer_time_empty(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *cgroup = NULL;
-+	long prev, curr;
-+	int i;
-+
-+	cgroup = cg_name(root, "cg_time_test_empty");
-+	if (!cgroup)
-+		goto cleanup;
-+
-+	/*
-+	 * 1) Create an empty cgroup and check that its freeze time
-+	 *    is 0.
-+	 */
-+	if (cg_create(cgroup))
-+		goto cleanup;
-+
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr) {
-+		if (curr < 0)
-+			ret = KSFT_SKIP;
-+		else
-+			debug("Expect time (%ld) to be 0\n", curr);
-+
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 2) Freeze the cgroup. Check that its freeze time is
-+	 *    larger than 0.
-+	 */
-+	if (cg_freeze_nowait(cgroup, true))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr <= prev) {
-+		debug("Expect time (%ld) > 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 3) Sleep for 100 us. Check that the freeze time is at
-+	 *    least 100 us larger than it was at 2).
-+	 */
-+	usleep(100);
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if ((curr - prev) < 100) {
-+		debug("Expect time (%ld) to be at least 100 us more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 4) Unfreeze the cgroup. Check that the freeze time is
-+	 *    larger than at 3).
-+	 */
-+	if (cg_freeze_nowait(cgroup, false))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr <= prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 5) Check the freeze time again to ensure that it has not
-+	 *    changed.
-+	 */
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr != prev) {
-+		debug("Expect time (%ld) to be unchanged from previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (cgroup)
-+		cg_destroy(cgroup);
-+	free(cgroup);
-+	return ret;
-+}
-+
-+/*
-+ * A simple test for cgroup freezer time accounting. This test follows
-+ * the same flow as test_cgfreezer_time_empty, but with a single process
-+ * in the cgroup.
-+ */
-+static int test_cgfreezer_time_simple(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *cgroup = NULL;
-+	long prev, curr;
-+	int i;
-+
-+	cgroup = cg_name(root, "cg_time_test_simple");
-+	if (!cgroup)
-+		goto cleanup;
-+
-+	/*
-+	 * 1) Create a cgroup and check that its freeze time is 0.
-+	 */
-+	if (cg_create(cgroup))
-+		goto cleanup;
-+
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr) {
-+		if (curr < 0)
-+			ret = KSFT_SKIP;
-+		else
-+			debug("Expect time (%ld) to be 0\n", curr);
-+
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 2) Populate the cgroup with one child and check that the
-+	 *    freeze time is still 0.
-+	 */
-+	cg_run_nowait(cgroup, child_fn, NULL);
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr > prev) {
-+		debug("Expect time (%ld) to be 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 3) Freeze the cgroup. Check that its freeze time is
-+	 *    larger than 0.
-+	 */
-+	if (cg_freeze_nowait(cgroup, true))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr <= prev) {
-+		debug("Expect time (%ld) > 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 4) Sleep for 100 us. Check that the freeze time is at
-+	 *    least 100 us larger than it was at 3).
-+	 */
-+	usleep(100);
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if ((curr - prev) < 100) {
-+		debug("Expect time (%ld) to be at least 100 us more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 5) Unfreeze the cgroup. Check that the freeze time is
-+	 *    larger than at 4).
-+	 */
-+	if (cg_freeze_nowait(cgroup, false))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr <= prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 6) Sleep for 100 us. Check that the freeze time is the
-+	 *    same as at 5).
-+	 */
-+	usleep(100);
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr != prev) {
-+		debug("Expect time (%ld) to be unchanged from previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (cgroup)
-+		cg_destroy(cgroup);
-+	free(cgroup);
-+	return ret;
-+}
-+
-+/*
-+ * Test that freezer time accounting works as expected, even while we're
-+ * populating a cgroup with processes.
-+ */
-+static int test_cgfreezer_time_populate(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *cgroup = NULL;
-+	long prev, curr;
-+	int i;
-+
-+	cgroup = cg_name(root, "cg_time_test_populate");
-+	if (!cgroup)
-+		goto cleanup;
-+
-+	if (cg_create(cgroup))
-+		goto cleanup;
-+
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr) {
-+		if (curr < 0)
-+			ret = KSFT_SKIP;
-+		else
-+			debug("Expect time (%ld) to be 0\n", curr);
-+
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 1) Populate the cgroup with 100 processes. Check that
-+	 *    the freeze time is 0.
-+	 */
-+	for (i = 0; i < 100; i++)
-+		cg_run_nowait(cgroup, child_fn, NULL);
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr != prev) {
-+		debug("Expect time (%ld) to be 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 2) Wait for the group to become fully populated. Check
-+	 *    that the freeze time is 0.
-+	 */
-+	if (cg_wait_for_proc_count(cgroup, 100))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr != prev) {
-+		debug("Expect time (%ld) to be 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 3) Freeze the cgroup and then populate it with 100 more
-+	 *    processes. Check that the freeze time continues to grow.
-+	 */
-+	if (cg_freeze_nowait(cgroup, true))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr <= prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	for (i = 0; i < 100; i++)
-+		cg_run_nowait(cgroup, child_fn, NULL);
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr <= prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 4) Wait for the group to become fully populated. Check
-+	 *    that the freeze time is larger than at 3).
-+	 */
-+	if (cg_wait_for_proc_count(cgroup, 200))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr <= prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 5) Unfreeze the cgroup. Check that the freeze time is
-+	 *    larger than at 4).
-+	 */
-+	if (cg_freeze_nowait(cgroup, false))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr <= prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 6) Kill the processes. Check that the freeze time is the
-+	 *    same as it was at 5).
-+	 */
-+	if (cg_killall(cgroup))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr != prev) {
-+		debug("Expect time (%ld) to be unchanged from previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 7) Freeze and unfreeze the cgroup. Check that the freeze
-+	 *    time is larger than it was at 6).
-+	 */
-+	if (cg_freeze_nowait(cgroup, true))
-+		goto cleanup;
-+	if (cg_freeze_nowait(cgroup, false))
-+		goto cleanup;
-+	prev = curr;
-+	curr = cg_check_freezetime(cgroup);
-+	if (curr <= prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (cgroup)
-+		cg_destroy(cgroup);
-+	free(cgroup);
-+	return ret;
-+}
-+
-+/*
-+ * Test that frozen time for a cgroup continues to work as expected,
-+ * even as processes are migrated. Frozen cgroup A's freeze time should
-+ * continue to increase and running cgroup B's should stay 0.
-+ */
-+static int test_cgfreezer_time_migrate(const char *root)
-+{
-+	long prev_A, curr_A, curr_B;
-+	char *cgroup[2] = {0};
-+	int ret = KSFT_FAIL;
-+	int pid, i;
-+
-+	cgroup[0] = cg_name(root, "cg_time_test_migrate_A");
-+	if (!cgroup[0])
-+		goto cleanup;
-+
-+	cgroup[1] = cg_name(root, "cg_time_test_migrate_B");
-+	if (!cgroup[1])
-+		goto cleanup;
-+
-+	if (cg_create(cgroup[0]))
-+		goto cleanup;
-+
-+	if (cg_check_freezetime(cgroup[0]) < 0) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	if (cg_create(cgroup[1]))
-+		goto cleanup;
-+
-+	pid = cg_run_nowait(cgroup[0], child_fn, NULL);
-+	if (pid < 0)
-+		goto cleanup;
-+
-+	if (cg_wait_for_proc_count(cgroup[0], 1))
-+		goto cleanup;
-+
-+	curr_A = cg_check_freezetime(cgroup[0]);
-+	if (curr_A) {
-+		debug("Expect time (%ld) to be 0\n", curr_A);
-+		goto cleanup;
-+	}
-+	curr_B = cg_check_freezetime(cgroup[1]);
-+	if (curr_B) {
-+		debug("Expect time (%ld) to be 0\n", curr_B);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * Freeze cgroup A.
-+	 */
-+	if (cg_freeze_wait(cgroup[0], true))
-+		goto cleanup;
-+	prev_A = curr_A;
-+	curr_A = cg_check_freezetime(cgroup[0]);
-+	if (curr_A <= prev_A) {
-+		debug("Expect time (%ld) to be > 0\n", curr_A);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * Migrate from A (frozen) to B (running).
-+	 */
-+	if (cg_enter(cgroup[1], pid))
-+		goto cleanup;
-+
-+	usleep(1000);
-+	curr_B = cg_check_freezetime(cgroup[1]);
-+	if (curr_B) {
-+		debug("Expect time (%ld) to be 0\n", curr_B);
-+		goto cleanup;
-+	}
-+
-+	prev_A = curr_A;
-+	curr_A = cg_check_freezetime(cgroup[0]);
-+	if (curr_A <= prev_A) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr_A, prev_A);
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (cgroup[0])
-+		cg_destroy(cgroup[0]);
-+	free(cgroup[0]);
-+	if (cgroup[1])
-+		cg_destroy(cgroup[1]);
-+	free(cgroup[1]);
-+	return ret;
-+}
-+
-+/*
-+ * The test creates a cgroup and freezes it. Then it creates a child cgroup.
-+ * After that it checks that the child cgroup has a non-zero freeze time
-+ * that is less than the parent's. Next, it freezes the child, unfreezes
-+ * the parent, and sleeps. Finally, it checks that the child's freeze
-+ * time has grown larger than the parent's.
-+ */
-+static int test_cgfreezer_time_parent(const char *root)
-+{
-+	char *parent, *child = NULL;
-+	int ret = KSFT_FAIL;
-+	long ptime, ctime;
-+
-+	parent = cg_name(root, "cg_test_parent_A");
-+	if (!parent)
-+		goto cleanup;
-+
-+	child = cg_name(parent, "cg_test_parent_B");
-+	if (!child)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_check_freezetime(parent) < 0) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	if (cg_freeze_wait(parent, true))
-+		goto cleanup;
-+
-+	usleep(1000);
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (cg_check_frozen(child, true))
-+		goto cleanup;
-+
-+	/*
-+	 * Since the parent was frozen the entire time the child cgroup
-+	 * was being created, we expect the parent's freeze time to be
-+	 * larger than the child's.
-+	 *
-+	 * Ideally, we would be able to check both times simultaneously,
-+	 * but here we get the child's after we get the parent's.
-+	 */
-+	ptime = cg_check_freezetime(parent);
-+	ctime = cg_check_freezetime(child);
-+	if (ptime <= ctime) {
-+		debug("Expect ptime (%ld) > ctime (%ld)\n", ptime, ctime);
-+		goto cleanup;
-+	}
-+
-+	if (cg_freeze_nowait(child, true))
-+		goto cleanup;
-+
-+	if (cg_freeze_wait(parent, false))
-+		goto cleanup;
-+
-+	if (cg_check_frozen(child, true))
-+		goto cleanup;
-+
-+	usleep(100000);
-+
-+	ctime = cg_check_freezetime(child);
-+	ptime = cg_check_freezetime(parent);
-+
-+	if (ctime <= ptime) {
-+		debug("Expect ctime (%ld) > ptime (%ld)\n", ctime, ptime);
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (child)
-+		cg_destroy(child);
-+	free(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(parent);
-+	return ret;
-+}
-+
-+/*
-+ * The test creates a parent cgroup and a child cgroup. Then, it freezes
-+ * the child and checks that the child's freeze time is greater than the
-+ * parent's, which should be zero.
-+ */
-+static int test_cgfreezer_time_child(const char *root)
-+{
-+	char *parent, *child = NULL;
-+	int ret = KSFT_FAIL;
-+	long ptime, ctime;
-+
-+	parent = cg_name(root, "cg_test_child_A");
-+	if (!parent)
-+		goto cleanup;
-+
-+	child = cg_name(parent, "cg_test_child_B");
-+	if (!child)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_check_freezetime(parent) < 0) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (cg_freeze_wait(child, true))
-+		goto cleanup;
-+
-+	ctime = cg_check_freezetime(child);
-+	ptime = cg_check_freezetime(parent);
-+	if (ptime != 0) {
-+		debug("Expect ptime (%ld) to be 0\n", ptime);
-+		goto cleanup;
-+	}
-+
-+	if (ctime <= ptime) {
-+		debug("Expect ctime (%ld) <= ptime (%ld)\n", ctime, ptime);
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (child)
-+		cg_destroy(child);
-+	free(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(parent);
-+	return ret;
-+}
-+
-+/*
-+ * The test creates the following hierarchy:
-+ *    A
-+ *    |
-+ *    B
-+ *    |
-+ *    C
-+ *
-+ * Then it freezes the cgroups in the order C, B, A.
-+ * Then it unfreezes the cgroups in the order A, B, C.
-+ * Then it checks that C's freeze time is larger than B's and
-+ * that B's is larger than A's.
-+ */
-+static int test_cgfreezer_time_nested(const char *root)
-+{
-+	char *cgroup[3] = {0};
-+	int ret = KSFT_FAIL;
-+	long time[3] = {0};
-+	int i;
-+
-+	cgroup[0] = cg_name(root, "cg_test_time_A");
-+	if (!cgroup[0])
-+		goto cleanup;
-+
-+	cgroup[1] = cg_name(cgroup[0], "B");
-+	if (!cgroup[1])
-+		goto cleanup;
-+
-+	cgroup[2] = cg_name(cgroup[1], "C");
-+	if (!cgroup[2])
-+		goto cleanup;
-+
-+	if (cg_create(cgroup[0]))
-+		goto cleanup;
-+
-+	if (cg_check_freezetime(cgroup[0]) < 0) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	if (cg_create(cgroup[1]))
-+		goto cleanup;
-+
-+	if (cg_create(cgroup[2]))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[2], true))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[1], true))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[0], true))
-+		goto cleanup;
-+
-+	usleep(1000);
-+
-+	if (cg_freeze_nowait(cgroup[0], false))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[1], false))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[2], false))
-+		goto cleanup;
-+
-+	time[2] = cg_check_freezetime(cgroup[2]);
-+	time[1] = cg_check_freezetime(cgroup[1]);
-+	time[0] = cg_check_freezetime(cgroup[0]);
-+
-+	if (time[2] <= time[1]) {
-+		debug("Expect C's time (%ld) > B's time (%ld)", time[2], time[1]);
-+		goto cleanup;
-+	}
-+
-+	if (time[1] <= time[0]) {
-+		debug("Expect B's time (%ld) > A's time (%ld)", time[1], time[0]);
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	for (i = 2; i >= 0 && cgroup[i]; i--) {
-+		cg_destroy(cgroup[i]);
-+		free(cgroup[i]);
-+	}
-+
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct cgfreezer_test {
- 	int (*fn)(const char *root);
-@@ -819,6 +1498,13 @@ struct cgfreezer_test {
- 	T(test_cgfreezer_stopped),
- 	T(test_cgfreezer_ptraced),
- 	T(test_cgfreezer_vfork),
-+	T(test_cgfreezer_time_empty),
-+	T(test_cgfreezer_time_simple),
-+	T(test_cgfreezer_time_populate),
-+	T(test_cgfreezer_time_migrate),
-+	T(test_cgfreezer_time_parent),
-+	T(test_cgfreezer_time_child),
-+	T(test_cgfreezer_time_nested),
- };
- #undef T
- 
--- 
-2.50.1.565.gc32cd1483b-goog
-
+SGnCoEppcmksCgpVbmZvcnR1bmF0ZWx5LMKgScKgY291bGRuJ3TCoHJlcHJvZHVjZcKgdGhpc8Kg
+aXNzdWXCoG9uwqBtecKgbWFjaGluZS4KSG93ZXZlcizCoHRoZcKgZ29vZMKgbmV3c8KgaXPCoHRo
+YXTCoGl0J3PCoHNpbWlsYXLCoHRvwqB0aGXCoFBDLXJlbGF0aXZlwqBVU0RUwqBhcmd1bWVudMKg
+c3BlYyzCoGFuZMKgScKgd2FzwqBhYmxlwqB0b8KgY29uc3RydWN0wqBhwqBtaW5pbWFswqBleGFt
+cGxlwqB0aGF0wqByZXByb2R1Y2VzwqB0aGXCoGlzc3VlwqByZWxpYWJseS4KCkluwqBib3RowqBj
+YXNlcyzCoHdlwqBuZWVkwqB0b8KgcmVzb2x2ZcKgdGhlwqBhZGRyZXNzwqBvcsKgb2Zmc2V0wqBm
+b3LCoHRoZcKgZ2l2ZW7CoHN5bWJvbC4KSSdtwqBjdXJyZW50bHnCoGV4cGxvcmluZ8Kgd2hldGhl
+csKgdGhlwqBhZGRyZXNzwqBvcsKgb2Zmc2V0wqBjYW7CoGJlwqByZXNvbHZlZMKgZnJvbcKgdGhl
+wqBEV0FSRsKgaW5mb3JtYXRpb24uCklmwqB0aGlzwqBhcHByb2FjaMKgd29ya3MswqBJ4oCZbGzC
+oGFwcGVuZMKgbXnCoG1vZGlmaWNhdGlvbnPCoHRvwqB0aGlzwqBwYXRjaC4KCgpBdMKgMjAyNS0w
+OC0wNMKgMTg6MjM6NTkswqAiSmlyacKgT2xzYSLCoDxvbHNhamlyaUBnbWFpbC5jb20+wqB3cm90
+ZToKPk9uwqBTYXQswqBBdWfCoDAyLMKgMjAyNcKgYXTCoDA4OjQ4OjAyQU3CoCswMDAwLMKgSmlh
+d2VpwqBaaGFvwqB3cm90ZToKPj7CoE9uwqB4ODYtNjQswqBVU0RUwqBhcmd1bWVudHPCoGNhbsKg
+YmXCoHNwZWNpZmllZMKgdXNpbmfCoFNjYWxlLUluZGV4LUJhc2XCoChTSUIpCj4+wqBhZGRyZXNz
+aW5nLMKgZS5nLsKgIjFALTk2KCVyYnAsJXJheCw4KSIuwqBUaGXCoGN1cnJlbnTCoFVTRFTCoGlt
+cGxlbWVudGF0aW9uCj4+wqBpbsKgbGliYnBmwqBjYW5ub3TCoHBhcnNlwqB0aGlzwqBmb3JtYXQs
+wqBjYXVzaW5nwqBgYnBmX3Byb2dyYW1fX2F0dGFjaF91c2R0KClgCj4+wqB0b8KgZmFpbMKgd2l0
+aMKgLUVOT0VOVMKgKHVucmVjb2duaXplZMKgcmVnaXN0ZXIpLgo+PsKgCj4+wqBUaGlzwqBwYXRj
+aMKgZml4ZXPCoHRoaXPCoGJ5wqBpbXBsZW1lbnRpbmfCoHRoZcKgbmVjZXNzYXJ5wqBjaGFuZ2Vz
+Ogo+PsKgLcKgYWRkwqBjb3JyZWN0wqBoYW5kbGluZ8KgZm9ywqBTSUItYWRkcmVzc2VkwqBhcmd1
+bWVudHPCoGluwqBgYnBmX3VzZHRfYXJnYC4KPj7CoC3CoGFkZMKgYWRhcHRpdmXCoHN1cHBvcnTC
+oHRvwqBgX19icGZfdXNkdF9hcmdfdHlwZWDCoGFuZAo+PsKgwqDCoGBfX2JwZl91c2R0X2FyZ19z
+cGVjYMKgdG/CoHJlcHJlc2VudMKgU0lCwqBhZGRyZXNzaW5nwqBwYXJhbWV0ZXJzLgo+PsKgCj4+
+wqBTaWduZWQtb2ZmLWJ5OsKgSmlhd2VpwqBaaGFvwqA8cGhvZW5peDUwMDUyNkAxNjMuY29tPgo+
+PsKgLS0tCj4+wqDCoHRvb2xzL2xpYi9icGYvdXNkdC5icGYuaMKgfMKgMzPCoCsrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrLQo+PsKgwqB0b29scy9saWIvYnBmL3VzZHQuY8KgwqDCoMKgwqB8
+wqA0M8KgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLQo+PsKgwqAywqBm
+aWxlc8KgY2hhbmdlZCzCoDY5wqBpbnNlcnRpb25zKCspLMKgN8KgZGVsZXRpb25zKC0pCj4+wqAK
+Pj7CoGRpZmbCoC0tZ2l0wqBhL3Rvb2xzL2xpYi9icGYvdXNkdC5icGYuaMKgYi90b29scy9saWIv
+YnBmL3VzZHQuYnBmLmgKPj7CoGluZGV4wqAyYTc4NjVjOGUzZmUuLjI0NjUxMzA4OGMzYcKgMTAw
+NjQ0Cj4+wqAtLS3CoGEvdG9vbHMvbGliL2JwZi91c2R0LmJwZi5oCj4+wqArKyvCoGIvdG9vbHMv
+bGliL2JwZi91c2R0LmJwZi5oCj4+wqBAQMKgLTM0LDbCoCszNCw3wqBAQMKgZW51bcKgX19icGZf
+dXNkdF9hcmdfdHlwZcKgewo+PsKgwqAJQlBGX1VTRFRfQVJHX0NPTlNULAo+PsKgwqAJQlBGX1VT
+RFRfQVJHX1JFRywKPj7CoMKgCUJQRl9VU0RUX0FSR19SRUdfREVSRUYsCj4+wqArCUJQRl9VU0RU
+X0FSR19TSUIsCj4+wqDCoH07Cj4+wqDCoAo+PsKgwqBzdHJ1Y3TCoF9fYnBmX3VzZHRfYXJnX3Nw
+ZWPCoHsKPj7CoEBAwqAtNDMsNsKgKzQ0LDEwwqBAQMKgc3RydWN0wqBfX2JwZl91c2R0X2FyZ19z
+cGVjwqB7Cj4+wqDCoAllbnVtwqBfX2JwZl91c2R0X2FyZ190eXBlwqBhcmdfdHlwZTsKPj7CoMKg
+CS8qwqBvZmZzZXTCoG9mwqByZWZlcmVuY2VkwqByZWdpc3RlcsKgd2l0aGluwqBzdHJ1Y3TCoHB0
+X3JlZ3PCoCovCj4+wqDCoAlzaG9ydMKgcmVnX29mZjsKPj7CoCsJLyrCoG9mZnNldMKgb2bCoGlu
+ZGV4wqByZWdpc3RlcsKgaW7CoHB0X3JlZ3MswqBvbmx5wqB1c2VkwqBpbsKgU0lCwqBtb2RlwqAq
+Lwo+PsKgKwlzaG9ydMKgaWR4X3JlZ19vZmY7Cj4+wqArCS8qwqBzY2FsZcKgZmFjdG9ywqBmb3LC
+oGluZGV4wqByZWdpc3RlcizCoG9ubHnCoHVzZWTCoGluwqBTSULCoG1vZGXCoCovCj4+wqArCXNo
+b3J0wqBzY2FsZTsKPj7CoMKgCS8qwqB3aGV0aGVywqBhcmfCoHNob3VsZMKgYmXCoGludGVycHJl
+dGVkwqBhc8Kgc2lnbmVkwqB2YWx1ZcKgKi8KPj7CoMKgCWJvb2zCoGFyZ19zaWduZWQ7Cj4+wqDC
+oAkvKsKgbnVtYmVywqBvZsKgYml0c8KgdGhhdMKgbmVlZMKgdG/CoGJlwqBjbGVhcmVkwqBhbmQs
+wqBvcHRpb25hbGx5LAo+PsKgQEDCoC0xNDksN8KgKzE1NCw3wqBAQMKgaW50wqBicGZfdXNkdF9h
+cmcoc3RydWN0wqBwdF9yZWdzwqAqY3R4LMKgX191NjTCoGFyZ19udW0swqBsb25nwqAqcmVzKQo+
+PsKgwqB7Cj4+wqDCoAlzdHJ1Y3TCoF9fYnBmX3VzZHRfc3BlY8KgKnNwZWM7Cj4+wqDCoAlzdHJ1
+Y3TCoF9fYnBmX3VzZHRfYXJnX3NwZWPCoCphcmdfc3BlYzsKPj7CoC0JdW5zaWduZWTCoGxvbmfC
+oHZhbDsKPj7CoCsJdW5zaWduZWTCoGxvbmfCoHZhbCzCoGlkeDsKPj7CoMKgCWludMKgZXJyLMKg
+c3BlY19pZDsKPj7CoMKgCj4+wqDCoAkqcmVzwqA9wqAwOwo+PsKgQEDCoC0yMDIsNsKgKzIwNywz
+MsKgQEDCoGludMKgYnBmX3VzZHRfYXJnKHN0cnVjdMKgcHRfcmVnc8KgKmN0eCzCoF9fdTY0wqBh
+cmdfbnVtLMKgbG9uZ8KgKnJlcykKPj7CoMKgCQkJcmV0dXJuwqBlcnI7Cj4+wqDCoCNpZsKgX19C
+WVRFX09SREVSX1/CoD09wqBfX09SREVSX0JJR19FTkRJQU5fXwo+PsKgwqAJCXZhbMKgPj49wqBh
+cmdfc3BlYy0+YXJnX2JpdHNoaWZ0Owo+PsKgKyNlbmRpZgo+PsKgKwkJYnJlYWs7Cj4+wqArCWNh
+c2XCoEJQRl9VU0RUX0FSR19TSUI6Cj4+wqArCQkvKsKgQXJnwqBpc8KgaW7CoG1lbW9yecKgYWRk
+cmVzc2VkwqBiecKgU0lCwqAoU2NhbGUtSW5kZXgtQmFzZSnCoG1vZGUKPj7CoCsJCcKgKsKgKGUu
+Zy4swqAiLTFALTk2KCVyYnAsJXJheCw4KSLCoGluwqBVU0RUwqBhcmfCoHNwZWMpLsKgUmVnaXN0
+ZXIKPj7CoCsJCcKgKsKgaXPCoGlkZW50aWZpZWTCoGxpa2XCoHdpdGjCoEJQRl9VU0RUX0FSR19T
+SULCoGNhc2UswqB0aGXCoG9mZnNldAo+PsKgKwkJwqAqwqBpc8KgaW7CoGFyZ19zcGVjLT52YWxf
+b2ZmLMKgdGhlwqBzY2FsZcKgZmFjdG9ywqBpc8KgaW7CoGFyZ19zcGVjLT5zY2FsZS4KPj7CoCsJ
+CcKgKsKgRmlyc3RseSzCoHdlwqBmZXRjaMKgdGhlwqBiYXNlwqByZWdpc3RlcsKgY29udGVudHPC
+oGFuZMKgdGhlwqBpbmRleAo+PsKgKwkJwqAqwqByZWdpc3RlcsKgY29udGVudHPCoGZyb23CoHB0
+X3JlZ3MuwqBTZWNvbmRseSzCoHdlwqBtdWx0aXBsecKgdGhlCj4+wqArCQnCoCrCoGluZGV4wqBy
+ZWdpc3RlcsKgY29udGVudHPCoGJ5wqB0aGXCoHNjYWxlwqBmYWN0b3IswqB0aGVuwqBhZGTCoHRo
+ZQo+PsKgKwkJwqAqwqBiYXNlwqBhZGRyZXNzwqBhbmTCoHRoZcKgb2Zmc2V0wqB0b8KgZ2V0wqB0
+aGXCoGZpbmFswqBhZGRyZXNzLsKgRmluYWxseSwKPj7CoCsJCcKgKsKgd2XCoGRvwqBhbm90aGVy
+wqB1c2VyLXNwYWNlwqBwcm9iZcKgcmVhZMKgdG/CoGZldGNowqBhcmd1bWVudMKgdmFsdWUKPj7C
+oCsJCcKgKsKgaXRzZWxmLgo+PsKgKwkJwqAqLwo+PsKgKwkJZXJywqA9wqBicGZfcHJvYmVfcmVh
+ZF9rZXJuZWwoJnZhbCzCoHNpemVvZih2YWwpLMKgKHZvaWTCoCopY3R4wqArwqBhcmdfc3BlYy0+
+cmVnX29mZik7Cj4+wqArCQlpZsKgKGVycikKPj7CoCsJCQlyZXR1cm7CoGVycjsKPj7CoCsJCWVy
+csKgPcKgYnBmX3Byb2JlX3JlYWRfa2VybmVsKCZpZHgswqBzaXplb2YoaWR4KSzCoCh2b2lkwqAq
+KWN0eMKgK8KgYXJnX3NwZWMtPmlkeF9yZWdfb2ZmKTsKPj7CoCsJCWlmwqAoZXJyKQo+PsKgKwkJ
+CXJldHVybsKgZXJyOwo+PsKgKwkJZXJywqA9wqBicGZfcHJvYmVfcmVhZF91c2VyKCZ2YWwswqBz
+aXplb2YodmFsKSwKPj7CoCsJCQkJKHZvaWTCoCopdmFswqArwqBpZHjCoCrCoGFyZ19zcGVjLT5z
+Y2FsZcKgK8KgYXJnX3NwZWMtPnZhbF9vZmYpOwo+PsKgKwkJaWbCoChlcnIpCj4+wqArCQkJcmV0
+dXJuwqBlcnI7Cj4+wqArI2lmwqBfX0JZVEVfT1JERVJfX8KgPT3CoF9fT1JERVJfQklHX0VORElB
+Tl9fCj4+wqArCQl2YWzCoD4+PcKgYXJnX3NwZWMtPmFyZ19iaXRzaGlmdDsKPj7CoMKgI2VuZGlm
+Cj4+wqDCoAkJYnJlYWs7Cj4+wqDCoAlkZWZhdWx0Ogo+PsKgZGlmZsKgLS1naXTCoGEvdG9vbHMv
+bGliL2JwZi91c2R0LmPCoGIvdG9vbHMvbGliL2JwZi91c2R0LmMKPj7CoGluZGV4wqA0ZTRhNTI3
+NDJiMDEuLjFmOGI5ZTFjOTgxOcKgMTAwNjQ0Cj4+wqAtLS3CoGEvdG9vbHMvbGliL2JwZi91c2R0
+LmMKPj7CoCsrK8KgYi90b29scy9saWIvYnBmL3VzZHQuYwo+PsKgQEDCoC0yMDAsNsKgKzIwMCw3
+wqBAQMKgZW51bcKgdXNkdF9hcmdfdHlwZcKgewo+PsKgwqAJVVNEVF9BUkdfQ09OU1QsCj4+wqDC
+oAlVU0RUX0FSR19SRUcsCj4+wqDCoAlVU0RUX0FSR19SRUdfREVSRUYsCj4+wqArCVVTRFRfQVJH
+X1NJQiwKPj7CoMKgfTsKPj7CoMKgCj4+wqDCoC8qwqBzaG91bGTCoG1hdGNowqBleGFjdGx5wqBz
+dHJ1Y3TCoF9fYnBmX3VzZHRfYXJnX3NwZWPCoGZyb23CoHVzZHQuYnBmLmjCoCovCj4+wqBAQMKg
+LTIwNyw2wqArMjA4LDjCoEBAwqBzdHJ1Y3TCoHVzZHRfYXJnX3NwZWPCoHsKPj7CoMKgCV9fdTY0
+wqB2YWxfb2ZmOwo+PsKgwqAJZW51bcKgdXNkdF9hcmdfdHlwZcKgYXJnX3R5cGU7Cj4+wqDCoAlz
+aG9ydMKgcmVnX29mZjsKPj7CoCsJc2hvcnTCoGlkeF9yZWdfb2ZmOwo+PsKgKwlzaG9ydMKgc2Nh
+bGU7Cj4+wqDCoAlib29swqBhcmdfc2lnbmVkOwo+PsKgwqAJY2hhcsKgYXJnX2JpdHNoaWZ0Owo+
+PsKgwqB9Owo+PsKgQEDCoC0xMjgzLDExwqArMTI4NiwzOcKgQEDCoHN0YXRpY8KgaW50wqBjYWxj
+X3B0X3JlZ3Nfb2ZmKGNvbnN0wqBjaGFywqAqcmVnX25hbWUpCj4+wqDCoAo+PsKgwqBzdGF0aWPC
+oGludMKgcGFyc2VfdXNkdF9hcmcoY29uc3TCoGNoYXLCoCphcmdfc3RyLMKgaW50wqBhcmdfbnVt
+LMKgc3RydWN0wqB1c2R0X2FyZ19zcGVjwqAqYXJnLMKgaW50wqAqYXJnX3N6KQo+PsKgwqB7Cj4+
+wqAtCWNoYXLCoHJlZ19uYW1lWzE2XTsKPj7CoC0JaW50wqBsZW4swqByZWdfb2ZmOwo+PsKgLQls
+b25nwqBvZmY7Cj4+wqArCWNoYXLCoHJlZ19uYW1lWzE2XcKgPcKgezB9LMKgaWR4X3JlZ19uYW1l
+WzE2XcKgPcKgezB9Owo+PsKgKwlpbnTCoGxlbizCoHJlZ19vZmYswqBpZHhfcmVnX29mZizCoHNj
+YWxlwqA9wqAxOwo+PsKgKwlsb25nwqBvZmbCoD3CoDA7Cj4+wqArCj4+wqArCWlmwqAoc3NjYW5m
+KGFyZ19zdHIswqAiwqAlZMKgQMKgJWxkwqAowqAlJSUxNVteLF3CoCzCoCUlJTE1W14sXcKgLMKg
+JWTCoCnCoCVuIiwKPj7CoCsJCQkJYXJnX3N6LMKgJm9mZizCoHJlZ19uYW1lLMKgaWR4X3JlZ19u
+YW1lLMKgJnNjYWxlLMKgJmxlbinCoD09wqA1wqB8fAo+PsKgKwkJc3NjYW5mKGFyZ19zdHIswqAi
+wqAlZMKgQMKgKMKgJSUlMTVbXixdwqAswqAlJSUxNVteLF3CoCzCoCVkwqApwqAlbiIsCj4+wqAr
+CQkJCWFyZ19zeizCoHJlZ19uYW1lLMKgaWR4X3JlZ19uYW1lLMKgJnNjYWxlLMKgJmxlbinCoD09
+wqA0wqB8fAo+PsKgKwkJc3NjYW5mKGFyZ19zdHIswqAiwqAlZMKgQMKgJWxkwqAowqAlJSUxNVte
+LF3CoCzCoCUlJTE1W14pXcKgKcKgJW4iLAo+PsKgKwkJCQlhcmdfc3oswqAmb2ZmLMKgcmVnX25h
+bWUswqBpZHhfcmVnX25hbWUswqAmbGVuKcKgPT3CoDTCoHx8Cj4+wqArCQlzc2NhbmYoYXJnX3N0
+cizCoCLCoCVkwqBAwqAowqAlJSUxNVteLF3CoCzCoCUlJTE1W14pXcKgKcKgJW4iLAo+PsKgKwkJ
+CQlhcmdfc3oswqByZWdfbmFtZSzCoGlkeF9yZWdfbmFtZSzCoCZsZW4pwqA9PcKgMwo+PsKgKwkJ
+KcKgewo+PsKgKwkJLyrCoFNjYWxlwqBJbmRleMKgQmFzZcKgY2FzZSzCoGUuZy4swqAxQC05Nigl
+cmJwLCVyYXgsOCkKPj7CoCsJCcKgKsKgMUAoJXJicCwlcmF4LDgpCj4+wqArCQnCoCrCoDFALTk2
+KCVyYnAsJXJheCkKPj7CoCsJCcKgKsKgMUAoJXJicCwlcmF4KQo+PsKgKwkJwqAqLwo+Cj5oaSwK
+PkknbcKgZ2V0dGluZ8KgZm9sbG93aW5nwqBlcnJvcsKgZnJvbcKgdGhlwqB0ZXN0Ogo+Cj5zdWJ0
+ZXN0X211bHRpc3BlY191c2R0OlBBU1M6c2tlbF9vcGVuwqAwwqBuc2VjCj5saWJicGY6wqB1c2R0
+OsKgdW5yZWNvZ25pemVkwqBhcmfCoCMxMMKgc3BlY8KgJy0yQG51bXMoJXJheCwlcmF4KcKgLTFA
+JC0xMjcnCj5saWJicGY6wqBwcm9nwqAndXNkdDEyJzrCoGZhaWxlZMKgdG/CoGF1dG8tYXR0YWNo
+OsKgLUVJTlZBTAo+c3VidGVzdF9tdWx0aXNwZWNfdXNkdDpGQUlMOnNrZWxfYXR0YWNowqB1bmV4
+cGVjdGVkwqBlcnJvcjrCoC0yMsKgKGVycm5vwqAyMikKPiM0ODAvMsKgwqDCoHVzZHQvbXVsdGlz
+cGVjOkZBSUwKPgo+YXJndW1lbnRzwqBsb29rwqBsaWtlOgo+wqDCoMKgwqBBcmd1bWVudHM6wqAt
+NEAkM8KgLTRAJDTCoC04QCQ0MsKgLThAJDQ1wqAtNEAkNcKgLThAJDbCoDhAJXJkeMKgOEAlcnNp
+wqAtNEAkLTnCoC0yQCVjeMKgLTJAbnVtcyglcmF4LCVyYXgpwqAtMUAkLTEyNwo+Cj5ub3TCoHN1
+cmXCoHdoecKgdGhlcmUnc8KgdmFyaWFibGXCoG5hbWXCoGluwqB0aGXCoGFyZzEwwqBkZWZpbml0
+aW9uCj4KPmdjY8KgKEdDQynCoDE1LjEuMcKgMjAyNTA1MjHCoChSZWTCoEhhdMKgMTUuMS4xLTIp
+Cj5jbGFuZ8KgdmVyc2lvbsKgMjAuMS44wqAoRmVkb3JhwqAyMC4xLjgtMy5mYzQyKQo+Cj50aGFu
+a3MsCj5qaXJrYQo+Cj4KPj7CoCsJCWFyZy0+YXJnX3R5cGXCoD3CoFVTRFRfQVJHX1NJQjsKPj7C
+oCsJCWFyZy0+dmFsX29mZsKgPcKgb2ZmOwo+PsKgKwkJYXJnLT5zY2FsZcKgPcKgc2NhbGU7Cj4+
+wqArCj4+wqArCQlyZWdfb2ZmwqA9wqBjYWxjX3B0X3JlZ3Nfb2ZmKHJlZ19uYW1lKTsKPj7CoCsJ
+CWlmwqAocmVnX29mZsKgPMKgMCkKPj7CoCsJCQlyZXR1cm7CoHJlZ19vZmY7Cj4+wqArCQlhcmct
+PnJlZ19vZmbCoD3CoHJlZ19vZmY7Cj4+wqDCoAo+PsKgLQlpZsKgKHNzY2FuZihhcmdfc3RyLMKg
+IsKgJWTCoEDCoCVsZMKgKMKgJSUlMTVbXildwqApwqAlbiIswqBhcmdfc3oswqAmb2ZmLMKgcmVn
+X25hbWUswqAmbGVuKcKgPT3CoDMpwqB7Cj4+wqArCQlpZHhfcmVnX29mZsKgPcKgY2FsY19wdF9y
+ZWdzX29mZihpZHhfcmVnX25hbWUpOwo+PsKgKwkJaWbCoChpZHhfcmVnX29mZsKgPMKgMCkKPj7C
+oCsJCQlyZXR1cm7CoGlkeF9yZWdfb2ZmOwo+PsKgKwkJYXJnLT5pZHhfcmVnX29mZsKgPcKgaWR4
+X3JlZ19vZmY7Cj4+wqArCX3CoGVsc2XCoGlmwqAoc3NjYW5mKGFyZ19zdHIswqAiwqAlZMKgQMKg
+JWxkwqAowqAlJSUxNVteKV3CoCnCoCVuIiwKPj7CoCsJCQkJYXJnX3N6LMKgJm9mZizCoHJlZ19u
+YW1lLMKgJmxlbinCoD09wqAzKcKgewo+PsKgwqAJCS8qwqBNZW1vcnnCoGRlcmVmZXJlbmNlwqBj
+YXNlLMKgZS5nLizCoC00QC0yMCglcmJwKcKgKi8KPj7CoMKgCQlhcmctPmFyZ190eXBlwqA9wqBV
+U0RUX0FSR19SRUdfREVSRUY7Cj4+wqDCoAkJYXJnLT52YWxfb2ZmwqA9wqBvZmY7Cj4+wqBAQMKg
+LTEyOTgsN8KgKzEzMjksN8KgQEDCoHN0YXRpY8KgaW50wqBwYXJzZV91c2R0X2FyZyhjb25zdMKg
+Y2hhcsKgKmFyZ19zdHIswqBpbnTCoGFyZ19udW0swqBzdHJ1Y3TCoHVzZHRfYXJnX3NwZWMKPj7C
+oMKgCX3CoGVsc2XCoGlmwqAoc3NjYW5mKGFyZ19zdHIswqAiwqAlZMKgQMKgKMKgJSUlMTVbXild
+wqApwqAlbiIswqBhcmdfc3oswqByZWdfbmFtZSzCoCZsZW4pwqA9PcKgMinCoHsKPj7CoMKgCQkv
+KsKgTWVtb3J5wqBkZXJlZmVyZW5jZcKgY2FzZcKgd2l0aG91dMKgb2Zmc2V0LMKgZS5nLizCoDhA
+KCVyc3ApwqAqLwo+PsKgwqAJCWFyZy0+YXJnX3R5cGXCoD3CoFVTRFRfQVJHX1JFR19ERVJFRjsK
+Pj7CoC0JCWFyZy0+dmFsX29mZsKgPcKgMDsKPj7CoCsJCWFyZy0+dmFsX29mZsKgPcKgb2ZmOwo+
+PsKgwqAJCXJlZ19vZmbCoD3CoGNhbGNfcHRfcmVnc19vZmYocmVnX25hbWUpOwo+PsKgwqAJCWlm
+wqAocmVnX29mZsKgPMKgMCkKPj7CoMKgCQkJcmV0dXJuwqByZWdfb2ZmOwo+PsKgQEDCoC0xMzA2
+LDfCoCsxMzM3LDfCoEBAwqBzdGF0aWPCoGludMKgcGFyc2VfdXNkdF9hcmcoY29uc3TCoGNoYXLC
+oCphcmdfc3RyLMKgaW50wqBhcmdfbnVtLMKgc3RydWN0wqB1c2R0X2FyZ19zcGVjCj4+wqDCoAl9
+wqBlbHNlwqBpZsKgKHNzY2FuZihhcmdfc3RyLMKgIsKgJWTCoEDCoCUlJTE1c8KgJW4iLMKgYXJn
+X3N6LMKgcmVnX25hbWUswqAmbGVuKcKgPT3CoDIpwqB7Cj4+wqDCoAkJLyrCoFJlZ2lzdGVywqBy
+ZWFkwqBjYXNlLMKgZS5nLizCoC00QCVlYXjCoCovCj4+wqDCoAkJYXJnLT5hcmdfdHlwZcKgPcKg
+VVNEVF9BUkdfUkVHOwo+PsKgLQkJYXJnLT52YWxfb2ZmwqA9wqAwOwo+PsKgKwkJYXJnLT52YWxf
+b2ZmwqA9wqBvZmY7Cj4+wqDCoAo+PsKgwqAJCXJlZ19vZmbCoD3CoGNhbGNfcHRfcmVnc19vZmYo
+cmVnX25hbWUpOwo+PsKgwqAJCWlmwqAocmVnX29mZsKgPMKgMCkKPj7CoC0twqAKPj7CoDIuNDMu
+MAo+PsKgCj4+wqAK
 
