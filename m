@@ -1,224 +1,239 @@
-Return-Path: <linux-kselftest+bounces-38266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2328B1AD0F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 06:16:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 506EEB1ADBE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 07:54:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81C083BADEC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 04:16:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECBC33BF6F7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 05:54:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6A44200127;
-	Tue,  5 Aug 2025 04:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3EF2185B8;
+	Tue,  5 Aug 2025 05:54:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="GumbmVYV"
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="bBjDfKYW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1BB814885D;
-	Tue,  5 Aug 2025 04:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AE3175A5;
+	Tue,  5 Aug 2025 05:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754367373; cv=none; b=kvzJXGm3McC+sBXFMm6AsKT6OucsUPYWSG7pBcZwCXK5nSBIKP4NLeNl2ajeuII835G95G+0vnBs5cHowo1a9Bmka3H6UvFqN0zzAPW9pbc/rWrK6q7gRGT4Qu7XUvlJ48r5y2vXAA1i/uaSx9dqtVvQPwoZaAPxGr9epb9Ez/Y=
+	t=1754373243; cv=none; b=ZBp17RtvMN/SPj4VqTRlHUJrzCBkQVSGk+8KHj1xzTk2Tuo12vypppyeB2IxUORm2oXeYchWy1Ygr1yh8KCyalqU1NKWrKsyl0daUedYDx4vxJsDPVGC1fz0UOEqrHLbZF77zKIH4YCW8goPzpTwbGy1pD0bl6z7GSmBmcEd4mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754367373; c=relaxed/simple;
-	bh=o+ssrMN3R0tCneTP8BnCsRalwo0Dtmpy4cR5Pmqs5sI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=FDOda5/qAiFX70CeM4M8TTz09kAFnajM64WZvSaoMJAAh4rIRWON8BebpxbHtV27B+XRgSue3K42up9cv/KTWoJEaR0PNR+rIir7++vKQlVwc31uv0ZDN9o3p+Bu3TAs29kFW3erg+WZQ9vrRYMp2HdSiS/ANMluoYsLnilC8P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=GumbmVYV reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=XNQY0F1vHSHGHdNRVjDBV2xfDzvJgmJgDnLk3c/SAKI=; b=G
-	umbmVYVdRPM5VwJoVbCWvFxFw/VDISpq11H+ZhiAJBLYBhvOCZgXIi3uhzpQNyx5
-	wEw/7IMWYPfUuc4e7E/84GMHw/PFxWqQZXP9nVlKJdKprHHJOpEkBW2lmYP2Xm9j
-	+txvebo+VO5dx2yF4TSXP4XDaqaUswaDNzOlOstE/k=
-Received: from phoenix500526$163.com ( [120.230.124.59] ) by
- ajax-webmail-wmsvr-40-129 (Coremail) ; Tue, 5 Aug 2025 12:15:42 +0800 (CST)
-Date: Tue, 5 Aug 2025 12:15:42 +0800 (CST)
-From: =?UTF-8?B?6LW15L2z54Kc?= <phoenix500526@163.com>
-To: "Jiri Olsa" <olsajiri@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	yonghong.song@linux.dev, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH v6 1/2] libbpf: fix USDT SIB argument handling
- causing unrecognized register error
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
- Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <aJCKP1Cja3DCm0EG@krava>
-References: <20250802084803.108777-1-phoenix500526@163.com>
- <20250802084803.108777-2-phoenix500526@163.com> <aJCKP1Cja3DCm0EG@krava>
-X-NTES-SC: AL_Qu2eBv+duEsv5CaaYekfmUsVh+o9X8K1vfsk3oZfPJp+jADp9CwiW3RSBEbQ+ca0ExCMmgmGbjRU8cFlcrthXJwxtWFWB3UVc5R65qJB/oQR/A==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1754373243; c=relaxed/simple;
+	bh=b3qLvidQt2IQmyqEcAsLJbmTR+wVyp6SbcerHb1qMcs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hy2vXOhRTo/c4zigZyhpweHyn1q2wDksmrE76+qAsU1UMAWCu1ch6Jw47tSkM1FynqTTNe4u0jny3VAb64+hmCfT9w5DYfkU9IASUpF2EodOtzmjQoshbe+CBtVoiUOhcKW84AOeykvGmk3oDQtdKL9zn9TwJ/P1zIq1lUtpNPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=bBjDfKYW; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4bx2T60Psrz9t8l;
+	Tue,  5 Aug 2025 07:45:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1754372730;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bPF4WdQCtv984o72KwXLxMISxhU/aJPqgLwzYtsm72M=;
+	b=bBjDfKYWT21NFwvhbyK5aFKtO6yFlm8WKPH9dWAj5oD5m1o+cPDeaf3RswmG9jD83irGDi
+	OpSvCvXeZuBix3/tg2FMC3AL8+gyQwrHiZibGBamiSy0+gusfknYSXjoUG11XufHr79v3u
+	MlViEwFLGuQ3lGIcljKeXIn8m4w6+Fsj6atzQWPSheC0cBLTAigLG/UyXtsbl9AnMLXxvE
+	Xh3lR5sdmm9nFCjCaZpezk3FnoxlEBuDmYJ/6vqSp4OH4Sn5xcuTJsiKuPM5+mqs78ViPV
+	o17N3NWGq4KpbOeOgNto/Uksx9Cu4EwpetVbqhnax656nKXT5VIaTRzEDWBH9Q==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::2 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
+From: Aleksa Sarai <cyphar@cyphar.com>
+Subject: [PATCH v4 0/4] procfs: make reference pidns more user-visible
+Date: Tue, 05 Aug 2025 15:45:07 +1000
+Message-Id: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <2a70a21a.3e23.19878713825.Coremail.phoenix500526@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:gSgvCgDHT6luhZFoI8gSAA--.42683W
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBaxqgiGiRbW-uWQALse
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGOakWgC/23NTQ6CMBCG4auYrq3p9IcWV97DuCDtIF0ITWsaC
+ eHuFuICA8v3S+aZiSSMHhO5niYSMfvkh76EPJ+I7Zr+idS70oQzrpgGTUMcbJto8K5PtAmeGnS
+ gjJACWkbKWYjY+s9K3h+lO5/eQxzXDxmW9Ydx2GMZKKPKupoxjQq4u9kxdE282OFFFi3zrSAOB
+ F6EigNqdM6gZDtBbAV5IIgiSFsZZWtgNRd/wjzPX4EKj1I1AQAA
+To: Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, linux-kernel@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Aleksa Sarai <cyphar@cyphar.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7460; i=cyphar@cyphar.com;
+ h=from:subject:message-id; bh=b3qLvidQt2IQmyqEcAsLJbmTR+wVyp6SbcerHb1qMcs=;
+ b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMWRMnJV35/6lhU2bWe6c99t5d/cht20Cy821S3StD09t/
+ V617E/f4Y5SFgYxLgZZMUWWbX6eoZvmL76S/GklG8wcViaQIQxcnAIwEekljAwv5yivvVnkLrSR
+ vfXk4+Wpn166LLTnnrJ5VZB6vEPwv6z7jAzbNp5fo5x/vczhas+Cjh1/LR3a7bbue9Pf/bPhdPe
+ dCiEGAA==
+X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
+ fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
+X-Rspamd-Queue-Id: 4bx2T60Psrz9t8l
 
-SGnCoEppcmksCgpVbmZvcnR1bmF0ZWx5LMKgScKgY291bGRuJ3TCoHJlcHJvZHVjZcKgdGhpc8Kg
-aXNzdWXCoG9uwqBtecKgbWFjaGluZS4KSG93ZXZlcizCoHRoZcKgZ29vZMKgbmV3c8KgaXPCoHRo
-YXTCoGl0J3PCoHNpbWlsYXLCoHRvwqB0aGXCoFBDLXJlbGF0aXZlwqBVU0RUwqBhcmd1bWVudMKg
-c3BlYyzCoGFuZMKgScKgd2FzwqBhYmxlwqB0b8KgY29uc3RydWN0wqBhwqBtaW5pbWFswqBleGFt
-cGxlwqB0aGF0wqByZXByb2R1Y2VzwqB0aGXCoGlzc3VlwqByZWxpYWJseS4KCkluwqBib3RowqBj
-YXNlcyzCoHdlwqBuZWVkwqB0b8KgcmVzb2x2ZcKgdGhlwqBhZGRyZXNzwqBvcsKgb2Zmc2V0wqBm
-b3LCoHRoZcKgZ2l2ZW7CoHN5bWJvbC4KSSdtwqBjdXJyZW50bHnCoGV4cGxvcmluZ8Kgd2hldGhl
-csKgdGhlwqBhZGRyZXNzwqBvcsKgb2Zmc2V0wqBjYW7CoGJlwqByZXNvbHZlZMKgZnJvbcKgdGhl
-wqBEV0FSRsKgaW5mb3JtYXRpb24uCklmwqB0aGlzwqBhcHByb2FjaMKgd29ya3MswqBJ4oCZbGzC
-oGFwcGVuZMKgbXnCoG1vZGlmaWNhdGlvbnPCoHRvwqB0aGlzwqBwYXRjaC4KCgpBdMKgMjAyNS0w
-OC0wNMKgMTg6MjM6NTkswqAiSmlyacKgT2xzYSLCoDxvbHNhamlyaUBnbWFpbC5jb20+wqB3cm90
-ZToKPk9uwqBTYXQswqBBdWfCoDAyLMKgMjAyNcKgYXTCoDA4OjQ4OjAyQU3CoCswMDAwLMKgSmlh
-d2VpwqBaaGFvwqB3cm90ZToKPj7CoE9uwqB4ODYtNjQswqBVU0RUwqBhcmd1bWVudHPCoGNhbsKg
-YmXCoHNwZWNpZmllZMKgdXNpbmfCoFNjYWxlLUluZGV4LUJhc2XCoChTSUIpCj4+wqBhZGRyZXNz
-aW5nLMKgZS5nLsKgIjFALTk2KCVyYnAsJXJheCw4KSIuwqBUaGXCoGN1cnJlbnTCoFVTRFTCoGlt
-cGxlbWVudGF0aW9uCj4+wqBpbsKgbGliYnBmwqBjYW5ub3TCoHBhcnNlwqB0aGlzwqBmb3JtYXQs
-wqBjYXVzaW5nwqBgYnBmX3Byb2dyYW1fX2F0dGFjaF91c2R0KClgCj4+wqB0b8KgZmFpbMKgd2l0
-aMKgLUVOT0VOVMKgKHVucmVjb2duaXplZMKgcmVnaXN0ZXIpLgo+PsKgCj4+wqBUaGlzwqBwYXRj
-aMKgZml4ZXPCoHRoaXPCoGJ5wqBpbXBsZW1lbnRpbmfCoHRoZcKgbmVjZXNzYXJ5wqBjaGFuZ2Vz
-Ogo+PsKgLcKgYWRkwqBjb3JyZWN0wqBoYW5kbGluZ8KgZm9ywqBTSUItYWRkcmVzc2VkwqBhcmd1
-bWVudHPCoGluwqBgYnBmX3VzZHRfYXJnYC4KPj7CoC3CoGFkZMKgYWRhcHRpdmXCoHN1cHBvcnTC
-oHRvwqBgX19icGZfdXNkdF9hcmdfdHlwZWDCoGFuZAo+PsKgwqDCoGBfX2JwZl91c2R0X2FyZ19z
-cGVjYMKgdG/CoHJlcHJlc2VudMKgU0lCwqBhZGRyZXNzaW5nwqBwYXJhbWV0ZXJzLgo+PsKgCj4+
-wqBTaWduZWQtb2ZmLWJ5OsKgSmlhd2VpwqBaaGFvwqA8cGhvZW5peDUwMDUyNkAxNjMuY29tPgo+
-PsKgLS0tCj4+wqDCoHRvb2xzL2xpYi9icGYvdXNkdC5icGYuaMKgfMKgMzPCoCsrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrLQo+PsKgwqB0b29scy9saWIvYnBmL3VzZHQuY8KgwqDCoMKgwqB8
-wqA0M8KgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLQo+PsKgwqAywqBm
-aWxlc8KgY2hhbmdlZCzCoDY5wqBpbnNlcnRpb25zKCspLMKgN8KgZGVsZXRpb25zKC0pCj4+wqAK
-Pj7CoGRpZmbCoC0tZ2l0wqBhL3Rvb2xzL2xpYi9icGYvdXNkdC5icGYuaMKgYi90b29scy9saWIv
-YnBmL3VzZHQuYnBmLmgKPj7CoGluZGV4wqAyYTc4NjVjOGUzZmUuLjI0NjUxMzA4OGMzYcKgMTAw
-NjQ0Cj4+wqAtLS3CoGEvdG9vbHMvbGliL2JwZi91c2R0LmJwZi5oCj4+wqArKyvCoGIvdG9vbHMv
-bGliL2JwZi91c2R0LmJwZi5oCj4+wqBAQMKgLTM0LDbCoCszNCw3wqBAQMKgZW51bcKgX19icGZf
-dXNkdF9hcmdfdHlwZcKgewo+PsKgwqAJQlBGX1VTRFRfQVJHX0NPTlNULAo+PsKgwqAJQlBGX1VT
-RFRfQVJHX1JFRywKPj7CoMKgCUJQRl9VU0RUX0FSR19SRUdfREVSRUYsCj4+wqArCUJQRl9VU0RU
-X0FSR19TSUIsCj4+wqDCoH07Cj4+wqDCoAo+PsKgwqBzdHJ1Y3TCoF9fYnBmX3VzZHRfYXJnX3Nw
-ZWPCoHsKPj7CoEBAwqAtNDMsNsKgKzQ0LDEwwqBAQMKgc3RydWN0wqBfX2JwZl91c2R0X2FyZ19z
-cGVjwqB7Cj4+wqDCoAllbnVtwqBfX2JwZl91c2R0X2FyZ190eXBlwqBhcmdfdHlwZTsKPj7CoMKg
-CS8qwqBvZmZzZXTCoG9mwqByZWZlcmVuY2VkwqByZWdpc3RlcsKgd2l0aGluwqBzdHJ1Y3TCoHB0
-X3JlZ3PCoCovCj4+wqDCoAlzaG9ydMKgcmVnX29mZjsKPj7CoCsJLyrCoG9mZnNldMKgb2bCoGlu
-ZGV4wqByZWdpc3RlcsKgaW7CoHB0X3JlZ3MswqBvbmx5wqB1c2VkwqBpbsKgU0lCwqBtb2RlwqAq
-Lwo+PsKgKwlzaG9ydMKgaWR4X3JlZ19vZmY7Cj4+wqArCS8qwqBzY2FsZcKgZmFjdG9ywqBmb3LC
-oGluZGV4wqByZWdpc3RlcizCoG9ubHnCoHVzZWTCoGluwqBTSULCoG1vZGXCoCovCj4+wqArCXNo
-b3J0wqBzY2FsZTsKPj7CoMKgCS8qwqB3aGV0aGVywqBhcmfCoHNob3VsZMKgYmXCoGludGVycHJl
-dGVkwqBhc8Kgc2lnbmVkwqB2YWx1ZcKgKi8KPj7CoMKgCWJvb2zCoGFyZ19zaWduZWQ7Cj4+wqDC
-oAkvKsKgbnVtYmVywqBvZsKgYml0c8KgdGhhdMKgbmVlZMKgdG/CoGJlwqBjbGVhcmVkwqBhbmQs
-wqBvcHRpb25hbGx5LAo+PsKgQEDCoC0xNDksN8KgKzE1NCw3wqBAQMKgaW50wqBicGZfdXNkdF9h
-cmcoc3RydWN0wqBwdF9yZWdzwqAqY3R4LMKgX191NjTCoGFyZ19udW0swqBsb25nwqAqcmVzKQo+
-PsKgwqB7Cj4+wqDCoAlzdHJ1Y3TCoF9fYnBmX3VzZHRfc3BlY8KgKnNwZWM7Cj4+wqDCoAlzdHJ1
-Y3TCoF9fYnBmX3VzZHRfYXJnX3NwZWPCoCphcmdfc3BlYzsKPj7CoC0JdW5zaWduZWTCoGxvbmfC
-oHZhbDsKPj7CoCsJdW5zaWduZWTCoGxvbmfCoHZhbCzCoGlkeDsKPj7CoMKgCWludMKgZXJyLMKg
-c3BlY19pZDsKPj7CoMKgCj4+wqDCoAkqcmVzwqA9wqAwOwo+PsKgQEDCoC0yMDIsNsKgKzIwNywz
-MsKgQEDCoGludMKgYnBmX3VzZHRfYXJnKHN0cnVjdMKgcHRfcmVnc8KgKmN0eCzCoF9fdTY0wqBh
-cmdfbnVtLMKgbG9uZ8KgKnJlcykKPj7CoMKgCQkJcmV0dXJuwqBlcnI7Cj4+wqDCoCNpZsKgX19C
-WVRFX09SREVSX1/CoD09wqBfX09SREVSX0JJR19FTkRJQU5fXwo+PsKgwqAJCXZhbMKgPj49wqBh
-cmdfc3BlYy0+YXJnX2JpdHNoaWZ0Owo+PsKgKyNlbmRpZgo+PsKgKwkJYnJlYWs7Cj4+wqArCWNh
-c2XCoEJQRl9VU0RUX0FSR19TSUI6Cj4+wqArCQkvKsKgQXJnwqBpc8KgaW7CoG1lbW9yecKgYWRk
-cmVzc2VkwqBiecKgU0lCwqAoU2NhbGUtSW5kZXgtQmFzZSnCoG1vZGUKPj7CoCsJCcKgKsKgKGUu
-Zy4swqAiLTFALTk2KCVyYnAsJXJheCw4KSLCoGluwqBVU0RUwqBhcmfCoHNwZWMpLsKgUmVnaXN0
-ZXIKPj7CoCsJCcKgKsKgaXPCoGlkZW50aWZpZWTCoGxpa2XCoHdpdGjCoEJQRl9VU0RUX0FSR19T
-SULCoGNhc2UswqB0aGXCoG9mZnNldAo+PsKgKwkJwqAqwqBpc8KgaW7CoGFyZ19zcGVjLT52YWxf
-b2ZmLMKgdGhlwqBzY2FsZcKgZmFjdG9ywqBpc8KgaW7CoGFyZ19zcGVjLT5zY2FsZS4KPj7CoCsJ
-CcKgKsKgRmlyc3RseSzCoHdlwqBmZXRjaMKgdGhlwqBiYXNlwqByZWdpc3RlcsKgY29udGVudHPC
-oGFuZMKgdGhlwqBpbmRleAo+PsKgKwkJwqAqwqByZWdpc3RlcsKgY29udGVudHPCoGZyb23CoHB0
-X3JlZ3MuwqBTZWNvbmRseSzCoHdlwqBtdWx0aXBsecKgdGhlCj4+wqArCQnCoCrCoGluZGV4wqBy
-ZWdpc3RlcsKgY29udGVudHPCoGJ5wqB0aGXCoHNjYWxlwqBmYWN0b3IswqB0aGVuwqBhZGTCoHRo
-ZQo+PsKgKwkJwqAqwqBiYXNlwqBhZGRyZXNzwqBhbmTCoHRoZcKgb2Zmc2V0wqB0b8KgZ2V0wqB0
-aGXCoGZpbmFswqBhZGRyZXNzLsKgRmluYWxseSwKPj7CoCsJCcKgKsKgd2XCoGRvwqBhbm90aGVy
-wqB1c2VyLXNwYWNlwqBwcm9iZcKgcmVhZMKgdG/CoGZldGNowqBhcmd1bWVudMKgdmFsdWUKPj7C
-oCsJCcKgKsKgaXRzZWxmLgo+PsKgKwkJwqAqLwo+PsKgKwkJZXJywqA9wqBicGZfcHJvYmVfcmVh
-ZF9rZXJuZWwoJnZhbCzCoHNpemVvZih2YWwpLMKgKHZvaWTCoCopY3R4wqArwqBhcmdfc3BlYy0+
-cmVnX29mZik7Cj4+wqArCQlpZsKgKGVycikKPj7CoCsJCQlyZXR1cm7CoGVycjsKPj7CoCsJCWVy
-csKgPcKgYnBmX3Byb2JlX3JlYWRfa2VybmVsKCZpZHgswqBzaXplb2YoaWR4KSzCoCh2b2lkwqAq
-KWN0eMKgK8KgYXJnX3NwZWMtPmlkeF9yZWdfb2ZmKTsKPj7CoCsJCWlmwqAoZXJyKQo+PsKgKwkJ
-CXJldHVybsKgZXJyOwo+PsKgKwkJZXJywqA9wqBicGZfcHJvYmVfcmVhZF91c2VyKCZ2YWwswqBz
-aXplb2YodmFsKSwKPj7CoCsJCQkJKHZvaWTCoCopdmFswqArwqBpZHjCoCrCoGFyZ19zcGVjLT5z
-Y2FsZcKgK8KgYXJnX3NwZWMtPnZhbF9vZmYpOwo+PsKgKwkJaWbCoChlcnIpCj4+wqArCQkJcmV0
-dXJuwqBlcnI7Cj4+wqArI2lmwqBfX0JZVEVfT1JERVJfX8KgPT3CoF9fT1JERVJfQklHX0VORElB
-Tl9fCj4+wqArCQl2YWzCoD4+PcKgYXJnX3NwZWMtPmFyZ19iaXRzaGlmdDsKPj7CoMKgI2VuZGlm
-Cj4+wqDCoAkJYnJlYWs7Cj4+wqDCoAlkZWZhdWx0Ogo+PsKgZGlmZsKgLS1naXTCoGEvdG9vbHMv
-bGliL2JwZi91c2R0LmPCoGIvdG9vbHMvbGliL2JwZi91c2R0LmMKPj7CoGluZGV4wqA0ZTRhNTI3
-NDJiMDEuLjFmOGI5ZTFjOTgxOcKgMTAwNjQ0Cj4+wqAtLS3CoGEvdG9vbHMvbGliL2JwZi91c2R0
-LmMKPj7CoCsrK8KgYi90b29scy9saWIvYnBmL3VzZHQuYwo+PsKgQEDCoC0yMDAsNsKgKzIwMCw3
-wqBAQMKgZW51bcKgdXNkdF9hcmdfdHlwZcKgewo+PsKgwqAJVVNEVF9BUkdfQ09OU1QsCj4+wqDC
-oAlVU0RUX0FSR19SRUcsCj4+wqDCoAlVU0RUX0FSR19SRUdfREVSRUYsCj4+wqArCVVTRFRfQVJH
-X1NJQiwKPj7CoMKgfTsKPj7CoMKgCj4+wqDCoC8qwqBzaG91bGTCoG1hdGNowqBleGFjdGx5wqBz
-dHJ1Y3TCoF9fYnBmX3VzZHRfYXJnX3NwZWPCoGZyb23CoHVzZHQuYnBmLmjCoCovCj4+wqBAQMKg
-LTIwNyw2wqArMjA4LDjCoEBAwqBzdHJ1Y3TCoHVzZHRfYXJnX3NwZWPCoHsKPj7CoMKgCV9fdTY0
-wqB2YWxfb2ZmOwo+PsKgwqAJZW51bcKgdXNkdF9hcmdfdHlwZcKgYXJnX3R5cGU7Cj4+wqDCoAlz
-aG9ydMKgcmVnX29mZjsKPj7CoCsJc2hvcnTCoGlkeF9yZWdfb2ZmOwo+PsKgKwlzaG9ydMKgc2Nh
-bGU7Cj4+wqDCoAlib29swqBhcmdfc2lnbmVkOwo+PsKgwqAJY2hhcsKgYXJnX2JpdHNoaWZ0Owo+
-PsKgwqB9Owo+PsKgQEDCoC0xMjgzLDExwqArMTI4NiwzOcKgQEDCoHN0YXRpY8KgaW50wqBjYWxj
-X3B0X3JlZ3Nfb2ZmKGNvbnN0wqBjaGFywqAqcmVnX25hbWUpCj4+wqDCoAo+PsKgwqBzdGF0aWPC
-oGludMKgcGFyc2VfdXNkdF9hcmcoY29uc3TCoGNoYXLCoCphcmdfc3RyLMKgaW50wqBhcmdfbnVt
-LMKgc3RydWN0wqB1c2R0X2FyZ19zcGVjwqAqYXJnLMKgaW50wqAqYXJnX3N6KQo+PsKgwqB7Cj4+
-wqAtCWNoYXLCoHJlZ19uYW1lWzE2XTsKPj7CoC0JaW50wqBsZW4swqByZWdfb2ZmOwo+PsKgLQls
-b25nwqBvZmY7Cj4+wqArCWNoYXLCoHJlZ19uYW1lWzE2XcKgPcKgezB9LMKgaWR4X3JlZ19uYW1l
-WzE2XcKgPcKgezB9Owo+PsKgKwlpbnTCoGxlbizCoHJlZ19vZmYswqBpZHhfcmVnX29mZizCoHNj
-YWxlwqA9wqAxOwo+PsKgKwlsb25nwqBvZmbCoD3CoDA7Cj4+wqArCj4+wqArCWlmwqAoc3NjYW5m
-KGFyZ19zdHIswqAiwqAlZMKgQMKgJWxkwqAowqAlJSUxNVteLF3CoCzCoCUlJTE1W14sXcKgLMKg
-JWTCoCnCoCVuIiwKPj7CoCsJCQkJYXJnX3N6LMKgJm9mZizCoHJlZ19uYW1lLMKgaWR4X3JlZ19u
-YW1lLMKgJnNjYWxlLMKgJmxlbinCoD09wqA1wqB8fAo+PsKgKwkJc3NjYW5mKGFyZ19zdHIswqAi
-wqAlZMKgQMKgKMKgJSUlMTVbXixdwqAswqAlJSUxNVteLF3CoCzCoCVkwqApwqAlbiIsCj4+wqAr
-CQkJCWFyZ19zeizCoHJlZ19uYW1lLMKgaWR4X3JlZ19uYW1lLMKgJnNjYWxlLMKgJmxlbinCoD09
-wqA0wqB8fAo+PsKgKwkJc3NjYW5mKGFyZ19zdHIswqAiwqAlZMKgQMKgJWxkwqAowqAlJSUxNVte
-LF3CoCzCoCUlJTE1W14pXcKgKcKgJW4iLAo+PsKgKwkJCQlhcmdfc3oswqAmb2ZmLMKgcmVnX25h
-bWUswqBpZHhfcmVnX25hbWUswqAmbGVuKcKgPT3CoDTCoHx8Cj4+wqArCQlzc2NhbmYoYXJnX3N0
-cizCoCLCoCVkwqBAwqAowqAlJSUxNVteLF3CoCzCoCUlJTE1W14pXcKgKcKgJW4iLAo+PsKgKwkJ
-CQlhcmdfc3oswqByZWdfbmFtZSzCoGlkeF9yZWdfbmFtZSzCoCZsZW4pwqA9PcKgMwo+PsKgKwkJ
-KcKgewo+PsKgKwkJLyrCoFNjYWxlwqBJbmRleMKgQmFzZcKgY2FzZSzCoGUuZy4swqAxQC05Nigl
-cmJwLCVyYXgsOCkKPj7CoCsJCcKgKsKgMUAoJXJicCwlcmF4LDgpCj4+wqArCQnCoCrCoDFALTk2
-KCVyYnAsJXJheCkKPj7CoCsJCcKgKsKgMUAoJXJicCwlcmF4KQo+PsKgKwkJwqAqLwo+Cj5oaSwK
-PkknbcKgZ2V0dGluZ8KgZm9sbG93aW5nwqBlcnJvcsKgZnJvbcKgdGhlwqB0ZXN0Ogo+Cj5zdWJ0
-ZXN0X211bHRpc3BlY191c2R0OlBBU1M6c2tlbF9vcGVuwqAwwqBuc2VjCj5saWJicGY6wqB1c2R0
-OsKgdW5yZWNvZ25pemVkwqBhcmfCoCMxMMKgc3BlY8KgJy0yQG51bXMoJXJheCwlcmF4KcKgLTFA
-JC0xMjcnCj5saWJicGY6wqBwcm9nwqAndXNkdDEyJzrCoGZhaWxlZMKgdG/CoGF1dG8tYXR0YWNo
-OsKgLUVJTlZBTAo+c3VidGVzdF9tdWx0aXNwZWNfdXNkdDpGQUlMOnNrZWxfYXR0YWNowqB1bmV4
-cGVjdGVkwqBlcnJvcjrCoC0yMsKgKGVycm5vwqAyMikKPiM0ODAvMsKgwqDCoHVzZHQvbXVsdGlz
-cGVjOkZBSUwKPgo+YXJndW1lbnRzwqBsb29rwqBsaWtlOgo+wqDCoMKgwqBBcmd1bWVudHM6wqAt
-NEAkM8KgLTRAJDTCoC04QCQ0MsKgLThAJDQ1wqAtNEAkNcKgLThAJDbCoDhAJXJkeMKgOEAlcnNp
-wqAtNEAkLTnCoC0yQCVjeMKgLTJAbnVtcyglcmF4LCVyYXgpwqAtMUAkLTEyNwo+Cj5ub3TCoHN1
-cmXCoHdoecKgdGhlcmUnc8KgdmFyaWFibGXCoG5hbWXCoGluwqB0aGXCoGFyZzEwwqBkZWZpbml0
-aW9uCj4KPmdjY8KgKEdDQynCoDE1LjEuMcKgMjAyNTA1MjHCoChSZWTCoEhhdMKgMTUuMS4xLTIp
-Cj5jbGFuZ8KgdmVyc2lvbsKgMjAuMS44wqAoRmVkb3JhwqAyMC4xLjgtMy5mYzQyKQo+Cj50aGFu
-a3MsCj5qaXJrYQo+Cj4KPj7CoCsJCWFyZy0+YXJnX3R5cGXCoD3CoFVTRFRfQVJHX1NJQjsKPj7C
-oCsJCWFyZy0+dmFsX29mZsKgPcKgb2ZmOwo+PsKgKwkJYXJnLT5zY2FsZcKgPcKgc2NhbGU7Cj4+
-wqArCj4+wqArCQlyZWdfb2ZmwqA9wqBjYWxjX3B0X3JlZ3Nfb2ZmKHJlZ19uYW1lKTsKPj7CoCsJ
-CWlmwqAocmVnX29mZsKgPMKgMCkKPj7CoCsJCQlyZXR1cm7CoHJlZ19vZmY7Cj4+wqArCQlhcmct
-PnJlZ19vZmbCoD3CoHJlZ19vZmY7Cj4+wqDCoAo+PsKgLQlpZsKgKHNzY2FuZihhcmdfc3RyLMKg
-IsKgJWTCoEDCoCVsZMKgKMKgJSUlMTVbXildwqApwqAlbiIswqBhcmdfc3oswqAmb2ZmLMKgcmVn
-X25hbWUswqAmbGVuKcKgPT3CoDMpwqB7Cj4+wqArCQlpZHhfcmVnX29mZsKgPcKgY2FsY19wdF9y
-ZWdzX29mZihpZHhfcmVnX25hbWUpOwo+PsKgKwkJaWbCoChpZHhfcmVnX29mZsKgPMKgMCkKPj7C
-oCsJCQlyZXR1cm7CoGlkeF9yZWdfb2ZmOwo+PsKgKwkJYXJnLT5pZHhfcmVnX29mZsKgPcKgaWR4
-X3JlZ19vZmY7Cj4+wqArCX3CoGVsc2XCoGlmwqAoc3NjYW5mKGFyZ19zdHIswqAiwqAlZMKgQMKg
-JWxkwqAowqAlJSUxNVteKV3CoCnCoCVuIiwKPj7CoCsJCQkJYXJnX3N6LMKgJm9mZizCoHJlZ19u
-YW1lLMKgJmxlbinCoD09wqAzKcKgewo+PsKgwqAJCS8qwqBNZW1vcnnCoGRlcmVmZXJlbmNlwqBj
-YXNlLMKgZS5nLizCoC00QC0yMCglcmJwKcKgKi8KPj7CoMKgCQlhcmctPmFyZ190eXBlwqA9wqBV
-U0RUX0FSR19SRUdfREVSRUY7Cj4+wqDCoAkJYXJnLT52YWxfb2ZmwqA9wqBvZmY7Cj4+wqBAQMKg
-LTEyOTgsN8KgKzEzMjksN8KgQEDCoHN0YXRpY8KgaW50wqBwYXJzZV91c2R0X2FyZyhjb25zdMKg
-Y2hhcsKgKmFyZ19zdHIswqBpbnTCoGFyZ19udW0swqBzdHJ1Y3TCoHVzZHRfYXJnX3NwZWMKPj7C
-oMKgCX3CoGVsc2XCoGlmwqAoc3NjYW5mKGFyZ19zdHIswqAiwqAlZMKgQMKgKMKgJSUlMTVbXild
-wqApwqAlbiIswqBhcmdfc3oswqByZWdfbmFtZSzCoCZsZW4pwqA9PcKgMinCoHsKPj7CoMKgCQkv
-KsKgTWVtb3J5wqBkZXJlZmVyZW5jZcKgY2FzZcKgd2l0aG91dMKgb2Zmc2V0LMKgZS5nLizCoDhA
-KCVyc3ApwqAqLwo+PsKgwqAJCWFyZy0+YXJnX3R5cGXCoD3CoFVTRFRfQVJHX1JFR19ERVJFRjsK
-Pj7CoC0JCWFyZy0+dmFsX29mZsKgPcKgMDsKPj7CoCsJCWFyZy0+dmFsX29mZsKgPcKgb2ZmOwo+
-PsKgwqAJCXJlZ19vZmbCoD3CoGNhbGNfcHRfcmVnc19vZmYocmVnX25hbWUpOwo+PsKgwqAJCWlm
-wqAocmVnX29mZsKgPMKgMCkKPj7CoMKgCQkJcmV0dXJuwqByZWdfb2ZmOwo+PsKgQEDCoC0xMzA2
-LDfCoCsxMzM3LDfCoEBAwqBzdGF0aWPCoGludMKgcGFyc2VfdXNkdF9hcmcoY29uc3TCoGNoYXLC
-oCphcmdfc3RyLMKgaW50wqBhcmdfbnVtLMKgc3RydWN0wqB1c2R0X2FyZ19zcGVjCj4+wqDCoAl9
-wqBlbHNlwqBpZsKgKHNzY2FuZihhcmdfc3RyLMKgIsKgJWTCoEDCoCUlJTE1c8KgJW4iLMKgYXJn
-X3N6LMKgcmVnX25hbWUswqAmbGVuKcKgPT3CoDIpwqB7Cj4+wqDCoAkJLyrCoFJlZ2lzdGVywqBy
-ZWFkwqBjYXNlLMKgZS5nLizCoC00QCVlYXjCoCovCj4+wqDCoAkJYXJnLT5hcmdfdHlwZcKgPcKg
-VVNEVF9BUkdfUkVHOwo+PsKgLQkJYXJnLT52YWxfb2ZmwqA9wqAwOwo+PsKgKwkJYXJnLT52YWxf
-b2ZmwqA9wqBvZmY7Cj4+wqDCoAo+PsKgwqAJCXJlZ19vZmbCoD3CoGNhbGNfcHRfcmVnc19vZmYo
-cmVnX25hbWUpOwo+PsKgwqAJCWlmwqAocmVnX29mZsKgPMKgMCkKPj7CoC0twqAKPj7CoDIuNDMu
-MAo+PsKgCj4+wqAK
+Ever since the introduction of pid namespaces, procfs has had very
+implicit behaviour surrounding them (the pidns used by a procfs mount is
+auto-selected based on the mounting process's active pidns, and the
+pidns itself is basically hidden once the mount has been constructed).
+
+/* pidns mount option for procfs */
+
+This implicit behaviour has historically meant that userspace was
+required to do some special dances in order to configure the pidns of a
+procfs mount as desired. Examples include:
+
+ * In order to bypass the mnt_too_revealing() check, Kubernetes creates
+   a procfs mount from an empty pidns so that user namespaced containers
+   can be nested (without this, the nested containers would fail to
+   mount procfs). But this requires forking off a helper process because
+   you cannot just one-shot this using mount(2).
+
+ * Container runtimes in general need to fork into a container before
+   configuring its mounts, which can lead to security issues in the case
+   of shared-pidns containers (a privileged process in the pidns can
+   interact with your container runtime process). While
+   SUID_DUMP_DISABLE and user namespaces make this less of an issue, the
+   strict need for this due to a minor uAPI wart is kind of unfortunate.
+
+Things would be much easier if there was a way for userspace to just
+specify the pidns they want. Patch 1 implements a new "pidns" argument
+which can be set using fsconfig(2):
+
+    fsconfig(procfd, FSCONFIG_SET_FD, "pidns", NULL, nsfd);
+    fsconfig(procfd, FSCONFIG_SET_STRING, "pidns", "/proc/self/ns/pid", 0);
+
+or classic mount(2) / mount(8):
+
+    // mount -t proc -o pidns=/proc/self/ns/pid proc /tmp/proc
+    mount("proc", "/tmp/proc", "proc", MS_..., "pidns=/proc/self/ns/pid");
+
+The initial security model I have in this RFC is to be as conservative
+as possible and just mirror the security model for setns(2) -- which
+means that you can only set pidns=... to pid namespaces that your
+current pid namespace is a direct ancestor of and you have CAP_SYS_ADMIN
+privileges over the pid namespace. This fulfils the requirements of
+container runtimes, but I suspect that this may be too strict for some
+usecases.
+
+The pidns argument is not displayed in mountinfo -- it's not clear to me
+what value it would make sense to show (maybe we could just use ns_dname
+to provide an identifier for the namespace, but this number would be
+fairly useless to userspace). I'm open to suggestions. Note that
+PROCFS_GET_PID_NAMESPACE (see below) does at least let userspace get
+information about this outside of mountinfo.
+
+Note that you cannot change the pidns of an already-created procfs
+instance. The primary reason is that allowing this to be changed would
+require RCU-protecting proc_pid_ns(sb) and thus auditing all of
+fs/proc/* and some of the users in fs/* to make sure they wouldn't UAF
+the pid namespace. Since creating procfs instances is very cheap, it
+seems unnecessary to overcomplicate this upfront. Trying to reconfigure
+procfs this way errors out with -EBUSY.
+
+/* ioctl(PROCFS_GET_PID_NAMESPACE) */
+
+In addition, being able to figure out what pid namespace is being used
+by a procfs mount is quite useful when you have an administrative
+process (such as a container runtime) which wants to figure out the
+correct way of mapping PIDs between its own namespace and the namespace
+for procfs (using NS_GET_{PID,TGID}_{IN,FROM}_PIDNS). There are
+alternative ways to do this, but they all rely on ancillary information
+that third-party libraries and tools do not necessarily have access to.
+
+To make this easier, add a new ioctl (PROCFS_GET_PID_NAMESPACE) which
+can be used to get a reference to the pidns that a procfs is using.
+
+Rather than copying the (fairly strict) security model for setns(2),
+apply a slightly looser model to better match what userspace can already
+do:
+
+ * Make the ioctl only valid on the root (meaning that a process without
+   access to the procfs root -- such as only having an fd to a procfs
+   file or some open_tree(2)-like subset -- cannot use this API). This
+   means that the process already has some level of access to the
+   /proc/$pid directories.
+
+ * If the calling process is in an ancestor pidns, then they can already
+   create pidfd for processes inside the pidns, which is morally
+   equivalent to a pidns file descriptor according to setns(2). So it
+   seems reasonable to just allow it in this case. (The justification
+   for this model was suggested by Christian.)
+
+ * If the process has access to /proc/1/ns/pid already (i.e. has
+   ptrace-read access to the pidns pid1), then this ioctl is equivalent
+   to just opening a handle to it that way.
+
+   Ideally we would check for ptrace-read access against all processes
+   in the pidns (which is very likely to be true for at least one
+   process, as SUID_DUMP_DISABLE is cleared on exec(2) and is rarely set
+   by most programs), but this would obviously not scale.
+
+I'm open to suggestions for whether we need to make this stricter (or
+possibly allow more cases).
+
+Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+---
+Changes in v4:
+- Remove unneeded EXPORT_SYMBOL_GPL. [Christian Brauner]
+- Return -EOPNOTSUPP for new APIs for CONFIG_PID_NS=n rather than
+  pretending they don't exist entirely. [Christian Brauner]
+- PROCFS_IOCTL_MAGIC conflicts with XSDFEC_MAGIC, so we need to allocate
+  subvalues more carefully (switch to _IO(PROCFS_IOCTL_MAGIC, 32)).
+- Add some more selftests for PROCFS_GET_PID_NAMESPACE.
+- Reword argument for PROCFS_GET_PID_NAMESPACE security model based on
+  Christian's suggestion, and remove CAP_SYS_ADMIN edge-case (in most
+  cases, such a process would also have ptrace-read credentials over the
+  pidns pid1).
+- v3: <https://lore.kernel.org/r/20250724-procfs-pidns-api-v3-0-4c685c910923@cyphar.com>
+
+Changes in v3:
+- Disallow changing pidns for existing procfs instances, as we'd
+  probably have to RCU-protect everything that touches the pinned pidns
+  reference.
+- Improve tests with slightly nicer ASSERT_ERRNO* macros.
+- v2: <https://lore.kernel.org/r/20250723-procfs-pidns-api-v2-0-621e7edd8e40@cyphar.com>
+
+Changes in v2:
+- #ifdef CONFIG_PID_NS
+- Improve cover letter wording to make it clear we're talking about two
+  separate features with different permission models. [Andy Lutomirski]
+- Fix build warnings in pidns_is_ancestor() patch. [kernel test robot]
+- v1: <https://lore.kernel.org/r/20250721-procfs-pidns-api-v1-0-5cd9007e512d@cyphar.com>
+
+---
+Aleksa Sarai (4):
+      pidns: move is-ancestor logic to helper
+      procfs: add "pidns" mount option
+      procfs: add PROCFS_GET_PID_NAMESPACE ioctl
+      selftests/proc: add tests for new pidns APIs
+
+ Documentation/filesystems/proc.rst        |  12 ++
+ fs/proc/root.c                            | 166 +++++++++++++++-
+ include/linux/pid_namespace.h             |   9 +
+ include/uapi/linux/fs.h                   |   4 +
+ kernel/pid_namespace.c                    |  22 ++-
+ tools/testing/selftests/proc/.gitignore   |   1 +
+ tools/testing/selftests/proc/Makefile     |   1 +
+ tools/testing/selftests/proc/proc-pidns.c | 315 ++++++++++++++++++++++++++++++
+ 8 files changed, 514 insertions(+), 16 deletions(-)
+---
+base-commit: 66639db858112bf6b0f76677f7517643d586e575
+change-id: 20250717-procfs-pidns-api-8ed1583431f0
+
+Best regards,
+-- 
+Aleksa Sarai <cyphar@cyphar.com>
+
 
