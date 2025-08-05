@@ -1,286 +1,287 @@
-Return-Path: <linux-kselftest+bounces-38297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAF77B1B728
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 17:08:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A5F1B1B73C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 17:17:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8A7317FB8C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 15:08:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 015843B58F9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 15:17:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94DF2798E1;
-	Tue,  5 Aug 2025 15:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFDAC275B15;
+	Tue,  5 Aug 2025 15:17:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqIuO8Zo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IyGJnCnV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7142B263F3C;
-	Tue,  5 Aug 2025 15:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11856C8CE
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Aug 2025 15:17:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754406522; cv=none; b=G/Z8bzdQQ/L8kaUb3LIHH6vkq/BHhXPNR/VtJ69yYgjYBqy9r2EUPXQr/WWTv1pXoxcIhtUGU+kSHP1xcU6TRLQCnMUJdyQ4Jq7HSUGeYMqhzKwMaTx0SeT/vLcb2ZTsflW46DH/1ZquElWOWcWsRK6WMFUQrGFy4kRsiI6DtNc=
+	t=1754407067; cv=none; b=l9EVx2A2VdCf6o/TVoz9bojckPNNr7MGlFaLQE413uX0mMhyyUoaIpnFuoOfBivwH4HFeoew/wfoPTHdGwPK352o30zVwnX8RxagHzLHZep8AJU05+OCQFPkg9jItMjoXJRtImW8RBgqQsL9gbtdwESnoInuTf/lZxdSbkJ/Whw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754406522; c=relaxed/simple;
-	bh=b7nMlz0hl/YNL4Ew6jtDlQQA/G+wzIxKRhMvw21PRJ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GdXfqdq2yJ+PPZpnl/Dpg9uiUq1GymhKGSkUVWTbfa6+hrAHwBB+uIvLilxB5w+tp1skajnQM9ZSUgfWv+Q5ZxDt9wZO5R9ejsUJpet5dt7dpo9LkYe4OYGZUn+FLcLioO64VRgjT+dwtWoNqgB7s34x24aEt2WX55gr85afsY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqIuO8Zo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6205CC4CEF7;
-	Tue,  5 Aug 2025 15:08:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754406522;
-	bh=b7nMlz0hl/YNL4Ew6jtDlQQA/G+wzIxKRhMvw21PRJ0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dqIuO8ZobapKuMTYUjgMKIi0YiPul02gRny8USn4lK7qS9VxbuJjE/oT8CJbug2M9
-	 qGSxJqMxltHWeH+o9j8fv2pF25ko0zSfbbaD4TeLmtIxsWE6HC9IPYXaRNNY2cTsBk
-	 4pd04ZbrVb47vrUZGzDwxAX3mMzOcu0SJqqQAWZsmIeVc/wPxZwXkw7gTyNkkoD6zm
-	 A8OOrxT5OPelbHfgXr2fl4z1k6eDwffoehXqwSA845dad4YXUNGrQz0nRE6RP5hpm5
-	 8FwBkm1Dd4X3kQGaqJP+OauAqGHfhmOheY4f3qCwGyZ/PQgK6XdVQHERrjonDVCgus
-	 sntGHAOAxNl0g==
-Date: Tue, 5 Aug 2025 17:08:17 +0200
-From: Joel Granados <joel.granados@kernel.org>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex.williamson@redhat.com>, 
-	Aaron Lewis <aaronlewis@google.com>, Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>, 
-	Bibo Mao <maobibo@loongson.cn>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org, 
-	Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, 
-	Jason Gunthorpe <jgg@nvidia.com>, Josh Hilke <jrhilke@google.com>, 
-	Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Vinicius Costa Gomes <vinicius.gomes@intel.com>, 
-	Vipin Sharma <vipinsh@google.com>, Wei Yang <richard.weiyang@gmail.com>, 
-	"Yury Norov [NVIDIA]" <yury.norov@gmail.com>
-Subject: Re: [PATCH 00/33] vfio: Introduce selftests for VFIO
-Message-ID: <77qzhwwieggkmyguxm6v7dhpro2ez3nch6qelc2dd5lbdgp6hz@dnbfliagwpnv>
-References: <20250620232031.2705638-1-dmatlack@google.com>
+	s=arc-20240116; t=1754407067; c=relaxed/simple;
+	bh=4uTGqFw4J++VGhGxbRFCBduEWyWz/aIs8wS094wvPZU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZvMvqkfSnxii9Dx8iPzGvHRtRTpxRN2NyU5bcgo+XWwD+vyEnksFDfozbBYiRh4a8tpxL9t0WQYz80A2HxB+PVBBWhdYh0/sp3csQWp3/tWPwvCCjfkn3hRJSgX1a409YBUhhbaJq9wylLHFfXmTSUvVebf+Yxz76f0h4gwo/TU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IyGJnCnV; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-707389a2fe3so55383506d6.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Aug 2025 08:17:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1754407065; x=1755011865; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7IXs2Kr/JIndnkNpfZSfduZvVHbFnK3EtPg4aqdOsRc=;
+        b=IyGJnCnVWr6LUH6Eq53gxZ69P7Bu1k6W1K43xwWrYr7hkj3PTVHlSIXy3mn1W3o7l/
+         OFgQqGipejhfS8YGTv1gt5uEWive2pgm+8l4gOgUlyFY7AEtFye7OoiIBFuYehvDsu6Y
+         9RC3mswKNLdXubMuBjufOcD2DPq4L5v/LrRxJRH//RWnZvdGrxs28CtPuid8t9/zbQME
+         m4q49GRRE+PkXEr4PgHMO50iG/ZaTmca0yoPvKxeCKVJ2WcUV0vgvz8RLdJI4+f9gI+2
+         f6KHK52VZwrWcBaq9VTphIEh5XecIjcy1DV27lEf4B1AxblI6MKemTOfdhTmCXnY5/Mr
+         WDlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754407065; x=1755011865;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7IXs2Kr/JIndnkNpfZSfduZvVHbFnK3EtPg4aqdOsRc=;
+        b=gYo9XcZ5i9ZsCmwU0UkacxlXXfcP++5CpEqBSGhmRPq2mZByc2/8RTUJXE4n9D7djL
+         kJe6Phvt6IeNHZlwoFZN+V+nISObkLrZdTvkMdEnmB0b3isRgVY94gJpE7wXRfcz4B+Z
+         zba9fViTq1Ex5XoAO2zQVtM5BZ2yQvwpn/kx9YO475pkXhbPJr+nxnTPHdCptkHTJmGG
+         ERkpBo11bxYormLJbAWeN9ejbFeJZ5PTRr/zHkn5XvF/aR4/BYKJ9/3gpQtyVx+Ua88h
+         hwvmAkmCvQW4YuIHZcIJl0i70FyW8LeczlmXDH6yPdC+303zmcxvwnRocbQnRqGuVIhq
+         ezrA==
+X-Forwarded-Encrypted: i=1; AJvYcCX+3rtODWKjGxz3CtmQmkqoy3ZMjaR/iMgbvorQclSuRU8bRAmM97AdMlVN9PYVDfEjlCHu04EKdkzxR8REuI0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXnsu9BGV5rl0A3Gycu0FfHjB2RAVL0gLBLZ3guZqVNoMETuE0
+	sHemF6PeyLm6ZGuDLcbDA2wjIhhjK6UIAa3WkFUMn/z93ySB+kgsRViVrxe0cebQew2oWTM3ZyZ
+	dJWtaoIgvBfKtR2ahM5oYWH35IGxsr/tsVTg1IJOI
+X-Gm-Gg: ASbGncvjk6HNBYzgMwIL2oc/1ILJcz12E0pSQKOfFgwkotTTTvPlDzx/2KBmVqlLOFc
+	niVYgKrLzCJ/P/5H3RIbzaQUyYI7qD8rMyhc9QZ18BcfpKPUJMBldMPY44F9FgYbMDnv29KuBb2
+	FeVh4YonFXHppg9PvI5nd3WRSkrxMS1UEgxuZ4Xv4BLlNDpAIUGCcdXoKt6e0JnU3K9liX6RCTw
+	XSw2qNGBH0Pm68PX+mU4huaO6NrhTMuheM6B3pXCw==
+X-Google-Smtp-Source: AGHT+IHa9Nch2FIZBNvQFdt72fBtGdTNiWpLK+36OZqHE3rAqtd4pqYuQh8Gb7ugOeLVkjRMznl5Qph/PIQV3EAFD/c=
+X-Received: by 2002:ad4:5765:0:b0:706:f753:6b1f with SMTP id
+ 6a1803df08f44-70935fb3038mr189139186d6.21.1754407064119; Tue, 05 Aug 2025
+ 08:17:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rsv7vzz2yb5otiah"
-Content-Disposition: inline
-In-Reply-To: <20250620232031.2705638-1-dmatlack@google.com>
-
-
---rsv7vzz2yb5otiah
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250729193647.3410634-1-marievic@google.com> <20250729193647.3410634-2-marievic@google.com>
+In-Reply-To: <20250729193647.3410634-2-marievic@google.com>
+From: Rae Moar <rmoar@google.com>
+Date: Tue, 5 Aug 2025 11:17:33 -0400
+X-Gm-Features: Ac12FXze3TaZ1ItJhvvsVg6J8U-v3wToEcNYmNz4bKxujCA6Thw0S4iJb4SdDqU
+Message-ID: <CA+GJov4BQ1mRa-JaHoML+gF7rk=XY=hCRL+Shag6Aj6VbUgUeg@mail.gmail.com>
+Subject: Re: [PATCH 1/9] kunit: Add parent kunit for parameterized test context
+To: Marie Zhussupova <marievic@google.com>
+Cc: davidgow@google.com, shuah@kernel.org, brendan.higgins@linux.dev, 
+	elver@google.com, dvyukov@google.com, lucas.demarchi@intel.com, 
+	thomas.hellstrom@linux.intel.com, rodrigo.vivi@intel.com, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	kasan-dev@googlegroups.com, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 20, 2025 at 11:19:58PM +0000, David Matlack wrote:
-> This series introduces VFIO selftests, located in
-> tools/testing/selftests/vfio/.
-Sorry for coming late to the party. Only recently got some cycles to go
-through this. This seems very similar to what we are trying to do with
-iommutests [3].
+On Tue, Jul 29, 2025 at 3:37=E2=80=AFPM Marie Zhussupova <marievic@google.c=
+om> wrote:
+>
+> Currently, KUnit parameterized tests lack a mechanism
+> to share resources across individual test invocations
+> because the same `struct kunit` instance is reused for
+> each test.
+>
+> This patch refactors kunit_run_tests() to provide each
+> parameterized test with its own `struct kunit` instance.
+> A new parent pointer is added to `struct kunit`, allowing
+> individual parameterized tests to reference a shared
+> parent kunit instance. Resources added to this parent
+> will then be accessible to all individual parameter
+> test executions.
+>
+> Signed-off-by: Marie Zhussupova <marievic@google.com>
 
->=20
-> VFIO selftests aim to enable kernel developers to write and run tests
-> that take the form of userspace programs that interact with VFIO and
-> IOMMUFD uAPIs. VFIO selftests can be used to write functional tests for
-> new features, regression tests for bugs, and performance tests for
-> optimizations.
-Have you considered implementing something outside the kernel sources?
-Something similar to fstests [1] or blktests [2]?
+Hello!
 
-I ask because I have always seen it as a suit that tests (regression and
-performance) the Linux kernel as well as the hardware. By hardware I
-mean IOMMU devices, peripherals as well as their QEMU implementations.
-Since the scope is quite big, seemed (to me) like a good idea to keep it
-out of the kernel sources.
+Thank you so much for sending out this series. I have wanted to see an
+update of our parameterized test framework for a while. I have a few
+comments below for this patch. But otherwise it is looking good.
 
-Can you speak to the pros/cons of having it in selftests? (sorry if this
-was already answered)
+Reviewed-by: Rae Moar <rmoar@google.com>
 
->=20
-> These tests are designed to interact with real PCI devices, i.e. they do
-> not rely on mocking out or faking any behavior in the kernel. This
-> allows the tests to exercise not only VFIO but also IOMMUFD, the IOMMU
-> driver, interrupt remapping, IRQ handling, etc.
-And depending on how you execute them, you might also be exercising the
-QEMU emulation paths. You could even test different HW firmwares if you
-wanted to :)
+Thanks!
+-Rae
 
->=20
-> For more background on the motivation and design of this series, please
-> see the RFC:
->=20
->   https://lore.kernel.org/kvm/20250523233018.1702151-1-dmatlack@google.co=
-m/
->=20
-> This series can also be found on GitHub:
->=20
->   https://github.com/dmatlack/linux/tree/vfio/selftests/v1
->=20
-=2E..
-> Instructions
-> -----------------------------------------------------------------------
->=20
-> Running VFIO selftests requires at a PCI device bound to vfio-pci for
-> the tests to use. The address of this device is passed to the test as
-> a segment:bus:device.function string, which must match the path to
-> the device in /sys/bus/pci/devices/ (e.g. 0000:00:04.0).
-Would you be able to autodetect the devices that are vfio-testable?
-I saw this question in the thread, but did not see the answer (sorry
-if I missed it).
+> ---
+>  include/kunit/test.h | 12 ++++++++++--
+>  lib/kunit/test.c     | 32 +++++++++++++++++++-------------
+>  2 files changed, 29 insertions(+), 15 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 39c768f87dc9..a42d0c8cb985 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -268,14 +268,22 @@ struct kunit_suite_set {
+>   *
+>   * @priv: for user to store arbitrary data. Commonly used to pass data
+>   *       created in the init function (see &struct kunit_suite).
+> + * @parent: for user to store data that they want to shared across
+> + *         parameterized tests.
+>   *
 
->=20
-> Once you have chosen a device, there is a helper script provided to
-> unbind the device from its current driver, bind it to vfio-pci, export
-> the environment variable $VFIO_SELFTESTS_BDF, and launch a shell:
-If I'm reading the series correctly there is a fair amount of helper
-code needed: device (un)binding, checking capabilities, setting up
-DMAable memory.... Have you considered a library like libvfn [4] (is
-there any other?) to take care of all this?
+As David mentioned, I would also prefer that this provides a more
+general description of the @parent field here. Although this is
+currently only used for parameterized tests, it could have other use
+cases in the future.
 
-One of the good things about having all this in a library is that it can
-be used in other contexts besides testing.
+>   * Used to store information about the current context under which the t=
+est
+>   * is running. Most of this data is private and should only be accessed
+> - * indirectly via public functions; the one exception is @priv which can=
+ be
+> - * used by the test writer to store arbitrary data.
+> + * indirectly via public functions; the two exceptions are @priv and @pa=
+rent
+> + * which can be used by the test writer to store arbitrary data or data =
+that is
+> + * available to all parameter test executions, respectively.
 
->=20
->   $ tools/testing/selftests/vfio/run.sh -d 0000:00:04.0 -s
->=20
-> The -d option tells the script which device to use and the -s option
-> tells the script to launch a shell.
->=20
-> Additionally, the VFIO selftest vfio_dma_mapping_test has test cases
-> that rely on HugeTLB pages being available, otherwise they are skipped.
-> To enable those tests make sure at least 1 2MB and 1 1GB HugeTLB pages
-> are available.
->=20
->   $ echo 1 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
->   $ echo 1 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
-Should this be automatic? You can just modify nr_hugepages everytime you
-execute a test that requires it.
+In addition, I would prefer that the call out to @parent here is also
+changed to a more general description of the @parent field. However,
+feel free to also include the description of the use case for the
+parameterized tests.
 
->=20
-> To run all VFIO selftests using make:
->=20
->   $ make -C tools/testing/selftests/vfio run_tests
-This ties back to having the test suit outside the Linux Kernel sources.
-I might not always want/have a Linux Kernel selftests. Like if I would
-want to test the Intel/AMD IOMMU implementation in QEMU.
+>   */
+>  struct kunit {
+>         void *priv;
+> +       /*
+> +        * Reference to the parent struct kunit for storing shared resour=
+ces
+> +        * during parameterized testing.
+> +        */
 
->=20
-> To run individual tests:
->=20
->   $ tools/testing/selftests/vfio/vfio_dma_mapping_test
->   $ tools/testing/selftests/vfio/vfio_dma_mapping_test -v iommufd_anonymo=
-us_hugetlb_2mb
->   $ tools/testing/selftests/vfio/vfio_dma_mapping_test -r vfio_dma_mappin=
-g_test.iommufd_anonymous_hugetlb_2mb.dma_map_unmap
->=20
-> The environment variable $VFIO_SELFTESTS_BDF can be overridden for a
-> specific test by passing in the BDF on the command line as the last
-> positional argument.
->=20
->   $ tools/testing/selftests/vfio/vfio_dma_mapping_test 0000:00:04.0
->   $ tools/testing/selftests/vfio/vfio_dma_mapping_test -v iommufd_anonymo=
-us_hugetlb_2mb 0000:00:04.0
->   $ tools/testing/selftests/vfio/vfio_dma_mapping_test -r vfio_dma_mappin=
-g_test.iommufd_anonymous_hugetlb_2mb.dma_map_unmap 0000:00:04.0
->=20
-> When you are done, free the HugeTLB pages and exit the shell started by
-> run.sh. Exiting the shell will cause the device to be unbound from
-> vfio-pci and bound back to its original driver.
->=20
->   $ echo 0 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
->   $ echo 0 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
->   $ exit
-As before: Can this be done automatically?
+I am more 50/50 on changing this description. Could change it just to:
+"Reference to the parent struct kunit for storing shared resources."
 
->=20
-> It's also possible to use run.sh to run just a single test hermetically,
-> rather than dropping into a shell:
->=20
->   $ tools/testing/selftests/vfio/run.sh -d 0000:00:04.0 -- tools/testing/=
-selftests/vfio/vfio_dma_mapping_test -v iommufd_anonymous
->=20
-> Tests
-> -----------------------------------------------------------------------
->=20
-> There are 5 tests in this series, mostly to demonstrate as a
-> proof-of-concept:
->=20
->  - tools/testing/selftests/vfio/vfio_pci_device_test.c
->  - tools/testing/selftests/vfio/vfio_pci_driver_test.c
->  - tools/testing/selftests/vfio/vfio_iommufd_setup_test.c
->  - tools/testing/selftests/vfio/vfio_dma_mapping_test.c
->  - tools/testing/selftests/kvm/vfio_pci_device_irq_test.c
->=20
-> Future Areas of Development
-> -----------------------------------------------------------------------
->=20
-> Library:
->=20
->  - Driver support for devices that can be used on AMD, ARM, and other
->    platforms (e.g. mlx5).
->  - Driver support for a device available in QEMU VMs (e.g.
->    pcie-ats-testdev [1])
->  - Support for tests that use multiple devices.
->  - Support for IOMMU groups with multiple devices.
->  - Support for multiple devices sharing the same container/iommufd.
->  - Sharing TEST_ASSERT() macros and other common code between KVM
->    and VFIO selftests.
-Same as before: How about a lib?
+> +       struct kunit *parent;
+>
+>         /* private: internal use only. */
+>         const char *name; /* Read only after initialization! */
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index f3c6b11f12b8..4d6a39eb2c80 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -647,6 +647,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+>         struct kunit_case *test_case;
+>         struct kunit_result_stats suite_stats =3D { 0 };
+>         struct kunit_result_stats total_stats =3D { 0 };
+> +       const void *curr_param;
+>
+>         /* Taint the kernel so we know we've run tests. */
+>         add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
+> @@ -679,36 +680,39 @@ int kunit_run_tests(struct kunit_suite *suite)
+>                 } else {
+>                         /* Get initial param. */
+>                         param_desc[0] =3D '\0';
+> -                       test.param_value =3D test_case->generate_params(N=
+ULL, param_desc);
+> +                       /* TODO: Make generate_params try-catch */
+> +                       curr_param =3D test_case->generate_params(NULL, p=
+aram_desc);
+>                         test_case->status =3D KUNIT_SKIPPED;
+>                         kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT =
+KUNIT_SUBTEST_INDENT
+>                                   "KTAP version 1\n");
+>                         kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT =
+KUNIT_SUBTEST_INDENT
+>                                   "# Subtest: %s", test_case->name);
+>
+> -                       while (test.param_value) {
+> -                               kunit_run_case_catch_errors(suite, test_c=
+ase, &test);
+> +                       while (curr_param) {
+> +                               struct kunit param_test =3D {
+> +                                       .param_value =3D curr_param,
+> +                                       .param_index =3D ++test.param_ind=
+ex,
+> +                                       .parent =3D &test,
+> +                               };
+> +                               kunit_init_test(&param_test, test_case->n=
+ame, test_case->log);
+> +                               kunit_run_case_catch_errors(suite, test_c=
+ase, &param_test);
+>
+>                                 if (param_desc[0] =3D=3D '\0') {
+>                                         snprintf(param_desc, sizeof(param=
+_desc),
+>                                                  "param-%d", test.param_i=
+ndex);
 
->=20
-> Tests:
->=20
->  - DMA mapping performance tests for BARs/HugeTLB/etc.
->  - Porting tests from
->    https://github.com/awilliam/tests/commits/for-clg/ to selftests.
->  - Live Update selftests.
->  - Porting Sean's KVM selftest for posted interrupts to use the VFIO
->    selftests library [2]
->=20
-=2E..
->=20
-> base-commit: e271ed52b344ac02d4581286961d0c40acc54c03
-> prerequisite-patch-id: c1decca4653262d3d2451e6fd4422ebff9c0b589
-> --=20
-> 2.50.0.rc2.701.gf1e915cc24-goog
->=20
+This probably doesn't matter too much either way but should this be
+param_test.param_index instead? This would cover the case where the
+param_index is changed during the test run even though it shouldn't.
 
-Best
+>                                 }
+>
+> -                               kunit_print_ok_not_ok(&test, KUNIT_LEVEL_=
+CASE_PARAM,
+> -                                                     test.status,
+> -                                                     test.param_index + =
+1,
+> +                               kunit_print_ok_not_ok(&param_test, KUNIT_=
+LEVEL_CASE_PARAM,
+> +                                                     param_test.status,
+> +                                                     param_test.param_in=
+dex,
+>                                                       param_desc,
+> -                                                     test.status_comment=
+);
+> +                                                     param_test.status_c=
+omment);
+>
+> -                               kunit_update_stats(&param_stats, test.sta=
+tus);
+> +                               kunit_update_stats(&param_stats, param_te=
+st.status);
+>
+>                                 /* Get next param. */
+>                                 param_desc[0] =3D '\0';
+> -                               test.param_value =3D test_case->generate_=
+params(test.param_value, param_desc);
+> -                               test.param_index++;
+> -                               test.status =3D KUNIT_SUCCESS;
+> -                               test.status_comment[0] =3D '\0';
+> -                               test.priv =3D NULL;
+> +                               curr_param =3D test_case->generate_params=
+(curr_param, param_desc);
+>                         }
+>                 }
+>
+> @@ -723,6 +727,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+>
+>                 kunit_update_stats(&suite_stats, test_case->status);
+>                 kunit_accumulate_stats(&total_stats, param_stats);
+> +               /* TODO: Put this kunit_cleanup into a try-catch. */
+> +               kunit_cleanup(&test);
 
-[1] https://github.com/kdave/xfstests
-[2] https://github.com/linux-blktests/blktests
-[3] https://github.com/SamsungDS/iommutests
-[4] https://github.com/SamsungDS/libvfn
+I might be missing something here but why not do this cleanup before
+the printing stage and only if the test was a parent param test?
 
---=20
 
-Joel Granados
 
---rsv7vzz2yb5otiah
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmiSHlgACgkQupfNUreW
-QU9n5QwAlN4q0wm6M2efHhBPz5s8o7xTe59fbZk8Jt0AMTD00DD7LCvTEH7+rlNL
-ctB08Z8Z4CAowaiU1UiWq7cRAEZ5GGL2spcQc36XTXtvIk6ApsYP+qVg1ATLjc2S
-lr69S4qv/LSpwOmL/vCZTrQgIQMsqnyb1SvmFLm6YiPPJhQB0csPp8VgUmNEcUXU
-7De+mBNMb0Z3wjZYCDjRs4SAsyvLnOsjAjlvT5Pe8SMuctmCIZsFHKtSb07p3a3t
-0+FTT0mh/JzRzE8KWCZN3Q15/0juhkfXJP3fdTk1iWfV9IBlaFCihOUcsLovO/iw
-uRvG8kAWkzp0+TyZJiGk2QkXaDxQjGeW0gsC1Nxk0Gcaq/dciUSMCD2zXLEMSVqG
-ClWuI8nhPYonHWAOJAWb1SF2KFEoWIc+NUKqtPlzgCzmU+j7KcC+FRCnEjt533zs
-nmhosqrKfGW4W56A4dVed7dBACKvLTSEUYVtfIBIvvv9rcT2xXtDWI8PaAzk9d3k
-rnI0THXx
-=ZDn9
------END PGP SIGNATURE-----
-
---rsv7vzz2yb5otiah--
+>         }
+>
+>         if (suite->suite_exit)
+> --
+> 2.50.1.552.g942d659e1b-goog
+>
 
