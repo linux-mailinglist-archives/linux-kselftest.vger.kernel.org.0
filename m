@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-38276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE3C0B1AE49
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 08:29:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18897B1AE55
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 08:30:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6A147A23F0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 06:28:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C93D53BB1F2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 06:30:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7441B21B8F8;
-	Tue,  5 Aug 2025 06:28:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A67225417;
+	Tue,  5 Aug 2025 06:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nbQ4CISm"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="R7uyQpbS"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24F821ABCF;
-	Tue,  5 Aug 2025 06:28:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3F921C9E5;
+	Tue,  5 Aug 2025 06:29:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754375338; cv=none; b=bI/pofXql/Vm6MLft50Uv+1AAIyB8J8Llc8rGCfVcZpADeeXmdKcEJLjsQYdTHSQEALRMnXzJI6pJP4QeSq6Mj0C+gVcasnCc+vtx9iF6TQ29hAfL3Dulz/ZaJj368Zm1I0CUDwEBxFyGadjFjwmEpSB6ZajWcG7J2sxiQD8Gm8=
+	t=1754375352; cv=none; b=m6u16cqUXdViFbv1uQa8bIS+7eKT2WrO5gcWH590jbwZ16IylW/fYrQdhUBYbhho9pBlTRVRdyeZLszahGEu8r7OI9mmyrnsZJl8jnNu1Biqzu11h3RCuiwMKCq/6bGy6aumv9nuSdgil4DA3Zpqi2OcRwinESNzF8NukV2Zj0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754375338; c=relaxed/simple;
-	bh=ZabHjDmh4i7YIgeLrgzszFYG9JKkJVtEY/t5VL9A/F8=;
+	s=arc-20240116; t=1754375352; c=relaxed/simple;
+	bh=MVvPvZCE3I713bYs8EBca4lo70Y5VkoX2XvvlNdG3LQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zi/Cit66sZl9yCSrNETmrwtYuRAzi0aT3cCbb5ChHYpK+xU5c04Ql64dXhgYeutYSEjU2qJcEgIa/gqTf924vsp+HyqiMRhReDhnFLVmTIeh93rJOIr2aufecg8opABabkAgseHULWKjpEOCRhY8Z7/JJPlfZxCGoEmAJL5Sexg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nbQ4CISm; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=ZZwgUMF6XRVIfxH2wYOQejSKIhdb0X48IL/ht9l3RBEu5CHNa7+Uqgn8qkCqajo+f9fTTnGE0pgKqksefgqdCLl5322xTsH7Wnx9H9LyCfrx9fKzdCi76yFf001sXZx8rCqr92jVOwV3kVCBme1345N9AQ5CRqjZSska8K0qzKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=R7uyQpbS; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 574La2f0025639;
-	Tue, 5 Aug 2025 06:28:30 GMT
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 574L1ZVx014654;
+	Tue, 5 Aug 2025 06:28:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=E8Lc0Ngip1RoqiiEB
-	ln8K6ixMv54+IdkKqHJ/sDtX0c=; b=nbQ4CISmRuvmlL++WWK6DnKKQA/98W2Zo
-	9J6ULHV9xnsvDtbpouP17tYY1FHbdKEB90wctKUKaMz6KFIfT/A1CNuavK5l6NXQ
-	LPYeVySYNU4vYFRwxRJZ3agacA7V/5aNGHCuXZmnilMR+PtZ+6QZNcz0f6/oujP/
-	RmpXNSWRCi6OPjl8lPbm6N1WCljQaWAlfNQobqZ2rLMet1BFPlhTnWXiXtBdgueh
-	B+NduDB0z9kO4QW4qyzMbUgX9pACb69PoK8a0fy4bDtFPkO3ZSgDkz3uY6+WpzCk
-	cf53nnFswg4sXSczO7qmVIqmkkbogKAsKAawWhEduraeE3B51Fu9g==
+	:mime-version:references:subject:to; s=pp1; bh=FAc975URBeDhQ2ZGa
+	Ba4r6rkYNEci9eNQVanL1mGVvg=; b=R7uyQpbSfScbGqYvykgLCtO5dHVOvnAd9
+	FcdlT8Tv1Ah0vYfnco53NW3Yxomv5JCSk8ncxlHnqpvgqnYHT0W8Z03ejSCXPEST
+	kebY0iDYbkyAMMH8r6dha/BUrDLX0KrLFQ4tnCyvBrn/UNUFGSo+tAy3zURjf/4D
+	7dTyzI/d2NUFhf96anckFqAARCBL7CJ/MsLTs/2HnqXZJaArE4yaRzoTBQkD7WzA
+	M4qcpk5W725p2FN4ee3eS4bFhp29WmTBL7FgzB42XqG6v1d13UKQ9NUBF3iU5FcT
+	S9hdELmRMNBWr19S0/ZXTnAMpwL3hADb2lBcHMtsPLpIz2CXKmQIw==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 489ab3mrhe-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48983t55vh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Aug 2025 06:28:30 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5756PKxN002595;
-	Tue, 5 Aug 2025 06:28:29 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 489ab3mrh9-1
+	Tue, 05 Aug 2025 06:28:37 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5756SaKh019111;
+	Tue, 5 Aug 2025 06:28:36 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48983t55va-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Aug 2025 06:28:29 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5753wBFt009562;
-	Tue, 5 Aug 2025 06:28:28 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 489x0p16ep-1
+	Tue, 05 Aug 2025 06:28:36 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5753JJaL009807;
+	Tue, 5 Aug 2025 06:28:35 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 489w0thbtu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Aug 2025 06:28:28 +0000
+	Tue, 05 Aug 2025 06:28:35 +0000
 Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5756SOEk45416816
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5756SWek33358368
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 5 Aug 2025 06:28:24 GMT
+	Tue, 5 Aug 2025 06:28:32 GMT
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B8C012004B;
-	Tue,  5 Aug 2025 06:28:24 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id EA11820043;
+	Tue,  5 Aug 2025 06:28:31 +0000 (GMT)
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C38B220040;
-	Tue,  5 Aug 2025 06:28:17 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 3291320040;
+	Tue,  5 Aug 2025 06:28:25 +0000 (GMT)
 Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.39.141])
 	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  5 Aug 2025 06:28:17 +0000 (GMT)
+	Tue,  5 Aug 2025 06:28:24 +0000 (GMT)
 From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -85,9 +85,9 @@ Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
         christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
         mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
         iii@linux.ibm.com, shuah@kernel.org
-Subject: [bpf-next 3/6] bpf,powerpc: Implement bpf_addr_space_cast instruction
-Date: Tue,  5 Aug 2025 11:57:44 +0530
-Message-ID: <20250805062747.3479221-4-skb99@linux.ibm.com>
+Subject: [bpf-next 4/6] bpf,powerpc: Introduce bpf_jit_emit_atomic_ops() to emit atomic instructions
+Date: Tue,  5 Aug 2025 11:57:45 +0530
+Message-ID: <20250805062747.3479221-5-skb99@linux.ibm.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250805062747.3479221-1-skb99@linux.ibm.com>
 References: <20250805062747.3479221-1-skb99@linux.ibm.com>
@@ -99,104 +99,274 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=Z+jsHGRA c=1 sm=1 tr=0 ts=6891a48e cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=2OwXVqhp2XgA:10 a=VnNF1IyMAAAA:8 a=VdvQuQQzA1H2XN5x8tMA:9
-X-Proofpoint-ORIG-GUID: FzqfjKF2M8R6OUL78a6u6CShx5cAoO1k
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA1MDA0NSBTYWx0ZWRfX9VFCofYbje0H
- yrHoH402ZdAlD3kgNyY9KLTjutJk1UmoFDWEznDMd3tggsdeIQ5Dn9Z3JR7lmmSBaD/jMusme/m
- QeVw6lCpstXoVvVsi0G783MWVRHk0R4Vtq+/MoHBzS3xswzHREsEwDNM94TyZUG7vU5DpOH3iFM
- ozJf7ZjThxPN4Z1NCuil40X7+9BiPmcUlCgz+QsMyYyEtjV3ZFZtaOYLVS1HNHqY2Q357xsnP5c
- uspGCJogwP6JmYEmpFVFF9Oii+gm05H7HfSDV6FiiLj1nbTDXEEbzAkZl3LhABpk8H7VodGXg0p
- lxGoTFpnyk2r7YyQdRWDhUY/LfLOcI0Z1tEBqlGc+oh0jIljR8UG91hHEsa3VLMujXoxChGqkLO
- oRBNOHulnRWPQJqs2+Q83H/v10t9g0jtRKdeLCxUgSKpyMYSelVVtpHSOkNe+L688KC24myT
-X-Proofpoint-GUID: s1Y8E__poHMixCbnWQNZaThpAmQFgGu2
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA1MDA0NSBTYWx0ZWRfXwiJSf2dWPA2n
+ 2Iv/EQoxRlLW23TjNZ0uDp6JwW6KZePtFViAxhd5mt4bcRvYZRMFSJPErJS6dszQ6nQHfWtXGQ3
+ lDMydrDdFweplrZSzAiFbIlOYz/uVS1MhTy4N2ybUo2QwZDzHe7Abd99vDvO8E3FalZvAXF3Ja7
+ hgibLd7fKp2XUMajCCe2lQLxiKXu3brJXpf/828GQoiKrMiznM/o1jJcmAACv55tkmCRhGeg/nB
+ x7Sth7L1eb8HcdWG0ubziEmwnvjzhoNbZn1Jxj/624phGxAUZeZXDYlf1l0CTpoMoqKe+EebRXo
+ fIbDXgGny0ypovrRrQn/MSJT25aUhWS6d617KVb0KH7O4QzjAJZMw97WgbaYHTF3CvtMqw+BFGB
+ 0WCem9zn2GtKsi6lr6C4o970Js3dMVUxB0eANGlNi8jGi4RrrhacCoaE8dR4eOamGoYeI6ss
+X-Proofpoint-GUID: y1IvXRs28EEz1D4IoEQyuqPzy5m9abLt
+X-Proofpoint-ORIG-GUID: 5m-gE2FuSQ8KJqOr79Xa4f8uo9KsfHfl
+X-Authority-Analysis: v=2.4 cv=AZSxH2XG c=1 sm=1 tr=0 ts=6891a495 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=2OwXVqhp2XgA:10 a=VnNF1IyMAAAA:8 a=mLi99PhJ1kaOFlELNpEA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-08-05_01,2025-08-04_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 clxscore=1015 suspectscore=0
- priorityscore=1501 mlxlogscore=742 adultscore=0 phishscore=0 mlxscore=0
- bulkscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2508050045
+ clxscore=1015 priorityscore=1501 impostorscore=0 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2508050045
 
-LLVM generates bpf_addr_space_cast instruction while translating
-pointers between native (zero) address space and
-__attribute__((address_space(N))). The addr_space=0 is reserved as
-bpf_arena address space.
-
-rY = addr_space_cast(rX, 0, 1) is processed by the verifier and
-converted to normal 32-bit move: wX = wY.
-
-rY = addr_space_cast(rX, 1, 0) : used to convert a bpf arena pointer to
-a pointer in the userspace vma. This has to be converted by the JIT.
+The existing code for emitting bpf atomic instruction sequences for
+atomic operations such as XCHG, CMPXCHG, ADD, AND, OR, and XOR has been
+refactored into a reusable function, bpf_jit_emit_ppc_atomic_op().
+It also computes the jump offset and tracks the instruction index for jited
+LDARX/LWARX to be used in case it causes a fault.
 
 Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 ---
- arch/powerpc/net/bpf_jit.h        |  1 +
- arch/powerpc/net/bpf_jit_comp.c   |  6 ++++++
- arch/powerpc/net/bpf_jit_comp64.c | 11 +++++++++++
- 3 files changed, 18 insertions(+)
+ arch/powerpc/net/bpf_jit_comp64.c | 203 +++++++++++++++++-------------
+ 1 file changed, 115 insertions(+), 88 deletions(-)
 
-diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
-index 2d095a873305..748e30e8b5b4 100644
---- a/arch/powerpc/net/bpf_jit.h
-+++ b/arch/powerpc/net/bpf_jit.h
-@@ -165,6 +165,7 @@ struct codegen_context {
- 	unsigned int exentry_idx;
- 	unsigned int alt_exit_addr;
- 	u64 arena_vm_start;
-+	u64 user_vm_start;
- };
- 
- #define bpf_to_ppc(r)	(ctx->b2p[r])
-diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index 35bfdf4d8785..2b3f90930c27 100644
---- a/arch/powerpc/net/bpf_jit_comp.c
-+++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -205,6 +205,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
- 	/* Make sure that the stack is quadword aligned. */
- 	cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
- 	cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux->arena);
-+	cgctx.user_vm_start = bpf_arena_get_user_vm_start(fp->aux->arena);
- 
- 	/* Scouting faux-generate pass 0 */
- 	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
-@@ -441,6 +442,11 @@ bool bpf_jit_supports_kfunc_call(void)
- 	return true;
- }
- 
-+bool bpf_jit_supports_arena(void)
-+{
-+	return IS_ENABLED(CONFIG_PPC64);
-+}
-+
- bool bpf_jit_supports_far_kfunc_call(void)
- {
- 	return IS_ENABLED(CONFIG_PPC64);
 diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 16e62766c757..d4fe4dacf2d6 100644
+index d4fe4dacf2d6..6a85cd847075 100644
 --- a/arch/powerpc/net/bpf_jit_comp64.c
 +++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -812,6 +812,17 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		 */
- 		case BPF_ALU | BPF_MOV | BPF_X: /* (u32) dst = src */
- 		case BPF_ALU64 | BPF_MOV | BPF_X: /* dst = src */
+@@ -423,6 +423,111 @@ asm (
+ "		blr				;"
+ );
+ 
++static int bpf_jit_emit_atomic_ops(u32 *image, struct codegen_context *ctx,
++				   const struct bpf_insn *insn, u32 *jmp_off,
++				   u32 *tmp_idx, u32 *addrp)
++{
++	u32 tmp1_reg = bpf_to_ppc(TMP_REG_1);
++	u32 tmp2_reg = bpf_to_ppc(TMP_REG_2);
++	u32 size = BPF_SIZE(insn->code);
++	u32 src_reg = bpf_to_ppc(insn->src_reg);
++	u32 dst_reg = bpf_to_ppc(insn->dst_reg);
++	s32 imm = insn->imm;
 +
-+			if (insn_is_cast_user(&insn[i])) {
-+				EMIT(PPC_RAW_RLDICL(tmp1_reg, src_reg, 0, 32));
-+				PPC_LI64(dst_reg, (ctx->user_vm_start & 0xffffffff00000000UL));
-+				EMIT(PPC_RAW_CMPDI(tmp1_reg, 0));
-+				PPC_BCC_SHORT(COND_EQ, (ctx->idx + 2) * 4);
-+				EMIT(PPC_RAW_OR(tmp1_reg, dst_reg, tmp1_reg));
-+				EMIT(PPC_RAW_MR(dst_reg, tmp1_reg));
-+				break;
-+			}
++	u32 save_reg = tmp2_reg;
++	u32 ret_reg = src_reg;
++	u32 fixup_idx;
 +
- 			if (imm == 1) {
- 				/* special mov32 for zext */
- 				EMIT(PPC_RAW_RLWINM(dst_reg, dst_reg, 0, 0, 31));
++	/* Get offset into TMP_REG_1 */
++	EMIT(PPC_RAW_LI(tmp1_reg, insn->off));
++       /*
++	* Enforce full ordering for operations with BPF_FETCH by emitting a 'sync'
++	* before and after the operation.
++	*
++	* This is a requirement in the Linux Kernel Memory Model.
++	* See __cmpxchg_u64() in asm/cmpxchg.h as an example.
++	*/
++	if ((imm & BPF_FETCH) && IS_ENABLED(CONFIG_SMP))
++		EMIT(PPC_RAW_SYNC());
++
++	*tmp_idx = ctx->idx;
++
++	/* load value from memory into TMP_REG_2 */
++	if (size == BPF_DW)
++		EMIT(PPC_RAW_LDARX(tmp2_reg, tmp1_reg, dst_reg, 0));
++	else
++		EMIT(PPC_RAW_LWARX(tmp2_reg, tmp1_reg, dst_reg, 0));
++	/* Save old value in _R0 */
++	if (imm & BPF_FETCH)
++		EMIT(PPC_RAW_MR(_R0, tmp2_reg));
++
++	switch (imm) {
++	case BPF_ADD:
++	case BPF_ADD | BPF_FETCH:
++		EMIT(PPC_RAW_ADD(tmp2_reg, tmp2_reg, src_reg));
++		break;
++	case BPF_AND:
++	case BPF_AND | BPF_FETCH:
++		EMIT(PPC_RAW_AND(tmp2_reg, tmp2_reg, src_reg));
++		break;
++	case BPF_OR:
++	case BPF_OR | BPF_FETCH:
++		EMIT(PPC_RAW_OR(tmp2_reg, tmp2_reg, src_reg));
++		break;
++	case BPF_XOR:
++	case BPF_XOR | BPF_FETCH:
++		EMIT(PPC_RAW_XOR(tmp2_reg, tmp2_reg, src_reg));
++		break;
++	case BPF_CMPXCHG:
++	       /*
++		* Return old value in BPF_REG_0 for BPF_CMPXCHG &
++		* in src_reg for other cases.
++		*/
++		ret_reg = bpf_to_ppc(BPF_REG_0);
++
++		/* Compare with old value in BPF_R0 */
++		if (size == BPF_DW)
++			EMIT(PPC_RAW_CMPD(bpf_to_ppc(BPF_REG_0), tmp2_reg));
++		else
++			EMIT(PPC_RAW_CMPW(bpf_to_ppc(BPF_REG_0), tmp2_reg));
++		/* Don't set if different from old value */
++		PPC_BCC_SHORT(COND_NE, (ctx->idx + 3) * 4);
++		fallthrough;
++	case BPF_XCHG:
++		save_reg = src_reg;
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	/* store new value */
++	if (size == BPF_DW)
++		EMIT(PPC_RAW_STDCX(save_reg, tmp1_reg, dst_reg));
++	else
++		EMIT(PPC_RAW_STWCX(save_reg, tmp1_reg, dst_reg));
++	/* we're done if this succeeded */
++	PPC_BCC_SHORT(COND_NE, *tmp_idx * 4);
++	fixup_idx = ctx->idx;
++
++	if (imm & BPF_FETCH) {
++		/* Emit 'sync' to enforce full ordering */
++		if (IS_ENABLED(CONFIG_SMP))
++			EMIT(PPC_RAW_SYNC());
++		EMIT(PPC_RAW_MR(ret_reg, _R0));
++		/*
++		 * Skip unnecessary zero-extension for 32-bit cmpxchg.
++		 * For context, see commit 39491867ace5.
++		 */
++		if (size != BPF_DW && imm == BPF_CMPXCHG &&
++		    insn_is_zext(insn + 1))
++			*addrp = ctx->idx * 4;
++	}
++
++	*jmp_off = (fixup_idx - *tmp_idx) * 4;
++
++	return 0;
++}
++
+ static int bpf_jit_emit_probe_mem_store(struct codegen_context *ctx, u32 src_reg, s16 off,
+ 					u32 code, u32 *image)
+ {
+@@ -538,7 +643,6 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 		u32 size = BPF_SIZE(code);
+ 		u32 tmp1_reg = bpf_to_ppc(TMP_REG_1);
+ 		u32 tmp2_reg = bpf_to_ppc(TMP_REG_2);
+-		u32 save_reg, ret_reg;
+ 		s16 off = insn[i].off;
+ 		s32 imm = insn[i].imm;
+ 		bool func_addr_fixed;
+@@ -546,6 +650,7 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 		u64 imm64;
+ 		u32 true_cond;
+ 		u32 tmp_idx;
++		u32 jmp_off;
+ 
+ 		/*
+ 		 * addrs[] maps a BPF bytecode address into a real offset from
+@@ -1081,93 +1186,15 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 				return -EOPNOTSUPP;
+ 			}
+ 
+-			save_reg = tmp2_reg;
+-			ret_reg = src_reg;
+-
+-			/* Get offset into TMP_REG_1 */
+-			EMIT(PPC_RAW_LI(tmp1_reg, off));
+-			/*
+-			 * Enforce full ordering for operations with BPF_FETCH by emitting a 'sync'
+-			 * before and after the operation.
+-			 *
+-			 * This is a requirement in the Linux Kernel Memory Model.
+-			 * See __cmpxchg_u64() in asm/cmpxchg.h as an example.
+-			 */
+-			if ((imm & BPF_FETCH) && IS_ENABLED(CONFIG_SMP))
+-				EMIT(PPC_RAW_SYNC());
+-			tmp_idx = ctx->idx * 4;
+-			/* load value from memory into TMP_REG_2 */
+-			if (size == BPF_DW)
+-				EMIT(PPC_RAW_LDARX(tmp2_reg, tmp1_reg, dst_reg, 0));
+-			else
+-				EMIT(PPC_RAW_LWARX(tmp2_reg, tmp1_reg, dst_reg, 0));
+-
+-			/* Save old value in _R0 */
+-			if (imm & BPF_FETCH)
+-				EMIT(PPC_RAW_MR(_R0, tmp2_reg));
+-
+-			switch (imm) {
+-			case BPF_ADD:
+-			case BPF_ADD | BPF_FETCH:
+-				EMIT(PPC_RAW_ADD(tmp2_reg, tmp2_reg, src_reg));
+-				break;
+-			case BPF_AND:
+-			case BPF_AND | BPF_FETCH:
+-				EMIT(PPC_RAW_AND(tmp2_reg, tmp2_reg, src_reg));
+-				break;
+-			case BPF_OR:
+-			case BPF_OR | BPF_FETCH:
+-				EMIT(PPC_RAW_OR(tmp2_reg, tmp2_reg, src_reg));
+-				break;
+-			case BPF_XOR:
+-			case BPF_XOR | BPF_FETCH:
+-				EMIT(PPC_RAW_XOR(tmp2_reg, tmp2_reg, src_reg));
+-				break;
+-			case BPF_CMPXCHG:
+-				/*
+-				 * Return old value in BPF_REG_0 for BPF_CMPXCHG &
+-				 * in src_reg for other cases.
+-				 */
+-				ret_reg = bpf_to_ppc(BPF_REG_0);
+-
+-				/* Compare with old value in BPF_R0 */
+-				if (size == BPF_DW)
+-					EMIT(PPC_RAW_CMPD(bpf_to_ppc(BPF_REG_0), tmp2_reg));
+-				else
+-					EMIT(PPC_RAW_CMPW(bpf_to_ppc(BPF_REG_0), tmp2_reg));
+-				/* Don't set if different from old value */
+-				PPC_BCC_SHORT(COND_NE, (ctx->idx + 3) * 4);
+-				fallthrough;
+-			case BPF_XCHG:
+-				save_reg = src_reg;
+-				break;
+-			default:
+-				pr_err_ratelimited(
+-					"eBPF filter atomic op code %02x (@%d) unsupported\n",
+-					code, i);
+-				return -EOPNOTSUPP;
+-			}
+-
+-			/* store new value */
+-			if (size == BPF_DW)
+-				EMIT(PPC_RAW_STDCX(save_reg, tmp1_reg, dst_reg));
+-			else
+-				EMIT(PPC_RAW_STWCX(save_reg, tmp1_reg, dst_reg));
+-			/* we're done if this succeeded */
+-			PPC_BCC_SHORT(COND_NE, tmp_idx);
+-
+-			if (imm & BPF_FETCH) {
+-				/* Emit 'sync' to enforce full ordering */
+-				if (IS_ENABLED(CONFIG_SMP))
+-					EMIT(PPC_RAW_SYNC());
+-				EMIT(PPC_RAW_MR(ret_reg, _R0));
+-				/*
+-				 * Skip unnecessary zero-extension for 32-bit cmpxchg.
+-				 * For context, see commit 39491867ace5.
+-				 */
+-				if (size != BPF_DW && imm == BPF_CMPXCHG &&
+-				    insn_is_zext(&insn[i + 1]))
+-					addrs[++i] = ctx->idx * 4;
++			ret = bpf_jit_emit_atomic_ops(image, ctx, &insn[i],
++						      &jmp_off, &tmp_idx, &addrs[i + 1]);
++			if (ret) {
++				if (ret == -EOPNOTSUPP) {
++					pr_err_ratelimited(
++						"eBPF filter atomic op code %02x (@%d) unsupported\n",
++						code, i);
++				}
++				return ret;
+ 			}
+ 			break;
+ 
 -- 
 2.43.5
 
