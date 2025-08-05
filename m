@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-38335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21176B1BC08
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 23:52:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38373B1BC0F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 23:52:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DB65174A06
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 21:52:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DA8818A7A99
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Aug 2025 21:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C752BCF7D;
-	Tue,  5 Aug 2025 21:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D354A2BD5BF;
+	Tue,  5 Aug 2025 21:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V82Dm7vN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HHC/NxH1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA6A29CB5A;
-	Tue,  5 Aug 2025 21:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD0E2BD010;
+	Tue,  5 Aug 2025 21:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754430566; cv=none; b=l+4giviGuOvw7BE7Cb/YIF2xZCW5BCzey4NF0YqR8Eb5IPJwco8/xrI9UEr/tvsLaCACNWAvFjeH6vtu5OZ1LVXzxI6cNAw7UxKb0hA3O0lHKFAmZ5b8qk6VKKdXvZ+DE+fdXx4vlfqf5gXdUOnS0JX0ad2C6CWtx8OpRcgB0sc=
+	t=1754430567; cv=none; b=IhPspw9U64oNQetig0hfP9uoFS7I62BPoz2xwHKWl1Bs2kPyQj9Id23a8IUAM6PwYHoYaX9omwFzz9m52r5+P1jFLSKat2oxoR8fULYwxJnxRrdN4FkjNabUQX7wP64CeSEmvQQwYwKW63Gc7xy6602ow//6VL2hkvrq0ayfjV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754430566; c=relaxed/simple;
-	bh=nH9AzNvXgldUU/AljR6D3DexM35j63PI4USaZ9u/z9k=;
+	s=arc-20240116; t=1754430567; c=relaxed/simple;
+	bh=P1/qaJCybjcXSEfP6RGJaoK9v8utpfUNtngCHpZIML8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZZYPBGSzizNpDC00zP1k35dwo3xwD+o3+lzv4cfEQDiL3E1b8JPEnwItLiIc7c5p8m4pG93dA9lxhBLc+a8Z2FOlHbygL8oyOv3enWPM+onuSt6KS5CFFv8SdTJ5jEDfgIDkfloc3UncAET8pifFSffVdsBDBgrhkCDBU/j+kuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V82Dm7vN; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:To:Cc; b=qD7VesTm4HOEhus0/37yxcqBkSOBhgon0tiegln/9Yl4VjhKZLEAu9E2Er9B/q3dI3HhTBhHp2TXG6DRHhyZJfuR1BexMRADZz82ZSPAZtmdH6TYXO5VACQOlVYKrW1xBB4ShgBI9t+kM1oH76vg529/gyyHLJ1jMYoDyTWbRiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HHC/NxH1; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-23fd3fe0d81so56702155ad.3;
-        Tue, 05 Aug 2025 14:49:24 -0700 (PDT)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-76a3818eb9bso4346335b3a.3;
+        Tue, 05 Aug 2025 14:49:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754430564; x=1755035364; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754430565; x=1755035365; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=j7WdeYwSOTTiB9deoqbpcAAZGDfkPprbWBWnuaDCaW8=;
-        b=V82Dm7vNK9O7k7aSAZMtUmgY74jLPJrWdD3q4EgX9N/ZW7ffhMV2qZUhWoaoMfR+Zu
-         9DQqtzU1Giv57Nh0IAO2u3UmvhWcbKp8+B+qaCSI6dwiAWZk7Y/WtWqtUs7ZBuwYm1KV
-         BhPKXcHnzhQ7KE6XLe8JSWsikoYndGSBNjcwzR3OJL0HC79IFE20ecS6NiOudgv6lR07
-         FlDO3yc8oQlVX6vTTakQXoWiahElGv+k5zR3BwbLuf7Y1axBXvK+SsP6ofSivCy2+KRf
-         6a5RyW7k8XtCTdOVyh6NOQ3VPvTdMmQuZN1eozC8TjKrfwKuYw+vpCBrPWSLirduqCjY
-         vwgw==
+        bh=xWqr1u7R6aV4zTd/B0j1tkHJBdcxjwTrCzBwm4Fr1i8=;
+        b=HHC/NxH1yEuKE6hO2+10BGnFa6/NahjfNqjKoDF9BdxjbirkGJyVgSoAXpwBKvXIRz
+         b+LiGJkMO7IK5GIsqLX9E84yx2lGdK+DkJDq5QgQEIslyE+ukEl8RY102CmKnUKbFdwb
+         D7ItyQdfiP8FbYeaEHatHFgCxqB4NQxj3e6C0Jaa3h5bi6UCmE6NFwUNidPfPEktZeND
+         0wH4JO2/FBxBjX3gHQ26AbQYOtVpeRf8YRycGlaQ+sbmPIuE5VYPCscJHRvgPtcRZUOn
+         9oeKmW0spJxlwXC3wMueIOgg5CwtneI91nLdXyK/1UG6xcsMYWHWRUVSMswKW4yxEIHY
+         /Ovg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754430564; x=1755035364;
+        d=1e100.net; s=20230601; t=1754430565; x=1755035365;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j7WdeYwSOTTiB9deoqbpcAAZGDfkPprbWBWnuaDCaW8=;
-        b=rY2eI0TyNGb8W0yiLlXKj5PLD6BB/T0vUgMl2+GocI9GZ3Lzpe16AtexytN+q9y+dZ
-         1HPbX2gn9gziPyc4C1vSdQwaPbGwQzVFCKF8nAPnAm6cRjrncMrGtqhBKX6WSQfrKgTN
-         jO1ArSr9bYvd9bTiWwDiDajs1uLtA6WAbDuK5SrC3gBUsXwU81ocYPexSgBp5jlo6xhV
-         XRZZT6amm8+L39wXeuYHNlPcBEncvfSjN5BxQSsJBsS+tvVhp/nzzgosxUR6BYSKWB0Z
-         +anNsD1JFxsRwcM0vcDJnI2hEVDu0BvhuNY3iJK8nb33992xboMvlQ7fj5nG3bmU5fza
-         xNxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUX5gN0iEZQYPUyIiuzcjhlx1ved+MOIejHgBz+6Et2nIhdOE6BzulPb7ZNL2X0d4OOgTOVAPYJ@vger.kernel.org, AJvYcCVSEK5aqpPEX3yCLkrctrjlyCcHg08adibtcc7nb8DD0SCsnACbuUQN+QLgiDokzpKG23M9DZyWprCe3MjYRfpC@vger.kernel.org, AJvYcCWLl4Aly0lrK9DVH0JFVEzhohJPDJTL7FChQJj1WXhnZMfSZ43L7SeJ18RX/jobudGlvqyPmuO58MkGNOzW@vger.kernel.org, AJvYcCWfKL21q5QPveWb1c9tY8wK8DOQNSJd0dVSMLu7CR9us8xNzDJ6mv4lCMNkeLcYOUg76og=@vger.kernel.org, AJvYcCXRuGcFo2D7PY1MVBIK/ZSZmoCwFRp9Gxv8fOIg289FoZbDT0aZ5yoKRzqP7gektqKl87G5112uvrLuezQt@vger.kernel.org
-X-Gm-Message-State: AOJu0YykSL/qi2md3xJ0XM4DeK8EgUecju6fYFX1CkY/W718g7i/sDaN
-	ZfBE7r3gtnhpEeWUasVbFRGSKr+mg7UzyifKQM3rvr9Lv9LMBHXmY22q
-X-Gm-Gg: ASbGncuTAEfU1+uI7rOQ3JcfmdztXCETJajX75pGw4yX+U715p+kohDZA8VWaSJuElf
-	71BcG7eagSReMb5F74I5fbzd/wwVbbQHk3tJAivoCaZ63DXD8aBeOrjxvmpJSjvwaoBHfMVp7eW
-	3aosX5TH8SU9IRPFKfs4EgDuR0zawaUMrmCgI7C7iMJSjXGOHzKlzl7xu5lSJ3+kPf3UN/m0+dT
-	G+xNtZQmW4TRAKmKmD6CWHmP+nwc1fT6DXC5avfbmZFrOrx74157Tbf24TgPjS6NzHeEJd2pxL4
-	K2HiMFK0Hulos7Vq2RKjiiyWjveLrr2hUXlplF97jskxUu2S7F+FzLOjoTl9NoAuGmCGX4UsFiy
-	VHBjmB1vTkhl2D2/+Dd4L3WJmg6PA2A==
-X-Google-Smtp-Source: AGHT+IGx4vPl2oXpK9VlREXkqAjZ5FwbF92y0gDsYjmBbN35wDgdgTqIRJq/vOJfOY7uEhYx/Sid4g==
-X-Received: by 2002:a17:903:46cf:b0:240:48f4:40d5 with SMTP id d9443c01a7336-2429f5340a5mr8876385ad.39.1754430563927;
-        Tue, 05 Aug 2025 14:49:23 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:7::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241d1f0fb4asm140671005ad.60.2025.08.05.14.49.22
+        bh=xWqr1u7R6aV4zTd/B0j1tkHJBdcxjwTrCzBwm4Fr1i8=;
+        b=u/lqLEIhJm5zb9gTUEBnfLD0ulxOt5sISgN+o/zEmG4sx8K3/ZYoyEarRn1JkJfjMo
+         N/pkgMEh8zoPOxsBO5Lxk6sLhaeYBj4/ociKBL3Jpc6/cNygkZFtDye+nBTXJGer4tmS
+         NR4U8NQvmbTVmeT+lxXyXizl26SHDe1eMICxK+6W+FKkaSqI94l1Zf2LRL7dArJRNsxt
+         c/ZOlW7qzjBHdl5ENdrnkJgzTQUp2FwwLrBEpuVXEDbdbqjy00Qsx4uQtleG3SOiME91
+         2i5tF/xYSQs1kFzBHCMqdqLvdO3xS536JTgv7fN3/sNpaIFgdF/s4roDUWSjOhevDv+x
+         UBdw==
+X-Forwarded-Encrypted: i=1; AJvYcCU2zb4jNA04tdutI9FkjkPVSapLj2k02fMuMge7rqtZQyTgJIfI7nz3JL/51TBLoMHzbsOM5kcI6jkB1AZT@vger.kernel.org, AJvYcCUh4y54/18kdEn/tsaUEN3pDo4iHuvaVfhoJWAyyjcdnJYARs5RYjEEpNTvAoQPaYh0SPnQRukNTOmjfdxjVuWv@vger.kernel.org, AJvYcCUu+HaX5Ru/MDMgdNf5WNHd+qu7kVuqMJFNrQDejLP0dISDeYMXU7wQG7mb2JZp0Y56HQrTOJ09bZXcdHj2@vger.kernel.org, AJvYcCWQzviePB9PfEL2P5fF6IofOIaFVhMslT8jfm8oiYSrtYyEVEh42r/uJbMD1B8BAWvbsgI=@vger.kernel.org, AJvYcCXMu5eQo9dLwB+ZQOik+vAjwLmDDgXHfM/9DVE777xBZktQ++z9fJ4NLDfgtg4ZpVqT1OjShyfE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzF4+0UBD26fE7vk0aP6ZpGvipbE7LXQ9cwBzgPuShJ/eCEGVZr
+	EVIxbAkhtzDif279WTGVyVZZJS1cmFxqExez4xXDVxyeFEU8TxpP+m4nO406PGZS
+X-Gm-Gg: ASbGncudTxlJRrRLQJc6Nzet39ABspKd7BC+1eHdF5XokaWHqvo27Ah4mtqHrSi+ruV
+	2AKXVNxzVBJGm2hkf3kAliklN9s/Atgz2/Eob6MdDC7xDpEuDFawlaO9PT8QYsFMUcuE07CZ6da
+	gBYBB880BZLosJ/RDfFSsHN0gybTkrSU0zYt8uxs/UXwdLZBN7KoSXM8VsNrUL/dAZCx7rRoXbR
+	5zPNtflPknbN4jnwnrRDb31V2Y7s8rp0sqd6dqrnjUpiXZUf1HFNVNX1hG2oM3m46hbPINOVSWu
+	YAKqrUORniPoaWTMvKvNKfQe3ZkSkBiZ2+M7Tphitr8zi3MfViAvQVCiofWUnShQNTOn9M4vylD
+	OG4ctCV8mNLJzjnePnAaV
+X-Google-Smtp-Source: AGHT+IF9PY4f57pByyzJj+B/qQvdtKhfo8+NygbXA2dkub9dCFAKHMnBQ4/xzUnOCuyFm/MQwZFvxw==
+X-Received: by 2002:a17:902:ce0b:b0:240:3e73:6df with SMTP id d9443c01a7336-242a0aa3352mr2595325ad.14.1754430565561;
+        Tue, 05 Aug 2025 14:49:25 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:47::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8976a11sm142925745ad.86.2025.08.05.14.49.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Aug 2025 14:49:23 -0700 (PDT)
+        Tue, 05 Aug 2025 14:49:24 -0700 (PDT)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Tue, 05 Aug 2025 14:49:15 -0700
-Subject: [PATCH RFC net-next v4 07/12] hv_sock: add netns hooks
+Date: Tue, 05 Aug 2025 14:49:16 -0700
+Subject: [PATCH RFC net-next v4 08/12] vsock/vmci: add netns hooks
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250805-vsock-vmtest-v4-7-059ec51ab111@meta.com>
+Message-Id: <20250805-vsock-vmtest-v4-8-059ec51ab111@meta.com>
 References: <20250805-vsock-vmtest-v4-0-059ec51ab111@meta.com>
 In-Reply-To: <20250805-vsock-vmtest-v4-0-059ec51ab111@meta.com>
 To: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
@@ -108,27 +108,30 @@ X-Mailer: b4 0.13.0
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Make NS changes not break hyperv. Guest vsocks still remain in the
-global namespace always, so the behavior is unchanged.
+Add hooks for new internal NS calls to avoid breaking vmci. Guest vsocks
+remain in global mode namespaces, so behavior is unchanged.
 
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- net/vmw_vsock/hyperv_transport.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/vmw_vsock/vmci_transport.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
-index 432fcbbd14d4..8862297b09a7 100644
---- a/net/vmw_vsock/hyperv_transport.c
-+++ b/net/vmw_vsock/hyperv_transport.c
-@@ -313,7 +313,7 @@ static void hvs_open_connection(struct vmbus_channel *chan)
- 		return;
+diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+index 7eccd6708d66..3c434ee3ca8c 100644
+--- a/net/vmw_vsock/vmci_transport.c
++++ b/net/vmw_vsock/vmci_transport.c
+@@ -703,9 +703,9 @@ static int vmci_transport_recv_stream_cb(void *data, struct vmci_datagram *dg)
+ 	vsock_addr_init(&src, pkt->dg.src.context, pkt->src_port);
+ 	vsock_addr_init(&dst, pkt->dg.dst.context, pkt->dst_port);
  
- 	hvs_addr_init(&addr, conn_from_host ? if_type : if_instance);
--	sk = vsock_find_bound_socket(&addr);
-+	sk = vsock_find_bound_socket(&addr, vsock_global_net());
- 	if (!sk)
- 		return;
- 
+-	sk = vsock_find_connected_socket(&src, &dst);
++	sk = vsock_find_connected_socket(&src, &dst, vsock_global_net());
+ 	if (!sk) {
+-		sk = vsock_find_bound_socket(&dst);
++		sk = vsock_find_bound_socket(&dst, vsock_global_net());
+ 		if (!sk) {
+ 			/* We could not find a socket for this specified
+ 			 * address.  If this packet is a RST, we just drop it.
 
 -- 
 2.47.3
