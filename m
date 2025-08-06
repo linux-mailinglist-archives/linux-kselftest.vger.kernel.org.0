@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-38391-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0588B1C9AF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 18:20:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE2EDB1C9D9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 18:35:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 703A1628483
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 16:20:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9E747A95E9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 16:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DBB22741CF;
-	Wed,  6 Aug 2025 16:20:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08A123F424;
+	Wed,  6 Aug 2025 16:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jDUMjS94"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d/y054IB"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514962AF1D;
-	Wed,  6 Aug 2025 16:20:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928D0155322;
+	Wed,  6 Aug 2025 16:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754497229; cv=none; b=QK+1SmKuM/XRpvpevAp7bsMQFucjEsBIbZkI6BsbizdS/bG9PbL3Ny45y6n90FwIcZx+cgQ2JI0Gum4mxNmQZeNAt3xkwLxKB/K9K609vqgzZ1wLohx9ecupi6EgJUHPAeYzB64P0ufKCKfkSdugONedWv8gMMysnYfMr2d/Rro=
+	t=1754498137; cv=none; b=ot1BxoTk/23d+NzGWuND6/uzxTArJlV1yM/qW1kjb8ChV5S0y9AUASkxERdRzAZrUTP/+TP2UwR7S4Tmf5E7MBAYUHlKGIOasHoSOFSMr/2/iWUHR8TTABtRqlNeN43EYvSgY6KJfD1Wq4GlnEUs+6JVw0jFZTMs373XZtYv/a8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754497229; c=relaxed/simple;
-	bh=YzNUeRz+7NioewNCFAm3H45FqF6Pb+PeV+gi/hYZbgY=;
+	s=arc-20240116; t=1754498137; c=relaxed/simple;
+	bh=xGGpA95XAeb0WwdxHKDD91ns9hkx0Ye7AgEA8IpfDQM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IgjrFVPiXmXkwX1DDuoka+JrV+zsCqApQt3sdNi+JbZ6tjztvRDXZA+y4bz3DmUFi6O+5+9T0Yv7OPcDIJFQnesEghvGahTAmRSVJwdX/PVrR5Q7qvoAxQL/SoEr4JCBLTga0sIsSWQzKvqO2ifM5F4pqTW+9ncwZ9FtQqE5o9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jDUMjS94; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CC0C4CEE7;
-	Wed,  6 Aug 2025 16:20:28 +0000 (UTC)
+	 MIME-Version; b=N4f+GRG7ScW3KLI1tpqD3gNmt3ramcVg47DPOyBUbjoOhZziP3JusvwTKzfUybsfWdIMuu77x0g4hQqI7T0vJKSYlS/TZr50gRbUQe9r7bF//z+WGtHvB3oHXRPekcKec+L+wKCGaS6cgCpGGP/wT4eMpHjpukkx9rGuJAwBmjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d/y054IB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4AFC4CEE7;
+	Wed,  6 Aug 2025 16:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754497228;
-	bh=YzNUeRz+7NioewNCFAm3H45FqF6Pb+PeV+gi/hYZbgY=;
+	s=k20201202; t=1754498135;
+	bh=xGGpA95XAeb0WwdxHKDD91ns9hkx0Ye7AgEA8IpfDQM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jDUMjS94sgJQAZ5W00DgCyGrAW6+Trt3W/gI1nOMamwgPl56P6wr8/GVQ1HFmmZjH
-	 6/LQJm5zFpFitXGcP64l/kDbGqCyCSIbTdHXJJz0FA6rwLO1OhMpTVBjWd26RbU1Qa
-	 20wai22oS/gPJVFvG89ocT6IJ0oI05qIrHKdXFnYqaZOF5QRTaJkWdRZ5hj1fa89hp
-	 u5Wz+zXci6GN9FOdsLo/Qh5CN3RzSoQbUJ69nL82LVeJvGpzQCVq/M1Rs1RsA8+bfM
-	 L/V1FCago4T+cQ7LdEkoCb3ZvWVNk9Kms5F/YItBmwN2rwQlHcB0yKEZgN3e3B1rty
-	 wJ6bribMzvyPA==
+	b=d/y054IB3WTivroNoV2FuA+UveCHLltCgYNZqm23SCuo2K9wGbGR2ca6JyInOgSVe
+	 LYLjRM5pnbKC0QeVcHViZHHqT64AmrA7+rN4vgnhFxrEqyFoh23I1CaVCHNR80/chv
+	 +DuIUQynVIwoERpz8iCWEZg9uf1Nzr1Y2HH1TTNynQwuiRE2+hMbXXLE/j98m3NiCq
+	 INKjI9cpu4MAYIcc0N2+F4aHVyHz4y4h7OQdop9sNR0xVL7gnaINkSav9ExiAYebtU
+	 eivKoe6UotebTQfZDgo8QyQIrou2wX9HPTkpDlfL71wIAEzMUlsuOnJ0fwyvZXDGOq
+	 +rTtZl13re3PA==
 From: SeongJae Park <sj@kernel.org>
 To: Suren Baghdasaryan <surenb@google.com>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -72,11 +72,11 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-fsdevel@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] fs/proc/task_mmu: factor out proc_maps_private fields used by PROCMAP_QUERY
-Date: Wed,  6 Aug 2025 09:20:25 -0700
-Message-Id: <20250806162025.82266-1-sj@kernel.org>
+Subject: Re: [PATCH v3 3/3] fs/proc/task_mmu: execute PROCMAP_QUERY ioctl under per-vma locks
+Date: Wed,  6 Aug 2025 09:35:32 -0700
+Message-Id: <20250806163532.82466-1-sj@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250806155905.824388-3-surenb@google.com>
+In-Reply-To: <20250806155905.824388-4-surenb@google.com>
 References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -86,18 +86,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Wed,  6 Aug 2025 08:59:03 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
+On Wed,  6 Aug 2025 08:59:04 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
 
-> Refactor struct proc_maps_private so that the fields used by PROCMAP_QUERY
-> ioctl are moved into a separate structure. In the next patch this allows
-> ioctl to reuse some of the functions used for reading /proc/pid/maps
-> without using file->private_data. This prevents concurrent modification
-> of file->private_data members by ioctl and /proc/pid/maps readers.
+> Utilize per-vma locks to stabilize vma after lookup without taking
+> mmap_lock during PROCMAP_QUERY ioctl execution. If vma lock is
+> contended, we fall back to mmap_lock but take it only momentarily
+> to lock the vma and release the mmap_lock. In a very unlikely case
+> of vm_refcnt overflow, this fall back path will fail and ioctl is
+> done under mmap_lock protection.
 > 
-> The change is pure code refactoring and has no functional changes.
+> This change is designed to reduce mmap_lock contention and prevent
+> PROCMAP_QUERY ioctl calls from blocking address space updates.
 > 
 > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
 Acked-by: SeongJae Park <sj@kernel.org>
 
