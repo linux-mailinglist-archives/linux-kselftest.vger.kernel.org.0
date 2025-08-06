@@ -1,211 +1,128 @@
-Return-Path: <linux-kselftest+bounces-38358-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38359-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B108B1C132
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 09:20:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DB33B1C207
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 10:20:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 541E63B9B67
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 07:20:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C458A16CF4B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 08:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA46F218ABD;
-	Wed,  6 Aug 2025 07:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78EEC22156C;
+	Wed,  6 Aug 2025 08:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MdsPfF2G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25D3211A11;
-	Wed,  6 Aug 2025 07:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5AB1E32CF;
+	Wed,  6 Aug 2025 08:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754464853; cv=none; b=HMCz/RVeQW/FvT8SHRydUCXQJI0sZKjSzPTp6ZwKmoM3KoFkFv+PnQsnrERxVdcXSmeWY8xUtVFYvba5krasT2G1s18fnDPpiz74UM1du0kRmQQNDAhImimA7sXyGNF/rX2dnPaBJ4S1heSUSEbfAzDOE5yuZcDy1IYFXjYVDXI=
+	t=1754468428; cv=none; b=E6O8AMDFdM/AjOXXG1661EIfTv2MJo6JGj527FG8BMYT8mHSfhPLcbQUuSW8QIYnnuDsQTzBD6eger2NTGXR7S7lCIZvOi1rsc7YnolQg5wspPCROAkFZRNGeJvCxi/U57xNH3ygV/bDL3s8UEaXhSvLx5ohBFJiXU4uR4JQl7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754464853; c=relaxed/simple;
-	bh=vIFlUEQ8duZaV++ql5qnFXORdx14T1OmC8rb2hvrisw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DrfZzU13tCEqmtEpKSf1sp3WzaK8BErkYiOYv75GLEXQWSkYaO5yFetpkO7rKWrF5r0/HKQk9P2piqSLjNLM/U9aXzMqN4rbDFlypQ99YVvEDqltux8RPLeQAisCBJQ1BZUtxhVMfacmrDlQxOl6BE3FZELg4I8awqOHXZj6heQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4bxh4d2QtTz9sRh;
-	Wed,  6 Aug 2025 09:00:01 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EE6QsNR5sOkc; Wed,  6 Aug 2025 09:00:01 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4bxh4d1G7Tz9sRg;
-	Wed,  6 Aug 2025 09:00:01 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 119908B765;
-	Wed,  6 Aug 2025 09:00:01 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 4moU8TC_Njvz; Wed,  6 Aug 2025 09:00:00 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id D0D438B763;
-	Wed,  6 Aug 2025 08:59:59 +0200 (CEST)
-Message-ID: <e8c39250-e9a0-4075-92b2-ffa2344a9212@csgroup.eu>
-Date: Wed, 6 Aug 2025 08:59:59 +0200
+	s=arc-20240116; t=1754468428; c=relaxed/simple;
+	bh=2Zg3JIzvXIyqJnoZOSLrCALPdYrjS+32WFTDqn2TkLQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EDDtayuVDVvHJwquAKVowWjoCfV9eMMciBZxHJoV7smgysY3aqnkNGBdTt6GfKBFFWrwa1ZXsTMEPLilZR28IHVe4pUIdr38B+efWvFF5jwp5I1XWzwE8ihzYrJPGvXSq1g+kwu0lc4EglqONs0gCJrid3mXY3Kf5NnkHF4UUI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MdsPfF2G; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b422b31b1c0so3958713a12.0;
+        Wed, 06 Aug 2025 01:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754468426; x=1755073226; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tk74vFBOtgpOUaVzdQICrykdzva6RLuKYXQfB725rV0=;
+        b=MdsPfF2Gw8ijIC1wEH/mHJtOPVG15vx7uB3KKUsdOspNeU/JhPKyFwDL5VR1SIN7N6
+         Tao7+Udo84UBBDPT7flOScJ+9oB24wckomsN6aBuevQWVuABazk/Oay4PgyE89nP11nt
+         GCUmP7abcmupvPrz1Y/kkIhzQlgIa2DcXXqnvuhU0z8IrcdhUs4NF3QhONyQLlD2TcAG
+         TKOyrPS0zGmkIawqHcoRU0dbCjfZA5ZITwlC7uyng5xnfyrBdr9J1wU/ol/CzChDZ4OO
+         ksBcgEnwo0uJ8JPHYF1ydjh/isvjcVm+cpwanGO6VTvcKu+czpgjuKOu8/2X+xYkghVw
+         Jb2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754468426; x=1755073226;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tk74vFBOtgpOUaVzdQICrykdzva6RLuKYXQfB725rV0=;
+        b=JjeHTtQoXIW+xOVdTK2XZo/kmuQYW/Y3ssXYUwZvO0yPPuKn8JCCyZNx+LnL3dJOEa
+         8WRtoM6qxtsYZM3rvY4GTe/9oDHjpkpDmsIfGPIUUmUKPQUmoWWTe8eBg+a5mQgY+MSU
+         f89CM4DwFRgXQySLhdZQg/iM8LSyutUYhLnvZVh8+khq92YPkKb73E1VBdKVylDlr1kR
+         9M7ceBUhb7m5UlsKHK6d4vWrYWxkdF5tZIeaRykGwtkdK9yzPGXYeuvmHf5bDf6OYVeI
+         D5MN9/jUUpvjX0hnJ4PxpywPrE1p1FBga6WHJU3IFlIFA9U1YTKOa8472vGVNouFYl3D
+         LZhg==
+X-Forwarded-Encrypted: i=1; AJvYcCUKJtVy6mdkvV+pfdQ85A+CR7ZD/3URFTWxBdTiIXEXGyEuvUKRC7fYd9hPhqk40bj/PAKteOYn@vger.kernel.org, AJvYcCVBsrPKmXFCN25qU0IlfnevOnCkgs9xKbw1K9PpMGRGtx+gYV5keU6uiGt94ZDJPx6MaFjR8M73rszlsg5jZcUg@vger.kernel.org, AJvYcCW5GAPu/JBLT+NUb6l1aUfhlWsIiuW5eCniMe01Czan8Dl5x4shg8iCJV5npe/cQoFQP+oZDhaLcDTzZoA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnlTquXe0xM3AOE8ZILCsQGlpfSbNdk7YMe9SMrcNCS3ffnJIM
+	obtufF5oGnHnii+iiUB+N3hjUIKkLh6ks2SWFF0IOdaA8+8YqhcuG+jR
+X-Gm-Gg: ASbGnctgGuubQpQ6x31VSVFCoIDmX+nv/K9hiYVn7Q60L5aDmj0QIeSTpocrVyfAoPm
+	bBg0S3B4mFXd8HzLSJwI4MOp0NXnkTQsEAZKX/wMGTY/9K8XdKW/1KZ+eYNkwwsoEfHkjH1SK29
+	PfYpvDQZfuQm3Eju9sAFEdgJ4kzs7/S6bBlxPTWoEIERxkka3HIz5Pj4Ax8TiLPa1ySXk3hHBPO
+	lB/XoorQHfe3XNWpdvp4MoEW8Mey0kaIGopCmM//UcqM8hTHCk4ViigqRXX0A20J1kLK5VmAEKm
+	oLRmqcDwEQR9Yhzu9EiRGkC2xTGZg+AV3jqRT6F4IOUBGGX9WvdsK1yMpsr4yETFo3a8Rs9RWCQ
+	AKTu3Xh1nmUHyM19lZQEwCYtnLyn9u28eLX4dOxjYR9Lm9PaSoAjHNg==
+X-Google-Smtp-Source: AGHT+IEReFrA9fu6w4gM/cP7i9PjlBPwmU6McdahgPWGATLeJixMmq/Kf/I51qnimVALN6oZwVx02A==
+X-Received: by 2002:a17:90b:48d2:b0:31a:ab75:6e45 with SMTP id 98e67ed59e1d1-32166cb5d9amr2019526a91.28.1754468426250;
+        Wed, 06 Aug 2025 01:20:26 -0700 (PDT)
+Received: from manjaro.domain.name ([2401:4900:1c30:7b0d:6527:282d:9edd:5f40])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3216126c96esm2078947a91.22.2025.08.06.01.20.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Aug 2025 01:20:25 -0700 (PDT)
+From: Pranav Tyagi <pranav.tyagi03@gmail.com>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	dw@davidwei.uk,
+	haiyuewa@163.com,
+	axboe@kernel.dk,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: linux-kernel-mentees@lists.linux.dev,
+	Pranav Tyagi <pranav.tyagi03@gmail.com>
+Subject: [PATCH] selftests/drivers/net: replace typeof() with __auto_type
+Date: Wed,  6 Aug 2025 13:50:16 +0530
+Message-ID: <20250806082016.14891-1-pranav.tyagi03@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bpf-next 1/6] bpf,powerpc: Introduce
- bpf_jit_emit_probe_mem_store() to emit store instructions
-To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
- Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, andrii@kernel.org,
- eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, naveen@kernel.org, maddy@linux.ibm.com,
- mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com, iii@linux.ibm.com,
- shuah@kernel.org
-References: <20250805062747.3479221-1-skb99@linux.ibm.com>
- <20250805062747.3479221-2-skb99@linux.ibm.com>
- <e65548d0-14aa-4b9c-8051-7c91c5dffd1f@csgroup.eu>
- <8cfa1cb2-57bf-4984-a64e-53c82440e87f@linux.ibm.com>
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Language: fr-FR
-In-Reply-To: <8cfa1cb2-57bf-4984-a64e-53c82440e87f@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Replace typeof() with __auto_type in iou-zcrx.c.
+__auto_type was introduced in GCC 4.9 and reduces the compile time for
+all compilers. No functional changes intended.
 
+Signed-off-by: Pranav Tyagi <pranav.tyagi03@gmail.com>
+---
+ tools/testing/selftests/drivers/net/hw/iou-zcrx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Le 05/08/2025 à 13:59, Venkat Rao Bagalkote a écrit :
-> 
-> On 05/08/25 1:04 pm, Christophe Leroy wrote:
->>
->>
->> Le 05/08/2025 à 08:27, Saket Kumar Bhaskar a écrit :
->>> bpf_jit_emit_probe_mem_store() is introduced to emit instructions for
->>> storing memory values depending on the size (byte, halfword,
->>> word, doubleword).
->>
->> Build break with this patch
->>
->>   CC      arch/powerpc/net/bpf_jit_comp64.o
->> arch/powerpc/net/bpf_jit_comp64.c:395:12: error: 
->> 'bpf_jit_emit_probe_mem_store' defined but not used [-Werror=unused- 
->> function]
->>  static int bpf_jit_emit_probe_mem_store(struct codegen_context *ctx, 
->> u32 src_reg, s16 off,
->>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> cc1: all warnings being treated as errors
->> make[4]: *** [scripts/Makefile.build:287: arch/powerpc/net/ 
->> bpf_jit_comp64.o] Error 1
->>
-> I tried this on top of bpf-next, and for me build passed.
-
-Build of _this_ patch (alone) passed ?
-
-This patch defines a static function but doesn't use it, so the build 
-must breaks because of that, unless you have set CONFIG_PPC_DISABLE_WERROR.
-
-Following patch starts using this function so then the build doesn't 
-break anymore. But until next patch is applied the build doesn't work. 
-Both patches have to be squashed together in order to not break 
-bisectability of the kernel.
-
-Christophe
-
-> 
-> Note: I applied https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Flore.kernel.org%2Fbpf%2F20250717202935.29018-2- 
-> puranjay%40kernel.org%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C0468473019834e07ef2b08ddd4179b9c%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638899920058624267%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=iZLg9NUWxtH3vO1STI8wRYLzwvhohd2KKTAGYDe3WnM%3D&reserved=0 before applying current patch.
-> 
-> gcc version 14.2.1 20250110
-> 
-> uname -r: 6.16.0-gf2844c7fdb07
-> 
-> bpf-next repo: https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Fkernel.googlesource.com%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fbpf%2Fbpf-next&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C0468473019834e07ef2b08ddd4179b9c%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638899920058644309%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=OrMauttrzPbaFYhzKdkH5l%2FltISc95MwitnUC7YLhJQ%3D&reserved=0
-> 
-> HEAD:
-> 
-> commit f3af62b6cee8af9f07012051874af2d2a451f0e5 (origin/master, origin/ 
-> HEAD)
-> Author: Tao Chen <chen.dylane@linux.dev>
-> Date:   Wed Jul 23 22:44:42 2025 +0800
-> 
->      bpftool: Add bash completion for token argument
-> 
-> 
-> Build Success logs:
-> 
->    TEST-OBJ [test_progs-cpuv4] xdp_vlan.test.o
->    TEST-OBJ [test_progs-cpuv4] xdpwall.test.o
->    TEST-OBJ [test_progs-cpuv4] xfrm_info.test.o
->    BINARY   bench
->    BINARY   test_maps
->    BINARY   test_progs
->    BINARY   test_progs-no_alu32
->    BINARY   test_progs-cpuv4
-> 
-> 
-> Regards,
-> 
-> Venkat.
-> 
->>
->>>
->>> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
->>> ---
->>>   arch/powerpc/net/bpf_jit_comp64.c | 30 ++++++++++++++++++++++++++++++
->>>   1 file changed, 30 insertions(+)
->>>
->>> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/ 
->>> bpf_jit_comp64.c
->>> index 025524378443..489de21fe3d6 100644
->>> --- a/arch/powerpc/net/bpf_jit_comp64.c
->>> +++ b/arch/powerpc/net/bpf_jit_comp64.c
->>> @@ -409,6 +409,36 @@ asm (
->>>   "        blr                ;"
->>>   );
->>>   +static int bpf_jit_emit_probe_mem_store(struct codegen_context 
->>> *ctx, u32 src_reg, s16 off,
->>> +                    u32 code, u32 *image)
->>> +{
->>> +    u32 tmp1_reg = bpf_to_ppc(TMP_REG_1);
->>> +    u32 tmp2_reg = bpf_to_ppc(TMP_REG_2);
->>> +
->>> +    switch (BPF_SIZE(code)) {
->>> +    case BPF_B:
->>> +        EMIT(PPC_RAW_STB(src_reg, tmp1_reg, off));
->>> +        break;
->>> +    case BPF_H:
->>> +        EMIT(PPC_RAW_STH(src_reg, tmp1_reg, off));
->>> +        break;
->>> +    case BPF_W:
->>> +        EMIT(PPC_RAW_STW(src_reg, tmp1_reg, off));
->>> +        break;
->>> +    case BPF_DW:
->>> +        if (off % 4) {
->>> +            EMIT(PPC_RAW_LI(tmp2_reg, off));
->>> +            EMIT(PPC_RAW_STDX(src_reg, tmp1_reg, tmp2_reg));
->>> +        } else {
->>> +            EMIT(PPC_RAW_STD(src_reg, tmp1_reg, off));
->>> +        }
->>> +        break;
->>> +    default:
->>> +        return -EINVAL;
->>> +    }
->>> +    return 0;
->>> +}
->>> +
->>>   static int emit_atomic_ld_st(const struct bpf_insn insn, struct 
->>> codegen_context *ctx, u32 *image)
->>>   {
->>>       u32 code = insn.code;
->>
+diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+index 62456df947bc..85551594bf0f 100644
+--- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
++++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+@@ -42,8 +42,8 @@ static long page_size;
+ #define SEND_SIZE (512 * 4096)
+ #define min(a, b) \
+ 	({ \
+-		typeof(a) _a = (a); \
+-		typeof(b) _b = (b); \
++		__auto_type _a = (a); \
++		__auto_type _b = (b); \
+ 		_a < _b ? _a : _b; \
+ 	})
+ #define min_t(t, a, b) \
+-- 
+2.49.0
 
 
