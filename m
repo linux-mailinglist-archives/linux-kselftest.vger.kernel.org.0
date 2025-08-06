@@ -1,266 +1,109 @@
-Return-Path: <linux-kselftest+bounces-38390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38391-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F855B1C97D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 17:59:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0588B1C9AF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 18:20:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B80F3188AB17
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 16:00:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 703A1628483
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 16:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10AE2296141;
-	Wed,  6 Aug 2025 15:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DBB22741CF;
+	Wed,  6 Aug 2025 16:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Budp1pRU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jDUMjS94"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE95A29A9FE
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Aug 2025 15:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514962AF1D;
+	Wed,  6 Aug 2025 16:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754495957; cv=none; b=JzgFCL3Lite1OuxtH2OPnnNsIaY156AiiBPeo4J47piC5k5+/vJiWGrqRlapyQEthWVKINAVu9KXycGl3E0RJXLtXna9Uv5jbIiRGa39z/3rllSszMFka5pG34bNQMcm4d2sFps7rVfQ5ZYkgm/lQcNQXPq30SvlCYkxN/O/iBM=
+	t=1754497229; cv=none; b=QK+1SmKuM/XRpvpevAp7bsMQFucjEsBIbZkI6BsbizdS/bG9PbL3Ny45y6n90FwIcZx+cgQ2JI0Gum4mxNmQZeNAt3xkwLxKB/K9K609vqgzZ1wLohx9ecupi6EgJUHPAeYzB64P0ufKCKfkSdugONedWv8gMMysnYfMr2d/Rro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754495957; c=relaxed/simple;
-	bh=JRfgX1mdsRBhfL5iUYnonjqsaZrBRF+pfu+2IoIqfMs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Q9f492Pb+x8JZldO+behoOKXCLGsPiSmn8JSOUzHTmpBPoWpaZUama2FTLYS8nCBuJT7DK39HvrxI3yZuzjiRfHPI5occVUk0Z3kdTn7bcI4zjuZiWNf8AO2XEPLx4VVqwvpsVVZT/CGhpRx3jwWl+GDaOL+p0HlOFm29kWCc6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Budp1pRU; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-23ff6e5c131so55493045ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Aug 2025 08:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754495954; x=1755100754; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=79cST+DpT8JLjhSc853c7Vp44fp4YLe4km92lxkzOhQ=;
-        b=Budp1pRUx6mYa0epyo7zbp+kkDKr3RN/i8el8R7Gka6OmrHe2dFDFDdc+iDTLUKKiC
-         iq40KT4Z5+N9+8HmW49DP/HxNSsTFIzoP30ciMT9uw8AeFodCJqI6ZEdtg9hnks+JGHl
-         xZoBMksg8rh0B18GhOcwGnnPUsoKD54LGiyKNA3erREfPj6wpwDRuMrPdDoFPXgCrh0q
-         Lo0mJa3l3ezZkJrQ9XJPpiSLn0TwfCXe/2ffk5VJZXxr8LYJF29c9J5g6v9woFjbRH+8
-         Ryz0j8obquz+9LqjwKt+gymvn94TrB4q8xSYgGRCXLW7KO3UMTw2Aas+6mWmJKGs5X1s
-         9U7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754495954; x=1755100754;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=79cST+DpT8JLjhSc853c7Vp44fp4YLe4km92lxkzOhQ=;
-        b=jWhlvnMvO857/D6V2axQUHGztzTY+4nhg9rInFGfORzvt1GUhVDr0q85846v9kpXaf
-         cW9IE2mWPXFQgnbqatgag5GKMm3ipVI2fdr/UfzcoufH2HlWXY9lR7mpQbhJJ/4UYwZu
-         3nIxbDap3cr0c0yAypEJADO1DIHZk9RRpUDA/snYZSBXZQ7j8gXbdjQgU7amXMpFGow9
-         32X5ZNLnSE1s8scbnA662Kunf09QyZBwE6wAp5ckM2U6GHCuXkje/iRmY01HF4+C8tq7
-         p2pWTcXGshHwBrISLyheOKwgGLUNNPQ1Up7d+A0Xyld+zvMHM7m5JqdEWy3gdmqwSCUJ
-         3Cdw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMtPT3aLwpDyR7iS3OVHbPvQO5lrbp/RyVu44x0m0xp96BAu0pSkYhbdvNpZmNuciGhnNHwQ8Xmpw/7u6t6oE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpHf3itSLerka9i69sKH5dEYWgiAo4CI6AOd+lPvnWRUVRhypk
-	HdbA1Sr5lN7P69GE00iXGvfMQNao8jalTLT3gIrU7mt+OYG959vZ/2VW10iH69NdjAoIYTOHjvu
-	jyO/+hA==
-X-Google-Smtp-Source: AGHT+IFlS+JvIsWnRvs7bTfyfgC/5w+RmEgonVOp9GJDKi3AshY2Fhxqa2lT8Ee9l8rZG2GebQuiHk0ZMyQ=
-X-Received: from pjboe1.prod.google.com ([2002:a17:90b:3941:b0:31e:c61e:663b])
- (user=surenb job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:dacc:b0:240:92cc:8fcf
- with SMTP id d9443c01a7336-2429f496c6bmr47463745ad.49.1754495954146; Wed, 06
- Aug 2025 08:59:14 -0700 (PDT)
-Date: Wed,  6 Aug 2025 08:59:04 -0700
-In-Reply-To: <20250806155905.824388-1-surenb@google.com>
+	s=arc-20240116; t=1754497229; c=relaxed/simple;
+	bh=YzNUeRz+7NioewNCFAm3H45FqF6Pb+PeV+gi/hYZbgY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=IgjrFVPiXmXkwX1DDuoka+JrV+zsCqApQt3sdNi+JbZ6tjztvRDXZA+y4bz3DmUFi6O+5+9T0Yv7OPcDIJFQnesEghvGahTAmRSVJwdX/PVrR5Q7qvoAxQL/SoEr4JCBLTga0sIsSWQzKvqO2ifM5F4pqTW+9ncwZ9FtQqE5o9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jDUMjS94; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CC0C4CEE7;
+	Wed,  6 Aug 2025 16:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754497228;
+	bh=YzNUeRz+7NioewNCFAm3H45FqF6Pb+PeV+gi/hYZbgY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=jDUMjS94sgJQAZ5W00DgCyGrAW6+Trt3W/gI1nOMamwgPl56P6wr8/GVQ1HFmmZjH
+	 6/LQJm5zFpFitXGcP64l/kDbGqCyCSIbTdHXJJz0FA6rwLO1OhMpTVBjWd26RbU1Qa
+	 20wai22oS/gPJVFvG89ocT6IJ0oI05qIrHKdXFnYqaZOF5QRTaJkWdRZ5hj1fa89hp
+	 u5Wz+zXci6GN9FOdsLo/Qh5CN3RzSoQbUJ69nL82LVeJvGpzQCVq/M1Rs1RsA8+bfM
+	 L/V1FCago4T+cQ7LdEkoCb3ZvWVNk9Kms5F/YItBmwN2rwQlHcB0yKEZgN3e3B1rty
+	 wJ6bribMzvyPA==
+From: SeongJae Park <sj@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	akpm@linux-foundation.org,
+	Liam.Howlett@oracle.com,
+	lorenzo.stoakes@oracle.com,
+	david@redhat.com,
+	vbabka@suse.cz,
+	peterx@redhat.com,
+	jannh@google.com,
+	hannes@cmpxchg.org,
+	mhocko@kernel.org,
+	paulmck@kernel.org,
+	shuah@kernel.org,
+	adobriyan@gmail.com,
+	brauner@kernel.org,
+	josef@toxicpanda.com,
+	yebin10@huawei.com,
+	linux@weissschuh.net,
+	willy@infradead.org,
+	osalvador@suse.de,
+	andrii@kernel.org,
+	ryan.roberts@arm.com,
+	christophe.leroy@csgroup.eu,
+	tjmercier@google.com,
+	kaleshsingh@google.com,
+	aha310510@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] fs/proc/task_mmu: factor out proc_maps_private fields used by PROCMAP_QUERY
+Date: Wed,  6 Aug 2025 09:20:25 -0700
+Message-Id: <20250806162025.82266-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250806155905.824388-3-surenb@google.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250806155905.824388-1-surenb@google.com>
-X-Mailer: git-send-email 2.50.1.565.gc32cd1483b-goog
-Message-ID: <20250806155905.824388-4-surenb@google.com>
-Subject: [PATCH v3 3/3] fs/proc/task_mmu: execute PROCMAP_QUERY ioctl under
- per-vma locks
-From: Suren Baghdasaryan <surenb@google.com>
-To: akpm@linux-foundation.org
-Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
-	vbabka@suse.cz, peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, 
-	mhocko@kernel.org, paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
-	brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com, 
-	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de, 
-	andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
-	tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Utilize per-vma locks to stabilize vma after lookup without taking
-mmap_lock during PROCMAP_QUERY ioctl execution. If vma lock is
-contended, we fall back to mmap_lock but take it only momentarily
-to lock the vma and release the mmap_lock. In a very unlikely case
-of vm_refcnt overflow, this fall back path will fail and ioctl is
-done under mmap_lock protection.
+On Wed,  6 Aug 2025 08:59:03 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
 
-This change is designed to reduce mmap_lock contention and prevent
-PROCMAP_QUERY ioctl calls from blocking address space updates.
+> Refactor struct proc_maps_private so that the fields used by PROCMAP_QUERY
+> ioctl are moved into a separate structure. In the next patch this allows
+> ioctl to reuse some of the functions used for reading /proc/pid/maps
+> without using file->private_data. This prevents concurrent modification
+> of file->private_data members by ioctl and /proc/pid/maps readers.
+> 
+> The change is pure code refactoring and has no functional changes.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- fs/proc/task_mmu.c | 84 +++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 68 insertions(+), 16 deletions(-)
+Acked-by: SeongJae Park <sj@kernel.org>
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 45134335e086..0396315dfaee 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -517,28 +517,81 @@ static int pid_maps_open(struct inode *inode, struct file *file)
- 		PROCMAP_QUERY_VMA_FLAGS				\
- )
- 
--static int query_vma_setup(struct mm_struct *mm)
-+#ifdef CONFIG_PER_VMA_LOCK
-+
-+static int query_vma_setup(struct proc_maps_locking_ctx *lock_ctx)
- {
--	return mmap_read_lock_killable(mm);
-+	lock_ctx->locked_vma = NULL;
-+	lock_ctx->mmap_locked = false;
-+
-+	return 0;
- }
- 
--static void query_vma_teardown(struct mm_struct *mm, struct vm_area_struct *vma)
-+static void query_vma_teardown(struct proc_maps_locking_ctx *lock_ctx)
- {
--	mmap_read_unlock(mm);
-+	if (lock_ctx->mmap_locked)
-+		mmap_read_unlock(lock_ctx->mm);
-+	else
-+		unlock_vma(lock_ctx);
-+}
-+
-+static struct vm_area_struct *query_vma_find_by_addr(struct proc_maps_locking_ctx *lock_ctx,
-+						     unsigned long addr)
-+{
-+	struct vm_area_struct *vma;
-+	struct vma_iterator vmi;
-+
-+	if (lock_ctx->mmap_locked)
-+		return find_vma(lock_ctx->mm, addr);
-+
-+	unlock_vma(lock_ctx);
-+	rcu_read_lock();
-+	vma_iter_init(&vmi, lock_ctx->mm, addr);
-+	vma = lock_next_vma(lock_ctx->mm, &vmi, addr);
-+	rcu_read_unlock();
-+
-+	if (!IS_ERR_OR_NULL(vma)) {
-+		lock_ctx->locked_vma = vma;
-+	} else if (PTR_ERR(vma) == -EAGAIN) {
-+		/* Fallback to mmap_lock on vma->vm_refcnt overflow */
-+		mmap_read_lock(lock_ctx->mm);
-+		vma = find_vma(lock_ctx->mm, addr);
-+		lock_ctx->mmap_locked = true;
-+	}
-+
-+	return vma;
-+}
-+
-+#else /* CONFIG_PER_VMA_LOCK */
-+
-+static int query_vma_setup(struct proc_maps_locking_ctx *lock_ctx)
-+{
-+	return mmap_read_lock_killable(lock_ctx->mm);
- }
- 
--static struct vm_area_struct *query_vma_find_by_addr(struct mm_struct *mm, unsigned long addr)
-+static void query_vma_teardown(struct proc_maps_locking_ctx *lock_ctx)
- {
--	return find_vma(mm, addr);
-+	mmap_read_unlock(lock_ctx->mm);
- }
- 
--static struct vm_area_struct *query_matching_vma(struct mm_struct *mm,
-+static struct vm_area_struct *query_vma_find_by_addr(struct proc_maps_locking_ctx *lock_ctx,
-+						     unsigned long addr)
-+{
-+	return find_vma(lock_ctx->mm, addr);
-+}
-+
-+#endif  /* CONFIG_PER_VMA_LOCK */
-+
-+static struct vm_area_struct *query_matching_vma(struct proc_maps_locking_ctx *lock_ctx,
- 						 unsigned long addr, u32 flags)
- {
- 	struct vm_area_struct *vma;
- 
- next_vma:
--	vma = query_vma_find_by_addr(mm, addr);
-+	vma = query_vma_find_by_addr(lock_ctx, addr);
-+	if (IS_ERR(vma))
-+		return vma;
-+
- 	if (!vma)
- 		goto no_vma;
- 
-@@ -579,11 +632,11 @@ static struct vm_area_struct *query_matching_vma(struct mm_struct *mm,
- 	return ERR_PTR(-ENOENT);
- }
- 
--static int do_procmap_query(struct proc_maps_private *priv, void __user *uarg)
-+static int do_procmap_query(struct mm_struct *mm, void __user *uarg)
- {
-+	struct proc_maps_locking_ctx lock_ctx = { .mm = mm };
- 	struct procmap_query karg;
- 	struct vm_area_struct *vma;
--	struct mm_struct *mm;
- 	const char *name = NULL;
- 	char build_id_buf[BUILD_ID_SIZE_MAX], *name_buf = NULL;
- 	__u64 usize;
-@@ -610,17 +663,16 @@ static int do_procmap_query(struct proc_maps_private *priv, void __user *uarg)
- 	if (!!karg.build_id_size != !!karg.build_id_addr)
- 		return -EINVAL;
- 
--	mm = priv->lock_ctx.mm;
- 	if (!mm || !mmget_not_zero(mm))
- 		return -ESRCH;
- 
--	err = query_vma_setup(mm);
-+	err = query_vma_setup(&lock_ctx);
- 	if (err) {
- 		mmput(mm);
- 		return err;
- 	}
- 
--	vma = query_matching_vma(mm, karg.query_addr, karg.query_flags);
-+	vma = query_matching_vma(&lock_ctx, karg.query_addr, karg.query_flags);
- 	if (IS_ERR(vma)) {
- 		err = PTR_ERR(vma);
- 		vma = NULL;
-@@ -705,7 +757,7 @@ static int do_procmap_query(struct proc_maps_private *priv, void __user *uarg)
- 	}
- 
- 	/* unlock vma or mmap_lock, and put mm_struct before copying data to user */
--	query_vma_teardown(mm, vma);
-+	query_vma_teardown(&lock_ctx);
- 	mmput(mm);
- 
- 	if (karg.vma_name_size && copy_to_user(u64_to_user_ptr(karg.vma_name_addr),
-@@ -725,7 +777,7 @@ static int do_procmap_query(struct proc_maps_private *priv, void __user *uarg)
- 	return 0;
- 
- out:
--	query_vma_teardown(mm, vma);
-+	query_vma_teardown(&lock_ctx);
- 	mmput(mm);
- 	kfree(name_buf);
- 	return err;
-@@ -738,7 +790,7 @@ static long procfs_procmap_ioctl(struct file *file, unsigned int cmd, unsigned l
- 
- 	switch (cmd) {
- 	case PROCMAP_QUERY:
--		return do_procmap_query(priv, (void __user *)arg);
-+		return do_procmap_query(priv->lock_ctx.mm, (void __user *)arg);
- 	default:
- 		return -ENOIOCTLCMD;
- 	}
--- 
-2.50.1.565.gc32cd1483b-goog
 
+Thanks,
+SJ
+
+[...]
 
