@@ -1,223 +1,213 @@
-Return-Path: <linux-kselftest+bounces-38377-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38378-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE2DBB1C79B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 16:29:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1057FB1C7FA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 16:54:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E8003B32C9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 14:29:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BED5D3B898C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 14:54:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46CF828C5BF;
-	Wed,  6 Aug 2025 14:29:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27931DED49;
+	Wed,  6 Aug 2025 14:54:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FbKfDW/9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6Yr3zQB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2063.outbound.protection.outlook.com [40.107.92.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFDEC8EB;
-	Wed,  6 Aug 2025 14:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754490573; cv=fail; b=gZIexBudmAUvboTGV4bRAwWB0FB0g3O3Fn8XUyK9VYAmTXb+zZ0OujDc3zHgmR873CI/72fZI5QYLlmcPZltsmbRyPRv1loSrsqfL2D4d1D45a1WM+arhv9qMLoQichq7+OkXqLFykYqZLZDpfHfI4gdbjhyk9/2nGtQ+O4W07M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754490573; c=relaxed/simple;
-	bh=enXazQoPKDr5lGmLFMgqPHRJae+BFjd6W3KcWvJVAfw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ilZZ3xaU9ZainIWLCw4A0m+z/TTm0370Zg7dWxuMe2wOZKJVBCLnf+fgP8BHHTmLHyjQdPKLd1CK+0mw3OZ0pvmdZK7yUjmXdRX7LaX941CYx8oBOUBTwaIlbmHx4SSXYrtY0sBS9E+Nf/4vc3e9Pvqv1iORVIXl94S7773dMY8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FbKfDW/9; arc=fail smtp.client-ip=40.107.92.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VqqCLNyRJoJ+57C6QrtyJo1jUA8e0sZ8Z9VEzd6I/HJGsm5mJyLU1D/XcHj7Pf9x+g7GtZHknh8aiQfb2hU2WlI6rsxZHFrHi6Bhjhx1qsneHqNPXw5tFcLBAzZRiN3vmy79m5Iyv6qaEWmvG+Yo4VAekgLUWNPrFPID13UaWwoWf/62grcC+n662OUI9xYIqSJbenplfN4Eycm8dX7JHBKKSg4o1Rv47VeRBeUDNjhqZvqgApcmMdL7tlVSxeqOHAxeDzWJRXkukfO0ebK3g0j5PsN6ALytLmnjz4u8IHgpcWTYFnYnAZzaDkqWD6rVPH4IAq9gv4xEjGOmMr+5gA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+5nokKLSKvQaO+OVEv5lwLReUQo18ediOrfd4kcViq8=;
- b=HjkmPnQTHXYwFKG+clpE+CeAxGHAvQLZd9BkMfHCskk4yqrVY9WjW1G0AgCu9lycM0C5gaJLDLt6ukzvGSvIq4FFdQmgB9eetOn4aOA/01efSnSDwNI4QZVElBALZHY++wB/GI4dtdHODUzl4AZaEn/dHKwEeJDMHiGsdm8fWhjkDUT5bMBD0qd1LEODrp/oDB8VzIiOdYBQttKj1ddxE5dWrrLgdVzDVkLRl0DOvl4kZOHwQ6OgQyyvkHVba0cph+Rf/WYbcMezL9bhM0opZ5YzxEnCpbtu/yfesw68JsCbn+jTVRrcXrnH1bPIVaNMZrv7wDdbkMk+bv8TNv8y4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+5nokKLSKvQaO+OVEv5lwLReUQo18ediOrfd4kcViq8=;
- b=FbKfDW/95ZVMsJcR+FumzRcUI1lOJRvnwfi/DZLDU9HWvxeptpAGbq2r6fdLYfQUUT9XWA4LY5loIIZHUPY+Sj/pbbonG8gysZyRlazVkFt4TQ9IOxPm83DTzPCQsyQVLebRdO6ewN3C78lELvNctB5jjyl9aMU4jUa6ORswA5KN+fpQVHjqKHGmF37/UEg03G2NdepbNsRm+h7dHRRxHZw1rHTXWvFIVmwufWrt6T6L9gUXwB1FnI4sRJHGJQb/mWSB4PTU1kLGL3WTEB98Lv0g+ML/0gLT9jJIgfZYnkwGpg273JWlnBE1g0G2SQO61JOVpIUwg+daH59o+CK2yw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- PH8PR12MB7304.namprd12.prod.outlook.com (2603:10b6:510:217::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.15; Wed, 6 Aug
- 2025 14:29:28 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a%6]) with mapi id 15.20.9009.013; Wed, 6 Aug 2025
- 14:29:27 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/4] mm/huge_memory: move to next folio after
- folio_split() succeeds.
-Date: Wed, 06 Aug 2025 10:29:25 -0400
-X-Mailer: MailMate (2.0r6272)
-Message-ID: <87B76D39-9673-4C3C-9B0E-375A677205C4@nvidia.com>
-In-Reply-To: <60b6c458-e3d0-4123-9815-44e8e8ae0e60@redhat.com>
-References: <20250806022045.342824-1-ziy@nvidia.com>
- <20250806022045.342824-3-ziy@nvidia.com>
- <60b6c458-e3d0-4123-9815-44e8e8ae0e60@redhat.com>
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: BL6PEPF00013DFC.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:22e:400:0:1001:0:21) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9391D63C7;
+	Wed,  6 Aug 2025 14:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754492076; cv=none; b=fMshoMcnP1gGks/PliFMHkaOhKaPDwQWwyLOGsQbTfyMbk+DnkX7yPyxMZuDWtpLMUIQfO6deomQmAzxkcmgi0kOx437PpR/XucO3WJnCsm/z68rAs8xVw7MjWcMhsxss/BgNTTxDCgO9Az8oT5YhEejNVw31dCX7QTdXyFX+U4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754492076; c=relaxed/simple;
+	bh=20UlBhFxiM7AmMKXTe391uusOsHNWtrdHst1H5qTpqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T+MYhsLqbVEWxNKE0NcgunEqKtnVHBvSdUbKQRfvJiJaVsmlUZacK860LUYBrOyVyQpQWm0cnANPP9pJXkme/mFFisOAdyqsmM3iKM3pHqTopENaS07XbXbZ4ihf7fmm8hzMe9nUjo11JBY79CC1OQbTQIh3LFQbfWpbD9XXoC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U6Yr3zQB; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ae0bde4d5c9so1505162366b.3;
+        Wed, 06 Aug 2025 07:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754492073; x=1755096873; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=l/rb74Rn4CUT7usZvguA3GJ62ZV1pluEnH5A6t2WngA=;
+        b=U6Yr3zQBhyDBFvSh2F2gyChz359lbMcF/lXwnUNejSEq0WSKpGxSqQvkx5cqqOvLGS
+         XlXccT80rDJvQL1iRpXB9X6zQpg0StTC6fbVywmJfWzwE0tfsQtlaF9m9/jzRc2ijCr2
+         e8zeciGEJvaJfS+Tgg/JTjpuI+qbG5pmj76oZwCKfIBWG/sOxQLWmAfsG6BEQeYZ9PYf
+         A+Fjj6eAisrZWPHG+DpXcrgBqOWrdoqQ+97mkGKYl5yG1lOIufDXVkFEYrvV+44AtHFk
+         mkW9dNafT+ZADoTVD9dOUMBgNlytw6ibneyUSw+2Hoki8syd6jcMWnIXj42OmL+epP64
+         UG0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754492073; x=1755096873;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l/rb74Rn4CUT7usZvguA3GJ62ZV1pluEnH5A6t2WngA=;
+        b=bWcrTtjrZu+57nVsnw7OQ7+hrWnWqS/NxBsO1i6im4jSq6P+D9TkEOxzvjxYf/SIq4
+         Xdy4GiovwbaRoYlX1Zupu1zPIykchr0k+6Vcu6wrpcwQwTAEcoS+3uUxJC8Wr8cG5/jb
+         rW9ssuLLZkCINFm0g2b6WgSiypSIPPjs4zxuK5FxgatznlVgLdaZQEndcho2rqUOlnKY
+         2qBKxeSzm9oMojBWXpuqmCoSpC1a7tE6Xy7ExsGjVqkwML170exNKl2jy2rmdTOCwuru
+         0bm9VIUI1NViXEyI2LTPPcm++JGci/DUg8sigCnvsMyxe2ewFZkr/GfRkKdcyppWzn8Z
+         9fXA==
+X-Forwarded-Encrypted: i=1; AJvYcCVKkKBEBA4KecoUTbR9ELTNFc07tZDFfP++UwnoyybW5/X3jmaTbKdAOp+jNAnJI9Spx6xyTDVDCF4Pt/SvIcCL@vger.kernel.org, AJvYcCXxSYHbyrtC02WSOIFuJO//oNex9sKYz/t03U0tcbftPI+g8rkC1U4/+dQ6T0Lcm7QIo4xznENPzBqcQ4w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGpa4pO7uRUmAFHqJReGYiOL3JewDqmYdG0ZooOiTgFyXoY5Fh
+	oJzf0rOr1DjL/ai857r1weU24P3utsFoHig/N4nN5ZxNENwV8lpruomg
+X-Gm-Gg: ASbGnctSBnFCCw6JYQEPYbK7PwSpLrX9lZwZ/3j7JytxJFPLUDoyJ67u95vY0prUOKo
+	q+9LFKdCLRoL+Z9TPZeTGgLyGPNl+IhkPTNhIbrrcFBSlS+01mGLo4EHasiRSPanOrLOk4sUKbo
+	K+ecPStUMorshihA4H5qCshu2Alzt/IukyLtwdEODoXSbLfhWYwCPRFwIK+S5ABSJ+2z9zrvO2D
+	zk2tYpXNWQiE/LYucV9zDSEfBNhE+nulRGZn1zhaLmdfXNPPssjiNLXQYgQ6Or84+m3/9N22Wrc
+	L+Nyt6kM0QMSsF7sWAshqBUsdwQbUCI4/kdNDR2pS9PImB8TTg+cdJ14mA8XcI/dY9Dj7i96cic
+	6IzKiuyY1u4fwhxnfrVU21w==
+X-Google-Smtp-Source: AGHT+IFS6g0g1OqUDi72LqUCVo/ND5e7JBrkMGvo/NtwvaBttPCiw1Ma69w75ETAugGec2ZHXmvHzA==
+X-Received: by 2002:a17:907:3f8c:b0:ad5:2e5b:d16b with SMTP id a640c23a62f3a-af990350c69mr348859766b.27.1754492073165;
+        Wed, 06 Aug 2025 07:54:33 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0766f9sm1139997566b.24.2025.08.06.07.54.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 06 Aug 2025 07:54:32 -0700 (PDT)
+Date: Wed, 6 Aug 2025 14:54:32 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Donet Tom <donettom@linux.ibm.com>
+Cc: Wei Yang <richard.weiyang@gmail.com>,
+	Aboorva Devarajan <aboorvad@linux.ibm.com>,
+	akpm@linux-foundation.org, Liam.Howlett@oracle.com,
+	lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
+	david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+	baohua@kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ritesh.list@gmail.com
+Subject: Re: [PATCH v3 3/7] selftest/mm: Fix ksm_funtional_test failures
+Message-ID: <20250806145432.nygrslkiyvzulujn@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20250729053403.1071807-1-aboorvad@linux.ibm.com>
+ <20250729053403.1071807-4-aboorvad@linux.ibm.com>
+ <20250804091141.ifwryfmgjepwrog4@master>
+ <20fb853c-7d79-4d26-9c8a-f6ce9367d424@linux.ibm.com>
+ <20250805170353.6vlbyg6qn5hv4yzz@master>
+ <e9079694-1e30-46b6-97e7-b79be01c65a6@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|PH8PR12MB7304:EE_
-X-MS-Office365-Filtering-Correlation-Id: 86de2f6f-a0db-4a96-043e-08ddd4f5a625
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ANKLMo6DRiP0VY8wpiq6hYSTDXYrxNtNguKlnnx67gg2bUIl/JVQlR9+XFk2?=
- =?us-ascii?Q?exxiPqdF9Cio0ahKVMITPUYj/ahrijckPrOMPx+12Ba3hzdV3GGVdPuVI+fA?=
- =?us-ascii?Q?5F/yrOslChTb3/WR5rpWGA34aU1uEIMstXfA+WYq1CRUv78EQzg0a1D50DJn?=
- =?us-ascii?Q?TOrAyz7vzrpw42cKk5LrjHBkRYYnX28RnCS+c0GKYwvlusbAi6RDajDxv8ks?=
- =?us-ascii?Q?ObIrLHdjQZeNIgb1XqOQAaNxvDuToZNQw5pw9M2lfl2W2fs9eF+5/TdiMG40?=
- =?us-ascii?Q?OA3equEy+cZgNND1sKKT5qqc9VaRWCVftsvGdUFJ/CDv9lDSkJGOEhV8p2q2?=
- =?us-ascii?Q?KiUDrlqDw+RrWF8UUXeGPG+JwpIFEKqu3ynWlfQ/n7hfI1EPLDn8LmIEhGQi?=
- =?us-ascii?Q?sxGbtWrkJGiMrQc0hd45mDQNoOSw0OJCoAa++EUClxzz79FI3ZvXrhzdhnzi?=
- =?us-ascii?Q?fdML453F/6XY/W5yFszYRFfcurJr3inX1bPcvYln0B/s+DtsaLzuZKFTn5D5?=
- =?us-ascii?Q?Wh44ImRKFSoEWL3G+7G1yrKkq6kuai65s8fnd0yBItX5auxi2zFGSYJxmaul?=
- =?us-ascii?Q?Z0cXZjjZ3oMBH8GqAf+p/cqrUqrliCUyNRwrj6lYDBbDAHlpl27otF/DledN?=
- =?us-ascii?Q?Ilkvv0DoPb5WZ7ua9Jgbqt2fHhlqS8RJUVOMgrJhKlBZK3F618cEi69WsWVn?=
- =?us-ascii?Q?sHIXnl+N/1XB4qChIQqHfRl3cSEUuh38A7hPswe5S99ULuzclAMxsp+lnnho?=
- =?us-ascii?Q?SYa+Vna3xcB3mnKeBzjJ2kyiyjGHj1m/KAVVc8orCdIAHBlfMtlQ+073GG+6?=
- =?us-ascii?Q?Xgms/qUNx3K4ZtAnx80t84dHPNuL76awFq8nuYQT3HWxv+N1Bil5b2GKcqYA?=
- =?us-ascii?Q?n6t+hF0mcbuAJ+G/lkZ0t1O56z4vvSpQ+gKlMyIphgcIetGCYE/0EdG6CrR0?=
- =?us-ascii?Q?69Dwnnaj49Ay8Ppw1X+1feL7WoDwgfM5F61XOM3MzEwT7or9/uCOYRezvkli?=
- =?us-ascii?Q?NIRQTPOdymz4aguvxWIRF2udSgS+QFz+l8cgtTFslW+q1ARY3Sn6aGNDXgbz?=
- =?us-ascii?Q?a7eIYmQp7aVnTJFGrAoFkgHiUVyYbOZIRv9M2jEOB9KiVg0aw+WxBQZKmx2X?=
- =?us-ascii?Q?ZNDgEzeXsuyAetGmg9NVQQy+bbgqBYThwZeab0Q8tQ8M916WpSF9Ze6b6nTv?=
- =?us-ascii?Q?h9BXQNDNBrjqQ02njE5CQsePE0ChIJ2lP8VzTBMMlaZ4PNllnMiXbdRm6rnh?=
- =?us-ascii?Q?q6m8ewGJuLhCpV8rAEqVjSwBW550CgbsXF+re9vfe2/CIquGoyNo82Pw7ffz?=
- =?us-ascii?Q?2rDIBWKYRLmwrjlgWXhfDxJLhvm534UMGubUlnuPddQDrXPFmiiOE9nv99H8?=
- =?us-ascii?Q?UCsBrE86ydlcBBIVR2jrGlRDGvn+XJKl/2XXJMbMOG9ADTxcoa1wdmOh+SVa?=
- =?us-ascii?Q?SQU5bAHtc78=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?raTqxp5naUNMU760sizWcFGbjTGcRx9wedQ7lQh9IVRMIkrBVlmqmsH4vblS?=
- =?us-ascii?Q?e2XF/cZf8J92Qw3gOdBMwL3m4Si/7yAcM+3qvV/zEZjN/ENkP/4qFusT5pn0?=
- =?us-ascii?Q?4AhWPotpii0YdvAoe3tsudtrLVZVUFR+7q8KiuLOeSk3S08VnedyVAhI5sKx?=
- =?us-ascii?Q?m5Q0+OI8C6TKnEHDquICFRYkcceLUpEgBWhX1N8l+k0sZI2NV2rltRnMnpHw?=
- =?us-ascii?Q?jNdmsfFYKzam6uQsRuGC/AlcfAJOIp/F+a+qdND7n+dRMA8r79rJIvirZ2Rh?=
- =?us-ascii?Q?yQ3D/cAOqKLS3AAWAcGwctJ7npQRe91lfHqIy4s7EiTxqcFM/jRqaVFhqAor?=
- =?us-ascii?Q?GioER/aVft16WU/QPouFwZ/H7y3uyMqfg6EoPdzvBromIYL+fcI8kEbfacrL?=
- =?us-ascii?Q?ob/VWovUcEawFEhYNv0WsnfbQzpPI7SVsazH1oJ3i+aq2uay3D+Xr5ZAzbSu?=
- =?us-ascii?Q?yX91BV/q//Kn+onk7FtClSDlGzhaGIqV7CeD91G72QaMNOFA2rjfy5F/sxx5?=
- =?us-ascii?Q?xTi4aG3NF10EF23ZaFUmN9xqUfQAw9R2UnM0TAhrmyYJo0nVUORTA2A1QM8F?=
- =?us-ascii?Q?+Hy0W37oDBR9CHyEyxpvKF98gUq/QMNkGfqrMdy/F4uDiOHbxBspWKCx/3Ol?=
- =?us-ascii?Q?rdbd91yQKmo3k7pDKemk+HEETjhVsE5EVh2MxYmy/qWAeO+a9a2BfA5ttVgP?=
- =?us-ascii?Q?OcsMwm0MaPrALlKoKKhWNro4ldT8WAb305p2y/hOF0Jw3gcYvN2hRvz/YIkU?=
- =?us-ascii?Q?4F7p386yeDDnJlTDhRs2mfpwjcoSaV2OMOI+kz7QyzYQY5CoInMYZvIpeqrD?=
- =?us-ascii?Q?eGcQlAxtnQEGmPhy0avzSynlrvmaQN/8O+RdBnvoXirW+Yc0AKafwy7K11a+?=
- =?us-ascii?Q?aav8IjEDi7WLwXdh3bAJbcHB4arQSHol45e/owr3Z50SnWb3PXkOaOgvAYje?=
- =?us-ascii?Q?Cdb7QJFwtFoQUXYKUy1uAwkPly0ZvQBHCqMDsENDUScgu9LZNp30VpLCsZOr?=
- =?us-ascii?Q?BynSmaRM4v78iHT2i+YXuxV6VVxvqjMCNMLpGdB2OfsQnGBwoCov/yNBtQaP?=
- =?us-ascii?Q?nb4pGTfR06zro5lpSNZc5jWXktVWuerdCb2cOWOdJ7N8JisT5689NlFPvMGR?=
- =?us-ascii?Q?jXd66uFArajnG15tm+fHuvPoM4Z6J+q/kTH5uMvtuAAGkfRCLrFRwJmpPKLt?=
- =?us-ascii?Q?hs46hQvJsL9yBEyrs2QRI8GHalcp+tlcLhxMhqAYrrLjirGyrDb5vPVbaGPO?=
- =?us-ascii?Q?5zEY9KD0YnzIK3IA3lcgBww3YS7w2/PB3hRGpcMoQAtx7p2P0+t4JLCCe2kD?=
- =?us-ascii?Q?PmfNBRUxeaYT4KfagIVCSHaoqVBZjsZQeRe+N+WF9G/JLRZ/Op6GRpJbvtif?=
- =?us-ascii?Q?kxK6eA/q5unDfE87dwWL8auqOpAgtjwYD9JEphQrMtKhSbg8md3HY7Vm7acP?=
- =?us-ascii?Q?PQmMd/jfv+lZ09h69WXGuQfwDGEBFIyKQF66WHvDjHGvJzPHeEfxz25p5HmH?=
- =?us-ascii?Q?TRj4F0fiOkHSa+1dtEM3ijySUM+BumAD0wbvI8VTaAtyB3CSmZFvMtSGkoDs?=
- =?us-ascii?Q?Xl4J/rK27uTeS7ixYaruTR3Er07skgAC0MNocJWT?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86de2f6f-a0db-4a96-043e-08ddd4f5a625
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2025 14:29:27.7148
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0Str24LBYMlQ743mzQ1vDuqFEtfqq2iUH7JjoM1iZSJ9j4XtqOJ+D6gTkHF8iy6O
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7304
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e9079694-1e30-46b6-97e7-b79be01c65a6@linux.ibm.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-On 6 Aug 2025, at 8:47, David Hildenbrand wrote:
-
-> On 06.08.25 04:20, Zi Yan wrote:
->> Current behavior is to move to next PAGE_SIZE and split, but that make=
-s it
->> hard to check after-split folio orders. This is a preparation patch to=
-
->> allow more precise split_huge_page_test check in an upcoming commit.
->>
->> split_folio_to_order() part is not changed, since split_pte_mapped_thp=
- test
->> relies on its current behavior.
->>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->> ---
+On Wed, Aug 06, 2025 at 06:30:37PM +0530, Donet Tom wrote:
+[...]
+>> Child process inherit the ksm_merging_pages from parent, which is reasonable
+>> to me. But I am confused why ksm_unmerge() would just reset ksm_merging_pages
+>> for parent and leave ksm_merging_pages in child process unchanged.
+>> 
+>> ksm_unmerge() writes to /sys/kernel/mm/ksm/run, which is a system wide sysfs
+>> interface. I expect it applies to both parent and child.
 >
-> [...]
+>I am not very familiar with the KSM code, but from what I understand:
 >
->>  +		nr_pages =3D folio_nr_pages(folio);
->> +
->>   		if (!folio_test_anon(folio)) {
->>   			mapping =3D folio->mapping;
->>   			target_order =3D max(new_order,
->> @@ -4385,15 +4388,16 @@ static int split_huge_pages_pid(int pid, unsig=
-ned long vaddr_start,
->>   		if (!folio_test_anon(folio) && folio->mapping !=3D mapping)
->>   			goto unlock;
->>  -		if (in_folio_offset < 0 ||
->> -		    in_folio_offset >=3D folio_nr_pages(folio)) {
->> +		if (in_folio_offset < 0 || in_folio_offset >=3D nr_pages) {
->>   			if (!split_folio_to_order(folio, target_order))
->>   				split++;
->>   		} else {
->> -			struct page *split_at =3D folio_page(folio,
->> -							   in_folio_offset);
->> -			if (!folio_split(folio, target_order, split_at, NULL))
->> +			struct page *split_at =3D
->> +				folio_page(folio, in_folio_offset);
+>The ksm_merging_pages counter is maintained per mm_struct. When
+>we write to /sys/kernel/mm/ksm/run, unmerging is triggered, and the
+>counters are updated for all mm_structs present in the ksm_mm_slot list.
 >
-> Can we add an empty line here, and just have this in a single line, ple=
-ase (feel free to exceed 80chars if it makes the code look less ugly).
+>A mm_struct gets added to this list  when MADV_MERGEABLE is called.
+>In the case of the child process, since MADV_MERGEABLE has not been
+>invoked yet, its mm_struct is not part of the list. As a result,
+>its ksm_merging_pages counter is not reset.
+>
 
-Sure.
+Would this flag be inherited during fork? VM_MERGEABLE is saved in related vma
+I don't see it would be dropped during fork. Maybe missed.
 
 >
->> +			if (!folio_split(folio, target_order, split_at, NULL)) {
->>   				split++;
->> +				addr +=3D PAGE_SIZE * nr_pages;
+>> > value remained unchanged. That’s why get_my_merging_page() in the child was
+>> > returning a non-zero value.
+>> > 
+>> I guess you mean the get_my_merging_page() in __mmap_and_merge_range() return
+>> a non-zero value. But there is ksm_unmerge() before it. Why this ksm_unmerge()
+>> couldn't reset the value, but a ksm_unmerge() in parent could.
+>> 
+>> > Initially, I fixed the issue by calling ksm_unmerge() before the fork(), and
+>> > that
+>> > resolved the problem. Later, I decided it would be cleaner to move the
+>> > ksm_unmerge() call to the test cleanup phase.
+>> > 
+>> Also all the tests before test_prctl_fork(), except test_prctl(), calls
+>> 
+>>    ksft_test_result(!range_maps_duplicates());
+>> 
+>> If the previous tests succeed, it means there is no duplicate pages. This
+>> means ksm_merging_pages should be 0 before test_prctl_fork() if other tests
+>> pass. And the child process would inherit a 0 ksm_merging_pages. (A quick test
+>> proves it.)
 >
-> Hm, but won't we do another "addr +=3D PAGE_SIZE" in the for loop?
+>
+>If I understand correctly, all the tests are calling MADV_UNMERGEABLE,
+>which internally calls break_ksm() in the kernel. This function replaces the
+>KSM page with an exclusive anonymous page. However, the
+>ksm_merging_pages counters are not updated at this point.
+>
+>The function range_maps_duplicates(map, size) checks whether the pages
+>have been unmerged. Since break_ksm() does perform the unmerge, this
+>function returns false, and the test passes.
+>
+>The ksm_merging_pages update happens later via the ksm_scan_thread().
+>That’s why we observe that ksm_merging_pages values are not reset
+>immediately after the test finishes.
+>
 
-You are right. Will fix it with addr +=3D PAGE_SIZE * (nr_pages - 1);
+Not familiar with ksm internal. But the ksm_merging_pages counter still has
+non-zero value when all merged pages are unmerged makes me feel odd.
 
-Thanks.
+>If we add a sleep(1) after the MADV_UNMERGEABLE call, we can see that
+>the ksm_merging_pages values are reset after the sleep.
+>
+>Once the test completes successfully, we can call ksm_unmerge(), which
+>will immediately reset the ksm_merging_pages value. This way, in the fork
+>test, the child process will also see the correct value.
+>> 
+>> So which part of the story I missed?
+>> 
+>
+>So, during the cleanup phase after a successful test, we can call
+>ksm_unmerge() to reset the counter. Do you see any issue with
+>this approach?
+>
 
-Best Regards,
-Yan, Zi
+It looks there is no issue with an extra ksm_unmerge().
+
+But one more question. Why an extra ksm_unmerge() could help.
+
+Here is what we have during test:
+
+
+  test_prot_none()
+      !range_maps_duplicates()
+      ksm_unmerge()                  1) <--- newly add
+  test_prctl_fork()
+      >--- in child
+      __mmap_and_merge_range()
+          ksm_unmerge()              2) <--- already have
+
+As you mentioned above ksm_unmerge() would immediately reset
+ksm_merging_pages, why ksm_unmerge() at 2) still leave ksm_merging_pages
+non-zero? And the one at 1) could help.
+
+Or there is still some timing issue like sleep(1) you did?
+
+-- 
+Wei Yang
+Help you, Help me
 
