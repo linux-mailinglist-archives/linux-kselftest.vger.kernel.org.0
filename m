@@ -1,107 +1,128 @@
-Return-Path: <linux-kselftest+bounces-38419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB628B1CD5D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 22:20:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 145EEB1CDDF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 22:45:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6C0B161C0D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 20:20:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76BFE188EF00
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 20:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DDCC1C862D;
-	Wed,  6 Aug 2025 20:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA4D82D4B74;
+	Wed,  6 Aug 2025 20:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A8FKy+Jr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U/iLSn55"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E951EA80;
-	Wed,  6 Aug 2025 20:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E672D46D8;
+	Wed,  6 Aug 2025 20:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754511636; cv=none; b=QgDxwJ723EQ02JJczlSZEw5BHIBFVnplkB2Aa+a5IcuYFkfwKLx0xsroVioFdfm5HR83OzXm3bfVAKJR9EQI5MrCnXy/fh/l7EG88C3+nUU8qlHuAWMHhclx8aJjnvNA7AxZeurb3zVXog0P2DtM1U9TkVb0DNs5bRX/PYeXgVs=
+	t=1754512779; cv=none; b=KP2JeAR/WofUPPeP4XTmNNnUOWgyV1Jt0/MayaNbQLMkUb8G8O5zCqXeMU0AwBMpcl2tUqwyazOJv47/skPWxrcWlSDLCnGrPXJhZExHnvExUfvOEZZl6NqFgsj4GLDivT6c8SOP+1uLdOal/tPnQ5G6NkWY9ad6C86zvgfF6jU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754511636; c=relaxed/simple;
-	bh=s5Z2b74HI9MI/0XxjwGg/yU3unXf8FlOB1C/jaNAbKI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DXPtKaxMIgDjRQxy+tYaECi+GGXlmOyRhJ3D0SWraeThdqoV6qp04uo48HtYd/NqrMuuHiufSD7UyimqG4ShE3aaLPZJqQGDYJMGx7pq3ADPOMwYwnypinPyKy9inLXQZAPb8Mavr6eeHuMn0JGY8HX58Y3XgY771k8XcKb82v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A8FKy+Jr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90596C4CEE7;
-	Wed,  6 Aug 2025 20:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754511636;
-	bh=s5Z2b74HI9MI/0XxjwGg/yU3unXf8FlOB1C/jaNAbKI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=A8FKy+Jrk6et1gnhPu5/2vTRUeY9ZxU77v0Lisz8T4pSOsffmZIJlxe94uL/VWJ4L
-	 y32dliwCzfcb+MYSexT9BMyJoET3BfRiZeBBs4BJcM0oF2be/rR+j1kN++PU5nlFx8
-	 XxUP6nHo+Bbs0zoU0bHPCxWUEJBof9AhOLzygUF2lxWEuQlVL302jK3iqZglKxwW6i
-	 nVROeXamoqdpZBvAAw1X/MYpaTUYDzPCAKPgNQCnTI+uoIqpPWbvjpiVN8gQnGE10j
-	 51H2Hd4xra3kNCbl28RsHmxqOrpYS0hDdCyC4tcF70bGTVnBRDWX3tbPW2NTpssuV+
-	 jcyKIfYUHD0SQ==
-Date: Wed, 6 Aug 2025 13:20:34 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Eric Dumazet <edumazet@google.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, borisp@nvidia.com,
- john.fastabend@gmail.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, sd@queasysnail.net, will@willsroot.io,
- savy@syst3mfailure.io
-Subject: Re: [PATCH net 1/2] tls: handle data disappearing from under the
- TLS ULP
-Message-ID: <20250806132034.55292365@kernel.org>
-In-Reply-To: <CANn89iKvW8jSrktWVd6g4m8qycp32-M=gFxwZRJ3LZi1h2Q80Q@mail.gmail.com>
-References: <20250806180510.3656677-1-kuba@kernel.org>
-	<CANn89iKvW8jSrktWVd6g4m8qycp32-M=gFxwZRJ3LZi1h2Q80Q@mail.gmail.com>
+	s=arc-20240116; t=1754512779; c=relaxed/simple;
+	bh=qXIy2TDe6wtUv8kXF4txJya0a+nOnVVUmiqcNtgwnMM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O3uxqJh9KD0U/TiWiFdQxUDZuPO2DCrZs4t6Ro5Nlbfpi/nA0IVbwSs7u+t+lvwpLH85vagmZqhpC056ElqWMP26xL0kcmjAfkQjDgVvAAzzcYHxo/O3x6EcRBKk4GXFUUpFEQVGY0T++wzZnUE1y+5Alk9f3IyQntXKyrK9t68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U/iLSn55; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b3507b63c6fso227873a12.2;
+        Wed, 06 Aug 2025 13:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754512776; x=1755117576; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vLwQExKUfK4JzXgNc/MSuz/ip/toJprM4tvNXBkEa0c=;
+        b=U/iLSn55PZVMFJnPW8ATt7rkDkirlZkDzXsk4XxyG+Ubuwz1j43gjyvsxj4cfbO0ZM
+         DeAXCvwXR/y6cYnm0X/6MiltgxnbvSfy2KoTCym2Urux+SqpKRr+/fTsOgttUhAdjZCt
+         cr5xCgsZoSC0oYnUND5UDMo81fFm+0eSoJ9KUIrLwboaNfx02JdwQeURkb7k5+k4JGfn
+         TnG1uno7jrlEHx18ei9509cfe+rCb5ZOZtbiAHTbEArb9ZkChDkr38tQYVPJExJA/I6x
+         5loyvp2g3lG3EsWqXBGPkrqaFhy4ZO86YXzKt4vfkMKjRKhv5P7ImP/sVxMotYq1U0Fz
+         u2jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754512776; x=1755117576;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vLwQExKUfK4JzXgNc/MSuz/ip/toJprM4tvNXBkEa0c=;
+        b=mMNyNaVYyTx6l7MqbGTisnlOeovn1LizFfoWT/cFmtwUFz1A4+x58z5h3eVGWFgEW8
+         epRzqWqGhIsezGsEUjmdWriw1MPhDJmzEdMNPl+8hV/0ijq9PdjqF5zFEep2hDSJfuD5
+         iKwygkUasnwc+VPIdMYaHZzqahp7/WV+Bl4Y9NGvk4p4OHLOg8wAo4jeNpSrJTAR47na
+         kBnEUSEH7XKFAG6QwRMmui7oQwwxDUryvKoN6Fyk1Y9NUuUeOSkmUAec/31t6eQTNfeU
+         /bIJ3uvA2c5VZeuZj0KxkBiYykNzNi/0ql0rtBNCQYLzVYNbr7fZYxmQN3342OjagHEA
+         ev3A==
+X-Forwarded-Encrypted: i=1; AJvYcCUSzjsuLMLYvqcleoos9cbZc9bCPvNRyppIcBby4VYqYuCN0bPtkw2phsBtLzVB0Izfi8mNwzdWh3itGstuo3J6@vger.kernel.org, AJvYcCVusuHeBFsxZYt9YA8jiL7ac4Yde1g10OHQCGMylB9h9zJAq/yrYKVrSuRXioa/yOJ3NlFnjrQL3ehCmPc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEcOvsBSEABZ3PRcmKhmhG8vx2rMjZbZZT1ImxeoAGgOnkOyLp
+	e8Ba7Zt6QYFL0rLpGXtQHbCz2qi0c0Ebo4fwLzewaOKwRD47zN79fHMO
+X-Gm-Gg: ASbGncu8fkjCvM5CsGRKTgGjUY/SGzKl45XH0dROorbC/wqEnEeyaPi2Q2cyqCi3INI
+	mtEXA8v1gAdBW7wx1L7Xc/YCakCXzan8do5D4xibOndLzcttK/LAgGu4RYyxf91K4OsaF2JuZlc
+	HvUm/j2AFP6Fp2gINBQDV1y2p2XR+OwFi3bHarFFVN8BFbfc4cqn0F5BuxRntSaTOVyKImFep9N
+	EX74trGxrCAZNjoCJsKenXQK6PMUX+i4gr7XuHvcl17J5olS6GmwRzhvk2F1zy+AmTXNGk6gI8X
+	NZFS6ReCF9uO/JKwHVDepJ1HynLP3Iy6TO/SYWYA3IC87UMAUtta2rUItp/qilP7KpPBYLWVYJN
+	mrt7WLNIviCLB5AT9KZsiavIFSOaXKw+W
+X-Google-Smtp-Source: AGHT+IF8wHNHuQVZKKSQQIRqVPww/m8v+NrnrInpYnTghu2nm8e4+4Nb4DI4QQXkDMw2EhctprCEdg==
+X-Received: by 2002:a17:903:19f0:b0:242:9bbc:c773 with SMTP id d9443c01a7336-242a0bc9f41mr56677965ad.54.1754512776231;
+        Wed, 06 Aug 2025 13:39:36 -0700 (PDT)
+Received: from server.. ([103.251.57.138])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241d1ef67a3sm166407345ad.15.2025.08.06.13.39.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Aug 2025 13:39:35 -0700 (PDT)
+From: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+To: linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH] selftests: arm64: Fix -Waddress warning in tpidr2 test
+Date: Thu,  7 Aug 2025 02:09:26 +0530
+Message-ID: <20250806203928.168365-1-reddybalavignesh9979@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 6 Aug 2025 11:35:28 -0700 Eric Dumazet wrote:
-> > TLS expects that it owns the receive queue of the TCP socket.
-> > This cannot be guaranteed in case the reader of the TCP socket
-> > entered before the TLS ULP was installed, or uses some non-standard
-> > read API (eg. zerocopy ones). Make sure that the TCP sequence
-> > numbers match between ->data_ready and ->recvmsg, otherwise
-> > don't trust the work that ->data_ready has done.
-> >
-> > Signed-off-by: William Liu <will@willsroot.io>
-> > Signed-off-by: Savino Dicanosa <savy@syst3mfailure.io>  
-> 
-> I presume you meant Reported-by tags ?
+Resolve compiler warning about always true condition in ksft_test_result
+in tpidr2, passing actual function.
 
-Oops..
+This silences -Waddress warning while maintaining test functionality.
 
-> > Link: https://lore.kernel.org/tFjq_kf7sWIG3A7CrCg_egb8CVsT_gsmHAK0_wxDPJXfIzxFAMxqmLwp3MlU5EHiet0AwwJldaaFdgyHpeIUCS-3m3llsmRzp9xIOBR4lAI=@syst3mfailure.io
-> > Fixes: 84c61fe1a75b ("tls: rx: do not use the standard strparser")
-> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> > ---
-> >  include/net/tls.h  |  1 +
-> >  net/tls/tls.h      |  2 +-
-> >  net/tls/tls_strp.c | 17 ++++++++++++++---
-> >  net/tls/tls_sw.c   |  3 ++-
-> >  4 files changed, 18 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/include/net/tls.h b/include/net/tls.h
-> > index 857340338b69..37344a39e4c9 100644
-> > --- a/include/net/tls.h
-> > +++ b/include/net/tls.h
-> > @@ -117,6 +117,7 @@ struct tls_strparser {
-> >         bool msg_ready;
-> >
-> >         struct strp_msg stm;
-> > +       u32 copied_seq;  
-> 
-> Can a 2^32 wrap occur eventually ?
+Signed-off-by: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+---
+ tools/testing/selftests/arm64/abi/tpidr2.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Hm, good point. Is it good enough if we also check it in data_ready?
-That way we should notice that someone is eating our data before
-the seq had a chance to wrap?
+diff --git a/tools/testing/selftests/arm64/abi/tpidr2.c b/tools/testing/selftests/arm64/abi/tpidr2.c
+index f58a9f89b952..4c89ab0f1010 100644
+--- a/tools/testing/selftests/arm64/abi/tpidr2.c
++++ b/tools/testing/selftests/arm64/abi/tpidr2.c
+@@ -227,10 +227,10 @@ int main(int argc, char **argv)
+ 	ret = open("/proc/sys/abi/sme_default_vector_length", O_RDONLY, 0);
+ 	if (ret >= 0) {
+ 		ksft_test_result(default_value(), "default_value\n");
+-		ksft_test_result(write_read, "write_read\n");
+-		ksft_test_result(write_sleep_read, "write_sleep_read\n");
+-		ksft_test_result(write_fork_read, "write_fork_read\n");
+-		ksft_test_result(write_clone_read, "write_clone_read\n");
++		ksft_test_result(write_read(), "write_read\n");
++		ksft_test_result(write_sleep_read(), "write_sleep_read\n");
++		ksft_test_result(write_fork_read(), "write_fork_read\n");
++		ksft_test_result(write_clone_read(), "write_clone_read\n");
+ 
+ 	} else {
+ 		ksft_print_msg("SME support not present\n");
+-- 
+2.43.0
+
 
