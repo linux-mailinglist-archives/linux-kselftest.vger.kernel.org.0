@@ -1,229 +1,126 @@
-Return-Path: <linux-kselftest+bounces-38365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE882B1C344
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 11:26:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3872EB1C3B2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 11:48:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD1DB18A5FFB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 09:26:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 390EA186FD5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 09:48:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D4428A407;
-	Wed,  6 Aug 2025 09:25:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8FEC21CC79;
+	Wed,  6 Aug 2025 09:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nyud2KCz"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="c54s3wP2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD229288CA1;
-	Wed,  6 Aug 2025 09:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69C422904;
+	Wed,  6 Aug 2025 09:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754472350; cv=none; b=UdTzaUDBJ96SXFxeLFI+HzxN9+WX0DVhmcO9ccyBq8dg6pczhUS/ceBIe5+At4T3HJWqLs0Pu2VPgF7b5ht6N5DF9cniD4YkGT9WgHdyldqUXc9NZ4fh8zVRMXnYv54PuxXlwgXCg7G0Lr59XlgLnjJTVccuI2RIxX76u3zGaLc=
+	t=1754473693; cv=none; b=KJbauVr0/45K7y/otp38O7Lky2BkWIGJ5KYQZ2tDdHork6lQ9foO9uhsLvltJe2g66i0jQUx9nHaHFUQhJtHCZlFDaKeOlfiPlmV6Zl3UQoYScRku5eoY7qI1UFNsRwjDKB89d+AxNhUZUX8IyFZezeg9Pt7ar9muiXoy3E69sI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754472350; c=relaxed/simple;
-	bh=nieYC9c+249BW7EG1qD6ENgERSYGNbMzbTwbnbkvNmA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dcYT1foRyX06y/E8yichg/4B1A3S+WbXDpQdtt9YsFZV5TFd52gOHWTL+ZBcFfGlYb4syiZtoEp5ezsUJ8izzoaXQz7Fx4LSa1qFiqTkAvDfYK8D0yMQNKDCYwniKpL7RFpNHqHQgvpl7K+C3tzwdk62DMyvMZv2TG/azK7EOL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=nyud2KCz; arc=none smtp.client-ip=220.197.31.5
+	s=arc-20240116; t=1754473693; c=relaxed/simple;
+	bh=L18x3n0Qgl4lVs+Z9ZFglVRU0vLUp/CruW8wFiT1QfI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=IQjo/uIqepo7chE6EFgeggo1KO2/UGnO9UiUk0txRVKigGCEhXJS9d6J+qQ7cLcTqyj2YZ9oh+348tHCFp3tmXkTra//0WoID6kS/utbNa26DUJ/bu/bp/5SxE4mHRcDl+wOCTA4IEOBzhQuwsGLrBOe0nuhdEHkcseiqxDK4r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=c54s3wP2 reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=mL
-	R5OmI3/KOhZo6YRssu1xcudMwJC+vZQUkPh7Xha2c=; b=nyud2KCzUs/hwXRWi3
-	xEJ1DYlPPeJyZlDMSWlMjxVtxbyvKlEJ4oIQGGvPsdkIOY1V+OJIbEfX9La99yMP
-	IpCzq3RnuMDyVsotGK3fFdFo8KY3KPa24Viu14aKcbE1DHN0VLEN1S0aJfuiFPWX
-	XyotWvJXULSy3Bd2NRj0/s9Ek=
-Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wDnD0ZrH5NoufpdAA--.11721S4;
-	Wed, 06 Aug 2025 17:25:03 +0800 (CST)
-From: Jiawei Zhao <phoenix500526@163.com>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=QzKGHkQdK0bBRBUTozmgAfsqu4s3xVI4zk+6kEWtcVQ=; b=c
+	54s3wP2ww5tR5bh9A31RvZAgGZpX10TLpTSyUMkPuHwHnB2Kc6YCAp6jFJvr1WKA
+	/LM7BrelO+XRPYYa1dJL4aiQeE1gT1FCq0OF0P11za+iEimD9QPncHtRjEUen5Tr
+	xguMl/NG3alS2l6UjMv9OfslXGo9mBO5JpI2y6HksE=
+Received: from phoenix500526$163.com ( [120.230.124.59] ) by
+ ajax-webmail-wmsvr-40-108 (Coremail) ; Wed, 6 Aug 2025 17:47:36 +0800 (CST)
+Date: Wed, 6 Aug 2025 17:47:36 +0800 (CST)
+From: =?UTF-8?B?6LW15L2z54Kc?= <phoenix500526@163.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v7 2/2] selftests/bpf: Force -O2 for USDT selftests to cover SIB handling logic
-Date: Wed,  6 Aug 2025 09:24:58 +0000
-Message-ID: <20250806092458.111972-3-phoenix500526@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250806092458.111972-1-phoenix500526@163.com>
-References: <20250806092458.111972-1-phoenix500526@163.com>
+Subject: Re:Re: [PATCH v6 2/2] selftests/bpf: Force -O2 for USDT selftests
+ to cover SIB handling logic
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <058d4d74-23ff-444b-a773-9d45204900f2@linux.dev>
+References: <20250802084803.108777-1-phoenix500526@163.com>
+ <20250802084803.108777-3-phoenix500526@163.com>
+ <058d4d74-23ff-444b-a773-9d45204900f2@linux.dev>
+X-NTES-SC: AL_Qu2eBvicvE4u4CSdbOkfmUsVh+o9X8K1vfsk3oZfPJp+jCLp1yY+THNTMH/b4cWDNTqunQiHQiJp+uZHV6V3YawLZvTuhmOs4NaAknJTr1/35Q==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnD0ZrH5NoufpdAA--.11721S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKF15CryUAFWrXry5CF43GFg_yoW7Gw1xpa
-	48Xw1YkrWIqF43Kr1SqF4Utr4rKanayrW8JFykXFyavr48JF92qr1xKry7Kas3G395XF1r
-	A39xtan8Gr48Jw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jzUDJUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBaxChiGiTHQJCqwAAsf
+Message-ID: <393dae7e.9b04.1987ec77091.Coremail.phoenix500526@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:bCgvCgD313O5JJNoRQoUAA--.51653W
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFAOhiGiTGhWjkQABs5
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
-
-In this patch:
-- add usdt_o2 test case to cover SIB addressing usdt argument spec
-  handling logic
-
-Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
----
- tools/testing/selftests/bpf/Makefile          |  8 +++
- .../selftests/bpf/prog_tests/usdt_o2.c        | 71 +++++++++++++++++++
- .../selftests/bpf/progs/test_usdt_o2.c        | 37 ++++++++++
- 3 files changed, 116 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 910d8d6402ef..68cf6a9cf05f 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -759,6 +759,14 @@ TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
- TRUNNER_BPF_CFLAGS :=
- $(eval $(call DEFINE_TEST_RUNNER,test_maps))
- 
-+# Use -O2 optimization to generate SIB addressing usdt argument spec
-+# Only apply on x86 architecture where SIB addressing is relevant
-+ifeq ($(ARCH), x86)
-+$(OUTPUT)/usdt_o2.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
-+$(OUTPUT)/cpuv4/usdt_o2.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
-+$(OUTPUT)/no_alu32/usdt_o2.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
-+endif
-+
- # Define test_verifier test runner.
- # It is much simpler than test_maps/test_progs and sufficiently different from
- # them (e.g., test.h is using completely pattern), that it's worth just
-diff --git a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
-new file mode 100644
-index 000000000000..f04b756b3640
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Jiawei Zhao <phoenix500526@163.com>. */
-+#include <test_progs.h>
-+
-+#define _SDT_HAS_SEMAPHORES 1
-+#include "../sdt.h"
-+#include "test_usdt_o2.skel.h"
-+
-+int lets_test_this(int);
-+
-+#define test_value 0xFEDCBA9876543210ULL
-+#define SEC(name) __attribute__((section(name), used))
-+
-+
-+static volatile __u64 array[1] = {test_value};
-+unsigned short test_usdt1_semaphore SEC(".probes");
-+
-+static __always_inline void trigger_func(void)
-+{
-+	/* Base address + offset + (index * scale) */
-+	if (test_usdt1_semaphore) {
-+		for (volatile int i = 0; i <= 0; i++)
-+			STAP_PROBE1(test, usdt1, array[i]);
-+	}
-+}
-+
-+static void basic_sib_usdt(void)
-+{
-+	LIBBPF_OPTS(bpf_usdt_opts, opts);
-+	struct test_usdt_o2 *skel;
-+	struct test_usdt_o2__bss *bss;
-+	int err;
-+
-+	skel = test_usdt_o2__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	bss = skel->bss;
-+	bss->my_pid = getpid();
-+
-+	err = test_usdt_o2__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	/* usdt1 won't be auto-attached */
-+	opts.usdt_cookie = 0xcafedeadbeeffeed;
-+	skel->links.usdt1 = bpf_program__attach_usdt(skel->progs.usdt1,
-+						     0 /*self*/, "/proc/self/exe",
-+						     "test", "usdt1", &opts);
-+	if (!ASSERT_OK_PTR(skel->links.usdt1, "usdt1_link"))
-+		goto cleanup;
-+
-+	trigger_func();
-+
-+	ASSERT_EQ(bss->usdt1_called, 1, "usdt1_called");
-+	ASSERT_EQ(bss->usdt1_cookie, 0xcafedeadbeeffeed, "usdt1_cookie");
-+	ASSERT_EQ(bss->usdt1_arg_cnt, 1, "usdt1_arg_cnt");
-+	ASSERT_EQ(bss->usdt1_arg, test_value, "usdt1_arg");
-+	ASSERT_EQ(bss->usdt1_arg_ret, 0, "usdt1_arg_ret");
-+	ASSERT_EQ(bss->usdt1_arg_size, sizeof(array[0]), "usdt1_arg_size");
-+
-+cleanup:
-+	test_usdt_o2__destroy(skel);
-+}
-+
-+
-+
-+void test_usdt_o2(void)
-+{
-+	basic_sib_usdt();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_usdt_o2.c b/tools/testing/selftests/bpf/progs/test_usdt_o2.c
-new file mode 100644
-index 000000000000..14602aa54578
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_usdt_o2.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/usdt.bpf.h>
-+
-+int my_pid;
-+
-+int usdt1_called;
-+u64 usdt1_cookie;
-+int usdt1_arg_cnt;
-+int usdt1_arg_ret;
-+u64 usdt1_arg;
-+int usdt1_arg_size;
-+
-+SEC("usdt")
-+int usdt1(struct pt_regs *ctx)
-+{
-+	long tmp;
-+
-+	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	__sync_fetch_and_add(&usdt1_called, 1);
-+
-+	usdt1_cookie = bpf_usdt_cookie(ctx);
-+	usdt1_arg_cnt = bpf_usdt_arg_cnt(ctx);
-+
-+	usdt1_arg_ret = bpf_usdt_arg(ctx, 0, &tmp);
-+	usdt1_arg = (u64)tmp;
-+	usdt1_arg_size = bpf_usdt_arg_size(ctx, 0);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+CgpPSywgSeKAmXZlIGFscmVhZHkgYWRkZWQgYW4gdXNkdF9vMiB0ZXN0IGFuZCBwYXNzZWQgaXQu
+wqAKCgoKCkF0IDIwMjUtMDgtMDYgMDM6NDI6MjIsICJZb25naG9uZyBTb25nIiA8eW9uZ2hvbmcu
+c29uZ0BsaW51eC5kZXY+IHdyb3RlOgo+Cj4KPk9uIDgvMi8yNSAxOjQ4IEFNLCBKaWF3ZWkgWmhh
+byB3cm90ZToKPj4gV2hlbiB1c2luZyBHQ0Mgb24geDg2LTY0IHRvIGNvbXBpbGUgYW4gdXNkdCBw
+cm9nIHdpdGggLU8xIG9yIGhpZ2hlcgo+PiBvcHRpbWl6YXRpb24sIHRoZSBjb21waWxlciB3aWxs
+IGdlbmVyYXRlIFNJQiBhZGRyZXNzaW5nIG1vZGUgZm9yIGdsb2JhbAo+PiBhcnJheSBhbmQgUEMt
+cmVsYXRpdmUgYWRkcmVzc2luZyBtb2RlIGZvciBnbG9iYWwgdmFyaWFibGUsCj4+IGUuZy4gIjFA
+LTk2KCVyYnAsJXJheCw4KSIgYW5kICItMUA0K3QxKCVyaXApIi4KPj4KPj4gSW4gdGhpcyBwYXRj
+aDoKPj4gLSBmb3JjZSAtTzIgb3B0aW1pemF0aW9uIGZvciB1c2R0LnRlc3QubyB0byBnZW5lcmF0
+ZSBTSUIgYWRkcmVzc2luZyB1c2R0Cj4+ICAgIGFyZ3VtZW50IHNwZWMuCj4+IC0gY2hhbmdlIHRo
+ZSBnbG9iYWwgdmFyaWFibGUgdDEgdG8gYSBsb2NhbCB2YXJpYWJsZSwgdG8gYXZvaWQgY29tcGls
+ZXIKPj4gICAgZ2VuZXJhdGluZyBQQy1yZWxhdGl2ZSBhZGRyZXNzaW5nIG1vZGUgZm9yIGl0Lgo+
+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBKaWF3ZWkgWmhhbyA8cGhvZW5peDUwMDUyNkAxNjMuY29tPgo+
+PiAtLS0KPj4gICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvTWFrZWZpbGUgICAgICAgICAg
+fCAgOCArKysrKysrKwo+PiAgIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3Rz
+L3VzZHQuYyB8IDE4ICsrKysrKysrKysrKy0tLS0tLQo+PiAgIDIgZmlsZXMgY2hhbmdlZCwgMjAg
+aW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKPj4KPj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rl
+c3Rpbmcvc2VsZnRlc3RzL2JwZi9NYWtlZmlsZSBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Jw
+Zi9NYWtlZmlsZQo+PiBpbmRleCA5MTBkOGQ2NDAyZWYuLjRiNzdkMDZkNWM0MiAxMDA2NDQKPj4g
+LS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL01ha2VmaWxlCj4+ICsrKyBiL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9NYWtlZmlsZQo+PiBAQCAtNzU5LDYgKzc1OSwxNCBAQCBU
+UlVOTkVSX0JQRl9CVUlMRF9SVUxFIDo9ICQkKGVycm9yIG5vIEJQRiBvYmplY3RzIHNob3VsZCBi
+ZSBidWlsdCkKPj4gICBUUlVOTkVSX0JQRl9DRkxBR1MgOj0KPj4gICAkKGV2YWwgJChjYWxsIERF
+RklORV9URVNUX1JVTk5FUix0ZXN0X21hcHMpKQo+PiAgIAo+PiArIyBGb3JjZSB1c2R0LmMgdG8g
+dXNlIC1PMiBvcHRpbWl6YXRpb24gdG8gZ2VuZXJhdGUgU0lCIGFkZHJlc3NpbmcKPj4gKyMgT25s
+eSBhcHBseSBvbiB4ODYgYXJjaGl0ZWN0dXJlIHdoZXJlIFNJQiBhZGRyZXNzaW5nIGlzIHJlbGV2
+YW50Cj4+ICtpZmVxICgkKEFSQ0gpLCB4ODYpCj4+ICskKE9VVFBVVCkvdXNkdC50ZXN0Lm86IENG
+TEFHUzo9JChzdWJzdCBPMCxPMiwkKENGTEFHUykpCj4+ICskKE9VVFBVVCkvY3B1djQvdXNkdC50
+ZXN0Lm86IENGTEFHUzo9JChzdWJzdCBPMCxPMiwkKENGTEFHUykpCj4+ICskKE9VVFBVVCkvbm9f
+YWx1MzIvdXNkdC50ZXN0Lm86IENGTEFHUzo9JChzdWJzdCBPMCxPMiwkKENGTEFHUykpCj4+ICtl
+bmRpZgo+Cj5UaGlzIGlzIG5vIGdvb2QuIFlvdSBzaG91bGQgbm90IGNoYW5nZSBmcm9tIC1PMCB0
+byAtTzIuIFRoZSBleGlzdGluZyB1c2R0LmMKPnRlc3Qgc2hvdWxkIGJlIGtlcHQuIEkgYXNzdW1l
+IGF0IC1PMCBsZXZlbCwgdGhlIGNvbXBpbGVyIHByb2JhYmx5Cj53b24ndCBnZW5lcmF0ZSBTSUIg
+cGF0dGVybi4KPgo+WW91IGNvdWxkIGFkZCBhbm90aGVyIHVzZHQgdGVzdCBlLmcuIHVzZHRfbzIu
+YyBhbmQgZm9yY2UKPnVzZHRfbzIgaXMgY29tcGlsZWQgd2l0aCAtTzIgb3B0aW1pemF0aW9ucyBh
+bmQgaW4gdXNkdF9vMiBmb2N1c2luZyBvbgo+U0lCIHByb2JlLgo+Cj4+ICsKPj4gICAjIERlZmlu
+ZSB0ZXN0X3ZlcmlmaWVyIHRlc3QgcnVubmVyLgo+PiAgICMgSXQgaXMgbXVjaCBzaW1wbGVyIHRo
+YW4gdGVzdF9tYXBzL3Rlc3RfcHJvZ3MgYW5kIHN1ZmZpY2llbnRseSBkaWZmZXJlbnQgZnJvbQo+
+PiAgICMgdGhlbSAoZS5nLiwgdGVzdC5oIGlzIHVzaW5nIGNvbXBsZXRlbHkgcGF0dGVybiksIHRo
+YXQgaXQncyB3b3J0aCBqdXN0Cj4+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
+cy9icGYvcHJvZ190ZXN0cy91c2R0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJv
+Z190ZXN0cy91c2R0LmMKPj4gaW5kZXggNDk1ZDY2NDE0YjU3Li44NmYzNTRkMjVhZWYgMTAwNjQ0
+Cj4+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3VzZHQuYwo+
+PiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy91c2R0LmMKPj4g
+QEAgLTE0LDEwICsxNCwxNSBAQCBzdGF0aWMgdm9sYXRpbGUgaW50IGlkeCA9IDI7Cj4+ICAgc3Rh
+dGljIHZvbGF0aWxlIF9fdTY0IGJsYSA9IDB4RkVEQ0JBOTg3NjU0MzIxMFVMTDsKPj4gICBzdGF0
+aWMgdm9sYXRpbGUgc2hvcnQgbnVtc1tdID0gey0xLCAtMiwgLTMsIC00fTsKPj4gICAKPj4gLXN0
+YXRpYyB2b2xhdGlsZSBzdHJ1Y3Qgewo+PiAtCWludCB4Owo+PiAtCXNpZ25lZCBjaGFyIHk7Cj4+
+IC19IHQxID0geyAxLCAtMTI3IH07Cj4+ICsvKgo+PiArICogVE9ETzogIEF0IE8yIG9wdGltaXph
+dGlvbiBsZXZlbCwgdDEncyBVU0RUIGFyZ3VtZW50IHNwZWMgYmVjb21lcyAtMUA0K3QxKCVyaXAp
+Lgo+PiArICogU2luY2UgbGliYnBmIGRvZXNuJ3Qgc3VwcG9ydCBSSVAgYWRkcmVzc2luZyBtb2Rl
+IHlldCwgdGhpcyBjYXVzZXMgInVucmVjb2duaXplZCByZWdpc3RlciIgZXJyb3JzLgo+PiArICog
+VGhpcyB0ZXN0IHdpbGwgYmUgcmUtZW5hYmxlZCBvbmNlIGxpYmJwZiBzdXBwb3J0cyBSSVAgYWRk
+cmVzc2luZyBtb2RlLgo+PiArICovCj4+ICsvLyBzdGF0aWMgdm9sYXRpbGUgc3RydWN0IHsKPj4g
+Ky8vCWludCB4Owo+PiArLy8Jc2lnbmVkIGNoYXIgeTsKPj4gKy8vIH0gdDEgPSB7IDEsIC0xMjcg
+fTsKPj4gICAKPgo+Wy4uLl0K
 
