@@ -1,104 +1,136 @@
-Return-Path: <linux-kselftest+bounces-38385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0259B1C8CE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 17:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D5F6B1C937
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 17:48:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A4133A5F86
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 15:34:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 331953AF62C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 15:46:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EDF3292B3F;
-	Wed,  6 Aug 2025 15:34:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C745B293C51;
+	Wed,  6 Aug 2025 15:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nJJzJ5m4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KJ/B+cFJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA19524503C;
-	Wed,  6 Aug 2025 15:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB327292B54;
+	Wed,  6 Aug 2025 15:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754494468; cv=none; b=WiaD2KKFlxO9MlwD1NG4jOdXbdDlAXvqTcnI6mdorakJvQo6/coFzDiMYeFsRPBPcOzuAwZNyKvkHAIqWPpzHNmrurLoGIijaPwLCZMATp4tUgYApDjAnhH9jrQzyGrLUa/l8rdxGL2Xm/Ucu7aSj2OJqHAeEW4A/3l+hEDIpwQ=
+	t=1754495166; cv=none; b=aNM8n3RYpAZBF7zNSjAXphxXdXQymTvch/pCPnbEoWnhZyj196zaP5KIR7qjFEhqur+gNqLk0bYa01I0U/0PanWzYH2MVknyXviciLNw9mj7PoHCrBRgW2L3DF/5qwZ2eDYB6eS6GdWZoZuRCw8ubnJ5atKtUdxOzP+8SjH78+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754494468; c=relaxed/simple;
-	bh=9k5FqnoKkgBQy4Bx9d/Hz1VRfIa6e+0sJLuBBqzZUKo=;
+	s=arc-20240116; t=1754495166; c=relaxed/simple;
+	bh=jmUH1JzYQAfaDnXZLVWzBEI4r9jrLU/kenC5OLCdEOE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=elcrqjRiNvyB6S4bj1owW20MrIIsZz/XEQfCnDk5BAWvM0hMQYqVHH6mBlTyreqBIzr/idisDOQu81mTqvKbWO9sCnQoUDEOu/EXvotN8/Y/rS7ODDvNf566au9YmyHne3gnKkG3UaNTYZ102PGv0tRD7WW/8RLX+lR1dnefuyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nJJzJ5m4; arc=none smtp.client-ip=209.85.167.41
+	 To:Cc:Content-Type; b=Isl3PdDc4I2AnYOpa8tetScqIAAkh8UJN/FdAv/KVJeGlRj3+29VhTvUJllVAci0GOuJv81sa6b+koX+1Fh/b3ujq6xgRAXBkowscZfUw4tUbe0bwtOZN3C350YELWqvpNNxBhx4vDT7Eq69Nhv8aB3DbryV1sFuafsJ0xRPkic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KJ/B+cFJ; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-55b823c9129so6847902e87.3;
-        Wed, 06 Aug 2025 08:34:26 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-55b978c61acso3640e87.2;
+        Wed, 06 Aug 2025 08:46:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754494465; x=1755099265; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754495163; x=1755099963; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dr2iD/x5RNPmf2/wZEirrgdGMAy27l5lk2Wo0A6tpXk=;
-        b=nJJzJ5m4BN0Q2AqdOZ36CW/wdCvynCkbRrIEIfGt4yM1WlE55pDaJf4lVVp3qFQ9Fw
-         KB7FMbVMaQTPRfbHlANGk+QHB721D7/PKZcBUnRIxQLI2kAbTElwoZscjlEwyF45jldQ
-         iWOsstU9Za3/ApPjWPjaAomTWaflIePE5ODF71Eu/mYD5LTm5AGl+6AA7rmEPZKDS/WD
-         jXA2xKMqHuU0MsxnFh8lHdsNW7VWTKAqo+/UYSo9o0CZvfDybWxLPR0C4FS5wnsK6rXD
-         3HWaC+xGVZFAQIvkp1wegVjyzSzsewkq4ltGTW+8L+Ibrk+ioIrmOIcQ3G9mm52/dbh9
-         ZayA==
+        bh=5zmrMmlSKNc8Wry1y8dWX27pKFPjQrw0O9VLnGzkRYw=;
+        b=KJ/B+cFJa6X4I6XVunDC3I+vUqtBiYanfLfLoeYuUnVv5awQl6k8GR22Yd0qwTTw6/
+         ZgdN6iN0Z/cQJT7EFDZLMq0SMeLJpj+RV+9JpYy/8njUXZDTByJV539bmCCi2v5EBS0E
+         Pq/7vwmra+CuNCBjPcWO34L6Uy9diZRL3U1Kc5Tso/Um8QjIEU1JNmHtiOY8vPFM/p4o
+         6iZ7lp2K7rHT4LFY5ImVmJQtn9VFCXGbhSEOS9f1Uk4F2gN9LoKh3w4ceNcYa3Zu4Ni5
+         TlbPOLPkkf7+TynvxFkzFSLcX1+6WhUMJgMPMSb+iDkzX+Wy99yju35zlwoEqot6lZkh
+         jFvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754494465; x=1755099265;
+        d=1e100.net; s=20230601; t=1754495163; x=1755099963;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dr2iD/x5RNPmf2/wZEirrgdGMAy27l5lk2Wo0A6tpXk=;
-        b=slK28Ck0hEnTvh4cbq3UDB9bEKKa7x6HZ2NKhqk0TXVQJ9YAf+bS4LfiXmo2xl/koN
-         TB6BUMP9yfVpnK70Ve7vIz5VG7f1NW//POxvV/LCfL3OedIHWVZcqCfzOskPNU9/OJW1
-         Zb4YI0hsAB54YRK7G2VhDxUtaoDfzzMH+7digs2zRrVD6Oh18pSSdqBLmsM3HjuVsraQ
-         y87gqDSsQxFGtBk+cmdRVSOpIpo5ZdIZQeMbYZrKUJ5hLpee/ptUnPUov4bLfejBSMZ1
-         Fknb7v4pI7hml7QsupNKTKfgV1PReRlNtlvv4w/bPviQmd8BOMDD2PY0VWKBiC1o3nVV
-         zS3A==
-X-Forwarded-Encrypted: i=1; AJvYcCUfENQVhaktTcTvyk3JVoHv0lQeT+2dJ+XDgfrMNS5ZdbpqQZTKXsy6jcwlFs1+xzNPdECKrLgOOjGOliuuJBHI@vger.kernel.org, AJvYcCV2foRLVS54Tm0qeAKCKghCk7TBZvsNeQxxvHO4IVU6jR0egbPR5uKhzK39nbspA0AtGyXhhqEN@vger.kernel.org, AJvYcCWO3pajrqLaBCy4SzSdnCMXvaWfAe2qgg88PTp1HD3w0ioQe+umlCnXG9VBdoMXVevgbwpaLOk3NvrLgsk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx26TTgAN8NoGNQbdJ+CMmxXOWc3U0lHRMYz4ifXh06VfPCUY0+
-	Tz7jQefJaV+u4yjtgxC0mHY8DFpTwv5UMZSb+1PV7PxYI0WDiVW/paLIuRQVQ10WdduRqjRaKhI
-	l1eWPij3KC2IvrSQGLnhMURIDmjF1k55augDw
-X-Gm-Gg: ASbGncsCpitM9Zm2XVb8f/wc2mtMcOJsyd2ji76ybvDvMkuPXcEP6+4h+faA9ZgNf0m
-	YgctlDi24YVfEOl4aN8k3diG7WDD+794aCaW0hP1TWud9ISvpYJ8/wSgR/LF5rzQTB/75jYPjXv
-	xTUK50aaPo4o5athf+hSVTTK6qWapWskHLnJkzvASbvtrw+LbizXOr9cC80w1eoD1WEyOb8zyzu
-	BUJ6KIo45HQ6gBlkGamqNh3GQIVp3hFbg5fbq70cQ==
-X-Google-Smtp-Source: AGHT+IHzYnj2t0StXyiHnTT7AmBDLHvyVs5VmB+AUx/CTQwaqmFE5NjD51Ls4fjvngJ3ybeRwbshDtvTMQF8qgnMbII=
-X-Received: by 2002:a05:6512:3c8e:b0:55b:8f40:32bd with SMTP id
- 2adb3069b0e04-55caf34c5bfmr1035444e87.33.1754494464775; Wed, 06 Aug 2025
- 08:34:24 -0700 (PDT)
+        bh=5zmrMmlSKNc8Wry1y8dWX27pKFPjQrw0O9VLnGzkRYw=;
+        b=ksZ4FkD3PSY3kb3oC5p/8rIyQSbj/qmQLjXQHqKbq/l/xno5wlDi30ixbqdADUJp86
+         p2xpg16hW1St7k/2njP6sRt4k0obNC5C3Fv6a7dyAnzuY/I6cZDMI59Kroae/FQ8BDQN
+         B3Y29hgcM4Z+sQRWN3ExHnIywu0yrjHkgg6OnbVb9BHytvpe+T2co7Ry5u8gpRuIfYnC
+         3KTtLSNylMwpgLUsCZ3iQ3D5rHdVp7xg+UTlPNbbD0m92IjCrJWoLdLpGPcCuEqutY++
+         sckIhPIFoZU1qjPYExzGHiXvV+ZmEvCssILMc/vUWH4KI81zsBleK8QClbtrXCJbGeZq
+         Ehgg==
+X-Forwarded-Encrypted: i=1; AJvYcCVkaTu+fBnydsnolsTn+MxZpNmybJ9ClbUhnIFJUwpuSftx73jN97joXjSqDnXckyrwqhjAdojhUsScZ2g=@vger.kernel.org, AJvYcCXaB7HmM2c4xWT4mgh9u5+7+Yt4H8g+YYXutD1/n5lJ/64DfUoI+VDql7EMNynxU6myekehGhzrFp1y0Gg7srG7@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIEFXw5//Q5bQqDGa1O6yxr2IVohZyRyaG6Lb0jCmH7AZv6MhZ
+	PbOAc65jZuDIPqeVP6ceNSqPBwiFunNuYUlfOUGttzF9a1UIfeixM+qYah5q2xkwCKv1nx33Y5L
+	MfFSqmNcYctaACLQh9AyzrYVDxs2IeC8=
+X-Gm-Gg: ASbGncuew/JxnN1B2gzC1+h0yjFyswRPaLdoOhX9hHUpmalwISLHoKdCZqYvLoyTR0l
+	he7Uim7OUs28QUAxd/TKi4EstUyrvyLIbY4zH423p5UnWVOqpbu1xPKwmVnYpE7llBkhQywkqII
+	ckuQHx//ItoHorhkaaNC8YeyJhZq+ZIKPY4py6y77Jxck2b/tJPLl1QYtiKTmxdshhCbTFCGQSm
+	i63FfABog0nldx7Cjpzw+xvmNOOzvVlNaiKdLFikw==
+X-Google-Smtp-Source: AGHT+IGXosmjvzExQ3C4RK78Mcex7Mn1Uk/h0JUj5QUxdn/C6gvDfKT6OI5wS9vLx2H97RSvkUJIJkgfNFNXTPXKb0g=
+X-Received: by 2002:a05:6512:118a:b0:55b:82b8:c2f3 with SMTP id
+ 2adb3069b0e04-55caf5f82b4mr1212425e87.43.1754495162686; Wed, 06 Aug 2025
+ 08:46:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250806082016.14891-1-pranav.tyagi03@gmail.com> <20250806082933.4c1240c1@kernel.org>
-In-Reply-To: <20250806082933.4c1240c1@kernel.org>
+References: <20250730142301.6754-1-pranav.tyagi03@gmail.com>
+In-Reply-To: <20250730142301.6754-1-pranav.tyagi03@gmail.com>
 From: Pranav Tyagi <pranav.tyagi03@gmail.com>
-Date: Wed, 6 Aug 2025 21:04:12 +0530
-X-Gm-Features: Ac12FXyFmqPogFZVuBbAAVtJwDwboWX38L2kXniEux0YesnBsfKWjaAg2UPcZOc
-Message-ID: <CAH4c4jKB_oTHDN6tp_ujBY_mNOyY_J60RrNFiFKXf=H_OCMPEA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/drivers/net: replace typeof() with __auto_type
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	pabeni@redhat.com, shuah@kernel.org, dw@davidwei.uk, haiyuewa@163.com, 
-	axboe@kernel.dk, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
+Date: Wed, 6 Aug 2025 21:15:50 +0530
+X-Gm-Features: Ac12FXyNkNIXJt8LjQHrVLUgBnSRkW0iOHvQddA77ExTJZswxw6Wx4O4SJ98_zE
+Message-ID: <CAH4c4jJ8VywRUfn2z8HnA73vNxviZ53DZttcR3JaPULF3JFkQA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/mm: use __auto_type in swap() macro
+To: akpm@linux-foundation.org, peterx@redhat.com, shuah@kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Cc: linux-kernel-mentees@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 6, 2025 at 8:59=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
-te:
+On Wed, Jul 30, 2025 at 7:53=E2=80=AFPM Pranav Tyagi <pranav.tyagi03@gmail.=
+com> wrote:
 >
-> On Wed,  6 Aug 2025 13:50:16 +0530 Pranav Tyagi wrote:
-> > Replace typeof() with __auto_type in iou-zcrx.c.
-> > __auto_type was introduced in GCC 4.9 and reduces the compile time for
-> > all compilers. No functional changes intended.
+> Replace typeof() with __auto_type in the swap() macro in uffd-stress.c.
+> __auto_type was introduced in GCC 4.9 and reduces the compile time for
+> all compilers. No functional changes intended.
 >
-> Yet another unnecessary compiler feature. Please no.
+> Signed-off-by: Pranav Tyagi <pranav.tyagi03@gmail.com>
+> ---
+>  tools/testing/selftests/mm/uffd-stress.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/sel=
+ftests/mm/uffd-stress.c
+> index 40af7f67c407..c0f64df5085c 100644
+> --- a/tools/testing/selftests/mm/uffd-stress.c
+> +++ b/tools/testing/selftests/mm/uffd-stress.c
+> @@ -51,7 +51,7 @@ static char *zeropage;
+>  pthread_attr_t attr;
+>
+>  #define swap(a, b) \
+> -       do { typeof(a) __tmp =3D (a); (a) =3D (b); (b) =3D __tmp; } while=
+ (0)
+> +       do { __auto_type __tmp =3D (a); (a) =3D (b); (b) =3D __tmp; } whi=
+le (0)
+>
+>  const char *examples =3D
+>         "# Run anonymous memory test on 100MiB region with 99999 bounces:=
+\n"
+> --
+> 2.49.0
+>
 
-I understand. Thanks
+Hi,
+
+Just a gentle follow-up on this cleanup patch. From what I could find,
+this is the only use of
+typeof() left in the mm selftests, so this should be the only instance
+needing this change.
+
+Thanks for considering!
+
+Regards
+Pranav Tyagi
 
