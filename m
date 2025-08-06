@@ -1,128 +1,140 @@
-Return-Path: <linux-kselftest+bounces-38359-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38361-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DB33B1C207
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 10:20:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95897B1C2EE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 11:11:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C458A16CF4B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 08:20:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56B9A3A602E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 09:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78EEC22156C;
-	Wed,  6 Aug 2025 08:20:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AE8B289810;
+	Wed,  6 Aug 2025 09:11:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MdsPfF2G"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="XEsBx9IL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5AB1E32CF;
-	Wed,  6 Aug 2025 08:20:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06892AD2F;
+	Wed,  6 Aug 2025 09:11:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754468428; cv=none; b=E6O8AMDFdM/AjOXXG1661EIfTv2MJo6JGj527FG8BMYT8mHSfhPLcbQUuSW8QIYnnuDsQTzBD6eger2NTGXR7S7lCIZvOi1rsc7YnolQg5wspPCROAkFZRNGeJvCxi/U57xNH3ygV/bDL3s8UEaXhSvLx5ohBFJiXU4uR4JQl7w=
+	t=1754471476; cv=none; b=Abxu57uklSxvEFlZblivOnQ/5uP1nCDoZOSXy0fBHi+oewhornODAXwHw8PIj3xNP3Xkvoh+oEdxV12oOzTJaXPMzoPW2+NWZf3KiTQyoiU/u0ZF+OodErAs/xutYzcls4Ev61iHcEWGIJ6xsXfaMyJE4a6bXPvNJtdNNPHL3qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754468428; c=relaxed/simple;
-	bh=2Zg3JIzvXIyqJnoZOSLrCALPdYrjS+32WFTDqn2TkLQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EDDtayuVDVvHJwquAKVowWjoCfV9eMMciBZxHJoV7smgysY3aqnkNGBdTt6GfKBFFWrwa1ZXsTMEPLilZR28IHVe4pUIdr38B+efWvFF5jwp5I1XWzwE8ihzYrJPGvXSq1g+kwu0lc4EglqONs0gCJrid3mXY3Kf5NnkHF4UUI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MdsPfF2G; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b422b31b1c0so3958713a12.0;
-        Wed, 06 Aug 2025 01:20:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754468426; x=1755073226; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tk74vFBOtgpOUaVzdQICrykdzva6RLuKYXQfB725rV0=;
-        b=MdsPfF2Gw8ijIC1wEH/mHJtOPVG15vx7uB3KKUsdOspNeU/JhPKyFwDL5VR1SIN7N6
-         Tao7+Udo84UBBDPT7flOScJ+9oB24wckomsN6aBuevQWVuABazk/Oay4PgyE89nP11nt
-         GCUmP7abcmupvPrz1Y/kkIhzQlgIa2DcXXqnvuhU0z8IrcdhUs4NF3QhONyQLlD2TcAG
-         TKOyrPS0zGmkIawqHcoRU0dbCjfZA5ZITwlC7uyng5xnfyrBdr9J1wU/ol/CzChDZ4OO
-         ksBcgEnwo0uJ8JPHYF1ydjh/isvjcVm+cpwanGO6VTvcKu+czpgjuKOu8/2X+xYkghVw
-         Jb2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754468426; x=1755073226;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tk74vFBOtgpOUaVzdQICrykdzva6RLuKYXQfB725rV0=;
-        b=JjeHTtQoXIW+xOVdTK2XZo/kmuQYW/Y3ssXYUwZvO0yPPuKn8JCCyZNx+LnL3dJOEa
-         8WRtoM6qxtsYZM3rvY4GTe/9oDHjpkpDmsIfGPIUUmUKPQUmoWWTe8eBg+a5mQgY+MSU
-         f89CM4DwFRgXQySLhdZQg/iM8LSyutUYhLnvZVh8+khq92YPkKb73E1VBdKVylDlr1kR
-         9M7ceBUhb7m5UlsKHK6d4vWrYWxkdF5tZIeaRykGwtkdK9yzPGXYeuvmHf5bDf6OYVeI
-         D5MN9/jUUpvjX0hnJ4PxpywPrE1p1FBga6WHJU3IFlIFA9U1YTKOa8472vGVNouFYl3D
-         LZhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUKJtVy6mdkvV+pfdQ85A+CR7ZD/3URFTWxBdTiIXEXGyEuvUKRC7fYd9hPhqk40bj/PAKteOYn@vger.kernel.org, AJvYcCVBsrPKmXFCN25qU0IlfnevOnCkgs9xKbw1K9PpMGRGtx+gYV5keU6uiGt94ZDJPx6MaFjR8M73rszlsg5jZcUg@vger.kernel.org, AJvYcCW5GAPu/JBLT+NUb6l1aUfhlWsIiuW5eCniMe01Czan8Dl5x4shg8iCJV5npe/cQoFQP+oZDhaLcDTzZoA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnlTquXe0xM3AOE8ZILCsQGlpfSbNdk7YMe9SMrcNCS3ffnJIM
-	obtufF5oGnHnii+iiUB+N3hjUIKkLh6ks2SWFF0IOdaA8+8YqhcuG+jR
-X-Gm-Gg: ASbGnctgGuubQpQ6x31VSVFCoIDmX+nv/K9hiYVn7Q60L5aDmj0QIeSTpocrVyfAoPm
-	bBg0S3B4mFXd8HzLSJwI4MOp0NXnkTQsEAZKX/wMGTY/9K8XdKW/1KZ+eYNkwwsoEfHkjH1SK29
-	PfYpvDQZfuQm3Eju9sAFEdgJ4kzs7/S6bBlxPTWoEIERxkka3HIz5Pj4Ax8TiLPa1ySXk3hHBPO
-	lB/XoorQHfe3XNWpdvp4MoEW8Mey0kaIGopCmM//UcqM8hTHCk4ViigqRXX0A20J1kLK5VmAEKm
-	oLRmqcDwEQR9Yhzu9EiRGkC2xTGZg+AV3jqRT6F4IOUBGGX9WvdsK1yMpsr4yETFo3a8Rs9RWCQ
-	AKTu3Xh1nmUHyM19lZQEwCYtnLyn9u28eLX4dOxjYR9Lm9PaSoAjHNg==
-X-Google-Smtp-Source: AGHT+IEReFrA9fu6w4gM/cP7i9PjlBPwmU6McdahgPWGATLeJixMmq/Kf/I51qnimVALN6oZwVx02A==
-X-Received: by 2002:a17:90b:48d2:b0:31a:ab75:6e45 with SMTP id 98e67ed59e1d1-32166cb5d9amr2019526a91.28.1754468426250;
-        Wed, 06 Aug 2025 01:20:26 -0700 (PDT)
-Received: from manjaro.domain.name ([2401:4900:1c30:7b0d:6527:282d:9edd:5f40])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3216126c96esm2078947a91.22.2025.08.06.01.20.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Aug 2025 01:20:25 -0700 (PDT)
-From: Pranav Tyagi <pranav.tyagi03@gmail.com>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	dw@davidwei.uk,
-	haiyuewa@163.com,
-	axboe@kernel.dk,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: linux-kernel-mentees@lists.linux.dev,
-	Pranav Tyagi <pranav.tyagi03@gmail.com>
-Subject: [PATCH] selftests/drivers/net: replace typeof() with __auto_type
-Date: Wed,  6 Aug 2025 13:50:16 +0530
-Message-ID: <20250806082016.14891-1-pranav.tyagi03@gmail.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1754471476; c=relaxed/simple;
+	bh=31I6WjXhRwY1ZO5yYnIVtAEAXW02SAJ1j4oJyCrK7cU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jnqtmrXMdnjTZ47iOczjDEq0UaEMjaH0BnWNYFsGzWHUBrRIECqd6bN31G7u0h5dNkKzkZHZTACgrVLqRalK3ypwYXv1Q2etzFle28Ut/v5kCrqraHIiw8lje0yGlueb5SOAXiajcAPk1R9kyhxRcDhrWNL82WDlWXHanDG1Aas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=XEsBx9IL reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+Received: from h205.csg.ci.i.u-tokyo.ac.jp (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 5769A4Q3005818
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Wed, 6 Aug 2025 18:10:13 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=04SbAc//VYkDj1IMLyHG/BmwbhPG6uTcl3uHd/dz/BI=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Subject:Date:Message-Id:To;
+        s=rs20250326; t=1754471413; v=1;
+        b=XEsBx9IL1udj/IyQHko/lhxsGUKJnAMTGyD6LZOzTQNNIBBMmB+owrZBhNRAY3Zt
+         DCl7SGKRwTdo0a/DCr88QNE4yZrv4Y4qiMvLI8Ba48/tWugukGW0HkDvgp1brHEY
+         WMAGmkFQHI3jbtf3vHTgRpLTMVbCrMhB/NQVPTDKJ0JdM6hwuRB50Memt2+KbBTE
+         UbiasCzNdvjQSKAKqJi7qqwybDdmOLx6wgUtcpV/fMk/2TKAaSTBx9s6LfhA+qEi
+         L/Ly7LCfvGHHUshrmn+2UFUI4eqTLbNHiWdAiTdysMPTWcuWwPe5gb63gFtw9E9y
+         4fxayjyrq+lW7QIi7WGvPA==
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Subject: [PATCH RFC v2 0/2] KVM: arm64: PMU: Use multiple host PMUs
+Date: Wed, 06 Aug 2025 18:09:53 +0900
+Message-Id: <20250806-hybrid-v2-0-0661aec3af8c@rsg.ci.i.u-tokyo.ac.jp>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOEbk2gC/zWOyw6CMBBFf4XM2pK28oisTEz8ALeGRWEGmQWgL
+ TYQwr/bVF3eOyfnzgaOLJODKtnAkmfH0xiCPiTQ9mZ8kGAMGbTUudQ6E/3aWEYhFeZdl5WEqCH
+ AT0sdL1F0h9v1AvW3tPR6B+n8uzTGkWinYeC5SnyRqiKCPbt5smv8wqtIxsGjOv0HvRJKZKgMG
+ iWplPkZzTrykgYb1Pu+fwAs6cmzywAAAA==
+X-Change-ID: 20250224-hybrid-01d5ff47edd2
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+X-Mailer: b4 0.14.2
 
-Replace typeof() with __auto_type in iou-zcrx.c.
-__auto_type was introduced in GCC 4.9 and reduces the compile time for
-all compilers. No functional changes intended.
+On heterogeneous arm64 systems, KVM's PMU emulation is based on the
+features of a single host PMU instance. When a vCPU is migrated to a
+pCPU with an incompatible PMU, counters such as PMCCNTR_EL0 stop
+incrementing.
 
-Signed-off-by: Pranav Tyagi <pranav.tyagi03@gmail.com>
+Although this behavior is permitted by the architecture, Windows does
+not handle it gracefully and may crash with a division-by-zero error.
+
+The current workaround requires VMMs to pin vCPUs to a set of pCPUs
+that share a compatible PMU. This is difficult to implement correctly in
+QEMU/libvirt, where pinning occurs after vCPU initialization, and it
+also restricts the guest to a subset of available pCPUs.
+
+This patch introduces the KVM_ARM_VCPU_PMU_V3_COMPOSITION attribute to
+create a "composite" PMU. When set, KVM exposes a PMU that is compatible
+with all pCPUs by advertising only a single cycle counter, a feature
+common to all PMUs.
+
+This allows Windows guests to run reliably on heterogeneous systems
+without crashing, even without vCPU pinning, and enables VMMs to
+schedule vCPUs across all available pCPUs, making full use of the host
+hardware.
+
+A QEMU patch that demonstrates the usage of the new attribute is
+available at:
+https://lore.kernel.org/qemu-devel/20250806-kvm-v1-1-d1d50b7058cd@rsg.ci.i.u-tokyo.ac.jp/
+("[PATCH RFC] target/arm/kvm: Choose PMU backend")
+
+Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 ---
- tools/testing/selftests/drivers/net/hw/iou-zcrx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v2:
+- Added the KVM_ARM_VCPU_PMU_V3_COMPOSITION attribute to opt in the
+  feature.
+- Added code to handle overflow.
+- Link to v1: https://lore.kernel.org/r/20250319-hybrid-v1-1-4d1ada10e705@daynix.com
 
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-index 62456df947bc..85551594bf0f 100644
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-@@ -42,8 +42,8 @@ static long page_size;
- #define SEND_SIZE (512 * 4096)
- #define min(a, b) \
- 	({ \
--		typeof(a) _a = (a); \
--		typeof(b) _b = (b); \
-+		__auto_type _a = (a); \
-+		__auto_type _b = (b); \
- 		_a < _b ? _a : _b; \
- 	})
- #define min_t(t, a, b) \
+---
+Akihiko Odaki (2):
+      KVM: arm64: PMU: Introduce KVM_ARM_VCPU_PMU_V3_COMPOSITION
+      KVM: arm64: selftests: Test guest PMUv3 composition
+
+ Documentation/virt/kvm/devices/vcpu.rst            |  30 ++
+ arch/arm64/include/asm/kvm_host.h                  |   2 +
+ arch/arm64/include/uapi/asm/kvm.h                  |   1 +
+ arch/arm64/kvm/arm.c                               |   5 +-
+ arch/arm64/kvm/pmu-emul.c                          | 495 +++++++++++++--------
+ arch/arm64/kvm/sys_regs.c                          |   2 +-
+ include/kvm/arm_pmu.h                              |  12 +-
+ .../selftests/kvm/arm64/vpmu_counter_access.c      | 148 ++++--
+ 8 files changed, 461 insertions(+), 234 deletions(-)
+---
+base-commit: 8ec6d99a41e3d1dbdff2bdb3aa42951681e1e76c
+change-id: 20250224-hybrid-01d5ff47edd2
+
+Best regards,
 -- 
-2.49.0
+Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 
 
