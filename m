@@ -1,88 +1,76 @@
-Return-Path: <linux-kselftest+bounces-38368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49EC3B1C40E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 12:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46046B1C437
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 12:25:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1676318A5AB8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 10:11:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D0631890E7B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 10:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2DF28A1D2;
-	Wed,  6 Aug 2025 10:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E406A28AAED;
+	Wed,  6 Aug 2025 10:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="laYDgQ4F"
+	dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b="U3I5F5KD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430EDEAF9;
-	Wed,  6 Aug 2025 10:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754475094; cv=none; b=D2Hq+fZDpLFZP8Vir6PQRB7LOFzHCMxN5082pY8bGAQv91t1yxaRz92Yo7h1siwleTkXTLw8QVzDjK2ZSQUyfZU57eWVMIC4n8FheT28Z11Cyj1qDhm8ORXBcEdAQQBOx7V75uTXTUYVdL37Xaq+//+br2cvjyLDpb6si04gy+M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754475094; c=relaxed/simple;
-	bh=rz3+HU7JKv8jhc5UzbJs46L/Ju8Ag6gLiK8FfBcLLSY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bYqtLDLXsFgcwlk69dA/W6LBNGBKjA2TzeCaYmPHL8pw85B1ZJql76vqLnh3FWgwAdArbrVfud/9jdkLuQpxd0RQFAqhZNklWrBiS4NRtson+oHKTpXASoqescr7E/4XNdxG3KxUWlNG3D1kilE1/SgLkjzJ8wSq6CYPzWYjkN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=laYDgQ4F; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b1fd59851baso4080860a12.0;
-        Wed, 06 Aug 2025 03:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754475092; x=1755079892; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sO3HfLOCJJZChZ/lYTRgYCSocOP1p3nJGczefdhSTxE=;
-        b=laYDgQ4FhnDKo+OqJlFhI1KmCp0fB4fMR2etDqgQbQltsZTP9PsmOIwXSVoF7SqH/M
-         ZzNbsFLRFyKEDVowIp12FDK+zhNNbHjOdkB01SN14KS9SmqaFdhzpD5Z9n2iSByaZV7Q
-         +p2wVzwAx+AFrQP6LrLHV0WkCfEMts5V898wILjzew7DZF4sZD+8ztbptJL5Xdl8YJS0
-         47WB0/C+/9ZivmR6G/DKTQH+ro0JxFCs8Idcmb0k9OZmImNsCMPB+Kde27Na9IuREFhE
-         Y0CMJd1fGuRN/c7d6C9CaH9hFi7vjxRK3y2xitqAMzkU3wSfeZtCo7xdduHe85D02nst
-         fLyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754475092; x=1755079892;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sO3HfLOCJJZChZ/lYTRgYCSocOP1p3nJGczefdhSTxE=;
-        b=ZKqs24eq7oIZD3gTAMbOKVmtcT/uSfp6B/DbhjoqYXKzrsUcGZJQVKEZO3zRMhizWR
-         1AABR8PTUxpaCjEaIYxOTQFqV7t+SiWv7TvWB9qyxMMLXEanXZSdnUw/FMhDTOhULAcA
-         SrmaHMp5Ycyjv5E0louMJdYypKndBlH4q1AfWwBa2J5ZB1WdNCQ/Bu3WvB9GX/dT4/rE
-         XjQh7F1OFwolxnyVOpNYPp2msVhY0I3gAcIXl8R7hvOiqLyUxf1pIte0f7E/wWp5QeDG
-         TBeqAXAC6HwdgKgq+KPKb4ggbPhUh4GsirQXie5BzA565lsyc6AIuao+b9TMY/Gi4Cr8
-         bUQA==
-X-Forwarded-Encrypted: i=1; AJvYcCU21heP1d6TIJiwN4XGtPA3ON+HN9PQX8g1WQSRMeHnT8LYt71rE+clYA2Nt1NQ0bNwHboIA1V9mcUJW1Q=@vger.kernel.org, AJvYcCVg2abw2PciG4+jfc1uGCUxq+barR1c7lVKPatu8FVXfs3fnqQXCMllxssejPRQMzczL8kz+UCwSWYcczOj/Dtm@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyFZF8hh+vUixC7omk0OVe4vjh13lR+kRhjmO2DF7KSQYKJlOr
-	3YY6myeqEfGfitQbUPP7NVQ9+NLzIk3AvO35pRdwtjhfAs90cB8YNlpL
-X-Gm-Gg: ASbGncuNx0nY/7lgEPG3jOfmRGsuub5Xd3vnhhGER10hGJtWvfMB9qMS0m1QedsGstc
-	t95nBUE9hkQDp26ikD1FSsU/eMVIfhQNeo0N2sqq5pqQUypvevGTwL13Qz2B/jiKBwJQ/uaKk3q
-	1jogK2igy4hP9BgWTnERzgmvreM1Z+A/CytWMinhajKGcp7Mz8yHo6XaOHEpJmjPVHxdJPMzabk
-	cLtJJke0tLbrX0GJOGjYr12QwEO1vs8HS3wL0oxA+AS71s0MOxksbaGk2xSfWc4SKbkYl/uTQnO
-	8vOh80XZHe6Frzb4Hyngz64Y/bMO0meOi/IOypPMvjOSw8JcrYjm6fh/LNBVdOsTd+63B6QWtUL
-	R3R/om3GykbVIT111tAfYzhPrBr91V/aZOfGe1y7QgFI=
-X-Google-Smtp-Source: AGHT+IEmLanIPxjWKqJkZkvNGPC1Tz6Y2s/W700XeFEAe/gxXlOLDOI9aFoVES62QDsNB9Bbbmo5WA==
-X-Received: by 2002:a17:903:3c45:b0:240:3b9e:dd65 with SMTP id d9443c01a7336-2429f6541b3mr31886055ad.38.1754475092273;
-        Wed, 06 Aug 2025 03:11:32 -0700 (PDT)
-Received: from manjaro.domain.name ([2401:4900:1c30:7b0d:6527:282d:9edd:5f40])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8976cfdsm153199745ad.101.2025.08.06.03.11.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Aug 2025 03:11:31 -0700 (PDT)
-From: Pranav Tyagi <pranav.tyagi03@gmail.com>
-To: shuah@kernel.org
-Cc: brauner@kernel.org,
-	amir73il@gmail.com,
-	jhubbard@nvidia.com,
-	linux-kselftest@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DAE5207A22;
+	Wed,  6 Aug 2025 10:25:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.95
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754475939; cv=pass; b=pvzf4/FS/95vtAoGrRA8fEUpj+MXj8MGlnFhWT98zssD/P3otK8QqaxlnV6oVpsjDIVIVJT3GR80FAaveh/RKwj1A/FLE6IPClJ7euTOdyaOiyICnwWwly0RKpXvICZ3wx7mnxylPj5KX504fxTAvKdYLW0SO6uens68UDlm/aw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754475939; c=relaxed/simple;
+	bh=+wmQqhO/faO6co4hBA9A8Ni4X+9sQBZZYbpDBYq8EfQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gmvyG/sc1cn8eEyPOBPBtRQN+Suzj5QJmuEiFbcjkMvkoxhT9/vVESia8v3ET+plvrYeDTb75B3cWRayRA6wloTOa7H4cmJH9oF8nlfCTkFDHHJ5UG3Y45DMIUMjQK990CZPtQwjHNC/WxtPa+GCPlZntUC2FdBPCKIqybHUt+I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b=U3I5F5KD; arc=pass smtp.client-ip=136.143.188.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1754475910; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=fepJ8qRfgN4zCRlmQcXewJjX7ndwkr9ZErcwug1fF/Qm4DmSeg0CtFZXIJbYf+F0xfwH7f/CECvYQPanzhikWH8O/BjUqDef0G9p41zZKS3zwx8o9HWSCtjm5koJhUTATq32wNwln4xbiCrj24wmFmfcGZAS/93DgCViOLuRcIA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1754475910; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=+wmQqhO/faO6co4hBA9A8Ni4X+9sQBZZYbpDBYq8EfQ=; 
+	b=hVATTcTbTnrdSRZYHokKzVn89UaAZFwSJiHoVgn25NRuEf9eaZydmSHv8+FY1BByvl0yZZPq8dgcb1ghDlZ/FgDz1ZZdaNcWkFy5hZGJlnz4xFwlFGZPt4v+dEFf9sTiW4q7wIyQaI3yYItV/AA3lh4qJpH9URv93h6skV3OOSY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=zohomail.com;
+	spf=pass  smtp.mailfrom=safinaskar@zohomail.com;
+	dmarc=pass header.from=<safinaskar@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1754475910;
+	s=zm2022; d=zohomail.com; i=safinaskar@zohomail.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To;
+	bh=+wmQqhO/faO6co4hBA9A8Ni4X+9sQBZZYbpDBYq8EfQ=;
+	b=U3I5F5KDYBTv3/hL6pjdw8mRCB0ECyCmCoRP/aqriH0MSxXaWoFSIv1w8BmYmWLz
+	e4V+2FbB/iEiLnq9uTfVGKgrFCzK14RYT1Ns0kLmSQHWUdXS+E0AfpUZj+IM2FkTgCV
+	/q0+57F21dqblHR/PNOwAZcgpHgsMiIgVhhH9/hk=
+Received: by mx.zohomail.com with SMTPS id 1754475907706352.8426825833187;
+	Wed, 6 Aug 2025 03:25:07 -0700 (PDT)
+From: Askar Safin <safinaskar@zohomail.com>
+To: cyphar@cyphar.com
+Cc: amir73il@gmail.com,
+	brauner@kernel.org,
+	corbet@lwn.net,
+	jack@suse.cz,
+	linux-api@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Pranav Tyagi <pranav.tyagi03@gmail.com>
-Subject: [PATCH] selftests/filesystems: replace typeof() with __auto_type
-Date: Wed,  6 Aug 2025 15:41:23 +0530
-Message-ID: <20250806101123.20478-1-pranav.tyagi03@gmail.com>
-X-Mailer: git-send-email 2.49.0
+	linux-kselftest@vger.kernel.org,
+	luto@amacapital.net,
+	shuah@kernel.org,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v4 2/4] procfs: add "pidns" mount option
+Date: Wed,  6 Aug 2025 13:25:01 +0300
+Message-ID: <20250806102501.75104-1-safinaskar@zohomail.com>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <2025-08-05.1754378656-steep-harps-muscled-mailroom-lively-gosling-VVGNTP@cyphar.com>
+References: <2025-08-05.1754378656-steep-harps-muscled-mailroom-lively-gosling-VVGNTP@cyphar.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,30 +78,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Feedback-ID: rr08011227cd007dd0b9c9dcb652e3ba8400007454c63885fa4739e1a2448e2dfcd94715a18ae97a0dffae61:zu08011227eb8290984d483d5d1a43e04000005dc1ce89a5e53403a5117830c5dff694efbf2d6162e2802556:rf0801122c8cf1f5d05d0e16bf0447132600008990b2a0cdb4e3567989e390629257cc551dc8fb0a863a8c551d183331cc:ZohoMail
+X-ZohoMailClient: External
 
-Replace typeof() with __auto_type in utils.c.
-__auto_type was introduced in GCC 4.9 and reduces the compile time for
-all compilers. No functional changes intended.
+> I just realised that we probably also want to support FSCONFIG_SET_PATH
 
-Signed-off-by: Pranav Tyagi <pranav.tyagi03@gmail.com>
----
- tools/testing/selftests/filesystems/utils.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I just checked kernel code. Indeed nobody uses FSCONFIG_SET_PATH. Moreover, fsparam_path macro is present since 5.1. And for all this time nobody used it. So, let's just remove FSCONFIG_SET_PATH. Nobody used it, so this will not break anything.
 
-diff --git a/tools/testing/selftests/filesystems/utils.c b/tools/testing/selftests/filesystems/utils.c
-index c43a69dffd83..95f202e2bfb7 100644
---- a/tools/testing/selftests/filesystems/utils.c
-+++ b/tools/testing/selftests/filesystems/utils.c
-@@ -34,7 +34,7 @@
- 
- #define syserror_set(__ret__, format, ...)                    \
- 	({                                                    \
--		typeof(__ret__) __internal_ret__ = (__ret__); \
-+		__auto_type __internal_ret__ = (__ret__);       \
- 		errno = labs(__ret__);                        \
- 		fprintf(stderr, "%m - " format "\n", ##__VA_ARGS__);       \
- 		__internal_ret__;                             \
--- 
-2.49.0
+If you okay with that, I can submit patch, removing it.
 
+--
+Askar Safin
 
