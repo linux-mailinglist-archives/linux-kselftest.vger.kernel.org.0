@@ -1,880 +1,165 @@
-Return-Path: <linux-kselftest+bounces-38413-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98A83B1CC29
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 20:49:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54DA4B1CC3D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 20:57:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C6C8722879
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 18:49:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30DDB18A784A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Aug 2025 18:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BE97299A8E;
-	Wed,  6 Aug 2025 18:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D5029DB96;
+	Wed,  6 Aug 2025 18:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YThDiYWu"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="sbNFfut8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289591FBEA8;
-	Wed,  6 Aug 2025 18:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2D21E834E;
+	Wed,  6 Aug 2025 18:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754506180; cv=none; b=CHHnrEQ+VYQQZ6VA3Gvcg0oyYRVEXV9Kl/4PpPmE/RV0TBbS7uP/V4NpQNzwvxHhXU0B/gDjOg2tVAFEe1o1lxNfjxa1JEVtZOtOG+cvTJBZ6hvNyJdpd0SRD0w8nVdRWZxHCW1EVwIlsknWZxF/TpaI2Tqu3uOahxZisuUUfQ8=
+	t=1754506670; cv=none; b=Ije0/JGF9+neO/rijVe8o+E+0BjuejV7bhMi0Di+/xADozrjqUMK6d9qyQ/nh6MP4JL3R24Gw0GOi8vrRzg1PzGboJsS4OY89q6gOxaHM6nD6c+ekf/Q6cfKZNnwC7BGpoWmWG7iFlKoAcZIwo+5ILTJh40ybyGbTmfs57EcsgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754506180; c=relaxed/simple;
-	bh=zHNHlTb3hPWxa9WuhgyzdWZ8RQNtrd/xMHrSKDFp7Q0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G7/fvSGqzllBjXGHZaeVU7vusSdaI3VYpPZiDCat+75Lu5VE18JU9QiMt9CKM7sTQF3OObZNs0l7AuyhRAGooLjV0Q8K0uULb1rKWZufmDr2Q8YJCauAS8QxaQ1VrWr5ZkKe/2LqsM1HyH+HqPvG33d1MJaVPwQntuUbgxLvfdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YThDiYWu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996BCC4CEE7;
-	Wed,  6 Aug 2025 18:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754506179;
-	bh=zHNHlTb3hPWxa9WuhgyzdWZ8RQNtrd/xMHrSKDFp7Q0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YThDiYWuOyoxMmUFF/EwHxdXyQWXbfngyLt5qhm93vkZ/BNMWD1fi67HBd40JAo8l
-	 ndMLMW8ykNG5QZKsskchVVSOEndWJEfp9MW7jaHMuN02ls0PXUgC9t4cts7Dvk7u8E
-	 8ZEP5VRMnJocv9RTEe1YrUs7t67vFeluSpuSeoRJAYzZobbjQMgOs/BXVkWODQwWAZ
-	 jik6H7pTSfMCbnnnlr7HGG7zmanjbivtbLnQVdwe9zFavAAvmlnVi63ECWk9d7meoC
-	 byX/llno/Muwt31FA79CZZ7xfadwNcvbPJAJU9pfEXoor7ishDuUjznnzfOiIW7uij
-	 PChyVRD3jQIRg==
-Date: Wed, 6 Aug 2025 11:49:39 -0700
-From: Kees Cook <kees@kernel.org>
-To: Abhinav Saxena <xandfury@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/tty: add TIOCSTI test suite
-Message-ID: <202508061135.00D9366F@keescook>
-References: <20250730-toicsti-bug-v3-1-dd2dac97f27a@gmail.com>
+	s=arc-20240116; t=1754506670; c=relaxed/simple;
+	bh=Z2K44BDv8iYtioBJw82pfmKLTw/D0OBAOM+CsDmQydU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H6ZTUX63hFxagfhd/RAEnjSyxrVxZFRXIxrOUeCz3n/Xp8swqzmkUrhIOPUzgS63gCC9SzJsq3VRWZR7C6fdL2vd3boiiJKk9iUZWUvyMJJE5mNRtcTkSJ9hJwghynmsUuUapQQD9EXkWagVoJeT6wTxxiRGNpEtrMw0cEz1wu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=sbNFfut8; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=hzq0vb/yvUU3QbvwPK4scAkP5mr8qU5DJOgyJY7yIlM=; b=sbNFfut8rqy1hdfW/leJn9f/Mf
+	cfbhFoDmOnw0rwsdOyFgb0fWp0zUslkXicnn5nYw0vzJZ+ZfIfQ3r1vyZ9Y9v8Diknno3KxftnSyA
+	2PD2UlQMQUY2qFg546bxsdSXs/zjLOnREg5bTHmLhndzsu2/uw2QUBBdHzNujstdUUGF2X1eIj/+5
+	OwjdxuHMgVxSkaxFzT22HEp0HZzkbegje5DiNp1/3c4jzTzhQKskuBOQEvMB9hCovykO7YftUY3e8
+	dCsSXT0EAHP0w6n/nFJp+TLwNtQe/TZmrI7w5w804DkHdKJG2Qg2jdWVAN9L1/sKQf+2ccayBMD/X
+	2L0nM9vA==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1ujjKY-0000000G8fK-3YMG;
+	Wed, 06 Aug 2025 18:57:42 +0000
+Message-ID: <1ea6f1d9-550d-4b81-bade-1a0ca14c27c6@infradead.org>
+Date: Wed, 6 Aug 2025 11:57:42 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250730-toicsti-bug-v3-1-dd2dac97f27a@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/4] procfs: add PROCFS_GET_PID_NAMESPACE ioctl
+To: Aleksa Sarai <cyphar@cyphar.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+ Andy Lutomirski <luto@amacapital.net>, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
+ <20250805-procfs-pidns-api-v4-3-705f984940e7@cyphar.com>
+ <9027aa89-b3b2-46c8-8338-6c37f1c5b97a@infradead.org>
+ <2025-08-06.1754503216-vulgar-pinch-more-tasks-meager-grader-93KeQn@cyphar.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <2025-08-06.1754503216-vulgar-pinch-more-tasks-meager-grader-93KeQn@cyphar.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 30, 2025 at 06:14:43PM -0600, Abhinav Saxena wrote:
-> TIOCSTI is a TTY ioctl command that allows inserting characters into
-> the terminal input queue, making it appear as if the user typed those
-> characters. This functionality has behavior that varies based on system
-> configuration and process credentials.
+
+
+On 8/6/25 11:02 AM, Aleksa Sarai wrote:
+> On 2025-08-05, Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>>
+>> On 8/4/25 10:45 PM, Aleksa Sarai wrote:
+>>> /proc has historically had very opaque semantics about PID namespaces,
+>>> which is a little unfortunate for container runtimes and other programs
+>>> that deal with switching namespaces very often. One common issue is that
+>>> of converting between PIDs in the process's namespace and PIDs in the
+>>> namespace of /proc.
+>>>
+>>> In principle, it is possible to do this today by opening a pidfd with
+>>> pidfd_open(2) and then looking at /proc/self/fdinfo/$n (which will
+>>> contain a PID value translated to the pid namespace associated with that
+>>> procfs superblock). However, allocating a new file for each PID to be
+>>> converted is less than ideal for programs that may need to scan procfs,
+>>> and it is generally useful for userspace to be able to finally get this
+>>> information from procfs.
+>>>
+>>> So, add a new API to get the pid namespace of a procfs instance, in the
+>>> form of an ioctl(2) you can call on the root directory of said procfs.
+>>> The returned file descriptor will have O_CLOEXEC set. This acts as a
+>>> sister feature to the new "pidns" mount option, finally allowing
+>>> userspace full control of the pid namespaces associated with procfs
+>>> instances.
+>>>
+>>> The permission model for this is a bit looser than that of the "pidns"
+>>> mount option (and also setns(2)) because /proc/1/ns/pid provides the
+>>> same information, so as long as you have access to that magic-link (or
+>>> something equivalently reasonable such as being in an ancestor pid
+>>> namespace) it makes sense to allow userspace to grab a handle. Ideally
+>>> we would check for ptrace-read access against all processes in the pidns
+>>> (which is very likely to be true for at least one process, as
+>>> SUID_DUMP_DISABLE is cleared on exec(2) and is rarely set by most
+>>> programs), but this would obviously not scale.
+>>>
+>>> setns(2) will still have their own permission checks, so being able to
+>>> open a pidns handle doesn't really provide too many other capabilities.
+>>>
+>>> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+>>> ---
+>>>  Documentation/filesystems/proc.rst |  4 +++
+>>>  fs/proc/root.c                     | 68 ++++++++++++++++++++++++++++++++++++--
+>>>  include/uapi/linux/fs.h            |  4 +++
+>>>  3 files changed, 74 insertions(+), 2 deletions(-)
+>>>
+>>
+>>
+>>> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+>>> index 0bd678a4a10e..68e65e6d7d6b 100644
+>>> --- a/include/uapi/linux/fs.h
+>>> +++ b/include/uapi/linux/fs.h
+>>> @@ -435,8 +435,12 @@ typedef int __bitwise __kernel_rwf_t;
+>>>  			 RWF_APPEND | RWF_NOAPPEND | RWF_ATOMIC |\
+>>>  			 RWF_DONTCACHE)
+>>>  
+>>> +/* This matches XSDFEC_MAGIC, so we need to allocate subvalues carefully. */
+>>>  #define PROCFS_IOCTL_MAGIC 'f'
+>>>  
+>>> +/* procfs root ioctls */
+>>> +#define PROCFS_GET_PID_NAMESPACE	_IO(PROCFS_IOCTL_MAGIC, 32)
+>>
+>> Since the _IO() nr here is 32, Documentation/userspace-api/ioctl/ioctl-number.rst
+>> should be updated like:
+>>
+>> -'f'   00-0F  linux/fs.h                                                conflict!
+>> +'f'   00-1F  linux/fs.h                                                conflict!
 > 
-> The dev.tty.legacy_tiocsti sysctl introduced in commit 83efeeeb3d04
-> ("tty: Allow TIOCSTI to be disabled") controls TIOCSTI usage. When
-> disabled, TIOCSTI requires CAP_SYS_ADMIN capability.
-> 
-> The current implementation checks the current process's credentials via
-> capable(CAP_SYS_ADMIN), but does not validate against the file opener's
-> credentials stored in file->f_cred. This creates different behavior when
-> file descriptors are passed between processes via SCM_RIGHTS.
-> 
-> Add a test suite with 16 test variants using fixture variants to verify
-> TIOCSTI behavior when dev.tty.legacy_tiocsti is enabled/disabled:
-> 
-> - Basic TIOCSTI tests (8 variants): Direct testing with different
->   capability and controlling terminal combinations
-> - FD passing tests (8 variants): Test behavior when file descriptors
->   are passed between processes with different capabilities
-> 
-> The FD passing tests document this behavior - some tests show different
-> results than expected based on file opener credentials, demonstrating
-> that TIOCSTI uses current process credentials rather than file opener
-> credentials.
-> 
-> The tests validate proper enforcement of the legacy_tiocsti sysctl. Test
-> implementation uses openpty(3) with TIOCSCTTY for isolated PTY
-> environments. See tty_ioctl(4) for details on TIOCSTI behavior and
-> security requirements.
+> Should this be 00-20 (or 00-2F) instead?
 
-This is looking really nice! Notes below...
+Oops, yes, it should be one of those. Thanks.
 
-> 
-> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
-> ---
-> To run all tests:
-> $ sudo ./tools/testing/selftests/tty/tty_tiocsti_test
-> 
-> Test Results:
-> - PASSED: 13/16 tests
-> - Different behavior: 3/16 tests (documenting credential checking behavior)
-> 
-> All tests validated using:
-> - scripts/checkpatch.pl --strict (clean output)
-> - Functional testing on kernel v6.16-rc2
-> 
-> Changes in v3:
-> - Replaced all printf() calls with TH_LOG() for proper test logging (Kees Cook)
-> - Added struct __test_metadata parameter to helper functions
-> - Moved common legacy_tiocsti availability check to FIXTURE_SETUP()
-> - Implemented sysctl modification/restoration in FIXTURE_SETUP/TEARDOWN
-> - Used openpty() with TIOCSCTTY for reliable PTY testing environment
-> - Fixed child/parent synchronization in FD passing tests
-> - Replaced manual _exit(1) handling with proper ASSERT statements
-> - Switched // comments to /* */ format throughout
-> - Expanded to 16 test variants using fixture variants
-> - Enhanced error handling and test reliability
-> - Link to v2: https://lore.kernel.org/r/20250713-toicsti-bug-v2-1-b183787eea29@gmail.com
-> - Link to v1: https://lore.kernel.org/r/20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com
-> 
-> References:
-> - tty_ioctl(4) - documents TIOCSTI ioctl and capability requirements
-> - openpty(3) - pseudo-terminal creation and management
-> - commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
-> - Documentation/security/credentials.rst
-> - https://github.com/KSPP/linux/issues/156
-> - https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad/
-> - drivers/tty/Kconfig
-> - Documentation/driver-api/tty/
-> ---
->  tools/testing/selftests/tty/Makefile           |   6 +-
->  tools/testing/selftests/tty/config             |   1 +
->  tools/testing/selftests/tty/tty_tiocsti_test.c | 650 +++++++++++++++++++++++++
->  3 files changed, 656 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
-> index 50d7027b2ae3..7f6fbe5a0cd5 100644
-> --- a/tools/testing/selftests/tty/Makefile
-> +++ b/tools/testing/selftests/tty/Makefile
-> @@ -1,5 +1,9 @@
->  # SPDX-License-Identifier: GPL-2.0
->  CFLAGS = -O2 -Wall
-> -TEST_GEN_PROGS := tty_tstamp_update
-> +TEST_GEN_PROGS := tty_tstamp_update tty_tiocsti_test
-> +LDLIBS += -lcap
->  
->  include ../lib.mk
-> +
-> +# Add libcap for TIOCSTI test
-> +$(OUTPUT)/tty_tiocsti_test: LDLIBS += -lcap
-> diff --git a/tools/testing/selftests/tty/config b/tools/testing/selftests/tty/config
-> new file mode 100644
-> index 000000000000..c6373aba6636
-> --- /dev/null
-> +++ b/tools/testing/selftests/tty/config
-> @@ -0,0 +1 @@
-> +CONFIG_LEGACY_TIOCSTI=y
-> diff --git a/tools/testing/selftests/tty/tty_tiocsti_test.c b/tools/testing/selftests/tty/tty_tiocsti_test.c
-> new file mode 100644
-> index 000000000000..1eafef6e36fa
-> --- /dev/null
-> +++ b/tools/testing/selftests/tty/tty_tiocsti_test.c
-> @@ -0,0 +1,650 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * TTY Tests - TIOCSTI
-> + *
-> + * Copyright © 2025 Abhinav Saxena <xandfury@gmail.com>
-> + */
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <fcntl.h>
-> +#include <sys/ioctl.h>
-> +#include <errno.h>
-> +#include <stdbool.h>
-> +#include <string.h>
-> +#include <sys/socket.h>
-> +#include <sys/wait.h>
-> +#include <pwd.h>
-> +#include <termios.h>
-> +#include <grp.h>
-> +#include <sys/capability.h>
-> +#include <sys/prctl.h>
-> +#include <pty.h>
-> +#include <utmp.h>
-> +
-> +#include "../kselftest_harness.h"
-> +
-> +enum test_type {
-> +	TEST_PTY_TIOCSTI_BASIC,
-> +	TEST_PTY_TIOCSTI_FD_PASSING,
-> +	/* other tests cases such as serial may be added. */
-> +};
-> +
-> +/*
-> + * Test Strategy:
-> + * - Basic tests: Use PTY with/without TIOCSCTTY (controlling terminal for
-> + *   current process)
-> + * - FD passing tests: Child creates PTY, parent receives FD (demonstrates
-> + *   security issue)
-> + *
-> + * SECURITY VULNERABILITY DEMONSTRATION:
-> + * FD passing tests show that TIOCSTI uses CURRENT process credentials, not
-> + * opener credentials. This means privileged processes can be given FDs from
-> + * unprivileged processes and successfully perform TIOCSTI operations that the
-> + * unprivileged process couldn't do directly.
-> + *
-> + * Attack scenario:
-> + * 1. Unprivileged process opens TTY (direct TIOCSTI fails due to lack of
-> + *    privileges)
-> + * 2. Unprivileged process passes FD to privileged process via SCM_RIGHTS
-> + * 3. Privileged process can use TIOCSTI on the FD (succeeds due to its
-> + *    privileges)
-> + * 4. Result: Effective privilege escalation via file descriptor passing
-> + *
-> + * This matches the kernel logic in tiocsti():
-> + * 1. if (!tty_legacy_tiocsti && !capable(CAP_SYS_ADMIN)) return -EIO;
-> + * 2. if ((current->signal->tty != tty) && !capable(CAP_SYS_ADMIN))
-> + *        return -EPERM;
-> + * Note: Both checks use capable() on CURRENT process, not FD opener!
-> + *
-> + * If the file credentials were also checked along with the capable() checks
-> + * then the results for FD pass tests would be consistent with the basic tests.
-> + */
-> +
-> +FIXTURE(tiocsti)
-> +{
-> +	int pty_master_fd; /* PTY - for basic tests */
-> +	int pty_slave_fd;
-> +	bool has_pty;
-> +	bool initial_cap_sys_admin;
-> +	int original_legacy_tiocsti_setting;
-> +	bool can_modify_sysctl;
-> +};
-> +
-> +FIXTURE_VARIANT(tiocsti)
-> +{
-> +	const enum test_type test_type;
-> +	const bool controlling_tty; /* true=current->signal->tty == tty */
-> +	const int legacy_tiocsti; /* 0=restricted, 1=permissive */
-> +	const bool requires_cap; /* true=with CAP_SYS_ADMIN, false=without */
-> +	const int expected_success; /* 0=success, -EIO/-EPERM=specific error */
-> +};
-> +
-> +/*
-> + * Tests Controlling Terminal Variants (current->signal->tty == tty)
-> + *
-> + * TIOCSTI Test Matrix:
-> + *
-> + * | legacy_tiocsti | CAP_SYS_ADMIN | Expected Result | Error |
-> + * |----------------|---------------|-----------------|-------|
-> + * | 1 (permissive) | true          | SUCCESS         | -     |
-> + * | 1 (permissive) | false         | SUCCESS         | -     |
-> + * | 0 (restricted) | true          | SUCCESS         | -     |
-> + * | 0 (restricted) | false         | FAILURE         | -EIO  |
-> + */
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_permissive_withcap) {
-> +	.test_type = TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty = true,
-> +	.legacy_tiocsti = 1,
-> +	.requires_cap = true,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_permissive_nocap) {
-> +	.test_type = TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty = true,
-> +	.legacy_tiocsti = 1,
-> +	.requires_cap = false,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_restricted_withcap) {
-> +	.test_type = TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty = true,
-> +	.legacy_tiocsti = 0,
-> +	.requires_cap = true,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_restricted_nocap) {
-> +	.test_type = TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty = true,
-> +	.legacy_tiocsti = 0,
-> +	.requires_cap = false,
-> +	.expected_success = -EIO, /* FAILURE: legacy restriction */
-> +}; /* clang-format on */
-> +
-> +/*
-> + * Note for FD Passing Test Variants
-> + * Since we're testing the scenario where an unprivileged process pass an FD
-> + * to a privileged one, .requires_cap here means the caps of the child process.
-> + * Not the parent; parent would always be privileged.
-> + */
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_permissive_withcap) {
-> +	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty = true,
-> +	.legacy_tiocsti = 1,
-> +	.requires_cap = true,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_permissive_nocap) {
-> +	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty = true,
-> +	.legacy_tiocsti = 1,
-> +	.requires_cap = false,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_restricted_withcap) {
-> +	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty = true,
-> +	.legacy_tiocsti = 0,
-> +	.requires_cap = true,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_restricted_nocap) {
-> +	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty = true,
-> +	.legacy_tiocsti = 0,
-> +	.requires_cap = false,
-> +	.expected_success = -EIO,
-> +}; /* clang-format on */
-> +
-> +/*
-> + * Non-Controlling Terminal Variants (current->signal->tty != tty)
-> + *
-> + * TIOCSTI Test Matrix:
-> + *
-> + * | legacy_tiocsti | CAP_SYS_ADMIN | Expected Result | Error |
-> + * |----------------|---------------|-----------------|-------|
-> + * | 1 (permissive) | true          | SUCCESS         | -     |
-> + * | 1 (permissive) | false         | FAILURE         | -EPERM|
-> + * | 0 (restricted) | true          | SUCCESS         | -     |
-> + * | 0 (restricted) | false         | FAILURE         | -EIO  |
-> + */
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_permissive_withcap) {
-> +	.test_type = TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty = false,
-> +	.legacy_tiocsti = 1,
-> +	.requires_cap = true,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_permissive_nocap) {
-> +	.test_type = TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty = false,
-> +	.legacy_tiocsti = 1,
-> +	.requires_cap = false,
-> +	.expected_success = -EPERM,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_restricted_withcap) {
-> +	.test_type = TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty = false,
-> +	.legacy_tiocsti = 0,
-> +	.requires_cap = true,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_restricted_nocap) {
-> +	.test_type = TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty = false,
-> +	.legacy_tiocsti = 0,
-> +	.requires_cap = false,
-> +	.expected_success = -EIO,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_permissive_withcap) {
-> +	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty = false,
-> +	.legacy_tiocsti = 1,
-> +	.requires_cap = true,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_permissive_nocap) {
-> +	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty = false,
-> +	.legacy_tiocsti = 1,
-> +	.requires_cap = false,
-> +	.expected_success = -EPERM,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_restricted_withcap) {
-> +	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty = false,
-> +	.legacy_tiocsti = 0,
-> +	.requires_cap = true,
-> +	.expected_success = 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_restricted_nocap) {
-> +	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty = false,
-> +	.legacy_tiocsti = 0,
-> +	.requires_cap = false,
-> +	.expected_success = -EIO,
-> +}; /* clang-format on */
-> +
-> +/* Helper function to send FD via SCM_RIGHTS */
-> +static int send_fd_via_socket(int socket_fd, int fd_to_send)
-> +{
-> +	struct msghdr msg = { 0 };
-> +	struct cmsghdr *cmsg;
-> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
-> +	char dummy_data = 'F';
-> +	struct iovec iov = { .iov_base = &dummy_data, .iov_len = 1 };
-> +
-> +	msg.msg_iov = &iov;
-> +	msg.msg_iovlen = 1;
-> +	msg.msg_control = cmsg_buf;
-> +	msg.msg_controllen = sizeof(cmsg_buf);
-> +
-> +	cmsg = CMSG_FIRSTHDR(&msg);
-> +	cmsg->cmsg_level = SOL_SOCKET;
-> +	cmsg->cmsg_type = SCM_RIGHTS;
-> +	cmsg->cmsg_len = CMSG_LEN(sizeof(int));
-> +
-> +	memcpy(CMSG_DATA(cmsg), &fd_to_send, sizeof(int));
-> +
-> +	return sendmsg(socket_fd, &msg, 0) < 0 ? -1 : 0;
-> +}
-> +
-> +/* Helper function to receive FD via SCM_RIGHTS */
-> +static int recv_fd_via_socket(int socket_fd)
-> +{
-> +	struct msghdr msg = { 0 };
-> +	struct cmsghdr *cmsg;
-> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
-> +	char dummy_data;
-> +	struct iovec iov = { .iov_base = &dummy_data, .iov_len = 1 };
-> +	int received_fd = -1;
-> +
-> +	msg.msg_iov = &iov;
-> +	msg.msg_iovlen = 1;
-> +	msg.msg_control = cmsg_buf;
-> +	msg.msg_controllen = sizeof(cmsg_buf);
-> +
-> +	if (recvmsg(socket_fd, &msg, 0) < 0)
-> +		return -1;
-> +
-> +	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
-> +		if (cmsg->cmsg_level == SOL_SOCKET &&
-> +		    cmsg->cmsg_type == SCM_RIGHTS) {
-> +			memcpy(&received_fd, CMSG_DATA(cmsg), sizeof(int));
-> +			break;
-> +		}
-> +	}
-> +
-> +	return received_fd;
-> +}
-> +
-> +static inline bool has_cap_sys_admin(void)
-> +{
-> +	cap_t caps = cap_get_proc();
-> +
-> +	if (!caps)
-> +		return false;
-> +
-> +	cap_flag_value_t cap_val;
-> +	bool has_cap = (cap_get_flag(caps, CAP_SYS_ADMIN, CAP_EFFECTIVE,
-> +				     &cap_val) == 0) &&
-> +		       (cap_val == CAP_SET);
-> +
-> +	cap_free(caps);
-> +	return has_cap;
-> +}
-> +
-> +/*
-> + * Drop to nobody user (uid/gid 65534) to lose all capabilities
-> + */
-> +static inline bool drop_to_nobody(struct __test_metadata *_metadata)
-> +{
-> +	ASSERT_EQ(setgroups(0, NULL), 0);
-> +	ASSERT_EQ(setgid(65534), 0);
-> +	ASSERT_EQ(setuid(65534), 0);
-> +
-> +	ASSERT_FALSE(has_cap_sys_admin());
-> +	return true;
-> +}
-> +
-> +static inline int get_legacy_tiocsti_setting(struct __test_metadata *_metadata)
-> +{
-> +	FILE *fp;
-> +	int value = -1;
-> +
-> +	fp = fopen("/proc/sys/dev/tty/legacy_tiocsti", "r");
-> +	if (!fp) {
-> +		/* legacy_tiocsti sysctl not available (kernel < 6.2) */
-> +		return -1;
-> +	}
-> +
-> +	if (fscanf(fp, "%d", &value) == 1) {
-> +		if (value < 0 || value > 1)
-> +			value = -1; /* Invalid value */
-> +	} else {
-> +		value = -1; /* Failed to parse */
-> +	}
-> +
-> +	fclose(fp);
-> +	return value;
-> +}
-> +
-> +static inline bool set_legacy_tiocsti_setting(struct __test_metadata *_metadata,
-> +					      int value)
-> +{
-> +	FILE *fp;
-> +	bool success = false;
-> +
-> +	/* Sanity-check the value */
-> +	ASSERT_GE(value, 0);
-> +	ASSERT_LE(value, 1);
-> +
-> +	/*
-> +	 * Try to open for writing; if we lack permission, return false so
-> +	 * the test harness will skip variants that need to change it
-> +	 */
-> +	fp = fopen("/proc/sys/dev/tty/legacy_tiocsti", "w");
-> +	if (!fp)
-> +		return false;
-> +
-> +	/* Write the new setting */
-> +	if (fprintf(fp, "%d\n", value) > 0)
-> +		success = true;
-> +	else
-> +		TH_LOG("Failed to write legacy_tiocsti: %s", strerror(errno));
-> +
-> +	fclose(fp);
-> +	return success;
+> Also, is there a better value to use for this new ioctl? I'm not quite
+> sure what is the best practice to handle these kinds of conflicts...
 
-It's not very obvious, but actually some write failures are delayed
-until the close. From the man page:
+I wouldn't worry about it. We have *many* conflicts.
+(unless Al or Christian are concerned)
 
-ERRORS
-    ...
-    The fclose() function may also fail and set errno for any of the
-    errors specified for the routines close(2), write(2), or fflush(3).
-
-You'll need to check both the fprintf and the fclose. Probably as:
-
-	if (fprintf(fp, "%d\n", value) > 0 && fclose(fp))
-		success = true;
-	else
-		TH_LOG("Failed to write legacy_tiocsti: %s", strerror(errno));
-	return success;
-
-> +}
-> +
-> +/*
-> + * TIOCSTI injection test function
-> + * @tty_fd: TTY slave file descriptor to test TIOCSTI on
-> + * Returns: 0 on success, -errno on failure
-> + */
-> +static inline int test_tiocsti_injection(struct __test_metadata *_metadata,
-> +					 int tty_fd)
-> +{
-> +	int ret;
-> +	char inject_char = 'V';
-> +
-> +	errno = 0;
-> +	ret = ioctl(tty_fd, TIOCSTI, &inject_char);
-> +	return ret == 0 ? 0 : -errno;
-> +}
-> +
-> +FIXTURE_SETUP(tiocsti)
-> +{
-> +	/* Create PTY pair for basic tests */
-> +	self->has_pty = (openpty(&self->pty_master_fd, &self->pty_slave_fd,
-> +				 NULL, NULL, NULL) == 0);
-> +	if (!self->has_pty) {
-> +		self->pty_master_fd = -1;
-> +		self->pty_slave_fd = -1;
-> +	}
-> +
-> +	self->initial_cap_sys_admin = has_cap_sys_admin();
-> +	self->original_legacy_tiocsti_setting =
-> +		get_legacy_tiocsti_setting(_metadata);
-> +
-> +	if (self->original_legacy_tiocsti_setting < 0)
-> +		SKIP(return, "legacy_tiocsti sysctl not available (kernel < 6.2)");
-> +
-> +	/* Test if we can modify the sysctl (requires appropriate privileges) */
-> +	self->can_modify_sysctl = set_legacy_tiocsti_setting(_metadata,
-> +							     self->original_legacy_tiocsti_setting);
-> +	if (!self->can_modify_sysctl)
-> +		TH_LOG("Warning: Cannot modify legacy_tiocsti sysctl - will skip mismatched variants");
-> +}
-> +
-> +FIXTURE_TEARDOWN(tiocsti)
-> +{
-> +	/*
-> +	 * Backup restoration -
-> +	 * each test should restore its own sysctl changes
-> +	 */
-> +	if (self->can_modify_sysctl &&
-> +	    self->original_legacy_tiocsti_setting >= 0) {
-> +		int current_value = get_legacy_tiocsti_setting(_metadata);
-> +
-> +		if (current_value != self->original_legacy_tiocsti_setting) {
-> +			TH_LOG("Backup: Restoring legacy_tiocsti from %d to %d",
-> +			       current_value,
-> +			       self->original_legacy_tiocsti_setting);
-> +			set_legacy_tiocsti_setting(_metadata,
-> +				self->original_legacy_tiocsti_setting);
-> +		}
-
-This "set the value if it's different" logic here is mostly duplicated
-below; probably better to have a helper for doing this. It can also be
-aware of the value (since you read it during SETUP), so you may not need
-the triple read (once in SETUP, once in test, once in TEARDOWN). Though
-it doesn't really hurt anything to do the read/check/write cycle here
-either. Up to you!
-
-> +	}
-> +
-> +	if (self->has_pty) {
-> +		if (self->pty_master_fd >= 0)
-> +			close(self->pty_master_fd);
-> +		if (self->pty_slave_fd >= 0)
-> +			close(self->pty_slave_fd);
-> +	}
-> +}
-> +
-> +TEST_F(tiocsti, test)
-> +{
-> +	int saved_legacy_tiocsti = get_legacy_tiocsti_setting(_metadata);
-> +	bool need_restore = false;
-> +	int status;
-> +	pid_t child_pid;
-> +
-> +	/* Set legacy_tiocsti sysctl to match variant requirement */
-> +	if (self->can_modify_sysctl) {
-> +		if (saved_legacy_tiocsti != variant->legacy_tiocsti) {
-> +			if (!set_legacy_tiocsti_setting(_metadata,
-> +					variant->legacy_tiocsti)) {
-> +				SKIP(return,
-> +				     "Failed to set legacy_tiocsti sysctl");
-> +			}
-> +			need_restore = true;
-
-You don't need to handle the restore since TEARDOWN will do it, yes?
-
-> +		}
-> +	} else {
-> +		/*
-> +		 * Can't modify sysctl
-> +		 * - check if current value matches variant
-> +		 */
-> +		if (self->original_legacy_tiocsti_setting !=
-> +		    variant->legacy_tiocsti) {
-> +			SKIP(return,
-> +			    "legacy_tiocsti setting mismatch and cannot modify sysctl");
-> +		}
-
-I feel like both the set and this check should be part of SETUP instead?
-All variants have a legacy_tiocsti setting, so better to put common
-setup code in the SETUP.
-
-> +	}
-> +
-> +	/* Common skip conditions */
-> +	if (variant->test_type == TEST_PTY_TIOCSTI_BASIC && !self->has_pty) {
-> +		SKIP(goto restore_sysctl,
-> +		     "PTY not available for controlling terminal test");
-> +	}
-> +
-> +	if (variant->test_type == TEST_PTY_TIOCSTI_FD_PASSING &&
-> +	    !self->initial_cap_sys_admin) {
-> +		SKIP(goto restore_sysctl,
-> +		     "FD Pass tests require CAP_SYS_ADMIN");
-> +	}
-> +
-> +	if (variant->requires_cap && !self->initial_cap_sys_admin) {
-> +		SKIP(goto restore_sysctl,
-> +		     "Test requires initial CAP_SYS_ADMIN");
-> +	}
-
-Same for all of these: they do a skip, which should work from SETUP. And
-they can be done before sysctl changing, so they can just do a return.
-(A skipped SETUP will, I think, still call TEARDOWN.)
-
-> +	if (variant->test_type == TEST_PTY_TIOCSTI_BASIC) {
-
-variants within variants. ;)
-
-I would lift the fork logic out of the if/else, and then put the bodies
-of each in a separate function (pass in the metadata and the pid).
-That'll make these more readable instead of be heavily indented.
-
-
-> +		/* ===== BASIC TIOCSTI TEST ===== */
-> +		child_pid = fork();
-> +		ASSERT_GE(child_pid, 0);
-> +
-> +		if (child_pid == 0) {
-> +			/* Child process - perform the actual test */
-> +
-> +			/* Handle capability requirements */
-> +			if (self->initial_cap_sys_admin &&
-> +			    !variant->requires_cap)
-> +				ASSERT_TRUE(drop_to_nobody(_metadata));
-> +
-> +			if (variant->controlling_tty) {
-> +				/*
-> +				 * Create new session and set PTY as
-> +				 * controlling terminal
-> +				 */
-> +				pid_t sid = setsid();
-> +
-> +				ASSERT_GE(sid, 0);
-> +				ASSERT_EQ(ioctl(self->pty_slave_fd, TIOCSCTTY,
-> +						0),
-> +					  0);
-
-which avoids this kind of weird "oh no I'm almost at 80 characters"
-stuff above.
-
-> +			}
-> +
-> +			/*
-> +			 * Validate test environment setup and verify final
-> +			 * capability state matches expectation
-> +			 * after potential drop.
-> +			 *
-> +			 */
-> +			ASSERT_TRUE(self->has_pty);
-> +			ASSERT_EQ(has_cap_sys_admin(), variant->requires_cap);
-> +
-> +			/* Test TIOCSTI and validate result */
-> +			int result = test_tiocsti_injection(_metadata,
-> +							    self->pty_slave_fd);
-> +
-> +			/* Check against expected result from variant */
-> +			EXPECT_EQ(result, variant->expected_success);
-> +			_exit(0);
-> +		}
-> +
-> +	} else {
-> +		/* ===== FD PASSING SECURITY TEST ===== */
-> +		int sockpair[2];
-> +
-> +		ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, sockpair), 0);
-> +
-> +		child_pid = fork();
-> +		ASSERT_GE(child_pid, 0);
-> +
-> +		if (child_pid == 0) {
-> +			/* Child process - create PTY and send FD */
-> +			close(sockpair[0]);
-> +			signal(SIGHUP, SIG_IGN);
-> +
-> +			/* Handle privilege dropping */
-> +			if (!variant->requires_cap && has_cap_sys_admin())
-> +				ASSERT_TRUE(drop_to_nobody(_metadata));
-> +
-> +			/* Create child's PTY */
-> +			int child_master_fd, child_slave_fd;
-> +
-> +			ASSERT_EQ(openpty(&child_master_fd, &child_slave_fd,
-> +					  NULL, NULL, NULL),
-> +				  0);
-> +
-> +			if (variant->controlling_tty) {
-> +				pid_t sid = setsid();
-> +
-> +				ASSERT_GE(sid, 0);
-> +				ASSERT_EQ(ioctl(child_slave_fd, TIOCSCTTY, 0),
-> +					  0);
-> +			}
-> +
-> +			/* Test child's direct TIOCSTI for reference */
-> +			int direct_result = test_tiocsti_injection(_metadata,
-> +								   child_slave_fd);
-> +			EXPECT_EQ(direct_result, variant->expected_success);
-> +
-> +			/* Send FD to parent */
-> +			ASSERT_EQ(send_fd_via_socket(sockpair[1],
-> +						     child_slave_fd),
-> +				  0);
-> +
-> +			/* Wait for parent completion signal */
-> +			char sync_byte;
-> +			ssize_t bytes_read = read(sockpair[1], &sync_byte, 1);
-> +
-> +			ASSERT_EQ(bytes_read, 1);
-> +
-> +			close(child_master_fd);
-> +			close(child_slave_fd);
-> +			close(sockpair[1]);
-> +			_exit(0);
-> +		}
-> +
-> +		/* Parent process - receive FD and test TIOCSTI */
-> +		close(sockpair[1]);
-> +
-> +		int received_fd = recv_fd_via_socket(sockpair[0]);
-> +
-> +		ASSERT_GE(received_fd, 0);
-> +
-> +		bool parent_has_cap = self->initial_cap_sys_admin;
-> +
-> +		TH_LOG("=== TIOCSTI FD Passing Test Context ===");
-> +		TH_LOG("legacy_tiocsti: %d, Parent CAP_SYS_ADMIN: %s, Child: %s",
-> +		       variant->legacy_tiocsti, parent_has_cap ? "yes" : "no",
-> +		       variant->requires_cap ? "kept" : "dropped");
-> +
-> +		/* SECURITY TEST: Try TIOCSTI with FD opened by child */
-> +		int result = test_tiocsti_injection(_metadata, received_fd);
-> +
-> +		/* Log security concern if demonstrated */
-> +		if (result == 0 && !variant->requires_cap) {
-> +			TH_LOG("*** SECURITY CONCERN DEMONSTRATED ***");
-> +			TH_LOG("Privileged parent can use TIOCSTI on FD from unprivileged child");
-> +			TH_LOG("This shows current process credentials are used, not opener credentials");
-> +		}
-> +
-> +		EXPECT_EQ(result, variant->expected_success)
-> +		{
-> +			TH_LOG("FD passing: expected error %d, got %d",
-> +			       variant->expected_success, result);
-> +		}
-> +
-> +		/* Signal child completion */
-> +		char sync_byte = 'D';
-> +		ssize_t bytes_written = write(sockpair[0], &sync_byte, 1);
-> +
-> +		ASSERT_EQ(bytes_written, 1);
-> +
-> +		close(received_fd);
-> +		close(sockpair[0]);
-> +	}
-> +
-> +	/* Common child process cleanup for both test types */
-> +	ASSERT_EQ(waitpid(child_pid, &status, 0), child_pid);
-> +
-> +	if (WIFSIGNALED(status)) {
-> +		TH_LOG("Child terminated by signal %d", WTERMSIG(status));
-> +		ASSERT_FALSE(WIFSIGNALED(status))
-> +		{
-> +			TH_LOG("Child process failed assertion");
-> +		}
-> +	} else {
-> +		EXPECT_EQ(WEXITSTATUS(status), 0);
-> +	}
-> +
-> +restore_sysctl:
-> +	if (need_restore)
-> +		set_legacy_tiocsti_setting(_metadata, saved_legacy_tiocsti);
-> +}
-> +
-> +TEST_HARNESS_MAIN
-
-Thanks for chipping away at this! :)
-
--Kees
+>> (17 is already used for PROCFS_IOCTL_MAGIC somewhere else, so that probably should
+>> have update the Doc/rst file.)
+>>
+>>> +
+>>>  /* Pagemap ioctl */
+>>>  #define PAGEMAP_SCAN	_IOWR(PROCFS_IOCTL_MAGIC, 16, struct pm_scan_arg)
 
 -- 
-Kees Cook
+~Randy
+
 
