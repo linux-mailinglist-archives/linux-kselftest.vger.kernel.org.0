@@ -1,118 +1,241 @@
-Return-Path: <linux-kselftest+bounces-38483-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38484-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B57F1B1DBE9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 18:45:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC6CEB1DC0D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 19:00:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70AC272214F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 16:45:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AE313B3F8E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCAD101F2;
-	Thu,  7 Aug 2025 16:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADAAC27055D;
+	Thu,  7 Aug 2025 17:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ejy6su2w"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VkYTb2HX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2042.outbound.protection.outlook.com [40.107.237.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CA2BA36
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 16:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754585143; cv=none; b=QunYWTvE1ahdLMra8KgKxdakP6cq8AUtwc+KrPNiEYSwBQpgZEiqm93nON5xR3V37GHReCTN4A2vxtPqd7YCKJk1/I7YJyfXkBnRgMIR8kk1S7EFQQ0xLxWDrLLUSBazjrqHW7FjV6AcYMhFmN+6jnAwK8izZXEjWP9UkoxYxFI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754585143; c=relaxed/simple;
-	bh=DnbinLqQ/SZv5MEYtpqvtmUWrOq+jq1hEaDbmqBlBqA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e6oMSc/v0eh/IfsCwSoPextl5IJF8ShvvUn+pdK3dbsKw9BxlCyXhFGioMsDifvG+HFplLLOE6RTchmoO4NbVbWRl6JakKq6JAA3cynERMzZclLHP0MZZpKYdEJ1JSsVm9/9WcsdLySK05p5zO5eoy3kZeJxG3zLfzfMxU9TQDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ejy6su2w; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754585140;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mJ5oeu3kAg6HS4OVA9rb//xbi40No26cZ49UiO4tWTM=;
-	b=ejy6su2wN5ZJAfDkGH1leOaJEVgVzrb4zi82Z41vH2G4hzi55FGQMl3nxrntcIL6yT/bBd
-	9MyjxCYjW2uPShkpKC/QxN4Cgs2iEP5KXuknvgo5DTyT8AdpxadIZjmN8K0bFxABQdLka6
-	O06fJpBJOaWx9iHh8nmRQhb7CfoWiq4=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-640-gsHcVQqpMHOtwknZP4RCqw-1; Thu, 07 Aug 2025 12:45:39 -0400
-X-MC-Unique: gsHcVQqpMHOtwknZP4RCqw-1
-X-Mimecast-MFC-AGG-ID: gsHcVQqpMHOtwknZP4RCqw_1754585139
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-711136ed77fso17213537b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 09:45:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754585139; x=1755189939;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mJ5oeu3kAg6HS4OVA9rb//xbi40No26cZ49UiO4tWTM=;
-        b=H92V8QEg/OktbmzL4ticXuASbOJ8SnM6vv+SRgqomfKTkjQ9WUSx2shYWkFEkZlGJ+
-         Nj9fazC8ZZ6dJatJmOHBbGY/m9kg5hktkL5x7pl9baURhrjZZwv4BKrdm2WU2hMrlSIb
-         EAAmEdtuM4i9HOfAfroxMRMDlDfb3rWZ1zy2CX4HgYaOkzfMXNXoSynctbN13oJzqIl6
-         WbkQQUoDJyVsARMdzZftWyKqUlpifUOvytV+y6D2ePQ/ztJXF8BassHwQ7tvbVIf1elH
-         +eYj/xr+bSnGrrLWzxCgzP+TNArp+8U97ka1LT5AfOG2k5AVRBU0x52VSlSLvAMgVOgf
-         dSiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWmBakde4T1GM4b6weW6Z2cDzcwLelLXB6r+oswHwE10pZET4xicv8lcbkFQNsbrzHLwcyWu3JNo931/kZlgA8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkaERUUQt7ioKE57njzoyThANNWQcl2p2f7m/ZmaRHfl3KBdrK
-	ypoNb6yBvKYhd11fEsSN2dPS3LXDUKMoBoglSC2wpIZvQTD2Ug5Yb8tRfIgkQGzEB7mNL0BzU4h
-	KVh3kpWOnsSHAaQQyN/pZexJiqh3sHBOI8HzEjiERvaVUzIdnQTWf+yuJ8O6bBuZk7osYfA==
-X-Gm-Gg: ASbGncsDYBR9agy1BXXLZNH6spkL85PE8Lr5kSOLLzz6IDZZqbubDNI24YOUE8SMfOF
-	FTHsJZl7aK35FbAN6R7pOcKw1cxn3Rbb5WAH1Y3MUnYF4PzHYag9iYr91gqcx/YPp8KcldthoMe
-	+JhITWAsV081YuIYYvHd7yc1e0s5YIJsnvdPorvM/wmu+YnuGXrzKAeG5JbyWxe+NvxUkdqrZ8z
-	pWYFphE1ztNGyJ31GS4xeGVnoICJ17Usx8c/YKV8BkCqZxeKtqIVBy9X3qa4CSXV8YoyYoi4oVe
-	aIsyTE5Es/pq3IyhqQWrohA4wqrtHxO0OM93QzgMrkXbJu19+LC1m610xoe8GRUHwHMDwO7ZDcp
-	fsfmn3GJ89LV+K13+XxWaqg==
-X-Received: by 2002:a05:690c:2701:b0:70e:2d17:84b5 with SMTP id 00721157ae682-71bcc53c148mr93209407b3.0.1754585139003;
-        Thu, 07 Aug 2025 09:45:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFgbSqJY7+1sIhtBagdJKAXgNAdJDwXw5O7GuTQuwI9yzsV33fmqqWR2xnGe9+z9PsGvblgNg==
-X-Received: by 2002:a05:690c:2701:b0:70e:2d17:84b5 with SMTP id 00721157ae682-71bcc53c148mr93208937b3.0.1754585138431;
-        Thu, 07 Aug 2025 09:45:38 -0700 (PDT)
-Received: from x1.local (bras-base-aurron9134w-grc-11-174-89-135-171.dsl.bell.ca. [174.89.135.171])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-71b83fd71afsm34285437b3.19.2025.08.07.09.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Aug 2025 09:45:36 -0700 (PDT)
-Date: Thu, 7 Aug 2025 12:45:26 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Ujwal Kundur <ujwal.kundur@gmail.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, jackmanb@google.com,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/1] selftests/mm/uffd: Refactor non-composite global
- vars into struct
-Message-ID: <aJTYJjj1pCWr-q62@x1.local>
-References: <20250501163827.2598-1-ujwal.kundur@gmail.com>
- <20250702152057.4067-1-ujwal.kundur@gmail.com>
- <aGf_W_ZgIf63dmAz@x1.local>
- <CALkFLLJua-LeS+S5GpiXORA-3wNSR0DTzbh2bvU=Vg-Uzd2VFA@mail.gmail.com>
- <CALkFLLLoXfTNtigbcyD4RdJfY+b5Rh5-5Zta1QM9dBQxZd19cQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA75427281D;
+	Thu,  7 Aug 2025 17:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754586012; cv=fail; b=ijp0ZUvsnmSViuQOdDMUJpQwUt14MMopWMhUb3kW5Ji149h+zcJ4BfBx549kuUM6FzEQcoyaMLBIbiIzdCcTGFU9c0bnuY/OY++6XmDlk9eomHKmxsHjbpwl9KHd8A/BeUI+7V7LWqRt5xphvs8TSkw7umjKsz63yKLW+6hPidY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754586012; c=relaxed/simple;
+	bh=rQA2aGpyUWONsC/whrOp2cHgU5M87+dSKk2UMiiQJDQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=DadI9oYs5qvIBetEiLHTbKuMm6c0v9IFVNVsfX7pboZyBXeb1cTB8Nb3wEV9Ngwt7TVkqYaBcNKrKqkkS14clCPM3aSJlM3BLMg6imWu0OXKqr/NmwR69rgjeKNiiIKdg80RjER5uA9hyCj9z4q9XQfNQIvQ0aBWZGGhAh/7R0g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=VkYTb2HX; arc=fail smtp.client-ip=40.107.237.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qNOzH19LJzGWBhze34siyjuqNdFMCde670Hc6C06QoJe/MABEO5mR/pB/6GZfF2H1U+FhK9G9MqltpOzzvkyb+lt6AyY6QOc99rzDQGgZg1Yo//ROtNScu0BJFB51lAQJF1p8ui3qRpqQEH9jPv+a0IU/IQplVIp4IkXjJFhV/v25WImXAdwsLAs3zUqyp1DqaUN2LWhqPMYVQyZ2qiW+F8DzTkEF7fXOHB7t4/emorOZ9rsVp36BnplNVmUgQvgZ27gyI79QBODl/RVr/v+y0JTi9He7yZ6V8Uleyn2GEQTiC7xFEMQxPT6ij3uPL7TiFAI114OaUSecdr8k6q/Qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hENgWQa+SIlxDusf3vX8v1UG62hK+qaFvkJCjOC3WlU=;
+ b=rMdFM280tCsHO3aoOamt6t1zTsTJOx6edALHky+1IEd0WDqZr86R5FgUSLbQCMha9o3YX+wrebump4Abvh2BsTPmvZhv3Qdobrlp+RIbtsGQJsiK06QquWZ4mHdizTakvwXPHF/4h2O7tWq452ak2IzQSJm8DBw+6TZuDCG/Z6euZOtPRC7rskX2z7mBIcOQP5d5mVAg+2LWUzOE46eoA8z//04Kp010kBmqtXWYMUb+5zcbBlZfQaMDw6iI7opvvBCzKPepXUyW4Wb2r0/n2ygef/oEFqUrA1ZPl+vbme5MD0CAFgapyynFP2oAqn2aRI1+7gF8W760ofHk4wbL0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hENgWQa+SIlxDusf3vX8v1UG62hK+qaFvkJCjOC3WlU=;
+ b=VkYTb2HX9ORJXR3R7lZFdcs2NR3oVTg/PSrKJslIZQ4E1OuLgL5Ej6D5LWVHiLU+16PaaILs8gaC7M/nmi8QpJnuLP/KEcmVc/E+TayTaCccSHNpOZ96oEOvZfBGEXMXkikZt8ZyVISlqqeB0GShlbUE5SH6P8ijYoAXiuIdcTVpwQ5JX3h/J8ICawfHC2MwwmGZJW4wI8UknddlZoVlnulkrmqxB9lcsmLbI7QeZ91ls0y5jxakMF1dssHVS4ZDrxFcDK3/InP0ZoPgE+pmtFetv8Va0vlksycrD8sSAp3JRGMPs13ZBvJjwFOq7af/gvu1z10idTtQIlnZnV0yAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ DS7PR12MB8081.namprd12.prod.outlook.com (2603:10b6:8:e6::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9009.15; Thu, 7 Aug 2025 17:00:07 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a%6]) with mapi id 15.20.9009.013; Thu, 7 Aug 2025
+ 17:00:07 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: wang lian <lianux.mm@gmail.com>
+Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, baohua@kernel.org,
+ baolin.wang@linux.alibaba.com, david@redhat.com, dev.jain@arm.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, lorenzo.stoakes@oracle.com, mhocko@suse.com,
+ npache@redhat.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org,
+ surenb@google.com, vbabka@suse.cz
+Subject: Re: [PATCH 3/4] selftests/mm: add check_folio_orders() helper.
+Date: Thu, 07 Aug 2025 13:00:04 -0400
+X-Mailer: MailMate (2.0r6272)
+Message-ID: <6A8E4E50-88AD-482F-811C-8707027B1E1C@nvidia.com>
+In-Reply-To: <20250807030000.33303-1-lianux.mm@gmail.com>
+References: <20250806022045.342824-4-ziy@nvidia.com>
+ <20250807030000.33303-1-lianux.mm@gmail.com>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: BLAPR03CA0107.namprd03.prod.outlook.com
+ (2603:10b6:208:32a::22) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALkFLLLoXfTNtigbcyD4RdJfY+b5Rh5-5Zta1QM9dBQxZd19cQ@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|DS7PR12MB8081:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc302143-9e38-496b-d7aa-08ddd5d3dc95
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?4Yr5J+YbJejVjtgDofMOn35rBqFGCw9ZtKumD83Den4AnxXQSlz2B4/Ax7AM?=
+ =?us-ascii?Q?Cw3Nnr3pkBSmQjsZvaSgsokonsCsz/MQhQAR7ncuFmzeEb34mKP0Z9xd9rE6?=
+ =?us-ascii?Q?qIMucYgZE8Qu/XwZ4AmbgTWdPL2IyAvV3xhiptVaMEJe09eZw3gnpTzq5GnP?=
+ =?us-ascii?Q?A0uAU9nqBK0MkJsx3tb6YospUep+MAbBdWP1cvWpHs3/HfMG8xiUFR2Wy4oE?=
+ =?us-ascii?Q?cEqgqVJtEOhjM4TxQmfxia2YFfixyjjALQA4hWnh8/tJcY5ytGEVNBGR9gIe?=
+ =?us-ascii?Q?fgyaFGvbVL/gTCwqCMA1Rk9M9uhNfUZB3HHm5f8nzgXtztOeTRXb8dES9FPV?=
+ =?us-ascii?Q?KFLqgwyVcjcXOeFJGmxiAYLs4e5zj/rWY8y+qpfgU9SLSkhvQyYd/Z+Te+nc?=
+ =?us-ascii?Q?IhJSfxakl1l4MI4oucGKt8kVFsbCSD4kywPGtWLZdNT9aibPk7++xug85rDA?=
+ =?us-ascii?Q?uvGDMmZszGn6QKbJWYtwnXn1EKAOEjjIXmyD0F1b7Sl6GPT05juNTetRzwEl?=
+ =?us-ascii?Q?3a3370yxa+PVjC+7E0Ce40M+0LJoI6Tok5XtpXf6L4zcO7yRDNyxHe3jZnAz?=
+ =?us-ascii?Q?mJEwxNsL3/LLp4xj5ldjoW+iNaGIGJVfzpcyktzE5miKrgq3x37ou4pw2DAI?=
+ =?us-ascii?Q?1ERLboPvFFbDYRxNVINLOMrndftdqVCuNg4kFb6XtUoaQaui7M33SGmqGPdv?=
+ =?us-ascii?Q?9KVwU2gftc3kGEihdZlPmNpPa4VFpirMwhMb9k8vi9qz7uuSUPcOMZxNdkyt?=
+ =?us-ascii?Q?D0Yg3Y0wgat1ErEM/IxJ5N6t8eCl3x9HrFme0kkhsZ7WMjKs8xvjYV9ESfNq?=
+ =?us-ascii?Q?ztwmBZwLYeNmiDZpuGg9relr5Wk4k1oG2MWCYdFVMRK5ZCfa7ihj/FvO4KAd?=
+ =?us-ascii?Q?f7+f2invatYeswsyeWkw/mVhxa0a1YIyuXDHZAl31yvfZMtBekw+sY98iM3o?=
+ =?us-ascii?Q?DrnGb3nacF0w1lK31S9nMcNntNYV6MAGLnW5BvMGNsE8w3rs8Np5eRR1ivKf?=
+ =?us-ascii?Q?ZIufKro22Q2L2kCtAz1LA5R+TZluR66yqAvJX5nqLV3ZZb2boTIIWYMjJbt5?=
+ =?us-ascii?Q?iPXXTXHlM19V9aoVpzzCJUeVtarQprtJbvi66QADneEymBJ2upNyDFhbTeKj?=
+ =?us-ascii?Q?419HLpuYnQn5eC3we8M7HVSgqiov0QjkgppNxSR70jHnUqVb0K1pKieeQTSH?=
+ =?us-ascii?Q?kDbUMmnzBxRUEmYiU4CCc59pQ9V1Cgism1sgRSXEs3RAj6T3lccT4Gna42G+?=
+ =?us-ascii?Q?5C6QXlepPR878Jc7xjEYg9dU1Eb1GQ5/xSLQLNI/JYw6KqQcOCqF3CuDGZdq?=
+ =?us-ascii?Q?pOyP06PB1Rk+XYnb6jxFq7dugBpMSREbt2Lm4jNA2iDfVR/1uftDiUCUdfD6?=
+ =?us-ascii?Q?pwKTl0aELp7lphUK3xDA4fw/qvqJpaAbKFvVuEwYEeUXZ9ozVw5DBAz4phgv?=
+ =?us-ascii?Q?E67tbNl+Q74=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/oQPF3MTiUdE0rcF6FzudjUIuqX1AjtxmSbF9sV5qcmSbk01rbkuIPQOJqvw?=
+ =?us-ascii?Q?XRQ/a+WmgnnebB543iDZanE4iMMwgZKIK3RqlITtiUpBMdvAFk0yeubNR8qT?=
+ =?us-ascii?Q?mk07IBcXkLXj7YIBblQRSLB7MGZTaHJ4zftCdwitGs5cxgvuN1Svb9gCeER8?=
+ =?us-ascii?Q?RdxiZ1Y2kFau18o5eU2n6yHY0DEVxqk1LTQ9KjgocgAYF4lFRRGg/C1JSjJy?=
+ =?us-ascii?Q?/gJ/RnloiuyhlJLyn/NihvNrgJzNBNl0jmllzVlIO2aGzbGqGUPSgvqx3T7T?=
+ =?us-ascii?Q?F3+p4kkH8apGq7oKiyDtywF/6kVE9XZC9F3HVhR1XhTW+NQCp3d4StrNktsV?=
+ =?us-ascii?Q?JfM38E0HKWeRj6TYaQsl3KyyIf0T9F3XhL83yxt07zvvrvHxwvFxeyAe07yo?=
+ =?us-ascii?Q?CRHsT91gYztuwZHRw5fgCmC0NBBv2KgknS1nYUzVn/DKxmpEcW5K8pXyE4Rx?=
+ =?us-ascii?Q?8TVctXKwxK92DQNPvFtvpRL7TBq8owqrwKe6d4B5Luf1CsM86pdfkZKsqZ59?=
+ =?us-ascii?Q?siwQC3fDeWppYLE3x6k7LEM8mK6r7ALhLdfn3BVP5Fa/vfBb4Jdv7dXZkc26?=
+ =?us-ascii?Q?bW3D6GAM8lARLLBsRo3m/yvvH6U8y0aCWPfV6JmVlXGZmbt+87rvBLpH4y0B?=
+ =?us-ascii?Q?bCVEdLQQSe/zHJBVtfIKngUnYrOgSt+Jz6sMJkLoGfiAI/ezo6NOyNengdFK?=
+ =?us-ascii?Q?KlvrABlXgt73Vlef8w1PmGD4C0XqRbMRd79x6mVQouUBJ3efkhcUDmEGUEfe?=
+ =?us-ascii?Q?meG/V28/7xqLy24AeEYtn1Gp4Fie5OmxHMva5agzahPptF/BNkRZ6IvKAmwE?=
+ =?us-ascii?Q?ghlEkFixzgzR2Ns+5GbAr1f+Yl+NZBfyzMwGLt6Kkj6AHhRTx8LU5JNPhErC?=
+ =?us-ascii?Q?QsEmY7KOablHcUQyKKYtNSU9NZ4WhqHVQtfrvwfewicbuV5aF+Xd0YyH9XnN?=
+ =?us-ascii?Q?x1dvuTx3bj2++wqdAmziRv67tML2rdLPCoVE+VSzxW6wpzvHsXn0sWJC3oss?=
+ =?us-ascii?Q?6ktmoGjFIhIzrsKatqfI1cRKEvVGha1CdKFolgkS33rWz7TlTSjC31ELIHtS?=
+ =?us-ascii?Q?MlI6acDu7PLB4pIRHKjQ8+QuuTf4T1PCashXfkw8mLaIUrSyMcFDf/5kzZ5W?=
+ =?us-ascii?Q?q6yiAL4ssh4kpU0pTlykR6jktp3KVF/tU0u0kAxCQn9kwmNcj3+YBMKoTZ4a?=
+ =?us-ascii?Q?oC49c+I8VNUulpbMeUzaoF7ChCj+hugVUPzbSZJ1Q6kGpS/wopRUnMxDKbMR?=
+ =?us-ascii?Q?vg4UkfDsIM1YWMoEpx2IBUv5n8LJqCkoYKFViRjnSDFsP4p6zwPhrlKvJfmc?=
+ =?us-ascii?Q?lk7k7DvJEQSDKuAxdxalG0Bp5MoXdGmIOze283te+iDtDiSPIB3UpJl4Sqmo?=
+ =?us-ascii?Q?LtUtJCKTNlx+wHtYCqUgNJvjmDG2HNO4hRdNECQmLeRa4CP+/cYpZGOxxTNP?=
+ =?us-ascii?Q?LNrEDyZq996koGhuvFXygEVnLtrFW7OmHZzmQJN1S3yQA4W3/TSUXIKFhy92?=
+ =?us-ascii?Q?pCYVvMV570OIqMqfINy7csZolSJlP6Cib3V6mDMmCOw7aU+QFGsWuF7kSBCK?=
+ =?us-ascii?Q?vsRzBjnqs8VRStLtoR5ssumkQt2xM7ZIyDMqBAfJ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc302143-9e38-496b-d7aa-08ddd5d3dc95
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2025 17:00:07.4232
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FgpLxZEHDLmcO7T8n5c153XuCI8Rwb2JYPIPCnQ5D+62Xdr7b0ltcanQgrd4LOUm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8081
 
-On Wed, Aug 06, 2025 at 08:33:06PM +0530, Ujwal Kundur wrote:
-> Ping -- please let me know if there's anything else I must address.
-> I've ensured v6 still applies on mm-new.
+On 6 Aug 2025, at 23:00, wang lian wrote:
 
-You can try formally reposting your patch, instead of replying to old
-versions.  It might be overlooked as discussions.
+> Hi Zi,
+>
+> Thanks for the patch.
+>
+> I have a nit suggestion to centralize some of the macro definitions
+> for better consistency and reusability.
+>
+> On [Date of patch], Zi Yan wrote:
+>> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/self=
+tests/mm/vm_util.c
+>> ...
+>> +#define PGMAP_PRESENT		(1UL << 63)
+>> +#define KPF_COMPOUND_HEAD	(1UL << 15)
+>> +#define KPF_COMPOUND_TAIL	(1UL << 16)
+>> +#define KPF_THP			(1UL << 22)
+>> +#define PFN_MASK		((1UL<<55)-1)
+>
+> Currently, these macros and `PGMAP_PRESENT` are defined locally in
+> `vm_util.c`. It would be cleaner to move them to the shared header
+> `vm_util.h`.
+>
+> This would also allow us to consistently use `PM_PRESENT` (from the
+> header) instead of the local `PGMAP_PRESENT` duplicate. I noticed the
+> patch is already moving in this direction, and we can complete this
+> cleanup.
+>
+> How about a change like this?
 
-Thanks,
+I did not know about PM_PRESENT. Sure, will move the code like you
+did below. Thanks.
 
--- 
-Peter Xu
+>
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -17,17 +17,6 @@
+>  #define STATUS_FILE_PATH "/proc/self/status"
+>  #define MAX_LINE_LENGTH 500
+>
+> -#define PGMAP_PRESENT          (1UL << 63)
+> -#define KPF_COMPOUND_HEAD      (1UL << 15)
+> -#define KPF_COMPOUND_TAIL      (1UL << 16)
+> -#define KPF_THP                        (1UL << 22)
+> -#define PFN_MASK     ((1UL<<55)-1)
+> -
+>  unsigned int __page_size;
+>  unsigned int __page_shift;
+>
+> @@ -360,7 +349,7 @@ static int get_page_flags(uint64_t vpn, int pagemap=
+_file, int kpageflags_file,
+>  	 * Treat non-present page as a page without any flag, so that
+>  	 * gather_folio_orders() just record the current folio order.
+>  	 */
+> -	if (!(pfn & PGMAP_PRESENT)) {
+> +	if (!(pfn & PM_PRESENT)) {
+>  		*flags =3D 0;
+>  		return 0;
+>  	}
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -17,6 +17,11 @@
+>  #define PM_FILE                        BIT_ULL(61)
+>  #define PM_SWAP                        BIT_ULL(62)
+>  #define PM_PRESENT             BIT_ULL(63)
+> +#define KPF_COMPOUND_HEAD      (1UL << 15)
+> +#define KPF_COMPOUND_TAIL      (1UL << 16)
+> +#define KPF_THP                        (1UL << 22)
+> +#define PFN_MASK     ((1UL<<55)-1)
+>
+>  extern unsigned int __page_size;
+>  extern unsigned int __page_shift;
+>
+>
+> Best regards,
+> wang lian
 
+
+--
+Best Regards,
+Yan, Zi
 
