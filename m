@@ -1,243 +1,268 @@
-Return-Path: <linux-kselftest+bounces-38448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4827B1D4A3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 11:21:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E651B1D4AE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 11:27:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C289D17635A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 09:21:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDBEB7AFC4A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 09:25:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9E87218AB4;
-	Thu,  7 Aug 2025 09:21:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F64221D96;
+	Thu,  7 Aug 2025 09:26:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="erpoaS/k"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="b8oYo392"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD86190498
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 09:21:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4491400C;
+	Thu,  7 Aug 2025 09:26:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754558504; cv=none; b=MRDfbrhxgrxkyTEuQ+iNz3LrSuNnwlakM0FDOvdAm2QHP1xy0KceRwL8cVvtTXuIDtlwuL99vORmB85vfUPQ8tDHs+VhcHaD+htPNLrM6TyCSgcAzImjI0ctv/zImcz6fso0UpQ1HAoBz3bFCkMLv2SqTTD3NjVRClbMTUGEDUI=
+	t=1754558815; cv=none; b=V2RFafjfbjyNF6Z9rIUv7Ce5K2e2z/6bPbU1FPhIVAUEiK9hEL2QGAHqELkI17541OxvgwtMEKp3Ff4F3r8ehUxpOe6waJ8nDOIo4dYtPMlVVqeopDHvB1f455i+TYsO2Dmt8EneGSf+N4+sQxP2zxNDUx9cnYpzPZpISX0KbNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754558504; c=relaxed/simple;
-	bh=2kF9Xp/i+CMWgPLaCGqbMiGiYTpga7r7YABuRUKkC+U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oNicpiayJ5OZZ58s7IcFDgi1UZbHN9Cl4CbPpWifH123M0rALIOLv7dongi7/4+V1S6NgyOjzcKSl+9MdcxhmTS9AzJ6A9oq6vEqnkfiU15V2hPP2R2vvFWQG93pB7RKdq5Q/IJ4f+PbC4GPm1/yNT44oAtMun2AbHrafKXETjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=erpoaS/k; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-76bc5e68e26so841497b3a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 02:21:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754558502; x=1755163302; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nazhVQn6Jruflxd4sQmZQocx4oQcxFqDx6cnHObT89c=;
-        b=erpoaS/ktQ3Qc6Q34OoQEztjQK1yqvAEpPkrcwBhE3P3FByAghn28uN3NjWZDM+MIy
-         KrOR1maQNj9fZIZ1+E4p4b3Ru8zBXtFue7Qi2xaayL3GU6tjeXPy3xn/HDwtwfWapZr0
-         XoSogb2O7zjF5vXo++1pghafqFfr0c8aHNW0u1MMzxT6ACCeAJa5aBQIjFGrF5gxcz0u
-         3owk7mld5hI8RLHbsiCXH+T0rfDKqqKgoYBYhdbFSBKTxjtGYVf17m5teekfKxcEVd6D
-         UUKgUweR6D/UPm5CW12Fu5dVIJ5b9NZaIImhoMorYY6CwbrmIb3/WA3lN5DMV90mNbzM
-         RD0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754558502; x=1755163302;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nazhVQn6Jruflxd4sQmZQocx4oQcxFqDx6cnHObT89c=;
-        b=Q5ug8dA5TqQWcMNWzzEXVb/gqQVELvlqudH8ZwFA6QMpIOUEqWaS4rBTUhCjj0srDP
-         o+lV6X/rHKf4emHSHyben1+5CGAWWI+TfE4llj+fbdlfqRhpSemIo1bNgpianwSLqnmB
-         0GNMfsIwCyqKhCVFyjmNPs82BCSrTueFHPrLlzuNh1r33xBT9bWpowH4rXO+7SkXTREf
-         zGLG2GjrnSAlJXMvUyaLtpfUstGGZdZNAyJiL8GISYZLaYVUaWxIps/6uWuNzewveB8j
-         G23fttr5Cysf8OHitZQmFvDYOzxOXXPef4oZ+r+QCWvyQyDU+K3y8QeOA8eBqElT2bRL
-         VpZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXG/4fWp4wZbuBQMgF8WHCNKb58LZFU2ghaDZ+gdY2spqn0gIuM5pN28dc5zz1jHBQB6kfRfH7O/VxCfu1t8Bk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9Yr1xvx33QgOEIK+6e42ciFElvdLhgNXF4di9k7GSLFEKdHBw
-	83On0lMYMUqcvTETkVCG+uxWbXBpm+ggOUQCpd2nkwu8qEeEYmAIlojyA92iCg8erR0BqepUEU9
-	Rhk3KS+F3E8LB6xI9m2diwc2GnvOwXXU2ipHT4k72iA==
-X-Gm-Gg: ASbGnctrObg3vCx0ZU2mV/1nsHFRUokFuhUF/hm8GhquwdicH7BGqQ/B7Qrf6g+P3OC
-	RHRttGdGhxvyzTI3eHYBUDENU8cZZcEAm/afEAvcFd0TZhP9wpBXP1WoKaIMYIl203n6lv0yv+R
-	eSWNE7CR54JN2RaUHtjlHZrDhQoFLtuHckhkdCu50T+g+kIOrKKXWdfgmx7uJNTsUyRT1tBCW8Q
-	I9/0r2/G5RqN8lgjt9n4CCgXyp5JqDggzWHpf+UNUD/q0NPEmMq
-X-Google-Smtp-Source: AGHT+IENUNZHbWNhDkjrlDBP/IMI+ox17dvQGf1pPh/T6DNibPj5t5Kqy2cH1NAjJtx9Hg5ja440tS5wnPkyrNZunu0=
-X-Received: by 2002:a17:903:2f89:b0:240:967a:fec3 with SMTP id
- d9443c01a7336-2429f30b074mr82279045ad.29.1754558502039; Thu, 07 Aug 2025
- 02:21:42 -0700 (PDT)
+	s=arc-20240116; t=1754558815; c=relaxed/simple;
+	bh=3z4s7PTykH/zot4xKgMwdwn/iq1/xaK0ST9LBJX36XA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sN7JK2u+gFDi2B4CyzsrHAEwXwagI4YNbyiWUguWtRGPpOrvRzfk26m5Fy8ldpgcWVo5+vAJbaV9K5ybm0vPVqIlqkfXpy5nNKWhypLbHPgs0HXcHdaW7cqyBcIpwDljwoOX8RFa/qRXARMEidPVRYLVbozBuzqFfCjm0NO6/zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=b8oYo392; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5776kXBQ018719;
+	Thu, 7 Aug 2025 09:26:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=HtBbpc
+	8CX6/g0hj1osOlGVlIONmWAFXX5Df86apHsCA=; b=b8oYo392JZ9KPdQfZvW1yg
+	yXjL/mSesNZQpEPEZamzRgn9cqmfgfVfIfvgslaA/xmKAI/MCAOtUMDL718Uz4wp
+	0Qf4LxCUGFrkArrXgje759XSj1CA/CLzY49s6L03zHPcXlGaVw8Qt2iwjN5a3xkL
+	FKwIQpH8zDJJzOPtUg/vYHeOADNOUg4XMCgheg88TrNMPwrbFkPj5shov0R/Wxfp
+	wF5KB3AGAAh9Khmpt9GdOGfmQJeCqbmbHNwYWag9T5kBKDWjEFWTlXJGhzZGZ0l4
+	VL7dMByLxZw0lo0jHuT926272aHa5RY3UJr589acOV+opAq8a9qRDkBbFfioNY3g
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bq6395nj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Aug 2025 09:26:38 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5779Qb46011519;
+	Thu, 7 Aug 2025 09:26:37 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bq6395ng-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Aug 2025 09:26:37 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 57752CGV025910;
+	Thu, 7 Aug 2025 09:26:36 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 48bpwn7x05-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Aug 2025 09:26:36 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5779Qaue30868028
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 Aug 2025 09:26:36 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 064D058057;
+	Thu,  7 Aug 2025 09:26:36 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 13F5C58058;
+	Thu,  7 Aug 2025 09:26:30 +0000 (GMT)
+Received: from [9.109.245.113] (unknown [9.109.245.113])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  7 Aug 2025 09:26:29 +0000 (GMT)
+Message-ID: <111d2351-3fb7-4011-af07-78b40874d956@linux.ibm.com>
+Date: Thu, 7 Aug 2025 14:56:28 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYvZtbQLoS=GpaZ_uzm3YiZEQmz0oghnwVamNQ49CosT2w@mail.gmail.com>
- <aJNsreA4FuxalDc8@stanley.mountain>
-In-Reply-To: <aJNsreA4FuxalDc8@stanley.mountain>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 7 Aug 2025 14:51:29 +0530
-X-Gm-Features: Ac12FXzDGhnu1-S9XsmcuSQdpNl-4x-pjyL4dJsRMo-Zz2V8DR8MxaCT9WEoD8A
-Message-ID: <CA+G9fYvEGBAAEetvvtXWsGb3EQ2sTOM=szkxZ4m-Gt2bTszBdQ@mail.gmail.com>
-Subject: Re: next-20250804 Unable to handle kernel execute from non-executable
- memory at virtual address idem_hash
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Renjiang Han <quic_renjiang@quicinc.com>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Cgroups <cgroups@vger.kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, linux-fsdevel@vger.kernel.org, 
-	Song Liu <song@kernel.org>, yukuai3@huawei.com, Arnd Bergmann <arnd@arndb.de>, 
-	Anders Roxell <anders.roxell@linaro.org>, Ben Copeland <benjamin.copeland@linaro.org>
-Content-Type: multipart/mixed; boundary="00000000000040a1ab063bc2fcd6"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/7] selftest/mm: Fix ksm_funtional_test failures
+To: Wei Yang <richard.weiyang@gmail.com>
+Cc: Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
+        Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, shuah@kernel.org,
+        pfalcato@suse.de, david@redhat.com, ziy@nvidia.com,
+        baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
+        dev.jain@arm.com, baohua@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ritesh.list@gmail.com
+References: <20250729053403.1071807-1-aboorvad@linux.ibm.com>
+ <20250729053403.1071807-4-aboorvad@linux.ibm.com>
+ <20250804091141.ifwryfmgjepwrog4@master>
+ <20fb853c-7d79-4d26-9c8a-f6ce9367d424@linux.ibm.com>
+ <20250805170353.6vlbyg6qn5hv4yzz@master>
+ <e9079694-1e30-46b6-97e7-b79be01c65a6@linux.ibm.com>
+ <20250806145432.nygrslkiyvzulujn@master>
+Content-Language: en-US
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <20250806145432.nygrslkiyvzulujn@master>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=NInV+16g c=1 sm=1 tr=0 ts=6894714e cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=G4KbePK-NKx5Xlsl9MIA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: cs8q0z50iEOqbQtM-UroqxXp2SxZOBan
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA3MDA3MyBTYWx0ZWRfX/BAtRJtTAZAy
+ OFau9aI4q6cLNLf6CaQzDdOiJxXSzj0zDWX8uA3MhDBJcgFkPPmuPsStyh1iRylaDFpmJ7qGeAl
+ OqGk3isXLliBEeR6X2Y0gKPGay5NP7CrDnv8XODhr5a1Xl3H4hHN1XBLzZJuDVIMdczVLu2AO68
+ jsAnOuOack80drzoZpG4edV86LAhe07rGbwmc705Kip9AN059mayz2Mhs8ocZVo3AwVt8oWfPvK
+ L2EwtJtMbKcgNLfG7YKwRDXRCUyNPHyly0gt7D5dp0xwNiYrV8B1cRY/RViaNLEfAvl0U/oCZcF
+ XXKVm96edRuOnrOm75dvS0+QEUVfwSETOHyMW8BJecR2yFqxNRQXUBHb6xIvkQCImyvWXRJiZp8
+ 5l7o48ZOK9J6bxIasL5giV3yDRr4nfuxP8Gb6CR5QH79vz0fyL2GvqYiVS/4roun/Roz9fVT
+X-Proofpoint-ORIG-GUID: A71PnRco0sTo52NZs3C2OQYx5jRa28hi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-07_01,2025-08-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 suspectscore=0 impostorscore=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 adultscore=0 mlxscore=0
+ bulkscore=0 priorityscore=1501 spamscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508070073
 
---00000000000040a1ab063bc2fcd6
-Content-Type: text/plain; charset="UTF-8"
 
-Hi Dan,
-
-On Wed, 6 Aug 2025 at 20:24, Dan Carpenter <dan.carpenter@linaro.org> wrote:
+On 8/6/25 8:24 PM, Wei Yang wrote:
+> On Wed, Aug 06, 2025 at 06:30:37PM +0530, Donet Tom wrote:
+> [...]
+>>> Child process inherit the ksm_merging_pages from parent, which is reasonable
+>>> to me. But I am confused why ksm_unmerge() would just reset ksm_merging_pages
+>>> for parent and leave ksm_merging_pages in child process unchanged.
+>>>
+>>> ksm_unmerge() writes to /sys/kernel/mm/ksm/run, which is a system wide sysfs
+>>> interface. I expect it applies to both parent and child.
+>> I am not very familiar with the KSM code, but from what I understand:
+>>
+>> The ksm_merging_pages counter is maintained per mm_struct. When
+>> we write to /sys/kernel/mm/ksm/run, unmerging is triggered, and the
+>> counters are updated for all mm_structs present in the ksm_mm_slot list.
+>>
+>> A mm_struct gets added to this list  when MADV_MERGEABLE is called.
+>> In the case of the child process, since MADV_MERGEABLE has not been
+>> invoked yet, its mm_struct is not part of the list. As a result,
+>> its ksm_merging_pages counter is not reset.
+>>
+> Would this flag be inherited during fork? VM_MERGEABLE is saved in related vma
+> I don't see it would be dropped during fork. Maybe missed.
 >
-> On Tue, Aug 05, 2025 at 12:50:28AM +0530, Naresh Kamboju wrote:
-> > While booting and testing selftest cgroups and filesystem testing on arm64
-> > dragonboard-410c the following kernel warnings / errors noticed and system
-> > halted and did not recover with selftests Kconfig enabled running the kernel
-> > Linux next tag next-20250804.
-> >
-> > Regression Analysis:
-> > - New regression? Yes
-> > - Reproducibility? Re-validation is in progress
-> >
-> > First seen on the next-20250804
-> > Good: next-20250801
-> > Bad: next-20250804
-> >
-> > Test regression: next-20250804 Unable to handle kernel execute from
-> > non-executable memory at virtual address idem_hash
-> > Test regression: next-20250804 refcount_t: addition on 0;
-> > use-after-free refcount_warn_saturate
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > ## Test crash log
-> > [    9.811341] Unable to handle kernel NULL pointer dereference at
-> > virtual address 000000000000002e
-> > [    9.811444] Mem abort info:
-> > [    9.821150]   ESR = 0x0000000096000004
-> > [    9.833499]   SET = 0, FnV = 0
-> > [    9.833566]   EA = 0, S1PTW = 0
-> > [    9.835511]   FSC = 0x04: level 0 translation fault
-> > [    9.838901] Data abort info:
-> > [    9.843788]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-> > [    9.846565]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> > [    9.851938]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> > [    9.853510] rtc-pm8xxx 200f000.spmi:pmic@0:rtc@6000: registered as rtc0
-> > [    9.856992] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000856f8000
-> > [    9.862446] rtc-pm8xxx 200f000.spmi:pmic@0:rtc@6000: setting system
-> > clock to 1970-01-01T00:00:31 UTC (31)
-> > [    9.868789] [000000000000002e] pgd=0000000000000000, p4d=0000000000000000
-> > [    9.875459] Internal error: Oops: 0000000096000004 [#1]  SMP
-> > [    9.889547] input: pm8941_pwrkey as
-> > /devices/platform/soc@0/200f000.spmi/spmi-0/0-00/200f000.spmi:pmic@0:pon@800/200f000.spmi:pmic@0:pon@800:pwrkey/input/input1
-> > [    9.891545] Modules linked in: qcom_spmi_temp_alarm rtc_pm8xxx
-> > qcom_pon(+) qcom_pil_info videobuf2_dma_sg ubwc_config qcom_q6v5
-> > venus_core(+) qcom_sysmon qcom_spmi_vadc v4l2_fwnode llcc_qcom
-> > v4l2_async qcom_vadc_common qcom_common ocmem v4l2_mem2mem drm_gpuvm
-> > videobuf2_memops qcom_glink_smem videobuf2_v4l2 drm_exec mdt_loader
-> > qmi_helpers gpu_sched drm_dp_aux_bus qnoc_msm8916 videodev
-> > drm_display_helper qcom_stats videobuf2_common cec qcom_rng
-> > drm_client_lib mc phy_qcom_usb_hs socinfo rpmsg_ctrl display_connector
-> > rpmsg_char ramoops rmtfs_mem reed_solomon drm_kms_helper fuse drm
-> > backlight
-> > [    9.912286] input: pm8941_resin as
-> > /devices/platform/soc@0/200f000.spmi/spmi-0/0-00/200f000.spmi:pmic@0:pon@800/200f000.spmi:pmic@0:pon@800:resin/input/input2
-> > [    9.941186] CPU: 2 UID: 0 PID: 221 Comm: (udev-worker) Not tainted
-> > 6.16.0-next-20250804 #1 PREEMPT
-> > [    9.941200] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > [    9.941206] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [    9.941215] pc : dev_pm_opp_put (/builds/linux/drivers/opp/core.c:1685)
-> > [    9.941233] lr : core_clks_enable+0x54/0x148 venus_core
-> > [   10.004266] sp : ffff8000842b35f0
-> > [   10.004273] x29: ffff8000842b35f0 x28: ffff8000842b3ba0 x27: ffff0000047be938
-> > [   10.004289] x26: 0000000000000000 x25: 0000000000000000 x24: ffff80007b350ba0
-> > [   10.004303] x23: ffff00000ba380c8 x22: ffff00000ba38080 x21: 0000000000000000
-> > [   10.004316] x20: 0000000000000000 x19: ffffffffffffffee x18: 00000000ffffffff
-> > [   10.004330] x17: 0000000000000000 x16: 1fffe000017541a1 x15: ffff8000842b3560
-> > [   10.004344] x14: 0000000000000000 x13: 007473696c5f7974 x12: 696e696666615f65
-> > [   10.004358] x11: 00000000000000c0 x10: 0000000000000020 x9 : ffff80007b33f2bc
-> > [   10.004371] x8 : ffffffffffffffde x7 : ffff0000044a4800 x6 : 0000000000000000
-> > [   10.004384] x5 : 0000000000000002 x4 : 00000000c0000000 x3 : 0000000000000001
-> > [   10.004397] x2 : 0000000000000002 x1 : ffffffffffffffde x0 : ffffffffffffffee
-> > [   10.004412] Call trace:
-> > [   10.004417] dev_pm_opp_put (/builds/linux/drivers/opp/core.c:1685) (P)
-> > [   10.004435] core_clks_enable+0x54/0x148 venus_core
-> > [   10.004504] core_power_v1+0x78/0x90 venus_core
-> > [   10.004560] venus_runtime_resume+0x6c/0x98 venus_core
-> > [   10.004616] pm_generic_runtime_resume
+>>>> value remained unchanged. That’s why get_my_merging_page() in the child was
+>>>> returning a non-zero value.
+>>>>
+>>> I guess you mean the get_my_merging_page() in __mmap_and_merge_range() return
+>>> a non-zero value. But there is ksm_unmerge() before it. Why this ksm_unmerge()
+>>> couldn't reset the value, but a ksm_unmerge() in parent could.
+>>>
+>>>> Initially, I fixed the issue by calling ksm_unmerge() before the fork(), and
+>>>> that
+>>>> resolved the problem. Later, I decided it would be cleaner to move the
+>>>> ksm_unmerge() call to the test cleanup phase.
+>>>>
+>>> Also all the tests before test_prctl_fork(), except test_prctl(), calls
+>>>
+>>>     ksft_test_result(!range_maps_duplicates());
+>>>
+>>> If the previous tests succeed, it means there is no duplicate pages. This
+>>> means ksm_merging_pages should be 0 before test_prctl_fork() if other tests
+>>> pass. And the child process would inherit a 0 ksm_merging_pages. (A quick test
+>>> proves it.)
+>>
+>> If I understand correctly, all the tests are calling MADV_UNMERGEABLE,
+>> which internally calls break_ksm() in the kernel. This function replaces the
+>> KSM page with an exclusive anonymous page. However, the
+>> ksm_merging_pages counters are not updated at this point.
+>>
+>> The function range_maps_duplicates(map, size) checks whether the pages
+>> have been unmerged. Since break_ksm() does perform the unmerge, this
+>> function returns false, and the test passes.
+>>
+>> The ksm_merging_pages update happens later via the ksm_scan_thread().
+>> That’s why we observe that ksm_merging_pages values are not reset
+>> immediately after the test finishes.
+>>
+> Not familiar with ksm internal. But the ksm_merging_pages counter still has
+> non-zero value when all merged pages are unmerged makes me feel odd.
 >
-> Could you try adding some error checking to core_clks_enable()?
-> Does the patch below help?
+>> If we add a sleep(1) after the MADV_UNMERGEABLE call, we can see that
+>> the ksm_merging_pages values are reset after the sleep.
+>>
+>> Once the test completes successfully, we can call ksm_unmerge(), which
+>> will immediately reset the ksm_merging_pages value. This way, in the fork
+>> test, the child process will also see the correct value.
+>>> So which part of the story I missed?
+>>>
+>> So, during the cleanup phase after a successful test, we can call
+>> ksm_unmerge() to reset the counter. Do you see any issue with
+>> this approach?
+>>
+> It looks there is no issue with an extra ksm_unmerge().
+>
+> But one more question. Why an extra ksm_unmerge() could help.
+>
+> Here is what we have during test:
+>
+>
+>    test_prot_none()
+>        !range_maps_duplicates()
+>        ksm_unmerge()                  1) <--- newly add
+>    test_prctl_fork()
+>        >--- in child
+>        __mmap_and_merge_range()
+>            ksm_unmerge()              2) <--- already have
+>
+> As you mentioned above ksm_unmerge() would immediately reset
+> ksm_merging_pages, why ksm_unmerge() at 2) still leave ksm_merging_pages
+> non-zero? And the one at 1) could help.
 
-Your patch works.
-The attached patch from Sasha fixes this reported problem on today's
-Linux next tag.
 
-$ git log --oneline next-20250805..next-20250807 --
-drivers/media/platform/qcom/venus/pm_helpers.c
-7881cd6886a89 media: venus: Fix OPP table error handling
+ From the debugging, what I understood is:
 
-- Naresh
+When we perform fork(), MADV_MERGEABLE, or PR_SET_MEMORY_MERGE, the
+mm_struct of the process gets added to the ksm_mm_slot list. As a
+result, both the parent and child processes’ mm_struct structures
+will be present in ksm_mm_slot.
 
---00000000000040a1ab063bc2fcd6
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="media-venus-fix-opp-table-error-handling.patch"
-Content-Disposition: attachment; 
-	filename="media-venus-fix-opp-table-error-handling.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_me16oaig0>
-X-Attachment-Id: f_me16oaig0
+When KSM merges the pages, it creates a ksm_rmap_item for each page,
+and the ksm_merging_pages counter is incremented accordingly.
 
-Y29tbWl0IDc4ODFjZDY4ODZhODllZGE4NDgxOTJkM2Y1NzU5Y2UwODY3MmUwODQKQXV0aG9yOiBT
-YXNoYSBMZXZpbiA8c2FzaGFsQGtlcm5lbC5vcmc+CkRhdGU6ICAgVHVlIEF1ZyA1IDA4OjU4OjIw
-IDIwMjUgLTA0MDAKCiAgICBtZWRpYTogdmVudXM6IEZpeCBPUFAgdGFibGUgZXJyb3IgaGFuZGxp
-bmcKICAgIAogICAgVGhlIHZlbnVzIGRyaXZlciBmYWlscyB0byBjaGVjayBpZiBkZXZfcG1fb3Bw
-X2ZpbmRfZnJlcV97Y2VpbCxmbG9vcn0oKQogICAgcmV0dXJucyBhbiBlcnJvciBwb2ludGVyIGJl
-Zm9yZSBjYWxsaW5nIGRldl9wbV9vcHBfcHV0KCkuIFRoaXMgY2F1c2VzCiAgICBhIGNyYXNoIHdo
-ZW4gT1BQIHRhYmxlcyBhcmUgbm90IHByZXNlbnQgaW4gZGV2aWNlIHRyZWUuCiAgICAKICAgIFVu
-YWJsZSB0byBoYW5kbGUga2VybmVsIGFjY2VzcyB0byB1c2VyIG1lbW9yeSBvdXRzaWRlIHVhY2Nl
-c3Mgcm91dGluZXMKICAgIGF0IHZpcnR1YWwgYWRkcmVzcyAwMDAwMDAwMDAwMDAwMDJlCiAgICAu
-Li4KICAgIHBjIDogZGV2X3BtX29wcF9wdXQrMHgxYy8weDRjCiAgICBsciA6IGNvcmVfY2xrc19l
-bmFibGUrMHg0Yy8weDE2YyBbdmVudXNfY29yZV0KICAgIAogICAgQWRkIElTX0VSUigpIGNoZWNr
-cyBiZWZvcmUgY2FsbGluZyBkZXZfcG1fb3BwX3B1dCgpIHRvIGF2b2lkCiAgICBkZXJlZmVyZW5j
-aW5nIGVycm9yIHBvaW50ZXJzLgogICAgCiAgICBGaXhlczogYjE3OTIzNGI1ZTU5ICgibWVkaWE6
-IHZlbnVzOiBwbV9oZWxwZXJzOiB1c2Ugb3BwLXRhYmxlIGZvciB0aGUgZnJlcXVlbmN5IikKICAg
-IFNpZ25lZC1vZmYtYnk6IFNhc2hhIExldmluIDxzYXNoYWxAa2VybmVsLm9yZz4KICAgIFNpZ25l
-ZC1vZmYtYnk6IExpbnVzIFRvcnZhbGRzIDx0b3J2YWxkc0BsaW51eC1mb3VuZGF0aW9uLm9yZz4K
-CmRpZmYgLS1naXQgYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL3Fjb20vdmVudXMvcG1faGVscGVy
-cy5jIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9xY29tL3ZlbnVzL3BtX2hlbHBlcnMuYwppbmRl
-eCA4ZGQ1YTliMGQwNjBjLi5lMzJmODg2MmE5ZjkwIDEwMDY0NAotLS0gYS9kcml2ZXJzL21lZGlh
-L3BsYXRmb3JtL3Fjb20vdmVudXMvcG1faGVscGVycy5jCisrKyBiL2RyaXZlcnMvbWVkaWEvcGxh
-dGZvcm0vcWNvbS92ZW51cy9wbV9oZWxwZXJzLmMKQEAgLTQ4LDcgKzQ4LDggQEAgc3RhdGljIGlu
-dCBjb3JlX2Nsa3NfZW5hYmxlKHN0cnVjdCB2ZW51c19jb3JlICpjb3JlKQogCWludCByZXQ7CiAK
-IAlvcHAgPSBkZXZfcG1fb3BwX2ZpbmRfZnJlcV9jZWlsKGRldiwgJmZyZXEpOwotCWRldl9wbV9v
-cHBfcHV0KG9wcCk7CisJaWYgKCFJU19FUlIob3BwKSkKKwkJZGV2X3BtX29wcF9wdXQob3BwKTsK
-IAogCWZvciAoaSA9IDA7IGkgPCByZXMtPmNsa3NfbnVtOyBpKyspIHsKIAkJaWYgKElTX1Y2KGNv
-cmUpKSB7CkBAIC02NjAsNyArNjYxLDggQEAgc3RhdGljIGludCBkZWNpZGVfY29yZShzdHJ1Y3Qg
-dmVudXNfaW5zdCAqaW5zdCkKIAkvKlRPRE8gOiBkaXZpZGUgdGhpcyBpbnN0LT5sb2FkIGJ5IHdv
-cmtfcm91dGUgKi8KIAogCW9wcCA9IGRldl9wbV9vcHBfZmluZF9mcmVxX2Zsb29yKGRldiwgJm1h
-eF9mcmVxKTsKLQlkZXZfcG1fb3BwX3B1dChvcHApOworCWlmICghSVNfRVJSKG9wcCkpCisJCWRl
-dl9wbV9vcHBfcHV0KG9wcCk7CiAKIAltaW5fbG9hZGVkX2NvcmUoaW5zdCwgJm1pbl9jb3JlaWQs
-ICZtaW5fbG9hZCwgZmFsc2UpOwogCW1pbl9sb2FkZWRfY29yZShpbnN0LCAmbWluX2xwX2NvcmVp
-ZCwgJm1pbl9scF9sb2FkLCB0cnVlKTsKQEAgLTExMjEsNyArMTEyMyw4IEBAIHN0YXRpYyBpbnQg
-bG9hZF9zY2FsZV92NChzdHJ1Y3QgdmVudXNfaW5zdCAqaW5zdCkKIAlmcmVxID0gbWF4KGZyZXFf
-Y29yZTEsIGZyZXFfY29yZTIpOwogCiAJb3BwID0gZGV2X3BtX29wcF9maW5kX2ZyZXFfZmxvb3Io
-ZGV2LCAmbWF4X2ZyZXEpOwotCWRldl9wbV9vcHBfcHV0KG9wcCk7CisJaWYgKCFJU19FUlIob3Bw
-KSkKKwkJZGV2X3BtX29wcF9wdXQob3BwKTsKIAogCWlmIChmcmVxID4gbWF4X2ZyZXEpIHsKIAkJ
-ZGV2X2RiZyhkZXYsIFZEQkdMICJyZXF1ZXN0ZWQgY2xvY2sgcmF0ZTogJWx1IHNjYWxpbmcgY2xv
-Y2sgcmF0ZSA6ICVsdVxuIiwKQEAgLTExMzEsNyArMTEzNCw4IEBAIHN0YXRpYyBpbnQgbG9hZF9z
-Y2FsZV92NChzdHJ1Y3QgdmVudXNfaW5zdCAqaW5zdCkKIAl9CiAKIAlvcHAgPSBkZXZfcG1fb3Bw
-X2ZpbmRfZnJlcV9jZWlsKGRldiwgJmZyZXEpOwotCWRldl9wbV9vcHBfcHV0KG9wcCk7CisJaWYg
-KCFJU19FUlIob3BwKSkKKwkJZGV2X3BtX29wcF9wdXQob3BwKTsKIAogc2V0X2ZyZXE6CiAK
---00000000000040a1ab063bc2fcd6--
+Since the parent process did the merge, its mm_struct is present in
+ksm_mm_slot, and ksm_rmap_item entries are created for all the merged
+pages.
+
+When a process is forked, the child’s mm_struct is also added to
+ksm_mm_slot, and it inherits the ksm_merging_pages count. However,
+no ksm_rmap_item entries are created for the child process because it
+did not do any merge.
+
+When ksm_unmerge() is called, it iterates over all processes in
+ksm_mm_slot. In our case, both the parent and child are present. It
+first processes the parent, which has ksm_rmap_item entries, so it
+unmerges the pages and resets the ksm_merging_pages counter.
+
+For the child, since it did not perform any actual merging, it does not
+have any ksm_rmap_item entries. Therefore, there are no pages to unmerge,
+and the counter remains unchanged.
+
+So, only processes that performed KSM merging will have their counters
+updated during ksm_unmerge(). The child process, having not initiated any
+merging, retains the inherited counter value without any update.
+
+So from a testing point of view, I think it is better to reset the
+counters as part of the cleanup code to ensure that the next tests do
+not get incorrect values.
+
+The question I have is: is it correct to keep the inherited 
+|ksm_merging_page|
+value in the child or Should we reset it to 0 during |ksm_fork()|?
+
+>
+> Or there is still some timing issue like sleep(1) you did?
+>
 
