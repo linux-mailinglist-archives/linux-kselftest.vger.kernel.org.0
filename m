@@ -1,194 +1,329 @@
-Return-Path: <linux-kselftest+bounces-38487-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38488-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EE9FB1DC48
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 19:05:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E34DFB1DC9F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 19:46:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 323C8161945
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 17:05:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DD53188FB6A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 17:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC5EE26E17A;
-	Thu,  7 Aug 2025 17:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECCC1DB546;
+	Thu,  7 Aug 2025 17:46:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="swILADHQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="J//AvZZE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2086.outbound.protection.outlook.com [40.107.96.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475D826D4E5;
-	Thu,  7 Aug 2025 17:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754586315; cv=fail; b=auzmlJDD+IvU+2Xt6IWy/dVjsizfCPCGZilHhfM2PAFCU2jSaevObH3Kfj2/+QDXtyxE9iQgCYpl0jDJgeFVJABA/l9ZZoJCf9SZUdL+0UudY/HYy9Am2/SjKwz7+ZB9ov72fFCAant4/4w9kvyfOxQb65dnUHO1Li6DLIyRnsw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754586315; c=relaxed/simple;
-	bh=Z8AoF4CBDgheqblJ79UfO9Wv2m/IAO9ayiAypcjZSf4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MjvlzNM1c/B+M8a8i/019nG+oTM30D21SmXeQoO1C0xbBaOIrRW4KyBFF/vQ5jJEvKFjLMGsnWADShTRU1cZEaKDsW/YAS8kPxOzvAk5pHjLyTneRz7FgVie1EQfV1b9Pf1J8K599HK0VoiCy6Tqhl1U08gjFgZAerLRiLgLxVc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=swILADHQ; arc=fail smtp.client-ip=40.107.96.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LcSy8LzLSNhfpYZ84o2noTdzlqUbptouovjOQUVb0jKVAkhHDC8rhDYrEIiIcvzeHNQcF6DUfZnBe0eIqsChajKyhiD8727cl2zTKr1pOTYNyKRmry6uPKSzDEJEASRQBbB9sFvMOTOAMKUKVW000PoLT1i03GQeHWbcGv1RqWcG0LZoF3Sy4z3L9NdP+zsWb+uLr/cKcgNMPeyR+HB2rsQF/P9mRNv5gSrAKw1wT4lX9+noa0Myzc25cBnZlzXfvxTCVMjU1yXRDj708lGm/85Z0YmLQZ1L2n/NmA3XWRITI7TtY9LDIdUjrelBrD94qZkwNwr6UslI6XnRlStzaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PJl8qdfovy444RxiqbyAi/xd/6Lmgw5Y9aDAQl217Jo=;
- b=sCGTVunmN2T71BJMgMaoWXsp7mSQinWMpGuID/pAGXMj8Eilm7Uhgdr/GkZWqEarw7Mh1IHwodtU3UNzj9gqN19UNAObsU94WAm2vm+YZreEtDKX4Jb1XoCDpx83TenXAhZhpwsljuhtsU3fIPVjxbLU0pvrDu3OKchyX1ktKLlnfYhD2gvl7FMIJpVG+75Dzb/zIBNbKOqBmRMYYVz5SNNwgTjSbIcNI9GKFD/KqHyoZ/nb93T4FyG2t09qiyaGldb5rbRzjodqbNyKtVLyW3nC/MXEFjzQjAQrTZcPTG6S+sNLDNmr/QnQRV21wDUQ+8FWkWvZQzEG8F1clfLVrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PJl8qdfovy444RxiqbyAi/xd/6Lmgw5Y9aDAQl217Jo=;
- b=swILADHQEnsmrfEKE0mGuq+q5zRhuf+rS81pXQRrg7ruFZLosVBib5rUgTcROJaOmIQlreH9hbuHYK5oz7nA2gpYPS1Sz1LIstRXwhHS0vRCYrb5BBIZfJpeRxan3dNXRCuvc9u2/q0PPLB7g1+F8N2cBuasAA4zBcjENRC2fMtAWj2QuuWZtse3SELJVIGCBknQ5BQrJdwpLCUswl69KP1Bvy8ilfvXetxHYHuW7ZdoSR4ClZ982eYopv/I7sy0n+bXmxYIScQ5867Iz9FlO75ozPaK3pFX+VT1tEzbSgidf6CfZwolf9n+lW7I5QsYhhcxMmFcfUbsX0e+uP5JsQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- BL4PR12MB9482.namprd12.prod.outlook.com (2603:10b6:208:58d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.17; Thu, 7 Aug
- 2025 17:05:11 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a%6]) with mapi id 15.20.9009.013; Thu, 7 Aug 2025
- 17:05:11 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Wei Yang <richard.weiyang@gmail.com>
-Cc: David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
- Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/4] mm/huge_memory: move to next folio after
- folio_split() succeeds.
-Date: Thu, 07 Aug 2025 13:05:09 -0400
-X-Mailer: MailMate (2.0r6272)
-Message-ID: <30CEAF42-ABC1-4174-8D78-C92B8C8AEB37@nvidia.com>
-In-Reply-To: <20250807085521.bhs2o6wk6pe7xf5x@master>
-References: <20250806022045.342824-1-ziy@nvidia.com>
- <20250806022045.342824-3-ziy@nvidia.com>
- <20250807085521.bhs2o6wk6pe7xf5x@master>
-Content-Type: text/plain
-X-ClientProxiedBy: BLAPR03CA0167.namprd03.prod.outlook.com
- (2603:10b6:208:32f::23) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFDD31A0712
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 17:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754588781; cv=none; b=rncXheh0jCmkDVxe1r17N7PwPsqcFVsBpmGs4to7hafIA2eaYsf0FV+JDUDWzBqSfIueG1HYkraPpirlXgQZpY9m2M3xMjLVrb6xPW9+q+OnMYS0jOMcXIDlvg+CscLORZ55BNCSLxJsU/OdnIF5SE6QpzjH1ghDxb0ZsG6NkqE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754588781; c=relaxed/simple;
+	bh=Uq3iiNUU91g4FQyKlsdBmM5MGVUlLCvmUTwzVzeS5m4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=V6OtGBjkjIYsardpmZ8iHH/LWts2oYGFxFYB37B6Qv/7gT6daBUqjj6KFaStbSAM2bO4w407ca06AeJ12p9h/5WW/G8If75SHp9ae3C97V0WEkjbDP96xM3Ic2tEfaRAEJBKf13EaxJk3B13pe+LUY+gKqxW80tNYidP2JS4ndc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=J//AvZZE; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-31eac278794so1261303a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 10:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1754588779; x=1755193579; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HcLjrOeqCd02Abu900eKiNp/ETH9Nin2wL4rT1C33Uc=;
+        b=J//AvZZEJXTa8GGXdPyNl6KeQd0LEgrzxnFZW3Sm6sm9TPcoPEsJ8J6qTDCOzmT5Dx
+         sKIAAR6Irar6VNpyveYuHkitULpD95EiHIzc6L2/qGtkHRiYXExhdLRUY3tWBk5RX4GW
+         u7loULwp6GdvOjhqvv6Z0D1cSainGMnwkh1DkYp1DSMGgSx8REUwtF7BU0V/2JO4Z7z9
+         67BcNj3GISt9p0Z4cFskxSWRZ7lTWdO4KNoySKLi1cBa0RRkE+Y4GpzbTFqFVeNGqNgl
+         ycgVr4Xw6a5T03LgW0/6tokNMQ/bQyfoP6036U+67aeTjM7pTmUdUElqU3ydVxcoqp03
+         /VPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754588779; x=1755193579;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HcLjrOeqCd02Abu900eKiNp/ETH9Nin2wL4rT1C33Uc=;
+        b=IXo0dbMmYUjj5Knjr6GJ4rONO+w1P+Mpxlzik02bQIWBAt22wz9iaX1Glghk3I168z
+         MzNhO4txLqKUko39l/8YFFyGqggJ405fs7GRdwgDjEdnCCHqvt79vEH4zuN7PTP4NUqO
+         SSN3p0s6ubLh57s4Qh2NT/78Y+88IZaRQuHf4VRgGePxTWTuEol6lrLneL0P2BAYpntx
+         g/nsCzXuXtVBpDsVkOSHboO4zBwUE8URLOwauc9AcCDcp3ZluAbt4kAq/px4sXNMUj1K
+         j93IbXENw/d+FBOGnsiN7n4rLtaWCTEVvXtSeP7WcxmQ9ROda3F376G8pC96of8sH6gJ
+         pjkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV3r2WrGVRlyS5k5qMwEzuE6sWcXokS1s9o9ZO1NrhEdnx0wiraG82C2w+yQZZDsC/z4YFTdTLFQJmUXzr5jm4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4DNakgbO9j3GpOOSFW44qqhGHYGIdFDmylYwPFnbZ9T/32Cu/
+	eGt8G8mQQFLHsxNXNgD7W3Hjz8/i1femXfqkQ6u+738yinKeHHdEoY0U+fihSb35Mr9GjywPsWJ
+	97A==
+X-Google-Smtp-Source: AGHT+IH1TzamuhyocWAYv+jV0O95ZvaImp1W99Xp6lTkB1S1QMyzi0Kp+GJq5+BauORZKHrne7YiZLn0Zg==
+X-Received: from pjbsk13.prod.google.com ([2002:a17:90b:2dcd:b0:321:78e7:57fb])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:55ce:b0:320:ff84:ceb5
+ with SMTP id 98e67ed59e1d1-32182692d5emr600569a91.16.1754588779321; Thu, 07
+ Aug 2025 10:46:19 -0700 (PDT)
+Date: Fri,  8 Aug 2025 01:46:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|BL4PR12MB9482:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1f40a43f-16a3-4729-9e13-08ddd5d491a9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ZJgzwhKtzLI4CR3QzSNFqlb6P6iz+xgEiUDDmFQBLhlI1mZGIRY+/q+qcR/r?=
- =?us-ascii?Q?lNALg6LeLUaAM50+Ckv1TiqtJCwjzZLgU/qGm1yiYnCkErr8ZaPZ1R2BfFlD?=
- =?us-ascii?Q?6xG13By/m2WvBnpNYOrsjWWuimgpxBnz923QAcuHFVCEB/tcX2EL0rL50UjS?=
- =?us-ascii?Q?U+HmjUqgd3JBi7NkuENvw7VaN5FuSO7ReV0KJWuwfOqAVhdFYMdM802BvI0o?=
- =?us-ascii?Q?SeYNzOSQdu54uOpjAnthOZiastsmZFhcVuxTgYJcDTn5HSGlnEOA+unPQnzV?=
- =?us-ascii?Q?GHCbnFbqcs4Z6c2d3PDb1mpk1zAQKTH+/yyyVY0WrKJjVxF2Da3E5yxdbZA9?=
- =?us-ascii?Q?kYOtglHue4kjTwywrDs/Br9dIaCtl989p53aR2cl/malhYtzTHdZact/QvYs?=
- =?us-ascii?Q?4nqdL/uXfZMFubOTzpYafzwtKqXVfYt1T/yOA9qowMoi4qGZDYc8t+f3mgVf?=
- =?us-ascii?Q?2ZdgBLrX7OaiwAcc5pXswc1WiXLD6R28QLbfQakaT+a4u9SBRNQJ189ZWy3J?=
- =?us-ascii?Q?o16rWnT1ockYI1X4sRPiYySeWxFwY0NY/Bl5mPWdsof67BOaBGKjt4iSsf9J?=
- =?us-ascii?Q?E7CpxcQLxwQP4wRkh5aFe8O3aggrm+yp5qD/0EjSHYvFT2U+3n0qQ80yHqjI?=
- =?us-ascii?Q?X8vgD0OXlZI4rDd8c27xdkuJQ43sMJBKLK2HPTJFMSIu9nSJcApHrd6DfS7x?=
- =?us-ascii?Q?29c+YtN1bjHcXek9IA+A6+8ZNb5VMeVyFegP822l7ZqQ9x0KwMGo4VMVD67W?=
- =?us-ascii?Q?+vwSdEbBNqDL3iKCgG8j6SnRs5r3nc8RWPDLqpTjGIp0tflzqmeiQMXwRL2C?=
- =?us-ascii?Q?ZzJTTfs8Hmy7kOLuCIynztf1lPtcHJcq2eC3VhmpbBQfcwlSanP7I8MG4Ns6?=
- =?us-ascii?Q?sRuZmjnt7TwUzwZitnWZWlki6soLl6EXUL2snOVic3TyUfJrVE85vCHPmVEs?=
- =?us-ascii?Q?y4DqfQt61M6bNRSUqlubdnRI1qiIyTZt+rRlZt6Du/iEnq8/RI+qrwXRp2x0?=
- =?us-ascii?Q?7uRYKrw/9FUTEJn6DFvMcUtAoBv6ep3OIdKrfHlGhaOXyqXOsqf0iDMgLa4M?=
- =?us-ascii?Q?ja43QbZd6njX0OsIAda5ChqyszjvsA1HXxBosVJuWhbKpXIziD0U9vqho0jw?=
- =?us-ascii?Q?B7aITdDiA0NjZFeSUutQJylFnmITXZum6OjbiW8jFq/B+7U7PGnF3h/xbMmW?=
- =?us-ascii?Q?+gBZp+ZVq9ByqSaLfOTBMZ05CZkl8pvuYMXCk2ulHyb+IOSqR6GuI/BQojof?=
- =?us-ascii?Q?ByGubUAxG1/VUBcrvyN/JMA5j7+8EmAUPJFEipsZvhENwDT3UQjXC7nFyx+t?=
- =?us-ascii?Q?DcpgSPDESulqsMnR47Q4I0pMTf7PXiIupuKVr2RdWJW4SjoBroNA6rsZ6nzI?=
- =?us-ascii?Q?hRcuwxhuyNDA+AnqKXqA15XYQ9pqw8QhZaS/THP/DlKroqPBvYD4UV1+2e+F?=
- =?us-ascii?Q?pusqEqTl0p4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?HuTZ7YC8MAu2Hf/MPjcYTw96DhGcVlqJyOFZispNaooAfOPlAmd+uJk+n+2V?=
- =?us-ascii?Q?Og6trDwGjlqeOObP3x8rC1cA6pfNC5rjDBRmMKJqSenb6rr++2FO6X9/NIrc?=
- =?us-ascii?Q?LsaaSEP4QnFjKWLdwUHpysYxa0eGWfyVQN20AMrGt2BBM3kOLbNCBWb8EfPa?=
- =?us-ascii?Q?E4hhi59qwLGje5OwhS+sqZZZr2a4M0T0TDnBLv0Kgl7WYl5mt/Fm/ukhoQOT?=
- =?us-ascii?Q?OFzMZZUmF0poFrv3JbM6nfj+rZPGofTzXELLskmUiIp7c83+xvzCB7SKTsA0?=
- =?us-ascii?Q?Yhs9MkTOVDbm0Kwn1ZiPvKvZ/ck405+fbdkBmQaZfvRvNpOOMqKsNz9WC5iV?=
- =?us-ascii?Q?1y0/UynPSlLQnWsf+VIdZDl0vbOo4JGXD1RyXc1kOnP8iCdI427PylIQZNLd?=
- =?us-ascii?Q?mCoRmbiqqY5EykIp+rc4h4Yb7Uq9reIKoutu4BbWI4YtPRv67KG8PnMRMhux?=
- =?us-ascii?Q?Me874ZmnnQTbwMdDSx1RWke5XIC6vgKaNLFcuEgI8hIhuLv3m7JmpsvbxxtX?=
- =?us-ascii?Q?zOdb+gCSzQAxb8e4BX9fYcCPeT2pqxLTOUeTgqDONgnAGbMCYu6/ncUb8EtC?=
- =?us-ascii?Q?5fNSwXzKAPqbta5atFHfS9MpT2ZVbepVaas+8qjUK9ze1cG7bS0kbPc6K7UE?=
- =?us-ascii?Q?00rljw+43YvPVgk0dyn8Ia9B+nGBOOn9c5BAHOWSp7ZkeUR7WMB53wk4XO7z?=
- =?us-ascii?Q?7yMJpYYh/qqkGeZYC/61TBWF/MXWHqayEQXY2MNw8PTJ7CNfc3cFusKgoGAt?=
- =?us-ascii?Q?0DvWfT0cYbIsPcJDDewwbJ2dUlxTjZA/jixo09yscr+cr9oc7hGR8plvhwLT?=
- =?us-ascii?Q?xygh3hzEwTAu8A+WAzhM/gImGiOeAwnaNKVxWl/Num05zLhxdVK1QsQAPZdH?=
- =?us-ascii?Q?bMYH5Pb/vs7P2qm+liqm3NuaLO45kYxZ3WKUi9m1MvItViVNwWEF499RCKek?=
- =?us-ascii?Q?+WH9jCGlBjK++xPI1QV4eyc+qaWUaLCHUPyMBsjhpE1KtXq2pAOsXvR9ukEY?=
- =?us-ascii?Q?pLHHj37T+Lmh6UGiooXokMUv+7BC0j3GBCMu825I89Bfl5MVlmKBdHDahP2A?=
- =?us-ascii?Q?tAjK7SpEzrqYiBS6iVDPTr6JesAbvl2ZdGSj/GgnsbJPEj2SKPF5MdBsr/1Z?=
- =?us-ascii?Q?P4cK72g9AwpRvSCmnkk5o3Jqek0KAmxRkKxq9TL0BLfMAxr4XdopgbI3fHes?=
- =?us-ascii?Q?rvM/nf2GaaNq9SEGOm0F9/UnGGkLkAb9HTszYhyAQKqErreNT4UOcoZ1Fi4s?=
- =?us-ascii?Q?5G53Xr1g0rX3luaT5zB6cpEyCRgNmCogc3U5oot0fDdf1KXpurvWpCgFrQB7?=
- =?us-ascii?Q?iL1xJY/YHR4dBx5dg873FEzC17Tm0UAAUrosVeYH1cwkXG9jUJMv8k0iPaqs?=
- =?us-ascii?Q?rDAOrYkLw63rBv1wuNbtDur8X2gIVzQI7ct7qeNV6N7gKcz+fPL0A+8LOlN+?=
- =?us-ascii?Q?W2wtslEuSXs37ao0y0orfiph8pGZx/oFdPgowXFe0PgFkjlTdaFMhdkJG6YC?=
- =?us-ascii?Q?9XN8fFMcGsFSB83JWKC32pNtjGBuE9UlYAlOoltigfCaTOgt/APboCs5NYH2?=
- =?us-ascii?Q?xPw4bTD2KCGn72Drf0oyB6iYcskCy83hO0hO0uy7?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f40a43f-16a3-4729-9e13-08ddd5d491a9
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2025 17:05:11.1256
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4afzWFfBbPCw+sX7tbrlRVlQhj9gubO001A6fBVwk9ygewEZJP65LX3Px40BnJoj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL4PR12MB9482
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.1.703.g449372360f-goog
+Message-ID: <20250807174613.1895006-1-wakel@google.com>
+Subject: [PATCH] selftests/seccomp: improve backwards compatibility for older kernels
+From: Wake Liu <wakel@google.com>
+To: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc: wakel@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 7 Aug 2025, at 4:55, Wei Yang wrote:
+This commit introduces checks for kernel version and seccomp filter flag
+support to the seccomp selftests. It also includes conditional header
+inclusions using __GLIBC_PREREQ.
 
-> On Tue, Aug 05, 2025 at 10:20:43PM -0400, Zi Yan wrote:
-> [...]
->>
->> -		if (in_folio_offset < 0 ||
->> -		    in_folio_offset >= folio_nr_pages(folio)) {
->> +		if (in_folio_offset < 0 || in_folio_offset >= nr_pages) {
->> 			if (!split_folio_to_order(folio, target_order))
->> 				split++;
->> 		} else {
->> -			struct page *split_at = folio_page(folio,
->> -							   in_folio_offset);
->> -			if (!folio_split(folio, target_order, split_at, NULL))
->> +			struct page *split_at =
->> +				folio_page(folio, in_folio_offset);
->> +			if (!folio_split(folio, target_order, split_at, NULL)) {
->> 				split++;
->> +				addr += PAGE_SIZE * nr_pages;
->> +			}
->
-> Are we sure addr points to the folio start?
+Some tests were gated by kernel version, and adjustments were made for
+flags introduced after kernel 5.4. This ensures the selftests can run
+and pass correctly on kernel versions 5.4 and later, preventing failures
+due to features not present in older kernels.
 
-David pointed it out. Will use addr += PAGE_SIZE * (nr_pages - 1).
+The use of __GLIBC_PREREQ ensures proper compilation and functionality
+across different glibc versions in a mainline Linux kernel context.
+While it might appear redundant in specific build environments due to
+global overrides, it is crucial for upstream correctness and portability.
 
---
-Best Regards,
-Yan, Zi
+Signed-off-by: Wake Liu <wakel@google.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 108 ++++++++++++++++--
+ 1 file changed, 99 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 61acbd45ffaa..9b660cff5a4a 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -13,12 +13,14 @@
+  * we need to use the kernel's siginfo.h file and trick glibc
+  * into accepting it.
+  */
++#if defined(__GLIBC__) && defined(__GLIBC_PREREQ)
+ #if !__GLIBC_PREREQ(2, 26)
+ # include <asm/siginfo.h>
+ # define __have_siginfo_t 1
+ # define __have_sigval_t 1
+ # define __have_sigevent_t 1
+ #endif
++#endif
+ 
+ #include <errno.h>
+ #include <linux/filter.h>
+@@ -300,6 +302,26 @@ int seccomp(unsigned int op, unsigned int flags, void *args)
+ }
+ #endif
+ 
++int seccomp_flag_supported(int flag)
++{
++	/*
++	 * Probes if a seccomp filter flag is supported by the kernel.
++	 *
++	 * When an unsupported flag is passed to seccomp(SECCOMP_SET_MODE_FILTER, ...),
++	 * the kernel returns EINVAL.
++	 *
++	 * When a supported flag is passed, the kernel proceeds to validate the
++	 * filter program pointer. By passing NULL for the filter program,
++	 * the kernel attempts to dereference a bad address, resulting in EFAULT.
++	 *
++	 * Therefore, checking for EFAULT indicates that the flag itself was
++	 * recognized and supported by the kernel.
++	 */
++	if (seccomp(SECCOMP_SET_MODE_FILTER, flag, NULL) == -1 && errno == EFAULT)
++		return 1;
++	return 0;
++}
++
+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define syscall_arg(_n) (offsetof(struct seccomp_data, args[_n]))
+ #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+@@ -2436,13 +2458,12 @@ TEST(detect_seccomp_filter_flags)
+ 		ASSERT_NE(ENOSYS, errno) {
+ 			TH_LOG("Kernel does not support seccomp syscall!");
+ 		}
+-		EXPECT_EQ(-1, ret);
+-		EXPECT_EQ(EFAULT, errno) {
+-			TH_LOG("Failed to detect that a known-good filter flag (0x%X) is supported!",
+-			       flag);
+-		}
+ 
+-		all_flags |= flag;
++		if (seccomp_flag_supported(flag))
++			all_flags |= flag;
++		else
++			TH_LOG("Filter flag (0x%X) is not found to be supported!",
++			       flag);
+ 	}
+ 
+ 	/*
+@@ -2870,6 +2891,12 @@ TEST_F(TSYNC, two_siblings_with_one_divergence)
+ 
+ TEST_F(TSYNC, two_siblings_with_one_divergence_no_tid_in_err)
+ {
++	/* Depends on 5189149 (seccomp: allow TSYNC and USER_NOTIF together) */
++	if (!seccomp_flag_supported(SECCOMP_FILTER_FLAG_TSYNC_ESRCH)) {
++		SKIP(return, "Kernel does not support SECCOMP_FILTER_FLAG_TSYNC_ESRCH");
++		return;
++	}
++
+ 	long ret, flags;
+ 	void *status;
+ 
+@@ -3475,6 +3502,11 @@ TEST(user_notification_basic)
+ 
+ TEST(user_notification_with_tsync)
+ {
++	/* Depends on 5189149 (seccomp: allow TSYNC and USER_NOTIF together) */
++	if (!seccomp_flag_supported(SECCOMP_FILTER_FLAG_TSYNC_ESRCH)) {
++		SKIP(return, "Kernel does not support SECCOMP_FILTER_FLAG_TSYNC_ESRCH");
++		return;
++	}
+ 	int ret;
+ 	unsigned int flags;
+ 
+@@ -3966,6 +3998,13 @@ TEST(user_notification_filter_empty)
+ 
+ TEST(user_ioctl_notification_filter_empty)
+ {
++	/* Depends on 95036a7 (seccomp: interrupt SECCOMP_IOCTL_NOTIF_RECV
++	 * when all users have exited) */
++	if (!ksft_min_kernel_version(6, 11)) {
++		SKIP(return, "Kernel version < 6.11");
++		return;
++	}
++
+ 	pid_t pid;
+ 	long ret;
+ 	int status, p[2];
+@@ -4119,6 +4158,12 @@ int get_next_fd(int prev_fd)
+ 
+ TEST(user_notification_addfd)
+ {
++	/* Depends on 0ae71c7 (seccomp: Support atomic "addfd + send reply") */
++	if (!ksft_min_kernel_version(5, 14)) {
++		SKIP(return, "Kernel version < 5.14");
++		return;
++	}
++
+ 	pid_t pid;
+ 	long ret;
+ 	int status, listener, memfd, fd, nextfd;
+@@ -4281,6 +4326,12 @@ TEST(user_notification_addfd)
+ 
+ TEST(user_notification_addfd_rlimit)
+ {
++	/* Depends on 7cf97b1 (seccomp: Introduce addfd ioctl to seccomp user notifier) */
++	if (!ksft_min_kernel_version(5, 9)) {
++		SKIP(return, "Kernel version < 5.9");
++		return;
++	}
++
+ 	pid_t pid;
+ 	long ret;
+ 	int status, listener, memfd;
+@@ -4326,9 +4377,12 @@ TEST(user_notification_addfd_rlimit)
+ 	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
+ 	EXPECT_EQ(errno, EMFILE);
+ 
+-	addfd.flags = SECCOMP_ADDFD_FLAG_SEND;
+-	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
+-	EXPECT_EQ(errno, EMFILE);
++	/* Depends on 0ae71c7 (seccomp: Support atomic "addfd + send reply") */
++	if (ksft_min_kernel_version(5, 14)) {
++		addfd.flags = SECCOMP_ADDFD_FLAG_SEND;
++		EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
++		EXPECT_EQ(errno, EMFILE);
++	}
+ 
+ 	addfd.newfd = 100;
+ 	addfd.flags = SECCOMP_ADDFD_FLAG_SETFD;
+@@ -4356,6 +4410,12 @@ TEST(user_notification_addfd_rlimit)
+ 
+ TEST(user_notification_sync)
+ {
++	/* Depends on 48a1084 (seccomp: add the synchronous mode for seccomp_unotify) */
++	if (!ksft_min_kernel_version(6, 6)) {
++		SKIP(return, "Kernel version < 6.6");
++		return;
++	}
++
+ 	struct seccomp_notif req = {};
+ 	struct seccomp_notif_resp resp = {};
+ 	int status, listener;
+@@ -4520,6 +4580,12 @@ static char get_proc_stat(struct __test_metadata *_metadata, pid_t pid)
+ 
+ TEST(user_notification_fifo)
+ {
++	/* Depends on 4cbf6f6 (seccomp: Use FIFO semantics to order notifications) */
++	if (!ksft_min_kernel_version(5, 19)) {
++		SKIP(return, "Kernel version < 5.19");
++		return;
++	}
++
+ 	struct seccomp_notif_resp resp = {};
+ 	struct seccomp_notif req = {};
+ 	int i, status, listener;
+@@ -4623,6 +4689,12 @@ static long get_proc_syscall(struct __test_metadata *_metadata, int pid)
+ /* Ensure non-fatal signals prior to receive are unmodified */
+ TEST(user_notification_wait_killable_pre_notification)
+ {
++	/* Depends on c2aa2df (seccomp: Add wait_killable semantic to seccomp user notifier) */
++	if (!ksft_min_kernel_version(5, 19)) {
++		SKIP(return, "Kernel version < 5.19");
++		return;
++	}
++
+ 	struct sigaction new_action = {
+ 		.sa_handler = signal_handler,
+ 	};
+@@ -4693,6 +4765,12 @@ TEST(user_notification_wait_killable_pre_notification)
+ /* Ensure non-fatal signals after receive are blocked */
+ TEST(user_notification_wait_killable)
+ {
++	/* Depends on c2aa2df (seccomp: Add wait_killable semantic to seccomp user notifier) */
++	if (!ksft_min_kernel_version(5, 19)) {
++		SKIP(return, "Kernel version < 5.19");
++		return;
++	}
++
+ 	struct sigaction new_action = {
+ 		.sa_handler = signal_handler,
+ 	};
+@@ -4772,6 +4850,12 @@ TEST(user_notification_wait_killable)
+ /* Ensure fatal signals after receive are not blocked */
+ TEST(user_notification_wait_killable_fatal)
+ {
++	/* Depends on c2aa2df (seccomp: Add wait_killable semantic to seccomp user notifier) */
++	if (!ksft_min_kernel_version(5, 19)) {
++		SKIP(return, "Kernel version < 5.19");
++		return;
++	}
++
+ 	struct seccomp_notif req = {};
+ 	int listener, status;
+ 	pid_t pid;
+@@ -4854,6 +4938,12 @@ static void *tsync_vs_dead_thread_leader_sibling(void *_args)
+  */
+ TEST(tsync_vs_dead_thread_leader)
+ {
++	/* Depends on bfafe5e (seccomp: release task filters when the task exits) */
++	if (!ksft_min_kernel_version(6, 11)) {
++		SKIP(return, "Kernel version < 6.11");
++		return;
++	}
++
+ 	int status;
+ 	pid_t pid;
+ 	long ret;
+-- 
+2.50.1.703.g449372360f-goog
+
 
