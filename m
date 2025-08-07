@@ -1,133 +1,122 @@
-Return-Path: <linux-kselftest+bounces-38468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F178DB1D783
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 14:15:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36B02B1D7D7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 14:28:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE4363BD249
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 12:14:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F39C560ECA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 12:28:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF50924E4C3;
-	Thu,  7 Aug 2025 12:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A354D244677;
+	Thu,  7 Aug 2025 12:28:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fbPAqEC2";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4AWyzCfH"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfRz8/lo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963D724677C;
-	Thu,  7 Aug 2025 12:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400CD24293B;
+	Thu,  7 Aug 2025 12:28:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754568855; cv=none; b=ccJ0GbblnFU3h/v2L6ZoN+RaYrbrHtutIfPhaiSXpwfkrlax+f/ugBX5YnnznoLOtrQNZjbkHcD1V0vCPttTyntpS0tyz1rzVFYxVZX8BDKtNdzh7tm6P6gHyuqDvhCu09UTasQicQakyMiJVvxW/JG+DU+GpTR5wfQq/zbG1S4=
+	t=1754569730; cv=none; b=bB/NEk5V23zU3lu/IwaSSzshEjPrbLEDur6uZbAfqDT/dSjUgRLCnPzcA3Yj1W7VFvx+Pk5btca8C2o+kvAhCP1fjNY1qKpKsZ/5KjiH33njnidTNouqoe7stg5yuiDlO4ZA32F8ZiqyVgVk1hFm5/y+bq02eSDQFZlTS9qo/14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754568855; c=relaxed/simple;
-	bh=9eAjqVoPH60xTe4hk8BzLnfJUmmamtnI61RI8cXAJuU=;
+	s=arc-20240116; t=1754569730; c=relaxed/simple;
+	bh=kUH5cN8R6K2VxLTJzE/eGBwS7eFdgy3gZa8/khg7FMc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kEAomSHE35qoJLU2CrJlftgMZYE7BFe5jteWJnCMaSYQY7zCTx+WeVLugDDOiOLNLB9oenNyjOdxGu7oFXN/4cOEL24E781lBTmfdmyPQE/ObE0ixZ8r6/LAxzCdk/6ohFSLnLJ3hwemUDRM+lyeng04x91B+tVxFSg0X5nh8xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fbPAqEC2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4AWyzCfH; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Thu, 7 Aug 2025 14:14:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754568851;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+f0xBoJCXrCB5TMcth5fRcGRrB61mzdJpKiYAAtIrhI=;
-	b=fbPAqEC23v9amshmY4QKxjsXzScVKQZhnj1wI64Frg6lW5nOZEaKwaENbBC6t4vfATxIkC
-	VqEEjQOZyunqoODZg11ItMnc7fYjYurgsP2s5OXLkbcRITuk6vO0uSXZQBNHilZPKxCRhf
-	XEWk1NIZpPMxSsk0Q7IVNYTndFY1Rr16p7PLK/z5i131Ej1Qt4slz12Qy0ZZnK++KTcCND
-	5+JHa4mX0yQvEfL1t+XRZyeffxd7cKR7b+Q+fpsvNLGHcTujQMgRZOfNJumm4okzBYCPOx
-	0qlLKyckPwwW7Ro8osjh6L7zjW7tBTlcYWIU/QFiwR2wNS3gH0BTPRb6mVnOGA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754568851;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+f0xBoJCXrCB5TMcth5fRcGRrB61mzdJpKiYAAtIrhI=;
-	b=4AWyzCfHVykARLgrbKHhSFqGKWl9RSQqMjZ7lOIrIgb1YmrTJZMvHoJKfJadsebsGV68S5
-	DCLgjHpF9WovqqDw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Wake Liu <wakel@google.com>
-Cc: tglx@linutronix.de, mingo@redhat.com, shuah@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, peterz@infradead.org, 
-	dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com
-Subject: Re: [PATCH v2 1/1] selftests/futex: Check for shmget support at
- runtime
-Message-ID: <20250807140508-d3df8cab-249a-47ed-b92a-d33e43de0aee@linutronix.de>
-References: <20250807120042.1761685-1-wakel@google.com>
- <20250807120042.1761685-2-wakel@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=L9e3kBsv5TqLG0d8glRcEl3eesOLWooNxQDuUaw6gAd0Tlqu+7kdnPmnghmn5NHgJ8WyT9r+UbpCzrMr/Sr4YVIxtDK7JSod0dxUmejzAeerUQIc9+xIYj0Ti5U0CbJVxSpONGN6bcIqgBSzWEWQAYwv9UEzShLT1qDgFZLpcf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfRz8/lo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB578C4CEEB;
+	Thu,  7 Aug 2025 12:28:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754569729;
+	bh=kUH5cN8R6K2VxLTJzE/eGBwS7eFdgy3gZa8/khg7FMc=;
+	h=Date:From:List-Id:To:Cc:Subject:References:In-Reply-To:From;
+	b=QfRz8/lokPQVbrBLQdFUg7Zb/pO83LwtQj6QWEu50ZIIRiNZFCedBiyH1vPKdZCmn
+	 sd6EpNnPi3l2PXkuxCii2LHjBXBHhb8dMe7F02R3uXDPg+W0NEArdn2LzuNZWk4n4C
+	 /Sx0iu7o5KWBtcGI3LpmP5Ug+gPg6/SSSMluaZMDVq7o8iEupbbo1t+inLw6H7xOEs
+	 jqbuylhW2q93qMf3JwvCe+wxRi2FEEeMt64N6gLqFXR4huwOVfenuJMDp6TjvScCLC
+	 7UWGcPsoYmI5swp1B3/noAXrQ9FI+wP3dI6JCb6TOGkWKhf2Oy8Cic2ZCTYFeNZEkL
+	 7GwpI5SHcfNkg==
+Date: Thu, 7 Aug 2025 13:28:36 +0100
+From: Mark Brown <broonie@kernel.org>
+To: patchwork-bot+linux-riscv@kernel.org
+Cc: Deepak Gupta <debug@rivosinc.com>, linux-riscv@lists.infradead.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
+	brauner@kernel.org, peterz@infradead.org, oleg@redhat.com,
+	ebiederm@xmission.com, kees@kernel.org, corbet@lwn.net,
+	shuah@kernel.org, jannh@google.com, conor+dt@kernel.org,
+	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, a.hindborg@kernel.org,
+	aliceryhl@google.com, tmgross@umich.edu, lossin@kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
+	richard.henderson@linaro.org, jim.shu@sifive.com,
+	andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+	alexghiti@rivosinc.com, samitolvanen@google.com,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	zong.li@sifive.com, david@redhat.com
+Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
+Message-ID: <db4eb976-693c-426c-a867-66cadd3dd7d8@sirena.org.uk>
+References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
+ <175450053775.2863135.11568399057706626223.git-patchwork-notify@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="8Jovl+rM+g+rY2Z6"
+Content-Disposition: inline
+In-Reply-To: <175450053775.2863135.11568399057706626223.git-patchwork-notify@kernel.org>
+X-Cookie: Real Users hate Real Programmers.
+
+
+--8Jovl+rM+g+rY2Z6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250807120042.1761685-2-wakel@google.com>
 
-On Thu, Aug 07, 2025 at 08:00:42PM +0800, Wake Liu wrote:
-> The futex tests `futex_wait.c` and `futex_waitv.c` rely on the `shmget()`
-> syscall, which may not be available if the kernel is built without
-> System V IPC support (CONFIG_SYSVIPC=n). This can lead to test
-> failures on such systems.
-> 
-> This patch modifies the tests to check for `shmget()` support at
-> runtime by calling it and checking for an `ENOSYS` error. If `shmget()`
-> is not supported, the tests are skipped with a clear message,
-> improving the user experience and preventing false negatives.
-> 
-> This approach is more robust than relying on compile-time checks and
-> ensures that the tests run only when the required kernel features are
-> present.
-> 
-> Signed-off-by: Wake Liu <wakel@google.com>
-> ---
->  .../selftests/futex/functional/futex_wait.c   | 49 +++++++------
->  .../selftests/futex/functional/futex_waitv.c  | 73 ++++++++++++-------
->  2 files changed, 73 insertions(+), 49 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/futex_wait.c b/tools/testing/selftests/futex/functional/futex_wait.c
-> index 685140d9b93d..17a465313a59 100644
-> --- a/tools/testing/selftests/futex/functional/futex_wait.c
-> +++ b/tools/testing/selftests/futex/functional/futex_wait.c
-> @@ -48,7 +48,7 @@ static void *waiterfn(void *arg)
->  int main(int argc, char *argv[])
->  {
->  	int res, ret = RET_PASS, fd, c, shm_id;
-> -	u_int32_t f_private = 0, *shared_data;
-> +	u_int32_t f_private = 0, *shared_data = NULL;
->  	unsigned int flags = FUTEX_PRIVATE_FLAG;
->  	pthread_t waiter;
->  	void *shm;
-> @@ -96,32 +96,35 @@ int main(int argc, char *argv[])
->  	/* Testing an anon page shared memory */
->  	shm_id = shmget(IPC_PRIVATE, 4096, IPC_CREAT | 0666);
->  	if (shm_id < 0) {
-> -		perror("shmget");
-> -		exit(1);
-> -	}
-> -
-> -	shared_data = shmat(shm_id, NULL, 0);
-> +		if (errno == ENOSYS) {
-> +			ksft_test_result_skip("Kernel does not support System V shared memory\n");
-> +		} else {
-> +			ksft_test_result_fail("shmget() failed with error: %s\n", strerror(errno));
-> +			ret = RET_FAIL;
+On Wed, Aug 06, 2025 at 05:15:37PM +0000, patchwork-bot+linux-riscv@kernel.org wrote:
 
-kselftest.h is already keeping track of the failure status.
-Just call ksft_finished() at the end.
-Also the whole perror()/exit(1) pattern doesn't really make sense in a kselftest.
+> This series was applied to riscv/linux.git (for-next)
+> by Alexandre Ghiti <alexghiti@rivosinc.com>:
 
-> +		}
-> +	} else {
-> +		shared_data = shmat(shm_id, NULL, 0);
+>   - [v19,11/27] riscv/shstk: If needed allocate a new shadow stack on clone
+>     https://git.kernel.org/riscv/c/9c72a71321a6
+>   - [v19,12/27] riscv: Implements arch agnostic shadow stack prctls
+>     https://git.kernel.org/riscv/c/52eff0ab5f8e
 
-(...)
+Congratulations Deepak!  Do you have an update for my clone3() shadow
+stack series that I could roll in for when I repost that after the merge
+window, and/or instructions for how to run this stuff for RISC-V on some
+emulated platform?
+
+--8Jovl+rM+g+rY2Z6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiUm/QACgkQJNaLcl1U
+h9BDYgf/Ty4Hzzi0OZOuIjqMAO+hAw56Z5Cp+NT+3TWGYWAJtxuukMORT3mrkWI4
++lKrRIDqhecWHSZ3jeKvFjPvxTcPu/kwjG7GsseqGj7HJGoOufVlruKUj79xtdKS
+4V/WwyvqakZ4h3F0zy+bCyIrkBkQNbC3TTJVey1+4t0WNSj2uK4ZXespwXt+omY7
+MOsfSOj3AY1ueunPYkofK1g6VWYe4HSldfLRvwJMeUadPJ49XFhfpi41NsqdfhBB
+I8rdBWPSCS47tFoalL0R2oB+Dp78k8LmZhqKIRpPwAhMHIg3sI/kBMK4neka58L2
+d0MPk00RRPiLdsDKGHuaAWzwtLHXaA==
+=viF/
+-----END PGP SIGNATURE-----
+
+--8Jovl+rM+g+rY2Z6--
 
