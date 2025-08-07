@@ -1,167 +1,238 @@
-Return-Path: <linux-kselftest+bounces-38455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7782B1D5C8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 12:26:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CA69B1D5CC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 12:27:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1F3656474D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 10:26:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 209CB7AF417
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 10:25:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F06724DD1F;
-	Thu,  7 Aug 2025 10:26:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD18D260592;
+	Thu,  7 Aug 2025 10:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dYnrNXYQ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XWacN0CX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DC723D281
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 10:26:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BF22566FC;
+	Thu,  7 Aug 2025 10:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754562394; cv=none; b=Ob/CRkvvtOCL/gfkSP6VLu86rp5ETuDun2aCYM+CzdQyxUeiZZsxECmkUdVlRdUP6WocBwKY3/ThSZoyjAOW//Uty5HC/tWD+kwNiVhaXDp8vG37jUsvYaGrKlrQDSxonoEnZ8ea8l6pzuieRK90PP6KEfAgzoOg//pfVudmyds=
+	t=1754562443; cv=none; b=maXQ7WWPT2U049GkU/n4r4MbWARfAsuU12hkSBdgc7FFTYV5+qCEMFCaT6VKqC35eWN83V8l0aXbraoCi62IpWia1GJmeSjp+AHsO4qY3Csdb7lcpDnhpuwe5MsQd06X6OJgLvAx5taE11Dhq47HzU/49Z+oZ40e5N92fQKpf1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754562394; c=relaxed/simple;
-	bh=gry762pvhv1zYegs31/61w+aGvkNZqHLYFRec9I+I0I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O1zKjYh23yATPow4qGLl6n7H4OflpWtrE9OTfXHdbNALyph59UA5BzfRxv9kYGhPTZzIcEj7Ez0opXCtTWRE9dHRgBKhA4D1KVedoA0/PNbD6PStyWYYrisLI6wF3/fLFCEQ9ZSDFhdBzlf4jvgEW4RYK/v+DCprAl2ia1tWy8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dYnrNXYQ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754562391;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ZVGQibavMITRGZMUXMYks2pQwACDsPgQ1+QijdprboE=;
-	b=dYnrNXYQlvF/9tBskmcUPSqIr0JlS2HDxlIX7aXMJ+6QJ1pCmVstT9oizzTeF2fzTI+xFb
-	NY5cUljomuEAarr/zybObGWC+tiRwRGWKVBV90w0CGS9WexrIN34f/j4xmUCIm5Zco1BkL
-	4hDCXAWQXCNVkjhDtBbTYBWLB8oEDww=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-616-xydlSbAFMQaSjNjFgZBrgg-1; Thu, 07 Aug 2025 06:26:30 -0400
-X-MC-Unique: xydlSbAFMQaSjNjFgZBrgg-1
-X-Mimecast-MFC-AGG-ID: xydlSbAFMQaSjNjFgZBrgg_1754562389
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3b7892c42b7so509444f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 03:26:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754562389; x=1755167189;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZVGQibavMITRGZMUXMYks2pQwACDsPgQ1+QijdprboE=;
-        b=mFBH2jW8KT82kvc6542jMhRxtHS0o63MwT5B5cWg6XIfLoEbsMD/5BawEEaGRsskDo
-         UcSnHP886N5qls17SSsRzi42+u/79ZK7DR7ALhHAYXsMctdJPRCiIXBuU+RSB5IRswNf
-         towJ600uZuW8gsTcHfnvmw2Jg/Ft5553V+zLQ3rkLLGZfdCzfIZ0/aXrbajuo9ONqldn
-         fmw6lUJWvMAuSQ5rZ1u41i7OSWgKrw4VtBTG6aftfluRYh95xjDHhXYRkd08T5gQasKb
-         mPd4QpZMOk+4FT0Q1aw7kYxR671a9wv5Cm+HfcW0UdgI68tx0qGyFqHyzg+sHzhxHool
-         J3lA==
-X-Forwarded-Encrypted: i=1; AJvYcCW6A5y0OZPv6VN7C0FVfCt4ZjVs1e69Fb/ai6DrrOOFrEV6RtmDI8SRZ4GpNiJ5lJ3gTuBF7xqPumesGuGmLMg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9CZcIraFMPDzxgCbRX42sjGizIhDatWRweaXRQm8zpteyOxII
-	IvsINSdV3uVaJJMKPT1OZYJ5De4eYS6Q4di/MCIhh7hcay5RCymrsLd1YmMCAFa4jXN3rqnrCen
-	HpjigI9RKKmw2B4R9yhBbTDz1EFY2ql/ltqOpFr29JXpNB65uMnDNxBHFYwZ6DTXCkyXk5g==
-X-Gm-Gg: ASbGnctGyzASpoeLDI7b3s/TnYPOLemxMP7BMo29E4zqbix/xKGm0WItKC2hDvZraUs
-	45kbgOA72b/wU2YcG/OXx2dLyNb3HnObuOIdzUGo7CHuZ1D+xb3LSgEWikWsY8YmPQG1RtUXV61
-	kUi4AccDlXMe3jP8XR1pVWfw2YfB67vuXOoOPT3KwPqhpI8M+l/B7LMNm+Zvc7AhCV0QfeSZao7
-	zqC6sJi+RIBwxr6un2v3QJm0dOj+mYt4ov88cCRsI4rvXzRXvmqFXVfRbwOcifPlWHKOfwR0Sjx
-	Wsn5Lq0hDHuMijVFhhAAWOO3hvTp6/IW/m/QRd3seG2tzdSolb3JKrj+kotBN23hVaTz5b/02Zz
-	RPmCVHK9DXdHTwSypPCD46/l6Tpym+GS7GTOuD/4cZj9ERyfMWpyscUWr/zOUa9Q5rMo=
-X-Received: by 2002:a05:6000:40db:b0:3b7:925b:571c with SMTP id ffacd0b85a97d-3b8f492a9f2mr4770289f8f.57.1754562389156;
-        Thu, 07 Aug 2025 03:26:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGtRcixiHQt1T6HKtGZCkxOcdXhJODvpNxCQwLp/FeRmqHQKU+zL/VdHlQ5uC55jTnNQBdoXA==
-X-Received: by 2002:a05:6000:40db:b0:3b7:925b:571c with SMTP id ffacd0b85a97d-3b8f492a9f2mr4770264f8f.57.1754562388673;
-        Thu, 07 Aug 2025 03:26:28 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f49:bc00:12fa:1681:c754:1630? (p200300d82f49bc0012fa1681c7541630.dip0.t-ipconnect.de. [2003:d8:2f49:bc00:12fa:1681:c754:1630])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-458b8aab8c0sm219909625e9.19.2025.08.07.03.26.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Aug 2025 03:26:28 -0700 (PDT)
-Message-ID: <fb8216a0-8f47-4129-8b8c-f5d215abddec@redhat.com>
-Date: Thu, 7 Aug 2025 12:26:26 +0200
+	s=arc-20240116; t=1754562443; c=relaxed/simple;
+	bh=+wfTZqfen+JQWsEHglzCuLnwISzNYryf+2oaH5DlnBY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YfR+q1YlHgTDr+k7SFKq8oFAYB6bTqEdeUprwxF3TGBNk2fUd5YXlWd25elMIoHgApUcAVIjBMyVR5WapwXAOHMJBKPS+mZmuyjusjZc09mz7dsw/xmVsyqyuLJBNEVW6AAaFuvlMtZ15HYl37koBLhzAp6smd8eG7HXk2BVecE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XWacN0CX; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5779AwrV018010;
+	Thu, 7 Aug 2025 10:26:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=MvYuJI
+	BaTbglptud8BUxVWG/aFzgyTUty/UijXRHP0A=; b=XWacN0CXRj93+b4OQRBX76
+	tFfQfKjrKE3x9NVim1yHBVohPTOLDLI7ORbJAiBxvtifEDNTx3pngHW3BgJ+VCYW
+	4LHjfaYfz3+JKnvF8sveskfHwCrj2Lybc587XR/2GTJogHvFRYcwLHZvPhMf2aLr
+	cCexhL4/cN+ST8t1HB4WVJjSq5za2fNBIvHxtjJjiBOR8qEhxNfRPF+SBPyUQ2RF
+	6ZJZ462P3bIXs4w+ac1AI++NLCG+ZXhm9IiNYjGGp6V7rQWnkX0ZkPWyyPyzQWkD
+	pGxFvbL33Al1oSNy/IlfTNODqWO/de+gzAJ4m2E5JhX5njZGDG2jDtSROH+OghFg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bq639cr7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Aug 2025 10:26:48 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 577AHZMU012539;
+	Thu, 7 Aug 2025 10:26:47 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bq639cr4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Aug 2025 10:26:47 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5779eOPv020592;
+	Thu, 7 Aug 2025 10:26:46 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 48bpwn03rt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Aug 2025 10:26:46 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 577AQgYd53608722
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 Aug 2025 10:26:42 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9BBD12004B;
+	Thu,  7 Aug 2025 10:26:42 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E6C0520043;
+	Thu,  7 Aug 2025 10:26:37 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.109.219.153])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu,  7 Aug 2025 10:26:37 +0000 (GMT)
+Date: Thu, 7 Aug 2025 15:56:35 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
+        andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        naveen@kernel.org, maddy@linux.ibm.com, mpe@ellerman.id.au,
+        npiggin@gmail.com, memxor@gmail.com, iii@linux.ibm.com,
+        shuah@kernel.org
+Subject: Re: [bpf-next 0/6] bpf,powerpc: Add support for bpf arena and arena
+ atomics
+Message-ID: <aJR/W7w/csyL7Ov4@linux.ibm.com>
+References: <20250805062747.3479221-1-skb99@linux.ibm.com>
+ <5af0d7d9-71cb-4977-b496-6046c2c64d52@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: do check_huge_anon() with a number been
- passed in
-To: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
- lorenzo.stoakes@oracle.com, ziy@nvidia.com, dev.jain@arm.com
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20250807082707.30647-1-richard.weiyang@gmail.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- g3eXuA==
-Organization: Red Hat
-In-Reply-To: <20250807082707.30647-1-richard.weiyang@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5af0d7d9-71cb-4977-b496-6046c2c64d52@csgroup.eu>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA3MDA4MiBTYWx0ZWRfXyAn5EK3DnGtN
+ MJBX/qUB/39erTlaqBtSQ/Z+nfTyh/YMv7VUJuKpzAowq2y1K08lC0zQv1AJ/8x/NCDFtEMOLWU
+ EpNYpDm1h0GPofCCd6Io9sDK0vnb1NaKUPW5gOnyxDwNRuktLne4Oh6dOIHQeOC7yzFC8XJh2NO
+ nGvcK6QhjSIyfXkKZ4O6nGOwGIHuKyPA5kxBgaHmHT9/Flfa9mOi41zaAvAJ0lSzTcZxxtqU1Os
+ ySHFD4zSk7EI7DMgLpgFzti6zvfCWpOgeoTAIEBYmWZtDgvGBWUQlQZsD09TyCQ/u4a+DT5np06
+ ZGoP131WpVr699aRiAwf3HIRzXvvg6McV3rCiVH2D94/9vr2xB9Ic6wdOqgNFZuzLJJTGpEi2y4
+ FtBZZhuMXq6FmEct+9mvwDRT9bzmg/akfegrYTA9QiOEGsDKdx7KPYNbcvxWYnedlRWuzDZr
+X-Proofpoint-GUID: VHgF_G3YeGlqFtACXPJeRatxucYmKxt0
+X-Authority-Analysis: v=2.4 cv=PoCTbxM3 c=1 sm=1 tr=0 ts=68947f68 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=8nJEP1OIZ-IA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=muU3JWixXP3YJbJcO1YA:9
+ a=3ZKOabzyN94A:10 a=wPNLvfGTeEIA:10
+X-Proofpoint-ORIG-GUID: hLwI0__C5l9eor7AFoAsBFZu824w8krA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-07_01,2025-08-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 malwarescore=0 adultscore=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 mlxscore=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2507300000
+ definitions=main-2508070082
 
-On 07.08.25 10:27, Wei Yang wrote:
-> Currently it hard coded the number of hugepage to check for
-> check_huge_anon(), but we already have the number passed in.
+On Tue, Aug 05, 2025 at 09:45:39AM +0200, Christophe Leroy wrote:
 > 
-> Do the check based on the number of hugepage passed in is more
-> reasonable.
 > 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-> ---
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
--- 
-Cheers,
-
-David / dhildenb
-
+> Le 05/08/2025 à 08:27, Saket Kumar Bhaskar a écrit :
+> > This patch series introduces support for the PROBE_MEM32,
+> > bpf_addr_space_cast and PROBE_ATOMIC instructions in the powerpc BPF JIT,
+> > facilitating the implementation of BPF arena and arena atomics.
+> 
+> This series seems to be limited to powerpc64. Please make it explicit in all
+> patches subject, see exemple below:
+> 
+> $ git log --oneline arch/powerpc/net/bpf_jit_comp64.c
+> cf2a6de32cabb (tag: powerpc-6.17-2, origin/next-test, origin/next)
+> powerpc64/bpf: Add jit support for load_acquire and store_release
+> 59ba025948be2 powerpc/bpf: fix JIT code size calculation of bpf trampoline
+> d243b62b7bd3d powerpc64/bpf: Add support for bpf trampolines
+> 9670f6d2097c4 powerpc64/bpf: Fold bpf_jit_emit_func_call_hlp() into
+> bpf_jit_emit_func_call_rel()
+> fde318326daa4 powerpc64/bpf: jit support for signed division and modulo
+> 597b1710982d1 powerpc64/bpf: jit support for sign extended mov
+> 717756c9c8dda powerpc64/bpf: jit support for sign extended load
+> a71c0b09a14db powerpc64/bpf: jit support for unconditional byte swap
+> 3c086ce222cef powerpc64/bpf: jit support for 32bit offset jmp instruction
+> b1e7cee961274 powerpc/bpf: enforce full ordering for ATOMIC operations with
+> BPF_FETCH
+> 61688a82e047a powerpc/bpf: enable kfunc call
+> 
+Chris, will keep this in mind while sending v2.
+> 
+> > 
+> > The last patch in the series has fix for arena spinlock selftest
+> > failure.
+> > 
+> > This series is rebased on top of:
+> > https://lore.kernel.org/bpf/20250717202935.29018-2-puranjay@kernel.org/
+> > 
+> > All selftests related to bpf_arena, bpf_arena_atomic(except
+> > load_acquire/store_release) enablement are passing:
+> > 
+> > # ./test_progs -t arena_list
+> > #5/1     arena_list/arena_list_1:OK
+> > #5/2     arena_list/arena_list_1000:OK
+> > #5       arena_list:OK
+> > Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > # ./test_progs -t arena_htab
+> > #4/1     arena_htab/arena_htab_llvm:OK
+> > #4/2     arena_htab/arena_htab_asm:OK
+> > #4       arena_htab:OK
+> > Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > # ./test_progs -t verifier_arena
+> > #464/1   verifier_arena/basic_alloc1:OK
+> > #464/2   verifier_arena/basic_alloc2:OK
+> > #464/3   verifier_arena/basic_alloc3:OK
+> > #464/4   verifier_arena/iter_maps1:OK
+> > #464/5   verifier_arena/iter_maps2:OK
+> > #464/6   verifier_arena/iter_maps3:OK
+> > #464     verifier_arena:OK
+> > #465/1   verifier_arena_large/big_alloc1:OK
+> > #465/2   verifier_arena_large/big_alloc2:OK
+> > #465     verifier_arena_large:OK
+> > Summary: 2/8 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > # ./test_progs -t arena_atomics
+> > #3/1     arena_atomics/add:OK
+> > #3/2     arena_atomics/sub:OK
+> > #3/3     arena_atomics/and:OK
+> > #3/4     arena_atomics/or:OK
+> > #3/5     arena_atomics/xor:OK
+> > #3/6     arena_atomics/cmpxchg:OK
+> > #3/7     arena_atomics/xchg:OK
+> > #3/8     arena_atomics/uaf:OK
+> > #3/9     arena_atomics/load_acquire:SKIP
+> > #3/10    arena_atomics/store_release:SKIP
+> > #3       arena_atomics:OK (SKIP: 2/10)
+> > Summary: 1/8 PASSED, 2 SKIPPED, 0 FAILED
+> > 
+> > All selftests related to arena_spin_lock are passing:
+> > 
+> > # ./test_progs -t arena_spin_lock
+> > #6/1     arena_spin_lock/arena_spin_lock_1:OK
+> > #6/2     arena_spin_lock/arena_spin_lock_1000:OK
+> > #6/3     arena_spin_lock/arena_spin_lock_50000:OK
+> > #6       arena_spin_lock:OK
+> > Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > Saket Kumar Bhaskar (6):
+> >    bpf,powerpc: Introduce bpf_jit_emit_probe_mem_store() to emit store
+> >      instructions
+> >    bpf,powerpc: Implement PROBE_MEM32 pseudo instructions
+> >    bpf,powerpc: Implement bpf_addr_space_cast instruction
+> >    bpf,powerpc: Introduce bpf_jit_emit_atomic_ops() to emit atomic
+> >      instructions
+> >    bpf,powerpc: Implement PROBE_ATOMIC instructions
+> >    selftests/bpf: Fix arena_spin_lock selftest failure
+> > 
+> >   arch/powerpc/net/bpf_jit.h                    |   6 +-
+> >   arch/powerpc/net/bpf_jit_comp.c               |  32 +-
+> >   arch/powerpc/net/bpf_jit_comp32.c             |   2 +-
+> >   arch/powerpc/net/bpf_jit_comp64.c             | 378 +++++++++++++-----
+> >   .../bpf/prog_tests/arena_spin_lock.c          |  23 +-
+> >   .../selftests/bpf/progs/arena_spin_lock.c     |   8 +-
+> >   .../selftests/bpf/progs/bpf_arena_spin_lock.h |   4 +-
+> >   7 files changed, 348 insertions(+), 105 deletions(-)
+> > 
+> > base-commit: ea2aecdf7a954a8c0015e185cc870c4191d1d93f
+> 
 
