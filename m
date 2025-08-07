@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-38496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27A6FB1DDCF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 22:17:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 677D4B1DDD3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 22:17:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B9953A387D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 20:16:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 203FF17601F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 20:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE8C23875D;
-	Thu,  7 Aug 2025 20:16:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268C424DD17;
+	Thu,  7 Aug 2025 20:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KUNPzBGX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3GWK+Dqm"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A121EEA5D
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 20:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF5C237708
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 20:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754597801; cv=none; b=eIlH/mZjzEvc9BKlPERYye1ZSUA7L8iv/aD2zHzwvt7wMkUgJPlBnzLnOZYyNbfMtMwFF66fmDc2hb1FaQ+qDIF9O9nrZiFtbJ8gQ1lqhacCCIi//hyDBTKrEdj7GllQW2u3RbI4GcT4RbedIjNBAUkEydezhkW6pfrmWEy9uwo=
+	t=1754597803; cv=none; b=BbnFK843uy2/8aQXz0CWWFViZ6ZRZBobrYrlhs8uHYRocNrAijsgpPlfbt2cWFj3NGWGC32pPaxddKKjH99x8XqNVJxSNuJwr7ZPfWtNhRSivZl5b7xXLE+Htkgf2pEaBBe8HeTbjSTpfrty4HtQ64DS0RsIHn7MpScCzHgAGVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754597801; c=relaxed/simple;
-	bh=ZGm78cVu0eE8NMdDtBRB7S6EsWyYptmULKCe3VJEPzw=;
+	s=arc-20240116; t=1754597803; c=relaxed/simple;
+	bh=E7TcgZfVGcTLwtlC4VOwdxSg2cQOQ5DOom54BBEpctU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=K3oI5NIDzmldkh4MCzwoXBgCIpM8YJZwP2HLk8zlgW79ENPx7pOERw+EiGpv6Wwf05jOV/kzSg71ImHn4Gn3twqMgNjNeBqppnrx+WReStxcZSU4HJVXw5VphjOEeN1mttQ2suuKgqirY8zvknEIh89ofwjFoK63DOE7PfDV8Mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KUNPzBGX; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=Pca327/CCd4ntoN3thJjUDmW8ZJMM0h6Rp1cAyEsMQGZaBcX8NBwGQzfX40chkM3J1MN/A6jqN+/sZA4FiNUtQYDAXePvx7tV/RYe7j1akx43OcZ5DyBmNlNGttlYrJwNS0ESxpT6nCUBcbKqWVCD5jCpyfpTq3VNOYHBV/jxxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3GWK+Dqm; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-31f74a64da9so1615034a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 13:16:39 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-31eac278794so1361182a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 13:16:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754597799; x=1755202599; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1754597801; x=1755202601; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z4PvKVoMzsbWuS6ZNQkHyRpKtVjC8q7nP9qV4BuVoxE=;
-        b=KUNPzBGXuk1sv+jl+byzxQRbS/vJ9iOIor2YSOXTcPW0eFYZwJmm+2mS8oIwraujsR
-         Qtf59XKVr4Qp29P7lRnQYcTkxlqY/bSmozJoJLKzbrsiGd0CqX+IRdkZdkVzCzneN5pu
-         NcuyVD2TAzr0n715DDJYruVl4kWEiMEV2OOTxqik6+o2nupHnAibL8AobsbaB+hTaWuA
-         8y2O992f8vYqbBtZDyoGpyVBRy8TpcmSI8wbLDrWllcCrFYlwnMBwobWVfF2rPLEi5ew
-         4WITXpntEKoNyNntbbN+Bxd07IOdzwCFWrq3ouMTqv+e9i0AIPSWFIeBr0CB0d4LZsZ5
-         KUow==
+        bh=0Mbc3Ap17+SGeKDAF7BMv5oS325KPPu2sX6X04CM9sg=;
+        b=3GWK+Dqmmob0CMT+ipdju7Vj6Ec/V9mb34HE6WCP3hwSTfh3TmJhwJpXU/2uKW2nuq
+         3CX6m9GW9lVSQvCvy5ySDhrvV+3B9RI+PMugo4rRbElPwTXrRNTcf1NegWuxPr/7NSop
+         rBpAvyONQie1JfHfDE05slHFGp2I4mSd/1lsuEC0eRdLpiRhbKZ7P2n0iMGastqTJFlH
+         +q51r7A1XPLByI0bVnTr3WBjEaiGZ2XS9HJ1DrE86xxbApkL6aJr2k3Wfh4YZnm7fSdt
+         ewDO9xZlK1fml3EPm5130+fq11AxKQj1e+wNldroizRMBgAK+QZBb0DaFHzJAbUPmKlv
+         0xqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754597799; x=1755202599;
+        d=1e100.net; s=20230601; t=1754597801; x=1755202601;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z4PvKVoMzsbWuS6ZNQkHyRpKtVjC8q7nP9qV4BuVoxE=;
-        b=OAMqwlE6gacU4ZxRcXi61TGSsUWfm2wMAhRwICAJ6BM5/h5TiUP3jKaXSRzp9qnm9P
-         4kkTaSDfieA+PK0qUH/jTYERva+SnGbD7hATwvn8M5IffzSs168SBO4ZSh6TOp+3CRlk
-         qz9BAmEUsqR5WCcLf6/o7MiZ9q1gVYej82C5C2lAdsEp5rvxRCeIDXTXbJ9f+AaB7aXT
-         Zhnh7YSxCP+tDIdePke9ZX8ruG6xP7NQ0x10I2kK5nBswcpIlJ+FTxFdY0HwMioRjdWx
-         usFDSThtpkkOz95IFT0Z5AsdId6zcs7aj3aHA6PUDfiN7OBNgydLMC12FbEG+lEIRXum
-         q+Fg==
-X-Gm-Message-State: AOJu0Yw5XYlRSkirkyJZYMzf9NhRbW//OSeBFRHohfdCAGNej2t423IZ
-	DBcI9NWoMTJFVzWoPE7efBcfTC2JF8SNe630uxRGwdaWbvOyKrHlXIMCv3HOEGFSoqD1VqygXww
-	6RlkM3v7YjxrZXbSBfYDVKMgkxy0xgGd79qNMeUMqdtLIsuE26iYdo033+HlgBX7ALHzYih/SD7
-	8NAnxujyFW/Ll5NvKDAyHe7jWOUbG4PYTY1TB/ctq5YwY=
-X-Google-Smtp-Source: AGHT+IHlHTUzlI4XwfrvCHdPuSXY+IAAqyr2BEu6Hs2JizbOH4J+KBh8PsRSDzHe1VZ8MTVIYlqnupSA+w==
-X-Received: from pjx13.prod.google.com ([2002:a17:90b:568d:b0:31e:fe0d:f464])
- (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:28c5:b0:31a:ab75:6e45
- with SMTP id 98e67ed59e1d1-32183c42d6dmr439441a91.28.1754597799003; Thu, 07
- Aug 2025 13:16:39 -0700 (PDT)
-Date: Thu,  7 Aug 2025 13:15:57 -0700
+        bh=0Mbc3Ap17+SGeKDAF7BMv5oS325KPPu2sX6X04CM9sg=;
+        b=CjAUOslFCFAFFUFA07xOX5SyObEuEUyFiZ4RlNdQoH/V/3KzOIv4nHqOxQz3iijNMO
+         QfRIwcQEJ8CKL/gHxWFjIyU4mpza+sKSCewiAAWVMvTe4HukMfBBIcERNI4jB4zUuKy3
+         zFZQWeV75pjpgOoVkEobykgljUNtdm97B9yKecNS30kt7OPIBYpmW6o8dvdmtZZnO2cS
+         zLKQJD+s3hSXUdUMrPvFPkkkHvCq0FjUdTB1uqGe/MUM0xIaHXgJzNQpDpzD/dEZxPa/
+         v95F1oxP7zsqWjLJEimISpKZ/CI3z6nmQUB3k9NcVEanRMVrwYcR7JgFDr0u3CI35JYq
+         wbQg==
+X-Gm-Message-State: AOJu0YygjB6gry//oZhD40+YUkhmkwrpYKrMA57W/AaMUkBIAh1DNaKQ
+	O7wFTjtdHAueVMIYrDc6Yo0MTJkS7nMECggqh/PrLVQCHBiLBEfj8DXfRq8lN5bk5wem7n1cP2W
+	ByJEJ0mYPRPpQPzu7IDyhfRMKdKwBnKt10oRoAxe7B5mkJRpKRJ2BsRc95NBK+5Mxl+UkFwOQND
+	yEG0AJmZjJHurwbjGSIFlQLaz0jAZXqKtVNOyvjEcv3Bw=
+X-Google-Smtp-Source: AGHT+IGWU7OhyJ0pzBHtOYnTYwcGZIHyA770GRe7gIxY2qpTfZC9Od7tXnutcry2JK0QfyTciR3VHzO94A==
+X-Received: from pjnx5.prod.google.com ([2002:a17:90a:8a85:b0:31f:335d:342d])
+ (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4c11:b0:321:265a:e0c2
+ with SMTP id 98e67ed59e1d1-32183e55b63mr341966a91.32.1754597800513; Thu, 07
+ Aug 2025 13:16:40 -0700 (PDT)
+Date: Thu,  7 Aug 2025 13:15:58 -0700
 In-Reply-To: <20250807201628.1185915-1-sagis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,9 +74,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250807201628.1185915-1-sagis@google.com>
 X-Mailer: git-send-email 2.51.0.rc0.155.g4a0f42376b-goog
-Message-ID: <20250807201628.1185915-2-sagis@google.com>
-Subject: [PATCH v8 01/30] KVM: selftests: Add function to allow one-to-one GVA
- to GPA mappings
+Message-ID: <20250807201628.1185915-3-sagis@google.com>
+Subject: [PATCH v8 02/30] KVM: selftests: Expose function that sets up sregs
+ based on VM's mode
 From: Sagi Shahar <sagis@google.com>
 To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
 	Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>, 
@@ -92,89 +92,93 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-One-to-one GVA to GPA mappings can be used in the guest to set up boot
-sequences during which paging is enabled, hence requiring a transition
-from using physical to virtual addresses in consecutive instructions.
+This allows initializing sregs without setting vCPU registers in
+KVM.
+
+No functional change intended.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 Signed-off-by: Sagi Shahar <sagis@google.com>
 ---
- .../testing/selftests/kvm/include/kvm_util.h  |  3 +++
- tools/testing/selftests/kvm/lib/kvm_util.c    | 27 +++++++++++++++----
- 2 files changed, 25 insertions(+), 5 deletions(-)
+ .../selftests/kvm/include/x86/processor.h     |  1 +
+ .../testing/selftests/kvm/lib/x86/processor.c | 45 ++++++++++---------
+ 2 files changed, 25 insertions(+), 21 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index bee65ca08721..9994861d2acb 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -650,6 +650,9 @@ vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
- vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz,
- 				 vm_vaddr_t vaddr_min,
- 				 enum kvm_mem_region_type type);
-+vm_vaddr_t vm_vaddr_identity_alloc(struct kvm_vm *vm, size_t sz,
-+				   vm_vaddr_t vaddr_min,
-+				   enum kvm_mem_region_type type);
- vm_vaddr_t vm_vaddr_alloc_pages(struct kvm_vm *vm, int nr_pages);
- vm_vaddr_t __vm_vaddr_alloc_page(struct kvm_vm *vm,
- 				 enum kvm_mem_region_type type);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index a055343a7bf7..8f3dbf749afa 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1460,15 +1460,14 @@ vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
+diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+index b11b5a53ebd5..f2eb764cbd7c 100644
+--- a/tools/testing/selftests/kvm/include/x86/processor.h
++++ b/tools/testing/selftests/kvm/include/x86/processor.h
+@@ -1025,6 +1025,7 @@ static inline struct kvm_cpuid2 *allocate_kvm_cpuid2(int nr_entries)
  }
  
- static vm_vaddr_t ____vm_vaddr_alloc(struct kvm_vm *vm, size_t sz,
--				     vm_vaddr_t vaddr_min,
-+				     vm_vaddr_t vaddr_min, vm_paddr_t paddr_min,
- 				     enum kvm_mem_region_type type,
- 				     bool protected)
- {
- 	uint64_t pages = (sz >> vm->page_shift) + ((sz % vm->page_size) != 0);
+ void vcpu_init_cpuid(struct kvm_vcpu *vcpu, const struct kvm_cpuid2 *cpuid);
++void vcpu_setup_mode_sregs(struct kvm_vm *vm, struct kvm_sregs *sregs);
  
- 	virt_pgd_alloc(vm);
--	vm_paddr_t paddr = __vm_phy_pages_alloc(vm, pages,
--						KVM_UTIL_MIN_PFN * vm->page_size,
-+	vm_paddr_t paddr = __vm_phy_pages_alloc(vm, pages, paddr_min,
- 						vm->memslots[type], protected);
- 
- 	/*
-@@ -1492,7 +1491,7 @@ static vm_vaddr_t ____vm_vaddr_alloc(struct kvm_vm *vm, size_t sz,
- vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
- 			    enum kvm_mem_region_type type)
+ static inline void vcpu_get_cpuid(struct kvm_vcpu *vcpu)
  {
--	return ____vm_vaddr_alloc(vm, sz, vaddr_min, type,
-+	return ____vm_vaddr_alloc(vm, sz, vaddr_min, KVM_UTIL_MIN_PFN * vm->page_size, type,
- 				  vm_arch_has_protected_memory(vm));
+diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+index a92dc1dad085..002303e2a572 100644
+--- a/tools/testing/selftests/kvm/lib/x86/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+@@ -488,34 +488,37 @@ static void kvm_seg_set_tss_64bit(vm_vaddr_t base, struct kvm_segment *segp)
+ 	segp->present = 1;
  }
  
-@@ -1500,7 +1499,25 @@ vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz,
- 				 vm_vaddr_t vaddr_min,
- 				 enum kvm_mem_region_type type)
+-static void vcpu_init_sregs(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
++void vcpu_setup_mode_sregs(struct kvm_vm *vm, struct kvm_sregs *sregs)
  {
--	return ____vm_vaddr_alloc(vm, sz, vaddr_min, type, false);
-+	return ____vm_vaddr_alloc(vm, sz, vaddr_min, KVM_UTIL_MIN_PFN * vm->page_size, type, false);
+-	struct kvm_sregs sregs;
+-
+ 	TEST_ASSERT_EQ(vm->mode, VM_MODE_PXXV48_4K);
+ 
+-	/* Set mode specific system register values. */
+-	vcpu_sregs_get(vcpu, &sregs);
+-
+-	sregs.idt.base = vm->arch.idt;
+-	sregs.idt.limit = NUM_INTERRUPTS * sizeof(struct idt_entry) - 1;
+-	sregs.gdt.base = vm->arch.gdt;
+-	sregs.gdt.limit = getpagesize() - 1;
++	sregs->idt.base = vm->arch.idt;
++	sregs->idt.limit = NUM_INTERRUPTS * sizeof(struct idt_entry) - 1;
++	sregs->gdt.base = vm->arch.gdt;
++	sregs->gdt.limit = getpagesize() - 1;
+ 
+-	sregs.cr0 = X86_CR0_PE | X86_CR0_NE | X86_CR0_PG;
+-	sregs.cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
++	sregs->cr0 = X86_CR0_PE | X86_CR0_NE | X86_CR0_PG;
++	sregs->cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
+ 	if (kvm_cpu_has(X86_FEATURE_XSAVE))
+-		sregs.cr4 |= X86_CR4_OSXSAVE;
+-	sregs.efer |= (EFER_LME | EFER_LMA | EFER_NX);
++		sregs->cr4 |= X86_CR4_OSXSAVE;
++	sregs->efer |= (EFER_LME | EFER_LMA | EFER_NX);
++
++	kvm_seg_set_unusable(&sregs->ldt);
++	kvm_seg_set_kernel_code_64bit(&sregs->cs);
++	kvm_seg_set_kernel_data_64bit(&sregs->ds);
++	kvm_seg_set_kernel_data_64bit(&sregs->es);
++	kvm_seg_set_kernel_data_64bit(&sregs->gs);
++	kvm_seg_set_tss_64bit(vm->arch.tss, &sregs->tr);
+ 
+-	kvm_seg_set_unusable(&sregs.ldt);
+-	kvm_seg_set_kernel_code_64bit(&sregs.cs);
+-	kvm_seg_set_kernel_data_64bit(&sregs.ds);
+-	kvm_seg_set_kernel_data_64bit(&sregs.es);
+-	kvm_seg_set_kernel_data_64bit(&sregs.gs);
+-	kvm_seg_set_tss_64bit(vm->arch.tss, &sregs.tr);
++	sregs->cr3 = vm->pgd;
 +}
 +
-+/*
-+ * Allocate memory in @vm of size @sz beginning with the desired virtual address
-+ * of @vaddr_min and backed by physical address equal to returned virtual
-+ * address.
-+ *
-+ * Return the address where the memory is allocated.
-+ */
-+vm_vaddr_t vm_vaddr_identity_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
-+				   enum kvm_mem_region_type type)
++static void vcpu_init_sregs(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
 +{
-+	vm_vaddr_t gva = ____vm_vaddr_alloc(vm, sz, vaddr_min,
-+					    (vm_paddr_t)vaddr_min, type,
-+					    vm_arch_has_protected_memory(vm));
-+	TEST_ASSERT_EQ(gva, addr_gva2gpa(vm, gva));
-+
-+	return gva;
++	struct kvm_sregs sregs;
+ 
+-	sregs.cr3 = vm->pgd;
++	vcpu_sregs_get(vcpu, &sregs);
++	vcpu_setup_mode_sregs(vm, &sregs);
+ 	vcpu_sregs_set(vcpu, &sregs);
  }
  
- /*
 -- 
 2.51.0.rc0.155.g4a0f42376b-goog
 
