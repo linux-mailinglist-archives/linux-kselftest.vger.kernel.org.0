@@ -1,280 +1,261 @@
-Return-Path: <linux-kselftest+bounces-38470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0190B1D899
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 15:08:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAA39B1D8CB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 15:18:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EEFA1894F13
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 13:09:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6B26164E70
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 13:18:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5102D25A320;
-	Thu,  7 Aug 2025 13:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118021EA7E4;
+	Thu,  7 Aug 2025 13:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DFjvB4Fc"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iME6Fw4Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F32258CE1
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 13:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724184A0C;
+	Thu,  7 Aug 2025 13:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754572125; cv=none; b=j1v6d9kvkelPg8GXUmJSw+NgKMTzhRSnND9iJsZTjQnhzfJDCK+5GD6XdScAESQrlTTabJ8YMYAQkM5Mz5UuxUmauS4GzRVG48MrQodmTU2vKjQuX1ehAvqK8Nn3UB8ZS5QOXK4hf33u0wvYxq4IqGy868pWycezAqgg8dHCBz0=
+	t=1754572693; cv=none; b=qEmHWG/3k92xnLTv+0AfgSUUD2zPih6e7eqjq437xzF3rsuIv2Fied3HCabN41zTa7bhNaoJNcMZAPpY4+w1fs/h6+0kyLivj539LpcFjQCgoe1tLMYI0R1qzzu8858STCYBScToXY6bME/WetJDfSjdcHldPZisFMc8grOxlfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754572125; c=relaxed/simple;
-	bh=URcEUoEdbL5TkgsWujjaYCJlh1NPKxZwcixR2gJRS0E=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XHBpSINI+iGNjTqHTSGRb03o4e6nh56vLTMb9aeDYlLlIh7oM8OoJqyH3expESwmx4Aq/9hvMFgN63bb61ivnuCIoh4Pk06FZY7BFf8tvh+Uxp/2JE9A+xiyOWaa5bWvgwsK48W5l4ZcIqTU5zj2BsRHxxd+14qQFDrniw2I4A0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DFjvB4Fc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754572122;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uQYgV0X5e6OdkcED4BPO2+bBh1IW+KXBCsjfdvvJSgg=;
-	b=DFjvB4Fc8WmrWDRQjnIhQIrmRA2olTGfiRUnPbeLvCz+8wQeohirvbfLu/1pydCYWLa9hN
-	jCef7M6DzJeLxC1oArtlQzLRTB9nTq6sAMfRNd9eLsG8cmn3xvrpEXOKZo773cacBDqABB
-	9GhUrSKswTZdl3WHRxUzWxTYvPPyHwI=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-297-W8juRsy1Pm6k31lkEfWBkQ-1; Thu, 07 Aug 2025 09:08:40 -0400
-X-MC-Unique: W8juRsy1Pm6k31lkEfWBkQ-1
-X-Mimecast-MFC-AGG-ID: W8juRsy1Pm6k31lkEfWBkQ_1754572120
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c5bb68b386so327695585a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 06:08:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754572120; x=1755176920;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uQYgV0X5e6OdkcED4BPO2+bBh1IW+KXBCsjfdvvJSgg=;
-        b=Hz1mHB7FUUQF4XGQzuqZg2YVKrx74cw2La+m1XOD8dAUecuwgJxvvpN8uCI0ZNCNe7
-         LDCcQawCZ+f2XXnP9ZLimc7eldsKNKvSrpokE5/s52rrmjy8SfveokLlhuzBlszAr6sl
-         6/6ohOAgfcomIT9v526rhWyi3pW44OSJn7zbjWVbvaTZyxBG3KhbuDd25UgCj2fauCsn
-         Bb9SmTf0dNW11payYi7KPOoVkYBX4vlgoq5OkFQzHIuKCY4gJvM4+aprv8Di967ImRbK
-         3v+ApcFyIRPYXK3LlGYy0E8Lu5rhRckfhPKEe5OI4A+lwZi9Ae0Mqk6St3cJ4GozObPf
-         yxkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWIRJjnuGkj7k6FhEuVL4k1bX3xp4gwOv7HkEO0tyVCTWhfqnmIoDB1MDahYgdjbJlQS+KZerZG7aEl8oPPnSE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMMAtbik2k8+Lv47E1pBehgfScF/8B0b6c8+abBPfum64aVVwV
-	o/DA0hNS3/izH3DSG+JPKzKweG8nxoimCn/Ut1QH4SW2wLOfrx1maZJq1WbyIyEcOHkDvW0auEb
-	HoUkUIH+1FwiXRhYcNjNCcDKJJ7xA7LsPd+c7ffmsS+KurybduPl+5TJh/grydOZSZb2NcA==
-X-Gm-Gg: ASbGncvsnplnrzPyrPeWVHOhzX8wL2KjJvrNDpMF2raJxvJKjtR/bPktQdp6vynRRcX
-	JQQmgpTQF5mPB5l+ZdOjUUlcEM5HNB65hZZpB3Wf1GSNKvXylASFsMPNTtitWLfIGEULY7whcCG
-	YicV3E3QbJinLe+L9mY7aCM51sz7/H/NzbWywBND56GFYXixnW+aWbZOkdqJEZVmow1R/sl980y
-	IdGrKuAg8e3N0ELPTXbIcEy4AMuOYcLQ74L5bW3OWOH6Nua/1wfCmJmFwhm3CvjKGruB1wgirvx
-	VFQv2BgUsn97OzxmbgNhomK3kZj1Y6CFGXcpn6cFp3lOFCVXL43WkucdLxR/Lir94/NlM3yUZVI
-	VgDn2dQpLLA==
-X-Received: by 2002:a05:620a:4043:b0:7e6:211b:217a with SMTP id af79cd13be357-7e814e9a51fmr827515485a.43.1754572119612;
-        Thu, 07 Aug 2025 06:08:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHQYAus5qYLEVmfUEL8E4TfiRxMW8Y9h4TXOXPM9H13FxW8syk8V1fqHYb0D+NKKCK5hi3jZg==
-X-Received: by 2002:a05:620a:4043:b0:7e6:211b:217a with SMTP id af79cd13be357-7e814e9a51fmr827510685a.43.1754572119107;
-        Thu, 07 Aug 2025 06:08:39 -0700 (PDT)
-Received: from ?IPV6:2601:188:c180:4250:ecbe:130d:668d:951d? ([2601:188:c180:4250:ecbe:130d:668d:951d])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7077ce37c01sm98732806d6.79.2025.08.07.06.08.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Aug 2025 06:08:38 -0700 (PDT)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <c2888d14-e01d-4d28-866e-edeac0532d2a@redhat.com>
-Date: Thu, 7 Aug 2025 09:08:37 -0400
+	s=arc-20240116; t=1754572693; c=relaxed/simple;
+	bh=wYwiqpDIRB6YC0o8erHDDUs4XVbsYNSvbHFyw8ZnKps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hHG4aUOrsPVTNswWdcckWAJSenPwq32NaXILrcYr7LEheLwkZIgQfgxX6bIgBZAozl1faar7sZ5V3/Ses3kF1EkVmX0FfDOVx2ToOWVYZ9Wtm5X8nNyd2sMLuE07RB0ggld+veZ7ITUrAC1J1iDUMonxWhP6UWTFMld+jVrBjdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iME6Fw4Q; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 577Cmb0p019634;
+	Thu, 7 Aug 2025 13:17:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ReRMI1
+	w5O5kV+P3X1vvXZsrm2JTNYKpxE8su60j9QmI=; b=iME6Fw4Q2AlpWBaRqruKU0
+	/GUbmKqw2xwrh/F0+EI0Dco3u13BS6bex2gFBJwzTRgAtBBWHEk2ogIY1FajKvNC
+	s2HHB8rzH+e9Eaa8ppYyLisNVMV5yiNYtVGJ7nYcZ+uO0+4Rs64UfQFJD73MsRTw
+	kSUZbdv4cDY/7gB4ur++wcS7fza48BngaDpm47myHNy8mDmdt/WAFKUCymWiZ96w
+	Z689RwinbhzWd1DyRYS4ibGuBdQj70dZrYpS+zXd0n7MGiEn+Gd0kNAlnxwxumee
+	L8i0FsL5Fct/0eb8FoyTeNGAkjxt3Ug5zura4qow9J+PrighkNiI9of5zGfulfMA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48c26tynbf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Aug 2025 13:17:32 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 577DHVaX002921;
+	Thu, 7 Aug 2025 13:17:31 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48c26tynb9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Aug 2025 13:17:31 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5779vWDG007960;
+	Thu, 7 Aug 2025 13:17:30 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 48bpwn0r16-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Aug 2025 13:17:30 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 577DHQf450594166
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 Aug 2025 13:17:27 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DBEC620040;
+	Thu,  7 Aug 2025 13:17:26 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C35DA20043;
+	Thu,  7 Aug 2025 13:17:19 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.43.75.32])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu,  7 Aug 2025 13:17:19 +0000 (GMT)
+Date: Thu, 7 Aug 2025 18:47:16 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Cc: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hbathini@linux.ibm.com, sachinpb@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
+        iii@linux.ibm.com, shuah@kernel.org
+Subject: Re: [bpf-next 0/6] bpf,powerpc: Add support for bpf arena and arena
+ atomics
+Message-ID: <aJSnXO62QRglnNsw@linux.ibm.com>
+References: <20250805062747.3479221-1-skb99@linux.ibm.com>
+ <e918bef7-5f9b-4591-b671-fe3c0f681862@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: next-20250805: ampere: WARNING: kernel/cgroup/cpuset.c:1352 at
- remote_partition_disable
-To: Naresh Kamboju <naresh.kamboju@linaro.org>,
- Cgroups <cgroups@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org,
- Linux Regressions <regressions@lists.linux.dev>
-Cc: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- Dan Carpenter <dan.carpenter@linaro.org>,
- Anders Roxell <anders.roxell@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
- kamalesh.babulal@oracle.com
-References: <CA+G9fYtktEOzRWohqWpsGegS2PAcYh7qrzAr=jWCxfUMEvVKfQ@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CA+G9fYtktEOzRWohqWpsGegS2PAcYh7qrzAr=jWCxfUMEvVKfQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e918bef7-5f9b-4591-b671-fe3c0f681862@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YXGzjED4pJhXligsrAzBvBlxy0HdLnrb
+X-Authority-Analysis: v=2.4 cv=F/xXdrhN c=1 sm=1 tr=0 ts=6894a76c cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=8nJEP1OIZ-IA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=NEAV23lmAAAA:8
+ a=alihBsh1ZAGIVrIkydwA:9 a=3ZKOabzyN94A:10 a=wPNLvfGTeEIA:10
+X-Proofpoint-GUID: 6kbce07YtCxIaLhugwtQhO4aIFlYDmMx
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA3MDEwMyBTYWx0ZWRfX4IsiQ9WBU6y2
+ 730rC1TJZQZvrnmYLmcctkvELPG9Ir9+k1xV0LCmmDwFZPHtUJQVUFuotTz0tkwZJTROc1TnoMO
+ mqeXIuP2v8cgnspXRlQzjrKT3ZV/DyHY7uMJmyNQ0GaR7r0XTfCYS3zxykukzQsIb21U/E7LEU9
+ h5vcEDlvr1rWF/wViHhmEEH9eIb22oAXPCPI/OeYJhmQAxjQcgloGRNdbwAjccQLaynVLE+UQi+
+ aPuG2RSH71pzS2DOfEIwjbhsdzI2jc8+56bPCZPaHnrbxkC3uoe4uyNbjDgWXamUZ3yMxkfwfTD
+ kF4YG+5AMOpmuOMoKcLqIv5VM9zXwwsEdkoCynpBBDwHsyWQeydAL2Y8adqd02yJT8xS2/n9C2N
+ WYMm/vBkT9JSDhz1Ww2dQnUmvU39rGXpO2SULE+ZdoOILjjCtwdHOQnI0GssfxeZNWwALFPI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-07_02,2025-08-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
+ clxscore=1015 spamscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
+ malwarescore=0 phishscore=0 suspectscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508070103
 
-On 8/7/25 4:27 AM, Naresh Kamboju wrote:
-> Regressions noticed intermittently on AmpereOne while running selftest
-> cgroup testing
-> with Linux next-20250805 and earlier seen on next-20250722 tag also.
->
-> Regression Analysis:
-> - New regression? Yes
-> - Reproducibility? Intermittent
->
-> First seen on the next-20250722 and after next-20250805.
->
-> Test regression: next-20250805 ampere WARNING kernel cgroup cpuset.c
-> at remote_partition_disable
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> ## Test log
-> selftests: cgroup: test_cpuset_prs.sh
-> Running state tRunning state transition test ...
-> ransition test ...
-> Running test 0 ...
-> Running test 1 ...
-> Running test 2 ...
-> Running test 3 ...
-> Running test 4 ...
-> Running test 5 ...
-> Running test 6 ...
-> Running test 7 ...
-> Running test 8 ...
-> Running test 9 ...
-> Running test 10 ...
-> Running test 11 ...
-> Running test 12 ...
-> Running test 13 ...
-> Running test 14 ...
-> Running test 15 ...
-> Running test 16 ...
-> Running test 17 ...
-> Running test 18 ...
-> Running test 19 ...
-> [  137.504549] psci: CPU2 killed (polled 0 ms)
-> [  137.747094] Detected PIPT I-cache on CPU2
-> [  137.747214] GICv3: CPU2: found redistributor 3500 region 0:0x0000400201cc0000
-> [  137.747312] CPU2: Booted secondary processor 0x0000003500 [0xc00fac40]
->
-> <>
->
-> Running test 63 ...
-> Running test 64 ...
-> Running test 66 ...
-> [  174.929535] psci: CPU3 killed (polled 0 ms)
-> [  175.263087] Detected PIPT I-cache on CPU3
-> [  175.263203] GICv3: CPU3: found redistributor 3501 region 0:0x0000400201d00000
-> [  175.263300] CPU3: Booted secondary processor 0x0000003501 [0xc00fac40]
-> [  175.434129] workqueue: Interrupted when creating a worker thread
-> "kworker/u1028:0"
-> ** replaying previous printk message **
-> [  175.434129] workqueue: Interrupted when creating a worker thread
-> "kworker/u1028:0"
-> [  175.440230] ------------[ cut here ]------------
-> [  175.440234] WARNING: kernel/cgroup/cpuset.c:1352 at
-> remote_partition_disable+0x120/0x160, CPU#170: rmdir/33763
-> [  175.467456] Modules linked in: cdc_ether usbnet sm3_ce sha3_ce nvme
-> nvme_core xhci_pci_renesas arm_cspmu_module ipmi_devintf arm_spe_pmu
-> ipmi_msghandler arm_cmn cppc_cpufreq fuse drm backlight
-> [  175.484676] CPU: 170 UID: 0 PID: 33763 Comm: rmdir Not tainted
-> 6.16.0-next-20250805 #1 PREEMPT
-> [  175.493365] Hardware name: Inspur NF5280R7/Mitchell MB, BIOS
-> 04.04.00004001 2025-02-04 22:23:30 02/04/2025
-> [  175.503178] pstate: 63400009 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
-> not ok 12 selftests: cgroup: test_cpuset_prs.sh TIMEOUT 45 seconds
-> [  175.510130] pc : remote_partition_disable
-> (kernel/cgroup/cpuset.c:1352 (discriminator 1)
-> kernel/cgroup/cpuset.c:1342 (discriminator 1)
-> kernel/cgroup/cpuset.c:1514 (discriminator 1))
+On Tue, Aug 05, 2025 at 05:37:00PM +0530, Venkat Rao Bagalkote wrote:
+> 
+> On 05/08/25 11:57 am, Saket Kumar Bhaskar wrote:
+> > This patch series introduces support for the PROBE_MEM32,
+> > bpf_addr_space_cast and PROBE_ATOMIC instructions in the powerpc BPF JIT,
+> > facilitating the implementation of BPF arena and arena atomics.
+> > 
+> > The last patch in the series has fix for arena spinlock selftest
+> > failure.
+> > 
+> > This series is rebased on top of:
+> > https://lore.kernel.org/bpf/20250717202935.29018-2-puranjay@kernel.org/
+> > 
+> > All selftests related to bpf_arena, bpf_arena_atomic(except
+> > load_acquire/store_release) enablement are passing:
+> 
+> 
+> Hello Saket,
+> 
+> 
+> I see couple of selftests are failing on my set up.
+> 
+> > 
+> > # ./test_progs -t arena_list
+> > #5/1     arena_list/arena_list_1:OK
+> > #5/2     arena_list/arena_list_1000:OK
+> > #5       arena_list:OK
+> > Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > # ./test_progs -t arena_htab
+> > #4/1     arena_htab/arena_htab_llvm:OK
+> > #4/2     arena_htab/arena_htab_asm:OK
+> > #4       arena_htab:OK
+> > Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > # ./test_progs -t verifier_arena
+> > #464/1   verifier_arena/basic_alloc1:OK
+> > #464/2   verifier_arena/basic_alloc2:OK
+> > #464/3   verifier_arena/basic_alloc3:OK
+> > #464/4   verifier_arena/iter_maps1:OK
+> > #464/5   verifier_arena/iter_maps2:OK
+> > #464/6   verifier_arena/iter_maps3:OK
+> > #464     verifier_arena:OK
+> > #465/1   verifier_arena_large/big_alloc1:OK
+> > #465/2   verifier_arena_large/big_alloc2:OK
+> > #465     verifier_arena_large:OK
+> > Summary: 2/8 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> 
+> All error logs:
+> tester_init:PASS:tester_log_buf 0 nsec
+> process_subtest:PASS:obj_open_mem 0 nsec
+> process_subtest:PASS:specs_alloc 0 nsec
+> run_subtest:PASS:obj_open_mem 0 nsec
+> run_subtest:PASS:unexpected_load_failure 0 nsec
+> do_prog_test_run:PASS:bpf_prog_test_run 0 nsec
+> run_subtest:FAIL:1103 Unexpected retval: 4 != 0
+> #513/7   verifier_arena/reserve_invalid_region:FAIL
+> #513     verifier_arena:FAIL
+> Summary: 1/14 PASSED, 0 SKIPPED, 1 FAILED
+> 
+> 
+Hi Venkat,
 
-The warning is caused by workqueue_unbound_exclude_cpumask() returning 
-an error which should not normally happen. There is a "workqueue: 
-Interrupted when creating a worker thread" which may cause problem in 
-the workqueue code leading to this error. That particular error happens 
-when kthread_create_on_node() fails to create the requested worker kthread.
+It is known failure. This selftest was added recently. We are working on it to
+fix this. Will post the fix for this selftest separately.
+> > 
+> > # ./test_progs -t arena_atomics
+> > #3/1     arena_atomics/add:OK
+> > #3/2     arena_atomics/sub:OK
+> > #3/3     arena_atomics/and:OK
+> > #3/4     arena_atomics/or:OK
+> > #3/5     arena_atomics/xor:OK
+> > #3/6     arena_atomics/cmpxchg:OK
+> > #3/7     arena_atomics/xchg:OK
+> > #3/8     arena_atomics/uaf:OK
+> > #3/9     arena_atomics/load_acquire:SKIP
+> > #3/10    arena_atomics/store_release:SKIP
+> > #3       arena_atomics:OK (SKIP: 2/10)
+> > Summary: 1/8 PASSED, 2 SKIPPED, 0 FAILED
+> > 
+> > All selftests related to arena_spin_lock are passing:
+> > 
+> > # ./test_progs -t arena_spin_lock
+> > #6/1     arena_spin_lock/arena_spin_lock_1:OK
+> > #6/2     arena_spin_lock/arena_spin_lock_1000:OK
+> > #6/3     arena_spin_lock/arena_spin_lock_50000:OK
+> > #6       arena_spin_lock:OK
+> > Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+> test_arena_spin_lock_size:FAIL:check counter value unexpected check counter
+> value: actual 15999 != expected 16000
+> #6/1     arena_spin_lock/arena_spin_lock_1:FAIL
+> #6       arena_spin_lock:FAIL
+> Summary: 0/2 PASSED, 0 SKIPPED, 1 FAILED
 
-The test itself uses the hotplug code rather heavily to offline/online 
-CPUs to test the cpuset code related to hotplug. I don't know if that is 
-part of the problem or not. Anyway, there isn't any big change in the 
-cpuset code recently. I think the real bug may lie in other kernel areas 
-used by the cpuset code.
+This too, with llvm-19 the failure is known to us, where llvm doesn't have support for
+may_goto insn https://github.com/llvm/llvm-project/commit/0e0bfacff71859d1f9212205f8f873d47029d3fb.
+Though, there is else condition which is envoked incase llvm doesn't have support for may_goto insn,
+which we are looking into.
 
-Cheers,
-Longman
+Since llvm-20 has support for may_goto, we are not seeing this failure there(the selftest passes).
+So we are planning to fix this in separate patch for llvm-19 for now.
 
-
-> [  175.518032] lr : remote_partition_disable
-> (kernel/cgroup/cpuset.c:1352 (discriminator 1)
-> kernel/cgroup/cpuset.c:1514 (discriminator 1))
-> [  175.525849] sp : ffff8000c853bb90
-> [  175.529585] x29: ffff8000c853bb90 x28: ffff00017badc800 x27: 0000000000000000
-> timeout set to 45
-> [  175.536713] x26: 0000000000000000 x25: ffff00014c422540 x24: ffffb1c71020b000
-> [  175.545489] x23: ffff000113769c00 x22: 0000000000000001 x21: ffffb1c71020b5c0
-> [  175.552615] x20: ffff8000c853bbd0 x19: ffff000113769a00 x18: 00000000ffffffff
-> selftests: cgroup: test_cpuset_v1_hp.sh
-> [  175.559910] x17: 31752f72656b726f x16: 776b222064616572 x15: 68742072656b726f
-> [  175.569900] x14: 0000000000000004 x13: ffffb1c70fb4f160 x12: 0000000000000000
-> cpuset v1 mount point not found!
-> [  175.577888] x11: 000002f6b9bf58c3 x10: 0000000000000023 x9 : ffffb1c70d6bdff8
-> Test SKIPPED
-> ok 13 selftests: cgroup: test_cpuset_v1_hp.sh #SKIP
-> [  175.587877] x8 : ffff8000c853bad0 x7 : 0000000000000000 x6 : 0000000000000001
-> [  175.597864] x5 : ffffb1c70e87a488 x4 : fffffdffc40a88e0 x3 : 000000000080007d
-> [  175.607849] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 00000000fffffff4
-> [  175.615578] Call trace:
-> [  175.618013] remote_partition_disable (kernel/cgroup/cpuset.c:1352
-> (discriminator 1) kernel/cgroup/cpuset.c:1342 (discriminator 1)
-> kernel/cgroup/cpuset.c:1514 (discriminator 1)) (P)
-> [  175.623057] update_prstate (include/linux/spinlock.h:376
-> kernel/cgroup/cpuset.c:2963)
-> [  175.626799] cpuset_css_killed (kernel/cgroup/cpuset.c:3598)
-> [  175.630713] kill_css.part.0 (kernel/cgroup/cgroup.c:5968)
-> [  175.634464] cgroup_destroy_locked (kernel/cgroup/cgroup.c:6058
-> (discriminator 4))
-> [  175.638810] cgroup_rmdir (kernel/cgroup/cgroup.c:6102)
-> [  175.642376] kernfs_iop_rmdir (fs/kernfs/dir.c:1286)
-> [  175.646203] vfs_rmdir (fs/namei.c:4461 fs/namei.c:4438)
-> [  175.649515] do_rmdir (fs/namei.c:4516 (discriminator 1))
-> [  175.652823] __arm64_sys_unlinkat (fs/namei.c:4690 (discriminator 2)
-> fs/namei.c:4684 (discriminator 2) fs/namei.c:4684 (discriminator 2))
-> [  175.656998] invoke_syscall (arch/arm64/include/asm/current.h:19
-> arch/arm64/kernel/syscall.c:54)
-> [  175.660738] el0_svc_common.constprop.0
-> (include/linux/thread_info.h:135 (discriminator 2)
-> arch/arm64/kernel/syscall.c:140 (discriminator 2))
-> [  175.665431] do_el0_svc (arch/arm64/kernel/syscall.c:152)
-> [  175.668735] el0_svc (arch/arm64/include/asm/irqflags.h:82
-> (discriminator 1) arch/arm64/include/asm/irqflags.h:123 (discriminator
-> 1) arch/arm64/include/asm/irqflags.h:136 (discriminator 1)
-> arch/arm64/kernel/entry-common.c:169 (discriminator 1)
-> arch/arm64/kernel/entry-common.c:182 (discriminator 1)
-> arch/arm64/kernel/entry-common.c:880 (discriminator 1))
-> [  175.671877] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:899)
-> [  175.676052] el0t_64_sync (arch/arm64/kernel/entry.S:596)
-> [  175.679705] ---[ end trace 0000000000000000 ]---
->
->
-> ## Source
-> * Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
-> * Git sha: afec768a6a8fe7fb02a08ffce5f2f556f51d4b52
-> * Git describe: next-20250805
-> * Architectures: arm64
-> * Toolchains: gcc-13
-> * Kconfigs: defconfig+selftests/*/configs
->
-> ## Build
-> * Test log 1: https://qa-reports.linaro.org/api/testruns/29220998/log_file/
-> * Test log 2: https://qa-reports.linaro.org/api/testruns/29395866/log_file/
-> * LAVA log: https://lkft-staging.validation.linaro.org/scheduler/job/187100#L6621
-> * Test history:
-> https://regressions.linaro.org/lkft/linux-next-master-ampere/next-20250805/log-parser-test/exception-warning-kernelcgroupcpuset-at-remote_partition_disable/history/
-> * Test plan: https://tuxapi.tuxsuite.com/v1/groups/ampere/projects/ci/tests/30rj0dIdTXUiGfYMA7suavpa77r
-> * Build link: https://storage.tuxsuite.com/public/ampere/ci/builds/30rj0OYSDUMeT0cyTDioTe5XVOI/
-> * Kernel config:
-> https://storage.tuxsuite.com/public/ampere/ci/builds/30rj0OYSDUMeT0cyTDioTe5XVOI/config
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
->
-
+Regards,
+Saket
+> > Saket Kumar Bhaskar (6):
+> >    bpf,powerpc: Introduce bpf_jit_emit_probe_mem_store() to emit store
+> >      instructions
+> >    bpf,powerpc: Implement PROBE_MEM32 pseudo instructions
+> >    bpf,powerpc: Implement bpf_addr_space_cast instruction
+> >    bpf,powerpc: Introduce bpf_jit_emit_atomic_ops() to emit atomic
+> >      instructions
+> >    bpf,powerpc: Implement PROBE_ATOMIC instructions
+> >    selftests/bpf: Fix arena_spin_lock selftest failure
+> > 
+> >   arch/powerpc/net/bpf_jit.h                    |   6 +-
+> >   arch/powerpc/net/bpf_jit_comp.c               |  32 +-
+> >   arch/powerpc/net/bpf_jit_comp32.c             |   2 +-
+> >   arch/powerpc/net/bpf_jit_comp64.c             | 378 +++++++++++++-----
+> >   .../bpf/prog_tests/arena_spin_lock.c          |  23 +-
+> >   .../selftests/bpf/progs/arena_spin_lock.c     |   8 +-
+> >   .../selftests/bpf/progs/bpf_arena_spin_lock.h |   4 +-
+> >   7 files changed, 348 insertions(+), 105 deletions(-)
+> > 
+> > base-commit: ea2aecdf7a954a8c0015e185cc870c4191d1d93f
+> 
+> 
+> Regards,
+> 
+> Venkat.
+> 
 
