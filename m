@@ -1,152 +1,113 @@
-Return-Path: <linux-kselftest+bounces-38492-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38493-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3134B1DCCF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 20:01:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43742B1DD74
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 21:23:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDBFF1AA02E2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 18:01:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E261962807A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 19:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78BB1A3167;
-	Thu,  7 Aug 2025 18:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98B0B21D5BB;
+	Thu,  7 Aug 2025 19:23:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mcXrtgYc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GeNm/SBM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D311FF5F9
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 18:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4D11C860A;
+	Thu,  7 Aug 2025 19:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754589684; cv=none; b=evSwaqm4PNWQPoGlGBlgzxsCGX+Lr4FK8m5h2A5Fj8kzfu3ogY1VS2QdDI79KaRoxcCoSEP8cg3iUHovI+iCc4zduTTR+r2h8KnDQjJhOFECKyam95q8DllvoC8tudeM6gFvqFosgmS6BhVZjckxee+VrJR7S4Nz3osBprsuR4c=
+	t=1754594587; cv=none; b=X/z3bR7xSlzCiVzq2t6JahpuHYczG7yvLBs7v4Tv5D4KHRtekEsYNPgXZMIjohicYRKxZMW8fgKXoChgADn2cPbrp7pKnPsIxNTmq2TZQJXVWGrMAi7of5wy41kfCXsX17r2nx9WUG5cOrSdYT7lzRPk0zd8xkjzkBEL0CXGRyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754589684; c=relaxed/simple;
-	bh=kGnBaGbneL6boqRfQk66ANHbaY1qqZYqDC0sQhY7Efc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Esmkvq8Jp+qb4YCzgnlCd96hbd+JB47AjbAZtlzCIE6ee54Ef6zFXCZWq3WfTXVLnXTD+Kq39wvzAUE6U2J8xabCVB6hiyhqL382YEoeTNixG7kDmbxfNkJXc5QTcjOzoTSRXGQWZsq2toV3UiCxHje4PjpQufs/qhFkXDAur1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mcXrtgYc; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <e7ba3f7f-38b8-4c06-8aff-ef1fb8d04d86@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1754589675;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5+RLJIdnO4nFug6NwqhYgUcSF9+14CZNJQVj+XVkE2w=;
-	b=mcXrtgYcZu/Y7IeL0P5mqUechkqW9lWd2H6QNmfqoHQ7uLaILf3fNjR2TgP48mefi1THg2
-	5HbVB9YYgMvp3o85n18zt2zLulpgux0maR751TwrIfMrEtBBp17AcVBYne7DcEQLi+zW5H
-	OnuCDUHTlr6ErqSbFwuoRfB0xLez+aE=
-Date: Thu, 7 Aug 2025 11:01:08 -0700
+	s=arc-20240116; t=1754594587; c=relaxed/simple;
+	bh=bO0vADNCneshUIVHVe/hVO5ZsIGpYnBPeUVMpWJqGAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rCFADVIFqa7FxMNlUWOQGtI2y80wAJCZ0LUsO40QvM+5MYWQkuKt9Baslbq4x/VYAnwyjFHKAMhMJNbp3CIYIIwZbxNIqvOu4kzV50TAPYPj/PN30tsLZzxtxby6KG9JyXoIgFUfO0Gr+p7i9yBkS1ChcAwCLAf2kaXPE15VYjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GeNm/SBM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CF7CC4CEEB;
+	Thu,  7 Aug 2025 19:23:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754594586;
+	bh=bO0vADNCneshUIVHVe/hVO5ZsIGpYnBPeUVMpWJqGAM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GeNm/SBMZx67YSIsEMyUKUL7FL7ui9baKhJ5p6Pm9dJFfoOvs+EbdM7/34+mZPMxJ
+	 sSEnTwpUbnrKNbQsCzQxPrY/6dqg296Bn/QbB+NsgOp0b14lbHpil6CzWTcAWBGLnk
+	 LUEu+oQpGX8cQBGSTQKP6bDEHvk3juv854a+pcioXZEV3U/5h1+SIH5R2O+0DRVoky
+	 lWuEF/31rVyOBY7yJGPBF5M5WU3HI0TgpqxfLkLpEVuUfZNQagTVb5HW/Rfx23Zmli
+	 SG93Y+FZvwDqOPENpT7c3BxufBcmJx6qvm8WnqQdAG6dC7RZDuMjHX0aCCbhYQoOcS
+	 bWMSIB921g9oQ==
+Date: Thu, 7 Aug 2025 20:23:01 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: arm64: Check fread return value in exec_target
+Message-ID: <a72e8741-a63a-487e-838e-daeed3458c0f@sirena.org.uk>
+References: <20250807154950.24105-1-reddybalavignesh9979@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v7 2/2] selftests/bpf: Force -O2 for USDT selftests to
- cover SIB handling logic
-Content-Language: en-GB
-To: =?UTF-8?B?6LW15L2z54Kc?= <phoenix500526@163.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250806092458.111972-1-phoenix500526@163.com>
- <20250806092458.111972-3-phoenix500526@163.com>
- <f5d8d886-1de3-4521-917a-e98b645b987e@linux.dev>
- <30d8fcac.2669.19882763de2.Coremail.phoenix500526@163.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <30d8fcac.2669.19882763de2.Coremail.phoenix500526@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lDXe6O6YHA3QjJr+"
+Content-Disposition: inline
+In-Reply-To: <20250807154950.24105-1-reddybalavignesh9979@gmail.com>
+X-Cookie: Real Users hate Real Programmers.
 
 
+--lDXe6O6YHA3QjJr+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 8/6/25 7:57 PM, 赵佳炜 wrote:
->
->
->
-> Hi Yonghong,
->
-> I noticed that the USDT argument specification generated by GCC 14 is '8@array(,%rax,8)'.
-> This pattern is currently not handled correctly. I'm exploring whether I can use DWARF information
-> to calculate the address of this variable. This approach seems to work. However, since I can't
+On Thu, Aug 07, 2025 at 09:19:47PM +0530, Bala-Vignesh-Reddy wrote:
 
-I think 'array' should be in symbol table, so there is no need to check dwarf in my opinion.
+> Fix -Wunused-result warning generated when compiled with gcc 13.3.0,
+> by checking fread's return value and handling errors, preventing
+> potential failures when reading from stdin.
+>=20
+> Fixes compiler warning:
+> warning: ignoring return value of 'fread' declared with attribute
+> 'warn_unused_result' [-Wunused-result]
 
-> reproduce the same issue on my machine, I plan to implement this approach for the PC-relative
-> issue in a separate patch. Would that affect the merging of this patch?
+> --- a/tools/testing/selftests/arm64/pauth/exec_target.c
+> +++ b/tools/testing/selftests/arm64/pauth/exec_target.c
+> @@ -13,7 +13,12 @@ int main(void)
 
-Let us handle this since '8@array(,%rax,8)' may appear in CI environment.
+> -	fread(&val, sizeof(size_t), 1, stdin);
+> +	size_t size =3D fread(&val, sizeof(size_t), 1, stdin);
+> +
+> +	if (size !=3D 1) {
+> +		fprintf(stderr, "Could not read input from stdin\n");
+> +		return -1;
+> +	}
 
->
->
-> At 2025-08-07 02:17:34, "Yonghong Song" <yonghong.song@linux.dev> wrote:
->>
->> On 8/6/25 2:24 AM, Jiawei Zhao wrote:
->>> When using GCC on x86-64 to compile an usdt prog with -O1 or higher
->>> optimization, the compiler will generate SIB addressing mode for global
->>> array and PC-relative addressing mode for global variable,
->>> e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
->>>
->>> In this patch:
->>> - add usdt_o2 test case to cover SIB addressing usdt argument spec
->>>     handling logic
->>>
->>> Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
->>> ---
->>>    tools/testing/selftests/bpf/Makefile          |  8 +++
->>>    .../selftests/bpf/prog_tests/usdt_o2.c        | 71 +++++++++++++++++++
->>>    .../selftests/bpf/progs/test_usdt_o2.c        | 37 ++++++++++
->>>    3 files changed, 116 insertions(+)
->>>    create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
->>>    create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
->>>
->>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->>> index 910d8d6402ef..68cf6a9cf05f 100644
->>> --- a/tools/testing/selftests/bpf/Makefile
->>> +++ b/tools/testing/selftests/bpf/Makefile
->>> @@ -759,6 +759,14 @@ TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
->>>    TRUNNER_BPF_CFLAGS :=
->>>    $(eval $(call DEFINE_TEST_RUNNER,test_maps))
->>>    
->>> +# Use -O2 optimization to generate SIB addressing usdt argument spec
->>> +# Only apply on x86 architecture where SIB addressing is relevant
->>> +ifeq ($(ARCH), x86)
->>> +$(OUTPUT)/usdt_o2.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
->>> +$(OUTPUT)/cpuv4/usdt_o2.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
->>> +$(OUTPUT)/no_alu32/usdt_o2.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
->>> +endif
->> I tried your selftest with gcc14 and llvm20 in my environment. See below:
->>
->> llvm20:
->> Displaying notes found in: .note.stapsdt
->>    Owner                Data size        Description
->>    stapsdt              0x0000002f       NT_STAPSDT (SystemTap probe descriptors)
->>      Provider: test
->>      Name: usdt1
->>      Location: 0x00000000000003ac, Base: 0x0000000000000000, Semaphore: 0x0000000000000000
->>      Arguments: 8@-64(%rbp)
->>
->> gcc14:
->> Displaying notes found in: .note.stapsdt
->>    Owner                Data size        Description
->>    stapsdt              0x00000034       NT_STAPSDT (SystemTap probe descriptors)
->>      Provider: test
->>      Name: usdt1
->>      Location: 0x0000000000000334, Base: 0x0000000000000000, Semaphore: 0x0000000000000000
->>      Arguments: 8@array(,%rax,8)
->>
->> llvm20 and gcc14 generate different usdt patterns. '8@-64(%rbp)' already supports so
->> with SIB support, the test should pass CI, I think.
->>
-[...]
+It doesn't really matter but it'd be nicer to return a standard value
+=66rom main(), EXIT_FAILURE is probably a good choice.  Exit values are in
+the range 0..255.
 
+--lDXe6O6YHA3QjJr+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiU/RUACgkQJNaLcl1U
+h9AyyQf+Mg0LhcTpLXab7BZn+ejV6G4bsn2lcC2nLCXOkHWLPMlKyO26ip+/7+Gd
+BfeJ1PFXe4q6YNENah0xOEL1n3kCUXNYUJXmiat+FSAEgqIMYA3KZr/NNiZovIll
+zAbTQj0795xW27sGvS3rXXv5eoCr0IiqCgUsT+VSw1FQLEWYf3KF0ZQCGLzF73+E
+qHBrCqsUURH7dYANOMOmIood/LECtoeHxkiv0f5WLXegHany/MV0XWOL85Qfw6lL
+t0I5zJfiNL47WXJcc8MksVS1o9JFxtx9r2B+son/rzJiVthlyW3B93DnaiEld48I
+VkRyo+Wc4JMtxadU6wOjINGD8if2sQ==
+=s09D
+-----END PGP SIGNATURE-----
+
+--lDXe6O6YHA3QjJr+--
 
