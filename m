@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-38531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E780B1DFCB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 01:29:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74FC2B1DFCD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 01:29:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 491CB72308C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 23:29:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21E81723346
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 23:29:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B99C5242D6E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAFE5262FD0;
 	Thu,  7 Aug 2025 23:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dwR1KqbM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IV4nXWie"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD0D1946AA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D49256C87;
 	Thu,  7 Aug 2025 23:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754609354; cv=none; b=lUq6YJ7QiayseShd5Kbr14wfIE5N988Uf00hdWkQ7OUsaOEdbuAjBsI0M16DT7kTolpWcfUD0G8reRm9cNm0dNVEIIMvruJk86shCrZ7TVn5n/kWsWJWBImIy/z09SDqgQFRJX51cuahKC6qpv4Y7W4Pim+MJiSLGgoKjV234hg=
+	t=1754609354; cv=none; b=VREiY6eDns5C0BuFkQdCZVtjdhiqcS0JElGZVQoWvz+DdPpOyHU+828us5CtBQKSwzSpRuQgDukH5vRkre+zC+tuokc1S4O4FjvVNHeqFqe1tkX3anGS3p/BPNJUVU074zLzfkwZvI/1O6mCcpyt/gTm9Nu1E5mYepzoLICmLTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754609354; c=relaxed/simple;
-	bh=PhDpiyL0MBpJa7eaWVLsZ/q8aJ7n9LWGGzQBtX3leTI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jDEfIghr+BQDQ9w74E93VzcQCfHrgHv/nZV6IdGl6bhvLBVJwCKpsAh0LdUBG46f8+yEcynHN+8edRO00OM+9e+2DSMb2LwvZK6Qg3jxmdWqt5hHLUrfeSTX895KHZP7rV+ukk+b9LVryiayyAU0ftzVVUS5w9zWqFhhCR8NqAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dwR1KqbM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36744C4CEEB;
-	Thu,  7 Aug 2025 23:29:13 +0000 (UTC)
+	bh=SwfmDGDbFbfWMtCEiabspD+RCuPytk+hWkDJu2Ixei8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Sg5XuBcAUmZ1OeyMy0Jh/fVlbI1f+IwTpO+VmoRLTPxxlxyX0eoX88u+mIhJKp6ntc9u7XyasflAs9drEeAoJHxXS1GHN7fLtzpDLxyAMXOsSu4bh0AhCkOQDkyFcGuPk7HyU7ENve5u72we9BsWTnBc3xYQFRt7unRUOkLFLcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IV4nXWie; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4A2C4CEF6;
+	Thu,  7 Aug 2025 23:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754609353;
-	bh=PhDpiyL0MBpJa7eaWVLsZ/q8aJ7n9LWGGzQBtX3leTI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dwR1KqbMjdUu8aMe/X5dL7K0vv+K32lbbX/yc08LxPTNwlGtkVUzsfWqvwMdXaKLV
-	 elDgNZXtyS/xd2sAp4vTKxxkOOHicD/CsUwmO7lK3FblWJJxftiRbCHj0mgyoPF2k+
-	 QdFFfawd5Gt24mDOuD0zmzK4kIGDlZ7PbRiQa8NxNI7KBY1gfHN8LhVzlJGIDragc3
-	 jU7qlXNrqgnsqbtz64ut3YGuGXCcF9ghP1eNV2UNg/XYR58CEETQMbvyfnsniQVzXP
-	 1jmPtd48YmZcpblTcNqj7MJ+s8it2S/1i4cXnJ/SAE9uaiOq0ftdy1TzNPzhQC7bOE
-	 +K4GTT6gKleKw==
+	s=k20201202; t=1754609354;
+	bh=SwfmDGDbFbfWMtCEiabspD+RCuPytk+hWkDJu2Ixei8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=IV4nXWie4LabI3e7R6USg7GJHd2I6ornkz6NhJnQRVmBN4voNlnQiLXfb4MQtj9te
+	 ippmWPJ8AqZHeJp2P1h/pneWftP1j12FdHy0rOcRqqH4PYF3CqK2GU3LMgp5+O2leB
+	 zXMQkb1AYXqMosQNxg5B+hFNt3B2JgHdQ0UcjSRu9BW43PypTck930YYNq8QlKgiKm
+	 QlXT3TYclVSTasy6yL7GFt2QBFR/n4sY5IS0HSYDXb9IyiGDbhipfq6gkluXfC9d54
+	 JQ7eL4uh4t0XiPsjd/rNb2IeQ2Xpx+5s3YFtF2KaNIG1swwD04w2e8sr44ryy3+rtM
+	 cZqLBw2dpnKhw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -55,10 +56,12 @@ Cc: netdev@vger.kernel.org,
 	will@willsroot.io,
 	savy@syst3mfailure.io,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v2 1/2] tls: handle data disappearing from under the TLS ULP
-Date: Thu,  7 Aug 2025 16:29:06 -0700
-Message-ID: <20250807232907.600366-1-kuba@kernel.org>
+Subject: [PATCH net v2 2/2] selftests: tls: test TCP stealing data from under the TLS socket
+Date: Thu,  7 Aug 2025 16:29:07 -0700
+Message-ID: <20250807232907.600366-2-kuba@kernel.org>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250807232907.600366-1-kuba@kernel.org>
+References: <20250807232907.600366-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,102 +70,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-TLS expects that it owns the receive queue of the TCP socket.
-This cannot be guaranteed in case the reader of the TCP socket
-entered before the TLS ULP was installed, or uses some non-standard
-read API (eg. zerocopy ones). Replace the WARN_ON() and a buggy
-early exit (which leaves anchor pointing to a freed skb) with real
-error handling. Wipe the parsing state and tell the reader to retry.
+Check a race where data disappears from the TCP socket after
+TLS signaled that its ready to receive.
 
-We already reload the anchor every time we (re)acquire the socket lock,
-so the only condition we need to avoid is an out of bounds read
-(not having enough bytes in the socket for previously parsed record len).
+  ok 6 global.data_steal
+  #  RUN           tls_basic.base_base ...
+  #            OK  tls_basic.base_base
 
-If some data was read from under TLS but there's enough in the queue
-we'll reload and decrypt what is most likely not a valid TLS record.
-Leading to some undefined behavior from TLS perspective (corrupting
-a stream? missing an alert? missing an attack?) but no kernel crash
-should take place.
-
-Reported-by: William Liu <will@willsroot.io>
-Reported-by: Savino Dicanosa <savy@syst3mfailure.io>
-Link: https://lore.kernel.org/tFjq_kf7sWIG3A7CrCg_egb8CVsT_gsmHAK0_wxDPJXfIzxFAMxqmLwp3MlU5EHiet0AwwJldaaFdgyHpeIUCS-3m3llsmRzp9xIOBR4lAI=@syst3mfailure.io
-Fixes: 84c61fe1a75b ("tls: rx: do not use the standard strparser")
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-v2:
- - fix the reporter tags
- - drop the copied_seq nonsense, just correct the error handling
-v1: https://lore.kernel.org/20250806180510.3656677-1-kuba@kernel.org
----
- net/tls/tls.h      |  2 +-
- net/tls/tls_strp.c | 11 ++++++++---
- net/tls/tls_sw.c   |  3 ++-
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ tools/testing/selftests/net/tls.c | 63 +++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/net/tls/tls.h b/net/tls/tls.h
-index 774859b63f0d..4e077068e6d9 100644
---- a/net/tls/tls.h
-+++ b/net/tls/tls.h
-@@ -196,7 +196,7 @@ void tls_strp_msg_done(struct tls_strparser *strp);
- int tls_rx_msg_size(struct tls_strparser *strp, struct sk_buff *skb);
- void tls_rx_msg_ready(struct tls_strparser *strp);
- 
--void tls_strp_msg_load(struct tls_strparser *strp, bool force_refresh);
-+bool tls_strp_msg_load(struct tls_strparser *strp, bool force_refresh);
- int tls_strp_msg_cow(struct tls_sw_context_rx *ctx);
- struct sk_buff *tls_strp_msg_detach(struct tls_sw_context_rx *ctx);
- int tls_strp_msg_hold(struct tls_strparser *strp, struct sk_buff_head *dst);
-diff --git a/net/tls/tls_strp.c b/net/tls/tls_strp.c
-index 095cf31bae0b..d71643b494a1 100644
---- a/net/tls/tls_strp.c
-+++ b/net/tls/tls_strp.c
-@@ -475,7 +475,7 @@ static void tls_strp_load_anchor_with_queue(struct tls_strparser *strp, int len)
- 	strp->stm.offset = offset;
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 5ded3b3a7538..d8cfcf9bb825 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -2708,6 +2708,69 @@ TEST(prequeue) {
+ 	close(cfd);
  }
  
--void tls_strp_msg_load(struct tls_strparser *strp, bool force_refresh)
-+bool tls_strp_msg_load(struct tls_strparser *strp, bool force_refresh)
- {
- 	struct strp_msg *rxm;
- 	struct tls_msg *tlm;
-@@ -484,8 +484,11 @@ void tls_strp_msg_load(struct tls_strparser *strp, bool force_refresh)
- 	DEBUG_NET_WARN_ON_ONCE(!strp->stm.full_len);
- 
- 	if (!strp->copy_mode && force_refresh) {
--		if (WARN_ON(tcp_inq(strp->sk) < strp->stm.full_len))
--			return;
-+		if (unlikely(tcp_inq(strp->sk) < strp->stm.full_len)) {
-+			WRITE_ONCE(strp->msg_ready, 0);
-+			memset(&strp->stm, 0, sizeof(strp->stm));
-+			return false;
-+		}
- 
- 		tls_strp_load_anchor_with_queue(strp, strp->stm.full_len);
- 	}
-@@ -495,6 +498,8 @@ void tls_strp_msg_load(struct tls_strparser *strp, bool force_refresh)
- 	rxm->offset	= strp->stm.offset;
- 	tlm = tls_msg(strp->anchor);
- 	tlm->control	= strp->mark;
++TEST(data_steal) {
++	struct tls_crypto_info_keys tls;
++	char buf[20000], buf2[20000];
++	struct sockaddr_in addr;
++	int sfd, cfd, ret, fd;
++	int pid, status;
++	socklen_t len;
 +
-+	return true;
- }
- 
- /* Called with lock held on lower socket */
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 549d1ea01a72..51c98a007dda 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1384,7 +1384,8 @@ tls_rx_rec_wait(struct sock *sk, struct sk_psock *psock, bool nonblock,
- 			return sock_intr_errno(timeo);
- 	}
- 
--	tls_strp_msg_load(&ctx->strp, released);
-+	if (unlikely(!tls_strp_msg_load(&ctx->strp, released)))
-+		return tls_rx_rec_wait(sk, psock, nonblock, false);
- 
- 	return 1;
- }
++	len = sizeof(addr);
++	memrnd(buf, sizeof(buf));
++
++	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_256, &tls, 0);
++
++	addr.sin_family = AF_INET;
++	addr.sin_addr.s_addr = htonl(INADDR_ANY);
++	addr.sin_port = 0;
++
++	fd = socket(AF_INET, SOCK_STREAM, 0);
++	sfd = socket(AF_INET, SOCK_STREAM, 0);
++
++	ASSERT_EQ(bind(sfd, &addr, sizeof(addr)), 0);
++	ASSERT_EQ(listen(sfd, 10), 0);
++	ASSERT_EQ(getsockname(sfd, &addr, &len), 0);
++	ASSERT_EQ(connect(fd, &addr, sizeof(addr)), 0);
++	ASSERT_GE(cfd = accept(sfd, &addr, &len), 0);
++	close(sfd);
++
++	ret = setsockopt(fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
++	if (ret) {
++		ASSERT_EQ(errno, ENOENT);
++		SKIP(return, "no TLS support");
++	}
++	ASSERT_EQ(setsockopt(cfd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls")), 0);
++
++	/* Spawn a child and get it into the read wait path of the underlying
++	 * TCP socket.
++	 */
++	pid = fork();
++	ASSERT_GE(pid, 0);
++	if (!pid) {
++		EXPECT_EQ(recv(cfd, buf, sizeof(buf), MSG_WAITALL),
++			  sizeof(buf));
++		exit(!__test_passed(_metadata));
++	}
++
++	usleep(2000);
++	ASSERT_EQ(setsockopt(fd, SOL_TLS, TLS_TX, &tls, tls.len), 0);
++	ASSERT_EQ(setsockopt(cfd, SOL_TLS, TLS_RX, &tls, tls.len), 0);
++
++	EXPECT_EQ(send(fd, buf, sizeof(buf), 0), sizeof(buf));
++	usleep(2000);
++	EXPECT_EQ(recv(cfd, buf2, sizeof(buf2), MSG_DONTWAIT), -1);
++	/* Don't check errno, the error will be different depending
++	 * on what random bytes TLS interpreted as the record length.
++	 */
++
++	close(fd);
++	close(cfd);
++
++	EXPECT_EQ(wait(&status), pid);
++	EXPECT_EQ(status, 0);
++}
++
+ static void __attribute__((constructor)) fips_check(void) {
+ 	int res;
+ 	FILE *f;
 -- 
 2.50.1
 
