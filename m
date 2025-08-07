@@ -1,143 +1,129 @@
-Return-Path: <linux-kselftest+bounces-38476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38477-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9645B1DA6F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 16:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CBD9B1DA7B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 17:00:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78D7618C7912
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 14:56:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E14C31AA37FA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 15:00:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71976262FFC;
-	Thu,  7 Aug 2025 14:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07C9625E814;
+	Thu,  7 Aug 2025 14:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jG2J7x9K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V23mZAUK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C97248867
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 14:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9294A25DCE5;
+	Thu,  7 Aug 2025 14:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754578557; cv=none; b=J5RolewD/97qFodVKHh+RzVluc2RHnguPyw2q65yfQc+AmBPcZt/CORuTkTZ3Nuo0aR6AYu6EwE8A/w8bMe4GTnznOxdSRWQ3lj9B3MhSwaOkms6ue6fpQNRff/lA2LxxDwDeDXTHoStRdbioitFmmEL3RIq3+RldO7QYY0RWTA=
+	t=1754578785; cv=none; b=d8ueqcdS468pzZtKEL+z4pvT9hmLZm0xEQiZxq+eaAZ//SfEuoEQlx+1T4L5dg46Trgg4Ho0BybW5HAP0JOn5VlR3a/bVm+PAqN7Ep2jJsigeHffjoln29MMsnwAjfgNq9iqCcP4b4LO/v1q7XMoYuxEwUQdgB8XLnVOpmYYkV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754578557; c=relaxed/simple;
-	bh=HzO32Yh60OHiGqCK0y0hof+JHxVfAYcSBiCl3jE4fTs=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=sGaZGNBbKCzWRwkc4Cd0Z5mFmdYuIZ0XGGRFEG8aOIeNVNzPmks5PvdWFJy+YPCVKKERUkUUjh1Km9U18GNeW9g3AR0SB7FVoQLaOWK1KulZNN75e09cewg1osmIBGztkmxnOTQjvfi++sRWwGGAW0MLTw8ybBC1fMrw+9gJwBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jG2J7x9K; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-76bca6c73f3so2294147b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 07:55:55 -0700 (PDT)
+	s=arc-20240116; t=1754578785; c=relaxed/simple;
+	bh=FaaExgSgYdjOaVJfimhL+ae/usc6C6i9av2RGziIJIs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kP2oP3RobAQOCR7Jxyew7p3a9XWfu0xcWjeMB81+wY8N3RPzKX13pIfy9AuUTdo/la0FK/fm2aCfAucg4WUuTDkD7RGL9HQp99wUcY+GeMJm/BVWE/vknuUGEY/LtLlHvtZR+oFMkLyApH5Sg4IW/vzp6wiK+1osCPBRoRPtDZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V23mZAUK; arc=none smtp.client-ip=209.85.215.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-879d2e419b9so770790a12.2;
+        Thu, 07 Aug 2025 07:59:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754578555; x=1755183355; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jcPUX/VYgPTff9JpxJ+KoCMkZRni9WiIzz7CwqMYyyM=;
-        b=jG2J7x9Ko6Bl9VJUiMoAP0SksmlsYMO4W4VyqhRyUj8ENEwJNkNqjpDwQet3w1cWRF
-         GM1/QyhJ6dYDBy5ISo11QnmLHVJmb4bLKRclnIxdFzQOCY/Pe2dW6fapoFv4yt7U3cxg
-         Kpp/o9f2DD2ZNlh/bFvzFiaaygZyzjTvVMEdexEbpoNOC1EYlN8vqlbCgbx8+D4oZr/B
-         aurA73yalP+3x+nn7F3cCmdYg7pws0NRAWAv1Qxl3JMY0o5IGIATV+qLD5q+btNLwX60
-         FZwnDJD+SzdTyYS/NMC1QSZzn9Qo8uWvKq25RATlaZHh41dO3EsJq9u4sT5jN7SUmIVJ
-         RT9g==
+        d=gmail.com; s=20230601; t=1754578783; x=1755183583; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gfuti96j1DWdp4sE/vCi6HTL8gGK7hRu0UOwmloMQdo=;
+        b=V23mZAUKPDeR4ageCzi9YSDAcVqgVCgKfWVbV7UAKbHUNRGNBjzlqxVznO5vrnj8Ey
+         s+IRrWomvjGxBkHbDVLOHV8oQ0X9N8RVn7lYWe5TtQTV4cXuMIE5dGN6KaH+Lhyp0liy
+         LdeVnvSTXXGvq2MKmxN+Wla8nFrwRwiCwdZNyReq256l9k4lUiyS+X/6E62pjJsycVq7
+         Xfv4FMQkpKZCII9SRZfKbsufZ8kul9xB5zGtyXd6gzXIFti4IU9opuUog8TOtseqFQky
+         q3ONuaF349ZQKVMlA39os1AliclFXOEQPKIHp5CpYmBh6HpqdMA7giDD6eZByTtxXBII
+         MNZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754578555; x=1755183355;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jcPUX/VYgPTff9JpxJ+KoCMkZRni9WiIzz7CwqMYyyM=;
-        b=l4vFQgpibRRV2hyHWuiAp7ybvi4ukz8V47quyP7a9fvgaEvqZ7PWIGdm9mJdRhbcoZ
-         X/jB9RLRN26U3axidsq5A1i8PJqlPVBw7T8rgxUgUih7XzmYrsNposfGHnzRCjmQQQFJ
-         kvAEZahtPfa/Lz2Y1aB4KLF43yaClrk5YMUcBhkTQ6oISOBf4uJgK+qSdoMn+JF+wTIv
-         0tl7DaNTlzjXEB2bqnCPY6MC+fwjtHDrnbgKO4NHvDlDvbUFDC9bjVTQ1sfrsyMPnnJQ
-         0RyRFcY8sROGStXu+MaL/EE618Jj8ZJyQiNdHJT+3H1y7nP9rPpv8h2IAzzJZI4/18rV
-         ITwA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAZ2iYSFN+bVzFs5rw1cnKkkOdxaiWq4tdeYCsTubTEwssoMl/ThdfQJ+mFS4FE3at6uic4L9VwQBcmakKU9A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBNetL1S3/JWON+dfiMhr/xkl16OGapmwFkKWG9ufosuo5QSc1
-	hSlddj5i1ZmwwBBLqdLgmkzIkDurDnqneN2Pw88NHBcTubv+20TpoPi9Ai1tsdmDJ8bgTbT29kk
-	Csg==
-X-Google-Smtp-Source: AGHT+IHc4dZo6OEZz4pfAIClf+43hYuDLq9SKAoDuZay4FDjK25R8yRQgDScapgc5Lz+rs0x/IGp+47yZw==
-X-Received: from pgbcz7.prod.google.com ([2002:a05:6a02:2307:b0:b42:fe:62e2])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:328c:b0:234:8b24:108d
- with SMTP id adf61e73a8af0-240313b0ec0mr12184119637.22.1754578555276; Thu, 07
- Aug 2025 07:55:55 -0700 (PDT)
-Date: Thu,  7 Aug 2025 22:55:50 +0800
+        d=1e100.net; s=20230601; t=1754578783; x=1755183583;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gfuti96j1DWdp4sE/vCi6HTL8gGK7hRu0UOwmloMQdo=;
+        b=AE9F+zNQhMW7WacO/O444UEidpfuNpZhe+r/7SCUsEpMuOWGWqbz3X4pvt8TwdDKRC
+         B46vby4NVNYp3i8Oz86+3Hzj7tVoR503sjU3/OUP8C9Zl6yvfJd5zi6inF0rB+8c3j/W
+         DhsjCo19XDQ0YqHU6EO8feGsVDL4iRwTVGRZ0oEdh0NPzzE1TAzrbvjptNWIp3hkbkn9
+         EetFwq7KbIiiR9LudqCh/EjvGiY4zMEz4forShwrbXc4daIzWlVUsSLn068cKivHPwD6
+         35NX6NAUPrc9m2FsJKK2ENT/1hjPkkqOAQMz0eQ0lYvZJvUy2a7NR416apPa/jFa0kQz
+         y/iA==
+X-Forwarded-Encrypted: i=1; AJvYcCUfIQCtXRmBJ1t/NF6Qo+HHg2MpzaU0f4Zr8lUebIYY0XtqFdq/00lfw9BRR64WTBNP/1IAf41dwTR5/czXc3oI@vger.kernel.org, AJvYcCUtMjWvFvhD6btzPjU+dsOrFzsad/e1MDaggXD4/1uBPaV1/OnN8gXA9EgJWsLndjYkqXtC3KXDxM7mIgQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzltqvJwNY9Z3/yVC1H/iWmCy7EqSo0uYnHoxYgpJjVIc4U+fF1
+	qX2/eX3SLRcByVy0CqLLf7Ub0EeSE/zMgzeXvAJLEMxac38f7cpNVSUpCWpUJcG1clIW8obZ
+X-Gm-Gg: ASbGncuneCst5dFKi4SkvXmBSLveDhjr33zZM8Qj6m76ZDW8a/YcBD7nJk4dEoz6n1l
+	hA5siIRFoK4ILo6BX7T9LZ8q1PoXYH1G+aPCDNSJidBOyLBy7lwhQnpx347bszqy/gHAAziIhQb
+	TDtA8CJIkgILIOkeCISTIYkwUNioGePc1FLgSzlF6K4e1B5uEbZ2iF6/EvkycSGr+IWloRdQ4Vi
+	i3+BxXMcb1PwPmDOdq0zpOWVtTN3bRCU+3wDOQwIR0UtqpcnUvFLa3lz99YRpPGxkDTwDG200aO
+	d1G2ADrFzvgABxfVwxF9HYZ+b2ef3C5xdwK3WdmqY3TUuf1VfHWC2GnjmoqiAhiS9JJ4cZkG1+R
+	/58DHT5IBO7k4vJm8X1H/mtLh0SBpeZt6Mg==
+X-Google-Smtp-Source: AGHT+IGPxQPuvHlgEiFt5T/XzMzu+ViboT+tVdh2HEe6EhYCrfjWstnNjANJfZY2GjcUT2QPBTC6DQ==
+X-Received: by 2002:a17:903:b87:b0:240:3c64:8626 with SMTP id d9443c01a7336-2429ee6e786mr87749225ad.5.1754578783384;
+        Thu, 07 Aug 2025 07:59:43 -0700 (PDT)
+Received: from days-ASUSLaptop.lan ([213.130.142.69])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8977896sm188254875ad.79.2025.08.07.07.59.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Aug 2025 07:59:42 -0700 (PDT)
+From: dayss1224@gmail.com
+To: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Dong Yang <dayss1224@gmail.com>
+Subject: [PATCH v2 0/3] KVM: riscv: selftests: Enable supported test cases
+Date: Thu,  7 Aug 2025 22:59:27 +0800
+Message-Id: <cover.1754308799.git.dayss1224@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.50.1.703.g449372360f-goog
-Message-ID: <20250807145550.1837846-1-wakel@google.com>
-Subject: [PATCH] selftests/futex: Skip futex_waitv tests if ENOSYS
-From: Wake Liu <wakel@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, 
-	"=?UTF-8?q?Andr=C3=A9=20Almeida?=" <andrealmeid@igalia.com>, wakel@google.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The futex_waitv() syscall was introduced in Linux 5.16. The existing
-test in futex_wait_timeout.c will fail on kernels older than 5.16
-due to the syscall not being implemented.
+From: Dong Yang <dayss1224@gmail.com>
 
-Modify the test_timeout() function to check if the error returned
-is ENOSYS. If it is, skip the test and report it as such, rather than
-failing. This ensures the selftests can be run on a wider range of
-kernel versions without false negatives.
-
-Signed-off-by: Wake Liu <wakel@google.com>
+Add supported KVM test cases and fix the compilation dependencies.
 ---
- .../selftests/futex/functional/futex_wait_timeout.c   | 11 ++++++++---
- .../testing/selftests/futex/functional/futex_waitv.c  |  8 ++++++++
- 2 files changed, 16 insertions(+), 3 deletions(-)
+Changes in v2:
+- Delete some repeat KVM test cases on riscv
+- Add missing headers to fix the build for new RISC-V KVM selftests
 
-diff --git a/tools/testing/selftests/futex/functional/futex_wait_timeout.c b/tools/testing/selftests/futex/functional/futex_wait_timeout.c
-index d183f878360b..323cab339814 100644
---- a/tools/testing/selftests/futex/functional/futex_wait_timeout.c
-+++ b/tools/testing/selftests/futex/functional/futex_wait_timeout.c
-@@ -64,9 +64,14 @@ void *get_pi_lock(void *arg)
- static void test_timeout(int res, int *ret, char *test_name, int err)
- {
- 	if (!res || errno != err) {
--		ksft_test_result_fail("%s returned %d\n", test_name,
--				      res < 0 ? errno : res);
--		*ret = RET_FAIL;
-+		if (errno == ENOSYS) {
-+			ksft_test_result_skip("%s: %s\n",
-+					      test_name, strerror(errno));
-+		} else {
-+			ksft_test_result_fail("%s returned %d\n", test_name,
-+					      res < 0 ? errno : res);
-+			*ret = RET_FAIL;
-+		}
- 	} else {
- 		ksft_test_result_pass("%s succeeds\n", test_name);
- 	}
-diff --git a/tools/testing/selftests/futex/functional/futex_waitv.c b/tools/testing/selftests/futex/functional/futex_waitv.c
-index 034dbfef40cb..2a86fd3ea657 100644
---- a/tools/testing/selftests/futex/functional/futex_waitv.c
-+++ b/tools/testing/selftests/futex/functional/futex_waitv.c
-@@ -59,6 +59,14 @@ void *waiterfn(void *arg)
- 
- int main(int argc, char *argv[])
- {
-+	if (!ksft_min_kernel_version(5, 16)) {
-+		ksft_print_header();
-+		ksft_set_plan(0);
-+		ksft_print_msg("%s: FUTEX_WAITV not implemented until 5.16\n",
-+			       basename(argv[0]));
-+		ksft_print_cnts();
-+		return KSFT_SKIP;
-+	}
- 	pthread_t waiter;
- 	int res, ret = RET_PASS;
- 	struct timespec to;
+Dong Yang (1):
+  KVM: riscv: selftests: Add missing headers for new testcases
+
+Quan Zhou (2):
+  KVM: riscv: selftests: Add common supported test cases
+  KVM: riscv: selftests: Use the existing RISCV_FENCE macro in
+    `rseq-riscv.h`
+
+ tools/testing/selftests/kvm/Makefile.kvm              | 6 ++++++
+ tools/testing/selftests/kvm/include/riscv/processor.h | 2 ++
+ tools/testing/selftests/rseq/rseq-riscv.h             | 3 +--
+ 3 files changed, 9 insertions(+), 2 deletions(-)
+
 -- 
-2.50.1.703.g449372360f-goog
+2.34.1
 
 
