@@ -1,168 +1,143 @@
-Return-Path: <linux-kselftest+bounces-38475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F5C9B1D9E3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 16:22:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9645B1DA6F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 16:56:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57DF11896FE1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 14:22:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78D7618C7912
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 14:56:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ECEC1A2390;
-	Thu,  7 Aug 2025 14:22:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71976262FFC;
+	Thu,  7 Aug 2025 14:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ndMOndCF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jG2J7x9K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246A583A14;
-	Thu,  7 Aug 2025 14:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C97248867
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 14:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754576523; cv=none; b=MnF9k7fmmV63mQR4PAgRbXaC7PXeltwztvjqzIVS2FBjjhGdmHsifGpxhj/YeeVqg6LChGeLcHb3OHrPa+o0BTL0Ysxs9GjzS4YJly/ANrpQyUBW9Awi+Kk2aFYagm4J8hjIJxOWaI3aguoWlvL+TzHp2qNCQ6tZ/U1nwktiWNs=
+	t=1754578557; cv=none; b=J5RolewD/97qFodVKHh+RzVluc2RHnguPyw2q65yfQc+AmBPcZt/CORuTkTZ3Nuo0aR6AYu6EwE8A/w8bMe4GTnznOxdSRWQ3lj9B3MhSwaOkms6ue6fpQNRff/lA2LxxDwDeDXTHoStRdbioitFmmEL3RIq3+RldO7QYY0RWTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754576523; c=relaxed/simple;
-	bh=dNa1Bny7iZ1EGEiI7VWML96Y5Ny6rNbeqmObEt5JvqI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bs2JZNb7lrsIa3DLq9cC+3a9iK1GYuX7bDcp4WGg9RNLYVKl4rzqM0vnYuFEUKLtHJgigly2UFRgls7IF35pK69tdkNWPtnlN2d/ewbWA1BP6cHOdlAd9/rbU3RAsLUsJGLxohTlm4hOjJn1cJd6JU+OboTFt1YozZBs7PL/OJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ndMOndCF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF8AC4CEEB;
-	Thu,  7 Aug 2025 14:21:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754576522;
-	bh=dNa1Bny7iZ1EGEiI7VWML96Y5Ny6rNbeqmObEt5JvqI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ndMOndCF1jWP98uGYI8uwuZTPvoRBUGkNZ7MJlthypDVWbWaqD5Ip3/YaqNZWdAi7
-	 pAsrS3bgW/rVTdXma/79ooLYOWfZbfDlsDNkv8XCu8GV4hGPbt6mEEteV39XiwNX2u
-	 Qu5dPMxB3o5zYz0j/A61bNdXH9vACHIuoqKl7iE6bW3Zx7yQy2L/OuKdMTfjtLwyXQ
-	 FLdRK19bQXSF3It/rkgVriZZN6d9jqGDsPouuDP5U1I76H7Qh1fO5vyuhRAfDAsOxO
-	 M1FA8Ob3fSmaIQiwaUd7jFzEPcIUy9cOZhbJG24PLa2ozjqOy6PojcrMAWxdMtsm42
-	 1XlBXSaYXpJ9w==
-Message-ID: <da46ad00-910f-4eb1-9b74-14bd76fc8910@kernel.org>
-Date: Thu, 7 Aug 2025 16:21:53 +0200
+	s=arc-20240116; t=1754578557; c=relaxed/simple;
+	bh=HzO32Yh60OHiGqCK0y0hof+JHxVfAYcSBiCl3jE4fTs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=sGaZGNBbKCzWRwkc4Cd0Z5mFmdYuIZ0XGGRFEG8aOIeNVNzPmks5PvdWFJy+YPCVKKERUkUUjh1Km9U18GNeW9g3AR0SB7FVoQLaOWK1KulZNN75e09cewg1osmIBGztkmxnOTQjvfi++sRWwGGAW0MLTw8ybBC1fMrw+9gJwBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jG2J7x9K; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-76bca6c73f3so2294147b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 07:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1754578555; x=1755183355; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jcPUX/VYgPTff9JpxJ+KoCMkZRni9WiIzz7CwqMYyyM=;
+        b=jG2J7x9Ko6Bl9VJUiMoAP0SksmlsYMO4W4VyqhRyUj8ENEwJNkNqjpDwQet3w1cWRF
+         GM1/QyhJ6dYDBy5ISo11QnmLHVJmb4bLKRclnIxdFzQOCY/Pe2dW6fapoFv4yt7U3cxg
+         Kpp/o9f2DD2ZNlh/bFvzFiaaygZyzjTvVMEdexEbpoNOC1EYlN8vqlbCgbx8+D4oZr/B
+         aurA73yalP+3x+nn7F3cCmdYg7pws0NRAWAv1Qxl3JMY0o5IGIATV+qLD5q+btNLwX60
+         FZwnDJD+SzdTyYS/NMC1QSZzn9Qo8uWvKq25RATlaZHh41dO3EsJq9u4sT5jN7SUmIVJ
+         RT9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754578555; x=1755183355;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jcPUX/VYgPTff9JpxJ+KoCMkZRni9WiIzz7CwqMYyyM=;
+        b=l4vFQgpibRRV2hyHWuiAp7ybvi4ukz8V47quyP7a9fvgaEvqZ7PWIGdm9mJdRhbcoZ
+         X/jB9RLRN26U3axidsq5A1i8PJqlPVBw7T8rgxUgUih7XzmYrsNposfGHnzRCjmQQQFJ
+         kvAEZahtPfa/Lz2Y1aB4KLF43yaClrk5YMUcBhkTQ6oISOBf4uJgK+qSdoMn+JF+wTIv
+         0tl7DaNTlzjXEB2bqnCPY6MC+fwjtHDrnbgKO4NHvDlDvbUFDC9bjVTQ1sfrsyMPnnJQ
+         0RyRFcY8sROGStXu+MaL/EE618Jj8ZJyQiNdHJT+3H1y7nP9rPpv8h2IAzzJZI4/18rV
+         ITwA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAZ2iYSFN+bVzFs5rw1cnKkkOdxaiWq4tdeYCsTubTEwssoMl/ThdfQJ+mFS4FE3at6uic4L9VwQBcmakKU9A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBNetL1S3/JWON+dfiMhr/xkl16OGapmwFkKWG9ufosuo5QSc1
+	hSlddj5i1ZmwwBBLqdLgmkzIkDurDnqneN2Pw88NHBcTubv+20TpoPi9Ai1tsdmDJ8bgTbT29kk
+	Csg==
+X-Google-Smtp-Source: AGHT+IHc4dZo6OEZz4pfAIClf+43hYuDLq9SKAoDuZay4FDjK25R8yRQgDScapgc5Lz+rs0x/IGp+47yZw==
+X-Received: from pgbcz7.prod.google.com ([2002:a05:6a02:2307:b0:b42:fe:62e2])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:328c:b0:234:8b24:108d
+ with SMTP id adf61e73a8af0-240313b0ec0mr12184119637.22.1754578555276; Thu, 07
+ Aug 2025 07:55:55 -0700 (PDT)
+Date: Thu,  7 Aug 2025 22:55:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: BPF selftest: mptcp subtest failing
-Content-Language: en-GB, fr-BE
-To: Harshvardhan Jha <harshvardhan.j.jha@oracle.com>,
- Mat Martineau <martineau@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>
-Cc: Geliang Tang <geliang@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- mptcp@lists.linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- stable@vger.kernel.org
-References: <b1f933f6-545d-4f2e-a006-4e5568656c38@oracle.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <b1f933f6-545d-4f2e-a006-4e5568656c38@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.1.703.g449372360f-goog
+Message-ID: <20250807145550.1837846-1-wakel@google.com>
+Subject: [PATCH] selftests/futex: Skip futex_waitv tests if ENOSYS
+From: Wake Liu <wakel@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, 
+	"=?UTF-8?q?Andr=C3=A9=20Almeida?=" <andrealmeid@igalia.com>, wakel@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Harshvardhan,
+The futex_waitv() syscall was introduced in Linux 5.16. The existing
+test in futex_wait_timeout.c will fail on kernels older than 5.16
+due to the syscall not being implemented.
 
-On 07/08/2025 05:50, Harshvardhan Jha wrote:
-> Hi there,
-> I have explicitly disabled mptpcp by default on my custom kernel and
-> this seems to be causing the test case to fail. Even after enabling
-> mtpcp via sysctl command or adding an entry to /etc/sysctl.conf this
-> fails. I don't think this test should be failing and should account for
-> cases where mptcp has not been enabled by default?
+Modify the test_timeout() function to check if the error returned
+is ENOSYS. If it is, skip the test and report it as such, rather than
+failing. This ensures the selftests can be run on a wider range of
+kernel versions without false negatives.
 
-It looks like the test is failing because it expects MPTCP to be enabled
-by default. Or, said differently, it doesn't expect the kernel to be
-modified without adapting the corresponding tests :)
+Signed-off-by: Wake Liu <wakel@google.com>
+---
+ .../selftests/futex/functional/futex_wait_timeout.c   | 11 ++++++++---
+ .../testing/selftests/futex/functional/futex_waitv.c  |  8 ++++++++
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
-> This is the custom patch I had applied on the LTS v6.12.36 kernel and
-> tested it:
-> 
-> diff --git a/net/mptcp/ctrl.c b/net/mptcp/ctrl.c
-> index dd595d9b5e50c..bdcc4136e92ef 100644
-> --- a/net/mptcp/ctrl.c
-> +++ b/net/mptcp/ctrl.c
-> @@ -89,7 +89,7 @@ const char *mptcp_get_scheduler(const struct net *net)
->  
->  static void mptcp_pernet_set_defaults(struct mptcp_pernet *pernet)
->  {
-> -	pernet->mptcp_enabled = 1;
-> +	pernet->mptcp_enabled = 0;
->  	pernet->add_addr_timeout = TCP_RTO_MAX;
->  	pernet->blackhole_timeout = 3600;
->  	atomic_set(&pernet->active_disable_times, 0);
-
-First, I have the same question as the one I asked to RedHat devs: do
-you still need to keep MPTCP disabled by default? If I remember well, on
-RHEL side, they started to do that when they backported MPTCP on a
-previous stable version, as an experimental feature. They left it like
-that later mostly for internal process reasons I think. But honestly,
-today, it no longer makes sense to do that and annoys users: all other
-Linux distributions enable MPTCP by default without patching the kernel
-like you did.
-
-If you don't want to revert this patch, I guess you can modify the BPF
-selftests in 'prog_tests/mptcp.c' to set 'sysctl net.mptcp.enabled=1' in
-each netns created by the test. But again, not changing the default
-kernel behaviour sounds like a better solution.
-
-Cheers,
-Matt
+diff --git a/tools/testing/selftests/futex/functional/futex_wait_timeout.c b/tools/testing/selftests/futex/functional/futex_wait_timeout.c
+index d183f878360b..323cab339814 100644
+--- a/tools/testing/selftests/futex/functional/futex_wait_timeout.c
++++ b/tools/testing/selftests/futex/functional/futex_wait_timeout.c
+@@ -64,9 +64,14 @@ void *get_pi_lock(void *arg)
+ static void test_timeout(int res, int *ret, char *test_name, int err)
+ {
+ 	if (!res || errno != err) {
+-		ksft_test_result_fail("%s returned %d\n", test_name,
+-				      res < 0 ? errno : res);
+-		*ret = RET_FAIL;
++		if (errno == ENOSYS) {
++			ksft_test_result_skip("%s: %s\n",
++					      test_name, strerror(errno));
++		} else {
++			ksft_test_result_fail("%s returned %d\n", test_name,
++					      res < 0 ? errno : res);
++			*ret = RET_FAIL;
++		}
+ 	} else {
+ 		ksft_test_result_pass("%s succeeds\n", test_name);
+ 	}
+diff --git a/tools/testing/selftests/futex/functional/futex_waitv.c b/tools/testing/selftests/futex/functional/futex_waitv.c
+index 034dbfef40cb..2a86fd3ea657 100644
+--- a/tools/testing/selftests/futex/functional/futex_waitv.c
++++ b/tools/testing/selftests/futex/functional/futex_waitv.c
+@@ -59,6 +59,14 @@ void *waiterfn(void *arg)
+ 
+ int main(int argc, char *argv[])
+ {
++	if (!ksft_min_kernel_version(5, 16)) {
++		ksft_print_header();
++		ksft_set_plan(0);
++		ksft_print_msg("%s: FUTEX_WAITV not implemented until 5.16\n",
++			       basename(argv[0]));
++		ksft_print_cnts();
++		return KSFT_SKIP;
++	}
+ 	pthread_t waiter;
+ 	int res, ret = RET_PASS;
+ 	struct timespec to;
 -- 
-Sponsored by the NGI0 Core fund.
+2.50.1.703.g449372360f-goog
 
 
