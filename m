@@ -1,238 +1,152 @@
-Return-Path: <linux-kselftest+bounces-38491-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38492-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC453B1DCB7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 19:56:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3134B1DCCF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 20:01:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4F083AF860
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 17:55:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDBFF1AA02E2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 18:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ED2720299E;
-	Thu,  7 Aug 2025 17:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78BB1A3167;
+	Thu,  7 Aug 2025 18:01:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="ZVx+ttTg"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mcXrtgYc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07E2200BBC;
-	Thu,  7 Aug 2025 17:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D311FF5F9
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 18:01:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754589341; cv=none; b=TWbFjJuHUV1COYIy3au5ol9U2WkaZHdxw+m1nTcQx6Ed0GrxrX4aUFxvyqpsV5DIipbRb4+CVW3i0RGs9XnTlkFf8PfUdcnxRtgSoD2J3r7uH3k0qdOcyxJZ6Pg05FdxVCyf6wPpozXI8KCqaWNaezHVEAgPH6HbSJTJjrVk8Xs=
+	t=1754589684; cv=none; b=evSwaqm4PNWQPoGlGBlgzxsCGX+Lr4FK8m5h2A5Fj8kzfu3ogY1VS2QdDI79KaRoxcCoSEP8cg3iUHovI+iCc4zduTTR+r2h8KnDQjJhOFECKyam95q8DllvoC8tudeM6gFvqFosgmS6BhVZjckxee+VrJR7S4Nz3osBprsuR4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754589341; c=relaxed/simple;
-	bh=5SipIL2mqzjw8Lq0NGeJ5rC1D8r6xnD/6FPUKkhjv6c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hrZABSBwVzRrf0dp9YRlHhyuNp/Qqb/YTqarrZFh2kpjbBPyw0sqCR4EC3lzgMJXvyAFhLTRfwLe4QBexeq2dA0zfhiQVDmo2Gn+kVjjCtgURt6yzFVC0z60BCOrRPVsmDLMRCSqjujwit2IEvT0ANYP2PvWGgcqYES9eP+d8qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=ZVx+ttTg; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4byZZT1KVKz9tfQ;
-	Thu,  7 Aug 2025 19:55:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1754589329;
+	s=arc-20240116; t=1754589684; c=relaxed/simple;
+	bh=kGnBaGbneL6boqRfQk66ANHbaY1qqZYqDC0sQhY7Efc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Esmkvq8Jp+qb4YCzgnlCd96hbd+JB47AjbAZtlzCIE6ee54Ef6zFXCZWq3WfTXVLnXTD+Kq39wvzAUE6U2J8xabCVB6hiyhqL382YEoeTNixG7kDmbxfNkJXc5QTcjOzoTSRXGQWZsq2toV3UiCxHje4PjpQufs/qhFkXDAur1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mcXrtgYc; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <e7ba3f7f-38b8-4c06-8aff-ef1fb8d04d86@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1754589675;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=u1tGdj0bYIbktrA9nGNPQV29HAdkSKoqYz5zUeS8lIY=;
-	b=ZVx+ttTgCC2wvM3YNPiaDoGGKLNuUQkh684NzSkrW0dQB58kAWvoTJd6IEZ29TjHt1xwim
-	2A+jYaAKD3fTz1J88KquQQx1bErSq1LWnIXkKMX6nQE6qmN7DT3kPUNROfQ03pUuKI0xNX
-	6ilWQGHpr9mTqplG9l3Oq8iP6DfQM8OZQ/jh3bN0G7IkXU3EPUdFTho/BgDuRZSRdhoGuo
-	TRTSTFhPClWmIpQFk9D6hHfHj+JRJnHRH9jlT23yfl6voachoR5tyrQ/uDtfmawdg3Ds8k
-	oZuDla+AQxvu/EjKskEZZ54oVxbogexfa4DgJGCXNmmWXqbVQUkEP7WBZOT2kQ==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
-From: Aleksa Sarai <cyphar@cyphar.com>
-Date: Fri, 08 Aug 2025 03:55:06 +1000
-Subject: [PATCH 2/2] selftests/mount_setattr: add smoke tests for
- open_tree_attr(2) bug
+	bh=5+RLJIdnO4nFug6NwqhYgUcSF9+14CZNJQVj+XVkE2w=;
+	b=mcXrtgYcZu/Y7IeL0P5mqUechkqW9lWd2H6QNmfqoHQ7uLaILf3fNjR2TgP48mefi1THg2
+	5HbVB9YYgMvp3o85n18zt2zLulpgux0maR751TwrIfMrEtBBp17AcVBYne7DcEQLi+zW5H
+	OnuCDUHTlr6ErqSbFwuoRfB0xLez+aE=
+Date: Thu, 7 Aug 2025 11:01:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250808-open_tree_attr-bugfix-idmap-v1-2-0ec7bc05646c@cyphar.com>
-References: <20250808-open_tree_attr-bugfix-idmap-v1-0-0ec7bc05646c@cyphar.com>
-In-Reply-To: <20250808-open_tree_attr-bugfix-idmap-v1-0-0ec7bc05646c@cyphar.com>
-To: Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
- "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5342; i=cyphar@cyphar.com;
- h=from:subject:message-id; bh=5SipIL2mqzjw8Lq0NGeJ5rC1D8r6xnD/6FPUKkhjv6c=;
- b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMWRMedHQ6HDUvlTz6mxFq8Q1dl/WW+W92xjQvMLsyvXkM
- +LpHybXdZSyMIhxMciKKbJs8/MM3TR/8ZXkTyvZYOawMoEMYeDiFICJ+K5i+O8W75S/+abnVS4V
- rgmrtC3b/vz8PXeWR+BsFl8DnUsvFe8x/NM84ryscxFPdcbm9js+TNw8Cl2yjI+K7J/Ya2w8ulL
- 0IQ8A
-X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
- fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
-X-Rspamd-Queue-Id: 4byZZT1KVKz9tfQ
+Subject: Re: [PATCH v7 2/2] selftests/bpf: Force -O2 for USDT selftests to
+ cover SIB handling logic
+Content-Language: en-GB
+To: =?UTF-8?B?6LW15L2z54Kc?= <phoenix500526@163.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250806092458.111972-1-phoenix500526@163.com>
+ <20250806092458.111972-3-phoenix500526@163.com>
+ <f5d8d886-1de3-4521-917a-e98b645b987e@linux.dev>
+ <30d8fcac.2669.19882763de2.Coremail.phoenix500526@163.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <30d8fcac.2669.19882763de2.Coremail.phoenix500526@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-There appear to be no other open_tree_attr(2) tests at the moment, but
-as a minimal solution just add some additional checks in the existing
-MOUNT_ATTR_IDMAP tests to make sure that open_tree_attr(2) cannot be
-used to bypass the tested restrictions that apply to mount_setattr(2).
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- .../selftests/mount_setattr/mount_setattr_test.c   | 77 ++++++++++++++++++----
- 1 file changed, 64 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-index b1e4618399be..a688871a98eb 100644
---- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-+++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-@@ -107,6 +107,26 @@
- 	#endif
- #endif
- 
-+#ifndef __NR_open_tree_attr
-+	#if defined __alpha__
-+		#define __NR_open_tree_attr 577
-+	#elif defined _MIPS_SIM
-+		#if _MIPS_SIM == _MIPS_SIM_ABI32	/* o32 */
-+			#define __NR_open_tree_attr (467 + 4000)
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_NABI32	/* n32 */
-+			#define __NR_open_tree_attr (467 + 6000)
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_ABI64	/* n64 */
-+			#define __NR_open_tree_attr (467 + 5000)
-+		#endif
-+	#elif defined __ia64__
-+		#define __NR_open_tree_attr (467 + 1024)
-+	#else
-+		#define __NR_open_tree_attr 467
-+	#endif
-+#endif
-+
- #ifndef MOUNT_ATTR_IDMAP
- #define MOUNT_ATTR_IDMAP 0x00100000
- #endif
-@@ -121,6 +141,12 @@ static inline int sys_mount_setattr(int dfd, const char *path, unsigned int flag
- 	return syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
- }
- 
-+static inline int sys_open_tree_attr(int dfd, const char *path, unsigned int flags,
-+				     struct mount_attr *attr, size_t size)
-+{
-+	return syscall(__NR_open_tree_attr, dfd, path, flags, attr, size);
-+}
-+
- static ssize_t write_nointr(int fd, const void *buf, size_t count)
- {
- 	ssize_t ret;
-@@ -1222,6 +1248,12 @@ TEST_F(mount_setattr_idmapped, attached_mount_inside_current_mount_namespace)
- 	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
- 	ASSERT_GE(attr.userns_fd, 0);
- 	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	/*
-+	 * Make sure that open_tree_attr() without OPEN_TREE_CLONE is not a way
-+	 * to bypass this mount_setattr() restriction.
-+	 */
-+	ASSERT_LT(sys_open_tree_attr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+
- 	ASSERT_EQ(close(attr.userns_fd), 0);
- 	ASSERT_EQ(close(open_tree_fd), 0);
- }
-@@ -1255,6 +1287,12 @@ TEST_F(mount_setattr_idmapped, attached_mount_outside_current_mount_namespace)
- 	ASSERT_GE(attr.userns_fd, 0);
- 	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr,
- 				    sizeof(attr)), 0);
-+	/*
-+	 * Make sure that open_tree_attr() without OPEN_TREE_CLONE is not a way
-+	 * to bypass this mount_setattr() restriction.
-+	 */
-+	ASSERT_LT(sys_open_tree_attr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+
- 	ASSERT_EQ(close(attr.userns_fd), 0);
- 	ASSERT_EQ(close(open_tree_fd), 0);
- }
-@@ -1321,6 +1359,19 @@ TEST_F(mount_setattr_idmapped, detached_mount_outside_current_mount_namespace)
- 	ASSERT_EQ(close(open_tree_fd), 0);
- }
- 
-+static bool expected_uid_gid(int dfd, const char *path, int flags,
-+			     uid_t expected_uid, gid_t expected_gid)
-+{
-+	int ret;
-+	struct stat st;
-+
-+	ret = fstatat(dfd, path, &st, flags);
-+	if (ret < 0)
-+		return false;
-+
-+	return st.st_uid == expected_uid && st.st_gid == expected_gid;
-+}
-+
- /**
-  * Validate that currently changing the idmapping of an idmapped mount fails.
-  */
-@@ -1331,6 +1382,8 @@ TEST_F(mount_setattr_idmapped, change_idmapping)
- 		.attr_set = MOUNT_ATTR_IDMAP,
- 	};
- 
-+	ASSERT_TRUE(expected_uid_gid(-EBADF, "/mnt/D", 0, 0, 0));
-+
- 	if (!mount_setattr_supported())
- 		SKIP(return, "mount_setattr syscall not supported");
- 
-@@ -1348,27 +1401,25 @@ TEST_F(mount_setattr_idmapped, change_idmapping)
- 				    AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
- 	ASSERT_EQ(close(attr.userns_fd), 0);
- 
-+	EXPECT_FALSE(expected_uid_gid(open_tree_fd, ".", 0, 0, 0));
-+	EXPECT_TRUE(expected_uid_gid(open_tree_fd, ".", 0, 10000, 10000));
-+
- 	/* Change idmapping on a detached mount that is already idmapped. */
- 	attr.userns_fd	= get_userns_fd(0, 20000, 10000);
- 	ASSERT_GE(attr.userns_fd, 0);
- 	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	/*
-+	 * Make sure that open_tree_attr() without OPEN_TREE_CLONE is not a way
-+	 * to bypass this mount_setattr() restriction.
-+	 */
-+	EXPECT_LT(sys_open_tree_attr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	EXPECT_FALSE(expected_uid_gid(open_tree_fd, ".", 0, 20000, 20000));
-+	EXPECT_TRUE(expected_uid_gid(open_tree_fd, ".", 0, 10000, 10000));
-+
- 	ASSERT_EQ(close(attr.userns_fd), 0);
- 	ASSERT_EQ(close(open_tree_fd), 0);
- }
- 
--static bool expected_uid_gid(int dfd, const char *path, int flags,
--			     uid_t expected_uid, gid_t expected_gid)
--{
--	int ret;
--	struct stat st;
--
--	ret = fstatat(dfd, path, &st, flags);
--	if (ret < 0)
--		return false;
--
--	return st.st_uid == expected_uid && st.st_gid == expected_gid;
--}
--
- TEST_F(mount_setattr_idmapped, idmap_mount_tree_invalid)
- {
- 	int open_tree_fd = -EBADF;
+On 8/6/25 7:57 PM, 赵佳炜 wrote:
+>
+>
+>
+> Hi Yonghong,
+>
+> I noticed that the USDT argument specification generated by GCC 14 is '8@array(,%rax,8)'.
+> This pattern is currently not handled correctly. I'm exploring whether I can use DWARF information
+> to calculate the address of this variable. This approach seems to work. However, since I can't
 
--- 
-2.50.1
+I think 'array' should be in symbol table, so there is no need to check dwarf in my opinion.
+
+> reproduce the same issue on my machine, I plan to implement this approach for the PC-relative
+> issue in a separate patch. Would that affect the merging of this patch?
+
+Let us handle this since '8@array(,%rax,8)' may appear in CI environment.
+
+>
+>
+> At 2025-08-07 02:17:34, "Yonghong Song" <yonghong.song@linux.dev> wrote:
+>>
+>> On 8/6/25 2:24 AM, Jiawei Zhao wrote:
+>>> When using GCC on x86-64 to compile an usdt prog with -O1 or higher
+>>> optimization, the compiler will generate SIB addressing mode for global
+>>> array and PC-relative addressing mode for global variable,
+>>> e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
+>>>
+>>> In this patch:
+>>> - add usdt_o2 test case to cover SIB addressing usdt argument spec
+>>>     handling logic
+>>>
+>>> Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
+>>> ---
+>>>    tools/testing/selftests/bpf/Makefile          |  8 +++
+>>>    .../selftests/bpf/prog_tests/usdt_o2.c        | 71 +++++++++++++++++++
+>>>    .../selftests/bpf/progs/test_usdt_o2.c        | 37 ++++++++++
+>>>    3 files changed, 116 insertions(+)
+>>>    create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+>>>    create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>>> index 910d8d6402ef..68cf6a9cf05f 100644
+>>> --- a/tools/testing/selftests/bpf/Makefile
+>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>> @@ -759,6 +759,14 @@ TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
+>>>    TRUNNER_BPF_CFLAGS :=
+>>>    $(eval $(call DEFINE_TEST_RUNNER,test_maps))
+>>>    
+>>> +# Use -O2 optimization to generate SIB addressing usdt argument spec
+>>> +# Only apply on x86 architecture where SIB addressing is relevant
+>>> +ifeq ($(ARCH), x86)
+>>> +$(OUTPUT)/usdt_o2.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
+>>> +$(OUTPUT)/cpuv4/usdt_o2.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
+>>> +$(OUTPUT)/no_alu32/usdt_o2.test.o: CFLAGS:=$(subst O0,O2,$(CFLAGS))
+>>> +endif
+>> I tried your selftest with gcc14 and llvm20 in my environment. See below:
+>>
+>> llvm20:
+>> Displaying notes found in: .note.stapsdt
+>>    Owner                Data size        Description
+>>    stapsdt              0x0000002f       NT_STAPSDT (SystemTap probe descriptors)
+>>      Provider: test
+>>      Name: usdt1
+>>      Location: 0x00000000000003ac, Base: 0x0000000000000000, Semaphore: 0x0000000000000000
+>>      Arguments: 8@-64(%rbp)
+>>
+>> gcc14:
+>> Displaying notes found in: .note.stapsdt
+>>    Owner                Data size        Description
+>>    stapsdt              0x00000034       NT_STAPSDT (SystemTap probe descriptors)
+>>      Provider: test
+>>      Name: usdt1
+>>      Location: 0x0000000000000334, Base: 0x0000000000000000, Semaphore: 0x0000000000000000
+>>      Arguments: 8@array(,%rax,8)
+>>
+>> llvm20 and gcc14 generate different usdt patterns. '8@-64(%rbp)' already supports so
+>> with SIB support, the test should pass CI, I think.
+>>
+[...]
 
 
