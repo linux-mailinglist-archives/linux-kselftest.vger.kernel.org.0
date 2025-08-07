@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-38478-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38479-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1E20B1DA7F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 17:00:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BBF5B1DA84
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 17:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D76531AA3A0B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 15:00:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAF771AA4D07
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 15:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B17626528B;
-	Thu,  7 Aug 2025 14:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51F2226656F;
+	Thu,  7 Aug 2025 14:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HUm8/EdA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QAz1o/4w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9234222C339;
-	Thu,  7 Aug 2025 14:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4F0265CC2;
+	Thu,  7 Aug 2025 14:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754578791; cv=none; b=OfoaooOaCwfS/SqO8gUhmnFw6HftYU29gzQ03bSvwlcv6KnniZBtHamiuQ617LnThVLCpZfxtg5xGPhIpedTl89NTKL86rXVwQx7w75R8Olp7A2OE1UDudIVpUxrL5M6VIlqTVldkKdCa3OgW4bGhPFWqp5/MZ5GCz9bouLYB+0=
+	t=1754578798; cv=none; b=KY2p3LJx9qoQTzbNcErxhNcaPKjQAuVqqvWbvG82obwRlBub373abYUnIQRx3M1XCSoTLJuAGs0kj6d+57seK7kOVWhtoMXErrkA6r9oiXxxEjs8ox24ClfiBSndZ99kCn8Kb05tJXjxUm3IuvIQJAZ1Cx9F7Tr7VnEfaJQ9f1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754578791; c=relaxed/simple;
-	bh=aGdIIltb3/FuGFeqZwkoBzSyX+2R9Muuh4XWzgANQww=;
+	s=arc-20240116; t=1754578798; c=relaxed/simple;
+	bh=EdvPBByj2u5j5pDV5K3Qt0HlTqdCfMU9x78tj+wVu6M=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kAXANoFMMqFYGV4XyDFOvmHXLtJ2ktm5EZZaDaclOzlbQMZxVyXNO2UfRSuU4GqVh6f26X3Iv5CXUVt4x9m6FumWhX7MEZlbcEUfykeFQO0mxLmm3CRdETSfB7YEwgWZuv1wbguzOR9b8i2UMDzOOFQNzPguVxMj+fwEiDuZsO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HUm8/EdA; arc=none smtp.client-ip=209.85.214.193
+	 MIME-Version; b=JJirZwo+8sQTearqyjV1/NvOVrzitPjBe+FtXKB9mYdBT0E3zvuvv8CCLJgBYifGsN/+XEWlbZGXZZoKuf/ChdfMtNbYkgCDUTZk8wWwHAA3s4bHsi8weDDmGMjlx6ySHq5tbvNwfOSqvkeERk+gQwN06Kn6OyviwBdwapAGq20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QAz1o/4w; arc=none smtp.client-ip=209.85.215.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2402bbb4bf3so13303755ad.2;
-        Thu, 07 Aug 2025 07:59:50 -0700 (PDT)
+Received: by mail-pg1-f193.google.com with SMTP id 41be03b00d2f7-b4209a0d426so1110124a12.1;
+        Thu, 07 Aug 2025 07:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754578789; x=1755183589; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754578796; x=1755183596; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MEKBOFcXEZzeUzMFUmEzc0IXYr/dBeW4zd4vFjmsRos=;
-        b=HUm8/EdA1teJ4tCrO0HiDzkTaaH8VQYYzP4Wev00K3XvwjCnTOwFl6PVzUFwMyN8h9
-         8+WDl8VThXYPlqVadX6DnTYGZSRnx2doNUPXnLanmMUA2OFPkzcP/WYsEexDgMbwYm7x
-         Xi9iTpJtpQHXwTiEpB6bpSIvhgMAOmd5SQnd6ym6LdGQ5+xNAwRsHPgstw9rrDJAwjFg
-         fwKES7lsjL3kI1AOX/INeL/ghMbQQwrqpcdGUNoShz2oF+7iqXKv97Ws6Mfdfsifsz2V
-         evVbTmm82Op1MOWCCYiRNIdrG3e3qRHzQy8TPuHTHcE6CyWHp0Xu6KAe87xAOKLc0OHH
-         vR2w==
+        bh=22KKAv75ruk3Ey3Mnp1dAEnaFgvvgO6+9uK7rLi7Vnw=;
+        b=QAz1o/4wlrGz3JAIxlu4ZgOWQk5LXMkeuHmYTF+Uc+0++FFf3U4u8CGlDwI7O45Y8X
+         5I31S5o6lAZsldlnAU9tI5ZneGA/8UzN6lkP0E+ITNpH7Vea+qClGQT06k7DIicVrwd9
+         7yWsMSX+WLpNeHFXFO3dH7rElpIkhm1qtmaH7ixy4HS53txqe1SUBusuFESWOOz1h+wt
+         jG0y38NRDxa9o5n+MxM8pS5ARLEXunWmW6OirqnWlQti/e/jdvFU2s/xlC9unV/ix9va
+         LdKTupZUo5iU2HzMx9MSyXmpL5FHKiRPdBsgimKvR1+r/SZuaqnG8E39lVtfqdjdfQgT
+         +XCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754578789; x=1755183589;
+        d=1e100.net; s=20230601; t=1754578796; x=1755183596;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MEKBOFcXEZzeUzMFUmEzc0IXYr/dBeW4zd4vFjmsRos=;
-        b=M6oUoQHf7diUyYa4PqQn35uGFM5T+MTXxmKSaORw9MizPa4skQ46UFZqqbCu5WIZqu
-         EpofGwDprla2BIc7c4FeARAbJsTanilexnrus9QqdV/nANuTq9EQMQUIUMnaQCRqV0Qz
-         Rj8t9FxnTKVlirBR/iFNAiIx/wO1Bqo9MfCmbaUSLuMXYbLMpJ5VCYE9TTgUD8It4YWh
-         ZDXP7bEJlNymZIFmTA0GxS/zFSB4sXOHpmAYgLvg1wAymYC+bm9wbVkunCfzyXPIrBkV
-         lzoB1KFhvzQmOvAplGQuUQuUY6ANt9kV4YFx0YS8Z91T7I62x40st3d4VIf2rgp7aqOx
-         HBUg==
-X-Forwarded-Encrypted: i=1; AJvYcCUUrR7WiJm6kMEoDT0yCgw6XJ+R15+/JAhOBBkpqPVwyZMGo+IVtroEJqt6sRAFOfICY7wGRpRuNEW2JTMVaybP@vger.kernel.org, AJvYcCVNYAWoP74UUzQS/AVFOEhEemCFv034GaLEdZ/NQzNZWbNsjnp8CPZqqTh9SYrJTZigZ119nhf3GTXWk3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvkGSLyvCDPkar5wKXCHnayrMqCCGWw24A/m4gSwA4+w/r2YY8
-	jTUZUYZOmqdH5eAENXoJiQCQhh0Cp2NNdnNKQUUz3w50kcbzzBBN0orld4JjgWxuQZMGLSA6
-X-Gm-Gg: ASbGncshDQoedL/bSdGSd+PNszUXN/awSoGrTcOSelEeROpchj3UnFP4k2jhaVN4SqW
-	nuPAKbxmzY4VN3WRPOzrmaI84HeyTtbwl0rgIAzj+ZIjxJRA+Qz/EFfBxsps+6xlL1rut+pDJwL
-	l3/qe2zRUaaqykEenvCeC3Vzi/E5jZMEYpW3HIv0n8UYZEzDL1TF27GAlynGk9GijshZ6SuRxV9
-	O1WVrtA2Hd4IMSZ97P2jXGsQ5BWbruNGFrdszxIyNa2VVqjPoeO3dH+DxNWHyH7swAtpRsdxqY2
-	aXL/LT45waD9BjHnO0lp1KNGGmvWatgIMqQbR/dFal38FRENrtwEI0FxYruwpymIsdIYNPD1Vx7
-	PVvnvYt+uH+YmFRhPVSrVnH2L7K9RMHN+7g==
-X-Google-Smtp-Source: AGHT+IEKQGRwDJq1V8V4pFVhYsK4f9Gbh8SYKbU4QZlJjvPkkv9DEDqw9cocLhhr2stwvSgsFgK9Hg==
-X-Received: by 2002:a17:903:3c6b:b0:240:3bb7:fdc3 with SMTP id d9443c01a7336-242a0b6eac4mr81244295ad.28.1754578789452;
-        Thu, 07 Aug 2025 07:59:49 -0700 (PDT)
+        bh=22KKAv75ruk3Ey3Mnp1dAEnaFgvvgO6+9uK7rLi7Vnw=;
+        b=e10MZm6et0LTMi+XxabyEZNc1gAE2Za9JkEEgdPt2Hmx79PsBdMe/NP2z3Gv/Rhk4S
+         e8v2PLjiHLLzQYc3CmzGP0JqvkJ3301dVAdyl+AhS3wCy86t6sO5Uav3cIoyq+mUmL8/
+         gEYGF0PEmv6oMFO7kiZw4H71UWN6Pcx6aKLXxABW4H4XPlr1mo3xDB/rjLXidvfJ/HBV
+         ijuZhwyrx+PWbJSXoKReYkEItulTSZESKT95gdG7QO3F1xFyeprMLlDlUA4ktuO0Pde7
+         E0ihfV3go6XiWuGEV5hkbpmBSyQrtMAgVDK14Z9Th+P0P59NKnMiAWYrUOfFACXmh3CA
+         8aNA==
+X-Forwarded-Encrypted: i=1; AJvYcCUEHsOS/ra2MSvvE52j1Lr64OW3MUgxGKkxhNpRlx6Ml+/Vz5Bi4I3GfA0Wll5tif+4Q9KVouNnKx5w8nw=@vger.kernel.org, AJvYcCW3qlDLaCMckczopGNWXfJzpWS7fA+WldQI3rstxzoZOlIo21Q3lW7py/ki4e1K4CbV5ggD2Ui39id76BSHiatd@vger.kernel.org
+X-Gm-Message-State: AOJu0YywAGPUNfY9k78HUeG4q5ZrVvNYx8kWSCIL+yAzk1q+jP1d1uOH
+	s9jboGCkqaWi+Nc/b4m1rKC3cxDUqLVmSAsktOsMWueQONgndioHhOAGh38Ayhb4+D0LL11R
+X-Gm-Gg: ASbGncuE11fPfSoWy62/a7EJqLvaAjuGM870xEjl6MYk8tF9ZUs2g7Lc7r+kxLb6zMc
+	w8nE2X6vjIN4PIODDpY6Cvdik7p/MECLPr1eg7r1GvvsVW6NmFH1ow5BiFj8mgZXkvIxFkqzvTr
+	kZA2KDAXIj9TfhkxDOanWlBkglPVdBPwZopYCLc2zEESN/AVrAcKMJegJCOqPQZbyAYdHJzT2ty
+	h7t4c7g7iI3YqzXehfUixOgH7KUoQBsdDUqnE4TDek16mKa3jOMCu7ia7Y70whnvVon28DxFQfd
+	YnrwBqjtwFBHxWBIO3cNYDZdelaHrD7dTkwtzPQAnuPsuvn0zbOZv0hoNtAQZNvKgUm9FdWd3zK
+	zEUVzya89rvB48KhtF4cN94dDKiu9brZmEw==
+X-Google-Smtp-Source: AGHT+IHSOqYAlYjD5Ef/rlBHjxgWHAS+CS7TtAabCjgcNjOUQ2cMe6E5st467+N1r/2t8+OVaRydqA==
+X-Received: by 2002:a17:903:3d0e:b0:242:1ccf:65df with SMTP id d9443c01a7336-2429f326a64mr84374645ad.13.1754578795747;
+        Thu, 07 Aug 2025 07:59:55 -0700 (PDT)
 Received: from days-ASUSLaptop.lan ([213.130.142.69])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8977896sm188254875ad.79.2025.08.07.07.59.43
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8977896sm188254875ad.79.2025.08.07.07.59.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Aug 2025 07:59:49 -0700 (PDT)
+        Thu, 07 Aug 2025 07:59:55 -0700 (PDT)
 From: dayss1224@gmail.com
 To: kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -93,9 +93,9 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	Boqun Feng <boqun.feng@gmail.com>,
 	Quan Zhou <zhouquan@iscas.ac.cn>,
 	Dong Yang <dayss1224@gmail.com>
-Subject: [PATCH v2 1/3] KVM: riscv: selftests: Add common supported test cases
-Date: Thu,  7 Aug 2025 22:59:28 +0800
-Message-Id: <09544c24d724a0e9d01c34b3d7599d860919ccb6.1754308799.git.dayss1224@gmail.com>
+Subject: [PATCH v2 2/3] KVM: riscv: selftests: Use the existing RISCV_FENCE macro in `rseq-riscv.h`
+Date: Thu,  7 Aug 2025 22:59:29 +0800
+Message-Id: <7de4aedb44be3166a6568c28da70c0d2d4850571.1754308799.git.dayss1224@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1754308799.git.dayss1224@gmail.com>
 References: <cover.1754308799.git.dayss1224@gmail.com>
@@ -109,38 +109,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Quan Zhou <zhouquan@iscas.ac.cn>
 
-Some common KVM test cases are supported on riscv now as following:
-
-    access_tracking_perf_test
-    dirty_log_perf_test
-    memslot_modification_stress_test
-    memslot_perf_test
-    mmu_stress_test
-    rseq_test
+To avoid redefinition issues with RISCV_FENCE,
+ directly reference the existing macro in `rseq-riscv.h`.
 
 Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Dong Yang <dayss1224@gmail.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/rseq/rseq-riscv.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 38b95998e..3a7186551 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -197,6 +197,12 @@ TEST_GEN_PROGS_riscv += arch_timer
- TEST_GEN_PROGS_riscv += coalesced_io_test
- TEST_GEN_PROGS_riscv += get-reg-list
- TEST_GEN_PROGS_riscv += steal_time
-+TEST_GEN_PROGS_riscv += access_tracking_perf_test
-+TEST_GEN_PROGS_riscv += dirty_log_perf_test
-+TEST_GEN_PROGS_riscv += memslot_modification_stress_test
-+TEST_GEN_PROGS_riscv += memslot_perf_test
-+TEST_GEN_PROGS_riscv += mmu_stress_test
-+TEST_GEN_PROGS_riscv += rseq_test
+diff --git a/tools/testing/selftests/rseq/rseq-riscv.h b/tools/testing/selftests/rseq/rseq-riscv.h
+index 67d544aaa..06c840e81 100644
+--- a/tools/testing/selftests/rseq/rseq-riscv.h
++++ b/tools/testing/selftests/rseq/rseq-riscv.h
+@@ -8,6 +8,7 @@
+  * exception when executed in all modes.
+  */
+ #include <endian.h>
++#include <asm/fence.h>
  
- TEST_GEN_PROGS_loongarch += coalesced_io_test
- TEST_GEN_PROGS_loongarch += demand_paging_test
+ #if defined(__BYTE_ORDER) ? (__BYTE_ORDER == __LITTLE_ENDIAN) : defined(__LITTLE_ENDIAN)
+ #define RSEQ_SIG   0xf1401073  /* csrr mhartid, x0 */
+@@ -24,8 +25,6 @@
+ #define REG_L	__REG_SEL("ld ", "lw ")
+ #define REG_S	__REG_SEL("sd ", "sw ")
+ 
+-#define RISCV_FENCE(p, s) \
+-	__asm__ __volatile__ ("fence " #p "," #s : : : "memory")
+ #define rseq_smp_mb()	RISCV_FENCE(rw, rw)
+ #define rseq_smp_rmb()	RISCV_FENCE(r, r)
+ #define rseq_smp_wmb()	RISCV_FENCE(w, w)
 -- 
 2.34.1
 
