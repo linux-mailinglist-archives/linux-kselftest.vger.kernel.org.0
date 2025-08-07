@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-38506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38507-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28D2BB1DDF0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 22:19:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C679DB1DDF3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 22:19:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5B9A5864DA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 20:19:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 210417ACF45
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Aug 2025 20:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4488127602F;
-	Thu,  7 Aug 2025 20:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E45027780C;
+	Thu,  7 Aug 2025 20:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ktw5nj8h"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Cop8wzbn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A88E275AFF
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 20:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DF427602A
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Aug 2025 20:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754597817; cv=none; b=m7Bo2FoNCIcIUldHbsqq4kj7wqIv2eguuuGaHJcDGlthDXHI/1CT5CmNiEet3ERl/6wQQmDDK0zD95Bbi1k0FNuyoRcmZqgn4GyWbFn7pJLDIkvGk2oBGD0wcXFFy7cDzbzoNvGEQNRro+jbF5hh875uDdMPjGU5GBoh3OZ5EZ4=
+	t=1754597819; cv=none; b=H6OdVb7vlkBGSb6l65nHncf4B8hgrEsih4FWCrNMoJSOtFD/Qvp3/8TR6VPzTn5GAzvZCnV63U4g0Q94hxiSsJAOgZc94/ni2AMMwJ8BrMFEVqZv3E2KUlOJj8hINHa7xgJAisjaGUBd5gJt1RzW/Fc4K142quFn3x5i28oBa8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754597817; c=relaxed/simple;
-	bh=8/991SaqhfbOuXxYGVBkbjKMlNrrAbPc+jQ8DkNet6Y=;
+	s=arc-20240116; t=1754597819; c=relaxed/simple;
+	bh=zz03QvQy9BhkUcCbKhB8ZYqpdO348eIqrosxGGKxtEk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=hyO0wCxlr745WlbRHx+oDpnJZeBRZJRCR3bMa5mx4REWjaskY/w6p8tff5iCCCS7oWFZfSaQ90s8qiN7CQxGaeP0hSIpSsY/8W+6r/13sj7Bu/7kRnMZfqpe11Cf+8ZoiFClq+MBL4xWbAahCymFMnNYkchqx96J5zcb7XHnxpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ktw5nj8h; arc=none smtp.client-ip=209.85.210.202
+	 To:Cc:Content-Type; b=r79ZO9OboF8ChhExH/5RVDTS3yhk/6o7AHKRN2tGRZ8rfhqcTvbPLK+DKMojdL6G/l5RkfzWmyziPAfrpsrMHA9XQyTfsOODnK2WlB8fniO7hg/TC52O5ZkjHzaKEgwx+mHsXLtKauU26jJa4Cd7+i8iaauRHm/lfTzieKmHaPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Cop8wzbn; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-76bf3e05024so1400642b3a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 13:16:55 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3215b3229c7so1565913a91.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Aug 2025 13:16:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754597815; x=1755202615; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1754597816; x=1755202616; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qod859ACwAJ9KJXJ66Pu3+9/i9Fm4EF7ZGslehKFgPA=;
-        b=ktw5nj8hoBYBZya6tgjKW1e0edgY0Gyc4rjJmkPbKOJaXe16ikMFwbfC3zw7xxMgDe
-         SAH9GcOYDGpLrmFS+X8UdaR2lJwRR4v+F1+ZqZYHx+mo2oaQs4q3nrXzRQmHrTeFDeJQ
-         Yd6RJ2zMcetkFhH3hI2/ots2HHTDqJR3My27eVB8pzlrboIH8AWujf/iRwQHIldV/KyT
-         5RcGiWL3lMRo4YuLqX/YLJI9UdM6mvc3PsgV9uGccM4l1On9bpXawLx4GBeUEwSxwzdp
-         hjKRBWxSGdOLtnp8Y/oVp2xGfRVv4sz36oYLFCEHaobnojnc7dcJgbYtpfpehf1JSkIT
-         Xxwg==
+        bh=H02GupghP06Pl6XppekrAspyM14zQhrZcjITLukp9sM=;
+        b=Cop8wzbnRhGpzT/R202f6zeU7XyUTNjJcQLqVKvMu9NvBum9X8NewZFAICHbe+dTw6
+         uTCWRm/FO+ZiqcfpbfybgGdv/waGmxzOLOXBTyAwYkxdiPHSIxn7DMklz5vDLBwVlTw2
+         nCXXPktrnUG449/Mw4xLu7SDR9X+RC8fWDVVT2JymxyxOGKQGVfhDqS4bScFQfZVpFEI
+         PHbdw4LoeeksWJUEdpzSR8QvnVc4MhvBC8sw5koAU6hOjmgibSstKa7VSqfH2GZlYolp
+         Q86gbLqT9kxMj5A/p3QkErm8LiCpCB3isoqDXoMvhdZNQ7jaWQGliM9ZLhQgzd3KO6cr
+         +I+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754597815; x=1755202615;
+        d=1e100.net; s=20230601; t=1754597816; x=1755202616;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qod859ACwAJ9KJXJ66Pu3+9/i9Fm4EF7ZGslehKFgPA=;
-        b=JFwo0Jz+h/dXcQlwgOPWPuOLVsVI0fUgbPdE+vLIgTn/EWUj46C6LIai3QTAhDgbHG
-         vzN9KeLn19pC26UjczpTRvV/NnOhcxIbpygLtH3FDECmWUJeuVqszfyEEskYj/j4kVhH
-         awiMJZVIwew6+h3wZ1PJ3V6etZ3TS8ZOtysrbT5SFfWzTbU0uNX6wPkVDVE2zR9NRRSK
-         BaqkEQtfz5WKYf3q92UdCXo52OTB6c1Pked0PPPXtzft05aDbxzwtUPSuHbidroCYxVQ
-         YZABmlN/sA3PWM75vQdRuLCjxtSwPxa+JHa/9kx4GfoMvSCWbQ9yavQP+ZkTNIFYp+EK
-         JGJA==
-X-Gm-Message-State: AOJu0YyCZyL7NUpQiN8ntKXSJsiqsuS1NKMa+bTMpEc7x7CCfWsyyeEg
-	CFbMXYB/AEIf+CnCUvl7GOS5ydbXb1B81IDjjfJT5O7oxxW9xGf3zYXdD6GqyvbRfrF+7fthxj0
-	Gg8UzjOZlSx0Z5mMnk68jGJRF3ejnAKchwWUxsc6mIakiBEhh/i/BwzHij1BtKCoUR5VSwgv/Zj
-	mfRWnXvBSpM6yyzO1ZeXydw0V5VUTRiW8wv//+UvmlV6A=
-X-Google-Smtp-Source: AGHT+IElhGKAW5wN//qmv94pEi0jFcwaYTH9QkghkSjAapFDDJMVQZjNYUu6DUB+rXi8WiqKmyIVXaKSpQ==
-X-Received: from pftb22.prod.google.com ([2002:a05:6a00:2d6:b0:76b:fe87:6051])
- (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1389:b0:736:54c9:df2c
- with SMTP id d2e1a72fcca58-76c46111288mr619107b3a.15.1754597814594; Thu, 07
- Aug 2025 13:16:54 -0700 (PDT)
-Date: Thu,  7 Aug 2025 13:16:07 -0700
+        bh=H02GupghP06Pl6XppekrAspyM14zQhrZcjITLukp9sM=;
+        b=f1lD/t7aylUQWpx4enrIIZv7wlWsGhmBpr/bxfbHHkfmOajkNSirtGgsjyALUgCvyE
+         S4iTCMyMMnYmNlXsQtU/4ZxL9MUSBY1BvjTcbeonpNZa9yQC0ji0Qj4ojFrWxdJS3P8R
+         CEmP8BPZfs5UrNJCVea36feK+2lkD7qgF8BfutQBPG9CA/aUGhsKPoxRaZxEryNdT6aC
+         gQeuwGW9aO0OMovQBIwff+ZT2M37nV/yUpezNed+FLyFYEVZqgwUp58DgN9FI/FZOTl8
+         kttOHJ2WosL/ThjD9DYyDi2PXUDaVKGgS/gMVUyXwrZ42ufHQRiF86veKsVNXMqva4Pe
+         oOJg==
+X-Gm-Message-State: AOJu0YyVuN3rB+dp90ROtlfXbTKI+nM0b7JuLXbat6lD0nxN/Pe2IiQu
+	0XdBtGtlOq3zguf5mCmrVZyHo34ORL3uiFkQL+8D+PfoZE0n1hxPubGXh1MRcKTOHX3UARfyNT0
+	xZuWE+feLTvy81DrqgONp5zELf6phAbFXXvG0jpALd0y62x4EP11alX7A2WPEs+XA2UTTbW0wwd
+	nnTW9R9oQ9PDIZTmYU5mVKo3GtCSGrUHs59RHh/VZ38nQ=
+X-Google-Smtp-Source: AGHT+IFq754CbVPzWNL/LbseHEnbC9S06XClR4AL5Cvqv0z6d0U8bvMt5QEaurr631DddNOY7Hce1DrpyQ==
+X-Received: from pjbns14.prod.google.com ([2002:a17:90b:250e:b0:31e:a865:8b32])
+ (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3c49:b0:321:475e:e0b0
+ with SMTP id 98e67ed59e1d1-321839e1643mr539454a91.11.1754597816103; Thu, 07
+ Aug 2025 13:16:56 -0700 (PDT)
+Date: Thu,  7 Aug 2025 13:16:08 -0700
 In-Reply-To: <20250807201628.1185915-1-sagis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250807201628.1185915-1-sagis@google.com>
 X-Mailer: git-send-email 2.51.0.rc0.155.g4a0f42376b-goog
-Message-ID: <20250807201628.1185915-12-sagis@google.com>
-Subject: [PATCH v8 11/30] KVM: selftests: TDX: Adding test case for TDX port IO
+Message-ID: <20250807201628.1185915-13-sagis@google.com>
+Subject: [PATCH v8 12/30] KVM: selftests: TDX: Add basic TDX CPUID test
 From: Sagi Shahar <sagis@google.com>
 To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
 	Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>, 
@@ -89,216 +89,207 @@ To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
 Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Verifies TDVMCALL<INSTRUCTION.IO> READ and WRITE operations.
+The test reads CPUID values from inside a TD VM and compare them
+to expected values.
 
+The test targets CPUID values which are virtualized as "As Configured",
+"As Configured (if Native)", "Calculated", "Fixed" and "Native"
+according to the TDX spec.
+
+Co-developed-by: Isaku Yamahata <isaku.yamahata@intel.com>
+Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 Signed-off-by: Sagi Shahar <sagis@google.com>
 ---
- .../selftests/kvm/include/x86/tdx/test_util.h | 20 +++++
- .../selftests/kvm/lib/x86/tdx/test_util.c     | 35 +++++++++
- tools/testing/selftests/kvm/x86/tdx_vm_test.c | 78 ++++++++++++++++++-
- 3 files changed, 130 insertions(+), 3 deletions(-)
+ .../selftests/kvm/include/x86/tdx/test_util.h | 15 +++
+ .../selftests/kvm/lib/x86/tdx/test_util.c     | 20 ++++
+ tools/testing/selftests/kvm/x86/tdx_vm_test.c | 98 ++++++++++++++++++-
+ 3 files changed, 132 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86/tdx/test_util.h b/tools/testing/selftests/kvm/include/x86/tdx/test_util.h
-index dafeee9af1dc..cf11955d56d6 100644
+index cf11955d56d6..2af6e810ef78 100644
 --- a/tools/testing/selftests/kvm/include/x86/tdx/test_util.h
 +++ b/tools/testing/selftests/kvm/include/x86/tdx/test_util.h
-@@ -13,6 +13,19 @@
+@@ -9,6 +9,9 @@
+ #define TDX_TEST_SUCCESS_PORT 0x30
+ #define TDX_TEST_SUCCESS_SIZE 4
+ 
++#define TDX_TEST_REPORT_PORT 0x31
++#define TDX_TEST_REPORT_SIZE 4
++
+ /* Port I/O direction */
  #define PORT_READ	0
  #define PORT_WRITE	1
- 
-+/*
-+ * Assert that some IO operation involving tdg_vp_vmcall_instruction_io() was
-+ * called in the guest.
-+ */
-+void tdx_test_assert_io(struct kvm_vcpu *vcpu, uint16_t port, uint8_t size,
-+			uint8_t direction);
-+
-+/*
-+ * Run the tdx vcpu and check if there was some failure in the guest, either
-+ * an exception like a triple fault, or if a tdx_test_fatal() was hit.
-+ */
-+void tdx_run(struct kvm_vcpu *vcpu);
-+
- /*
-  * Run a test in a new process.
-  *
-@@ -57,4 +70,11 @@ void tdx_test_fatal(uint64_t error_code);
+@@ -77,4 +80,16 @@ void tdx_test_fatal_with_data(uint64_t error_code, uint64_t data_gpa);
   */
- void tdx_test_fatal_with_data(uint64_t error_code, uint64_t data_gpa);
+ void tdx_assert_error(uint64_t error);
  
 +/*
-+ * Assert on @error and report the @error to userspace.
-+ * Return value from tdg_vp_vmcall_report_fatal_error() is ignored since execution
-+ * is not expected to continue beyond this point.
++ * Report a 32 bit value from the guest to user space using TDG.VP.VMCALL
++ * <Instruction.IO> call. Data is reported on port TDX_TEST_REPORT_PORT.
 + */
-+void tdx_assert_error(uint64_t error);
++uint64_t tdx_test_report_to_user_space(uint32_t data);
++
++/*
++ * Read a 32 bit value from the guest in user space, sent using
++ * tdx_test_report_to_user_space().
++ */
++uint32_t tdx_test_read_report_from_guest(struct kvm_vcpu *vcpu);
 +
  #endif // SELFTEST_TDX_TEST_UTIL_H
 diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/test_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/test_util.c
-index 6c82a0c3bd37..4ccc5298ba25 100644
+index 4ccc5298ba25..f9bde114a8bc 100644
 --- a/tools/testing/selftests/kvm/lib/x86/tdx/test_util.c
 +++ b/tools/testing/selftests/kvm/lib/x86/tdx/test_util.c
-@@ -8,8 +8,37 @@
- 
- #include "kvm_util.h"
- #include "tdx/tdx.h"
-+#include "tdx/tdx_util.h"
- #include "tdx/test_util.h"
- 
-+void tdx_test_assert_io(struct kvm_vcpu *vcpu, uint16_t port, uint8_t size,
-+			uint8_t direction)
-+{
-+	TEST_ASSERT(vcpu->run->exit_reason == KVM_EXIT_IO,
-+		    "Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
-+		    vcpu->run->exit_reason,
-+		    exit_reason_str(vcpu->run->exit_reason));
-+
-+	TEST_ASSERT(vcpu->run->exit_reason == KVM_EXIT_IO &&
-+		    vcpu->run->io.port == port &&
-+		    vcpu->run->io.size == size &&
-+		    vcpu->run->io.direction == direction,
-+		    "Got unexpected IO exit values: %u (%s) %u %u %u\n",
-+		    vcpu->run->exit_reason,
-+		    exit_reason_str(vcpu->run->exit_reason),
-+		    vcpu->run->io.port, vcpu->run->io.size,
-+		    vcpu->run->io.direction);
-+}
-+
-+void tdx_run(struct kvm_vcpu *vcpu)
-+{
-+	td_vcpu_run(vcpu);
-+	if (vcpu->run->exit_reason == KVM_EXIT_SYSTEM_EVENT)
-+		TEST_FAIL("Guest reported error. error code: %lld (0x%llx)\n",
-+			  vcpu->run->system_event.data[12],
-+			  vcpu->run->system_event.data[13]);
-+}
-+
- int run_in_new_process(void (*func)(void))
- {
- 	int wstatus;
-@@ -69,3 +98,9 @@ void tdx_test_fatal(uint64_t error_code)
- {
- 	tdx_test_fatal_with_data(error_code, 0);
+@@ -104,3 +104,23 @@ void tdx_assert_error(uint64_t error)
+ 	if (error)
+ 		tdx_test_fatal(error);
  }
 +
-+void tdx_assert_error(uint64_t error)
++uint64_t tdx_test_report_to_user_space(uint32_t data)
 +{
-+	if (error)
-+		tdx_test_fatal(error);
++	/* Upcast data to match tdg_vp_vmcall_instruction_io() signature */
++	uint64_t data_64 = data;
++
++	return tdg_vp_vmcall_instruction_io(TDX_TEST_REPORT_PORT,
++					    TDX_TEST_REPORT_SIZE, PORT_WRITE,
++					    &data_64);
++}
++
++uint32_t tdx_test_read_report_from_guest(struct kvm_vcpu *vcpu)
++{
++	uint32_t res;
++
++	tdx_test_assert_io(vcpu, TDX_TEST_REPORT_PORT, 4, PORT_WRITE);
++	res = *(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
++
++	return res;
 +}
 diff --git a/tools/testing/selftests/kvm/x86/tdx_vm_test.c b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-index 7d6d71602761..97330e28f236 100644
+index 97330e28f236..bbdcca358d71 100644
 --- a/tools/testing/selftests/kvm/x86/tdx_vm_test.c
 +++ b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
 @@ -3,6 +3,7 @@
  #include <signal.h>
  
  #include "kvm_util.h"
-+#include "tdx/tdcall.h"
++#include "processor.h"
+ #include "tdx/tdcall.h"
  #include "tdx/tdx.h"
  #include "tdx/tdx_util.h"
- #include "tdx/test_util.h"
-@@ -25,7 +26,7 @@ static void verify_td_lifecycle(void)
+@@ -146,6 +147,99 @@ void verify_td_ioexit(void)
+ 	printf("\t ... PASSED\n");
+ }
  
- 	printf("Verifying TD lifecycle:\n");
- 
--	td_vcpu_run(vcpu);
++/*
++ * Verifies CPUID functionality by reading CPUID values in guest. The guest
++ * will then send the values to userspace using an IO write to be checked
++ * against the expected values.
++ */
++void guest_code_cpuid(void)
++{
++	uint32_t ebx, ecx;
++	uint64_t err;
++
++	/* Read CPUID leaf 0x1 */
++	asm volatile ("cpuid"
++		      : "=b" (ebx), "=c" (ecx)
++		      : "a" (0x1)
++		      : "edx");
++
++	err = tdx_test_report_to_user_space(ebx);
++	tdx_assert_error(err);
++
++	err = tdx_test_report_to_user_space(ecx);
++	tdx_assert_error(err);
++
++	tdx_test_success();
++}
++
++void verify_td_cpuid(void)
++{
++	uint32_t guest_max_addressable_ids, host_max_addressable_ids;
++	const struct kvm_cpuid_entry2 *cpuid_entry;
++	uint32_t guest_clflush_line_size;
++	uint32_t guest_initial_apic_id;
++	uint32_t guest_sse3_enabled;
++	uint32_t guest_fma_enabled;
++	struct kvm_vcpu *vcpu;
++	struct kvm_vm *vm;
++	uint32_t ebx, ecx;
++
++	vm = td_create();
++	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
++	vcpu = td_vcpu_add(vm, 0, guest_code_cpuid);
++	td_finalize(vm);
++
++	printf("Verifying TD CPUID:\n");
++
++	/* Wait for guest to report ebx value */
 +	tdx_run(vcpu);
- 	tdx_test_assert_success(vcpu);
- 
- 	kvm_vm_free(vm);
-@@ -69,9 +70,78 @@ void verify_report_fatal_error(void)
- 	TEST_ASSERT_EQ(vcpu->run->system_event.data[12], 0x0BAAAAAD00000000);
- 	TEST_ASSERT_EQ(vcpu->run->system_event.data[13], 0);
- 
--	td_vcpu_run(vcpu);
++	ebx = tdx_test_read_report_from_guest(vcpu);
++
++	/* Wait for guest to report either ecx value or error */
++	tdx_run(vcpu);
++	ecx = tdx_test_read_report_from_guest(vcpu);
++
++	/* Wait for guest to complete execution */
 +	tdx_run(vcpu);
 +	tdx_test_assert_success(vcpu);
++
++	/* Verify the CPUID values received from the guest. */
++	printf("\t ... Verifying CPUID values from guest\n");
++
++	/* Get KVM CPUIDs for reference */
++	cpuid_entry = vcpu_get_cpuid_entry(vcpu, 1);
++	TEST_ASSERT(cpuid_entry, "CPUID entry missing\n");
++
++	host_max_addressable_ids = (cpuid_entry->ebx >> 16) & 0xFF;
++
++	guest_sse3_enabled = ecx & 0x1;  // Native
++	guest_clflush_line_size = (ebx >> 8) & 0xFF;  // Fixed
++	guest_max_addressable_ids = (ebx >> 16) & 0xFF;  // As Configured
++	guest_fma_enabled = (ecx >> 12) & 0x1;  // As Configured (if Native)
++	guest_initial_apic_id = (ebx >> 24) & 0xFF;  // Calculated
++
++	TEST_ASSERT_EQ(guest_sse3_enabled, 1);
++	TEST_ASSERT_EQ(guest_clflush_line_size, 8);
++	TEST_ASSERT_EQ(guest_max_addressable_ids, host_max_addressable_ids);
++
++	/* TODO: This only tests the native value. To properly test
++	 * "As Configured (if Native)" this value needs override in the
++	 * TD params.
++	 */
++	TEST_ASSERT_EQ(guest_fma_enabled, (cpuid_entry->ecx >> 12) & 0x1);
++
++	/* TODO: guest_initial_apic_id is calculated based on the number of
++	 * vCPUs in the TD. From the spec: "Virtual CPU index, starting from 0
++	 * and allocated sequentially on each successful TDH.VP.INIT"
++	 * To test non-trivial values either use a TD with multiple vCPUs
++	 * or pick a different calculated value.
++	 */
++	TEST_ASSERT_EQ(guest_initial_apic_id, 0);
 +
 +	kvm_vm_free(vm);
 +	printf("\t ... PASSED\n");
 +}
 +
-+#define TDX_IOEXIT_TEST_PORT 0x50
-+
-+/*
-+ * Verifies IO functionality by writing a |value| to a predefined port.
-+ * Verifies that the read value is |value| + 1 from the same port.
-+ * If all the tests are passed then write a value to port TDX_TEST_PORT
-+ */
-+void guest_ioexit(void)
-+{
-+	uint64_t data_out, data_in;
-+	uint64_t ret;
-+
-+	data_out = 0xAB;
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IOEXIT_TEST_PORT, 1,
-+					   PORT_WRITE, &data_out);
-+	tdx_assert_error(ret);
-+
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IOEXIT_TEST_PORT, 1,
-+					   PORT_READ, &data_in);
-+	tdx_assert_error(ret);
-+
-+	if (data_in != 0xAC)
-+		tdx_test_fatal(data_in);
-+
-+	tdx_test_success();
-+}
-+
-+void verify_td_ioexit(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	uint32_t port_data;
-+	struct kvm_vm *vm;
-+
-+	vm = td_create();
-+	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
-+	vcpu = td_vcpu_add(vm, 0, guest_ioexit);
-+	td_finalize(vm);
-+
-+	printf("Verifying TD IO Exit:\n");
-+
-+	/* Wait for guest to do a IO write */
-+	tdx_run(vcpu);
-+	tdx_test_assert_io(vcpu, TDX_IOEXIT_TEST_PORT, 1, PORT_WRITE);
-+	port_data = *(uint8_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
-+
-+	printf("\t ... IO WRITE: DONE\n");
-+
-+	/*
-+	 * Wait for the guest to do a IO read. Provide the previous written data
-+	 * + 1 back to the guest
-+	 */
-+	tdx_run(vcpu);
-+	tdx_test_assert_io(vcpu, TDX_IOEXIT_TEST_PORT, 1, PORT_READ);
-+	*(uint8_t *)((void *)vcpu->run + vcpu->run->io.data_offset) = port_data + 1;
-+
-+	printf("\t ... IO READ: DONE\n");
-+
-+	/*
-+	 * Wait for the guest to complete execution successfully. The read
-+	 * value is checked within the guest.
-+	 */
-+	tdx_run(vcpu);
- 	tdx_test_assert_success(vcpu);
- 
-+	printf("\t ... IO verify read/write values: OK\n");
- 	kvm_vm_free(vm);
- 	printf("\t ... PASSED\n");
- }
-@@ -83,11 +153,13 @@ int main(int argc, char **argv)
+ int main(int argc, char **argv)
+ {
+ 	ksft_print_header();
+@@ -153,13 +247,15 @@ int main(int argc, char **argv)
  	if (!is_tdx_enabled())
  		ksft_exit_skip("TDX is not supported by the KVM. Exiting.\n");
  
--	ksft_set_plan(2);
-+	ksft_set_plan(3);
+-	ksft_set_plan(3);
++	ksft_set_plan(4);
  	ksft_test_result(!run_in_new_process(&verify_td_lifecycle),
  			 "verify_td_lifecycle\n");
  	ksft_test_result(!run_in_new_process(&verify_report_fatal_error),
  			 "verify_report_fatal_error\n");
-+	ksft_test_result(!run_in_new_process(&verify_td_ioexit),
-+			 "verify_td_ioexit\n");
+ 	ksft_test_result(!run_in_new_process(&verify_td_ioexit),
+ 			 "verify_td_ioexit\n");
++	ksft_test_result(!run_in_new_process(&verify_td_cpuid),
++			 "verify_td_cpuid\n");
  
  	ksft_finished();
  	return 0;
