@@ -1,97 +1,91 @@
-Return-Path: <linux-kselftest+bounces-38561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4149CB1E989
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 15:52:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 125D8B1E9B8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 15:57:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E32DC3A9463
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 13:52:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D5E51C24AA7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 13:58:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4473E81732;
-	Fri,  8 Aug 2025 13:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FE9327BF6F;
+	Fri,  8 Aug 2025 13:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldLbuBxl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SSOS6Tqf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FAA1B7F4;
-	Fri,  8 Aug 2025 13:52:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED80327A12C;
+	Fri,  8 Aug 2025 13:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754661126; cv=none; b=UDvhbf3lcpxCHvY760K1Pe+ipI5bWiPGBN7flSUmriFthJJr4DzXXHeEDUu9BHsD0L81af+aavR1wtwU2+QzTFpFckRE342po7M+2YAnv8/yXo3J57QQzeOpoLjAeGfywJOeEA2nMnV+NNjKdus7vgBQh5nooQ4dtG486A1I7rc=
+	t=1754661452; cv=none; b=tnTy3cTdCr4WzfaypFCR+UqXEP95mCAwbnZ8uUR97RYIJ4az7f5W9lJ2S0aD0b+6pToePt76gFqIHwKu0Gd0hnK6eNL1bmMuMm4yQ7vrXE4h98wTj3R74jk2+nx2La9/S/P3Gasx6J4FBgj0D/BwsblFtAN3KyYEg62uLwyhdq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754661126; c=relaxed/simple;
-	bh=+89FbzoXzbeBFvgwfAw8UlIb8w1o2l86DsH+uTjvG9E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o79AjJdAVxOyWRT73OJI6ODOGJWmRZSHcDNjnyeTcfvww5qkdJyS3RHVrkUNYSCx+LzoJNvZQfoI9HEQV1dX1ysp5LetOCTcjkd68r4i+b68pEJmiPGDbuSABCu3L35ICdiE8oXf3mCHldJKjFvUw00oeGoklcyLIFr/7ZAtqTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldLbuBxl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88941C4CEED;
-	Fri,  8 Aug 2025 13:52:03 +0000 (UTC)
+	s=arc-20240116; t=1754661452; c=relaxed/simple;
+	bh=MK5DJOEbqjKPiqztvlyYdDxYWReaTbpXF19G6D/+jAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tqPEJoj3SzPqT6rwydl2YELmW/r9up/Kzzx+mqwxOzFWA2OiczDDoFeEhFnOS7+gqvbpnhmI3jaCiqTakXRf8Q+BlCfngo22/oLRA1VhBiERBbvKfOUnyXA+XFwLoVauF/QUwRrjSn+syigKsOtkLeNASBXbSytNes8Or3q1/j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SSOS6Tqf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 251DBC4CEED;
+	Fri,  8 Aug 2025 13:57:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754661125;
-	bh=+89FbzoXzbeBFvgwfAw8UlIb8w1o2l86DsH+uTjvG9E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ldLbuBxlhKi8JUBDf6G3L/Y+wnIU5DwrlHdrbWDdl5iMLBl04MWlZufA487rSlUPn
-	 8FGYNe+44rTxfd1l7lbbYnUsK+jHPtr1bkWH09QNW1b7fSArFu+KHm5nqA9RXmfz/S
-	 Pya7S/u5PWHaUznf79abzAsPBz4o7SyiIGEVh9riD4X8qEPueChLC7AKh4ODZTD1Th
-	 iqcfLZLtjINdpqRWlWC2Inze+2+BcCSRXxS89RJlChiZoiexAgPIPnE3ZNjebk4ttb
-	 SFsjc/b17vPCLU/tdYaw67pYibrl4ZB/kPDx4ITRfjSMtJYYgHIhRqDVIjUUglSRLO
-	 KaRAwfNxc94cA==
-Date: Fri, 8 Aug 2025 15:52:01 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Aleksa Sarai <cyphar@cyphar.com>, Jan Kara <jack@suse.cz>, 
-	David Howells <dhowells@redhat.com>, Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] fscontext: do not consume log entries when
- returning -EMSGSIZE
-Message-ID: <20250808-notieren-abwaschen-cc01d21dd933@brauner>
-References: <20250807-fscontext-log-cleanups-v3-0-8d91d6242dc3@cyphar.com>
- <20250807-fscontext-log-cleanups-v3-1-8d91d6242dc3@cyphar.com>
- <20250806190751.GG222315@ZenIV>
+	s=k20201202; t=1754661451;
+	bh=MK5DJOEbqjKPiqztvlyYdDxYWReaTbpXF19G6D/+jAM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=SSOS6Tqf5pYiqsf0gVpkWJYeG2DjAxRFWKq6XLP6ZD5rhcVcJNQhH0h8TDuKh4tI9
+	 WK/1NzsVGUBjpXX9mYX0EEQN7QMsPkaWiTLYytMU40hXE6ZqYbP86L+ZgFTEP1ErAU
+	 QvbdgLkX1SMc1Uw5mLFIR5/mHDNayFprA/uvo22CPv+yxJKqyqiczv9Tbk4fDn6ZgC
+	 cR8ya/2jTcAO/o2vIjP1igmOpgP/20izZHi4J/wmy3keGL7IPefVv5yF2UdzwfZ5Hm
+	 nrMNTZLrFEoU5hMtqxznGH2KIMu4pMd/9u7H/+hiui3LgWoUVPCH0WXWXDMh1om6vY
+	 BNMQ83AENZsPQ==
+Date: Fri, 8 Aug 2025 06:57:30 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Eric Dumazet <edumazet@google.com>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, borisp@nvidia.com,
+ john.fastabend@gmail.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, sd@queasysnail.net, will@willsroot.io,
+ savy@syst3mfailure.io
+Subject: Re: [PATCH net 1/2] tls: handle data disappearing from under the
+ TLS ULP
+Message-ID: <20250808065730.602dac6a@kernel.org>
+In-Reply-To: <CANn89iLbDQ2Le-7WU2dWvr3bc4J-Jcra-rX935Or4wRXDGVViw@mail.gmail.com>
+References: <20250806180510.3656677-1-kuba@kernel.org>
+	<CANn89iKvW8jSrktWVd6g4m8qycp32-M=gFxwZRJ3LZi1h2Q80Q@mail.gmail.com>
+	<20250806132034.55292365@kernel.org>
+	<CANn89iLbDQ2Le-7WU2dWvr3bc4J-Jcra-rX935Or4wRXDGVViw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250806190751.GG222315@ZenIV>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 06, 2025 at 08:07:51PM +0100, Al Viro wrote:
-> On Thu, Aug 07, 2025 at 03:55:23AM +1000, Aleksa Sarai wrote:
+On Fri, 8 Aug 2025 06:51:06 -0700 Eric Dumazet wrote:
+> > > Can a 2^32 wrap occur eventually ?  
+> >
+> > Hm, good point. Is it good enough if we also check it in data_ready?
+> > That way we should notice that someone is eating our data before
+> > the seq had a chance to wrap?  
 > 
-> > -		goto err_free;
-> > -	ret = -EFAULT;
-> > -	if (copy_to_user(_buf, p, n) != 0)
-> > -		goto err_free;
-> > +	if (copy_to_user(_buf, p, n))
-> > +		n = -EFAULT;
-> >  	ret = n;
-> > -
-> > -err_free:
-> >  	if (need_free)
-> >  		kfree(p);
-> >  	return ret;
+> I could not understand what your suggestion was.
 > 
-> Minor nit: seeing that there's only one path to that return, I would
-> rather turn it into
-> 	return n;
-> and dropped the assignment to ret a few lines above.  Anyway, that's
-> trivially done when applying...
+> Perhaps store both copued_seq and tp->bytes_received and
 > 
-> Anyway, who's carrying fscontext-related stuff this cycle?  I've got
-> a short series in that area, but there won't be much from me around
-> there - a plenty of tree-in-dcache stuff, quite a bit of mount-related
-> work, etc., but not a lot around the options-parsing machinery.
+> check if (tp->bytes_received - strp->bytes_received) is smaller than 2^31 .
 > 
-> Christian, do you have any plans around that area?
+>               if (unlikely(strp->copied_seq != tp->copied_seq ||
+>                                (tp->bytes_received -
+> strp->bytes_received >= (1ULL < 31)) ||
+>                             WARN_ON(tcp_inq(strp->sk) < strp->stm.full_len))) {
 
-I've got a tree for that already and have applied related stuff there.
-I've fixed up the comments from this thread.
+Nice, I think that would work.
+I was wondering how to solve this yesterday and I realized the extra
+condition isn't really needed. We just have to handle the inq < full_len
+more carefully and remove the WARN_ON(). I posted a v2.
 
