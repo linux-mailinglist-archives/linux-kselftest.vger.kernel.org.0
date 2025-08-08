@@ -1,104 +1,124 @@
-Return-Path: <linux-kselftest+bounces-38563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFDC1B1E9F1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 16:06:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A70EB1E9F6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 16:06:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5F071C24A29
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 14:06:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55CF2625F0E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 14:06:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B342609D6;
-	Fri,  8 Aug 2025 14:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB8F027B4EE;
+	Fri,  8 Aug 2025 14:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iIb96Fhi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HK8r9EDm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0A81B7F4;
-	Fri,  8 Aug 2025 14:06:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329B12609D6
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Aug 2025 14:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754661978; cv=none; b=XtRDlyCw2ILfZ6H8ctsJsdNt+/gwY+UiRXhEjvcvvDnTL9Y/P9ajyxokoFXm3/JFy77GPgzxsLhTO5BT73lVmM8/yiEuUC4pV3obtqguGjso24MsSuMsx5xA+gCbPED7IE+rxVmYqzj1nBKdwta5CfnvFMWOWq7yldMaFm1xpFk=
+	t=1754662000; cv=none; b=UsHfRdV3PzceyBKm+cBrhD1qccq4YbgcvVhJyJPjif5pWlAnzWHKxtovsPpjmcvQ1qssea4XFxCeuQ3TxbE6dGRazAzACqXQpawl/JTUG9/mdGhB0eJjQz8biRXZj2X9CB7CWc07GbHRoE3f0L6qZd5bnpSA5QwfRoYUwKI0ViI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754661978; c=relaxed/simple;
-	bh=hllP0vfjoOHx7x2Rtw7H5LUbK6b0VbY0wcpLTbQ7yLA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gmSTHG6YT+I7bIj+YJLyvtJrvfFXHs5tAGFcGm4Jy8JMH5CGzduOU/1/q8rR9Nkrf8KR06tbH4g/nybFUJTzaBDK7e+PutAHEdQy12th4B3DwEWsE9k9NvushR6V0cEtom39VXGfISspPK9rSS6oOu1Z+8J5oan5xR7KAYZfzMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iIb96Fhi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E62C4CEF4;
-	Fri,  8 Aug 2025 14:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754661976;
-	bh=hllP0vfjoOHx7x2Rtw7H5LUbK6b0VbY0wcpLTbQ7yLA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iIb96Fhiq+jgyfvofugO+MBXEuk2akuWuJfWqCSF0F7VVEf8Zyz89e6UFfa5HOo5M
-	 9e0VEz0FLA1rX5DLfYSNyzNH61m5Wj9fj45V18BM692nh0YriSBHAbOkqnlkaMUeUk
-	 HVItMlxNxrWzCpnaMGnKVDRMlgs/3cMXzFQld5xD1FS8GNPMEX3+VmHDCG7vgH+OTQ
-	 ry4A0mZ1sZOjDB2Jvr85U8uJcQEDADtZNmGUK42aya679ZD+cs87VdiQ9bz5ITayLv
-	 5QDxUYhIJbAkwYFQ9MuuYMikflTZ2twu8XEUXSXqlU356DioQwnw2Fa0+SiLJRHPYx
-	 jnUKtHfQzqOxA==
-From: Christian Brauner <brauner@kernel.org>
-To: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	David Howells <dhowells@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v3 0/2] fscontext: do not consume log entries when returning -EMSGSIZE
-Date: Fri,  8 Aug 2025 16:06:05 +0200
-Message-ID: <20250808-landkarte-parodie-14c4a95037e4@brauner>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250807-fscontext-log-cleanups-v3-0-8d91d6242dc3@cyphar.com>
-References: <20250807-fscontext-log-cleanups-v3-0-8d91d6242dc3@cyphar.com>
+	s=arc-20240116; t=1754662000; c=relaxed/simple;
+	bh=Iq6OPfb0BUy4RFBX3eUrfo9zr9SoPfRQuh+fqYCnQLU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qfshviM4XmgNTudpogKH3rZraeZiuvA7F7NT4vBJSaF0gMyN5Ahq1LR8GvHHR0llkSCqtYoukEyuppHnh5xCzNejfvDeQoedLauCuPTyQ6U9IDcyHo+Y1YmKsZaiUz2+7XatP5AK4E4eo/QsCN4/6Gwotpfirw0377FkuQ/paDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HK8r9EDm; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4b0784e3153so37046861cf.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Aug 2025 07:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1754661998; x=1755266798; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ziOgj5AOK/KCYmHORFalDdaCAEaK5JFXOuVwayAxXmk=;
+        b=HK8r9EDmbd5MzTcRUmlHPMzvrN3shxlR0iJElTnkj0pLIp+EPyB/8VIs0i5KAMV10R
+         ESqETDrG3Xc6I4fDf26ncn7iSacCjhAJoOigbp7iH9VJ8ETXE7vnsuUVmmx8O1OVrEKe
+         U+kseDaP/m/IyjcCGbM3MtiNgQhYeeIdBhcX8eRHEK9fJ1oVT9o9Q+3mYsLWaHho7twc
+         MO06XOypLUi51ybX/pWPuznD/CQvdKbmaHt++uJgNcC4kMTGjbcSzxedV1WAAS4kR/Ct
+         6AXnrzgYD9+iaE9lC2SyehFmDa1795ZWGMc46wdIym+cqwcJyLGI51A0lGrWxX0RrWBD
+         xOig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754661998; x=1755266798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ziOgj5AOK/KCYmHORFalDdaCAEaK5JFXOuVwayAxXmk=;
+        b=j1Y9Uzs9Gyprd27ytVT5hUr+3VQ94GRSvCaZsjwkDfS7+IE10BAuXg4pTCwZtC+Chg
+         fWgd24eTR9CGQrWcnYB9X0DBIkx2PK/qIYQw0w+yUy3Z1M1ZxHpT7wFeh3hf9gvcLsem
+         r7VqlqqN/YHQU43lDSURuPUbU2lJD7MeVes6+gOOGs2LXjNQptTRvNoRrpBU6H1Rcw4J
+         nkKDsI0/z0VdPVJU8L404vWIj8+uvZ1wM6PuGQ2HNrhlPDEsrgUNI2aAJdGer5HF2G56
+         mZUH30d0is72G5hDm7ixb8oZ8iaumSO7ZKeFo9D7HmfscJI3GaWYsRRarZsj7asmt7LE
+         o9eg==
+X-Forwarded-Encrypted: i=1; AJvYcCVV257P/a2m3UsGAnpVtxymIRjvQWzEd2BFsZbr4KqEoAcxw4+kSfO1NKa1OP8dMYRKuMpAJFwIr3NOe4JA3rE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+j4iqB60EIki2kBVm74fmAPki8eLQtVLqIWo4IHyuZGvR1mqn
+	29cr73OglUYTjNPK0veYCL0UaibPiR7Y9WOZdi3j/1IEOsf79y3YUIgz/26sDsEvqR8Smi20Dty
+	2eS9e27nB4lRXCR3RcgNGrXNATXF4sOsjSgRxQH8E
+X-Gm-Gg: ASbGncuUTg15Xs+85+a9RON6qC+L0yPHTvWtJhVqVQrs0HL51dEkHRE7yI2vtx4ubGf
+	kvNc6TpwYUgIsR2yS1VGYDy0TdYEq9RrxMtx4+A4/v1vpdDy91q+Y9yT3nIbBnaG98GgcL/aqiP
+	rlpEIbSGKERSlbFbYtzpiRbNBb+xBSpfkUgWRCbh+4h+sxSBfhF14UDMyntVhNQ0GcXxRa/qxSs
+	r3P6XGzv2UE1jo=
+X-Google-Smtp-Source: AGHT+IHRGdX/ZHsgv2T1azwRgMELMQE11Kj9YJ9ySkdVHUQtPdOrWYZ9G4v5taRpQQUvTlquoKOl4cF58xAG4tcTuiU=
+X-Received: by 2002:ac8:5a52:0:b0:4b0:6463:7d0d with SMTP id
+ d75a77b69052e-4b0aee038e8mr47518731cf.42.1754661997500; Fri, 08 Aug 2025
+ 07:06:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1499; i=brauner@kernel.org; h=from:subject:message-id; bh=hllP0vfjoOHx7x2Rtw7H5LUbK6b0VbY0wcpLTbQ7yLA=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRMYwlO0HN7oJhnUKTt3fzkb+e5PGGml76Wu1/xHpl4w udwTdOejlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgInUBDL8U1imHPfWhLs9dOrk Bu8k8W8mEl6eEv8+is2Vnau3OkiumeF/udmfJQznrZQ+lCRXP98/IX6/2uknHzOmPzE+vOy+CAc zHwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+References: <20250806180510.3656677-1-kuba@kernel.org> <CANn89iKvW8jSrktWVd6g4m8qycp32-M=gFxwZRJ3LZi1h2Q80Q@mail.gmail.com>
+ <20250806132034.55292365@kernel.org> <CANn89iLbDQ2Le-7WU2dWvr3bc4J-Jcra-rX935Or4wRXDGVViw@mail.gmail.com>
+ <20250808065730.602dac6a@kernel.org>
+In-Reply-To: <20250808065730.602dac6a@kernel.org>
+From: Eric Dumazet <edumazet@google.com>
+Date: Fri, 8 Aug 2025 07:06:25 -0700
+X-Gm-Features: Ac12FXwxiUBJWwumM34Me8cVKTR6BwlbT11JvjUaBWegzEU4L43LQNutELiGo54
+Message-ID: <CANn89iKs4AsfM_315030-08s2f_1jmzo4Hou-MDKu21q1JcXWg@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] tls: handle data disappearing from under the TLS ULP
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com, 
+	andrew+netdev@lunn.ch, horms@kernel.org, borisp@nvidia.com, 
+	john.fastabend@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	sd@queasysnail.net, will@willsroot.io, savy@syst3mfailure.io
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 07 Aug 2025 03:55:22 +1000, Aleksa Sarai wrote:
-> Userspace generally expects APIs that return -EMSGSIZE to allow for them
-> to adjust their buffer size and retry the operation. However, the
-> fscontext log would previously clear the message even in the -EMSGSIZE
-> case.
-> 
-> Given that it is very cheap for us to check whether the buffer is too
-> small before we remove the message from the ring buffer, let's just do
-> that instead. While we're at it, refactor some fscontext_read() into a
-> separate helper to make the ring buffer logic a bit easier to read.
-> 
-> [...]
+On Fri, Aug 8, 2025 at 6:57=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
+> On Fri, 8 Aug 2025 06:51:06 -0700 Eric Dumazet wrote:
+> > > > Can a 2^32 wrap occur eventually ?
+> > >
+> > > Hm, good point. Is it good enough if we also check it in data_ready?
+> > > That way we should notice that someone is eating our data before
+> > > the seq had a chance to wrap?
+> >
+> > I could not understand what your suggestion was.
+> >
+> > Perhaps store both copued_seq and tp->bytes_received and
+> >
+> > check if (tp->bytes_received - strp->bytes_received) is smaller than 2^=
+31 .
+> >
+> >               if (unlikely(strp->copied_seq !=3D tp->copied_seq ||
+> >                                (tp->bytes_received -
+> > strp->bytes_received >=3D (1ULL < 31)) ||
+> >                             WARN_ON(tcp_inq(strp->sk) < strp->stm.full_=
+len))) {
+>
+> Nice, I think that would work.
+> I was wondering how to solve this yesterday and I realized the extra
+> condition isn't really needed. We just have to handle the inq < full_len
+> more carefully and remove the WARN_ON(). I posted a v2.
 
-Applied to the vfs-6.18.mount branch of the vfs/vfs.git tree.
-Patches in the vfs-6.18.mount branch should appear in linux-next soon.
-
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-6.18.mount
-
-[1/2] fscontext: do not consume log entries when returning -EMSGSIZE
-      https://git.kernel.org/vfs/vfs/c/b78c4328c498
-[2/2] selftests/filesystems: add basic fscontext log tests
-      https://git.kernel.org/vfs/vfs/c/d70b6ceebd29
+Ah I must have missed the v2, let me check it.
 
