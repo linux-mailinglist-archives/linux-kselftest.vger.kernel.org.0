@@ -1,151 +1,97 @@
-Return-Path: <linux-kselftest+bounces-38560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3FFFB1E987
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 15:51:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4149CB1E989
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 15:52:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC3121C21A22
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 13:51:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E32DC3A9463
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 13:52:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C30E934CDD;
-	Fri,  8 Aug 2025 13:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4473E81732;
+	Fri,  8 Aug 2025 13:52:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ccqf9tUZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldLbuBxl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F892E62C
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Aug 2025 13:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FAA1B7F4;
+	Fri,  8 Aug 2025 13:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754661081; cv=none; b=OHqEnEi9L/fPeJihSp358qOK1opTU3JVQldU7jhMK7iTKT36ChNhJoDpgeCiCGqyBvhiY3msmnDrvzYnA6l1LUD8KQjQJuiqkwFKrBpzWivzmPgNHjTioHr3Ad1uD0aMQ474vkRAucI2TOKkvAEc0+OC4cbDnEBHujoBQbiFvDQ=
+	t=1754661126; cv=none; b=UDvhbf3lcpxCHvY760K1Pe+ipI5bWiPGBN7flSUmriFthJJr4DzXXHeEDUu9BHsD0L81af+aavR1wtwU2+QzTFpFckRE342po7M+2YAnv8/yXo3J57QQzeOpoLjAeGfywJOeEA2nMnV+NNjKdus7vgBQh5nooQ4dtG486A1I7rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754661081; c=relaxed/simple;
-	bh=BAhtq4iyWUS7La1XKDSXOM4qjgi0CnZG9tVABc5gxYI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ObuaOQGwfuyEDbde0n0A88hfMSlhY7+px5JXkC89qDq1mug7cMaEVFiBSFXiz3tLnJ/W7qUbr/2hvsIsxC8jyqEg9M/rQkz6REF9pVui/+/lGSG1xxdQzS0cgCrQH6Se2RO8b6vTa0grwJqNa8fwIIlM61gZoJQK4W7CxfyvgtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ccqf9tUZ; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4b062b6d51aso25725481cf.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Aug 2025 06:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754661078; x=1755265878; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5l9uz2NI1yVWTJt793CCioTUXX+CH+IJmR8YdY9547Q=;
-        b=ccqf9tUZyPGhE/h8YOEUK/5Jg5oDj+zjU1XUx6RywMyejOJYYl8on1eWcvlw3I+dvb
-         HfNHccTX+IC+R1xu2waoVBxFIBqwM4NCtgCWMoGGfRUQX2owP3zkLPqjoUaOfo4OHJz/
-         fJtGs4B+j4EfdYo3VosHfIKS6S+BXVYme9/YaBMazr6lxSQpHQaNie6hbCZ9Fey3oGPq
-         Kp9L1S9fXue/mCfNHAf6K3RtfWqZj7Bj32quU5wnFCB/VcCqFgxTL2xF5/rFBTNIPYQc
-         CndpiTusdXE05UsS5VaztzaO0cQtgJ1lX5zN8J9+7Usal6Byc7viUFbb0+y59gP5Fxc4
-         ehDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754661078; x=1755265878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5l9uz2NI1yVWTJt793CCioTUXX+CH+IJmR8YdY9547Q=;
-        b=mUCuQCVI+ZRskeTZAEJ7IbgWXmiQovvHwyFPmIgLQP4IAFlliLPhXR5XiranKJO7LR
-         yzQss5fBdBIaOnB+o3sed52ACw7j3C33uWnjbp/Oc4uPykHk4733eWLMFvcPGfhg1oMa
-         AuRnma6TCS1HevRMiKcIqEaWU9U36BuLi6b8ULR7t0Pjgyay8wkmVOT9MCRcEpVJMy0N
-         Ad7OXwYKe8V8bzmw832sVG0Galyx7fWi4283Mte4XIUr3zfK3X6H+8sxfoVOWbDSI24U
-         0EL/B+LGwVVCYB34dM7RnurHhIauOXtl6dl6wDhTs/nLOGWYKoljdGGGuBTAUOaGTGwl
-         e28A==
-X-Forwarded-Encrypted: i=1; AJvYcCX8ah/1FvxHuh6QEN9BFqKgc/Wf9JP2y4gCjDECjOt27z3mnbc6pJCT1veRDA91L+wYK3nTVV/JbjxZB4BcyRQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4PKCS4u8MeK+JiQAsZf622F43piZ09rs02/zxmKJw6skM1+vC
-	zGf5YMK96CSvWue9NuWtAxzysM21RC4WRHhSQBisuJDe/JMTW5E+eVW4pMK+mlj/BjqR43Y6xTk
-	e4RVMANBSkNcdqZ1bBjpwo5rd2vV1JbzXSJahMAhP
-X-Gm-Gg: ASbGncuaRjtqDQbZZLaM/b0APvDC+bNUAdyQMCxpodIsEGIKcTcVi8xgRG30srt4XXV
-	Y6j8KO6QeNfP4btOI+OouclNITN17u/rKbCWlIrt/O3dIBC48k4TuRttSWQ4zNKJ4W+DEP1imxr
-	AotPflEJtdmeLw6n3ksTnRCkXjqZBL5iixXv3t9csu99t2pikkEK5t9iDkY8TP9M6NQvWPcvhW0
-	r+d+L50BMwSeN4=
-X-Google-Smtp-Source: AGHT+IHGSFa9wyI3cw4nNDYNdZgINkSyownrv5FzJPe+iFwhAGAu5rIrp5XfGSvEtcDPhYFyasTyzrnIYVhwTmvWvcM=
-X-Received: by 2002:a05:622a:5cd:b0:4ab:95a7:71d6 with SMTP id
- d75a77b69052e-4b0aee57eb5mr56199141cf.56.1754661077481; Fri, 08 Aug 2025
- 06:51:17 -0700 (PDT)
+	s=arc-20240116; t=1754661126; c=relaxed/simple;
+	bh=+89FbzoXzbeBFvgwfAw8UlIb8w1o2l86DsH+uTjvG9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o79AjJdAVxOyWRT73OJI6ODOGJWmRZSHcDNjnyeTcfvww5qkdJyS3RHVrkUNYSCx+LzoJNvZQfoI9HEQV1dX1ysp5LetOCTcjkd68r4i+b68pEJmiPGDbuSABCu3L35ICdiE8oXf3mCHldJKjFvUw00oeGoklcyLIFr/7ZAtqTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldLbuBxl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88941C4CEED;
+	Fri,  8 Aug 2025 13:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754661125;
+	bh=+89FbzoXzbeBFvgwfAw8UlIb8w1o2l86DsH+uTjvG9E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ldLbuBxlhKi8JUBDf6G3L/Y+wnIU5DwrlHdrbWDdl5iMLBl04MWlZufA487rSlUPn
+	 8FGYNe+44rTxfd1l7lbbYnUsK+jHPtr1bkWH09QNW1b7fSArFu+KHm5nqA9RXmfz/S
+	 Pya7S/u5PWHaUznf79abzAsPBz4o7SyiIGEVh9riD4X8qEPueChLC7AKh4ODZTD1Th
+	 iqcfLZLtjINdpqRWlWC2Inze+2+BcCSRXxS89RJlChiZoiexAgPIPnE3ZNjebk4ttb
+	 SFsjc/b17vPCLU/tdYaw67pYibrl4ZB/kPDx4ITRfjSMtJYYgHIhRqDVIjUUglSRLO
+	 KaRAwfNxc94cA==
+Date: Fri, 8 Aug 2025 15:52:01 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Aleksa Sarai <cyphar@cyphar.com>, Jan Kara <jack@suse.cz>, 
+	David Howells <dhowells@redhat.com>, Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] fscontext: do not consume log entries when
+ returning -EMSGSIZE
+Message-ID: <20250808-notieren-abwaschen-cc01d21dd933@brauner>
+References: <20250807-fscontext-log-cleanups-v3-0-8d91d6242dc3@cyphar.com>
+ <20250807-fscontext-log-cleanups-v3-1-8d91d6242dc3@cyphar.com>
+ <20250806190751.GG222315@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250806180510.3656677-1-kuba@kernel.org> <CANn89iKvW8jSrktWVd6g4m8qycp32-M=gFxwZRJ3LZi1h2Q80Q@mail.gmail.com>
- <20250806132034.55292365@kernel.org>
-In-Reply-To: <20250806132034.55292365@kernel.org>
-From: Eric Dumazet <edumazet@google.com>
-Date: Fri, 8 Aug 2025 06:51:06 -0700
-X-Gm-Features: Ac12FXyOEnG-NjwxUGxCSb-NEJLYi-7VAZhBj8UpMv0VU0UfM69ADbTNuFx-SXg
-Message-ID: <CANn89iLbDQ2Le-7WU2dWvr3bc4J-Jcra-rX935Or4wRXDGVViw@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] tls: handle data disappearing from under the TLS ULP
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com, 
-	andrew+netdev@lunn.ch, horms@kernel.org, borisp@nvidia.com, 
-	john.fastabend@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	sd@queasysnail.net, will@willsroot.io, savy@syst3mfailure.io
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250806190751.GG222315@ZenIV>
 
-On Wed, Aug 6, 2025 at 1:20=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
-te:
->
-> On Wed, 6 Aug 2025 11:35:28 -0700 Eric Dumazet wrote:
-> > > TLS expects that it owns the receive queue of the TCP socket.
-> > > This cannot be guaranteed in case the reader of the TCP socket
-> > > entered before the TLS ULP was installed, or uses some non-standard
-> > > read API (eg. zerocopy ones). Make sure that the TCP sequence
-> > > numbers match between ->data_ready and ->recvmsg, otherwise
-> > > don't trust the work that ->data_ready has done.
-> > >
-> > > Signed-off-by: William Liu <will@willsroot.io>
-> > > Signed-off-by: Savino Dicanosa <savy@syst3mfailure.io>
-> >
-> > I presume you meant Reported-by tags ?
->
-> Oops..
->
-> > > Link: https://lore.kernel.org/tFjq_kf7sWIG3A7CrCg_egb8CVsT_gsmHAK0_wx=
-DPJXfIzxFAMxqmLwp3MlU5EHiet0AwwJldaaFdgyHpeIUCS-3m3llsmRzp9xIOBR4lAI=3D@sys=
-t3mfailure.io
-> > > Fixes: 84c61fe1a75b ("tls: rx: do not use the standard strparser")
-> > > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> > > ---
-> > >  include/net/tls.h  |  1 +
-> > >  net/tls/tls.h      |  2 +-
-> > >  net/tls/tls_strp.c | 17 ++++++++++++++---
-> > >  net/tls/tls_sw.c   |  3 ++-
-> > >  4 files changed, 18 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/include/net/tls.h b/include/net/tls.h
-> > > index 857340338b69..37344a39e4c9 100644
-> > > --- a/include/net/tls.h
-> > > +++ b/include/net/tls.h
-> > > @@ -117,6 +117,7 @@ struct tls_strparser {
-> > >         bool msg_ready;
-> > >
-> > >         struct strp_msg stm;
-> > > +       u32 copied_seq;
-> >
-> > Can a 2^32 wrap occur eventually ?
->
-> Hm, good point. Is it good enough if we also check it in data_ready?
-> That way we should notice that someone is eating our data before
-> the seq had a chance to wrap?
+On Wed, Aug 06, 2025 at 08:07:51PM +0100, Al Viro wrote:
+> On Thu, Aug 07, 2025 at 03:55:23AM +1000, Aleksa Sarai wrote:
+> 
+> > -		goto err_free;
+> > -	ret = -EFAULT;
+> > -	if (copy_to_user(_buf, p, n) != 0)
+> > -		goto err_free;
+> > +	if (copy_to_user(_buf, p, n))
+> > +		n = -EFAULT;
+> >  	ret = n;
+> > -
+> > -err_free:
+> >  	if (need_free)
+> >  		kfree(p);
+> >  	return ret;
+> 
+> Minor nit: seeing that there's only one path to that return, I would
+> rather turn it into
+> 	return n;
+> and dropped the assignment to ret a few lines above.  Anyway, that's
+> trivially done when applying...
+> 
+> Anyway, who's carrying fscontext-related stuff this cycle?  I've got
+> a short series in that area, but there won't be much from me around
+> there - a plenty of tree-in-dcache stuff, quite a bit of mount-related
+> work, etc., but not a lot around the options-parsing machinery.
+> 
+> Christian, do you have any plans around that area?
 
-I could not understand what your suggestion was.
-
-Perhaps store both copued_seq and tp->bytes_received and
-
-check if (tp->bytes_received - strp->bytes_received) is smaller than 2^31 .
-
-              if (unlikely(strp->copied_seq !=3D tp->copied_seq ||
-                               (tp->bytes_received -
-strp->bytes_received >=3D (1ULL < 31)) ||
-                            WARN_ON(tcp_inq(strp->sk) < strp->stm.full_len)=
-)) {
+I've got a tree for that already and have applied related stuff there.
+I've fixed up the comments from this thread.
 
