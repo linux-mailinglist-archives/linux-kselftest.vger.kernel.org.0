@@ -1,124 +1,118 @@
-Return-Path: <linux-kselftest+bounces-38564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A70EB1E9F6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 16:06:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96C4CB1E9FC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 16:10:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55CF2625F0E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 14:06:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B814C1723EC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 14:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB8F027B4EE;
-	Fri,  8 Aug 2025 14:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 828E927CB0A;
+	Fri,  8 Aug 2025 14:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HK8r9EDm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h9gIT0hV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329B12609D6
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Aug 2025 14:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487E0EAF9;
+	Fri,  8 Aug 2025 14:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754662000; cv=none; b=UsHfRdV3PzceyBKm+cBrhD1qccq4YbgcvVhJyJPjif5pWlAnzWHKxtovsPpjmcvQ1qssea4XFxCeuQ3TxbE6dGRazAzACqXQpawl/JTUG9/mdGhB0eJjQz8biRXZj2X9CB7CWc07GbHRoE3f0L6qZd5bnpSA5QwfRoYUwKI0ViI=
+	t=1754662203; cv=none; b=B/TmOuBMdFrtX4ioRPjhg6t02VevqEs+9GpD/3KMEmZOrmvfnp/+z04e1hURq8vEZ4p3Ie+ZSAEry1/vI/050jDWponJmnchjkkhmGQmWXr78gxUOu7AJ2tfjgpaybq5KXAQsFKTV+3fvHGonPhkt9pyC1IhadtS3QAiCkdgXVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754662000; c=relaxed/simple;
-	bh=Iq6OPfb0BUy4RFBX3eUrfo9zr9SoPfRQuh+fqYCnQLU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qfshviM4XmgNTudpogKH3rZraeZiuvA7F7NT4vBJSaF0gMyN5Ahq1LR8GvHHR0llkSCqtYoukEyuppHnh5xCzNejfvDeQoedLauCuPTyQ6U9IDcyHo+Y1YmKsZaiUz2+7XatP5AK4E4eo/QsCN4/6Gwotpfirw0377FkuQ/paDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HK8r9EDm; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4b0784e3153so37046861cf.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Aug 2025 07:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754661998; x=1755266798; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ziOgj5AOK/KCYmHORFalDdaCAEaK5JFXOuVwayAxXmk=;
-        b=HK8r9EDmbd5MzTcRUmlHPMzvrN3shxlR0iJElTnkj0pLIp+EPyB/8VIs0i5KAMV10R
-         ESqETDrG3Xc6I4fDf26ncn7iSacCjhAJoOigbp7iH9VJ8ETXE7vnsuUVmmx8O1OVrEKe
-         U+kseDaP/m/IyjcCGbM3MtiNgQhYeeIdBhcX8eRHEK9fJ1oVT9o9Q+3mYsLWaHho7twc
-         MO06XOypLUi51ybX/pWPuznD/CQvdKbmaHt++uJgNcC4kMTGjbcSzxedV1WAAS4kR/Ct
-         6AXnrzgYD9+iaE9lC2SyehFmDa1795ZWGMc46wdIym+cqwcJyLGI51A0lGrWxX0RrWBD
-         xOig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754661998; x=1755266798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ziOgj5AOK/KCYmHORFalDdaCAEaK5JFXOuVwayAxXmk=;
-        b=j1Y9Uzs9Gyprd27ytVT5hUr+3VQ94GRSvCaZsjwkDfS7+IE10BAuXg4pTCwZtC+Chg
-         fWgd24eTR9CGQrWcnYB9X0DBIkx2PK/qIYQw0w+yUy3Z1M1ZxHpT7wFeh3hf9gvcLsem
-         r7VqlqqN/YHQU43lDSURuPUbU2lJD7MeVes6+gOOGs2LXjNQptTRvNoRrpBU6H1Rcw4J
-         nkKDsI0/z0VdPVJU8L404vWIj8+uvZ1wM6PuGQ2HNrhlPDEsrgUNI2aAJdGer5HF2G56
-         mZUH30d0is72G5hDm7ixb8oZ8iaumSO7ZKeFo9D7HmfscJI3GaWYsRRarZsj7asmt7LE
-         o9eg==
-X-Forwarded-Encrypted: i=1; AJvYcCVV257P/a2m3UsGAnpVtxymIRjvQWzEd2BFsZbr4KqEoAcxw4+kSfO1NKa1OP8dMYRKuMpAJFwIr3NOe4JA3rE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+j4iqB60EIki2kBVm74fmAPki8eLQtVLqIWo4IHyuZGvR1mqn
-	29cr73OglUYTjNPK0veYCL0UaibPiR7Y9WOZdi3j/1IEOsf79y3YUIgz/26sDsEvqR8Smi20Dty
-	2eS9e27nB4lRXCR3RcgNGrXNATXF4sOsjSgRxQH8E
-X-Gm-Gg: ASbGncuUTg15Xs+85+a9RON6qC+L0yPHTvWtJhVqVQrs0HL51dEkHRE7yI2vtx4ubGf
-	kvNc6TpwYUgIsR2yS1VGYDy0TdYEq9RrxMtx4+A4/v1vpdDy91q+Y9yT3nIbBnaG98GgcL/aqiP
-	rlpEIbSGKERSlbFbYtzpiRbNBb+xBSpfkUgWRCbh+4h+sxSBfhF14UDMyntVhNQ0GcXxRa/qxSs
-	r3P6XGzv2UE1jo=
-X-Google-Smtp-Source: AGHT+IHRGdX/ZHsgv2T1azwRgMELMQE11Kj9YJ9ySkdVHUQtPdOrWYZ9G4v5taRpQQUvTlquoKOl4cF58xAG4tcTuiU=
-X-Received: by 2002:ac8:5a52:0:b0:4b0:6463:7d0d with SMTP id
- d75a77b69052e-4b0aee038e8mr47518731cf.42.1754661997500; Fri, 08 Aug 2025
- 07:06:37 -0700 (PDT)
+	s=arc-20240116; t=1754662203; c=relaxed/simple;
+	bh=c+tJGSE1kVOEJc+fqWaxQew8R9k0tADAYnXJUS2UMAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RksBn7cAAkhBW0JQaQOBHVHyevGnmDRpz/pgG/jZa5AMD0PGb9ARSy1doiRJojQ/XbloPk0eRJeZeVcFzvc508JZVYA/e/QlAXuaSKLIAJdWQV3J1oHB98jXSeWum/lr6Hhr6zcG+tCa7puaqCrvHDnHOqbmvHWeFGDZLkqehao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h9gIT0hV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82DB3C4CEED;
+	Fri,  8 Aug 2025 14:09:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754662202;
+	bh=c+tJGSE1kVOEJc+fqWaxQew8R9k0tADAYnXJUS2UMAo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h9gIT0hVpFdMcHPf5lG4Z06B5oBym7Tto9V3PjID66JBmGBrQxSBGyBjHkLB1l/g3
+	 gfBUBf79hzudX/Ta1zBJ6QUxsTynvw8JfkjUdSYx0Di9g8wAqucAhPzvdABaHyYWqH
+	 ez95kCmYwi7iu5he5uyyup9P1VoVJAnJm1zGkGj+4nNOUvCIQbqSBCxjKBNl3TmatD
+	 qNrUZyb5tqdpGRRWtC17AxkKWIQZrKbPXMDoBPlJErEKlfLIrebfabMNsUv4bgSB7T
+	 AGTRhxq5jnA4lOhrtNLf7s4G6QHq26t7tA2RCZJ4g9VYfU0v5fB6ERFsnvZtk2ADq6
+	 cKWelb0hKqpJQ==
+Date: Fri, 8 Aug 2025 16:09:57 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Aleksa Sarai <cyphar@cyphar.com>
+Cc: Askar Safin <safinaskar@zohomail.com>, amir73il@gmail.com, 
+	corbet@lwn.net, jack@suse.cz, linux-api@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, luto@amacapital.net, shuah@kernel.org, viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v4 2/4] procfs: add "pidns" mount option
+Message-ID: <20250808-kurswechsel-angekauft-ec6bfc2efa79@brauner>
+References: <2025-08-05.1754378656-steep-harps-muscled-mailroom-lively-gosling-VVGNTP@cyphar.com>
+ <20250806102501.75104-1-safinaskar@zohomail.com>
+ <2025-08-06.1754489257-elated-baubles-defiant-growls-beloved-jewelry-9Ofm2b@cyphar.com>
+ <2025-08-07.1754550206-glad-sneeze-upstate-sorts-swank-courts-YKmj7E@cyphar.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250806180510.3656677-1-kuba@kernel.org> <CANn89iKvW8jSrktWVd6g4m8qycp32-M=gFxwZRJ3LZi1h2Q80Q@mail.gmail.com>
- <20250806132034.55292365@kernel.org> <CANn89iLbDQ2Le-7WU2dWvr3bc4J-Jcra-rX935Or4wRXDGVViw@mail.gmail.com>
- <20250808065730.602dac6a@kernel.org>
-In-Reply-To: <20250808065730.602dac6a@kernel.org>
-From: Eric Dumazet <edumazet@google.com>
-Date: Fri, 8 Aug 2025 07:06:25 -0700
-X-Gm-Features: Ac12FXwxiUBJWwumM34Me8cVKTR6BwlbT11JvjUaBWegzEU4L43LQNutELiGo54
-Message-ID: <CANn89iKs4AsfM_315030-08s2f_1jmzo4Hou-MDKu21q1JcXWg@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] tls: handle data disappearing from under the TLS ULP
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com, 
-	andrew+netdev@lunn.ch, horms@kernel.org, borisp@nvidia.com, 
-	john.fastabend@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	sd@queasysnail.net, will@willsroot.io, savy@syst3mfailure.io
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2025-08-07.1754550206-glad-sneeze-upstate-sorts-swank-courts-YKmj7E@cyphar.com>
 
-On Fri, Aug 8, 2025 at 6:57=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
-te:
->
-> On Fri, 8 Aug 2025 06:51:06 -0700 Eric Dumazet wrote:
-> > > > Can a 2^32 wrap occur eventually ?
-> > >
-> > > Hm, good point. Is it good enough if we also check it in data_ready?
-> > > That way we should notice that someone is eating our data before
-> > > the seq had a chance to wrap?
-> >
-> > I could not understand what your suggestion was.
-> >
-> > Perhaps store both copued_seq and tp->bytes_received and
-> >
-> > check if (tp->bytes_received - strp->bytes_received) is smaller than 2^=
-31 .
-> >
-> >               if (unlikely(strp->copied_seq !=3D tp->copied_seq ||
-> >                                (tp->bytes_received -
-> > strp->bytes_received >=3D (1ULL < 31)) ||
-> >                             WARN_ON(tcp_inq(strp->sk) < strp->stm.full_=
-len))) {
->
-> Nice, I think that would work.
-> I was wondering how to solve this yesterday and I realized the extra
-> condition isn't really needed. We just have to handle the inq < full_len
-> more carefully and remove the WARN_ON(). I posted a v2.
+On Thu, Aug 07, 2025 at 05:17:56PM +1000, Aleksa Sarai wrote:
+> On 2025-08-07, Aleksa Sarai <cyphar@cyphar.com> wrote:
+> > On 2025-08-06, Askar Safin <safinaskar@zohomail.com> wrote:
+> > > > I just realised that we probably also want to support FSCONFIG_SET_PATH
+> > > 
+> > > I just checked kernel code. Indeed nobody uses FSCONFIG_SET_PATH.
+> > > Moreover, fsparam_path macro is present since 5.1. And for all this
+> > > time nobody used it. So, let's just remove FSCONFIG_SET_PATH. Nobody
+> > > used it, so this will not break anything.
+> > > 
+> > > If you okay with that, I can submit patch, removing it.
+> > 
+> > I would prefer you didn't -- "*at()" semantics are very useful to a lot
+> > of programs (*especially* AT_EMPTY_PATH). I would like the pidns= stuff
+> > to support it, and probably also overlayfs...
+> > 
+> > I suspect the primary issue is that when migrating to the new mount API,
+> > filesystem devs just went with the easiest thing to use
+> > (FSCONFIG_SET_STRING) even though FSCONFIG_SET_PATH would be better. I
+> > suspect the lack of documentation around fsconfig(2) played a part too.
+> > 
+> > My impression is that interest in the minutia about fsconfig(2) is quite
+> > low on the list of priorities for most filesystem devs, and so the neat
+> > aspects of fsconfig(2) haven't been fully utilised. (In LPC last year,
+> > we struggled to come to an agreement on how filesystems should use the
+> > read(2)-based error interface.)
+> > 
+> > We can very easily move fsparam_string() or fsparam_file_or_string()
+> > parameters to fsparam_path() and a future fsparam_file_or_path(). I
+> > would much prefer that as a user.
+> 
+> Actually, fsparam_bdev() accepts FSCONFIG_SET_PATH in a very roundabout
+> way (and the checker doesn't verify anything...?). So there is at least
+> one user (ext4's "journal_path"), it's just not well-documented (which
+> I'm trying to fix ;]).
+> 
+> My plan is to update fs_lookup_param() to be more useful for the (fairly
+> common) use-case of wanting to support paths and file descriptors, and
+> going through to clean up some of these unused fsparam_* helpers (or
+> fsparam_* helpers being abused to implement stuff that the fs_parser
+> core already supports).
+> 
+> At the very least, overlayfs, ext4, and this procfs patchset can make
+> use of it.
 
-Ah I must have missed the v2, let me check it.
+I've never bothered with actually iplementing FSCONFIG_SET_PATH
+semantics because I think it's really weird to allow *at semantics when
+setting filesystem parameters. I always thought it's better to force
+userspace to provide a file descriptor for the final destination instead
+of doing some arcane lookup variant for mount configuration. But I'm
+happy to be convinced of its usefulness...
 
