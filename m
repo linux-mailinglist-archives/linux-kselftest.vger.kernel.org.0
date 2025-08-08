@@ -1,144 +1,211 @@
-Return-Path: <linux-kselftest+bounces-38598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 647B8B1EC66
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 17:51:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC786B1EC6E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 17:52:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BE541886999
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 15:51:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E35C189685E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 15:52:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F4E62853E5;
-	Fri,  8 Aug 2025 15:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C4DB286427;
+	Fri,  8 Aug 2025 15:52:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RIYeKXV4"
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="Ep6a0MBW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBCF225A29;
-	Fri,  8 Aug 2025 15:51:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569C428641C;
+	Fri,  8 Aug 2025 15:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754668291; cv=none; b=INb3n4leueQ5L7CTdkwRYsc1qyA7cTnOw65KhiYzZFNtizAyA1zOM/ep/6DaquMlvbJHqwYYiz8n52uT8zhAXMB4O+YeoyxRJ1WV7NCOWJrGbkXWp/DSMawVuf3y12yXTuXhkqHlVxWqGiQbrXtCCBoTqnepZj9gQMNujbCKNHQ=
+	t=1754668326; cv=none; b=Lpp+9cN9/vVjIKjkuGtJEcMwZNxrA97kUVZs8tc6Lx2elr8B1nZQusy36fAyQscuxHV7+zZlUfbkldhgHMR9Q6g81qXSXUedE4W+p5x9fYWr+XgLolNnyP0jbmtOJGNQb9EFTWpOQUPNO999cHlxHyomzfRIfLREx8K32wI67R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754668291; c=relaxed/simple;
-	bh=9M9vj6O/7T0eVWhnTNWZUnrhO3VOhOj0y1nq7m5+/KE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mtw26uGjRKLMSh79p+/Dbv8ZGssce/JkNUo3CaJtVv73ntfbIBiLWdUWEPepW1I6ug5JeL2KmaNPkylJRmFClklHk5Qg9Wnx7Iu8Xglwfh8JtIoC5fVHvhxCgFB+HjtMO96k6/UufHjjKl0kE9dHjaUosSpCvCmuW2/625JYf5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RIYeKXV4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B2BCC4CEED;
-	Fri,  8 Aug 2025 15:51:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754668290;
-	bh=9M9vj6O/7T0eVWhnTNWZUnrhO3VOhOj0y1nq7m5+/KE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RIYeKXV4q5z6kKHjTlMG66L4ft6xNwRXRWfVR048a8Np9uvX7sWmdyRaDON/yfP/m
-	 g0YV6UoqFXXYmCbmEwDzuAbrXJXPZmpYuAT27k0f/gBIokFEtVOMAfFXnxn8K7wCiZ
-	 58M+8+qi56hsrVR5Nd4QfXhVoHWdDiojV4KV0ebpRH/m6uBWZiuBtHR4jSm75ADUwv
-	 Oau/agS+PvoN62brSbn3k7ONiFAzFZ5Ek+B2hb+9QJEOV1SE5gINQnXLtD8GVVoo0J
-	 3boyH2aZpnco9cbOim8xX1c6NzgGQB2rkHI2j7dPqoVy/Nf30OjCw2sMdYXh6v5T5D
-	 Ee02sCv1R0rXQ==
-Message-ID: <94048354-2385-4f65-9c36-64424985613c@kernel.org>
-Date: Fri, 8 Aug 2025 17:51:25 +0200
+	s=arc-20240116; t=1754668326; c=relaxed/simple;
+	bh=pYCBVar2Qgp91JmbjTgfnekAUVrStY3Rlqlrla+YtiM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hMgC9WxxToiGW48gzJCUpxRz+ufuYoCj78v+QKbcKAI32x9zO0Ap5QXt4/96RTXb9DOIS5Emz2d23fqAAM2805M4n2lvnOnY7poGC3++8S1mJbG5/mon4s1TKQuEqpZn9Qua8F9mh0ZJLNuxcX44hm7JyUDLprjQlhCkayeEtWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=Ep6a0MBW; arc=none smtp.client-ip=80.241.56.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4bz7nP4wqCz9tyC;
+	Fri,  8 Aug 2025 17:51:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1754668313;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DPbABI21FplK/n38p82xe73WQkYhJfnB/7CRIW2+A20=;
+	b=Ep6a0MBWINk40s0WdGXokLOcrarxu+ue41L5QEXX/Mrf8wpZTeS9uBO3NyVUDOFOvqKkhv
+	Zub+7ytArkri001DJI7Lo/Po2Rh9Xu/2IV+rwjoFtqoxsNNgFOdMdESXVRGx4NCysxgq0k
+	0F8nXc24/Dr8iFbl4iXvBX25hPT7WBnQKI+e2LhgIqM+IR/UaFMdZ//f5ffT255qVlD0UF
+	qLV4sRzvc6dDM38dyTdw4ttatEpZRd9KVWWSCqjELhiUNV4DtMA/UFZQJmiJq8hlk8CFag
+	wl5tAkpp9KlD49RsP+OS7lffuglC3CibVcCIDQJ0UObrr6u/ol/A86LPs5LVEQ==
+Date: Sat, 9 Aug 2025 01:51:44 +1000
+From: Aleksa Sarai <cyphar@cyphar.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Askar Safin <safinaskar@zohomail.com>, amir73il@gmail.com, 
+	corbet@lwn.net, jack@suse.cz, linux-api@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, luto@amacapital.net, shuah@kernel.org, viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v4 2/4] procfs: add "pidns" mount option
+Message-ID: <2025-08-08.1754667211-eroded-secure-codex-earthworm-EK9kTK@cyphar.com>
+References: <2025-08-05.1754378656-steep-harps-muscled-mailroom-lively-gosling-VVGNTP@cyphar.com>
+ <20250806102501.75104-1-safinaskar@zohomail.com>
+ <2025-08-06.1754489257-elated-baubles-defiant-growls-beloved-jewelry-9Ofm2b@cyphar.com>
+ <2025-08-07.1754550206-glad-sneeze-upstate-sorts-swank-courts-YKmj7E@cyphar.com>
+ <20250808-kurswechsel-angekauft-ec6bfc2efa79@brauner>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Add LPM trie microbenchmarks
-To: Matt Fleming <matt@readmodwrite.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, kernel-team@cloudflare.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, netdev@vger.kernel.org,
- Matt Fleming <mfleming@cloudflare.com>
-References: <20250722150152.1158205-1-matt@readmodwrite.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20250722150152.1158205-1-matt@readmodwrite.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3clzvts2ovf5w7wk"
+Content-Disposition: inline
+In-Reply-To: <20250808-kurswechsel-angekauft-ec6bfc2efa79@brauner>
 
 
+--3clzvts2ovf5w7wk
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 2/4] procfs: add "pidns" mount option
+MIME-Version: 1.0
 
-On 22/07/2025 17.01, Matt Fleming wrote:
-> From: Matt Fleming<mfleming@cloudflare.com>
-> 
-> Add benchmarks for the standard set of operations: lookup, update,
-> delete. Also, include a benchmark for trie_free() which is known to have
-> terrible performance for maps with many entries.
-> 
-> Benchmarks operate on tries without gaps in the key range, i.e. each
-> test begins with a trie with valid keys in the range [0, nr_entries).
-> This is intended to cause maximum branching when traversing the trie.
-> 
-> All measurements are recorded inside the kernel to remove syscall
-> overhead.
-> 
-> Most benchmarks run an XDP program to generate stats but free needs to
-> collect latencies using fentry/fexit on map_free_deferred() because it's
-> not possible to use fentry directly on lpm_trie.c since commit
-> c83508da5620 ("bpf: Avoid deadlock caused by nested kprobe and fentry
-> bpf programs") and there's no way to create/destroy a map from within an
-> XDP program.
-> 
-> Here is example output from an AMD EPYC 9684X 96-Core machine for each
-> of the benchmarks using a trie with 10K entries and a 32-bit prefix
-> length, e.g.
-> 
->    $ ./bench lpm-trie-$op \
->    	--prefix_len=32  \
-> 	--producers=1     \
-> 	--nr_entries=10000
-> 
->    lookup: throughput    7.423 ± 0.023 M ops/s (  7.423M ops/prod), latency  134.710 ns/op
->    update: throughput    2.643 ± 0.015 M ops/s (  2.643M ops/prod), latency  378.310 ns/op
->    delete: throughput    0.712 ± 0.008 M ops/s (  0.712M ops/prod), latency 1405.152 ns/op
->      free: throughput    0.574 ± 0.003 K ops/s (  0.574K ops/prod), latency    1.743 ms/op
-> 
-> Tested-by: Jesper Dangaard Brouer<hawk@kernel.org>
+On 2025-08-08, Christian Brauner <brauner@kernel.org> wrote:
+> On Thu, Aug 07, 2025 at 05:17:56PM +1000, Aleksa Sarai wrote:
+> > On 2025-08-07, Aleksa Sarai <cyphar@cyphar.com> wrote:
+> > > On 2025-08-06, Askar Safin <safinaskar@zohomail.com> wrote:
+> > > > > I just realised that we probably also want to support FSCONFIG_SE=
+T_PATH
+> > > >=20
+> > > > I just checked kernel code. Indeed nobody uses FSCONFIG_SET_PATH.
+> > > > Moreover, fsparam_path macro is present since 5.1. And for all this
+> > > > time nobody used it. So, let's just remove FSCONFIG_SET_PATH. Nobody
+> > > > used it, so this will not break anything.
+> > > >=20
+> > > > If you okay with that, I can submit patch, removing it.
+> > >=20
+> > > I would prefer you didn't -- "*at()" semantics are very useful to a l=
+ot
+> > > of programs (*especially* AT_EMPTY_PATH). I would like the pidns=3D s=
+tuff
+> > > to support it, and probably also overlayfs...
+> > >=20
+> > > I suspect the primary issue is that when migrating to the new mount A=
+PI,
+> > > filesystem devs just went with the easiest thing to use
+> > > (FSCONFIG_SET_STRING) even though FSCONFIG_SET_PATH would be better. I
+> > > suspect the lack of documentation around fsconfig(2) played a part to=
+o.
+> > >=20
+> > > My impression is that interest in the minutia about fsconfig(2) is qu=
+ite
+> > > low on the list of priorities for most filesystem devs, and so the ne=
+at
+> > > aspects of fsconfig(2) haven't been fully utilised. (In LPC last year,
+> > > we struggled to come to an agreement on how filesystems should use the
+> > > read(2)-based error interface.)
+> > >=20
+> > > We can very easily move fsparam_string() or fsparam_file_or_string()
+> > > parameters to fsparam_path() and a future fsparam_file_or_path(). I
+> > > would much prefer that as a user.
+> >=20
+> > Actually, fsparam_bdev() accepts FSCONFIG_SET_PATH in a very roundabout
+> > way (and the checker doesn't verify anything...?). So there is at least
+> > one user (ext4's "journal_path"), it's just not well-documented (which
+> > I'm trying to fix ;]).
+> >=20
+> > My plan is to update fs_lookup_param() to be more useful for the (fairly
+> > common) use-case of wanting to support paths and file descriptors, and
+> > going through to clean up some of these unused fsparam_* helpers (or
+> > fsparam_* helpers being abused to implement stuff that the fs_parser
+> > core already supports).
+> >=20
+> > At the very least, overlayfs, ext4, and this procfs patchset can make
+> > use of it.
+>=20
+> I've never bothered with actually iplementing FSCONFIG_SET_PATH
+> semantics because I think it's really weird to allow *at semantics when
+> setting filesystem parameters. I always thought it's better to force
+> userspace to provide a file descriptor for the final destination instead
+> of doing some arcane lookup variant for mount configuration. But I'm
+> happy to be convinced of its usefulness...
 
-I've run a lot more benchmarks.
+I do think it's useful, and here's my thought process...
 
-I've used a slightly updated version[1] written by Matt, that improve
-the "delete" operation accounting that Alexei complain about, but I
-guess Matt isn't 100% happy with his approach (as I don't see a V4).
-The below "delete" numbers have improved compared to above.
+Most filesystems have to take string path parameters in order to support
+mount(2) and work with mount(8). Yes, fsparam_fd() will accept
+FSCONFIG_SET_STRING by parsing it as a decimal string, but there are
+only two users of fsparam_fd() and honestly I'm not convinced this is a
+particularly sane API for anything other than strict backcompat reasons
+(the API only makes sense as a file descriptor and you want mount(8) to
+be able to use it).
 
-Results from[2] with default 10,000 entries:
-  lookup	7.598 ± 0.004 M ops/s	131.608 ns/op
-  update	3.247 ± 0.029 M ops/s	308.008 ns/op
-  delete	1.747 ± 0.053 M ops/s	572.519 ns/op
-  free	0.294 ± 0.055 K ops/s	3.521 ms/op
+So you end up with most parameters supporting paths set using
+FSCONFIG_SET_STRING anyway, meaning in-kernel lookups can't be taken off
+the table. And if we accept paths for lookup, then (for the same reason
+we have *at(2) syscalls) it is preferable to allow specifying dirfds. So
+FSCONFIG_SET_PATH should also be supported.
 
-  [1] 
-https://github.com/xdp-project/xdp-project/blob/main/areas/bench/patches/bench-lpm-trie-V3-adjusted.patch
-  [2] 
-https://github.com/xdp-project/xdp-project/blob/main/areas/bench/bench01_lpm-trie.org
+And as there is no infrastructure to block FSCONFIG_SET_PATH_EMPTY
+arguments (yes, you can do it manually, but the *only* user of
+fs_lookup_param() doesn't), then anything that accepts FSCONFIG_SET_PATH
+currently also accepts FSCONFIG_SET_PATH_EMPTY which is "morally
+equivalent" to FSCONFIG_SET_FD. So unless you block
+FSCONFIG_SET_PATH_EMPTY then FSCONFIG_SET_FD should probably also be
+supported (there is the re-opening distinction, of course, but that is
+not relevant if you use filename_lookup() -- which is what filesystems
+will do in practice).
 
-I'm mostly interested in the fast-path lookup performance. Documented
-here [3] and links to plots[4]. People seeing these per operations
-costs, remember that this includes the get random number cost. That said
-is very clear from my data, that LPM trie have problems with cache-line
-trashing as number of entries increase.
+So my impression is that most users (if they had an fsconfig(2) man page
+to read...) would expect parameters that accept paths to either:
 
-  [3] 
-https://github.com/xdp-project/xdp-project/blob/main/areas/bench/bench02_lpm-trie-lookup.org
-  [4] 
-https://github.com/xdp-project/xdp-project/blob/main/areas/bench/bench02_lpm-trie-lookup.org#plotting-results
+* Work with FSCONFIG_SET_STRING and FSCONFIG_SET_PATH only; or
+* Work with FSCONFIG_SET_STRING, FSCONFIG_SET_PATH,
+  FSCONFIG_SET_PATH_EMPTY, and FSCONFIG_SET_FD.
 
-I've also documented the "bench" harness a little[5].
+Currently, none of our parameters work that way.
 
-  [5] 
-https://github.com/xdp-project/xdp-project/blob/main/areas/bench/README.org
+ * ext4's journal_path takes FSCONFIG_SET_STRING, FSCONFIG_SET_PATH, and
+   FSCONFIG_SET_PATH_EMPTY.
+ * overlayfs takes FSCONFIG_SET_FD and FSCONFIG_SET_STRING.
 
---Jesper
+I only fully realised how inconsistent this is while working on the
+fsconfig(2) man pages -- at the moment I have a very long paragraph
+explaining that there is this distinction in-kernel, but this really
+doesn't seem intentional to me. I would be very confused as a user that
+FSCONFIG_SET_PATH is useless for most filesystem *path* parameters, even
+though the filesystem accepts them as FSCONFIG_SET_STRING.
 
+As for practical uses, it would be nice to not have to open 500 files in
+order to create a 500-layer overlayfs.
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+https://www.cyphar.com/
+
+--3clzvts2ovf5w7wk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaJYdEAAKCRAol/rSt+lE
+b1xUAQCgQs7zgeTpR8rJQbJS59UIDD/xsFDXZFLV+Qt1jHO97gEA6H+q1NQqY5r+
+LqvLvlmnGibWFyVIOnQq+vtDUUPd+Q8=
+=q67u
+-----END PGP SIGNATURE-----
+
+--3clzvts2ovf5w7wk--
 
