@@ -1,124 +1,129 @@
-Return-Path: <linux-kselftest+bounces-38552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38553-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6529CB1E73F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 13:28:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2E70B1E7B7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 13:48:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 42D924E431C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 11:28:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4AA07AA58D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 11:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5F9275AF9;
-	Fri,  8 Aug 2025 11:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A16274FFE;
+	Fri,  8 Aug 2025 11:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iS+PFyCA"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KlH2z2/S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B03A5275873;
-	Fri,  8 Aug 2025 11:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E27125C827;
+	Fri,  8 Aug 2025 11:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754652341; cv=none; b=LeELd0HBdw0d3XH+lieB0TAT8ZWD/GvU25ULkLuaKs08peOcK0COUC9VPiUURLX/R6y74lR67G0UugXoFVevovWID2zZUvx+JVv7i2UYkZVdIXiZe2/n3BS+iItfKMrYMWTLNijmguQIsLy+smvx2Sn/3v2+POFNbmeCbhgIfAM=
+	t=1754653725; cv=none; b=rb2vZ8Qjl9+1/jnZNdtdPz/xxc8R5nM0ulPP6lHHfXIa5rdKJImSQAvTEmPPzEWYXcbi7XXfxmsmUJFvkiCFpA8XiDuW/ohp5PBN1ADC/RyHp0vk0HGZBOGmIladYIpl3k4vz2gVjgSPHnzBdxpuaiIM1emfVc6KkcEgz52lEYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754652341; c=relaxed/simple;
-	bh=jmY2d+TVbd58EY/lRBkBim9bE6y5cp6A+e45rmxMhE4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gLAW/mMkrvPex6cK5OYUlUOFLQh25t+LH/j2Me46tQTdLm2g5uTnyokBTb30GTINQqLq6qOXiu/A4zTfc7SmHHER0l7JDhVleqPBfuyW/+MwjoD3L1t0o/ShWTlEx5k44YGKxknwZGleCD50MAKFfqjx0rnx07ZCLGY8Vqc0Yys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iS+PFyCA; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3b78b2c6ecfso1127037f8f.0;
-        Fri, 08 Aug 2025 04:25:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754652337; x=1755257137; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=H/uZdIWNOl4/K2KiBu5RjAyid6lvEDY84VsOS2Ck1o4=;
-        b=iS+PFyCA2ScJIQMmrC9f1Fz86rROBfXVA+DoJPKTPaAP2qeZ2cCRIDMDLUrvYTa33G
-         CUnfYrWuEnmHiZxgT6Pghx3m9GY3qVuSjg+WwjdkbleBycvZgbGOgS0Q9Vp4pb9XcLZx
-         R9prGbEKOYU0uG2kGvqwqe0RoVRcb5R3UOrdOlO/4rSh7gV/JbyUEiOLs056ifISAPjm
-         g92SBrSH650mUznW5Ql1BJtLzxiutnG5ozNiTj1klXl5uV0BJSUQk1GCM6UQ3u4Jdln5
-         FbN7i+HLzD2HaMC+bzHc0AIF/X30F01Gq+NNabG9rande3y2XwCqQpwWAVdYHmK11I44
-         RWgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754652337; x=1755257137;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H/uZdIWNOl4/K2KiBu5RjAyid6lvEDY84VsOS2Ck1o4=;
-        b=IYmFONdTLeKj29XZHsiB+yWNaAPfKiLgv74+fJfiHKIRu9FmVJ17FsXCqS+lgXv8+6
-         AodeFa8EnhIDzCFyqgISNq46xlyLsc/rXxJEW/NuFdC05l95jSPcDQc6qkyJiH0Nx5T/
-         GukqZhfcGho72dvIzGSJAlWwLhq45ckhOfX9H+CxOKvZKayBIuvkF70pEyaGHd0XaP8n
-         0ier56a+Ij4znK2LQjGyBKc8spWWdHI5YObBYhH9yjL2+l+FaL5tMqCi5VfzqfhJLjNw
-         PR8xiFAJs4wa4PcHXtN4Hn3gJgRpwTr9ra4RUQCRf88/LO6GWp26SQZnhhZJTqdzJ61t
-         et5A==
-X-Forwarded-Encrypted: i=1; AJvYcCWyc2f1EDeK898ugS0tiRJVl265UyB3Ot5Vew2cT7s3lIb2T70tQNC64cTu1hbkHsqrVW6YKeH/Yk/LW00=@vger.kernel.org, AJvYcCXmJo39Kx5Z9v1c7f6Y87X84xNnKBCsJNQ+rRR/hJTKf+KROstAZ0CmT2eFmQCaqs/8pdUKD9yFIm2gPg7fGh1S@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWpp1BMBYE+ezU4+1ufszeRXCotUC78bhJILoT1hvGRUg25nuj
-	hR976c0VvELXZjPqJJPSQMjPZA2C5Ei2lIfMV6AA8gS/ZcLfq9s1+elD
-X-Gm-Gg: ASbGncv6NdaPWX/PJzmCbf31ltlp79k0zY0SxqH1Qln/djFxEx5Ac+DgiNR7W22S/PZ
-	rc2yAK1GMbD+6K2PBvrfwuNk00WBaWkjlnbu28l8n2UX4XYYlzKb1a/zzUczd9lMpIQseBo6IK5
-	J08hoU5D+vMplEI3cmjJGdSofmdnImIiV/uZFvMwni5fR+q/l00O2Em4Qqoaoc/xfdTGnxm47fI
-	OIyCY47fXAb3QWZYEJBP+WEKuUdcmUAXEaXv9xZVT6mOw3R3yZIqUFQhsStDJxTd4AxJYJfhc+g
-	W0e+jDgxFuI+XqM69QtzVKr9mdyfVeyGhCuQmPkgxZAZ6m8ZZqXRnDkkQCO5phI1zelTpsq5LoD
-	H/cSBeh9WefzhMUryzsJR
-X-Google-Smtp-Source: AGHT+IERetu6m3PsFoXoBwGgw08hFG2wpn/20tS6HlTFkIlZpCvLwaIGhv4arG8j5wADrJYmK69CbA==
-X-Received: by 2002:a05:6000:2006:b0:3a3:63d3:369a with SMTP id ffacd0b85a97d-3b900b37afamr2314380f8f.25.1754652336884;
-        Fri, 08 Aug 2025 04:25:36 -0700 (PDT)
-Received: from localhost ([87.254.0.133])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-459e5d0b1afsm127832045e9.26.2025.08.08.04.25.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Aug 2025 04:25:36 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kselftest@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests/futex: Fix help test for option -g
-Date: Fri,  8 Aug 2025 12:24:58 +0100
-Message-ID: <20250808112458.831212-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1754653725; c=relaxed/simple;
+	bh=FUx4gUgdyZ2ZZBXuzAMKD50bvkFnEcWtdMYMuJy1cVM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HGwE/Z/fk7JD4UrBrzwpoch3JP8/PAbCDAJNWqm/HCmCeLY0Oos1nEKnmv69TNbH4yZVMTLWjbHRdmSea5O33HuOI4nO4xjqC992KoaNFgeaW+taVbZNcomiYrVMFTMsCsFEfdvQJx2fPAXxUt8kKE1XKBxpsHnWw0AhqS415OA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KlH2z2/S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EFFEC4CEF1;
+	Fri,  8 Aug 2025 11:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754653724;
+	bh=FUx4gUgdyZ2ZZBXuzAMKD50bvkFnEcWtdMYMuJy1cVM=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=KlH2z2/SRGW4K4fN/lCfwfHAWCLsioLuNXYi0U8bGmXfTGaqjSCRwOhCs4s6TOA0J
+	 7X5PzrzWTGmySfiKXxgGxB0TXo1/sEh2IwxOimdqCIM5itio7QuZye5qUFhTiowsro
+	 g9QGixSNwxKrLcq5ITi3jqk67TuJhrezSoeLBNFz3QMy7WAmsXR3PnPszSWAp/YNRf
+	 EpX42Uy/odYqRyAa1Gq9Pu3xMZtrRg9Wroqn8PxqGIn7GoY01TQOQU0yKZO8i1uzel
+	 dv/TdTFEOVjWt68sUn36VVGp+5yBeS/m5Bp5b7ElzfFVkSOFUCDepl9vRLQpiKGtKo
+	 ASrYLKLOSRMsg==
+Date: Fri, 8 Aug 2025 12:48:31 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: patchwork-bot+linux-riscv@kernel.org, linux-riscv@lists.infradead.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
+	brauner@kernel.org, peterz@infradead.org, oleg@redhat.com,
+	ebiederm@xmission.com, kees@kernel.org, corbet@lwn.net,
+	shuah@kernel.org, jannh@google.com, conor+dt@kernel.org,
+	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, a.hindborg@kernel.org,
+	aliceryhl@google.com, tmgross@umich.edu, lossin@kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
+	richard.henderson@linaro.org, jim.shu@sifive.com,
+	andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+	alexghiti@rivosinc.com, samitolvanen@google.com,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	zong.li@sifive.com, david@redhat.com
+Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
+Message-ID: <09081487-89ac-4f8d-b9fc-e563f09726d2@sirena.org.uk>
+References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
+ <175450053775.2863135.11568399057706626223.git-patchwork-notify@kernel.org>
+ <db4eb976-693c-426c-a867-66cadd3dd7d8@sirena.org.uk>
+ <aJWz82F21pVTSVJi@debug.ba.rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="D45dRbRxMwDeSA/W"
+Content-Disposition: inline
+In-Reply-To: <aJWz82F21pVTSVJi@debug.ba.rivosinc.com>
+X-Cookie: What an artist dies with me!
 
-Currently the help text for the -g option contains a spelling
-mistake, a space before a \n and is a little hard to comprehend.
-Fix it.
 
-Fixes: cda95faef7bc ("selftests/futex: Add futex_priv_hash")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/futex/functional/futex_priv_hash.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--D45dRbRxMwDeSA/W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/tools/testing/selftests/futex/functional/futex_priv_hash.c b/tools/testing/selftests/futex/functional/futex_priv_hash.c
-index aea001ac4946..93c636d6bf80 100644
---- a/tools/testing/selftests/futex/functional/futex_priv_hash.c
-+++ b/tools/testing/selftests/futex/functional/futex_priv_hash.c
-@@ -132,7 +132,7 @@ static void usage(char *prog)
- {
- 	printf("Usage: %s\n", prog);
- 	printf("  -c    Use color\n");
--	printf("  -g    Test global hash instead intead local immutable \n");
-+	printf("  -g    Test global hash instead of private hash\n");
- 	printf("  -h    Display this help message\n");
- 	printf("  -v L  Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
- 	       VQUIET, VCRITICAL, VINFO);
--- 
-2.50.1
+On Fri, Aug 08, 2025 at 01:23:15AM -0700, Deepak Gupta wrote:
+> On Thu, Aug 07, 2025 at 01:28:36PM +0100, Mark Brown wrote:
 
+> > Do you have an update for my clone3() shadow
+
+> No I don't.
+
+> > stack series that I could roll in for when I repost that after the merge
+> > window, and/or instructions for how to run this stuff for RISC-V on some
+> > emulated platform?
+
+> I would want to write-up instructions. But I don't want you to go through
+> a lot of hassle of building toolchain and bunch of other stuff.
+> Let me see how I can make it easy for you. Will report back.
+
+Thanks.  FWIW I should already be sorted for the kernel build, unless
+there's a super new or specialist toolchain required for this feature
+(I'd guess I should be fine for the shadow stacks bit?) - it's userspace
+and emulation for the extension I'm missing.
+
+--D45dRbRxMwDeSA/W
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiV5A4ACgkQJNaLcl1U
+h9BR4gf/Yvc9us1uldFqSA9g7p+0bzU3IY/RfdDdME4qVGVWWXybW7b1P+6OdvKr
+lRLLeAJQkpEzhtLNeXXTVgRijmaDgccqM2d2Vkehw9qrW1+pwA56PX8PQPBtJsGL
+riODDRX0jZSrSVAPE/mwrQRc97vY83Tme2w2Psah2FzICcRcLdsC9vz3BIsquWgp
+5LbvWFyIS7PraLBoSkO76qBYDtRwjw3LzoANXm5rYo9QKsT48UPgjfvmzxLqTSxT
+oDMob4PjC2+1FU6Q1yzo5CUyK+aX58BM0OGwWEq4DDOCu5kd0ltVJen8HWszpfVz
+YgUpgySyAiGsfZTi1JBRv158syBsdQ==
+=5/MC
+-----END PGP SIGNATURE-----
+
+--D45dRbRxMwDeSA/W--
 
