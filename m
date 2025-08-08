@@ -1,155 +1,173 @@
-Return-Path: <linux-kselftest+bounces-38603-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38604-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D25DB1ECF8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 18:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7E84B1ED00
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 18:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D174618C7E20
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 16:27:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A23F18C8050
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 16:28:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFBA4287260;
-	Fri,  8 Aug 2025 16:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45CA22874EB;
+	Fri,  8 Aug 2025 16:27:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YMHbt8Kg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SaSXXSwZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F557404E;
-	Fri,  8 Aug 2025 16:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49B0287271
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Aug 2025 16:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754670435; cv=none; b=j3ihOVWh2SKI83AYhqwNUCUEZ/8CvhlKxhYocNkZKQB3CC28WHvnodmO6Xg//B3aU/cEf6yXxGI2Lxpctyl9vLNJcJJx/xVO/KuOscR7YaT5Pwe5lkJRzPfr2No6fQjvl3Gj/nPu33QEGKtjH4BpGvVdYX0i9bwOWGjJYQQ8f8c=
+	t=1754670454; cv=none; b=mjU6I9ttBZ/VNsoF7VhVsqnx/XDtcP0exYMxLT2xxHjXbdHPixXRja7pXsSpvQz7SZU3V9ZpBdX5XkKfKuSBz3rlTCWoJYrSzDwmt3j26AzRML6cYU+lT0wr3XwCtmnOYKnJku4BpGa5iqIPJNAt1q+/gCqfY6RSvpFMqXXaDG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754670435; c=relaxed/simple;
-	bh=rsp2CxpjFFLCkiLGoLnap1Vg9OnjX7p0W0tcn0Wnx3E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mf1ze+Xe8hhDtP/Fozeh2xGH/fdzrE1+xBtVw+Qs2eK8r4blT8NNHSKaRfhSWkfJXD7afqDmEqVvHXz5lI4ovfyZoPp1MIb5T4eFGsi0p4Kad4m7U2r25M6tZ6moWUYXmEHflp0Hk830bSA3Mf7N5xmeCf/X06ryQAjINqp8nw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YMHbt8Kg; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-459e210bd2dso11544095e9.1;
-        Fri, 08 Aug 2025 09:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754670432; x=1755275232; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4KvPmLkGGbt5wH+Uu1Ks9PURZhNKr1xUfeioKrI5T5E=;
-        b=YMHbt8KgR1kWKbshXZjQFjr4RA3OQj3loz/N6DyB+EwbZhNk6EFATxbPfJpS4Xixrn
-         CNleeeIJtzIaIc8HC3AoAnSUiLR5b0wr7gI8l93yfgtQevNqPMPs+WmzURXmq3dg8gup
-         ixgK/6f1+Z7MI1hTPQOQMMdv73txLENp6k9u8SbaEMGNg2MuVFNrC5C6pMWX3V/3Bc3S
-         O4XbrVKpFSc2u2pTT8plUIFtglXrJSc/jYLfZ4L2fglCMAF1Hocp+BdLoj8dP1WRk/N9
-         x6coXJb8B7ER+LMoGmIOYpwEJHiRz7jvqyjlVkYZ+5SRHwVKtOArRdaE+MguL/apR8H3
-         Efxw==
+	s=arc-20240116; t=1754670454; c=relaxed/simple;
+	bh=35xdwsaBTJ1Y4skh6luh1NYwYaL7lznfoO0s3HYedOc=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Yw+htq1N6RhcaW8c7d5fEp0PxtPQ9jwOeV4pp08XWRchgEdFMb++1wTYPQfTQSdinQVRpuOCjBoABicJPsVAC0KCK4y6ojcfYtNMN5ZHKD4uB94m6iij6zDW9XPsJ7QWTwBda8t+pBr4QsGaUBTjvWaGynP1dnxa+QyCDb5iPWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SaSXXSwZ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1754670451;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C2n2d3+1CIGjf3VybsTqnnNSZHlfvXlp65LE1VoA9y8=;
+	b=SaSXXSwZyLtw7C22Uqk63mPoahvYCDr9NqQS2KHO5sthemoqIp0UJL9XQw+F2/XKLBKqvx
+	ZUS32854N/PnCBMSJU3ig38CfCJi06KZkfCTPD60K6Qm9mQOipEV0BmZB8FC8A4FxZDTjc
+	j5JGWfmzi67Ws4/GsA6e01dLpfY/4Yg=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-662-ycA-a-nfNQ6Fa-FZ71RwYQ-1; Fri, 08 Aug 2025 12:27:29 -0400
+X-MC-Unique: ycA-a-nfNQ6Fa-FZ71RwYQ-1
+X-Mimecast-MFC-AGG-ID: ycA-a-nfNQ6Fa-FZ71RwYQ_1754670449
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-71b58de76caso32041597b3.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Aug 2025 09:27:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754670432; x=1755275232;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4KvPmLkGGbt5wH+Uu1Ks9PURZhNKr1xUfeioKrI5T5E=;
-        b=NzICaiIVLyZsn1EWIk6aHIdOJ2y4ssYlEC057QHCJcsZky8hEmsdjnHBeAqiQ92ZFh
-         xuDuoL2QlV6BxDsJQnuR/buGPG6YoIszQ/bqUfK6PsJetAyPMnhzyLyuDchfZvHDdC7m
-         bPAgeGict7rkbRvhaEvAlNdEbeDWWWzACqfvTr6rPWoW8/f5sMKwX1PDhGob1NdtOOux
-         Ca/HF+/MHXml5sfn8qGnr+UM2jYvLMSpSdgB3F0RSFFSELHEXQLilyq5uS/7Q9e6ghfR
-         jttfkx51U/GI2B3doNFz0SYURple//Nw/Ms+glYz9sSkUGoPcv8Y3UaZr66v6wuscrnQ
-         cG4w==
-X-Forwarded-Encrypted: i=1; AJvYcCV4tMTquVxI3JMI0sdoqup36BlStutwrLGxyw1T3y7Fcg6NDMXy5pWJM3KjV+6DEHX3TlKbgxgD8O4Ba+eE+KHJ@vger.kernel.org, AJvYcCVnrs25p/pG7jHIqb3CJGBWDf8Y8YyCMSrmLQoCM4gx8WonITQg3iTbxsaYCu7K9qtKx/SS0Hi8wzE5gIA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaqRZW9sSSAArMCjbNaIYlC7J6WgyHwDmFFNT4pz9UFDKSwr81
-	KcHyNicDTLMj0kbfHW/Z+1+wTJZzfc2BuksZbjLdK9bBRuqsdUvjPHsWHx8iZYDkMONOeK3gOii
-	2y0rYJ+q0pIoUzpsoh7IAv3F2o59F/diPciHC
-X-Gm-Gg: ASbGncvu/+wDEOgZmkm5UvgPEAyDU/i9LcEBBs7D80M8bRZdJaaLI4esq1M11csVLfR
-	h5aiwNxjKwFFnDWADqj6zQ5jhJOsuRexUa0yV+i+Efo3mtFBJ141S8sC21QYxQtgdqWCuKEoPBZ
-	7jnBwthAFTIXxXvyt/A1TVr0w2KzQkLLpIDPOqEW1LrlRi4F3crn8BAM1T+NsKogC8LdH7BNew9
-	05W247IW91P/St9yTjeUiehr/3KW7pIxD6bGwxLFzz/XVQ=
-X-Google-Smtp-Source: AGHT+IG9Evme4aHcdd6nrYR5lZeD6wADDRvFIyfNrpJoFoo1P/bytzRZ+hiKKbt7rFJTSNZ0YmLP6QuxRsz+uT1OYSE=
-X-Received: by 2002:a05:6000:18a6:b0:3a4:f7dd:6fad with SMTP id
- ffacd0b85a97d-3b900fdd6femr2888237f8f.14.1754670432326; Fri, 08 Aug 2025
- 09:27:12 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1754670449; x=1755275249;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C2n2d3+1CIGjf3VybsTqnnNSZHlfvXlp65LE1VoA9y8=;
+        b=SHN3xDf980vApfDx/87Nlm0WAp3J+5f4joUibNQdZc5BYXI/KK8C7FUnSKBWgy9SV3
+         mC4UM/1JvqCKeDIE/U7K3IS/il4qYrE7vipH7Zq54XwzY/E+fsjSI/Kd1qJCOd7Ulb5a
+         da79R0u21/rIpuUAL9+gfouQqFtGSEYLdI2lZ111ILQ0+b6/5kIUH4AksPgsn+ukZ0yx
+         agK093bXU9WzK40q+I9+oIzhIKUv0rXRFzfPrFR0n7n82zS3gl8h38aDsYIbaFa1spSO
+         HFyONBb8KgVD5crYqEIvwFuGZASBM5a1x/N94e5kIupDJ4o0xQvrIl4deGM3XYL7M9+X
+         7JwA==
+X-Forwarded-Encrypted: i=1; AJvYcCW7pseNmMoGUCzpL/fcchWBu/65n5YQ6LTRXpPY0aRqxpup+M5nAPRmzbDgiZTZBVtbADeRR2i8dIY1Ux1WOg4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweWOsN6Rx3UykvqW6D4zBsuLF1dzoKLgymGxy7DY4iTDjH2cns
+	CX1KAPBR4MgpxMDkANXw8eO/oaUnuVXw4EZ6aL/UR++VKFcV8YScQNzlICtrJi5SJRQhcBjra0A
+	p6lLfer/dz3f6YPUQH7yvXtTubQ6ay6scff2/uOWjUbgAnxWvaoKNzOE6GiLHe9l6Gje2iA==
+X-Gm-Gg: ASbGnctOXT0svtKin1O4T6d9NEKjxM49kZsJwjC9DK0YHDAB98fkh8NFiarL2oBwZyE
+	phVO72jtVhq2RqzHySAIZ6u5P/7qm62ezctiBbpg4t3q/3CApn8WL6Vk0//Lng19sHgm16E1izu
+	XtBMUFQjlgccinKTABULkV7YYYT6X9F9Pv1B0KnDqnpJ9DRBJLIlDTpLQoaJ5ggkuOqQSXX7OAN
+	afSRRx4i0gRuini0sroURHfx0TzZMnCbD5sPRTh4i5qhGhZet9xXOVpcPpSMGtwMcr2Bp7unU0D
+	lr9gd1YRp6KPJEsarQZSHfrJobUinAZ2YPxHmxPU1d2Pi21rBACMCzU/lG+TgGU604zFizIpNfL
+	TN10GPotlYw==
+X-Received: by 2002:a05:690c:368d:b0:71b:fa69:1a82 with SMTP id 00721157ae682-71bfa692661mr24301077b3.33.1754670448720;
+        Fri, 08 Aug 2025 09:27:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFlW/SK2xqpPPbu5o35295axqLAQOkQhIqoyd+MS4mQP3LIL8+WZc9zZEAAqzqpjzlffRpZ3w==
+X-Received: by 2002:a05:690c:368d:b0:71b:fa69:1a82 with SMTP id 00721157ae682-71bfa692661mr24300697b3.33.1754670448271;
+        Fri, 08 Aug 2025 09:27:28 -0700 (PDT)
+Received: from ?IPV6:2601:188:c180:4250:ecbe:130d:668d:951d? ([2601:188:c180:4250:ecbe:130d:668d:951d])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-71c058d6bf3sm398587b3.22.2025.08.08.09.27.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Aug 2025 09:27:27 -0700 (PDT)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <43af3cb0-3a8d-4ed4-9007-992475ba2844@redhat.com>
+Date: Fri, 8 Aug 2025 12:27:25 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250805062747.3479221-1-skb99@linux.ibm.com> <20250805062747.3479221-7-skb99@linux.ibm.com>
- <CAADnVQ+BoEMQ3i01YpzdNPAaL_mdNogkvHp0Ef73TBG8w726Zw@mail.gmail.com> <aJYXs90cMv/HC9A1@linux.ibm.com>
-In-Reply-To: <aJYXs90cMv/HC9A1@linux.ibm.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 8 Aug 2025 09:27:01 -0700
-X-Gm-Features: Ac12FXyUvmh7-9ppO5lCcBpJ1aArsrK9_eldp5dwMUa-0rnnH5koo3huzlHvDh4
-Message-ID: <CAADnVQLnHSHker4S+tCyUyM4kFCMiH+ugHM0eWVOHhP1cuC-BQ@mail.gmail.com>
-Subject: Re: [bpf-next 6/6] selftests/bpf: Fix arena_spin_lock selftest failure
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-Cc: bpf <bpf@vger.kernel.org>, ppc-dev <linuxppc-dev@lists.ozlabs.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Hari Bathini <hbathini@linux.ibm.com>, sachinpb@linux.ibm.com, 
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	"Naveen N. Rao" <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ilya Leoshkevich <iii@linux.ibm.com>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 00/18] cgroup/cpuset: Enable runtime modification of
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Phil Auld <pauld@redhat.com>,
+ Costa Shulyupin <costa.shul@redhat.com>, Gabriele Monaco
+ <gmonaco@redhat.com>, Cestmir Kalina <ckalina@redhat.com>
+References: <20250808151053.19777-1-longman@redhat.com>
+ <aJYcsXEiFmCmDAjz@localhost.localdomain>
+Content-Language: en-US
+In-Reply-To: <aJYcsXEiFmCmDAjz@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 8, 2025 at 8:29=E2=80=AFAM Saket Kumar Bhaskar <skb99@linux.ibm=
-.com> wrote:
+On 8/8/25 11:50 AM, Frederic Weisbecker wrote:
+> Le Fri, Aug 08, 2025 at 11:10:44AM -0400, Waiman Long a écrit :
+>> The "nohz_full" and "rcu_nocbs" boot command parameters can be used to
+>> remove a lot of kernel overhead on a specific set of isolated CPUs which
+>> can be used to run some latency/bandwidth sensitive workloads with as
+>> little kernel disturbance/noise as possible. The problem with this mode
+>> of operation is the fact that it is a static configuration which cannot
+>> be changed after boot to adjust for changes in application loading.
+>>
+>> There is always a desire to enable runtime modification of the number
+>> of isolated CPUs that can be dedicated to this type of demanding
+>> workloads. This patchset is an attempt to do just that with an amount of
+>> CPU isolation close to what can be done with the nohz_full and rcu_nocbs
+>> boot kernel parameters.
+>>
+>> This patch series provides the ability to change the set of housekeeping
+>> CPUs at run time via the cpuset isolated partition functionality.
+>> Currently, the cpuset isolated partition is able to disable scheduler
+>> load balancing and the CPU affinity of the unbound workqueue to avoid the
+>> isolated CPUs. This patch series will extend that with other kernel noises
+>> associated with the nohz_full boot command line parameter which has the
+>> following sub-categories:
+>>    - tick
+>>    - timer
+>>    - RCU
+>>    - MISC
+>>    - WQ
+>>    - kthread
+> Thanks for working on that, I'm about to leave for 2 weeks vacation so I
+> won't have the time to check this until I'm back.
 >
-> On Thu, Aug 07, 2025 at 03:21:42PM -0700, Alexei Starovoitov wrote:
-> > On Mon, Aug 4, 2025 at 11:29=E2=80=AFPM Saket Kumar Bhaskar <skb99@linu=
-x.ibm.com> wrote:
-> > >
-> > > @@ -60,9 +65,16 @@ static void test_arena_spin_lock_size(int size)
-> > >                 return;
-> > >         }
-> > >
-> > > -       skel =3D arena_spin_lock__open_and_load();
-> > > -       if (!ASSERT_OK_PTR(skel, "arena_spin_lock__open_and_load"))
-> > > +       skel =3D arena_spin_lock__open();
-> > > +       if (!ASSERT_OK_PTR(skel, "arena_spin_lock__open"))
-> > >                 return;
-> > > +
-> > > +       skel->rodata->nr_cpus =3D get_nprocs();
-> >
-> > ...
-> >
-> > > --- a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
-> > > +++ b/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
-> > > @@ -20,8 +20,6 @@
-> > >  #define __arena __attribute__((address_space(1)))
-> > >  #endif
-> > >
-> > > -extern unsigned long CONFIG_NR_CPUS __kconfig;
-> > > -
-> > >  /*
-> > >   * Typically, we'd just rely on the definition in vmlinux.h for qspi=
-nlock, but
-> > >   * PowerPC overrides the definition to define lock->val as u32 inste=
-ad of
-> > > @@ -494,7 +492,7 @@ static __always_inline int arena_spin_lock(arena_=
-spinlock_t __arena *lock)
-> > >  {
-> > >         int val =3D 0;
-> > >
-> > > -       if (CONFIG_NR_CPUS > 1024)
-> > > +       if (nr_cpus > 1024)
-> > >                 return -EOPNOTSUPP;
-> >
-> > We cannot do this. It will make arena_spin_lock much harder to use.
-> > BPF CI doesn't run on powerpc anyway, but you can document that this
-> > test is disable by creating selftests/bpf/DENYLIST.powerpc.
-> Hi Alexie,
-> Sorry, I did not get it. Can you please help me to understand why it
-> makes arena_spin_lock harder to use.
+> However this series is highly conflicting with mine (cpuset/isolation: Honour
+> kthreads preferred affinity). Your patchset even redoes things I'm doing
+> (housekeeping cpumask update, RCU synchronization, HK_TYPE_DOMAIN to include
+> cpusets, etc...)
+>
+> I have a v2 that is almost ready to post.
+>
+> Wouldn't it be better to wait for it and its infrastructure changes before
+> proceeding with nohz_full?
 
-because requiring user space to do
-skel->rodata->nr_cpus =3D get_nprocs()
-is a headache.
+Sure. I am just posting this RFC patch series to show my current idea 
+that I have. I will wait for your v2 and integrate on top.
+
+Looking forward to your upcoming v2 patch.
+
+Cheers,
+Longman
+
 
