@@ -1,157 +1,129 @@
-Return-Path: <linux-kselftest+bounces-38566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38567-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA5A8B1EA16
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 16:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A07D1B1EA37
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 16:19:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 531733B3FF1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 14:12:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BAA43AFA30
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 14:19:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 282B927E07B;
-	Fri,  8 Aug 2025 14:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4A962566F7;
+	Fri,  8 Aug 2025 14:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/K4Hlfu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="huzt8PAl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71AD27E05E;
-	Fri,  8 Aug 2025 14:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078C838F91
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Aug 2025 14:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754662346; cv=none; b=iild48Ud9ypavU0/rJtgng1kXhN3gGFz8LqrJadNp8r9VL6efGGjgc0L/27SmqeHHAjNMVPzTGnlpg1GFAx4NyVhA/WhEj4sjLCFNbBmNaiyjNnLryAmKN5eCzk5Br88Y5SSaxPxljxvaAYJ1gb91MlEkVoU2tk2uchKHICCb8I=
+	t=1754662761; cv=none; b=A1MTigNvrVYncwwUtWgyfplGyrXYknlzJr7LwKrTKo7kslQ0I8zn+x4c0e44AO4RqaWT8BADUa5waJ9G8q0N+JW5BRqCAuQ2LEkmzesjJ8VaPDVvEFCJICbuvILPJWcfV80PfiGCqqYv+jAuhK6qO1qOJL+VaVv0W3peSUb5yKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754662346; c=relaxed/simple;
-	bh=Yq4JBb/hsbhU89dMDt4TrHpKLmZvJDervBYp9pOoGGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=puvdM1lNyq1oIb4zkodoqpFqyjEZ3Q745CjgcZRowO+wtJvBIbaPfPpO7dZYuGJPZAJynfRalzdtOhEtqRikixevKDFUxP2ZdRMOgSRJobV8nBSyibkWxU1FZ71zARQ7Hilt7FaE5GVYwCjJ+mycIlLEF3er6gpuow5qv2AEwes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/K4Hlfu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ABFDC4CEED;
-	Fri,  8 Aug 2025 14:12:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754662345;
-	bh=Yq4JBb/hsbhU89dMDt4TrHpKLmZvJDervBYp9pOoGGQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V/K4HlfuUx6LKpoZIrIKCA2MAiFpC4iF0lEvFYy09fFdkV6dPqamM2jha/o6PkLgL
-	 mZH0CME3E66XouhzLMj9MeKSTjdbXU7/boNBpophSGxLfNflGo5y/PyiBH/canKd3N
-	 4zLPs542wfJxub1Q8KOrnmjN0XcreUrsYSncXlqTNtf5uoIxT4ZBkmsVSzWJqpCXGq
-	 4nvXO041HWaz9+KogFg9qUx0JFaN6wftY/S+oz1sp1BlqHmCujK4mQ4X9faPUU73hW
-	 EB9tM9nx+oI2KFdpiZFRgJDU9CVrZvveb3M1WBYBWuBCXzAHAP2PH3Rz/Gb1WCWvWG
-	 GRtvYBczaC7/A==
-Date: Fri, 8 Aug 2025 16:12:19 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Randy Dunlap <rdunlap@infradead.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Aleksa Sarai <cyphar@cyphar.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] procfs: add PROCFS_GET_PID_NAMESPACE ioctl
-Message-ID: <20250808-huschen-jazzband-c7d1ba351773@brauner>
-References: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
- <20250805-procfs-pidns-api-v4-3-705f984940e7@cyphar.com>
- <9027aa89-b3b2-46c8-8338-6c37f1c5b97a@infradead.org>
- <2025-08-06.1754503216-vulgar-pinch-more-tasks-meager-grader-93KeQn@cyphar.com>
- <1ea6f1d9-550d-4b81-bade-1a0ca14c27c6@infradead.org>
+	s=arc-20240116; t=1754662761; c=relaxed/simple;
+	bh=vSs/FLFyWmT5fUFdAh8nLqssatgQIqAhG3C9sNRJS4I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oHRsXqCwz4rylUJu4iyyE1U5sMtGkchDBKrczZDeqAtH/DelC/CqG4yL+WzRpHI2eXavS3k83ZI9WpeWINV1ab0A+aorj3XCqOd1G77QCy6fdiqyUBO08TxtdK1HzS+feMrwbAHEHKFFgRhuIlYKnu8WRzLPMhgxiyFAliWWEDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=huzt8PAl; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4aeb2e06b82so11863931cf.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Aug 2025 07:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1754662759; x=1755267559; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y94OGudZDPZNaW6E85iU0z+UoY8JtiL793eo6U580Jg=;
+        b=huzt8PAlnLjQSvC8yMN97oI0W2fAwLXH1ki9YXh8Xvn+Za09OOOIN6/19hhUciB92I
+         xxvKI9i0eDgpcKLx5IORw9+qOH+LdREjE+eyAGAwAir2QNZsWTWBn/3c53ARlInQ9Fyw
+         eEBhc/RtPLfRWTnr7i5qMoCz5CzNVZkPwlKqwMQ75ip78cD2vvWyyR6XZDj1DDSu1+rp
+         cFXCn8fPU1haBikSszdrwdG7MaG8okESv83iC1WLpRks1+gHi4frAwSBexN3qGnlXj6/
+         MlIkdJjl3utaVR62oH1jCfTD+Wrdq1hAg+LH8t61/FZV8Po3JVtRg06J7O5ocCyC5ANt
+         1chg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754662759; x=1755267559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y94OGudZDPZNaW6E85iU0z+UoY8JtiL793eo6U580Jg=;
+        b=bUWX+wq9lBGoQhi5EqxyiEmkyb1IPCJAyi8C77FcsyN7TgYmsyYXLAJUaXMdFIJgNj
+         OMQR1OVGcWiHGEV43u4osXKHCeOTX/pwq+E9ynTQhP1tUzmRWnspDT+hfqBQucawYDVS
+         1VzeUCZIcWR2OSzHYCQzMHhH45FYhM4loIlMMdUkHlzZknewOFBtznnAKjcWjpcXrKJH
+         jZWWLAzVyVASlsrH4oCFa8Jz3kR2Z02tmaqYmoIt0wN4wV5Ei+ZFoKBg9pM/6V3n6x4F
+         a5phOpxYTzCxpECsIIXS7nbMzh1rE9yhYP7P18uEV4JmlJlI/OKvNBuhFAsri1bu2701
+         MLlA==
+X-Forwarded-Encrypted: i=1; AJvYcCXwJjCJy92qQZUjQsNxoltLeQrwgIaTCV+1mpOt3N/o0xa7MkoEb9GbcZAzM/NpBOSZ1xK70T4t+vz3Fhf6c4k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4ZM5oJuXqWdL16ueNkleRyUYQZZGQbNQ4f6ecYOdzHHSnMAM0
+	J/bOVaPr4iGyUfH1AZoPD07w9RfK966+FbU5XPPjBzm3fE3oTLykCKfjAsTs/ROaRRSFfTCGSh3
+	iN7pzzCwuOah4QC57iInt0/IwFYSZPcqhuVZ0J0cK
+X-Gm-Gg: ASbGncuUzSCmi+FvGyU3Yuj4Z2Q/lJWfd2HsNTNiuszy0jJcXLPTdZ/XQow1oDtNhKf
+	toD1AMlTblH7U+7pmy48LlecgKAvN9Es/fJLnix2H8UGWEs+6BypuIsh3Dv/opZLD6jmFgKTZoV
+	jU9sRfCG34J4N+kuPyBVSojHYGqkUeebMF9duT8/87owUE1V04JrN5owlz5JOPJB4i6yOAiQQr6
+	Lq4
+X-Google-Smtp-Source: AGHT+IGlhlfzpC4KJNIVb9Mz9qopmHfUuMxN6adfHiYC4I0TtEw5oxUbbCOIZh/4rAe6le8uT8ly5EbruJYjRevHsbo=
+X-Received: by 2002:ac8:7dc2:0:b0:4ab:38c1:f9bd with SMTP id
+ d75a77b69052e-4b0aed0b967mr41999341cf.12.1754662758275; Fri, 08 Aug 2025
+ 07:19:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1ea6f1d9-550d-4b81-bade-1a0ca14c27c6@infradead.org>
+References: <20250807232907.600366-1-kuba@kernel.org>
+In-Reply-To: <20250807232907.600366-1-kuba@kernel.org>
+From: Eric Dumazet <edumazet@google.com>
+Date: Fri, 8 Aug 2025 07:19:06 -0700
+X-Gm-Features: Ac12FXxu695eQQh0GR6R9L_dN1lxvC_xRXbyFs3sP8XNLEQaFDLYQI2rudyY6IA
+Message-ID: <CANn89i+Hx-DtzYuGdkHTSoe81UvjDfqSpwKfwA=yAE4cUaSbAw@mail.gmail.com>
+Subject: Re: [PATCH net v2 1/2] tls: handle data disappearing from under the
+ TLS ULP
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com, 
+	andrew+netdev@lunn.ch, horms@kernel.org, borisp@nvidia.com, 
+	john.fastabend@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	sd@queasysnail.net, will@willsroot.io, savy@syst3mfailure.io
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 06, 2025 at 11:57:42AM -0700, Randy Dunlap wrote:
-> 
-> 
-> On 8/6/25 11:02 AM, Aleksa Sarai wrote:
-> > On 2025-08-05, Randy Dunlap <rdunlap@infradead.org> wrote:
-> >>
-> >>
-> >> On 8/4/25 10:45 PM, Aleksa Sarai wrote:
-> >>> /proc has historically had very opaque semantics about PID namespaces,
-> >>> which is a little unfortunate for container runtimes and other programs
-> >>> that deal with switching namespaces very often. One common issue is that
-> >>> of converting between PIDs in the process's namespace and PIDs in the
-> >>> namespace of /proc.
-> >>>
-> >>> In principle, it is possible to do this today by opening a pidfd with
-> >>> pidfd_open(2) and then looking at /proc/self/fdinfo/$n (which will
-> >>> contain a PID value translated to the pid namespace associated with that
-> >>> procfs superblock). However, allocating a new file for each PID to be
-> >>> converted is less than ideal for programs that may need to scan procfs,
-> >>> and it is generally useful for userspace to be able to finally get this
-> >>> information from procfs.
-> >>>
-> >>> So, add a new API to get the pid namespace of a procfs instance, in the
-> >>> form of an ioctl(2) you can call on the root directory of said procfs.
-> >>> The returned file descriptor will have O_CLOEXEC set. This acts as a
-> >>> sister feature to the new "pidns" mount option, finally allowing
-> >>> userspace full control of the pid namespaces associated with procfs
-> >>> instances.
-> >>>
-> >>> The permission model for this is a bit looser than that of the "pidns"
-> >>> mount option (and also setns(2)) because /proc/1/ns/pid provides the
-> >>> same information, so as long as you have access to that magic-link (or
-> >>> something equivalently reasonable such as being in an ancestor pid
-> >>> namespace) it makes sense to allow userspace to grab a handle. Ideally
-> >>> we would check for ptrace-read access against all processes in the pidns
-> >>> (which is very likely to be true for at least one process, as
-> >>> SUID_DUMP_DISABLE is cleared on exec(2) and is rarely set by most
-> >>> programs), but this would obviously not scale.
-> >>>
-> >>> setns(2) will still have their own permission checks, so being able to
-> >>> open a pidns handle doesn't really provide too many other capabilities.
-> >>>
-> >>> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
-> >>> ---
-> >>>  Documentation/filesystems/proc.rst |  4 +++
-> >>>  fs/proc/root.c                     | 68 ++++++++++++++++++++++++++++++++++++--
-> >>>  include/uapi/linux/fs.h            |  4 +++
-> >>>  3 files changed, 74 insertions(+), 2 deletions(-)
-> >>>
-> >>
-> >>
-> >>> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
-> >>> index 0bd678a4a10e..68e65e6d7d6b 100644
-> >>> --- a/include/uapi/linux/fs.h
-> >>> +++ b/include/uapi/linux/fs.h
-> >>> @@ -435,8 +435,12 @@ typedef int __bitwise __kernel_rwf_t;
-> >>>  			 RWF_APPEND | RWF_NOAPPEND | RWF_ATOMIC |\
-> >>>  			 RWF_DONTCACHE)
-> >>>  
-> >>> +/* This matches XSDFEC_MAGIC, so we need to allocate subvalues carefully. */
-> >>>  #define PROCFS_IOCTL_MAGIC 'f'
-> >>>  
-> >>> +/* procfs root ioctls */
-> >>> +#define PROCFS_GET_PID_NAMESPACE	_IO(PROCFS_IOCTL_MAGIC, 32)
-> >>
-> >> Since the _IO() nr here is 32, Documentation/userspace-api/ioctl/ioctl-number.rst
-> >> should be updated like:
-> >>
-> >> -'f'   00-0F  linux/fs.h                                                conflict!
-> >> +'f'   00-1F  linux/fs.h                                                conflict!
-> > 
-> > Should this be 00-20 (or 00-2F) instead?
-> 
-> Oops, yes, it should be one of those. Thanks.
-> 
-> > Also, is there a better value to use for this new ioctl? I'm not quite
-> > sure what is the best practice to handle these kinds of conflicts...
-> 
-> I wouldn't worry about it. We have *many* conflicts.
-> (unless Al or Christian are concerned)
+On Thu, Aug 7, 2025 at 4:29=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
+> TLS expects that it owns the receive queue of the TCP socket.
+> This cannot be guaranteed in case the reader of the TCP socket
+> entered before the TLS ULP was installed, or uses some non-standard
+> read API (eg. zerocopy ones). Replace the WARN_ON() and a buggy
+> early exit (which leaves anchor pointing to a freed skb) with real
+> error handling. Wipe the parsing state and tell the reader to retry.
+>
+> We already reload the anchor every time we (re)acquire the socket lock,
+> so the only condition we need to avoid is an out of bounds read
+> (not having enough bytes in the socket for previously parsed record len).
+>
+> If some data was read from under TLS but there's enough in the queue
+> we'll reload and decrypt what is most likely not a valid TLS record.
+> Leading to some undefined behavior from TLS perspective (corrupting
+> a stream? missing an alert? missing an attack?) but no kernel crash
+> should take place.
+>
+> Reported-by: William Liu <will@willsroot.io>
+> Reported-by: Savino Dicanosa <savy@syst3mfailure.io>
+> Link: https://lore.kernel.org/tFjq_kf7sWIG3A7CrCg_egb8CVsT_gsmHAK0_wxDPJX=
+fIzxFAMxqmLwp3MlU5EHiet0AwwJldaaFdgyHpeIUCS-3m3llsmRzp9xIOBR4lAI=3D@syst3mf=
+ailure.io
+> Fixes: 84c61fe1a75b ("tls: rx: do not use the standard strparser")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> v2:
+>  - fix the reporter tags
+>  - drop the copied_seq nonsense, just correct the error handling
+> v1: https://lore.kernel.org/20250806180510.3656677-1-kuba@kernel.org
+> ---
 
-We try to minimize conflicts but we unfortunately give no strong
-guarantees in any way. I always defer to Arnd in such matters as he's
-got a pretty good mental model of what is best to do for ioctls.
-
-> 
-> >> (17 is already used for PROCFS_IOCTL_MAGIC somewhere else, so that probably should
-> >> have update the Doc/rst file.)
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
