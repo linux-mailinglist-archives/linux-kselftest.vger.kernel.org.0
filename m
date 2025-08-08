@@ -1,144 +1,234 @@
-Return-Path: <linux-kselftest+bounces-38544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78E42B1E453
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 10:23:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43320B1E583
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 11:19:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B90726228AA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 08:23:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1945D18860AD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 09:19:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8E525CC7A;
-	Fri,  8 Aug 2025 08:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C3C2690C4;
+	Fri,  8 Aug 2025 09:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="cvPx8n4T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sDNNwmSz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C9625B663
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Aug 2025 08:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C772AE74;
+	Fri,  8 Aug 2025 09:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754641402; cv=none; b=FE0bTUlib3KyTLS30SWbiI7/3ExT5phJY/MC50xYvz0lfMbGXHyVW82+iuyxhilf6d6Np29uUkfgfct0i0mgwgSTVMZO18+qzvEKjLSlbOvCQCwD2eCF7+cu4bAqheC1ARZKAmqOIOlSHTNAO9kvK9McpsJjJ0EgcIt1R0bk+rw=
+	t=1754644772; cv=none; b=lX7FpA1jIg+llP4HikmzKgn5BjtEVvx4lWJKEcVWi339qqG8nT4XXFoF+WLDBFwzeahJCAGbMuCEw/oedNNBV2J7n7O40MQ1XFX9fzi2W0d2RNW6nOnDr2TGRRfdaGDGKYZBWmaxNq1UEbV4gl5VnQTMJliEW62PY4GH7ocHmcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754641402; c=relaxed/simple;
-	bh=bsh/7R5V9XNvtRBgbRptJnuST96CsEj614d/3uw/SME=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bAAXwt44sO7b4BiDa5fD+tzTReKJGvn+6Vn2FBlG1sh8dPp2+CeHFj4X/UXlt3msqj4xAn1QXAD0AeqNc2HtwUQDnEtIw4V5506XI5XAJfYUhzvM/7DURhOrjaabvaiPxksG5hY4u90peRuxM7FTw2J9/nGsV+ffsfJh6R4w18g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=cvPx8n4T; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2406fe901c4so12368815ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Aug 2025 01:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1754641399; x=1755246199; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rqclBjlpReb8Zh2xzaAy1Tthw4Ak4Apujt4wspR+yjo=;
-        b=cvPx8n4Ts3zqRUY2xG6AtHoEFC+hNzZ5gHKFw2TMNfy3bMZrzR2d8hpL+kqLbwSmYR
-         WQt08ukI6iwh0c7HnzBCxequGbVbH3ag+m2JMvUnAqXZzmRxkDtRxIacrlNlCyXthOUH
-         IgzoduBNZj2S3jD5DSUfLv/zUJPROXyNTcLEU5meK8kRSXnpt9FYN8vypJKpbls9GeYI
-         JWhE/0YwY8hwXhJggsRr8VCuj9vpNEERGnUvxPn5WjXqo0915MLiSCeLVHUdpmlKIZV7
-         vzHWIsMCoZDofevhvGraylyWzfrqJd+KwOaoQU11M1rDPanciQKQbvHVUHKgHOex1zgP
-         WGGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754641399; x=1755246199;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rqclBjlpReb8Zh2xzaAy1Tthw4Ak4Apujt4wspR+yjo=;
-        b=vuhySyWAntN6U/qspZLGFwlfWKoJ7V/sgKsx2ebI57p0Pp7TL9DSCoSJfxrD1OHPLq
-         ro+NPmT4SHC3Ui9Q4OmB8NMyqd7MVIjnhkno335iq1q1PZt1ZeQnIhzmZNS2n5bGLyfQ
-         +/vhgiunq62annysHInmVm1QUsBgMSIBzGK/Zyw0oUjz+M2JmIYpW9ggcVpH2QVf5GmS
-         WQicN9iW8Y/KHCaOzE6WiMl/dNASuX5Gn+/uJHAA5wfBHn6f2YXI2vrCr3TzaCIC3ktr
-         2tdFwAsLSfmGTETgqaO2NYYtEnr5FbAAjKrM+PFZ3wV+00Rb1zagFjiF9PP5tcs5+wNs
-         JV4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUvCCknwGlmMZ0ph9OHuqOhjnkZBB2IX4uQ/UGIgeMn3ar795OJglpeDTeuzvKU/XHAbW0EYQLP3Kkfn4qZ9EI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBN55wmBWrArreic8P53da8nxgiWl3gfdafh9RKc7wC3i8YWXw
-	MZlM3KATQ3K6lUEpjt28hk9XFDOnU4RN8nxViqECGlX8xzotav9K3iQLQ5WYbwphNY4=
-X-Gm-Gg: ASbGncvyL1qPuwiY5lKVgR4Kbb10VkStE9YAOsr8llPr+6cjct5gffDwiutGWtiBfl1
-	APq3vcPJ4eVDgirOGVlycAIm97XAnt+lM1ugxjElDYhiteePWkYyyA5W2L4uDLCf85GiKyS7KgT
-	ERvSTyDMHwlB9J/VzLGG2rPVr2m+eBVxyALpR5slItu1WyEzfFySigWzQb0YcQTDHnjQWCyG3qV
-	DIOS5GjyhtI8OGN6X6ityW9PAIPFxqtWrm67HQfW8RCQhIwZFKsvcPiEWeCjZLYCYe9reoZc79Q
-	8SP+PeUGoxZHlICtROwcNGl1hTEDLFV34gHDyVsb5Q8wYIMTlP+qHK2Igb1qkeyoRBgH//IQsTw
-	NPXad15QZ1e7AB5hCRWnBg2PFvLL2m0Ylc8WJdvOaHzg=
-X-Google-Smtp-Source: AGHT+IFzkjQpJ+CBSP5FDKaUMlIyJFyzXkrgnGdlTX6xXb/Zh2Ht/mDaf4SC0H4gKEAF5ZgXVLVJMA==
-X-Received: by 2002:a17:903:1207:b0:23f:f6ca:6a3 with SMTP id d9443c01a7336-242c2245139mr30852795ad.43.1754641399054;
-        Fri, 08 Aug 2025 01:23:19 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241d1ef5934sm202807465ad.21.2025.08.08.01.23.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Aug 2025 01:23:18 -0700 (PDT)
-Date: Fri, 8 Aug 2025 01:23:15 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: patchwork-bot+linux-riscv@kernel.org, linux-riscv@lists.infradead.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
-	brauner@kernel.org, peterz@infradead.org, oleg@redhat.com,
-	ebiederm@xmission.com, kees@kernel.org, corbet@lwn.net,
-	shuah@kernel.org, jannh@google.com, conor+dt@kernel.org,
-	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
-	gary@garyguo.net, bjorn3_gh@protonmail.com, a.hindborg@kernel.org,
-	aliceryhl@google.com, tmgross@umich.edu, lossin@kernel.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, devicetree@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
-	richard.henderson@linaro.org, jim.shu@sifive.com,
-	andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
-	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
-	alexghiti@rivosinc.com, samitolvanen@google.com,
-	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
-	zong.li@sifive.com, david@redhat.com
-Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
-Message-ID: <aJWz82F21pVTSVJi@debug.ba.rivosinc.com>
-References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
- <175450053775.2863135.11568399057706626223.git-patchwork-notify@kernel.org>
- <db4eb976-693c-426c-a867-66cadd3dd7d8@sirena.org.uk>
+	s=arc-20240116; t=1754644772; c=relaxed/simple;
+	bh=UNGRcrHpudJn0w1urLqBMR5FBKNY7aoHD0a4DiJoAxo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BftaOc3j+Cc632tTQx8EWqlV4Hw5J+6Qu+RhmWN/HuVcbCWcgU6eNBHot93G5nx5EY+ufyXpqHeBNV7PenX9AE7gR9vY0OB08pZwzQWjeszrfCTktVoW4flsAHiAfVGqw8yivOalOH0wRVrHyDkqNp+R3gehAZNnFUxVDshXbnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sDNNwmSz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42DACC4CEED;
+	Fri,  8 Aug 2025 09:19:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754644771;
+	bh=UNGRcrHpudJn0w1urLqBMR5FBKNY7aoHD0a4DiJoAxo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sDNNwmSzuV6K6E49l6/7w4x04nxM8m2PFrSfClS/AKcLclw41aWIzJeT6INSUiv4P
+	 kDl9RhCjOmWJ4EzxRuwRe2IGBGYrAGOvj+vEpV3gloJdycaCgkIqw83wf729wcUPjj
+	 OQ7hAsJ3REkLl3SqY6EAIg0l6W7sibBMmOWyHMNuj3ZA8Z12zjDljCvu4Nt8SV1jui
+	 ke6aHNILH2np4asSUv7VBMd9XceFW4OZYdFlYVdnQ0DujaMyo0To8ZK2vFlFDFhDl2
+	 P3kyYXdEZQB91ROboSPaoyzcU2Y0XgJmdH7Gn/mgKlVPFku8dRurU1AAK7VrIjhxOp
+	 AaSn0a9hSAVFQ==
+Message-ID: <af73992f-e683-4ccd-9ff5-28f6147ea43e@kernel.org>
+Date: Fri, 8 Aug 2025 11:19:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <db4eb976-693c-426c-a867-66cadd3dd7d8@sirena.org.uk>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: BPF selftest: mptcp subtest failing
+Content-Language: en-GB, fr-BE
+To: Harshvardhan Jha <harshvardhan.j.jha@oracle.com>,
+ Mat Martineau <martineau@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>
+Cc: Geliang Tang <geliang@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ mptcp@lists.linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ stable@vger.kernel.org
+References: <b1f933f6-545d-4f2e-a006-4e5568656c38@oracle.com>
+ <da46ad00-910f-4eb1-9b74-14bd76fc8910@kernel.org>
+ <84125c5e-ed99-4158-9a59-e1a97435c626@oracle.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <84125c5e-ed99-4158-9a59-e1a97435c626@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Aug 07, 2025 at 01:28:36PM +0100, Mark Brown wrote:
->On Wed, Aug 06, 2025 at 05:15:37PM +0000, patchwork-bot+linux-riscv@kernel.org wrote:
->
->> This series was applied to riscv/linux.git (for-next)
->> by Alexandre Ghiti <alexghiti@rivosinc.com>:
->
->>   - [v19,11/27] riscv/shstk: If needed allocate a new shadow stack on clone
->>     https://git.kernel.org/riscv/c/9c72a71321a6
->>   - [v19,12/27] riscv: Implements arch agnostic shadow stack prctls
->>     https://git.kernel.org/riscv/c/52eff0ab5f8e
->
->Congratulations Deepak!  
+Hi Harshvardhan,
 
-Thank you. Happy that its going in.
+On 08/08/2025 09:00, Harshvardhan Jha wrote:
+> Hi Matthieu,
+> 
+> On 07/08/25 7:51 PM, Matthieu Baerts wrote:
+>> Hi Harshvardhan,
+>>
+>> On 07/08/2025 05:50, Harshvardhan Jha wrote:
+>>> Hi there,
+>>> I have explicitly disabled mptpcp by default on my custom kernel and
+>>> this seems to be causing the test case to fail. Even after enabling
+>>> mtpcp via sysctl command or adding an entry to /etc/sysctl.conf this
+>>> fails. I don't think this test should be failing and should account for
+>>> cases where mptcp has not been enabled by default?
+>> It looks like the test is failing because it expects MPTCP to be enabled
+>> by default. Or, said differently, it doesn't expect the kernel to be
+>> modified without adapting the corresponding tests :)
+>>
+>>> This is the custom patch I had applied on the LTS v6.12.36 kernel and
+>>> tested it:
+>>>
+>>> diff --git a/net/mptcp/ctrl.c b/net/mptcp/ctrl.c
+>>> index dd595d9b5e50c..bdcc4136e92ef 100644
+>>> --- a/net/mptcp/ctrl.c
+>>> +++ b/net/mptcp/ctrl.c
+>>> @@ -89,7 +89,7 @@ const char *mptcp_get_scheduler(const struct net *net)
+>>>  
+>>>  static void mptcp_pernet_set_defaults(struct mptcp_pernet *pernet)
+>>>  {
+>>> -	pernet->mptcp_enabled = 1;
+>>> +	pernet->mptcp_enabled = 0;
+>>>  	pernet->add_addr_timeout = TCP_RTO_MAX;
+>>>  	pernet->blackhole_timeout = 3600;
+>>>  	atomic_set(&pernet->active_disable_times, 0);
+>> First, I have the same question as the one I asked to RedHat devs: do
+>> you still need to keep MPTCP disabled by default? If I remember well, on
+>> RHEL side, they started to do that when they backported MPTCP on a
+>> previous stable version, as an experimental feature. They left it like
+>> that later mostly for internal process reasons I think. But honestly,
+>> today, it no longer makes sense to do that and annoys users: all other
+>> Linux distributions enable MPTCP by default without patching the kernel
+>> like you did.
+> 
+> We had observed issues with mptcpd daemon failing before when we had
+> this enabled by default. The mtpcpd userspace fix is yet to be integrated.
 
-> Do you have an update for my clone3() shadow
-No I don't.
+If net.mptcp.enabled is set to 0 by default, I guess most mptcpd unit
+tests will be skipped. If you have issues when MPTCP is enabled by
+default, there might be real issues in mptcpd that would need to be
+fixed (or more likely, RHEL devs didn't noticed most tests were skipped,
+and there are probably some dependences missing for these tests).
 
->stack series that I could roll in for when I repost that after the merge
->window, and/or instructions for how to run this stuff for RISC-V on some
->emulated platform?
-I would want to write-up instructions. But I don't want you to go through
-a lot of hassle of building toolchain and bunch of other stuff.
-Let me see how I can make it easy for you. Will report back.
+But that's a different topic.
 
--Deepak
+> However, shouldn't the testcase be robust enough to handle that scenario
+> regardless?
 
+It should not be needed: these tests run in a dedicated netns where it
+expects the kernel to have MPTCP enabled by default. If this behaviour
+is changed without adapting the tests, that's normal to have issues.
+This is not an issue with the upstream kernel.
+
+>> If you don't want to revert this patch, I guess you can modify the BPF
+>> selftests in 'prog_tests/mptcp.c' to set 'sysctl net.mptcp.enabled=1' in
+>> each netns created by the test. But again, not changing the default
+>> kernel behaviour sounds like a better solution.
+> 
+> Even after changing /etc/sysctl.conf which is supposed to keep mptcp
+> enabled across reboots this issue occurs.
+
+/etc/sysctl.conf needs a userspace daemon to load it and apply the
+changes. In these tests, dedicated netns are created, and this file is
+not read. That's the whole purpose of using netns: not to have to handle
+default config changed on the host, just use the default values from the
+kernel. Plus, it is cleaner to use netns: no need to revert changes
+after, tests can be executed in parallel without impacting others, etc.
+
+> I agree with what you have stated, mptcp should be enabled by default
+> and the userspace fix should be incorporated ideally, however I still
+> believe that the test case shouldn't be giving a false negative as it is
+> in this case.
+
+I don't think these tests have to handle every possible modifications
+done by a custom kernel. If you have to modify the behaviour, then you
+also need to adapt everything related to that. That's why I don't
+recommend to change the behaviour.
+
+> The false negatives seem to be occurring since this commit I believe:
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=df8d3ba55b4fa1d6aed8449971ee50757cb0732f
+
+I don't think so, this commit changes MPTCP selftests, not the BPF ones
+you have issues with. I guess you wanted to refer to this commit:
+
+  02d6a057c7be ("selftests/bpf: run mptcp in a dedicated netns")
+
+> This does the opposite of you have mentioned in certain functions.
+
+The MPTCP selftests are setting net.mptcp.enabled=1, because RHEL devs
+added them a while ago, while it was making sense, and we lefted them
+there, even after the refactoring you mentioned. But we should probably
+remove them indeed, because it is not needed.
+> I suppose adding all these lines back might do the trick:
+> 
+> ip netns exec $netns sysctl -q net.mptcp.enabled=1
+
+For your issue, yes. But again, not changing the default kernel
+behaviour sounds like a better solution.
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
 
