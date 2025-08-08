@@ -1,145 +1,150 @@
-Return-Path: <linux-kselftest+bounces-38605-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38606-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B463B1ED20
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 18:43:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6D56B1EDB4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 19:20:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 548B64E0F74
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 16:43:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B69125658E7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Aug 2025 17:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 195B428750D;
-	Fri,  8 Aug 2025 16:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C810C27E076;
+	Fri,  8 Aug 2025 17:20:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eLVfNRp/"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="a8M63Uui"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D93627FB07;
-	Fri,  8 Aug 2025 16:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CD81C1F12
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Aug 2025 17:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754671390; cv=none; b=VPZ0iQYm70gdUPA94j8wPiX/NVGtUGQ3WNEczxt2F4n90hNKzd6zTmk1CGzY0pn+n2UTKLaz/3Obh/Wu3QMuc1NRqQWGdU38jqVtrtuVlgZQ9o2ePzLPvF5FQE7/z7deI/w5TFF4TW+CtMrropE4P5o5Y50HO++EbJ9aIiAiyiw=
+	t=1754673624; cv=none; b=dBv0LQwKhbU6pNgr+Hg2bL4y+OsH9hcGoPWTGyNQLmju/ZCPdUYjKZGYbyafSosjZ2nPCzDkVx/Hb2XjrLlYXIkEipGzdpKdC3M2tJWCrWSg8dNsiUX/UGpv+y/RcAnam8vPoi6xLFZzNG8RlauQmi5YbjlDH4Puu9xhva+9ESc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754671390; c=relaxed/simple;
-	bh=hBz7QODq6cwIwzLsI0Vrawc39RQX3Q+gtmpK3tbIgsw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EwEmbFDpdTejkK1H/nbjMylutDrK220EV3n/ApdhIdJN44b91q8uiPFdyr2KlJhbQ+VZHuL6skTcGwiUxPPjSI49BOGBNfgrBnDBZX5i9ptizs4YulDHJjdKXENpoyQh6PDShnBVp27cxr2H09bpqzqsFlOqBbLTiipaLEiR+h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eLVfNRp/; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3b780bdda21so1771263f8f.3;
-        Fri, 08 Aug 2025 09:43:08 -0700 (PDT)
+	s=arc-20240116; t=1754673624; c=relaxed/simple;
+	bh=RqNZJ9llYxg5119nPvsoAte+UupsM8m84wjkhwHB7S4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=akQopT3CYypvUdr6fx45yPHla2Tz0LBpbnBjXuTp0/PX8jYuGRMMaWXGtHit7GSfIjjGIC1p7Y1oE8mXzGlSYCE2TjryIob7Lwp76EdlVx8GNzA8veN3Fdb2ryiEd6lYsoqM0LtlCpsceneEu7OWVU7FIRxdYC+sK3Bm/j2FttU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=a8M63Uui; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-76bd7676e60so2279636b3a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Aug 2025 10:20:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754671387; x=1755276187; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hBz7QODq6cwIwzLsI0Vrawc39RQX3Q+gtmpK3tbIgsw=;
-        b=eLVfNRp/0C0kMs4BB1G2sqSdSXnoKcLdY3Uh4h1+DVoGEfVY8hQ7YWj/QGfqiWhrlp
-         teL3FFcCq3tNXl+qxHBpopgYyo6qfjoShBBeQlGkYgsqPgv0Y65O4jKlISgffacYvs4F
-         2xIouW+0iO3VS/8Y/vBwMgezlvcLKwlvv7x0mcj0/kSVEgOF13QsK50gWRtsdGSmPFif
-         O2fbTedUPGpskgapE408O0+ybt+m04MD+LN/iMf5n7MvIE6R83LvOBWz4AIHIkEmcC7O
-         A3WlysVRKxWrAuOgSe/A37gvCZQfFqmZ410Jwg2YoWT1KaahP03yRNmW2xbkWDZEhSeq
-         aVdw==
+        d=rivosinc.com; s=google; t=1754673622; x=1755278422; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e5KtmNZscqY46KvhQCHs24ev6RrXWd+1XTPfyk6qu6o=;
+        b=a8M63UuieKcX26TzVIbNSA88Yn2tSAaxOYC3qXip6DTpLgrn22RYAPzvTl7GC4X9n7
+         z/MTSt5RmjktrSErLR5LGgZ5yeeSVtDdy7r2tM2Vu46CreMC2xvBV/xJ4kk/9gTLtBME
+         XD6iQ6/bTVbnM06BTpJ3Wqoamucgcv6vA+OIF0+0vPh9mB6sBnKW8qCfSS5KlftSo3az
+         WCQrHVGt76H8CJWQDS7PnRtch2s5ptTFKFYwdOWhLRTPtvqtNEO2M2/DWyUucdKdhrXG
+         PfX0jt+/QtWvkyBjDFhL2MK1WtIdbK19Ej4ghyPEM4jpSiVz2OOVtdPLEqDkQS/C0a4r
+         xzhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754671387; x=1755276187;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hBz7QODq6cwIwzLsI0Vrawc39RQX3Q+gtmpK3tbIgsw=;
-        b=flsbYclaPz/1K40iHQdYqMzhnQtlGilBn3nAgWE9Ixzoms+NvDkkJ5CDjfPYQ6aeLA
-         eqhJ0ORUvTc6hkKzjfXCM7FCsg7JtSSdbf4LSIkUpzT3tWq3lIXc6iSFDg13GVwXa2Ef
-         OvR1e9LjvDoYbRr4wbV9uYwUjYE87vE/VunkCUo1ya2lbqzkFaL40zDsDorUMt0hNf7d
-         vtSoN1IrwvaI6ukAuKMId+KiE7Ne2LdRvQPRK3WzTG8W/BcUcenyF++xahNmTsE6FBKL
-         HPg/vZt2/x+WvKLePey09H7/HUsZ0wTEbUZSUS0tdp86nF9rsilbivlgXDzXNLTimsJu
-         a3eg==
-X-Forwarded-Encrypted: i=1; AJvYcCULCQmyzcyOQrTjJUZdLa+yJ8b18BnzKncJCZxHiHUL6jZUqwKK2brhc3asKccgqCHr7H8rRExv@vger.kernel.org, AJvYcCUtp664MMVv0JmWuoeD3KU+3aQKyozIeqZlVT5o+pEMsZT8GQBetpyEUD2GRuco7vDvDKrDi9NRiv58m8c7@vger.kernel.org, AJvYcCVA7k9EuaCBEccShRO10wGFqWOjUZYAGpQeYRw7MQoBOMirtZAQdHTkXlkvbTqkUG+RJhk=@vger.kernel.org, AJvYcCW53DKtIBTf7PRLyWEFLuE7c8K3ORBRqZaZXwWQRSEzGtlY2XYh7aiCG24WwsKVfqlIXatkay9bQYDyAyb0VgNR@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTPUd2lVM+V0lY9ViTK0pwGAfl6VqS7O+DRmb4ffWYmT5E1FLG
-	x+byzohzCf47qUdjAYTg9W7LUT5PdKdbGbHNzK8s7f++9HdukCnmczfA6mEZxZrXEil4iYBznFB
-	Sre9X+yu/ZHdkpjbJfGT7F9qyhdNtJkM=
-X-Gm-Gg: ASbGncuCY7VlUQFHRiJ6FJIKZ5YDzxVgOvuVPUSru3AImIUadwP4jfRznjW5fSZSfBg
-	ZrWuAeBGhgAE7QJjUuQ+6jvxT3OWENSOCkC3WYub0U/sg6deJ/9Qodc1ehQq0N2ozrr6Fjb5FV7
-	SFWNeNLFbxUgdCQO1M/QK9wM1/ui2jDJiS5Y9BEZ7FvxTOUeGr8jGEObZ80QRxXolxliTzv7App
-	mi1C9sFbW6itPZ/g6ULaweP4eCuKe+kPeMR
-X-Google-Smtp-Source: AGHT+IEH7Bh5BxabsxIyC+T8pE/X/o2EhezxEecYjJXKK56oTvG/5namA7BuNEyyuFoXRZlLz4c3lWwM+Tolix0kpVI=
-X-Received: by 2002:a05:6000:3104:b0:3b7:9dc1:74a5 with SMTP id
- ffacd0b85a97d-3b900b80561mr2646170f8f.52.1754671386463; Fri, 08 Aug 2025
- 09:43:06 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1754673622; x=1755278422;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e5KtmNZscqY46KvhQCHs24ev6RrXWd+1XTPfyk6qu6o=;
+        b=jB38uLjmi3/SeJLbTBhLLUpNJELIb3bXV2kjXqlfiT+U1RO5ZgQhZe12Hq7fGRtq9u
+         W03jS0/ZO8izZEi8H8fF3rSkN4DvcAUcGtSmL/s7+bWj11x/F0Ux9Rrz2HIcsJ5WuC36
+         StWzpCc8Q9OgnrVWFqUfa2GqNTC3Xf72bCkBZRp8/lKLD3wS9cEyjCVZZbHVZ5qAfuMc
+         K1MoshvEEV9vqQR4+x5Yq8MQlZxDAHutp9JvPyjQT++8uNUhw8zO3ll94Tw3p6qX2QS6
+         W2Q1+OeTEUNTZmZKStFLd/O8+yyHg4/5rgEhDF/bcKn07yRQ1hGaD3xedlzDJqxAlIjR
+         F6yw==
+X-Forwarded-Encrypted: i=1; AJvYcCX5dsYUYGbvp1ESjZbSLgKUtSASNGCkfN3bIC7wobO5RlTPiK8NIATIXhzDNnyElmZUTojFIM6hkNWuKRY4o8s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyt2af86NQ9ggvJTVKlMIKGdMGj7jkEAvXm8DxkWJMrmV3NhK4g
+	Gd4PPXchZ/HeWqueDtc7n1Xzi8u2tzRGcVexmBfXOmPw1p16oD+z3BDq9TKSFTucW/A=
+X-Gm-Gg: ASbGncvBYQNcFU2uKDZ+DR2D/SuY5ETHuIhkqQTmhfqUwKGJq5I+JV4z1UQXngtSqFT
+	hVxlosGOxVpD5PCWs74O+q7Enu4hGv6ZXu82G8BNy7AHrS4BxH9kF1s4v7NljO9qx0YnwYpYemW
+	1nSeJoWdpeZTHJMB+rbVDEXe4jV+Vc6orv1w8uOFv4zAt34Nir69PUoiNBtgpZlquPR7go/so7A
+	f/qBSDaounS4aNX1PO3/eEMoYHHSKuNuuS/OnVcvx3junl/X1NpMJK62mrni9IvE5qUKSsGf+VI
+	k5SJ65NwJ9PjoNt2DF53R6RKqrV0vGKfKPSxc0o6lUuBr/Rqk/F0PSjwR/UqBT5Sgz2WMNjB1kD
+	Ouc/Ro3WVvOER2pCkcEU7u7u2pX62+BqnIxMmDiCCouA=
+X-Google-Smtp-Source: AGHT+IEbXOfCcMMF+EKLeMi8xU3SNI8Lg4qkWBu83GI5zB4sNqf//XXj2WJssysLa22zlDPxSEkl6g==
+X-Received: by 2002:a17:902:da82:b0:240:c678:c1ee with SMTP id d9443c01a7336-242c1ffb211mr57743355ad.11.1754673622272;
+        Fri, 08 Aug 2025 10:20:22 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8aafa77sm213263625ad.174.2025.08.08.10.20.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Aug 2025 10:20:21 -0700 (PDT)
+Date: Fri, 8 Aug 2025 10:20:17 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: patchwork-bot+linux-riscv@kernel.org, linux-riscv@lists.infradead.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
+	brauner@kernel.org, peterz@infradead.org, oleg@redhat.com,
+	ebiederm@xmission.com, kees@kernel.org, corbet@lwn.net,
+	shuah@kernel.org, jannh@google.com, conor+dt@kernel.org,
+	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, a.hindborg@kernel.org,
+	aliceryhl@google.com, tmgross@umich.edu, lossin@kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
+	richard.henderson@linaro.org, jim.shu@sifive.com,
+	andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+	alexghiti@rivosinc.com, samitolvanen@google.com,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	zong.li@sifive.com, david@redhat.com
+Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
+Message-ID: <aJYx0Yi3rQcdY6se@debug.ba.rivosinc.com>
+References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
+ <175450053775.2863135.11568399057706626223.git-patchwork-notify@kernel.org>
+ <db4eb976-693c-426c-a867-66cadd3dd7d8@sirena.org.uk>
+ <aJWz82F21pVTSVJi@debug.ba.rivosinc.com>
+ <09081487-89ac-4f8d-b9fc-e563f09726d2@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250722150152.1158205-1-matt@readmodwrite.com>
- <CAADnVQ+rLJwKVbhd6LyGxDQwGUfg9EANcA5wOpA3C3pjaLdRQw@mail.gmail.com>
- <CAENh_SS2R3aQByV_=WRCO=ZHknk_+pV7RhXA4qx5OGMBN1SnOA@mail.gmail.com>
- <CAADnVQLnicTicjJhH8gUJK+mpngg5rVoJuQGMiypwtmyC01ZOw@mail.gmail.com> <CAENh_SRxK56Xr1=4MX4GhZuc0GF4z5+Q8VueTK0LDLj3wg_zXg@mail.gmail.com>
-In-Reply-To: <CAENh_SRxK56Xr1=4MX4GhZuc0GF4z5+Q8VueTK0LDLj3wg_zXg@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 8 Aug 2025 09:42:55 -0700
-X-Gm-Features: Ac12FXzI0SWIjlbuRKix9JN42rScdnLLmM34XmBImN01moHmeqq6Q4_oGi5PqHM
-Message-ID: <CAADnVQ+Q6qqz_kCibF6MGCOWAH4WH6XypYSCZjQzW7SP2yyodA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Add LPM trie microbenchmarks
-To: Matt Fleming <matt@readmodwrite.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	kernel-team <kernel-team@cloudflare.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Network Development <netdev@vger.kernel.org>, 
-	Matt Fleming <mfleming@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <09081487-89ac-4f8d-b9fc-e563f09726d2@sirena.org.uk>
 
-On Fri, Aug 8, 2025 at 7:21=E2=80=AFAM Matt Fleming <matt@readmodwrite.com>=
- wrote:
+On Fri, Aug 08, 2025 at 12:48:31PM +0100, Mark Brown wrote:
+>On Fri, Aug 08, 2025 at 01:23:15AM -0700, Deepak Gupta wrote:
+>> On Thu, Aug 07, 2025 at 01:28:36PM +0100, Mark Brown wrote:
 >
-> On Thu, Jul 31, 2025 at 5:41=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > well, random-key update when the map is full is also quite different fr=
-om
-> > random-key update when the map is empty.
-> >
-> > Instead doing an update from user space do timed ops:
-> > 1 start with empty map, update (aka insert) all keys sequentially
-> > 2 lookup all sequentially
-> > 3 delete all sequentially
-> > 4 update (aka insert) all sequentially
-> > 5 lookup random
-> > 6 update random
-> > 7 delete all random
-> >
-> > The elapsed time for 1 and 4 should be exactly the same.
-> > While all others might have differences,
-> > but all can be compared to each other and reasoned about.
+>> > Do you have an update for my clone3() shadow
 >
-> Having both sequential and random access for the benchmarks is fine,
-> but as far as I can tell the scheme you propose is not how the bpf
-> bench framework is implemented.
+>> No I don't.
 >
-> Plus, handing off a map between subtests is brittle and prone to
-> error. What if I just want to investigate the sequential access update
-> time? The cost of the most expensive op (probably delete) is going to
-> dwarf all over timings making it difficult to separate them and this
-> scheme is going to be susceptible to noise if I can't crank up the
-> number of iterations without altering the number of entries in the
-> map. Microbenchmarks mitigate noise/run-to-run variance by doing a
-> single op over and over again.
+>> > stack series that I could roll in for when I repost that after the merge
+>> > window, and/or instructions for how to run this stuff for RISC-V on some
+>> > emulated platform?
+>
+>> I would want to write-up instructions. But I don't want you to go through
+>> a lot of hassle of building toolchain and bunch of other stuff.
+>> Let me see how I can make it easy for you. Will report back.
+>
+>Thanks.  FWIW I should already be sorted for the kernel build, unless
+>there's a super new or specialist toolchain required for this feature
 
-The bench has to repeat the operation obviously.
-The point is that it cannot benchmark 'delete' in isolation.
-And it cannot benchmark 'update of empty aka insert' in isolation.
-So some operations have to be paired and when another one
-can be done standalone then the delta is the performance for the other.
-In the above 2,5,6 are repeatable. The others need to be paired.
+Unlike x86 shadow stack and arm's GCS, push on RISC-V shadow stack is done
+using dedicated `sspush` instruction and pop is done using instruction
+`sspopchk`. RISC-V vDSO has certain `C` files and they would need shadow stack
+push and pop (along with landing pad on them). So that's why kernel compile
+would require the toolchain. I'll point you to it.
 
-7 with pure random is probably not a good idea, since it will
-try to delete some keys that were already deleted and will skew the numbers=
-.
+>(I'd guess I should be fine for the shadow stacks bit?) - it's userspace
+>and emulation for the extension I'm missing.
+
+Qemu changes are upstream. I'll provide the command line option.
+On userspace, I'll point you to something pre-compiled rootfs.
+
+
 
