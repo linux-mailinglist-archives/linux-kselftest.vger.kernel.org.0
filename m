@@ -1,50 +1,76 @@
-Return-Path: <linux-kselftest+bounces-38647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08225B1FC30
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Aug 2025 23:13:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0407B1FCB3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 00:28:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66CEC7AA826
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Aug 2025 21:11:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F23C6177983
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Aug 2025 22:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FFD222CBD8;
-	Sun, 10 Aug 2025 21:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD0AC2D6630;
+	Sun, 10 Aug 2025 22:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HCOBV3tU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EnwGdK3T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E0F22A4DA;
-	Sun, 10 Aug 2025 21:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A9513D8A4
+	for <linux-kselftest@vger.kernel.org>; Sun, 10 Aug 2025 22:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754860330; cv=none; b=uW36EKXhKW9z07HIja324++MX0a7yHazWhVColsBFwdTIbTJR/2yheTxB2yYUlV2HjT877jxU8aNTLUZM1O3cvkNKsQVdL5+RFqaiRn+yhsfgDSa2ZAlVQo+Q9+NzRrAkL31+Xyp6s3zO/nXoQwF/yWUeZOJ9ukhdh05iVyxoFA=
+	t=1754864880; cv=none; b=VQLYjU+u0/7HCNawP2OIg38fu/KijcaHYw9THuJshYOeNGxWRtvWgfW8xKHX7RMzzscfFc7uahExxi6eSwvmhF1dkGUBYFWLi3T7xiOaoK1iwQsZgZMyaDdpoFfnYkp2HZ0+tdHZABOeP8tMjbIpJSAWt7lGh7hpFIbVrFzZHHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754860330; c=relaxed/simple;
-	bh=PTB+y1bea+X0pwle+Qsb0krCZI4wJwkr28qnyuTl7j4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=hczlwUowThmGaIIQa6Vt6qpx34/PL/cHbhQOygSaAvDu48nmIPqFqH/fQ9n9EX+P9Lg6RTtBynxT4wDoLLugNrRYJiUm9pUQG0CpDHNA4z1vIkmv6ZXtNfhE22Ao9C/6kDeQV4y7/fk5j8LkrYpBexGx8B5TCG+0YwYWAl4HaLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HCOBV3tU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF676C4CEEB;
-	Sun, 10 Aug 2025 21:12:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754860329;
-	bh=PTB+y1bea+X0pwle+Qsb0krCZI4wJwkr28qnyuTl7j4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=HCOBV3tU+ctjdX3pY3Zg/0pvMsfqNnXGmHLBwd4NcMVjVEH7cvRnVceivTVzUTBgz
-	 iBywCPbd901UmslM78Hnuk/eTpHS6/f3sLyf9xPRghxH/2C+4EPHmKaK3TU1y8G/SD
-	 2LZGbg4pzBNtyw7wRgsvYlW0+yX8/zcykqfhKvNIWp878PjsojxBNWCh5PKt5A4KoZ
-	 LQ8F53gT97pNeIvGJtMveQduZsLP39bJ9M6pBSMzg1LErA9A75yivHXsm8MZHlMgbc
-	 tG9XSvaRQ5XBE9KczEQP5WOF5MlpsjN04vNY4GNEFA7Y6xVuMV9vlzvKe/2lUu0GBk
-	 cXiQT6eCpZTTg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD1539D0C2B;
-	Sun, 10 Aug 2025 21:12:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1754864880; c=relaxed/simple;
+	bh=wIrlwbnuKnkPYVbgME8ikSpgK/+Ts/tGiac5ibXXP7I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bsc/wbm1qqt0VZ85P3xtQ2uW8ixcl/Mp6XYDuoKdaGoxRiAVR8ZA2X0FDRnHcMDYrjpWr2DtIAS8/EoFCzfjAB0J9YpkddpwW/JO1EB6as3u9Gq7fAplqXYO2Nv8nuBkbsAKFPntnL5pz1N1bzhdciYpdkxEiUMVnQd7d9rugQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EnwGdK3T; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1754864877;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1q12txHUQPg0R1RQNr4oGF8yA7IDYgf7jDtfYZA93xY=;
+	b=EnwGdK3T8n212w+m64grTMVLx1b360MuxibXCOiy/ykW1F1f0jg3odVeUUlWunUHoqYQeX
+	oAqQJmuamDpWG7yoSegR9RngAGaAbzM2ykfoUI7mKeXT4VXC65H7zLB5fI6c/30HMR6Iac
+	pPePz/tyH9Woi/d2MmlEDoZoAO175z8=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-250-bYpDTESUNLapYYdAG5EtPQ-1; Sun,
+ 10 Aug 2025 18:27:53 -0400
+X-MC-Unique: bYpDTESUNLapYYdAG5EtPQ-1
+X-Mimecast-MFC-AGG-ID: bYpDTESUNLapYYdAG5EtPQ_1754864871
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CDDA419560AD;
+	Sun, 10 Aug 2025 22:27:49 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.80.59])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B844D1800280;
+	Sun, 10 Aug 2025 22:27:46 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH] selftests/futex: Fix some futex_numa_mpol subtests
+Date: Sun, 10 Aug 2025 18:27:42 -0400
+Message-ID: <20250810222742.290485-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,74 +78,60 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 00/13] stackleak: Support Clang stack depth tracking
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <175486034248.1221929.3658503475425874388.git-patchwork-notify@kernel.org>
-Date: Sun, 10 Aug 2025 21:12:22 +0000
-References: <20250717231756.make.423-kees@kernel.org>
-In-Reply-To: <20250717231756.make.423-kees@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: linux-riscv@lists.infradead.org, arnd@arndb.de, mingo@kernel.org,
- gustavoars@kernel.org, hch@lst.de, andreyknvl@gmail.com,
- ryabinin.a.a@gmail.com, ardb@kernel.org, masahiroy@kernel.org,
- nathan@kernel.org, nicolas.schier@linux.dev, nick.desaulniers+lkml@gmail.com,
- morbo@google.com, justinstitt@google.com, linux-kernel@vger.kernel.org,
- x86@kernel.org, kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
- sparclinux@vger.kernel.org, llvm@lists.linux.dev
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Hello:
+The "Memory out of range" subtest of futex_numa_mpol assumes that memory
+access outside of the mmap'ed area is invalid. That may not be the case
+depending on the actual memory layout of the test application. When
+that subtest was run on an x86-64 system with latest upstream kernel,
+the test passed as an error was returned from futex_wake(). On another
+powerpc system, the same subtest failed because futex_wake() returned 0.
 
-This series was applied to riscv/linux.git (fixes)
-by Kees Cook <kees@kernel.org>:
+  Bail out! futex2_wake(64, 0x86) should fail, but didn't
 
-On Thu, 17 Jul 2025 16:25:05 -0700 you wrote:
-> v3:
->   - split up and drop __init vs inline patches that went via arch trees
->   - apply feedback about preferring __init to __always_inline
->   - incorporate Ritesh Harjani's patch for __init cleanups in powerpc
->   - wider build testing on older compilers
->  v2: https://lore.kernel.org/lkml/20250523043251.it.550-kees@kernel.org/
->  v1: https://lore.kernel.org/lkml/20250507180852.work.231-kees@kernel.org/
-> 
-> [...]
+Looking further into the passed subtest on x86-64, it was found that an
+-EINVAL was returned instead of -EFAULT. The -EINVAL error was returned
+because the node value test with FLAGS_NUMA set failed with a node value
+of 0x7f7f. IOW, the futex memory was accessible and futex_wake() failed
+because the supposed node number wasn't valid. If that memory location
+happens to have a very small value (e.g. 0), the test will pass and no
+error will be returned.
 
-Here is the summary with links:
-  - [v3,01/13] stackleak: Rename STACKLEAK to KSTACK_ERASE
-    (no matching commit)
-  - [v3,02/13] stackleak: Rename stackleak_track_stack to __sanitizer_cov_stack_depth
-    (no matching commit)
-  - [v3,03/13] stackleak: Split KSTACK_ERASE_CFLAGS from GCC_PLUGINS_CFLAGS
-    (no matching commit)
-  - [v3,04/13] x86: Handle KCOV __init vs inline mismatches
-    (no matching commit)
-  - [v3,05/13] arm: Handle KCOV __init vs inline mismatches
-    (no matching commit)
-  - [v3,06/13] arm64: Handle KCOV __init vs inline mismatches
-    https://git.kernel.org/riscv/c/65c430906eff
-  - [v3,07/13] s390: Handle KCOV __init vs inline mismatches
-    https://git.kernel.org/riscv/c/c64d6be1a6f8
-  - [v3,08/13] powerpc/mm/book3s64: Move kfence and debug_pagealloc related calls to __init section
-    https://git.kernel.org/riscv/c/645d1b666498
-  - [v3,09/13] mips: Handle KCOV __init vs inline mismatch
-    https://git.kernel.org/riscv/c/d01daf9d95c9
-  - [v3,10/13] init.h: Disable sanitizer coverage for __init and __head
-    https://git.kernel.org/riscv/c/381a38ea53d2
-  - [v3,11/13] kstack_erase: Support Clang stack depth tracking
-    (no matching commit)
-  - [v3,12/13] configs/hardening: Enable CONFIG_KSTACK_ERASE
-    https://git.kernel.org/riscv/c/4c56d9f7e75e
-  - [v3,13/13] configs/hardening: Enable CONFIG_INIT_ON_FREE_DEFAULT_ON
-    https://git.kernel.org/riscv/c/437641a72d0a
+Since this subtest is non-deterministic, it is dropped unless we
+explicitly set a guard page beyond the mmap region.
 
-You are awesome, thank you!
+The other problematic test is the "Memory too small" test. The
+futex_wake() function returns the -EINVAL error code because the given
+futex address isn't 8-byte aligned, not because only 4 of the 8 bytes
+are valid and the other 4 bytes are not. So proper name of this subtest
+is changed to "Mis-aligned futex" to reflect the reality.
+
+Fixes: 3163369407ba ("selftests/futex: Add futex_numa_mpol")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ tools/testing/selftests/futex/functional/futex_numa_mpol.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+index a9ecfb2d3932..802c15c82190 100644
+--- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
++++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+@@ -182,12 +182,10 @@ int main(int argc, char *argv[])
+ 	if (futex_numa->numa == FUTEX_NO_NODE)
+ 		ksft_exit_fail_msg("NUMA node is left uninitialized\n");
+ 
+-	ksft_print_msg("Memory too small\n");
++	/* FUTEX2_NUMA futex must be 8-byte aligned */
++	ksft_print_msg("Mis-aligned futex\n");
+ 	test_futex(futex_ptr + mem_size - 4, 1);
+ 
+-	ksft_print_msg("Memory out of range\n");
+-	test_futex(futex_ptr + mem_size, 1);
+-
+ 	futex_numa->numa = FUTEX_NO_NODE;
+ 	mprotect(futex_ptr, mem_size, PROT_READ);
+ 	ksft_print_msg("Memory, RO\n");
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.50.1
 
 
