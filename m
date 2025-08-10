@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-38637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7678B1F801
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Aug 2025 04:04:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88B13B1F803
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Aug 2025 04:06:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C426817BE4D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Aug 2025 02:04:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 925F5189C0FF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Aug 2025 02:06:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D67626ACB;
-	Sun, 10 Aug 2025 02:04:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F583594B;
+	Sun, 10 Aug 2025 02:05:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="qaIyKwLI"
+	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="kaEncN1U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E4A1367
-	for <linux-kselftest@vger.kernel.org>; Sun, 10 Aug 2025 02:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E241367
+	for <linux-kselftest@vger.kernel.org>; Sun, 10 Aug 2025 02:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754791485; cv=none; b=SkJvyWzK0V48r7ZJI8znRMlhpo1mLNh01E7DI30e1h/iL+fNA6wHPd7PxE4x+I26DKeqDXvcu0VMXDQQZT79mGiBPgNvwuu+d3oHClzm5Gjec6FyW4DognhhxQeBrPII+okiFUqDc+jXoF3AUO5jfsCrLRA/TpfJ5aadgw7vjS4=
+	t=1754791558; cv=none; b=u8NYSJD4fd4/BqlWksnIczBJ75YdlyWZ6j4GF0v64y8JEy3YCD1fJHMUn4H3WruZf+MmhdywhmtJWH595Ckx9YGP6hi20lrkhmZ4gVHVhc3BaDMBJxuAj09r8IqlFKqQydfM3k0m8xl1U3wGx7jfq5qAIFNNjTnPQUDb4tON8fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754791485; c=relaxed/simple;
-	bh=5B9EcPlaYkNFgWW2w0IjOvRGR5xFsqb+684FjwZuIdw=;
+	s=arc-20240116; t=1754791558; c=relaxed/simple;
+	bh=s7wQGYp05L9HfcQFejriC4r9sjnCHXs7CU+Ln53RY9o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b/x+NI2rl7Yo/pXflKNXPtLzKbgTtHU+/VuB5zKAc8BtQ4gJ767LQ8qVXTvpS0UlxHFg2CqXzXGN3AwOt2N0IZI+A4PNieB5K0t/A7q3Q3iRa0ZtOB8vqsUeg95haUEK63v3gOhb/dMWoWU/fvX6ooKbpyuY6ZtCq5zEdivgXwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=qaIyKwLI; arc=none smtp.client-ip=209.85.210.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=A/qunkpTSDUSu3wGn7jjSiyz9uoLZts3mLmSwatntarlMjvrRFQ+B+XxfrAJdkz/sAxTjugfeAiXI9Ev1uCrmoq4jI4bPEw3Fz9tlwYBhJSwCB8conavQMRb1gj3NM5/hgggbVI9VciRcty8XfqTt7UmBtg7nXjFC6sa/zIOqcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=kaEncN1U; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-76c3607d960so3556038b3a.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 09 Aug 2025 19:04:43 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2429d9d3755so31971585ad.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 09 Aug 2025 19:05:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1754791483; x=1755396283; darn=vger.kernel.org;
+        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1754791557; x=1755396357; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PpEDcR/rY+YXUvIHTjoMmFXmGhwOZhEhJLky7Dw6ZkA=;
-        b=qaIyKwLIV9p9uK/AqsiUY2LWiLIoFnpGOyUbNIM2mY+5onKztlemdtQfwV/giuu0nk
-         GTBFkn2l3j3pp3rzdqEXRplOlYvnwnaN45PuDpVnG8hqDmth9Qd/4b4PTt6q2NscuOzP
-         OGNuwaOq1PO6V0P5078ERdHJoTHT+GvDhj5trAEgBv1CVjpWp6az9biNKEiik7SqkCvQ
-         5tgaHq58RUv0eOyQtNI9xZQ1zSb33k/4tYpTUsUDie8iwrPPdxrp045MVmcl7sz9OOdx
-         pG041gidt7jPmGkby+uUNuH8xnapuhEOyEn3nDMkrsnV+Ye+1dPtMZvA+YGV7h+zatA7
-         kW7g==
+        bh=pb6zcooEg3RRvTiv3EjpCkXeNvci0on4KfGHqARNl58=;
+        b=kaEncN1U4woODhAoO9OHwrdDVTotjq7yqj5UKCirULLEcoIQIsFFtWMdkQQA4HAIO3
+         mH7UEGxEg12Il45cd6PMSvneShzpNER5Rjp3d8IibeFWJASj1FQAbgxdydN/6NVjEbAd
+         /ikEH02XTvU1KF/ret9og1m2auLjxNUy2seUV0SKsbxLsx23l+qtfnFOP/lBjl3OwDfm
+         uN4uIeffcAznwtYpLxo9cIOJXH2mcTPNVsVEbjCHNbiEsw4ZTj2OI6ViuD3llBBedg/J
+         RCEJTf0E4t4ex+csA9uYaWjruDkxpJAwgNTI+0PbRlLv9zCDiM6m8hBlCo1xvx+mNfho
+         ZdsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754791483; x=1755396283;
+        d=1e100.net; s=20230601; t=1754791557; x=1755396357;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PpEDcR/rY+YXUvIHTjoMmFXmGhwOZhEhJLky7Dw6ZkA=;
-        b=JZexJ+v+Rw5w3CwpYjJV6666ZogJsKpxBnWE2qBj3wFf+YUvls7n12LAh9LZlSPugy
-         Q3CNC0blwT6BQ6EY6fvLGuOjXJa9MZ371jMb/PQf0Pu6LF94HipIiQtZZG36W48LMVpf
-         s1BY1Fu4+qv0VOoARCpjWVUUqoHrkX0GjO73tHrrQ342GuXGatHq/tqEqEyb2913D3rz
-         YqD2jgpmcDSXBpiCbok7cW62V2QCxPLLrnEBZtatrEL9jvRKMQCmxCD46ZPu8uSqtHKe
-         BM/A+77YKQe0AkOgzsnfigPRdmzTGe9yTKwLMhtmbtR9N1uF41TMIugSClrUNUp2WgGw
-         L5Ag==
-X-Forwarded-Encrypted: i=1; AJvYcCVmHNNeTB+1KCXz2/I3ew0XuCZX9EHw6K4v/jirDoJtkdpfMifJFqNz8kbelr+/X3OpASR9WIgauYY/ur6nkbc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTibiTjv2EraZFOfjiVhYhuldOWobeguiz1l4/CA1wZy3514rV
-	BFmLh1OUfcaetWONjBrmy0p43D2B/lRpixq7RxfabFhQSnJwmRGPjhu4C9ep5GsGZd8=
-X-Gm-Gg: ASbGncuLuYmCY4h3yFwK2uq9qxFa/HinWG986g7fNe/JwwkSZnr5ukV+ysZZVIhHOPG
-	HJEXNa6YqNNP5sZt733CTSjLxYP0+mTiNpLO5+yrO9aiFCFdc91k7mitiKJxSepvY0yhNPSeUau
-	txoARgoagCy3mk6Spji/ZEI/A1xuz0KFStp270338/RWYo9oVKboUgIM0BzBmy6kQB3VdzL6MHL
-	ywdtTVXopIz0k2Zejtay1dS5e++2vyIiaLBSp5epTmAUw9C7nv4qRMg0wOmzkwc7IIidh9WvxRp
-	AZqg/adskafR0mHJraTpq1jWGIdG+gf6AuQvqPS3WeqXG2ayUMh73Z6zia4lpNjjInQCfyWeWMh
-	CKX62NGbI49NEanUuQSfZfwOthac+mQfnWar4nU0Z3I1o1Py+1fxhHnaO+wr0808Oo/Y6dvPX
-X-Google-Smtp-Source: AGHT+IH9l+G3vC9KcZ3JXNHknQZtzhkwAF36rtgqVKo/+BrNtn3ph8Wz2bBk6bfnDChBVuLFaLwxXQ==
-X-Received: by 2002:a05:6a21:6d94:b0:240:1bdb:bed2 with SMTP id adf61e73a8af0-240551be2a1mr12886194637.32.1754791483437;
-        Sat, 09 Aug 2025 19:04:43 -0700 (PDT)
+        bh=pb6zcooEg3RRvTiv3EjpCkXeNvci0on4KfGHqARNl58=;
+        b=QqlG+ogemz1NocHFiQhCwzV2d13cTQqTyJZJis7pwDDHeXkrWPLscLy4suPjqknsd1
+         RY4V8cLEQYoe8lWjpldMn+1QBKAODe4SI37xb0uE9XxJjoMmat6RioUIrDzM+oCNLe5W
+         V0k2VZP0FCJZc18lO75iCTTNT4NiM7Cv0yosEoEYq9d2jiUV21KvrTXqslEbeWP++5/Q
+         7fotwFrs7k9E/7lQZpz/H6knAm8Ci7rPpsS2YSzj1biJREcj2HJvePtVdGek4NcP7rNr
+         q+Pk5iMS8FJ7cWgMNdjwEHVLdyoTxfOkmhyKZJf7Ez85Za1VzpQOJrwm48jGsGLMeIKJ
+         TbFg==
+X-Forwarded-Encrypted: i=1; AJvYcCWvdzV9GREFwGisC14GMRRE47WNSoxBxAGxJvEmsPqMvWhO1FdLfGy0vVOA5ht+Dp3w9x1agbqmR1fLbLgvivQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwF6c5gPswGpSzRWfgMMPbZiTfRRLEXm3uNPYEBTx0JEXf3o6ub
+	vEGgZNVg2BAjkJfyF39AzxQwgYjmR1uU/yQjYVBeOelAdVItd514Aak4+04r/GZpcuQ=
+X-Gm-Gg: ASbGncvHgMjXolzKP8Xbo25z1dk01q84Fy6ac1RC9Z/vEeozwuQpfGEnFXRuTWuMNpw
+	LzMU2SYT6DFE3+WsaO6CPdMXHOuf/UBqUFSzAY+dEnINSPYbmhupPP/9e4j9dVE1/F2fEv+/o9X
+	1mYMd5BdfqkmyCM2T2+wmQ2cHFMu/41CYL60dTKed12x4xOEc7bjb6VB3WTmbCPRVl/jIQPE6yG
+	crqFvD+v2cJo107B5bhTe/D7VuyyJoE+TqkTvGqCgepcb5EFSUbyHQYo6SeGRXlTP0PxmwC3Sqy
+	SdseAbhtLD1XvmdEZu9NQHqp90sXppFwhwjoC05sfEf9vRr2/+LYhJeJz4617RN0V/fBC1QAt7l
+	Vp1DEMlMPkuQ/O8F4FbbEgxlrlfW84U2G91DE+TQpr3z3VOpjQuLuEeS5lV6Il46vc4cot9uy
+X-Google-Smtp-Source: AGHT+IF1TFqQOJkKBEjGMqAqbfj9fuF7MJ8nc7ELVFSJtdFjC/wviyjT7cTygqCqjzheWp7D/l2Vow==
+X-Received: by 2002:a17:902:f611:b0:240:468c:83e7 with SMTP id d9443c01a7336-242c20030bamr111421885ad.3.1754791556680;
+        Sat, 09 Aug 2025 19:05:56 -0700 (PDT)
 Received: from MacBook-Air.local (c-73-222-201-58.hsd1.ca.comcast.net. [73.222.201.58])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bd7887522sm22372207b3a.20.2025.08.09.19.04.42
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e89a3acfsm239911345ad.146.2025.08.09.19.05.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Aug 2025 19:04:43 -0700 (PDT)
-Date: Sat, 9 Aug 2025 19:04:40 -0700
+        Sat, 09 Aug 2025 19:05:55 -0700 (PDT)
+Date: Sat, 9 Aug 2025 19:05:52 -0700
 From: Joe Damato <joe@dama.to>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
 	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
 	willemdebruijn.kernel@gmail.com, skhawaja@google.com,
 	sdf@fomichev.me, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2 2/3] net: update NAPI threaded config even for
- disabled NAPIs
-Message-ID: <aJf-ONUg3AKXjcqV@MacBook-Air.local>
+Subject: Re: [PATCH net v2 3/3] net: prevent deadlocks when enabling NAPIs
+ with mixed kthread config
+Message-ID: <aJf-gL4n6xF5V-rk@MacBook-Air.local>
 Mail-Followup-To: Joe Damato <joe@dama.to>,
 	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
 	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
@@ -90,7 +90,7 @@ Mail-Followup-To: Joe Damato <joe@dama.to>,
 	willemdebruijn.kernel@gmail.com, skhawaja@google.com,
 	sdf@fomichev.me, shuah@kernel.org, linux-kselftest@vger.kernel.org
 References: <20250809001205.1147153-1-kuba@kernel.org>
- <20250809001205.1147153-3-kuba@kernel.org>
+ <20250809001205.1147153-4-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -99,56 +99,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250809001205.1147153-3-kuba@kernel.org>
+In-Reply-To: <20250809001205.1147153-4-kuba@kernel.org>
 
-On Fri, Aug 08, 2025 at 05:12:04PM -0700, Jakub Kicinski wrote:
-
-> We chose not to have an "unset" state for threaded, and not to wipe
-> the NAPI config clean when channels are explicitly disabled.
-
-Yea... I wonder if we could change that now or if it's too late? I think this
-is the thing you mentioned that I couldn't recall in my response to the cover
-letter.
-
-> This means the persistent config structs "exist" even when their NAPIs
-> are not instantiated.
+On Fri, Aug 08, 2025 at 05:12:05PM -0700, Jakub Kicinski wrote:
+> The following order of calls currently deadlocks if:
+>  - device has threaded=1; and
+>  - NAPI has persistent config with threaded=0.
 > 
-> Differently put - the NAPI persistent state lives in the net_device
-> (ncfg == struct napi_config):
+>   netif_napi_add_weight_config()
+>     dev->threaded == 1
+>       napi_kthread_create()
 > 
->     ,--- [napi 0] - [napi 1]
->  [dev]      |          |
->     `--- [ncfg 0] - [ncfg 1]
+>   napi_enable()
+>     napi_restore_config()
+>       napi_set_threaded(0)
+>         napi_stop_kthread()
+> 	  while (NAPIF_STATE_SCHED)
+> 	    msleep(20)
 > 
-> so say we a device with 2 queues but only 1 enabled:
+> We deadlock because disabled NAPI has STATE_SCHED set.
+> Creating a thread in netif_napi_add() just to destroy it in
+> napi_disable() is fairly ugly in the first place. Let's read
+> both the device config and the NAPI config in netif_napi_add().
 > 
->     ,--- [napi 0]
->  [dev]      |
->     `--- [ncfg 0] - [ncfg 1]
-> 
-> now we set the device to threaded=1:
-> 
->     ,---------- [napi 0 (thr:1)]
->  [dev(thr:1)]      |
->     `---------- [ncfg 0 (thr:1)] - [ncfg 1 (thr:?)]
-> 
-> Since [ncfg 1] was not attached to a NAPI during configuration we
-> skipped it. If we create a NAPI for it later it will have the old
-> setting (presumably disabled). One could argue if this is right
-> or not "in principle", but it's definitely not how things worked
-> before per-NAPI config..
-
-Thanks for the detailed commit message. I agree that it should probably work
-the same now.
-
-> Fixes: 2677010e7793 ("Add support to set NAPI threaded for individual NAPI")
+> Fixes: e6d76268813d ("net: Update threaded state in napi config in netif_set_threaded")
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
-> v2: add missing kdoc
-> ---
->  include/linux/netdevice.h | 5 ++++-
->  net/core/dev.c            | 7 ++++++-
->  2 files changed, 10 insertions(+), 2 deletions(-)
+>  net/core/dev.h | 8 ++++++++
+>  net/core/dev.c | 5 +++--
+>  2 files changed, 11 insertions(+), 2 deletions(-)
+> 
 
 Reviewed-by: Joe Damato <joe@dama.to>
 
