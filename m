@@ -1,177 +1,132 @@
-Return-Path: <linux-kselftest+bounces-38677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CEACB203F6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 11:41:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95D7EB2065D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 12:53:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DD42188D244
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 09:42:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC56417C66E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 10:53:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CE42253A9;
-	Mon, 11 Aug 2025 09:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="AbljZKnb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D9F27F000;
+	Mon, 11 Aug 2025 10:51:07 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C6722422E
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 Aug 2025 09:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE87270ED7;
+	Mon, 11 Aug 2025 10:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754905302; cv=none; b=i3y1vccQ1m+YcENYv7x64xYT6Oo9165snMaRFUHsZKRFdGkOpdZ68XH3sNDN+C/+q2O16BXKujM74jpUeiFyjL2l4akgkEvQDSalQYyd8ASWL9ezlw0CALqlbAR+JGgZkvqcNk1eG+VYjDXep+XJkZ6sLIXTuACjR1OdhgBvz08=
+	t=1754909467; cv=none; b=EJQNZiQIeABcx++9zJmjlLrxYGIx45C8pGg7WyBfXp8OCmaN3Vemf3ZcwzuMmtDd9fvV1iZDychzhv4THEzc6OSf4iy8aOsKYUv1tjosZRq0fgjnb5A22G5flqQ62C8KGkm/IY4AoTbeF5rbmg5mBHADffLppDXXVGAyhWjy5JY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754905302; c=relaxed/simple;
-	bh=FegSiZ/uTFpjfSl6w3mw++RAIeSoUOFcA93L/NfHQZ8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CbbeAHiSk582gh0Xlm04fViQ/8vYRj31OXXdj71ecJGbOnXWJACWF4/SxJ1P05tUEQyf8iYv+OSbWKzYOgHxQpyiY+MnYRka6sQrly1bPAAOyeqgByaMBAasBMhAdz8/RrTMvqwrb7ESlqLXlxwNVYiFt0yfMcwYmWCuy5P+Vg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=AbljZKnb; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-55b85d01b79so4312279e87.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Aug 2025 02:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1754905299; x=1755510099; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cy59ORjyXtIVFFgfYeqm1wmJyEdmnPmaEOXMVqFckn4=;
-        b=AbljZKnbDcKb7rjVsQSH4FwsC4jB1y+FTmw/znt5dyJFeR20/8cxkzVFF/phMbgXHR
-         F/3fALREVG+MqUobCe+7Oo9lcbH8ldP+EhGd0Lxh2okKC5MG+bY9fS6i47YN0+WlMsv0
-         B3z66gns21qhGlLBx54jv5p9WX3Nw+HFh+y+3/l8VKAj/LeapLFaSklMaYvFH+vceozn
-         V8RFVeE8mESbVKKznQbi0DGzzjmeAILEAfjOaXuQbHDHxR2CEUr9mbCI20H9DFBh30hX
-         KDx9dUrYl7f/DEnbqFYaOQqhzpD3lBu8sSDXYOzmk74PjPtSewPQprXnzy1zcZOYXU7d
-         3wsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754905299; x=1755510099;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cy59ORjyXtIVFFgfYeqm1wmJyEdmnPmaEOXMVqFckn4=;
-        b=kditPjtLqvd53sEhL1Agk25tydkgnF2yNbqy/WtyFj12yKILco3Bg6D8OqbvrTKBY5
-         Lr/f9DURPnyI6PIK04uwxE8Zt9/xWbZns6rubBVFaO2cQY861RN/jG8k7IT8fNqxpvhe
-         7euorlP/+kqIfCmr34q3n7FxuvPi02BHXNZJnMZwcPFGEMCxaE58fHpp1m0HLg5jJe2C
-         yhBOxlbtffzXzBofrrMistjV/15LhVJt8cMdl7vx2l+S7oVZTuHOFSgXtKbb3YY+94kB
-         cuBOruEdbrlnXZ021HS5gqBJpu+J6M59ypb57no8VT770DAtHRJhmQp6bYO3hYHCbIvu
-         WFOg==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ9E1eAjXKAaGWod1emj8bIEZ8IRr4YM2Q9M1FL/4xpS8EA4PVLydq5lwwH6K0GEFzNzMix/tvxecjNl57gOU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+L/bEXdQ7j7NLUdr9uTzFRm8kdTfOa+DQwvm2A3Mh+GoGCTqP
-	VhlnKtDMJVoi/04sIbe6nWgrE6piVT/nGaqq1p8JNf5O5EOe9Mpzgg04SxtP+H2uzFZHvJnR/mf
-	CtHrPahX6vrAobyX62Xddabm/WsJ0nkHkp8KjvbjZNw==
-X-Gm-Gg: ASbGnctW6BODKCVJSvnSBLCYtTBeiTWLEf1HCWhk5L3a17KBxsekYAsjkG1TGP70M5i
-	yd3/Qp7L+k6K+TiPLEO2jb10cKr/tebcohFCfemlxA8lGjrMhXcetKr15f343F+41gOVUXYbpnt
-	4pToFoxoz5vMv9V9r1S9NZ7CeTWn/x/OOkSPKfdpp0plfzOrVkbse+jiHuXdCl7DkNuKMVAxyqZ
-	daxjO9+M3vI6ugYJnU=
-X-Google-Smtp-Source: AGHT+IGmUn3ZM7jBX7D1YyhKjvaPN2e4dHa6K9n92Zz8n8QotO81v1sGyRseqSkkKtsFNnDYwv8ehf88vLMTTISTp9c=
-X-Received: by 2002:a05:6512:2316:b0:553:3a0a:1892 with SMTP id
- 2adb3069b0e04-55cc008637dmr3351518e87.15.1754905298946; Mon, 11 Aug 2025
- 02:41:38 -0700 (PDT)
+	s=arc-20240116; t=1754909467; c=relaxed/simple;
+	bh=oCocNIgOu43l9PMMMAdWVG/UZpa3tR5OOkjm0GU2wf4=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=aFVRTxvI32y73uHJCJOGzP2wvI8ycT+kxnm3RJGtiouAL8x1cix4kOnIgVTCVdJokFYo0I/o59Xnp246MdM5cGFRDYc31g95xYaHbaTIJqT/LR5wr7r3B+d92AcMuyS6cna8YJ3prFTqCADuBxUMc8jHTWpt7khy4sZUd6WDpWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8AxDGsUy5lo828+AQ--.52946S3;
+	Mon, 11 Aug 2025 18:51:00 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowJAxQMIRy5loZzdDAA--.48919S3;
+	Mon, 11 Aug 2025 18:50:59 +0800 (CST)
+Subject: Re: [PATCH] KVM: loongarch: selftests: Remove common tests built by
+ TEST_GEN_PROGS_COMMON
+To: Dong Yang <dayss1224@gmail.com>, pbonzini@redhat.com, shuah@kernel.org
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, chenhaucai@kernel.org,
+ Quan Zhou <zhouquan@iscas.ac.cn>
+References: <20250811082453.1167448-1-dayss1224@gmail.com>
+From: Bibo Mao <maobibo@loongson.cn>
+Message-ID: <11d1992d-baf0-fc2f-19d7-b263d15cf64d@loongson.cn>
+Date: Mon, 11 Aug 2025 18:49:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250805193955.798277-1-jesse@rivosinc.com> <20250805193955.798277-6-jesse@rivosinc.com>
-In-Reply-To: <20250805193955.798277-6-jesse@rivosinc.com>
-From: Anup Patel <apatel@ventanamicro.com>
-Date: Mon, 11 Aug 2025 15:11:27 +0530
-X-Gm-Features: Ac12FXzX2WBI8Efn8ZEvJJb1ujk-ZIhK3W3ZYl12yeFcZ1SpyaqkJna1l4oNLS8
-Message-ID: <CAK9=C2X2J4ROJ7nKB0hcD9dVav7ZMFWw2Qy+GEsmYN_Tt8DxPQ@mail.gmail.com>
-Subject: Re: [PATCH 5/8] riscv: hw_breakpoint: Use icount for single stepping
-To: Jesse Taube <jesse@rivosinc.com>
-Cc: linux-riscv@lists.infradead.org, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Oleg Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	"Liang, Kan" <kan.liang@linux.intel.com>, Shuah Khan <shuah@kernel.org>, 
-	Himanshu Chauhan <hchauhan@ventanamicro.com>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Conor Dooley <conor.dooley@microchip.com>, 
-	Deepak Gupta <debug@rivosinc.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Atish Patra <atishp@rivosinc.com>, Mayuresh Chitale <mchitale@ventanamicro.com>, 
-	Evan Green <evan@rivosinc.com>, WangYuli <wangyuli@uniontech.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Nam Cao <namcao@linutronix.de>, 
-	Yunhui Cui <cuiyunhui@bytedance.com>, Joel Granados <joel.granados@kernel.org>, 
-	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Celeste Liu <coelacanthushex@gmail.com>, 
-	Chunyan Zhang <zhangchunyan@iscas.ac.cn>, Nylon Chen <nylon.chen@sifive.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Joey Gouly <joey.gouly@arm.com>, 
-	Akihiko Odaki <akihiko.odaki@daynix.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250811082453.1167448-1-dayss1224@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxQMIRy5loZzdDAA--.48919S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7WF4rKF1rAry7Cr15Xry3KFX_yoW8ZryUpr
+	yS9rsFvFy8Zrs7Grn7Gw1DXan2kryqgF4vgF1xtw48Cry5JF48AF10k3s3KFnYq3y0vr4a
+	v3WfKrnF9ayDJwbCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
+	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkU
+	UUUU=
 
-Hi Jesse,
+Hi Dong,
 
-On Wed, Aug 6, 2025 at 1:10=E2=80=AFAM Jesse Taube <jesse@rivosinc.com> wro=
-te:
->
-> The Sdtrig RISC-V ISA extension does not have a resume flag for
-> returning to and executing the instruction at the breakpoint.
-> To avoid skipping the instruction or looping, it is necessary to remove
-> the hardware breakpoint and single step. Use the icount feature of
-> Sdtrig to accomplish this. Use icount as default with an option to allow
-> software-based single stepping when hardware or SBI does not have
-> icount functionality, as it may cause unwanted side effects when reading
-> the instruction from memory.
->
-> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+Thanks for you patch.
+
+On 2025/8/11 下午4:24, Dong Yang wrote:
+> Remove the common KVM test cases already added to TEST_GEN_PROGS_COMMON
+>   as following:
+> 
+> 	demand_paging_test
+> 	dirty_log_test
+> 	guest_print_test
+> 	kvm_binary_stats_test
+> 	kvm_create_max_vcpus
+> 	kvm_page_table_test
+> 	set_memory_region_test
+> 
+> Fixes: a867688c8cbb ("KVM: selftests: Add supported test cases for LoongArch")
+> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+> Signed-off-by: Dong Yang <dayss1224@gmail.com>
 > ---
-> OpenSBI implementation of sbi_debug_read_triggers does not return the
-> updated CSR values. There needs to be a check for working
-> sbi_debug_read_triggers before this works.
->
-> https://lists.riscv.org/g/tech-prs/message/1476
->
-> RFC -> V1:
->  - Add dbtr_mode to rv_init_icount_trigger
->  - Add icount_triggered to check which breakpoint was triggered
->  - Fix typo: s/affects/effects
->  - Move HW_BREAKPOINT_COMPUTE_STEP to Platform type
-> ---
->  arch/riscv/Kconfig                |  11 ++
->  arch/riscv/kernel/hw_breakpoint.c | 179 +++++++++++++++++++++++++++---
->  2 files changed, 172 insertions(+), 18 deletions(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index fd8b62cdc6f5..37f01ed199f3 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -546,6 +546,17 @@ config RISCV_COMBO_SPINLOCKS
->
->  endchoice
->
-> +config HW_BREAKPOINT_COMPUTE_STEP
-> +       bool "Allow computing hardware breakpoint step address"
-> +       default n
-> +       depends on HAVE_HW_BREAKPOINT
-> +       help
-> +         Select this option if hardware breakpoints are desired, but
-> +         hardware or SBI does not have icount functionality. This may ca=
-use
-> +         unwanted side effects when reading the instruction from memory.
-> +
-> +         If unsure, say N.
-> +
+>   tools/testing/selftests/kvm/Makefile.kvm | 7 -------
+>   1 file changed, 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> index 38b95998e1e6..d2ad85a8839f 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -199,17 +199,10 @@ TEST_GEN_PROGS_riscv += get-reg-list
+>   TEST_GEN_PROGS_riscv += steal_time
+>   
+TEST_GEN_PROGS_loongarch = $(TEST_GEN_PROGS_COMMON) is missing.
 
-We expect the same kernel image to work on a platform with
-icount triggers and without icount triggers.
+BTW irqfd_test in TEST_GEN_PROGS_COMMON fails to run on LoongArch, does 
+this test case pass to run on Riscv?
 
-Please drop this kconfig option. The decision of falling back to
-computing hardware breakpoint step address should be at
-boot-time and not compile-time.
+Regards
+Bibo Mao
+>   TEST_GEN_PROGS_loongarch += coalesced_io_test
+> -TEST_GEN_PROGS_loongarch += demand_paging_test
+>   TEST_GEN_PROGS_loongarch += dirty_log_perf_test
+> -TEST_GEN_PROGS_loongarch += dirty_log_test
+> -TEST_GEN_PROGS_loongarch += guest_print_test
+>   TEST_GEN_PROGS_loongarch += hardware_disable_test
+> -TEST_GEN_PROGS_loongarch += kvm_binary_stats_test
+> -TEST_GEN_PROGS_loongarch += kvm_create_max_vcpus
+> -TEST_GEN_PROGS_loongarch += kvm_page_table_test
+>   TEST_GEN_PROGS_loongarch += memslot_modification_stress_test
+>   TEST_GEN_PROGS_loongarch += memslot_perf_test
+> -TEST_GEN_PROGS_loongarch += set_memory_region_test
+>   
+>   SPLIT_TESTS += arch_timer
+>   SPLIT_TESTS += get-reg-list
+> 
 
-Regards,
-Anup
 
