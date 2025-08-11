@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-38729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EC1DB21908
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 01:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4BBBB21909
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 01:14:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A6A4A7A680B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 23:12:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AE107AAB83
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 23:12:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02B9A2D9EE3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CC502E2F09;
 	Mon, 11 Aug 2025 23:13:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mnr0yXgB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KfNI5z3L"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D582D8781;
-	Mon, 11 Aug 2025 23:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B6A2E2DCD;
+	Mon, 11 Aug 2025 23:13:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754954028; cv=none; b=c0Wb/pqKLYyo1YG6F3I8s8uWZvrLGJUwkQBZZsXwBHHeNQqrGg+k0+BiXPRQI43gLgmmezAV+jzzDpcSPjrflCeiSqHZi/tRqLb8E/64+/Zsjy3FYjLHxL5LDjG2PKB4RTi9xv7+eXzfyS3N54RFmr9kQ/jD1gWXfDyY1P5lCFM=
+	t=1754954029; cv=none; b=LoVSbAeQ8DszWmT/J1lbQZ/jCunhr1z8dRDdjKm1BhcMf6qfIVmmMyzbMGxr6kS1pKuebBd5LFs+Pr62o3gzcNDbWZpaNa1wMhEnEFyBupChuyTC60KigBwZoOgVAHxuaZGwBr214v0/Jzii6vg9bmjnTsmgW/TA4nvjrOCjdgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754954028; c=relaxed/simple;
-	bh=wgBFxlnaNWfDrQ1L/aOL9irFdGma24Z2xxiCY0ZFqS8=;
+	s=arc-20240116; t=1754954029; c=relaxed/simple;
+	bh=PD6pzHT84t4QNld+cuTFDSQXYlnjcWFNMgZBHR5BK9Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WWymdojgTb20gYxv3vqoJjD8s/ApSh0Caso1k2juPW+mweUmhbHSLc1+6XTEa+ZRmtHYqAruTeQJu/wWuvfMJXVqJyiLWcRORS19JVEOZES4yxO4eIvdM2rXq5Lym7xzqyCFGRjX26gsB/dN2YbuQ4cK2s6D3+7x3iPforK587o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mnr0yXgB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07ED4C4CEF1;
+	 MIME-Version; b=Pa6Bwet06dD+5TCuZL4wSlOcIo4TbZbFaWEFyQlSqsPQru+UhfblBlyfY/pPfwdUfcPWlvRDoSpwcfpDnymgiYb3+cuElqEbh6a+SOpNYysP9b3AvcP+sjhYjfNv48S4k8CfLueXxaDNjnujVUJ9LOAy8VmQzlgbaBmToVbpF28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KfNI5z3L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AABCC4CEF8;
 	Mon, 11 Aug 2025 23:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754954028;
-	bh=wgBFxlnaNWfDrQ1L/aOL9irFdGma24Z2xxiCY0ZFqS8=;
+	bh=PD6pzHT84t4QNld+cuTFDSQXYlnjcWFNMgZBHR5BK9Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Mnr0yXgBwEmmx10d2gwYjuuBc5qUHy/RmwBcw7EKh4OWxYS4UZ8AuPCD29OvClNiA
-	 k1uPzP+/1vvmvHw7xl+pOVv8kB8vWz9SPJ4hnRKjQkR9l2y8Uph06ChmDP3wkfuoQQ
-	 pbbcURN5Tve0Sm85vW4/V9QrqVlIBQEHu8kUslF8AQ81m2O3KbEJ9ibn5NWmH2n4Zl
-	 pipMfurqYl/O/zY7efY6m11I1bpi2/IyKdGjA6WdaDnpgii8dxrWKUM3XaOyYrLhNX
-	 2tkW+6kc/5HE8ibP3uK3YS87wPRy+RRHBaCeW6jAWbCGbPViXwVMtl9+LzXPxWRKVg
-	 qWbLwmhxQoObQ==
+	b=KfNI5z3L6elQoO65lsdVW2YcIGESqbRJR3vS7qJCqryM3lwY6z4Zy//2Vi1HH31Dy
+	 704WydacXBjBs7+EbRJTloMsewsm9lsRqLGlR3qPFQvl/MtRHHkMQqa7QKzwpgfzi4
+	 ifGHiGSN7bq1JzvMa+TQYy4cDMB7q82fyHiykU3y4lpRnNH4OVUzCukVKrMwGDPXDC
+	 lTmAU3vUZAhx/4d2289/XdpU9aPkj3fnohQamqZrFPBo1k1J46RNFPd3bLcriIOC/K
+	 4ojFxfZOUYkTDOmImeFIY9HHboNRz0RCLVk4yBM+EPq/ZP2pFUzJz+SjGus2k1zoDe
+	 hJPnDHlTJBkQA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	ap420073@gmail.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 4/5] selftests: net: terminate bkg() commands on exception
-Date: Mon, 11 Aug 2025 16:13:33 -0700
-Message-ID: <20250811231334.561137-5-kuba@kernel.org>
+Subject: [PATCH net-next 5/5] selftests: drv-net: devmem: flip the direction of Tx tests
+Date: Mon, 11 Aug 2025 16:13:34 -0700
+Message-ID: <20250811231334.561137-6-kuba@kernel.org>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250811231334.561137-1-kuba@kernel.org>
 References: <20250811231334.561137-1-kuba@kernel.org>
@@ -69,44 +69,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There is a number of:
+The Device Under Test should always be the local system.
+While the Rx test gets this right the Tx test is sending
+from remote to local. So Tx of DMABUF memory happens on remote.
 
-  with bkg("socat ..LISTEN..", exit_wait=True)
-
-uses in the tests. If whatever is supposed to send the traffic
-fails we will get stuck in the bkg(). Try to kill the process
-in case of exception, to avoid the long wait.
-
-A specific example where this happens is the devmem Tx tests.
+These tests never run in NIPA since we don't have a compatible
+device so we haven't caught this.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/net/lib/py/utils.py | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/drivers/net/hw/devmem.py | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-index f395c90fb0f1..4ac9249c85ab 100644
---- a/tools/testing/selftests/net/lib/py/utils.py
-+++ b/tools/testing/selftests/net/lib/py/utils.py
-@@ -117,6 +117,7 @@ import time
-                          shell=shell, fail=fail, ns=ns, host=host,
-                          ksft_wait=ksft_wait)
-         self.terminate = not exit_wait and not ksft_wait
-+        self._exit_wait = exit_wait
-         self.check_fail = fail
+diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
+index 0a2533a3d6d6..45c2d49d55b6 100755
+--- a/tools/testing/selftests/drivers/net/hw/devmem.py
++++ b/tools/testing/selftests/drivers/net/hw/devmem.py
+@@ -42,9 +42,9 @@ from lib.py import ksft_disruptive
+     port = rand_port()
+     listen_cmd = f"socat -U - TCP{cfg.addr_ipver}-LISTEN:{port}"
  
-         if shell and self.terminate:
-@@ -127,7 +128,9 @@ import time
-         return self
+-    with bkg(listen_cmd) as socat:
+-        wait_port_listen(port)
+-        cmd(f"echo -e \"hello\\nworld\"| {cfg.bin_remote} -f {cfg.ifname} -s {cfg.addr} -p {port}", host=cfg.remote, shell=True)
++    with bkg(listen_cmd, host=cfg.remote, exit_wait=True) as socat:
++        wait_port_listen(port, host=cfg.remote)
++        cmd(f"echo -e \"hello\\nworld\"| {cfg.bin_local} -f {cfg.ifname} -s {cfg.remote_addr} -p {port}", shell=True)
  
-     def __exit__(self, ex_type, ex_value, ex_tb):
--        return self.process(terminate=self.terminate, fail=self.check_fail)
-+        # Force termination on exception
-+        terminate = self.terminate or (self._exit_wait and ex_type)
-+        return self.process(terminate=terminate, fail=self.check_fail)
+     ksft_eq(socat.stdout.strip(), "hello\nworld")
  
+@@ -56,9 +56,9 @@ from lib.py import ksft_disruptive
+     port = rand_port()
+     listen_cmd = f"socat -U - TCP{cfg.addr_ipver}-LISTEN:{port}"
  
- global_defer_queue = []
+-    with bkg(listen_cmd, exit_wait=True) as socat:
+-        wait_port_listen(port)
+-        cmd(f"echo -e \"hello\\nworld\"| {cfg.bin_remote} -f {cfg.ifname} -s {cfg.addr} -p {port} -z 3", host=cfg.remote, shell=True)
++    with bkg(listen_cmd, host=cfg.remote, exit_wait=True) as socat:
++        wait_port_listen(port, host=cfg.remote)
++        cmd(f"echo -e \"hello\\nworld\"| {cfg.bin_local} -f {cfg.ifname} -s {cfg.remote_addr} -p {port} -z 3", shell=True)
+ 
+     ksft_eq(socat.stdout.strip(), "hello\nworld")
+ 
 -- 
 2.50.1
 
