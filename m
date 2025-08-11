@@ -1,59 +1,61 @@
-Return-Path: <linux-kselftest+bounces-38685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38686-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2EB3B21111
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 18:09:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76F32B21226
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 18:36:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B253718A24EF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 16:05:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D22C1882A34
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 16:33:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFCF61A9F8C;
-	Mon, 11 Aug 2025 15:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36742522B5;
+	Mon, 11 Aug 2025 16:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OOUCdw7L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jDi+FP9f"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9838E1A9F82;
-	Mon, 11 Aug 2025 15:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9533B1494C3;
+	Mon, 11 Aug 2025 16:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754927579; cv=none; b=F+cAnkP+fitdEjzCxjZ7wegfNLXsFCXHU2myPjLlV6cQ24P3gqnZx37sDEzawiYygjzXEe8COhI+BJYr/M2L+qvZ/KRLDi4iszVy9ntkZI82wbTIutLTjbZzv1ZQghwFubI2sbezao2sR2Pld21AgFcdc3ivgaKFxPQnAqmMmYg=
+	t=1754930009; cv=none; b=ofrpNjVegsXxXzAUCq8BhJe+BGlqf6wCA8GQhO3bcV4GEFL7aLeX7O5XYu9heVj+tBJXAv8eyi7ZJ4evaqw98+B0G9CjabGyGoPLoLExZgaX2b1+oOsZWz6lM9YRYpXlDSrIS4aTxKtZdYsN5mfeH9rDhTdqS80fEeare3vTFb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754927579; c=relaxed/simple;
-	bh=rMAHxsfqve86pCW8MJDJEH5uaWy14+2/Iq+hyWRBEUs=;
+	s=arc-20240116; t=1754930009; c=relaxed/simple;
+	bh=DWcUTl2SHn7hqoaVo7YianA9NpidcOYnkPILUtfu+ps=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NIB654bZXKDTBATPaGA8/v0OxE59FhsfiQB/wvpXUumuaiZUOKHMxDdFE08piBTnlMgZkKQSBxwpHDJZgqxorOyQ9y687wp3K7yiGNhN2IDjO3/rpFkFBPY6k9opT5zb8+t8ebJ7syjy4I6tSB67s1Bo+jZaDnmmEuWxlZMMRWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OOUCdw7L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5690C4CEED;
-	Mon, 11 Aug 2025 15:52:58 +0000 (UTC)
+	 MIME-Version:Content-Type; b=f3leEhEoVESsqGfozVlYznm9IpveItxLQyp+3aBGP/eCBJCQcQI7yGWDrW1XEnsIXbnJjRUVtzPm6zr2PTZnjGh68+qFPQ6XMq8+DWFL5+hOd1kJ0eRbbLZlgfnJTjWBZEQb76zVgr55zZjmJZAb5/knq38KpssSbHXYvz8PKYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jDi+FP9f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F337CC4CEED;
+	Mon, 11 Aug 2025 16:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754927579;
-	bh=rMAHxsfqve86pCW8MJDJEH5uaWy14+2/Iq+hyWRBEUs=;
+	s=k20201202; t=1754930009;
+	bh=DWcUTl2SHn7hqoaVo7YianA9NpidcOYnkPILUtfu+ps=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OOUCdw7LbqNkf7g5Y1hq0i0sPm09zLZ2pYuVG0L4uBDskjAf17FRBJLkI/Y9t5lUd
-	 EKqeYDEwsDHKCZ2Hic9gmj+qbeuvpfDtW9dsvMqrpYiF5a5wDBWoB2q78lqDZmJ79K
-	 3FZNyxD29rJ3cplNz3W8hoxmpgR5fXQzAcxtEIVjyvgU8zevPqL4ciBtyjfWWo16yl
-	 pZ5HeOf15EpYlnCcZQaP5fWCuDBvnMcXe8TA/rSh3njcUbjRreMRBRyzvNiLaCZkZ6
-	 rp9TvDB/UQn515sdg4gBCnUdw/3QHtoDx7S1WuV0dbja7rvHMVBkKMeBfHfAFn0YA9
-	 SKpA6+QgUamuw==
-Date: Mon, 11 Aug 2025 08:52:58 -0700
+	b=jDi+FP9fymM59E16Gk9pyLCUSHAzgYoWpj2Ku32MvF/2uINGQ4jeXGTfBcQtU5bpn
+	 lWSS6jO3B9+K9YyPT9OuiJPE1tBgZJz9kHme8+8/Igps0bW0JROgoAoE/tfpfTGTUs
+	 04DlxUoLDx5eJqV8zSqsqWyywL9qSJ3j3QJMcEMooWOIfcBGsjYwGw/DxZTkZrlDvW
+	 odjbdWCMqVDZ2taL1Gow6Jf+Wv7AAx379bRC+q/qA7erFAxFXWjIFewd+TL9O7mMzK
+	 k48GViiV59N3gHlE2bfW1gwLasCooZI7USvS2QiK9EY+a88T561B7N74mK+QVGhZpU
+	 AUrbsc7j5SeHg==
+Date: Mon, 11 Aug 2025 09:33:28 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Joe Damato <joe@dama.to>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- willemdebruijn.kernel@gmail.com, skhawaja@google.com, sdf@fomichev.me,
- shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2 0/3] net: prevent deadlocks and mis-configuration
- with per-NAPI threaded config
-Message-ID: <20250811085258.4b6cfa79@kernel.org>
-In-Reply-To: <aJf8_ypOuSrsQnIM@MacBook-Air.local>
-References: <20250809001205.1147153-1-kuba@kernel.org>
-	<aJf8_ypOuSrsQnIM@MacBook-Air.local>
+To: Jay Vosburgh <jv@jvosburgh.net>
+Cc: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, Simon Horman <horms@kernel.org>, Shuah
+ Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, David Wilder <wilder@us.ibm.com>
+Subject: Re: [PATCH net] bonding: don't set oif to bond dev when getting NS
+ target destination
+Message-ID: <20250811093328.70343754@kernel.org>
+In-Reply-To: <783435.1754922439@famine>
+References: <20250811140358.2024-1-liuhangbin@gmail.com>
+	<783435.1754922439@famine>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,27 +65,16 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sat, 9 Aug 2025 18:59:27 -0700 Joe Damato wrote:
-> On Fri, Aug 08, 2025 at 05:12:02PM -0700, Jakub Kicinski wrote:
-> > Running the test added with a recent fix on a driver with persistent
-> > NAPI config leads to a deadlock. The deadlock is fixed by patch 3,
-> > patch 2 is I think a more fundamental problem with the way we
-> > implemented the config.
-> > 
-> > I hope the fix makes sense, my own thinking is definitely colored
-> > by my preference (IOW how the per-queue config RFC was implemented).  
-> 
-> Maybe it's too late now, but I am open to revisiting how the whole per-queue
-> NAPI config works after a conversation we had a couple months ago (IIRC ?).
-> 
-> I think you had proposed something that made sense to me at the time (although
-> I can't recall what that was or what thread that was in).
+On Mon, 11 Aug 2025 07:27:19 -0700 Jay Vosburgh wrote:
+> 	Generically, I'm wondering if test updates should be separate
+> patches from the functional changes as a general policy.
 
-FWIW the discussion was whether setting things at the device level
-should override all the per-NAPI settings, or should we treat the
-device level as lower priority and only apply it if user didn't set
-per-NAPI override.
+Yes, not sure if we made it a hard requirement, but I think it's our
+preference. It is the reason why we don't require cover letters for
+submissions with 2 patches.
 
-I guess it doesn't make a huge difference, other than that resetting 
-the unused NAPIs to "unset" would remove the need for patch 2.
+Hangbin, please update config for bonding tests, looks like vlans 
+are not enabled there today.
+-- 
+pw-bot: cr
 
