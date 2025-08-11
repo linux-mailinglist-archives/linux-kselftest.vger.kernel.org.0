@@ -1,373 +1,226 @@
-Return-Path: <linux-kselftest+bounces-38698-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED97CB21450
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 20:28:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCFA2B21473
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 20:32:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 802E63A3862
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 18:28:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CBBF171C4D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 18:32:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3FD2E1C64;
-	Mon, 11 Aug 2025 18:28:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9076A2E11D1;
+	Mon, 11 Aug 2025 18:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W8o5NsGI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XBOPaasY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255872E1C53;
-	Mon, 11 Aug 2025 18:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D69526FDA3;
+	Mon, 11 Aug 2025 18:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754936896; cv=none; b=tBdfFz4d7Zi6Brj/wh/D9jYrQuVdPN+WY26mSuSX3oSEUOJAUGiOj5+iodV5xNlgkcl5zFB0HbdOdsy5Sne3jldd3gYMEbm+R/MUwaqU8ki0PFOhfhVDl4tFegqj+/icp2N/0j/p6EBl64A9nLnx6d+zea7qcHU6nw6ACkyLjZg=
+	t=1754937147; cv=none; b=XSeXoR/96N3kNcrM3YpAOo5nroe/zXk5DlJkdVW9No9ItWRQsV6rZyMnHHOBgJXVt93QPHL6+lmWkwf0kOkXDj0gdo5xyjrmFoVVWpfZwDpC7ED8vbL/eV5oyZvb0vKM0u72I128RnwdqTZE4ODGUIB/TXfOWQMi36kHZScrqa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754936896; c=relaxed/simple;
-	bh=R/c+sHj58hPXsXZ0wEu7sPVUYOmEp9NF5pVcd2XPhrk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I8wh8W67wAV2h++I1IHo9kr9WtesLiMsPjzLoFB+Wyx42GL+PfRbOT9u/hKojxe4QCsmEAJcAZbJ57JHHyEsPI9p/oJVYhNIYw7310RVmL2bYYJgj71vB8vyB/JIlC1uoiherkQAeAqw3q+sjPvGTA5pUVwOHxibxvvQ+nOu2PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W8o5NsGI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB150C4CEED;
-	Mon, 11 Aug 2025 18:28:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754936896;
-	bh=R/c+sHj58hPXsXZ0wEu7sPVUYOmEp9NF5pVcd2XPhrk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W8o5NsGIjnD6Fikc+Kz+w8FS4JVodiTAEjEhMMlpT5RIW6ivG8H5FJh83Nc4tq/Lm
-	 LxfZQn1eF3Q9MssTKldhaiUQv0nBNFWe0mloJIzvF8ha4Im7bvR6AsaHo5OAWcOeU0
-	 mWmxcF745Iorr1HB9ktFabBj8J3+V0cjbarnvOEy6OF4i71tTsy18dDjE9h4PYLUwk
-	 cXUBKCb7GQQc4gY6BBpqgG30ycrK36OWoH6OLx5CnTBEYJ26L7aJlUrxKuWC3yXRv3
-	 mmdLGw52pB6Jq/585O+B3Rl8CDXSXh1IfmsKR4IpSP6qjRga6qTaDLR/poss1wAdSL
-	 0gbdbI0FnhBSQ==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH 3/3] lib/crc: Use underlying functions instead of crypto_simd_usable()
-Date: Mon, 11 Aug 2025 11:26:31 -0700
-Message-ID: <20250811182631.376302-4-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250811182631.376302-1-ebiggers@kernel.org>
-References: <20250811182631.376302-1-ebiggers@kernel.org>
+	s=arc-20240116; t=1754937147; c=relaxed/simple;
+	bh=TYkPnUhq0q9Pu1cc3u+bphgk0Q8Pv+aHmUvtQ2rYVsI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=mvsdPA85Rts5ze0UypZKoL8H8HoIVWr4JJqgR5p6cQOK297dkDBMEQsqSBNkSQ2qz3ieqHX5igKIvoAU6F5xmsPdBBG4UvZQbTjJgv+YFFMeONLJxQBsedjDEiclwZ24FZCab1IO1BRvWpupN30TokvK03UU41NPaJjEwlFF5v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XBOPaasY; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-459e72abdd2so27639145e9.2;
+        Mon, 11 Aug 2025 11:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754937144; x=1755541944; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+38aHWatwJZcPjV77AnirM8d2+c+qtW/JJxgUgdCUEQ=;
+        b=XBOPaasYdTe1y/lNqX8qfeiKEKaKGXoqidiuX0eSIbNAtfysr2MGQ1bjDXriEUuidD
+         zJWXFYRiDXv9a8LPTtSuex//4SexIMfHGKvXa55f1QmZ5AEtBy3YqHyG6j7wDdZReaaj
+         XrgwuCmi2iw9dBvjVp1t6h3/qdeB0RNT0oY/A4119PYmagMlBAZuorRTn/chn64RXK+G
+         UOdTDU4T1GaTj+u08HlF/SI9BMlxSiUsCyPokjxv4rWQaVN3E0QMoKAsWrHOj4ZxX+rM
+         4UlTZJfTG+th+3aLGXwcHHdl8SzfC1H2bqdAecn4MbHfNoq1/ufGF7Gm9ad54sGzkcgk
+         JP+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754937144; x=1755541944;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+38aHWatwJZcPjV77AnirM8d2+c+qtW/JJxgUgdCUEQ=;
+        b=Y5+VcFPoBob01AkzdKJB9Rf7G4s0NgzIb68TE2ui3xMU/SjiXCLzt6tA0sUu4iugr8
+         /uOduIAd7ekTzEJMx/nKI7MQHM3aIBNwTwTMV7Y5MQ7iZ4h2ORxy8fmWjuM0LIXZFI/9
+         SqRQgP21s/wEcRvso2LAz7EkqZPp3uJecJtyoe0aSOLKilynxQjsm2gqklZqt9bmgeZi
+         X5dpydrn63k0BJGjkoVF9bUfELs/XcDVOU84RDZt437TJ7A3X8j/07oo0TJmesxiq3BL
+         u1j5fBaVOwV5H5ugJK/fMJmTSBBWS6XGdXtjGDsTZLrog/uCxPIGwdtNgGrO6CvUWbX0
+         LZMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUSC+/SwgGJI8+2Xu5mpc6MvZGUOyJKDUxvRq9q29sjP6dz8RnlLelJnzZGeyZPrDIKdqQjAfWbTS6+IQ8=@vger.kernel.org, AJvYcCWGjDMd/PskNN9l6RzDjsZifvfaQcHSRxefCjtS4YBVHtId6G++H3kwVeQQnvclGTtG4zmSpKD6W3GSQ3FquIJf@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBEeXeRCwjKvPceb1kjo1sfU6M99Xq5FUWkEKeQIa5Iy7BU+GS
+	TM8YFEAx79Qsj1qy4OGTpxn0fgsuxUw9rLVrJFsXmFTx0qFYCPd7060o960bhQ3ykcg=
+X-Gm-Gg: ASbGncthrnfvPoreS3U1x+dlknRIYhRgVcYC5urr1/u4RgcX7GpmWzIBSGTeCZzrm9s
+	m3rfkEt4asxPdviTW2SftQGGl09Z40oVof+Raq6qulpwt7+Jh0bxRhWBNw3NuiwuLFapUoWhHXL
+	vpJu+W/zKtKA7/kzH4qWOWF/sZCpUuVmDNVeiFF511JHqwlGJEfek7A5n4wfUnrgNyUa9EA1g2/
+	7p4+yYTJw9LR59VEMa2sFne0CNMQuUMXfWIIM8VJQKvvnFm4nAvVlkRyTYrFnMu+SRKWDA0EYRM
+	2JRprvdW+M1qjAWieups+y/SMVf9A+s7siOZakeeNYJM+6PgfhyrzjEmnoZvC5sKvUMcCa9uYwE
+	haaSzENX4/B10NC3gVvDw81Cmhw==
+X-Google-Smtp-Source: AGHT+IFJVCSJUAri3JD7IN6+yxqqLmWwHtU+s4kqcMVKECA1wbIBdQaeUjeRuyDBqwRlx4uXjqHS5Q==
+X-Received: by 2002:a05:600c:4fd1:b0:453:5c30:a1fd with SMTP id 5b1f17b1804b1-45a10ba7d10mr7182905e9.8.1754937143283;
+        Mon, 11 Aug 2025 11:32:23 -0700 (PDT)
+Received: from [192.168.1.243] ([143.58.192.81])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c3c33fesm42131132f8f.29.2025.08.11.11.32.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Aug 2025 11:32:22 -0700 (PDT)
+From: Andre Carvalho <asantostc@gmail.com>
+Date: Mon, 11 Aug 2025 19:32:09 +0100
+Subject: [PATCH net-next] selftests: netconsole: Validate interface
+ selection by MAC address
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250811-netcons-cmdline-selftest-v1-1-1f725ab020fa@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACg3mmgC/x3MQQrCQAxG4auUrA1Mx2rFq4iLduavBmoqk0EKp
+ Xc3dPkW39vIUARG92ajgp+YLOrRnhpK70FfYMneFEO8hFvoWVHTosbpk2dRsGGeKqzyeI6I/dC
+ Nub2S82/BJOuxfpArl2ul577/AdGPdYZ0AAAA
+X-Change-ID: 20250807-netcons-cmdline-selftest-b32e27a4bd16
+To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Andre Carvalho <asantostc@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754937142; l=4592;
+ i=asantostc@gmail.com; s=20250807; h=from:subject:message-id;
+ bh=TYkPnUhq0q9Pu1cc3u+bphgk0Q8Pv+aHmUvtQ2rYVsI=;
+ b=syUESDzmuOy1dox0z5Eymdea7Xg59jJCDD3zso8suc9OKxXnBEcBsZXV6rA3+s2uaFUcHafN8
+ aR7o4MgmwunDLQRPerr/D65ItwWe15bSWwVI9wo3C6JrWoEk9FbIR62
+X-Developer-Key: i=asantostc@gmail.com; a=ed25519;
+ pk=eWre+RwFHCxkiaQrZLsjC67mZ/pZnzSM/f7/+yFXY4Q=
 
-Since crc_kunit now tests the fallback code paths without using
-crypto_simd_disabled_for_test, make the CRC code just use the underlying
-may_use_simd() and irq_fpu_usable() functions directly instead of
-crypto_simd_usable().  This eliminates an unnecessary layer.
+Extend the existing netconsole cmdline selftest to also validate that
+interface selection can be performed via MAC address.
 
-Take the opportunity to add likely() and unlikely() annotations as well.
+The test now validates that netconsole works with both interface name
+and MAC address, improving test coverage.
 
-Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+Suggested-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Andre Carvalho <asantostc@gmail.com>
 ---
- lib/crc/arm/crc-t10dif.h          |  6 ++----
- lib/crc/arm/crc32.h               |  6 ++----
- lib/crc/arm64/crc-t10dif.h        |  6 ++----
- lib/crc/arm64/crc32.h             | 11 ++++++-----
- lib/crc/powerpc/crc-t10dif.h      |  5 +++--
- lib/crc/powerpc/crc32.h           |  5 +++--
- lib/crc/x86/crc-pclmul-template.h |  3 +--
- lib/crc/x86/crc32.h               |  2 +-
- 8 files changed, 20 insertions(+), 24 deletions(-)
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 10 +++-
+ .../selftests/drivers/net/netcons_cmdline.sh       | 55 +++++++++++++---------
+ 2 files changed, 42 insertions(+), 23 deletions(-)
 
-diff --git a/lib/crc/arm/crc-t10dif.h b/lib/crc/arm/crc-t10dif.h
-index 2edf7e9681d05..1a969f4024d47 100644
---- a/lib/crc/arm/crc-t10dif.h
-+++ b/lib/crc/arm/crc-t10dif.h
-@@ -3,12 +3,10 @@
-  * Accelerated CRC-T10DIF using ARM NEON and Crypto Extensions instructions
-  *
-  * Copyright (C) 2016 Linaro Ltd <ard.biesheuvel@linaro.org>
-  */
+diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+index b6071e80ebbb6a33283ab6cd6bcb7b925aefdb43..8e1085e896472d5c87ec8b236240878a5b2d00d2 100644
+--- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
++++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+@@ -148,12 +148,20 @@ function create_dynamic_target() {
+ # Generate the command line argument for netconsole following:
+ #  netconsole=[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
+ function create_cmdline_str() {
++	local BINDMODE=${1:-"ifname"}
++	if [ "${BINDMODE}" == "ifname" ]
++	then
++		SRCDEV=${SRCIF}
++	else
++		SRCDEV=$(mac_get "${SRCIF}")
++	fi
++
+ 	DSTMAC=$(ip netns exec "${NAMESPACE}" \
+ 		 ip link show "${DSTIF}" | awk '/ether/ {print $2}')
+ 	SRCPORT="1514"
+ 	TGTPORT="6666"
  
--#include <crypto/internal/simd.h>
--
- #include <asm/neon.h>
- #include <asm/simd.h>
- 
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_neon);
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_pmull);
-@@ -21,19 +19,19 @@ asmlinkage void crc_t10dif_pmull8(u16 init_crc, const u8 *buf, size_t len,
- 
- static inline u16 crc_t10dif_arch(u16 crc, const u8 *data, size_t length)
- {
- 	if (length >= CRC_T10DIF_PMULL_CHUNK_SIZE) {
- 		if (static_branch_likely(&have_pmull)) {
--			if (crypto_simd_usable()) {
-+			if (likely(may_use_simd())) {
- 				kernel_neon_begin();
- 				crc = crc_t10dif_pmull64(crc, data, length);
- 				kernel_neon_end();
- 				return crc;
- 			}
- 		} else if (length > CRC_T10DIF_PMULL_CHUNK_SIZE &&
- 			   static_branch_likely(&have_neon) &&
--			   crypto_simd_usable()) {
-+			   likely(may_use_simd())) {
- 			u8 buf[16] __aligned(16);
- 
- 			kernel_neon_begin();
- 			crc_t10dif_pmull8(crc, data, length, buf);
- 			kernel_neon_end();
-diff --git a/lib/crc/arm/crc32.h b/lib/crc/arm/crc32.h
-index 018007e162a2b..ae71aa60b7a74 100644
---- a/lib/crc/arm/crc32.h
-+++ b/lib/crc/arm/crc32.h
-@@ -5,12 +5,10 @@
-  * Copyright (C) 2016 Linaro Ltd <ard.biesheuvel@linaro.org>
-  */
- 
- #include <linux/cpufeature.h>
- 
--#include <crypto/internal/simd.h>
--
- #include <asm/hwcap.h>
- #include <asm/neon.h>
- #include <asm/simd.h>
- 
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_crc32);
-@@ -32,11 +30,11 @@ static inline u32 crc32_le_scalar(u32 crc, const u8 *p, size_t len)
+-	echo "netconsole=\"+${SRCPORT}@${SRCIP}/${SRCIF},${TGTPORT}@${DSTIP}/${DSTMAC}\""
++	echo "netconsole=\"+${SRCPORT}@${SRCIP}/${SRCDEV},${TGTPORT}@${DSTIP}/${DSTMAC}\""
  }
  
- static inline u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
- {
- 	if (len >= PMULL_MIN_LEN + 15 &&
--	    static_branch_likely(&have_pmull) && crypto_simd_usable()) {
-+	    static_branch_likely(&have_pmull) && likely(may_use_simd())) {
- 		size_t n = -(uintptr_t)p & 15;
+ # Do not append the release to the header of the message
+diff --git a/tools/testing/selftests/drivers/net/netcons_cmdline.sh b/tools/testing/selftests/drivers/net/netcons_cmdline.sh
+index ad2fb8b1c46326c69af20f2c9d68e80fa8eb894f..a15149f3a905d7287258cd17f0e806fb50604cf4 100755
+--- a/tools/testing/selftests/drivers/net/netcons_cmdline.sh
++++ b/tools/testing/selftests/drivers/net/netcons_cmdline.sh
+@@ -17,10 +17,6 @@ source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
+ check_netconsole_module
  
- 		/* align p to 16-byte boundary */
- 		if (n) {
- 			crc = crc32_le_scalar(crc, p, n);
-@@ -61,11 +59,11 @@ static inline u32 crc32c_scalar(u32 crc, const u8 *p, size_t len)
- }
- 
- static inline u32 crc32c_arch(u32 crc, const u8 *p, size_t len)
- {
- 	if (len >= PMULL_MIN_LEN + 15 &&
--	    static_branch_likely(&have_pmull) && crypto_simd_usable()) {
-+	    static_branch_likely(&have_pmull) && likely(may_use_simd())) {
- 		size_t n = -(uintptr_t)p & 15;
- 
- 		/* align p to 16-byte boundary */
- 		if (n) {
- 			crc = crc32c_scalar(crc, p, n);
-diff --git a/lib/crc/arm64/crc-t10dif.h b/lib/crc/arm64/crc-t10dif.h
-index c4521a7f1ee9b..435a990ec43c2 100644
---- a/lib/crc/arm64/crc-t10dif.h
-+++ b/lib/crc/arm64/crc-t10dif.h
-@@ -5,12 +5,10 @@
-  * Copyright (C) 2016 - 2017 Linaro Ltd <ard.biesheuvel@linaro.org>
-  */
- 
- #include <linux/cpufeature.h>
- 
--#include <crypto/internal/simd.h>
+ modprobe netdevsim 2> /dev/null || true
+-rmmod netconsole 2> /dev/null || true
 -
- #include <asm/neon.h>
- #include <asm/simd.h>
+-# The content of kmsg will be save to the following file
+-OUTPUT_FILE="/tmp/${TARGET}"
  
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_asimd);
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_pmull);
-@@ -23,19 +21,19 @@ asmlinkage u16 crc_t10dif_pmull_p64(u16 init_crc, const u8 *buf, size_t len);
- 
- static inline u16 crc_t10dif_arch(u16 crc, const u8 *data, size_t length)
- {
- 	if (length >= CRC_T10DIF_PMULL_CHUNK_SIZE) {
- 		if (static_branch_likely(&have_pmull)) {
--			if (crypto_simd_usable()) {
-+			if (likely(may_use_simd())) {
- 				kernel_neon_begin();
- 				crc = crc_t10dif_pmull_p64(crc, data, length);
- 				kernel_neon_end();
- 				return crc;
- 			}
- 		} else if (length > CRC_T10DIF_PMULL_CHUNK_SIZE &&
- 			   static_branch_likely(&have_asimd) &&
--			   crypto_simd_usable()) {
-+			   likely(may_use_simd())) {
- 			u8 buf[16];
- 
- 			kernel_neon_begin();
- 			crc_t10dif_pmull_p8(crc, data, length, buf);
- 			kernel_neon_end();
-diff --git a/lib/crc/arm64/crc32.h b/lib/crc/arm64/crc32.h
-index 6e5dec45f05d2..31e649cd40a2f 100644
---- a/lib/crc/arm64/crc32.h
-+++ b/lib/crc/arm64/crc32.h
-@@ -3,12 +3,10 @@
- #include <asm/alternative.h>
- #include <asm/cpufeature.h>
- #include <asm/neon.h>
- #include <asm/simd.h>
- 
--#include <crypto/internal/simd.h>
+ # Check for basic system dependency and exit if not found
+ # check_for_dependencies
+@@ -30,23 +26,38 @@ echo "6 5" > /proc/sys/kernel/printk
+ trap do_cleanup EXIT
+ # Create one namespace and two interfaces
+ set_network
+-# Create the command line for netconsole, with the configuration from the
+-# function above
+-CMDLINE="$(create_cmdline_str)"
 -
- // The minimum input length to consider the 4-way interleaved code path
- static const size_t min_len = 1024;
+-# Load the module, with the cmdline set
+-modprobe netconsole "${CMDLINE}"
+-
+-# Listed for netconsole port inside the namespace and destination interface
+-listen_port_and_save_to "${OUTPUT_FILE}" &
+-# Wait for socat to start and listen to the port.
+-wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
+-# Send the message
+-echo "${MSG}: ${TARGET}" > /dev/kmsg
+-# Wait until socat saves the file to disk
+-busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
+-# Make sure the message was received in the dst part
+-# and exit
+-validate_msg "${OUTPUT_FILE}"
++
++# Run the test twice, with different cmdline parameters
++for BINDMODE in "ifname" "mac"
++do
++	echo "Running with bind mode: ${BINDMODE}"
++	# Create the command line for netconsole, with the configuration from the
++	# function above
++	CMDLINE="$(create_cmdline_str "${BINDMODE}")"
++
++	# The content of kmsg will be save to the following file
++	OUTPUT_FILE="/tmp/${TARGET}-${BINDMODE}"
++
++	# Unload the module, if present
++	rmmod netconsole 2> /dev/null || true
++	# Load the module, with the cmdline set
++	modprobe netconsole "${CMDLINE}"
++
++	# Listed for netconsole port inside the namespace and destination interface
++	listen_port_and_save_to "${OUTPUT_FILE}" &
++	# Wait for socat to start and listen to the port.
++	wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
++	# Send the message
++	echo "${MSG}: ${TARGET}" > /dev/kmsg
++	# Wait until socat saves the file to disk
++	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
++	# Make sure the message was received in the dst part
++	# and exit
++	validate_msg "${OUTPUT_FILE}"
++
++	# kill socat in case it is still running
++	pkill_socat
++	echo "${BINDMODE} : Test passed" >&2
++done
  
- asmlinkage u32 crc32_le_arm64(u32 crc, unsigned char const *p, size_t len);
- asmlinkage u32 crc32c_le_arm64(u32 crc, unsigned char const *p, size_t len);
-@@ -21,11 +19,12 @@ asmlinkage u32 crc32_be_arm64_4way(u32 crc, unsigned char const *p, size_t len);
- static inline u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
- {
- 	if (!alternative_has_cap_likely(ARM64_HAS_CRC32))
- 		return crc32_le_base(crc, p, len);
- 
--	if (len >= min_len && cpu_have_named_feature(PMULL) && crypto_simd_usable()) {
-+	if (len >= min_len && cpu_have_named_feature(PMULL) &&
-+	    likely(may_use_simd())) {
- 		kernel_neon_begin();
- 		crc = crc32_le_arm64_4way(crc, p, len);
- 		kernel_neon_end();
- 
- 		p += round_down(len, 64);
-@@ -41,11 +40,12 @@ static inline u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
- static inline u32 crc32c_arch(u32 crc, const u8 *p, size_t len)
- {
- 	if (!alternative_has_cap_likely(ARM64_HAS_CRC32))
- 		return crc32c_base(crc, p, len);
- 
--	if (len >= min_len && cpu_have_named_feature(PMULL) && crypto_simd_usable()) {
-+	if (len >= min_len && cpu_have_named_feature(PMULL) &&
-+	    likely(may_use_simd())) {
- 		kernel_neon_begin();
- 		crc = crc32c_le_arm64_4way(crc, p, len);
- 		kernel_neon_end();
- 
- 		p += round_down(len, 64);
-@@ -61,11 +61,12 @@ static inline u32 crc32c_arch(u32 crc, const u8 *p, size_t len)
- static inline u32 crc32_be_arch(u32 crc, const u8 *p, size_t len)
- {
- 	if (!alternative_has_cap_likely(ARM64_HAS_CRC32))
- 		return crc32_be_base(crc, p, len);
- 
--	if (len >= min_len && cpu_have_named_feature(PMULL) && crypto_simd_usable()) {
-+	if (len >= min_len && cpu_have_named_feature(PMULL) &&
-+	    likely(may_use_simd())) {
- 		kernel_neon_begin();
- 		crc = crc32_be_arm64_4way(crc, p, len);
- 		kernel_neon_end();
- 
- 		p += round_down(len, 64);
-diff --git a/lib/crc/powerpc/crc-t10dif.h b/lib/crc/powerpc/crc-t10dif.h
-index 59e16804a6eae..e033d5f57bae2 100644
---- a/lib/crc/powerpc/crc-t10dif.h
-+++ b/lib/crc/powerpc/crc-t10dif.h
-@@ -4,12 +4,12 @@
-  *
-  * Copyright 2017, Daniel Axtens, IBM Corporation.
-  * [based on crc32c-vpmsum_glue.c]
-  */
- 
-+#include <asm/simd.h>
- #include <asm/switch_to.h>
--#include <crypto/internal/simd.h>
- #include <linux/cpufeature.h>
- #include <linux/jump_label.h>
- #include <linux/preempt.h>
- #include <linux/uaccess.h>
- 
-@@ -27,11 +27,12 @@ static inline u16 crc_t10dif_arch(u16 crci, const u8 *p, size_t len)
- 	unsigned int prealign;
- 	unsigned int tail;
- 	u32 crc = crci;
- 
- 	if (len < (VECTOR_BREAKPOINT + VMX_ALIGN) ||
--	    !static_branch_likely(&have_vec_crypto) || !crypto_simd_usable())
-+	    !static_branch_likely(&have_vec_crypto) ||
-+	    unlikely(!may_use_simd()))
- 		return crc_t10dif_generic(crc, p, len);
- 
- 	if ((unsigned long)p & VMX_ALIGN_MASK) {
- 		prealign = VMX_ALIGN - ((unsigned long)p & VMX_ALIGN_MASK);
- 		crc = crc_t10dif_generic(crc, p, prealign);
-diff --git a/lib/crc/powerpc/crc32.h b/lib/crc/powerpc/crc32.h
-index 811cc2e6ed24d..cc8fa3913d4e0 100644
---- a/lib/crc/powerpc/crc32.h
-+++ b/lib/crc/powerpc/crc32.h
-@@ -1,8 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0-only
-+#include <asm/simd.h>
- #include <asm/switch_to.h>
--#include <crypto/internal/simd.h>
- #include <linux/cpufeature.h>
- #include <linux/jump_label.h>
- #include <linux/preempt.h>
- #include <linux/uaccess.h>
- 
-@@ -22,11 +22,12 @@ static inline u32 crc32c_arch(u32 crc, const u8 *p, size_t len)
- {
- 	unsigned int prealign;
- 	unsigned int tail;
- 
- 	if (len < (VECTOR_BREAKPOINT + VMX_ALIGN) ||
--	    !static_branch_likely(&have_vec_crypto) || !crypto_simd_usable())
-+	    !static_branch_likely(&have_vec_crypto) ||
-+	    unlikely(!may_use_simd()))
- 		return crc32c_base(crc, p, len);
- 
- 	if ((unsigned long)p & VMX_ALIGN_MASK) {
- 		prealign = VMX_ALIGN - ((unsigned long)p & VMX_ALIGN_MASK);
- 		crc = crc32c_base(crc, p, prealign);
-diff --git a/lib/crc/x86/crc-pclmul-template.h b/lib/crc/x86/crc-pclmul-template.h
-index 35c950d7010c2..02744831c6fac 100644
---- a/lib/crc/x86/crc-pclmul-template.h
-+++ b/lib/crc/x86/crc-pclmul-template.h
-@@ -10,11 +10,10 @@
- #ifndef _CRC_PCLMUL_TEMPLATE_H
- #define _CRC_PCLMUL_TEMPLATE_H
- 
- #include <asm/cpufeatures.h>
- #include <asm/simd.h>
--#include <crypto/internal/simd.h>
- #include <linux/static_call.h>
- #include "crc-pclmul-consts.h"
- 
- #define DECLARE_CRC_PCLMUL_FUNCS(prefix, crc_t)				\
- crc_t prefix##_pclmul_sse(crc_t crc, const u8 *p, size_t len,		\
-@@ -55,11 +54,11 @@ static inline bool have_avx512(void)
-  * the dcache than the table-based code is, a 16-byte cutoff seems to work well.
-  */
- #define CRC_PCLMUL(crc, p, len, prefix, consts, have_pclmulqdq)		\
- do {									\
- 	if ((len) >= 16 && static_branch_likely(&(have_pclmulqdq)) &&	\
--	    crypto_simd_usable()) {					\
-+	    likely(irq_fpu_usable())) {					\
- 		const void *consts_ptr;					\
- 									\
- 		consts_ptr = (consts).fold_across_128_bits_consts;	\
- 		kernel_fpu_begin();					\
- 		crc = static_call(prefix##_pclmul)((crc), (p), (len),	\
-diff --git a/lib/crc/x86/crc32.h b/lib/crc/x86/crc32.h
-index cea2c96d08d09..2c4a5976654ad 100644
---- a/lib/crc/x86/crc32.h
-+++ b/lib/crc/x86/crc32.h
-@@ -42,11 +42,11 @@ static inline u32 crc32c_arch(u32 crc, const u8 *p, size_t len)
- 
- 	if (!static_branch_likely(&have_crc32))
- 		return crc32c_base(crc, p, len);
- 
- 	if (IS_ENABLED(CONFIG_X86_64) && len >= CRC32C_PCLMUL_BREAKEVEN &&
--	    static_branch_likely(&have_pclmulqdq) && crypto_simd_usable()) {
-+	    static_branch_likely(&have_pclmulqdq) && likely(irq_fpu_usable())) {
- 		/*
- 		 * Long length, the vector registers are usable, and the CPU is
- 		 * 64-bit and supports both CRC32 and PCLMULQDQ instructions.
- 		 * It is worthwhile to divide the data into multiple streams,
- 		 * CRC them independently, and combine them using PCLMULQDQ.
+ exit "${ksft_pass}"
+
+---
+base-commit: 37816488247ddddbc3de113c78c83572274b1e2e
+change-id: 20250807-netcons-cmdline-selftest-b32e27a4bd16
+
+Best regards,
 -- 
-2.50.1
+Andre Carvalho <asantostc@gmail.com>
 
 
