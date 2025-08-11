@@ -1,137 +1,119 @@
-Return-Path: <linux-kselftest+bounces-38648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0407B1FCB3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 00:28:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCA9FB1FD62
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 02:52:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F23C6177983
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Aug 2025 22:28:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7E9B164F13
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 00:52:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD0AC2D6630;
-	Sun, 10 Aug 2025 22:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A57158535;
+	Mon, 11 Aug 2025 00:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EnwGdK3T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDc62sLc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A9513D8A4
-	for <linux-kselftest@vger.kernel.org>; Sun, 10 Aug 2025 22:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8CCB644
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Aug 2025 00:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754864880; cv=none; b=VQLYjU+u0/7HCNawP2OIg38fu/KijcaHYw9THuJshYOeNGxWRtvWgfW8xKHX7RMzzscfFc7uahExxi6eSwvmhF1dkGUBYFWLi3T7xiOaoK1iwQsZgZMyaDdpoFfnYkp2HZ0+tdHZABOeP8tMjbIpJSAWt7lGh7hpFIbVrFzZHHM=
+	t=1754873520; cv=none; b=thN9LYVi/bdVVH/fEGu83KUfTZF3RvTCGjlvTJEu9NzYQhSCqEEc8u8tCLv4QD1Hfp+V+NjezNyQGicDmZSna/s9nrov49sh2yXlC6JyYpoCCz8lMzFJgdjFq2e7zS6KZehRzkh/Ke5IRfgfTPD9/MewDHWCFxP3dntbxCoBu6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754864880; c=relaxed/simple;
-	bh=wIrlwbnuKnkPYVbgME8ikSpgK/+Ts/tGiac5ibXXP7I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bsc/wbm1qqt0VZ85P3xtQ2uW8ixcl/Mp6XYDuoKdaGoxRiAVR8ZA2X0FDRnHcMDYrjpWr2DtIAS8/EoFCzfjAB0J9YpkddpwW/JO1EB6as3u9Gq7fAplqXYO2Nv8nuBkbsAKFPntnL5pz1N1bzhdciYpdkxEiUMVnQd7d9rugQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EnwGdK3T; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754864877;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1q12txHUQPg0R1RQNr4oGF8yA7IDYgf7jDtfYZA93xY=;
-	b=EnwGdK3T8n212w+m64grTMVLx1b360MuxibXCOiy/ykW1F1f0jg3odVeUUlWunUHoqYQeX
-	oAqQJmuamDpWG7yoSegR9RngAGaAbzM2ykfoUI7mKeXT4VXC65H7zLB5fI6c/30HMR6Iac
-	pPePz/tyH9Woi/d2MmlEDoZoAO175z8=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-250-bYpDTESUNLapYYdAG5EtPQ-1; Sun,
- 10 Aug 2025 18:27:53 -0400
-X-MC-Unique: bYpDTESUNLapYYdAG5EtPQ-1
-X-Mimecast-MFC-AGG-ID: bYpDTESUNLapYYdAG5EtPQ_1754864871
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CDDA419560AD;
-	Sun, 10 Aug 2025 22:27:49 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.80.59])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B844D1800280;
-	Sun, 10 Aug 2025 22:27:46 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH] selftests/futex: Fix some futex_numa_mpol subtests
-Date: Sun, 10 Aug 2025 18:27:42 -0400
-Message-ID: <20250810222742.290485-1-longman@redhat.com>
+	s=arc-20240116; t=1754873520; c=relaxed/simple;
+	bh=e1uTlGkBo8Y/5DwsXovlCoiBDpCkQW5dWWmsPXOh+oA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F8X+W+9ZZrD0tTf7lcwnK5/ll/8+tzGAQgYy3b+FF+0nj+oYU9q5iDwqHKdgyu66CeZwAi6OQe6O805Qi0ygpn/3e0IMA15hLAtXRYD5iMxF19Y+vvEVjH0DJyWIUutFwOKTVThCm2VIfN7KtQoDY6KafK5/Gu1LYBEuSvDg+Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDc62sLc; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-af95525bac4so695974566b.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 10 Aug 2025 17:51:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754873517; x=1755478317; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zv1IJoqgxHSXKcjtgFeyhterOz3vH8r5AnhGfX89cOc=;
+        b=UDc62sLcGUGTWJ+dxo4RBpjXjgTB+sg8hLOIbLbhTBhomzXVKL4vekSDrsgHJwr4oM
+         EVVTr19v0ro3epCCQA8zkomS766DxdcQfuw9960eyMU8uw03NHgmaILau3yDTpm5boW7
+         T1TD5MeWBNOaVqTo/isXqTQTRAq++0KbB5AldVvFNOce4kNFNt1iAnho4Cf79iN0pvAC
+         lxJJQb85nrdfWihV1jc2nVhrLRiue/+qFSfwU7IZhDu/f7Kkeb/WKl+LaLRJS9P59rBL
+         OD211f8A+I4Z1PsRHAYLqiyxU2ywyd6dCblrdQAOiPidUos8MAm+4sYiXGbHhPZoGI65
+         edNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754873517; x=1755478317;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zv1IJoqgxHSXKcjtgFeyhterOz3vH8r5AnhGfX89cOc=;
+        b=s9b/+esltm8y2KDyO6lkuuqr5k5LmrEpstsXIdEmiqHT3ZTKBR+jf+qf+VLxJRa5pP
+         vP/QcMwLCSqlXUyCnkWkZ/NAhiOsfOBtvETrGcaWH/Ln4KBuh3VsXd4vPJbcdbA4O8hS
+         yrn2O6ZanjZX7hlya476cWYYWZDsKOrxmVUqQ9cBNKIe8D5Jeqlx/O0o2E9bnWiVTdMt
+         m329zlEl7OSyEKRnrEnv39VMdT/G52FM7Mw2ZvxEIF7vlduNw3ulyAyTAjowWonSsBrr
+         namVWDUzjpAGTc0/GgPo7to3CT0h5ix5yqPY8Warfr7epmGmt/0tFTNl+5G4xvQDSQqK
+         +DLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVrokcsCs4lyKKyVYRuvUna0wXqlSjCdB76zHcjTjHPkix9RSZf9GRgjZHGwwEMecuLNG/gaGMw6MRTu/WBEiE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+/N6oobZ44Nz59dIKSxsf9PQY5XIGYsHrBKvzVAhBXssULw+l
+	ny4+PzKGYC3pxTWlCca0Fnskt8RdynKRpIocg7VprATA9dUNJDZui0Qi9X08PXGx
+X-Gm-Gg: ASbGncvhezDEN33ypv7FsZkpRWT28lsrQVRSGQD4wTyIaavqqO3ImMc7PzTrC1ws29d
+	vN3HI0ZqCZ3Rq59SdqxAVYu3eaMkJmykfibuSfCgZoclWpXX4vOkzZo4W25FmTzaqAHnQqQwsk0
+	HcJ+UVxaipiZf37BJc8ekLp4kTZtb8UnaWm/dei2DCOo6umqP5pObWUh0sF4hvktFmzkZAgbeDE
+	wC6tCNyR1r0ujXdjbCglpxb+84F9gF4IHNCSmzuffhN2SbniozKPjWyFIlffzGl18qBZULAFPPs
+	u69QweWdSYDN5RgMGKUUOKi073cP18vv3lEGZz67go6sV8btOkRWpJyHXMTwKyd5Dj/YeRZW1Vk
+	EOM5WSzxfCiwE4kkj3wnwqA==
+X-Google-Smtp-Source: AGHT+IHmYldaSBeO6dV/S7Yiju4l+VlWOSTR9stI/72nkU6ACRnZg3Ldx8ZoStARl/SNqNyVBZrAEg==
+X-Received: by 2002:a17:907:940c:b0:af2:42e8:ad92 with SMTP id a640c23a62f3a-af9c65b2f50mr987442566b.61.1754873517397;
+        Sun, 10 Aug 2025 17:51:57 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0a37a8sm1937794166b.40.2025.08.10.17.51.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 10 Aug 2025 17:51:56 -0700 (PDT)
+Date: Mon, 11 Aug 2025 00:51:56 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: akpm@linux-foundation.org, Wei Yang <richard.weiyang@gmail.com>,
+	Zi Yan <ziy@nvidia.com>, david@redhat.com, dev.jain@arm.com,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: do check_huge_anon() with a number been
+ passed in
+Message-ID: <20250811005156.rbvgf4y3xhls2koi@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20250807082707.30647-1-richard.weiyang@gmail.com>
+ <0467FDBA-A2CF-4CF0-ACCD-760ECD30BA8A@nvidia.com>
+ <207BD61A-5561-4E8C-B867-D1CFCAD37509@nvidia.com>
+ <13D32FD8-FAC8-468A-9C92-23A1B61610C3@nvidia.com>
+ <a1c64bca-9ed1-4d77-a838-4e74a35a1131@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1c64bca-9ed1-4d77-a838-4e74a35a1131@lucifer.local>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-The "Memory out of range" subtest of futex_numa_mpol assumes that memory
-access outside of the mmap'ed area is invalid. That may not be the case
-depending on the actual memory layout of the test application. When
-that subtest was run on an x86-64 system with latest upstream kernel,
-the test passed as an error was returned from futex_wake(). On another
-powerpc system, the same subtest failed because futex_wake() returned 0.
+On Sun, Aug 10, 2025 at 03:04:08PM +0100, Lorenzo Stoakes wrote:
+>Yeah just hit this,
+>
+>Adnrew - can we please drop this patch from mm-new for now? It's breaking the mm
+>self tests build.
+>
+>Maybe then Wei you can do a v2 rebased on current state of mm self tests?
+>
 
-  Bail out! futex2_wake(64, 0x86) should fail, but didn't
+Yup, v2 is on its way.
 
-Looking further into the passed subtest on x86-64, it was found that an
--EINVAL was returned instead of -EFAULT. The -EINVAL error was returned
-because the node value test with FLAGS_NUMA set failed with a node value
-of 0x7f7f. IOW, the futex memory was accessible and futex_wake() failed
-because the supposed node number wasn't valid. If that memory location
-happens to have a very small value (e.g. 0), the test will pass and no
-error will be returned.
+>Thanks!
+>
 
-Since this subtest is non-deterministic, it is dropped unless we
-explicitly set a guard page beyond the mmap region.
-
-The other problematic test is the "Memory too small" test. The
-futex_wake() function returns the -EINVAL error code because the given
-futex address isn't 8-byte aligned, not because only 4 of the 8 bytes
-are valid and the other 4 bytes are not. So proper name of this subtest
-is changed to "Mis-aligned futex" to reflect the reality.
-
-Fixes: 3163369407ba ("selftests/futex: Add futex_numa_mpol")
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/futex/functional/futex_numa_mpol.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-index a9ecfb2d3932..802c15c82190 100644
---- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-+++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-@@ -182,12 +182,10 @@ int main(int argc, char *argv[])
- 	if (futex_numa->numa == FUTEX_NO_NODE)
- 		ksft_exit_fail_msg("NUMA node is left uninitialized\n");
- 
--	ksft_print_msg("Memory too small\n");
-+	/* FUTEX2_NUMA futex must be 8-byte aligned */
-+	ksft_print_msg("Mis-aligned futex\n");
- 	test_futex(futex_ptr + mem_size - 4, 1);
- 
--	ksft_print_msg("Memory out of range\n");
--	test_futex(futex_ptr + mem_size, 1);
--
- 	futex_numa->numa = FUTEX_NO_NODE;
- 	mprotect(futex_ptr, mem_size, PROT_READ);
- 	ksft_print_msg("Memory, RO\n");
 -- 
-2.50.1
-
+Wei Yang
+Help you, Help me
 
