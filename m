@@ -1,176 +1,215 @@
-Return-Path: <linux-kselftest+bounces-38716-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACD47B21757
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 23:28:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ABDFB21822
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 00:18:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 717103B0636
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 21:28:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F32714638B2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 22:18:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE23F2E2F17;
-	Mon, 11 Aug 2025 21:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586A122425B;
+	Mon, 11 Aug 2025 22:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V1VqiMs9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DuyyTdrN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-qk1-f201.google.com (mail-qk1-f201.google.com [209.85.222.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034B02E2DCB;
-	Mon, 11 Aug 2025 21:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786031D61B7
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Aug 2025 22:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754947687; cv=none; b=V6RT8zrnDegoKkTteiiUudmYjLDiGlHbhtdYXYuND2yHwQ65i/yyh/6g6puUusPFlqfjALfnAe12LrFFHLd/nIWwUdn2VgqsaBae9aeCOeHebv2yznWRpAKCrjvPcHOeS5UlOP+w1VRG69rzcj2lR/Gwk515D5s1Nnp0cb0ktg4=
+	t=1754950666; cv=none; b=WyUbrMS9CohZimRLQw+oOLxm/nhz0XmP5+uWo/01ISbkRIA7yv+5qRi+l3/ZGD2quYIbR615xxNSJeZUHXXmAZypmzb55YpGqtS4jHIGZL7ddG3X6naZ/qmozbPY9+r4gG8HOaYzzEA6EOrA2i7qND7qkjazw+KaRpfs5wv+HFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754947687; c=relaxed/simple;
-	bh=4jWt+vtaMp5Tdm13CVmodDS1jsKe4d7LMcQKGSs1wIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gpKyYHElZRWJZP1ADolAWhuNLTx5ngsfyl7vpxkiUAPqoPq27txRwNihnWmXz6CYb7rD8b0EHFaUifLl+feIBgiiJP/xHUjE3kiD8pJ7T+chQt33sH7VQ02LxbsYedjbZQg2wIr27dAAIVrGMUv38RPOschYw828Qp390Mf6v3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V1VqiMs9; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6155e75a9acso7590881a12.0;
-        Mon, 11 Aug 2025 14:28:04 -0700 (PDT)
+	s=arc-20240116; t=1754950666; c=relaxed/simple;
+	bh=Ht/UHT3sLBhR0Zk80MTwgw23vViXOFXrlKz0LswUhvU=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ERSOZ63f/cwIZSevZBkviIF1Gqh5WzThHRRsi2kpS2ed7mn89pgEHTnFi4cIuswa6nXZrSPOepy359f646010KDzQdIdLNfj1nl8TDj6TKU1HIcMjnUbqNsXZVa9OXDYRml4WDvry/ONSo0km+3JaP8Kf1IED6TTAIMwF4SttXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marievic.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DuyyTdrN; arc=none smtp.client-ip=209.85.222.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marievic.bounces.google.com
+Received: by mail-qk1-f201.google.com with SMTP id af79cd13be357-7e826e0d7abso1003302785a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Aug 2025 15:17:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754947683; x=1755552483; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u7emz6ROM15eXVZD/JHmzk6WH3TEb4rlVhorWWEnTJU=;
-        b=V1VqiMs9rhral5NZfF/f6XNs28RuDZ+nbWmhXEpfmCq4/VKYJ4Xx6Gyk8bR6CMOSTt
-         +9OmWjgPrPwFWa6oja8i5wGMOyITalG0qi3ZPq2dopizSjrvV4QLVuE+M/MxXTsWI8Gi
-         2uvqTaYEnS+p12w61/u770wtNaODINSRy1EIQ9UirlQhUh18P1q1QX50w+9ZJBld0yC6
-         eH/xXSkvPnno0n5q4nQuTveDbum2ommpyJxw/KFQoiaaJCrMb13tE7NeC/AZAoWzt8P3
-         MKkBkHoDymW8ECyRevR1S9z2cD0kFjltc6GOAJDe2kWCqBIWRonq7wwvhejXpXV5lKEf
-         Rl0w==
+        d=google.com; s=20230601; t=1754950663; x=1755555463; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tsTpiVRLtnpCIisNiGgEETpcDrFcJWiGEHWB60H2Tzc=;
+        b=DuyyTdrNTQYHJr436vX2RDg+2npu+D7a+NLR8SlHifGB+Y5QpAFVB1sX0AjzW7e6sL
+         f22PTmJHIFjUzGYCUkraa//noQ9IFqlHaZeRnlxlbLyXlkSDfO0U2loMJ8Xhr9aBiCA7
+         lvXZjLorHcOPPUZtWHnaDTSx7Rgy3a2LvFpg0TusfJAtfbJ3vqpIM3azq9A9H/tTr7Nd
+         HJjltlP9zs3snfrbiNU8rDL2bMOyLOh4v1tQ0349aYTYzatdbkWSwIo/QVQ79fkyY9K9
+         MUTLscNqNu42lf+AkQWXLJlZoWYC5mi5qdfTprQTl/ghpgJ7P3p7E++P1lpO3ubxr7FF
+         jIrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754947683; x=1755552483;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=u7emz6ROM15eXVZD/JHmzk6WH3TEb4rlVhorWWEnTJU=;
-        b=le1VXJUeEWwQowV5D9Beo1qdi6F7gxvRqpbaUP3ssdwhMpKf0SXzJbmITPQPT1wzk8
-         JxMwJaRRxNCO5SxH2pHHgK7hdjo0B9KIkF3hDuf7nyxinQQvVo8d9040Jxb4pweV+qMs
-         VB/OB6n3W8LhTirdTigdSY2Yi7zaP9NJplzvmoaR5Yj60L5O/s1PRR0PvpTO+QgKlTUF
-         ibPMH8DYG0DKOWbCKUG9AotjjH90rmOyHbiM/jLQAHHa6FyLKU56TRlemN4Sd/yU06eA
-         ifIQqirCto0AGTmUNzZfLgBOF31c+6/mUGKS+ojapvIDUeQFQinY9PUGpqk6GyLB9omg
-         o+Tg==
-X-Forwarded-Encrypted: i=1; AJvYcCVO3fcpA7FY7EyZm6pUrdFPMyx6Zh2hOTT4e0xU7iggI2IqCWmowJN0bNd+xa4vSXxlAVBi78cCqT3hqsk=@vger.kernel.org, AJvYcCXF0qNwReIj76Mb4lWzYaTquv6FLl9Z3p4lU+S2f4iSq/oLyKHltwv8fbZf47HUHnthjjNPPlAArXM5ogPTc+rJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQ/ykWtJC5IfiDz/nEfBeNDLvY2JEt2Rv19X3B+TVx0/NaRyoh
-	pHrgLzKWTjcrQls8aX4FH68uW50IB0hIkUsmfisLpqE1pkj+Y34VilQ6uS+eW5Fb
-X-Gm-Gg: ASbGnctQySX8+nuGk4bdLMDQEzodC8mZ0TdVXkUPEftf7a3OlqykXGjOFJY5hTSetLM
-	ZuYZ0cHCyDVbe+cqGKbC68A4lL5kp3rpEWMlksBxdEAQhOppueiylrA9HJ67PP3gdB0GfHI6dkl
-	JGH+t5y7GQmOSe2K96pQ4yD6Q+isM/kBWPqiHtZWPg+/37H5XxcqqQf8V7I1sWLvVCvbkmj8aSL
-	wCBpXcNkFHmDcjJjH/iTaGaRfjs5fR+JUxAieg20KP0k7pYRWBhUjkO5Vx+yRggztlel5X7mJnS
-	VaNrxDuBylSdd3Yo22Dq+TLj0fKxi8JeMFHbrpBT3X9n4jA0DjkRDitkNpQhS9sU4hD9Jh3RztO
-	8md9aSMlN4xJOMxZyA9gRZw==
-X-Google-Smtp-Source: AGHT+IEJ09ZPMSOGoqTX4r3ubN8xEk05FcZvRutxM05qzde970yiia9Wthp2LHeb/ElEnlKIxxnWBw==
-X-Received: by 2002:a17:906:f5a5:b0:ae3:f903:e41 with SMTP id a640c23a62f3a-afa1e152edamr90815566b.54.1754947682935;
-        Mon, 11 Aug 2025 14:28:02 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0a3792sm2073582166b.50.2025.08.11.14.28.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 11 Aug 2025 14:28:02 -0700 (PDT)
-Date: Mon, 11 Aug 2025 21:28:02 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Wei Yang <richard.weiyang@gmail.com>, wang lian <lianux.mm@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] selftests/mm: add check_folio_orders() helper.
-Message-ID: <20250811212802.gsvbeqmo62v4tqly@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20250808190144.797076-1-ziy@nvidia.com>
- <20250808190144.797076-3-ziy@nvidia.com>
- <20250809201836.jegaanplfcjak44f@master>
- <B13F65A9-B001-4494-A060-23D95055553F@nvidia.com>
+        d=1e100.net; s=20230601; t=1754950663; x=1755555463;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tsTpiVRLtnpCIisNiGgEETpcDrFcJWiGEHWB60H2Tzc=;
+        b=lW1uq09/1cggao6PR3ORM7T1aTPM1MpuCdS/YE1TQCHkg2U7FIdt1kMe2WDWzJnRfs
+         qy+b+O+q123AMThmwWwtQ/9K1gUkEIS4loY9qspgPa2ztNEejOYL3Svp1lYGJzXag56S
+         Jli1z8s9oUu0aBU29udWEzmiPk3C6+Gi/QnTJ8FqC2cZR2veUciaNersnxDXsf30WVQq
+         AEXmQXrTxOuc3dKy/YJ/Ybrt/9crJ1Wq73bDaQl1wZ1SudT1Zv/6afxDre6/tYeXkUjU
+         gH+Qa/Kd45O73cMQxPh4Z2lOlLegoEZbFRFUDLH/yDCuWaSsPuZoiSHkaaLyFuY876ND
+         TOHA==
+X-Forwarded-Encrypted: i=1; AJvYcCWxlsfgydJr6pAwPhzAspxmKtZmZmZdRgjbILKNToNuUPP5DI0RPa3CLVRz9eCuoQfpYyKVZX2RR3N4sbpeNFE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyslfBCrljYSQ424dE0F2GVTlfKsuwHzLz8IOSIV+gjqSTnd9YA
+	kp069bbGqdsez19x29E69GzMDEfDoM+7LJH0Q09A/csKfAo3ELMPB5a1j/0wuUxblyTlcG5vCv+
+	qkEY4uTJ9xqf48g==
+X-Google-Smtp-Source: AGHT+IGLY1363SKVs1UR+Wi4x98jSfDfthClu1+vmuO4PXrMkif+fZojShhrhTTkXKzMJXFQxdtGp6zu02KtrQ==
+X-Received: from qknwd46.prod.google.com ([2002:a05:620a:72ae:b0:7e6:36d3:ccf2])
+ (user=marievic job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:620a:612a:b0:7e3:35e3:3412 with SMTP id af79cd13be357-7e858897035mr146693485a.34.1754950663342;
+ Mon, 11 Aug 2025 15:17:43 -0700 (PDT)
+Date: Mon, 11 Aug 2025 22:17:32 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <B13F65A9-B001-4494-A060-23D95055553F@nvidia.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.rc0.205.g4a044479a3-goog
+Message-ID: <20250811221739.2694336-1-marievic@google.com>
+Subject: [PATCH v2 0/7] kunit: Refactor and extend KUnit's parameterized
+ testing framework
+From: Marie Zhussupova <marievic@google.com>
+To: rmoar@google.com, davidgow@google.com, shuah@kernel.org, 
+	brendan.higgins@linux.dev
+Cc: mark.rutland@arm.com, elver@google.com, dvyukov@google.com, 
+	lucas.demarchi@intel.com, thomas.hellstrom@linux.intel.com, 
+	rodrigo.vivi@intel.com, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, kasan-dev@googlegroups.com, 
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, Marie Zhussupova <marievic@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Aug 11, 2025 at 02:39:08PM -0400, Zi Yan wrote:
-[...]
->>> +static int gather_folio_orders(char *vaddr_start, size_t len,
->>> +			       int pagemap_file, int kpageflags_file,
->>> +			       int orders[], int nr_orders)
->>> +{
->>> +	uint64_t page_flags = 0;
->>> +	int cur_order = -1;
->>> +	char *vaddr;
->>> +
->>> +	if (!pagemap_file || !kpageflags_file)
->>> +		return -1;
->>> +	if (nr_orders <= 0)
->>> +		return -1;
->>> +
->>> +	for (vaddr = vaddr_start; vaddr < vaddr_start + len; ) {
->>> +		char *next_folio_vaddr;
->>> +		int status;
->>> +
->>> +		if (get_page_flags(vaddr, pagemap_file, kpageflags_file, &page_flags))
->>> +			return -1;
->>> +
->>> +		/* all order-0 pages with possible false postive (non folio) */
->>> +		if (!(page_flags & (KPF_COMPOUND_HEAD | KPF_COMPOUND_TAIL))) {
->>> +			orders[0]++;
->>> +			vaddr += psize();
->>> +			continue;
->>> +		}
->>> +
->>> +		/* skip non thp compound pages */
->>> +		if (!(page_flags & KPF_THP)) {
->>> +			vaddr += psize();
->>> +			continue;
->>> +		}
->>> +
->>> +		/* vpn points to part of a THP at this point */
->>> +		if (page_flags & KPF_COMPOUND_HEAD)
->>> +			cur_order = 1;
->>> +		else {
->>> +			/* not a head nor a tail in a THP? */
->>> +			if (!(page_flags & KPF_COMPOUND_TAIL))
->>> +				return -1;
->>> +			continue;
->>> +		}
->>> +
->>> +		next_folio_vaddr = vaddr + (1UL << (cur_order + pshift()));
->>> +
->>> +		if (next_folio_vaddr >= vaddr_start + len)
->>> +			break;
->>
->> Would we skip order 1 folio at the last position?
->>
->> For example, vaddr_start is 0x2000, len is 0x2000 and the folio at vaddr_start
->> is an order 1 folio, whose size is exactly 0x2000.
->>
->> Then we will get next_folio_vaddr == vaddr_start + len.
->>
->> Could that happen?
->
->No. After the loop, there is code checking cur_order and updating orders[].
->
+Hello!
 
-Oh, I missed this.
+KUnit offers a parameterized testing framework, where tests can be
+run multiple times with different inputs. However, the current
+implementation uses the same `struct kunit` for each parameter run.
+After each run, the test context gets cleaned up, which creates
+the following limitations:
+
+a. There is no way to store resources that are accessible across
+   the individual parameter runs.
+b. It's not possible to pass additional context, besides the previous
+   parameter (and potentially anything else that is stored in the current
+   test context), to the parameter generator function.
+c. Test users are restricted to using pre-defined static arrays
+   of parameter objects or generate_params() to define their
+   parameters. There is no flexibility to make a custom dynamic
+   array without using generate_params(), which can be complex if
+   generating the next parameter depends on more than just the single
+   previous parameter.
+
+This patch series resolves these limitations by:
+
+1. [P 1] Giving each parameterized run its own `struct kunit`. It will
+   remove the need to manage state, such as resetting the `test->priv`
+   field or the `test->status_comment` after every parameter run.
+
+2. [P 1] Introducing parameterized test context available to all
+   parameter runs through the parent pointer of type `struct kunit`.
+   This context won't be used to execute any test logic, but will
+   instead be used for storing shared resources. Each parameter run
+   context will have a reference to that parent instance and thus,
+   have access to those resources.
+
+3. [P 2] Introducing param_init() and param_exit() functions that can
+   initialize and exit the parameterized test context. They will run once
+   before and after the parameterized test. param_init() can be used to add
+   resources to share between parameter runs, pass parameter arrays, and
+   any other setup logic. While param_exit() can be used to clean up
+   resources that were not managed by the parameterized test, and
+   any other teardown logic.
+
+4. [P 3] Passing the parameterized test context as an additional argument
+   to generate_params(). This provides generate_params() with more context,
+   making parameter generation much more flexible. The generate_params()
+   implementations in the KCSAN and drm/xe tests have been adapted to match
+   the new function pointer signature.
+
+5. [P 4] Introducing a `params_array` field in `struct kunit`.
+   This will allow the parameterized test context to have direct
+   storage of the parameter array, enabling features like using
+   dynamic parameter arrays or using context beyond just the
+   previous parameter. This will also enable outputting the KTAP
+   test plan for a parameterized test when the parameter count is
+   available.
+
+Patches 5 and 6 add examples tests to lib/kunit/kunit-example-test.c to
+showcase the new features and patch 7 updates the KUnit documentation
+to reflect all the framework changes.
+
+Thank you!
+-Marie
+
+---
+
+Changes in v2:
+
+Link to v1 of this patch series:
+https://lore.kernel.org/all/20250729193647.3410634-1-marievic@google.com/
+
+- Establish parameterized testing terminology:
+   - "parameterized test" will refer to the group of all runs of a single test
+     function with different parameters.
+   - "parameter run" will refer to the execution of the test case function with
+     a single parameter.
+   - "parameterized test context" is the `struct kunit` that holds the context
+     for the entire parameterized test.
+   - "parameter run context" is the `struct kunit` that holds the context of the
+     individual parameter run.
+   - A test is defined to be a parameterized tests if it was registered with a
+     generator function.
+- Make comment edits to reflect the established terminology.
+- Require users to manually pass kunit_array_gen_params() to
+  KUNIT_CASE_PARAM_WITH_INIT() as the generator function, unless they want to
+  provide their own generator function, if the parameter array was registered
+  in param_init(). This is to be consistent with the definition of a
+  parameterized test, i.e. generate_params() is never NULL if it's
+  a parameterized test.
+- Change name of kunit_get_next_param_and_desc() to
+  kunit_array_gen_params().
+- Other minor function name changes such as removing the "__" prefix in front
+  of internal functions.
+- Change signature of get_description() in `struct params_array` to accept
+  the parameterized test context, as well.
+- Output the KTAP test plan for a parameterized test when the parameter count
+  is available.
+- Cover letter was made more concise.
+- Edits to the example tests.
+- Fix bug of parameterized test init/exit logic being done outside of the
+  parameterized test check.
+- Fix bugs identified by the kernel test robot.
+
+---
+
+Marie Zhussupova (7):
+  kunit: Add parent kunit for parameterized test context
+  kunit: Introduce param_init/exit for parameterized test context
+    management
+  kunit: Pass parameterized test context to generate_params()
+  kunit: Enable direct registration of parameter arrays to a KUnit test
+  kunit: Add example parameterized test with shared resource management
+    using the Resource API
+  kunit: Add example parameterized test with direct dynamic parameter
+    array setup
+  Documentation: kunit: Document new parameterized test features
+
+ Documentation/dev-tools/kunit/usage.rst | 342 +++++++++++++++++++++++-
+ drivers/gpu/drm/xe/tests/xe_pci.c       |   2 +-
+ include/kunit/test.h                    |  95 ++++++-
+ kernel/kcsan/kcsan_test.c               |   2 +-
+ lib/kunit/kunit-example-test.c          | 222 +++++++++++++++
+ lib/kunit/test.c                        |  87 ++++--
+ rust/kernel/kunit.rs                    |   4 +
+ 7 files changed, 726 insertions(+), 28 deletions(-)
 
 -- 
-Wei Yang
-Help you, Help me
+2.51.0.rc0.205.g4a044479a3-goog
+
 
