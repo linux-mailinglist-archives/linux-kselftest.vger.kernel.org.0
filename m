@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-38728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0A9FB21905
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 01:14:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EC1DB21908
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 01:14:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4A20461F14
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 23:14:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A6A4A7A680B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 23:12:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5462D77E1;
-	Mon, 11 Aug 2025 23:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02B9A2D9EE3;
+	Mon, 11 Aug 2025 23:13:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oYC8Qx6f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mnr0yXgB"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52FC529ACF1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D582D8781;
 	Mon, 11 Aug 2025 23:13:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754954028; cv=none; b=AB98rju0EWG6vZphz1/qr9twvOzfWHnp40fcFPy/TahKrA4AHuwrNYaTYxIxl2h2jD0K1kz0aDFpMgD/9c4g+kUHTpU/T32qms0qXRLwCtB+6/vBL2lOFo4jbb/mH7soCu3GVhMEBfZBPwJk24UYvoqc0No1VrXb2I8RwOgrNjI=
+	t=1754954028; cv=none; b=c0Wb/pqKLYyo1YG6F3I8s8uWZvrLGJUwkQBZZsXwBHHeNQqrGg+k0+BiXPRQI43gLgmmezAV+jzzDpcSPjrflCeiSqHZi/tRqLb8E/64+/Zsjy3FYjLHxL5LDjG2PKB4RTi9xv7+eXzfyS3N54RFmr9kQ/jD1gWXfDyY1P5lCFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754954028; c=relaxed/simple;
-	bh=REgp+SgNKXX5+VGkxhNzKfxK2mGgk0h+2KbopKQgBNs=;
+	bh=wgBFxlnaNWfDrQ1L/aOL9irFdGma24Z2xxiCY0ZFqS8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ac8ERzWEIHGvrgb3MdsnWMc0ZeN8Lav5Kc4x0QaghyyHkrs0A985V/EdQuHoblvxaSvaXYS4BqPW5RocZiCgQnKkcAvjSghhhB+2eGg2JcSq22AnonYdXe9VbBcwRJQXygwx7wYSNJL3NLzV3QDX5lq/rRjqmAg6ZmIPub6xQXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oYC8Qx6f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74EC8C4CEFE;
-	Mon, 11 Aug 2025 23:13:47 +0000 (UTC)
+	 MIME-Version; b=WWymdojgTb20gYxv3vqoJjD8s/ApSh0Caso1k2juPW+mweUmhbHSLc1+6XTEa+ZRmtHYqAruTeQJu/wWuvfMJXVqJyiLWcRORS19JVEOZES4yxO4eIvdM2rXq5Lym7xzqyCFGRjX26gsB/dN2YbuQ4cK2s6D3+7x3iPforK587o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mnr0yXgB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07ED4C4CEF1;
+	Mon, 11 Aug 2025 23:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754954027;
-	bh=REgp+SgNKXX5+VGkxhNzKfxK2mGgk0h+2KbopKQgBNs=;
+	s=k20201202; t=1754954028;
+	bh=wgBFxlnaNWfDrQ1L/aOL9irFdGma24Z2xxiCY0ZFqS8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oYC8Qx6fUnQlnVaLB+s16FTMrEIBJwbcBafrpLTB6UnNpOk+VatZzWP1ttjohYRqW
-	 kAHmAATHRE4G4Av7baPU3BVfiJgk22e8RehC/haZWNTA1BcZ+mUq34PRNCQ+ICi4Gp
-	 eRuwSsk7CubqO949sb/Z1kyiKMvZmfvzvNY/1qUuCh2c+IL5m4YpOu4UD1oKuWevQl
-	 fI/AoSBe88yXYoJcVhMehT4R/uOeIRwtZwLS2yyHx2HSQWS+a1WZduMFqdAyrozhh2
-	 Pf6DuJCCmzmqFj8LmNi//HdglNLdRQXGF4taKz/HwK/aQymKKIoMrDwCcnk4Rj0ZWC
-	 YusGJlqCcs2sQ==
+	b=Mnr0yXgBwEmmx10d2gwYjuuBc5qUHy/RmwBcw7EKh4OWxYS4UZ8AuPCD29OvClNiA
+	 k1uPzP+/1vvmvHw7xl+pOVv8kB8vWz9SPJ4hnRKjQkR9l2y8Uph06ChmDP3wkfuoQQ
+	 pbbcURN5Tve0Sm85vW4/V9QrqVlIBQEHu8kUslF8AQ81m2O3KbEJ9ibn5NWmH2n4Zl
+	 pipMfurqYl/O/zY7efY6m11I1bpi2/IyKdGjA6WdaDnpgii8dxrWKUM3XaOyYrLhNX
+	 2tkW+6kc/5HE8ibP3uK3YS87wPRy+RRHBaCeW6jAWbCGbPViXwVMtl9+LzXPxWRKVg
+	 qWbLwmhxQoObQ==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	ap420073@gmail.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 3/5] selftests: drv-net: devmem: add / correct the IPv6 support
-Date: Mon, 11 Aug 2025 16:13:32 -0700
-Message-ID: <20250811231334.561137-4-kuba@kernel.org>
+Subject: [PATCH net-next 4/5] selftests: net: terminate bkg() commands on exception
+Date: Mon, 11 Aug 2025 16:13:33 -0700
+Message-ID: <20250811231334.561137-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250811231334.561137-1-kuba@kernel.org>
 References: <20250811231334.561137-1-kuba@kernel.org>
@@ -69,26 +69,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We need to use bracketed IPv6 addresses for socat.
+There is a number of:
+
+  with bkg("socat ..LISTEN..", exit_wait=True)
+
+uses in the tests. If whatever is supposed to send the traffic
+fails we will get stuck in the bkg(). Try to kill the process
+in case of exception, to avoid the long wait.
+
+A specific example where this happens is the devmem Tx tests.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/drivers/net/hw/devmem.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/lib/py/utils.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
-index baa2f24240ba..0a2533a3d6d6 100755
---- a/tools/testing/selftests/drivers/net/hw/devmem.py
-+++ b/tools/testing/selftests/drivers/net/hw/devmem.py
-@@ -24,7 +24,7 @@ from lib.py import ksft_disruptive
-     require_devmem(cfg)
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index f395c90fb0f1..4ac9249c85ab 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -117,6 +117,7 @@ import time
+                          shell=shell, fail=fail, ns=ns, host=host,
+                          ksft_wait=ksft_wait)
+         self.terminate = not exit_wait and not ksft_wait
++        self._exit_wait = exit_wait
+         self.check_fail = fail
  
-     port = rand_port()
--    socat = f"socat -u - TCP{cfg.addr_ipver}:{cfg.addr}:{port},bind={cfg.remote_addr}:{port}"
-+    socat = f"socat -u - TCP{cfg.addr_ipver}:{cfg.baddr}:{port},bind={cfg.remote_baddr}:{port}"
-     listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} -c {cfg.remote_addr} -v 7"
+         if shell and self.terminate:
+@@ -127,7 +128,9 @@ import time
+         return self
  
-     with bkg(listen_cmd, exit_wait=True) as ncdevmem:
+     def __exit__(self, ex_type, ex_value, ex_tb):
+-        return self.process(terminate=self.terminate, fail=self.check_fail)
++        # Force termination on exception
++        terminate = self.terminate or (self._exit_wait and ex_type)
++        return self.process(terminate=terminate, fail=self.check_fail)
+ 
+ 
+ global_defer_queue = []
 -- 
 2.50.1
 
