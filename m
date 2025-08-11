@@ -1,175 +1,102 @@
-Return-Path: <linux-kselftest+bounces-38711-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E16B2168E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 22:35:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73060B216D1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 22:54:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5ACC616E94E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 20:35:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96EA81A20F0A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Aug 2025 20:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D652DECA5;
-	Mon, 11 Aug 2025 20:35:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAE582E2DCB;
+	Mon, 11 Aug 2025 20:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="msI8tNLj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f6hqc4XA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC892DA75A
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 Aug 2025 20:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3412D94AD
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Aug 2025 20:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754944529; cv=none; b=oY9M5i+zV4WuOuDitdR1c8EECi/2Cv8HnmGPzo9v3ZRV9f97GnD36OGwkT7lqoDXE1Tc4IF9y3659km/AmW/OUGGLA4OVMaDzSUVrMk2ijxNUpF0kJo9BIot3w53REe3ft17vez8iIK9/ycZAmejrYR91ekG9jdc0WjRMB2+Xt4=
+	t=1754945628; cv=none; b=KLgccxmHZjGV0T77LE/77p+0xLFzjJ0fLBEJngJQUQDYnTuEF1976jPHw4J23hyqPD8XTAGpN+8nldikW8jwCFXYRNQL3W6RwG/zLQ5mB6FS/I6TZFm53txRbL4r21aP5kMi4v1BZDaB1Cc7vttx/bFc6FDDlxGNxKUCXCjUKTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754944529; c=relaxed/simple;
-	bh=QpDf+elt9M9TKmobx1BaTq9lS4qdM3lH4ej26Ym52hk=;
+	s=arc-20240116; t=1754945628; c=relaxed/simple;
+	bh=JAqQRpQuRD1gv5XSPrDmnd2nskW03QCSTIn0+0VPuag=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lBxTWO06ZrsVsKYNmh97cvCCOXJ+st6i/lsL+Z5ZbBargrPgWpZhj1OpghK+h5o7aRtyYMyY8h5K04rF2RL4ueMo/6fJ+ZWepHFB0AxNwVUvgS9vNp2i2UNOnr3zY5R2vjPOd9lMoGOShHliRj70rCg5VjNbJZG/kmG+6VhZse0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=msI8tNLj; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=W/DZshurHQsqSrTf4EOQbFr4tjs4e5nHNK/mE+W9cq80u5pV9mInAQrBwLS1rHHJ8pHAQ/vpVVQSwMgSLSj/PG71KxUFdWO4HM3HjcluH3sbNTs1rJ5mfyVxdrXEPhy90Jbfd9IEz5UZJ/MOQ/wAeVZWxHnfFyX+sdhPJnz2yrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=f6hqc4XA; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-321a3669ba4so2413646a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Aug 2025 13:35:27 -0700 (PDT)
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b42a54b7812so2661513a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Aug 2025 13:53:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754944527; x=1755549327; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1754945627; x=1755550427; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vTpJfMamSKiMcyAgK8UySPyjbjczetycEUO9ZouvYAA=;
-        b=msI8tNLjcyFy4VHG60oFhYnyavOX3RcwRuANNxCrroYviZnOY1WHUvuca+TeVt/fpq
-         4i1G+dxq/Sf30EKKYjSvGN+ctttaf9nNUc82mOXFnO+N1BVYTcEm5Tq5lGStc5ySU+DV
-         sQvKyRXNqfG2RZ6MZuufxOzYvAwCibMNIhYIIuahmbeJyJwjY9Nt9JM5MBxK0TxHXrKi
-         byNL/jwDyownPUwMj0p4D6F7gPjJpUR9nYDZLU2OoiQNV0JmPvbbUWR9N1CAfuq/DXLj
-         c+QQqroiOU/ylxQa1IccPv7zXbBJcPD32fnmislMgTrJa/Q7lzJctgtfUHhZ5puM4Cwb
-         uRpg==
+        bh=OIjVfeNq+ApcEX/TD0b/1d8mPe0JYmLtItfn+lVbGBE=;
+        b=f6hqc4XAtmSp4LaqoiFu1kQ0VTvQMysRApUX5E8TFOKP3Np5v/MvJU58j4Lm0Gw/yi
+         6tkZM8viSAmLKg7oUBzi6lyZ0QjS2OgbjvYibxvuHlX/bt6IoNNQJXtHMpgHGOoxfcPP
+         2JJVvUBdtTM36fYWRfFMsdiKuNhtq+ZKal34tgk7Tnqho6K4WNJ8HLWpR5NhKAd8I7jf
+         GRSpsAqF4753xLoJrtEzMk1dDTuY9jzhSbWetXXGxMUozUKxNznrCqwO+USMAK2zRvLL
+         NKZx0L5vGwAiaUAdNGtvLyiBE3Pxe03AOKG+IitN+E57sxSNZb+zW2vRPHh53YvesJtT
+         6W/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754944527; x=1755549327;
+        d=1e100.net; s=20230601; t=1754945627; x=1755550427;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vTpJfMamSKiMcyAgK8UySPyjbjczetycEUO9ZouvYAA=;
-        b=baIwRzmpJRMTxMTD18/Jl6t9U7AP8nqZaQUB/+BRI5Ajk6UY03RmnrciHGnf3+VOvf
-         wChhTO1/iSt23WtWfe7A5MggSuO1WJQqjpLBuiUU3VXpTIWnw8oBacNgxjTsy04s/G5p
-         1oscDfFcUtIzSi34fUoXODy2ORuCDLwS7mbuWQudKYb9g/9ZEPgmS0ltrK+xQfF1C6yb
-         MWidHjFC1cHmjQxSgGhDx55PnkqPD7dZz0xArjs67MxKS9Qx6/j2rGA+8+A92eSdCVkD
-         l2ZN0IZJIqiYYv7vDLoST6/+X1znIh8px+EUq2RIciCeH6rudurdtrKSYeeoavztI4EB
-         Zd6A==
-X-Gm-Message-State: AOJu0YzpRR0IA0Kbnhoc3htsteQ1vj874WOB0MPymgs9w+ZSN+JuBPOd
-	j6OvVhlTHp0ScoXu0l+xiWdI0Kro4mJKBhDyrQPa4bppErBaSWDmHKcofsiH6ibmtC81Qsb8ZMm
-	8tQ0VKw==
-X-Google-Smtp-Source: AGHT+IHyhaALMr5XuJoOSrDVhdZmcQWkFVvTH6tfqb1JQAjECOzXqhG5Gursizm3hnRl2+Uz1FQ4pdr6quY=
-X-Received: from pjbph15.prod.google.com ([2002:a17:90b:3bcf:b0:321:b92a:7a39])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:540d:b0:311:ea13:2e70
- with SMTP id 98e67ed59e1d1-321839f1159mr19783183a91.14.1754944527061; Mon, 11
- Aug 2025 13:35:27 -0700 (PDT)
-Date: Mon, 11 Aug 2025 13:35:25 -0700
-In-Reply-To: <20250807201628.1185915-22-sagis@google.com>
+        bh=OIjVfeNq+ApcEX/TD0b/1d8mPe0JYmLtItfn+lVbGBE=;
+        b=H74sLeGDvi19ccDUM0Ttocu8ik9tX2i4EzY/TSmVqKwtGpsdumZS8pRDDD0gccnOAX
+         OkmkWK3P8lCKlZVhPLFC4zurr/kYASeoudd8dCMMuK6TeyvNL2S9J3yAL8Lvs9qH7Wbk
+         FV1HcaSkt96AN2lL1YV3s5V7CZl8hgj3hS4c7n4oftFVDfT7mEAUn4HOe8DYw/8iUAlO
+         u98nJNkoIpYrIgkD+tRklL6/VmoDTLnVEqsiS/SXc+oCBGVCT+WZdN+74tx2Ugoxdj2e
+         6qAUQT2qYyxZyqX9Autq8FgiusA0Ex2o3rFQ7Kq5qBjdzCQw7Mj7ScBknjmGuLLULUux
+         g8Jg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/KsNJmUVG23dA6tNuIgUAUL6gsUiqspxKOBI75mXY+Ov2n2HU1rMJsjn0yfOXoomyAmT+7NjCHBKlyupZMNc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz67DyunckrhSkbpSiv9SeFggnGgKDYPOH1/GLjhSPpkvjKT2gN
+	6swYGZKQYbMIIbk/UbGZnu04/vQdDm6KegyK8TKueePrTcov1M4SJHapedeRjASVMlV6ywKJj4G
+	dvEoQuA==
+X-Google-Smtp-Source: AGHT+IFQy54dyug1fwyF7mFE+kG2LTj1gs6Ocg/a2BRYAoLkWItNyzLA1YfJte7cQL0UErIPYnECfSs/jDA=
+X-Received: from pjje11.prod.google.com ([2002:a17:90a:630b:b0:31e:998f:7b79])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d4c7:b0:220:ea90:191e
+ with SMTP id d9443c01a7336-242fc1fcf98mr12784565ad.4.1754945626697; Mon, 11
+ Aug 2025 13:53:46 -0700 (PDT)
+Date: Mon, 11 Aug 2025 13:53:45 -0700
+In-Reply-To: <0976e0d50b1620c0118b8a5020b90f3959d47b4a.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20250807201628.1185915-1-sagis@google.com> <20250807201628.1185915-22-sagis@google.com>
-Message-ID: <aJpUDS4PSgLK8A16@google.com>
-Subject: Re: [PATCH v8 21/30] KVM: selftests: TDX: Verify the behavior when
- host consumes a TD private memory
+References: <20250807201628.1185915-1-sagis@google.com> <aJoqqTM9zdcSx1Fi@google.com>
+ <0976e0d50b1620c0118b8a5020b90f3959d47b4a.camel@intel.com>
+Message-ID: <aJpYWVvNXjsewl-b@google.com>
+Subject: Re: [PATCH v8 00/30] TDX KVM selftests
 From: Sean Christopherson <seanjc@google.com>
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Ackerley Tng <ackerleytng@google.com>, 
-	Ryan Afranji <afranji@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Isaku Yamahata <isaku.yamahata@intel.com>, Erdem Aktas <erdemaktas@google.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
-	Binbin Wu <binbin.wu@linux.intel.com>, Oliver Upton <oliver.upton@linux.dev>, 
-	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
-	Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+To: Rick P Edgecombe <rick.p.edgecombe@intel.com>
+Cc: "sagis@google.com" <sagis@google.com>, Erdem Aktas <erdemaktas@google.com>, 
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "shuah@kernel.org" <shuah@kernel.org>, 
+	Ryan Afranji <afranji@google.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Reinette Chatre <reinette.chatre@intel.com>, 
+	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
+	"ackerleytng@google.com" <ackerleytng@google.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	"pratikrajesh.sampat@amd.com" <pratikrajesh.sampat@amd.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Roger Wang <runanwang@google.com>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"ajones@ventanamicro.com" <ajones@ventanamicro.com>, "oliver.upton@linux.dev" <oliver.upton@linux.dev>
 Content-Type: text/plain; charset="us-ascii"
 
-On Thu, Aug 07, 2025, Sagi Shahar wrote:
-> +void verify_host_reading_private_mem(void)
-> +{
-> +	uint64_t second_host_read;
-> +	uint64_t first_host_read;
-> +	struct kvm_vcpu *vcpu;
-> +	vm_vaddr_t test_page;
-> +	uint64_t *host_virt;
-> +	struct kvm_vm *vm;
-> +
-> +	vm = td_create();
-> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
-> +	vcpu = td_vcpu_add(vm, 0, guest_host_read_priv_mem);
-> +
-> +	test_page = vm_vaddr_alloc_page(vm);
-> +	TEST_ASSERT(test_page < BIT_ULL(32),
-> +		    "Test address should fit in 32 bits so it can be sent to the guest");
-> +
-> +	host_virt = addr_gva2hva(vm, test_page);
-> +	TEST_ASSERT(host_virt,
-> +		    "Guest address not found in guest memory regions\n");
-> +
-> +	tdx_test_host_read_private_mem_addr = test_page;
-> +	sync_global_to_guest(vm, tdx_test_host_read_private_mem_addr);
-> +
-> +	td_finalize(vm);
-> +
-> +	printf("Verifying host's behavior when reading TD private memory:\n");
-> +
-> +	tdx_run(vcpu);
-> +	tdx_test_assert_io(vcpu, TDX_HOST_READ_PRIVATE_MEM_PORT_TEST,
-> +			   4, PORT_WRITE);
-> +	printf("\t ... Guest's variable contains 0xABCD\n");
+On Mon, Aug 11, 2025, Rick P Edgecombe wrote:
+> But Sean, if you want to save some time I think we can just accelerate this
+> other reviewing. As far as new-fangled features, having this upstream is
+> important even for that, because we are currently having to keep these tests
+> plus follow on tests in sync across various development branches. So yea, it's
+> time to get this over the line.
 
-Don't use bare printf() for what is effectively debug info.
-> +
-> +	/* Host reads guest's variable. */
-> +	first_host_read = *host_virt;
-> +	printf("\t ... Host's read attempt value: %lu\n", first_host_read);
-> +
-> +	/* Guest updates variable and host rereads it. */
-> +	tdx_run(vcpu);
-> +	printf("\t ... Guest's variable updated to 0xFEDC\n");
-> +
-> +	second_host_read = *host_virt;
-> +	printf("\t ... Host's second read attempt value: %lu\n",
-> +	       second_host_read);
-> +
-> +	TEST_ASSERT(first_host_read == second_host_read,
-> +		    "Host did not read a fixed pattern\n");
-> +
-> +	printf("\t ... Fixed pattern was returned to the host\n");
-> +
-> +	kvm_vm_free(vm);
-> +	printf("\t ... PASSED\n");
-> +}
-> +
->  int main(int argc, char **argv)
->  {
->  	ksft_print_header();
-> @@ -966,7 +1045,7 @@ int main(int argc, char **argv)
->  	if (!is_tdx_enabled())
->  		ksft_exit_skip("TDX is not supported by the KVM. Exiting.\n");
->  
-> -	ksft_set_plan(13);
-> +	ksft_set_plan(14);
->  	ksft_test_result(!run_in_new_process(&verify_td_lifecycle),
->  			 "verify_td_lifecycle\n");
-
-This _really_ feels like it wants to be a first mover for using fixtures and
-test suites: https://lore.kernel.org/all/ZjUwqEXPA5QVItyX@google.com
-
->  	ksft_test_result(!run_in_new_process(&verify_report_fatal_error),
-> @@ -993,6 +1072,8 @@ int main(int argc, char **argv)
->  			 "verify_mmio_writes\n");
->  	ksft_test_result(!run_in_new_process(&verify_td_cpuid_tdcall),
->  			 "verify_td_cpuid_tdcall\n");
-> +	ksft_test_result(!run_in_new_process(&verify_host_reading_private_mem),
-> +			 "verify_host_reading_private_mem\n");
->  
->  	ksft_finished();
->  	return 0;
-> -- 
-> 2.51.0.rc0.155.g4a0f42376b-goog
-> 
+Yes please.  The unspoken threat in my response is that at some point I will just
+start NAKing KVM TDX patches :-D
 
