@@ -1,88 +1,87 @@
-Return-Path: <linux-kselftest+bounces-38796-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE5D4B22E85
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 19:05:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25456B22E8D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 19:07:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 092472A4473
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 17:00:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90BC93BA8B0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 17:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54AC82FAC0F;
-	Tue, 12 Aug 2025 17:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CB42FAC18;
+	Tue, 12 Aug 2025 17:03:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cn+Sse2v"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AGqd+B6S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A95B2F83CE
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 17:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE4E78F51
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 17:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755018025; cv=none; b=SRJ4YUO89UcDz/hS2vEkKsI33SqCT6jZPqdL57QL5fVKRqmvCK6Yt0sd/did+XmcdMzaiMAJzPZRxuzIaCmDbm0LPHrGnFSg7oLc/7hx4nEzAImQgrLyfvlG16u7KwDu/S0hrNdxYv3+nMJyWqngOPYwGrmx7PRNjjpH5cbBREo=
+	t=1755018196; cv=none; b=AKmTxoM9uvC8TwDbuCzSCpWWekf6Hf9sjV0Y9/VI1PM81FaFR2zbU+jU2swALOD4OTWYY0p8u+QsU/1w+b26H2xOGmUx8IUTdGl1K9AZSjbtHSJRdpEeOXzbAbpVQcyK8FPkbnn/BzdDNRe+S3mjxFx0PLVaxKpSxGk7IgACTHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755018025; c=relaxed/simple;
-	bh=g+xnwDkX5ngCL07XyKRVEFBFnuHLjAvKsgHBvXMtb3A=;
+	s=arc-20240116; t=1755018196; c=relaxed/simple;
+	bh=OWuuTvMfPyA+107W7mBI9T0en4MRUWzU9Hz6iht/BAU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dhjG+VJ1ByqYPL67/OP01J/MCbmvft9oemDgnzJdoYX2hJQJNqK2UklU5d+JGJddmuFtDs1REfnx8NPIZkVLjFmGFscqIYv2ppTu077ST+AjUNI43oSZ+YU/kCKfJJTeJdhXTYZ+JyV81R7wQoSk05eJq5i04uTZ3mGaSIbwwYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cn+Sse2v; arc=none smtp.client-ip=209.85.167.52
+	 To:Cc:Content-Type; b=mdIPWJZeHenXOuTV8j1dQKu5/yxnTrfLfJUo0DliRWXaUm3NRUhitod/wznz/Ud3IM7CigB5kLtE/AGj5E9hc95F9Q1j6KXd2GO/AhTFOtGt3MY591GoJwY/8OydEP3wFTp910D7YhJ02Th7Dbg7iogQEOpbMe02X4PX1//rVpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AGqd+B6S; arc=none smtp.client-ip=209.85.167.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-55cd07a28e0so576e87.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 10:00:23 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-55cdfd57585so434e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 10:03:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755018022; x=1755622822; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1755018193; x=1755622993; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g+xnwDkX5ngCL07XyKRVEFBFnuHLjAvKsgHBvXMtb3A=;
-        b=cn+Sse2vQYYSTXa8Uk/+ng2UExnV40XNGXOXyUHm6U6CVhqh5mjDF7JcI2v+sm5xN8
-         ZfY+vhoS+NT3r6wJsYkMTDwdb4SYS2qNrUVzbycHGxfXzqPFTBey+v9X16UHu0WTOhUf
-         Ysgfqyship5w9gJsontSXHJHLsPehRho4HUj0vnS28fC9uCUgeGgBfyA7ui4D9uidWOY
-         8+QHibXXxuSaMTSYPLXF3w/MKOuGSAFbILefc7bxUh5X+fryGgGl09eAljou0nFNi/z6
-         qrL+wIxbt4o9siXXFOJ8og0N+ufwWWf57tcsLzpgJTWpWAoTIO3y0xBAZ6r8tx4NDS8Q
-         PU9g==
+        bh=lmMKlUXAZp3eKZ4PwgQ72Z7vvc5pT/7V2A2LMb9mhe0=;
+        b=AGqd+B6STjvYl/IHnh6SGv4txrr+TsUEOWo7KIlv1a1gowHO0FOHoAdz7Dh6UwmHLs
+         q+yBHQ6YRqyU8Om/mNbrAkunjCHbBGPgaebbxdkein1vIUm1EbT5O+RDs8SwZ8ekKZ6D
+         bb1OXiHGQ/M3OEzvKxEPBArEam5/xOGEolJShLuJoF4UxEcWulHlQgPx+j5XQ0ky7bzW
+         6Gi45Ua01l1MfhE5wMUa1wh5ZtcT5FawN1ChpIg2IfcCo8KsfqemgH5bX02YYJYixmGg
+         aN+g+0PRdZdYSpl8JiIltSjWeB/HNU2eaKeQtUB3TonT2GESXrA8kSiGgL7FYV2E0Yo9
+         SJWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755018022; x=1755622822;
+        d=1e100.net; s=20230601; t=1755018193; x=1755622993;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g+xnwDkX5ngCL07XyKRVEFBFnuHLjAvKsgHBvXMtb3A=;
-        b=m+ZE7hA6rla1XPO50w/UBKZqpJybs4Uc9BN2YHPuD4vk9CrNJaL73VVi+SXg7BnpBT
-         LQ+GsHXWHyL1xh03wFbMx2FG3oSijODYzvWCjFeGWa0dLyEGrsLDSzrNKU5iSlEwET4s
-         DWBb690MvxnsLteQtmsBETMrlba+41pj8uRQNsjketN8QuSTQmlGeYQyyjH8zflOj6LE
-         Z713mp/k0COOtLKFADAhsNypJEwyUDSZxQiXMaJkmouEJTmQPyZNWLKIq9EEDwiki2Fk
-         dk3ZakT4VrGti1THsbAPViucjN4fezHERwC4Sx/zJvQuWmYm+k9zWU97geUqF1i/R3vV
-         sm5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUYmTefQuRKfcPJNg/iiMfGiRBv2+tsB5IkjbFpwCtf0H4ngFbwQpr2cXQgAVAiucySp7lzKr4Cbz0M1hNjGzs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTYalG5a7JcMApYu3t5jvSNPh6U1M80GThlio5iteRAlmW1FnG
-	JXTrfR1QPFDdahG6B7mZDETj6Y22qQy4G0xveG7ONg4qfe+IPXBAKJpfXJivQmjVGg5YGljn1BC
-	Ci2+18BK23S01Kf41jZCpPj2FpDLFmXumOEp1ksRC
-X-Gm-Gg: ASbGncugM8KffGhhi9Xb14Rnfyy6kMRa1gu7Y2zXR8q/DSoZ6hTTjFHobZclblsA0Yt
-	Xo/Zy/n2WgAdHC38MIl2FqXqFjA1JF9TTVOoXarwy0F6Da9ufdzd0LFzkMP77l5LW7j90BwFiDe
-	EfuLW88TA9icMXXsQwBCumjEqhW/fDKWfJaGuJov3CUfHx+gK4vNqIs9BQN4YPauXiQTKnD0LZ2
-	IGYkWteozoy9D/qy2UzLzyoguqj07sMZx0eDw==
-X-Google-Smtp-Source: AGHT+IGsm+bamhT29td+SwHGDqIrSinbu6HW1fTMkiRm3PCRaVm11QVRWbd5T45tIE+/NfYE+AaeEgGPepfjyo6/j/Q=
-X-Received: by 2002:a05:6512:33d6:b0:55b:7c73:c5f0 with SMTP id
- 2adb3069b0e04-55cd934255emr412363e87.2.1755018021029; Tue, 12 Aug 2025
- 10:00:21 -0700 (PDT)
+        bh=lmMKlUXAZp3eKZ4PwgQ72Z7vvc5pT/7V2A2LMb9mhe0=;
+        b=LS2dfOip618eMFXtTvpM7skLCknfTB5u/x40gVxRqRzjEBv5EDwL2X4Kd10BkQl4Z8
+         GFjCCZq4Ilxx1JI+rNdyvoSbcGD4sC8SvuKH9Mp05yR7WXRvka083Qzo+sk8sSPMm5mW
+         9Q6F7foBZF2HiUT3cH/jhemO9q8a003drQwsIBoeKLzoQa3qJFVl/WV1EdEu9C2fQkl8
+         c98FlC5S1T9GNuQfxTVFf20NtXraSCmBBb9qYU+1Y9lgml/vwn6lmNqj53kpm+9lUg2/
+         KiAVM4lGBhixmlskmpZuUoMXW5zHUeTWE8dai3QaJaTuCBwTialY+CQnNWaiSNCRmzBM
+         Miaw==
+X-Forwarded-Encrypted: i=1; AJvYcCUemQJWY0TF5+scfCRr0d2bD/mSVu22Sb7IYzE6INzcQI1+x/KQHR3uEJBufJCwZL4uZ1iDZjqQP9EFpEVh/GQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOvJ9GQ99XnBX3AKRNLw1y5li0njaBw2N6WglxNGhz/f8LaTo0
+	+I8OXGMN+LRbxZUjo3ZijWAEuml8Go75mylQRQjrwlHUG78JlEQvqx0IsMgbeoNY9JKHPqZOyYT
+	ka1ongWfr90hrrChK2QP7ZjhpyDevXNlNu752yn1U
+X-Gm-Gg: ASbGncsAZpY4VUmtg8bh0loTMhdLX7C6rMb01fXEtEh/SVt2d91OB+S5d/NGzpP1zPH
+	QL+cHWRUrPyLinXMeMmxO2tAkMPoXASE1PGG63ZsgVToj3U2Hia5xa0OSp2MkTLOPncbjkMOElY
+	UoSdpIx5oYw56SZ38FEh1PbnYAXWGQHdBTFY4iMMgt/kpUUJHe45ZBtiTMJyslil9fAPpv97cPm
+	qCXyrhiNxKbruFSpn0UyTbnwv/gsFpWK40nRkZnVglfH6RW
+X-Google-Smtp-Source: AGHT+IFhtF4CeSf0xkbpb20x4AxC2mCxdHvNXx3p+5yro8kmMD5Y7rhUC492jZT6952EjCndfu7lMsaPU9kKTO+1tz4=
+X-Received: by 2002:ac2:4f16:0:b0:55b:5e26:ed7b with SMTP id
+ 2adb3069b0e04-55cd92926c4mr447320e87.0.1755018192643; Tue, 12 Aug 2025
+ 10:03:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250811231334.561137-1-kuba@kernel.org> <20250811231334.561137-4-kuba@kernel.org>
-In-Reply-To: <20250811231334.561137-4-kuba@kernel.org>
+References: <20250811231334.561137-1-kuba@kernel.org> <20250811231334.561137-5-kuba@kernel.org>
+In-Reply-To: <20250811231334.561137-5-kuba@kernel.org>
 From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 12 Aug 2025 10:00:09 -0700
-X-Gm-Features: Ac12FXyDGk6XAUlBJwbNHP01ld7E2h4F-F2d8KqPQRtX-nKG5NcUnDuUe0iPPMU
-Message-ID: <CAHS8izOzh_vvGBCreeMvETO=m3Rsqf8t9ABwXsgzAQre=iO6Bg@mail.gmail.com>
-Subject: Re: [PATCH net-next 3/5] selftests: drv-net: devmem: add / correct
- the IPv6 support
+Date: Tue, 12 Aug 2025 10:02:59 -0700
+X-Gm-Features: Ac12FXz9hgUmCbmNnyGlQXztiWauwAYP8otTJ0HXPRbUpIkQERsnZD1mo-yj4yE
+Message-ID: <CAHS8izMbL0Yph4JmG35svABsuB5D_GwrvZuDiHLZ-TE4pwC1KA@mail.gmail.com>
+Subject: Re: [PATCH net-next 4/5] selftests: net: terminate bkg() commands on exception
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
 	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org, 
@@ -94,13 +93,20 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Aug 11, 2025 at 4:13=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
 ote:
 >
-> We need to use bracketed IPv6 addresses for socat.
+> There is a number of:
+>
+>   with bkg("socat ..LISTEN..", exit_wait=3DTrue)
+>
+> uses in the tests. If whatever is supposed to send the traffic
+> fails we will get stuck in the bkg(). Try to kill the process
+> in case of exception, to avoid the long wait.
+>
+> A specific example where this happens is the devmem Tx tests.
 >
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-Reviewed-by: Mina Almasry <almasrymina@google.com>
 
 --=20
 Thanks,
 Mina
+Acked-by: Mina Almasry <almasrymina@google.com>
 
