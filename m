@@ -1,239 +1,286 @@
-Return-Path: <linux-kselftest+bounces-38804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38805-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19573B23A58
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 23:04:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4838B23BBC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 00:22:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED4ED7A52AD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 21:02:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0F5C1AA554F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 22:22:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CAC1DE2D7;
-	Tue, 12 Aug 2025 21:04:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6DD2253920;
+	Tue, 12 Aug 2025 22:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CoRQ6Z22"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DbNUX/s2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2A12F0661;
-	Tue, 12 Aug 2025 21:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755032655; cv=fail; b=H5T4rVXt+5Zoite4fEMLoD2n5f35xTI3906PxNi8s6S/2K8j0ytPKo2DzhvjxeGXdsjUgkCWYiIP9P4Ey5s+S3ia4OklHFpAdhIFCQcd245lPuTG5xmVc8zrlhVY5HYtDIwCeNxbH2U4VISOafOYBhHAiw9nNr+huCuKResnELU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755032655; c=relaxed/simple;
-	bh=s8DBPBBoMEfcJtb3LAZj24H7IyvcHSrFgRpYi2+kJv0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=JJOA8XYzwI7yF3ASy2CNp7GwueaTxW1mZNiY5IG8/JdfNcsjpQnVknQjMoiK3W7ylwpxfoXSZaWJSXmF4rFXiRywmkf4IIHP+yl5x6CNqekcCBsJO/LYjR43HN6+YK7C8UKG3jR0jy7jtvgeXk3e+pVv0MBWfsss+dxdjIjtCk4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CoRQ6Z22; arc=fail smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755032655; x=1786568655;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=s8DBPBBoMEfcJtb3LAZj24H7IyvcHSrFgRpYi2+kJv0=;
-  b=CoRQ6Z22+eeBJWumBhw0jRZhiww51seN0DUuCq+qek7L3NSHzPw3fl0l
-   O6dUJYNE3v2Bil1dqvZyifOXAwcEuy4UmhSIWhWIqccxMuCULC/5+corj
-   nkKL9MBYQuUO8/pzw5V9e74AEF3Zio42VLlBCCFDJABAeEIzBfMhl9nWP
-   h0sApYGIU8T1ijVJh/fPpfb1BwfjukZC+3eb5gPH+PvokR3kkTRixB1sG
-   qbU1O4iK7u0lV50Xs1JkA54SW2+w6KSapQJ6H0V+qzcXRBytvkS5vHoNJ
-   DIPe18x+cfQ+m0RFZSdC9rAKoJ7THYv2QMCBLQotqdyTjjVw+luGys6v3
-   A==;
-X-CSE-ConnectionGUID: DzhkckVSSK6rVSn6n+yusQ==
-X-CSE-MsgGUID: qSKoY8wWTDW7WoribB4EQQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="61162118"
-X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
-   d="scan'208";a="61162118"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 14:04:14 -0700
-X-CSE-ConnectionGUID: gBFZaPbRT0CfGAn0DNRdgw==
-X-CSE-MsgGUID: 8SGVJ00GSO68+Zu9q2jftQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
-   d="scan'208";a="165800565"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 14:04:08 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Tue, 12 Aug 2025 14:04:06 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26 via Frontend Transport; Tue, 12 Aug 2025 14:04:06 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (40.107.93.53) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Tue, 12 Aug 2025 14:04:05 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WOKLIIWDz8WzQ8MDWLDywi3hCielazFyj3AByTyrcM73kvcJcsvRvWUvj+B8Dw0Ezz9dugBIpsK8iQil8ba+7eThhnu76eIu5SA1g6IDGCh0996ONlUUUHofCxXgcvN11pL/0oCsBO0e1xmk5v7OTI/lGb5nsKDmoiucxKoSC5Nal2SOGOMv259V1glU+InbKetSTw8viZTGaSr5XfSx7ZiJlm4/ifZwoiVL6qk3yDNWKCZo9kSw4Tq6eLOXsrniBDieTQ1dkyVihSscZFKaAQ9X38KMvYy6y0i2I4yzmjrpgK7K/+BSHLaRMKwi/gVtq2DTOc5dTjXeWsx0qNfBqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KWLeVlsfV3FPUVtZBsiO/3Zam9yx7NgverFMfXOb2Xw=;
- b=ZmdOSFeI8q1q3scxk9E42KOl6o8pSkj4yXDaFrgU/XaEULRKFmL8r7mGEyh5SdgKOs8OH4vE4AC8hKvpAvvArp61U/FKQTgdUuINbiGuo9yl5cd8+aIJxZfU7XN8m7XP0GQNYWeM9X04oxcsv8QgxCskH3X9AhNQ8E4wvK4SeWiOHb7eDFaWMJm0HsWlIyT6WNetXgWRbD6P5hb0Goa5TuE2c6cCCkBgA+NhjeYtK34grJ+5eAnUekmD3pp4MHZ5oZWkNNRT1aoe36BdG9bofj0IM22L4Ac5BWJeh30NR9fc0lsM6EZJjDJPPmWnw4wVZpZBHG4h8TQO87Lmdt3tsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH3PPF9E162731D.namprd11.prod.outlook.com
- (2603:10b6:518:1::d3c) by BN9PR11MB5306.namprd11.prod.outlook.com
- (2603:10b6:408:137::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.21; Tue, 12 Aug
- 2025 21:03:57 +0000
-Received: from PH3PPF9E162731D.namprd11.prod.outlook.com
- ([fe80::bbd5:541c:86ba:3efa]) by PH3PPF9E162731D.namprd11.prod.outlook.com
- ([fe80::bbd5:541c:86ba:3efa%7]) with mapi id 15.20.9031.012; Tue, 12 Aug 2025
- 21:03:57 +0000
-Date: Tue, 12 Aug 2025 16:05:34 -0500
-From: Ira Weiny <ira.weiny@intel.com>
-To: Sean Christopherson <seanjc@google.com>, Sagi Shahar <sagis@google.com>
-CC: <linux-kselftest@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Ackerley Tng <ackerleytng@google.com>, "Ryan
- Afranji" <afranji@google.com>, Andrew Jones <ajones@ventanamicro.com>, "Isaku
- Yamahata" <isaku.yamahata@intel.com>, Erdem Aktas <erdemaktas@google.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang
-	<runanwang@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, Oliver Upton
-	<oliver.upton@linux.dev>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
-	Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny <ira.weiny@intel.com>,
-	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
-Subject: Re: [PATCH v8 06/30] KVM: selftests: Add helper functions to create
- TDX VMs
-Message-ID: <689bac9eb9b43_20a6d929445@iweiny-mobl.notmuch>
-References: <20250807201628.1185915-1-sagis@google.com>
- <20250807201628.1185915-7-sagis@google.com>
- <aJpO_zN3buvaQoAW@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <aJpO_zN3buvaQoAW@google.com>
-X-ClientProxiedBy: MW4PR04CA0327.namprd04.prod.outlook.com
- (2603:10b6:303:82::32) To PH3PPF9E162731D.namprd11.prod.outlook.com
- (2603:10b6:518:1::d3c)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F7F20D4E9
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 22:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755037339; cv=none; b=e9PdceUQNxfU8IeQaVFjHCi51rZZHjXRH1Kt7z1O+f+CrY4ZFdeCGXd2azVzX9aom4q1u8lCRFRrT5PnWsOG1AygqnHFb9WRVCcHRpLD53743V9FNhqtxmg7jEMWIiJfx7XzSZJopng6Vyv80fbwzVVNcmtfP/dIw0kaCX/b3IY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755037339; c=relaxed/simple;
+	bh=DZVGpH2NP2m4OUwS9OYvQYy3pRrUU5yNAOtq2lI0pRY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nFnbCtaNK/+2MVEe54/bodv6NT/q+XgrAfWTvR8jCTT/8o9hcAsaOzn1DJeGMTnk/j5sHwSEb4vaP5TejeuFbvyhwBPtKM5RLsy72p+EoaS3hYlXuBYFYbDDZrdGQKamm2BUhm/CSDB0F6gHF/AFE8n3sz/7wrPCkWa4js+eDPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DbNUX/s2; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-7074a74248dso53826266d6.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 15:22:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755037337; x=1755642137; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rWuryeMFKkS3RAr2vCbtx7LOWzlUOf1ahWxEl9iGYmQ=;
+        b=DbNUX/s2A36UxeYdfARtZ2fjw4x2aI+lqZfFrEZjEaJRAeBDTR0vgDROHHBCdtPNp9
+         4C603Q9q7j/306/9NqJgAcRyItli/scXaNOl09xcL8UYTS1/L/vDKCbrupHzpDXBcxu3
+         +38h1Vu/EdFbvdNbuYcQGgTDUPHwLL0ZkjPRhknxsV+z2rv4lgCrK1OIkpxg5jbZyLB/
+         aZfwWs0DkqwjKtR12TwsejWQThTdgH7KKMAy1C1FoXY1dNSabSz3vQ97g18GKH6AnUbd
+         hmdIKb+fbNk1nSXx+Ro34Z8It996KR4lZt7ETevzkK3++PgXyJxe+C4NNCtxtu+qZ7v4
+         0wjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755037337; x=1755642137;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rWuryeMFKkS3RAr2vCbtx7LOWzlUOf1ahWxEl9iGYmQ=;
+        b=IMkfYP6lsxoxW1J01CJ/BFm9ZkSrbjuf1a+9edtIYI8RvdUpYEweDM4UXgo7umJPJH
+         JhEn/Qs/LU9sMXLnUtgGh6X+bHNylj2/GbaS1tji2o+1Y/yowyA8TuEAZWKhhySVZRql
+         01oKLgFLjxVoEg5y+tBNjXQevoRw0hSbNCNBKIvm9KyoDjvTluMORJKGqv6o6MVEC40J
+         bomVo0V1ic2CeD74EufqfMH0Cwqg0QIaZh9uTCuFUssLhX9sxe0cSt2K6RXGT5k5PAnl
+         zuVfsLCcG7WP/napuhCiCxHg77hu4He2w14cjE6azV1fk7LRQtNGN00TOzODZVAKoUfg
+         oHzw==
+X-Forwarded-Encrypted: i=1; AJvYcCXAsowr+G2ykkaEbOb7Q58ZiI2oZy5UBysNL75Jtqb4Wcg2248htCh3ZNi0uq5XRna654b8E7EJ+h44RX1p0xs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOE/6UswYy+1u8XIyRLIIS/RSZO6nVZHwuFG+0hjEpx1RybbYq
+	QzNPMRoQtzWLmXSMF/q6/XGg9nLFVMT+jFyI4IxkZ+FDA12BQJMycjjUQVP4vEAuPMN68NNOSvX
+	084b5zHciLzMBvy3J9NZAXH5430vMHirQnAB+e9NY
+X-Gm-Gg: ASbGncuN8AC3JMgdfPQwD9nuV9z04uXJeI1Vfylo+3AFbhZKsl4P9jx527R0BqZ2tpQ
+	voD2alJWzW6O+nobUtK1Q28Oi+EGtgaUgy9tQqKiksHwtAnRL6l/Y2n0WrFYae7mVzCMEPA/Xsr
+	VVWUA38VpEs1LwSqSIN/9mIEvF5b2vmaU6+VCkXyTjKdsdZIbfJeVdVqYvWkjx7sHbAWKKKKJBZ
+	BFNtOwt1Lsp908kQAhuVS2qmyg=
+X-Google-Smtp-Source: AGHT+IEadRB7taAvJL3meXl06djQ3Xt2tF79cuy40DLQCj2PV7nyTVommhLIfxsMSiSB57BjHwmxI3MbCeBYuqIhz/o=
+X-Received: by 2002:a05:6214:dc6:b0:704:7df6:44b4 with SMTP id
+ 6a1803df08f44-709e893bab1mr14144146d6.23.1755037336426; Tue, 12 Aug 2025
+ 15:22:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH3PPF9E162731D:EE_|BN9PR11MB5306:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97eb605c-b1cd-4a9b-a7e5-08ddd9e3c095
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?DKGtaAI04GiYPkfgrZLvRDqbDnbwZzh15OgLuHD03IpjH3iRDBiOtfdqHkf+?=
- =?us-ascii?Q?5TGcDa+51jRHbN5YRF5s89/7MFxP7HGQ3GtXz2/D63VeN6jwYtspBd2jVHk9?=
- =?us-ascii?Q?R7a51lov+4Jfjo1hFqfDPzLNBZzKTPuJTFopM0nNIVv2BhWnnbxCnLsR0yrw?=
- =?us-ascii?Q?7zsWhlefPtfgriXMxKBjHmEyZXust1xvotkrUbi0FztzkZb5j0H4C2ZYFhDw?=
- =?us-ascii?Q?eG39XoTYH8KacGplhQ7N+jcRHzhuxa0s+ono5FpWPVNFj1nplXJHKEWCg9ZL?=
- =?us-ascii?Q?4w3Z9tEJlXzRfNBS5dFj7BNqmjhNMimPjonjqEX+NBTOanxIdkuNWJHrCOhw?=
- =?us-ascii?Q?4vYFoSZMRyOuz2fTRY2nPrcR8Qi6xOYig+HcG4EiBY3UJ/EE/nmate3C00Uo?=
- =?us-ascii?Q?vKGtafySXjQWlb3Ua6r59lvjgWGS8mAHd0kyy9niGPeGQ/3cDJkwDutxcKdb?=
- =?us-ascii?Q?HE2BP/TEMH6EMeL+pPigJdWm39DxjraAnC5+c8cwYgg1BxuXlPYlzrm/f4qT?=
- =?us-ascii?Q?J1tpjtlUXvTX407u8/cL97Ord4Q5PLafywOAeYiMimKqi9HhljghV5F/RAXP?=
- =?us-ascii?Q?RFYYxSzfYu0RRZmduKiu2d7S8NrOEwdFWi08rhPSawzl7cslXncKUSsIKa7P?=
- =?us-ascii?Q?CGwH0r23yilXirLlWM9S5hj4iQ4PKeHvMfwZvf2VBigOd39Dxo/wX0Fywi0v?=
- =?us-ascii?Q?DLCMFtRHkFwQHaDIwzZihS0O+55H0Vv/DJjB55cmope/X+FEp+lV9P3MRkai?=
- =?us-ascii?Q?HNfPt5WYbnkU4Wq+nDEVMwQqkpGDuzvhmKhknXfqLEGmtxS144tgAcW/67ir?=
- =?us-ascii?Q?TDSXFE5Nx37vdsRU7D3tNANwIL6WF2lxqy1L3TB7v6XeHKd08e+Y1alSDegI?=
- =?us-ascii?Q?SR1PXwPbaaCkLAScDie+EVVxwomRf5lVjOs1Wp+Zn3oN4NHP6WNkvS5sC8Oa?=
- =?us-ascii?Q?WRXfD4U3p4hU7LmYBp7C4FdnbcMwLpq7SAwb8SXPgueWnu2LSczKMiea4X5a?=
- =?us-ascii?Q?M+1P/ooqOPf5N2o79fLl41u0ox2njaFIuke3+4GceLIfaOLksPnmOn2xvWuJ?=
- =?us-ascii?Q?yW/AWokRB4p09M+gx1rdGfOMFgua1juGF4v9Fb7r8k5Q3xrPZALijtcEAJeM?=
- =?us-ascii?Q?/nmGmSbgmNdvRZHkNBH4/thcTRWGeC+fajLz5lPQWA7hNUdUmloQoItffnAP?=
- =?us-ascii?Q?aVKRwcyvOvCq8RxqplzXsQ2N/0WQxDkk/HrBJ6vPiCHwX/nKO+ps4nGadKWp?=
- =?us-ascii?Q?/07NJbgti9l58+9uo+I3QKPWZVldFU9I6nBepeabhA/4qoxZg04re78WaL0z?=
- =?us-ascii?Q?/zkyTWIvebuzoGKgTTk93I1nbcq64zW9LsFNE7FxQpnf3TbtJ0I/zQAkWvk/?=
- =?us-ascii?Q?ZejnJAZIHk6ZM0UVGds1+1aSP/8YxFkTK//1j39YS7bFtzG8upaMCpI/kY4X?=
- =?us-ascii?Q?7bp4XYPYgLk=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH3PPF9E162731D.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZYjSJvE9wca2xvhCEubjp84OJzNvTZb0jZNkEoRkcYjBPNTw+oeVIxDtRfV2?=
- =?us-ascii?Q?bCSeikxdl635pN61gH70TwhDPYEmzNG3oXq+D5TsCujzuCrHL86w7b7V0PaS?=
- =?us-ascii?Q?dWPsE64Ye2A8DBBWlzrJASgNgKWaSTbkcj4JzhaJXfwsxxNQugSi8lE6q8hi?=
- =?us-ascii?Q?MFlP5Q7PoHq63cTtyQ7fH2o6v7gPPImtI3abe+iBDRNpumwEGcZ2h7IANg8k?=
- =?us-ascii?Q?9Jr7hje65YM2/7Vjl/srQ+iEmBxEOeKTm+can6UWawEXVcexuKfL2FFBfQ+S?=
- =?us-ascii?Q?7PMOw0GDr/RLQeevUs496Lx8QNzMgoCxwdtiQWAybcx58zp3cXYB0DWu1HK1?=
- =?us-ascii?Q?teBM1ARs4iUITFG/6ML97jY3CGR/6ArEtgI8cGd7otjs2gmPpKKyMMDAB7Bc?=
- =?us-ascii?Q?Wz4n2GF26N9cKmc/d+cXtv7qB55wjLIqCwj9QecMvMnnWsKH6x1AAHwIvwW6?=
- =?us-ascii?Q?CMTQF1MwLZ80iX7wq3jv3sJz6okJIxYD54GB/3c9bmWAJEKVSLE4D8JMETq0?=
- =?us-ascii?Q?D3NvlGfsmuRZpodo09BTtBm1vuKb20R1hiqNFrXKMYpPz4g/nXrMeU2UAYBY?=
- =?us-ascii?Q?AXcXGbMI0wDe9uPXecf8ax5zDo2HdC4JZPV7cWN+DaLzHVGfe0MNtOewBdE8?=
- =?us-ascii?Q?Q62wYKZfVvzKYMf1vbQbOrCtYWoNcKOJ6MMKSu0hsIxdLKNvhhCpeeKiyHMz?=
- =?us-ascii?Q?Oh5+Iv15MiEjXexV3Rj/f9rteGMxCb/8hskwGOqUVp1/ZF5to//7fH7e3EGN?=
- =?us-ascii?Q?aVP9RMlvG2/1Uxie+Ox8djC0Xn6ShRJVT6ptPGPlcMkqL+ZFsFaoJhQt5Jqb?=
- =?us-ascii?Q?VFyifo2Vnc5vxieF3ycQgYB4/O6vyyIb1TKZOufIQeTLWFXlqWYl/2Jr1vbJ?=
- =?us-ascii?Q?HRy2q3poIPBS4JowutV67GVe8PrmEr5xVveqwLnFnGHB33I0S4AQgkzZ7w/T?=
- =?us-ascii?Q?GiFXFL6Bi+mBhAiL+8cASUhJpBNAlRY1G0x01+o4xpXm1xPt6xzfRYBK4gEl?=
- =?us-ascii?Q?DVpi7HsYFEPCWvT9WNRwAsjBfOggWIy7UEJH1K4rGKaYyPlhgVGpfWOVn+wg?=
- =?us-ascii?Q?BkpvjQ8bLvKtjnmr9GZlHnx7yaptZFVD123m785HVQOm92XEpn6VdPacmy0d?=
- =?us-ascii?Q?xs5DvJaSnet9p1loJC9wkFo4urQoD4Lvy6855nf9SYOYcW+wfG/C1re015Pv?=
- =?us-ascii?Q?SsPGCyavjxGj7MFiKoDf3mb93FOcn0k+IKyeJuiDosHVTSSLfTh+ISRH2Xi9?=
- =?us-ascii?Q?F9se+rnWW64uIv8bmfx+S/zfCSTNsrFQr3Fwp6B7y2IKv2juKcTl7UvOWU9J?=
- =?us-ascii?Q?xszKjoZ9+RPQDxDpua09xw7qXk0JT2j3i+nRLcsgD0k2Ed8EYgLPOwdi4U+R?=
- =?us-ascii?Q?nKvlGq5kMWO46JrBiR+O2jIeH9GZyFpi4d0kkaZWZwhSrh0BwnHw496b1VT+?=
- =?us-ascii?Q?ciIMDc2G3xHzPbVChZ27N9DuQ2w6C9+CD/ShcB03zAWPyH+Nbl2GFqfwbdUo?=
- =?us-ascii?Q?7/kVkf96yrkXwfjTIaN38eLJRZULYspJA5c7Ta/ivHKaZPDrbyUNT/0kPqaa?=
- =?us-ascii?Q?IIWWJAV+YpgsA+IPUxOQvcxuNt7bQeTCwS8/F0zv?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97eb605c-b1cd-4a9b-a7e5-08ddd9e3c095
-X-MS-Exchange-CrossTenant-AuthSource: PH3PPF9E162731D.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2025 21:03:57.0455
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IbeQ7HoXbzg7aFj+N+uyoj5N0y5UgNkSXgbLHiGWqyaHtmrLc+cSlKvdAI3ghIsYT8JbiJ2U3W3fjJ/pBWdhlQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5306
-X-OriginatorOrg: intel.com
+References: <20250811221739.2694336-1-marievic@google.com> <20250811221739.2694336-2-marievic@google.com>
+In-Reply-To: <20250811221739.2694336-2-marievic@google.com>
+From: Rae Moar <rmoar@google.com>
+Date: Tue, 12 Aug 2025 18:22:05 -0400
+X-Gm-Features: Ac12FXy4odiVUbmTVSv_FQj3XmTzKCP2JeRGz1wZpwmC4BzXnA3qMhak1o8tSGs
+Message-ID: <CA+GJov6aVg70yjXF3=3teg26AKhcOwLEOgGT8by61nMJvB15jg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] kunit: Add parent kunit for parameterized test context
+To: Marie Zhussupova <marievic@google.com>
+Cc: davidgow@google.com, shuah@kernel.org, brendan.higgins@linux.dev, 
+	mark.rutland@arm.com, elver@google.com, dvyukov@google.com, 
+	lucas.demarchi@intel.com, thomas.hellstrom@linux.intel.com, 
+	rodrigo.vivi@intel.com, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, kasan-dev@googlegroups.com, 
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Sean Christopherson wrote:
-> On Thu, Aug 07, 2025, Sagi Shahar wrote:
-> > From: Erdem Aktas <erdemaktas@google.com>
+On Mon, Aug 11, 2025 at 6:17=E2=80=AFPM Marie Zhussupova <marievic@google.c=
+om> wrote:
+>
+> Currently, KUnit parameterized tests lack a mechanism
+> to share resources across parameter runs because the
+> same `struct kunit` instance is cleaned up and
+> reused for each run.
+>
+> This patch introduces parameterized test context,
+> enabling test users to share resources between
+> parameter runs. It also allows setting up resources
+> that need to be available for all parameter runs only once,
+> which is helpful in cases where setup is expensive.
+>
+> To establish a parameterized test context, this
+> patch adds a parent pointer field to `struct kunit`.
+> This allows resources added to the parent `struct kunit`
+> to be shared and accessible across all parameter runs.
+>
+> In kunit_run_tests(), the default `struct kunit`
+> created is now designated to act as the parameterized
+> test context whenever a test is parameterized.
+>
+> Subsequently, a new `struct kunit` is made
+> for each parameter run, and its parent pointer is
+> set to the `struct kunit` that holds the
+> parameterized test context.
+>
+> Signed-off-by: Marie Zhussupova <marievic@google.com>
+> ---
+>
+> Changes in v2:
+>
+> - Descriptions of the parent pointer in `struct kunit`
+>   were changed to be more general, as it could be
+>   used to share resources not only between parameter
+>   runs but also between test cases in the future.
+> - When printing parameter descriptions using
+>   test.param_index was changed to param_test.param_index.
+> - kunit_cleanup(&test) in kunit_run_tests() was moved
+>   inside the parameterized test check.
+> - The comments and the commit message were changed to
+>   reflect the parameterized testing terminology. See
+>   the patch series cover letter change log for the
+>   definitions.
 
-[snip]
+Hello!
 
-> > +
-> > +static void load_td_memory_region(struct kvm_vm *vm,
-> > +				  struct userspace_mem_region *region)
-> > +{
-> > +	const struct sparsebit *pages = region->protected_phy_pages;
-> > +	const vm_paddr_t gpa_base = region->region.guest_phys_addr;
-> > +	const uint64_t hva_base = region->region.userspace_addr;
-> > +	const sparsebit_idx_t lowest_page_in_region = gpa_base >> vm->page_shift;
-> > +
-> > +	sparsebit_idx_t i;
-> > +	sparsebit_idx_t j;
-> > +
-> > +	if (!sparsebit_any_set(pages))
-> > +		return;
-> > +
-> > +	sparsebit_for_each_set_range(pages, i, j) {
-> > +		const uint64_t size_to_load = (j - i + 1) * vm->page_size;
-> > +		const uint64_t offset =
-> > +			(i - lowest_page_in_region) * vm->page_size;
-> > +		const uint64_t hva = hva_base + offset;
-> > +		const uint64_t gpa = gpa_base + offset;
-> > +		void *source_addr;
-> > +
-> > +		/*
-> > +		 * KVM_TDX_INIT_MEM_REGION ioctl cannot encrypt memory in place.
-> 
-> We should really fix that.
+Thanks for making these changes! I really like the change to the new
+terminology for parameterized tests, as well as the description change
+for "parent".
 
-I'm working on it.
+Reviewed-by: Rae Moar <rmoar@google.com>
 
-This code will change with those changes.  But I'd like this to land, or
-be close to landing, first.
+Thanks!
 
-Ira
+-Rae
 
-[snip]
+
+>
+> ---
+>  include/kunit/test.h |  8 ++++++--
+>  lib/kunit/test.c     | 34 ++++++++++++++++++++--------------
+>  2 files changed, 26 insertions(+), 16 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 39c768f87dc9..b47b9a3102f3 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -268,14 +268,18 @@ struct kunit_suite_set {
+>   *
+>   * @priv: for user to store arbitrary data. Commonly used to pass data
+>   *       created in the init function (see &struct kunit_suite).
+> + * @parent: reference to the parent context of type struct kunit that ca=
+n
+> + *         be used for storing shared resources.
+>   *
+>   * Used to store information about the current context under which the t=
+est
+>   * is running. Most of this data is private and should only be accessed
+> - * indirectly via public functions; the one exception is @priv which can=
+ be
+> - * used by the test writer to store arbitrary data.
+> + * indirectly via public functions; the two exceptions are @priv and @pa=
+rent
+> + * which can be used by the test writer to store arbitrary data and acce=
+ss the
+> + * parent context, respectively.
+>   */
+>  struct kunit {
+>         void *priv;
+> +       struct kunit *parent;
+>
+>         /* private: internal use only. */
+>         const char *name; /* Read only after initialization! */
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index f3c6b11f12b8..14a8bd846939 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -647,6 +647,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+>         struct kunit_case *test_case;
+>         struct kunit_result_stats suite_stats =3D { 0 };
+>         struct kunit_result_stats total_stats =3D { 0 };
+> +       const void *curr_param;
+>
+>         /* Taint the kernel so we know we've run tests. */
+>         add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
+> @@ -679,37 +680,42 @@ int kunit_run_tests(struct kunit_suite *suite)
+>                 } else {
+>                         /* Get initial param. */
+>                         param_desc[0] =3D '\0';
+> -                       test.param_value =3D test_case->generate_params(N=
+ULL, param_desc);
+> +                       /* TODO: Make generate_params try-catch */
+> +                       curr_param =3D test_case->generate_params(NULL, p=
+aram_desc);
+>                         test_case->status =3D KUNIT_SKIPPED;
+>                         kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT =
+KUNIT_SUBTEST_INDENT
+>                                   "KTAP version 1\n");
+>                         kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT =
+KUNIT_SUBTEST_INDENT
+>                                   "# Subtest: %s", test_case->name);
+>
+> -                       while (test.param_value) {
+> -                               kunit_run_case_catch_errors(suite, test_c=
+ase, &test);
+> +                       while (curr_param) {
+> +                               struct kunit param_test =3D {
+> +                                       .param_value =3D curr_param,
+> +                                       .param_index =3D ++test.param_ind=
+ex,
+> +                                       .parent =3D &test,
+> +                               };
+> +                               kunit_init_test(&param_test, test_case->n=
+ame, test_case->log);
+> +                               kunit_run_case_catch_errors(suite, test_c=
+ase, &param_test);
+>
+>                                 if (param_desc[0] =3D=3D '\0') {
+>                                         snprintf(param_desc, sizeof(param=
+_desc),
+> -                                                "param-%d", test.param_i=
+ndex);
+> +                                                "param-%d", param_test.p=
+aram_index);
+>                                 }
+>
+> -                               kunit_print_ok_not_ok(&test, KUNIT_LEVEL_=
+CASE_PARAM,
+> -                                                     test.status,
+> -                                                     test.param_index + =
+1,
+> +                               kunit_print_ok_not_ok(&param_test, KUNIT_=
+LEVEL_CASE_PARAM,
+> +                                                     param_test.status,
+> +                                                     param_test.param_in=
+dex,
+>                                                       param_desc,
+> -                                                     test.status_comment=
+);
+> +                                                     param_test.status_c=
+omment);
+>
+> -                               kunit_update_stats(&param_stats, test.sta=
+tus);
+> +                               kunit_update_stats(&param_stats, param_te=
+st.status);
+>
+>                                 /* Get next param. */
+>                                 param_desc[0] =3D '\0';
+> -                               test.param_value =3D test_case->generate_=
+params(test.param_value, param_desc);
+> -                               test.param_index++;
+> -                               test.status =3D KUNIT_SUCCESS;
+> -                               test.status_comment[0] =3D '\0';
+> -                               test.priv =3D NULL;
+> +                               curr_param =3D test_case->generate_params=
+(curr_param, param_desc);
+>                         }
+> +                       /* TODO: Put this kunit_cleanup into a try-catch.=
+ */
+> +                       kunit_cleanup(&test);
+>                 }
+>
+>                 kunit_print_attr((void *)test_case, true, KUNIT_LEVEL_CAS=
+E);
+> --
+> 2.51.0.rc0.205.g4a044479a3-goog
+>
 
