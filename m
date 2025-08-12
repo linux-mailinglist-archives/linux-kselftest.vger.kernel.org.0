@@ -1,235 +1,239 @@
-Return-Path: <linux-kselftest+bounces-38803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D16FEB23923
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 21:39:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19573B23A58
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 23:04:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3EA03B2B5C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 19:38:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED4ED7A52AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 21:02:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EDF2FE586;
-	Tue, 12 Aug 2025 19:38:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CAC1DE2D7;
+	Tue, 12 Aug 2025 21:04:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dm+JyeNK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CoRQ6Z22"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913A43FE7;
-	Tue, 12 Aug 2025 19:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755027519; cv=none; b=urZbRqCM51zE/W0cT0Fz9moyqDdv2JTVtdtUhbYcn3SQVYOezGhYey5qdiHuFiu9gCsbMmIR0jHviVCILdV7jI22TsBDqw4wWwX3y5ABvz/0XcGu5qPfgNuYNRXjFBOWMyqle6S4YEk1HSt3+Ng6bgP/wQgfh2dZpjMEmkuBSBk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755027519; c=relaxed/simple;
-	bh=k0bcjssrJUD/KpgVbW06mRiBvNKVIgvAUj3fNEd199Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ecO+hXIGyJ54N1FfXkpEEKMypZk4DXYy3I1Ddf+9hsb4/40FG1IyB4y8tQpHIRat7AcfRRlUfdU6/xg/Mf2geCHBecgyCIT42ul10pAYBaHcwb7TGrIAfXmk78ULNcupEaesLoI+1yRbmYC0QruSfusLzeO+koR0+OFnqxwjG5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dm+JyeNK; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-455fdfb5d04so29882945e9.2;
-        Tue, 12 Aug 2025 12:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755027516; x=1755632316; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aRjJ2YZSkmssRTylvZmzxN9jsmpLOOeNPx4zXyP1f1o=;
-        b=dm+JyeNKSjdr7i6ZiqHF2dPe+RL/lmz0DvqxbH2xLjxN/KyBczLufX92aeng53/+hz
-         btyGbnyW492LhgICUm1A2tkzkyRXDE6u3IhNMbw6k0OWXKngF2mxGXhUAv/I/X1jIBS0
-         2Rk/8jWjceHHQk4WesvJ1WEXp6roXe8YLlA4J+fhwjCliYN11t5VWNLGr0NGll12tDHA
-         uw39k9BBgK0bS7FMyT8n4Q2DrqusBvCVPEPLCHZ0OruqjB7aIpG3lTiJg0znTF4m2a8P
-         cDwxb5iIqadXXLOP0DUhHS52E1gqBpbHgojsZSxeSGotCm5ZVTDlNSJtH1kk0A/jdKUb
-         q2Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755027516; x=1755632316;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aRjJ2YZSkmssRTylvZmzxN9jsmpLOOeNPx4zXyP1f1o=;
-        b=APkUd1UBFUJREFe8yYkbFDg0XFR6KZ+q7fMLe+eBt5vt4+8dS2JWD4DzH30tTA+J6u
-         K5jYaSpGGOu6DFmVMW7TnHeSqaFxqeUNtdZ+tePPQqouVLg8fQ5S8HVMZXYzmvr/eK7Z
-         og+otuOVvYdW9gGpPXpHY4eIJint6xktK93H5OFmhVys1+DKNmdYlzaeXCHeWIxt6X2a
-         4YjINF2KWdEi7zeNf7GbevJtJeXwWqkzou/RZCtNRVj5Lj+BtKKhDs5ePBEgyJyhzY9Q
-         gPzYmt3KIAxEmY/UwykOV411ARqymnbYY0OyO06TSDjV+phTUCbe2vJZ6tU1l9RK8t65
-         ZlNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX1+pkU7Bb3JLMg5VybXxhGk4EG4bcxhEUgllInVpX7Sa/a6IAdzMCV9+URPWlwyNxL4CELoyjOIf7DW78=@vger.kernel.org, AJvYcCXgykpkyQxiXsxSQrQK+zgtmaUjcTCysjemA6IM9ledU31WWhd78MYXlO1b2SP6GW/NLlKJolIrH26QmCRtWoGC@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBXP1X07d/rhq+1tt3G6fdyT9xHA1tpHrH7MWiCbURZAE/ZyQe
-	6LAYi00wktKR1lIc7oXhL2J8vFk4bARviw/5azhOH5XS0S6Rhxo2t5OK
-X-Gm-Gg: ASbGnctpz+ypr7T4Iopn+W1smdTW97bPMXt4kr0cyqSEuiYWflUTmFeKiZI6CD2vxRp
-	T1m/4hY768qUfV+4Hhe8oUZOLZ6fa8Pbpbqzpa9o3nM/zEMq0kDPJ6s/O1u3Nz6EGfW9rP756Yg
-	iM+xl2FEM78TnFzg2xgtLBjLIfzM1UD3Q2RKR0GpUQ5qDGalZw2sMlEvlj37R7yMrt9C7uucJwV
-	ipnCh5qjiWZGqphAAMZEwZt0BreoVqGFihnVIk1/ElYPPlL2uSkSZI+DnOyeY40Q98TvccH+MR6
-	lsU3P9+RQ9GIwL8xyExuw8xbtlUgGCFN4Yuwcwp++nSLrLzlVb69jJDkKMwjsyTEWsfwD1Q1iQi
-	4rfRwSLyMIStFFV+Jm5+zd8Ty2Fy/eHCYjkEj
-X-Google-Smtp-Source: AGHT+IEHq18jRo1NL097VskWhWmn+36nKMQHAFIlsAu9cmHnsNETDByYaq7CUpo72HYUl/5qcEKCrQ==
-X-Received: by 2002:a05:600c:8b22:b0:459:aa0a:db2d with SMTP id 5b1f17b1804b1-45a165f896emr2247985e9.28.1755027515647;
-        Tue, 12 Aug 2025 12:38:35 -0700 (PDT)
-Received: from [192.168.1.243] ([143.58.192.81])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-459dc900606sm373579395e9.15.2025.08.12.12.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Aug 2025 12:38:35 -0700 (PDT)
-From: Andre Carvalho <asantostc@gmail.com>
-Date: Tue, 12 Aug 2025 20:38:23 +0100
-Subject: [PATCH net-next v2] selftests: netconsole: Validate interface
- selection by MAC address
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2A12F0661;
+	Tue, 12 Aug 2025 21:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755032655; cv=fail; b=H5T4rVXt+5Zoite4fEMLoD2n5f35xTI3906PxNi8s6S/2K8j0ytPKo2DzhvjxeGXdsjUgkCWYiIP9P4Ey5s+S3ia4OklHFpAdhIFCQcd245lPuTG5xmVc8zrlhVY5HYtDIwCeNxbH2U4VISOafOYBhHAiw9nNr+huCuKResnELU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755032655; c=relaxed/simple;
+	bh=s8DBPBBoMEfcJtb3LAZj24H7IyvcHSrFgRpYi2+kJv0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=JJOA8XYzwI7yF3ASy2CNp7GwueaTxW1mZNiY5IG8/JdfNcsjpQnVknQjMoiK3W7ylwpxfoXSZaWJSXmF4rFXiRywmkf4IIHP+yl5x6CNqekcCBsJO/LYjR43HN6+YK7C8UKG3jR0jy7jtvgeXk3e+pVv0MBWfsss+dxdjIjtCk4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CoRQ6Z22; arc=fail smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755032655; x=1786568655;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=s8DBPBBoMEfcJtb3LAZj24H7IyvcHSrFgRpYi2+kJv0=;
+  b=CoRQ6Z22+eeBJWumBhw0jRZhiww51seN0DUuCq+qek7L3NSHzPw3fl0l
+   O6dUJYNE3v2Bil1dqvZyifOXAwcEuy4UmhSIWhWIqccxMuCULC/5+corj
+   nkKL9MBYQuUO8/pzw5V9e74AEF3Zio42VLlBCCFDJABAeEIzBfMhl9nWP
+   h0sApYGIU8T1ijVJh/fPpfb1BwfjukZC+3eb5gPH+PvokR3kkTRixB1sG
+   qbU1O4iK7u0lV50Xs1JkA54SW2+w6KSapQJ6H0V+qzcXRBytvkS5vHoNJ
+   DIPe18x+cfQ+m0RFZSdC9rAKoJ7THYv2QMCBLQotqdyTjjVw+luGys6v3
+   A==;
+X-CSE-ConnectionGUID: DzhkckVSSK6rVSn6n+yusQ==
+X-CSE-MsgGUID: qSKoY8wWTDW7WoribB4EQQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="61162118"
+X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
+   d="scan'208";a="61162118"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 14:04:14 -0700
+X-CSE-ConnectionGUID: gBFZaPbRT0CfGAn0DNRdgw==
+X-CSE-MsgGUID: 8SGVJ00GSO68+Zu9q2jftQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
+   d="scan'208";a="165800565"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 14:04:08 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Tue, 12 Aug 2025 14:04:06 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26 via Frontend Transport; Tue, 12 Aug 2025 14:04:06 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (40.107.93.53) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Tue, 12 Aug 2025 14:04:05 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WOKLIIWDz8WzQ8MDWLDywi3hCielazFyj3AByTyrcM73kvcJcsvRvWUvj+B8Dw0Ezz9dugBIpsK8iQil8ba+7eThhnu76eIu5SA1g6IDGCh0996ONlUUUHofCxXgcvN11pL/0oCsBO0e1xmk5v7OTI/lGb5nsKDmoiucxKoSC5Nal2SOGOMv259V1glU+InbKetSTw8viZTGaSr5XfSx7ZiJlm4/ifZwoiVL6qk3yDNWKCZo9kSw4Tq6eLOXsrniBDieTQ1dkyVihSscZFKaAQ9X38KMvYy6y0i2I4yzmjrpgK7K/+BSHLaRMKwi/gVtq2DTOc5dTjXeWsx0qNfBqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KWLeVlsfV3FPUVtZBsiO/3Zam9yx7NgverFMfXOb2Xw=;
+ b=ZmdOSFeI8q1q3scxk9E42KOl6o8pSkj4yXDaFrgU/XaEULRKFmL8r7mGEyh5SdgKOs8OH4vE4AC8hKvpAvvArp61U/FKQTgdUuINbiGuo9yl5cd8+aIJxZfU7XN8m7XP0GQNYWeM9X04oxcsv8QgxCskH3X9AhNQ8E4wvK4SeWiOHb7eDFaWMJm0HsWlIyT6WNetXgWRbD6P5hb0Goa5TuE2c6cCCkBgA+NhjeYtK34grJ+5eAnUekmD3pp4MHZ5oZWkNNRT1aoe36BdG9bofj0IM22L4Ac5BWJeh30NR9fc0lsM6EZJjDJPPmWnw4wVZpZBHG4h8TQO87Lmdt3tsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH3PPF9E162731D.namprd11.prod.outlook.com
+ (2603:10b6:518:1::d3c) by BN9PR11MB5306.namprd11.prod.outlook.com
+ (2603:10b6:408:137::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.21; Tue, 12 Aug
+ 2025 21:03:57 +0000
+Received: from PH3PPF9E162731D.namprd11.prod.outlook.com
+ ([fe80::bbd5:541c:86ba:3efa]) by PH3PPF9E162731D.namprd11.prod.outlook.com
+ ([fe80::bbd5:541c:86ba:3efa%7]) with mapi id 15.20.9031.012; Tue, 12 Aug 2025
+ 21:03:57 +0000
+Date: Tue, 12 Aug 2025 16:05:34 -0500
+From: Ira Weiny <ira.weiny@intel.com>
+To: Sean Christopherson <seanjc@google.com>, Sagi Shahar <sagis@google.com>
+CC: <linux-kselftest@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Ackerley Tng <ackerleytng@google.com>, "Ryan
+ Afranji" <afranji@google.com>, Andrew Jones <ajones@ventanamicro.com>, "Isaku
+ Yamahata" <isaku.yamahata@intel.com>, Erdem Aktas <erdemaktas@google.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang
+	<runanwang@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, Oliver Upton
+	<oliver.upton@linux.dev>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+	Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+Subject: Re: [PATCH v8 06/30] KVM: selftests: Add helper functions to create
+ TDX VMs
+Message-ID: <689bac9eb9b43_20a6d929445@iweiny-mobl.notmuch>
+References: <20250807201628.1185915-1-sagis@google.com>
+ <20250807201628.1185915-7-sagis@google.com>
+ <aJpO_zN3buvaQoAW@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <aJpO_zN3buvaQoAW@google.com>
+X-ClientProxiedBy: MW4PR04CA0327.namprd04.prod.outlook.com
+ (2603:10b6:303:82::32) To PH3PPF9E162731D.namprd11.prod.outlook.com
+ (2603:10b6:518:1::d3c)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250812-netcons-cmdline-selftest-v2-1-8099fb7afa9e@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAC6Ym2gC/3WNwQqDMBBEf0X23JQkrbX01P8oHmLc6IImJRvEI
- v57F3sucxqG92YDxkzI8Kg2yLgQU4pS7KkCP7o4oKJeOlhta33XjYpYfIqs/NxPFFExTqEgF9V
- dLNrGXbve3EDwd8ZA66F+gVBCrgVaWUbikvLn+FzMsf/0xvzXL0ZJQmNr12mrg3sOs6Pp7NMM7
- b7vXwFI+wbKAAAA
-X-Change-ID: 20250807-netcons-cmdline-selftest-b32e27a4bd16
-To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Andre Carvalho <asantostc@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755027515; l=4959;
- i=asantostc@gmail.com; s=20250807; h=from:subject:message-id;
- bh=k0bcjssrJUD/KpgVbW06mRiBvNKVIgvAUj3fNEd199Q=;
- b=pgbd3qOQd5BDA5FfaDqIysrfZxaKvjm2QzOT8kaNIgKcbDb73bdYIt6slbmfn3GTneCjofxYp
- jDc/agZMbNOD6VB4sDSIyNTTtz++QzNGK/bmpYzL5dFgPLW8B96auwm
-X-Developer-Key: i=asantostc@gmail.com; a=ed25519;
- pk=eWre+RwFHCxkiaQrZLsjC67mZ/pZnzSM/f7/+yFXY4Q=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH3PPF9E162731D:EE_|BN9PR11MB5306:EE_
+X-MS-Office365-Filtering-Correlation-Id: 97eb605c-b1cd-4a9b-a7e5-08ddd9e3c095
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?DKGtaAI04GiYPkfgrZLvRDqbDnbwZzh15OgLuHD03IpjH3iRDBiOtfdqHkf+?=
+ =?us-ascii?Q?5TGcDa+51jRHbN5YRF5s89/7MFxP7HGQ3GtXz2/D63VeN6jwYtspBd2jVHk9?=
+ =?us-ascii?Q?R7a51lov+4Jfjo1hFqfDPzLNBZzKTPuJTFopM0nNIVv2BhWnnbxCnLsR0yrw?=
+ =?us-ascii?Q?7zsWhlefPtfgriXMxKBjHmEyZXust1xvotkrUbi0FztzkZb5j0H4C2ZYFhDw?=
+ =?us-ascii?Q?eG39XoTYH8KacGplhQ7N+jcRHzhuxa0s+ono5FpWPVNFj1nplXJHKEWCg9ZL?=
+ =?us-ascii?Q?4w3Z9tEJlXzRfNBS5dFj7BNqmjhNMimPjonjqEX+NBTOanxIdkuNWJHrCOhw?=
+ =?us-ascii?Q?4vYFoSZMRyOuz2fTRY2nPrcR8Qi6xOYig+HcG4EiBY3UJ/EE/nmate3C00Uo?=
+ =?us-ascii?Q?vKGtafySXjQWlb3Ua6r59lvjgWGS8mAHd0kyy9niGPeGQ/3cDJkwDutxcKdb?=
+ =?us-ascii?Q?HE2BP/TEMH6EMeL+pPigJdWm39DxjraAnC5+c8cwYgg1BxuXlPYlzrm/f4qT?=
+ =?us-ascii?Q?J1tpjtlUXvTX407u8/cL97Ord4Q5PLafywOAeYiMimKqi9HhljghV5F/RAXP?=
+ =?us-ascii?Q?RFYYxSzfYu0RRZmduKiu2d7S8NrOEwdFWi08rhPSawzl7cslXncKUSsIKa7P?=
+ =?us-ascii?Q?CGwH0r23yilXirLlWM9S5hj4iQ4PKeHvMfwZvf2VBigOd39Dxo/wX0Fywi0v?=
+ =?us-ascii?Q?DLCMFtRHkFwQHaDIwzZihS0O+55H0Vv/DJjB55cmope/X+FEp+lV9P3MRkai?=
+ =?us-ascii?Q?HNfPt5WYbnkU4Wq+nDEVMwQqkpGDuzvhmKhknXfqLEGmtxS144tgAcW/67ir?=
+ =?us-ascii?Q?TDSXFE5Nx37vdsRU7D3tNANwIL6WF2lxqy1L3TB7v6XeHKd08e+Y1alSDegI?=
+ =?us-ascii?Q?SR1PXwPbaaCkLAScDie+EVVxwomRf5lVjOs1Wp+Zn3oN4NHP6WNkvS5sC8Oa?=
+ =?us-ascii?Q?WRXfD4U3p4hU7LmYBp7C4FdnbcMwLpq7SAwb8SXPgueWnu2LSczKMiea4X5a?=
+ =?us-ascii?Q?M+1P/ooqOPf5N2o79fLl41u0ox2njaFIuke3+4GceLIfaOLksPnmOn2xvWuJ?=
+ =?us-ascii?Q?yW/AWokRB4p09M+gx1rdGfOMFgua1juGF4v9Fb7r8k5Q3xrPZALijtcEAJeM?=
+ =?us-ascii?Q?/nmGmSbgmNdvRZHkNBH4/thcTRWGeC+fajLz5lPQWA7hNUdUmloQoItffnAP?=
+ =?us-ascii?Q?aVKRwcyvOvCq8RxqplzXsQ2N/0WQxDkk/HrBJ6vPiCHwX/nKO+ps4nGadKWp?=
+ =?us-ascii?Q?/07NJbgti9l58+9uo+I3QKPWZVldFU9I6nBepeabhA/4qoxZg04re78WaL0z?=
+ =?us-ascii?Q?/zkyTWIvebuzoGKgTTk93I1nbcq64zW9LsFNE7FxQpnf3TbtJ0I/zQAkWvk/?=
+ =?us-ascii?Q?ZejnJAZIHk6ZM0UVGds1+1aSP/8YxFkTK//1j39YS7bFtzG8upaMCpI/kY4X?=
+ =?us-ascii?Q?7bp4XYPYgLk=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH3PPF9E162731D.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZYjSJvE9wca2xvhCEubjp84OJzNvTZb0jZNkEoRkcYjBPNTw+oeVIxDtRfV2?=
+ =?us-ascii?Q?bCSeikxdl635pN61gH70TwhDPYEmzNG3oXq+D5TsCujzuCrHL86w7b7V0PaS?=
+ =?us-ascii?Q?dWPsE64Ye2A8DBBWlzrJASgNgKWaSTbkcj4JzhaJXfwsxxNQugSi8lE6q8hi?=
+ =?us-ascii?Q?MFlP5Q7PoHq63cTtyQ7fH2o6v7gPPImtI3abe+iBDRNpumwEGcZ2h7IANg8k?=
+ =?us-ascii?Q?9Jr7hje65YM2/7Vjl/srQ+iEmBxEOeKTm+can6UWawEXVcexuKfL2FFBfQ+S?=
+ =?us-ascii?Q?7PMOw0GDr/RLQeevUs496Lx8QNzMgoCxwdtiQWAybcx58zp3cXYB0DWu1HK1?=
+ =?us-ascii?Q?teBM1ARs4iUITFG/6ML97jY3CGR/6ArEtgI8cGd7otjs2gmPpKKyMMDAB7Bc?=
+ =?us-ascii?Q?Wz4n2GF26N9cKmc/d+cXtv7qB55wjLIqCwj9QecMvMnnWsKH6x1AAHwIvwW6?=
+ =?us-ascii?Q?CMTQF1MwLZ80iX7wq3jv3sJz6okJIxYD54GB/3c9bmWAJEKVSLE4D8JMETq0?=
+ =?us-ascii?Q?D3NvlGfsmuRZpodo09BTtBm1vuKb20R1hiqNFrXKMYpPz4g/nXrMeU2UAYBY?=
+ =?us-ascii?Q?AXcXGbMI0wDe9uPXecf8ax5zDo2HdC4JZPV7cWN+DaLzHVGfe0MNtOewBdE8?=
+ =?us-ascii?Q?Q62wYKZfVvzKYMf1vbQbOrCtYWoNcKOJ6MMKSu0hsIxdLKNvhhCpeeKiyHMz?=
+ =?us-ascii?Q?Oh5+Iv15MiEjXexV3Rj/f9rteGMxCb/8hskwGOqUVp1/ZF5to//7fH7e3EGN?=
+ =?us-ascii?Q?aVP9RMlvG2/1Uxie+Ox8djC0Xn6ShRJVT6ptPGPlcMkqL+ZFsFaoJhQt5Jqb?=
+ =?us-ascii?Q?VFyifo2Vnc5vxieF3ycQgYB4/O6vyyIb1TKZOufIQeTLWFXlqWYl/2Jr1vbJ?=
+ =?us-ascii?Q?HRy2q3poIPBS4JowutV67GVe8PrmEr5xVveqwLnFnGHB33I0S4AQgkzZ7w/T?=
+ =?us-ascii?Q?GiFXFL6Bi+mBhAiL+8cASUhJpBNAlRY1G0x01+o4xpXm1xPt6xzfRYBK4gEl?=
+ =?us-ascii?Q?DVpi7HsYFEPCWvT9WNRwAsjBfOggWIy7UEJH1K4rGKaYyPlhgVGpfWOVn+wg?=
+ =?us-ascii?Q?BkpvjQ8bLvKtjnmr9GZlHnx7yaptZFVD123m785HVQOm92XEpn6VdPacmy0d?=
+ =?us-ascii?Q?xs5DvJaSnet9p1loJC9wkFo4urQoD4Lvy6855nf9SYOYcW+wfG/C1re015Pv?=
+ =?us-ascii?Q?SsPGCyavjxGj7MFiKoDf3mb93FOcn0k+IKyeJuiDosHVTSSLfTh+ISRH2Xi9?=
+ =?us-ascii?Q?F9se+rnWW64uIv8bmfx+S/zfCSTNsrFQr3Fwp6B7y2IKv2juKcTl7UvOWU9J?=
+ =?us-ascii?Q?xszKjoZ9+RPQDxDpua09xw7qXk0JT2j3i+nRLcsgD0k2Ed8EYgLPOwdi4U+R?=
+ =?us-ascii?Q?nKvlGq5kMWO46JrBiR+O2jIeH9GZyFpi4d0kkaZWZwhSrh0BwnHw496b1VT+?=
+ =?us-ascii?Q?ciIMDc2G3xHzPbVChZ27N9DuQ2w6C9+CD/ShcB03zAWPyH+Nbl2GFqfwbdUo?=
+ =?us-ascii?Q?7/kVkf96yrkXwfjTIaN38eLJRZULYspJA5c7Ta/ivHKaZPDrbyUNT/0kPqaa?=
+ =?us-ascii?Q?IIWWJAV+YpgsA+IPUxOQvcxuNt7bQeTCwS8/F0zv?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97eb605c-b1cd-4a9b-a7e5-08ddd9e3c095
+X-MS-Exchange-CrossTenant-AuthSource: PH3PPF9E162731D.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2025 21:03:57.0455
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IbeQ7HoXbzg7aFj+N+uyoj5N0y5UgNkSXgbLHiGWqyaHtmrLc+cSlKvdAI3ghIsYT8JbiJ2U3W3fjJ/pBWdhlQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5306
+X-OriginatorOrg: intel.com
 
-Extend the existing netconsole cmdline selftest to also validate that
-interface selection can be performed via MAC address.
+Sean Christopherson wrote:
+> On Thu, Aug 07, 2025, Sagi Shahar wrote:
+> > From: Erdem Aktas <erdemaktas@google.com>
 
-The test now validates that netconsole works with both interface name
-and MAC address, improving test coverage.
+[snip]
 
-Suggested-by: Breno Leitao <leitao@debian.org>
-Reviewed-by: Breno Leitao <leitao@debian.org>
-Signed-off-by: Andre Carvalho <asantostc@gmail.com>
----
-Changes in v2:
-- Redirect log line to stderr
-- Do not ignore error unloading the module between test cases
-- Remove nested quotes when building cmdline for module
-- Format comments to avoid exceeding 80 columns
-- Link to v1: https://lore.kernel.org/r/20250811-netcons-cmdline-selftest-v1-1-1f725ab020fa@gmail.com
----
- .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 10 +++-
- .../selftests/drivers/net/netcons_cmdline.sh       | 55 +++++++++++++---------
- 2 files changed, 43 insertions(+), 22 deletions(-)
+> > +
+> > +static void load_td_memory_region(struct kvm_vm *vm,
+> > +				  struct userspace_mem_region *region)
+> > +{
+> > +	const struct sparsebit *pages = region->protected_phy_pages;
+> > +	const vm_paddr_t gpa_base = region->region.guest_phys_addr;
+> > +	const uint64_t hva_base = region->region.userspace_addr;
+> > +	const sparsebit_idx_t lowest_page_in_region = gpa_base >> vm->page_shift;
+> > +
+> > +	sparsebit_idx_t i;
+> > +	sparsebit_idx_t j;
+> > +
+> > +	if (!sparsebit_any_set(pages))
+> > +		return;
+> > +
+> > +	sparsebit_for_each_set_range(pages, i, j) {
+> > +		const uint64_t size_to_load = (j - i + 1) * vm->page_size;
+> > +		const uint64_t offset =
+> > +			(i - lowest_page_in_region) * vm->page_size;
+> > +		const uint64_t hva = hva_base + offset;
+> > +		const uint64_t gpa = gpa_base + offset;
+> > +		void *source_addr;
+> > +
+> > +		/*
+> > +		 * KVM_TDX_INIT_MEM_REGION ioctl cannot encrypt memory in place.
+> 
+> We should really fix that.
 
-diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-index b6071e80ebbb6a33283ab6cd6bcb7b925aefdb43..8e1085e896472d5c87ec8b236240878a5b2d00d2 100644
---- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-+++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-@@ -148,12 +148,20 @@ function create_dynamic_target() {
- # Generate the command line argument for netconsole following:
- #  netconsole=[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
- function create_cmdline_str() {
-+	local BINDMODE=${1:-"ifname"}
-+	if [ "${BINDMODE}" == "ifname" ]
-+	then
-+		SRCDEV=${SRCIF}
-+	else
-+		SRCDEV=$(mac_get "${SRCIF}")
-+	fi
-+
- 	DSTMAC=$(ip netns exec "${NAMESPACE}" \
- 		 ip link show "${DSTIF}" | awk '/ether/ {print $2}')
- 	SRCPORT="1514"
- 	TGTPORT="6666"
- 
--	echo "netconsole=\"+${SRCPORT}@${SRCIP}/${SRCIF},${TGTPORT}@${DSTIP}/${DSTMAC}\""
-+	echo "netconsole=\"+${SRCPORT}@${SRCIP}/${SRCDEV},${TGTPORT}@${DSTIP}/${DSTMAC}\""
- }
- 
- # Do not append the release to the header of the message
-diff --git a/tools/testing/selftests/drivers/net/netcons_cmdline.sh b/tools/testing/selftests/drivers/net/netcons_cmdline.sh
-index ad2fb8b1c46326c69af20f2c9d68e80fa8eb894f..d1d23dc67f99aa357041b71718550ed94292e57a 100755
---- a/tools/testing/selftests/drivers/net/netcons_cmdline.sh
-+++ b/tools/testing/selftests/drivers/net/netcons_cmdline.sh
-@@ -19,9 +19,6 @@ check_netconsole_module
- modprobe netdevsim 2> /dev/null || true
- rmmod netconsole 2> /dev/null || true
- 
--# The content of kmsg will be save to the following file
--OUTPUT_FILE="/tmp/${TARGET}"
--
- # Check for basic system dependency and exit if not found
- # check_for_dependencies
- # Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
-@@ -30,23 +27,39 @@ echo "6 5" > /proc/sys/kernel/printk
- trap do_cleanup EXIT
- # Create one namespace and two interfaces
- set_network
--# Create the command line for netconsole, with the configuration from the
--# function above
--CMDLINE="$(create_cmdline_str)"
--
--# Load the module, with the cmdline set
--modprobe netconsole "${CMDLINE}"
--
--# Listed for netconsole port inside the namespace and destination interface
--listen_port_and_save_to "${OUTPUT_FILE}" &
--# Wait for socat to start and listen to the port.
--wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
--# Send the message
--echo "${MSG}: ${TARGET}" > /dev/kmsg
--# Wait until socat saves the file to disk
--busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
--# Make sure the message was received in the dst part
--# and exit
--validate_msg "${OUTPUT_FILE}"
-+
-+# Run the test twice, with different cmdline parameters
-+for BINDMODE in "ifname" "mac"
-+do
-+	echo "Running with bind mode: ${BINDMODE}" >&2
-+	# Create the command line for netconsole, with the configuration from
-+	# the function above
-+	CMDLINE=$(create_cmdline_str "${BINDMODE}")
-+
-+	# The content of kmsg will be save to the following file
-+	OUTPUT_FILE="/tmp/${TARGET}-${BINDMODE}"
-+
-+	# Load the module, with the cmdline set
-+	modprobe netconsole "${CMDLINE}"
-+
-+	# Listed for netconsole port inside the namespace and destination
-+	# interface
-+	listen_port_and_save_to "${OUTPUT_FILE}" &
-+	# Wait for socat to start and listen to the port.
-+	wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
-+	# Send the message
-+	echo "${MSG}: ${TARGET}" > /dev/kmsg
-+	# Wait until socat saves the file to disk
-+	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+	# Make sure the message was received in the dst part
-+	# and exit
-+	validate_msg "${OUTPUT_FILE}"
-+
-+	# kill socat in case it is still running
-+	pkill_socat
-+	# Unload the module
-+	rmmod netconsole
-+	echo "${BINDMODE} : Test passed" >&2
-+done
- 
- exit "${ksft_pass}"
+I'm working on it.
 
----
-base-commit: 37816488247ddddbc3de113c78c83572274b1e2e
-change-id: 20250807-netcons-cmdline-selftest-b32e27a4bd16
+This code will change with those changes.  But I'd like this to land, or
+be close to landing, first.
 
-Best regards,
--- 
-Andre Carvalho <asantostc@gmail.com>
+Ira
 
+[snip]
 
