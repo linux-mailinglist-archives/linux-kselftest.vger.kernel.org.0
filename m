@@ -1,48 +1,49 @@
-Return-Path: <linux-kselftest+bounces-38781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62A86B22B1A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 16:53:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87A15B22B48
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 17:02:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3C0D3B60AA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 14:43:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1ED6188D8A8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 14:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38FFE2ED166;
-	Tue, 12 Aug 2025 14:42:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D742EFDAC;
+	Tue, 12 Aug 2025 14:57:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jz6GdDjD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cdm63OSK"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123492D0C99;
-	Tue, 12 Aug 2025 14:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BDA2EFD99;
+	Tue, 12 Aug 2025 14:57:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755009760; cv=none; b=Q8O9ZUWBsLXin0p1HaEhsc+hRLinVGzyYun+N3gthUHDoqhbo+v5e4zbL6A3OnWa89KPqiqwIlKbUXs2V+V6g64RrbRJnoAWCscHCEzoikNaEPeC3NhUNDTChNDnM8hSDo+zwfDxBfqxW9x2n7R4szy20ASYQCdCRIzqrvNmBik=
+	t=1755010640; cv=none; b=ONlcKGooBVdflW5zwUA9RgsBNFQJXzySYmODasuVrzbvtLsyxtlD+deRxx4vWjWWmeZ2ROGL8qRHScrNUUlWzUY9Y3jRCWfqCm1KP9BLeYtbdrCMC9vKot9HHBSvAYhDi85d8zbORUX+ejdZmdQQpE/AEoFNNA49QDcOYHFxl9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755009760; c=relaxed/simple;
-	bh=ETLjRp9vig5Efxzz4KkC1MHH3nZ8dtIu3vn/zI9XXgM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=SdFSxPs25cOmDunblcMcpu29ik/wynKpG0ZAXdopAAudDeOKvvhacIuhkqfs0xWh7tF02W9iWjpAF0jTnB3K9lJUNnCL/nHjBqdOyDuWBDEJPnH6S3Wap+JAy9J5Oja2zMJJZ20bFP1/ZhNoj2m9D1UNB9yROe5+czII6zruPA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jz6GdDjD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31FE7C4CEF0;
-	Tue, 12 Aug 2025 14:42:35 +0000 (UTC)
+	s=arc-20240116; t=1755010640; c=relaxed/simple;
+	bh=3ExZLAzsZqIFtZW4qLdpfIumHDDWHM/OVOaO+t5xwD8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=foxYHQ3vEQ58gp+5JqH1SJ0sM2ej7RW4Lnv1F8fxmj7WSa5xeRfeZu9jv+z56Cx0GmqXT1I4EobjSfev6435qbmhW6DnWS3NbMdWYMBycRAMUzIKtUjiCPq/PHUZcmy48pulS+ZZN+4TZTSDOt0yCU6Ydd4DdBXWh6A+NpWkkAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cdm63OSK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E2A6C4CEF0;
+	Tue, 12 Aug 2025 14:57:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755009756;
-	bh=ETLjRp9vig5Efxzz4KkC1MHH3nZ8dtIu3vn/zI9XXgM=;
+	s=k20201202; t=1755010640;
+	bh=3ExZLAzsZqIFtZW4qLdpfIumHDDWHM/OVOaO+t5xwD8=;
 	h=From:Date:Subject:To:Cc:From;
-	b=jz6GdDjDIlbP1PK8+LRHxmZfpY/1xLYqiQao3PRoxLTVrAuv/4Fi4T3rY3dwwwC3e
-	 bu7gCPbM1PAmFnDy43whWI2TLaAZQuewqNJ8s5ukLsP8zE05korj/QLDzNHyLmT7cA
-	 Fm6yeivWzYL2NPHhXYH+hRA1mOknv1ravCjbnbh0MXChcCrTpuDHDrD3ciH/wiC1Ql
-	 VgV0lygTnnklTdFS/5n0NdgPqM29QL7OUti4jo9ZuHc0TH80zBTbrrVAhKj+FwI8WW
-	 NCvrdvKmQErzHCPny6zjICs5EdDtHn9x6lLd4/3Mjg76stO4bPCKs4+GxmqssC1rVg
-	 2U2Mv+467B3Gw==
+	b=cdm63OSKyAumMKM6PCfP17B8WJbcbLNZqkLBaoaKUKgvjaekp+vAnYoRkGgPlV7Sv
+	 SsmDm6UqvNrqtS90D2sc6m/1AQYkda0YcVmEUtgF2eRPaXuMohYKaR5p+C1NbcyhaO
+	 UeVx7/6HzFg/b+N1UMyvOspdB/QggbpP06LO+feuZ6m/ZPlJd8ODIpMymYyhrjuMOK
+	 yG+cgsTv03vx1PLEpHXO9D3BGFDXOyHdpByucJEW5iNFY5oIsQNKmazjH2hvpHAuyB
+	 CCH+YUgxuzgEdWr1VsHO096HOx5ZO4hEIbwH8E263F74IeL0E4p/c9uW9V3FRlvefW
+	 57Zct/Kjk2QWQ==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 12 Aug 2025 15:37:00 +0100
-Subject: [PATCH] kselftest/arm64: Log error codes in sve-ptrace
+Date: Tue, 12 Aug 2025 15:49:27 +0100
+Subject: [PATCH] kselftest/arm64: Don't open code SVE_PT_SIZE() in
+ fp-ptrace
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,111 +52,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250812-arm64-fp-ptrace-perror-v1-1-7ce62d33709d@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAItRm2gC/x3MPQqAMAxA4atIZgO1/nsVcag11QxqSUUE6d0tj
- t/w3guBhCnAkL0gdHPg80go8gzsZo6VkJdk0ErXqlMdGtmbCp1Hf4mxhJ5ETkFdqHluXV/a1kK
- KvZDj5x+PU4wf3GhpF2gAAAA=
-X-Change-ID: 20250808-arm64-fp-ptrace-perror-210bb7f93c7c
+Message-Id: <20250812-arm64-fp-trace-macro-v1-1-317cfff986a5@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHZUm2gC/x3MSQqAMAxA0atI1gZiHSheRVyENmoWDqQignh3i
+ 8u3+P+BJKaSoC8eMLk06b5lVGUBYeFtFtSYDY5cS548sq1dg9OBp3EQXDnYjuQkCvk6cltBTg+
+ TSe9/O4zv+wGh42QXZgAAAA==
+X-Change-ID: 20250808-arm64-fp-trace-macro-02ede083da51
 To: Catalin Marinas <catalin.marinas@arm.com>, 
  Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-cff91
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2712; i=broonie@kernel.org;
- h=from:subject:message-id; bh=ETLjRp9vig5Efxzz4KkC1MHH3nZ8dtIu3vn/zI9XXgM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBom1LaJ2upA/Uof7Z6d84nh9kx7p1YYlXKHscrv
- iC4NrTG1FeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaJtS2gAKCRAk1otyXVSH
- 0APcB/wIoS/byN8bBx9jFgGH5oBOuTnhPMPMHSeiHSWXMPQQcczrKVeakRJrDvPo3wqLFzaxvOn
- XQOWArDyXhF4vwGp17dxTpTnMIao1freeft1YX2LDL8zMbeAglOKoS9m3yVzzXVPyKfOzXiWkyI
- QPBVBezeoA8aKggBXa++YTxbGLHJOzEI97NhMBcLI92sNf22w4z1kYcZNPXqNXc4VrdlBXJXmet
- yU5BvhSbzY05tJC5f4fNfzcJPEt+OAQjZT3V60dZe98Vjg7mkSypYaGBmpIbEJG7TtsnyzdnVPM
- acLN9g1xsRaV0X1t33dq68eu/hM4oG90ptxIKIsM8hBGvbu7
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1773; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=3ExZLAzsZqIFtZW4qLdpfIumHDDWHM/OVOaO+t5xwD8=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBom1ZNDQMMXonLuVFMnkDp3HEVYBhXFQEQ3AW8K
+ IWmG5NbDQCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaJtWTQAKCRAk1otyXVSH
+ 0C8mB/4gwEJmywOJjkmFNyrn/IILJtVCnzWPLvrJJCDLdQnFFA/DrVVoXJrpKAN6y6n7o8wX+W5
+ 8yrWfK2pfDSD0l21NxKiWeV7yddCPQuFlCydL1HqeN3k6P0iTB/p+dKMMZCNYySyzH4tRGjFET3
+ XILQqxcUoUiX/ynWShooJgW/n+d6G1QHZD6Na6+JDFQ99avzsTLy7sk8I17hs5i3Aeb00Q9ceMG
+ CxRtOCXcMP8GNr3pVL05VxWo+PC/ozvH0ewSvcypX0bnUbjH3FaUqm/wQqYoH7eDXTPKdEEZGso
+ a6EBQf74yQL//qVaeNmXJYekmu/gUGamG9QEQDzo/k312huE
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Use ksft_perror() to report error codes from failing ptrace operations to
-make it easier to interpret logs when things go wrong.
+In fp-trace when allocating a buffer to write SVE register data we open
+code the addition of the header size to the VL depeendent register data
+size, which lead to an underallocation bug when we cut'n'pasted the code
+for FPSIMD format writes. Use the SVE_PT_SIZE() macro that the kernel
+UAPI provides for this.
 
+Fixes: b84d2b27954f ("kselftest/arm64: Test FPSIMD format data writes via NT_ARM_SVE in fp-ptrace")
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/sve-ptrace.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ tools/testing/selftests/arm64/fp/fp-ptrace.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-index b22303778fb0..4cba3bcff660 100644
---- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-@@ -95,19 +95,27 @@ static int do_child(void)
- static int get_fpsimd(pid_t pid, struct user_fpsimd_state *fpsimd)
- {
- 	struct iovec iov;
-+	int ret;
+diff --git a/tools/testing/selftests/arm64/fp/fp-ptrace.c b/tools/testing/selftests/arm64/fp/fp-ptrace.c
+index 124bc883365e..cdd7a45c045d 100644
+--- a/tools/testing/selftests/arm64/fp/fp-ptrace.c
++++ b/tools/testing/selftests/arm64/fp/fp-ptrace.c
+@@ -1187,7 +1187,7 @@ static void sve_write_sve(pid_t child, struct test_config *config)
+ 	if (!vl)
+ 		return;
  
- 	iov.iov_base = fpsimd;
- 	iov.iov_len = sizeof(*fpsimd);
--	return ptrace(PTRACE_GETREGSET, pid, NT_PRFPREG, &iov);
-+	ret = ptrace(PTRACE_GETREGSET, pid, NT_PRFPREG, &iov);
-+	if (ret == -1)
-+		ksft_perror("ptrace(PTRACE_GETREGSET)");
-+	return ret;
- }
+-	iov.iov_len = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
++	iov.iov_len = SVE_PT_SIZE(vq, SVE_PT_REGS_SVE);
+ 	iov.iov_base = malloc(iov.iov_len);
+ 	if (!iov.iov_base) {
+ 		ksft_print_msg("Failed allocating %lu byte SVE write buffer\n",
+@@ -1234,8 +1234,7 @@ static void sve_write_fpsimd(pid_t child, struct test_config *config)
+ 	if (!vl)
+ 		return;
  
- static int set_fpsimd(pid_t pid, struct user_fpsimd_state *fpsimd)
- {
- 	struct iovec iov;
-+	int ret;
- 
- 	iov.iov_base = fpsimd;
- 	iov.iov_len = sizeof(*fpsimd);
--	return ptrace(PTRACE_SETREGSET, pid, NT_PRFPREG, &iov);
-+	ret = ptrace(PTRACE_SETREGSET, pid, NT_PRFPREG, &iov);
-+	if (ret == -1)
-+		ksft_perror("ptrace(PTRACE_SETREGSET)");
-+	return ret;
- }
- 
- static struct user_sve_header *get_sve(pid_t pid, const struct vec_type *type,
-@@ -117,6 +125,7 @@ static struct user_sve_header *get_sve(pid_t pid, const struct vec_type *type,
- 	void *p;
- 	size_t sz = sizeof *sve;
- 	struct iovec iov;
-+	int ret;
- 
- 	while (1) {
- 		if (*size < sz) {
-@@ -132,8 +141,11 @@ static struct user_sve_header *get_sve(pid_t pid, const struct vec_type *type,
- 
- 		iov.iov_base = *buf;
- 		iov.iov_len = sz;
--		if (ptrace(PTRACE_GETREGSET, pid, type->regset, &iov))
-+		ret = ptrace(PTRACE_GETREGSET, pid, type->regset, &iov);
-+		if (ret) {
-+			ksft_perror("ptrace(PTRACE_GETREGSET)");
- 			goto error;
-+		}
- 
- 		sve = *buf;
- 		if (sve->size <= sz)
-@@ -152,10 +164,14 @@ static int set_sve(pid_t pid, const struct vec_type *type,
- 		   const struct user_sve_header *sve)
- {
- 	struct iovec iov;
-+	int ret;
- 
- 	iov.iov_base = (void *)sve;
- 	iov.iov_len = sve->size;
--	return ptrace(PTRACE_SETREGSET, pid, type->regset, &iov);
-+	ret = ptrace(PTRACE_SETREGSET, pid, type->regset, &iov);
-+	if (ret == -1)
-+		ksft_perror("ptrace(PTRACE_SETREGSET)");
-+	return ret;
- }
- 
- /* Validate setting and getting the inherit flag */
+-	iov.iov_len = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq,
+-							  SVE_PT_REGS_FPSIMD);
++	iov.iov_len = SVE_PT_SIZE(vq, SVE_PT_REGS_FPSIMD);
+ 	iov.iov_base = malloc(iov.iov_len);
+ 	if (!iov.iov_base) {
+ 		ksft_print_msg("Failed allocating %lu byte SVE write buffer\n",
 
 ---
 base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250808-arm64-fp-ptrace-perror-210bb7f93c7c
+change-id: 20250808-arm64-fp-trace-macro-02ede083da51
 
 Best regards,
 --  
