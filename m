@@ -1,143 +1,156 @@
-Return-Path: <linux-kselftest+bounces-38791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8100FB22D5B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 18:24:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A902BB22D98
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 18:30:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6E0274E1FDC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 16:24:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 850DD7A54E8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 16:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 725D92FA0E8;
-	Tue, 12 Aug 2025 16:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B42C2F90C3;
+	Tue, 12 Aug 2025 16:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AS0PaIDD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w/aRAEt/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24042F8BE5
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 16:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62ED2F659B
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 16:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755015848; cv=none; b=Gx2j1l32MgzbElghmtCYAJogVDPS7hxzTTbyX2aHgXDfS/Bkm6P5OZKj/KxqUs43xF93UgF+8HS1CEfcHvRtg/eebske5nWmXS+sFAaFHWum274YApPudEE+nCA2x45djXcvz4uStDAIvkDfVcNHDi2Q+R3VzaYCIh0ey3Cd9bs=
+	t=1755016191; cv=none; b=sd3SyB5hg5m30wtuyGbSEmT/S56cWyacAIocrINl5taiZi/TifTcadYN9vDxQam8SuJ+/LF3kE6mYWyB+ZBdv/shHp+hoHZjEDSzH2QAq7kp1MGh1/qgnTiB2JEHQvvBUmMy7eOIo6qthDOBRRvaOsAnsTNTkxT7/lSXI+C/cJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755015848; c=relaxed/simple;
-	bh=/ER6f5wKsAdYIZPqBjFZAtf33yzWXq79xrA8udzzwxc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hJcdJebooJGxa1ZoMetI1m1wPHRMfWjLLlAbkZDSVNhOvIjKlSlxhNSQ+pMEnVQb6WraBlth8YJr7LSjVKOR1yCLZvIzMliuOW+cJfnoSH8JlrfIap12zF92wA7+mhJLHH5Vh3VP/MAGGUBg6Lkr0L05TsTOgEmuirqviWFlViU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AS0PaIDD; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755015845;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=maWtxKCUaRWYHdCmxfw96mUNXiNl/KJh+3ma5G2HCtQ=;
-	b=AS0PaIDD6YsveOBjZgWwzQ0dRHLUB4Ki9tqAYku+G8uEK+033keADoPtZF/eHrB7feYkGG
-	8/QaOFDOuLbBpeQluajqF9WtDkCAJSOes0fN2WANM5aaRWY32pvwvpk8K7i//ZOruR8xrf
-	FDxNlKAm642rg0sAFHmlyaOMIqsMJkQ=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-248-hwb8FfnlOVuHW_XwrcmL3Q-1; Tue, 12 Aug 2025 12:24:04 -0400
-X-MC-Unique: hwb8FfnlOVuHW_XwrcmL3Q-1
-X-Mimecast-MFC-AGG-ID: hwb8FfnlOVuHW_XwrcmL3Q_1755015844
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7e7fc5f1e45so1180052185a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 09:24:04 -0700 (PDT)
+	s=arc-20240116; t=1755016191; c=relaxed/simple;
+	bh=7zd+1Q2nXxKRhSiNSR0nkmbGVXeZVbtHzoCniviHQwQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=QMNBXeuMLt105AP3M8bG82YwHVYbCYqlF87xqsLH73ie6+EV2RyJNuhej9aPhJc01qDpIY/s3BcoEuVaMS9jx4tBjfSIe4/GOYnETD30bdpZdZjC8GDv2ytEZRy1mCu5EDCyp5A/4yGFaZBouiSPtf2BnRYQPeudLUuEh5sM1jE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marievic.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=w/aRAEt/; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marievic.bounces.google.com
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-70e5e6ab756so81854747b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 09:29:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755016188; x=1755620988; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZjXcxnVV61K5zKiboHXun1MZgLxE+8QryKh9246KOjo=;
+        b=w/aRAEt/fTCUljWMxiyGymHnb/huFZWQvBTSIk0NfHofXHz8m0L80dToBYnztuLq3a
+         lA5KKA+OnK5EiI9RKtOntDaq4mcOgtdle4O8bwxpQA80ZBWDaWU+9GuOPRkbJP2RvvG5
+         rUJ1+mK9RA9bHkhfxPcl9JPltRX9DhD1W5PyVYRBwzT7/IQurMUn+3x/39GemPYCbbYj
+         0z2c5UYSaX3Pyww2d3BvnnGMxx6nmk+UIlMxYHMPFCK8JiHi3NuVEJSig/gNXABUEOyC
+         BfG4j7BoLD5mDumlvBu+ZRaqt7BHM5PFDiSGtFx0P0LVPGmYS4OyYVWnWtjJ9/ihGwa5
+         BzJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755015844; x=1755620644;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=maWtxKCUaRWYHdCmxfw96mUNXiNl/KJh+3ma5G2HCtQ=;
-        b=DUECa6hoentu8m+2RZ4Dmbsottca+cewJsvtdlEoSrbxeiBBsh1SSx8/3YdEDnXg+R
-         I9BKcHrKt9cNTf0SEiIWxZ5mq6rLzNiLAs1GCIjz/0+9Ewz/RCpLGiZDnaXY5b1xetkX
-         N46ry8GALjI6fyWttsNe6oXdERahWlulC6bxVtphPigCT8sVgS8W29wFP/1r1a96Qttz
-         Sy/YP1tMS0M8tzlnfyU/U6hrjNAlTVi+1yCiOSPESVKfApK/xBkk8dRp0FtAwX5u6p7C
-         BrVNZpyK0NqCx8zuwSm9KRcM4sqc8ykxWVwkZhjJruVg2mAEviokPDLirVpmgvJhdzS/
-         MeOg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0sKtVP1hBbtK6IwC2ivGTq2+rhZUYJXWsgwMUBN0rT4uTR3L/sEhfKsvbB2kIgnElQmJI/8WIoh9NR1Sxe4Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQhN/S+Sw1rKpdaUDcR7SI9LuW+bKAapvb32RTCVyMDrUUMyQW
-	qDcK2bdTjcgkNZP9YI48oT8sNHKmjl1oRH1+Fu8oj1DSK512qnVF0KqeL6DZJVvVFnxt0KDEdKB
-	xJD7yLujI+nBxo7i4Wx7G32vfAzaG4eQufSXKQGHg1424yvav5N39DstUzzQWeJb48Nz7NA==
-X-Gm-Gg: ASbGnctTfLmaRreY9f/hlRInGVIc0VoGkNm3kZ9atBcquG6KAKXKaXU26dT8Uixr4ms
-	RlKrt3leAHMSXoVU9/DdKme2o7TDuv4Q6ZdRQMQELP1o/0B8aibKEtnUjozzK9TzQaEL1gSLnJC
-	iVSh2ZeqpvvdqivJaCBWTdxmAXYPOduYBpRux9+epAvat5/S6CHc8msH/ipz9CZo/af6SJ4B4BC
-	8gSIglUSLzsfJJ5h+5AEV541hDTYAhgiu1j5OrnJJT3DbSb3vYSbo9wjs16K3o+gse1DphSrJOh
-	l9i+SYrhupSftUtjs31AoaS4BAnrx6l+8RlVDGIka02RYw7omdHnKy6+aeROWL1AjbPDlmCnKJd
-	+pO5Bs+RnwS4=
-X-Received: by 2002:a05:620a:9150:b0:7e6:9b39:6f10 with SMTP id af79cd13be357-7e864654550mr35421085a.61.1755015843801;
-        Tue, 12 Aug 2025 09:24:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEUZOpIX8ME8P1/zbKmcThEYzGtWD1LRv70+Qx5g144GKeuzIvmx2X7DcVxpCNWPGo7DzZgNw==
-X-Received: by 2002:a05:620a:9150:b0:7e6:9b39:6f10 with SMTP id af79cd13be357-7e864654550mr35416685a.61.1755015843245;
-        Tue, 12 Aug 2025 09:24:03 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e69e15f5e0sm1449283685a.69.2025.08.12.09.24.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Aug 2025 09:24:02 -0700 (PDT)
-Message-ID: <50a1e8ea-986c-41f2-899c-746098b6b1b7@redhat.com>
-Date: Tue, 12 Aug 2025 18:23:59 +0200
+        d=1e100.net; s=20230601; t=1755016188; x=1755620988;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZjXcxnVV61K5zKiboHXun1MZgLxE+8QryKh9246KOjo=;
+        b=V4sbQw83KQF10v6KX5Y/j7asdr5jAsP9JgIKoCBcRbZs1qMBNawzg/nGaBQdmsw1RN
+         MFTPvvEa+QNagVmfsvhe5PKI06WJYxqwwcncTJhz0msr6Q/HOW1a29fwSGmNCqRnXX2A
+         UraxldW+drAy0pu2CShDWn5RRRoarLk/AJTr+yOtr8YarupOT3lue4mWrCPf5WDW9wGg
+         pRx3CU0aIDr9unWY8bRILC+jYpVoUkRxyevMSYr7Mx+0HKLsv+t1sRTxf2JG+Kzp4Ib8
+         gPW0gFnixTwDE3ZZPfR8Wp5ZRVllIu6htH2vgLMFfyLlY81O4C1ZLMeTfPgbOOQsmNAX
+         YF1Q==
+X-Gm-Message-State: AOJu0Yy4+5Cjby2WEvIHacfl4kxkmPnxrugNI7Wmf76xjIpIwdGFLejU
+	zIsQ8XiVsNYHHfxINpEaqsdY7eTdrebErmWHER9Mrw/qx+sM+0wE3fKgwUMgMuPOB7eGiFzehBA
+	RT6EMg2MNEfqhoA==
+X-Google-Smtp-Source: AGHT+IGwKwv5249Eya7pfM/i3ivAXTfbdYzSlggsR5jJH18s5NNyJ45xevu3PM8ULW+3cMiHRHBvv36PcDumDQ==
+X-Received: from ybka13.prod.google.com ([2002:a25:bacd:0:b0:e91:771b:592b])
+ (user=marievic job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6902:610c:b0:e91:770d:439c with SMTP id 3f1490d57ef6-e930b77dbd7mr104378276.2.1755016187935;
+ Tue, 12 Aug 2025 09:29:47 -0700 (PDT)
+Date: Tue, 12 Aug 2025 16:29:20 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2 1/2] tls: handle data disappearing from under the
- TLS ULP
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- andrew+netdev@lunn.ch, horms@kernel.org, borisp@nvidia.com,
- john.fastabend@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- sd@queasysnail.net, will@willsroot.io, savy@syst3mfailure.io
-References: <20250807232907.600366-1-kuba@kernel.org>
- <b3a83032-8ed4-4d5d-9df9-6dbd02acac1c@redhat.com>
- <20250812062825.391c030c@kernel.org>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250812062825.391c030c@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.rc0.205.g4a044479a3-goog
+Message-ID: <20250812162920.2923601-1-marievic@google.com>
+Subject: [PATCH] kunit: Release resource upon __kunit_add_resource() failure
+ in the Resource API
+From: Marie Zhussupova <marievic@google.com>
+To: rmoar@google.com, davidgow@google.com, shuah@kernel.org, 
+	brendan.higgins@linux.dev
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, Marie Zhussupova <marievic@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 8/12/25 3:28 PM, Jakub Kicinski wrote:
-> On Tue, 12 Aug 2025 12:45:56 +0200 Paolo Abeni wrote:
->> On 8/8/25 1:29 AM, Jakub Kicinski wrote:
->>> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
->>> index 549d1ea01a72..51c98a007dda 100644
->>> --- a/net/tls/tls_sw.c
->>> +++ b/net/tls/tls_sw.c
->>> @@ -1384,7 +1384,8 @@ tls_rx_rec_wait(struct sock *sk, struct sk_psock *psock, bool nonblock,
->>>  			return sock_intr_errno(timeo);
->>>  	}
->>>  
->>> -	tls_strp_msg_load(&ctx->strp, released);
->>> +	if (unlikely(!tls_strp_msg_load(&ctx->strp, released)))
->>> +		return tls_rx_rec_wait(sk, psock, nonblock, false);  
->>
->> I'm probably missing something relevant, but I don't see anything
->> preventing the above recursion from going very deep and cause stack
->> overflow.
->>
->> Perhaps something alike:
->>
->> 		released = false;
->> 		goto <function start>
->>
->> would be safer?
-> 
-> It's a tail call to the same function, the compiler should do that for
-> us automatically. Can we not trust the compiler to be sensible? Both
-> clang and gcc get it right.
+__kunit_add_resource() currently does the following
+things in order: initializes the resource refcount to 1,
+initializes the resource, and adds the resource to
+the test's resource list. Currently, __kunit_add_resource()
+only fails if the resource initialization fails.
 
-Sound reasonable, I dumbly did not consider it. I'm fine with the patch
-in the current form.
+The kunit_alloc_and_get_resource()
+and kunit_alloc_resource() functions allocate memory
+for `struct kunit_resource`. However, if the subsequent
+call to __kunit_add_resource() fails, the functions
+return NULL without releasing the memory.
 
-/P
+This patch adds calls to kunit_put_resource() in these
+functions before returning NULL to decrease the refcount
+of the resource that failed to initialize to 0. This will
+trigger kunit_release_resource(), which will both call
+kunit_resource->free and kfree() on the resource.
+
+Since kunit_resource->free is user defined, comments
+were added to note that kunit_resource->free()
+should be able to handle any inconsistent state
+that may result from the resource init failure.
+
+Signed-off-by: Marie Zhussupova <marievic@google.com>
+---
+ include/kunit/resource.h | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+index 4ad69a2642a5..2585e9a5242d 100644
+--- a/include/kunit/resource.h
++++ b/include/kunit/resource.h
+@@ -216,7 +216,9 @@ static inline int kunit_add_named_resource(struct kunit *test,
+  * kunit_alloc_and_get_resource() - Allocates and returns a *test managed resource*.
+  * @test: The test context object.
+  * @init: a user supplied function to initialize the resource.
+- * @free: a user supplied function to free the resource (if needed).
++ * @free: a user supplied function to free the resource (if needed). Note that,
++ * if supplied, @free will run even if @init fails: Make sure it can handle any
++ * inconsistent state which may result.
+  * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
+  * @context: for the user to pass in arbitrary data to the init function.
+  *
+@@ -258,6 +260,7 @@ kunit_alloc_and_get_resource(struct kunit *test,
+ 		kunit_get_resource(res);
+ 		return res;
+ 	}
++	kunit_put_resource(res);
+ 	return NULL;
+ }
+ 
+@@ -265,7 +268,9 @@ kunit_alloc_and_get_resource(struct kunit *test,
+  * kunit_alloc_resource() - Allocates a *test managed resource*.
+  * @test: The test context object.
+  * @init: a user supplied function to initialize the resource.
+- * @free: a user supplied function to free the resource (if needed).
++ * @free: a user supplied function to free the resource (if needed). Note that,
++ * if supplied, @free will run even if @init fails: Make sure it can handle any
++ * inconsistent state which may result.
+  * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
+  * @context: for the user to pass in arbitrary data to the init function.
+  *
+@@ -293,6 +298,7 @@ static inline void *kunit_alloc_resource(struct kunit *test,
+ 	if (!__kunit_add_resource(test, init, free, res, context))
+ 		return res->data;
+ 
++	kunit_put_resource(res);
+ 	return NULL;
+ }
+ 
+-- 
+2.51.0.rc0.205.g4a044479a3-goog
 
 
