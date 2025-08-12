@@ -1,126 +1,235 @@
-Return-Path: <linux-kselftest+bounces-38802-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51E8CB238CD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 21:29:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D16FEB23923
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 21:39:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC8972A127B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 19:28:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3EA03B2B5C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 19:38:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327982D663D;
-	Tue, 12 Aug 2025 19:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EDF2FE586;
+	Tue, 12 Aug 2025 19:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MKw5MZi3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dm+JyeNK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7081E47AD
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 19:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913A43FE7;
+	Tue, 12 Aug 2025 19:38:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755026879; cv=none; b=Nxxh/XUuCy6kH6JVC/wIJmcdORUWW29sK7dlmzn/nSqfhUu01ZmP80r3PaIetExAzXTW5Js5Kfnlz5VBOwEB2FMZGEldJ+UmjQSTIyC7e3yom8phH6ELbzZd/WLaVWDU0d1G2Sv+myKVdnNJAiZ3Y0ACf4k55vlPopE6ljkeqCo=
+	t=1755027519; cv=none; b=urZbRqCM51zE/W0cT0Fz9moyqDdv2JTVtdtUhbYcn3SQVYOezGhYey5qdiHuFiu9gCsbMmIR0jHviVCILdV7jI22TsBDqw4wWwX3y5ABvz/0XcGu5qPfgNuYNRXjFBOWMyqle6S4YEk1HSt3+Ng6bgP/wQgfh2dZpjMEmkuBSBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755026879; c=relaxed/simple;
-	bh=y0y2N5LIeyP8xsy0Qa63fgrKE/mH0tt08exbUT5h0jw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s9wATamclzkZ/F54gyXkYViDFe4xCAL3nXMFA8rM0VLzntq9e8yVtSVo6so0vIjcm9ZDUNR8ISqcwdUkhGiUusg1nQ41/gKEXUkOyocO4YDsiPAsiFIKzmdNIOpehx9Jl5PjEqTo2HtqU9v9l0WVAdrK+W5j22OGIxNqHhqzFYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MKw5MZi3; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3e54f4ca0dfso21215925ab.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 12:27:57 -0700 (PDT)
+	s=arc-20240116; t=1755027519; c=relaxed/simple;
+	bh=k0bcjssrJUD/KpgVbW06mRiBvNKVIgvAUj3fNEd199Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ecO+hXIGyJ54N1FfXkpEEKMypZk4DXYy3I1Ddf+9hsb4/40FG1IyB4y8tQpHIRat7AcfRRlUfdU6/xg/Mf2geCHBecgyCIT42ul10pAYBaHcwb7TGrIAfXmk78ULNcupEaesLoI+1yRbmYC0QruSfusLzeO+koR0+OFnqxwjG5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dm+JyeNK; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-455fdfb5d04so29882945e9.2;
+        Tue, 12 Aug 2025 12:38:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1755026876; x=1755631676; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1RNO+JaaEkY/OEdHDihqn21pputuGs/yjSpDhvuKLeI=;
-        b=MKw5MZi3KtfJao50CyvdDDxaC1iTr9aQBbAxreZa5wqvXsnrufo+0bv785xkygUEKK
-         MvxfAMbgbqRc6dKLUkOQCzN8cwqn3DJ2/4XwfqbhBLHaiJDsvEw1iF07CgXn0gAoBXdU
-         cJRVZKvScZtLLZ/+moSJAQ1/ZTY7z17FUw7i4=
+        d=gmail.com; s=20230601; t=1755027516; x=1755632316; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aRjJ2YZSkmssRTylvZmzxN9jsmpLOOeNPx4zXyP1f1o=;
+        b=dm+JyeNKSjdr7i6ZiqHF2dPe+RL/lmz0DvqxbH2xLjxN/KyBczLufX92aeng53/+hz
+         btyGbnyW492LhgICUm1A2tkzkyRXDE6u3IhNMbw6k0OWXKngF2mxGXhUAv/I/X1jIBS0
+         2Rk/8jWjceHHQk4WesvJ1WEXp6roXe8YLlA4J+fhwjCliYN11t5VWNLGr0NGll12tDHA
+         uw39k9BBgK0bS7FMyT8n4Q2DrqusBvCVPEPLCHZ0OruqjB7aIpG3lTiJg0znTF4m2a8P
+         cDwxb5iIqadXXLOP0DUhHS52E1gqBpbHgojsZSxeSGotCm5ZVTDlNSJtH1kk0A/jdKUb
+         q2Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755026876; x=1755631676;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1RNO+JaaEkY/OEdHDihqn21pputuGs/yjSpDhvuKLeI=;
-        b=UvtwAADbXEZtSWPAxFbo4byx/JtsebKrKWM1MR2P0abDOHaqvQyUKlCiFz3P231FAY
-         9w+jaQKAieeEakc0hitOeDjxdo/46yHqy1jOQrsvh5cbbolQH/kMZ9a4FWBM52e4T/Hb
-         xS47oEeP0SCEd4iQLWr0QkZAObpmHawPXHQAtRPsfhZeIwyEb0kX7Sp9eUuaMxAyN578
-         FvyeiZRKjiYud7bSeIbVqD9TsChvPbCkItRArN1DCtvMUAYR5vKc6lvuohJxloYpYnrQ
-         Lvo0Zm5i68rD4Jryk+pxeIj1bDunISHLJ40jTx7/Imr5u9emwcpkjk6YxG+NzbYViJIl
-         6eiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXXcmdxdoeBgUp9DIgFhF+56CzD6TAMNtE8G3A7Bxp0Z+vscrbaUSMbi8z2F9eaEsnLGbTo69sCQLq30rj12VY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDSUH1s0rg6TjStQbi1xwr0JH7I9aZNTNguvo7RxPREV26HhuP
-	fpI0517kEv8CbXM0XM1S3EID+JiRYx5gkMuB+mW8T+zDDj3/6CLJBsLZpHEznuUmTPEobA1ypKY
-	2pi2p
-X-Gm-Gg: ASbGnctS3zNxKiXWr2/ubXigioQfOpbp/727sTmsEuNyC8S80nkfNVlhfXuTEJYvyiJ
-	07LebpimYxoCrVU7ndOFTc85D0ou3Qepv+p0DdRvPVsHdtoe6a/jwgbhQUDQk/07SmHXQR7J6BR
-	iyyWbMINUYRqFCvS8iNg4i5s15Hwh+69Me/JW4KiBLBpcdJ1/BaAuRc3QvgRNTa+MNmHXLgq4Gc
-	w+HGiVW0z29GomqBvce6x1/kYI2xldGFXZJdqBQkUo3l1sBk/B52fErJoQ4BgJTqrd4tacOaFbC
-	tpY68pWp/d2aEQui14uG4SkIXVFviCPxgvKXNeBN6PUDdIi8UBq1kR+D0oosBj9+SzvwiaONwca
-	hxtJi8GnmyHxEijk3vuM4IQGvXW45fB7mGw==
-X-Google-Smtp-Source: AGHT+IEUCGZnLw63tW0KNVTQOiNtoNzl7gbeEHojoAK0DgCBv29G2cLC+KWOONDi4CrPrrCxgtRIBw==
-X-Received: by 2002:a05:6e02:2147:b0:3e5:3520:4a76 with SMTP id e9e14a558f8ab-3e5674e77f6mr4612365ab.24.1755026876188;
-        Tue, 12 Aug 2025 12:27:56 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3e546358251sm31477615ab.54.2025.08.12.12.27.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Aug 2025 12:27:55 -0700 (PDT)
-Message-ID: <ba9f7752-ceb2-4fcd-acaa-b5afa77eecda@linuxfoundation.org>
-Date: Tue, 12 Aug 2025 13:27:55 -0600
+        d=1e100.net; s=20230601; t=1755027516; x=1755632316;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aRjJ2YZSkmssRTylvZmzxN9jsmpLOOeNPx4zXyP1f1o=;
+        b=APkUd1UBFUJREFe8yYkbFDg0XFR6KZ+q7fMLe+eBt5vt4+8dS2JWD4DzH30tTA+J6u
+         K5jYaSpGGOu6DFmVMW7TnHeSqaFxqeUNtdZ+tePPQqouVLg8fQ5S8HVMZXYzmvr/eK7Z
+         og+otuOVvYdW9gGpPXpHY4eIJint6xktK93H5OFmhVys1+DKNmdYlzaeXCHeWIxt6X2a
+         4YjINF2KWdEi7zeNf7GbevJtJeXwWqkzou/RZCtNRVj5Lj+BtKKhDs5ePBEgyJyhzY9Q
+         gPzYmt3KIAxEmY/UwykOV411ARqymnbYY0OyO06TSDjV+phTUCbe2vJZ6tU1l9RK8t65
+         ZlNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX1+pkU7Bb3JLMg5VybXxhGk4EG4bcxhEUgllInVpX7Sa/a6IAdzMCV9+URPWlwyNxL4CELoyjOIf7DW78=@vger.kernel.org, AJvYcCXgykpkyQxiXsxSQrQK+zgtmaUjcTCysjemA6IM9ledU31WWhd78MYXlO1b2SP6GW/NLlKJolIrH26QmCRtWoGC@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBXP1X07d/rhq+1tt3G6fdyT9xHA1tpHrH7MWiCbURZAE/ZyQe
+	6LAYi00wktKR1lIc7oXhL2J8vFk4bARviw/5azhOH5XS0S6Rhxo2t5OK
+X-Gm-Gg: ASbGnctpz+ypr7T4Iopn+W1smdTW97bPMXt4kr0cyqSEuiYWflUTmFeKiZI6CD2vxRp
+	T1m/4hY768qUfV+4Hhe8oUZOLZ6fa8Pbpbqzpa9o3nM/zEMq0kDPJ6s/O1u3Nz6EGfW9rP756Yg
+	iM+xl2FEM78TnFzg2xgtLBjLIfzM1UD3Q2RKR0GpUQ5qDGalZw2sMlEvlj37R7yMrt9C7uucJwV
+	ipnCh5qjiWZGqphAAMZEwZt0BreoVqGFihnVIk1/ElYPPlL2uSkSZI+DnOyeY40Q98TvccH+MR6
+	lsU3P9+RQ9GIwL8xyExuw8xbtlUgGCFN4Yuwcwp++nSLrLzlVb69jJDkKMwjsyTEWsfwD1Q1iQi
+	4rfRwSLyMIStFFV+Jm5+zd8Ty2Fy/eHCYjkEj
+X-Google-Smtp-Source: AGHT+IEHq18jRo1NL097VskWhWmn+36nKMQHAFIlsAu9cmHnsNETDByYaq7CUpo72HYUl/5qcEKCrQ==
+X-Received: by 2002:a05:600c:8b22:b0:459:aa0a:db2d with SMTP id 5b1f17b1804b1-45a165f896emr2247985e9.28.1755027515647;
+        Tue, 12 Aug 2025 12:38:35 -0700 (PDT)
+Received: from [192.168.1.243] ([143.58.192.81])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-459dc900606sm373579395e9.15.2025.08.12.12.38.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Aug 2025 12:38:35 -0700 (PDT)
+From: Andre Carvalho <asantostc@gmail.com>
+Date: Tue, 12 Aug 2025 20:38:23 +0100
+Subject: [PATCH net-next v2] selftests: netconsole: Validate interface
+ selection by MAC address
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog-test.c: Remove unused variable in main
-To: bajing <bajing@cmss.chinamobile.com>, shuah@kernel.org
-Cc: lizhijian@fujitsu.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250812075345.872-1-bajing@cmss.chinamobile.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250812075345.872-1-bajing@cmss.chinamobile.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250812-netcons-cmdline-selftest-v2-1-8099fb7afa9e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAC6Ym2gC/3WNwQqDMBBEf0X23JQkrbX01P8oHmLc6IImJRvEI
+ v57F3sucxqG92YDxkzI8Kg2yLgQU4pS7KkCP7o4oKJeOlhta33XjYpYfIqs/NxPFFExTqEgF9V
+ dLNrGXbve3EDwd8ZA66F+gVBCrgVaWUbikvLn+FzMsf/0xvzXL0ZJQmNr12mrg3sOs6Pp7NMM7
+ b7vXwFI+wbKAAAA
+X-Change-ID: 20250807-netcons-cmdline-selftest-b32e27a4bd16
+To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Andre Carvalho <asantostc@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755027515; l=4959;
+ i=asantostc@gmail.com; s=20250807; h=from:subject:message-id;
+ bh=k0bcjssrJUD/KpgVbW06mRiBvNKVIgvAUj3fNEd199Q=;
+ b=pgbd3qOQd5BDA5FfaDqIysrfZxaKvjm2QzOT8kaNIgKcbDb73bdYIt6slbmfn3GTneCjofxYp
+ jDc/agZMbNOD6VB4sDSIyNTTtz++QzNGK/bmpYzL5dFgPLW8B96auwm
+X-Developer-Key: i=asantostc@gmail.com; a=ed25519;
+ pk=eWre+RwFHCxkiaQrZLsjC67mZ/pZnzSM/f7/+yFXY4Q=
 
-On 8/12/25 01:53, bajing wrote:
-> Since $optind is not used in the subsequent code, the variable
-> should be removed.
-> 
-> Signed-off-by: bajing <bajing@cmss.chinamobile.com>
-> ---
->   tools/testing/selftests/watchdog/watchdog-test.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-> index a1f506ba5578..837001a9e3a0 100644
-> --- a/tools/testing/selftests/watchdog/watchdog-test.c
-> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
-> @@ -209,8 +209,6 @@ int main(int argc, char *argv[])
->   		exit(ret);
->   	}
->   
-> -	optind = 0;
+Extend the existing netconsole cmdline selftest to also validate that
+interface selection can be performed via MAC address.
 
-Removing the assignment soles based on looking at the subsequent
-is incorrect.
+The test now validates that netconsole works with both interface name
+and MAC address, improving test coverage.
 
-Explain why this needs to be removed? Did you happen to check
-getopt_long() and how it uses optind before making this change?
+Suggested-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Andre Carvalho <asantostc@gmail.com>
+---
+Changes in v2:
+- Redirect log line to stderr
+- Do not ignore error unloading the module between test cases
+- Remove nested quotes when building cmdline for module
+- Format comments to avoid exceeding 80 columns
+- Link to v1: https://lore.kernel.org/r/20250811-netcons-cmdline-selftest-v1-1-1f725ab020fa@gmail.com
+---
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 10 +++-
+ .../selftests/drivers/net/netcons_cmdline.sh       | 55 +++++++++++++---------
+ 2 files changed, 43 insertions(+), 22 deletions(-)
 
-> -
->   	while ((c = getopt_long(argc, argv, sopts, lopts, NULL)) != -1) {
->   		switch (c) {
->   		case 'b':
+diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+index b6071e80ebbb6a33283ab6cd6bcb7b925aefdb43..8e1085e896472d5c87ec8b236240878a5b2d00d2 100644
+--- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
++++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+@@ -148,12 +148,20 @@ function create_dynamic_target() {
+ # Generate the command line argument for netconsole following:
+ #  netconsole=[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
+ function create_cmdline_str() {
++	local BINDMODE=${1:-"ifname"}
++	if [ "${BINDMODE}" == "ifname" ]
++	then
++		SRCDEV=${SRCIF}
++	else
++		SRCDEV=$(mac_get "${SRCIF}")
++	fi
++
+ 	DSTMAC=$(ip netns exec "${NAMESPACE}" \
+ 		 ip link show "${DSTIF}" | awk '/ether/ {print $2}')
+ 	SRCPORT="1514"
+ 	TGTPORT="6666"
+ 
+-	echo "netconsole=\"+${SRCPORT}@${SRCIP}/${SRCIF},${TGTPORT}@${DSTIP}/${DSTMAC}\""
++	echo "netconsole=\"+${SRCPORT}@${SRCIP}/${SRCDEV},${TGTPORT}@${DSTIP}/${DSTMAC}\""
+ }
+ 
+ # Do not append the release to the header of the message
+diff --git a/tools/testing/selftests/drivers/net/netcons_cmdline.sh b/tools/testing/selftests/drivers/net/netcons_cmdline.sh
+index ad2fb8b1c46326c69af20f2c9d68e80fa8eb894f..d1d23dc67f99aa357041b71718550ed94292e57a 100755
+--- a/tools/testing/selftests/drivers/net/netcons_cmdline.sh
++++ b/tools/testing/selftests/drivers/net/netcons_cmdline.sh
+@@ -19,9 +19,6 @@ check_netconsole_module
+ modprobe netdevsim 2> /dev/null || true
+ rmmod netconsole 2> /dev/null || true
+ 
+-# The content of kmsg will be save to the following file
+-OUTPUT_FILE="/tmp/${TARGET}"
+-
+ # Check for basic system dependency and exit if not found
+ # check_for_dependencies
+ # Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
+@@ -30,23 +27,39 @@ echo "6 5" > /proc/sys/kernel/printk
+ trap do_cleanup EXIT
+ # Create one namespace and two interfaces
+ set_network
+-# Create the command line for netconsole, with the configuration from the
+-# function above
+-CMDLINE="$(create_cmdline_str)"
+-
+-# Load the module, with the cmdline set
+-modprobe netconsole "${CMDLINE}"
+-
+-# Listed for netconsole port inside the namespace and destination interface
+-listen_port_and_save_to "${OUTPUT_FILE}" &
+-# Wait for socat to start and listen to the port.
+-wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
+-# Send the message
+-echo "${MSG}: ${TARGET}" > /dev/kmsg
+-# Wait until socat saves the file to disk
+-busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
+-# Make sure the message was received in the dst part
+-# and exit
+-validate_msg "${OUTPUT_FILE}"
++
++# Run the test twice, with different cmdline parameters
++for BINDMODE in "ifname" "mac"
++do
++	echo "Running with bind mode: ${BINDMODE}" >&2
++	# Create the command line for netconsole, with the configuration from
++	# the function above
++	CMDLINE=$(create_cmdline_str "${BINDMODE}")
++
++	# The content of kmsg will be save to the following file
++	OUTPUT_FILE="/tmp/${TARGET}-${BINDMODE}"
++
++	# Load the module, with the cmdline set
++	modprobe netconsole "${CMDLINE}"
++
++	# Listed for netconsole port inside the namespace and destination
++	# interface
++	listen_port_and_save_to "${OUTPUT_FILE}" &
++	# Wait for socat to start and listen to the port.
++	wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
++	# Send the message
++	echo "${MSG}: ${TARGET}" > /dev/kmsg
++	# Wait until socat saves the file to disk
++	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
++	# Make sure the message was received in the dst part
++	# and exit
++	validate_msg "${OUTPUT_FILE}"
++
++	# kill socat in case it is still running
++	pkill_socat
++	# Unload the module
++	rmmod netconsole
++	echo "${BINDMODE} : Test passed" >&2
++done
+ 
+ exit "${ksft_pass}"
 
-thanks,
--- Shuah
+---
+base-commit: 37816488247ddddbc3de113c78c83572274b1e2e
+change-id: 20250807-netcons-cmdline-selftest-b32e27a4bd16
+
+Best regards,
+-- 
+Andre Carvalho <asantostc@gmail.com>
+
 
