@@ -1,150 +1,118 @@
-Return-Path: <linux-kselftest+bounces-38741-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9BC3B219EE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 02:51:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B804CB21A6A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 03:53:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D771F1A23A42
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 00:51:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62AC6628240
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Aug 2025 01:53:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06B0A2D660E;
-	Tue, 12 Aug 2025 00:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 618D92DA758;
+	Tue, 12 Aug 2025 01:53:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eEFayJqQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ItOeHoro"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9836127450;
-	Tue, 12 Aug 2025 00:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F339C155A4E;
+	Tue, 12 Aug 2025 01:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754959870; cv=none; b=sJi5P1Cc7ugqge2TcM4lZn+1JPk5pqe6SLD358ewm5hCvjQUjw7R+9134zBgbIs8+x1uR3t0WfLpVmnbMrOp57BpN0KaaNWYstm3f1Qgd+aUibSTrXUxwqnpJu5jco5DCiK/1orRaCzXkIKES3tdhM6Jiqs45RoTnmxUJIcrKs8=
+	t=1754963632; cv=none; b=Mj0BOSZF3vyazlQO3JhuW0cYRSGErl67g2OaNkAZpN0lkDOl+UT18/TgoODb8Cq2zVVpbC2usf1wmrS6zAGGEfEBOO8SC+U7fx+RHAzhuNTevmdbVOrhecwupKCnEp0t2aMRCubNcAXCPrAnXk1gu6Z/QRIMxRT4d0ThjyN7B5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754959870; c=relaxed/simple;
-	bh=I+JJT/HEgzht8NH5PV02zwDfS1nSJ1CV2zFF8/WCNdc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XBbcf4IWp97A/wQtNKXgew+pmeb+pWQ+7OMjC9oFyKh2jF8238EOHZ2QxzgoKXVCfnZXSaHe3vr+rEFZEzL4qTEbo1v1qskHdp6Z3CVZ1nVEP83gx3XVLu9bdNHZPQ05c1qcGyuFVMpRXImdt6C8Mcw2c4hcODAJv1We0r4gw0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eEFayJqQ; arc=none smtp.client-ip=209.85.215.176
+	s=arc-20240116; t=1754963632; c=relaxed/simple;
+	bh=kbjk1NE25U+D+cdIZ8WClPsz5FPrJ9ZGpFCxJb02zSI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OPfrBWGaejlx1R6hsXsTZBSkiV8bfntPsy1aigPEvGiQO9dmYAZPj1UjxmpM2IcNLxbeKPDovdpy/2UyU+fkqsYQQAf5vMzDpkcGKvoPIDe+1vJedZNy2RtqeQyPa0kBx5s0eEqMVbJZNzmMXi2yro0mhBqjyz2BKFVm80ph7kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ItOeHoro; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b4255b4d8f9so3304166a12.0;
-        Mon, 11 Aug 2025 17:51:09 -0700 (PDT)
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-af51596da56so3806879a12.0;
+        Mon, 11 Aug 2025 18:53:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754959869; x=1755564669; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rLk7JyZeB5fZff0o7uyhPEE+hzUw7ew/nwGo79HGTQI=;
-        b=eEFayJqQEUf9jd7wt8hOFs/23kBqGa410Vh2PMAGsTq+/LWLKHl+7FOb3a40oXaabZ
-         E5ZM345EFg5+z13rUVWDV5+qaIytCxWIw1o1glT3WBjJkNBgNG216Cw6+bUk+JshltBq
-         juxmWuU819PV6lSF3o4aeZqyMfCEiGxP+ESlcmpgFzkVXkToyp0aSu0VNtrpTH6ss1L7
-         XNFsGMQmDV0xWHSLP3wDj6pjYMTd/ULNkVpBtQBmQU/7QtzEauvYYW0HLBnxEO2pOgIj
-         90782jS9rnVOymULKM2dlmzW4xYeVpzsRsbTHYuPd7eoSf29WAcW9aZz4/3rS9ekEhAm
-         HUCA==
+        d=gmail.com; s=20230601; t=1754963630; x=1755568430; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2TM2/7lE7zgF0cwNVS0H6okln7+yKWK+fmjDA20yXco=;
+        b=ItOeHorotzqoOfAi62HfYv00md6rQrsFSw7ydKqW3eOV4izfTjoR3URgivJKPQejQP
+         cONURLG3UNURFScWKfLWycrfvhlJZU7jaXlv9Tc2jrB4bajZAucSkJUILk1RSM8m2fI4
+         iIJglDSm9knb8KkG5AxgBs632JEsqVIRKm54E4XceKxKp9Vbs5V4RtT3wjdGEWVBOlh1
+         5TCqePp4/I0M2CbdiSlk3Xky+AIRfGqCLzda3d1C4iKS6QfT0tJsLAiqUFFK6PLSWhg3
+         wMVqufIWJT+wNx7zSaNDEmJNLjD34syzct98h1TtANn0H5aaZ1zj8duKs7IRd2/HntV4
+         E1pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754959869; x=1755564669;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rLk7JyZeB5fZff0o7uyhPEE+hzUw7ew/nwGo79HGTQI=;
-        b=DgT3+8vj+Ivka8ONgXB0IO5x9grAqO9leAvdhyOmUy8Gfi04Kp5V6Q/DvvvOL/4BG3
-         /qT7oHP7uv8r931ur5Z5ubK5OXs2ZQbeQFTPNA73WCV7GLX6qxlFH3UjEWP6O6yHmIn8
-         NfagxfhaltDMOifWEZesA0GrtvRcECRvH+tMQgWTBN0LstomoomshhSE+Yt8YaFKZZUr
-         Gjyum5/QjB/uo3y2hsqeLLoYIAlXK+Lg4+jcBhq+FfkoxCz2bOqB1wFNMbt3SxC2KuXE
-         btrkmLySoAMc4w0G5Y92wGuuH0qWny5D45ek/4c5mQy/6FADtDrHs8DKBTA4W8D+vqDy
-         iEZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXeBidaMtjyhIjKVsiMUWc68ANuBhmg99Y8qAXPvhevbRqCkst8+XGTyeC6vePBGRudbGlBXnm1i8i/y8KBKa8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYeaTcPtTUxASlCQAZJp3qNUOk6UJxjbxX6LM7V/df9Z+Qq4wP
-	J4xfgy+w48Am6j8t4oAb9wEkb4FxjIfpiMHnxIYU/tYxAU7e0y2MrxYW
-X-Gm-Gg: ASbGncuUQX0KcTtLiMMYOrXQO5+O+pBZMJgpB/Y6u/exOrl1mSY8ex0fJFzsLuMO+lG
-	2R3xMZSdqh3vcMZwltYIf/19tfmBelmROGgF3Lstsg6IC7Tk86YClwfMtWuaL+PVkglgGLQkmDp
-	p6nomuh9Exnjf5kdFwKDjCtpCUj2BASGf0TTQrMpvSTZsyfxOrDwx8CBB2sMFTcDcb3IaWhi4B1
-	EqyJWu5dVCbnXvT1VV+y7l1FDKUvQjrOzOFG/0vEmr5KEcEiMYTrIfVSLGyzm5Y+YDNWtOBGBuZ
-	DNVG8uj4NhgSu8Y+fgdNjiSAHloTrVIEDe5ZYIytbl4pdesMnzPgBFF5vDlW2U9k76GZ3ev5fQl
-	FmRr8IKq2vRvCvSmv6PkXFcuiu3X8rWc=
-X-Google-Smtp-Source: AGHT+IFeQ4dRsxAoCsTYUm6+5cX6P5ashl71urTJ+obxYkrmQdDrTJ4Ig2f2oLTBbk3S9YSOm6D0xA==
-X-Received: by 2002:a17:902:ce88:b0:240:4d19:8797 with SMTP id d9443c01a7336-242fc23f4e4mr24656975ad.22.1754959868729;
-        Mon, 11 Aug 2025 17:51:08 -0700 (PDT)
-Received: from localhost ([159.117.70.219])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-241d1f0e945sm283785035ad.56.2025.08.11.17.51.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Aug 2025 17:51:08 -0700 (PDT)
-From: Nai-Chen Cheng <bleach1827@gmail.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev,
-	Nai-Chen Cheng <bleach1827@gmail.com>
-Subject: [PATCH v2] selftests/futex: fix format-security warnings in futex_priv_hash
-Date: Tue, 12 Aug 2025 08:50:48 +0800
-Message-ID: <20250812005048.59892-1-bleach1827@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1754963630; x=1755568430;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2TM2/7lE7zgF0cwNVS0H6okln7+yKWK+fmjDA20yXco=;
+        b=QoGH55t1luK0C1Pm1cDaBPLoI6rnQcQHS3ZQI0ESSdu3EQuxCKcNjfXhgDbnF8CGl7
+         R2SefPmkdxs1u3O326rH5jySvwKywJgxdNObaXwtFhdtBPk7iu7zX7V7Iwr/fNmL//s7
+         ioJqtp67XjaaPNSlUEBFangN6Age8bRBohTiukO5NN+bFtsAz8kCaOR8skoC3xML/fj6
+         dS391m16gW2d98jTwyyWfQZ/O/HCC62+Ez6XVbs59sU2Os0h1nwHuKS/CynTm6NFTd5U
+         dBPwaixA6oSZ/+8WRy26ao5h0GWZEgIXq4J5tKVEnpBlzs5NZJD5vad9O8/jaDMSTYn8
+         VDDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVQz8Vf7SdmyzgkkIH/DksJLdM4TMkfxWE8G96CkZFWMIefJ51w+W15yBYMkLCC21fSNzSkiXQx@vger.kernel.org, AJvYcCX2UTZnafs/zXHJtLme2HMknVTqQ3iM3JZrM4evpU+gG8qAVljD7oC3CXxr4qE8yxN0cNC9Rh2ipsPSUGo=@vger.kernel.org, AJvYcCXMycmrDx4mLBrSL+wXcmeF0HHlzuUCOeMf3s9Yet1qZ2/HEn6gXoe5+kKcJvk0fxVU/CWIf6+R08/UFPM+7EHN@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYk84mUV6GBoVClH5GnMGBtJ5X6b46iomQY+km+1ojvM9m1lgB
+	R/td72hrM/TV7FHgLjI0c2VBmOf9KVfbvxTbeqFtJuoC1CPWZPdsdql+
+X-Gm-Gg: ASbGncvYoL5NpR9UjGzndL1Ncq6gVyHhDTTzyZwHVj8Y08uJqhZjJgcLiV/znOxUV2k
+	oAS9QVZ7V8WVKo44G8uPoIqNLK2tnROcqkN073S48+k1490Jk+5X0hSD1xuNXWK13yiWs4v9qKi
+	DSKbMYxCNYFMIZMsGYQ1Wyn6dvYCDMehF7Yl9q3P+HPEJ5sq50R4qoNMu9+Ucfj8cYnyCZGCRkB
+	28EfBwSsZ4WF81dv95aJCA1Uqx9xYd0EPKjXPSvsoz6CDf1tDiav/RSOwNHE7xuD/hNkz5cq7yL
+	7yrDHyaQ3V+xo3gzN3ea1loiknhP0sqZVgR+OCjDVBmrLkF5uzPfG9NikK76bCPz2tKrr2FoCby
+	PNi7GPJfGjGk6dj9bxCPyb3yhSSk=
+X-Google-Smtp-Source: AGHT+IEu6V5UHqfMhjN/LVoyKCA0Ke5eBONL1yJNKfnYSGTC0pmHyZAZe/NtCLnUSOsVGOs4pRo9ZA==
+X-Received: by 2002:a17:902:d603:b0:240:25f3:211b with SMTP id d9443c01a7336-242c225644amr212881815ad.51.1754963630158;
+        Mon, 11 Aug 2025 18:53:50 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241d1f0f603sm285233875ad.48.2025.08.11.18.53.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Aug 2025 18:53:49 -0700 (PDT)
+Date: Tue, 12 Aug 2025 01:53:40 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	David Wilder <wilder@us.ibm.com>
+Subject: Re: [PATCH net] bonding: don't set oif to bond dev when getting NS
+ target destination
+Message-ID: <aJqepGpobcDGak_C@fedora>
+References: <20250811140358.2024-1-liuhangbin@gmail.com>
+ <783435.1754922439@famine>
+ <20250811093328.70343754@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250811093328.70343754@kernel.org>
 
-Fix format-security warnings by using proper format strings when
-passing message variables to ksft_exit_fail_msg(),
-ksft_test_result_pass(), and ksft_test_result_skip() function.
+On Mon, Aug 11, 2025 at 09:33:28AM -0700, Jakub Kicinski wrote:
+> On Mon, 11 Aug 2025 07:27:19 -0700 Jay Vosburgh wrote:
+> > 	Generically, I'm wondering if test updates should be separate
+> > patches from the functional changes as a general policy.
+> 
+> Yes, not sure if we made it a hard requirement, but I think it's our
+> preference. It is the reason why we don't require cover letters for
+> submissions with 2 patches.
+> 
+> Hangbin, please update config for bonding tests, looks like vlans 
+> are not enabled there today.
 
-This prevents potential security issues and eliminates compiler warnings
-when building with -Wformat-security.
+Ah, yes, I forgot to update this part.
 
-Signed-off-by: Nai-Chen Cheng <bleach1827@gmail.com>
----
-
-Changes in v2:
-- Fix typo in subject: "selftest" -> "selftests"
-- Retested compilation and functionality
-- Link to v1: https://lore.kernel.org/all/20250717120606.45115-1-bleach1827@gmail.com/
-
----
-diff --git a/tools/testing/selftests/futex/functional/futex_priv_hash.c b/tools/testing/selftests/futex/functional/futex_priv_hash.c
-index 24a92dc94eb8..19651087c4de 100644
---- a/tools/testing/selftests/futex/functional/futex_priv_hash.c
-+++ b/tools/testing/selftests/futex/functional/futex_priv_hash.c
-@@ -184,10 +184,10 @@ int main(int argc, char *argv[])
- 	futex_slots1 = futex_hash_slots_get();
- 	if (futex_slots1 <= 0) {
- 		ksft_print_msg("Current hash buckets: %d\n", futex_slots1);
--		ksft_exit_fail_msg(test_msg_auto_create);
-+		ksft_exit_fail_msg("%s", test_msg_auto_create);
- 	}
- 
--	ksft_test_result_pass(test_msg_auto_create);
-+	ksft_test_result_pass("%s", test_msg_auto_create);
- 
- 	online_cpus = sysconf(_SC_NPROCESSORS_ONLN);
- 	ret = pthread_barrier_init(&barrier_main, NULL, MAX_THREADS + 1);
-@@ -212,11 +212,11 @@ int main(int argc, char *argv[])
- 		if (futex_slotsn < 0 || futex_slots1 == futex_slotsn) {
- 			ksft_print_msg("Expected increase of hash buckets but got: %d -> %d\n",
- 				       futex_slots1, futex_slotsn);
--			ksft_exit_fail_msg(test_msg_auto_inc);
-+			ksft_exit_fail_msg("%s", test_msg_auto_inc);
- 		}
--		ksft_test_result_pass(test_msg_auto_inc);
-+		ksft_test_result_pass("%s", test_msg_auto_inc);
- 	} else {
--		ksft_test_result_skip(test_msg_auto_inc);
-+		ksft_test_result_skip("%s", test_msg_auto_inc);
- 	}
- 	ret = pthread_mutex_unlock(&global_lock);
- 
--- 
-2.43.0
-
+Thanks
+Hangbin
 
