@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-38883-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF0FAB24E4B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 17:55:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7951B24E53
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 17:55:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E13211C24C30
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:48:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BCF3188F7C5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:48:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E5AE29ACED;
-	Wed, 13 Aug 2025 15:42:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE8AD29CB24;
+	Wed, 13 Aug 2025 15:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mghUu9Uk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c0SgZTUw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C32299A81;
-	Wed, 13 Aug 2025 15:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C31629B8D8;
+	Wed, 13 Aug 2025 15:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755099743; cv=none; b=orjei0ottqel+rXDch+ZZzrInblPQcSgnNmD7eoFUoxQRAe4pJRTgTiJXbZy1MDGiCs++BA0QwtlS9YtzZVDFEqI7vnhiK6gwD/Ffe0GzAWj3maTPEkuUvPOkyBaFURGnPoVIXvB19UdAnNqUx9S0dt4xf92DaSBmzfP4TUYM/Y=
+	t=1755099745; cv=none; b=k592P4Ko/nbtELDmZk+bvJ2ZwQTMk9BAf6qBEZzMNPKRRhAFT8RHNCc7AV/RsnTgnXQX8JP7+N9+5SiSOhbcBm+EEZi17SmdOmG9njPcaR7+nIRZJfeRchUOir1r79f3OC8TKggBrVSZFm0mUNhxWozhW1OXjs+WlZ3OIuFiBS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755099743; c=relaxed/simple;
-	bh=jSSTP0CMYqLQgK+GyMVsel3zf/VtDwNHVf3qOND1uDk=;
+	s=arc-20240116; t=1755099745; c=relaxed/simple;
+	bh=9phkFdt74ZQl1LqYivkVMOh37dFF5NjHa3G+R3/LyqE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MunZXZaApEuOrHWfk2UBlgOzIJeKWIfcc/HblyRfqH4NgFErTeCHnQaseWObioipTX6RJmy+aCgOE/G1HmScz9fEiABWqNUYYG6ai0m8pNQXXVx7gb0PHY2lThmPgB2BNreVQWkU7KczuRNzWN6+pfDbT3vIZmZhdJdUqu7NrAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mghUu9Uk; arc=none smtp.client-ip=209.85.222.172
+	 In-Reply-To:To:Cc; b=Rig2iJN3YXwrjP1Az8wsznE2EnfgtQsPkmQT2dfkH0uI2A2w30ckWNK0vv9S0I2q/wN/DXM22jV8X4YQNCiecAdkIP1hJ2a0vZ7OLBWEIQN23ACrv5/2UirTb3psnVH+Z2OSN4KMTy+dNOgVeicmJVSWJVq8ZAqba9Ru86C5pqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c0SgZTUw; arc=none smtp.client-ip=209.85.160.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7e864c4615aso115043485a.1;
-        Wed, 13 Aug 2025 08:42:21 -0700 (PDT)
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4b109921fe7so314621cf.0;
+        Wed, 13 Aug 2025 08:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755099740; x=1755704540; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755099743; x=1755704543; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wcmbdRLiVO4cc/yBM3bWVRyme/nNaKfenk9T8xs0Ffk=;
-        b=mghUu9UkbrgdO+MoviOBTeXtWT9IX6LSWL2z9FRxigCJAqd02X7TblEh4BGupV2ztx
-         SGVO7EJv0AIp2GmOb1pF05vzhoZW3KAnojzPGsKSYpgze8VVrG6aOv5jDRbYvOvb9hJq
-         7h2XQxgf+yYEkJ2rFllmq5g3midFpIEfluiSJeJ+kuulB1cCtrcT+tZXJQbDasXs6WgZ
-         HGz4GJ0RSIn/iSmR28qmBoLuVaja6/60VKbF2Jy6d9oWAIQKWAy5Z9SfVaf68tBFAt0p
-         FXlSVIq4Mio+96k+fy7izBUxZSmHwve/WGDS1M0Ofoue5nOC3uVyZtsoD5ZE3AAvZHNM
-         g5wA==
+        bh=rfJJX9lKKQ448nBfVi1BWsqmEl2RnVMCrehqFg8UH0o=;
+        b=c0SgZTUwnuMRIA3otF0hACHbjQYefuEw7GR3tYiOvF2PZ6PZO67lQoyufHvWxRqYhm
+         bZvYhIiyr/QmjY7+0S55rgajBz+8W8cje8gCckvn8w4ABTwOHZPU4guGciIeBo1SFpm2
+         Q6ozwXwN4i9FzpvL0qshm6i6IgK9tk6IsdT38oBfrMlsL54+rkbwrnUY5rj9W8WZ3k10
+         cMkOn6WwvX9xkFysl/Yi8j2eIAX+VigA2ryS3Mx2l3RSNhff5UMLv2IoR4bxVr9Sf09B
+         PN10kJs/JA0cYLnMGob5/sCrYDU20FEujnDiyn+V/Ccm1BK6F6DhckHwrQRg2xHhV77b
+         QLsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755099740; x=1755704540;
+        d=1e100.net; s=20230601; t=1755099743; x=1755704543;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wcmbdRLiVO4cc/yBM3bWVRyme/nNaKfenk9T8xs0Ffk=;
-        b=a+EYBWye487OqZqYuFvY0rDaAUHfHiNwajQyGailR//Y0k99AGZ7eTtc57A6FjCDl6
-         5Moeud1ILw1RwfgvaXbqMAyWkFvm0BO3gs/oMXvYt8OdEvqWKBF5NF26sEk37uWvhwRs
-         m929ByedjJlBOZOHy2dM+gMx/An66gktzPxnxX9g1I2f1hvWXwVgtNh/DXdnj9b5i7OJ
-         +xrDy6JjYL0JKZ5+Wp12+rS5RfVoNtGIfrXJtXZL5sd2l793U8M8tZhOe+vT7Bo4DIFQ
-         azsJa8Uw7PTeHrXpUhVOhNuDg1dTjD636/g6mvgTUOtMK8Fd0oWz07c1hUhpPJuBGlbS
-         w3pg==
-X-Forwarded-Encrypted: i=1; AJvYcCUYJxXcBg5xY9RKmMofbxgfEMFmbapWK3FfB8+LahoOFijMT1NnbGv5kGzLysJqiWIi/EhwLHUg95/HvNTQ/toS@vger.kernel.org, AJvYcCUzWbIJG+YN6pes4cm+Mv9n5VYQ0posLb+mmHGzg+EGe+7a//49cdufTq5wZ7M/VTC0u+GyxKW7@vger.kernel.org, AJvYcCVSBacGT/MOk+hVMhqMlTBD/muMtOYqSmwbQa3+yJOc3MYYJy8Xcy6HbFR4BnF6H7JKRtwTXOl8q1YkEYMY@vger.kernel.org, AJvYcCVpMkj1szZ1mz2Un7+e+CLjH2CRS51Jloekekn/S8k/YLjMTJl/Ot4c3ay7wsIC6Mpx0c6iMkAnjoD3@vger.kernel.org, AJvYcCVtH3QSb3zt6nS5k9ZZzqAwxD4Od+IM3LEd2GH/wz379o0uFf+eIWFWUXQDfgkMpaEd5aX+rernJsc=@vger.kernel.org, AJvYcCWvUuSAzip5EcesdQ7gT+qtrJL45pfXE3uf5joWJYkkCK+/54WMNtLbPngtho/miD/7s+hIhc5CsHZgiEV1nJY=@vger.kernel.org, AJvYcCXzbgeNM9tflFenjTKPJQyP13/FsAnYmHqVNh0IosEj3mVNApxpyroWYoCuUO7zN37ucVwUMl0U1RVyjg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmxA12OP3BfW/Z3toxVh/yyF/j6jUNdFaFKt2Rz11n8ReT7jMz
-	UzhKN5v0cqQUZgajtBuY/egZhFS+bCrddhSgsQu+58yaJ1nQZ5kCyoYo
-X-Gm-Gg: ASbGncvHq9YeM62LIxq3pIwtjyed0KD4+oQBXWyDFA83bP1eikWq75QRs4hdUjHxdmI
-	xBeRzv4qZCkAZsKg/iuhTUtR4U+AwvkVXmjUA/2gqEAkzw8Yq1OD6IGxWEs9SEQ0SonW2bdOS5I
-	kflj3ncPfUF4kwJLhFiHUnxasa8FpoSE7C9MA/CsEQBT690E1+XRmTjKtb3a/XGP13eQDVagq/d
-	FX2PG+7NpD6+jpYshNpjbwDVPzmIqEkqsghYEYb4ld1XXeph5tK8b/VQ3ICV9AQZRd1mUJRNtxd
-	x6gQbfx6mTWWO5l0bgmfxxAoiHkt25xgkHv7KjPitjxsI2iSaSa6oHf3ei8ZcJi3CgPjxl37fBN
-	InXRSOz2bJxaz9cRp7tB+qGrUmr1R0nRg6G8/p7KW/Mqfre3qORjpRA88759pjSLgX0EDK2IxfL
-	MS+WGfqATEoT94629y+E3zRfBh2wk+qPIYjutOMvZfqlyX
-X-Google-Smtp-Source: AGHT+IGfyPN9tuqYm8U4vQO9QvX0XCFm/DgPPcPcTW3fssXclM27AttUHXU9384uEAdC1FKNPCVA9w==
-X-Received: by 2002:a05:620a:4309:b0:7e0:e2d7:e03 with SMTP id af79cd13be357-7e86fbc0bd8mr8171785a.7.1755099740351;
-        Wed, 13 Aug 2025 08:42:20 -0700 (PDT)
+        bh=rfJJX9lKKQ448nBfVi1BWsqmEl2RnVMCrehqFg8UH0o=;
+        b=oKjKuBUiQI5OMog5dY/B82lVJJ3LOGmAgz3kgpVIfQZgg2eNWfvK4f7PZoizrHXO2M
+         Id9/vRXDfc5KY7HeSnTrfo1mM9Py/RDAjSws7W+RU8tW93h1EqQUPRxTA92PaJH8mS0v
+         gAUNq0Vh9msV179v8njasX93nrtfzMBocSpjTY3KQLn7ZDCrSGAdBHndZZNfLiTIN0Hj
+         nx8HUg9hoIpXYPpYmz/3i1j5N1HhJKRHPMr11XCVl2of6KHOA04FzHfkUOj6obLiDrw/
+         7z1wtM60EsGk2Og7iPyFpJLRkOMSm4Ue/K7m03iUKhnVIAkjFULHtKdfanLV+DOjob4v
+         DWqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUF3g+2y4SuL6ngtnCws40ZD4aWniZR5lp2PTU3ryQ700lwTbP8g8EH4P8UO74XwYPSy85vV49JVUo=@vger.kernel.org, AJvYcCV14xojsHA+atEIRwmJ0WiTQeviNl7pzyQV12izLzdwghZW64CbQuC40xY+4HZpxxC5ErEH/uhxVK/w+A==@vger.kernel.org, AJvYcCVtnkmrRUQbJZpw6Ql9zTjD1VAtMVGJw6Vumhg/yd9ugBC8urHoGXA7Ceq9mpHELRqx6Z6In52G@vger.kernel.org, AJvYcCWavY7x46PdLam9yR7JW4jXpMtTdQg96f8qWoEnTUDmDNirKVae7o0gGMiAt9VlV6BBHZb/uPCib9/P04mZ@vger.kernel.org, AJvYcCWvW1xrxzXEAinkRu/jaNOkeg7vuGj0MHOEvyX1WDPuFZzbJptRMIkw33syTZYejl6FTTTgJ3Dt2frr@vger.kernel.org, AJvYcCXHh0Qor+TNvY0fd6gXKCw/P5rz3fNlguUemdM0HQuarC+4eyt8tayXqXO+HyCgQsqEOSXQepEmMcklIujmjRk=@vger.kernel.org, AJvYcCXLcip24v6w93YcUnjFldOkdUo/JZOpoGtVmsc38z7ixHGq9pkJO8T+3BgZtIgRoFX6HZf425FnBFx4BWMOVksu@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNRk0KguMG/yWOhsdFczhDs9n+0gPGEZwesZsG1msNBsDXHx7k
+	rwgKX3a6vhDyarcnSmSXodj4y+Mg0niK56/Q2E0p4p1cf7OX3FQGSsGh
+X-Gm-Gg: ASbGncs+bo0lEBHLNrNvluXmkdNwed23+54jpvV44h/45Pduv8XFiByahkjI1oG/n7T
+	NeJGJrwlTKX42AuO4PS1YCXV956dFY5qnVkSXGiy6n1QLL/ovHvQdFyUlFSYH08JhRuErPRI/oU
+	B8C/E74EL+QpHZX8j+Eubw2Y8tIuT6tbRWc1QFt+C6dtOnjTNenm/Py6A1lHaLAs/9CK2H86OSa
+	Eut3u0ZTwh7nkPYEbmE3n96BzULKRlLk/ubfnYE9Xg8PQ7TWXTg3yqU6PQ0o8QbxVj8RF+Qusr8
+	isYe1ZxUugf8waVBG0MLF9AyRO9u1X9cAWAintyObQEZxmR98+2LcNxtd6tOjLgGqO4YPPMx3DF
+	aavfCV3UpIxivyhtp2VRSoAd0J5mwMWYWh2zfeCUCzBqZJgKMbiegS96RLxsBRHKMTFKJdYCHqy
+	JXEs609+1kaGutIamo6b3ZrkuZQwDUv6/mdpZfQ+vofWJB
+X-Google-Smtp-Source: AGHT+IEG6vbN3JiLx4Zvm7sGkrgY8IFW6f87G5dzjokUu9eNvm8nTBHVeTML6uomQC5WLma2KX7E3w==
+X-Received: by 2002:a05:622a:5986:b0:4b0:89c2:68fe with SMTP id d75a77b69052e-4b0fc8b7decmr53142121cf.52.1755099742826;
+        Wed, 13 Aug 2025 08:42:22 -0700 (PDT)
 Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2600:4808:6353:5c00:d445:7694:2051:518c])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e81bc7a1e3sm1180019685a.74.2025.08.13.08.42.18
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e81bc7a1e3sm1180019685a.74.2025.08.13.08.42.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Aug 2025 08:42:19 -0700 (PDT)
+        Wed, 13 Aug 2025 08:42:22 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Wed, 13 Aug 2025 11:42:00 -0400
-Subject: [PATCH v3 09/11] rust: net: use `core::ffi::CStr` method names
+Date: Wed, 13 Aug 2025 11:42:01 -0400
+Subject: [PATCH v3 10/11] rust: of: use `core::ffi::CStr` method names
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250813-core-cstr-fanout-1-v3-9-545c14bc44ff@gmail.com>
+Message-Id: <20250813-core-cstr-fanout-1-v3-10-545c14bc44ff@gmail.com>
 References: <20250813-core-cstr-fanout-1-v3-0-545c14bc44ff@gmail.com>
 In-Reply-To: <20250813-core-cstr-fanout-1-v3-0-545c14bc44ff@gmail.com>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -116,13 +116,13 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  netdev@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-acpi@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1755099716; l=1163;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1755099716; l=1153;
  i=tamird@gmail.com; h=from:subject:message-id;
- bh=jSSTP0CMYqLQgK+GyMVsel3zf/VtDwNHVf3qOND1uDk=;
+ bh=9phkFdt74ZQl1LqYivkVMOh37dFF5NjHa3G+R3/LyqE=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
  MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QLE8mI7AVGtx+HAorNNktKwEeNw87jP2Dm/x8WxEn8G0HU4C1+7sSGz2uvHfqc6z1xiQtkNCaCN
- XP4LWQ43yBQI=
+ QA5ZBj0FVzxsKMM0ak/CLXiUFCmTAQdpP6pEgVTnyx1hxCPZxv/OzY8aSzcw782B+XDNpOc5uCi
+ RWM+agi20aAc=
 X-Developer-Key: i=tamird@gmail.com; a=openssh;
  fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
@@ -135,22 +135,22 @@ Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Reviewed-by: Benno Lossin <lossin@kernel.org>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- rust/kernel/net/phy.rs | 2 +-
+ rust/kernel/of.rs | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/rust/kernel/net/phy.rs b/rust/kernel/net/phy.rs
-index 7de5cc7a0eee..be1027b7961b 100644
---- a/rust/kernel/net/phy.rs
-+++ b/rust/kernel/net/phy.rs
-@@ -497,7 +497,7 @@ unsafe impl Sync for DriverVTable {}
- pub const fn create_phy_driver<T: Driver>() -> DriverVTable {
-     // INVARIANT: All the fields of `struct phy_driver` are initialized properly.
-     DriverVTable(Opaque::new(bindings::phy_driver {
--        name: T::NAME.as_char_ptr().cast_mut(),
-+        name: crate::str::as_char_ptr_in_const_context(T::NAME).cast_mut(),
-         flags: T::FLAGS,
-         phy_id: T::PHY_DEVICE_ID.id(),
-         phy_id_mask: T::PHY_DEVICE_ID.mask_as_int(),
+diff --git a/rust/kernel/of.rs b/rust/kernel/of.rs
+index b76b35265df2..58b20c367f99 100644
+--- a/rust/kernel/of.rs
++++ b/rust/kernel/of.rs
+@@ -34,7 +34,7 @@ fn index(&self) -> usize {
+ impl DeviceId {
+     /// Create a new device id from an OF 'compatible' string.
+     pub const fn new(compatible: &'static CStr) -> Self {
+-        let src = compatible.as_bytes_with_nul();
++        let src = compatible.to_bytes_with_nul();
+         // Replace with `bindings::of_device_id::default()` once stabilized for `const`.
+         // SAFETY: FFI type is valid to be zero-initialized.
+         let mut of: bindings::of_device_id = unsafe { core::mem::zeroed() };
 
 -- 
 2.50.1
