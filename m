@@ -1,288 +1,275 @@
-Return-Path: <linux-kselftest+bounces-38908-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 245B8B252F1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 20:22:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B120B25362
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 20:55:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 907C47A156F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 18:20:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C1B61C2122A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 18:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030A219F424;
-	Wed, 13 Aug 2025 18:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12F9F2C032E;
+	Wed, 13 Aug 2025 18:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=riotgames.com header.i=@riotgames.com header.b="ibzqRE0D"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="cS+krm+r";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Dp492Xko"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550BE281368
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Aug 2025 18:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755109313; cv=none; b=rxvhYMXNy7hamEOCl9YlA2VeprPkBa7MJVVNgtOCVHBrytozCboUMED1PZZRzpSXkK/1Em3SzUoIIsCKubLAa/ly5dezrKrV4D9rjfZ4b9R5scEgjfkrSqWjMdqHddoXITe1uheX3PWolU6asTZN+LnZh5W6J3cO3xXVoqhbPmA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755109313; c=relaxed/simple;
-	bh=H7Aok+8AsCNXUKSJni83EqB4Qm6rA3DYVwzZH5/eAj0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GFQTD0ShZu1HfLjE9yy+BXm2LOSFM/7t1PcjsdeB2z4cf08dmoh4xgEQRYU3a6vJhxcQiItqzA8yjJpKnLZVRiQVkBwFHZwpYyTVyjRBz7HbJvXzUsorNuA3EVZup0xF9ca1EI+eXNrUMkRIHY3+IJ302r/0q1FXJK8hdbS+J+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=riotgames.com; spf=pass smtp.mailfrom=riotgames.com; dkim=pass (1024-bit key) header.d=riotgames.com header.i=@riotgames.com header.b=ibzqRE0D; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=riotgames.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riotgames.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-76e2e8e54f8so189388b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Aug 2025 11:21:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7705192D97;
+	Wed, 13 Aug 2025 18:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755111285; cv=fail; b=mYfbfngToji7OSFEEkfLWLZMfPcmhLdNPNfu5JLhy4vgfV1ovJeM3RNgNz2aAKxXaw8aO148U9FGNfmsQtsAVeJmt87gfYbLqUFq1SFrLVmiMyPEMb51A31hTHwPx4hknIHLMnnI3Q1498Eod3WSHwVYXDvSftTu62+mourj+Dg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755111285; c=relaxed/simple;
+	bh=MUgANSvZ5mo+eveBlYyi6C8m3ifBCSDLxDeTjP10HAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=seuH5OaK1t6xQXjZj450AEWguuVgvf4lyvbSMwOSja16TPoOtiowFZVInh2/7glxbmQUZUy3bIYOEk55HWwLhp1T9r+izUE4Un57DrPFWS4SXPr39w+rnIlv5366UYlDw995cft2FOoAt+BQhXQWCZIk+VzMmG65FEjVFissa/4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=cS+krm+r; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Dp492Xko; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57DIN1s2020802;
+	Wed, 13 Aug 2025 18:53:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=MUgANSvZ5mo+eveBlYyi6C8m3ifBCSDLxDeTjP10HAI=; b=
+	cS+krm+rgGka0G3KMzM9shK/xr+IY3xBvi28eoWuqN7wMuqYPOaum2tWle7EfdUl
+	yulA8ls2sIHjrXScvaCBGzTfI9DzJNuNnAkAZErmgxsWdOx3cpxjHIq0P4+suDaq
+	Rc3K3dtzcHeEL8+BNM9aRddO6F1lR7cOhHoNosrnxYoJU14G7DBywalCoICMCAym
+	GBii5rJ7h59CtHBD6/H1mlV2CYUXXcK8BJZOlNcEVjvz0Qjf/FpOPNjZxWxnnowh
+	6tPGem/nkmIBsniYbjwlTrDogwxsf5Az1bgmQ1nR+HWUPnzuo++uqw+TfUzQPJpl
+	K+Onr4adXEH8Q1f4gi/boQ==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48dx7dr4hh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 13 Aug 2025 18:53:51 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57DHhp0C009843;
+	Wed, 13 Aug 2025 18:53:49 GMT
+Received: from cy4pr02cu008.outbound.protection.outlook.com (mail-westcentralusazon11011036.outbound.protection.outlook.com [40.93.199.36])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48dvsj3h67-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 13 Aug 2025 18:53:48 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=u8zgVkT2fcQDImqCZ6IyI8eCGK7+fpNRY5U4x/cCcQ3V+XoiC4Rg2YVJT2EATSF90spTrc0EzY4F73ska6WEP22NxxkY24+BugdbT9zYZVbNzDLsc6jljDv14qOE3GFMzevNHP2fmEUR/ZwcEmSleQBY2Yj4ZkPPUIrrDhefTnJpfajtYJJqKmQJCeJTt4B0QRskdh4IlGDiiFkDuS4Cx28+3QeU+vE7nk/i63AvaQYNhBQ6dMWNOeXDyvqJiLazbWUjS4D7M/QSvdGwATwMG5T0Ee+ilAIKuyeq1LHjnSy323MvcZehVFhmVf/Y3ZXLRsDb/+RVqGUQqLvklyUHbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MUgANSvZ5mo+eveBlYyi6C8m3ifBCSDLxDeTjP10HAI=;
+ b=jkjYGCFFJtd2CId9dO8NWF3+K49EQPorC6V1xgeoMYNxVJssWw+W0L9IjC2pJCEXwDC3YwQ23j56LI9mTK9dhSnBLgHrbw5Q37xdJAvoAQpKUBrasnurDnPb00AGQRuEh5cx8/27lhTzVtjgLPRVRpj/m4NezMMmVODJ1f2mT18xZ9xD64Tn/wc9GktFZikhpoL8GIeh+2XLhuBYnHUEbq9wPfDV9MRj6LuY6ODRuZOj3HrxC0LDDSif5zCnYoSzUJMLVQ1VD54TDolk3aZcRvkaWHclSE9PDIM356Lmf9mQQ404RbFsFj8fyl3v381S3qarg0PDaCOolKYm8KNneQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riotgames.com; s=riotgames; t=1755109312; x=1755714112; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H7Aok+8AsCNXUKSJni83EqB4Qm6rA3DYVwzZH5/eAj0=;
-        b=ibzqRE0DDjzt16d2wt2NLHbHfReKnm93lrY+oYwY4n0wSUwz3ntidB9bq/vkLwoHwX
-         ix3vFqJkdBxldPO+I1JhtoanWBMVQpxoHC5yOPTFbRXlvr7gxlt0eQTBmM6Gsox3Ja/O
-         VAzNdvTOM4uM9rp/AACmuXOZz6uRjfpIMkDsY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755109312; x=1755714112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H7Aok+8AsCNXUKSJni83EqB4Qm6rA3DYVwzZH5/eAj0=;
-        b=I/DvHb/f01x+2tKOKBekA/uSjmimv243AsQPriVgaSIiFmbP5HoYWBjdqB2oggZgrV
-         lKNwDs6AbzbYZOKG6M3SxTc8UJumpSNQcwNqXEQiubnHbhVavJmPoL7wfvlT0gi4ZcrJ
-         0V9KTiF7UNP80pCYpqGareS78CZFgL+mLTN3iKRnF1hs2uJy+60qV3agBp74OemkYajV
-         pZgremJImkArydBPEYMZN73Z0gmvahyAXHazsIxzCMeD8dvftUVhzAtHOt7CDPWS1N2n
-         Ksolnl5+8HsXgJfXqkHtzAcz6PVqmy2aTrrQuO/2nUXUGXWdRbB+51l8QtuknkUX/oI8
-         dq7g==
-X-Forwarded-Encrypted: i=1; AJvYcCV/8wtEkCOx9fmd4lHF9+fA+ubGqW9zfORB2wlEkDbjfl+faVmpa9Tu0DjeNO33V/jhJaoYAMWUmV1AOsC/XT0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyV1qMtK0Jk5LIYQ50X9ddiaBeeVTRb+X77Q7DOOY8lFicDcCQT
-	fXQyg9dovzoTdF87+0hiU6Jc07yMMhT8tR3rKWCp95I0EWtj26xULZrZEXvJrDdIAacGsnDLo4f
-	MbKHus69l50+68wCBdfk8xigG+rucHB4kMCoTJCZzMA==
-X-Gm-Gg: ASbGncvHN3gLlpxuDz2WpHBn3ulq6q1Prw2/dfejxtOl85sA+25X0cgY2KAJczcOOxc
-	sz+2YcVUX5tnlLv3beetDc0uDWWtgSJPzwJD5uSgf3i2yworzZYXx3g84j6vYVUNN/Qd3tcOP4v
-	QAW/UXXnx2TAV6SsM0AFpuiCUBpSj7amZ1D07asX6lUeqku495ypoqQIDZYq0/dChcfHaeEdoke
-	lqjppLRwMFPmVoF
-X-Google-Smtp-Source: AGHT+IH1tY6NdVEiDiIOsXh+Mk2DqBPeX3M9xSd8qZwtHHdAHFsFYmz3eY2hG8dt2+kqapTm/ssv5tGMAlMvrUmANCk=
-X-Received: by 2002:a17:903:3c46:b0:240:7247:f738 with SMTP id
- d9443c01a7336-244584af6b0mr1439195ad.1.1755109311644; Wed, 13 Aug 2025
- 11:21:51 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MUgANSvZ5mo+eveBlYyi6C8m3ifBCSDLxDeTjP10HAI=;
+ b=Dp492XkoYVqzEpWi7Uw0wHhaRt9u/JrMkh7Fi5wmoWnQidps+X30iGjuB5IoG4OnKmf1JGo4Fg5mUIIHUKgsusqZyvdKG1u5mbgv5NVOAYXWE7nRBbJJ8TuK87NOJFXdMtsqA6NDCH/Z98kt3AL9B/+ShugXuJSlSSCcUpqfcao=
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
+ by DM6PR10MB4122.namprd10.prod.outlook.com (2603:10b6:5:221::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.11; Wed, 13 Aug
+ 2025 18:53:44 +0000
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2%5]) with mapi id 15.20.9031.012; Wed, 13 Aug 2025
+ 18:53:44 +0000
+Date: Wed, 13 Aug 2025 19:53:41 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, david@redhat.com,
+        vbabka@suse.cz, peterx@redhat.com, jannh@google.com,
+        hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org,
+        shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org,
+        josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net,
+        willy@infradead.org, osalvador@suse.de, andrii@kernel.org,
+        ryan.roberts@arm.com, christophe.leroy@csgroup.eu,
+        tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>
+Subject: Re: [PATCH v4 1/3] selftests/proc: test PROCMAP_QUERY ioctl while
+ vma is concurrently modified
+Message-ID: <36049c3f-94ae-4bd2-9425-68649be92b61@lucifer.local>
+References: <20250808152850.2580887-1-surenb@google.com>
+ <20250808152850.2580887-2-surenb@google.com>
+ <7d3b4b0c-f905-4622-95a8-e4d076dc71d4@lucifer.local>
+ <CAJuCfpH+Mg7P--sP7LmhhUgGSU0AwmoJLYGyvft5fPC0Mz1P6w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpH+Mg7P--sP7LmhhUgGSU0AwmoJLYGyvft5fPC0Mz1P6w@mail.gmail.com>
+X-ClientProxiedBy: GV3P280CA0092.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:8::10) To DM4PR10MB8218.namprd10.prod.outlook.com
+ (2603:10b6:8:1cc::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250804022101.2171981-1-xukuohai@huaweicloud.com> <20250804022101.2171981-3-xukuohai@huaweicloud.com>
-In-Reply-To: <20250804022101.2171981-3-xukuohai@huaweicloud.com>
-From: Zvi Effron <zeffron@riotgames.com>
-Date: Wed, 13 Aug 2025 11:21:40 -0700
-X-Gm-Features: Ac12FXz9SYBFn_O1HZA19Q6nLQJmBqaWIiON5vvZTvzhr0qNIx5-gxQZM7Ri3GI
-Message-ID: <CAC1LvL2AiNpN86+fz+30ap0Pm5W9C1MtV5sPvupU2uFGoJ94ug@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] libbpf: ringbuf: Add overwrite ring buffer process
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yhs@fb.com>, 
-	Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Willem de Bruijn <willemb@google.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>, 
-	Tao Chen <chen.dylane@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin Kelly <martin.kelly@crowdstrike.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|DM6PR10MB4122:EE_
+X-MS-Office365-Filtering-Correlation-Id: 305ea28c-d6f7-4ec5-94bc-08ddda9aba74
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZDBjVlE5TkFQWTFaMGlEUEF4VlFqUjdJOHU1aXI5ekx4WnVnUGZhLzZHZmoz?=
+ =?utf-8?B?d3FCd1ZFcEc2eS9ZZFBBTVBPbVIzVjZIeUFYL2ZMOWZZZ01YUzVDVmdhdlBk?=
+ =?utf-8?B?OU9TZzQySC8vdUNkMnBrOGVON1hnZnZISEJ1dDk5WGJtQnJPNVZkMTZjY1Ev?=
+ =?utf-8?B?VzhOem5zTmJVR29jTnhVQmtyNmhudDBZNkRDQ01sd1p4ZGpIR1FHNHhBN0Vo?=
+ =?utf-8?B?QTlxcy85Z0pUSS91QVlEYlVDRlpDRWxvVzZCU1VHY0F5OTRUMUs3eWs1TkxN?=
+ =?utf-8?B?b3ZROW1OOTY2bE0zaWVDNlZzbkU0ajc5MDRWU0ZGcWFqZnpnTTh2V2FWVGdK?=
+ =?utf-8?B?eTExckRoV2g2WVIvQ3pkNVJrUWwwV3NLUzNDdlNZcXUzTnhIRFN6S09jUGNZ?=
+ =?utf-8?B?VzljWlhvUURVcE9MZ29rZmdKRmI5c2tEa0ttZldNVi9hdmlvb0N0dHBJOXRt?=
+ =?utf-8?B?eDFzTWFJSVNWQkxjUlZQYXZYTjBaWmdrWDlHekNDRVczRmZudHM2RkFMVUJv?=
+ =?utf-8?B?cVArNlIzaVdob0t0UkhzelVZMDR6NTVpVkVPMjk4R2pZY2E4Qk9VcDhuL2hE?=
+ =?utf-8?B?aTQzR3ZROTFKSGljVjRQdGVJbTRaRGZnSFFkRHAzWDJXMVI0U3VkalVUYTNL?=
+ =?utf-8?B?Yno1VFBRcFJTZTZxU1ZjUTVxTHRLQ2g1U3piTUd2S0l4dXFxNCtkNkppY0dI?=
+ =?utf-8?B?SmVyenZBMkF2ZTYyaVoyMzBNbTJtN1F0SVU1azIrSWdYQ2RKZDJBeHcxd1NW?=
+ =?utf-8?B?OFlrOXQyaFYzTS8waHB1WC9Ielpzc1ZIRlJSWGRZbmttL2ZjellWaXg3NmVT?=
+ =?utf-8?B?OFR3QVl3aGNaenFIWmFwZFVQVWgwVEllbkl4VWJjc1JCcHJqNlA3RlhQUndX?=
+ =?utf-8?B?VXpHaEVYZURyVHlvVjFDWmV0RmlFdmtvNHNMcHIrOVZPbCtZTG5LbmQra2RF?=
+ =?utf-8?B?Wm1iTjZDUW56VUEyYm5XbkNjaFdZOGg1Z2o0VUNHRTBmMzg1Qlk4RU1ydVJP?=
+ =?utf-8?B?bS9vSjJRanR4NGhtVXhwbmRKbmZhN00wNkJmZ0dBTS9CU2twQjRmWG5SMTBr?=
+ =?utf-8?B?MGd0bmg5cno4NGw0ekQ0QjBZdm82SmdkeExQb29DVytEMlUwVDNLcWhwbitQ?=
+ =?utf-8?B?UU1vZ0hxRDAydGMwU21aamJzRnRiejl1MHVBN05PTGtiTWFyTFhaVnNyd09K?=
+ =?utf-8?B?R2c4enhSbEEwWDlZZGYyL3NTNHk3UU9EdGQwRGYvYXU2WE5xS1F2bzVxMkw0?=
+ =?utf-8?B?bFVSSDdwSVRmQlJQOFRkd1c0QVFKZTNaVXh6bEYxN20rVUVzWWIzdTVZRWJR?=
+ =?utf-8?B?WGdBY2lDSForOUFSR0lnOXl4ZHNOb1YvcWRad0RGaHpMYUVRdEVySWljUk9m?=
+ =?utf-8?B?Z3h4OHIxQTh0Nlk1TWxsbDZwZUN6T1hsUTdiZEVQM0hGeHpmM0t5clpFb0Q3?=
+ =?utf-8?B?WWppVHZscnl1RUJwN2VJOFZwRzFYL3R0T2tNMnhkbmZTaitBM2NUUGlsZzFE?=
+ =?utf-8?B?REw5V2N2bDdIVnd3alBic2xZWGZhN0tmVVV1cVRJQ0lkYy9ITVEydUFaR0ZR?=
+ =?utf-8?B?R1ZhS1FTdFpGaHRyOFlqZVFQdVZWdm1LL3pHL3EzeEN3R1g3SGszYURhTlFo?=
+ =?utf-8?B?Y1BtSkFJVFJTV0NsOHBPbG5IRXgwRysxRVNFRkNManVMVEQ2T2FjcTRaUzYr?=
+ =?utf-8?B?N0RieWJMOFM2K2Q4Nmo4aTMyS3lZNXlXcmZKdEdReFl5cHFSTWgxUThqbDZP?=
+ =?utf-8?B?Z2QrSVhlWlhhdlNGMFQxSnYxVXJyYXZGVy9CRHBYTDZYR2tnbnBpZ2tvaEVN?=
+ =?utf-8?B?NGFQaEdVVmJNS3ptenFadmw0aGlMZUV5VUdEU2syWkI1ZG13dC9MR2ZEYVY1?=
+ =?utf-8?B?Y1puc2d5SjFsRzNwcFd5dEFmdmZ0VlBBMWlaUlNDZS9vWVhDV0lHS0paekxG?=
+ =?utf-8?Q?0mnfJwhbPM0=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Q1ZLck4zNjFScnV0elZ3bS9kMFlBRlZBbDNWaTAyNjdPWFoxaWYvNWZqSVkw?=
+ =?utf-8?B?ZFNyL3pXeWFzYnhlSWxBWUN2WVRjS2had0pNNFZwMG5uQkN3c1FFM1A1MnVl?=
+ =?utf-8?B?QUZvUENRT0pUUERCYlFyUlE5YzErb0E4QWhNMFNUd1p5dmZUdTF0V25Qem5s?=
+ =?utf-8?B?RVcvSDIrMU82dkZYMWVrRk9PVHIyQ0JVem1uRitoaHBnNklrcHpiMVRycTZa?=
+ =?utf-8?B?M1lrTVVvS1pwWFhLNkhjdHdScWluamxsTHFsTFRxZXRHTmZnV2QxOXFUQUJJ?=
+ =?utf-8?B?bGoxWGVHczJsRVF6VEpKcWZIdTJZSFk2OUhsOThGeFFMd2EzMzZtdy9oQnBT?=
+ =?utf-8?B?ZSsrNUlpRG9za3FITUV6MEQrZjdGczV2S3lnSXpPeGYwNDJ5ZlFGZmJUZXlt?=
+ =?utf-8?B?bHY5N3lQb0FtckdOV0hPVmVpYk5ZNGhXRmllRTBQTi9EUSsvTFhoNnFaQzZ5?=
+ =?utf-8?B?YmVoYy9Fa3VEOG55U0psQWRUUWV1anRuZld5NmlISVU0YUNNdkRTUXRWZnht?=
+ =?utf-8?B?RE5xYS84RThhQ3pITG5iYi9Jb0JSbml5dzdocDhNWlRFK2huWDg1UFpldUFj?=
+ =?utf-8?B?SG4xazNBTkZ2RGREanN6eTlNcE15c1p4SzdNRm5tdEF5NjhCWUlnWFVGR3Yy?=
+ =?utf-8?B?YStxdXRyZjZTckJvWmtQSHQvV1ZsSG1UOWp5b3VMa2xLSDFYVjlIaDJsK00y?=
+ =?utf-8?B?ME9RR1Vaak1DZEc0UWF6WDh3dVAvREhJNTY2SVhYT3psRy9sY3FvWGlmSktq?=
+ =?utf-8?B?OXVXUHJlZDFXWVU4M3dXd1FnbVU0Vit3N2RUUUwzNVgvU2lEN2M5dDFPWk5M?=
+ =?utf-8?B?dVVQSmNaeUt6T3dlQ0JKMTBXVjdBSklTZG9RR2RhVXl1ZVg0dlYwQkppWlVG?=
+ =?utf-8?B?NEtHMnRGRUZ4ZHNYYnZSelczK3laZFhRclVIS3dSTk1kRi9IL0UwdXBVeEhW?=
+ =?utf-8?B?Zk9lSytrT2hJRHJ0NW9UblpLK2NOZ0ZFeWVENG5DdGZITm8wK1psL3VYSmJl?=
+ =?utf-8?B?SC80M2FNczNZeldzNHlqL3ZDNUcray9QcmhjZkxwSXdmZnJMQ0pLdm1GNVVa?=
+ =?utf-8?B?TmJlVDNsdnJoOTBVbjg2YmNmUGdTOHJ5UlM1YUhvUmpXMTFWRHBjWnNOUzcw?=
+ =?utf-8?B?L0I5aDNTV25jeStzNU1rNmdRSUtWOFBBblR0MWZEOVFhQkRXbmRwMlZRQi9R?=
+ =?utf-8?B?SUFZbVd3aXNoUmtpYkJWTk1HRGFGS2J2WjhjSjdZeVJMZkhaQ1NKUHhrMHkz?=
+ =?utf-8?B?WFVjL0d2MlMyMFFZS3VtMDdYQ3J6ZzZ1YmF1ZjdLdnJRd1hSbDZCRVZPSmQz?=
+ =?utf-8?B?N1NLaDgvRUEwT2RlWnNaR0k4MmZodnZkckJPdUFrRTZXbWpOTy9ENTlxNVM4?=
+ =?utf-8?B?MnMwdnNQRFp3TDc1YUhpTWlxak8rNXhHNkoyL0tzN25DSmJ0clU5UTdIOC9M?=
+ =?utf-8?B?V1hIdG5ZRmhIR0J4WTJTajlva1J4dGVtaHNwS0toSm5WbjFJbHpIV3U4dlkr?=
+ =?utf-8?B?MWZ2VXlMTU1Ua2ZQbTRaSnlmeW1xKzd2UGpzUmtaTWRNWlNwWVBHSDc3RXRO?=
+ =?utf-8?B?LzNWWU1tRUEreXJpZ2N1K2NQNFZtYVBxRFlqS3RaRFZ6dnZNOHJ2ekluQjJC?=
+ =?utf-8?B?b3k2OVFNdEU2VVZRYSsxMzAxb0VZa1RnTWJkZTl3MVF1SVUvZWVsMytxTFU3?=
+ =?utf-8?B?WmRpcHNEMlZJTCtTVklvYjJmcXJ5eGhLZlpHVzBQZjJtMXJuemVFZGc0cGNp?=
+ =?utf-8?B?RHQwVHppWWFLSXdqUzRFUnlaaGpqSjQwNis4akNyWFROMFVLRVRONUhHMDF1?=
+ =?utf-8?B?RnI3dTRkQXpZQTBWRVhjUFZ6akdwcUVmYjdiZEE4c0NmT3YvZzlWMjNzTG5x?=
+ =?utf-8?B?TnFVTVFpNXk1dE5Wa2hZbG9GZ0Z6V0UvMDBqeUNCbytsV1Y4OEZzdUUyNlAx?=
+ =?utf-8?B?M05SK2NCVnJxczBuOEExOEx3MEN5SFM5OTJBeGh5bElOZHdrSmYyWWZJTjVG?=
+ =?utf-8?B?NjRKbWQvdkt0SjQrdlFXZnNqZi9SR29jY1FtNFJSVG1EVFVvWENGZG1acXNF?=
+ =?utf-8?B?V2haQ3BIZjdNb2RTK0hBMW9WeWVjM0JKOGQrZURONFdLTWwrUFJ0VEdiS3BV?=
+ =?utf-8?B?a2MxM1E1aEFpQ0Q1RkM0TWhCckV3ak50dGJRa3lNcVc3RzdwTXhocHVLSzZY?=
+ =?utf-8?B?aWc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	cHEFfjNukBYuCsG28UwRaHcXNtLlK2yZ2BWxn4KOMJUtl9FggTL5WlMb4YWvXQUFfDswFB+lDFLuPA+CVY3q7veazWssGYcywReJudepVV5RMwrrQ+p1jAbQxraB29xXDciqPH1ZDhLihQI7XoM7sP0LLMLnmgLUHVT4OuyDKEnn31YDfI0vf46qosrAQ+4A1yXzYBVxCY4ZvuVg67960djbAu+qXXD3FKxPPkpb22GuzShAlrqSk5J1M/zYoRJGET7hTholYmtAMXF7WD4ZSLy7ynMN2P6GEUGe8X602S6v+KAx/iX/vRIVVpoqnQfllfBFw4VpNZ0gcJTDDMToY5a1+GIlGkLbMjrjThanpzbNb4FRY3RP6+QLDtaQrhhU0WaH53CNWLYRkHWTWxP138a+CMIg5ROfjJIMyX9jSy3KCSuVQBTABK7/nkR2mvQ4yNzypbUFMxYk6Ssqky/U7E2vinevh0ew1GKa/x6uUrSEVuG9+8NDKafitAe8CtjS7aRGx7aO8TiV3pEAiM8TRSdN0O9xbop4vgzrb5MhHUmzAAK4j0Gqne4najr+BKpc+lqAo3+QFZRKHbKNNWjhlwXNjvUU9xdSdKLgYe0/Ils=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 305ea28c-d6f7-4ec5-94bc-08ddda9aba74
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2025 18:53:44.5177
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QiDz/+FMGC8aD808lkw62axv8g8pXmE9ZbwCPplSk4H5ba7Xc4e5opwbFZxoEwl0t6T1/LYf6Ma4wqvMl4U+ZbVcqqK9oSFpJjXNJuKYAgI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4122
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-13_01,2025-08-11_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ adultscore=0 mlxscore=0 phishscore=0 spamscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2507300000 definitions=main-2508130177
+X-Proofpoint-ORIG-GUID: _kKp3q1w4HkOhMcfjZoyoRlSO30kAFlt
+X-Authority-Analysis: v=2.4 cv=WecMa1hX c=1 sm=1 tr=0 ts=689cdf3f b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=2OwXVqhp2XgA:10 a=GoEa3M9JfhUA:10 a=yPCof4ZbAAAA:8 a=1XWaLZrsAAAA:8
+ a=VwQbUJbxAAAA:8 a=6-8YGsThPIWc6biHcAgA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ cc=ntf awl=host:12069
+X-Proofpoint-GUID: _kKp3q1w4HkOhMcfjZoyoRlSO30kAFlt
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODEzMDE3OCBTYWx0ZWRfX2XkXQNn2AFwa
+ y1UvkyvFeKn4CELSCUISE/Wb2CcvXDNufudTCwp8nnjLutSKQeTnrPkwPIZwUnYfo4i99Yaiys3
+ 2yGVYFaW5lmJfV6g2uIbmZXvRbf/hbrwQRdNxWeRW/RdJl+SbLP3D0jDU8Vjl0iYZ+vUNYrfdX0
+ ydU79w/NEnaUr8R2XFcfkfquTq+7asS9Zb1W5rIPuaQR71GsKvLvrn9JD7NYJy125xc6bR3Irxm
+ MjN+jhB3+PVTG5afK7HJw2BA8p9fcjt5KTXXjM+Bn0VlS+Ua+4rU/ybMyvfF9hTvJiDnj/jntny
+ eeLsYDvPyES6y2jfyQIxcxDeTQfQYKwqMHG5CyA2o7vfy64sqW7rrG5wB9IbWSuSP+x6ZHcKW/+
+ 9btwjxRUlKr11esJJy+/lWNpekS0LAWdYCK6a7e+mnhwoFDYrALyCT8cqkR/G1iUij7Dbahr
 
-On Sun, Aug 3, 2025 at 7:27=E2=80=AFPM Xu Kuohai <xukuohai@huaweicloud.com>=
- wrote:
+On Wed, Aug 13, 2025 at 04:21:47PM +0000, Suren Baghdasaryan wrote:
+> On Wed, Aug 13, 2025 at 1:39 PM Lorenzo Stoakes
+> <lorenzo.stoakes@oracle.com> wrote:
+> >
+> > On Fri, Aug 08, 2025 at 08:28:47AM -0700, Suren Baghdasaryan wrote:
+> > > Extend /proc/pid/maps tearing tests to verify PROCMAP_QUERY ioctl operation
+> > > correctness while the vma is being concurrently modified.
+> > >
+> >
+> > General comment, but I really feel like this stuff is mm-specific. Yes it uses
+> > proc, but it's using it to check for mm functionality.
+> >
+> > I mean I'd love for these to be in the mm self tests but I get obviously why
+> > they're in the proc ones...
+> >
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > Tested-by: SeongJae Park <sj@kernel.org>
+> > > Acked-by: SeongJae Park <sj@kernel.org>
+> >
+> > The tests themselves look good, had a good look through. But I've given you
+> > some nice ASCII diagrams to sprinkle liberally around :)
 >
-> From: Xu Kuohai <xukuohai@huawei.com>
->
-> In overwrite mode, the producer does not wait for the consumer, so the
-> consumer is responsible for handling conflicts. An optimistic method
-> is used to resolve the conflicts: the consumer first reads consumer_pos,
-> producer_pos and overwrite_pos, then calculates a read window and copies
-> data in the window from the ring buffer. After copying, it checks the
-> positions to decide if the data in the copy window have been overwritten
-> by be the producer. If so, it discards the copy and tries again. Once
-> success, the consumer processes the events in the copy.
->
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> ---
-> tools/lib/bpf/ringbuf.c | 103 +++++++++++++++++++++++++++++++++++++++-
-> 1 file changed, 102 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index 9702b70da444..9c072af675ff 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -27,10 +27,13 @@ struct ring {
-> ring_buffer_sample_fn sample_cb;
-> void *ctx;
-> void *data;
-> + void *read_buffer;
-> unsigned long *consumer_pos;
-> unsigned long *producer_pos;
-> + unsigned long *overwrite_pos;
-> unsigned long mask;
-> int map_fd;
-> + bool overwrite_mode;
-> };
->
-> struct ring_buffer {
-> @@ -69,6 +72,9 @@ static void ringbuf_free_ring(struct ring_buffer *rb, s=
-truct ring *r)
-> r->producer_pos =3D NULL;
-> }
->
-> + if (r->read_buffer)
-> + free(r->read_buffer);
-> +
-> free(r);
-> }
->
-> @@ -119,6 +125,14 @@ int ring_buffer__add(struct ring_buffer *rb, int map=
-_fd,
-> r->sample_cb =3D sample_cb;
-> r->ctx =3D ctx;
-> r->mask =3D info.max_entries - 1;
-> + r->overwrite_mode =3D info.map_flags & BPF_F_OVERWRITE;
-> + if (unlikely(r->overwrite_mode)) {
-> + r->read_buffer =3D malloc(info.max_entries);
-> + if (!r->read_buffer) {
-> + err =3D -ENOMEM;
-> + goto err_out;
-> + }
-> + }
->
-> /* Map writable consumer page */
-> tmp =3D mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED, map=
-_fd, 0);
-> @@ -148,6 +162,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_=
-fd,
-> goto err_out;
-> }
-> r->producer_pos =3D tmp;
-> + r->overwrite_pos =3D r->producer_pos + 1; /* overwrite_pos is next to p=
-roducer_pos */
-> r->data =3D tmp + rb->page_size;
->
-> e =3D &rb->events[rb->ring_cnt];
-> @@ -232,7 +247,7 @@ static inline int roundup_len(__u32 len)
-> return (len + 7) / 8 * 8;
-> }
->
-> -static int64_t ringbuf_process_ring(struct ring *r, size_t n)
-> +static int64_t ringbuf_process_normal_ring(struct ring *r, size_t n)
-> {
-> int *len_ptr, len, err;
-> /* 64-bit to avoid overflow in case of extreme application behavior */
-> @@ -278,6 +293,92 @@ static int64_t ringbuf_process_ring(struct ring *r, =
-size_t n)
-> return cnt;
-> }
->
-> +static int64_t ringbuf_process_overwrite_ring(struct ring *r, size_t n)
-> +{
-> +
-> + int err;
-> + uint32_t *len_ptr, len;
-> + /* 64-bit to avoid overflow in case of extreme application behavior */
-> + int64_t cnt =3D 0;
-> + size_t size, offset;
-> + unsigned long cons_pos, prod_pos, over_pos, tmp_pos;
-> + bool got_new_data;
-> + void *sample;
-> + bool copied;
-> +
-> + size =3D r->mask + 1;
-> +
-> + cons_pos =3D smp_load_acquire(r->consumer_pos);
-> + do {
-> + got_new_data =3D false;
-> +
-> + /* grab a copy of data */
-> + prod_pos =3D smp_load_acquire(r->producer_pos);
-> + do {
-> + over_pos =3D READ_ONCE(*r->overwrite_pos);
-> + /* prod_pos may be outdated now */
-> + if (over_pos < prod_pos) {
-> + tmp_pos =3D max(cons_pos, over_pos);
-> + /* smp_load_acquire(r->producer_pos) before
-> + * READ_ONCE(*r->overwrite_pos) ensures that
-> + * over_pos + r->mask < prod_pos never occurs,
-> + * so size is never larger than r->mask
-> + */
-> + size =3D prod_pos - tmp_pos;
-> + if (!size)
-> + goto done;
-> + memcpy(r->read_buffer,
-> + r->data + (tmp_pos & r->mask), size);
-> + copied =3D true;
-> + } else {
-> + copied =3D false;
-> + }
-> + prod_pos =3D smp_load_acquire(r->producer_pos);
-> + /* retry if data is overwritten by producer */
-> + } while (!copied || prod_pos - tmp_pos > r->mask);
+> Thanks for the commentary, Lorenzo, it is great! I think I'll post
+> them as a follow-up patch since they do not change the functionality
+> of the test.
 
-This seems to allow for a situation where a call to process the ring can
-infinite loop if the producers are producing and overwriting fast enough. T=
-hat
-seems suboptimal to me?
+No problem, and sure that's fine it's not critical stuff obviously :)
 
-Should there be a timeout or maximum number of attempts or something that
-returns -EBUSY or another error to the user?
+>
+> >
+> > Anyway for tests themselves:
+> >
+> > Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+>
+> Thanks!
 
-> +
-> + cons_pos =3D tmp_pos;
-> +
-> + for (offset =3D 0; offset < size; offset +=3D roundup_len(len)) {
-> + len_ptr =3D r->read_buffer + (offset & r->mask);
-> + len =3D *len_ptr;
-> +
-> + if (len & BPF_RINGBUF_BUSY_BIT)
-> + goto done;
-> +
-> + got_new_data =3D true;
-> + cons_pos +=3D roundup_len(len);
-> +
-> + if ((len & BPF_RINGBUF_DISCARD_BIT) =3D=3D 0) {
-> + sample =3D (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
-> + err =3D r->sample_cb(r->ctx, sample, len);
-> + if (err < 0) {
-> + /* update consumer pos and bail out */
-> + smp_store_release(r->consumer_pos,
-> + cons_pos);
-> + return err;
-> + }
-> + cnt++;
-> + }
-> +
-> + if (cnt >=3D n)
-> + goto done;
-> + }
-> + } while (got_new_data);
-> +
-> +done:
-> + smp_store_release(r->consumer_pos, cons_pos);
-> + return cnt;
-> +}
-> +
-> +static int64_t ringbuf_process_ring(struct ring *r, size_t n)
-> +{
-> + if (likely(!r->overwrite_mode))
-> + return ringbuf_process_normal_ring(r, n);
-> + else
-> + return ringbuf_process_overwrite_ring(r, n);
-> +}
-> +
-> /* Consume available ring buffer(s) data without event polling, up to n
-> * records.
-> *
-> --
-> 2.43.0
->
->
+Cheers, Lorenzo
 
