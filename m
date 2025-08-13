@@ -1,131 +1,337 @@
-Return-Path: <linux-kselftest+bounces-38916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E906B25640
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 00:05:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3255B257DC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 01:53:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66986567B6A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 22:05:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 792FA9A414F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 23:53:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 100A42C08B6;
-	Wed, 13 Aug 2025 22:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0FDB2FC866;
+	Wed, 13 Aug 2025 23:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ElBSNsNv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HFlgr3ew"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9865A2BDC2B;
-	Wed, 13 Aug 2025 22:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385AC2F60A9;
+	Wed, 13 Aug 2025 23:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755122736; cv=none; b=Sx/xGUwzFweJnqnODBtWJbnE0xRtr+3VK8yFgRglsDw04mZuhmQQ33w8G8l8nr8LckYrdfBCsatHLkpb229iAudpXrIT459yRpRggKcg6PwbPN5I7f9P4cBcfbzEpdQttWlEHWsyBElMW6BKH/ogqMuyiXEJYbEZX14Z+Ro/y60=
+	t=1755129184; cv=none; b=FEEovxzdvznxEvfFSHnBcxkwaGtwdCHTDj0VK1XjAwQgVH+we+rGOZFZONku2yNTJEujIECyU5MD71gZfReAcK9boQvKhWy3UuYlAxacgje9wx5F/kR6aQkWUY02s5/5R5/OyvY2KFFPpZ996CzhOMOqrmvgecKEnMWTpEs+l+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755122736; c=relaxed/simple;
-	bh=MUaFUoPulFgG8/a1da/RApFMWDCXyyeVhMjgI13XPrY=;
+	s=arc-20240116; t=1755129184; c=relaxed/simple;
+	bh=ptSZAwPL2sgYyeOLgmE6vLPRwFuh8EaCAiNWFH99voo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GnEcTCXl0eXb2WKzRRhFEulrGTozlpRH4AASV9d6usjjgYz741Gm4W73CrI24v3zJQXrd6EU9ARsHo7XQa0mKOXiWF+RsfxyFdxBObGLFcoHBm/F5JV/Jhh/7HRP+SLK7ohpAm1Wxoh786jCk8oz/FAPn3b02RNwUYAggdzWLt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ElBSNsNv; arc=none smtp.client-ip=209.85.215.178
+	 To:Cc:Content-Type; b=eSRSHTrdcn88PNQb96UpS+spdKK8Sicy9F+fXxNfEXv4wMu2yuGLv2eDzsxprCh+M1ykF3v+81O6GgCjiRvKMCc0Jl6vaJ1IiuyHXKTCvn5HXOOTZXXxJ+RTBxftUIWal6EZKezGHjn+HR7SdnbLFeqgfMBnD1In8Vr8H1IVW1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HFlgr3ew; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b47174aec0eso153593a12.2;
-        Wed, 13 Aug 2025 15:05:34 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2445806df50so2403455ad.1;
+        Wed, 13 Aug 2025 16:53:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755122734; x=1755727534; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755129182; x=1755733982; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7JBfKkj+UGQ1ABwj7O02ZtdTt4/duiO+Dl+5JziUpEA=;
-        b=ElBSNsNvLQDLNjwZiy4a1NtjXe78HlRWQD+CnVE4JC/zL8GRio/rAdzHmnzESP1UBe
-         GelLG4Yj8tZHctL2fu8n1LC0ZjprHpf6lDpLqvkkUvuIA0TmL5PvvNq5Z8zq3Movq3WO
-         iFgPIE/49TmdqPULfamQeHbwfAhas5esvUHVeVp0CkAnJ9uHCjsX2bZFSwj0Dxgjhk3E
-         HIkkgZ6n94CC6spLaoPEqzIFEsjRpdzwL0PZPwyBQLMF0pc92WG3bS721KMCLceMeSxd
-         LVX5W37f3jWeWxTMQprbK1rK/0nz6Hf7B0K86271mrx8TwBJlpdOunrl9qRrjJuMbkLr
-         W5ew==
+        bh=Yibfqhr60YQhJ0vMmSX+PE0La1PBsoeXQ5fzoaqLw9w=;
+        b=HFlgr3ew8UBhINKcg6m2JqCB0jsRk5/8O9fUHai838q/9yZNAsPpR70V4tfOkP+rif
+         vVMNxGOqFsaYeMF0/+VOx+W8aax/eiXIQ4Ifu3CnDSlEbCB1lH/nhWvGRZhEvqODMMvt
+         LeGp1caEp6p6r3hjH3ypW4iZMMjxyGtmt1sr8IWkjNqeQDATgMj19OPx2GMtgS45qI/t
+         Q6ercop3SvXTlQYwTXLN1Qr0Zfv2xedPC1ZjxbDbKVyLufwgpSL4Y1MW1sGLkmsTksQW
+         RFucSIaxphGWEEkcpSrDNs07y1FBdACXZJBHsFgvl02RKq8lXAz4xpevOwAn6d/rVB93
+         lq6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755122734; x=1755727534;
+        d=1e100.net; s=20230601; t=1755129182; x=1755733982;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7JBfKkj+UGQ1ABwj7O02ZtdTt4/duiO+Dl+5JziUpEA=;
-        b=Zak/KDkic5AoZCX72d0A74GFwggPc1W6MVEflvCpAUct7f3S06B8GJ+S/OjVau8F18
-         0zIPDDfW9D+Olac7UmHgCK4sMrzcARzu3JVyuhhfvAs6ykZj2KjqLJ/yyZWsS5QJ0QXb
-         hHo6bUQA4U0nFQGvIR+fyJIBC9lE09MyfeZ3qE/gFYLAfngMvcIpLoFZyG/BZ1i6wS9V
-         aPGU99gJVHgvbQVINthHY3vxSl4TPD1eFmY5D+F0Is83Q/L9PoDNbzHl6IDpFF5hXgZS
-         X8R0x97e9+w14aFOl2OxSM6M3bbyU/HqVNE2rwtqJD1uD1nuQNYpn118rO2zwK5EItr9
-         DiKA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqmYKxGTcpqZb4LJzZloc2auoZtWmyaCylw20FJ3kMiivbP/8AYwYHlwnx629ppPCbBwE=@vger.kernel.org, AJvYcCV25xv7znKkAoSlHjNiM6GQGTAfnEIjtJGbPXtP+2B6utZZEmCucOmNlaJOHMvA/8zFnke8sMFxfHeodcWO6TtA@vger.kernel.org, AJvYcCXYwLyKvdvqNM6LahKlVoB0TU+cLEgYfsFXKkcJyd3ZGw73EZsrkBK25KQUK2/DkdG6rrlyiAXCjcoyDIbY@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvkRNUzMEQ/4zP+BCAilhfl13L60ia8JpgATZJEOj6kOdbih6N
-	gQthudsh/5DmP+qC9UkipEt0Y91owCGtZxuWKF+EXwzsm18F6FyhW/wb1JmxNQotBAoNA20f2lE
-	LOrpRQkqsMGaHFFGP1v6fALmFNvIhY+4=
-X-Gm-Gg: ASbGncsvPhDggGvl2n9w0Rk9M/XnJckavYadBXqNVZ7NiZBNaPQkNr/p+IBQWuPs1he
-	sX1ybpgAydYfWzR+7KhunC/x6FuPjxNY3Vm/YX9iW2aMa0qs01XI7YI0bHL+zAWZz8nTdrc2ifk
-	yPkz/tg7GDWqIrIz/3bfm0ZgM8xmb6tpsdpp+ZQwpXZx6d5LZWt56mJyDo8LmiQOPqgly2hYPt0
-	9HQ08uRb62I4lCFG30UwNagsjiK+YbrqA==
-X-Google-Smtp-Source: AGHT+IE4ZnX5NFOSNqXjPfzUTcPCZGSi6O/jb/0tQEcr2gXu4GvmAgY2dkXipKjIM3yroVrHul1Wq1khKdFjWD1ObFA=
-X-Received: by 2002:a17:90b:17cc:b0:321:4182:2b9e with SMTP id
- 98e67ed59e1d1-32327ab2df2mr1263041a91.12.1755122733609; Wed, 13 Aug 2025
- 15:05:33 -0700 (PDT)
+        bh=Yibfqhr60YQhJ0vMmSX+PE0La1PBsoeXQ5fzoaqLw9w=;
+        b=WYCYdZIiATrldzqOXauHzcHmFj9pUhG9FO/g92gVAS5qOAnHb6E4K1Lq6ttn8OWTDF
+         Y962jxk0k+pxDjHE6ilfDRuMSkYcnNRNxmXz2J6P+mQCpN7hoZ+5IiXWxmvaJ9gbYxzz
+         Un2Prl3B4j2YskrUHdqsWunb3N5JQigGpuziFcr/HNzMdGdU6vbqvOJzESb1Fw+TKB/a
+         S4aAikFuQr2ydn8UrLJ/ARTGZwKxPraT6uMJvx3jBJ0tHFemxsum+H74sAhK51YsDB55
+         eG9c+NaUCN7/XirIkjODgrREiZvMdFnqyfgRpujT7J0iDrogx5m2d0xLVxBTYV55w7jc
+         j7LQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVjE+yMAlcDSk/RLb7HRJ2juXnFKz+LUn5vEuzEp5SpI4YwYGviH+3SCoNsUMKrYVkUEgVfQ6ZcTfpowcOj@vger.kernel.org, AJvYcCWwPHQaWv47Y9hwXDebtJqrS6VNbspiamVJCtrwvCeg2f1jB0Cb9xcrYZo1lrnRUT8Kxs4=@vger.kernel.org, AJvYcCXxC03+RGBz9efkHfvyRynI6W0G9hmEhaAMqQ9eaOSUegrvYTB4d7x8BBrZFP9HELKV0Dr4ubsmB+IOlRM1bktH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4UgW5ThFeztdSvBmIzIbOPacKEWba/uZCUi81E6V0AVXa51FS
+	5rZiQkAd1DZ8cHTFNZJEu4eiXHkPI7cF5WpLagmriX/NZFCVS5+iVC0hCvUHrze4uw77/iVy+7N
+	gJ1HxPtrzFG54WiN2Ix0xE2+wRxij3T0=
+X-Gm-Gg: ASbGncuQFfk6WbU3ccK+1AItRV0d4NWA4TFTpaP9XVD7GlpqNoeig0+XN2XKvMwofPv
+	8PzBRgghzboot6BYYECdxqIdFlqupLPITluq+Ywae+SOsGlMcUqP9365+hz236/n1CxtXP2USv3
+	504XxFvJ0LKvd01sK2wVw91LvuIFGEqGKRPCc+AOyGYWR8cq5fdjto6RHV0HCBhflUCFrRV17ge
+	om6oDDP3K1IA99H8zNxA85MhqJF4yVWjQ==
+X-Google-Smtp-Source: AGHT+IHG1GLklcVngaU9qlQXqz0M5cGGN5p3IePoCqy+9brfwmo1IfweQEukdUN7/60gv68it2PhsuycMa83eFV5pXw=
+X-Received: by 2002:a17:903:acb:b0:23d:dd04:28e2 with SMTP id
+ d9443c01a7336-2445868a8e2mr12595995ad.35.1755129182347; Wed, 13 Aug 2025
+ 16:53:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250812153719.36465-1-slopixelz@gmail.com>
-In-Reply-To: <20250812153719.36465-1-slopixelz@gmail.com>
+References: <20250807023430.4566-1-phoenix500526@163.com> <20250807023430.4566-2-phoenix500526@163.com>
+In-Reply-To: <20250807023430.4566-2-phoenix500526@163.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 13 Aug 2025 15:05:19 -0700
-X-Gm-Features: Ac12FXw15X9NSzx_eHUQdPC-I5W_By2TvHBRCp0SbsCBCqcQUekSEXkrWtkohrI
-Message-ID: <CAEf4Bzb47GuSPEjbA_dJON94Dw4JKzpWvR+qm4QQW2p+0z1rSA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix typo in kprobe_multi_test.c
-To: Shubham Sharma <slopixelz@gmail.com>
+Date: Wed, 13 Aug 2025 16:52:47 -0700
+X-Gm-Features: Ac12FXwjAUH5NapzbRp3zxp00pi90baz3EHSoXXRah97NUC2vemMm_Ypx0Iwwvc
+Message-ID: <CAEf4BzaWtO4-JE=++_64y01aWGGBnUSpw_pbQf79rFz_oVhU-Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 1/2] libbpf: fix USDT SIB argument handling
+ causing unrecognized register error
+To: Jiawei Zhao <phoenix500526@163.com>
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
-	shuah@kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	yonghong.song@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 12, 2025 at 8:37=E2=80=AFAM Shubham Sharma <slopixelz@gmail.com=
-> wrote:
+On Wed, Aug 6, 2025 at 7:35=E2=80=AFPM Jiawei Zhao <phoenix500526@163.com> =
+wrote:
 >
-> Fixed a spelling mistake:
-> - comparision -> comparison
+> On x86-64, USDT arguments can be specified using Scale-Index-Base (SIB)
+> addressing, e.g. "1@-96(%rbp,%rax,8)". The current USDT implementation
+> in libbpf cannot parse this format, causing `bpf_program__attach_usdt()`
+> to fail with -ENOENT (unrecognized register).
 >
-> Signed-off-by: Shubham Sharma <slopixelz@gmail.com>
+> This patch fixes this by implementing the necessary changes:
+> - add correct handling for SIB-addressed arguments in `bpf_usdt_arg`.
+> - add adaptive support to `__bpf_usdt_arg_type` and
+>   `__bpf_usdt_arg_spec` to represent SIB addressing parameters.
+>
+> Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
 > ---
->  tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/lib/bpf/usdt.bpf.h | 33 +++++++++++++++++++++++++++++-
+>  tools/lib/bpf/usdt.c     | 43 ++++++++++++++++++++++++++++++++++------
+>  2 files changed, 69 insertions(+), 7 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b=
-/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> index e19ef509ebf8..f377bea0b82d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> @@ -463,7 +463,7 @@ static bool skip_entry(char *name)
->         return false;
->  }
+> diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
+> index 2a7865c8e3fe..246513088c3a 100644
+> --- a/tools/lib/bpf/usdt.bpf.h
+> +++ b/tools/lib/bpf/usdt.bpf.h
+> @@ -34,6 +34,7 @@ enum __bpf_usdt_arg_type {
+>         BPF_USDT_ARG_CONST,
+>         BPF_USDT_ARG_REG,
+>         BPF_USDT_ARG_REG_DEREF,
+> +       BPF_USDT_ARG_SIB,
+>  };
 >
-> -/* Do comparision by ignoring '.llvm.<hash>' suffixes. */
-> +/* Do comparison by ignoring '.llvm.<hash>' suffixes. */
+>  struct __bpf_usdt_arg_spec {
+> @@ -43,6 +44,10 @@ struct __bpf_usdt_arg_spec {
+>         enum __bpf_usdt_arg_type arg_type;
+>         /* offset of referenced register within struct pt_regs */
+>         short reg_off;
+> +       /* offset of index register in pt_regs, only used in SIB mode */
+> +       short idx_reg_off;
+> +       /* scale factor for index register, only used in SIB mode */
+> +       short scale;
 
-Is this the only typo in the entire BPF selftests? If we are doing
-single character comment fixes, let's do it as one bigger pass,
-instead of tons of tiny patches?
+I'd really prefer not to increase the size of __bpf_usdt_arg_spec and
+not change its layout for all existing BPF_USDT_ARG_* modes just to
+not have to worry about any backwards/forward compatibility issues.
+
+Scale can be 1, 2,4, 8, is that right? Instead of using 2 bytes for
+it, we should be able to use just 2 bits to represent bit shift (0, 1,
+2, 3 should be enough).
+
+We can carve out at least 3 bytes by making arg_type field into packed
+single-byte enum (we'd need to be careful with big endian).
+
+Then we can add idx_reg_off:12 and idx_scale_shift:4 somewhere between
+arg_type and reg_off, taking 2 bytes in total.
+
+We'll still be left with one byte to spare for the future (and there
+are tricks we can do with arg_signed and arg_bitshift, but I'd not
+touch them yet).
+
+WDYT?
 
 pw-bot: cr
 
 
->  static int compare_name(const char *name1, const char *name2)
+>         /* whether arg should be interpreted as signed value */
+>         bool arg_signed;
+>         /* number of bits that need to be cleared and, optionally,
+> @@ -149,7 +154,7 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, =
+long *res)
 >  {
->         const char *res1, *res2;
+>         struct __bpf_usdt_spec *spec;
+>         struct __bpf_usdt_arg_spec *arg_spec;
+> -       unsigned long val;
+> +       unsigned long val, idx;
+>         int err, spec_id;
+>
+>         *res =3D 0;
+> @@ -202,6 +207,32 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num,=
+ long *res)
+>                         return err;
+>  #if __BYTE_ORDER__ =3D=3D __ORDER_BIG_ENDIAN__
+>                 val >>=3D arg_spec->arg_bitshift;
+> +#endif
+> +               break;
+> +       case BPF_USDT_ARG_SIB:
+> +               /* Arg is in memory addressed by SIB (Scale-Index-Base) m=
+ode
+> +                * (e.g., "-1@-96(%rbp,%rax,8)" in USDT arg spec). Regist=
+er
+> +                * is identified like with BPF_USDT_ARG_SIB case, the off=
+set
+> +                * is in arg_spec->val_off, the scale factor is in arg_sp=
+ec->scale.
+> +                * Firstly, we fetch the base register contents and the i=
+ndex
+> +                * register contents from pt_regs. Secondly, we multiply =
+the
+> +                * index register contents by the scale factor, then add =
+the
+> +                * base address and the offset to get the final address. =
+Finally,
+> +                * we do another user-space probe read to fetch argument =
+value
+> +                * itself.
+> +                */
+> +               err =3D bpf_probe_read_kernel(&val, sizeof(val), (void *)=
+ctx + arg_spec->reg_off);
+> +               if (err)
+> +                       return err;
+> +               err =3D bpf_probe_read_kernel(&idx, sizeof(idx), (void *)=
+ctx + arg_spec->idx_reg_off);
+> +               if (err)
+> +                       return err;
+> +               err =3D bpf_probe_read_user(&val, sizeof(val),
+> +                               (void *)val + idx * arg_spec->scale + arg=
+_spec->val_off);
+
+it might be just how gmail renders it, but please make sure that
+wrapped argument is aligned with first argument on the previous line
+
+> +               if (err)
+> +                       return err;
+> +#if __BYTE_ORDER__ =3D=3D __ORDER_BIG_ENDIAN__
+> +               val >>=3D arg_spec->arg_bitshift;
+>  #endif
+>                 break;
+>         default:
+> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+> index 4e4a52742b01..1f8b9e1c9819 100644
+> --- a/tools/lib/bpf/usdt.c
+> +++ b/tools/lib/bpf/usdt.c
+> @@ -200,6 +200,7 @@ enum usdt_arg_type {
+>         USDT_ARG_CONST,
+>         USDT_ARG_REG,
+>         USDT_ARG_REG_DEREF,
+> +       USDT_ARG_SIB,
+>  };
+>
+>  /* should match exactly struct __bpf_usdt_arg_spec from usdt.bpf.h */
+> @@ -207,6 +208,8 @@ struct usdt_arg_spec {
+>         __u64 val_off;
+>         enum usdt_arg_type arg_type;
+>         short reg_off;
+> +       short idx_reg_off;
+> +       short scale;
+>         bool arg_signed;
+>         char arg_bitshift;
+>  };
+> @@ -1283,11 +1286,39 @@ static int calc_pt_regs_off(const char *reg_name)
+>
+>  static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_=
+arg_spec *arg, int *arg_sz)
+>  {
+> -       char reg_name[16];
+> -       int len, reg_off;
+> -       long off;
+> +       char reg_name[16] =3D {0}, idx_reg_name[16] =3D {0};
+> +       int len, reg_off, idx_reg_off, scale =3D 1;
+> +       long off =3D 0;
+> +
+> +       if (sscanf(arg_str, " %d @ %ld ( %%%15[^,] , %%%15[^,] , %d ) %n"=
+,
+> +                               arg_sz, &off, reg_name, idx_reg_name, &sc=
+ale, &len) =3D=3D 5 ||
+
+see comment above about aligning wrapped argument list
+
+> +               sscanf(arg_str, " %d @ ( %%%15[^,] , %%%15[^,] , %d ) %n"=
+,
+> +                               arg_sz, reg_name, idx_reg_name, &scale, &=
+len) =3D=3D 4 ||
+> +               sscanf(arg_str, " %d @ %ld ( %%%15[^,] , %%%15[^)] ) %n",
+> +                               arg_sz, &off, reg_name, idx_reg_name, &le=
+n) =3D=3D 4 ||
+> +               sscanf(arg_str, " %d @ ( %%%15[^,] , %%%15[^)] ) %n",
+> +                               arg_sz, reg_name, idx_reg_name, &len) =3D=
+=3D 3
+> +               ) {
+> +               /* Scale Index Base case, e.g., 1@-96(%rbp,%rax,8)
+> +                * 1@(%rbp,%rax,8)
+> +                * 1@-96(%rbp,%rax)
+> +                * 1@(%rbp,%rax)
+
+nit: let's list all variants at the same indentation level (and let's
+use the more standard multi-level comment format)
+
+/*
+ * Scale-Index-Base case:
+ * - 1@-96(%rbp,%rax,8)
+ * - 1@(%rbp,%rax,8)
+ * ...
+ */
+
+> +                */
+> +               arg->arg_type =3D USDT_ARG_SIB;
+> +               arg->val_off =3D off;
+> +               arg->scale =3D scale;
+> +
+> +               reg_off =3D calc_pt_regs_off(reg_name);
+> +               if (reg_off < 0)
+> +                       return reg_off;
+> +               arg->reg_off =3D reg_off;
+>
+> -       if (sscanf(arg_str, " %d @ %ld ( %%%15[^)] ) %n", arg_sz, &off, r=
+eg_name, &len) =3D=3D 3) {
+> +               idx_reg_off =3D calc_pt_regs_off(idx_reg_name);
+> +               if (idx_reg_off < 0)
+> +                       return idx_reg_off;
+> +               arg->idx_reg_off =3D idx_reg_off;
+> +       } else if (sscanf(arg_str, " %d @ %ld ( %%%15[^)] ) %n",
+> +                               arg_sz, &off, reg_name, &len) =3D=3D 3) {
+>                 /* Memory dereference case, e.g., -4@-20(%rbp) */
+>                 arg->arg_type =3D USDT_ARG_REG_DEREF;
+>                 arg->val_off =3D off;
+> @@ -1298,7 +1329,7 @@ static int parse_usdt_arg(const char *arg_str, int =
+arg_num, struct usdt_arg_spec
+>         } else if (sscanf(arg_str, " %d @ ( %%%15[^)] ) %n", arg_sz, reg_=
+name, &len) =3D=3D 2) {
+>                 /* Memory dereference case without offset, e.g., 8@(%rsp)=
+ */
+>                 arg->arg_type =3D USDT_ARG_REG_DEREF;
+> -               arg->val_off =3D 0;
+> +               arg->val_off =3D off;
+>                 reg_off =3D calc_pt_regs_off(reg_name);
+>                 if (reg_off < 0)
+>                         return reg_off;
+> @@ -1306,7 +1337,7 @@ static int parse_usdt_arg(const char *arg_str, int =
+arg_num, struct usdt_arg_spec
+>         } else if (sscanf(arg_str, " %d @ %%%15s %n", arg_sz, reg_name, &=
+len) =3D=3D 2) {
+>                 /* Register read case, e.g., -4@%eax */
+>                 arg->arg_type =3D USDT_ARG_REG;
+> -               arg->val_off =3D 0;
+> +               arg->val_off =3D off;
+
+why this change? it makes it seem like val_off might not be zero, for
+no good reason...
+
+>
+>                 reg_off =3D calc_pt_regs_off(reg_name);
+>                 if (reg_off < 0)
 > --
 > 2.43.0
+>
 >
 
