@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-38853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38855-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60517B24AFC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:48:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0B88B24B31
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:54:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 750C36830CD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 13:45:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3043616A4B3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 13:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C2172E613D;
-	Wed, 13 Aug 2025 13:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1FFE2EB5DC;
+	Wed, 13 Aug 2025 13:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZX7OAEO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1jN/zVu"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625CC72612;
-	Wed, 13 Aug 2025 13:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0AE18FC80;
+	Wed, 13 Aug 2025 13:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755092732; cv=none; b=jYnI5fduAAW++GgAgtrvms1A+8HJ+g1+1JAmg/kEqrFgcSUVIPW7pmGEB7d9JgIwrH5LdFN3CRUXZwH1hYuoDQnEmKZuPez79rqbm9u67hwLGORDy0i7kPw0LV+A4BNPmdfUOgBzJCwYG+brde2JqSBevtQ+qHOO/Bfdf9xR+lM=
+	t=1755093027; cv=none; b=PoOZXmpOgHvVH9WzDsZfLTzt6NHOajp2lRRrHGPfpkrC599ipjoZauT4Rt+ZF8LLCuVoeGctAFjWpEHkwyLlp8+cXkYYwcA+vAChj40rFoLXMRA39HOeHdU9+rVQGJ7I10GXR2n3dGMrd9+cidUnlItmdLl1jEyZuNASpHUnVVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755092732; c=relaxed/simple;
-	bh=D0xx7031UZevoMdpdp6ryj7WTHkAul4ivyREJrKlUK4=;
+	s=arc-20240116; t=1755093027; c=relaxed/simple;
+	bh=kgmkNi4FyNWpSQEulVVTL5fLq/GrDqNglBvivi4oPyI=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=CrtNoVW54oYQrvC+uMm+8b39FxOIQYB2ZyP7VWymwFoCfhFdgbKz76YGT0q4w089tzctwNC7SoadVKRL/faD0vU5YLdcVjz52twC2h6HX4qOHtiBCNBvizCzjZmhUINjW1sWaSwpKiWvmvtPo8WITBNmmSRKbaOU3kdERTdRf4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZX7OAEO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E37C4CEEB;
-	Wed, 13 Aug 2025 13:45:30 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Uxvn1NUzwy/sD3RSbLEmEEgwkCzGLoJFlBeTnf3UAFUMTNI/WH6OpyZWzGPb0FnJHmfaTvRieFhxDyaCpCuX3Y3SRw8GJXSFsumrozxJqzIj99j1bZylXmQb6izDxyE+u5j1p3OArGrbJleXn50hkgR5ht+4LRTf02ccTrw0i0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1jN/zVu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55C5C4CEEB;
+	Wed, 13 Aug 2025 13:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755092731;
-	bh=D0xx7031UZevoMdpdp6ryj7WTHkAul4ivyREJrKlUK4=;
+	s=k20201202; t=1755093027;
+	bh=kgmkNi4FyNWpSQEulVVTL5fLq/GrDqNglBvivi4oPyI=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=lZX7OAEO4iV5S1+YXwOnpNeXysrLeSryC2YE5VkGmWFuQ1wIf+WHQIRsPfY64kEvv
-	 QzcQMAowqKlFIJSrHE1eEuBK6vW1P1AekwkoCcjrd4HOlzlC6jenE3ECVGpLYdDivk
-	 qyjpj02i46dkWEnCNEDjQSNs/9x6Jd21DB4k9HTMhz5nsiU0DfPOYMHteLZ1wJLASP
-	 qpUPUOOVkMdmZ1Z9ow7qaMytrTTWQK6SBmBQ51D/RRDYYx10iAwqrguOIiiU8j9v8N
-	 4iS480IBHW3v/cY6/gPBGGopu5lpSm9aIIhXlxXD27EoChcg/w8dp4NObDJYFg5pZk
-	 akcmTCNvjNGFA==
+	b=Q1jN/zVuEQN2ad0P6Qcr4DZUk0jFORaWGUNrolSM5KKUqK63TaPvDhJVtIVYe0D1w
+	 qCq8wEOB4s/uDY+53Pfn1RZrIx6V9QRLiidfV5Px7squI22fCWtmzueIZq2oUVcrOC
+	 tsFHaGFK//++3BHNyUpKyw11Q6V7kGH4aywuYJ+2Ytw70Dn7Jbb99ItrBO5uRekayL
+	 J7WqRF5gUpjt0Fq2NaoTWwLEFETn46ES66Gv39ippaXcz04SyOd4+YyAaFGjlIz/xk
+	 MBthNFb0RZcrhkNGJOHtCF40JG5hew93XfGeXYK58xszMcQaefiEgTpiYUqc5Vsa2d
+	 RijdHjK4FLGuA==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: Mike Rapoport <rppt@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>,  Alexander Graf
@@ -50,12 +50,12 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,  Alexander Graf
   Thomas Weischuh <linux@weissschuh.net>,  kexec@lists.infradead.org,
   linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
   linux-mm@kvack.org
-Subject: Re: [PATCH 1/3] kho: allow scratch areas with zero size
-In-Reply-To: <20250811082510.4154080-2-rppt@kernel.org>
+Subject: Re: [PATCH 2/3] lib/test_kho: fixes for error handling
+In-Reply-To: <20250811082510.4154080-3-rppt@kernel.org>
 References: <20250811082510.4154080-1-rppt@kernel.org>
-	<20250811082510.4154080-2-rppt@kernel.org>
-Date: Wed, 13 Aug 2025 15:45:29 +0200
-Message-ID: <mafs0349vwd1i.fsf@kernel.org>
+	<20250811082510.4154080-3-rppt@kernel.org>
+Date: Wed, 13 Aug 2025 15:50:24 +0200
+Message-ID: <mafs0y0rnuy8v.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -69,57 +69,17 @@ On Mon, Aug 11 2025, Mike Rapoport wrote:
 
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 >
-> Parsing of kho_scratch parameter treats zero size as an invalid value,
-> although it should be fine for user to request zero sized scratch area
-> for some types if scratch memory, when for example there is no need to
-> create scratch area in the low memory.
-
-Can the system boot with 0 per-node memory? If not, then perhaps we
-should only allow lowmem scratch to be zero?
-
+> * Update kho_test_save() so that folios array won't be freed when
+>   returning from the function and the fdt will be freed on error
+> * Reset state->nr_folios to 0 in  kho_test_generate_data() on error
+> * Simplify allocation of folios info in fdt.
 >
-> Treat zero as a valid value for a scratch area size but reject
-> kho_scratch parameter that defines no scratch memory at all.
->
+> Reported-by: Pratyush Yadav <pratyush@kernel.org>
+> Closes: https://lore.kernel.org/all/mafs0zfcjcepf.fsf@kernel.org
+> Fixes: b753522bed0b ("kho: add test for kexec handover")
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->  kernel/kexec_handover.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/kexec_handover.c b/kernel/kexec_handover.c
-> index e49743ae52c5..c6ac5a5e51cb 100644
-> --- a/kernel/kexec_handover.c
-> +++ b/kernel/kexec_handover.c
-> @@ -385,6 +385,7 @@ static int __init kho_parse_scratch_size(char *p)
->  {
->  	size_t len;
->  	unsigned long sizes[3];
-> +	size_t total_size = 0;
->  	int i;
->  
->  	if (!p)
-> @@ -421,11 +422,15 @@ static int __init kho_parse_scratch_size(char *p)
->  		}
->  
->  		sizes[i] = memparse(p, &endp);
-> -		if (!sizes[i] || endp == p)
-> +		if (endp == p)
->  			return -EINVAL;
->  		p = endp;
-> +		total_size += sizes[i];
->  	}
->  
-> +	if (!total_size)
-> +		return -EINVAL;
-> +
 
-Looks good. BTW, unrelated to this patch, but should we also check that
-p == '\0' here to make sure the whole argument was consumed?
-
-
->  	scratch_size_lowmem = sizes[0];
->  	scratch_size_global = sizes[1];
->  	scratch_size_pernode = sizes[2];
+Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
 
 -- 
 Regards,
