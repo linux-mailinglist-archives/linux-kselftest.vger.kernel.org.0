@@ -1,165 +1,203 @@
-Return-Path: <linux-kselftest+bounces-38826-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38827-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D539EB2418D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 08:32:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A9AEB241B9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 08:40:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 624837A7404
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 06:30:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B537F3BEA3B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 06:37:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE6D2D1F64;
-	Wed, 13 Aug 2025 06:32:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768292D3A80;
+	Wed, 13 Aug 2025 06:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lve0QVUU";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0bRlmOQr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cl3cCN3L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C9D256C84;
-	Wed, 13 Aug 2025 06:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F632D374A
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 Aug 2025 06:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755066743; cv=none; b=sFXyGB0ExigcMrCkJklIdKvwVkO5Od/EvIdKs12N89meCe6cdqNJjGSn5wTmRvuiJhO7YhfoWxik1MzF+/PA56tBh7YZpFlDjDV7ZASm7MxbP2i7y6GHea4npwcHd2hMNTf1D431pm8gRV9KJIM1NmrostagNWvmslk77fkL1Wk=
+	t=1755066994; cv=none; b=riNCbAgnsDcGLKIoabnE7Xd+rBa1yFNZLhYFjV5A9InUzKy+XkxB7JQ/pd3wgR4J2zGN/yWb7H3FcIJomXkWjBT6TIdHaHIIvCmu1/pdosAHTznWLLBP5Hp2BAqlwVA+O4SxPn7a7i43GCCyJ8rjrw19ImX854Ev0/ULIGZwFhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755066743; c=relaxed/simple;
-	bh=5qg032v9a3VDlMiDWU0b9ctfLGVw/7YohIMQc/Hgbaw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uFdNexxvFlf9IQGm+kJCEI94DT9X5i+74dq8w05fKTDgcF2a+kDCdTtNGNR0RYRClvGfNrT0AtNWqMrcUtclzaeA7/IU2dIzfGLIUS3lCCaaSjDyLYKo/Zmj4GF1YeOUTYPWUJ2g7qfTwxbxJMJE9k/oJ9bBmgaxvkFv3PaEKkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lve0QVUU; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0bRlmOQr; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1755066739;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SRqTyhe3RKI3LCkCiYUFb5eBsIQ7LFFUOTaaEf4vnww=;
-	b=lve0QVUUx69R4nGes8O0ZOkEYnaE7NAhiUjDtUO86+yk69JnEq9FLwqdlPCPENJ17DSIt8
-	EhC+SQjMS9aeTDNFcTf8jkgM/rPQLaIjVGHonLboMcjoxkRxX8m/0Vo+KDmjwiI5PanuGM
-	+B9yqynWGSu6N1Qqov9ZyofDZUGuSUE211nZd3DFPJRlt3/x+WYK7VWxU7564BQ0Mmf9R5
-	M3W66lLk27qVTR1D0c11QD1/g6dbnblael5KoRq7HsvcMi3c6nv5yPvmrk1jUimAKumj/r
-	/TxywK7oMTRlMCC17TcynL6vEFob8ZWTtS6eY4fbYsfqkiXSvI6D43nJLwT2UA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1755066739;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SRqTyhe3RKI3LCkCiYUFb5eBsIQ7LFFUOTaaEf4vnww=;
-	b=0bRlmOQrarTM210wv1wND0+XTXworEuIQZTdcYChDAq++pUPjap215u2/blmqPmMatF+Ks
-	31+2AOCdpxJBmxBw==
-Date: Wed, 13 Aug 2025 08:32:13 +0200
-Subject: [PATCH] kunit: tool: Parse skipped tests from kselftest.h
+	s=arc-20240116; t=1755066994; c=relaxed/simple;
+	bh=gHVSJzoq1b8jxS14gNfEVJcP5cUxP3DrXnDa5zTDYFw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QMM7f2kfo8TJGmwZibp/RrpMKedzBBFsmxqAQRD0RlR5aYIoxHaAJliuIvq7rBHFpDBD/myfZKquHpEUd2OAVDs1ahIucnqOmFm0vLeZhywaRksCe6QSWCs4gNZeJ9ecwgJcOPC8vp4vCr2NOFjnFbThsQIXN5IS7WmhPHR2jXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cl3cCN3L; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-afca41c7d7fso97832866b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Aug 2025 23:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755066990; x=1755671790; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FxlhII7DHQKn60cJIkcE4m0mCEjJ+9mfJXebrB1mqUA=;
+        b=Cl3cCN3LUQqsEMiqa/y56v8P1H/rPXV8hwJF6IDjdVcCkJcxstjZhG9sCWPEy1nCLj
+         hX5BSPlGp+6egdP6BvgFHsYIIvOpXKhVnEb2SgCleZMlltO4W6iP9CtYzy+kalks65h5
+         KP3etMDXcst4WFOfAlnwJ9VbAPKU8W7NwnuKi8NlceoEU2aJltn9euZKmMqFDufDJnJ/
+         zA+SO0s0JRMMpxcXPYl79YZN5PIk3J4cK5HMWC+hNLke9AgJCxxo8WcrUvWLXPtAfrUc
+         eR0XoWpE6QBdb5V5FeFOQT4v8T6BpVGUWFjWnvK16TLKsCbZpfPOQ+pefuzdJiAv3sN8
+         j1SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755066990; x=1755671790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FxlhII7DHQKn60cJIkcE4m0mCEjJ+9mfJXebrB1mqUA=;
+        b=rZaJXNg6y759nI1EwMFwNbCriXYmM598XW95EO3pcff2FfP1n4MhJawy4VqUY7am3/
+         g/L8zMaAi2H6bxTB0qaraUjWYttBlnhC2Nw2khSo2NWyMh3CY4DsiNifKjjUV4Gf3pM/
+         vxeO2rLKkprTnxzStMCpXksHrrxihZHdtDxuHj9Vle8kTLZNNaB+nJaU9FCiQVxRjLO9
+         W5fcc+QvHDRx4Q+3vLUxFApugSfFP8hwB7aRB1OSuZeUKf5UZ3470BuYuC9ojlktBfQz
+         DEBZ9G0iNI2JxlfYx3atsMg1A0jUkm7ldb15Cg3q4IkaCQsw3dKLh72LU5BhmJt9FpNk
+         EMOQ==
+X-Gm-Message-State: AOJu0YyZbCx7GFVtpeW6O4tWFlpmUrx5rznF9r7aefpUhsJyjsFp/4Gz
+	ZoZ7x9wByX2tEctSzPr66it49RG6J4oBho4KjYtcTSAZkyhSRcsqH7ELG4UBGOVwCnKajnrI9zF
+	lfIrocvQ1pp/lCY9CGodJf0txMH1vuxeK3TkMkUc=
+X-Gm-Gg: ASbGnctRTYrWsSqqsoKoLjLgpEMrn9/+zuzN1+4D2qZOpMerrOxaY7Lm0jhU8/N+QaK
+	kisv7qcoAOC9UUiLVQ/l+QlxREaC3YIB1u75jmm7vZBOiwW85FW2o7txjnFurEi7HVUzE5rlDNg
+	xx25YjHTtKYV+y9j1DmzhJCMaij7o1HlrAIGR/zY0aha9LREam65I86dlvB7q8uwU+YqknuhUBS
+	inCdYo=
+X-Google-Smtp-Source: AGHT+IHd+JKqTe6wQTP57evjen6vMGzLWINWMYBfSTx6Gzx8mFOweK+FIENemt3Fnp06/uI4qDONNfszYQbMd3eeKRg=
+X-Received: by 2002:a17:906:f583:b0:af8:fded:6b7a with SMTP id
+ a640c23a62f3a-afca8489667mr121949266b.17.1755066989633; Tue, 12 Aug 2025
+ 23:36:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250813-kunit-kselftesth-skip-v1-1-57ae3de4f109@linutronix.de>
-X-B4-Tracking: v=1; b=H4sIAGwxnGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDC0Nj3ezSvMwS3ezi1Jy0ktTikgzd4uzMAt1UIwvLpNTkFEtzEzMloN6
- CotS0zAqwudGxtbUAQuGMqmcAAAA=
-X-Change-ID: 20250813-kunit-kselftesth-skip-e289becd9746
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755066737; l=3393;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=5qg032v9a3VDlMiDWU0b9ctfLGVw/7YohIMQc/Hgbaw=;
- b=s25+IgYMvwjdHBJLxkuySfqGzpUgC10XDKa9CGQ5d8hekmUOJFVZznQ8toi90LJQvcwNqxmGF
- 5Jy2FOghyhaAtTqFJTw4AAjFiytk0Ptl5lk9KYFg8qLV1fd1fqIihiv
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+References: <20250813031647.96411-1-higuoxing@gmail.com>
+In-Reply-To: <20250813031647.96411-1-higuoxing@gmail.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Wed, 13 Aug 2025 08:36:18 +0200
+X-Gm-Features: Ac12FXx-dP427diVJzgtKf1PPntx9LO-HYQA4iY3IVeDTSYrcVGk__hd-5UhmRk
+Message-ID: <CAOQ4uxg0OvDW5yJiseEOHBB2sH6Nw1iWo+CvvZ0COTGo=oYmfg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/fs/mount-notify: Fix compilation failure.
+To: Xing Guo <higuoxing@gmail.com>
+Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org, jhubbard@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Skipped tests reported by kselftest.h use a different format than KTAP,
-there is no explicit test name. Normally the test name is part of the
-free-form string after the SKIP keyword:
+On Wed, Aug 13, 2025 at 5:17=E2=80=AFAM Xing Guo <higuoxing@gmail.com> wrot=
+e:
+>
+> Commit c6d9775c2066 ("selftests/fs/mount-notify: build with tools include
+> dir") introduces the struct __kernel_fsid_t to decouple dependency with
+> headers_install.  The commit forgets to define a macro for __kernel_fsid_=
+t
+> and it will cause type re-definition issue.
+>
+> Signed-off-by: Xing Guo <higuoxing@gmail.com>
 
-	ok 3 # SKIP test: some reason
+Thank you for fixing this!
 
-Extend the parser to handle those correctly. Use the free-form string as
-test name instead.
+Acked-by: Amir Goldstein <amir73il@gmail.com>
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-Reviewed-by: David Gow <davidgow@google.com>
----
-These patches where originally part of my series "kunit: Introduce UAPI
-testing framework" [0], but that isn't going anywhere right now and the
-patches are useful on their own.
-Both series would go in through the KUnit tree in any case, so there is
-no potential for conflicts.
-    
-[0] https://lore.kernel.org/lkml/20250717-kunit-kselftests-v5-0-442b711cde2e@linutronix.de/
----
- tools/testing/kunit/kunit_parser.py                             | 8 +++++---
- tools/testing/kunit/test_data/test_is_test_passed-kselftest.log | 3 ++-
- 2 files changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index c176487356e6c94882046b19ea696d750905b8d5..333cd3a4a56b6f26c10aa1a5ecec9858bc57fbd7 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -352,9 +352,9 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
- 	lines.pop()
- 	return True
- 
--TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
-+TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+) ?(- )?([^#]*)( # .*)?$')
- 
--TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?(.*) # SKIP(.*)$')
-+TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+) ?(- )?(.*) # SKIP ?(.*)$')
- 
- def peek_test_name_match(lines: LineStream, test: Test) -> bool:
- 	"""
-@@ -379,6 +379,8 @@ def peek_test_name_match(lines: LineStream, test: Test) -> bool:
- 	if not match:
- 		return False
- 	name = match.group(4)
-+	if not name:
-+		return False
- 	return name == test.name
- 
- def parse_test_result(lines: LineStream, test: Test,
-@@ -416,7 +418,7 @@ def parse_test_result(lines: LineStream, test: Test,
- 
- 	# Set name of test object
- 	if skip_match:
--		test.name = skip_match.group(4)
-+		test.name = skip_match.group(4) or skip_match.group(5)
- 	else:
- 		test.name = match.group(4)
- 
-diff --git a/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log b/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log
-index 65d3f27feaf22a3f47ed831c4c24f6f11c625a92..30d9ef18bcec177067288d5242771236f29b7d56 100644
---- a/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log
-+++ b/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log
-@@ -1,5 +1,5 @@
- TAP version 13
--1..2
-+1..3
- # selftests: membarrier: membarrier_test_single_thread
- # TAP version 13
- # 1..2
-@@ -12,3 +12,4 @@ ok 1 selftests: membarrier: membarrier_test_single_thread
- # ok 1 sys_membarrier available
- # ok 2 sys membarrier invalid command test: command = -1, flags = 0, errno = 22. Failed as expected
- ok 2 selftests: membarrier: membarrier_test_multi_thread
-+ok 3 # SKIP selftests: membarrier: membarrier_test_multi_thread
-
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250813-kunit-kselftesth-skip-e289becd9746
-
-Best regards,
--- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-
+> ---
+>  .../mount-notify/mount-notify_test.c           | 17 ++++++++---------
+>  .../mount-notify/mount-notify_test_ns.c        | 18 ++++++++----------
+>  2 files changed, 16 insertions(+), 19 deletions(-)
+>
+> diff --git a/tools/testing/selftests/filesystems/mount-notify/mount-notif=
+y_test.c b/tools/testing/selftests/filesystems/mount-notify/mount-notify_te=
+st.c
+> index 63ce708d93ed..e4b7c2b457ee 100644
+> --- a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.=
+c
+> +++ b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.=
+c
+> @@ -2,6 +2,13 @@
+>  // Copyright (c) 2025 Miklos Szeredi <miklos@szeredi.hu>
+>
+>  #define _GNU_SOURCE
+> +
+> +// Needed for linux/fanotify.h
+> +typedef struct {
+> +       int     val[2];
+> +} __kernel_fsid_t;
+> +#define __kernel_fsid_t __kernel_fsid_t
+> +
+>  #include <fcntl.h>
+>  #include <sched.h>
+>  #include <stdio.h>
+> @@ -10,20 +17,12 @@
+>  #include <sys/mount.h>
+>  #include <unistd.h>
+>  #include <sys/syscall.h>
+> +#include <sys/fanotify.h>
+>
+>  #include "../../kselftest_harness.h"
+>  #include "../statmount/statmount.h"
+>  #include "../utils.h"
+>
+> -// Needed for linux/fanotify.h
+> -#ifndef __kernel_fsid_t
+> -typedef struct {
+> -       int     val[2];
+> -} __kernel_fsid_t;
+> -#endif
+> -
+> -#include <sys/fanotify.h>
+> -
+>  static const char root_mntpoint_templ[] =3D "/tmp/mount-notify_test_root=
+.XXXXXX";
+>
+>  static const int mark_cmds[] =3D {
+> diff --git a/tools/testing/selftests/filesystems/mount-notify/mount-notif=
+y_test_ns.c b/tools/testing/selftests/filesystems/mount-notify/mount-notify=
+_test_ns.c
+> index 090a5ca65004..9f57ca46e3af 100644
+> --- a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_=
+ns.c
+> +++ b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_=
+ns.c
+> @@ -2,6 +2,13 @@
+>  // Copyright (c) 2025 Miklos Szeredi <miklos@szeredi.hu>
+>
+>  #define _GNU_SOURCE
+> +
+> +// Needed for linux/fanotify.h
+> +typedef struct {
+> +       int     val[2];
+> +} __kernel_fsid_t;
+> +#define __kernel_fsid_t __kernel_fsid_t
+> +
+>  #include <fcntl.h>
+>  #include <sched.h>
+>  #include <stdio.h>
+> @@ -10,21 +17,12 @@
+>  #include <sys/mount.h>
+>  #include <unistd.h>
+>  #include <sys/syscall.h>
+> +#include <sys/fanotify.h>
+>
+>  #include "../../kselftest_harness.h"
+> -#include "../../pidfd/pidfd.h"
+>  #include "../statmount/statmount.h"
+>  #include "../utils.h"
+>
+> -// Needed for linux/fanotify.h
+> -#ifndef __kernel_fsid_t
+> -typedef struct {
+> -       int     val[2];
+> -} __kernel_fsid_t;
+> -#endif
+> -
+> -#include <sys/fanotify.h>
+> -
+>  static const char root_mntpoint_templ[] =3D "/tmp/mount-notify_test_root=
+.XXXXXX";
+>
+>  static const int mark_types[] =3D {
+> --
+> 2.50.1
+>
 
