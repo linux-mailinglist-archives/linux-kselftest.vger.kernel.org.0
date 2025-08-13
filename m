@@ -1,122 +1,109 @@
-Return-Path: <linux-kselftest+bounces-38851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38852-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C00B24AA9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:34:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FCFCB24AD7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:43:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEE3E3B27FF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 13:34:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9049A1890D0C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 13:41:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D9B2EA470;
-	Wed, 13 Aug 2025 13:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05D262EBBBE;
+	Wed, 13 Aug 2025 13:39:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PFEZ4+39"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="LS253VEX";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="wMQd8Iwg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B814E2E7F39;
-	Wed, 13 Aug 2025 13:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C502B2E9728;
+	Wed, 13 Aug 2025 13:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755092087; cv=fail; b=PkKzNus0GJL/6e3+eghT1dcpEyQSLL9lR+IVb6mWMIlU+qDFm3vwxbbROIFuCdeeK0/ElBrIl3GwR7KhVGVs/pJQPCBZnM6sTP43t/9cDheuRG1fQmqeCi2WCg3C/kGNVL2OK90SfysOqnYuq6YYNshRUdtZnSldOt/I/Cu2GYY=
+	t=1755092377; cv=fail; b=IBT0W+YlP1yduXWmYGvMHxGTeWdlRCBL+Uw92Ol7sAvvxNjTBX5du1iFXXwsEalR6PkvHkW3xvGM4QoADgfOsZ2kD2GxcdqvKBP7yN75LA3sUoxw6KCVTwmE+FofcUAjmwT/2WfnZTPtJoFADaR72kolaUCv/C6vW1QZ//pvY2s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755092087; c=relaxed/simple;
-	bh=kOplSnkVtO0f6Yj1oXUHDvjK5in41J5xjVXyU9vEeng=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=mGyX+MT6rFaOV2PSUzTr6sMzHUYq8TmsLvHNi7cFoAgdhgQp9HzsN3Fqq+pCMvO0oJkEZzFxfsYCtMa7D4KbSbaDsdUlDlCmcwb5ujDvg83/r2q+yZ1dr4lhJdMEv2+zOhRbh6TF6omCBoEjIx/aQ5KV7F8kk7Q3+1ZPRVIZkbw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PFEZ4+39; arc=fail smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755092086; x=1786628086;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=kOplSnkVtO0f6Yj1oXUHDvjK5in41J5xjVXyU9vEeng=;
-  b=PFEZ4+39IvdLpUJ+gD1UGOE4Zg7I1WeFDs7Ykkel75WYFiEHG4fOtARZ
-   PZ29U77kt1G/3w4evsgxyef1cwYUnBn7wohj63Yq3tjTS3u2O3U/RAcA3
-   r3aabcj97SPUzSSn1RMAOSOgMOqi2wUa1wxGpz3BOZbRPzgf7YGw0+mOO
-   c7zsGUzNCcPAe+zr2mDRxMqw4uhBiG0QcmDEj7SKCzD7nkgQWmpWUYfAM
-   NNn2eMAcgDLW1GspBgvmaFiuxC6D71p3a89/OunZQtAC6LSoid3vlsrTH
-   wrkngQX106hnG0JHohNXX3+KC6FS67tl8oT8HRaXHtYKuc5s3Nr1uI14w
-   g==;
-X-CSE-ConnectionGUID: P9myLBnmQV2wzUTyWbydzQ==
-X-CSE-MsgGUID: +gzOaDSaRLm2zr0AlaubKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="74833721"
-X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
-   d="scan'208";a="74833721"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 06:34:45 -0700
-X-CSE-ConnectionGUID: XrVvZ1pQTriBh6n21Pcxbg==
-X-CSE-MsgGUID: ayS5RnOLSQm2dQl6O8legw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
-   d="scan'208";a="165966765"
-Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 06:34:45 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Wed, 13 Aug 2025 06:34:44 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Wed, 13 Aug 2025 06:34:44 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (40.107.223.82)
- by edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Wed, 13 Aug 2025 06:34:44 -0700
+	s=arc-20240116; t=1755092377; c=relaxed/simple;
+	bh=86UOf8nrGPS42FLOBES7pGObFRIENKAetFsO2NOJ/Og=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=GvcYqiOyTo9+DmOW0TYHMN6f2hjuCGJeEOuKS8QsXhsC6YQlU+r4Q8OIQPq2QUECZFp3ijc5uECQqURQWxKiY/rrMRIidVX9wV4VxFj+tEz6wMBfkZzV7aiKCcDI06n26cJcXS9Q/zQqTyUPGBVLxycxthC3M9BNz8kvZwzqRFk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=LS253VEX; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=wMQd8Iwg; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57DDNBdM023013;
+	Wed, 13 Aug 2025 13:38:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=1UuZ7KxfqxqOMu2byI
+	NrQu2EY16zw3bxaxwX/3i5LjY=; b=LS253VEXOckOlJLaoOc99/cJTM2MBs+OHS
+	q7NJHrM35Cz/d24rwHVba/56rSfQywjcdlIbaHkUVkH6//tbp9TxeHOwhOPlny+A
+	Uc1Yln92XToS8bir1TL6k7ngthlWaaMAwzmKb4UImS7KbaMajKW7Jnh70EV43MRE
+	ehxGB70XMYxb7Gj0bNBwxTtFQMB3qiGZhM496iFIlT/L71dTzzd39SmMCIha3DIk
+	ifGtqLpnB6uyglPH/jyyKh7eFISED1ik3DITSBSd+04hLNGONzGJMjg0NNUtefAg
+	+3hP4lviyFGFhyYFwJKdCoaQBVGjxDtlel9XkLO8FYAZ84A5SvMA==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48dvrfygs0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 13 Aug 2025 13:38:58 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57DCXnlo017390;
+	Wed, 13 Aug 2025 13:38:57 GMT
+Received: from ph8pr06cu001.outbound.protection.outlook.com (mail-westus3azon11012067.outbound.protection.outlook.com [40.107.209.67])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 48dvsbdtg9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 13 Aug 2025 13:38:57 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qsSHZ6LalfpWZh6Cjvl7Qjk+xmQL4exQnR1q3OVBf9tZ2k2TJS8jJQTiegZWEszM70x+04HwEYVWPYeamUMkQZIoRq07m5V0p8zu52lFHiINjf2qrLiWe71EUJtUXhuztSJuxc8kP6F5YZXlQbz6skOQbEXYLR7IfquffSYOxsiFIcC++/fhNjse0ITP5mecTgJqPfSUaG3lG68XOKQCVgjuxBI6NRJ1VwW8EPgHUJEVHYRphwGPy7t+4s9+Etvonam3IK1fDanBVXDTUNBUmsq6XXdLuLeSBiizD7JPG37ypeMvvMr+uiBUGWGAAiWiLA+D/pcliUgvrr3qw9qrLg==
+ b=R0EQSv8YoPlGvrScodgXSfZMpSqbVlJ8xrTVCYWKZvYmOtxA2XV51fJPXZTdi+e38ZpwWKLtEMbiq6K/uV2B5prxoEqU0Az9gcMWgZRG3+UFcnXlLlCd0QxbHT9PUcwJMNzLdkyC54z0TFc9wtAynLVUeiR/Kp27B2+vuv15YaQRRUXY0aLJOAhhUDUz1Lv8x1O5efh4HQ8/D0xoSUdN38lVHtCTUpQrciyHnQdMhY05dag7OLB5Kig9HBV8Yx5oY35Tc8vazHYrYnFpeLVlcp1NJirkXI9PMD4+kIieY6r/ilrGM/HoXF7wTFpqh4tfJUDEiBvmT0oJ4yPDLbbLmw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1b9gaA9bO9pumtq3ZL6XDWMvR1tX0SnfHwKIRdbc9Q0=;
- b=Qo0jnVCdCQUtBksnbEKKpwLfFspdvTypmji1yOyPEIYh+vIX0Nx2cS7c1dOgT59bH+6rKObfd69Zu1FAeE47WCxSNp5oyy2CFwS3KvkhgWOPTM4Ue4uXLQH7pmkhhjFNylm9/sIBrZA/xbAG7wS21iJhJ4CObk8ZdnhhAsieisuMGXdH2s3gfL2786FBBvurKeKT8Jz60arR74mOr47lhUwdsbmqVpjnfZ6QwiCQEUX2Sj8iRVFVToJpwWC3jztWfZ/0/zwoFz6BfnE6u1lk+g27t76EzGze1SzcfQ8JUdyx345Olpbi+wMtCJ8BqolYN6XN2jP0WCIrSVVyE/xl8g==
+ bh=1UuZ7KxfqxqOMu2byINrQu2EY16zw3bxaxwX/3i5LjY=;
+ b=pYK/W3eTW32nB7vTzRidmodC8lH7Y5MO1V+YRYwV2efVyS04/Nwy3RN9kZyF5Ql5JLorOTiUpTBs6iBKe+k/p+KUy76do9UVOZ4JJ85cfqeuDxfT6DXz2fdGXX6N8L5dy5Hg/dZdIkz6PuJXfyKb5HcdngIFhAFkXYR8KAMxdDJv0jUXQfH6mpiC5lmuxRcREte00CFNq2KNrIGo1q9CALm8yRFxtRIVeeZEo5D2bBuXxRwQdIFZB2NKZTxoQUFvpAxhDTNaBlapfbF+9yhFSa0vKhaYRgQVoeV8Yn98rZXQLn843HpdLvnrldNllKnbbwWE0NN+8o0TI5AbqAzRZQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM3PR11MB8735.namprd11.prod.outlook.com (2603:10b6:0:4b::20) by
- MW4PR11MB7029.namprd11.prod.outlook.com (2603:10b6:303:22e::14) with
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1UuZ7KxfqxqOMu2byINrQu2EY16zw3bxaxwX/3i5LjY=;
+ b=wMQd8Iwg07Q1yUQgghYU/7NNa6M4bgjwcPL8jsVfZ7hh7pcom/BWZ8idLfcsovS2grzLZxt7NwPpJ3PNTUHBCZna7h8MQ79Pdm/8Qwuoz0wLtjUscsfsMiP+JN1IU7Jieezenm83T5AE8IPLBO8cQYrFwQkOG+6IOHFl1Of8qhU=
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
+ by DS7PR10MB5200.namprd10.prod.outlook.com (2603:10b6:5:3a6::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.15; Wed, 13 Aug
- 2025 13:34:30 +0000
-Received: from DM3PR11MB8735.namprd11.prod.outlook.com
- ([fe80::3225:d39b:ca64:ab95]) by DM3PR11MB8735.namprd11.prod.outlook.com
- ([fe80::3225:d39b:ca64:ab95%4]) with mapi id 15.20.9031.012; Wed, 13 Aug 2025
- 13:34:30 +0000
-Message-ID: <55e8d6da-50e3-4916-a778-71da628cbc08@intel.com>
-Date: Wed, 13 Aug 2025 21:34:19 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 07/30] KVM: selftests: TDX: Use KVM_TDX_CAPABILITIES to
- validate TDs' attribute configuration
-To: Sagi Shahar <sagis@google.com>, <linux-kselftest@vger.kernel.org>, "Paolo
- Bonzini" <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, "Sean
- Christopherson" <seanjc@google.com>, Ackerley Tng <ackerleytng@google.com>,
-	Ryan Afranji <afranji@google.com>, Andrew Jones <ajones@ventanamicro.com>,
-	Isaku Yamahata <isaku.yamahata@intel.com>, Erdem Aktas
-	<erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, "Roger
- Wang" <runanwang@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, "Oliver
- Upton" <oliver.upton@linux.dev>, "Pratik R. Sampat"
-	<pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>
-CC: <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
-References: <20250807201628.1185915-1-sagis@google.com>
- <20250807201628.1185915-8-sagis@google.com>
-Content-Language: en-US
-From: Chenyi Qiang <chenyi.qiang@intel.com>
-In-Reply-To: <20250807201628.1185915-8-sagis@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR01CA0147.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::27) To DM3PR11MB8735.namprd11.prod.outlook.com
- (2603:10b6:0:4b::20)
+ 2025 13:38:54 +0000
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2%5]) with mapi id 15.20.9031.012; Wed, 13 Aug 2025
+ 13:38:54 +0000
+Date: Wed, 13 Aug 2025 14:38:47 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, david@redhat.com,
+        vbabka@suse.cz, peterx@redhat.com, jannh@google.com,
+        hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org,
+        shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org,
+        josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net,
+        willy@infradead.org, osalvador@suse.de, andrii@kernel.org,
+        ryan.roberts@arm.com, christophe.leroy@csgroup.eu,
+        tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>
+Subject: Re: [PATCH v4 1/3] selftests/proc: test PROCMAP_QUERY ioctl while
+ vma is concurrently modified
+Message-ID: <7d3b4b0c-f905-4622-95a8-e4d076dc71d4@lucifer.local>
+References: <20250808152850.2580887-1-surenb@google.com>
+ <20250808152850.2580887-2-surenb@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250808152850.2580887-2-surenb@google.com>
+X-ClientProxiedBy: LO4P123CA0117.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:192::14) To DM4PR10MB8218.namprd10.prod.outlook.com
+ (2603:10b6:8:1cc::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -124,149 +111,398 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM3PR11MB8735:EE_|MW4PR11MB7029:EE_
-X-MS-Office365-Filtering-Correlation-Id: 06f63049-b735-4a71-d87e-08ddda6e21a5
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|DS7PR10MB5200:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7050e0c5-5077-46a2-fe78-08ddda6ebecf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020|7053199007;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?WU5rSEJqTnNjalphZWV6eERnNTgycS9LdkxaVHNYZ2ZtSWI5eitNVDNHRHFI?=
- =?utf-8?B?K093U0JoNmR6RVA5bC9tT0xQdnh3TnU5WldzWDVtaUNxa1F0d1lVUFhYOVNI?=
- =?utf-8?B?VEpPV2Z0QmlrYjAwK0h6TTliUkMvL1FmME1EMWRpK0ZFSSszQld6SE9Uemow?=
- =?utf-8?B?bHdweVhuaVFXeCtlTjcrR3lKakIxdlpuMUt1cWNJWnNQOTJiQU1Qb3FsaVRZ?=
- =?utf-8?B?Wk4rWkp4VTRHN2pUNkR1bHpNK2s0SUtQUUNLaWxFTFpxYWpGaGg5NE5DVHh2?=
- =?utf-8?B?N2lKZ1E5ckN6dmovZmpzZTNBcEVQdFZIQnpZY1Jjd0xGNUl2TGNxQ2d0TnZl?=
- =?utf-8?B?Y29ubHYrc3YwRnhPTm1PTWFNR2hIMmVJK1V5allZWmY2eHVqQ0I4UVRRUlhz?=
- =?utf-8?B?RVV2bjE4eGMwNjFNNmx5TGRJTStwSENzL2JITlNsaVBHU2d1TEpRZTQ4UGhj?=
- =?utf-8?B?TlNCNHgwc2ZqN1lHR1Nmc2lHM21ueG14RmlhTkRRekpoUStkV3p2S2pPeXRo?=
- =?utf-8?B?U052blM4V1o5UXFRMmxDMWExYUprV2l3eENVMFFMZFFXVGFueEFEUExWTExz?=
- =?utf-8?B?ZGNESnYwY3ZNMnh3bDRNd2k1MkpyY1htRlJZWTB3NGo5ODdsVFNTSzROdWJI?=
- =?utf-8?B?UDlDcjVmUmtGZXB6VkpkNXM4S2NtVThWUnQ1V3pRdnVWM1VWTnBhdWV1RG5K?=
- =?utf-8?B?TlpqVklpSlhVdmVWbHQwdUR2K05wdzVwOE1vYmwraUVpTllyaDJxNGVLNklL?=
- =?utf-8?B?eVB2RCtKbEhUdGVmZFVobDNheWIvb2tpUm5IOGNtWnF1RFBxV3RuczZqQmh3?=
- =?utf-8?B?NWhnd3ByQnAwQXh6K1Vla1dFTWt4Y1BURVhzZWdOM3dxc2xKVnFNVDNPeUs4?=
- =?utf-8?B?UTBMeUVsa2RhQ3pORnFtc3p1b2dMOHRyNkg3bHJjOGpoZytKSEMwaHFlYzVU?=
- =?utf-8?B?Q0YyVXl3SWtFeDVmSTUvMHJFYnRJSnlTNmgySzFWcVZSMUJxREFpMUVud1lX?=
- =?utf-8?B?L0tVaTJFa1JJcU80MTZxdFFMMEExdXk0QzRVU1pxV3B3aTZDOVQ4akFqOTI4?=
- =?utf-8?B?MWZHamVveENtR0xRaU54bkc4SVhDcXZ1SFU5aFdzNmxXWUhnTUZlZ3IrV21J?=
- =?utf-8?B?N0l6b1U0dFdtNUFZVklheGljWjNWeHpnczdpTkU2aUJHYkpGQzFmQzlzalJz?=
- =?utf-8?B?NEo5OU40ZDJmbHlldldPQjdURG85MWNiQnVIeFVMOWZxa2hpcXRJbXZkMEN3?=
- =?utf-8?B?akpVU3RXR0UrWjY3cmthQXdNTktHdjBET2dOT2pYa0RVK0xPd29kSmFCSk1L?=
- =?utf-8?B?NWpqQkNCZ3B5UERMTW5JQXpqTmZubzQ1N3Fqak5MRUh2aTBKbytFcFBSciti?=
- =?utf-8?B?NUc5Z3RNaDZFK3JGbWV3bTNib2g2a3U2MXY0OXJqdm56ajBSTlhuU1RwNGt5?=
- =?utf-8?B?UUovb1B0b3hBQUpHY09GTElDM2QwUmpCd0tYRFhVUmh4T1pwV0Z3aXZpOVQ5?=
- =?utf-8?B?ai94SFcvNm5WSDFOLzVsUFUrVnVuaFBXeGZsdFE1TGUydnJNSkhTNjNUS3dw?=
- =?utf-8?B?UTYzR3RQV2RkMmtPYjRlcVgwUmk1U05pQVJETXlmTWlSRGpPZVUwQ1JPRUJ1?=
- =?utf-8?B?aG03ZS9NT241TmpEQU1qdjJtK3E5MHBkWXRqVElVQjkzRnlsS3E3K0FNOWlk?=
- =?utf-8?B?UVRldWhQVUE5dUxoNXFLSmhOdWRyVkJIUERDeE8zejY0ckJjdUQyelcrYnNR?=
- =?utf-8?B?ZU1nYmQzdzRFSlJZQXdZVEhZL0NWdEt3OFhCZnNrdVhEeUhQMHNCVjZrM01K?=
- =?utf-8?B?MEJZK05qRWVESFdyNE11cDdEdjhhRzBxRjBhTGcvTEFVUnBSa01ERDE5bksz?=
- =?utf-8?B?dHQ2YndFUVZLUVZ4MFdYR25PZ1AvaGxXY0I1NXNuQXhsNUxoRk4rMlFOWmpX?=
- =?utf-8?B?N0RJTUJWK1RwbWFZZEQ0cVA1WUlEWnR3TVJVQUhIc3hMK2RGUTdHSHZnVEQw?=
- =?utf-8?B?MDBLbHhBeURnPT0=?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM3PR11MB8735.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020)(7053199007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?1dpE/JjXyC37w1jjCXWMbf7HE8KGreMz6hWXMgvtGFTTcnzcSu920CqXJX/J?=
+ =?us-ascii?Q?MAeoC+MQ6V/JBdm8d1DCABnhCy2u/6v6LqKeSj0XrCHSK0P0brOB8nuVETrg?=
+ =?us-ascii?Q?6X10v4u/8lOXsNnkRFcQLYQQoYAREPn+qR2lf58zA2U2e1F/xPaaKOREGMSd?=
+ =?us-ascii?Q?jySGZVzEPKYkbE0Um4qycyk1sOqTRK7ygH1BtDS150eGbpmRv5jxMS+xSfmg?=
+ =?us-ascii?Q?To2See5knuNL9p8xxPzh1RxXHSPdUV4aNW4QROqQ6xnOtQn+XhAsyFUmyPGn?=
+ =?us-ascii?Q?xyeQFUSeAncCY5PSe8gktngvtv4qOoyGNq6bucmv8kGMdBe/AuqgcQ3ZOpzK?=
+ =?us-ascii?Q?354Zaqs1XQ9t3CGlQ0UcaAD35B7IvMprJGik46mK8S8qqrxo8Rc2pgDuoUUm?=
+ =?us-ascii?Q?f7zkLsBMKUNYrg7ncY7FLh76kVyHheD2snj6zhKJK0FEeoskYFvbf18iYJtF?=
+ =?us-ascii?Q?prnwcKOtCCju8VKQrloS+W6pxqnlLAJf6nUcKJig+PnbY/6nS1QmezahP/X2?=
+ =?us-ascii?Q?Nk4KRS4aygcDhHkocj5zSYcYAwHETjq9h2riQ6d/w193swjRfpWX7FHlO+Pq?=
+ =?us-ascii?Q?6JX4X76GGNMdh/QsdarNfw4XQFF5rZlRX5O+2YUvnyZInGlQesnganPppCeN?=
+ =?us-ascii?Q?ilv8+F5qIVprQtQGIWe8RceFyyE/WPdjY1raudmu98TiQrTxFZy/6R7VwH0e?=
+ =?us-ascii?Q?QqKyK4EFAODeu84ySPkGVLAN3Un6r1UQveXFqnSJSptpfNObIg/MMqbnePWt?=
+ =?us-ascii?Q?svkE/EnOirLyFNWt3cToQPKtyB3hSEHhXuarWfUZN5elNbSdW3J7Uz+m9kpP?=
+ =?us-ascii?Q?boQBwP1BJDgmDmDWNHZqBPNb8gXJ3dl1HpRE/k7sprSOTfIoaHpEGG7e5EMp?=
+ =?us-ascii?Q?AbIYq25/Y5e3OnusfftAwkLrPhTjpB6iMu9zwf29VSbi/C3e2BIFeYulm95b?=
+ =?us-ascii?Q?BwgXzhwGnfSQW2XBgR1GEKbW1TKz7goU4iLDkLUoRV6wyMY5FQ9Oj3+xJGd3?=
+ =?us-ascii?Q?lXlQ14A9mjCmOR2hCLDKKQ1fByGMHxkkTBXHMvqJwVsesWV3zNIl7GExwMKI?=
+ =?us-ascii?Q?GsUGfAwkDz5mFHkDOvyKKNm46QS7bA8EnMUTGoLIoTphRixK6QnBFKKjvlQS?=
+ =?us-ascii?Q?hpB8hX3mCumxQ1yMuEV0PLFjDcW/hCBsp0Os8EaxvODYAiNr0KFaCchXNMD8?=
+ =?us-ascii?Q?beP8c1q9jxnw91KZd/sAoZ2nrIBsE+DNTWz/b2xGwtabsf8k44wlFsc7A7qe?=
+ =?us-ascii?Q?kIe+3JQF1xvzPsySLYzk3cFUHcDvhAIlKWpAjhDGdfSNWDtyNiY0rskZ+Okq?=
+ =?us-ascii?Q?8KiW5XF9teBGGvaJSUncFtpCkdQ6K4l1FDNgYHBSz8f6hv8KhmartFmfhJye?=
+ =?us-ascii?Q?tad5MRq95Oy9ioxzkVNXOeFf+4CURErSFtnnywlsh2klgWERObRrFvDfpAks?=
+ =?us-ascii?Q?mYdGhFycMwo=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YWhzVjJlN1QzTExuLzRYYVpGenpoZGVJWVYvaUZkdmtiZ3BEcFVvejc0M1Mw?=
- =?utf-8?B?UVZwajF3R2xGdzNBTnJ0WmI1T2ZtU2FRQTdMUlNSeThvSFhSd1RCZU5JWjBX?=
- =?utf-8?B?MkJVNkNwQW50a21oRXJ0amVWeHBVbHc0QmtRdHVOam1MZWJSZDI0bE03Q1JZ?=
- =?utf-8?B?MDFUNmZtMExXQUFZbkdOYnZaU1FWRHNVaUMzRVlrdm4yU1lUeXFWZVhQVnZx?=
- =?utf-8?B?Wm8yN2xLdFpuZ2R4Znp2REZJRnBpaytWU0UyREg1NFFxTkg4Z2FIRTNlbFJv?=
- =?utf-8?B?MUVaeHhOVTA5WmJmYjkzeklPOGNzU1B0VWpmbWxXYnBlUjVMRVg0SzQwTlg5?=
- =?utf-8?B?LzM3c01vekN5WXRrRTdJZ3pLQjE3bjUybGF3VGRoTDBLbXpJQ0pzUXdzTjh1?=
- =?utf-8?B?UHpGMk1GWUN3eW9ZZU85Mi9iRVQxSmdqUVFxeklNUkxPakxtTVhqV3JIUkZD?=
- =?utf-8?B?TUUxSUZCZkVIQXEwZ2FsK1hRVXpJcTlwMllkZlJ1UUpwc1ZwREVQdlIrV1c3?=
- =?utf-8?B?OGp2VlRuNEZvSXVYUEQxL2RmSEk4TEE2Sm1DeDFtZDZ4YmZWeUxHNk5nVmRR?=
- =?utf-8?B?MUp1cXg1UUVlZjZqYXRXME1Vc05wTTNRN1liYWZCa3JCdFk2cHhnK2Evc280?=
- =?utf-8?B?cmNnUFRVcDBvcDRUZFN5a0JUU1hHeDQ5R0VOLzZuUi9rMSs1ZStpN1RVeTdk?=
- =?utf-8?B?TmFKWFpCV1RFeTZLbVI0Q2VTanJGRHQ4TWllNTUrTi9IaDRjSHpZaE5ydWZZ?=
- =?utf-8?B?VWNOSXhsbElrMm9GYlVTWC85VHViOFZheTZobEgrRE56SE05Z2VYWi9RRWJK?=
- =?utf-8?B?c2NQOVhHdmtMekdJSFJGUDl3VFE0WHRXVlU0NTFndGRnbS92OTJ5TVhtOHZy?=
- =?utf-8?B?VWpaQjFJS1Z1Q1lDdkRsWWg2YzYxTnJzUjJrazlBYmQrbmpCLzBJV2l5WGtK?=
- =?utf-8?B?QkdEWWZERVdZOFJjd0Fwdnp1alZnVDVTaGdQTnBCQmR4Y2RQajdXbVo5MGJS?=
- =?utf-8?B?VVFObmFNMWprNFV3Ym4zRXlha0ZkTE5JQXpyUUVmclZ0cU1jTGZ5a1BWeEh2?=
- =?utf-8?B?WW8vdXh1TnlnNWx4dmRTamU3b2ZFdDFNNGRoQTROTVRiNzdsRWRBRTU3NkVz?=
- =?utf-8?B?ai9ERjY2d0M0VXpRNTRTbmhWUDM3MjREUFk5WHh1NTlwRkpUbW0rbTBDTlZm?=
- =?utf-8?B?WlpXdi9MWlFJMzRRbFl2eTBmOWpwZnB0WFd4U3M5S0RqQTRUbmxtV00vaTdH?=
- =?utf-8?B?Uy9KdVFzRDhPT2VPbDNXeXZmaTU4NitJUmRDNjFCZ2trYTJDTStPNE1kM1lY?=
- =?utf-8?B?emo0VDhvMVJhVUFkZFpzMmNjZ0c0Vy91NDZsSWZUdUdFNlcvZ0dpQnhqV2Jo?=
- =?utf-8?B?cjVNeHR1RW9Rd2RDVTRsUVpRVE5oNlIyMjRRTDJvZ1VNYm13dDEvR0V6bStT?=
- =?utf-8?B?djFidWZEVnlWaXlZMGVzZi9ZKzNNb25oNlJHM29kLzFRVE5ZRm1RY2NQeUR4?=
- =?utf-8?B?UkRIcUFRVnhIVWJxbG1LeklvWGpISnBxYjJTRlBRaWt5b3YwMEVsVmVjWHdu?=
- =?utf-8?B?aUlZVk5Idm1wcThpcEszcUVyVDZhdXBHU1pRM1c4bzU0azRMdi9tcit6cUVr?=
- =?utf-8?B?VmdkMjd3OGZyeW9YQkZraFhGMzFnWUJ3YzFxQnVwZ0RLUzNDRUtoYkxqRy9u?=
- =?utf-8?B?WUNEZnZTTCtiQlhZUmM1NmJ2b3JVZVQrUEF5b0loZzNBWm1PNGFpZkZ0bHBz?=
- =?utf-8?B?NGFwSmJ3Qm4rb3dWeXREeGRqNG5rZisvS2JpWndYSU5LUTVNN0ZFZzd2V1dq?=
- =?utf-8?B?eS9HZlBEUGhIRnh4eG9SZ3JwaytKNFdwamJQSDNhdHdXUFNxQ3N6RzNjaXlr?=
- =?utf-8?B?VzVWdlpCU2g3YVh5aTcrc1RoeTduS0lhYkxoSXIxaWFsZEN0Wlh4TzBhNWlE?=
- =?utf-8?B?REQ3UUNkVkQ3MHJEZGRCS05DaHVyZTl5UVFJMTF4QTlLUk5Fc3d6dS8xVUwz?=
- =?utf-8?B?UVd5Ui96UXlXT1Y1WmRjb0tuZmlFbk5ESXFVdmY0Y2FCR1JQaXZOZHk2cGdI?=
- =?utf-8?B?Z0lZdzdld2pEVHROTGFzMUV6VExrWURmZTB1MlFzditvbGNkeHhjaUxxTDdm?=
- =?utf-8?B?b09HVW14M2k1ZWE2aTdFTEtqK2VaVWtQNE96Z0czT29tRlNsdmd5d1IySDFU?=
- =?utf-8?B?UEE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06f63049-b735-4a71-d87e-08ddda6e21a5
-X-MS-Exchange-CrossTenant-AuthSource: DM3PR11MB8735.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?8My9l9oqvw6G0fab8FMBgiViwbiwKYQfbXbnfRUhZCBgR3Eanzfa9Z0IZe/3?=
+ =?us-ascii?Q?z7HEEDYFRCPw2yivrhfIjJFHfs87IR+d9Kz2WkiSUCVtuB8DNeaqSgNV63jr?=
+ =?us-ascii?Q?neSc4i1LZtSFZvft5I+3cDku3srtbVZ66sO09s6A5NiyBtleP7n3am6lHmvs?=
+ =?us-ascii?Q?unY9XF/bexI70S1vyvlvjW99kL6g82LVPqBavB9hFlwwQmXsmbmt8O1TJ8Ph?=
+ =?us-ascii?Q?6DaZ8LQgQWIrO7eBw2GOT+5dpWaXDsMOIAx52KvkFp7FOJLI5SJWWhwcv8++?=
+ =?us-ascii?Q?O2MCI/pimXGvkpaiClWSilLfVhadV8Y57mDlZV79m8TI+nPeYFYrZLNwB5lh?=
+ =?us-ascii?Q?Vf+ysid7R5+TASaAQzmvyjrteyN9taCQqUv7qCkFptoUnGoMWhFEG7iss3wv?=
+ =?us-ascii?Q?nfqKmuFJWViZf4uhz9yF1zr9xCemDr7VG7+9+falPExVdQr/To5R1IkguaGg?=
+ =?us-ascii?Q?f4pWXUb0Q2aRzXXX0MwmaFpJMElIaEpS83OcJdgDlQLLnHWbks9OrpkRl+Ey?=
+ =?us-ascii?Q?fpj/G/a6XIC1zZgjx4pdzISGBmcSfU+InUcr8rcpsAeiV/jxkYKhz0bZtWkP?=
+ =?us-ascii?Q?VMDwRDJugCEoXVEguo6WPnreVZkzqptQlO4+A6k1SWhrOqvkfRE70rHVAJSe?=
+ =?us-ascii?Q?hfRlLpB2aUYmRVUHQqUJtYe9Ed1gVDScy2BF38BWAPt69MQPLOxxPgEo5SE5?=
+ =?us-ascii?Q?y7C+C+wRczNk6j0jC5u3w9vAXXCDQJgur7IdELLALBzmjRbIwe0+KSmeA4qe?=
+ =?us-ascii?Q?sIO14vbjFD/E8uT2tx+3bgFr5kQLeyQa4VBaWR8jJuvMBD+QTjAeCiXwD5o+?=
+ =?us-ascii?Q?kXh8/MrjxBQiuSOV19bYOhCut6ZzyLy/sN8hepA2FL0At1mhx5pg87R9H06q?=
+ =?us-ascii?Q?F0TPDA1+UAC3LuGX5ljfTJg6RSecV5i6XQlFKFKSRmRBu/j9022yCT9am+zm?=
+ =?us-ascii?Q?dmo3Y8v5FNo3qmcQ1EHZAtzDeU6WZd1MFnNINwRRqZN23CESrg+sNSx7DeOU?=
+ =?us-ascii?Q?cJHdVvSQxwQHrKCEeWWwhvJp0ja9zVeXgOmK13uUemqOoD4l1HO7H+2VPVIR?=
+ =?us-ascii?Q?sLa5bU6pAxD7dojO3+F0AXPVtjP+K1b8o1AF/ailDzr4YkN0SvTbt55fZrJO?=
+ =?us-ascii?Q?jr7Dr9GtAYFt+0mwNsiU1PH1/k8oYTU6YPWy3U81q/xGslVx27tg81WEuJ8K?=
+ =?us-ascii?Q?CiOe450TdQL6js8PINVDyiFMDrfq9Hp02vHaGyYt7/C8xxWX0xIiNuj3TdgD?=
+ =?us-ascii?Q?9TTp46e73PYFtfu+Z5PsAdFhBrrEwMC1MrQ5GZCRCjl0jYas1WTlV3VDXI9w?=
+ =?us-ascii?Q?6Bs1BvQhLtiRz3+/G1cJiSXVgm3dJFi1+Cl/p8U6of1zifsc8FLv82hbs5Yy?=
+ =?us-ascii?Q?3LWSF6ZH2S7BkGiWDiLVOPBgOTS8Y1MSFlG/8PbSCp8TVPu8rlvIp129FsXb?=
+ =?us-ascii?Q?O7lyhBlhppgEpc5YcMAz8MnTuMLbdwTQmfu1R1gGri8CCt6H7LH4gTcxwFst?=
+ =?us-ascii?Q?n6xnHtMCxIZSIamBncpWSNAqsNfYMP1OD9w5kg3IGJOp5nPueDdmaslwad0N?=
+ =?us-ascii?Q?Wp9+uQandhMVn2agXCfRKcsyGZ3/OOUI+YoMcREBrl1P3pinHxt1NGQe4xYa?=
+ =?us-ascii?Q?IA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	o3zfsaWmvk4axLA9CjZqyzPUktxd7Yb96Kwu804+q/RSdtkR+NjeilOVcCZe82EF0CjnJBDosyJ3Mj2KssMliwNhtluysqawg86UYsEvI5cvZyySNvDTXnFDLJNkQyX6LymjwO6Bd7BJ8mc2FxL1RKwBjbi35BHYXe+z12nMfLfiQBEd198CVEFUrTwN4S7ehfCojVeu4+fmG1QO3yMoupRzCQvpGG8UMEJYleiitE0dAnuPMf34JTShXuXZx6INncRRWBgNoSgMRYOWO/27CwP1o9g3vcaHm+MbuhhRRmpSZgannhI0/Ma9Z4RGhPRIJgq1YEwcpn7RQvnN/2wrbEyPpSrMUyH0bsetEIyg97HZh2U67aQ+bucTLOY3avuc9FsBDGtWvIi6j+YU0cJh8L9Ciq5raRIWxCRA3onV4dGiR+oOKP4EySDFH8F0DIau5J87LRJkj6tgxv22bsPLevOB2bm01gHgsFf1hPNh3f3wXUaTdKGzXbNFPp2Vcpz9493oomGACQf9u1TuvynlZNbfKna4YhxzXVD5/Yf3zf5XY1d2r3ijEul3UvbwjbJ2fhW/3N1n/UBQ/YD+RWvJb9gTI/a2Re4DLx+5B4wp4YY=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7050e0c5-5077-46a2-fe78-08ddda6ebecf
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2025 13:34:30.5949
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2025 13:38:54.0037
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mVeVCQGXo4OolZx7xJ6u+klmlRN1mL44RFXG38Lw9mrpkY1qtiVK4f289KA1Xu1Y+HhmgTWt+T0A3as4LqXLIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7029
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-UserPrincipalName: aGlZtt4dHoorrLewUSjxcfGC7xe9Hwo5NvmvPEpbapD0PhN1qnrraDpWZYWfNuAX1nzta4hOMlsCHarjC9rqT5NLeIjrImkNBQBMQT1Ch6w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5200
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-13_01,2025-08-11_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 suspectscore=0 mlxlogscore=999 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2507300000
+ definitions=main-2508130128
+X-Authority-Analysis: v=2.4 cv=B/S50PtM c=1 sm=1 tr=0 ts=689c9572 b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=2OwXVqhp2XgA:10 a=GoEa3M9JfhUA:10 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8
+ a=yPCof4ZbAAAA:8 a=-xGtGpdhqmp0rC1n79sA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-ORIG-GUID: wnxQMEIqqHwTxAS96HyXhZ3zyxgJ1CrH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODEzMDEyOCBTYWx0ZWRfX/xDIp63dKCL6
+ 2g32WYAC1pqFpPUl06NYTYD0xiCXTew0vQi70HmuTYnLKEciCOI3u0sngWh1y0CBu+28NZGhU+O
+ hFVlqbS+BzG0hM6XvH7+/jiwuUGFoFzIVXCoe2EX1IxxDGkc3mErNwkDrK9856cNIzeAWK41Rbn
+ rOXFWm9bddeB/ZKTNG9nvNPpewIR30pmpF3yiQod0jWgaY+aMw6oV71riJAqWWrvArawJoVunV3
+ IF6KNKQ9stPgc1b4PtXLhFZktkOOe5kuL8eS78kziBoV+8+nIlCHd05P4DpkPAWCrb+2+v31g0U
+ Qr438F2AmNKxPxApbogNDMsYMk7FzgPNHf56imWUwTfrHELr5ANwwtysHwZ+bSR91zc08MIiYH7
+ e9Nbxcctfxly46IxBgnViSbcxxZPOpxnYZlhQzeuQUdtUuN9P6Q8i2fsCMslrAB37kynB1Z1
+X-Proofpoint-GUID: wnxQMEIqqHwTxAS96HyXhZ3zyxgJ1CrH
 
+On Fri, Aug 08, 2025 at 08:28:47AM -0700, Suren Baghdasaryan wrote:
+> Extend /proc/pid/maps tearing tests to verify PROCMAP_QUERY ioctl operation
+> correctness while the vma is being concurrently modified.
+>
 
+General comment, but I really feel like this stuff is mm-specific. Yes it uses
+proc, but it's using it to check for mm functionality.
 
-On 8/8/2025 4:16 AM, Sagi Shahar wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> This also exercises the KVM_TDX_CAPABILITIES ioctl.
-> 
-> Suggested-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Co-developed-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
+I mean I'd love for these to be in the mm self tests but I get obviously why
+they're in the proc ones...
+
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Tested-by: SeongJae Park <sj@kernel.org>
+> Acked-by: SeongJae Park <sj@kernel.org>
+
+The tests themselves look good, had a good look through. But I've given you
+some nice ASCII diagrams to sprinkle liberally around :)
+
+Anyway for tests themselves:
+
+Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+
 > ---
->  .../selftests/kvm/lib/x86/tdx/tdx_util.c        | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> index 392d6272d17e..bb074af4a476 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> @@ -140,6 +140,21 @@ static void tdx_apply_cpuid_restrictions(struct kvm_cpuid2 *cpuid_data)
->  	}
+>  tools/testing/selftests/proc/proc-maps-race.c | 65 +++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>
+> diff --git a/tools/testing/selftests/proc/proc-maps-race.c b/tools/testing/selftests/proc/proc-maps-race.c
+> index 94bba4553130..a546475db550 100644
+> --- a/tools/testing/selftests/proc/proc-maps-race.c
+> +++ b/tools/testing/selftests/proc/proc-maps-race.c
+> @@ -32,6 +32,8 @@
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <unistd.h>
+> +#include <linux/fs.h>
+> +#include <sys/ioctl.h>
+>  #include <sys/mman.h>
+>  #include <sys/stat.h>
+>  #include <sys/types.h>
+> @@ -317,6 +319,25 @@ static bool capture_mod_pattern(FIXTURE_DATA(proc_maps_race) *self,
+>  	       strcmp(restored_first_line->text, self->first_line.text) == 0;
 >  }
->  
-> +static void tdx_check_attributes(struct kvm_vm *vm, uint64_t attributes)
+>
+> +static bool query_addr_at(int maps_fd, void *addr,
+> +			  unsigned long *vma_start, unsigned long *vma_end)
 > +{
-> +	struct kvm_tdx_capabilities *tdx_cap;
+> +	struct procmap_query q;
 > +
-> +	tdx_cap = tdx_read_capabilities(vm);
+> +	memset(&q, 0, sizeof(q));
+> +	q.size = sizeof(q);
+> +	/* Find the VMA at the split address */
+> +	q.query_addr = (unsigned long long)addr;
+> +	q.query_flags = 0;
+> +	if (ioctl(maps_fd, PROCMAP_QUERY, &q))
+> +		return false;
 > +
-> +	/* TDX spec: any bits 0 in supported_attrs must be 0 in attributes */
-> +	TEST_ASSERT_EQ(attributes & ~tdx_cap->supported_attrs, 0);
+> +	*vma_start = q.vma_start;
+> +	*vma_end = q.vma_end;
 > +
-> +	/* TDX spec: any bits 1 in attributes must be 1 in supported_attrs */
-> +	TEST_ASSERT_EQ(attributes & tdx_cap->supported_attrs, attributes);
-> +
-> +	free(tdx_cap);
+> +	return true;
 > +}
 > +
->  #define KVM_MAX_CPUID_ENTRIES 256
->  
->  #define CPUID_EXT_VMX			BIT(5)
-> @@ -256,6 +271,8 @@ static void tdx_td_init(struct kvm_vm *vm, uint64_t attributes)
->  	memcpy(&init_vm->cpuid, cpuid, kvm_cpuid2_size(cpuid->nent));
->  	free(cpuid);
->  
-> +	tdx_check_attributes(vm, attributes);
+>  static inline bool split_vma(FIXTURE_DATA(proc_maps_race) *self)
+>  {
+>  	return mmap(self->mod_info->addr, self->page_size, self->mod_info->prot | PROT_EXEC,
+> @@ -559,6 +580,8 @@ TEST_F(proc_maps_race, test_maps_tearing_from_split)
+>  	do {
+>  		bool last_line_changed;
+>  		bool first_line_changed;
+> +		unsigned long vma_start;
+> +		unsigned long vma_end;
+>
+>  		ASSERT_TRUE(read_boundary_lines(self, &new_last_line, &new_first_line));
+>
+> @@ -595,6 +618,19 @@ TEST_F(proc_maps_race, test_maps_tearing_from_split)
+>  		first_line_changed = strcmp(new_first_line.text, self->first_line.text) != 0;
+>  		ASSERT_EQ(last_line_changed, first_line_changed);
+>
+> +		/* Check if PROCMAP_QUERY ioclt() finds the right VMA */
+
+Typo ioclt -> ioctl.
+
+I think a little misleading, we're just testing whether we find a VMA at
+mod_info->addr + self->page_size.
+
+
+> +		ASSERT_TRUE(query_addr_at(self->maps_fd, mod_info->addr + self->page_size,
+> +					  &vma_start, &vma_end));
+> +		/*
+> +		 * The vma at the split address can be either the same as
+> +		 * original one (if read before the split) or the same as the
+> +		 * first line in the second page (if read after the split).
+> +		 */
+> +		ASSERT_TRUE((vma_start == self->last_line.start_addr &&
+> +			     vma_end == self->last_line.end_addr) ||
+> +			    (vma_start == split_first_line.start_addr &&
+> +			     vma_end == split_first_line.end_addr));
 > +
->  	init_vm->attributes = attributes;
->  
->  	tdx_apply_cpuid_restrictions(&init_vm->cpuid);
 
-Do we need to set the init_vm->xfam based on cpuid.0xd and validate it with tdx_cap->supported_xfam?
+So I'd make things clearer here with a comment like:
 
+	We are mmap()'ing a distinct VMA over the start of a 3 page
+	mapping, which will cause the first page to be unmapped, and we can
+	observe two states:
+
+                read
+                  |
+                  v
+	|---------|------------------|
+	|         |                  |
+	|    A    |         B        | or:
+	|         |                  |
+	|---------|------------------|
+
+                  |
+                  v
+	|----------------------------|
+	|                            |
+	|              A             |
+	|                            |
+	|----------------------------|
+
+	If we see entries in /proc/$pid/maps it'll be:
+
+	7fa86aa15000-7fa86aa16000 rw-p 00000000 00:00 0  (A)
+	7fa86aa16000-7fa86aa18000 rw-p 00000000 00:00 0  (B)
+
+	Or:
+
+	7fa86aa15000-7fa86aa18000 rw-p 00000000 00:00 0  (A)
+
+	So we assert that the reported range is equivalent to one of these.
+
+Obviously you can mix this in where you feel it makes sense.
+
+>  		clock_gettime(CLOCK_MONOTONIC_COARSE, &end_ts);
+>  		end_test_iteration(&end_ts, self->verbose);
+>  	} while (end_ts.tv_sec - start_ts.tv_sec < self->duration_sec);
+> @@ -636,6 +672,9 @@ TEST_F(proc_maps_race, test_maps_tearing_from_resize)
+>  	clock_gettime(CLOCK_MONOTONIC_COARSE, &start_ts);
+>  	start_test_loop(&start_ts, self->verbose);
+>  	do {
+> +		unsigned long vma_start;
+> +		unsigned long vma_end;
+> +
+>  		ASSERT_TRUE(read_boundary_lines(self, &new_last_line, &new_first_line));
+>
+>  		/* Check if we read vmas after shrinking it */
+> @@ -662,6 +701,16 @@ TEST_F(proc_maps_race, test_maps_tearing_from_resize)
+>  					"Expand result invalid", self));
+>  		}
+>
+> +		/* Check if PROCMAP_QUERY ioclt() finds the right VMA */
+> +		ASSERT_TRUE(query_addr_at(self->maps_fd, mod_info->addr, &vma_start, &vma_end));
+
+Same comments as above.
+
+> +		/*
+> +		 * The vma should stay at the same address and have either the
+> +		 * original size of 3 pages or 1 page if read after shrinking.
+> +		 */
+> +		ASSERT_TRUE(vma_start == self->last_line.start_addr &&
+> +			    (vma_end - vma_start == self->page_size * 3 ||
+> +			     vma_end - vma_start == self->page_size));
+
+
+So I'd make things clearer here with a comment like:
+
+	We are shrinking and expanding a VMA from 1 page to 3 pages:
+
+       read
+        |
+        v
+	|---------|
+	|         |
+	|    A    |
+	|         |
+	|---------|
+
+        |
+        v
+	|----------------------------|
+	|                            |
+	|              A             |
+	|                            |
+	|----------------------------|
+
+	If we see entries in /proc/$pid/maps it'll be:
+
+	7fa86aa15000-7fa86aa16000 rw-p 00000000 00:00 0  (A)
+
+	Or:
+
+	7fa86aa15000-7fa86aa18000 rw-p 00000000 00:00 0  (A)
+
+	So we assert that the reported range is equivalent to one of these.
+
+
+> +
+>  		clock_gettime(CLOCK_MONOTONIC_COARSE, &end_ts);
+>  		end_test_iteration(&end_ts, self->verbose);
+>  	} while (end_ts.tv_sec - start_ts.tv_sec < self->duration_sec);
+> @@ -703,6 +752,9 @@ TEST_F(proc_maps_race, test_maps_tearing_from_remap)
+>  	clock_gettime(CLOCK_MONOTONIC_COARSE, &start_ts);
+>  	start_test_loop(&start_ts, self->verbose);
+>  	do {
+> +		unsigned long vma_start;
+> +		unsigned long vma_end;
+> +
+>  		ASSERT_TRUE(read_boundary_lines(self, &new_last_line, &new_first_line));
+>
+>  		/* Check if we read vmas after remapping it */
+> @@ -729,6 +781,19 @@ TEST_F(proc_maps_race, test_maps_tearing_from_remap)
+>  					"Remap restore result invalid", self));
+>  		}
+>
+> +		/* Check if PROCMAP_QUERY ioclt() finds the right VMA */
+> +		ASSERT_TRUE(query_addr_at(self->maps_fd, mod_info->addr + self->page_size,
+> +					  &vma_start, &vma_end));
+
+Same comments as above.
+
+
+> +		/*
+> +		 * The vma should either stay at the same address and have the
+> +		 * original size of 3 pages or we should find the remapped vma
+> +		 * at the remap destination address with size of 1 page.
+> +		 */
+> +		ASSERT_TRUE((vma_start == self->last_line.start_addr &&
+> +			     vma_end - vma_start == self->page_size * 3) ||
+> +			    (vma_start == self->last_line.start_addr + self->page_size &&
+> +			     vma_end - vma_start == self->page_size));
+> +
+
+Again be good to have more explanation here, similar comments to abov.
+
+	We are mremap()'ing the last page of the next VMA (B) into the
+	midle of the current one (A) (using MREMAP_DONTUNMAP leaving the
+	last page of the original VMA zapped but in place:
+
+      read
+        |
+        v             R/W                            R/O
+	|----------------------------| |------------------.---------|
+	|                            | |                  .         |
+	|              A             | |              B   .         |
+	|                            | |                  .         |
+	|----------------------------| |------------------.---------|
+
+	This will unmap the middle of A, splitting it in two, before
+	placing a copy of B there (Which has different prot bits than A):
+
+        |
+	v   R/W       R/O      R/W                   R/O
+	|---------|---------|--------| |----------------------------|
+	|         |         |        | |                            |
+	|    A1   |    B2   |   A2   | |              B             |
+	|         |         |        | |                            |
+	|---------|---------|--------| |----------------------------|
+
+	But then we 'patch' B2 back to R/W prot bits, causing B2 to get
+	merged:
+
+	|
+	v             R/W                            R/O
+	|----------------------------| |----------------------------|
+	|                            | |                            |
+	|              A             | |              B             |
+	|                            | |                            |
+	|----------------------------| |----------------------------|
+
+	If we see entries in /proc/$pid/maps it'll be:
+
+	7fa86aa15000-7fa86aa18000 rw-p 00000000 00:00 0  (A)
+	7fa86aa19000-7fa86aa20000 r--p 00000000 00:00 0  (B)
+
+	Or:
+
+	7fa86aa15000-7fa86aa16000 rw-p 00000000 00:00 0  (A1)
+	7fa86aa16000-7fa86aa17000 r--p 00000000 00:00 0  (B2)
+	7fa86aa17000-7fa86aa18000 rw-p 00000000 00:00 0  (A3)
+	7fa86aa19000-7fa86aa20000 r--p 00000000 00:00 0  (B)
+
+	We are always examining the first line, so we simply assert that
+	this remains in place and we observe 1 page or 3 pages.
+
+>  		clock_gettime(CLOCK_MONOTONIC_COARSE, &end_ts);
+>  		end_test_iteration(&end_ts, self->verbose);
+>  	} while (end_ts.tv_sec - start_ts.tv_sec < self->duration_sec);
+> --
+> 2.50.1.703.g449372360f-goog
+>
 
