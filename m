@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-38861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38862-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB02DB24D88
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 17:36:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67B29B24D6C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 17:32:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDC2A3BC610
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:30:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89C797BDB06
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC59B26657D;
-	Wed, 13 Aug 2025 15:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81ADE272814;
+	Wed, 13 Aug 2025 15:30:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X+NDqabR"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RqrBM+4r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93052641CA
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Aug 2025 15:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127442727E0
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 Aug 2025 15:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755099040; cv=none; b=OAvvyYZBFvpc5SJh46zviSGuqh8wJbtmK1QmBgnYlzN5FFV5vtzc5CPlDFkEYFiODhQowj8G8dKO0tWNOB4ANQ4gh8+8JWwQ28epvXpcYBr0zZjqEcHpOehD0h0zfSIgUh0lNW1miyV2T0aWCVcc3Ll5QdLhnEz1zGEZEaYuP1I=
+	t=1755099051; cv=none; b=MABOydeWkwbG/IhS81j/XPOEkzrErJagoeRe+xTsmobADYFNnolvBb9GFRHifPmCR3meVmas0w6eLA72HAj1BPziMJkR5vOt8y3xnwVtb1UXC7JviYaSOkED67tQQK3/Dtq9CPjMxPhRUnUmm/XbsoRfJ+tnCFnKa9Jzx7X+sAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755099040; c=relaxed/simple;
-	bh=bMByBsrtjkN+fRggz+RI4RpCiPWZPkReGVAZTHbwDus=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XOW3CDieGwIIxW14h5gf+RyzlRfJPaF2tjzerBbziHqZ+UQ6U6gh2deabGD/Mly+qZoWtr3C4a4dfSqT6MPqTiQj+1cNQkGo1u5LAm84Iihmy22oxVXFhhv7L2Uo/THWM03cFsWv/tRz64O65Bl5GKZKvyAA0X6SeqUJPjdonWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X+NDqabR; arc=none smtp.client-ip=95.215.58.181
+	s=arc-20240116; t=1755099051; c=relaxed/simple;
+	bh=oBpG2Njdb/3sUKn2TUNTKNLeUonqd8QmP93MjbKGHbw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=j4tIWtl3QPGqVVD45no3lGqwdPHUUakJXYY21bYxvKitJq6YGeQo/D4gOw5w3xB4ikRFL4NTeqWDwXtMXaO2mM3J/v8rm6mB0/V85tarbcdel8pLA1yEJheIbidKCzi1lY1YKiMPH/w/PQL6XjjVzWX0fEJEYQgRtunDwB633VE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RqrBM+4r; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1755099036;
+	t=1755099046;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Fktp/IJNpxzdC2cRonL/xXN1tBsZHEP9YLQ3qx2TSgo=;
-	b=X+NDqabRvfniiCccTSd3t4ZZDOcpusGOPzBCkOVbKlIdgawPJSUigdYc7wNieV6KzsET1d
-	XJSll3iLlwKjzhwn9KUUZ4YaaE8TTQgIu1Kx5xfOUxhX8S8mhUhDIxDWGmN0SH6Q0X9SRB
-	5d/75mU93Rp/0IRv9QjmUbksV4f5NRs=
+	bh=Dg4Vf15U+E3Og15w4aN3q+dU4EFzVNfYMRDLB+8UxmM=;
+	b=RqrBM+4rmnd7f7csAuy8+jSFgCq4RPvj3YzfAYTrYT19w8YqLd0wETIOIXqbB0VW5R2n6e
+	nNj73wPxbzpzwRfzhbPjXw3SU5kCG8znJgh927XNgi/1O1/zdyC6AJiTgFwKacWxk5EcRN
+	yyvz8SSRlDvkUhFP8tgAy6qVWPBhPmk=
 From: KaFai Wan <kafai.wan@linux.dev>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -62,10 +62,9 @@ To: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Cc: Felix Fietkau <nbd@nbd.name>
-Subject: [PATCH bpf v2 1/2] bpf: Allow fall back to interpreter for programs with stack size <= 512
-Date: Wed, 13 Aug 2025 23:29:57 +0800
-Message-ID: <20250813152958.3107403-2-kafai.wan@linux.dev>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Add socket filter attach test
+Date: Wed, 13 Aug 2025 23:29:58 +0800
+Message-ID: <20250813152958.3107403-3-kafai.wan@linux.dev>
 In-Reply-To: <20250813152958.3107403-1-kafai.wan@linux.dev>
 References: <20250813152958.3107403-1-kafai.wan@linux.dev>
 Precedence: bulk
@@ -77,99 +76,174 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-OpenWRT users reported regression on ARMv6 devices after updating to latest
-HEAD, where tcpdump filter:
+This test verifies socket filter attachment functionality on architectures
+supporting either BPF JIT compilation or the interpreter.
 
-tcpdump "not ether host 3c37121a2b3c and not ether host 184ecbca2a3a \
-and not ether host 14130b4d3f47 and not ether host f0f61cf440b7 \
-and not ether host a84b4dedf471 and not ether host d022be17e1d7 \
-and not ether host 5c497967208b and not ether host 706655784d5b"
+It specifically validates the fallback to interpreter behavior when JIT fails,
+particularly targeting ARMv6 devices with the following configuration:
+  # CONFIG_BPF_JIT_ALWAYS_ON is not set
+  CONFIG_BPF_JIT_DEFAULT_ON=y
 
-fails with warning: "Kernel filter failed: No error information"
-when using config:
- # CONFIG_BPF_JIT_ALWAYS_ON is not set
- CONFIG_BPF_JIT_DEFAULT_ON=y
-
-The issue arises because commits:
-1. "bpf: Fix array bounds error with may_goto" changed default runtime to
-   __bpf_prog_ret0_warn when jit_requested = 1
-2. "bpf: Avoid __bpf_prog_ret0_warn when jit fails" returns error when
-   jit_requested = 1 but jit fails
-
-This change restores interpreter fallback capability for BPF programs with
-stack size <= 512 bytes when jit fails.
-
-Reported-by: Felix Fietkau <nbd@nbd.name>
-Closes: https://lore.kernel.org/bpf/2e267b4b-0540-45d8-9310-e127bf95fc63@nbd.name/
-Fixes: 6ebc5030e0c5 ("bpf: Fix array bounds error with may_goto")
 Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
- kernel/bpf/core.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ .../selftests/bpf/prog_tests/socket_filter.c  | 124 ++++++++++++++++++
+ .../selftests/bpf/progs/socket_filter.c       |  16 +++
+ 2 files changed, 140 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/socket_filter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/socket_filter.c
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 5d1650af899d..f8f8ac3b5513 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2366,8 +2366,7 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
- 					 const struct bpf_insn *insn)
- {
- 	/* If this handler ever gets executed, then BPF_JIT_ALWAYS_ON
--	 * is not working properly, or interpreter is being used when
--	 * prog->jit_requested is not 0, so warn about it!
-+	 * is not working properly, so warn about it!
- 	 */
- 	WARN_ON_ONCE(1);
- 	return 0;
-@@ -2468,8 +2467,9 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
- 	return ret;
- }
- 
--static void bpf_prog_select_func(struct bpf_prog *fp)
-+static bool bpf_prog_select_interpreter(struct bpf_prog *fp)
- {
-+	bool select_interpreter = false;
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
- 	u32 stack_depth = max_t(u32, fp->aux->stack_depth, 1);
- 	u32 idx = (round_up(stack_depth, 32) / 32) - 1;
-@@ -2478,15 +2478,16 @@ static void bpf_prog_select_func(struct bpf_prog *fp)
- 	 * But for non-JITed programs, we don't need bpf_func, so no bounds
- 	 * check needed.
- 	 */
--	if (!fp->jit_requested &&
--	    !WARN_ON_ONCE(idx >= ARRAY_SIZE(interpreters))) {
-+	if (idx < ARRAY_SIZE(interpreters)) {
- 		fp->bpf_func = interpreters[idx];
-+		select_interpreter = true;
- 	} else {
- 		fp->bpf_func = __bpf_prog_ret0_warn;
- 	}
- #else
- 	fp->bpf_func = __bpf_prog_ret0_warn;
- #endif
-+	return select_interpreter;
- }
- 
- /**
-@@ -2505,7 +2506,7 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
- 	/* In case of BPF to BPF calls, verifier did all the prep
- 	 * work with regards to JITing, etc.
- 	 */
--	bool jit_needed = fp->jit_requested;
-+	bool jit_needed = false;
- 
- 	if (fp->bpf_func)
- 		goto finalize;
-@@ -2514,7 +2515,8 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
- 	    bpf_prog_has_kfunc_call(fp))
- 		jit_needed = true;
- 
--	bpf_prog_select_func(fp);
-+	if (!bpf_prog_select_interpreter(fp))
-+		jit_needed = true;
- 
- 	/* eBPF JITs can rewrite the program in case constant
- 	 * blinding is active. However, in case of error during
+diff --git a/tools/testing/selftests/bpf/prog_tests/socket_filter.c b/tools/testing/selftests/bpf/prog_tests/socket_filter.c
+new file mode 100644
+index 000000000000..ee3a4cc1a992
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/socket_filter.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <sys/utsname.h>
++#include <uapi/linux/filter.h>
++#include "socket_filter.skel.h"
++
++static int duration;
++
++void do_test(void)
++{
++	/* the filter below is the tcpdump filter:
++	 * tcpdump "not ether host 3c37121a2b3c and not ether host 184ecbca2a3a \
++	 * and not ether host 14130b4d3f47 and not ether host f0f61cf440b7 \
++	 * and not ether host a84b4dedf471 and not ether host d022be17e1d7 \
++	 * and not ether host 5c497967208b and not ether host 706655784d5b"
++	 */
++	struct sock_filter code[] = {
++		{ 0x20,  0,  0, 0x00000008 },
++		{ 0x15,  0,  2, 0x121a2b3c },
++		{ 0x28,  0,  0, 0x00000006 },
++		{ 0x15, 60,  0, 0x00003c37 },
++		{ 0x20,  0,  0, 0x00000002 },
++		{ 0x15,  0,  2, 0x121a2b3c },
++		{ 0x28,  0,  0, 0x00000000 },
++		{ 0x15, 56,  0, 0x00003c37 },
++		{ 0x20,  0,  0, 0x00000008 },
++		{ 0x15,  0,  2, 0xcbca2a3a },
++		{ 0x28,  0,  0, 0x00000006 },
++		{ 0x15, 52,  0, 0x0000184e },
++		{ 0x20,  0,  0, 0x00000002 },
++		{ 0x15,  0,  2, 0xcbca2a3a },
++		{ 0x28,  0,  0, 0x00000000 },
++		{ 0x15, 48,  0, 0x0000184e },
++		{ 0x20,  0,  0, 0x00000008 },
++		{ 0x15,  0,  2, 0x0b4d3f47 },
++		{ 0x28,  0,  0, 0x00000006 },
++		{ 0x15, 44,  0, 0x00001413 },
++		{ 0x20,  0,  0, 0x00000002 },
++		{ 0x15,  0,  2, 0x0b4d3f47 },
++		{ 0x28,  0,  0, 0x00000000 },
++		{ 0x15, 40,  0, 0x00001413 },
++		{ 0x20,  0,  0, 0x00000008 },
++		{ 0x15,  0,  2, 0x1cf440b7 },
++		{ 0x28,  0,  0, 0x00000006 },
++		{ 0x15, 36,  0, 0x0000f0f6 },
++		{ 0x20,  0,  0, 0x00000002 },
++		{ 0x15,  0,  2, 0x1cf440b7 },
++		{ 0x28,  0,  0, 0x00000000 },
++		{ 0x15, 32,  0, 0x0000f0f6 },
++		{ 0x20,  0,  0, 0x00000008 },
++		{ 0x15,  0,  2, 0x4dedf471 },
++		{ 0x28,  0,  0, 0x00000006 },
++		{ 0x15, 28,  0, 0x0000a84b },
++		{ 0x20,  0,  0, 0x00000002 },
++		{ 0x15,  0,  2, 0x4dedf471 },
++		{ 0x28,  0,  0, 0x00000000 },
++		{ 0x15, 24,  0, 0x0000a84b },
++		{ 0x20,  0,  0, 0x00000008 },
++		{ 0x15,  0,  2, 0xbe17e1d7 },
++		{ 0x28,  0,  0, 0x00000006 },
++		{ 0x15, 20,  0, 0x0000d022 },
++		{ 0x20,  0,  0, 0x00000002 },
++		{ 0x15,  0,  2, 0xbe17e1d7 },
++		{ 0x28,  0,  0, 0x00000000 },
++		{ 0x15, 16,  0, 0x0000d022 },
++		{ 0x20,  0,  0, 0x00000008 },
++		{ 0x15,  0,  2, 0x7967208b },
++		{ 0x28,  0,  0, 0x00000006 },
++		{ 0x15, 12,  0, 0x00005c49 },
++		{ 0x20,  0,  0, 0x00000002 },
++		{ 0x15,  0,  2, 0x7967208b },
++		{ 0x28,  0,  0, 0x00000000 },
++		{ 0x15,  8,  0, 0x00005c49 },
++		{ 0x20,  0,  0, 0x00000008 },
++		{ 0x15,  0,  2, 0x55784d5b },
++		{ 0x28,  0,  0, 0x00000006 },
++		{ 0x15,  4,  0, 0x00007066 },
++		{ 0x20,  0,  0, 0x00000002 },
++		{ 0x15,  0,  3, 0x55784d5b },
++		{ 0x28,  0,  0, 0x00000000 },
++		{ 0x15,  0,  1, 0x00007066 },
++		{ 0x06,  0,  0, 0x00000000 },
++		{ 0x06,  0,  0, 0x00040000 },
++	};
++	struct sock_fprog bpf = {
++		.len = ARRAY_SIZE(code),
++		.filter = code,
++	};
++	int ret, sock = 0;
++
++	sock = socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
++	if (CHECK(sock < 0, "create socket", "errno %d\n", errno))
++		return;
++
++	ret = setsockopt(sock, SOL_SOCKET, SO_ATTACH_FILTER, &bpf, sizeof(bpf));
++	CHECK(ret < 0, "attach filter", "errno %d\n", errno);
++
++	close(sock);
++}
++
++void test_socket_filter(void)
++{
++	struct socket_filter *skel;
++	struct utsname uts;
++	int err;
++
++	err = uname(&uts);
++	if (err < 0)
++		return;
++
++	skel = socket_filter__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	/* The filter JIT fails on armv6 */
++	if (strncmp(uts.machine, "armv6", strlen("armv6")) == 0 &&
++	    skel->kconfig->CONFIG_BPF_JIT_ALWAYS_ON)
++		test__skip();
++	else
++		do_test();
++
++	socket_filter__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/socket_filter.c b/tools/testing/selftests/bpf/progs/socket_filter.c
+new file mode 100644
+index 000000000000..f93623ec7ec0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/socket_filter.c
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++
++extern bool CONFIG_BPF_JIT_ALWAYS_ON __kconfig __weak;
++
++/* This function is here to have CONFIG_BPF_JIT_ALWAYS_ON
++ * used and added to object BTF.
++ */
++int unused(void)
++{
++	return CONFIG_BPF_JIT_ALWAYS_ON ? 0 : 1;
++}
 -- 
 2.43.0
 
