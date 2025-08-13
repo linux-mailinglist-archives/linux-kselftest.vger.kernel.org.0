@@ -1,72 +1,92 @@
-Return-Path: <linux-kselftest+bounces-38862-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38863-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67B29B24D6C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 17:32:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57555B24DB4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 17:42:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89C797BDB06
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:30:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68A4BB60324
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Aug 2025 15:37:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81ADE272814;
-	Wed, 13 Aug 2025 15:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52BE273D8D;
+	Wed, 13 Aug 2025 15:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RqrBM+4r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJ4ZwuEX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127442727E0
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Aug 2025 15:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D3424501B;
+	Wed, 13 Aug 2025 15:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755099051; cv=none; b=MABOydeWkwbG/IhS81j/XPOEkzrErJagoeRe+xTsmobADYFNnolvBb9GFRHifPmCR3meVmas0w6eLA72HAj1BPziMJkR5vOt8y3xnwVtb1UXC7JviYaSOkED67tQQK3/Dtq9CPjMxPhRUnUmm/XbsoRfJ+tnCFnKa9Jzx7X+sAc=
+	t=1755099528; cv=none; b=McA5pwNDZ2OAiJsdwvjSaE6RsYOG3qTYqE6Nd4rcOIEmQZ1aX+ZnJ9tRRPzaj7Q5F4vIZXbmQZoEZXBSwaClUHLtjUvQtyA70h/IpsTt+oGVu8O3l343bkrZOR7sH4alehZMhuJa89jCqJgVlKK27L9l1WDQvzDZsR8oxNsg1C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755099051; c=relaxed/simple;
-	bh=oBpG2Njdb/3sUKn2TUNTKNLeUonqd8QmP93MjbKGHbw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j4tIWtl3QPGqVVD45no3lGqwdPHUUakJXYY21bYxvKitJq6YGeQo/D4gOw5w3xB4ikRFL4NTeqWDwXtMXaO2mM3J/v8rm6mB0/V85tarbcdel8pLA1yEJheIbidKCzi1lY1YKiMPH/w/PQL6XjjVzWX0fEJEYQgRtunDwB633VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RqrBM+4r; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1755099046;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Dg4Vf15U+E3Og15w4aN3q+dU4EFzVNfYMRDLB+8UxmM=;
-	b=RqrBM+4rmnd7f7csAuy8+jSFgCq4RPvj3YzfAYTrYT19w8YqLd0wETIOIXqbB0VW5R2n6e
-	nNj73wPxbzpzwRfzhbPjXw3SU5kCG8znJgh927XNgi/1O1/zdyC6AJiTgFwKacWxk5EcRN
-	yyvz8SSRlDvkUhFP8tgAy6qVWPBhPmk=
-From: KaFai Wan <kafai.wan@linux.dev>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
+	s=arc-20240116; t=1755099528; c=relaxed/simple;
+	bh=qN9x0M5iZ/AJ3TuhCeARilRxngvX7v10a63t3HFI3z8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kqTM6Yu5y24CUoiEq1gD+5teKGG6GD8V03yfzNDtUy9/wwUUgmYLGNGmpoMTO4iQAAfNxWs2fICeMyt8RHq0MHJJzqzFK297mehu1AAQMB7v4mxLupTMlsLBL6+LqJXJi4HHZBE37Xhvf0RqXihTUzj5iyFtRmqU2jm/Z3Xar3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJ4ZwuEX; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-76e2e89bebaso45070b3a.1;
+        Wed, 13 Aug 2025 08:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755099526; x=1755704326; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FA+E4yoYzdUzcvg+5vC+lhnzGIxbCNmvdw1XMVNouhI=;
+        b=BJ4ZwuEXz6uZjn01qAj32XDiOWJXHJ32SxCowjM/FN2ypzOEPZyMJ/IYJHdfWt7BCp
+         b45MGv+EAg4UVY3PgdEI5f5qtcW83hZHeehJpnYaIO/sqAPHkSvh0tRNjCfX439B54fr
+         KwFSgB5yYTzhyqN+8w/jtfnPKjW3exDQu88ZbWoI7N58IIAnQKklkLKeOJRiBkEPCzSg
+         Q9YZEDgE7v3HBOCUc93SoGpjKiHlyFHet0u2oTvZBYzYDQo1o6vel3LGfRo07tevvcvk
+         j5hT5QYhBvOrzJcnIvTXmkJydMHBjJf0VmNWOTF1G6s2Rwws0Mdhl1Z/Oe402EY4/aKx
+         eyuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755099526; x=1755704326;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FA+E4yoYzdUzcvg+5vC+lhnzGIxbCNmvdw1XMVNouhI=;
+        b=h9KQZmDZBwtHn3sqKs1qKK9dlL2mns9xFcfTvSMfquzS8gMif7t1+88V0KhImQvzrM
+         bAY9EvjvlDZhClxAU6+TlTfKIJmM9bgqi3uPFRKvdv1yB0erLDESPFwMQenFgC2ArHEx
+         sCzfmyKKHVV9PRjukpEiz0oKyX2Z66Qsb61RtJmNFAn9NRizHhzy211d8sAVPfMQz07O
+         mfzneM+6wUoCo1Jgw37IoGME4AanDDLxho9M0HSFZyJNbLRVkWlkuBzryqygZct1nr0S
+         xZucDiQ675frLP66FuEjKqUyQ1e4TFOsnP4RI0Dp3NtTXJ5MR+SpJbXl7F1D9X9e5xD6
+         7ppg==
+X-Forwarded-Encrypted: i=1; AJvYcCU9xbiN8GiNd9bPSH+smXd1FcvIPW5evV5qGv8YbihFWizau8on4v+Y7PtTHi7I93owntYu3IpMaFUpK40DzjMZ@vger.kernel.org, AJvYcCUmRJ/lHzzbAUa52odx0l+v5AqssZ2GB9JJfSxtU+qEGA830J6QLb5Ui+qbk5ua1AVvoDw=@vger.kernel.org, AJvYcCVHvZze8OtxXX6acXLpPtSxYTXIbag/wKSyMCux+lhaR4Zi4JoWxJ6ByO/0an5H6K5Is+tNL9SOcy+6Sibx@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTx3tXlrXF0YHFa5BjlblppAFMF0j04DjAx1tMpwCLTbILfG1U
+	gD4QwGMUSP2SrynMzT0nZGOYkEZRyAhhsCxyjr7SdVYSNqlbFJXvaYDb
+X-Gm-Gg: ASbGncuthmg2pVvyvHzD1YWSPwHWhLyNq6FtiYhqcVXS7PYGnXnWkvOw0GoL92R9X1o
+	gGqPQhQLQxtdJWc/5qaRdPX4XXQ6MYcFf3Sw9RQmiFsLFrixqZp61Kot73QPwQC4rJ4rS4n84Ju
+	BJ61p7QDsgk/OhUapz15yxPgpK+uKmwSOtVdg3weQJaX2FDypQEOmXWTiKctAWiZnMeY+KlPiLY
+	vajaX+j9VuIR4ebUkEqhi5650njzuV9ZnTuipvNgNHA/zyTEVbXOAunAQPoo2YV0vHH9PlBvo9P
+	L6a1lEiOND0FiA/PtvAjlOt29EurdEPQ+B0U3YB1jFpt/qRKz9FEJme364Pqq96c+tWlO3/Nllc
+	CoMgZF7XXHEjExKigv5mxkJQ01qRKJjiW6RBHlKqDhtk=
+X-Google-Smtp-Source: AGHT+IG5txLJaBD2EVOoyMG9/l69czxsPDzAirfxlZMTnU+Olk1RBvYjkCxzs5/ABD4vdLuVrRvqOA==
+X-Received: by 2002:a05:6a20:7d9d:b0:240:2473:57b7 with SMTP id adf61e73a8af0-240a89ffe05mr6124974637.8.1755099526416;
+        Wed, 13 Aug 2025 08:38:46 -0700 (PDT)
+Received: from kforge.gk.pfsense.com ([103.70.166.143])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bccfbd156sm32301174b3a.84.2025.08.13.08.38.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Aug 2025 08:38:45 -0700 (PDT)
+From: Gopi Krishna Menon <krishnagopi487@gmail.com>
+To: borntraeger@linux.ibm.com
+Cc: Gopi Krishna Menon <krishnagopi487@gmail.com>,
+	frankja@linux.ibm.com,
+	imbrenda@linux.ibm.com,
+	david@redhat.com,
+	pbonzini@redhat.com,
 	shuah@kernel.org,
-	kafai.wan@linux.dev,
-	mrpre@163.com,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Add socket filter attach test
-Date: Wed, 13 Aug 2025 23:29:58 +0800
-Message-ID: <20250813152958.3107403-3-kafai.wan@linux.dev>
-In-Reply-To: <20250813152958.3107403-1-kafai.wan@linux.dev>
-References: <20250813152958.3107403-1-kafai.wan@linux.dev>
+	skhan@linuxfoundation.org
+Subject: [PATCH] KVM: selftests: fix minor typo in cpumodel_subfuncs
+Date: Wed, 13 Aug 2025 21:08:36 +0530
+Message-ID: <20250813153838.5470-1-krishnagopi487@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,176 +94,27 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-This test verifies socket filter attachment functionality on architectures
-supporting either BPF JIT compilation or the interpreter.
+Specifically, fix spelling of "available" in main function.
 
-It specifically validates the fallback to interpreter behavior when JIT fails,
-particularly targeting ARMv6 devices with the following configuration:
-  # CONFIG_BPF_JIT_ALWAYS_ON is not set
-  CONFIG_BPF_JIT_DEFAULT_ON=y
-
-Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+Signed-off-by: Gopi Krishna Menon <krishnagopi487@gmail.com>
 ---
- .../selftests/bpf/prog_tests/socket_filter.c  | 124 ++++++++++++++++++
- .../selftests/bpf/progs/socket_filter.c       |  16 +++
- 2 files changed, 140 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/socket_filter.c
- create mode 100644 tools/testing/selftests/bpf/progs/socket_filter.c
+ tools/testing/selftests/kvm/s390/cpumodel_subfuncs_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/socket_filter.c b/tools/testing/selftests/bpf/prog_tests/socket_filter.c
-new file mode 100644
-index 000000000000..ee3a4cc1a992
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/socket_filter.c
-@@ -0,0 +1,124 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <sys/utsname.h>
-+#include <uapi/linux/filter.h>
-+#include "socket_filter.skel.h"
-+
-+static int duration;
-+
-+void do_test(void)
-+{
-+	/* the filter below is the tcpdump filter:
-+	 * tcpdump "not ether host 3c37121a2b3c and not ether host 184ecbca2a3a \
-+	 * and not ether host 14130b4d3f47 and not ether host f0f61cf440b7 \
-+	 * and not ether host a84b4dedf471 and not ether host d022be17e1d7 \
-+	 * and not ether host 5c497967208b and not ether host 706655784d5b"
-+	 */
-+	struct sock_filter code[] = {
-+		{ 0x20,  0,  0, 0x00000008 },
-+		{ 0x15,  0,  2, 0x121a2b3c },
-+		{ 0x28,  0,  0, 0x00000006 },
-+		{ 0x15, 60,  0, 0x00003c37 },
-+		{ 0x20,  0,  0, 0x00000002 },
-+		{ 0x15,  0,  2, 0x121a2b3c },
-+		{ 0x28,  0,  0, 0x00000000 },
-+		{ 0x15, 56,  0, 0x00003c37 },
-+		{ 0x20,  0,  0, 0x00000008 },
-+		{ 0x15,  0,  2, 0xcbca2a3a },
-+		{ 0x28,  0,  0, 0x00000006 },
-+		{ 0x15, 52,  0, 0x0000184e },
-+		{ 0x20,  0,  0, 0x00000002 },
-+		{ 0x15,  0,  2, 0xcbca2a3a },
-+		{ 0x28,  0,  0, 0x00000000 },
-+		{ 0x15, 48,  0, 0x0000184e },
-+		{ 0x20,  0,  0, 0x00000008 },
-+		{ 0x15,  0,  2, 0x0b4d3f47 },
-+		{ 0x28,  0,  0, 0x00000006 },
-+		{ 0x15, 44,  0, 0x00001413 },
-+		{ 0x20,  0,  0, 0x00000002 },
-+		{ 0x15,  0,  2, 0x0b4d3f47 },
-+		{ 0x28,  0,  0, 0x00000000 },
-+		{ 0x15, 40,  0, 0x00001413 },
-+		{ 0x20,  0,  0, 0x00000008 },
-+		{ 0x15,  0,  2, 0x1cf440b7 },
-+		{ 0x28,  0,  0, 0x00000006 },
-+		{ 0x15, 36,  0, 0x0000f0f6 },
-+		{ 0x20,  0,  0, 0x00000002 },
-+		{ 0x15,  0,  2, 0x1cf440b7 },
-+		{ 0x28,  0,  0, 0x00000000 },
-+		{ 0x15, 32,  0, 0x0000f0f6 },
-+		{ 0x20,  0,  0, 0x00000008 },
-+		{ 0x15,  0,  2, 0x4dedf471 },
-+		{ 0x28,  0,  0, 0x00000006 },
-+		{ 0x15, 28,  0, 0x0000a84b },
-+		{ 0x20,  0,  0, 0x00000002 },
-+		{ 0x15,  0,  2, 0x4dedf471 },
-+		{ 0x28,  0,  0, 0x00000000 },
-+		{ 0x15, 24,  0, 0x0000a84b },
-+		{ 0x20,  0,  0, 0x00000008 },
-+		{ 0x15,  0,  2, 0xbe17e1d7 },
-+		{ 0x28,  0,  0, 0x00000006 },
-+		{ 0x15, 20,  0, 0x0000d022 },
-+		{ 0x20,  0,  0, 0x00000002 },
-+		{ 0x15,  0,  2, 0xbe17e1d7 },
-+		{ 0x28,  0,  0, 0x00000000 },
-+		{ 0x15, 16,  0, 0x0000d022 },
-+		{ 0x20,  0,  0, 0x00000008 },
-+		{ 0x15,  0,  2, 0x7967208b },
-+		{ 0x28,  0,  0, 0x00000006 },
-+		{ 0x15, 12,  0, 0x00005c49 },
-+		{ 0x20,  0,  0, 0x00000002 },
-+		{ 0x15,  0,  2, 0x7967208b },
-+		{ 0x28,  0,  0, 0x00000000 },
-+		{ 0x15,  8,  0, 0x00005c49 },
-+		{ 0x20,  0,  0, 0x00000008 },
-+		{ 0x15,  0,  2, 0x55784d5b },
-+		{ 0x28,  0,  0, 0x00000006 },
-+		{ 0x15,  4,  0, 0x00007066 },
-+		{ 0x20,  0,  0, 0x00000002 },
-+		{ 0x15,  0,  3, 0x55784d5b },
-+		{ 0x28,  0,  0, 0x00000000 },
-+		{ 0x15,  0,  1, 0x00007066 },
-+		{ 0x06,  0,  0, 0x00000000 },
-+		{ 0x06,  0,  0, 0x00040000 },
-+	};
-+	struct sock_fprog bpf = {
-+		.len = ARRAY_SIZE(code),
-+		.filter = code,
-+	};
-+	int ret, sock = 0;
-+
-+	sock = socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
-+	if (CHECK(sock < 0, "create socket", "errno %d\n", errno))
-+		return;
-+
-+	ret = setsockopt(sock, SOL_SOCKET, SO_ATTACH_FILTER, &bpf, sizeof(bpf));
-+	CHECK(ret < 0, "attach filter", "errno %d\n", errno);
-+
-+	close(sock);
-+}
-+
-+void test_socket_filter(void)
-+{
-+	struct socket_filter *skel;
-+	struct utsname uts;
-+	int err;
-+
-+	err = uname(&uts);
-+	if (err < 0)
-+		return;
-+
-+	skel = socket_filter__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	/* The filter JIT fails on armv6 */
-+	if (strncmp(uts.machine, "armv6", strlen("armv6")) == 0 &&
-+	    skel->kconfig->CONFIG_BPF_JIT_ALWAYS_ON)
-+		test__skip();
-+	else
-+		do_test();
-+
-+	socket_filter__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/socket_filter.c b/tools/testing/selftests/bpf/progs/socket_filter.c
-new file mode 100644
-index 000000000000..f93623ec7ec0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/socket_filter.c
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+extern bool CONFIG_BPF_JIT_ALWAYS_ON __kconfig __weak;
-+
-+/* This function is here to have CONFIG_BPF_JIT_ALWAYS_ON
-+ * used and added to object BTF.
-+ */
-+int unused(void)
-+{
-+	return CONFIG_BPF_JIT_ALWAYS_ON ? 0 : 1;
-+}
+diff --git a/tools/testing/selftests/kvm/s390/cpumodel_subfuncs_test.c b/tools/testing/selftests/kvm/s390/cpumodel_subfuncs_test.c
+index 27255880dabd..aded795d42be 100644
+--- a/tools/testing/selftests/kvm/s390/cpumodel_subfuncs_test.c
++++ b/tools/testing/selftests/kvm/s390/cpumodel_subfuncs_test.c
+@@ -291,7 +291,7 @@ int main(int argc, char *argv[])
+ 			ksft_test_result_pass("%s\n", testlist[idx].subfunc_name);
+ 			free(array);
+ 		} else {
+-			ksft_test_result_skip("%s feature is not avaialable\n",
++			ksft_test_result_skip("%s feature is not available\n",
+ 					      testlist[idx].subfunc_name);
+ 		}
+ 	}
 -- 
 2.43.0
 
