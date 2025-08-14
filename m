@@ -1,138 +1,204 @@
-Return-Path: <linux-kselftest+bounces-38940-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38942-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D942B25C34
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 08:51:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC48FB25CB2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 09:09:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D2015C8113
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 06:49:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 984231C22E0D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 07:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 713E625A2C2;
-	Thu, 14 Aug 2025 06:48:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F66926563F;
+	Thu, 14 Aug 2025 07:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="gv2boPI9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WUVRjhnX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 159F82571C9;
-	Thu, 14 Aug 2025 06:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C67A25A659;
+	Thu, 14 Aug 2025 07:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755154113; cv=none; b=FkYusxxwX4x6VHaNQKlitIg0Ju69FqDkdSo7Uh6On0VKjfXhSFpvWDIp83E9h2iztOxD5zbtGxJ8NOAE3kgL7D4lMFi7NL6lzbgaICInM/BAJ2f2gtqUF2FBsNWAPmJPtdk8GyKIck/BFCTpB9EsXmGeil6prkgI918AIozJxng=
+	t=1755155139; cv=none; b=OgH6wClEOEaRxav42RjDjg+o0yHvSula8uY8DCJS7SGVMu3ZCaD0INKJYatB2BMtboOH4mrhW7NeGavmNUQx0aIE4nXwUyTpJBS2j5xAurisWj6X8OisrF581eXXJTLpk4mp9HE0W9wpX43rQ00juRX531jEZqLeXkde8RCRrVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755154113; c=relaxed/simple;
-	bh=UeaI+r6RLQaPLS2L41/1GvaQ44iR/OPXvshVJGLJRYU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=eIxmQPITX1TNrRm9rw6S7ZjNBvdJ7vIU6jvePd3viyqFTZygUgWxCyeVi8yGpE1eQ4jc3aljqMxdTp2VcNwfW69RtzbZDv40/UXy56ygQAH9rptN2QNLFo/LdRAnZf0vq3allvRYtJDUTMS1F/nJuECyOsr5Xsc3lmFUT/6U8t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=gv2boPI9 reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=2L0qUKH/tSWiOlgk1aoo4VVytXAKs8kx/jLyi5XtEAE=; b=g
-	v2boPI9aKg1NYYS3P2Kofn1g+EGwaCgFWPgq3tIj2rG4t/ArLRUsObXEMYNyxLef
-	uVD72ebNlVtqK+PnIpnQ9s89Gc+0tCAjKgmwHOvoUCkWo5mlFEHE6coc2ks8kr1X
-	VktAmePunm5CaboYw0eaPjyH5a1Y/KHBIhC+J++QCk=
-Received: from phoenix500526$163.com ( [120.230.124.83] ) by
- ajax-webmail-wmsvr-40-107 (Coremail) ; Thu, 14 Aug 2025 14:48:00 +0800
- (CST)
-Date: Thu, 14 Aug 2025 14:48:00 +0800 (CST)
-From: =?UTF-8?B?6LW15L2z54Kc?= <phoenix500526@163.com>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	yonghong.song@linux.dev, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH bpf-next v8 2/2] selftests/bpf: Add an usdt_o2 test
- case in selftests to cover SIB handling logic
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
- Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <CAEf4BzbQ00YtbSqRotMEN4eBJC7aYNy9fFRO-Q_=Z0uS6O06mg@mail.gmail.com>
-References: <20250807023430.4566-1-phoenix500526@163.com>
- <20250807023430.4566-3-phoenix500526@163.com>
- <CAEf4BzbQ00YtbSqRotMEN4eBJC7aYNy9fFRO-Q_=Z0uS6O06mg@mail.gmail.com>
-X-NTES-SC: AL_Qu2eB/2eu0gj5iCcZekfmUsVh+o9X8K1vfsk3oZfPJp+jCHpwBAmdHNTP3T91tCDJhi2nQiHWxFr6fxIXJdlY7oMKD0hQgR2BLwDdCZGXaGaog==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1755155139; c=relaxed/simple;
+	bh=KXtijr+I+nto8on/vYSGro/glqW/adtu+zzDmd7P0To=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=bBlI1S/lYKNz0Xa2wZ5HXwgrQZsvnlVajsahTpG6dWYcS1vDtJrzTG1eRilk523HTPdQm5nTPNTbtOQwdk/OAl6IRdvkwFxFf7yDadQbOeQ4X8QqECUmr5kKx34FH0FrnvAWDrZalw1Q/E9cxVNXp5doUzXnK2vt/DHums/W4pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WUVRjhnX; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755155137; x=1786691137;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=KXtijr+I+nto8on/vYSGro/glqW/adtu+zzDmd7P0To=;
+  b=WUVRjhnXTkmur9SJOxddG4rbertoRUIQa5AB5/zKQxGVk8MY972FSYIe
+   VbyoLUhifK2fCtEI47u4Yt8jI8Nswsi0VfYPqXul5ByV/no8v25YhUHuY
+   38O12S22tf4F+g6cc5bG5xqQj/FR6FaRmVtqfBE5+EzcVhqs1yWn3Jm8K
+   Ui/L7XFiF+vfK9dRBiYWF5iSOR18xl9KW4CyqRF3XyBUVO2LMkFFMQOAl
+   jL8k4EpHcLYe+Ws613fPdrb5wxug6mptu+4LiaktDhv0cmBM8EmZ59GYY
+   JWgsyUh7KfJWEo9d0kgzqIKWjx6E3gZvp64xA71y8DUp0pSWZJRFrr+mF
+   w==;
+X-CSE-ConnectionGUID: wUzauBo6Q4KPgaOyJ7utfA==
+X-CSE-MsgGUID: Xa0w9SKEQB+p8/yjnC3ZcA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="80040380"
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="80040380"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 00:05:37 -0700
+X-CSE-ConnectionGUID: hee8cGoQTVqaZ6GC6+sPXw==
+X-CSE-MsgGUID: WlQoPe84Q4y0NiHDRz3qlw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="197542278"
+Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 00:05:33 -0700
+Message-ID: <c359e0d3-b840-4e98-b06d-94b4e3f7f792@linux.intel.com>
+Date: Thu, 14 Aug 2025 15:05:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <10b5dedd.4d59.198a755e12e.Coremail.phoenix500526@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:aygvCgCHTzqghp1ostAZAA--.1457W
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBawWpiGidggVa6QACsM
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 10/30] KVM: selftests: TDX: Add report_fatal_error test
+From: Binbin Wu <binbin.wu@linux.intel.com>
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
+ Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
+ Andrew Jones <ajones@ventanamicro.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Erdem Aktas <erdemaktas@google.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
+ <ira.weiny@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20250807201628.1185915-1-sagis@google.com>
+ <20250807201628.1185915-11-sagis@google.com>
+ <ef499c6e-d62c-450e-982b-82c53054ea53@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <ef499c6e-d62c-450e-982b-82c53054ea53@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-CgoKCgo+SGF2ZSB5b3UgY29uc2lkZXJlZCB1c2luZyBHQ0MncyBfX2F0dHJpYnV0ZV9fKChvcHRp
-bWl6ZSgiTzIiKSkpCj5hdHRyaWJ1dGUuIEl0IHNlZW1zIGxpa2UgQ2xhbmcgZG9lc24ndCBoYXZl
-IHN1cHBvcnQgZm9yIHNvbWV0aGluZyBsaWtlCj50aGF0LCBidXQgd2UnbGwgc3RpbGwgaGF2ZSB0
-aGlzIGNvdmVyZWQgaW4gQlBGIENJIGZvciBHQ0MtYnVpbHQKPnNlbGZ0ZXN0cy4gVGhlbiBJJ2Qg
-anVzdCBhZGQgdGhpcyBhcyBhbm90aGVyIHN1YnRlc3QgdG8gZXhpc3RpbmcgdXNkdAo+dGVzdHMu
-Cj4KPkNhbiB5b3UgcGxlYXNlIHRyeSB0aGF0PwoKRG9uZQoKCj5JcyBzZW1hcGhvcmUgZXNzZW50
-aWFsIHRvIHRoaXMgdGVzdD8KCgpJdCdzIG5vIGVzc2VudGlhbC4gSSd2ZSBhbHJlYWR5IHJlbW92
-ZWQgaXQgaW4gdGhlIG5ldyBwYXRjaC4gCgoKCkF0IDIwMjUtMDgtMTQgMDg6MDQ6MzUsICJBbmRy
-aWkgTmFrcnlpa28iIDxhbmRyaWkubmFrcnlpa29AZ21haWwuY29tPiB3cm90ZToKPk9uIFdlZCwg
-QXVnIDYsIDIwMjUgYXQgNzozNeKAr1BNIEppYXdlaSBaaGFvIDxwaG9lbml4NTAwNTI2QDE2My5j
-b20+IHdyb3RlOgo+Pgo+PiBXaGVuIHVzaW5nIEdDQyBvbiB4ODYtNjQgdG8gY29tcGlsZSBhbiB1
-c2R0IHByb2cgd2l0aCAtTzEgb3IgaGlnaGVyCj4+IG9wdGltaXphdGlvbiwgdGhlIGNvbXBpbGVy
-IHdpbGwgZ2VuZXJhdGUgU0lCIGFkZHJlc3NpbmcgbW9kZSBmb3IgZ2xvYmFsCj4+IGFycmF5IGFu
-ZCBQQy1yZWxhdGl2ZSBhZGRyZXNzaW5nIG1vZGUgZm9yIGdsb2JhbCB2YXJpYWJsZSwKPj4gZS5n
-LiAiMUAtOTYoJXJicCwlcmF4LDgpIiBhbmQgIi0xQDQrdDEoJXJpcCkiLgo+Pgo+PiBJbiB0aGlz
-IHBhdGNoOgo+PiAtIGFkZCB1c2R0X28yIHRlc3QgY2FzZSB0byBjb3ZlciBTSUIgYWRkcmVzc2lu
-ZyB1c2R0IGFyZ3VtZW50IHNwZWMKPj4gICBoYW5kbGluZyBsb2dpYwo+Pgo+PiBTaWduZWQtb2Zm
-LWJ5OiBKaWF3ZWkgWmhhbyA8cGhvZW5peDUwMDUyNkAxNjMuY29tPgo+PiAtLS0KPj4gIHRvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9NYWtlZmlsZSAgICAgICAgICB8ICA4ICsrKwo+PiAgLi4u
-L3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy91c2R0X28yLmMgICAgICAgIHwgNzEgKysrKysrKysr
-KysrKysrKysrKwo+PiAgLi4uL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvdGVzdF91c2R0X28yLmMgICAg
-ICAgIHwgMzcgKysrKysrKysrKwo+PiAgMyBmaWxlcyBjaGFuZ2VkLCAxMTYgaW5zZXJ0aW9ucygr
-KQo+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9n
-X3Rlc3RzL3VzZHRfbzIuYwo+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2JwZi9wcm9ncy90ZXN0X3VzZHRfbzIuYwo+Pgo+PiBkaWZmIC0tZ2l0IGEvdG9vbHMv
-dGVzdGluZy9zZWxmdGVzdHMvYnBmL01ha2VmaWxlIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
-YnBmL01ha2VmaWxlCj4+IGluZGV4IDkxMGQ4ZDY0MDJlZi4uNjhjZjZhOWNmMDVmIDEwMDY0NAo+
-PiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvTWFrZWZpbGUKPj4gKysrIGIvdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL01ha2VmaWxlCj4+IEBAIC03NTksNiArNzU5LDE0IEBA
-IFRSVU5ORVJfQlBGX0JVSUxEX1JVTEUgOj0gJCQoZXJyb3Igbm8gQlBGIG9iamVjdHMgc2hvdWxk
-IGJlIGJ1aWx0KQo+PiAgVFJVTk5FUl9CUEZfQ0ZMQUdTIDo9Cj4+ICAkKGV2YWwgJChjYWxsIERF
-RklORV9URVNUX1JVTk5FUix0ZXN0X21hcHMpKQo+Pgo+PiArIyBVc2UgLU8yIG9wdGltaXphdGlv
-biB0byBnZW5lcmF0ZSBTSUIgYWRkcmVzc2luZyB1c2R0IGFyZ3VtZW50IHNwZWMKPj4gKyMgT25s
-eSBhcHBseSBvbiB4ODYgYXJjaGl0ZWN0dXJlIHdoZXJlIFNJQiBhZGRyZXNzaW5nIGlzIHJlbGV2
-YW50Cj4+ICtpZmVxICgkKEFSQ0gpLCB4ODYpCj4+ICskKE9VVFBVVCkvdXNkdF9vMi50ZXN0Lm86
-IENGTEFHUzo9JChzdWJzdCBPMCxPMiwkKENGTEFHUykpCj4+ICskKE9VVFBVVCkvY3B1djQvdXNk
-dF9vMi50ZXN0Lm86IENGTEFHUzo9JChzdWJzdCBPMCxPMiwkKENGTEFHUykpCj4+ICskKE9VVFBV
-VCkvbm9fYWx1MzIvdXNkdF9vMi50ZXN0Lm86IENGTEFHUzo9JChzdWJzdCBPMCxPMiwkKENGTEFH
-UykpCj4+ICtlbmRpZgo+PiArCj4KPkhhdmUgeW91IGNvbnNpZGVyZWQgdXNpbmcgR0NDJ3MgX19h
-dHRyaWJ1dGVfXygob3B0aW1pemUoIk8yIikpKQo+YXR0cmlidXRlLiBJdCBzZWVtcyBsaWtlIENs
-YW5nIGRvZXNuJ3QgaGF2ZSBzdXBwb3J0IGZvciBzb21ldGhpbmcgbGlrZQo+dGhhdCwgYnV0IHdl
-J2xsIHN0aWxsIGhhdmUgdGhpcyBjb3ZlcmVkIGluIEJQRiBDSSBmb3IgR0NDLWJ1aWx0Cj5zZWxm
-dGVzdHMuIFRoZW4gSSdkIGp1c3QgYWRkIHRoaXMgYXMgYW5vdGhlciBzdWJ0ZXN0IHRvIGV4aXN0
-aW5nIHVzZHQKPnRlc3RzLgo+Cj5DYW4geW91IHBsZWFzZSB0cnkgdGhhdD8KPgo+PiAgIyBEZWZp
-bmUgdGVzdF92ZXJpZmllciB0ZXN0IHJ1bm5lci4KPj4gICMgSXQgaXMgbXVjaCBzaW1wbGVyIHRo
-YW4gdGVzdF9tYXBzL3Rlc3RfcHJvZ3MgYW5kIHN1ZmZpY2llbnRseSBkaWZmZXJlbnQgZnJvbQo+
-PiAgIyB0aGVtIChlLmcuLCB0ZXN0LmggaXMgdXNpbmcgY29tcGxldGVseSBwYXR0ZXJuKSwgdGhh
-dCBpdCdzIHdvcnRoIGp1c3QKPj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L2JwZi9wcm9nX3Rlc3RzL3VzZHRfbzIuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9w
-cm9nX3Rlc3RzL3VzZHRfbzIuYwo+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+PiBpbmRleCAwMDAw
-MDAwMDAwMDAuLmYwNGI3NTZiMzY0MAo+PiAtLS0gL2Rldi9udWxsCj4+ICsrKyBiL3Rvb2xzL3Rl
-c3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3VzZHRfbzIuYwo+PiBAQCAtMCwwICsxLDcx
-IEBACj4+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMAo+PiArLyogQ29weXJp
-Z2h0IChjKSAyMDI1IEppYXdlaSBaaGFvIDxwaG9lbml4NTAwNTI2QDE2My5jb20+LiAqLwo+PiAr
-I2luY2x1ZGUgPHRlc3RfcHJvZ3MuaD4KPj4gKwo+PiArI2RlZmluZSBfU0RUX0hBU19TRU1BUEhP
-UkVTIDEKPj4gKyNpbmNsdWRlICIuLi9zZHQuaCIKPj4gKyNpbmNsdWRlICJ0ZXN0X3VzZHRfbzIu
-c2tlbC5oIgo+PiArCj4+ICtpbnQgbGV0c190ZXN0X3RoaXMoaW50KTsKPj4gKwo+PiArI2RlZmlu
-ZSB0ZXN0X3ZhbHVlIDB4RkVEQ0JBOTg3NjU0MzIxMFVMTAo+PiArI2RlZmluZSBTRUMobmFtZSkg
-X19hdHRyaWJ1dGVfXygoc2VjdGlvbihuYW1lKSwgdXNlZCkpCj4+ICsKPj4gKwo+PiArc3RhdGlj
-IHZvbGF0aWxlIF9fdTY0IGFycmF5WzFdID0ge3Rlc3RfdmFsdWV9Owo+PiArdW5zaWduZWQgc2hv
-cnQgdGVzdF91c2R0MV9zZW1hcGhvcmUgU0VDKCIucHJvYmVzIik7Cj4+ICsKPgo+SXMgc2VtYXBo
-b3JlIGVzc2VudGlhbCB0byB0aGlzIHRlc3Q/Cj4KPj4gK3N0YXRpYyBfX2Fsd2F5c19pbmxpbmUg
-dm9pZCB0cmlnZ2VyX2Z1bmModm9pZCkKPj4gK3sKPj4gKyAgICAgICAvKiBCYXNlIGFkZHJlc3Mg
-KyBvZmZzZXQgKyAoaW5kZXggKiBzY2FsZSkgKi8KPj4gKyAgICAgICBpZiAodGVzdF91c2R0MV9z
-ZW1hcGhvcmUpIHsKPj4gKyAgICAgICAgICAgICAgIGZvciAodm9sYXRpbGUgaW50IGkgPSAwOyBp
-IDw9IDA7IGkrKykKPj4gKyAgICAgICAgICAgICAgICAgICAgICAgU1RBUF9QUk9CRTEodGVzdCwg
-dXNkdDEsIGFycmF5W2ldKTsKPj4gKyAgICAgICB9Cj4+ICt9Cj4+ICsKPgo+Wy4uLl0K
+
+
+On 8/13/2025 6:58 PM, Binbin Wu wrote:
+>
+>
+> On 8/8/2025 4:16 AM, Sagi Shahar wrote:
+>> The test checks report_fatal_error functionality.
+>>
+>> TD guest can use TDG.VP.VMCALL<ReportFatalError> to report the fatal error
+>> it has experienced. TD guest is requesting a termination with the error
+>> information that include 16 general-purpose registers.
+>
+> I think it's worth to mention that KVM converts TDG.VP.VMCALL<ReportFatalError>
+> to KVM_EXIT_SYSTEM_EVENT with the type KVM_SYSTEM_EVENT_TDX_FATAL.
+>
+>>
+>> Co-developed-by: Binbin Wu <binbin.wu@linux.intel.com>
+>> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
+>> Signed-off-by: Sagi Shahar <sagis@google.com>
+>> ---
+>>   .../selftests/kvm/include/x86/tdx/tdx.h       |  6 ++-
+>>   .../selftests/kvm/include/x86/tdx/tdx_util.h  |  1 +
+>>   .../selftests/kvm/include/x86/tdx/test_util.h | 19 +++++++
+>>   tools/testing/selftests/kvm/lib/x86/tdx/tdx.c | 18 +++++++
+>>   .../selftests/kvm/lib/x86/tdx/tdx_util.c      |  6 +++
+>>   .../selftests/kvm/lib/x86/tdx/test_util.c     | 10 ++++
+>>   tools/testing/selftests/kvm/x86/tdx_vm_test.c | 51 ++++++++++++++++++-
+>>   7 files changed, 108 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+>> index a7161efe4ee2..2acccc9dccf9 100644
+>> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+>> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+>> @@ -4,9 +4,13 @@
+>>     #include <stdint.h>
+>>   +#include "kvm_util.h"
+>> +
+>> +#define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
+>> +
+>>   #define TDG_VP_VMCALL_INSTRUCTION_IO 30
+>>     uint64_t tdg_vp_vmcall_instruction_io(uint64_t port, uint64_t size,
+>>                         uint64_t write, uint64_t *data);
+>> -
+>> +void tdg_vp_vmcall_report_fatal_error(uint64_t error_code, uint64_t data_gpa);
+>>   #endif // SELFTEST_TDX_TDX_H
+>> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+>> index 57a2f5893ffe..d66cf17f03ea 100644
+>> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+>> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+>> @@ -15,5 +15,6 @@ struct kvm_vm *td_create(void);
+>>   void td_initialize(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>>              uint64_t attributes);
+>>   void td_finalize(struct kvm_vm *vm);
+>> +void td_vcpu_run(struct kvm_vcpu *vcpu);
+>>     #endif // SELFTESTS_TDX_KVM_UTIL_H
+>> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/test_util.h b/tools/testing/selftests/kvm/include/x86/tdx/test_util.h
+>> index 07d63bf1ffe1..dafeee9af1dc 100644
+>> --- a/tools/testing/selftests/kvm/include/x86/tdx/test_util.h
+>> +++ b/tools/testing/selftests/kvm/include/x86/tdx/test_util.h
+>> @@ -38,4 +38,23 @@ bool is_tdx_enabled(void);
+>>   void tdx_test_success(void);
+>>   void tdx_test_assert_success(struct kvm_vcpu *vcpu);
+>>   +/*
+>> + * Report an error with @error_code to userspace.
+>> + *
+>> + * Return value from tdg_vp_vmcall_report_fatal_error() is ignored since
+>> + * execution is not expected to continue beyond this point.
+>> + */
+>> +void tdx_test_fatal(uint64_t error_code);
+
+Another thing to mention is that tdx_test_fatal() and tdx_test_fatal_with_data()
+use R12 to pass the input error_code, which is functionally workable, since both
+guest and userspace code are in KVM selftest test code.
+
+But TDX GHCI spec has its own format for R12:
+- 31:0
+   TD-specific error code
+   * Panic – 0x0.
+   * Values – 0x1 to 0xFFFFFFFF reserved.
+- 62:32
+   TD-specific extended error code.
+   TD software defined.
+- 63
+   Set if the TD specified additional information in the GPA parameter (R13).
+So, this patch series doesn't follow the format.
+
+Also, tdx_test_fatal_with_data() set bit 63 of R12, so, the value reported to
+userspace will be different in R12 from the original parameter passed by the
+guest, and setting bit 63 could collide with the error code defined by guest.
+
+IMHO, it's better to follow the GHCI spec.
+But if TDX KVM selftest code doesn't want to follow it, then it should not set
+bit 63 for tdx_test_fatal_with_data() in R12.
+
+>>
+>> +
+>> +/*
+>> + * Report an error with @error_code to userspace.
+>> + *
+>> + * @data_gpa may point to an optional shared guest memory holding the error
+>> + * string.
+>
+> A according to the GHCI spec, this is the optional GPA pointing to a shared guest memory, but in these TDX KVM selftest cases, it may not used that way. It may need some clarification about it. And based on the usage in this patch series, the name data_gpa may be misleading.
+>
+>
+>> + *
+>> + * Return value from tdg_vp_vmcall_report_fatal_error() is ignored since
+>> + * execution is not expected to continue beyond this point.
+>> + */
+>> +void tdx_test_fatal_with_data(uint64_t error_code, uint64_t data_gpa);
+>> + 
+[...]
 
