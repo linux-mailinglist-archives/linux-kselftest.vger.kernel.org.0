@@ -1,450 +1,144 @@
-Return-Path: <linux-kselftest+bounces-38963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51306B264AE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 13:51:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A596B26561
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 14:29:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9702E3B7E8B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 11:49:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CD069E8333
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 12:29:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219DD2F9996;
-	Thu, 14 Aug 2025 11:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4762FE042;
+	Thu, 14 Aug 2025 12:29:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B6F/o2th"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XuMezp6O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A118E2FA0C7;
-	Thu, 14 Aug 2025 11:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1A21F8BD6;
+	Thu, 14 Aug 2025 12:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755172138; cv=none; b=li5IcvhZTlwF1kWMOBQzf9OThU8Wv4OsrhsU2wXgWlu/uf/PjnfVhe4xQJCzLltB2ffx735HO/XBRwgIzBDFx+L2xDPW8bv/JFvGJboR1305SZJ8VuqFcRsvIb0X7121CZT8RSiGw7/pJaiEuQrrXQYAHmpI4+VKlaBynQaekJE=
+	t=1755174558; cv=none; b=IYu+W+0IhOtXENjlecswJQdh9iIG8QWfGdE/wMs/Qx394EGp5st/sVauila1r/p8zRjw+kILoX0vVmlH/3FaG7W0jr1WmRjYuzj4mks9Jucz3G+p3ZA3fWRwBpAKTdxccMCXFFyglp+Vo+HWR+1Y3v8Gl3FpRvCgDstgvD2/UTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755172138; c=relaxed/simple;
-	bh=gu4zFAplBgPGHOV6DtfYlkgF3aC4M8p9AQmESbr3BKQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EKG547f1JYUNCGvqG4uvi3s4cctnxWdzeiqgmBf5o1QnUnHRK32PQ9VrNjizITufeBwSOewQISA3VWgD6cZRvv/HWD25TUfy4XJhHGlYd6lsdQAB3lyms6fqBs0klT8g6t2P3AKiMDAzXYuGQ2/kfOg3865QvFuv0o1pkgRCIgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B6F/o2th; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755172135; x=1786708135;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gu4zFAplBgPGHOV6DtfYlkgF3aC4M8p9AQmESbr3BKQ=;
-  b=B6F/o2thqrccY/b6s16cizw8B70w07EUrmkgvyJjtzm83o+W4o4knmLy
-   FhNq5Yyg6Hzn9VS7GAMrbEoTJbHT/lZ62tmGSASjQu+Azf5uoIyw3nZT8
-   O8QAuKkE52UjH0x7+UY4a6aZC1iY8nXH+HVQ8llGwsyc7/8ZfZ9UPn1Y1
-   /Mu0LmaMuA9Id7LOba+A6n47BEskyiYI9mbAW1DX40w7Xegcntg1eUyw1
-   JGp1E3zNVETeJVM9g95CdF1QeeLhnw5BBimBhgdeY5KmfPJBXDJE9zukq
-   NrIQgBTDMZIF7CW7CE0GVbbveVlJFoaYlxkVoDhiJvtePlN1uF7s/1DDE
-   Q==;
-X-CSE-ConnectionGUID: bNP/k1V0QAO1LbdN/oeuKA==
-X-CSE-MsgGUID: ygu2oef8Q5+WGwwGothg4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="45062502"
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="45062502"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 04:48:54 -0700
-X-CSE-ConnectionGUID: uVJP7rpYSMucul+jFkbWwQ==
-X-CSE-MsgGUID: VLAJKu8bQ1iPFVgvlRBrsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="166725347"
-Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 04:48:50 -0700
-Message-ID: <410c14cd-edab-4dd0-8ac1-a33496744590@linux.intel.com>
-Date: Thu, 14 Aug 2025 19:48:48 +0800
+	s=arc-20240116; t=1755174558; c=relaxed/simple;
+	bh=rO57oBgut8MLaOzJs0p+XeTS4dLzPzn1ceaz8hkxa9Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e58wjT3G8dL4UWYem69ja0swVhTzP+33Rpk7Dvyl7fCal5qsqSxCi1kOhZMiJbwiduhxWPYLiTXn5KxMuMR+FFjF6aMHrIat7NiyxWSN5UddT2ML5dCypPOJJ+J8ptAAG+sNMkkt5W3+3ZEY4GrNO2I9beBRjTD8EEy3i+wvdCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XuMezp6O; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e931cc4c572so846426276.2;
+        Thu, 14 Aug 2025 05:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755174554; x=1755779354; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s9nMkqU8lfgV6BG9eQtddTrYU3f2ABJUvKOLDHRPKLM=;
+        b=XuMezp6OYRsBVMIGyn+2NG0AvNpg9oWEYpawPc944lD5XB/31RZhkm/K6so9X2H46A
+         Gx0jgFBxKgLcAZqDpM3ecxmnBTmj8Ua2Fa8q7+TML9JxDGgE9ctYMEMhH1EAyKyCAQFg
+         HhVWFs20mPR5mxC94+Fc42NGkMcgah4qyaK8/8TUkw9Zo7EGgF8XCm22yN420XtXUVIx
+         +WL7yyPjs5H+PZpbRTAIfYMhXfBnFvgK9QmpiXhGLPM/bb7K5Q1MHzwim+7UpRwCUNvT
+         t5LCgrw4vHJoqN7L2rlZOZxhw2GLfoN5SOqk/G1r8od6wGppSo2NcLtM2sbP2BcF+2o3
+         IwYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755174554; x=1755779354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s9nMkqU8lfgV6BG9eQtddTrYU3f2ABJUvKOLDHRPKLM=;
+        b=J/a1JnLPR8qLgaaff82rhEDwv13C1ejI/P03SvMmcqL3BlS5aD8Gfc8bVYI0efQPJP
+         bdQLAUiIMydMbadM1Z4lf4ByhwWvWJRmlCPyqKoDxMxSATgJ3IvJA43rc9uRYHpe7+Gj
+         GyTN8fIlclK3N8ocljEOIgqppfyXrFJj7Js2gSNOd72QZvcnaqGlsjxisStkBp6/KfdF
+         gWzmIvgTqfzyHhUgyBU94G4ep/mLYbVw3GOVYa1p1vov7BbwsBNI1c/fXnyWq9t2Rb4R
+         rVgtM1uAlge7uiKBG3wTDGBzjB9KNTh2e7e2PrCTYKHLszwQDkZm3XYGSoqlyUVHRlCC
+         4b2w==
+X-Forwarded-Encrypted: i=1; AJvYcCVUhChfEhOIrxHzQipzNWx/M5I7vBGoHhrFAhxTlxUCZL+L8Wfki1KZQSI1qKN85E+8f64DYJkUolxmMBXCPSD+@vger.kernel.org, AJvYcCVlEbmfykLgUjbgwNoV4C51R4JLiKycxEyoXx8RYs/mmtRSBi5cwEbWo5w7wedPL7ulVxk=@vger.kernel.org, AJvYcCVlbMhxLyCer8NRVQCBctw7UDFRsEsLczzGbbZGfnVErvxHrtSinHmKdeTBQNdwSPID3SDHG428AGaLNjQy@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl2WZCDDNm5IXIAXSwegad34mHL9phO1s2vz0x0yMOfkg57AEL
+	B8/VN9wckkHgrD4t/Bz4EaLTiuRYsrE7j76JU7eLYzHK1BIn+5bWg/NdxZJzPDVk0G7ko3E7Zfa
+	ZxhC1EeuaziUbIftGC9+vArp/VVC2nXQ=
+X-Gm-Gg: ASbGncumJJ0dIGpkoCwIxyWBw1Gm7mG+qMQQNeeIrmhGLIubIR7wlZBz6KYv7CwkjdA
+	e37M+cY+Hf/sbu/SXKkn95VhGoExMkX6RxGt7/QkcX/xJV0MRnuuIUTZ4ezciHi5M6OMFut9NhG
+	nECgFBoI/kYo6yU74wSdF0zk2dHVQrwTeSFhQ6Jx0Tv0EiL5HEh4T91deMo8Yr6VrLDWNpqu5uY
+	2P38lerag==
+X-Google-Smtp-Source: AGHT+IGE1gdLemrEH2Nj6lqz+g07DOtoHK3C3EWMG7OQAmimyaEJ2F2fKwl/j9fdVwM4pcXtaqsv6Ug4x1GQNBC/JZs=
+X-Received: by 2002:a05:690c:4b84:b0:71b:6703:b710 with SMTP id
+ 00721157ae682-71d6360a216mr38415977b3.33.1755174554524; Thu, 14 Aug 2025
+ 05:29:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 22/30] KVM: selftests: TDX: Add TDG.VP.INFO test
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
- Andrew Jones <ajones@ventanamicro.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Erdem Aktas <erdemaktas@google.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
- <ira.weiny@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20250807201628.1185915-1-sagis@google.com>
- <20250807201628.1185915-23-sagis@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20250807201628.1185915-23-sagis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250812153719.36465-1-slopixelz@gmail.com> <CAEf4Bzb47GuSPEjbA_dJON94Dw4JKzpWvR+qm4QQW2p+0z1rSA@mail.gmail.com>
+In-Reply-To: <CAEf4Bzb47GuSPEjbA_dJON94Dw4JKzpWvR+qm4QQW2p+0z1rSA@mail.gmail.com>
+From: Shubham Sharma <slopixelz@gmail.com>
+Date: Thu, 14 Aug 2025 17:59:02 +0530
+X-Gm-Features: Ac12FXwXgIiKCr7IO21rjznlSCQbU2rxOpaUtZl6pcdj0WUBpnNkmJVevSs19bk
+Message-ID: <CAN3jmPQ2HfxVoFg_Jpif3EbjAtdii1hrnRzvC58skTBu=+ZGbA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix typo in kprobe_multi_test.c
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
+	shuah@kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 8/8/2025 4:16 AM, Sagi Shahar wrote:
-> From: Roger Wang <runanwang@google.com>
+On Thu, Aug 14, 2025 at 3:35=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> Adds a test for TDG.VP.INFO.
+> On Tue, Aug 12, 2025 at 8:37=E2=80=AFAM Shubham Sharma <slopixelz@gmail.c=
+om> wrote:
+> >
+> > Fixed a spelling mistake:
+> > - comparision -> comparison
+> >
+> > Signed-off-by: Shubham Sharma <slopixelz@gmail.com>
+> > ---
+> >  tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c=
+ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > index e19ef509ebf8..f377bea0b82d 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > @@ -463,7 +463,7 @@ static bool skip_entry(char *name)
+> >         return false;
+> >  }
+> >
+> > -/* Do comparision by ignoring '.llvm.<hash>' suffixes. */
+> > +/* Do comparison by ignoring '.llvm.<hash>' suffixes. */
 >
-> Introduce __tdx_module_call() that does needed shuffling from function
-> parameters to registers used by the TDCALL instruction that is used by the
-> guest to communicate with the TDX module. The first function parameter is
-> the leaf number indicating which guest side function should be run, for
-> example, TDG.VP.INFO.
-
-I think __tdx_hypercall() can be combined into __tdx_module_call(), it's just
-another leaf TDG.VP.VMCALL for tdcall. To avoid two copies of assembly code
-doing similar things?
-
-
-
+> Is this the only typo in the entire BPF selftests? If we are doing
+> single character comment fixes, let's do it as one bigger pass,
+> instead of tons of tiny patches?
 >
-> The guest uses new __tdx_module_call() to call TDG.VP.INFO to obtain TDX
-> TD execution environment information from the TDX module. All returned
-> registers are passed back to the host that verifies values for
-> correctness.
+> pw-bot: cr
 >
-> Co-developed-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Roger Wang <runanwang@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> ---
->   .../selftests/kvm/include/x86/tdx/tdcall.h    |  19 +++
->   .../selftests/kvm/include/x86/tdx/tdx.h       |   5 +
->   .../selftests/kvm/lib/x86/tdx/tdcall.S        |  68 +++++++++
->   tools/testing/selftests/kvm/lib/x86/tdx/tdx.c |  27 ++++
->   tools/testing/selftests/kvm/x86/tdx_vm_test.c | 133 +++++++++++++++++-
->   5 files changed, 251 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h b/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
-> index e7440f7fe259..ab1a97a82fa9 100644
-> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
-> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
-> @@ -32,4 +32,23 @@ struct tdx_hypercall_args {
->   /* Used to request services from the VMM */
->   u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
->   
-> +/*
-> + * Used to gather the output registers values of the TDCALL and SEAMCALL
-> + * instructions when requesting services from the TDX module.
-> + *
-> + * This is a software only structure and not part of the TDX module/VMM ABI.
-> + */
-> +struct tdx_module_output {
-> +	u64 rcx;
-> +	u64 rdx;
-> +	u64 r8;
-> +	u64 r9;
-> +	u64 r10;
-> +	u64 r11;
-> +};
-> +
-> +/* Used to communicate with the TDX module */
-> +u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
-> +		      struct tdx_module_output *out);
-> +
->   #endif // SELFTESTS_TDX_TDCALL_H
-> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
-> index 060158cb046b..801ca879664e 100644
-> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
-> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
-> @@ -6,6 +6,8 @@
->   
->   #include "kvm_util.h"
->   
-> +#define TDG_VP_INFO 1
-> +
->   #define TDG_VP_VMCALL_GET_TD_VM_CALL_INFO 0x10000
->   #define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
->   
-> @@ -31,5 +33,8 @@ uint64_t tdg_vp_vmcall_ve_request_mmio_write(uint64_t address, uint64_t size,
->   uint64_t tdg_vp_vmcall_instruction_cpuid(uint32_t eax, uint32_t ecx,
->   					 uint32_t *ret_eax, uint32_t *ret_ebx,
->   					 uint32_t *ret_ecx, uint32_t *ret_edx);
-> +uint64_t tdg_vp_info(uint64_t *rcx, uint64_t *rdx,
-> +		     uint64_t *r8, uint64_t *r9,
-> +		     uint64_t *r10, uint64_t *r11);
->   
->   #endif // SELFTEST_TDX_TDX_H
-> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S b/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
-> index b10769d1d557..c393a0fb35be 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
-> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
-> @@ -91,5 +91,73 @@ __tdx_hypercall:
->   	pop %rbp
->   	ret
->   
-> +#define TDX_MODULE_rcx 0 /* offsetof(struct tdx_module_output, rcx) */
-> +#define TDX_MODULE_rdx 8 /* offsetof(struct tdx_module_output, rdx) */
-> +#define TDX_MODULE_r8 16 /* offsetof(struct tdx_module_output, r8) */
-> +#define TDX_MODULE_r9 24 /* offsetof(struct tdx_module_output, r9) */
-> +#define TDX_MODULE_r10 32 /* offsetof(struct tdx_module_output, r10) */
-> +#define TDX_MODULE_r11 40 /* offsetof(struct tdx_module_output, r11) */
-> +
-> +.globl __tdx_module_call
-> +.type __tdx_module_call, @function
-> +__tdx_module_call:
-> +	/* Set up stack frame */
-> +	push %rbp
-> +	movq %rsp, %rbp
-> +
-> +	/* Callee-saved, so preserve it */
-> +	push %r12
-> +
-> +	/*
-> +	 * Push output pointer to stack.
-> +	 * After the operation, it will be fetched into R12 register.
-> +	 */
-> +	push %r9
-> +
-> +	/* Mangle function call ABI into TDCALL/SEAMCALL ABI: */
-> +	/* Move Leaf ID to RAX */
-> +	mov %rdi, %rax
-> +	/* Move input 4 to R9 */
-> +	mov %r8,  %r9
-> +	/* Move input 3 to R8 */
-> +	mov %rcx, %r8
-> +	/* Move input 1 to RCX */
-> +	mov %rsi, %rcx
-> +	/* Leave input param 2 in RDX */
-> +
-> +	tdcall
-> +
-> +	/*
-> +	 * Fetch output pointer from stack to R12 (It is used
-> +	 * as temporary storage)
-> +	 */
-> +	pop %r12
-> +
-> +	/*
-> +	 * Since this macro can be invoked with NULL as an output pointer,
-> +	 * check if caller provided an output struct before storing output
-> +	 * registers.
-> +	 *
-> +	 * Update output registers, even if the call failed (RAX != 0).
-> +	 * Other registers may contain details of the failure.
-> +	 */
-> +	test %r12, %r12
-> +	jz .Lno_output_struct
-> +
-> +	/* Copy result registers to output struct: */
-> +	movq %rcx, TDX_MODULE_rcx(%r12)
-> +	movq %rdx, TDX_MODULE_rdx(%r12)
-> +	movq %r8,  TDX_MODULE_r8(%r12)
-> +	movq %r9,  TDX_MODULE_r9(%r12)
-> +	movq %r10, TDX_MODULE_r10(%r12)
-> +	movq %r11, TDX_MODULE_r11(%r12)
-> +
-> +.Lno_output_struct:
-> +	/* Restore the state of R12 register */
-> +	pop %r12
-> +
-> +	pop %rbp
-> +	ret
-> +
->   /* Disable executable stack */
->   .section .note.GNU-stack,"",%progbits
-> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
-> index fb391483d2fa..ab6fd3d7ae4b 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
-> @@ -162,3 +162,30 @@ uint64_t tdg_vp_vmcall_instruction_cpuid(uint32_t eax, uint32_t ecx,
->   
->   	return ret;
->   }
-> +
-> +uint64_t tdg_vp_info(uint64_t *rcx, uint64_t *rdx,
-> +		     uint64_t *r8, uint64_t *r9,
-> +		     uint64_t *r10, uint64_t *r11)
-> +{
-> +	struct tdx_module_output out;
-> +	uint64_t ret;
-> +
-> +	memset(&out, 0, sizeof(struct tdx_module_output));
-> +
-> +	ret = __tdx_module_call(TDG_VP_INFO, 0, 0, 0, 0, &out);
-> +
-> +	if (rcx)
-> +		*rcx = out.rcx;
-> +	if (rdx)
-> +		*rdx = out.rdx;
-> +	if (r8)
-> +		*r8 = out.r8;
-> +	if (r9)
-> +		*r9 = out.r9;
-> +	if (r10)
-> +		*r10 = out.r10;
-> +	if (r11)
-> +		*r11 = out.r11;
-> +
-> +	return ret;
-> +}
-> diff --git a/tools/testing/selftests/kvm/x86/tdx_vm_test.c b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-> index b6ef0348746c..82acc17a66ab 100644
-> --- a/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-> +++ b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-> @@ -1038,6 +1038,135 @@ void verify_host_reading_private_mem(void)
->   	printf("\t ... PASSED\n");
->   }
->   
-> +/*
-> + * Do a TDG.VP.INFO call from the guest
-> + */
-> +void guest_tdcall_vp_info(void)
-> +{
-> +	uint64_t rcx, rdx, r8, r9, r10, r11;
-> +	uint64_t err;
-> +
-> +	err = tdg_vp_info(&rcx, &rdx, &r8, &r9, &r10, &r11);
-> +	tdx_assert_error(err);
-> +
-> +	/* return values to user space host */
-> +	err = tdx_test_report_64bit_to_user_space(rcx);
-> +	tdx_assert_error(err);
-> +
-> +	err = tdx_test_report_64bit_to_user_space(rdx);
-> +	tdx_assert_error(err);
-> +
-> +	err = tdx_test_report_64bit_to_user_space(r8);
-> +	tdx_assert_error(err);
-> +
-> +	err = tdx_test_report_64bit_to_user_space(r9);
-> +	tdx_assert_error(err);
-> +
-> +	err = tdx_test_report_64bit_to_user_space(r10);
-> +	tdx_assert_error(err);
-> +
-> +	err = tdx_test_report_64bit_to_user_space(r11);
-> +	tdx_assert_error(err);
-> +
-> +	tdx_test_success();
-> +}
-> +
-> +/*
-> + * TDG.VP.INFO call from the guest. Verify the right values are returned
-> + */
-> +void verify_tdcall_vp_info(void)
-> +{
-> +	const struct kvm_cpuid_entry2 *cpuid_entry;
-> +	uint32_t ret_num_vcpus, ret_max_vcpus;
-> +	uint64_t rcx, rdx, r8, r9, r10, r11;
-> +	const int num_vcpus = 2;
-> +	struct kvm_vcpu *vcpus[num_vcpus];
-> +	uint64_t attributes;
-> +	struct kvm_vm *vm;
-> +	int gpa_bits = -1;
-> +	uint32_t i;
-> +
-> +	vm = td_create();
-> +
-> +#define TDX_TDPARAM_ATTR_SEPT_VE_DISABLE_BIT	BIT(28)
-> +	/* Setting attributes parameter used by TDH.MNG.INIT to 0x10000000 */
-> +	attributes = TDX_TDPARAM_ATTR_SEPT_VE_DISABLE_BIT;
-> +
-> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, attributes);
-> +
-> +	for (i = 0; i < num_vcpus; i++)
-> +		vcpus[i] = td_vcpu_add(vm, i, guest_tdcall_vp_info);
-> +
-> +	td_finalize(vm);
-> +
-> +	printf("Verifying TDG.VP.INFO call:\n");
-> +
-> +	/* Get KVM CPUIDs for reference */
-> +
-> +	for (i = 0; i < num_vcpus; i++) {
-> +		struct kvm_vcpu *vcpu = vcpus[i];
-> +
-> +		cpuid_entry = vcpu_get_cpuid_entry(vcpu, 0x80000008);
-> +		TEST_ASSERT(cpuid_entry, "CPUID entry missing\n");
-> +		gpa_bits = (cpuid_entry->eax & GENMASK(23, 16)) >> 16;
-> +		TEST_ASSERT_EQ((1UL << (gpa_bits - 1)), tdx_s_bit);
-> +
-> +		/* Wait for guest to report rcx value */
-> +		tdx_run(vcpu);
-> +		rcx = tdx_test_read_64bit_report_from_guest(vcpu);
-> +
-> +		/* Wait for guest to report rdx value */
-> +		tdx_run(vcpu);
-> +		rdx = tdx_test_read_64bit_report_from_guest(vcpu);
-> +
-> +		/* Wait for guest to report r8 value */
-> +		tdx_run(vcpu);
-> +		r8 = tdx_test_read_64bit_report_from_guest(vcpu);
-> +
-> +		/* Wait for guest to report r9 value */
-> +		tdx_run(vcpu);
-> +		r9 = tdx_test_read_64bit_report_from_guest(vcpu);
-> +
-> +		/* Wait for guest to report r10 value */
-> +		tdx_run(vcpu);
-> +		r10 = tdx_test_read_64bit_report_from_guest(vcpu);
-> +
-> +		/* Wait for guest to report r11 value */
-> +		tdx_run(vcpu);
-> +		r11 = tdx_test_read_64bit_report_from_guest(vcpu);
-> +
-> +		ret_num_vcpus = r8 & 0xFFFFFFFF;
-> +		ret_max_vcpus = (r8 >> 32) & 0xFFFFFFFF;
-> +
-> +		/* first bits 5:0 of rcx represent the GPAW */
-> +		TEST_ASSERT_EQ(rcx & 0x3F, gpa_bits);
-> +		/* next 63:6 bits of rcx is reserved and must be 0 */
-> +		TEST_ASSERT_EQ(rcx >> 6, 0);
-> +		TEST_ASSERT_EQ(rdx, attributes);
-> +		TEST_ASSERT_EQ(ret_num_vcpus, num_vcpus);
-> +		TEST_ASSERT_EQ(ret_max_vcpus, vm_check_cap(vm, KVM_CAP_MAX_VCPUS));
-> +		/* VCPU_INDEX = i */
-> +		TEST_ASSERT_EQ(r9, i);
-> +		/*
-> +		 * verify reserved bits are 0
-> +		 * r10 bit 0 (SYS_RD) indicates that the TDG.SYS.RD/RDM/RDALL
-> +		 * functions are available and can be either 0 or 1.
-> +		 */
-> +		TEST_ASSERT_EQ(r10 & ~1, 0);
-> +		TEST_ASSERT_EQ(r11, 0);
-> +
-> +		/* Wait for guest to complete execution */
-> +		tdx_run(vcpu);
-> +
-> +		tdx_test_assert_success(vcpu);
-> +
-> +		printf("\t ... Guest completed run on VCPU=%u\n", i);
-> +	}
-> +
-> +	kvm_vm_free(vm);
-> +	printf("\t ... PASSED\n");
-> +}
-> +
->   int main(int argc, char **argv)
->   {
->   	ksft_print_header();
-> @@ -1045,7 +1174,7 @@ int main(int argc, char **argv)
->   	if (!is_tdx_enabled())
->   		ksft_exit_skip("TDX is not supported by the KVM. Exiting.\n");
->   
-> -	ksft_set_plan(14);
-> +	ksft_set_plan(15);
->   	ksft_test_result(!run_in_new_process(&verify_td_lifecycle),
->   			 "verify_td_lifecycle\n");
->   	ksft_test_result(!run_in_new_process(&verify_report_fatal_error),
-> @@ -1074,6 +1203,8 @@ int main(int argc, char **argv)
->   			 "verify_td_cpuid_tdcall\n");
->   	ksft_test_result(!run_in_new_process(&verify_host_reading_private_mem),
->   			 "verify_host_reading_private_mem\n");
-> +	ksft_test_result(!run_in_new_process(&verify_tdcall_vp_info),
-> +			 "verify_tdcall_vp_info\n");
->   
->   	ksft_finished();
->   	return 0;
+> >  static int compare_name(const char *name1, const char *name2)
+> >  {
+> >         const char *res1, *res2;
+> > --
+> > 2.43.0
+> >
 
+
+Thank you for the feedback. I understand that small, single-character
+fixes are better grouped into a larger patch to avoid multiple tiny
+commits.
+I=E2=80=99ll review the BPF selftests code for similar typos and send a
+combined patch instead.
+
+Thanks,
+Shubham Sharma
 
