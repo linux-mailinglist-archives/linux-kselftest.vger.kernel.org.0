@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-38998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74F74B26C70
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 18:23:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80D62B26C21
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 18:12:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 657DF4E469B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 16:23:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3063B188AD8E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 16:10:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECBA8258CF0;
-	Thu, 14 Aug 2025 16:23:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B29227FB27;
+	Thu, 14 Aug 2025 16:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MUQSnxZi"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="bdj4u54A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79E72566E7;
-	Thu, 14 Aug 2025 16:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A9811ADFFB;
+	Thu, 14 Aug 2025 16:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755188596; cv=none; b=Tnx5Cu828u0ybcbLUb+WvPWbOdT+5Ot9PRAKLVFlvq9jba3lnjVgTHNWnC8dnJD1GIrZ9V9piFbEAzFTwDCgkCDw4WLIQ4qNQY1njv4UsOW3qsn06hBADNwFB6191oZf7i865mDF7rWfoC3QK9W6XY5WsVGNbS40JAQfiaHsKiM=
+	t=1755187697; cv=none; b=itE0smeG5nU7tvNF6uziTdSNh6uWseUHIeVB5lM+PC+ancIl1+jNXspkFBlwVABgiFb1MP8L1EQbFDzYmqIThlTjOsgIbUP9jyJLCx8ePJeEAgSDg+04p+ULnj1gEt9cgyk2C9Tt94fNRD0b/xu0yvsG8CNLwALgr+Zoo7iovFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755188596; c=relaxed/simple;
-	bh=l4RpZEZEyFuGtuV7W4a26EQUDXnqU+r9rXYOKFw33+U=;
+	s=arc-20240116; t=1755187697; c=relaxed/simple;
+	bh=svkp08rdGVyKgFVxwgXAWa3Xf1Z0GRrg8XDC2J4AQsQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CZA0S34LBFx9SJnxkbMmAx7Ksd09JNXgKUf3F/LOEuRYyUi7mbXCCmgH7guKVClmAzb0jURVQ+fiM9B91Wb5Mg1pFv3mSVca5nwH4oAbg/P1YRn+KJubiGchYhL7Og0YTOtrMuzY09a3pRbPK+2CCJD/FSYmL0dK+VNRj/FsAQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MUQSnxZi; arc=none smtp.client-ip=117.135.210.2
+	 MIME-Version; b=K5JvPaRiWCYeMTfMnLMV78Tm+/E/xSkP082UbXROjyrMIoE9ezHv4Av7S7lUpnbIJ4AImRn9bjCGqZEv98UdrK97yyyFFcVg1svYArZAGLlv++FvSXkuIUQRcYEc3uIiT9aKQT5uKu8Sx7S11SiyaPApUmOTYQND7X+WfA65hB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=bdj4u54A; arc=none smtp.client-ip=117.135.210.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=6l
-	zJrqnywi6rrLDFjSoml0wlX8+SiyR25gUueMYiFr8=; b=MUQSnxZisp/AE3pFEv
-	NB8zGD3/axMZYApB+99c0HOO9q7LRduk9n/oKZoBy/AimY+1B6e7/Dnhlp0gaZI5
-	LEeyDuiD2ciWg5z6CIPSBR12yAFGdn66g+wx1QPGl+J14QkFXnk6/3DXf5ZmtS0R
-	xIXwokQ3boj1aiDw0AtAL8u5I=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=ns
+	TqgMpwxxk6C6R6rkKnNo1S3EeyK8BjaeGgYw51cqk=; b=bdj4u54AAT1IoAtlrX
+	/Og9Kd8Stgws8RGW2N9Km2zU+WOyRLsS9Je5gI9f5x8H0xdBdbfLPRPO/pnBLLBR
+	CjWUJaTQNeRpMNi67XJswH0iu6FQOo6TYe8LEkgR839b7uD+xSuMKu+5Hk/aDiH4
+	9XUIzs71pypKXkzQ8hfV6GVwc=
 Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wAnEgTMCZ5otf6bBw--.46198S4;
-	Fri, 15 Aug 2025 00:07:43 +0800 (CST)
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wAnEgTMCZ5otf6bBw--.46198S5;
+	Fri, 15 Aug 2025 00:07:44 +0800 (CST)
 From: Jiawei Zhao <phoenix500526@163.com>
 To: ast@kernel.org
 Cc: daniel@iogearbox.net,
@@ -46,9 +46,9 @@ Cc: daniel@iogearbox.net,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v10 2/3] selftests/bpf: Add an usdt_o2 test case in selftests to cover SIB handling logic
-Date: Thu, 14 Aug 2025 16:07:38 +0000
-Message-ID: <20250814160740.96150-3-phoenix500526@163.com>
+Subject: [PATCH bpf-next v10 3/3] selftests/bpf: make usdt_o2 reliably generate SIB USDT arg spec
+Date: Thu, 14 Aug 2025 16:07:39 +0000
+Message-ID: <20250814160740.96150-4-phoenix500526@163.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250814160740.96150-1-phoenix500526@163.com>
 References: <20250814160740.96150-1-phoenix500526@163.com>
@@ -59,161 +59,84 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAnEgTMCZ5otf6bBw--.46198S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktF4fAF15uFyUZw1UKFg_yoWrtrW5pa
-	48X348KFWIqF13K3Wftr4Utr4rKanayrW8JFykXryavr48JryIqr1xKr17tasxG395XF1r
-	A39xtan8Gr48JaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jqrWOUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFB6piGieCMAXxwAAsF
+X-CM-TRANSID:_____wAnEgTMCZ5otf6bBw--.46198S5
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJF1xur1fJFW3Xr43CFW3Jrb_yoW5XFWrpa
+	4kJayYkF1vqFyfA34fJr42v3WrK3Z5ZFW8ArWkKw1jvr1UX3y8Xr4xKa4jv3sYk3yF934Y
+	v3y8t398uay8Aw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j-F4_UUUUU=
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFB6piGieCMAXxwABsE
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
+usdt_o2 is intended to exercise the SIB (Scale-Index-Base) argument
+handling in libbpf's USDT path. With GCC 13 this reliably produced a
+SIB-form argument (e.g. 8@(%rdx,%rax,8)), but with newer GCC (e.g. 15)
+the compiler frequently optimizes the probe argument into a plain
+register (e.g. 8@%rax) or a stack slot, so the test stops covering the
+SIB code path and becomes flaky across toolchains.
 
-In this patch:
-- add usdt_o2 test case to cover SIB addressing usdt argument spec
-  handling logic
+Force a SIB memory operand in the probe by:
+* placing the base pointer into %rdx and the index into %rax using an
+  empty inline asm with output constraints ("=d", "=a") and matching
+  inputs
+* immediately passing base[idx] to STAP_PROBE1.
+* only enable on x86 platform.
+
+This makes the compiler encode the operand as SIB (base + index8),
+which in .note.stapsdt shows up as 8@(%rdx,%rax,8) regardless of GCC
+version. A memory clobber and noinline prevent reordering/re-allocation
+around the probe site.
+
+This change is x86_64-specific and does not alter program semantics; it
+only stabilizes the USDT argument shape so the test consistently
+validates SIB handling. Clang historically prefers stack temporaries for
+such operands, but the selftests build with GCC, and this keeps behavior
+stable across GCC versions without introducing a separate .S file.
 
 Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
 ---
- tools/testing/selftests/bpf/Makefile          |  1 +
- .../selftests/bpf/prog_tests/usdt_o2.c        | 69 +++++++++++++++++++
- .../selftests/bpf/progs/test_usdt_o2.c        | 37 ++++++++++
- 3 files changed, 107 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
+ .../selftests/bpf/prog_tests/usdt_o2.c        | 20 ++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 4863106034df..24ff1a329625 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -760,6 +760,7 @@ TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
- TRUNNER_BPF_CFLAGS :=
- $(eval $(call DEFINE_TEST_RUNNER,test_maps))
- 
-+
- # Define test_verifier test runner.
- # It is much simpler than test_maps/test_progs and sufficiently different from
- # them (e.g., test.h is using completely pattern), that it's worth just
 diff --git a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
-new file mode 100644
-index 000000000000..f02dcf5188ab
---- /dev/null
+index f02dcf5188ab..e46d5743ad24 100644
+--- a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
 +++ b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Jiawei Zhao <phoenix500526@163.com>. */
-+#include <test_progs.h>
-+
-+#include "../sdt.h"
-+#include "test_usdt_o2.skel.h"
-+
-+#if defined(__GNUC__) && !defined(__clang__)
-+__attribute__((optimize("O2")))
+@@ -15,11 +15,19 @@ __attribute__((optimize("O2")))
+ int lets_test_this(int);
+ static volatile __u64 array[1] = {test_value};
+ 
+-static __always_inline void trigger_func(void)
++static noinline void trigger_func(void)
+ {
++#if defined(__x86_64__) || defined(__i386__)
+ 	/* Base address + offset + (index * scale) */
+-	for (volatile int i = 0; i <= 0; i++)
+-		STAP_PROBE1(test, usdt1, array[i]);
++	/* Force SIB addressing with inline assembly */
++	const __u64 *base;
++	__u32 idx;
++	/* binding base to %rdx and idx to %rax */
++	asm volatile("" : "=d"(base), "=a"(idx) : "0"(array), "1"((__u32)0) : "memory");
++	STAP_PROBE1(test, usdt1, base[idx]);
++#else
++	STAP_PROBE1(test, usdt1, array[0]);
 +#endif
-+
-+#define test_value 0xFEDCBA9876543210ULL
-+#define SEC(name) __attribute__((section(name), used))
-+
-+int lets_test_this(int);
-+static volatile __u64 array[1] = {test_value};
-+
-+static __always_inline void trigger_func(void)
-+{
-+	/* Base address + offset + (index * scale) */
-+	for (volatile int i = 0; i <= 0; i++)
-+		STAP_PROBE1(test, usdt1, array[i]);
-+}
-+
-+static void basic_sib_usdt(void)
-+{
-+	LIBBPF_OPTS(bpf_usdt_opts, opts);
-+	struct test_usdt_o2 *skel;
-+	struct test_usdt_o2__bss *bss;
-+	int err;
-+
-+	skel = test_usdt_o2__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	bss = skel->bss;
-+	bss->my_pid = getpid();
-+
-+	err = test_usdt_o2__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	/* usdt1 won't be auto-attached */
-+	opts.usdt_cookie = 0xcafedeadbeeffeed;
-+	skel->links.usdt1 = bpf_program__attach_usdt(skel->progs.usdt1,
-+						     0 /*self*/, "/proc/self/exe",
-+						     "test", "usdt1", &opts);
-+	if (!ASSERT_OK_PTR(skel->links.usdt1, "usdt1_link"))
-+		goto cleanup;
-+
-+	trigger_func();
-+
-+	ASSERT_EQ(bss->usdt1_called, 1, "usdt1_called");
-+	ASSERT_EQ(bss->usdt1_cookie, 0xcafedeadbeeffeed, "usdt1_cookie");
-+	ASSERT_EQ(bss->usdt1_arg_cnt, 1, "usdt1_arg_cnt");
-+	ASSERT_EQ(bss->usdt1_arg, test_value, "usdt1_arg");
-+	ASSERT_EQ(bss->usdt1_arg_ret, 0, "usdt1_arg_ret");
-+	ASSERT_EQ(bss->usdt1_arg_size, sizeof(array[0]), "usdt1_arg_size");
-+
-+cleanup:
-+	test_usdt_o2__destroy(skel);
-+}
-+
-+
-+
-+void test_usdt_o2(void)
-+{
-+	basic_sib_usdt();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_usdt_o2.c b/tools/testing/selftests/bpf/progs/test_usdt_o2.c
-new file mode 100644
-index 000000000000..14602aa54578
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_usdt_o2.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/usdt.bpf.h>
-+
-+int my_pid;
-+
-+int usdt1_called;
-+u64 usdt1_cookie;
-+int usdt1_arg_cnt;
-+int usdt1_arg_ret;
-+u64 usdt1_arg;
-+int usdt1_arg_size;
-+
-+SEC("usdt")
-+int usdt1(struct pt_regs *ctx)
-+{
-+	long tmp;
-+
-+	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	__sync_fetch_and_add(&usdt1_called, 1);
-+
-+	usdt1_cookie = bpf_usdt_cookie(ctx);
-+	usdt1_arg_cnt = bpf_usdt_arg_cnt(ctx);
-+
-+	usdt1_arg_ret = bpf_usdt_arg(ctx, 0, &tmp);
-+	usdt1_arg = (u64)tmp;
-+	usdt1_arg_size = bpf_usdt_arg_size(ctx, 0);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ }
+ 
+ static void basic_sib_usdt(void)
+@@ -61,9 +69,11 @@ static void basic_sib_usdt(void)
+ 	test_usdt_o2__destroy(skel);
+ }
+ 
+-
+-
+ void test_usdt_o2(void)
+ {
++#if !defined(__x86_64__) && !defined(__i386__)
++	test__skip();
++	return;
++#endif
+ 	basic_sib_usdt();
+ }
 -- 
 2.43.0
 
