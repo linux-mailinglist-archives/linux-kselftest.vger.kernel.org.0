@@ -1,272 +1,544 @@
-Return-Path: <linux-kselftest+bounces-38949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ED46B26050
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 11:11:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B3CAB2606C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 11:14:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26A833B111C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 09:06:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69FB41CC6662
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 09:08:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DC6A2FB987;
-	Thu, 14 Aug 2025 09:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D2D22E7BB8;
+	Thu, 14 Aug 2025 09:04:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gapjnHf7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mCCyuMjd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ADC32FC874;
-	Thu, 14 Aug 2025 09:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755162062; cv=none; b=q9bOOBc9xfnFif2X+2KjyeIOBaAEIW/dPTmYlKrH6yf9qdSwlF00589RAIih9mJaRQW/WaTWCGRmU998ZJYeyD7c/dRiHHPNI10GlVxisgmrBJJxiZhDamfKwLelpYraPyneCBxJwMabnlAFA9ljXwPTHCd05G3V9EgDde7v7A8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755162062; c=relaxed/simple;
-	bh=kfIC01s9yQ5mKJ/rXXEH1XcjUrgB4lPfBVa1ADMWbTM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lVihG2db9zrOTnh8C9mWe5vxDKUSXB/Br42IWd48zNT85TJtVVrTBJHLVTNUX5ZgrKnqkZymO/Rycl60gdeHxHMMTaEMUh6yM1UEsGw+qefcEnGJc6rraQGeGE+Eius153aN00laRlFFvDLfCA4nVROuim1LGjsA+SeIpaFk50I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gapjnHf7; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-45a1b065d58so4449735e9.1;
-        Thu, 14 Aug 2025 02:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755162058; x=1755766858; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yDGB2cR8if6ZH2zs0PF/R7505/JlUyKM0m/lfviOAcM=;
-        b=gapjnHf7zhkDXjd/6RRMMJo54DdfkIloPZjcuOmOhZFBU9Tteyoj+x8UHqn3GP+bon
-         CUYrF7i5qKn+WSsUDNemPHjasXI1tggL2sCjMzopET2DEOlcpVHjF5WbU1FbnL8DNMXz
-         0WAPHolVQ+OPXZdxxKM/pbAW5ZICyKuHozytfhF9x+iFK+FIfElnvuqB0rk1PbUInkBC
-         +NQV0kxtnKPxuiELDc5OAWIVQxPEV1qAVsdtRhGftBIuwU80hgWHTw5jcgLFgLn7Tn2c
-         gXvTod/df6qYvR8tPPJDI/fO0oucwm4y32Y+2wGetfbYZ/rwWcuU8U0DxKiGvc5eaYzq
-         9q8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755162058; x=1755766858;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yDGB2cR8if6ZH2zs0PF/R7505/JlUyKM0m/lfviOAcM=;
-        b=iA0/oZ6mASJepv+h4RGBNiF1Om86USTwYeDu5o55hnlU6wte7XOtT6O2IBvugcUZUd
-         c7+/1lddaXgyn17m0CahZUAGmsCXVsB98NwizkmotLZU5wceefNXDnM1BQjjV1BrpvOu
-         5kgN60zIdPwNg4MlKhtzrCOjHUnho5VNtkgOaDjaETU5YjaOrb9VRxzrBge4LpYDatR4
-         msv83ekOIxJJim4+FnLJv76oVxSWRhrQhaGCxIqkFLm7bJc9xleyxIjF8dP3phFLFvvD
-         9l3v1y/WhKDtLh1snA0EVpUi22+4C0ekUabgleYqg6Xk5d8JhT+d2B6/QT1dQE2RcjNT
-         lE7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVUpzqDibg4tSrSLWPvyrzhc8+4KDIDTg5JIlgNuslLEUptZadRhDBbbHspAqf/k6wopD0=@vger.kernel.org, AJvYcCWZveWSPwIYbAQpJ+uX776iZ7Il51qL7VRYKtIt9txXnoVR4qs1A6lXZvxPl3/WxwubQNoadwR7TJXtdryzWnQy@vger.kernel.org, AJvYcCXsbKTgZesVhLhEXIk1KLMuIt1gxbMzAZ62Bnm176eqQfJybf9QQjdFo/vEhr8koMAowijJV6U4VvQQfq1O@vger.kernel.org
-X-Gm-Message-State: AOJu0YymQ2MiHjrvzbWvrA4ppZh2/GrcHD9rxMgj3xygKWx7D/82Sw2A
-	Zl7nBP21DmxJ6A80jVLI+5HfIiFwMaklDLsvI3pnpCHTzVY91Upki8IY
-X-Gm-Gg: ASbGncuAVRb7P97v2fhocv8oHGeveLOF4o1v/SJWoee6EB1PSF6oyp2UoQrA2Wg78po
-	jrHHfu5laEj+9xGyjNv87m4VCUWMKTD5C82C988TsolMbTo8IwzA+ZM7YaHNb90TpzQk858ZU59
-	/k2RLDjDXMWIbt23nwo9C/0ExZOoACiqqhsRdI3aTF5+LbSgPfouYFPDI9CVMXWBgYMhCu8whD7
-	HuGjZftmWZ9VALAJbiqxyogeUdEsFdJp4VsZKIwGPEPHAhhajBKXJXhYNuuo5tIKCFG4NVdSeso
-	AkzMGGxuC8sWdZx9JekNj4iUiYC2LeQHIKHopscWHxOWQ7c61uw4eWRac9ACesyxKzAfyaFR
-X-Google-Smtp-Source: AGHT+IEf/HOG+lNROoBVhIXSDZhNx2uqtQGIfsWzrtShrYamuDneVKSjmMOtgfiCLgih4GixA55L9Q==
-X-Received: by 2002:a05:600c:3507:b0:43c:ec0a:ddfd with SMTP id 5b1f17b1804b1-45a1b605850mr15218395e9.6.1755162058105;
-        Thu, 14 Aug 2025 02:00:58 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::31e0])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45a1c6e336csm13777865e9.16.2025.08.14.02.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 02:00:57 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 14 Aug 2025 11:00:55 +0200
-To: Jiawei Zhao <phoenix500526@163.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
-	daniel@iogearbox.net, shuah@kernel.org, yonghong.song@linux.dev,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v8 2/2] selftests/bpf: Add an usdt_o2 test case
- in selftests to cover SIB handling logic
-Message-ID: <aJ2lxyUYfQkfQW2-@krava>
-References: <20250814064504.103401-1-phoenix500526@163.com>
- <20250814064504.103401-3-phoenix500526@163.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1292E11BF;
+	Thu, 14 Aug 2025 09:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755162298; cv=fail; b=oRo5qffYu3qCr1IvE4k3tuGKMNWYufHJ7OG8e5mfOC0Uw+tbGE6HSsmdPmKoNYLlxbxh/XIwFkB2Mp3cOzi94bpfUlc8lv+7kuqwveA3FHFq6WiiI2UrkjgtnXuMj4dqWkpQkg0VYRW1cKtRUeVv3J7E4QYF74o0koprdpvo378=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755162298; c=relaxed/simple;
+	bh=ob5jBy4tqP9ipg0WbdssIH1R9LZMnaWXoEg1KeFAnIo=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=A8vsdCBGZxrXea3ORnvMcFFFsXji7BS4wJHnQ57/SZ51i4e1TpYOucPxiU26q3Kpx4/6ixG46vBUZCAPvNZ5CmJH67dgILjo0aF4OrqAFBLxaKIn3Z9BCRB53MGzSIwZ+a1cTkLqygiC4Y5qGPTTmtYbDdkY6MkZU/4iV3s4sbg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mCCyuMjd; arc=fail smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755162296; x=1786698296;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ob5jBy4tqP9ipg0WbdssIH1R9LZMnaWXoEg1KeFAnIo=;
+  b=mCCyuMjdsgLiAXGMG1U8aeKF/7Nk7Bz04zFWfY8meHlUricoVWnBiU6M
+   zDHvC0cm9P3cKEGVQI1wh6i7aOwlMQqClfn3f4lz9nAI3+F1Fk9+1+66f
+   54WEWPjlvyBf+FUDqQ0KhG2NZ81/GU0cx8NbvtWhvZ58HdO2ebYCDw59g
+   oG06MCMVzJr9YjX8Vu7ID6dgs18jkyKibHCpzT21fEHmnCRYP7AS53VKA
+   Us448s9ywSlxlxOjm+WVFn5W6Ch5/xRgjfTBwcdQjiNXFP+bpigEhbxZL
+   yhuTCAf1jo6RRbSAUmmPGwHl+Hqm0TSTE1QIGNPtQofaPslGFrTrSxpDA
+   A==;
+X-CSE-ConnectionGUID: SnGvHgI4SCSM2HInd/U6qw==
+X-CSE-MsgGUID: jOuqwWq6Rl2zlabbPZoaFA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="45050470"
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="45050470"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 02:04:55 -0700
+X-CSE-ConnectionGUID: iWVlkljwRYyn8J+sDdXCiw==
+X-CSE-MsgGUID: JM1rvWjdQtSJ/ffoiCBRRg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="166972509"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 02:04:55 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Thu, 14 Aug 2025 02:04:54 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Thu, 14 Aug 2025 02:04:54 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (40.107.236.69)
+ by edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Thu, 14 Aug 2025 02:04:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=T/hjgBwIRcyioSQHh33roFE4OMPIhPy2+AluOzP2QvKA3wB3yvbS6t9/Ik1NNXWju5vGjCC4lNyfcxYtBDfV2jx8xOiVfWrma5es8ILOGIDKPFDh2Noqy/LJIwyFx9L/PEs0ZAb44fPquRymgirCkroTXZFgM8S3NfD9Bi2BIPq6zczr6G/LagI9h83sPVmLPUkBYerhQPttt6gRMaA1DWDAEdmdDjxE0ho1m02TKXS6ul1WLF/pw5r+T4xHENJxNRVdtUzYHkMNWmfODTk0ytnG8AMZkizarTr/b9s5oZOB9KXQh32bO6nooTaKS7lOCn3KT6MiUKH5OJjKUI4WQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d9iD3FHAW63wmc44foEelXIHbuMKEM86Xow3CnNuwg8=;
+ b=n/XLskatqnXaBIBU2A7hk6dLlxNIvU/aNJORMbnkQpnfFAPh8QIS5FxYrVcnChGnDCflAo7BwZuCC+2cTAatmJ4B0bwVgUp5NlxZU6AG8txkScJ1ZFRLJ0OAWZr8qUZaJA9AIhGKNHdc+zeGANLo5ndlCmtC2w4VwZbvIgi89FPGAN3iUQLIt4oce7gvCo0WT9WVi0QJoEUTmtIvSDuOC3hFbWTdp3Uf3se1naG/InFhuo4LMTYgYo79Y01fRFuVlOWquS9+2XGo4IKV7bRttb/CTKs5YCI6t2Gj8OnwXVmLCWEGn2Q/7yfgQIOTFjwcBhrYyQG6JouL57VxaGoKLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CYXPR11MB8729.namprd11.prod.outlook.com (2603:10b6:930:dc::17)
+ by CY8PR11MB7244.namprd11.prod.outlook.com (2603:10b6:930:97::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.15; Thu, 14 Aug
+ 2025 09:04:51 +0000
+Received: from CYXPR11MB8729.namprd11.prod.outlook.com
+ ([fe80::680a:a5bc:126d:fdfb]) by CYXPR11MB8729.namprd11.prod.outlook.com
+ ([fe80::680a:a5bc:126d:fdfb%6]) with mapi id 15.20.9031.014; Thu, 14 Aug 2025
+ 09:04:51 +0000
+Message-ID: <e0d0aa8b-7844-43dc-913d-ea0f302d3feb@intel.com>
+Date: Thu, 14 Aug 2025 17:04:39 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 22/30] KVM: selftests: TDX: Add TDG.VP.INFO test
+To: Sagi Shahar <sagis@google.com>, <linux-kselftest@vger.kernel.org>, "Paolo
+ Bonzini" <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, "Sean
+ Christopherson" <seanjc@google.com>, Ackerley Tng <ackerleytng@google.com>,
+	Ryan Afranji <afranji@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+	Isaku Yamahata <isaku.yamahata@intel.com>, Erdem Aktas
+	<erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, "Roger
+ Wang" <runanwang@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, "Oliver
+ Upton" <oliver.upton@linux.dev>, "Pratik R. Sampat"
+	<pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>
+CC: <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+References: <20250807201628.1185915-1-sagis@google.com>
+ <20250807201628.1185915-23-sagis@google.com>
+Content-Language: en-US
+From: Chenyi Qiang <chenyi.qiang@intel.com>
+In-Reply-To: <20250807201628.1185915-23-sagis@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR01CA0160.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:28::16) To CYXPR11MB8729.namprd11.prod.outlook.com
+ (2603:10b6:930:dc::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250814064504.103401-3-phoenix500526@163.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CYXPR11MB8729:EE_|CY8PR11MB7244:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ed0c756-1be2-4ed3-5aeb-08dddb11a05d
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|376014|366016|921020|7053199007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?S3JMbWtuMEVlZWdMbXRTclJoZ1BYRm83RDU4a0VpOTdYd3V3eS91cVRIVzFo?=
+ =?utf-8?B?RXlqNHlxQUdSNHdFSzAwRGkxWDh0YWxWVEV2QTFkNytqeU5leHNMREVqSGg1?=
+ =?utf-8?B?QVdqa1Vsbm5admk0WmVzOXVDMWJEeForMG5xd2p1dUVFdWZpV0RVeEFXWE5W?=
+ =?utf-8?B?TFg5eXhlRkpPd2UrOHc1ZmZmd1ZYNnBoeEdaYUFZQjRGa1I3dDZvTDZxRTEz?=
+ =?utf-8?B?STc1N3RYRHVPYXFuT2RxZ25kblI5UzJTQUp6UVhuL2MzbXp4K1gyYTY0QnpR?=
+ =?utf-8?B?VjFEWEVNR3BiODZrZEtteXovdkRIVVRkZ09BOVYrUVQwVEJJQ2xUb0s3UU5M?=
+ =?utf-8?B?Y1NDTmVJUXJmWDJtU0tGY3QxMW00N3NRTEoxMy9jOXFZMnQ0TWNJN080eTF0?=
+ =?utf-8?B?enNTU1dyRjVSZWtXZVpCQ09JSldyQnB2N3JteFdza2JaYS9xc011a0JtaW9M?=
+ =?utf-8?B?aHU3YUp4Ny8vWXdtUGlyeHp1L2dBcGRTc1hXZVEzUmlwR2VZYk05dE1QT2g3?=
+ =?utf-8?B?Z1d5OGFKK1YvaEp6N3owV1ZQQmZndGtkU2kzQkVIOU5ycU5Uc2JVU0swSURO?=
+ =?utf-8?B?eUlLYmkrN3BCRlIrWVpyUEMrYzBveFczeDlydHA0Z213eTJWVHY0a1hxbDhO?=
+ =?utf-8?B?bzRCVGVsK28ySm1TY1RLR1dwVE1NS3Uybmt3cG4zc1J1TTN2N21QQmtGSld4?=
+ =?utf-8?B?SVN5ZzhqdGdnS3YyOUxNMmx6T2JkNVRMRVNpWWpsSTlmeHBCK0tEZk0vZSs4?=
+ =?utf-8?B?NWU2OEJjZ3VZY1VEQ1h2WEpFRU5OVmZ2RkZhWVYvTzYvZjU4ZVdad0FQbHV4?=
+ =?utf-8?B?d3lqbUpYWkprNkNKOVRpNjJQc3Fqc0JSSXB1MU9SSUQwcm00YUgrOXFObklP?=
+ =?utf-8?B?N01CenJiS1FBV3N4RjhxUGJybHZEZVVRaWcrZXZYK0lCWDh1TzZHTlZYcnRm?=
+ =?utf-8?B?d0JVb1VuQmVac3lvejNWM0xUSVhsL3VkRHo4Qm5kU2ZlWVdPeDFGMjQ3WlVG?=
+ =?utf-8?B?WkVBeXpML3BtUXd1UDhERGpHQitiZXJid25wSGU5a0ZUWHlBR2ZyRlJ2NTk4?=
+ =?utf-8?B?NlFXWHpseHFidzZBZ3FTWGFLOEFlMjFGQkZ3aTR2NGYxWkJmb0xaRlU4RW45?=
+ =?utf-8?B?cldOUFJabWYzUUlaSkVIQk9EemNYVHF6T3pKNnQ4YU9TKzF1VUZxcStDNUNZ?=
+ =?utf-8?B?bGx4aGJTY2FGMFhrREwrTEttV0pBc3ZyaUloY1k3clZJZ044d0V2eElzVXpO?=
+ =?utf-8?B?WVkzSythZEQ4dVlENVR4WmxWdTVvQkRibUt2b05sZS81UzVqaG9HL2tFbFp0?=
+ =?utf-8?B?SjJBbVprcVN0N0F0eUZnaURJS250c1JQL2x1dFlGWkMvS0pCVStubmlwNkRl?=
+ =?utf-8?B?RnUrQUI4STd6UzFWb0xYM0xVeTZSK0h0dnZ6bTRVQXZSZk5wazZ3NndkSmha?=
+ =?utf-8?B?OG1jOXVyR05qQ1FnM1FpQ05Nb1RtK1lIN2hNZ1FRRzlDbEdFMm5YM1cvaDNV?=
+ =?utf-8?B?N0NjLytTUjg1OFBwbUcyaEc0NmV6ajFGd0llaUYvTlZ6Zlc1dHVQK09IQnR3?=
+ =?utf-8?B?cXM0UlpaQnNPZlhzY1p3YlRXQUhWYjVWalNZTHdTcWFvc3lSbWlXbzFPNzVk?=
+ =?utf-8?B?MC9lelJXZVNZUU5tR1hBam9JNWwrNXBDdXlTMnhCdXRPRm81OXRnWllMT1dy?=
+ =?utf-8?B?MGhKWTBPa0VYWk5OdVh3WDFDTUovUEsvRjJpV0hCTTEzTVBuL3UxSm1VTDNP?=
+ =?utf-8?B?R3oyTjFlUjZnNjhpYWNrQWtCZURaaENFLzI3dDFUR1ZBVGdrWHErc2FrUDVV?=
+ =?utf-8?B?ZVczYlpWb0psVUZPTXpTc0s3ak5wSFd2aTBRRzA4Q0RGeE41bkgra0VjRGhC?=
+ =?utf-8?B?MTRVNGhXbVBWZGpYdmIxa3QvanhYczFoWVBibXowOUdPaXlMN2ZSbUhaRC9q?=
+ =?utf-8?B?SGI3K3FKSVRrajIvZGFaMXdRUkRpamdLSFFNbkpFS2dJUlc0OUpKdFVBM3pN?=
+ =?utf-8?B?QVZCYm15TlBnPT0=?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYXPR11MB8729.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016)(921020)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkJDdlV1MytGS2xUbm8zNDU3NHZRbzJjS2FQWE9sckUzYis5WTVPMU9PZEZK?=
+ =?utf-8?B?TCszNUw2aitmSlpRM2F5bGJTa09yMkpxSzUyWk1CYXRkcDlSb05iVi80aDZZ?=
+ =?utf-8?B?RXBiM05wdUhWY2Z3WUNLemU2ZmJ6aGw3NitBd0Jxb1BBdHR6ZWxJQlFKbGU3?=
+ =?utf-8?B?UEtoWWdwNmpEeVlYUUgrSFk4V0RuQ1d3Y0NCT05mTzJxMTNwNUJsRVB3Q285?=
+ =?utf-8?B?NUk0RjJFT09Vb2lLdjdiZWUyNXdaZVYzMTd6NGZ2RWpiMEFibXJ4Vjd6THd1?=
+ =?utf-8?B?TktOT0xEKy9kaDFwTjB3TGFQYzNKUEQzaGVnSjFhZUIwQzk3MHRNYWppU0w5?=
+ =?utf-8?B?SDdySzNJMVlZcTJNaEtaT0NDK3lTSS9yanZKQnFNSmNiMnVuK2VucElzUXk4?=
+ =?utf-8?B?UmtsZDYzaGFXK2JZa3RzMWl4STRaYXIva1FGSXYrc1hrL0RSeFpMNzMwMUhu?=
+ =?utf-8?B?bkVPWENWQktoZ2kzMXlBaCsrUmJCTUZMbTBtL1VuZDhYZzFsYzM2MDVCbUw3?=
+ =?utf-8?B?Z1RoSmJNNzdpVXJDWnlyTXY5VDdNcU5sUlJicmdBWTlTS0NpdjBaS2N4SlRq?=
+ =?utf-8?B?aUlHUS9ObGxUTklEVFQwV2VYS2NFOURxNFVHTUJoV0R1SXhyY2dJdEUvOTlX?=
+ =?utf-8?B?dmlFMjk4SWZ4MWZURnJzOHNOU2poUCtXNzVQN1lxQlV3NDRiRGRHUDFuQVNq?=
+ =?utf-8?B?UFJoK2pFUzdWY0I5MzYxU2ljUy9RSWhqMUx5RU1SOUZuL2VGV0d1ZW43ZGFX?=
+ =?utf-8?B?Qjk3US9YTDRUMkFwT1ByN0hMVUFnVUtjL3ArYlhPeGE2VEk0Ty9oSHQ3cXRt?=
+ =?utf-8?B?ZDNmRk5JNWxINTRad0pMRCtLcVhlTE9LT2RWRmU2T0doR0RwblR0YzdtMWs0?=
+ =?utf-8?B?SzZFVUxlUWM3MG9kcjhLWlBnVU1OMUlvQVBJaG54OXNia3hkdU96ZEY0UGQ1?=
+ =?utf-8?B?UzBDOU1zZzlLbEVjcXc5cmMrZVFnSDJpTEp6c0VhTERyclNwSmk2a0hUNk1V?=
+ =?utf-8?B?VVU3QldSNHg1aGd5ZmhnWlBvbTNSV1F6bTlQNHdiR0RVM0NMVVFyZlMvTlNm?=
+ =?utf-8?B?NDhKSkFzNmduK2RwMmwwYzZqVVBYZ2xHMzN6Wjg0dzlMOE5UMXYyOUlRL3Zv?=
+ =?utf-8?B?STFGcDNWNEkwVVo5U1BvazFoc0x4cGFHaHhZSGxFanU2dGRCdHpYSHVHTUNz?=
+ =?utf-8?B?Ynh3YTlOMHhJK1d2TVBzN1A2TWZGSlhzMi9QUWZmMUpxSkVmTEoxWElWeVp5?=
+ =?utf-8?B?Y2Nna0lRNm5OS1QzOHorVVkzNTVOdGxSMk5ZMG41SXZGUVZJY3NwYU93cUVr?=
+ =?utf-8?B?bDVCTTQ0YjRrYjViMWRNZFlzVHFuUUtWOWhhUlN1VjVCQ2F5dkZJdldJaWhV?=
+ =?utf-8?B?a2I2WnhwTzZYaVE1Rjd0dWRJaTFPbTZUYU1uazAvNU5pd2xmOTN0MXZKdEJp?=
+ =?utf-8?B?cU12ZFF6T2xVVEFxbVJ5TVpBb3hvbU04cFlleUxZbU50RU9WNE51WjJLNXNR?=
+ =?utf-8?B?T0ZldzE0VDBpR0s2QVpPVlM1akxvTVJKRU5ycy9GRFI4T1h6ek13bFRqRGhk?=
+ =?utf-8?B?OThSTHFha1pzMmQyN0MxTy9QSGcrSjN4YzBCOTNtaFY1ZkJIZldtTUlKcWNB?=
+ =?utf-8?B?RS9RaVJKRDlsaWlPZG9uNzlsa3VONzVYVXRTd1M4cW1yUmR6dTR2TjlrdGxj?=
+ =?utf-8?B?UUp2WlBhUWNSeEw4ZXYvNnpKQmFYRi9seUVnWFA3UG5iVm54a0FSYzRmcStU?=
+ =?utf-8?B?MHB0L21pMmJmcXp0R0FQU3BVbEo4cTFmUHpQRzR6bnkvZVBKQ0sxWmZSYjZL?=
+ =?utf-8?B?MW52cFFWNWg2ZU1EOE94eWpBWEl1S0NqSE50NGo3T0xRa1VqeHFiMWE0RDdq?=
+ =?utf-8?B?VlNhS0p1MGI4dHN1TDEwSmhDc2JkUXd4MFIzVmVmcUoxQ0lweUwvcEIzWWxC?=
+ =?utf-8?B?TWpMUkRjSUFEbGwrSjlmZm9zUjdrcHZrbUZpUjEwVmk1bHMwWlRkdFBRdkNn?=
+ =?utf-8?B?THpxWC93OFRraGJyQmRYTlBZN0hVTmNjMnorRzNzQm9VQm0vRW5xanF0czJR?=
+ =?utf-8?B?VDNuZHV0dVdDNnIxaFVTVHpUY2syUmxqcVIwV0trYjZmSnVCQ1pMaXZnU1kz?=
+ =?utf-8?B?ekZWajFyQ2N4REFCczZJc2h3aWpDenhRVXZyTXh5bzRKdExVWlJBbHkybUtN?=
+ =?utf-8?B?SkE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ed0c756-1be2-4ed3-5aeb-08dddb11a05d
+X-MS-Exchange-CrossTenant-AuthSource: CYXPR11MB8729.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2025 09:04:51.1603
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AmsZVmBSUDH81K3XwtPNxkgDY4FfYgMFoRDEZ4q64+/2o/gu9qtWhAe8GLsPzWertu/14Ym9mTFNq1qPeAzlaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7244
+X-OriginatorOrg: intel.com
 
-On Thu, Aug 14, 2025 at 06:45:04AM +0000, Jiawei Zhao wrote:
-> When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-> optimization, the compiler will generate SIB addressing mode for global
-> array and PC-relative addressing mode for global variable,
-> e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
+
+
+On 8/8/2025 4:16 AM, Sagi Shahar wrote:
+> From: Roger Wang <runanwang@google.com>
 > 
-> In this patch:
-> - add usdt_o2 test case to cover SIB addressing usdt argument spec
->   handling logic
-
-hi,
-on my setup (gcc15) the test generates ust register argument:
-
-  stapsdt              0x0000002a       NT_STAPSDT (SystemTap probe descriptors)
-    Provider: test
-    Name: usdt1
-    Location: 0x00000000007677ce, Base: 0x00000000035bc728, Semaphore: 0x0000000000000000
-    Arguments: 8@%rax
-
-
-  7677c6:       48 8b 04 c5 20 49 9c    mov    0x39c4920(,%rax,8),%rax
-  7677cd:       03
-  7677ce:       90                      nop
-
-
-I'm not sure if there's reliable solution to generate SIB argument from gcc,
-maybe we could generate all in assembly, but that might get complicated
-
-jirka
-
-
+> Adds a test for TDG.VP.INFO.
 > 
-> Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
+> Introduce __tdx_module_call() that does needed shuffling from function
+> parameters to registers used by the TDCALL instruction that is used by the
+> guest to communicate with the TDX module. The first function parameter is
+> the leaf number indicating which guest side function should be run, for
+> example, TDG.VP.INFO.
+> 
+> The guest uses new __tdx_module_call() to call TDG.VP.INFO to obtain TDX
+> TD execution environment information from the TDX module. All returned
+> registers are passed back to the host that verifies values for
+> correctness.
+> 
+> Co-developed-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Roger Wang <runanwang@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+
+Duplicated SOB. Please change the order according to submmitting-patches.rst.
+And check the whole series for such SOB issue.
+
 > ---
->  tools/testing/selftests/bpf/Makefile          |  1 +
->  .../selftests/bpf/prog_tests/usdt_o2.c        | 69 +++++++++++++++++++
->  .../selftests/bpf/progs/test_usdt_o2.c        | 37 ++++++++++
->  3 files changed, 107 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
+>  .../selftests/kvm/include/x86/tdx/tdcall.h    |  19 +++
+>  .../selftests/kvm/include/x86/tdx/tdx.h       |   5 +
+>  .../selftests/kvm/lib/x86/tdx/tdcall.S        |  68 +++++++++
+>  tools/testing/selftests/kvm/lib/x86/tdx/tdx.c |  27 ++++
+>  tools/testing/selftests/kvm/x86/tdx_vm_test.c | 133 +++++++++++++++++-
+>  5 files changed, 251 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 4863106034df..24ff1a329625 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -760,6 +760,7 @@ TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
->  TRUNNER_BPF_CFLAGS :=
->  $(eval $(call DEFINE_TEST_RUNNER,test_maps))
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h b/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
+> index e7440f7fe259..ab1a97a82fa9 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
+> @@ -32,4 +32,23 @@ struct tdx_hypercall_args {
+>  /* Used to request services from the VMM */
+>  u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
 >  
+> +/*
+> + * Used to gather the output registers values of the TDCALL and SEAMCALL
+
+This series only uses this struct to gather values for TDCALL. Please remove
+the "SEAMCALL" for accuracy.
+
+> + * instructions when requesting services from the TDX module.
+> + *
+> + * This is a software only structure and not part of the TDX module/VMM ABI.
+> + */
+> +struct tdx_module_output {
+> +	u64 rcx;
+> +	u64 rdx;
+> +	u64 r8;
+> +	u64 r9;
+> +	u64 r10;
+> +	u64 r11;
+> +};
 > +
->  # Define test_verifier test runner.
->  # It is much simpler than test_maps/test_progs and sufficiently different from
->  # them (e.g., test.h is using completely pattern), that it's worth just
-> diff --git a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
-> new file mode 100644
-> index 000000000000..f02dcf5188ab
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
-> @@ -0,0 +1,69 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2025 Jiawei Zhao <phoenix500526@163.com>. */
-> +#include <test_progs.h>
+> +/* Used to communicate with the TDX module */
+> +u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> +		      struct tdx_module_output *out);
 > +
-> +#include "../sdt.h"
-> +#include "test_usdt_o2.skel.h"
+>  #endif // SELFTESTS_TDX_TDCALL_H
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> index 060158cb046b..801ca879664e 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> @@ -6,6 +6,8 @@
+>  
+>  #include "kvm_util.h"
+>  
+> +#define TDG_VP_INFO 1
 > +
-> +#if defined(__GNUC__) && !defined(__clang__)
-> +__attribute__((optimize("O2")))
-> +#endif
+>  #define TDG_VP_VMCALL_GET_TD_VM_CALL_INFO 0x10000
+>  #define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
+>  
+> @@ -31,5 +33,8 @@ uint64_t tdg_vp_vmcall_ve_request_mmio_write(uint64_t address, uint64_t size,
+>  uint64_t tdg_vp_vmcall_instruction_cpuid(uint32_t eax, uint32_t ecx,
+>  					 uint32_t *ret_eax, uint32_t *ret_ebx,
+>  					 uint32_t *ret_ecx, uint32_t *ret_edx);
+> +uint64_t tdg_vp_info(uint64_t *rcx, uint64_t *rdx,
+> +		     uint64_t *r8, uint64_t *r9,
+> +		     uint64_t *r10, uint64_t *r11);
+>  
+>  #endif // SELFTEST_TDX_TDX_H
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S b/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
+> index b10769d1d557..c393a0fb35be 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
+> @@ -91,5 +91,73 @@ __tdx_hypercall:
+>  	pop %rbp
+>  	ret
+>  
+> +#define TDX_MODULE_rcx 0 /* offsetof(struct tdx_module_output, rcx) */
+> +#define TDX_MODULE_rdx 8 /* offsetof(struct tdx_module_output, rdx) */
+> +#define TDX_MODULE_r8 16 /* offsetof(struct tdx_module_output, r8) */
+> +#define TDX_MODULE_r9 24 /* offsetof(struct tdx_module_output, r9) */
+> +#define TDX_MODULE_r10 32 /* offsetof(struct tdx_module_output, r10) */
+> +#define TDX_MODULE_r11 40 /* offsetof(struct tdx_module_output, r11) */
 > +
-> +#define test_value 0xFEDCBA9876543210ULL
-> +#define SEC(name) __attribute__((section(name), used))
+> +.globl __tdx_module_call
+> +.type __tdx_module_call, @function
+> +__tdx_module_call:
+> +	/* Set up stack frame */
+> +	push %rbp
+> +	movq %rsp, %rbp
 > +
-> +int lets_test_this(int);
-> +static volatile __u64 array[1] = {test_value};
+> +	/* Callee-saved, so preserve it */
+> +	push %r12
 > +
-> +static __always_inline void trigger_func(void)
+> +	/*
+> +	 * Push output pointer to stack.
+> +	 * After the operation, it will be fetched into R12 register.
+> +	 */
+> +	push %r9
+> +
+> +	/* Mangle function call ABI into TDCALL/SEAMCALL ABI: */
+> +	/* Move Leaf ID to RAX */
+> +	mov %rdi, %rax
+> +	/* Move input 4 to R9 */
+> +	mov %r8,  %r9
+> +	/* Move input 3 to R8 */
+> +	mov %rcx, %r8
+> +	/* Move input 1 to RCX */
+> +	mov %rsi, %rcx
+> +	/* Leave input param 2 in RDX */
+> +
+> +	tdcall
+> +
+> +	/*
+> +	 * Fetch output pointer from stack to R12 (It is used
+> +	 * as temporary storage)
+> +	 */
+> +	pop %r12
+> +
+> +	/*
+> +	 * Since this macro can be invoked with NULL as an output pointer,
+> +	 * check if caller provided an output struct before storing output
+> +	 * registers.
+> +	 *
+> +	 * Update output registers, even if the call failed (RAX != 0).
+> +	 * Other registers may contain details of the failure.
+> +	 */
+> +	test %r12, %r12
+> +	jz .Lno_output_struct
+> +
+> +	/* Copy result registers to output struct: */
+> +	movq %rcx, TDX_MODULE_rcx(%r12)
+> +	movq %rdx, TDX_MODULE_rdx(%r12)
+> +	movq %r8,  TDX_MODULE_r8(%r12)
+> +	movq %r9,  TDX_MODULE_r9(%r12)
+> +	movq %r10, TDX_MODULE_r10(%r12)
+> +	movq %r11, TDX_MODULE_r11(%r12)
+> +
+> +.Lno_output_struct:
+> +	/* Restore the state of R12 register */
+> +	pop %r12
+> +
+> +	pop %rbp
+> +	ret
+> +
+>  /* Disable executable stack */
+>  .section .note.GNU-stack,"",%progbits
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> index fb391483d2fa..ab6fd3d7ae4b 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> @@ -162,3 +162,30 @@ uint64_t tdg_vp_vmcall_instruction_cpuid(uint32_t eax, uint32_t ecx,
+>  
+>  	return ret;
+>  }
+> +
+> +uint64_t tdg_vp_info(uint64_t *rcx, uint64_t *rdx,
+> +		     uint64_t *r8, uint64_t *r9,
+> +		     uint64_t *r10, uint64_t *r11)
 > +{
-> +	/* Base address + offset + (index * scale) */
-> +	for (volatile int i = 0; i <= 0; i++)
-> +		STAP_PROBE1(test, usdt1, array[i]);
+> +	struct tdx_module_output out;
+> +	uint64_t ret;
+> +
+> +	memset(&out, 0, sizeof(struct tdx_module_output));
+> +
+> +	ret = __tdx_module_call(TDG_VP_INFO, 0, 0, 0, 0, &out);
+> +
+> +	if (rcx)
+> +		*rcx = out.rcx;
+> +	if (rdx)
+> +		*rdx = out.rdx;
+> +	if (r8)
+> +		*r8 = out.r8;
+> +	if (r9)
+> +		*r9 = out.r9;
+> +	if (r10)
+> +		*r10 = out.r10;
+> +	if (r11)
+> +		*r11 = out.r11;
+> +
+> +	return ret;
+> +}
+> diff --git a/tools/testing/selftests/kvm/x86/tdx_vm_test.c b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
+> index b6ef0348746c..82acc17a66ab 100644
+> --- a/tools/testing/selftests/kvm/x86/tdx_vm_test.c
+> +++ b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
+> @@ -1038,6 +1038,135 @@ void verify_host_reading_private_mem(void)
+>  	printf("\t ... PASSED\n");
+>  }
+>  
+> +/*
+> + * Do a TDG.VP.INFO call from the guest
+> + */
+> +void guest_tdcall_vp_info(void)
+> +{
+> +	uint64_t rcx, rdx, r8, r9, r10, r11;
+> +	uint64_t err;
+> +
+> +	err = tdg_vp_info(&rcx, &rdx, &r8, &r9, &r10, &r11);
+> +	tdx_assert_error(err);
+> +
+> +	/* return values to user space host */
+> +	err = tdx_test_report_64bit_to_user_space(rcx);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(rdx);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(r8);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(r9);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(r10);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(r11);
+> +	tdx_assert_error(err);
+> +
+> +	tdx_test_success();
 > +}
 > +
-> +static void basic_sib_usdt(void)
+> +/*
+> + * TDG.VP.INFO call from the guest. Verify the right values are returned
+> + */
+> +void verify_tdcall_vp_info(void)
 > +{
-> +	LIBBPF_OPTS(bpf_usdt_opts, opts);
-> +	struct test_usdt_o2 *skel;
-> +	struct test_usdt_o2__bss *bss;
-> +	int err;
+> +	const struct kvm_cpuid_entry2 *cpuid_entry;
+> +	uint32_t ret_num_vcpus, ret_max_vcpus;
+> +	uint64_t rcx, rdx, r8, r9, r10, r11;
+> +	const int num_vcpus = 2;
+> +	struct kvm_vcpu *vcpus[num_vcpus];
+> +	uint64_t attributes;
+> +	struct kvm_vm *vm;
+> +	int gpa_bits = -1;
+> +	uint32_t i;
 > +
-> +	skel = test_usdt_o2__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
-> +		return;
+> +	vm = td_create();
 > +
-> +	bss = skel->bss;
-> +	bss->my_pid = getpid();
+> +#define TDX_TDPARAM_ATTR_SEPT_VE_DISABLE_BIT	BIT(28)
+> +	/* Setting attributes parameter used by TDH.MNG.INIT to 0x10000000 */
+> +	attributes = TDX_TDPARAM_ATTR_SEPT_VE_DISABLE_BIT;
 > +
-> +	err = test_usdt_o2__attach(skel);
-> +	if (!ASSERT_OK(err, "skel_attach"))
-> +		goto cleanup;
+> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, attributes);
 > +
-> +	/* usdt1 won't be auto-attached */
-> +	opts.usdt_cookie = 0xcafedeadbeeffeed;
-> +	skel->links.usdt1 = bpf_program__attach_usdt(skel->progs.usdt1,
-> +						     0 /*self*/, "/proc/self/exe",
-> +						     "test", "usdt1", &opts);
-> +	if (!ASSERT_OK_PTR(skel->links.usdt1, "usdt1_link"))
-> +		goto cleanup;
+> +	for (i = 0; i < num_vcpus; i++)
+> +		vcpus[i] = td_vcpu_add(vm, i, guest_tdcall_vp_info);
 > +
-> +	trigger_func();
+> +	td_finalize(vm);
 > +
-> +	ASSERT_EQ(bss->usdt1_called, 1, "usdt1_called");
-> +	ASSERT_EQ(bss->usdt1_cookie, 0xcafedeadbeeffeed, "usdt1_cookie");
-> +	ASSERT_EQ(bss->usdt1_arg_cnt, 1, "usdt1_arg_cnt");
-> +	ASSERT_EQ(bss->usdt1_arg, test_value, "usdt1_arg");
-> +	ASSERT_EQ(bss->usdt1_arg_ret, 0, "usdt1_arg_ret");
-> +	ASSERT_EQ(bss->usdt1_arg_size, sizeof(array[0]), "usdt1_arg_size");
+> +	printf("Verifying TDG.VP.INFO call:\n");
 > +
-> +cleanup:
-> +	test_usdt_o2__destroy(skel);
-> +}
+> +	/* Get KVM CPUIDs for reference */
 > +
+> +	for (i = 0; i < num_vcpus; i++) {
+> +		struct kvm_vcpu *vcpu = vcpus[i];
 > +
+> +		cpuid_entry = vcpu_get_cpuid_entry(vcpu, 0x80000008);
+> +		TEST_ASSERT(cpuid_entry, "CPUID entry missing\n");
+> +		gpa_bits = (cpuid_entry->eax & GENMASK(23, 16)) >> 16;
+> +		TEST_ASSERT_EQ((1UL << (gpa_bits - 1)), tdx_s_bit);
 > +
-> +void test_usdt_o2(void)
-> +{
-> +	basic_sib_usdt();
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_usdt_o2.c b/tools/testing/selftests/bpf/progs/test_usdt_o2.c
-> new file mode 100644
-> index 000000000000..14602aa54578
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_usdt_o2.c
-> @@ -0,0 +1,37 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
+> +		/* Wait for guest to report rcx value */
+> +		tdx_run(vcpu);
+> +		rcx = tdx_test_read_64bit_report_from_guest(vcpu);
 > +
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/usdt.bpf.h>
+> +		/* Wait for guest to report rdx value */
+> +		tdx_run(vcpu);
+> +		rdx = tdx_test_read_64bit_report_from_guest(vcpu);
 > +
-> +int my_pid;
+> +		/* Wait for guest to report r8 value */
+> +		tdx_run(vcpu);
+> +		r8 = tdx_test_read_64bit_report_from_guest(vcpu);
 > +
-> +int usdt1_called;
-> +u64 usdt1_cookie;
-> +int usdt1_arg_cnt;
-> +int usdt1_arg_ret;
-> +u64 usdt1_arg;
-> +int usdt1_arg_size;
+> +		/* Wait for guest to report r9 value */
+> +		tdx_run(vcpu);
+> +		r9 = tdx_test_read_64bit_report_from_guest(vcpu);
 > +
-> +SEC("usdt")
-> +int usdt1(struct pt_regs *ctx)
-> +{
-> +	long tmp;
+> +		/* Wait for guest to report r10 value */
+> +		tdx_run(vcpu);
+> +		r10 = tdx_test_read_64bit_report_from_guest(vcpu);
 > +
-> +	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
-> +		return 0;
+> +		/* Wait for guest to report r11 value */
+> +		tdx_run(vcpu);
+> +		r11 = tdx_test_read_64bit_report_from_guest(vcpu);
 > +
-> +	__sync_fetch_and_add(&usdt1_called, 1);
+> +		ret_num_vcpus = r8 & 0xFFFFFFFF;
+> +		ret_max_vcpus = (r8 >> 32) & 0xFFFFFFFF;
 > +
-> +	usdt1_cookie = bpf_usdt_cookie(ctx);
-> +	usdt1_arg_cnt = bpf_usdt_arg_cnt(ctx);
-> +
-> +	usdt1_arg_ret = bpf_usdt_arg(ctx, 0, &tmp);
-> +	usdt1_arg = (u64)tmp;
-> +	usdt1_arg_size = bpf_usdt_arg_size(ctx, 0);
-> +
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-> -- 
-> 2.43.0
-> 
-> 
+> +		/* first bits 5:0 of rcx represent the GPAW */
+> +		TEST_ASSERT_EQ(rcx & 0x3F, gpa_bits);
+> +		/* next 63:6 bits of rcx is reserved and must be 0 */
+> +		TEST_ASSERT_EQ(rcx >> 6, 0);
+> +		TEST_ASSERT_EQ(rdx, attributes);
+> +		TEST_ASSERT_EQ(ret_num_vcpus, num_vcpus);
+> +		TEST_ASSERT_EQ(ret_max_vcpus, vm_check_cap(vm, KVM_CAP_MAX_VCPUS));
+> +		/* VCPU_INDEX = i */
+> +		TEST_ASSERT_EQ(r9, i);
+
+The format for r9 is
+- 31:0
+   VCPU_INDEX
+- 62:32
+   Reserved to 0
+
+Maybe add the check for reserved bits as other registers
+
 
