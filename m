@@ -1,224 +1,131 @@
-Return-Path: <linux-kselftest+bounces-38960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C0C2B26400
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 13:17:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BC1FB26428
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 13:24:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56F251720CC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 11:17:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F5073B7027
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 11:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44AB2264614;
-	Thu, 14 Aug 2025 11:17:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA79C2EB5DA;
+	Thu, 14 Aug 2025 11:24:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J6mr9Ymj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a1CUhn+Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623071474CC;
-	Thu, 14 Aug 2025 11:17:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196A22EA742;
+	Thu, 14 Aug 2025 11:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755170235; cv=none; b=AGqXFQCfrWtw+r4TCPGz4+M8GMXa7tthgPneofWfwZ7DwrRTgnNfv5rIl8hNcawyUwcbtifyLtwqYU0q5lKXXIMTvjthD2o6t+qin1QaiTFVtks3l2P9E2URpEiaYIsfleoURZ8XUfQXWFNRCcq3uYZe1M2lYBr6SZPKdWzdtXc=
+	t=1755170650; cv=none; b=Lc6tJNFylVVnXTrGgtxvIZi00wyjRBThd9KVE3uolTXMd1YC/Y5BlbDSa55bOBIfM6tScOpqkna/R+5oceCh4baLwFZ4jvRnHx/N7kb5nEYLfxSfIHdLuT0nQmVK2i6EmU3p5NqzJvvxB+dJaWa4eEiXMAr9wcRjhMcHfcaCLAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755170235; c=relaxed/simple;
-	bh=TL2DIflxlb+3IICNHLU8/yPYEmvqO6pplGEDMmxOSnk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fdVKh1y2Mb76xszzAVdhqqVKp5SfwziQxpdqniuIxO2adWG2TIUKiYaH926nxw2d/XmWPdMRr8RQdBVfyw68P0OsYUnw9ymBLGxy0LipcubeNerPGTKfbSudh63jY7H2GXRaDze6L0KwvnJsC5AUVmL9Zz0P+NpNkP2HpV8W/B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J6mr9Ymj; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755170233; x=1786706233;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TL2DIflxlb+3IICNHLU8/yPYEmvqO6pplGEDMmxOSnk=;
-  b=J6mr9YmjRpl1r1xxrdoD33tLOaTRViFnf7JKV1/VwJ3X17lb0vqy6o33
-   cBFC13jNkSlnY5JldALqydhBvFUpshIpy3d1sX9uWmOja7oqF0e3sWQjL
-   1QXXiKS2zfPB9TmjGMoDKVJgAz7C/RZ3vVdWGTrw59rz7jGczk6EoAJbE
-   X/EdSmuCLpv329o3aV/YJg7pEQdkC+5XrhcNihr4UEWLXhEU7EtC5Y1fI
-   ofXpOxpOJfD2qhNi1su/wqoMFqIA/Qc9b56d9cD+xhK13KwHrHeVzWalC
-   ApTW0xiY8sY7P1rZQ+njPOHveIZpe+SbWk2Ns4kbAhap2Y+E02REBxXgf
-   g==;
-X-CSE-ConnectionGUID: ITh7pIRpTnOTV8MLzkmCOA==
-X-CSE-MsgGUID: QNMSZgNWQOCdzVM3TOaHnA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57404831"
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="57404831"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 04:17:12 -0700
-X-CSE-ConnectionGUID: NW122BnVRuOjHQPb4R6/EA==
-X-CSE-MsgGUID: pefCXJucQIKTQSomNpdWEA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="166228833"
-Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 04:17:09 -0700
-Message-ID: <fa61f808-ffd0-46cd-9e59-1a4e743bea24@linux.intel.com>
-Date: Thu, 14 Aug 2025 19:17:06 +0800
+	s=arc-20240116; t=1755170650; c=relaxed/simple;
+	bh=OSgBRSjGQ236uYu98tlTjJY4/7HYkdj4MUaECGXODz4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XnTfQh3ZY7+DJ6lbbzVFFuA1QUQyiVSMO07sg9cFL6EkvUw33LRbjLep1Y16DA73X0XfIew2fJWNuP36P6tyRpX1bYqfuDnHo4OcJsVhS32MZUWnlh+ul9mdKu34CzF036Ux9Mn5qDLcr//Czu0HWbYbGMR79gULtB2HY/xgwEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a1CUhn+Q; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-55ce526a25eso822256e87.3;
+        Thu, 14 Aug 2025 04:24:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755170647; x=1755775447; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c8YVDPfS039bLvzm0DeSH6D9y/NnMaiZTYgV49JknR8=;
+        b=a1CUhn+Q7NabHSxfxeZVc/XcpFK5sQ1oUo/3AAEXkY/cy3TlswOiaemDkccvDvBqRu
+         1VyvKIPowM/e1Wf51kJmx81QRTWi7TzdstqbOSoh7sRZaI041S4ArkBSZlgAjuQQ/LhF
+         bJFhItY5fTDD6oHV962RATkywg7cwrzdXxUR1+oE726EkyXubcyTx+JJrgMzP1+IpvkG
+         xinJN+me0iRNsSA2W5RZMFeo3H155FVMnVgXT7hMNT2A5ryIrryMhK0lGTleVCB1PTG8
+         y+OGi6IVoUguNqBBgZpKnxQu5QDEj5JWs6WLAbDJARZs2O+Ja5klxilCUQpEpIQGL2wM
+         bPKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755170647; x=1755775447;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c8YVDPfS039bLvzm0DeSH6D9y/NnMaiZTYgV49JknR8=;
+        b=fRUFGjG3dWhvhbNLXZsfz5PevRtCvpM3hhwI/OlicxBN2hydBAYJKdGpnsmS/Q14vy
+         y/GAHG+CsHsB7nHnCEp5O87QASC18QdKKuvlI/ifMb4n6N8IUA8sBZ3OrgbkuSwMVnfP
+         vqNyWakoI8jsGOklSIw4K2kXkHX2lO764LIdyl/I4tIoD02OgLJAMYdry7uEPne5xWDV
+         GjqsgJXlzCeHFAIxHc7dENRmalzPzs1lR7+5aa/VIFXouOzpAc0ZTM1G9JFL4C5tyIXv
+         B/c2Kt01s4Y5C//eyqXNtY+Qysj6S/vBMMF658d54JOZD3Xe7gZUiSoNbDFBA1Hs6Ru6
+         qDVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQf5xW5kZWYcxgDDGoaWhY5G8vdjtikz7XfwBqESjRH0rX2R8E1NkG3G8g/HB246KJKqpPoQ55Yn+kDeH3@vger.kernel.org, AJvYcCWBcuPZ62eyHlowN6FmQ5Of4/Y+134svGw3y/Urjes6oVBsjEVYyGPx6UP6lyJYZ85twVk=@vger.kernel.org, AJvYcCWGUUABjtJ4K818qVHvbM/IeRmfofx0qiZSDzAVJvSexcnaoHReTBi7fxci6ZfHvWWesnNgalTLTiN9bG2HTKH/@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRSI2958dWmmo2bnecJWr8kvrzoPAAMHxW4VLqHWlOGzbjYj3b
+	+eoNSgybQknslYjIVWklP+4y7PW5HGjHPLvyrwUcTQi1bXvv0zh7TiBAW2kI8o23o5WSBmEUq4C
+	8XZ6Nyr0p+9Dhx0CAhMqaNGuVgZkckHU=
+X-Gm-Gg: ASbGncuq0i20N4FXBOhEismlebcxc8VlCvNxN4eyjqDmVRDg/ggzvr9nUAtj5Qzeyrz
+	65B5cpQ2onZryipzqc0Bk8so9x9DTZeor2Erate5qU21ouDpZSnba8lkDu4mymf/w9VvncKZFPy
+	ajUTr7K7oJZS2adS486j9Qk9DHsbS+ypC6k7+gulFWK9jrYzaZKFmAZsw0XmtoFp0JttHSf1hhV
+	d25XOxW4pVL9G5o24dmmkk7DkL+raCIBCguWZ4=
+X-Google-Smtp-Source: AGHT+IFI2kqWLzZtRfGxmJTfQ6cNWdna9hNxp19wpWoh6Z4+RelmSZ3rW47xzxqumwdgnMr18PDAqSFpOeMQnYta35M=
+X-Received: by 2002:a05:6512:1109:b0:55b:5863:6297 with SMTP id
+ 2adb3069b0e04-55ce5029ca4mr858873e87.28.1755170646693; Thu, 14 Aug 2025
+ 04:24:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 21/30] KVM: selftests: TDX: Verify the behavior when
- host consumes a TD private memory
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
- Andrew Jones <ajones@ventanamicro.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Erdem Aktas <erdemaktas@google.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
- <ira.weiny@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20250807201628.1185915-1-sagis@google.com>
- <20250807201628.1185915-22-sagis@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20250807201628.1185915-22-sagis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250813152958.3107403-1-kafai.wan@linux.dev> <20250813152958.3107403-3-kafai.wan@linux.dev>
+ <eb6f9ba4acccc7685596a8f1b282667a43d51ca8.camel@gmail.com>
+In-Reply-To: <eb6f9ba4acccc7685596a8f1b282667a43d51ca8.camel@gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Thu, 14 Aug 2025 13:23:55 +0200
+X-Gm-Features: Ac12FXyFNjFhK511o2F4JY2E85oYqMlyMJBpIFl9oCy6TDbcAhF5fcRJbIbWwQY
+Message-ID: <CANk7y0hQWOL3OW8Ok4e-kp7Brn5Zq6H5+EfS=mVtoVd+AUxZmA@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add socket filter attach test
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: KaFai Wan <kafai.wan@linux.dev>, puranjay@kernel.org, xukuohai@huaweicloud.com, 
+	ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org, 
+	mrpre@163.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 8/8/2025 4:16 AM, Sagi Shahar wrote:
-> From: Ryan Afranji <afranji@google.com>
+On Thu, Aug 14, 2025 at 2:35=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
 >
-> The test checks that host can only read fixed values when trying to
-> access the guest's private memory.
+> On Wed, 2025-08-13 at 23:29 +0800, KaFai Wan wrote:
+> > This test verifies socket filter attachment functionality on architectu=
+res
+> > supporting either BPF JIT compilation or the interpreter.
+> >
+> > It specifically validates the fallback to interpreter behavior when JIT=
+ fails,
+> > particularly targeting ARMv6 devices with the following configuration:
+> >   # CONFIG_BPF_JIT_ALWAYS_ON is not set
+> >   CONFIG_BPF_JIT_DEFAULT_ON=3Dy
+> >
+> > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+> > ---
 >
-> Signed-off-by: Ryan Afranji <afranji@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> ---
->   tools/testing/selftests/kvm/x86/tdx_vm_test.c | 83 ++++++++++++++++++-
->   1 file changed, 82 insertions(+), 1 deletion(-)
+> This test should not be landed as-is, first let's do an analysis for
+> why the program fails to jit compile on arm.
 >
-> diff --git a/tools/testing/selftests/kvm/x86/tdx_vm_test.c b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-> index 2f75f12d2a44..b6ef0348746c 100644
-> --- a/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-> +++ b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-> @@ -959,6 +959,85 @@ void verify_td_cpuid_tdcall(void)
->   	printf("\t ... PASSED\n");
->   }
->   
-> +/*
-> + * Shared variables between guest and host for host reading private mem test
-> + */
-> +static uint64_t tdx_test_host_read_private_mem_addr;
-> +#define TDX_HOST_READ_PRIVATE_MEM_PORT_TEST 0x53
-> +
-> +void guest_host_read_priv_mem(void)
-> +{
-> +	uint64_t placeholder = 0;
-> +	uint64_t ret;
-> +
-> +	/* Set value */
-> +	*((uint32_t *)tdx_test_host_read_private_mem_addr) = 0xABCD;
-> +
-> +	/* Exit so host can read value */
-> +	ret = tdg_vp_vmcall_instruction_io(TDX_HOST_READ_PRIVATE_MEM_PORT_TEST,
-> +					   4, PORT_WRITE, &placeholder);
-> +	tdx_assert_error(ret);
-> +
-> +	/* Update guest_var's value and have host reread it. */
-> +	*((uint32_t *)tdx_test_host_read_private_mem_addr) = 0xFEDC;
-> +
-> +	tdx_test_success();
-> +}
-> +
-> +void verify_host_reading_private_mem(void)
-> +{
-> +	uint64_t second_host_read;
-> +	uint64_t first_host_read;
-> +	struct kvm_vcpu *vcpu;
-> +	vm_vaddr_t test_page;
-> +	uint64_t *host_virt;
-> +	struct kvm_vm *vm;
-> +
-> +	vm = td_create();
-> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
-> +	vcpu = td_vcpu_add(vm, 0, guest_host_read_priv_mem);
-> +
-> +	test_page = vm_vaddr_alloc_page(vm);
-> +	TEST_ASSERT(test_page < BIT_ULL(32),
-> +		    "Test address should fit in 32 bits so it can be sent to the guest");
+> I modified kernel to dump BPF program before jit attempt, but don't
+> see anything obviously wrong with it.  The patch to get disassembly
+> and disassembly itself with resolved kallsyms are attached.
+>
+> Can someone with access to ARM vm/machine take a looks at this?
+> Puranjay, Xu, would you have some time?
 
-I didn't understand it.
-Could you elaborate a bit?
+Hi Eduard,
+Thanks for the email, I will look into it.
 
-> +
-> +	host_virt = addr_gva2hva(vm, test_page);
-> +	TEST_ASSERT(host_virt,
-> +		    "Guest address not found in guest memory regions\n");
-> +
-> +	tdx_test_host_read_private_mem_addr = test_page;
-> +	sync_global_to_guest(vm, tdx_test_host_read_private_mem_addr);
-> +
-> +	td_finalize(vm);
-> +
-> +	printf("Verifying host's behavior when reading TD private memory:\n");
+Let me try to boot a kernel on ARMv6 qemu and reproduce this.
 
-When the host accesses host_virt, it's not accessing the same page of the
-private page of the TD, so it's not accurate to say the host is reading or
-consuming TD private memory.
-
-> +
-> +	tdx_run(vcpu);
-> +	tdx_test_assert_io(vcpu, TDX_HOST_READ_PRIVATE_MEM_PORT_TEST,
-> +			   4, PORT_WRITE);
-> +	printf("\t ... Guest's variable contains 0xABCD\n");
-> +
-> +	/* Host reads guest's variable. */
-> +	first_host_read = *host_virt;
-> +	printf("\t ... Host's read attempt value: %lu\n", first_host_read);
-> +
-> +	/* Guest updates variable and host rereads it. */
-> +	tdx_run(vcpu);
-> +	printf("\t ... Guest's variable updated to 0xFEDC\n");
-> +
-> +	second_host_read = *host_virt;
-> +	printf("\t ... Host's second read attempt value: %lu\n",
-> +	       second_host_read);
-> +
-> +	TEST_ASSERT(first_host_read == second_host_read,
-> +		    "Host did not read a fixed pattern\n");
-> +
-> +	printf("\t ... Fixed pattern was returned to the host\n");
-> +
-> +	kvm_vm_free(vm);
-> +	printf("\t ... PASSED\n");
-> +}
-> +
->   int main(int argc, char **argv)
->   {
->   	ksft_print_header();
-> @@ -966,7 +1045,7 @@ int main(int argc, char **argv)
->   	if (!is_tdx_enabled())
->   		ksft_exit_skip("TDX is not supported by the KVM. Exiting.\n");
->   
-> -	ksft_set_plan(13);
-> +	ksft_set_plan(14);
->   	ksft_test_result(!run_in_new_process(&verify_td_lifecycle),
->   			 "verify_td_lifecycle\n");
->   	ksft_test_result(!run_in_new_process(&verify_report_fatal_error),
-> @@ -993,6 +1072,8 @@ int main(int argc, char **argv)
->   			 "verify_mmio_writes\n");
->   	ksft_test_result(!run_in_new_process(&verify_td_cpuid_tdcall),
->   			 "verify_td_cpuid_tdcall\n");
-> +	ksft_test_result(!run_in_new_process(&verify_host_reading_private_mem),
-> +			 "verify_host_reading_private_mem\n");
->   
->   	ksft_finished();
->   	return 0;
-
+Thanks,
+Puranjay
 
