@@ -1,144 +1,107 @@
-Return-Path: <linux-kselftest+bounces-38925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40C4BB25912
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 03:31:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29CBCB25955
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 03:58:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB8DB7BB065
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 01:29:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42DF25A47D3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 01:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A8719D071;
-	Thu, 14 Aug 2025 01:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E341238166;
+	Thu, 14 Aug 2025 01:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r/G5BgbH"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MBsIxElx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E09156C6F
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Aug 2025 01:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A242A231853;
+	Thu, 14 Aug 2025 01:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755135037; cv=none; b=VZEnqklbXO/FmJXVkIJH8botwl8gcyqKY/Cgvlk4pVYzA6IBucbkXVp3uSKzgb1YZPmJNbbzYl54KRgZdeB/JnWT64g14Sskk6Xo7tJmDTkjyGaO0w+1hj0ySuqun/xb5BmWiASkUowOLX4sxmxymX07GH1Zybyaj+DidvM8ET0=
+	t=1755136698; cv=none; b=udNDMMAG38yZhYQUiT/NFcd2GpMoDpX4tHXz9KwYV8J8Ad+rGUIvYsfzO54rE7lns5CeB9dcl8mFGZ6c6/zEKne/ecSXp1S1kg+YA++lUf50Iw3sKYamvSkcErD3yCH3wCn05Peh166Paly682oykySCVY62uTc1DVr2Gee2H8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755135037; c=relaxed/simple;
-	bh=WbgJ5isNsqVYV5zzaKVbpULuS/3hHjDmri82xKxBaDQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=sT5E7dLP8ykxLb/YMUqgPf7MDJyK2dlgMdFOj8BDFNfeU5UHGdSTTDXzU5qELUOTiLhCKeO7wDAADm6YcoJLkWT8CyrTCvy2j5TNuh2P3L+p+lis3li8o8RG+W2A/Wins4uutWlKFjfqSx2RFvY2l9TqtdFCfOfDf+4YOElhLnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r/G5BgbH; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-24458121274so4638815ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Aug 2025 18:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755135035; x=1755739835; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:user-agent:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4oH/H8Uczj38sjgvka81xmx7klPZUzo+Pao4BcFdNEY=;
-        b=r/G5BgbH01l17L9hLaUr8LrJjHdwJS8TGK0S/8Y8GGcnlxtNzDshxVo7SmLGcBGpS/
-         W2dQoqCIi5WWR+SUID++57ytheg66TiYNnytJ3SyBC19QP3HtH+4wjMHdRJXb8BejCSz
-         FY1V0IBmZ7MUy3+4MMHtZwVDfqisttn0F/S1kpLpdeovqQZqRF7vrvszc2HJh6ArpZJC
-         N8JefQsQSr7lxKfq44kKsaXY4KIGOyofQdDaoCdv1iarj7ye1wzw1RepuQxgO18pDOIA
-         AXlBzLVsdY+9qAWCWhOtEpgKfmnpkiDSxt0KzCnh+EhknRHJzOMT8PSOXggtb8uy0h3q
-         ROlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755135035; x=1755739835;
-        h=cc:to:from:subject:message-id:user-agent:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4oH/H8Uczj38sjgvka81xmx7klPZUzo+Pao4BcFdNEY=;
-        b=eMhJbwWZFi7gI+BxwHlIT2N6zPyTJeYz9Dy1aM3GQ5rnWFQAtgJiTP0OcNufAIU3OP
-         FZ1zZCk7bk/b3uJqJK8dXtvjOPWE3EtNmPPLinQPrq/Bl/CMaEnjjDtJW5wXCvppBk3A
-         6mOqGu313HEc6SOu+huPqVbmufIgVZDVYHx91r47f60h2a4DFzKqAMeF/K/3OY8n3yo+
-         euhe6lBiJrEzgSQ2xFW5uNF69u04vRIo2iIe8GgGzsrbVZR7DDWZdGEMdpvVRwtWcKPt
-         W7+mfYmoaxw/EpPHaCOgC9gekjyPuW4SJ9FPa7pmvZBdYs/I6puBmNLP3z8V39R8fIu4
-         r4AQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWR4hgumboZpcbehXocLnOP4adBtPBb+GeoYLQaAUx7DmhBSuIe/HU0NCKM4Yx/UFWoxgc+1owZDjtUi2MMNf4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxa7hIwdJWNMqfelcK4Eul9j9fxF4Qe5F5/7t1+XeHDKSPQdFZF
-	F1iQuKcfGGLmu5KfDtHrDZ0AZbvhRhKMkxDl18GKI1DMQMX/a97TTyJuZE6zVJgnmnN224jCbiU
-	MJnyZy45s2A==
-X-Google-Smtp-Source: AGHT+IEvtjIjDFf5oUu8XtuvZ66AuDR6piAkpqJV0aQYguAIByySyHcA1rR4otGY+tKdX93cPC7afkFJ2b9b
-X-Received: from pluo13.prod.google.com ([2002:a17:903:4b0d:b0:23f:f074:4148])
- (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:138a:b0:240:4d19:8797
- with SMTP id d9443c01a7336-24458a50a4amr18212045ad.22.1755135035267; Wed, 13
- Aug 2025 18:30:35 -0700 (PDT)
-Date: Wed, 13 Aug 2025 18:30:33 -0700
-In-Reply-To: <aJo7udUoWJt_jLzK@slm.duckdns.org> (Tejun Heo's message of "Mon,
- 11 Aug 2025 08:51:37 -1000")
+	s=arc-20240116; t=1755136698; c=relaxed/simple;
+	bh=q2SGHb3APxGdMTmDmItq4Pu4zI6iiexqPHr9lgOY3DA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ej5YkK2itbnWaz+D0jLsJ9m6VGSg4JeKvQjIHtA44XTrpWXFDjftlpcMH5YgH8ukvf2r2sRMGPlZSoUiafRTJf3H4PK5OitYIeZLqgmv806dkibF0t31+3TKAZh8bldr5k2JQWsw5VZXsaYvBQJh93f5T4JtC10pa1Vvnj4FQDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MBsIxElx; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=OULRM4aV2FRJFBE1gYMM0RJzh8b5jot7eoMGHtiCmGA=; b=MBsIxElxqbQMTdHrM6BcYWZ0+4
+	xcO7DUvbQHekl9JU9h0eEA/acArYZO0/c65dzpp7XBIumGFJqNYBpC68WOoKvWn8IZIeSjwbcvBQ2
+	Bfaag3Z/VQZqmKIdoz8T7OV2W/PKYme6DAPAtt1HIM13lNWvbZlyTRIuKd/2SKxU4kh81c3L2Zo9P
+	ytGu8bkFzPSKdQik9vbNYDAyKncI1gQIZTZJZzS79qYzN8z0qPjP/j8tp/WRh5RcgeYOHEr6tvUsD
+	fEAyXRTq8T+QfnRyP/OFBEYNw00YCRTnHjkdrpGp0T3hcQRPDyabtEoq9K0FC8+lYi3DwHYZ+35aS
+	iRTcK5Xg==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1umNEL-0000000FXu6-0gjV;
+	Thu, 14 Aug 2025 01:58:13 +0000
+Message-ID: <98ed6868-8030-4d10-b66d-c7e3d42886f8@infradead.org>
+Date: Wed, 13 Aug 2025 18:58:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250805032940.3587891-4-ynaffit@google.com> <20250805032940.3587891-5-ynaffit@google.com>
- <aJo7udUoWJt_jLzK@slm.duckdns.org>
-User-Agent: mu4e 1.12.9; emacs 30.1
-Message-ID: <dbx8qzxe7kqu.fsf@ynaffit-andsys.c.googlers.com>
-Subject: Re: [RFC PATCH v3 1/2] cgroup: cgroup.freeze.stat.local time accounting
-From: Tiffany Yang <ynaffit@google.com>
-To: Tejun Heo <tj@kernel.org>
-Cc: linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Chen Ridong <chenridong@huawei.com>, 
-	kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] Documentation: ktap: formatting cleanup
+To: Bagas Sanjaya <bagasdotme@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Documentation <linux-doc@vger.kernel.org>,
+ Linux Kernel Workflows <workflows@vger.kernel.org>,
+ Linux Kernel Selftests <linux-kselftest@vger.kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>, Tim Bird <Tim.Bird@sony.com>,
+ Rae Moar <rmoar@google.com>
+References: <20250814012046.21235-1-bagasdotme@gmail.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250814012046.21235-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Tejun Heo <tj@kernel.org> writes:
+Hi,
 
-> Hello,
+For both patches:
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-> Generally looks good to me. Some comments on cosmetics / interface.
+but I have a process question, I suppose.
+Why send this patch series to the workflows mailing list?
 
-> On Mon, Aug 04, 2025 at 08:29:41PM -0700, Tiffany Yang wrote:
-> ...
->> +  cgroup.freeze.stat.local
+(This is not the first occasion of this happening [by other people]).
 
-> This was mentioned before and maybe I missed the following discussions but
-> given that cgroup.freeze is a part of core cgroup, cgroup.stat.local is
-> probably the right place. It's not great that cgroup.stat wouldn't be a
-> superset of cgroup.stat.local but we can add the hierarchical counter  
-> later
-> if necessary.
+Thanks.
 
-Got it. I had ended up opting for the "freeze"-specific name because
-there was already a cgroup_local_stat_show that seemed to imply that
-cgroup.stat.local was reserved for controllers with a struct
-cgroup_subsys. I will update v4 with something similar for core!
+On 8/13/25 6:20 PM, Bagas Sanjaya wrote:
+> Hi,
+> 
+> Just a little formatting cleanup for ktap docs (actually only bullet list
+> items fix in [2/2]; the first patch is trivial spelling fix).
+> 
+> Enjoy!
 
 
->> +	A read-only flat-keyed file which exists in non-root cgroups.
->> +	The following entry is defined:
->> +
->> +	  freeze_time_total
-
-> How about just frozen_usec? "_usec" is what we used in cpu.stat for time
-> stats.
-
-Ack.
-
-
->> +		Cumulative time that this cgroup has spent between freezing and
->> +		thawing, regardless of whether by self or ancestor groups.
->> +		NB: (not) reaching "frozen" state is not accounted here.
->> +
->> +		Using the following ASCII representation of a cgroup's freezer
->> +		state, ::
-
-> It's a bit odd to include credit in a doc file. Maybe move it to the
-> description or add Co-developed-by: tag?
-
-
-Will do! Thanks for looking over this :).
+> 
+> Bagas Sanjaya (2):
+>   Documentation: ktap: Correct "its" spelling
+>   Documentation: ktap: Separate first bullet list items
+> 
+>  Documentation/dev-tools/ktap.rst | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> 
+> base-commit: 0bbc2548ea85e6bda835a08c6d47d46435945cda
 
 -- 
-Tiffany Y. Yang
+~Randy
 
