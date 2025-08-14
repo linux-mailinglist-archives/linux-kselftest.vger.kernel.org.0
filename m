@@ -1,81 +1,65 @@
-Return-Path: <linux-kselftest+bounces-38962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03C20B26498
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 13:48:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51306B264AE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 13:51:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4BEC16A373
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 11:46:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9702E3B7E8B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 11:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FF62F60D3;
-	Thu, 14 Aug 2025 11:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219DD2F9996;
+	Thu, 14 Aug 2025 11:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IyQakyzR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B6F/o2th"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DC3288C81;
-	Thu, 14 Aug 2025 11:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A118E2FA0C7;
+	Thu, 14 Aug 2025 11:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755171976; cv=none; b=LyuAEkF+8G8oo4v4iOUmHex8LiMRQf9cV/rHRbW5OZlMvpzutL8+p9I4T3Cw+5awue0wJx4N3iRmfygf32S4qu86FJ7imMXVbNdC57BMlb3xoT1o/zDZOFFZ3fV3rB0BrChXCZFC92zphWk+QdgYl2rXCn5UNczPwJwVuWtVHOo=
+	t=1755172138; cv=none; b=li5IcvhZTlwF1kWMOBQzf9OThU8Wv4OsrhsU2wXgWlu/uf/PjnfVhe4xQJCzLltB2ffx735HO/XBRwgIzBDFx+L2xDPW8bv/JFvGJboR1305SZJ8VuqFcRsvIb0X7121CZT8RSiGw7/pJaiEuQrrXQYAHmpI4+VKlaBynQaekJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755171976; c=relaxed/simple;
-	bh=EPvdS7aVkBtwB3OhVA+7wiGzFkFTuQ0xT5JdRJ7cvWE=;
+	s=arc-20240116; t=1755172138; c=relaxed/simple;
+	bh=gu4zFAplBgPGHOV6DtfYlkgF3aC4M8p9AQmESbr3BKQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gJGVS3lVnYRvzXJ0UH+CUFCg1Gk/xIez/AlF8uFustXUu5vS5LkqL/7QKCdjjR3mDDOj/YzD3aqyFgBT9lkjh3AmueDWDKQfFwGZyEUUNkzPdfLuez2EfnE9npP1+U4QyAaejHyIxfPvhAkRfGIwAyJuwZY8XvCPKjulaU1lb/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IyQakyzR; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-afcb7ae6ed0so107458666b.3;
-        Thu, 14 Aug 2025 04:46:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755171973; x=1755776773; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2nlRfwEePLJBrTmXUpP/E3Bax77fjCyq+CaY5BjSJgo=;
-        b=IyQakyzRuHh6ghlcoSizosl1W05jnCiumcwD9C9J+0YnEP5V9OXX8zr9Ni9J6ZiXZW
-         n75nrkOe7q0l48AuWgzNTSXFKHP98aKurpe8DqWfHhBRYulxK3k5FvqJ77Nw2JVm1PtI
-         Ld/8oyypL8UXTBSY6rVHqljBFuz++Yj+5REV3KriQ6i4qmG2I0MlilqY7XHZrKFFhDCc
-         ItDAePlOrV6llrefS1crQvucqneGKtbDKTmw2i/uxy7kOTQMAB7EPCNxW/kwFV79dwFq
-         OsFHzGeRz+jVxGg/iv2P2kyZqhWZz5v1fx6crolqehm+fSdUy6M4GfPAG8i4aPcOlOQF
-         vtbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755171973; x=1755776773;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nlRfwEePLJBrTmXUpP/E3Bax77fjCyq+CaY5BjSJgo=;
-        b=krCNk+oYMSftfRJX6v8i7l4LiW3k8rBaEv6lKN284/UM/Aaa9D5gNv6d1OUz/5q9CY
-         UYrG1Te9fZMo6Fot5Tg0gwIItWcDa/7nrROlf4xFbTM9Y7BOvdRMUmOuHDGQb2Z7eHxe
-         ngoLCybWNBfoA9cDZQRlBkLgLt4isQFJqXXmeJbwVU1Q+u2TJfAXhyIns7UX7o3EVCFf
-         rpeB2mvV1pG7GHgJqT9Jw5HJM0K/HnlYlt4nBC29kzZBBIBuV0o4pBOFpZWQswbwD2yF
-         VrrvYCCxcPJyL/B5oaevwkCQZWWVyj5e5gTKQ12VHWYMpheLZEbilFtzJKEELrXnG89d
-         3ymQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/VZZAA9zLWKH03/9fIs+sMwL7c+ta4vfWcphW2lG0S/nPcaiNpqOALoxFni/7IyflfoWoyezlGnidBvP0TjPT@vger.kernel.org, AJvYcCVvdzS6Jhc1BLs2pcdOF7k3TqvuAbnN2HqlI3fQ91Ll3sQVE2ni8cmED65RuV9MBaxVBborMH0zc84=@vger.kernel.org, AJvYcCXXaHtdb0AfvWJ015zGq177wwaTulnlSW2xRrZPJvagJVH4+LB2mOhjVbLnEu+P4mRzHugjF2jw@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoHTOCV9Fq1406ZPov4N1dkfd97i6hvckF94G8gLxzADIvY8m4
-	/KfuAYscs7iW3IdtPRDe7EsXg6vp1oQiUs+Uh0axQOsmk2YvtdJFWd3S
-X-Gm-Gg: ASbGncsxclFwDCagqFjcjUF5bf1qHaYoLzdM2k5WPTba4xvbdBn/4EPfkmAXoIhf4EB
-	h76aJgSaiIpgU8kliIDGj/pLG3RYM2HY+xRWOiAtSbv0RcticLi4QZ8afmvgBs+jCFryWSWGItH
-	n8lMn8pNl1y2AoqGSsQx7GoLM2pDs9p4OkLLdr2Ixwwq3KASYc1YTOa/artyZYjqFWaRmp9cCWQ
-	Q32syFHcl5fztd8r+T34wSV/nk8VXMcSjhnG4mdq0+UDod0urfbPXJ+89XAZG2Xq92gveX2ggwP
-	qjZrANVvfdSmNEoxL6WzxhcCc+JfiVtlXmqaTtdkHHvXfMEp/1Pf8E3vOnFL5w8hxqXnep5Zhua
-	NjzxSARjXveP0us07aD44BF4xyNmytIkEAmEMUWpa473M+g9uhD9VG4F8pjCRdEkWRwXmjdNnyD
-	w/j7Sri+M=
-X-Google-Smtp-Source: AGHT+IFcNIgWEbldO7XiQAyOiuDDpvpJsZRCwoG05l9vu0kiGbqQ+bpmB/yrTEWAMGKxSxZzCFfjEw==
-X-Received: by 2002:a17:907:1c9f:b0:ae3:5e70:32fb with SMTP id a640c23a62f3a-afcb93a233bmr284068266b.4.1755171972570;
-        Thu, 14 Aug 2025 04:46:12 -0700 (PDT)
-Received: from [192.168.0.2] (dslb-002-205-018-108.002.205.pools.vodafone-ip.de. [2.205.18.108])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af919e96050sm2561184866b.0.2025.08.14.04.46.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Aug 2025 04:46:12 -0700 (PDT)
-Message-ID: <66bea2a5-b873-4e08-9500-a0093648bc39@gmail.com>
-Date: Thu, 14 Aug 2025 13:46:10 +0200
+	 In-Reply-To:Content-Type; b=EKG547f1JYUNCGvqG4uvi3s4cctnxWdzeiqgmBf5o1QnUnHRK32PQ9VrNjizITufeBwSOewQISA3VWgD6cZRvv/HWD25TUfy4XJhHGlYd6lsdQAB3lyms6fqBs0klT8g6t2P3AKiMDAzXYuGQ2/kfOg3865QvFuv0o1pkgRCIgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B6F/o2th; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755172135; x=1786708135;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gu4zFAplBgPGHOV6DtfYlkgF3aC4M8p9AQmESbr3BKQ=;
+  b=B6F/o2thqrccY/b6s16cizw8B70w07EUrmkgvyJjtzm83o+W4o4knmLy
+   FhNq5Yyg6Hzn9VS7GAMrbEoTJbHT/lZ62tmGSASjQu+Azf5uoIyw3nZT8
+   O8QAuKkE52UjH0x7+UY4a6aZC1iY8nXH+HVQ8llGwsyc7/8ZfZ9UPn1Y1
+   /Mu0LmaMuA9Id7LOba+A6n47BEskyiYI9mbAW1DX40w7Xegcntg1eUyw1
+   JGp1E3zNVETeJVM9g95CdF1QeeLhnw5BBimBhgdeY5KmfPJBXDJE9zukq
+   NrIQgBTDMZIF7CW7CE0GVbbveVlJFoaYlxkVoDhiJvtePlN1uF7s/1DDE
+   Q==;
+X-CSE-ConnectionGUID: bNP/k1V0QAO1LbdN/oeuKA==
+X-CSE-MsgGUID: ygu2oef8Q5+WGwwGothg4Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="45062502"
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="45062502"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 04:48:54 -0700
+X-CSE-ConnectionGUID: uVJP7rpYSMucul+jFkbWwQ==
+X-CSE-MsgGUID: VLAJKu8bQ1iPFVgvlRBrsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="166725347"
+Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 04:48:50 -0700
+Message-ID: <410c14cd-edab-4dd0-8ac1-a33496744590@linux.intel.com>
+Date: Thu, 14 Aug 2025 19:48:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,129 +67,384 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv2 net-next 1/3] bonding: add support for per-port LACP
- actor priority
-To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Nikolay Aleksandrov <razor@blackwall.org>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Petr Machata <petrm@nvidia.com>, Amit Cohen <amcohen@nvidia.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>,
- Stephen Hemminger <stephen@networkplumber.org>,
- David Ahern <dsahern@gmail.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20250814104256.18372-1-liuhangbin@gmail.com>
- <20250814104256.18372-2-liuhangbin@gmail.com>
+Subject: Re: [PATCH v8 22/30] KVM: selftests: TDX: Add TDG.VP.INFO test
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
+ Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
+ Andrew Jones <ajones@ventanamicro.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Erdem Aktas <erdemaktas@google.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
+ <ira.weiny@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20250807201628.1185915-1-sagis@google.com>
+ <20250807201628.1185915-23-sagis@google.com>
 Content-Language: en-US
-From: Jonas Gorski <jonas.gorski@gmail.com>
-In-Reply-To: <20250814104256.18372-2-liuhangbin@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20250807201628.1185915-23-sagis@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
 
-On 14.08.25 12:42, Hangbin Liu wrote:
-> Introduce a new netlink attribute 'ad_actor_port_prio' to allow setting
-> the LACP actor port priority on a per-slave basis. This extends the
-> existing bonding infrastructure to support more granular control over
-> LACP negotiations.
-> 
-> The priority value is embedded in LACPDU packets and will be used by
-> subsequent patches to influence aggregator selection policies.
-> 
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+
+On 8/8/2025 4:16 AM, Sagi Shahar wrote:
+> From: Roger Wang <runanwang@google.com>
+>
+> Adds a test for TDG.VP.INFO.
+>
+> Introduce __tdx_module_call() that does needed shuffling from function
+> parameters to registers used by the TDCALL instruction that is used by the
+> guest to communicate with the TDX module. The first function parameter is
+> the leaf number indicating which guest side function should be run, for
+> example, TDG.VP.INFO.
+
+I think __tdx_hypercall() can be combined into __tdx_module_call(), it's just
+another leaf TDG.VP.VMCALL for tdcall. To avoid two copies of assembly code
+doing similar things?
+
+
+
+>
+> The guest uses new __tdx_module_call() to call TDG.VP.INFO to obtain TDX
+> TD execution environment information from the TDX module. All returned
+> registers are passed back to the host that verifies values for
+> correctness.
+>
+> Co-developed-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Roger Wang <runanwang@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
 > ---
->  Documentation/networking/bonding.rst |  9 +++++++
->  drivers/net/bonding/bond_3ad.c       |  2 ++
->  drivers/net/bonding/bond_netlink.c   | 16 +++++++++++++
->  drivers/net/bonding/bond_options.c   | 36 ++++++++++++++++++++++++++++
->  include/net/bond_3ad.h               |  1 +
->  include/net/bond_options.h           |  1 +
->  include/uapi/linux/if_link.h         |  1 +
->  7 files changed, 66 insertions(+)
-> 
-> diff --git a/Documentation/networking/bonding.rst b/Documentation/networking/bonding.rst
-> index f8f5766703d4..874d8a4681ec 100644
-> --- a/Documentation/networking/bonding.rst
-> +++ b/Documentation/networking/bonding.rst
-> @@ -193,6 +193,15 @@ ad_actor_sys_prio
->  	This parameter has effect only in 802.3ad mode and is available through
->  	SysFs interface.
->  
-> +ad_actor_port_prio
+>   .../selftests/kvm/include/x86/tdx/tdcall.h    |  19 +++
+>   .../selftests/kvm/include/x86/tdx/tdx.h       |   5 +
+>   .../selftests/kvm/lib/x86/tdx/tdcall.S        |  68 +++++++++
+>   tools/testing/selftests/kvm/lib/x86/tdx/tdx.c |  27 ++++
+>   tools/testing/selftests/kvm/x86/tdx_vm_test.c | 133 +++++++++++++++++-
+>   5 files changed, 251 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h b/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
+> index e7440f7fe259..ab1a97a82fa9 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
+> @@ -32,4 +32,23 @@ struct tdx_hypercall_args {
+>   /* Used to request services from the VMM */
+>   u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
+>   
+> +/*
+> + * Used to gather the output registers values of the TDCALL and SEAMCALL
+> + * instructions when requesting services from the TDX module.
+> + *
+> + * This is a software only structure and not part of the TDX module/VMM ABI.
+> + */
+> +struct tdx_module_output {
+> +	u64 rcx;
+> +	u64 rdx;
+> +	u64 r8;
+> +	u64 r9;
+> +	u64 r10;
+> +	u64 r11;
+> +};
 > +
-> +	In an AD system, this specifies the port priority. The allowed range
-> +	is 1 - 65535. If the value is not specified, it takes 255 as the
-> +	default value.
+> +/* Used to communicate with the TDX module */
+> +u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> +		      struct tdx_module_output *out);
 > +
-> +	This parameter has effect only in 802.3ad mode and is available through
-> +	netlink interface.
+>   #endif // SELFTESTS_TDX_TDCALL_H
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> index 060158cb046b..801ca879664e 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> @@ -6,6 +6,8 @@
+>   
+>   #include "kvm_util.h"
+>   
+> +#define TDG_VP_INFO 1
 > +
->  ad_actor_system
->  
->  	In an AD system, this specifies the mac-address for the actor in
-> diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-> index 2fca8e84ab10..19b389b81600 100644
-> --- a/drivers/net/bonding/bond_3ad.c
-> +++ b/drivers/net/bonding/bond_3ad.c
-> @@ -436,6 +436,7 @@ static void __ad_actor_update_port(struct port *port)
->  
->  	port->actor_system = BOND_AD_INFO(bond).system.sys_mac_addr;
->  	port->actor_system_priority = BOND_AD_INFO(bond).system.sys_priority;
-> +	port->actor_port_priority = SLAVE_AD_INFO(port->slave)->port_priority;
->  }
->  
->  /* Conversions */
-> @@ -2211,6 +2212,7 @@ void bond_3ad_bind_slave(struct slave *slave)
->  		port->actor_admin_port_key = bond->params.ad_user_port_key << 6;
->  		ad_update_actor_keys(port, false);
->  		/* actor system is the bond's system */
-> +		SLAVE_AD_INFO(slave)->port_priority = port->actor_port_priority;
-
-I don't know the code flow well, but the assignment direction here is the
-opposite of other values, e.g.
-
-                port->actor_port_number = SLAVE_AD_INFO(slave)->id;
-
-so I would have expected this to be
-
-		port->actor_port_priority = SLAVE_AD_INFO(slave)->port_priority;
-
-Is this intentional?
-
->  		__ad_actor_update_port(port);
->  		/* tx timer(to verify that no more than MAX_TX_IN_SECOND
->  		 * lacpdu's are sent in one second)
-> diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bond_netlink.c
-> index 57fff2421f1b..3a37298583ed 100644
-> --- a/drivers/net/bonding/bond_netlink.c
-> +++ b/drivers/net/bonding/bond_netlink.c
-> @@ -28,6 +28,7 @@ static size_t bond_get_slave_size(const struct net_device *bond_dev,
->  		nla_total_size(sizeof(u8)) +	/* IFLA_BOND_SLAVE_AD_ACTOR_OPER_PORT_STATE */
->  		nla_total_size(sizeof(u16)) +	/* IFLA_BOND_SLAVE_AD_PARTNER_OPER_PORT_STATE */
->  		nla_total_size(sizeof(s32)) +	/* IFLA_BOND_SLAVE_PRIO */
-> +		nla_total_size(sizeof(u16)) +	/* IFLA_BOND_SLAVE_AD_ACTOR_PORT_PRIO */
->  		0;
->  }
->  
-> @@ -77,6 +78,10 @@ static int bond_fill_slave_info(struct sk_buff *skb,
->  					ad_port->partner_oper.port_state))
->  				goto nla_put_failure;
->  		}
+>   #define TDG_VP_VMCALL_GET_TD_VM_CALL_INFO 0x10000
+>   #define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
+>   
+> @@ -31,5 +33,8 @@ uint64_t tdg_vp_vmcall_ve_request_mmio_write(uint64_t address, uint64_t size,
+>   uint64_t tdg_vp_vmcall_instruction_cpuid(uint32_t eax, uint32_t ecx,
+>   					 uint32_t *ret_eax, uint32_t *ret_ebx,
+>   					 uint32_t *ret_ecx, uint32_t *ret_edx);
+> +uint64_t tdg_vp_info(uint64_t *rcx, uint64_t *rdx,
+> +		     uint64_t *r8, uint64_t *r9,
+> +		     uint64_t *r10, uint64_t *r11);
+>   
+>   #endif // SELFTEST_TDX_TDX_H
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S b/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
+> index b10769d1d557..c393a0fb35be 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
+> @@ -91,5 +91,73 @@ __tdx_hypercall:
+>   	pop %rbp
+>   	ret
+>   
+> +#define TDX_MODULE_rcx 0 /* offsetof(struct tdx_module_output, rcx) */
+> +#define TDX_MODULE_rdx 8 /* offsetof(struct tdx_module_output, rdx) */
+> +#define TDX_MODULE_r8 16 /* offsetof(struct tdx_module_output, r8) */
+> +#define TDX_MODULE_r9 24 /* offsetof(struct tdx_module_output, r9) */
+> +#define TDX_MODULE_r10 32 /* offsetof(struct tdx_module_output, r10) */
+> +#define TDX_MODULE_r11 40 /* offsetof(struct tdx_module_output, r11) */
 > +
-> +		if (nla_put_u16(skb, IFLA_BOND_SLAVE_AD_ACTOR_PORT_PRIO,
-> +				SLAVE_AD_INFO(slave)->port_priority))
-> +			goto nla_put_failure;
+> +.globl __tdx_module_call
+> +.type __tdx_module_call, @function
+> +__tdx_module_call:
+> +	/* Set up stack frame */
+> +	push %rbp
+> +	movq %rsp, %rbp
+> +
+> +	/* Callee-saved, so preserve it */
+> +	push %r12
+> +
+> +	/*
+> +	 * Push output pointer to stack.
+> +	 * After the operation, it will be fetched into R12 register.
+> +	 */
+> +	push %r9
+> +
+> +	/* Mangle function call ABI into TDCALL/SEAMCALL ABI: */
+> +	/* Move Leaf ID to RAX */
+> +	mov %rdi, %rax
+> +	/* Move input 4 to R9 */
+> +	mov %r8,  %r9
+> +	/* Move input 3 to R8 */
+> +	mov %rcx, %r8
+> +	/* Move input 1 to RCX */
+> +	mov %rsi, %rcx
+> +	/* Leave input param 2 in RDX */
+> +
+> +	tdcall
+> +
+> +	/*
+> +	 * Fetch output pointer from stack to R12 (It is used
+> +	 * as temporary storage)
+> +	 */
+> +	pop %r12
+> +
+> +	/*
+> +	 * Since this macro can be invoked with NULL as an output pointer,
+> +	 * check if caller provided an output struct before storing output
+> +	 * registers.
+> +	 *
+> +	 * Update output registers, even if the call failed (RAX != 0).
+> +	 * Other registers may contain details of the failure.
+> +	 */
+> +	test %r12, %r12
+> +	jz .Lno_output_struct
+> +
+> +	/* Copy result registers to output struct: */
+> +	movq %rcx, TDX_MODULE_rcx(%r12)
+> +	movq %rdx, TDX_MODULE_rdx(%r12)
+> +	movq %r8,  TDX_MODULE_r8(%r12)
+> +	movq %r9,  TDX_MODULE_r9(%r12)
+> +	movq %r10, TDX_MODULE_r10(%r12)
+> +	movq %r11, TDX_MODULE_r11(%r12)
+> +
+> +.Lno_output_struct:
+> +	/* Restore the state of R12 register */
+> +	pop %r12
+> +
+> +	pop %rbp
+> +	ret
+> +
+>   /* Disable executable stack */
+>   .section .note.GNU-stack,"",%progbits
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> index fb391483d2fa..ab6fd3d7ae4b 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
+> @@ -162,3 +162,30 @@ uint64_t tdg_vp_vmcall_instruction_cpuid(uint32_t eax, uint32_t ecx,
+>   
+>   	return ret;
+>   }
+> +
+> +uint64_t tdg_vp_info(uint64_t *rcx, uint64_t *rdx,
+> +		     uint64_t *r8, uint64_t *r9,
+> +		     uint64_t *r10, uint64_t *r11)
+> +{
+> +	struct tdx_module_output out;
+> +	uint64_t ret;
+> +
+> +	memset(&out, 0, sizeof(struct tdx_module_output));
+> +
+> +	ret = __tdx_module_call(TDG_VP_INFO, 0, 0, 0, 0, &out);
+> +
+> +	if (rcx)
+> +		*rcx = out.rcx;
+> +	if (rdx)
+> +		*rdx = out.rdx;
+> +	if (r8)
+> +		*r8 = out.r8;
+> +	if (r9)
+> +		*r9 = out.r9;
+> +	if (r10)
+> +		*r10 = out.r10;
+> +	if (r11)
+> +		*r11 = out.r11;
+> +
+> +	return ret;
+> +}
+> diff --git a/tools/testing/selftests/kvm/x86/tdx_vm_test.c b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
+> index b6ef0348746c..82acc17a66ab 100644
+> --- a/tools/testing/selftests/kvm/x86/tdx_vm_test.c
+> +++ b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
+> @@ -1038,6 +1038,135 @@ void verify_host_reading_private_mem(void)
+>   	printf("\t ... PASSED\n");
+>   }
+>   
+> +/*
+> + * Do a TDG.VP.INFO call from the guest
+> + */
+> +void guest_tdcall_vp_info(void)
+> +{
+> +	uint64_t rcx, rdx, r8, r9, r10, r11;
+> +	uint64_t err;
+> +
+> +	err = tdg_vp_info(&rcx, &rdx, &r8, &r9, &r10, &r11);
+> +	tdx_assert_error(err);
+> +
+> +	/* return values to user space host */
+> +	err = tdx_test_report_64bit_to_user_space(rcx);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(rdx);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(r8);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(r9);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(r10);
+> +	tdx_assert_error(err);
+> +
+> +	err = tdx_test_report_64bit_to_user_space(r11);
+> +	tdx_assert_error(err);
+> +
+> +	tdx_test_success();
+> +}
+> +
+> +/*
+> + * TDG.VP.INFO call from the guest. Verify the right values are returned
+> + */
+> +void verify_tdcall_vp_info(void)
+> +{
+> +	const struct kvm_cpuid_entry2 *cpuid_entry;
+> +	uint32_t ret_num_vcpus, ret_max_vcpus;
+> +	uint64_t rcx, rdx, r8, r9, r10, r11;
+> +	const int num_vcpus = 2;
+> +	struct kvm_vcpu *vcpus[num_vcpus];
+> +	uint64_t attributes;
+> +	struct kvm_vm *vm;
+> +	int gpa_bits = -1;
+> +	uint32_t i;
+> +
+> +	vm = td_create();
+> +
+> +#define TDX_TDPARAM_ATTR_SEPT_VE_DISABLE_BIT	BIT(28)
+> +	/* Setting attributes parameter used by TDH.MNG.INIT to 0x10000000 */
+> +	attributes = TDX_TDPARAM_ATTR_SEPT_VE_DISABLE_BIT;
+> +
+> +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, attributes);
+> +
+> +	for (i = 0; i < num_vcpus; i++)
+> +		vcpus[i] = td_vcpu_add(vm, i, guest_tdcall_vp_info);
+> +
+> +	td_finalize(vm);
+> +
+> +	printf("Verifying TDG.VP.INFO call:\n");
+> +
+> +	/* Get KVM CPUIDs for reference */
+> +
+> +	for (i = 0; i < num_vcpus; i++) {
+> +		struct kvm_vcpu *vcpu = vcpus[i];
+> +
+> +		cpuid_entry = vcpu_get_cpuid_entry(vcpu, 0x80000008);
+> +		TEST_ASSERT(cpuid_entry, "CPUID entry missing\n");
+> +		gpa_bits = (cpuid_entry->eax & GENMASK(23, 16)) >> 16;
+> +		TEST_ASSERT_EQ((1UL << (gpa_bits - 1)), tdx_s_bit);
+> +
+> +		/* Wait for guest to report rcx value */
+> +		tdx_run(vcpu);
+> +		rcx = tdx_test_read_64bit_report_from_guest(vcpu);
+> +
+> +		/* Wait for guest to report rdx value */
+> +		tdx_run(vcpu);
+> +		rdx = tdx_test_read_64bit_report_from_guest(vcpu);
+> +
+> +		/* Wait for guest to report r8 value */
+> +		tdx_run(vcpu);
+> +		r8 = tdx_test_read_64bit_report_from_guest(vcpu);
+> +
+> +		/* Wait for guest to report r9 value */
+> +		tdx_run(vcpu);
+> +		r9 = tdx_test_read_64bit_report_from_guest(vcpu);
+> +
+> +		/* Wait for guest to report r10 value */
+> +		tdx_run(vcpu);
+> +		r10 = tdx_test_read_64bit_report_from_guest(vcpu);
+> +
+> +		/* Wait for guest to report r11 value */
+> +		tdx_run(vcpu);
+> +		r11 = tdx_test_read_64bit_report_from_guest(vcpu);
+> +
+> +		ret_num_vcpus = r8 & 0xFFFFFFFF;
+> +		ret_max_vcpus = (r8 >> 32) & 0xFFFFFFFF;
+> +
+> +		/* first bits 5:0 of rcx represent the GPAW */
+> +		TEST_ASSERT_EQ(rcx & 0x3F, gpa_bits);
+> +		/* next 63:6 bits of rcx is reserved and must be 0 */
+> +		TEST_ASSERT_EQ(rcx >> 6, 0);
+> +		TEST_ASSERT_EQ(rdx, attributes);
+> +		TEST_ASSERT_EQ(ret_num_vcpus, num_vcpus);
+> +		TEST_ASSERT_EQ(ret_max_vcpus, vm_check_cap(vm, KVM_CAP_MAX_VCPUS));
+> +		/* VCPU_INDEX = i */
+> +		TEST_ASSERT_EQ(r9, i);
+> +		/*
+> +		 * verify reserved bits are 0
+> +		 * r10 bit 0 (SYS_RD) indicates that the TDG.SYS.RD/RDM/RDALL
+> +		 * functions are available and can be either 0 or 1.
+> +		 */
+> +		TEST_ASSERT_EQ(r10 & ~1, 0);
+> +		TEST_ASSERT_EQ(r11, 0);
+> +
+> +		/* Wait for guest to complete execution */
+> +		tdx_run(vcpu);
+> +
+> +		tdx_test_assert_success(vcpu);
+> +
+> +		printf("\t ... Guest completed run on VCPU=%u\n", i);
+> +	}
+> +
+> +	kvm_vm_free(vm);
+> +	printf("\t ... PASSED\n");
+> +}
+> +
+>   int main(int argc, char **argv)
+>   {
+>   	ksft_print_header();
+> @@ -1045,7 +1174,7 @@ int main(int argc, char **argv)
+>   	if (!is_tdx_enabled())
+>   		ksft_exit_skip("TDX is not supported by the KVM. Exiting.\n");
+>   
+> -	ksft_set_plan(14);
+> +	ksft_set_plan(15);
+>   	ksft_test_result(!run_in_new_process(&verify_td_lifecycle),
+>   			 "verify_td_lifecycle\n");
+>   	ksft_test_result(!run_in_new_process(&verify_report_fatal_error),
+> @@ -1074,6 +1203,8 @@ int main(int argc, char **argv)
+>   			 "verify_td_cpuid_tdcall\n");
+>   	ksft_test_result(!run_in_new_process(&verify_host_reading_private_mem),
+>   			 "verify_host_reading_private_mem\n");
+> +	ksft_test_result(!run_in_new_process(&verify_tdcall_vp_info),
+> +			 "verify_tdcall_vp_info\n");
+>   
+>   	ksft_finished();
+>   	return 0;
 
-
-This is an 802.3ad (exclusive) setting, shouldn't this be in the
-
-  if (BOND_MODE(slave->bond) == BOND_MODE_8023AD) { }
-
-block above this?
-
-Regards,
-Jonas
 
