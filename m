@@ -1,231 +1,137 @@
-Return-Path: <linux-kselftest+bounces-38973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01F9BB2691C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 16:24:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCC3AB26978
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 16:34:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11952AA3C56
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 14:13:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE317607CFE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 14:19:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE1721B184;
-	Thu, 14 Aug 2025 14:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB05A1F0E29;
+	Thu, 14 Aug 2025 14:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Mzo6F6co"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105C119C569;
-	Thu, 14 Aug 2025 14:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72F51D6188;
+	Thu, 14 Aug 2025 14:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755180615; cv=none; b=Yeh6jpSloLwUpcb7jpnVXHiqIKpYIl7zBhjq4ab0pejLmLAp3O5UXdk0M0clnW12hF76K6SVoHcBh0lDsA8PA4RUXM2NwNcSPTt/NwcMkz3XEB3iLIbbbF3LIg5XQKJvl8f/Qj7Lu5Fc2y+PIGP14FMWW/DMZO39Z+OXQigGDPU=
+	t=1755181100; cv=none; b=aKYR7zyr4yqgvZ7kf9hasOvOJ7qfdveWb8B0is8gwS6Bq023tjSTiJIcHJkzmvqRbniDks3X3j2HGT9nN07uQQ4q+YjRy+eNd+uI7LwFEYoTXd3nhPMq24zzZJHNhlO8DbxhMBDPZGb3hY30xF6AJrFk5Lm52GrRo6GR1FPX82k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755180615; c=relaxed/simple;
-	bh=sOSWtwaggT08IQ917pbTV5IdSxjEcB7zrNQ5o7nafW0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KqwRNa2o0fzy8QBJWmOoj6W5cWvbDCTzznUFe31SBvsj7zxfVNbXkwwLIBcfogCtWFSVZv8M5F6lnV32VP2gHDSSpr5eQtTk4bKW4Kf3S+OGJVR5O1kw3d7hEQhuaCkVZkcKtBK26HtxaeGEjjkZ+eosA/fyRPMN50Q67GAylPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4c2nFG6ZfTzYQv8m;
-	Thu, 14 Aug 2025 22:10:10 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 852E61A08DC;
-	Thu, 14 Aug 2025 22:10:09 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP4 (Coremail) with SMTP id gCh0CgCXExRA7p1oVmqpDg--.50608S2;
-	Thu, 14 Aug 2025 22:10:09 +0800 (CST)
-Message-ID: <9b8bef34-128c-4fb0-bbe1-0b9d697aaca9@huaweicloud.com>
-Date: Thu, 14 Aug 2025 22:10:08 +0800
+	s=arc-20240116; t=1755181100; c=relaxed/simple;
+	bh=fkB8DkoZb1oZNbrYSSwnjyBm03Xw/im88bG42r7TEkU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X4foZsTh2IotsZYHBcxlPNUr7ZUr1A3iuu5mX4RT5ybGPo6HFNVsLdNYJm30a8tqJgNkq50mdKizyzQrmH3TfziLyGJcFplBjuUufU3cJ+QDi7Obl+GuEaJ+yxcU216ej0xg93ecOwA34t7pf08yhPbC5z9eZWt5yssawxU6qeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Mzo6F6co; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=0O
+	BOvNjE4rQN4ZWaV0+VTg3QRrUL9Y9ebRZMVvXEMMI=; b=Mzo6F6coua6wBtKhDi
+	YgBghu9a/s8UbTedn382ewkp2uoFgSo5o2exy7iZlsi4RastDZVeSFytbqgLnJf6
+	F0jE4NnXuM3qzG1Nd5HYkr8s7qP/8WgKErUHk2Pzg0tbSGdGK6hZmiYQ+tXOc1Ee
+	18f7Q8EdTcTF1laF7O3Ar57Q0=
+Received: from phoenix.. (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wAXt8QG8J1otxnOBw--.45910S2;
+	Thu, 14 Aug 2025 22:17:44 +0800 (CST)
+From: Jiawei Zhao <phoenix500526@163.com>
+To: ast@kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	yonghong.song@linux.dev,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v9 0/3] libbpf: fix USDT SIB argument handling causing unrecognized register error
+Date: Thu, 14 Aug 2025 14:17:37 +0000
+Message-ID: <20250814141741.77698-1-phoenix500526@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/4] libbpf: ringbuf: Add overwrite ring buffer
- process
-Content-Language: en-US
-To: Zvi Effron <zeffron@riotgames.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Yonghong Song <yhs@fb.com>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Willem de Bruijn <willemb@google.com>,
- Jason Xing <kerneljasonxing@gmail.com>,
- Paul Chaignon <paul.chaignon@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin Kelly <martin.kelly@crowdstrike.com>
-References: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
- <20250804022101.2171981-3-xukuohai@huaweicloud.com>
- <CAC1LvL2AiNpN86+fz+30ap0Pm5W9C1MtV5sPvupU2uFGoJ94ug@mail.gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <CAC1LvL2AiNpN86+fz+30ap0Pm5W9C1MtV5sPvupU2uFGoJ94ug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCXExRA7p1oVmqpDg--.50608S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr4rtF17KFyktFyUArWkJFb_yoWrtr4kpF
-	WYka15CFyDZF17Cr1S9FWSvFyrKwsavr1xCFyxt3W8A34qkF1fWFyjkrWakr4xJrykGr1F
-	vrWDXas7Cr1UGrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	bAw3UUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CM-TRANSID:_____wAXt8QG8J1otxnOBw--.45910S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5Zr1xJr4UGF1UGFg_yoW5Jw45pa
+	yrK3s8tryjya47JFsxXr47tw4fGan3GrWUGF1Iqw1Yvr4rGFyxJr4xKr15JrnxGa95Xa4Y
+	vF1DtF43Gas5A37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jrZ2fUUUUU=
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBgB2piGid6YUzlgABsB
 
-On 8/14/2025 2:21 AM, Zvi Effron wrote:
-> On Sun, Aug 3, 2025 at 7:27 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->>
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> In overwrite mode, the producer does not wait for the consumer, so the
->> consumer is responsible for handling conflicts. An optimistic method
->> is used to resolve the conflicts: the consumer first reads consumer_pos,
->> producer_pos and overwrite_pos, then calculates a read window and copies
->> data in the window from the ring buffer. After copying, it checks the
->> positions to decide if the data in the copy window have been overwritten
->> by be the producer. If so, it discards the copy and tries again. Once
->> success, the consumer processes the events in the copy.
->>
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> ---
->> tools/lib/bpf/ringbuf.c | 103 +++++++++++++++++++++++++++++++++++++++-
->> 1 file changed, 102 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
->> index 9702b70da444..9c072af675ff 100644
->> --- a/tools/lib/bpf/ringbuf.c
->> +++ b/tools/lib/bpf/ringbuf.c
->> @@ -27,10 +27,13 @@ struct ring {
->> ring_buffer_sample_fn sample_cb;
->> void *ctx;
->> void *data;
->> + void *read_buffer;
->> unsigned long *consumer_pos;
->> unsigned long *producer_pos;
->> + unsigned long *overwrite_pos;
->> unsigned long mask;
->> int map_fd;
->> + bool overwrite_mode;
->> };
->>
->> struct ring_buffer {
->> @@ -69,6 +72,9 @@ static void ringbuf_free_ring(struct ring_buffer *rb, struct ring *r)
->> r->producer_pos = NULL;
->> }
->>
->> + if (r->read_buffer)
->> + free(r->read_buffer);
->> +
->> free(r);
->> }
->>
->> @@ -119,6 +125,14 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
->> r->sample_cb = sample_cb;
->> r->ctx = ctx;
->> r->mask = info.max_entries - 1;
->> + r->overwrite_mode = info.map_flags & BPF_F_OVERWRITE;
->> + if (unlikely(r->overwrite_mode)) {
->> + r->read_buffer = malloc(info.max_entries);
->> + if (!r->read_buffer) {
->> + err = -ENOMEM;
->> + goto err_out;
->> + }
->> + }
->>
->> /* Map writable consumer page */
->> tmp = mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
->> @@ -148,6 +162,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
->> goto err_out;
->> }
->> r->producer_pos = tmp;
->> + r->overwrite_pos = r->producer_pos + 1; /* overwrite_pos is next to producer_pos */
->> r->data = tmp + rb->page_size;
->>
->> e = &rb->events[rb->ring_cnt];
->> @@ -232,7 +247,7 @@ static inline int roundup_len(__u32 len)
->> return (len + 7) / 8 * 8;
->> }
->>
->> -static int64_t ringbuf_process_ring(struct ring *r, size_t n)
->> +static int64_t ringbuf_process_normal_ring(struct ring *r, size_t n)
->> {
->> int *len_ptr, len, err;
->> /* 64-bit to avoid overflow in case of extreme application behavior */
->> @@ -278,6 +293,92 @@ static int64_t ringbuf_process_ring(struct ring *r, size_t n)
->> return cnt;
->> }
->>
->> +static int64_t ringbuf_process_overwrite_ring(struct ring *r, size_t n)
->> +{
->> +
->> + int err;
->> + uint32_t *len_ptr, len;
->> + /* 64-bit to avoid overflow in case of extreme application behavior */
->> + int64_t cnt = 0;
->> + size_t size, offset;
->> + unsigned long cons_pos, prod_pos, over_pos, tmp_pos;
->> + bool got_new_data;
->> + void *sample;
->> + bool copied;
->> +
->> + size = r->mask + 1;
->> +
->> + cons_pos = smp_load_acquire(r->consumer_pos);
->> + do {
->> + got_new_data = false;
->> +
->> + /* grab a copy of data */
->> + prod_pos = smp_load_acquire(r->producer_pos);
->> + do {
->> + over_pos = READ_ONCE(*r->overwrite_pos);
->> + /* prod_pos may be outdated now */
->> + if (over_pos < prod_pos) {
->> + tmp_pos = max(cons_pos, over_pos);
->> + /* smp_load_acquire(r->producer_pos) before
->> + * READ_ONCE(*r->overwrite_pos) ensures that
->> + * over_pos + r->mask < prod_pos never occurs,
->> + * so size is never larger than r->mask
->> + */
->> + size = prod_pos - tmp_pos;
->> + if (!size)
->> + goto done;
->> + memcpy(r->read_buffer,
->> + r->data + (tmp_pos & r->mask), size);
->> + copied = true;
->> + } else {
->> + copied = false;
->> + }
->> + prod_pos = smp_load_acquire(r->producer_pos);
->> + /* retry if data is overwritten by producer */
->> + } while (!copied || prod_pos - tmp_pos > r->mask);
-> 
-> This seems to allow for a situation where a call to process the ring can
-> infinite loop if the producers are producing and overwriting fast enough. That
-> seems suboptimal to me?
-> 
-> Should there be a timeout or maximum number of attempts or something that
-> returns -EBUSY or another error to the user?
-> 
+When using GCC on x86-64 to compile an usdt prog with -O1 or higher
+optimization, the compiler will generate SIB addressing mode for global
+array and PC-relative addressing mode for global variable,
+e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
 
-Yeah, infinite loop is a bit unsettling, will return -EBUSY after some
-tries.
+The current USDT implementation in libbpf cannot parse these two formats,
+causing `bpf_program__attach_usdt()` to fail with -ENOENT
+(unrecognized register).
+
+This patch series adds support for SIB addressing mode in USDT probes.
+The main changes include:
+- add correct handling logic for SIB-addressed arguments in
+  `parse_usdt_arg`.
+- add an usdt_o2 test case to cover SIB addressing mode.
+
+Testing shows that the SIB probe correctly generates 8@(%rcx,%rax,8) 
+argument spec and passes all validation checks.
+
+The modification history of this patch series:
+Change since v1:
+- refactor the code to make it more readable
+- modify the commit message to explain why and how
+
+Change since v2:
+- fix the `scale` uninitialized error
+
+Change since v3:
+- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
+  and pass all test cases.
+
+Change since v4:
+- split the patch into two parts, one for the fix and the other for the
+  test
+
+Change since v5:
+- Only enable optimization for x86 architecture to generate SIB addressing
+  usdt argument spec.
+
+Change since v6:
+- Add an usdt_o2 test case to cover SIB addressing mode.
+- Reinstate the usdt.c test case.
+
+Change since v7:
+- Refactor modifications to __bpf_usdt_arg_spec to avoid increasing its size,
+  achieving better compatibility
+- Fix some minor code style issues
+- Refactor the usdt_o2 test case, removing semaphore and adding GCC attribute
+  to force -O2 optimization
+
+Change since v8:
+- Refactor the usdt_o2 test case, using assembly to force SIB addressing mode.
+
+Jiawei Zhao (3):
+  libbpf: fix USDT SIB argument handling causing unrecognized register
+    error
+  selftests/bpf: Add an usdt_o2 test case in selftests to cover SIB
+    handling logic
+  selftests/bpf: make usdt_o2 reliably generate SIB USDT arg spec
+
+ tools/lib/bpf/usdt.bpf.h                      | 54 +++++++++++++-
+ tools/lib/bpf/usdt.c                          | 61 ++++++++++++++--
+ tools/testing/selftests/bpf/Makefile          |  1 +
+ .../selftests/bpf/prog_tests/usdt_o2.c        | 73 +++++++++++++++++++
+ .../selftests/bpf/progs/test_usdt_o2.c        | 37 ++++++++++
+ 5 files changed, 219 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
+
+-- 
+2.43.0
 
 
