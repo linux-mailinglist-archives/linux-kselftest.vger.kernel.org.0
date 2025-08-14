@@ -1,148 +1,141 @@
-Return-Path: <linux-kselftest+bounces-38993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED8AEB26BE3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 18:06:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D0DB26C46
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 18:15:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 304BF7A982D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 16:05:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C41CB6806C0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 16:10:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2CBC244690;
-	Thu, 14 Aug 2025 16:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0C224EAB1;
+	Thu, 14 Aug 2025 16:08:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QdhgNAEH"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="n6/gSe5k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31049220F55;
-	Thu, 14 Aug 2025 16:06:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9B3C184;
+	Thu, 14 Aug 2025 16:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755187602; cv=none; b=BceVhMZc7VKP2a+d+fAhPWmHPatDj7UyXa/oMuPJoJX9QnOzMKUuwd4CJRHvwso9J98SuzrLqeEP122UJcOZdZDZgGf7qR697ZJXpqoiPZ134PlugzpsEtdZ+iT5VJvpdd0c6BLAZTYVob2ndIOnR3IoFV6K0mn7E9frqAFZSAg=
+	t=1755187696; cv=none; b=W3BuMirIbEH+85Y2dvPqa5dYWqS0Iw80uwJENaibz1EoZaibvDfEgg4yEVWdvNJ/YwEtLB0AKEkXqykIFmTq+dSIgiko69da8mQRJt4utB9tfB+N99auBphkcg5P72KIl+ls30ZsrTNrmo7lgS8Lx5J6NNuy1qN5v8Cd2H8IYek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755187602; c=relaxed/simple;
-	bh=lz47cxuQXW9kCaneS5tiSGf5QivssZJjHuGYjSUYoDE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tNggl4fXwHKkn60okcvuOQm+0TQFHF6Bv7qqJX8FBraiZTDnDJpLAYt4tYrbO2tLKW6dVElXE5uzeBFKuswiMsvxLK4vDvfnzK81T800nifSmhEGshNbTNsbGdF9Skmk6VlaKD+RTybVEHuQqhkVKNkH3kAxtNCRq0zxr0cMqSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QdhgNAEH; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-323266d6f57so1319082a91.0;
-        Thu, 14 Aug 2025 09:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755187600; x=1755792400; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2JQC78ZpgMIMuWQWRfvjMuPKHibgoB05xt+yx0YmXFw=;
-        b=QdhgNAEHZO265vJT4m3HGJ817fIbSIqIVCixapDZ2OMf/kiW4yfhFGRECcIvvECMJh
-         iZsAumfMmtbBpE+qMnRBAmG38RqHOEjk62pIJ3LDECfyLkYED/ngN2SE86Z2K9MrbjOk
-         +ugbq55w2bjRyI/vMRDnwoDjgKKD/J1WnDoZXvc1TLTNFSUyBs0WxavQqEUMtzm3+lcE
-         +//eVSza9qfws79KoUJEhsLsNo+Z3ZyS0YzzD3KetHW/f0grrlrvCob06n6vkS58nkL2
-         AxuGqTvhMy+7AKM36yOWBdKfli5ZB4H8l+fy3tPRIWwsjLZ6LwVg6dKmLElDA/0cXJr5
-         RGKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755187600; x=1755792400;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2JQC78ZpgMIMuWQWRfvjMuPKHibgoB05xt+yx0YmXFw=;
-        b=CRsedaOioT/QLbC5iSgEdJBeC95qdnCmLqySJYvImiKlUKEfTTEFQYRZKVYTy3G65A
-         LSpJGHkqqyecyYp/WMwsfHLaVxNiAfZvvv90qquP419asFyHc3j8gfP428jlnFBtnwXH
-         lFegFA1f3DEoiNJA/QU6albpZJ9F/Wp8sy0rz4v41BjdIAeA/ikPy6Tr+cqJakDeDKHF
-         UZYpTsT/gS1SkesqatJ0YSZkJIl7Z2o/2OpnjrVjV1138DgDQ4Ziz7IQksKvdith1eFA
-         uszBEj2g/PljqkghbNAfB/Zg018AWTNbsIzxJ6vrl7VNEZFxxM4UkWJs8igoC5BVSWVA
-         vM9w==
-X-Forwarded-Encrypted: i=1; AJvYcCU0EdazzusJ9VpP0llZ+DeOQ7CBY84DHcwJ7iQSBT6m9+2rqq+ZnS9zBrWuqUXKsVqwNEkGnoq722ZqnOcy@vger.kernel.org, AJvYcCVG3rQyqU3Pp4/TSwTKtYGlimkHB1xAd9ygDTvxZ42ytNMkFrm4Atd+0xYV1zt1IE7T9P0=@vger.kernel.org, AJvYcCWcV19tz88Qgdo0wViFSIlwgHKg5pNETUMH2BEIzhaZ9ms9m6b2tOKAc33ezl6f2zMl92bohIOCx8tUTJqBDbpa@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJ4JekbJ3hrAn6kKNkhPyXOPz6UUGpkt3bWz4rP1+gc+Flsgj9
-	32h4HfrXK9ColyuaJbz1YLG0dNJd9SdxqLGckX3NQ9tpRupi5UlpnpHZ
-X-Gm-Gg: ASbGncv4tOCpe+KAFj3TeHLDAmwpZRhqo+JIgY+nw8pXYAFc3AG9EnuO0jbvwyyVJ7F
-	BwK8fWy+1WG8NXdk1nQk/M6XZVnGmVJSjF1JXEwptQCOPFTMle373PnIbXftewR5jwmBud0SJNb
-	kSgN7T7i7KKR+fZniBkcdS3c9cKyGtzUsMWp+0e73KiVf/uVfVZmKLodPhq4uJEkEi2iOcAYIF+
-	XFXxlaAWQKOZKVtVvDp3nplPLhgzIqJzpjDSPFt8gWVYbNTweIg6Ch6+gsab5ibDJa9KtWdjsB+
-	miIspqGOULBTmUJ+r75n4Uch4PYzpfD1rsqHGePDnY/9LriRVVfIOjtMTOb+AiDx2EvldS05nGN
-	Cp9gEwj5Sra/5cBFzqNY=
-X-Google-Smtp-Source: AGHT+IEhBBG0ngLQSL1m1pTEMacHumOyYx5CiFYAiylVBFK4bQhJSTeJAL3kGYnVrMJWW2lrkPzzkg==
-X-Received: by 2002:a17:90b:2745:b0:31f:eae:a7e8 with SMTP id 98e67ed59e1d1-32327b28cbdmr5893443a91.11.1755187600264;
-        Thu, 14 Aug 2025 09:06:40 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32331097831sm2246465a91.33.2025.08.14.09.06.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 09:06:39 -0700 (PDT)
-Message-ID: <35c18502a4870d8a833c1c9af20b85ca3f8a0ff6.camel@gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add socket filter attach test
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: KaFai Wan <kafai.wan@linux.dev>, puranjay@kernel.org, 
-	xukuohai@huaweicloud.com, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
- song@kernel.org, 	yonghong.song@linux.dev, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, mrpre@163.com, 	linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, 	linux-kselftest@vger.kernel.org
-Date: Thu, 14 Aug 2025 09:06:35 -0700
-In-Reply-To: <CANk7y0hQWOL3OW8Ok4e-kp7Brn5Zq6H5+EfS=mVtoVd+AUxZmA@mail.gmail.com>
-References: <20250813152958.3107403-1-kafai.wan@linux.dev>
-	 <20250813152958.3107403-3-kafai.wan@linux.dev>
-	 <eb6f9ba4acccc7685596a8f1b282667a43d51ca8.camel@gmail.com>
-	 <CANk7y0hQWOL3OW8Ok4e-kp7Brn5Zq6H5+EfS=mVtoVd+AUxZmA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	s=arc-20240116; t=1755187696; c=relaxed/simple;
+	bh=AkOJYAfSU03UNBem+zavN7JuyZKK1aByA5MBFV4pzmU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EkOQ5J12N7yWRpUuy7glhsU3a/qAC0GNvTJ5wf2Yg/nBnfF0RA7ewPr4LnFQzW+wQ8IFHX4Zi1/Z6yjg4gJ4TTc/fqcuL8twM2+PS7H9swpKX9tAgQpMxG6ynxNMige9lmyq52nH83+vRdYvXYOH6r56WjEcWDsw39fy1IVnXM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=n6/gSe5k; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=VN
+	G5t39SRqkXzyt7mfNlVPiAWBTeAtA1OtCt+HC0uE8=; b=n6/gSe5kTSLFgZMh5y
+	1JKvTmAyZC58i5w4CVdtcG81n7bvLukP54KIkNv8faQooJqBUsYbrfYkEaL5ya7z
+	sFXL7nI9eA48gNT3RVP+ori3AMB8ndfwaBCxmua0U9RgqpRxyVc+aSmYvNxPdKOh
+	Xk+C7ej5aoeNe/4Mc/qA2dsx8=
+Received: from phoenix.. (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wAnEgTMCZ5otf6bBw--.46198S2;
+	Fri, 15 Aug 2025 00:07:43 +0800 (CST)
+From: Jiawei Zhao <phoenix500526@163.com>
+To: ast@kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	yonghong.song@linux.dev,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v10 0/3] libbpf: fix USDT SIB argument handling causing unrecognized register error
+Date: Thu, 14 Aug 2025 16:07:36 +0000
+Message-ID: <20250814160740.96150-1-phoenix500526@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAnEgTMCZ5otf6bBw--.46198S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5Zr1xJr4UGF1UGFg_yoW5Xr4xpa
+	yrKws8trWjya47GFsxWr42qw4fGan3GFWUGFn2qw1Yvr4rGFyxJr4xKr15JFnxGa93Xa4Y
+	vF1DtFs8Gas5AwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07joGQDUUUUU=
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBawWpiGid-FPtBAAAs8
 
-On Thu, 2025-08-14 at 13:23 +0200, Puranjay Mohan wrote:
-> On Thu, Aug 14, 2025 at 2:35=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > On Wed, 2025-08-13 at 23:29 +0800, KaFai Wan wrote:
-> > > This test verifies socket filter attachment functionality on architec=
-tures
-> > > supporting either BPF JIT compilation or the interpreter.
-> > >=20
-> > > It specifically validates the fallback to interpreter behavior when J=
-IT fails,
-> > > particularly targeting ARMv6 devices with the following configuration=
-:
-> > >   # CONFIG_BPF_JIT_ALWAYS_ON is not set
-> > >   CONFIG_BPF_JIT_DEFAULT_ON=3Dy
-> > >=20
-> > > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
-> > > ---
-> >=20
-> > This test should not be landed as-is, first let's do an analysis for
-> > why the program fails to jit compile on arm.
-> >=20
-> > I modified kernel to dump BPF program before jit attempt, but don't
-> > see anything obviously wrong with it.  The patch to get disassembly
-> > and disassembly itself with resolved kallsyms are attached.
-> >=20
-> > Can someone with access to ARM vm/machine take a looks at this?
-> > Puranjay, Xu, would you have some time?
->=20
-> Hi Eduard,
-> Thanks for the email, I will look into it.
->=20
-> Let me try to boot a kernel on ARMv6 qemu and reproduce this.
+When using GCC on x86-64 to compile an usdt prog with -O1 or higher
+optimization, the compiler will generate SIB addressing mode for global
+array and PC-relative addressing mode for global variable,
+e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
 
-Thank you, Puranjay,
+The current USDT implementation in libbpf cannot parse these two formats,
+causing `bpf_program__attach_usdt()` to fail with -ENOENT
+(unrecognized register).
 
-While looking at the code yesterday I found a legit case for failing
-to jit on armv6:
+This patch series adds support for SIB addressing mode in USDT probes.
+The main changes include:
+- add correct handling logic for SIB-addressed arguments in
+  `parse_usdt_arg`.
+- add an usdt_o2 test case to cover SIB addressing mode.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/arch/=
-arm/net/bpf_jit_32.c#n445
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/arch/=
-arm/net/bpf_jit_32.c#n2089
+Testing shows that the SIB probe correctly generates 8@(%rcx,%rax,8) 
+argument spec and passes all validation checks.
 
-But attached program does not seem to be that big to hit 0xfff boundary.
+The modification history of this patch series:
+Change since v1:
+- refactor the code to make it more readable
+- modify the commit message to explain why and how
+
+Change since v2:
+- fix the `scale` uninitialized error
+
+Change since v3:
+- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
+  and pass all test cases.
+
+Change since v4:
+- split the patch into two parts, one for the fix and the other for the
+  test
+
+Change since v5:
+- Only enable optimization for x86 architecture to generate SIB addressing
+  usdt argument spec.
+
+Change since v6:
+- Add an usdt_o2 test case to cover SIB addressing mode.
+- Reinstate the usdt.c test case.
+
+Change since v7:
+- Refactor modifications to __bpf_usdt_arg_spec to avoid increasing its size,
+  achieving better compatibility
+- Fix some minor code style issues
+- Refactor the usdt_o2 test case, removing semaphore and adding GCC attribute
+  to force -O2 optimization
+
+Change since v8:
+- Refactor the usdt_o2 test case, using assembly to force SIB addressing mode.
+
+Change since v9:
+- Only enable the usdt_o2 test case on x86_64 and i386 architectures since the
+  SIB addressing mode is only supported on x86_64 and i386.
+
+Jiawei Zhao (3):
+  libbpf: fix USDT SIB argument handling causing unrecognized register
+    error
+  selftests/bpf: Add an usdt_o2 test case in selftests to cover SIB
+    handling logic
+  selftests/bpf: make usdt_o2 reliably generate SIB USDT arg spec
+
+ tools/lib/bpf/usdt.bpf.h                      | 54 ++++++++++++-
+ tools/lib/bpf/usdt.c                          | 61 ++++++++++++--
+ tools/testing/selftests/bpf/Makefile          |  1 +
+ .../selftests/bpf/prog_tests/usdt_o2.c        | 79 +++++++++++++++++++
+ .../selftests/bpf/progs/test_usdt_o2.c        | 37 +++++++++
+ 5 files changed, 225 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
+
+-- 
+2.43.0
+
 
