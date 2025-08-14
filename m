@@ -1,173 +1,335 @@
-Return-Path: <linux-kselftest+bounces-38971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C515BB26879
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 16:05:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23FC4B268F9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 16:19:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A68974E5C36
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 14:05:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F6B6603D30
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 14:06:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68D7B301479;
-	Thu, 14 Aug 2025 13:59:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="J6LX3x5W"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D63732143D;
+	Thu, 14 Aug 2025 13:59:59 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FDCA31F012;
-	Thu, 14 Aug 2025 13:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F054321434;
+	Thu, 14 Aug 2025 13:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755179972; cv=none; b=USw4p4jGKOczKwF7ON+Qf06ruwqkLhSFPghEsK98bPhgOsTMAXsYbwJw2FfIPDVBcp/gBbHvnY4DqdHt3ksdgUtYmJhKz32qKbiscxJ7nY1N5Kv+aBcc09ygVa+Vhx2LvDoO0iq+ZZEupv6Dm0US1b+6Qrbs3cjXj9viYd5rOwY=
+	t=1755179999; cv=none; b=WEQ9tke/1WA0Evam3/gRWJswi+66hqCblW+B5SLA91qel1Inl7VRSkdXvlSm2alX0ZjNNLZ2m9qNJoH7JFh591j4DLE6Tu2vNKS+02wsI7bCzJjp1nhHFBYpiSvhCQP4+PXhiy21ZR7JS3gNdoLhWJJlproZWSlsQM+7zWJplxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755179972; c=relaxed/simple;
-	bh=seZWa+JyXD1KsVCPRTt17Bcrb4b3iOqD5eAQ0vNw9yc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=CHDj6hoaJq2mI7gdOdZvov4Gw4T8hxiO9LYMcUG8St5OsGo3dDWSTF4Yo0Cx+dj9C86g558cIjW14sT7AqGQd8xBaWlWoSjp+FEZK7DKDBGbBiPIBvoGmn2yqANxW/kGeJCfcNArwOUA64ClQjpLU57eDnHTXBvZHirLmrBGwU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=J6LX3x5W reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=W02Oc1CqUdpt5hhm3tyKd5nlAV05WQriIwEfbmSd12Y=; b=J
-	6LX3x5WuDzQ2zqNLm82zS8C53ilY9ddHXNx3Wdf1FUHUbeuWK/3s0AOpu9kxQaXl
-	sINRIVq17D6X6Badqwv/5k5GlEkd6jU8LPNXFoT5n1eTC+TLlcFbKz3MCBUHjmxz
-	N9F20MxAYO4y5luGZdPON3UqnQEAcTripElEXEwPIg=
-Received: from phoenix500526$163.com ( [120.230.124.83] ) by
- ajax-webmail-wmsvr-40-102 (Coremail) ; Thu, 14 Aug 2025 21:59:01 +0800
- (CST)
-Date: Thu, 14 Aug 2025 21:59:01 +0800 (CST)
-From: =?GBK?B?1dS80ey/?= <phoenix500526@163.com>
-To: "Jiri Olsa" <olsajiri@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
-	daniel@iogearbox.net, shuah@kernel.org, yonghong.song@linux.dev,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH bpf-next v8 2/2] selftests/bpf: Add an usdt_o2 test
- case in selftests to cover SIB handling logic
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
- Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <aJ2lxyUYfQkfQW2-@krava>
-References: <20250814064504.103401-1-phoenix500526@163.com>
- <20250814064504.103401-3-phoenix500526@163.com> <aJ2lxyUYfQkfQW2-@krava>
-X-NTES-SC: AL_Qu2eB/2ctkEv5yeQYekfmUsVh+o9X8K1vfsk3oZfPJp+jCzp6CUNclhTBEr81tCDEh+0kAiHdzxR+P1Xbahacr8MH69Tnuzu5eMUZpxIVVBtfA==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=arc-20240116; t=1755179999; c=relaxed/simple;
+	bh=4w7TJU8PYCfu5IBx1JR+pz0kyrdxTR7wAUd6BeP/mg8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mNaA/h6j75x1W9ZEHlsWMpzY96VVznI+EzV3I0tly6rre6PORB3vPdDkl2KP9NafLYRNO+XEzHcKErFjh3+ap/N3ExlLUfBp3XnKsGA2qaUqlx1/qY9BOSO5BoBUc2drC2irJ7+xTyLTDPizvSdvlddl1Fui7+wSCcgUHAS9h6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4c2n1Q3Cx9zKHMq9;
+	Thu, 14 Aug 2025 21:59:54 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id B4E4D1A084A;
+	Thu, 14 Aug 2025 21:59:53 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP1 (Coremail) with SMTP id cCh0CgDHgq7Y651o+Q5jDg--.18691S2;
+	Thu, 14 Aug 2025 21:59:53 +0800 (CST)
+Message-ID: <1f1d98bc-2243-44c9-94e3-3594d19ea313@huaweicloud.com>
+Date: Thu, 14 Aug 2025 21:59:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <2ff6a1c4.8e68.198a8e07fa3.Coremail.phoenix500526@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:ZigvCgD3f9qm651oilIaAA--.2555W
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFAypiGid5AyzWwABsN
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/4] bpf: Add overwrite mode for bpf ring buffer
+Content-Language: en-US
+To: Jordan Rome <linux@jordanrome.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Yonghong Song <yhs@fb.com>, Song Liu <song@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>,
+ Tao Chen <chen.dylane@linux.dev>, Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>, Martin Kelly <martin.kelly@crowdstrike.com>
+References: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
+ <20250804022101.2171981-2-xukuohai@huaweicloud.com>
+ <CAADnVQKC8HdoEnjL-Y3tDrfghJnpVddDoSsyDYxacvHLAJqFQQ@mail.gmail.com>
+ <53c46f61-2901-4225-a6e7-a82c2e6663b9@huaweicloud.com>
+ <27a11141-8e0d-498a-bc27-318d108161c8@jordanrome.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <27a11141-8e0d-498a-bc27-318d108161c8@jordanrome.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgDHgq7Y651o+Q5jDg--.18691S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfXr1rJw4kCFy3Jr4rtry8AFb_yoW8Jr4rGo
+	WUuw17Zr15Jr1UGr4UJw1UJr15Jr1UJr1DJr1UXw13GF18JF1UJ34UJry5G3y5Jr1rGr1U
+	J34UJr1UAFyUJr18n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUY27kC6x804xWl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7
+	CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
+	e7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+	WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+	jIksgUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-CgoKCgoKCkhpLCBKaXJpLiBJJ3ZlIGFscmVhZHkgbW9kaWZpZWQgdGhlIHVzZHRfbzIuYyB0byBn
-ZW5lcmF0ZSBpdHMgdXNkdCBhcmd1bWVudCBzcGVjIGluIGFzc2VtYmx5LgoKQ291bGQgeW91IGhl
-bHAgbWUgdmVyaWZ5IHRoaXMgbW9kaWZpY2F0aW9uIHNpbmNlIEkgY2Fubm90IHJlcHJvZHVjZSB0
-aGlzIGlzc3VlLiBJIGd1ZXNzIHRoaXMKc29sdXRpb24gbWF5IHdvcmsuIAoKVGhhbmtzIQoKCgoK
-CkF0IDIwMjUtMDgtMTQgMTc6MDA6NTUsICJKaXJpIE9sc2EiIDxvbHNhamlyaUBnbWFpbC5jb20+
-IHdyb3RlOgo+T24gVGh1LCBBdWcgMTQsIDIwMjUgYXQgMDY6NDU6MDRBTSArMDAwMCwgSmlhd2Vp
-IFpoYW8gd3JvdGU6Cj4+IFdoZW4gdXNpbmcgR0NDIG9uIHg4Ni02NCB0byBjb21waWxlIGFuIHVz
-ZHQgcHJvZyB3aXRoIC1PMSBvciBoaWdoZXIKPj4gb3B0aW1pemF0aW9uLCB0aGUgY29tcGlsZXIg
-d2lsbCBnZW5lcmF0ZSBTSUIgYWRkcmVzc2luZyBtb2RlIGZvciBnbG9iYWwKPj4gYXJyYXkgYW5k
-IFBDLXJlbGF0aXZlIGFkZHJlc3NpbmcgbW9kZSBmb3IgZ2xvYmFsIHZhcmlhYmxlLAo+PiBlLmcu
-ICIxQC05NiglcmJwLCVyYXgsOCkiIGFuZCAiLTFANCt0MSglcmlwKSIuCj4+IAo+PiBJbiB0aGlz
-IHBhdGNoOgo+PiAtIGFkZCB1c2R0X28yIHRlc3QgY2FzZSB0byBjb3ZlciBTSUIgYWRkcmVzc2lu
-ZyB1c2R0IGFyZ3VtZW50IHNwZWMKPj4gICBoYW5kbGluZyBsb2dpYwo+Cj5oaSwKPm9uIG15IHNl
-dHVwIChnY2MxNSkgdGhlIHRlc3QgZ2VuZXJhdGVzIHVzdCByZWdpc3RlciBhcmd1bWVudDoKPgo+
-ICBzdGFwc2R0ICAgICAgICAgICAgICAweDAwMDAwMDJhICAgICAgIE5UX1NUQVBTRFQgKFN5c3Rl
-bVRhcCBwcm9iZSBkZXNjcmlwdG9ycykKPiAgICBQcm92aWRlcjogdGVzdAo+ICAgIE5hbWU6IHVz
-ZHQxCj4gICAgTG9jYXRpb246IDB4MDAwMDAwMDAwMDc2NzdjZSwgQmFzZTogMHgwMDAwMDAwMDAz
-NWJjNzI4LCBTZW1hcGhvcmU6IDB4MDAwMDAwMDAwMDAwMDAwMAo+ICAgIEFyZ3VtZW50czogOEAl
-cmF4Cj4KPgo+ICA3Njc3YzY6ICAgICAgIDQ4IDhiIDA0IGM1IDIwIDQ5IDljICAgIG1vdiAgICAw
-eDM5YzQ5MjAoLCVyYXgsOCksJXJheAo+ICA3Njc3Y2Q6ICAgICAgIDAzCj4gIDc2NzdjZTogICAg
-ICAgOTAgICAgICAgICAgICAgICAgICAgICAgbm9wCj4KPgo+SSdtIG5vdCBzdXJlIGlmIHRoZXJl
-J3MgcmVsaWFibGUgc29sdXRpb24gdG8gZ2VuZXJhdGUgU0lCIGFyZ3VtZW50IGZyb20gZ2NjLAo+
-bWF5YmUgd2UgY291bGQgZ2VuZXJhdGUgYWxsIGluIGFzc2VtYmx5LCBidXQgdGhhdCBtaWdodCBn
-ZXQgY29tcGxpY2F0ZWQKPgo+amlya2EKPgo+Cj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBKaWF3ZWkg
-WmhhbyA8cGhvZW5peDUwMDUyNkAxNjMuY29tPgo+PiAtLS0KPj4gIHRvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2JwZi9NYWtlZmlsZSAgICAgICAgICB8ICAxICsKPj4gIC4uLi9zZWxmdGVzdHMvYnBm
-L3Byb2dfdGVzdHMvdXNkdF9vMi5jICAgICAgICB8IDY5ICsrKysrKysrKysrKysrKysrKysKPj4g
-IC4uLi9zZWxmdGVzdHMvYnBmL3Byb2dzL3Rlc3RfdXNkdF9vMi5jICAgICAgICB8IDM3ICsrKysr
-KysrKysKPj4gIDMgZmlsZXMgY2hhbmdlZCwgMTA3IGluc2VydGlvbnMoKykKPj4gIGNyZWF0ZSBt
-b2RlIDEwMDY0NCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy91c2R0X28y
-LmMKPj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJv
-Z3MvdGVzdF91c2R0X28yLmMKPj4gCj4+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9icGYvTWFrZWZpbGUgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvTWFrZWZpbGUK
-Pj4gaW5kZXggNDg2MzEwNjAzNGRmLi4yNGZmMWEzMjk2MjUgMTAwNjQ0Cj4+IC0tLSBhL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9NYWtlZmlsZQo+PiArKysgYi90b29scy90ZXN0aW5nL3Nl
-bGZ0ZXN0cy9icGYvTWFrZWZpbGUKPj4gQEAgLTc2MCw2ICs3NjAsNyBAQCBUUlVOTkVSX0JQRl9C
-VUlMRF9SVUxFIDo9ICQkKGVycm9yIG5vIEJQRiBvYmplY3RzIHNob3VsZCBiZSBidWlsdCkKPj4g
-IFRSVU5ORVJfQlBGX0NGTEFHUyA6PQo+PiAgJChldmFsICQoY2FsbCBERUZJTkVfVEVTVF9SVU5O
-RVIsdGVzdF9tYXBzKSkKPj4gIAo+PiArCj4+ICAjIERlZmluZSB0ZXN0X3ZlcmlmaWVyIHRlc3Qg
-cnVubmVyLgo+PiAgIyBJdCBpcyBtdWNoIHNpbXBsZXIgdGhhbiB0ZXN0X21hcHMvdGVzdF9wcm9n
-cyBhbmQgc3VmZmljaWVudGx5IGRpZmZlcmVudCBmcm9tCj4+ICAjIHRoZW0gKGUuZy4sIHRlc3Qu
-aCBpcyB1c2luZyBjb21wbGV0ZWx5IHBhdHRlcm4pLCB0aGF0IGl0J3Mgd29ydGgganVzdAo+PiBk
-aWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvdXNkdF9v
-Mi5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvdXNkdF9vMi5jCj4+
-IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+IGluZGV4IDAwMDAwMDAwMDAwMC4uZjAyZGNmNTE4OGFi
-Cj4+IC0tLSAvZGV2L251bGwKPj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3By
-b2dfdGVzdHMvdXNkdF9vMi5jCj4+IEBAIC0wLDAgKzEsNjkgQEAKPj4gKy8vIFNQRFgtTGljZW5z
-ZS1JZGVudGlmaWVyOiBHUEwtMi4wCj4+ICsvKiBDb3B5cmlnaHQgKGMpIDIwMjUgSmlhd2VpIFpo
-YW8gPHBob2VuaXg1MDA1MjZAMTYzLmNvbT4uICovCj4+ICsjaW5jbHVkZSA8dGVzdF9wcm9ncy5o
-Pgo+PiArCj4+ICsjaW5jbHVkZSAiLi4vc2R0LmgiCj4+ICsjaW5jbHVkZSAidGVzdF91c2R0X28y
-LnNrZWwuaCIKPj4gKwo+PiArI2lmIGRlZmluZWQoX19HTlVDX18pICYmICFkZWZpbmVkKF9fY2xh
-bmdfXykKPj4gK19fYXR0cmlidXRlX18oKG9wdGltaXplKCJPMiIpKSkKPj4gKyNlbmRpZgo+PiAr
-Cj4+ICsjZGVmaW5lIHRlc3RfdmFsdWUgMHhGRURDQkE5ODc2NTQzMjEwVUxMCj4+ICsjZGVmaW5l
-IFNFQyhuYW1lKSBfX2F0dHJpYnV0ZV9fKChzZWN0aW9uKG5hbWUpLCB1c2VkKSkKPj4gKwo+PiAr
-aW50IGxldHNfdGVzdF90aGlzKGludCk7Cj4+ICtzdGF0aWMgdm9sYXRpbGUgX191NjQgYXJyYXlb
-MV0gPSB7dGVzdF92YWx1ZX07Cj4+ICsKPj4gK3N0YXRpYyBfX2Fsd2F5c19pbmxpbmUgdm9pZCB0
-cmlnZ2VyX2Z1bmModm9pZCkKPj4gK3sKPj4gKwkvKiBCYXNlIGFkZHJlc3MgKyBvZmZzZXQgKyAo
-aW5kZXggKiBzY2FsZSkgKi8KPj4gKwlmb3IgKHZvbGF0aWxlIGludCBpID0gMDsgaSA8PSAwOyBp
-KyspCj4+ICsJCVNUQVBfUFJPQkUxKHRlc3QsIHVzZHQxLCBhcnJheVtpXSk7Cj4+ICt9Cj4+ICsK
-Pj4gK3N0YXRpYyB2b2lkIGJhc2ljX3NpYl91c2R0KHZvaWQpCj4+ICt7Cj4+ICsJTElCQlBGX09Q
-VFMoYnBmX3VzZHRfb3B0cywgb3B0cyk7Cj4+ICsJc3RydWN0IHRlc3RfdXNkdF9vMiAqc2tlbDsK
-Pj4gKwlzdHJ1Y3QgdGVzdF91c2R0X28yX19ic3MgKmJzczsKPj4gKwlpbnQgZXJyOwo+PiArCj4+
-ICsJc2tlbCA9IHRlc3RfdXNkdF9vMl9fb3Blbl9hbmRfbG9hZCgpOwo+PiArCWlmICghQVNTRVJU
-X09LX1BUUihza2VsLCAic2tlbF9vcGVuIikpCj4+ICsJCXJldHVybjsKPj4gKwo+PiArCWJzcyA9
-IHNrZWwtPmJzczsKPj4gKwlic3MtPm15X3BpZCA9IGdldHBpZCgpOwo+PiArCj4+ICsJZXJyID0g
-dGVzdF91c2R0X28yX19hdHRhY2goc2tlbCk7Cj4+ICsJaWYgKCFBU1NFUlRfT0soZXJyLCAic2tl
-bF9hdHRhY2giKSkKPj4gKwkJZ290byBjbGVhbnVwOwo+PiArCj4+ICsJLyogdXNkdDEgd29uJ3Qg
-YmUgYXV0by1hdHRhY2hlZCAqLwo+PiArCW9wdHMudXNkdF9jb29raWUgPSAweGNhZmVkZWFkYmVl
-ZmZlZWQ7Cj4+ICsJc2tlbC0+bGlua3MudXNkdDEgPSBicGZfcHJvZ3JhbV9fYXR0YWNoX3VzZHQo
-c2tlbC0+cHJvZ3MudXNkdDEsCj4+ICsJCQkJCQkgICAgIDAgLypzZWxmKi8sICIvcHJvYy9zZWxm
-L2V4ZSIsCj4+ICsJCQkJCQkgICAgICJ0ZXN0IiwgInVzZHQxIiwgJm9wdHMpOwo+PiArCWlmICgh
-QVNTRVJUX09LX1BUUihza2VsLT5saW5rcy51c2R0MSwgInVzZHQxX2xpbmsiKSkKPj4gKwkJZ290
-byBjbGVhbnVwOwo+PiArCj4+ICsJdHJpZ2dlcl9mdW5jKCk7Cj4+ICsKPj4gKwlBU1NFUlRfRVEo
-YnNzLT51c2R0MV9jYWxsZWQsIDEsICJ1c2R0MV9jYWxsZWQiKTsKPj4gKwlBU1NFUlRfRVEoYnNz
-LT51c2R0MV9jb29raWUsIDB4Y2FmZWRlYWRiZWVmZmVlZCwgInVzZHQxX2Nvb2tpZSIpOwo+PiAr
-CUFTU0VSVF9FUShic3MtPnVzZHQxX2FyZ19jbnQsIDEsICJ1c2R0MV9hcmdfY250Iik7Cj4+ICsJ
-QVNTRVJUX0VRKGJzcy0+dXNkdDFfYXJnLCB0ZXN0X3ZhbHVlLCAidXNkdDFfYXJnIik7Cj4+ICsJ
-QVNTRVJUX0VRKGJzcy0+dXNkdDFfYXJnX3JldCwgMCwgInVzZHQxX2FyZ19yZXQiKTsKPj4gKwlB
-U1NFUlRfRVEoYnNzLT51c2R0MV9hcmdfc2l6ZSwgc2l6ZW9mKGFycmF5WzBdKSwgInVzZHQxX2Fy
-Z19zaXplIik7Cj4+ICsKPj4gK2NsZWFudXA6Cj4+ICsJdGVzdF91c2R0X28yX19kZXN0cm95KHNr
-ZWwpOwo+PiArfQo+PiArCj4+ICsKPj4gKwo+PiArdm9pZCB0ZXN0X3VzZHRfbzIodm9pZCkKPj4g
-K3sKPj4gKwliYXNpY19zaWJfdXNkdCgpOwo+PiArfQo+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3Rlc3RfdXNkdF9vMi5jIGIvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvYnBmL3Byb2dzL3Rlc3RfdXNkdF9vMi5jCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
-Cj4+IGluZGV4IDAwMDAwMDAwMDAwMC4uMTQ2MDJhYTU0NTc4Cj4+IC0tLSAvZGV2L251bGwKPj4g
-KysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3Rlc3RfdXNkdF9vMi5jCj4+
-IEBAIC0wLDAgKzEsMzcgQEAKPj4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4w
-Cj4+ICsvKiBDb3B5cmlnaHQgKGMpIDIwMjIgTWV0YSBQbGF0Zm9ybXMsIEluYy4gYW5kIGFmZmls
-aWF0ZXMuICovCj4+ICsKPj4gKyNpbmNsdWRlICJ2bWxpbnV4LmgiCj4+ICsjaW5jbHVkZSA8YnBm
-L2JwZl9oZWxwZXJzLmg+Cj4+ICsjaW5jbHVkZSA8YnBmL3VzZHQuYnBmLmg+Cj4+ICsKPj4gK2lu
-dCBteV9waWQ7Cj4+ICsKPj4gK2ludCB1c2R0MV9jYWxsZWQ7Cj4+ICt1NjQgdXNkdDFfY29va2ll
-Owo+PiAraW50IHVzZHQxX2FyZ19jbnQ7Cj4+ICtpbnQgdXNkdDFfYXJnX3JldDsKPj4gK3U2NCB1
-c2R0MV9hcmc7Cj4+ICtpbnQgdXNkdDFfYXJnX3NpemU7Cj4+ICsKPj4gK1NFQygidXNkdCIpCj4+
-ICtpbnQgdXNkdDEoc3RydWN0IHB0X3JlZ3MgKmN0eCkKPj4gK3sKPj4gKwlsb25nIHRtcDsKPj4g
-Kwo+PiArCWlmIChteV9waWQgIT0gKGJwZl9nZXRfY3VycmVudF9waWRfdGdpZCgpID4+IDMyKSkK
-Pj4gKwkJcmV0dXJuIDA7Cj4+ICsKPj4gKwlfX3N5bmNfZmV0Y2hfYW5kX2FkZCgmdXNkdDFfY2Fs
-bGVkLCAxKTsKPj4gKwo+PiArCXVzZHQxX2Nvb2tpZSA9IGJwZl91c2R0X2Nvb2tpZShjdHgpOwo+
-PiArCXVzZHQxX2FyZ19jbnQgPSBicGZfdXNkdF9hcmdfY250KGN0eCk7Cj4+ICsKPj4gKwl1c2R0
-MV9hcmdfcmV0ID0gYnBmX3VzZHRfYXJnKGN0eCwgMCwgJnRtcCk7Cj4+ICsJdXNkdDFfYXJnID0g
-KHU2NCl0bXA7Cj4+ICsJdXNkdDFfYXJnX3NpemUgPSBicGZfdXNkdF9hcmdfc2l6ZShjdHgsIDAp
-Owo+PiArCj4+ICsJcmV0dXJuIDA7Cj4+ICt9Cj4+ICsKPj4gK2NoYXIgX2xpY2Vuc2VbXSBTRUMo
-ImxpY2Vuc2UiKSA9ICJHUEwiOwo+PiAtLSAKPj4gMi40My4wCj4+IAo+PiAK
+On 8/13/2025 9:22 PM, Jordan Rome wrote:
+> 
+> On 8/12/25 12:02 AM, Xu Kuohai wrote:
+>> On 8/9/2025 5:39 AM, Alexei Starovoitov wrote:
+>>> On Sun, Aug 3, 2025 at 7:27 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+>>>>
+>>>> From: Xu Kuohai <xukuohai@huawei.com>
+>>>>
+>>>> When the bpf ring buffer is full, new events can not be recorded util
+>>>> the consumer consumes some events to free space. This may cause critical
+>>>> events to be discarded, such as in fault diagnostic, where recent events
+>>>> are more critical than older ones.
+>>>>
+>>>> So add ovewrite mode for bpf ring buffer. In this mode, the new event
+>>>> overwrites the oldest event when the buffer is full.
+>>>>
+>>>> The scheme is as follows:
+>>>>
+>>>> 1. producer_pos tracks the next position to write new data. When there
+>>>>     is enough free space, producer simply moves producer_pos forward to
+>>>>     make space for the new event.
+>>>>
+>>>> 2. To avoid waiting for consumer to free space when the buffer is full,
+>>>>     a new variable overwrite_pos is introduced for producer. overwrite_pos
+>>>>     tracks the next event to be overwritten (the oldest event committed) in
+>>>>     the buffer. producer moves it forward to discard the oldest events when
+>>>>     the buffer is full.
+>>>>
+>>>> 3. pending_pos tracks the oldest event under committing. producer ensures
+>>>>     producers_pos never passes pending_pos when making space for new events.
+>>>>     So multiple producers never write to the same position at the same time.
+>>>>
+>>>> 4. producer wakes up consumer every half a round ahead to give it a chance
+>>>>     to retrieve data. However, for an overwrite-mode ring buffer, users
+>>>>     typically only cares about the ring buffer snapshot before a fault occurs.
+>>>>     In this case, the producer should commit data with BPF_RB_NO_WAKEUP flag
+>>>>     to avoid unnecessary wakeups.
+>>>
+>>> If I understand it correctly the algorithm requires all events to be the same
+>>> size otherwise first overwrite might trash the header,
+>>> also the producers should use some kind of signaling to
+>>> timestamp each event otherwise it all will look out of order to the consumer.
+>>>
+>>> At the end it looks inferior to the existing perf ring buffer with overwrite.
+>>> Since in both cases the out of order needs to be dealt with
+>>> in post processing the main advantage of ring buf vs perf buf is gone.
+>>
+>> No, the advantage is not gone.
+>>
+>> The ring buffer is still shared by multiple producers. When an event occurs,
+>> the producer queues up to acquire the spin lock of the ring buffer to write
+>> event to it. So events in the ring buffer are always ordered, no out of order
+>> occurs.
+>>
+>> And events are not required to be the same size. When an overwrite happens,
+>> the events bing trashed are discared, and the overwrite_pos is moved forward
+>> to skip these events until it reaches the first event that is not trashed.
+>>
+>> To make it clear, here are some example diagrams.
+>>
+>> 1. Let's say we have a ring buffer with size 4096.
+>>
+>>    At first, {producer,overwrite,pending,consumer}_pos are all set to 0
+>>
+>>    0       512      1024    1536     2048     2560     3072 3584 4096
+>> +-----------------------------------------------------------------------+
+>> | |
+>> | |
+>> | |
+>> +-----------------------------------------------------------------------+
+>>    ^
+>>    |
+>>    |
+>> producer_pos = 0
+>> overwrite_pos = 0
+>> pending_pos = 0
+>> consumer_pos = 0
+>>
+>> 2. Reserve event A, size 512.
+>>
+>>    There is enough free space, so A is allocated at offset 0 and producer_pos
+>>    is moved to 512, the end of A. Since A is not submitted, the BUSY bit is
+>>    set.
+>>
+>>    0       512      1024    1536     2048     2560     3072 3584 4096
+>> +-----------------------------------------------------------------------+
+>>    | |                                                              |
+>>    |   A |                                                              |
+>>    | [BUSY] |                                                              |
+>> +-----------------------------------------------------------------------+
+>>    ^        ^
+>>    |        |
+>>    |        |
+>>    |    producer_pos = 512
+>>    |
+>> overwrite_pos = 0
+>> pending_pos = 0
+>> consumer_pos = 0
+>>
+>>
+>> 3. Reserve event B, size 1024.
+>>
+>>    B is allocated at offset 512 with BUSY bit set, and producer_pos is moved
+>>    to the end of B.
+>>
+>>    0       512      1024    1536     2048     2560     3072 3584 4096
+>> +-----------------------------------------------------------------------+
+>>    |        | |                                            |
+>>    |   A    |        B |                                            |
+>>    | [BUSY] |      [BUSY] |                                            |
+>> +-----------------------------------------------------------------------+
+>>    ^                          ^
+>>    |                          |
+>>    |                          |
+>>    |                   producer_pos = 1536
+>>    |
+>> overwrite_pos = 0
+>> pending_pos = 0
+>> consumer_pos = 0
+>>
+>> 4. Reserve event C, size 2048.
+>>
+>>    C is allocated at offset 1536 and producer_pos becomes 3584.
+>>
+>>    0       512      1024    1536     2048     2560     3072 3584 4096
+>> +-----------------------------------------------------------------------+
+>>    |        |                 | |        |
+>>    |    A   |        B        |                 C |        |
+>>    | [BUSY] |      [BUSY]     |               [BUSY] |        |
+>> +-----------------------------------------------------------------------+
+>>    ^ ^
+>>    | |
+>>    | |
+>>    | producer_pos = 3584
+>>    |
+>> overwrite_pos = 0
+>> pending_pos = 0
+>> consumer_pos = 0
+>>
+>> 5. Submit event A.
+>>
+>>    The BUSY bit of A is cleared. B becomes the oldest event under writing, so
+>>    pending_pos is moved to 512, the start of B.
+>>
+>>    0       512      1024    1536     2048     2560     3072 3584 4096
+>> +-----------------------------------------------------------------------+
+>>    |        |                 | |        |
+>>    |    A   |        B        |                 C |        |
+>>    |        |      [BUSY]     |               [BUSY] |        |
+>> +-----------------------------------------------------------------------+
+>>    ^        ^ ^
+>>    |        | |
+>>    |        | |
+>>    |   pending_pos = 512 producer_pos = 3584
+>>    |
+>> overwrite_pos = 0
+>> consumer_pos = 0
+>>
+>> 6. Submit event B.
+>>
+>>    The BUSY bit of B is cleared, and pending_pos is moved to the start of C,
+>>    which is the oldest event under writing now.
+>>
+>>    0       512      1024    1536     2048     2560     3072 3584 4096
+>> +-----------------------------------------------------------------------+
+>>    |        |                 | |        |
+>>    |    A   |        B        |                 C |        |
+>>    |        |                 |               [BUSY] |        |
+>> +-----------------------------------------------------------------------+
+>>    ^                          ^ ^
+>>    |                          | |
+>>    |                          | |
+>>    |                     pending_pos = 1536 producer_pos = 3584
+>>    |
+>> overwrite_pos = 0
+>> consumer_pos = 0
+>>
+>> 7. Reserve event D, size 1536 (3 * 512).
+>>
+>>    There are 2048 bytes not under writing between producer_pos and pending_pos,
+>>    so D is allocated at offset 3584, and producer_pos is moved from 3584 to
+>>    5120.
+>>
+>>    Since event D will overwrite all bytes of event A and the begining 512 bytes
+>>    of event B, overwrite_pos is moved to the start of event C, the oldest event
+>>    that is not overwritten.
+>>
+>>    0       512      1024    1536     2048     2560     3072 3584 4096
+>> +-----------------------------------------------------------------------+
+>>    |                 |        | |        |
+>>    |      D End      |        |                 C | D Begin|
+>>    |      [BUSY]     |        |               [BUSY] | [BUSY] |
+>> +-----------------------------------------------------------------------+
+>>    ^                 ^        ^
+>>    |                 |        |
+>>    |                 |   pending_pos = 1536
+>>    |                 |   overwrite_pos = 1536
+>>    |                 |
+>>    |             producer_pos=5120
+>>    |
+>> consumer_pos = 0
+>>
+>> 8. Reserve event E, size 1024.
+>>
+>>    Though there are 512 bytes not under writing between producer_pos and
+>>    pending_pos, E can not be reserved, as it would overwrite the first 512
+>>    bytes of event C, which is still under writing.
+>>
+>> 9. Submit event C and D.
+>>
+>>    pending_pos is moved to the end of D.
+>>
+>>    0       512      1024    1536     2048     2560     3072 3584 4096
+>> +-----------------------------------------------------------------------+
+>>    |                 |        | |        |
+>>    |      D End      |        |                 C | D Begin|
+>>    |                 |        | |        |
+>> +-----------------------------------------------------------------------+
+>>    ^                 ^        ^
+>>    |                 |        |
+>>    |                 |   overwrite_pos = 1536
+>>    |                 |
+>>    |             producer_pos=5120
+>>    |             pending_pos=5120
+>>    |
+>> consumer_pos = 0
+> 
+> These diagrams are very helpful in terms of understanding the flow.
+> In part 7 when A is overwritten by D, why doesn't the consumer position move forward to
+> point to the beginning of C? If the ring buffer producer guarantees ordering of reserved
+> slots then C, in this case, is now the oldest reserved. This speaks to your second patch
+> where you say that the consumer resolves conflicts by discarding data that has been
+> overwritten but I feel like the simpler thing to do is just move the consumer position.
+> 
+
+But the consumer may be ahead of overwrite_pos. In this case, moving
+consumer_pos back to the oldest event is not correct, as the event has
+already been consumed.
+
 
