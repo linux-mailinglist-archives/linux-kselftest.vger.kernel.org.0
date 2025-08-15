@@ -1,388 +1,219 @@
-Return-Path: <linux-kselftest+bounces-39101-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39102-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3E0CB27ECB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 13:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 02886B27EE0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 13:11:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB3216021DF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 11:04:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01D68606518
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 11:11:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847512459FB;
-	Fri, 15 Aug 2025 11:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E540423C503;
+	Fri, 15 Aug 2025 11:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k29vl0i/"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SJpm/oAw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2077.outbound.protection.outlook.com [40.107.94.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87ED191F91
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Aug 2025 11:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755255877; cv=none; b=FqGlmsqxSpdhFgC9Heio4C2s1QKrZ4scfBln+PiBnEdZN2aaSzsBUJbTKwGJw3TGep65LbAlZ9Eg1Cq9y4Gb+j4HsXYMyVJLvCVPSxCzTeR2YpabuNQcrKIlAZ2Q+4eKYOk39FJ60EXs1U//L2YDhE0Oxv7pXmSfdcgd7m346fU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755255877; c=relaxed/simple;
-	bh=8eQepZ3fEzXK6PodxV/BBZt7Tl/anmf/CBWbTz5YJRU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b7p6N7NXEB3WhwdwDZQp1Vp/k0WcgYE5OSJkruosqZtIByvMilzzivei4vu4rBbV3Wnh2Pcm+kPNM5sYVaXPE2Edpfy+SQdL/owjNI4a4fE7PjcFp2dFeXrl6jD12LeJwjYxelqb3ImonKiBy/3+uCwm8eBbMrsRiwFYmiVzqyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k29vl0i/; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7e8704da966so122554685a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Aug 2025 04:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755255874; x=1755860674; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DvG9N+gVecsI59wlaewqRQex6HgP2zxwloK5N2YE9s0=;
-        b=k29vl0i/r9rK4vVv06/rIGPnmKjfHhJyaQbR/3MzdJCLeTgqfKdkjok65r3D60J7xr
-         c//cK34LKoELYcFS5iuZC1RiZoZMNvBot0hPsS6B8bZKOevlRM+LtOl5YOkU7dMJrvEc
-         V7EAJhGMZ503o28SQx5opRyw7JeZrrqfJfpnBehEAHBNAIYuIv1dxGOOS5y/79G1/IPQ
-         b78clrvDqFWO5K40rkgDJel/fNt6/4kfF5Rb8GiL/hzj19b0Xz+izGg9PW77UAqvpmAP
-         3OY1StYqeJ3FR5epGcecbQo/7cl1mU7Vcd2Kd5DVJSemDZUmgHjDjUQWAKb3sxDtuCBr
-         eQtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755255874; x=1755860674;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DvG9N+gVecsI59wlaewqRQex6HgP2zxwloK5N2YE9s0=;
-        b=Z7LQBj+BmfwTfYeoogwUXZA9kfzhsPUNyd50a4PyM+41H83ZUv3CaOq8xNDgy9DwbU
-         bGStp1ZbOYqHrnh7IHHq+31Wwiw3/mMhzitdAVA/NPSy/Nae1relHXZag32kJmOrj70l
-         znyM33COE+JDfC6/LD5DAFHNFBK+w6Og6LZRT2CPJllNoKBDBLHwDHiD4OkoVjkiS4wd
-         EWIu++70LlNx0EvhsugJR9kh8/mBG8FBNMS8b3YOoox1eHvqrf8GcYiZy+QU9cE6eFYL
-         81s7PTiK+AzgPPnk5aLCevQ12jwVdGvZ3PUuMokT/MEqJZFG/sc33/jukpn85cEu8KLI
-         fhcw==
-X-Forwarded-Encrypted: i=1; AJvYcCXrPuNN4PEGhYkqqIVmgnZ6o9vlAHmP+phBYOQsHK9mBouah3OeHt/243LyR/Xe41f/c3DDnYaHMC1POEbmsmM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCWrHRMduYcVxNU3m1RbHj63cq1D0HmRB9Y4wsPJP1ote34TOX
-	MCjz6xEf8DNVo4jfNlqDniGsYhF79ZQzdvXbnVcp9g7aHXrocDg3fHpaEDiatB2ToK6KlbGpT4b
-	iLOecST30Itg2B+4eGk5aHy73ieEJOZPT/aVKVWoA
-X-Gm-Gg: ASbGncu4+9E3ZcNfyVlgcYzZK+OJlxYYVJV3bnSnl6dGNneX5aJySlgDri4qrDhpqlg
-	USmApfE1uoIZh8mR6YX6H7b3X7z3AhLP+cjbNpcWSHAcFBb1O3PYXvrZArhqZc/wnp64v6agr22
-	oOkfJE3CEaYPNRitGRNUjZMScTpAUZJElk7y8c1P8piXaJxzFF3gRW7zGeMKmYE8ORPgmKPhDGi
-	r83+e91Eho8vTerzeIdt38eeg==
-X-Google-Smtp-Source: AGHT+IEBgNg/azZknQtEaX/nvdBwzWpkWqavVXwebuGBFNyXdTtS0KFCRoBhmm4qTY0bifgT1iF+KMa+Wk1LUbv0zyc=
-X-Received: by 2002:a05:620a:6cc6:b0:7e6:8e43:4571 with SMTP id
- af79cd13be357-7e87e0dbc24mr181297285a.64.1755255874005; Fri, 15 Aug 2025
- 04:04:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523C02798E1;
+	Fri, 15 Aug 2025 11:11:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755256303; cv=fail; b=e6k49U7lGYOUdkEjtFMC7lcbu8YwWrSWYUPY79emP50ZRdzhsbWMAeBBTpSL3Uz2LLor8AgUsmXZ8KM/HKdsMZwv1u85WN79e26rlFxbvzfCVg3+ioxPjq/NQdarxYjMyom1p7vTki/1NzhPCDzVknVHpTbDvh1bNOXnTG/0bZw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755256303; c=relaxed/simple;
+	bh=yihez3eyo8+/NwGFKZ5gLLxi/zMjR0x/lNYUEmBb/RY=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
+	 In-Reply-To:MIME-Version; b=EzTIkSQ9YLVwMdcABnO/J0tv8AmkIlLeGfRsPdRJ1cIEljReNm47RzQxryMs1F8cPI4EprzIFiLQR6g8qEnGUZKJVpqX7SoXBlZf6Zux0y1uCgpF3Vq5ewDDn9NGSwUR0Ibu6i88ZcUoR6oB7xRXRuGs2Jp/Uy7e1bJ936VXDdo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SJpm/oAw; arc=fail smtp.client-ip=40.107.94.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bXOc6YFVVBwmfB5O6KVWCNQgbtlbc6H6jFR1qFI4Ba94GhxhbgpU+6nFETTtnIb0SP9OtjJWlThSXciwVzfnXa4yLtIPWAn8oTEGsyd5k68PJGzJWaGIO6NTplXn4KgLdjidAVrkNlX8XcMCfgaDzXxTuSLubza88+a08YBLTR7JBarINFsT1KusV8Pya7cXZoe3wT9TNkA2YpTlukl99MjDYRDf04/8pidgHx8vY/aeE76hUhT0THvcd3RamJe5qWe8O39yyQmXDObCsvPBTHofbjvMKMylYgSolEvM2hghRZJVy3Yjz5JwmeWkZMaX8CIx60RUhmCg57qGmAgskA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yihez3eyo8+/NwGFKZ5gLLxi/zMjR0x/lNYUEmBb/RY=;
+ b=LL3NDhw0jMFkkwgjGbusPnvhSlwqfgh5I4eebb1Vf21V1lITFCvAP8FL79j6oATzTiQ3q2q2liVgbP0zw8dNc8vZwrQSus8Yhgtk+N8ETQzOQe5CfYTGTc1MJEwib/p/Y8JyQzxvFt3G3eKS22kG3JG2E2tv10kGm2xsWQgcoVPBPB2iMzmvBrPpFtiuilRCa5ryoEdXeJIkkH6ea00q4h2WxqlEKLtnVJF4h3RlD3S7DGYSn1bLV2ETAcTuYc7R8oIPXDjG5iEn9ggBD/N5pjwl7UcfUkaHAIIwY8GD/472hqCeKShHG0Pe/Ehuz+9zb+ECfOTvy6JLVvR8ataYvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yihez3eyo8+/NwGFKZ5gLLxi/zMjR0x/lNYUEmBb/RY=;
+ b=SJpm/oAwW5HimXMfwBC+4DYDCkfH/B9Nl0BBtORLl8hRAbq1aGFtQ4HC5ernja3xtHfgWsTXmS4EpTylu8yKd212mXbJU1p9jMBXnhamzSVPMP6ztWLt4LFSCoKzX1y2/twJLL4O2VqHkM6zBVV2S319hoYlRwe40+hMxIzPXS+Vjs5sA6F8i8LqNOv53FcFUMD22n3Ggs0VvNe+4w/5ZQQDVYOhMZO8PPKc7337YNdL/2hhuXekbV5KSS5o6iyLe9RoZras7f/rn5pMT8EVf1lbazCofWklaV4ZxES80Mb6rH7gSx9fJBovd/IoI6sM9L2ggmm6fbMwtBIkErl5Gw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH2PR12MB3990.namprd12.prod.outlook.com (2603:10b6:610:28::18)
+ by IA0PR12MB8714.namprd12.prod.outlook.com (2603:10b6:208:488::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.13; Fri, 15 Aug
+ 2025 11:11:39 +0000
+Received: from CH2PR12MB3990.namprd12.prod.outlook.com
+ ([fe80::6e37:569f:82ee:3f99]) by CH2PR12MB3990.namprd12.prod.outlook.com
+ ([fe80::6e37:569f:82ee:3f99%3]) with mapi id 15.20.9031.014; Fri, 15 Aug 2025
+ 11:11:39 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 15 Aug 2025 20:11:34 +0900
+Message-Id: <DC2YFDSUSTT8.1K6K6M8OY7LUY@nvidia.com>
+Cc: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
+ <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
+ <linux-clk@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+ <linux-block@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH v2 02/19] gpu: nova-core: replace `kernel::c_str!` with
+ C-Strings
+From: "Alexandre Courbot" <acourbot@nvidia.com>
+To: "Tamir Duberstein" <tamird@gmail.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun
+ Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
+ Krummrich" <dakr@kernel.org>, "Maarten Lankhorst"
+ <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>,
+ "Thomas Zimmermann" <tzimmermann@suse.de>, "David Airlie"
+ <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "FUJITA Tomonori"
+ <fujita.tomonori@gmail.com>, "Andrew Lunn" <andrew@lunn.ch>, "Heiner
+ Kallweit" <hkallweit1@gmail.com>, "Russell King" <linux@armlinux.org.uk>,
+ "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
+ <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
+ <pabeni@redhat.com>, "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Breno Leitao" <leitao@debian.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Luis Chamberlain"
+ <mcgrof@kernel.org>, "Russ Weight" <russ.weight@linux.dev>, "Dave Ertman"
+ <david.m.ertman@intel.com>, "Ira Weiny" <ira.weiny@intel.com>, "Leon
+ Romanovsky" <leon@kernel.org>, "Bjorn Helgaas" <bhelgaas@google.com>,
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
+ "David Gow" <davidgow@google.com>, "Rae Moar" <rmoar@google.com>, "Jens
+ Axboe" <axboe@kernel.dk>, "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>, "Liam
+ Girdwood" <lgirdwood@gmail.com>, "Mark Brown" <broonie@kernel.org>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
+References: <20250813-core-cstr-cstrings-v2-0-00be80fc541b@gmail.com>
+ <20250813-core-cstr-cstrings-v2-2-00be80fc541b@gmail.com>
+In-Reply-To: <20250813-core-cstr-cstrings-v2-2-00be80fc541b@gmail.com>
+X-ClientProxiedBy: TYCP301CA0063.JPNP301.PROD.OUTLOOK.COM
+ (2603:1096:405:7d::8) To CH2PR12MB3990.namprd12.prod.outlook.com
+ (2603:10b6:610:28::18)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250815103604.3857930-1-marievic@google.com> <20250815103604.3857930-3-marievic@google.com>
-In-Reply-To: <20250815103604.3857930-3-marievic@google.com>
-From: David Gow <davidgow@google.com>
-Date: Fri, 15 Aug 2025 19:04:21 +0800
-X-Gm-Features: Ac12FXxjQpWOUTkjmalKCNMWlZUcA8lL3JG3JcVOWa1BTIUZU_qejiU4XP91Ljs
-Message-ID: <CABVgOS=3WjF=LObZNUcW9wsdnjzrmhAsjHP8uu02cO3F5iWkrA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/7] kunit: Introduce param_init/exit for parameterized
- test context management
-To: Marie Zhussupova <marievic@google.com>
-Cc: rmoar@google.com, shuah@kernel.org, brendan.higgins@linux.dev, 
-	mark.rutland@arm.com, elver@google.com, dvyukov@google.com, 
-	lucas.demarchi@intel.com, thomas.hellstrom@linux.intel.com, 
-	rodrigo.vivi@intel.com, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, kasan-dev@googlegroups.com, 
-	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000e99b52063c655a21"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3990:EE_|IA0PR12MB8714:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b9acb7e-1242-47f4-bb80-08dddbec811c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|10070799003|1800799024|7416014|376014|921020|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cENnNHhCeUJGZGlnZmhUeGl3N2xyV1M4d25vb1haempJNTFZWmsyZlJsQW5w?=
+ =?utf-8?B?R3ZnK2x1Yy93aHM3c0RtMnRCV1ZhWVdUMnhCT005ZE54TGFIQi82c3RmUVNz?=
+ =?utf-8?B?Rm1Nd1pab0pMZFNvR1pDRnRENXp2YWo3V0RyYzZ5SVBCQlByL3FGdUZ3TVdM?=
+ =?utf-8?B?SkRRdlNXclJqb0p6M1FpK2xIZ0crMjNBcjhnS2V0SmMrenlCK2U3YnF3M1dH?=
+ =?utf-8?B?R0tKRzZHYzE2aVowUmkwTG0xZWNrL05QQnlWRzZKWGFyQVlSbjN2K01nenN4?=
+ =?utf-8?B?SXZ5OXNacWpYbmhPdlczZzdGckIydzNwQVVXS043K0VxQ0NhRHJicWZyTkJr?=
+ =?utf-8?B?T0xscndveFhGZzcxVXNRaUZFbmxaTVhrZjNxRWlRdmlBcDVKYytKT3lTZW9R?=
+ =?utf-8?B?Wlp4dGFPUTJUNHRreHFZYnlPdFBKUU4wSG40U1dxSHFWWVdLc3JrVFV4Wm9I?=
+ =?utf-8?B?bnAyU3F0WVdYc001MVp1aUpUbVVyTDBvN2txNDJ6YjU2WFFuSVZoVGpKd2l2?=
+ =?utf-8?B?Z2VkWm1xNEExUnh3V1Bkam5XNTVEamY1RlJwM2UrWDExaEZ4QUt2MTNtZG16?=
+ =?utf-8?B?cW5TMlkxL01xR3JqNTF3ZEVZS201bUNkcGgvYzlWMnF5ZUp1V3ZFelZ2WkNU?=
+ =?utf-8?B?QUFxR0xqM2w1SHArellIZXVhaWJmTE5uTHczN25WVmJGOVcvWGJRSEdaRUJj?=
+ =?utf-8?B?UkdzV0FuQW5EQnc1YzJVUjdlQWE0TlVNV1NJbHFBNEF1RmFLMHUvN0xhYm9L?=
+ =?utf-8?B?T3BjYTVadFNZK29OUmNGdkFZb3FmM0hYSEhMYkpyWkRGSC91b0dOSGFBSWor?=
+ =?utf-8?B?emdHTzdzNlMzRUFBTW1kb0tVdXdXTlBlMTNURktFR3B6cHVTUXhub3BSU09M?=
+ =?utf-8?B?djc2RVRzQW05N1Z1TmhSbHdINTAxY0szQVJRVmt1dzhieUJoay9sRzN2eTdx?=
+ =?utf-8?B?ajk0MWpBRkhva2lTQkljVFRVZFgrYUYwQnl2elNsM1BJS2R5UHk4cm5pM25k?=
+ =?utf-8?B?MEprSXZ2VU55bHd5bGpBTnZsNkkwNmdJSHhSOWl1ak9OZnA1R3lUM2pkVzgr?=
+ =?utf-8?B?R25xY2VkbFp5VDFQY3loeWY4a3M3NjV2RUV1WjZIT3NHbXZtaVA2RUJ4SHpH?=
+ =?utf-8?B?dXNUTzNsai9TM0liZkppNzJzVjNYcGk3Y0Rmc3kvd2hsT2twLzNLR0hiMzdo?=
+ =?utf-8?B?OVBwdXFxU2lYZXIyTjdxbFdKV3BzdW93MFFoSlN2d1hYZnF3c2pZbTlzTWJP?=
+ =?utf-8?B?UDNJSGF5L1YzaHJwZU1pTEhKZXlVTWlaUGZMcC9rRFBOaXQyWXVaOXFrTnJC?=
+ =?utf-8?B?bXVhYS93TjlrZGh4VkFwd2VBOHlFL01sNVNZQkx6dnlsTlA1cEI1TDNoa0Y0?=
+ =?utf-8?B?cDRCS3ZHVzFudGx3R3NSeUg5YkxOc3g2Q0dVUFAvNXQzaVRONkh0b3hWTFhY?=
+ =?utf-8?B?N0VFajJRSGJIUTFaYWJTS0V5Mmt6L2EyWDY3WXJRelVlVnlTelFHeGJub3Fn?=
+ =?utf-8?B?MVVGUWNmQWJFTndQT2tZVEprYTdMUXlIUUJoTTdmQXltYk1rRldDTTZDVUFK?=
+ =?utf-8?B?QjFuVmVyYVk3Qm5MR1FtWTRHa2JBYlVURzlKWFQ5ZkdKL2MyNUVVNmd3ZVNN?=
+ =?utf-8?B?SVB0Vlk1ZmNtRkRwOGZQYmMvZFk4aUhEQ3E2M0RyWncwa0haV2F6ZmxrdVoz?=
+ =?utf-8?B?aGFPZ2hzUFVacEVPbTZRdUE5N2l6TTR6SkJhVmh6TzNpQUtUQVZUOExZcm1E?=
+ =?utf-8?B?SEVpT2RPaVNkdDQ1cndxVDM2N2pMdk9la1l4c3VldWFJME9BZStKTVZ2S3Bz?=
+ =?utf-8?B?TXVEWnJUK3dxT3hNdlpKQjJZYVJkRkNIT2xFYWNybG9mbWZuRWtGaUhBQUFq?=
+ =?utf-8?B?dFlpLzFQUUVWMzBVaWhnVnAwV0FvbHVNL1Z4MEY3S24rZmNHZDVxRk10eGxh?=
+ =?utf-8?B?U2tQeUpxWTFQeXE4RmNtdnlnN0d5d1VzVkFpOHZvdFJjZWpnMHQxdDZIL2Z0?=
+ =?utf-8?B?KytGWE0zdUpRPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(10070799003)(1800799024)(7416014)(376014)(921020)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TWpLUG9kMjExaG1tNlNkNGFIdVkwaVlIRCtQWkMyeTdUTXNyVUUvN01UTVlH?=
+ =?utf-8?B?Y0NWdXk0cVladXpUL2V3aThIYXhPVHNpdlpjd3NYSEIzd2NNbGZrSERRZFJt?=
+ =?utf-8?B?VVg5Rjg2ZlpZc2tDZjltSzFtWnYybG1reFU0ajNGZUtuSUdldWZ0TGpSa2VC?=
+ =?utf-8?B?QTJMa2lxYTRxSktpdkxYVW5wdmFFaDgwREFKYkd4RnlmOGZRampCWXR3VFhM?=
+ =?utf-8?B?U21VcnR3bFhJWVphOGtsUW43akdWYnRQOGZqVlZmUFM1UGdza1BxRy9NMHRE?=
+ =?utf-8?B?WUxDVTZtcmVBbzFpTUdISlZKdkFvTDJ5NkJFSEQrbHhNY2tYaXNERXBKb3JG?=
+ =?utf-8?B?cFc1RUQrOHVUNCtOdkNKZ1VBenJqcWhjaktvRVpxcm84eFl0R09IUW1sTmt4?=
+ =?utf-8?B?TTV4M2lIUWlpeUI3TW1hdDJBYzZyUDFic2RsVU5KOWJ3TUNwL1RzU3oyRU02?=
+ =?utf-8?B?akRKYUtVQjNnQUtNbG5WbEM3STE4U01DOVpVY0hPUW9oaDRtVjJicFVoVWY3?=
+ =?utf-8?B?aWRid0J6bDFPRDJjNXlJMXc1RFdXdjdTQmZBZVNQekdpK2wvZ25LOXp5UE1l?=
+ =?utf-8?B?WEFjZjdEd1ZPUmFLVGhEaU54TDJiRXE0UjQ0UGJvVnBQQldickJKMTNTNDlE?=
+ =?utf-8?B?V3RIcW5hWklXWVBsNytMdDJ1V1MzK0Y1Mld1c3BwaXp5UTdKS05nVklDRFVO?=
+ =?utf-8?B?R1JhR3VkNjNSRmZURDA3TW5BSDFNZTIwVG5sS0NhNGI1TGZYUU1PNGFhMjFY?=
+ =?utf-8?B?TGhkc05tTXJFN0dNQ2tnNXkyQ0h0VnYzNWo3OXVzeklxVlZkK0Q2aDgrM3pq?=
+ =?utf-8?B?UGlqQlMwUHV3SjEzVXJYNVpPSzl1MTF3dFdyS2VxdVJuV0hSUzlRTy9aVTlj?=
+ =?utf-8?B?QjZrZVhTQmtFMlEzUGdOMWJ5bGpZdk40NXZWcjEydG03aHRVdExGZkRnQUNW?=
+ =?utf-8?B?eVR0K2FsdkJKL1ZIUGxYay9XVUZHaGdFNWd6eEZ4Qm5hR2pkbGp5SXVxOExz?=
+ =?utf-8?B?OEFkbHZoN05zTW1vVHF4UUdBRWZiVXhoSC9vczJySUh6cWNTK0hiNU9RdWVn?=
+ =?utf-8?B?UEhkZEcyR3dyQUl4OGtZQXBFbVRCNXVCR3grbFBLNS9nUGYyZTdvMWZnajVn?=
+ =?utf-8?B?M0Nidzd3YWVta0s0UTN0YzlPVk5RNmYzdVcwd09vckdEWWN4TlkyMlBRVDl6?=
+ =?utf-8?B?ZU9hMFpoVjRzS0IyaS9jdlFtc0NtTStuTHY2bWpidFlFamZXK2xvTVFDNlZp?=
+ =?utf-8?B?VEVFcHJrRWwwSkJ4MWpZM2cxZWFPNkQ5Ty9rOFBteUlmK1YzYTc2aDdDeDRN?=
+ =?utf-8?B?RldTZm5Qb2ZnRU9vclFLQStMdVI2Tm1aTXpKeWRzQ3NHVUlCbXZjVFIvT2J3?=
+ =?utf-8?B?S0h2R0xoMUphcW1zZ0QwRWlFd3N2Q2xEV3paeTJpaTRFYVNOanVzbWhBc1NF?=
+ =?utf-8?B?QW0xRmVZdEM4YXpTcVlHNEdrYlBDMmxKeHFIMjkzQWpTQS9QSlArVHZRRGRX?=
+ =?utf-8?B?OWpmQ0M3U0RsNUw3Tk1xRUJzS2paTFMyK0xXZmFSK2c2M0dNSmY0VXg4UnQw?=
+ =?utf-8?B?bzNIY284TDhKM3hrU09PMWlqSGtqak5xbkVXMDRlUHR0dUkxT1o4RmdoNUlY?=
+ =?utf-8?B?V1N3K1A0SG1YL3JLeDVxVUJqZmI3RWlONURtZzdUZzY3MHEwL2Rsei9lUVYv?=
+ =?utf-8?B?Q2dweTI2a0c3N05VM3poamd3Q2cxdTI1T01VY3ZaOEpKK1V0a1ZEQitVeFh0?=
+ =?utf-8?B?dENCK2tPcTlBWFV2OUIyN0xoYWdqM05BRlJwRUp3ZjRaeG5ManRjQnh0Q0Vi?=
+ =?utf-8?B?WVhlQUYzV24rT1BvMjRPRUtTWnBETmFDSXZ2K2RNVEd0b1FEbittQjBUUU5u?=
+ =?utf-8?B?OHVhVXNhNHZEeGpoOVJWWDFkTVVWbVl6YnRqK2JEOThMM0IzUjdTU2JGa1lR?=
+ =?utf-8?B?TGdhNlVjNTNnMnBnQkZ0VWJUKzk2L3JjcE1iM3JFUGFrcFVGWGprUldzU2dZ?=
+ =?utf-8?B?RHBLVlNZMzBHU25nam5DczJtVUErbUhvb2lDZyt0d25WcmlKeGlsay84TXBG?=
+ =?utf-8?B?SjZzTTJlcEN2VkEwWWNqY3cyR2JQMFJlMWJSZGYwcFlmanRQMm5GakxCRXNC?=
+ =?utf-8?B?cUFkb3k4M0hHV0JRc3BJdnhSSmQwM0tEYnduNVcxK2ptVkRsam0zVHlRMEZw?=
+ =?utf-8?Q?ZPpeq9nNj6326kp6nBQnhx+QgxF4GbyDhJgQ1KUUzt8G?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b9acb7e-1242-47f4-bb80-08dddbec811c
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3990.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2025 11:11:39.5847
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZbHFvGyCRGmg7MGMx8njWWHRnixiLERfGlLNUvVmcVitUSt1bIk8IuWxsipxZGuPK7bMMw1wU693kys8/inQmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8714
 
---000000000000e99b52063c655a21
-Content-Type: text/plain; charset="UTF-8"
+On Thu Aug 14, 2025 at 12:59 AM JST, Tamir Duberstein wrote:
+> C-String literals were added in Rust 1.77. Replace instances of
+> `kernel::c_str!` with C-String literals where possible.
+>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Benno Lossin <lossin@kernel.org>
+> Acked-by: Danilo Krummrich <dakr@kernel.org>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-On Fri, 15 Aug 2025 at 18:36, Marie Zhussupova <marievic@google.com> wrote:
->
-> Add (*param_init) and (*param_exit) function pointers to
-> `struct kunit_case`. Users will be able to set them via the new
-> KUNIT_CASE_PARAM_WITH_INIT() macro.
->
-> param_init/exit will be invoked by kunit_run_tests() once before and once
-> after the parameterized test, respectively. They will receive the
-> `struct kunit` that holds the parameterized test context; facilitating
-> init and exit for shared state.
->
-> This patch also sets param_init/exit to None in rust/kernel/kunit.rs.
->
-> Reviewed-by: Rae Moar <rmoar@google.com>
-> Signed-off-by: Marie Zhussupova <marievic@google.com>
-> ---
-
-Thanks, I've tested the param_init failure case, and it works well for me now.
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->
-> Changes in v3:
-> v2: https://lore.kernel.org/all/20250811221739.2694336-3-marievic@google.com/
-> - kunit_init_parent_param_test() now sets both the `struct kunit_case`
->   and the `struct kunit` statuses as failed if the parameterized test
->   init failed. The failure message was also changed to include the failure
->   code, mirroring the kunit_suite init failure message.
-> - A check for parameter init failure was added in kunit_run_tests(). So,
->   if the init failed, the framework will skip the parameter runs and
->   update the param_test statistics to count that failure.
-> - Commit message formatting.
->
-> Changes in v2:
-> v1: https://lore.kernel.org/all/20250729193647.3410634-3-marievic@google.com/
-> - param init/exit were set to None in rust/kernel/kunit.rs to fix the
->   Rust breakage.
-> - The name of __kunit_init_parent_test was changed to
->   kunit_init_parent_param_test and its call was changed to happen only
->   if the test is parameterized.
-> - The param_exit call was also moved inside the check for if the test is
->   parameterized.
-> - KUNIT_CASE_PARAM_WITH_INIT() macro logic was change to not automatically
->   set generate_params() to KUnit's built-in generator function. Instead,
->   the test user will be asked to provide it themselves.
-> - The comments and the commit message were changed to reflect the
->   parameterized testing terminology. See the patch series cover letter
->   change log for the definitions.
->
-> ---
->  include/kunit/test.h | 25 +++++++++++++++++++++++++
->  lib/kunit/test.c     | 27 ++++++++++++++++++++++++++-
->  rust/kernel/kunit.rs |  4 ++++
->  3 files changed, 55 insertions(+), 1 deletion(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index b47b9a3102f3..d2e1b986b161 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -92,6 +92,8 @@ struct kunit_attributes {
->   * @name:     the name of the test case.
->   * @generate_params: the generator function for parameterized tests.
->   * @attr:     the attributes associated with the test
-> + * @param_init: The init function to run before a parameterized test.
-> + * @param_exit: The exit function to run after a parameterized test.
->   *
->   * A test case is a function with the signature,
->   * ``void (*)(struct kunit *)``
-> @@ -128,6 +130,8 @@ struct kunit_case {
->         const char *name;
->         const void* (*generate_params)(const void *prev, char *desc);
->         struct kunit_attributes attr;
-> +       int (*param_init)(struct kunit *test);
-> +       void (*param_exit)(struct kunit *test);
->
->         /* private: internal use only. */
->         enum kunit_status status;
-> @@ -218,6 +222,27 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
->                   .generate_params = gen_params,                                \
->                   .attr = attributes, .module_name = KBUILD_MODNAME}
->
-> +/**
-> + * KUNIT_CASE_PARAM_WITH_INIT - Define a parameterized KUnit test case with custom
-> + * param_init() and param_exit() functions.
-> + * @test_name: The function implementing the test case.
-> + * @gen_params: The function to generate parameters for the test case.
-> + * @init: A reference to the param_init() function to run before a parameterized test.
-> + * @exit: A reference to the param_exit() function to run after a parameterized test.
-> + *
-> + * Provides the option to register param_init() and param_exit() functions.
-> + * param_init/exit will be passed the parameterized test context and run once
-> + * before and once after the parameterized test. The init function can be used
-> + * to add resources to share between parameter runs, and any other setup logic.
-> + * The exit function can be used to clean up resources that were not managed by
-> + * the parameterized test, and any other teardown logic.
-> + */
-> +#define KUNIT_CASE_PARAM_WITH_INIT(test_name, gen_params, init, exit)          \
-> +               { .run_case = test_name, .name = #test_name,                    \
-> +                 .generate_params = gen_params,                                \
-> +                 .param_init = init, .param_exit = exit,                       \
-> +                 .module_name = KBUILD_MODNAME}
-> +
->  /**
->   * struct kunit_suite - describes a related collection of &struct kunit_case
->   *
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 14a8bd846939..917df2e1688d 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -641,6 +641,20 @@ static void kunit_accumulate_stats(struct kunit_result_stats *total,
->         total->total += add.total;
->  }
->
-> +static void kunit_init_parent_param_test(struct kunit_case *test_case, struct kunit *test)
-> +{
-> +       if (test_case->param_init) {
-> +               int err = test_case->param_init(test);
-> +
-> +               if (err) {
-> +                       kunit_err(test_case, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-> +                               "# failed to initialize parent parameter test (%d)", err);
-> +                       test->status = KUNIT_FAILURE;
-> +                       test_case->status = KUNIT_FAILURE;
-> +               }
-> +       }
-> +}
-> +
->  int kunit_run_tests(struct kunit_suite *suite)
->  {
->         char param_desc[KUNIT_PARAM_DESC_SIZE];
-> @@ -678,6 +692,11 @@ int kunit_run_tests(struct kunit_suite *suite)
->                         kunit_run_case_catch_errors(suite, test_case, &test);
->                         kunit_update_stats(&param_stats, test.status);
->                 } else {
-> +                       kunit_init_parent_param_test(test_case, &test);
-> +                       if (test_case->status == KUNIT_FAILURE) {
-> +                               kunit_update_stats(&param_stats, test.status);
-> +                               goto test_case_end;
-> +                       }
->                         /* Get initial param. */
->                         param_desc[0] = '\0';
->                         /* TODO: Make generate_params try-catch */
-> @@ -714,10 +733,16 @@ int kunit_run_tests(struct kunit_suite *suite)
->                                 param_desc[0] = '\0';
->                                 curr_param = test_case->generate_params(curr_param, param_desc);
->                         }
-> +                       /*
-> +                        * TODO: Put into a try catch. Since we don't need suite->exit
-> +                        * for it we can't reuse kunit_try_run_cleanup for this yet.
-> +                        */
-> +                       if (test_case->param_exit)
-> +                               test_case->param_exit(&test);
->                         /* TODO: Put this kunit_cleanup into a try-catch. */
->                         kunit_cleanup(&test);
->                 }
-> -
-> +test_case_end:
->                 kunit_print_attr((void *)test_case, true, KUNIT_LEVEL_CASE);
->
->                 kunit_print_test_stats(&test, param_stats);
-> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> index 4b8cdcb21e77..cda64574b44d 100644
-> --- a/rust/kernel/kunit.rs
-> +++ b/rust/kernel/kunit.rs
-> @@ -207,6 +207,8 @@ pub const fn kunit_case(
->          status: kernel::bindings::kunit_status_KUNIT_SUCCESS,
->          module_name: core::ptr::null_mut(),
->          log: core::ptr::null_mut(),
-> +        param_init: None,
-> +        param_exit: None,
->      }
->  }
->
-> @@ -226,6 +228,8 @@ pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
->          status: kernel::bindings::kunit_status_KUNIT_SUCCESS,
->          module_name: core::ptr::null_mut(),
->          log: core::ptr::null_mut(),
-> +        param_init: None,
-> +        param_exit: None,
->      }
->  }
->
-> --
-> 2.51.0.rc1.167.g924127e9c0-goog
->
-
---000000000000e99b52063c655a21
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-jmkLAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFBp5bTxrTm/d
-WMmRETO8lNkA4c7fMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBF
-tO3/N2l9hTaij/K0xCpLwIlrqpNo0nMAvvG5LPQQjSeHnTh06tWTgsPCOJ65GX+bqWRDwGTu8WTq
-c5ihCNOikBs25j82yeLkfdbeN/tzRGUb2RD+8n9I3CnyMSG49U2s0ZdncsrIVFh47KW2TpHTF7R8
-N1dri01wPg8hw4u0+XoczR2TiBrBOISKmAlkAi+P9ivT31gSHdbopoL4x0V2Ow9IOp0chrQQUZtP
-KBytLhzUzd9wIsE0QMNDbw6jeG8+a4sd17zpXSbBywIGw7sEvPtnBjMaf5ib3kznlOne6tuDVx4y
-QFExTCSrP3OTMUkNbpIdgzg2CHQ2aB8i8YsTZ8Q8Q8ztPJ+xDNsqBUeYxILLjTjxQQovToqipB3f
-6IMyk+lWCdDS+iCLYZULV1BTHSdwp1NM3t4jZ8TMlV+JzAyRqz4lzSl8ptkFhKBJ7w2tDrZ3BEXB
-8ASUByRxeh+pC1Z5/HhqfiWMVPjaWmlRRJVlRk+ObKIv2CblwxMYlo2Mn8rrbEDyfum1RTMW55Z6
-Vumvw5QTHe29TYxSiusovM6OD5y0I+4zaIaYDx/AtF0mMOFXb1MDyynf1CDxhtkgnrBUseHSOU2e
-MYs7IqzRap5xsgpJS+t7cp/P8fdlCNvsXss9zZa279tKwaxR0U2IzGxRGsWKGxDysn1HT6pqMDGC
-Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAUXA7LnOuRz2DvkWTeMc
-0TANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgAajXmtqTYc6VnbKNqUv+24zFMJ72
-ByNZMBgUPX1WmIQwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-ODE1MTEwNDM0WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAcvY56TR4MH7v42ch8NNQfTa8pwOy7kx+tOuaMaqvReI6Pt2JGQVNimtaAZMJXYiw
-Q83xTk+nTz3W4xkPNSSqrzqgj+fYRTfjx0fvJhmcU9qPai4cr/RGJRHPxhYvMhG6eQYtZOOxkjNK
-V2pcfmeJaTl+wIoBOksms454xmJplt3Jxtxt5CQm3QCj2Fg1RTQNnzfchG9VczxkZI0m8dCiV9pU
-jqPbY8IVX2ys5gkIDew6m8/aHN2ODHfhOeLMJm0I7iJT+j8U4RtDVD51YdoRdPBRO3G+Gzn6L+g1
-w0HmR834n3JfEAOjfxczf8/lEvAaJbwxwW/TsBJ4TKH+JtH2Iw==
---000000000000e99b52063c655a21--
+Reviewed-by: Alexandre Courbot <acourbot@nvidia.com>
 
