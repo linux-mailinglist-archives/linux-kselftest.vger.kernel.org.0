@@ -1,76 +1,78 @@
-Return-Path: <linux-kselftest+bounces-39059-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36A42B2790F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 08:23:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DE2BB2790D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 08:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F71E189A1F7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 06:21:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85DE316F522
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 06:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 108C129E0E6;
-	Fri, 15 Aug 2025 06:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE132BE7A2;
+	Fri, 15 Aug 2025 06:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OSlWa+bU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NQ7oQnmG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BEE729D292;
-	Fri, 15 Aug 2025 06:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37822BE054;
+	Fri, 15 Aug 2025 06:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755238812; cv=none; b=RrhvaEVpPc8mbRmBCPLCGFmzzqMyuOKTKszFXJfYErjglyj/ZhpzVXkcJIqe2Qvf/cUDcDIC+/K2dkRLCnmtYMZ5z0zzJxpINT91q27ieIyE5D4C4SPAzCjpZq11l+4J1gBNeJ9cHPKdeGUO1g8qg4GVdFV4naXdYOpRDfV939c=
+	t=1755238819; cv=none; b=k91lj/4rMxWQkwL41hbMtshEtFdpAulJSCgyupmpdoabLvYEIuXoNYqZe2PIGu5+mssq/PKGtqUSpzEFQf2Ug7JIs8+UgXC31Q0wNLJkU9CvW/46z+R9QiW9H+J5ECPA3hbclyeQk6ocrcAT1uhCy0qDRAMwjTCX7OfekLZmPOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755238812; c=relaxed/simple;
-	bh=M1qD99cVuowaMMpYyTGgdDNgWN0orzoh16rsQLyUYPc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lvX6tQBtTsAhSWR29jDXWmqIi6xM+Fw6n64PfZRpm8toebNGDv3oCsPoZs1bScSyaW/gchkbWc+ykYS/fW//OfS7PfFEXZd/7KMDbxE56JriBGZt+lniLiSFtIALtMKhH7mPIzFxdOXYTQVxHEtnMA81iZAyDfwOfmiroEPq9wE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OSlWa+bU; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1755238819; c=relaxed/simple;
+	bh=lK5zkef5cKqd23qXzdQvroNbSbdGLd4vAGXqaVs9VRY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sPKjMa8BUaZwdmmav7myCfn39Hp5rHO4BLvo38HJjMJqdPiQXIM7htsbqrKfAMiNl1+/Xg1UO3JKGsO9L0HmfY7VTuKRccyzhgJGuf4Us/7pAfyJh1K32K5Fz0OIatBr7NgSUYozd/AYE+4KcQM8NvHu2B9+ljmlB8Ok0jPnyTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NQ7oQnmG; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-76e1fc69f86so2097457b3a.0;
-        Thu, 14 Aug 2025 23:20:11 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-323266b2368so1233619a91.0;
+        Thu, 14 Aug 2025 23:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755238810; x=1755843610; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=V+6CK4pJH6IHQzTvx0Xqq3B1gHNjIgNq+9zUFXP0jZs=;
-        b=OSlWa+bUUyO2nkuVHH3SYRxelowPsK/lFGnmeVZ4szzk1y1a2xJa1LibFN7sSqrq9a
-         8CeDTnQubMn0N+ZQ1wWYcB2UuAjltj8dkpRinq5PT5zC0JFnrhScYdrzZp5r1GG/OQCp
-         E1zP5KNRPyinPiHsKu8SpAUV/Ttms0Rb651au0KlyABR2QPbYlfi7/AjhKUG6XtjgbSi
-         Hjh7X62sPP6SvPkxL12UX1vUDh0CDFOBiHEM3KqGJmJgfMAcMKH2PcAJsx8Ui9qLUZxH
-         On1Ntx7LGIbDxZUBSbmXYj/DKxpwUkkx53Zmw2Tg55H74ftGsUPy9IMFzba1myZr5MLX
-         4Z6Q==
+        d=gmail.com; s=20230601; t=1755238816; x=1755843616; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yXBPJFE070kbLr6SjD+Vna2EUaNdA1XNDeA15UUUetQ=;
+        b=NQ7oQnmGAfEyRbCqRQvOgfstHwkI9y3rjQrlOtxnbXmWyZgm5010va1NSqjOUrGUVz
+         bgCS4IPqWJa/JuIW8IPHjRv9dAtULSlHF8GRF6LmVf1m7V53jnN0EsdEcj41rnhIX1iw
+         75rl9ZG2gbpXkP+7FbOi2MzTwF6zzNOotHpuk63sgxJnJbRTouEfzsiHRjUFCEUa1jBT
+         eZnxfHMRh7X3cCsJ00ICBMegqG1pnSN5FOge3+vOzQcNVAstXWXRNz+/vRJN7s9/IVQO
+         1dg//92cVkeCxCytaH4nEuA7ku7pp6/dFnEWAj1J3lrHCcN1ozJdv87bkkyuQWQizYDm
+         dFvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755238810; x=1755843610;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V+6CK4pJH6IHQzTvx0Xqq3B1gHNjIgNq+9zUFXP0jZs=;
-        b=qzcvxkf7ad6mFdA9R+tKE60hf+R6qBI7EJD24mEllW54srCkXruOPBx6rTiS9OuOZm
-         f7k3PFZewm/Q0EMnqSFz5vKaEjYeVM2dQORZoAxhd7FQ38y94snzlUzcz+Eq7dJE2sis
-         1dl2T9nCdrspFKx0QqVJ8snS1M0ubFKGtMn74dnn02hzVTXHr858xW4cHivb2UnuJPq7
-         qkxP7WM55UJ1Yvz1bxXlrRlrQ/qolT5EVwvJBPZpVUzFO/NC0YZr8P6lik/U5YDYdt14
-         9VDmNmRP6FXREIyIlfPpAw1nUjGtOnKj0PEwG2EGo4qo1dRaa7zK4stt6FYWLRUhvz6D
-         oFPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMiTYZTrTQkZQogPDkKLsWDmCuBWWqb3VXcEVZ98UeRZfSDKG4khm2EC+oGl7ytZ3B/cPsJWC4TDtSAAo0SxBy@vger.kernel.org, AJvYcCUmhdqjReUWk9dRpbthykZwZqyOxKFIl3XVwhZYJOmmwjUrFnVTk0JLDsnrO0GJXfNI1WRrTrt4If0VWcU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yywqzl4Xz+DLSc7+UMuIfpBXaTWg17mU3JBzUwaUSkX0bt8XMpx
-	Nfe05ZX0IXeOCW1mqzutNUJA4aa5w2/Hx9Euu2vBISu/Warvbve7VJBm8PG5QIFb
-X-Gm-Gg: ASbGncuWQnCKCxS8Wc9FM3ph/pbDJsNHuVJ5fbZ/DoGdBRWWrawly4yVFeAIVhYRygo
-	OiB5QFjO+nMgBGHvToRhbJPVeZTm+CGj8WNp5+onkqNrEWzSFyZgEVtcExBVjvoZc3OPLhWx/yD
-	DmU89h9NJ6WyDwO7Ze6BuLsMydVoC+ANtS/mwUcUnO7UUyLnf8g3A5AR0S1e3scIIj+jaWTa+md
-	4mAgiWIWbBKg6P6bsxX/qmlV14L+5pvagEcSVdyo3e0mMliuuxze4bxGMq/LMi/W9E1LBm6Pfrd
-	MgxUz23KwU520yHqQZWj+LrCNwFXLmtY0SW09wt8C9qCbdeJeradwhIp9SQR+8PclO6MzkY8jSb
-	Pj4MLnnJSKqbWMojuKuak3KJf43MFFX0cYOLxDJAIYvvY/O62CvYj
-X-Google-Smtp-Source: AGHT+IGd53oaXH1+v/3izS/t47bREhjBLJ78OaqnTfsmXgwyTnMuXeYsrqdLr/dvuLoj5aY1mRtcgQ==
-X-Received: by 2002:a05:6a20:158a:b0:1f3:31fe:c1da with SMTP id adf61e73a8af0-240d2934bbbmr1708057637.11.1755238810353;
-        Thu, 14 Aug 2025 23:20:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755238816; x=1755843616;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yXBPJFE070kbLr6SjD+Vna2EUaNdA1XNDeA15UUUetQ=;
+        b=EWsUBDp/icPHU32jk4bC4v5dA3zRN7YCrS1SsWXzhgL2Bckx/BA0IYkwXdCZp9UuHj
+         3UsnD3GR1lJr465OJ8vdVi+mf5py+MXjjPal89nxM1B17uzgXLIbFmrGWTS+3J8YFGGs
+         snnspYV4s/yRfr/n0whsGO4VyF3ZrlWRRr8VC71rvELiXuhN6D+ZuQL6hbCorJEkGuQ7
+         /GSTfreVfC1ZGSxLeW4K0OUQp3o6wcBAll/w5epMNx9B+1YHzBiiE/AJwKBaDuNKGI3F
+         xNE+23vgATHQx5oc8/JKCiowd+pPeRQLo/9Hr3dNPY4Y4AAcov4Eo4qnuvGZstFwBmHM
+         nc0A==
+X-Forwarded-Encrypted: i=1; AJvYcCUsUviGq1igAGs0+zFpH+qZu2D5HIk65mkyw5Owrgp2IbZOAwznEQ4ufEfb8S2MjMTZawxsfip4T+9Gpr0=@vger.kernel.org, AJvYcCWfdNC44ILO2d2sHpDeFx3LRsvnifWtUNFhYbEtk31te0T/Wi+/KguIghrhW9rqLGBwM9Xk+GfvLP2qY+vsOW9d@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFJ+QEPh83jf04S+WmlZ7Yx8jQ7nOzRMkKSdjuRp+UlIXmobfr
+	UMo+INyVOP4+J8JTaRTU7V+MRwJlK6unwaPBQJIQ+lpzCHSS2qzqLzofZMMXzcYV
+X-Gm-Gg: ASbGnct/OEL/W0+hxcvnfeptE1P8oi4H4VsXNDca+S/RyhI2iQa6J0cTxMd/LOHv0/e
+	3BUu7oXafTGb7G/UhjSWSJBniHxYF8COQ/ySFymgXAwnC4DX/KpQNNBONjqOFcFbgjSvmXgTH8c
+	BUIzrELERmhseVrVccRd5FZPPLIQnmvA4pa2lPbHdChVS3nKpVrkfBpfgFXgTNMM5K9YRcjeh5l
+	HQ+/JuyzdXXHB+agPp52r/UD1IvxRdegIZXjKYYhsp5BcuHuYGYFvTTernJ7OWFK1ghuvnQK0sD
+	KmrfKC0VX6uPb+fRhCYR/gXZ5kImBwwjIoma6ARJTgL4keFb88dB1XsK2yLzmS7zvmK1GJnfro2
+	XBkP9EYBBA07WNiRVsPtiV7vGBR9hahF8SkmAZnpppQ==
+X-Google-Smtp-Source: AGHT+IF5/cA9kDJRJAps4NuwCaiWI8kJ9VWzISNdOQMCKTkjR2rcc96cntj6yxmHbzqPeS+m5cerEg==
+X-Received: by 2002:a17:90b:5864:b0:31c:c661:e4e with SMTP id 98e67ed59e1d1-323421866f4mr1598609a91.33.1755238815851;
+        Thu, 14 Aug 2025 23:20:15 -0700 (PDT)
 Received: from fedora.redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b472d76df62sm425206a12.41.2025.08.14.23.20.05
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b472d76df62sm425206a12.41.2025.08.14.23.20.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 23:20:09 -0700 (PDT)
+        Thu, 14 Aug 2025 23:20:15 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Jay Vosburgh <jv@jvosburgh.net>,
@@ -85,10 +87,12 @@ Cc: Jay Vosburgh <jv@jvosburgh.net>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv3 net 0/3] bonding: fix negotiation flapping in 802.3ad passive mode
-Date: Fri, 15 Aug 2025 06:19:57 +0000
-Message-ID: <20250815062000.22220-1-liuhangbin@gmail.com>
+Subject: [PATCHv3 net 1/3] bonding: update LACP activity flag after setting lacp_active
+Date: Fri, 15 Aug 2025 06:19:58 +0000
+Message-ID: <20250815062000.22220-2-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250815062000.22220-1-liuhangbin@gmail.com>
+References: <20250815062000.22220-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,42 +101,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch fixes unstable LACP negotiation when bonding is configured in
-passive mode (`lacp_active=off`).
+The port's actor_oper_port_state activity flag should be updated immediately
+after changing the lacp_active option to reflect the current mode correctly.
 
-Previously, the actor would stop sending LACPDUs after initial negotiation
-succeeded, leading to the partner timing out and restarting the negotiation
-cycle. This resulted in continuous LACP state flapping.
+Fixes: 3a755cd8b7c6 ("bonding: add new option lacp_active")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ drivers/net/bonding/bond_3ad.c     | 25 +++++++++++++++++++++++++
+ drivers/net/bonding/bond_options.c |  1 +
+ include/net/bond_3ad.h             |  1 +
+ 3 files changed, 27 insertions(+)
 
-The fix ensures the passive actor starts sending periodic LACPDUs after
-receiving the first LACPDU from the partner, in accordance with IEEE
-802.1AX-2020 section 6.4.1.
-
-v3:
-a) const bond_params for ad_initialize_port (Paolo Abeni)
-b) add comment about why we need to sleep in test script (Paolo Abeni)
-
-v2:
-a) Split the patch in to 2 parts. One for lacp_active setting.
-   One for passive mode negotiation flapping issue. (Nikolay Aleksandrov)
-b) Update fixes tags and some comments (Nikolay Aleksandrov)
-c) Update selftest to pass on normal kernel (Jakub Kicinski)
-
-Hangbin Liu (3):
-  bonding: update LACP activity flag after setting lacp_active
-  bonding: send LACPDUs periodically in passive mode after receiving
-    partner's LACPDU
-  selftests: bonding: add test for passive LACP mode
-
- drivers/net/bonding/bond_3ad.c                |  67 ++++++++---
- drivers/net/bonding/bond_options.c            |   1 +
- include/net/bond_3ad.h                        |   1 +
- .../selftests/drivers/net/bonding/Makefile    |   3 +-
- .../drivers/net/bonding/bond_passive_lacp.sh  | 105 ++++++++++++++++++
- .../selftests/drivers/net/bonding/config      |   1 +
- 6 files changed, 159 insertions(+), 19 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-
+diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
+index 2fca8e84ab10..414fecfd2a0e 100644
+--- a/drivers/net/bonding/bond_3ad.c
++++ b/drivers/net/bonding/bond_3ad.c
+@@ -2883,6 +2883,31 @@ void bond_3ad_update_lacp_rate(struct bonding *bond)
+ 	spin_unlock_bh(&bond->mode_lock);
+ }
+ 
++/**
++ * bond_3ad_update_lacp_active - change the lacp active
++ * @bond: bonding struct
++ *
++ * Update actor_oper_port_state when lacp_active is modified.
++ */
++void bond_3ad_update_lacp_active(struct bonding *bond)
++{
++	struct port *port = NULL;
++	struct list_head *iter;
++	struct slave *slave;
++	int lacp_active;
++
++	lacp_active = bond->params.lacp_active;
++	spin_lock_bh(&bond->mode_lock);
++	bond_for_each_slave(bond, slave, iter) {
++		port = &(SLAVE_AD_INFO(slave)->port);
++		if (lacp_active)
++			port->actor_oper_port_state |= LACP_STATE_LACP_ACTIVITY;
++		else
++			port->actor_oper_port_state &= ~LACP_STATE_LACP_ACTIVITY;
++	}
++	spin_unlock_bh(&bond->mode_lock);
++}
++
+ size_t bond_3ad_stats_size(void)
+ {
+ 	return nla_total_size_64bit(sizeof(u64)) + /* BOND_3AD_STAT_LACPDU_RX */
+diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
+index 1d639a3be6ba..3b6f815c55ff 100644
+--- a/drivers/net/bonding/bond_options.c
++++ b/drivers/net/bonding/bond_options.c
+@@ -1660,6 +1660,7 @@ static int bond_option_lacp_active_set(struct bonding *bond,
+ 	netdev_dbg(bond->dev, "Setting LACP active to %s (%llu)\n",
+ 		   newval->string, newval->value);
+ 	bond->params.lacp_active = newval->value;
++	bond_3ad_update_lacp_active(bond);
+ 
+ 	return 0;
+ }
+diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
+index 2053cd8e788a..dba369a2cf27 100644
+--- a/include/net/bond_3ad.h
++++ b/include/net/bond_3ad.h
+@@ -307,6 +307,7 @@ int bond_3ad_lacpdu_recv(const struct sk_buff *skb, struct bonding *bond,
+ 			 struct slave *slave);
+ int bond_3ad_set_carrier(struct bonding *bond);
+ void bond_3ad_update_lacp_rate(struct bonding *bond);
++void bond_3ad_update_lacp_active(struct bonding *bond);
+ void bond_3ad_update_ad_actor_settings(struct bonding *bond);
+ int bond_3ad_stats_fill(struct sk_buff *skb, struct bond_3ad_stats *stats);
+ size_t bond_3ad_stats_size(void);
 -- 
 2.50.1
 
