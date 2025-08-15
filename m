@@ -1,127 +1,146 @@
-Return-Path: <linux-kselftest+bounces-39015-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5A3FB272AF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 00:56:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59D91B27356
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 02:09:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8619BA23180
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Aug 2025 22:56:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F20E4685250
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 00:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF1B283130;
-	Thu, 14 Aug 2025 22:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E78E1114;
+	Fri, 15 Aug 2025 00:09:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTAsYgTI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MlvCDJJ5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B189280309;
-	Thu, 14 Aug 2025 22:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC2419A;
+	Fri, 15 Aug 2025 00:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755212164; cv=none; b=cOfmrSgrTWd+FZVfbCZ2knCTX+DIhpTqlm/r9bAKdwBHfLfg+IV0J0CyroNOZgcssZkzoQnJbhoh84fHDT1+G7FnofeBcHPwthAxhoVGgQ5IjaosMqGWuuwffRj702z5LEiBiisVImnOUFwh4ZplHCFpcKew0kwizZCxV3/8Mtw=
+	t=1755216576; cv=none; b=o4bv2I3xedml9Ei8Uv18jjQ/T1wOR2x20P7MF4uRgyUF1VudZ2KyNR/qlp2ucA7xhqYlOstpcOsuS2tM/rrGCZWKE8Rvc/7SCFcFM/oNGlEmb5mrfISzkLQnGS0e2hC6f2ReXZkNcUxcPzLZETFLTCC5wydeggNQvVrmalYncg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755212164; c=relaxed/simple;
-	bh=mQHd7PTKwFf9DIdBJXB1vK+y846gRcI0pvlTZeYISMw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ttPpIp/R9oShITatp+Pi+Jm8joi55H4eB1UdUEA7jCtSWf+sQPRxYKM9iFkF2mzCFBdtUTiCG6OzRyQfY6dSBtLB/g//iyk4/LSsTBovwXSIqIp1e/yAZpCb3aFWL8XL1Uu6T9XQsGQFPQnCCaUw0H1ldORdncVCUS+en4ZLu0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GTAsYgTI; arc=none smtp.client-ip=209.85.210.171
+	s=arc-20240116; t=1755216576; c=relaxed/simple;
+	bh=SXhJb46D02XyYpPG0ZR+hLtc2VGrkDqQzQtP4rIForg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MFwKZQiFTbFqG5xfNLzJ6ax66qaZPRxyvwpxaewwMIPL44fPtQTLvr9gE/HurEPchUitLYuxLDnsz1ht5eS3jM8j2rp031p1BeqyMQ+i9LKrLzwAna4HwQUlrwfOvf8RmyQigQ9YJqUhC6NXk3LTvBFKzLdT1EdAy9Q6RvR7A/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MlvCDJJ5; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-76e2e629fc4so1619082b3a.0;
-        Thu, 14 Aug 2025 15:56:03 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-76e44537dccso5703b3a.1;
+        Thu, 14 Aug 2025 17:09:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755212162; x=1755816962; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E5AKvjWPxuvk9+NvAN7NRCHNy5BREu+iLhDk4IMjA/w=;
-        b=GTAsYgTI6afpqeXATs/2ePSUo8GXWgeqYAPeQuU8eEG5i6DqethsYTdteskZJbCwb+
-         8imzVeqXVa7fpeURXrX9Q3qWshcqNPc41QF5IHt2pOajL7SVChInxDydxpF8fmDzS4VB
-         qxuE2PrKqXkRmPksbMLk9kAqVDfFIrbDPpDh2nZ9VC62RwxnhMnLe91opREq6bDSFVRc
-         6o1lgu0okGWxW/n7tHn4OnI7+3ITkv805mLw6awaEhqdinPBluQPPGBUMnCybUg40odE
-         URQdZ+mkoGmFNnVwFAhq5zotHiijQ0bpwtO3aaLKnXJVpWAcs0Vj24zGurvNMS+GM6F4
-         EHvg==
+        d=gmail.com; s=20230601; t=1755216574; x=1755821374; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zxoW0PVifSF+JymiPBLwjWMtoyAZGxm4WlnOuM8c4Dk=;
+        b=MlvCDJJ5vibasVe4gc4fvBVzr/oPa5GVXTIFh0IixSHUHbUHdbncvXL4wR+Akzf7KO
+         /2nfBe7X1YWjqI9roxPEvW1Qx19llAR6dL75fZgbW0u3smQZOXtF1Lbdc2EHDEQLluPx
+         EyyWwNGeAl9MEU1Ao9AJH9Q4JDInsJ1V9oIL0m70GqbuV6P0i6AUNr75/BquUUkfRzrt
+         /yCOCOUQfHiFoXYm98Ln1RRlpzFv5SNbczPadq/5eO2zTrf1Q/xgXjdMHkcGNDk7T3Xf
+         XM6O0z7PDD6FEljIMDSn/K9R/wgFRSgv+ugXVW1rm9nu6z6Spv8/rgJDzHjQ6gSfpnjW
+         zQcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755212162; x=1755816962;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E5AKvjWPxuvk9+NvAN7NRCHNy5BREu+iLhDk4IMjA/w=;
-        b=tf5CuJ1DsyLWsqz1T4RuddBnh5wr8s9PIfkO+D0Nv4s5XR9tNZg7vIqAbAamz9sBpl
-         IsRYC7Nv9ZUpoYEHSWe3acloHyp3V7t9iq8oh02U5KE5cy1qRbj/J1iCJRNFHmqdUbcG
-         Np46Hb0xsAImGAJth8dU5Xc8Z8MWs8I+aEabmDt5AwJzxIm8je5K2Pk0wwnTSO1UmXba
-         bH9tAio5VdnqYEqeJJPOLdT3eJzQcSZxQ+oAk/0phphsQtnMrbtuCtgZ6IBny2vNpUoF
-         AL7c7uccGxWe9Q5tHGCOBQC8tAwQyLkbzj/vAiDQYwYOZF5CPTIj5a0dsikGzE9dpJ+2
-         1gBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+PLlmcXQv3vF6gKvWckNLSUvDpf3FL8nMatjdsqfchq2AFtd6I9Bv4eJeMhh68G74qZlBqPJioqvbJTkBEMbn@vger.kernel.org, AJvYcCVVIJHkU07VNm/VhzKB1BFM5fZ4PSPoMlMHNhg56oZN8TsIPL+EZcY/jqRgZeJAX7ke4eDCqsZGJt66@vger.kernel.org, AJvYcCX0NhOdNWUDSiXbfD4mLXLlbzowlEJJGtWsJHyGTANAGlHk4byPK3pohTsFPgeoarZdXFd/rGfMjEQ=@vger.kernel.org, AJvYcCXxBbQMx6jG6soTHiRDfsZUIXjjsDYRcB8boGk5L5IaFgcxrO3tjHkMAkitbQF/jeMhW4cqTisEzlqtBPV1@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSFV5VBCgu8W4kJw6jJl39kueK66mCmN121uYfmRmBZv+oZRwm
-	UVyxlJNx8tG6hIXPoU7vVhPxe9JexhwwBzySTozGADBm8okItTuDmNzj
-X-Gm-Gg: ASbGncvSX7jYkGRHuwCInaBN5XHe/u8E+UkKybH2o8LGz5aJybK6+7AUNyWpR2/h+/o
-	fl1/VjbdntgHvgbE4qLby+ZqCpX/pztEZ93rxwe+WQ074SZVOwOhUcMB0vP+0tDzmzHlWDTK3cD
-	F+5rBz55GNGlonj6f+QLTC3gpvsM95KVrCO5VtIutbheemiTd97dl2YYIHckG/Xr0Op2ur6lmQj
-	eowMurhqefswaNMvoLbCrrKtfwWmFPh+apgJtwGVRL40nRYeq8Dsoix3RVD4RCag3ye2v5wBNnN
-	nJOY9/Vtu3d5BvmuMscMKF0MNoQkxdr4T7s7pYhV3MPnYbDhJT7OpCl6P/svxNt6Fabz7AvWki+
-	pCGAaZVAa60u5Sx23Gadl/A==
-X-Google-Smtp-Source: AGHT+IH7mGzPa5mo9B5wynWRywyhFQPatdKJXTvrQw/mOHTL0M+5shEN/BMB8QgAUqPFJnuwQV4jTQ==
-X-Received: by 2002:a05:6a00:2392:b0:730:95a6:3761 with SMTP id d2e1a72fcca58-76e2fa2cc1bmr8017756b3a.3.1755212162510;
-        Thu, 14 Aug 2025 15:56:02 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bdf61d092sm32632771b3a.116.2025.08.14.15.56.01
+        d=1e100.net; s=20230601; t=1755216574; x=1755821374;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zxoW0PVifSF+JymiPBLwjWMtoyAZGxm4WlnOuM8c4Dk=;
+        b=chIK5d7Kjp9IyNeELZ3ar1RnUsC69dYTFLGS3xqz9P18+8Wgo/U6rG9aAQ89WroYcJ
+         y+foDLwo+AfKx9r3AW1CkUdhvX/T45bSZeaeUfRoi5EvtwWTt3m8mvfzXKaX8vYlqGrI
+         Yhi7yrj9CB9tllcJON/gWXVgB6gCRUs88xUcgLgR4uEZruCemGhXUyyi3urNDX7QHe7L
+         vFkzIlVAOmJhUX0OaYm7iccXWl5x8umxkSP7qMw1l555Qez7pExKPaKgGNU+x/ftR8H6
+         iuRKHiyMkAmu9H0k+XnEOVjHbYZwX8jrxgA/Y7ewISCxx6qgU3pGke4NY/f1Fl2LzVBq
+         sJWA==
+X-Forwarded-Encrypted: i=1; AJvYcCU6gf3Ai7vGdWS6cEtrrsbgXz4cFTOw9g6GhLSlL/lQMG7NZELcgjlnsDFj18qPzT0OV55zspjGZh+EyZs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsLM0tdTWztJYj70GGvDRSAusPgRviqiOq2HKz+Qxvrt3A1F31
+	SC+RcZqrY6pmjUQtLItg+HjGJxWFX+NITF6YKHXQGpZz9KdVtn2WYSs5/hvIXf9X
+X-Gm-Gg: ASbGncvAsDzz0+VZDlNXjfGvEQWxqYHCfVJFyDrQBsNA9eqQTjt2Nr3znVgXRqwkfMb
+	WkrAMOtbMfXgb4Qw0GzhA1IWNg39UxjP3XeTT4l6a0Dp44qmoUo1Nia3NznlHLFcvcKIaVywGS4
+	Jo0TZbhubb84afyjxSmRzoqc8fJvuiV38FUUSH5XpPhGkTNcCReUGfTv90Quz0UJsw/G87RkGeQ
+	ktQRVkzkhWcfTiy11NsoPvYvWRgC2VsplT+EIL7Aig5Jvk3bW5noquDJm/R9WRI/425csl7Q7/J
+	rZ1zF9neWYLHicyHdR5IqDF3Oaop6qH6lWtWEL7xvo8D2Y3P0PZuqJX+OJ4jx+FbSrYBHdLWbu/
+	Pn94Hy7Sxtdc6Owf5PL4o0a9aEQC/zXs=
+X-Google-Smtp-Source: AGHT+IFDMdF6+yivvCvqSJWE4UQ35aadp0nC/z5tzMjZ2sph8Sp3/GEi6/LsTjvgkkBK2V+ed8hFgg==
+X-Received: by 2002:a05:6a00:b42:b0:736:3979:369e with SMTP id d2e1a72fcca58-76e446ffb04mr30874b3a.9.1755216574174;
+        Thu, 14 Aug 2025 17:09:34 -0700 (PDT)
+Received: from soham-laptop.. ([103.182.158.109])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76c2efd89aesm21367854b3a.106.2025.08.14.17.09.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 15:56:01 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 7A568423F8C9; Fri, 15 Aug 2025 05:55:59 +0700 (WIB)
-Date: Fri, 15 Aug 2025 05:55:59 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Randy Dunlap <rdunlap@infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Documentation <linux-doc@vger.kernel.org>,
-	Linux Kernel Workflows <workflows@vger.kernel.org>,
-	Linux Kernel Selftests <linux-kselftest@vger.kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Tim Bird <Tim.Bird@sony.com>, Rae Moar <rmoar@google.com>
-Subject: Re: [PATCH 0/2] Documentation: ktap: formatting cleanup
-Message-ID: <aJ5pf-5nxHJcqzgZ@archie.me>
-References: <20250814012046.21235-1-bagasdotme@gmail.com>
- <98ed6868-8030-4d10-b66d-c7e3d42886f8@infradead.org>
- <aJ2Epp0b3HgeaMxk@archie.me>
- <e2186e21-d069-4881-8829-b698cf90d5e3@infradead.org>
+        Thu, 14 Aug 2025 17:09:33 -0700 (PDT)
+From: Soham Metha <sohammetha01@gmail.com>
+To: linux-kselftest@vger.kernel.org
+Cc: shuah@kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	Soham Metha <sohammetha01@gmail.com>
+Subject: [PATCH 0/6] Kselftests: fix spelling mistakes
+Date: Fri, 15 Aug 2025 05:38:58 +0530
+Message-Id: <20250815000859.112169-1-sohammetha01@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e2186e21-d069-4881-8829-b698cf90d5e3@infradead.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 14, 2025 at 08:55:08AM -0700, Randy Dunlap wrote:
-> 
-> 
-> On 8/13/25 11:39 PM, Bagas Sanjaya wrote:
-> > On Wed, Aug 13, 2025 at 06:58:12PM -0700, Randy Dunlap wrote:
-> >> Why send this patch series to the workflows mailing list?
-> > 
-> > Workflows ML is listed in get_maintainer.pl output.
-> 
-> Thank you. I didn't realize that. So in the MAINTAINERS file
-> workflows ML is listed under DOCUMENTATION PROCESS and with
-> these specific directories:
-> 
-> F:	Documentation/dev-tools/
-> F:	Documentation/maintainer/
-> F:	Documentation/process/
-> 
-> so yes, you got it right. Thanks!
-> 
+Used codespell to detect spelling mistakes across multiple tests
+and fixed various simple typos found.
 
-OK, thanks!
+---
+
+found/fixed the following typos:
+
+> didnt't -> didn't
+
+in `tools/testing/selftests/filesystems/statmount/statmount_test.c`
+
+> add add -> add
+> cannnot -> cannot
+> fowarded -> forwarded
+
+in `tools/testing/selftests/net/netfilter/nft_nat.sh`
+
+> faile -> failed
+
+in `tools/testing/selftests/ublk/test_common.sh`
+
+> indicies -> indices
+> requrired -> required
+> guranteed -> guaranteed
+
+in `tools/testing/selftests/kvm/riscv/sbi_pmu_test.c`
+
+> avaialable -> available
+
+in `tools/testing/selftests/kvm/s390/cpumodel_subfuncs_test.c`
+
+> requries -> requires
+
+in `tools/testing/selftests/safesetid/safesetid-test.c`
+
+Soham Metha (6):
+  selftests: filesystems: statmout: fix spelling mistake in output
+  setftests: net: netfilter: fix spelling mistakes in output
+  selftests: ublk: fixed spelling mistake in output
+  selftests: kvm: riscv: fix spelling mistakes in comments
+  selftests: kvm: s390: fixed spelling mistake in output
+  selftests: net: tcp_ao: fix spelling mistake in comments
+
+ .../filesystems/statmount/statmount_test.c     |  2 +-
+ .../testing/selftests/kvm/riscv/sbi_pmu_test.c | 10 +++++-----
+ .../kvm/s390/cpumodel_subfuncs_test.c          |  2 +-
+ .../testing/selftests/net/netfilter/nft_nat.sh | 18 +++++++++---------
+ .../selftests/safesetid/safesetid-test.c       |  2 +-
+ tools/testing/selftests/ublk/test_common.sh    |  2 +-
+ 6 files changed, 18 insertions(+), 18 deletions(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.34.1
+
 
