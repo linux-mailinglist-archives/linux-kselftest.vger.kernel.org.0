@@ -1,112 +1,129 @@
-Return-Path: <linux-kselftest+bounces-39125-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6602FB28867
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 00:41:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3299B28891
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 00:52:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25A74AE4E8E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 22:41:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 684053ADE15
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 22:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D40246798;
-	Fri, 15 Aug 2025 22:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6FD5280A2C;
+	Fri, 15 Aug 2025 22:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PtN+LK2e"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0JMnMesD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D690317715;
-	Fri, 15 Aug 2025 22:41:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6947015855E
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Aug 2025 22:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755297668; cv=none; b=NEIZ9shjww+zt1nW7xT8eR/rnR4+GCh4qPeIkn9uFhC+hAmu+wrbv4G5Mmhnnn/ycwJxYHJH40fpjZ9U5IBLDWkl1gMS76j3ISQKZK+IX68S7Fnqci1Z15oqmXljZJNXpS9kJskvAb8eSFfIM6OqFNoHQY/FQrzn+vApqyPjShw=
+	t=1755298346; cv=none; b=aferhU5vW2MWd2CIS9wn3IEce4E7keXKKBKODoQfNa5GVMcN9X/EbpGXTvU/2TjoZVoMwkj/KBsuQgiD0N2UNHIzF4zk3Pbcx6RTA4IgoNNrOvPPHVLzav7YHHVrTtr056Cej/fwt9bhhTMUJ8GxddUU0IbGDJwZ8zH+2aGLXMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755297668; c=relaxed/simple;
-	bh=uFKEJJOjRDhjSKoXQ6Fe8Zn8RG1bPOxAlF+QEogDX4o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hkbD4dSayMgiDcwF9WavZe90akfi/1QRYsbv4B02Befu5yb+SUVOX9GNs9hZSBGQiWuvvhgvqHEMp0EOEgiXXFtDo6xtFG027GLjJpTYSRux1iC3SMA73aDdj3s552I8Bk6hb4qft/0Y6Ma41nBJ87GN4/qmMVKgky4eA0QLcEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PtN+LK2e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24505C4CEEB;
-	Fri, 15 Aug 2025 22:41:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755297667;
-	bh=uFKEJJOjRDhjSKoXQ6Fe8Zn8RG1bPOxAlF+QEogDX4o=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PtN+LK2ev2AUcW+NwEZzv6yD3zPVUpPAS4wwhfpKAP37ldhvxzAg2Tg9A/RlBfOUp
-	 5wyB6mfEyUbP8o18TV39lRP1LLMmaxg9H9CvSKvuQ7gj2jH7xAiPGLziyLmq35syWa
-	 zBWhjJcgyyNoS1emzBqqYR+jshYWZ26VeJqECPpcQ935JJCjgsfyeQIIfJWUbCVHMI
-	 9E+P2fgcBpkYT9D8kSVDI0a3iOQk04eJfO5zqpM1OSjOjVVrDtb+9qFg4Yuhw5gwCM
-	 gVqnetbMHs98bjs2HEsCUtxYBUn2a7sl+Z1qxlJw2q+KqsITo2PTOnojDsxJba9cE9
-	 Rz9ttSskS8c1g==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	willemb@google.com,
-	daniel.zahka@gmail.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: drv-net: tso: increase the retransmit threshold
-Date: Fri, 15 Aug 2025 15:41:00 -0700
-Message-ID: <20250815224100.363438-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1755298346; c=relaxed/simple;
+	bh=K/wYqwonycmklyJ5/DgqlS1Uy+2TdihuiWzWz12ccbw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=H5Q5+prkFZ2m3nVYfBN3Aewqd2Kq+dVaJwircxDcMy3wTrfKXo2TQWAWT0K/Thb5ncuBse1rYNg/xiBOkySBiUmd2l1wcRNebNi6wGBnW9YwF9s1RAFj8Ag30toOhsiUeZXPoDN1WlkEQKBIl7NTRGsfQQyrsWSUgz6Swbc7Ezc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0JMnMesD; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-32326bf571bso4176665a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Aug 2025 15:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755298345; x=1755903145; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N+Te5pIYiAmG0oRIPBD1Z6ejvqQFlWYw672ZGrfsn94=;
+        b=0JMnMesDMC6V4mt3HJ7A427nO7IlUZ4ukfDoG5M6Y+g6pliALlS59Es1cTZ+pWe6cp
+         FLynaHEbH/Z5onZGJwpmt/xODXIrtBQmjvGbxiGC2lRNSPLDOfuODRfk11jKfK3nmx4r
+         ZGkK55QLGguH9g0haF6BIIz/mr+NXzlg+9gYNIGdj5xfK4dGFSysI3ApRU/2JdkutZSu
+         hKHjnRphxfFB0DzyPQW1wewVI29rfa/3Caz54dgZm2dxzEu+oZ2ew/lxw6M5s+tc9/Lg
+         WdhDw1+X2d3rk1libTSOm/aLEhGPOPrdqbHCd/qs2XagM6ndPifxdipbm+uhZFnurJlS
+         XT/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755298345; x=1755903145;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=N+Te5pIYiAmG0oRIPBD1Z6ejvqQFlWYw672ZGrfsn94=;
+        b=p1+FVt0spIWK7F3n+l2U3hmSfJRJic10rVnbECY8dBrwbH3xhCSOpSnjjS+xadsWXQ
+         iCxTDnGrW3Iton6LxZmDoYJe3SjEFcGj/yM0Gh8PtcIIiW1yIyPYZhinE5IhVrmCybh9
+         B41c2wacOrNATvQvfhi0Qyllmcxdt3BA51WGE1/n8dXwQ+ldy+7jChxfa66T4EmIsv0v
+         Uht0O7GI9Wiu1USRsyFHQQY77V+7eacIXuFVUOgfCT1MENOqbjmgwceEO5Z4EuF9KgAL
+         oRnaO/zSLJhfM42gL/9lq62z11uwMijy4/zc10nXWA3Vi7fGwwsP1HespKTezyogjYw3
+         Y3cw==
+X-Forwarded-Encrypted: i=1; AJvYcCXJymHqw5XBQRXLeOzFilfPGNtCi9XdgLeIH1Xp9r2Ux1bqeRGyUl2BwKCW5tJQO7PaQkBiB61e37kzvtkz+Ww=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUM6mfpI71nNsEE0XSRG8y+Ci9Q/UJbm/U4byEHngYCuJPLPuv
+	zpf2layEuYRuQlfFmesQU91Tu6lMPGRPoIeP030BYpIfvGBN4I+DvpxaXADpLP6Z4fy+7ncYi06
+	CdcIMww==
+X-Google-Smtp-Source: AGHT+IEv+UJAB/6+TZfmF8Xh+vBJ3l/eBNjM0pOlbutUgEhFPbzx0x5t1mtIyCzUBXElTaWSG/PR3FTxuRM=
+X-Received: from pjbqx15.prod.google.com ([2002:a17:90b:3e4f:b0:31f:d4f:b20d])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:55d0:b0:31e:94d2:c36f
+ with SMTP id 98e67ed59e1d1-32341e0e6efmr6091256a91.8.1755298344805; Fri, 15
+ Aug 2025 15:52:24 -0700 (PDT)
+Date: Fri, 15 Aug 2025 15:52:22 -0700
+In-Reply-To: <CAAhR5DFFRRV9hH3VOmZqb6TArcZL0=893oi3M2rZgVC5Bu-vJg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20250807201628.1185915-1-sagis@google.com> <aJoqqTM9zdcSx1Fi@google.com>
+ <0976e0d50b1620c0118b8a5020b90f3959d47b4a.camel@intel.com>
+ <aJpYWVvNXjsewl-b@google.com> <CAAhR5DFFRRV9hH3VOmZqb6TArcZL0=893oi3M2rZgVC5Bu-vJg@mail.gmail.com>
+Message-ID: <aJ-6JpHD6xhAvZPy@google.com>
+Subject: Re: [PATCH v8 00/30] TDX KVM selftests
+From: Sean Christopherson <seanjc@google.com>
+To: Sagi Shahar <sagis@google.com>
+Cc: Rick P Edgecombe <rick.p.edgecombe@intel.com>, Erdem Aktas <erdemaktas@google.com>, 
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "shuah@kernel.org" <shuah@kernel.org>, 
+	Ryan Afranji <afranji@google.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Reinette Chatre <reinette.chatre@intel.com>, 
+	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
+	"ackerleytng@google.com" <ackerleytng@google.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	"pratikrajesh.sampat@amd.com" <pratikrajesh.sampat@amd.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Roger Wang <runanwang@google.com>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"ajones@ventanamicro.com" <ajones@ventanamicro.com>, "oliver.upton@linux.dev" <oliver.upton@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-We see quite a few flakes during the TSO test against virtualized
-devices in NIPA. There's often 10-30 retransmissions during the
-test. Sometimes as many as 100. Set the retransmission threshold
-at 1/4th of the wire frame target.
+On Thu, Aug 14, 2025, Sagi Shahar wrote:
+> On Mon, Aug 11, 2025 at 3:53=E2=80=AFPM Sean Christopherson <seanjc@googl=
+e.com> wrote:
+> >
+> > On Mon, Aug 11, 2025, Rick P Edgecombe wrote:
+> > > But Sean, if you want to save some time I think we can just accelerat=
+e this
+> > > other reviewing. As far as new-fangled features, having this upstream=
+ is
+> > > important even for that, because we are currently having to keep thes=
+e tests
+> > > plus follow on tests in sync across various development branches. So =
+yea, it's
+> > > time to get this over the line.
+> >
+> > Yes please.  The unspoken threat in my response is that at some point I=
+ will just
+> > start NAKing KVM TDX patches :-D
+>=20
+> I'm making good progress and the massive refactor is mostly complete.
+> I believe I should have the patches ready to review next week.
+>=20
+> I'm also thinking that it would be easier if I split the series in 2
+> or possibly 3 patchset. The first one including the setup code and the
+> basic lifecycle test and then the rest of the tests with possibly the
+> guest_memfd tests in a separate series. What do you think?
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: willemb@google.com
-CC: daniel.zahka@gmail.com
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/drivers/net/hw/tso.py | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
-index c13dd5efa27a..0998e68ebaf0 100755
---- a/tools/testing/selftests/drivers/net/hw/tso.py
-+++ b/tools/testing/selftests/drivers/net/hw/tso.py
-@@ -60,16 +60,17 @@ from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
-         sock_wait_drain(sock)
-         qstat_new = cfg.netnl.qstats_get({"ifindex": cfg.ifindex}, dump=True)[0]
- 
--        # No math behind the 10 here, but try to catch cases where
--        # TCP falls back to non-LSO.
--        ksft_lt(tcp_sock_get_retrans(sock), 10)
--        sock.close()
--
-         # Check that at least 90% of the data was sent as LSO packets.
-         # System noise may cause false negatives. Also header overheads
-         # will add up to 5% of extra packes... The check is best effort.
-         total_lso_wire  = len(buf) * 0.90 // cfg.dev["mtu"]
-         total_lso_super = len(buf) * 0.90 // cfg.dev["tso_max_size"]
-+
-+        # Make sure we have order of magnitude more LSO packets than
-+        # retransmits, in case TCP retransmitted all the LSO packets.
-+        ksft_lt(tcp_sock_get_retrans(sock), total_lso_wire / 4)
-+        sock.close()
-+
-         if should_lso:
-             if cfg.have_stat_super_count:
-                 ksft_ge(qstat_new['tx-hw-gso-packets'] -
--- 
-2.50.1
-
+Yes, please.  Even if we end up having to tweak a few APIs when the fancier=
+ tests
+come along, I think it'll be easier and faster overall to hammer out the co=
+re
+support first.
 
