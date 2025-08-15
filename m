@@ -1,219 +1,248 @@
-Return-Path: <linux-kselftest+bounces-39102-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02886B27EE0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 13:11:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E8AAB2801D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 14:44:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01D68606518
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 11:11:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C2CD603E9A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 12:44:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E540423C503;
-	Fri, 15 Aug 2025 11:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7B3301004;
+	Fri, 15 Aug 2025 12:44:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SJpm/oAw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a621F5wb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2077.outbound.protection.outlook.com [40.107.94.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523C02798E1;
-	Fri, 15 Aug 2025 11:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755256303; cv=fail; b=e6k49U7lGYOUdkEjtFMC7lcbu8YwWrSWYUPY79emP50ZRdzhsbWMAeBBTpSL3Uz2LLor8AgUsmXZ8KM/HKdsMZwv1u85WN79e26rlFxbvzfCVg3+ioxPjq/NQdarxYjMyom1p7vTki/1NzhPCDzVknVHpTbDvh1bNOXnTG/0bZw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755256303; c=relaxed/simple;
-	bh=yihez3eyo8+/NwGFKZ5gLLxi/zMjR0x/lNYUEmBb/RY=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
-	 In-Reply-To:MIME-Version; b=EzTIkSQ9YLVwMdcABnO/J0tv8AmkIlLeGfRsPdRJ1cIEljReNm47RzQxryMs1F8cPI4EprzIFiLQR6g8qEnGUZKJVpqX7SoXBlZf6Zux0y1uCgpF3Vq5ewDDn9NGSwUR0Ibu6i88ZcUoR6oB7xRXRuGs2Jp/Uy7e1bJ936VXDdo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SJpm/oAw; arc=fail smtp.client-ip=40.107.94.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bXOc6YFVVBwmfB5O6KVWCNQgbtlbc6H6jFR1qFI4Ba94GhxhbgpU+6nFETTtnIb0SP9OtjJWlThSXciwVzfnXa4yLtIPWAn8oTEGsyd5k68PJGzJWaGIO6NTplXn4KgLdjidAVrkNlX8XcMCfgaDzXxTuSLubza88+a08YBLTR7JBarINFsT1KusV8Pya7cXZoe3wT9TNkA2YpTlukl99MjDYRDf04/8pidgHx8vY/aeE76hUhT0THvcd3RamJe5qWe8O39yyQmXDObCsvPBTHofbjvMKMylYgSolEvM2hghRZJVy3Yjz5JwmeWkZMaX8CIx60RUhmCg57qGmAgskA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yihez3eyo8+/NwGFKZ5gLLxi/zMjR0x/lNYUEmBb/RY=;
- b=LL3NDhw0jMFkkwgjGbusPnvhSlwqfgh5I4eebb1Vf21V1lITFCvAP8FL79j6oATzTiQ3q2q2liVgbP0zw8dNc8vZwrQSus8Yhgtk+N8ETQzOQe5CfYTGTc1MJEwib/p/Y8JyQzxvFt3G3eKS22kG3JG2E2tv10kGm2xsWQgcoVPBPB2iMzmvBrPpFtiuilRCa5ryoEdXeJIkkH6ea00q4h2WxqlEKLtnVJF4h3RlD3S7DGYSn1bLV2ETAcTuYc7R8oIPXDjG5iEn9ggBD/N5pjwl7UcfUkaHAIIwY8GD/472hqCeKShHG0Pe/Ehuz+9zb+ECfOTvy6JLVvR8ataYvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yihez3eyo8+/NwGFKZ5gLLxi/zMjR0x/lNYUEmBb/RY=;
- b=SJpm/oAwW5HimXMfwBC+4DYDCkfH/B9Nl0BBtORLl8hRAbq1aGFtQ4HC5ernja3xtHfgWsTXmS4EpTylu8yKd212mXbJU1p9jMBXnhamzSVPMP6ztWLt4LFSCoKzX1y2/twJLL4O2VqHkM6zBVV2S319hoYlRwe40+hMxIzPXS+Vjs5sA6F8i8LqNOv53FcFUMD22n3Ggs0VvNe+4w/5ZQQDVYOhMZO8PPKc7337YNdL/2hhuXekbV5KSS5o6iyLe9RoZras7f/rn5pMT8EVf1lbazCofWklaV4ZxES80Mb6rH7gSx9fJBovd/IoI6sM9L2ggmm6fbMwtBIkErl5Gw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH2PR12MB3990.namprd12.prod.outlook.com (2603:10b6:610:28::18)
- by IA0PR12MB8714.namprd12.prod.outlook.com (2603:10b6:208:488::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.13; Fri, 15 Aug
- 2025 11:11:39 +0000
-Received: from CH2PR12MB3990.namprd12.prod.outlook.com
- ([fe80::6e37:569f:82ee:3f99]) by CH2PR12MB3990.namprd12.prod.outlook.com
- ([fe80::6e37:569f:82ee:3f99%3]) with mapi id 15.20.9031.014; Fri, 15 Aug 2025
- 11:11:39 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 15 Aug 2025 20:11:34 +0900
-Message-Id: <DC2YFDSUSTT8.1K6K6M8OY7LUY@nvidia.com>
-Cc: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
- <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
- <linux-clk@vger.kernel.org>, <linux-pci@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <linux-block@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH v2 02/19] gpu: nova-core: replace `kernel::c_str!` with
- C-Strings
-From: "Alexandre Courbot" <acourbot@nvidia.com>
-To: "Tamir Duberstein" <tamird@gmail.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun
- Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
- Krummrich" <dakr@kernel.org>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>,
- "Thomas Zimmermann" <tzimmermann@suse.de>, "David Airlie"
- <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "FUJITA Tomonori"
- <fujita.tomonori@gmail.com>, "Andrew Lunn" <andrew@lunn.ch>, "Heiner
- Kallweit" <hkallweit1@gmail.com>, "Russell King" <linux@armlinux.org.uk>,
- "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>, "Breno Leitao" <leitao@debian.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Luis Chamberlain"
- <mcgrof@kernel.org>, "Russ Weight" <russ.weight@linux.dev>, "Dave Ertman"
- <david.m.ertman@intel.com>, "Ira Weiny" <ira.weiny@intel.com>, "Leon
- Romanovsky" <leon@kernel.org>, "Bjorn Helgaas" <bhelgaas@google.com>,
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, "Arnd
- Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
- "David Gow" <davidgow@google.com>, "Rae Moar" <rmoar@google.com>, "Jens
- Axboe" <axboe@kernel.dk>, "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>, "Liam
- Girdwood" <lgirdwood@gmail.com>, "Mark Brown" <broonie@kernel.org>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
-References: <20250813-core-cstr-cstrings-v2-0-00be80fc541b@gmail.com>
- <20250813-core-cstr-cstrings-v2-2-00be80fc541b@gmail.com>
-In-Reply-To: <20250813-core-cstr-cstrings-v2-2-00be80fc541b@gmail.com>
-X-ClientProxiedBy: TYCP301CA0063.JPNP301.PROD.OUTLOOK.COM
- (2603:1096:405:7d::8) To CH2PR12MB3990.namprd12.prod.outlook.com
- (2603:10b6:610:28::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F6B2C3264;
+	Fri, 15 Aug 2025 12:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755261883; cv=none; b=Ssc0NBDJFkX+4XJbMUY2fFODzGzqBrKKOMZ3VdArVklAxLG8+YFOpKEgjqNoa3NG4EWtudDo/v2mZTDg/we7Rm9HZRMUuBkF3214yK4PfLG/dMDiWXtEOFS0rj8G0k+T5Dn1SZCMlfbOsdY/wo0MwFUgHJgewvF4M69X2jZz51Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755261883; c=relaxed/simple;
+	bh=gdXFBB295mBNGVsJgAbR1vP0UTgaD4mZH6tytmxhwnQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PpuIfTxZzsxARCC8Ene5DxHChVo9JFcIOoJvAY6n6/1FvAwBFH62aVCkQyVudBxow7Ayi6puHg7V/W+9bWVVzmngLz36RmyMF3luiB/8j6KiD3zZgJXZvnobHyB/fP7lw8xA+gU5+4zWbScZ1Ejx1voXd6Nus74AJeKDoxoW43s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a621F5wb; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-afcb7347e09so306522366b.0;
+        Fri, 15 Aug 2025 05:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755261880; x=1755866680; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hjeBt9GCyvF4EZYxj/on9NBWCQ0HQWui55lR9+/qkb0=;
+        b=a621F5wbZ7lOLge1xfuqFv4jc0tNRqysphcZwt9hlYCIIuFH+3D82hNbcYhrEPZTbX
+         8HrEIsnpWxIN06ZHqbltnXhhiPfUCfLqyRjUCOKTgZOuKn/qmiQrTX0PzzZ9Bm8GtU1i
+         m82J/Cz6Qyhbr+WcgLmwUeF6lSvRgqq4WoPrW80JdhS4F9yAq0BCszMQIJsZP6jzkxPp
+         e1vkD+CLdW3G94bKjLUAAKbtrU/9UY6qBCQhrmaykTAE8KxbZ0dd1KfeUhkkqOUIEp8n
+         +t39q47kYwHd59hveWflMOoCdfOh7KZZhk8Wh2Xe2CQejyBo5FJrADSLoLrpVhS5hQnc
+         W//Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755261880; x=1755866680;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hjeBt9GCyvF4EZYxj/on9NBWCQ0HQWui55lR9+/qkb0=;
+        b=c8v2TrcxsrBiXD7BdH8oZJ7ejl9P+l2v2xbvAvYOAqC2PdeCR6DvV5GVW6rYGvRH7N
+         eAJp7HLrP7368QzZn+rQ+IxIBGezosgokiCK73kpFbo9w0Rq66ttOAGgAb4JURc5cG/f
+         WPbLYTTZ6dwuDFctjOg7Nkw+IoLydTBACV/3c6aA2EmSzrkm1TPQtlQrAciJOw4n+ak3
+         94S1FiLjpvUCbIv4967gPRXnFZjAPCslmX8Xb9vI5Ub7bTI8Oxmw4hn13BN+DZWB8lDd
+         8EpCRsGsTlAvb5py0Vuq98S/lnese3bWvGRjJHeFLmW++aVCIEsHC6kxaHqvqryxqc/d
+         /i7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUoeINI+mIFDOs9Qg9t2w6R4EvbQFFbVUKsliuKrL713BtIXMl0fUp/ThVrsQKhKQlrQAi5Ijxl09hq72qPQToW@vger.kernel.org, AJvYcCVldQkL7nuwn+fBWJYBMI5/23E9nIBQzbvNWWdb3Yz1YFXA9D8rAKK/+isezLKMbl+1TC8jFIRKOullG9RG@vger.kernel.org, AJvYcCXrkA2d1JVXsZbuFPaeqo5DmM+fRRa8au2iXR0HiGu2iV4WVS6ZsgGkeXFW+vd1gv90oTc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVW+dxTBXYOq86BxqAquiv5nk59jCuaJ/B68MdAQMeg8+rfZvU
+	kGIbn+9o/xf1t48DFV6Tm2qa0nCG8f40T+l1H2GPF8h+FvzBcIOrGd28
+X-Gm-Gg: ASbGncuYMRCsAeBu8phKgBbglEGGxIeGhIaALugP1iw3qbykhNAYzX9hLbRHb3siBiy
+	cLrk+MW1HDRFVSTKuT+PIq7BOieHr0oHtVJ0a8sSV9wsmaRjuWRstBV5IWqvzL4AI5fQdy+DO5P
+	XEmSRI4YDsn/GcTPjtey4qzY6zn/SfuPEyrap3YIdMYCrgeF0Bi2VcBpUE6UY2sYjjEws8tsgbf
+	J6yGfZaFzybHWqJa5r085OQoh2ftWt2Ww/MyFydFub5aHATuHKCb1FIhaqkfIwJUUt8b93oGQ8a
+	hiqTJvTWSwWO+Ogp7dRrwv9kpGAsI6KANgw6/vDnVSom+nZ7DQd5CKrmYDJL5oFC94cw1S72RQL
+	u6wPo/mUowg==
+X-Google-Smtp-Source: AGHT+IHG+YotOlvULIwtil5MjsG5WCy1TrbFl0wpQ0pvXdVu8f9TwR47lcgTFQCHv+6evIR/26cmdw==
+X-Received: by 2002:a17:907:3e9f:b0:afa:2672:8c49 with SMTP id a640c23a62f3a-afcdc1d40cbmr180056266b.18.1755261879931;
+        Fri, 15 Aug 2025 05:44:39 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-618af9d3112sm1413205a12.9.2025.08.15.05.44.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Aug 2025 05:44:39 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 15 Aug 2025 14:44:32 +0200
+To: Jiawei Zhao <phoenix500526@163.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	yonghong.song@linux.dev, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v10 3/3] selftests/bpf: make usdt_o2 reliably
+ generate SIB USDT arg spec
+Message-ID: <aJ8rsK2-XcPXNX7h@krava>
+References: <20250814160740.96150-1-phoenix500526@163.com>
+ <20250814160740.96150-4-phoenix500526@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PR12MB3990:EE_|IA0PR12MB8714:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b9acb7e-1242-47f4-bb80-08dddbec811c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|10070799003|1800799024|7416014|376014|921020|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cENnNHhCeUJGZGlnZmhUeGl3N2xyV1M4d25vb1haempJNTFZWmsyZlJsQW5w?=
- =?utf-8?B?R3ZnK2x1Yy93aHM3c0RtMnRCV1ZhWVdUMnhCT005ZE54TGFIQi82c3RmUVNz?=
- =?utf-8?B?Rm1Nd1pab0pMZFNvR1pDRnRENXp2YWo3V0RyYzZ5SVBCQlByL3FGdUZ3TVdM?=
- =?utf-8?B?SkRRdlNXclJqb0p6M1FpK2xIZ0crMjNBcjhnS2V0SmMrenlCK2U3YnF3M1dH?=
- =?utf-8?B?R0tKRzZHYzE2aVowUmkwTG0xZWNrL05QQnlWRzZKWGFyQVlSbjN2K01nenN4?=
- =?utf-8?B?SXZ5OXNacWpYbmhPdlczZzdGckIydzNwQVVXS043K0VxQ0NhRHJicWZyTkJr?=
- =?utf-8?B?T0xscndveFhGZzcxVXNRaUZFbmxaTVhrZjNxRWlRdmlBcDVKYytKT3lTZW9R?=
- =?utf-8?B?Wlp4dGFPUTJUNHRreHFZYnlPdFBKUU4wSG40U1dxSHFWWVdLc3JrVFV4Wm9I?=
- =?utf-8?B?bnAyU3F0WVdYc001MVp1aUpUbVVyTDBvN2txNDJ6YjU2WFFuSVZoVGpKd2l2?=
- =?utf-8?B?Z2VkWm1xNEExUnh3V1Bkam5XNTVEamY1RlJwM2UrWDExaEZ4QUt2MTNtZG16?=
- =?utf-8?B?cW5TMlkxL01xR3JqNTF3ZEVZS201bUNkcGgvYzlWMnF5ZUp1V3ZFelZ2WkNU?=
- =?utf-8?B?QUFxR0xqM2w1SHArellIZXVhaWJmTE5uTHczN25WVmJGOVcvWGJRSEdaRUJj?=
- =?utf-8?B?UkdzV0FuQW5EQnc1YzJVUjdlQWE0TlVNV1NJbHFBNEF1RmFLMHUvN0xhYm9L?=
- =?utf-8?B?T3BjYTVadFNZK29OUmNGdkFZb3FmM0hYSEhMYkpyWkRGSC91b0dOSGFBSWor?=
- =?utf-8?B?emdHTzdzNlMzRUFBTW1kb0tVdXdXTlBlMTNURktFR3B6cHVTUXhub3BSU09M?=
- =?utf-8?B?djc2RVRzQW05N1Z1TmhSbHdINTAxY0szQVJRVmt1dzhieUJoay9sRzN2eTdx?=
- =?utf-8?B?ajk0MWpBRkhva2lTQkljVFRVZFgrYUYwQnl2elNsM1BJS2R5UHk4cm5pM25k?=
- =?utf-8?B?MEprSXZ2VU55bHd5bGpBTnZsNkkwNmdJSHhSOWl1ak9OZnA1R3lUM2pkVzgr?=
- =?utf-8?B?R25xY2VkbFp5VDFQY3loeWY4a3M3NjV2RUV1WjZIT3NHbXZtaVA2RUJ4SHpH?=
- =?utf-8?B?dXNUTzNsai9TM0liZkppNzJzVjNYcGk3Y0Rmc3kvd2hsT2twLzNLR0hiMzdo?=
- =?utf-8?B?OVBwdXFxU2lYZXIyTjdxbFdKV3BzdW93MFFoSlN2d1hYZnF3c2pZbTlzTWJP?=
- =?utf-8?B?UDNJSGF5L1YzaHJwZU1pTEhKZXlVTWlaUGZMcC9rRFBOaXQyWXVaOXFrTnJC?=
- =?utf-8?B?bXVhYS93TjlrZGh4VkFwd2VBOHlFL01sNVNZQkx6dnlsTlA1cEI1TDNoa0Y0?=
- =?utf-8?B?cDRCS3ZHVzFudGx3R3NSeUg5YkxOc3g2Q0dVUFAvNXQzaVRONkh0b3hWTFhY?=
- =?utf-8?B?N0VFajJRSGJIUTFaYWJTS0V5Mmt6L2EyWDY3WXJRelVlVnlTelFHeGJub3Fn?=
- =?utf-8?B?MVVGUWNmQWJFTndQT2tZVEprYTdMUXlIUUJoTTdmQXltYk1rRldDTTZDVUFK?=
- =?utf-8?B?QjFuVmVyYVk3Qm5MR1FtWTRHa2JBYlVURzlKWFQ5ZkdKL2MyNUVVNmd3ZVNN?=
- =?utf-8?B?SVB0Vlk1ZmNtRkRwOGZQYmMvZFk4aUhEQ3E2M0RyWncwa0haV2F6ZmxrdVoz?=
- =?utf-8?B?aGFPZ2hzUFVacEVPbTZRdUE5N2l6TTR6SkJhVmh6TzNpQUtUQVZUOExZcm1E?=
- =?utf-8?B?SEVpT2RPaVNkdDQ1cndxVDM2N2pMdk9la1l4c3VldWFJME9BZStKTVZ2S3Bz?=
- =?utf-8?B?TXVEWnJUK3dxT3hNdlpKQjJZYVJkRkNIT2xFYWNybG9mbWZuRWtGaUhBQUFq?=
- =?utf-8?B?dFlpLzFQUUVWMzBVaWhnVnAwV0FvbHVNL1Z4MEY3S24rZmNHZDVxRk10eGxh?=
- =?utf-8?B?U2tQeUpxWTFQeXE4RmNtdnlnN0d5d1VzVkFpOHZvdFJjZWpnMHQxdDZIL2Z0?=
- =?utf-8?B?KytGWE0zdUpRPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(10070799003)(1800799024)(7416014)(376014)(921020)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TWpLUG9kMjExaG1tNlNkNGFIdVkwaVlIRCtQWkMyeTdUTXNyVUUvN01UTVlH?=
- =?utf-8?B?Y0NWdXk0cVladXpUL2V3aThIYXhPVHNpdlpjd3NYSEIzd2NNbGZrSERRZFJt?=
- =?utf-8?B?VVg5Rjg2ZlpZc2tDZjltSzFtWnYybG1reFU0ajNGZUtuSUdldWZ0TGpSa2VC?=
- =?utf-8?B?QTJMa2lxYTRxSktpdkxYVW5wdmFFaDgwREFKYkd4RnlmOGZRampCWXR3VFhM?=
- =?utf-8?B?U21VcnR3bFhJWVphOGtsUW43akdWYnRQOGZqVlZmUFM1UGdza1BxRy9NMHRE?=
- =?utf-8?B?WUxDVTZtcmVBbzFpTUdISlZKdkFvTDJ5NkJFSEQrbHhNY2tYaXNERXBKb3JG?=
- =?utf-8?B?cFc1RUQrOHVUNCtOdkNKZ1VBenJqcWhjaktvRVpxcm84eFl0R09IUW1sTmt4?=
- =?utf-8?B?TTV4M2lIUWlpeUI3TW1hdDJBYzZyUDFic2RsVU5KOWJ3TUNwL1RzU3oyRU02?=
- =?utf-8?B?akRKYUtVQjNnQUtNbG5WbEM3STE4U01DOVpVY0hPUW9oaDRtVjJicFVoVWY3?=
- =?utf-8?B?aWRid0J6bDFPRDJjNXlJMXc1RFdXdjdTQmZBZVNQekdpK2wvZ25LOXp5UE1l?=
- =?utf-8?B?WEFjZjdEd1ZPUmFLVGhEaU54TDJiRXE0UjQ0UGJvVnBQQldickJKMTNTNDlE?=
- =?utf-8?B?V3RIcW5hWklXWVBsNytMdDJ1V1MzK0Y1Mld1c3BwaXp5UTdKS05nVklDRFVO?=
- =?utf-8?B?R1JhR3VkNjNSRmZURDA3TW5BSDFNZTIwVG5sS0NhNGI1TGZYUU1PNGFhMjFY?=
- =?utf-8?B?TGhkc05tTXJFN0dNQ2tnNXkyQ0h0VnYzNWo3OXVzeklxVlZkK0Q2aDgrM3pq?=
- =?utf-8?B?UGlqQlMwUHV3SjEzVXJYNVpPSzl1MTF3dFdyS2VxdVJuV0hSUzlRTy9aVTlj?=
- =?utf-8?B?QjZrZVhTQmtFMlEzUGdOMWJ5bGpZdk40NXZWcjEydG03aHRVdExGZkRnQUNW?=
- =?utf-8?B?eVR0K2FsdkJKL1ZIUGxYay9XVUZHaGdFNWd6eEZ4Qm5hR2pkbGp5SXVxOExz?=
- =?utf-8?B?OEFkbHZoN05zTW1vVHF4UUdBRWZiVXhoSC9vczJySUh6cWNTK0hiNU9RdWVn?=
- =?utf-8?B?UEhkZEcyR3dyQUl4OGtZQXBFbVRCNXVCR3grbFBLNS9nUGYyZTdvMWZnajVn?=
- =?utf-8?B?M0Nidzd3YWVta0s0UTN0YzlPVk5RNmYzdVcwd09vckdEWWN4TlkyMlBRVDl6?=
- =?utf-8?B?ZU9hMFpoVjRzS0IyaS9jdlFtc0NtTStuTHY2bWpidFlFamZXK2xvTVFDNlZp?=
- =?utf-8?B?VEVFcHJrRWwwSkJ4MWpZM2cxZWFPNkQ5Ty9rOFBteUlmK1YzYTc2aDdDeDRN?=
- =?utf-8?B?RldTZm5Qb2ZnRU9vclFLQStMdVI2Tm1aTXpKeWRzQ3NHVUlCbXZjVFIvT2J3?=
- =?utf-8?B?S0h2R0xoMUphcW1zZ0QwRWlFd3N2Q2xEV3paeTJpaTRFYVNOanVzbWhBc1NF?=
- =?utf-8?B?QW0xRmVZdEM4YXpTcVlHNEdrYlBDMmxKeHFIMjkzQWpTQS9QSlArVHZRRGRX?=
- =?utf-8?B?OWpmQ0M3U0RsNUw3Tk1xRUJzS2paTFMyK0xXZmFSK2c2M0dNSmY0VXg4UnQw?=
- =?utf-8?B?bzNIY284TDhKM3hrU09PMWlqSGtqak5xbkVXMDRlUHR0dUkxT1o4RmdoNUlY?=
- =?utf-8?B?V1N3K1A0SG1YL3JLeDVxVUJqZmI3RWlONURtZzdUZzY3MHEwL2Rsei9lUVYv?=
- =?utf-8?B?Q2dweTI2a0c3N05VM3poamd3Q2cxdTI1T01VY3ZaOEpKK1V0a1ZEQitVeFh0?=
- =?utf-8?B?dENCK2tPcTlBWFV2OUIyN0xoYWdqM05BRlJwRUp3ZjRaeG5ManRjQnh0Q0Vi?=
- =?utf-8?B?WVhlQUYzV24rT1BvMjRPRUtTWnBETmFDSXZ2K2RNVEd0b1FEbittQjBUUU5u?=
- =?utf-8?B?OHVhVXNhNHZEeGpoOVJWWDFkTVVWbVl6YnRqK2JEOThMM0IzUjdTU2JGa1lR?=
- =?utf-8?B?TGdhNlVjNTNnMnBnQkZ0VWJUKzk2L3JjcE1iM3JFUGFrcFVGWGprUldzU2dZ?=
- =?utf-8?B?RHBLVlNZMzBHU25nam5DczJtVUErbUhvb2lDZyt0d25WcmlKeGlsay84TXBG?=
- =?utf-8?B?SjZzTTJlcEN2VkEwWWNqY3cyR2JQMFJlMWJSZGYwcFlmanRQMm5GakxCRXNC?=
- =?utf-8?B?cUFkb3k4M0hHV0JRc3BJdnhSSmQwM0tEYnduNVcxK2ptVkRsam0zVHlRMEZw?=
- =?utf-8?Q?ZPpeq9nNj6326kp6nBQnhx+QgxF4GbyDhJgQ1KUUzt8G?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b9acb7e-1242-47f4-bb80-08dddbec811c
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3990.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2025 11:11:39.5847
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZbHFvGyCRGmg7MGMx8njWWHRnixiLERfGlLNUvVmcVitUSt1bIk8IuWxsipxZGuPK7bMMw1wU693kys8/inQmA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8714
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250814160740.96150-4-phoenix500526@163.com>
 
-On Thu Aug 14, 2025 at 12:59 AM JST, Tamir Duberstein wrote:
-> C-String literals were added in Rust 1.77. Replace instances of
-> `kernel::c_str!` with C-String literals where possible.
->
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Benno Lossin <lossin@kernel.org>
-> Acked-by: Danilo Krummrich <dakr@kernel.org>
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+On Thu, Aug 14, 2025 at 04:07:39PM +0000, Jiawei Zhao wrote:
+> usdt_o2 is intended to exercise the SIB (Scale-Index-Base) argument
+> handling in libbpf's USDT path. With GCC 13 this reliably produced a
+> SIB-form argument (e.g. 8@(%rdx,%rax,8)), but with newer GCC (e.g. 15)
+> the compiler frequently optimizes the probe argument into a plain
+> register (e.g. 8@%rax) or a stack slot, so the test stops covering the
+> SIB code path and becomes flaky across toolchains.
+> 
+> Force a SIB memory operand in the probe by:
+> * placing the base pointer into %rdx and the index into %rax using an
+>   empty inline asm with output constraints ("=d", "=a") and matching
+>   inputs
+> * immediately passing base[idx] to STAP_PROBE1.
+> * only enable on x86 platform.
+> 
+> This makes the compiler encode the operand as SIB (base + index8),
+> which in .note.stapsdt shows up as 8@(%rdx,%rax,8) regardless of GCC
+> version. A memory clobber and noinline prevent reordering/re-allocation
+> around the probe site.
+> 
+> This change is x86_64-specific and does not alter program semantics; it
+> only stabilizes the USDT argument shape so the test consistently
+> validates SIB handling. Clang historically prefers stack temporaries for
+> such operands, but the selftests build with GCC, and this keeps behavior
+> stable across GCC versions without introducing a separate .S file.
+> 
+> Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
+> ---
+>  .../selftests/bpf/prog_tests/usdt_o2.c        | 20 ++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+> index f02dcf5188ab..e46d5743ad24 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+> @@ -15,11 +15,19 @@ __attribute__((optimize("O2")))
+>  int lets_test_this(int);
+>  static volatile __u64 array[1] = {test_value};
+>  
+> -static __always_inline void trigger_func(void)
+> +static noinline void trigger_func(void)
+>  {
+> +#if defined(__x86_64__) || defined(__i386__)
+>  	/* Base address + offset + (index * scale) */
+> -	for (volatile int i = 0; i <= 0; i++)
+> -		STAP_PROBE1(test, usdt1, array[i]);
+> +	/* Force SIB addressing with inline assembly */
+> +	const __u64 *base;
+> +	__u32 idx;
+> +	/* binding base to %rdx and idx to %rax */
+> +	asm volatile("" : "=d"(base), "=a"(idx) : "0"(array), "1"((__u32)0) : "memory");
+> +	STAP_PROBE1(test, usdt1, base[idx]);
 
-Reviewed-by: Alexandre Courbot <acourbot@nvidia.com>
+hum, I still end up with
+
+	  stapsdt              0x0000002a       NT_STAPSDT (SystemTap probe descriptors)
+	    Provider: test
+	    Name: usdt1
+	    Location: 0x00000000007674c9, Base: 0x00000000035bc698, Semaphore: 0x0000000000000000
+	    Arguments: 8@%rax
+
+disasm being:
+
+	static noinline void trigger_func(void)
+	{
+	  76749f:       55                      push   %rbp
+	  7674a0:       48 89 e5                mov    %rsp,%rbp
+		/* Base address + offset + (index * scale) */
+		/* Force SIB addressing with inline assembly */
+		const __u64 *base;
+		__u32 idx;
+		/* binding base to %rdx and idx to %rax */
+		asm volatile("" : "=d"(base), "=a"(idx) : "0"(array), "1"((__u32)0) : "memory");
+	  7674a3:       ba 20 49 9c 03          mov    $0x39c4920,%edx
+	  7674a8:       b8 00 00 00 00          mov    $0x0,%eax
+	  7674ad:       48 89 55 f8             mov    %rdx,-0x8(%rbp)
+	  7674b1:       89 45 f4                mov    %eax,-0xc(%rbp)
+		STAP_PROBE1(test, usdt1, base[idx]);
+	  7674b4:       8b 45 f4                mov    -0xc(%rbp),%eax
+	  7674b7:       48 8d 14 c5 00 00 00    lea    0x0(,%rax,8),%rdx
+	  7674be:       00
+	  7674bf:       48 8b 45 f8             mov    -0x8(%rbp),%rax
+	  7674c3:       48 01 d0                add    %rdx,%rax
+	  7674c6:       48 8b 00                mov    (%rax),%rax
+	  7674c9:       90                      nop
+	#else
+		STAP_PROBE1(test, usdt1, array[0]);
+	#endif
+	}
+	  7674ca:       90                      nop
+	  7674cb:       5d                      pop    %rbp
+	  7674cc:       c3                      ret
+
+
+I wonder we could also try to bring in Andrii's usdt.h [1] and overload usdt
+arguments like outlined in the hack below (full code in [1])
+
+we will probably need smarter and sustainable change, but you I guess you get
+the idea
+
+jirka
+
+
+[1] https://github.com/anakryiko/usdt
+[2] git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git usdt_hack
+---
+diff --git a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+index e46d5743ad24..7bb098c37de5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
++++ b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+@@ -4,6 +4,8 @@
+ 
+ #include "../sdt.h"
+ #include "test_usdt_o2.skel.h"
++#define USDT_ARGS ".asciz \"(,%%rax,8)\"\n"
++#include "usdt.h"
+ 
+ #if defined(__GNUC__) && !defined(__clang__)
+ __attribute__((optimize("O2")))
+@@ -28,6 +30,7 @@ static noinline void trigger_func(void)
+ #else
+ 	STAP_PROBE1(test, usdt1, array[0]);
+ #endif
++	USDT(krava, test1, 1, 2);
+ }
+ 
+ static void basic_sib_usdt(void)
+diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests/bpf/usdt.h
+index 549d1f774810..960ebd6aa88b 100644
+--- a/tools/testing/selftests/bpf/usdt.h
++++ b/tools/testing/selftests/bpf/usdt.h
+@@ -403,6 +403,10 @@ struct usdt_sema { volatile unsigned short active; };
+ 	__asm__ __volatile__ ("" :: "m" (sema));
+ #endif
+ 
++#ifndef USDT_ARGS
++#define USDT_ARGS __usdt_asm_args(__VA_ARGS__)
++#endif
++
+ /* main USDT definition (nop and .note.stapsdt metadata) */
+ #define __usdt_probe(group, name, sema_def, sema, ...) do {					\
+ 	sema_def(sema)										\
+@@ -418,7 +422,7 @@ struct usdt_sema { volatile unsigned short active; };
+ 	__usdt_asm1(		__usdt_asm_addr sema)						\
+ 	__usdt_asm_strz(group)									\
+ 	__usdt_asm_strz(name)									\
+-	__usdt_asm_args(__VA_ARGS__)								\
++	USDT_ARGS										\
+ 	__usdt_asm1(		.ascii "\0")							\
+ 	__usdt_asm1(994:	.balign 4)							\
+ 	__usdt_asm1(		.popsection)							\
 
