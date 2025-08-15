@@ -1,87 +1,99 @@
-Return-Path: <linux-kselftest+bounces-39018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B423B27358
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 02:10:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15463B273A5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 02:20:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3E715E4A8A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 00:10:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E892C1881906
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 00:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B05D15A8;
-	Fri, 15 Aug 2025 00:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8B7E2D052;
+	Fri, 15 Aug 2025 00:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DXAmW4XY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WFexyq4o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C5563CF;
-	Fri, 15 Aug 2025 00:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A4AAD2C;
+	Fri, 15 Aug 2025 00:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755216603; cv=none; b=IlDIL6mj/JfuDBJ7EqaaDfQX2FP+MaWHLjdN2aTrEB8y/p5KoGTLel8qpNEC3lhBIvzHCFTTbwJv8bTyG5cOmWBPZolzLGrX35bthRrgAAJ3XZUTfUdBfsdmP/mTGNI7BB03Gr8bxr/QucKYUmmm2xkD8Y4y/Dy99t9KgCvbyG8=
+	t=1755217126; cv=none; b=oJj7v5bgOeIySRkOdTlzXjrIraBOIaucFYF0qs3PDxvlyy/YYN1yc3fyPgmhZ+xVw7aIHp/9oMzR23kSZpoeDr86dydg2DZ3u4DMWukr+Z9kTj/A4w9MtmVQILgGF8IDS7B8DtTuttsKNtN68auqLwVNK+zVp8BtU9zIYNmALC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755216603; c=relaxed/simple;
-	bh=LeLrLXcF4B2D/r502SwuoJI5Jqp2w+Ye/rStaLUoDi0=;
+	s=arc-20240116; t=1755217126; c=relaxed/simple;
+	bh=YSHQ0nHVRPFsB93Dabwiu8ozEATJ/8Mr0PnXcpCB98s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oeGiV+EmgPgje185Sqd6udc4UDRVXujwjUx4B5JRfhI5siuswsrVXy0F2GOZu++TNAsTGnq7S83QT7aAVC52BIIeVpxiqRvBViWUFMJlpz2YZxwpY2i3RGQbjOaXDJ8Ov1jDltB+dqWdQ0vZ7kT2Sn4UYy8WilhwipQszcZG3ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DXAmW4XY; arc=none smtp.client-ip=209.85.210.171
+	 MIME-Version; b=uvkhhDFAQda5cdgEGqIp8WaFNkgFhLATKhSFTQ86XwTd56a7vRJIo5/oAkjsPvgwwmXtdoQDrsDHalqTKQ733TewL8JzgVwDzahCiPivB0YX74qiDSHfmwSGml3Y40XwFTxvJjTAU3oWJd4knCZlV74jgYN8jIDopH2ocHRm0K4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WFexyq4o; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-76e2ea79219so1787048b3a.2;
-        Thu, 14 Aug 2025 17:10:00 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2445806c2ddso12760205ad.1;
+        Thu, 14 Aug 2025 17:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755216599; x=1755821399; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755217124; x=1755821924; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DlLxjN4pkp49jDBSQ7gXFAZ4FdqJj7SbFZCOba3BMhc=;
-        b=DXAmW4XYNP2pZmKg5Jc20qvwsJqYXg31cgoOGg+zZrOynWsjg9eNumVmtEDofOWrsj
-         mnmTTYUcwqNq+vSjsW/eTij+lMh9hYp9rN3696i/Rdh8mVXWVWzp7TiLfvx6qc03Ay1+
-         THCUBQGjopBU5TMtC+EIYesEvizj8pH86Akzi8jbuL77B2TvK1JKKKa3/X5t0PZfePSu
-         edAyD7rPWl+l9Uvff7LP4J3gr70E9cXAHOmOAW7xJL8ZMinSjCo2lo31pLA5F0q27tff
-         wo7xumxfdvsvQ+v/bN+Mcmwv4qvIHIdHP+1/fsPBJbICorrjsoSyKPm0wMrqAPYkLdsf
-         k1VQ==
+        bh=VHJYqmfxyB1ZtjnaSlG3/Xthq2PX+hi9aHfPk8z27kw=;
+        b=WFexyq4oXTNdVCrZZiWbVQWICwor/oZkoM5a+veKqbKqwurJx7uhZ1lYL7puFPtM97
+         T9rvtKBJAsYbiHPn63d3J5+bbBiw3JOkp2I5WjT65ulmhzGK7EPEuPIluAK96iDejfhv
+         V2zPkZOtGQJTbHBBVMZWjBWl4Pwh2CJmtMfswCXNMjjAr13b7E8NqO6PpeUZkbigKcoU
+         KCx41nRvW9HWFqPnSbMqwTM+3kzZD/gCo404E1fvkLfi33sR6GkzSP8tpcwhRB/jGulr
+         CrQI7Hy6dkYHh94XLaJXUeZxntwpyC4mGACMvVe2w2BJWsbrQngtjjNb2jxDouVocTW6
+         N1kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755216599; x=1755821399;
+        d=1e100.net; s=20230601; t=1755217124; x=1755821924;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DlLxjN4pkp49jDBSQ7gXFAZ4FdqJj7SbFZCOba3BMhc=;
-        b=JEjtlaweEFPLf3NaXaGJEC6f6x+aJOOwYCmThTy2NgEKssgh9Laecd4xqFHBfZ773o
-         OFzg92pJoman8C+Q4RuWy4dVzjqCecAjdRDhik0oHOL6YHmD9iV4QlYQx1GF9S5Pc004
-         DNE7WZkC5tSjuPh+hgaTtrhvE6P3v9jd2NXAUMKWqVzYa4hkEErKDSwvhcIuwBYOKT21
-         2qa/kgNJeLHFnLfwVI444al1qdcahMU0pKtewAIp5WIR87J86rEbchcIpmiLaFY1cwhU
-         01U7CugwephkCT6J9e9ZZZqPU8O1B0Zz9xH0c6wbmK2N/4thK4PtV3NTMeIisaGjMrZ3
-         6fmA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAQLi6yceSJWMOQ9OCjHOcqu4iZsbofET/yHOPIXXat6vQxXguwWN8wwolzIcwqlgGHtMbpB32LVs6E1s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrJ1NqugixUA12QfVQpoO6dvD7TS4Vu5nlJ5RDNWSsrw6aa8nu
-	u1pe9wh6anQvdXnxy+E6gZqZIXqbz0T4jPNoLmXIoOfAezVbcQH/TTaSWWe9DpJG
-X-Gm-Gg: ASbGncuvlK9dXZoazXh31HjY+GG9Iyu4IXu+w1tRzdIQ11cP+h0DRfbD5B1RT0HN6pV
-	/0fIVdGsdTmBRZL3obvPirpL1Uy1+zhCuhzb2vNAlMdrzAjwKpp6uMqI7C2VIJLORklCTUB6g2h
-	FloF4f6/keXlTLpqISceOhsJvwHx3F0efbIjDTwWyEA6Sbj8r5UZpfDYZV66Iprp+54P/VyS80j
-	/x1NKJ4NcyY+Iz8phb2bgwB7A/UU6efCpD3r7pkI3MqQ/JXfu7xhiUZ0UCtWb4hE0Y4r6XW98aD
-	OBdex7KyVu5CU69PcgkKGNQv3I7zXNtFjWlSW66ecBtiH8JWrSpB54t5G/iR9TJGKTUQRSM84hA
-	DpqsiLn3Ppu46SmCKNgCgaDeX7PTt2t0=
-X-Google-Smtp-Source: AGHT+IH4yIyU5+Vw7X3ZhdEpMKKKSLOLoQRegPY6V7frOv02QTJ899n6OOmUfl2yHMF7rrVED6sj5A==
-X-Received: by 2002:a05:6a20:3c90:b0:23d:665b:cefe with SMTP id adf61e73a8af0-240d2d7d707mr315324637.9.1755216599521;
-        Thu, 14 Aug 2025 17:09:59 -0700 (PDT)
-Received: from soham-laptop.. ([103.182.158.109])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76c2efd89aesm21367854b3a.106.2025.08.14.17.09.56
+        bh=VHJYqmfxyB1ZtjnaSlG3/Xthq2PX+hi9aHfPk8z27kw=;
+        b=fv/h0ZocVsAzylqVdIiVCJm7Njf9CO019WUyVyf9YCGzUOtnpykH48Aav8HJdBlE6f
+         t4SSn8CLHdNrgjKfBd51EKcfDT6DAu/jdBHPx8sEpynKgwiScaJlojXyVFBuWFj8RyFZ
+         Xg/ZrJkZtOcYpLGVoEDpvvJ/CEOcc7E8F3SsfMx2ypHzgX7ayK/QB6ZXqptCCoiVBoYt
+         KudqcbL3QKThCHiEJN6vAl1sHVrP9/eSLeIrBdLQRc0QGzGiaNKj49fBSOwA5ACbFZ7x
+         Uki4GpRVrst+npYdau/uS34yFRg/I05X0iMwLrRcnAfaVKNYLBOzFwJarsJ3nZptbLEg
+         Kz5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUgsoaZJDIKYGuq2Q0DHSy5umr7lfOGavRJnrK4/oJjDZ7yjktXO7NcY6rhIYsjGOiSHwQvW42d@vger.kernel.org, AJvYcCV4waBbTfD4Kkdkk1wnxhUSzyamXEVXdNwXaBz8niylaEdA1hyX3tPda6NrdXoXPReb4pfHbUjP/tMEt30=@vger.kernel.org, AJvYcCXLZjodCsSgcUl8tE8iPs1zu3sq8ChXlADdwlsC9A+Cbed9JXOF+UMfQJzc/fQXBVAWkdnDsxtNUrc0AmBbLb3w@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7/w21cXwyEVBgu190U6EzyxA9H1Z/4kYLIzhuN13gmeGj9bNW
+	LLv3CqJoEzQg21bP+qLPQdoNNPEm/vN2vejvp+i8IZatxaJu0CtjrVq35nSHUjk/2aY=
+X-Gm-Gg: ASbGncu7B24+ECxypbG1xrmTpi2ibcWRBw3zgypmr3tllKzAmXxAUwJ9KS9aRUwYFFT
+	F44g6BfJ0Rw3WKTbb3FhR+2BP57aPdzgcSC1fjI3xgz9zerEvKCHtmT0p8F1SLkyeNIkFxGoklR
+	5CFu2oQnUdfTp94GnB4v/a/dGPxSVJuToiAadL7vs2vyv/fokyR+NR10Um1eHprpNUl4JA7XU4n
+	KB1tDlAfnWPhXZ2XyrZBtVV25aNPTRCr6SZLZExYDxzjlXLO/BWo+Ujzo43lAMN3TR8g6XMjg9I
+	AeXb11/kPnwlDBOBj6kt8ucmr05XIXq87X5EbXBUb7MTAfjaw5UaUG/jKUFd/hubthmsn6EEY62
+	dtmFvQ7WvT99kd6t2ipeqSw7Hvw64yx2i7ms/k2ty3Q==
+X-Google-Smtp-Source: AGHT+IFxzhdphiJBS2G/UPMPzKz6foyjIJZMPLW6JxLo23pShrslemm4KTOWFETkoXre0puhmLRAcQ==
+X-Received: by 2002:a17:902:c947:b0:240:aa0:1584 with SMTP id d9443c01a7336-2446d8db8f0mr2125065ad.38.1755217123642;
+        Thu, 14 Aug 2025 17:18:43 -0700 (PDT)
+Received: from soham-laptop.. ([103.182.158.111])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446d5a451esm700745ad.165.2025.08.14.17.18.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 17:09:59 -0700 (PDT)
+        Thu, 14 Aug 2025 17:18:43 -0700 (PDT)
 From: Soham Metha <sohammetha01@gmail.com>
 To: linux-kselftest@vger.kernel.org
 Cc: shuah@kernel.org,
+	skhan@linuxfoundation.org,
 	linux-kernel-mentees@lists.linuxfoundation.org,
 	linux-kernel@vger.kernel.org,
-	Soham Metha <sohammetha01@gmail.com>
-Subject: [PATCH 1/6] selftests: filesystems: statmout: fix spelling mistake in output
-Date: Fri, 15 Aug 2025 05:38:59 +0530
-Message-Id: <20250815000859.112169-2-sohammetha01@gmail.com>
+	Soham Metha <sohammetha01@gmail.com>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	netdev@vger.kernel.org
+Subject: [PATCH 2/6] setftests: net: netfilter: fix spelling mistakes in output
+Date: Fri, 15 Aug 2025 05:47:59 +0530
+Message-Id: <20250815001803.112924-1-sohammetha01@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250815000859.112169-1-sohammetha01@gmail.com>
 References: <20250815000859.112169-1-sohammetha01@gmail.com>
@@ -93,30 +105,104 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-found/fixed the following typo:
+found/fixed following typos
 
-- didnt't -> didn't
+- add add -> add
+- cannnot -> cannot
+- fowarded -> forwarded
 
-in `tools/testing/selftests/filesystems/statmount/statmount_test.c`
+in `tools/testing/selftests/net/netfilter/nft_nat.sh`
 
 Signed-off-by: Soham Metha <sohammetha01@gmail.com>
 ---
- tools/testing/selftests/filesystems/statmount/statmount_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../testing/selftests/net/netfilter/nft_nat.sh | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
-index f048042e53e9..1278259231fc 100644
---- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
-+++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
-@@ -545,7 +545,7 @@ static void test_statmount_mnt_opts(void)
- 		return;
- 	}
- 
--	ksft_test_result_fail("didnt't find mount entry\n");
-+	ksft_test_result_fail("didn't find mount entry\n");
- 	free(sm);
- 	free(line);
+diff --git a/tools/testing/selftests/net/netfilter/nft_nat.sh b/tools/testing/selftests/net/netfilter/nft_nat.sh
+index a954754b99b3..44a8fdf5c19c 100755
+--- a/tools/testing/selftests/net/netfilter/nft_nat.sh
++++ b/tools/testing/selftests/net/netfilter/nft_nat.sh
+@@ -164,7 +164,7 @@ table $family nat {
  }
+ EOF
+ 	if [ $? -ne 0 ]; then
+-		echo "SKIP: Could not add add $family dnat hook"
++		echo "SKIP: Could not add $family dnat hook"
+ 		return $ksft_skip
+ 	fi
+ 
+@@ -239,7 +239,7 @@ EOF
+ 			test_inet_nat=false
+ 			return $ksft_skip
+ 		fi
+-		echo "SKIP: Could not add add $family dnat hook"
++		echo "SKIP: Could not add $family dnat hook"
+ 		return $ksft_skip
+ 	fi
+ 
+@@ -418,7 +418,7 @@ table $family nat {
+ }
+ EOF
+ 	if [ $? -ne 0 ]; then
+-		echo "SKIP: Could not add add $family masquerade hook"
++		echo "SKIP: Could not add $family masquerade hook"
+ 		return $ksft_skip
+ 	fi
+ 
+@@ -509,7 +509,7 @@ table $family nat {
+ }
+ EOF
+ 	if [ $? -ne 0 ]; then
+-		echo "SKIP: Could not add add $family masquerade hook"
++		echo "SKIP: Could not add $family masquerade hook"
+ 		return $ksft_skip
+ 	fi
+ 
+@@ -569,7 +569,7 @@ test_redirect6()
+ 	ip netns exec "$ns0" sysctl net.ipv6.conf.all.forwarding=1 > /dev/null
+ 
+ 	if ! ip netns exec "$ns2" ping -q -c 1 dead:1::99 > /dev/null;then
+-		echo "ERROR: cannnot ping $ns1 from $ns2 via ipv6"
++		echo "ERROR: cannot ping $ns1 from $ns2 via ipv6"
+ 		lret=1
+ 	fi
+ 
+@@ -598,7 +598,7 @@ table $family nat {
+ }
+ EOF
+ 	if [ $? -ne 0 ]; then
+-		echo "SKIP: Could not add add $family redirect hook"
++		echo "SKIP: Could not add $family redirect hook"
+ 		return $ksft_skip
+ 	fi
+ 
+@@ -673,7 +673,7 @@ table $family nat {
+ }
+ EOF
+ 	if [ $? -ne 0 ]; then
+-		echo "SKIP: Could not add add $family redirect hook"
++		echo "SKIP: Could not add $family redirect hook"
+ 		return $ksft_skip
+ 	fi
+ 
+@@ -844,7 +844,7 @@ table $family nat {
+ }
+ EOF
+ 	if [ $? -ne 0 ]; then
+-		echo "SKIP: Could not add add $family masquerade hook"
++		echo "SKIP: Could not add $family masquerade hook"
+ 		return $ksft_skip
+ 	fi
+ 
+@@ -859,7 +859,7 @@ EOF
+ 	# from router:service bypass connection tracking.
+ 	test_port_shadow_notrack "$family"
+ 
+-	# test nat based mitigation: fowarded packets coming from service port
++	# test nat based mitigation: forwarded packets coming from service port
+ 	# are masqueraded with random highport.
+ 	test_port_shadow_pat "$family"
+ 
 -- 
 2.34.1
 
