@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-39020-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39021-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B9E5B273AE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 02:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF3B7B273B1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 02:22:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A13E189F96F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 00:20:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E7881CE1F99
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 00:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 933AF15C15F;
-	Fri, 15 Aug 2025 00:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E70C11DA23;
+	Fri, 15 Aug 2025 00:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X8BdORKu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y5yYhzfp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208A11547E7;
-	Fri, 15 Aug 2025 00:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D26A926;
+	Fri, 15 Aug 2025 00:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755217199; cv=none; b=Jn4kMezvEPAUedgDkvlTNy3aihS3kN93uFYb6nxDyOWPWuFQSrNdvwwp8TofuOmEgRTMF6j81eex2GXcQOen9wOmtZ4xP0QvRVKVUHeupUE3Ay7lvHDNRIGBdWYmSQ80GZaPZIE+ZMDnB2MF5ADTtf9PsxdR+Hx/rCxpq313p+4=
+	t=1755217223; cv=none; b=HpzLyscnZgZpjdAsT5le6rVfoV9HJi+lzG7dQHujy/OAf2N7lf1GqVF01w1Coedf+z/vsTeAfN+8NCI+y4eMP9iy4V4nnQX8nXPo4+t46Jr5IDpiHfm5qdiV0OLt1eeprQrajfkkBVdrfUeEUgGr/sapow0+sepzlqf5n1OrWCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755217199; c=relaxed/simple;
-	bh=4WxO5njFK0+OR3toSx5o2S0JgQhNFZQCIDBPKDxbstg=;
+	s=arc-20240116; t=1755217223; c=relaxed/simple;
+	bh=Hlpf2kTVXQNQmFdUgxQvYfOl1mZBxeqXkGFm+CUVm/s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bc+xL67QahGpmrzBm1Ux86bYWUEio8a6HpMnF4kjCz8tPIuhu7KhYVAopBEVEHEPNuTSgS4Pqk5za3Bb+63jllkoiqUUtca7dvU+FzenxetWpci+cBHv10SAtOM5wLSbrhPdlSAlKUh4cEiD8AvxHOX9TxpJlhtXuvbOVsP5Bdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X8BdORKu; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=c+DFZo7eqSRKHeK70mdOZ02+Mqx0Nu3ROmNCyHXQFIBE98ESEfZDoaazYuvaclBAREd7NbrvTRoj3Uj7mBz6ppShBl6TOt5ow4sc27K8Jle8jhdwy2vC/O319aLJ3tE3InyPxvTxUez9DwssKAzV7wI21Hu3fV/Y6XwUP/lcjSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y5yYhzfp; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2445827be70so16040115ad.3;
-        Thu, 14 Aug 2025 17:19:57 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b4716f46a2eso1021607a12.0;
+        Thu, 14 Aug 2025 17:20:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755217197; x=1755821997; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755217221; x=1755822021; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q9fv3c2HbHHCXhaOug3C2M7cVcHLqE7dP/SrHl96zCY=;
-        b=X8BdORKuCdWaHpzlAmUFA8h1mly25qS9yf4EJUqVbQeQTYNNxf38LqcjQx7VjGWKfJ
-         t0S2FpGwwdeX0JX6NWJJ4bAUnbbxMwapebd9pL5+iQ+Ge6XBVmA4GAsQJzI3HqjjCmju
-         a3V36KFXbeVCKTlNs6+u5z01OL4swiNWoPPN/4yLwg3SHsqm9UDtAzGbM76eQcHEClF2
-         ro9jDwF1YxxaEAtDw0BiAGUsSr0zmabeSWWV2d2S5l/qbxYi9XQWpKB01kgIDImD9uxz
-         b7GMnMVUBbICK6mqXUJ8aulu76SIOuT71y8SUAYMFQ+m7Ppnjd4/y2zG/OdQaNANq35D
-         easg==
+        bh=TnAqP/Eao4gbLB1mbZYWMwk5AegHaMBnl9yzD4tj3Pc=;
+        b=Y5yYhzfpBxjgkA2+uPTWI7l99s5kVxQaHJUc0mjjXRn01JClTeXI26muzGByTj+DrJ
+         HPfH/nWIoQuk/+fM0/NtBDsxNcir8WWzG3Wwn9Bsi3bUg9Eyr9gMP+lYVlaVsC0OIMtx
+         i57ohFJC1FEIjURSukNaqsaSkf10s4C/5gYNl29aq9k3ySA+LLTbIzJ6hyveb6tSjS4U
+         E3r+53nkjwjJtOjv+v1uRyv5yYZ1Dz6LeG/TSzeiNq/Ub1BQLaE3cNYL2V7ShsIBlvFY
+         gegmRt3Q7oa5q2qNX4Zp2/hesZTnKd3ON9kQZyBx5aFVkT/BRSybAZCs14IS58+hEUZ0
+         FowQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755217197; x=1755821997;
+        d=1e100.net; s=20230601; t=1755217221; x=1755822021;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q9fv3c2HbHHCXhaOug3C2M7cVcHLqE7dP/SrHl96zCY=;
-        b=VuNUQ7uV1oxf0IIgkK5uD+X23W4vBFk3O9Z+DEL+wvt01Dph0JNCMjOtzm/c5hfvZP
-         nXTqGDdfGRRZKYVMv7UG5dNg8nDFQih/JyrYVw+ieJhmdG3m477f+UTybJ1OfRm21Orr
-         zo0H3NgJm8v2U08yM5S8x9WyEVferri04SxIapo4A6fgakRGvz3myMTTIyczd8QqSxfr
-         DWmmuBLpA/CCBL4K1Qw1u/uR6nwtyzFFTYW6GCo0Z7CUl8kOG/mg5cap1VqKWQECW1SE
-         1HIr1B5ZCb29WAzpTdjLJFfAWvuSIzyvzpKV0i/khho5y8WtYLuF06Yba8dgs2OreXRj
-         6dUA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlS0u2s+80N/qWLbHgrXkdKRUg4nMzlAKuZCTzdv/mkh3ynRm0PYbF4OG14wq/4uEzj9XESSGto6W+OXFu@vger.kernel.org, AJvYcCXmuIHdNlsMPd/1QIAH8NKDZ9s/sK5jQT9mHE8uZrdFgQRTdIo925NBebRzxBIwfvhFES6AvUl6Ah4gHg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1YLDX5szej2YrceBRevAeUuXILOK3buG/k5gKSKV1jAafvsNm
-	vUsB31u8pnyonFAW+X77DzmC/m/avgEY1JXCeTnL8AJrRxbMwTkDPdlrPr4mOvLn9B0=
-X-Gm-Gg: ASbGncv8xsA7o+wfE3cVY8xgbBjy+XCosMVCnJxqH1ZUdLJtM2lBKPt32DwuiMcpvOm
-	o8AfNkXwJ+PoDLQBu4MtcqE5TP2mtA/ENWQ/sX8jWc3Y20FkHzDlcItQzLPg0qJyh+cSKr5HF4j
-	9BhQNuy1vmfGy3ecqUm6EzE048T+NDhRSEI/uhguC8LXqSEFqDA+jr8/I+INd9Wersc+TyI9Cf3
-	NTBMMLJ9WLqU3g/mvUBcQ9zzI5iZt8n6G1Xb+0rypF/OTHZ/DXI4wPIFbd9gALbfF7iCzTiCGC/
-	1olTMxFNcZxa/DHSqOhoGsOSq5QJTxF26h5YOFmDCqINPk/Ucm49BmRMTWYmCGR1EdJyEyps/vT
-	YqodYYHsKLhEryMBFbHD9D0JmGs+0gEHhnWwZ8SGm0w==
-X-Google-Smtp-Source: AGHT+IE2r0AUduQsrykmHmpUS6XlGtUQsJE/qubvEKPOvnN+jaFYs459i+wdq1r02Cqq4OkDozuRtg==
-X-Received: by 2002:a17:903:1b65:b0:242:9bca:863c with SMTP id d9443c01a7336-2446d95508dmr1526625ad.54.1755217196891;
-        Thu, 14 Aug 2025 17:19:56 -0700 (PDT)
+        bh=TnAqP/Eao4gbLB1mbZYWMwk5AegHaMBnl9yzD4tj3Pc=;
+        b=nrPfLg8lsfNEsC4mDrBQeRDJCKt9hDZxsypvNcVx0Pxw3cKtspztXQ1sOhGgk0BcbJ
+         reT4AvEhTmVRymtTP4RaGqytf/pOeHc8PhZvRtXWsvD+grxDUhaDktw8y4r5CEA16q19
+         CG1h4rJ7PrIcckAke91ooxG3NcXsgSKaFFXlaaO6t0JgaWS5C9se+IHSRb+dbgxduyf/
+         WKQkHz6R/31C2N9qgS9yCNBujeievxhjJwjSu/K8EZIr9j2Viizuap74uWJA9oppfdCR
+         4r7a3v2EtvCE32igqxJYbGhgrSGckqvWd5o9bayVZLP1agFu0x8N7yrwVJQ/GoPtmMNs
+         Ur9g==
+X-Forwarded-Encrypted: i=1; AJvYcCVPYwUftehSwuQE+QQ6WfQqhGbq4T51bTfK0du3lglczSXA3lzUfkY4SAgMRNtS1BUD15XDUHXPrLAubMFp@vger.kernel.org, AJvYcCXxLTWaaEnrs0s1W/skJ/P9EujHzJO2ke4Sm6v14mlEt+L4If9HIGw/A2ApE8rDCtY7msg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5FoWCHo5lAkI/J2HeT1y5okojj6k7gJtiilfWiWsR9/glRBy7
+	fTWP/hRfLhN4zBR8rCLe8BNTfktcHUiIftRfNJybId3Krts9KcSJHpUrUHefLaLCA7A=
+X-Gm-Gg: ASbGncuUGI1xNi+ba6BgxYKTjh/nMvgHPh47d8vW/3AM+Ba2+1h3FBcmcjsZGdFqc4y
+	4h3ag9dhcH0KLEvtY+tOB+9rpbl6pca7h74R0454E2BswY9upuTz72KaJ+n8fyn/0p/pRDloBAa
+	8D/ZfVFxKkTLyFYQqWB/LL4/YxiCDc7kdKhDIYesTTIIENKbe1aK8YVz7Y8KSotUybVHpbRz9wb
+	mj2/VTu46jlg5uZXZwy1DqhA1Yvjbo53Zfv59H8yBmE/TOjO5dfuHjJN9rxo0Z/JOF6njIwLLC6
+	aSyUCj2yJVVq8tf5OBNp+FQB2A9l/6EC8549YFMBOvi5QtSdAJ4736vfz+aYswFBo3Rks52ay1z
+	4sdqj/+t2hfA54AQebAVsM4DNun3ka/3W3rL3G/CQ3A==
+X-Google-Smtp-Source: AGHT+IFCAtu5B5yxPJm9Jf0dqxrJjQRchll+v2TqA1NF0cIniaNtFVRw/nJJfo96v0jQVWxXrvFqKw==
+X-Received: by 2002:a17:903:46c4:b0:243:6d9:aa2e with SMTP id d9443c01a7336-2446d9b0973mr1513905ad.53.1755217221031;
+        Thu, 14 Aug 2025 17:20:21 -0700 (PDT)
 Received: from soham-laptop.. ([103.182.158.111])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446d5a451esm700745ad.165.2025.08.14.17.19.53
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446d5a451esm700745ad.165.2025.08.14.17.20.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 17:19:56 -0700 (PDT)
+        Thu, 14 Aug 2025 17:20:20 -0700 (PDT)
 From: Soham Metha <sohammetha01@gmail.com>
 To: linux-kselftest@vger.kernel.org
 Cc: shuah@kernel.org,
@@ -80,11 +80,19 @@ Cc: shuah@kernel.org,
 	linux-kernel-mentees@lists.linuxfoundation.org,
 	linux-kernel@vger.kernel.org,
 	Soham Metha <sohammetha01@gmail.com>,
-	Ming Lei <ming.lei@redhat.com>,
-	linux-block@vger.kernel.org
-Subject: [PATCH 3/6] selftests: ublk: fixed spelling mistake in output
-Date: Fri, 15 Aug 2025 05:48:00 +0530
-Message-Id: <20250815001803.112924-2-sohammetha01@gmail.com>
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org
+Subject: [PATCH 4/6] selftests: kvm: riscv: fix spelling mistakes in comments
+Date: Fri, 15 Aug 2025 05:48:01 +0530
+Message-Id: <20250815001803.112924-3-sohammetha01@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250815001803.112924-1-sohammetha01@gmail.com>
 References: <20250815000859.112169-1-sohammetha01@gmail.com>
@@ -97,30 +105,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-found/fixed following typos
+found/fixed the following typos
 
-- faile -> failed
+- indicies -> indices
+- requrired -> required
+- guranteed -> guaranteed
 
-in `tools/testing/selftests/ublk/test_common.sh`
+in `tools/testing/selftests/kvm/riscv/sbi_pmu_test.c`
 
 Signed-off-by: Soham Metha <sohammetha01@gmail.com>
 ---
- tools/testing/selftests/ublk/test_common.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/riscv/sbi_pmu_test.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/ublk/test_common.sh b/tools/testing/selftests/ublk/test_common.sh
-index 8a4dbd09feb0..e21476ff1f06 100755
---- a/tools/testing/selftests/ublk/test_common.sh
-+++ b/tools/testing/selftests/ublk/test_common.sh
-@@ -358,7 +358,7 @@ run_io_and_recover()
+diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+index 924a335d2262..6a8818ac036c 100644
+--- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
++++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+@@ -212,7 +212,7 @@ static void update_counter_info(int num_counters)
+ 	for (i = 0; i < num_counters; i++) {
+ 		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_GET_INFO, i, 0, 0, 0, 0, 0);
  
- 	state=$(_recover_ublk_dev -n "$dev_id" "$@")
- 	if [ "$state" != "LIVE" ]; then
--		echo "faile to recover to LIVE($state)"
-+		echo "failed to recover to LIVE($state)"
- 		return 255
- 	fi
+-		/* There can be gaps in logical counter indicies*/
++		/* There can be gaps in logical counter indices*/
+ 		if (ret.error)
+ 			continue;
+ 		GUEST_ASSERT_NE(ret.value, 0);
+@@ -446,7 +446,7 @@ static void test_pmu_basic_sanity(void)
+ 		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_GET_INFO, i,
+ 				0, 0, 0, 0, 0);
  
+-		/* There can be gaps in logical counter indicies*/
++		/* There can be gaps in logical counter indices*/
+ 		if (ret.error)
+ 			continue;
+ 		GUEST_ASSERT_NE(ret.value, 0);
+@@ -474,7 +474,7 @@ static void test_pmu_events_snaphost(void)
+ 	struct riscv_pmu_snapshot_data *snapshot_data = snapshot_gva;
+ 	int i;
+ 
+-	/* Verify presence of SBI PMU and minimum requrired SBI version */
++	/* Verify presence of SBI PMU and minimum required SBI version */
+ 	verify_sbi_requirement_assert();
+ 
+ 	snapshot_set_shmem(snapshot_gpa, 0);
+@@ -489,7 +489,7 @@ static void test_pmu_events_snaphost(void)
+ 		if (counter_mask_available & (BIT(i)))
+ 			GUEST_ASSERT_EQ(READ_ONCE(snapshot_data->ctr_values[i]), 0);
+ 	}
+-	/* Only these two events are guranteed to be present */
++	/* Only these two events are guaranteed to be present */
+ 	test_pmu_event_snapshot(SBI_PMU_HW_CPU_CYCLES);
+ 	test_pmu_event_snapshot(SBI_PMU_HW_INSTRUCTIONS);
+ 
+@@ -500,7 +500,7 @@ static void test_pmu_events_overflow(void)
+ {
+ 	int num_counters = 0, i = 0;
+ 
+-	/* Verify presence of SBI PMU and minimum requrired SBI version */
++	/* Verify presence of SBI PMU and minimum required SBI version */
+ 	verify_sbi_requirement_assert();
+ 
+ 	snapshot_set_shmem(snapshot_gpa, 0);
 -- 
 2.34.1
 
