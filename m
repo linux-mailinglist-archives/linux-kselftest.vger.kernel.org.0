@@ -1,129 +1,197 @@
-Return-Path: <linux-kselftest+bounces-39126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3299B28891
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 00:52:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A0E3B288AA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 01:15:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 684053ADE15
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 22:52:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CECE5C029C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 23:15:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6FD5280A2C;
-	Fri, 15 Aug 2025 22:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCAC32D0C9E;
+	Fri, 15 Aug 2025 23:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0JMnMesD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtnhH5xv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6947015855E
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Aug 2025 22:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B269C24111D;
+	Fri, 15 Aug 2025 23:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755298346; cv=none; b=aferhU5vW2MWd2CIS9wn3IEce4E7keXKKBKODoQfNa5GVMcN9X/EbpGXTvU/2TjoZVoMwkj/KBsuQgiD0N2UNHIzF4zk3Pbcx6RTA4IgoNNrOvPPHVLzav7YHHVrTtr056Cej/fwt9bhhTMUJ8GxddUU0IbGDJwZ8zH+2aGLXMc=
+	t=1755299719; cv=none; b=u1RQkTmJwKRJwYB8dft26AX+6TYmN9Ym0KdyfT14azxZTvB3rKWgtf3XmZQ1XAshBKa6phM1zI85n0h9m0UvZXd5PGi8wkRwERuJlDXBOBkGE4LDaK9s09wO2Fzwq0XYy39VfUKuUR3xCFcDHichvXjmFtiqNby+hzKUonjE3U8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755298346; c=relaxed/simple;
-	bh=K/wYqwonycmklyJ5/DgqlS1Uy+2TdihuiWzWz12ccbw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=H5Q5+prkFZ2m3nVYfBN3Aewqd2Kq+dVaJwircxDcMy3wTrfKXo2TQWAWT0K/Thb5ncuBse1rYNg/xiBOkySBiUmd2l1wcRNebNi6wGBnW9YwF9s1RAFj8Ag30toOhsiUeZXPoDN1WlkEQKBIl7NTRGsfQQyrsWSUgz6Swbc7Ezc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0JMnMesD; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-32326bf571bso4176665a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Aug 2025 15:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755298345; x=1755903145; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N+Te5pIYiAmG0oRIPBD1Z6ejvqQFlWYw672ZGrfsn94=;
-        b=0JMnMesDMC6V4mt3HJ7A427nO7IlUZ4ukfDoG5M6Y+g6pliALlS59Es1cTZ+pWe6cp
-         FLynaHEbH/Z5onZGJwpmt/xODXIrtBQmjvGbxiGC2lRNSPLDOfuODRfk11jKfK3nmx4r
-         ZGkK55QLGguH9g0haF6BIIz/mr+NXzlg+9gYNIGdj5xfK4dGFSysI3ApRU/2JdkutZSu
-         hKHjnRphxfFB0DzyPQW1wewVI29rfa/3Caz54dgZm2dxzEu+oZ2ew/lxw6M5s+tc9/Lg
-         WdhDw1+X2d3rk1libTSOm/aLEhGPOPrdqbHCd/qs2XagM6ndPifxdipbm+uhZFnurJlS
-         XT/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755298345; x=1755903145;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=N+Te5pIYiAmG0oRIPBD1Z6ejvqQFlWYw672ZGrfsn94=;
-        b=p1+FVt0spIWK7F3n+l2U3hmSfJRJic10rVnbECY8dBrwbH3xhCSOpSnjjS+xadsWXQ
-         iCxTDnGrW3Iton6LxZmDoYJe3SjEFcGj/yM0Gh8PtcIIiW1yIyPYZhinE5IhVrmCybh9
-         B41c2wacOrNATvQvfhi0Qyllmcxdt3BA51WGE1/n8dXwQ+ldy+7jChxfa66T4EmIsv0v
-         Uht0O7GI9Wiu1USRsyFHQQY77V+7eacIXuFVUOgfCT1MENOqbjmgwceEO5Z4EuF9KgAL
-         oRnaO/zSLJhfM42gL/9lq62z11uwMijy4/zc10nXWA3Vi7fGwwsP1HespKTezyogjYw3
-         Y3cw==
-X-Forwarded-Encrypted: i=1; AJvYcCXJymHqw5XBQRXLeOzFilfPGNtCi9XdgLeIH1Xp9r2Ux1bqeRGyUl2BwKCW5tJQO7PaQkBiB61e37kzvtkz+Ww=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUM6mfpI71nNsEE0XSRG8y+Ci9Q/UJbm/U4byEHngYCuJPLPuv
-	zpf2layEuYRuQlfFmesQU91Tu6lMPGRPoIeP030BYpIfvGBN4I+DvpxaXADpLP6Z4fy+7ncYi06
-	CdcIMww==
-X-Google-Smtp-Source: AGHT+IEv+UJAB/6+TZfmF8Xh+vBJ3l/eBNjM0pOlbutUgEhFPbzx0x5t1mtIyCzUBXElTaWSG/PR3FTxuRM=
-X-Received: from pjbqx15.prod.google.com ([2002:a17:90b:3e4f:b0:31f:d4f:b20d])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:55d0:b0:31e:94d2:c36f
- with SMTP id 98e67ed59e1d1-32341e0e6efmr6091256a91.8.1755298344805; Fri, 15
- Aug 2025 15:52:24 -0700 (PDT)
-Date: Fri, 15 Aug 2025 15:52:22 -0700
-In-Reply-To: <CAAhR5DFFRRV9hH3VOmZqb6TArcZL0=893oi3M2rZgVC5Bu-vJg@mail.gmail.com>
+	s=arc-20240116; t=1755299719; c=relaxed/simple;
+	bh=hPX8Rw2XYN37yKZbsN7yXqiMNoy09Tv+WYuJAcD6nII=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CGpZxAFCemCxlf1hUWKc4NmCFWwIA5PENlyQzYFpuAEflRn2xYnzAkcQFWqUubJvqknplmzmDQK89FkXbHiegjEfbZCjes7qjFoA1KI3kq/LhEkvWjWV8iUtj2Z4gMBq1gNNnyoxufE6J1nphdsydqWfwnX4Xm/3e6GYWMWAkAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtnhH5xv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2EAC4CEEB;
+	Fri, 15 Aug 2025 23:15:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755299718;
+	bh=hPX8Rw2XYN37yKZbsN7yXqiMNoy09Tv+WYuJAcD6nII=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dtnhH5xvHX8H8IodstPBQ08aVqaAqh0yShDzWQQlxZ9Wlsnqi3c5gP9A3tTIcUnQH
+	 8MEAI51T62zjfK4gRiuMtJ60Qw7Dgk+OfPD4ZT+NJ2dsjMray8SB1NbCyiX1432OzX
+	 Ayjx+yQ3I3ScKnYKbV9zHwy7uFWfD9FuFzE3Vf81OAmtrrmbUUthdBKzaSxueOdJRp
+	 /HGZb1+JqpdTcEkCsyXu1FK4w8DrKc5XsWdEru49qluaIL61w5wDTqL7D66MFCFqxZ
+	 QwGYjVtEoICijnEALToEcKRl0Gu4D1OcqPtSd/l7majGYCLeCFY7Gv7IbWldk5r8N0
+	 Pu4wj8aWkAEDA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	almasrymina@google.com,
+	sdf@fomichev.me,
+	joe@dama.to,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: drv-net: ncdevmem: make configure_channels() support combined channels
+Date: Fri, 15 Aug 2025 16:15:13 -0700
+Message-ID: <20250815231513.381652-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250807201628.1185915-1-sagis@google.com> <aJoqqTM9zdcSx1Fi@google.com>
- <0976e0d50b1620c0118b8a5020b90f3959d47b4a.camel@intel.com>
- <aJpYWVvNXjsewl-b@google.com> <CAAhR5DFFRRV9hH3VOmZqb6TArcZL0=893oi3M2rZgVC5Bu-vJg@mail.gmail.com>
-Message-ID: <aJ-6JpHD6xhAvZPy@google.com>
-Subject: Re: [PATCH v8 00/30] TDX KVM selftests
-From: Sean Christopherson <seanjc@google.com>
-To: Sagi Shahar <sagis@google.com>
-Cc: Rick P Edgecombe <rick.p.edgecombe@intel.com>, Erdem Aktas <erdemaktas@google.com>, 
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "shuah@kernel.org" <shuah@kernel.org>, 
-	Ryan Afranji <afranji@google.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Reinette Chatre <reinette.chatre@intel.com>, 
-	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
-	"ackerleytng@google.com" <ackerleytng@google.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	"pratikrajesh.sampat@amd.com" <pratikrajesh.sampat@amd.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Roger Wang <runanwang@google.com>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"ajones@ventanamicro.com" <ajones@ventanamicro.com>, "oliver.upton@linux.dev" <oliver.upton@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 14, 2025, Sagi Shahar wrote:
-> On Mon, Aug 11, 2025 at 3:53=E2=80=AFPM Sean Christopherson <seanjc@googl=
-e.com> wrote:
-> >
-> > On Mon, Aug 11, 2025, Rick P Edgecombe wrote:
-> > > But Sean, if you want to save some time I think we can just accelerat=
-e this
-> > > other reviewing. As far as new-fangled features, having this upstream=
- is
-> > > important even for that, because we are currently having to keep thes=
-e tests
-> > > plus follow on tests in sync across various development branches. So =
-yea, it's
-> > > time to get this over the line.
-> >
-> > Yes please.  The unspoken threat in my response is that at some point I=
- will just
-> > start NAKing KVM TDX patches :-D
->=20
-> I'm making good progress and the massive refactor is mostly complete.
-> I believe I should have the patches ready to review next week.
->=20
-> I'm also thinking that it would be easier if I split the series in 2
-> or possibly 3 patchset. The first one including the setup code and the
-> basic lifecycle test and then the rest of the tests with possibly the
-> guest_memfd tests in a separate series. What do you think?
+ncdevmem tests that the kernel correctly rejects attempts
+to deactivate queues with MPs bound.
 
-Yes, please.  Even if we end up having to tweak a few APIs when the fancier=
- tests
-come along, I think it'll be easier and faster overall to hammer out the co=
-re
-support first.
+Make the configure_channels() test support combined channels.
+Currently it tries to set the queue counts to rx N tx N-1,
+which only makes sense for devices which have IRQs per ring
+type. Most modern devices used combined IRQs/channels with
+both Rx and Tx queues. Since the math is total Rx == combined+Rx
+setting Rx when combined is non-zero will be increasing the total
+queue count, not decreasing as the test intends.
+
+Note that the test would previously also try to set the Tx
+ring count to Rx - 1, for some reason. Which would be 0
+if the device has only 2 queues configured.
+
+With this change (device with 2 queues):
+  setting channel count rx:1 tx:1
+  YNL set channels: Kernel error: 'requested channel counts are too low for existing memory provider setting (2)'
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: shuah@kernel.org
+CC: almasrymina@google.com
+CC: sdf@fomichev.me
+CC: joe@dama.to
+CC: linux-kselftest@vger.kernel.org
+---
+ .../selftests/drivers/net/hw/ncdevmem.c       | 78 ++++++++++++++++++-
+ 1 file changed, 76 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+index be937542b4c0..71961a7688e6 100644
+--- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
++++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+@@ -356,7 +356,81 @@ static int configure_rss(void)
+ 
+ static int configure_channels(unsigned int rx, unsigned int tx)
+ {
+-	return run_command("ethtool -L %s rx %u tx %u", ifname, rx, tx);
++	struct ethtool_channels_get_req *gchan;
++	struct ethtool_channels_set_req *schan;
++	struct ethtool_channels_get_rsp *chan;
++	struct ynl_error yerr;
++	struct ynl_sock *ys;
++	int ret;
++
++	fprintf(stderr, "setting channel count rx:%u tx:%u\n", rx, tx);
++
++	ys = ynl_sock_create(&ynl_ethtool_family, &yerr);
++	if (!ys) {
++		fprintf(stderr, "YNL: %s\n", yerr.msg);
++		return -1;
++	}
++
++	gchan = ethtool_channels_get_req_alloc();
++	if (!gchan) {
++		ret = -1;
++		goto exit_close_sock;
++	}
++
++	ethtool_channels_get_req_set_header_dev_index(gchan, ifindex);
++	chan = ethtool_channels_get(ys, gchan);
++	ethtool_channels_get_req_free(gchan);
++	if (!chan) {
++		fprintf(stderr, "YNL get channels: %s\n", ys->err.msg);
++		ret = -1;
++		goto exit_close_sock;
++	}
++
++	schan =	ethtool_channels_set_req_alloc();
++	if (!schan) {
++		ret = -1;
++		goto exit_free_chan;
++	}
++
++	ethtool_channels_set_req_set_header_dev_index(schan, ifindex);
++
++	if (chan->_present.combined_count) {
++		if (chan->_present.rx_count || chan->_present.tx_count) {
++			ethtool_channels_set_req_set_rx_count(schan, 0);
++			ethtool_channels_set_req_set_tx_count(schan, 0);
++		}
++
++		if (rx == tx) {
++			ethtool_channels_set_req_set_combined_count(schan, rx);
++		} else if (rx > tx) {
++			ethtool_channels_set_req_set_combined_count(schan, tx);
++			ethtool_channels_set_req_set_rx_count(schan, rx - tx);
++		} else {
++			ethtool_channels_set_req_set_combined_count(schan, rx);
++			ethtool_channels_set_req_set_tx_count(schan, tx - rx);
++		}
++
++		ret = ethtool_channels_set(ys, schan);
++		if (ret)
++			fprintf(stderr, "YNL set channels: %s\n", ys->err.msg);
++	} else if (chan->_present.rx_count) {
++		ethtool_channels_set_req_set_rx_count(schan, rx);
++		ethtool_channels_set_req_set_tx_count(schan, tx);
++
++		ret = ethtool_channels_set(ys, schan);
++		if (ret)
++			fprintf(stderr, "YNL set channels: %s\n", ys->err.msg);
++	} else {
++		fprintf(stderr, "Error: device has neither combined nor rx channels\n");
++		ret = -1;
++	}
++	ethtool_channels_set_req_free(schan);
++exit_free_chan:
++	ethtool_channels_get_rsp_free(chan);
++exit_close_sock:
++	ynl_sock_destroy(ys);
++
++	return ret;
+ }
+ 
+ static int configure_flow_steering(struct sockaddr_in6 *server_sin)
+@@ -752,7 +826,7 @@ void run_devmem_tests(void)
+ 		error(1, 0, "Failed to bind\n");
+ 
+ 	/* Deactivating a bound queue should not be legal */
+-	if (!configure_channels(num_queues, num_queues - 1))
++	if (!configure_channels(num_queues, num_queues))
+ 		error(1, 0, "Deactivating a bound queue should be illegal.\n");
+ 
+ 	/* Closing the netlink socket does an implicit unbind */
+-- 
+2.50.1
+
 
