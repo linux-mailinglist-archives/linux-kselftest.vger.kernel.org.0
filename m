@@ -1,86 +1,90 @@
-Return-Path: <linux-kselftest+bounces-39017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59D91B27356
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 02:09:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B423B27358
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 02:10:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F20E4685250
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 00:09:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3E715E4A8A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 00:10:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E78E1114;
-	Fri, 15 Aug 2025 00:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B05D15A8;
+	Fri, 15 Aug 2025 00:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MlvCDJJ5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DXAmW4XY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC2419A;
-	Fri, 15 Aug 2025 00:09:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C5563CF;
+	Fri, 15 Aug 2025 00:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755216576; cv=none; b=o4bv2I3xedml9Ei8Uv18jjQ/T1wOR2x20P7MF4uRgyUF1VudZ2KyNR/qlp2ucA7xhqYlOstpcOsuS2tM/rrGCZWKE8Rvc/7SCFcFM/oNGlEmb5mrfISzkLQnGS0e2hC6f2ReXZkNcUxcPzLZETFLTCC5wydeggNQvVrmalYncg4=
+	t=1755216603; cv=none; b=IlDIL6mj/JfuDBJ7EqaaDfQX2FP+MaWHLjdN2aTrEB8y/p5KoGTLel8qpNEC3lhBIvzHCFTTbwJv8bTyG5cOmWBPZolzLGrX35bthRrgAAJ3XZUTfUdBfsdmP/mTGNI7BB03Gr8bxr/QucKYUmmm2xkD8Y4y/Dy99t9KgCvbyG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755216576; c=relaxed/simple;
-	bh=SXhJb46D02XyYpPG0ZR+hLtc2VGrkDqQzQtP4rIForg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MFwKZQiFTbFqG5xfNLzJ6ax66qaZPRxyvwpxaewwMIPL44fPtQTLvr9gE/HurEPchUitLYuxLDnsz1ht5eS3jM8j2rp031p1BeqyMQ+i9LKrLzwAna4HwQUlrwfOvf8RmyQigQ9YJqUhC6NXk3LTvBFKzLdT1EdAy9Q6RvR7A/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MlvCDJJ5; arc=none smtp.client-ip=209.85.210.173
+	s=arc-20240116; t=1755216603; c=relaxed/simple;
+	bh=LeLrLXcF4B2D/r502SwuoJI5Jqp2w+Ye/rStaLUoDi0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=oeGiV+EmgPgje185Sqd6udc4UDRVXujwjUx4B5JRfhI5siuswsrVXy0F2GOZu++TNAsTGnq7S83QT7aAVC52BIIeVpxiqRvBViWUFMJlpz2YZxwpY2i3RGQbjOaXDJ8Ov1jDltB+dqWdQ0vZ7kT2Sn4UYy8WilhwipQszcZG3ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DXAmW4XY; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-76e44537dccso5703b3a.1;
-        Thu, 14 Aug 2025 17:09:35 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-76e2ea79219so1787048b3a.2;
+        Thu, 14 Aug 2025 17:10:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755216574; x=1755821374; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zxoW0PVifSF+JymiPBLwjWMtoyAZGxm4WlnOuM8c4Dk=;
-        b=MlvCDJJ5vibasVe4gc4fvBVzr/oPa5GVXTIFh0IixSHUHbUHdbncvXL4wR+Akzf7KO
-         /2nfBe7X1YWjqI9roxPEvW1Qx19llAR6dL75fZgbW0u3smQZOXtF1Lbdc2EHDEQLluPx
-         EyyWwNGeAl9MEU1Ao9AJH9Q4JDInsJ1V9oIL0m70GqbuV6P0i6AUNr75/BquUUkfRzrt
-         /yCOCOUQfHiFoXYm98Ln1RRlpzFv5SNbczPadq/5eO2zTrf1Q/xgXjdMHkcGNDk7T3Xf
-         XM6O0z7PDD6FEljIMDSn/K9R/wgFRSgv+ugXVW1rm9nu6z6Spv8/rgJDzHjQ6gSfpnjW
-         zQcg==
+        d=gmail.com; s=20230601; t=1755216599; x=1755821399; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DlLxjN4pkp49jDBSQ7gXFAZ4FdqJj7SbFZCOba3BMhc=;
+        b=DXAmW4XYNP2pZmKg5Jc20qvwsJqYXg31cgoOGg+zZrOynWsjg9eNumVmtEDofOWrsj
+         mnmTTYUcwqNq+vSjsW/eTij+lMh9hYp9rN3696i/Rdh8mVXWVWzp7TiLfvx6qc03Ay1+
+         THCUBQGjopBU5TMtC+EIYesEvizj8pH86Akzi8jbuL77B2TvK1JKKKa3/X5t0PZfePSu
+         edAyD7rPWl+l9Uvff7LP4J3gr70E9cXAHOmOAW7xJL8ZMinSjCo2lo31pLA5F0q27tff
+         wo7xumxfdvsvQ+v/bN+Mcmwv4qvIHIdHP+1/fsPBJbICorrjsoSyKPm0wMrqAPYkLdsf
+         k1VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755216574; x=1755821374;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zxoW0PVifSF+JymiPBLwjWMtoyAZGxm4WlnOuM8c4Dk=;
-        b=chIK5d7Kjp9IyNeELZ3ar1RnUsC69dYTFLGS3xqz9P18+8Wgo/U6rG9aAQ89WroYcJ
-         y+foDLwo+AfKx9r3AW1CkUdhvX/T45bSZeaeUfRoi5EvtwWTt3m8mvfzXKaX8vYlqGrI
-         Yhi7yrj9CB9tllcJON/gWXVgB6gCRUs88xUcgLgR4uEZruCemGhXUyyi3urNDX7QHe7L
-         vFkzIlVAOmJhUX0OaYm7iccXWl5x8umxkSP7qMw1l555Qez7pExKPaKgGNU+x/ftR8H6
-         iuRKHiyMkAmu9H0k+XnEOVjHbYZwX8jrxgA/Y7ewISCxx6qgU3pGke4NY/f1Fl2LzVBq
-         sJWA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6gf3Ai7vGdWS6cEtrrsbgXz4cFTOw9g6GhLSlL/lQMG7NZELcgjlnsDFj18qPzT0OV55zspjGZh+EyZs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsLM0tdTWztJYj70GGvDRSAusPgRviqiOq2HKz+Qxvrt3A1F31
-	SC+RcZqrY6pmjUQtLItg+HjGJxWFX+NITF6YKHXQGpZz9KdVtn2WYSs5/hvIXf9X
-X-Gm-Gg: ASbGncvAsDzz0+VZDlNXjfGvEQWxqYHCfVJFyDrQBsNA9eqQTjt2Nr3znVgXRqwkfMb
-	WkrAMOtbMfXgb4Qw0GzhA1IWNg39UxjP3XeTT4l6a0Dp44qmoUo1Nia3NznlHLFcvcKIaVywGS4
-	Jo0TZbhubb84afyjxSmRzoqc8fJvuiV38FUUSH5XpPhGkTNcCReUGfTv90Quz0UJsw/G87RkGeQ
-	ktQRVkzkhWcfTiy11NsoPvYvWRgC2VsplT+EIL7Aig5Jvk3bW5noquDJm/R9WRI/425csl7Q7/J
-	rZ1zF9neWYLHicyHdR5IqDF3Oaop6qH6lWtWEL7xvo8D2Y3P0PZuqJX+OJ4jx+FbSrYBHdLWbu/
-	Pn94Hy7Sxtdc6Owf5PL4o0a9aEQC/zXs=
-X-Google-Smtp-Source: AGHT+IFDMdF6+yivvCvqSJWE4UQ35aadp0nC/z5tzMjZ2sph8Sp3/GEi6/LsTjvgkkBK2V+ed8hFgg==
-X-Received: by 2002:a05:6a00:b42:b0:736:3979:369e with SMTP id d2e1a72fcca58-76e446ffb04mr30874b3a.9.1755216574174;
-        Thu, 14 Aug 2025 17:09:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755216599; x=1755821399;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DlLxjN4pkp49jDBSQ7gXFAZ4FdqJj7SbFZCOba3BMhc=;
+        b=JEjtlaweEFPLf3NaXaGJEC6f6x+aJOOwYCmThTy2NgEKssgh9Laecd4xqFHBfZ773o
+         OFzg92pJoman8C+Q4RuWy4dVzjqCecAjdRDhik0oHOL6YHmD9iV4QlYQx1GF9S5Pc004
+         DNE7WZkC5tSjuPh+hgaTtrhvE6P3v9jd2NXAUMKWqVzYa4hkEErKDSwvhcIuwBYOKT21
+         2qa/kgNJeLHFnLfwVI444al1qdcahMU0pKtewAIp5WIR87J86rEbchcIpmiLaFY1cwhU
+         01U7CugwephkCT6J9e9ZZZqPU8O1B0Zz9xH0c6wbmK2N/4thK4PtV3NTMeIisaGjMrZ3
+         6fmA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAQLi6yceSJWMOQ9OCjHOcqu4iZsbofET/yHOPIXXat6vQxXguwWN8wwolzIcwqlgGHtMbpB32LVs6E1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrJ1NqugixUA12QfVQpoO6dvD7TS4Vu5nlJ5RDNWSsrw6aa8nu
+	u1pe9wh6anQvdXnxy+E6gZqZIXqbz0T4jPNoLmXIoOfAezVbcQH/TTaSWWe9DpJG
+X-Gm-Gg: ASbGncuvlK9dXZoazXh31HjY+GG9Iyu4IXu+w1tRzdIQ11cP+h0DRfbD5B1RT0HN6pV
+	/0fIVdGsdTmBRZL3obvPirpL1Uy1+zhCuhzb2vNAlMdrzAjwKpp6uMqI7C2VIJLORklCTUB6g2h
+	FloF4f6/keXlTLpqISceOhsJvwHx3F0efbIjDTwWyEA6Sbj8r5UZpfDYZV66Iprp+54P/VyS80j
+	/x1NKJ4NcyY+Iz8phb2bgwB7A/UU6efCpD3r7pkI3MqQ/JXfu7xhiUZ0UCtWb4hE0Y4r6XW98aD
+	OBdex7KyVu5CU69PcgkKGNQv3I7zXNtFjWlSW66ecBtiH8JWrSpB54t5G/iR9TJGKTUQRSM84hA
+	DpqsiLn3Ppu46SmCKNgCgaDeX7PTt2t0=
+X-Google-Smtp-Source: AGHT+IH4yIyU5+Vw7X3ZhdEpMKKKSLOLoQRegPY6V7frOv02QTJ899n6OOmUfl2yHMF7rrVED6sj5A==
+X-Received: by 2002:a05:6a20:3c90:b0:23d:665b:cefe with SMTP id adf61e73a8af0-240d2d7d707mr315324637.9.1755216599521;
+        Thu, 14 Aug 2025 17:09:59 -0700 (PDT)
 Received: from soham-laptop.. ([103.182.158.109])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76c2efd89aesm21367854b3a.106.2025.08.14.17.09.31
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76c2efd89aesm21367854b3a.106.2025.08.14.17.09.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 17:09:33 -0700 (PDT)
+        Thu, 14 Aug 2025 17:09:59 -0700 (PDT)
 From: Soham Metha <sohammetha01@gmail.com>
 To: linux-kselftest@vger.kernel.org
 Cc: shuah@kernel.org,
 	linux-kernel-mentees@lists.linuxfoundation.org,
 	linux-kernel@vger.kernel.org,
 	Soham Metha <sohammetha01@gmail.com>
-Subject: [PATCH 0/6] Kselftests: fix spelling mistakes
-Date: Fri, 15 Aug 2025 05:38:58 +0530
-Message-Id: <20250815000859.112169-1-sohammetha01@gmail.com>
+Subject: [PATCH 1/6] selftests: filesystems: statmout: fix spelling mistake in output
+Date: Fri, 15 Aug 2025 05:38:59 +0530
+Message-Id: <20250815000859.112169-2-sohammetha01@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250815000859.112169-1-sohammetha01@gmail.com>
+References: <20250815000859.112169-1-sohammetha01@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,57 +93,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Used codespell to detect spelling mistakes across multiple tests
-and fixed various simple typos found.
+found/fixed the following typo:
 
----
-
-found/fixed the following typos:
-
-> didnt't -> didn't
+- didnt't -> didn't
 
 in `tools/testing/selftests/filesystems/statmount/statmount_test.c`
 
-> add add -> add
-> cannnot -> cannot
-> fowarded -> forwarded
+Signed-off-by: Soham Metha <sohammetha01@gmail.com>
+---
+ tools/testing/selftests/filesystems/statmount/statmount_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-in `tools/testing/selftests/net/netfilter/nft_nat.sh`
-
-> faile -> failed
-
-in `tools/testing/selftests/ublk/test_common.sh`
-
-> indicies -> indices
-> requrired -> required
-> guranteed -> guaranteed
-
-in `tools/testing/selftests/kvm/riscv/sbi_pmu_test.c`
-
-> avaialable -> available
-
-in `tools/testing/selftests/kvm/s390/cpumodel_subfuncs_test.c`
-
-> requries -> requires
-
-in `tools/testing/selftests/safesetid/safesetid-test.c`
-
-Soham Metha (6):
-  selftests: filesystems: statmout: fix spelling mistake in output
-  setftests: net: netfilter: fix spelling mistakes in output
-  selftests: ublk: fixed spelling mistake in output
-  selftests: kvm: riscv: fix spelling mistakes in comments
-  selftests: kvm: s390: fixed spelling mistake in output
-  selftests: net: tcp_ao: fix spelling mistake in comments
-
- .../filesystems/statmount/statmount_test.c     |  2 +-
- .../testing/selftests/kvm/riscv/sbi_pmu_test.c | 10 +++++-----
- .../kvm/s390/cpumodel_subfuncs_test.c          |  2 +-
- .../testing/selftests/net/netfilter/nft_nat.sh | 18 +++++++++---------
- .../selftests/safesetid/safesetid-test.c       |  2 +-
- tools/testing/selftests/ublk/test_common.sh    |  2 +-
- 6 files changed, 18 insertions(+), 18 deletions(-)
-
+diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+index f048042e53e9..1278259231fc 100644
+--- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
++++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+@@ -545,7 +545,7 @@ static void test_statmount_mnt_opts(void)
+ 		return;
+ 	}
+ 
+-	ksft_test_result_fail("didnt't find mount entry\n");
++	ksft_test_result_fail("didn't find mount entry\n");
+ 	free(sm);
+ 	free(line);
+ }
 -- 
 2.34.1
 
