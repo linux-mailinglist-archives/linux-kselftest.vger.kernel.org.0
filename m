@@ -1,142 +1,135 @@
-Return-Path: <linux-kselftest+bounces-39119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E251CB28586
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 20:07:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41B61B286E1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 22:04:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 656F77BA43D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 18:06:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC0AA601466
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Aug 2025 20:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA642225A35;
-	Fri, 15 Aug 2025 18:07:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC23C298CD5;
+	Fri, 15 Aug 2025 20:04:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fxi4+IWe"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="bdION+ee"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8051F4CB7;
-	Fri, 15 Aug 2025 18:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE5E275846
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Aug 2025 20:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755281258; cv=none; b=ufN1Msn0xEXbP7l/1iNJFGETZfGa4LU9hN7a7GJLttU8KfOv6uPgEObV/B6+NMAmiOMAk2IcuT5GEbSJiOZAEsWPl8cnEnQLjGqm2khnSs6mXlRvspj5bDfL68mRXffrzfKr9/iyUhqBubIovqHiVS8mLuVkqHgXH2yWMPpEroU=
+	t=1755288282; cv=none; b=uH0H5Ix/N6ISeqVG34EiOoJacXSlNqwXGMtHFcQXGSj55FMCqNDLpHmfDkXj7/PWZUA84BgraE17b2lh8MN1/F78kNRsX0sDF7k3vI8K8e42gb188XMcq+d3INgkeJhrsXEC5cj4ZNjrPwABxvAPZNS4537EYGIRaIPZ2j5B7FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755281258; c=relaxed/simple;
-	bh=OxzEES3Byrb7/dVvqVnSxXCGNY2+jcoSY0OZPGvO69k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CDSbj6Fv9C0Fh8w/tzmM5NEoMkluvNDnc7/C++2fmpKY5GCIWssIKW2VEOr6KoCfFE4kRXlgTIVovRnQ++3qc80Co0dpdi7zWUzej90qy5QqGOwhAxJsYb3dDbHv1wtDGqDVmuTE0RAInV5lJTjlLvex0+K0LpJ0c+vqSwliABM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fxi4+IWe; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-76e2eb6d07bso2144817b3a.3;
-        Fri, 15 Aug 2025 11:07:37 -0700 (PDT)
+	s=arc-20240116; t=1755288282; c=relaxed/simple;
+	bh=YnJazGOGZYJN/dBOZtTqRX6QsQM8mR8auk3uz2DqgeM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=McnRmrCwKuzJ5EpBxB5AvWOcCWOQdBTMaeTaGCqK3i122pO3kpwS45whx9Fkns4vVNvWtNRRPQfeArpSEf5sBNMuxNJFwNNbUWZ69uMfZ0Bu6NWj/v34FPMmSPZNvKZ8ZZlk3XXRe/iX/IPDMwdfQMrL+4I7cvKtnmLaOevkwKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=bdION+ee; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-88432daa703so65026939f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Aug 2025 13:04:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755281257; x=1755886057; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Txv0eigY94VABCpNSrT19lsKnOf+NvBhMBzz1EifcA4=;
-        b=Fxi4+IWe3Np2NKbob+5JMHsWJqj3OcD1TW2lgBwZ/xqIwmQ0hBD9/+Tj53Lcr9BZOt
-         mfk3W23At9Bq+E+1PvPK9FHKPlhNMM5hthH+ki9VEwQjcAEw5ibgpZPXC7cvivlKuMs1
-         CCJHSRUnu8ixrx5uo9jn3d9H+bkEvFrANboWtn99LkKryzM65n+pr2iPosK8hTkND2hI
-         jgCrsNGXIvcE8G0IPNaf7urXBuDA+vVPmLhvtRLZtiVVMWsi76mLMRfT3x8ORmXOahcP
-         SCc3sVaWXJDwY9tn3T+G3zPVdfgyl4AhQ1/utT9jWjpeAU2b9TFNiytnlUx3gmmJG46a
-         89fQ==
+        d=ventanamicro.com; s=google; t=1755288280; x=1755893080; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YjJzR6BitUGV64diaMvb3KSO/e3Gi7ex2M4rjIRjOr4=;
+        b=bdION+eejFvdPEWkEbuMrOJ3+gSdkiYpkxnSXMWsRmBATp6dxZ3jndTZjFN2l7rLrJ
+         Wg0MvpyfdW2ATIMfUJomXxy0Mqm/tqGaIQIIr/iKmpQ61rYgzTElr91VQ5GfMPkBU8gd
+         +YnJHz+kGMF3kJbMEV7HMFCFu8echSEeWkbVwtJFTO3XUfEfngxnWyltILOoSd8mQ+xH
+         nX8MPluR3DzvdNhMr4TJ9CmUpSecA0Tx0nTptZxDrrOoW3nD3b/+uM6GHAxNBEgkjNMX
+         MYu452K4mmJn9pooUruBDq82NCy7uHAM2hKvs6BOHecoRXDahyykkLelYYe+TRq5GX2a
+         dsWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755281257; x=1755886057;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Txv0eigY94VABCpNSrT19lsKnOf+NvBhMBzz1EifcA4=;
-        b=vbHANlXvwnlsxwOhI2xCFdYIDlwnysOyeZ6t6wHX7d3itbrpylJ1u+6bGrNu4J6lsf
-         DYcujAqcXpk7klNYL8vmK11ztf1I81uLLQPL60myQjJMm4RuDIkXxQe13UnYHjKIhdIv
-         9L5Mxz0GYi+lFoXdzPokmlC8Ihv5J604HX2f0sEkqxuTgSQbHifbifEqfGP9nsBkt6Tb
-         DL4n0X4fEUBw4O5pAv4MBvzXvE0gpby7joUCiPv5r2SmDAb9azoCQ+GKPxyxxtRgV5RU
-         fuielFCOpqe0iT9aGQPb7J/AsFsoxGS/CYawfFJH58LUyoyuwv9uZ5ECZW1PSKL9zph3
-         qUMg==
-X-Forwarded-Encrypted: i=1; AJvYcCXPhehCUhe8jsuv3+zPl6j4rhRdsqzp9dS8BaYxXoDmCcq6wXBtv+Pz5s8Fr6qmtYaIYVnAIBqbAXbog4YTW/c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzy40Qp/mSFVsirVm3FXnJ/y5IFLnra7IzTLqi/w22t8dE+6bia
-	U0Hz8nSwpmRv/sVX+RbeFkU/SGFHVLwfcoH92qctgU42WQvz4XInbPHbH02c3TDkSNY=
-X-Gm-Gg: ASbGncvHS5EGp4XHH+t3379ubWdPeF2WIRb3XTH1N1ubhPKunZjfYqVVawoBRESJr68
-	9t9fwZrvNv3YaPjjp6td1d6njidk5RkKAuLIzTTFXKetDfs07v8prCAijeH1yx8vS94IK78jE0L
-	awTmU4suBT9ciUwz7TtWzzPZvapCw5x0H+PMUcN+YHyE1h4zykoLqOYagzMMhsxbFHgPHD+gUIY
-	0JAO1QweHpTIMcQiuxUTm7NtOjswOjozixIWCy6mqRYg8u5dF7ei3D9An/zZfHqgaD/R1PS/M/s
-	Uum8EWpz3xYLRDQiradOrSZaoYoIaCGAM3EDBcv5BxjHIIKyN2czHTE22EZ6pZ1s38EzF4LT2RQ
-	hc3xCfvaNbetzsYdZ1iM9zGKPdwX/ldNu
-X-Google-Smtp-Source: AGHT+IHZQFs59X0pM7cQtgM5LxBWUBMt1KUqzQhiajgIm0frQf8o8tCXB8aEphaQJZsF5rVclsZJRw==
-X-Received: by 2002:a17:902:da82:b0:242:e0f1:f4bf with SMTP id d9443c01a7336-24478f5143bmr940865ad.18.1755281256546;
-        Fri, 15 Aug 2025 11:07:36 -0700 (PDT)
-Received: from server.. ([103.251.57.144])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446cb0d717sm18921065ad.67.2025.08.15.11.07.31
+        d=1e100.net; s=20230601; t=1755288280; x=1755893080;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YjJzR6BitUGV64diaMvb3KSO/e3Gi7ex2M4rjIRjOr4=;
+        b=ncSKaIdvqlGDK2xH8Nv27Z6If0iKPLMmCEqE5uj/hiy2uuE3YSYcJpqaKB4LNvvikU
+         rasCo5+5GZuoP0ggLluWLPe/Mrs2rnAcMez7xyg7iRaHPN7UWFH0nsnjv6RWPENPkaoH
+         Q6GKNdaRaxErvlW6rSkCB9LCpTw7f/T7VRWYHKEr0Eqv5RF3IIVDeasR4mFYvdiQQZEi
+         7+6Rdr98LpP5gzn0C3ZRLhxxXSE1W0ccQr2ek/mqifUDQBzJPzabIrf4O7Ci5CsoUpdm
+         oO7tRYOLIcZn8JWlLIKiSK96SFR1vPE5K8kQlSrqt3ahGQJCUKV6DCfkkXcyCCQP7Z3M
+         0fZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWh7aCzK8GD3yE8MQhjx4kJ170StPv3pZln09PIxKUsR7dcICo2GALfvjU+NRgmREla7wT/TYwsA3K8rBSFpQw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+gJiivznBgGFcgHkxrKEdXa3BSX/4k/Dac39wJCnXrTcZFn3E
+	6axAd24tqWkKnA4qzmhMeYLgzhwSD2GImnS91P8PGmcJzsl6aglBBMmjc3XP/RKvsMg=
+X-Gm-Gg: ASbGnctv43VPFBN9sA/XQ0WXM0/WUYSLorta6a0VDC7cFMkBqONY6994nEcIvg2ZuW1
+	20zkWWJpLb40EymLD0q6OfdGXD6bp9+SggRlAmVJ3SyJkCXZSKGXmXnf4WISpegogKJZ+0uL5mZ
+	xQtiom4YbhP+Jlfc8kn36ID+ZQKwf+Hp6cf+arBtXcnnQx4KaqOy5wOBnMY7CeqCnLJXaGsiDRz
+	oWCTthc0wUy4grTeZ3cISjdt/0rW+077Z7SOp3ZS0TFe18Z2zGX6K9YgwjRMcvuz2Vyiv1vduEf
+	guYtsctufUY0uVPaD2Pizx3MaWfLRN3Ir3vb8hVu+rHfBB8iqWY1ey1goJE+OHu72UaGaPBhFWw
+	UsKiNjhB7LQQrtcTthEG74Mqj
+X-Google-Smtp-Source: AGHT+IFVAKt30ibqWuDesYE4Rq4i7q7q9OchtpkO5B6rE/MAYha/hplJL5lUKwJN5zK9vnb+lDVkPA==
+X-Received: by 2002:a05:6602:3410:b0:86c:e686:ca29 with SMTP id ca18e2360f4ac-8843e34cd35mr730781139f.2.1755288280204;
+        Fri, 15 Aug 2025 13:04:40 -0700 (PDT)
+Received: from localhost ([140.82.166.162])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8843f9f6d8dsm77814839f.24.2025.08.15.13.04.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Aug 2025 11:07:35 -0700 (PDT)
-From: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
-To: shuah@kernel.org,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
-Subject: [PATCH] selftests: riscv: Add README for RISC-V KSelfTest
-Date: Fri, 15 Aug 2025 23:37:24 +0530
-Message-ID: <20250815180724.14459-1-reddybalavignesh9979@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Fri, 15 Aug 2025 13:04:39 -0700 (PDT)
+Date: Fri, 15 Aug 2025 15:04:38 -0500
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Anup Patel <apatel@ventanamicro.com>
+Cc: Atish Patra <atish.patra@linux.dev>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/6] RISC-V: KVM: Set initial value of hedeleg in
+ kvm_arch_vcpu_create()
+Message-ID: <20250815-5b8056af445fb30be7c387a7@orel>
+References: <20250814155548.457172-1-apatel@ventanamicro.com>
+ <20250814155548.457172-2-apatel@ventanamicro.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250814155548.457172-2-apatel@ventanamicro.com>
 
-Add a README file for RISC-V specific kernel selftests under
-tools/testing/selftests/riscv/. This mirrors the existing README
-for arm64, providing clear guidance on how the tests are architecture
-specific and skipped on non-riscv systems. It also includes
-standard make commands for building, running and installing the
-tests, along with a reference to general kselftest documentation.
+On Thu, Aug 14, 2025 at 09:25:43PM +0530, Anup Patel wrote:
+> The hedeleg may be updated by ONE_REG interface before the VCPU
+> is run at least once hence set the initial value of hedeleg in
+> kvm_arch_vcpu_create() instead of kvm_riscv_vcpu_setup_config().
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/kvm/vcpu.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index f001e56403f9..86025f68c374 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -133,6 +133,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>  
+>  	/* Mark this VCPU never ran */
+>  	vcpu->arch.ran_atleast_once = false;
+> +
+> +	vcpu->arch.cfg.hedeleg = KVM_HEDELEG_DEFAULT;
+>  	vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+>  	bitmap_zero(vcpu->arch.isa, RISCV_ISA_EXT_MAX);
+>  
+> @@ -570,7 +572,6 @@ static void kvm_riscv_vcpu_setup_config(struct kvm_vcpu *vcpu)
+>  			cfg->hstateen0 |= SMSTATEEN0_SSTATEEN0;
+>  	}
+>  
+> -	cfg->hedeleg = KVM_HEDELEG_DEFAULT;
+>  	if (vcpu->guest_debug)
+>  		cfg->hedeleg &= ~BIT(EXC_BREAKPOINT);
+>  }
+> -- 
+> 2.43.0
+>
 
-Signed-off-by: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
----
- tools/testing/selftests/riscv/README | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 tools/testing/selftests/riscv/README
-
-diff --git a/tools/testing/selftests/riscv/README b/tools/testing/selftests/riscv/README
-new file mode 100644
-index 000000000000..443da395da68
---- /dev/null
-+++ b/tools/testing/selftests/riscv/README
-@@ -0,0 +1,24 @@
-+KSelfTest RISC-V
-+================
-+
-+- These tests are riscv specific and so not built or run but just skipped
-+  completely when env-variable ARCH is found to be different than 'riscv'.
-+
-+- Holding true the above, RISC-V KSFT tests can be run within the
-+  KSelfTest framework using standard Linux top-level-makefile targets:
-+
-+      $ make TARGETS=riscv kselftest-clean
-+      $ make TARGETS=riscv kselftest
-+
-+      or
-+
-+      $ make -C tools/testing/selftests TARGETS=riscv \
-+		INSTALL_PATH=<your-installation-path> install
-+
-+      or, alternatively, only specific riscv/ subtargets can be picked:
-+
-+      $ make -C tools/testing/selftests TARGETS=riscv RISCV_SUBTARGETS="mm vector" \
-+		INSTALL_PATH=<your-installation-path> install
-+
-+   Further details on building and running KSFT can be found in:
-+     Documentation/dev-tools/kselftest.rst
--- 
-2.43.0
-
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
