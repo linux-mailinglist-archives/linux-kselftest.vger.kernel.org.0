@@ -1,136 +1,89 @@
-Return-Path: <linux-kselftest+bounces-39155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE626B28ED5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 17:15:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2120FB29014
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 20:27:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B092B4E1E71
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 15:15:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E89C6567363
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 18:27:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0652F60AE;
-	Sat, 16 Aug 2025 15:15:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF252D3A80;
+	Sat, 16 Aug 2025 18:27:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xeXI+wWF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVthTd69"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF93A2ECE9A
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 Aug 2025 15:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7161D15C15F;
+	Sat, 16 Aug 2025 18:27:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755357329; cv=none; b=DrT3m9PoGX+KDG1ualtpXVdPzky/06Nyz5PnpxGlnmmUHdRmzcqemieKRmBN39Qv4z4eRz9PTBnYNioJOOAgKAULvEUmyL7SaauRXl9XR444hy9IIxALeNTPy3MtvcE58P/5xBSGEccpx1zrWlYx3Mnx6Y1nnYxuIbdb9/I+Zro=
+	t=1755368835; cv=none; b=akhHc9V2p/nZ5drpnKO1BDbGb0GXnnVT+KmVzrp/Mriz9NXlVvbEjeg+DoARTAFRhh58Ej+MuBbSZBxbKMDMtQWpYUoGeV1ceU1OHzPsGa+2qzi8TVjB6SrR9ESw9zxJOIuC4zhHRSU2v43wFa3W1Cw5lv2YCDuOpwX9mfTR0cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755357329; c=relaxed/simple;
-	bh=QBoQ2/LRMiA6/AxN/TDAOkOxArwJyzbjun/AzbwTDxs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ViP6umQBBI7L7n6qZL/aK/O1TYLFF75hMXCOGx31mqcLNcxz/a9cHWs7NeR+ny8oky5bYVBjFnGOAbvTHPOwI1uo0KL/yb/+q8pg2OpPM8yDINC0mPAJWWd8nAPyzq5QR4zAB7J4H2Zefe6afvPldxPkh1ULa1ccXW1hAX+GNUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xeXI+wWF; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <06952937f3dd04e7f68bbd288da23f00ae83c213.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1755357315;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QBoQ2/LRMiA6/AxN/TDAOkOxArwJyzbjun/AzbwTDxs=;
-	b=xeXI+wWFkISQZxdselg7Se2ois5v+hY2uVINzY72TsutKFJXYNnQQzMOljZlklva9ON2k1
-	dhmQALAKUv6Eup2ZwTiexrX5hxC9OkVp+TnRt2cL2c/6OLsvSDpYxwACRGGERkbOzxXWpl
-	ifpVeT1Sv/XdkjxYCFg1e5lElSrRNIw=
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add socket filter attach test
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>, Puranjay Mohan
- <puranjay12@gmail.com>
-Cc: puranjay@kernel.org, xukuohai@huaweicloud.com, ast@kernel.org, 
- daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- kpsingh@kernel.org,  sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- mykolal@fb.com,  shuah@kernel.org, mrpre@163.com,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Date: Sat, 16 Aug 2025 23:14:54 +0800
-In-Reply-To: <35c18502a4870d8a833c1c9af20b85ca3f8a0ff6.camel@gmail.com>
-References: <20250813152958.3107403-1-kafai.wan@linux.dev>
-	 <20250813152958.3107403-3-kafai.wan@linux.dev>
-	 <eb6f9ba4acccc7685596a8f1b282667a43d51ca8.camel@gmail.com>
-	 <CANk7y0hQWOL3OW8Ok4e-kp7Brn5Zq6H5+EfS=mVtoVd+AUxZmA@mail.gmail.com>
-	 <35c18502a4870d8a833c1c9af20b85ca3f8a0ff6.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1755368835; c=relaxed/simple;
+	bh=wsEBIuxySBNX56S3ZSXmQYy+ySJQlVUn2tu0BS9YA5A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LIp+MYMTpdEuj9Xih8H5LRGa1W1W30MDCe6q9DGf5w9X++ngbisfpdUQyZ5M5k5XA9TDg1zJpEekpV8riLIBcgwLV5iKUZ3L5sgB5NsiStID76fFh4FV7IvvrhQbH6HBEgBJ5vkyP5vZxVPtETGpaowwia7W0hLWXXC/STptj3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVthTd69; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C23AC4CEEF;
+	Sat, 16 Aug 2025 18:27:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755368834;
+	bh=wsEBIuxySBNX56S3ZSXmQYy+ySJQlVUn2tu0BS9YA5A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YVthTd69DKN4Ajoa/pVqLz8TngOJEgqMqHLIhWZpFKacImhptnl4Cw9WfVBuozJm7
+	 8dJ/CmyMdYAfrK5BjNE3QZQ+kp/NouJAJoaAc4JVzDSVIKDYT/PfBhLiq9HIoH8sqH
+	 42mZBe4s31RJ2RKJMuKzW6PcfJShafnClQt6KnP1F7YAhPZ7zKjajBvcFBSXMDQ/if
+	 c1zDe66l0FOYxTEOYQ/5erImI5yYi0l5/4s7gpvnY8Pw6JAb8dF1BR7BgpaQiifq6s
+	 c1V3Jl2arY0s2NRn2T2uhacyzLfrEWWeJgMBBUA0W3uHH4eAmIXo/kLWNGUM7lwO+c
+	 lXg8hsEN2tMHw==
+Date: Sat, 16 Aug 2025 11:27:12 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, Geliang
+ Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Jianguo Wu <wujianguo@chinatelecom.cn>, Shuah
+ Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, zhenwei pi
+ <pizhenwei@bytedance.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org, Christoph Paasch <cpaasch@openai.com>,
+ stable@vger.kernel.org, Thomas Dreibholz <dreibh@simula.no>
+Subject: Re: [PATCH net 0/8] mptcp: misc fixes for v6.17-rc
+Message-ID: <20250816112712.209644c8@kernel.org>
+In-Reply-To: <20250815-net-mptcp-misc-fixes-6-17-rc2-v1-0-521fe9957892@kernel.org>
+References: <20250815-net-mptcp-misc-fixes-6-17-rc2-v1-0-521fe9957892@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2025-08-14 at 09:06 -0700, Eduard Zingerman wrote:
-> On Thu, 2025-08-14 at 13:23 +0200, Puranjay Mohan wrote:
-> > On Thu, Aug 14, 2025 at 2:35=E2=80=AFAM Eduard Zingerman
-> > <eddyz87@gmail.com> wrote:
-> > >=20
-> > > On Wed, 2025-08-13 at 23:29 +0800, KaFai Wan wrote:
-> > > > This test verifies socket filter attachment functionality on
-> > > > architectures
-> > > > supporting either BPF JIT compilation or the interpreter.
-> > > >=20
-> > > > It specifically validates the fallback to interpreter behavior
-> > > > when JIT fails,
-> > > > particularly targeting ARMv6 devices with the following
-> > > > configuration:
-> > > > =C2=A0 # CONFIG_BPF_JIT_ALWAYS_ON is not set
-> > > > =C2=A0 CONFIG_BPF_JIT_DEFAULT_ON=3Dy
-> > > >=20
-> > > > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
-> > > > ---
-> > >=20
-> > > This test should not be landed as-is, first let's do an analysis
-> > > for
-> > > why the program fails to jit compile on arm.
-> > >=20
-> > > I modified kernel to dump BPF program before jit attempt, but
-> > > don't
-> > > see anything obviously wrong with it.=C2=A0 The patch to get
-> > > disassembly
-> > > and disassembly itself with resolved kallsyms are attached.
-> > >=20
-> > > Can someone with access to ARM vm/machine take a looks at this?
-> > > Puranjay, Xu, would you have some time?
-> >=20
-> > Hi Eduard,
-> > Thanks for the email, I will look into it.
-> >=20
-> > Let me try to boot a kernel on ARMv6 qemu and reproduce this.
->=20
-> Thank you, Puranjay,
->=20
-> While looking at the code yesterday I found a legit case for failing
-> to jit on armv6:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/arc=
-h/arm/net/bpf_jit_32.c#n445
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/arc=
-h/arm/net/bpf_jit_32.c#n2089
->=20
-> But attached program does not seem to be that big to hit 0xfff
-> boundary.
+On Fri, 15 Aug 2025 19:28:18 +0200 Matthieu Baerts (NGI0) wrote:
+> Here are various fixes:
+> 
+> - Patch 1: Better handling SKB extension allocation failures. A fix for
+>   v5.7.
+> 
+> - Patches 2, 3: Avoid resetting MPTCP limits when flushing MPTCP
+>   endpoints. With a validation in the selftests. Fixes for v5.7.
+> 
+> - Patches 4, 5, 6: Disallow '0' as ADD_ADDR retransmission timeout.
+>   With a preparation patch, and a validation in the selftests. Fixes for
+>   v5.11.
+> 
+> - Patches 8, 9: Fix C23 extension warnings in the selftests, spotted by
+>   GCC. Fixes for v6.16.
 
-Hi Eduard, Puranjay
-
-OpenWRT users reported several tests that aren't working properly,
-which may be helpful.
-
-https://github.com/openwrt/openwrt/issues/19405#issuecomment-3121390534
-https://github.com/openwrt/openwrt/issues/19405#issuecomment-3176820629
-
---=20
-Thanks,
-KaFai
+userspace_pm.sh which hasn't flaked in 1000 runs has flaked last night,
+with this series applied:
+https://netdev-3.bots.linux.dev/vmksft-mptcp/results/255941/8-userspace-pm-sh/
+Looks unrelated but also quite strange?
 
