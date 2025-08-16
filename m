@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-39129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39130-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DF35B2893B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 02:28:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B284DB2894A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 02:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8094A5C1332
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 00:28:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E49C5C5F8A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 00:32:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED402904;
-	Sat, 16 Aug 2025 00:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6460423DE;
+	Sat, 16 Aug 2025 00:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Swb7jkXg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qeb6BqjE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B899F38B;
-	Sat, 16 Aug 2025 00:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73CF171C9;
+	Sat, 16 Aug 2025 00:32:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.15
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755304129; cv=fail; b=kHCkjEQ9uSKMQaxFJ9WsQg9CA+rh8AwnvyeOdAtLnFV+z7AYdHWcvKrNZqZsU3zEVHVm9CIYaE7fVJUKoBKFogdKtWg/BinaV+aHrrV1qN9u+kBydc5QNDdWsT9Vv/MQqANyAxxkBeL6B6m/2CRwDBHa9OpfJVKckPU5cO8azWk=
+	t=1755304363; cv=fail; b=kARoIJ/gaGj8+bPVwuJ5QnH33DKhPmpAPNIVxkItViwrCA4Y8KL8DaA9wTtJg1rvmN7W6YPYQsrkSEw9TAZJQ7Vc2TU1Iz82TcQQBcynAbIlf4MC4MsH8KLuOeENaw4jS9MU8/z2hmZyq6KbIOS61Bh7u/AIUhKwc5uBPK7BUqU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755304129; c=relaxed/simple;
-	bh=XZNlA02ThU80GKBWhJFaLx2vT7bzT9lKVCK/OQPTxQg=;
+	s=arc-20240116; t=1755304363; c=relaxed/simple;
+	bh=1ZBIu+WDDFQ3+jvNFXyzLMcMWxj0GtyG/ggiuOHD+UQ=;
 	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=qI3KwC9iw6gxVhEjlNgLbWPyIX8sL4RzBmVEhHkpxE2rTXUaLsx2T8b0k6oLbgeYVxlb74wDgXlWzgYtGQ0ZmQesT4iFpDC5CjOQjiaX+Uj82IjETBS8po/XqEEDTfW1Pm+Zq0areUkqtFOxqam7N7A1pq12oMj9/+m8bxAx1tk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Swb7jkXg; arc=fail smtp.client-ip=198.175.65.17
+	 Content-Type:MIME-Version; b=kpUZqv9Mqwh7xEoVRCDuGts/zTreeYtxrT15qR1wL9vM8jfPzGh4vgKAZXly2WboLS6exnXP2C3fGYhCkNVZq00vtkCzP1sSxgvrCRUE03BfjMQNM/3qEmfzo5QZGZh2WP1klXe10r6MT02IOugPoF6g7F8cCzIN9DHwT75AcnI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qeb6BqjE; arc=fail smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755304128; x=1786840128;
+  t=1755304362; x=1786840362;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=XZNlA02ThU80GKBWhJFaLx2vT7bzT9lKVCK/OQPTxQg=;
-  b=Swb7jkXgWFuC3Oz9L3LxFdWUs4cgZS8TSTxLLPjXzgrO3IjV4C7FLufj
-   VRteZJDR1qCktfKCDjmhkovqJNIPDha+MLx0uoJBlV6hiE6+lHGmVN7Vt
-   I//CXYcOd2mLj5podJtCHABHiz2fqKvRJIcEuUYQOJdlOfzZC/WF8W2Lk
-   EzHM/SX12ljayeKaXvIsi3mvyarShYYid+dFArNXSRdi/MkoouCHJKMel
-   5tmRW1wkAa28kjKnk5sUXnz6JWJl90ILGICRgRBgWutIjl/pjqivfaKqW
-   E0rhMVJPYnuXJMsSn1B0ClFfDfs1dwbqogLoEONY1X3ghsiRRg8MlLpqO
-   w==;
-X-CSE-ConnectionGUID: ElC3MzTgRDS6VBmbTD931g==
-X-CSE-MsgGUID: rGtFxKMGQNi7dxiU03z/fg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="57580015"
+  bh=1ZBIu+WDDFQ3+jvNFXyzLMcMWxj0GtyG/ggiuOHD+UQ=;
+  b=Qeb6BqjELhG8pViwpurJJOaRDyMYdze8MnftvPJ68ST2FhDHIt6lh2Ve
+   v7G3YL6ID1RtE5mU7ZQcAvPRmEm+k0TpjLNYt5V2Islj1lq759cVWl4JZ
+   08fYdq7Aq4bjItaGbwGgMX1Ws6upRWu3k4tFoYP4aGeoZICRhb1r6m2Y9
+   pB6wWIxFuQChN2AdHnLiN8cyGVwMq7p6CVHjdT41lPZIRdv0mC37PUcha
+   XUIjhL0kbbanJgEVoPS4DvkXBh4x9YUmvy/4jg58H+wp+CtXASvGaD8jt
+   LOk9H0ioqjfQq+JHG0AV/LD9KymWMDDMsXwZQNFeDddso8zy3B7q4E66D
+   A==;
+X-CSE-ConnectionGUID: 34GE18UvRoCJAJ661Lbxyw==
+X-CSE-MsgGUID: ODqHX3+gRyGLmTijs1ryGA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="61257479"
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="57580015"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 17:28:45 -0700
-X-CSE-ConnectionGUID: MaJ52a2IS0yWSeH7VtwHeA==
-X-CSE-MsgGUID: GuXYZboQTFaFqPvCLW3KWQ==
+   d="scan'208";a="61257479"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 17:32:42 -0700
+X-CSE-ConnectionGUID: Jvr5t9KURCGY0alCGUTCVQ==
+X-CSE-MsgGUID: K6SshI9RQTGMI2RQnScd2w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="172337826"
+   d="scan'208";a="171250498"
 Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 17:28:45 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 17:32:41 -0700
+Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
  fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Fri, 15 Aug 2025 17:28:44 -0700
+ 15.2.2562.17; Fri, 15 Aug 2025 17:32:40 -0700
 Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Fri, 15 Aug 2025 17:28:44 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (40.107.93.66) by
- edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ 15.2.2562.17 via Frontend Transport; Fri, 15 Aug 2025 17:32:40 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (40.107.236.53)
+ by edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Fri, 15 Aug 2025 17:28:44 -0700
+ 15.2.2562.17; Fri, 15 Aug 2025 17:32:40 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y9oZ/xMmOe9V0UJK1zmgMgjJzgxHbaAjIkKr81tk+LaF1JaYd8rZwrqGBNdSiIESN3nu/3nqOoqOtVc0NMMXdQRvRC41r5zAdZTQqCDYEs9Ny1PnOqaRajZEicXwpqJRGTE7+VTsp+4sHtvOfX2CWWN3BvmMO9evC7EWIa2xoXn+J8N7KfneTCi3WbWpafjICvhcOUuswbKUDpkZ4UzwRPOPEBfgjxrbNpgjz7IZV/Y4mPC/M1UGDaD+0akIvzXAcvVPluqfiIv76+c8qSCAxgCVD2yNHxfGtxMe4HZAGLO9giMIUHsPafy7mtH5jV/xqgRyiJIPl7CXMoaIWVIOsw==
+ b=nUw3Cdilz4dAJqOQgPRQEhKiF/PQXMlowsgTyYprACF8G3gZuqCJdnksOtB2+20r6zhKO+/9/mBfQK5AhETGOckR4792b6qa3YRJUViEk9UT1qp+voBymrZtSIYNf7JseA3TBebwvCmUMjlQQralSbs+1U5ikZ5+zpZEqSnkCPiD3SQVpKp5vAWj2W9sQ4ZupgBylbQvS+cepE0VJMzdL0V2v8RWu3yO/JkGNGFbQC7jNMe8Tfoc0f9WhKn3aXLZ4eya1fK7MQNZYV8q2gzhITq7sw8RuouS5HeHBp8hBTaLhoFoF4ruyWXkSvNgQc+xCCk0qKfR/L+7vaQJWRN9Fw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Lzv27N1NvW+s4QYVgjA8ynhtSBAh910pOveooC1psc8=;
- b=eOC+nhmW6+ZhlGVG6+TQuddKi+8JaDVVPeCr7pE2FAoSk+FTs7O0fUc/Or/SNVppZC1gsKmN9syCNZWP7EOkgk3zrl3Cm3YvnCdGFIhVGMTKzWZ6yYN58KkZ4UcvKiTnC0BkwNU2yt8dedxvmrhCs2Hry6o1qGS7qcp6lrpkR1IWio0VBtsfGPs2LhAr909GHx+J/Di1FuYeydhfxQPc2BwFc1BJDMXHMrh3vtjNyNveQLi6IRXAgA2S3DwpI7BuQ+WZ3iyBZ3GnYTgq+qp5KYYK9hh0G+xQR9puQj4Pah2gJGmlumBGpoEY3pfIA0jEXnB4qKPSIkDbw5MNjSVDYw==
+ bh=sJ1zrgfJiCRyg0BMIvUPQWpQ/MWZJapeSFodDpbxNBU=;
+ b=fvfVCOmX3rhYrE5B8xsUuPOyYlt53WElIAPFTnIzpba4ONZ+w+nyP7ZM9iHdOx8WWAdpwyTXAW1p5WKTOa8u7zFoh1Hsf+vv6ndUJTEPV7x0a3Ao346jotv2yBuH8aYrY30a4t3vTZT/QtCkvR9HZyS9RWQinWJ+1xazzxhF+5FxOtzbuAX8adiioManqWAoVj5vIsuAyij5LGIRwj4AcVohe3qlVpXPIQKjgYptolIEmkcv/XqbNiHIf91KosT5JJBHd2z4uQnlUTKR4oDPkoYAuHBHbDoqUQ+AyUl8ou7OcwiAQyFVyoGNq6nKHIegoDg2yp0pl4O0H+o/Aa7S/Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -86,37 +86,38 @@ Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
  by CY5PR11MB6533.namprd11.prod.outlook.com (2603:10b6:930:43::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.19; Sat, 16 Aug
- 2025 00:28:41 +0000
+ 2025 00:32:37 +0000
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::61a:aa57:1d81:a9cf]) by SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::61a:aa57:1d81:a9cf%4]) with mapi id 15.20.9031.014; Sat, 16 Aug 2025
- 00:28:41 +0000
-Message-ID: <d8425202-733e-4b29-990d-56d9efed44f9@intel.com>
-Date: Fri, 15 Aug 2025 17:28:39 -0700
+ 00:32:37 +0000
+Message-ID: <09c45d9d-df5b-456f-a8ff-b887d8a705c1@intel.com>
+Date: Fri, 15 Aug 2025 17:32:35 -0700
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v8 06/30] KVM: selftests: Add helper functions to create
  TDX VMs
-To: Sagi Shahar <sagis@google.com>, Binbin Wu <binbin.wu@linux.intel.com>
-CC: Sean Christopherson <seanjc@google.com>,
-	<linux-kselftest@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	"Shuah Khan" <shuah@kernel.org>, Ackerley Tng <ackerleytng@google.com>, Ryan
- Afranji <afranji@google.com>, Andrew Jones <ajones@ventanamicro.com>, Isaku
- Yamahata <isaku.yamahata@intel.com>, Erdem Aktas <erdemaktas@google.com>,
-	"Rick Edgecombe" <rick.p.edgecombe@intel.com>, Roger Wang
-	<runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>, "Pratik R.
- Sampat" <pratikrajesh.sampat@amd.com>, Ira Weiny <ira.weiny@intel.com>,
-	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+To: Sean Christopherson <seanjc@google.com>, Sagi Shahar <sagis@google.com>
+CC: Binbin Wu <binbin.wu@linux.intel.com>, <linux-kselftest@vger.kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, "Ackerley
+ Tng" <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, Andrew
+ Jones <ajones@ventanamicro.com>, Isaku Yamahata <isaku.yamahata@intel.com>,
+	"Erdem Aktas" <erdemaktas@google.com>, Rick Edgecombe
+	<rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, Oliver Upton
+	<oliver.upton@linux.dev>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+	Ira Weiny <ira.weiny@intel.com>, <linux-kernel@vger.kernel.org>,
+	<kvm@vger.kernel.org>
 References: <20250807201628.1185915-1-sagis@google.com>
  <20250807201628.1185915-7-sagis@google.com> <aJpO_zN3buvaQoAW@google.com>
  <0c8d6d1c-d9e1-4ffd-bb26-a03fb87cde1f@linux.intel.com>
  <CAAhR5DG+EMVbrdGaPoUiX3MtnVktFtdiY+dDjRhA9tugAoRTJQ@mail.gmail.com>
-Content-Language: en-US
+ <aJ_PQPkD3qrlW8jZ@google.com>
 From: Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <CAAhR5DG+EMVbrdGaPoUiX3MtnVktFtdiY+dDjRhA9tugAoRTJQ@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <aJ_PQPkD3qrlW8jZ@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4PR04CA0358.namprd04.prod.outlook.com
- (2603:10b6:303:8a::33) To SJ2PR11MB7573.namprd11.prod.outlook.com
+X-ClientProxiedBy: MW4PR04CA0304.namprd04.prod.outlook.com
+ (2603:10b6:303:82::9) To SJ2PR11MB7573.namprd11.prod.outlook.com
  (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -126,397 +127,191 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|CY5PR11MB6533:EE_
-X-MS-Office365-Filtering-Correlation-Id: c60e2113-c0d8-4fe7-63f6-08dddc5bd9e9
+X-MS-Office365-Filtering-Correlation-Id: ee1019fe-d6ab-4920-dd2f-08dddc5c66ca
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?aE1nSE84N0RTNTR3b3NENzBKanUzVzNQUE1kWUp3cGdPR3kvYmdLdU1iaGF4?=
- =?utf-8?B?b0NZbHh4SHFmeU50K3A1YU9INUJRaUFReFB2NktIdG94L1F1bnpudVRZWkFx?=
- =?utf-8?B?VUQxWWh5TjB6VHJDYjFBS0RMVTdkQmE2SnlReFlkWUNKZC9vRFJ6SGk4d2Ru?=
- =?utf-8?B?L2hpZUkxdDhjcUZMRVFyQ2F4dTg3aHN3VCttaVlhMlZadW5vVkdKTFFCTCtM?=
- =?utf-8?B?eG9hTitNSjNBM1oyUDV5cXBaWmh5WWVsTGRMKzRDSFQ1RFVhMHRNUE9abU5j?=
- =?utf-8?B?WlZadFNSd2R0Ulh0eHhIUlI4bnpGN3JkdkJ0bWV0OTNtR3ZiNE1VbWF1NG5S?=
- =?utf-8?B?MXNaQUg0SVB3WWRCMTZkMGtDUExUY3NlNklGY1hjQlNZSG5NaDZpNkNzTzVE?=
- =?utf-8?B?ZExYS1Z3aUVzc2x4MmRIcUsvcDBhSkFkTkRMckRONGVlb3hnUVJBN2ZXcnRY?=
- =?utf-8?B?WXQ2UzdJbEJDMFhMamFRYU1uVGFWd1l6dVlMUy9nVjRWRXBZZm45eXM0OGND?=
- =?utf-8?B?NWQvSEg3TXpoQXJ5b0g3TmxUeEFFRm1RRHBmUm00cUVLS05UdXVISXZtRExx?=
- =?utf-8?B?VXFBM0pYYjdIeWkwN2QzS2EzSDZiNzJtbXBBdDNQZkZFOG1sdTlNOWp5cmhM?=
- =?utf-8?B?MStvUHp5RFN1SFhPb0tubHltMVdHeFJPTjd0TTNTZUljN1BWZUNucFp1UU45?=
- =?utf-8?B?b1pzRU1FU2NKYmZWR3lsb1dMZjdOdlVRZkphaVBvaUV0YkNJQWtDRkN1MlZU?=
- =?utf-8?B?UmovZnFLVSsyUStZc3lqNUZtNkZwMlQ5ZUUxWllid0hwaWZkajhOWVNyVnNp?=
- =?utf-8?B?SzcxRzdSeFdFQ1RBS1E1N29Mb3FJZnJ0UFpYM2d4Y0pRT3piMWd6SUg3SXFx?=
- =?utf-8?B?b25QK1NQK01XbnlEbEtaWE9uZU02NFY3eFFHcW1oZkhwODV5ZnBhY2JrMXU4?=
- =?utf-8?B?MXRqeW5NRCtZYm0yOW1GSmNlUW5Ea3hRSWlLNTB4VUErdXNSZENPUndTNlV0?=
- =?utf-8?B?TG93Z0VWUXJ6bCtTZzBxZklOcy9CcGNKZmtQREZsdkpzdmZma2ZaWUttMGdt?=
- =?utf-8?B?UWdmcC9DUmtrOWRoaHNrQmFuWjZ2RlhvVHlaVWx6ZS95ZmRsMW9ySnBwR0t0?=
- =?utf-8?B?K3krazBpZVVKMUdzWlB2eXg2ck0wVGpWbG9FSWZxTWQyQkYvSng2UE9VZlJH?=
- =?utf-8?B?Ty9yUDluTWRLcG9ab3NGcS9hTDQ1aFB2S3E1SXZLckQ2N1gwaWVZNW92Vzkx?=
- =?utf-8?B?bnBqMmF1MndGWnJJUmJFZklFUHRiZDcxWjNRZ2doMUhJMUdkb0lQNXlWdEZE?=
- =?utf-8?B?cHNDMjNVKzZwRGxqc3l1d3J4aXc2VEphU2Jtc2RiNVZEYXl4ckZVZGQyWUpF?=
- =?utf-8?B?bUdjSEtwcHUxK0FiTTkvWC82VTJOcTRvSTdFU1BhcmJ2aFA5MmExVFNYazly?=
- =?utf-8?B?UDZ5Wm9NbXFzMjlPeUtaSDVRUVJpQUZjQy9XMXJqQVpXbHJPZGJRbzJ3YnQ3?=
- =?utf-8?B?YUwvWVZyeVd6S3VOTjFua0RvcXZZeUpEQllmN0ZxMGhqUTRmMG51aFlNV2xa?=
- =?utf-8?B?TmtDN1VnT0dINE5JVVFjdllFTlpERTI5VDNCaFJ1c0xESlI0VVVRVVVMUlpm?=
- =?utf-8?B?TlZKamdoTU9lbnFGc1ZEN09FUVVjWTBhMHRuNFF3YUhwTzhRbURGMVN4dWhO?=
- =?utf-8?B?cEdSMTNZTUFtWFc1REZNU1pWd0pIb1I4b2pYclh3T1gwVEQ2QS9HS2xjWStB?=
- =?utf-8?B?bWlsbFB1bXpXS1RuZmdnYWRWZ1M2dDVoVVBtREF2Y2JWeE5yZlRvTSs5Mnhm?=
- =?utf-8?B?ZzZUcHRKdlR6NVdWN3BUWmhEWUtjRXhVYTc2enpMa2phbTYydjB5eDJmRnp4?=
- =?utf-8?B?V2NhNi9lSWVlUjVpL29oaGZJRlJTSnl5bnZPWUtEakRaZ3RNVVlrQzg4V052?=
- =?utf-8?Q?FR3yRzreN9Y=3D?=
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?VE9YVG00WUJMSjV0cDYwdXg0cm4rcm5UMUxMQnhRb1MrK1ZhMXo1VFBoRU9N?=
+ =?utf-8?B?Q1A5cWFKcDlYcEp3MUZYUTJlbzZ4UFQrekhkZEZvZnhESG04Rm5Rb3dlamVM?=
+ =?utf-8?B?bkxsaWJYc2UyT0tVaEtYZFgxbElybGI3dDI2M1Z5N2hVRGdualc2a0NnWFlE?=
+ =?utf-8?B?Y3hjVTdlZkFETnV3eWZPclVHNFdpVmRQVTkwR21tLzdLRms2WTVLaW1GSWZ4?=
+ =?utf-8?B?eDdlbUpIWi8xQktGYklPZGdoeHdNYWhJQ0NVYnlyTGJTYTZrb0hKb1NocWo2?=
+ =?utf-8?B?Q2NaV3ZVajJ0NWNYRm9tSFVoUVFDQ0RuR2ExN28vTklQcTBERm14NHFoOFVp?=
+ =?utf-8?B?TGRRc1U5TnBTZUZia3FwNE0rcGkzazU2R2l2RGJEWFZBUWNJcENqUW1jODRJ?=
+ =?utf-8?B?M2pIU3d2bkF2ZXZFOTExbGRmWm5COUQ2VW5wemxRdkNxQWRuVGh6enN0Z2Zw?=
+ =?utf-8?B?VzloZVJrdmhCWUpvK1AvYmZzS1pyWG5MVFJ3WURqRldmU1htRGxYK3pPR29D?=
+ =?utf-8?B?dzl0R00zcnR5ejRJL0lLWEk5VmNjREF5Rm1WeG41SDlnTnQ4RlMrK1NRMm0y?=
+ =?utf-8?B?NTBUTVVtdEdPdlBXZ0lSV0pIRzJqQWU0QUNibmw2TXdUeFVUdndRWjBuNjRr?=
+ =?utf-8?B?WUtkQllOS0pJWjVHalhqZ3UycU0yOVQ2MlJYVG5LNWdCaStZcHNSM0t1dWo1?=
+ =?utf-8?B?RE9QNTJPOStCcmNNaURaYjRGSno1cGlFR053N3NKMlhWb1dtMTd2VUxhRmtX?=
+ =?utf-8?B?NDdnRzBsMDA2MlhuaFhRZWd1SXpGQUorTkFwN1JqZDF2NzJTVklaRk5vZVFJ?=
+ =?utf-8?B?TFE2TkFyc2lSWWhOTjMrcmxiSDl4a0tOcmQyQlhRVllaNmNZRm5aeTh6VjJn?=
+ =?utf-8?B?MkUySGlETXVNMlJQeENDdElVRFJPWXdiVkpnRW1LNjN2a0NqOEpnSzA5elFX?=
+ =?utf-8?B?a2R6MDNTcHhtVHFKdzNLeFRwb3VpQ1h1Z2N1UnppUnpBZXR1ZXJDZFBZWHR0?=
+ =?utf-8?B?Wmhzd24wbFNrejExTS9YZTQ5TjN4QWtXTXlHTFZZWCtPQU8yeThFeS9VNUx2?=
+ =?utf-8?B?Y0doYWQwQm1nQ3RlUTF0bUI2VkpkcGZvamZjMzNsRDVtQkhKam0wT3NrVFBx?=
+ =?utf-8?B?S21zYndxYUtrL0szQ2xzMUFESWMxK0p3bDNNY2k5RjA0eXlyU3g3NXhPZmFN?=
+ =?utf-8?B?ajlFMENYMU80WUxLY29kYldHOEFSblh2ZDRFOGlFdEVFd2ZsZFFRdzJKRVcy?=
+ =?utf-8?B?UXIxaUFNWVo5dFV5bkRjT2owVWxFMnZjYjRoZE5MK2NYMnV3WiszdUh4ekhB?=
+ =?utf-8?B?VytURzNkVHhpc3J1UEJQYkRCek04VWdEdGpCM3ZpU1gwQS9BNlJiR3hmUE0x?=
+ =?utf-8?B?dXRRUVpaYTAzMjNocU10N3JMQkJzWE5BSDk2eHpvZFRVQzVESk02RE1DcXlG?=
+ =?utf-8?B?NWN4ZmFpS3Vnc2syKy9rd2tlbWpBeDQwdEgyQzUrYmFPMDdzWVpIWW1sc0Z2?=
+ =?utf-8?B?SlFYZVp4N3UzTC9DV3VuaTQ4cG90b2l1UVlLdXJhNVppcmZFTXJSRysxUFBO?=
+ =?utf-8?B?QTNWVUx6cnRybVExV3Z1a1E5WUFMMWg0WTBDa01TV3ZkWnhwMmF4M2M2dzdJ?=
+ =?utf-8?B?WFllNkJKMzBrTlVWREh4YldQSXJybTFEbTAxY25wZXdpNFBsb0haak9yVnlI?=
+ =?utf-8?B?Y0E2a1RtMStHa3JPQ1hIbTBuR050UnIwclV1RlJib1NBV29hYlk4bG1VY2xC?=
+ =?utf-8?B?NUpIRndYc25qYVhDcEZyYU1SazIwR2h6TzRoRmhXNTZuUDdiK0VGanFJU1ln?=
+ =?utf-8?B?eXUzS3VsSitFOVRvUFNtU2gvZm00QVZONExBSWMza1dwU1hNeVpTOGFQWFc0?=
+ =?utf-8?B?Vk0wMktSMzVMS1JuYlNKKzlNZmRaMDZMSE0zRHVQeTBPMFcvUjVnbDdsdk5K?=
+ =?utf-8?Q?E3Q/to2/Ruo=3D?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkJnZVZvT0U0bmhxOW5hWk4xNW1kdjNuNjQybmZoSi9Ob0FPUCtOSE40YlBR?=
- =?utf-8?B?VEZNYXY3Zm5MVFFZbkl6SUthdFBheW1pSjFGK0NOdnl4QlJXUmFjMWZ4WXNw?=
- =?utf-8?B?QTYzdkJnWEQwb1pHZFV1ZzFpaE9vbC8rN3JKeDl4QlVERVhDR09lR2dpRUN0?=
- =?utf-8?B?VHEwRTJkcnN4REx5MlA1dzloOEZYN2JhWXh2N1ZMZS9Bbi9FL3l6NzVzSlY4?=
- =?utf-8?B?Ukg5VEIxTDgvZjNyTzdnTGNUTUlOcDBNYThDcnBLMXlGbnR6QTRKelFsR1F4?=
- =?utf-8?B?RHNIZmtGY2l2d250aHN3UUFKUFRGVW9rMU1lVkZzeEorYW5UNXRnTlJQYnJB?=
- =?utf-8?B?NVRQeE1WNFZzZWEzOGpCUDh4QmFQMzE5c2xXbWpIQkMyc3ljZk1IbkZ3YXdX?=
- =?utf-8?B?dkxWckxzcDM1WU9XSnBqOWJVcFZHN3kySERIODM5Sll5Z3dSRDdlVngweVox?=
- =?utf-8?B?SXlHMDBmMEZqS0pkU2RHTnIzQWhqSWR4aHNlM3d3NFY2UDhOeGlDNTdKQXJv?=
- =?utf-8?B?djFYOVVlYnR3WUw1Z3ZyMlh0L3YrRjlIcklaejFOMUxrVUZrazBneldWVlI5?=
- =?utf-8?B?QkFjK01zemxsdU1yYlVWNk04WWhXaW1GcTUvSFNsYndWbnNrWDB4cmhyenpi?=
- =?utf-8?B?NzJ2U29waWxnM3FQb3FBa1N4T3h6QUlmY3dVclJ3bG9UREx4Vnl4S1BFSDda?=
- =?utf-8?B?REh5S2tLSUFzNTBoSEtMZDExak84RVdKeUszVC80VFlMbTBIUjFtenZGOFpG?=
- =?utf-8?B?ZGEycE1zTUpzR1Vnck1kNld4VUNBU2FOOURJNVJjSFp4Q0YxakNsNHl2ZWhF?=
- =?utf-8?B?MlFlb2R0c1dyajRKbWxPSGNqNVhrK01CZm5kMlUyOXNjeng0Wk9qTnNsdTlo?=
- =?utf-8?B?Z3hnbUxSMjlZTEJGc1ZHNW5QWHVaSVpGTGpYMWxBYUFaKzV1TXpkMHR3U0Nh?=
- =?utf-8?B?V2ptSS9ZL3ZFRTNLdjJmVldkOWUwVXhQbUVCbGdQRXlmZDEwL0p5cmdiaDl0?=
- =?utf-8?B?V1ZOMDdtRUhCOG9Sb2ZEcms2ZjIyWnltWVJIWVd2TFFzNnBwL29wejhxVzVz?=
- =?utf-8?B?dFBIYmhDNTZYcmVlTnMyejFHVm92S3Z3NU5hajM1M3lDUy93MEhiZHVIaWpU?=
- =?utf-8?B?aUF5cWtEc3J2UlE2c014TCtaRDVQK2FOYzJ3MENRcWpYQkpDazFVSWJSbW9V?=
- =?utf-8?B?TU5vbCtHOXVLd0tkYjA1YmJZMUtsL3Y3TjdxYVlJcmtjYWpCV0Q0bG92U2kw?=
- =?utf-8?B?TEx2dVZFYXhtOXdHb00xNkNkU05uRTVmanVhYTg3dEJQVmR5aVJveWVSdlFw?=
- =?utf-8?B?NzdNQ2JpdXNqcGk3RlExRWsrYVF1YXZnbEE1RFYrRXpBSkFmYUdRb3ZLQzAz?=
- =?utf-8?B?TkVSN1lSQWFWNnRVVDBrM3EraXV4OGw5TjVTOEExc3RiM0hOT1N6andaQnBN?=
- =?utf-8?B?a3gwUWZ5eStnYyttTGhuSlhXV3FsV1VIbDZ1cUcvd01ZSlE1SWtpTHVQYmov?=
- =?utf-8?B?VDl6ZGhYMjY1OSt0Ny9vd2hDVXZkYlF3OFdnaFJ6cEIya1ljdlVUbUdpZS9u?=
- =?utf-8?B?R3NCMUNidGxxYmNsWkMvOVlldlZVQzZnVFZoZUMvbWVicjZwQU83U3gycVNQ?=
- =?utf-8?B?dUpDSkJrYWZJVXhRTUxSbzY4RnRVRGNIWFIrMmF3R3lXWU4rc2Z5a2UwSVZZ?=
- =?utf-8?B?ZnU3TXg3WmRXZlg0OWhBa053Wk01ZDgwaU9RVkwxaklqVWovZjZOZkNDR25C?=
- =?utf-8?B?d3lVRDF5RTVWcEFwVjhmTHFVNHpNbnF1cnVQR1haUG1FTUxaODZzeFZYM2Q1?=
- =?utf-8?B?K2lvVllvVStxSUV2cHRWM1dDRzdGRU11RGxNQ2tLbnhGY1k5RjEwTUF6eVpj?=
- =?utf-8?B?NFZMMzVudjFnSi95RkNKN1p4RnR6RzFqeGZTM255Ni8ya3NOakNUdUJkalo5?=
- =?utf-8?B?ZFVPc29nUURKNTdXQktKaUJxS3duaEdSUjFoYkwrSys1enNQbjV4OEVOUUdL?=
- =?utf-8?B?Sk1sRk9ycTZ0NW9vNHpmTUZXVWQyYWNRKzQzNkFmUUJDNjZxclBnbU5iMGw5?=
- =?utf-8?B?ZjhsUFFrTmNTOFdZbG1xL3lnd3B5dXVmUmVIaVJJYW0rMGgzYXQ1SHViNzdn?=
- =?utf-8?B?WHBtOFlEUGNvM2ZuOUJqa0RCY28vdkxEWFFRbVcrSmhCc2ZZQm9JckdrdTY1?=
- =?utf-8?B?bkE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c60e2113-c0d8-4fe7-63f6-08dddc5bd9e9
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXJ1Ti82YVBmVkdINy9Ub0VFRld2UHZOZHBlSzY3cVJyY3NJWWh3c01aOHdm?=
+ =?utf-8?B?M1BDazM5K25SVjVDQ1JaeTBtVVF1UTRlT1B5cEhob0EwcytBVFloMHBYNFUr?=
+ =?utf-8?B?RUZ3NWhEK2VTcGgrUXcyQzVPSk5LVVdsL2xaR1JwOFQ1bFRRTnlldGFVRXQ3?=
+ =?utf-8?B?ams1M090aGRVQUhyNXYrSHRXNmh0NGtXTXJEcExYa0hOVkxQeGxjS0piUitq?=
+ =?utf-8?B?UWxoVW1RTDFPcjk0Nlc2bnZyVW5wdjNXMEFqRmFsaEQ4K1BrR0NpU01Jc1d3?=
+ =?utf-8?B?ZW45ZUpNYTZGMXROQVVSK1JlZzExM3JDRThqZE5ZT2FTMVE0Sy9GOHJYaUNk?=
+ =?utf-8?B?MHNTUUNwL2dQdzN6d3RSVDFUL0JtU2RURk9taFVvTHBId2RSKy9hd0c1RUdx?=
+ =?utf-8?B?aGVFeGlvWW1YalNoOGhpQlF5M1h6VUh3T2V1MjFpQVROdHJtcDh0OHU0Zm82?=
+ =?utf-8?B?ZVRoeFY5TlRVTG10aEJwNUxRdDlKbWk4NjZhbkVnYWRBS25lRC9aZEtMQmJj?=
+ =?utf-8?B?VER2OGdzV0pDMlA2MjAzV2JqRkdtQXVabDVTYzJBaUduRlpiQmhxeHhGenhj?=
+ =?utf-8?B?aFZORGlVTndSYTBSMnRzczFiSG5sWmpObWFmZU5mV0N3UTF2T1p5cFBhWEVR?=
+ =?utf-8?B?Z1VzdU1jbmVJeDYzRFNIZUhuS2Q0K0dVSXJsV0gySERLc1ZFbTNKb2EyQldq?=
+ =?utf-8?B?cFJOclVuUnpLbExOL0txNk9BTEVOMU5Uc2ovK2pqTEV4Z2NzeW5RT3h0UGtV?=
+ =?utf-8?B?ZVRQdVRERWJCa0IycDBtTjNSeldXaVFtR1diTVFrSnVLVDFYS3QwOUlobkk3?=
+ =?utf-8?B?ZGdQeTZta3V4c1YxUkRMNEpoVjZVbnhzN2lwTElKR3ZTQlhrN0FUd3o5elZN?=
+ =?utf-8?B?VmxMUVp0bExmcHpVWnJ1TjBRTUZrNzh6OEVheXZBdkRMVVhJbGNrNkZNRlNo?=
+ =?utf-8?B?N3BTVTZyWGhla01XWjUrbEtvNWUvMkl4anRrTlpEQVdJMldHa0o0QmxpQlF0?=
+ =?utf-8?B?Qk1NRjRUYUtwM0RSQ3lFYnIwWEJ1aHBJZ1BHcXpyQ1ZWRjdBZHJCdk5tMFJw?=
+ =?utf-8?B?WFRFVGphSDM3TGl3RHBrYUwraGQ3QWlHL2Q0emZOaGM5cnA1M3ArOGpqeGVu?=
+ =?utf-8?B?ZU5OODVhQm5QZHFyaFZUc1UyVFNZNzB1WS81dEkxNlVoMERqeHpIOTFERGpM?=
+ =?utf-8?B?eThjT3BJaGh2QzF1cFpnNVo5WWx0TDVsYlRJdHcrR0hNRldoUy94VUdvTjMv?=
+ =?utf-8?B?OEVFSlZrNDZROXVnSzliZlVDU3EyNlRheGhIUkwwRDhEdUV6QzZ3MDhJak45?=
+ =?utf-8?B?a05sVjVWTDY4RXdlY2NHeEp6MnNMVzhNcTVyVktVNmZZbHh5WVlIWklmNkRi?=
+ =?utf-8?B?UHVJRy9MNDMrcVIxc3dGa1RyaEdFMVh3dmFlT2VmOTRYWFVtTUF3dStaWFhG?=
+ =?utf-8?B?WHc5aFU1bXoxK1VhS3FDUjkxSEJOVGFFdVV1UEdSTDJvV0JzcUZQNTMxZWRw?=
+ =?utf-8?B?R20vV25ISlZ1dkpES3BRbExRU0VZV3oyR2lIeXA4aHNnMmc2S2hHemp1YW02?=
+ =?utf-8?B?N2x2SCt1UDZPTjR4a1pTZEhnczdSRDZtUXhlRS9CclRpc01ibitnYjdsdzFM?=
+ =?utf-8?B?czY1TVhWRmVKSGZ2MWJzSUNTTlNQNkVVcDRTMkFNNkNtS0FnUDYxUERRcnc0?=
+ =?utf-8?B?WWZkT3Jwa2RVc0pRSzRnVXY2dTJGRVFxSS8yVk8rNXJzcG1YeTlmZ1RsMWxW?=
+ =?utf-8?B?TmdBbTFLdGxmWkZGTGVWVXhjd2JybEpvYXRyQ005WXdRUTN6Y3ltMGNFUDJz?=
+ =?utf-8?B?RUZaSHU5OEZzWUFKQW9aUVgrYmY2QWVMZ21tc0FpODNqM0FVcDhZcXE0TkNJ?=
+ =?utf-8?B?b1JuWGZ2bWtHWDNFUkZBUnJwcGtGSmpuOEdRc2NRdTJSZmI1V1A2aUhLTVJI?=
+ =?utf-8?B?VjkvYndOR0psa2tWVisydThjTXVuMnZBMUErTHJlTjFETXM4MXlmdnZ3bkZ5?=
+ =?utf-8?B?RUJyY09jQ25iL0syVXZURDQwa1dRQ2x4cll4Z3JEZHNhWEJHQnRQcTRVcUZD?=
+ =?utf-8?B?THlDTzFFVWwxVU16UzlvRHBRS2ZZWFhmMC9NM0ZUaHZ4a1p6RjhBbVROeEFZ?=
+ =?utf-8?B?eTdZeGZJR2xwNUxHZDAxRDQxSHNPdWxvR29NaDRoeHlMVFhzOHlsL3RpTm1r?=
+ =?utf-8?B?bWc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee1019fe-d6ab-4920-dd2f-08dddc5c66ca
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2025 00:28:41.4089
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2025 00:32:37.7445
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7b22uDiN55K2dxsfWF3DVWhlG3ZfY0L8OwdAomrFooqda6zsA+DtUHnG96N89YpHMhdVPibqXa8U0qj1MfPH9yiU7watFX9bK+TcQZyoAp0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: xQ4GU+MkPnaImjsB+F0dCzzdFrWGUGkb6LYSlmQEzOOYfTKZasVYbRb5OLa0fJqV6AXu+oW0LoqM9IQ6TjWyRCm+TlZrU+TWsVmiNmIJweg=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6533
 X-OriginatorOrg: intel.com
 
-Hi Sagi,
 
-On 8/14/25 10:20 PM, Sagi Shahar wrote:
-> On Tue, Aug 12, 2025 at 11:22 PM Binbin Wu <binbin.wu@linux.intel.com> wrote:
+
+On 8/15/25 5:22 PM, Sean Christopherson wrote:
+> On Fri, Aug 15, 2025, Sagi Shahar wrote:
+>> On Tue, Aug 12, 2025 at 11:22 PM Binbin Wu <binbin.wu@linux.intel.com> wrote:
+>>>
+>>>
+>>>
+>>> On 8/12/2025 4:13 AM, Sean Christopherson wrote:
+>>>> On Thu, Aug 07, 2025, Sagi Shahar wrote:
+>>> [...]
+>>>>> +
+>>>>> +/*
+>>>>> + * Boot parameters for the TD.
+>>>>> + *
+>>>>> + * Unlike a regular VM, KVM cannot set registers such as esp, eip, etc
+>>>>> + * before boot, so to run selftests, these registers' values have to be
+>>>>> + * initialized by the TD.
+>>>>> + *
+>>>>> + * This struct is loaded in TD private memory at TD_BOOT_PARAMETERS_GPA.
+>>>>> + *
+>>>>> + * The TD boot code will read off parameters from this struct and set up the
+>>>>> + * vCPU for executing selftests.
+>>>>> + */
+>>>>> +struct __packed td_boot_parameters {
+>>>> None of these comments explain why these structures are __packed, and I suspect
+>>>> _that_ is the most interesting/relevant information for unfamiliar readers.
+>>> I guess because the fields defined in this structure are accessed by hard-coded
+>>> offsets in boot code.
+>>> But as you suggested below, replicating the functionality of the kernel's
+>>> OFFSET() could get rid of "__packed".
+>>>
 >>
+>> I agree, I think the reason for using __packed is because of the hard
+>> coded offsets. I tried using OFFSET() as Sean suggested but couldn't
+>> make it work.
 >>
+>> I can't get the Kbuild scripts to work inside the kvm selftests
+>> Makefile. I tried adding the following rules based on a reference I
+>> found:
 >>
->> On 8/12/2025 4:13 AM, Sean Christopherson wrote:
->>> On Thu, Aug 07, 2025, Sagi Shahar wrote:
->> [...]
->>>> +
->>>> +/*
->>>> + * Boot parameters for the TD.
->>>> + *
->>>> + * Unlike a regular VM, KVM cannot set registers such as esp, eip, etc
->>>> + * before boot, so to run selftests, these registers' values have to be
->>>> + * initialized by the TD.
->>>> + *
->>>> + * This struct is loaded in TD private memory at TD_BOOT_PARAMETERS_GPA.
->>>> + *
->>>> + * The TD boot code will read off parameters from this struct and set up the
->>>> + * vCPU for executing selftests.
->>>> + */
->>>> +struct __packed td_boot_parameters {
->>> None of these comments explain why these structures are __packed, and I suspect
->>> _that_ is the most interesting/relevant information for unfamiliar readers.
->> I guess because the fields defined in this structure are accessed by hard-coded
->> offsets in boot code.
->> But as you suggested below, replicating the functionality of the kernel's
->> OFFSET() could get rid of "__packed".
+>> +include/x86/tdx/td_boot_offsets.h: lib/x86/tdx/td_boot_offsets.s
+>> +       $(call filechk,offsets,__TDX_BOOT_OFFSETS_H__)
+>> +
+>> +lib/x86/tdx/td_boot_offsets.s: lib/x86/tdx/td_boot_offsets.c
+>> +       $(call if_changed_dep,cc_s_c)
 >>
+>> But I'm getting the following error when trying to generate the header:
+>>
+>> /bin/sh: -c: line 1: syntax error near unexpected token `;'
+>> /bin/sh: -c: line 1: `set -e;  ;  printf '# cannot find fixdep (%s)\n'
+>>  > lib/x86/tdx/.td_boot_offsets.s.cmd; printf '# using basic dep
+>> data\n\n' >> lib/x86/tdx/.td_boot_offsets.s.cmd; cat
+>> lib/x86/tdx/.td_boot_offsets.s.d >>
+>> lib/x86/tdx/.td_boot_offsets.s.cmd; printf '\n%s\n'
+>> 'cmd_lib/x86/tdx/td_boot_offsets.s := ' >>
+>> lib/x86/tdx/.td_boot_offsets.s.cmd'
+>> make: *** [Makefile.kvm:44: lib/x86/tdx/td_boot_offsets.s] Error 2
+>>
+>> For now I can add a comment on the __packed and add a TODO to replace
+>> it with OFFSET. I think that making OFFSET work inside the kvm
+>> selftests will require more expertise in the Kbuild system which I
+>> don't have.
 > 
-> I agree, I think the reason for using __packed is because of the hard
-> coded offsets. I tried using OFFSET() as Sean suggested but couldn't
-> make it work.
+> No, I don't want to punt on this.  I don't care about __packed, I care about the
+> maintenance and review costs associated with hand coding struct offsets in .S
+> files.
 > 
-> I can't get the Kbuild scripts to work inside the kvm selftests
-> Makefile. I tried adding the following rules based on a reference I
-> found:
+> The problem is this line:
 > 
-> +include/x86/tdx/td_boot_offsets.h: lib/x86/tdx/td_boot_offsets.s
-> +       $(call filechk,offsets,__TDX_BOOT_OFFSETS_H__)
-> +
-> +lib/x86/tdx/td_boot_offsets.s: lib/x86/tdx/td_boot_offsets.c
-> +       $(call if_changed_dep,cc_s_c)
+> 	$(call if_changed_dep,cc_s_c)
 > 
-> But I'm getting the following error when trying to generate the header:
+> IIUC, the kernel's "generic" command for generating a .s file from a .c file
+> assumes various paths and flags, which doesn't play nice with KVM selftests'
+> unusual setup.
 > 
-> /bin/sh: -c: line 1: syntax error near unexpected token `;'
-> /bin/sh: -c: line 1: `set -e;  ;  printf '# cannot find fixdep (%s)\n'
->  > lib/x86/tdx/.td_boot_offsets.s.cmd; printf '# using basic dep
-> data\n\n' >> lib/x86/tdx/.td_boot_offsets.s.cmd; cat
-> lib/x86/tdx/.td_boot_offsets.s.d >>
-> lib/x86/tdx/.td_boot_offsets.s.cmd; printf '\n%s\n'
-> 'cmd_lib/x86/tdx/td_boot_offsets.s := ' >>
-> lib/x86/tdx/.td_boot_offsets.s.cmd'
-> make: *** [Makefile.kvm:44: lib/x86/tdx/td_boot_offsets.s] Error 2
+> We could fudge around that by defining a custom command, e.g.
+> 
+> 	cmd_kvm_cc_s_c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -S $< -o $@
+> 
+> but that just runs into more problems with the build system (variables not
+> defined, more assumptions about the environment, etc).
+> 
+> AFAICT, there's no need to use if_changed_dep, i.e. fixdep.  KVM selftests
+> generate dependencies using standard mechanisms, and they appear to work as
+> expected for this case, so just omit the if_change_dep and let the existing
+> dependency stuff do its magic.
+> 
+> This could be tidied up, e.g. add kbuild.h to tool/s, and is obviously incomplete,
+> but it works.
 > 
 
-I do not believe that the selftests can directly use the Kbuild
-infrastructure. From what I understand, when similar things are needed they
-are duplicated. Take for example tools/build/Build.include that is included
-in Makefile.kvm and contains the needed things duplicated from
-scripts/Kbuild.include.
+Thank you very much Sean. So much cleaner than what I came up with. I need to
+investigate why those includes did not seem to work for me.
 
-I see two options here:
-a) Selftests relies on the kernel to generate the header file. This unfortunately
-   will create dependency on kernel being built first and I expect a no-go.
-b) - Duplicate the filechk (that depends on tmp-target), filechk_offsets, and 
-     sed-offsets defines in from scripts/Makefile.lib to tools/build/Build.include
-   - Duplicate include/linux/kbuild.h in tools/include/linux
-
-(b) will allow your rule duplicated below to work:
-	include/x86/tdx/td_boot_offsets.h: lib/x86/tdx/td_boot_offsets.s
-	       $(call filechk,offsets,__TDX_BOOT_OFFSETS_H__)
-
-tools/build/Build.include already contains if_changed_dep and the command
-it calls may just be locally defined to make the other rule you are trying work.
-
-I played around with this a bit and found changes below to work. I certainly
-admit that it is crude but "it works" as a proof-of-concept. I also look forward to
-learn from other folks on how to to this right.
-
-If you think something like this is useful then please consider below only as a 
-proof-of-concept since it needs to be split appropriately, missing cleanups
-(handling "make clean"), may not need to be TDX specific, etc.
-
----8<---
- tools/build/Build.include                     | 56 +++++++++++++++++++
- tools/include/linux/kbuild.h                  | 16 ++++++
- tools/testing/selftests/kvm/Makefile.kvm      | 11 ++++
- .../selftests/kvm/lib/x86/asm-tdx-offsets.c   | 28 ++++++++++
- .../selftests/kvm/lib/x86/tdx/tdcall.S        | 16 +-----
- 5 files changed, 113 insertions(+), 14 deletions(-)
- create mode 100644 tools/include/linux/kbuild.h
- create mode 100644 tools/testing/selftests/kvm/lib/x86/asm-tdx-offsets.c
-
-diff --git a/tools/build/Build.include b/tools/build/Build.include
-index e45b2eb0d24a..330892a1ba15 100644
---- a/tools/build/Build.include
-+++ b/tools/build/Build.include
-@@ -20,6 +20,10 @@ space   := $(empty) $(empty)
- # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
- dot-target = $(dir $@).$(notdir $@)
- 
-+###
-+# Name of target with a '.tmp_' as filename prefix. foo/bar.o => foo/.tmp_bar.o
-+tmp-target = $(dir $@).tmp_$(notdir $@)
-+
- ###
- # filename of target with directory and extension stripped
- basetarget = $(basename $(notdir $@))
-@@ -43,6 +47,58 @@ escsq = $(subst $(squote),'\$(squote)',$1)
- echo-cmd = $(if $($(quiet)cmd_$(1)),\
-            echo '  $(call escsq,$($(quiet)cmd_$(1)))';)
- 
-+# Default sed regexp - multiline due to syntax constraints
-+#
-+# Use [:space:] because LLVM's integrated assembler inserts <tab> around
-+# the .ascii directive whereas GCC keeps the <space> as-is.
-+define sed-offsets
-+	's:^[[:space:]]*\.ascii[[:space:]]*"\(.*\)".*:\1:; \
-+	/^->/{s:->#\(.*\):/* \1 */:; \
-+	s:^->\([^ ]*\) [\$$#]*\([^ ]*\) \(.*\):#define \1 \2 /* \3 */:; \
-+	s:->::; p;}'
-+endef
-+
-+# Use filechk to avoid rebuilds when a header changes, but the resulting file
-+# does not
-+define filechk_offsets
-+	 echo "#ifndef $2"; \
-+	 echo "#define $2"; \
-+	 echo "/*"; \
-+	 echo " * DO NOT MODIFY."; \
-+	 echo " *"; \
-+	 echo " * This file was generated by Kbuild"; \
-+	 echo " */"; \
-+	 echo ""; \
-+	 sed -ne $(sed-offsets) < $<; \
-+	 echo ""; \
-+	 echo "#endif"
-+endef
-+
-+###
-+# filechk is used to check if the content of a generated file is updated.
-+# Sample usage:
-+#
-+# filechk_sample = echo $(KERNELRELEASE)
-+# version.h: FORCE
-+#	$(call filechk,sample)
-+#
-+# The rule defined shall write to stdout the content of the new file.
-+# The existing file will be compared with the new one.
-+# - If no file exist it is created
-+# - If the content differ the new file is used
-+# - If they are equal no change, and no timestamp update
-+define filechk
-+	echo $(tmp-target);					\
-+	$(Q)set -e;						\
-+	mkdir -p $(dir $@);					\
-+	trap "rm -f $(tmp-target)" EXIT;			\
-+	{ $(filechk_$(1)); } > $(tmp-target);			\
-+	if [ ! -r $@ ] || ! cmp -s $@ $(tmp-target); then	\
-+		$(echo-cmd) '  UPD     $@';			\
-+		mv -f $(tmp-target) $@;				\
-+	fi
-+endef
-+
- ###
- # Replace >$< with >$$< to preserve $ when reloading the .cmd file
- # (needed for make)
-diff --git a/tools/include/linux/kbuild.h b/tools/include/linux/kbuild.h
-new file mode 100644
-index 000000000000..e7be517aaaf6
---- /dev/null
-+++ b/tools/include/linux/kbuild.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __LINUX_KBUILD_H
-+#define __LINUX_KBUILD_H
-+
-+#define DEFINE(sym, val) \
-+	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"" : : "i" (val))
-+
-+#define BLANK() asm volatile("\n.ascii \"->\"" : : )
-+
-+#define OFFSET(sym, str, mem) \
-+	DEFINE(sym, offsetof(struct str, mem))
-+
-+#define COMMENT(x) \
-+	asm volatile("\n.ascii \"->#" x "\"")
-+
-+#endif
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index ef2b1a47719c..e7bd835a56db 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -241,12 +241,14 @@ INSTALL_HDR_PATH = $(top_srcdir)/usr
- LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
- LINUX_TOOL_INCLUDE = $(top_srcdir)/tools/include
- LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
-+LINUX_TOOL_OUTPUT_ARCH_INCLUDE = $(OUTPUT)/include/$(ARCH)
- CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
- 	-Wno-gnu-variable-sized-type-not-at-end -MD -MP -DCONFIG_64BIT \
- 	-fno-builtin-memcmp -fno-builtin-memcpy \
- 	-fno-builtin-memset -fno-builtin-strnlen \
- 	-fno-stack-protector -fno-PIE -fno-strict-aliasing \
- 	-I$(LINUX_TOOL_INCLUDE) -I$(LINUX_TOOL_ARCH_INCLUDE) \
-+	-I$(LINUX_TOOL_OUTPUT_ARCH_INCLUDE) \
- 	-I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(ARCH) \
- 	-I ../rseq -I.. $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
- ifeq ($(ARCH),s390)
-@@ -256,6 +258,15 @@ ifeq ($(ARCH),x86)
- ifeq ($(shell echo "void foo(void) { }" | $(CC) -march=x86-64-v2 -x c - -c -o /dev/null 2>/dev/null; echo "$$?"),0)
- 	CFLAGS += -march=x86-64-v2
- endif
-+
-+GEN_HDRS := $(OUTPUT)/include/$(ARCH)/generated/asm-tdx-offsets.h
-+
-+$(OUTPUT)/lib/$(ARCH)/asm-tdx-offsets.s: lib/$(ARCH)/asm-tdx-offsets.c
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -S $< -o $@
-+
-+$(GEN_HDRS): $(OUTPUT)/lib/$(ARCH)/asm-tdx-offsets.s
-+	$(call filechk,offsets,__ASM_KVM_SELFTESTS_OFFSETS_H__)
-+
- endif
- ifeq ($(ARCH),arm64)
- tools_dir := $(top_srcdir)/tools
-diff --git a/tools/testing/selftests/kvm/lib/x86/asm-tdx-offsets.c b/tools/testing/selftests/kvm/lib/x86/asm-tdx-offsets.c
-new file mode 100644
-index 000000000000..ad56d99b56be
---- /dev/null
-+++ b/tools/testing/selftests/kvm/lib/x86/asm-tdx-offsets.c
-@@ -0,0 +1,28 @@
-+#include <linux/kbuild.h>
-+
-+#include "tdx/tdcall.h"
-+
-+static inline void common(void)
-+{
-+	OFFSET(TDX_HYPERCALL_r10, tdx_hypercall_args, r10);
-+	OFFSET(TDX_HYPERCALL_r11, tdx_hypercall_args, r11);
-+	OFFSET(TDX_HYPERCALL_r12, tdx_hypercall_args, r12);
-+	OFFSET(TDX_HYPERCALL_r13, tdx_hypercall_args, r13);
-+	OFFSET(TDX_HYPERCALL_r14, tdx_hypercall_args, r14);
-+	OFFSET(TDX_HYPERCALL_r15, tdx_hypercall_args, r15);
-+
-+	BLANK();
-+	OFFSET(TDX_MODULE_rcx, tdx_module_output, rcx);
-+	OFFSET(TDX_MODULE_rdx, tdx_module_output, rdx);
-+	OFFSET(TDX_MODULE_r8, tdx_module_output, r8);
-+	OFFSET(TDX_MODULE_r9, tdx_module_output, r9);
-+	OFFSET(TDX_MODULE_r10, tdx_module_output, r10);
-+	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
-+}
-+
-+int main(void)
-+{
-+	common();
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S b/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
-index c393a0fb35be..e98aa5178db9 100644
---- a/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
-+++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
-@@ -1,18 +1,13 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /* Adapted from arch/x86/coco/tdx/tdcall.S */
- 
-+#include "generated/asm-tdx-offsets.h"
-+
- /*
-  * TDCALL is supported in Binutils >= 2.36, add it for older version.
-  */
- #define tdcall		.byte 0x66,0x0f,0x01,0xcc
- 
--#define TDX_HYPERCALL_r10 0 /* offsetof(struct tdx_hypercall_args, r10) */
--#define TDX_HYPERCALL_r11 8 /* offsetof(struct tdx_hypercall_args, r11) */
--#define TDX_HYPERCALL_r12 16 /* offsetof(struct tdx_hypercall_args, r12) */
--#define TDX_HYPERCALL_r13 24 /* offsetof(struct tdx_hypercall_args, r13) */
--#define TDX_HYPERCALL_r14 32 /* offsetof(struct tdx_hypercall_args, r14) */
--#define TDX_HYPERCALL_r15 40 /* offsetof(struct tdx_hypercall_args, r15) */
--
- /*
-  * Bitmasks of exposed registers (with VMM).
-  */
-@@ -91,13 +86,6 @@ __tdx_hypercall:
- 	pop %rbp
- 	ret
- 
--#define TDX_MODULE_rcx 0 /* offsetof(struct tdx_module_output, rcx) */
--#define TDX_MODULE_rdx 8 /* offsetof(struct tdx_module_output, rdx) */
--#define TDX_MODULE_r8 16 /* offsetof(struct tdx_module_output, r8) */
--#define TDX_MODULE_r9 24 /* offsetof(struct tdx_module_output, r9) */
--#define TDX_MODULE_r10 32 /* offsetof(struct tdx_module_output, r10) */
--#define TDX_MODULE_r11 40 /* offsetof(struct tdx_module_output, r11) */
--
- .globl __tdx_module_call
- .type __tdx_module_call, @function
- __tdx_module_call:
----8<---
+Reinette
 
 
 
