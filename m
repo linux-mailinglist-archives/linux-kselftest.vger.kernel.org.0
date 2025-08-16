@@ -1,94 +1,85 @@
-Return-Path: <linux-kselftest+bounces-39141-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39142-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07220B28A7B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 06:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 098F3B28A7F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 06:10:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4DFA8B63821
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 04:02:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71E137BB9F6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 04:08:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57DF61DF97D;
-	Sat, 16 Aug 2025 04:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D31D41D5CFB;
+	Sat, 16 Aug 2025 04:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="j9Td8sW2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NrK2LwHo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE461D90C8;
-	Sat, 16 Aug 2025 04:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5A07483;
+	Sat, 16 Aug 2025 04:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755316995; cv=none; b=tn9Q19LTVQnyemn+zUb8sMqRxbr9jlLqAMd7YZzeriwS4iIp3XUDI+vl3OtRv5C+zkd/BL6wluRTVsBp1JC/QAt/gEObmeTxGIsoeHJ6A7DkAnbXQD6IEnJI6AQtDnmOuHcH4tVKi8D9AkC/c8C0eeH0nKFZkMSH6qt5yR5/KmM=
+	t=1755317421; cv=none; b=rQhVBtqs0n8ovKEWjl6L0mMXSGIY5u2zKKev87tk0yq5bU5U885b8L0gIBoJ0uvMQbLEo8aLfUv6J6a+O7T9FLXgLrls0Tr2grDtNN/0RTKGJAZ2xCe+qYTB+y8PeIOiyHrBVcEYJRNW5Lou+yqASWXCyayEl5YfLpJq/f2x6/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755316995; c=relaxed/simple;
-	bh=OY7cu1ptwp7Q4/IfJC0uHnFCndwrR+zv2mdDP6P9Y2c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=blKsffZRMDW8JWG9wyxEZrk/QDVvmKvYmbPtPFj62VlGK3S3H3u4Etev8LfqEkj8fW2Y2BJDHsC0ZdHMbZ6h7gApNl1ZndO/nJrebOxPCoq20eNEPVsR3TKxY+I06S1iQcNBtNQ9VKDkGdEtSisM8KuWg0C2tdnxjWqeLaJeDBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=j9Td8sW2; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57G304XN027324;
-	Sat, 16 Aug 2025 04:02:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=PMcQ23ZFIrS4lFSR/
-	NDkPpS8Eu4jYkAwRz0zhZuUv6k=; b=j9Td8sW2STyOO/pbDydh8RUjN5ieShndq
-	VG+a+Rq3OgI0/GBFva3YHlrJaAv7B5SPDl8KyUvI20BkonUdXEKSf3lMlGxLG2PC
-	oMrgKgFh8OT4kqcoGZr9oXfURLdTgKRjJtrzhjkEkG52yq7Afj9KqPanH6X2pUGv
-	5DmVqyaqtoABEKJed83ay+Lj4hGJe4kEFBM6MDAAqA110Ke2ffKGKLs37D9U1UcY
-	sPcwgdXSfUyx+IC/fR5bT4Uo7d7aX6w+FpXLkaCO9LrKqdPnf+FNfHQY2h7k3BCM
-	ZL+5dBFm97XxGaPFEErBcmr7ok3pcUbr+7ODtLbzbWVmdCC+83xbw==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48jhnxr46j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 16 Aug 2025 04:02:58 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 57G42vcS004763;
-	Sat, 16 Aug 2025 04:02:57 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48jhnxr46e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 16 Aug 2025 04:02:57 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 57G1TB5j020615;
-	Sat, 16 Aug 2025 04:02:56 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 48ehnqbrv4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 16 Aug 2025 04:02:56 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 57G42qLp49873340
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 16 Aug 2025 04:02:52 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 225C920043;
-	Sat, 16 Aug 2025 04:02:52 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 04A7420040;
-	Sat, 16 Aug 2025 04:02:41 +0000 (GMT)
-Received: from aboo.ibm.com.com (unknown [9.36.5.210])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Sat, 16 Aug 2025 04:02:40 +0000 (GMT)
-From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
-        lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
-        david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-        npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-        baohua@kernel.org, richard.weiyang@gmail.com
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, donettom@linux.ibm.com,
-        ritesh.list@gmail.com, aboorvad@linux.ibm.com
-Subject: [PATCH v4 7/7] selftests/mm: skip hugepage-mremap test if userfaultfd unavailable
-Date: Sat, 16 Aug 2025 09:31:13 +0530
-Message-ID: <20250816040113.760010-8-aboorvad@linux.ibm.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250816040113.760010-1-aboorvad@linux.ibm.com>
-References: <20250816040113.760010-1-aboorvad@linux.ibm.com>
+	s=arc-20240116; t=1755317421; c=relaxed/simple;
+	bh=/c3aNzjOgzXJdrd/tUcCte5n93leNqn/o0rqKcxvA70=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a4myMYUlWKTKbo5YERe2ISOH7Sun2ljILl062gzo7qErgPQhmliFYjo3HVRozeRHUC3YGHenThzTklqGz/oEoP3WzrqTF7g2gRrwCnh1fmxoTlT177V4lVLdLmqMAnZV4ME5iFAqdBNKlm7JJ0XKTJa3Rq2UIpv9IWAasHJ6q2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NrK2LwHo; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2430c3684d1so27911725ad.0;
+        Fri, 15 Aug 2025 21:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755317420; x=1755922220; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZgmrZyNxf9Lsu54SjKCiJtIUKWyFnhsglXuJqcWDIus=;
+        b=NrK2LwHo28FAbBP1kvt84jC+/TG6MCyYsHmF7G6QhMP1hpGfT4z0HW80w5Nh2Eeivq
+         ZF2KKD0nGqBAgI5eR1+uzhA4RuNMfpe+V4hC6B1g3GTaTWxBtl26tFSPhwJYLyVebpe/
+         yiqCywXtMWykaRPF6/3wbVe83kBBMj6/gBClqWfLbOGcVsybNVnd0jBxvCbDTw3R9bHN
+         MlTZGaG98piLyEpx+pvCwlCrJ1CRQffiC8bfp/8lhTsDRBFv6vdaeA2bAQavWF/m9LkI
+         256DqhsbbM4Y78Aye1MyBYq3jZcwI9mNoTtJ4Hu5e8Y4CpPFVDuvYmwGADq81G/joBju
+         hLgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755317420; x=1755922220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZgmrZyNxf9Lsu54SjKCiJtIUKWyFnhsglXuJqcWDIus=;
+        b=NTrKdLE8VonsbGA4VntbDeO8l7GPbMFd8yLfTnMw2sHee3aFjw96AkkS6OdjSuDOdA
+         3QtnP7f1DJNP6Ea90UuDL/2NwxfVDw69Pz/goFDf3zvlgVkCXOpSO5vOQMJ43MbEDbOu
+         vRSGOONkb/6IqAfARI9Jbc/EMVVL21lPMwAEVzoP56MS0mfljAY5wbB6Le8aB0C4v12P
+         WNHlkRQ1vDhDRHRdvFeuO4V3CgxJ6NhvCjjevcfNy4/r1MoZwOOi82tUbZ1j73i3YL8C
+         lo8zu2PTIL/EVPf16JIDB5iWnSsK413OLrb7vzdRXj1FP3rhZMgaiKukZhlxbOv8RpQ7
+         Z7UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVgYHwKzI8uN6GSkwAPte49W5Ck1ab/xcJi2P3k252TUvlU82/AFMQ9pu76upwIh9WL0sPCaz5OeoYiu4g=@vger.kernel.org, AJvYcCXG+2XOZhGM1nx8nIaMIzhrzU1EfAk3zcKeRX53mGFWalOJza0GV/7VfBxfo9QBL0pTnqIqOuqkGKtmdArroo4x@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSxMpUu/+AHqec35ZNAqaiVJthPjSyn5Di7X6n7D7ACFQzge9y
+	fwPP1CIZOpwDdnciByY58loZ3b6qvc4+kcJRzJPF/SjqQ+vNy//09YX5O/YB2jQt
+X-Gm-Gg: ASbGnctaadHusryolUq6+zxT2PnhmrBixlRLZWeXlkYdoaQE4/9n4MwaXVIfLucD1EN
+	0tX4ztWvAPyvmUF9GhkosWElYhPpGCPhZAVnkcZMZocT3V49i1LvEECThfuMJMCTEiC6rFgq9Z/
+	siHRnNPin4kXOQEpz5M6w9i4W7hniy3wflfgnPdudmSl/ldAooyMqzP0IPSBgdStRXLWMaitKFQ
+	AcXtUiXTj0D+eZVjrsCyJosdAemGI70w0zyXv0eXaKjfc0Oq2UC2c5LF0TLYdsm5hqFVkgZj/Q4
+	Ks3k9UMq04TJp/rLyyrF8i1Nx0ZyQxdQ0E6fMBfwKaoiG6yySey2470J8bcgt6b5j+/IQ6RUhp8
+	QDcQIwIAaKkNUHXY5DiLOazY5sQ==
+X-Google-Smtp-Source: AGHT+IGjAe97d4G7wjQcmf5PK9qwQ+YnFzo0vcsTuTa1kbZBxViRv8DPWyTH8/SgX+MWNFi7sQ465Q==
+X-Received: by 2002:a17:902:e751:b0:23f:f39b:eae4 with SMTP id d9443c01a7336-2446bd131c7mr73257325ad.9.1755317419719;
+        Fri, 15 Aug 2025 21:10:19 -0700 (PDT)
+Received: from gmail.com ([157.50.43.60])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446d54e2a3sm26096095ad.125.2025.08.15.21.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Aug 2025 21:10:19 -0700 (PDT)
+From: hariconscious@gmail.com
+To: shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: HariKrishna <hariconscious@gmail.com>
+Subject: [PATCH] kselftest/media_tests : fixed typo errors
+Date: Sat, 16 Aug 2025 09:40:12 +0530
+Message-ID: <20250816041012.851-1-hariconscious@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,93 +87,30 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=XbqJzJ55 c=1 sm=1 tr=0 ts=68a002f2 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=2OwXVqhp2XgA:10 a=VnNF1IyMAAAA:8 a=20KFwNOVAAAA:8 a=Ikd4Dj_1AAAA:8
- a=9-ECl0np4EkliaZUNCgA:9
-X-Proofpoint-ORIG-GUID: DsoJurbOVixvCwG9hjw2GXYFWuwatWgd
-X-Proofpoint-GUID: nGAL8WzpqwAdoD_KGG-f6QOBx5h3cC75
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE2MDAyNyBTYWx0ZWRfX7wdgCsGcsdTN
- Y3TlhNndkcy962LcryatPdwy4CAd45T+YeL7jbdV2QSxLkMIImqqkQP3LET3Mbmh2so6bemJigL
- xyV/zceGJTnBYfffdQMiAc6qbHAVvMXBEW389ndib7IeVFNsdBCRVNsmUSReml2suKuwuZmzDzR
- vuj2nuMstzWIYhiuEwOSv33eJw4HavKdNfEkEavIhprAgbdBWSptXiO5cKabtue7JlJOMId8ygd
- FdJ3NYLcqfNijYJ/5/jj5jNY+WK9AlmqoPdGvjZ3wmPu1jTW5XsZWVloaFlS/mEon16h592mazQ
- MXlMR/IeY1GbRy6SyjMkZw7H9MzaQ88C0RQYz2+Z7fNrzwWDfp8fAferO4U6ZYGAk47IyDQ2QsQ
- LQxUg0WK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-16_01,2025-08-14_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 adultscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
- clxscore=1015 malwarescore=0 spamscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508160027
 
-Gracefully skip test if userfaultfd is not supported (ENOSYS) or not
-permitted (EPERM), instead of failing.  This avoids misleading failures
-with clear skip messages.
+From: HariKrishna <hariconscious@gmail.com>
 
---------------
-Before Patch
---------------
-~ running ./hugepage-mremap
-...
-~ Bail out! userfaultfd: Function not implemented
-~ Planned tests != run tests (1 != 0)
-~ Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-~ [FAIL]
-not ok 4 hugepage-mremap # exit=1
+fixed typo error
 
---------------
-After Patch
---------------
-~ running ./hugepage-mremap
-...
-~ ok 2 # SKIP userfaultfd is not supported/not enabled.
-~ 1 skipped test(s) detected.
-~ Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
-~ [SKIP]
-ok 4 hugepage-mremap # SKIP
-
-Co-developed-by: Donet Tom <donettom@linux.ibm.com>
-Signed-off-by: Donet Tom <donettom@linux.ibm.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+Signed-off-by: HariKrishna <hariconscious@gmail.com>
 ---
- tools/testing/selftests/mm/hugepage-mremap.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ tools/testing/selftests/media_tests/media_device_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testing/selftests/mm/hugepage-mremap.c
-index c463d1c09c9b..2bd1dac75c3f 100644
---- a/tools/testing/selftests/mm/hugepage-mremap.c
-+++ b/tools/testing/selftests/mm/hugepage-mremap.c
-@@ -65,10 +65,20 @@ static void register_region_with_uffd(char *addr, size_t len)
- 	struct uffdio_api uffdio_api;
+diff --git a/tools/testing/selftests/media_tests/media_device_test.c b/tools/testing/selftests/media_tests/media_device_test.c
+index 4b9953359e40..5710532ac379 100644
+--- a/tools/testing/selftests/media_tests/media_device_test.c
++++ b/tools/testing/selftests/media_tests/media_device_test.c
+@@ -71,7 +71,7 @@ int main(int argc, char **argv)
+ 	if (getuid() != 0)
+ 		ksft_exit_skip("Please run the test as root - Exiting.\n");
  
- 	/* Create and enable userfaultfd object. */
--
- 	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
--	if (uffd == -1)
--		ksft_exit_fail_msg("userfaultfd: %s\n", strerror(errno));
-+	if (uffd == -1) {
-+		switch (errno) {
-+		case EPERM:
-+			ksft_exit_skip("Insufficient permissions, try running as root.\n");
-+			break;
-+		case ENOSYS:
-+			ksft_exit_skip("userfaultfd is not supported/not enabled.\n");
-+			break;
-+		default:
-+			ksft_exit_fail_msg("userfaultfd failed with %s\n", strerror(errno));
-+			break;
-+		}
-+	}
+-	/* Generate random number of interations */
++	/* Generate random number of iterations */
+ 	srand((unsigned int) time(NULL));
+ 	count = rand();
  
- 	uffdio_api.api = UFFD_API;
- 	uffdio_api.features = 0;
 -- 
-2.47.1
+2.43.0
 
 
