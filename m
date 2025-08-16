@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-39148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39149-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB719B28E57
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 16:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A611B28E58
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 16:08:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59CC6AE2F88
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 14:06:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 143823B274D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 14:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7E882E717D;
-	Sat, 16 Aug 2025 14:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14E9E20C48A;
+	Sat, 16 Aug 2025 14:07:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QGrsvoxw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WspO71bf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2286921FF5E;
-	Sat, 16 Aug 2025 14:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F5F1EEE0;
+	Sat, 16 Aug 2025 14:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755353216; cv=none; b=UgvPU6Yx/W248JgEUToxn18zQrQOvj/trY2Xm54uGf9ZG5KNZkOO7Q/VBwDyAMmckHDMUgMb6MjSmRanU0/zQ1Kg9V+08SKKUoyP4eVBgCI5wBZFZQVpvauNV0s7fB/TcaUoGQZYzk1XmQL33no24iQi8f3P2Non5V0r7trsygg=
+	t=1755353279; cv=none; b=dW3k6Mq0H0XLL5STcC3FRhLUVRFOffW+P+LMgeBCBNfDJ2ksQFoSCwi5Pj8HvTYxvXQo3MaTnGn5fnum8bb1Msv2JUu0HwA7ZpR/UNOi5mrPvmVEMjCghEZN1g1qvFPOHSscgGx/QU7/HqxatswUSYJD9KHword/bfv91nQibxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755353216; c=relaxed/simple;
-	bh=19bdvPGahnSQV24H+k0J7fJUg4WVuiFuAAr4vjBz63Q=;
+	s=arc-20240116; t=1755353279; c=relaxed/simple;
+	bh=Om8lZ9OBULN9cTC5jNFpnEdKLYJXaAz5uqr1mPgysk8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aglHC2oB2l9JYZABzjoJmK+5+hhEniOh1Uyyz35SToHk+PSF7j2OWKZpyypxjbRayztb9+EjkIZKLb6JISYQ1WOo1yPWork97IGp2I9sDDnVslCReGjCFzgWuddNWB1wMZbv4DK+65aVJFCdJJmgSIyWyYesWcKqsHyLmlfawKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QGrsvoxw; arc=none smtp.client-ip=209.85.218.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=IPmqkniFxys6+lj2kFkBQSQIMypUA0fIEH3LEKgbzlxbe0qScCJxpUaDfnke/AxjzYGB1UeM3/2rbz9fGZD3o8Z2AunSF/EmA7BY1DXVKqtos92NKNLumS7+8xuraVtytrpR2VfY2tHe9IpULdOsKo1zHkPSRhf/p6acoUtR99g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WspO71bf; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-afcb61f6044so480065566b.0;
-        Sat, 16 Aug 2025 07:06:54 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-618b62dbb21so2329368a12.2;
+        Sat, 16 Aug 2025 07:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755353213; x=1755958013; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755353276; x=1755958076; darn=vger.kernel.org;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/cp+VbHKwcTssvBL/g6TrCkhlullaweEwLRwBzlXiRc=;
-        b=QGrsvoxwI59q8C9rZGngRs3v8rrEwOJIAeT7SjpehUpdapvkk5lR8HfB7/X/4nc2PL
-         3lVVbbcKSCzNz8ijdpoH/67yBnkAG6numm2fha5HjYQybEnsNMfjgPd2ZlP+ZJ1zIji6
-         +I+prqmXFdFc9tpSQHttdCMUCnQmCNJz4zM5f2tyIKmA287SC2GO7b3Rrg8ja8i7C7gp
-         NNdSkpiQu0CHP/qnicPS3nNECJhd2r6hGni+HiuohZV0mWFFF12aggwFB6MOJ/ose/Ha
-         WJ2uUtL7kob17QS+63acH/W3xWaawxxqNPBs4DZBuYaEXHdCN5RuIUrbIzG9C7b65Qql
-         sRcg==
+        bh=5uaxDkrC90fmKFDmTr+OGwUc637UVz7/TValI+Y8iKI=;
+        b=WspO71bf0ced8L5V7BKn0pvpVuJecYlflRbn7Y8VG7TmfpXaGLEtkFCvH3ssKLHyZ/
+         xQCu8cZhH9vZyV70B4xl85fx5vlSkFwMqcjfggUkuA96sB2MldnP2w8a/HBdG99VOwBn
+         dGj2YB6/ccug0o0+I4vmPqaQu+PGxF6uBlzNqZFI3ebNGD6kQDZMl6cEbTGdhjhPsyJN
+         7j8QnVgcyxtcvQF8nvPLgJspULASSPR/T7aHQG7dl7osuXHPLKMTAfOymELJebinQeCj
+         hxvAyQrVLdSS+cuvA7O1l/1c23XrcrYl2Hjpdk3glNSAnhP4wtT9/IrMoZei2jetY7SX
+         AxPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755353213; x=1755958013;
+        d=1e100.net; s=20230601; t=1755353276; x=1755958076;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=/cp+VbHKwcTssvBL/g6TrCkhlullaweEwLRwBzlXiRc=;
-        b=KN7wIzIt6nYpxWz6Kmu3I+GP6tMTDUF/XzixGIiZIIujvK8Upa7cCMe9Uz3DgmwERz
-         KD6/BTBYxbPMki5+NuR8dgGqrkoWUqJD9ENhPwUYyOeJw/X6s/tZL67dhFumKd3OShgl
-         YuRVb5w5OiN2hkQTSMtysNZDyvkxhur1IbYwdBGqmxt3SzTvFDXya6PtEJe1pagC0ABH
-         gRMFvnpgbTyzgLntOrEirDB5mpJO58CJwtpgzyyfLfuq1eMjWBob3P1JP6Y9QTFcb8Cv
-         rbBULKpIspLN6ps30KZSEYgIB/4c8zhKiTAmmPjo3cahiDC4yoXpwQQVgUMbbaHR5Pfb
-         J+MA==
-X-Forwarded-Encrypted: i=1; AJvYcCWpba1SCn8XpWNlFG6GHc+EU3HvhcWyy7Za3k6Flac2EYvWMMQoD5a+0Jdv3DrCkyffPVZ915rEvSeMGUwF+B6o@vger.kernel.org, AJvYcCX00dRYGaKPvI26t5SjQUG8CwfZhHlTVdgqP1N2NDGOaJmQA8sexsk7uesHKNvZqt1y+gZRilj+QqoMPDY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzayElN13I211SBPwQG6KJLPOdsSqDZ39r1TCl6Bxx6o0SuiuwC
-	gVuQMtKArW7VE6cfve0Q9td6guVHWYAUROv7Uenciu8wdx9/l45ZtOXB
-X-Gm-Gg: ASbGncsg4TBlAcPNFjt0NYzfsCLkDPq71hq5ABXGzuFt/y5gM5U0Icb9OeSH5Wa7HB7
-	KcX3lHE00r9WyoH+LJV+cFgK4AhogmdCiNUDi4D6fWl9qeanYBiG3UsAN0tNjnR7dIt4jD14oWN
-	sCAW+XXGCW4ZGn+0mtIEuAdzAzjNldAVPw331o+noJZXCnpoqiesij6cNKPvgDLS0l1JRhFOZHA
-	qhuOCzvOzuiTfwiNiVoGbxdpPGZL0TMPqT0QBlPo5uBE8UrUAp6iQJRq+BNnBy3ESu7iLpI9Ejo
-	ayWveJXmKDn9MyOA3fClABHzTgw88/zZQwK0MW1edEgX2VQPbZI251E5CZ7Sy+JFnb4R+/xvnXK
-	+dM1QyDZOZIw/ETOLXdLX+w==
-X-Google-Smtp-Source: AGHT+IGeSr+Ixtwc7wx3WQkh0Jy1SQP8zs6ljOM6DHr1SVeNpVGmGDSkBV6/gAIjI30qJKHsPlbhpw==
-X-Received: by 2002:a17:907:2da3:b0:ae6:c334:af3a with SMTP id a640c23a62f3a-afcbd5cbffbmr1091494666b.6.1755353213290;
-        Sat, 16 Aug 2025 07:06:53 -0700 (PDT)
+        bh=5uaxDkrC90fmKFDmTr+OGwUc637UVz7/TValI+Y8iKI=;
+        b=bL+mNK6HP547BdU2qUmbv4sJYlhT4xK/pSOCmjAaWqSoLyGWLnbdpqSDwvN7jwHhtK
+         U9G9gVJx32aAdjQ2ko1aO/CZOg9yG8wQvuqXcI8kfNQr0euVIr0XF2+XbqPalNRmhb1e
+         OpMHyw0ZSraBXrPQQpZOExvwm/ZMXJHXE7/z41AresyVZz8D7Xmd7nvfuUIQt+WU2hsZ
+         s52xY2OBKZyfRKrIcfFz1Xn366xWx68cyyuCP//Td2ajai8HQjeOC/HXhFVoWye6l2V9
+         PS7LW4t8iK0uxFm7kDRJNYnQPYhDV89HvlueKjqw8r57/NzqS56mk5aL/3uZjZhk/MO7
+         gnow==
+X-Forwarded-Encrypted: i=1; AJvYcCUUGzBGjWdLxmWpEwQsRfIpz/0gZLO8u36yoaBHkimx6UvlGT1cxtRmBvHsMgArXGYabnjlVXTtCoHfxAQmrA/f@vger.kernel.org, AJvYcCXN3O4Ht7uh1O9w5uf8LTFX0+maVi3ghwi4jzyNpQDiznJ2MZzKanaYuqpVTWvsO10W+hKG+iZYWOaQO6A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8cVNB8x7fTStllw06D1i7Y2A6XyEfFNgnDqM10BT/0Ri8S844
+	CtmjE517Eok8bxXASp3T+DNtQvNppMgkhfGkZ3k9a8444tjsglCgKaKa
+X-Gm-Gg: ASbGnct1jNPkFuts9Be8UfEydkHOOWyVnUoQDvuR3CTxzxOsHJ771zfEPdxUKCXX8tB
+	/AyB4+XTMpnjDn/8DYwTEpU00Iz1fDTTvueI48OWEEOt8RXhfvTqH6OComYgaZy7FoLOINz9UgI
+	70rvco3pho5S1P8fVBvevsC5Hb4Mn5FhwvLTY1mAQ6RfI/eYlP6kL1W9pMXZcSQRxiY3gU+j4I7
+	neJgxkvFnb4U9k17BExQZOaCN0VjL/W+pH+bNBEF+XlIoy3T+5nfOuWOesn7kJw9FvICIFjkHk6
+	afypnppnlBPNTOCvI0kq0e/mq8AM28ejS83j+Q/PzYIms8btsojn/jpu38/OzPVXud8qYpC0KQZ
+	hYRWhQPsesHSZttQq13maZw==
+X-Google-Smtp-Source: AGHT+IE1b/Pj74re6G/Q6vJ6st0rdkU7h9PGlQizm286SNk7tjVfBDAwwmFTOY+1Vb+2pSq1IfaDTw==
+X-Received: by 2002:a05:6402:2681:b0:615:a201:df41 with SMTP id 4fb4d7f45d1cf-618b054fbb2mr4471169a12.22.1755353275548;
+        Sat, 16 Aug 2025 07:07:55 -0700 (PDT)
 Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-618af9da3e7sm3372710a12.13.2025.08.16.07.06.52
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-618b01ae4besm3499692a12.38.2025.08.16.07.07.54
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 16 Aug 2025 07:06:52 -0700 (PDT)
-Date: Sat, 16 Aug 2025 14:06:52 +0000
+        Sat, 16 Aug 2025 07:07:55 -0700 (PDT)
+Date: Sat, 16 Aug 2025 14:07:54 +0000
 From: Wei Yang <richard.weiyang@gmail.com>
 To: Aboorva Devarajan <aboorvad@linux.ibm.com>
 Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
@@ -83,11 +83,11 @@ Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
 	baohua@kernel.org, richard.weiyang@gmail.com, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	donettom@linux.ibm.com, ritesh.list@gmail.com
-Subject: Re: [PATCH v4 2/7] selftests/mm: Add support to test 4PB VA on PPC64
-Message-ID: <20250816140652.qf52izwhltcofp3o@master>
+Subject: Re: [PATCH v4 3/7] selftest/mm: Fix ksm_funtional_test failures
+Message-ID: <20250816140754.tgkn5kwf2i2oe7va@master>
 Reply-To: Wei Yang <richard.weiyang@gmail.com>
 References: <20250816040113.760010-1-aboorvad@linux.ibm.com>
- <20250816040113.760010-3-aboorvad@linux.ibm.com>
+ <20250816040113.760010-4-aboorvad@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,24 +96,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250816040113.760010-3-aboorvad@linux.ibm.com>
+In-Reply-To: <20250816040113.760010-4-aboorvad@linux.ibm.com>
 User-Agent: NeoMutt/20170113 (1.7.2)
 
-On Sat, Aug 16, 2025 at 09:31:08AM +0530, Aboorva Devarajan wrote:
+On Sat, Aug 16, 2025 at 09:31:09AM +0530, Aboorva Devarajan wrote:
 >From: Donet Tom <donettom@linux.ibm.com>
 >
->PowerPC64 supports a 4PB virtual address space, but this test was
->previously limited to 512TB. This patch extends the coverage up to
->the full 4PB VA range on PowerPC64.
+>This patch fixed 2 issues.
 >
->Memory from 0 to 128TB is allocated without an address hint, while
->allocations from 128TB to 4PB use a hint address.
+>1) After fork() in test_prctl_fork, the child process uses the file
+>descriptors from the parent process to read ksm_stat and
+>ksm_merging_pages. This results in incorrect values being read (parent
+>process ksm_stat and ksm_merging_pages will be read in child), causing
+>the test to fail.
 >
+>This patch calls init_global_file_handles() in the child process to
+>ensure that the current process's file descriptors are used to read
+>ksm_stat and ksm_merging_pages.
+>
+>2) All tests currently call ksm_merge to trigger page merging.
+>To ensure the system remains in a consistent state for subsequent
+>tests, it is better to call ksm_unmerge during the test cleanup phase
+>
+>In the test_prctl_fork test, after a fork(), reading ksm_merging_pages
+>in the child process returns a non-zero value because a previous test
+>performed a merge, and the child's memory state is inherited from the
+>parent.
+>
+>Although the child process calls ksm_unmerge, the ksm_merging_pages
+>counter in the parent is reset to zero, while the child's counter
+>remains unchanged. This discrepancy causes the test to fail.
+>
+>To avoid this issue, each test should call ksm_unmerge during cleanup
+>to ensure the counter is reset and the system is in a clean state for
+>subsequent tests.
+>
+>execv argument is an array of pointers to null-terminated strings.
+>In this patch we also added NULL in the execv argument.
+>
+>Fixes: 6c47de3be3a0 ("selftest/mm: ksm_functional_tests: extend test case for ksm fork/exec")
 >Co-developed-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
 >Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->Reviewed-by: Dev Jain <dev.jain@arm.com>
->Acked-by: David Hildenbrand <david@redhat.com>
->Reviewed-by: Zi Yan <ziy@nvidia.com>
 >Signed-off-by: Donet Tom <donettom@linux.ibm.com>
 
 Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
