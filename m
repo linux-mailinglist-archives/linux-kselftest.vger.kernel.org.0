@@ -1,89 +1,123 @@
-Return-Path: <linux-kselftest+bounces-39156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2120FB29014
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 20:27:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFCC9B290A4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 23:22:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E89C6567363
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 18:27:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2E835C135E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 21:22:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF252D3A80;
-	Sat, 16 Aug 2025 18:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A02D23496F;
+	Sat, 16 Aug 2025 21:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVthTd69"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YYmP9b7G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7161D15C15F;
-	Sat, 16 Aug 2025 18:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22FD2185AA;
+	Sat, 16 Aug 2025 21:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755368835; cv=none; b=akhHc9V2p/nZ5drpnKO1BDbGb0GXnnVT+KmVzrp/Mriz9NXlVvbEjeg+DoARTAFRhh58Ej+MuBbSZBxbKMDMtQWpYUoGeV1ceU1OHzPsGa+2qzi8TVjB6SrR9ESw9zxJOIuC4zhHRSU2v43wFa3W1Cw5lv2YCDuOpwX9mfTR0cQ=
+	t=1755379321; cv=none; b=ZScXltDLpRbu5ZOsUIgxU6fxYSGWhe5kMYKGQFfysLYmu5S/caAlVV8iiSrnZ93cUOiOTpTV4MGUzLtBHynbo5fhMT1BLiWVGR45s/sKxxDhxmjDIcXYAfdsJuwMF9xsMav93AWy/4YaO6jV6r+wI0qACcbGuSsccJ7aI+Z1qrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755368835; c=relaxed/simple;
-	bh=wsEBIuxySBNX56S3ZSXmQYy+ySJQlVUn2tu0BS9YA5A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LIp+MYMTpdEuj9Xih8H5LRGa1W1W30MDCe6q9DGf5w9X++ngbisfpdUQyZ5M5k5XA9TDg1zJpEekpV8riLIBcgwLV5iKUZ3L5sgB5NsiStID76fFh4FV7IvvrhQbH6HBEgBJ5vkyP5vZxVPtETGpaowwia7W0hLWXXC/STptj3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVthTd69; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C23AC4CEEF;
-	Sat, 16 Aug 2025 18:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755368834;
-	bh=wsEBIuxySBNX56S3ZSXmQYy+ySJQlVUn2tu0BS9YA5A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YVthTd69DKN4Ajoa/pVqLz8TngOJEgqMqHLIhWZpFKacImhptnl4Cw9WfVBuozJm7
-	 8dJ/CmyMdYAfrK5BjNE3QZQ+kp/NouJAJoaAc4JVzDSVIKDYT/PfBhLiq9HIoH8sqH
-	 42mZBe4s31RJ2RKJMuKzW6PcfJShafnClQt6KnP1F7YAhPZ7zKjajBvcFBSXMDQ/if
-	 c1zDe66l0FOYxTEOYQ/5erImI5yYi0l5/4s7gpvnY8Pw6JAb8dF1BR7BgpaQiifq6s
-	 c1V3Jl2arY0s2NRn2T2uhacyzLfrEWWeJgMBBUA0W3uHH4eAmIXo/kLWNGUM7lwO+c
-	 lXg8hsEN2tMHw==
-Date: Sat, 16 Aug 2025 11:27:12 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, Geliang
- Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Jianguo Wu <wujianguo@chinatelecom.cn>, Shuah
- Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, zhenwei pi
- <pizhenwei@bytedance.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-doc@vger.kernel.org, Christoph Paasch <cpaasch@openai.com>,
- stable@vger.kernel.org, Thomas Dreibholz <dreibh@simula.no>
-Subject: Re: [PATCH net 0/8] mptcp: misc fixes for v6.17-rc
-Message-ID: <20250816112712.209644c8@kernel.org>
-In-Reply-To: <20250815-net-mptcp-misc-fixes-6-17-rc2-v1-0-521fe9957892@kernel.org>
-References: <20250815-net-mptcp-misc-fixes-6-17-rc2-v1-0-521fe9957892@kernel.org>
+	s=arc-20240116; t=1755379321; c=relaxed/simple;
+	bh=jvHsXepbd85mILs5MOLtSpqmRNq7lhyRSHBkFQ6Srjs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iNmZOIEDBUp8q5a3BbGpfwK1nVak0XEF+zNAGipAurq0PB9SJ1dV8/n0B4wg7cYjpv4sGEGG8BYxOHUj39xwi79uRTl+ftIP+IWsS51Foyxz73vvExnR15Q00vp58aC5uHpY+8/9H13XlPk4sYdcVLRwAhedzfdIJ6oFHFXW/Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YYmP9b7G; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-24458051ac6so4461015ad.1;
+        Sat, 16 Aug 2025 14:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755379319; x=1755984119; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ds8Je7KfY4GjwHXKsWk5Giau9uIeYrla8x9MggnAb0U=;
+        b=YYmP9b7Glk5PXXIpgnP4QPyQyyOR76CNqNHrRkgSh/IobLtN6Zc3y4JSU21ABlyvhl
+         NtgmllyW7SJj0LzyaSz8XspjRp8YrZSus3CP3DqVUWF/qD2wC4D/Eh8NFcrfg3wO7GAg
+         VQ9Y25TTm46wAPsMRM3uYlqBPc3flJcSPri+oRA0Ln8xpd4pMx+q8yUTDx0tHNgoJAx2
+         DmK36S+pLIDd4pq/giQwpLygs5OtHdmkepTDn4kkMGxqDGEREA4KwcPuLlsTXQYzHEDk
+         LKvsnzVZY6abNDJdsbsiYS3+wnfEfcAWOMP/vw6S+ODfdeKKfaQHRWqxLT6bAx2p0cfo
+         evXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755379319; x=1755984119;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ds8Je7KfY4GjwHXKsWk5Giau9uIeYrla8x9MggnAb0U=;
+        b=pHw1ejC3sBuD9iAr/aWG31gJPHOEcDV1okYqsAaepJYyzx9CR5R34aDlVGkin/i63L
+         2igPXqkBzRXoXmuDmmBUOQD+P90vBziNeHKsomqmjfL2L1tcyieHYH7obRJCBjY00qy9
+         u69hZYHyqcZ5rqh6jN9Bvbx0IH7lYMaFXbP3CfqQMiR+dJlnnixwI5rCjyBURTxkmei7
+         0tT48hyHqQEZYv40k2DOJX+hFnDOhFX5Fu3DQj6E93FkNGsXg5ZIhMiQn1nBi0/MMaoe
+         LQyLtJaqbLLRp0DIOpMpPb36GdG+gAcS0hh3kcfBYr1rl1IevGb/4BTxTpNCZZc1SZ9+
+         CmBw==
+X-Forwarded-Encrypted: i=1; AJvYcCX1C6F0N2Zez7WFAg/QNjq4WbZNkxv1Cj0pgoWmjqly0s+LYlTfwbR5TOa8iyIZXjAYrMk8y7WH5aMeTGHlU7c=@vger.kernel.org, AJvYcCX7f/rmQj3bNGEsr1Yx/TTbWZaDPo4LjgObg2PLwpI+tnpbZExLiUAtTNAMSgE1zqGc7lmu/V3HCCIDo48P@vger.kernel.org, AJvYcCX9AJfBrEb9+e0/2bYkvzLWz84ocJ2eus5Eslz/yzWRl6SV5xj7nzgKRSeSzR1M7aoHLElEIo+iKemihLk=@vger.kernel.org, AJvYcCXtNtKmnUwcp8y2WM2iSoG1+4wBmdrNDUMUYc2mht80lf28x4eobGsEG2nu3lMPpHglH5iThwocM+nmwqgO0x1/@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFg6kLamVpeq9/gcvHcJJgodGw3g0OhrJdOQxLh9KKA3NCyrvZ
+	fo0oddJlx07c5xsLn0Y2McIhuZKEeSKpLL0ZOuthfNW14Be5rxTR9fJg4ImXaQYJmhyRae59OOE
+	UfXMzHKAvcUk8uGm2usRK34QTkEvZ6b0fYvAokPo=
+X-Gm-Gg: ASbGncu4FcxsybC1GOZq8NwCnsufqlkYa4IcghsiufV2aSBV0ZdHWbbSXJ+ddAcZOiH
+	DFaFnkX57/LfZ4AARp4nE4Avhgz8DfpfKaldCBjShDK1UpoPtfOqpvvKn7FQ/HaTrbkUKuaj6tE
+	nx28mnbMIJ8tM2zgQIRW+2MOOQu7/pBWjmtvDd+2NClbr+R5lEjGk5ePO8WhvSXUBYEfHDTNEXk
+	E945n9vwnO1Mm4xyos=
+X-Google-Smtp-Source: AGHT+IEWjOp4P2fU8wk6DK2g7nuduw++M/0lhwl96NpMeoXDbRf1rYmaSGIzIjyIjkEruBxPEP1OhxK64EdgQTvEFwc=
+X-Received: by 2002:a17:903:1a70:b0:240:725d:dd66 with SMTP id
+ d9443c01a7336-2446d9c6212mr49127785ad.11.1755379318942; Sat, 16 Aug 2025
+ 14:21:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20250726180750.2735836-1-ojeda@kernel.org> <DBOEANDMX1OU.2B47D7G6EQ38O@kernel.org>
+In-Reply-To: <DBOEANDMX1OU.2B47D7G6EQ38O@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sat, 16 Aug 2025 23:21:47 +0200
+X-Gm-Features: Ac12FXzLXRqQ8BoWN6f3ka4dcgtWt6sEkaNyDNPtyslcoLw_3oMH2C2O3pfwMyc
+Message-ID: <CANiq72nVJpptasJM5+Xe3MGYfP4CZ6=acPV82X=EgVf=3C25MQ@mail.gmail.com>
+Subject: Re: [PATCH] rust: kernel: remove support for unused host `#[test]`s
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
+	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 15 Aug 2025 19:28:18 +0200 Matthieu Baerts (NGI0) wrote:
-> Here are various fixes:
-> 
-> - Patch 1: Better handling SKB extension allocation failures. A fix for
->   v5.7.
-> 
-> - Patches 2, 3: Avoid resetting MPTCP limits when flushing MPTCP
->   endpoints. With a validation in the selftests. Fixes for v5.7.
-> 
-> - Patches 4, 5, 6: Disallow '0' as ADD_ADDR retransmission timeout.
->   With a preparation patch, and a validation in the selftests. Fixes for
->   v5.11.
-> 
-> - Patches 8, 9: Fix C23 extension warnings in the selftests, spotted by
->   GCC. Fixes for v6.16.
+On Tue, Jul 29, 2025 at 10:27=E2=80=AFAM Danilo Krummrich <dakr@kernel.org>=
+ wrote:
+>
+> Nice! This should also allow us to remove the Cmalloc allocator subsequen=
+tly.
 
-userspace_pm.sh which hasn't flaked in 1000 runs has flaked last night,
-with this series applied:
-https://netdev-3.bots.linux.dev/vmksft-mptcp/results/255941/8-userspace-pm-sh/
-Looks unrelated but also quite strange?
+Yeah, unless we want to use it in the `macros` crate for an example or
+similar -- I didn't include the removal directly here mainly to split
+that decision into another step, but given this other issue in
+`rusttest` I just sent:
+
+    https://lore.kernel.org/rust-for-linux/20250816204215.2719559-1-ojeda@k=
+ernel.org/
+
+I think it is easiest to just get rid of it (and anyway eventually I
+want to run the tests from the macros crate within the kernel too).
+
+I have sent a patch for that here:
+
+    https://lore.kernel.org/rust-for-linux/20250816211900.2731720-1-ojeda@k=
+ernel.org/
+
+Cheers,
+Miguel
 
