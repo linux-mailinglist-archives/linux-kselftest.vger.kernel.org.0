@@ -1,141 +1,136 @@
-Return-Path: <linux-kselftest+bounces-39154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43F78B28E98
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 16:47:13 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE626B28ED5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 17:15:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0061817A69F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 14:46:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B092B4E1E71
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 15:15:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5500822D7A5;
-	Sat, 16 Aug 2025 14:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0652F60AE;
+	Sat, 16 Aug 2025 15:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cJzySBZ6"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xeXI+wWF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34558462;
-	Sat, 16 Aug 2025 14:46:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF93A2ECE9A
+	for <linux-kselftest@vger.kernel.org>; Sat, 16 Aug 2025 15:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755355585; cv=none; b=I+TOcpw3H5dOljI3Y75Bugr3hcdao3Jv2gHH7YS1zoEiJfMwaUhuKVeVZGcDJ4zIzqkCXBJJZ6OvdJupomw34IItnuh6vp/Ot/te4wPnPGjXbmKItGjLi9g2VPAdvgAc3tei3DuRsgKmXx8jX9ReW/u5apyh8hyW0EdinvpP2ew=
+	t=1755357329; cv=none; b=DrT3m9PoGX+KDG1ualtpXVdPzky/06Nyz5PnpxGlnmmUHdRmzcqemieKRmBN39Qv4z4eRz9PTBnYNioJOOAgKAULvEUmyL7SaauRXl9XR444hy9IIxALeNTPy3MtvcE58P/5xBSGEccpx1zrWlYx3Mnx6Y1nnYxuIbdb9/I+Zro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755355585; c=relaxed/simple;
-	bh=5aaRUSH/4btpHZ9YU0dxGdPsemsBQH/FhjTp881Z+ZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mham7aDckXmAsvH4dTz1S+umMuvPZzNI2T1LNUIeNhW271J6x7x9qvT06i6T6Z8Vvrtj7yde8rLHg6vkcg5jj43xVxkRMYG/C9PbH2R7imxXkjcMCuDoo2FroEAj5mvGaKGON5MHkgNiZmbsCSF5Ked9xiciL9UDdDKoIe9i7sQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cJzySBZ6; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6188b793d21so4351847a12.3;
-        Sat, 16 Aug 2025 07:46:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755355582; x=1755960382; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gw+P/Pa0Dw/S93nPWnlSUfNlUoEoEUunc4lH2vJItmg=;
-        b=cJzySBZ6IldNtRgM4U4u7E2NpOgBEyLvm0mp55GTf+C58VeDwWsHVUhnfU/psS9U61
-         ORMWAsQ8sXoh5s3JN3U7ExBngUEdJ2bNlMRsyTV22JmlRrsPREuwID12dcTD/poE9/pD
-         +PC9K3KQyN2voNZB44I3Ng6rX5pM9LDZrMVD8X4RZc8ltjLe5cRw5tUcQkXt1AoiZAoa
-         2Ot7RpbTvEYDoHbgU7Nzs4WsjYTKBQFjlV89ie8ZPGp3RHgRu8XrrXq3FRMZGKjfUrcQ
-         TkTUQnT/kBoBs7hLi4GoNKCnX+TDJY6znhFwi/E133lQyuB3DK0cyaD6/WpY+mX0MxKY
-         5TvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755355582; x=1755960382;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gw+P/Pa0Dw/S93nPWnlSUfNlUoEoEUunc4lH2vJItmg=;
-        b=SYWNDuia2o7Vz7ay/sIv/7OFayBgmz7jY5nWEJDCV/9C+NDS1r4EdWntJv5W4mFUbS
-         OQi3dmOCwhq07acHH0ViOt8R8gDjvgPv43hoQ81Hl6U7Cqbquza6M0T4TbfFMBidTy9N
-         OqsrB1Yqhg4J6Zi3+15VzaPxXmWA5rhu68tFvBf5U5i9Qpv8n7oUDIxqfk7yLn8xTKcY
-         pvcXN47Tc+o2b1pm0AbzuAFIHkhLkYWpaQOiXCwAGuZ8QyeEBJEGjO88fhe+CkSnEjFT
-         xl6Kd/6FDJhhjda53EUk543jk1Wkc89UntgHnxn2I8lnIS5QVdlMZ3Onz6XgyowTQsYd
-         e3Eg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEerzD3vtNjw3B26kcoJP7L5dIfW9xVskYClrz6G/+uFoFHW28NWF6RR4q31tfcbae/F5VldajXA01XMc5e6md@vger.kernel.org, AJvYcCWHCYDiCWRXAquYZXSoJUJoRnOApux3vfm8FH7OdFqG4GEWNdhbn4+PCujzZtPxRzc04kwgmf74QOCnTM4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzpXHby8UhuSMp4p7zQxN8jdNHw5FMCPzUDmvwNH4GvtuBsmoK
-	rYCmU+gV7dRUYBnnVvlr0yAnJgFjUZdpcPmNyBwm6KoI2v+tDljGMkgO
-X-Gm-Gg: ASbGncsHOF6TOdciwSewdWBCWCgKsctyFlWbBRHlYWfzVwukVLQ8aLv+7S2zKwMXFM5
-	xzfvqfBnC0bGVOKXpeXI0uoL7Al+ORxCCNVDJRtK6iYrCg2BbVGjl1PwuMSSOtAzRETK6XStQXP
-	VNwGuvTS1HEhJv7fWI/H1wlaROke7QOKfNq7690Nm+FZJ3xCelkG6RdxJVZF6orky3g4ci+R5iw
-	/LoH1ey2bb/WgPp5TtPo2ZDOuQWfUCuOyk+F46IWLC5kbqJAFqYl2wakLxX+1NMMqeP3/0Yxo62
-	Yojzfvpj46l2mJ+T0LmH1QBTx2LcQU4OKzwSRJazYGDNZ5T/k0CyimcXPcCi1hlsScHRmQ4dRC1
-	lTwXpNB9AWWNpfCfL7TPTVw==
-X-Google-Smtp-Source: AGHT+IEmWAGVkWxKGm+74BpjO/R8tO3rFmp421TY2+nMdu59Zv37dPIM+ndBXIrW+4ecQTGD7IRrMQ==
-X-Received: by 2002:a05:6402:1d48:b0:618:2733:1a52 with SMTP id 4fb4d7f45d1cf-618b050f323mr4526625a12.8.1755355581871;
-        Sat, 16 Aug 2025 07:46:21 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-618b01ae6bcsm3401904a12.37.2025.08.16.07.46.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 16 Aug 2025 07:46:21 -0700 (PDT)
-Date: Sat, 16 Aug 2025 14:46:21 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
-	lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
-	david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-	baohua@kernel.org, richard.weiyang@gmail.com, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	donettom@linux.ibm.com, ritesh.list@gmail.com
-Subject: Re: [PATCH v4 7/7] selftests/mm: skip hugepage-mremap test if
- userfaultfd unavailable
-Message-ID: <20250816144621.3d4ocd44slizboxy@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20250816040113.760010-1-aboorvad@linux.ibm.com>
- <20250816040113.760010-8-aboorvad@linux.ibm.com>
+	s=arc-20240116; t=1755357329; c=relaxed/simple;
+	bh=QBoQ2/LRMiA6/AxN/TDAOkOxArwJyzbjun/AzbwTDxs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ViP6umQBBI7L7n6qZL/aK/O1TYLFF75hMXCOGx31mqcLNcxz/a9cHWs7NeR+ny8oky5bYVBjFnGOAbvTHPOwI1uo0KL/yb/+q8pg2OpPM8yDINC0mPAJWWd8nAPyzq5QR4zAB7J4H2Zefe6afvPldxPkh1ULa1ccXW1hAX+GNUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xeXI+wWF; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <06952937f3dd04e7f68bbd288da23f00ae83c213.camel@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1755357315;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QBoQ2/LRMiA6/AxN/TDAOkOxArwJyzbjun/AzbwTDxs=;
+	b=xeXI+wWFkISQZxdselg7Se2ois5v+hY2uVINzY72TsutKFJXYNnQQzMOljZlklva9ON2k1
+	dhmQALAKUv6Eup2ZwTiexrX5hxC9OkVp+TnRt2cL2c/6OLsvSDpYxwACRGGERkbOzxXWpl
+	ifpVeT1Sv/XdkjxYCFg1e5lElSrRNIw=
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add socket filter attach test
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>, Puranjay Mohan
+ <puranjay12@gmail.com>
+Cc: puranjay@kernel.org, xukuohai@huaweicloud.com, ast@kernel.org, 
+ daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org,  sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ mykolal@fb.com,  shuah@kernel.org, mrpre@163.com,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Date: Sat, 16 Aug 2025 23:14:54 +0800
+In-Reply-To: <35c18502a4870d8a833c1c9af20b85ca3f8a0ff6.camel@gmail.com>
+References: <20250813152958.3107403-1-kafai.wan@linux.dev>
+	 <20250813152958.3107403-3-kafai.wan@linux.dev>
+	 <eb6f9ba4acccc7685596a8f1b282667a43d51ca8.camel@gmail.com>
+	 <CANk7y0hQWOL3OW8Ok4e-kp7Brn5Zq6H5+EfS=mVtoVd+AUxZmA@mail.gmail.com>
+	 <35c18502a4870d8a833c1c9af20b85ca3f8a0ff6.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250816040113.760010-8-aboorvad@linux.ibm.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Aug 16, 2025 at 09:31:13AM +0530, Aboorva Devarajan wrote:
->Gracefully skip test if userfaultfd is not supported (ENOSYS) or not
->permitted (EPERM), instead of failing.  This avoids misleading failures
->with clear skip messages.
->
->--------------
->Before Patch
->--------------
->~ running ./hugepage-mremap
->...
->~ Bail out! userfaultfd: Function not implemented
->~ Planned tests != run tests (1 != 0)
->~ Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->~ [FAIL]
->not ok 4 hugepage-mremap # exit=1
->
->--------------
->After Patch
->--------------
->~ running ./hugepage-mremap
->...
->~ ok 2 # SKIP userfaultfd is not supported/not enabled.
->~ 1 skipped test(s) detected.
->~ Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
->~ [SKIP]
->ok 4 hugepage-mremap # SKIP
->
->Co-developed-by: Donet Tom <donettom@linux.ibm.com>
->Signed-off-by: Donet Tom <donettom@linux.ibm.com>
->Acked-by: David Hildenbrand <david@redhat.com>
->Reviewed-by: Zi Yan <ziy@nvidia.com>
->Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+On Thu, 2025-08-14 at 09:06 -0700, Eduard Zingerman wrote:
+> On Thu, 2025-08-14 at 13:23 +0200, Puranjay Mohan wrote:
+> > On Thu, Aug 14, 2025 at 2:35=E2=80=AFAM Eduard Zingerman
+> > <eddyz87@gmail.com> wrote:
+> > >=20
+> > > On Wed, 2025-08-13 at 23:29 +0800, KaFai Wan wrote:
+> > > > This test verifies socket filter attachment functionality on
+> > > > architectures
+> > > > supporting either BPF JIT compilation or the interpreter.
+> > > >=20
+> > > > It specifically validates the fallback to interpreter behavior
+> > > > when JIT fails,
+> > > > particularly targeting ARMv6 devices with the following
+> > > > configuration:
+> > > > =C2=A0 # CONFIG_BPF_JIT_ALWAYS_ON is not set
+> > > > =C2=A0 CONFIG_BPF_JIT_DEFAULT_ON=3Dy
+> > > >=20
+> > > > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+> > > > ---
+> > >=20
+> > > This test should not be landed as-is, first let's do an analysis
+> > > for
+> > > why the program fails to jit compile on arm.
+> > >=20
+> > > I modified kernel to dump BPF program before jit attempt, but
+> > > don't
+> > > see anything obviously wrong with it.=C2=A0 The patch to get
+> > > disassembly
+> > > and disassembly itself with resolved kallsyms are attached.
+> > >=20
+> > > Can someone with access to ARM vm/machine take a looks at this?
+> > > Puranjay, Xu, would you have some time?
+> >=20
+> > Hi Eduard,
+> > Thanks for the email, I will look into it.
+> >=20
+> > Let me try to boot a kernel on ARMv6 qemu and reproduce this.
+>=20
+> Thank you, Puranjay,
+>=20
+> While looking at the code yesterday I found a legit case for failing
+> to jit on armv6:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/arc=
+h/arm/net/bpf_jit_32.c#n445
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/arc=
+h/arm/net/bpf_jit_32.c#n2089
+>=20
+> But attached program does not seem to be that big to hit 0xfff
+> boundary.
 
-Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
+Hi Eduard, Puranjay
 
--- 
-Wei Yang
-Help you, Help me
+OpenWRT users reported several tests that aren't working properly,
+which may be helpful.
+
+https://github.com/openwrt/openwrt/issues/19405#issuecomment-3121390534
+https://github.com/openwrt/openwrt/issues/19405#issuecomment-3176820629
+
+--=20
+Thanks,
+KaFai
 
