@@ -1,289 +1,127 @@
-Return-Path: <linux-kselftest+bounces-39158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA3CCB290B2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 23:44:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D9A3B2919D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Aug 2025 07:23:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A194AA1E5B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Aug 2025 21:44:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAC082A1BAA
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Aug 2025 05:23:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F0A223C512;
-	Sat, 16 Aug 2025 21:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF1D31A0703;
+	Sun, 17 Aug 2025 05:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="LNuoyGlP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CbjsNcAp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VfB6yRGM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D963215175;
-	Sat, 16 Aug 2025 21:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B6D1581EE;
+	Sun, 17 Aug 2025 05:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755380682; cv=none; b=B7588EZE7WxGC5C9NgVB9m6qaZadQTMcKrTybFnZW/V1yOo4EUaw5QJbpVO+0u1R86o/9ovl9T0WUmPg+PJLMFcKIMd/cVOd1+J/DCj1UCC6ElbbU7CxHhj+wfEsQUyiJCOoeDdinU7iugJogVOT3/BwJU5QhJ6e0CyRTNnd6AQ=
+	t=1755408197; cv=none; b=f+NyKPq9weBs+/JVjXqYT9VOvhbtPBltzmBr2Ks5Hx0pSjEYmhNhud1vGXMEeZxSMHHXeWY1pkQmBoc4iFfGJxGnHeoo2ZvrSD9qri8RHSBVIdDFoaenU7ScBZ8MLIfMWBhBg0KeBrdpa9xLKmqz/jAvG8cmtJ6k3btA7qCSvsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755380682; c=relaxed/simple;
-	bh=rH+iZVOojl81+gh+Qt2mwYI85KqtnO4j8w5ftUhj4/o=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=g+UeqHg0aY/wePjAe/la3g+QMCav4eSoQ+jGQVF6qG5qxtZ/+PBLSYJU9xN9/vpr0aIBEI1ri9DpufQ+gkYtjZVCDAvE/jp5Vhrjkhd04mGUK0rlKZBFIbGMAcCezpB2pcS7Eq6wsjpLIOqosn7DqP88gFPKJKCndj51qHy1Ilk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=LNuoyGlP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CbjsNcAp; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id D37D1EC0075;
-	Sat, 16 Aug 2025 17:44:35 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Sat, 16 Aug 2025 17:44:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
-	 h=cc:cc:content-id:content-transfer-encoding:content-type
-	:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to; s=fm2; t=1755380675; x=1755467075; bh=I3Cv5gTZ28aN83YHExaUK
-	avYb1lKshX4L/7hwiwo+fU=; b=LNuoyGlP5rW8sSJi4VbAQ9MltNvRp5MD0nWtQ
-	h1kBsSMYAfS/Fq4SzdXQgl19KLEAlBBCXVeV0LAAJIg2Szo3t51Y1DgFXfzfuQ9s
-	uf3ITgv0rPG4pL3mvafjfXN6OC4VDzLqBE18PRgs++aWeoCEYAX/K8MXIuAvmQfZ
-	DbOBtSDJvMlZkxMStQcirR/ejaLislZMgNNWyAoaVnZvUGmwE+z/3LtlDJOJFAOR
-	yqGI/zq1E4n7ljnTG/EhnhKRw3QdQRclv2nRtci2nwbyPc+k+41+mH45kkKhsG7t
-	7w2k6Etq5Crwu7w/ea1Z6ErXUZYe1o9q8vm7DceZ1eQSBsSmw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-id
-	:content-transfer-encoding:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1755380675; x=1755467075; bh=I3Cv5gTZ28aN83YHExaUKavYb1lKshX4L/7
-	hwiwo+fU=; b=CbjsNcAp1+1DY/DIUwzL5Qgh76ZpLUnoSGOYctEwp5H4JM+NvH8
-	znFqtltzzLplhLwvQOV8gHAJrVyn9jWjqNIafPiuvsiwq+HKz63YspOtd/dmtOys
-	UKCbesjziuMalmgCb7osbWoaza7tehb8WeAoUu4wghMsaf+ja6iaPcic09X70R3f
-	r3bnMgdlDvPzf5DDAQUMD73tn+J3nbfpEd6cnrWkWpzC1tqWBu2u6QIhbj21hSpc
-	n/FHONVemJ4rUbRz5FE+yTG56rEZzYb5VqNmz+KWeIeGGN4QfqXkj2lFMbt9S919
-	AbrTj74PMtIpyMjkF6oSBK1S+I+ipwBx6Aw==
-X-ME-Sender: <xms:w_ugaBslVhgHqHVKEFRrN9P3MKlnxEQ_ZfQW8VUr0M8pH0A-RAkCHw>
-    <xme:w_ugaEvBp23dwWVSOf8YqTiRpwCIqfrTNAC3jKx_YnQjbWs4h6iQ7b3j-slQ04ND4
-    4IixqsDsVE7EXusfLk>
-X-ME-Received: <xmr:w_ugaKNKY0CoE8vspUN0IMBtHKeq0Rny5tN5Bh_KSf4Yos876fxvIZkF3p-rbbqNiQdzvA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeejleeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhephffvvefujghfofggtgfgfffksehtqhertdertddvnecuhfhrohhmpeflrgihucgg
-    ohhssghurhhghhcuoehjvhesjhhvohhssghurhhghhdrnhgvtheqnecuggftrfgrthhtvg
-    hrnhepieefvdelfeeljeevtefhfeeiudeuiedvfeeiveelffduvdevfedtheffffetfeff
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhvse
-    hjvhhoshgsuhhrghhhrdhnvghtpdhnsggprhgtphhtthhopedukedpmhhouggvpehsmhht
-    phhouhhtpdhrtghpthhtoheprhgriihorhessghlrggtkhifrghllhdrohhrghdprhgtph
-    htthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepughsrghh
-    vghrnhesghhmrghilhdrtghomhdprhgtphhtthhopehlihhuhhgrnhhgsghinhesghhmrg
-    hilhdrtghomhdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhr
-    tghpthhtohephhhorhhmsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhusggrse
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdp
-    rhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
-X-ME-Proxy: <xmx:w_ugaOdYOBIiemgzlQnb06iIAPnYvkxUsFunk8LCVSo69bV3D8jD3Q>
-    <xmx:w_ugaJn76wrqgBHEyceOJnDNXfo3W755CyGsVYZBnwdg5JzXSbTwjA>
-    <xmx:w_ugaIxVSOXf_RtrNlpN3piO5s7vnkyeUCLfaXw6FNK1liChmu3Wow>
-    <xmx:w_ugaEPrruU0OF9xms9RxFL_b4RoNJCfI1wnX3bMiCGmoDufihyzqg>
-    <xmx:w_ugaOVdgUf-MiKtBHdUTYvDJsFVWKELljfYm1cL5Ic-qjtEUiUBWOkg>
-Feedback-ID: i53714940:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 16 Aug 2025 17:44:34 -0400 (EDT)
-Received: by famine.localdomain (Postfix, from userid 1000)
-	id 2E9709FC9C; Sat, 16 Aug 2025 14:44:33 -0700 (PDT)
-Received: from famine (localhost [127.0.0.1])
-	by famine.localdomain (Postfix) with ESMTP id 2B91B9FB65;
-	Sat, 16 Aug 2025 14:44:33 -0700 (PDT)
-From: Jay Vosburgh <jv@jvosburgh.net>
-To: Hangbin Liu <liuhangbin@gmail.com>
-cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-    "David S. Miller" <davem@davemloft.net>,
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-    Paolo Abeni <pabeni@redhat.com>,
-    Nikolay Aleksandrov <razor@blackwall.org>,
-    Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-    Jonathan Corbet <corbet@lwn.net>, Petr Machata <petrm@nvidia.com>,
-    Amit Cohen <amcohen@nvidia.com>,
-    Vladimir Oltean <vladimir.oltean@nxp.com>,
-    Stephen Hemminger <stephen@networkplumber.org>,
-    David Ahern <dsahern@gmail.com>, linux-doc@vger.kernel.org,
-    linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv2 net-next 2/3] bonding: support aggregator selection
- based on port priority
-In-reply-to: <20250814104256.18372-3-liuhangbin@gmail.com>
-References: <20250814104256.18372-1-liuhangbin@gmail.com>
- <20250814104256.18372-3-liuhangbin@gmail.com>
-Comments: In-reply-to Hangbin Liu <liuhangbin@gmail.com>
-   message dated "Thu, 14 Aug 2025 10:42:55 -0000."
-X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
+	s=arc-20240116; t=1755408197; c=relaxed/simple;
+	bh=2Krz1q4dLXwXDvNiRnwBsAnhUvKZtc4rAuQ9af6bRPo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=prxThdV5LwXt7c9iBRh/kK/bFutoOX8Quy/LFTnxF3o/HRQqQBENUi9jIqsQ5DR48d719WF8VTm5CW+gBe5DFuAmCMW81IVarxNdemJrZkOjrop29Mx0WGVZr0zo2v3dol0U/tFVfl4ajfZYz9DCqwFXpAah+6BRxp0MZ/mRwM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VfB6yRGM; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-76e39ec6f52so2783309b3a.1;
+        Sat, 16 Aug 2025 22:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755408195; x=1756012995; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kp6ZpPi7OjGlmUly9kUQqc77MGv9H1CyM6s09oVZLEQ=;
+        b=VfB6yRGMp6IFhjjo/g5whuED5+9spRqoy92lOhfit/JPZkK8yhKaJdTBoDeqS5fNb+
+         Qjg4pOYYwCpHb4z4r6BaX0X/OKtkBvqiKvcwm7omAaTPNZKOYl5Ls0sWyX4I4eNSqIYH
+         Y7iFHBYdy7fLVqjiicnepb6pNxMNg4YOD12tumGd4bQmDchD9WRzYnpjrVE9LacFAQVS
+         kUkVbqt7/quvwTmBq0UI2DyyzFH8vYaCTLHpUUY/mN6Sx5K7Fd/wBdPa1bIH/iF7T5kj
+         C/IFlmR7X+jgJYmfCI3fxPaw+PLhApNT598gPY4K2J8Du3IhsQBGiPm/VzXnBSN/7MFZ
+         aocQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755408195; x=1756012995;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kp6ZpPi7OjGlmUly9kUQqc77MGv9H1CyM6s09oVZLEQ=;
+        b=qnOQnP7SG8/+Je0xoT2h7RqCVUU3BW8yRXf/glVpDir/jVBxzP1COnkfpgzYCr1nWo
+         w38TZs2MME/bgZWQMKYWWEAK0snLU6A33EX7i92+oE0LLeoBy9gDyD5llpfygWVxICpn
+         +4KOb0aCTAdqGWoI1KRmGxEFyaqX6bjQe/QQO5OPWbip6Kg0q0NxIlj9fZ3VN94zVFZ3
+         A42uHKM3ijcyldUoJ5N8IuyDqaTgMe4oJxWVfmmCr5JzRgGxaGrCLEQEm3fs96Mr7a+E
+         bQBcIXW7u/xwUPCYS141lpwMkAO9s7XvJJJV+X9vEeuSLUzyFj64pjtv+xMFbfz2pg3l
+         ffHA==
+X-Forwarded-Encrypted: i=1; AJvYcCWgf+KntIQfNuRe/vFRl64FLUdeVxPOLS5CrJYp+4e2/lhAEmk0Af7/zgtBVFy5hy8FllQ3cDhcMaiVOvnvhDTc@vger.kernel.org, AJvYcCXw+k5oqpjSo2ltogXhA0CdQnWmEHVSWTSI+0Lr0WmEwv2f3riJlk+Z/9DLp1IAj0go7Bnp/+YUK1eJMsg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/HsZ78ACGw6x4WXJUnNkJdhMMGTX0Wr+g8qbf+mGBVPwYodql
+	orQW+bB3LjAPk0G2b9tv7aGWtv3yLPrWdioS3F+BUVrfCtmuDkDvm+Y5
+X-Gm-Gg: ASbGncuBkWKm3BtPeeHpmKjh3tn4W+1cBEVMGwAMMAVIIggyxzjlxxVtZ7yKotKL9sE
+	kKaDoYJpDSbbMHXQUgXLEIUjAreQmjWjOEPoFakrFpf2CE26TrIPlwPbyKP9w7Q2HSMPS8l75iS
+	8PUGXXIDDzQvilsTdQWYycRyJC5X/5GPoyatn1ATmSx10Oqt+y/ojf0wdTK/RVP7tyEtg9opeqP
+	zNXH4wkWt9rQHuckF4vR1x+IDcb3BMPfTNTkowjNYUn8yoYGdQ4Cvo5KV6A864YkAgvlZi6uKYV
+	Rb0eArLeKdiIcdrjA8FFPLei/nej/MfopIcHA6+0whjOp7JKF8sPsIigSuDRsgiFMmvpbSQiB31
+	wzvQz8Ex+ztJF/UUxH569nAYjeb8Akc0uEpBjv9FoWYbRMBgeF/na
+X-Google-Smtp-Source: AGHT+IFVbgdeT/QfwgQykch+QhrWI4zgFHqFV8jB8otfCty8P30FG2RsqWRDOf9aMTlgNZpyP1+N3A==
+X-Received: by 2002:a05:6a00:3cd5:b0:769:93fb:210a with SMTP id d2e1a72fcca58-76e4484dee1mr10276988b3a.21.1755408195517;
+        Sat, 16 Aug 2025 22:23:15 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:d003:7033:ad1b:5a79:43f0:e247])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e4556670csm4405906b3a.79.2025.08.16.22.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Aug 2025 22:23:15 -0700 (PDT)
+From: vivekyadav1207731111@gmail.com
+To: catalin.marinas@arm.com,
+	will@kernel.org,
+	shuah@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Vivek Yadav <vivekyadav1207731111@gmail.com>
+Subject: [PATCH 0/3] kselftest/arm64: Cleanups and readability fixes
+Date: Sat, 16 Aug 2025 22:22:44 -0700
+Message-Id: <20250817052244.8822-1-vivekyadav1207731111@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1109152.1755380673.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 16 Aug 2025 14:44:33 -0700
-Message-ID: <1109153.1755380673@famine>
+Content-Transfer-Encoding: 8bit
 
-Hangbin Liu <liuhangbin@gmail.com> wrote:
+From: Vivek Yadav <vivekyadav1207731111@gmail.com>
 
->Add a new ad_select policy 'port_priority' that uses the per-port
->actor priority values (set via ad_actor_port_prio) to determine
->aggregator selection.
->
->This allows administrators to influence which ports are preferred
->for aggregation by assigning different priority values, providing
->more flexible load balancing control in LACP configurations.
->
->Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
->---
-> Documentation/networking/bonding.rst |  9 ++++++++-
-> drivers/net/bonding/bond_3ad.c       | 27 +++++++++++++++++++++++++++
-> drivers/net/bonding/bond_options.c   |  1 +
-> include/net/bond_3ad.h               |  1 +
-> 4 files changed, 37 insertions(+), 1 deletion(-)
->
->diff --git a/Documentation/networking/bonding.rst b/Documentation/network=
-ing/bonding.rst
->index 874d8a4681ec..151c964562db 100644
->--- a/Documentation/networking/bonding.rst
->+++ b/Documentation/networking/bonding.rst
->@@ -250,7 +250,14 @@ ad_select
-> 		ports (slaves).  Reselection occurs as described under the
-> 		"bandwidth" setting, above.
-> =
+Hi all,
 
->-	The bandwidth and count selection policies permit failover of
->+	prio or 3
->+
->+		The active aggregator is chosen by the highest total sum of
->+		actor port priorities across its active ports. Note this
->+		priority is ad_actor_port_prio, not per port prio, which is
->+		used for primary reselect.
->+
->+	The bandwidth, count and prio selection policies permit failover of
+This small series makes cosmetic style cleanups in the arm64 kselftests
+to improve readability and suppress checkpatch warnings. These changes
+are purely cosmetic and do not affect functionality.
 
-	Needing to have a caveat here makes me think we should instead
-change the nomenclature.  Perhaps "lacp_port_prio"?  The standard hasn't
-had "ad" in its name for 20-ish years, so I don't think we should use
-"ad" in user facing options, and common usage these days is to just call
-it "lacp."
-
-	Simiarly, I don't think we need "ad" in the option name, either;
-the standard just calls it "actor_port_priority", is there a good reason
-not to use that?
-
-	-J
-
-> 	802.3ad aggregations when partial failure of the active aggregator
-> 	occurs.  This keeps the aggregator with the highest availability
-> 	(either in bandwidth or in number of ports) active at all times.
->diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3a=
-d.c
->index 19b389b81600..dcc1a1750df5 100644
->--- a/drivers/net/bonding/bond_3ad.c
->+++ b/drivers/net/bonding/bond_3ad.c
->@@ -747,6 +747,18 @@ static int __agg_active_ports(struct aggregator *agg=
-)
-> 	return active;
-> }
-> =
-
->+static unsigned int __agg_ports_priority(const struct aggregator *agg)
->+{
->+	struct port *port =3D agg->lag_ports;
->+	unsigned int prio =3D 0;
->+
->+	for (; port; port =3D port->next_port_in_aggregator)
->+		if (port->is_enabled)
->+			prio +=3D port->actor_port_priority;
->+
->+	return prio;
->+}
->+
-> /**
->  * __get_agg_bandwidth - get the total bandwidth of an aggregator
->  * @aggregator: the aggregator we're looking at
->@@ -1707,6 +1719,9 @@ static struct aggregator *ad_agg_selection_test(str=
-uct aggregator *best,
-> 	 * BOND_AD_COUNT: Select by count of ports.  If count is equal,
-> 	 *     select by bandwidth.
-> 	 *
->+	 * BOND_AD_PRIO: Select by total priority of ports. If priority
->+	 *     is equal, select by count.
->+	 *
-> 	 * BOND_AD_STABLE, BOND_AD_BANDWIDTH: Select by bandwidth.
-> 	 */
-> 	if (!best)
->@@ -1725,6 +1740,14 @@ static struct aggregator *ad_agg_selection_test(st=
-ruct aggregator *best,
-> 		return best;
-> =
-
-> 	switch (__get_agg_selection_mode(curr->lag_ports)) {
->+	case BOND_AD_PRIO:
->+		if (__agg_ports_priority(curr) > __agg_ports_priority(best))
->+			return curr;
->+
->+		if (__agg_ports_priority(curr) < __agg_ports_priority(best))
->+			return best;
->+
->+		fallthrough;
-> 	case BOND_AD_COUNT:
-> 		if (__agg_active_ports(curr) > __agg_active_ports(best))
-> 			return curr;
->@@ -1790,6 +1813,10 @@ static int agg_device_up(const struct aggregator *=
-agg)
->  * (slaves), and reselect whenever a link state change takes place or th=
-e
->  * set of slaves in the bond changes.
->  *
->+ * BOND_AD_PRIO: select the aggregator with highest total priority of po=
-rts
->+ * (slaves), and reselect whenever a link state change takes place or th=
-e
->+ * set of slaves in the bond changes.
->+ *
->  * FIXME: this function MUST be called with the first agg in the bond, o=
-r
->  * __get_active_agg() won't work correctly. This function should be bett=
-er
->  * called with the bond itself, and retrieve the first agg from it.
->diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bon=
-d_options.c
->index 5b58326dd24c..4bfff38b9ad0 100644
->--- a/drivers/net/bonding/bond_options.c
->+++ b/drivers/net/bonding/bond_options.c
->@@ -165,6 +165,7 @@ static const struct bond_opt_value bond_ad_select_tbl=
-[] =3D {
-> 	{ "stable",    BOND_AD_STABLE,    BOND_VALFLAG_DEFAULT},
-> 	{ "bandwidth", BOND_AD_BANDWIDTH, 0},
-> 	{ "count",     BOND_AD_COUNT,     0},
->+	{ "prio",      BOND_AD_PRIO,      0},
-> 	{ NULL,        -1,                0},
-> };
-> =
-
->diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
->index bf551ca70359..34495df965f0 100644
->--- a/include/net/bond_3ad.h
->+++ b/include/net/bond_3ad.h
->@@ -26,6 +26,7 @@ enum {
-> 	BOND_AD_STABLE =3D 0,
-> 	BOND_AD_BANDWIDTH =3D 1,
-> 	BOND_AD_COUNT =3D 2,
->+	BOND_AD_PRIO =3D 3,
-> };
-> =
-
-> /* rx machine states(43.4.11 in the 802.3ad standard) */
->-- =
-
->2.50.1
->
+Changes in this series:
+  * Suppress unnecessary checkpatch warning in a comment
+  * Add parentheses around sizeof for clarity
+  * Remove redundant blank line
 
 ---
-	-Jay Vosburgh, jv@jvosburgh.net
+
+Vivek Yadav (3):
+  kselftest/arm64: Remove extra blank line
+  kselftest/arm64: Supress warning and improve readability
+  kselftest/arm64: Add parentheses around sizeof for clarity
+
+ tools/testing/selftests/arm64/abi/hwcap.c       | 1 -
+ tools/testing/selftests/arm64/bti/assembler.h   | 1 -
+ tools/testing/selftests/arm64/fp/fp-ptrace.c    | 1 -
+ tools/testing/selftests/arm64/fp/fp-stress.c    | 4 ++--
+ tools/testing/selftests/arm64/fp/sve-ptrace.c   | 2 +-
+ tools/testing/selftests/arm64/fp/vec-syscfg.c   | 1 -
+ tools/testing/selftests/arm64/fp/zt-ptrace.c    | 1 -
+ tools/testing/selftests/arm64/gcs/gcs-locking.c | 1 -
+ 8 files changed, 3 insertions(+), 9 deletions(-)
+
+-- 
+2.25.1
+
 
