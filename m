@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-39247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFE9BB2B182
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 21:23:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1EF6B2B189
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 21:26:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99CFB4E14B5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 19:20:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADFC17AA6E2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 19:25:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD8A2749EC;
-	Mon, 18 Aug 2025 19:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BCAA273D81;
+	Mon, 18 Aug 2025 19:26:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ef9b0Seq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qfDDwrE+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567862749CE;
-	Mon, 18 Aug 2025 19:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC73BE555;
+	Mon, 18 Aug 2025 19:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755544816; cv=none; b=HdzL5yy7Md9ozYvh85Fwx5buqPg+1ZB4KTunxq454zO33E4nSjbD+/Wq2J1JkkhfFxadRma9ghRPyI+tsaxsk41w2axL8PFYu+7/OroRFazb0DYMlTNb+Y4acnAsCCUO+t7+tZ9jYBsUdwPi3VqekyVO7aRO6q1VduQs0NDg35Y=
+	t=1755545183; cv=none; b=SjGPiulzhakX/PkdezRF/FIsnn58PSqFRa2SoVrXHvsr0evBxXhOEaM/Gu2TnBAkT0V4SSD0Obz5iZxUrVGXHe8FU1P1180vXbY/GJXm0SdVByD6qLNVmqw3SjTmuiU+aHiYOQUM9iMSxHhO/PbQXQ4qIwY8pohHqhUUymuqUz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755544816; c=relaxed/simple;
-	bh=+poCgBhUgppZ/6n7MeaajfyLcNeQlq0KWUa5GzL6rNI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=m81pH8EkHoSqxRqioK9clXyfXBstU6KvqOHkZNp8GKQV3ZJDHd0pmAwnYrzmXvamDNVzt5esYWQR44+sQLjEwUNTG9tlJdOaRYjVm6+IXj7EsSqjKzzyiW5xvN8zXmQkBX4bHfQTRxT1HP8VldUJ962HnTbYvTXQzLvejw3/blo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ef9b0Seq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C66CC4CEF1;
-	Mon, 18 Aug 2025 19:20:15 +0000 (UTC)
+	s=arc-20240116; t=1755545183; c=relaxed/simple;
+	bh=+y/vOOo8jAZA17Jtz8gRMU0zs0a5jt47Bouz8MVv3Wg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tu9Guv4YxTkS7O2py7ILd9YV1bsg0wTGKFUQaSly+9c25prviC8B0zL9yMl81MyMc6jxUIMaDWFEToTyXhO48A8NytWm47Nluo8xHtosPcxs7vZ7tS6CpgOtrnbWLrQV6r7mu5c+fYWu1yUPwh54rVZRXs+Fx778qhbrEdHvapA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qfDDwrE+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A2F9C4CEEB;
+	Mon, 18 Aug 2025 19:26:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755544816;
-	bh=+poCgBhUgppZ/6n7MeaajfyLcNeQlq0KWUa5GzL6rNI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Ef9b0SeqfHKrYd+g9Hnn77FcLpCGHobz34wyKpVVXZp5bY5vDvbXV9gUfD3YF512x
-	 s2Amd827aoV+joPSiJJOa2whVyIBdTiNfzYMF1aOzB3WaUGc4tYFEFvlbdW6O6/WOj
-	 k5DAywpumC5+ghqN8d3rVjByIhPFZIG0rnezuXor3y1iSCXg4TIIPYS6hc5dibfM7R
-	 y/o3qf8tF1M05BEEf17JBL2qgCvOB/UXNGgmVFLXeekmoecYuacDVKo1yis1i0rGbF
-	 MM5KCvM09nsKEjzH/tE3+w8/lc5WVuKU6byw8P2cYSD6ONbX3rpasVYgE53wu5U5HS
-	 DADKscVHCGzNQ==
+	s=k20201202; t=1755545183;
+	bh=+y/vOOo8jAZA17Jtz8gRMU0zs0a5jt47Bouz8MVv3Wg=;
+	h=From:Subject:Date:To:Cc:From;
+	b=qfDDwrE+BVp5zL1+EDWcdMm7DmF/RDfc139D2y/CQIlaGUYVodu81jkwikSMnQAp9
+	 I6RIQpL6z+vUbr3V7f/oao7P8ecH/sO6LvAa8gv51EltIpuqfeFBLOPDwjrF1O/XCq
+	 ARoyCzVY3yd1NvKMFVR6KGeaRKuc5mP30SqfNLuf/Psh7+Mxtli77t09TWya4cAkaf
+	 7eaPmhtMhH5/niq6dqMUg+SdujDRCt50ZzIhPsb4uyR4K+LfRgdZC+A6QpQroNGfKu
+	 3v/o6HbGyBOre8ZFJYdaycQMX+ZajkeTaG4trVyK3qk3A6yClCydTDmX7dlovz2KPi
+	 P8EBQe0D/+0Ww==
 From: Mark Brown <broonie@kernel.org>
-Date: Mon, 18 Aug 2025 20:19:37 +0100
-Subject: [PATCH 3/3] kselftest/filelock: Add a .gitignore file
+Subject: [PATCH v3 0/3] arm64: Support FEAT_LSFE (Large System Float
+ Extension)
+Date: Mon, 18 Aug 2025 20:21:17 +0100
+Message-Id: <20250818-arm64-lsfe-v3-0-af6f4d66eb39@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,41 +53,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250818-selftest-filelock-ktap-v1-3-d41af77f1396@kernel.org>
-References: <20250818-selftest-filelock-ktap-v1-0-d41af77f1396@kernel.org>
-In-Reply-To: <20250818-selftest-filelock-ktap-v1-0-d41af77f1396@kernel.org>
-To: Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAC59o2gC/1XMQQ6CMBCF4auQrq2ZlgKtK+9hXECZQiOCmZpGQ
+ 7i7hcQoy/eS/5tZQPIY2CmbGWH0wU9jGvkhY7avxw65b9NmEmQBpSx4TfdS8SE45KAFWGd03Vr
+ JUvAgdP61YZdr2r0Pz4nemx3F+n6Z6p+JggMvdV4IqxpXKXG+IY04HCfq2OpE+WsryHetTC1ab
+ DUYY2yjdu2yLB+mc/9x4QAAAA==
+X-Change-ID: 20250625-arm64-lsfe-0810cf98adc2
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-cff91
-X-Developer-Signature: v=1; a=openpgp-sha256; l=464; i=broonie@kernel.org;
- h=from:subject:message-id; bh=+poCgBhUgppZ/6n7MeaajfyLcNeQlq0KWUa5GzL6rNI=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoo3zpop9yyrLO4hLCaBxqcWaoP7VzDocqeGl2/
- SFtE6NwiTyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKN86QAKCRAk1otyXVSH
- 0GbuB/9H6JsvnWGHzmuBnqvCTKXXzTUsVsnPAB4CkxhgGGXaL5PJUqWqWRSsrgGReZQlZOMHHkV
- d2K0+ToXJSVXtN4A8rjIukguDeRE5yO6n+NuCuxJ5y6OwJXOAhd5tjyUCofEjOe0/AslEec1duT
- x0TQXDhfi9GRPUMMOavd3+vedhDLsq0c/tcx0RJhrlnvhDwLqbGk6Aeam9PlJOn40OVm7kIewEH
- FJLj14I2THenD2iEx1a9+Ub2r7ehnxAZZmwtmsEYK+piKDRkAFlmrm6drp+C61M7EFpdsDchEbD
- xGcV9/tKHsgIpuJ7o1U88QtHn5e+V7H1QtFILoutuC4Wp+qK
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1372; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=+y/vOOo8jAZA17Jtz8gRMU0zs0a5jt47Bouz8MVv3Wg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoo35Z9ywOmVIYyAGuED3un6+Vp7m7E8UOzL3eO
+ oaGa9ejrgyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKN+WQAKCRAk1otyXVSH
+ 0Pn0B/9Lgel83JGwfCO6weWZrwLTSxZ2NGgB1wsezpQ0o8+jWonTcI42s6sUDwa5kbmTm29twd3
+ au1tIWNztBPPSfYtmfR013a77/8OggTudCW3WkyBYW60gOe+W7oO9VZ7ncmJjl0KdLpga9/CJo2
+ QrcJs0AQeSYSfDSX2aUFarsYAeJf0BOpcZQQqFmRcBJeEYfOXJuoPISSlTl2QToQGQbEIsSsuHZ
+ czwK5wGZhCDuyu3Rz5InsNXmq1P2Yw0DbkfMp0rYdaX6NClG3rFT6zQD59hMfeqRpSHeCawPxMD
+ Tpj8xMNFP4Z9IbXUBYDpqVYc5Y1Csw1L4AH82yeJPogRglaZ
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Tell git to ignore the generated binary for the test.
+FEAT_LSFE is optional from v9.5, it adds new instructions for atomic
+memory operations with floating point values.  We have no immediate use
+for it in kernel, provide a hwcap so userspace can discover it and allow
+the ID register field to be exposed to KVM guests.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/filelock/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v3:
+- Rebase onto v6.17-rc1.
+- Link to v2: https://lore.kernel.org/r/20250703-arm64-lsfe-v2-0-eced80999cb4@kernel.org
 
-diff --git a/tools/testing/selftests/filelock/.gitignore b/tools/testing/selftests/filelock/.gitignore
-new file mode 100644
-index 000000000000..825e899a121b
---- /dev/null
-+++ b/tools/testing/selftests/filelock/.gitignore
-@@ -0,0 +1 @@
-+ofdlocks
+Changes in v2:
+- Fix result of vi dropping in hwcap test.
+- Link to v1: https://lore.kernel.org/r/20250627-arm64-lsfe-v1-0-68351c4bf741@kernel.org
 
--- 
-2.39.5
+---
+Mark Brown (3):
+      arm64/hwcap: Add hwcap for FEAT_LSFE
+      KVM: arm64: Expose FEAT_LSFE to guests
+      kselftest/arm64: Add lsfe to the hwcaps test
+
+ Documentation/arch/arm64/elf_hwcaps.rst   |  4 ++++
+ arch/arm64/include/asm/hwcap.h            |  1 +
+ arch/arm64/include/uapi/asm/hwcap.h       |  1 +
+ arch/arm64/kernel/cpufeature.c            |  2 ++
+ arch/arm64/kernel/cpuinfo.c               |  1 +
+ arch/arm64/kvm/sys_regs.c                 |  4 +++-
+ tools/testing/selftests/arm64/abi/hwcap.c | 21 +++++++++++++++++++++
+ 7 files changed, 33 insertions(+), 1 deletion(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250625-arm64-lsfe-0810cf98adc2
+
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
 
