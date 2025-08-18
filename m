@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-39211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39212-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27ED8B29D2E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 11:08:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88AB3B29D1E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 11:06:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48502188D166
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 09:06:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CAA23B757F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 09:06:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05C6D30DD14;
-	Mon, 18 Aug 2025 09:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 641C430DEAE;
+	Mon, 18 Aug 2025 09:05:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tgp7sGp/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b8F8SD2X"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C32030C366;
-	Mon, 18 Aug 2025 09:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F9A30C366;
+	Mon, 18 Aug 2025 09:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755507933; cv=none; b=NhsVVkutHmDbBybgYJgGsr0Ebkb5h1JZkgmVwv/VbbX2zYnf22CmcH8rmy7tdSn/ggRf1rW2EGJCUx/oWFDnyKOcmhhqKhTGVVFWZI5IoeO5naXKUeUZcqyXhx486x4j4+ZemqeaP0wKGzPIn0LqiiVE4NaRd0u5yLlzmbX8Rfc=
+	t=1755507941; cv=none; b=QyzWHgT4Rooh69Sn1UdgXmp8aPMF8cX/I2toSaibIKQ5/TflqIV0Zmoy6Ti558BZywX1Appds93XwCyHmCjmBJFYKeHgTeJw+gQ4U99ctjqCfuitQDZxspuFhDe5Wx0ZZGdGfnG50K2M+h3jLhgCO2W+/YPW5s6TXkVkz/9UrpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755507933; c=relaxed/simple;
-	bh=dNQ2xLxbkqhX/WGlb8xDDFkpcY/MPYzvRrHMPcRpf+8=;
+	s=arc-20240116; t=1755507941; c=relaxed/simple;
+	bh=Vaxdln6PvoSuQXVLrreSF67KHxG2vOuiUg9ALmSUzck=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oxzMMfQWlHVF/M04giLAYE4v+9ihzxwAVN/iRZfPXWTAH1u5HcBVp9RFJfdXpRtuwzhvpezwNsP1Rxg4e6d1Lu9l1w+yTGGQ/067q2voyXGf98I1Bg5nRV3WR7cp3h0vuo+tFI6T8DCv3J+wnmqSSGEXIiCjGQAhdvVifW5T0R0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tgp7sGp/; arc=none smtp.client-ip=209.85.219.169
+	 MIME-Version; b=cBW+D4ro1RNsCcRP8/2WL9vVEViaHy1dDUd2upgm8myyIKU6fIEDjGaGrPBFuwA0tNOWd9W2J8ZL57sNSkSgvSeje1hxILszzo7EEZy/FISeIT7CW5Sr+JHeF1a/tdAn3WdqnClUwe63urOwmbNlcKDd01a6BzkfOz7RVh+j6vI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b8F8SD2X; arc=none smtp.client-ip=209.85.219.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e9321ed5e5eso2579143276.3;
-        Mon, 18 Aug 2025 02:05:32 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e93498d436dso782534276.1;
+        Mon, 18 Aug 2025 02:05:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755507931; x=1756112731; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755507939; x=1756112739; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hz/z+SnaxoNL88nSulJaSHbf2jaz0dixFKHNOBcuqI0=;
-        b=Tgp7sGp/QJUCN0YplwZY8hIrq7WJ1Gl0qhBYvKmF/xOy0zKzL7ZCkfk75mxukqo8Ij
-         E9bjPlzb0hT/6VCv+K70+MT6PwSn94kToWwSnesRn955gVlJK+ipBJDLC7G9BcgdZqPF
-         09o8P+RRk0MJGdtUUvA9boz+ABkZrlzECZ4f+sR52D/UZkTFzSb0AqMinma82ck7OkbI
-         ASGU+oeVmmE+3IgB+JxIcYbtDp6ouYvGgjxPy63NdKIFZs7qBxdaWyZcK/kcx2I6/Ye4
-         9OzJoQ5TCVfrslNFZRXj17nGh24ksoN9c4S72E+EXrlptAyBfhhfie+XmBVCEnsHAGIo
-         9xHQ==
+        bh=8L5QsSIN8yL9VXCRQ/tSDzT2fMRmD+CBZIMe5YLGEqM=;
+        b=b8F8SD2XZRLTPcUdpd3Zw+dQtqJnLcHESO1KOsJ71W+Kz7W7a30lDNAm1stJJMuj+8
+         MQ0r5m6Q61SbIYp5AmwzyRJpfalWJ7TG63KKvZjS17X9vk2yqwIgKI5mX+5sQiqtn+nj
+         6zSam2ICcNvJWnjQ2JcBuDILCMmqn2ngMxOtOG2a4OEqzk+3l3426Mu12eKtmsRUIboN
+         Q5gVXlDqwQTS2U4rdKnFLx1FCgnx+xkqjZucpBDMhI9GHguahxSryHZMzHkUfEmPaz6M
+         VZw3zwuFNfVzCpyZ5VZhCioeReP5THmncDPURUmkD/zOipgC77Tt+/rlF2HSPVUCF0V0
+         0gKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755507931; x=1756112731;
+        d=1e100.net; s=20230601; t=1755507939; x=1756112739;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hz/z+SnaxoNL88nSulJaSHbf2jaz0dixFKHNOBcuqI0=;
-        b=Gu0s0wAU+AaczBiYi4uBttic+AX4fDznoX/NIXnP+Ph/8uMRAqOnlzgrV4vSiy1tyT
-         JVOvSVbx6TKiSMCcoV3kT5+gE3Dt0J7jUAfN878HcV+9jFfbOI8ZRt9WWy8x1OB1nlAp
-         ZPsm1F95YlcEuLnpk/MmQdiA83M2vIeqXv1//Dk/uv66mlEPGU+KmF6OdEhN+W3br59A
-         WBQej8DDnL+nFW9j6el7JYbRXlyoEKF3ouas/xHIFNd0mnpm3j8QiSlUwuvE1XvRnOkg
-         CgiLZt6RCNcdSJtWWZn9UgyR2ZXwg1npt083CUs7bxIbh++4EVf0hOu+FTo6C9f+/sT7
-         dq+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVXibDxK7QaElCPHr6B8b59MxS4N59NVi5/JaSqLVoZyZzDmuVuArKExrJj5n/LCl8M6jU=@vger.kernel.org, AJvYcCX/0sojyxna95FZKFVDNcDQHgy5OBAVmpyiAwYq3fQQVIPkvGd3M9IAn/vy3HhzCFf67amh0aGSfk0vkoahYG5F@vger.kernel.org, AJvYcCXk3PjfXx5KBzXuFdyX5+SrM/5RHoy2/+wncMkq8RpeGrnZgylb29U6DseAYEcc9ynWUU1V90BtVA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyj2ZObUYCTCA8QaobnkwC7gwb93wVuUq0b9kaZdgt2nlCKXL/h
-	OOcfq9q4M349wGEj+ovPJ22GJDxhCABVqrQ3pm46l1BS1gq2Xd15k+ih
-X-Gm-Gg: ASbGncv3UfpAQvzPZAy1EgL748kTwVLuXti32YLcqmPi5hjdFurZVLjsT1Rqj8SnbXw
-	7s0OYEp0224X9Rl7aA0W9M5bUBs7cn0tZ6/2LBg8E7rwNrAVYnCL2T5ZDRjgV+c6NOQamrsWjxO
-	4Mt2TLTeBWhNh6/vVEAGXxvTzhks25T6XbQGwrgtoVip4FhGTjrw5H7uDCN29z43H4s2oiTUrqq
-	30KOna96IWPXdemVfPFtuSae0ojoayT/xAwr4X4JRXlVFV19hJo6C2p7SmPWA4xBPVYJQ/7/Cnl
-	8Lro7nRzkiAqwiaKXo19DswFsXuWpglsUKxrr4p9hrFnl37CCK+2alLTjJQzHSi0M9l5LI8Ksk5
-	g1mQ2xEh7ikKAP8eDzmay/G5d
-X-Google-Smtp-Source: AGHT+IFMlWPnbh3tU493sus1xFHCbXLkD/uFBBLRKMrYXOGSIxGh/DrgYrNVQUJbgKTDhG/ZLbT50A==
-X-Received: by 2002:a05:6902:6d02:b0:e8b:c3bf:ff92 with SMTP id 3f1490d57ef6-e93324afa94mr12614103276.30.1755507931014;
-        Mon, 18 Aug 2025 02:05:31 -0700 (PDT)
+        bh=8L5QsSIN8yL9VXCRQ/tSDzT2fMRmD+CBZIMe5YLGEqM=;
+        b=L9AAwi+hGtE9pQVEYJIX2dhrORFHGbnxo8zlN73KYQQBF1uSCxpn185gVCOy9+8Kjj
+         R5TE8pDbipFO0pEWxVD1cxoXm4ZjBmDmRO9T/2YnGfM0ibZreBIJBvlAm6XXCOdTgwy9
+         ctnM44aq89ukraeGF2xiQ0dNgJ5263TUaEsTtf4NIvXZWkpAg3sIShq3UtijSXGsiQlr
+         mjfvawbuqjn69ykimkUCVQBm49KxILj3c0oEnVyW1jXod2s9UlEgT/hvonjE30RgNAJu
+         08USorzgkAXd4X89V80XPnK6mO2Cx6AYiBaqCsmYDl5Zcdd6TnTb8/IDoM0+Ps41QAPu
+         2Kpw==
+X-Forwarded-Encrypted: i=1; AJvYcCVWoKeuXBRU2nOirirkpsy9OjEhfHdf6oEi1EgLGCSGXz2FJcp7DoDxMH/lRSc3reCKwUY=@vger.kernel.org, AJvYcCVb8jRIFYGXx4TI54UqEb+w4HddTFUFMmOUCMV6k4lM7YaMzzt1pNB6n5xdF0hTKNIOp7h960allQ==@vger.kernel.org, AJvYcCXHBzHCcN3cR46MkvABWgRYGpoyIJd7Z4XgJq18cdb/M9hP/13X7sbVkboW2eyuFh+B6pJFvxQSHgyt5bS9JeLs@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1i49JQ9q7V147g5geDiTNJNLaAMPjRPihKgA48B0I51kr0XgM
+	hyzs8Y+PLN/TYYRLjvwAN8jF2sUlZsc/jPv19GBWGog4pEGJNNrlkHag
+X-Gm-Gg: ASbGncsDZM2Vx6mAkNtq3E7hzrCoxPjOU68ErFPcCXrU+xThBk6wiBh284Xj1YcBuxy
+	jfCKdT7iSu2aHQGS7bgzNj1Bo0Us+NteTQm+oalAcmH8pFJLSRtbyeODBu4++YARPpel8TRM3Wd
+	Nd8FJqDVXNx0DfJGl8Z0qJJVaqps1BLyjzgLLPsncgIIMOs0hYpbEpgFGnJ5b6E2BMwQzAYcCmW
+	Kv/RbuvCeCuI2U6BIE+efa+3SFUQnD8nwjprwiJ2qmcuV2MuwUiuMCjdvts1waw1ZLuYM4lki4l
+	mCW/ubUzMJpaGale0mUlHPp1KmE/xZqquyzCnVc707jV/HACT+m7ia0Z+qrryAcXxp6i33nAiHw
+	M8oKCwxnrRGB8ZQ==
+X-Google-Smtp-Source: AGHT+IF7iraoL3WH3jX6auppvXUooFl1bUrCDOB6A7AfW8Qjuj03gvthYsxX9nuQOa9jut8MtzcDxA==
+X-Received: by 2002:a05:6902:420e:b0:e91:d090:8244 with SMTP id 3f1490d57ef6-e93324e0304mr13647876276.23.1755507938393;
+        Mon, 18 Aug 2025 02:05:38 -0700 (PDT)
 Received: from roronoa.. ([146.70.98.176])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e933264aabcsm2985389276.9.2025.08.18.02.05.24
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e933264aabcsm2985389276.9.2025.08.18.02.05.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 02:05:30 -0700 (PDT)
+        Mon, 18 Aug 2025 02:05:37 -0700 (PDT)
 From: Djalal Harouni <tixxdz@gmail.com>
 To: tj@kernel.org,
 	hannes@cmpxchg.org,
@@ -96,9 +96,9 @@ To: tj@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	tixxdz@opendz.org
 Cc: Djalal Harouni <tixxdz@gmail.com>
-Subject: [RFC PATCH v2 bpf-next 1/3] kernfs: cgroup: support writing cgroup interfaces from a kernfs node
-Date: Mon, 18 Aug 2025 10:04:22 +0100
-Message-ID: <20250818090424.90458-2-tixxdz@gmail.com>
+Subject: [RFC PATCH v2 bpf-next 2/3] bpf: cgroup: Add BPF Kfunc to write and freeze a cgroup
+Date: Mon, 18 Aug 2025 10:04:23 +0100
+Message-ID: <20250818090424.90458-3-tixxdz@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250818090424.90458-1-tixxdz@gmail.com>
 References: <20250818090424.90458-1-tixxdz@gmail.com>
@@ -110,179 +110,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-Freezing a cgroup of a task from BPF is better than user space which
-could be too late and is subject to races. To achieve this allow writing to
-cgroup core interfaces from BPF by adding a new kfunc helper that take a
-kernfs node directly.
+Add bpf_cgroup_write_interface() kfunc that writes to a cgroup
+interface. Takes a cgroup on the default hierarchy as argument, and
+writes to the specified interface file of that cgroup.
 
-Currently only writing to "cgroup.freeze" on the default hierarchy is
-allowed. The writing goes directly via a kernfs_node which allows to
-share the same path as if a kernfs_node was opened from userspace.
+Freezing a cgroup of a task from BPF is better than user space
+which could be too late and is subject to races. Hence, add support
+for writing to "cgroup.freeze" interface using the mentioned bpf kfunc.
+
+Planned users of this feature are: systemd and BPF tools.
+Taking the freezing example, we could freeze a cgroup hierarchy on
+suspicious activity for a more thorough analysis. The cgroup hierarchies
+could be system services, user sessions, K8s pods or containers.
 
 Signed-off-by: Djalal Harouni <tixxdz@gmail.com>
 ---
- include/linux/cgroup.h |   3 ++
- kernel/cgroup/cgroup.c | 102 ++++++++++++++++++++++++++++++++++++++---
- 2 files changed, 99 insertions(+), 6 deletions(-)
+ kernel/bpf/helpers.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index b18fb5fcb38e..03a0782c94bf 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -125,6 +125,9 @@ int cgroup_rm_cftypes(struct cftype *cfts);
- void cgroup_file_notify(struct cgroup_file *cfile);
- void cgroup_file_show(struct cgroup_file *cfile, bool show);
- 
-+ssize_t cgroup_kn_interface_write(struct kernfs_node *kn, const char *name__str,
-+				  const char *buf, size_t nbytes, loff_t off);
-+
- int cgroupstats_build(struct cgroupstats *stats, struct dentry *dentry);
- int proc_cgroup_show(struct seq_file *m, struct pid_namespace *ns,
- 		     struct pid *pid, struct task_struct *tsk);
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 312c6a8b55bb..cddd7c1d354d 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -229,6 +229,24 @@ static struct file_system_type cgroup2_fs_type;
- static struct cftype cgroup_base_files[];
- static struct cftype cgroup_psi_files[];
- 
-+struct cgroup_kn_cftype {
-+	char name[MAX_CFTYPE_NAME];
-+	unsigned int namelen;
-+
-+	/*
-+	 * write() is the write operation on a kernfs node.
-+	 */
-+	ssize_t (*write)(struct kernfs_node *kn, const char *buf, size_t nbytes,
-+			 loff_t off, bool revalidate);
-+};
-+
-+#define CGROUP_PREFIX "cgroup."
-+#define CGROUP_CORE_INTERFACE_FREEZE_SUFFIX "freeze"
-+#define CGROUP_CORE_INTERFACE_FREEZE (CGROUP_PREFIX CGROUP_CORE_INTERFACE_FREEZE_SUFFIX)
-+#define CGROUP_CORE_INTERFACE_FREEZE_LEN (sizeof(CGROUP_CORE_INTERFACE_FREEZE) - 1)
-+
-+static struct cgroup_kn_cftype kn_cfts[];
-+
- /* cgroup optional features */
- enum cgroup_opt_features {
- #ifdef CONFIG_PSI
-@@ -4030,29 +4048,58 @@ static int cgroup_freeze_show(struct seq_file *seq, void *v)
- 	return 0;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 6b4877e85a68..5efc1bc57db9 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2605,6 +2605,50 @@ bpf_task_get_cgroup1(struct task_struct *task, int hierarchy_id)
+ 		return NULL;
+ 	return cgrp;
  }
- 
--static ssize_t cgroup_freeze_write(struct kernfs_open_file *of,
--				   char *buf, size_t nbytes, loff_t off)
-+static bool cgroup_kn_revalidate(struct cgroup *cgrp)
++
++#define BPF_CGROUP_MAX_WRITE	((1UL << 24) - 1)
++
++/**
++ * bpf_cgroup_write_interface - Writes to a cgroup interface file.
++ * @cgrp: The target cgroup
++ * @name__str: name of the cgroup core interface file
++ * @value_p: value to write
++ * @off: offset
++ *
++ * Return: number of bytes written on success, a negative value on error.
++ */
++__bpf_kfunc int
++bpf_cgroup_write_interface(struct cgroup *cgrp, const char *name__str,
++			   const struct bpf_dynptr *value_p, loff_t off)
 +{
-+	if (!cgroup_on_dfl(cgrp) || !cgroup_parent(cgrp))
-+		return false;
++	struct bpf_dynptr_kern *value_ptr = (struct bpf_dynptr_kern *)value_p;
++	struct kernfs_node *kn;
++	const void *value;
++	u32 value_len;
++	int ret;
 +
-+	return true;
-+}
++	value_len = __bpf_dynptr_size(value_ptr);
++	if (!value_len)
++		return 0;
 +
-+static ssize_t cgroup_kn_freeze(struct kernfs_node *kn,
-+				const char *buf, size_t nbytes, loff_t off,
-+				bool revalidate)
- {
- 	struct cgroup *cgrp;
- 	ssize_t ret;
- 	int freeze;
-+	char b[4] = {0};
++	if (value_len > BPF_CGROUP_MAX_WRITE)
++		return -E2BIG;
 +
-+	/* Handle userspace writes +(0|1)\n and fail otherwise */
-+	ret = strscpy(b, buf, sizeof(b));
-+	if (ret < 0)
-+		return ret;
- 
--	ret = kstrtoint(strstrip(buf), 0, &freeze);
-+	nbytes = ret;
-+	ret = kstrtoint(strstrip(b), 0, &freeze);
- 	if (ret)
- 		return ret;
- 
- 	if (freeze < 0 || freeze > 1)
- 		return -ERANGE;
- 
--	cgrp = cgroup_kn_lock_live(of->kn, false);
-+	cgrp = cgroup_kn_lock_live(kn, false);
- 	if (!cgrp)
- 		return -ENOENT;
- 
-+	if (revalidate && !cgroup_kn_revalidate(cgrp)) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
++	value = __bpf_dynptr_data(value_ptr, value_len);
++	if (!value)
++		return -EINVAL;
 +
- 	cgroup_freeze(cgrp, freeze);
- 
--	cgroup_kn_unlock(of->kn);
-+	ret = nbytes;
- 
--	return nbytes;
-+out:
-+	cgroup_kn_unlock(kn);
++	rcu_read_lock();
++	kn = cgrp->kn;
++	rcu_read_unlock();
++
++	kernfs_get(kn);
++	ret = cgroup_kn_interface_write(kn, name__str, value, value_len, off);
++	kernfs_put(kn);
++
 +	return ret;
 +}
 +
-+static ssize_t cgroup_freeze_write(struct kernfs_open_file *of,
-+				   char *buf, size_t nbytes, loff_t off)
-+{
-+	return cgroup_kn_freeze(of->kn, buf, nbytes, off, false);
- }
+ #endif /* CONFIG_CGROUPS */
  
- static void __cgroup_kill(struct cgroup *cgrp)
-@@ -4601,6 +4648,49 @@ void cgroup_file_show(struct cgroup_file *cfile, bool show)
- 	kernfs_put(kn);
- }
- 
-+static struct cgroup_kn_cftype kn_cfts[] = {
-+	{
-+		.name = CGROUP_CORE_INTERFACE_FREEZE,
-+		.namelen = CGROUP_CORE_INTERFACE_FREEZE_LEN,
-+		.write = cgroup_kn_freeze,
-+	},
-+	{ },
-+};
-+
-+static const struct cgroup_kn_cftype *cgroup_kn_cft(const char *name__str)
-+{
-+	struct cgroup_kn_cftype *kn_cft;
-+
-+	for (kn_cft = kn_cfts; kn_cft && kn_cft->name[0] != '\0'; kn_cft++) {
-+		if (!strncmp(name__str, kn_cft->name, kn_cft->namelen))
-+			return kn_cft;
-+	}
-+
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
-+
-+ssize_t cgroup_kn_interface_write(struct kernfs_node *kn, const char *name__str,
-+				  const char *buf, size_t nbytes, loff_t off)
-+{
-+	const struct cgroup_kn_cftype *kn_cft;
-+
-+	/* empty, do not remove */
-+	if (!nbytes)
-+		return 0;
-+
-+	if (kernfs_type(kn) != KERNFS_DIR)
-+		return -ENOTDIR;
-+
-+	kn_cft = cgroup_kn_cft(name__str);
-+	if (IS_ERR(kn_cft))
-+		return PTR_ERR(kn_cft);
-+
-+	if (unlikely(!kn_cft->write))
-+		return -EOPNOTSUPP;
-+
-+	return kn_cft->write(kn, buf, nbytes, off, true);
-+}
-+
  /**
-  * css_next_child - find the next child of a given css
-  * @pos: the current position (%NULL to initiate traversal)
+@@ -3736,6 +3780,7 @@ BTF_ID_FLAGS(func, bpf_cgroup_ancestor, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_cgroup_write_interface, KF_TRUSTED_ARGS | KF_SLEEPABLE)
+ #endif
+ BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_from_vpid, KF_ACQUIRE | KF_RET_NULL)
 -- 
 2.43.0
 
