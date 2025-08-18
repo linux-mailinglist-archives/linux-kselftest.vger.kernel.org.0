@@ -1,116 +1,105 @@
-Return-Path: <linux-kselftest+bounces-39225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 689BEB29F27
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 12:31:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3753B2A0F4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 14:01:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43F3A17ED6E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 10:29:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AA9217690A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 11:57:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98EE9258EE3;
-	Mon, 18 Aug 2025 10:29:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 776DF31B104;
+	Mon, 18 Aug 2025 11:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="H8UUTFuj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+HJdGPg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35AD258EDB
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 10:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF5731AF01;
+	Mon, 18 Aug 2025 11:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755512954; cv=none; b=W9Z8Z+4gMtN3Ql8khPF6Shn4tTKADRELRUFXkNWjrQbCQcL4CejIiXYwvR1I4Y9xymfdIHFgYmCksh7J2f8AmBjLdrWkJHENF1VHjc/qJWlUj8V3U1gM2o+f8sNjQiBKHmsaIK1DLi7jhGOKb8jAG+UGxELAThFdTzMKu9Pcf8w=
+	t=1755518247; cv=none; b=RARycyDD5vOQQdJrt4g6eH/oB2kp8XDQ/nMMlrS/PqvEydH94HnZb2R/u8Mw5x/YzmIc9HcIMe6Bia1QYQ8CDnjMSxKFZOl5f2+41gHHL7U36qSWcY4eGX6wLSDbIDVWfiorLGI4AOOo4ysxXwZYPZeoU4iiPcHEYDQTxFRMIN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755512954; c=relaxed/simple;
-	bh=BhbysUcbAKjEA8/11kFRzX2E12IzlBavWPgZPsKEmYQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=haEAuIVLcjs0+EqX19Ps+zNRc7Hjm0oJ4eI78UXUF3dHz+igkG/13jM6BxT2Z2MXAin+N7bcIPNYRuZbFImcvKzPgeLCMcldngNmOQ4CI1zPflmF8CGRk4FCcOXtGd2v4NEYf36hjbZnNJez4XFwevrTEoB87IxiuALlGAh+Fm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=H8UUTFuj; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-45a1b0b4d13so4694775e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 03:29:12 -0700 (PDT)
+	s=arc-20240116; t=1755518247; c=relaxed/simple;
+	bh=5jHJQJsG6PPM3ZiBXsIJKj/EWtSsObcH1vyAtrn3Gp0=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=gk5TbgE12ABGQytCqovGPJ/XN4X3McqM8Dqzkc/8yBR5Mfn1dBHGnjfPeiWJHMRaSPK6PkkSWu9WOoHkFcAbLiNoIitZl6+NACdTQUbvP8E6DbWJSDUkuZxQ9stkiNEu2+jte0Yw4sKUouM1Y9tpX4KR8U+jfefpowHR59XJEdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+HJdGPg; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-619998ac786so3479189a12.1;
+        Mon, 18 Aug 2025 04:57:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1755512951; x=1756117751; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BhbysUcbAKjEA8/11kFRzX2E12IzlBavWPgZPsKEmYQ=;
-        b=H8UUTFujZ5bOLN6tfCzFgID6wonxXrPF9cK8Z+ZS9fyfn7aGURLVqHXgqUfi0r1/vT
-         Sn5ORcibCb9aNtRsE/3btDwWwqXJZGMUURJjuWMjBC4l7T9zXMjCDo1M57XWLJlakU+l
-         i2xjswyTWWLeLqPI7PT19ZhfG/PayiG1TGLWAI9BpBnIVjtqe8FmsjaE4txXpr5y6qRM
-         kBWo98qzE6NncAWo39DOGtkOl77CnZymx9LV6pX2e0hE0mXXBX6HaP2BTNIo18pCZ6r3
-         bWRWDQzCLZj6P8Nz4Dyj/0QiMOQ0SPrY+hnQXZVGLZR3tXU6mpsrcrBxprzPFe2GmO2b
-         aSmg==
+        d=gmail.com; s=20230601; t=1755518244; x=1756123044; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=T9iwgo+i86PCVtZqT4kE8ztMHAtNDZ0Rddp49IBLH84=;
+        b=f+HJdGPgRbKldTMPeTjftBOP3HmzOW74UzvJmLWEc4W8UJIKXl03EnINm38aaaw71x
+         lS60D5DqB0eDNCZkeyebrzppmdd4XtJ7gPUyro+N8+isab6VHj6WFJZr35DpVjYnSVOG
+         VIv3Vz7nowZMzazAdTedOYKqn8+3FPpfwNB3mLNxJVAWyvZZ5IFfEdFOGZjqCFDWNSL7
+         JSA/+iNTpFYQCUT2M5NUywHRWyYqhyNcl0aPVkxD+KOGEJqNN+6jKNLuL+XFBzfPy0uo
+         JpZm8fsbi7KsVoy4VyOixUcvTezFSczJFNMf0P7GMnTj33kQr3G3gb9e6+iIXfdqgWkX
+         CQTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755512951; x=1756117751;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BhbysUcbAKjEA8/11kFRzX2E12IzlBavWPgZPsKEmYQ=;
-        b=se5Ts4IHbIWSW7D/1TlucSOcRHdo402LN9ZFDw3u6w5KkLcoDkC0myJ9szxQXM6Lv8
-         B6Y0JUOVzNRfRck/iLEJETxsN/88gugnxBjJ6D7+6KyJr2fQFX2uaDSv/guM3qKSWGmA
-         WdlCoFJoypawN2WeRGvelbdebjcMp/N4k0zrbMrtrMVWA85VlrTXRa9eoGEZZC/MRtaO
-         +0Y7SIMvXNs1dwmBwWX6I3F3TxBpjrGDoCzcsH6CF4lwQ7IbL5luT4pMWMFlTsbo0reD
-         C+1P9QqZcF5FbDXr3XIH5g1r29NzdUrixaF01SWSzqSweLRgcr9YQZKiVph05TN5b/WH
-         tOgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWQZ64naq6Nf6SlPZEBbwEG+mMAHaJKw8VFYgXRbAPCn/CvQcNwjW4uakDXK0cw7dHS75GBJoMpcZbpcdiPoU8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzG9vqrln66FLC1QB8YaxN9rrMDeb0gGvGpKFjVzApRW5RIYGy7
-	yxfE54bb3rtleZtPx8AdTE112AOZ1ZkmTplNd3uMJeCB5f7ZoJdgqlKtA063+PLLBKs=
-X-Gm-Gg: ASbGncvUOFXM5odr+zq52y13T9vjhsXJROBwu9D3nN8syY+K/vjF5oKU4K2e1ole0yw
-	JYkbkKl5c1dki6f4Jr7Rpl5tjpsOhTW/GnX4H52EaUPPSGj/Sw1U5tPzVVOKTTYtGfD5Tj369XF
-	1y/KHYi4TW//eOphs5/+dDHon2m/wwuihndDjL/rs/dezYs7wYFN6SN8WP0OfB/ASolxnilr7NT
-	jtLrRuJtx22zg8qB5HpwyY6JhqyKA8sbHTgesvZYNQIL3LYpGGXu/5qNmbQK5WJ2MriVhCZKkpv
-	CMRhuWfIPNzjzONi9xP+GAQkf1fpK1vMi9eUravHtLdId7Om7lse1v5tlX4dM0r7yG+0J8FNT3j
-	eqSytCNS8JCdKIu/i1HOl7N2aFWS9FA==
-X-Google-Smtp-Source: AGHT+IFey14ol9S6TtNaCL77HGtEmBhLvnjzcHSJ5a+JMC7yNb3b8k4bUmeKUn0yZJ7mbxDU1Gpejg==
-X-Received: by 2002:a05:600c:46cf:b0:459:ddd6:1cbf with SMTP id 5b1f17b1804b1-45a21781fb3mr36116495e9.0.1755512950889;
-        Mon, 18 Aug 2025 03:29:10 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:faeb:f88c:9e29:5aa1])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45a2232de40sm125126805e9.26.2025.08.18.03.29.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 03:29:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755518244; x=1756123044;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T9iwgo+i86PCVtZqT4kE8ztMHAtNDZ0Rddp49IBLH84=;
+        b=miFni+xezqrAqWVrOCasPfYIgTypqnnRSF5QlGgf/e/5HEZVbchOTYmvKo+CsBaH6N
+         BI2rqEGY368QskAzYYryZP50nNga/Lj8Apb+xp10KT3CeHdvPp+4ooKoT+3nKr7KL870
+         jvpl4o8iSPmwEHpPoKAl1Nfuc7nX7K1Fm70a0YOqglOO1Lfgb+Z9eeT/Cu76CpekjV5Q
+         Pac9fXMgzMUjVaLUg46WE/OIwTeegDE1hStzLP5o/gyT+UmM9Z/5Mk1k7iKkVhc6k5l9
+         O4f/tYNBVoro3C0GotBZ21kNpjqC7fpUFixHIdREv4SdPRUmJbFuYVpLykbLPyFPsn35
+         6qkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUk8KqvnnOeH6bHNj1y41rPfdUS3kTX3fLJaTES17EOYnk1OisurK9I5CX3V3E7Mnf04Sy8hRLRQxFOlYM=@vger.kernel.org, AJvYcCW6xwOERPCLkVU2CARwAKjxx+iGl2+hhTmHqWjgO7AL9lFG+xs+Y9lD23Tj/mgnqiqTrDEmK56/6gI6q4nS7FE3@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5Q/u6IzehXJfnp9d6wPy2+MJDBc7oMD3c4dK+XG8962SmzXuI
+	OqZdrn8G0hw1Z4AhLlj/wpPhqZ6mvydqXlkfUmVN/viOJbCPNgtYRDgPmTN+NzIvHHExEppuqRP
+	KUjGwBBcjmj0idLTnrREihqDw4GM+QNY=
+X-Gm-Gg: ASbGnctsilJeI3RaARFsdO9M63EWSZbOJ0lnDktbK7i8BPdBhmBVLsM7QFhpPWzeCn9
+	Q6QC0v+y9qmR+8n4fedgKVwmVmxzGtG4cFgR3EluVqGgnZrbHSkshS4DHbRAYy8JCT3ZLBWOzKQ
+	VvXzZ9zsBLiuETUIxsLrHZBO6QC24hHVIZfvxaTcSUICRdJ553ZnFact10+w2cNHPC1LPYm1yoy
+	LXf3NAN5Etap88Lukcnn3hz3T5HATdtSC5vO1OH+fBoqBy4iRYD
+X-Google-Smtp-Source: AGHT+IFvbQqzH5lN1+Kyg8vBAAzNpFlPf+v42KwiTM2r7r0zwVNLhha2/ttn8fx/3Vm1MJpAvzri1Jbk11XIhxsyTGA=
+X-Received: by 2002:a05:6402:2787:b0:617:cd9d:e267 with SMTP id
+ 4fb4d7f45d1cf-618b052fc3cmr9823214a12.8.1755518243828; Mon, 18 Aug 2025
+ 04:57:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 18 Aug 2025 12:29:10 +0200
-Message-Id: <DC5HEJRMZ84K.34OPU922A7XBE@ventanamicro.com>
-Subject: Re: [PATCH 0/6] ONE_REG interface for SBI FWFT extension
-Cc: "Palmer Dabbelt" <palmer@dabbelt.com>, "Paul Walmsley"
- <paul.walmsley@sifive.com>, "Alexandre Ghiti" <alex@ghiti.fr>, "Andrew
- Jones" <ajones@ventanamicro.com>, "Anup Patel" <anup@brainfault.org>,
- "Paolo Bonzini" <pbonzini@redhat.com>, "Shuah Khan" <shuah@kernel.org>,
- <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
- <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, "linux-riscv"
- <linux-riscv-bounces@lists.infradead.org>
-To: "Anup Patel" <apatel@ventanamicro.com>, "Atish Patra"
- <atish.patra@linux.dev>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-References: <20250814155548.457172-1-apatel@ventanamicro.com>
-In-Reply-To: <20250814155548.457172-1-apatel@ventanamicro.com>
+MIME-Version: 1.0
+From: Sidharth Seela <sidharthseela@gmail.com>
+Date: Mon, 18 Aug 2025 17:27:12 +0530
+X-Gm-Features: Ac12FXwO-bmhfVkEZc4PmVuaYWtBqlneHweG5Fs7DVLHZVjfG4lU6PawU1ViqWI
+Message-ID: <CAJE-K+DWK7MCha0bp3D4AeCh57gbR3EUDy3JO5C6b6xFeM7=mA@mail.gmail.com>
+Subject: [PATCH] sud_test.c: Spelling correction 'usigned' changed to 'unsigned'
+To: shuah@kernel.org
+Cc: dvyukov@google.com, tglx@linutronix.de, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-2025-08-14T21:25:42+05:30, Anup Patel <apatel@ventanamicro.com>:
-> This series adds ONE_REG interface for SBI FWFT extension implemented
-> by KVM RISC-V.
+Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
 
-I think it would be better to ONE_REG the CSRs (medeleg/menvcfg), or at
-least expose their CSR fields (each sensible medeleg bit, PMM, ...)
-through kvm_riscv_config, than to couple this with SBI/FWFT.
+diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+index 2eb2c06303f2..6b846f5c1fa6 100644
+--- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
++++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+@@ -140,7 +140,7 @@ TEST(bad_prctl_param)
+        prctl_invalid(_metadata, PR_SYS_DISPATCH_EXCLUSIVE_ON, 1, -1L,
+&sel, EINVAL);
 
-The controlled behavior is defined by the ISA, and userspace might want
-to configure the S-mode execution environment even when SBI/FWFT is not
-present, which is not possible with the current design.
+        /*
+-        * Allowed range overflows usigned long
++        * Allowed range overflows unsigned long
+         */
+        prctl_invalid(_metadata, PR_SYS_DISPATCH_EXCLUSIVE_ON, -1L,
+0x1, &sel, EINVAL);
 
-Is there a benefit in expressing the ISA model through SBI/FWFT?
-
-Thanks.
+--
+2.39.5
 
