@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-39249-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0FC0B2B18B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 21:27:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60D03B2B18D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 21:27:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D988520049
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 19:26:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1EFA7ABF6E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 19:25:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4577A274B5D;
-	Mon, 18 Aug 2025 19:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161D9275112;
+	Mon, 18 Aug 2025 19:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mqjxnwpb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JIk8LPIr"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1411A274B50;
-	Mon, 18 Aug 2025 19:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5112750E6;
+	Mon, 18 Aug 2025 19:26:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755545187; cv=none; b=jUQC65/zFfKgkfCS//xwF4i0zSr7SqK1E5SAXyi+4IkSAjIqk9wQhXXt9HneqwJtC63161PRCrVCHdpWjAnhTfXSt0TVzUm8UtiL9YpMdbr1vv1Ha6q5+HfVBCfSGWnmBj+KHkutvmiFFmYzSD27y5k0jz6n2wNkW/fgZd4YaO0=
+	t=1755545190; cv=none; b=SswfZMqiXUJCK0QC49iyu/dkEih1V9A8gLm7k0xix6PdYQOoFd/Bw0hQuxDBc/ycbD0KUz/BKdKLGRP77Cx3rvGysbaE+QmlK3DMzhvEr7wcylLUsBacieqZf1XYYVLfRHd6Rd0xDRKAS7+p73iZyiDwKGs6e/GDNwyve71vuew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755545187; c=relaxed/simple;
-	bh=tE3vjuer16Q9aKRgwGD1wbqaDmgXWO5eLjpXugsWLRg=;
+	s=arc-20240116; t=1755545190; c=relaxed/simple;
+	bh=WuZkA+3W6xGa4E/TZchTSAE/H6G9gi5ov679T+TmFuI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qvETMp4IUHyUiTgcimhYoKB+K8LaEqUU29IGdYQ9dEGvBmZHUGVjLnYCVQgk6SdvPmfN4W6oCKmrpTmHv0nO37bedtOyAhXW/6WjPR8c/i2XuI08yF0BgSjXBpyE4XmtEKTEDWg5sroEv1KUIZscSpfmiLkUbBK4f5Zvtw3fu/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mqjxnwpb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B1B6C116D0;
-	Mon, 18 Aug 2025 19:26:23 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=p9kke8DlaA21KAWtgDLMXRzojUKYWHTojOTwINxB2FB3FGgJbNqtKIz/UXA/w5UNiV2u8AY9g6LMi/tCZRDuHQnLO20eGGG/D1b/5UQ2rogJRY2inB7ncBW0f3sbh44HRBHBkYUHLpNPB0m6X8tx5NfAX7VnBs6auvuPgdbbtSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JIk8LPIr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06817C4CEEB;
+	Mon, 18 Aug 2025 19:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755545186;
-	bh=tE3vjuer16Q9aKRgwGD1wbqaDmgXWO5eLjpXugsWLRg=;
+	s=k20201202; t=1755545189;
+	bh=WuZkA+3W6xGa4E/TZchTSAE/H6G9gi5ov679T+TmFuI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=mqjxnwpb2AKhJqL5v+7S29hYiGmXD/FPeCQDu0k1XK5SnroTIJ+OkeaXlA+2eSGmk
-	 scD3LevEvtqKO00LNdvNxFntrhbOE/fkMiSyYwCYH/CwdzWe4WXe7ebKuEv4a24lbt
-	 eG3aNVrDC6tE9HHP4zimCj/BAq8xGKc7uy7t5ia+JJMI9XFqeAfzbTDIbd3Rmm5kTc
-	 Zd5mDbI7FpPLOy2G/3oX4NHEP7AsIWBvcDdW8aaygsSi3HVczoeA2WFW6v+NMt+1+q
-	 CAjO+UttrHZF0wneJygH9FXt9sQe7LqOdcPQVFmGqlilVzRsdPn0U4bDZfpB1G00Z1
-	 25q0obdtmMLgA==
+	b=JIk8LPIraA5qigmZ8M9b7LWFDtpBW0YZ0T2PP4XpGzOB2bLjSqHg09KbvFh8FSIKU
+	 P+HNzDesyZC6q0ny07/MDt5gfqjf3hJNPgAicagMlmkAOJ5kC07+I/YNlcjkN9l0ZE
+	 9QRRX0pnkWJafhhXBPXNUoGjWV/J+DaMNvhsOGSNW+FA5gL/sUppVJHwIE+EMa1y29
+	 XBfC8jcbVCxoAgRQdLN6ipfPdSw8PyckHBGRqsq2HnPlLrnR6Oet7ms4QoQAzSze0n
+	 KiyBCYgkqJdvJu7tiu3il8F03zFlGehLLxrwAeW5vwRyTdguUZw9HQx4tooG9sfa5G
+	 zVLYCvuMgK7Qw==
 From: Mark Brown <broonie@kernel.org>
-Date: Mon, 18 Aug 2025 20:21:18 +0100
-Subject: [PATCH v3 1/3] arm64/hwcap: Add hwcap for FEAT_LSFE
+Date: Mon, 18 Aug 2025 20:21:19 +0100
+Subject: [PATCH v3 2/3] KVM: arm64: Expose FEAT_LSFE to guests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250818-arm64-lsfe-v3-1-af6f4d66eb39@kernel.org>
+Message-Id: <20250818-arm64-lsfe-v3-2-af6f4d66eb39@kernel.org>
 References: <20250818-arm64-lsfe-v3-0-af6f4d66eb39@kernel.org>
 In-Reply-To: <20250818-arm64-lsfe-v3-0-af6f4d66eb39@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -64,102 +64,50 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, 
  linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-cff91
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3733; i=broonie@kernel.org;
- h=from:subject:message-id; bh=tE3vjuer16Q9aKRgwGD1wbqaDmgXWO5eLjpXugsWLRg=;
- b=owGbwMvMwMWocq27KDak/QLjabUkhozFdVHV7+rqbFMjNDKE55d4hFvO4mhaP2HxSlvT1tYsG
- 8ui4y2djMYsDIxcDLJiiixrn2WsSg+X2Dr/0fxXMINYmUCmMHBxCsBENlax/y9/lVHv4RzPM6GT
- QX2XRqPNZ9brvVc/pjOpJ4dUn52/XI+vRN6A+YrLV4mknBtn4/pCLusf37RzvvAfMQ2W/JrU9wz
- NbK+0otW7Nu4/JXqs18TvpF/jSdaTi0QZ9yhvFN/kZNK5xrQzRnMi19sD7zz5P09fVVi5d5Hpxs
- 6FsebJ21ga7udGvzQ63WC2ZFWt4/HYZVIe7Ts2pume3Jyk7DY515dnmrK+5jyjyZ/PfosWsD+e+
- bwjWHnn4lU/58Q18fYtMquR1Y2K+Vwqc7dbYsMzq5j+F9nVf6WEwhWa2n+cZBIJPRZveDC85QJf
- zpLvob4Rxu+Ovzu+O/zotgcc1e+anGW/uQmftwlRsE8AAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1325; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=WuZkA+3W6xGa4E/TZchTSAE/H6G9gi5ov679T+TmFuI=;
+ b=owGbwMvMwMWocq27KDak/QLjabUkhozFddGCUonZ74SrJEXuBqxgCyt/drfgy4XF66bbipXda
+ C7xvneuk9GYhYGRi0FWTJFl7bOMVenhElvnP5r/CmYQKxPIFAYuTgGYyPEC9n+qm/+fajtxQW1N
+ cxTTmXmNdq5bqkvkP+hWhtmfNq3qCNG87ZhoJiica33V7+HdVMtsyZzyeW5ZRi4xd17wpPnse2F
+ +6ZKdyqKdf+UmhOqu+SssF3irfktb7rff/Z6LrKzO9uxmXf9hY9U5H3m/SZZXDxWFFz374sjxIc
+ J74bfgHRqtpnMOlJvI7nGKY6p7Vrp7uyqbaNZK7T0FDvPX782qemZh4erz8uXJ/Ds7G7O563eG6
+ gV08Il6xd/7LaS+a835uZ0OMSGl+3LEX3lsn14+YfqDdfsWttzg5QgO9rf5y1t9ovSg0p/9wY0T
+ mQz/8SS5d9xlVWKfc7r8jk/oWTW3Ht+tT2ST4rxlk32aAA==
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
 FEAT_LSFE (Large System Float Extension), providing atomic floating point
 memory operations, is optional from v9.5. This feature adds no new
-architectural stare and we have no immediate use for it in the kernel so
-simply provide a hwcap for it to support discovery by userspace.
+architectural state, expose the relevant ID register field to guests so
+they can discover it.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/arch/arm64/elf_hwcaps.rst | 4 ++++
- arch/arm64/include/asm/hwcap.h          | 1 +
- arch/arm64/include/uapi/asm/hwcap.h     | 1 +
- arch/arm64/kernel/cpufeature.c          | 2 ++
- arch/arm64/kernel/cpuinfo.c             | 1 +
- 5 files changed, 9 insertions(+)
+ arch/arm64/kvm/sys_regs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/arch/arm64/elf_hwcaps.rst b/Documentation/arch/arm64/elf_hwcaps.rst
-index f58ada4d6cb2..a15df4956849 100644
---- a/Documentation/arch/arm64/elf_hwcaps.rst
-+++ b/Documentation/arch/arm64/elf_hwcaps.rst
-@@ -441,6 +441,10 @@ HWCAP3_MTE_FAR
- HWCAP3_MTE_STORE_ONLY
-     Functionality implied by ID_AA64PFR2_EL1.MTESTOREONLY == 0b0001.
- 
-+HWCAP3_LSFE
-+    Functionality implied by ID_AA64ISAR3_EL1.LSFE == 0b0001
-+
-+
- 4. Unused AT_HWCAP bits
- -----------------------
- 
-diff --git a/arch/arm64/include/asm/hwcap.h b/arch/arm64/include/asm/hwcap.h
-index 13f94c8ddfc0..6d567265467c 100644
---- a/arch/arm64/include/asm/hwcap.h
-+++ b/arch/arm64/include/asm/hwcap.h
-@@ -178,6 +178,7 @@
- #define __khwcap3_feature(x)		(const_ilog2(HWCAP3_ ## x) + 128)
- #define KERNEL_HWCAP_MTE_FAR		__khwcap3_feature(MTE_FAR)
- #define KERNEL_HWCAP_MTE_STORE_ONLY	__khwcap3_feature(MTE_STORE_ONLY)
-+#define KERNEL_HWCAP_LSFE		__khwcap3_feature(LSFE)
- 
- /*
-  * This yields a mask that user programs can use to figure out what
-diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
-index 72c78468b806..575564ecdb0b 100644
---- a/arch/arm64/include/uapi/asm/hwcap.h
-+++ b/arch/arm64/include/uapi/asm/hwcap.h
-@@ -145,5 +145,6 @@
-  */
- #define HWCAP3_MTE_FAR		(1UL << 0)
- #define HWCAP3_MTE_STORE_ONLY		(1UL << 1)
-+#define HWCAP3_LSFE		(1UL << 2)
- 
- #endif /* _UAPI__ASM_HWCAP_H */
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 9ad065f15f1d..b1219f14459f 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -278,6 +278,7 @@ static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
- 
- static const struct arm64_ftr_bits ftr_id_aa64isar3[] = {
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR3_EL1_FPRCVT_SHIFT, 4, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR3_EL1_LSFE_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR3_EL1_FAMINMAX_SHIFT, 4, 0),
- 	ARM64_FTR_END,
- };
-@@ -3252,6 +3253,7 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
- 	HWCAP_CAP(ID_AA64ISAR1_EL1, I8MM, IMP, CAP_HWCAP, KERNEL_HWCAP_I8MM),
- 	HWCAP_CAP(ID_AA64ISAR2_EL1, LUT, IMP, CAP_HWCAP, KERNEL_HWCAP_LUT),
- 	HWCAP_CAP(ID_AA64ISAR3_EL1, FAMINMAX, IMP, CAP_HWCAP, KERNEL_HWCAP_FAMINMAX),
-+	HWCAP_CAP(ID_AA64ISAR3_EL1, LSFE, IMP, CAP_HWCAP, KERNEL_HWCAP_LSFE),
- 	HWCAP_CAP(ID_AA64MMFR2_EL1, AT, IMP, CAP_HWCAP, KERNEL_HWCAP_USCAT),
- #ifdef CONFIG_ARM64_SVE
- 	HWCAP_CAP(ID_AA64PFR0_EL1, SVE, IMP, CAP_HWCAP, KERNEL_HWCAP_SVE),
-diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
-index ba834909a28b..c44e6d94f5de 100644
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -162,6 +162,7 @@ static const char *const hwcap_str[] = {
- 	[KERNEL_HWCAP_SME_SMOP4]	= "smesmop4",
- 	[KERNEL_HWCAP_MTE_FAR]		= "mtefar",
- 	[KERNEL_HWCAP_MTE_STORE_ONLY]	= "mtestoreonly",
-+	[KERNEL_HWCAP_LSFE]		= "lsfe",
- };
- 
- #ifdef CONFIG_COMPAT
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index 82ffb3b3b3cf..08e2cb94bff3 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -1642,7 +1642,8 @@ static u64 __kvm_read_sanitised_id_reg(const struct kvm_vcpu *vcpu,
+ 			val &= ~ARM64_FEATURE_MASK(ID_AA64ISAR2_EL1_WFxT);
+ 		break;
+ 	case SYS_ID_AA64ISAR3_EL1:
+-		val &= ID_AA64ISAR3_EL1_FPRCVT | ID_AA64ISAR3_EL1_FAMINMAX;
++		val &= ID_AA64ISAR3_EL1_FPRCVT | ID_AA64ISAR3_EL1_LSFE |
++			ID_AA64ISAR3_EL1_FAMINMAX;
+ 		break;
+ 	case SYS_ID_AA64MMFR2_EL1:
+ 		val &= ~ID_AA64MMFR2_EL1_CCIDX_MASK;
+@@ -2991,6 +2992,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+ 					ID_AA64ISAR2_EL1_APA3 |
+ 					ID_AA64ISAR2_EL1_GPA3)),
+ 	ID_WRITABLE(ID_AA64ISAR3_EL1, (ID_AA64ISAR3_EL1_FPRCVT |
++				       ID_AA64ISAR3_EL1_LSFE |
+ 				       ID_AA64ISAR3_EL1_FAMINMAX)),
+ 	ID_UNALLOCATED(6,4),
+ 	ID_UNALLOCATED(6,5),
 
 -- 
 2.39.5
