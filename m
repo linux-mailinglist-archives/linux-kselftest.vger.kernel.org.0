@@ -1,193 +1,140 @@
-Return-Path: <linux-kselftest+bounces-39254-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE69CB2B275
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 22:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EABCB2B2F4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 22:53:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61E8A1BA2575
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 20:34:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AED51B22AA0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 20:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45CED2222D0;
-	Mon, 18 Aug 2025 20:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D593274B57;
+	Mon, 18 Aug 2025 20:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FrS1K8f+"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="gKq9Pmf6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC9C1F76A8
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 20:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD769274B3B
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 20:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755549265; cv=none; b=ubFHa+jhOf6CFaqLnjgHPjRwGZSiVbkmvGh0kKm1wChBJnLAR6Z4RiIM+CFmMqP8KmDN7GOEWO/UyOehq8fkTVbzyhxk0DHF3jGzq9D8EOvY3sS5shn3lme7p+168lVmfzZAZtY+3Mlw67yFg4bd03le+Y/oas4Oo2aVMzSPcGM=
+	t=1755550162; cv=none; b=CwmQunlIwvqMgUwsLVX5+vAPxFESgWRb6v0U5qaTLTjAqi8ouTu52qXDPGvuhuwRRepu1WWS4PyVMi3bp/eTPVlVvdzJzH4cU7Gxi4XTx2Eju1d0O+ttf4rVZIahcLdPor69L6yh/FBIRMO/4OkeGqPU90ZuESf9Nhm4hGyNncQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755549265; c=relaxed/simple;
-	bh=vEU1DhK/0zgNT8JWZLGDWnWbNMj0+ZSO11M2ZhDRAFg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bMbIHTHlcd1wYIabZcgh7cHjwhhRmuoMZ4nLkzmuWg//Xpec8litkeEpLzReM0I4+JJX6a3ME/OEk546wISJYXnOql4hy2cv6IVpDo3B4jCMW4E5ROBWvBHL9WyME3sXJYAb81ODLVR+Ro4ohBK7FLu39d3SUycZ1nhppHmL+HM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FrS1K8f+; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-55ce5287a47so4158630e87.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 13:34:23 -0700 (PDT)
+	s=arc-20240116; t=1755550162; c=relaxed/simple;
+	bh=r/tlFuEp24RY7LW1HU003dO2ILYoTGwJZsLmDtFGX/0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K9gDusc7aWEK9rBGDSpyHmQXyo2S/oDFS/EM89DiYsCxmLkS1a+dANEK7hYs+6deKdtU+iWp/AliXp28ce0PWvVSPJB6cJ1ihe7NKUQYUs8CjzMILjMpVoTJXQFLIBvfly1wwXGE4JEXeKCmtpdukV8mNV8i2r0cLl8rhN0xMzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=gKq9Pmf6; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3e57010bc95so42301065ab.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 13:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755549261; x=1756154061; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pUZu6/RFeyBiHuWjtq2Q11oy5SbsMtdXFQAhlB7E6FM=;
-        b=FrS1K8f+0yw+Bjz5v+Sxs8Tcb1nTC//pEgPY1zWE6yyQRakfWFXc2LpNaExRxQlXJN
-         MIKqoVaQrYyG8xq40HiLFtTg02cLnjm166+5OWq7DDQ6eOFdmwuVfIzTdRk1F42cxji+
-         KgC2aTtZBkIbwsZ1D7ojjN2N7TuC7jPGYPRkdSxYhkSxQA0lJVjjHlSoGgx0Q9QZyAHW
-         nYpqZfntpxYY4oZXTmiBwV9bIeDQ3ZaTdXJAB5w3s8xGwgUsGMJQuiQFQOQMshZObje8
-         FUN/wyEJePcwGoTZaN4/B3DoJPfA4I6X27brmLj0+sLln3Lmu4ssQwuaYsEqUFMWMjLV
-         Urdg==
+        d=ventanamicro.com; s=google; t=1755550160; x=1756154960; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yTx0AGgPrDbS3KcN6ga5NW90Vwf9DBfaoRIUpUUDTXY=;
+        b=gKq9Pmf6bc026odWyjA8oa2uHAwlkeuX8nz8Vc5gX71wfDlBxMCicnWGl24Os8raWA
+         C8e3H77OQyY9VMrP6OSYX1sYsQOpySph0Ire4kdjx6PhSImZBmZGKT2g0X5hPM8FtDB2
+         sHxBvyV6luwDJwuYiMejeBe4POxSngVIS+8+tz3JFgeYu4ZLmgGR2AzVf2KkEx0OKKkg
+         u1HG7NvsPegxs+9duAXZuSIbi1OqEE25xFI/HgumMMMNkT7/JByDZBvVLLBPy7BsV6Tp
+         t/y+AJ//4E6MVXJuyBUDIvdCaWDmMZaACyoqtDj4D+qhZlS1p3EF2aMNCaeUKunId+lZ
+         ZvhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755549261; x=1756154061;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pUZu6/RFeyBiHuWjtq2Q11oy5SbsMtdXFQAhlB7E6FM=;
-        b=ckTC5wie8nsGNrsANZ1/L20AcefB+K6wNhrt3k/6J5223v87hSYr40IlvkQ/qDZrhz
-         gXEDaQ8x2wpZYkPH8iiL550B+vtqDCcGKxtxjdUzhPXUdUFmjV7VeeEWnU0aOdPi0hB9
-         PffO4+LEdDTjkN/WOzjvnATN3cgyLcRdLvHUVboU5wEDSrvchu9T3xTgMrilnAU3Usa1
-         FvcD7v2nCyWAh4QfJ4iyDn0rWFEJZUZG4lNSwDJjoW2pWsC1z19p6Qv4Dzu7JqPSGUjE
-         QE7+MkjteTEUqXZ5ItUEI3wUqxHh+E7ytkD793qI/4iHrrzMB8J9EMfzuCI87W5AhAy0
-         6ivw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnx/2OtxvpDaTZ4W1BNv5mgH9Zbi/rjX/8PpbfD88GaEJE3NOsVCaYOBn+8XSBcEsYTAPSeLiGOFMhse1fhQc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmNWFKZJF46zVxMkHLn2jA/3kHt3WzuwWLRrM7yN0RBgBBw348
-	0bh1W8cmIQ8DlPtSvrqrIGAY/lhuJGVx31ZW2l6V5Xi5fB2oQFicm5xKOZuNTftuQmrVSO+bnBm
-	I0StQtiUTMf2QyURon55Od39sdHYi1XpInaozSZz9
-X-Gm-Gg: ASbGnctdLh2IOn1A8jSBA33gWIzpzZXvTfREOB4tPH9nW6qkzCEBCvo5mBqQeQ5YK7+
-	Xsrtn+j2W5uiOP8oxgVAkA91uZMx+NSbeYJXhyU/VrJQ+Jv/KJh9fqNUpu8CYlTqcwzS9JELtXG
-	MWLkqHi/rVD4VwlOy4qKgqpIBmM6Ep8O1euV/pS3j7EdTteKDHbx01v9QneCeyO4Of6uXsSzhUz
-	AYWPg0aWHDj1VtHWdJuOceu
-X-Google-Smtp-Source: AGHT+IG/okCLiEMnTbEAuvgIc+GfOEaMV4Ktqhv/RQf6BYRPRMuCIwvQNW5SPCUa5fwVMmY/BHmCrdmWZrmWrMGMPKA=
-X-Received: by 2002:a05:6512:1597:b0:55c:c937:111d with SMTP id
- 2adb3069b0e04-55e0076824fmr61707e87.13.1755549261092; Mon, 18 Aug 2025
- 13:34:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755550160; x=1756154960;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yTx0AGgPrDbS3KcN6ga5NW90Vwf9DBfaoRIUpUUDTXY=;
+        b=HVIEosgi+02aB/1cfeKkV0lgjkW1dWzgHWuFd7kWBmvWRCpRYj1bDkXdS48FC5g+y+
+         nS/0L5bkJ49YD79lViU+zNVLrZBc7Apr6WKVwX3YMo250GXq5Z3OPNrHyvNAknjzwQZL
+         h89Juk1toyCDwoqQbxMz0I8RKv+nyEiQRBXNntGJkOhInlPz1hJ2Iuy2etKNV1LADOAb
+         Cr311jjZP1aMiHYcWn/L3gBRwCWivllXmhUkG6cEZq0Og2ri+UGs3WoYlbnEztyyjyJu
+         ktMHWiTaqR6Be9BT6kRij6qyz3ArfpOZKRO4KtEJr9qLt3p1hTaplTSaBjNjAjOLZ3nC
+         opDA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3amUe8S2IcyHkUzjtHM5iJZFLFMqKCtdRPoycj9nIWkDv7ydCHWvX/hKS4i28hqFlK1TMGOCnq0Rp8hchi/s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSM4p3XPf9ktXM7C7jUK+BNR/0SHmhxFiFFCrmgvtjVt3O2UgH
+	UMbHgOuW7uqvc1pr83Jonj+bEb0k7Hqr6r378B3HAR2WYQEY2xRaQSW5lJ/h0+d9hiZX+2gFb2f
+	+KMJrqU8=
+X-Gm-Gg: ASbGncts6IfN4sPKEFzjrwOL4DhuT7F/khq/FSDTvK32EgZ25i+06Xlxjwk6UMeYllo
+	O/4Ir5ii5HPMAtOTwDTf0yb6p+vWolztBPwJAuzZXmENXIFlRt4hZ0lCEL+DKDKtCY4NquEdiTV
+	RuaUjnRjprLwefcT/MR0Kx73m3c8n+eOQSQVIcL2tfF35cveuqTO6UUrDl4hQKSck01UUaNptxp
+	uydz5INVJGvQZhwI0U8FxSWwcIFFeTz2SmU7FqMtLsTBa77X3FlfrfzYxsSvwtSkPYiIUkMbtbu
+	Y1zo8iY+5vURrjG2wfYgfIB31mzrwHIMu494CZJYtxCJVY0FhXjhoi2oPw4bGzIQr9DoKDX1SO1
+	JXgzGUZBb9Qe1sCJ2rVkRQxpfPxFLmKdTEMk=
+X-Google-Smtp-Source: AGHT+IHxcwWqm3fjBflzgEs6NvcilbQYpbaH0XAlN7Sox/42b5vyAZqiL/BamV9P4rahkCtx7tHI7Q==
+X-Received: by 2002:a05:6e02:18ce:b0:3e5:6696:202d with SMTP id e9e14a558f8ab-3e67665caeemr2588935ab.20.1755550159855;
+        Mon, 18 Aug 2025 13:49:19 -0700 (PDT)
+Received: from localhost ([140.82.166.162])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-50c949f68eesm2778428173.77.2025.08.18.13.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Aug 2025 13:49:19 -0700 (PDT)
+Date: Mon, 18 Aug 2025 15:49:18 -0500
+From: Andrew Jones <ajones@ventanamicro.com>
+To: dayss1224@gmail.com
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atish.patra@linux.dev>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Quan Zhou <zhouquan@iscas.ac.cn>
+Subject: Re: [PATCH v2 2/3] KVM: riscv: selftests: Use the existing
+ RISCV_FENCE macro in `rseq-riscv.h`
+Message-ID: <20250818-617bdc4613bfa02c291a6b47@orel>
+References: <cover.1754308799.git.dayss1224@gmail.com>
+ <7de4aedb44be3166a6568c28da70c0d2d4850571.1754308799.git.dayss1224@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250620232031.2705638-1-dmatlack@google.com> <CALzav=dVYqS8oQNbygVjgA69EQMBBP4CyzydyUoAjnN2mb_yUQ@mail.gmail.com>
- <20250728102737.5b51e9da.alex.williamson@redhat.com> <20250729222635.GU36037@nvidia.com>
- <CALzav=d0vPMw26f-vzCJnjRFL+Uc6sObihqJ0jnJRpi-SxtSSw@mail.gmail.com>
- <CALzav=fdT+NJDO+jWyty+tKqxqum4RVkHZmUocz4MDQkPgG4Bg@mail.gmail.com> <20250818133721.32b660e3.alex.williamson@redhat.com>
-In-Reply-To: <20250818133721.32b660e3.alex.williamson@redhat.com>
-From: David Matlack <dmatlack@google.com>
-Date: Mon, 18 Aug 2025 13:33:52 -0700
-X-Gm-Features: Ac12FXzA9RSmzacYT5nDWeSXLLoZk1b9VAVMv04nR2qdBzwPjNGQjuMMNBDam8Q
-Message-ID: <CALzav=eOz+Gf8XawvaSSBHj=8gQg3O9T9dJcN6q4eqh7_MEPDw@mail.gmail.com>
-Subject: Re: [PATCH 00/33] vfio: Introduce selftests for VFIO
-To: Alex Williamson <alex.williamson@redhat.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, Aaron Lewis <aaronlewis@google.com>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>, Bibo Mao <maobibo@loongson.cn>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org, 
-	Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, 
-	Joel Granados <joel.granados@kernel.org>, Josh Hilke <jrhilke@google.com>, 
-	Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>, Vipin Sharma <vipinsh@google.com>, 
-	Wei Yang <richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7de4aedb44be3166a6568c28da70c0d2d4850571.1754308799.git.dayss1224@gmail.com>
 
-On Mon, Aug 18, 2025 at 12:37=E2=80=AFPM Alex Williamson
-<alex.williamson@redhat.com> wrote:
+On Thu, Aug 07, 2025 at 10:59:29PM +0800, dayss1224@gmail.com wrote:
+> From: Quan Zhou <zhouquan@iscas.ac.cn>
+> 
+> To avoid redefinition issues with RISCV_FENCE,
+>  directly reference the existing macro in `rseq-riscv.h`.
+> 
+> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+> Signed-off-by: Dong Yang <dayss1224@gmail.com>
+> ---
+>  tools/testing/selftests/rseq/rseq-riscv.h | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/rseq/rseq-riscv.h b/tools/testing/selftests/rseq/rseq-riscv.h
+> index 67d544aaa..06c840e81 100644
+> --- a/tools/testing/selftests/rseq/rseq-riscv.h
+> +++ b/tools/testing/selftests/rseq/rseq-riscv.h
+> @@ -8,6 +8,7 @@
+>   * exception when executed in all modes.
+>   */
+>  #include <endian.h>
+> +#include <asm/fence.h>
+>  
+>  #if defined(__BYTE_ORDER) ? (__BYTE_ORDER == __LITTLE_ENDIAN) : defined(__LITTLE_ENDIAN)
+>  #define RSEQ_SIG   0xf1401073  /* csrr mhartid, x0 */
+> @@ -24,8 +25,6 @@
+>  #define REG_L	__REG_SEL("ld ", "lw ")
+>  #define REG_S	__REG_SEL("sd ", "sw ")
+>  
+> -#define RISCV_FENCE(p, s) \
+> -	__asm__ __volatile__ ("fence " #p "," #s : : : "memory")
+>  #define rseq_smp_mb()	RISCV_FENCE(rw, rw)
+>  #define rseq_smp_rmb()	RISCV_FENCE(r, r)
+>  #define rseq_smp_wmb()	RISCV_FENCE(w, w)
+> -- 
+> 2.34.1
 >
-> On Mon, 18 Aug 2025 11:59:39 -0700
-> David Matlack <dmatlack@google.com> wrote:
->
-> > On Thu, Jul 31, 2025 at 1:55=E2=80=AFPM David Matlack <dmatlack@google.=
-com> wrote:
-> > >
-> > > On Tue, Jul 29, 2025 at 3:26=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.c=
-om> wrote:
-> > > >
-> > > > On Mon, Jul 28, 2025 at 10:27:37AM -0600, Alex Williamson wrote:
-> > > > > On Fri, 25 Jul 2025 09:47:48 -0700
-> > > > > David Matlack <dmatlack@google.com> wrote:
-> > > > > > I also was curious about your thoughts on maintenance of VFIO
-> > > > > > selftests, since I don't think we discussed that in the RFC. I =
-am
-> > > > > > happy to help maintain VFIO selftests in whatever way makes the=
- most
-> > > > > > sense. For now I added tools/testing/selftests/vfio under the
-> > > > > > top-level VFIO section in MAINTAINERS (so you would be the main=
-tainer)
-> > > > > > and then also added a separate section for VFIO selftests with =
-myself
-> > > > > > as a Reviewer (see PATCH 01). Reviewer felt like a better choic=
-e than
-> > > > > > Maintainer for myself since I am new to VFIO upstream (I've pri=
-marily
-> > > > > > worked on KVM in the past).
-> > > > >
-> > > > > Hi David,
-> > > > >
-> > > > > There's a lot of potential here and I'd like to see it proceed.
-> > > >
-> > > > +1 too, I really lack time at the moment to do much with this but I=
-'m
-> > > > half inclined to suggest Alex should say it should be merged in 6
-> > > > weeks (to motivate any reviewing) and we can continue to work on it
-> > > > in-tree.
-> > > >
-> > > > As they are self tests I think there is alot more value in having t=
-he
-> > > > tests than having perfect tests.
-> > >
-> > > They have been quite useful already within Google. Internally we have
-> > > something almost identical to the RFC and have been using that for
-> > > testing our 6.6-based kernel continuously since March. Already they
-> > > have caught one (self-inflicted) regression where 1GiB HugeTLB pages
-> > > started getting mapped with 2MiB mappings in the IOMMU, and have been
-> > > very helpful with new development (e.g. Aaron's work, and Live Update
-> > > support).
-> > >
-> > > So I agree, it's probably net positive to merge early and then iterat=
-e
-> > > in-tree. Especially since these are only tests and not e.g.
-> > > load-bearing kernel code (although I still want to hold a high bar fo=
-r
-> > > the selftests code).
-> > >
-> > > The only patches to hold off merging would be 31-33, since those
-> > > should probably go through the KVM tree? And of course we need Acks
-> > > for the drivers/dma/{ioat,idxd} changes, but the changes there are
-> > > pretty minor.
-> >
-> > Alex, how would you like to proceed?
->
-> I think we need an ack from Shuah for the overall inclusion in
-> tools/testing/selftests/
->
-> AFAICT the tools include files don't seem to have any central
-> authority, so maybe we just need to chase those ioat/idxd acks, along
-> with Shuah's and we can get this rolling and follow-up with the latter
-> KVM patches once the base is merged.  Thanks,
 
-Sounds good.
-
-And yeah, I also don't see any maintainers listed for tools/include/
-or tools/arch/x86/include/. Jason left some comments on the RFC that
-reduced the delta in v1, but that's the only feedback I've gotten so
-far there.
-
-I will try emailing Shuah and the ioat/idxd maintainers directly as a
-next step, since it has been about 2 months since I posted this series
-and we haven't heard anything yet.
-
-Thanks for the help.
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
