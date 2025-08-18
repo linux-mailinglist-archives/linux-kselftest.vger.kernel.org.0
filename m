@@ -1,105 +1,97 @@
-Return-Path: <linux-kselftest+bounces-39226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3753B2A0F4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 14:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C418B2AA47
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 16:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AA9217690A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 11:57:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47A5B5A30B7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 14:17:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 776DF31B104;
-	Mon, 18 Aug 2025 11:57:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63549322749;
+	Mon, 18 Aug 2025 14:07:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+HJdGPg"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="uKRtaEcV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF5731AF01;
-	Mon, 18 Aug 2025 11:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B79261B9B;
+	Mon, 18 Aug 2025 14:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755518247; cv=none; b=RARycyDD5vOQQdJrt4g6eH/oB2kp8XDQ/nMMlrS/PqvEydH94HnZb2R/u8Mw5x/YzmIc9HcIMe6Bia1QYQ8CDnjMSxKFZOl5f2+41gHHL7U36qSWcY4eGX6wLSDbIDVWfiorLGI4AOOo4ysxXwZYPZeoU4iiPcHEYDQTxFRMIN4=
+	t=1755526051; cv=none; b=cRmow1JjK3cPzB3TcSNuHlx7h2Zk0jt520z5t9juFBMV7iqnNotfhSTxJOImJEkEB+SxvOHMqOi40O8aUHIMqnzh5nlHWBj7CWycQKO0Q7zYyyWKu12Nq49kjHTz0UoxRH3nge0edlQoT0y17lwHUT+EcA/PV5DQs4d6se4l6eI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755518247; c=relaxed/simple;
-	bh=5jHJQJsG6PPM3ZiBXsIJKj/EWtSsObcH1vyAtrn3Gp0=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=gk5TbgE12ABGQytCqovGPJ/XN4X3McqM8Dqzkc/8yBR5Mfn1dBHGnjfPeiWJHMRaSPK6PkkSWu9WOoHkFcAbLiNoIitZl6+NACdTQUbvP8E6DbWJSDUkuZxQ9stkiNEu2+jte0Yw4sKUouM1Y9tpX4KR8U+jfefpowHR59XJEdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+HJdGPg; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-619998ac786so3479189a12.1;
-        Mon, 18 Aug 2025 04:57:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755518244; x=1756123044; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=T9iwgo+i86PCVtZqT4kE8ztMHAtNDZ0Rddp49IBLH84=;
-        b=f+HJdGPgRbKldTMPeTjftBOP3HmzOW74UzvJmLWEc4W8UJIKXl03EnINm38aaaw71x
-         lS60D5DqB0eDNCZkeyebrzppmdd4XtJ7gPUyro+N8+isab6VHj6WFJZr35DpVjYnSVOG
-         VIv3Vz7nowZMzazAdTedOYKqn8+3FPpfwNB3mLNxJVAWyvZZ5IFfEdFOGZjqCFDWNSL7
-         JSA/+iNTpFYQCUT2M5NUywHRWyYqhyNcl0aPVkxD+KOGEJqNN+6jKNLuL+XFBzfPy0uo
-         JpZm8fsbi7KsVoy4VyOixUcvTezFSczJFNMf0P7GMnTj33kQr3G3gb9e6+iIXfdqgWkX
-         CQTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755518244; x=1756123044;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T9iwgo+i86PCVtZqT4kE8ztMHAtNDZ0Rddp49IBLH84=;
-        b=miFni+xezqrAqWVrOCasPfYIgTypqnnRSF5QlGgf/e/5HEZVbchOTYmvKo+CsBaH6N
-         BI2rqEGY368QskAzYYryZP50nNga/Lj8Apb+xp10KT3CeHdvPp+4ooKoT+3nKr7KL870
-         jvpl4o8iSPmwEHpPoKAl1Nfuc7nX7K1Fm70a0YOqglOO1Lfgb+Z9eeT/Cu76CpekjV5Q
-         Pac9fXMgzMUjVaLUg46WE/OIwTeegDE1hStzLP5o/gyT+UmM9Z/5Mk1k7iKkVhc6k5l9
-         O4f/tYNBVoro3C0GotBZ21kNpjqC7fpUFixHIdREv4SdPRUmJbFuYVpLykbLPyFPsn35
-         6qkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUk8KqvnnOeH6bHNj1y41rPfdUS3kTX3fLJaTES17EOYnk1OisurK9I5CX3V3E7Mnf04Sy8hRLRQxFOlYM=@vger.kernel.org, AJvYcCW6xwOERPCLkVU2CARwAKjxx+iGl2+hhTmHqWjgO7AL9lFG+xs+Y9lD23Tj/mgnqiqTrDEmK56/6gI6q4nS7FE3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5Q/u6IzehXJfnp9d6wPy2+MJDBc7oMD3c4dK+XG8962SmzXuI
-	OqZdrn8G0hw1Z4AhLlj/wpPhqZ6mvydqXlkfUmVN/viOJbCPNgtYRDgPmTN+NzIvHHExEppuqRP
-	KUjGwBBcjmj0idLTnrREihqDw4GM+QNY=
-X-Gm-Gg: ASbGnctsilJeI3RaARFsdO9M63EWSZbOJ0lnDktbK7i8BPdBhmBVLsM7QFhpPWzeCn9
-	Q6QC0v+y9qmR+8n4fedgKVwmVmxzGtG4cFgR3EluVqGgnZrbHSkshS4DHbRAYy8JCT3ZLBWOzKQ
-	VvXzZ9zsBLiuETUIxsLrHZBO6QC24hHVIZfvxaTcSUICRdJ553ZnFact10+w2cNHPC1LPYm1yoy
-	LXf3NAN5Etap88Lukcnn3hz3T5HATdtSC5vO1OH+fBoqBy4iRYD
-X-Google-Smtp-Source: AGHT+IFvbQqzH5lN1+Kyg8vBAAzNpFlPf+v42KwiTM2r7r0zwVNLhha2/ttn8fx/3Vm1MJpAvzri1Jbk11XIhxsyTGA=
-X-Received: by 2002:a05:6402:2787:b0:617:cd9d:e267 with SMTP id
- 4fb4d7f45d1cf-618b052fc3cmr9823214a12.8.1755518243828; Mon, 18 Aug 2025
- 04:57:23 -0700 (PDT)
+	s=arc-20240116; t=1755526051; c=relaxed/simple;
+	bh=aWJdNsIL+OfTpQ7wAhWqjKJj/AXrvG8KIwRxbSMd0Ks=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NGHNYCurfaQF76NxvXLWpmQa9velP5PevzqWPK/olROAawTNbBh5YK6ivpIcIbh50wEDVKNIpbKehBRh5A5L/oYo5ToNnLoJ5CsF+1PruLAytIn96DQUsjDRJAWh+eKnjEnMSs9GA5KD3TDnlvmJGUiOaVXa41QJ+qOro5yd7VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=uKRtaEcV; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1755526041;
+	bh=aWJdNsIL+OfTpQ7wAhWqjKJj/AXrvG8KIwRxbSMd0Ks=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uKRtaEcVKtXTiPWamZvVo+hWvY4SZTAPEAQF6+V7D5SvXfco8IGylDSVS2hFQt4Tv
+	 6NNb9/wjTU90ZBUD/TjktLML/FvQD5uT8RWQWyY4NDDhMhyreuCDffRSsB2rHvzS64
+	 lr3NbpCuzrO0AoTjHkuKFX5+UQ6x+RqlSqRDe56k=
+Date: Mon, 18 Aug 2025 16:07:21 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 2/3] selftests/nolibc: don't pass CC to toplevel Makefile
+Message-ID: <d742c315-273d-417e-b1c7-00a9cec6a2c4@t-8ch.de>
+References: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
+ <20250719-nolibc-llvm-system-v1-2-1730216ce171@weissschuh.net>
+ <20250721025627.GB1886@1wt.eu>
+ <ebb84a9c-8771-4791-8a81-b615cecec7c3@t-8ch.de>
+ <20250817093905.GA14213@1wt.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Sidharth Seela <sidharthseela@gmail.com>
-Date: Mon, 18 Aug 2025 17:27:12 +0530
-X-Gm-Features: Ac12FXwO-bmhfVkEZc4PmVuaYWtBqlneHweG5Fs7DVLHZVjfG4lU6PawU1ViqWI
-Message-ID: <CAJE-K+DWK7MCha0bp3D4AeCh57gbR3EUDy3JO5C6b6xFeM7=mA@mail.gmail.com>
-Subject: [PATCH] sud_test.c: Spelling correction 'usigned' changed to 'unsigned'
-To: shuah@kernel.org
-Cc: dvyukov@google.com, tglx@linutronix.de, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250817093905.GA14213@1wt.eu>
 
-Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
+On 2025-08-17 11:39:05+0200, Willy Tarreau wrote:
+> On Sun, Aug 17, 2025 at 10:30:52AM +0200, Thomas Weißschuh wrote:
+> > On 2025-07-21 04:56:27+0200, Willy Tarreau wrote:
+> > > On Sat, Jul 19, 2025 at 05:38:28PM +0200, Thomas Weißschuh wrote:
 
-diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-index 2eb2c06303f2..6b846f5c1fa6 100644
---- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-+++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-@@ -140,7 +140,7 @@ TEST(bad_prctl_param)
-        prctl_invalid(_metadata, PR_SYS_DISPATCH_EXCLUSIVE_ON, 1, -1L,
-&sel, EINVAL);
+(...)
 
-        /*
--        * Allowed range overflows usigned long
-+        * Allowed range overflows unsigned long
-         */
-        prctl_invalid(_metadata, PR_SYS_DISPATCH_EXCLUSIVE_ON, -1L,
-0x1, &sel, EINVAL);
+> > > I think I'd be fine with this, but then we need to make it
+> > > explicit in the help message and fix the current one, possibly just
+> > > with this:
+> > > 
+> > > -	@echo "  nolibc-test       build the executable (uses \$$CC and \$$CROSS_COMPILE)"
+> > > +	@echo "  nolibc-test       build the executable (uses \$$CC)"
+> > 
+> > I don't think this is correct. $CC itself depends on $CROSS_COMPILE
+> > through tools/scripts/Makefile.include.
+> 
+> I don't understand what you mean by "depends on" here. CC defaults
+> to ${CROSS_COMPILE}gcc and may override it if set. So if one sets
+> CC, CROSS_COMPILE will not be used for it. Or maybe we could change
+> it to this to indicate a precedence if that's the idea you want to
+> convey ?
+> 
+>  -	@echo "  nolibc-test       build the executable (uses \$$CC and \$$CROSS_COMPILE)"
+>  +	@echo "  nolibc-test       build the executable (uses \$$CC or \$$CROSS_COMPILE)"
 
---
-2.39.5
+Yes, that is the idea. 
+I pushed a commit to this effect to nolibc/for-next.
+
+
+Thomas
 
