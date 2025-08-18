@@ -1,130 +1,146 @@
-Return-Path: <linux-kselftest+bounces-39217-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3E78B29D75
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 11:18:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8A95B29DA4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 11:24:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F48E1888772
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 09:18:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC8071771B8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 09:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0512750F6;
-	Mon, 18 Aug 2025 09:18:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E7730DD2B;
+	Mon, 18 Aug 2025 09:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MBOcaBQZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e8FWk3V5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB7523C4E0
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 09:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF482D7D42;
+	Mon, 18 Aug 2025 09:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755508688; cv=none; b=e0XzNx4SYraU+9K8bAqBKDnB5+ELQH/dYrz2dYDt+Vky4tAIXZ+By3/BL+0pcaK2hgsFSAJ7zzoa/086DUw1CYxZVrspxMfquC9VZ6BD9W5FdrZiLP2qnGvlXgPojfWfsperAHEwiyC8FkGCQ0TKUk1WuHFmIHM+EPRoi/Yiacw=
+	t=1755509005; cv=none; b=paqz3LiYeVlWSme8mVCGW4BEZRL34gWOcOHKo9Mxam301mekcE1LRNtRhXKZIXiGl2pDzmfxAA5yuMX6Qj3264j9eqDkYFlPr1hwrlgSTxAIqdupPPgzfmkg7e0v7T9Ah8sTgxn6fBtwarJoINZz10uv6kp7Dc1yn3Wm9P0ucXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755508688; c=relaxed/simple;
-	bh=VRbt8m6yjwhJBf5/VpfWNr4OTU3FocAWSdb4TOxjyvM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BFwOfDnWtTPgh0Xs0AS0oBpo4Mi2zZKEv/f7FzmcGV9BwoTDmxDoZjFhff5vAIEvhn6uYJ3h/UywaMv7hXKIi3ME6HG25AehPbGiZNQ9ENtoNy8kh2rpX0fl8Q8+4seYHgGBRIMSac6tuY7mocHKUas3iQmHIXlfXVFYedjA5MI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MBOcaBQZ; arc=none smtp.client-ip=209.85.208.41
+	s=arc-20240116; t=1755509005; c=relaxed/simple;
+	bh=GTJsdloMm1slL0ugKJLhrrNq7KdUoq4hUGaAdOXWx2Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h6fz3TD7r3hk6yNXsKU1JR0oT4OIK0b33vWgi9Y6NGfvI4v0nEGp3zXy/g2ucjWOkx5h03hk94IHMDNzOc7r/Ie2OohSp9hlnGQeAlObU5DBUHTdbdvTl4E9hm1PwRm/ydKj2VEiosERaM/Aw4w8tpvUe5SJ4h4bgaA8PorvvT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e8FWk3V5; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6188b7949f6so7492916a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 02:18:06 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-76e4f2e4c40so1512232b3a.2;
+        Mon, 18 Aug 2025 02:23:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755508685; x=1756113485; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tBB+lwM+pvu4wSVI63N+6OIHc2C2sLC4MvB3ZcoPbLI=;
-        b=MBOcaBQZMeX0vEddnxjS41cMsUGiEZrSXKT+uQKGjN2ZsGoOMW1kqmKvmeosmslWbb
-         eYRe0MjcIf082+t4lh88vWp3W+hOhbUv0erzRhq4zBzZOXAYF0fBx5ry/qy0daF8kELv
-         AljcQWVW7vvlqjKwv//kQx/fztyIZEE4vJhafqFiN7rfVdp+TCJ8ir33JgFdXvohKCiw
-         eca9/c27g7xRNPtiHlKIg8LuVBgxsUKOCaRa2qylj+TwAI+rd7Bbz29C5c0rhclopfj1
-         1EJMO0Y0X4TaSOnsMT4Kzvz5rsj+mpFyAKaKDieXr06D2AYak9eSh/Wr1xXjg6Vk/L0t
-         0XGQ==
+        d=gmail.com; s=20230601; t=1755509003; x=1756113803; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gqi/7q5CUaFa0VX1JEGp/3xAMYM2zA1F4e32bwx3x1Q=;
+        b=e8FWk3V5QSZK2/6UV9gdsMdmkgI31TA2hBgC1NVD1JDm8CgAt7OW7svGTtpXNbTxQp
+         2pvc4QxrdKoPl9qyivVdEQByPKf5Zjin1TKwM6wCFg8lDLzYiTxKUxpU7jzSZuznUJX2
+         bdISxO8k7fPLFeJ4uTxsmgMERIjtynNZBt2KeSG0ONazegC90WYxpb57ml7QOcv3q4RE
+         JHC7P9M1v5nPIOET3XTeBSVFHrIrxABtzUQqhyQVbDcHDuJyUKFshfNRemvPpJj0N5o7
+         lpPPugkXjVhc01k+Z/4q7WyEK5LAF5lEePAUauqj1gX5wNCFNd9wLLb0lkEsYqNSgnCa
+         hiaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755508685; x=1756113485;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tBB+lwM+pvu4wSVI63N+6OIHc2C2sLC4MvB3ZcoPbLI=;
-        b=b8v46yUp/+DVTf5/j17oqdoVx6OXCZ08Tl8afSGdTtoKrJsZD0T16m1O6SOPLJlGWR
-         coAYOMIxISfen8yQEeQGaS/6dGmp/pE2ds74EaZCNMqbRcg4S+Y2OlzA/nTnih9B0+Ox
-         ihLxOyFyG1BlMBx0VdOi7+IGIL4MUGCFr7Uvb+w/hk6sjbD6bEatEzHpGRAjM2NKtD5T
-         FjCAUNI2IeB5VVNnNaG2FfJDeiU86OvpjQ4xDROG61lG4vlIP6M1XW1OuLvrJ5eXewSi
-         aa9lv4qpsqykAkeVwDZRgGoLHAuhOpBtL6d2nyG17MKyWx5Fxvc8SxUfUXndXH/zCy2m
-         t6Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCWMQR9qeIwKAlbUdv+oapHRnJhdtjY7Li6/A/qa3zb2u4ZEoUXVc7A/5n+ujqe39LTBmqHsErPBIW6Jwk3bBPA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNtV1gdbs0Xx3LvqCl7deTBa5h3nUQSgu3geBKiDDQgApbqPqJ
-	9n5lXZKmzZ3KM7N42C/AfnczwmOnlzRPqeejKXUipHhSBf+CBCNhXtQP
-X-Gm-Gg: ASbGncsC10YDXxNnt4r78Wy8pfmU1EPHeIJtI85NZvSWbTjAmETbRG1SWXNAJNDj4H9
-	INEuglPU/O25/KXcZx4m9dxQ8efLxmL9K0v29s6E0sphYZOKKpaZesRSyeccOpJzzAqeTkgyh90
-	4tB92hg7eVfiWIJE7l+O7hIC4d8GMo1S6vG6bL2O/WxtaePlcdM8WrDKxC3sOOQf8peZ6bXm8dg
-	y54MvfPAiTO6UI5Aynxxf1IV/ZUaA+4tleLWosbmo4CeZMfM2X6+WI9LN7p07h0hLdZrhfQgWIc
-	j/6E+hXInWuOU5cNR0m/PhUxvZrfZ/sNb62KAewMgnO/S89XlEGNAEmG1ch3RC4uGUKKdXwzFrR
-	seYAAxomTGJVqkdUSXkL8bQ==
-X-Google-Smtp-Source: AGHT+IEnbuslmAYoX/r/WUhAK3IQsUhLJAXaHPPA81WGpSjMtXS6gTvCCY7bzrCTPjrHQRCoTrse/g==
-X-Received: by 2002:a17:907:9446:b0:af9:3611:924e with SMTP id a640c23a62f3a-afcdc3e77b9mr944453766b.53.1755508684864;
-        Mon, 18 Aug 2025 02:18:04 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afcdd01f445sm762836666b.106.2025.08.18.02.18.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 18 Aug 2025 02:18:04 -0700 (PDT)
-Date: Mon, 18 Aug 2025 09:18:03 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: Wei Yang <richard.weiyang@gmail.com>
-Cc: kees@kernel.org, luto@amacapital.net, wad@chromium.org,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org,
-	usama.anjum@collabora.com, thomas.weissschuh@linutronix.de
-Subject: Re: [Patch v2 0/2] Add kselftest harness selftest with variant
-Message-ID: <20250818091803.jfsmmag27n2vivaa@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20250620032815.14543-1-richard.weiyang@gmail.com>
+        d=1e100.net; s=20230601; t=1755509003; x=1756113803;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gqi/7q5CUaFa0VX1JEGp/3xAMYM2zA1F4e32bwx3x1Q=;
+        b=R/dircUw4iPXnIPjPoAiTSIsP0/DtkGWo5HGAlVNyYTP+pjSNHWcRv4qHG+2P5qJfk
+         KQlp+xp1VDd23mjAIAXSmWsSGXj3k7DCTgqy7ikCXb50nS8eMW1fAmemKS31789356U5
+         MzPqgWJX6jB2Tj5EeL43gsPKdyv3VOsbb06QHyY3gqnVau5Hn0pK4Xg8qP2D2fJBrjEg
+         9vBTTyZ6E6c092P6szNvl0f6p2VqI9Ghm52gq0BF1mftvmS9SThjsLmUEYyXxL0bNNLw
+         VNAFAT+BxzzUANIOQFgfT2eDZNGCdyv99jT660MrTHQWLysYvPaellaXgANYADHI62hO
+         UWrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUcKShErw54eEo+f9ZmfUMj2FONDgoRd++D4z2NUN0LBfsLomuHxqX53Tow2CaRfkzm9rcfAOMx2lCfrLQfn5FA@vger.kernel.org, AJvYcCXxGuEGIoxu+SqvdAXW2tEcKH3kIIwZ3HFfMXzLcI9OqDmuNOnBu0GNb0CCcppmlcWTOSOTdbk5jrU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzT0YfyzQ7/9V5oTu2QIYk8xWt8s0b0xlhcK/KRzZMOjiV41UdQ
+	hj6r/QoZvv0T5BV5H2O4HmkqsJS3KuAuggxOdYYf5ZSlwjyHg5qWT3bKrNSqveOC+2E=
+X-Gm-Gg: ASbGnct+V7zsbQLNTV2EDPuAynLyd9zMo+FuVt6KoPoBgQSqSI//BhQykFskksUrPxG
+	kuh6cmi7NOl58/e39cMlYUv6r/DGVOxSgX7WXf3HMJgCgybvthw0Hj/eivKETM23G+ugOy5+oqx
+	YmCLdzZlsoJbMbMvrfnJvwcqpt1MCpmZ/qIMgrQL6UzApkrgoyv34Gefy+b3VqKrS7KaOOHsHPy
+	CP9lZnKR3cygkNbkT1WcZ61B5ONCayxOVWBR2/YOUoxF1o4R/01C0Xqc8Is8eFStyYTgdx2RAuv
+	UYHdVQ66VxuG7j3zD4Vq/BHdu1QtULnTBwIS0RUG8lMRg6vYF0avMBkuYP6Uqdc48AQF3bvfcS9
+	6r9H62pcZwHVvYcXnabaLx2WMR2f+4nnrIBhmZyYVjnUlfx+Q3kAK
+X-Google-Smtp-Source: AGHT+IFwWi3hdv7B80mzCFhPktE/NRKZt7D2uT48w603YVhfsUCPwkeuy3sDAXB9QP5F8jXVeuJTaA==
+X-Received: by 2002:a05:6a00:1913:b0:76b:fab4:6456 with SMTP id d2e1a72fcca58-76e44858f2cmr15383702b3a.21.1755509003359;
+        Mon, 18 Aug 2025 02:23:23 -0700 (PDT)
+Received: from fedora.redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e45592eeesm6604976b3a.104.2025.08.18.02.23.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Aug 2025 02:23:22 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Petr Machata <petrm@nvidia.com>,
+	Amit Cohen <amcohen@nvidia.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	David Ahern <dsahern@gmail.com>,
+	Jonas Gorski <jonas.gorski@gmail.com>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv3 net-next 0/3] bonding: support aggregator selection based on port priority
+Date: Mon, 18 Aug 2025 09:23:08 +0000
+Message-ID: <20250818092311.383181-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250620032815.14543-1-richard.weiyang@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 20, 2025 at 03:28:13AM +0000, Wei Yang wrote:
->We already have a selftest for harness, while there is not usage 
->of FIXTURE_VARIANT.                                                                                                                                                                                                   
->                                                                                                                                                                                                                   
->Patch 2 add FIXTURE_VARIANT usage in the selftest.
->
->Patch 1 is a typo fix.
+This patchset introduces a new per-port bonding option: `ad_actor_port_prio`.
 
-Ping...
+It allows users to configure the actor's port priority, which can then be used
+by the bonding driver for aggregator selection based on port priority.
 
-Would someone pick it up?
+This provides finer control over LACP aggregator choice, especially in setups
+with multiple eligible aggregators over 2 switches.
 
->
->v2:
->  * drop patch 2 in v1
->  * adjust patch 2 based on Thomas comment
->
->Wei Yang (2):
->  selftests: harness: correct typo of __constructor_order_forward in
->    comment
->  selftests: harness: Add kselftest harness selftest with variant
->
-> tools/testing/selftests/kselftest_harness.h   |  2 +-
-> .../kselftest_harness/harness-selftest.c      | 30 +++++++++++++++++++
-> .../harness-selftest.expected                 | 20 ++++++++++---
-> 3 files changed, 47 insertions(+), 5 deletions(-)
->
->-- 
->2.34.1
+v3:
+a) add comments when init slave port_priority (Jonas Gorski)
+b) rename ad_lacp_port_prio to lacp_port_prio (Jay Vosburgh)
+
+v2:
+a) set default bond option value for port priority (Nikolay Aleksandrov)
+b) fix __agg_ports_priority coding style (Nikolay Aleksandrov)
+c) fix shellcheck warns
+
+Hangbin Liu (3):
+  bonding: add support for per-port LACP actor priority
+  bonding: support aggregator selection based on port priority
+  selftests: bonding: add test for LACP actor port priority
+
+ Documentation/networking/bonding.rst          | 18 +++-
+ drivers/net/bonding/bond_3ad.c                | 31 +++++++
+ drivers/net/bonding/bond_netlink.c            | 16 ++++
+ drivers/net/bonding/bond_options.c            | 37 ++++++++
+ include/net/bond_3ad.h                        |  2 +
+ include/net/bond_options.h                    |  1 +
+ include/uapi/linux/if_link.h                  |  1 +
+ .../selftests/drivers/net/bonding/Makefile    |  3 +-
+ .../drivers/net/bonding/bond_lacp_prio.sh     | 93 +++++++++++++++++++
+ tools/testing/selftests/net/forwarding/lib.sh | 24 -----
+ tools/testing/selftests/net/lib.sh            | 24 +++++
+ 11 files changed, 224 insertions(+), 26 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
 
 -- 
-Wei Yang
-Help you, Help me
+2.50.1
+
 
