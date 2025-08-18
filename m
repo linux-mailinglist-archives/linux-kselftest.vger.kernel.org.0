@@ -1,203 +1,173 @@
-Return-Path: <linux-kselftest+bounces-39223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13930B29E44
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 11:45:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68E8BB29E8B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 11:56:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F6677B0D82
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 09:42:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BD9F176182
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 09:56:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A01A30F53B;
-	Mon, 18 Aug 2025 09:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E163101B1;
+	Mon, 18 Aug 2025 09:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="hVcdb+/+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dWKjk9K+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AE230F533
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 09:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F310F30FF29
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 09:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755510260; cv=none; b=eR3xB0VOT7sin1L/77kQKzhmfqxCnbiWOmRVNwJSu0mWQrsJIjY6QJjk9q2rOMb6kvdw08qSyVMkb+evyFSDnmzR4eSXuN5SfcFq/3HG/lttAqO0ECsjd8UgS4tfv7eF+bE47vI1OO8cG+fdTBPLudElphygALmW+/IK2x5VtY4=
+	t=1755510977; cv=none; b=rM/MESyRTcwK80gKFOmuXcMRjGjQ9LKH2gWEc0r08t4NgP26sQfoyl5Ocvwaia5z2hhJkU5LDuZXp/2GYcR48EeO/3O1C28Co1IPD3tkyiVYNZcmX8C/Yk+RJSuMAhEsrY25jiCrplnEwZGe5Bg8vC1v8u92rGAypDKLMJzAmrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755510260; c=relaxed/simple;
-	bh=D1SHf/Q6k0gRHYTrXsDfLwpQODuU63rUiRHOBs/zSPo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Z579HAJC1bbMnIImui1kSdrSp5upc/1jNCRXtKltGeVGKRUZ/O8hIzqQkM9qkMePNF3SIYBuM3nyl9PpkuA4aqPdu4Uj9xV3w1FZ33aVKGvCIleWV8JhPCB0mAFTZeNCw+6nIRUeXn0XEAPg/zQI3vP9tuz/sbD0atmSxYxYdIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=hVcdb+/+; arc=none smtp.client-ip=209.85.210.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-76e34c4ce54so2756221b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 02:44:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1755510256; x=1756115056; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OhUabrkYn48Lbikledq2qqqh5BAE4/QD+CFPQO3FXYg=;
-        b=hVcdb+/+2F6eC8dmagybpHuDcj+SckB99H98mgqiKJNlCR7A9Y32zyYRMRCEuYiQdq
-         2p7R0YV2adsgeL40iNrcKmb2u04IhkUQXNjOX2GV3l/gNcfB3Y9oGJOw3I12tO1ur38D
-         A6lHYVDIZRUfVKGR0xHweDKiPIVWpCXvMsJVELGP6B+nDlNpCeOftCiDSeS4F4nt7ZU8
-         AnuxVTyGXcNjfGKdkUdbGyq3hDW0SZhp7kn2vN+c3t+GmDwpRssGtiJHgQUalJwZdGRU
-         fCXih0nlFHW3v0Kqt6jvNe9+439EXXMDjeHvHjbZXD3aTZenPbUjRX3ItK7g9JVnH0jx
-         5OzA==
+	s=arc-20240116; t=1755510977; c=relaxed/simple;
+	bh=T6n7tG2140FihXrM2B2pBsjHqASmO323rupXc9dMges=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HAye+9Do/QICJwAfuMVWuM76DYqdwsmT2ErsO0VQSj7LMnmeLOmtONv6/jwb5bO8cV44MasyZgzn0wW6q8SLcCw7YYS6NYbZdxBtYZxbURf5ILwZUnMHnQ1nrQ66xN4suJRBaNqOFa8YM7PijESyxEmwM6uNBdt4jsr+Q5QbY0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dWKjk9K+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755510973;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=raDzIjAENVmKn6Sj6sy5GLjqp3QaobootKXp9zS8+JM=;
+	b=dWKjk9K+rlASpQz5wdj300MddGvKUag2+ABUEZOdg/z961ilr5IVphM23XtOFncPOxM/Lj
+	hlOD7V9BbZMwgv2zDueg9ep+0ATfLN5NMNaxR9quPywOEZPhwgXcZISJ1dxJGbgdhFDtiC
+	4122fO2OgYt6h9gG7zTBGbNJIoz4uIc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-376-hd8wqf6fPlCa-31CfW7tsw-1; Mon, 18 Aug 2025 05:56:12 -0400
+X-MC-Unique: hd8wqf6fPlCa-31CfW7tsw-1
+X-Mimecast-MFC-AGG-ID: hd8wqf6fPlCa-31CfW7tsw_1755510971
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45a1b00352eso13390355e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 02:56:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755510256; x=1756115056;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OhUabrkYn48Lbikledq2qqqh5BAE4/QD+CFPQO3FXYg=;
-        b=Qyn6dqrcKlbDT5qT3IuZIIpCJCktqigcxWqeyFNpqQgPF8oP5376shJK0SREe69XY7
-         xrioj/dDpDHCjeLbMRIotInf6zC4M3kW5UHXWmWoEXS3IVLoZHcWVQ59k6y/WhO6fahF
-         yOJtguqGLWuCsF3sKI9rSnvtd2hpTBuurr02pOUsqSwxStMAnukfNaRxPFB0bST14El/
-         Uydu1YZsbiSkV4Woia6sv3Ldg+5AcGADUrnhc8ouwyr/2jh+wSIuhMrhVFomemJuC62t
-         QhEUgqxHHQ6qT0S132CyWcBoxaP+1Sl6uZKq1nCvnF+Qx2PQzVv2D8HObPgoos+mPkjr
-         PsUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXjXbduwdr1rVlFgDuau+G3/IDGAgqRbu5HQtd1AWQW/lm1CKjeOVjqA9uiolRCjKXIjnwh6RQHC/kGTiCiPkQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwuS2ZXpIiIUJiMBWY/WC4jH8+ULu4YihsqWrElS4n4jgSpFET
-	2EA7Vs4FIKFLOzVdj/ZZ8fBZ/2wzyrtOhTqhCYJm7r/f6m6obXlVHa4OK8wPxHpddT0=
-X-Gm-Gg: ASbGncu2tgrbKwXalZfFA2/L1vtGkKwah7POQrjWWhfp+g4PufCKDVEy09tFdkZH6m8
-	/D6zPqPNdQmCibO2SPPRsuzf/29U26jbPtu37XXV1GcROGj5+j2go0gnrpreerkWFazc2K2oeYy
-	jgWkit+8QQIGt8+26d0eXuwDmqOJeCCcIoVQdk1GJYrDX66xBmwMUAlEIRBL1myJdtGar4d08Gk
-	/I6VorE8hgiKbqXBk4mAMJQJH+EREZjOQfL6926XOZ2JID4QQh5V8BbTJRno9zeqKjuQciDf0sE
-	eZWcDBkJNO1XQd8pbv7H8+c2UKvReLNd6pj+9V6eKxuiD3D+u6CS19d5RY9JYtq2yVZTSYRo1Xv
-	LkFbOO9/kvJRcMia8H8320M2yW4NL2ST2sz1iYjaYpu1YaaTbXRiaw9OogBeY
-X-Google-Smtp-Source: AGHT+IEZaY/YH9MtTwNMDfFJQKUI2OS6UAuZArNL0C86X+FxToOfXP0efaPYaMKUFj+v4u4OB+zJ+g==
-X-Received: by 2002:a05:6a20:2451:b0:222:ca3f:199 with SMTP id adf61e73a8af0-240d297f5c3mr16558144637.18.1755510255710;
-        Mon, 18 Aug 2025 02:44:15 -0700 (PDT)
-Received: from H3DJ4YJ04F.bytedance.net ([203.208.189.9])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e45292c7bsm6733189b3a.36.2025.08.18.02.44.05
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 18 Aug 2025 02:44:15 -0700 (PDT)
-From: Yongting Lin <linyongting@bytedance.com>
-To: anthony.yznaga@oracle.com,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org
-Cc: akpm@linux-foundation.org,
-	andreyknvl@gmail.com,
-	arnd@arndb.de,
-	brauner@kernel.org,
-	catalin.marinas@arm.com,
-	dave.hansen@intel.com,
-	david@redhat.com,
-	ebiederm@xmission.com,
-	khalid@kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linyongting@bytedance.com,
-	luto@kernel.org,
-	markhemm@googlemail.com,
-	maz@kernel.org,
-	mhiramat@kernel.org,
-	neilb@suse.de,
-	pcc@google.com,
-	rostedt@goodmis.org,
-	vasily.averin@linux.dev,
-	viro@zeniv.linux.org.uk,
-	willy@infradead.org,
-	xhao@linux.alibaba.com,
-	linux-kselftest@vger.kernel.org,
-	libo.gcs85@bytedance.com,
-	yuanzhu@bytedance.com
-Subject: Re: [PATCH v2 13/20] x86/mm: enable page table sharing
-Date: Mon, 18 Aug 2025 17:44:02 +0800
-Message-Id: <20250818094402.13385-1-linyongting@bytedance.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <e3aca3b7-4f38-410d-91d6-5a2521dedb6c@oracle.com>
-References: <e3aca3b7-4f38-410d-91d6-5a2521dedb6c@oracle.com>
+        d=1e100.net; s=20230601; t=1755510971; x=1756115771;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=raDzIjAENVmKn6Sj6sy5GLjqp3QaobootKXp9zS8+JM=;
+        b=k8OSVgdRmiBLA5RGnXTBn/qZ25FufghzVqPp0m6xIx5Ugl/NZd/yeXSOGAnVzuahCe
+         qZ6bzXX8CkZn3tXtS18VtLalMPSXsKm0mSa8WEq5JAixU4gXjxk1vsQEOmboNb2zvrg7
+         qa1TFww9Dn/3oSKrTHp/ixL4/VqJHXijzQgfMaZiOPVq6bLwmBm6JLq3uUVyaZmVnn3v
+         Qh32lHavm+xhXu3jswBDhBVuX1OyMJXSIn+WFKMGf/WU60XWLW6opFYClPUjBuyhB8vq
+         mwUM8bmmp1Hk0GGgszllZ1bDXYe3a4nDUlCH+eAHgdK4YmIEqwPeDAq4mByofXRHpsUI
+         eqrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/yHlsjs1+fXWRe5733DasY4ccnxH7pnReOk62y95I1eaLsEwX01PdTA8WqbSi6xSeThjHc7fct0FRpRfKOtk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzV4ZKuDZSujh9CsRQ/hCc3dsjE36B+JajldT2ZySzWMVcChthq
+	DvqmHXKVPljfBzyJ6ABCVQHfL7HEKE/J87XNjatMGqmgurYOep6XFBid8Y5bVjCjtaJU0M8GN7P
+	cdNlioteKAPCOJtUSzkxYTULd2J3odQ6cfLCHhHx+7SZ23M8XfOv3bidASfxuixSWdXWTLA==
+X-Gm-Gg: ASbGncuwdHJhgAoSaupd4+TLa2dR/vCORx//oOBBzxW4Nh0EiaOEYCG67IdLyKZTmaq
+	998p3M9N5VxnRkyLEaLVAqflDM/WuEyEBzC3vx2zLIZiZ8FKvGr6zgIt7w8sHiN1dJOpXOOuq4Z
+	0JeJEpcO//V3KT8caGT3lyo+0Wu42JKXgfSVfJdAZF/dwrceClEYIU79AOZh25zldCJx0s2znDF
+	b//PWA/UkfpSc72L91P18pKELhBMb25w2ZfpJElLYXeXK8/LcWhlsSXVIXb3D7MvZ+oz780GQ8Q
+	T+NEewqy+7fLgega8eYcI8uHrF5pYXp6cDL6r4YLuFvqlyyFL+mczI2ZsROralE0U9p9uH2oYAA
+	16/zEft7ZVsUZIDjHcPRnCWFBit03PYpJgJ1grz3+MJiQDRX/Fok5ITt2PnOCmQNu
+X-Received: by 2002:a05:600c:b90:b0:439:86fb:7340 with SMTP id 5b1f17b1804b1-45a21877960mr102171555e9.30.1755510970902;
+        Mon, 18 Aug 2025 02:56:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHokknDqB0c84wJMzSgV2MRYm5XM+i/62v1KITdc0/L0Tkbm35j/TM/ZHDqqxEk9IMBO+SOsw==
+X-Received: by 2002:a05:600c:b90:b0:439:86fb:7340 with SMTP id 5b1f17b1804b1-45a21877960mr102171265e9.30.1755510970517;
+        Mon, 18 Aug 2025 02:56:10 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f22:600:53c7:df43:7dc3:ae39? (p200300d82f22060053c7df437dc3ae39.dip0.t-ipconnect.de. [2003:d8:2f22:600:53c7:df43:7dc3:ae39])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45a2221136dsm127102855e9.5.2025.08.18.02.56.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Aug 2025 02:56:09 -0700 (PDT)
+Message-ID: <ee28da71-a1b8-4980-a2ad-f956260e73c3@redhat.com>
+Date: Mon, 18 Aug 2025 11:56:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/6] selftests: kvm: s390: fixed spelling mistake in
+ output
+To: Soham Metha <sohammetha01@gmail.com>, linux-kselftest@vger.kernel.org
+Cc: shuah@kernel.org, skhan@linuxfoundation.org,
+ linux-kernel-mentees@lists.linuxfoundation.org,
+ linux-kernel@vger.kernel.org,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+References: <20250815000859.112169-1-sohammetha01@gmail.com>
+ <20250815001803.112924-1-sohammetha01@gmail.com>
+ <20250815001803.112924-4-sohammetha01@gmail.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20250815001803.112924-4-sohammetha01@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you! Anthony.
+On 15.08.25 02:18, Soham Metha wrote:
+> found/fixed the following typo
+> 
+> - avaialable -> available
+> 
+> in `tools/testing/selftests/kvm/s390/cpumodel_subfuncs_test.c`
+> 
+> Signed-off-by: Soham Metha <sohammetha01@gmail.com>
+> ---
 
-Yep, I checked the comments in arch/mm/x86/fault.c file which says as your
-advices in previous email.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
+-- 
+Cheers
 
-I changed my code in kernel 5.5 as below:
+David / dhildenb
 
-       if (unlikely(is_shared_vma) && ((fault & VM_FAULT_RETRY) &&
-           (flags & FAULT_FLAG_ALLOW_RETRY) || fault_signal_pending(fault, regs)))
-               mmap_read_unlock(mm);
-
-BTW: I wrote some selftests in my github repostory, which perform
-the basic function of mshare, and I will write some complicated cases
-to support the new functions or defect found in mshare. For example,
-once you support mshare as a VMA in KVM (just as the defeat viewed by 
-Jann Horn), I will add extra test cases to verify its correctiness for 
-this scenario.
-
-From Jann Horn's review:
-https://lore.kernel.org/all/CAG48ez3cUZf+xOtP6UkkS2-CmOeo+3K5pvny0AFL_XBkHh5q_g@mail.gmail.com/
-
-Currently, I put my selftest in my github repostory, and you could retrieve it
-as below:
-
-    git remote add yongting-mshare-selftests https://github.com/ivanalgo/linux-kernel-develop/
-    git fetch yongting-mshare-selftests dev-mshare-v2-selftest-v1
-    git cherry-pick a64f2ff6497d13c09badc0fc68c44d9995bc2fef
-
-At this stage, I am not sure what is the best way to proceed:
-- Should I send them as part of your next version (v3)?
-- Or should I post them separately as [RFC PATCH] for early review?
-
-Please let me know your preference and any sugestion is welcome.
-I am happy to rebase and resend in the format that works best for
-the community.
-
-Thanks
-Yongting
-
-> Anthony
->
->>
->> As a result, needs to release vma->vm_mm.mmap_lock as well.
->>
->> So it is supposed to be like below:
->>
->> -    fault = handle_mm_fault(vma, address, flags, regs);
->> +    fault = handle_mm_fault(vma, addr, flags, regs);
->> +
->> +    if (unlikely(is_shared_vma) && ((fault & VM_FAULT_COMPLETED) ||
->> +        (fault & VM_FAULT_RETRY) || fault_signal_pending(fault, regs))) {
->> +        mmap_read_unlock(vma->vm_mm);
->> +        mmap_read_unlock(mm);
->> +    }
->>
->>>         if (fault_signal_pending(fault, regs)) {
->>>           /*
->>> @@ -1413,6 +1446,8 @@ void do_user_addr_fault(struct pt_regs *regs,
->>>           goto retry;
->>>       }
->>>   +    if (unlikely(is_shared_vma))
->>> +        mmap_read_unlock(vma->vm_mm);
->>>       mmap_read_unlock(mm);
->>>   done:
->>>       if (likely(!(fault & VM_FAULT_ERROR)))
->>> diff --git a/mm/Kconfig b/mm/Kconfig
->>> index e6c90db83d01..8a5a159457f2 100644
->>> --- a/mm/Kconfig
->>> +++ b/mm/Kconfig
->>> @@ -1344,7 +1344,7 @@ config PT_RECLAIM
->>>     config MSHARE
->>>       bool "Mshare"
->>> -    depends on MMU
->>> +    depends on MMU && ARCH_SUPPORTS_MSHARE
->>>       help
->>>         Enable msharefs: A ram-based filesystem that allows multiple
->>>         processes to share page table entries for shared pages. A file 
->>
->> Yongting Lin. 
->
->
 
