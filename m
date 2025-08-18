@@ -1,149 +1,201 @@
-Return-Path: <linux-kselftest+bounces-39257-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1941EB2B329
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 23:01:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37810B2B498
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 01:25:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AF8C189DD1A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 21:01:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E109F4E4FC8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Aug 2025 23:25:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2736123A58B;
-	Mon, 18 Aug 2025 21:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40F520D51C;
+	Mon, 18 Aug 2025 23:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ant9n3My"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BQbzzPG4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F9D1E868
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 21:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71C121883E;
+	Mon, 18 Aug 2025 23:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755550880; cv=none; b=Wa69w9HVXkozAXOeK796ITfmNnaO6ma9hrETgtBJLzpKITf+Tw3tKZt6/OAQ/jho4xJgFHI5RCRSN5IlTFLt75PizMgCuaU29684KJzYi5r5PcqIF4UUc2PGJp4e4+IH2FUH1Xsg9ODgrUrNJJ6XOrKLq+fap/kpj8i4attxJkY=
+	t=1755559536; cv=none; b=tHdBQWXZpBa8I7RYtp+CeNy4i9gCM75MbrPRnMxoWh5OgH+3+aa+2smcfRFx5Y1DAAPnPhR4YGsAgzg9XnTRrtSSKRB0k8ph5GKC8RqQ4SZta/MhCxSxpUE2O4sypE3+JHns4d2hkdw83P2AEmS55ilbabEigXkoZ8t5soDz7HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755550880; c=relaxed/simple;
-	bh=94V2oxncUNCGGpu+Iq+45gM38Y+E66NCd49Ad/nyJWc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NJ8J1EVKZSLOwA2hFZfeMM6g2PIlZlGfhOd8UKEGO9h0gE9R4+/bhz4qW/peTCuygdaUstIv/kA/IqzNNXJ7mXMuCa0sF/XBBGFWc3KvXT4UxctCahZmRP1Mr5hP5iQvaMfp7iAZioSsv1H2uolYqOUPZQNef+CGEG20nM8NNIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ant9n3My; arc=none smtp.client-ip=209.85.166.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-88432e29adcso112962239f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 14:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1755550877; x=1756155677; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3nZTzF2lhsZGOWdY8YDL7P1nyHVBb5WBP5wnL3mixY4=;
-        b=ant9n3MyhidCzVK4theaKTpSBYdHnNf1AlnxKN4VruncyD/QKO5lRVnBcJxRRl18Ep
-         dBvUXCgywKh9f+pydfPoIDRfvxntqWL62fPbARpVwlr4aVNp1sZ1VJfXMuz3qzWY48Fs
-         eSzlQ29YVxyFrHBjB5v+owui42xEfoMVri60nVnNc+ehIe4FPjwFR29l7g6aMg1dlr3O
-         JJmfTlZdu7td/3gija5voI7T12pTQFtwEJcVXJhzmmyPcgUOd3rLkSaqmrsp+6QcB+vN
-         rPX4i1OKaaZc/D2aztEsXR9WQN/dREWhFlGe2JTd+7GJP2bxZvfqkoMwYSjh/TBsFrj9
-         d3BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755550877; x=1756155677;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3nZTzF2lhsZGOWdY8YDL7P1nyHVBb5WBP5wnL3mixY4=;
-        b=J+VquZpW1Jg63GuZKonjoD4Ym+oSS94RxZQjWwLJuSPyReOSi+Q+H93U8VTttV5Rol
-         MiMm+PZaGgdKZSmxT8NwBEcOOVcIJxjUDzHIYzP4Q9UrqbOpcJ7j8tbQU0Hgf1ZA6tba
-         Inw4S94ltqEnBfox0hzfTPctEFPgz/43YR7gzkPCXK2uAU1IgngfdDsS9D7LQPMQ3ytB
-         idLZ6CBAnD4L/jCBW8aJCJWZlwkqETx8SGDExG8rbX7bg03xuf9zKGHl3eeDfw7kdLQP
-         oiYLC6Qht+/Z//dqy5NupXUVU7fHstS5NxUZtWJXREEo+CpNUmAfmdUuTcZkZ16Rrns4
-         1c8g==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ86BqKxKyae8W/t6DpjiWHcDNK0ihG4OHrum30+WTrcdaPhvv5DXLVvjzKBMFoSFXUErnGQ0M34/QNyVWH8g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAB8BypeWc56E8LcoujK5WUVeOZ3N4mH1LwPkTP3buUv+rJ1km
-	S8MfFkkOWHeL9hoINAsDo2w1CaSQdmp7A6PTofJlUGp4+vT4RRhs6raqlK7HxOi56jA=
-X-Gm-Gg: ASbGncuRPJj0sb+i7rs0SYXSFeW5glBz9Q2lDsIP5BJYzqM2ol52D5XKO7s3mXtrHQN
-	zt5Fu5p5+HFADA15GESZKfPb4N9Doy7tCbAOIi+fPX95hXB4TWW2/VF5s7kCtPYO32M10aNvwcx
-	5ob4sM21VMTzd9GVKDCO1DqJK5fn7TZJK9ehC6KezFMTgU/dNaCUMTo1A90dIsQa10Ia+KiL1E0
-	+E7jt1PizK3Uf4UgDh25sxZQOhYl3mbTMdJ7QP6+gyWvaiyfCvgwegoth3zGILQ+wmLQx2X1+5D
-	AyfuWGA5XMVBIqIjDDFh632nhpfFM5bYH9vQVsEmFpdM5JSqVw0gXz5f7p6GU8xAg7ri1jBOoLO
-	v2T6F7MXUitV0hpoYUErsUtHD
-X-Google-Smtp-Source: AGHT+IFFpFqrnNZItu3L5GNLWSB269pADqOsIU+gIQEJhNsMNbkPMIMecR7fgqDGFDi8X/YtnL7Gbg==
-X-Received: by 2002:a05:6602:2cd1:b0:881:87ac:24a with SMTP id ca18e2360f4ac-88467ecf75amr19364539f.7.1755550877544;
-        Mon, 18 Aug 2025 14:01:17 -0700 (PDT)
-Received: from localhost ([140.82.166.162])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8843f9c47f5sm345226739f.20.2025.08.18.14.01.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 14:01:16 -0700 (PDT)
-Date: Mon, 18 Aug 2025 16:01:16 -0500
-From: Andrew Jones <ajones@ventanamicro.com>
-To: dayss1224@gmail.com
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atish.patra@linux.dev>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Quan Zhou <zhouquan@iscas.ac.cn>
-Subject: Re: [PATCH v2 3/3] KVM: riscv: selftests: Add missing headers for
- new testcases
-Message-ID: <20250818-4672b703d0bf9518ee1d4162@orel>
-References: <cover.1754308799.git.dayss1224@gmail.com>
- <cafaa0b547d4a1fc45a38753038c011ea7201d04.1754308799.git.dayss1224@gmail.com>
+	s=arc-20240116; t=1755559536; c=relaxed/simple;
+	bh=Z/fOjp/Ym9YooMKQnrRWOQT8w9dEmQrzw4wTszp9L3s=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=mCas9gWs2UOAk7jth9AuVob0I6/d3zQ17RM3tG3EeR9ueCU6y27s7eRvL76sByr4XwTpZQnYStRacAuDITk4S1gO9S6i7+2tLgPoToF9VPAvN5j32Gbv6uTNeKFodLTgJCFGiCYyGjsQkrUUqEAOOhluMJQcMW7u+NmZ7vZOFWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BQbzzPG4; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755559535; x=1787095535;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=Z/fOjp/Ym9YooMKQnrRWOQT8w9dEmQrzw4wTszp9L3s=;
+  b=BQbzzPG4bMOuM3m6kmit59ABfisYIpFwGfZQ7MMHcXxA6IwxJz3hpGkR
+   oKW39q/H6GFLfzU1e064YypsGFS06VKVeerCGqsZ8/zJrvxZbEN2ZwaOf
+   794KbU4IpsYXtDhuWn/4wXNw4oadmI6+Jcg3YYK5HHFHkxPEs43nZuqBt
+   QozEZrVMEiQu6qTlkWjj6b5COx13nHp72V1hOu3JlGMXTR/MUUwHWMwFS
+   FYbfans7CNhT34s4oYZjoCq2QEvSGKue8PDNBsZxlI8iO1mhu/3cJ+Peg
+   JG06k1UdSv4Pt/ngzTLL8DdnExyr+NY2Ta9pnzkpWr5NCUhmtpJWdPdFp
+   Q==;
+X-CSE-ConnectionGUID: 8YI0Ui88RVOJWK2uA1AOgQ==
+X-CSE-MsgGUID: EMd1im/JTHiieR0QZApCUA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="61627992"
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="61627992"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 16:25:35 -0700
+X-CSE-ConnectionGUID: F5tq7uFnToWNTQu7SXkcSg==
+X-CSE-MsgGUID: waurPwuXTVGwkqVYXmfW5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="166936014"
+Received: from vcostago-mobl3.jf.intel.com (HELO vcostago-mobl3) ([10.98.24.140])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 16:25:34 -0700
+From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+To: David Matlack <dmatlack@google.com>, Alex Williamson
+ <alex.williamson@redhat.com>
+Cc: Aaron Lewis <aaronlewis@google.com>, Adhemerval Zanella
+ <adhemerval.zanella@linaro.org>, Adithya Jayachandran
+ <ajayachandra@nvidia.com>, Andrew Jones <ajones@ventanamicro.com>, Ard
+ Biesheuvel <ardb@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>,
+ Bibo Mao <maobibo@loongson.cn>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Dan Williams <dan.j.williams@intel.com>, Dave Jiang
+ <dave.jiang@intel.com>, David Matlack <dmatlack@google.com>,
+ dmaengine@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>, James
+ Houghton <jthoughton@google.com>, Jason Gunthorpe <jgg@nvidia.com>, Joel
+ Granados <joel.granados@kernel.org>, Josh Hilke <jrhilke@google.com>,
+ Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "Mike Rapoport (Microsoft)"
+ <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Pasha Tatashin
+ <pasha.tatashin@soleen.com>, "Pratik R. Sampat" <prsampat@amd.com>, Saeed
+ Mahameed <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Vipin Sharma <vipinsh@google.com>, Wei Yang
+ <richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
+Subject: Re: [PATCH 12/33] tools headers: Import iosubmit_cmds512()
+In-Reply-To: <20250620232031.2705638-13-dmatlack@google.com>
+References: <20250620232031.2705638-1-dmatlack@google.com>
+ <20250620232031.2705638-13-dmatlack@google.com>
+Date: Mon, 18 Aug 2025 16:25:33 -0700
+Message-ID: <87jz302owi.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cafaa0b547d4a1fc45a38753038c011ea7201d04.1754308799.git.dayss1224@gmail.com>
+Content-Type: text/plain
 
-On Thu, Aug 07, 2025 at 10:59:30PM +0800, dayss1224@gmail.com wrote:
-> From: Dong Yang <dayss1224@gmail.com>
-> 
-> Add missing headers to fix the build for new RISC-V KVM selftests.
-> 
-> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> Signed-off-by: Dong Yang <dayss1224@gmail.com>
+David Matlack <dmatlack@google.com> writes:
+
+> Import iosubmit_cmds512() from arch/x86/include/asm/io.h into tools/ so
+> it can be used by VFIO selftests to interact with Intel DSA devices.
+>
+
+minor: perhaps move this patch to be near the one that adds the DSA
+driver? (in case there's a next revision)
+
+Anyway,
+
+Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+
+> Also pull in movdir64b() from arch/x86/include/asm/special_insns.h into
+> tools/, which is the underlying instruction used by iosubmit_cmds512().
+>
+> Changes made when importing: None
+>
+> Signed-off-by: David Matlack <dmatlack@google.com>
 > ---
->  tools/testing/selftests/kvm/include/riscv/processor.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
-> index 162f303d9..4cf5ae117 100644
-> --- a/tools/testing/selftests/kvm/include/riscv/processor.h
-> +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-> @@ -9,7 +9,9 @@
+>  tools/arch/x86/include/asm/io.h            | 26 +++++++++++++++++++++
+>  tools/arch/x86/include/asm/special_insns.h | 27 ++++++++++++++++++++++
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 tools/arch/x86/include/asm/special_insns.h
+>
+> diff --git a/tools/arch/x86/include/asm/io.h b/tools/arch/x86/include/asm/io.h
+> index 4c787a2363de..ecad61a3ea52 100644
+> --- a/tools/arch/x86/include/asm/io.h
+> +++ b/tools/arch/x86/include/asm/io.h
+> @@ -4,6 +4,7 @@
 >  
->  #include <linux/stringify.h>
->  #include <asm/csr.h>
-> +#include <asm/vdso/processor.h>
-
-This is fine, but...
-
->  #include "kvm_util.h"
-> +#include "ucall_common.h"
-
-...this isn't correct. We should instead add this include line to all the
-source files that need it:
-
-access_tracking_perf_test.c
-memslot_modification_stress_test.c
-memslot_perf_test.c
-
-
-Thanks,
-drew
-
+>  #include <linux/compiler.h>
+>  #include <linux/types.h>
+> +#include "special_insns.h"
 >  
->  #define INSN_OPCODE_MASK	0x007c
->  #define INSN_OPCODE_SHIFT	2
+>  #define build_mmio_read(name, size, type, reg, barrier) \
+>  static inline type name(const volatile void __iomem *addr) \
+> @@ -72,4 +73,29 @@ build_mmio_write(__writeq, "q", u64, "r", )
+>  
+>  #include <asm-generic/io.h>
+>  
+> +/**
+> + * iosubmit_cmds512 - copy data to single MMIO location, in 512-bit units
+> + * @dst: destination, in MMIO space (must be 512-bit aligned)
+> + * @src: source
+> + * @count: number of 512 bits quantities to submit
+> + *
+> + * Submit data from kernel space to MMIO space, in units of 512 bits at a
+> + * time.  Order of access is not guaranteed, nor is a memory barrier
+> + * performed afterwards.
+> + *
+> + * Warning: Do not use this helper unless your driver has checked that the CPU
+> + * instruction is supported on the platform.
+> + */
+> +static inline void iosubmit_cmds512(void __iomem *dst, const void *src,
+> +				    size_t count)
+> +{
+> +	const u8 *from = src;
+> +	const u8 *end = from + count * 64;
+> +
+> +	while (from < end) {
+> +		movdir64b(dst, from);
+> +		from += 64;
+> +	}
+> +}
+> +
+>  #endif /* _TOOLS_ASM_X86_IO_H */
+> diff --git a/tools/arch/x86/include/asm/special_insns.h b/tools/arch/x86/include/asm/special_insns.h
+> new file mode 100644
+> index 000000000000..04af42a99c38
+> --- /dev/null
+> +++ b/tools/arch/x86/include/asm/special_insns.h
+> @@ -0,0 +1,27 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _TOOLS_ASM_X86_SPECIAL_INSNS_H
+> +#define _TOOLS_ASM_X86_SPECIAL_INSNS_H
+> +
+> +/* The dst parameter must be 64-bytes aligned */
+> +static inline void movdir64b(void *dst, const void *src)
+> +{
+> +	const struct { char _[64]; } *__src = src;
+> +	struct { char _[64]; } *__dst = dst;
+> +
+> +	/*
+> +	 * MOVDIR64B %(rdx), rax.
+> +	 *
+> +	 * Both __src and __dst must be memory constraints in order to tell the
+> +	 * compiler that no other memory accesses should be reordered around
+> +	 * this one.
+> +	 *
+> +	 * Also, both must be supplied as lvalues because this tells
+> +	 * the compiler what the object is (its size) the instruction accesses.
+> +	 * I.e., not the pointers but what they point to, thus the deref'ing '*'.
+> +	 */
+> +	asm volatile(".byte 0x66, 0x0f, 0x38, 0xf8, 0x02"
+> +		     : "+m" (*__dst)
+> +		     :  "m" (*__src), "a" (__dst), "d" (__src));
+> +}
+> +
+> +#endif /* _TOOLS_ASM_X86_SPECIAL_INSNS_H */
 > -- 
-> 2.34.1
-> 
-> 
-> -- 
-> kvm-riscv mailing list
-> kvm-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kvm-riscv
+> 2.50.0.rc2.701.gf1e915cc24-goog
+>
+
+-- 
+Vinicius
 
