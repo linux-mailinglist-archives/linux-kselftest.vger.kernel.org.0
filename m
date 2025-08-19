@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-39315-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39316-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33942B2C9AA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 18:29:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00C44B2C9A8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 18:29:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18E59188B609
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 16:28:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A2DD7BB3E5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 16:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BEFE25785E;
-	Tue, 19 Aug 2025 16:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D147C25A2A7;
+	Tue, 19 Aug 2025 16:27:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DyPLfa5T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dUzPpd5C"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40F2256C91;
-	Tue, 19 Aug 2025 16:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F01258ECF;
+	Tue, 19 Aug 2025 16:27:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755620842; cv=none; b=fVAjHwgRM2obsRbIUdte/PwUlVqYHNI3GtAY08tssftSi9MGAEXKzkm+mz8PT7ndHX0qPAMivfFU9bww9gZaxt4XltzVh/ZZ64195vh+J9kglTtdJblYNy108f6Sd5+2jAMiBalj+RD13b2g6PBtlaE9K/wYZM5er5i2xodqimQ=
+	t=1755620852; cv=none; b=mJHIFhEUBj91dAmfkZD4R2ha+IYOHI6px1ehj6SeuKrvBiXurloCy44LEajzoMZwpzcqzwsQxfumJyd+MFQcEL5InNQeUJJFVKY7bdLiOdLR/Y7mhX8TpFurhp0PbtIa7qANBb+CHk0RjiLndNf7VnbEdMxO2AeEgnJuGxxW6eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755620842; c=relaxed/simple;
-	bh=hVaIM8V8kRd9AQDq914Wwe26mHFpW+Fx9glpdzPR7+8=;
+	s=arc-20240116; t=1755620852; c=relaxed/simple;
+	bh=CpY1ufLEWWNH3kGc/B+gDx5FfDuMHKHnHbWU0IDFJ7U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hNrcngXjLVNOTDgz1qaPWaG/JAyrT2bGQO2ViCmYr+i1uMiitr7nL1907iPzhsVYn7GcOV+qzaGQVX12ySjplsaH7CS2ZHpSZ2E/3x29uW2yi7yvlitYCUAl4BkhvANxl0us+4G9s7wvSaY7xR8uIwfEx2+dOnRwhwGFkg/L4pQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DyPLfa5T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DE8C4CEF1;
-	Tue, 19 Aug 2025 16:27:16 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=glhWvAa5/tu9FBk2jtuwsfmFg0LcoED2gLukqWntFONkeJXwzMEbz58j/IaYVPCGYPRBQXqUkG4pPZzSfRsHeomEzQEimgqOYyAl2mqkzJTpcucF+xm7Zf1iTPzWDGlmm3or0+dzZTTCq5TI8UQTG0bQJTgjMM2YRTZrCpn+I9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dUzPpd5C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF12C4CEF1;
+	Tue, 19 Aug 2025 16:27:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755620842;
-	bh=hVaIM8V8kRd9AQDq914Wwe26mHFpW+Fx9glpdzPR7+8=;
+	s=k20201202; t=1755620852;
+	bh=CpY1ufLEWWNH3kGc/B+gDx5FfDuMHKHnHbWU0IDFJ7U=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=DyPLfa5TK2OpgwmCPBJImANFYCq6autqHJOl9oj5Jxw6GQFMyCV3UQgZju5aY74kj
-	 UFf19PLU9ejKGdziB/1W66uYaCxAIMqGk+LWv5PwoHOMAOPHT528Y5D29rY3r8Tm0g
-	 bxRm1u7v59lueFmlP85aut4623DemO85Ua1Ve15RSGhiIyHN7nOCp+fLzCJT00pQ3Q
-	 hK9UcXPEgxEDvCs/W0/SNqlLKrwwKVfLH5WPosxHpKYh9yCGrOAjUbi3Zr2cdt9LU/
-	 fakGNIWhf9n73AK+H4dLnymI68NgoLpUCEI6YVcJB2z7krir59P55AdXvZ+s7SbRrV
-	 Pw/psMcw9ZYPQ==
+	b=dUzPpd5Ch1gAwPQ4RMaF/mxwKUbtKJ1PKn8ki8qZo9Te/0N4A4Rn9LvOzDASrBIXu
+	 /htVaV+/Kox56Sik0AGYaruBOeOdsUtRERWyYcSncLHHAizu1hHWged6nDb0QlAFL0
+	 hLwYqIU5zgeBRFMdALCVDCchNK3HrLdMk7jlre/sxqyHTZ3AoT1MnQFTNozJ3nmpbi
+	 oWHRnkb5cdVkSmr+JNRlCmqFMooM4iHHi85+GSOd+v+02jKdt6esSuYDqY/zby0fR2
+	 y6oMoQzfXyXPAsksJO8G3qjaFfEeuJ0dq3Hqcfn9tk8biU0XxUCWy/eV2KXXivOlEk
+	 t7guF3sK5vEag==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 19 Aug 2025 17:21:48 +0100
-Subject: [PATCH v19 2/8] Documentation: userspace-api: Add shadow stack API
- documentation
+Date: Tue, 19 Aug 2025 17:21:49 +0100
+Subject: [PATCH v19 3/8] selftests: Provide helper header for shadow stack
+ testing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250819-clone3-shadow-stack-v19-2-bc957075479b@kernel.org>
+Message-Id: <20250819-clone3-shadow-stack-v19-3-bc957075479b@kernel.org>
 References: <20250819-clone3-shadow-stack-v19-0-bc957075479b@kernel.org>
 In-Reply-To: <20250819-clone3-shadow-stack-v19-0-bc957075479b@kernel.org>
 To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
@@ -77,99 +77,144 @@ Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
  Kees Cook <kees@kernel.org>, Kees Cook <kees@kernel.org>, 
  Shuah Khan <skhan@linuxfoundation.org>
 X-Mailer: b4 0.15-dev-cff91
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3291; i=broonie@kernel.org;
- h=from:subject:message-id; bh=hVaIM8V8kRd9AQDq914Wwe26mHFpW+Fx9glpdzPR7+8=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBopKXQTdY3ugJkYbJS5pLU75D0MW2jy457UDv26
- 3WzN4ar6iiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKSl0AAKCRAk1otyXVSH
- 0NRaB/wJySdY1ayPL1KkBWJiBZ2rO3++CePDThRvIUqVv8MSOS5JV6ExNNLfaCcL+n4mdOIRwBP
- k+Vp23qjXejxL1E49NBonyonPKK5kc0/PpZBHW3q+BPEVqBXxYsK7yz4itNzxdkCdQNFQvNLHrF
- W1cOZaoHItMs9p5NPZmQ4bXiFwPoe72IIAEl29WnhU10pFNZlUqcTqBQyWFiPVrt/hxCbnJcKV2
- eaUmQkuxUdXTLop38o/lP6W2OI/x9VR/tpDCgbCh2JCwBJV45Hgw7SZKv5cQhn12g2Z2iLasK+O
- inCZguORVZZHRYpPPwpQDMiae+5Slcnuf25s2zmPwnPLeoPC
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4438; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=CpY1ufLEWWNH3kGc/B+gDx5FfDuMHKHnHbWU0IDFJ7U=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBopKXQ+7orl49b6QFaoHfJhPRBM3cnmhhrps0Co
+ fsFp62Q9+KJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKSl0AAKCRAk1otyXVSH
+ 0DcOB/sHQiTiHO3xkP1GksYe+otBd9UQ0/3RoFjDWhCyiDlr2V1d8tpeMVYv4zI/IcdQB0kOc8l
+ oNvq5WuTLvMJ5nV53b9ORY/8qb1g0X8pmQ8E1dL5936i7LjW395X9Qf28NUZ6kVRumD88VR2JU4
+ iI7O5Df5YDFk8O4dFgm5nIP0X4fU8UgBeL9GsJqWD4lMQqlKLkeUg6RuG7vC1n+K9b9ZDW5zXWR
+ nf1EYzdLdMwbV0DzHVZGXj2Agt0dxyrbF+XTagF9k+qIVllLiriMBY/heTswJ1wRgkKg5xuUpX3
+ A4RvKR6Uo1hp+kv4Xkhm1lMM0ovkw/LgZjJpdLx9kDb+aSUe
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-There are a number of architectures with shadow stack features which we are
-presenting to userspace with as consistent an API as we can (though there
-are some architecture specifics). Especially given that there are some
-important considerations for userspace code interacting directly with the
-feature let's provide some documentation covering the common aspects.
+While almost all users of shadow stacks should be relying on the dynamic
+linker and libc to enable the feature there are several low level test
+programs where it is useful to enable without any libc support, allowing
+testing without full system enablement. This low level testing is helpful
+during bringup of the support itself, and also in enabling coverage by
+automated testing without needing all system components in the target root
+filesystems to have enablement.
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Provide a header with helpers for this purpose, intended for use only by
+test programs directly exercising shadow stack interfaces.
+
+Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Reviewed-by: Kees Cook <kees@kernel.org>
 Tested-by: Kees Cook <kees@kernel.org>
 Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-Acked-by: Yury Khrustalev <yury.khrustalev@arm.com>
-Reviewed-by: Deepak Gupta <debug@rivosinc.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Tested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/userspace-api/index.rst        |  1 +
- Documentation/userspace-api/shadow_stack.rst | 44 ++++++++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+ tools/testing/selftests/ksft_shstk.h | 98 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
 
-diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
-index b8c73be4fb11..0167e59b541e 100644
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -62,6 +62,7 @@ Everything else
- 
-    ELF
-    netlink/index
-+   shadow_stack
-    sysfs-platform_profile
-    vduse
-    futex2
-diff --git a/Documentation/userspace-api/shadow_stack.rst b/Documentation/userspace-api/shadow_stack.rst
+diff --git a/tools/testing/selftests/ksft_shstk.h b/tools/testing/selftests/ksft_shstk.h
 new file mode 100644
-index 000000000000..65c665496624
+index 000000000000..fecf91218ea5
 --- /dev/null
-+++ b/Documentation/userspace-api/shadow_stack.rst
-@@ -0,0 +1,44 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/tools/testing/selftests/ksft_shstk.h
+@@ -0,0 +1,98 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Helpers for shadow stack enablement, this is intended to only be
++ * used by low level test programs directly exercising interfaces for
++ * working with shadow stacks.
++ *
++ * Copyright (C) 2024 ARM Ltd.
++ */
 +
-+=============
-+Shadow Stacks
-+=============
++#ifndef __KSFT_SHSTK_H
++#define __KSFT_SHSTK_H
 +
-+Introduction
-+============
++#include <asm/mman.h>
 +
-+Several architectures have features which provide backward edge
-+control flow protection through a hardware maintained stack, only
-+writeable by userspace through very limited operations.  This feature
-+is referred to as shadow stacks on Linux, on x86 it is part of Intel
-+Control Enforcement Technology (CET), on arm64 it is Guarded Control
-+Stacks feature (FEAT_GCS) and for RISC-V it is the Zicfiss extension.
-+It is expected that this feature will normally be managed by the
-+system dynamic linker and libc in ways broadly transparent to
-+application code, this document covers interfaces and considerations.
++/* This is currently only defined for x86 */
++#ifndef SHADOW_STACK_SET_TOKEN
++#define SHADOW_STACK_SET_TOKEN (1ULL << 0)
++#endif
 +
++static bool shadow_stack_enabled;
 +
-+Enabling
-+========
++#ifdef __x86_64__
++#define ARCH_SHSTK_ENABLE	0x5001
++#define ARCH_SHSTK_SHSTK	(1ULL <<  0)
 +
-+Shadow stacks default to disabled when a userspace process is
-+executed, they can be enabled for the current thread with a syscall:
++#define ARCH_PRCTL(arg1, arg2)					\
++({								\
++	long _ret;						\
++	register long _num  asm("eax") = __NR_arch_prctl;	\
++	register long _arg1 asm("rdi") = (long)(arg1);		\
++	register long _arg2 asm("rsi") = (long)(arg2);		\
++								\
++	asm volatile (						\
++		"syscall\n"					\
++		: "=a"(_ret)					\
++		: "r"(_arg1), "r"(_arg2),			\
++		  "0"(_num)					\
++		: "rcx", "r11", "memory", "cc"			\
++	);							\
++	_ret;							\
++})
 +
-+ - For x86 the ARCH_SHSTK_ENABLE arch_prctl()
-+ - For other architectures the PR_SET_SHADOW_STACK_ENABLE prctl()
++#define ENABLE_SHADOW_STACK
++static __always_inline void enable_shadow_stack(void)
++{
++	int ret = ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
++	if (ret == 0)
++		shadow_stack_enabled = true;
++}
 +
-+It is expected that this will normally be done by the dynamic linker.
-+Any new threads created by a thread with shadow stacks enabled will
-+themselves have shadow stacks enabled.
++#endif
 +
++#ifdef __aarch64__
++#define PR_SET_SHADOW_STACK_STATUS      75
++# define PR_SHADOW_STACK_ENABLE         (1UL << 0)
 +
-+Enablement considerations
-+=========================
++#define my_syscall2(num, arg1, arg2)                                          \
++({                                                                            \
++	register long _num  __asm__ ("x8") = (num);                           \
++	register long _arg1 __asm__ ("x0") = (long)(arg1);                    \
++	register long _arg2 __asm__ ("x1") = (long)(arg2);                    \
++	register long _arg3 __asm__ ("x2") = 0;                               \
++	register long _arg4 __asm__ ("x3") = 0;                               \
++	register long _arg5 __asm__ ("x4") = 0;                               \
++									      \
++	__asm__  volatile (                                                   \
++		"svc #0\n"                                                    \
++		: "=r"(_arg1)                                                 \
++		: "r"(_arg1), "r"(_arg2),                                     \
++		  "r"(_arg3), "r"(_arg4),                                     \
++		  "r"(_arg5), "r"(_num)					      \
++		: "memory", "cc"                                              \
++	);                                                                    \
++	_arg1;                                                                \
++})
 +
-+- Returning from the function that enables shadow stacks without first
-+  disabling them will cause a shadow stack exception.  This includes
-+  any syscall wrapper or other library functions, the syscall will need
-+  to be inlined.
-+- A lock feature allows userspace to prevent disabling of shadow stacks.
-+- Those that change the stack context like longjmp() or use of ucontext
-+  changes on signal return will need support from libc.
++#define ENABLE_SHADOW_STACK
++static __always_inline void enable_shadow_stack(void)
++{
++	int ret;
++
++	ret = my_syscall2(__NR_prctl, PR_SET_SHADOW_STACK_STATUS,
++			  PR_SHADOW_STACK_ENABLE);
++	if (ret == 0)
++		shadow_stack_enabled = true;
++}
++
++#endif
++
++#ifndef __NR_map_shadow_stack
++#define __NR_map_shadow_stack 453
++#endif
++
++#ifndef ENABLE_SHADOW_STACK
++static inline void enable_shadow_stack(void) { }
++#endif
++
++#endif
 
 -- 
 2.39.5
