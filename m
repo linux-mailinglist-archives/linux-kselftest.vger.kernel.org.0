@@ -1,144 +1,102 @@
-Return-Path: <linux-kselftest+bounces-39337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28606B2CF5C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 00:29:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB648B2CF89
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 00:53:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C056B1BA4F23
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 22:30:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1C453BC538
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 22:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0533054DA;
-	Tue, 19 Aug 2025 22:29:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D80239567;
+	Tue, 19 Aug 2025 22:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4mHyKJEu"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="VRxHnEG0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3C03054CC
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Aug 2025 22:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D29E236451;
+	Tue, 19 Aug 2025 22:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755642592; cv=none; b=M9Hi7kedC3ff1L72vQL9vtdGxIO+GH9uo7fiZ8PpsbBcAMKcfAJAJ6zHOfoL/5SMxxezrdLzAZRiwui0x8WJJ+K1HmpYX1ebPUUACDmYFb+g06YzaX0Aw7AhcpMU62ZFVmnAdjts2IhDBfmferuzQZmzMRBJEdc6Ge4qB7cnieI=
+	t=1755643946; cv=none; b=O+UHysLTbc/CharAK/lOjEPMRAeUxg6gz5BkMflyIyr9PCd0sXUzoMPhlmgpBnGiGSXF6i2uY1/Zkro3QRyzm+wDHxLQ2Vt3O18TQNJ82vGpLrsJUS0W+evYr/lblJn1hIzghrnBxk1aA3ToFPc/U1MSrPOv4fYpngtqqbowcVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755642592; c=relaxed/simple;
-	bh=dxX3neWWzgYZ3JSHle1PX7pHgn7clNpX/nC036Y65qA=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=XFZOCJHbmUptogrd9caMOM+PEzXL/EYaCP/lNQ16lF17ogCfgxJU1nyMco+bt+LkPvOPixEELdBtd9KVyTLUwcxnaD9T+ToTKobHY/KsNICmiXLvQ8McYvYBItI2widzRioEDVC0Y2XkGzb0xYtpTPTN87daPAOGnLzJFItaXS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4mHyKJEu; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-323266a1e87so6069857a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Aug 2025 15:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755642590; x=1756247390; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c/yuQF3NDibrCV+Eakek13HGyazhOkoQzXCiSemSH9A=;
-        b=4mHyKJEuiTKDBnRLegz7+9wJoU0eTTqpw5vUQfDtsbGxXwrXEourufrcpipbBJYDZK
-         5wVvqQkdHp5Wg0LRBQWOjH7gL5b5OuXq4zCE0sGJ5pVs1X7rzME2boiAWlA1xGiYfOQk
-         5I4LaKvYjkbcRI13gjgCBqa1tC+Oik1+A3FL9XyvqfJ0VA+Uq6ZL4AnpOasblnpzykQU
-         DfAy7p5ZQ5bnWrUx6lhTtz0micYv5C+VLT1FK0qNx56bB3INqi3krpz1PEHiYVCThBER
-         QENRsafdj0fhjDPQMJ6bAz6m3JTVPgodA0s4Nt0rvL6a+0WcX08ypXmwjT7KaEaS6U+P
-         864A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755642590; x=1756247390;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c/yuQF3NDibrCV+Eakek13HGyazhOkoQzXCiSemSH9A=;
-        b=mDFOtMkkgEssn+i1eXMsstijXFN80BNSFGftvPW+ol1ZpYz5Ixg14UeFtcXIOH/8xl
-         k7ekUti3atf//IsdzTLZ5LbCzsaAdIHtYYaNSImXlIFQL9DasO6j3shxM7RyfkOGuG4Z
-         ADI6VsBURnpNLhSPasF8Ld9WkUL/Zifi/VBvVEtzbTM110n1tbhIhCKE2bt97q4e6Bc7
-         cwr9Zle3I4xvZXFeeOELC3H+CrybkmGqq3qgCw8HPUfwSVF852e5+jmrfYknblDdLMds
-         bx/JZHnPbKB5aIooOr+uY/ou0+xGREZwICZH9SMrErybbjBrZIL4KoV5taps9RnXutr1
-         wA6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWmNRafzcsfydZb+sYQK6qzBthp3c5IRzlyCGvZ+kAomQVtJlqdzwa36aFnmoI3nCuRWO/9tayx76rsWviEcPU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfbRokQ3MVLokz2vAVBntiMGRLq4HJ8u0SxOTm+oxzpg57G0xC
-	TMTV00Yyrkc+m56JX3BaJkOK45kXpdwQ6xlxM6V+ArznIGBlLOVewyoMa+ZFaKYzSarorciI108
-	zZY1GQg==
-X-Google-Smtp-Source: AGHT+IHnXiQclQBWqGPkN2h3vJjstq/7V+XZNMXqHx7f/8NepV1MCa5SFMuKI6yxtQydrAuu2kuDLCqcQoA=
-X-Received: from pjuw7.prod.google.com ([2002:a17:90a:d607:b0:31f:6ddd:ef5])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:48d2:b0:311:c939:c851
- with SMTP id 98e67ed59e1d1-324e1291c04mr1027335a91.4.1755642590447; Tue, 19
- Aug 2025 15:29:50 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Tue, 19 Aug 2025 15:29:44 -0700
+	s=arc-20240116; t=1755643946; c=relaxed/simple;
+	bh=VHQSLjKvrE7HNYDGcF9hXuERvtRcIH2r8IoBLnp3tGI=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=X30n97edG0zn2Ya8JS+CWuRzlwMcv8Lw1kgEemXo5UluXA8MO17bLcqq47lboz5XKMNRI9UD5GsYkGqgBbmCCojvb9+PWG6RLsftCVo/KjEFjMhAJqy75j5T4s9ASMy54BcesRF1NNiG0e4r/Aal/KMhBDKRJvbBzT4q7EC5jS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=VRxHnEG0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F330CC4CEF1;
+	Tue, 19 Aug 2025 22:52:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1755643945;
+	bh=VHQSLjKvrE7HNYDGcF9hXuERvtRcIH2r8IoBLnp3tGI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=VRxHnEG0v+ow/6aDnDx9elsJSvUiowJJ8lN6T/rQnlpoiVhnpwkQciMdIi1zv7RGi
+	 JjRDJ+b5lNRiClIOfVFV9zJEGb4tyLGmOugHSddO5s/H/Xv/WdbI/U9GjhEUmqdAYU
+	 IYxp75U+ahWCvfr+9L94JLCV8JuGzpMCyjjDGXrA=
+Date: Tue, 19 Aug 2025 15:52:24 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, David Hildenbrand
+ <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
+ <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jason Gunthorpe
+ <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
+ <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>, Zi Yan
+ <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache
+ <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain
+ <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org, Shuah Khan
+ <shuah@kernel.org>, kernel@collabora.com
+Subject: Re: [PATCH v2 4/8] selftests/mm: Add -Wunused family of flags
+Message-Id: <20250819155224.23fe3d79896e269bd9e27d04@linux-foundation.org>
+In-Reply-To: <57c816d6-a9ba-47c9-8f40-3978580b7f67@arm.com>
+References: <20250731160132.1795351-1-usama.anjum@collabora.com>
+	<20250731160132.1795351-5-usama.anjum@collabora.com>
+	<57c816d6-a9ba-47c9-8f40-3978580b7f67@arm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.0.rc1.167.g924127e9c0-goog
-Message-ID: <20250819222945.3052711-1-seanjc@google.com>
-Subject: [PATCH] rseq/selftests: Use weak symbol reference, not definition, to
- link with glibc
-From: Sean Christopherson <seanjc@google.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Peter Zijlstra <peterz@infradead.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Florian Weimer <fweimer@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add "extern" to the glibc-defined weak rseq symbols to convert the rseq
-selftest's usage from weak symbol definitions to weak symbol _references_.
-Effectively re-defining the glibc symbols wreaks havoc when building with
--fno-common, e.g. generates segfaults when running multi-threaded programs,
-as dynamically linked applications end up with multiple versions of the
-symbols.
+On Mon, 18 Aug 2025 10:16:35 +0200 Kevin Brodsky <kevin.brodsky@arm.com> wrote:
 
-Building with -fcommon, which until recently has the been the default for
-GCC and clang, papers over the bug by allowing the linker to resolve the
-weak/tentative definition to glibc's "real" definition.
+> >  # Avoid accidental wrong builds, due to built-in rules working just a little
+> >  # bit too well--but not quite as well as required for our situation here.
+> >  #
+> > @@ -35,6 +34,7 @@ MAKEFLAGS += --no-builtin-rules
+> >  
+> >  CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+> >  CFLAGS += -Wunreachable-code
+> > +CFLAGS += -Wunused  -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value
+> 
+> -Wall implies all of these except -Wunused-parameter (at least according
+> to gcc(1)).
+> 
+> As to -Wunused-parameter I am frankly not convinced it's worth the
+> hassle. We're getting 90 lines changed in patch 6-8 just to mark
+> parameters as unused, in other words noise to keep the compiler happy.
+> It is not enabled by default in the kernel proper precisely because it
+> is so noisy when callbacks are involved.
 
-Note, the symbol itself (or rather its address), not the value of the
-symbol, is set to 0/NULL for unresolved weak symbol references, as the
-symbol doesn't exist and thus can't have a value.  Check for a NULL rseq
-size pointer to handle the scenario where the test is statically linked
-against a libc that doesn't support rseq in any capacity.
+Yeah, we rely upon unused parameters in a million places:
 
-Fixes: 3bcbc20942db ("selftests/rseq: Play nice with binaries statically linked against glibc 2.35+")
-Cc: stable@vger.kernel.org
-Suggested-by: Florian Weimer <fweimer@redhat.com>
-Reported-by: Thomas Gleixner <tglx@linutronix.de>
-Closes: https://lore.kernel.org/all/87frdoybk4.ffs@tglx
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/rseq/rseq.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
-index 663a9cef1952..dcac5cbe7933 100644
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -40,9 +40,9 @@
-  * Define weak versions to play nice with binaries that are statically linked
-  * against a libc that doesn't support registering its own rseq.
-  */
--__weak ptrdiff_t __rseq_offset;
--__weak unsigned int __rseq_size;
--__weak unsigned int __rseq_flags;
-+extern __weak ptrdiff_t __rseq_offset;
-+extern __weak unsigned int __rseq_size;
-+extern __weak unsigned int __rseq_flags;
- 
- static const ptrdiff_t *libc_rseq_offset_p = &__rseq_offset;
- static const unsigned int *libc_rseq_size_p = &__rseq_size;
-@@ -209,7 +209,7 @@ void rseq_init(void)
- 	 * libc not having registered a restartable sequence.  Try to find the
- 	 * symbols if that's the case.
- 	 */
--	if (!*libc_rseq_size_p) {
-+	if (!libc_rseq_size_p || !*libc_rseq_size_p) {
- 		libc_rseq_offset_p = dlsym(RTLD_NEXT, "__rseq_offset");
- 		libc_rseq_size_p = dlsym(RTLD_NEXT, "__rseq_size");
- 		libc_rseq_flags_p = dlsym(RTLD_NEXT, "__rseq_flags");
-
-base-commit: c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
--- 
-2.51.0.rc1.167.g924127e9c0-goog
-
+#else
+static inline void some_stub_function(type1 arg2, type2 arg2)
+{
+}
+#endif
 
