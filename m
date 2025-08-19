@@ -1,220 +1,432 @@
-Return-Path: <linux-kselftest+bounces-39334-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 176B7B2CEAD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 23:42:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 721ECB2CF11
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 00:07:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6CE0E7B1E8D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 21:41:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCEDC1899804
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 22:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E753101BD;
-	Tue, 19 Aug 2025 21:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E2FB3FE7;
+	Tue, 19 Aug 2025 22:07:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QW0+7yIU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WVzKe/oy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4BD24C68B;
-	Tue, 19 Aug 2025 21:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8578E353349;
+	Tue, 19 Aug 2025 22:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755639768; cv=none; b=R8ud/An3BLIwUxMbqAH+gm8ERl711mgxUBPMWY7oUBTGiRlYwZOiZ/X59VUdWYjruFAdq49r48xtl9LF2FAoz0GSF5ZP0gF6j2QujVKlxzGEkfAZZIp5EmKW5bOSdptPX4ecTXRJSlkNziQoShFqJeOF6y8BuqzU5njWkL4wT78=
+	t=1755641245; cv=none; b=akNESL1K12jkU45p/873PhvTeO/BWO3EG6hEuw9h0x7nmmX+aB1g+dnC9h3VybDKI9S1uvvttmG5d4Rd8Osy0WZ3irPWyrbOAW/uRo7mUG7/zXcG1Ct9gNAeC6QLS7dX/yGGc2PccqCdawhqeSpay3XpPO1z+EJQ08wZBpeFDrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755639768; c=relaxed/simple;
-	bh=HaC2GMXg8TCT8SsM2x6lc4Qo6koTUzkaO+mYZ1UMJ4s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E3+izW69gkXUBjpKykXD79KRkmfUAbKp0LQhoJye2AV15HavuCIqy+zIHObHHBOoWfUk8PHziEev+k+iEm4hPkZnsuAnvry78AeXpCMTTPXxWe5ow89Xkv5KvsDHXnSA2dIZP2mQk4wPiD6GsvUZNJeHZM51fDM0bkfhP7YKoHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QW0+7yIU; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-70a928c3686so3071146d6.1;
-        Tue, 19 Aug 2025 14:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755639766; x=1756244566; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ves8rm5p4JdLczWmm2YLAstt4OmqCQiHNYiBWXA/b9E=;
-        b=QW0+7yIUDYDDKQhoTegJHmdKR4r8wQ7MBpBdCJEIBAbiKUG4nVAAQn7Gvo8j62NKWf
-         FlMhCqniM7cu0s0ty3qFdfiPe2cU5eA1DX+l4ZJC3IH0uErHt5+QmCZY13Meb0ELOfOY
-         JXc3bepsROErdPQjkW+gkJBT9TTf8okvNLQtao+uAoGlI+9wguyaLR0scgJwUCVIaSa9
-         MIeQKMxD0RV5ys9Fixu6yk+LxxdKClqBewe2vT/OJ1/wxps99VK49Mh3W54c7xJukH/n
-         Te0pib1Frg4o3LjRi1cEVrWJC+qKustnVbp8L9vLl4HHEA6FIRhaEDvhU+hRC4rlwv3N
-         4YTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755639766; x=1756244566;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ves8rm5p4JdLczWmm2YLAstt4OmqCQiHNYiBWXA/b9E=;
-        b=jzgu3yatVNQBy4L0mSshcIP4C6S9EzvJEKcugdZ9Ax74t39eBtabbbcK7Y07/oeqqJ
-         7JQnKqdVjqmZpWQuwuIeglswKOLvmFxkp0HeofaEK0mLEbTZnea5MBKsehPdAehov3Lm
-         DShfTUebfbrRtJuQusJxQhyzqzoujGNdE7UpSwjMgmbNxdPcjY45P2tTlyyu1uFochuY
-         kfAxckJQFUTNgaQib1qasPCBE9Jele/PzsbjhsowhSQsFj/mP5c17+/Pp83+ID39Yxqx
-         5C3m+/bDPa8LLgT7k9YlLE9M6gKDicPSoCFw+tcA0Ahaz8DTIKWwTkIYsqOHOdEt/CxA
-         rF2g==
-X-Forwarded-Encrypted: i=1; AJvYcCVCttooVdytTPn4/9Geq7SgpDlU+HdhzBZTToUjhTKo1NNpWb7mhfR6AsYaS64RMc6DVKmUp66EruZq128=@vger.kernel.org, AJvYcCVUYQmbcQN7Sdm59c57akkSoToIWT+vixy9U5KmS/xKwEO9WdlCepv6PdwtrCS65R2Nv+wsEElifpDsaC21Oa3y@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXG+/qN8G69kg2T36qmi361wlcpaVSwE0iaR9vp9CXndDk5R81
-	LWhIm2w41FeASIOo4J+1NMOWzLWAyYlJPIP6dfPoxLqi9zxRfOtvt/gr
-X-Gm-Gg: ASbGncvEkDIW0VD0QNrlAkvPllRC+wtaahKYupInkpDrCn/09MNxMQC2fZKTwO/vXD5
-	jXXdfWUzjk4ZzD0sCYLa/J/eTdvQLOouxie3Jg3fbOHmSb4srk5D539DrTOZ3g/uRCMQTlGwOKb
-	paCwWMFDQek49Cx+IPYc+IeF09WtQbVRP6bO+H4dpKsKo2nbLgCSsvdyirZxt1t3ATpSbAuKoOy
-	ojafhCiTRjvPcpyYYQ8V/U1ad5bzhoXzvLJTTXlEPzZN5ydbtsPMsXFA3c+JrZf5Bkqtiml0qQi
-	dsibBxNrAn/9s/q9gDQpta1QHPk+DN/sGyP2P1K2Fs1F9x9N6cJy1Rib6YwWRlgrKmahtV8f3Qi
-	VReaYi21ptMVsGMQBtcyyZ/nZgci7pWFl97DPsLXITH4=
-X-Google-Smtp-Source: AGHT+IGukX69pdgdIaCow8FyAR1dkPWBNGHo1bDEaikElvOMMvGz5VVwFJxZVoZZIBe562vlkrz7eA==
-X-Received: by 2002:ad4:5dc6:0:b0:70d:6de2:51a2 with SMTP id 6a1803df08f44-70d75f9b4c1mr14140156d6.28.1755639765998;
-        Tue, 19 Aug 2025 14:42:45 -0700 (PDT)
-Received: from rpthibeault-XPS-13-9305.. ([23.233.177.113])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70ba93738d0sm77075476d6.55.2025.08.19.14.42.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 14:42:45 -0700 (PDT)
-From: Raphael Pinsonneault-Thibeault <rpthibeault@gmail.com>
-To: tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	shuah@kernel.org
-Cc: Raphael Pinsonneault-Thibeault <rpthibeault@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/x86: fix coding style errors in test_syscall_vdso.c
-Date: Tue, 19 Aug 2025 17:39:10 -0400
-Message-ID: <20250819213911.174167-3-rpthibeault@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1755641245; c=relaxed/simple;
+	bh=JQuLWjKxFCVOeoAbJw4Sug+i0kEK+JPaGdGyH+V5Vks=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FdojijOidzSbfNnlid6DRDSnAquC7dNAW3DNrp0xuzkKOfmp/4RyS6o2g3lJGgAp08+CbUjwo7lVX1rwBLhxyeoolm3cgScXs5eyrqsLMagU/VpWIZulIqacjxd9k2AVnrDR8Y9lt+fbxXapIxlCK9b+7k//GmG4BhPLIPcErG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WVzKe/oy; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755641243; x=1787177243;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JQuLWjKxFCVOeoAbJw4Sug+i0kEK+JPaGdGyH+V5Vks=;
+  b=WVzKe/oy3SipbsSgzeGtlzRfZBQmByLOx6ZUMU3v9dj7nIiDWvC1q/aI
+   C7O2ikMcLQEX8GNl0MSet9WOHVJS9mLRwflazVrWi/gaXac9l0vySdZrD
+   HKPrsiEODOkjTul8LIiLD/uiFjFqERdqPUeNS5moH8tooI2q09uuojSdZ
+   erjY+VHY0CBrsUB6rqrZcEOGQ2s51mjODzMjG9aysDI/rO+b0fROONBuM
+   He+DFXhZppXSOFObMmqHAn/PtaQIR6pz0DUvlYF7tYQS9lgwTsp5nOnUT
+   yG8QC8TUomZ9EptMapCzEOb+6piKFJVIXJCRfYmW14XAWtJKNm0505SS0
+   A==;
+X-CSE-ConnectionGUID: EOexQIDBRsqvNec9/5Fvzw==
+X-CSE-MsgGUID: LuvtGwLTS9qpljCgAAjlnw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57610745"
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="57610745"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 15:07:22 -0700
+X-CSE-ConnectionGUID: pwjsihVrTUWnVg4Yx5K3HA==
+X-CSE-MsgGUID: VkfB73g+TCWmrUjwp31NkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="205121805"
+Received: from unknown (HELO [10.247.119.200]) ([10.247.119.200])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 15:07:07 -0700
+Message-ID: <8ea0c5b5-04ac-44c5-8cf4-2e08fe36a03a@intel.com>
+Date: Tue, 19 Aug 2025 15:07:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 20/33] vfio: selftests: Add driver for Intel CBDMA
+To: David Matlack <dmatlack@google.com>,
+ Alex Williamson <alex.williamson@redhat.com>
+Cc: Aaron Lewis <aaronlewis@google.com>,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Andrew Jones <ajones@ventanamicro.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Arnaldo Carvalho de Melo <acme@redhat.com>, Bibo Mao <maobibo@loongson.cn>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Dan Williams <dan.j.williams@intel.com>, dmaengine@vger.kernel.org,
+ Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, Joel Granados <joel.granados@kernel.org>,
+ Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Paolo Bonzini <pbonzini@redhat.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>,
+ "Pratik R. Sampat" <prsampat@amd.com>, Saeed Mahameed <saeedm@nvidia.com>,
+ Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
+ Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+ Vipin Sharma <vipinsh@google.com>, Wei Yang <richard.weiyang@gmail.com>,
+ "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
+References: <20250620232031.2705638-1-dmatlack@google.com>
+ <20250620232031.2705638-21-dmatlack@google.com>
+Content-Language: en-US
+From: Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20250620232031.2705638-21-dmatlack@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-fix 68 checkpatch errors in
-tools/testing/selftests/x86/test_syscall_vdso.c:
-add void to function definitions without parameters
-fix whitespace in charp array definitions
-fix whitespace in printf statements
 
-Signed-off-by: Raphael Pinsonneault-Thibeault <rpthibeault@gmail.com>
----
 
-for the whitespace errors, attempted to maintain the “prettiness” 
-of the charp definition and the printf statements
+On 6/20/25 4:20 PM, David Matlack wrote:
+> Add a driver for the Intel CBDMA device. This driver is based on and
+> named after the Linux driver for this device (drivers/dma/ioat/) and
+> also based on previous work from Peter Shier <pshier@google.com>.
+> 
+> The driver aims to be as simple as possible. It uses a single descriptor
+> to issue DMA operations, and only supports the copy operation. For "DMA
+> storms", the driver kicks off the maximum number of maximum-sized DMA
+> operations. On Skylake server parts, this was 2^16-1 copies of size 2M
+> and lasts about 15 seconds.
+> 
+> Create symlinks to drivers/dma/ioat/{hw.h,registers.h} to get access to
+> various macros (e.g. IOAT_CHANCMD_RESET) and struct ioat_dma_descriptor.
+> 
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
 
- .../testing/selftests/x86/test_syscall_vdso.c | 59 ++++++++++---------
- 1 file changed, 30 insertions(+), 29 deletions(-)
+Acked-by: Dave Jiang <dave.jiang@intel.com>
 
-diff --git a/tools/testing/selftests/x86/test_syscall_vdso.c b/tools/testing/selftests/x86/test_syscall_vdso.c
-index 8965c311bd65..ee98c3cf4f56 100644
---- a/tools/testing/selftests/x86/test_syscall_vdso.c
-+++ b/tools/testing/selftests/x86/test_syscall_vdso.c
-@@ -116,10 +116,10 @@ void print_regs64(void)
- {
- 	if (!kernel_is_64bit)
- 		return;
--	printf("ax:%016llx bx:%016llx cx:%016llx dx:%016llx\n", regs64.rax,  regs64.rbx,  regs64.rcx,  regs64.rdx);
--	printf("si:%016llx di:%016llx bp:%016llx sp:%016llx\n", regs64.rsi,  regs64.rdi,  regs64.rbp,  regs64.rsp);
--	printf(" 8:%016llx  9:%016llx 10:%016llx 11:%016llx\n", regs64.r8 ,  regs64.r9 ,  regs64.r10,  regs64.r11);
--	printf("12:%016llx 13:%016llx 14:%016llx 15:%016llx\n", regs64.r12,  regs64.r13,  regs64.r14,  regs64.r15);
-+	printf("ax:%016llx bx:%016llx cx:%016llx dx:%016llx\n",	regs64.rax,	regs64.rbx,	regs64.rcx,	regs64.rdx);
-+	printf("si:%016llx di:%016llx bp:%016llx sp:%016llx\n",	regs64.rsi,	regs64.rdi,	regs64.rbp,	regs64.rsp);
-+	printf(" 8:%016llx  9:%016llx 10:%016llx 11:%016llx\n",	regs64.r8,	regs64.r9,	regs64.r10,	regs64.r11);
-+	printf("12:%016llx 13:%016llx 14:%016llx 15:%016llx\n",	regs64.r12,	regs64.r13,	regs64.r14,	regs64.r15);
- }
- 
- int check_regs64(void)
-@@ -179,7 +179,7 @@ struct {
- 	int sz;
- } sigmask_desc;
- 
--void prep_args()
-+void prep_args(void)
- {
- 	nfds = 42;
- 	FD_ZERO(&rfds);
-@@ -201,28 +201,28 @@ void prep_args()
- static void print_flags(const char *name, unsigned long r)
- {
- 	static const char *bitarray[] = {
--	"\n" ,"c\n" ,/* Carry Flag */
--	"0 " ,"1 "  ,/* Bit 1 - always on */
--	""   ,"p "  ,/* Parity Flag */
--	"0 " ,"3? " ,
--	""   ,"a "  ,/* Auxiliary carry Flag */
--	"0 " ,"5? " ,
--	""   ,"z "  ,/* Zero Flag */
--	""   ,"s "  ,/* Sign Flag */
--	""   ,"t "  ,/* Trap Flag */
--	""   ,"i "  ,/* Interrupt Flag */
--	""   ,"d "  ,/* Direction Flag */
--	""   ,"o "  ,/* Overflow Flag */
--	"0 " ,"1 "  ,/* I/O Privilege Level (2 bits) */
--	"0"  ,"1"   ,/* I/O Privilege Level (2 bits) */
--	""   ,"n "  ,/* Nested Task */
--	"0 " ,"15? ",
--	""   ,"r "  ,/* Resume Flag */
--	""   ,"v "  ,/* Virtual Mode */
--	""   ,"ac " ,/* Alignment Check/Access Control */
--	""   ,"vif ",/* Virtual Interrupt Flag */
--	""   ,"vip ",/* Virtual Interrupt Pending */
--	""   ,"id " ,/* CPUID detection */
-+	"\n",	"c\n",	/* Carry Flag */
-+	"0 ",	"1 ",	/* Bit 1 - always on */
-+	"",		"p ",	/* Parity Flag */
-+	"0 ",	"3? ",
-+	"",		"a ",	/* Auxiliary carry Flag */
-+	"0 ",	"5? ",
-+	"",		"z ",	/* Zero Flag */
-+	"",		"s ",	/* Sign Flag */
-+	"",		"t ",	/* Trap Flag */
-+	"",		"i ",	/* Interrupt Flag */
-+	"",		"d ",	/* Direction Flag */
-+	"",		"o ",	/* Overflow Flag */
-+	"0 ",	"1 ",	/* I/O Privilege Level (2 bits) */
-+	"0",	"1",	/* I/O Privilege Level (2 bits) */
-+	"",		"n ",	/* Nested Task */
-+	"0 ",	"15? ",
-+	"",		"r ",	/* Resume Flag */
-+	"",		"v ",	/* Virtual Mode */
-+	"",		"ac ",	/* Alignment Check/Access Control */
-+	"",		"vif ",	/* Virtual Interrupt Flag */
-+	"",		"vip ",	/* Virtual Interrupt Pending */
-+	"",		"id ",	/* CPUID detection */
- 	NULL
- 	};
- 	const char **bitstr;
-@@ -320,7 +320,7 @@ int run_syscall(void)
- 	return check_regs64();
- }
- 
--int run_syscall_twice()
-+int run_syscall_twice(void)
- {
- 	int exitcode = 0;
- 	long sv;
-@@ -337,7 +337,7 @@ int run_syscall_twice()
- 	return exitcode;
- }
- 
--void ptrace_me()
-+void ptrace_me(void)
- {
- 	pid_t pid;
- 
-@@ -356,6 +356,7 @@ void ptrace_me()
- 	printf("[RUN]\tRunning tests under ptrace\n");
- 	while (1) {
- 		int status;
-+
- 		pid = waitpid(-1, &status, __WALL);
- 		if (WIFEXITED(status))
- 			exit(WEXITSTATUS(status));
--- 
-2.43.0
+> ---
+>  .../selftests/vfio/lib/drivers/ioat/hw.h      |   1 +
+>  .../selftests/vfio/lib/drivers/ioat/ioat.c    | 235 ++++++++++++++++++
+>  .../vfio/lib/drivers/ioat/registers.h         |   1 +
+>  tools/testing/selftests/vfio/lib/libvfio.mk   |   7 +
+>  .../selftests/vfio/lib/vfio_pci_driver.c      |  10 +-
+>  5 files changed, 253 insertions(+), 1 deletion(-)
+>  create mode 120000 tools/testing/selftests/vfio/lib/drivers/ioat/hw.h
+>  create mode 100644 tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
+>  create mode 120000 tools/testing/selftests/vfio/lib/drivers/ioat/registers.h
+> 
+> diff --git a/tools/testing/selftests/vfio/lib/drivers/ioat/hw.h b/tools/testing/selftests/vfio/lib/drivers/ioat/hw.h
+> new file mode 120000
+> index 000000000000..8ab52ddd4458
+> --- /dev/null
+> +++ b/tools/testing/selftests/vfio/lib/drivers/ioat/hw.h
+> @@ -0,0 +1 @@
+> +../../../../../../../drivers/dma/ioat/hw.h
+> \ No newline at end of file
+> diff --git a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
+> new file mode 100644
+> index 000000000000..c3b91d9b1f59
+> --- /dev/null
+> +++ b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
+> @@ -0,0 +1,235 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <stdint.h>
+> +#include <unistd.h>
+> +
+> +#include <linux/errno.h>
+> +#include <linux/io.h>
+> +#include <linux/pci_ids.h>
+> +#include <linux/sizes.h>
+> +
+> +#include <vfio_util.h>
+> +
+> +#include "hw.h"
+> +#include "registers.h"
+> +
+> +#define IOAT_DMACOUNT_MAX UINT16_MAX
+> +
+> +struct ioat_state {
+> +	/* Single descriptor used to issue DMA memcpy operations */
+> +	struct ioat_dma_descriptor desc;
+> +
+> +	/* Copy buffers used by ioat_send_msi() to generate an interrupt. */
+> +	u64 send_msi_src;
+> +	u64 send_msi_dst;
+> +};
+> +
+> +static inline struct ioat_state *to_ioat_state(struct vfio_pci_device *device)
+> +{
+> +	return device->driver.region.vaddr;
+> +}
+> +
+> +static inline void *ioat_channel_registers(struct vfio_pci_device *device)
+> +{
+> +	return device->bars[0].vaddr + IOAT_CHANNEL_MMIO_SIZE;
+> +}
+> +
+> +static int ioat_probe(struct vfio_pci_device *device)
+> +{
+> +	u8 version;
+> +	int r;
+> +
+> +	if (!vfio_pci_device_match(device, PCI_VENDOR_ID_INTEL,
+> +				   PCI_DEVICE_ID_INTEL_IOAT_SKX))
+> +		return -EINVAL;
+> +
+> +	VFIO_ASSERT_NOT_NULL(device->bars[0].vaddr);
+> +
+> +	version = readb(device->bars[0].vaddr + IOAT_VER_OFFSET);
+> +	switch (version) {
+> +	case IOAT_VER_3_2:
+> +	case IOAT_VER_3_3:
+> +		r = 0;
+> +		break;
+> +	default:
+> +		printf("ioat: Unsupported version: 0x%x\n", version);
+> +		r = -EINVAL;
+> +	}
+> +	return r;
+> +}
+> +
+> +static u64 ioat_channel_status(void *bar)
+> +{
+> +	return readq(bar + IOAT_CHANSTS_OFFSET) & IOAT_CHANSTS_STATUS;
+> +}
+> +
+> +static void ioat_clear_errors(struct vfio_pci_device *device)
+> +{
+> +	void *registers = ioat_channel_registers(device);
+> +	u32 errors;
+> +
+> +	errors = vfio_pci_config_readl(device, IOAT_PCI_CHANERR_INT_OFFSET);
+> +	vfio_pci_config_writel(device, IOAT_PCI_CHANERR_INT_OFFSET, errors);
+> +
+> +	errors = vfio_pci_config_readl(device, IOAT_PCI_DMAUNCERRSTS_OFFSET);
+> +	vfio_pci_config_writel(device, IOAT_PCI_CHANERR_INT_OFFSET, errors);
+> +
+> +	errors = readl(registers + IOAT_CHANERR_OFFSET);
+> +	writel(errors, registers + IOAT_CHANERR_OFFSET);
+> +}
+> +
+> +static void ioat_reset(struct vfio_pci_device *device)
+> +{
+> +	void *registers = ioat_channel_registers(device);
+> +	u32 sleep_ms = 1, attempts = 5000 / sleep_ms;
+> +	u8 chancmd;
+> +
+> +	ioat_clear_errors(device);
+> +
+> +	writeb(IOAT_CHANCMD_RESET, registers + IOAT2_CHANCMD_OFFSET);
+> +
+> +	for (;;) {
+> +		chancmd = readb(registers + IOAT2_CHANCMD_OFFSET);
+> +		if (!(chancmd & IOAT_CHANCMD_RESET))
+> +			break;
+> +
+> +		VFIO_ASSERT_GT(--attempts, 0);
+> +		usleep(sleep_ms * 1000);
+> +	}
+> +
+> +	VFIO_ASSERT_EQ(ioat_channel_status(registers), IOAT_CHANSTS_HALTED);
+> +}
+> +
+> +static void ioat_init(struct vfio_pci_device *device)
+> +{
+> +	struct ioat_state *ioat = to_ioat_state(device);
+> +	u8 intrctrl;
+> +
+> +	VFIO_ASSERT_GE(device->driver.region.size, sizeof(*ioat));
+> +
+> +	vfio_pci_config_writew(device, PCI_COMMAND,
+> +			       PCI_COMMAND_MEMORY |
+> +			       PCI_COMMAND_MASTER |
+> +			       PCI_COMMAND_INTX_DISABLE);
+> +
+> +	ioat_reset(device);
+> +
+> +	/* Enable the use of MXI-x interrupts for channel interrupts. */
+> +	intrctrl = IOAT_INTRCTRL_MSIX_VECTOR_CONTROL;
+> +	writeb(intrctrl, device->bars[0].vaddr + IOAT_INTRCTRL_OFFSET);
+> +
+> +	vfio_pci_msix_enable(device, 0, device->msix_info.count);
+> +
+> +	device->driver.msi = 0;
+> +	device->driver.max_memcpy_size =
+> +		1UL << readb(device->bars[0].vaddr + IOAT_XFERCAP_OFFSET);
+> +	device->driver.max_memcpy_count = IOAT_DMACOUNT_MAX;
+> +}
+> +
+> +static void ioat_remove(struct vfio_pci_device *device)
+> +{
+> +	ioat_reset(device);
+> +	vfio_pci_msix_disable(device);
+> +}
+> +
+> +static void ioat_handle_error(struct vfio_pci_device *device)
+> +{
+> +	void *registers = ioat_channel_registers(device);
+> +
+> +	printf("Error detected during memcpy operation!\n"
+> +	       "  CHANERR: 0x%x\n"
+> +	       "  CHANERR_INT: 0x%x\n"
+> +	       "  DMAUNCERRSTS: 0x%x\n",
+> +	       readl(registers + IOAT_CHANERR_OFFSET),
+> +	       vfio_pci_config_readl(device, IOAT_PCI_CHANERR_INT_OFFSET),
+> +	       vfio_pci_config_readl(device, IOAT_PCI_DMAUNCERRSTS_OFFSET));
+> +
+> +	ioat_reset(device);
+> +}
+> +
+> +static int ioat_memcpy_wait(struct vfio_pci_device *device)
+> +{
+> +	void *registers = ioat_channel_registers(device);
+> +	u64 status;
+> +	int r = 0;
+> +
+> +	/* Wait until all operations complete. */
+> +	for (;;) {
+> +		status = ioat_channel_status(registers);
+> +		if (status == IOAT_CHANSTS_DONE)
+> +			break;
+> +
+> +		if (status == IOAT_CHANSTS_HALTED) {
+> +			ioat_handle_error(device);
+> +			return -1;
+> +		}
+> +	}
+> +
+> +	/* Put the channel into the SUSPENDED state. */
+> +	writeb(IOAT_CHANCMD_SUSPEND, registers + IOAT2_CHANCMD_OFFSET);
+> +	for (;;) {
+> +		status = ioat_channel_status(registers);
+> +		if (status == IOAT_CHANSTS_SUSPENDED)
+> +			break;
+> +	}
+> +
+> +	return r;
+> +}
+> +
+> +static void __ioat_memcpy_start(struct vfio_pci_device *device,
+> +				iova_t src, iova_t dst, u64 size,
+> +				u16 count, bool interrupt)
+> +{
+> +	void *registers = ioat_channel_registers(device);
+> +	struct ioat_state *ioat = to_ioat_state(device);
+> +	u64 desc_iova;
+> +	u16 chanctrl;
+> +
+> +	desc_iova = to_iova(device, &ioat->desc);
+> +	ioat->desc = (struct ioat_dma_descriptor) {
+> +		.ctl_f.op = IOAT_OP_COPY,
+> +		.ctl_f.int_en = interrupt,
+> +		.src_addr = src,
+> +		.dst_addr = dst,
+> +		.size = size,
+> +		.next = desc_iova,
+> +	};
+> +
+> +	/* Tell the device the address of the descriptor. */
+> +	writeq(desc_iova, registers + IOAT2_CHAINADDR_OFFSET);
+> +
+> +	/* (Re)Enable the channel interrupt and abort on any errors */
+> +	chanctrl = IOAT_CHANCTRL_INT_REARM | IOAT_CHANCTRL_ANY_ERR_ABORT_EN;
+> +	writew(chanctrl, registers + IOAT_CHANCTRL_OFFSET);
+> +
+> +	/* Kick off @count DMA copy operation(s). */
+> +	writew(count, registers + IOAT_CHAN_DMACOUNT_OFFSET);
+> +}
+> +
+> +static void ioat_memcpy_start(struct vfio_pci_device *device,
+> +			      iova_t src, iova_t dst, u64 size,
+> +			      u64 count)
+> +{
+> +	__ioat_memcpy_start(device, src, dst, size, count, false);
+> +}
+> +
+> +static void ioat_send_msi(struct vfio_pci_device *device)
+> +{
+> +	struct ioat_state *ioat = to_ioat_state(device);
+> +
+> +	__ioat_memcpy_start(device,
+> +			    to_iova(device, &ioat->send_msi_src),
+> +			    to_iova(device, &ioat->send_msi_dst),
+> +			    sizeof(ioat->send_msi_src), 1, true);
+> +
+> +	VFIO_ASSERT_EQ(ioat_memcpy_wait(device), 0);
+> +}
+> +
+> +const struct vfio_pci_driver_ops ioat_ops = {
+> +	.name = "ioat",
+> +	.probe = ioat_probe,
+> +	.init = ioat_init,
+> +	.remove = ioat_remove,
+> +	.memcpy_start = ioat_memcpy_start,
+> +	.memcpy_wait = ioat_memcpy_wait,
+> +	.send_msi = ioat_send_msi,
+> +};
+> diff --git a/tools/testing/selftests/vfio/lib/drivers/ioat/registers.h b/tools/testing/selftests/vfio/lib/drivers/ioat/registers.h
+> new file mode 120000
+> index 000000000000..0b809cfd8fe6
+> --- /dev/null
+> +++ b/tools/testing/selftests/vfio/lib/drivers/ioat/registers.h
+> @@ -0,0 +1 @@
+> +../../../../../../../drivers/dma/ioat/registers.h
+> \ No newline at end of file
+> diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
+> index a3c3bc9a7c00..624dc267a879 100644
+> --- a/tools/testing/selftests/vfio/lib/libvfio.mk
+> +++ b/tools/testing/selftests/vfio/lib/libvfio.mk
+> @@ -1,8 +1,15 @@
+> +include $(top_srcdir)/scripts/subarch.include
+> +ARCH ?= $(SUBARCH)
+> +
+>  VFIO_DIR := $(selfdir)/vfio
+>  
+>  LIBVFIO_C := lib/vfio_pci_device.c
+>  LIBVFIO_C += lib/vfio_pci_driver.c
+>  
+> +ifeq ($(ARCH:x86_64=x86),x86)
+> +LIBVFIO_C += lib/drivers/ioat/ioat.c
+> +endif
+> +
+>  LIBVFIO_O := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBVFIO_C))
+>  
+>  LIBVFIO_O_DIRS := $(shell dirname $(LIBVFIO_O) | uniq)
+> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+> index c98bd2d31d8a..aa47360e47a9 100644
+> --- a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+> @@ -4,7 +4,15 @@
+>  #include "../../../kselftest.h"
+>  #include <vfio_util.h>
+>  
+> -static struct vfio_pci_driver_ops *driver_ops[] = {};
+> +#ifdef __x86_64__
+> +extern struct vfio_pci_driver_ops ioat_ops;
+> +#endif
+> +
+> +static struct vfio_pci_driver_ops *driver_ops[] = {
+> +#ifdef __x86_64__
+> +	&ioat_ops,
+> +#endif
+> +};
+>  
+>  void vfio_pci_driver_probe(struct vfio_pci_device *device)
+>  {
 
 
