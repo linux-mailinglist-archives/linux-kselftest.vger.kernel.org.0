@@ -1,137 +1,112 @@
-Return-Path: <linux-kselftest+bounces-39286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86C3DB2BAC7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 09:31:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC3A8B2BAD5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 09:34:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 551D1626DFA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 07:31:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4322C5285D8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 07:32:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E8625A2AE;
-	Tue, 19 Aug 2025 07:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8407F27B353;
+	Tue, 19 Aug 2025 07:32:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BfXaSVT7"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="c/6nEF8z";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="6I0mRjty"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246F87FBAC
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Aug 2025 07:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D9820F08E;
+	Tue, 19 Aug 2025 07:32:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755588624; cv=none; b=UO4xa3VzKDeaCWnDR0mZNI/TvKYkrzJs5x0J65Xv8jWP01xecCM87mw7y6hS3/F8u4jCc5iDMzBTd3a/gJJWPkkQvMugLefYG39CR91iY4yCagK7DSOozQjCHlqXPSJCa8Jkx9nm0qrXdtp7GbAZD4JnBwZLY9WRHbZJncdXoj8=
+	t=1755588755; cv=none; b=NL52UMawc6Wp+8rK9tnqUB3NXo+F5iwLk3hWGJ6flcms+3Pvwh+nBwXJTerTSdFZnccVK2MeZapplrxwvaMuWQqzgxQRGM0w69ysLk62a4q2b0rzSntxAgCAt+oPnvropYQsWvgTLflowgQ5qS2H9RVB+aQh8mVrrK0RXtXrK+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755588624; c=relaxed/simple;
-	bh=5SWrOqsOjRXtQmZBkktmi7W8AxcP0JV2xVyFi1knU3c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qL8xDCZVbafcGY9QYpKsBhStcHYu4JWDDAK7kbG6wQPIwL0Hu9sRA4pbher400V/So+D6isljsvnGt2isiFZWJM8yLI0xfsXa92ADeVjN4IFFDPycevUmmlGL4n0WAXomUSXayrU+8lYd98qEQiAt4np/feJpcTkjRDdw+ZJsDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BfXaSVT7; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3b9dc56a7a3so634268f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Aug 2025 00:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755588621; x=1756193421; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZ/4MiuH+uKPxmrL1oBiKZlLklwBZnyUMBYuRZJW6Rg=;
-        b=BfXaSVT7Fc1Vl7JGznOiVqu21/lDWGyAY3T09vblUW3qVwGKOoJA12zSDELQ++nnip
-         yha69UASUBU8mCZtc4m+FZzXFMRLwugNtY+2jJ1DM7rjJGF+Ogo3E4YSwXLJrOuMUXSr
-         05OYWv5btJgxAEKw84c3Stfd+hCXksGDYijGvb0J83M1h0ZBdZP6vHE0kF4OJ7uE3B7e
-         rZdKacIJfN2WTh7jff1QjDnPnAhli/zjFbHiYgD8gBtASUSWmM+x6Eh+EYpmy41y8ZgZ
-         PWa8d7NncuSFDP9h1i07EvOL5rLaJ68+6m3lPr9pQIp6KgSk4cf72OYW49gnppyd4gIV
-         g+Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755588621; x=1756193421;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sZ/4MiuH+uKPxmrL1oBiKZlLklwBZnyUMBYuRZJW6Rg=;
-        b=KVIa1ogsSiohYbc2NtElXhSoDjvGXNGNH+N1BjRKMRHjX14z2lRUZursD7dmWVFsK9
-         rwAymHZnXGYGghZaWv2+Wzg9lrsRcIufIB/bWKRNYXYonf2Gq1UQW17t3RZUaml/ZEiT
-         GYcI2UCYs+MwQaNFie8RQeeAEwvo1PHOS2oZV+v5BviJeoVqdTD1Dj1+Hhq+X3PvPdPo
-         gZQGkBDM1BdJDoC1GpklLGAASjPAhBdaLLzU7mNfMNBNU3AZpUo7/K/exscIvSgYyZpe
-         70KmaUW36MBsSyDTcMMaqN9oI3kUDnaKYA7PUDfqcrAlcGLiJ11FqtPkwdVXlFzMhPFP
-         xdNw==
-X-Gm-Message-State: AOJu0YyK7Tc3Vhb7yRdnD6iaYbfRqXbXmZCL5xd3DHcBs7etcuqTU2xK
-	WnUKOrmNZ95lrsrIrapp7g6vVDtLJ5z7yyRiG9FDiojQRCQpGJ9p7ophmkfNFC8N
-X-Gm-Gg: ASbGncuxtVwgwHbSIy3JssWVDiKttbhibpgQ59+Flqt37vqlDuxO4pZ8tx6KANlzfUA
-	KQ9SA5VDPr/jKGp7SnpfVKHiExlqopiuH8uG7p7feuZKbo+DPYOxrrTHZOrja82yLAjtNpu8kXX
-	TZimgSTy5yAIm1H+AQT3Hz8yLqjaWnb0KDBSM/eX8QUwdkoTxwNSGd97iWIdGoEpeOzjuW4NyH/
-	s2elQ498w/k0ufAo25ofWhmJzrfCfG+fYql00FDp1zwpDtwyzya9jsxVSZ8Af46KEC95CNacmJn
-	/hpUext17afXEgDR+7ow+49hZuGNrE542jLTKPdpP9Hn5lguEs0uBSaWx2jXGm/kPoeGwsOn7s7
-	8hwciR3Xk85KTrOMqRbguCiPDww==
-X-Google-Smtp-Source: AGHT+IGv6czHuUnpXLot4prHKRHjCN3RGKKWdPoEbqzzyH5T85wFHsShB48xmwxssxWxNbqyfd5i7Q==
-X-Received: by 2002:a05:6000:2307:b0:3b9:1677:471f with SMTP id ffacd0b85a97d-3c0e9f00014mr478984f8f.1.1755588620884;
-        Tue, 19 Aug 2025 00:30:20 -0700 (PDT)
-Received: from bhk ([41.231.66.206])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c077789c92sm2423425f8f.52.2025.08.19.00.30.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 00:30:20 -0700 (PDT)
-From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
-To: linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org
-Cc: linux-kernel-mentees@lists.linuxfoundation.org,
-	Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
-Subject: [PATCH v2] selftests:ftrace:Improved event description
-Date: Tue, 19 Aug 2025 08:28:56 +0100
-Message-ID: <20250819073015.125292-1-mehdi.benhadjkhelifa@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1755588755; c=relaxed/simple;
+	bh=2wLuAo381KhJtQkRClMN8LIhb7JAua7arGcFv6fvF5U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BbGBmQSlw6KPowY7JwdO86CcxOpE6Gg5HvpTrFIj7e1axQ7r7IIKzxIWTnSiYfwgciWRX1/yBM8ZZbmbBvDLUUrxypNIUoUDY+uSjTg7/D7LjZptQViCiSVgPl7YKBoH11VLyVqjgl5u//yu6A3MOzZ3m2qM3Wj99Ednjmo6uQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=c/6nEF8z; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=6I0mRjty; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 19 Aug 2025 09:32:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1755588751;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6ghg175AsfGLoXkygcsu9yHvH4+ZO7WfnjSNzxFio3g=;
+	b=c/6nEF8z8gz4O37DYDw1UBFgXIoXkNfInJlOTVTaDuRMROLdBw0inxnLyebJNDoRTmFR19
+	qoAGPC0UCyb5s1/j2Uo2wM/0bEs+iQvEP1XyrtFOq/6R87DfiKDFeys6W4Chz7GETQAqd1
+	kPWsNudNlDkJJN1qY9Kror9zGRLyPOUHjxJ4w0sSCkJEqpGZz+qQdI9ZCVF1ArpTOZzT18
+	crGT4lhA4rD73hXLMahc7ke5pFSzTMunxlm3laR7sli7669vPW8PQAe9/8vuFSHHYqOBLb
+	Ixe3oWJji4yCXkG967rHon2eDlhhziDNTK5nXpHchJ8Ac7NRP5Tmb8/uT99+GA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1755588751;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6ghg175AsfGLoXkygcsu9yHvH4+ZO7WfnjSNzxFio3g=;
+	b=6I0mRjtyAJNSzny5lUR1ktAlSQeaxUcJf8Ljxxox0g08EOYi03ypYl43nIqMyxgs1oGgyR
+	B6iauQpyGPvdmpAg==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Waiman Long <longman@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Colin Ian King <colin.i.king@gmail.com>
+Subject: Re: [PATCH] selftests/futex: Fix some futex_numa_mpol subtests
+Message-ID: <20250819073230.9YxJoQY3@linutronix.de>
+References: <20250810222742.290485-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250810222742.290485-1-longman@redhat.com>
 
--Changed pid to PID to make it more clear
+On 2025-08-10 18:27:42 [-0400], Waiman Long wrote:
+> The "Memory out of range" subtest of futex_numa_mpol assumes that memory
+> access outside of the mmap'ed area is invalid. That may not be the case
+> depending on the actual memory layout of the test application. When
+> that subtest was run on an x86-64 system with latest upstream kernel,
+> the test passed as an error was returned from futex_wake(). On another
+> powerpc system, the same subtest failed because futex_wake() returned 0.
+> 
+>   Bail out! futex2_wake(64, 0x86) should fail, but didn't
+> 
+> Looking further into the passed subtest on x86-64, it was found that an
+> -EINVAL was returned instead of -EFAULT. The -EINVAL error was returned
+> because the node value test with FLAGS_NUMA set failed with a node value
+> of 0x7f7f. IOW, the futex memory was accessible and futex_wake() failed
+> because the supposed node number wasn't valid. If that memory location
+> happens to have a very small value (e.g. 0), the test will pass and no
+> error will be returned.
+> 
+> Since this subtest is non-deterministic, it is dropped unless we
+> explicitly set a guard page beyond the mmap region.
+> 
+> The other problematic test is the "Memory too small" test. The
+> futex_wake() function returns the -EINVAL error code because the given
+> futex address isn't 8-byte aligned, not because only 4 of the 8 bytes
+> are valid and the other 4 bytes are not. So proper name of this subtest
+> is changed to "Mis-aligned futex" to reflect the reality.
+> 
+> Fixes: 3163369407ba ("selftests/futex: Add futex_numa_mpol")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
--Changed 'restricts' to 'restrict' instead to align with imperative form
+This makes sense.
+Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-Signed-off-by: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
----
-Changelog:
-
-Changes since v1:
-- Changed patch title to align with conventions.
-
-- Reverted a typo in event/event-pid.tc "Event tracing" => "event
-  tracing"
-
-- Changed patch development to 6.17-rc2 from 6.16-rc7
-
- tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc | 2 +-
- tools/testing/selftests/ftrace/test.d/event/event-pid.tc    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
-index 9933ed24f901..aa83be738e69 100644
---- a/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
-+++ b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
-@@ -1,6 +1,6 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
--# description: event tracing - restricts events based on pid notrace filtering
-+# description: event tracing - restrict events based on PID notrace filtering
- # requires: set_event events/sched set_event_pid set_event_notrace_pid
- # flags: instance
- 
-diff --git a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
-index 7f5f97dffdc3..90ba7c794062 100644
---- a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
-+++ b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
-@@ -1,6 +1,6 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
--# description: event tracing - restricts events based on pid
-+# description: event tracing - restrict events based on PID
- # requires: set_event set_event_pid events/sched
- # flags: instance
- 
--- 
-2.50.1
-
+Sebastian
 
