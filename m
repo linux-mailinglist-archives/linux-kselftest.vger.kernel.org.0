@@ -1,158 +1,85 @@
-Return-Path: <linux-kselftest+bounces-39264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C3B1B2B550
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 02:30:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B43EB2B558
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 02:35:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5A465E7F12
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 00:30:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54F7F19678AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 00:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E1C4207A;
-	Tue, 19 Aug 2025 00:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A5315E5D4;
+	Tue, 19 Aug 2025 00:35:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="jwPZHbEC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqguAWeY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B5D347B4
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Aug 2025 00:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427D8156F45;
+	Tue, 19 Aug 2025 00:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755563448; cv=none; b=eW65bEPnedMDVyeavI+1Knzmdg7QlKFY08sKsUkfZ7XV1RyKae6Cwvw7ZdQp7lWbmeY1OKD8ZzxsM5A+yEWLjb61dWTlMASO662kYh5yd3qHWftVSNgf9TDLxnr+MEbc1/tC8FzcmIsc5pTNydCHu3Z6zixI/HRVXQ/M3u8BnB8=
+	t=1755563717; cv=none; b=k8z5LhmnDjq4JcqlgaUA+YSmPHhr4dY5SUk2/xGUUwThcF5/0xT7+YbcX53oSPIEUhq1/GKAxt6GW0lVLF/TTjkEJLV6FTOThOJXTGKt8dAwmmNwW9F1rESywP1WJi3ZmD3CTGAqNnYMd/mi6RoulFidF0Z/LLxOLGB4oKBeG+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755563448; c=relaxed/simple;
-	bh=7cSAwm8Mpm474gJFqJTDSfYjShfJlHAUKQHNp9cO/CU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OoLFAnNEGukD4CnzWU9KC6zynTKFTh7TVeSnvvAEhsrUH/5INtmjzJ0RstN3GgWaF9To/hmZlw6UpVQeYyuipzv2sCaEhAyNIn1BrtfoOv+ZHWk2tLbURb14qO6wtDqi44GEzNejlU6bTADFXs6yHZvHBovSKOF92cqRRicVoJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=jwPZHbEC; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4b109c5ac7bso49261541cf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 17:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1755563446; x=1756168246; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hLw3Ly5lBpwG37igk8nIXvrjC9WRvilq8gEy55nQz4Q=;
-        b=jwPZHbECeV+xOkYEcU+z1HIZtR6xcdUSyjRWedKpftrEJFHr41eUThABrxS2BmG+EE
-         0HQIz2xY/Vx4O95K2ZGsU9pkOL1ONpTXqZdOY2kCgknY0cHgifEsXZ+Do9zeM/dGLevg
-         LbQFFFTKxyBRLP4VvDwd2RWmsWptbxsD23B3RKzx/0YHOZm9aSoYsVj9Z/wuhIwTB8at
-         2cUTJAV/H/HOD7TilX7at3nETQ+dDaizDMTuRqqhEIEy6gQ+Liv1xk6bIfZVFJlWovT2
-         tGFOgFYgkp4SP/QOG7O1eQLUOthO47spiTiV7YYb2nVdYsJsTrN7vJWgXjUj3DQlpteP
-         yvyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755563446; x=1756168246;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hLw3Ly5lBpwG37igk8nIXvrjC9WRvilq8gEy55nQz4Q=;
-        b=F8etIYCuvZM2/ZmqFEha3R3MvDV8+fgqJKDWm8lku1zolrcyF4aDFuLJOajTmo30BZ
-         fXq6lq2Jgfnx1RTuVmO+cLhdJoLwlN89LAwQAzqeeZm2INGb2dWhkclSkNUk0vo04sqP
-         YKEeRNfyrpfxoqaeNFATPPkPr6XzNHd7YIB/vTdbG3n+GUZHaqYKwTShAjWwlHiBtsG2
-         XW/jLzKHmeoAnSLRtTLoM5ygfYztshRsG6TZn2EYa1gEVF9ji3AT/U0bGLOqoqxhuRH3
-         9EO1+2jighOb85PWP61pKOhQApLzYCNNWsAa28bhj03MYll6zlvA620VOQNWgrDT3SRp
-         uvvg==
-X-Forwarded-Encrypted: i=1; AJvYcCWhHQ+02nOa+ShIkm8A3jLzbaTUdXV4P0LTSTBoWWYH6b3gChDK67Owb/2W773k8nw4OOhRoXBLvNsc70By/q4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1ufXH3gyhdZh8VR7WKrZm4DeXRNSqeMg1grZLZf4DYErCASDS
-	gfrj6NCPsFMYQ3jKRMgqJeD2kGiqeGSzMIMRsKtv45FCVDCcQIzynHdwmWGEUu6TEUE=
-X-Gm-Gg: ASbGncuMsiseBDwEpR54huvN2hwwg9XYj996AHYx7UBVFGTqXlgwwaL6s9lAYeg0UB2
-	Nnen/1Wl6xJD5wqYL0uqbTgmQQr+seCiRf/I9ClZRkRZTwfjIl64PEtIqK+8GPv3opRaVir9jYG
-	0XxG9mcUpFL/Cc7F6Zl75zY+MAboYpxsYKjnCzGUDGlry1tiFLN72ne3y9iu7anUsLq1L62/BL7
-	RAocTOrww/8uNYXKQtu9sRY1O1ukSP+QLuKMKED2x58O0FG0SlU0sC/CV/1NLjYuAyNsarLWzs/
-	5eo6mc3SNdCeLss1BkypTA2CgsU09VmY430zW9D2BwmpWvMUTfl8wrKRs8jCOSJksHfO/JrwiRp
-	mqHigJDgASezpzPSdxEl6I8M=
-X-Google-Smtp-Source: AGHT+IGBQbFzX0nYDgxxHDXJuUpwrISyNXTFy2dbw5LSBC5tG74mcZCK5FKwm3AQdhXjEGg8m2Q7VA==
-X-Received: by 2002:a05:622a:312:b0:4ae:f1c4:98fe with SMTP id d75a77b69052e-4b286e216edmr8455701cf.34.1755563445791;
-        Mon, 18 Aug 2025 17:30:45 -0700 (PDT)
-Received: from localhost ([173.23.183.85])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b11dc584c3sm58679171cf.17.2025.08.18.17.30.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 17:30:45 -0700 (PDT)
-Date: Mon, 18 Aug 2025 19:30:44 -0500
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Bibo Mao <maobibo@loongson.cn>
-Cc: Dong Yang <dayss1224@gmail.com>, pbonzini@redhat.com, shuah@kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	chenhaucai@kernel.org, Quan Zhou <zhouquan@iscas.ac.cn>
-Subject: Re: [PATCH] KVM: loongarch: selftests: Remove common tests built by
- TEST_GEN_PROGS_COMMON
-Message-ID: <20250818-2e6cf1b89c738f0fb1264811@orel>
-References: <20250811082453.1167448-1-dayss1224@gmail.com>
- <11d1992d-baf0-fc2f-19d7-b263d15cf64d@loongson.cn>
+	s=arc-20240116; t=1755563717; c=relaxed/simple;
+	bh=pS3SAXWXLubnYcw9FqTVjHbNQej40FQ4fhcGAOaEF+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mneQMSnRucXOfeaWkE1y0gJOM4Cbc4WEhrc9/9CGERIqQ3i1qhGuqKwbaSskb1gQpg5RcyDoheyCgVBlauhh/w6/6YVzla11UyXd3P9b5J0PGUFX50G0ofwyoiQj1y73beCP4lYOnV6ivxoWmv60I3z8Oq782m2I46qoRNRBcFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqguAWeY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E50C4CEEB;
+	Tue, 19 Aug 2025 00:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755563716;
+	bh=pS3SAXWXLubnYcw9FqTVjHbNQej40FQ4fhcGAOaEF+Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=gqguAWeYNOBlzmLabfbhIjMJXKk538mSIPSUlf1oF/UfRDxdGudmeakNDZSEvuBRW
+	 rRTD4ZPMMa0gFoioVMhyl8nBvQOpfExB1BBYoiBw4zA11bwmthMX6p0XpzYIzK1X6b
+	 D040kcT504JYWKPqilzwan11d+70VNpF8wiuztBq7KNn7PfXyEWuYg8iumXfVTBXIx
+	 QwRzvsfH989+BnyAB2qTHCP7SsRiI2CM35d/tV38/AzbeyT6YyXc5c8Yjcb0Fzj0xy
+	 a1axyCG85/i7PX0y/dV4azjvW9w9vhuxoTWIrT8hZDzt/xvh13CF5rF/UfLuor2YTX
+	 7GdsRlzWt7lag==
+Date: Mon, 18 Aug 2025 17:35:15 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Alex Tran <alex.t.tran@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests net/socket.c: removed warnings from unused
+ returns
+Message-ID: <20250818173515.1845a785@kernel.org>
+In-Reply-To: <20250815060631.144471-1-alex.t.tran@gmail.com>
+References: <20250815060631.144471-1-alex.t.tran@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <11d1992d-baf0-fc2f-19d7-b263d15cf64d@loongson.cn>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 11, 2025 at 06:49:07PM +0800, Bibo Mao wrote:
-> Hi Dong,
-> 
-> Thanks for you patch.
-> 
-> On 2025/8/11 下午4:24, Dong Yang wrote:
-> > Remove the common KVM test cases already added to TEST_GEN_PROGS_COMMON
-> >   as following:
-> > 
-> > 	demand_paging_test
-> > 	dirty_log_test
-> > 	guest_print_test
-> > 	kvm_binary_stats_test
-> > 	kvm_create_max_vcpus
-> > 	kvm_page_table_test
-> > 	set_memory_region_test
-> > 
-> > Fixes: a867688c8cbb ("KVM: selftests: Add supported test cases for LoongArch")
-> > Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> > Signed-off-by: Dong Yang <dayss1224@gmail.com>
-> > ---
-> >   tools/testing/selftests/kvm/Makefile.kvm | 7 -------
-> >   1 file changed, 7 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> > index 38b95998e1e6..d2ad85a8839f 100644
-> > --- a/tools/testing/selftests/kvm/Makefile.kvm
-> > +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> > @@ -199,17 +199,10 @@ TEST_GEN_PROGS_riscv += get-reg-list
-> >   TEST_GEN_PROGS_riscv += steal_time
-> TEST_GEN_PROGS_loongarch = $(TEST_GEN_PROGS_COMMON) is missing.
-> 
-> BTW irqfd_test in TEST_GEN_PROGS_COMMON fails to run on LoongArch, does this
-> test case pass to run on Riscv?
+On Thu, 14 Aug 2025 23:06:31 -0700 Alex Tran wrote:
+> +	char *err_message1;
+> +	char *err_message2;
 
-It appears to. It outputs the vm mode created and then exits with a zero
-exit code.
+nit, how about:
 
-Thanks,
-drew
+	const char *msg1, *msg2;
 
-> 
-> Regards
-> Bibo Mao
-> >   TEST_GEN_PROGS_loongarch += coalesced_io_test
-> > -TEST_GEN_PROGS_loongarch += demand_paging_test
-> >   TEST_GEN_PROGS_loongarch += dirty_log_perf_test
-> > -TEST_GEN_PROGS_loongarch += dirty_log_test
-> > -TEST_GEN_PROGS_loongarch += guest_print_test
-> >   TEST_GEN_PROGS_loongarch += hardware_disable_test
-> > -TEST_GEN_PROGS_loongarch += kvm_binary_stats_test
-> > -TEST_GEN_PROGS_loongarch += kvm_create_max_vcpus
-> > -TEST_GEN_PROGS_loongarch += kvm_page_table_test
-> >   TEST_GEN_PROGS_loongarch += memslot_modification_stress_test
-> >   TEST_GEN_PROGS_loongarch += memslot_perf_test
-> > -TEST_GEN_PROGS_loongarch += set_memory_region_test
-> >   SPLIT_TESTS += arch_timer
-> >   SPLIT_TESTS += get-reg-list
-> > 
-> 
+? And then please wrap the lines at 80 chars.
+
+>  	int i, err;
+>  
+>  	err = 0;
+> @@ -56,13 +58,13 @@ static int run_tests(void)
+>  			    errno == -s->expect)
+>  				continue;
+>  
+> -			strerror_r(-s->expect, err_string1, ERR_STRING_SZ);
+> -			strerror_r(errno, err_string2, ERR_STRING_SZ);
+> +			err_message1 = strerror_r(-s->expect, err_string1, ERR_STRING_SZ);
+> +			err_message2 = strerror_r(errno, err_string2, ERR_STRING_SZ);
 
