@@ -1,198 +1,164 @@
-Return-Path: <linux-kselftest+bounces-39325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25A64B2CAB3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 19:36:18 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B854B2CAC0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 19:37:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F2763BFD03
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 17:36:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 140A24E47B7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 17:37:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2279930C35C;
-	Tue, 19 Aug 2025 17:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 744C030BF7C;
+	Tue, 19 Aug 2025 17:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="fdN5z0p7"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DM5c6UxU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9203730BF5A
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Aug 2025 17:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569AF30BF6A
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 Aug 2025 17:37:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755624950; cv=none; b=SMkJJaaLvHyh4ref6chqVzHc1cEOQ6uDid+Sz56RRHdYh5o1qG48G0Yl20hBHQLhQhJj+y/B5wSYd/+LBcOpF2BUQJIyRV+kLVkPFrgGfUhcDvU8e2iVqx9BZhtApr8PC9/m2AziBwpLzDUEnx4pHKE/CBmAd+VDsLn412tTpgc=
+	t=1755625041; cv=none; b=Mp8oR/YmuDnYlEnhQn0VFVzH78UK1H5qW7UYsrzd17DqT+H+UiEkE6OUg0yFjSgmvXIfH1wwWTGiASp5IBS1YgEQD/dzWJHFfY/kjXCBXAHXMD86qMlGkke/46axEOgvBvaOuwggfH1wU2pRNo4DIlwb9eRlBXVw7kFleVFtzbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755624950; c=relaxed/simple;
-	bh=3lx/6/xRZF2aURKCYXk81xVXA9kIZnoFiaggniSCdKM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=Hf4upYc31w4Lro2vxqMN6cQMyQmmu2a7yeailAZpfaSM65teDhw4z9aaesVDaerVIdbiSzz0omXK1QLqOi99DRbQbWLBrEqqZKmwmFERSZP4sNbb/ldMqW5kVx6ichxh9zfJTVK7kWv8gb9Y7jftEqIic+S1AaMpVJnpZ8AMhwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=fdN5z0p7; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3b9e4110df6so758287f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Aug 2025 10:35:47 -0700 (PDT)
+	s=arc-20240116; t=1755625041; c=relaxed/simple;
+	bh=JXPd1rLK4KxreXPwbOiKrhOxW5tmFTs62cIXzsuk8AY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=s/+a8IfQoyWZxZRFgxDi2+cA3tMcBORYN6JOdNt//BgjXeLPYJGlTMgk22AR2y5uial38mFzIYppY/5YHrXONdNG80H2p9JR+ofTwEVuKySF3IGuPRsDTGEzn+d7HTU6sjCJwJPtzWsjAQ8RMXcYjNdthOjI8FdKkUxViH1/JcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DM5c6UxU; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3b9e7437908so5349497f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Aug 2025 10:37:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1755624946; x=1756229746; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:from:to:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HriY9Mwm+2fMM0vnEvPFFz/UXLfXmL7avJoov+0cHIs=;
-        b=fdN5z0p7Ve1LwKx8C8KdIcc6Hk+jxajMirUok34CF8jIAKlY4X/pulTnLgksyDj38R
-         ySeTUzGp0hQH6w12RzNAYI5ffKWUJizaWd0DQKgAu4FJLs2haKDPAwOq+kcmUKuO3iuf
-         n7h/dxhIQ9A61QQRKfdx2iRQgdao5WQn2kMahwsxxjWD120n/iq9aqPcPF8o0vmV6gKj
-         KIX8lZUKgd5K+HRB5fzhmrb0NcqaYkSoRCJlrG7WvtbMrBnXOVlxVrQEMJojkxc10tvS
-         aGIHp7NJnd5pzvccaXx4AQ4N9k4wQ0TMDpjQgCW2gGT7CeLYFM67mxU7wXz0irENZec6
-         am6g==
+        d=suse.com; s=google; t=1755625037; x=1756229837; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dO5/mt3F5WN5A5SgwE0dDDSreyFeFbLuWxIdcH33nUM=;
+        b=DM5c6UxUhU7iHTTkj2hj4QMHVGYMUdfnGnWOKBp+zAYLoc/DQqrA92WoCGqm8JbkXK
+         DStvjVpCytekBsqcOp95f9gmLU4m1XvpWQ6gl2WNt4KXK/lnioNo0GCyxHXF01qCNSA+
+         XV470V8PrzVdrZGPGtPHx12/1z7bxo2h7/UVCGVwbVjQNMHu8vt02WxzQYs4iW6Nr6kH
+         TUhdHJGMHuBz5Sa9/UB8/Nd44oVhdG6p15dIe65Zz7AGSWl2HHCzwxRJjdYZIsCdYpIb
+         0XBkuxGbyB+9CeqG2cE0f4H+3WRL+b+aUQLIUhOaznHYros8d8L4toOSkoHVy3ca+KDS
+         jNMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755624946; x=1756229746;
-        h=in-reply-to:references:subject:from:to:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HriY9Mwm+2fMM0vnEvPFFz/UXLfXmL7avJoov+0cHIs=;
-        b=t6VxBUX/W9jEXeJEZyk1kYTFEyWAEyHB+3JdBkTVsrp05CgPXo8RDTweBz9JdRxMza
-         R5MHGTjIibNZCZoYmaGGLWjAoTtvGE8ofB/QZJ9X6+bSNluZ6PL9BI/mxAFjVPJ7gOSV
-         UStd0NoBKiXhQ//d2CIvNVggWQt8/PyjnGk9mPuF9k2JzHZj6DeZK0WsbJH5G/6dCsIN
-         2cn9U6PQS0CSOC7molm/luzR2KYcVOvB1M6o+a4CnyDkbWcH5wGPLs4KXA/CvPQVYSmq
-         l4ySM1TCbeMmHwDI7wYd6S/yYECmmG7kCeDWhzPk9QGwUD9R/UfvK8OWhBVXiy43GoNI
-         /70w==
-X-Forwarded-Encrypted: i=1; AJvYcCW2em8KL9n5aWIRayc+zDATvxVSGFNhSraba1dc6As/tuNYxDXflBSAsrHfNNajkLqUiNX+7dWSa93z+qx9kkY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz32rod0f2/f7pfvKDxuSLdVdGawAUR69anubmVO6EeW688pT9w
-	J8lgeItbFT3FRrt2SiQuZTd9dpQOLFAgLW5v4PPLq+2LnGtwvXRvgDbBBDySXeMmsmU=
-X-Gm-Gg: ASbGncv62xfDgY0irmqtAyEH+jOp5W+opFx+V5zjWxwxTZNrf7hLaMBLBYSZrcatdti
-	JBBFc+L4+95HXoJnVpC9xd8RZxvYddOqTuTRclkoOc5rZTBXtTd98VNa9qgX+cvyh9FCXrvYC8+
-	2TbmsWxwSuN5s/1DwUyr2eFNLqNr1nxgal2KFfzCVzibsboFyMwzC/NqaBcXXMmn64df8RVNtqQ
-	Mel783W86/DvBvlfu4/MVTcIUmwD2vb8POeWIum2YjyNvNyMYeVqaN5tOxetk/mKyPI5DeYHt0K
-	YmwV8F3XpIlGOERugcdkaAUQyrB2qj+gCeYZEU3UTRdPo5H05KLsqlzT1z6o4iiQGKdeOqK28Mm
-	NlxvKtZT3DRyxMU/zlva1mFgni4KvNw==
-X-Google-Smtp-Source: AGHT+IHdHc43/qbPeSuFvpTUjrq1NXmEH79kFa8+PuZKM64k2/KwBznp+KjWl/svIF/2Oq3kUoCIug==
-X-Received: by 2002:a05:600c:468f:b0:453:7011:fcdb with SMTP id 5b1f17b1804b1-45b46b7681bmr4785225e9.1.1755624945689;
-        Tue, 19 Aug 2025 10:35:45 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:e7d6:daad:8c97:a08e])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45a1c6bc85csm221551445e9.5.2025.08.19.10.35.45
+        d=1e100.net; s=20230601; t=1755625037; x=1756229837;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dO5/mt3F5WN5A5SgwE0dDDSreyFeFbLuWxIdcH33nUM=;
+        b=OdPO7cJ/yb5pKwq7A779l4fan57syuxDQJImw6iZmc2v2HJhnPH337v5PUOpX6yIIL
+         1QVm+Nv2nDaJNMUOFxSZJ11PL+Zi/MS1QDvqMFHwkrKAmaRQO1AWu5d0E3AzRgItQKUr
+         iFmgXWF5+PCy4gwH8zcwiOwcZtJui8cQpSvp3sDFBNG2d1pcAAfaRI9iZbqVi6YW28qu
+         FWoX1JSxEbsuy6S5ZSZQKOx/6kdDx0ICXX3tjyaQH1uf1rvXVmo3AsrWay0famF+CK3x
+         kxBrlO0+M83eoiPEC5qKLZsJ3UnnP55hnlYCeKuvu2W5ECju76cZvSFVkmmv8cGE5Cjy
+         MYZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWiTK0yM9vfApwUr9RBwc2eZVJW8P/la2bEO71pYuVmJ4Xcz790DdW6+gxf7wQOCl6e1vOg8IlIIrskTdB+seA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFpUj4L59cwU8vB6gqqsHp0Q5ZzVToVgwyjTSO8gnZApw9w0xI
+	vUOy1OrSZWmXUICgwWJni//oxWYTyq3gJJUYYzVEoX0XR0msc1DjvySk5+RqbK8V4+M=
+X-Gm-Gg: ASbGncvWZ2izr76T6cnZ08M+GPUTb3XwdVyRVV7DF2855eoGfYQmHXLMomB1qRGJ1x8
+	Ca1wMeHpI/T4DrJgrJ6N6Cgr9wAoiijRbk5yKpXIoh7Xpuhh9lCxFLvfVmHRa7FfZ5lhM8/Nyac
+	ngT0p6pedOqLlwhP1/ixj7BbttQkvkhbGqJbpvBfoPhSgJjecnoUrh9tFqseIXgUTkEK7woEBKl
+	szU5IkpYxa/d20yRZVtwAIiHzo6weYm7TS/L1ULSVJRTDYZ4hXPXI7BuRocHuxGunjVxsGH/uUm
+	Bg6YXtePpD7Z7kmCi212tHVEIzL7wWogdqYQ06GIUzBQGYeSRR/oyAHnbmiSGXolXWXil9eK2hn
+	fWYltoefTIkU=
+X-Google-Smtp-Source: AGHT+IGh34R50gEhJycTm5zqMFBCoU3WTDF2MBvLl83PU9al954kLRGJD/Cpv5Dxv7zp9pGb6k4+EA==
+X-Received: by 2002:a05:6000:4012:b0:3c0:7e02:67bb with SMTP id ffacd0b85a97d-3c0ecd26d18mr2762797f8f.63.1755625036666;
+        Tue, 19 Aug 2025 10:37:16 -0700 (PDT)
+Received: from localhost ([177.94.120.255])
+        by smtp.gmail.com with UTF8SMTPSA id 71dfb90a1353d-53b2bed9fe1sm2906022e0c.16.2025.08.19.10.37.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 10:35:45 -0700 (PDT)
+        Tue, 19 Aug 2025 10:37:16 -0700 (PDT)
+From: =?utf-8?B?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Date: Tue, 19 Aug 2025 14:37:01 -0300
+Subject: [PATCH] selftests/livepatch: Ignore NO_SUPPORT line in dmesg
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 19 Aug 2025 19:35:44 +0200
-Message-Id: <DC6L3PG5HP48.2J8TC1JZHMJVO@ventanamicro.com>
-Cc: "Atish Patra" <atish.patra@linux.dev>, "Palmer Dabbelt"
- <palmer@dabbelt.com>, "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Alexandre Ghiti" <alex@ghiti.fr>, "Andrew Jones"
- <ajones@ventanamicro.com>, "Anup Patel" <anup@brainfault.org>, "Paolo
- Bonzini" <pbonzini@redhat.com>, "Shuah Khan" <shuah@kernel.org>,
- <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
- <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, "linux-riscv"
- <linux-riscv-bounces@lists.infradead.org>
-To: "Anup Patel" <apatel@ventanamicro.com>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-Subject: Re: [PATCH 0/6] ONE_REG interface for SBI FWFT extension
-References: <20250814155548.457172-1-apatel@ventanamicro.com>
- <DC5HEJRMZ84K.34OPU922A7XBE@ventanamicro.com>
- <CAK9=C2X8-DBi7qQ87kMA0AiVdiFH0_4L4mzzZzbeCg2eiNm8Qg@mail.gmail.com>
- <DC6DLP13J0LA.XW9J3XFBCM1Y@ventanamicro.com>
- <CAK9=C2VA2jswYm_yxYsCaGKUkJT46rxUH-6OKdsApMZ8nhkrQw@mail.gmail.com>
-In-Reply-To: <CAK9=C2VA2jswYm_yxYsCaGKUkJT46rxUH-6OKdsApMZ8nhkrQw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250819-selftests-lp_taint_flag-v1-1-a94a62a47683@suse.com>
+X-B4-Tracking: v=1; b=H4sIADy2pGgC/x3MQQqDMBBA0avIrBuqAUvTq5QikzgxA2EqmVgE8
+ e5Nu3yL/w9QKkwKj+6AQh9WfkvDcOkgJJSFDM/NYHs79vfBGaUcK2lVk9epIkudYsbFBHeLo3f
+ e0uyg1WuhyPv//Hw1e1QyvqCE9Ptp2jBdhfYK5/kFGmhp7IYAAAA=
+X-Change-ID: 20250819-selftests-lp_taint_flag-c96f5b9b2ed9
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1960; i=rbm@suse.com;
+ h=from:subject:message-id; bh=JXPd1rLK4KxreXPwbOiKrhOxW5tmFTs62cIXzsuk8AY=;
+ b=owEBiQJ2/ZANAwAIAckLinxjhlimAcsmYgBopLZIfQ0VomklN2mvleQcbBjgLgQY1J4xq4OOr
+ qxsw4qZyOSJAk8EAAEIADkWIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCaKS2SBsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMSwyLDIACgkQyQuKfGOGWKZGnQ//fBACTrdtPSbzrMFqDYzWog8GqrVdXFi
+ 4SqqfZ7DKYjSQ5aSMPrsBxJn7TJwY89RaEHx05QfSS+1ZiRtGRXywG5Wf2gMiFq13JCXF7NImqg
+ P0JU69SV7XTysIQbGnmtLMnkemaJPoK4IN/7+h0lFlogYfakHzVlOpD1zsnMAk4PWAQx6AKeWep
+ xMkfQSlI55rXwmV6n5OqHfMdnDkS3aRNiX8mkSsjeOPT6MlPDOp6pe9rQhC8rUT4TkXm1wEp2i5
+ Df58jj4q5Bc/SuPD/Yl37HsoiwAjsQjEfLOsbk6GWoNz3eL3egG8970hI92TTwz9R9yjaAzpjkK
+ URSbA2hJd2eXhS2CZnbSNHCV7pyaVuV4Zk5zA5QF7C1VrFpKi4mYst87Jcf9rFgFnn94avGeZOn
+ pniqrKf9GBfmRduRXGTnNtlE3NlErpegKumgxlBO1Kyr1fxyWMo1NWG9ZmgaP9DBQKN8Q30zfnu
+ MPszoN8iyhd6W5iqdqNS2pJ70dy4cZqq0KBMIsjoW+Aw2HU10wEsvQcLZnSP4N+9TRqaudYrgwp
+ 1xxwGTBL5AE+parSF7X/ocZmqLRDaigFgjZyhGGt39vRC1CK9/AsY+RApYCCXp7SO+NVEjQ5Zuw
+ JSsRVoGi9S1P8OKCfnkGeve0kkgGmVFHEw5znZgbr/apkvQ9EvUA=
+X-Developer-Key: i=rbm@suse.com; a=openpgp;
+ fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
 
-2025-08-19T21:22:27+05:30, Anup Patel <apatel@ventanamicro.com>:
-> On Tue, Aug 19, 2025 at 5:13=E2=80=AFPM Radim Kr=C4=8Dm=C3=A1=C5=99 <rkrc=
-mar@ventanamicro.com> wrote:
->>
->> 2025-08-19T12:00:43+05:30, Anup Patel <apatel@ventanamicro.com>:
->> > On Mon, Aug 18, 2025 at 3:59=E2=80=AFPM Radim Kr=C4=8Dm=C3=A1=C5=99 <r=
-krcmar@ventanamicro.com> wrote:
->> >>
->> >> 2025-08-14T21:25:42+05:30, Anup Patel <apatel@ventanamicro.com>:
->> >> > This series adds ONE_REG interface for SBI FWFT extension implement=
-ed
->> >> > by KVM RISC-V.
->> >>
->> >> I think it would be better to ONE_REG the CSRs (medeleg/menvcfg), or =
-at
->> >> least expose their CSR fields (each sensible medeleg bit, PMM, ...)
->> >> through kvm_riscv_config, than to couple this with SBI/FWFT.
->> >>
->> >> The controlled behavior is defined by the ISA, and userspace might wa=
-nt
->> >> to configure the S-mode execution environment even when SBI/FWFT is n=
-ot
->> >> present, which is not possible with the current design.
->> >>
->> >> Is there a benefit in expressing the ISA model through SBI/FWFT?
->> >>
->> >
->> > Exposing medeleg/menvcfg is not the right approach because a
->> > Guest/VM does not have M-mode hence it is not appropriate to
->> > expose m<xyz> CSRs via ONE_REG interface. This also aligns
->> > with H-extension architecture which does not virtualize M-mode.
->>
->> We already have mvendorid, marchid, and mipid in kvm_riscv_config.
->
-> The mvendorid, marchid, and mipid are accessible via SBI BASE
-> extension but not any other M-mode CSRs hence these are special.
->
->>
->> The virtualized M-mode is userspace+KVM.  (KVM doesn't allow userspace
->> to configure most things now, but I think we'll have to change that when
->> getting ready for production.)
->
-> The RISC-V architecture is not designed to virtualize M-mode
-> and there is no practical use-case for virtualized M-mode hence
-> WE WON'T BE SUPPORTING IT IN KVM RISC-V.
+Some systems might disable unloading a livepatch and when running tests on
+them they fail like the following:
 
-Oh, sorry for the misunderstanding, I'll be clearer next time and talk
-about implementation of the supervisor execution environment.
-KVM+userspace provides SEE to the VS-mode, which is to VS-mode as what
-M-mode is to S-mode, hence I called KVM+userspace a virtualized M-mode.
+$ ./run_kselftest.sh -c livepatch
+  TAP version 13
+  1..8
+  # selftests: livepatch: test-livepatch.sh
+  # TEST: basic function patching ... not ok
+  #
+  # --- expected
+  # +++ result
+  # @@ -5,6 +5,7 @@ livepatch: 'test_klp_livepatch': starting
+  #  livepatch: 'test_klp_livepatch': completing patching transition
+  #  livepatch: 'test_klp_livepatch': patching complete
+  #  % echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
+  # +livepatch: attempt to disable live patch test_klp_livepatch, setting
+  NO_SUPPORT taint flag
+  #  livepatch: 'test_klp_livepatch': initializing unpatching transition
+  #  livepatch: 'test_klp_livepatch': starting unpatching transition
+  #  livepatch: 'test_klp_livepatch': completing unpatching transition
+  #
+  # ERROR: livepatch kselftest(s) failed
 
-> FYI, the KVM ARM64 does not virtualize EL3 either and it is
-> already in production so please stop making random arguments
-> for requiring virtualized M-mode for production.
+Cc: Marcos Paulo de Souza <mpdesouza@suse.com>
+Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+---
+ tools/testing/selftests/livepatch/functions.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yeah, I agree that we don't need it, I just had to provide so many
-examples in the previous discussion that I went into quite niche cases.
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 46991a029f7c64ace3945727b3540521ffe2e529..13fc289962cdd77c9fc4eaf1ad336775d6db710d 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -321,6 +321,7 @@ function check_result {
+ 	result=$(dmesg | awk -v last_dmesg="$LAST_DMESG" 'p; $0 == last_dmesg { p=1 }' | \
+ 		 grep -e 'livepatch:' -e 'test_klp' | \
+ 		 grep -v '\(tainting\|taints\) kernel' | \
++		 grep -v 'setting NO_SUPPORT taint flag' | \
+ 		 sed 's/^\[[ 0-9.]*\] //' | \
+ 		 sed 's/^\[[ ]*[CT][0-9]*\] //')
+ 
 
-The increased flexibility is similarly useful for more important cases:
-we can't avoid "virtualized M-mode"/SEE, but we don't have to completely
-implement it in HS-mode.
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250819-selftests-lp_taint_flag-c96f5b9b2ed9
 
->> For general virtualization, we want to be able to configure the
->> following behavior for each exception that would go to the virtualized
->> M-mode:
->>   0) delegated to the guest
->>   1) implemented by userspace
->>   2-N) implementations by KVM (ideally zero or one)
->>
->> We can have medeleg, and another method to decide how to handle trapped
->> exceptions, but it probably makes more sense to have a per-exception
->> ONE_REG that sets how each exception behaves.
->>
->
-> No pointing in discussing this further since we won't be supporting
-> virtualized M-mode.
+Best regards,
+-- 
+Ricardo B. Marlière <rbm@suse.com>
 
-I understand, back to the current series:
-
-I think we need to provide means with which userspace can control which
-FWFT features are enabled, because KVM just exposes everything it know
-and hardware supports right now:
- 1) Migration between different systems would be hindered
- 2) We couldn't add more FWFT features without breaking the SEE
-
-The (2) is similar to how we must set ".default_disabled =3D true" to
-current FWFT, because KVM can't be changing the SEE for userspace.
-
-Do you want me to send a patch that inverts the default, to make all
-future SBI extension start as disabled, so we can't easily repeat the
-mistake in the future?
-
-Thanks.
 
