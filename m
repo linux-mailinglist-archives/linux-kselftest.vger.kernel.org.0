@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-39314-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39315-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08B81B2C9A7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 18:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33942B2C9AA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 18:29:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 624921BC81D6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 16:28:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18E59188B609
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Aug 2025 16:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D43B25B1FC;
-	Tue, 19 Aug 2025 16:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BEFE25785E;
+	Tue, 19 Aug 2025 16:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mG5Nht3f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DyPLfa5T"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC3D24EA90;
-	Tue, 19 Aug 2025 16:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40F2256C91;
+	Tue, 19 Aug 2025 16:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755620836; cv=none; b=BsFaL76YywVvC9+hhyIor+AQRb8nkbljD28WFcmhiQS9orzJJsdLUKFm4CAvzXzAK85aL3vMhupCBsNJsLbJC/yKlqiegPIglY/byimfJwJIkInSoBuEClQA4kpDMIEq/+MnIu77mYUUA1vBfb3jwhi9k4pJC5fECgWd0M+3K6Y=
+	t=1755620842; cv=none; b=fVAjHwgRM2obsRbIUdte/PwUlVqYHNI3GtAY08tssftSi9MGAEXKzkm+mz8PT7ndHX0qPAMivfFU9bww9gZaxt4XltzVh/ZZ64195vh+J9kglTtdJblYNy108f6Sd5+2jAMiBalj+RD13b2g6PBtlaE9K/wYZM5er5i2xodqimQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755620836; c=relaxed/simple;
-	bh=sCkuhZhQLgVA+X2B9E/24D8lf8QLxbBNxj1NjjW+v04=;
+	s=arc-20240116; t=1755620842; c=relaxed/simple;
+	bh=hVaIM8V8kRd9AQDq914Wwe26mHFpW+Fx9glpdzPR7+8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LV4M2AUz/t9EIfhuzg18/3HfQ6Wu5zkNwIw7tJGPA/ynl80Uabflz9+FVdISYWqwCfva9EEBG27EYWjy6GXGnUb8gHT5DJIfYBWGOhBO2OFQ63SeiEKDBUmX620h/gw1XBYIW4eBPMo3TXexrCcSWghU83xAdzNhmP5zbWLMYwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mG5Nht3f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C676C113D0;
-	Tue, 19 Aug 2025 16:27:09 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=hNrcngXjLVNOTDgz1qaPWaG/JAyrT2bGQO2ViCmYr+i1uMiitr7nL1907iPzhsVYn7GcOV+qzaGQVX12ySjplsaH7CS2ZHpSZ2E/3x29uW2yi7yvlitYCUAl4BkhvANxl0us+4G9s7wvSaY7xR8uIwfEx2+dOnRwhwGFkg/L4pQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DyPLfa5T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DE8C4CEF1;
+	Tue, 19 Aug 2025 16:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755620835;
-	bh=sCkuhZhQLgVA+X2B9E/24D8lf8QLxbBNxj1NjjW+v04=;
+	s=k20201202; t=1755620842;
+	bh=hVaIM8V8kRd9AQDq914Wwe26mHFpW+Fx9glpdzPR7+8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=mG5Nht3f84Q5VTewVMfPte9wo/B1JeUugMm5OYacumVcsiulYF5HT4UmAcDoWABJv
-	 lT8FKLtjnanElC9gidxE8r1TDfIP/AovpEKOF9CuzxJ55PhnUxPOxL4aGED2vCxE/G
-	 +orm7ozyn32Q3/7dWavQfCvqs3prJck0bGmHTpuYZ5KA8fS8QAC3UYVtegS6rucHLo
-	 wD+OShym5ukDRMNBTRmJMSaweFu6UIwIRvpC+AWI0gD4d8VkXpUWtyjineC/ccQk/A
-	 vc7Gyn7kto4PNHl6XopPSvyZAhEBHxvlSo0sBKK9YO9krfa7AOS8MN8YSOhpM/7533
-	 F4K1vqaBBn5lg==
+	b=DyPLfa5TK2OpgwmCPBJImANFYCq6autqHJOl9oj5Jxw6GQFMyCV3UQgZju5aY74kj
+	 UFf19PLU9ejKGdziB/1W66uYaCxAIMqGk+LWv5PwoHOMAOPHT528Y5D29rY3r8Tm0g
+	 bxRm1u7v59lueFmlP85aut4623DemO85Ua1Ve15RSGhiIyHN7nOCp+fLzCJT00pQ3Q
+	 hK9UcXPEgxEDvCs/W0/SNqlLKrwwKVfLH5WPosxHpKYh9yCGrOAjUbi3Zr2cdt9LU/
+	 fakGNIWhf9n73AK+H4dLnymI68NgoLpUCEI6YVcJB2z7krir59P55AdXvZ+s7SbRrV
+	 Pw/psMcw9ZYPQ==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 19 Aug 2025 17:21:47 +0100
-Subject: [PATCH v19 1/8] arm64/gcs: Return a success value from
- gcs_alloc_thread_stack()
+Date: Tue, 19 Aug 2025 17:21:48 +0100
+Subject: [PATCH v19 2/8] Documentation: userspace-api: Add shadow stack API
+ documentation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250819-clone3-shadow-stack-v19-1-bc957075479b@kernel.org>
+Message-Id: <20250819-clone3-shadow-stack-v19-2-bc957075479b@kernel.org>
 References: <20250819-clone3-shadow-stack-v19-0-bc957075479b@kernel.org>
 In-Reply-To: <20250819-clone3-shadow-stack-v19-0-bc957075479b@kernel.org>
 To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
@@ -74,118 +74,102 @@ Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
  Yury Khrustalev <yury.khrustalev@arm.com>, 
  Wilco Dijkstra <wilco.dijkstra@arm.com>, linux-kselftest@vger.kernel.org, 
  linux-api@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
- Kees Cook <kees@kernel.org>
+ Kees Cook <kees@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Shuah Khan <skhan@linuxfoundation.org>
 X-Mailer: b4 0.15-dev-cff91
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3726; i=broonie@kernel.org;
- h=from:subject:message-id; bh=sCkuhZhQLgVA+X2B9E/24D8lf8QLxbBNxj1NjjW+v04=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBopKXPN3yAT+iEP6l5t5KQ9WtZj/u1xSCDpyuiR
- HCGAXK471OJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKSlzwAKCRAk1otyXVSH
- 0MB8B/9+XrLDMVZdjgtEDztlLW4AykJOQ6+Hqd0rWPG76jByPwN6NYQsdgMOvQ6AoI1YlGNZ35C
- VBDwqR0iRuq2FbHUrFsLd82f+HU4IS9wZcz65b3zgppFABbUGMW5MKv4JLy0wilhGe4s7EChG95
- rcwLBoH+Qg38/VTbki2wi5q2tYvNFEy6Hm/8xrdAfcPdlj79GIi7c6nmRBDwl3reoqgu0SlkUKA
- 6XgXjsdtSTSUcCLxPaoNdjVV7c+2aZf25zO4j+QLHFx7ufsIofO6kQQwsSaoYQsCECtTxrql9UL
- iciW9ARdLDJFQxeQulvsuqFrMkX4yVb0AJ1XFGRJIFG2gZQc
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3291; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=hVaIM8V8kRd9AQDq914Wwe26mHFpW+Fx9glpdzPR7+8=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBopKXQTdY3ugJkYbJS5pLU75D0MW2jy457UDv26
+ 3WzN4ar6iiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKSl0AAKCRAk1otyXVSH
+ 0NRaB/wJySdY1ayPL1KkBWJiBZ2rO3++CePDThRvIUqVv8MSOS5JV6ExNNLfaCcL+n4mdOIRwBP
+ k+Vp23qjXejxL1E49NBonyonPKK5kc0/PpZBHW3q+BPEVqBXxYsK7yz4itNzxdkCdQNFQvNLHrF
+ W1cOZaoHItMs9p5NPZmQ4bXiFwPoe72IIAEl29WnhU10pFNZlUqcTqBQyWFiPVrt/hxCbnJcKV2
+ eaUmQkuxUdXTLop38o/lP6W2OI/x9VR/tpDCgbCh2JCwBJV45Hgw7SZKv5cQhn12g2Z2iLasK+O
+ inCZguORVZZHRYpPPwpQDMiae+5Slcnuf25s2zmPwnPLeoPC
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Currently as a result of templating from x86 code gcs_alloc_thread_stack()
-returns a pointer as an unsigned int however on arm64 we don't actually use
-this pointer value as anything other than a pass/fail flag. Simplify the
-interface to just return an int with 0 on success and a negative error code
-on failure.
+There are a number of architectures with shadow stack features which we are
+presenting to userspace with as consistent an API as we can (though there
+are some architecture specifics). Especially given that there are some
+important considerations for userspace code interacting directly with the
+feature let's provide some documentation covering the common aspects.
 
-Acked-by: Deepak Gupta <debug@rivosinc.com>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Kees Cook <kees@kernel.org>
+Tested-by: Kees Cook <kees@kernel.org>
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Acked-by: Yury Khrustalev <yury.khrustalev@arm.com>
+Reviewed-by: Deepak Gupta <debug@rivosinc.com>
+Tested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/gcs.h | 8 ++++----
- arch/arm64/kernel/process.c  | 8 ++++----
- arch/arm64/mm/gcs.c          | 8 ++++----
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ Documentation/userspace-api/index.rst        |  1 +
+ Documentation/userspace-api/shadow_stack.rst | 44 ++++++++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
 
-diff --git a/arch/arm64/include/asm/gcs.h b/arch/arm64/include/asm/gcs.h
-index 5bc432234d3a..b4bbec9382a1 100644
---- a/arch/arm64/include/asm/gcs.h
-+++ b/arch/arm64/include/asm/gcs.h
-@@ -64,8 +64,8 @@ static inline bool task_gcs_el0_enabled(struct task_struct *task)
- void gcs_set_el0_mode(struct task_struct *task);
- void gcs_free(struct task_struct *task);
- void gcs_preserve_current_state(void);
--unsigned long gcs_alloc_thread_stack(struct task_struct *tsk,
--				     const struct kernel_clone_args *args);
-+int gcs_alloc_thread_stack(struct task_struct *tsk,
-+			   const struct kernel_clone_args *args);
+diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
+index b8c73be4fb11..0167e59b541e 100644
+--- a/Documentation/userspace-api/index.rst
++++ b/Documentation/userspace-api/index.rst
+@@ -62,6 +62,7 @@ Everything else
  
- static inline int gcs_check_locked(struct task_struct *task,
- 				   unsigned long new_val)
-@@ -91,8 +91,8 @@ static inline bool task_gcs_el0_enabled(struct task_struct *task)
- static inline void gcs_set_el0_mode(struct task_struct *task) { }
- static inline void gcs_free(struct task_struct *task) { }
- static inline void gcs_preserve_current_state(void) { }
--static inline unsigned long gcs_alloc_thread_stack(struct task_struct *tsk,
--						   const struct kernel_clone_args *args)
-+static inline int gcs_alloc_thread_stack(struct task_struct *tsk,
-+					 const struct kernel_clone_args *args)
- {
- 	return -ENOTSUPP;
- }
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 96482a1412c6..f0b1bea9c873 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -299,7 +299,7 @@ static void flush_gcs(void)
- static int copy_thread_gcs(struct task_struct *p,
- 			   const struct kernel_clone_args *args)
- {
--	unsigned long gcs;
-+	int ret;
- 
- 	if (!system_supports_gcs())
- 		return 0;
-@@ -310,9 +310,9 @@ static int copy_thread_gcs(struct task_struct *p,
- 	p->thread.gcs_el0_mode = current->thread.gcs_el0_mode;
- 	p->thread.gcs_el0_locked = current->thread.gcs_el0_locked;
- 
--	gcs = gcs_alloc_thread_stack(p, args);
--	if (IS_ERR_VALUE(gcs))
--		return PTR_ERR((void *)gcs);
-+	ret = gcs_alloc_thread_stack(p, args);
-+	if (ret != 0)
-+		return ret;
- 
- 	return 0;
- }
-diff --git a/arch/arm64/mm/gcs.c b/arch/arm64/mm/gcs.c
-index 6e93f78de79b..3abcbf9adb5c 100644
---- a/arch/arm64/mm/gcs.c
-+++ b/arch/arm64/mm/gcs.c
-@@ -38,8 +38,8 @@ static unsigned long gcs_size(unsigned long size)
- 	return max(PAGE_SIZE, size);
- }
- 
--unsigned long gcs_alloc_thread_stack(struct task_struct *tsk,
--				     const struct kernel_clone_args *args)
-+int gcs_alloc_thread_stack(struct task_struct *tsk,
-+			   const struct kernel_clone_args *args)
- {
- 	unsigned long addr, size;
- 
-@@ -59,13 +59,13 @@ unsigned long gcs_alloc_thread_stack(struct task_struct *tsk,
- 	size = gcs_size(size);
- 	addr = alloc_gcs(0, size);
- 	if (IS_ERR_VALUE(addr))
--		return addr;
-+		return PTR_ERR((void *)addr);
- 
- 	tsk->thread.gcs_base = addr;
- 	tsk->thread.gcs_size = size;
- 	tsk->thread.gcspr_el0 = addr + size - sizeof(u64);
- 
--	return addr;
-+	return 0;
- }
- 
- SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
+    ELF
+    netlink/index
++   shadow_stack
+    sysfs-platform_profile
+    vduse
+    futex2
+diff --git a/Documentation/userspace-api/shadow_stack.rst b/Documentation/userspace-api/shadow_stack.rst
+new file mode 100644
+index 000000000000..65c665496624
+--- /dev/null
++++ b/Documentation/userspace-api/shadow_stack.rst
+@@ -0,0 +1,44 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=============
++Shadow Stacks
++=============
++
++Introduction
++============
++
++Several architectures have features which provide backward edge
++control flow protection through a hardware maintained stack, only
++writeable by userspace through very limited operations.  This feature
++is referred to as shadow stacks on Linux, on x86 it is part of Intel
++Control Enforcement Technology (CET), on arm64 it is Guarded Control
++Stacks feature (FEAT_GCS) and for RISC-V it is the Zicfiss extension.
++It is expected that this feature will normally be managed by the
++system dynamic linker and libc in ways broadly transparent to
++application code, this document covers interfaces and considerations.
++
++
++Enabling
++========
++
++Shadow stacks default to disabled when a userspace process is
++executed, they can be enabled for the current thread with a syscall:
++
++ - For x86 the ARCH_SHSTK_ENABLE arch_prctl()
++ - For other architectures the PR_SET_SHADOW_STACK_ENABLE prctl()
++
++It is expected that this will normally be done by the dynamic linker.
++Any new threads created by a thread with shadow stacks enabled will
++themselves have shadow stacks enabled.
++
++
++Enablement considerations
++=========================
++
++- Returning from the function that enables shadow stacks without first
++  disabling them will cause a shadow stack exception.  This includes
++  any syscall wrapper or other library functions, the syscall will need
++  to be inlined.
++- A lock feature allows userspace to prevent disabling of shadow stacks.
++- Those that change the stack context like longjmp() or use of ucontext
++  changes on signal return will need support from libc.
 
 -- 
 2.39.5
