@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-39390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39391-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27C54B2E4F4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 20:30:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04637B2E4FB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 20:30:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96A36A23E04
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 18:30:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA75E7B3FF9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 18:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559C027FB2D;
-	Wed, 20 Aug 2025 18:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35EF428136B;
+	Wed, 20 Aug 2025 18:29:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="emGAKO6l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MgHvn3Wb"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279E12798F0;
-	Wed, 20 Aug 2025 18:29:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBD1280CFA;
+	Wed, 20 Aug 2025 18:29:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755714577; cv=none; b=tf3W1erNXZ6I9lcWeG1bfaFCCdBeTfyw930EpxDspK7WKzvDRDCSDRRPfco4zrrGqLFCA2WiXyUKM1E4D9ALldKp67Jk1FL79sAUBJ9rgelHwNAhH/Uo3DhEHN41HGqlYO6Nxvl4Njco2BPDWThTEraB5zkkDqwRardwN2uf2Uo=
+	t=1755714580; cv=none; b=T7YbE2MOAP4+RK3pma6DAl2K3vPvmx3odyQUXGtX//Fy2OyowH5uIqEdq2QfCDOOHe7POKCLs5m4BL6GKYUf09GGAFbLrAVAc0kvgYn5GNe0M58b+GUum0tnmT6S+7N4+tVPpxMfT++W6gtl+lTkirZ3CnNHq9wPz3ug5m8AcZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755714577; c=relaxed/simple;
-	bh=0cwUclnjLWnGliCQcpa8hoycuIbbaDjLpbHWDzHQVD0=;
+	s=arc-20240116; t=1755714580; c=relaxed/simple;
+	bh=7yYQgVpvwR50FjsSjL4YhMM/gAvl6YUZb0wor5dneuY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JL+LN6FkzPYw1UEDiR3L+cVI17fjTiA2FcSrPkEqiL7mrWEud49QqcY8xjwQtsL3EVa/nIX4OkAld9OxezbnfSQzgx9Sa7ygXfk/07bQc8survjSeMPyONwx76D4jmkEijU0ZEA8ShRpA3cxi0BMa39gJSFSKBvQNpgaHS54HdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=emGAKO6l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D45C116B1;
-	Wed, 20 Aug 2025 18:29:33 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=amWtftpkK/I/vpxRSaj4nbDAHBcCNZhoZOtXIszmROMuVXroVGicMlXxvZx4D+1MUcJ4ajnxPkGebWHQVFqO6rlIE5/WLY2t07eGzpvjFaId13+YI9NIvZ6GN65ldhLIPkZTtmYEu13WgtuJWCutIatd+reNc9YdtUN4G1x0cyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MgHvn3Wb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A900C116C6;
+	Wed, 20 Aug 2025 18:29:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755714576;
-	bh=0cwUclnjLWnGliCQcpa8hoycuIbbaDjLpbHWDzHQVD0=;
+	s=k20201202; t=1755714579;
+	bh=7yYQgVpvwR50FjsSjL4YhMM/gAvl6YUZb0wor5dneuY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=emGAKO6lq7bMnTNnm3mU1HIyCSA9ocOLpKGhpoxGOygM6sqbufmP4kwRhMGv6fHy7
-	 YTzIm8s0M5JcIMnQKqZlGFpHOCZy7XYdabrsDp1hmhlqOss2UuelTkDhGqjkF4K7yd
-	 l++K3WldnJQvAv+kCYFDCPIOnCwaaRwAZVkf1isYlXySyNvMeFnpN1zBTp0SvQVks6
-	 qfCq9H/0f+TpARHNmmtCAnm1b+Qvn+eI0hj5EJt9mCld82ZYwT7Ys7Z2KO4+wk8I5z
-	 QtiBh2cr0wfD8btHthGVz4irIXazi4wYRtNxEKMwsLeojiSU/BWbbGGbTGhp7BWYSR
-	 cBE/WUykzd0zg==
+	b=MgHvn3WbTwCQyqYCVGAUi1nOpKIIYwqfk2QqGPUzrFMYPOgDYvpwA4cawpaV+oT5l
+	 8Iy4qDlUfBAsWBKGHLkqt3OL56fGoaDfO1dLA5npQO5FV8l+C1Xj/bJVYogzk/Sb2e
+	 jiYVed9+cSVfdIVHpn1JvkbCxKGiDBsXx7z8nnFyaEmI88EH0AI5ufGYhJEe+SOGCS
+	 EwZjA57ubwKm5RUEt1x4QbEojF+DY8J2fKZCcc9CV5w3H/3q0I8eJ+tcwXaoMdohvU
+	 UX+siKVjqePcl39RV1b5+/tw8NHicJQRbJifyPmVWe7F030UQz0ZGw/tpuOdBOtQdh
+	 qGFLedDq0Wbrw==
 From: Mark Brown <broonie@kernel.org>
-Date: Wed, 20 Aug 2025 19:29:05 +0100
-Subject: [PATCH 3/5] arm64/sme: Support disabling streaming mode via ptrace
- on SME only systems
+Date: Wed, 20 Aug 2025 19:29:06 +0100
+Subject: [PATCH 4/5] kselftst/arm64: Test NT_ARM_SVE FPSIMD format writes
+ on non-SVE systems
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250820-arm64-sme-ptrace-sme-only-v1-3-f7c22b2871f8@kernel.org>
+Message-Id: <20250820-arm64-sme-ptrace-sme-only-v1-4-f7c22b2871f8@kernel.org>
 References: <20250820-arm64-sme-ptrace-sme-only-v1-0-f7c22b2871f8@kernel.org>
 In-Reply-To: <20250820-arm64-sme-ptrace-sme-only-v1-0-f7c22b2871f8@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -67,133 +67,108 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-cff91
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5057; i=broonie@kernel.org;
- h=from:subject:message-id; bh=0cwUclnjLWnGliCQcpa8hoycuIbbaDjLpbHWDzHQVD0=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBophQCUfs2yu78q+NnrMRmVLiS0xhc90jY1beJh
- 69Mi/yRMfSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKYUAgAKCRAk1otyXVSH
- 0AnVB/sE4E2/WH5Q+UMNHOb1lJpIUoWhABDCsgPhH/0D64cih6wUSP19mAaYUERBq11NR1MMLo4
- tvISRMvkgkn3CsbDgxIw1u1vzSYwJzS2+3KouCKwaslYrD8JSwL80sbLsa3kUO8jDCAqWc2NCEj
- WVj9l0xPcFJ8yTmpvqO9iEJyZwQmmelgFCTiXdY1ZHUhHB6RIw2kjFpLbxC08bqgTrsYRPLv9S2
- j7bLp+hRaUyJm7BzXmpq78lF4QdlToyhCFcpH8qYQs8Y1LUM2rfQjt9xrVUHS870EGXa2TgOrLl
- 6mF0dm6t+QY25SxCOuJWaatlZjNI1R/8X2Cjd/bVk0CQXiOY
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2876; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=7yYQgVpvwR50FjsSjL4YhMM/gAvl6YUZb0wor5dneuY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBophQDBCnwEb501FLky81u9LBxHlAhDWR4gmn9k
+ mEJosS/c1OJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKYUAwAKCRAk1otyXVSH
+ 0LfPCACA73choIeRJkU3n15ARoQsj6wSJ4dWK3BIH5qL6LaiyaCFmR9pGo90ITc9K3MQI3R5RuD
+ NfWln+t4vCHrrbV4FJzo0vH1EJC8k70J8ZVAJT+AoYbBEejdXeyZGJEPd+NJP1YgPKNDblzKEcq
+ IORUZ5vmvUP5EU2lMpoiWQPwvH7pYPZ0kbOykQ4Rwh385LX4VrkMzyX9Fw7FvLisz5Y7NJiaG2v
+ 9uBw37OjcjKxKDK+TXLth7oBqzpeEQXfxqTTZ7shCMdU2KKdHaj+aoZZi7g8p2UCFJJ3bv/zeE9
+ 3aGX0zOsm1hbyBolt4ecosh8w9aoJsWGsEM6fpBNU/NLezP2
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Currently it is not possible to disable streaming mode via ptrace on SME
-only systems, the interface for doing this is to write via NT_ARM_SVE but
-such writes will be rejected on a system without SVE support. Enable this
-functionality by allowing userspace to write SVE_PT_REGS_FPSIMD format data
-via NT_ARM_SVE with the vector length set to 0 on SME only systems. Such
-writes currently error since we require that a vector length is specified
-which should minimise the risk that existing software is relying on current
-behaviour.
+In order to allow exiting streaming mode on systems with SME but not SVE
+we allow writes of FPSIMD format data via NT_ARM_SVE even when SVE is not
+supported, add a test case that covers this to sve-ptrace.
 
-Reads are not supported since I am not aware of any use case for this and
-there is some risk that an existing userspace application may be confused if
-it reads NT_ARM_SVE on a system without SVE. Existing kernels will return
-FPSIMD formatted register state from NT_ARM_SVE if full SVE state is not
-stored, for example if the task has not used SVE. Returning a vector length
-of 0 would create a risk that software would try to do things like allocate
-space for register state with zero sizes, while returning a vector length of
-128 bits would look like SVE is supported. It seems safer to just not make
-the changes to add read support.
-
-It remains possible for userspace to detect a SME only system via the ptrace
-interface only since reads of NT_ARM_SSVE and NT_ARM_ZA will succeed while
-reads of NT_ARM_SVE will fail. Read/write access to the FPSIMD registers in
-non-streaming mode is available via REGSET_FPR.
-
-sve_set_common() already avoids allocating SVE storage when doing a FPSIMD
-formatted write and allocating SME storage when doing a NT_ARM_SVE write so
-we change the function to validate the new case and skip setting a vector
-length for it.
-
-The aim is to make a minimally invasive change, no operation that would
-previously have succeeded will be affected, and we use a previously
-defined interface in new circumstances rather than define completely new
-ABI.
+We do not support reads.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/arch/arm64/sve.rst |  5 +++++
- arch/arm64/kernel/ptrace.c       | 40 +++++++++++++++++++++++++++++++++-------
- 2 files changed, 38 insertions(+), 7 deletions(-)
+ tools/testing/selftests/arm64/fp/sve-ptrace.c | 61 +++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/Documentation/arch/arm64/sve.rst b/Documentation/arch/arm64/sve.rst
-index 28152492c29c..a61c9d0efe4d 100644
---- a/Documentation/arch/arm64/sve.rst
-+++ b/Documentation/arch/arm64/sve.rst
-@@ -402,6 +402,11 @@ The regset data starts with struct user_sve_header, containing:
-   streaming mode and any SETREGSET of NT_ARM_SSVE will enter streaming mode
-   if the target was not in streaming mode.
+diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+index 5f39ca0b4194..fe43fb07ee6c 100644
+--- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
++++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+@@ -378,6 +378,58 @@ static void ptrace_sve_fpsimd(pid_t child, const struct vec_type *type)
+ 	free(svebuf);
+ }
  
-+* On systems that do not support SVE it is permitted to use SETREGSET to
-+  write SVE_PT_REGS_FPSIMD formatted data via NT_ARM_SVE, in this case the
-+  vector length should be specified as 0. This allows streaming mode to be
-+  disabled on systems with SME but not SVE.
++/* Write the FPSIMD registers via the SVE regset when SVE is not supported */
++static void ptrace_sve_fpsimd_no_sve(pid_t child)
++{
++	void *svebuf;
++	struct user_sve_header *sve;
++	struct user_fpsimd_state *fpsimd, new_fpsimd;
++	unsigned int i, j;
++	unsigned char *p;
++	int ret;
 +
- * If any register data is provided along with SVE_PT_VL_ONEXEC then the
-   registers data will be interpreted with the current vector length, not
-   the vector length configured for use on exec.
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 4b001121c72d..b9bdd83fbbca 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -912,13 +912,39 @@ static int sve_set_common(struct task_struct *target,
- 		return -EINVAL;
- 
- 	/*
--	 * Apart from SVE_PT_REGS_MASK, all SVE_PT_* flags are consumed by
--	 * vec_set_vector_length(), which will also validate them for us:
-+	 * On systems without SVE we accept FPSIMD format writes with
-+	 * a VL of 0 to allow exiting streaming mode, otherwise a VL
-+	 * is required.
- 	 */
--	ret = vec_set_vector_length(target, type, header.vl,
--		((unsigned long)header.flags & ~SVE_PT_REGS_MASK) << 16);
--	if (ret)
--		return ret;
-+	if (header.vl) {
-+		/*
-+		 * If the system does not support SVE we can't
-+		 * configure a SVE VL.
-+		 */
-+		if (!system_supports_sve() && type == ARM64_VEC_SVE)
-+			return -EINVAL;
-+
-+		/*
-+		 * Apart from SVE_PT_REGS_MASK, all SVE_PT_* flags are
-+		 * consumed by vec_set_vector_length(), which will
-+		 * also validate them for us:
-+		 */
-+		ret = vec_set_vector_length(target, type, header.vl,
-+					    ((unsigned long)header.flags & ~SVE_PT_REGS_MASK) << 16);
-+		if (ret)
-+			return ret;
-+	} else {
-+		/* If the system supports SVE we require a VL. */
-+		if (system_supports_sve())
-+			return -EINVAL;
-+
-+		/*
-+		 * Only FPSIMD formatted data with no flags set is
-+		 * supported.
-+		 */
-+		if (header.flags != SVE_PT_REGS_FPSIMD)
-+			return -EINVAL;
++	svebuf = malloc(SVE_PT_SIZE(0, SVE_PT_REGS_FPSIMD));
++	if (!svebuf) {
++		ksft_test_result_fail("Failed to allocate FPSIMD buffer\n");
++		return;
 +	}
++
++	/* On a system without SVE the VL should be set to 0 */
++	memset(svebuf, 0, SVE_PT_SIZE(0, SVE_PT_REGS_FPSIMD));
++	sve = svebuf;
++	sve->flags = SVE_PT_REGS_FPSIMD;
++	sve->size = SVE_PT_SIZE(0, SVE_PT_REGS_FPSIMD);
++	sve->vl = 0;
++
++	/* Try to set a known FPSIMD state via PT_REGS_SVE */
++	fpsimd = (struct user_fpsimd_state *)((char *)sve +
++					      SVE_PT_FPSIMD_OFFSET);
++	for (i = 0; i < 32; ++i) {
++		p = (unsigned char *)&fpsimd->vregs[i];
++
++		for (j = 0; j < sizeof(fpsimd->vregs[i]); ++j)
++			p[j] = j;
++	}
++
++	ret = set_sve(child, &vec_types[0], sve);
++	ksft_test_result(ret == 0, "FPSIMD write via SVE\n");
++	if (ret) {
++		ksft_test_result_skip("Verify FPSIMD write via SVE\n");
++		goto out;
++	}
++
++	/* Verify via the FPSIMD regset */
++	if (get_fpsimd(child, &new_fpsimd)) {
++		ksft_test_result_skip("Verify FPSIMD write via SVE\n");
++		goto out;
++	}
++	ksft_test_result(memcmp(fpsimd, &new_fpsimd, sizeof(*fpsimd)) == 0,
++			 "Verify FPSIMD write via SVE\n");
++
++out:
++	free(svebuf);
++}
++
+ /* Validate attempting to set SVE data and read SVE data */
+ static void ptrace_set_sve_get_sve_data(pid_t child,
+ 					const struct vec_type *type,
+@@ -810,6 +862,15 @@ static int do_parent(pid_t child)
+ 		}
+ 	}
  
- 	/* Allocate SME storage if necessary, preserving any existing ZA/ZT state */
- 	if (type == ARM64_VEC_SME) {
-@@ -1016,7 +1042,7 @@ static int sve_set(struct task_struct *target,
- 		   unsigned int pos, unsigned int count,
- 		   const void *kbuf, const void __user *ubuf)
- {
--	if (!system_supports_sve())
-+	if (!system_supports_sve() && !system_supports_sme())
- 		return -EINVAL;
++	/* We support SVE writes of FPSMID format on SME only systems */
++	if (!(getauxval(AT_HWCAP) & HWCAP_SVE) &&
++	    (getauxval(AT_HWCAP2) & HWCAP2_SME)) {
++		ptrace_sve_fpsimd_no_sve(child);
++	} else {
++		ksft_test_result_skip("FPSIMD write via SVE\n");
++		ksft_test_result_skip("Verify FPSIMD write via SVE\n");
++	}
++
+ 	ret = EXIT_SUCCESS;
  
- 	return sve_set_common(target, regset, pos, count, kbuf, ubuf,
+ error:
 
 -- 
 2.39.5
