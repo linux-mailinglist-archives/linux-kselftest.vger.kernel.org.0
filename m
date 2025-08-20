@@ -1,116 +1,137 @@
-Return-Path: <linux-kselftest+bounces-39366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AB98B2D8F6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 11:47:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0392B2D9E4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 12:17:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A45EB615E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 09:45:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C74C188DD7C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 10:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B998D2E2F15;
-	Wed, 20 Aug 2025 09:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5752D5C78;
+	Wed, 20 Aug 2025 10:15:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h1aMRGgh"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xk/l9Yjb";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uqPIa7gz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024FB2E040D;
-	Wed, 20 Aug 2025 09:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A112459D4;
+	Wed, 20 Aug 2025 10:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755682856; cv=none; b=SxA0lwWC0uxFpFJpfnaZLyd7/urjOx6lrNO7x92u/5YdBIxdfxNVBWzKXWmfDXvVxunh0of1RuzfAiCoGVd9GL+ZMuXQNREsVjZU4BJwyjfynYZoBcKRkQOZFS8qLMquwuIXux9/yHqe+VFL3fN9joUiJgJNNEqaiUcwodhbMtw=
+	t=1755684910; cv=none; b=cpSYtc9xzG7M/Z1UsEU/mwIYBi3iJzCi4TbUgZYzQx0BnkGYjrdVfThQ++4cf9PEvODgTP+FRlqMmun4uF2xK2sm4bK1Ss+5L4eiLx3xrUd8JaHnCL6ZUNh5qqtJr65KAmER2Ue2xf98gBMweZdSuIUKu2wAPluAXJQ7UGJw+gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755682856; c=relaxed/simple;
-	bh=xMPa+8Qn4mu18QhDnLh2TBRIN1AH7lNj6illVJiSw0s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=U93iUv0UGa0HhQ38+AskA5drKccky/JMpIfRgpN1qemUvYLACNHacq1h9AYGHER8IEs88MUNRVJmfB2B7a0S6S/D2hBkNEUECZ+SW8Ew3/BQ0+uww8sA/JN/jrPvSoMr/oDjii2Nv3xvQbx6K44s3C+YJyLAzDJjXC45iRwcG6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h1aMRGgh; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-61aa702c9ebso70206a12.3;
-        Wed, 20 Aug 2025 02:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755682853; x=1756287653; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iaU4VZUJUriIOWDjZuxPqvHN376Nc6Yxil/qOWrIx5I=;
-        b=h1aMRGghhe9veuWnsV7JYp6jPhZuwXlAYgMIB0mTzu8FxZufCVmauOH6bNY8L/5ATp
-         n8gqaRvj4DYU7vgHaMqS5/wo3msVe6SUvEacJm+44QMedS/TkNR0CCh6o66L863FCoAv
-         OgCe4/+U9/BU6Mnre/ZRyv3JrPKYYR4Fj0ybqhgOdMNRx5RYifhG5+zDh3W1hNJlZCmO
-         +fMJaFZhD5J/KYjdtR5CJ9CEBAk7DFr5RKY810M4jY288nI97Y6mPxSlcLRdgbZ4ltPX
-         HpItiWNgdl/rXpvVfTmxOOXH1QtID58sQx+4AKf0CXBTSDopHiF2PaIKPWMYZJRr66b4
-         gmcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755682853; x=1756287653;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iaU4VZUJUriIOWDjZuxPqvHN376Nc6Yxil/qOWrIx5I=;
-        b=BCbZJ01CVgnhTT+mSSJlPHNvFbPNH7mA2/9ScyrVpcfGmw6kwyuuatwdAGzpZkl3ZP
-         K6fwbHPj5lIRMfb5mDRsrzYSbs2MazfjyGjXVH5WF4I3w3OGJ5aqxuOkxnO3FXyArq5I
-         zj/KXYM6+6imqyPxH2ldDrTpVOQqxR3XyclxlhJ+i+zqcs8wv7/ZtNPzqUicFohlNWNi
-         krfPKb+a/W0H1crKiee3TlEXyfXSyIIqpKHytWY0nAhNhSI85HdvZA7hhbYdTCmulK2g
-         kTIggzrjxyqlAlq8d7sScOmkKDWpTGojRDVrcABEcbeSGt8qHKVrkN+8neE9PEmZ8ESd
-         UYeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWFXFOMoCQo0hC/Mvsqs6F6X/WGObzwGmaby3y3fIXR/XJRyIIEjaSxsBDiLSX3J0L+9AntBH8A3RR5/BY=@vger.kernel.org, AJvYcCWewfuawHpX/F2G1HSPUegxCRmH91Z7PgXEJi84LQHgo34Zp/e3FWJroSaeaOljqRDBicE8MrmZtyFWUaEjbt3f@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYx9ENQKmt/oXnmzrXzS+3UZNHUOIUu7a6jcMAO5xdIQF85jym
-	X2DY4at8zdfFjF7oVmD8q0lUubtZ6jfXeC/skJqQCO1akU5v6VbwN2f6CC4hXI2Zi2c=
-X-Gm-Gg: ASbGncuC8mxLupwANF++ZdFYzyBL6iCeUQI41A6bEpjNd7AYfFqbyObRB8Sn8n7dHh0
-	1HJFxKBoOIV/NHa2KfXUpKPgcqk8mAU4We3o5uhcMIJtLCnrNJRMaMtRq86TRdC0sn45sjoZzyR
-	112DclRpSdfX73lOQlkAfX4PZ/XzEjv4bsJR5mHuL9TXkyGZGbh0sXsYeQLki7m/EqbtRLcMqQD
-	NxhDNHCzc5V49FvfdgFWwbiXejACs0XBi49QSoSLWwjjr5TEDONOQ7XWorRiyBRFwf+bWr5QoZU
-	27tR2+bv7C7YlwFres5Zwqg4PJjdo4ximGrHbnWLZbbOe5Jptc6v9uG/8qucL8ua+niXP6L7yQn
-	c3agPEgAz4BKyl/GRUduAceTonPAFQxyClCKmKitOKWM+zt8pldGBTvpnTLq3T0HPF7AIjVjSnt
-	DBVN8=
-X-Google-Smtp-Source: AGHT+IF+jHeg1blhzus397KbMO6fpg4RfqSldoscVcwuKg6PL2oN6QYbuUXPW8t4wlcCO5RFZ0LvkA==
-X-Received: by 2002:a17:907:1c91:b0:af9:6e4a:3b2c with SMTP id a640c23a62f3a-afdf0200d09mr189014966b.43.1755682853046;
-        Wed, 20 Aug 2025 02:40:53 -0700 (PDT)
-Received: from localhost.localdomain (user-46-112-72-61.play-internet.pl. [46.112.72.61])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afded315e39sm147081466b.48.2025.08.20.02.40.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Aug 2025 02:40:52 -0700 (PDT)
-From: Bartlomiej Kubik <kubik.bartlomiej@gmail.com>
-To: skhan@linuxfoundation.org,
-	linux-kselftest@vger.kernel.org
-Cc: linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	Bartlomiej Kubik <kubik.bartlomiej@gmail.com>
-Subject: [PATCH] selftests/ftrace: fix spelling mistake
-Date: Wed, 20 Aug 2025 11:40:48 +0200
-Message-Id: <20250820094048.140823-1-kubik.bartlomiej@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1755684910; c=relaxed/simple;
+	bh=uahLgJ+9Vb1frTk4rhXXm3v4WzbXDg3Zmu/qGvO8wY0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ew+5emFedoCTUE8w+zoHDF+vHW6xUN/RQCZxWxGIpXnwtWzgdT/9BDgQSWdzxJiwO3JEgpn7LEDkHtjoSqHz1/up6+GjjCjAotgJh1PrxSsfOeOcJOU4XJ812tK+WXyq4SAjmDV8t2/IosqiDN7f5xidLbs8DTCa5KaJ+qVqfMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xk/l9Yjb; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uqPIa7gz; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Wed, 20 Aug 2025 12:15:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1755684907;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Iq9Rp/OuC3PCbtXKJ+rrICU+++sBXQCJ0QqJmyLjg+I=;
+	b=xk/l9YjbZxA1WTuNZDPDzZ8Wdc5Ml1Z8iLcrdiinHR/jwkPKoZe+/Yal4T3iQYwXywj3aL
+	TuAdMOj+eQI0qmH4cwrwb6A3GMEaaVQoSspG8drK9wAs5SV2ideGv0qB3XhysuV56KbSJ4
+	Ji1ZYj+TAl0GzjJEk9GVKmLEw7BefXb3EhPgFPnViqNPKbjRmStIhai3NtAluEf5PrZHVV
+	T4448Dt1lvhIAkl03wcMAqvjtP2i+hGi5Mem2w/M3c9233P9HviyrsxwKIaTEioVDHmkb5
+	w4lNJSNOF2EW+K8iCdf0/FKJRU8M0mcWk1yvh6VZByLxUK8W+1DJdnpNq/W+nA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1755684907;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Iq9Rp/OuC3PCbtXKJ+rrICU+++sBXQCJ0QqJmyLjg+I=;
+	b=uqPIa7gzVKO93eAxiDkhCF2+ypJHv38VRv3c6TBXEdvdEQOGkI4lmIgUVLp7mtuPYYNrwu
+	m3d54o5VitT9DoBQ==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: John Stultz <jstultz@google.com>
+Cc: Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Shuah Khan <shuah@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, 
+	Richard Cochran <richardcochran@gmail.com>, Christopher Hall <christopher.s.hall@intel.com>, 
+	Miroslav Lichvar <mlichvar@redhat.com>, Werner Abt <werner.abt@meinberg-usa.com>, 
+	David Woodhouse <dwmw2@infradead.org>, Kurt Kanzenbach <kurt@linutronix.de>, 
+	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
+Subject: Re: [PATCH 12/14] vdso/gettimeofday: Add support for auxiliary clocks
+Message-ID: <20250820113704-8b174953-f02a-4376-9359-e4007914ac2a@linutronix.de>
+References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
+ <20250701-vdso-auxclock-v1-12-df7d9f87b9b8@linutronix.de>
+ <CANDhNCqvKOc9JgphQwr0eDyJiyG4oLFS9R8rSFvU0fpurrJFDg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANDhNCqvKOc9JgphQwr0eDyJiyG4oLFS9R8rSFvU0fpurrJFDg@mail.gmail.com>
 
-Fix spelling mistake in return string.
+Hi John,
 
-Signed-off-by: Bartlomiej Kubik <kubik.bartlomiej@gmail.com>
----
- .../selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc  | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Aug 20, 2025 at 01:03:56AM -0700, John Stultz wrote:
+> On Tue, Jul 1, 2025 at 1:58 AM Thomas Weißschuh
+> <thomas.weissschuh@linutronix.de> wrote:
+> >
+> > Expose the auxiliary clocks through the vDSO.
+> >
+> > Architectures not using the generic vDSO time framework,
+> > namely SPARC64, are not supported.
+> >
+> > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> 
+> Just as a heads up, I've just been bisecting and this commit seems to
+> be causing problems on arm64 devices, running 32bit versions of
+> kselftest nanosleep or inconsistency-check tests. Running the 64bit
+> versions of the tests are not showing issues.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
-index aee22289536b..d2a7da7bc87d 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
-@@ -102,7 +102,7 @@ clear_trace
- 
- cnt=`cnt_trace`
- if [ $cnt -ne 0 ]; then
--    fail "Tracing is still happeing"
-+    fail "Tracing is still happening"
- fi
- 
- echo "!$func:traceoff" >> set_ftrace_filter
--- 
-2.39.5
+Thanks for the report, I can reproduce the issue.
 
+> From my initial digging, it looks like clockids that aren't vdso
+> enabled (CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID,
+> CLOCK_REALTIME_ALARM, CLOCK_BOOTTIME_ALARM) are somehow getting caught
+> in the vdso logic and are *not* falling back to the syscall (stracing
+> the test I don't see syscalls happen before the failure), and the
+> values returned don't look to be correct.
+
+The generic vDSO code assumes that it can use the UAPI headers, also in the
+compat vDSO. This is true for most architectures, as the UAPI headers work
+correctly in 32-bit and 64-bit mode. On arm64 this is different, as the headers
+from arm64/ are never used by regular 32-bit userpspace. So
+arch/arm64/include/uapi/asm/bitsperlong.h defines __BITS_PER_LONG=64 even when
+used by the 32-bit compat vDSO. The commit you identified uses __GENMASK()
+which uses __BITS_PER_LONG. Due to the mismatch between __BITS_PER_LONG and the
+real long datatype we run into an out-of-bounds shift and therefore undefined
+behaviour. And of course -Wshift-count-overflow is explicitly disabled.
+
+There are a few possible fixes, none of which is really great.
+I'll send some patches.
+
+> The inconsistency-check output looks like:
+
+(...)
+
+> Which hints we're returning nanosecond values in the tv_sec field somehow.
+
+That seems to be an artifact of the UB from above, this happens even if
+do_aux() just returns 'false'.
+
+
+Thomas
 
