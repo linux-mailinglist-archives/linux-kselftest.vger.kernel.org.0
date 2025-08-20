@@ -1,150 +1,142 @@
-Return-Path: <linux-kselftest+bounces-39351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0233B2D59D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 10:05:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1F74B2D615
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 10:21:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CE1E1895895
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 08:04:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B0D53ADBA0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 08:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 464172C11D2;
-	Wed, 20 Aug 2025 08:04:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 591A02C11ED;
+	Wed, 20 Aug 2025 08:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w00Abl7L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YcZ6QKsN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CBC27B33A
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 Aug 2025 08:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2965421B9FD;
+	Wed, 20 Aug 2025 08:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755677053; cv=none; b=qfcjsQL576HhusfwFpwBwv6Q2MZqEOeWgcBlYECe55DgOBxtEv7nMevi9iNzlEPO8G5s//AqDdPeAXg4icnouKw4Hrdi2ihPVWe5ODtbgO3ehNhwR0eQgoOQz1/f9XGy+6tpj/mje0rH1WHEf5LmhC46S8TdmIZmdV9p3DbfQgw=
+	t=1755677845; cv=none; b=NckeVhkDUE99iSUKV6fjEMSh0o8rZFhHZZaXVa/lP7kWcvprhTr/kKjmNMlhzjoPxsD84jfZ+PohKH9hRJchHIanKHtki8cB2fhEcql7KddOs/ZmA6laexZVD7ETRdf2qeg9mYObLQ3pmEbYhg4aKFKrnu4VdhtSFXpGcb76CmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755677053; c=relaxed/simple;
-	bh=rbFXFjw4n1QivhuWIRmAWtZ9fMtej7RhLcACXFP/i3Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nno0qkxSgyxQ3QgQUfbbJGQbzh/LhY4qDSIax+DWL6o5YSRV+nGSUcbpqj2XAfTLtcGXw0wzPDNERKkm77R0/kQlyih2IM6/TXJbHRrgdw690Z0N+qmKIberEbvQfWLXDsqdHF0DqEIT5DsYKXf+robG4FqSpyw+PQEtP+Q9RjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=w00Abl7L; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-55ce510f4f6so6590256e87.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Aug 2025 01:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755677050; x=1756281850; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rbFXFjw4n1QivhuWIRmAWtZ9fMtej7RhLcACXFP/i3Y=;
-        b=w00Abl7LIysvda5RITxZ3gyLq4xfappFa16LgbiYLPykC4dnMwAOUnsC/xSBnq7nW/
-         qUU3yqZBVi7rfxH90gQ5a7pra1XDv1lIB9MS8r8MxKzWYF5GS7awXgROujXmCF47gCrQ
-         oksu2jb1sZCFRD9qKTPEqZ5HuMy4Kbw2u/mkPXuU2jenNXN9aPtMsHjkibtHPMvB/CsQ
-         7yhAuqMmnf7vf+MIYqZQKHI1F02/kuJAZ7nKGF56KGmtIDTHeliKk7HlaFFSEcLm+k5x
-         W/XI1SLMshLnGDimdkgy23AeeBscKCQ22lJlFHJWoRCpgqH4jlGnbjcoE2HdMJpHbwdE
-         zu5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755677050; x=1756281850;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rbFXFjw4n1QivhuWIRmAWtZ9fMtej7RhLcACXFP/i3Y=;
-        b=RlhkBLRXy+YHqKcXciZl97C8wBqlr4oGuCprZC194PytVezAbxLX8q5NUSJ0G0UH2f
-         zKIb42yq7hiD2xL9GPr7a0ZcNlVEYm2NVDnN/iHzhjd8knZTPDeeBFGGRhQmWKVFOs96
-         6FVq9Z+ybvSNtmqOzMvrPc5Pm33NIp4q2PL/8AGaK6dSF2Q9ODlesoDR9X84fY/LSu1u
-         bHueA6G6e6J6dfVlc2LxQSzBhTfBBHTkaQgvuF/D60/b/E4nxs8Dj2cdkXfQAEXt+EHo
-         3TFIos3YVeeWKMDQ9tKKUysn4ozPhnDP3qlXGKzCA4fGaKHqlNoYGUyJ9UEFeTRl/OlO
-         O93g==
-X-Forwarded-Encrypted: i=1; AJvYcCW5hjFw10+5XXkOduJFtArvQL3ooc22xERdehvqpoihQY4/PXyD57hYV++11JX0c2gZt9g0PIRSJHB3qwNJHgo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyZcxNpVQltm5LD4tde8EUMisHFzI/+Yz5YsVq97wEhaGBy9gu
-	JCOeveQ4GZawatCt/sn9hVDP0/iSM8EDDGUdOSeB6GaoQw+/NvQeinGosyCsp+K1LhZ5YFRm2l6
-	Hv8dry7QMFgYypHLsYOzJKYTnel4viKsTq052fQc=
-X-Gm-Gg: ASbGncvbPCl57muW9INrenCDBsuFjtxfgTwyTH50BkWXbE28Vu4U4K4LDzaYCabhSPh
-	GEMGM3KrB1TW4hVqnaelem1ynuH8wkpdS5WdB5e+haeX/TSh7U41NelouZbD2HvZokP04Lo26Q+
-	XHzG1ciSC1KaAUCFoMOla8cPVW/WUJSRdeVJ4hrOOtMcHM9CcHuKy5f67nJOkDrBw70iyWQ+CVq
-	SrtUBPD3O6O8uQDzgLUThgauf+g7f8d135Lq9Po4DgZtnSg4AU6hg==
-X-Google-Smtp-Source: AGHT+IGVK1oPtxH4WR1xR8qF9qbjjy/dcR0lYEGwtgT9scAs4HhXg+zq6box8q/WjPnqcqOrs9UAS7T3jjVlqulmz2U=
-X-Received: by 2002:ac2:4ca9:0:b0:55b:732d:931 with SMTP id
- 2adb3069b0e04-55e06b2dd6fmr405525e87.12.1755677049307; Wed, 20 Aug 2025
- 01:04:09 -0700 (PDT)
+	s=arc-20240116; t=1755677845; c=relaxed/simple;
+	bh=Dc5NRIzPD+WO269gYuJoXHm7vaSM5NPvDKwoOI/hTec=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pQZc3p1MnuvA05XWCVWHCFbeJU3o9uyehnL6mL7pjbicdwYQfi4D9onn2Kz9Aky4V1YZuaV++U91U8xF4QDqjgsRdAguinPAg2ChN4a96IA++VKuHlgTsHp7xGT9YKtqFjYjpNS9s31doiZuj/qIsWeAPKWalpsCwrMMDfdkM3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YcZ6QKsN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7278AC113D0;
+	Wed, 20 Aug 2025 08:17:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755677844;
+	bh=Dc5NRIzPD+WO269gYuJoXHm7vaSM5NPvDKwoOI/hTec=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YcZ6QKsNp9V3duVko2MLuTdpZ+y8x/zmsEvi6Ok2rqXL20SrWYfDL97LuLdlsSxFS
+	 inoAu2nx9AN69lJQar8/AOHuceFHXjb6KMymFyrfGrcmAWTBQiojH7An4OuGZdDrw/
+	 abuozJkRPIZJI85rG1XsmHWqNS/Ol72G2zs0vIOpjn7ejkyaQvh0vjQZJCm2oeWSMC
+	 nLu0P1q67rJIqTH5t9HivEV9S0bf5BSzhwNQyE1XZSp0wu+Mb2q+NovNW/umXhPnQf
+	 oIdKCHCo2dmzPpDMz09qZ5rQCKei16U8D//ttk14gKAY8Utgc2E7LYP/5c5ubq39Wp
+	 1Z6PcQh4sQW7A==
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Benson Leung <bleung@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Dawid Niedzwiecki <dawidn@google.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	tzungbi@kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2 0/5] platform/chrome: Fix a possible UAF via revocable
+Date: Wed, 20 Aug 2025 08:16:40 +0000
+Message-ID: <20250820081645.847919-1-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.51.0.rc1.167.g924127e9c0-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de> <20250701-vdso-auxclock-v1-12-df7d9f87b9b8@linutronix.de>
-In-Reply-To: <20250701-vdso-auxclock-v1-12-df7d9f87b9b8@linutronix.de>
-From: John Stultz <jstultz@google.com>
-Date: Wed, 20 Aug 2025 01:03:56 -0700
-X-Gm-Features: Ac12FXwkxxvaSnLooTWKfhclqEnR_RwAuKEDNHPFBz1DnCC5Fudpwl3wjm0bVsk
-Message-ID: <CANDhNCqvKOc9JgphQwr0eDyJiyG4oLFS9R8rSFvU0fpurrJFDg@mail.gmail.com>
-Subject: Re: [PATCH 12/14] vdso/gettimeofday: Add support for auxiliary clocks
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan <shuah@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arch@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>, 
-	Christopher Hall <christopher.s.hall@intel.com>, Miroslav Lichvar <mlichvar@redhat.com>, 
-	Werner Abt <werner.abt@meinberg-usa.com>, David Woodhouse <dwmw2@infradead.org>, 
-	Kurt Kanzenbach <kurt@linutronix.de>, Nam Cao <namcao@linutronix.de>, 
-	Antoine Tenart <atenart@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 1, 2025 at 1:58=E2=80=AFAM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> Expose the auxiliary clocks through the vDSO.
->
-> Architectures not using the generic vDSO time framework,
-> namely SPARC64, are not supported.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+This is a follow-up series of [1].  It tries to fix a possible UAF in the
+fops of cros_ec_chardev after the underlying protocol device has gone by
+using revocable.
 
-Just as a heads up, I've just been bisecting and this commit seems to
-be causing problems on arm64 devices, running 32bit versions of
-kselftest nanosleep or inconsistency-check tests. Running the 64bit
-versions of the tests are not showing issues.
+The 1st patch introduces the revocable which is an implementation of ideas
+from the talk [2].
 
-From my initial digging, it looks like clockids that aren't vdso
-enabled (CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID,
-CLOCK_REALTIME_ALARM, CLOCK_BOOTTIME_ALARM) are somehow getting caught
-in the vdso logic and are *not* falling back to the syscall (stracing
-the test I don't see syscalls happen before the failure), and the
-values returned don't look to be correct.
+The 2nd and 3rd patches add test cases for revocable in Kunit and selftest.
 
-The inconsistency-check output looks like:
-# 5983032:0
-# 5983317:0
-# 5983561:0
-# 5983846:0
-# 5984130:0
-# 5984415:0
-# --------------------
-# 5984659:0
-# 2009440:0
-# --------------------
-# 2009724:0
-# 2009969:0
-# 2010253:0
-# 2010538:0
-# 2010782:0
-# 2011067:0
+The 4th patch converts existing protocol devices to resource providers
+of cros_ec_device.
 
-Which hints we're returning nanosecond values in the tv_sec field somehow.
+The 5th patch converts cros_ec_chardev to a resource consumer of
+cros_ec_device to fix the UAF.
 
-Reverting just this change gets things back to working.
+[1] https://lore.kernel.org/chrome-platform/20250721044456.2736300-6-tzungbi@kernel.org/
+[2] https://lpc.events/event/17/contributions/1627/
 
-It's pretty late here, so I'm going to try to dig a bit further to
-understand what's going on tomorrow, but wanted to raise this in case
-it's more obvious to less tired eyes. :)
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-thanks
--john
+v2:
+- Rename "ref_proxy" -> "revocable".
+- Add test cases in Kunit and selftest.
+
+v1: https://lore.kernel.org/chrome-platform/20250814091020.1302888-1-tzungbi@kernel.org/
+
+Tzung-Bi Shih (5):
+  revocable: Revocable resource management
+  revocable: Add Kunit test cases
+  selftests: revocable: Add kselftest cases
+  platform/chrome: Protect cros_ec_device lifecycle with revocable
+  platform/chrome: cros_ec_chardev: Consume cros_ec_device via revocable
+
+ .../driver-api/driver-model/index.rst         |   1 +
+ .../driver-api/driver-model/revocable.rst     | 151 ++++++++++++
+ MAINTAINERS                                   |   9 +
+ drivers/base/Kconfig                          |   8 +
+ drivers/base/Makefile                         |   5 +-
+ drivers/base/revocable.c                      | 229 ++++++++++++++++++
+ drivers/base/revocable_test.c                 | 110 +++++++++
+ drivers/platform/chrome/cros_ec_chardev.c     | 124 +++++++---
+ drivers/platform/chrome/cros_ec_i2c.c         |   5 +
+ drivers/platform/chrome/cros_ec_ishtp.c       |   5 +
+ drivers/platform/chrome/cros_ec_lpc.c         |   5 +
+ drivers/platform/chrome/cros_ec_rpmsg.c       |   5 +
+ drivers/platform/chrome/cros_ec_spi.c         |   4 +
+ drivers/platform/chrome/cros_ec_uart.c        |   5 +
+ include/linux/platform_data/cros_ec_proto.h   |   4 +
+ include/linux/revocable.h                     |  37 +++
+ tools/testing/selftests/Makefile              |   1 +
+ .../selftests/drivers/base/revocable/Makefile |   7 +
+ .../drivers/base/revocable/revocable_test.c   | 116 +++++++++
+ .../drivers/base/revocable/test-revocable.sh  |  39 +++
+ .../base/revocable/test_modules/Makefile      |  10 +
+ .../revocable/test_modules/revocable_test.c   | 188 ++++++++++++++
+ 22 files changed, 1027 insertions(+), 41 deletions(-)
+ create mode 100644 Documentation/driver-api/driver-model/revocable.rst
+ create mode 100644 drivers/base/revocable.c
+ create mode 100644 drivers/base/revocable_test.c
+ create mode 100644 include/linux/revocable.h
+ create mode 100644 tools/testing/selftests/drivers/base/revocable/Makefile
+ create mode 100644 tools/testing/selftests/drivers/base/revocable/revocable_test.c
+ create mode 100755 tools/testing/selftests/drivers/base/revocable/test-revocable.sh
+ create mode 100644 tools/testing/selftests/drivers/base/revocable/test_modules/Makefile
+ create mode 100644 tools/testing/selftests/drivers/base/revocable/test_modules/revocable_test.c
+
+-- 
+2.51.0.rc1.167.g924127e9c0-goog
+
 
