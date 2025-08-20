@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-39409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E0B5B2E82A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:29:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE7E9B2E830
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:30:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1273A219BB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:28:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A5C31CC17DF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2910927F16C;
-	Wed, 20 Aug 2025 22:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97268211A28;
+	Wed, 20 Aug 2025 22:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lc4O/ib2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sNgPr9Tb"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98E2155A30;
-	Wed, 20 Aug 2025 22:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DB820E6;
+	Wed, 20 Aug 2025 22:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755728914; cv=none; b=GH/yy7J4cwwO4lw9L4c9tKUkLRF56atwOgh7GmXD4a7ONjvBKwVHMNF3kQLt5d2mifZwhA9Hvf5Pn6AHd8Cd8+g5++M7blnzQVYLjEpMxezgjXr3cCjzs9/TH6RwdBaDNmNHi3hIfrhIWGmnQtlOAdHdoLKYRRSJIAT/ryC/glw=
+	t=1755729035; cv=none; b=Ad+ECnwNKvczcnwQ6oemJDpu+LWsyFuy4kTE0bccZfMrA903A3+2VK35iIlz7DFGNhCaRbKAGXVqG/MHsWz8NhiofAEG0ARtK8i4QD69NrhRRmfdidh+N/hWX9PQQ2Ph7/LXyMIXevffIslAxY2McMgoWBnUf32mzPkYZGyZ47A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755728914; c=relaxed/simple;
-	bh=PjVVrFOvOrmZlky6gvsbAAlEHD3EctTHJhm2W439Kxk=;
+	s=arc-20240116; t=1755729035; c=relaxed/simple;
+	bh=tGAdZc0KS9L/r5jqwEnengTd6HhtdTELMF/rxwYJ2II=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Tx1gqKfDO+w7oqIwXUrkZbrD7kby902Jzo2iHR2/Py6LNDiXILg4S7PBtKBHpo0c05k+mWXh5L4iktfCQ/23LSl2ByZYJTKkkmGlrPkh2u7d97OU5yIxAPwB3smmdjN/pavgbnyqfpVInplQu2e0SpCglKr0ThajstuR9Y++/C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lc4O/ib2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E07C4CEE7;
-	Wed, 20 Aug 2025 22:28:33 +0000 (UTC)
+	 MIME-Version:Content-Type; b=AwEAZn4yzanK5oJb6hMcib9lK9cwp1C//Mv9ZRRW62H1NeKfLt5hy6t5QtwSOsOMP/perzp3vVBrowOGu+8T/Doa3XhbhlRi/WvRjW5A8G2uC2Zd+uFoPZWarq363DdMl5f5fJl6VgG/uR/DSzXCsnweFEMkDTOaqo8g7QhD/3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sNgPr9Tb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC465C4CEE7;
+	Wed, 20 Aug 2025 22:30:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755728913;
-	bh=PjVVrFOvOrmZlky6gvsbAAlEHD3EctTHJhm2W439Kxk=;
+	s=k20201202; t=1755729034;
+	bh=tGAdZc0KS9L/r5jqwEnengTd6HhtdTELMF/rxwYJ2II=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lc4O/ib2w/vfzDHVAfmaSHpPIDx36lt3h8vuYfnXugwtpkpDulA4cPd2Z3p3GnRV+
-	 GO5PeEQ6Z+4ruPMKy0+Uno5hqiYIr7DEV+D7V8EehvfO9SrQTrFNAVTyT6fsIF2hao
-	 AcTZIxoLdYUmv5Dg2uLmvaiJq6SIImz2UodZI8dlHIkEvFUN6wrZPqtZn5yjhysIsL
-	 bzAqBMYPedl51B0btQ0wUnUsCFhlMukZ81WH0RX3xeUMMwLh4CFGQwO7sVTb++jK14
-	 HV4Vf1aU2Fb3iARaQytpx71bK2XYg0TTWYo+FkVSS+yU8Q11DktM+HQS/qpkZcyrxE
-	 DT1/iNTw79MOA==
+	b=sNgPr9TbvOuO5FT4aQkcoymboru/M7IsHTWgI1aK4LDgWZI7NitjiK0FrvWzFfN+X
+	 Zg0OdRE3DHIXKd70iaf+hy4nUl1Kh+sN8EljRSxUT8AVWLfPaMVYG71L5XQSw2GOII
+	 LTGTzaJVN7NBgbltGqtdI1VGJIjAA3Kuzv0pHVtn1DPXYVgDl6eAKWMR/mA+znrCMK
+	 6udb3AAC0WS3qlNA//gTe/b0e1xoRc3M+ebRSa3LrX3ZQxDaOsX2rskr/QJKxwdUci
+	 uxKvytdKrGAdCzX+MpLbOZys9fgWsVuiKZQbX5ZLuDFsLJG41k/yOPVOxxJiMJDAP9
+	 0ct0cxFuydFFw==
 Received: from host86-149-246-145.range86-149.btcentralplus.com ([86.149.246.145] helo=lobster-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1uorIF-009WB8-54;
-	Wed, 20 Aug 2025 23:28:31 +0100
-Date: Wed, 20 Aug 2025 23:28:30 +0100
-Message-ID: <87h5y1k4q9.wl-maz@kernel.org>
+	id 1uorKC-009WCr-U7;
+	Wed, 20 Aug 2025 23:30:33 +0100
+Date: Wed, 20 Aug 2025 23:30:31 +0100
+Message-ID: <87frdlk4mw.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Mark Brown <broonie@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -61,12 +61,11 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-doc@vger.kernel.org,
 	kvmarm@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15 1/6] arm64/gcs: Ensure FGTs for EL1 GCS instructions are disabled
-In-Reply-To: <87ikihk4x3.wl-maz@kernel.org>
+	linux-kernel@vger.kernel.org,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+Subject: Re: [PATCH v15 0/6] KVM: arm64: Provide guest support for GCS
+In-Reply-To: <20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org>
 References: <20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org>
-	<20250820-arm64-gcs-v15-1-5e334da18b84@kernel.org>
-	<87ikihk4x3.wl-maz@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -78,25 +77,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 86.149.246.145
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, thiago.bauermann@linaro.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, 20 Aug 2025 23:24:24 +0100,
-Marc Zyngier <maz@kernel.org> wrote:
+On Wed, 20 Aug 2025 15:14:40 +0100,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> On Wed, 20 Aug 2025 15:14:41 +0100,
-> Mark Brown <broonie@kernel.org> wrote:
-> > 
-> > The initial EL2 setup for GCS did not include disabling of EL1 usage of
-> > GCS instructions, also disable these traps.  This is the first disabling
-> > of instruction traps, use x2 to store the value to be written.
+> The arm64 Guarded Control Stack (GCS) feature provides support for
+> hardware protected stacks of return addresses, intended to provide
+> hardening against return oriented programming (ROP) attacks and to make
+> it easier to gather call stacks for applications such as profiling.
 > 
-> Written where?
+> When GCS is active a secondary stack called the Guarded Control Stack is
+> maintained, protected with a memory attribute which means that it can
+> only be written with specific GCS operations.  The current GCS pointer
+> can not be directly written to by userspace.  When a BL is executed the
+> value stored in LR is also pushed onto the GCS, and when a RET is
+> executed the top of the GCS is popped and compared to LR with a fault
+> being raised if the values do not match.  GCS operations may only be
+> performed on GCS pages, a data abort is generated if they are not.
+> 
+> The combination of hardware enforcement and lack of extra instructions
+> in the function entry and exit paths should result in something which
+> has less overhead and is more difficult to attack than a purely software
+> implementation like clang's shadow stacks.
+> 
+> This series implements support for managing GCS for KVM guests, it also
+> includes a fix for S1PIE which has also been sent separately as this
+> feature is a dependency for GCS.  It is based on:
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/gcs
+>
 
-Gah, I was looking at 6.16, not 6.17-rc1.
-
-Apologies for the noise.
+Is this cover letter accurate? I don't see any PIE-related patch, and
+you indicate this being rebased on 6.17-rc1...
 
 	M.
 
