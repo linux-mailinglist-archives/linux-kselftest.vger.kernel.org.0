@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-39407-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09C36B2E80B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:20:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1538B2E81B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:24:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEF303B86E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:18:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD0ED5851D2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E382836BF;
-	Wed, 20 Aug 2025 22:18:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D415E25CC5E;
+	Wed, 20 Aug 2025 22:24:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jgpFo5rW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0LHqwsB"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C0A27A12D;
-	Wed, 20 Aug 2025 22:18:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2284155A30;
+	Wed, 20 Aug 2025 22:24:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755728291; cv=none; b=LOqh+LBloNUtii+91/tEGIjXQ1wbkjz1xCwdLM49FTHrFHMSuMeYAM9Uxi3C7wONDlC33vgbbWUfHSJL6St6Y8EVINUiYEr9yJjFFff0fWEloYsYCAdkIO4cJpaRemIbAR9gkpNm2UbHR+/tLI7o2SoQI7GI2HeJJezO+dmDxiQ=
+	t=1755728667; cv=none; b=gZl0A0mjWsA1pwtozyH7cg8557X/WyerRJxqu1SBoUohgj2MPvTyAI9fFJOfXEnGuHZ1+5nTSuhUSbtKPji0FZhND5a9b/433GPZfDORLByZ2axPth0Wl6fPO7xrcieadJMK2yh4hLcBi/A0QaSHgKxQtlO4QsM0MUfODDR8Kro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755728291; c=relaxed/simple;
-	bh=TGQmzkspugVB5qBEUpdujC25KIeihWnVs9IUgXT1UOE=;
+	s=arc-20240116; t=1755728667; c=relaxed/simple;
+	bh=ysNe3rGWwElNFQFScxZngEi0VfXeoQjX5AlbYef/6wk=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oeEu1IOzqYrj7cK4LDJv/TEjLYmjwPWXe1+MsX7IEbHAyMj5j5KcGW79yeZii1N24G/NP/Q9PPx1SNIphjbNUoT/1DmKv0Qff8U27JZhgBH8lPbkBjw4VNmUCF6Xuaaz36EfrOPpT1skmwQULW9WxX9qRs2u+Ag6UCxJCmAQsMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jgpFo5rW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 484D4C4CEE7;
-	Wed, 20 Aug 2025 22:18:11 +0000 (UTC)
+	 MIME-Version:Content-Type; b=T8u0hebVoBHlWTlCDDDCuQwYIVbuSPZDJ+X9BhIimhfkSlIIyzDYOSzipoyPFBn329O7oCIHPSxqfqz19ERcld22M08GPpsX+eVTUi8Qn3qTM7Fwbp/NWTNDbEC2ucZq3wIJ+1siPqq6MIRhTf7wDE0TNymcwNZoVy9NGNm7A2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E0LHqwsB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 346C4C4CEE7;
+	Wed, 20 Aug 2025 22:24:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755728291;
-	bh=TGQmzkspugVB5qBEUpdujC25KIeihWnVs9IUgXT1UOE=;
+	s=k20201202; t=1755728667;
+	bh=ysNe3rGWwElNFQFScxZngEi0VfXeoQjX5AlbYef/6wk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=jgpFo5rWJ4pzUbV4s3NIXt30fTeWof+pZ3u+I1ZB+VY7dCND39o9inCzVHWygFDKD
-	 QH3yYsrpWSHRpoU7wsOZQxBmHRTxQp/jrHVd2L2nAfjGWbA9oB3OXASBfl/txY2y5n
-	 zq4bkpKpHOn08Cs+cnU+OvZDVvtoTynjfeyMxXIPnMy5NrUqCJA1xykXMyTn32vTIx
-	 MDlmAgWKDqXKB5X69EN9GXkOSFLzw1YBLMWZ0JX343mwyHJzHy/9Dni5p6hUNhGwdH
-	 TX0s75NmqbuFugE3MPi2lmiBRKmERtfe+KpgFnSTrCt+k7sZBmHqVtcu/h2fSyVtQo
-	 hQfYLIT3q14/g==
+	b=E0LHqwsB/FLhEq23DaO6O76nUZpFqFY5BwK9BXZi06/G/EzcYm081Mx6tA99iCfDS
+	 eOCG+JnnXDq13atuzO5CYJqlEDjZcJPBgcDgXNuSpxl4GFINUKHRU59cXTCoWSa2g1
+	 zTGQbt/gpVGni5/XJ6N2eHClmVLY94gnyl1QoV7/Drc/es+LQ2BEj6q5aNOj0D/EGj
+	 ugqr+4JHh6jdnCxol72zTj/IpkmB9/B/BHiMu0wXj0YzE4f3x5FilwetESXcJ+esEJ
+	 LVDGcT9VcITtewtQAX0hhlsonOF/6/UiX+afEspBp/YTqZygiPQ/CTIQbI78cLfpnO
+	 H2KYQEt+MC+IA==
 Received: from host86-149-246-145.range86-149.btcentralplus.com ([86.149.246.145] helo=lobster-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1uor8A-009W00-5o;
-	Wed, 20 Aug 2025 23:18:06 +0100
-Date: Wed, 20 Aug 2025 23:18:05 +0100
-Message-ID: <87jz2xk57m.wl-maz@kernel.org>
+	id 1uorEH-009W7G-8x;
+	Wed, 20 Aug 2025 23:24:25 +0100
+Date: Wed, 20 Aug 2025 23:24:24 +0100
+Message-ID: <87ikihk4x3.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Mark Brown <broonie@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -62,10 +62,10 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	kvmarm@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15 5/6] KVM: arm64: Allow GCS to be enabled for guests
-In-Reply-To: <20250820-arm64-gcs-v15-5-5e334da18b84@kernel.org>
+Subject: Re: [PATCH v15 1/6] arm64/gcs: Ensure FGTs for EL1 GCS instructions are disabled
+In-Reply-To: <20250820-arm64-gcs-v15-1-5e334da18b84@kernel.org>
 References: <20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org>
-	<20250820-arm64-gcs-v15-5-5e334da18b84@kernel.org>
+	<20250820-arm64-gcs-v15-1-5e334da18b84@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -81,32 +81,45 @@ X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org,
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, 20 Aug 2025 15:14:45 +0100,
+On Wed, 20 Aug 2025 15:14:41 +0100,
 Mark Brown <broonie@kernel.org> wrote:
 > 
-> Now that required functionality for GCS is in place expose
-> ID_AA64PFR1_EL1.GCS, allowing guests to be given the feature.
+> The initial EL2 setup for GCS did not include disabling of EL1 usage of
+> GCS instructions, also disable these traps.  This is the first disabling
+> of instruction traps, use x2 to store the value to be written.
+
+Written where?
+
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  arch/arm64/kvm/sys_regs.c | 1 -
->  1 file changed, 1 deletion(-)
+>  arch/arm64/include/asm/el2_setup.h | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index 592cb5d6497a..60e234422064 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -1616,7 +1616,6 @@ static u64 __kvm_read_sanitised_id_reg(const struct kvm_vcpu *vcpu,
->  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_SME);
->  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_RNDR_trap);
->  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_NMI);
-> -		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_GCS);
->  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_THE);
->  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_MTEX);
->  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_PFAR);
-> 
+> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+> index 46033027510c..0ac14ea4dbc8 100644
+> --- a/arch/arm64/include/asm/el2_setup.h
+> +++ b/arch/arm64/include/asm/el2_setup.h
+> @@ -355,6 +355,10 @@
+>  
+>  .Lskip_gce_fgt_\@:
+>  
+> +	orr	x2, x2, #HFGITR_EL2_nGCSEPP_MASK
 
-Still disabled for NV in limit_nv_id_reg().
+What is x2 set to before this?
+
+> +	orr	x2, x2, #HFGITR_EL2_nGCSSTR_EL1_MASK
+> +	orr	x2, x2, #HFGITR_EL2_nGCSPUSHM_EL1_MASK
+> +
+>  .Lset_fgt_\@:
+>  	msr_s	SYS_HFGRTR_EL2, x0
+>  	msr_s	SYS_HFGWTR_EL2, x0
+
+Followed by:
+
+	msr_s	SYS_HFGITR_EL2, xzr
+
+Puzzled.
 
 	M.
 
