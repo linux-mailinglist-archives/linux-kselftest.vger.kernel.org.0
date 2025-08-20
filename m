@@ -1,117 +1,167 @@
-Return-Path: <linux-kselftest+bounces-39381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E4DDB2E133
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 17:33:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EBB2B2E161
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 17:42:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35893A25C3B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 15:23:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A31971BA4437
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 15:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB7E322535;
-	Wed, 20 Aug 2025 15:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 125532C21CB;
+	Wed, 20 Aug 2025 15:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BAbY8fe8"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="CELdqXIV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680252D7813
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 Aug 2025 15:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E392DECBB;
+	Wed, 20 Aug 2025 15:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=158.69.130.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755702944; cv=none; b=QwGdLtpVRlYMg4JPjR3MQJzTl+vszP6Wd8xTGIGw7olY5V04257FVLZbbUwDV/bHOGKPoTbB9BGdnPFcAtpd0AHf0tJK2vCDqds5sBJvN1GSyKmOZ1uL4sENr7NH10g52n64nb2A2OInN6KYpOdDX4uGiBus6kV1XImzbrMg6SE=
+	t=1755704457; cv=none; b=JPxBC9JwC3/H1rlTa852GMXicLP1k7+QEOWBAU3u+qNF5tkPUssJP9DjvfY+DxLQW9mPT4k8o3Me4afV1rsDXZmdpb8NGrv9UJIA1drzz+vHQAl6cOE5VgeVHse6s8guoqQBu9j/rv+m/pn1lyLK2FfhoboFF8N+2+aGbMXvXRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755702944; c=relaxed/simple;
-	bh=13FUGJW12CjFo+iuPJUPd57hxgV9qCf1JSMfv2fgBBM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ss2/ehSWi2p1k4OqeWKjR24UQWPS65Hz07YiKnUjyQVUsWNKM/fIiHncazbbPrtav2kP8KRLd+9dDPXMC42ncIQr8S0MkeC8muOqWlqDMofhwCxXGTmMgeI71Uvd3XpespNPgde8zSxLTsEvVPLxNz+7loY3ZdLhwNdMM7Ac/1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BAbY8fe8; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-324e4c3af5fso27452a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Aug 2025 08:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755702943; x=1756307743; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aLQGbBV6UkGThqaYqD2VruRxdB/oQfuxLhj4lvw4NUg=;
-        b=BAbY8fe8vUD4tZmgf16I7et6IvdjCRoipuPdW3FpoU56l4Hdnwk9h8iWdFZ4x3Iy1Y
-         9va9+WytawnsJ4WKlUxSAN2Cpu6R02tIX0FEqD5JzkHrjJiV6tMSFfQ0hMOkMi20Tg/E
-         nz66T2cIUDXfaOpHECqUDWjGpRh56E/fATuP3T7n0oGcUH949nf4XYwS3kuglx2xcsIA
-         9IyizZH8DuK3lPus5LQ/6/S9J6ZNR8lQLEBQuIFuxCy/OeIHNyikFnbCxdCJi8N3Hlyv
-         2PtAwEdcpAgpwmqS6fBdr4rWrNLm+ZE1/efwO3Jx23wGjMxAX5EyGpOfRzF5yxi3FvT6
-         ehng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755702943; x=1756307743;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aLQGbBV6UkGThqaYqD2VruRxdB/oQfuxLhj4lvw4NUg=;
-        b=KuSQTDqnfLpr2rVuK+T7AJ0kV53O7jecn3gol7OqYfnkNi9jlxz2Mk3RROw2BeH3bI
-         GFJC0xvbshGxNO2JKOHNf4aQRv1NPtwFyIG258p+qA84Hk6TbF05E3aBPBs2Na9Mh0Km
-         3j96ebHM/KKK9Bu5oXO7VZTT3aukfzyr7blCZ9Eckr2U6+2qTGQ1sGK8cQx6w9aYyTjE
-         9VK3CAfYebJuGEzNdy3/jQXLWA9ITfRw8pnNFAi7pjLeIyObPg7wfHyOpNByL91+seZT
-         4NkK4h51QjjhJE0E3doGI9ix4NlrK9O30kPnQ3fJgqo5kyVCae4oBOO0XamE+FnbXBIY
-         E0Xw==
-X-Forwarded-Encrypted: i=1; AJvYcCXAQ4LxiXXyptqNSS/85Jkwes1vfxwPLdDxED6h1LglpKI/DhEnjbCMiCa95pMH8tZmfxJ98LUaAO98Fbs4VD4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3+OGIjrsrlA8ngYulEbeblKtdkWaKG7x/8B4UlH/EHwXFfCTk
-	PEgpc2JBvnO3HrBoX/YX6Xr4S/kY3KUbIKn+18VstZe67moq6ad7JtYMb1+q+Obesdc3Vy4emSN
-	O0mAlrg==
-X-Google-Smtp-Source: AGHT+IE9iGk/sRCwAsdU6VesQcmBbVaZpEaJBxTmZ5Qv6evdaW0ytYvrMeubSC1IlHptd/SUUkon+wRAZeA=
-X-Received: from pjg11.prod.google.com ([2002:a17:90b:3f4b:b0:31f:f3:f8c3])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:558c:b0:321:cfd5:3f95
- with SMTP id 98e67ed59e1d1-324e1425be1mr4887657a91.35.1755702942762; Wed, 20
- Aug 2025 08:15:42 -0700 (PDT)
-Date: Wed, 20 Aug 2025 08:15:41 -0700
-In-Reply-To: <aKXFKaJuZZTbAbJD@google.com>
+	s=arc-20240116; t=1755704457; c=relaxed/simple;
+	bh=yPQP9xdUUp1NC+xPWPtOPfUaY+fSaRi9v5dh68y2WMc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qiTyhTJbwuSv5Tp+1cpOnvXf4SHLPEeyBMYJrHetH8okgYuIChWlwDZJBdjwIIiNvufCUSKcdW0p3td4q6/Jx7SzGYdSIMJ5fYrvJd71d8kq9cC9W/X/2JbH7qbRA7yO3KIPyd9JUAlAqceJBQRavbc/AjdAKi7gYUmU5yqZISA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=CELdqXIV; arc=none smtp.client-ip=158.69.130.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1755704447;
+	bh=yPQP9xdUUp1NC+xPWPtOPfUaY+fSaRi9v5dh68y2WMc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CELdqXIVZMAhgjQeKZUVklBBaisPw93K7CNRgICRezMzZ51dofeJ207eSZ2d/cTuh
+	 9F3a59/ol4xN8pfDNH6rVAdXqD0m3dwXcmREgRy5Z6J6YUznhmbB702nUnnWubqEZP
+	 XvStRYFrOIQDVdF3H+8xdL6FsP06pLUkVPn4w/VrR/ebzPNujUBWw6VnNlqSh+0SXe
+	 XJPHOnwlUHMKaYgr+m42kyHw6VWBT7/xA3+hEeVjNp5/5DfKY97NpkeG5FMHDQyHR7
+	 XbAmY9H224kxvJG4TJu4kMyhekHm1T1HKzx9yabCDfjgSPq23VRLRsBJBbx3+ziPHs
+	 IsRGp/fa9O1Qg==
+Received: from [172.16.0.63] (192-222-132-26.qc.cable.ebox.net [192.222.132.26])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4c6Vz34zxlz2G0;
+	Wed, 20 Aug 2025 11:40:47 -0400 (EDT)
+Message-ID: <92cf18ee-e1ee-43ed-91e2-35e35cf97af8@efficios.com>
+Date: Wed, 20 Aug 2025 11:40:47 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250624231930.583689-1-seanjc@google.com> <18f2ea68-0f7c-465e-917e-e079335995c1@sirena.org.uk>
- <aKXFKaJuZZTbAbJD@google.com>
-Message-ID: <aKXmnRTBzNklwdYk@google.com>
-Subject: Re: [PATCH] selftests: harness: Rework is_signed_type() to avoid
- collision with overflow.h
-From: Sean Christopherson <seanjc@google.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Betterbird (Linux)
+Subject: Re: [PATCH] rseq/selftests: Use weak symbol reference, not
+ definition, to link with glibc
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Sean Christopherson <seanjc@google.com>,
+ Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Kienan Stewart <kstewart@efficios.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Florian Weimer <fweimer@redhat.com>, Thomas Gleixner <tglx@linutronix.de>
+References: <20250819222945.3052711-1-seanjc@google.com>
+ <62f49015-e1af-43ed-8499-507a49032662@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Content-Language: fr
+Autocrypt: addr=mjeanson@efficios.com; keydata=
+ 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 IZHa
+In-Reply-To: <62f49015-e1af-43ed-8499-507a49032662@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 20, 2025, Sean Christopherson wrote:
-> On Wed, Aug 20, 2025, Mark Brown wrote:
-> > On Tue, Jun 24, 2025 at 04:19:30PM -0700, Sean Christopherson wrote:
-> > > Rename is_signed_type() to is_signed_var() to avoid colliding with a macro
-> > > of the same name defined by linux/overflow.h.  Note, overflow.h's version
-> > > takes a type as the input, whereas the harness's version takes a variable!
-> > 
-> > This patch is in -next and is causing widespread breakage in the
-> > selftests -next on at least arm and arm64 due to:
-> > 
-> > make --silent --keep-going --jobs=15 O=/build/stage/build-work INSTALL_PATH=/build/stage/build-work/kselftest_install ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- kselftest-install
-> > 
-> > ...
-> > 
-> > In file included from test-pcmtest-driver.c:10:
-> > ../kselftest_harness.h:59:10: fatal error: linux/overflow.h: No such file or directory
-> >    59 | #include <linux/overflow.h>
-> >       |          ^~~~~~~~~~~~~~~~~~
-> > compilation terminated.
+On 2025-08-20 08:55, Mathieu Desnoyers wrote:
 > 
-> Argh, many selftests don't add tools/include to their include path.  The least
-> awful thing I can think of is to go with a minimal fix to avoid the collision.
-> AFAICT, nothing outside of kselftest_harness.h uses is_signed_type(), so this
-> shouldn't cause a different flavor of breakage?
+> Michael, can you try it out ?
 
-I force-pushed a straight rename.  Please holler if that somehow still breaks
-builds.
+Will do.
 
-[1/1] selftests: harness: Rename is_signed_type() to avoid collision with overflow.h
-      https://github.com/kvm-x86/linux/commit/dce1b33ed743
+> 
+> Kienan, we may want to add a configuration forcing "-fno-common" to our
+> CI, this problematic pattern may be hiding other issues elsewhere. I'm
+> thinking of LTTng-UST tracepoint headers and libside headers.
+
+AFAIK, -fno-common has been the default since GCC 10 so it's already 
+well tested in CI, there are a few fixes from around 2020 in LTTng 
+related to this.
+
+> 
+> Sean, do you want to contribute the fix to librseq as well ?
+
+Librseq currently doesn't have the weak symbols like the selftests so 
+the fix doesn't really apply.
+
+> 
+> Thanks everyone for looking into this. I'll be back from vacation next
+> week and will resume normal operations. :-)
+> 
+> Mathieu
+> 
+>>     */
+>> -__weak ptrdiff_t __rseq_offset;
+>> -__weak unsigned int __rseq_size;
+>> -__weak unsigned int __rseq_flags;
+>> +extern __weak ptrdiff_t __rseq_offset;
+>> +extern __weak unsigned int __rseq_size;
+>> +extern __weak unsigned int __rseq_flags;
+>>    
+>>    static const ptrdiff_t *libc_rseq_offset_p = &__rseq_offset;
+>>    static const unsigned int *libc_rseq_size_p = &__rseq_size;
+>> @@ -209,7 +209,7 @@ void rseq_init(void)
+>>    	 * libc not having registered a restartable sequence.  Try to find the
+>>    	 * symbols if that's the case.
+>>    	 */
+>> -	if (!*libc_rseq_size_p) {
+>> +	if (!libc_rseq_size_p || !*libc_rseq_size_p) {
+>>    		libc_rseq_offset_p = dlsym(RTLD_NEXT, "__rseq_offset");
+>>    		libc_rseq_size_p = dlsym(RTLD_NEXT, "__rseq_size");
+>>    		libc_rseq_flags_p = dlsym(RTLD_NEXT, "__rseq_flags");
+>>
+>> base-commit: c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
+> 
+> 
+
 
