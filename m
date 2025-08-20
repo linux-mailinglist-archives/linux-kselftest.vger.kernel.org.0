@@ -1,221 +1,266 @@
-Return-Path: <linux-kselftest+bounces-39373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49FDAB2DE5C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 15:51:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E0AEB2DEF9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 16:19:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E26593B6F07
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 13:49:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A12A51667F3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 14:16:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6081A9FB2;
-	Wed, 20 Aug 2025 13:49:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C239B221F0C;
+	Wed, 20 Aug 2025 14:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="as3QrdPJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QZnqJjl5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2076.outbound.protection.outlook.com [40.107.101.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC35119DF62;
-	Wed, 20 Aug 2025 13:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755697794; cv=fail; b=GL1EtslmJNa4VA4zYboaVOaKvKmcb7CM/vyTkvFesJvhwDQ0U7dTNLymNdaf373pBcjour7B59i1Kx7oLbl2B2t3OFVG1zV3IbWj1QugOYL6cMLwAM0F/p2ctjKg1WnpaMzX2a7caxmT0nsfwKKuIX6J3N7MKDKVx3bQVs7WjhM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755697794; c=relaxed/simple;
-	bh=v+k0526FxsenShZQTx9VzCchBz7lY82OHA0GXPYPTcI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PzLCWndm1TJNAtNwqNUcFOjBeHBAOzta1wTg6YF8iPgcVlVkZ377yUn2MLCdplvsLmB51SmjBkK/+60gF6GE3+pmIWrp2XdUByWF1AGHasKvNpuv+r2L1DPv01EHlzFHcVDiNsnjXc6DhBgXgyPMHPAbvZfYLQ+g7WGm0/nYOfo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=as3QrdPJ; arc=fail smtp.client-ip=40.107.101.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WQLORERPqzMtM5X9kFCYWYaDAhmQsLvH56TR3IxJs8Lt30CHPkMK+OHzYOwERvvVZFSF08IHPfaXtX9woPiQkAmu79ZHc9D6gvZBPfRUtIM6DnqWX1UHUvwcxYh1fBgivlvKKnd9Iw/qLYe5qOqh2unVRJsyWpAqy4cGy6BoC/OV/BsCxvmg0EHZUIyfEyOr1LlHiKhbCj2jVC75ZE++icPnnjpARiSsU2zKGXnKCAGobgDu6a1qn3KF4i6/Oya9/JfZHgaOzNV+Iqdl407Oo39nw5BihnoueAKLHc4QKxTFryyWrDTxXAGGu9TiLPI3TATxU4a31mHN+Abixb0FeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v+k0526FxsenShZQTx9VzCchBz7lY82OHA0GXPYPTcI=;
- b=a7+l+WoZt7J+/S19yA2Rx/oow0l+uwHqEWb4WaueDUeu6z8Y14l4+sIj1hSEs6vxcUDNu+QxnQosJgO8B9EL2jYEn9ihpS9n1CksaSqWU9M5VHD5ch5dyytaFo86pjl/4lrdWOc6u75NAYpxK69GurOmGYIBHvknuYqj45ESgSQdHTyDc+Ef6MdH2M+7Pvt1X8bp4ucWOR5iCRLCe5rUHgCcac9gIeKB9CfJrX2Y6OHtxlne2tjikCDQWtzCMpk5bIxUrFnyViBgIC5ZBzI9FgxqEDj9nAeYiPBixCaT0eeFKoJWpfhcm3d0xwmM9f/fnwSFdrZL1UcgnLOaFUSi2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v+k0526FxsenShZQTx9VzCchBz7lY82OHA0GXPYPTcI=;
- b=as3QrdPJEPosdjWyPg0OSQkm+Hk5LG3OOnikqjIGBe/6bd9Os0famInldaNFryXofkLNmF9Iw4gkU84Crqaw5apayhDuav7NP349mhPivDHhFetTE0ZORFcGCLLPojziUdJpRnTjOTvAgppA7wQygoQ1BiwJ7vdfUymO/R+Y7zZblNuvN6+gHkA8mTimYDOXI5XFncWj9LA5//ZzwSx5HlwZuYUJWnlcgHxd/nsnW71I3ps64tqiFKzKqw+u2yVopNaPxq82dcxF5GSpU4RVOyijSdwsyHoWifcdeSgE1TEQjieUOZ/J5L8wTka4O9wBMJjDrbYMS7k3xsKfaBK0aw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- MN0PR12MB5905.namprd12.prod.outlook.com (2603:10b6:208:379::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.14; Wed, 20 Aug
- 2025 13:49:48 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a%6]) with mapi id 15.20.9031.014; Wed, 20 Aug 2025
- 13:49:48 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Wei Yang <richard.weiyang@gmail.com>, wang lian <lianux.mm@gmail.com>,
- David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
- Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 4/5] selftests/mm: add check_after_split_folio_orders()
- helper.
-Date: Wed, 20 Aug 2025 09:49:45 -0400
-X-Mailer: MailMate (2.0r6272)
-Message-ID: <A5A3C9E5-7E90-4EB4-878F-D5143FE0F349@nvidia.com>
-In-Reply-To: <a81b7fd3-c466-45c9-9374-361b780ce09b@linux.alibaba.com>
-References: <20250818184622.1521620-1-ziy@nvidia.com>
- <20250818184622.1521620-5-ziy@nvidia.com>
- <a81b7fd3-c466-45c9-9374-361b780ce09b@linux.alibaba.com>
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: MN2PR06CA0023.namprd06.prod.outlook.com
- (2603:10b6:208:23d::28) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907131DDC07;
+	Wed, 20 Aug 2025 14:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755699319; cv=none; b=K01Is6JX3twqDGoEKpTu079xE2sv8YGmLs9qBy+VuW8+PRiUU9G5a9R8swlxgrJIj2Y6UKA5BmqfFpY+fyQLuaLpVG3Ro2dZNam/A5zRVVd7GTipBkHeHfqIpaxfqniaopej09ovryMR8U0YjDDpzWkvZys9f9j2BkM+QXPTpsg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755699319; c=relaxed/simple;
+	bh=az0FxiDXmKVIPZV1Ev18Kw1GYBdYXlqv77n5btKqy2g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=R0CuDQysto9FvHb4nvpmnrvtN7p0U6Afdj6YjgOghT0NkyzyOO8SkZ74hj7B5eRbBoZRDKuoUJHtrw9Hey1KTCHX7KdJRqLmEr5jIGwTwEtkFLyBmMshICe2SLvLHy5CYxUlPGSX1n4WL25jOB6auvfsjBXe+OqUYB2j3g8VFEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QZnqJjl5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99386C4CEE7;
+	Wed, 20 Aug 2025 14:15:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755699318;
+	bh=az0FxiDXmKVIPZV1Ev18Kw1GYBdYXlqv77n5btKqy2g=;
+	h=From:Subject:Date:To:Cc:From;
+	b=QZnqJjl5as15luX+evDK6G85xnf5wasbcEidrcSmyxbpFKG3Lf8cSOs5yYllk2Vx4
+	 Xvgm0S18x4xeN6Ng0+5OMfswWjxELzxbGYhcgbYVtn66bBsJ8nWvkxic+pDknE44Lb
+	 Kj8eziT+GDczQ+zzjkMiDdT5JnhtXDIJruiZBQcF0FFeJxb3addQ/H3EfyshLNciJu
+	 Bi5O7jYGficfzEJ/Voib3QNkv4DKfLOY6nzAPB+EDqxpcD+Vt6F40wKjPBBA0X7mVl
+	 xibd4WqkHDyx+b+kFNDmeyx70q5RbhDSgCiNucxaGnJ0TVCzojEO8zBY8As7jzgu92
+	 MDTo4z0TKJTfQ==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v15 0/6] KVM: arm64: Provide guest support for GCS
+Date: Wed, 20 Aug 2025 15:14:40 +0100
+Message-Id: <20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|MN0PR12MB5905:EE_
-X-MS-Office365-Filtering-Correlation-Id: 149aaa17-0fac-4869-47f3-08dddff06dca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?usWYsLSkDI7a6xOde6tFRjHMSHnPuEbInbt0abZwwZCXWV4mNKQwbp1++1/p?=
- =?us-ascii?Q?Z296avrYndnXEokP4lovct6ZpzSYkHB7fVMQjArrsbwO4VnIZXCSCw/yeWbL?=
- =?us-ascii?Q?uhBHCNE7yn9J/yz9d0K+83dIVYqueIV89+iBewqWWk0P7JIH4wKNayZbx23/?=
- =?us-ascii?Q?RLFXCAQwiXI0ycneWYkuXdPoQfbN/ApUfr6doi9opC7WaE42Ozzh1orxd8CS?=
- =?us-ascii?Q?40qyoMh09UBvhcNXc0ZE6fhgESK1MRWJMmd+MzF/xK2yXT2YeL/CCSQy/8O3?=
- =?us-ascii?Q?JAPEODNtPvmbHn7pSfI5YQc+Ywq2rO6e/UwqhZ23jtqXNMJl37OQBnD4eXyl?=
- =?us-ascii?Q?WaXP+DVc/J8rYTn3nDzV6vrRCt4rhpGDCuoSkyCfNvrJUFGF1GWvsM3f5Cme?=
- =?us-ascii?Q?4CI+fU28jb3tAswPQfBwVTO7cooxxma9686cGvBXDKVmO+LbawAhWCjgwKXN?=
- =?us-ascii?Q?vojQHhzwPkx9uh3MTnDI2ZTCMtZr0LAOP1viYuonU6DqLE9UFlctOXX84Jfh?=
- =?us-ascii?Q?GJJ48PUwS4+rafZsMNKC3gcX0+duyUjl5ce8xj6iH6BFN+iAeC5nGhrz3fhb?=
- =?us-ascii?Q?oB/RVhuxYY7DCF0mFzfF/1UuQM2bidURcHZYXJDM0/Q8N+5tKy5DwKShu6jK?=
- =?us-ascii?Q?MEpOZGHXcBwwl+3s6v5LiCBSsacz+FYbMFVtPirhvtBcyFfMgGk18QAYlcu9?=
- =?us-ascii?Q?thPVD9cY4AuH+cpCRO8Th3oSA1BRaYLbF0wWAAuiXlh9oEeSssnEJV5X8uYZ?=
- =?us-ascii?Q?t5uNsGG691aZboHPsxGngfjy6uzg23PWLT46mI2P8E5205R09uvpfhtGWI8T?=
- =?us-ascii?Q?UPSOoDO71XmRNZQZzxWXddKYiUddv/4QuJQInk9abIaSE2bQ0qXlTHdUhR0i?=
- =?us-ascii?Q?e1tUhaxiszDJ05LD5MDmRHdsFMvyfStW6/C/pjLkaj3NqucRrSUu7GCT2RaM?=
- =?us-ascii?Q?wUzBICDpBtRZ9jLf4gD7UdCnUKr3j99kX8qSGm8lavbS48giCQCwJnT5iuTl?=
- =?us-ascii?Q?bupCAkuCza5sR9vQkKx9+7JlRNhYoErwosEb0Jfa7wtsUjonPM6zI9Q1QrGU?=
- =?us-ascii?Q?5ptco0QnRWcHAQlBiyMLjPv+vUyxe466bc4qWmTmjx+y4ZfsbPSuPog+6DRa?=
- =?us-ascii?Q?4rEn9GtnoDDJosu8V9uews1Tw5jABmpjwO87S5nez69fipkwGAxikTdRd9yJ?=
- =?us-ascii?Q?KbFvZKKGCzu3S4jFymMZEgUsdiD+MbIN1SSYq4OiiaxNId4IOaTds5Oeln6z?=
- =?us-ascii?Q?3Dqzpm9bAx5sRi0iaUT+xndOEW2ayrx+Ysot2i5Aym5whzkKDfO4291XscXo?=
- =?us-ascii?Q?fh5e2mRjbREcLHbDbekBPKE9WJRqqvV1L6zfOgOgo9CEY3AAS8ckxFkh2WqG?=
- =?us-ascii?Q?ftBRf6vsT9HamZ95rInxsHWszEHKExWXTaPx14l3g3iCYkhUInxbT9za4BUT?=
- =?us-ascii?Q?wE0YN+Y/c4E=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?G6TcBlLUxC6sX8pzjZG+TaSIQkqKEPBxm/pzWeNvTu17KXVVXsKLXa1ojsst?=
- =?us-ascii?Q?o+ulAjQBb+2LlNNNFWsSAquBqobjoAkKyKAajr/ARF+Aj7SxGbnD4jKSvTwP?=
- =?us-ascii?Q?h2rmAvYLYEJmQDsKTor3Ul4Hp9Yo7sWE2FbP08kVTNTR7DH0JBcMF/bAsfS9?=
- =?us-ascii?Q?91J+QaAuD5PiflDjp3poduuOI2BqC7KFWErBocJMbUHrojNttDOng0on1Cms?=
- =?us-ascii?Q?ukq8CvgtLiFd9Mv6Q7MAs/BjBnheQ+/bapVijFhzoxgGcaDa8RJFcPcXV3Z/?=
- =?us-ascii?Q?6rukaQxac375RdIjvQEjuX5BKHVWhwJvat7bhnVJoC5JdA7v0AqgfVStHJ5c?=
- =?us-ascii?Q?VO6xd8dnvk4jA8Qli7SW/64snkqbwGs8EV/wUXOdapRYuGj71v34q4nQTvfr?=
- =?us-ascii?Q?7wDSzR0FyZH708l8g9GAc8qpiwmF2RleqMktOPEmldMumEnEbKKlEcEs5AyD?=
- =?us-ascii?Q?fbr1y//M3LgKCCHcNRenCEGlGyuM3oBCchGrcBSNhnVFrfuQM6Tmi3rPL0us?=
- =?us-ascii?Q?YkvJupC7JjbiYPqzGxpxAJgEkgBQY/SevwRLcneB/7qBkqbiafi7RLaqOB6L?=
- =?us-ascii?Q?AtRQU+j4f4CdFr+3UThed7Bwfe7gITzpyteBbdUg2/CEiIRuNuH0F9KJKGY7?=
- =?us-ascii?Q?BDpEtPsT5Y0E/1Z/5aozdThhXw5gi/1V0hJw4jbzOG6N55ofjVMAVZ6OaPXt?=
- =?us-ascii?Q?uzd36y227Ixf6ZmQJUhj5JDuDACWvHvnXUOIe0PFETevDDJp+6jsYq5IKEdw?=
- =?us-ascii?Q?5QyYBmvfiDeCzyxDHqvySOBCJmRXemZC3QCwLbF5WJC//f2IrqR2+e48Vi2G?=
- =?us-ascii?Q?cINWW8PG5EFUMJ6nuU4EmcQde2UL1feXG/vMX4eoZLmNKAcv9CGPKDV4Ur2c?=
- =?us-ascii?Q?r2Uyx6mKbTQBKUiOfkuGVRbOrTi1XaEG/RyD134CeUlU8MiLU0JavwxtDrpt?=
- =?us-ascii?Q?0gBTO4lZ5aqfkSNQxpdhrkSj2mGra+VZqCjUP0A/9+W/AxgfR6P5d17qxjFw?=
- =?us-ascii?Q?o390VO2o9JsliIw6/pXc7/M5m/rQ3Cq24govkbm/rr6eZFF27mtPTo0v6JXI?=
- =?us-ascii?Q?MceuDViRcMU5wb9X98hVYjb9DdGA0vpM22Rrv/CnIkQhi9ST5rZzS7m4ajRn?=
- =?us-ascii?Q?e5Z0sDmRtYboxQrNQwInw4SoO+BWe+f7fVH3QscCvjEU5j5EGhHHi3cW/xPI?=
- =?us-ascii?Q?+f1VzwJ6dscwFob5+Cq5s3PdFmZydHDoLfEYd5Ce3guFI1hYRVPpW40BouNX?=
- =?us-ascii?Q?w9D6POnarPYsGj2yE9P6pJB2ItFLjB67WLAnI8KwREWW+bzBuw1QkikM1aMS?=
- =?us-ascii?Q?vqHj6z8SBc+C6ElOnRmLa3fhaoYoihNjrlpNwk3Ti1Hg/IZ3OufdrioQtXDY?=
- =?us-ascii?Q?QFBjH4II3v1rg/ecBA9+CmYcqfK5dOatfOScelby8aDf6oJ/oX2CxMHEIHxY?=
- =?us-ascii?Q?oTCO+mWiHGRrRmbb+W/QEV1P4Y99/n4E7WOFQSAiOwnGnypJ5tPOS3FCcnAk?=
- =?us-ascii?Q?vTTmOpazE4JJQwq9XJgDdiPk5wgWrlbh9hTrpb7nmVhjiIXjYjEDuikrYttk?=
- =?us-ascii?Q?C5OvDM7oMNFlQWgpddJCJwzXlqT7DGeA/ag4HN2I?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 149aaa17-0fac-4869-47f3-08dddff06dca
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2025 13:49:48.4637
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GOOOh9aJO9G5mb9tJg3ekLwTxnwBOGdS/jkFEVAjmH2lXh7+nS/qwwpHRhShgFRF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5905
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFDYpWgC/2XTyW7cMAwA0F8JfK4LkqK2nPIfQQ9aqBkjzUxgB
+ 0aLYP69UopkZAg+idCTxMUf0ybrItv0+PAxrbIv23K91AXqHw9TOofLSeYl18BEQArqN4f11fB
+ 8StssCjFEyM6Sn+r+GDaZ4xou6dzE++tbi76tUpY/n1c8/6rr87K9X9e/nzfu2KL/z7ZourN3n
+ GGORRtbvIoxmKcXWS/y++d1PU3tmJ06StxTqjQnSpiZE0kcqOqowp6qSlPOxRfvIHs3UL5TB7a
+ nXKlxqQRVnwzGD1R3lKinulIvBR3mbBTxQM03RQDfU1OpdaJ1lhA454HaO8XjrbZSAkzsVMzW6
+ oG6L8pAh8bvrpXJF0nWGqukDNTfqSHdU18pFKOYjY+uwEAR7tbBoTsIrcbeC8VM6GHsLGKHj+l
+ imyjG6NCzlRTHfJF6fCgztpliqhlXzMqEEX8PFdceHZ/dpoqIonX1XxGREXOPD/XCNle6DhSkb
+ MDTMefb7fYPlFIfY8MDAAA=
+X-Change-ID: 20230303-arm64-gcs-e311ab0d8729
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Oliver Upton <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+ kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+ Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+X-Mailer: b4 0.15-dev-cff91
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8303; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=az0FxiDXmKVIPZV1Ev18Kw1GYBdYXlqv77n5btKqy2g=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBopdhtwezNGDr6bKVibgjxGDd4bfbttoLc03kh3
+ kp7vZXT5hqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKXYbQAKCRAk1otyXVSH
+ 0De7B/0YBmgbLhmIUMotiaMyCyPe3WaBmas4aHuk4n/w638XrmUaxuWsty0CUzLev8gOYqderq6
+ Yv6+GjBneNo8dvfL3Sahre8XrYQ/Fg47x4hmydl/zJax326DvvL4Hi08zBkgWbVSP/SgYbx6EHQ
+ u7CSPfFD1MXHV0Zn6XfAAh+wU20SQc24DQmC0XNesCGqLOYBmqY/bqdfSwvMbpobWXTZ1KLzfS8
+ 16l/Rd6iByEnMabdjZhoNfvYBTHy4lyh3OnHZaowb4qiusjryCJhJauTWvfq2UgypqbRr+cOyrq
+ wEctSnH4C3ZeWmxqW1PCrmd4h5PpJkmf+FVW12Q9xQuLxsxP
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 20 Aug 2025, at 5:22, Baolin Wang wrote:
+The arm64 Guarded Control Stack (GCS) feature provides support for
+hardware protected stacks of return addresses, intended to provide
+hardening against return oriented programming (ROP) attacks and to make
+it easier to gather call stacks for applications such as profiling.
 
-> On 2025/8/19 02:46, Zi Yan wrote:
->> The helper gathers a folio order statistics of folios within a virtual=
+When GCS is active a secondary stack called the Guarded Control Stack is
+maintained, protected with a memory attribute which means that it can
+only be written with specific GCS operations.  The current GCS pointer
+can not be directly written to by userspace.  When a BL is executed the
+value stored in LR is also pushed onto the GCS, and when a RET is
+executed the top of the GCS is popped and compared to LR with a fault
+being raised if the values do not match.  GCS operations may only be
+performed on GCS pages, a data abort is generated if they are not.
 
->> address range and checks it against a given order list. It aims to pro=
-vide
->> a more precise folio order check instead of just checking the existenc=
-e of
->> PMD folios.
->>
->> The helper will be used the upcoming commit.
->>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->> ---
->
-> I tested this patch, and it works for me.
-> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+The combination of hardware enforcement and lack of extra instructions
+in the function entry and exit paths should result in something which
+has less overhead and is more difficult to attack than a purely software
+implementation like clang's shadow stacks.
 
-Thanks.
+This series implements support for managing GCS for KVM guests, it also
+includes a fix for S1PIE which has also been sent separately as this
+feature is a dependency for GCS.  It is based on:
 
->
-> By the way, I moved gather_after_split_folio_orders() to the vm_util.c =
-file as a helper for mTHP collapse checks in my patchset[1]. I'm not sure=
- whether you need to move gather_after_split_folio_orders() to vm_util.c =
-in this patch, or if I should move it in my patchset.
+   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/gcs
 
-Feel free to move it in your patchset. My initial version has it in vm_ut=
-il.c, but
-I realized that its implementation is very limited to folio split check a=
-nd moved
-it to split_huge_page_test.c. If you find it suitable for your test cases=
-, feel
-free to move it. Just note that the code does not handle memremapped THP,=
- since
-it only checks page flags without checking the PFN. So when a vaddr range=
- is mapped
-to a THP/mTHP head page and some other THP/mTHP tail pages, the code just=
- treats
-the whole vaddr range as if it is mapped to a single THP/mTHP and gets a =
-wrong
-order. After-split folios do not have this concern, so
-gather_after_split_folio_orders() is simplified to not handle such cases.=
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v15:
+- Rebase onto v6.17-rc1.
+- Link to v14: https://lore.kernel.org/r/20241005-arm64-gcs-v14-0-59060cd6092b@kernel.org
 
+Changes in v14:
+- Rebase onto arm64/for-next/gcs which includes all the non-KVM support.
+- Manage the fine grained traps for GCS instructions.
+- Manage PSTATE.EXLOCK when delivering exceptions to KVM guests.
+- Link to v13: https://lore.kernel.org/r/20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org
 
->
-> [1] https://lore.kernel.org/all/955e0b9682b1746c528a043f0ca530b54ee2253=
-6.1755677674.git.baolin.wang@linux.alibaba.com/
+Changes in v13:
+- Rebase onto v6.12-rc1.
+- Allocate VM_HIGH_ARCH_6 since protection keys used all the existing
+  bits.
+- Implement mm_release() and free transparently allocated GCSs there.
+- Use bit 32 of AT_HWCAP for GCS due to AT_HWCAP2 being filled.
+- Since we now only set GCSCRE0_EL1 on change ensure that it is
+  initialised with GCSPR_EL0 accessible to EL0.
+- Fix OOM handling on thread copy.
+- Link to v12: https://lore.kernel.org/r/20240829-arm64-gcs-v12-0-42fec947436a@kernel.org
 
+Changes in v12:
+- Clarify and simplify the signal handling code so we work with the
+  register state.
+- When checking for write aborts to shadow stack pages ensure the fault
+  is a data abort.
+- Depend on !UPROBES.
+- Comment cleanups.
+- Link to v11: https://lore.kernel.org/r/20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org
 
---
-Best Regards,
-Yan, Zi
+Changes in v11:
+- Remove the dependency on the addition of clone3() support for shadow
+  stacks, rebasing onto v6.11-rc3.
+- Make ID_AA64PFR1_EL1.GCS writeable in KVM.
+- Hide GCS registers when GCS is not enabled for KVM guests.
+- Require HCRX_EL2.GCSEn if booting at EL1.
+- Require that GCSCR_EL1 and GCSCRE0_EL1 be initialised regardless of
+  if we boot at EL2 or EL1.
+- Remove some stray use of bit 63 in signal cap tokens.
+- Warn if we see a GCS with VM_SHARED.
+- Remove rdundant check for VM_WRITE in fault handling.
+- Cleanups and clarifications in the ABI document.
+- Clean up and improve documentation of some sync placement.
+- Only set the EL0 GCS mode if it's actually changed.
+- Various minor fixes and tweaks.
+- Link to v10: https://lore.kernel.org/r/20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org
+
+Changes in v10:
+- Fix issues with THP.
+- Tighten up requirements for initialising GCSCR*.
+- Only generate GCS signal frames for threads using GCS.
+- Only context switch EL1 GCS registers if S1PIE is enabled.
+- Move context switch of GCSCRE0_EL1 to EL0 context switch.
+- Make GCS registers unconditionally visible to userspace.
+- Use FHU infrastructure.
+- Don't change writability of ID_AA64PFR1_EL1 for KVM.
+- Remove unused arguments from alloc_gcs().
+- Typo fixes.
+- Link to v9: https://lore.kernel.org/r/20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org
+
+Changes in v9:
+- Rebase onto v6.10-rc3.
+- Restructure and clarify memory management fault handling.
+- Fix up basic-gcs for the latest clone3() changes.
+- Convert to newly merged KVM ID register based feature configuration.
+- Fixes for NV traps.
+- Link to v8: https://lore.kernel.org/r/20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org
+
+Changes in v8:
+- Invalidate signal cap token on stack when consuming.
+- Typo and other trivial fixes.
+- Don't try to use process_vm_write() on GCS, it intentionally does not
+  work.
+- Fix leak of thread GCSs.
+- Rebase onto latest clone3() series.
+- Link to v7: https://lore.kernel.org/r/20231122-arm64-gcs-v7-0-201c483bd775@kernel.org
+
+Changes in v7:
+- Rebase onto v6.7-rc2 via the clone3() patch series.
+- Change the token used to cap the stack during signal handling to be
+  compatible with GCSPOPM.
+- Fix flags for new page types.
+- Fold in support for clone3().
+- Replace copy_to_user_gcs() with put_user_gcs().
+- Link to v6: https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org
+
+Changes in v6:
+- Rebase onto v6.6-rc3.
+- Add some more gcsb_dsync() barriers following spec clarifications.
+- Due to ongoing discussion around clone()/clone3() I've not updated
+  anything there, the behaviour is the same as on previous versions.
+- Link to v5: https://lore.kernel.org/r/20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org
+
+Changes in v5:
+- Don't map any permissions for user GCSs, we always use EL0 accessors
+  or use a separate mapping of the page.
+- Reduce the standard size of the GCS to RLIMIT_STACK/2.
+- Enforce a PAGE_SIZE alignment requirement on map_shadow_stack().
+- Clarifications and fixes to documentation.
+- More tests.
+- Link to v4: https://lore.kernel.org/r/20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org
+
+Changes in v4:
+- Implement flags for map_shadow_stack() allowing the cap and end of
+  stack marker to be enabled independently or not at all.
+- Relax size and alignment requirements for map_shadow_stack().
+- Add more blurb explaining the advantages of hardware enforcement.
+- Link to v3: https://lore.kernel.org/r/20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org
+
+Changes in v3:
+- Rebase onto v6.5-rc4.
+- Add a GCS barrier on context switch.
+- Add a GCS stress test.
+- Link to v2: https://lore.kernel.org/r/20230724-arm64-gcs-v2-0-dc2c1d44c2eb@kernel.org
+
+Changes in v2:
+- Rebase onto v6.5-rc3.
+- Rework prctl() interface to allow each bit to be locked independently.
+- map_shadow_stack() now places the cap token based on the size
+  requested by the caller not the actual space allocated.
+- Mode changes other than enable via ptrace are now supported.
+- Expand test coverage.
+- Various smaller fixes and adjustments.
+- Link to v1: https://lore.kernel.org/r/20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org
+
+---
+Mark Brown (6):
+      arm64/gcs: Ensure FGTs for EL1 GCS instructions are disabled
+      KVM: arm64: Manage GCS access and registers for guests
+      KVM: arm64: Forward GCS exceptions to nested guests
+      KVM: arm64: Set PSTATE.EXLOCK when entering an exception
+      KVM: arm64: Allow GCS to be enabled for guests
+      KVM: selftests: arm64: Add GCS registers to get-reg-list
+
+ arch/arm64/include/asm/el2_setup.h               |  4 +++
+ arch/arm64/include/asm/kvm_emulate.h             |  3 ++
+ arch/arm64/include/asm/kvm_host.h                | 14 +++++++++
+ arch/arm64/include/asm/vncr_mapping.h            |  2 ++
+ arch/arm64/include/uapi/asm/ptrace.h             |  1 +
+ arch/arm64/kvm/handle_exit.c                     | 14 +++++++--
+ arch/arm64/kvm/hyp/exception.c                   | 37 ++++++++++++++++++++++++
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h       | 31 ++++++++++++++++++++
+ arch/arm64/kvm/hyp/vhe/sysreg-sr.c               | 10 +++++++
+ arch/arm64/kvm/sys_regs.c                        | 32 ++++++++++++++++++--
+ tools/testing/selftests/kvm/arm64/get-reg-list.c | 12 ++++++++
+ 11 files changed, 155 insertions(+), 5 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20230303-arm64-gcs-e311ab0d8729
+
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
+
 
