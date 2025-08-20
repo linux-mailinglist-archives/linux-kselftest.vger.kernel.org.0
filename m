@@ -1,84 +1,84 @@
-Return-Path: <linux-kselftest+bounces-39383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86370B2E16D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 17:46:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A60B2E192
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 17:56:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0259E5A0BB7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 15:44:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B8B4189BAD0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 15:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E7A92E8B74;
-	Wed, 20 Aug 2025 15:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EFD7322741;
+	Wed, 20 Aug 2025 15:53:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ym6cbr/Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aCsEdcNp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9878E280325;
-	Wed, 20 Aug 2025 15:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22498322558;
+	Wed, 20 Aug 2025 15:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755704644; cv=none; b=mO5ae6ZxQmDRx489voYZTQ1wCbWIsVw+rFF+/IYkHNABQC4CmNCKy3CnHT4Lk0lJkefke1QixuQAObdaOv1fckALumOvT46J5Ugi1ZJGD//a0FN8l3PPPRPrw+ca/3FNK71xbGFn/QhTZ3Afv4W1VjWrGo7/AwUdq41gea+Bugo=
+	t=1755705221; cv=none; b=b64e/0HgVJUjl1c+n3RIcyT02P/hEI5P7mIdwEvZbgLQ8enU1s4b3bFydJqt0uKe6eJFG7ZQdtuYGTXYvcN4HCPoBsUMhf4+kuC4651DhJX/eOny0Y3WrwnEpQjU244+AkQ8TpzoOUl4mobaA3+I3/cWBGIPbIY06P7xU+N25Q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755704644; c=relaxed/simple;
-	bh=ksVrbv0ANSstCuaUNpZ6lY5WdHlGllFDmru27C7xkrE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XZgLZpj4KzTAGSivA7sPc0SR83fatl5lAzNTAQ4W3uN3sgFTLW2m8nJAIIDLff6V1EYs6Dxsbe+GIHgIHYRXj+2omsrWsFcqImb7UhBqRiXnQpiLhBjlhnV7EdSQwGJCthDOqnkg2AV0o/1wIujFlVt/WQZcbLDcsWUk9Hfhmcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ym6cbr/Q; arc=none smtp.client-ip=209.85.216.48
+	s=arc-20240116; t=1755705221; c=relaxed/simple;
+	bh=a/hCJoXL5I+lxBOtX74CyJftUCvYnA5vpF2rrW1Yp9k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qo6m5AjoqFIFsCas330cjSJcktyaCSf/yE13xpFngMn4pseysU/iifkMrqlbXFA7OjEcVsK+sLZCL86gPz6qe0KTeW2KlQaBbbbgZUg7lvk1+Fcyfy2uMRToDIJKy97JNmeMUGroyH48WzxvBgkjlN7ZPJpi9sUc1/1eInvXT6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aCsEdcNp; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-323266b6ff5so40231a91.0;
-        Wed, 20 Aug 2025 08:44:03 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2445818eb6eso50084845ad.2;
+        Wed, 20 Aug 2025 08:53:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755704643; x=1756309443; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755705219; x=1756310019; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bKzYlK8zQ8ggkStKH3hXym6+TYxzBzWA/D1b6WG96R0=;
-        b=Ym6cbr/QhG8+1st3dSafmLiPklqrSyjj9gQJShixiIvGwvyih3y8T5T9e3uc3VUyR6
-         SWsY4/4TKcWASLHRJWLXy3sToRJQS9ZtMGKikrqtogb3Wg+7umEQjaWiJmX13Q4c+LfK
-         Ev9A3s05992KmmBGhRw9lC6GvlwDfn8IZgVPQEBxJFweBgf2hsjl22kvXSCUUXAVpX1l
-         yiDsckLgtYJM0+kGYXlgU8ZM+7AHlHvhjt0aPmo7wpKzwPYBBhuBYCDS1oIXQF8v1MbS
-         wV7X6VzBzizZ6aX8gfKu262CutjWA9dIAdDPbvJ8A7+c4NZU/V0tHfkkjQGKULEmiLgl
-         Mfew==
+        bh=85YxivsvpcP5IRNp6DBdLOeXv3NB9wRFZGxkMTe9r9E=;
+        b=aCsEdcNp2GlusO0gXzdyZRQLRBpX9ZcgbkUlMM5XZKkkJC6oeZ44A1RzDNi2aIyhqn
+         2mLbkVhGJ0MmMFQdrpjCOGRbd3485Gk4G6qtYVeE/M+Mv1HG+MoYPEysQMowMkWuMk14
+         Y9so7Sn8vKLvhyMc7pqFsnSd/xXJHA67K2xfOauU/o6xpvtU9peo5v28+osF6fPGYjex
+         dvnMy9FUwRU2fXd92lejX3s54WkT91l/To5SajFVWkE1fQNets1lXgLi+D97bhim5/W2
+         xqeh19pZfTE8l2RlQZi9ze8gUCRIMcX2XxwSHER5+GtuC3wcHnm5XSmbf4UBVVyJiubl
+         ri2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755704643; x=1756309443;
+        d=1e100.net; s=20230601; t=1755705219; x=1756310019;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bKzYlK8zQ8ggkStKH3hXym6+TYxzBzWA/D1b6WG96R0=;
-        b=f2/D+JsupqN6Fen1sDBN+TPy1WmV6+8TkWsanKgZohuxy9JRjg1oRrz9sySTnlOIlz
-         qH92D0pH2idepp+2DJXW8wekT4R6Qvn/F7vxwUkhoEASdgzfA2qT8HJJeFrZjszD4Vpq
-         Td5b0xiW2tPiG7P9oM8Ry/tOt2TLztR9Wg6ye8/RnMikALHzKbS7j+4Jt+6jXueX7yFV
-         SE8MaeaZZp0oST6u7DElSOkcCF2LZ65mPXSEYr8rnhgYaeTB/GSO80eqxiPCb3H8o11F
-         cizRgBWBPBKAMv8wXZFG+TRhwV2R66aeYo3RFvKgzsu1wnnZ3AnnUoIlYhAup7cl4fJW
-         JEFA==
-X-Forwarded-Encrypted: i=1; AJvYcCVEV/58mua98YXbwCKKssxtOU2dwcvoGmKvKC/KTUFK1odmRB23Hlmcp+XrxukdAINuahRuKTodHyIQCWkatmQf@vger.kernel.org, AJvYcCX9idJVeDAhmbN9890HJz0419oSsnK07j74tXQtKEX2GVi1/PlMNWcSkbBS0Ta5J1H60uGvrkPB1zst+MU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZcmlSQSvc5Wswqpk2ehCumx5M61ARfHRMgNE7zDUs1ioO6dYj
-	tDzzGdNUvtutnKpXCir/i+SSj042aEvRTEtNorpleW3ghRLHnEwfooPf
-X-Gm-Gg: ASbGnctAP4nmEnBAniSbkRJYtOTFzpRXXduvI5FuwOROa9R2eHlNH/J0GwWr+2gOuk5
-	GtiJ28dxE4AmySnBPkgbZjAWWfz9lOsu7VxAZ5QGPChRKYm+oCwG2RDh0vqkdglSWecqdJSjgSf
-	KeADPT2Bf4p6OQEBG7PAShnv2oFzoowbMG+iA3yAF5gwL76eMPNEnu/f24bBJHJlyyOojj8IIqP
-	T7UHVqwe6uOKXymrfftNEnx0Zv4YhEOyl05voxsMsa8eCpGruHwhPnXEsv5pgl6wLjnXmEMj6Wt
-	nSm6/6eMiOHxPfHR4x5VXu+mHPpGcKW4EzX7fSAu6aw3PcMd58pTIRJCs0dbMVCBKgeUA3oqmuP
-	Gzo0OT0DrB9YYokG+nUUlUxUz05jHUQXRg2VQMDWqjjzKOyGT4w==
-X-Google-Smtp-Source: AGHT+IEoK3LgcqM2J5L6HXT4MC6WDaOmGnQgjZAHypS37Lz0UAIZ1bbDVcpUZ0pnm0v2X4bZSb9tAw==
-X-Received: by 2002:a17:90b:4c11:b0:30a:3e8e:ea30 with SMTP id 98e67ed59e1d1-324eb9de67dmr39919a91.11.1755704642819;
-        Wed, 20 Aug 2025 08:44:02 -0700 (PDT)
+        bh=85YxivsvpcP5IRNp6DBdLOeXv3NB9wRFZGxkMTe9r9E=;
+        b=SxSpJkaialiPWd4MgfBchg9AfMnb8qCLHMkGOAUBbKSJAEqbZ3xK/iK8wLgVHQrsmu
+         sKzARvDj+jpNl0udCogZZI0spTZgt27YVgvhqHhBP8xtTB6N0V4OIDBavXAWLf1QIhKq
+         TRE7r/VaJL2RCBLrBsAlrYGLtaLAZmMDbO7jkW1oV5JZ2I91oQfrMUQ+ZzW9GHKww5YP
+         y5GsVz9xqTRujWUCiOkNPivHVmX9BJ3Zy0cJjpkMQgQucaH4B3VTHnPDRgPKZWyMxjgU
+         R6VNPW2E35xx6KSOSjHcz1Owz8gGQ15xh8xU6F3Yvjyy5ER9CVnQcEGNCgupSDQHFv4Q
+         6yuw==
+X-Forwarded-Encrypted: i=1; AJvYcCUnDAGczibx7jY6Vnv5lzETlimSacqKnJnKEFp734geNgxTRGrhLwS2GytpVtfekRTAlZiJozzB51gvkCY=@vger.kernel.org, AJvYcCVWg0zKIQ6mvSLHVWtGSYypGlzEkAeWYSEL3xltqTd8k2oUWsWOW95abW5zpJ0jL0ApqkDSsa6MMj8YioRwtpwm@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/4UgJMwKB9+mJtpVQOvT4OWt6l2xFCXZQXK4yTzQXkkq8ybVy
+	pEezq0UFUh5CBqE+Cis+Afk9Xjy4sWg4sLMB0YGtozazEY88qEfi7cNHO+08Z61QvGM=
+X-Gm-Gg: ASbGncshRmrTeHKk9d8ZLDfaa0kGgNqdeo3ibzTiX76yN5MdRWSXx8EfR+3srTepI7X
+	zbLQ3xDQSl/Xxj3xP02xB0N+U9ryiaBDLYLGX7oS6aqVdulKJCEcGfasIV2DuVRVHnlSXtsq2tr
+	4xkgH3ArzVv7mvHzaEfDBvkoIR4nySJKypMFqzeij+7OSa7057J4GOO/sc1ZoW+i6uac2pA1MhF
+	SeAyTYC3eLRYmnxbDZ9dq9wgkNAmgp8EOFZf3ODIQAYBPcZdTfL45cys/P3bhq+OPwyxvtyrQc0
+	Phkc7EQgw/DfprQwLFRlVP9VYie5UYtYrvXiUC2vK1L+Sr9NecenfG6oI7djneXPqSC55GBF9Fm
+	7dYF2Ir3gMdt3AUkVg6WBptCSMUUl9H8sAdp8vOZseQ6+0y5FjA==
+X-Google-Smtp-Source: AGHT+IGQlZwARaldPqzdhtQ7tbsSk3uP7Nk0kfrYh02Q6xCWNl2/Qy6d1TtZcYrK2wV5sowJ+h3p1w==
+X-Received: by 2002:a17:903:11c3:b0:23f:d903:d867 with SMTP id d9443c01a7336-245ef2272a8mr36335675ad.35.1755705219237;
+        Wed, 20 Aug 2025 08:53:39 -0700 (PDT)
 Received: from localhost.localdomain ([202.164.136.133])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-324e254ca61sm2719944a91.15.2025.08.20.08.43.58
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed51c7c8sm30188675ad.140.2025.08.20.08.53.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Aug 2025 08:44:02 -0700 (PDT)
-Received: (nullmailer pid 70722 invoked by uid 1000);
-	Wed, 20 Aug 2025 15:42:37 -0000
+        Wed, 20 Aug 2025 08:53:38 -0700 (PDT)
+Received: (nullmailer pid 71549 invoked by uid 1000);
+	Wed, 20 Aug 2025 15:52:14 -0000
 From: Kathara Sasikumar <katharasasikumar007@gmail.com>
 To: skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org
 Cc: linux-kernel-mentees@lists.linux.dev, linux-kernel@vger.kernel.org, katharasasikumar007@gmail.com
-Subject: [PATCH] selftests/netfilter: fix typo in comment
-Date: Wed, 20 Aug 2025 15:41:10 +0000
-Message-ID: <20250820154109.70598-2-katharasasikumar007@gmail.com>
+Subject: [PATCH] selftests/bpf: fix typo in comment
+Date: Wed, 20 Aug 2025 15:47:59 +0000
+Message-ID: <20250820154758.71280-2-katharasasikumar007@gmail.com>
 X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -88,27 +88,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Correct spelling of address in conntrack_icmp_related.sh comment. This
-patch fixes a minor typo in the selftest script for netfilter.
+Correct spelling of 'occurrence' in uretprobe_stack.c comment. This
+patch fixes a minor typo in the BPF selftest.
 
 Signed-off-by: Kathara Sasikumar <katharasasikumar007@gmail.com>
 ---
- tools/testing/selftests/net/netfilter/conntrack_icmp_related.sh | 2 +-
+ tools/testing/selftests/bpf/progs/uretprobe_stack.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/netfilter/conntrack_icmp_related.sh b/tools/testing/selftests/net/netfilter/conntrack_icmp_related.sh
-index c63d840ead61..f63b7f12b36a 100755
---- a/tools/testing/selftests/net/netfilter/conntrack_icmp_related.sh
-+++ b/tools/testing/selftests/net/netfilter/conntrack_icmp_related.sh
-@@ -171,7 +171,7 @@ table inet filter {
- }
- EOF
+diff --git a/tools/testing/selftests/bpf/progs/uretprobe_stack.c b/tools/testing/selftests/bpf/progs/uretprobe_stack.c
+index 9fdcf396b8f4..cbc428a80744 100644
+--- a/tools/testing/selftests/bpf/progs/uretprobe_stack.c
++++ b/tools/testing/selftests/bpf/progs/uretprobe_stack.c
+@@ -27,7 +27,7 @@ SEC("uprobe//proc/self/exe:target_1")
+ int BPF_UPROBE(uprobe_1)
+ {
+ 	/* target_1 is recursive wit depth of 2, so we capture two separate
+-	 * stack traces, depending on which occurence it is
++	 * stack traces, depending on which occurrence it is
+ 	 */
+ 	static bool recur = false;
  
--# make sure NAT core rewrites adress of icmp error if nat is used according to
-+# make sure NAT core rewrites address of icmp error if nat is used according to
- # conntrack nat information (icmp error will be directed at nsrouter1 address,
- # but it needs to be routed to nsclient1 address).
- ip netns exec "$nsrouter1" nft -f - <<EOF
 -- 
 2.47.2
 
