@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-39408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1538B2E81B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:24:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E0B5B2E82A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:29:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD0ED5851D2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:24:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1273A219BB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:28:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D415E25CC5E;
-	Wed, 20 Aug 2025 22:24:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2910927F16C;
+	Wed, 20 Aug 2025 22:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0LHqwsB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lc4O/ib2"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2284155A30;
-	Wed, 20 Aug 2025 22:24:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98E2155A30;
+	Wed, 20 Aug 2025 22:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755728667; cv=none; b=gZl0A0mjWsA1pwtozyH7cg8557X/WyerRJxqu1SBoUohgj2MPvTyAI9fFJOfXEnGuHZ1+5nTSuhUSbtKPji0FZhND5a9b/433GPZfDORLByZ2axPth0Wl6fPO7xrcieadJMK2yh4hLcBi/A0QaSHgKxQtlO4QsM0MUfODDR8Kro=
+	t=1755728914; cv=none; b=GH/yy7J4cwwO4lw9L4c9tKUkLRF56atwOgh7GmXD4a7ONjvBKwVHMNF3kQLt5d2mifZwhA9Hvf5Pn6AHd8Cd8+g5++M7blnzQVYLjEpMxezgjXr3cCjzs9/TH6RwdBaDNmNHi3hIfrhIWGmnQtlOAdHdoLKYRRSJIAT/ryC/glw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755728667; c=relaxed/simple;
-	bh=ysNe3rGWwElNFQFScxZngEi0VfXeoQjX5AlbYef/6wk=;
+	s=arc-20240116; t=1755728914; c=relaxed/simple;
+	bh=PjVVrFOvOrmZlky6gvsbAAlEHD3EctTHJhm2W439Kxk=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T8u0hebVoBHlWTlCDDDCuQwYIVbuSPZDJ+X9BhIimhfkSlIIyzDYOSzipoyPFBn329O7oCIHPSxqfqz19ERcld22M08GPpsX+eVTUi8Qn3qTM7Fwbp/NWTNDbEC2ucZq3wIJ+1siPqq6MIRhTf7wDE0TNymcwNZoVy9NGNm7A2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E0LHqwsB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 346C4C4CEE7;
-	Wed, 20 Aug 2025 22:24:27 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Tx1gqKfDO+w7oqIwXUrkZbrD7kby902Jzo2iHR2/Py6LNDiXILg4S7PBtKBHpo0c05k+mWXh5L4iktfCQ/23LSl2ByZYJTKkkmGlrPkh2u7d97OU5yIxAPwB3smmdjN/pavgbnyqfpVInplQu2e0SpCglKr0ThajstuR9Y++/C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lc4O/ib2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E07C4CEE7;
+	Wed, 20 Aug 2025 22:28:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755728667;
-	bh=ysNe3rGWwElNFQFScxZngEi0VfXeoQjX5AlbYef/6wk=;
+	s=k20201202; t=1755728913;
+	bh=PjVVrFOvOrmZlky6gvsbAAlEHD3EctTHJhm2W439Kxk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=E0LHqwsB/FLhEq23DaO6O76nUZpFqFY5BwK9BXZi06/G/EzcYm081Mx6tA99iCfDS
-	 eOCG+JnnXDq13atuzO5CYJqlEDjZcJPBgcDgXNuSpxl4GFINUKHRU59cXTCoWSa2g1
-	 zTGQbt/gpVGni5/XJ6N2eHClmVLY94gnyl1QoV7/Drc/es+LQ2BEj6q5aNOj0D/EGj
-	 ugqr+4JHh6jdnCxol72zTj/IpkmB9/B/BHiMu0wXj0YzE4f3x5FilwetESXcJ+esEJ
-	 LVDGcT9VcITtewtQAX0hhlsonOF/6/UiX+afEspBp/YTqZygiPQ/CTIQbI78cLfpnO
-	 H2KYQEt+MC+IA==
+	b=lc4O/ib2w/vfzDHVAfmaSHpPIDx36lt3h8vuYfnXugwtpkpDulA4cPd2Z3p3GnRV+
+	 GO5PeEQ6Z+4ruPMKy0+Uno5hqiYIr7DEV+D7V8EehvfO9SrQTrFNAVTyT6fsIF2hao
+	 AcTZIxoLdYUmv5Dg2uLmvaiJq6SIImz2UodZI8dlHIkEvFUN6wrZPqtZn5yjhysIsL
+	 bzAqBMYPedl51B0btQ0wUnUsCFhlMukZ81WH0RX3xeUMMwLh4CFGQwO7sVTb++jK14
+	 HV4Vf1aU2Fb3iARaQytpx71bK2XYg0TTWYo+FkVSS+yU8Q11DktM+HQS/qpkZcyrxE
+	 DT1/iNTw79MOA==
 Received: from host86-149-246-145.range86-149.btcentralplus.com ([86.149.246.145] helo=lobster-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1uorEH-009W7G-8x;
-	Wed, 20 Aug 2025 23:24:25 +0100
-Date: Wed, 20 Aug 2025 23:24:24 +0100
-Message-ID: <87ikihk4x3.wl-maz@kernel.org>
+	id 1uorIF-009WB8-54;
+	Wed, 20 Aug 2025 23:28:31 +0100
+Date: Wed, 20 Aug 2025 23:28:30 +0100
+Message-ID: <87h5y1k4q9.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Mark Brown <broonie@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -63,9 +63,10 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v15 1/6] arm64/gcs: Ensure FGTs for EL1 GCS instructions are disabled
-In-Reply-To: <20250820-arm64-gcs-v15-1-5e334da18b84@kernel.org>
+In-Reply-To: <87ikihk4x3.wl-maz@kernel.org>
 References: <20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org>
 	<20250820-arm64-gcs-v15-1-5e334da18b84@kernel.org>
+	<87ikihk4x3.wl-maz@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -81,45 +82,21 @@ X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org,
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, 20 Aug 2025 15:14:41 +0100,
-Mark Brown <broonie@kernel.org> wrote:
+On Wed, 20 Aug 2025 23:24:24 +0100,
+Marc Zyngier <maz@kernel.org> wrote:
 > 
-> The initial EL2 setup for GCS did not include disabling of EL1 usage of
-> GCS instructions, also disable these traps.  This is the first disabling
-> of instruction traps, use x2 to store the value to be written.
-
-Written where?
-
+> On Wed, 20 Aug 2025 15:14:41 +0100,
+> Mark Brown <broonie@kernel.org> wrote:
+> > 
+> > The initial EL2 setup for GCS did not include disabling of EL1 usage of
+> > GCS instructions, also disable these traps.  This is the first disabling
+> > of instruction traps, use x2 to store the value to be written.
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/include/asm/el2_setup.h | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
-> index 46033027510c..0ac14ea4dbc8 100644
-> --- a/arch/arm64/include/asm/el2_setup.h
-> +++ b/arch/arm64/include/asm/el2_setup.h
-> @@ -355,6 +355,10 @@
->  
->  .Lskip_gce_fgt_\@:
->  
-> +	orr	x2, x2, #HFGITR_EL2_nGCSEPP_MASK
+> Written where?
 
-What is x2 set to before this?
+Gah, I was looking at 6.16, not 6.17-rc1.
 
-> +	orr	x2, x2, #HFGITR_EL2_nGCSSTR_EL1_MASK
-> +	orr	x2, x2, #HFGITR_EL2_nGCSPUSHM_EL1_MASK
-> +
->  .Lset_fgt_\@:
->  	msr_s	SYS_HFGRTR_EL2, x0
->  	msr_s	SYS_HFGWTR_EL2, x0
-
-Followed by:
-
-	msr_s	SYS_HFGITR_EL2, xzr
-
-Puzzled.
+Apologies for the noise.
 
 	M.
 
