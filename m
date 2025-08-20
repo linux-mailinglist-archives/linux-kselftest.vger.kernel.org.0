@@ -1,116 +1,142 @@
-Return-Path: <linux-kselftest+bounces-39404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DA22B2E7F2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:14:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5737AB2E7F4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:15:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 319781C8858F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:14:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1812F68640C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:15:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287DA26F47D;
-	Wed, 20 Aug 2025 22:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CCD7215F4A;
+	Wed, 20 Aug 2025 22:15:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NSwEfGU/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y2KyhvhA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27B86FBF;
-	Wed, 20 Aug 2025 22:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D266618991E;
+	Wed, 20 Aug 2025 22:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755728038; cv=none; b=UIJQPIPJsY0FqYMvzpAw7rS9f4xyA2Ktmvd/1NaVk7VMVososmlWVB1SSmFb3sbbTHhhnQNbjP5Ec0zVIH755rWNGD6DXrIk2jKLMjjTHFJMss4ZqKAxWoeH9gDsgqPDuk7SX2BKaQ2UP9wRJo64wlJsVJKxUYSkLvYhq7xX7+M=
+	t=1755728130; cv=none; b=LezQdxf41Y/pwVre/Jxn+G3nGqxFhWj+wqrh9JDMnV/eIvLxeHvD1H3UP2aHLQMsdYAc+ZCL/+fl6XPd5OQj6poqcBviSc26ClenvdYey/idUxZWf1kAwTy8J3RWtQ/pWJ1Pby1c7omX7P0eYc5Pdc6MNwy9rZoLTq+RpK4TkRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755728038; c=relaxed/simple;
-	bh=723mCQUWr4vd81W677iTRLHJxWJWtzlIUtHlOa32V2c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F7ovZxgKynayNwOM6ZxKxU3ZJEsJlc3FQ14WNGvJHlAnGqH0Fd758h1LFNx3FBkFGYkheVLWOy53X8lfF8DFe1Ih0uHU00cHTaAwdaVqLhKcL5ggjyyBtdlSfQ/5ZjL0L1I8AZjSswK8WLL/V3Zln7TJcieN6uBqQ0Ijy32NqNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NSwEfGU/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093ECC4CEE7;
-	Wed, 20 Aug 2025 22:13:54 +0000 (UTC)
+	s=arc-20240116; t=1755728130; c=relaxed/simple;
+	bh=pV6kDL6PIDFC0mwCK5gV9e0W2aPceEaVuWKaFn/7g6M=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UrRs8bnMCjcXcj9prCdxABpVTd0oIX10qx+kQhSdchSqSr0A5cv5zRp6iYf50Z6BOH4+z/dhftg3d4xR4gTuNCHnoC2h5FLq5K3lPLQGirYU41nOG6ifTVEd3EWtVwH+f38f/6O9YrcG09nd5vKGRjz4kzN8lRMRBCeOLcI94q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y2KyhvhA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3690CC4CEE7;
+	Wed, 20 Aug 2025 22:15:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755728037;
-	bh=723mCQUWr4vd81W677iTRLHJxWJWtzlIUtHlOa32V2c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NSwEfGU/YJrPF3PALBhfdolw0CHUjRu08AInSQfl2oOFBo69/fuTXpzGZwvjoaJdB
-	 rQYI4nMpqDfU9sxX15xmXjazClgIP2wxPYwwNa6I0VCbVYMGpWY/PEqRV0l5UXVrs9
-	 U+Nci3ttrnIrMHvMkF/mWu3GjYDDzWJ94MN16eC6x3t+P6XGjoBLVQMsA9yU3e5Sm7
-	 kPZHWAGTE1vGTiscwRLtNeTW/7xBYsZValPSquuhueO9073mlb5tWJW20d9g/AmkO5
-	 bWu3H1/p9uEmQiEOvmob4rT6gGAGpSJ6Is7CdXGrvAwEHi/pp/xZCSHYBKLXZP8piE
-	 NO7XFUVIJnmTg==
-Date: Wed, 20 Aug 2025 23:13:52 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
+	s=k20201202; t=1755728130;
+	bh=pV6kDL6PIDFC0mwCK5gV9e0W2aPceEaVuWKaFn/7g6M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Y2KyhvhAVR3/gKC7W/S1QdsFqJ5l4WaOyzdLBEUDZr+vdUm4Lr790sESxZA6BBclN
+	 fugWGpTAV8t9htbX9EdrBo+hZfDjLGkZGcWeN6z7ISrP14fcfyMoCfRxsEH96nQ8qv
+	 XcWsitR1H7qLNcM6BAxEaY1886/48KQlU25v+SAdx/y1r9ApGvpzOeW77R2+T/Bic7
+	 A4DFUFvsPSf94l+fA5Hr8khXeNpPIqZRJsKxYorDa0kY92r6vTZZc8ObaZ6i6rJLPj
+	 +e+M75CMCrtpkSJKP1Bc4X9yGqBQrBu3uLYmWqzwNaB6iIGa506aI+IRk3gQLhlWmr
+	 JQRBM5AoNvohw==
+Received: from host86-149-246-145.range86-149.btcentralplus.com ([86.149.246.145] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1uor5b-009VxZ-Sz;
+	Wed, 20 Aug 2025 23:15:28 +0100
+Date: Wed, 20 Aug 2025 23:15:25 +0100
+Message-ID: <87ldndk5c2.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
 	Oliver Upton <oliver.upton@linux.dev>,
 	Joey Gouly <joey.gouly@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15 2/6] KVM: arm64: Manage GCS access and registers for
- guests
-Message-ID: <6ea4127b-813d-49b0-9922-b5f298ca5f0e@sirena.org.uk>
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v15 3/6] KVM: arm64: Forward GCS exceptions to nested guests
+In-Reply-To: <20250820-arm64-gcs-v15-3-5e334da18b84@kernel.org>
 References: <20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org>
- <20250820-arm64-gcs-v15-2-5e334da18b84@kernel.org>
- <87o6s9k8ie.wl-maz@kernel.org>
+	<20250820-arm64-gcs-v15-3-5e334da18b84@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="JKL6PMQq5ZwIKYYm"
-Content-Disposition: inline
-In-Reply-To: <87o6s9k8ie.wl-maz@kernel.org>
-X-Cookie: Whoever dies with the most toys wins.
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 86.149.246.145
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
+On Wed, 20 Aug 2025 15:14:43 +0100,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> GCS can generate exceptions with an EC of 0x2D (GCS Data Check
+> Exception) when data validation checks fail.  When running a nested
+> guest which has access to GCS such exceptions can be directed from EL0
+> to EL2 and therefore need to be forwarded to the guest hypervisor, add
+> handling for this.
 
---JKL6PMQq5ZwIKYYm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Why is it so? A GCS exception from EL0 should be routed to EL1, no
+matter what (either this is an L1 guest with EL1 pretending to be EL2,
+or this is an L2 guest that has its own EL1).
 
-On Wed, Aug 20, 2025 at 10:06:49PM +0100, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+Can you describe the case where we need to reinject the exception?
 
-> > In order to allow userspace to control availability of the feature to
-> > guests we enable writability for only ID_AA64PFR1_EL1.GCS, this is a
-> > deliberately conservative choice to avoid errors due to oversights.
-> > Further fields should be made writable in future.
+>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/kvm/handle_exit.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
+> index a598072f36d2..2f5aef84b294 100644
+> --- a/arch/arm64/kvm/handle_exit.c
+> +++ b/arch/arm64/kvm/handle_exit.c
+> @@ -301,10 +301,18 @@ static int handle_svc(struct kvm_vcpu *vcpu)
+>  
+>  static int kvm_handle_gcs(struct kvm_vcpu *vcpu)
+>  {
+> -	/* We don't expect GCS, so treat it with contempt */
+> -	if (kvm_has_feat(vcpu->kvm, ID_AA64PFR1_EL1, GCS, IMP))
+> -		WARN_ON_ONCE(1);
+> +	if (!kvm_has_gcs(vcpu->kvm)) {
+> +		kvm_inject_undefined(vcpu);
+> +		return 1;
+> +	}
+>  
+> +	if (vcpu_has_nv(vcpu) && !is_hyp_ctxt(vcpu)) {
 
-> I'm not sure what you mean by that. Making the feature field writable
-> is only allowable if we have some level of support (and otherwise we
-> should prevent both the feature being exposed, and the field being
-> writable).
+We now have is_nested_ctxt(), which is more obvious.
 
-> So future fields being writable will only happen when the features are
-> fully supported, and only then.
+> +		kvm_inject_nested_sync(vcpu, kvm_vcpu_get_esr(vcpu));
+> +		return 1;
+> +	}
+> +
+> +	/* We shouldn't have generated a trap in this case */
+> +	WARN_ON_ONCE(1);
+>  	kvm_inject_undefined(vcpu);
+>  	return 1;
+>  }
+> 
 
-> Please clarify, or drop this altogether.
+Thanks,
 
-That's bitrot from earlier versions where we needed to enable
-ID_AA64PFR1_EL1, the other versions were similar.  I'll remove these
-stale references.
+	M.
 
---JKL6PMQq5ZwIKYYm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmimSJ8ACgkQJNaLcl1U
-h9ArWQf/eQm5fVrMcWS54gUdtfiVe/qKLMrda9FKLpovpB8GsKqKDBef8b7Mo0GZ
-wv/jvtET+UErD1lSyfeYcMoKrjKryCkuA9/vbNs+pB3j/wo9/DS11IgYXyj+fy/h
-EpFn4aJieXOnKMBAngpXM3ZcSpio/ZPVASw28Ux17L8gfmYcLmAgNC1XaxD6bj7x
-+IsTvk7ekqeUGzFYeZVZetm76oozpkKRKV3N8X4d5YfPukP83y8HrDKJZp0yIklF
-+tLpcqGjMgmEb8XMWdGNY5PwHzPeQou/Dx4Tn0+lilEJV8vOZDyJKSHeQDvjeZnV
-EVWu21kCgBmxXm8RxEmGCalLJpYV3A==
-=2ze9
------END PGP SIGNATURE-----
-
---JKL6PMQq5ZwIKYYm--
+-- 
+Jazz isn't dead. It just smells funny.
 
