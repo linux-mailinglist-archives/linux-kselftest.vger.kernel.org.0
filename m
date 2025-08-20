@@ -1,137 +1,111 @@
-Return-Path: <linux-kselftest+bounces-39367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0392B2D9E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 12:17:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FF1EB2DA97
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 13:13:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C74C188DD7C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 10:15:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 624775C5389
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 11:12:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5752D5C78;
-	Wed, 20 Aug 2025 10:15:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D5F2E2DF5;
+	Wed, 20 Aug 2025 11:12:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xk/l9Yjb";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uqPIa7gz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JjoMgF9t"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A112459D4;
-	Wed, 20 Aug 2025 10:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A939EEDE;
+	Wed, 20 Aug 2025 11:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755684910; cv=none; b=cpSYtc9xzG7M/Z1UsEU/mwIYBi3iJzCi4TbUgZYzQx0BnkGYjrdVfThQ++4cf9PEvODgTP+FRlqMmun4uF2xK2sm4bK1Ss+5L4eiLx3xrUd8JaHnCL6ZUNh5qqtJr65KAmER2Ue2xf98gBMweZdSuIUKu2wAPluAXJQ7UGJw+gk=
+	t=1755688323; cv=none; b=uyrMPCZ/QG+yW0lzfUeSLp8jLlUpkTssQLjVoraa8AJHF12wBGt1b1DOBniKXjZ9qTRl9qJf7+7e1+aqbUWaH9EFvtOLlGxZdQ8uHgqT5/w4snRd/kj6EYxcNz665dIc6II99jfZzpxIn6zUIK1OkvhSQWfiKBnZxPJPtqJQ9YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755684910; c=relaxed/simple;
-	bh=uahLgJ+9Vb1frTk4rhXXm3v4WzbXDg3Zmu/qGvO8wY0=;
+	s=arc-20240116; t=1755688323; c=relaxed/simple;
+	bh=uelpzfAus7T4cNwWxHRNcaR1zhmvwzv3JA5pkiDgjpE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ew+5emFedoCTUE8w+zoHDF+vHW6xUN/RQCZxWxGIpXnwtWzgdT/9BDgQSWdzxJiwO3JEgpn7LEDkHtjoSqHz1/up6+GjjCjAotgJh1PrxSsfOeOcJOU4XJ812tK+WXyq4SAjmDV8t2/IosqiDN7f5xidLbs8DTCa5KaJ+qVqfMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xk/l9Yjb; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uqPIa7gz; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Wed, 20 Aug 2025 12:15:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1755684907;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Iq9Rp/OuC3PCbtXKJ+rrICU+++sBXQCJ0QqJmyLjg+I=;
-	b=xk/l9YjbZxA1WTuNZDPDzZ8Wdc5Ml1Z8iLcrdiinHR/jwkPKoZe+/Yal4T3iQYwXywj3aL
-	TuAdMOj+eQI0qmH4cwrwb6A3GMEaaVQoSspG8drK9wAs5SV2ideGv0qB3XhysuV56KbSJ4
-	Ji1ZYj+TAl0GzjJEk9GVKmLEw7BefXb3EhPgFPnViqNPKbjRmStIhai3NtAluEf5PrZHVV
-	T4448Dt1lvhIAkl03wcMAqvjtP2i+hGi5Mem2w/M3c9233P9HviyrsxwKIaTEioVDHmkb5
-	w4lNJSNOF2EW+K8iCdf0/FKJRU8M0mcWk1yvh6VZByLxUK8W+1DJdnpNq/W+nA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1755684907;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Iq9Rp/OuC3PCbtXKJ+rrICU+++sBXQCJ0QqJmyLjg+I=;
-	b=uqPIa7gzVKO93eAxiDkhCF2+ypJHv38VRv3c6TBXEdvdEQOGkI4lmIgUVLp7mtuPYYNrwu
-	m3d54o5VitT9DoBQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: John Stultz <jstultz@google.com>
-Cc: Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Shuah Khan <shuah@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, 
-	Richard Cochran <richardcochran@gmail.com>, Christopher Hall <christopher.s.hall@intel.com>, 
-	Miroslav Lichvar <mlichvar@redhat.com>, Werner Abt <werner.abt@meinberg-usa.com>, 
-	David Woodhouse <dwmw2@infradead.org>, Kurt Kanzenbach <kurt@linutronix.de>, 
-	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
-Subject: Re: [PATCH 12/14] vdso/gettimeofday: Add support for auxiliary clocks
-Message-ID: <20250820113704-8b174953-f02a-4376-9359-e4007914ac2a@linutronix.de>
-References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
- <20250701-vdso-auxclock-v1-12-df7d9f87b9b8@linutronix.de>
- <CANDhNCqvKOc9JgphQwr0eDyJiyG4oLFS9R8rSFvU0fpurrJFDg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=c2PA7NmsmzUCYElIgdqQfPd0hHO8KpPNLfFTi7fESMktKq5Yw5KisKZjM1i4Er6qaI1eN3sC8Q95tzLB8ACs+b30E9Fq9s+EbR5AwBJVlCrGM4V0YNNDFH09JhdefdSMfm6d42mgEj5Vh+K/eb9yz3iisrZgMun5SkaWekJKTqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JjoMgF9t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D809C4CEEB;
+	Wed, 20 Aug 2025 11:12:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755688323;
+	bh=uelpzfAus7T4cNwWxHRNcaR1zhmvwzv3JA5pkiDgjpE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JjoMgF9tPfHSUiTAV/IcbrA/yawyIpFAe+2SsSiISdtotHcnCFH4c4CiNFym6lneT
+	 oTdTjGTxdHr8cMKNUDizoVdMuf2DkO0qvvT9mzyyBgVVUPaLxK5x2kMhkS21IkOOXm
+	 10Qhbh567qWy/86BaItBpag9ZB+JFlAUMVu7O8e+STAuK4zRmZXuc6KbqzVSblP19l
+	 p086ezKSfXxmPpoPI5nYAyIXeFbVUgYRcG9wv/ggj7Pjat2M3A6BVnqappVfmAGp2V
+	 Wc6lqe9YozLQXnIjFMRt+0ynUMJhaC0DPXBMZZXjppGGGhFkV0tbx83MKJAawBNuke
+	 vIIsu+WI8FW4Q==
+Date: Wed, 20 Aug 2025 12:11:58 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH] selftests: harness: Rework is_signed_type() to avoid
+ collision with overflow.h
+Message-ID: <18f2ea68-0f7c-465e-917e-e079335995c1@sirena.org.uk>
+References: <20250624231930.583689-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2aT/0UNAiNyFJt+8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANDhNCqvKOc9JgphQwr0eDyJiyG4oLFS9R8rSFvU0fpurrJFDg@mail.gmail.com>
-
-Hi John,
-
-On Wed, Aug 20, 2025 at 01:03:56AM -0700, John Stultz wrote:
-> On Tue, Jul 1, 2025 at 1:58 AM Thomas Weißschuh
-> <thomas.weissschuh@linutronix.de> wrote:
-> >
-> > Expose the auxiliary clocks through the vDSO.
-> >
-> > Architectures not using the generic vDSO time framework,
-> > namely SPARC64, are not supported.
-> >
-> > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> 
-> Just as a heads up, I've just been bisecting and this commit seems to
-> be causing problems on arm64 devices, running 32bit versions of
-> kselftest nanosleep or inconsistency-check tests. Running the 64bit
-> versions of the tests are not showing issues.
-
-Thanks for the report, I can reproduce the issue.
-
-> From my initial digging, it looks like clockids that aren't vdso
-> enabled (CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID,
-> CLOCK_REALTIME_ALARM, CLOCK_BOOTTIME_ALARM) are somehow getting caught
-> in the vdso logic and are *not* falling back to the syscall (stracing
-> the test I don't see syscalls happen before the failure), and the
-> values returned don't look to be correct.
-
-The generic vDSO code assumes that it can use the UAPI headers, also in the
-compat vDSO. This is true for most architectures, as the UAPI headers work
-correctly in 32-bit and 64-bit mode. On arm64 this is different, as the headers
-from arm64/ are never used by regular 32-bit userpspace. So
-arch/arm64/include/uapi/asm/bitsperlong.h defines __BITS_PER_LONG=64 even when
-used by the 32-bit compat vDSO. The commit you identified uses __GENMASK()
-which uses __BITS_PER_LONG. Due to the mismatch between __BITS_PER_LONG and the
-real long datatype we run into an out-of-bounds shift and therefore undefined
-behaviour. And of course -Wshift-count-overflow is explicitly disabled.
-
-There are a few possible fixes, none of which is really great.
-I'll send some patches.
-
-> The inconsistency-check output looks like:
-
-(...)
-
-> Which hints we're returning nanosecond values in the tv_sec field somehow.
-
-That seems to be an artifact of the UB from above, this happens even if
-do_aux() just returns 'false'.
+In-Reply-To: <20250624231930.583689-1-seanjc@google.com>
+X-Cookie: divorce, n:
 
 
-Thomas
+--2aT/0UNAiNyFJt+8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jun 24, 2025 at 04:19:30PM -0700, Sean Christopherson wrote:
+> Rename is_signed_type() to is_signed_var() to avoid colliding with a macro
+> of the same name defined by linux/overflow.h.  Note, overflow.h's version
+> takes a type as the input, whereas the harness's version takes a variable!
+
+This patch is in -next and is causing widespread breakage in the
+selftests -next on at least arm and arm64 due to:
+
+make --silent --keep-going --jobs=15 O=/build/stage/build-work INSTALL_PATH=/build/stage/build-work/kselftest_install ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- kselftest-install
+
+...
+
+In file included from test-pcmtest-driver.c:10:
+../kselftest_harness.h:59:10: fatal error: linux/overflow.h: No such file or directory
+   59 | #include <linux/overflow.h>
+      |          ^~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+Sample build log:
+
+   https://builds.sirena.org.uk/5303936d609e09665deda94eaedf26a0e5c3a087/arm64/defconfig/build.log
+
+--2aT/0UNAiNyFJt+8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmilrX0ACgkQJNaLcl1U
+h9BLSwf/cRKn3J4t1uI3cNNpE0JKxWL7PcQdUsrNQToHFdHdVi7hAzmnWghZ/vo3
+px0Yka/MhLQGJaiW0MZpMgxzu0ZuYnvZVpjT0eOnRqJHPG4JdbP/D+1A9YRa0Mjc
+hkEZoJJ6o6BqV3Izlr8j4ny3w+WAGgacBTSw5EZ0jCl/aNNqkyDhNmfUJOrJ05v+
+0B1dLXsr+O+TxN+NsoUUhshVnXaBcA3teQbZjo6BgjGsUKjNg/HBHt32ejOa3Nnx
+ydzG/2cNrt+YIGX3hUB7p4rQ23SisUZ9XhpwrzDr3mU+pyLaS9m6vptW7GSmSksZ
+DcUDq5p3R5FmmwRMMEHRw4vLQUncrA==
+=h8CZ
+-----END PGP SIGNATURE-----
+
+--2aT/0UNAiNyFJt+8--
 
