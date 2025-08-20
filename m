@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-39387-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39388-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAAD8B2E4EE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 20:29:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E58BFB2E4F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 20:29:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 130845E35DD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 18:29:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DD833B7FE1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 18:29:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C896277CB4;
-	Wed, 20 Aug 2025 18:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E6227B32A;
+	Wed, 20 Aug 2025 18:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLcZNj6X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/E5hUdy"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCBC3EA8D;
-	Wed, 20 Aug 2025 18:29:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F5627B328;
+	Wed, 20 Aug 2025 18:29:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755714568; cv=none; b=IU7Copjxs4+wz8d8NEkNVJUUKAnQDG3X/d3IQVXzFH6a04DxWyyfoNWcKwFu3y/1lXr1p1tpy/YKgzGtEN3tE+B5uDVjj640znw0PR/rfpl4ZhHrjrolcYNlPznsD9hzZYVum6ivAUgAzWHQgW3RTDjJAEE6isiqK0Ifj0nQ8YY=
+	t=1755714571; cv=none; b=eeq1Uk67prwBedAgzfkIzy0JcGv7OniRjwN4zhWPFstuigo1FaPiIGE6X1nBey4OU+zTEiRU++w1CDOaR5t25pnlv2zUXi2nkJP9op5CXZ/UW3YmIzr3QeeE3yDKLzilVHmQX4h8gIdrTy50VbXT02qx09j2/kzDuRjKJxyI3xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755714568; c=relaxed/simple;
-	bh=0SzMeuxfOcNRRFI3htotgO4HznADUizoh4BxITQXZOk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jCA+lpBLuZc92b8XL+E2Mu3KB1uXwiSPYlXlufSkI93PROG8Si4w2XP0XGlDsjlm6y2hBPGZUdM7ONO/g87BqBW/PCx4HaQk0X56AoSC818gtn7Wh47IA7w4kv31LgljVI2aYiN/zcjqjC4D3sMKNLH+ncArO39wGOuBFwmsKV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLcZNj6X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4560EC113CF;
-	Wed, 20 Aug 2025 18:29:25 +0000 (UTC)
+	s=arc-20240116; t=1755714571; c=relaxed/simple;
+	bh=xFa+NeJG2jF6wE7Joj16Oc51n2//5XUYYYZ0eG8q3lU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=EnuHZsWCfi12acbn0nOpGtixhmTeOHbJrVKM2jOMUFbS6p+9tryittjXWStcMPxjvFlGcpuPHPxhYY5Tqvj8uChQhZ5ld3tdcOQxAfJCmaFS2yJTr+/oUH87rAxMVYYDPHqZMlCzUruFbUAv6nsfJjMZxxYjm/wdbh8IhI+CHe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/E5hUdy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F287C116B1;
+	Wed, 20 Aug 2025 18:29:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755714567;
-	bh=0SzMeuxfOcNRRFI3htotgO4HznADUizoh4BxITQXZOk=;
-	h=From:Subject:Date:To:Cc:From;
-	b=HLcZNj6Xx1YnNkL7/pmzTjPZLtq7r0D4LDQY6xconSMbLOgivCj75OKolau7e4REA
-	 bnUKL52WlM4nwx13xRELTbxCXC2L6t8m2vZnPuh8al/NsXRc0qJKI3FoecooLrR+Tl
-	 3bn4dWdH7BxPD0EXItX7Q8rOPQIuWbcWQKdc+2q3V4d9xth5+BFV9BIX6Pb1JwWkqO
-	 4bviGi+1eYSf8BQRI5DkWPc4Ay7vScetR8CwefUTokTRcjlSdW9XIb6XVw18nCFqps
-	 D+CIRZFVdBMB0Zgql050NCJlSlq69VLxXfUFmm7wMrl2CIcrURIQ6ZNmXbwhZOKMZ8
-	 gKMbNJ2xTy/oQ==
+	s=k20201202; t=1755714570;
+	bh=xFa+NeJG2jF6wE7Joj16Oc51n2//5XUYYYZ0eG8q3lU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=L/E5hUdy/Zq7DwlSV0lPuwRI4qKR/gShAYBuHGCXtWSw1T+zi3r4KS/3B3e9ZKCuZ
+	 Lu6er1KZgxXNzYBURZeBKIMtXwAAZTnpwv6K8fop1co5id4aR+W/s2WVibsyXdLFmQ
+	 cHhv2l+O3IyvE0NFtWnRNwOH+uY7jRnIURC6wSFe047cetUW+W8YwQeu3CMhTuqSVd
+	 OePOrOfoH4nn9KXTrR5S+AXxd9fKu88FheFdmfxzUdDSt1+LNU0btTkDI4ACpJ03mG
+	 RqeOlQAOHKADvzKpES6vvcX4mTsUM15tvGPX7CNFuWZ+aNBhtuaMte7JznQNFRNwip
+	 +cEcPTGiCUTHQ==
 From: Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/5] arm64/sme: Support disabling streaming mode via ptrace
- on SME only systems
-Date: Wed, 20 Aug 2025 19:29:02 +0100
-Message-Id: <20250820-arm64-sme-ptrace-sme-only-v1-0-f7c22b2871f8@kernel.org>
+Date: Wed, 20 Aug 2025 19:29:03 +0100
+Subject: [PATCH 1/5] kselftest/arm64: Verify that we reject out of bounds
+ VLs in sve-ptrace
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,11 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAO8TpmgC/02NwQ6CMBBEf6XZs2u2VbDhVwyHUhZtIhS3SDSEf
- 7cBD97mTTLzFkgsgRNUagHhOaQQhwz6oMDf3XBjDG1mMGQKuugLOunLM6aecZzEed5iHB4f1F1
- jCyqJ2BHk/Sjchff2fa13Fn6+smLaS2hcYvSxD1Ol5vKY38Ub+FdXahNbsj9xN+Ku7Z2XiGS4Z
- bKn1hUa6nX9AsHKlt/QAAAA
-X-Change-ID: 20250717-arm64-sme-ptrace-sme-only-1fb850600ea0
+Message-Id: <20250820-arm64-sme-ptrace-sme-only-v1-1-f7c22b2871f8@kernel.org>
+References: <20250820-arm64-sme-ptrace-sme-only-v1-0-f7c22b2871f8@kernel.org>
+In-Reply-To: <20250820-arm64-sme-ptrace-sme-only-v1-0-f7c22b2871f8@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
  Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
  Jonathan Corbet <corbet@lwn.net>, Oleg Nesterov <oleg@redhat.com>
@@ -69,72 +67,86 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-cff91
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2972; i=broonie@kernel.org;
- h=from:subject:message-id; bh=0SzMeuxfOcNRRFI3htotgO4HznADUizoh4BxITQXZOk=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBophQAKGsvgPWYjakzBehyIWbniPGNVwMRy7IMp
- jdIOYBYrriJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKYUAAAKCRAk1otyXVSH
- 0FfpB/4gF/goxVk8COhAg47IRT39tjP26tJuUhi0mMHRnEDvhOuV8V+5vaQPbO+Xjfw8uHwDEuw
- AytR+JXZJv9UotF4ySgcaTMJ9lAN3VkoESEmjNHN/PrPIY8Ft2h6FykhQQkTl6sTUmgZLkf5p2a
- lmU78YM6rXOhB6s+g6Hw7CgUHNbH+2hTJYnVw87P+QiH7vR+njPZ13RFp4bd2hmzuszifcUywQ4
- XPBtfXAUqiiQQtj5UtEhAwkFuKFHtg1e3SbHORXOIhavM2ymwS0hMMbpcloDqDAFtJF8pT8H1Nq
- AZ61yit7STjWoeFvVjYeSLdXFpvSSoVtFP880qhy7P5a3sdO
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2329; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=xFa+NeJG2jF6wE7Joj16Oc51n2//5XUYYYZ0eG8q3lU=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBophQBBnrnyJoBRFW07hBrEL9iNoVV/fdd5wyni
+ /xIOYEjiUWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKYUAQAKCRAk1otyXVSH
+ 0PvRB/9HIoad8JkWcAcMr/vzFQGFNApVF/Y7Cxbekiy2xFDCnzN5ih7L//v6ELI/8AqffCg8lkG
+ XGBWKHeOkxxLwgd1ZluEFrH3NmdwvvGJbsuGaryl4oqje3yoaLtOJo6Dq0AI2/f45CY8JNRdwcA
+ 2+WIlTGpFcy4ikG0o/jBeoMd7k5WNsmU7Tl4cB6l1s/gXmdY2pHzg8S5SsJKuY/j86aUQ1UREo+
+ VVqoaZ37uymnkTgcVFcOGxGyYCwXQd1ejXjEfYKQi3V7ADTlJoh9k7pKJOcJ44kgSNGVmaSyPCc
+ NMDy7iHNt0auoOQveAajjJ1ADUmHNfguB10Eyc1SEV7eHG6O
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Currently it is not possible to disable streaming mode via ptrace on SME
-only systems, the interface for doing this is to write via NT_ARM_SVE but
-such writes will be rejected on a system without SVE support. Enable this
-functionality by allowing userspace to write SVE_PT_REGS_FPSIMD format data
-via NT_ARM_SVE with the vector length set to 0 on SME only systems. Such
-writes currently error since we require that a vector length is specified
-which should minimise the risk that existing software is relying on current
-behaviour.
-
-Reads are not supported since I am not aware of any use case for this and
-there is some risk that an existing userspace application may be confused if
-it reads NT_ARM_SVE on a system without SVE. Existing kernels will return
-FPSIMD formatted register state from NT_ARM_SVE if full SVE state is not
-stored, for example if the task has not used SVE. Returning a vector length
-of 0 would create a risk that software could try to do things like allocate
-space for register state with zero sizes, while returning a vector length of
-128 bits would look like SVE is supported. It seems safer to just not make
-the changes to add read support.
-
-It remains possible for userspace to detect a SME only system via the ptrace
-interface only since reads of NT_ARM_SSVE and NT_ARM_ZA will suceed while
-reads of NT_ARM_SVE will fail. Read/write access to the FPSIMD registers in
-non-streaming mode is available via REGSET_FPR.
-
-The aim is is to make a minimally invasive change, no operation that would
-previously have succeeded will be affected, and we use a previously defined
-interface in new circumstances rather than define completely new ABI.
-
-The series starts with some enhancements to sve-ptrace to cover some
-further corners of existing behaviours in order to reduce the risk of
-inadvertent changes, implements the proposed new ABI, then extends both
-sve-ptrace and fp-ptrace to exercise it.
+We do not currently have a test that asserts that we reject attempts to set
+a vector length smaller than SVE_VL_MIN or larger than SVE_VL_MAX, add one
+since that is our current behaviour.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Mark Brown (5):
-      kselftest/arm64: Verify that we reject out of bounds VLs in sve-ptrace
-      kselftest/arm64: Check that unsupported regsets fail in sve-ptrace
-      arm64/sme: Support disabling streaming mode via ptrace on SME only systems
-      kselftst/arm64: Test NT_ARM_SVE FPSIMD format writes on non-SVE systems
-      kselftest/arm64: Cover disabling streaming mode without SVE in fp-ptrace
+ tools/testing/selftests/arm64/fp/sve-ptrace.c | 32 ++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
- Documentation/arch/arm64/sve.rst              |   5 +
- arch/arm64/kernel/ptrace.c                    |  40 ++++++--
- tools/testing/selftests/arm64/fp/fp-ptrace.c  |   5 +-
- tools/testing/selftests/arm64/fp/sve-ptrace.c | 139 +++++++++++++++++++++++++-
- 4 files changed, 177 insertions(+), 12 deletions(-)
----
-base-commit: 768361ab16ce943ef3577cea204dc81aa4a47517
-change-id: 20250717-arm64-sme-ptrace-sme-only-1fb850600ea0
-prerequisite-change-id: 20250808-arm64-fp-trace-macro-02ede083da51
+diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+index b22303778fb0..a9b2377c46b8 100644
+--- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
++++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+@@ -66,7 +66,7 @@ static const struct vec_type vec_types[] = {
+ };
+ 
+ #define VL_TESTS (((TEST_VQ_MAX - SVE_VQ_MIN) + 1) * 4)
+-#define FLAG_TESTS 2
++#define FLAG_TESTS 4
+ #define FPSIMD_TESTS 2
+ 
+ #define EXPECTED_TESTS ((VL_TESTS + FLAG_TESTS + FPSIMD_TESTS) * ARRAY_SIZE(vec_types))
+@@ -270,6 +270,25 @@ static void check_u32(unsigned int vl, const char *reg,
+ 	}
+ }
+ 
++/* Set out of range VLs */
++static void ptrace_set_vl_ranges(pid_t child, const struct vec_type *type)
++{
++	struct user_sve_header sve;
++	int ret;
++
++	memset(&sve, 0, sizeof(sve));
++	sve.flags = SVE_PT_REGS_SVE;
++	sve.size = sizeof(sve);
++
++	ret = set_sve(child, type, &sve);
++	ksft_test_result(ret != 0, "%s Set invalid VL 0\n", type->name);
++
++	sve.vl = SVE_VL_MAX + SVE_VQ_BYTES;
++	ret = set_sve(child, type, &sve);
++	ksft_test_result(ret != 0, "%s Set invalid VL %d\n", type->name,
++			 SVE_VL_MAX + SVE_VQ_BYTES);
++}
++
+ /* Access the FPSIMD registers via the SVE regset */
+ static void ptrace_sve_fpsimd(pid_t child, const struct vec_type *type)
+ {
+@@ -703,6 +722,17 @@ static int do_parent(pid_t child)
+ 					      vec_types[i].name);
+ 		}
+ 
++		/* Setting out of bounds VLs should fail */
++		if (getauxval(vec_types[i].hwcap_type) & vec_types[i].hwcap) {
++			ptrace_set_vl_ranges(child, &vec_types[i]);
++		} else {
++			ksft_test_result_skip("%s Set invalid VL 0\n",
++					      vec_types[i].name);
++			ksft_test_result_skip("%s Set invalid VL %d\n",
++					      vec_types[i].name,
++					      SVE_VL_MAX + SVE_VQ_BYTES);
++		}
++
+ 		/* Step through every possible VQ */
+ 		for (vq = SVE_VQ_MIN; vq <= TEST_VQ_MAX; vq++) {
+ 			vl = sve_vl_from_vq(vq);
 
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+-- 
+2.39.5
 
 
