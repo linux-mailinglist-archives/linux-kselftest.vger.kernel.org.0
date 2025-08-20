@@ -1,94 +1,115 @@
-Return-Path: <linux-kselftest+bounces-39364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF46DB2D81E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 11:27:12 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D1BEB2D82A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 11:29:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 227C17AE4C6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 09:25:38 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 596F14E2134
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 09:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 568CB2E22A8;
-	Wed, 20 Aug 2025 09:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5E8F2D97BB;
+	Wed, 20 Aug 2025 09:25:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="VFcTqMEB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CvT7Hya3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32692E1742;
-	Wed, 20 Aug 2025 09:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FF31B4233;
+	Wed, 20 Aug 2025 09:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755681765; cv=none; b=gENFaoAdanvfGDYCb0+RSJGEWjSynzTzdKZXT3SsSX//XrPQfhQBJA9eUyhIHBEtLiZtAteoA7WVVhwVeS+VAhiaEY8VoZpcOm1rPNgx3CCyS6/Ns4lz5guNthFtnILM4WSlY9PQNFBr79/gSgbrqfvIt23sC2olzKte7USL//k=
+	t=1755681941; cv=none; b=kSI4UWbabvsaevLyhCXtrQ/p1omN3lbGvHK+u4xJMZ9vr7LRNljO0ejiKUfWOXiTwyr90Qa5UPwn02W7nMRPJ/iumAwC9s2LtNC6wHp1asVI+IPKZ0wxLARSDVWBUEFN20LmUdWM9xNvvebVWd8RJ7CWFMERMzSpPcF2ABH3tpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755681765; c=relaxed/simple;
-	bh=yUCt1pPaMx7JVZBQZQbvE7z+7ajLYmKvOlONA/NhJV8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MxQBuoxI12wO/b0D9tlpD5RbpqhW5RwscDvTb/NduOmAbCKnsU4TNpAeNkzICiG0+U6dbhy3UsrAZUQj1Lx3HqmxtFfk+RiKhV6hjIaI6cFR14V2/XSXeGUKpKAU8I9OPG8zFO/oas82aIEMDbRGBddO1AYeROecivvx6xLu9T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=VFcTqMEB; arc=none smtp.client-ip=115.124.30.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1755681753; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=YGgNtPnkWs24Cm5tQaMk9u0G5NYAGMzfPYAnpUK7BCE=;
-	b=VFcTqMEBUKg16CarMORmCUvc0TckKrbN7LYdpujoCAbcuq03Za4SWI9TF6zd6hGZ1FMzmKuheep7M17X2mIFp2Z8yb+Keo4HsRW2+324rtYZVlgYN+6Uj/cF35QTU1FbuGX1TgsXcuHI2RcoOepCDQ0eeKLN2Q/H2YmvXHD8sos=
-Received: from 30.74.144.118(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WmBG0pZ_1755681750 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 20 Aug 2025 17:22:30 +0800
-Message-ID: <a81b7fd3-c466-45c9-9374-361b780ce09b@linux.alibaba.com>
-Date: Wed, 20 Aug 2025 17:22:30 +0800
+	s=arc-20240116; t=1755681941; c=relaxed/simple;
+	bh=je5AHg/youKOa+xhCXnHlhnCi4E0rhPm8H3bXUt+7zk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WpXP8zbL5tc2QVTTSavkpCRTnC2718HU6yrlemzvOMIm7mA+NW2xiJnxTE7pLREg14PAUB2in/tgFYiNn3aX99Rs0ULOs49PnmcVGjibykgWZrUIJpEHVqvJ5K9eWa54ee9ePI48dCvPNxOUDfRILmtqrKMtxyxBMhsFzeIuCiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CvT7Hya3; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-32372c05c5dso2694707a91.0;
+        Wed, 20 Aug 2025 02:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755681938; x=1756286738; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=moqMZqhapfuLQfkSPWKxhFFyVYs5GkMX6FHp/4+cuAI=;
+        b=CvT7Hya3j68rWwf3Pplp22TEXEw5oAZE9wWfGywrYxAGb6A+JSiKoguZrVZ0rlQrG0
+         L4bC+VAaC+k6EJ2XGD80snxLdYUqi9EH4fH8vEI1U13cGuOfDnPLzpm2vbDE2TRHX2dl
+         bb2MyDpJnUUDSjUX9zdusMcoVK6+WnlZ5b5sDap1RczzhAZ5aluqK2AwT97K4vrpm3U4
+         N6ejKA35MJIdg77401a0gECB622YPfbOQGhAU//L+V9g8Vos3vGArQhI9NITFA2wskyq
+         gQqyz/JY/UsJmHIaci/C1TRKDSPP/0j2A4XkKDlth8ptC+qKCR2lmtez+TJBkUz2yCgw
+         mSFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755681938; x=1756286738;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=moqMZqhapfuLQfkSPWKxhFFyVYs5GkMX6FHp/4+cuAI=;
+        b=noH0yAYOWZJcQSLJuderCA/43ddvfT2Sk3jESEkwb9zzmnJ8uDIQyaZ7/jzWA1auPx
+         qSAQREPJM/tVntPEayDxcoZ3mUMp9UncZJylWk1JAvRVf4LT7suF3IDnIH2SBrnRxBdt
+         Anud/+VlsG8CZKYF7YmVmZ8HOojiWeQo4mRhiYdOMD4KqydRoekofLn5qNWZzAFI4stH
+         ejyBk+cuqcG6AS3nQ0UlTnp070zVmMS5l8kZX86In4hqByfFswLpgYLaeDczthoSXJ6u
+         PVXuc/wYsCKaHzfYpEQMmqKt0cbO8uYg/lbMhAu6AvTQu6JAwr0CMYfOPDdV8TifENpM
+         58xw==
+X-Forwarded-Encrypted: i=1; AJvYcCXfGQLCiWhSG3JOi04JWgUCrP2aurQdTN0XNpUdxwHS/v2jqepfCF16X26HaSpQrEjxpk5xBGO7ktj8KzA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8h6tHL51W8MM3VXxn3h77ALV9DVHGnXl4q98fKW/SfZMnNBQy
+	x9KPibBaTSxZ8mQXzJu3gHzKOHbAu649BeEx5QneYKYDfqa9W0pIQjm5
+X-Gm-Gg: ASbGncs60CstZtJRH3GVi8efeJRLxcO/YjqElw15+d2wqhd9UZqgypFQZEHZIQC1sal
+	q5Fs98Zt0EUUZSX32jlOS+EcuWdI11NjYy5hUxgUJDt//RWHdbfp/zYrG1wMM2/B3LlboDcLH0B
+	TAl0SXHfUzdgidkdk7b4sN5TrKhnhA+HnsvaZhUsLHT1cV2rY83KHSwBxgUTdLhK2UmtZoDsK/i
+	Vrx7aUvAyzMVyQF1SLK9VMTZx8qi96KFzxwTrl1Khen+oEnmILD2rUm2uemi5ZBdD2QVZGMtlIU
+	ICRsQzJruIFXjtGKRDNV3dzB2XWsTRh0NrvRx4Dv/yYxAm4ie+bvXfXxIngS6nD6TSEvA6/QXLL
+	uHEDm/xJTMkQXDoyV2DhAYVYdiKrDgTJAcw==
+X-Google-Smtp-Source: AGHT+IHfofIsMiWoNimXexXoDKvhKGpCqUQtCSn9RIsIQgxCsfV79DHB65P82HThv2L137MX9dVq+w==
+X-Received: by 2002:a17:90b:3c12:b0:323:7e80:8817 with SMTP id 98e67ed59e1d1-324e14239d9mr2854023a91.36.1755681938297;
+        Wed, 20 Aug 2025 02:25:38 -0700 (PDT)
+Received: from OSC.. ([106.222.231.87])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-324e252f8c8sm1752044a91.11.2025.08.20.02.25.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Aug 2025 02:25:38 -0700 (PDT)
+From: Pavan Bobba <opensource206@gmail.com>
+To: shuah@kernel.org,
+	cvam0000@gmail.com
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Pavan Bobba <opensource206@gmail.com>
+Subject: [PATCH] kselftests:grammer correction
+Date: Wed, 20 Aug 2025 14:55:33 +0530
+Message-ID: <20250820092533.10985-1-opensource206@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/5] selftests/mm: add check_after_split_folio_orders()
- helper.
-To: Zi Yan <ziy@nvidia.com>, Wei Yang <richard.weiyang@gmail.com>,
- wang lian <lianux.mm@gmail.com>, David Hildenbrand <david@redhat.com>,
- linux-mm@kvack.org
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250818184622.1521620-1-ziy@nvidia.com>
- <20250818184622.1521620-5-ziy@nvidia.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20250818184622.1521620-5-ziy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+corrected a minor grammer mistake
 
+Signed-off-by: Pavan Bobba <opensource206@gmail.com>
+---
+ tools/testing/selftests/acct/acct_syscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2025/8/19 02:46, Zi Yan wrote:
-> The helper gathers a folio order statistics of folios within a virtual
-> address range and checks it against a given order list. It aims to provide
-> a more precise folio order check instead of just checking the existence of
-> PMD folios.
-> 
-> The helper will be used the upcoming commit.
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
+diff --git a/tools/testing/selftests/acct/acct_syscall.c b/tools/testing/selftests/acct/acct_syscall.c
+index 87c044fb9293..ee2894e4f7bc 100644
+--- a/tools/testing/selftests/acct/acct_syscall.c
++++ b/tools/testing/selftests/acct/acct_syscall.c
+@@ -22,7 +22,7 @@ int main(void)
+ 	ksft_print_header();
+ 	ksft_set_plan(1);
+ 
+-	// Check if test is run a root
++	// Check if test is run as root
+ 	if (geteuid()) {
+ 		ksft_exit_skip("This test needs root to run!\n");
+ 		return 1;
+-- 
+2.43.0
 
-I tested this patch, and it works for me.
-Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-By the way, I moved gather_after_split_folio_orders() to the vm_util.c 
-file as a helper for mTHP collapse checks in my patchset[1]. I'm not 
-sure whether you need to move gather_after_split_folio_orders() to 
-vm_util.c in this patch, or if I should move it in my patchset.
-
-[1] 
-https://lore.kernel.org/all/955e0b9682b1746c528a043f0ca530b54ee22536.1755677674.git.baolin.wang@linux.alibaba.com/
 
