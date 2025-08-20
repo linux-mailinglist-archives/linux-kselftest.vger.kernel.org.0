@@ -1,142 +1,126 @@
-Return-Path: <linux-kselftest+bounces-39405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5737AB2E7F4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:15:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04508B2E7F7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 00:15:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1812F68640C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:15:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E40BB5C86CA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Aug 2025 22:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CCD7215F4A;
-	Wed, 20 Aug 2025 22:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA6BA215F4A;
+	Wed, 20 Aug 2025 22:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y2KyhvhA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bjX4SZXc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D266618991E;
-	Wed, 20 Aug 2025 22:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A34818991E;
+	Wed, 20 Aug 2025 22:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755728130; cv=none; b=LezQdxf41Y/pwVre/Jxn+G3nGqxFhWj+wqrh9JDMnV/eIvLxeHvD1H3UP2aHLQMsdYAc+ZCL/+fl6XPd5OQj6poqcBviSc26ClenvdYey/idUxZWf1kAwTy8J3RWtQ/pWJ1Pby1c7omX7P0eYc5Pdc6MNwy9rZoLTq+RpK4TkRM=
+	t=1755728138; cv=none; b=UVfIs3qOnO4QljFGluCrkGOJaqew7AfLKScqfyJkLyKoAlApcl8kA8CBMu6198BSFkMuqgj/X6eVh/9I2QXEVQXYIlUSrOks5FKXH4nNrHh1yk3FHEEkFLN9pA2dNPNUIHK4gVRWhGF6WGb+7M6DRKdhpP/OVdbfpauRXVbrAhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755728130; c=relaxed/simple;
-	bh=pV6kDL6PIDFC0mwCK5gV9e0W2aPceEaVuWKaFn/7g6M=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UrRs8bnMCjcXcj9prCdxABpVTd0oIX10qx+kQhSdchSqSr0A5cv5zRp6iYf50Z6BOH4+z/dhftg3d4xR4gTuNCHnoC2h5FLq5K3lPLQGirYU41nOG6ifTVEd3EWtVwH+f38f/6O9YrcG09nd5vKGRjz4kzN8lRMRBCeOLcI94q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y2KyhvhA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3690CC4CEE7;
-	Wed, 20 Aug 2025 22:15:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755728130;
-	bh=pV6kDL6PIDFC0mwCK5gV9e0W2aPceEaVuWKaFn/7g6M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Y2KyhvhAVR3/gKC7W/S1QdsFqJ5l4WaOyzdLBEUDZr+vdUm4Lr790sESxZA6BBclN
-	 fugWGpTAV8t9htbX9EdrBo+hZfDjLGkZGcWeN6z7ISrP14fcfyMoCfRxsEH96nQ8qv
-	 XcWsitR1H7qLNcM6BAxEaY1886/48KQlU25v+SAdx/y1r9ApGvpzOeW77R2+T/Bic7
-	 A4DFUFvsPSf94l+fA5Hr8khXeNpPIqZRJsKxYorDa0kY92r6vTZZc8ObaZ6i6rJLPj
-	 +e+M75CMCrtpkSJKP1Bc4X9yGqBQrBu3uLYmWqzwNaB6iIGa506aI+IRk3gQLhlWmr
-	 JQRBM5AoNvohw==
-Received: from host86-149-246-145.range86-149.btcentralplus.com ([86.149.246.145] helo=lobster-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1uor5b-009VxZ-Sz;
-	Wed, 20 Aug 2025 23:15:28 +0100
-Date: Wed, 20 Aug 2025 23:15:25 +0100
-Message-ID: <87ldndk5c2.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15 3/6] KVM: arm64: Forward GCS exceptions to nested guests
-In-Reply-To: <20250820-arm64-gcs-v15-3-5e334da18b84@kernel.org>
-References: <20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org>
-	<20250820-arm64-gcs-v15-3-5e334da18b84@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1755728138; c=relaxed/simple;
+	bh=w7ZhLVBtJork5lC6/PwqLofmXynK9t2XVXuul30JeBM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eHEdTV1UzGYcKGqGspr+rco4Jq4zRdA/xpU6zh4rpsuXtqheXkYBvQVltDsRa2N2CoAR8qATXX/9559LpGldkg8Ph4WCkPs7t+w3XNYe69WSVTBdb97gxAZM6wFY//yIEJqNKVugu24+3iliorPGx059J/Sx0zjd1jVqDfIeOXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bjX4SZXc; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b47174beb13so202544a12.2;
+        Wed, 20 Aug 2025 15:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755728136; x=1756332936; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pcPQwn/g5jNJbs7+VbHJElT/HRRGmlILHSyyD8bjdFo=;
+        b=bjX4SZXcDCqN1TgrTT+tWuJkHvNc+6sJXzwroFjV6NABb0+n9fgSV5qdny1pSgLVQJ
+         zfRwy6r+nmJmmXy1muCMd1FMxDpIMOmPXV+tHCE3YUlZzMOGicZpRe1x/pmDYDZAY4oq
+         1ffl1NAEKGE4mNA/HagqTfQkuIm2x4gkk++giW+JOTREoF0r1V7Uda+H6CB/3/HsYBLB
+         eiscFfhY561KzYrxAttIKmZBlvTETyDJaZ1CbGNXRIvBDvDOvK0n2/ZXd6m0nBfoyEiC
+         ZNFonWKB8B/0ZjZmPEwkHJpd10mRtFqpplglJO+pkm7qaCiwuZgpCWbcekc3ikMK4VYl
+         N1xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755728136; x=1756332936;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pcPQwn/g5jNJbs7+VbHJElT/HRRGmlILHSyyD8bjdFo=;
+        b=R0A5UyEAQXaspeYWnj+3PfbSRypYHAu9zRKHjztR0nJG9FOomgNK1E6wOeSB6Z2E36
+         fn5LniQtaBoKpCHqysDiuOKx7R0ggQX3+8HZmeMRZyqz+mPPRYyCe/cNq21uAmxParEU
+         YCc35DzM8Vh6HvOA87u8qrX4jB/dxRkTGYr++72n7IoKdnLTIWCyKAIYDXzNk8Gfp57N
+         aNFz0w0sw/7JXaCUQlCyl14YyAR2JqXK5A/9RQGOHEmMwiXeFohGjgqva5Uq/c6oAW2e
+         0IF7LXq6kOyZm4ONtH9LKeM/Vo4qIsfofnyV1Q+xmQN/s+flZs12EMUfgOsVlXKkOuxi
+         L2Nw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+4ve/XMPr9+AwlE3OOwT/l4BVoNb4cmAQFmZE3FVBt9KFLoT+PotQj4+fyYy5ZDAA2ZUP6xfwKV2UCtE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpbQ89d9R3o56wqGZlfCQK2UrE92/h1MPdsFK4IPrVqo6tFksq
+	aZHIC0ZLcg6RZ74gdDEF7GWL2KMx1NzV4x9LMKSNrvBu1YxwmXCMxU4/N5+8cQ==
+X-Gm-Gg: ASbGnctZ+HRVZnhF4EFnMyJVmjC8T8lx1UkP58maIibeOgD79g4M6OYaXnkrir05UYq
+	g/63ozWg6jrcG+YOKqsEA5VI6CE9RqWDFbLDgzaPRYYF76/mQ+y73CxOqxu/BtbJ2t6fdlpR5lt
+	uJxO13DsnUcywF8n3XsWjdLwGlEBS/zr3yv1WyJAo+v6iXdbKyDHatp8Kpy1I24x25G5Mepoukf
+	JauHP6MM7UsWcS/BQVJawrlZFrDWG0SkqnlsjAp9EGmn/I3vd+5nscNtq2hc4eVxeLLm660aOnM
+	S5jVIanUbr+kI6RGSl67Z6FKpd8fk2QkAP/Zm9eetJ/qV1r0EVhvvHcMzLIWl/k0APmH3RRDnBZ
+	0Fr4Hytjt41EIVUdubL4aJDbXGkWR8jDz
+X-Google-Smtp-Source: AGHT+IHPFyFwi4+H/VPlv9o1ob6JMSG8ZpfV+iZxZ8GWJpg19ea3g0Yd3nJ4E0bNeFXqqLIbEPq9dg==
+X-Received: by 2002:a17:902:f68f:b0:234:cf24:3be8 with SMTP id d9443c01a7336-245fed88b5cmr4609625ad.28.1755728136310;
+        Wed, 20 Aug 2025 15:15:36 -0700 (PDT)
+Received: from [10.25.72.178] ([202.164.25.5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed4fa997sm36254355ad.125.2025.08.20.15.15.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Aug 2025 15:15:36 -0700 (PDT)
+Message-ID: <fff77b13-1eea-4a9a-b58d-23e3d36dc866@gmail.com>
+Date: Thu, 21 Aug 2025 03:45:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 86.149.246.145
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] kselftests:grammer correction
+To: Pavan Bobba <opensource206@gmail.com>, shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250820125836.14464-1-opensource206@gmail.com>
+Content-Language: en-US
+From: Shivam Chaudhary <cvam0000@gmail.com>
+In-Reply-To: <20250820125836.14464-1-opensource206@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 20 Aug 2025 15:14:43 +0100,
-Mark Brown <broonie@kernel.org> wrote:
-> 
-> GCS can generate exceptions with an EC of 0x2D (GCS Data Check
-> Exception) when data validation checks fail.  When running a nested
-> guest which has access to GCS such exceptions can be directed from EL0
-> to EL2 and therefore need to be forwarded to the guest hypervisor, add
-> handling for this.
 
-Why is it so? A GCS exception from EL0 should be routed to EL1, no
-matter what (either this is an L1 guest with EL1 pretending to be EL2,
-or this is an L2 guest that has its own EL1).
+On 20/08/25 6:28 PM, Pavan Bobba wrote:
+> correct a minor grammer mistake
 
-Can you describe the case where we need to reinject the exception?
+grammer should be grammar , spelling.txt does not have this, that is why 
+missed by checkpatch.
 
->
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+Also use proper subject prefix kselftests: should be selftests: acct:
+
+please Send v3
+
+> Signed-off-by: Pavan Bobba <opensource206@gmail.com>
 > ---
->  arch/arm64/kvm/handle_exit.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-> index a598072f36d2..2f5aef84b294 100644
-> --- a/arch/arm64/kvm/handle_exit.c
-> +++ b/arch/arm64/kvm/handle_exit.c
-> @@ -301,10 +301,18 @@ static int handle_svc(struct kvm_vcpu *vcpu)
->  
->  static int kvm_handle_gcs(struct kvm_vcpu *vcpu)
->  {
-> -	/* We don't expect GCS, so treat it with contempt */
-> -	if (kvm_has_feat(vcpu->kvm, ID_AA64PFR1_EL1, GCS, IMP))
-> -		WARN_ON_ONCE(1);
-> +	if (!kvm_has_gcs(vcpu->kvm)) {
-> +		kvm_inject_undefined(vcpu);
-> +		return 1;
-> +	}
->  
-> +	if (vcpu_has_nv(vcpu) && !is_hyp_ctxt(vcpu)) {
-
-We now have is_nested_ctxt(), which is more obvious.
-
-> +		kvm_inject_nested_sync(vcpu, kvm_vcpu_get_esr(vcpu));
-> +		return 1;
-> +	}
-> +
-> +	/* We shouldn't have generated a trap in this case */
-> +	WARN_ON_ONCE(1);
->  	kvm_inject_undefined(vcpu);
->  	return 1;
->  }
-> 
-
-Thanks,
-
-	M.
-
--- 
-Jazz isn't dead. It just smells funny.
+> v1 -> v2 : changed the "corrected" word to "correct" word in message
+>             description to follow the convention
+>   tools/testing/selftests/acct/acct_syscall.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/acct/acct_syscall.c b/tools/testing/selftests/acct/acct_syscall.c
+> index 87c044fb9293..ee2894e4f7bc 100644
+> --- a/tools/testing/selftests/acct/acct_syscall.c
+> +++ b/tools/testing/selftests/acct/acct_syscall.c
+> @@ -22,7 +22,7 @@ int main(void)
+>   	ksft_print_header();
+>   	ksft_set_plan(1);
+>   
+> -	// Check if test is run a root
+> +	// Check if test is run as root
+>   	if (geteuid()) {
+>   		ksft_exit_skip("This test needs root to run!\n");
+>   		return 1;
 
