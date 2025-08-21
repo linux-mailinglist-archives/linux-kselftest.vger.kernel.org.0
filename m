@@ -1,94 +1,80 @@
-Return-Path: <linux-kselftest+bounces-39532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09820B2FF4B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 17:55:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD7CEB3009A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 18:59:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7B05AC228D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 15:48:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDDB51C2190B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 16:56:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFB52E1EF5;
-	Thu, 21 Aug 2025 15:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42C2D2E5B36;
+	Thu, 21 Aug 2025 16:56:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W+1P/zpy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X2pFq3sw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745BC2E1EED;
-	Thu, 21 Aug 2025 15:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4DB2E1F11;
+	Thu, 21 Aug 2025 16:56:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755790894; cv=none; b=gr2v5jH+Ri2z/45hDwPDLWMc8IUnpLVYv02Z3TVjxjQPShpVuawb8e+0Mf4hSjAz1T2M6vAM0Vk+w+Af5QF4xDhw7n49ty7u55oObzzmlOUpRNb1AMRTltUL9m4Yk9NzgIeWRJj60IowlEDoVWKZRztHAiRFFGMXQbSmM01Qy1A=
+	t=1755795365; cv=none; b=ub+vuWw/3aKSPop+UwpnANDXZ01CFiovCHkrp1wFpLcWfY5cpDen/wYIYzkH4P+lF/IX6mIMrceAzecZeu+7ew3XmhTxRZEFvH3/UkqU2MEC7m2Z7jYHJ8t/T2Ob02yVO662WW+37CzG5BtOgxszibvaqnwjIoCSyuGGhkfHy+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755790894; c=relaxed/simple;
-	bh=xZfQUgbZnh68Crkj2L8djsDkAGtbGZgFkYXgmuw/02s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nPFiJX4Y6244mn7GZAEmQHG8BRkyhThYVF8Ej1cMdkvaYysXceD1w7pUCs+PDw079+25R8aXmPSYkM0QPcjhzykO69GUu17DIndQbsL7oHBBHGjAzPAMMCvVk1xeTqCkp6Tepkz6zoTqa4of2uiKM9Afr2KiiFwZBEv305LqNTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W+1P/zpy; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b4743621044so708147a12.0;
-        Thu, 21 Aug 2025 08:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755790893; x=1756395693; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5RWfX5SToSzLPcly9AU1U5Uw7VFDv2dnTyM+JJFNb14=;
-        b=W+1P/zpyxEGgOj82vN4+Bpx7X0cwu20saxGK21xAlLqKtgBhSr1xg0MrHbgAoSm5kJ
-         Kj+Q3sgO0JVX+1RgN+FqAogq74Jz0dMfzOMwbISMbnqZWih6s5qtzfsjI9ed5nj2zZ3i
-         fOJ97tg3HOQKsKtf+s0JeI6BqFoOvCJSJCLQnXmdr9ra4JKRjJaW0/nlFQN/323b5VV9
-         Vdqhc9sAvyepSz5c6q4SK2Ih+3RuLSlaxX6uNUzmPlRKKZWhknuJWolKMqJXWAr1T3GL
-         9Aq+rgWD4wqXVUD+lqjtkqFX+WYL1RW359HeiuPCw6oamv335miRN15dvNgbc/CKJ7Tv
-         Nc/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755790893; x=1756395693;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5RWfX5SToSzLPcly9AU1U5Uw7VFDv2dnTyM+JJFNb14=;
-        b=Utnl3OoUfJSx1xJvEtDiq/9UuemtYpzFcv9csMFWRevU+Kk16bcHJr48vl6I5ETmUR
-         FBWyiCAeIQqkiTLSX1DyLX70BrM+M7g4+x1yYrKr8h5xQY1o/mhBxqH/hHi7oLrYfgRK
-         9gLJc6sGbvweHhwo1N3T1XkNwluhlmZ0ErBV6Wj0QXoWy7toDGu+bTeD1f5zq/wywVs6
-         sH13Vazd7dGsblH5j7x+DRHppzEZxuUMGv7FFzrPQlLFSYk1rG9NMZt0d7CfEn3K672v
-         EeVKIzCDk5WOjmSvOI9Bsu0Jfe584k9XxytZTgJgu9AqnthkXySM+zkJ6sLKztpI8OKk
-         08ww==
-X-Forwarded-Encrypted: i=1; AJvYcCU0mglTQFs2qbPAi/r5qaUst4I+/71zikdK3RQ8Gjau4brjGuZm0mI1xLqcd5lx8Yci9ENgTIBNm65C3dJimXzV@vger.kernel.org, AJvYcCVKaw5oRCJZvbPRBuNTB44wGjpbGbFv/Ro8U/mTdcTECpa5Hez2QjCIpKKlNYq88W/7Kxl3MN4xp+tjPiM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZu0ssls4DF/F4bgYSyzF6G8p0I1DTFnDm+iaI0z103Kd/1Z92
-	kg1IIcT2wv/UKnYU0vVr6OzQIGOzbLGXB6fZ/Mk6/GaHYtrHghcexnhm
-X-Gm-Gg: ASbGncv0zavOfTvxdjUsS0sBArUTP76Lz6O17zhj3uKuQWYDvIrNnB3N4awrT65vhZ0
-	kIZ0Agn1Z44rmPlwvcYKUqDxEULpFqbLFBaomlz3q46OvBpwY/98I/IsKdipxX/rCwBc0vjQQZk
-	ow2rP50tRl2weJLeUOdRMFhUrHG9GVhEgI6I/oQX/xICr0TGRaqrydj4y2211ezh00JVBEGNYeM
-	9ZoE4RHTAQGsaheaJ+T+TwlkEaaBkHtHbDWdIWIFcLpQ9DDSgYK1aIiOt+aO6NkNdsnUaQw4iZC
-	SQJJ3kynEeUnZYKaSKrO6n38lnKBuzkIbDqvhh5sHCugj4MsDw5kOEDqsKfxUEVvPThZiKh9Bfd
-	rgy8oJ30YOdYdooZn1ELvbS4UNCu4FU1zoogI0dr33Pt9kVFg
-X-Google-Smtp-Source: AGHT+IFoS5sjeqDzHKWvRWy3jAZgwmRoH6W/HrMPd3Q27lnUP/3qOikzDhMaT/C+xdmi4QUuen54/w==
-X-Received: by 2002:a17:902:fc8d:b0:23f:cf96:3072 with SMTP id d9443c01a7336-245fed88bf0mr40353715ad.26.1755790892570;
-        Thu, 21 Aug 2025 08:41:32 -0700 (PDT)
-Received: from ti-am64x-sdk.. ([152.57.22.150])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed51c027sm58971345ad.148.2025.08.21.08.41.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 08:41:32 -0700 (PDT)
-From: bhanuseshukumar <bhanuseshukumar@gmail.com>
-To: tglx@linutronix.de,
-	mingo@redhat.com,
-	shuah@kernel.org
-Cc: peterz@infradead.org,
-	dvhart@infradead.org,
-	dave@stgolabs.net,
-	andrealmeid@igalia.com,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1755795365; c=relaxed/simple;
+	bh=OTJfMD5H4cDT5DeZwBC9vrpTKC9XBlJdn8JVZTk0OfA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=lQg+5fz9ZmyhuoAIx3AqpXk8nuxUTRMGJ6cndZSleR66wqFAHvrfRnXyDLwqdmS0pOrzUd8o1VENpMR2jSBSMO0+EEAKQTG3OdKGzFSWetb9abP7j/Oxtf/QF//i05DjxqOezjjxpv1hc9ng6INkf8OwEFKiR1ia+NVHBRcNlgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X2pFq3sw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66C4FC4CEF4;
+	Thu, 21 Aug 2025 16:56:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755795364;
+	bh=OTJfMD5H4cDT5DeZwBC9vrpTKC9XBlJdn8JVZTk0OfA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=X2pFq3swWLYIK/fEgSYiOtTYtShp4zuzf3sugfUz5NkK2zy+tphCNy/d/MvkUV5/l
+	 qFPdgdCYcUco0Hsy/E87K25hxzrJSQ31SToOjB/EDos+/4n0w6rK+chN1ioL48MHSe
+	 cOc5MJ6stgKBkcNayHxqqXcg8aqP6QVytAEXPOyhG5RaxxZ0QvEQbRMCvNLn88Jt8F
+	 1/zMcIHH7gpllTV7BrZG/PzZfyVGS6HQ3RO6p+MTrHHYJw3elBu54+axH4A+Wr4Ent
+	 XIxATolM0fhS3WrWQaGvf0yC85rJjWG5KjW/yH6esL8uKfzbkPthPD699lY0fSp/rN
+	 3mZePrUrR0Jsg==
+From: SeongJae Park <sj@kernel.org>
+To: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	akpm@linux-foundation.org,
+	shuah@kernel.org,
+	mic@digikod.net,
+	gnoack@google.com,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	ming.lei@redhat.com,
+	skhan@linuxfoundation.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	bigeasy@linutronix.de,
-	colin.i.king@gmail.com,
-	bhanuseshukumar <bhanuseshukumar@gmail.com>
-Subject: [PATCH] selftests: futex; Fix spelling in test messages
-Date: Thu, 21 Aug 2025 21:11:03 +0530
-Message-Id: <20250821154103.115110-1-bhanuseshukumar@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-mm@kvack.org,
+	netdev@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-block@vger.kernel.org
+Subject: Re: [PATCH] selftests: centralise maybe-unused definition in kselftest.h
+Date: Thu, 21 Aug 2025 09:56:02 -0700
+Message-Id: <20250821165602.79023-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250821101159.2238-1-reddybalavignesh9979@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,38 +83,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Correct a few spelling mistakes in selftest output messages to improve
-readability
+On Thu, 21 Aug 2025 15:41:59 +0530 Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com> wrote:
 
-Signed-off-by: bhanuseshukumar <bhanuseshukumar@gmail.com>
----
- This fix is part of kselftest pre-requisite task for kernel mentorship fall 2025
- tools/testing/selftests/futex/functional/futex_priv_hash.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Several selftests subdirectories duplicated the define __maybe_unused,
+> leading to redundant code. Moved to kselftest.h header and removed
+> other definition.
+> 
+> This addresses the duplication noted in the proc-pid-vm warning fix
+> 
+> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+> Link:https://lore.kernel.org/lkml/20250820143954.33d95635e504e94df01930d0@linux-foundation.org/
+> 
+> Signed-off-by: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
 
-diff --git a/tools/testing/selftests/futex/functional/futex_priv_hash.c b/tools/testing/selftests/futex/functional/futex_priv_hash.c
-index aea001ac4946..a8cec7bd2b5d 100644
---- a/tools/testing/selftests/futex/functional/futex_priv_hash.c
-+++ b/tools/testing/selftests/futex/functional/futex_priv_hash.c
-@@ -132,7 +132,7 @@ static void usage(char *prog)
- {
- 	printf("Usage: %s\n", prog);
- 	printf("  -c    Use color\n");
--	printf("  -g    Test global hash instead intead local immutable \n");
-+	printf("  -g    Test global hash instead local immutable\n");
- 	printf("  -h    Display this help message\n");
- 	printf("  -v L  Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
- 	       VQUIET, VCRITICAL, VINFO);
-@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
- 	join_max_threads();
- 
- 	ret = futex_hash_slots_get();
--	ksft_test_result(ret == 2, "No more auto-resize after manaul setting, got %d\n",
-+	ksft_test_result(ret == 2, "No more auto-resize after manual setting, got %d\n",
- 			 ret);
- 
- 	futex_hash_slots_set_must_fail(1 << 29);
--- 
-2.34.1
+Acked-by: SeongJae Park <sj@kernel.org>
 
+
+Thanks,
+SJ
+
+[...]
 
