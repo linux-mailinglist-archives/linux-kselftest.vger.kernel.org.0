@@ -1,129 +1,119 @@
-Return-Path: <linux-kselftest+bounces-39602-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39603-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEAEBB30812
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 23:11:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52180B3083D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 23:21:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B309585B4C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 21:07:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E847AC4BAA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 21:18:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E543393DD1;
-	Thu, 21 Aug 2025 21:04:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FCA82C0262;
+	Thu, 21 Aug 2025 21:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QoxKzoxX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mm2EDa+P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D5F21FF28
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 21:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7163393DD3;
+	Thu, 21 Aug 2025 21:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755810251; cv=none; b=kxWEW3U7d0NCmokJwwlzgq65qmSMqnO/YnRSeCk9HJMI1qqDhBrHn1g6FxLcU2bw4+J8FB8lt4NDjRfvduqUGnaeHUF8tjlT2raCaGzyCd4XrwaNDC9d5s8FUfs/5qAPtxIw1Bqy4+MyZBN74zIVaEffN1AQ69qelchMdgTwqjA=
+	t=1755811049; cv=none; b=QC2oXQel2nNj6rxYPkecCjNUR7LibAymGVAXqEtAf82+CidTB+nTn34gyjAKtwtYA0RUn5GJxpA/jxVMh5h42jqCuuD5/VBZ7y4aIgo+HbGcCSTAK1+jseBebDUCPommfscFXKlzby7Tw7wIOAA4MZ+JwOeLzpoUQA8KBMlqwMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755810251; c=relaxed/simple;
-	bh=Ax/5M9fNgiaUpM60gNgoLr7S2/wLwZqWm5F2SXmLfG0=;
+	s=arc-20240116; t=1755811049; c=relaxed/simple;
+	bh=wIvWJcJ2qicBpEyhg+T9O62WoWdENAS0bcC5e9CSn1o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CVlRugupiDlqcCRqUtgX7rCMOY+cV5fFkxAiYz4U5n6NQncQoNvHFeNqEqvo6ZpgVC3D5DhGVhZzwPlOXqE92Rlb7DaygXH0HYtS52CLvoIeIv2LzI0CaTTfrnaXgv3MU9FSWxv0zmF3uabWb/t7ToU16M4RjlBRgKeIZk1Wcd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QoxKzoxX; arc=none smtp.client-ip=209.85.222.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-89019119eeeso751427241.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 14:04:09 -0700 (PDT)
+	 To:Cc:Content-Type; b=lLqsysqdvzAUhV7xefmCIXhbHw+y5M4VoI1+2Nj3GZHF2TEnJqhVcfxNAskW0hpxXYpEFRbMuafF3aIJtyjR3vZX6pxbIUTYl8t/w6Al2BxXydTrTewiVClJXR1cZEqA1xMjLAVYT/VtEaUYCTKCdnpt4OJF4n0BVLjAPAVfr5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mm2EDa+P; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-71d603658e3so11848457b3.1;
+        Thu, 21 Aug 2025 14:17:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755810248; x=1756415048; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DiHzVX3qqPLSsGwTYsNg14BwO9f8YSWJkk7KXDdCW6Q=;
-        b=QoxKzoxXs4JFDqpMIofYQsgGMSLkQxghekIWh1b/d8RwUYmcoBOL1wlZ3bKCSikNC7
-         5rDMSQJDTsbUZjTxs62THojZGcKY1j4zn8u8cJLCtDOltClY9zKaEBPBWdVT/F+O1qNs
-         wo8C0LNTG0gKmd8471cSCATxj9AX7LHCRZP7qTKaJgEv0jI3izQeVncFuwMj39U1EC5l
-         AvZMUty0OEk/a7Cu3/8a0MlsjeVJz0eJ/6pFQlVbUCNOQvlmCxsF40tOMtdR9k6FZwHC
-         HT4CWf1WdeKJh7r8+4bDJroO1bH/Td8TPMnAlugfMj/xko4iU0NETDN0cJtlMALWTH3U
-         1X2Q==
+        d=gmail.com; s=20230601; t=1755811047; x=1756415847; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=M0A+kRlT2FglN/8Bz1t/135C//i0Oe25IbMxPqDCh20=;
+        b=Mm2EDa+Pc53AY9wnEsDV4fn5KbcPOqxznX1jixgFxi4TFbIA5ul3MstbV3krdKWN1v
+         DS3IL+bGyLQycMJnCro7hfzXdW6VX+CbWUQ6ETB0NJtRzKv/Vh5iG7ZUA3eIzI6CiCmC
+         4ZoAthWlUWsce6MrviwMEiMr+UYHzxt/dmMOYQBjSxyDJa03Gsa+pP+QBGrB0u0MtFW6
+         N60grxzBZkz192aEIasRaYCSF8bGXUvElSDasqEaqA9BQRwqwXj1EvwNM9XUYqDhJW7u
+         7s+iC4uDHRBfFfxu6pYJDHPFrBF1X24xVJqYLfGekcMQLimGRmiJTxuF9cd54rF6H+JP
+         qEDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755810248; x=1756415048;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DiHzVX3qqPLSsGwTYsNg14BwO9f8YSWJkk7KXDdCW6Q=;
-        b=rSUUrdVMGwfjol92neImSkYniR+43FGlT4SOxwyZ0m/FNilwjNV02Zer6d8xgckzOu
-         G9QIKuLydv69ekzXJvM24GlP7DY5RKHSqTeMHQHCbqKZZyjymk4gB5QbegDbZvp6254j
-         +CBywgyRx0BEeaWM0cRLpyAZlq0SNyDbinMbsjDKbFl6QQQLytZPG1oDvflTM0VVtFny
-         60wfvtmyYmtnyG2LlrPWh7BvZbz9PWzCuIyrFSjn463Dd8/0Kr1AI4wAqFwurmBAQsaQ
-         TfDhSKCuLHHMqXQfbZH9akFgOo47Alq4HY512TKaFc7SHcLNRVhCbvfCXnJhdW94I+AA
-         97sg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1GizyP8RbmjEyNVzV6YU9PUpstnKOsCybEAcp7fQz/qwVoE2pmcnqGQA/yotU+hXB0ENVCBGD11ai/4qUYWM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUcILVyeDXunTi51A5WQ0TMDumESOse4n7Cn4r68mbcigquqsN
-	CQgzcggEzMtRvZpePaDXAvVu7qEXT0N+E8U+/4iTA3xoNjyM54/pukpesbgYiFEmcOVH8AfBME8
-	gaJXKbIu2zA0OqlSzm5R5LO/1B0c+k6LJlQ1+6uTn
-X-Gm-Gg: ASbGnctkItgHeEIDRndfn84AwYJmfSLr4OdbBN7dt3qA6DjEf0YW5SZqH1kDIgf+oLA
-	ZyV+0TViCfurnaN85lRWm/B5v1qfUqRHeXNKYSgAdyx6F32mloFBchQ9bOOVk2XQYUgOfIVk/AU
-	VqJuXpJg3GVam/NeQkBzdpBMUgcbomCzJkScgTzVuibs4siXB9pga/Y+4YLK3JxFSSGfBh1Gma1
-	fDcYOyixVqglTwt866cbrgAZdlonGU8QWGn6wftBiCCAQUOvjq5YozQ
-X-Google-Smtp-Source: AGHT+IH8BmhwAV5TMq5jtuv5CcD52sEM4hDAtFzPHkyrC5f4RE9vRJicCBjwB0j/euUZjYyXAYbjQQDm0mf50m9A4Hw=
-X-Received: by 2002:a05:6102:3714:b0:4fa:d2c:4ff with SMTP id
- ada2fe7eead31-51d0f2ea55dmr219355137.27.1755810248226; Thu, 21 Aug 2025
- 14:04:08 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755811047; x=1756415847;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M0A+kRlT2FglN/8Bz1t/135C//i0Oe25IbMxPqDCh20=;
+        b=mp0INznmqT3MABkTH36ucge+dod8WiMHJG0zj7IUqCFzMEPGr6e5Qt7oJ/gbw5ZMlw
+         +OFXNCzvqwI/kVUuuNp2o1fUx3hUD61qhDxFXj7zU3MjjYHwwCaMhK/jxYwhDGSgRklt
+         HtdkEtpjykHRXYkcEdsCuVpPTpLqgXI9A//X1d64VdmIAOi+RO6hnZTnXpu1f3tWDl+U
+         tRD7ZH/z/2yI+TlWnoATRJP93mnFyrbSzZN7GlfyFkvaNhF/Tq0RoxCsnhup4PussBD4
+         9doi59DY7Qok0mEJC8/CNnsqEjvHbFbakcEAOOfKmdyAwiSxmoh8ENuQWGNXL7cgG4O0
+         3+hw==
+X-Forwarded-Encrypted: i=1; AJvYcCV1X/RJm2UBxomZP+DZrhqQgR//+vrKEQ4DsairQSLLPWc1EPEnviJtnDhkACtswaN4fXMM4fk6ASje940=@vger.kernel.org, AJvYcCW3262NyAw3RpEeXtNhwBjzEnTAsbxVdQPDuya1XzvIEMlsuVAfUtwRhdPsb8dBQbhwJWPRI8v/e6Qsic4=@vger.kernel.org, AJvYcCXTHYF78EUNXLq2M98oVk9TqKJSErx8mzrLtHx1loa+110SeWjKjmhBCAXXQiVl9NBCMp2vdPyFzxhA7lA/q9iI@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSmf+kF8iZyR5XcDBjVpZR6zuyhicpqqs99TiWbpl1hzs2659e
+	Mdr1Dt5+GTSnHeRMpS/Rl3BHAzmxKO1kcSxCrj7/1cbNAiS3Kj5cGcNUbruLAOjptd1c/qAdmZD
+	3+rCzNAVKMTAe03D3QMafwa3k6Djav98fOw==
+X-Gm-Gg: ASbGncvE+5xTYMcJ7I+Jwu/n6V9Q73LyOjgvULk24+hOcDMFOGgaUjgw8b0TujZbKye
+	QYCRRgd3ZChlfN5m78SF4IIOSenLnOljh1gEmfQN1BfPRpJFpm2sJfruqfc/tMbYdfRBxb6wBxv
+	ZhvquFwJREJMVr8JyniET0d7laMcTuK+w+Ox1HsX6e4ho8IgtplwGX9iZJ01eho6wTVXps8HApw
+	UM583ZzkgtdfoZhTiN4KwOTpg6wsxBoM72WvWnqN1qKohmUzo2kIyWa7lc=
+X-Google-Smtp-Source: AGHT+IG6//TXCd7HWmIFgh2CoCFbe0b7gysAa1lfgSeo97MehCuFJS9JIpTBAgiJE6ZQ+0LnbnlXHEBegv61Kx3lmJQ=
+X-Received: by 2002:a05:690c:4c05:b0:71d:bc04:a615 with SMTP id
+ 00721157ae682-71fdc307ab4mr7570467b3.15.1755811046697; Thu, 21 Aug 2025
+ 14:17:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250620232031.2705638-1-dmatlack@google.com> <CALzav=dVYqS8oQNbygVjgA69EQMBBP4CyzydyUoAjnN2mb_yUQ@mail.gmail.com>
- <20250728102737.5b51e9da.alex.williamson@redhat.com> <20250729222635.GU36037@nvidia.com>
- <CALzav=d0vPMw26f-vzCJnjRFL+Uc6sObihqJ0jnJRpi-SxtSSw@mail.gmail.com>
- <CALzav=fdT+NJDO+jWyty+tKqxqum4RVkHZmUocz4MDQkPgG4Bg@mail.gmail.com>
- <20250818133721.32b660e3.alex.williamson@redhat.com> <CALzav=eOz+Gf8XawvaSSBHj=8gQg3O9T9dJcN6q4eqh7_MEPDw@mail.gmail.com>
- <20250821141048.6e16e546.alex.williamson@redhat.com>
-In-Reply-To: <20250821141048.6e16e546.alex.williamson@redhat.com>
-From: David Matlack <dmatlack@google.com>
-Date: Thu, 21 Aug 2025 14:03:39 -0700
-X-Gm-Features: Ac12FXx-07ysjjhbXcW1d6QGdWIOYK7REtcOvofZDmLrqHjrbC9iI7jgWdySeG8
-Message-ID: <CALzav=f=tg_oz1pEOKFiswBKnTCbrPOJR-DgAK_--jmSkxbCWw@mail.gmail.com>
-Subject: Re: [PATCH 00/33] vfio: Introduce selftests for VFIO
-To: Alex Williamson <alex.williamson@redhat.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, Aaron Lewis <aaronlewis@google.com>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>, Bibo Mao <maobibo@loongson.cn>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org, 
-	Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, 
-	Joel Granados <joel.granados@kernel.org>, Josh Hilke <jrhilke@google.com>, 
-	Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>, Vipin Sharma <vipinsh@google.com>, 
-	Wei Yang <richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
+References: <20250821200132.1218850-1-zlatistiv@gmail.com> <9c310ab7-0f0b-412f-8df7-71730a2d2caa@sirena.org.uk>
+In-Reply-To: <9c310ab7-0f0b-412f-8df7-71730a2d2caa@sirena.org.uk>
+From: Nikola Ivanov <zlatistiv@gmail.com>
+Date: Fri, 22 Aug 2025 00:17:14 +0300
+X-Gm-Features: Ac12FXyzv06cBuZ62BErId8wrKWN93hUseTYhtMGTtt1blvR1AUlAbdCKMTekFc
+Message-ID: <CAHjv_as7m7UbSLAPU6hX_=tAvLZYR_7Q=1n+Xq-nW-6OJ237PA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/alsa: remove 0/NULL global variable assignment
+To: Mark Brown <broonie@kernel.org>
+Cc: perex@perex.cz, tiwai@suse.com, shuah@kernel.org, 
+	linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 21, 2025 at 1:10=E2=80=AFPM Alex Williamson
-<alex.williamson@redhat.com> wrote:
+On Thu, Aug 21, 2025 at 09:49:29PM +0100, Mark Brown wrote:
+> On Thu, Aug 21, 2025 at 11:01:32PM +0300, Nikola Z. Ivanov wrote:
+> > Remove 0/NULL global variable assignment in mixer-test.c and pcm-test.c
 >
-> I think we have all the required acks now and reviews just suggest some
-> minor patch shuffling, right?.  You were also going to switch from
-> reviewer to maintainer of the selftests in MAINTAINERS ;)
+> Why?
 >
-> Are you planning to collect those acks, add the minor changes, drop the
-> trailing KVM changes to come in through the existing kvm selftests and
-> repost?
+> > --- a/tools/testing/selftests/alsa/mixer-test.c
+> > +++ b/tools/testing/selftests/alsa/mixer-test.c
+> > @@ -53,10 +53,10 @@ struct ctl_data {
+> >     struct ctl_data *next;
+> >  };
+> >
+> > -int num_cards = 0;
+> > -int num_controls = 0;
+> > -struct card_data *card_list = NULL;
+> > -struct ctl_data *ctl_list = NULL;
+> > +int num_cards;
+> > +int num_controls;
+> > +struct card_data *card_list;
+> > +struct ctl_data *ctl_list;
 >
-> With KVM Forum coming up, I'd like to try to get this squared away and
-> into the vfio next branch by next week.  Thanks,
+> Nothing now sets initial values for these variables so they all have
+> undefined values which is buggy.  The code is relying on the default
+> values.
 
-Heh, I was just going to send a similar email to you :)
-
-That plan sounds good to me. I will prep a new series with those
-changes and send it out at the beginning of next week (fingers
-crossed).
-
-Thanks.
+Checkpatch reports it as an error, it looks to be part of the C
+standard that all compilers must initialize globals to 0.
+Though I suppose it helps with readability to see
+the num_ counters assigned 0.
 
