@@ -1,121 +1,104 @@
-Return-Path: <linux-kselftest+bounces-39429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2C91B2EBF3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 05:31:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C79FB2EC31
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 05:39:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F92D1BC7B2B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 03:31:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C07C13BEED5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 03:37:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918D72E5B24;
-	Thu, 21 Aug 2025 03:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97FE82E173F;
+	Thu, 21 Aug 2025 03:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bVy1+VmM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ql/ChiIf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C40C4317D;
-	Thu, 21 Aug 2025 03:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661292E7F3F;
+	Thu, 21 Aug 2025 03:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755747085; cv=none; b=iQPkZzGlwwmxqIXsrNCcjcFA/LcmB7g3APpTV2lTYveOrD80XQ47QE+yKth53J1Z68iqXPp1/LijroO1atodMmSAZfZaDMQuTDALsLsapO7T1Dfw2kzJPuwcibFKxqASHra00ZJKbgp+TUc8qyoi38327OPjfXw4EsgUixP1cfg=
+	t=1755747430; cv=none; b=f4iYSHTlI8iurPoCh28oZ4Cs9widIhIgW3n0nkTXlxfw9gx9gT8l8/M6WDZOL0VEw4aLQdxDJJbLAhJlkFUnZixUO05BdU8cKBbRGWoxELB6BymAmt2IFlDtwgwE7mwsQttH9fCT4KFcnZ1iqGSyqRACB3fIF0mjFZ+YTez7+t4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755747085; c=relaxed/simple;
-	bh=a4YnhyBkuFuirVo+51VQJ8oQdxUJTXBQ9fdqOBz79EQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mVeWtqamqnnkg6U8WaBRWJSCEsWg+Xd7yAvxt+KPL/m5TsAu07wOI0HxB88vYnGPYswiSZcHQYm59cOWw9XR2R4wxsk/ruht7ESBEAbpx8ydOXhbdUXftS2qvo+g3DxBE2qqPlVo8H3dUlBE0C1fdHZB5vqqgW2qtu4XWAEiUB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bVy1+VmM; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4b10c1abfe4so8547501cf.2;
-        Wed, 20 Aug 2025 20:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755747083; x=1756351883; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=icRsK3KTpWigO3BokxIYIH8/TdR1BM20AbZoHc5m7is=;
-        b=bVy1+VmMayBrx3BUCOjSWEr6qIfVXvEocsOoFPOTi9Zo8tCv9t8JRtxai0mMU4W3At
-         zP/B1X7SQcvnlUPB0LbRqFuajKIj8jJYyN6HXwm3eORMV09rVlg3u7sFVJ9Rai4bxLni
-         O+nq1hBIB8VZVu+uNbTehg8vygfzmye4zdaDz5600o7OCwYx//zETi6VlCFy/byIaQhL
-         S9ZN5Cs4BDuHlIwJVCTsvHoAZ076in5Us7V76+PT4qklS/vTaxaJ6PI4dNY6tDr3ioCH
-         vfvsCqeiFVvvcX2mTv7wtzPEMvbnKvpsA6GYgSnDcmySTnBpiSTiciFxD5u9cXUltGDi
-         NnKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755747083; x=1756351883;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=icRsK3KTpWigO3BokxIYIH8/TdR1BM20AbZoHc5m7is=;
-        b=BanRLsOTYWgAUm63NDIz6Da6H80a7DUT1UxKreG8TbeG0QkmYF+F4qgAXR8vwupTiR
-         ynXw6cPYYT0LpXvRDYEmmyoOqHa9O5qR+m1K2tTlHG+hDy0pwdMY+mrBIt7oBKhueygg
-         5bHbvHmXbo2g/BFQmcrq6NutMOB6jDdQJzUUCs9H3Iof51Mka95ge1Pf7DAkxu4bWiBM
-         L7LzR6J5s2G+9Ip0KclcyjnWiMxSwqdVCqoVrTzoztjJY7FA5PWMdIOoPbPbqM5lShEo
-         Ea2ueXsRn9d8bBQRSA4Brqz7KCzmGaHNAenxVlS06Cnu1bWvTXUBdGx/Bzo1oBrTObAZ
-         x99A==
-X-Forwarded-Encrypted: i=1; AJvYcCUX6Bda3NoFu2jac4XB+uP0LjP03cKLTBw9Nkhmc3S2L4RC+ETAsJl2bX6UXlohbgby/wZMBk5MQvDwN44=@vger.kernel.org, AJvYcCW/e/bsh06dogaINi3CNw6dqQkNYMK1bVajkSznLbwVzW84+21tbQZIM+ilD1myoRrrisphNfRXpSNNREctTT8J@vger.kernel.org
-X-Gm-Message-State: AOJu0YweqoaMN+1MkwJK5e/Gp/298RokCatnqgvLF/lQp6s8X7W1g51+
-	WzqoEXM1To4Vnim6/TdNjsA1Y3UE1YW28K2a5a6udyMxScqKxH8AjjvviC8s9sDR
-X-Gm-Gg: ASbGncuNV2OyC+BtQEgCx9FGkRm42g3VHFtJXtX60USp76f3G853f1LtrfpTdmM8Usl
-	LUvUNnwYsBnwq5h5j/K3WekZpI3TvbcuBtWZF4sP9Isx9Fq8EAfLap0QaJmsbUVkBuUIc3VGkNw
-	IFcSaY6LlHnJmka6yIOZCtcJ2BFFbLCvLxrh4uQPPBezuNesDB12brD7a7AQwQes0K4eG8GHSsa
-	vOTzlpwxSdq3OxHi+3i9sDuhhPs86pLR2YRsouH55jDMVk/xICv28siiXiFYVwXL4yRO6wGGsrL
-	BnTQnzkdA51dTey8UMJDB3QiBIf36JxVAthcjS0FST1KsKFuhBir5jH/GK+XI0AoDuguOj9T5Fq
-	ZublErOSh24G7dAQv2o1yEgez5WhNWEbRmoRsiQdL9SRcWASyT5ECBAmLqJq1ZFERcC1jZ0Thzk
-	A=
-X-Google-Smtp-Source: AGHT+IH8BDknIEg8aOY7I0VpUcwOlM1TFgwrml5wA9EZ+EVgHVP56EFvVKYngKbQyG8yEXT2lkgb2w==
-X-Received: by 2002:a05:622a:28f:b0:4b0:cb1f:e390 with SMTP id d75a77b69052e-4b29fa53d05mr6498871cf.29.1755747082903;
-        Wed, 20 Aug 2025 20:31:22 -0700 (PDT)
-Received: from fedora (pool-99-240-65-82.cpe.net.cable.rogers.com. [99.240.65.82])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b29bf0b493sm11703131cf.48.2025.08.20.20.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Aug 2025 20:31:22 -0700 (PDT)
-From: Albin Babu Varghese <albinbabuvarghese20@gmail.com>
-To: Shuah Khan <skhan@linuxfoundation.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Shuah Khan <shuah@kernel.org>,
-	Albin Babu Varghese <albinbabuvarghese20@gmail.com>
-Cc: linuxppc-dev@lists.ozlabs.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/powerpc/tm: fix typo on a comment
-Date: Wed, 20 Aug 2025 23:29:44 -0400
-Message-ID: <20250821032950.44054-2-albinbabuvarghese20@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1755747430; c=relaxed/simple;
+	bh=nh9dDQLLLpxkYOKYMlE9tT0MxIxgkUC+bSrwomTGalw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LTRYMSRe8oYdeeCzxw2hN5E2B11T21wUaPC4GBWjfwyAWBK+veoLpt95pdgMq5G9D/NESfOwmkRCw6HLvj825nvTtbqIWU2lQjsoSzebaTctZDJLDI0osTgYAZxjXclqNujcYJ5SJnBU07fCnELS1ckMCDGu0+tfZghkDxNz4m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ql/ChiIf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E12C16AAE;
+	Thu, 21 Aug 2025 03:37:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755747428;
+	bh=nh9dDQLLLpxkYOKYMlE9tT0MxIxgkUC+bSrwomTGalw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ql/ChiIf7DDKz9dZAhyNamU0dmZ8E4W3kGhPHD0Xu/NNd7kTL2tC9cvE9WGNz/Ixd
+	 P6i7h104+bTxc9magHj2UBS6EPhgKcjpVobpjzl7jQIoAzr33OKDrcD3cREqvLMZM5
+	 9kqYWCJe6JMuzAjevUQODATp4nuc4H64Az9au+INw+2NScXyQkQXY/VvxHdX4FXA3z
+	 WiSxR6bAsuEJnWo+BZe428O2zcXkxh4gcAsdtbrhDqVjwFCjCP6dkrmJ0RR1CzjlEv
+	 yrbDRORArsGkEhtwCJlQXLzduUzkB8K1w16tvRFGuvLflcVKxh9/x1iYysHgdUM8Ss
+	 r9KY6GDhk2zzQ==
+Date: Wed, 20 Aug 2025 23:37:06 -0400
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 0/3] Test CRC computation in interrupt contexts
+Message-ID: <20250821033706.GC185832@quark>
+References: <20250811182631.376302-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250811182631.376302-1-ebiggers@kernel.org>
 
-Fix typo 'sucess' -> 'success' in comment.
+On Mon, Aug 11, 2025 at 11:26:28AM -0700, Eric Biggers wrote:
+> This series updates crc_kunit to use the same interrupt context testing
+> strategy that I used in the crypto KUnit tests.  I.e., test CRC
+> computation in hardirq, softirq, and task context concurrently.  This
+> detect issues related to use of the FPU/SIMD/vector registers.
+> 
+> To allow lib/crc/tests/ and lib/crypto/tests/ to share code, move the
+> needed helper function to include/kunit/run-in-irq-context.h.
+> include/kunit/ seems like the most relevant location for this sort of
+> thing, but let me know if there is any other preference.
+> 
+> The third patch replaces the calls to crypto_simd_usable() in lib/crc/
+> with calls to the underlying functions, now that we have a better
+> solution that doesn't rely on the test injecting values.  (Note that
+> crc_kunit wasn't actually using the injection solution, anyway.)
+> 
+> I'd like to take this series via crc-next.
+> 
+> Eric Biggers (3):
+>   kunit, lib/crypto: Move run_irq_test() to common header
+>   lib/crc: crc_kunit: Test CRC computation in interrupt contexts
+>   lib/crc: Use underlying functions instead of crypto_simd_usable()
+> 
+>  include/kunit/run-in-irq-context.h    | 129 ++++++++++++++++++++++++++
+>  lib/crc/arm/crc-t10dif.h              |   6 +-
+>  lib/crc/arm/crc32.h                   |   6 +-
+>  lib/crc/arm64/crc-t10dif.h            |   6 +-
+>  lib/crc/arm64/crc32.h                 |  11 ++-
+>  lib/crc/powerpc/crc-t10dif.h          |   5 +-
+>  lib/crc/powerpc/crc32.h               |   5 +-
+>  lib/crc/tests/crc_kunit.c             |  62 +++++++++++--
+>  lib/crc/x86/crc-pclmul-template.h     |   3 +-
+>  lib/crc/x86/crc32.h                   |   2 +-
+>  lib/crypto/tests/hash-test-template.h | 123 +-----------------------
+>  11 files changed, 206 insertions(+), 152 deletions(-)
+>  create mode 100644 include/kunit/run-in-irq-context.h
 
-Signed-off-by: Albin Babu Varghese <albinbabuvarghese20@gmail.com>
----
- tools/testing/selftests/powerpc/tm/tm-tar.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=crc-next
 
-diff --git a/tools/testing/selftests/powerpc/tm/tm-tar.c b/tools/testing/selftests/powerpc/tm/tm-tar.c
-index f2a9137f3c1e..ea420caa3961 100644
---- a/tools/testing/selftests/powerpc/tm/tm-tar.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-tar.c
-@@ -50,7 +50,7 @@ int test_tar(void)
- 			"bne	2b;"
- 			"tend.;"
- 
--			/* Transaction sucess! TAR should be 3 */
-+			/* Transaction success! TAR should be 3 */
- 			"mfspr  7, %[tar];"
- 			"ori	%[res], 7, 4;"  // res = 3|4 = 7
- 			"b	4f;"
--- 
-2.50.1
+But, reviews and acks would be greatly appreciated!
 
+- Eric
 
