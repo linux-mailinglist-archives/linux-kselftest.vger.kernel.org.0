@@ -1,76 +1,54 @@
-Return-Path: <linux-kselftest+bounces-39501-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39503-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B16A8B2FBE0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 16:09:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB4AAB2FBFF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 16:12:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C67BD1D0291E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 14:04:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D9BA189FABD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 14:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA472FB60A;
-	Thu, 21 Aug 2025 14:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF15E24397A;
+	Thu, 21 Aug 2025 14:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="YLL/UP3h"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515A62F619B;
-	Thu, 21 Aug 2025 14:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5E323D7C1;
+	Thu, 21 Aug 2025 14:06:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755784932; cv=none; b=DLjsP9My8BV58XddVllsu14HwDKcV18uppO90myojZz0esTNbTF0LaFIfvjFobdzQGiylrI90kH3QGZiMlGswjxnesASJeWDD0xdWN4jOibJRO2lDkJhHpADumCk+sliUaso92rj7wo9Mx7GC0TEA/Wltm89ubKsQe36sFsG09M=
+	t=1755785222; cv=none; b=ii8w/LD3mIWgBi96Z+HdbJl54QAGUNLsO52Qid7oX/t6p2ijG+xwoIplV4BPK62aI8SQHIkc6BFI1eeoBT5mMrV/ueVwFLP5t0A9/wIxgvcVf3qImae6R5PWWiUUxRCdpix7S+TN+6vSr8OYWjARo8g0wTpE+kCWyp6Ek0KrYuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755784932; c=relaxed/simple;
-	bh=j+dnGsQvvMyv+gqHvh4MX/eBm+f7ZHWkpmRE/R7IECM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qGoTeGXkptHgN19j+xPPB5ACUTgT2RqNnRv5raU4jffgNo6VrERhdjZMl9r4IS6dyRgPVW0Q4zYmcF2rOkbw2/PxwrcsWSHz/F9B2+7OLad5hIIv96pkZjKMd7ft0LK3FKhX04fDbfqTR8++dbW2BBBSqYB0nA034vkUstrBvV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from ROG.lan (unknown [118.251.176.166])
-	by APP-03 (Coremail) with SMTP id rQCowABn+Xq+JqdoP8MTDg--.22469S7;
-	Thu, 21 Aug 2025 22:01:50 +0800 (CST)
-From: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
-To: paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	anup@brainfault.org,
-	pbonzini@redhat.com,
-	shuah@kernel.org,
-	cyan.yang@sifive.com,
-	cleger@rivosinc.com,
-	charlie@rivosinc.com,
-	cuiyunhui@bytedance.com,
-	samuel.holland@sifive.com,
-	namcao@linutronix.de,
-	jesse@rivosinc.com,
-	inochiama@gmail.com,
-	yongxuan.wang@sifive.com,
-	ajones@ventanamicro.com,
-	parri.andrea@gmail.com,
-	mikisabate@gmail.com,
-	yikming2222@gmail.com,
-	thomas.weissschuh@linutronix.de
-Cc: linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
+	s=arc-20240116; t=1755785222; c=relaxed/simple;
+	bh=Vail83RRNr80X7YdiV8bcd9lALKG736LnkAi6724cqc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RpZ6Y17/KF2PEm2dBQE6zKoBajNtXcrhDKpNpnCdRmrlyujiqe/D9hnuvAzAtn8z+O5NluCNWuMJK3p+liOxAf5iw3su658reDxfcF5wV1PlqiSLZk9Ta9bsD4LOwWAFe9/dBythGwB+2jHkrqWjDxA7z9lKUsmjjWJiM2dw2uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=YLL/UP3h; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=u4
+	YuSkPEHbpSteJpb/E58W6qZC/ILSmjwkLuynr2Zj8=; b=YLL/UP3hNqMwuCZrkj
+	eLqmzsO/roaPyMZlLcWr5gZChGQRhz5aov8a3ixl06KCb8UqdBJ776UBvbmy+t+Z
+	9Bh0OVgG5JUsGzDi0DMUKXAAQz1vaP0x+nVPLaEu7UcJXQL00c2eY9QYF0Nb5vfB
+	q2lu24vwqy949eiOmR8Z5qS0U=
+Received: from phoenix.. (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wB3RUngJ6doG2VUDA--.41400S2;
+	Thu, 21 Aug 2025 22:06:26 +0800 (CST)
+From: Jiawei Zhao <phoenix500526@163.com>
+To: ast@kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	yonghong.song@linux.dev,
+	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	pincheng.plct@isrc.iscas.ac.cn
-Subject: [PATCH v1 RESEND 5/5] KVM: riscv: selftests: add Zilsd and Zclsd extension to get-reg-list test
-Date: Thu, 21 Aug 2025 22:01:31 +0800
-Message-Id: <20250821140131.225756-6-pincheng.plct@isrc.iscas.ac.cn>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250821140131.225756-1-pincheng.plct@isrc.iscas.ac.cn>
-References: <20250821140131.225756-1-pincheng.plct@isrc.iscas.ac.cn>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v12 0/2] libbpf: fix USDT SIB argument handling causing unrecognized register error
+Date: Thu, 21 Aug 2025 14:06:21 +0000
+Message-ID: <20250821140623.971621-1-phoenix500526@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,69 +56,93 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowABn+Xq+JqdoP8MTDg--.22469S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cw47Ar47Jw4fZr4kXryUAwb_yoW8ZF15pr
-	1rA39Ikr4kJ34fA392y3s8Ww18Xws8Jws5Cw43ur4fAryjyryxtFnrA3W3Jr1DJa4Fqr1S
-	yF1fWr12vw40yrUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUml14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWUWVWUuwAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_
-	Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x
-	IIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j
-	6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x0262
-	8vn2kIc2xKxwCY1x0262kKe7AKxVWrXVW3AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
-	7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-	8E67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_
-	Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r
-	1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
-	JbIYCTnIWIevJa73UjIFyTuYvjTRZGYpUUUUU
-X-CM-SenderInfo: pslquxhhqjh1xofwqxxvufhxpvfd2hldfou0/
+X-CM-TRANSID:_____wB3RUngJ6doG2VUDA--.41400S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5Zr1xJr4UGF1UGFg_yoW5ArW5pF
+	WrGws8trWqyas7GFsxXr4Iyw43Wan5GFWUJFn2qw1Yvr4rGF9rJrWxKw15GFnxGa97X34Y
+	vF4qyFs8Gas5AaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07joGQDUUUUU=
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBgASwiGim-6KgjQADsB
 
-The KVM RISC-V allows Zilsd and Zclsd extensions for Guest/VM so add
-this extension to get-reg-list test.
+When using GCC on x86-64 to compile an usdt prog with -O1 or higher
+optimization, the compiler will generate SIB addressing mode for global
+array and PC-relative addressing mode for global variable,
+e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
 
-Signed-off-by: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
----
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+The current USDT implementation in libbpf cannot parse these two formats,
+causing `bpf_program__attach_usdt()` to fail with -ENOENT
+(unrecognized register).
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index a0b7dabb5040..477bd386265f 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -78,7 +78,9 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCB:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCD:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCF:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCLSD:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCMOP:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZILSD:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZFA:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZFH:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZFHMIN:
-@@ -530,7 +532,9 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
- 		KVM_ISA_EXT_ARR(ZCB),
- 		KVM_ISA_EXT_ARR(ZCD),
- 		KVM_ISA_EXT_ARR(ZCF),
-+		KVM_ISA_EXT_ARR(ZCLSD),
- 		KVM_ISA_EXT_ARR(ZCMOP),
-+		KVM_ISA_EXT_ARR(ZILSD),
- 		KVM_ISA_EXT_ARR(ZFA),
- 		KVM_ISA_EXT_ARR(ZFH),
- 		KVM_ISA_EXT_ARR(ZFHMIN),
-@@ -1199,7 +1203,9 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_zcb,
- 	&config_zcd,
- 	&config_zcf,
-+	&config_zclsd,
- 	&config_zcmop,
-+	&config_zilsd,
- 	&config_zfa,
- 	&config_zfh,
- 	&config_zfhmin,
+This patch series adds support for SIB addressing mode in USDT probes.
+The main changes include:
+- add correct handling logic for SIB-addressed arguments in
+  `parse_usdt_arg`.
+- add an usdt_o2 test case to cover SIB addressing mode.
+
+Testing shows that the SIB probe correctly generates 8@(%rcx,%rax,8) 
+argument spec and passes all validation checks.
+
+The modification history of this patch series:
+Change since v1:
+- refactor the code to make it more readable
+- modify the commit message to explain why and how
+
+Change since v2:
+- fix the `scale` uninitialized error
+
+Change since v3:
+- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
+  and pass all test cases.
+
+Change since v4:
+- split the patch into two parts, one for the fix and the other for the
+  test
+
+Change since v5:
+- Only enable optimization for x86 architecture to generate SIB addressing
+  usdt argument spec.
+
+Change since v6:
+- Add an usdt_o2 test case to cover SIB addressing mode.
+- Reinstate the usdt.c test case.
+
+Change since v7:
+- Refactor modifications to __bpf_usdt_arg_spec to avoid increasing its size,
+  achieving better compatibility
+- Fix some minor code style issues
+- Refactor the usdt_o2 test case, removing semaphore and adding GCC attribute
+  to force -O2 optimization
+
+Change since v8:
+- Refactor the usdt_o2 test case, using assembly to force SIB addressing mode.
+
+Change since v9:
+- Only enable the usdt_o2 test case on x86_64 and i386 architectures since the
+  SIB addressing mode is only supported on x86_64 and i386.
+
+Change since v10:
+- Replace `__attribute__((optimize("O2")))` with `#pragma GCC optimize("O1")`
+  to fix the issue where the optimized compilation condition works improperly. 
+- Renamed test case usdt_o2 and relevant files name to usdt_o1 in that O1
+  level optimization is enough to generate SIB addressing usdt argument spec.
+
+Change since v11:
+- Replace `STAP_PROBE1` with `STAP_PROBE_ASM`
+- Use bit fields instead of bit shifting operations
+- Merge the usdt_o1 test case into the usdt test case
+
+Jiawei Zhao (2):
+  libbpf: fix USDT SIB argument handling causing unrecognized register
+    error
+  selftests/bpf: Enrich subtest_basic_usdt case in selftests to cover
+    SIB handling logic
+
+ tools/lib/bpf/usdt.bpf.h                      | 47 ++++++++++++++-
+ tools/lib/bpf/usdt.c                          | 58 +++++++++++++++++--
+ tools/testing/selftests/bpf/prog_tests/usdt.c | 30 ++++++++++
+ tools/testing/selftests/bpf/progs/test_usdt.c | 28 +++++++++
+ 4 files changed, 156 insertions(+), 7 deletions(-)
+
 -- 
-2.39.5
+2.43.0
 
 
