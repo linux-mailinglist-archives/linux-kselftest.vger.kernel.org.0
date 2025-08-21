@@ -1,106 +1,97 @@
-Return-Path: <linux-kselftest+bounces-39533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39534-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD7CEB3009A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 18:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40791B300BE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 19:08:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDDB51C2190B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 16:56:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 080381C23DCA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 17:08:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42C2D2E5B36;
-	Thu, 21 Aug 2025 16:56:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA4F12FB627;
+	Thu, 21 Aug 2025 17:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X2pFq3sw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zx7KcmwH"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4DB2E1F11;
-	Thu, 21 Aug 2025 16:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C055B2FAC12;
+	Thu, 21 Aug 2025 17:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755795365; cv=none; b=ub+vuWw/3aKSPop+UwpnANDXZ01CFiovCHkrp1wFpLcWfY5cpDen/wYIYzkH4P+lF/IX6mIMrceAzecZeu+7ew3XmhTxRZEFvH3/UkqU2MEC7m2Z7jYHJ8t/T2Ob02yVO662WW+37CzG5BtOgxszibvaqnwjIoCSyuGGhkfHy+M=
+	t=1755796098; cv=none; b=d1virllfsxIO88lAQbP5or+Z6xiSx94OK6IgYBon3j9kPwmVP2gh16wlNJcAwyiY5EBMH424YlbCinNIYRgycgezXrlYOHd+6ARJ/2JXsSwI34ppZhIa3AkeJCsVc33FDFhw1f8PkPNbGH1HqCX6yyJNCF6bUTII3a5WxR2dCnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755795365; c=relaxed/simple;
-	bh=OTJfMD5H4cDT5DeZwBC9vrpTKC9XBlJdn8JVZTk0OfA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lQg+5fz9ZmyhuoAIx3AqpXk8nuxUTRMGJ6cndZSleR66wqFAHvrfRnXyDLwqdmS0pOrzUd8o1VENpMR2jSBSMO0+EEAKQTG3OdKGzFSWetb9abP7j/Oxtf/QF//i05DjxqOezjjxpv1hc9ng6INkf8OwEFKiR1ia+NVHBRcNlgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X2pFq3sw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66C4FC4CEF4;
-	Thu, 21 Aug 2025 16:56:04 +0000 (UTC)
+	s=arc-20240116; t=1755796098; c=relaxed/simple;
+	bh=31gOTHz/ebGa3W3r+33yR1DrojtjP2REs9LRBXLJK8I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=My24CyOI+ULmyLYgO6Yeyobl5CYZk82aQzuW3c61MZe5nM5lKchsh1luin+YC2L3Fqck+3KgaNvhraTkxETvYrZJNl1s5L+weHrSbDi3J8b8ChTY8uhV0vp8ux2rvCPnG6wEbbBcgvj/Q9yqcQDnn5fnZqVlvaWLcyUFDGUt8Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zx7KcmwH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C03C4CEEB;
+	Thu, 21 Aug 2025 17:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755795364;
-	bh=OTJfMD5H4cDT5DeZwBC9vrpTKC9XBlJdn8JVZTk0OfA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=X2pFq3swWLYIK/fEgSYiOtTYtShp4zuzf3sugfUz5NkK2zy+tphCNy/d/MvkUV5/l
-	 qFPdgdCYcUco0Hsy/E87K25hxzrJSQ31SToOjB/EDos+/4n0w6rK+chN1ioL48MHSe
-	 cOc5MJ6stgKBkcNayHxqqXcg8aqP6QVytAEXPOyhG5RaxxZ0QvEQbRMCvNLn88Jt8F
-	 1/zMcIHH7gpllTV7BrZG/PzZfyVGS6HQ3RO6p+MTrHHYJw3elBu54+axH4A+Wr4Ent
-	 XIxATolM0fhS3WrWQaGvf0yC85rJjWG5KjW/yH6esL8uKfzbkPthPD699lY0fSp/rN
-	 3mZePrUrR0Jsg==
-From: SeongJae Park <sj@kernel.org>
-To: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	akpm@linux-foundation.org,
-	shuah@kernel.org,
-	mic@digikod.net,
-	gnoack@google.com,
-	david@redhat.com,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	ming.lei@redhat.com,
-	skhan@linuxfoundation.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-mm@kvack.org,
-	netdev@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-block@vger.kernel.org
-Subject: Re: [PATCH] selftests: centralise maybe-unused definition in kselftest.h
-Date: Thu, 21 Aug 2025 09:56:02 -0700
-Message-Id: <20250821165602.79023-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250821101159.2238-1-reddybalavignesh9979@gmail.com>
-References: 
+	s=k20201202; t=1755796098;
+	bh=31gOTHz/ebGa3W3r+33yR1DrojtjP2REs9LRBXLJK8I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Zx7KcmwHGYzBB8Wz7/IqA9JoUmOMKz9o4IlC+Nr+VFleqUDYHw3uR8Aoz6xwmCPr6
+	 MWSfdqeoXvoR2UgCXiW633WgJQF+Bc7Wfc0EkBTEqigegYs2sdLncthO3zpl5fTxnR
+	 JQcf3jma81dBP3NG3WSSvN+QZBJPAEsB/DE7eOmFFhuUdyIJxOTUBfnc8FeZ/BYGh0
+	 U9BnNfrcR32om/UNtBADGLtDYbdEQ7DUzthFyuSgcz4G2Jp/ogX6lDOS1NfPrLVFFw
+	 KYKfQwFwv/fo9hzyq73OfCkXgwApXs2leHC5MqosKILQ/AuuyJd46OGQ3hlLw0++3G
+	 jJ72zB0iC90ow==
+Date: Thu, 21 Aug 2025 18:08:13 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] kselftest/arm64/gcs: Correctly check return value
+ when disabling GCS
+Message-ID: <24a68b5d-2c24-46ec-aee2-74b45b45deea@sirena.org.uk>
+References: <20250821-nolibc-gcs-fixes-v1-0-88519836c915@weissschuh.net>
+ <20250821-nolibc-gcs-fixes-v1-1-88519836c915@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-
-On Thu, 21 Aug 2025 15:41:59 +0530 Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com> wrote:
-
-> Several selftests subdirectories duplicated the define __maybe_unused,
-> leading to redundant code. Moved to kselftest.h header and removed
-> other definition.
-> 
-> This addresses the duplication noted in the proc-pid-vm warning fix
-> 
-> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> Link:https://lore.kernel.org/lkml/20250820143954.33d95635e504e94df01930d0@linux-foundation.org/
-> 
-> Signed-off-by: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
-
-Acked-by: SeongJae Park <sj@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="DVFZaVUj4cP8FPoR"
+Content-Disposition: inline
+In-Reply-To: <20250821-nolibc-gcs-fixes-v1-1-88519836c915@weissschuh.net>
+X-Cookie: Warp 7 -- It's a law we can live with.
 
 
-Thanks,
-SJ
+--DVFZaVUj4cP8FPoR
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[...]
+On Thu, Aug 21, 2025 at 05:13:02PM +0200, Thomas Wei=DFschuh wrote:
+> The return value was not assigned to 'ret', so the check afterwards
+> does not do anything.
+
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--DVFZaVUj4cP8FPoR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAminUnwACgkQJNaLcl1U
+h9AaNwf/dx/DkunGpnhn2H/7SWaWs67mqHdnj5v38faOVHnQsUi5f48labTyAYNQ
+kB8icvE9A8Z/KCxsc92S2lwv5bshWE8ZvbWyFyytJbFEXGpI5XGlPRagdL6UzJr+
+BmZIcMpbVd+DG2g4DY4yqiqBOpaCVEPneOOi3mC1ZC5BGNMExvhGCQ2XPhpFDpKL
+cydo41hLLhbq3OcuPnuhwc2vqAX3dzDVU/QsYacFYA7rN5ZjsJk7GQLrtmZecXiq
+IU1bx1FOwi+5oHHG9b7QS0OLSbftM+gO16Q3yeXxfU3BxR8iHsF4Jv11Fn/Qt7e9
+aNZxz1s6oz8GKK2Oh8DqAvZuOtqxCw==
+=Auzd
+-----END PGP SIGNATURE-----
+
+--DVFZaVUj4cP8FPoR--
 
