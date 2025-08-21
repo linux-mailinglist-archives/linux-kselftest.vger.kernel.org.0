@@ -1,109 +1,160 @@
-Return-Path: <linux-kselftest+bounces-39418-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 452BEB2EA69
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 03:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4512CB2EAD1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 03:39:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E4535A303E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 01:17:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBDA55C8141
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 01:39:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EB901E493C;
-	Thu, 21 Aug 2025 01:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1BEC244687;
+	Thu, 21 Aug 2025 01:39:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="wlZnw6kv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BCZUR5HI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f193.google.com (mail-yw1-f193.google.com [209.85.128.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0333636CE02;
-	Thu, 21 Aug 2025 01:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0313243951;
+	Thu, 21 Aug 2025 01:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755739038; cv=none; b=W2TaNZr5ZZgH1ZvBqUqcAARdq21G9fKxAPLPhvPuR5aTHz3nR69KMMI0du0a7HfoKGiM/U9n5w25yvrIWRndYhUQNPvkzh0rA56a0yrVDMOD9YCHgHO37BdHCHBt+jY/OzZjMIWTapX4AssdDs+l+X+2S/123g79D08RHP90nM4=
+	t=1755740385; cv=none; b=j7UqI39MYdQU6yjNIINhYp3XsMjln8a1KgCj5Gj0I7tMIFIGe0dkjXv9IuHBrBbloms9J7uGB3aN9kSzP5pnydvZGlE5RThmqbtDH0BumZUxgbx22/pA0EY8jRKO5O6fXSvvXzghKmyk9qcMWQ+bUBoasFZQS3YrrdKX+4rBt9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755739038; c=relaxed/simple;
-	bh=w/mhTWUbr6/K3ZpBOw6iFBOZ7tUKFPr+Fy1MPDtZFyY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ut72dnrZ4FcY/0Id5LCkncZyJCxTrWv6AOzdsB1x7n8Nl2Zt30hD/Q3/W8adiqAxK+4zDdoRlYJysXgUvwivRJM8Q+t22yIDY0KPSbpIL4+losRhT7B2jQnTjPNpP2x7Ht+umol0O0p70TVR2suCb5nYI0pF7qpRaHvVBDd+UTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=wlZnw6kv; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1755739027; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=Kcy4kiDvfXjZXkr3p+YJ3IZARRcGWf8p3DtdKNM7Prw=;
-	b=wlZnw6kv3L93IuGWKFpgFpZrvNt6crSxCtPi/QEu8b3ZHojHqNCD0Gh+jWq2Q0WDFPVw4wEHL0ooB0rLKL74LibaRUWTtODZ0K7kUZ31h2cFb2aSQT7x86F14zvhOT/lOtokuLcx9NAZFY7bOIDaJCOUUKkpz3tBL5tdmDzUIYQ=
-Received: from 30.74.144.114(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WmE-6ch_1755738705 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 21 Aug 2025 09:11:46 +0800
-Message-ID: <816d77f1-aa8f-4580-b1cd-b8c81f929fdd@linux.alibaba.com>
-Date: Thu, 21 Aug 2025 09:11:45 +0800
+	s=arc-20240116; t=1755740385; c=relaxed/simple;
+	bh=kSDSfek91jsHl7FrJyM0gLyKBh6BqcNAxcjQLYi4lr0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZA/AC+x6guEFid1D11m1qv1HmxW0kEmxIRg4QJ42bhkQNjeYXzOM+Lz2pJena1a4ZP8JxYMWgQrPoa4MfMDqy32jdbn6IXSkDkrELNKrQ91bvpq611Q1yAUzavq8ZlS2KvvQoXmCkkHiGsHLKwVvZOaqKXO690fCnXwcrzhK8O8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BCZUR5HI; arc=none smtp.client-ip=209.85.128.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f193.google.com with SMTP id 00721157ae682-71d6083cc69so3920597b3.2;
+        Wed, 20 Aug 2025 18:39:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755740382; x=1756345182; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ebI6Za89uQY5Wc3NtaCHo2kvrIsvdUGpm5geS336IaY=;
+        b=BCZUR5HIRYVCwWBt+JlNeUoB4hkWonQUkO5ptgiQg5bhCAOg1naSBQdKj1JY7IbgZD
+         Er1oOBvai9Fcw0GUXHQIgkIzBUR9ZxIc1UmII8HmR2Was2vqgZm5CoPPIlPYac4VM8h5
+         0e//StOonDEIXR6Pt02ByixOOyuDWcf702XZYAkcdaJK/7FIXhhzhFDzMUL/o5Gbcdc4
+         dysTU6cxWxzi14Njkv2nQISo6x8VRFwMhfHGpxxh9k+vkEC+j0F/e2wd10UHBUBlhGKJ
+         m+PQplZe+t3XnSQOtQhUF6XY1f+3CeGoF9luPH13Sp2mnPg24lUEsbYP/KHbYDyqu56Z
+         W9Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755740382; x=1756345182;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ebI6Za89uQY5Wc3NtaCHo2kvrIsvdUGpm5geS336IaY=;
+        b=jswEQrZtfIyyYMZ9Pw+OWLJkspvzi0wIAdFJe/+2uFuP57QK+b2rZFyvMW+ENPqaki
+         9cYkAfuCMBH30z5un31/cspOjmOpy2QkpUjza6CsSk8C5sCGl3jf7vWY8Nf8XmMvrzLO
+         6cf10Joc0xSq2aN5j70rexr+2s+sf3XXm59UH4PXc98NOYDxWZYuM5Bf79YJH34Xq6IB
+         UosZu5L/61rnI/VluUy4Rt4ADw32f09Wf4JDiTqbdZw+CEd7WgT7e7g6x+1HblKsVrJ4
+         T8Kdf0gxrlQS+Z5d8awtZ7Q2N71fxE5dK8BAMnXpl4luHfDc9rOr6S7c53U1fG5Zf4Gy
+         tcKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVDRnl6HXAQ/98oWJKLp2ZIriKnGHr5TpKC/hvThyzVkI3WtjIjM/JVVSQnahTSgr/NCa+s2A3USLnd2i99AID5@vger.kernel.org, AJvYcCVUS6Cc3RCukXs5QkOEvpv2+PFW55tHFJosxbj1AJIFVo6LpHij+vMevITBpz1OrqnCvms=@vger.kernel.org, AJvYcCWgxi2CnkfdJIaXQaWVw0e1XO8sne9k5y2iCfmyGJWB7UV8nMewmLvqTgWXE52+d0yJ+v7GMqE1@vger.kernel.org, AJvYcCXkDODRKhK5C/ux2alzmC0Ai4TfTGM8uHy8q81Pl83+fG6E/SqqIIq6di1IZfQJyvrUQiEAUTmiU3S0WWOg@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHznvrgoA4Z+bA4YIUDDzmG+fppU+NE2vHexGAzVQHHuVNY+/r
+	3rkRxVsZ1aB+4ovyFwPSvDWIKI4tHAw8QK/T7MS2D0A7X79qtjIdUXy+od1hdiOQdxAX6RI4nN0
+	bJAr04NGJbyuwXzL+L1DGuedbzHBS7pQ=
+X-Gm-Gg: ASbGncuAgfoiPwosmez67whP3jRMq4OfsP2QTw0isQJq0E7V2jeKYHgyd18KY9pmpkv
+	maGtpiY3PZTth8X7ZvETUTtwkNFTevy5OeKxMSG/1OxQ48nK72LKRnQEYU8zeUd5BpmRWVXrR8A
+	JZeHEXw9tjGDD8xO817yovIR1lcnzRGA0T5TQAFQ2RZ3wsM7XKpf4QaNPJT75LFDlRNGz+uzeOk
+	JKl41DHQNU=
+X-Google-Smtp-Source: AGHT+IGfNVSG+YcsbP05U+7tIuANEtQ3x/KgCgdmjsd6mkdSCWkbsC/b2aHy2e+JJzoZ3OamVVaeaFd9iZgnbQ6z6cY=
+X-Received: by 2002:a05:690c:30d:b0:71b:9213:a75d with SMTP id
+ 00721157ae682-71fc8899224mr12037257b3.18.1755740382464; Wed, 20 Aug 2025
+ 18:39:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/5] selftests/mm: add check_after_split_folio_orders()
- helper.
-To: Zi Yan <ziy@nvidia.com>
-Cc: Wei Yang <richard.weiyang@gmail.com>, wang lian <lianux.mm@gmail.com>,
- David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
- Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250818184622.1521620-1-ziy@nvidia.com>
- <20250818184622.1521620-5-ziy@nvidia.com>
- <a81b7fd3-c466-45c9-9374-361b780ce09b@linux.alibaba.com>
- <A5A3C9E5-7E90-4EB4-878F-D5143FE0F349@nvidia.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <A5A3C9E5-7E90-4EB4-878F-D5143FE0F349@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250819033956.59164-1-dongml2@chinatelecom.cn>
+ <20250819033956.59164-3-dongml2@chinatelecom.cn> <CAEf4BzZBztC69GFDuA4YJHPmWOXuq3+tSNMspPNA3tksGaEi=A@mail.gmail.com>
+In-Reply-To: <CAEf4BzZBztC69GFDuA4YJHPmWOXuq3+tSNMspPNA3tksGaEi=A@mail.gmail.com>
+From: Menglong Dong <menglong8.dong@gmail.com>
+Date: Thu, 21 Aug 2025 09:39:31 +0800
+X-Gm-Features: Ac12FXzswgjQ95dJXpbKnIm6pNkHCGVkejzRiQftM1aigpT1SzLiC1ZO-IiEQUM
+Message-ID: <CADxym3bjmC3d1d3_CKd2DqFB4P_LYK_FwXUXFcKsYcJ6=smfAg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: skip recursive functions for kprobe_multi
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
+	shuah@kernel.org, davem@davemloft.net, kuba@kernel.org, hawk@kernel.org, 
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com, 
+	justinstitt@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Aug 21, 2025 at 6:47=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Mon, Aug 18, 2025 at 8:40=E2=80=AFPM Menglong Dong <menglong8.dong@gma=
+il.com> wrote:
+> >
+> > Some functions is recursive for the kprobe_multi and impact the benchma=
+rk
+> > results. So just skip them.
+> >
+> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> > ---
+> >  tools/testing/selftests/bpf/trace_helpers.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testin=
+g/selftests/bpf/trace_helpers.c
+> > index d24baf244d1f..9da9da51b132 100644
+> > --- a/tools/testing/selftests/bpf/trace_helpers.c
+> > +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> > @@ -559,6 +559,22 @@ static bool skip_entry(char *name)
+> >         if (!strncmp(name, "__ftrace_invalid_address__",
+> >                      sizeof("__ftrace_invalid_address__") - 1))
+> >                 return true;
+> > +
+> > +       if (!strcmp(name, "migrate_disable"))
+> > +               return true;
+> > +       if (!strcmp(name, "migrate_enable"))
+> > +               return true;
+> > +       if (!strcmp(name, "rcu_read_unlock_strict"))
+> > +               return true;
+> > +       if (!strcmp(name, "preempt_count_add"))
+> > +               return true;
+> > +       if (!strcmp(name, "preempt_count_sub"))
+> > +               return true;
+> > +       if (!strcmp(name, "__rcu_read_lock"))
+> > +               return true;
+> > +       if (!strcmp(name, "__rcu_read_unlock"))
+> > +               return true;
+> > +
+>
+> static const char *trace_blacklist[] =3D {
+>     "migrate_disable",
+>     "migrate_enable",
+>     ...
+> };
+>
+> it's not like it's one or two functions where copy-pasting strcmp might b=
+e fine
 
+OK!
 
-On 2025/8/20 21:49, Zi Yan wrote:
-> On 20 Aug 2025, at 5:22, Baolin Wang wrote:
-> 
->> On 2025/8/19 02:46, Zi Yan wrote:
->>> The helper gathers a folio order statistics of folios within a virtual
->>> address range and checks it against a given order list. It aims to provide
->>> a more precise folio order check instead of just checking the existence of
->>> PMD folios.
->>>
->>> The helper will be used the upcoming commit.
->>>
->>> Signed-off-by: Zi Yan <ziy@nvidia.com>
->>> ---
->>
->> I tested this patch, and it works for me.
->> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> 
-> Thanks.
-> 
->>
->> By the way, I moved gather_after_split_folio_orders() to the vm_util.c file as a helper for mTHP collapse checks in my patchset[1]. I'm not sure whether you need to move gather_after_split_folio_orders() to vm_util.c in this patch, or if I should move it in my patchset.
-> 
-> Feel free to move it in your patchset. My initial version has it in vm_util.c, but
-> I realized that its implementation is very limited to folio split check and moved
-> it to split_huge_page_test.c. If you find it suitable for your test cases, feel
-> free to move it. Just note that the code does not handle memremapped THP, since
-> it only checks page flags without checking the PFN. So when a vaddr range is mapped
-> to a THP/mTHP head page and some other THP/mTHP tail pages, the code just treats
-> the whole vaddr range as if it is mapped to a single THP/mTHP and gets a wrong
-> order. After-split folios do not have this concern, so
-> gather_after_split_folio_orders() is simplified to not handle such cases.
-
-Thanks for the information. khugepaged also does not have this case, so 
-it works well for me.
+>
+> pw-bot: cr
+>
+>
+> >         return false;
+> >  }
+> >
+> > --
+> > 2.50.1
+> >
 
