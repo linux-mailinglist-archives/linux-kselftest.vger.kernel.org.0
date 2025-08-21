@@ -1,212 +1,200 @@
-Return-Path: <linux-kselftest+bounces-39606-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5828B3087E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 23:38:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24DE2B308A1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 23:47:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD5066247D5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 21:37:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5CF1AA5E44
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 21:46:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5125D2D6E53;
-	Thu, 21 Aug 2025 21:37:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5541A2EB5D9;
+	Thu, 21 Aug 2025 21:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZZLwgz0C"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906DE2C0278
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 21:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBAEC2EB5AD
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 21:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755812238; cv=none; b=cAsApJSzaz2MYrD75vbi19h4XyEzoQ4AjvXDE2nM/nvbyU9ETn4+NWpr1FY/FY1ev6UHy03cqhgM6ywt8WsG/PJGI9Vnk+aH0t77/qfKthrzL8sUOedNfYt9U92u/ajStFrML3OnzxKpgSsNI8cprwuKujdnbBx7dlPvrXG8seo=
+	t=1755812732; cv=none; b=EfzDiHvCmqxxp6c3P9Pq8VEVOVxfYPy/OnpxDwo56HpmlOyYL4QKNZWsyOgoO6g8yVFoZdNdN/+yGdc5Ue7FtHGlf9Kj4ZvzwFeZYc/pkclq6shCItNeSRLai2RQsibAXoUhD0iKe1XO/sT4Se4JFzgV8Eo7iGMAolVjEX4djIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755812238; c=relaxed/simple;
-	bh=D7mG/7eHvAByRVz7e7xhMg1OUUyaclPfbPriELhFlwc=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=tVD6bkHjYuPCmUe+hFDQbP/nOZsqQGUr3XX1TiNQ12RpkYaoGC46gA7MQpDQ64y2OYTfeM/NeleIHiPPrPYgoteXsE1x/dw+gJdkM103l5GvvlCfoqfUQ+ndnbKzgs4ztqD7F+NB9JkfVhN6DE1DaEAXSuj9YO1+4RCvkCytdqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3e7172dea48so29165695ab.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 14:37:14 -0700 (PDT)
+	s=arc-20240116; t=1755812732; c=relaxed/simple;
+	bh=fUaBHZHAJdUQk9eKwml7s0QHGPPoV73wuBZAYASLp2c=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=aF6FIbIIbWGXyrxrjeJOycawTy1qKDqbO7OCfKEkJszNmtSzu+GguRaANA66UVLljc0wjya9dhPlhFGbkdXNouOtfBbPJ7wcBYTDrh9zDKx2A117stbxK8vjMhnheWCxknFMqZ5nI1jYFKfv9aCXTK0oJ++3gFhH9NkohrncGjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZZLwgz0C; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755812729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=xgU+Z5k4KPqEraeKDWCOzJcpc8HGVmW4oZxLQRmx6Ws=;
+	b=ZZLwgz0CiBuA5jqpqa/3NMcq+bINC3dxkAPtqA1K1FPNAm4cPgih0GanlICii54VvK2uM7
+	GIiVVRNpqJOvIgPghRxR9sSi0p3zpRP7uSaHidBwnXSqbsx11QYnOYbEyn4gP9yjsmoh4l
+	yHA+ELlnVoP8sJAJfDVlWkofqxLzPQQ=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-73-g3SW3UENPYO4jrdn7tkPNA-1; Thu, 21 Aug 2025 17:45:23 -0400
+X-MC-Unique: g3SW3UENPYO4jrdn7tkPNA-1
+X-Mimecast-MFC-AGG-ID: g3SW3UENPYO4jrdn7tkPNA_1755812722
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3b9e4117542so652276f8f.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 14:45:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755812234; x=1756417034;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q4cr6QMqKu3ZXE5LbmZFl5rCj+PzGQQulyaw1Vp4aNc=;
-        b=ULb7IFQFHnLfT9IsKF5WUrvCDJ0iFWGb+vE2rfVS99eqmDj3oGuMCToHfpe4t7RzID
-         o+naFMJZtXEggeUWfZhAU9RozaNsXewp0mIWoSD2kN5xSGpVtnNAadldal4ZJYbQJy+f
-         iMocY/l2b5LniRjQuw3EYRpZ4QyyK7gma/yig5nAxrP4Omz1L2mQ0d0I/REBqfqBWFca
-         ixyets+z1WYG6LDAqLAi8QACwO8eGFzoqp0aOefzcKex2P49E5H3sLbiwRwQCSf3GUM6
-         iX/vjX4SabBRYCvELmGW4fq9BqIVCoDYYsLA4q3yZbfd6WNYdXU4A15diHByujK3FZlW
-         +eXg==
-X-Forwarded-Encrypted: i=1; AJvYcCVhpc1Pg9ygWJQIxBmx6xkz5uETUeLKpxnadM5BD8Nyd3JkCoyYYpMRptKbx/y+iGcogrSk1y1Ut8u+fZ8fhlo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYS0yfXa+0PhVsNpARKU1NmbS83AOTy/Z2RKyOoOqNgIE0jDOu
-	XT+jBenbXqOxRG4LoVVSJ+70QRS6DCBvl8OuNPPBEpmopF4RShA1IIeRFSSy4YkPDPK3ZL+ytq6
-	AAldToJxrLLWVh3UcdNsRoxdxsdciSuhQqDq4t7FK9dxG7XOJpLErBC8qUXQ=
-X-Google-Smtp-Source: AGHT+IF7KMX4PQ9MbhjzaZS9KH1hsBks7Ag/V1kb+FvUzHNpAJ+XwFEszukCkWQQAtI/yieVASDRCVnTSkaGoVJY87X1Pd3k81yl
+        d=1e100.net; s=20230601; t=1755812722; x=1756417522;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xgU+Z5k4KPqEraeKDWCOzJcpc8HGVmW4oZxLQRmx6Ws=;
+        b=HTsUQF9GXUT23F18qkRUP2bqALUjyQeHmCNxuZnpF1RPgaJ+Rhb+2sbTnf3kHZ2Qg5
+         s/CPmT3zh5G5MxLcMcQSaqZhOA206f/CyOukR0BG8WBoJ7yOWcW1czHwmAnbOaU1asTQ
+         imfwV+YVq253G2fYndde6uY2uD4DD9kDdBiJtC4aZf4NriliO4FQdtEQNKj2CpigusHA
+         +vwZ8MKwgCQa+oaS0QkQupoZpGgBXPS28FOb7Lx9GXRxM2sSd29pVWWbs++kzl4ZPN+W
+         aTHvud/28ZGoey5/hxjbuEL/ISDur0Vo6WD4OnnYu8anR1SBGLbqS+gfz08Av7FYnyx2
+         ECSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJyadHApYOOa/6IJCQNnPVs6vz4vDjiYWhUuQ7M/PXboR3j546w4vFrXkMi/5ZFPxCFautD2vebgdNZNE4U2Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkRW0pG12kS4FhLDRph6LvevzEhXN4kyQfdy++lMxHlEwYESMd
+	aPjJBQB0mKJbx2CD4I3Z0cA/wAf3x/MS4ohHniB/k2WVuVLe/i+JNmjcqKOYV/w4VyVjIurRQUF
+	NROzseyTCAkcmhGU9ScfNMsZHhtLFzwWIo0Fqn7P1Co77tF8R1UHupCrIcb15pKXMGFwbKQ==
+X-Gm-Gg: ASbGnctYkUfksOCPSovd5CB1FgyydLqa4YtXtcOii/fWWdVdPhJfxUsgTpMFwRaDik/
+	ST1BG0WDgRYP/DFG4eHlZajnwQFCDFQiIlAaJK1rb8mzjn2vB73FrMG6q5JzQ6y6WxcL4PAEofL
+	FzNhlAsS5i2uoTpgSh4oqsE6p/hUTatTeIi8LLTgXtQewkFJsvbvEhJ1plZPAjbJjKQ2spSnh6f
+	SL9Ceu8yXIINWhCravL6TH/kgttt4Vevu6S4ASNMewv2t1qdxc2/Lxn5oWEdneRPmiFbyySnt/y
+	luahWhSvxVD2bz6zFTAhRUpfRQdgc6f0unZ1YWjZINSsLbtM+fParS+eXQ7k3LOuEeoM10o7Ubx
+	aklG6rDTqmsMJW5BvjzEjXTBbuw93iqrDwZhqh7QLfFs/MLaKfK9qnLGf0RDB3g==
+X-Received: by 2002:a05:6000:2902:b0:3b8:f925:8d4 with SMTP id ffacd0b85a97d-3c5db2da00amr300083f8f.26.1755812721897;
+        Thu, 21 Aug 2025 14:45:21 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEfnhl0R8ZwVLuxUZYmGD7nMrbthuKRx51tD/iqNpCQL5sxy24UygUdE3xc6j7fC/B+t7+yTQ==
+X-Received: by 2002:a05:6000:2902:b0:3b8:f925:8d4 with SMTP id ffacd0b85a97d-3c5db2da00amr300045f8f.26.1755812721421;
+        Thu, 21 Aug 2025 14:45:21 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f26:ba00:803:6ec5:9918:6fd? (p200300d82f26ba0008036ec5991806fd.dip0.t-ipconnect.de. [2003:d8:2f26:ba00:803:6ec5:9918:6fd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b4e25da97sm22067085e9.1.2025.08.21.14.45.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Aug 2025 14:45:20 -0700 (PDT)
+Message-ID: <b09b7ef4-5b06-4bb8-9be3-1194e3904c92@redhat.com>
+Date: Thu, 21 Aug 2025 23:45:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:19c6:b0:3e6:6c55:643 with SMTP id
- e9e14a558f8ab-3e9201f3d92mr16380665ab.7.1755812233632; Thu, 21 Aug 2025
- 14:37:13 -0700 (PDT)
-Date: Thu, 21 Aug 2025 14:37:13 -0700
-In-Reply-To: <20250821200701.1329277-1-david@redhat.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68a79189.050a0220.cb3d1.0004.GAE@google.com>
-Subject: [syzbot ci] Re: mm: remove nth_page()
-From: syzbot ci <syzbot+ci0b43493baa45553d@syzkaller.appspotmail.com>
-To: agordeev@linux.ibm.com, airlied@gmail.com, akpm@linux-foundation.org, 
-	alex.williamson@redhat.com, alex@ghiti.fr, andreas@gaisler.com, 
-	aou@eecs.berkeley.edu, axboe@kernel.dk, borntraeger@linux.ibm.com, 
-	bp@alien8.de, brett.creeley@amd.com, cassel@kernel.org, 
-	catalin.marinas@arm.com, chenhuacai@kernel.org, christophe.leroy@csgroup.eu, 
-	cl@gentwo.org, dave.hansen@linux.intel.com, davem@davemloft.net, 
-	david@redhat.com, dennis@kernel.org, dgilbert@interlog.com, 
-	dlemoal@kernel.org, dri-devel@lists.freedesktop.org, dvyukov@google.com, 
-	elver@google.com, glider@google.com, gor@linux.ibm.com, hannes@cmpxchg.org, 
-	hca@linux.ibm.com, herbert@gondor.apana.org.au, 
-	intel-gfx@lists.freedesktop.org, io-uring@vger.kernel.org, 
-	iommu@lists.linux.dev, jackmanb@google.com, 
-	james.bottomley@hansenpartnership.com, jani.nikula@linux.intel.com, 
-	jason@zx2c4.com, jesper.nilsson@axis.com, jgg@nvidia.com, jgg@ziepe.ca, 
-	jhubbard@nvidia.com, joonas.lahtinen@linux.intel.com, 
-	kasan-dev@googlegroups.com, kernel@xen0n.name, kevin.tian@intel.com, 
-	kvm@vger.kernel.org, lars.persson@axis.com, liam.howlett@oracle.com, 
-	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org, 
-	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, linux-mmc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, lorenzo.stoakes@oracle.com, 
-	m.szyprowski@samsung.com, maddy@linux.ibm.com, martin.petersen@oracle.com, 
-	maximlevitsky@gmail.com, mhocko@suse.com, mingo@redhat.com, 
-	mpe@ellerman.id.au, muchun.song@linux.dev, netdev@vger.kernel.org, 
-	npiggin@gmail.com, oakad@yahoo.com, osalvador@suse.de, palmer@dabbelt.com, 
-	paul.walmsley@sifive.com, peterx@redhat.com, robin.murphy@arm.com, 
-	rodrigo.vivi@intel.com, rppt@kernel.org, shameerali.kolothum.thodi@huawei.com, 
-	shuah@kernel.org, simona@ffwll.ch, surenb@google.com, svens@linux.ibm.com, 
-	tglx@linutronix.de, tj@kernel.org, torvalds@linux-foundation.org, 
-	tsbogend@alpha.franken.de, tursulin@ursulin.net, ulf.hansson@linaro.org, 
-	vbabka@suse.cz, virtualization@lists.linux.dev, will@kernel.org, 
-	wireguard@lists.zx2c4.com, x86@kernel.org, ziy@nvidia.com
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 33/35] kfence: drop nth_page() usage
+From: David Hildenbrand <david@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
+ Dmitry Vyukov <dvyukov@google.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Brendan Jackman <jackmanb@google.com>,
+ Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org,
+ Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
+ Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
+ kasan-dev@googlegroups.com, kvm@vger.kernel.org,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+ netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+ Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
+ Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+ virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+ wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+References: <20250821200701.1329277-1-david@redhat.com>
+ <20250821200701.1329277-34-david@redhat.com>
+ <1a13a5cb-4312-4c01-827b-fa8a029df0f1@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <1a13a5cb-4312-4c01-827b-fa8a029df0f1@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-syzbot ci has tested the following series
+On 21.08.25 22:32, David Hildenbrand wrote:
+> On 21.08.25 22:06, David Hildenbrand wrote:
+>> We want to get rid of nth_page(), and kfence init code is the last user.
+>>
+>> Unfortunately, we might actually walk a PFN range where the pages are
+>> not contiguous, because we might be allocating an area from memblock
+>> that could span memory sections in problematic kernel configs (SPARSEMEM
+>> without SPARSEMEM_VMEMMAP).
+>>
+>> We could check whether the page range is contiguous
+>> using page_range_contiguous() and failing kfence init, or making kfence
+>> incompatible these problemtic kernel configs.
+>>
+>> Let's keep it simple and simply use pfn_to_page() by iterating PFNs.
+>>
+> 
+> Fortunately this series is RFC due to lack of detailed testing :P
+> 
+> Something gives me a NULL-pointer pointer here (maybe the virt_to_phys()).
+> 
+> Will look into that tomorrow.
 
-[v1] mm: remove nth_page()
-https://lore.kernel.org/all/20250821200701.1329277-1-david@redhat.com
-* [PATCH RFC 01/35] mm: stop making SPARSEMEM_VMEMMAP user-selectable
-* [PATCH RFC 02/35] arm64: Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
-* [PATCH RFC 03/35] s390/Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
-* [PATCH RFC 04/35] x86/Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
-* [PATCH RFC 05/35] wireguard: selftests: remove CONFIG_SPARSEMEM_VMEMMAP=y from qemu kernel config
-* [PATCH RFC 06/35] mm/page_alloc: reject unreasonable folio/compound page sizes in alloc_contig_range_noprof()
-* [PATCH RFC 07/35] mm/memremap: reject unreasonable folio/compound page sizes in memremap_pages()
-* [PATCH RFC 08/35] mm/hugetlb: check for unreasonable folio sizes when registering hstate
-* [PATCH RFC 09/35] mm/mm_init: make memmap_init_compound() look more like prep_compound_page()
-* [PATCH RFC 10/35] mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap()
-* [PATCH RFC 11/35] mm: sanity-check maximum folio size in folio_set_order()
-* [PATCH RFC 12/35] mm: limit folio/compound page sizes in problematic kernel configs
-* [PATCH RFC 13/35] mm: simplify folio_page() and folio_page_idx()
-* [PATCH RFC 14/35] mm/mm/percpu-km: drop nth_page() usage within single allocation
-* [PATCH RFC 15/35] fs: hugetlbfs: remove nth_page() usage within folio in adjust_range_hwpoison()
-* [PATCH RFC 16/35] mm/pagewalk: drop nth_page() usage within folio in folio_walk_start()
-* [PATCH RFC 17/35] mm/gup: drop nth_page() usage within folio when recording subpages
-* [PATCH RFC 18/35] io_uring/zcrx: remove "struct io_copy_cache" and one nth_page() usage
-* [PATCH RFC 19/35] io_uring/zcrx: remove nth_page() usage within folio
-* [PATCH RFC 20/35] mips: mm: convert __flush_dcache_pages() to __flush_dcache_folio_pages()
-* [PATCH RFC 21/35] mm/cma: refuse handing out non-contiguous page ranges
-* [PATCH RFC 22/35] dma-remap: drop nth_page() in dma_common_contiguous_remap()
-* [PATCH RFC 23/35] scatterlist: disallow non-contigous page ranges in a single SG entry
-* [PATCH RFC 24/35] ata: libata-eh: drop nth_page() usage within SG entry
-* [PATCH RFC 25/35] drm/i915/gem: drop nth_page() usage within SG entry
-* [PATCH RFC 26/35] mspro_block: drop nth_page() usage within SG entry
-* [PATCH RFC 27/35] memstick: drop nth_page() usage within SG entry
-* [PATCH RFC 28/35] mmc: drop nth_page() usage within SG entry
-* [PATCH RFC 29/35] scsi: core: drop nth_page() usage within SG entry
-* [PATCH RFC 30/35] vfio/pci: drop nth_page() usage within SG entry
-* [PATCH RFC 31/35] crypto: remove nth_page() usage within SG entry
-* [PATCH RFC 32/35] mm/gup: drop nth_page() usage in unpin_user_page_range_dirty_lock()
-* [PATCH RFC 33/35] kfence: drop nth_page() usage
-* [PATCH RFC 34/35] block: update comment of "struct bio_vec" regarding nth_page()
-* [PATCH RFC 35/35] mm: remove nth_page()
+Okay, easy: relying on i but not updating it /me facepalm
 
-and found the following issue:
-general protection fault in kfence_guarded_alloc
+-- 
+Cheers
 
-Full report is available here:
-https://ci.syzbot.org/series/f6f0aea1-9616-4675-8c80-f9b59ba3211c
+David / dhildenb
 
-***
-
-general protection fault in kfence_guarded_alloc
-
-tree:      net-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/netdev/net-next.git
-base:      da114122b83149d1f1db0586b1d67947b651aa20
-arch:      amd64
-compiler:  Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-config:    https://ci.syzbot.org/builds/705b7862-eb10-40bd-a4cf-4820b4912466/config
-
-smpboot: CPU0: Intel(R) Xeon(R) CPU @ 2.80GHz (family: 0x6, model: 0x55, stepping: 0x7)
-Oops: general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] SMP KASAN NOPTI
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:kfence_guarded_alloc+0x643/0xc70
-Code: 41 c1 e5 18 bf 00 00 00 f5 44 89 ee e8 a6 67 9c ff 45 31 f6 41 81 fd 00 00 00 f5 4c 0f 44 f3 49 8d 7e 08 48 89 f8 48 c1 e8 03 <42> 80 3c 20 00 74 05 e8 f1 cb ff ff 4c 8b 6c 24 18 4d 89 6e 08 49
-RSP: 0000:ffffc90000047740 EFLAGS: 00010202
-RAX: 0000000000000001 RBX: ffffea0004d90080 RCX: 0000000000000000
-RDX: ffff88801c2e8000 RSI: 00000000ff000000 RDI: 0000000000000008
-RBP: ffffc90000047850 R08: ffffffff99b2201b R09: 1ffffffff3364403
-R10: dffffc0000000000 R11: fffffbfff3364404 R12: dffffc0000000000
-R13: 00000000ff000000 R14: 0000000000000000 R15: ffff88813fec7068
-FS:  0000000000000000(0000) GS:ffff8880b861c000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88813ffff000 CR3: 000000000df36000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- __kfence_alloc+0x385/0x3b0
- __kmalloc_noprof+0x440/0x4f0
- __alloc_workqueue+0x103/0x1b70
- alloc_workqueue_noprof+0xd4/0x210
- init_mm_internals+0x17/0x140
- kernel_init_freeable+0x307/0x4b0
- kernel_init+0x1d/0x1d0
- ret_from_fork+0x3f9/0x770
- ret_from_fork_asm+0x1a/0x30
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:kfence_guarded_alloc+0x643/0xc70
-Code: 41 c1 e5 18 bf 00 00 00 f5 44 89 ee e8 a6 67 9c ff 45 31 f6 41 81 fd 00 00 00 f5 4c 0f 44 f3 49 8d 7e 08 48 89 f8 48 c1 e8 03 <42> 80 3c 20 00 74 05 e8 f1 cb ff ff 4c 8b 6c 24 18 4d 89 6e 08 49
-RSP: 0000:ffffc90000047740 EFLAGS: 00010202
-RAX: 0000000000000001 RBX: ffffea0004d90080 RCX: 0000000000000000
-RDX: ffff88801c2e8000 RSI: 00000000ff000000 RDI: 0000000000000008
-RBP: ffffc90000047850 R08: ffffffff99b2201b R09: 1ffffffff3364403
-R10: dffffc0000000000 R11: fffffbfff3364404 R12: dffffc0000000000
-R13: 00000000ff000000 R14: 0000000000000000 R15: ffff88813fec7068
-FS:  0000000000000000(0000) GS:ffff8880b861c000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88813ffff000 CR3: 000000000df36000 CR4: 0000000000350ef0
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
