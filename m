@@ -1,117 +1,103 @@
-Return-Path: <linux-kselftest+bounces-39474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06A1FB2F560
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 12:33:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36A23B2F570
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 12:36:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBB35AA7D1D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 10:31:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF3FD1BA12BF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 10:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8834C304BD8;
-	Thu, 21 Aug 2025 10:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JtytdtCm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0375522AE7A;
+	Thu, 21 Aug 2025 10:34:53 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2248B27815F;
-	Thu, 21 Aug 2025 10:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B541C701F;
+	Thu, 21 Aug 2025 10:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755772308; cv=none; b=JiCGuRVBZA8PXPqHZt0F7aqufiCz/kWov16V/QFe9sdcvg9vq/pOF0AfuKFXx5lqt/oqLafCmCHqj0ugMzJkETTXk4QpmqPvK728OwwzapVLlS2okYzMd5aHa1c3MLAw/nx1GEVDGykXGtvszsitLnza272JGuCeoMlXHbbaPto=
+	t=1755772492; cv=none; b=ivEA+oDihvjt1H/4IGxQZEg0hXvdtN1JS+Jp+mOV8xpZAEu8uVKa0TTMRc2pAB3MURnKF2uLdwUj+knRadjiC6NpuC1sxonovOTE4poi/px1xXfFqtk9WqhH23q+xrRfsSIJjG2TZW4xqd5C+/1rMPIv24bbRJkO8nxKR1F1XYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755772308; c=relaxed/simple;
-	bh=D+MQDeuGUXz+FTfr0de9kkuoW88p7ikUCgiDz+RsYic=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=limE83WvMPv6jnZw6flcExIiUGl7oGfCI/ivnZoTj2fQJ574qVKttmHfepBIBoLFXmJeU1hcGdBX+DJe6dyALe0lmXG6ihHmnGHYfvGbzoPIb1VN6ysfP2hlYTjUvolXIT7TOXXwgiNeVfa38csXZecYOw0so2Tpc3g8Re5Mcts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JtytdtCm; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-76e2ea94c7cso840324b3a.2;
-        Thu, 21 Aug 2025 03:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755772305; x=1756377105; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D+MQDeuGUXz+FTfr0de9kkuoW88p7ikUCgiDz+RsYic=;
-        b=JtytdtCm1YWc2YYH8r86bF8XbctEgeVlAi+Z/ehO1j/puhQcY5RYwH/DZ/ZZUjFZ6e
-         d1Vq24cltS/gvhu8C0maaYVGLmXYljEhMbqHzy/g/YYBIShF4nY+OH3Va0FdyYOZwwy8
-         2I10Hx/6W2z+UpNIn9rwwLaSu1EVY4iAR/Y4XKyUJ6cJsU0oqXJ7c7A44waxawoZuLi5
-         gMQSVaUjfUf7Wm8zcSS0hBeIqoQGkExOMOS4AKdNOK3GByOTT89/WadRUe1Yxqv8rnD9
-         7w5ehnQtoLoJk6TXEZpd94l6a9kajJyab4BqZy3iJLPgABJei7od6TQVksl/E5c+yAKc
-         R1gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755772305; x=1756377105;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D+MQDeuGUXz+FTfr0de9kkuoW88p7ikUCgiDz+RsYic=;
-        b=N9vNpcC4bOiV+8y2DRBFNYWLyJ9I+ZTPZolaON9Id+ONKRQcDrS5AdVGaaa85HdfAC
-         4L8xdoPGC/ZEc+AUyqrZB5Do96YX1mPX/cABdpBh2WW3JqUUSz2MLl/rJcamP6+4lQs4
-         JaWjKC8kLM956FUbnvcU+XSVKVt6hTJQFkbMkMbmTrnZwn0xwsavpftVsn79hNTe9woS
-         VhSzZcgJwasV417fGpl5PlKfAb/7vqSISulfWNAc3MdNLBn+CTAyFAWrrKRPlUOZAQ97
-         37mMlmRAGFQ3yuyR7l6TblY0XBTjIwxeD66CU8nLy5+E1aKabdKcXLcIcUWEWZTGapJ4
-         +thg==
-X-Forwarded-Encrypted: i=1; AJvYcCVX0eEv1Ve61F11Tmb1cS+Mn5luDhptR6SXKNFI4Dy/tsl1yKYEQ9Ujw/fPp3bcfT/N32zXCEBAhU4PJkgktg5R@vger.kernel.org, AJvYcCW7gN98zJqlaHieCxQhkrhuqLgZ3vEsCddMHY8dU/F7LEIDVRTHWtWMEiUEL+KNSS3KOE3Tj+GtPOLZ8mc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzc3Rv0SpjBr0TNy4pWUtAOpwel1XooChZfAs2rCdW7rv/KRcod
-	zPbfez5UM6A7rqgAXYlEp2wh5MDMLvlJhun3ipA2wyMVQQXcGgmWaUD600VfGoeNSGs=
-X-Gm-Gg: ASbGncs6TqwpiDBonWHBiA7kDme9CtKDcRDMPiMQ9nk2w+5LwU6/Uj/Ld57NM84oCIE
-	b4jH3hQ/zWuK3u49XbaYQNbaIavMoNtsAoNpBYpIefZTD0iB6geuZ602JdB/dMQybxUSmtUX7IG
-	YhpM9LT3hZcNHe/hpG07p+SJnEHKQmow5Y1QUDYE8ZBLahXq7Q16yLgBNKE1PCdAEBW/AOFQ8nW
-	/785cDt+xRUlu29pFKxxnh06t/VtSIECNOBMr9vpBxnDlMfTSBBxIx/Fqc7VXFgWoSEIOVQnN3e
-	D2KRGLwtL2SybjZOU9Bc2zFOM8rWz+rniH0lxI4IE+aLLsWkb+VF5rNr+qXOrHanJa7ql/SVBpB
-	ILkjuofAiBy3Qj8VYZ91oW1h2KDSxElZ8NA==
-X-Google-Smtp-Source: AGHT+IEtzUOLCMK5h6DyeoMF7OKkpgcvIbMKbLedXsYunfHMl4dYg4T5SZ69QlizjHs38NTW9w2KTQ==
-X-Received: by 2002:a05:6a00:1399:b0:76b:f6ef:9729 with SMTP id d2e1a72fcca58-76ea3240a45mr2817610b3a.21.1755772305196;
-        Thu, 21 Aug 2025 03:31:45 -0700 (PDT)
-Received: from server.. ([103.250.145.167])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e7d1314a4sm7883419b3a.41.2025.08.21.03.31.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 03:31:44 -0700 (PDT)
-From: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
-To: akpm@linux-foundation.org
-Cc: linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	reddybalavignesh9979@gmail.com,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org,
-	surenb@google.com
-Subject: Re: [PATCH] selftests: proc: mark vsyscall strings maybe-unused
-Date: Thu, 21 Aug 2025 16:01:39 +0530
-Message-ID: <20250821103139.2872-1-reddybalavignesh9979@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250820143954.33d95635e504e94df01930d0@linux-foundation.org>
-References: <20250820143954.33d95635e504e94df01930d0@linux-foundation.org>
+	s=arc-20240116; t=1755772492; c=relaxed/simple;
+	bh=red0dGa++TOzVhe/hYcvQlEOP59ONxx+JtjyD02D1/k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JJrHIMapd7mX8R0MqQnHwXqrGBaEBNQxndzuOcl/HySu8X0TV9mqFajWvUI6fupgx5Serw3F9SAa8OwJvadrZIbCPm+TCYqxPCgDm81oWoH3unlp3ye2fQyWU2SjO1yhDtQTHpEU0QrNUt4kbtxGDtCmq+ioCQMEAcTMKzDgzFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3830C152B;
+	Thu, 21 Aug 2025 03:34:42 -0700 (PDT)
+Received: from [10.57.91.188] (unknown [10.57.91.188])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 334CD3F63F;
+	Thu, 21 Aug 2025 03:34:44 -0700 (PDT)
+Message-ID: <f997a8ec-26aa-45f3-a757-d221321c8607@arm.com>
+Date: Thu, 21 Aug 2025 12:34:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/8] selftests/mm: Add -Wunreachable-code and fix
+ warnings
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@redhat.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com
+References: <20250731160132.1795351-1-usama.anjum@collabora.com>
+ <20250731160132.1795351-2-usama.anjum@collabora.com>
+ <c09a2a13-8571-44e5-b780-c704598df764@arm.com>
+ <46dce2ac-adb5-4a6b-8847-fe214c1599a7@collabora.com>
+Content-Language: en-GB
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+In-Reply-To: <46dce2ac-adb5-4a6b-8847-fe214c1599a7@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Andrew,
+On 21/08/2025 08:19, Muhammad Usama Anjum wrote:
+>>> [...]
+>>>
+>>> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+>>> index 05de1fc0005b7..a85b2e393e4e8 100644
+>>> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+>>> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+>>> @@ -296,10 +296,8 @@ void split_file_backed_thp(int order)
+>>>  		ksft_exit_fail_msg("Unable to create a tmpfs for testing\n");
+>>>  
+>>>  	status = snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_loc);
+>>> -	if (status >= INPUT_MAX) {
+>>> +	if (status >= INPUT_MAX)
+>>>  		ksft_exit_fail_msg("Fail to create file-backed THP split testing file\n");
+>>> -		goto cleanup;
+>> At that point the mount() call has succeeded so I think we do want to
+>> keep the goto and just print the error message instead of calling
+>> replace ksft_exit_fail_msg().
+> The cleanup tag does cleanup and then calls ksft_exit_fail_msg() without printing the
+> actual reason of failure. So current flow seems good where information about the error
+> is being printed.
 
-Thanks for your feedback, I didn't notice that __maybe_unused is
-defined repeatedly in selftests directory.
+My point is that with this patch, ksft_exit_fail_msg() still causes the
+test to exit right away without the cleanup steps (i.e.
+unmounting/removing the directory) being executed. Printing a specific
+error message is good but we should also run the cleanup steps.
 
-Following your suggestions, I've submitted a cleanup patch that centralise
-the __maybe_unused definition in tools/testing/selftests/kselftest.h and
-removed the redundant copies across the selftests subdirectories.
-I've tested it with gcc and clang, and it builds cleanly.
-
-Patch Link:
-https://lore.kernel.org/lkml/20250821101159.2238-1-reddybalavignesh9979@gmail.com/
-
-Will also look into build system, to tackle including kselftest.h everywhere
-
-Thanks,
-Bala Vignesh
+- Kevin
 
