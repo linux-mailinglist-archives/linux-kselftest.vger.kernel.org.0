@@ -1,128 +1,258 @@
-Return-Path: <linux-kselftest+bounces-39472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C2B4B2F45C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 11:45:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8B75B2F4EC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 12:15:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20925163BF7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 09:44:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EE663AE740
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 10:12:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BCF32EAD01;
-	Thu, 21 Aug 2025 09:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 375462DCF4D;
+	Thu, 21 Aug 2025 10:12:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=0x65c.net header.i=@0x65c.net header.b="dKCWu4US"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bKsQvKo6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m204-227.eu.mailgun.net (m204-227.eu.mailgun.net [161.38.204.227])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC6F2E1755
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 09:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.38.204.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D9D264F99;
+	Thu, 21 Aug 2025 10:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755769446; cv=none; b=e6mGpfjWebyppGIM+3mNcBChqsNM39YJ3OdRLeL7RNfggDgiC5hRNTj11E/FcM7rWZW7Mt7QNrk4Ljo/f0p0jPDiHs/rzKdRFGY3ivUoKY5mwWFN4yEioXqIPWDzcQjGTi+bwrZ7LsA1YyTLvQrA2F86alSVZxUm6Iw4coYdk+s=
+	t=1755771134; cv=none; b=pkksMoLA3r+enOhLskD8xFZT4LcTcwnCgTODiblyt9eSSyQlXSEABh1Ete/+U1RlF5YVEEXSx5p/CvfqSuEfUD6rjcu1d0+ldrHyrHvsu53g7QTlgbu3w7QBWyvYhJkNB5Cw2FaXMM5XbhPbFB0z96ymjOAQvFCAUl4nlIwXxWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755769446; c=relaxed/simple;
-	bh=83cihqlEqrLgv3XLmOKKTdF4Z3MSPxjYWXhdRqDwMLE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TM26C7aM4GFgBZDA0gtTvVlr9lUGJvtcy8ruPFy9c183N4sqJyEmSFVXqUgyXoWuNkAIncr3W4BLncqQqyKH8yqLE9OTBaN4dqp3ThOR9Rn48ZzsjnVlo8NUr5Z0GXz74f5DfEq1XzzT3ym2+kG+C7wSXVHGEfmEl/MP1WnFDtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x65c.net; spf=pass smtp.mailfrom=0x65c.net; dkim=pass (2048-bit key) header.d=0x65c.net header.i=@0x65c.net header.b=dKCWu4US; arc=none smtp.client-ip=161.38.204.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x65c.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0x65c.net
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=0x65c.net; q=dns/txt; s=email; t=1755769442; x=1755776642;
- h=Content-Type: Cc: To: To: Subject: Subject: Message-ID: Date: From: From: In-Reply-To: References: MIME-Version: Sender: Sender;
- bh=ugKEM2SyYdaO/Rg696PMdoUOugJ5ms+2fB3pFprkEgY=;
- b=dKCWu4US4AnR7LkHQPLutN7WMCKuKVo/op0tLgrrz5BZv8j13aOR38cUQJmUisil5BBl4+Chmv3NjylNNNxfkUkZsEzs7jdYHTydqQ4ljCI4sL81N6Z7RJDVRIS5k34cVKeecTXns4sB2KBwR01F0cZC7dkz5vD1lVf4Rk52lTZtaNEaT/WFW2/sbaRUA97/rVSPu3UuhNIayqlzftK88WvxiBle8/LK4a/4+g4Rb/n61u2daikat/OCQ2x/6n2j5NHVypKya0xrN7YFFw6AQMLOV4GmqG4Jn+KCBeaPxOUrl3GuQD3miC6ab4ykb4USt8UTteTxf7Kay8wlXdkObg==
-X-Mailgun-Sid: WyJlMmQxMSIsImxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmciLCI1NGVmNCJd
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182]) by
- 28760c5320251e6bcfb6e02fb9fae320767aca1d74f462755b6944c89a79a453 with SMTP id
- 68a6ea62ca5807a38bbc11c9 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Thu, 21 Aug 2025 09:44:02 GMT
-X-Mailgun-Sending-Ip: 161.38.204.227
-Sender: alessandro@0x65c.net
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e934b5476a0so779593276.3;
-        Thu, 21 Aug 2025 02:44:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWaTS8oklPlW0k2UaAkjrpGGYNtlU2pbM30YJSh0vvG/toHC+XBC7b9a5M88ngYvkTW8jay1r2d@vger.kernel.org, AJvYcCX+OhZfKWQ+lFj0BDMO0xqeKISZp8357D18x+uYxFCRQsbxH8FOe5lUuXoTFaf5AeD9RjHpOaUAUpb3y3BocJs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2e2sqcEHmSW0QLjLMirtL0ELd3bZVns6Z9IcTE+Dr/dYn99On
-	bPY1FJKikPR20C5frPwxCs0KIgAL4Mpu0YA8h3hLS61ERb2nQFV342GVZOumDCq50GHtXlaCyUv
-	5q+LJWTWh9him+be9VLkZjXuJuX6LNPQ=
-X-Google-Smtp-Source: AGHT+IHyW5/7bNkwGxP3ivGbrp37X+DolCJeqLe9ofXaucYeQPqGUKVm7LnPENaErXYpXAowHUYHu5a3hpU54TgDVmA=
-X-Received: by 2002:a05:690c:6212:b0:71f:9a36:d5c0 with SMTP id
- 00721157ae682-71fc8b02ce9mr17495387b3.46.1755769441141; Thu, 21 Aug 2025
- 02:44:01 -0700 (PDT)
+	s=arc-20240116; t=1755771134; c=relaxed/simple;
+	bh=UqbPJ04Skx3qeuN8AslDJpOBSlWMMOu7RTbaxK6CX1g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JZowApDLrQVqzjJwdd3jwTnfZVwzFx8xMZM1ksmW4iz3ZXZX57MnkqmRR30PvRtwzPrsQ2/JNF+E8fCizM409/rCzsMByR48WR0RyYWmCDaWhqPrYAAgU0wFqGr3ErfvDUjgKgACxMfOMJ/AhV146gGmUkSxsAOnP6TIkhEHh24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bKsQvKo6; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-323266cdf64so638809a91.0;
+        Thu, 21 Aug 2025 03:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755771132; x=1756375932; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jOIaU+ivLyUInrFo1z4/NdrgXjFotuRBDXDYangsfLc=;
+        b=bKsQvKo6cP8+LOP6Kbj4W2C21rxVPTw1HB+GnuzSDygyx4NvOJtgSQkmxOd4gjMCqb
+         ycQbAze9R2xwyMcv2s4LFkSNqnryc3IxnJY3baKcmw2jTXimUXEfffTblk6EDvp5nn9S
+         b9lZZ9Y0eDf6SDlsycnx7qX/L+rA8wRb7toOtl1oWw3SmUzqm8LSGmjyvaUjITVqvFdg
+         /NLPdyuEz+SbRyYD9YGy9GC0LgGOAiqUFaYwwEpNoHgNgh7Ll6gunDpGhEU+E2xzIcLh
+         n0PcOf87/IKFvDpwFZ0WVmcIS1SyrEajXzVYPZTSL8SBmsSmCq/6/cOG3b0jDg0yOkyv
+         qZ+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755771132; x=1756375932;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jOIaU+ivLyUInrFo1z4/NdrgXjFotuRBDXDYangsfLc=;
+        b=jCIKzDmwOxrShlfw2A8d3YncxLKw6qtMTwIgw6zhBhA2n9pJZbuF89dW3ixthUhn38
+         yClnt2MEPHDAOgxcpix85qS2loNVc/CG2JKNRXfoDzR+RXP5Oyu9zDJ6ZLPHFesZGBIv
+         wWclEBrpWebrdQHSSZLH8I7c3MBfek76m63E2hNYri+Q/nfWt6WG8bXOMMpaH7G7/oLl
+         53kdvCsvdG5p5niGyMJz0iZ4Dhgd215gbL0XEuIUG03nbSy/B7EJimsHEuTbPRSaKCSU
+         l5na0uOd3MY2UUrYG2sU9VE3wXlPxJUq4snAysRAHSGT0kgjFIUjPfebh6Ke4t16krWX
+         Y7GQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVVDujfSkQGSKXAgm05fJLH3SZ8zgEkG2Xwyyoyy6IMkcu9uxxzaH0+CSkcEhThubAwi9GiUkP6QyULvcZzGw==@vger.kernel.org, AJvYcCVdZH9mGJFzYypX3rtp1Rp2t56O9GuMAIvgSxOh+Or5t72bgZpZa85piwSGq8cDSLktw1ct+/yX4AXGvtvt@vger.kernel.org, AJvYcCVrNOXtnjQGNaXLa2FjJeGiNY/TwZRoNJkyzaQu5mKuAWs8dg9J3Kwx+cyWG6lssN/DFFFJvAxQ@vger.kernel.org, AJvYcCWrkoTXCAw6D6Sc7v0/eoGl0ReUBppcNwniYIZE8BqbwiSxFSLwb8/2zaubA2kVs8/qCeNx/xq/8P6zaw==@vger.kernel.org, AJvYcCX4IiGwFsa+LRM9Qt7WgfWVlXXClKUqBJbaWUXLHaYcLft20H3NhMd0ecmbrcdhRK41YY+adM5sLMVDaZr+Jz2TpUGRWQQu@vger.kernel.org, AJvYcCXktRHU8DJu1TAeFizaw2GkX8uo8PymfLFf6zl3Ik2flAPecbgQPqfdqDj3rkzZS2m7NB66Cl5CbcZkaR1pew+G@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPfziuyNdT6yq5UqyXfInSpGsTtp/kIS2LS+9h+VPn+SNQzQpm
+	v2SYwUPY2g6tSjNP9skBCuA+XRG+DgX9+OWm2X+bJ4R+qJunVgYQDLuw
+X-Gm-Gg: ASbGncsQRM2iLR6bBWp248oBK+YhIUzJ/1kfANVL4GKkv8Fy4iGsu8doUEJFCwNFkC5
+	ch7y+mgc1Q7Mz73KrX5l2BGK0JB6uThNaGrgPgk/urXFyz3W0jftUdY0auoUmrywQlwBeJngygA
+	DPMqlFxEaLq4m+f3D7+IH0tnjbONNXt7iWz1K7VxWGfqTXFX7QG0O1BcyqzU/xipxcrIUHYfuxs
+	W+F9VSQySyfzojYH16WIcWSldPw4GiXuJTD4xNoTwTwplJigPzpm0zoFD88xaC6y5XcfuPiTRvj
+	1uaCslzYEjOZjaAJ5q49e+axGF7xz3iZXAUN1MsOY6f2UsUlmMJzvY8uCG1ksr5Mftpcd4znQh0
+	7+iFMCkDoCdDqjKEJNvFFmybaf2YN5wiytw==
+X-Google-Smtp-Source: AGHT+IGyEK2exr+k/V0w8XXUmSIzv3Ytbu6vvsSe7eRwRcTsYn2OH5a5icQQPi/utnU7cQhUneD/0w==
+X-Received: by 2002:a17:90b:224e:b0:323:7e80:8819 with SMTP id 98e67ed59e1d1-324ed15d2c5mr2462627a91.36.1755771131489;
+        Thu, 21 Aug 2025 03:12:11 -0700 (PDT)
+Received: from server.. ([103.250.145.167])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e7ccfa8d1sm7835815b3a.0.2025.08.21.03.12.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Aug 2025 03:12:10 -0700 (PDT)
+From: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+To: akpm@linux-foundation.org,
+	shuah@kernel.org
+Cc: mic@digikod.net,
+	gnoack@google.com,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	ming.lei@redhat.com,
+	skhan@linuxfoundation.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-mm@kvack.org,
+	netdev@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	reddybalavignesh9979@gmail.com
+Subject: [PATCH] selftests: centralise maybe-unused definition in kselftest.h
+Date: Thu, 21 Aug 2025 15:41:59 +0530
+Message-ID: <20250821101159.2238-1-reddybalavignesh9979@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250821074552.682731-1-alessandro@0x65c.net> <20250821074552.682731-2-alessandro@0x65c.net>
- <aKbX_CzxSi7T9Bcp@fedora> <CAKiXHKcLsEWbEz1EkzE942PbsMEpfj=wO7uYDb+Nxy8nGCEx1Q@mail.gmail.com>
- <aKbfzeS1QrP0dE4N@fedora>
-In-Reply-To: <aKbfzeS1QrP0dE4N@fedora>
-From: Alessandro Ratti <alessandro@0x65c.net>
-Date: Thu, 21 Aug 2025 11:43:50 +0200
-X-Gmail-Original-Message-ID: <CAKiXHKejzOAiieTxZpq8+v-vnzSEyuOuD0tYbzHL5R78iS+BMQ@mail.gmail.com>
-X-Gm-Features: Ac12FXyj6ULNp4v4zjksz2jwkKV6qIhan8btkFWhOqkMdSr9nGRgg9JEdG0pdlE
-Message-ID: <CAKiXHKejzOAiieTxZpq8+v-vnzSEyuOuD0tYbzHL5R78iS+BMQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: rtnetlink: add checks for ifconfig and iproute2
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: Alessandro <alessandro@0x65c.net>, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, skhan@linuxfoundation.org, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, 21 Aug 2025 at 10:59, Hangbin Liu <liuhangbin@gmail.com> wrote:
->
-> On Thu, Aug 21, 2025 at 10:45:19AM +0200, Alessandro wrote:
-> > On Thu, 21 Aug 2025 at 10:25, Hangbin Liu <liuhangbin@gmail.com> wrote:
-> > >
-> > > On Thu, Aug 21, 2025 at 09:43:11AM +0200, Alessandro Ratti wrote:
-> > > > On systems where `ifconfig` is not available (e.g., modern Debian), the
-> > > > `kci_test_promote_secondaries` test fails. Wrap the call in a check.
-> > > >
-> > > > Additionally, `do_test_address_proto` fails on iproute2 versions that
-> > > > lack support for `proto` in `ip address` commands. Add a minimal feature
-> > > > check and skip the test with a proper message if unsupported.
-> > > >
-> > > > These changes allow the tests to run and report SKIP instead of FAIL on
-> > > > platforms with older tools.
-> > > >
-> > > > Signed-off-by: Alessandro Ratti <alessandro@0x65c.net>
-> > > > ---
-> > > >  tools/testing/selftests/net/rtnetlink.sh | 10 +++++++++-
-> > > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-> > > > index d6c00efeb664..9bff620ef595 100755
-> > > > --- a/tools/testing/selftests/net/rtnetlink.sh
-> > > > +++ b/tools/testing/selftests/net/rtnetlink.sh
-> > > > @@ -330,7 +330,9 @@ kci_test_promote_secondaries()
-> > > >       for i in $(seq 2 254);do
-> > > >               IP="10.23.11.$i"
-> > > >               ip -f inet addr add $IP/16 brd + dev "$devdummy"
-> > > > -             ifconfig "$devdummy" $IP netmask 255.255.0.0
-> > > > +             if command -v ifconfig >/dev/null 2>&1; then
-> > > > +                     ifconfig "$devdummy" $IP netmask 255.255.0.0
-> > > > +             fi
-> > >
-> > > Maybe just skip the promote_secondaries test if ifconfig is not available?
-> > >
-> >
-> > Thank you for your review and comment.
-> >
-> > My takeaway here is that the test works because the IP addresses are set on the
-> > $devdummy by the previous ip(8) command, and ifconfig seems a bit redundant.
->
-> No, please check the git log to see why we use ifconfig here.
->
+Several selftests subdirectories duplicated the define __maybe_unused,
+leading to redundant code. Moved to kselftest.h header and removed
+other definition.
 
-Ah! I see your point now. That said, yes, better skip the test if
-ifconfig isn't installed.
-I'll send out a new patch.
+This addresses the duplication noted in the proc-pid-vm warning fix
 
-Thank you
-Alessandro
+Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+Link:https://lore.kernel.org/lkml/20250820143954.33d95635e504e94df01930d0@linux-foundation.org/
+
+Signed-off-by: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+---
+ tools/testing/selftests/kselftest.h                    | 4 ++++
+ tools/testing/selftests/landlock/audit.h               | 6 ++----
+ tools/testing/selftests/landlock/common.h              | 4 ----
+ tools/testing/selftests/mm/pkey-helpers.h              | 3 ---
+ tools/testing/selftests/net/psock_lib.h                | 4 ----
+ tools/testing/selftests/perf_events/watermark_signal.c | 2 --
+ tools/testing/selftests/proc/proc-pid-vm.c             | 4 ----
+ tools/testing/selftests/ublk/utils.h                   | 2 --
+ 8 files changed, 6 insertions(+), 23 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index c3b6d2604b1e..661d31c4b558 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -92,6 +92,10 @@
+ #endif
+ #define __printf(a, b)   __attribute__((format(printf, a, b)))
+ 
++#ifndef __maybe_unused
++#define __maybe_unused __attribute__((__unused__))
++#endif
++
+ /* counters */
+ struct ksft_count {
+ 	unsigned int ksft_pass;
+diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
+index b16986aa6442..02fd1393947a 100644
+--- a/tools/testing/selftests/landlock/audit.h
++++ b/tools/testing/selftests/landlock/audit.h
+@@ -20,14 +20,12 @@
+ #include <sys/time.h>
+ #include <unistd.h>
+ 
++#include "../kselftest.h"
++
+ #ifndef ARRAY_SIZE
+ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+ #endif
+ 
+-#ifndef __maybe_unused
+-#define __maybe_unused __attribute__((__unused__))
+-#endif
+-
+ #define REGEX_LANDLOCK_PREFIX "^audit([0-9.:]\\+): domain=\\([0-9a-f]\\+\\)"
+ 
+ struct audit_filter {
+diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
+index 88a3c78f5d98..9acecae36f51 100644
+--- a/tools/testing/selftests/landlock/common.h
++++ b/tools/testing/selftests/landlock/common.h
+@@ -22,10 +22,6 @@
+ 
+ #define TMP_DIR "tmp"
+ 
+-#ifndef __maybe_unused
+-#define __maybe_unused __attribute__((__unused__))
+-#endif
+-
+ /* TEST_F_FORK() should not be used for new tests. */
+ #define TEST_F_FORK(fixture_name, test_name) TEST_F(fixture_name, test_name)
+ 
+diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+index ea404f80e6cb..fa15f006fa68 100644
+--- a/tools/testing/selftests/mm/pkey-helpers.h
++++ b/tools/testing/selftests/mm/pkey-helpers.h
+@@ -84,9 +84,6 @@ extern void abort_hooks(void);
+ #ifndef noinline
+ # define noinline __attribute__((noinline))
+ #endif
+-#ifndef __maybe_unused
+-# define __maybe_unused __attribute__((__unused__))
+-#endif
+ 
+ int sys_pkey_alloc(unsigned long flags, unsigned long init_val);
+ int sys_pkey_free(unsigned long pkey);
+diff --git a/tools/testing/selftests/net/psock_lib.h b/tools/testing/selftests/net/psock_lib.h
+index 6e4fef560873..067265b0a554 100644
+--- a/tools/testing/selftests/net/psock_lib.h
++++ b/tools/testing/selftests/net/psock_lib.h
+@@ -22,10 +22,6 @@
+ 
+ #define PORT_BASE			8000
+ 
+-#ifndef __maybe_unused
+-# define __maybe_unused		__attribute__ ((__unused__))
+-#endif
+-
+ static __maybe_unused void pair_udp_setfilter(int fd)
+ {
+ 	/* the filter below checks for all of the following conditions that
+diff --git a/tools/testing/selftests/perf_events/watermark_signal.c b/tools/testing/selftests/perf_events/watermark_signal.c
+index e03fe1b9bba2..b3a72f0ac522 100644
+--- a/tools/testing/selftests/perf_events/watermark_signal.c
++++ b/tools/testing/selftests/perf_events/watermark_signal.c
+@@ -17,8 +17,6 @@
+ 
+ #include "../kselftest_harness.h"
+ 
+-#define __maybe_unused __attribute__((__unused__))
+-
+ static int sigio_count;
+ 
+ static void handle_sigio(int signum __maybe_unused,
+diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
+index 978cbcb3eb11..2a72d37ad008 100644
+--- a/tools/testing/selftests/proc/proc-pid-vm.c
++++ b/tools/testing/selftests/proc/proc-pid-vm.c
+@@ -47,10 +47,6 @@
+ #include <sys/resource.h>
+ #include <linux/fs.h>
+ 
+-#ifndef __maybe_unused
+-#define __maybe_unused __attribute__((__unused__))
+-#endif
+-
+ #include "../kselftest.h"
+ 
+ static inline long sys_execveat(int dirfd, const char *pathname, char **argv, char **envp, int flags)
+diff --git a/tools/testing/selftests/ublk/utils.h b/tools/testing/selftests/ublk/utils.h
+index 36545d1567f1..a852e0b7153e 100644
+--- a/tools/testing/selftests/ublk/utils.h
++++ b/tools/testing/selftests/ublk/utils.h
+@@ -2,8 +2,6 @@
+ #ifndef KUBLK_UTILS_H
+ #define KUBLK_UTILS_H
+ 
+-#define __maybe_unused __attribute__((unused))
+-
+ #ifndef min
+ #define min(a, b) ((a) < (b) ? (a) : (b))
+ #endif
+-- 
+2.43.0
+
 
