@@ -1,106 +1,192 @@
-Return-Path: <linux-kselftest+bounces-39476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39477-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81D03B2F588
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 12:43:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64AC0B2F7D6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 14:24:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 390601CC5B3D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 10:43:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D460603D82
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 12:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 175E43054E3;
-	Thu, 21 Aug 2025 10:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9B431158B;
+	Thu, 21 Aug 2025 12:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Jy56pvHo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7A72DC331;
-	Thu, 21 Aug 2025 10:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B792DEA8F
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 12:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755773005; cv=none; b=i+hL7VER3zPrMNnacymLRxuPefrfa1USNpm+HcfHg2KL6up+S0HE74gmIw7bK2uO6glqnGw6qLpU4dUgGXoHGN50pjsgLZnttbps0vIOUhAefKHKx9YXAfy6y2alODumf398WyEYtTlEV386EGf/mhM5lWidx9wy3HChl79LIF4=
+	t=1755778946; cv=none; b=A9ChReysVYzzbxVCQzHPmAnOu3T2tzhzZhz1O7jhNM/51Ib+KZfWfIXVspxpv8uBY5pC0Yi5oHDQCByKB5MJuUpWFx7xU7YpcEnaDvhd6TPnTboRxSFcqbe08cul09GY66jOBvgAsaBbCfvTUG7LTmywhVp/8NiNgwYNmwVjZ7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755773005; c=relaxed/simple;
-	bh=xA5z4QGiRT8EMnfJu0zYHYDYsBX5hfHAvWyffpSGsoI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oqHqmGNEnjF3qcNDRq5/8lJjgHQMzMGtidevi+/QYi1yt2LbcYwbdfOzmZLjNcptUeHtMcW3yfvudilBbXKIw+884kGhjsVEHiYBbfZ9WZuO/7n1RngeK5V9R5zBUHlVgNmXxuwP0JYhlAcppXwCSjR1vna1ONkszuGGMwh03As=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 51F9D152B;
-	Thu, 21 Aug 2025 03:43:14 -0700 (PDT)
-Received: from [10.57.91.188] (unknown [10.57.91.188])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 298EB3F63F;
-	Thu, 21 Aug 2025 03:43:14 -0700 (PDT)
-Message-ID: <88ea592c-c6ff-4a19-a366-eadeca66b039@arm.com>
-Date: Thu, 21 Aug 2025 12:43:12 +0200
+	s=arc-20240116; t=1755778946; c=relaxed/simple;
+	bh=fSEsQ/Vk6OMQpZkWmTwVJ6fm0yCcKERCKkZiq1OYf8A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dz7+wIu8DTXJb8zpAPqobW9IVaNNkQRmygK/3Oq5ZBrjgP0e/Gdq5+C36JzTHkngO7QzBg7kdgXUfyLcftdsvpZHMB5JaYWQ5tbEcB577m9jRqsMLE3P2J1vFAm/xo19CSAwwLgsvAZcecNN188iUjQT+d2Vrzg9ZCb/3BNZW8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Jy56pvHo; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4b1098f9e9eso14266721cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 05:22:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755778943; x=1756383743; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aKSsjvve/1RAj60Dban8ij17MQ++dGwNHw+gQ1QKQpM=;
+        b=Jy56pvHopgVB4QlSdjncvHSNwKJIyH1Jqn/VU5MfuBNlaMxR6MMS7f7be0iKp1yM7c
+         T6Ls3h8VJB4p01WMuTKeD6HeNMThCfAMaA2ivjdV6j8t/BGNexZq3mnxToSNjuH7GTI4
+         SeLLsuPpAtVImwsQjvgfTndynLEWkirbKbaumcFNAm3SyDyx/XiED9J7Tz7rjV2ZUW+b
+         v99L+FAGWOeWKJCBJV3SaoPXXlhVhMeId6KlRjikRNNrp/CIt/k3tQtwPQDh9L+paFCu
+         EwvrZ30mwznm7mMpk64rcAnch23ynjVuKA8/9SVMMA8HX9MJ3FMbE9NQ2HVfvvcMvuSn
+         3qPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755778943; x=1756383743;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aKSsjvve/1RAj60Dban8ij17MQ++dGwNHw+gQ1QKQpM=;
+        b=qZKVgoZi1z10tkrUAQ844XbPVOOQgs/AgNQmCTKyHWoIo5Z50JwpCU3CohP91dL6G7
+         sqLLdSRvTXKAYM5TNFFdPFfya0i85mOnVlbU1vhwd5MUJEBOr/Szd5RLqlRZFSKiJx5d
+         hKPgUdeqBgGhxWPxRqGGN+NrJJkMHaZLn9nCQ8/0ti3KKTg8gHZaWJn+lV8XeSauD0On
+         vNwLjbqg/v2oxyPFgWbXz59WYi4cudFsT4oIBthnphmGsgjFfvqLgaByqD7mw8fqRXe5
+         q4ciZb3aNcIhAXWuuJl2cZX6M3fwHKpg+w7aHuI6SmGScRV4Pzu7tZK6hSwTDSgjr9RR
+         0HNw==
+X-Forwarded-Encrypted: i=1; AJvYcCXuc7RrJ6ZzhGjLzsy9vBZKa8NpkEqII0JKCb4k76Y0g9smbXLSZqNYHzJMlvTFDJ3RhBpUt0jwRyRrZR4pvrY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwX2PXWdzBcqYKr9kIHyLElpYBp1ON0GUAHnG/Vyup2psok4gNz
+	Q0oAbcnNu/vjv2OP8nXBn9U/UtwnYvLy98UEB+FlzNai/hdU1+xMmtGs5+eHmpwqTxzO433NU6B
+	wSuw7bITFvVw1bbmOV2xWV2D2PaGVj48MgACvZY88
+X-Gm-Gg: ASbGnctLl+BzJDR3SnRkBYPkB/q3VHuiqpx5LTWd673nfge7DioH8llGryh4cNuOZpd
+	HQ+xwyubpzTaQb1Uq7mGD6dLSykxW6I/8cCgbVolJ9nTn6Jl/LZ+ZbJgN9vJNb9Efb+D+A4Q0sh
+	bzTfR7zGBcIjVw3oFCB0WR7PqpUW3TtXf2qw4Cn3kpTgzM4DeNANnhSeafG2DrpMJKcn3O0b9OQ
+	gtrCriVSr3/VsUQoAxWvT3GVQ==
+X-Google-Smtp-Source: AGHT+IFXwsqHTBSwwL4QWrFjnAqYGYGRHHfnn0fyyJIeQ/rD+n3E/hb0G9BvZiYOX886SM/9LiSsdHBY2287j79joNs=
+X-Received: by 2002:a05:622a:191c:b0:4b2:9620:33b3 with SMTP id
+ d75a77b69052e-4b29fa5cbfcmr20179561cf.34.1755778942207; Thu, 21 Aug 2025
+ 05:22:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/8] selftests/mm: Add -Wunused family of flags
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@redhat.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-riscv@lists.infradead.org, Shuah Khan <shuah@kernel.org>
-Cc: kernel@collabora.com
-References: <20250731160132.1795351-1-usama.anjum@collabora.com>
- <20250731160132.1795351-5-usama.anjum@collabora.com>
- <57c816d6-a9ba-47c9-8f40-3978580b7f67@arm.com>
- <8e9d7c59-46b4-4e1b-8a55-1898302f5080@collabora.com>
-Content-Language: en-GB
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-In-Reply-To: <8e9d7c59-46b4-4e1b-8a55-1898302f5080@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250815083930.10547-1-chia-yu.chang@nokia-bell-labs.com> <20250815083930.10547-7-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20250815083930.10547-7-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 21 Aug 2025 05:22:10 -0700
+X-Gm-Features: Ac12FXwJLwuIZZV7IiiWgI7Ni_b_-fkA-MWf7lHGDVGOEcjIPXX_K_j__DXPqFs
+Message-ID: <CANn89iKAUB4JOoHDPrxsRDeBTXPEF8Fu4ab2O_w2QTnRNXJvzg@mail.gmail.com>
+Subject: Re: [PATCH v15 net-next 06/14] tcp: accecn: AccECN negotiation
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, linux-doc@vger.kernel.org, corbet@lwn.net, 
+	horms@kernel.org, dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com, 
+	kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com, 
+	jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch, 
+	donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org, 
+	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com, 
+	Olivier Tilmans <olivier.tilmans@nokia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 21/08/2025 08:28, Muhammad Usama Anjum wrote:
->> As to -Wunused-parameter I am frankly not convinced it's worth the
->> hassle. We're getting 90 lines changed in patch 6-8 just to mark
->> parameters as unused, in other words noise to keep the compiler happy.
->> It is not enabled by default in the kernel proper precisely because it
->> is so noisy when callbacks are involved.
->>
->> Patch 5 is clearly an improvement, but I'd rather take it without
->> actually enabling -Wunused-parameter. The rest of this patch isn't that
->> useful either IMHO.
-> Patch 5 removes genuinely unused parameters flagged by the compiler. If we
-> drop the -Wunused-parameter option, however, new unused parameters will
-> continue to creep in with future patches. The goal of enabling this warning
-> is to surface such issues early so developers can address them during
-> development, rather than later during review or debugging.
+On Fri, Aug 15, 2025 at 1:39=E2=80=AFAM <chia-yu.chang@nokia-bell-labs.com>=
+ wrote:
 >
-> Long term, I’d like us to rely more on compiler and static analysis just like
-> kernel to catch these kinds of problems proactively, instead of waiting until
-> they’re reported or someone fixes them later. While it may feel like noise
-> initially, this is largely a one-time cleanup—once done, developers will
-> simply fix warnings as they arise, keeping the codebase cleaner going forward.
+> From: Ilpo J=C3=A4rvinen <ij@kernel.org>
+>
+> Accurate ECN negotiation parts based on the specification:
+>   https://tools.ietf.org/id/draft-ietf-tcpm-accurate-ecn-28.txt
+>
+> Accurate ECN is negotiated using ECE, CWR and AE flags in the
+> TCP header. TCP falls back into using RFC3168 ECN if one of the
+> ends supports only RFC3168-style ECN.
+>
+> The AccECN negotiation includes reflecting IP ECN field value
+> seen in SYN and SYNACK back using the same bits as negotiation
+> to allow responding to SYN CE marks and to detect ECN field
+> mangling. CE marks should not occur currently because SYN=3D1
+> segments are sent with Non-ECT in IP ECN field (but proposal
+> exists to remove this restriction).
+>
+> Reflecting SYN IP ECN field in SYNACK is relatively simple.
+> Reflecting SYNACK IP ECN field in the final/third ACK of
+> the handshake is more challenging. Linux TCP code is not well
+> prepared for using the final/third ACK a signalling channel
+> which makes things somewhat complicated here.
+>
+> tcp_ecn sysctl can be used to select the highest ECN variant
+> (Accurate ECN, ECN, No ECN) that is attemped to be negotiated and
+> requested for incoming connection and outgoing connection:
+> TCP_ECN_IN_NOECN_OUT_NOECN, TCP_ECN_IN_ECN_OUT_ECN,
+> TCP_ECN_IN_ECN_OUT_NOECN, TCP_ECN_IN_ACCECN_OUT_ACCECN,
+> TCP_ECN_IN_ACCECN_OUT_ECN, and TCP_ECN_IN_ACCECN_OUT_NOECN.
+>
+> After this patch, the size of tcp_request_sock remains unchanged
+> and no new holes are added. Below are the pahole outcomes before
+> and after this patch:
+>
+>
 
-Agreed on the general principle, but I think the hassle is just too big
-for what we're getting in return here (see also Andrew's reply). New
-code may also introduce a bunch of unused parameters for legitimate
-reasons and it's easy to imagine contributors ignoring such seemingly
-harmless/irrelevant warnings instead of sprinkling __unused all over. My
-feeling is that unused parameters are expected to be allowed in the
-kernel and it isn't helpful to go against that expectation in just a
-small subset of kselftests.
+> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
+> Co-developed-by: Olivier Tilmans <olivier.tilmans@nokia.com>
+> Signed-off-by: Olivier Tilmans <olivier.tilmans@nokia.com>
+> Co-developed-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> Acked-by: Paolo Abeni <pabeni@redhat.com>
+>
 
-- Kevin
+
+> +       if (tp->ecn_flags & TCP_ECN_MODE_ACCECN) {
+> +               TCP_SKB_CB(skb)->tcp_flags &=3D ~TCPHDR_ACE;
+> +               TCP_SKB_CB(skb)->tcp_flags |=3D
+> +                       tcp_accecn_reflector_flags(tp->syn_ect_rcv);
+> +               tp->syn_ect_snt =3D inet_sk(sk)->tos & INET_ECN_MASK;
+> +       }
+>  }
+>
+>  /* Packet ECN state for a SYN.  */
+> @@ -125,8 +377,20 @@ static inline void tcp_ecn_send_syn(struct sock *sk,=
+ struct sk_buff *skb)
+>  {
+>         struct tcp_sock *tp =3D tcp_sk(sk);
+>         bool bpf_needs_ecn =3D tcp_bpf_ca_needs_ecn(sk);
+> -       bool use_ecn =3D READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn) =3D=
+=3D 1 ||
+> -               tcp_ca_needs_ecn(sk) || bpf_needs_ecn;
+> +       bool use_ecn, use_accecn;
+> +       u8 tcp_ecn =3D READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn);
+> +
+> +       /* +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> +        * | tcp_ecn values |    Outgoing connections   |
+> +        * +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> +        * |     0,2,5      |     Do not request ECN    |
+> +        * |      1,4       |   Request ECN connection  |
+> +        * |       3        | Request AccECN connection |
+> +        * +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> +        */
+
+You have nice macros, maybe use them ?
+
+      TCP_ECN_IN_NOECN_OUT_NOECN =3D 0,
+       TCP_ECN_IN_ECN_OUT_ECN =3D 1,
+       TCP_ECN_IN_ECN_OUT_NOECN =3D 2,
+       TCP_ECN_IN_ACCECN_OUT_ACCECN =3D 3,
+       TCP_ECN_IN_ACCECN_OUT_ECN =3D 4,
+       TCP_ECN_IN_ACCECN_OUT_NOECN =3D 5,
+
+This can be done later, no need to respin.
+
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
