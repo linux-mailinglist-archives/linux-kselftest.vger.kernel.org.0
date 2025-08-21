@@ -1,183 +1,232 @@
-Return-Path: <linux-kselftest+bounces-39582-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D155B30573
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 22:30:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D74FB30587
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 22:31:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84CA516ADE5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 20:25:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBBE217C372
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Aug 2025 20:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C378381037;
-	Thu, 21 Aug 2025 20:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1592C0269;
+	Thu, 21 Aug 2025 20:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e1JSg2B2"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WloXl5Al"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41BA352FEE
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 20:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ADE42C0260
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 20:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755806930; cv=none; b=tBdk8TARI9wueEK2gcFBUafgNx+mQ98iXyzW8Vmb4LEndUwfbBNSyNCvCYe7NusSiVjbk0cbw9J3IlYAW/fUx0v0n7eXO1IqvhFm9FN8HonVbc+A2KbM1xnTv86ov+YoHp3MBzCsIHIchGzM6uFQQ3+1JlgWpRREL+/YX0Bt69c=
+	t=1755807059; cv=none; b=Xut+HC6w+6+zsT4ueZnX0wWKFjKG7o6RBlIQ/SD0Wh1892jZtbql9PiQGZP2WI/jWRc7HtCPk87obnyXZCzbz0oJzTzIFEfEqJifLuRGq/EZNjIU8h5kiEUGZ8tvOj67t8y1s6UoLSHFzPBnCsgY2AsCJ24FvUccBSYa1S/YbA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755806930; c=relaxed/simple;
-	bh=vBZZGz0SB0V7Hvywd1N29mvuGT2dBN/lU5Bb9Xz8Q6s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E9eVEyMZJlFcF6hxdOHZ/ij75pOS5lSCCvSqYiJQtH8vUlRDe7lu6ddQpmywp9UjBLKvbMXGVxiWwhpN32GCYz5aFUJtP/wcGx+iF2NcUr/yDTA27hUu4bDsBAxqe/uRdzXDv92j4dfb8hhL+HFkGygtiT23hULSY2T4jTqLOqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e1JSg2B2; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1755807059; c=relaxed/simple;
+	bh=R0ZyW/lP53DUpD5XCfGL8s/RHhsGuoWDmk/SVEPPWc8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mhIaINFvhniVhyyF1sojs6uDhXEXlqrB729tgGi/VwPuSaEthYafcae8SkB8WvWkdM0xF+r62W4uIw5zs60PfEf/CnvvP55s9k7PdpAfSemUYfvKpi2F5nOHp0EbZDwEJ1mG3ov9KCzHuFHVDdiIq7UaSefPpy2fZQ6/OqIWH9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WloXl5Al; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755806928;
+	s=mimecast20190719; t=1755807057;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8aQmj/0+AYT4mPx/DatgQPPbmq0Lkvm9KCqKkKCdC9Q=;
-	b=e1JSg2B2zYR4/k9MYnGN1wDcaVC0eaxaiLJohSY7QvdYHyg4VRv+llTGlQa4rwq5tW0NC5
-	d9/gP1NklKkwL0k06r9F7aLwoefh2d/vgLLQbqgpE6xsiDSjZh7lOltjT5v2OJLwsEIq+J
-	9PrzJIojvoLP/Q7Xbp8qcgcl6dtJiFA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=An+3TCbux96ebWXl79jkDvpeTXFUup6Liv8QO7JiiR4=;
+	b=WloXl5AlJmqcY6isKKXSorqfTao4xnrfxRX4pRiy2v5H3fCiuaDNJI/EhVlbA7ci7WIGCo
+	57JIzgwd137b+oEBKxw1Yo6Vm7QXwCmj8OCstBCYd0UiJPykQk5TTMJ2CQGUMWHAnecodN
+	dwRinHYUlwi9/rhUCjwsyc/L5APDkd8=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-593-T3aBbGcjMgq73W8ZSxw4DQ-1; Thu, 21 Aug 2025 16:08:46 -0400
-X-MC-Unique: T3aBbGcjMgq73W8ZSxw4DQ-1
-X-Mimecast-MFC-AGG-ID: T3aBbGcjMgq73W8ZSxw4DQ_1755806925
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-45a1b0071c1so6423015e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 13:08:46 -0700 (PDT)
+ us-mta-180-w86Tt6-KM8-2VHqvuXh33A-1; Thu, 21 Aug 2025 16:10:55 -0400
+X-MC-Unique: w86Tt6-KM8-2VHqvuXh33A-1
+X-Mimecast-MFC-AGG-ID: w86Tt6-KM8-2VHqvuXh33A_1755807055
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3e8613ac164so1552795ab.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 13:10:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755806925; x=1756411725;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8aQmj/0+AYT4mPx/DatgQPPbmq0Lkvm9KCqKkKCdC9Q=;
-        b=h4DS9ZM0Bv0Sf1NyoLWYsUIg+MYjCigqDxLOc0050Nyq32QZTdd+467NNe8qqGPpFT
-         9nGrA+XAJ6ysM4IwiHPXwrXzrmKTZpotQim7NdrPPC8jKrixVtab/EnGAoIEEI0M/yhk
-         VKMAazxSyM7ZoVjvohA+LPNPRMwWUqqaKF878d+CV+ha1XrKH5MvKGW25evnFTC5vRhO
-         cE1QbEboLc69/B6UdPJT1WLodkwIR7liWR+V9qOHLMxETwVYT0XTl6XMjCIpjbASyxSp
-         UJW7bADwr69cuNNm9NTw52gxZ9f1NHOV1m/6g4CICbYul2RMRaTrI7/HJ7h2xK+Rhkxk
-         metg==
-X-Forwarded-Encrypted: i=1; AJvYcCXb+yf24fh69hhEOr2h5y6owv2TRBuerCo2UNPJadNPtSjKBc/wkdPPbrwMMYE2gCASlhvenUkuOLqOKby9GyA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvKKxuB9Kc+QJ03q73MvQFJ183q07XILTZddsCz9WlkheWPOPc
-	uOyXUgJTL3Q0JhWd8kVpiUEXwP1rlS5oY1rM6nfhDoagZfpXBms/q5HPJt4nSWedKZLTyM8HdM4
-	Fawj/D2n95NI1Fpt+iMBFuGqvtbAdd+9H8Cam90P/AcEWCYaVRTsqx0EJA/9jIXFgz0lGUg==
-X-Gm-Gg: ASbGnctr6MCUlYv76+6RGf3koPDGqPMNZO5TdZ61C+F6kd1gXVHJWqz2WBwPIJx7VP2
-	G5jZFac67woT/J249e34xOJqNTtw/ocJ2uMf5u6E5EP+H0w9NKgsaM9/QtlmmKgOoXOqROGFX7f
-	WcO+XgH20HH6Ghtz45LtX69cYTrSwxA/lobYDM3GcZ++yW5SNZ/d92ImB/VqOHR8vTgguRtp5Ju
-	j8wbiiKM0/iyC0UBX1qVw/h0IgoBZCVYZUXS2hUzGw2BXlGvSuOH613vpKxZq01DNMKLTcWeh4Z
-	/qHOmKMrmd2jyVZahV4mKYvQXTSmekFDnJzDcXKrh795B3eWlkTWJjGZ9/Xj5uMPuxNH4xoP69I
-	OgqlJtLfpUPjGFUymDVPk0g==
-X-Received: by 2002:a05:600c:3b25:b0:459:da89:b06 with SMTP id 5b1f17b1804b1-45b517b008dmr3774195e9.16.1755806925522;
-        Thu, 21 Aug 2025 13:08:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHDDv+I9AWZPVyKVFD2prHDmQqsK3mzEWwP5yNf0oRJXtHjmqgi3hMC3hwAmszm5rTAtK85Rg==
-X-Received: by 2002:a05:600c:3b25:b0:459:da89:b06 with SMTP id 5b1f17b1804b1-45b517b008dmr3774035e9.16.1755806925116;
-        Thu, 21 Aug 2025 13:08:45 -0700 (PDT)
-Received: from localhost (p200300d82f26ba0008036ec5991806fd.dip0.t-ipconnect.de. [2003:d8:2f26:ba00:803:6ec5:9918:6fd])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45b50e0a479sm8895255e9.21.2025.08.21.13.08.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Aug 2025 13:08:44 -0700 (PDT)
-From: David Hildenbrand <david@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: David Hildenbrand <david@redhat.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Christoph Lameter <cl@gentwo.org>,
-	Dennis Zhou <dennis@kernel.org>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	iommu@lists.linux.dev,
-	io-uring@vger.kernel.org,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	John Hubbard <jhubbard@nvidia.com>,
-	kasan-dev@googlegroups.com,
-	kvm@vger.kernel.org,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-arm-kernel@axis.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org,
-	linux-ide@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Marco Elver <elver@google.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	netdev@vger.kernel.org,
-	Oscar Salvador <osalvador@suse.de>,
-	Peter Xu <peterx@redhat.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Tejun Heo <tj@kernel.org>,
-	virtualization@lists.linux.dev,
-	Vlastimil Babka <vbabka@suse.cz>,
-	wireguard@lists.zx2c4.com,
-	x86@kernel.org,
-	Zi Yan <ziy@nvidia.com>
-Subject: [PATCH RFC 35/35] mm: remove nth_page()
-Date: Thu, 21 Aug 2025 22:07:01 +0200
-Message-ID: <20250821200701.1329277-36-david@redhat.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250821200701.1329277-1-david@redhat.com>
-References: <20250821200701.1329277-1-david@redhat.com>
+        d=1e100.net; s=20230601; t=1755807055; x=1756411855;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=An+3TCbux96ebWXl79jkDvpeTXFUup6Liv8QO7JiiR4=;
+        b=DH0tQyNRuJmrk/y6+wv0XvrNgF+F2NI/lMeF8+DgxXx8mwx0XNR49UJxA3Yk/1bVNh
+         sV1wrFY6ODaZqq05gBqtADRV1o9O9kImuAEKar2F5M9qpxNRYREJ+8DcjhND0kNR6MBa
+         m66ycxi2Qkg/JLXGAaDu3h+iCGcS+TQgYY7oUnIN7cfFo26gNFaZJZnaFYh4UlVULnCy
+         +LzkfNoiQCLhNbqKETnegPgCtDD79lomVpDKv/BrMgciF0sNXcuLtjm8wXRJW/W1zLFc
+         Yz6lbWaPfJpIw3959as5sp/fKTCfZ76vc8uPvPtycQoJzIZ7WbiiDRV7JPU3T4BxvMk+
+         t35Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXKQvahIWUnLoiBjrpTDkAABBJPT4guaHqWPZ1LYSY8OTJ3tOrtou/wG0XvMO3WJWlFjRyO4ilJimFeoGuFIC8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKO30JPUcM26Ke4tl8CqFl2sto2KesPRAfEwgFGrosOJ/jHGzo
+	KoPHkzD/OOe25KqNiAhGTw+nCE4x+WBhbZgfpHbXAmj3cK6T8hW3yZhZ+MGnQPYa9Em5n5S4eWN
+	LM0DgTAbjMpH/OafaLUx2qzm/65xMou9QO79sjuZRJBkPAqVy+5CK3K0D8ccgxF6Zl8IOYg==
+X-Gm-Gg: ASbGncvayxqu269jpecwOxqfgIrF9jTN9dwfrUHYLFGCEeFv1+JusZ2DHg4nVBWcxOk
+	i5BlFvj38Yk591xKkboTR6W2KBCKd8UQYEb/m+0dc74w5JsApeTFGhu2By9/WM4s3i7iRPwBdWK
+	5FK97IutqPSc5UiwVZ7htWJL/s2BMAllYZ+QtbfaLAGT9R152v/NO90Wr4QSkp94VYZ2qggmk5w
+	uKpqxejJQJ7HER+HcGcN3FWVhLYEqpSBQeqWLTkSA7I2JV2ESr41AKIB0T3zMLh1RHp07EXqnPy
+	NmcWcUMXVLQmDAV4NWRfl2cjheeSktmflrdOJLoHips=
+X-Received: by 2002:a05:6602:6407:b0:881:982b:9946 with SMTP id ca18e2360f4ac-886bd0f1ad1mr31881739f.1.1755807054505;
+        Thu, 21 Aug 2025 13:10:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH7UyEEHnmghSQL6lcVlKCttefDYrWN/3zEcgegYm6NRgpa88y8amc0JBLXw47xKtjo5rcPAA==
+X-Received: by 2002:a05:6602:6407:b0:881:982b:9946 with SMTP id ca18e2360f4ac-886bd0f1ad1mr31879039f.1.1755807053992;
+        Thu, 21 Aug 2025 13:10:53 -0700 (PDT)
+Received: from redhat.com ([38.15.36.11])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8843f9c3329sm702744239f.19.2025.08.21.13.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Aug 2025 13:10:53 -0700 (PDT)
+Date: Thu, 21 Aug 2025 14:10:48 -0600
+From: Alex Williamson <alex.williamson@redhat.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, Aaron Lewis <aaronlewis@google.com>,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>, Adithya Jayachandran
+ <ajayachandra@nvidia.com>, Andrew Jones <ajones@ventanamicro.com>, Ard
+ Biesheuvel <ardb@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>,
+ Bibo Mao <maobibo@loongson.cn>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Dan Williams <dan.j.williams@intel.com>, Dave Jiang <dave.jiang@intel.com>,
+ dmaengine@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>, James
+ Houghton <jthoughton@google.com>, Joel Granados <joel.granados@kernel.org>,
+ Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, "Mike Rapoport
+ (Microsoft)" <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Pasha
+ Tatashin <pasha.tatashin@soleen.com>, "Pratik R. Sampat"
+ <prsampat@amd.com>, Saeed Mahameed <saeedm@nvidia.com>, Sean Christopherson
+ <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Vinicius Costa Gomes
+ <vinicius.gomes@intel.com>, Vipin Sharma <vipinsh@google.com>, Wei Yang
+ <richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
+Subject: Re: [PATCH 00/33] vfio: Introduce selftests for VFIO
+Message-ID: <20250821141048.6e16e546.alex.williamson@redhat.com>
+In-Reply-To: <CALzav=eOz+Gf8XawvaSSBHj=8gQg3O9T9dJcN6q4eqh7_MEPDw@mail.gmail.com>
+References: <20250620232031.2705638-1-dmatlack@google.com>
+	<CALzav=dVYqS8oQNbygVjgA69EQMBBP4CyzydyUoAjnN2mb_yUQ@mail.gmail.com>
+	<20250728102737.5b51e9da.alex.williamson@redhat.com>
+	<20250729222635.GU36037@nvidia.com>
+	<CALzav=d0vPMw26f-vzCJnjRFL+Uc6sObihqJ0jnJRpi-SxtSSw@mail.gmail.com>
+	<CALzav=fdT+NJDO+jWyty+tKqxqum4RVkHZmUocz4MDQkPgG4Bg@mail.gmail.com>
+	<20250818133721.32b660e3.alex.williamson@redhat.com>
+	<CALzav=eOz+Gf8XawvaSSBHj=8gQg3O9T9dJcN6q4eqh7_MEPDw@mail.gmail.com>
+Organization: Red Hat
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Now that all users are gone, let's remove it.
+On Mon, 18 Aug 2025 13:33:52 -0700
+David Matlack <dmatlack@google.com> wrote:
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- include/linux/mm.h                   | 2 --
- tools/testing/scatterlist/linux/mm.h | 1 -
- 2 files changed, 3 deletions(-)
+> On Mon, Aug 18, 2025 at 12:37=E2=80=AFPM Alex Williamson
+> <alex.williamson@redhat.com> wrote:
+> >
+> > On Mon, 18 Aug 2025 11:59:39 -0700
+> > David Matlack <dmatlack@google.com> wrote:
+> > =20
+> > > On Thu, Jul 31, 2025 at 1:55=E2=80=AFPM David Matlack <dmatlack@googl=
+e.com> wrote: =20
+> > > >
+> > > > On Tue, Jul 29, 2025 at 3:26=E2=80=AFPM Jason Gunthorpe <jgg@nvidia=
+.com> wrote: =20
+> > > > >
+> > > > > On Mon, Jul 28, 2025 at 10:27:37AM -0600, Alex Williamson wrote: =
+=20
+> > > > > > On Fri, 25 Jul 2025 09:47:48 -0700
+> > > > > > David Matlack <dmatlack@google.com> wrote: =20
+> > > > > > > I also was curious about your thoughts on maintenance of VFIO
+> > > > > > > selftests, since I don't think we discussed that in the RFC. =
+I am
+> > > > > > > happy to help maintain VFIO selftests in whatever way makes t=
+he most
+> > > > > > > sense. For now I added tools/testing/selftests/vfio under the
+> > > > > > > top-level VFIO section in MAINTAINERS (so you would be the ma=
+intainer)
+> > > > > > > and then also added a separate section for VFIO selftests wit=
+h myself
+> > > > > > > as a Reviewer (see PATCH 01). Reviewer felt like a better cho=
+ice than
+> > > > > > > Maintainer for myself since I am new to VFIO upstream (I've p=
+rimarily
+> > > > > > > worked on KVM in the past). =20
+> > > > > >
+> > > > > > Hi David,
+> > > > > >
+> > > > > > There's a lot of potential here and I'd like to see it proceed.=
+ =20
+> > > > >
+> > > > > +1 too, I really lack time at the moment to do much with this but=
+ I'm
+> > > > > half inclined to suggest Alex should say it should be merged in 6
+> > > > > weeks (to motivate any reviewing) and we can continue to work on =
+it
+> > > > > in-tree.
+> > > > >
+> > > > > As they are self tests I think there is alot more value in having=
+ the
+> > > > > tests than having perfect tests. =20
+> > > >
+> > > > They have been quite useful already within Google. Internally we ha=
+ve
+> > > > something almost identical to the RFC and have been using that for
+> > > > testing our 6.6-based kernel continuously since March. Already they
+> > > > have caught one (self-inflicted) regression where 1GiB HugeTLB pages
+> > > > started getting mapped with 2MiB mappings in the IOMMU, and have be=
+en
+> > > > very helpful with new development (e.g. Aaron's work, and Live Upda=
+te
+> > > > support).
+> > > >
+> > > > So I agree, it's probably net positive to merge early and then iter=
+ate
+> > > > in-tree. Especially since these are only tests and not e.g.
+> > > > load-bearing kernel code (although I still want to hold a high bar =
+for
+> > > > the selftests code).
+> > > >
+> > > > The only patches to hold off merging would be 31-33, since those
+> > > > should probably go through the KVM tree? And of course we need Acks
+> > > > for the drivers/dma/{ioat,idxd} changes, but the changes there are
+> > > > pretty minor. =20
+> > >
+> > > Alex, how would you like to proceed? =20
+> >
+> > I think we need an ack from Shuah for the overall inclusion in
+> > tools/testing/selftests/
+> >
+> > AFAICT the tools include files don't seem to have any central
+> > authority, so maybe we just need to chase those ioat/idxd acks, along
+> > with Shuah's and we can get this rolling and follow-up with the latter
+> > KVM patches once the base is merged.  Thanks, =20
+>=20
+> Sounds good.
+>=20
+> And yeah, I also don't see any maintainers listed for tools/include/
+> or tools/arch/x86/include/. Jason left some comments on the RFC that
+> reduced the delta in v1, but that's the only feedback I've gotten so
+> far there.
+>=20
+> I will try emailing Shuah and the ioat/idxd maintainers directly as a
+> next step, since it has been about 2 months since I posted this series
+> and we haven't heard anything yet.
+>=20
+> Thanks for the help.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index f59ad1f9fc792..3ded0db8322f7 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -210,9 +210,7 @@ extern unsigned long sysctl_admin_reserve_kbytes;
- 
- #if defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
- bool page_range_contiguous(const struct page *page, unsigned long nr_pages);
--#define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
- #else
--#define nth_page(page,n) ((page) + (n))
- static inline bool page_range_contiguous(const struct page *page,
- 		unsigned long nr_pages)
- {
-diff --git a/tools/testing/scatterlist/linux/mm.h b/tools/testing/scatterlist/linux/mm.h
-index 5bd9e6e806254..121ae78d6e885 100644
---- a/tools/testing/scatterlist/linux/mm.h
-+++ b/tools/testing/scatterlist/linux/mm.h
-@@ -51,7 +51,6 @@ static inline unsigned long page_to_phys(struct page *page)
- 
- #define page_to_pfn(page) ((unsigned long)(page) / PAGE_SIZE)
- #define pfn_to_page(pfn) (void *)((pfn) * PAGE_SIZE)
--#define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
- 
- #define __min(t1, t2, min1, min2, x, y) ({              \
- 	t1 min1 = (x);                                  \
--- 
-2.50.1
+I think we have all the required acks now and reviews just suggest some
+minor patch shuffling, right?.  You were also going to switch from
+reviewer to maintainer of the selftests in MAINTAINERS ;)
+
+Are you planning to collect those acks, add the minor changes, drop the
+trailing KVM changes to come in through the existing kvm selftests and
+repost?
+
+With KVM Forum coming up, I'd like to try to get this squared away and
+into the vfio next branch by next week.  Thanks,
+
+Alex
 
 
