@@ -1,220 +1,132 @@
-Return-Path: <linux-kselftest+bounces-39694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0EFFB31E6C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 17:26:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9B6CB31E66
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 17:26:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CED93B44D50
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 15:17:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43A5C622D96
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 15:19:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E81F23D7C6;
-	Fri, 22 Aug 2025 15:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD9922688C;
+	Fri, 22 Aug 2025 15:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PWl6d5HX"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="Ij8kuW7T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A31221254F;
-	Fri, 22 Aug 2025 15:17:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A981D211A11;
+	Fri, 22 Aug 2025 15:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755875827; cv=none; b=iulj9A/w7hoAMkgtWvMTxxLKZrvg4KhwIlNadiA+NsILZuU0PSBV6U3uJyvEALX9Hc3SKyxGP+GqxyLGm9FlFy+VogcqWy4iK84OJqh8Wxbw/fX+SkdKvPJxd4IySWbG1Zl8NKCCFAv4x+34FXZ910YevhhI9IaMkAvBENMz7xg=
+	t=1755875920; cv=none; b=S1bVogznnubNLAlvcLDw7CmnBD6ntYZtGQdg1+tbfVrNl2NC4+VdzxKliJfwALJ+/lveoe/dhn5BV0jSDKVgPdXgnRUlSD04MPidlY6EUhEigvW5EAdiIWkX+zVN3XPQfF4Z57hyJUs7u3jcnhVeToP8++TpPxFYDXgWed1BZ+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755875827; c=relaxed/simple;
-	bh=DYIv+8O47AgXECoNN0D9qxENXd43XygJabRYMi9Zf2w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rKQVNAH/xYbA1Ja7TIdbpVsIZLqbTEPVjZ5LSRLXTt/z6w7uHDrdoTSELnTPl38Ruu0lbS+HXSbaUbSOe/Pe1bnD1u/vs3eN/QxVYKVIJBqLaWSXLImIuLpHFqgfx6HVflMbW2tGWFBdeS3FBtZpWpygvAeqt6n927GzYoM29ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PWl6d5HX; arc=none smtp.client-ip=220.197.31.4
+	s=arc-20240116; t=1755875920; c=relaxed/simple;
+	bh=AsisFzk5RpZGo2qHEIH2RFjIZWGpxDMznki/isvR0fY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=TDVCYkdI3fLZRCvXXR7xNsid1cacWH6pJJVzAW7ZLwcWTAl8hJF549E2/S55vJOC1sSVa6mGBqkrp41MOXN1k+6ErEaaFFwhRGMJgTdz+b8+XaMQ3uDuJFzRK7Ezw31Z09xYv2nd/nnGPsP9cK5W+RfgyqfUfalkhtzJkpsQ4yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=Ij8kuW7T reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=2M
-	64p6PzM6E+Ful7zBk13hxPItF7DaAAOT0U0YpEi50=; b=PWl6d5HXOioRCGLWcs
-	gq/fMlCD+B/WMXWN8nYTj2mf1pG5eNnHw7B+cZnhEpkfJYgteSeJo6lZiwuGR1gD
-	/dEu6W7g7WCLC43xGgDwIDoF1V9zAVB3uPMWB2VV6UvLCgCjWmbMkFQiAICLd60p
-	bNqGRFrFwgIl+eeVYhbDoGw9E=
-Received: from phoenix.. (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgBHTfm8iahoidrHAA--.29756S4;
-	Fri, 22 Aug 2025 23:16:15 +0800 (CST)
-From: Jiawei Zhao <phoenix500526@163.com>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v13 2/2] selftests/bpf: Enrich subtest_basic_usdt case in selftests to cover SIB handling logic
-Date: Fri, 22 Aug 2025 15:16:11 +0000
-Message-ID: <20250822151611.1084244-3-phoenix500526@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250822151611.1084244-1-phoenix500526@163.com>
-References: <20250822151611.1084244-1-phoenix500526@163.com>
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=BsZS4lEWMC63rdXE3QSmsW25yOWeMoC6tKATE9okz+Y=; b=I
+	j8kuW7TnUPouiKhqvVKCIqRou381+Qf6vrNjxlnEkN6Pzn/PCwN14jSOhphpk50m
+	G8j6zOr5kX542yIZxtmr9cbjLB/bVDXVRBFBbqcdsnxIp6XiaeviapCueby8hZrI
+	W1C57LfFmIKJvoMjUy5MUPXNTXvEdm5or4+F/eBlWQ=
+Received: from phoenix500526$163.com ( [120.230.124.83] ) by
+ ajax-webmail-wmsvr-40-140 (Coremail) ; Fri, 22 Aug 2025 23:18:03 +0800
+ (CST)
+Date: Fri, 22 Aug 2025 23:18:03 +0800 (CST)
+From: =?GBK?B?1dS80ey/?= <phoenix500526@163.com>
+To: "Jiri Olsa" <olsajiri@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	yonghong.song@linux.dev, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH bpf-next v12 0/2] libbpf: fix USDT SIB argument
+ handling causing unrecognized register error
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <aKhuA0xklnLCIbsv@krava>
+References: <20250821152713.1024982-1-phoenix500526@163.com>
+ <aKhuA0xklnLCIbsv@krava>
+X-NTES-SC: AL_Qu2eB/ScukAj5SGdZukfmUsVh+o9X8K1vfsk3oZfPJp+jB/o8AU8Z1lMJ1nW+euOIgmlrheYSRJPzuZ6Z7ZSWYANxeMs2NJchFmQHO4hDfC67w==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgBHTfm8iahoidrHAA--.29756S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKF15Cry3JFW7ZFyfKr17Jrb_yoW7CrWfpa
-	ykZ34xtryrt3WxG34fJr4jqw4rKFn2yrW5JFZrXryjvrWkGrs7Xrn7tw13KFnxX3ykX3W5
-	ArZ0kan5Kw4xXF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jqeHDUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFBqxiGiogESwtQAAs2
+Message-ID: <7078a326.98e2.198d25bb89b.Coremail.phoenix500526@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:jCgvCgDXf48siqhoEgYgAA--.2681W
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFBqxiGiogESwtQABs3
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
-
-In this patch:
-- enrich subtest_basic_usdt test case to cover SIB addressing usdt argument spec
-  handling logic
-
-Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
----
- tools/testing/selftests/bpf/prog_tests/usdt.c | 44 ++++++++++++++++++-
- tools/testing/selftests/bpf/progs/test_usdt.c | 30 +++++++++++++
- 2 files changed, 72 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-index 9057e983cc54..c04b416aa4a8 100644
---- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-@@ -25,6 +25,10 @@ unsigned short test_usdt0_semaphore SEC(".probes");
- unsigned short test_usdt3_semaphore SEC(".probes");
- unsigned short test_usdt12_semaphore SEC(".probes");
- 
-+#if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__))
-+unsigned short test_usdt_sib_semaphore SEC(".probes");
-+#endif
-+
- static void __always_inline trigger_func(int x) {
- 	long y = 42;
- 
-@@ -40,12 +44,29 @@ static void __always_inline trigger_func(int x) {
- 	}
- }
- 
-+#if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__))
-+static __attribute__((optimize("O1"))) void trigger_sib_spec(void)
-+{
-+	/* Base address + offset + (index * scale) */
-+	/* Force SIB addressing with inline assembly */
-+	asm volatile(
-+		"# probe point with memory access\n"
-+		STAP_PROBE_ASM(test, usdt_sib, -2@(%%rdx,%%rax,2))
-+		"# end probe point"
-+		:
-+		: "d"(nums), "a"(0)
-+		: "memory"
-+	);
-+}
-+#endif
-+
- static void subtest_basic_usdt(void)
- {
- 	LIBBPF_OPTS(bpf_usdt_opts, opts);
- 	struct test_usdt *skel;
- 	struct test_usdt__bss *bss;
- 	int err, i;
-+	const __u64 expected_cookie = 0xcafedeadbeeffeed;
- 
- 	skel = test_usdt__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "skel_open"))
-@@ -59,20 +80,29 @@ static void subtest_basic_usdt(void)
- 		goto cleanup;
- 
- 	/* usdt0 won't be auto-attached */
--	opts.usdt_cookie = 0xcafedeadbeeffeed;
-+	opts.usdt_cookie = expected_cookie;
- 	skel->links.usdt0 = bpf_program__attach_usdt(skel->progs.usdt0,
- 						     0 /*self*/, "/proc/self/exe",
- 						     "test", "usdt0", &opts);
- 	if (!ASSERT_OK_PTR(skel->links.usdt0, "usdt0_link"))
- 		goto cleanup;
- 
-+#if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__))
-+	opts.usdt_cookie = expected_cookie;
-+	skel->links.usdt_sib = bpf_program__attach_usdt(skel->progs.usdt_sib,
-+								0 /*self*/, "/proc/self/exe",
-+								"test", "usdt_sib", &opts);
-+	if (!ASSERT_OK_PTR(skel->links.usdt_sib, "usdt_sib_link"))
-+		goto cleanup;
-+#endif
-+
- 	trigger_func(1);
- 
- 	ASSERT_EQ(bss->usdt0_called, 1, "usdt0_called");
- 	ASSERT_EQ(bss->usdt3_called, 1, "usdt3_called");
- 	ASSERT_EQ(bss->usdt12_called, 1, "usdt12_called");
- 
--	ASSERT_EQ(bss->usdt0_cookie, 0xcafedeadbeeffeed, "usdt0_cookie");
-+	ASSERT_EQ(bss->usdt0_cookie, expected_cookie, "usdt0_cookie");
- 	ASSERT_EQ(bss->usdt0_arg_cnt, 0, "usdt0_arg_cnt");
- 	ASSERT_EQ(bss->usdt0_arg_ret, -ENOENT, "usdt0_arg_ret");
- 	ASSERT_EQ(bss->usdt0_arg_size, -ENOENT, "usdt0_arg_size");
-@@ -156,6 +186,16 @@ static void subtest_basic_usdt(void)
- 	ASSERT_EQ(bss->usdt3_args[1], 42, "usdt3_arg2");
- 	ASSERT_EQ(bss->usdt3_args[2], (uintptr_t)&bla, "usdt3_arg3");
- 
-+#if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__))
-+	trigger_sib_spec();
-+	ASSERT_EQ(bss->usdt_sib_called, 1, "usdt_sib_called");
-+	ASSERT_EQ(bss->usdt_sib_cookie, expected_cookie, "usdt_sib_cookie");
-+	ASSERT_EQ(bss->usdt_sib_arg_cnt, 1, "usdt_sib_arg_cnt");
-+	ASSERT_EQ(bss->usdt_sib_arg, nums[0], "usdt_sib_arg");
-+	ASSERT_EQ(bss->usdt_sib_arg_ret, 0, "usdt_sib_arg_ret");
-+	ASSERT_EQ(bss->usdt_sib_arg_size, sizeof(nums[0]), "usdt_sib_arg_size");
-+#endif
-+
- cleanup:
- 	test_usdt__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_usdt.c b/tools/testing/selftests/bpf/progs/test_usdt.c
-index 096488f47fbc..b5f883bca66b 100644
---- a/tools/testing/selftests/bpf/progs/test_usdt.c
-+++ b/tools/testing/selftests/bpf/progs/test_usdt.c
-@@ -107,4 +107,34 @@ int BPF_USDT(usdt12, int a1, int a2, long a3, long a4, unsigned a5,
- 	return 0;
- }
- 
-+
-+int usdt_sib_called;
-+u64 usdt_sib_cookie;
-+int usdt_sib_arg_cnt;
-+int usdt_sib_arg_ret;
-+u64 usdt_sib_arg;
-+int usdt_sib_arg_size;
-+
-+// Note: usdt_sib is only tested on x86-related architectures, so it requires
-+// manual attach since auto-attach will panic tests under other architectures
-+SEC("usdt")
-+int usdt_sib(struct pt_regs *ctx)
-+{
-+	long tmp;
-+
-+	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	__sync_fetch_and_add(&usdt_sib_called, 1);
-+
-+	usdt_sib_cookie = bpf_usdt_cookie(ctx);
-+	usdt_sib_arg_cnt = bpf_usdt_arg_cnt(ctx);
-+
-+	usdt_sib_arg_ret = bpf_usdt_arg(ctx, 0, &tmp);
-+	usdt_sib_arg = (short)tmp;
-+	usdt_sib_arg_size = bpf_usdt_arg_size(ctx, 0);
-+
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+CgoKCgoKCgoKT2ssIGRvbmUuCgoKCgoKCgpBdCAyMDI1LTA4LTIyIDIxOjE3OjU1LCAiSmlyaSBP
+bHNhIiA8b2xzYWppcmlAZ21haWwuY29tPiB3cm90ZToKPk9uIFRodSwgQXVnIDIxLCAyMDI1IGF0
+IDAzOjI3OjEwUE0gKzAwMDAsIEppYXdlaSBaaGFvIHdyb3RlOgo+PiBXaGVuIHVzaW5nIEdDQyBv
+biB4ODYtNjQgdG8gY29tcGlsZSBhbiB1c2R0IHByb2cgd2l0aCAtTzEgb3IgaGlnaGVyCj4+IG9w
+dGltaXphdGlvbiwgdGhlIGNvbXBpbGVyIHdpbGwgZ2VuZXJhdGUgU0lCIGFkZHJlc3NpbmcgbW9k
+ZSBmb3IgZ2xvYmFsCj4+IGFycmF5IGFuZCBQQy1yZWxhdGl2ZSBhZGRyZXNzaW5nIG1vZGUgZm9y
+IGdsb2JhbCB2YXJpYWJsZSwKPj4gZS5nLiAiMUAtOTYoJXJicCwlcmF4LDgpIiBhbmQgIi0xQDQr
+dDEoJXJpcCkiLgo+PiAKPj4gVGhlIGN1cnJlbnQgVVNEVCBpbXBsZW1lbnRhdGlvbiBpbiBsaWJi
+cGYgY2Fubm90IHBhcnNlIHRoZXNlIHR3byBmb3JtYXRzLAo+PiBjYXVzaW5nIGBicGZfcHJvZ3Jh
+bV9fYXR0YWNoX3VzZHQoKWAgdG8gZmFpbCB3aXRoIC1FTk9FTlQKPj4gKHVucmVjb2duaXplZCBy
+ZWdpc3RlcikuCj4+IAo+PiBUaGlzIHBhdGNoIHNlcmllcyBhZGRzIHN1cHBvcnQgZm9yIFNJQiBh
+ZGRyZXNzaW5nIG1vZGUgaW4gVVNEVCBwcm9iZXMuCj4+IFRoZSBtYWluIGNoYW5nZXMgaW5jbHVk
+ZToKPj4gLSBhZGQgY29ycmVjdCBoYW5kbGluZyBsb2dpYyBmb3IgU0lCLWFkZHJlc3NlZCBhcmd1
+bWVudHMgaW4KPj4gICBgcGFyc2VfdXNkdF9hcmdgLgo+PiAtIGFkZCBhbiB1c2R0X28yIHRlc3Qg
+Y2FzZSB0byBjb3ZlciBTSUIgYWRkcmVzc2luZyBtb2RlLgo+PiAKPj4gVGVzdGluZyBzaG93cyB0
+aGF0IHRoZSBTSUIgcHJvYmUgY29ycmVjdGx5IGdlbmVyYXRlcyA4QCglcmN4LCVyYXgsOCkgCj4+
+IGFyZ3VtZW50IHNwZWMgYW5kIHBhc3NlcyBhbGwgdmFsaWRhdGlvbiBjaGVja3MuCj4+IAo+PiBU
+aGUgbW9kaWZpY2F0aW9uIGhpc3Rvcnkgb2YgdGhpcyBwYXRjaCBzZXJpZXM6Cj4+IENoYW5nZSBz
+aW5jZSB2MToKPj4gLSByZWZhY3RvciB0aGUgY29kZSB0byBtYWtlIGl0IG1vcmUgcmVhZGFibGUK
+Pj4gLSBtb2RpZnkgdGhlIGNvbW1pdCBtZXNzYWdlIHRvIGV4cGxhaW4gd2h5IGFuZCBob3cKPj4g
+Cj4+IENoYW5nZSBzaW5jZSB2MjoKPj4gLSBmaXggdGhlIGBzY2FsZWAgdW5pbml0aWFsaXplZCBl
+cnJvcgo+PiAKPj4gQ2hhbmdlIHNpbmNlIHYzOgo+PiAtIGZvcmNlIC1PMiBvcHRpbWl6YXRpb24g
+Zm9yIHVzZHQudGVzdC5vIHRvIGdlbmVyYXRlIFNJQiBhZGRyZXNzaW5nIHVzZHQKPj4gICBhbmQg
+cGFzcyBhbGwgdGVzdCBjYXNlcy4KPj4gCj4+IENoYW5nZSBzaW5jZSB2NDoKPj4gLSBzcGxpdCB0
+aGUgcGF0Y2ggaW50byB0d28gcGFydHMsIG9uZSBmb3IgdGhlIGZpeCBhbmQgdGhlIG90aGVyIGZv
+ciB0aGUKPj4gICB0ZXN0Cj4+IAo+PiBDaGFuZ2Ugc2luY2UgdjU6Cj4+IC0gT25seSBlbmFibGUg
+b3B0aW1pemF0aW9uIGZvciB4ODYgYXJjaGl0ZWN0dXJlIHRvIGdlbmVyYXRlIFNJQiBhZGRyZXNz
+aW5nCj4+ICAgdXNkdCBhcmd1bWVudCBzcGVjLgo+PiAKPj4gQ2hhbmdlIHNpbmNlIHY2Ogo+PiAt
+IEFkZCBhbiB1c2R0X28yIHRlc3QgY2FzZSB0byBjb3ZlciBTSUIgYWRkcmVzc2luZyBtb2RlLgo+
+PiAtIFJlaW5zdGF0ZSB0aGUgdXNkdC5jIHRlc3QgY2FzZS4KPj4gCj4+IENoYW5nZSBzaW5jZSB2
+NzoKPj4gLSBSZWZhY3RvciBtb2RpZmljYXRpb25zIHRvIF9fYnBmX3VzZHRfYXJnX3NwZWMgdG8g
+YXZvaWQgaW5jcmVhc2luZyBpdHMgc2l6ZSwKPj4gICBhY2hpZXZpbmcgYmV0dGVyIGNvbXBhdGli
+aWxpdHkKPj4gLSBGaXggc29tZSBtaW5vciBjb2RlIHN0eWxlIGlzc3Vlcwo+PiAtIFJlZmFjdG9y
+IHRoZSB1c2R0X28yIHRlc3QgY2FzZSwgcmVtb3Zpbmcgc2VtYXBob3JlIGFuZCBhZGRpbmcgR0ND
+IGF0dHJpYnV0ZQo+PiAgIHRvIGZvcmNlIC1PMiBvcHRpbWl6YXRpb24KPj4gCj4+IENoYW5nZSBz
+aW5jZSB2ODoKPj4gLSBSZWZhY3RvciB0aGUgdXNkdF9vMiB0ZXN0IGNhc2UsIHVzaW5nIGFzc2Vt
+Ymx5IHRvIGZvcmNlIFNJQiBhZGRyZXNzaW5nIG1vZGUuCj4+IAo+PiBDaGFuZ2Ugc2luY2Ugdjk6
+Cj4+IC0gT25seSBlbmFibGUgdGhlIHVzZHRfbzIgdGVzdCBjYXNlIG9uIHg4Nl82NCBhbmQgaTM4
+NiBhcmNoaXRlY3R1cmVzIHNpbmNlIHRoZQo+PiAgIFNJQiBhZGRyZXNzaW5nIG1vZGUgaXMgb25s
+eSBzdXBwb3J0ZWQgb24geDg2XzY0IGFuZCBpMzg2Lgo+PiAKPj4gQ2hhbmdlIHNpbmNlIHYxMDoK
+Pj4gLSBSZXBsYWNlIGBfX2F0dHJpYnV0ZV9fKChvcHRpbWl6ZSgiTzIiKSkpYCB3aXRoIGAjcHJh
+Z21hIEdDQyBvcHRpbWl6ZSgiTzEiKWAKPj4gICB0byBmaXggdGhlIGlzc3VlIHdoZXJlIHRoZSBv
+cHRpbWl6ZWQgY29tcGlsYXRpb24gY29uZGl0aW9uIHdvcmtzIGltcHJvcGVybHkuIAo+PiAtIFJl
+bmFtZWQgdGVzdCBjYXNlIHVzZHRfbzIgYW5kIHJlbGV2YW50IGZpbGVzIG5hbWUgdG8gdXNkdF9v
+MSBpbiB0aGF0IE8xCj4+ICAgbGV2ZWwgb3B0aW1pemF0aW9uIGlzIGVub3VnaCB0byBnZW5lcmF0
+ZSBTSUIgYWRkcmVzc2luZyB1c2R0IGFyZ3VtZW50IHNwZWMuCj4+IAo+PiBDaGFuZ2Ugc2luY2Ug
+djExOgo+PiAtIFJlcGxhY2UgYFNUQVBfUFJPQkUxYCB3aXRoIGBTVEFQX1BST0JFX0FTTWAKPj4g
+LSBVc2UgYml0IGZpZWxkcyBpbnN0ZWFkIG9mIGJpdCBzaGlmdGluZyBvcGVyYXRpb25zCj4+IC0g
+TWVyZ2UgdGhlIHVzZHRfbzEgdGVzdCBjYXNlIGludG8gdGhlIHVzZHQgdGVzdCBjYXNlCj4KPmhp
+LAo+SSBjYW4gc2VlIHBhdGNoc2V0IHYxMiB0d2ljZSB3aXRoIGRpZmZlcmVudCBzdGF0cy4uIHRo
+aXMgb25lJ3MgdGhlIGxhdHRlciwKPmJ1dCB5b3UgbWlnaHQgd2FudCB0byByZXNlbmQgd2l0aCBu
+ZXcgdmVyc2lvbgo+Cj5qaXJrYQo+Cj4KPj4gCj4+IEppYXdlaSBaaGFvICgyKToKPj4gICBsaWJi
+cGY6IGZpeCBVU0RUIFNJQiBhcmd1bWVudCBoYW5kbGluZyBjYXVzaW5nIHVucmVjb2duaXplZCBy
+ZWdpc3Rlcgo+PiAgICAgZXJyb3IKPj4gICBzZWxmdGVzdHMvYnBmOiBFbnJpY2ggc3VidGVzdF9i
+YXNpY191c2R0IGNhc2UgaW4gc2VsZnRlc3RzIHRvIGNvdmVyCj4+ICAgICBTSUIgaGFuZGxpbmcg
+bG9naWMKPj4gCj4+ICB0b29scy9saWIvYnBmL3VzZHQuYnBmLmggICAgICAgICAgICAgICAgICAg
+ICAgfCA0NyArKysrKysrKysrKysrKy0KPj4gIHRvb2xzL2xpYi9icGYvdXNkdC5jICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8IDU4ICsrKysrKysrKysrKysrKysrLS0KPj4gIHRvb2xzL3Rlc3Rp
+bmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3VzZHQuYyB8IDQ0ICsrKysrKysrKysrKystCj4+
+ICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvdGVzdF91c2R0LmMgfCAzMCArKysr
+KysrKysrCj4+ICA0IGZpbGVzIGNoYW5nZWQsIDE3MCBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9u
+cygtKQo+PiAKPj4gLS0gCj4+IDIuNDMuMAo+PiAKPj4gCg==
 
