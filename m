@@ -1,213 +1,194 @@
-Return-Path: <linux-kselftest+bounces-39714-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39715-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9424AB321DB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 19:58:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C991B321E0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 20:00:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08E61B64E18
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 17:57:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B60FAE02EB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 18:00:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9730529A30D;
-	Fri, 22 Aug 2025 17:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87FFF29ACC0;
+	Fri, 22 Aug 2025 18:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="NTWdP+X4"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="bowIBjw1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAFE29993D
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 17:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAB6B661
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 17:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755885507; cv=none; b=mqRr0uWzcW9L0GX4s9vkL1mL+WnUOo90XqJe5k7oKl70y8CR3drRnp5QL2aZndOn41iygwaYxO0Wndw4RJtcFj+5tPiVuex2DIyEVOVMAin2VwtTV9bxtRGSn0ON9xiIwxXGhfGwNwsGL0IkH5GxUS1Tu/KwfpvY3MvpprYdAvI=
+	t=1755885602; cv=none; b=rxycrTvj779bqlqP9rpexoen1DScYeLg0YbQ9LLa+bSInoUSEbrZLBIrV3WMmN4hBddtSAXTkr6leGyvIDxBgTTKgBU3SB/rqDkL2gGNHZU0gvxIJcCJ5y2TFkD06Na/gUepcVEKwpo18q6Sh+iSjD3ZGQ7HkJOflf+lgAOdIvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755885507; c=relaxed/simple;
-	bh=nF6YlaAh7XuRGcAeSUxzKN7syva3tGK7AQ9piMFQqbU=;
+	s=arc-20240116; t=1755885602; c=relaxed/simple;
+	bh=QjGUX/IavHKYnweyZiQnCgeIEp0Qa7sid7tkHYHTpno=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FWdLa3vZZNeCSHV9NVhvSCl58wqCHYGDP2RiNEiA2OeHYJrtYtiR/2+lzSSUrPUn2dz0VzMkMoRzVxNz0w5wG/kO4GK6tWAX5eeTwuYppN5Bvaw7ldZpsC0eta1pL3e1nzG4z7dx43zBjOgow7snj9aB+p9JlDEP60ejQBdOiIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=NTWdP+X4; arc=none smtp.client-ip=209.85.217.52
+	 To:Cc:Content-Type; b=UJjc+D8Nz9Z+ARhiiH11//ImOrn2GfuN3aKB0qzkd0QdvLVWZgd77E0zxTpkQTyZ+2nRHAJUWk+u4Z++15XnZtk8qP8pb6QupKmcxV1tR62156SDWHDuvkM3BF1vFFMFn7V6WrxuB4Vl5oaReR1X7kYvKANQxJltAQOAbwm3lhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=bowIBjw1; arc=none smtp.client-ip=209.85.221.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-50f8af3517eso788287137.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 10:58:24 -0700 (PDT)
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-53b173717beso863840e0c.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 10:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1755885503; x=1756490303; darn=vger.kernel.org;
+        d=rivosinc.com; s=google; t=1755885598; x=1756490398; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QctlWqJYLmIg/E5LPhpjhg17ib5pNjMH7p/Hx4zus4I=;
-        b=NTWdP+X4Xxg5tI/7NKVqN1Ci7k2Air8QvJc564jyZr4rzbB3TvlktHSN9INkmEzU5Y
-         TbSGmMiGkWC/ChQaf7pQqRIU5BaqW3cQTALyS2C9cLftquNgKDCtqd44P9RPDLHpL8Uu
-         lsrXYkAbY/7WE8/EDWxkaj1gDDZVDY1j0F/HlKY6e847+KXbBqc0WYyJgqY5NGq58ZCK
-         vdC5L1B4NMw0uBU0YeTmuLAgd2W4ZGqk3ImZNztNDN2iLZ8V+d5H6vE/IdbeWRNIZyyB
-         oPv5rgNxsau7nLVUK0leUdLzznqfEM3cCJ0tUMIT9K+nuGg9qeQhDVjqD6BCLyU0ai5u
-         Uycw==
+        bh=W9fNzpGQYiY8hUTovQusQUuPvFziC263n9KoSaKQGOM=;
+        b=bowIBjw14hcCMcXEFQelP3F/IgxTFZDchFVES0znmztlohD5OqknGtwUauveTSnrWI
+         d+g9ASlXmk6+S6w0s3lsxdo6K/nufGMQFXIZwbw9iynSEugqPGnB9tqXpw0Hcih9Onui
+         iijzOiiuMaPBArTtbShD9NF713MkistmOXciz2PZKEmS10o7BfeUpLVebc5fgDvwRzKP
+         xg2jY+GCeh9VBOPo2w7FXx5csbaTRSS94Be+Y1ueb3eVtMPtYQMLwwwYnbRwA83bIx5T
+         3xrWnQYIygkpgtWfsU2DBLyYmw2+EVYgNGEEnHrWCUL7dgBJzqPflfVugdJwqWJfRBi2
+         TVLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755885503; x=1756490303;
+        d=1e100.net; s=20230601; t=1755885598; x=1756490398;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QctlWqJYLmIg/E5LPhpjhg17ib5pNjMH7p/Hx4zus4I=;
-        b=TunVf7SJ7yC67UGRruBSxAedrKC0KmKJmLgh53mpqiFgAVkqLDqc+Q/LznV2UVHLQh
-         YfnGRa5/sC81VmMw0FBevoS6lWNppNonApvCDqVLrUUDbBPKPMovO0FUb4B7KxvVR4Ey
-         NFKTNe8lLx+sFQB6mhxKGViOuSVz7LmpE3uZaC2b31Cg0KQ79oJH3WhS/GiRA70RQ7XY
-         C6VVg6aJ2MDre8ngmmZQWmdGXhEHnq05Be/V/iirxrHgspuqVR60EueyWDOeERDgNh5+
-         Da519+0oG2rK/i8oZiWQ5mcBza5DWt4DQKUdVfRYu/iWrkvJUwnnrv+Yies7+ETeD5mf
-         hyYg==
-X-Forwarded-Encrypted: i=1; AJvYcCW3i95d+l6vXzjGtlr9dPhI2yebLR6W79KW6SjqL5unz/sIuz/qT1TY+NonK4d3ldnVkpcxaQ+kj47ABfjJY38=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5l6Fr7Ji3dGPf70xL2bBaxoFxywBeQC9Y9e2Q1EUqfzj4nb05
-	7TuK9AEkI6NgpBBRDgddqV+qt9U7R+6iBreKZatarNbjV97p0pSd/uLFk+BxLgPWbPSmwQtkBQW
-	tlqhUcifnn41tb2Msyg8tDE84CIv/NlX1kdIf0M5VVQ==
-X-Gm-Gg: ASbGncvvoFO6mydE+HjbV/h5IvnasB9eLmQ4UlXX0kKU47FwgFrhwH9Rzt1veTMYkoW
-	ru8cwhz9uh/UPNd7prkKOqT8RBd7T8mGecKJYcQeKyndb3jsshj3PVKPT6hloPD1msDnFJbpOa+
-	ryiHcWwxbn4XLA/BRfJWSSiXizypEfGR33MdEkrRqsNIhANnNkrfTIGXTR7XC7zQWK37xey5fJY
-	QeomoJq
-X-Google-Smtp-Source: AGHT+IFN//tAIOu8+R+uuhM96f7zV3pePtaUS87r3F/6litKfGF0/DndAdWIWiwCZ7w8YwN9/a0uzZqZes7ebIu5qsc=
-X-Received: by 2002:a05:6102:579b:b0:4fc:f151:a644 with SMTP id
- ada2fe7eead31-51d0f1e3aebmr1186332137.27.1755885503401; Fri, 22 Aug 2025
- 10:58:23 -0700 (PDT)
+        bh=W9fNzpGQYiY8hUTovQusQUuPvFziC263n9KoSaKQGOM=;
+        b=YiwotNCopUzZxVXvx2x0Zl9ZVjwHT8bIZn5l5QOAiWNcaRkw3M9z6mpLSgpt1SjRdY
+         LQEPaaJ2tETP5s8YknBXcm6JxBSmYDKg2tTT0gj6M5OQARRmLV581A+gvmnS5u0jstHK
+         3RexpMP/dzfwZC0gAgKbAY85ByLLmwk8uohhi+JdOVfHAH7Bc+V3yISegtndiBDOkzC3
+         ZiVG5sSKpq+UD+YR3vbmfBIOPEXgsJqb+ddizH8Uwq3oEdx270+ta6yvUPjjci40NrMr
+         gAu/D5r2XJviQgYxkriAG6fYqzlHFDrcebgAAi06iRHrgtTWr6RtgOR1vjR3h2iZSuCJ
+         bo+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVMjXWcdo2nn3gRIRMDz8w8FPykpLs4gKSUsEbnjv2Vs+KbMDYl5fk+MH7UWqOzNNB+3/ZUDeD+YkQUsjMLHvY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycJWWZRnD4c6Qb/vvmSp0iWI5mkw1OVKdRsN9HDnmNx3HSAwV9
+	hra0eRqTnN6YND7iAmXM2+HWGeoV2f0TzTkrOf3jF+PNgBZAPpU74LUcS/ccVD8JM43F9NLc0e8
+	dJXSgExyk+6VD1eSph0lCRs4gwCPoc8jQDFFI8Y1UJA==
+X-Gm-Gg: ASbGncvw+AWPVboGxEYfk1t3adHlQaYVMO1MUnf4xqtqtTz4zH1/bShgloKKdoeczbW
+	wJOrROi3vb7dmUY5rtA7RqQAUEQwlzVXdJ/H86AvZFoPeYbfo87vWcEHYbWBARcuylX1Sj0iWOZ
+	W7JMc5MLFpZcAqg1b3soTAEwOb9zZ6RdDGdZThLaUrcpd0tAPvYu/sC5CKIju1LmuiGNfIn7u/s
+	msgOa27
+X-Google-Smtp-Source: AGHT+IGn5vdUvXU42asTYKNQVZYOTWSFQylr/vzhKnTrBq4lq3wiMD7MVYIp2kAGpgvKTA1X/43JEESbQNKODDhNtrQ=
+X-Received: by 2002:a05:6122:2502:b0:539:27eb:ca76 with SMTP id
+ 71dfb90a1353d-53c8a2ea9admr1107586e0c.5.1755885598348; Fri, 22 Aug 2025
+ 10:59:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250805193955.798277-1-jesse@rivosinc.com> <20250805193955.798277-9-jesse@rivosinc.com>
- <CACPK8Xd2QfL460LY2T0ia7Akb79fEXKF2+=B27M8q5j7jUoouQ@mail.gmail.com>
-In-Reply-To: <CACPK8Xd2QfL460LY2T0ia7Akb79fEXKF2+=B27M8q5j7jUoouQ@mail.gmail.com>
+References: <20250822174715.1269138-1-jesse@rivosinc.com>
+In-Reply-To: <20250822174715.1269138-1-jesse@rivosinc.com>
 From: Jesse Taube <jesse@rivosinc.com>
-Date: Fri, 22 Aug 2025 10:58:12 -0700
-X-Gm-Features: Ac12FXyOxEp8jMlrarfb8y3cqhZyCnGwLGrfNnesQRaBf_dB1MguAeHwG0yw4Oc
-Message-ID: <CALSpo=bM8S2cKHRQ1Zn1ViDh9QfoKkWGVVeW50D1UQkXP_6rug@mail.gmail.com>
-Subject: Re: [PATCH 8/8] selftests: riscv: Add test for hardware breakpoints
-To: Joel Stanley <joel@jms.id.au>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Fri, 22 Aug 2025 10:59:47 -0700
+X-Gm-Features: Ac12FXx85Q9pdAS3tmJucpDWbmumN5hD5YReh0RpBOKeYl8mPi6vXHz7zLBXbxM
+Message-ID: <CALSpo=aQyb+E0HHDRoXs0f5vvxJtMpCA546ROkq0e3B-ur9QBg@mail.gmail.com>
+Subject: Re: [PATCH 0/8] riscv: add initial support for hardware breakpoints
+To: linux-riscv@lists.infradead.org
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Oleg Nesterov <oleg@redhat.com>, 
+	Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Liang Kan <kan.liang@linux.intel.com>, Shuah Khan <shuah@kernel.org>, 
+	Himanshu Chauhan <hchauhan@ventanamicro.com>, Charlie Jenkins <charlie@rivosinc.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Conor Dooley <conor.dooley@microchip.com>, 
+	Deepak Gupta <debug@rivosinc.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Atish Patra <atishp@rivosinc.com>, Anup Patel <apatel@ventanamicro.com>, 
+	Mayuresh Chitale <mchitale@ventanamicro.com>, Evan Green <evan@rivosinc.com>, 
+	WangYuli <wangyuli@uniontech.com>, Huacai Chen <chenhuacai@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, Nam Cao <namcao@linutronix.de>, 
+	Yunhui Cui <cuiyunhui@bytedance.com>, Joel Granados <joel.granados@kernel.org>, 
+	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Celeste Liu <coelacanthushex@gmail.com>, 
+	Chunyan Zhang <zhangchunyan@iscas.ac.cn>, Nylon Chen <nylon.chen@sifive.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Joey Gouly <joey.gouly@arm.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Joel Stanley <joel@jms.id.au>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 14, 2025 at 10:42=E2=80=AFPM Joel Stanley <joel@jms.id.au> wrot=
-e:
+On Fri, Aug 22, 2025 at 10:47=E2=80=AFAM Jesse Taube <jesse@rivosinc.com> w=
+rote:
 >
-> Hi Jesse,
+> This patchset adds initial support for hardware breakpoints and
+> watchpoints to the  RISC-V architecture. The framework is built on
+> top of perf subsystem and SBI debug trigger extension.
 >
-> We had a pretty huge cc list on the thread, I've trimmed it right
-> back. Feel free to add some people back but keep it focused.
+> Currently following features are not supported and are in works:
+>  - icount for single stepping
+>  - Virtualization of debug triggers
+>  - kernel space debug triggers
 >
-> On Wed, 6 Aug 2025 at 05:42, Jesse Taube <jesse@rivosinc.com> wrote:
-> >
-> > Add riscv specific selftest for hardhardware breakpoints.
+> The SBI debug trigger extension can be found at:
+> https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-debug-=
+triggers.adoc
 >
-> nit: double hardware
+> The Sdtrig ISA is part of RISC-V debug specification which can be
+> found at:
+> https://github.com/riscv/riscv-debug-spec
 >
-> > These tests are based on:
-> > tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+> based off the original RFC by Himanshu Chauhan here:
+> https://lore.kernel.org/lkml/20240222125059.13331-1-hchauhan@ventanamicro=
+.com/
 >
-> The sefltest didn't build for me. There's a few suggested fixes below.
+> Second RFC by Jesse Taube here:
+> https://lore.kernel.org/lkml/20250722173829.984082-1-jesse@rivosinc.com/
 >
-> > Signed-off-by: Jesse Taube <jesse@rivosinc.com>
-> > ---
-> > The selftest fails as register_user_hw_breakpoint seemingly does not
-> > call arch_install_hw_breakpoint. The test also seems to fail on arm64
-> > in the same way when I tested it.
+> Himanshu Chauhan (2):
+>   riscv: Add SBI debug trigger extension and function ids
+>   riscv: Introduce support for hardware break/watchpoints
 >
-> Is this still a problem with your patchset?
+> Jesse Taube (6):
+>   riscv: Add insn.c, consolidate instruction decoding
+>   riscv: insn: Add get_insn_nofault
+>   riscv: hw_breakpoint: Use icount for single stepping
+>   riscv: ptrace: Add hw breakpoint support
+>   riscv: ptrace: Add hw breakpoint regset
+>   selftests: riscv: Add test for hardware breakpoints
+>
+>  arch/riscv/Kconfig                            |   2 +
+>  arch/riscv/include/asm/bug.h                  |  12 -
+>  arch/riscv/include/asm/hw_breakpoint.h        |  59 ++
+>  arch/riscv/include/asm/insn.h                 | 132 ++-
+>  arch/riscv/include/asm/kdebug.h               |   3 +-
+>  arch/riscv/include/asm/processor.h            |   4 +
+>  arch/riscv/include/asm/sbi.h                  |  33 +-
+>  arch/riscv/include/uapi/asm/ptrace.h          |   9 +
+>  arch/riscv/kernel/Makefile                    |   2 +
+>  arch/riscv/kernel/hw_breakpoint.c             | 763 ++++++++++++++++++
+>  arch/riscv/kernel/insn.c                      | 165 ++++
+>  arch/riscv/kernel/kgdb.c                      | 102 +--
+>  arch/riscv/kernel/probes/kprobes.c            |   1 +
+>  arch/riscv/kernel/process.c                   |   4 +
+>  arch/riscv/kernel/ptrace.c                    | 169 ++++
+>  arch/riscv/kernel/traps.c                     |  11 +-
+>  arch/riscv/kernel/traps_misaligned.c          |  93 +--
+>  include/uapi/linux/elf.h                      |   2 +
+>  tools/include/uapi/linux/elf.h                |   1 +
+>  tools/perf/tests/tests.h                      |   3 +-
+>  tools/testing/selftests/riscv/Makefile        |   2 +-
+>  .../selftests/riscv/breakpoints/.gitignore    |   1 +
+>  .../selftests/riscv/breakpoints/Makefile      |  13 +
+>  .../riscv/breakpoints/breakpoint_test.c       | 246 ++++++
+>  24 files changed, 1641 insertions(+), 191 deletions(-)
+>  create mode 100644 arch/riscv/include/asm/hw_breakpoint.h
+>  create mode 100644 arch/riscv/kernel/hw_breakpoint.c
+>  create mode 100644 arch/riscv/kernel/insn.c
+>  create mode 100644 tools/testing/selftests/riscv/breakpoints/.gitignore
+>  create mode 100644 tools/testing/selftests/riscv/breakpoints/Makefile
+>  create mode 100644 tools/testing/selftests/riscv/breakpoints/breakpoint_=
+test.c
+>
+> --
+> 2.43.0
+>
 
-Yes
-
->
-> Do you test in qemu? Can you share your version, command line, etc?
-
-Yes. I used buildroot's `qemu_aarch64_virt_defconfig` config and set
-`BR2_PACKAGE_LINUX_TOOLS_SELFTESTS` and tested with the example
-command from the boards readme.
-
->
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/breakpoints/Makefile
-> > @@ -0,0 +1,12 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# Copyright (C) 2021 ARM Limited
-> > +# Originally tools/testing/arm64/abi/Makefile
->
-> CFLAGS +=3D $(KHDR_INCLUDES)
->
-> This adds -isystem to include local headers for the up to date
-> ptrace.h and elf.h definitions.
->
->  $ make headers
-
-oh that's why it wasn't building!
+Oops, this meant to be V2.
 
 Thanks,
 Jesse Taube
->  $ make -C tools/testing/selftests CROSS_COMPILE=3Driscv64-linux-gnu-
-> ARCH=3Driscv TARGETS=3Driscv/breakpoints
->      make: Entering directory 'tools/testing/selftests'
->      riscv64-linux-gnu-gcc -static
-> -otools/testing/selftests/riscv/breakpoints/breakpoint_test
->      -isystem usr/include -Itools/testing/selftests/../../../tools/includ=
-e
->      -D_GNU_SOURCE=3D   breakpoint_test.c
->
-> > +
-> > +CFLAGS +=3D -I$(top_srcdir)/tools/include
-> > +
-> > +TEST_GEN_PROGS :=3D breakpoint_test
-> > +
-> > +include ../../lib.mk
-> > +
-> > +$(OUTPUT)/breakpoint_test: breakpoint_test.c
-> > +       $(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> > diff --git a/tools/testing/selftests/riscv/breakpoints/breakpoint_test.=
-c b/tools/testing/selftests/riscv/breakpoints/breakpoint_test.c
-> > new file mode 100644
-> > index 000000000000..faeecc72da12
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/breakpoints/breakpoint_test.c
-> > @@ -0,0 +1,246 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (C) 2016 Google, Inc.
-> > + *
-> > + * Original Code by Pavel Labath <labath@google.com>
-> > + *
-> > + * Code modified by Pratyush Anand <panand@redhat.com>
-> > + * for testing different byte select for each access size.
-> > + * Originally tools/testing/selftests/breakpoints/breakpoint_test_arm6=
-4.c
-> > + */
-> > +
-> > +#define _GNU_SOURCE
-> > +
-> > +#include <asm/ptrace.h>
-> > +#include <sys/types.h>
-> > +#include <sys/wait.h>
-> > +#include <sys/ptrace.h>
-> > +#include <sys/param.h>
-> > +#include <sys/uio.h>
-> > +#include <stdint.h>
-> > +#include <stdbool.h>
-> > +#include <stddef.h>
-> > +#include <string.h>
-> > +#include <stdio.h>
-> > +#include <unistd.h>
-> > +#include <elf.h>
->
-> This is the wrong elf.h, we want the one with NT_RISCV_HW_BREAK.
->
-> -#include <elf.h>
-> +#include <linux/elf.h>
->
->
-> > +#include <errno.h>
-> > +#include <signal.h>
-> > +
-> > +#include "../../kselftest.h"
-> > +
-> > +#define MAX_BP_SIZE 8
-> > +
 
