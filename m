@@ -1,798 +1,282 @@
-Return-Path: <linux-kselftest+bounces-39619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39620-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 326D3B30AE1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 03:39:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9F90B30AFD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 03:54:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76A3E685BF8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 01:39:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96E13568068
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 01:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B03A1C549F;
-	Fri, 22 Aug 2025 01:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4152E1A9FB9;
+	Fri, 22 Aug 2025 01:54:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ahTJ3SmI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAxBeZ+S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8470C1A9FB6
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 01:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06ED81A294;
+	Fri, 22 Aug 2025 01:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755826739; cv=none; b=CCxaoTjoLtU6/A6zIgF+xlAP6+uLvue6Z5WE/aNWx2J47nut92z7bmRCm7Yx2ZxCqr1RUDASm1HD1KNai/UVuQwKSJAJu0etv9cS8q8FTQlD7QNTZKis3gfrORAz8ZklpJ+7oWGKq/8kGauImmlY4L7nAmevgI6VEEur+E32aOg=
+	t=1755827668; cv=none; b=hN6pCZesfMI21+CYcvnlJzKd8TR145nknZj8mO7ksBufsV9fTnMV52xGEnKWM07oj6NOmN8HNE2qk5vdExBBPZc0T7g4sCFwjj1NcrOfRZrIOGKXsIO1aWc0b1CW1bc0l4BDKE8pfed+EtLzVKNefxwzRGkWv+KejvaTEe7ILes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755826739; c=relaxed/simple;
-	bh=cMyDPM6lVeJMVaG2qjywrXR4bPYrAG96UhN1uXVEBsI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bSRTYnm1YTdG2s32nwOQQorrumLdzegdwVDkrP79OGYQcubaUcPThs7x8GtdfTeHLMN+alkelWiTHG6D8LQLgTdS5XIIioCYEtYvlY7ZPTWwspgEtyJJpbN+GqbTWUms462PkGSKxs7WvoLkTBFR7zp07UeTbwlOHtJTPPlYyZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ahTJ3SmI; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-32326e72dfbso2666593a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 18:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755826737; x=1756431537; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zMDg/uAc5+RsTMY4md2v1ID7410l0nb81E+3UmfaUqY=;
-        b=ahTJ3SmI8eELS6VwSVRdfBpoug9T8+EST9AvGn0m5IZvOiZTHorp30o6FgPyJm74UX
-         GDvMBS+/xTB6SQQNMCt0wpya1n5U7swGjr6UI9N0X863nepyM2TlurC6Gj+Gh3F4OdGN
-         1v8TaoRol/2dFSGA+IzIqr+EWPAYHYk+GOdPja5rN60P4VF5Zj//TZtvgc28Ivj7cZd6
-         Q6NytikVF+W/JTlsMLWEuLpIVvHMaGB95lhT4eiqhzoS1Po+xuQjexL2Akr/jRUG0+xu
-         uKpxPIunrTRljILNpxq+vFRq3s8W12/OBY1WLFzi6GW2tV3Sb9it/n3Hl4EZe9YamH6o
-         f+nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755826737; x=1756431537;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zMDg/uAc5+RsTMY4md2v1ID7410l0nb81E+3UmfaUqY=;
-        b=OF4sVIxSHIRLOl/xmz63PvHaxoiBIU85d/MMmqgg0j6q10kyGaSArVQOrisj6A5QUw
-         WbwtdhWfvCBvOiTYb/b6wutFSNsSSg6vRjFyx1doHMjAS0GY9h8ndJs1qGICGNsWnlL8
-         +RpgTAUUUfX5f10L9dBjO5/n6yAdWM+XWUyOt8YNq+eBOLY9lCjCYW4FyMxryov8YjGV
-         285lfeNDAsI4lwxM7m1TmU6Nwnvm9s36DF5YR6E00RuztUBEtmu1O0SJsYtx+R4SKW9o
-         fRjKhe8UJejirfQ/BUwIbUfb71D/BmFw8eozGIka1xJmKGnWMt+D1XcEeIEAC5inNyqR
-         b0pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWP6ZgiwR7clxD1V1s1faW4z7ZRQBdXiojt/OCoijX9QiUCmOZVSMBrXBl2igGb0K72sSiPEh6AbGtfi4H1u14=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzspLGezA62rzV76MX4BSY1RDwxsj08Jgl2ThEGeUX27Vod16Sb
-	2d0eaz2PAkaUKrt4PlKRIVcj+dWJRS0jXUU6Jx/P4VPe14H30ml0CJz22WBwdGCSWJse2lgsU2L
-	KiiD0Odbbjw==
-X-Google-Smtp-Source: AGHT+IFb1w489F3f4jLCNYnaL1YiWRdZ4hvvhOBlLgEi34xYiBkeRh4NlmcN4ipV7dXI4J8WtLETF6fELCn/
-X-Received: from plev24.prod.google.com ([2002:a17:903:31d8:b0:246:222a:4ddf])
- (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d507:b0:240:7308:aecb
- with SMTP id d9443c01a7336-2462ef1d587mr14551615ad.32.1755826736773; Thu, 21
- Aug 2025 18:38:56 -0700 (PDT)
-Date: Thu, 21 Aug 2025 18:37:53 -0700
-In-Reply-To: <20250822013749.3268080-6-ynaffit@google.com>
+	s=arc-20240116; t=1755827668; c=relaxed/simple;
+	bh=RNtaMbZ2x4QLJdtSV131dRyufCLa7xFY2p4/ptgxCeY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HV+2AzKYsIH6VsTvrj+zYg+/frc3IkOVLe4ydZo0+0ctV1BzKoMolMYiwdPqFWnqcJXugmNDD0G4Y1EQtwqqvN5qJQxxPMv+LhD3fP+tjS81TZoWKMOrTdUlhPIQduILv5K3A7eXuZFzu9L7KN5AvqR5+6uRG0KICxhFQ0w/w50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAxBeZ+S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D8FC4CEEB;
+	Fri, 22 Aug 2025 01:54:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755827667;
+	bh=RNtaMbZ2x4QLJdtSV131dRyufCLa7xFY2p4/ptgxCeY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=nAxBeZ+ScJCPg8sfuC4+HreXmkxX/b9hzP0U4bN6mKOpkpef2SNRtoihbmkTUU28u
+	 0DA4qbaaoT9aT3A5tFTeuiu6qw+uCScIeNmOn1e0CyAsB5N7nsO93kMMEFG08UNPTW
+	 xd9+O+LyUK1SR1qKhj4pRnTbD/nth41h3CruL3vWhRum8yTO98m/E/a/Ts1G/O3Uza
+	 akwnjRAswqO3QNG4ntRsP+BubWHEH0IBX9h1vMoClmb4cIRDCcBfqJYDAJOZDGXu8/
+	 F2h5H6oO2ofuqiG/fFra6vXtm8AnpNcGBVx862NPVe1EvyyaOp2PRFi0Kovh0lwMao
+	 xwFzWe+7kIktQ==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v7 00/29] KVM: arm64: Implement support for SME
+Date: Fri, 22 Aug 2025 02:53:29 +0100
+Message-Id: <20250822-kvm-arm64-sme-v7-0-7a65d82b8b10@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250822013749.3268080-6-ynaffit@google.com>
-X-Mailer: git-send-email 2.51.0.rc2.233.g662b1ed5c5-goog
-Message-ID: <20250822013749.3268080-8-ynaffit@google.com>
-Subject: [PATCH v4 2/2] cgroup: selftests: Add tests for freezer time
-From: Tiffany Yang <ynaffit@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Chen Ridong <chenridong@huawei.com>, 
-	kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJvNp2gC/2XRzW6DMAwH8FdBOS9VbBIDPe09ph3yWaIO6AJDm
+ 6q++0JRVw2OtvKzHf2vbPQp+pEdiytLfo5jHPpcVC8Fs63uT55Hl2uGAktRCuDnueM6dST52Hk
+ uSANKciWVxLIxevTcJN3bdlFTd1m6l+RD/L5veXvPdRvHaUg/96UzLN11foO4mT8DFzwEqF0lD
+ TbevZ596v3HYUgntoya8Y8D7jlm7jQiWQO1MGbHyweXmYstLzMXygioLYTg91w+uBIIcsvlsp2
+ kphq0sxZ3XD25hGrL1fJ3SY1Gp4Kq5I7TkxOqLafMAaQNQebbxX9+W2NJ/vMrZz6t2azx2aHr4
+ nQsZjrkm5KF/Pr2C3Kn8agpAgAA
+X-Change-ID: 20230301-kvm-arm64-sme-06a1246d3636
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+ Joey Gouly <joey.gouly@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Will Deacon <will@kernel.org>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>, 
+ Mark Rutland <mark.rutland@arm.com>, linux-arm-kernel@lists.infradead.org, 
+ kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-cff91
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10103; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=RNtaMbZ2x4QLJdtSV131dRyufCLa7xFY2p4/ptgxCeY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBop824Crwk4I+3H8DwqjMBFey8V+yMjbGKqda0V
+ PJlavtfYdiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaKfNuAAKCRAk1otyXVSH
+ 0AxyB/0QPj0pEasZ8zfuSsrsSEhgz4tK1DLW2a5aDmzyrAmq4YY2MteCRzA53bkr1FooVPXBGpC
+ kYppAh3SHez1InKhf7twJYONZJ6VOW0V6tkJEcQdVnIi9qLNHBAap5+Aa0+BV9Bvr1DZOqly+CO
+ oSU1R+iRGkBEhcSm2tMDi2ql+rLA7cii3jxTXvvQ40QBQJVDRMb/p22yrtJxDqyOAc4uUAKqcyN
+ bsgg4btykdOXvgUbqfly/EiCfCW66RbgNXvlYtGcrycq0+nzaGBnRq4xFOdaeapRfoD62YQq3NN
+ M04k2/UYubiefdfJZTfDNy0RKzC4DEqaPpAJKEkgsetUChDj
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Test cgroup v2 freezer time stat. Freezer time accounting should
-be independent of other cgroups in the hierarchy and should increase
-iff a cgroup is CGRP_FREEZE (regardless of whether it reaches
-CGRP_FROZEN).
+I've removed the RFC tag from this version of the series, but the items
+that I'm looking for feedback on remains the same:
 
-Skip these tests on systems without freeze time accounting.
+ - The userspace ABI, in particular:
+  - The vector length used for the SVE registers, access to the SVE
+    registers and access to ZA and (if available) ZT0 depending on
+    the current state of PSTATE.{SM,ZA}.
+  - The use of a single finalisation for both SVE and SME.
 
-Signed-off-by: Tiffany Yang <ynaffit@google.com>
-Cc: Michal Koutn=C3=BD <mkoutny@suse.com>
+ - The addition of control for enabling fine grained traps in a similar
+   manner to FGU but without the UNDEF, I'm not clear if this is desired
+   at all and at present this requires symmetric read and write traps like
+   FGU. That seemed like it might be desired from an implementation
+   point of view but we already have one case where we enable an
+   asymmetric trap (for ARM64_WORKAROUND_AMPERE_AC03_CPU_38) and it
+   seems generally useful to enable asymmetrically.
+
+This series implements support for SME use in non-protected KVM guests.
+Much of this is very similar to SVE, the main additional challenge that
+SME presents is that it introduces a new vector length similar to the
+SVE vector length and two new controls which change the registers seen
+by guests:
+
+ - PSTATE.ZA enables the ZA matrix register and, if SME2 is supported,
+   the ZT0 LUT register.
+ - PSTATE.SM enables streaming mode, a new floating point mode which
+   uses the SVE register set with the separately configured SME vector
+   length.  In streaming mode implementation of the FFR register is
+   optional.
+
+It is also permitted to build systems which support SME without SVE, in
+this case when not in streaming mode no SVE registers or instructions
+are available.  Further, there is no requirement that there be any
+overlap in the set of vector lengths supported by SVE and SME in a
+system, this is expected to be a common situation in practical systems.
+
+Since there is a new vector length to configure we introduce a new
+feature parallel to the existing SVE one with a new pseudo register for
+the streaming mode vector length.  Due to the overlap with SVE caused by
+streaming mode rather than finalising SME as a separate feature we use
+the existing SVE finalisation to also finalise SME, a new define
+KVM_ARM_VCPU_VEC is provided to help make user code clearer.  Finalising
+SVE and SME separately would introduce complication with register access
+since finalising SVE makes the SVE registers writeable by userspace and
+doing multiple finalisations results in an error being reported.
+Dealing with a state where the SVE registers are writeable due to one of
+SVE or SME being finalised but may have their VL changed by the other
+being finalised seems like needless complexity with minimal practical
+utility, it seems clearer to just express directly that only one
+finalisation can be done in the ABI.
+
+Access to the floating point registers follows the architecture:
+
+ - When both SVE and SME are present:
+   - If PSTATE.SM == 0 the vector length used for the Z and P registers
+     is the SVE vector length.
+   - If PSTATE.SM == 1 the vector length used for the Z and P registers
+     is the SME vector length.
+ - If only SME is present:
+   - If PSTATE.SM == 0 the Z and P registers are inaccessible and the
+     floating point state accessed via the encodings for the V registers.
+   - If PSTATE.SM == 1 the vector length used for the Z and P registers
+ - The SME specific ZA and ZT0 registers are only accessible if SVCR.ZA is 1.
+
+The VMM must understand this, in particular when loading state SVCR
+should be configured before other state.  It should be noted that while
+the architecture refers to PSTATE.SM and PSTATE.ZA these PSTATE bits are
+not preserved in SPSR_ELx, they are only accessible via SVCR.
+
+There are a large number of subfeatures for SME, most of which only
+offer additional instructions but some of which (SME2 and FA64) add
+architectural state. These are configured via the ID registers as per
+usual.
+
+Protected KVM supported, with the implementation maintaining the
+existing restriction that the hypervisor will refuse to run if streaming
+mode or ZA is enabled.  This both simplfies the code and avoids the need
+to allocate storage for host ZA and ZT0 state, there seems to be little
+practical use case for supporting this and the memory usage would be
+non-trivial.
+
+The new KVM_ARM_VCPU_VEC feature and ZA and ZT0 registers have not been
+added to the get-reg-list selftest, the idea of supporting additional
+features there without restructuring the program to generate all
+possible feature combinations has been rejected.  I will post a separate
+series which does that restructuring.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-v3 -> v4:
-* Clean up logic around skipping selftests and decrease granularity of
-  sleep times, as suggested by Michal.
----
- tools/testing/selftests/cgroup/test_freezer.c | 663 ++++++++++++++++++
- 1 file changed, 663 insertions(+)
+Changes in v7:
+- Rebase onto v6.17-rc1.
+- Handle SMIDR_EL1 as a VM wide ID register and use this in feat_sme_smps().
+- Expose affinity fields in SMIDR_EL1.
+- Remove SMPRI_EL1 from vcpu_sysreg, the value is always 0 currently.
+- Prevent userspace writes to SMPRIMAP_EL2.
+- Link to v6: https://lore.kernel.org/r/20250625-kvm-arm64-sme-v6-0-114cff4ffe04@kernel.org
 
-diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/=
-selftests/cgroup/test_freezer.c
-index 8730645d363a..dfb763819581 100644
---- a/tools/testing/selftests/cgroup/test_freezer.c
-+++ b/tools/testing/selftests/cgroup/test_freezer.c
-@@ -804,6 +804,662 @@ static int test_cgfreezer_vfork(const char *root)
- 	return ret;
- }
-=20
-+/*
-+ * Get the current frozen_usec for the cgroup.
-+ */
-+static long cg_check_freezetime(const char *cgroup)
-+{
-+	return cg_read_key_long(cgroup, "cgroup.stat.local",
-+				"frozen_usec ");
-+}
-+
-+/*
-+ * Test that the freeze time will behave as expected for an empty cgroup.
-+ */
-+static int test_cgfreezer_time_empty(const char *root)
-+{
-+	int ret =3D KSFT_FAIL;
-+	char *cgroup =3D NULL;
-+	long prev, curr;
-+
-+	cgroup =3D cg_name(root, "cg_time_test_empty");
-+	if (!cgroup)
-+		goto cleanup;
-+
-+	/*
-+	 * 1) Create an empty cgroup and check that its freeze time
-+	 *    is 0.
-+	 */
-+	if (cg_create(cgroup))
-+		goto cleanup;
-+
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr < 0) {
-+		ret =3D KSFT_SKIP;
-+		goto cleanup;
-+	}
-+	if (curr > 0) {
-+		debug("Expect time (%ld) to be 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	if (cg_freeze_nowait(cgroup, true))
-+		goto cleanup;
-+
-+	/*
-+	 * 2) Sleep for 1000 us. Check that the freeze time is at
-+	 *    least 1000 us.
-+	 */
-+	usleep(1000);
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr < 1000) {
-+		debug("Expect time (%ld) to be at least 1000 us\n",
-+		      curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 3) Unfreeze the cgroup. Check that the freeze time is
-+	 *    larger than at 2).
-+	 */
-+	if (cg_freeze_nowait(cgroup, false))
-+		goto cleanup;
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr <=3D prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 4) Check the freeze time again to ensure that it has not
-+	 *    changed.
-+	 */
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr !=3D prev) {
-+		debug("Expect time (%ld) to be unchanged from previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	ret =3D KSFT_PASS;
-+
-+cleanup:
-+	if (cgroup)
-+		cg_destroy(cgroup);
-+	free(cgroup);
-+	return ret;
-+}
-+
-+/*
-+ * A simple test for cgroup freezer time accounting. This test follows
-+ * the same flow as test_cgfreezer_time_empty, but with a single process
-+ * in the cgroup.
-+ */
-+static int test_cgfreezer_time_simple(const char *root)
-+{
-+	int ret =3D KSFT_FAIL;
-+	char *cgroup =3D NULL;
-+	long prev, curr;
-+
-+	cgroup =3D cg_name(root, "cg_time_test_simple");
-+	if (!cgroup)
-+		goto cleanup;
-+
-+	/*
-+	 * 1) Create a cgroup and check that its freeze time is 0.
-+	 */
-+	if (cg_create(cgroup))
-+		goto cleanup;
-+
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr < 0) {
-+		ret =3D KSFT_SKIP;
-+		goto cleanup;
-+	}
-+	if (curr > 0) {
-+		debug("Expect time (%ld) to be 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 2) Populate the cgroup with one child and check that the
-+	 *    freeze time is still 0.
-+	 */
-+	cg_run_nowait(cgroup, child_fn, NULL);
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr > prev) {
-+		debug("Expect time (%ld) to be 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	if (cg_freeze_nowait(cgroup, true))
-+		goto cleanup;
-+
-+	/*
-+	 * 3) Sleep for 1000 us. Check that the freeze time is at
-+	 *    least 1000 us.
-+	 */
-+	usleep(1000);
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr < 1000) {
-+		debug("Expect time (%ld) to be at least 1000 us\n",
-+		      curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 4) Unfreeze the cgroup. Check that the freeze time is
-+	 *    larger than at 3).
-+	 */
-+	if (cg_freeze_nowait(cgroup, false))
-+		goto cleanup;
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr <=3D prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 5) Sleep for 1000 us. Check that the freeze time is the
-+	 *    same as at 4).
-+	 */
-+	usleep(1000);
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr !=3D prev) {
-+		debug("Expect time (%ld) to be unchanged from previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	ret =3D KSFT_PASS;
-+
-+cleanup:
-+	if (cgroup)
-+		cg_destroy(cgroup);
-+	free(cgroup);
-+	return ret;
-+}
-+
-+/*
-+ * Test that freezer time accounting works as expected, even while we're
-+ * populating a cgroup with processes.
-+ */
-+static int test_cgfreezer_time_populate(const char *root)
-+{
-+	int ret =3D KSFT_FAIL;
-+	char *cgroup =3D NULL;
-+	long prev, curr;
-+	int i;
-+
-+	cgroup =3D cg_name(root, "cg_time_test_populate");
-+	if (!cgroup)
-+		goto cleanup;
-+
-+	if (cg_create(cgroup))
-+		goto cleanup;
-+
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr < 0) {
-+		ret =3D KSFT_SKIP;
-+		goto cleanup;
-+	}
-+	if (curr > 0) {
-+		debug("Expect time (%ld) to be 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 1) Populate the cgroup with 100 processes. Check that
-+	 *    the freeze time is 0.
-+	 */
-+	for (i =3D 0; i < 100; i++)
-+		cg_run_nowait(cgroup, child_fn, NULL);
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr !=3D prev) {
-+		debug("Expect time (%ld) to be 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 2) Wait for the group to become fully populated. Check
-+	 *    that the freeze time is 0.
-+	 */
-+	if (cg_wait_for_proc_count(cgroup, 100))
-+		goto cleanup;
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr !=3D prev) {
-+		debug("Expect time (%ld) to be 0\n", curr);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 3) Freeze the cgroup and then populate it with 100 more
-+	 *    processes. Check that the freeze time continues to grow.
-+	 */
-+	if (cg_freeze_nowait(cgroup, true))
-+		goto cleanup;
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr <=3D prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	for (i =3D 0; i < 100; i++)
-+		cg_run_nowait(cgroup, child_fn, NULL);
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr <=3D prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 4) Wait for the group to become fully populated. Check
-+	 *    that the freeze time is larger than at 3).
-+	 */
-+	if (cg_wait_for_proc_count(cgroup, 200))
-+		goto cleanup;
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr <=3D prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 5) Unfreeze the cgroup. Check that the freeze time is
-+	 *    larger than at 4).
-+	 */
-+	if (cg_freeze_nowait(cgroup, false))
-+		goto cleanup;
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr <=3D prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 6) Kill the processes. Check that the freeze time is the
-+	 *    same as it was at 5).
-+	 */
-+	if (cg_killall(cgroup))
-+		goto cleanup;
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr !=3D prev) {
-+		debug("Expect time (%ld) to be unchanged from previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * 7) Freeze and unfreeze the cgroup. Check that the freeze
-+	 *    time is larger than it was at 6).
-+	 */
-+	if (cg_freeze_nowait(cgroup, true))
-+		goto cleanup;
-+	if (cg_freeze_nowait(cgroup, false))
-+		goto cleanup;
-+	prev =3D curr;
-+	curr =3D cg_check_freezetime(cgroup);
-+	if (curr <=3D prev) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr, prev);
-+		goto cleanup;
-+	}
-+
-+	ret =3D KSFT_PASS;
-+
-+cleanup:
-+	if (cgroup)
-+		cg_destroy(cgroup);
-+	free(cgroup);
-+	return ret;
-+}
-+
-+/*
-+ * Test that frozen time for a cgroup continues to work as expected,
-+ * even as processes are migrated. Frozen cgroup A's freeze time should
-+ * continue to increase and running cgroup B's should stay 0.
-+ */
-+static int test_cgfreezer_time_migrate(const char *root)
-+{
-+	long prev_A, curr_A, curr_B;
-+	char *cgroup[2] =3D {0};
-+	int ret =3D KSFT_FAIL;
-+	int pid;
-+
-+	cgroup[0] =3D cg_name(root, "cg_time_test_migrate_A");
-+	if (!cgroup[0])
-+		goto cleanup;
-+
-+	cgroup[1] =3D cg_name(root, "cg_time_test_migrate_B");
-+	if (!cgroup[1])
-+		goto cleanup;
-+
-+	if (cg_create(cgroup[0]))
-+		goto cleanup;
-+
-+	if (cg_check_freezetime(cgroup[0]) < 0) {
-+		ret =3D KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	if (cg_create(cgroup[1]))
-+		goto cleanup;
-+
-+	pid =3D cg_run_nowait(cgroup[0], child_fn, NULL);
-+	if (pid < 0)
-+		goto cleanup;
-+
-+	if (cg_wait_for_proc_count(cgroup[0], 1))
-+		goto cleanup;
-+
-+	curr_A =3D cg_check_freezetime(cgroup[0]);
-+	if (curr_A) {
-+		debug("Expect time (%ld) to be 0\n", curr_A);
-+		goto cleanup;
-+	}
-+	curr_B =3D cg_check_freezetime(cgroup[1]);
-+	if (curr_B) {
-+		debug("Expect time (%ld) to be 0\n", curr_B);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * Freeze cgroup A.
-+	 */
-+	if (cg_freeze_wait(cgroup[0], true))
-+		goto cleanup;
-+	prev_A =3D curr_A;
-+	curr_A =3D cg_check_freezetime(cgroup[0]);
-+	if (curr_A <=3D prev_A) {
-+		debug("Expect time (%ld) to be > 0\n", curr_A);
-+		goto cleanup;
-+	}
-+
-+	/*
-+	 * Migrate from A (frozen) to B (running).
-+	 */
-+	if (cg_enter(cgroup[1], pid))
-+		goto cleanup;
-+
-+	usleep(1000);
-+	curr_B =3D cg_check_freezetime(cgroup[1]);
-+	if (curr_B) {
-+		debug("Expect time (%ld) to be 0\n", curr_B);
-+		goto cleanup;
-+	}
-+
-+	prev_A =3D curr_A;
-+	curr_A =3D cg_check_freezetime(cgroup[0]);
-+	if (curr_A <=3D prev_A) {
-+		debug("Expect time (%ld) to be more than previous check (%ld)\n",
-+		      curr_A, prev_A);
-+		goto cleanup;
-+	}
-+
-+	ret =3D KSFT_PASS;
-+
-+cleanup:
-+	if (cgroup[0])
-+		cg_destroy(cgroup[0]);
-+	free(cgroup[0]);
-+	if (cgroup[1])
-+		cg_destroy(cgroup[1]);
-+	free(cgroup[1]);
-+	return ret;
-+}
-+
-+/*
-+ * The test creates a cgroup and freezes it. Then it creates a child cgrou=
-p.
-+ * After that it checks that the child cgroup has a non-zero freeze time
-+ * that is less than the parent's. Next, it freezes the child, unfreezes
-+ * the parent, and sleeps. Finally, it checks that the child's freeze
-+ * time has grown larger than the parent's.
-+ */
-+static int test_cgfreezer_time_parent(const char *root)
-+{
-+	char *parent, *child =3D NULL;
-+	int ret =3D KSFT_FAIL;
-+	long ptime, ctime;
-+
-+	parent =3D cg_name(root, "cg_test_parent_A");
-+	if (!parent)
-+		goto cleanup;
-+
-+	child =3D cg_name(parent, "cg_test_parent_B");
-+	if (!child)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_check_freezetime(parent) < 0) {
-+		ret =3D KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	if (cg_freeze_wait(parent, true))
-+		goto cleanup;
-+
-+	usleep(1000);
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (cg_check_frozen(child, true))
-+		goto cleanup;
-+
-+	/*
-+	 * Since the parent was frozen the entire time the child cgroup
-+	 * was being created, we expect the parent's freeze time to be
-+	 * larger than the child's.
-+	 *
-+	 * Ideally, we would be able to check both times simultaneously,
-+	 * but here we get the child's after we get the parent's.
-+	 */
-+	ptime =3D cg_check_freezetime(parent);
-+	ctime =3D cg_check_freezetime(child);
-+	if (ptime <=3D ctime) {
-+		debug("Expect ptime (%ld) > ctime (%ld)\n", ptime, ctime);
-+		goto cleanup;
-+	}
-+
-+	if (cg_freeze_nowait(child, true))
-+		goto cleanup;
-+
-+	if (cg_freeze_wait(parent, false))
-+		goto cleanup;
-+
-+	if (cg_check_frozen(child, true))
-+		goto cleanup;
-+
-+	usleep(100000);
-+
-+	ctime =3D cg_check_freezetime(child);
-+	ptime =3D cg_check_freezetime(parent);
-+
-+	if (ctime <=3D ptime) {
-+		debug("Expect ctime (%ld) > ptime (%ld)\n", ctime, ptime);
-+		goto cleanup;
-+	}
-+
-+	ret =3D KSFT_PASS;
-+
-+cleanup:
-+	if (child)
-+		cg_destroy(child);
-+	free(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(parent);
-+	return ret;
-+}
-+
-+/*
-+ * The test creates a parent cgroup and a child cgroup. Then, it freezes
-+ * the child and checks that the child's freeze time is greater than the
-+ * parent's, which should be zero.
-+ */
-+static int test_cgfreezer_time_child(const char *root)
-+{
-+	char *parent, *child =3D NULL;
-+	int ret =3D KSFT_FAIL;
-+	long ptime, ctime;
-+
-+	parent =3D cg_name(root, "cg_test_child_A");
-+	if (!parent)
-+		goto cleanup;
-+
-+	child =3D cg_name(parent, "cg_test_child_B");
-+	if (!child)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_check_freezetime(parent) < 0) {
-+		ret =3D KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (cg_freeze_wait(child, true))
-+		goto cleanup;
-+
-+	ctime =3D cg_check_freezetime(child);
-+	ptime =3D cg_check_freezetime(parent);
-+	if (ptime !=3D 0) {
-+		debug("Expect ptime (%ld) to be 0\n", ptime);
-+		goto cleanup;
-+	}
-+
-+	if (ctime <=3D ptime) {
-+		debug("Expect ctime (%ld) <=3D ptime (%ld)\n", ctime, ptime);
-+		goto cleanup;
-+	}
-+
-+	ret =3D KSFT_PASS;
-+
-+cleanup:
-+	if (child)
-+		cg_destroy(child);
-+	free(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(parent);
-+	return ret;
-+}
-+
-+/*
-+ * The test creates the following hierarchy:
-+ *    A
-+ *    |
-+ *    B
-+ *    |
-+ *    C
-+ *
-+ * Then it freezes the cgroups in the order C, B, A.
-+ * Then it unfreezes the cgroups in the order A, B, C.
-+ * Then it checks that C's freeze time is larger than B's and
-+ * that B's is larger than A's.
-+ */
-+static int test_cgfreezer_time_nested(const char *root)
-+{
-+	char *cgroup[3] =3D {0};
-+	int ret =3D KSFT_FAIL;
-+	long time[3] =3D {0};
-+	int i;
-+
-+	cgroup[0] =3D cg_name(root, "cg_test_time_A");
-+	if (!cgroup[0])
-+		goto cleanup;
-+
-+	cgroup[1] =3D cg_name(cgroup[0], "B");
-+	if (!cgroup[1])
-+		goto cleanup;
-+
-+	cgroup[2] =3D cg_name(cgroup[1], "C");
-+	if (!cgroup[2])
-+		goto cleanup;
-+
-+	if (cg_create(cgroup[0]))
-+		goto cleanup;
-+
-+	if (cg_check_freezetime(cgroup[0]) < 0) {
-+		ret =3D KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	if (cg_create(cgroup[1]))
-+		goto cleanup;
-+
-+	if (cg_create(cgroup[2]))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[2], true))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[1], true))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[0], true))
-+		goto cleanup;
-+
-+	usleep(1000);
-+
-+	if (cg_freeze_nowait(cgroup[0], false))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[1], false))
-+		goto cleanup;
-+
-+	if (cg_freeze_nowait(cgroup[2], false))
-+		goto cleanup;
-+
-+	time[2] =3D cg_check_freezetime(cgroup[2]);
-+	time[1] =3D cg_check_freezetime(cgroup[1]);
-+	time[0] =3D cg_check_freezetime(cgroup[0]);
-+
-+	if (time[2] <=3D time[1]) {
-+		debug("Expect C's time (%ld) > B's time (%ld)", time[2], time[1]);
-+		goto cleanup;
-+	}
-+
-+	if (time[1] <=3D time[0]) {
-+		debug("Expect B's time (%ld) > A's time (%ld)", time[1], time[0]);
-+		goto cleanup;
-+	}
-+
-+	ret =3D KSFT_PASS;
-+
-+cleanup:
-+	for (i =3D 2; i >=3D 0 && cgroup[i]; i--) {
-+		cg_destroy(cgroup[i]);
-+		free(cgroup[i]);
-+	}
-+
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct cgfreezer_test {
- 	int (*fn)(const char *root);
-@@ -819,6 +1475,13 @@ struct cgfreezer_test {
- 	T(test_cgfreezer_stopped),
- 	T(test_cgfreezer_ptraced),
- 	T(test_cgfreezer_vfork),
-+	T(test_cgfreezer_time_empty),
-+	T(test_cgfreezer_time_simple),
-+	T(test_cgfreezer_time_populate),
-+	T(test_cgfreezer_time_migrate),
-+	T(test_cgfreezer_time_parent),
-+	T(test_cgfreezer_time_child),
-+	T(test_cgfreezer_time_nested),
- };
- #undef T
-=20
---=20
-2.51.0.rc2.233.g662b1ed5c5-goog
+Changes in v6:
+- Rebase onto v6.16-rc3.
+- Link to v5: https://lore.kernel.org/r/20250417-kvm-arm64-sme-v5-0-f469a2d5f574@kernel.org
+
+Changes in v5:
+- Rebase onto v6.15-rc2.
+- Add pKVM guest support.
+- Always restore SVCR.
+- Link to v4: https://lore.kernel.org/r/20250214-kvm-arm64-sme-v4-0-d64a681adcc2@kernel.org
+
+Changes in v4:
+- Rebase onto v6.14-rc2 and Mark Rutland's fixes.
+- Expose SME to nested guests.
+- Additional cleanups and test fixes following on from the rebase.
+- Flush register state on VMM PSTATE.{SM,ZA}.
+- Link to v3: https://lore.kernel.org/r/20241220-kvm-arm64-sme-v3-0-05b018c1ffeb@kernel.org
+
+Changes in v3:
+- Rebase onto v6.12-rc2.
+- Link to v2: https://lore.kernel.org/r/20231222-kvm-arm64-sme-v2-0-da226cb180bb@kernel.org
+
+Changes in v2:
+- Rebase onto v6.7-rc3.
+- Configure subfeatures based on host system only.
+- Complete nVHE support.
+- There was some snafu with sending v1 out, it didn't make it to the
+  lists but in case it hit people's inboxes I'm sending as v2.
+
+---
+Mark Brown (29):
+      arm64/sysreg: Update SMIDR_EL1 to DDI0601 2025-06
+      arm64/fpsimd: Update FA64 and ZT0 enables when loading SME state
+      arm64/fpsimd: Decide to save ZT0 and streaming mode FFR at bind time
+      arm64/fpsimd: Check enable bit for FA64 when saving EFI state
+      arm64/fpsimd: Determine maximum virtualisable SME vector length
+      KVM: arm64: Introduce non-UNDEF FGT control
+      KVM: arm64: Pay attention to FFR parameter in SVE save and load
+      KVM: arm64: Pull ctxt_has_ helpers to start of sysreg-sr.h
+      KVM: arm64: Move SVE state access macros after feature test macros
+      KVM: arm64: Rename SVE finalization constants to be more general
+      KVM: arm64: Document the KVM ABI for SME
+      KVM: arm64: Define internal features for SME
+      KVM: arm64: Rename sve_state_reg_region
+      KVM: arm64: Store vector lengths in an array
+      KVM: arm64: Implement SME vector length configuration
+      KVM: arm64: Support SME control registers
+      KVM: arm64: Support TPIDR2_EL0
+      KVM: arm64: Support SME identification registers for guests
+      KVM: arm64: Support SME priority registers
+      KVM: arm64: Provide assembly for SME register access
+      KVM: arm64: Support userspace access to streaming mode Z and P registers
+      KVM: arm64: Flush register state on writes to SVCR.SM and SVCR.ZA
+      KVM: arm64: Expose SME specific state to userspace
+      KVM: arm64: Context switch SME state for guests
+      KVM: arm64: Handle SME exceptions
+      KVM: arm64: Expose SME to nested guests
+      KVM: arm64: Provide interface for configuring and enabling SME for guests
+      KVM: arm64: selftests: Add SME system registers to get-reg-list
+      KVM: arm64: selftests: Add SME to set_id_regs test
+
+ Documentation/virt/kvm/api.rst                   | 117 +++++++----
+ arch/arm64/include/asm/fpsimd.h                  |  26 +++
+ arch/arm64/include/asm/kvm_emulate.h             |   6 +
+ arch/arm64/include/asm/kvm_host.h                | 169 ++++++++++++---
+ arch/arm64/include/asm/kvm_hyp.h                 |   5 +-
+ arch/arm64/include/asm/kvm_pkvm.h                |   2 +-
+ arch/arm64/include/asm/vncr_mapping.h            |   2 +
+ arch/arm64/include/uapi/asm/kvm.h                |  33 +++
+ arch/arm64/kernel/cpufeature.c                   |   2 -
+ arch/arm64/kernel/fpsimd.c                       |  89 ++++----
+ arch/arm64/kvm/arm.c                             |  10 +
+ arch/arm64/kvm/config.c                          |   8 +-
+ arch/arm64/kvm/fpsimd.c                          |  28 ++-
+ arch/arm64/kvm/guest.c                           | 252 ++++++++++++++++++++---
+ arch/arm64/kvm/handle_exit.c                     |  14 ++
+ arch/arm64/kvm/hyp/fpsimd.S                      |  28 ++-
+ arch/arm64/kvm/hyp/include/hyp/switch.h          | 175 ++++++++++++++--
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h       | 110 ++++++----
+ arch/arm64/kvm/hyp/nvhe/hyp-main.c               |  86 ++++++--
+ arch/arm64/kvm/hyp/nvhe/pkvm.c                   |  85 ++++++--
+ arch/arm64/kvm/hyp/nvhe/switch.c                 |   4 +-
+ arch/arm64/kvm/hyp/nvhe/sys_regs.c               |   6 +
+ arch/arm64/kvm/hyp/vhe/switch.c                  |  17 +-
+ arch/arm64/kvm/hyp/vhe/sysreg-sr.c               |   7 +
+ arch/arm64/kvm/nested.c                          |   3 +-
+ arch/arm64/kvm/reset.c                           | 156 ++++++++++----
+ arch/arm64/kvm/sys_regs.c                        | 141 ++++++++++++-
+ arch/arm64/tools/sysreg                          |   8 +-
+ include/uapi/linux/kvm.h                         |   1 +
+ tools/testing/selftests/kvm/arm64/get-reg-list.c |  15 +-
+ tools/testing/selftests/kvm/arm64/set_id_regs.c  |  27 ++-
+ 31 files changed, 1328 insertions(+), 304 deletions(-)
+---
+base-commit: 062b3e4a1f880f104a8d4b90b767788786aa7b78
+change-id: 20230301-kvm-arm64-sme-06a1246d3636
+
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
 
