@@ -1,158 +1,168 @@
-Return-Path: <linux-kselftest+bounces-39660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73EC3B31183
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 10:19:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 294C3B3119E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 10:23:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26483188AD92
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 08:16:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C24C7AA08C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 08:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362FB2EB5D5;
-	Fri, 22 Aug 2025 08:15:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65A712EACE1;
+	Fri, 22 Aug 2025 08:23:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="e4dvoXQd"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="n3hw1yrz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCCD2EAB8E;
-	Fri, 22 Aug 2025 08:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545572475C7;
+	Fri, 22 Aug 2025 08:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755850524; cv=none; b=ozLI64b9GVkgPSCwtPCuert4I6ajVEbnwo5JDaG/kwfv67Vvr2lFsAsePrm3dyJk5ndnPtnehOczlDXuFYFGu7UY9EAhd3qR+KCng0lYVHtvjV1vP9nqcPkYMPTqEKhE8xuaeZrLjp4bTnRR8UwvJPEWWv2smbcRlaF6DLdihPk=
+	t=1755850988; cv=none; b=JBLJN8HHrWdUqMVSnsi9BxWMY8U2mslo2qsCDiNEc1JUowPnlP2WEsDLFfAQkkgzPEIU+Wz0fUeY6ep2XGUUpN1v6QpjqCrd6dOGHDojrRnUwPuyhG7a+Sy9id3vu0asHsFJfFKmoqSDoy8t8e29vrywNX24wlqHYEKCfkVfjxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755850524; c=relaxed/simple;
-	bh=kTBgh0y3vRHtAXTeRcbbIloycHJMI8lellSKLz/etxs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=KyXfAKy0F6ybvStAwcrXAl3biBkLUUQ6DEZFSRmOfzmRYRgIG37lB7OaWyfJgYV8T9iF4iIytitS2ZQo+FvY+BvEeLQGgc3/hWgMYDQuNEmWbaqbO9kH927iWHN4aCUrICUaWEobQwpuar4If72hJzV66dkJG9o3P8TNiyk9L8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=e4dvoXQd; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250822081519euoutp01946853c37392c604dd0c3ef7d9f9864d~eCL6pnShX0804708047euoutp01V;
-	Fri, 22 Aug 2025 08:15:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250822081519euoutp01946853c37392c604dd0c3ef7d9f9864d~eCL6pnShX0804708047euoutp01V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755850519;
-	bh=gSgM5v5QN4mf4R9UjO3p9g49c5fElcblzx9rfuNpgCM=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=e4dvoXQdSu6m2XApKflo9WPmqpXymYx8peucZKWnnidxwTqyyGT6vyRmLSZhDupfy
-	 UQS833Dv4xDvMpcINMnXzIPqm8717h4UDC2WHsJO8GSlXAIbIu/HM+EmSf5f03lk+1
-	 DvviTyYYSXyxJn74yEGOVwAsfz9e64KnZWqZgVcw=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250822081519eucas1p173966299ee7e4ed7e44e5668490c5bb1~eCL6VCjyQ0206902069eucas1p1F;
-	Fri, 22 Aug 2025 08:15:19 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250822081515eusmtip1e7bc345219f25d2646a53b4e40310c91~eCL2XTm3N1429714297eusmtip1U;
-	Fri, 22 Aug 2025 08:15:14 +0000 (GMT)
-Message-ID: <8c4b0068-92be-427b-8bfc-9926eea6aa09@samsung.com>
-Date: Fri, 22 Aug 2025 10:15:14 +0200
+	s=arc-20240116; t=1755850988; c=relaxed/simple;
+	bh=hVavycqMrPemBzWjKcAFiAsh6MQHU/3hvyOrGOvCTsk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c/8OLmqmzm0KOxnFQRem3mTYEIg/dFNvnHF3dJO4Vp7ORf7Em00Xzrkx0NkGthd9PEsUUNiqwrcuF92IBksE+mJBzI7XdCVd0ktnHE9drXFMJoq28VnTvcBQj0OQoac52c83pIFzNju9xgFbbDoUERqv9zSHWy7ogttl9Qx5hEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=n3hw1yrz; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1755850979;
+	bh=hVavycqMrPemBzWjKcAFiAsh6MQHU/3hvyOrGOvCTsk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=n3hw1yrzFgymnMe6I39Ns8dAbaU8ke443nB8cex/RWNnDprZnhw0sqOPfZd4Le99v
+	 hPXcfKSRVBu4C6xGfAg4cssdVFfafUv8ugUAapbCOl2TmLMVFQYQoD3oEtLxbl/zeS
+	 GciTxfY981eGp4kmylCkGfyZ0M6ADazxeVrzmuxE/QNBk3KBbYFFbBTs1N8z7AItg+
+	 CFWwaYpj/vmujGXXm52IYTyLG+3fQi2RpwYFpU+LCXWvvfA71bg53Sp49dPSse3sG7
+	 cI7woKUzjOu2DCLTMz2L5ky4xCn+DNnWh12gWAzbToSFmmrV3Yzfm4b9qBiaZSCQT1
+	 /UcWVZwNiAf/w==
+Received: from mt.tail9873f4.ts.net (unknown [103.151.43.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 6910617E12FF;
+	Fri, 22 Aug 2025 10:22:54 +0200 (CEST)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Peter Xu <peterx@redhat.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Nico Pache <npache@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org,
+	kevin.brodsky@arm.com
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com
+Subject: [PATCH v3 0/8] selftests/mm: Add compiler flags and fix found warnings
+Date: Fri, 22 Aug 2025 13:20:57 +0500
+Message-ID: <20250822082145.4145617-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH RFC 23/35] scatterlist: disallow non-contigous page
- ranges in a single SG entry
-To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc: Alexander Potapenko <glider@google.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Brendan Jackman <jackmanb@google.com>,
-	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>, Dmitry
-	Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
-	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe
-	<axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>, John Hubbard
-	<jhubbard@nvidia.com>, kasan-dev@googlegroups.com, kvm@vger.kernel.org,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Linus Torvalds
-	<torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Marco Elver <elver@google.com>, Michal Hocko <mhocko@suse.com>, Mike
-	Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
-	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>, Peter Xu
-	<peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>, Suren Baghdasaryan
-	<surenb@google.com>, Tejun Heo <tj@kernel.org>,
-	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
-	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20250821200701.1329277-24-david@redhat.com>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20250822081519eucas1p173966299ee7e4ed7e44e5668490c5bb1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250821200818eucas1p2c3df1e12eeba86a68679743d2f5929a8
-X-EPHeader: CA
-X-CMS-RootMailID: 20250821200818eucas1p2c3df1e12eeba86a68679743d2f5929a8
-References: <20250821200701.1329277-1-david@redhat.com>
-	<CGME20250821200818eucas1p2c3df1e12eeba86a68679743d2f5929a8@eucas1p2.samsung.com>
-	<20250821200701.1329277-24-david@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On 21.08.2025 22:06, David Hildenbrand wrote:
-> The expectation is that there is currently no user that would pass in
-> non-contigous page ranges: no allocator, not even VMA, will hand these
-> out.
->
-> The only problematic part would be if someone would provide a range
-> obtained directly from memblock, or manually merge problematic ranges.
-> If we find such cases, we should fix them to create separate
-> SG entries.
->
-> Let's check in sg_set_page() that this is really the case. No need to
-> check in sg_set_folio(), as pages in a folio are guaranteed to be
-> contiguous.
->
-> We can now drop the nth_page() usage in sg_page_iter_page().
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->   include/linux/scatterlist.h | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
-> index 6f8a4965f9b98..8196949dfc82c 100644
-> --- a/include/linux/scatterlist.h
-> +++ b/include/linux/scatterlist.h
-> @@ -6,6 +6,7 @@
->   #include <linux/types.h>
->   #include <linux/bug.h>
->   #include <linux/mm.h>
-> +#include <linux/mm_inline.h>
->   #include <asm/io.h>
->   
->   struct scatterlist {
-> @@ -158,6 +159,7 @@ static inline void sg_assign_page(struct scatterlist *sg, struct page *page)
->   static inline void sg_set_page(struct scatterlist *sg, struct page *page,
->   			       unsigned int len, unsigned int offset)
->   {
-> +	VM_WARN_ON_ONCE(!page_range_contiguous(page, ALIGN(len + offset, PAGE_SIZE) / PAGE_SIZE));
->   	sg_assign_page(sg, page);
->   	sg->offset = offset;
->   	sg->length = len;
-> @@ -600,7 +602,7 @@ void __sg_page_iter_start(struct sg_page_iter *piter,
->    */
->   static inline struct page *sg_page_iter_page(struct sg_page_iter *piter)
->   {
-> -	return nth_page(sg_page(piter->sg), piter->sg_pgoffset);
-> +	return sg_page(piter->sg) + piter->sg_pgoffset;
->   }
->   
->   /**
+Recently, I reviewed a patch on the mm/kselftest mailing list about a
+test which had obvious type mismatch fix in it. It was strange why that
+wasn't caught during development and when patch was accepted. This led
+me to discover that those extra compiler options to catch these warnings
+aren't being used. When I added them, I found tens of warnings in just
+mm suite.
 
-Best regards
+In this series, I'm adding these flags and fixing those warnings. In the
+last try several months ago [1], I'd patches for individual tests. I've
+made patches better by grouping the same type of fixes together. Hence
+there is no changelog for individual patches.
+
+The changes have been build tested on x86_64, arm64, powerpc64 and
+partially
+on riscv64. The test run with and without this series has been done on
+x86_64.
+
+---
+Changes since v1:
+- Drop test harness patch which isn't needed anymore
+- Revamp how patches are written per same kind of failure
+
+Changes since v2:
+- split_huge_page_test.c: better deadcode removal
+- Drop -Wunused-parameter flag as kernel also doesn't enable it and it
+  causes too much hassle
+- Drop previous patches 6 and 7 as they are just marking unused parameters
+  with unused flag
+- Rename __unused to __always_unused and also add __maybe_unused
+
+Muhammad Usama Anjum (8):
+  selftests/mm: Add -Wunreachable-code and fix warnings
+  selftests/mm: protection_keys: Fix dead code
+  selftests: kselftest.h: Add unused macro
+  selftests/mm: Add -Wunused family of flags
+  selftests/mm: Remove unused parameters
+  selftests/mm: Fix unused parameter warnings for different
+    architectures
+  selftests/mm: mark variable unused with macro
+  selftests/mm: pkey-helpers: Remove duplicate __maybe_unused
+
+ tools/testing/selftests/kselftest.h           |  8 ++++++
+ tools/testing/selftests/mm/Makefile           |  2 +-
+ tools/testing/selftests/mm/compaction_test.c  |  2 +-
+ tools/testing/selftests/mm/cow.c              |  2 +-
+ tools/testing/selftests/mm/droppable.c        |  2 +-
+ tools/testing/selftests/mm/gup_longterm.c     |  2 +-
+ tools/testing/selftests/mm/hmm-tests.c        |  5 ++--
+ tools/testing/selftests/mm/hugepage-vmemmap.c |  2 +-
+ tools/testing/selftests/mm/hugetlb-madvise.c  |  2 +-
+ .../selftests/mm/hugetlb-soft-offline.c       |  2 +-
+ tools/testing/selftests/mm/ksm_tests.c        | 17 ++++++-------
+ tools/testing/selftests/mm/madv_populate.c    |  2 +-
+ tools/testing/selftests/mm/map_populate.c     |  2 +-
+ tools/testing/selftests/mm/memfd_secret.c     |  2 +-
+ .../testing/selftests/mm/mlock-random-test.c  |  2 +-
+ tools/testing/selftests/mm/mlock2-tests.c     |  2 +-
+ tools/testing/selftests/mm/mseal_test.c       |  8 ++++--
+ tools/testing/selftests/mm/on-fault-limit.c   |  2 +-
+ tools/testing/selftests/mm/pkey-helpers.h     |  3 ---
+ .../selftests/mm/pkey_sighandler_tests.c      | 25 +++++++++++++++----
+ tools/testing/selftests/mm/protection_keys.c  |  6 ++---
+ tools/testing/selftests/mm/soft-dirty.c       |  6 ++---
+ .../selftests/mm/split_huge_page_test.c       |  2 +-
+ tools/testing/selftests/mm/uffd-common.c      |  4 +--
+ tools/testing/selftests/mm/uffd-common.h      |  2 +-
+ tools/testing/selftests/mm/uffd-stress.c      |  2 +-
+ tools/testing/selftests/mm/uffd-unit-tests.c  |  8 +++---
+ tools/testing/selftests/mm/uffd-wp-mremap.c   |  2 +-
+ .../selftests/mm/virtual_address_range.c      |  2 +-
+ 29 files changed, 73 insertions(+), 55 deletions(-)
+
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.47.2
 
 
