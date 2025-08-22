@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-39706-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39707-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 303A0B321B5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 19:49:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 876EAB321B0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 19:47:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD65B5C272C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 17:47:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC1001D63801
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 17:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68FED292B3D;
-	Fri, 22 Aug 2025 17:47:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ECA1298CBE;
+	Fri, 22 Aug 2025 17:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="OTQZUj1v"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="OfCFDmNN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1325285C90
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 17:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57742980A8
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 17:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755884845; cv=none; b=p9Yj8zq6pfGOWU6QldmyY0CJt+iXNIgUYxk0xvXN/UpSLX6rLfmV/K+qnApiYohsaDIVkY9FLkaMKSXptYv8CDj49+sLEv1clLzZBoyXOq+33G9JEPxnP8/yMxkGe4sm3VfgkcGGffZ0o4EapALgv0YqrpkI+LK6tq0CgLJNsCU=
+	t=1755884848; cv=none; b=FqPDUpIudTKXjGEiFUA6LOj4vh7577vE5TLF4QS+Kkf4ETtbHzxjQ+8qcpJHh04yWMfOBVpAecnut2mEr9aX4u1sT4P4HHqAO6lBLJoD2ylLRrxQDYcTXI3xtKI/+hatV10BRGOf/SaYXTOH5qEyEQWkQdUQmBP+8JyOFLJ0knk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755884845; c=relaxed/simple;
-	bh=3eKPG4TUTR4+0R+9VHkqyjDfcIO6WcWdW7JtEbAMzYk=;
+	s=arc-20240116; t=1755884848; c=relaxed/simple;
+	bh=0b+k1Da34Ie81q2wS6yZp0j3E9D5ClJNu8JRMBnHi+c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aU3dpQhCmF+jpf5+Y4+am7Dd2iOyGI0jgBolZ54J/BMLQP+gb79KbGMT2FJOPlSXzij2WeM1TPTcmAT/J+qABFLWIWg/PAUa15jMRD9t203EtzusS5JEwfiq5IsBW3CPcswb6bIfJhGFoj/QFBxz6awWpDxSETQ/tjGhN5MAknc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=OTQZUj1v; arc=none smtp.client-ip=209.85.160.182
+	 MIME-Version; b=L+9wqLb7y6iKouw7+uaoinNAgCliaxrC3KPy+bu1Fkfpa2DJoL9jTuHimtIPZV5bwe9M63WiHiccG94ZX9ot9i+lAvyOxKYm+Dt9qIlG5ZthA2pmd2Gju1mo2IPe8C/BtqW9Z4QUH5e+6rtFTaoAbo+M8Lcyd1uqzjqgjq0lz24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=OfCFDmNN; arc=none smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4b1099192b0so39196071cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 10:47:23 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4b10993301fso24045301cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 10:47:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1755884842; x=1756489642; darn=vger.kernel.org;
+        d=rivosinc.com; s=google; t=1755884845; x=1756489645; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QfYucjg1h8+O9tUzDFG8M32q+vBz17OTGpTy9qZYkXU=;
-        b=OTQZUj1v9NpyD3w5ILfE7N9VGv6YW9/WHMn77bii310dpGoTVyRbNSK7xtcP83IsR8
-         +CQPog4T8onKtM6zuZ3alDo+nr5ZiGUXa4Pemo4/Lf7GR8gvnk637iQvvULIBqw0opmX
-         I3yWXea7mGx5DqiyhlSXv8T9MRyVuyzNrHb73qSHaCRkpX5A3qIxtRwLnNm6dByhWlUb
-         +dE7+KYuDCwMRIoMH948AZ2xU7725O6fF8rZ7r3BzcHhsNl1YiyGnVmJkBIwaWwX1dho
-         Gw3d+24AvmRfukzB/05Uu2tzBOFJP383COFWcUFS5nuDcvSkfYsuCWQprWgiRf/C6WtK
-         R/gQ==
+        bh=7icmFEtMbjG8nHUlUz3H6xEpzLvZfrYx0hP4AUrTZT0=;
+        b=OfCFDmNNY64q0WQPlHvyCU01UrN1O7uFPdUYZGLx0gq160X8cjbGA6BXYsice8kGT9
+         wuEOwiNl1w4Q+dE9CWSycC0eoFwKKguwPhKYsaJC2RKC8cm8sZqUGYtzUfuUYOvHVHxJ
+         /Dd3snX4ScJbxhSb04vqSOj3UqLNR3fv0qLyynTX5fHvRf3qNAImmbMam6aQDtS0RrOc
+         JI1bMoTYU8PPxCOIs+6Mwkmmvmq0Ezdc83d/grP5F59lZXe1lKB3Fv0vaA41zvrdUx30
+         HboVj4nKplV2V9fWIMWA5HuGJ9pF+zZQJMFzijMWMKehgpxhX870AQ5eC7sgg6FSmq7P
+         40eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755884842; x=1756489642;
+        d=1e100.net; s=20230601; t=1755884845; x=1756489645;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QfYucjg1h8+O9tUzDFG8M32q+vBz17OTGpTy9qZYkXU=;
-        b=Kcv0z1pwFZ1j+dyELDmyMthy6YEGzBJ97AljepQJdu0qqxtsjsgzcWTjzFO37JGE+4
-         rNO6JQWquUspjb9gfM2T6TqK+Sv3DxRVfdrXLk+bCgR9cuE9Nor10zmP94g5BYGcytj8
-         tSYybLELHbYZh11rcMIflsOObXu4qsoTR9ODVNX5QMjuHgHY/eYv1Fd9OGflq2nLKNrw
-         1O5MMghXi/JKWIOgcN+YBHtLSgipGs8MxmKu+qSYgzLoBgNuMiaDOTCov7tag2pHkori
-         CV9wbCdHnDCd1VEXfQbHFGfMbxHsde4QGJnKMJmlqrwWMpMFlz9kQCpPnvO1mdoHOQE9
-         70Lw==
-X-Forwarded-Encrypted: i=1; AJvYcCUHdDGyWwSawQ/ntJRjhpKQSyruluOEVlLzer+W2OslwaxzEODH/Ar8lIDZtmA/cx5yXGFo9P22bG3tZUnKnbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJrUsZc5voiVHj2FhMX3Tiz6ymtDk+BjS+8kUaUkJ7eCjjpkC5
-	+SJBUPKzlZi0weNTcuHDLrIl0+pDk9FU7exPghBhm25UklvfYbBns7VbegXuCfUrDpA=
-X-Gm-Gg: ASbGncufBvnzv886NkBnFRoKP7wUDBYTSpx8nPf+Q5PgXGhyEOa9I9I51ghDrmQySwx
-	hUwFSL/n9gm3M0xZ+OEHBHEzoERAMqGzWNEcFvPOlQEeRS3DwaBBMDZRvWYfh0grdVFHbz9hBxb
-	KJYXzDvlUgMZnJy66Px069S5NmdAO9HK+1E2M3TuZnHKx12leoKrzGhcT7IEcNslhy5h/uQAMdT
-	jVugV88Ei/Yu/ffH4dW+22E1/I5BKvERcnHAAGISSPtceSixAAvx/0K1zjjyaL45vTEgZieREzY
-	R8iom786Ai8gQ1kZhi0lzbAwEaxYv28hki7oYUsUgftFFGAnTAU7VrY297o6BN9EVWmaEDL6BE8
-	TeXzPiUjUHFgx//U25G2exugY0BskaNTzOn/Gxx/Ki7qxc6j2JWsgyhl5VgzrH5JNYyiNSkmrvq
-	zPKTMbUA==
-X-Google-Smtp-Source: AGHT+IGIVSOen45mpOt0xYdR05GnbUoonndymEzs2Y2tUjKO6oUDKgrfkoqnPSp/0zNTXeE4BQVymQ==
-X-Received: by 2002:a05:622a:2615:b0:4b0:75ed:bbf9 with SMTP id d75a77b69052e-4b2aaacb9dfmr44784981cf.33.1755884842505;
-        Fri, 22 Aug 2025 10:47:22 -0700 (PDT)
+        bh=7icmFEtMbjG8nHUlUz3H6xEpzLvZfrYx0hP4AUrTZT0=;
+        b=pLO1iW8rKh41qKKcHvl5GOMuKXnP9kMY9BEKN129gMUQAD6OI4HLZom9nuMjjGFcrY
+         RU39Js9fo6db0h8zSenMe3eBnGH+ardjC7eE0tF/2qXDiKdnYoDgmR0AHol642++YtL6
+         +nLmjJve+s2L+AGY0KJWSgr/dsHxdEISHj5SF2fjBfiLsstF/YNG3lPHXw7a4zUdGQTD
+         urwRNg6QD3fJXNacU8MJ7DVDfsQdGygR3QVmRtz+zxW8EfkNcjQYby41kW5glKbd6ev/
+         Eh+pqoEVWObYfeLa3eihKPpaM82z77ErZqF1MKqgv5GXtdMNXEMV0TcYkQ/fVZb8Jvnm
+         BXIg==
+X-Forwarded-Encrypted: i=1; AJvYcCXoWOr50C//db8osjdqhnDCUAxL8zPOudFrb58KYWU3i5wD+935jBgRLs/Q2WfbIkL/jD7ODrROhWY0gNWYTTk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiL0N1n+7HyGfQ67SS1Shwe/v2jeUKUD3zGw7lhaTe1zmbcuii
+	iC9BCmR6y9Hg87fPswKr5c1T/auc+Eco/Emy+ue8TnUgoH+2SOirBUamUxShd+V29+Y=
+X-Gm-Gg: ASbGncv6xuYvbBKl2fFc0QzLHK6yJgiOxb4uaSvCEGKFM6baTy2eFVVzTHj+I6zgvvW
+	CQdPE8ZD8OeW+r1oAv4iZ7ON70sJi7oT5BoFo7BM3w0GOlG6sMwcI56JVr7yBV+5APzRP4wyqjg
+	6TVgYLDp1iOx0+yFliIWxvEPe2LzT5OC6lDLkTkXBzjLytwYtvBdZTWxaGVetXra+7Z6mHB6VGd
+	KtmvJCUyV75txJd80yn02E017ZqTJMjnuJ4v17WeTRJjhyKPud+8Bo8fYidlMIMN2vNQ5nXsWSs
+	i/L9JvIHSCRyZ6lyPj6U+APm6+zFi5JEnKTg7yQsv1A8BOkax9/68B+Ll1wkQ59kK6LaLfq+rw0
+	XNt9psxf3AqIbYiDMhaedOuyRWYrhdUvJOzk/mcAvejvPfiWnZnuYReADUz+DE6gAff/FPr/vYU
+	xmE72u6w==
+X-Google-Smtp-Source: AGHT+IGt5FtRUkeNaYf2QqcOOYK1voNcUZefaLnp0B87objwjhy4KKvTzMxzHCr1EhOf/GN0KqwnNQ==
+X-Received: by 2002:ac8:5dd1:0:b0:4b1:103b:bb6f with SMTP id d75a77b69052e-4b2aab276d4mr43535751cf.61.1755884845347;
+        Fri, 22 Aug 2025 10:47:25 -0700 (PDT)
 Received: from jesse-lt.jtp-bos.lab (pool-108-26-215-125.bstnma.fios.verizon.net. [108.26.215.125])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b2b8e6023asm3121361cf.53.2025.08.22.10.47.20
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b2b8e6023asm3121361cf.53.2025.08.22.10.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Aug 2025 10:47:22 -0700 (PDT)
+        Fri, 22 Aug 2025 10:47:25 -0700 (PDT)
 From: Jesse Taube <jesse@rivosinc.com>
 To: linux-riscv@lists.infradead.org
 Cc: Paul Walmsley <paul.walmsley@sifive.com>,
@@ -128,9 +128,9 @@ Cc: Paul Walmsley <paul.walmsley@sifive.com>,
 	linux-perf-users@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Joel Stanley <joel@jms.id.au>
-Subject: [PATCH 2/8] riscv: Add SBI debug trigger extension and function ids
-Date: Fri, 22 Aug 2025 10:47:09 -0700
-Message-ID: <20250822174715.1269138-3-jesse@rivosinc.com>
+Subject: [PATCH 3/8] riscv: insn: Add get_insn_nofault
+Date: Fri, 22 Aug 2025 10:47:10 -0700
+Message-ID: <20250822174715.1269138-4-jesse@rivosinc.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250822174715.1269138-1-jesse@rivosinc.com>
 References: <20250822174715.1269138-1-jesse@rivosinc.com>
@@ -142,74 +142,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Himanshu Chauhan <hchauhan@ventanamicro.com>
+get_insn_nofault uses get_insn with pagefaults dissabled, allowing it to
+be called in an atomic context.
 
-Debug trigger extension is a proposed SBI extension to support
-native debugging in S-mode and VS-mode.
-
-The proposal for the extension can be found at:
-https://lists.riscv.org/g/sig-hypervisors/message/361
-
-This patch adds the extension and the function IDs defined
-by the extension.
-
-Signed-off-by: Himanshu Chauhan <hchauhan@ventanamicro.com>
+Signed-off-by: Jesse Taube <jesse@rivosinc.com>
 ---
+Unsure if copy_from_kernel_nofault is an acceptable replacement for
+direct dereference in __read_insn.
+
 RFC -> V1:
- - No change
+ - Add new function instead of using copy_from_user_nofault
 V1 -> V2:
  - No change
 ---
- arch/riscv/include/asm/sbi.h | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ arch/riscv/include/asm/insn.h |  1 +
+ arch/riscv/kernel/insn.c      | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index 3d250824178b..be2ca8e8a49e 100644
---- a/arch/riscv/include/asm/sbi.h
-+++ b/arch/riscv/include/asm/sbi.h
-@@ -35,6 +35,7 @@ enum sbi_ext_id {
- 	SBI_EXT_DBCN = 0x4442434E,
- 	SBI_EXT_STA = 0x535441,
- 	SBI_EXT_NACL = 0x4E41434C,
-+	SBI_EXT_DBTR = 0x44425452,
+diff --git a/arch/riscv/include/asm/insn.h b/arch/riscv/include/asm/insn.h
+index ba74e5b8262c..f87e0a48f786 100644
+--- a/arch/riscv/include/asm/insn.h
++++ b/arch/riscv/include/asm/insn.h
+@@ -553,6 +553,7 @@ static inline void riscv_insn_insert_utype_itype_imm(u32 *utype_insn, u32 *itype
+ #include <asm/ptrace.h>
  
- 	/* Experimentals extensions must lie within this range */
- 	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
-@@ -402,6 +403,34 @@ enum sbi_ext_nacl_feature {
- #define SBI_NACL_SHMEM_SRET_X(__i)		((__riscv_xlen / 8) * (__i))
- #define SBI_NACL_SHMEM_SRET_X_LAST		31
+ int get_insn(struct pt_regs *regs, ulong epc, ulong *r_insn);
++int get_insn_nofault(struct pt_regs *regs, ulong epc, ulong *r_insn);
+ unsigned long get_step_address(struct pt_regs *regs, u32 code);
  
-+/* SBI debug triggers function IDs */
-+enum sbi_ext_dbtr_fid {
-+	SBI_EXT_DBTR_NUM_TRIGGERS = 0,
-+	SBI_EXT_DBTR_SETUP_SHMEM,
-+	SBI_EXT_DBTR_TRIG_READ,
-+	SBI_EXT_DBTR_TRIG_INSTALL,
-+	SBI_EXT_DBTR_TRIG_UPDATE,
-+	SBI_EXT_DBTR_TRIG_UNINSTALL,
-+	SBI_EXT_DBTR_TRIG_ENABLE,
-+	SBI_EXT_DBTR_TRIG_DISABLE,
-+};
+ #endif /* _ASM_RISCV_INSN_H */
+diff --git a/arch/riscv/kernel/insn.c b/arch/riscv/kernel/insn.c
+index dd2a6ef9fd25..c8f77c0093c9 100644
+--- a/arch/riscv/kernel/insn.c
++++ b/arch/riscv/kernel/insn.c
+@@ -2,6 +2,9 @@
+ /*
+  * Copyright 2025 Rivos, Inc
+  */
 +
-+struct sbi_dbtr_data_msg {
-+	unsigned long tstate;
-+	unsigned long tdata1;
-+	unsigned long tdata2;
-+	unsigned long tdata3;
-+};
++#include <linux/uaccess.h>
 +
-+struct sbi_dbtr_id_msg {
-+	unsigned long idx;
-+};
+ #include <asm/insn.h>
+ #include <asm/ptrace.h>
+ #include <asm/uaccess.h>
+@@ -74,6 +77,17 @@ int get_insn(struct pt_regs *regs, ulong epc, ulong *r_insn)
+ 	}
+ }
+ 
++int get_insn_nofault(struct pt_regs *regs, ulong epc, ulong *r_insn)
++{
++	int ret;
 +
-+union sbi_dbtr_shmem_entry {
-+	struct sbi_dbtr_data_msg data;
-+	struct sbi_dbtr_id_msg id;
-+};
++	pagefault_disable();
++	ret = get_insn(regs, epc, r_insn);
++	pagefault_enable();
 +
- /* SBI spec version fields */
- #define SBI_SPEC_VERSION_DEFAULT	0x1
- #define SBI_SPEC_VERSION_MAJOR_SHIFT	24
++	return ret;
++}
++
+ /* Calculate the new address for after a step */
+ unsigned long get_step_address(struct pt_regs *regs, u32 code)
+ {
 -- 
 2.43.0
 
