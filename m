@@ -1,89 +1,78 @@
-Return-Path: <linux-kselftest+bounces-39615-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39616-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E517EB30AA2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 03:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF587B30AC2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 03:22:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C77F61D010EE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 01:09:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B54741D04179
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 01:22:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D92919C546;
-	Fri, 22 Aug 2025 01:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9CCD1A9F84;
+	Fri, 22 Aug 2025 01:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z4cEqrby"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bxz/mP97"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FFD81922F6;
-	Fri, 22 Aug 2025 01:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28EA1A073F
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 01:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755824962; cv=none; b=UllJ+JXJ6HRpDNnjYD8YklCDZ02khBdeFQrA+czMu9DWCi1jp89KlQaGIDynEKDcx41JYpZ8jvLVi2u0gPuLzVSmyz5/HarYXOYPxcWKVIYQ2Otur3b3RXf07+Ah2XILuLLTJSde7OqlGBy0rKGWK7EuMbl9eZqDUh2k5Bvn18o=
+	t=1755825713; cv=none; b=uBPDsVa1I3l5E+51XyMiZ81ZbO+dfvjAOOC9b+yr+L01uXjcI5kkpQkx20+hxv3zBUrmlPkICBXighfjx+XtJIbHUEJo04K1NoY+2SkUcs4yPjWUlgt6cGGCUXqzcIEj2rCy8exStheFm0AEerlGVGPa+uiWCyBnjvMFm/Aq0bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755824962; c=relaxed/simple;
-	bh=0dODRNC78xNke3pHeVeJUZvgtP8G2f7317szkX2hU6s=;
+	s=arc-20240116; t=1755825713; c=relaxed/simple;
+	bh=ntCiTsnHyv89Ppw/YN8mIQ+gYRwhLO3TxI+GVHhT5J0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LfabO1ZklmNZtSrCV+lUewlXoMID9sHFF5XetkioP+FQZN5QbHw5L6VADaqNoBAzImLj3550VscSmwPEqTpvW18yg242YazhF8+RyUOMnQpDExws20KTl/7rB7cMfRAD2yN51dKjAo6x7eqE1djhLPXIyENxSS3NquqGodoJg7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z4cEqrby; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-323267b98a4so1348677a91.1;
-        Thu, 21 Aug 2025 18:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755824960; x=1756429760; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h3IvWMgAQ7iyt9pErEVox3m88MWiTBgrWQ2lpL1JbMA=;
-        b=Z4cEqrbyhPT4oe5WvHlF+B5OebtAuwb+QOPfaR80npcX45xeMta/oguwKvk4xpod3Z
-         hu7J0KIdaHsOmmLqIv6Bzk0B/qIGajZKRGIVw0ztGRr5lEaEK8nAZg9qxLDr/a3VJII0
-         +NL+e7/QjRMJ8SsylyEL1iJ61fCUtFUI6n5UNX3/wJ6VGGy47YT4vzKdjg5282bssQIc
-         HQvgNH1aBVT+zkHAakoYmyvOktTYDPKsidw0dZ7UMyc+lC5YLhm4fVIkbM6xrlYkaaPp
-         HFD/xxzuA6S9iXig8PstDjGPxKxSD7KysfsKBoVR+aRFpDf56MiXbLI2LvuhfiolH7Fa
-         kOiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755824960; x=1756429760;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h3IvWMgAQ7iyt9pErEVox3m88MWiTBgrWQ2lpL1JbMA=;
-        b=P/G1/jNYaFy4C+7DruW21LItUUVQCrNIdGhewxZ6xi1jUj5KsAaOIwsOacPSZwRmcO
-         ea2Z2mxvLQ3tLtArkiWcpTZ+y1NIGFM0iwCJeY0UNvAnSsccD3VcMPXTXt40ka85kVQy
-         1zCjOGV2+SgDRj9e1TDtws0sX4WjhoaGqm6EGhBhyD8OTsLceEcrvSoJL4zLc1MPGzoo
-         9ICS0sevtPIq6ocugLyxJs2WGRH7OvmcGDqZAmXaHlO6h/EN2UuWJ+kIGbymBXzm/9jA
-         yo56FLYh9KzWECjms/U6cCTm25byvIMeefRE/auOGZnH+u0EOnIJ64E9o7PsHnAKFuys
-         NCqg==
-X-Forwarded-Encrypted: i=1; AJvYcCUA54jUG/nIWhhbDLDu6ESyloDbTJOEByAONb0gHJi7goWrwLRwSnTVMT2TcEux+uaSHha6tQE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyirsy2UrpO6tSWGlt5AWdUMV6Xpu7O+WuSB/0WZWKqn8gX4FPb
-	ImXwwYrtfu/f5pvgk7tLFaFiKdmxdpMcLT/exc12Z3+HYlkjaV4XhmcS
-X-Gm-Gg: ASbGnctBI6rqQSOUBzigihk0CcItsoVbKAjfnjfcev/zQEiskiAA4eWmyl1UsefeRiQ
-	iVFA8vSApfcs+S0kLF428gLy2iRt/JPWj6uzA6dyspCm8MNGbyVns39+0kbcCYl0v0So4ijhoQ7
-	whK1j6eWAffrnBi+pXroM/UOOBF8Obuk5BzDV0GJhX0rI0fpqvYsKgWbJyw20szk8ir6jmkLPeB
-	BpKhOVx/rZxunpbIRbSl/E6XD8DxMr/6QZxlmEfEscqFC7WUvxH4OHec/UwBXr6hnhraaVrI91S
-	kY7sG8q9OvJeCITRV3ic64n6PA3K8e1FedfdG8LECvizxZJIWHFt1YJCLeYDAqh5TBiCx3fXAE+
-	bzkuyolcJl6cp2C06GXbl3jWpNvc=
-X-Google-Smtp-Source: AGHT+IHGU9u2H0lrds4JZ+ha02XcXfQbC9cFCfl9rGEtlVY044CJ0NqK8sNK4JELfKp6RGXi4iuSrw==
-X-Received: by 2002:a17:90a:d2c8:b0:312:e8ed:758 with SMTP id 98e67ed59e1d1-32515ede095mr1618745a91.13.1755824959744;
-        Thu, 21 Aug 2025 18:09:19 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-325129aa68fsm950823a91.7.2025.08.21.18.09.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 18:09:19 -0700 (PDT)
-Date: Fri, 22 Aug 2025 01:09:13 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Alessandro Ratti <alessandro@0x65c.net>
-Cc: linux-kselftest@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
-	pabeni@redhat.com, skhan@linuxfoundation.org
-Subject: Re: [PATCH] selftests: rtnetlink: skip tests if tools or feats are
- missing
-Message-ID: <aKfDOSx3C8NbMJsw@fedora>
-References: <CAKiXHKejzOAiieTxZpq8+v-vnzSEyuOuD0tYbzHL5R78iS+BMQ@mail.gmail.com>
- <20250821142141.735075-1-alessandro@0x65c.net>
- <20250821142141.735075-2-alessandro@0x65c.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vc3S+QHUGzyAuhz/CmDX9UkDG0BBuWxfpZYpNe+vFYK9dKx8vdBo483ATKZ/h9BxCYdgnAo1cBd2PWcDE8N9mxXPbfhnKIPhtnzKVDIN9oDMbT20qOb3LXp3UT1lZC475CM4w9qGATKjObCjQulryqZrnllHF59WwglovLLdHxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bxz/mP97; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755825710;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pP1gIuRFr7tSKsLKFv1sUFXkEDX22rWdnjLkvx8Dr3w=;
+	b=bxz/mP970haO0GhwvMwNYNIg2XAFuRY50CEbjjXhV++QxbQ5jtkmzBx3hSmLDZUmoHcn9i
+	KxUQtIDtB5Ddtc2mHSHhFDJHBCBiCjvazbpybP7tt1bJQQ2gmtstz6+s/6TCysKEZ0Djp6
+	DmNAFH7luWMZDe+55rGMm39WQDGrxuw=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-167-NdzZ7o2eMMy-971uUgmbKA-1; Thu,
+ 21 Aug 2025 21:21:47 -0400
+X-MC-Unique: NdzZ7o2eMMy-971uUgmbKA-1
+X-Mimecast-MFC-AGG-ID: NdzZ7o2eMMy-971uUgmbKA_1755825704
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5BF62180035C;
+	Fri, 22 Aug 2025 01:21:43 +0000 (UTC)
+Received: from fedora (unknown [10.72.116.34])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 18ED9180028F;
+	Fri, 22 Aug 2025 01:21:29 +0000 (UTC)
+Date: Fri, 22 Aug 2025 09:21:24 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+Cc: akpm@linux-foundation.org, shuah@kernel.org, mic@digikod.net,
+	gnoack@google.com, david@redhat.com, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, skhan@linuxfoundation.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-mm@kvack.org,
+	netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-block@vger.kernel.org
+Subject: Re: [PATCH] selftests: centralise maybe-unused definition in
+ kselftest.h
+Message-ID: <aKfGFB2MmkbA4BBC@fedora>
+References: <20250821101159.2238-1-reddybalavignesh9979@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,74 +81,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250821142141.735075-2-alessandro@0x65c.net>
+In-Reply-To: <20250821101159.2238-1-reddybalavignesh9979@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Thu, Aug 21, 2025 at 04:16:51PM +0200, Alessandro Ratti wrote:
-> Some rtnetlink selftests assume the presence of ifconfig and iproute2
-> support for the `proto` keyword in `ip address` commands. These
-> assumptions can cause test failures on modern systems (e.g. Debian
-> Bookworm) where:
+On Thu, Aug 21, 2025 at 03:41:59PM +0530, Bala-Vignesh-Reddy wrote:
+> Several selftests subdirectories duplicated the define __maybe_unused,
+> leading to redundant code. Moved to kselftest.h header and removed
+> other definition.
 > 
->  - ifconfig is not installed by default
->  - The iproute2 version lacks support for address protocol
+> This addresses the duplication noted in the proc-pid-vm warning fix
 > 
-> This patch improves test robustness by:
+> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+> Link:https://lore.kernel.org/lkml/20250820143954.33d95635e504e94df01930d0@linux-foundation.org/
 > 
->  - Skipping kci_test_promote_secondaries if ifconfig is missing
->  - Skipping do_test_address_proto if ip address help does not mention
->    proto
-> 
-> These changes ensure the tests degrade gracefully by reporting SKIP
-> instead of FAIL when prerequisites are not met, improving portability
-> across systems.
-> 
-> Signed-off-by: Alessandro Ratti <alessandro@0x65c.net>
-> ---
->  tools/testing/selftests/net/rtnetlink.sh | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-> index d6c00efeb664..c2a0e7f37391 100755
-> --- a/tools/testing/selftests/net/rtnetlink.sh
-> +++ b/tools/testing/selftests/net/rtnetlink.sh
-> @@ -323,6 +323,11 @@ kci_test_addrlft()
->  
->  kci_test_promote_secondaries()
->  {
-> +	run_cmd ifconfig "$devdummy"
-> +	if [ $ret -ne 0 ]; then
-> +		end_test "SKIP: ifconfig not installed"
-> +		return $ksft_skip
-> +	fi
->  	promote=$(sysctl -n net.ipv4.conf.$devdummy.promote_secondaries)
->  
->  	sysctl -q net.ipv4.conf.$devdummy.promote_secondaries=1
-> @@ -1201,6 +1206,12 @@ do_test_address_proto()
->  	local ret=0
->  	local err
->  
-> +	run_cmd_grep 'proto' ip address help
-> +	if [ $? -ne 0 ];then
-> +		end_test "SKIP: addr proto ${what}: iproute2 too old"
-> +		return $ksft_skip
-> +	fi
-> +
->  	ip address add dev "$devdummy" "$addr3"
->  	check_err $?
->  	proto=$(address_get_proto "$addr3")
-> -- 
-> 2.39.5
-> 
+> Signed-off-by: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
 
-Hi Alessandro,
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-Next time, please add the version tag and target branch in the subject.
-e.g. [PATCHv2 net-next] your subject
+Thanks,
+Ming
 
-I'm not sure if the lack of a version number will have an impact on the
-patch work.
-
-The change looks good to me.
-
-Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
 
