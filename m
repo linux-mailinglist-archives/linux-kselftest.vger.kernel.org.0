@@ -1,52 +1,45 @@
-Return-Path: <linux-kselftest+bounces-39656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9121BB30F8F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 08:51:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E814DB30FA9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 08:59:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C3793A81DA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 06:51:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D1E11CC6954
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 06:59:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 304682E5428;
-	Fri, 22 Aug 2025 06:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="j17RBcsD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1E632E5B08;
+	Fri, 22 Aug 2025 06:58:56 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CADC15E90;
-	Fri, 22 Aug 2025 06:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA3C296BD0;
+	Fri, 22 Aug 2025 06:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755845473; cv=none; b=LsoRSjLzEZLXrJRQZIaqCM0BIPwF1HyHIX98x2Tmk/hGeG0iJ/vpwBPkmi4ujAKiE5qyCi74sai0KgGgLz2uo6CVKKazaav3ZeoB/BSZxcH6NuAA3L31otDorGP0QQadlJQUDlp2cvhxFNLjjoS2+IeGaGWITAqWGun2vci2vGc=
+	t=1755845936; cv=none; b=nOH12nYrDG/Xm9VY5RsIYU4J2w0qJhtvkS2w7S+WEBFwGT3VxcKNisLqYBycX1/HbEIRPORVS1QFlpMXZ68LtteCi6s16NJdY757FggEcEhc8VDD9huJVY0dh0UGCcfqiNZgQVigbXRkMi+TJYrZGj2T9qpHi1a5PxiWzVsC1V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755845473; c=relaxed/simple;
-	bh=JCJe22NBnh/Ohku/c/jURhYMPWhOcCrL/i6Ia6jiF3I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GpN0xA4zEg4CpMkbGI/HOvMaiHfHeE8ImFiAcNUPv+nYboozqpABuID7686LcvtkVc8ZQkhSPuTlrFiGcFryVZiyDBAEeU5alXKN9xLrzneAJ9HwhJvc6xFdYSLrPyz9FLUcaiWf0MVaDtkuzErUUGuvbwNoKSqK3Nr/Zx6grNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=j17RBcsD; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=IrjTn5lxjgH6PT63JNA+B4QI+udrzjtftEznNof8LA0=; b=j17RBcsD4qSuOv6w/CU/WxHpFF
-	IUY594dwVhdfBDbQGOv/tKSfMsm0NAXG1Md63nkJNodbRDDk8nW85G6B2OB7xQTA4CYrfAHA3MtQJ
-	6fR1Ko1vfc8+DXbMEJWnMc+JPvB3m9SyDhWLFY94FS9FNO+CVHBVhJfjMdLlt2k5wPS3ZmXInAlMo
-	Yd/DMzJdv4+lN7VYpp0Kveb9yEnELMp1djT3fv3kLMnXUFlH6Ba9vdZOXO0xIvUuhyD3CJDAY0+1R
-	bC6jGsswDCYcR+XRRagP4v+i5j6hl4KC1BjvFwfFUO80GQLv5SLQ6ntdvHQ7Lrjwoa8/ZmJMX1pTo
-	lADwTdoA==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1upLc4-00000001kK4-2FVr;
-	Fri, 22 Aug 2025 06:51:00 +0000
-Message-ID: <f87145e5-5a86-4ccf-96ac-61e16e894b81@infradead.org>
-Date: Thu, 21 Aug 2025 23:50:58 -0700
+	s=arc-20240116; t=1755845936; c=relaxed/simple;
+	bh=DtBOtyja9oaFsqArnMz5V4Hl/4aCTCe6Aw+SSt12Z80=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=fmUx6MRkGMj+kH+temoBVfILM++Z5WgJpYSv2MKg3nwEZmJvG6csheDVwS6b2k1PIqvosd/mknIRGsPRrUnkb2u4fjOT7/WemEwtTgONUH8yPm+oLAipowSHInLAMk8IqESXDMihKH5+pTF9IDVYa6iEDRCaAHV9J+E6hPhyvTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4c7WHv1LsbzKHNXd;
+	Fri, 22 Aug 2025 14:58:51 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id AD0A11A1446;
+	Fri, 22 Aug 2025 14:58:50 +0800 (CST)
+Received: from [10.67.109.79] (unknown [10.67.109.79])
+	by APP3 (Coremail) with SMTP id _Ch0CgCXXNcpFaho8_HCEQ--.46529S2;
+	Fri, 22 Aug 2025 14:58:50 +0800 (CST)
+Message-ID: <a309c2b5-5425-428c-a034-d5ebc68cb304@huaweicloud.com>
+Date: Fri, 22 Aug 2025 14:58:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,146 +47,265 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 11/29] KVM: arm64: Document the KVM ABI for SME
-To: Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Will Deacon <will@kernel.org>,
- Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <shuah@kernel.org>
-Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
- Mark Rutland <mark.rutland@arm.com>, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250822-kvm-arm64-sme-v7-0-7a65d82b8b10@kernel.org>
- <20250822-kvm-arm64-sme-v7-11-7a65d82b8b10@kernel.org>
+Subject: Re: [PATCH v4 1/2] cgroup: cgroup.stat.local time accounting
+From: Chen Ridong <chenridong@huaweicloud.com>
+To: Tiffany Yang <ynaffit@google.com>, linux-kernel@vger.kernel.org
+Cc: John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Pavel Machek <pavel@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Chen Ridong <chenridong@huawei.com>, kernel-team@android.com,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20250822013749.3268080-6-ynaffit@google.com>
+ <20250822013749.3268080-7-ynaffit@google.com>
+ <552a7f82-2735-47a5-9abd-a9ae845f4961@huaweicloud.com>
 Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250822-kvm-arm64-sme-v7-11-7a65d82b8b10@kernel.org>
+In-Reply-To: <552a7f82-2735-47a5-9abd-a9ae845f4961@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgCXXNcpFaho8_HCEQ--.46529S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jry7tF48WF1UZr1xWFWUtwb_yoW3Aw47pa
+	yDA3W3tw4FqF12vr4Sy34qvFySgr48tw4UKr9rJa4xAFnIq3Wktr1xAr15WF1UAFZ7K3W8
+	Ja4Y9ryfCrnFvFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
 
 
-On 8/21/25 6:53 PM, Mark Brown wrote:
-> SME, the Scalable Matrix Extension, is an arm64 extension which adds
-> support for matrix operations, with core concepts patterned after SVE.
+On 2025/8/22 14:14, Chen Ridong wrote:
 > 
-> SVE introduced some complication in the ABI since it adds new vector
-> floating point registers with runtime configurable size, the size being
-> controlled by a prameter called the vector length (VL). To provide control
-
-                  parameter
-
-> of this to VMMs we offer two phase configuration of SVE, SVE must first be
-> enabled for the vCPU with KVM_ARM_VCPU_INIT(KVM_ARM_VCPU_SVE), after which
-> vector length may then be configured but the configurably sized floating
-> point registers are inaccessible until finalized with a call to
-> KVM_ARM_VCPU_FINALIZE(KVM_ARM_VCPU_SVE) after which the configurably sized
-> registers can be accessed.
 > 
-...
+> On 2025/8/22 9:37, Tiffany Yang wrote:
+>> There isn't yet a clear way to identify a set of "lost" time that
+>> everyone (or at least a wider group of users) cares about. However,
+>> users can perform some delay accounting by iterating over components of
+>> interest. This patch allows cgroup v2 freezing time to be one of those
+>> components.
+>>
+>> Track the cumulative time that each v2 cgroup spends freezing and expose
+>> it to userland via a new local stat file in cgroupfs. Thank you to
+>> Michal, who provided the ASCII art in the updated documentation.
+>>
+>> To access this value:
+>>   $ mkdir /sys/fs/cgroup/test
+>>   $ cat /sys/fs/cgroup/test/cgroup.stat.local
+>>   freeze_time_total 0
+>>
+>> Ensure consistent freeze time reads with freeze_seq, a per-cgroup
+>> sequence counter. Writes are serialized using the css_set_lock.
+>>
+>> Signed-off-by: Tiffany Yang <ynaffit@google.com>
+>> Cc: Tejun Heo <tj@kernel.org>
+>> Cc: Michal Koutný <mkoutny@suse.com>
+>> ---
+>> v3 -> v4:
+>> * Replace "freeze_time_total" with "frozen" and expose stats via
+>>   cgroup.stat.local, as recommended by Tejun.
+>> * Use the same timestamp when freezing/unfreezing a cgroup as its
+>>   descendants, as suggested by Michal.
+>>
+>> v2 -> v3:
+>> * Use seqcount along with css_set_lock to guard freeze time accesses, as
+>>   suggested by Michal.
+>>
+>> v1 -> v2:
+>> * Track per-cgroup freezing time instead of per-task frozen time, as
+>>   suggested by Tejun.
+>> ---
+>>  Documentation/admin-guide/cgroup-v2.rst | 18 ++++++++++++++++
+>>  include/linux/cgroup-defs.h             | 17 +++++++++++++++
+>>  kernel/cgroup/cgroup.c                  | 28 +++++++++++++++++++++++++
+>>  kernel/cgroup/freezer.c                 | 16 ++++++++++----
+>>  4 files changed, 75 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+>> index 51c0bc4c2dc5..a1e3d431974c 100644
+>> --- a/Documentation/admin-guide/cgroup-v2.rst
+>> +++ b/Documentation/admin-guide/cgroup-v2.rst
+>> @@ -1001,6 +1001,24 @@ All cgroup core files are prefixed with "cgroup."
+>>  		Total number of dying cgroup subsystems (e.g. memory
+>>  		cgroup) at and beneath the current cgroup.
+>>  
+>> +  cgroup.stat.local
+>> +	A read-only flat-keyed file which exists in non-root cgroups.
+>> +	The following entry is defined:
+>> +
+>> +	  frozen_usec
+>> +		Cumulative time that this cgroup has spent between freezing and
+>> +		thawing, regardless of whether by self or ancestor groups.
+>> +		NB: (not) reaching "frozen" state is not accounted here.
+>> +
+>> +		Using the following ASCII representation of a cgroup's freezer
+>> +		state, ::
+>> +
+>> +			       1    _____
+>> +			frozen 0 __/     \__
+>> +			          ab    cd
+>> +
+>> +		the duration being measured is the span between a and c.
+>> +
+>>    cgroup.freeze
+>>  	A read-write single value file which exists on non-root cgroups.
+>>  	Allowed values are "0" and "1". The default is "0".
+>> diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+>> index 6b93a64115fe..539c64eeef38 100644
+>> --- a/include/linux/cgroup-defs.h
+>> +++ b/include/linux/cgroup-defs.h
+>> @@ -433,6 +433,23 @@ struct cgroup_freezer_state {
+>>  	 * frozen, SIGSTOPped, and PTRACEd.
+>>  	 */
+>>  	int nr_frozen_tasks;
+>> +
+>> +	/* Freeze time data consistency protection */
+>> +	seqcount_t freeze_seq;
+>> +
+>> +	/*
+>> +	 * Most recent time the cgroup was requested to freeze.
+>> +	 * Accesses guarded by freeze_seq counter. Writes serialized
+>> +	 * by css_set_lock.
+>> +	 */
+>> +	u64 freeze_start_nsec;
+>> +
+>> +	/*
+>> +	 * Total duration the cgroup has spent freezing.
+>> +	 * Accesses guarded by freeze_seq counter. Writes serialized
+>> +	 * by css_set_lock.
+>> +	 */
+>> +	u64 frozen_nsec;
+>>  };
+>>  
+>>  struct cgroup {
+>> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+>> index 312c6a8b55bb..ab096b884bbc 100644
+>> --- a/kernel/cgroup/cgroup.c
+>> +++ b/kernel/cgroup/cgroup.c
+>> @@ -3763,6 +3763,27 @@ static int cgroup_stat_show(struct seq_file *seq, void *v)
+>>  	return 0;
+>>  }
+>>  
+>> +static int cgroup_core_local_stat_show(struct seq_file *seq, void *v)
+>> +{
+>> +	struct cgroup *cgrp = seq_css(seq)->cgroup;
+>> +	unsigned int sequence;
+>> +	u64 freeze_time;
+>> +
+>> +	do {
+>> +		sequence = read_seqcount_begin(&cgrp->freezer.freeze_seq);
+>> +		freeze_time = cgrp->freezer.frozen_nsec;
+>> +		/* Add in current freezer interval if the cgroup is freezing. */
+>> +		if (test_bit(CGRP_FREEZE, &cgrp->flags))
+>> +			freeze_time += (ktime_get_ns() -
+>> +					cgrp->freezer.freeze_start_nsec);
+>> +	} while (read_seqcount_retry(&cgrp->freezer.freeze_seq, sequence));
+>> +
+>> +	seq_printf(seq, "frozen_usec %llu\n",
+>> +		   (unsigned long long) freeze_time / NSEC_PER_USEC);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  #ifdef CONFIG_CGROUP_SCHED
+>>  /**
+>>   * cgroup_tryget_css - try to get a cgroup's css for the specified subsystem
+>> @@ -5354,6 +5375,11 @@ static struct cftype cgroup_base_files[] = {
+>>  		.name = "cgroup.stat",
+>>  		.seq_show = cgroup_stat_show,
+>>  	},
+>> +	{
+>> +		.name = "cgroup.stat.local",
+>> +		.flags = CFTYPE_NOT_ON_ROOT,
+>> +		.seq_show = cgroup_core_local_stat_show,
+>> +	},
+>>  	{
+>>  		.name = "cgroup.freeze",
+>>  		.flags = CFTYPE_NOT_ON_ROOT,
+>> @@ -5763,6 +5789,7 @@ static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,
+>>  	 * if the parent has to be frozen, the child has too.
+>>  	 */
+>>  	cgrp->freezer.e_freeze = parent->freezer.e_freeze;
+>> +	seqcount_init(&cgrp->freezer.freeze_seq);
+>>  	if (cgrp->freezer.e_freeze) {
+>>  		/*
+>>  		 * Set the CGRP_FREEZE flag, so when a process will be
+>> @@ -5771,6 +5798,7 @@ static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,
+>>  		 * consider it frozen immediately.
+>>  		 */
+>>  		set_bit(CGRP_FREEZE, &cgrp->flags);
+>> +		cgrp->freezer.freeze_start_nsec = ktime_get_ns();
+>>  		set_bit(CGRP_FROZEN, &cgrp->flags);
+>>  	}
+>>  
+>> diff --git a/kernel/cgroup/freezer.c b/kernel/cgroup/freezer.c
+>> index bf1690a167dd..6c18854bff34 100644
+>> --- a/kernel/cgroup/freezer.c
+>> +++ b/kernel/cgroup/freezer.c
+>> @@ -171,7 +171,7 @@ static void cgroup_freeze_task(struct task_struct *task, bool freeze)
+>>  /*
+>>   * Freeze or unfreeze all tasks in the given cgroup.
+>>   */
+>> -static void cgroup_do_freeze(struct cgroup *cgrp, bool freeze)
+>> +static void cgroup_do_freeze(struct cgroup *cgrp, bool freeze, u64 ts_nsec)
+>>  {
+>>  	struct css_task_iter it;
+>>  	struct task_struct *task;
+>> @@ -179,10 +179,16 @@ static void cgroup_do_freeze(struct cgroup *cgrp, bool freeze)
+>>  	lockdep_assert_held(&cgroup_mutex);
+>>  
+>>  	spin_lock_irq(&css_set_lock);
+>> -	if (freeze)
+>> +	write_seqcount_begin(&cgrp->freezer.freeze_seq);
+>> +	if (freeze) {
+>>  		set_bit(CGRP_FREEZE, &cgrp->flags);
+>> -	else
+>> +		cgrp->freezer.freeze_start_nsec = ts_nsec;
+>> +	} else {
+>>  		clear_bit(CGRP_FREEZE, &cgrp->flags);
+>> +		cgrp->freezer.frozen_nsec += (ts_nsec -
+>> +			cgrp->freezer.freeze_start_nsec);
+>> +	}
+>> +	write_seqcount_end(&cgrp->freezer.freeze_seq);
+>>  	spin_unlock_irq(&css_set_lock);
+>>
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  Documentation/virt/kvm/api.rst | 117 +++++++++++++++++++++++++++++------------
->  1 file changed, 82 insertions(+), 35 deletions(-)
+> Hello Tiffany,
 > 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 6aa40ee05a4a..71f46b342641 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
+> I wanted to check if there are any specific considerations regarding how we should input the ts_nsec
+> value.
+> 
+> Would it be possible to define this directly within the cgroup_do_freeze function rather than
+> passing it as a parameter? This approach might simplify the implementation and potentially improve
+> timing accuracy when it have lots of descendants.
+> 
 
-> @@ -2600,12 +2600,12 @@ Specifically:
->    0x6020 0000 0010 00d5 FPCR        32  fp_regs.fpcr
->  ======================= ========= ===== =======================================
->  
-> -.. [1] These encodings are not accepted for SVE-enabled vcpus.  See
-> -       :ref:`KVM_ARM_VCPU_INIT`.
-> +.. [1] These encodings are not accepted for SVE enabled vcpus.  See
+I revisited v3, and this was Michal's point.
+	p
+     /  |  \
+    1  ...  n
+When we freeze the parent group p, is it expected that all descendant cgroups (1 to n) should share
+the same frozen timestamp?
 
-                                               SVE-enabled
-was good.
-
-> +       :ref:`KVM_ARM_VCPU_INIT`.  They are also not accepted when SME is
-> +       enabled without SVE and the vcpu is in streaming mode.
->  
-
-> @@ -2665,19 +2675,25 @@ follows::
->  	/* Vector length vq * 16 bytes not supported */
->  
->  .. [2] The maximum value vq for which the above condition is true is
-> -       max_vq.  This is the maximum vector length available to the guest on
-> -       this vcpu, and determines which register slices are visible through
-> -       this ioctl interface.
-> +       max_vq.  This is the maximum vector length currently available to
-> +       the guest on this vcpu, and determines which register slices are
-> +       visible through this ioctl interface.
-> +
-> +       If SME is supported then the max_vq used for the Z and P registers
-> +       then while SVCR.SM is 1 this vector length will be the maximum SME
-
-I'm having trouble parsing the 2 lines above.
-
-> +       vector length available for the guest, otherwise it will be the
-> +       maximum SVE vector length available.
->  
->  (See Documentation/arch/arm64/sve.rst for an explanation of the "vq"
->  nomenclature.)
->  
-
-> @@ -3520,7 +3537,7 @@ Possible features:
->  	        initial value of this pseudo-register indicates the best set of
->  	        vector lengths possible for a vcpu on this host.
->  
-> -	   * Before KVM_ARM_VCPU_FINALIZE(KVM_ARM_VCPU_SVE):
-> +	   * Before KVM_ARM_VCPU_FINALIZE(KVM_ARM_VCPU_VEC}):
-
-		Why the inserted '}', please?
-
->  
->  	      - KVM_RUN and KVM_GET_REG_LIST are not available;
->  
-> @@ -3533,11 +3550,40 @@ Possible features:
->  	        KVM_SET_ONE_REG, to modify the set of vector lengths available
->  	        for the vcpu.
->  
-> -	   * After KVM_ARM_VCPU_FINALIZE(KVM_ARM_VCPU_SVE):
-> +	   * After KVM_ARM_VCPU_FINALIZE(KVM_ARM_VCPU_VEC):
->  
->  	      - the KVM_REG_ARM64_SVE_VLS pseudo-register is immutable, and can
->  	        no longer be written using KVM_SET_ONE_REG.
->  
-> +	- KVM_ARM_VCPU_SME: Enables SME for the CPU (arm64 only).
-> +	  Depends on KVM_CAP_ARM_SME.
-> +	  Requires KVM_ARM_VCPU_FINALIZE(KVM_ARM_VCPU_VEC):
-> +
-> +	   * After KVM_ARM_VCPU_INIT:
-> +
-> +	      - KVM_REG_ARM64_SME_VLS may be read using KVM_GET_ONE_REG: the
-> +	        initial value of this pseudo-register indicates the best set of
-> +	        vector lengths possible for a vcpu on this host.
-> +
-> +	   * Before KVM_ARM_VCPU_FINALIZE(KVM_ARM_VCPU_VEC}):
-
-	ditto: inserted '}'
-
-> +
-> +	      - KVM_RUN and KVM_GET_REG_LIST are not available;
-> +
-> +	      - KVM_GET_ONE_REG and KVM_SET_ONE_REG cannot be used to access
-> +	        the scalable architectural SVE registers
-> +	        KVM_REG_ARM64_SVE_ZREG(), KVM_REG_ARM64_SVE_PREG() or
-> +	        KVM_REG_ARM64_SVE_FFR, the matrix register
-> +		KVM_REG_ARM64_SME_ZA() or the LUT register KVM_REG_ARM64_ZT();
-> +
-> +	      - KVM_REG_ARM64_SME_VLS may optionally be written using
-> +	        KVM_SET_ONE_REG, to modify the set of vector lengths available
-> +	        for the vcpu.
-> +
-> +	   * After KVM_ARM_VCPU_FINALIZE(KVM_ARM_VCPU_VEC):
+If the cgroup tree structure is stable, the exact frozen time may not be really matter. However, if
+the tree is not stable, obtaining the same frozen time is acceptable?
 
 -- 
-~Randy
+Best regards,
+Ridong
 
 
