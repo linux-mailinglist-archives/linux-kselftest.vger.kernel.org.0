@@ -1,91 +1,91 @@
-Return-Path: <linux-kselftest+bounces-39730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 795A6B32423
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 23:25:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2032B32497
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 23:33:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 464CB606890
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 21:25:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A8591D23A3D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 21:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894AC2E2EE5;
-	Fri, 22 Aug 2025 21:25:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E069F3376BD;
+	Fri, 22 Aug 2025 21:27:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kONTZkki"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AkeRbb3H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA01027780C;
-	Fri, 22 Aug 2025 21:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77085334375;
+	Fri, 22 Aug 2025 21:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755897948; cv=none; b=NmKTiOBiTth0kM9Kjr5jhuBUr0lRV9BI14LhhegaFeyWQa29Cp7/j+MSrDCXlXz6sVskoeMRPxzp8favRiqxx7e7miG7ArvNvfru+q1MgwLHND0L6uiCN5r3tWJbgs61rxybQ0t6aE0Z8Bo8nMnSlwjkFHGz6e38Q7fMCbIQ/1w=
+	t=1755898054; cv=none; b=NhXlQk0qsxV7pWWtFc/ueK9d+iM2c6EvI9sLNTPxCA70dolprWOwcQhjT0AvaEu/WyGuibE+eKyYm93IvJhG0yvAiCRGOw3gJkbp12X8ADSCQORdHMntbK0ooOp5IMp8f6vmZdDit48N4Ma5IszILxRXsCGePNfWxLi7T2v5Cbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755897948; c=relaxed/simple;
-	bh=PyEJE4lX8bJRA4X2yjT0Huc+ZpwR/rAt/m/T/q1s4Qc=;
+	s=arc-20240116; t=1755898054; c=relaxed/simple;
+	bh=NgvM1y6eKAact5srhZSWA6nq5hfv7jYa6jFxeGzxTvg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n/rD0fqJv1EH/KskUwaTaeIj3jYdSP7T8HooiQRLEIXPfDu41YbYUy8DJf4cs3Fca0jixrcqAma7KHaRr+aFsl+i0WqUbSRtDnYlX6RVzc5Vh2Ins0bpWkBnk6Sk2uUutb/xweuUMv1VyDJXaxkIrQQrfRNpl9JW3MiqiMsEIuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kONTZkki; arc=none smtp.client-ip=209.85.214.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q3427Mi503Zqx1by1jCcHlXuvG0f8dK8i1OQgZxqDlZMUdbLZa7iPnz8eWXmwfxYe8bXUgmbz7Wl4pl6fPPRx3JIdUJ9WogUNGB2k+zH2KnhDxKS3LTZpzknD1KCW/RO3yQMNZB/CmMC1I0tpZwqglurMa3lUXpzduQ1oV66bMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AkeRbb3H; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-24457f581aeso19651115ad.0;
-        Fri, 22 Aug 2025 14:25:46 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-76e2e6038cfso2959837b3a.0;
+        Fri, 22 Aug 2025 14:27:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755897946; x=1756502746; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755898053; x=1756502853; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=noPk3pDZKA1ESTkZuU1/asvypuJ7e5/Eo8H7HZAECl0=;
-        b=kONTZkki44PC2urLVNCXcs+gwsgpXsH7OkHAzbtHkoSbfBmIPB8sArXpSxVV5iErQ9
-         vabu/YNayhaTXvbx1tjHKmouwM1ZRFlX8KeVoFcraYqgyhU5bJBUQt+NiZ556rVUfPFH
-         BaJ4SkLiZyYgnlo2F05j/DrB7bZ0b0pleWjj/9y22fEksJg3Cn/Ip5L0z1p/S+jau0fv
-         TDGUsnZDtWqc68wbnPgWbXyL9jH/UBKCVsp3Pk9nLLSH1CmVp3sUtI5mnQYVddEIdlOH
-         AE/1zaf08mQKVlplga8j0ypuMkaU/syxkzzKyT5Nvkh/VxzJpn3R6FlIrTitZmaVJSvK
-         2P9A==
+        bh=qc5aKUbyHXzB+ReBgimqpIrI93bwlyDaCPI5BMn2Uj4=;
+        b=AkeRbb3H2g5BreBlIidTV+O7cEo1S2UdrVK6zHgisSLmjyvNuOR6X/kWliyNNaYKsT
+         cNaI2Is3fs9CWbn5rX7K7bopLzuwuqK15P72ifR1h6Erar8DtepbNGhj6KkcNU6m7fJV
+         t3zgSt+YS7Y5jZaDpLbMto+Ifkj0FCC6EJY5UAeGDCoFkgSD7H///6MWWFbswWunoOfA
+         khWRPYxF5/BOKyXRsTy1uySY1fyxwdeHxcA5bISlw5yFPsYz7QvGdN9G8c+fmwDq04fF
+         4VPbZHRKJq7ElXK/rO2rqP7u+4aSWtiAfFtKwC95fjZH8W/zjrD5vniXV0ZDSoDzwbW6
+         k05A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755897946; x=1756502746;
+        d=1e100.net; s=20230601; t=1755898053; x=1756502853;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=noPk3pDZKA1ESTkZuU1/asvypuJ7e5/Eo8H7HZAECl0=;
-        b=mVX4A7qI8y+tJvITTqRMntAClA2uzQJlE1kqQ24j+yGevFW4njOvpsmfLmvecswkXz
-         ZVYXq4gGAfHmx+m6zu9QuY2egUDXswnF/NwxC9dQts4uEGgqcxjjhvjuuZprtBSyGkL1
-         DkHjdx9lxGbjBkbMipkAwfpGrnV+0kzZVI8s7WkzfkJJpImStyGXcN3+Ud537Wh7qlyW
-         S7UlM0eZ1qAYPjxgfOvUjCMBq0d1hG3Fl2mvRApNnsk1goptC7SU5OXmolxLP/I9AjXa
-         j/X/LGhwJqDwec/WXhKiJ2lI8Gq/cNMWlskd6XJrBKYjFY3nptvG0J+uVmhS6pWLQI5W
-         s0Zw==
-X-Forwarded-Encrypted: i=1; AJvYcCWqFZsdUkojLv53hFKxRpo9ko8u8lTXfx4dVeIJEZmp1Q2vyr04LdgK6AP8jmiuckbFgBdBMfx3@vger.kernel.org, AJvYcCXGz7wr/PN8+X+0tQVIW4d4VgIhQM/JjLXdchSbtfjcNZc3vxSSmjo1+FG+Fg1vwqUGob6ZHDq7ESNCDognIz4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIrcl2WcKA8DVddlnB3x/xuj4DVEs2/9f/YbTi8HttmUy1fAJe
-	/p9zI2eptb5J6hhICqXhJS6aeFxJpDiitCycxVs74fRLPUWdVxQKsGE=
-X-Gm-Gg: ASbGncvPB6ZAoSS9AGuRS9//0Rv4VAAgO0KhCoYHAq/DNfmzgNHNXRFTjUl95e2HoH8
-	4eKtquCZs5nxl83fl/fhvl5p3KbWGgI+xmg7XoKbj+/JyB6IJ9AijhWGQNa7zn3u+/rFM9d2fuE
-	YNUByQ42XiAokoSku5r2nNCZItfCDWQdKYIcKeNI9LhRGyjsLltP8Ks8wYsE2psia+BayJI/lKg
-	l4BQY5MNgp02fZIbtSwdWKuzc4m3ejhufwYYeE7jfQ+9xCpCMk1f/y3+lygHZ1Xsa+nxWQusZbU
-	QiNhtmlzHab6cXLaj7mP4joZeQOJqJSA1FBs0WU4TM1uN8feArcs/mxhQYGOUrsMHSSmTK6gUth
-	i5XLRdMSV1MoIM4H2DC/pYfV/ZmgdOoOXQSF7XFwAN8IB/prh0YaCnudTg7srfMSBvjr5cZNef1
-	2YmKZ9MqX48u4x/2xfKfWIW5WizKuLxnCoGFLecpTc4nLXKzY+f5gsvkv5v1vUKzyZ6EzXA0576
-	4PK
-X-Google-Smtp-Source: AGHT+IEGDqW6+HTW2RzMWj5gmi3mF4Tu6FZIcKtkuS/kUYAvwr8K1mdAa0goBkBIPSSKpl71Hq1TmA==
-X-Received: by 2002:a17:903:11c5:b0:240:3b9e:dd65 with SMTP id d9443c01a7336-2462ef44573mr54642815ad.38.1755897945870;
-        Fri, 22 Aug 2025 14:25:45 -0700 (PDT)
+        bh=qc5aKUbyHXzB+ReBgimqpIrI93bwlyDaCPI5BMn2Uj4=;
+        b=pNm4DItNHxMQ8kLtVpHC8by7FV3tv4gRSR1M7rmLich32cef9TfR2hCuyAqoVx2LQX
+         MSn8/ZeL1R/Wl7HrCiztohUDQoug3OhZE6Bq2167TKLFa9O+wlDK7WUdUF0IKuIijbaU
+         dlJmByplbX5y8pD5tudOgTtP9ojB+U4AHwG/L6ugPBMr43Jllgh2ZZWEWXwTsCvzkPQI
+         ygxPEQMSvmvPWGQrQZa0Eta3W6NBdaKL2jVnJmifmEVX1mCIpzUFUpXZut0Dr9YdrL66
+         HrC71NBmlDWN5D8b4kHZ1MOl16pNaUDLKPMO9VCJyqjodMVZB98SULJQXlN8u2LRtmnM
+         uI2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUfi88R5uoOGu7o7D9SXMqTWpGC++Od6ysXYRBtLAgKNKeljtyqnYXJCGDJjIFivrs22X6jhjcvk9kI/oS3pTE=@vger.kernel.org, AJvYcCUti/bks5hRB/NSFbXndRidUzjvg2mPNrfYTKcsN5/zEl/+nAmzbYkLlDifJUl6Ts5aiKbM85ql@vger.kernel.org
+X-Gm-Message-State: AOJu0YzP8NS9g7hEal+X4Ac4wy8QcpH/2PinyiNzibSauWmGkG1yG87y
+	ZCxNabT0YZ9vMud8ktuvFYu3VJNAuV94f0lS+EEXOK30qZe64SnTEwo=
+X-Gm-Gg: ASbGncv0v/YDqyFfbEwOJkbxBWRXCpU86VkfdB0unQCaLfvcDAuGCfVU7A1+hqpRNdB
+	aCzhnJtIzj7WgAtZ50vTrIdvzfZgOFzga9++HNsEPBPgnb/tWgf4gr8W1I9iOnWYQyPbYe84pls
+	NJu53Gvd1XHUDs36zPDPfWjJkqhljjDVwnPQIpJEcM6k46cuGmC0GcEK6h4tsDKVjS4m6fFLQJN
+	9CDV62iSiK5f5MEILXQiK2gYKS1sKIItPUkDeOMYf+ZGUe3D2BkGFHsHuyUUGuMzv3FoCAt9Bm7
+	ZIk0aYw+hFxfumHY4Cfjd2Puocuk3a1dgEU6aQ7B940NS0Ot539IUO/u2v75Nc4IZJFCuiLZJwM
+	rfyU/P1YbM5VedYp43gq1xeTzRGcmCpo/BiDGElfBpK/M2+WzXiVzQsf3RwMcCcXLXWBbA3ny0K
+	IQYCrCIxYX+NZdxZOmUSMvVBXWWUmtT8UiALrEqBtpKavOJcIMvlGGHp/UbOVB5BpvCuXGLA/Ch
+	MQp
+X-Google-Smtp-Source: AGHT+IFcRAEgnT2HNaZdwXSF3E3InxI/riwDq92jZH1LrJ/Inxw9lTA2ibF+EylSfTnl3Cly917mig==
+X-Received: by 2002:a05:6a20:12c8:b0:240:2371:d003 with SMTP id adf61e73a8af0-24340cd311cmr6435779637.28.1755898052647;
+        Fri, 22 Aug 2025 14:27:32 -0700 (PDT)
 Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2466885efc8sm5088955ad.90.2025.08.22.14.25.45
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b49cb8afc11sm651400a12.17.2025.08.22.14.27.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Aug 2025 14:25:45 -0700 (PDT)
-Date: Fri, 22 Aug 2025 14:25:45 -0700
+        Fri, 22 Aug 2025 14:27:32 -0700 (PDT)
+Date: Fri, 22 Aug 2025 14:27:31 -0700
 From: Stanislav Fomichev <stfomichev@gmail.com>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
 	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
 	almasrymina@google.com, sdf@fomichev.me, joe@dama.to,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/4] selftests: drv-net: ncdevmem: remove use of
- error()
-Message-ID: <aKjgWZnfWShtvi8m@mini-arch>
+Subject: Re: [PATCH net-next 2/4] selftests: drv-net: ncdevmem: save IDs of
+ flow rules we added
+Message-ID: <aKjgw1R9Zpl7nCKZ@mini-arch>
 References: <20250822200052.1675613-1-kuba@kernel.org>
- <20250822200052.1675613-2-kuba@kernel.org>
+ <20250822200052.1675613-3-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,189 +94,17 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250822200052.1675613-2-kuba@kernel.org>
+In-Reply-To: <20250822200052.1675613-3-kuba@kernel.org>
 
 On 08/22, Jakub Kicinski wrote:
-> Using error() makes it impossible for callers to unwind their
-> changes. Replace error() calls with proper error handling.
+> In prep for more selective resetting of ntuple filters
+> try to save the rule IDs to a table.
 > 
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
+This seems ok to unblock nipa cleanup, but at this point why not copy-paste
+proper ioctl from kperf? https://github.com/facebookexperimental/kperf/blob/main/devmem.c#L119
+(seems less complicated than popen)
+
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-
-> ---
->  .../selftests/drivers/net/hw/ncdevmem.c       | 528 ++++++++++++------
->  1 file changed, 364 insertions(+), 164 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> index 71961a7688e6..e75adfed33ac 100644
-> --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> @@ -115,6 +115,21 @@ struct memory_provider {
->  				   size_t off, int n);
->  };
->  
-> +static void pr_err(const char *fmt, ...)
-> +{
-> +	va_list args;
-> +
-> +	fprintf(stderr, "%s: ", TEST_PREFIX);
-> +
-> +	va_start(args, fmt);
-> +	vfprintf(stderr, fmt, args);
-> +	va_end(args);
-> +
-> +	if (errno != 0)
-> +		fprintf(stderr, ": %s", strerror(errno));
-> +	fprintf(stderr, "\n");
-> +}
-> +
->  static struct memory_buffer *udmabuf_alloc(size_t size)
->  {
->  	struct udmabuf_create create;
-> @@ -123,27 +138,33 @@ static struct memory_buffer *udmabuf_alloc(size_t size)
->  
->  	ctx = malloc(sizeof(*ctx));
->  	if (!ctx)
-> -		error(1, ENOMEM, "malloc failed");
-> +		return NULL;
->  
->  	ctx->size = size;
->  
->  	ctx->devfd = open("/dev/udmabuf", O_RDWR);
-> -	if (ctx->devfd < 0)
-> -		error(1, errno,
-> -		      "%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
-> -		      TEST_PREFIX);
-> +	if (ctx->devfd < 0) {
-> +		pr_err("[skip,no-udmabuf: Unable to access DMA buffer device file]");
-> +		goto err_free_ctx;
-> +	}
->  
->  	ctx->memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-> -	if (ctx->memfd < 0)
-> -		error(1, errno, "%s: [skip,no-memfd]\n", TEST_PREFIX);
-> +	if (ctx->memfd < 0) {
-> +		pr_err("[skip,no-memfd]");
-> +		goto err_close_dev;
-> +	}
->  
->  	ret = fcntl(ctx->memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-> -	if (ret < 0)
-> -		error(1, errno, "%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-> +	if (ret < 0) {
-> +		pr_err("[skip,fcntl-add-seals]");
-> +		goto err_close_memfd;
-> +	}
->  
->  	ret = ftruncate(ctx->memfd, size);
-> -	if (ret == -1)
-> -		error(1, errno, "%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
-> +	if (ret == -1) {
-> +		pr_err("[FAIL,memfd-truncate]");
-> +		goto err_close_memfd;
-> +	}
->  
->  	memset(&create, 0, sizeof(create));
->  
-> @@ -151,15 +172,29 @@ static struct memory_buffer *udmabuf_alloc(size_t size)
->  	create.offset = 0;
->  	create.size = size;
->  	ctx->fd = ioctl(ctx->devfd, UDMABUF_CREATE, &create);
-> -	if (ctx->fd < 0)
-> -		error(1, errno, "%s: [FAIL, create udmabuf]\n", TEST_PREFIX);
-> +	if (ctx->fd < 0) {
-> +		pr_err("[FAIL, create udmabuf]");
-> +		goto err_close_fd;
-> +	}
->  
->  	ctx->buf_mem = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED,
->  			    ctx->fd, 0);
-> -	if (ctx->buf_mem == MAP_FAILED)
-> -		error(1, errno, "%s: [FAIL, map udmabuf]\n", TEST_PREFIX);
-> +	if (ctx->buf_mem == MAP_FAILED) {
-> +		pr_err("[FAIL, map udmabuf]");
-> +		goto err_close_fd;
-> +	}
->  
->  	return ctx;
-> +
-> +err_close_fd:
-> +	close(ctx->fd);
-> +err_close_memfd:
-> +	close(ctx->memfd);
-> +err_close_dev:
-> +	close(ctx->devfd);
-> +err_free_ctx:
-> +	free(ctx);
-> +	return NULL;
->  }
->  
->  static void udmabuf_free(struct memory_buffer *ctx)
-> @@ -217,7 +252,7 @@ static void print_nonzero_bytes(void *ptr, size_t size)
->  		putchar(p[i]);
->  }
->  
-> -void validate_buffer(void *line, size_t size)
-> +int validate_buffer(void *line, size_t size)
->  {
->  	static unsigned char seed = 1;
->  	unsigned char *ptr = line;
-> @@ -232,8 +267,10 @@ void validate_buffer(void *line, size_t size)
->  				"Failed validation: expected=%u, actual=%u, index=%lu\n",
->  				expected, ptr[i], i);
->  			errors++;
-> -			if (errors > 20)
-> -				error(1, 0, "validation failed.");
-> +			if (errors > 20) {
-> +				pr_err("validation failed");
-> +				return -1;
-> +			}
->  		}
->  		seed++;
->  		if (seed == do_validation)
-> @@ -241,6 +278,7 @@ void validate_buffer(void *line, size_t size)
->  	}
->  
->  	fprintf(stdout, "Validated buffer\n");
-> +	return 0;
->  }
->  
->  static int rxq_num(int ifindex)
-> @@ -279,7 +317,7 @@ static int rxq_num(int ifindex)
->  		system(command);                                        \
->  	})
->  
-> -static int reset_flow_steering(void)
-> +static void reset_flow_steering(void)
->  {
->  	/* Depending on the NIC, toggling ntuple off and on might not
->  	 * be allowed. Additionally, attempting to delete existing filters
-> @@ -292,7 +330,6 @@ static int reset_flow_steering(void)
->  	run_command(
->  		"ethtool -n %s | grep 'Filter:' | awk '{print $2}' | xargs -n1 ethtool -N %s delete >&2",
->  		ifname, ifname);
-> -	return 0;
->  }
->  
->  static const char *tcp_data_split_str(int val)
-> @@ -354,6 +391,11 @@ static int configure_rss(void)
->  	return run_command("ethtool -X %s equal %d >&2", ifname, start_queue);
->  }
->  
-> +static void reset_rss(void)
-> +{
-> +	run_command("ethtool -X %s default >&2", ifname, start_queue);
-> +}
-> +
->  static int configure_channels(unsigned int rx, unsigned int tx)
->  {
->  	struct ethtool_channels_get_req *gchan;
-> @@ -479,6 +521,7 @@ static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
->  
->  	*ys = ynl_sock_create(&ynl_netdev_family, &yerr);
->  	if (!*ys) {
-> +		netdev_queue_id_free(queues);
-
-Funny how you spotted this.. Ownership of these is complicated with ynl :-( 
 
