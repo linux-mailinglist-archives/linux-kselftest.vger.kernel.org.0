@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-39668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75E5BB311AF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 10:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4DC2B311B2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 10:25:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D7E35C790C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 08:24:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2638D5C6C6D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 08:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5CD2EBDCD;
-	Fri, 22 Aug 2025 08:23:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A93C2EDD45;
+	Fri, 22 Aug 2025 08:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Mo3SXVoQ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GVWIKBh9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B07E2ED156;
-	Fri, 22 Aug 2025 08:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3CB2EBDD2;
+	Fri, 22 Aug 2025 08:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755851021; cv=none; b=bmPAxeB+SviGhLemYlUlm/k4iuBRpWT6w6jBt/HBdwBw9WF9EUUuZ4iDbtXYp2r9XQL3VolgXinLLRKMABFa7ggClsVbO3YAMoZbaE4EjUtPr0Lp9NGTcqZ6o9iCEKCQFY+8aet0agknGABDv1VsXmMlqT/3AT4bnCLb2SKPLA0=
+	t=1755851026; cv=none; b=PcPxXr2S2JKoc0mnxbwKmc85nFcPS5tZqopeBxwXmkkyEnTLPVZEpb9mmVRn4StrG+bqzVATKP+pa8GaPSNFQBjzGFefu9O0hqTfodEdri1ck+BFCVrFD3q3hb2d1LeSnhVfu6eJIBtKnon+/PnwP6XC7Il3V88KFNY7lkGBSso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755851021; c=relaxed/simple;
-	bh=0jRkmhz63wy9fDzRoFQ6jLTDJnLHcryUWGPCMeOuRPI=;
+	s=arc-20240116; t=1755851026; c=relaxed/simple;
+	bh=W0DS7D8x6Zf79SrfKNqQDnRrrEJR/lLnafAee6VW+oM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CbCz+nBa1SBRIGm2hh8n6i5aXJjpwil14HIT+gRx9AqK6OfI+JZb6c3An5ChL1nyU40/pI4r1Z69xPUEi+Q/4tVWM1pj+QgOK6Az56yti5iFzBhemmYw9B0mlk/na5xV/3QLbV+Pr8je8ztIFQiAG2YrdMCd8bhel70DMNUyIEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Mo3SXVoQ; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=SUZVQrM6enT6UI+AOzJHqi/IcmHWMLzbBnJUYLwcnlFKQHRS7ukpxpZbo4wE6Tnnlj2hoiSs1eNL+l18Jo7Bpv2AMACgWalOuQJjEfVrzZF7a5NosoHj3OdGeU76nqci+BdSoBuqnhA8pAorLbnrksRGGOZ+Rs5Qz3ozzwIbj7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GVWIKBh9; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1755851017;
-	bh=0jRkmhz63wy9fDzRoFQ6jLTDJnLHcryUWGPCMeOuRPI=;
+	s=mail; t=1755851022;
+	bh=W0DS7D8x6Zf79SrfKNqQDnRrrEJR/lLnafAee6VW+oM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Mo3SXVoQX00rreJeQtrS4eVBtHuxZoC8Om/y8ytIGq/Hm+AIS2sawTRGxPwOS96W9
-	 wNBFW/mw/O9sWy7szdGOw8HycqUR4gcMMkN/DhV3XbwxRqMXICTXebJxJwdq3VP+iZ
-	 Sh1f3k96yvxyiCKRHOcXjOl+Dme79Uf7J+1m+/8oHUvKVS+3YI/N5WHO7s7M+6Vn2B
-	 t1cOTldSFakNHnWURgZ7YMM+uFdHevBi57TnfgZ6vNWu+h4NTP4B5sDG6RZCUviId/
-	 hncIEU2TG1qFkdVd3SZCasIs8VCwuDleksbR6kr2GDk1WkZZh9Z3+dLxBd2dyLL/5u
-	 +GqkA+lOGfJPQ==
+	b=GVWIKBh9ihlMBX5Fn+YlBNuJbGSi8GqX9eRPFApnpkkwsiIvyQRMnZLuT10QU66yX
+	 vqg7B2BgPm+cyE4eXy1PKKXWGyxmwD1Jg2uT6JiVg4cvkb3AvnDH+90yOJf+TQfMpX
+	 pnc8q5YXa89TwcxOk+JqIcVrRDTAdwT3giy+dCsRslgj5wpEDWrWQ1RZvYzhwYLqV5
+	 DV8SWsbzu23eM+BaEzNIYOqkmLiX906nxOwrqtiyEhb75zu26rOrHhtnQkBkgCpGMG
+	 0rsvyJHdo7r/+c/tl6aglEfkOKWJaD9KHd8XWbVZNuMYxuScnQrJc8al21Ed3IY3II
+	 QNf+g+gTUTYsg==
 Received: from mt.tail9873f4.ts.net (unknown [103.151.43.82])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2A30817E0458;
-	Fri, 22 Aug 2025 10:23:33 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2AA9717E05F0;
+	Fri, 22 Aug 2025 10:23:38 +0200 (CEST)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Shuah Khan <shuah@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
@@ -79,9 +79,9 @@ To: Shuah Khan <shuah@kernel.org>,
 	kevin.brodsky@arm.com
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v3 7/8] selftests/mm: mark variable unused with macro
-Date: Fri, 22 Aug 2025 13:21:04 +0500
-Message-ID: <20250822082145.4145617-8-usama.anjum@collabora.com>
+Subject: [PATCH v3 8/8] selftests/mm: pkey-helpers: Remove duplicate __maybe_unused
+Date: Fri, 22 Aug 2025 13:21:05 +0500
+Message-ID: <20250822082145.4145617-9-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250822082145.4145617-1-usama.anjum@collabora.com>
 References: <20250822082145.4145617-1-usama.anjum@collabora.com>
@@ -93,29 +93,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use __always_unused macro instead of raw compiler attribute.
+__maybe_unused is now defined in the kselftest.h. Remove from this file
+as its not required.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
 Changes since v2:
 - Introduced in v2
 ---
- tools/testing/selftests/mm/protection_keys.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/mm/pkey-helpers.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-index 6281d4c61b50e..967181bcb4120 100644
---- a/tools/testing/selftests/mm/protection_keys.c
-+++ b/tools/testing/selftests/mm/protection_keys.c
-@@ -1302,7 +1302,7 @@ static void test_mprotect_with_pkey_0(int *ptr, u16 pkey)
+diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+index ea404f80e6cb9..fa15f006fa68c 100644
+--- a/tools/testing/selftests/mm/pkey-helpers.h
++++ b/tools/testing/selftests/mm/pkey-helpers.h
+@@ -84,9 +84,6 @@ extern void abort_hooks(void);
+ #ifndef noinline
+ # define noinline __attribute__((noinline))
+ #endif
+-#ifndef __maybe_unused
+-# define __maybe_unused __attribute__((__unused__))
+-#endif
  
- static void test_ptrace_of_child(int *ptr, u16 pkey)
- {
--	__attribute__((__unused__)) int peek_result;
-+	int __always_unused peek_result;
- 	pid_t child_pid;
- 	void *ignored = 0;
- 	long ret;
+ int sys_pkey_alloc(unsigned long flags, unsigned long init_val);
+ int sys_pkey_free(unsigned long pkey);
 -- 
 2.47.2
 
