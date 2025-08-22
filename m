@@ -1,229 +1,167 @@
-Return-Path: <linux-kselftest+bounces-39687-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39686-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACB6CB31DFC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 17:17:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26EF1B31DAC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 17:11:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA6E4587DD4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 15:10:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14D22B6341B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Aug 2025 15:07:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC4381DE4C4;
-	Fri, 22 Aug 2025 15:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 810791CBEB9;
+	Fri, 22 Aug 2025 15:09:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="TvcZ+Kjv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Prntf9uZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01EC19CC11
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 15:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D54126BFF;
+	Fri, 22 Aug 2025 15:09:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755875416; cv=none; b=KEJOJ8vtMT+rhm/g33pwPooBztsKqDfBdZU4ez4VBijaF17vIPz09WJaGHi1Cp5TY7U0OMlR88jwTwlEt+PtTZR8l+5IQOTFWJIZCqf3E5rE00j0BdEp9k9fWAzsVGhc/QpHXwA+vmdkVpbR6uPLS1rFH7Y82OuRCbyK4V9MyG0=
+	t=1755875365; cv=none; b=sG1qVCcUuLl0KzoCjme+qn/SjinG2+FsBXR1tJsGdR0mn1x+AaCdROW314zE4MZnes8szwv0TAJdEyMoq+El0+C8erf+JGBOhrPtjISPSvym0ueSqPBGPrMHmjzjbTm8zzRXBnks2u6gxre1tUE3hhQNpGn07qJUmdG9ulo+WJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755875416; c=relaxed/simple;
-	bh=Hdq5Ry1Oo1i4/2GBD0dGqX7HHIwg6UOJzlHrNI7JCgw=;
+	s=arc-20240116; t=1755875365; c=relaxed/simple;
+	bh=BbeE+oYVvXyCl/P3cWovjJUaU7WzCVAlNkMT749qO5w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s+xySuzosXy2qF8JJZ1W/R9tskKH+2JL1pJCox6tKlxz2HIyXpDojoqgKrFVUORw4/UTfApwhiky0O2TCfgdkJfhTaMLDXpxFUk4EGn1qeFm3qAnee7wl0xajGhpcRe51yN8IPb1fxeYjF5K68y/hdXkeESBLBEs+XgugK29wvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=TvcZ+Kjv; arc=none smtp.client-ip=45.157.188.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4c7jmv6Yzyz997;
-	Fri, 22 Aug 2025 16:51:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1755874271;
-	bh=zTTfmyqDupOjx6oqqavArctJ4iCrnJ+ZVQgZlvGbaKA=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q/jj4KPmrWxMj7eeEPCEUngVMeh2TTZLGdOvg/dwwvAIOSEw5IIMXIcd91xT5Ynx2blXNERcmKnmG6bn+LF8nT0vo9Md2dfUEF1Xbz3JBLaJbbTkEjX8SGEk9b7EGM0WZbYk+gIHnmF2GuOuGoc6R/quAz/pR972dJ/ZngFA8M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Prntf9uZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC2FC113D0;
+	Fri, 22 Aug 2025 15:09:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755875364;
+	bh=BbeE+oYVvXyCl/P3cWovjJUaU7WzCVAlNkMT749qO5w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TvcZ+Kjv3uiFSzBmD6CV25iFw47KiUlXV6COeYfUKWUrElaR53ZVWrCnbp9ydTekv
-	 6UsvJuVk02SEcKusMSylawRGBOCGBi4Qv9BNyoTgDZPnVA7pj2yrujLWENWoohYZv6
-	 yCsGRC0FUxE07oBZSN53cZxCMXLrRrgGZYhsCVak=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4c7jmt2VbwzFpN;
-	Fri, 22 Aug 2025 16:51:10 +0200 (CEST)
-Date: Fri, 22 Aug 2025 16:51:09 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, gnoack@google.com, 
-	david@redhat.com, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, 
-	vbabka@suse.cz, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, ming.lei@redhat.com, skhan@linuxfoundation.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-mm@kvack.org, netdev@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
-Subject: Re: [PATCH] selftests: centralise maybe-unused definition in
- kselftest.h
-Message-ID: <20250822.Ahno5pong1Ai@digikod.net>
-References: <20250821101159.2238-1-reddybalavignesh9979@gmail.com>
+	b=Prntf9uZKZis/U/bJlHQFXtv4HnPV3FVBr1/P31JtBZdZlx8pNyYQrIV2U1OHL2Ph
+	 KWg0PSoWLWhirFvfgHCyLwMGddND32c/PoybCUWyTY4uJJaWAm3pqSnmsGRF97A6G4
+	 VDGi/p4toQ5nig1708cGRPMAz3wCxoj5eCkSR54XvHPYG/bVMzGFIuTMu74kogSth9
+	 uZBDebwYJugk9IlUMY2oDzjDlJybUXGUDToJl2tsj04xT1jSsHqLJwHeqPJg2mwSqm
+	 1JhNQxwyrU8QnJ30mOJ/Iq/kXqrUNLLTQ0bAe831b6zLWD86rnmkM7tBokSIpXtEvj
+	 XiFVPUzX/IwAA==
+Date: Fri, 22 Aug 2025 18:09:03 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>,
+	Dmitry Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
+	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+	Jens Axboe <axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>,
+	John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com,
+	kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
+	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Marco Elver <elver@google.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+	Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
+	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+Subject: Re: [PATCH RFC 01/35] mm: stop making SPARSEMEM_VMEMMAP
+ user-selectable
+Message-ID: <aKiID8i6dYrlVi5T@kernel.org>
+References: <20250821200701.1329277-1-david@redhat.com>
+ <20250821200701.1329277-2-david@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250821101159.2238-1-reddybalavignesh9979@gmail.com>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20250821200701.1329277-2-david@redhat.com>
 
-On Thu, Aug 21, 2025 at 03:41:59PM +0530, Bala-Vignesh-Reddy wrote:
-> Several selftests subdirectories duplicated the define __maybe_unused,
-> leading to redundant code. Moved to kselftest.h header and removed
-> other definition.
+On Thu, Aug 21, 2025 at 10:06:27PM +0200, David Hildenbrand wrote:
+> In an ideal world, we wouldn't have to deal with SPARSEMEM without
+> SPARSEMEM_VMEMMAP, but in particular for 32bit SPARSEMEM_VMEMMAP is
+> considered too costly and consequently not supported.
 > 
-> This addresses the duplication noted in the proc-pid-vm warning fix
+> However, if an architecture does support SPARSEMEM with
+> SPARSEMEM_VMEMMAP, let's forbid the user to disable VMEMMAP: just
+> like we already do for arm64, s390 and x86.
 > 
-> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> Link:https://lore.kernel.org/lkml/20250820143954.33d95635e504e94df01930d0@linux-foundation.org/
+> So if SPARSEMEM_VMEMMAP is supported, don't allow to use SPARSEMEM without
+> SPARSEMEM_VMEMMAP.
 > 
-> Signed-off-by: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+> This implies that the option to not use SPARSEMEM_VMEMMAP will now be
+> gone for loongarch, powerpc, riscv and sparc. All architectures only
+> enable SPARSEMEM_VMEMMAP with 64bit support, so there should not really
+> be a big downside to using the VMEMMAP (quite the contrary).
+> 
+> This is a preparation for not supporting
+> 
+> (1) folio sizes that exceed a single memory section
+> (2) CMA allocations of non-contiguous page ranges
+> 
+> in SPARSEMEM without SPARSEMEM_VMEMMAP configs, whereby we
+> want to limit possible impact as much as possible (e.g., gigantic hugetlb
+> page allocations suddenly fails).
+> 
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: WANG Xuerui <kernel@xen0n.name>
+> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: Alexandre Ghiti <alex@ghiti.fr>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Andreas Larsson <andreas@gaisler.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Looks good for Landlock:
-
-Acked-by: Mickaël Salaün <mic@digikod.net>
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
 > ---
->  tools/testing/selftests/kselftest.h                    | 4 ++++
->  tools/testing/selftests/landlock/audit.h               | 6 ++----
->  tools/testing/selftests/landlock/common.h              | 4 ----
->  tools/testing/selftests/mm/pkey-helpers.h              | 3 ---
->  tools/testing/selftests/net/psock_lib.h                | 4 ----
->  tools/testing/selftests/perf_events/watermark_signal.c | 2 --
->  tools/testing/selftests/proc/proc-pid-vm.c             | 4 ----
->  tools/testing/selftests/ublk/utils.h                   | 2 --
->  8 files changed, 6 insertions(+), 23 deletions(-)
+>  mm/Kconfig | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-> index c3b6d2604b1e..661d31c4b558 100644
-> --- a/tools/testing/selftests/kselftest.h
-> +++ b/tools/testing/selftests/kselftest.h
-> @@ -92,6 +92,10 @@
->  #endif
->  #define __printf(a, b)   __attribute__((format(printf, a, b)))
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 4108bcd967848..330d0e698ef96 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -439,9 +439,8 @@ config SPARSEMEM_VMEMMAP_ENABLE
+>  	bool
 >  
-> +#ifndef __maybe_unused
-> +#define __maybe_unused __attribute__((__unused__))
-> +#endif
-> +
->  /* counters */
->  struct ksft_count {
->  	unsigned int ksft_pass;
-> diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
-> index b16986aa6442..02fd1393947a 100644
-> --- a/tools/testing/selftests/landlock/audit.h
-> +++ b/tools/testing/selftests/landlock/audit.h
-> @@ -20,14 +20,12 @@
->  #include <sys/time.h>
->  #include <unistd.h>
->  
-> +#include "../kselftest.h"
-> +
->  #ifndef ARRAY_SIZE
->  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
->  #endif
->  
-> -#ifndef __maybe_unused
-> -#define __maybe_unused __attribute__((__unused__))
-> -#endif
-> -
->  #define REGEX_LANDLOCK_PREFIX "^audit([0-9.:]\\+): domain=\\([0-9a-f]\\+\\)"
->  
->  struct audit_filter {
-> diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
-> index 88a3c78f5d98..9acecae36f51 100644
-> --- a/tools/testing/selftests/landlock/common.h
-> +++ b/tools/testing/selftests/landlock/common.h
-> @@ -22,10 +22,6 @@
->  
->  #define TMP_DIR "tmp"
->  
-> -#ifndef __maybe_unused
-> -#define __maybe_unused __attribute__((__unused__))
-> -#endif
-> -
-
-We could explicitly include kselftest.h in this file, but it's already
-included by kselftest_harness.h, so that's OK.
-
->  /* TEST_F_FORK() should not be used for new tests. */
->  #define TEST_F_FORK(fixture_name, test_name) TEST_F(fixture_name, test_name)
->  
-> diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
-> index ea404f80e6cb..fa15f006fa68 100644
-> --- a/tools/testing/selftests/mm/pkey-helpers.h
-> +++ b/tools/testing/selftests/mm/pkey-helpers.h
-> @@ -84,9 +84,6 @@ extern void abort_hooks(void);
->  #ifndef noinline
->  # define noinline __attribute__((noinline))
->  #endif
-> -#ifndef __maybe_unused
-> -# define __maybe_unused __attribute__((__unused__))
-> -#endif
->  
->  int sys_pkey_alloc(unsigned long flags, unsigned long init_val);
->  int sys_pkey_free(unsigned long pkey);
-> diff --git a/tools/testing/selftests/net/psock_lib.h b/tools/testing/selftests/net/psock_lib.h
-> index 6e4fef560873..067265b0a554 100644
-> --- a/tools/testing/selftests/net/psock_lib.h
-> +++ b/tools/testing/selftests/net/psock_lib.h
-> @@ -22,10 +22,6 @@
->  
->  #define PORT_BASE			8000
->  
-> -#ifndef __maybe_unused
-> -# define __maybe_unused		__attribute__ ((__unused__))
-> -#endif
-> -
->  static __maybe_unused void pair_udp_setfilter(int fd)
->  {
->  	/* the filter below checks for all of the following conditions that
-> diff --git a/tools/testing/selftests/perf_events/watermark_signal.c b/tools/testing/selftests/perf_events/watermark_signal.c
-> index e03fe1b9bba2..b3a72f0ac522 100644
-> --- a/tools/testing/selftests/perf_events/watermark_signal.c
-> +++ b/tools/testing/selftests/perf_events/watermark_signal.c
-> @@ -17,8 +17,6 @@
->  
->  #include "../kselftest_harness.h"
->  
-> -#define __maybe_unused __attribute__((__unused__))
-> -
->  static int sigio_count;
->  
->  static void handle_sigio(int signum __maybe_unused,
-> diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
-> index 978cbcb3eb11..2a72d37ad008 100644
-> --- a/tools/testing/selftests/proc/proc-pid-vm.c
-> +++ b/tools/testing/selftests/proc/proc-pid-vm.c
-> @@ -47,10 +47,6 @@
->  #include <sys/resource.h>
->  #include <linux/fs.h>
->  
-> -#ifndef __maybe_unused
-> -#define __maybe_unused __attribute__((__unused__))
-> -#endif
-> -
->  #include "../kselftest.h"
->  
->  static inline long sys_execveat(int dirfd, const char *pathname, char **argv, char **envp, int flags)
-> diff --git a/tools/testing/selftests/ublk/utils.h b/tools/testing/selftests/ublk/utils.h
-> index 36545d1567f1..a852e0b7153e 100644
-> --- a/tools/testing/selftests/ublk/utils.h
-> +++ b/tools/testing/selftests/ublk/utils.h
-> @@ -2,8 +2,6 @@
->  #ifndef KUBLK_UTILS_H
->  #define KUBLK_UTILS_H
->  
-> -#define __maybe_unused __attribute__((unused))
-> -
->  #ifndef min
->  #define min(a, b) ((a) < (b) ? (a) : (b))
->  #endif
+>  config SPARSEMEM_VMEMMAP
+> -	bool "Sparse Memory virtual memmap"
+> +	def_bool y
+>  	depends on SPARSEMEM && SPARSEMEM_VMEMMAP_ENABLE
+> -	default y
+>  	help
+>  	  SPARSEMEM_VMEMMAP uses a virtually mapped memmap to optimise
+>  	  pfn_to_page and page_to_pfn operations.  This is the most
 > -- 
-> 2.43.0
+> 2.50.1
 > 
-> 
+
+-- 
+Sincerely yours,
+Mike.
 
