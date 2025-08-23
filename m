@@ -1,86 +1,95 @@
-Return-Path: <linux-kselftest+bounces-39789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5586DB329ED
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 17:55:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EBEDB32A1D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 18:00:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 100CA3BD2BE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 15:55:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AF285833C1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 16:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4142D3729;
-	Sat, 23 Aug 2025 15:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8072E62D0;
+	Sat, 23 Aug 2025 16:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="laD9UYHq"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="DAwdmn+Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA22C212549;
-	Sat, 23 Aug 2025 15:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DEA52E7BC5
+	for <linux-kselftest@vger.kernel.org>; Sat, 23 Aug 2025 16:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755964548; cv=none; b=Kd90YKWqgymd9BnNjWCJKVL1sQUHVCS0OHr+Jd0T8nRuC8fUDu+1sZYs39vKfYt42JoS+hCPiOF2l4Mb1E6bD15yPyNWMuAwR4Pn6mNb8nascJGIoe9nLzRFJTpmTjvh1NyH+qlBhiCCKFaY7HHgYXfGWMyQXTzIobzHFoeWiU8=
+	t=1755964804; cv=none; b=sJUO1cq8ZK6zV7sUHedH7N2AxM3kPHif5Aumt8df+bulUHQn4VvMfMdTVVw5ivEHCDDDUIt76EwaPhSOLaO07056SpxhSHd2Ex8jHNUOZqK1HPFFJ2Lwq+Gu1S1prRVqk+fP2iS1nq2sZRfNB78oJGKCMCmmyThTvUdTO7we2/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755964548; c=relaxed/simple;
-	bh=IwK6ZOkL3fyauMsghiEfSSZSqRTAgaGOcby6wIKtHOE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Azk0g79DjIky1R1ulGcWPnctawungO2N8IwD2FB1oag1VHPUsASX2V2NfdifBflSAJmd7s2X4ZwUhzGD9IB2TmebHa2BwiyAhF3amj33QmRijQ58Qhg8XZyd/jUzIHz8swRPZTj/VP7WgRoSjDbOXcLRIS4bk9gAqOccWC0Hlt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=laD9UYHq; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b49d46a8d05so264198a12.0;
-        Sat, 23 Aug 2025 08:55:46 -0700 (PDT)
+	s=arc-20240116; t=1755964804; c=relaxed/simple;
+	bh=dK+CR3Hpw7kGgKQtXxubea1aCAm20tR0xK1kEUaSbEA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DAY9hiAwxgOHnc7k3R8TJwrwj/Tv/vN0k0iYkfvvb5ocDxqKObNvU5ZUiPvcofNKj59VUlERuIkTmyiO/jJKc7owwB4WgEfEQ6EWQuPGZsiY2OwaL7MH6HTI5MvA4ZfxitbVzOKyRgIL208kaxchzDCBGqmHIX5j16tv9imejDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=DAwdmn+Q; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-76e6cbb991aso2697396b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 23 Aug 2025 09:00:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755964546; x=1756569346; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1755964801; x=1756569601; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hHOD/XY0X+Od8iRzBJ5/06QoPuKSvzf8PdQxU6Bi+58=;
-        b=laD9UYHqeHyleztjan+jh4kVwWH13hyCjBSjHUnjc8XFMZdxp+hnxU5O7KNbCufxxj
-         mtyhtgvpEX2J5TcvpaEUtIVK2H99TeYw1PcWE0eZMr+8Ot5NTVT3gAPPMbobh5gvL6SY
-         eFjOM11sJSUF4OeJnTyj8hsfN9RQV/aIK+B3DjVDkYHw2lhyNW1w7Valw3HD6U0XBOJI
-         xuS8PJ7IbGardVsPM7gSqLoDPZGudKyzMwQ+9j17dQi4/3JGUZyJzO8J8pJVliKNrF4x
-         sjvAnPygQxSZsmI1cmmkdIwAG+onDKYy91EYKFR15SCkaCMvC0zJVImmejNFPHmiQ+2y
-         mgVw==
+        bh=H24QVG/T3cxixN5Hjl4PI98/BCvc+2mgYT4CjAn1N5o=;
+        b=DAwdmn+QCIub+wf1aZmp/lmq0EDc+wYhJLul6JPZyMaV+fo5gzKKZHXq6UpLu7X2lk
+         JDwMStIX87HbFPsASqH1M+k0s5uCa3NNbgKMLx/vu4cptnXAEYL6+v6y8sSOKdLSLTJc
+         6jY3y4brA9v8TsLZeA0Xg/l4Yvce2yGtkVhhmOf47IY2S3WXkrHHAHP4OATI1Ik16rQE
+         BVRtXDtviTvEjOVBEAHLMbH20EptaavlhhVbDr+kaaeMlYTP3nH9I5RptYHyx7iFxarx
+         t933K4c7T7YYNhrUsyA1GSVJg+mlWDyuY2UshqHVds4/+T3jYEDpxfFggz7bzw6c9RLL
+         8bcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755964546; x=1756569346;
+        d=1e100.net; s=20230601; t=1755964801; x=1756569601;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hHOD/XY0X+Od8iRzBJ5/06QoPuKSvzf8PdQxU6Bi+58=;
-        b=f2M8Z5spiOpcuZdk+/pNLpFfPOeAojwOaP1GQ1TPSWiudNg+fXk+viPajRg1M2fQ6R
-         l+zyxZiEkokdnVY5GAdEyNaM91tCAd29GH0F1SvHe3qIptltvjdQccCwIi2EZ85nptFN
-         ai7yTiIFykSnq1EqwJWifbtC97mTmkHopgfpAZ944nJNcavFXOwRmzLw7LQSWaVW7FdS
-         kS9QwE/p7+zRHUmrfvQLC+muBLAxYFIYovqQCcSQWaTB+jtFTnNisFXNK7qLEz+Xukju
-         XLo1kCgMJy3X/TgOj9YRnvLkyaB7UJCB8Mgm4Qn/ZubQ0DKcf4GSILNIU0exvcFdbGLh
-         W08w==
-X-Forwarded-Encrypted: i=1; AJvYcCXjWg7EsEFGuWb08NSrZh4IenqOrw+kgzzb2h4TBQ9ilSp1gDI6z/dgpwOC4xjah4qxT8wAgkVYtNgyjo0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxp/IGz0Ti2jfuNa71uJbDR3e8Ve/pKUXzfz+ibLtjyx9zBoTDv
-	BHP2WQtZpUMEGEa7Hp/nGXJvha1PYz4pgHCn5vzr5T2ED+S1tYCrzlwwt6SUaqmR
-X-Gm-Gg: ASbGncvZ0UEslgREnKRFSZc7/DpU1syPIG4fRD1as70djx3kYcsB+FaKsMsLj5aXUJe
-	HsSwFzT43jztuqss5ysOZKyk49ysvlGpxAzYWwMkTiIxP9z62PeF71dWw96PH3NjW1VZ3O+URP0
-	U4tAHGt3zsv7iTmvTKmGP9EJcNNnECIQTReIm5zXThIAKCRGwp+lqFJGaJPbPDn05MrQBeGOQJB
-	i00ELa7WniDhqi8cBpVruUO4lhrP7mW3Khv+QEob1KXMXyF8TzhujMu5z7h+9ezVpHRKaiKvRLi
-	8qxV6sKCRmLERbsC3X8bAJCucULP2khtdN7MbB8/ZyHhZuW1TFndyVMVgkmRZoVryWNEZuRCh1g
-	4pZpeCOGXeD+8+eCUpiWXMahQJdzZe+9TbQ==
-X-Google-Smtp-Source: AGHT+IH1dOI3lLdhA7dyJ743U8yOLELwsIVQczq7HjyWYAInVucUMxOSQYBi4rTS35zq8TJFKxGbog==
-X-Received: by 2002:a17:902:fc47:b0:246:9a5f:839f with SMTP id d9443c01a7336-2469a5f8594mr10394735ad.21.1755964545838;
-        Sat, 23 Aug 2025 08:55:45 -0700 (PDT)
-Received: from kali ([2406:7400:75:3c04:45dc:8c83:132d:efa1])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246687c75b5sm25320815ad.66.2025.08.23.08.55.43
+        bh=H24QVG/T3cxixN5Hjl4PI98/BCvc+2mgYT4CjAn1N5o=;
+        b=P+AQtck+Cug3+NnMCTAl4cR2RSVW03H6fNBJTHvP/DX/hq3XVB8aDSbwM7Eg5ejVvC
+         Ro0OUZs/6hYREi2BWCShUQvVyjpiM2KAg6quH2qAyHsAjn6je+gGSTOtvHVf66ArLtdu
+         vX8a8vAZ5q+bt5S9rDhvdWGxf8nyM0SbpTWsej2cADKh97cGnm8j6WQrItYiKBCESzGi
+         mEU+/dg9lCj1xcu3vklLVeO5dwJyAA21775MoucMaJnTtqO4POSLdtoYk1WugIzcBUHg
+         LRIA5AS5preoO4KnJwwMM3LQSzDJ3auqzVhbdbEOHb3dux7EQRfOsI1FSV17RiP6RzxT
+         LGPA==
+X-Forwarded-Encrypted: i=1; AJvYcCUHAGDT+ew3eQ1tNrLWwI7nKHN023ywq7cVmXYoEwkvI7tTrydguS+uMTxR8/4f6f9PchZRonlxMN9GLsLi39M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRZQ5P3fIAfWsJj+8W0YMND5dbVIUJME6gM6g/jpwRTZb4H6v6
+	TFhMGGQZgmdqK4dV1NaW443nFxor+rARHKbLvCPwVuMjO8c//Km+fU5rjewjd4ruj6g=
+X-Gm-Gg: ASbGncuJ0ASxjGWHCNI1gJAbpVjFOMOOVfrFxpizdP0EZY6fjXuAGDXIiHnZZn4qQ3c
+	vwPbvARJISSgjCIUslyixJSI6M1k7hDcK0yLn+SzuO7JgdD90E0CNzrk91LtKNTeV98Wat4vZJx
+	G4N3D5iF+w8IJyQt/igjttKBtLRYM2+QWevbsAYd9Fvl+WKHwQbD/opUjL9UocM1TUvtaVPjoB0
+	ak79mdHxGWWH0065+U3iiEXm9mI7hbD52njbTE+0f0ms0T3U6t0nHLRWIoyKlzwajNf00dsImDi
+	IlEFYVkF5FB3IXCK0tgkrbFpUhTq+2YCpzvGZmPGZ0kHvuOj5kdEVAQ7pnDnkRbHxBuOASmPjVQ
+	7kQSMHDDC1uif5yoDfjAVuHjgSvYLg0XTzWaG6DvCJV0AumM+UJlEedAqtc0C5AXwIDmVNFSl
+X-Google-Smtp-Source: AGHT+IHHBn4yz0Tv2mtxye/b3d+njwhsYjSP/E2IAAVTTBKNql/cK/uY7eFReM62Y2BttpdFYMcwWg==
+X-Received: by 2002:a05:6a20:1592:b0:23f:fe66:5d2a with SMTP id adf61e73a8af0-24340bce2c1mr9575921637.27.1755964800673;
+        Sat, 23 Aug 2025 09:00:00 -0700 (PDT)
+Received: from anup-ubuntu-vm.localdomain ([103.97.166.196])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77040214b81sm2804464b3a.93.2025.08.23.08.59.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Aug 2025 08:55:45 -0700 (PDT)
-From: Preetpalbugs <preetpal77952@gmail.com>
-X-Google-Original-From: Preetpalbugs <preetpal.singh@s.amity.edu>
-To: skhan@linuxfoundation.org
-Cc: linux-kselftest@vger.kernel.org,
+        Sat, 23 Aug 2025 09:00:00 -0700 (PDT)
+From: Anup Patel <apatel@ventanamicro.com>
+To: Atish Patra <atish.patra@linux.dev>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Anup Patel <anup@brainfault.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Preetpalbugs <preetpal.singh@s.amity.edu>
-Subject: [PATCH] selftests: timers: Fix wording and grammar in messages
-Date: Sat, 23 Aug 2025 21:24:52 +0530
-Message-ID: <20250823155452.198536-1-preetpal.singh@s.amity.edu>
-X-Mailer: git-send-email 2.50.1
+	linux-kselftest@vger.kernel.org,
+	Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v3 0/6] ONE_REG interface for SBI FWFT extension
+Date: Sat, 23 Aug 2025 21:29:41 +0530
+Message-ID: <20250823155947.1354229-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,309 +98,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Signed-off-by: Preetpalbugs <preetpal.singh@s.amity.edu>
----
- posix_timers.c | 290 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 290 insertions(+)
- create mode 100644 posix_timers.c
+This series adds ONE_REG interface for SBI FWFT extension implemented
+by KVM RISC-V. This was missed out in accepted SBI FWFT patches for
+KVM RISC-V.
 
-diff --git a/posix_timers.c b/posix_timers.c
-new file mode 100644
-index 0000000..486b71b
---- /dev/null
-+++ b/posix_timers.c
-@@ -0,0 +1,290 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2013 Red Hat, Inc., Frederic Weisbecker <fweisbec@redhat.com>
-+ *
-+ * Selftests for a few posix timers interface.
-+ *
-+ * Kernel loop code stolen from Steven Rostedt <srostedt@redhat.com>
-+ */
-+
-+#include <sys/time.h>
-+#include <stdio.h>
-+#include <signal.h>
-+#include <unistd.h>
-+#include <time.h>
-+#include <pthread.h>
-+
-+#include "../kselftest.h"
-+
-+#define DELAY 2
-+#define USECS_PER_SEC 1000000
-+
-+static volatile int done;
-+
-+/* Busy loop in userspace to elapse ITIMER_VIRTUAL */
-+static void user_loop(void)
-+{
-+	while (!done);
-+}
-+
-+/*
-+ * Try to spend as much time as possible in kernelspace
-+ * to elapse ITIMER_PROF.
-+ */
-+static void kernel_loop(void)
-+{
-+	void *addr = sbrk(0);
-+	int err = 0;
-+
-+	while (!done && !err) {
-+		err = brk(addr + 4096);
-+		err |= brk(addr);
-+	}
-+}
-+
-+/*
-+ * Sleep until ITIMER_REAL expiration.
-+ */
-+static void idle_loop(void)
-+{
-+	pause();
-+}
-+
-+static void sig_handler(int nr)
-+{
-+	done = 1;
-+}
-+
-+/*
-+ * Check the expected timer expiration matches the GTOD elapsed delta since
-+ * we armed the timer. Keep a 0.5 sec error margin due to various jitter.
-+ */
-+static int check_diff(struct timeval start, struct timeval end)
-+{
-+	long long diff;
-+
-+	diff = end.tv_usec - start.tv_usec;
-+	diff += (end.tv_sec - start.tv_sec) * USECS_PER_SEC;
-+
-+	if (llabs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2) {
-+		printf("Diff too high: %lld..", diff);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int check_itimer(int which)
-+{
-+	const char *name;
-+	int err;
-+	struct timeval start, end;
-+	struct itimerval val = {
-+		.it_value.tv_sec = DELAY,
-+	};
-+
-+	if (which == ITIMER_VIRTUAL)
-+		name = "ITIMER_VIRTUAL";
-+	else if (which == ITIMER_PROF)
-+		name = "ITIMER_PROF";
-+	else if (which == ITIMER_REAL)
-+		name = "ITIMER_REAL";
-+	else
-+		return -1;
-+
-+	done = 0;
-+
-+	if (which == ITIMER_VIRTUAL)
-+		signal(SIGVTALRM, sig_handler);
-+	else if (which == ITIMER_PROF)
-+		signal(SIGPROF, sig_handler);
-+	else if (which == ITIMER_REAL)
-+		signal(SIGALRM, sig_handler);
-+
-+	err = gettimeofday(&start, NULL);
-+	if (err < 0) {
-+		ksft_perror("Can't call gettimeofday()");
-+		return -1;
-+	}
-+
-+	err = setitimer(which, &val, NULL);
-+	if (err < 0) {
-+		ksft_perror("Can't set timer");
-+		return -1;
-+	}
-+
-+	if (which == ITIMER_VIRTUAL)
-+		user_loop();
-+	else if (which == ITIMER_PROF)
-+		kernel_loop();
-+	else if (which == ITIMER_REAL)
-+		idle_loop();
-+
-+	err = gettimeofday(&end, NULL);
-+	if (err < 0) {
-+		ksft_perror("Can't call gettimeofday()");
-+		return -1;
-+	}
-+
-+	ksft_test_result(check_diff(start, end) == 0, "%s\n", name);
-+
-+	return 0;
-+}
-+
-+static int check_timer_create(int which)
-+{
-+	const char *type;
-+	int err;
-+	timer_t id;
-+	struct timeval start, end;
-+	struct itimerspec val = {
-+		.it_value.tv_sec = DELAY,
-+	};
-+
-+	if (which == CLOCK_THREAD_CPUTIME_ID) {
-+		type = "thread";
-+	} else if (which == CLOCK_PROCESS_CPUTIME_ID) {
-+		type = "process";
-+	} else {
-+		ksft_print_msg("Unknown timer_create() type %d\n", which);
-+		return -1;
-+	}
-+
-+	done = 0;
-+	err = timer_create(which, NULL, &id);
-+	if (err < 0) {
-+		ksft_perror("Can't create timer");
-+		return -1;
-+	}
-+	signal(SIGALRM, sig_handler);
-+
-+	err = gettimeofday(&start, NULL);
-+	if (err < 0) {
-+		ksft_perror("Can't call gettimeofday()");
-+		return -1;
-+	}
-+
-+	err = timer_settime(id, 0, &val, NULL);
-+	if (err < 0) {
-+		ksft_perror("Can't set timer");
-+		return -1;
-+	}
-+
-+	user_loop();
-+
-+	err = gettimeofday(&end, NULL);
-+	if (err < 0) {
-+		ksft_perror("Can't call gettimeofday()");
-+		return -1;
-+	}
-+
-+	ksft_test_result(check_diff(start, end) == 0,
-+			 "timer_create() per %s\n", type);
-+
-+	return 0;
-+}
-+
-+static pthread_t ctd_thread;
-+static volatile int ctd_count, ctd_failed;
-+
-+static void ctd_sighandler(int sig)
-+{
-+	if (pthread_self() != ctd_thread)
-+		ctd_failed = 1;
-+	ctd_count--;
-+}
-+
-+static void *ctd_thread_func(void *arg)
-+{
-+	struct itimerspec val = {
-+		.it_value.tv_sec = 0,
-+		.it_value.tv_nsec = 1000 * 1000,
-+		.it_interval.tv_sec = 0,
-+		.it_interval.tv_nsec = 1000 * 1000,
-+	};
-+	timer_t id;
-+
-+	/* 1/10 seconds to ensure the leader sleeps */
-+	usleep(10000);
-+
-+	ctd_count = 100;
-+	if (timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id))
-+		return "Can't create timer\n";
-+	if (timer_settime(id, 0, &val, NULL))
-+		return "Can't set timer\n";
-+
-+	while (ctd_count > 0 && !ctd_failed)
-+		;
-+
-+	if (timer_delete(id))
-+		return "Can't delete timer\n";
-+
-+	return NULL;
-+}
-+
-+/*
-+ * Test that only the running thread receives the timer signal.
-+ */
-+static int check_timer_distribution(void)
-+{
-+	const char *errmsg;
-+
-+	signal(SIGALRM, ctd_sighandler);
-+
-+	errmsg = "Can't create thread\n";
-+	if (pthread_create(&ctd_thread, NULL, ctd_thread_func, NULL))
-+		goto err;
-+
-+	errmsg = "Cannot join thread\n";
-+	if (pthread_join(ctd_thread, (void **)&errmsg) || errmsg)
-+		goto err;
-+
-+	if (!ctd_failed)
-+		ksft_test_result_pass("check signal distribution\n");
-+	else if (ksft_min_kernel_version(6, 3))
-+		ksft_test_result_fail("check signal distribution\n");
-+	else
-+		ksft_test_result_skip("check signal distribution (old kernel)\n");
-+	return 0;
-+err:
-+	ksft_print_msg("%s", errmsg);
-+	return -1;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	ksft_print_header();
-+	ksft_set_plan(6);
-+
-+	ksft_print_msg("Testing POSIX timers. False negative may happen on CPU execution \n");
-+	ksft_print_msg("This may happen on CPU-based timers if other threads run on the CPU...\n");
-+
-+	if (check_itimer(ITIMER_VIRTUAL) < 0)
-+		ksft_exit_fail();
-+
-+	if (check_itimer(ITIMER_PROF) < 0)
-+		ksft_exit_fail();
-+
-+	if (check_itimer(ITIMER_REAL) < 0)
-+		ksft_exit_fail();
-+
-+	if (check_timer_create(CLOCK_THREAD_CPUTIME_ID) < 0)
-+		ksft_exit_fail();
-+
-+	/*
-+	 * It's unfortunately hard to reliably test a timer expiration
-+	 * on parallel multithread cputime. We could arm it to expire
-+	 * on DELAY * nr_threads, with nr_threads busy looping, then wait
-+	 * the normal DELAY since the time is elapsing nr_threads faster.
-+	 * But for that we need to ensure we have real physical free CPUs
-+	 * to ensure true parallelism. So test only one thread until we
-+	 * find a better solution.
-+	 */
-+	if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
-+		ksft_exit_fail();
-+
-+	if (check_timer_distribution() < 0)
-+		ksft_exit_fail();
-+
-+	ksft_finished();
-+}
+These patches can also be found in the riscv_kvm_fwft_one_reg_v3 branch
+at: https://github.com/avpatel/linux.git
+
+Changes since v2:
+ - Re-based on latest KVM RISC-V queue
+ - Improved FWFT ONE_REG interface to allow enabling/disabling each
+   FWFT feature from KVM userspace
+
+Changes since v1:
+ - Dropped have_state in PATCH4 as suggested by Drew
+ - Added Drew's Reviewed-by in appropriate patches
+
+Anup Patel (6):
+  RISC-V: KVM: Set initial value of hedeleg in kvm_arch_vcpu_create()
+  RISC-V: KVM: Introduce feature specific reset for SBI FWFT
+  RISC-V: KVM: Introduce optional ONE_REG callbacks for SBI extensions
+  RISC-V: KVM: Move copy_sbi_ext_reg_indices() to SBI implementation
+  RISC-V: KVM: Implement ONE_REG interface for SBI FWFT state
+  KVM: riscv: selftests: Add SBI FWFT to get-reg-list test
+
+ arch/riscv/include/asm/kvm_vcpu_sbi.h         |  22 +-
+ arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h    |   1 +
+ arch/riscv/include/uapi/asm/kvm.h             |  15 ++
+ arch/riscv/kvm/vcpu.c                         |   3 +-
+ arch/riscv/kvm/vcpu_onereg.c                  |  60 +----
+ arch/riscv/kvm/vcpu_sbi.c                     | 172 +++++++++++--
+ arch/riscv/kvm/vcpu_sbi_fwft.c                | 227 ++++++++++++++++--
+ arch/riscv/kvm/vcpu_sbi_sta.c                 |  63 +++--
+ .../selftests/kvm/riscv/get-reg-list.c        |  32 +++
+ 9 files changed, 467 insertions(+), 128 deletions(-)
+
 -- 
-2.50.1
+2.43.0
 
 
