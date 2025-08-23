@@ -1,107 +1,152 @@
-Return-Path: <linux-kselftest+bounces-39775-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39776-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B789B32646
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 03:47:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B559B32686
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 04:59:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E807563C1F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 01:47:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47C0D7BB3CE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 02:57:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC191C84B2;
-	Sat, 23 Aug 2025 01:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0912021ABA4;
+	Sat, 23 Aug 2025 02:59:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="h9/dBUq6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E733987D;
-	Sat, 23 Aug 2025 01:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BBF1EFF9A;
+	Sat, 23 Aug 2025 02:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755913628; cv=none; b=TZ8A7UKBcIQYvvqO60KX7mEq/bWGqyZfHK+6beevn79yHAPuudJfj9o9/j7rb9QylSqXabkQ95dyGpg13hdd1COMUOJwsnXhn/WRhaZ5bfUHWfGcAa3U0bXXjgiQJSA9qfHTa6bY5/324q0A9nKE+it0lsYJByhDlb4bj4SNvWU=
+	t=1755917950; cv=none; b=Zdj1j6XbK0/xslTpbd/LLz64lRtHkKpp9griNysYeccReanvrfQH086wFaPnxLK00vvkL4bykotZ4Gn4DmfzjydKRMVUn0Lq0E+g+m2s/bAMA8a0+s+7Sc88pE0hO6rs01Wk9gBQbEL+N+J989TZZY1JXDfB2uy9/LmeoZ0D9qE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755913628; c=relaxed/simple;
-	bh=j+i8Xbizla3YxcV+EPa2HULHUGXLyHMqJNjzWhnx5ms=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f6hJkq6cN2qZIp5CauKMu/sGaEotvwKhXjIk+fK1SiPrU69QX6Huj7S2/MAE5RRv6rTrShhRhzHmUs0ekDU4ipBV2f6whxFbqTAu32nYN4XDzZ57qhxOhZ54wyXqtVhCnFeZi2Pg13lCx5yU/Qqn2dT/P5FcylrZv2tiQJRiCSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4c80Kj2VMpzYQvCx;
-	Sat, 23 Aug 2025 09:47:05 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id DEBAF1A12D3;
-	Sat, 23 Aug 2025 09:47:03 +0800 (CST)
-Received: from [10.67.109.79] (unknown [10.67.109.79])
-	by APP2 (Coremail) with SMTP id Syh0CgDn87WXHalo_A8tEg--.58363S2;
-	Sat, 23 Aug 2025 09:47:03 +0800 (CST)
-Message-ID: <48d7be9c-6645-4426-9415-10ea5bc780f0@huaweicloud.com>
-Date: Sat, 23 Aug 2025 09:47:03 +0800
+	s=arc-20240116; t=1755917950; c=relaxed/simple;
+	bh=Xv/+PXZ3hTcvXLBhLIihBLItunKkhfvFzPo6IIK5LsI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=Px9cvidOSnX4K7f1yXp80kVHIgNqSAB1AiNUJj97vivi18HZgSGHjTku0xeGFl+UfVg34ZbFgepvqXdcIP7YAqKF1CT1ptvD7pLvR8jztCJknSSw8k3XH2Swj2ftmONbVU5s8BMF4kyoyBc4l3B7s/VJoje5ebVIC9cg39AjWtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=h9/dBUq6 reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=uhiE6TM+gcn9XNGc5J8udtO8Knd3mFbDC7DrFjExc2o=; b=h
+	9/dBUq6r4dFUQxMinRW65W//n6hxwQfFNOerupGbFuqtnD8qjWCX/j3q2nRFIleV
+	SnVEiGM1uWxLIxpqt+F2+Mcdzm8bCF45o4XAKoBuVwT1cvM6JmaJYoz6HoPMiEuT
+	noX7tzQH4ZJJhoXlFGYOJUp9x+4itluAEwOEbAWjvA=
+Received: from phoenix500526$163.com ( [120.230.124.83] ) by
+ ajax-webmail-wmsvr-40-102 (Coremail) ; Sat, 23 Aug 2025 10:58:38 +0800
+ (CST)
+Date: Sat, 23 Aug 2025 10:58:38 +0800 (CST)
+From: =?UTF-8?B?6LW15L2z54Kc?= <phoenix500526@163.com>
+To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	yonghong.song@linux.dev, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH bpf-next v13 2/2] selftests/bpf: Enrich
+ subtest_basic_usdt case in selftests to cover SIB handling logic
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <CAEf4Bzbs3hV_Q47+d93tTX13WkrpkpOb4=U04mZCjHyZg4aVdw@mail.gmail.com>
+References: <20250822151611.1084244-1-phoenix500526@163.com>
+ <20250822151611.1084244-3-phoenix500526@163.com>
+ <CAEf4Bzbs3hV_Q47+d93tTX13WkrpkpOb4=U04mZCjHyZg4aVdw@mail.gmail.com>
+X-NTES-SC: AL_Qu2eB/WauEEq7iGabekfmUsVh+o9X8K1vfsk3oZfPJp+jCzp0SwFYFhTLVD49dCDIgW9tQiHaDhx9f1hb5l+dKgnwpK7z/fQZV2KRND+QwlO5A==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] cgroup: selftests: Add tests for freezer time
-To: Tiffany Yang <ynaffit@google.com>
-Cc: linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>,
- Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Pavel Machek <pavel@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
- Chen Ridong <chenridong@huawei.com>, kernel-team@android.com,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20250822013749.3268080-6-ynaffit@google.com>
- <20250822013749.3268080-8-ynaffit@google.com>
- <bad4609b-4427-48ff-80e9-70cb3066253e@huaweicloud.com>
- <dbx8sehj8a25.fsf@ynaffit-andsys.c.googlers.com>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <dbx8sehj8a25.fsf@ynaffit-andsys.c.googlers.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgDn87WXHalo_A8tEg--.58363S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYV7kC6x804xWl14x267AKxVW5JVWrJwAF
-	c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
-	wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-	x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-	64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r
-	1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
-	c2xKxwCF04k20xvY0x0EwIxGrwCF54CYxVCY1x0262kKe7AKxVW8ZVWrXwCFx2IqxVCFs4
-	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
-	MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
-	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
-	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-	BIdaVFxhVjvjDU0xZFpf9x07UdxhLUUUUU=
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Message-ID: <530fff84.d87.198d4dd1fb8.Coremail.phoenix500526@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:ZigvCgB3dJ9fLqlonhkgAA--.9217W
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFB+yiGipD2wvNAADsL
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-
-
-On 2025/8/23 2:50, Tiffany Yang wrote:
->> Perhaps we can simply use if (curr != 0) for the condition?
-> 
-> 
-> Here we have 2 separate conditions because in the case where curr < 0,
-> it means that the interface is not available and we should skip this
-> test instead of failing it. In the case where curr > 0, the feature is
-> not working correctly, and the test should fail as a result.
-
-Thank you for your explanation.
-See now.
-
--- 
-Best regards,
-Ridong
-
+CgoKCgoKPmRvZXMgY2xhbmcgZGVmaW5lIF9fR05VQ19fIGFzIHdlbGw/IG90aGVyd2lzZSB3aHkg
+IWRlZmluZShfX2NsYW5nX18pID8KClllcywgY2xhbmcgZG9lcyBkZWZpbmQgX19HTlVDX18gLgoK
+Cgo+eW91IHVzZSBhc3NlbWJseSBkaXJlY3RseSwgc28gb3B0aW1pemUoKSBzaG91bGQgYmUgaXJy
+ZWxldmFudCwgbm8/Cj4KPlNvIHdlIGNhbiBtYWtlIHRoaXMgbm9uLUdDQyBzcGVjaWZpYywgcmln
+aHQ/CgpZZXMsIEknbGwgbWFrZSBpdCBpbiB0aGUgbmV4dCB2ZXJzaW9uLgoKCj5pcyBpdCBndWFy
+YW50ZWVkIHRoYXQgbnVtcyBhZGRyZXNzIHdpbGwgZW5kIHVwIGluIHJkeCBhbmQgYSBpbiByYXg/
+Li4uCj4KPkknZCBmZWVsIG1vcmUgY29tZm9ydGFibGUgaWYgeW91IGV4cGxpY2l0bHkgc2V0IHVw
+IHJkeCBhbmQgcmF4IGluCj5hc3NlbWJseSwgdGhlbiBhZGQgVVNEVCB3aXRoIFNUQVBfUFJPQkVf
+QVNNLiBUaGF0IHNob3VsZCBiZSBwb3NzaWJsZQo+d2l0aCBlbWJlZGRlZCBhc3NlbWJseSwgbm8/
+CgpJIHRoaW5rIGl0IHdpbGwgaW4gdGhhdCB0aGUgaW5wdXQgb3BlcmFuZCBjb25zdHJhaW4gYCJk
+IihudW1zKSwgImEiKDApYCBpbXBsaWVzCnRoZSBudW1zIGFkZHJlc3Mgd2lsbCBlbmQgdXAgaW4g
+cmR4IHdoaWxlIHRoZSBpbmRleCAwIHdpbGwgYmUgaW4gcmF4LiAKClNvIEkgdGhpbmsgd2UgZG9u
+J3QgbmVlZCB0byBleHBsaWNpdGx5IHNldCB1cCByZHggYW5kIHJheCBhZ2Fpbi4gCgoKPndoeSB0
+aGVzZSB1bm5lY2Vzc2FyeSBjb21tZW50cyBlbWJlZGRlZCBpbiB0aGUgYXNzZW1ibHk/Li4uCgpC
+ZWNhdXNlIHRoZXJlIGlzICJiZWZvcmUiIGFuZCAiYWZ0ZXIiIGluIHRoZSBgU1RBUF9QUk9CRV9B
+U01gIGV4YW1wbGUuCkl0J3MgT0sgdG8gcmVtb3ZlIGl0LiAKCgpBdCAyMDI1LTA4LTIzIDA2OjU5
+OjQ5LCAiQW5kcmlpIE5ha3J5aWtvIiA8YW5kcmlpLm5ha3J5aWtvQGdtYWlsLmNvbT4gd3JvdGU6
+Cj5PbiBGcmksIEF1ZyAyMiwgMjAyNSBhdCA4OjE24oCvQU0gSmlhd2VpIFpoYW8gPHBob2VuaXg1
+MDA1MjZAMTYzLmNvbT4gd3JvdGU6Cj4+Cj4+IFdoZW4gdXNpbmcgR0NDIG9uIHg4Ni02NCB0byBj
+b21waWxlIGFuIHVzZHQgcHJvZyB3aXRoIC1PMSBvciBoaWdoZXIKPj4gb3B0aW1pemF0aW9uLCB0
+aGUgY29tcGlsZXIgd2lsbCBnZW5lcmF0ZSBTSUIgYWRkcmVzc2luZyBtb2RlIGZvciBnbG9iYWwK
+Pj4gYXJyYXkgYW5kIFBDLXJlbGF0aXZlIGFkZHJlc3NpbmcgbW9kZSBmb3IgZ2xvYmFsIHZhcmlh
+YmxlLAo+PiBlLmcuICIxQC05NiglcmJwLCVyYXgsOCkiIGFuZCAiLTFANCt0MSglcmlwKSIuCj4+
+Cj4+IEluIHRoaXMgcGF0Y2g6Cj4+IC0gZW5yaWNoIHN1YnRlc3RfYmFzaWNfdXNkdCB0ZXN0IGNh
+c2UgdG8gY292ZXIgU0lCIGFkZHJlc3NpbmcgdXNkdCBhcmd1bWVudCBzcGVjCj4+ICAgaGFuZGxp
+bmcgbG9naWMKPj4KPj4gU2lnbmVkLW9mZi1ieTogSmlhd2VpIFpoYW8gPHBob2VuaXg1MDA1MjZA
+MTYzLmNvbT4KPj4gLS0tCj4+ICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0
+cy91c2R0LmMgfCA0NCArKysrKysrKysrKysrKysrKystCj4+ICB0b29scy90ZXN0aW5nL3NlbGZ0
+ZXN0cy9icGYvcHJvZ3MvdGVzdF91c2R0LmMgfCAzMCArKysrKysrKysrKysrCj4+ICAyIGZpbGVz
+IGNoYW5nZWQsIDcyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4+Cj4+IGRpZmYgLS1n
+aXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy91c2R0LmMgYi90b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy91c2R0LmMKPj4gaW5kZXggOTA1N2U5
+ODNjYzU0Li5jMDRiNDE2YWE0YTggMTAwNjQ0Cj4+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
+c3RzL2JwZi9wcm9nX3Rlc3RzL3VzZHQuYwo+PiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
+cy9icGYvcHJvZ190ZXN0cy91c2R0LmMKPj4gQEAgLTI1LDYgKzI1LDEwIEBAIHVuc2lnbmVkIHNo
+b3J0IHRlc3RfdXNkdDBfc2VtYXBob3JlIFNFQygiLnByb2JlcyIpOwo+PiAgdW5zaWduZWQgc2hv
+cnQgdGVzdF91c2R0M19zZW1hcGhvcmUgU0VDKCIucHJvYmVzIik7Cj4+ICB1bnNpZ25lZCBzaG9y
+dCB0ZXN0X3VzZHQxMl9zZW1hcGhvcmUgU0VDKCIucHJvYmVzIik7Cj4+Cj4+ICsjaWYgKChkZWZp
+bmVkKF9feDg2XzY0X18pIHx8IGRlZmluZWQoX19pMzg2X18pKSAmJiBkZWZpbmVkKF9fR05VQ19f
+KSAmJiAhZGVmaW5lZChfX2NsYW5nX18pKQo+Cj5kb2VzIGNsYW5nIGRlZmluZSBfX0dOVUNfXyBh
+cyB3ZWxsPyBvdGhlcndpc2Ugd2h5ICFkZWZpbmUoX19jbGFuZ19fKSA/Cj4KPj4gK3Vuc2lnbmVk
+IHNob3J0IHRlc3RfdXNkdF9zaWJfc2VtYXBob3JlIFNFQygiLnByb2JlcyIpOwo+PiArI2VuZGlm
+Cj4+ICsKPj4gIHN0YXRpYyB2b2lkIF9fYWx3YXlzX2lubGluZSB0cmlnZ2VyX2Z1bmMoaW50IHgp
+IHsKPj4gICAgICAgICBsb25nIHkgPSA0MjsKPj4KPj4gQEAgLTQwLDEyICs0NCwyOSBAQCBzdGF0
+aWMgdm9pZCBfX2Fsd2F5c19pbmxpbmUgdHJpZ2dlcl9mdW5jKGludCB4KSB7Cj4+ICAgICAgICAg
+fQo+PiAgfQo+Pgo+PiArI2lmICgoZGVmaW5lZChfX3g4Nl82NF9fKSB8fCBkZWZpbmVkKF9faTM4
+Nl9fKSkgJiYgZGVmaW5lZChfX0dOVUNfXykgJiYgIWRlZmluZWQoX19jbGFuZ19fKSkKPj4gK3N0
+YXRpYyBfX2F0dHJpYnV0ZV9fKChvcHRpbWl6ZSgiTzEiKSkpIHZvaWQgdHJpZ2dlcl9zaWJfc3Bl
+Yyh2b2lkKQo+Cj55b3UgdXNlIGFzc2VtYmx5IGRpcmVjdGx5LCBzbyBvcHRpbWl6ZSgpIHNob3Vs
+ZCBiZSBpcnJlbGV2YW50LCBubz8KPgo+U28gd2UgY2FuIG1ha2UgdGhpcyBub24tR0NDIHNwZWNp
+ZmljLCByaWdodD8KPgo+PiArewo+PiArICAgICAgIC8qIEJhc2UgYWRkcmVzcyArIG9mZnNldCAr
+IChpbmRleCAqIHNjYWxlKSAqLwo+PiArICAgICAgIC8qIEZvcmNlIFNJQiBhZGRyZXNzaW5nIHdp
+dGggaW5saW5lIGFzc2VtYmx5ICovCj4+ICsgICAgICAgYXNtIHZvbGF0aWxlKAo+PiArICAgICAg
+ICAgICAgICAgIiMgcHJvYmUgcG9pbnQgd2l0aCBtZW1vcnkgYWNjZXNzXG4iCj4+ICsgICAgICAg
+ICAgICAgICBTVEFQX1BST0JFX0FTTSh0ZXN0LCB1c2R0X3NpYiwgLTJAKCUlcmR4LCUlcmF4LDIp
+KQo+Cj5pcyBpdCBndWFyYW50ZWVkIHRoYXQgbnVtcyBhZGRyZXNzIHdpbGwgZW5kIHVwIGluIHJk
+eCBhbmQgYSBpbiByYXg/Li4uCj4KPkknZCBmZWVsIG1vcmUgY29tZm9ydGFibGUgaWYgeW91IGV4
+cGxpY2l0bHkgc2V0IHVwIHJkeCBhbmQgcmF4IGluCj5hc3NlbWJseSwgdGhlbiBhZGQgVVNEVCB3
+aXRoIFNUQVBfUFJPQkVfQVNNLiBUaGF0IHNob3VsZCBiZSBwb3NzaWJsZQo+d2l0aCBlbWJlZGRl
+ZCBhc3NlbWJseSwgbm8/Cj4KPj4gKyAgICAgICAgICAgICAgICIjIGVuZCBwcm9iZSBwb2ludCIK
+Pgo+d2h5IHRoZXNlIHVubmVjZXNzYXJ5IGNvbW1lbnRzIGVtYmVkZGVkIGluIHRoZSBhc3NlbWJs
+eT8uLi4KPgo+PiArICAgICAgICAgICAgICAgOgo+PiArICAgICAgICAgICAgICAgOiAiZCIobnVt
+cyksICJhIigwKQo+PiArICAgICAgICAgICAgICAgOiAibWVtb3J5Igo+PiArICAgICAgICk7Cj4+
+ICt9Cj4KPlsuLi5dCj4KPj4gKwo+PiAraW50IHVzZHRfc2liX2NhbGxlZDsKPj4gK3U2NCB1c2R0
+X3NpYl9jb29raWU7Cj4+ICtpbnQgdXNkdF9zaWJfYXJnX2NudDsKPj4gK2ludCB1c2R0X3NpYl9h
+cmdfcmV0Owo+PiArdTY0IHVzZHRfc2liX2FyZzsKPj4gK2ludCB1c2R0X3NpYl9hcmdfc2l6ZTsK
+Pj4gKwo+PiArLy8gTm90ZTogdXNkdF9zaWIgaXMgb25seSB0ZXN0ZWQgb24geDg2LXJlbGF0ZWQg
+YXJjaGl0ZWN0dXJlcywgc28gaXQgcmVxdWlyZXMKPj4gKy8vIG1hbnVhbCBhdHRhY2ggc2luY2Ug
+YXV0by1hdHRhY2ggd2lsbCBwYW5pYyB0ZXN0cyB1bmRlciBvdGhlciBhcmNoaXRlY3R1cmVzCj4K
+PmRvbid0IHVzZSBjKysgc3R5bGUgY29tbWVudHMKPgo+PiArU0VDKCJ1c2R0IikKPj4gK2ludCB1
+c2R0X3NpYihzdHJ1Y3QgcHRfcmVncyAqY3R4KQo+PiArewo+PiArICAgICAgIGxvbmcgdG1wOwo+
+PiArCj4+ICsgICAgICAgaWYgKG15X3BpZCAhPSAoYnBmX2dldF9jdXJyZW50X3BpZF90Z2lkKCkg
+Pj4gMzIpKQo+PiArICAgICAgICAgICAgICAgcmV0dXJuIDA7Cj4+ICsKPj4gKyAgICAgICBfX3N5
+bmNfZmV0Y2hfYW5kX2FkZCgmdXNkdF9zaWJfY2FsbGVkLCAxKTsKPj4gKwo+PiArICAgICAgIHVz
+ZHRfc2liX2Nvb2tpZSA9IGJwZl91c2R0X2Nvb2tpZShjdHgpOwo+PiArICAgICAgIHVzZHRfc2li
+X2FyZ19jbnQgPSBicGZfdXNkdF9hcmdfY250KGN0eCk7Cj4+ICsKPj4gKyAgICAgICB1c2R0X3Np
+Yl9hcmdfcmV0ID0gYnBmX3VzZHRfYXJnKGN0eCwgMCwgJnRtcCk7Cj4+ICsgICAgICAgdXNkdF9z
+aWJfYXJnID0gKHNob3J0KXRtcDsKPj4gKyAgICAgICB1c2R0X3NpYl9hcmdfc2l6ZSA9IGJwZl91
+c2R0X2FyZ19zaXplKGN0eCwgMCk7Cj4+ICsKPj4gKyAgICAgICByZXR1cm4gMDsKPj4gK30KPj4g
+Kwo+PiAgY2hhciBfbGljZW5zZVtdIFNFQygibGljZW5zZSIpID0gIkdQTCI7Cj4+IC0tCj4+IDIu
+NDMuMAo+Pgo=
 
