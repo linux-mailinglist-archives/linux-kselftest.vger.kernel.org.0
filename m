@@ -1,161 +1,397 @@
-Return-Path: <linux-kselftest+bounces-39788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71B3EB3293B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 16:38:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5586DB329ED
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 17:55:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D8C7564622
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 14:38:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 100CA3BD2BE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 15:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7AF025B2FA;
-	Sat, 23 Aug 2025 14:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4142D3729;
+	Sat, 23 Aug 2025 15:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="laD9UYHq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4971448D5;
-	Sat, 23 Aug 2025 14:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA22C212549;
+	Sat, 23 Aug 2025 15:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755959917; cv=none; b=WvBKFwi4rSKED7Yx+jOk5Jjhl70frA+K9ZmwrvpgJN7JXmsDF36/3zD3BNfvBA6sIfqlxC9mFvdT/2Go1GI29qrxQcbdQKJMx69swV3C1IVs8rhhCVKp6trNhd2bIAY26Rv7NmwK2wI8pfYNOsaoze7HKVv02MfIdCwZgFbIcuA=
+	t=1755964548; cv=none; b=Kd90YKWqgymd9BnNjWCJKVL1sQUHVCS0OHr+Jd0T8nRuC8fUDu+1sZYs39vKfYt42JoS+hCPiOF2l4Mb1E6bD15yPyNWMuAwR4Pn6mNb8nascJGIoe9nLzRFJTpmTjvh1NyH+qlBhiCCKFaY7HHgYXfGWMyQXTzIobzHFoeWiU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755959917; c=relaxed/simple;
-	bh=Nh6YA7zHVUidyfs1irsqbpNd4HNN14VNgJLyf2nJm94=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mWik5lzqcZYVIsRJyozDDScIJucinBO6NBQWBb7YeBLKEmBPj7ao0Ib63UswTiWNd4x/vzCrBfrnMiwlro0lRe7YpzdGu6Suel2lRcOuvQA9RoewcKZvPm3Ue1nuF1UMOSBiw3BrMPiYDDQCZkulOQYExQFSxUS9ilT9rnZSl7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4c8KRr54xmzYQvZp;
-	Sat, 23 Aug 2025 22:38:32 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 3F99D1A0FCF;
-	Sat, 23 Aug 2025 22:38:31 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP3 (Coremail) with SMTP id _Ch0CgAXsmll0qlo2m8jAA--.52530S2;
-	Sat, 23 Aug 2025 22:38:31 +0800 (CST)
-Message-ID: <1af26519-6113-43fa-b220-8beb2059b4d3@huaweicloud.com>
-Date: Sat, 23 Aug 2025 22:38:29 +0800
+	s=arc-20240116; t=1755964548; c=relaxed/simple;
+	bh=IwK6ZOkL3fyauMsghiEfSSZSqRTAgaGOcby6wIKtHOE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Azk0g79DjIky1R1ulGcWPnctawungO2N8IwD2FB1oag1VHPUsASX2V2NfdifBflSAJmd7s2X4ZwUhzGD9IB2TmebHa2BwiyAhF3amj33QmRijQ58Qhg8XZyd/jUzIHz8swRPZTj/VP7WgRoSjDbOXcLRIS4bk9gAqOccWC0Hlt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=laD9UYHq; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b49d46a8d05so264198a12.0;
+        Sat, 23 Aug 2025 08:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755964546; x=1756569346; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hHOD/XY0X+Od8iRzBJ5/06QoPuKSvzf8PdQxU6Bi+58=;
+        b=laD9UYHqeHyleztjan+jh4kVwWH13hyCjBSjHUnjc8XFMZdxp+hnxU5O7KNbCufxxj
+         mtyhtgvpEX2J5TcvpaEUtIVK2H99TeYw1PcWE0eZMr+8Ot5NTVT3gAPPMbobh5gvL6SY
+         eFjOM11sJSUF4OeJnTyj8hsfN9RQV/aIK+B3DjVDkYHw2lhyNW1w7Valw3HD6U0XBOJI
+         xuS8PJ7IbGardVsPM7gSqLoDPZGudKyzMwQ+9j17dQi4/3JGUZyJzO8J8pJVliKNrF4x
+         sjvAnPygQxSZsmI1cmmkdIwAG+onDKYy91EYKFR15SCkaCMvC0zJVImmejNFPHmiQ+2y
+         mgVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755964546; x=1756569346;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hHOD/XY0X+Od8iRzBJ5/06QoPuKSvzf8PdQxU6Bi+58=;
+        b=f2M8Z5spiOpcuZdk+/pNLpFfPOeAojwOaP1GQ1TPSWiudNg+fXk+viPajRg1M2fQ6R
+         l+zyxZiEkokdnVY5GAdEyNaM91tCAd29GH0F1SvHe3qIptltvjdQccCwIi2EZ85nptFN
+         ai7yTiIFykSnq1EqwJWifbtC97mTmkHopgfpAZ944nJNcavFXOwRmzLw7LQSWaVW7FdS
+         kS9QwE/p7+zRHUmrfvQLC+muBLAxYFIYovqQCcSQWaTB+jtFTnNisFXNK7qLEz+Xukju
+         XLo1kCgMJy3X/TgOj9YRnvLkyaB7UJCB8Mgm4Qn/ZubQ0DKcf4GSILNIU0exvcFdbGLh
+         W08w==
+X-Forwarded-Encrypted: i=1; AJvYcCXjWg7EsEFGuWb08NSrZh4IenqOrw+kgzzb2h4TBQ9ilSp1gDI6z/dgpwOC4xjah4qxT8wAgkVYtNgyjo0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp/IGz0Ti2jfuNa71uJbDR3e8Ve/pKUXzfz+ibLtjyx9zBoTDv
+	BHP2WQtZpUMEGEa7Hp/nGXJvha1PYz4pgHCn5vzr5T2ED+S1tYCrzlwwt6SUaqmR
+X-Gm-Gg: ASbGncvZ0UEslgREnKRFSZc7/DpU1syPIG4fRD1as70djx3kYcsB+FaKsMsLj5aXUJe
+	HsSwFzT43jztuqss5ysOZKyk49ysvlGpxAzYWwMkTiIxP9z62PeF71dWw96PH3NjW1VZ3O+URP0
+	U4tAHGt3zsv7iTmvTKmGP9EJcNNnECIQTReIm5zXThIAKCRGwp+lqFJGaJPbPDn05MrQBeGOQJB
+	i00ELa7WniDhqi8cBpVruUO4lhrP7mW3Khv+QEob1KXMXyF8TzhujMu5z7h+9ezVpHRKaiKvRLi
+	8qxV6sKCRmLERbsC3X8bAJCucULP2khtdN7MbB8/ZyHhZuW1TFndyVMVgkmRZoVryWNEZuRCh1g
+	4pZpeCOGXeD+8+eCUpiWXMahQJdzZe+9TbQ==
+X-Google-Smtp-Source: AGHT+IH1dOI3lLdhA7dyJ743U8yOLELwsIVQczq7HjyWYAInVucUMxOSQYBi4rTS35zq8TJFKxGbog==
+X-Received: by 2002:a17:902:fc47:b0:246:9a5f:839f with SMTP id d9443c01a7336-2469a5f8594mr10394735ad.21.1755964545838;
+        Sat, 23 Aug 2025 08:55:45 -0700 (PDT)
+Received: from kali ([2406:7400:75:3c04:45dc:8c83:132d:efa1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246687c75b5sm25320815ad.66.2025.08.23.08.55.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Aug 2025 08:55:45 -0700 (PDT)
+From: Preetpalbugs <preetpal77952@gmail.com>
+X-Google-Original-From: Preetpalbugs <preetpal.singh@s.amity.edu>
+To: skhan@linuxfoundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Preetpalbugs <preetpal.singh@s.amity.edu>
+Subject: [PATCH] selftests: timers: Fix wording and grammar in messages
+Date: Sat, 23 Aug 2025 21:24:52 +0530
+Message-ID: <20250823155452.198536-1-preetpal.singh@s.amity.edu>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/4] libbpf: ringbuf: Add overwrite ring buffer
- process
-Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Yonghong Song <yhs@fb.com>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>,
- Tao Chen <chen.dylane@linux.dev>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>, Martin Kelly <martin.kelly@crowdstrike.com>
-References: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
- <20250804022101.2171981-3-xukuohai@huaweicloud.com>
- <CAEf4Bzaq5drHWChXoRBnrmkb6reAsSVj8r=uByFSup31FMA7hw@mail.gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <CAEf4Bzaq5drHWChXoRBnrmkb6reAsSVj8r=uByFSup31FMA7hw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgAXsmll0qlo2m8jAA--.52530S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw15tw15ury5Ary5XFykAFb_yoW5Ww48pF
-	y5Kw45KrnrZr12kwn3X3WIgFyrCan7AryUKr4IyF18ArnIqF13WFWj9F4Y9F13ZrZ3Kw1j
-	yrWDuas2kryUCwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 8/23/2025 5:23 AM, Andrii Nakryiko wrote:
-> On Sun, Aug 3, 2025 at 7:27 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->>
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> In overwrite mode, the producer does not wait for the consumer, so the
->> consumer is responsible for handling conflicts. An optimistic method
->> is used to resolve the conflicts: the consumer first reads consumer_pos,
->> producer_pos and overwrite_pos, then calculates a read window and copies
->> data in the window from the ring buffer. After copying, it checks the
->> positions to decide if the data in the copy window have been overwritten
->> by be the producer. If so, it discards the copy and tries again. Once
->> success, the consumer processes the events in the copy.
->>
-> 
-> I don't mind adding BPF_F_OVERWRITE mode to BPF ringbuf (it seems like
-> this will work fine) itself, but I don't think retrofitting it to this
-> callback-based libbpf-side API is a good fit.
-> 
-> For one, I don't like that extra memory copy and potentially a huge
-> allocation that you do. I think for some use cases user logic might be
-> totally fine with using ringbuf memory directly, even if it can be
-> overwritten at any point. So it would be unfair to penalize
-> sophisticated users for such cases. Even if not, I'd say allocating
-> just enough to hold the record would be a better approach.
-> 
-> Another downside is that the user doesn't really have much visibility
-> right now into whether any samples were overwritten.
-> 
-> I've been mulling over the idea of adding an iterator-like API for BPF
-> ringbuf on the libbpf side for a while now. I'm still debating some
-> API nuances with Eduard, but I think we'll end up adding something
-> pretty soon. Iterator-based API seems like a much better fit for
-> overwritable mode here.
-> 
-> But all that is not really overwrite-specific and is broader, so I
-> think we can proceed with finalizing kernel-side details of overwrite
-> and not block on libbpf side of things for now, though.
->
+Signed-off-by: Preetpalbugs <preetpal.singh@s.amity.edu>
+---
+ posix_timers.c | 290 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 290 insertions(+)
+ create mode 100644 posix_timers.c
 
-Sounds great! Looking forward to the new iterator-based API. Clearly, no
-memory allocation or a samll allocation is better than a huge allocation.
-I'll focus on the kernel side before the new API is introduced.
-
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> ---
->>   tools/lib/bpf/ringbuf.c | 103 +++++++++++++++++++++++++++++++++++++++-
->>   1 file changed, 102 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
->> index 9702b70da444..9c072af675ff 100644
->> --- a/tools/lib/bpf/ringbuf.c
->> +++ b/tools/lib/bpf/ringbuf.c
->> @@ -27,10 +27,13 @@ struct ring {
->>          ring_buffer_sample_fn sample_cb;
->>          void *ctx;
->>          void *data;
->> +       void *read_buffer;
->>          unsigned long *consumer_pos;
->>          unsigned long *producer_pos;
->> +       unsigned long *overwrite_pos;
->>          unsigned long mask;
->>          int map_fd;
->> +       bool overwrite_mode;
->>   };
-> 
-> [...]
+diff --git a/posix_timers.c b/posix_timers.c
+new file mode 100644
+index 0000000..486b71b
+--- /dev/null
++++ b/posix_timers.c
+@@ -0,0 +1,290 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2013 Red Hat, Inc., Frederic Weisbecker <fweisbec@redhat.com>
++ *
++ * Selftests for a few posix timers interface.
++ *
++ * Kernel loop code stolen from Steven Rostedt <srostedt@redhat.com>
++ */
++
++#include <sys/time.h>
++#include <stdio.h>
++#include <signal.h>
++#include <unistd.h>
++#include <time.h>
++#include <pthread.h>
++
++#include "../kselftest.h"
++
++#define DELAY 2
++#define USECS_PER_SEC 1000000
++
++static volatile int done;
++
++/* Busy loop in userspace to elapse ITIMER_VIRTUAL */
++static void user_loop(void)
++{
++	while (!done);
++}
++
++/*
++ * Try to spend as much time as possible in kernelspace
++ * to elapse ITIMER_PROF.
++ */
++static void kernel_loop(void)
++{
++	void *addr = sbrk(0);
++	int err = 0;
++
++	while (!done && !err) {
++		err = brk(addr + 4096);
++		err |= brk(addr);
++	}
++}
++
++/*
++ * Sleep until ITIMER_REAL expiration.
++ */
++static void idle_loop(void)
++{
++	pause();
++}
++
++static void sig_handler(int nr)
++{
++	done = 1;
++}
++
++/*
++ * Check the expected timer expiration matches the GTOD elapsed delta since
++ * we armed the timer. Keep a 0.5 sec error margin due to various jitter.
++ */
++static int check_diff(struct timeval start, struct timeval end)
++{
++	long long diff;
++
++	diff = end.tv_usec - start.tv_usec;
++	diff += (end.tv_sec - start.tv_sec) * USECS_PER_SEC;
++
++	if (llabs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2) {
++		printf("Diff too high: %lld..", diff);
++		return -1;
++	}
++
++	return 0;
++}
++
++static int check_itimer(int which)
++{
++	const char *name;
++	int err;
++	struct timeval start, end;
++	struct itimerval val = {
++		.it_value.tv_sec = DELAY,
++	};
++
++	if (which == ITIMER_VIRTUAL)
++		name = "ITIMER_VIRTUAL";
++	else if (which == ITIMER_PROF)
++		name = "ITIMER_PROF";
++	else if (which == ITIMER_REAL)
++		name = "ITIMER_REAL";
++	else
++		return -1;
++
++	done = 0;
++
++	if (which == ITIMER_VIRTUAL)
++		signal(SIGVTALRM, sig_handler);
++	else if (which == ITIMER_PROF)
++		signal(SIGPROF, sig_handler);
++	else if (which == ITIMER_REAL)
++		signal(SIGALRM, sig_handler);
++
++	err = gettimeofday(&start, NULL);
++	if (err < 0) {
++		ksft_perror("Can't call gettimeofday()");
++		return -1;
++	}
++
++	err = setitimer(which, &val, NULL);
++	if (err < 0) {
++		ksft_perror("Can't set timer");
++		return -1;
++	}
++
++	if (which == ITIMER_VIRTUAL)
++		user_loop();
++	else if (which == ITIMER_PROF)
++		kernel_loop();
++	else if (which == ITIMER_REAL)
++		idle_loop();
++
++	err = gettimeofday(&end, NULL);
++	if (err < 0) {
++		ksft_perror("Can't call gettimeofday()");
++		return -1;
++	}
++
++	ksft_test_result(check_diff(start, end) == 0, "%s\n", name);
++
++	return 0;
++}
++
++static int check_timer_create(int which)
++{
++	const char *type;
++	int err;
++	timer_t id;
++	struct timeval start, end;
++	struct itimerspec val = {
++		.it_value.tv_sec = DELAY,
++	};
++
++	if (which == CLOCK_THREAD_CPUTIME_ID) {
++		type = "thread";
++	} else if (which == CLOCK_PROCESS_CPUTIME_ID) {
++		type = "process";
++	} else {
++		ksft_print_msg("Unknown timer_create() type %d\n", which);
++		return -1;
++	}
++
++	done = 0;
++	err = timer_create(which, NULL, &id);
++	if (err < 0) {
++		ksft_perror("Can't create timer");
++		return -1;
++	}
++	signal(SIGALRM, sig_handler);
++
++	err = gettimeofday(&start, NULL);
++	if (err < 0) {
++		ksft_perror("Can't call gettimeofday()");
++		return -1;
++	}
++
++	err = timer_settime(id, 0, &val, NULL);
++	if (err < 0) {
++		ksft_perror("Can't set timer");
++		return -1;
++	}
++
++	user_loop();
++
++	err = gettimeofday(&end, NULL);
++	if (err < 0) {
++		ksft_perror("Can't call gettimeofday()");
++		return -1;
++	}
++
++	ksft_test_result(check_diff(start, end) == 0,
++			 "timer_create() per %s\n", type);
++
++	return 0;
++}
++
++static pthread_t ctd_thread;
++static volatile int ctd_count, ctd_failed;
++
++static void ctd_sighandler(int sig)
++{
++	if (pthread_self() != ctd_thread)
++		ctd_failed = 1;
++	ctd_count--;
++}
++
++static void *ctd_thread_func(void *arg)
++{
++	struct itimerspec val = {
++		.it_value.tv_sec = 0,
++		.it_value.tv_nsec = 1000 * 1000,
++		.it_interval.tv_sec = 0,
++		.it_interval.tv_nsec = 1000 * 1000,
++	};
++	timer_t id;
++
++	/* 1/10 seconds to ensure the leader sleeps */
++	usleep(10000);
++
++	ctd_count = 100;
++	if (timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id))
++		return "Can't create timer\n";
++	if (timer_settime(id, 0, &val, NULL))
++		return "Can't set timer\n";
++
++	while (ctd_count > 0 && !ctd_failed)
++		;
++
++	if (timer_delete(id))
++		return "Can't delete timer\n";
++
++	return NULL;
++}
++
++/*
++ * Test that only the running thread receives the timer signal.
++ */
++static int check_timer_distribution(void)
++{
++	const char *errmsg;
++
++	signal(SIGALRM, ctd_sighandler);
++
++	errmsg = "Can't create thread\n";
++	if (pthread_create(&ctd_thread, NULL, ctd_thread_func, NULL))
++		goto err;
++
++	errmsg = "Cannot join thread\n";
++	if (pthread_join(ctd_thread, (void **)&errmsg) || errmsg)
++		goto err;
++
++	if (!ctd_failed)
++		ksft_test_result_pass("check signal distribution\n");
++	else if (ksft_min_kernel_version(6, 3))
++		ksft_test_result_fail("check signal distribution\n");
++	else
++		ksft_test_result_skip("check signal distribution (old kernel)\n");
++	return 0;
++err:
++	ksft_print_msg("%s", errmsg);
++	return -1;
++}
++
++int main(int argc, char **argv)
++{
++	ksft_print_header();
++	ksft_set_plan(6);
++
++	ksft_print_msg("Testing POSIX timers. False negative may happen on CPU execution \n");
++	ksft_print_msg("This may happen on CPU-based timers if other threads run on the CPU...\n");
++
++	if (check_itimer(ITIMER_VIRTUAL) < 0)
++		ksft_exit_fail();
++
++	if (check_itimer(ITIMER_PROF) < 0)
++		ksft_exit_fail();
++
++	if (check_itimer(ITIMER_REAL) < 0)
++		ksft_exit_fail();
++
++	if (check_timer_create(CLOCK_THREAD_CPUTIME_ID) < 0)
++		ksft_exit_fail();
++
++	/*
++	 * It's unfortunately hard to reliably test a timer expiration
++	 * on parallel multithread cputime. We could arm it to expire
++	 * on DELAY * nr_threads, with nr_threads busy looping, then wait
++	 * the normal DELAY since the time is elapsing nr_threads faster.
++	 * But for that we need to ensure we have real physical free CPUs
++	 * to ensure true parallelism. So test only one thread until we
++	 * find a better solution.
++	 */
++	if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
++		ksft_exit_fail();
++
++	if (check_timer_distribution() < 0)
++		ksft_exit_fail();
++
++	ksft_finished();
++}
+-- 
+2.50.1
 
 
