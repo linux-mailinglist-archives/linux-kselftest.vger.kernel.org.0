@@ -1,89 +1,91 @@
-Return-Path: <linux-kselftest+bounces-39797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39798-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7628BB32B30
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 19:02:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12E53B32DB2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Aug 2025 08:14:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2545EAC0136
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Aug 2025 17:02:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB2C7443678
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Aug 2025 06:14:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47DDF1E1E12;
-	Sat, 23 Aug 2025 17:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF31A233736;
+	Sun, 24 Aug 2025 06:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GXo8Ft7o"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NwuTKpwO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BEF3234;
-	Sat, 23 Aug 2025 17:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA4F165F1A;
+	Sun, 24 Aug 2025 06:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755968538; cv=none; b=uCjDCcZtUH2FVWofNOjhpqgaz6MYfVzs8SN7re1ilHFs4SlMy346Pqs+N6xdTLUOXlOyoEj7ltSHzbMaJPEwy7pC7wjEJKyV4Y4Po9jmremWETArp/GVkLFzo11RxzpUn1HlnKyde1JTRApV49Pf6IF5eKafHllHj5m/1Ewn3LE=
+	t=1756016074; cv=none; b=EL/bQVUqnv/hfRH4ebz8n4wCiJzdWevrriR2PJuMqdGnq37/pImVQPxqWESsoZrtPk3DSCM/u5oOnvghIwRHP4tmtPYVTCD+BW9UZL90NUPjVXD9l4GmGTvWzH/pImKipNNFy9gVlFRIvkZQ8wzImOtlu5CGQdHViopYu5RtvLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755968538; c=relaxed/simple;
-	bh=rLmYaUXKiJXYAlYBGXGFMvCWXOPdKhCoO6aZASFlBk8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Fsf3cf+VLc6ehUzFuEsj/V5245IXY+q3wfQLfuU/vncIZ4nsdVEfwdyqx5ApYgFBj4TGMujOHnESjMOBb6E75Psjl9n5puR7RYxsffhgTM2vncxgebBJHMLjU1TNYrbpQ6O13ZTUqTjj1glZd4KfdtduSpGlOKpmPoLER+Z78TU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GXo8Ft7o; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1756016074; c=relaxed/simple;
+	bh=2Krz1q4dLXwXDvNiRnwBsAnhUvKZtc4rAuQ9af6bRPo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=meQll7WGbj/Jg/Fg6vwvkJ1dlDDF1PJK//stIGVYk1sHUfM4MeaYHuac25W1vko+YZPlTOthEeAEp6Ts4+3QlPtRkn7H/WOUxAkHPFIx8pge6lpWMxeDwlQ2cTDH2ZA+UJZqO/wVvkEzr3jLUDLahjHXjJ1u5Veht2i3D1nYxnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NwuTKpwO; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24664469fd9so9149515ad.2;
-        Sat, 23 Aug 2025 10:02:16 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-770d7dafacdso53390b3a.0;
+        Sat, 23 Aug 2025 23:14:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755968536; x=1756573336; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756016073; x=1756620873; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hk+p5ghEzTAvQDShLGqOKKNyxsexSgFKL80k6vJGfUg=;
-        b=GXo8Ft7oSetMYqAdBKlWW9vOSiR57Iwq93wdjvsmv9zi2vZlDuJIJBzU697HI5Mg+L
-         a0a4aSCtOEb/hjSrU+mp3qamW3gE5wlvoArfR23O6UHU2tYLHx2kMdTr4tqaszxv4r9a
-         khZsTGRHr0Qx9HLuISF8jvtfHOIujhkkrhIiHf79fpUBf6ghDBU1At6Us1TSKyu9Pc/r
-         4U1qHg52tS8cRmk7qp8EZcDLw9heGv3O3uaMZmDmlxjXVmUIyPvciAhHU0/tFYNylqmR
-         7+CTaUUN2DzfRN67r7pJhXRzHbqAhtXJU0AqRkCsrrPNQtsNJFqw7oPE/LPGMVmCjECz
-         K4aw==
+        bh=kp6ZpPi7OjGlmUly9kUQqc77MGv9H1CyM6s09oVZLEQ=;
+        b=NwuTKpwOuLNZNs/HjPvqKBHpJNl//w5Uwhqz3kuWPS+FXwZtYOwvuPjwaVRhIPo4Cf
+         jniLwOaeTm9TQBsndVVNnVK7UUgmSeBuzLpyL5rYG0GDnvTEFoukPJX2q3+PvGIRhM8x
+         uLn301FmWbbAGjRKDtb2QDz3Ti30QHdYFrnAUnO5fF1qccECxVUzNT1Nzh/SGiMWk2cu
+         uZxCNZxhiwYWw13bM1JKbak35giN+ImNQyJ/yQr9duoXQhQOV93IIOLpQAa3wz7XGDwJ
+         5JuRLXbBVqepq2CjOBpW1wMQaA/ml1vVFg8dXNWzRuM94RpbSNyfIPYsk24If2lPgYCP
+         uEDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755968536; x=1756573336;
+        d=1e100.net; s=20230601; t=1756016073; x=1756620873;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Hk+p5ghEzTAvQDShLGqOKKNyxsexSgFKL80k6vJGfUg=;
-        b=dv07/CGio5gCaCwp/9La41EONV/LrNwlG8SUVKd1FpF9bI7Sq8kQNq82SSmDJz6O9E
-         kkGxi+jg3eF8G5yZS3i/ndtE4BIGiJ52pMOh97fUYCvW8q6hqUDcM9wtXxg+uNI6SnJ4
-         LWF61bD/nWB59ycr3aj4/aderGwMz8ZluGzfQpmpTLeqS4mkwmW6NgtRdZPyzG1cVATg
-         I5q9VdkHM6WLmNYPPe/Pm4pd9E08i5QWA5H/+d4MovDxzC3KZ+elsHq0YwkFoq1uE494
-         fhBSk/4t0srVn7xnwAbhlrAaOkKZb2D2R3Y9xynfiGsdKEEC+e4aMu91ViWXfVRK6h+L
-         0+Ww==
-X-Forwarded-Encrypted: i=1; AJvYcCUnIq7WtsIAiUEBdOKnmjSmLnl2WAj7QDVVOoq2VCEw4ioXbJqEVQZYh3Rpk94CnIfkSEzpwz9v6CWGDJAWcXMG@vger.kernel.org, AJvYcCUue1CSw926uCTj+86dcge+AlYj2h6sFRZsotOH7fzyv6AKGs3dz5EvL80fqTJl/f2OyCu6rs4jWqfAzls=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyahHdSpJv76j5/8b53rKac81IbZ4SqFPeDnM0FIjpMFiBh0JEL
-	MBPeTnHNR+eBDqzUuEmotVj10KXBIfA5vhTX5Lg/+OgB8Z6jSdaDPJCl
-X-Gm-Gg: ASbGncuqPqb+FRyNNgQoQElAKFIa5QqNO31DpCTo4rrNnIiGBmJghz+r7YqXU70h+1j
-	5+x7mpPs2YwkyMI/g8SYMRp6B39Qxlqn5RcdIvv4s7EFsOtCR1u8hCcvNQUeLDqaKBRC9R4kP8X
-	8UM36vJrjqMWBgMA8apJwHF3eQVS1SDduuZ8BtfDZlig9sdcXITAXFAxPy138xQG/kexx5HWpAI
-	bTOGISrbeSQE5OhIpu8Ul8yeEZKEOEHBiUZ8GwvopioQidJGKFUd9rt7MtM02KzSsl6wb/o4nJG
-	KM2YINF1ixtjr3oPAC2uZ4juVEDZcUgtYnHPPSI2ldWYQnCMf2v5bOixHqWWGsXVVXA3otyXVYB
-	Mz/1zkRL3KoGgEp1tt3TGXre8ktJVEzPLer67xwOgOrItmWvAHzQhkvSUn+15
-X-Google-Smtp-Source: AGHT+IH2ShbvDYkTHBSBnl1YUhuZP8E16J7gyLk2VDXODCN3OD494KKcUR6j+r39w3Xzpc8VsjYNAA==
-X-Received: by 2002:a17:902:d486:b0:23f:cd6e:8d0f with SMTP id d9443c01a7336-2462ee1a473mr78779365ad.13.1755968535825;
-        Sat, 23 Aug 2025 10:02:15 -0700 (PDT)
-Received: from vicky-pop-os.. ([2401:4900:8fcf:2a2b:8899:f1d3:d5cd:752a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2467e3238fasm17808055ad.104.2025.08.23.10.02.11
+        bh=kp6ZpPi7OjGlmUly9kUQqc77MGv9H1CyM6s09oVZLEQ=;
+        b=lcMUUKsdlx+iA/jis0ky5YOHRaom5zIevqJmp9PQsFUxPp/E4ROu8B2pKllSPgFBI0
+         F8TumbzTBp67Bgl9JIZiUggLsuklqwuOZ/aC21nFvKQq0kna7fKVQk5syhFaoSpiT2ae
+         vq5UR+FrdW+biRdur/LzWkUpybWprOnmnS9qFa5zhV5ipvoFCxZ1bW2JAqn528y7+L9I
+         eHk/ryLHTey+RY6pbZwPuMty3G9D48siERdy470VAG63ShWiA2fHhqeqJduHA53whnsh
+         2MW2i1eMtHlt7KV7jvrMLoBHSnxCrAUYJ5/n2s7yecLLlDvbb/nYSDzRFl57fK81tSme
+         npUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2M1ZjiO6/ZCOGCJav3PNoIo/57V/pHBCULrQ2Vgzm80VaIRmg6sFnE1lVmB+P4JeY442ySkbcXcbdNdFLUSM+@vger.kernel.org, AJvYcCUT9f+REk8hscwW+vsXhv5zFAK8t/+Z3ZgZ9zwh2o7HOlofP1vF8iJ0niksupuQx7TiDJTMw8+TO37z3qkh@vger.kernel.org, AJvYcCUo8Mlu5AA4/w3flsq9JidupJ3prh26n5dn6inRPMOkZ/AP/G/RrG9cUHbI4vpcCfPDyx57jX9G1gM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXqIJcm/reQCm35OILPNYCaK2o1ktyBtxQto4WKniL5ddUen4o
+	WLiBI/80amkJOS/2uTtSwDNy/C1il/8vIJTeBnUBYDVS5IA8H+gZZuNl
+X-Gm-Gg: ASbGncv6l/xS78CU/FL027LVyq8cbg2mmjB86lbFyayMcFmyPS7PDHhtdjxF/WsvMp/
+	X1NIaop6XhNPF2g6J5AtZCU3Twty9auEu8DvFm9Cl6dg+GUYvTOKlL+z/bDWsBl8IWpuKaoUmny
+	3q96ZJnpsXA5b6JQmZD9NRLnhVZChby19lSTEcdt6JUSWSi4Ks3XH9obld2g8wJvGZIEIXbQ74O
+	ZtGhDi91vfROUvROu8figjZbNkyxZCGC8W9ghjhqb5mfiNAqW2nrHbbtQIddHrLG6Frd3cE1zzr
+	HeChGly431dsxAb+0Vujt9ko1uxmBreMmAQ3tIBQCpVUA75lzsAvsnosd9Nfk2m1RoqxF+Xx8Bz
+	qWSsYGuvSVIo8QZ4oQem6IVzMtidsHjhtAbWQgZAsFav58wtUBuaF
+X-Google-Smtp-Source: AGHT+IHTB0sh55lPsQjkIFNymMCMskciLiGeZrY5LBODEDl6ZzyrY2seKOgvSBVSBIbrFshQ1YI7Zw==
+X-Received: by 2002:a05:6a20:6a10:b0:243:78a:82aa with SMTP id adf61e73a8af0-24340d5e73dmr12948421637.50.1756016072582;
+        Sat, 23 Aug 2025 23:14:32 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:d003:7033:ad1b:5a79:43f0:e247])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-770529149bdsm1654943b3a.98.2025.08.23.23.14.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Aug 2025 10:02:14 -0700 (PDT)
-From: ally heev <allyheev@gmail.com>
-To: skhan@linuxfoundation.org,
-	akpm@linux-foundation.org,
-	david@redhat.com,
-	shuah@kernel.org
-Cc: ally heev <allyheev@gmail.com>,
-	linux-mm@kvack.org,
+        Sat, 23 Aug 2025 23:14:32 -0700 (PDT)
+From: vivekyadav1207731111@gmail.com
+To: catalin.marinas@arm.com,
+	will@kernel.org,
+	shuah@kernel.org,
+	corbet@lwn.net
+Cc: linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] kselftest: mm: fix typos in test_vmalloc.sh
-Date: Sat, 23 Aug 2025 22:32:08 +0530
-Message-Id: <20250823170208.184149-1-allyheev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	Vivek Yadav <vivekyadav1207731111@gmail.com>
+Subject: [PATCH 0/3] kselftest/arm64: Cleanups and readability fixes
+Date: Sat, 23 Aug 2025 23:13:59 -0700
+Message-Id: <20250824061402.13432-1-vivekyadav1207731111@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,42 +94,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Signed-off-by: ally heev <allyheev@gmail.com>
----
- tools/testing/selftests/mm/test_vmalloc.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+From: Vivek Yadav <vivekyadav1207731111@gmail.com>
 
-diff --git a/tools/testing/selftests/mm/test_vmalloc.sh b/tools/testing/selftests/mm/test_vmalloc.sh
-index d73b846736f1..d39096723fca 100755
---- a/tools/testing/selftests/mm/test_vmalloc.sh
-+++ b/tools/testing/selftests/mm/test_vmalloc.sh
-@@ -47,14 +47,14 @@ check_test_requirements()
- 	fi
- }
- 
--run_perfformance_check()
-+run_performance_check()
- {
- 	echo "Run performance tests to evaluate how fast vmalloc allocation is."
- 	echo "It runs all test cases on one single CPU with sequential order."
- 
- 	modprobe $DRIVER $PERF_PARAM > /dev/null 2>&1
- 	echo "Done."
--	echo "Ccheck the kernel message buffer to see the summary."
-+	echo "Check the kernel message buffer to see the summary."
- }
- 
- run_stability_check()
-@@ -160,7 +160,7 @@ function run_test()
- 		usage
- 	else
- 		if [[ "$1" = "performance" ]]; then
--			run_perfformance_check
-+			run_performance_check
- 		elif [[ "$1" = "stress" ]]; then
- 			run_stability_check
- 		elif [[ "$1" = "smoke" ]]; then
+Hi all,
+
+This small series makes cosmetic style cleanups in the arm64 kselftests
+to improve readability and suppress checkpatch warnings. These changes
+are purely cosmetic and do not affect functionality.
+
+Changes in this series:
+  * Suppress unnecessary checkpatch warning in a comment
+  * Add parentheses around sizeof for clarity
+  * Remove redundant blank line
+
+---
+
+Vivek Yadav (3):
+  kselftest/arm64: Remove extra blank line
+  kselftest/arm64: Supress warning and improve readability
+  kselftest/arm64: Add parentheses around sizeof for clarity
+
+ tools/testing/selftests/arm64/abi/hwcap.c       | 1 -
+ tools/testing/selftests/arm64/bti/assembler.h   | 1 -
+ tools/testing/selftests/arm64/fp/fp-ptrace.c    | 1 -
+ tools/testing/selftests/arm64/fp/fp-stress.c    | 4 ++--
+ tools/testing/selftests/arm64/fp/sve-ptrace.c   | 2 +-
+ tools/testing/selftests/arm64/fp/vec-syscfg.c   | 1 -
+ tools/testing/selftests/arm64/fp/zt-ptrace.c    | 1 -
+ tools/testing/selftests/arm64/gcs/gcs-locking.c | 1 -
+ 8 files changed, 3 insertions(+), 9 deletions(-)
+
 -- 
-2.34.1
+2.25.1
 
 
