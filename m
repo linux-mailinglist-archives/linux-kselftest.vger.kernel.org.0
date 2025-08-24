@@ -1,72 +1,89 @@
-Return-Path: <linux-kselftest+bounces-39813-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BDE7B33252
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Aug 2025 21:18:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA78B33340
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 01:19:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BE1B7AC717
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Aug 2025 19:16:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 120CD3A4224
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Aug 2025 23:19:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CCBD1F099C;
-	Sun, 24 Aug 2025 19:18:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B86CC1FF7C7;
+	Sun, 24 Aug 2025 23:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Pz+w2RBM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ePaYGx0c"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2D314A4F9;
-	Sun, 24 Aug 2025 19:17:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F359B1991D4;
+	Sun, 24 Aug 2025 23:19:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756063079; cv=none; b=a0gqUq+hn1UolH7DPiVFX7tZWcySUyLgCkt0alr5xu0WMyCxgjFE3axOxlaqKMmEIbPVQtI7W3IOxFki2kVOZZznU9E6SJymbngbu+Dnylyx250tXxJ0qRPafB9BGaGzrwPCDf7ljDo+0W9+os9bCRkkWBMM8MGQeLVfPUEEq3M=
+	t=1756077590; cv=none; b=FZ6nVYa5rvGfpmWgFkpkfqR69J9ZHUZntZV8txy7mYxeYXKhuPzHHuwi1/yNTHtoXsCVSCKKpMmO40Q4XB4oaueILSU17XTtdStAWrSDrAL+KIZB8xWyJK0pw1bb3CY0QNcYpDUg62DnJ5EmURcjK9Mnxbl4ztc9UuHh8CoWmYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756063079; c=relaxed/simple;
-	bh=oYu3AEDa0TRtvcj+z6xaQAuj/MVapve83cGXiYV4UTY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AYn06/BAZ/qr1OCR3M72m69I8MSTptlQjHneoMltUUXJuNyEf8592DacrqNRhmMBvInT4kkK7d+GEU/hGPsrFptbU0t8C0jF3IQY1cguhc0x3s0lqu72BBdOPas052FSYZZkWynmqXk1uWMvgCQPVJml2onQPLU4N0K+HPpGyjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Pz+w2RBM; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57OIVKH8017233;
-	Sun, 24 Aug 2025 19:17:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=9lmN5Yioo1QqsiV40k9ebaXaEmTYE
-	i9mxlYj+PVkIxw=; b=Pz+w2RBMDehNsI+1Hf1IIT0baB+ZqPLniNqttmx1g1mzf
-	4Oij99hWsNDhbDae0xsrxOUowL+8GJYq86gV4PAFLNeTR67MLyfSi28qf1ixvNMs
-	VobBbJbimkD1CHLObTh5pHopiPmeenAF3THzR/B0teAVpnOaJnDUWeW/2iwRAF6E
-	QCimNzY/pOams71bc8U7BmAMqg551czDL7zueXwj5yE3q/ceWMRS7ht57J7pR5Lq
-	zHn4zobhJ+XbCoAwpfCpo7UOjLYZYOTWhxrPkCigwo3mM/By3jARGhpeFKUyOspv
-	RsUsC+kdGCaXgK1J1oIVGma3A4SErOQFDN0cbuHHQ==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48q5pt16v8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 24 Aug 2025 19:17:52 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57OIxw0o026772;
-	Sun, 24 Aug 2025 19:17:51 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 48q437d9w0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 24 Aug 2025 19:17:51 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 57OJHpYP006658;
-	Sun, 24 Aug 2025 19:17:51 GMT
-Received: from ca-dev110.us.oracle.com (ca-dev110.us.oracle.com [10.129.136.45])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 48q437d9vv-1;
-	Sun, 24 Aug 2025 19:17:51 +0000
-From: Alok Tiwari <alok.a.tiwari@oracle.com>
-To: shuah@kernel.org, dev.jain@arm.com, broonie@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc: alok.a.tiwari@oracle.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: fix typo in ss_flags check message for sas.c
-Date: Sun, 24 Aug 2025 12:17:16 -0700
-Message-ID: <20250824191721.631980-1-alok.a.tiwari@oracle.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1756077590; c=relaxed/simple;
+	bh=xs5BMCegfIqJONLHKBflgvssLR5EU8lHoB1CnTpHgGw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cm3ttARyQtEDWskKhsNzlxiQMfS/kHZ1kAsl/scK95j9VbnCDSGQfcELiRd3JkscbUbJbhAL3sbPbEz37tQ3H8/AaFBKZCwPVpYA1iDjxSaWSbp7fJ/GBAx/1vfGwdNOM3dxSnisXKJ3g5eDWnfusp2w6Jpf4LKK59iz5gubNnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ePaYGx0c; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55ce5097493so3554768e87.0;
+        Sun, 24 Aug 2025 16:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756077587; x=1756682387; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UmM40kFHu7y6w1kDElLTxjdz9xSmHdOgb73sn9dXdkQ=;
+        b=ePaYGx0cs1z/6joQ1oKiYCCUNXV+MFFsUa4DO0C1gH22V2+kySE2GD74qf2yPSDZz2
+         O2iZB12tjZNTN2po+SDBDgMCAWVFl1XAkBdRHv21s2OhvSqJW9yTIuXVfwK/i5Rc7am8
+         7wewC6BG+Pf5LYqGS8f412mEx2DvFDR0Jki3FB5EIRHGtVCVQck4GqzKPCO+X1xTT05X
+         wjgD1kHoohVg5ZkoswSPwteVrruRwL9T0Dfz72GjyFzC3akfBFvIPqO/VE0pr4h19msD
+         k4KGYUe2bdxAUi1y2iUj2SypB6sUDVaaCNxQggASIQ+NfsoNxSj/FvlmIq24j0AvCf55
+         Et8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756077587; x=1756682387;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UmM40kFHu7y6w1kDElLTxjdz9xSmHdOgb73sn9dXdkQ=;
+        b=MJaoL0HzwP7UQ24BbZooiJtksQlY8Iw19CRMNNSRYwQmIGzZ65EURgsm/kn0dE8ncZ
+         YVwX2KtGzd5pif9jUn/zWUqt+F9iVuIZk5YRhRuNxmugpa/kHq0CX435cuQskIvnO/OQ
+         8VJhXoLhquLtkXoJLmNMwljZag4OU89aU+N6pmjGuq+mpXM4VT/lJFCcY3byf9Pp2FRa
+         7FxKWLSVGT4bioAkj1nYJ2GLvWJCVvgUqm/t69yQESz0iwoeaCJvH5h92tkcLIJrPgkg
+         pO+NZNOecbwU9dsEoHNoyINshrZtiN+eGHcSjYAmHswCn9zKe9nssNuhTdbq3hKp8aGj
+         h8Ew==
+X-Forwarded-Encrypted: i=1; AJvYcCU2JTzv1YTN1NvAnoJXvDzEWjOTHwk7g9efzPf81Jo318q2nUbPAUo7p7K6GtoDGGNU1GIiF3yCnjwlvW4=@vger.kernel.org, AJvYcCU42G/145UUEukeBxsA1yURfEelpceA6gM+6VeDJmgul48Xv4z3CU3fkdr2yvd02uMa/nD/Ci0WZKxxzI39dSPu@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5qBHGZUh0o0zHDOCtec3WIod0Kn+IR5KlwpF/GAhc455opP/S
+	pv3pF/QnpI4FP5W4KCGWlfRyW1e3CE4NEsttSpgmjCLOqmEliCVo7s1v
+X-Gm-Gg: ASbGncsRqnXzClF4/Pob7jKHyuuPJqysf0omf3AmImmYN/DpYq3eNm3KytBKGp7CW8p
+	NRAAmt9bGr+r6rifxVc7Q9X+OQErF3mce0BaFSJ1Acl6nDrS+6vloEaALSrTiJ6cFzhrNU/mDJx
+	Q9B8sQqfaN97eAqtDA5g0Cbh5MjdY7fYE19CFVnzbzYpSpXpLiSFwDa+LsuJdaJ1dekG3MCNoFE
+	ghYMOx82U6W4Qwo+NcRhXdL6rKsK/SgGevybxfsz5KOfecIIXbsYqYhJLujW3rDYLIN2iYOPEyS
+	fe7RddW0/jFizxLN3V8fMcQLDlmCYKh6Bc41ajD1Iw2pchLQ+TOmjV3lRHv4i46a5E7B4903JR3
+	NYxO9R+ZRRVhTOD6vzeN7WZRrcFa8tsqxktWRKzsNJn7nEKdyD3oXNyG+FjIpzKh+q3zM71MzUG
+	CIacl+OpxGCY1BJJK/+tTd9JbIbXHyRWnXucimRz91N8JnZ0TLbD4cFQ==
+X-Google-Smtp-Source: AGHT+IFH8Gguydnj/gZwYUIqVoUJZDcXxQXD16TPLJVRIthpGvYhR/+6vI99F1aFwVlA/sgsldzduw==
+X-Received: by 2002:a05:6512:234c:b0:55f:42b8:b11 with SMTP id 2adb3069b0e04-55f42b80c99mr817992e87.45.1756077586954;
+        Sun, 24 Aug 2025 16:19:46 -0700 (PDT)
+Received: from ip-172-31-45-110.eu-north-1.compute.internal (ec2-13-51-206-214.eu-north-1.compute.amazonaws.com. [13.51.206.214])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55f35c9a199sm1294898e87.110.2025.08.24.16.19.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Aug 2025 16:19:46 -0700 (PDT)
+From: Mallikarjun Thammanavar <mallikarjunst09@gmail.com>
+To: nphamcs@gmail.com,
+	shuah@kernel.org,
+	hannes@cmpxchg.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mallikarjun Thammanavar <mallikarjunst09@gmail.com>
+Subject: [PATCH] selftests/cachestat: fix grammar and debug prints
+Date: Sun, 24 Aug 2025 23:19:42 +0000
+Message-ID: <20250824231942.3910-1-mallikarjunst09@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,52 +91,37 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-24_07,2025-08-20_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
- adultscore=0 phishscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2508110000
- definitions=main-2508240183
-X-Proofpoint-ORIG-GUID: 8Umo7c7tYRFHyJH68gg6IpN7EG6kzA9U
-X-Proofpoint-GUID: 8Umo7c7tYRFHyJH68gg6IpN7EG6kzA9U
-X-Authority-Analysis: v=2.4 cv=EcXIQOmC c=1 sm=1 tr=0 ts=68ab6560 cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=2OwXVqhp2XgA:10 a=yPCof4ZbAAAA:8 a=OQvTAjIdMcoE0BJuZ4YA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAzMCBTYWx0ZWRfX4ENL9DT8fAE8
- 2tHOTDmtsdrUvnJ6/UiYOWud0GdBHN4nhLgoeJ/ssALd9fceKmoPgbWYSxrw6LjsokEAO3amGI1
- zyz1v0/B0VJVp8Uk4EnKleLu9W5Q4uhQIUHJY/ac8fknSkReLR3ko0CfbyRsPiNQB6/Yv8AyNRf
- kGdxCF6dE5dTuqWToECa1cZcMltYEqmqDRgy/sgGmLHn9wlhtLsls9pOG2dDSbIGk4qgr9yTKei
- ViF6Dnb9X1gBYM1LWTqoSJQxtWoy7s3XYrVcVhn5nJRB3LODpUSsR95JbE9X/34Jfwt1a7KAo//
- lCipB/A0VRDG/A/24zLbOv90fXtm9jggoy3dovn1Gc4ghdlVGOFQOSUPb7OdT04sWZjPwUXThuE
- XowsTmYn
 
-Fix a typo in the signal alternate stack test where the error
-message incorrectly used tss_flags instead of the correct field
-name ss_flags.
+Fix minor grammar in ksft_print_msg() output for better readability.
 
-This change ensures the test output accurately reflects the
-structure member being checked.
-
-Signed-off-by: Alok Tiwari <alok.a.tiwari@oracle.com>
+Signed-off-by: Mallikarjun Thammanavar <mallikarjunst09@gmail.com>
 ---
- tools/testing/selftests/signal/sas.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/cachestat/test_cachestat.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/signal/sas.c b/tools/testing/selftests/signal/sas.c
-index 07227fab1cc98..476ffa807a61e 100644
---- a/tools/testing/selftests/signal/sas.c
-+++ b/tools/testing/selftests/signal/sas.c
-@@ -64,7 +64,7 @@ void my_usr1(int sig, siginfo_t *si, void *u)
- 		exit(EXIT_FAILURE);
- 	}
- 	if (stk.ss_flags != SS_DISABLE)
--		ksft_test_result_fail("tss_flags=%x, should be SS_DISABLE\n",
-+		ksft_test_result_fail("ss_flags=%x, should be SS_DISABLE\n",
- 				stk.ss_flags);
- 	else
- 		ksft_test_result_pass(
+diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
+index 632ab44737ec..1417d7fb7910 100644
+--- a/tools/testing/selftests/cachestat/test_cachestat.c
++++ b/tools/testing/selftests/cachestat/test_cachestat.c
+@@ -76,7 +76,7 @@ bool write_exactly(int fd, size_t filesize)
+ 		ssize_t write_len = write(fd, cursor, remained);
+ 
+ 		if (write_len <= 0) {
+-			ksft_print_msg("Unable write random data to file.\n");
++			ksft_print_msg("Unable to write random data to file.\n");
+ 			ret = false;
+ 			goto out_free_data;
+ 		}
+@@ -183,7 +183,7 @@ static int test_cachestat(const char *filename, bool write_random, bool create,
+ 				if (cs.nr_dirty) {
+ 					ret = KSFT_FAIL;
+ 					ksft_print_msg(
+-						"Number of dirty should be zero after fsync.\n");
++						"Number of dirty pages should be zero after fsync.\n");
+ 				}
+ 			} else {
+ 				ksft_print_msg("Cachestat (after fsync) returned non-zero.\n");
 -- 
-2.50.1
+2.43.0
 
 
