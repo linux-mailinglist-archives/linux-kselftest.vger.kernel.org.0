@@ -1,110 +1,136 @@
-Return-Path: <linux-kselftest+bounces-39885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1EC0B34B2A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 21:54:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D290B34CB1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 22:51:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 828191A8785E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 19:54:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2271B1895AFD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 20:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 966CB28640B;
-	Mon, 25 Aug 2025 19:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF0F62882BD;
+	Mon, 25 Aug 2025 20:51:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IoeOEwER"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DTvl8hQx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB5826B08F;
-	Mon, 25 Aug 2025 19:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F35F1632C8;
+	Mon, 25 Aug 2025 20:51:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756151643; cv=none; b=d4f/GTyI7VP/QMko/j9+LU4p1lAuDH0aN/c8zlLW+zGizRjqqLb0kV/JKCot6zgBWasZdJb5TutpvhIEhd6KXzscfZT2C3D95YqqwLRdogq2oMo08JZ5HWnKFbzucbNmopf6C1smK5pR1q6KFZWoUVk1kkPciTUxYfJCWP3PYsk=
+	t=1756155065; cv=none; b=BWenwtR8Wa6PHwU8OgjNz5P3VsK1jNkO1oHVYHdFxnZcCbANSi6srv37X4Vef+JIdH/AhiV7H+/BKN7PREpYJwclpVMMTeO+YX906m/J9QC/olr+kRo41tg7BM5jW4FVwgioH+BQLqvlqxEplVnj1CMkhZAqKqOi8OIum17A4pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756151643; c=relaxed/simple;
-	bh=pncAPkXt8am82BvZrMraZwDvu8s/RK9Sq6BRR53zrHo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LBDdK1qofmmRHFk5xBOD4olTpAswGwhSKsijh9Q2nSQ5RVPTlFrgRRTr/YUonY800w2SEYgS/Y44XOIoa5LdcggZsqdmoSUmpbbZgbS9iNbHmtU1VWvZFKZ4xsQU9tWnjXPvGWW1CTXraKsgRpgkLEPWRGFhSX/tcv6/sY86E1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IoeOEwER; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2460757107bso43719315ad.2;
-        Mon, 25 Aug 2025 12:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756151641; x=1756756441; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hblcTV6SRi+i2kQ1j/WNk4ZeI9irz/NCFtS96Usun4A=;
-        b=IoeOEwERTcleGECFUBx0/Y+3J6AkhXQ4uckSclPnVwMsFo6K62WLpNNgbMIBycPW9s
-         2+ROF/Wel7FYM8CoYTnQEJoL6M8OBB8PUrpCzekGfe2xna3vJUSgkdCvvEaDtRhGffJX
-         wCTkqN906DprVb9VdphzrtQwPNYRqLvE9uhfUPYb09b/ZFkbeaPgm6tB4sup0YAabnNk
-         Ng7Rw/GoHbffS0MPLD84NuTn7kwB3THWuAT5SICHBfTDYWhRpBKlZGhKF4LIVbKeGiad
-         GFnnXCFNF+FelPAVpOlcOR6NHwOKB2eel55ChXwIeWTL3ww+9QtfAn5B9pOh7+N0ndqR
-         UCBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756151641; x=1756756441;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hblcTV6SRi+i2kQ1j/WNk4ZeI9irz/NCFtS96Usun4A=;
-        b=i/QVdcx3e5b6qM60yMZ+wtLp2y7ijsdQe5ehjlkEFpTWYL3KrbzEWXL9AZBFB9ZmJc
-         wiRpTwg9aEK4t/nka4rsoKPPbPlKRCox7xpKAIVtN8ToqH8TsX75TDXUnISHF6/f9Zp3
-         t7mU0QJHDthmugnCnku1SdQPdxERaSoMZSZ1la0mz3B+2iqoYvV3jhWrTvDKPYIUQL62
-         /IucJ6FIrcnpcjg+Mv3MGkoJgy7eDM04WKVOotKtx8KN2Nfd5T2/zyKMKhlQ/+mfNBgw
-         W0xvieLym0LwL+uxcJUtUqmp9ZGXJcdbwbHo2IoSr0w+3biK9lIiVZzqx7PqE9dTleSi
-         CRbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWOUcF3+RV96SYMWBIg/9Ksq16IZNDf1GLqh8Pi09YL9ET8Ihb3Tu1o/x42QTHrPRDQwETdIKxE58PU4lG3MIQ=@vger.kernel.org, AJvYcCXs4jgaXVwe82/wl4CJAAdqipwgkEKYkvJ3dEcmsnteM2wmSmgYUPYz+0RcBMQHP1IAkOFjD3d0@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHctd4M/8VqghHu6jJMm/WBZLPQD3aOB5L7YnBrSpUC6kEnC/9
-	i3woXadtztBJfn7BhC6HtE1EGY+Mg7NdmsfK5lNimKLJNfkOAl8CoXI=
-X-Gm-Gg: ASbGnctRzLiX3jTGs2naP1dXi3StZ0ulYwJIDYzhkbUplwMdTJdmTluCo8Haim7Irz3
-	k9qKfqQRStmVz5qtyCPfjMXq67fx8+53T/dSKnvAC77CBrnJ6tMxKo6LOolIL8NYr5XilGks88+
-	0qaE3LyWWmzBj1Zy3u3ryyaKDCjz9YlGUrLMImC6iqj0l4R3FSQ5A9I3jqFOE+3ewVkWR93yrSS
-	gJpiaXBNt0xjRppopheKpDD5A73YKjwQuwrb21owEy+TPhVm87zgpKaZ+wuXgqpBC6DqF824ie8
-	6byXad/SoZCXtAZFY0SKPMteQdRqn07NVvuFpPAgBYbOrIGY1MtZRpBQoW3qUHgIfcipkNvrYve
-	j39ZckdwGO54tBFCdjnBgPrUHDk3etmC1x8Buxo6QDW0BV3sbUaiDmF5+a52crWtzb90PAZWRUb
-	BzF8TqyZ2qHHIGodblVAnrK7mzYPMS+0FQQT6SyLwdGj8+ag7Oo891VhkblKw7VTjMWgxLpxWav
-	MZeUEjb/Ej0aTU=
-X-Google-Smtp-Source: AGHT+IHSI9Jv0vkVHj88ZxRs9n3Bdir5DaO8ys4HWy9D8pgM4ip5mTtAJ0fVKE+2dWyrIUgE6o1Suw==
-X-Received: by 2002:a17:903:3845:b0:21f:1202:f2f5 with SMTP id d9443c01a7336-2462edabc8fmr159339055ad.8.1756151641220;
-        Mon, 25 Aug 2025 12:54:01 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2466889dcd4sm75611285ad.158.2025.08.25.12.54.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Aug 2025 12:54:00 -0700 (PDT)
-Date: Mon, 25 Aug 2025 12:54:00 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	shuah@kernel.org, almasrymina@google.com, sdf@fomichev.me,
-	joe@dama.to, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/5] selftests: drv-net: ncdevmem: explicitly
- set HDS threshold to 0
-Message-ID: <aKy_WJPrwNwOxOAc@mini-arch>
-References: <20250825180447.2252977-1-kuba@kernel.org>
- <20250825180447.2252977-6-kuba@kernel.org>
+	s=arc-20240116; t=1756155065; c=relaxed/simple;
+	bh=3v8ZwzMQp6vVVbwvD/f/q5xRWGh2QXldSzFtAYwk/QA=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gnJYvHd44W4voiHBTNVW3ctJpEmihmvgAgUdmW3wVe4pPn9I/p+4q/M5aElvxQecE2gG0YMQnPM7PJ5yqx9eecdrCHKSinjYB/8Q8AK4nlP3ZxlvanC3KLmwrHTNh6iAT9D1FB0Zr7hefwGI2zg8E4bN8iCbhBZpy3QuW5xx7ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DTvl8hQx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C168C4CEED;
+	Mon, 25 Aug 2025 20:51:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756155065;
+	bh=3v8ZwzMQp6vVVbwvD/f/q5xRWGh2QXldSzFtAYwk/QA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=DTvl8hQx/dzgJ0SeP4gMEgDeFDVLJSwWfDa3Wc/B1+vFtw4ARQZXlJB4DWUnnoc2s
+	 n2b9hl+FxHEoaZHjkTQF7y0az/5PoQy7wuD9d5RoBzWuujbjMtTo7pCKI0Gy4hCDoV
+	 WvB4f+Laip7+5YYbALMqrG3W1A9rMeJOSW2d7y8CsLv+ErU+ft7ijSBJaMIxJMAURj
+	 2uQIvhOS2V8qgrUh5huIgKkzxLaPl5pnTA7IAsR6IXO9MTycR0KHaNyLk3kuKKpkbM
+	 8zjXPBdCP79lSILbrO9r6aZNGaNuxcUiqVtdLz196fhnTmOj4UbyjR+jc0CuyHhQ5H
+	 1v+TpYyCEb4Aw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1uqe9e-00000000Od9-43HS;
+	Mon, 25 Aug 2025 20:51:03 +0000
+Date: Mon, 25 Aug 2025 21:51:02 +0100
+Message-ID: <87zfbnyvk9.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Sebastian Ott <sebott@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: fix irqfd_test on arm64
+In-Reply-To: <aKy-9eby1OS38uqM@google.com>
+References: <20250825155203.71989-1-sebott@redhat.com>
+	<aKy-9eby1OS38uqM@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250825180447.2252977-6-kuba@kernel.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, sebott@redhat.com, pbonzini@redhat.com, shuah@kernel.org, oliver.upton@linux.dev, kvm@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 08/25, Jakub Kicinski wrote:
-> Make sure we set HDS threshold to 0 if the device supports changing it.
-> It's required for ZC.
+On Mon, 25 Aug 2025 20:52:21 +0100,
+Sean Christopherson <seanjc@google.com> wrote:
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> v2:
->  - split from previous patch
->  - only touch hds if device supports it
+> On Mon, Aug 25, 2025, Sebastian Ott wrote:
+> > irqfd_test on arm triggers the following assertion:
+> > ==== Test Assertion Failure ====
+> >   include/kvm_util.h:527: !ret
+> >   pid=3643 tid=3643 errno=11 - Resource temporarily unavailable
+> >      1  0x00000000004026d7: kvm_irqfd at kvm_util.h:527
+> >      2  0x0000000000402083: main at irqfd_test.c:100
+> >      3  0x0000ffffa5aab587: ?? ??:0
+> >      4  0x0000ffffa5aab65f: ?? ??:0
+> >      5  0x000000000040236f: _start at ??:?
+> >   KVM_IRQFD failed, rc: -1 errno: 11 (Resource temporarily unavailable)
+> > 
+> > Fix this by setting up a vgic for the vm.
+> > 
+> > Signed-off-by: Sebastian Ott <sebott@redhat.com>
+> > ---
+> > @@ -86,14 +90,30 @@ static void juggle_eventfd_primary(struct kvm_vm *vm, int eventfd)
+> >  	kvm_irqfd(vm, GSI_BASE_PRIMARY + 1, eventfd, KVM_IRQFD_FLAG_DEASSIGN);
+> >  }
+> >  
+> > +static struct kvm_vm *test_vm_create(void)
+> > +{
+> > +#ifdef __aarch64__
+> > +	struct kvm_vm *vm;
+> > +	struct kvm_vcpu *vcpu;
+> > +	int gic_fd;
+> > +
+> > +	vm = vm_create_with_one_vcpu(&vcpu, NULL);
+> > +	gic_fd = vgic_v3_setup(vm, 1, 64);
+> > +	__TEST_REQUIRE(gic_fd >= 0, "Failed to create vgic-v3");
+> 
+> I don't think this test requires v3+, any GIC will do.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+There is no such thing as "any GIC". You need to know what is
+available, and ask for something that actually exists. So while the
+above is wrong on the ground that this doesn't work on v2 or v5, the
+selection has to be explicit.
+
+> Is there a sane way to handle vGIC creation in kvm_arch_vm_post_create()?  E.g.
+> could we create a v3 GIC when possible, and fall back to v2?  And then provide a
+> way for tests to express a hard v3 GIC dependency?
+
+You can ask KVM what's available. Like an actual VMM does. There is no
+shortage of examples in the current code base.
+
+And ideally, this should be made an integral part of creating a viable
+VM, which the current VM creation hack makes a point in not providing.
+
+	M.
+
+-- 
+Jazz isn't dead. It just smells funny.
 
