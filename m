@@ -1,164 +1,213 @@
-Return-Path: <linux-kselftest+bounces-39864-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39865-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69647B34812
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 18:58:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8454B34836
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 19:07:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E171483406
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 16:58:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FD1D189FB0C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 17:07:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 288563019A0;
-	Mon, 25 Aug 2025 16:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E312F99BD;
+	Mon, 25 Aug 2025 17:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K8EPeL9r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HBYHNRcX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68651DBB2E;
-	Mon, 25 Aug 2025 16:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA81F502BE
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 17:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756141108; cv=none; b=R8UNt0Gtt5Qur9wDRPBQgiUGucLXVycA+kb6Eiw1bJjkMH50XYLypMN+kWmkZ6WdgCecCYQDloTqP1CZ2zLOrFGsLOU7Z4lwhZfk2YwKPUff5H4xCUorV1v3pDHOO2VZZgFNs5j0dZcBDZBdmD7U07aCCynib2F3FpQ5V7anG2U=
+	t=1756141627; cv=none; b=taxLAwOjHi2mD7S7HNLxg4baaej9btb4uEK/6Mjg1hE1HG8VR4aJmPspaJbHRMOZlVK0o5WAlKxf3oNJZ1WHRowVzPPwWVqxJiyxCCdVG85Qa86EGdgd7IgR2DnOQn0W3Sk1ShR2STEKBz/25JE33LXtfnhlm0xUqdF/+7zvx2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756141108; c=relaxed/simple;
-	bh=5Xs4ClQrBNPUK24yQ8tvJo62CGzQ+OUCbyk/7pv7K6g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QgQWpbJWBzKj1a7SGWEa7yiJVbyEsh6QfFcjr6FB5I1pwO1WfiT8/uFaFVx6gWLTFQRkxS+wNhE7g6Fyui1pXkyyXnYAxEYOOZzOjKauT+7dz50o0FGODdFKhMUV1kmI3JjzzXBcFOZPuunyhfYRHFDPIaVNZWvqRyS3rrMc/xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K8EPeL9r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF37AC4CEED;
-	Mon, 25 Aug 2025 16:58:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756141107;
-	bh=5Xs4ClQrBNPUK24yQ8tvJo62CGzQ+OUCbyk/7pv7K6g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=K8EPeL9rFMK2+nBscZ78BHN9AXOnwLlio8wCQA9T4HPI2M7JTseek460vnzI7LqJC
-	 TDu4NzXeMpXS8jhUa/iSAcIvRfHFDSrWxcvq7/PwB+bucaEQsHAodSxeBqU3oHbYQw
-	 JfnmUaXpTgDVr5GNOQRbyvPuO31dhRIGQUncZS3uv95CJi5KIRjBjS37ASsfqMbjJV
-	 FaVoAzebuKQA21fTHdob2rVKAkh6oJNsI5NIl49si6OGRBanVCOrvFPYRUxz3E2h7U
-	 H5t70EO0n4A9bkEljsMG6VtFtoS+dKBxf5ZFl9Bmc3Iax0SvbwLHZzXF+Oj3qlKigt
-	 vsahqKXPodl2Q==
-Date: Mon, 25 Aug 2025 19:58:10 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: Mika =?iso-8859-1?Q?Penttil=E4?= <mpenttil@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	Alexander Potapenko <glider@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>,
-	Dmitry Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
-	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-	Jens Axboe <axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>,
-	John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com,
-	kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Marco Elver <elver@google.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
-	Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
-	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
-	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
-	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
-Subject: update kernel-doc for MEMBLOCK_RSRV_NOINIT (was: Re: [PATCH RFC
- 10/35] mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap())
-Message-ID: <aKyWIriZ1bmnIrBW@kernel.org>
-References: <9156d191-9ec4-4422-bae9-2e8ce66f9d5e@redhat.com>
- <7077e09f-6ce9-43ba-8f87-47a290680141@redhat.com>
- <aKmDBobyvEX7ZUWL@kernel.org>
- <a90cf9a3-d662-4239-ad54-7ea917c802a5@redhat.com>
- <aKxz9HLQTflFNYEu@kernel.org>
- <a72080b4-5156-4add-ac7c-1160b44e0dfe@redhat.com>
- <aKx6SlYrj_hiPXBB@kernel.org>
- <f8140a17-c4ec-489b-b314-d45abe48bf36@redhat.com>
- <aKyMfvWe8JetkbRL@kernel.org>
- <dbd2ec55-0e7f-407a-a8bd-e1ac83ac2a0a@redhat.com>
+	s=arc-20240116; t=1756141627; c=relaxed/simple;
+	bh=5PUlfoVWVRg6I2FFtXNFbJ4L0V8P8GIIUsk8ZG7Fglk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jjnv3nZ0ZNxptH5Y69X4FEwqgCK2OrjUSMPSxEBdzxAIicc9PMw1/GXFbEMQJEi7l95PCnonT3DUAfsOZkmkijycAHsi5+sMN5dIXXlcLke/Z985gGWPfN5W8mt0pn73uAR3jW1fFK57uRoVIyIkASZgJyNG2WhxygLNLGgI098=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HBYHNRcX; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-b49b56a3f27so2453232a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 10:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756141625; x=1756746425; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o5RmAfR4rYsxlFJUhIr+eW2wt0BUW3DWgzYQ+evh+1Q=;
+        b=HBYHNRcXuPZg7SJacFOsFZRMbCKV2jUwe9HiVHj0nd8ft2uLLnVwxVDwjf5M5d7yGC
+         mWYqjyEjVceRtlSONbvB2Orh2fJAi1Vto6JJnBjNcb5B1xO+yH4qpzXKtjIISqU9bgxb
+         cc9I5D/us2nTYdJZBZTysm5YPAGvepxy/MS67gwTgte6roUaaMmsii6mTexk/vU7qqlF
+         cLTEqFlHVim96uBzD+KmyL8uPadyZnJDOBGHfQINct64fKVvFOfyVtpczoJQvjIR8y3M
+         LlbMNAqxJfr1fniwv9M+Yhnn6A8QGKwQwmO5yxW3lRzdysSZJlYdHZ3ZKBm2NGYDNG/M
+         pmvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756141625; x=1756746425;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o5RmAfR4rYsxlFJUhIr+eW2wt0BUW3DWgzYQ+evh+1Q=;
+        b=pvtXF99ilaGRo65+V74iYRLurS3UieI6tvGUWg3R3uiT3mDDstq4qVQtlbykYqjCXT
+         k/EtSML3kxL1iZaeRpkgj8mnl2uIXHrnuQWc0hORzhvAx9Z238gPKaE+EYRZeogJfdBo
+         zXD2JDOKzGDCESe39YDpSs1OBjBWRKmlSNuSvA5PpitxFu2cUwN6eKAbw6B4ZVBQUQTp
+         vQIIBbgY6QF3vwFIvnEMzEVpLFlJXgmcAiA+thV3KcA68URt0UBcrBRTkqbpU+eZn51X
+         wMGccv2z5g21q8fzEYaHmylphkuEpnRRXMMbub2pT+m0j66jvsNkCpfpVT74oEngxz0g
+         3N/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWGk3KAIKPmz4UYBVoko/JhgeQ4FuHfWum78a/UI9tSfPOc8wrO8gVEWiLRFE5HUWwzYbB2Vl+d3eb17rqwwas=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEs+zMPgsQZ3CJgQG0KS1A8yW9Z6PV5Ym8P5jSZbfq01pNBDgy
+	wYSIkxqwLMg3AbGvKBZoQE/Anaq84dQjEkZ8omFaHXsBnyDPBXNH3qp3
+X-Gm-Gg: ASbGnctWWdySC5lC7ypQKn9cstuYunOuCM3JWHKZuR/h+J6owGY62byC+Aew++biVy/
+	DRm21afLVx4C7d/CvjEtTw09Bghf6G8Q58EneKxvirZ7nNURWm7HPC3Ygzdy1XEmBao0TCsBug4
+	zD8fojp4VCI60VQzn2kkoHi1ra++ipM9j+QbCVaIVfUTj6r9vcS0qtSs9POeOVyB68nMWEGMwoa
+	SPiFAakvXVobvdSy822xrDi1Z3utNaVtS4U2klDNTYCd4+pLa149WCu/kwvdxaM6OKnxb30zUJc
+	eER5R0JshmbwLlpxaRrA+k7Fc+cv2IRFRnXuE4JG38XUk/W7YJwNeY01wxDpHDF4tIikR43EQih
+	8Ic1U8NsyTj68u7Uy27vWwCQi9rPa2REh5ok=
+X-Google-Smtp-Source: AGHT+IEkhsxEhLSZfQy3k7sFLEhX/tDwtC0J4MzkXu5Dz/C+lrHURinY952j7BmG/n6fx8oK3A6/fg==
+X-Received: by 2002:a17:903:1a08:b0:246:a8ad:3f24 with SMTP id d9443c01a7336-246a8ad4130mr81739215ad.7.1756141624869;
+        Mon, 25 Aug 2025 10:07:04 -0700 (PDT)
+Received: from linux ([223.181.114.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3254b8ff608sm7486025a91.29.2025.08.25.10.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Aug 2025 10:07:04 -0700 (PDT)
+From: I Viswanath <viswanathiyyappan@gmail.com>
+To: shuah@kernel.org
+Cc: akpm@linux-foundation.org,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev,
+	I Viswanath <viswanathiyyappan@gmail.com>
+Subject: [PATCH] selftests/mm: use calloc instead of malloc in pagemap_ioctl.c
+Date: Mon, 25 Aug 2025 22:36:43 +0530
+Message-ID: <20250825170643.63174-1-viswanathiyyappan@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dbd2ec55-0e7f-407a-a8bd-e1ac83ac2a0a@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 25, 2025 at 06:23:48PM +0200, David Hildenbrand wrote:
-> 
-> I don't quite understand the interaction with PG_Reserved and why anybody
-> using this function should care.
-> 
-> So maybe you can rephrase in a way that is easier to digest, and rather
-> focuses on what callers of this function are supposed to do vs. have the
-> liberty of not doing?
+As per Documentation/process/deprecated.rst, dynamic size calculations
+should not be performed in memory allocator arguments due to possible
+overflows.
 
-How about
+Replaced malloc with calloc to avoid open-ended arithmetic
+and prevent possible overflows.
+
+Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
+---
+Even though the arguments are small enough an overflow cannot happen,
+I think it's still better to follow kernel standard practices.
+
+ tools/testing/selftests/mm/pagemap_ioctl.c | 24 +++++++++++-----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index 0d4209eef0c3..4e6b815e96b2 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -209,7 +209,7 @@ int userfaultfd_tests(void)
+ 	wp_addr_range(mem, mem_size);
  
-diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-index b96746376e17..fcda8481de9a 100644
---- a/include/linux/memblock.h
-+++ b/include/linux/memblock.h
-@@ -40,8 +40,9 @@ extern unsigned long long max_possible_pfn;
-  * via a driver, and never indicated in the firmware-provided memory map as
-  * system RAM. This corresponds to IORESOURCE_SYSRAM_DRIVER_MANAGED in the
-  * kernel resource tree.
-- * @MEMBLOCK_RSRV_NOINIT: memory region for which struct pages are
-- * not initialized (only for reserved regions).
-+ * @MEMBLOCK_RSRV_NOINIT: reserved memory region for which struct pages are not
-+ * fully initialized. Users of this flag are responsible to properly initialize
-+ * struct pages of this region
-  * @MEMBLOCK_RSRV_KERN: memory region that is reserved for kernel use,
-  * either explictitly with memblock_reserve_kern() or via memblock
-  * allocation APIs. All memblock allocations set this flag.
-diff --git a/mm/memblock.c b/mm/memblock.c
-index 154f1d73b61f..46b411fb3630 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -1091,13 +1091,20 @@ int __init_memblock memblock_clear_nomap(phys_addr_t base, phys_addr_t size)
+ 	vec_size = mem_size/page_size;
+-	vec = malloc(sizeof(struct page_region) * vec_size);
++	vec = calloc(vec_size, sizeof(struct page_region));
  
- /**
-  * memblock_reserved_mark_noinit - Mark a reserved memory region with flag
-- * MEMBLOCK_RSRV_NOINIT which results in the struct pages not being initialized
-- * for this region.
-+ * MEMBLOCK_RSRV_NOINIT
-+ *
-  * @base: the base phys addr of the region
-  * @size: the size of the region
-  *
-- * struct pages will not be initialized for reserved memory regions marked with
-- * %MEMBLOCK_RSRV_NOINIT.
-+ * The struct pages for the reserved regions marked %MEMBLOCK_RSRV_NOINIT will
-+ * not be fully initialized to allow the caller optimize their initialization.
-+ *
-+ * When %CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled, setting this flag
-+ * completely bypasses the initialization of struct pages for such region.
-+ *
-+ * When %CONFIG_DEFERRED_STRUCT_PAGE_INIT is disabled, struct pages in this
-+ * region will be initialized with default values but won't be marked as
-+ * reserved.
-  *
-  * Return: 0 on success, -errno on failure.
-  */
-
-> -- 
-> Cheers
-> 
-> David / dhildenb
-> 
-
+ 	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
+ 				vec_size - 2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
+@@ -247,11 +247,11 @@ int sanity_tests_sd(void)
+ 	vec_size = num_pages/2;
+ 	mem_size = num_pages * page_size;
+ 
+-	vec = malloc(sizeof(struct page_region) * vec_size);
++	vec = calloc(vec_size, sizeof(struct page_region));
+ 	if (!vec)
+ 		ksft_exit_fail_msg("error nomem\n");
+ 
+-	vec2 = malloc(sizeof(struct page_region) * vec_size);
++	vec2 = calloc(vec_size, sizeof(struct page_region));
+ 	if (!vec2)
+ 		ksft_exit_fail_msg("error nomem\n");
+ 
+@@ -436,7 +436,7 @@ int sanity_tests_sd(void)
+ 	mem_size = 1050 * page_size;
+ 	vec_size = mem_size/(page_size*2);
+ 
+-	vec = malloc(sizeof(struct page_region) * vec_size);
++	vec = calloc(vec_size, sizeof(struct page_region));
+ 	if (!vec)
+ 		ksft_exit_fail_msg("error nomem\n");
+ 
+@@ -491,7 +491,7 @@ int sanity_tests_sd(void)
+ 	mem_size = 10000 * page_size;
+ 	vec_size = 50;
+ 
+-	vec = malloc(sizeof(struct page_region) * vec_size);
++	vec = calloc(vec_size, sizeof(struct page_region));
+ 	if (!vec)
+ 		ksft_exit_fail_msg("error nomem\n");
+ 
+@@ -541,7 +541,7 @@ int sanity_tests_sd(void)
+ 	vec_size = 1000;
+ 	mem_size = vec_size * page_size;
+ 
+-	vec = malloc(sizeof(struct page_region) * vec_size);
++	vec = calloc(vec_size, sizeof(struct page_region));
+ 	if (!vec)
+ 		ksft_exit_fail_msg("error nomem\n");
+ 
+@@ -695,8 +695,8 @@ int base_tests(char *prefix, char *mem, unsigned long long mem_size, int skip)
+ 	}
+ 
+ 	vec_size = mem_size/page_size;
+-	vec = malloc(sizeof(struct page_region) * vec_size);
+-	vec2 = malloc(sizeof(struct page_region) * vec_size);
++	vec = calloc(vec_size, sizeof(struct page_region));
++	vec2 = calloc(vec_size, sizeof(struct page_region));
+ 
+ 	/* 1. all new pages must be not be written (dirty) */
+ 	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
+@@ -807,8 +807,8 @@ int hpage_unit_tests(void)
+ 	unsigned long long vec_size = map_size/page_size;
+ 	struct page_region *vec, *vec2;
+ 
+-	vec = malloc(sizeof(struct page_region) * vec_size);
+-	vec2 = malloc(sizeof(struct page_region) * vec_size);
++	vec = calloc(vec_size, sizeof(struct page_region));
++	vec2 = calloc(vec_size, sizeof(struct page_region));
+ 	if (!vec || !vec2)
+ 		ksft_exit_fail_msg("malloc failed\n");
+ 
+@@ -997,7 +997,7 @@ int unmapped_region_tests(void)
+ 	void *start = (void *)0x10000000;
+ 	int written, len = 0x00040000;
+ 	long vec_size = len / page_size;
+-	struct page_region *vec = malloc(sizeof(struct page_region) * vec_size);
++	struct page_region *vec = calloc(vec_size, sizeof(struct page_region));
+ 
+ 	/* 1. Get written pages */
+ 	written = pagemap_ioctl(start, len, vec, vec_size, 0, 0,
+@@ -1062,7 +1062,7 @@ int sanity_tests(void)
+ 	mem_size = 10 * page_size;
+ 	vec_size = mem_size / page_size;
+ 
+-	vec = malloc(sizeof(struct page_region) * vec_size);
++	vec = calloc(vec_size, sizeof(struct page_region));
+ 	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+ 	if (mem == MAP_FAILED || vec == MAP_FAILED)
+ 		ksft_exit_fail_msg("error nomem\n");
 -- 
-Sincerely yours,
-Mike.
+2.50.1
+
 
