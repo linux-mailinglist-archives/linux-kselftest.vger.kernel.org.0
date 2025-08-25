@@ -1,174 +1,390 @@
-Return-Path: <linux-kselftest+bounces-39858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88AFBB34651
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 17:52:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0AF8B346EC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 18:17:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 351D13A4DF5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 15:52:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D85E67A4549
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 16:16:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7222F2916;
-	Mon, 25 Aug 2025 15:52:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA2AB2FA0CC;
+	Mon, 25 Aug 2025 16:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LNzgMPNn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IgSLtGmQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AD129E0F4
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 15:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72D82F3633;
+	Mon, 25 Aug 2025 16:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756137136; cv=none; b=Hl9uqbiZyQhpCjqmXnLlLgo/XUXVB1kYSjocCRE2V8igh3l5NksO1d0EFbqjSynaPW10pr0q6avXZK4+KgpgNAMfNBH7flmNfA0w7bLOcW1z37GwTxwTYQNHr9BHPb8d+HU1aOcupkYJTNjK3rphbms9BJApQdMFlbJON6sR95o=
+	t=1756138616; cv=none; b=j7TxotFUn/PnBIemctvi4bdw+q5wy75liP+n+hi6UA01ez4mYw1IkRHONi+AHONSRTYCYrHXxU5gpHXUhXSA1suykQzu5g5gpAUT0mrEpjYCCjZ6nJNAXHTIpGkkc8wcGJS8fb9MCEFwwWd4gV5quPB/7w9MdLJk2IV2mYBZNeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756137136; c=relaxed/simple;
-	bh=KZkhA/kQOmp5Oy93QMxfpEXKqa6Fo2q74cwH7XYOoXk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hn11giTfTAt0dzK6uHhrMdW7LEJetNVLSnuHJ/wlTLVnQGL26oxGpLVl763FiEO6hE2JtDiEGtVdCJCRYImitmbyteUQNaY0a4Qvpa2DKU3vRX4R99kmvZj1d3Wr3JyeuqL76JVC36ssMAGYSXI0C9wCreGdZbPAHjm0QDHTmxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LNzgMPNn; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756137134;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Ed6qfTFHMUqyUn8kqjL4nj7yM5M0u0oh4hNGYHbww5c=;
-	b=LNzgMPNnwqeaRmUfES2bLyObn/B2iVStO4niAFqGnhI4aZznWpHH8kgL3Ih3YsNn987s3p
-	S1Tf87kT82c7+2YVbPykqzq+cCtNcc6SLUgtCmCJOb7ejSKiqGGd9j9twfS4tzjv/DlXot
-	JL55/6VbcMXgRVBvGonYJBpSnDsYVps=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-688-jxGlNkb2OnakM0Fx0XPiHg-1; Mon, 25 Aug 2025 11:52:10 -0400
-X-MC-Unique: jxGlNkb2OnakM0Fx0XPiHg-1
-X-Mimecast-MFC-AGG-ID: jxGlNkb2OnakM0Fx0XPiHg_1756137129
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3c79f0a57ddso1103457f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 08:52:10 -0700 (PDT)
+	s=arc-20240116; t=1756138616; c=relaxed/simple;
+	bh=TDLfIWRFwwC3Dx3jliWqTXEQ28lSr9bcRJA/957/60I=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=Lb98fOinU3hUTYq53G3Xt2ou2eMsKvRSrZY6zgxaKshSvmwvx/myrYG6s8b6fjY+FVH9ree8zrHssUydaGC000CvlD7/GBSxD+baTlvMCUW+8AzN1I/4RJhpkXVWBTUGHUz7mL5/sXhr1FvO6PaLkM31l426t4f7cjohmXxj0+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IgSLtGmQ; arc=none smtp.client-ip=209.85.217.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-523011c7489so206198137.1;
+        Mon, 25 Aug 2025 09:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756138614; x=1756743414; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3q0gIgfUdfzXjLWY/5e4i6y//L3MRBinZoAMQYO2NI4=;
+        b=IgSLtGmQ/mxRr+jNu3YmkZAKr5KRoxWq+bkyb40IF8F3c9xOwr+l/IiKwpyuDkjvR0
+         yUgTNfvi61CZXnKcB3Y6/IfDElzc28B180EyhSXPx1O5TfCaFFaQDwnxo2uA2eX07t73
+         Z36Tgkhmr+DsMNig9obEP9rmDp7j1KaL9Zy/F/ZkLKvX9A76sxtSPeuSac39jyysFnR6
+         HJLrU6adw+25MdjwfMqQdqLFM+obpv4hcemHGf+MHI8WPLeBBz5JhbKA51CDJpN2HaKU
+         Cc2XxlHDLNPtEtzow+LFGAo/Yww6LQUg/RG2D9flItG9V3e6DLb+mYsp6YxNzQU4tItT
+         aFYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756137129; x=1756741929;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ed6qfTFHMUqyUn8kqjL4nj7yM5M0u0oh4hNGYHbww5c=;
-        b=LdR+TORYdNyFiakoYwQwr4d8UM89You3jHZTYRSJTECKyHFq27AO4oyUNQ1BJkAEVl
-         ERFtq2hMdWeUwjUaXufCyhehw1CWoeFKrauAUfrJqIA69dPL2ZU084rd3/uiegl/Yiao
-         kdxasKwNCg+7k2R39+qQx0LahFg8PDMdlar78AvKvTeXrxKPQhnYED2naBKvqdXRSemj
-         dlsYHAxz8SfDfqNoafFq+GWI/Iae1IXDiWN71N9HAnPI8Nn4usumziakbHW12iC4iPk/
-         KiA7l2PK++d+J/xruN1CUi6SAym96Wq+1+Sc6u1YigRnhj8fJaCH7Xc8tE/DJV8jTl2c
-         cNfg==
-X-Forwarded-Encrypted: i=1; AJvYcCXP9wGVcpBsFEa1AE4tJrplIVTlNBfEk2wYQsCwTOFnxG2bOzKZ6F/H1pvaYxooImD1GKDevcFHb/D4hoKtvTY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIPS2nI/Pq0B/ib8+mtTDi8efuBbw7jJYEjEC/gCepcEypq4/R
-	pCLdmwT0KKA3uPkLcH4Kq5V2wWSE8+12mG2+rZuAIgHSA1tW6wP/7hsZ45BGSVhOVBHXCHQCYbX
-	vgE5DNPFU8Xlmjkpj3zdP+kQ4SV7v36Yc5lmVxQD9JPzSNfwIzJgatCcy33+px6bLsgX3uw==
-X-Gm-Gg: ASbGncuSggrHVb19E0kwNu49Ufz5l65RHrWy0pruRRK2ICxG9uZIUoz92frHcEsEhAJ
-	s34tyOKzN71qFMMXanXYvfiZJ3AvkYgaNeqVDgefktynTMc1+Q1NVoPNJ22Sbjf+dPV2pDpFHI3
-	P33jw1rQ7vVGDAc73kzIJzv4cB0geHA/ErY6U1fBEueYYn8EO6i0HvIu5WMlum1Li1sgrKvZYIK
-	CH2s+uIcwu6BHih43y1VNLew27rBre5snBmrpARwsrfcoOPFYfRq5jJebxrIkFe8st26Zkxc9Ik
-	SBsPIDnXKfrjIuur9RmTORGuw3YAMsd6VhmtYgtITFMCw5JduWW9rkZ0zE5JjlQVneZIRfUDpq/
-	VW2QZpKEXWbijgc+8qw5qXceynhc=
-X-Received: by 2002:a05:6000:2404:b0:3b8:d30c:885f with SMTP id ffacd0b85a97d-3c5dcefe32fmr10599042f8f.53.1756137128985;
-        Mon, 25 Aug 2025 08:52:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFXEz5g23IvWuo/ydVi6QeOhq8AK8ymIKqhjfE0JE8EYTvGus+zqYsHwn1w6Z++sXaw7/PNcA==
-X-Received: by 2002:a05:6000:2404:b0:3b8:d30c:885f with SMTP id ffacd0b85a97d-3c5dcefe32fmr10599010f8f.53.1756137128539;
-        Mon, 25 Aug 2025 08:52:08 -0700 (PDT)
-Received: from rh.redhat.com (p200300f6af131a0027bd20bfc18c447d.dip0.t-ipconnect.de. [2003:f6:af13:1a00:27bd:20bf:c18c:447d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c70f237fefsm12155436f8f.30.2025.08.25.08.52.07
+        d=1e100.net; s=20230601; t=1756138614; x=1756743414;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3q0gIgfUdfzXjLWY/5e4i6y//L3MRBinZoAMQYO2NI4=;
+        b=A6Nf46gH9AKmjYtxf+m0AaCZZ5gT04Tkz0PVrVjf9iKGJd8CZ46b42KIonECKi+9pU
+         kpmcMxaQUgMt3NxBiXScO06qXLAaAyD1rE05Ak2Wl1luwcz+mz623Vhmrfg+rLyj3wEn
+         WDwlOdka4LUKA6l0PApUrhS5J5Vt/JixCRh5u+bKNLV4fQfzV3t1Aaw+RIw+QbkTkxyf
+         8C4gHFpT127fBcWWdHw2sZkprOiaR3Iw2PNn3Q4WskbayWlOP03HM31MkvwXDTObhjQy
+         caVIw4S8Ls5yvlIU1s8EixwXP40fU9tkelG/ypFaPU82HmZ4YG5Qu+d7rQZDK2meYF1t
+         teAw==
+X-Forwarded-Encrypted: i=1; AJvYcCV4IwCAGwpznIRbAwhKyFidHHWKx/dBFrrgYQ7dfZ6EKbRfs/8fsDToCwfNuJXPTbheRyR4ssc5a/Sp4Zk=@vger.kernel.org, AJvYcCVk1LlThQRx5sXs5l/9ltl+qRfpnSwv/cwI1eGMMyDWzBHvtaP94B0FlOg11vkwdmpksGaEzEsQ@vger.kernel.org, AJvYcCXbC0gDoHDWTHaE+714Fj/1092qQ09xXKgJ2PZbGxkcij35xhm1lrM7RR/9bim+7BQrHk32TrKd7Ec0pj9kku77@vger.kernel.org
+X-Gm-Message-State: AOJu0YzigYjGb73ponIsnCnlkWYcVbBfgDxKnSCqlYJCx7tqlHk/evc/
+	RwD6NTY+lxetMT0yv9dh2LP7Sc29f/zTtZDyJIqHKFSvcHArUpJA+FtW
+X-Gm-Gg: ASbGncuA9SkmgqB4Um/EtGNHYwaywFR45p1u6HPgQgIKYPHDBkWBEKrBQj87fAvfxMy
+	qjTvvBpqlXY3q+PyO11ERKyGPv5O4J+An4f7jEG5/2UkGchPMlhAHGdXbhbyvIT55A9ljXPvMLU
+	HfvuGf5J67/xUHN7LjIUkRQL9N2p954fL8peDaLJXp+BhmQEGxOETurtBZFxVdOWJYJne/0j+vC
+	xzTpHaP4+yzDKwyry5Ri25V7QhBg3OgteZpzNU11Wa8cmq6tKZa8JThuzKpugI/WKCql893fOcW
+	0ik8dnrvCMPjKXYnJU3LoSYqwGTdqP1BNpvEFhoFDDAb0pEhWSZ2dqpIU7Dy096dYiVlATfOSZ+
+	YkqQDuXDeZB7NXwZBCuMLkDuQrOwAGR6hjbKlUALPP01yktayB+kR+smtrYXIrXMWFZQAEQ==
+X-Google-Smtp-Source: AGHT+IGkT4GwkOKBU6QvAEO4wgFdzVC3ttH/lDlWPOkolxnrPDydRtNZaN37go/mkOzg4VN+tRE3Ng==
+X-Received: by 2002:a05:6102:38d1:b0:4eb:eede:ec61 with SMTP id ada2fe7eead31-51d0c6bf425mr3973257137.1.1756138613478;
+        Mon, 25 Aug 2025 09:16:53 -0700 (PDT)
+Received: from gmail.com (128.5.86.34.bc.googleusercontent.com. [34.86.5.128])
+        by smtp.gmail.com with UTF8SMTPSA id ada2fe7eead31-51e4b2a85ddsm1539488137.4.2025.08.25.09.16.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Aug 2025 08:52:08 -0700 (PDT)
-From: Sebastian Ott <sebott@redhat.com>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>
-Cc: kvm@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sebastian Ott <sebott@redhat.com>
-Subject: [PATCH] KVM: selftests: fix irqfd_test on arm64
-Date: Mon, 25 Aug 2025 17:52:03 +0200
-Message-ID: <20250825155203.71989-1-sebott@redhat.com>
-X-Mailer: git-send-email 2.51.0
+        Mon, 25 Aug 2025 09:16:52 -0700 (PDT)
+Date: Mon, 25 Aug 2025 12:16:52 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Brett A C Sheffield <bacs@librecast.net>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Cc: Brett A C Sheffield <bacs@librecast.net>, 
+ Greg KH <gregkh@linuxfoundation.org>, 
+ Willem de Bruijn <willemb@google.com>
+Message-ID: <willemdebruijn.kernel.143e90d593cff@gmail.com>
+In-Reply-To: <20250825092548.4436-3-bacs@librecast.net>
+References: <20250825092548.4436-3-bacs@librecast.net>
+Subject: Re: [PATCH net-next] selftests: net: add test for ipv6 fragmentation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-irqfd_test on arm triggers the following assertion:
-==== Test Assertion Failure ====
-  include/kvm_util.h:527: !ret
-  pid=3643 tid=3643 errno=11 - Resource temporarily unavailable
-     1  0x00000000004026d7: kvm_irqfd at kvm_util.h:527
-     2  0x0000000000402083: main at irqfd_test.c:100
-     3  0x0000ffffa5aab587: ?? ??:0
-     4  0x0000ffffa5aab65f: ?? ??:0
-     5  0x000000000040236f: _start at ??:?
-  KVM_IRQFD failed, rc: -1 errno: 11 (Resource temporarily unavailable)
+Brett A C Sheffield wrote:
+> Add selftest for the IPv6 fragmentation regression which affected
+> several stable kernels.
+> 
+> Commit a18dfa9925b9 ("ipv6: save dontfrag in cork") was backported to
+> stable without some prerequisite commits.  This caused a regression when
+> sending IPv6 UDP packets by preventing fragmentation and instead
+> returning -1 (EMSGSIZE).
+> 
+> Add selftest to check for this issue by attempting to send a packet
+> larger than the interface MTU. The packet will be fragmented on a
+> working kernel, with sendmsg(2) correctly returning the expected number
+> of bytes sent.  When the regression is present, sendmsg returns -1 and
+> sets errno to EMSGSIZE.
+> 
+> Signed-off-by: Brett A C Sheffield <bacs@librecast.net>
+> Link: https://lore.kernel.org/stable/aElivdUXqd1OqgMY@karahi.gladserv.com
 
-Fix this by setting up a vgic for the vm.
+Thanks for adding a regression test for this.
 
-Signed-off-by: Sebastian Ott <sebott@redhat.com>
----
- tools/testing/selftests/kvm/irqfd_test.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+> ---
+>  tools/testing/selftests/net/.gitignore        |   1 +
+>  tools/testing/selftests/net/Makefile          |   1 +
+>  .../selftests/net/ipv6_fragmentation.c        | 204 ++++++++++++++++++
+>  3 files changed, 206 insertions(+)
+>  create mode 100644 tools/testing/selftests/net/ipv6_fragmentation.c
+> 
+> diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+> index 47c293c2962f..3d4b4a53dfda 100644
+> --- a/tools/testing/selftests/net/.gitignore
+> +++ b/tools/testing/selftests/net/.gitignore
+> @@ -16,6 +16,7 @@ ip_local_port_range
+>  ipsec
+>  ipv6_flowlabel
+>  ipv6_flowlabel_mgr
+> +ipv6_fragmentation
+>  log.txt
+>  msg_oob
+>  msg_zerocopy
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index b31a71f2b372..f83f91b758ae 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -117,6 +117,7 @@ TEST_GEN_FILES += tfo
+>  TEST_PROGS += tfo_passive.sh
+>  TEST_PROGS += broadcast_pmtu.sh
+>  TEST_PROGS += ipv6_force_forwarding.sh
+> +TEST_GEN_PROGS += ipv6_fragmentation
+>  
+>  # YNL files, must be before "include ..lib.mk"
+>  YNL_GEN_FILES := busy_poller netlink-dumps
+> diff --git a/tools/testing/selftests/net/ipv6_fragmentation.c b/tools/testing/selftests/net/ipv6_fragmentation.c
+> new file mode 100644
+> index 000000000000..21e1a3cdc63d
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/ipv6_fragmentation.c
+> @@ -0,0 +1,204 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Author: Brett A C Sheffield <bacs@librecast.net>
+> + *
+> + * Kernel selftest for the IPv6 fragmentation regression which affected
+> + * stable kernels:
+> + *
+> + *   https://lore.kernel.org/stable/aElivdUXqd1OqgMY@karahi.gladserv.com
+> + *
+> + * Commit:
+> + *   a18dfa9925b9 ("ipv6: save dontfrag in cork")
+> + * was backported to stable without some prerequisite commits.
+> + *
+> + * This caused a regression when sending IPv6 UDP packets by preventing
+> + * fragmentation and instead returning -1 (EMSGSIZE).
+> + *
+> + * This selftest demonstrates the issue. sendmsg returns correctly (8192)
+> + * on a working kernel, and returns -1 (EMSGSIZE) when the regression is
+> + * present.
+> + *
+> + * The regression was not present in the mainline kernel, but add this test to
+> + * catch similar breakage in future.
+> + */
+> +
+> +#define _GNU_SOURCE
+> +
+> +#include <fcntl.h>
+> +#include <linux/if_tun.h>
+> +#include <net/if.h>
+> +#include <netinet/in.h>
+> +#include <sched.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/ioctl.h>
+> +#include <sys/socket.h>
+> +#include <unistd.h>
+> +
+> +#define MTU 1500
+> +#define LARGER_THAN_MTU 8192
+> +
+> +/* ensure MTU is smaller than what we plan to send */
+> +static int set_mtu(int ctl, char *ifname, struct ifreq *ifr)
+> +{
+> +	ifr->ifr_mtu = MTU;
+> +	return ioctl(ctl, SIOCSIFMTU, ifr);
+> +}
+> +
+> +/* bring up interface */
+> +static int interface_up(int ctl, char *ifname, struct ifreq *ifr)
+> +{
+> +	if (ioctl(ctl, SIOCGIFFLAGS, ifr) == -1) {
+> +		perror("ioctl SIOCGIFFLAGS");
+> +		return -1;
+> +	}
+> +	ifr->ifr_flags = ifr->ifr_flags | IFF_UP;
+> +	return ioctl(ctl, SIOCSIFFLAGS, ifr);
+> +}
+> +
+> +/* no need to wait for DAD in our namespace */
+> +static int disable_dad(char *ifname)
+> +{
+> +	char sysvar[] = "/proc/sys/net/ipv6/conf/%s/accept_dad";
+> +	char fname[IFNAMSIZ + sizeof(sysvar)];
+> +	int fd;
+> +
+> +	snprintf(fname, sizeof(fname), sysvar, ifname);
+> +	fd = open(fname, O_WRONLY);
+> +	if (fd == -1) {
+> +		perror("open accept_dad");
+> +		return -1;
+> +	}
+> +	if (write(fd, "0", 1) != 1) {
+> +		perror("write");
+> +		return -1;
+> +	}
+> +	return close(fd);
+> +}
+> +
+> +/* create TAP interface that will be deleted when this process exits */
+> +static int create_interface(int ctl, char *ifname, struct ifreq *ifr)
+> +{
+> +	int fd;
+> +
+> +	fd = open("/dev/net/tun", O_RDWR);
+> +	if (fd == -1) {
+> +		perror("open tun");
+> +		return -1;
+> +	}
+> +
+> +	ifr->ifr_flags = IFF_TAP | IFF_NO_PI;
+> +	if (ioctl(fd, TUNSETIFF, (void *)ifr) == -1) {
+> +		close(fd);
+> +		perror("ioctl: TUNSETIFF");
+> +		return -1;
+> +	}
+> +	strcpy(ifname, ifr->ifr_name);
+> +
+> +	return fd;
+> +}
+> +
+> +/* we need to set MTU, so do this in a namespace to play nicely */
+> +static int create_namespace(void)
+> +{
+> +	const char *netns_path = "/proc/self/ns/net";
+> +	int fd;
+> +
+> +	if (unshare(CLONE_NEWNET) != 0) {
+> +		perror("unshare");
+> +		return -1;
+> +	}
 
-diff --git a/tools/testing/selftests/kvm/irqfd_test.c b/tools/testing/selftests/kvm/irqfd_test.c
-index 7c301b4c7005..f7b8766e9d42 100644
---- a/tools/testing/selftests/kvm/irqfd_test.c
-+++ b/tools/testing/selftests/kvm/irqfd_test.c
-@@ -8,7 +8,11 @@
- #include <stdint.h>
- #include <sys/sysinfo.h>
- 
-+#include "processor.h"
- #include "kvm_util.h"
-+#ifdef __aarch64__
-+#include "vgic.h"
-+#endif
- 
- static struct kvm_vm *vm1;
- static struct kvm_vm *vm2;
-@@ -86,14 +90,30 @@ static void juggle_eventfd_primary(struct kvm_vm *vm, int eventfd)
- 	kvm_irqfd(vm, GSI_BASE_PRIMARY + 1, eventfd, KVM_IRQFD_FLAG_DEASSIGN);
- }
- 
-+static struct kvm_vm *test_vm_create(void)
-+{
-+#ifdef __aarch64__
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	int gic_fd;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, NULL);
-+	gic_fd = vgic_v3_setup(vm, 1, 64);
-+	__TEST_REQUIRE(gic_fd >= 0, "Failed to create vgic-v3");
-+
-+	return vm;
-+#endif
-+	return vm_create(1);
-+}
-+
- int main(int argc, char *argv[])
- {
- 	pthread_t racing_thread;
- 	int r, i;
- 
- 	/* Create "full" VMs, as KVM_IRQFD requires an in-kernel IRQ chip. */
--	vm1 = vm_create(1);
--	vm2 = vm_create(1);
-+	vm1 = test_vm_create();
-+	vm2 = test_vm_create();
- 
- 	WRITE_ONCE(__eventfd, kvm_new_eventfd());
- 
--- 
-2.51.0
+Is this not sufficient to move the current process in its own netns?
+
+> +
+> +	fd = open(netns_path, O_RDONLY);
+> +	if (fd == -1) {
+> +		perror("open");
+> +		return -1;
+> +	}
+> +
+> +	if (setns(fd, CLONE_NEWNET)) {
+> +		perror("setns");
+> +		return -1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int setup(void)
+> +{
+> +	struct ifreq ifr = {0};
+> +	char ifname[IFNAMSIZ];
+> +	int fd = -1;
+> +	int ctl;
+> +
+> +	if (create_namespace() == -1)
+> +		return -1;
+> +
+> +	ctl = socket(AF_LOCAL, SOCK_STREAM, 0);
+> +	if (ctl == -1)
+> +		return -1;
+> +
+> +	memset(ifname, 0, sizeof(ifname));
+> +	fd = create_interface(ctl, ifname, &ifr);
+> +	if (fd == -1)
+> +		goto err_close_ctl;
+> +	if (disable_dad(ifname) == -1)
+> +		goto err_close_fd;
+> +	if (interface_up(ctl, ifname, &ifr) == -1)
+> +		goto err_close_fd;
+> +	if (set_mtu(ctl, ifname, &ifr) == -1)
+> +		goto err_close_fd;
+> +	usleep(10000); /* give interface a moment to wake up */
+
+This may be racy. Wait on a more explicit signal? E.g.,
+/sys/class/net/$DEV/operstate.
+
+> +	goto err_close_ctl;
+> +err_close_fd:
+> +	close(fd);
+> +	fd = -1;
+> +err_close_ctl:
+> +	close(ctl);
+> +	return fd;
+> +}
+> +
+> +int main(void)
+> +{
+> +	/* address doesn't matter, use an IPv6 multicast address for simplicity */
+> +	struct in6_addr addr = {
+> +		.s6_addr[0] = 0xff, /* multicast */
+> +		.s6_addr[1] = 0x12, /* set flags (T, link-local) */
+> +	};
+> +	struct sockaddr_in6 sa = {
+> +		.sin6_family = AF_INET6,
+> +		.sin6_addr = addr,
+> +		.sin6_port = 4242
+> +	};
+> +	char buf[LARGER_THAN_MTU] = {0};
+> +	struct iovec iov = { .iov_base = buf, .iov_len = sizeof(buf)};
+> +	struct msghdr msg = {
+> +		.msg_iov = &iov,
+> +		.msg_iovlen = 1,
+> +		.msg_name = (struct sockaddr *)&sa,
+> +		.msg_namelen = sizeof(sa),
+> +	};
+> +	ssize_t rc;
+> +	int ns_fd;
+> +	int s;
+> +
+> +	printf("Testing IPv6 fragmentation\n");
+> +	ns_fd = setup();
+> +	if (ns_fd == -1)
+> +		return 1;
+> +	s = socket(AF_INET6, SOCK_DGRAM, 0);
+> +	msg.msg_name = (struct sockaddr *)&sa;
+> +	msg.msg_namelen = sizeof(sa);
+
+nit: duplicate?
+
+Also, no local address is set. This uses the IPv6 auto assigned
+address?
+
+> +	rc = sendmsg(s, &msg, 0);
+> +	if (rc == -1) {
+> +		perror("send");
+> +		return 1;
+
+Probably want to cleanup state both on success and failure.
+
+Could use KSFT_.. exit codes, though 0/1 works just as well for
+kselftests in practice.
+
+> +	} else if (rc != LARGER_THAN_MTU) {
+> +		fprintf(stderr, "send() returned %zi\n", rc);
+> +		return 1;
+> +	}
+> +	close(s);
+> +	close(ns_fd);
+> +
+> +	return 0;
+> +}
+> -- 
+> 2.49.1
+> 
+
 
 
