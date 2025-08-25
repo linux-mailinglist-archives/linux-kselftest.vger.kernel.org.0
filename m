@@ -1,136 +1,139 @@
-Return-Path: <linux-kselftest+bounces-39886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39887-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D290B34CB1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 22:51:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2357AB34D35
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 23:00:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2271B1895AFD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 20:51:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE1B32043C6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 21:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF0F62882BD;
-	Mon, 25 Aug 2025 20:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0682829A323;
+	Mon, 25 Aug 2025 21:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DTvl8hQx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hQzUAXTy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F35F1632C8;
-	Mon, 25 Aug 2025 20:51:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA5F28B7CC
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 21:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756155065; cv=none; b=BWenwtR8Wa6PHwU8OgjNz5P3VsK1jNkO1oHVYHdFxnZcCbANSi6srv37X4Vef+JIdH/AhiV7H+/BKN7PREpYJwclpVMMTeO+YX906m/J9QC/olr+kRo41tg7BM5jW4FVwgioH+BQLqvlqxEplVnj1CMkhZAqKqOi8OIum17A4pU=
+	t=1756155630; cv=none; b=YXU4n6jSYle5U0XPOWlwxnD+H2iOrg4i1l/Ub+UanHza9Bef4J/R7/z3AhNGiQ46rERVsfBB1PdVa498pazfDIOd2SELgrn8Kn59HGstglhIo/UQ+haSSvgpyqhIpu2Ow3cZNTn2KXZ38g6F28i/9ETr5AoGS8SCn9lJxRVQ7Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756155065; c=relaxed/simple;
-	bh=3v8ZwzMQp6vVVbwvD/f/q5xRWGh2QXldSzFtAYwk/QA=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gnJYvHd44W4voiHBTNVW3ctJpEmihmvgAgUdmW3wVe4pPn9I/p+4q/M5aElvxQecE2gG0YMQnPM7PJ5yqx9eecdrCHKSinjYB/8Q8AK4nlP3ZxlvanC3KLmwrHTNh6iAT9D1FB0Zr7hefwGI2zg8E4bN8iCbhBZpy3QuW5xx7ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DTvl8hQx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C168C4CEED;
-	Mon, 25 Aug 2025 20:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756155065;
-	bh=3v8ZwzMQp6vVVbwvD/f/q5xRWGh2QXldSzFtAYwk/QA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=DTvl8hQx/dzgJ0SeP4gMEgDeFDVLJSwWfDa3Wc/B1+vFtw4ARQZXlJB4DWUnnoc2s
-	 n2b9hl+FxHEoaZHjkTQF7y0az/5PoQy7wuD9d5RoBzWuujbjMtTo7pCKI0Gy4hCDoV
-	 WvB4f+Laip7+5YYbALMqrG3W1A9rMeJOSW2d7y8CsLv+ErU+ft7ijSBJaMIxJMAURj
-	 2uQIvhOS2V8qgrUh5huIgKkzxLaPl5pnTA7IAsR6IXO9MTycR0KHaNyLk3kuKKpkbM
-	 8zjXPBdCP79lSILbrO9r6aZNGaNuxcUiqVtdLz196fhnTmOj4UbyjR+jc0CuyHhQ5H
-	 1v+TpYyCEb4Aw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1uqe9e-00000000Od9-43HS;
-	Mon, 25 Aug 2025 20:51:03 +0000
-Date: Mon, 25 Aug 2025 21:51:02 +0100
-Message-ID: <87zfbnyvk9.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Sebastian Ott <sebott@redhat.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	kvm@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: fix irqfd_test on arm64
-In-Reply-To: <aKy-9eby1OS38uqM@google.com>
-References: <20250825155203.71989-1-sebott@redhat.com>
-	<aKy-9eby1OS38uqM@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1756155630; c=relaxed/simple;
+	bh=8/L1nD6fwcNCBonjJ/5ertVaeOR+ahaDa34IyMFnlZE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=QHf8U/+1NIrL4S+4QorV4c/4w7pX7huR5LwyPFmX29g9vigkO/vyhyilVz0qD7O69TntjARzvlo9mb0S0EhO/T+BRiT7QIkMQLsHALJnXPTL5nxIAzt9RGzSpT5qSFmMG1X+qORo67qko5UuFHj9jd57m/6I2uvdn7k823ki8Sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hQzUAXTy; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-325a6573e81so1337397a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 14:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1756155629; x=1756760429; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:user-agent:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EajGDWl4bYdFnIYaGpVNH0fQHV+uFPvw1C8aIH8SGwE=;
+        b=hQzUAXTyiuZ3Jb9Vj5S4MFw0rxCwcdFbgjYYBjzXqaO487SZuT1WvtenXG0v4goZXf
+         Ny+Y216jjgC5wocoV5RCXti2KjSsy22orRGCuqgoIa5X2U+KO61FwGqILfkHaqo3+NgY
+         KbAZ9GJiB+2N6fe4DdxE6887+OhBupOTHmufghu5iuzMWQWtM7Fb8OA33FQe7bX5wJcj
+         zUdRabwZWKMXwZijyfxua+OciHYNspGrF1kVPSLmJWevCQJd4D8HX4yBJ7UJSOBmxjRe
+         f8jFnm1WpCXr0Y6z2sehyFwltX4k0mmf9KfF8NlFgD7gwEoS4Ung8q+7YPab9dhkQtBd
+         aj8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756155629; x=1756760429;
+        h=cc:to:from:subject:message-id:user-agent:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EajGDWl4bYdFnIYaGpVNH0fQHV+uFPvw1C8aIH8SGwE=;
+        b=a5+nAySRtnPIRur1jHUOaAekUOFgX0EAXumFQ9ufSbQBMCMChu7Q/i46SXp8jQDGD+
+         pA4GPUg6USr335em2DzUIUSJTonr21b0gpm9ewDjNxAmXIDYKMNbQTjkmYsdhVDLg9L5
+         zSRStZxK+YYTrlH3EYeiHlq0VykPQtIsakrPTHXcjNbTqleJYEB/lB1q0Sngg/tdOJgu
+         N2k1TJEL+lhOE6uoyP3rFgr6/oO2aFm3Wq4poDqH0L446j0weuNhAO1KaDSLMQJL5/bw
+         0ecSl/yHYR8qfk9Z5e3JInNwUz4tLANpY+SyQBHf7sP6i8kjrB/awIWhz0qIFlulZUZC
+         HGXA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0fY5b4bKyPEsipId3URrarBUiSPRm0+TJXt/31s7s+sLB/5OpCrTEjqTpNmjZMwdD7lwkZhGRl0g3NxYvv2s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq6Ci4KqCEPz1TcjR9dn7jmx7leJUuJEnfJhMd/inVUc2pdn0W
+	fCwPGX2eLeAXKd6959aDBeMu0v859gpCt3gzau730veNLe7gvcg/ownzJrpeGy3j51KIFdxvPYS
+	UwW0i2nLRvA==
+X-Google-Smtp-Source: AGHT+IHfcHvufdfIXSHW6kSBSPN+UPpDISXjx0iJ8nMd5Gl1QjNxnfRrBYGYRdeOvhlCxZIcU1Bknm3SxCBw
+X-Received: from pjl11.prod.google.com ([2002:a17:90b:2f8b:b0:325:1d7a:69ff])
+ (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:53c8:b0:323:7e82:fcd
+ with SMTP id 98e67ed59e1d1-32517b2bba5mr18185189a91.37.1756155628647; Mon, 25
+ Aug 2025 14:00:28 -0700 (PDT)
+Date: Mon, 25 Aug 2025 14:00:27 -0700
+In-Reply-To: <1b6498f3-ca07-41d5-9637-f20a58184e60@huaweicloud.com> (Chen
+ Ridong's message of "Sat, 23 Aug 2025 09:45:26 +0800")
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: seanjc@google.com, sebott@redhat.com, pbonzini@redhat.com, shuah@kernel.org, oliver.upton@linux.dev, kvm@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Mime-Version: 1.0
+References: <20250822013749.3268080-6-ynaffit@google.com> <20250822013749.3268080-7-ynaffit@google.com>
+ <552a7f82-2735-47a5-9abd-a9ae845f4961@huaweicloud.com> <a309c2b5-5425-428c-a034-d5ebc68cb304@huaweicloud.com>
+ <dbx8ms7r885f.fsf@ynaffit-andsys.c.googlers.com> <1b6498f3-ca07-41d5-9637-f20a58184e60@huaweicloud.com>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Message-ID: <dbx8ldn7nml0.fsf@ynaffit-andsys.c.googlers.com>
+Subject: Re: [PATCH v4 1/2] cgroup: cgroup.stat.local time accounting
+From: Tiffany Yang <ynaffit@google.com>
+To: Chen Ridong <chenridong@huaweicloud.com>
+Cc: linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	"Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Chen Ridong <chenridong@huawei.com>, 
+	kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-On Mon, 25 Aug 2025 20:52:21 +0100,
-Sean Christopherson <seanjc@google.com> wrote:
-> 
-> On Mon, Aug 25, 2025, Sebastian Ott wrote:
-> > irqfd_test on arm triggers the following assertion:
-> > ==== Test Assertion Failure ====
-> >   include/kvm_util.h:527: !ret
-> >   pid=3643 tid=3643 errno=11 - Resource temporarily unavailable
-> >      1  0x00000000004026d7: kvm_irqfd at kvm_util.h:527
-> >      2  0x0000000000402083: main at irqfd_test.c:100
-> >      3  0x0000ffffa5aab587: ?? ??:0
-> >      4  0x0000ffffa5aab65f: ?? ??:0
-> >      5  0x000000000040236f: _start at ??:?
-> >   KVM_IRQFD failed, rc: -1 errno: 11 (Resource temporarily unavailable)
-> > 
-> > Fix this by setting up a vgic for the vm.
-> > 
-> > Signed-off-by: Sebastian Ott <sebott@redhat.com>
-> > ---
-> > @@ -86,14 +90,30 @@ static void juggle_eventfd_primary(struct kvm_vm *vm, int eventfd)
-> >  	kvm_irqfd(vm, GSI_BASE_PRIMARY + 1, eventfd, KVM_IRQFD_FLAG_DEASSIGN);
-> >  }
-> >  
-> > +static struct kvm_vm *test_vm_create(void)
-> > +{
-> > +#ifdef __aarch64__
-> > +	struct kvm_vm *vm;
-> > +	struct kvm_vcpu *vcpu;
-> > +	int gic_fd;
-> > +
-> > +	vm = vm_create_with_one_vcpu(&vcpu, NULL);
-> > +	gic_fd = vgic_v3_setup(vm, 1, 64);
-> > +	__TEST_REQUIRE(gic_fd >= 0, "Failed to create vgic-v3");
-> 
-> I don't think this test requires v3+, any GIC will do.
+Chen Ridong <chenridong@huaweicloud.com> writes:
 
-There is no such thing as "any GIC". You need to know what is
-available, and ask for something that actually exists. So while the
-above is wrong on the ground that this doesn't work on v2 or v5, the
-selection has to be explicit.
+...
 
-> Is there a sane way to handle vGIC creation in kvm_arch_vm_post_create()?  E.g.
-> could we create a v3 GIC when possible, and fall back to v2?  And then provide a
-> way for tests to express a hard v3 GIC dependency?
 
-You can ask KVM what's available. Like an actual VMM does. There is no
-shortage of examples in the current code base.
+>> Thanks,
 
-And ideally, this should be made an integral part of creating a viable
-VM, which the current VM creation hack makes a point in not providing.
+> What I mean by "stable" is that while cgroup 1 through n might be deleted  
+> or have more descendants
+> created. For example:
 
-	M.
+>           n  n-1  n-2  ... 1
+> frozen   a  a+1  a+2     a+n
+> unfozen  b  b+1  b+2  ... b+n
+> nsec     b-a ...
+
+> In this case, all frozen_nsec values are b - a, which I believe is  
+> correct.
+> However, consider a scenario where some cgroups are deleted:
+
+>           n  n-1  n-2  ... 1
+> frozen   a  a+1  a+2     a+n
+> // 2 ... n-1 are deleted.
+> unfozen  b               b+1
+
+> Here, the frozen_nsec for cgroup n would be b - a, but for cgroup 1 it  
+> would be (b + 1) - (a + n).
+> This could introduce some discrepancy / timing inaccuracies.
+
+Ah, I think I see what you're saying. I had a similar concern when I had
+been looking to track this value per-task rather than per-cgroup (i.e.,
+when there are many tasks, the frozen duration recorded for the cgroup
+drifts from the duration that the task is actually frozen). Ultimately,
+although those inaccuracies exist, for the time scales in our use case,
+they would not grow large enough to make an appreciable
+difference. To use your example, the ~(n - 1) difference between the
+"true" frozen duration and the reported one is still effectively the
+same (to us). For others, their systems may see a much larger "n" than
+we might realistically see on ours, or they may need finer-grained
+reporting, so this solution may not be adequate.
 
 -- 
-Jazz isn't dead. It just smells funny.
+Tiffany Y. Yang
 
