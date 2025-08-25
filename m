@@ -1,390 +1,247 @@
-Return-Path: <linux-kselftest+bounces-39859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0AF8B346EC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 18:17:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FB38B346EF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 18:18:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D85E67A4549
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 16:16:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5666D1B22FEC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 16:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA2AB2FA0CC;
-	Mon, 25 Aug 2025 16:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D405D3009E6;
+	Mon, 25 Aug 2025 16:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IgSLtGmQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z1X+B0ZG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72D82F3633;
-	Mon, 25 Aug 2025 16:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2D72ECE8A;
+	Mon, 25 Aug 2025 16:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756138616; cv=none; b=j7TxotFUn/PnBIemctvi4bdw+q5wy75liP+n+hi6UA01ez4mYw1IkRHONi+AHONSRTYCYrHXxU5gpHXUhXSA1suykQzu5g5gpAUT0mrEpjYCCjZ6nJNAXHTIpGkkc8wcGJS8fb9MCEFwwWd4gV5quPB/7w9MdLJk2IV2mYBZNeQ=
+	t=1756138641; cv=none; b=SptbKSJop3H7dgWw1sL735/1gEinjzjDUprwQm+xPwGYIz5BQqS1la+ZzdpdyQqWHvXJbbKHZQJxzGDqFLeKeM0d3uPmzx6cNdCye0KYVKPVjQv7p2yasunQfr8+yNVJliOe5vHm9v8uqZlmuyCet75Xlo86rqV8WCVbj5E17UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756138616; c=relaxed/simple;
-	bh=TDLfIWRFwwC3Dx3jliWqTXEQ28lSr9bcRJA/957/60I=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=Lb98fOinU3hUTYq53G3Xt2ou2eMsKvRSrZY6zgxaKshSvmwvx/myrYG6s8b6fjY+FVH9ree8zrHssUydaGC000CvlD7/GBSxD+baTlvMCUW+8AzN1I/4RJhpkXVWBTUGHUz7mL5/sXhr1FvO6PaLkM31l426t4f7cjohmXxj0+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IgSLtGmQ; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-523011c7489so206198137.1;
-        Mon, 25 Aug 2025 09:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756138614; x=1756743414; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3q0gIgfUdfzXjLWY/5e4i6y//L3MRBinZoAMQYO2NI4=;
-        b=IgSLtGmQ/mxRr+jNu3YmkZAKr5KRoxWq+bkyb40IF8F3c9xOwr+l/IiKwpyuDkjvR0
-         yUgTNfvi61CZXnKcB3Y6/IfDElzc28B180EyhSXPx1O5TfCaFFaQDwnxo2uA2eX07t73
-         Z36Tgkhmr+DsMNig9obEP9rmDp7j1KaL9Zy/F/ZkLKvX9A76sxtSPeuSac39jyysFnR6
-         HJLrU6adw+25MdjwfMqQdqLFM+obpv4hcemHGf+MHI8WPLeBBz5JhbKA51CDJpN2HaKU
-         Cc2XxlHDLNPtEtzow+LFGAo/Yww6LQUg/RG2D9flItG9V3e6DLb+mYsp6YxNzQU4tItT
-         aFYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756138614; x=1756743414;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3q0gIgfUdfzXjLWY/5e4i6y//L3MRBinZoAMQYO2NI4=;
-        b=A6Nf46gH9AKmjYtxf+m0AaCZZ5gT04Tkz0PVrVjf9iKGJd8CZ46b42KIonECKi+9pU
-         kpmcMxaQUgMt3NxBiXScO06qXLAaAyD1rE05Ak2Wl1luwcz+mz623Vhmrfg+rLyj3wEn
-         WDwlOdka4LUKA6l0PApUrhS5J5Vt/JixCRh5u+bKNLV4fQfzV3t1Aaw+RIw+QbkTkxyf
-         8C4gHFpT127fBcWWdHw2sZkprOiaR3Iw2PNn3Q4WskbayWlOP03HM31MkvwXDTObhjQy
-         caVIw4S8Ls5yvlIU1s8EixwXP40fU9tkelG/ypFaPU82HmZ4YG5Qu+d7rQZDK2meYF1t
-         teAw==
-X-Forwarded-Encrypted: i=1; AJvYcCV4IwCAGwpznIRbAwhKyFidHHWKx/dBFrrgYQ7dfZ6EKbRfs/8fsDToCwfNuJXPTbheRyR4ssc5a/Sp4Zk=@vger.kernel.org, AJvYcCVk1LlThQRx5sXs5l/9ltl+qRfpnSwv/cwI1eGMMyDWzBHvtaP94B0FlOg11vkwdmpksGaEzEsQ@vger.kernel.org, AJvYcCXbC0gDoHDWTHaE+714Fj/1092qQ09xXKgJ2PZbGxkcij35xhm1lrM7RR/9bim+7BQrHk32TrKd7Ec0pj9kku77@vger.kernel.org
-X-Gm-Message-State: AOJu0YzigYjGb73ponIsnCnlkWYcVbBfgDxKnSCqlYJCx7tqlHk/evc/
-	RwD6NTY+lxetMT0yv9dh2LP7Sc29f/zTtZDyJIqHKFSvcHArUpJA+FtW
-X-Gm-Gg: ASbGncuA9SkmgqB4Um/EtGNHYwaywFR45p1u6HPgQgIKYPHDBkWBEKrBQj87fAvfxMy
-	qjTvvBpqlXY3q+PyO11ERKyGPv5O4J+An4f7jEG5/2UkGchPMlhAHGdXbhbyvIT55A9ljXPvMLU
-	HfvuGf5J67/xUHN7LjIUkRQL9N2p954fL8peDaLJXp+BhmQEGxOETurtBZFxVdOWJYJne/0j+vC
-	xzTpHaP4+yzDKwyry5Ri25V7QhBg3OgteZpzNU11Wa8cmq6tKZa8JThuzKpugI/WKCql893fOcW
-	0ik8dnrvCMPjKXYnJU3LoSYqwGTdqP1BNpvEFhoFDDAb0pEhWSZ2dqpIU7Dy096dYiVlATfOSZ+
-	YkqQDuXDeZB7NXwZBCuMLkDuQrOwAGR6hjbKlUALPP01yktayB+kR+smtrYXIrXMWFZQAEQ==
-X-Google-Smtp-Source: AGHT+IGkT4GwkOKBU6QvAEO4wgFdzVC3ttH/lDlWPOkolxnrPDydRtNZaN37go/mkOzg4VN+tRE3Ng==
-X-Received: by 2002:a05:6102:38d1:b0:4eb:eede:ec61 with SMTP id ada2fe7eead31-51d0c6bf425mr3973257137.1.1756138613478;
-        Mon, 25 Aug 2025 09:16:53 -0700 (PDT)
-Received: from gmail.com (128.5.86.34.bc.googleusercontent.com. [34.86.5.128])
-        by smtp.gmail.com with UTF8SMTPSA id ada2fe7eead31-51e4b2a85ddsm1539488137.4.2025.08.25.09.16.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Aug 2025 09:16:52 -0700 (PDT)
-Date: Mon, 25 Aug 2025 12:16:52 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Brett A C Sheffield <bacs@librecast.net>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Cc: Brett A C Sheffield <bacs@librecast.net>, 
- Greg KH <gregkh@linuxfoundation.org>, 
- Willem de Bruijn <willemb@google.com>
-Message-ID: <willemdebruijn.kernel.143e90d593cff@gmail.com>
-In-Reply-To: <20250825092548.4436-3-bacs@librecast.net>
-References: <20250825092548.4436-3-bacs@librecast.net>
-Subject: Re: [PATCH net-next] selftests: net: add test for ipv6 fragmentation
+	s=arc-20240116; t=1756138641; c=relaxed/simple;
+	bh=FANVRTF6GTKZEwwkEPlW/tWs0ubXGJ7R1OcvtRKQmn8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=exXjb3hRCCddd9pnWyEM1lCdYwwTOq1uHNa87hzixgaPOPZaUmdcfACUnD6E/i0azY9+gQgJm44/RYe/CmXANipS+8B2ZFeZhl5JME324D+zb8lOLXNOPpk36G+eGiSYLlyjmr4CYxjxP1/LgckZ49wki91Xkp8Wii2hFXXCq08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z1X+B0ZG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3323DC4CEED;
+	Mon, 25 Aug 2025 16:17:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756138640;
+	bh=FANVRTF6GTKZEwwkEPlW/tWs0ubXGJ7R1OcvtRKQmn8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z1X+B0ZGv7uHOoHuOLd4SJt16FexWEbZsjEQFQqRUrapr3OCpVgaCrasYjPdbbOyy
+	 eytOcCBL+pDQ3AWWdM11/NupldPVN7n787Ac52JA6muufv5Aq5hmbyZm6HiI3UG9/E
+	 S3WLhadcDWFA0vrOLjkLNWku02BCbOZumOEeIy+mLkW7A9OWvR0HBF0JMJQllwxMjH
+	 McwQict10AbNwzUaf3Fe4rhbDyKvQqV4mNkpdYsg1XXv1bkWDE2ZZQycNZSZHCAubw
+	 xxCEDJgzUrllwHg0O5i5LR3vB8H9ddKiEeoiX5nxByJsLox/KvefidsYGinF192ZU3
+	 LkZva/mIcA0xQ==
+Date: Mon, 25 Aug 2025 19:17:02 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: Mika =?iso-8859-1?Q?Penttil=E4?= <mpenttil@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	Alexander Potapenko <glider@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>,
+	Dmitry Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
+	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+	Jens Axboe <axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>,
+	John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com,
+	kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
+	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Marco Elver <elver@google.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+	Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
+	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+Subject: Re: [PATCH RFC 10/35] mm/hugetlb: cleanup
+ hugetlb_folio_init_tail_vmemmap()
+Message-ID: <aKyMfvWe8JetkbRL@kernel.org>
+References: <20250821200701.1329277-1-david@redhat.com>
+ <20250821200701.1329277-11-david@redhat.com>
+ <9156d191-9ec4-4422-bae9-2e8ce66f9d5e@redhat.com>
+ <7077e09f-6ce9-43ba-8f87-47a290680141@redhat.com>
+ <aKmDBobyvEX7ZUWL@kernel.org>
+ <a90cf9a3-d662-4239-ad54-7ea917c802a5@redhat.com>
+ <aKxz9HLQTflFNYEu@kernel.org>
+ <a72080b4-5156-4add-ac7c-1160b44e0dfe@redhat.com>
+ <aKx6SlYrj_hiPXBB@kernel.org>
+ <f8140a17-c4ec-489b-b314-d45abe48bf36@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f8140a17-c4ec-489b-b314-d45abe48bf36@redhat.com>
 
-Brett A C Sheffield wrote:
-> Add selftest for the IPv6 fragmentation regression which affected
-> several stable kernels.
+On Mon, Aug 25, 2025 at 05:42:33PM +0200, David Hildenbrand wrote:
+> On 25.08.25 16:59, Mike Rapoport wrote:
+> > On Mon, Aug 25, 2025 at 04:38:03PM +0200, David Hildenbrand wrote:
+> > > On 25.08.25 16:32, Mike Rapoport wrote:
+> > > > On Mon, Aug 25, 2025 at 02:48:58PM +0200, David Hildenbrand wrote:
+> > > > > On 23.08.25 10:59, Mike Rapoport wrote:
+> > > > > > On Fri, Aug 22, 2025 at 08:24:31AM +0200, David Hildenbrand wrote:
+> > > > > > > On 22.08.25 06:09, Mika Penttilä wrote:
+> > > > > > > > 
+> > > > > > > > On 8/21/25 23:06, David Hildenbrand wrote:
+> > > > > > > > 
+> > > > > > > > > All pages were already initialized and set to PageReserved() with a
+> > > > > > > > > refcount of 1 by MM init code.
+> > > > > > > > 
+> > > > > > > > Just to be sure, how is this working with MEMBLOCK_RSRV_NOINIT, where MM is supposed not to
+> > > > > > > > initialize struct pages?
+> > > > > > > 
+> > > > > > > Excellent point, I did not know about that one.
+> > > > > > > 
+> > > > > > > Spotting that we don't do the same for the head page made me assume that
+> > > > > > > it's just a misuse of __init_single_page().
+> > > > > > > 
+> > > > > > > But the nasty thing is that we use memblock_reserved_mark_noinit() to only
+> > > > > > > mark the tail pages ...
+> > > > > > 
+> > > > > > And even nastier thing is that when CONFIG_DEFERRED_STRUCT_PAGE_INIT is
+> > > > > > disabled struct pages are initialized regardless of
+> > > > > > memblock_reserved_mark_noinit().
+> > > > > > 
+> > > > > > I think this patch should go in before your updates:
+> > > > > 
+> > > > > Shouldn't we fix this in memblock code?
+> > > > > 
+> > > > > Hacking around that in the memblock_reserved_mark_noinit() user sound wrong
+> > > > > -- and nothing in the doc of memblock_reserved_mark_noinit() spells that
+> > > > > behavior out.
+> > > > 
+> > > > We can surely update the docs, but unfortunately I don't see how to avoid
+> > > > hacking around it in hugetlb.
+> > > > Since it's used to optimise HVO even further to the point hugetlb open
+> > > > codes memmap initialization, I think it's fair that it should deal with all
+> > > > possible configurations.
+> > > 
+> > > Remind me, why can't we support memblock_reserved_mark_noinit() when
+> > > CONFIG_DEFERRED_STRUCT_PAGE_INIT is disabled?
+> > 
+> > When CONFIG_DEFERRED_STRUCT_PAGE_INIT is disabled we initialize the entire
+> > memmap early (setup_arch()->free_area_init()), and we may have a bunch of
+> > memblock_reserved_mark_noinit() afterwards
 > 
-> Commit a18dfa9925b9 ("ipv6: save dontfrag in cork") was backported to
-> stable without some prerequisite commits.  This caused a regression when
-> sending IPv6 UDP packets by preventing fragmentation and instead
-> returning -1 (EMSGSIZE).
+> Oh, you mean that we get effective memblock modifications after already
+> initializing the memmap.
 > 
-> Add selftest to check for this issue by attempting to send a packet
-> larger than the interface MTU. The packet will be fragmented on a
-> working kernel, with sendmsg(2) correctly returning the expected number
-> of bytes sent.  When the regression is present, sendmsg returns -1 and
-> sets errno to EMSGSIZE.
+> That sounds ... interesting :)
+
+It's memmap, not the free lists. Without deferred init, memblock is active
+for a while after memmap initialized and before the memory goes to the free
+lists.
+ 
+> So yeah, we have to document this for memblock_reserved_mark_noinit().
 > 
-> Signed-off-by: Brett A C Sheffield <bacs@librecast.net>
-> Link: https://lore.kernel.org/stable/aElivdUXqd1OqgMY@karahi.gladserv.com
+> Is it also a problem for kexec_handover?
 
-Thanks for adding a regression test for this.
-
-> ---
->  tools/testing/selftests/net/.gitignore        |   1 +
->  tools/testing/selftests/net/Makefile          |   1 +
->  .../selftests/net/ipv6_fragmentation.c        | 204 ++++++++++++++++++
->  3 files changed, 206 insertions(+)
->  create mode 100644 tools/testing/selftests/net/ipv6_fragmentation.c
+With KHO it's also interesting, but it does not support deferred struct
+page init for now :)
+ 
+> We should do something like:
 > 
-> diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-> index 47c293c2962f..3d4b4a53dfda 100644
-> --- a/tools/testing/selftests/net/.gitignore
-> +++ b/tools/testing/selftests/net/.gitignore
-> @@ -16,6 +16,7 @@ ip_local_port_range
->  ipsec
->  ipv6_flowlabel
->  ipv6_flowlabel_mgr
-> +ipv6_fragmentation
->  log.txt
->  msg_oob
->  msg_zerocopy
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index b31a71f2b372..f83f91b758ae 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -117,6 +117,7 @@ TEST_GEN_FILES += tfo
->  TEST_PROGS += tfo_passive.sh
->  TEST_PROGS += broadcast_pmtu.sh
->  TEST_PROGS += ipv6_force_forwarding.sh
-> +TEST_GEN_PROGS += ipv6_fragmentation
->  
->  # YNL files, must be before "include ..lib.mk"
->  YNL_GEN_FILES := busy_poller netlink-dumps
-> diff --git a/tools/testing/selftests/net/ipv6_fragmentation.c b/tools/testing/selftests/net/ipv6_fragmentation.c
-> new file mode 100644
-> index 000000000000..21e1a3cdc63d
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/ipv6_fragmentation.c
-> @@ -0,0 +1,204 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Author: Brett A C Sheffield <bacs@librecast.net>
-> + *
-> + * Kernel selftest for the IPv6 fragmentation regression which affected
-> + * stable kernels:
-> + *
-> + *   https://lore.kernel.org/stable/aElivdUXqd1OqgMY@karahi.gladserv.com
-> + *
-> + * Commit:
-> + *   a18dfa9925b9 ("ipv6: save dontfrag in cork")
-> + * was backported to stable without some prerequisite commits.
-> + *
-> + * This caused a regression when sending IPv6 UDP packets by preventing
-> + * fragmentation and instead returning -1 (EMSGSIZE).
-> + *
-> + * This selftest demonstrates the issue. sendmsg returns correctly (8192)
-> + * on a working kernel, and returns -1 (EMSGSIZE) when the regression is
-> + * present.
-> + *
-> + * The regression was not present in the mainline kernel, but add this test to
-> + * catch similar breakage in future.
-> + */
-> +
-> +#define _GNU_SOURCE
-> +
-> +#include <fcntl.h>
-> +#include <linux/if_tun.h>
-> +#include <net/if.h>
-> +#include <netinet/in.h>
-> +#include <sched.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <sys/ioctl.h>
-> +#include <sys/socket.h>
-> +#include <unistd.h>
-> +
-> +#define MTU 1500
-> +#define LARGER_THAN_MTU 8192
-> +
-> +/* ensure MTU is smaller than what we plan to send */
-> +static int set_mtu(int ctl, char *ifname, struct ifreq *ifr)
-> +{
-> +	ifr->ifr_mtu = MTU;
-> +	return ioctl(ctl, SIOCSIFMTU, ifr);
-> +}
-> +
-> +/* bring up interface */
-> +static int interface_up(int ctl, char *ifname, struct ifreq *ifr)
-> +{
-> +	if (ioctl(ctl, SIOCGIFFLAGS, ifr) == -1) {
-> +		perror("ioctl SIOCGIFFLAGS");
-> +		return -1;
-> +	}
-> +	ifr->ifr_flags = ifr->ifr_flags | IFF_UP;
-> +	return ioctl(ctl, SIOCSIFFLAGS, ifr);
-> +}
-> +
-> +/* no need to wait for DAD in our namespace */
-> +static int disable_dad(char *ifname)
-> +{
-> +	char sysvar[] = "/proc/sys/net/ipv6/conf/%s/accept_dad";
-> +	char fname[IFNAMSIZ + sizeof(sysvar)];
-> +	int fd;
-> +
-> +	snprintf(fname, sizeof(fname), sysvar, ifname);
-> +	fd = open(fname, O_WRONLY);
-> +	if (fd == -1) {
-> +		perror("open accept_dad");
-> +		return -1;
-> +	}
-> +	if (write(fd, "0", 1) != 1) {
-> +		perror("write");
-> +		return -1;
-> +	}
-> +	return close(fd);
-> +}
-> +
-> +/* create TAP interface that will be deleted when this process exits */
-> +static int create_interface(int ctl, char *ifname, struct ifreq *ifr)
-> +{
-> +	int fd;
-> +
-> +	fd = open("/dev/net/tun", O_RDWR);
-> +	if (fd == -1) {
-> +		perror("open tun");
-> +		return -1;
-> +	}
-> +
-> +	ifr->ifr_flags = IFF_TAP | IFF_NO_PI;
-> +	if (ioctl(fd, TUNSETIFF, (void *)ifr) == -1) {
-> +		close(fd);
-> +		perror("ioctl: TUNSETIFF");
-> +		return -1;
-> +	}
-> +	strcpy(ifname, ifr->ifr_name);
-> +
-> +	return fd;
-> +}
-> +
-> +/* we need to set MTU, so do this in a namespace to play nicely */
-> +static int create_namespace(void)
-> +{
-> +	const char *netns_path = "/proc/self/ns/net";
-> +	int fd;
-> +
-> +	if (unshare(CLONE_NEWNET) != 0) {
-> +		perror("unshare");
-> +		return -1;
-> +	}
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 154f1d73b61f2..ed4c563d72c32 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -1091,13 +1091,16 @@ int __init_memblock memblock_clear_nomap(phys_addr_t base, phys_addr_t size)
+>  /**
+>   * memblock_reserved_mark_noinit - Mark a reserved memory region with flag
+> - * MEMBLOCK_RSRV_NOINIT which results in the struct pages not being initialized
+> - * for this region.
+> + * MEMBLOCK_RSRV_NOINIT which allows for the "struct pages" corresponding
+> + * to this region not getting initialized, because the caller will take
+> + * care of it.
+>   * @base: the base phys addr of the region
+>   * @size: the size of the region
+>   *
+> - * struct pages will not be initialized for reserved memory regions marked with
+> - * %MEMBLOCK_RSRV_NOINIT.
+> + * "struct pages" will not be initialized for reserved memory regions marked
+> + * with %MEMBLOCK_RSRV_NOINIT if this function is called before initialization
+> + * code runs. Without CONFIG_DEFERRED_STRUCT_PAGE_INIT, it is more likely
+> + * that this function is not effective.
+>   *
+>   * Return: 0 on success, -errno on failure.
+>   */
 
-Is this not sufficient to move the current process in its own netns?
-
-> +
-> +	fd = open(netns_path, O_RDONLY);
-> +	if (fd == -1) {
-> +		perror("open");
-> +		return -1;
-> +	}
-> +
-> +	if (setns(fd, CLONE_NEWNET)) {
-> +		perror("setns");
-> +		return -1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int setup(void)
-> +{
-> +	struct ifreq ifr = {0};
-> +	char ifname[IFNAMSIZ];
-> +	int fd = -1;
-> +	int ctl;
-> +
-> +	if (create_namespace() == -1)
-> +		return -1;
-> +
-> +	ctl = socket(AF_LOCAL, SOCK_STREAM, 0);
-> +	if (ctl == -1)
-> +		return -1;
-> +
-> +	memset(ifname, 0, sizeof(ifname));
-> +	fd = create_interface(ctl, ifname, &ifr);
-> +	if (fd == -1)
-> +		goto err_close_ctl;
-> +	if (disable_dad(ifname) == -1)
-> +		goto err_close_fd;
-> +	if (interface_up(ctl, ifname, &ifr) == -1)
-> +		goto err_close_fd;
-> +	if (set_mtu(ctl, ifname, &ifr) == -1)
-> +		goto err_close_fd;
-> +	usleep(10000); /* give interface a moment to wake up */
-
-This may be racy. Wait on a more explicit signal? E.g.,
-/sys/class/net/$DEV/operstate.
-
-> +	goto err_close_ctl;
-> +err_close_fd:
-> +	close(fd);
-> +	fd = -1;
-> +err_close_ctl:
-> +	close(ctl);
-> +	return fd;
-> +}
-> +
-> +int main(void)
-> +{
-> +	/* address doesn't matter, use an IPv6 multicast address for simplicity */
-> +	struct in6_addr addr = {
-> +		.s6_addr[0] = 0xff, /* multicast */
-> +		.s6_addr[1] = 0x12, /* set flags (T, link-local) */
-> +	};
-> +	struct sockaddr_in6 sa = {
-> +		.sin6_family = AF_INET6,
-> +		.sin6_addr = addr,
-> +		.sin6_port = 4242
-> +	};
-> +	char buf[LARGER_THAN_MTU] = {0};
-> +	struct iovec iov = { .iov_base = buf, .iov_len = sizeof(buf)};
-> +	struct msghdr msg = {
-> +		.msg_iov = &iov,
-> +		.msg_iovlen = 1,
-> +		.msg_name = (struct sockaddr *)&sa,
-> +		.msg_namelen = sizeof(sa),
-> +	};
-> +	ssize_t rc;
-> +	int ns_fd;
-> +	int s;
-> +
-> +	printf("Testing IPv6 fragmentation\n");
-> +	ns_fd = setup();
-> +	if (ns_fd == -1)
-> +		return 1;
-> +	s = socket(AF_INET6, SOCK_DGRAM, 0);
-> +	msg.msg_name = (struct sockaddr *)&sa;
-> +	msg.msg_namelen = sizeof(sa);
-
-nit: duplicate?
-
-Also, no local address is set. This uses the IPv6 auto assigned
-address?
-
-> +	rc = sendmsg(s, &msg, 0);
-> +	if (rc == -1) {
-> +		perror("send");
-> +		return 1;
-
-Probably want to cleanup state both on success and failure.
-
-Could use KSFT_.. exit codes, though 0/1 works just as well for
-kselftests in practice.
-
-> +	} else if (rc != LARGER_THAN_MTU) {
-> +		fprintf(stderr, "send() returned %zi\n", rc);
-> +		return 1;
-> +	}
-> +	close(s);
-> +	close(ns_fd);
-> +
-> +	return 0;
-> +}
+I have a different version :)
+ 
+diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+index b96746376e17..d20d091c6343 100644
+--- a/include/linux/memblock.h
++++ b/include/linux/memblock.h
+@@ -40,8 +40,9 @@ extern unsigned long long max_possible_pfn;
+  * via a driver, and never indicated in the firmware-provided memory map as
+  * system RAM. This corresponds to IORESOURCE_SYSRAM_DRIVER_MANAGED in the
+  * kernel resource tree.
+- * @MEMBLOCK_RSRV_NOINIT: memory region for which struct pages are
+- * not initialized (only for reserved regions).
++ * @MEMBLOCK_RSRV_NOINIT: memory region for which struct pages don't have
++ * PG_Reserved set and are completely not initialized when
++ * %CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled (only for reserved regions).
+  * @MEMBLOCK_RSRV_KERN: memory region that is reserved for kernel use,
+  * either explictitly with memblock_reserve_kern() or via memblock
+  * allocation APIs. All memblock allocations set this flag.
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 154f1d73b61f..02de5ffb085b 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -1091,13 +1091,15 @@ int __init_memblock memblock_clear_nomap(phys_addr_t base, phys_addr_t size)
+ 
+ /**
+  * memblock_reserved_mark_noinit - Mark a reserved memory region with flag
+- * MEMBLOCK_RSRV_NOINIT which results in the struct pages not being initialized
+- * for this region.
++ * MEMBLOCK_RSRV_NOINIT
++ *
+  * @base: the base phys addr of the region
+  * @size: the size of the region
+  *
+- * struct pages will not be initialized for reserved memory regions marked with
+- * %MEMBLOCK_RSRV_NOINIT.
++ * The struct pages for the reserved regions marked %MEMBLOCK_RSRV_NOINIT will
++ * not have %PG_Reserved flag set.
++ * When %CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled, setting this flags also
++ * completly bypasses the initialization of struct pages for this region.
+  *
+  * Return: 0 on success, -errno on failure.
+  */
+ 
+> Optimizing the hugetlb code could be done, but I am not sure how high
+> the priority is (nobody complained so far about the double init).
+> 
 > -- 
-> 2.49.1
+> Cheers
+> 
+> David / dhildenb
 > 
 
-
+-- 
+Sincerely yours,
+Mike.
 
