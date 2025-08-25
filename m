@@ -1,134 +1,203 @@
-Return-Path: <linux-kselftest+bounces-39850-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 791D0B344F3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 17:03:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9529B344F7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 17:03:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78FB51A82429
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 15:02:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD18D5E1328
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 15:02:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D5FC2FDC2F;
-	Mon, 25 Aug 2025 14:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="QGsFtqFh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E001C2FCBF9;
+	Mon, 25 Aug 2025 14:59:33 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BA12FDC31
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 14:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E342FC008;
+	Mon, 25 Aug 2025 14:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756133913; cv=none; b=SfqhUQHL9UFvhdXi3KxJMMMf1ix/wzORWiBE5iueQRkUs7NJ3SuNjIGZ2WEdiO+gLVahfhNL9plBsIXWiKqvEfpbL1Uz/ZQ8j6N8WFW/KTLZZp4DZBBfQDTSfmGvMyrnXD62oHJj8hwjby0VmlzwzYPciVW57GRnnyxr3CQfxW4=
+	t=1756133973; cv=none; b=Owq5M70uK831PGEs99iJhxBjgoT2Bq7tWYUGHqUkebghvtLfECbpK5JeeObItZ94RPOdJK/MuTAlXr4T2/wZJIKxIqm4Z5L58EbQLqPNagpOGBH0Ww3M2stnvjkBi4GWTBJZEdJojPQiIlOkQWWxW/nCgS246ljJdh7C8/J+IaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756133913; c=relaxed/simple;
-	bh=Uo8Uq5CGd42i/IUZX2QiGqJ9jwcLrhXXcAVNfr2ZqI8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=m/OyhPAdOdf8n7bxgzASWCm0ZQDnYmXWzos3jX58chLHUAx0+XN2TvKsBhLGXAG6dvy2/5SjqVkg4tipCpW+bLAUD9G6Oi58s+l6GQi4oDrKfSdQgxE6JCuGYsHO1oijqGShTjzj+9O8g3/84exLDGpFN3L8PwZb5UrSvzepGWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=QGsFtqFh; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7704799d798so1233634b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 07:58:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1756133911; x=1756738711; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6KNNjy6jnCK8i9cBT6PGrQfVqxJIthxv9ctwdRDGY9o=;
-        b=QGsFtqFhAsWiT5DHzRrcZIkFseotRWf0ZyUGuG1gpt/scQNOJ+LDowbCSjIYiL7lvD
-         ZVgQOwQBKqUcJ5sZRALrxQTSjMuZzrLaZQ08wElEmd6BulKiYlPXP9WiKFhw3ZiAus8v
-         7j+vLjeuuckQYq2/oBkC9N5vPR5jNVmuLw4GxDJDSVPQ84AcBaUngr73nzaTo2Hq64Od
-         8+hpxSGuT/qzEnkGCDBy5zhH8XGFWoZ7oy60E6BomNQiYca0bpGKiv+5Ouq45LljLJ+j
-         0iIBGNy2voplCvJrZbROQsAP9jAE2Za9ppwmGVAY6b44VjLxn5zXq1gQQXbPQAOOMgC2
-         8RlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756133911; x=1756738711;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6KNNjy6jnCK8i9cBT6PGrQfVqxJIthxv9ctwdRDGY9o=;
-        b=RAe/82dV41xLNVLJddOiBenZ99X6YRYMB/nmMXlZy+HN4d8do9S/zWaYqPPAuiQVmu
-         v9MkqhFaqUoDC1Fy/5wAkxYTMgvMlyyopqpEg3gaT3lUmpswiX4fltLlQw8iwLcUxKGB
-         eRJVhIgqfLLlOt8GKs5+K0zMqRYcgnJWOpl/yypUWeX68aBiUuF37aaTM0jefpFkJC06
-         j3NG/sMu+lTn/8d4DV67iOXdZX7ecPtrphfSAJU7NLKftLciHqTtZv1LLljQlzF5JMZA
-         yYhxxhswgaFR4cKbUXc9KWtyxDNGhdjyfiGzmmsaZhDeAUqLZnMGLk5DN08cphPpVtgi
-         q/9g==
-X-Forwarded-Encrypted: i=1; AJvYcCXW2zHO89r4lMLhJf8uASKr9ma7MbHKgJkq4ykTsakQS4X+2Ji0G41unmLaTVc2baoqcoISX038YyNU193AA3o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKsSwXevqEIXGbX+aURVDneU7nAiIj1BQJRtekByf3S7+dtntU
-	nXkapa+ez78vcMC3COktHPdLA4SxLUFBa1D+jcXaSPly1SxYUsxcJ6sZr/U/pt51YTQ=
-X-Gm-Gg: ASbGncviAGfr9Ib5ijy0P/ta4sJdNIvG53OlD6gZAGRtErOnWul0yRpJv7bch18Mr1V
-	tzpR08h8+6kKje3MCQ/PBfSK7AgOXk+eD4YoFmX0tJWjcpPF4o/Ojbnz199I8a1IDc79fAtpyyj
-	OBkvvWaqSkjeN6UcCE8zCMSYMuOFBywsLl5EbDSdvlf0HDCHFzoVmhDCVjPfn+d+pQL7Tjm4AGG
-	GliRrYYKcaMY1qNPliwlPt2b7jq4Z7M/j18FqtG2KOYKmsL7My8o7jok7lv4C7jpDwTnx4p98Sp
-	p0YIpdDKC79N5BrPvLntRnIfpIUUe6Qsbd1KD2XCvwXqHy3IWQH7vVnIuQirzqH9fzkx2ewR3lU
-	3jrMjOUK561EzPUHeQjfyaWWLnGiRGFuARYbCeilApd+4r4es9hh8C1gedOAh
-X-Google-Smtp-Source: AGHT+IFUi1/2GefYrlbJCoIFczVXEJy1x3XUrow95S+g3t2wLpPX4iH95FuGRMW+srrK0U8C6BeQcg==
-X-Received: by 2002:a05:6a00:10d1:b0:76e:7aee:35f2 with SMTP id d2e1a72fcca58-7702fc15031mr13371786b3a.30.1756133911092;
-        Mon, 25 Aug 2025 07:58:31 -0700 (PDT)
-Received: from H3DJ4YJ04F.bytedance.net ([203.208.189.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-770401b190asm7803436b3a.74.2025.08.25.07.58.27
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 25 Aug 2025 07:58:30 -0700 (PDT)
-From: Yongting Lin <linyongting@bytedance.com>
-To: anthony.yznaga@oracle.com,
-	khalid@kernel.org,
-	shuah@kernel.org,
-	linyongting@bytedance.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	akpm@linux-foundation.org,
-	linux-mm@kvack.org
-Subject: [PATCH 8/8] mshare: selftests: Add test case to demostrate that mshare doesn't support THP
-Date: Mon, 25 Aug 2025 22:57:19 +0800
-Message-Id: <20250825145719.29455-17-linyongting@bytedance.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250825145719.29455-1-linyongting@bytedance.com>
-References: <20250825145719.29455-1-linyongting@bytedance.com>
+	s=arc-20240116; t=1756133973; c=relaxed/simple;
+	bh=Ph3JfDSVa7q/qwjjJkCRoufp4rbUldY1HsHR/5oOvEw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AiuuKGxfyTNJkmgq6w8W5Nt+TQ01n4bnxomfh6Lv5UlVSDsy1t3knI8fEnigAnOgzyOH16bA0+uUTWhjORZjCyWsdHeFXt7M+PRhn/KZ+KfasDmXqedlAJIUlmclzFSpG7u0VmPwyRQaQkKTBpxyPE50GW0cCyqUNOfY0yW6oLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from ROG (unknown [118.251.178.216])
+	by APP-05 (Coremail) with SMTP id zQCowABX6lopeqxooi0eDw--.61332S2;
+	Mon, 25 Aug 2025 22:58:51 +0800 (CST)
+From: <pincheng.plct@isrc.iscas.ac.cn>
+To: <inochiama@gmail.com>
+Cc: <ajones@ventanamicro.com>,
+	<alex@ghiti.fr>,
+	<anup@brainfault.org>,
+	<aou@eecs.berkeley.edu>,
+	<charlie@rivosinc.com>,
+	<cleger@rivosinc.com>,
+	<conor+dt@kernel.org>,
+	<cuiyunhui@bytedance.com>,
+	<cyan.yang@sifive.com>,
+	<devicetree@vger.kernel.org>,
+	<jesse@rivosinc.com>,
+	<krzk+dt@kernel.org>,
+	<kvm-riscv@lists.infradead.org>,
+	<kvm@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>,
+	<mikisabate@gmail.com>,
+	<namcao@linutronix.de>,
+	<palmer@dabbelt.com>,
+	<parri.andrea@gmail.com>,
+	<paul.walmsley@sifive.com>,
+	<pbonzini@redhat.com>,
+	<pincheng.plct@isrc.iscas.ac.cn>,
+	<robh@kernel.org>,
+	<samuel.holland@sifive.com>,
+	<shuah@kernel.org>,
+	<thomas.weissschuh@linutronix.de>,
+	<yikming2222@gmail.com>,
+	<yongxuan.wang@sifive.com>
+Subject: Re: [PATCH v1 RESEND 1/5] dt-bidings: riscv: add Zilsd and Zclsd extension descriptions
+Date: Mon, 25 Aug 2025 22:58:49 +0800
+Message-ID: <001e01dc15d0$c4842e10$4d8c8a30$@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AdwV0HURyytbkCJFT0CWNFw9272t/g==
+Content-Language: zh-cn
+X-CM-TRANSID:zQCowABX6lopeqxooi0eDw--.61332S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAr4Uur48KryUtFWxWFW8Crg_yoW5Kry8pa
+	97GF4UGF98XryfW3s7Kw48uay5Ga1kGr1fCFsrt34xKFW5Ar10qFW2y3WYqw18Jr4IkF4j
+	vr42gr1vq3sxArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9E14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwAKzVCY07xG64k0F24lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr4
+	1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+	67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjx
+	v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
+	Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+	AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sREb4S5UUUUU==
+X-CM-SenderInfo: pslquxhhqjh1xofwqxxvufhxpvfd2hldfou0/
 
-This case is quit simple by using madvise(MADV_HUGEPAGE), but for verifying
-the size of THP memory, we need to setup the memcg and attach test
-process to this memcg before perform the test.
+> -----Original Message-----
+> From: Inochi Amaoto <inochiama@gmail.com>
+> Sent: Saturday, August 23, 2025 6:35 AM
+> To: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>;
+> paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu;
+> alex@ghiti.fr; robh@kernel.org; krzk+dt@kernel.org; =
+conor+dt@kernel.org;
+> anup@brainfault.org; pbonzini@redhat.com; shuah@kernel.org;
+> cyan.yang@sifive.com; cleger@rivosinc.com; charlie@rivosinc.com;
+> cuiyunhui@bytedance.com; samuel.holland@sifive.com;
+> namcao@linutronix.de; jesse@rivosinc.com; inochiama@gmail.com;
+> yongxuan.wang@sifive.com; ajones@ventanamicro.com;
+> parri.andrea@gmail.com; mikisabate@gmail.com; yikming2222@gmail.com;
+> thomas.weissschuh@linutronix.de
+> Cc: linux-riscv@lists.infradead.org; linux-kernel@vger.kernel.org;
+> linux-doc@vger.kernel.org; devicetree@vger.kernel.org; =
+kvm@vger.kernel.org;
+> kvm-riscv@lists.infradead.org; linux-kselftest@vger.kernel.org
+> Subject: Re: [PATCH v1 RESEND 1/5] dt-bidings: riscv: add Zilsd and =
+Zclsd
+> extension descriptions
+>=20
+> On Thu, Aug 21, 2025 at 10:01:27PM +0800, Pincheng Wang wrote:
+> > Add descriptions for the Zilsd (Load/Store pair instructions) and
+> > Zclsd (Compressed Load/Store pair instructions) ISA extensions which
+> > were ratified in commit f88abf1 ("Integrating load/store pair for =
+RV32
+> > with the main manual") of the riscv-isa-manual.
+> >
+> > Signed-off-by: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
+> > ---
+> >  .../devicetree/bindings/riscv/extensions.yaml | 39
+> > +++++++++++++++++++
+> >  1 file changed, 39 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > index ede6a58ccf53..d72ffe8f6fa7 100644
+> > --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > @@ -366,6 +366,20 @@ properties:
+> >              guarantee on LR/SC sequences, as ratified in commit
+> b1d806605f87
+> >              ("Updated to ratified state.") of the riscv profiles
+> specification.
+> >
+> > +        - const: zilsd
+> > +          description:
+> > +            The standard Zilsd extension which provides support for
+> aligned
+> > +            register-pair load and store operations in 32-bit =
+instruction
+> > +            encodings, as ratified in commit f88abf1 ("Integrating
+> > +            load/store pair for RV32 with the main manual") of
+> riscv-isa-manual.
+> > +
+> > +        - const: zclsd
+> > +          description:
+> > +            The Zclsd extension implements the compressed (16-bit)
+> version of the
+> > +            Load/Store Pair for RV32. As with Zilsd, this extension =
+was
+> ratified
+> > +            in commit f88abf1 ("Integrating load/store pair for =
+RV32 with
+> the
+> > +            main manual") of riscv-isa-manual.
+> > +
+> >          - const: zk
+> >            description:
+> >              The standard Zk Standard Scalar cryptography extension =
+as
+> > ratified @@ -847,6 +861,16 @@ properties:
+> >              anyOf:
+> >                - const: v
+> >                - const: zve32x
+>=20
+> > +      # Zclsd depends on Zilsd and Zca
+> > +      - if:
+> > +          contains:
+> > +            anyOf:
+> > +              - const: zclsd
+> > +        then:
+> > +          contains:
+> > +            anyOf:
+> > +              - const: zilsd
+> > +              - const: zca
+> >
+>=20
+> Should be allOf? I see the comment says "Zclsd" requires both "Zilsd"
+> and "Zca".
+>=20
+> Regards,
+> Inochi
 
-Because mshare doesn't support THP feature, the size of THP memory should
-be 0 even though we use madivse.
+You're absolutely right, thank you for catching this. Since Zclsd =
+depends on both Zilsd and Zca, the condition should use allOf to =
+correctly enforce the conjunction. I'll fix this in next revision.
 
-Signed-off-by: Yongting Lin <linyongting@bytedance.com>
----
- tools/testing/selftests/mshare/memory.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/tools/testing/selftests/mshare/memory.c b/tools/testing/selftests/mshare/memory.c
-index 7754c0e33506..2a415ce7bc01 100644
---- a/tools/testing/selftests/mshare/memory.c
-+++ b/tools/testing/selftests/mshare/memory.c
-@@ -68,4 +68,15 @@ TEST_F(memory, swap)
- 	ASSERT_GT(swap_size, GB(1) * 9 / 10);
- }
- 
-+TEST_F(memory, thp)
-+{
-+	ASSERT_NE(madvise(self->addr, self->allocate_size, MADV_HUGEPAGE), -1);
-+	/* touch 1G */
-+	memset(self->addr, 0x01, GB(1));
-+
-+	size_t huge = read_huge_from_cgroup(self->cgroup);
-+	/* mshare don't support THP now */
-+	ASSERT_EQ(huge, 0);
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.20.1
+Best regards,
+Pincheng Wang
 
 
