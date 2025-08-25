@@ -1,156 +1,141 @@
-Return-Path: <linux-kselftest+bounces-39816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61E27B33416
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 04:49:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C279B3341C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 04:53:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B118D7A2E09
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 02:47:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6664416BF2D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 02:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67F5229B2E;
-	Mon, 25 Aug 2025 02:49:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E5F1CEAB2;
+	Mon, 25 Aug 2025 02:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H6V0EK2K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RHj85OQ8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA0618FC91;
-	Mon, 25 Aug 2025 02:49:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC88C38DD8;
+	Mon, 25 Aug 2025 02:53:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756090141; cv=none; b=dDmH/XSeZJlAZzitMWmsdlHBtmHqtQjhIj1FlmMDccv2kVJMiFL73R71ohCu4eTEwHmzPvN9RT7PdaacQJuKdP1VPr83Ld5uAuDU5XwXfrWuHHmCGsi2gMZo47MU+GVHbgG/FPkWl6Aie5JThvdrnHoMtr8jZOhexdedASUeAAI=
+	t=1756090429; cv=none; b=NcoEVDiUSZGuVbkxaqZrin9v34MAKXwFgCrZT0ycN1FJYlBfMl8DeqHfji37tdH7is6k18hqeh1tEMxG6s9Uzd7MHE9EYs0E6GK+sYIZxw3bZ1wmm8Ui4UMK6AZrBQD+NtERagPw08dtdGCWP7HKBvk6o//A1fm6FeClA3XNr0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756090141; c=relaxed/simple;
-	bh=UNMbrd7hgvAtuRFWyNNxOWTM4EmKwRV0uuqjzMO9iSk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tmBju0udSmtPyuHONEEh1vrKCFgswRKtZNYmwlVeBxYkYuZ9fubfcz8vbPdUAJyRkW0rZA9WS51iufJmPj+xI2xxlbDDr1wQVPV2VgMIXR0g7w4FY1sIETdCysusAA+ZmZm6jusfoAGrnwJDYymDp2aeIw976vbDbkS1w+cOaUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H6V0EK2K; arc=none smtp.client-ip=209.85.210.177
+	s=arc-20240116; t=1756090429; c=relaxed/simple;
+	bh=AKXdzx3iGv0Cdlf3syAes3VVjlT9t9y5HamF5W7AGq0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HGXPHOl9owSulMEk9S+xSeZW4XG7vWOioi9qHTwYSXbI3PSQdvivC2UooduLRGTj9h6uIDDfsiObivftsVR8GPAFz2XqnSFtks/LJKHxHVfUHcMxvsOSbu13r5rlE+qgdduHafC0wWOiZHaFBKKH+3R3SshOUfQcFpqMwtUC4gI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RHj85OQ8; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-76e6cbb991aso3305923b3a.1;
-        Sun, 24 Aug 2025 19:49:00 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6188b793d21so5741227a12.3;
+        Sun, 24 Aug 2025 19:53:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756090139; x=1756694939; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GCLwb/EDAA4ippM35qYgVy/WRmFSEboUwsaV433ebuA=;
-        b=H6V0EK2K0EVnUPFpVP08jcJC32qTfaQm6SWjbZGmWdpIt3DPnKBgB3G9iqddqyS1xz
-         fqrCLuwzqnRcQ6kcBl7vkNPaLNq91nQnOIBNQLL74Ha9+XsKtcX9QFwxWH01n5YmZ8Ig
-         nJ9GKKm5FylIDCyUGkvu80Pc3Zi8wb+jGQd7zAMXkxIv5aqg17O870T89cxYNEgyOA8R
-         qdV10DfLDqI1SVsNqALmKBhfep9p9RIXplC/Y15lAv7VyYitcvNmalfrc1kn5esj/9ld
-         Zs8jou758yJRjyeyRbMogUK+knbp0gjO66UUPCnFDA/Vrl97Po7h2BwVZz+ks9moh4g+
-         yGQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756090139; x=1756694939;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1756090425; x=1756695225; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GCLwb/EDAA4ippM35qYgVy/WRmFSEboUwsaV433ebuA=;
-        b=MQXGKX5ncZ8gDpdyZhiA1skIo/wC610LE3o7m1ajQIvsaCvbcJ3P42StSOKxdXfHBR
-         S4yFY9etxRxwu3BlgW717L+YDEDUaI+et+fL9IiwFUoLHwxJQS1E0LajQGOpOW1+nj3o
-         FA+oYphWwifsZT0N5Fo4uVtME0aODQjt/KH2mzvOKS+/uBA9jgSxL3+9QwgGtaiuXHms
-         D+Ye99MYEnUbO8V/DGOspMcRRv5q8CKqclGvMocMVo4oxv6kpVMkfe2RwUTxYtxJzy6P
-         G+uEcwynkJR9pRlb3Paqh3TZlxlnqXBMvQ5GoUIZ05ChjqiOoVTo7xrj+g7p7xrRj773
-         BFCw==
-X-Forwarded-Encrypted: i=1; AJvYcCUvh6F56k9Xpjkas6Wuf1WstJHckah922LD5z8z4JIPe6JKacpdGNJ3WnhOc+ii8tqvuvqRuRVy/OA=@vger.kernel.org, AJvYcCXxUxYZMAJCkPK3NbQERte4dFg8xVukLSjC4nZGnc+U5gque7JentdoVsPkeIC7GKDU+pwacaE1RFcSZSJpQQui@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9ZJXVBIH1ISxcCUsrQ6KG8qviu5ioKhAQeA+hOIrz2GjU+4pa
-	sJ0ImtYPnTvl2+aLip24P6fn4CvImx5wmdiL/A9Unzaz32PIC0lu/wWU
-X-Gm-Gg: ASbGncvRVPMEMOJW8jRGDij3BJ6nC3sylCqjyZS13tBhlLcrb8sSmsWo8yypiU9A3M7
-	0wB1JGi3KrwAFf70t3gufgOGvo1SaMDMSh0s28nCjcadesOM2HJNwkJfGD5vFgHDIEPj02liQOs
-	XHY3961SsYjK/k6hUlCVk8xxa7XNWQhgXNCKi5bt8ovTE3uPlRztj1ly7dYNIv3v0j7TWJh0Mjv
-	iwfw1kVTQJdDUJODiNRRptIChIIpNGqV0s7j2Tc9VPKf4VE6wE1LkJPP6HKzKEnAqXF7uB49Zb6
-	dJt2YvQGm7OnJ4xQIhfHdu0Ia8bH51RIzyzMxLYedwAIhVrjvKcaMdrinfC3BAWuIgVG/x1AOFl
-	rz/lfeOz7sjopYw2D9cA5lF3Dgjk=
-X-Google-Smtp-Source: AGHT+IHcXBzFHVDS6JF3cjZ2GEDtTnnPVuRO91B/XKp81mhgYJt6SoHA5RpDPSM3y7rxhcIuU8ZTZw==
-X-Received: by 2002:a05:6a00:3927:b0:740:a023:5d60 with SMTP id d2e1a72fcca58-7702fadba93mr12801609b3a.19.1756090139483;
-        Sun, 24 Aug 2025 19:48:59 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7704001eb82sm5865845b3a.47.2025.08.24.19.48.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Aug 2025 19:48:58 -0700 (PDT)
-Date: Mon, 25 Aug 2025 02:48:49 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jay Vosburgh <jv@jvosburgh.net>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Petr Machata <petrm@nvidia.com>,
-	Amit Cohen <amcohen@nvidia.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	David Ahern <dsahern@gmail.com>,
-	Jonas Gorski <jonas.gorski@gmail.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv3 net-next 1/3] bonding: add support for per-port LACP
- actor priority
-Message-ID: <aKvPERQJS3pz_DTW@fedora>
-References: <20250818092311.383181-1-liuhangbin@gmail.com>
- <20250818092311.383181-2-liuhangbin@gmail.com>
- <1547622.1755909223@famine>
+        bh=uuQEOF8lXWx0tyN0E34X9QSFDbgyKnv6vJT8/V1kPN8=;
+        b=RHj85OQ83igf0JodNDTuzl+McNt08BjWQr1xqZAKqTTheujqJdJzg9+DidSmaUWOUn
+         khJYAou/0AKhDeQuxS1dNC1Vh0H0EsSqxoNp2unN/k3EQtue4Gi+SqE/GSbmfKDTMrWb
+         kiuxpR45fYIfqpUgAW3WCOp+eAiz7HzQdTZyD4W8gkx/Yyx26RnRt/iLTRi6JYNuk5q1
+         K3IAoxlr8iGI8JsWBGTma04g49cfYvYtCGZOrgfxTpmnFrlHmYq918V5xDpziS0k+x36
+         4p2xYv2blaWd7TfkcCwPibmPLMCch1t9pPDH5IlqysMbnH3msMq4oRpR+iaJh5DUmibv
+         VUQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756090425; x=1756695225;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uuQEOF8lXWx0tyN0E34X9QSFDbgyKnv6vJT8/V1kPN8=;
+        b=fZEwnhpKI1IpFZ2+uPfdHdNiXCGtgeKCQTEpGHHW5Zu+PHGL668ugrsTEzwcvidH5b
+         ptHGahHYwQa4PmErR5m/HoLuVIQRmzLBRlF1fhZwwr4vWTRJsWfX9FVlC9RGQzTS8IF+
+         abp+opQAvgKEUS2w6AzZiStoeZWLgrFd8XVYmorzBD0JDSiIrUtZGgx3D0wqOcj2dhvA
+         5xhsUSJVs7SrnSBDnU+h2zYAfnxCy4PTwa0yDVGyBFsuV38hJzHZrZQWaAHY+mlmG8BX
+         nAQWv/rt1/1hFM9hH1Qj9k8AoRSqFSvwfZ9AQgHOz6T/j08jn/tTtpib5UK2pvVAwudK
+         gwAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMP+Uj9EcVImlmYopHf4GKHXXqI7pRlY481dsp9opWwFpPCMYBh4dVfGY9gwAZWMig2mclfmpMbkMY3Ic=@vger.kernel.org, AJvYcCWcvNa6Jhss/RmN0e9BP2SIrX+9ryU7euFAnVEQRDSRwHPQEKE6I7UeX6uwfbl6jvCkt7gBLxOa9OJ+BWm2KodI@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNF0bCqNzuU665NE52U/QpWLy9zqcWnNu9xwCfkz5SxHpK/QwU
+	PZdPcuum/8+QRRYYfe08dkeTJzA+WiKd1iwPGSb7Dg6EMwOUALbZIu4ipN3Khr4eLkXThKwnl3m
+	/pNP1D7XY4Wv20Eu9isVvHSyU0unynEk=
+X-Gm-Gg: ASbGncsjl++kHPVqIchtAzmBA5Ph9+7HpQ8pknt/klx3MGc5weMeRW5IGd33mY5sHc2
+	Js7uUHHDrToU+0BWDUHb42hguxz2hgBa7x/buaDSYHhom8bpVLE9pWb7hid++/Wea2a4i2+yPzU
+	70+T7Nnre2PYqoaEcwNDGt1RGyjUkC1VV0cMR6xl/bCbeY9OxAW0i3IzRnLV77RWJqtblEGzUph
+	YIWTcWNgccrfoZrhsQxehxuoVBbgK1FeE9pY9/Jjxk8dIkfb2gF7fJLCZO7pDwHuEtl+yAuPg==
+X-Google-Smtp-Source: AGHT+IEU1FlX6VqgN+0TONBTh6JTkrbGtb1BTJ7rjrRMKFIkmyRa22u+pADcYFGDkQRMTM+s2m7G/3I2ftjPQejby5g=
+X-Received: by 2002:a05:6402:27c7:b0:609:7ed1:c791 with SMTP id
+ 4fb4d7f45d1cf-61c1b6f5a6amr8602984a12.32.1756090425106; Sun, 24 Aug 2025
+ 19:53:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1547622.1755909223@famine>
+References: <20250823170208.184149-1-allyheev@gmail.com> <aKq25rlqbyYDaWVo@pc636>
+ <20250824171722.ea915592ea3bd060c6b17a38@linux-foundation.org>
+In-Reply-To: <20250824171722.ea915592ea3bd060c6b17a38@linux-foundation.org>
+From: ally heev <allyheev@gmail.com>
+Date: Mon, 25 Aug 2025 08:23:33 +0530
+X-Gm-Features: Ac12FXyys5mnbxszcX8Pac2LI8BHvZ5qDrWuATBA5w2UNc7UXOxjIJmIvIcS8TQ
+Message-ID: <CAMB6jUH70j20WgJ9TD=Lsy21XktDG0PqxEgjZ7XZFvcus9SjkA@mail.gmail.com>
+Subject: Re: [PATCH] kselftest: mm: fix typos in test_vmalloc.sh
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Uladzislau Rezki <urezki@gmail.com>, skhan@linuxfoundation.org, david@redhat.com, 
+	shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 22, 2025 at 05:33:43PM -0700, Jay Vosburgh wrote:
-> Hangbin Liu <liuhangbin@gmail.com> wrote:
-> 
-> >Introduce a new netlink attribute 'ad_actor_port_prio' to allow setting
-> 
-> 	Nit here "actor_port_prio"?
-> 
-> 	One more comment below ...
-> 
-> >the LACP actor port priority on a per-slave basis. This extends the
-> >existing bonding infrastructure to support more granular control over
-> >LACP negotiations.
+> A changelog would be identical to the subject.  checkpatch is being a
+> bit excessive here.
+
+Yes. Hence omitted it
+
+
+On Mon, Aug 25, 2025 at 5:47=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Sun, 24 Aug 2025 08:53:26 +0200 Uladzislau Rezki <urezki@gmail.com> wr=
+ote:
+>
+> > >  run_stability_check()
+> > > @@ -160,7 +160,7 @@ function run_test()
+> > >             usage
+> > >     else
+> > >             if [[ "$1" =3D "performance" ]]; then
+> > > -                   run_perfformance_check
+> > > +                   run_performance_check
+> > >             elif [[ "$1" =3D "stress" ]]; then
+> > >                     run_stability_check
+> > >             elif [[ "$1" =3D "smoke" ]]; then
+> > > --
+> > > 2.34.1
+> > >
+> > >
+> > ./scripts/checkpatch.pl ./0001-kselftest-mm-fix-typos-in-test_vmalloc.s=
+h.patch
+> > WARNING: Missing commit description - Add an appropriate one
 > >
-> >The priority value is embedded in LACPDU packets and will be used by
-> >subsequent patches to influence aggregator selection policies.
+> > total: 0 errors, 1 warnings, 24 lines checked
 > >
-> >Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> >---
-> > Documentation/networking/bonding.rst |  9 +++++++
-> > drivers/net/bonding/bond_3ad.c       |  4 ++++
-> > drivers/net/bonding/bond_netlink.c   | 16 +++++++++++++
-> > drivers/net/bonding/bond_options.c   | 36 ++++++++++++++++++++++++++++
-> > include/net/bond_3ad.h               |  1 +
-> > include/net/bond_options.h           |  1 +
-> > include/uapi/linux/if_link.h         |  1 +
-> > 7 files changed, 68 insertions(+)
+> > NOTE: For some of the reported defects, checkpatch may be able to
+> >       mechanically convert to the typical style using --fix or --fix-in=
+place.
 > >
-
-...
-
-> >diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-> >index 2fca8e84ab10..eb0fb7374391 100644
-> >+static const struct bond_opt_value bond_actor_port_prio_tbl[] = {
-> >+	{ "minval",  1,     BOND_VALFLAG_MIN},
-> >+	{ "maxval",  65535, BOND_VALFLAG_MAX},
-> >+	{ "default", 255,   BOND_VALFLAG_DEFAULT},
-> >+	{ NULL,      -1,    0},
-> 
-> 	Does the standard forbid actor_port_prio being set to zero?  The
-> description I'm finding says only that it's an unsigned integer and two
-> octets in size (802.1AX-2014 6.4.2.3 LACPDU structure).
-> 
-> 	-J
-
-Yes, I also can't find a clear doc about the minimal value of port priority.
-I will set it to 0.
-
-Thanks
-Hangbin
+> > ./0001-kselftest-mm-fix-typos-in-test_vmalloc.sh.patch has style proble=
+ms, please review.
+> >
+> > NOTE: If any of the errors are false positives, please report
+> >       them to the maintainer, see CHECKPATCH in MAINTAINERS.
+> >
+> > Can you add a commit message?
+>
+> A changelog would be identical to the subject.  checkpatch is being a
+> bit excessive here.
+>
+> Oh well, I'll add the obvious text.
 
