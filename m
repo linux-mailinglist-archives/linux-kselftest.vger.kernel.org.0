@@ -1,213 +1,162 @@
-Return-Path: <linux-kselftest+bounces-39865-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8454B34836
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 19:07:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F96BB3496A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 19:56:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FD1D189FB0C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 17:07:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C2672A5E94
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 17:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E312F99BD;
-	Mon, 25 Aug 2025 17:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A260305E29;
+	Mon, 25 Aug 2025 17:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HBYHNRcX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XIeNjfNj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA81F502BE
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 17:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6EC23FC49;
+	Mon, 25 Aug 2025 17:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756141627; cv=none; b=taxLAwOjHi2mD7S7HNLxg4baaej9btb4uEK/6Mjg1hE1HG8VR4aJmPspaJbHRMOZlVK0o5WAlKxf3oNJZ1WHRowVzPPwWVqxJiyxCCdVG85Qa86EGdgd7IgR2DnOQn0W3Sk1ShR2STEKBz/25JE33LXtfnhlm0xUqdF/+7zvx2w=
+	t=1756144566; cv=none; b=b83Q2hBpnkhwxfNzRMCs6V3kCQpMHmWr4RU5SO7mwYUOMtUpM4MtU1YWAXYK0EUWf1ps+rf4RnevBJ+GQAS6p2OtIH5N9+3UVVBuIEv8UW8amhKDfhBi2iYG5RQ3Pmat/SgqWhCM8kKFGasj26+AwRZU/A80ZM4T11MZIAsqukA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756141627; c=relaxed/simple;
-	bh=5PUlfoVWVRg6I2FFtXNFbJ4L0V8P8GIIUsk8ZG7Fglk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jjnv3nZ0ZNxptH5Y69X4FEwqgCK2OrjUSMPSxEBdzxAIicc9PMw1/GXFbEMQJEi7l95PCnonT3DUAfsOZkmkijycAHsi5+sMN5dIXXlcLke/Z985gGWPfN5W8mt0pn73uAR3jW1fFK57uRoVIyIkASZgJyNG2WhxygLNLGgI098=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HBYHNRcX; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-b49b56a3f27so2453232a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 10:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756141625; x=1756746425; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o5RmAfR4rYsxlFJUhIr+eW2wt0BUW3DWgzYQ+evh+1Q=;
-        b=HBYHNRcXuPZg7SJacFOsFZRMbCKV2jUwe9HiVHj0nd8ft2uLLnVwxVDwjf5M5d7yGC
-         mWYqjyEjVceRtlSONbvB2Orh2fJAi1Vto6JJnBjNcb5B1xO+yH4qpzXKtjIISqU9bgxb
-         cc9I5D/us2nTYdJZBZTysm5YPAGvepxy/MS67gwTgte6roUaaMmsii6mTexk/vU7qqlF
-         cLTEqFlHVim96uBzD+KmyL8uPadyZnJDOBGHfQINct64fKVvFOfyVtpczoJQvjIR8y3M
-         LlbMNAqxJfr1fniwv9M+Yhnn6A8QGKwQwmO5yxW3lRzdysSZJlYdHZ3ZKBm2NGYDNG/M
-         pmvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756141625; x=1756746425;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o5RmAfR4rYsxlFJUhIr+eW2wt0BUW3DWgzYQ+evh+1Q=;
-        b=pvtXF99ilaGRo65+V74iYRLurS3UieI6tvGUWg3R3uiT3mDDstq4qVQtlbykYqjCXT
-         k/EtSML3kxL1iZaeRpkgj8mnl2uIXHrnuQWc0hORzhvAx9Z238gPKaE+EYRZeogJfdBo
-         zXD2JDOKzGDCESe39YDpSs1OBjBWRKmlSNuSvA5PpitxFu2cUwN6eKAbw6B4ZVBQUQTp
-         vQIIBbgY6QF3vwFIvnEMzEVpLFlJXgmcAiA+thV3KcA68URt0UBcrBRTkqbpU+eZn51X
-         wMGccv2z5g21q8fzEYaHmylphkuEpnRRXMMbub2pT+m0j66jvsNkCpfpVT74oEngxz0g
-         3N/w==
-X-Forwarded-Encrypted: i=1; AJvYcCWGk3KAIKPmz4UYBVoko/JhgeQ4FuHfWum78a/UI9tSfPOc8wrO8gVEWiLRFE5HUWwzYbB2Vl+d3eb17rqwwas=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEs+zMPgsQZ3CJgQG0KS1A8yW9Z6PV5Ym8P5jSZbfq01pNBDgy
-	wYSIkxqwLMg3AbGvKBZoQE/Anaq84dQjEkZ8omFaHXsBnyDPBXNH3qp3
-X-Gm-Gg: ASbGnctWWdySC5lC7ypQKn9cstuYunOuCM3JWHKZuR/h+J6owGY62byC+Aew++biVy/
-	DRm21afLVx4C7d/CvjEtTw09Bghf6G8Q58EneKxvirZ7nNURWm7HPC3Ygzdy1XEmBao0TCsBug4
-	zD8fojp4VCI60VQzn2kkoHi1ra++ipM9j+QbCVaIVfUTj6r9vcS0qtSs9POeOVyB68nMWEGMwoa
-	SPiFAakvXVobvdSy822xrDi1Z3utNaVtS4U2klDNTYCd4+pLa149WCu/kwvdxaM6OKnxb30zUJc
-	eER5R0JshmbwLlpxaRrA+k7Fc+cv2IRFRnXuE4JG38XUk/W7YJwNeY01wxDpHDF4tIikR43EQih
-	8Ic1U8NsyTj68u7Uy27vWwCQi9rPa2REh5ok=
-X-Google-Smtp-Source: AGHT+IEkhsxEhLSZfQy3k7sFLEhX/tDwtC0J4MzkXu5Dz/C+lrHURinY952j7BmG/n6fx8oK3A6/fg==
-X-Received: by 2002:a17:903:1a08:b0:246:a8ad:3f24 with SMTP id d9443c01a7336-246a8ad4130mr81739215ad.7.1756141624869;
-        Mon, 25 Aug 2025 10:07:04 -0700 (PDT)
-Received: from linux ([223.181.114.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3254b8ff608sm7486025a91.29.2025.08.25.10.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Aug 2025 10:07:04 -0700 (PDT)
-From: I Viswanath <viswanathiyyappan@gmail.com>
-To: shuah@kernel.org
-Cc: akpm@linux-foundation.org,
-	david@redhat.com,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	I Viswanath <viswanathiyyappan@gmail.com>
-Subject: [PATCH] selftests/mm: use calloc instead of malloc in pagemap_ioctl.c
-Date: Mon, 25 Aug 2025 22:36:43 +0530
-Message-ID: <20250825170643.63174-1-viswanathiyyappan@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1756144566; c=relaxed/simple;
+	bh=Sqcd8MEqSlMASqnsEkumIOPR2m+rpUpw+A+V+vT4TsQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DKbPNn0w9eXJbwWFCnT/WT1Fn4gh2jNi4WKDZkMg8tlWU87Hs7Q5rGfvjdwqqBUeLjZVCrbxxUJO5QVUTHU6le/qGGOYkJQ1jpFaw/J9d9mjRD9n/UZu03thT2SDsEs6yIodxt/22CvAADijt89bJ7WCspNE8XSRiNKQLg/dDOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XIeNjfNj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FF2C4CEED;
+	Mon, 25 Aug 2025 17:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756144565;
+	bh=Sqcd8MEqSlMASqnsEkumIOPR2m+rpUpw+A+V+vT4TsQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XIeNjfNj00zeKgf0Og7lA2loxROwUE3fH6uOMDJ3K+jDI83IgjRxdaOjzu7ljogBP
+	 J6Px4d+nA+xR9ahivgOI9TcsYxAEG/3h+8ZXoUg5b+e8MJSYLZ5Fobb2m4nvFq2PQ9
+	 OTCZ6DfeEgM5dHrvrKr2n6BQRyg02zOA3ld/PkEks+akE61w+fZHRv0vhb4mjTu7/f
+	 ++Gp+qHy2gd0W5MZSepJs4JrSjM0UjjP9PQ3XVqx6de++TjWiaeOa17UVx3C93JmgU
+	 if6kvhKq28ZUDUW2qbTNJrWLhAlPH1eYrl8lSaN5MpCEzs68Q4icvOZlR55xUVI5rG
+	 vmYA4uQgtTmEg==
+Date: Mon, 25 Aug 2025 10:56:05 -0700
+From: Kees Cook <kees@kernel.org>
+To: Wake Liu <wakel@google.com>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] selftests/seccomp: improve backwards compatibility for
+ older kernels
+Message-ID: <202508251051.E222C34D2F@keescook>
+References: <20250807174613.1895006-1-wakel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250807174613.1895006-1-wakel@google.com>
 
-As per Documentation/process/deprecated.rst, dynamic size calculations
-should not be performed in memory allocator arguments due to possible
-overflows.
+On Fri, Aug 08, 2025 at 01:46:13AM +0800, Wake Liu wrote:
+> This commit introduces checks for kernel version and seccomp filter flag
+> support to the seccomp selftests. It also includes conditional header
+> inclusions using __GLIBC_PREREQ.
+> 
+> Some tests were gated by kernel version, and adjustments were made for
+> flags introduced after kernel 5.4. This ensures the selftests can run
+> and pass correctly on kernel versions 5.4 and later, preventing failures
+> due to features not present in older kernels.
+> 
+> The use of __GLIBC_PREREQ ensures proper compilation and functionality
+> across different glibc versions in a mainline Linux kernel context.
+> While it might appear redundant in specific build environments due to
+> global overrides, it is crucial for upstream correctness and portability.
+> 
+> Signed-off-by: Wake Liu <wakel@google.com>
+> ---
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 108 ++++++++++++++++--
+>  1 file changed, 99 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 61acbd45ffaa..9b660cff5a4a 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -13,12 +13,14 @@
+>   * we need to use the kernel's siginfo.h file and trick glibc
+>   * into accepting it.
+>   */
+> +#if defined(__GLIBC__) && defined(__GLIBC_PREREQ)
+>  #if !__GLIBC_PREREQ(2, 26)
+>  # include <asm/siginfo.h>
+>  # define __have_siginfo_t 1
+>  # define __have_sigval_t 1
+>  # define __have_sigevent_t 1
+>  #endif
+> +#endif
+>  
+>  #include <errno.h>
+>  #include <linux/filter.h>
+> @@ -300,6 +302,26 @@ int seccomp(unsigned int op, unsigned int flags, void *args)
+>  }
+>  #endif
+>  
+> +int seccomp_flag_supported(int flag)
+> +{
+> +	/*
+> +	 * Probes if a seccomp filter flag is supported by the kernel.
+> +	 *
+> +	 * When an unsupported flag is passed to seccomp(SECCOMP_SET_MODE_FILTER, ...),
+> +	 * the kernel returns EINVAL.
+> +	 *
+> +	 * When a supported flag is passed, the kernel proceeds to validate the
+> +	 * filter program pointer. By passing NULL for the filter program,
+> +	 * the kernel attempts to dereference a bad address, resulting in EFAULT.
+> +	 *
+> +	 * Therefore, checking for EFAULT indicates that the flag itself was
+> +	 * recognized and supported by the kernel.
+> +	 */
+> +	if (seccomp(SECCOMP_SET_MODE_FILTER, flag, NULL) == -1 && errno == EFAULT)
+> +		return 1;
+> +	return 0;
+> +}
 
-Replaced malloc with calloc to avoid open-ended arithmetic
-and prevent possible overflows.
+I like this!
 
-Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
----
-Even though the arguments are small enough an overflow cannot happen,
-I think it's still better to follow kernel standard practices.
+> +
+>  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+>  #define syscall_arg(_n) (offsetof(struct seccomp_data, args[_n]))
+>  #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+> @@ -2436,13 +2458,12 @@ TEST(detect_seccomp_filter_flags)
+>  		ASSERT_NE(ENOSYS, errno) {
+>  			TH_LOG("Kernel does not support seccomp syscall!");
+>  		}
+> -		EXPECT_EQ(-1, ret);
+> -		EXPECT_EQ(EFAULT, errno) {
+> -			TH_LOG("Failed to detect that a known-good filter flag (0x%X) is supported!",
+> -			       flag);
+> -		}
+>  
+> -		all_flags |= flag;
+> +		if (seccomp_flag_supported(flag))
+> +			all_flags |= flag;
+> +		else
+> +			TH_LOG("Filter flag (0x%X) is not found to be supported!",
+> +			       flag);
 
- tools/testing/selftests/mm/pagemap_ioctl.c | 24 +++++++++++-----------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+So I've pushed back on "backward compatible" changes to this selftest
+because I want it to be validating the _latest_ seccomp. This allows for
+expected flags to be missing.
 
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index 0d4209eef0c3..4e6b815e96b2 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -209,7 +209,7 @@ int userfaultfd_tests(void)
- 	wp_addr_range(mem, mem_size);
- 
- 	vec_size = mem_size/page_size;
--	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec = calloc(vec_size, sizeof(struct page_region));
- 
- 	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
- 				vec_size - 2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-@@ -247,11 +247,11 @@ int sanity_tests_sd(void)
- 	vec_size = num_pages/2;
- 	mem_size = num_pages * page_size;
- 
--	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec = calloc(vec_size, sizeof(struct page_region));
- 	if (!vec)
- 		ksft_exit_fail_msg("error nomem\n");
- 
--	vec2 = malloc(sizeof(struct page_region) * vec_size);
-+	vec2 = calloc(vec_size, sizeof(struct page_region));
- 	if (!vec2)
- 		ksft_exit_fail_msg("error nomem\n");
- 
-@@ -436,7 +436,7 @@ int sanity_tests_sd(void)
- 	mem_size = 1050 * page_size;
- 	vec_size = mem_size/(page_size*2);
- 
--	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec = calloc(vec_size, sizeof(struct page_region));
- 	if (!vec)
- 		ksft_exit_fail_msg("error nomem\n");
- 
-@@ -491,7 +491,7 @@ int sanity_tests_sd(void)
- 	mem_size = 10000 * page_size;
- 	vec_size = 50;
- 
--	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec = calloc(vec_size, sizeof(struct page_region));
- 	if (!vec)
- 		ksft_exit_fail_msg("error nomem\n");
- 
-@@ -541,7 +541,7 @@ int sanity_tests_sd(void)
- 	vec_size = 1000;
- 	mem_size = vec_size * page_size;
- 
--	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec = calloc(vec_size, sizeof(struct page_region));
- 	if (!vec)
- 		ksft_exit_fail_msg("error nomem\n");
- 
-@@ -695,8 +695,8 @@ int base_tests(char *prefix, char *mem, unsigned long long mem_size, int skip)
- 	}
- 
- 	vec_size = mem_size/page_size;
--	vec = malloc(sizeof(struct page_region) * vec_size);
--	vec2 = malloc(sizeof(struct page_region) * vec_size);
-+	vec = calloc(vec_size, sizeof(struct page_region));
-+	vec2 = calloc(vec_size, sizeof(struct page_region));
- 
- 	/* 1. all new pages must be not be written (dirty) */
- 	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
-@@ -807,8 +807,8 @@ int hpage_unit_tests(void)
- 	unsigned long long vec_size = map_size/page_size;
- 	struct page_region *vec, *vec2;
- 
--	vec = malloc(sizeof(struct page_region) * vec_size);
--	vec2 = malloc(sizeof(struct page_region) * vec_size);
-+	vec = calloc(vec_size, sizeof(struct page_region));
-+	vec2 = calloc(vec_size, sizeof(struct page_region));
- 	if (!vec || !vec2)
- 		ksft_exit_fail_msg("malloc failed\n");
- 
-@@ -997,7 +997,7 @@ int unmapped_region_tests(void)
- 	void *start = (void *)0x10000000;
- 	int written, len = 0x00040000;
- 	long vec_size = len / page_size;
--	struct page_region *vec = malloc(sizeof(struct page_region) * vec_size);
-+	struct page_region *vec = calloc(vec_size, sizeof(struct page_region));
- 
- 	/* 1. Get written pages */
- 	written = pagemap_ioctl(start, len, vec, vec_size, 0, 0,
-@@ -1062,7 +1062,7 @@ int sanity_tests(void)
- 	mem_size = 10 * page_size;
- 	vec_size = mem_size / page_size;
- 
--	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec = calloc(vec_size, sizeof(struct page_region));
- 	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
- 	if (mem == MAP_FAILED || vec == MAP_FAILED)
- 		ksft_exit_fail_msg("error nomem\n");
+Is there perhaps a way that the backward compat checking could be a
+commandline flag or something? That way by default it looks strictly the
+more current seccomp features.
+
+-Kees
+
 -- 
-2.50.1
-
+Kees Cook
 
