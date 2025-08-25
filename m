@@ -1,106 +1,142 @@
-Return-Path: <linux-kselftest+bounces-39888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0910B34DB9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 23:11:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4386CB34DD8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 23:23:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84FD817A896
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 21:11:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F15A22429DB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 21:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7038429B78E;
-	Mon, 25 Aug 2025 21:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E47FF288C26;
+	Mon, 25 Aug 2025 21:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P+KICfZE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qpnui3i6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DE629A9E9
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 21:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA42E2882AA;
+	Mon, 25 Aug 2025 21:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756156294; cv=none; b=eBTAUgND5M3SaL3Srg+GbQBRn/nCBJ28CcMPWt89BbE5tRs0sN73DAyIbv0Uue6SdI9tHvbKCpdKkietR+cuhYufMnhBhP5NBESAat47n0C7gsZHXM7lje9UCNgDGhXb4DWhZiu/f83gImI80PvXIzTSe/iwytf0fcuiy4zrvVo=
+	t=1756156974; cv=none; b=a3dly9dtQLyZEII1TyK9San9Wk+srjcFMMvvBLBFoRrmtu7onL7eCahfCK9XziVR7FygoKTS1Nb9FJM9VZkNj4UbIs+kUSh4Zwp29JS1bx0EnBbetevKKLdmMXFD19LCasbi9E3XK50xtq6XE6VqCJLIb2sr1ck5puTt0MPvROc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756156294; c=relaxed/simple;
-	bh=nFbTNjxctDGMu7gKAPNA3RP/CMiZt9a/yh8OXsYC9xE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=n7OYcxaYg8XUclbjgmSZ6s1ci+zaYqJ2XU1KyXfC2YHYoKhvRpZNgWsZL5o7ckyy8q/YX431Hv2XtzLfYwfQGt3ndoe98fsk+tpMJr6voScrUUOS9nPZp5eJsSaQMO2gpe+8h/p7BIxzZ+Av3/iprkTLsYLPXXg8U/QFYF8telU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P+KICfZE; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2465bc6da05so38879415ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 14:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756156292; x=1756761092; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bU/VP3KImYxnarLk0B3IOiENhi91lMJDhOtDAwiONbw=;
-        b=P+KICfZE0PJy3Y83tPMgyg+zkNONscb562RHl4XrM/JrXNmkKn+yAzCpRAou1h+og7
-         b1quBY96Qe9Co8ZXsWxrfAbVFDgAdjyO3zCAmlc26XilYPjycIHUxlqgcTJRflPX0u4G
-         XOPJewZKlu1WRn5VPZdojohVIu2CdaOYi8dmyVZGN+Y9LHG7qHkcEpaM+4OdOu7/QGF+
-         kWp9Avrc4oXsqqs64f1C+EF2A+Dkbi79xGrar2KWCTMEKY3X0zxDRVBBN0QSvmK3B1st
-         TcQdVcZQNX3SeVhHAuuvWhqNDj2rK+vq2m+BeGIpAn/f7kjBks/0I4RQE9wzRq76RCma
-         UwzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756156292; x=1756761092;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bU/VP3KImYxnarLk0B3IOiENhi91lMJDhOtDAwiONbw=;
-        b=hgGT/ucRSKYSET7u7Tux3WpRiC5A/qtCGZqe6VyGDh4eOspd44jP5mAQop5KYQNthh
-         htV68azrZxnCOBTQCt1ZrKNvRkvgqwPpEP1VeRSJxit86/g4t+1qjVkyJpRE8S44Ioyz
-         YjKbq3yn6RIW1yWOW11xJvxTInk6NAp0GeyLbVotwfcErX0FMLi3vPtQotzxEK9pQIoa
-         hXDzV+PewPA2eXQhYiHeKi5hOSdvofihwV2TmRUmp52h9TNJ140cvWV6LXPRivVUnCq4
-         w9nX56ATkTfwQpdg5IKq1MXP9hYqdlfe6Jo9L5hXS/PqCe5hKkoUsfTIJncmZdoHh1SZ
-         XQcg==
-X-Forwarded-Encrypted: i=1; AJvYcCWl4IfZpqsnJ5w1rxOQo/mzPJHsU5OqY8aKBdigUbeK9K90n/0dYgwyfyOVaPjmTssDUVM2lSkR+5Pb8AqXQT8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyJjFYMrb6mS7U00AsTjhQhQQ33aMTI7lQ9/Wx0nK+Wfzr0Cag
-	bnWhRjrKrk33JNdVNEGklFxPzMQr2HjobVmp9KiPlkNu9d3ZomkN0YzntQmInbLsJ/kxyorzw/5
-	pAqynNg==
-X-Google-Smtp-Source: AGHT+IEmXw+WuOyMgM65AZf9fTrlI3TioKulbn9TFehdZm7hjH7SGdKKkkNUobg2k6tabLgV7nQdbhXUq2U=
-X-Received: from pjbsm17.prod.google.com ([2002:a17:90b:2e51:b0:325:238b:5dc6])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1c8:b0:244:9913:2fe2
- with SMTP id d9443c01a7336-2462eec67a9mr166879855ad.27.1756156292252; Mon, 25
- Aug 2025 14:11:32 -0700 (PDT)
-Date: Mon, 25 Aug 2025 14:11:30 -0700
-In-Reply-To: <87zfbnyvk9.wl-maz@kernel.org>
+	s=arc-20240116; t=1756156974; c=relaxed/simple;
+	bh=Cy47lc26STJx5l+f9M8q4OZm6Kg3jg1998oIbime1wA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fu3j5alLyhVgi+PJ3B5IjuU5yarFFVDPzjOb/e/6Ys+fjVerZgT4uCmh2oRp86j1IStwsNGbytlyNapt8YmI3jUakgInlbJVZoYlQIF8eD+Zu+OvP+r/SJz3SEjH57uDqlBUgra2wp9Av0eOpU90mp+TP03Gt8o9M7s1/tei9R0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qpnui3i6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE42C113D0;
+	Mon, 25 Aug 2025 21:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756156974;
+	bh=Cy47lc26STJx5l+f9M8q4OZm6Kg3jg1998oIbime1wA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qpnui3i6ORPp1aarx710P3I2B7R7T80KZucw9Fu1dWEYwdTUay++8eCtXnq1CHIJX
+	 jKnj47O4I7IMVPMUz8LIBFyctpaJG79TB8fJtk0cwBKMZmwjYGyOH61d28o4X/yeZW
+	 75iYI6sFysSobZfFenAtxJKQkP1jY2OI86rqu/Vx5vZfDI/H1XosYd0mpi01tNH2k/
+	 d/EX2UTFL5r4K9ypRfAiiAAE6y0N576mtEIn6cQUAsyHSgKYWuzUsd3zcABnJI2vcS
+	 URfZrX/tL1h61c4GHpm9vJ8w1e2DHGiyEllcRzC25gpUC3aVog4W77wyFfc/f+BMuu
+	 zwwiX4sE4KGzg==
+Date: Mon, 25 Aug 2025 14:22:53 -0700
+From: Kees Cook <kees@kernel.org>
+To: Ayash-Bera <ayashbera@gmail.com>
+Cc: shuah@kernel.org, luto@amacapital.net, wad@chromium.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/seccomp: improve clarity of test messages and
+ comments
+Message-ID: <202508251422.2312EDDAAA@keescook>
+References: <20250817064252.40996-1-ayashbera@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250825155203.71989-1-sebott@redhat.com> <aKy-9eby1OS38uqM@google.com>
- <87zfbnyvk9.wl-maz@kernel.org>
-Message-ID: <aKzRgp58vU6h02n6@google.com>
-Subject: Re: [PATCH] KVM: selftests: fix irqfd_test on arm64
-From: Sean Christopherson <seanjc@google.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Sebastian Ott <sebott@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, kvm@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250817064252.40996-1-ayashbera@gmail.com>
 
-On Mon, Aug 25, 2025, Marc Zyngier wrote:
-> On Mon, 25 Aug 2025 20:52:21 +0100,
-> Sean Christopherson <seanjc@google.com> wrote:
-> > Is there a sane way to handle vGIC creation in kvm_arch_vm_post_create()?  E.g.
-> > could we create a v3 GIC when possible, and fall back to v2?  And then provide a
-> > way for tests to express a hard v3 GIC dependency?
+On Sun, Aug 17, 2025 at 12:12:52PM +0530, Ayash-Bera wrote:
+> Replace ambiguous language in comments and test descriptions to improve
+> code readability and make test intentions clearer.
+
+Thanks; these are good clarifications. Can you please use checkpatch.pl
+and then wrap the long commit string?
+
+-Kees
+
 > 
-> You can ask KVM what's available. Like an actual VMM does. There is no
-> shortage of examples in the current code base.
+> Changes made:
+> - Make TODO comment more specific about 64-bit vs 32-bit argument
+>   handling test requirements  
+> - Clarify comment about task termination during syscall execution
+> - Replace vague "bad recv()" with specific "invalid recv() with NULL parameter"
+> - Replace informal "bad flags" with "invalid flags" for consistency
+> 
+> These improvements help maintainers and contributors better understand
+> the expected test behavior.
+> 
+> Signed-off-by: Ayash Bera <ayashbera@gmail.com>
+> 
+> ---
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 61acbd45ffaa..bded07f86a54 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -933,7 +933,7 @@ TEST(KILL_unknown)
+>  	ASSERT_EQ(SIGSYS, WTERMSIG(status));
+>  }
+>  
+> -/* TODO(wad) add 64-bit versus 32-bit arg tests. */
+> +/* TODO(wad) add tests for 64-bit versus 32-bit argument handling differences. */
+>  TEST(arg_out_of_range)
+>  {
+>  	struct sock_filter filter[] = {
+> @@ -3514,7 +3514,7 @@ TEST(user_notification_kill_in_middle)
+>  	ASSERT_GE(listener, 0);
+>  
+>  	/*
+> -	 * Check that nothing bad happens when we kill the task in the middle
+> +	 * Check that killing the task in the middle of a syscall does not cause crashes or hangs when we kill the task in the middle
+>  	 * of a syscall.
+>  	 */
+>  	pid = fork();
+> @@ -3798,7 +3798,7 @@ TEST(user_notification_fault_recv)
+>  	if (pid == 0)
+>  		exit(syscall(__NR_getppid) != USER_NOTIF_MAGIC);
+>  
+> -	/* Do a bad recv() */
+> +	/* Test invalid recv() with NULL parameter */
+>  	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, NULL), -1);
+>  	EXPECT_EQ(errno, EFAULT);
+>  
+> @@ -4169,13 +4169,13 @@ TEST(user_notification_addfd)
+>  	addfd.id = req.id;
+>  	addfd.flags = 0x0;
+>  
+> -	/* Verify bad newfd_flags cannot be set */
+> +	/* Verify invalid newfd_flags cannot be set */
+>  	addfd.newfd_flags = ~O_CLOEXEC;
+>  	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
+>  	EXPECT_EQ(errno, EINVAL);
+>  	addfd.newfd_flags = O_CLOEXEC;
+>  
+> -	/* Verify bad flags cannot be set */
+> +	/* Verify invalid flags cannot be set */
+>  	addfd.flags = 0xff;
+>  	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
+>  	EXPECT_EQ(errno, EINVAL);
+> -- 
+> 2.50.1
+> 
 
-Right, by "sane" I meant: is there a way to instantiate a supported GIC without
-making it hard/painful to write tests, and without having to plumb in arm64
-specific requirements to common APIs?
-
-E.g. are there tests that use the common vm_create() APIs and rely on NOT having
-a GIC?
-
-> And ideally, this should be made an integral part of creating a viable
-> VM, which the current VM creation hack makes a point in not providing.
+-- 
+Kees Cook
 
