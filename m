@@ -1,160 +1,206 @@
-Return-Path: <linux-kselftest+bounces-39861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39862-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECE6CB34704
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 18:20:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45E3AB34736
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 18:24:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 805C43B1D0E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 16:20:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 319E32A4D58
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Aug 2025 16:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B99452FDC27;
-	Mon, 25 Aug 2025 16:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A963002A9;
+	Mon, 25 Aug 2025 16:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuZQedcg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6305C271A9D;
-	Mon, 25 Aug 2025 16:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F23111713;
+	Mon, 25 Aug 2025 16:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756138807; cv=none; b=RjHMAMJJIUr0CXJyPGWpTI4DhMjQm44EFxAZ/gHTlvlGSmq7/LePUrA5NbUcg03VSFjMd93spW9Nu5L/yk4u/6O+cgRNG0GrTTL7Gc8niEhTS/uFIWKYo5Lm0PfS4yH+ZClUzZliE+z/+dzQuBUIrFhN8kaFJz1jSDBikQsGwZE=
+	t=1756139023; cv=none; b=fZeN5KU9FQHQdGtKQd4z+41HPsrzinnRfDZTP3aCJnoeIpcdAyXaAyijMfXtQwOwcMIJrxXcQgwU/0f6av5w/9AtlmBjmStRukJfkL+kWblRt0a2CkidDugW/FaxWQERujq1MjxJpSNQfXYS4n0N267ZbL8HW6n3p1cw8eA6nV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756138807; c=relaxed/simple;
-	bh=jvP/MoODPqxFznKN/LTG9V/r7b3ws9cfp65aCZZR0fg=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=Xi2kCqe20bFDWEvbLOm525B5gdUxnyljWgr0V67EWtEyN5ARYx24YE5u52nSvYU8aLU5ECeS5aF0jZWG43SWhEvHgrtdjO+cpJI206rlGrYHaEN14PNDRFL+aVAGwSu4evD6zvputSeQ5Pmpte04jtLJbCZl8N15UPQlDyr1OQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from [192.168.110.25] (unknown [118.251.178.216])
-	by APP-05 (Coremail) with SMTP id zQCowADXaVocjaxos6UhDw--.6581S2;
-	Tue, 26 Aug 2025 00:19:42 +0800 (CST)
-Message-ID: <b812bb46-6a26-456a-8210-d02138fb31a6@isrc.iscas.ac.cn>
-Date: Tue, 26 Aug 2025 00:19:40 +0800
+	s=arc-20240116; t=1756139023; c=relaxed/simple;
+	bh=KgpIyi6RAg5MAXdti7zU0f2hj8RJXYvhBuIqG1e+0CE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S7qDhJcZIBfVPzXSu/dG60hK0wJ7SLrorqbmvcFiunQkGyNdyCB3EUCvsYvHiXydfj+hjbnhF02Wre3rZrWrWG6GIfZNmvmOwAHN17y1fehoZnYSmarbbKURxkHGm5xB9C4A+Kkflvr6d6eVzQ6/8nvO+THLwoefrQ/SBCVspNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuZQedcg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09423C4CEED;
+	Mon, 25 Aug 2025 16:23:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756139022;
+	bh=KgpIyi6RAg5MAXdti7zU0f2hj8RJXYvhBuIqG1e+0CE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cuZQedcg1Zp25ehlMzicSD+8IdnsfbE4M/4qDW+GBk9ac9z4eDU7QA6R5eTSxBxbe
+	 IFjDzU/5VAjaY7v9KqbVmjsEbZWtdaSccRasiAxWh7JdLtkj+ykHU+0OaB9UTDfEgW
+	 8v3PFGD7ukTKEdGiWSqbat61DdJsQ9rU/FEmZLPNkKxQDhf/heHdagLNykxupDCCSm
+	 3lu7uf5m1eR2ji0UUJezLjeh0pDx9h8qfk1AU2OFNwyw+HTJPTewAnEGi434B1V6Br
+	 p9w1zuysufJvFxZwXfaIKGYzFCI2xiznEsqSR8PVd5faWmyVnMEqXjwtewDrGZOMx5
+	 kCya4XmM0eXwQ==
+Date: Mon, 25 Aug 2025 17:23:34 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, anup@brainfault.org, pbonzini@redhat.com,
+	shuah@kernel.org, cyan.yang@sifive.com, cleger@rivosinc.com,
+	charlie@rivosinc.com, cuiyunhui@bytedance.com,
+	samuel.holland@sifive.com, namcao@linutronix.de, jesse@rivosinc.com,
+	inochiama@gmail.com, yongxuan.wang@sifive.com,
+	ajones@ventanamicro.com, parri.andrea@gmail.com,
+	mikisabate@gmail.com, yikming2222@gmail.com,
+	thomas.weissschuh@linutronix.de, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	devicetree@vger.kernel.org, kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 RESEND 1/5] dt-bidings: riscv: add Zilsd and Zclsd
+ extension descriptions
+Message-ID: <20250825-clang-husband-bcb5defdb5f3@spud>
+References: <20250821140131.225756-1-pincheng.plct@isrc.iscas.ac.cn>
+ <20250821140131.225756-2-pincheng.plct@isrc.iscas.ac.cn>
+ <20250822-purge-doubling-f38988284db1@spud>
+ <a2cc4cbe-82ca-4a89-b623-73721a1f3baf@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: inochiama@gmail.com
-Cc: ajones@ventanamicro.com, alex@ghiti.fr, anup@brainfault.org,
- aou@eecs.berkeley.edu, charlie@rivosinc.com, cleger@rivosinc.com,
- conor+dt@kernel.org, cuiyunhui@bytedance.com, cyan.yang@sifive.com,
- devicetree@vger.kernel.org, jesse@rivosinc.com, krzk+dt@kernel.org,
- kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
- mikisabate@gmail.com, namcao@linutronix.de, palmer@dabbelt.com,
- parri.andrea@gmail.com, paul.walmsley@sifive.com, pbonzini@redhat.com,
- pincheng.plct@isrc.iscas.ac.cn, robh@kernel.org, samuel.holland@sifive.com,
- shuah@kernel.org, thomas.weissschuh@linutronix.de, yikming2222@gmail.com,
- yongxuan.wang@sifive.com
-References: <znik7dcyeipf57xerlm5gwjszcaaeujoukr7g4a7wt7lsfu366@skany6k7agt4>
-Subject: Re: [PATCH v1 RESEND 1/5] dt-bidings: riscv: add Zilsd and Zclsd
- extension descriptions
-From: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
-In-Reply-To: <znik7dcyeipf57xerlm5gwjszcaaeujoukr7g4a7wt7lsfu366@skany6k7agt4>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:zQCowADXaVocjaxos6UhDw--.6581S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF4fKrWkurWxZr18AryUtrb_yoW8Kw4Upa
-	93CF18KFZ8Xw13u3s7tw18Xw45Jr4kKr15AF47t34xKay5Ar10qFWakw1YvF18GF4xCF4I
-	va1Ygw1fZ3ZrAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-	c2xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-	WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-	67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-	AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
-	42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-	evJa73UjIFyTuYvjTRM6wCDUUUU
-X-CM-SenderInfo: pslquxhhqjh1xofwqxxvufhxpvfd2hldfou0/
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="przAQh4lUz2Eomq/"
+Content-Disposition: inline
+In-Reply-To: <a2cc4cbe-82ca-4a89-b623-73721a1f3baf@isrc.iscas.ac.cn>
 
-On 2025/8/23 6:34, Inochi Amaoto wrote:
- > On Thu, Aug 21, 2025 at 10:01:27PM +0800, Pincheng Wang wrote:
- >> Add descriptions for the Zilsd (Load/Store pair instructions) and
- >> Zclsd (Compressed Load/Store pair instructions) ISA extensions
- >> which were ratified in commit f88abf1 ("Integrating load/store
- >> pair for RV32 with the main manual") of the riscv-isa-manual.
- >>
- >> Signed-off-by: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
- >> ---
- >>   .../devicetree/bindings/riscv/extensions.yaml | 39 +++++++++++++++++++
- >>   1 file changed, 39 insertions(+)
- >>
- >> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml 
+
+--przAQh4lUz2Eomq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Aug 25, 2025 at 11:26:13PM +0800, Pincheng Wang wrote:
+> On 2025/8/23 0:33, Conor Dooley wrote:
+> > On Thu, Aug 21, 2025 at 10:01:27PM +0800, Pincheng Wang wrote:
+> > > Add descriptions for the Zilsd (Load/Store pair instructions) and
+> > > Zclsd (Compressed Load/Store pair instructions) ISA extensions
+> > > which were ratified in commit f88abf1 ("Integrating load/store
+> > > pair for RV32 with the main manual") of the riscv-isa-manual.
+> > >=20
+> > > Signed-off-by: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
+> > > ---
+> > >   .../devicetree/bindings/riscv/extensions.yaml | 39 ++++++++++++++++=
++++
+> > >   1 file changed, 39 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml =
 b/Documentation/devicetree/bindings/riscv/extensions.yaml
- >> index ede6a58ccf53..d72ffe8f6fa7 100644
- >> --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
- >> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
- >> @@ -366,6 +366,20 @@ properties:
- >>               guarantee on LR/SC sequences, as ratified in commit 
-b1d806605f87
- >>               ("Updated to ratified state.") of the riscv profiles 
-specification.
- >>
- >> +        - const: zilsd
- >> +          description:
- >> +            The standard Zilsd extension which provides support for 
+> > > index ede6a58ccf53..d72ffe8f6fa7 100644
+> > > --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > > +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > > @@ -366,6 +366,20 @@ properties:
+> > >               guarantee on LR/SC sequences, as ratified in commit b1d=
+806605f87
+> > >               ("Updated to ratified state.") of the riscv profiles sp=
+ecification.
+> > > +        - const: zilsd
+> > > +          description:
+> > > +            The standard Zilsd extension which provides support for =
 aligned
- >> +            register-pair load and store operations in 32-bit 
-instruction
- >> +            encodings, as ratified in commit f88abf1 ("Integrating
- >> +            load/store pair for RV32 with the main manual") of 
-riscv-isa-manual.
- >> +
- >> +        - const: zclsd
- >> +          description:
- >> +            The Zclsd extension implements the compressed (16-bit) 
-version of the
- >> +            Load/Store Pair for RV32. As with Zilsd, this extension 
+> > > +            register-pair load and store operations in 32-bit instru=
+ction
+> > > +            encodings, as ratified in commit f88abf1 ("Integrating
+> > > +            load/store pair for RV32 with the main manual") of riscv=
+-isa-manual.
+> > > +
+> > > +        - const: zclsd
+> > > +          description:
+> > > +            The Zclsd extension implements the compressed (16-bit) v=
+ersion of the
+> > > +            Load/Store Pair for RV32. As with Zilsd, this extension =
 was ratified
- >> +            in commit f88abf1 ("Integrating load/store pair for 
-RV32 with the
- >> +            main manual") of riscv-isa-manual.
- >> +
- >>           - const: zk
- >>             description:
- >>               The standard Zk Standard Scalar cryptography extension 
+> > > +            in commit f88abf1 ("Integrating load/store pair for RV32=
+ with the
+> > > +            main manual") of riscv-isa-manual.
+> > > +
+> > >           - const: zk
+> > >             description:
+> > >               The standard Zk Standard Scalar cryptography extension =
 as ratified
- >> @@ -847,6 +861,16 @@ properties:
- >>               anyOf:
- >>                 - const: v
- >>                 - const: zve32x
- >
- >> +      # Zclsd depends on Zilsd and Zca
- >> +      - if:
- >> +          contains:
- >> +            anyOf:
- >> +              - const: zclsd
- >> +        then:
- >> +          contains:
- >> +            anyOf:
- >> +              - const: zilsd
- >> +              - const: zca
- >>
- >
- > Should be allOf? I see the comment says "Zclsd" requires both "Zilsd"
- > and "Zca".
- >
- > Regards,
- > Inochi
+> > > @@ -847,6 +861,16 @@ properties:
+> > >               anyOf:
+> > >                 - const: v
+> > >                 - const: zve32x
+> > > +      # Zclsd depends on Zilsd and Zca
+> > > +      - if:
+> > > +          contains:
+> > > +            anyOf:
+> > > +              - const: zclsd
+> > > +        then:
+> > > +          contains:
+> > > +            anyOf:
+> > > +              - const: zilsd
+> > > +              - const: zca
+> > >   allOf:
+> > >     # Zcf extension does not exist on rv64
+> > > @@ -864,6 +888,21 @@ allOf:
+> > >             not:
+> > >               contains:
+> > >                 const: zcf
+> > > +  # Zilsd extension does not exist on rv64
+> > > +  - if:
+> > > +      properties:
+> >=20
+> > > +        riscv,isa-extensions:
+> > > +          contains:
+> > > +            const: zilsd
+> >=20
+> > This syntax is odd, it shouldn't be required to have zilsd in here and
+> > in the then. Did you copy this from Zcf or come up with it yourself
+> > because it didn't work otherwise?
+> >=20
+>=20
+> Yes, I did model this after the existing Zcf constraint in the same file.
+> The structure is nearly identical: cheking for presence of the extension =
+and
+> rv64i, then forbidding it in the "then" branch.
+>=20
+> I've tested confirmed that removing the "contains: const: zilsd" from the
+> "if" condition still correctly enforces that zilsd must not appear when
+> rv64i is present. The "then" clause with "not: contains" is sufficient.
+>=20
+> Given that the validation behavior is equivalent, but the logic is cleaner
+> and less redundant without the extra "contains", would you recommend
+> updating it to the simpler form:
+>=20
+>     - if:
+>         properties:
+>           riscv,isa-base:
+>             contains:
+>               const: rv64i
+>       then:
+>         properties:
+>           riscv,isa-extensions:
+>             not:
+>               contains:
+>                 const: zilsd
+>=20
+> If so, I'll update it in the next revision.
 
-You're absolutely right, thank you for catching this. Since Zclsd 
-depends on both Zilsd and Zca, the condition should use allOf to 
-correctly enforce the conjunction. I'll fix this in next revision.
+Yeah, please reduce it to this form.
 
-Best regards,
-Pincheng Wang
+--przAQh4lUz2Eomq/
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaKyOBgAKCRB4tDGHoIJi
+0tBmAPwITOW6B962WAfPzymCU4z9xZ51B5BtYVuDFIxypRRcogD/bJcgHnZ/rI15
+6Mdyko1A6Tb+pZvgrrtqkICniCrQogc=
+=3Dwx
+-----END PGP SIGNATURE-----
+
+--przAQh4lUz2Eomq/--
 
