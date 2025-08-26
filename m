@@ -1,37 +1,37 @@
-Return-Path: <linux-kselftest+bounces-39965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39966-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D94FEB37058
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 18:31:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D6A0B37052
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 18:31:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51BBB1B6054C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 16:31:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 160F1164070
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 16:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C6D33164D8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B270A34F48B;
 	Tue, 26 Aug 2025 16:30:42 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBDC3164CA;
-	Tue, 26 Aug 2025 16:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77913164D5;
+	Tue, 26 Aug 2025 16:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756225842; cv=none; b=tc38WJOImfSrUdnQfQoYeu/0ME0VpESw2jQ3fVIk0ovdC6Kg4u+Nyo7ckC1neYaTH5biqHf6NG6tB4eC0oyt9gr6SPrHOab98VVP5eqr0IPXpCqm9pYNNv6i8Ao0NxNmgf7x2Qx0ztJFajrB/j6Rkc8v++9M38difVV+sglPZ18=
+	t=1756225842; cv=none; b=N8a0AXOsj9BAeSlnrgQt/yjd1cd0Poibk7wBY3DaiDk4X0LML5mQHlGNsDqcLRxbnvAnpyFbKfPo0wwVqVYaCwXnYbTOweK+gpyslFxWyvk0Im+TrOPu8eTfGR95C4yTJsD02IPHPFkRiRcPM2Hp3FfFWXnq23EyPb/TfmIKtP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756225842; c=relaxed/simple;
-	bh=HtF3kKHFg9XwWbNN4HMPRKpFaIvrfyNEuULG2kM8s3c=;
+	bh=PAFYPans5yNReMaQrfW5ouj0cLv8bJIIwDxFOF9Dzpk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EK59wQdRmHDKQHbdQd6cW/h1I0bP77n5X7pSaVE2ddz49yjGzKHRkSZnEjy9ZvPSaXcSYQAsQXw0KxGwNGFR7wEbS29/huIbb1SNrgnXLRbJRZgmUVT+N+ydTc6AmEutvxLhStOZQ8gGGPdxIjk2t6HvaT+tAyVHGwZly/FSURk=
+	 MIME-Version; b=pxBBoxr4GgOwEO9sUHbwD9XCOb5Fnwpc6GPDuWz9At3N9ycX0BHzirAgD72yJSZiSFqTqz4r4w6psCdTXhUd352BfcaaGpTWIPLMbQUT9xW/wTEYwS5XlEWPaaQ+PtwqGUhP38aZRdBKni0bj64zmGv7cwAM4F+JxQTuPdbWfPY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
 Received: from ROG.lan (unknown [118.251.176.199])
-	by APP-03 (Coremail) with SMTP id rQCowAD3jX8L4a1oBKJmDw--.6398S4;
-	Wed, 27 Aug 2025 00:30:20 +0800 (CST)
+	by APP-03 (Coremail) with SMTP id rQCowAD3jX8L4a1oBKJmDw--.6398S5;
+	Wed, 27 Aug 2025 00:30:22 +0800 (CST)
 From: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
 To: paul.walmsley@sifive.com,
 	palmer@dabbelt.com,
@@ -65,9 +65,9 @@ Cc: linux-riscv@lists.infradead.org,
 	kvm-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	pincheng.plct@isrc.iscas.ac.cn
-Subject: [PATCH v2 2/5] riscv: add ISA extension parsing for Zilsd and Zclsd
-Date: Wed, 27 Aug 2025 00:29:36 +0800
-Message-Id: <20250826162939.1494021-3-pincheng.plct@isrc.iscas.ac.cn>
+Subject: [PATCH v2 3/5] riscv: hwprobe: export Zilsd and Zclsd ISA extensions
+Date: Wed, 27 Aug 2025 00:29:37 +0800
+Message-Id: <20250826162939.1494021-4-pincheng.plct@isrc.iscas.ac.cn>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250826162939.1494021-1-pincheng.plct@isrc.iscas.ac.cn>
 References: <20250826162939.1494021-1-pincheng.plct@isrc.iscas.ac.cn>
@@ -78,91 +78,87 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowAD3jX8L4a1oBKJmDw--.6398S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxXr1rAF1kuFW3Jr15ArykAFb_yoW5GF4kpr
-	s5CrWFyrWDJw1fuwsxtrZ5Ww15Xw1UGws8Gw1xWryrJFW7trWfXr1kAa42yanxJFy0qr1Y
-	vF1rWrsxZa4UAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+X-CM-TRANSID:rQCowAD3jX8L4a1oBKJmDw--.6398S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxJw4kJw1rKr13Jw1rXw18Krg_yoW5XFyxpF
+	4DWrs3WFZ8Ca1xCFZ7KF48urykA3Z7Kw4agF12k3yUXFW7ZrWrJ3sxtanIyr1jqFyFva9Y
+	gF1FkrZ5t39rArUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmS14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
 	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-	8EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS
-	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-	IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-	xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-	kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
-	KfnxnUUI43ZEXa7sRipB-tUUUUU==
+	Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+	M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
+	v20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
+	F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2
+	IY04v7MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+	CEb7AF67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
+	42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
+	4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBI
+	daVFxhVjvjDU0xZFpf9x0pRl_MsUUUUU=
 X-CM-SenderInfo: pslquxhhqjh1xofwqxxvufhxpvfd2hldfou0/
 
-Add parsing for Zilsd and Zclsd ISA extensions which were ratified in
-commit f88abf1 ("Integrating load/store pair for RV32 with the
-main manual") of the riscv-isa-manual.
+Export Zilsd and Zclsd ISA extensions through hwprobe.
 
 Signed-off-by: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
 ---
- arch/riscv/include/asm/hwcap.h |  2 ++
- arch/riscv/kernel/cpufeature.c | 24 ++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ Documentation/arch/riscv/hwprobe.rst  | 8 ++++++++
+ arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
+ arch/riscv/kernel/sys_hwprobe.c       | 2 ++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index affd63e11b0a..7ad43d12c49f 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -106,6 +106,8 @@
- #define RISCV_ISA_EXT_ZAAMO		97
- #define RISCV_ISA_EXT_ZALRSC		98
- #define RISCV_ISA_EXT_ZICBOP		99
-+#define RISCV_ISA_EXT_ZILSD		100
-+#define RISCV_ISA_EXT_ZCLSD     101
+diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
+index 2aa9be272d5d..538ab6c08f7b 100644
+--- a/Documentation/arch/riscv/hwprobe.rst
++++ b/Documentation/arch/riscv/hwprobe.rst
+@@ -275,6 +275,14 @@ The following keys are defined:
+        ratified in commit 49f49c842ff9 ("Update to Rafified state") of
+        riscv-zabha.
  
- #define RISCV_ISA_EXT_XLINUXENVCFG	127
- 
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index 743d53415572..8e7757db3895 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -242,6 +242,28 @@ static int riscv_ext_zcf_validate(const struct riscv_isa_ext_data *data,
- 	return -EPROBE_DEFER;
- }
- 
-+static int riscv_ext_zilsd_validate(const struct riscv_isa_ext_data *data,
-+		  const unsigned long *isa_bitmap)
-+{
-+	if (IS_ENABLED(CONFIG_64BIT))
-+		return -EINVAL;
++  * :c:macro:`RISCV_HWPROBE_EXT_ZILSD`: The Zilsd extension is supported as
++       defined in the RISC-V ISA manual starting from commit f88abf1("Integrating
++       load/store pair for RV32 with the main manual") of the riscv-isa-manual.
 +
-+	return 0;
-+}
++  * :c:macro:`RISCV_HWPROBE_EXT_ZCLSD`: The Zclsd extension is supported as
++       defined in the RISC-V ISA manual starting from commit f88abf1("Integrating
++       load/store pair for RV32 with the main manual") of the riscv-isa-manual.
 +
-+static int riscv_ext_zclsd_validate(const struct riscv_isa_ext_data *data,
-+				    const unsigned long *isa_bitmap)
-+{
-+	if (IS_ENABLED(CONFIG_64BIT))
-+		return -EINVAL;
-+
-+	if (__riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_ZILSD) &&
-+		__riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_ZCA))
-+		return 0;
-+
-+	return -EPROBE_DEFER;
-+}
-+
- static int riscv_vector_f_validate(const struct riscv_isa_ext_data *data,
- 				   const unsigned long *isa_bitmap)
- {
-@@ -483,6 +505,8 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
- 	__RISCV_ISA_EXT_DATA_VALIDATE(zcd, RISCV_ISA_EXT_ZCD, riscv_ext_zcd_validate),
- 	__RISCV_ISA_EXT_DATA_VALIDATE(zcf, RISCV_ISA_EXT_ZCF, riscv_ext_zcf_validate),
- 	__RISCV_ISA_EXT_DATA_VALIDATE(zcmop, RISCV_ISA_EXT_ZCMOP, riscv_ext_zca_depends),
-+	__RISCV_ISA_EXT_DATA_VALIDATE(zclsd, RISCV_ISA_EXT_ZCLSD, riscv_ext_zclsd_validate),
-+	__RISCV_ISA_EXT_DATA_VALIDATE(zilsd, RISCV_ISA_EXT_ZILSD, riscv_ext_zilsd_validate),
- 	__RISCV_ISA_EXT_DATA(zba, RISCV_ISA_EXT_ZBA),
- 	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
- 	__RISCV_ISA_EXT_DATA(zbc, RISCV_ISA_EXT_ZBC),
+ * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: Deprecated.  Returns similar values to
+      :c:macro:`RISCV_HWPROBE_KEY_MISALIGNED_SCALAR_PERF`, but the key was
+      mistakenly classified as a bitmask rather than a value.
+diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
+index aaf6ad970499..e086179bb4fa 100644
+--- a/arch/riscv/include/uapi/asm/hwprobe.h
++++ b/arch/riscv/include/uapi/asm/hwprobe.h
+@@ -82,6 +82,8 @@ struct riscv_hwprobe {
+ #define		RISCV_HWPROBE_EXT_ZAAMO		(1ULL << 56)
+ #define		RISCV_HWPROBE_EXT_ZALRSC	(1ULL << 57)
+ #define		RISCV_HWPROBE_EXT_ZABHA		(1ULL << 58)
++#define	RISCV_HWPROBE_EXT_ZILSD	(1ULL << 59)
++#define	RISCV_HWPROBE_EXT_ZCLSD	(1ULL << 60)
+ #define RISCV_HWPROBE_KEY_CPUPERF_0	5
+ #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
+ #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
+diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
+index 0b170e18a2be..12f4b68ad2ac 100644
+--- a/arch/riscv/kernel/sys_hwprobe.c
++++ b/arch/riscv/kernel/sys_hwprobe.c
+@@ -111,6 +111,7 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
+ 		EXT_KEY(ZCA);
+ 		EXT_KEY(ZCB);
+ 		EXT_KEY(ZCMOP);
++		EXT_KEY(ZCLSD);
+ 		EXT_KEY(ZICBOM);
+ 		EXT_KEY(ZICBOZ);
+ 		EXT_KEY(ZICNTR);
+@@ -119,6 +120,7 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
+ 		EXT_KEY(ZIHINTPAUSE);
+ 		EXT_KEY(ZIHPM);
+ 		EXT_KEY(ZIMOP);
++		EXT_KEY(ZILSD);
+ 		EXT_KEY(ZKND);
+ 		EXT_KEY(ZKNE);
+ 		EXT_KEY(ZKNH);
 -- 
 2.39.5
 
