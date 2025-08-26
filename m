@@ -1,209 +1,156 @@
-Return-Path: <linux-kselftest+bounces-39963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0CDBB37038
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 18:27:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F29FB3704A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 18:30:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AC6016F12E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 16:27:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD8657C1673
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 16:30:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89CCA3164CA;
-	Tue, 26 Aug 2025 16:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ItuZx9xm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8358923506F;
+	Tue, 26 Aug 2025 16:30:36 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081BB3081BC;
-	Tue, 26 Aug 2025 16:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB49B2B9A7;
+	Tue, 26 Aug 2025 16:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756225604; cv=none; b=bdGflle/+KFPsK4vKMTyTNJmpA+juys4l1x/42SwTab537Z3jXuWtK0BIOZ//Uy3S9GHtNvNyV/837f6xciRHfY6/TohCySkyMIaYZPnQ4eqIc1bzFtkFpTyQno0Pg0NZ/WL/2XZQPdVuOIA7c/Vc/qX8HJeUHOCRSxjMxpA+z0=
+	t=1756225836; cv=none; b=M3L7Obo1s6+OrSxldYxleDXI0VJX9Oe1oA7N8iZixLP3dn+kYrfgKq+vabJMItjYEAuXKBIk/w0lT4JjUgTkzaRfaWIpQGhiH+KTlAtGV90lLO1OYiOnceVQmoQyz19dGBCquKk8eNqlw8IKnfpulPFmEFqo6IjLrzu0R5FS6Aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756225604; c=relaxed/simple;
-	bh=KIUHApQZBeG3sv1gBKAzcJWc3aNcc0ib8FLAyWN2igM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ihbMthIe7H0oKoHfQVtjZNCmlhqrFE6csPhLI39B9yPjA9qfInlqVHl08gtCU/LyP29mYsjUCur0WGyZpqbqoHF7jAI7Yb187Fc+M2wD+ztThZHSw1+DV99ligP/x2vCXfCYPQC2c7r6dI3TFGwZdbKlPgiFRR98uRbmNypUMRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ItuZx9xm; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-3367144d19cso23509801fa.2;
-        Tue, 26 Aug 2025 09:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756225599; x=1756830399; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I5zGMY0B+wsQd0Wnquc7Hok6cqc/WBPDwGcUcIfHRhk=;
-        b=ItuZx9xmwoblq1aFrYRUznaaOwJ/J+eaVuBlBA+8jtU33Uc8SQoWs92c5N6Rk4V53n
-         FY4Vw04UzvHm8TrZE7JezEU9/LaqggJ+WdyxjCKRootDVPd2WqDYyTgX6M0geEAnggMf
-         j/EL+l/cSffNH1ChoVo/LDuIPqTS8wZYSgU/X5sCg0p8eb1sV8C1mAzOFsf400/Z9Vt1
-         gNPoN2HeUJwoVo5V6Y9mdzi7Kxu7W2uu6CXGxi7Dol/6udeJByzKvFgmy2vexqb9ZV7m
-         wTIU5g71IjRCAeXjHD78QiSLOx89otGG0y2C7NHWd3Vkp+qCcEY00V87c0PaLUwFF8we
-         TZLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756225599; x=1756830399;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I5zGMY0B+wsQd0Wnquc7Hok6cqc/WBPDwGcUcIfHRhk=;
-        b=phTucKxernkH1eOhfY36kcsa0hv5ciOzG31aazksuW6OluLeDUTAI9W7biO4l8K3cC
-         lsPrkBgP5Z5fCAWLknTbJqV9zwkwjbxUgP55ZMVuI8JMwxuWRRWDt9zwKkg0nPhnue9O
-         gptfkSAaVjVEHMp/DLBLa1xcW/Y50b5TTncBNtzJH1ZV9+FGgkP5ijLkDrbvpCzLSYt9
-         gFw5xF8mddzw3wapUzduQnkrakn48qJ8gh4hqI3x7c3VpJhYWtbCL/JxpS0b2B1F84at
-         lhX83YweJtxFKsmUhRJ0H3gl+BRTjQ/6stKWHNHBVIYDRcJzEAg8w/033/XJ5FW7N9M/
-         tQvA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdKpBqi12uMNqDQXe1r8+W/BSGXBLeP3nMUimVbc6Yt8M/ZKJwUDy0rt5rKgtqSWXthNaeLcCSPpRGYRA=@vger.kernel.org, AJvYcCWCMNBWKdVGvn0cIYU1WereDLupuNpD2LSOqa6992kOhDoMr2AK4QAkch0NCcz7Z0VAl+uP2oSg4TdpDn6n6Ieb@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPeo6WzLf6ZjI+CZq9QlUcTVAtd8NCyUiSYKGWd5rcojNLqi+l
-	Fw0J/THO0cWtFMWABXsu4t5dgfCip0bsrKl8Xl5iwkS/JKQMAtEaQgpNZbXuXlgtknLQFxygPuy
-	LohHIHbJ2JnjGMRotIuBSRR2zlg1qoTyHhsFi
-X-Gm-Gg: ASbGncuVRHG4STBdrwpKmkquGJ4A/PjklZt1X9xoAPAHDOQGGnkEANS4dOWFR/uM3+d
-	moNFwGiOE9KhuDtvmxKSwx3at23sS22419XQFlkw8PJ1Vo9MBkii4s5U04MhQ+H4oys0JGgB3OL
-	OCLPDyNvJQT9P7kMnKKKjT1MEAKs71syLso3TlCAzLF5tt+hJsSiKpn9OKMToom2mU0UfDZtu2E
-	HCfKhpXQgfaRecz67fE5qY4Z5BrauN1c2wBycVSzg==
-X-Google-Smtp-Source: AGHT+IHkb64c4bZS+NGaeP4VCluu/PBLB8BKBtdaSeEYU+WxbjYgL2JboP1sxe+Bh7hVlYsMPO1uy+hpvD/0fQSHB0E=
-X-Received: by 2002:a2e:be92:0:b0:331:f04d:e689 with SMTP id
- 38308e7fff4ca-33650fc8436mr45721141fa.41.1756225598840; Tue, 26 Aug 2025
- 09:26:38 -0700 (PDT)
+	s=arc-20240116; t=1756225836; c=relaxed/simple;
+	bh=yMwNl4e0l3TtPcySpAL6rbOFnmB2yIOLSJ7vpcZI0ws=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=aOTLb0W4XnqeGlDddDdO4JnLsspso6vH4CAZlsvsCbZ5Zd1ztCFwPnt/RlKcie4hLxYoiBtEI1w287ocIlDrjEe2FS4EPCkdgRRkg6oguMOZTEChKf4PZMa1ZGOAkFHIqM6hSiBbLrz/Tz+CVoVGulZnnF63ZEkyii2yE4GDt+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from ROG.lan (unknown [118.251.176.199])
+	by APP-03 (Coremail) with SMTP id rQCowAD3jX8L4a1oBKJmDw--.6398S2;
+	Wed, 27 Aug 2025 00:30:05 +0800 (CST)
+From: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
+To: paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	anup@brainfault.org,
+	pbonzini@redhat.com,
+	shuah@kernel.org,
+	cyan.yang@sifive.com,
+	cleger@rivosinc.com,
+	charlie@rivosinc.com,
+	cuiyunhui@bytedance.com,
+	samuel.holland@sifive.com,
+	namcao@linutronix.de,
+	jesse@rivosinc.com,
+	inochiama@gmail.com,
+	yongxuan.wang@sifive.com,
+	ajones@ventanamicro.com,
+	parri.andrea@gmail.com,
+	mikisabate@gmail.com,
+	yikming2222@gmail.com,
+	thomas.weissschuh@linutronix.de
+Cc: linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	pincheng.plct@isrc.iscas.ac.cn
+Subject: [PATCH v2 0/5] Add Zilsd/Zclsd support in hwprobe and KVM
+Date: Wed, 27 Aug 2025 00:29:34 +0800
+Message-Id: <20250826162939.1494021-1-pincheng.plct@isrc.iscas.ac.cn>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250730142301.6754-1-pranav.tyagi03@gmail.com> <20250806164841.2907972-1-joshua.hahnjy@gmail.com>
-In-Reply-To: <20250806164841.2907972-1-joshua.hahnjy@gmail.com>
-From: Pranav Tyagi <pranav.tyagi03@gmail.com>
-Date: Tue, 26 Aug 2025 21:56:26 +0530
-X-Gm-Features: Ac12FXydsbaI3ePxtk_Pq8B7Slgn4iz04KSeXyYj_cYZPkXFV1_OSHzZmmvB410
-Message-ID: <CAH4c4jJmCP8w8mbeTpOhNvWCgb9U1A+ssny3nSw9Qg5tEnqVcw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/mm: use __auto_type in swap() macro
-To: Joshua Hahn <joshua.hahnjy@gmail.com>
-Cc: akpm@linux-foundation.org, peterx@redhat.com, shuah@kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowAD3jX8L4a1oBKJmDw--.6398S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFyftr1UXr48Cr1DJrW5Jrb_yoW8KrW5pF
+	s5GwnI9r1kJw13CF1fAr48ur1rKan5uws3tF9xtw18WayayFyrZr10k3ZxZF1kAFZ29FyD
+	Z3WrWryI9wnrAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+	nIWIevJa73UjIFyTuYvjTRM6wCDUUUU
+X-CM-SenderInfo: pslquxhhqjh1xofwqxxvufhxpvfd2hldfou0/
 
-On Wed, Aug 6, 2025 at 10:18=E2=80=AFPM Joshua Hahn <joshua.hahnjy@gmail.co=
-m> wrote:
->
-> On Wed, 30 Jul 2025 19:53:01 +0530 Pranav Tyagi <pranav.tyagi03@gmail.com=
-> wrote:
->
-> Hi Pranav,
->
-> Thank you for this patch! Sorry for the late response, thank you for bump=
-ing
-> the patch. I just have a few comments about the commit message.
->
-> > Replace typeof() with __auto_type in the swap() macro in uffd-stress.c.
-> > __auto_type was introduced in GCC 4.9 and reduces the compile time for
-> > all compilers. No functional changes intended.
->
-> From what I understand, the compiler optimizations from typeof() --> __au=
-to_type
-> applies when the argument is a variably modified type. It seems like this
-> internal definition of swap() is only used within selftests/mm/uffd-stres=
-s.c,
-> and in particular is only used twice, in these two lines:
->
-> /* prepare next bounce */
-> swap(area_src, area_dst);
->
-> swap(area_src_alias, area_dst_alias);
->
-> Where area_src, area_dst, area_src_alias, area_dst_alias are all char * w=
-hich
-> the compiler knows the size of at compile time. Given this, I wonder if t=
-here
-> are any compile time speedups.
->
-> But this is just my understanding, based on a quick look at the code. Ple=
-ase
-> feel free to correct me, if I am incorrectly understanding your changes o=
-r if
-> my understanding of __auto_type is incorrect : -)
->
-> With that said, I think the main benefit that we get from using __auto_ty=
-pe
-> has more to do with readability. Since __auto_type can only be used to
-> declare local variables (as we are doing here), maybe we can rephrase the
-> commit to be about improving readability, and not compile time?
->
-> Again, please let me know if I am overlooking something.
->
-> One other thought -- while this internal definition of swap() is confined=
- to
-> selftests/mm/uffd-stress.c, there is another identical definition in
-> include/linux/minmax.h that may be used more widely across not only mm
-> stresstests, but across subsystems as well. Without having taken a deeper
-> look into this, perhaps this version of swap is indeed called on some dat=
-a
-> structures with variable type, and we might be able to see some tangible
-> compile time improvements?
->
-> In any case, this change looks good to me, but maybe a new commit message
-> that can more closely describe the effects would be better : -) Once you =
-add
-> those changes, please feel free to add my review tag for the mm selftest =
-change:
->
-> Reviewed-by: Joshua Hahn <joshua.hahnjy@gmail.com>
->
-> > Signed-off-by: Pranav Tyagi <pranav.tyagi03@gmail.com>
-> > ---
-> >  tools/testing/selftests/mm/uffd-stress.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/s=
-elftests/mm/uffd-stress.c
-> > index 40af7f67c407..c0f64df5085c 100644
-> > --- a/tools/testing/selftests/mm/uffd-stress.c
-> > +++ b/tools/testing/selftests/mm/uffd-stress.c
-> > @@ -51,7 +51,7 @@ static char *zeropage;
-> >  pthread_attr_t attr;
-> >
-> >  #define swap(a, b) \
-> > -     do { typeof(a) __tmp =3D (a); (a) =3D (b); (b) =3D __tmp; } while=
- (0)
-> > +     do { __auto_type __tmp =3D (a); (a) =3D (b); (b) =3D __tmp; } whi=
-le (0)
-> >
-> >  const char *examples =3D
-> >       "# Run anonymous memory test on 100MiB region with 99999 bounces:=
-\n"
-> > --
-> > 2.49.0
->
-> Sent using hkml (https://github.com/sjp38/hackermail)
+Hi all,
 
-Hi Joshua,
+This is v2 of a short series that adds kernel support for the ratified
+Zilsd (Load/Store pair) and Zclsd (Compressed Load/Store pair) RISC-V
+ISA extensions. The series enables kernel-side exposure so user-space
+(for example glibc) can detect and use these extensions via hwprobe and
+runtime checks.
 
-Thanks for the detailed review and I sincerely apologize for the delayed
-response.
+Patches:
+- Patch 1：Add device tree bindings documentation for Zilsd and Zclsd.
+- Patch 2: Extend RISC-V ISA extension string parsing to recognize them.
+- Patch 3: Export Zilsd and Zclsd via riscv_hwprobe.
+- Patch 4: Allow KVM guests to use them.
+- Patch 5: Add KVM selftests.
 
-You=E2=80=99re correct =E2=80=94 __auto_type mainly provides compiler optim=
-izations when the
-argument is a variably modified type and in this case the compiler already
-knows the size of the arguments at compile time. The motivation here is mor=
-e
-about readability and consistency, as __auto_type is already used in severa=
-l
-places within selftests. This patch has since been picked up into the
-mm-unstable branch.
+Changes in v2:
+- Device-tree schema: simplified the rv64 validation for Zilsd by
+  removing a redundant `contais: const: zilsd` in the `if` clause; the
+  simpler `if (riscv, isa-base contains rv64i) then (riscv,
+  isa-extension not contains zilsd)` form is used instead. Behaviour is
+  unchanged, and the logic is cleaner.
+- Device-tree schema: corrected Zclsd dependency to require both Zilsd
+  and Zca (previous `anyOf` was incorrect; now both are enforced).
+- Commit message typo fixed: "dt-bidings" -> "dt-bindings" in the Patch
+  1 commit subject.
 
-I also looked at the swap() definition in include/linux/minmax.h, which is
-indeed more widely used across subsystems. That version may offer tangible
-compile-time improvements in cases involving variable argument types and I
-plan to follow up with a patch there.
+The v2 changes are documentation/schema corrections in extensions.yaml.
+No functional changes were made to ISA parsing, hwprobe syscall, KVM
+guest support or the selftests beyond ensuring the binding correctly
+documents and validates the extension relationships.
 
-Thanks again for the thorough review.
+Please review v2 and advise if futher changes are needed.
 
-Regards
-Pranav Tyagi
+Thanks,
+Pincheng Wang 
+
+Pincheng Wang (5):
+  dt-bindings: riscv: add Zilsd and Zclsd extension descriptions
+  riscv: add ISA extension parsing for Zilsd and Zclsd
+  riscv: hwprobe: export Zilsd and Zclsd ISA extensions
+  riscv: KVM: allow Zilsd and Zclsd extensions for Guest/VM
+  KVM: riscv: selftests: add Zilsd and Zclsd extension to get-reg-list
+    test
+
+ Documentation/arch/riscv/hwprobe.rst          |  8 +++++
+ .../devicetree/bindings/riscv/extensions.yaml | 36 +++++++++++++++++++
+ arch/riscv/include/asm/hwcap.h                |  2 ++
+ arch/riscv/include/uapi/asm/hwprobe.h         |  2 ++
+ arch/riscv/include/uapi/asm/kvm.h             |  2 ++
+ arch/riscv/kernel/cpufeature.c                | 24 +++++++++++++
+ arch/riscv/kernel/sys_hwprobe.c               |  2 ++
+ arch/riscv/kvm/vcpu_onereg.c                  |  2 ++
+ .../selftests/kvm/riscv/get-reg-list.c        |  6 ++++
+ 9 files changed, 84 insertions(+)
+
+-- 
+2.39.5
+
 
