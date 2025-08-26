@@ -1,261 +1,199 @@
-Return-Path: <linux-kselftest+bounces-39971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A80BB370BD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 18:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4DDCB3710C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 19:16:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05EED7C2788
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 16:51:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69E4E8E3F46
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 17:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F98B2D46D1;
-	Tue, 26 Aug 2025 16:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99452C17A3;
+	Tue, 26 Aug 2025 17:16:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GZ5oM5Jn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wj9xKgd9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662E9280037
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 16:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1662D47E8
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 17:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756227110; cv=none; b=GeSVoAR52XyOFXnmced87qxeNdceiUi78PmWNVH3+QXx0God/6qXdHs5OUNHHeUuvxys9soKJ1Kts80AAoCy6H66w329PIJSf/vmmqxOf/TJJ8FosK6FkXZ+30b5bSWfNBZRR8EM5mfm0+iy5ShHw8x/OwqqwRZe9CDOzWLmQLk=
+	t=1756228585; cv=none; b=jgRpO6Jxhwa/vEtQpIh3iCMGvrhKjzc6ZAIErSvX49p0RDE7xxBoZAFddXRjxIuiQ5SyBWlzs5fzZGBpkjY82GlLu3/9uUdgphtjoE6qHIpfEwPus6CCcgeTGXtSNgF1ybto3rQLhTAdWvLtc8WBeTKzyBxK/bJbIfTHOBZdctU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756227110; c=relaxed/simple;
-	bh=er1lq/dzsrmFZwsv2XyfdQy2+0Y7HeZOJLs86tFN+BE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HzHXz7fG2dX8QOrOHY8s/J0rQVr+u9uTGcAzYqXQ0Y8v2bH0QoLHPlrXx8suj3xdthNzoIaH037/97AheJ8yN1Cpn1hDL3SIofZWkKsUzociu7Cbijcpyx606g0lEt40GHJqeOjnls7vY78SEB0gtl+dVPwhqHmLaATg+IHeUdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GZ5oM5Jn; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <d438bf3a-a9c9-4d34-b814-63f2e9bb3a85@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1756227096;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qnzpS995oSOSAmi/9OR2XBD5gzrE04xt0mbKyF2sQXU=;
-	b=GZ5oM5JnBURFXQr6PfYeyqv3JcusbV4mlcSjz/z3d+E2E2iRcqUy3EcwG7jLGSkJylG4t1
-	GlqPh0K3FekjPeIlrW44T8vStlPQhGUNYV+6OcLpa5SP0UwSPDGfXOLc46Nr6k6TIeJzNQ
-	tYEz1DfuwUbulkj+hrRAUy16k3ooCa0=
-Date: Tue, 26 Aug 2025 09:51:08 -0700
+	s=arc-20240116; t=1756228585; c=relaxed/simple;
+	bh=fvjdVvqrVjKr0a5LTdg9nBk5vfBdc56Vo1TvHP111NU=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=dFOugoHzGqaBTp7T1m3WsR9G4wRsyCAg8hQQAOQzI2Zlz2NZl/tOfI8aNyHjyCNYiqgDQz0vWFcVa6xlfgz4TkW8UMaZ0cCqeVrio2geou1DHSpTC05xrJcyH/JGIjycZYkPw7/kTXYhQ4tIv5o2UZQOLVbFGCZ/YfZFQTsBqBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wj9xKgd9; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7705115a2a5so2353464b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 10:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1756228583; x=1756833383; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EPQkp4eLa51rgoZQsO5XmXkzCVyl1vzwf6yi1FF+7Hs=;
+        b=wj9xKgd9fBgxYmukIeSSBdnF9nqOpbWHWj3J/y72rpcEOv2u9DPGjECgnmU+3oGsju
+         IaqgSYBFkxIa0Ni9POfGW3nWEbKJqPzVpBc3O0UMpnCHDQHKqaEorG0Tr3WA77PKwR4J
+         xI9Pb+GvWPBqjyvbswMKO3prqcUnR2wb1oHCcsfLJRoabpdalJN3yc9l+qI/UZwDHtmw
+         zC8znhZTkKxpQGebunvOc7zh6Y0iv3ZbYNukvkC8AHcpwMU7u8rkdrn8oVglClq9Wu8u
+         8qMGs9oGLxPRJHcChfVQSCsiSadGsSckobwpJThnKcWra3LY7M6dSs4UAiO/2HI2bd3k
+         KxMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756228583; x=1756833383;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EPQkp4eLa51rgoZQsO5XmXkzCVyl1vzwf6yi1FF+7Hs=;
+        b=XiRhPfAuBlUcjqRNuvPiOLODsNItGaJZpSwSb8+ND+hc4FZt+ntHqXVjOyg4au5q5H
+         o1lgyOU0rwP/OH07wHQL8fbSddZV3/RNudC8UX2EzJATBRbgLUrYIicykQspbqi3iYsA
+         0w1v9VW9R3pd14botcsHzDjUisESu4WSs6fvrWKvXaIblVjVcvXxnqqhKu0suiCVdQ6t
+         +BK8D3sWRA5gZK/Mxi0o+T9Kd/p5alnMD+Eill7EWyAH39HcNf8jFmPcUMio1ueSAVne
+         8rUIKu5MX7RkEqCLEJCuNv+18OezyL+3XbfMbpWjtMDJSNhJz7rFMCIVcmW42f2y/SmI
+         NziA==
+X-Forwarded-Encrypted: i=1; AJvYcCVSYOdpKYBcGNyYV9ReJQl6FzAzJ+sSd4hHMvd0RRjBvWa8qeG6fQaGrqte6kRwONqRAPpHeFODbO7fS4xMWAw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6MuWQgZAheJYZili2z3xrvWoi10yFY0yFBfOe8HJYdGJHR0UJ
+	KR4mNjLlAivYRFDAp3py2EWFbvr/b7a2r0AhjLQs62zq4ZgtNe0rJ8t0q2p28vmqYrZ9bui76Rr
+	qkQeqfg==
+X-Google-Smtp-Source: AGHT+IGegMNQmVeWNpCzLcs4Xi46pfblu1Kifftbl1fWL6g5w/8bftTv67TFe6za5csVE4uK+DTIuwgIIwA=
+X-Received: from pfva1.prod.google.com ([2002:a05:6a00:c81:b0:771:3e92:f3aa])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:aa7:8251:0:b0:76e:8535:53d9
+ with SMTP id d2e1a72fcca58-7702faac358mr17851538b3a.18.1756228583195; Tue, 26
+ Aug 2025 10:16:23 -0700 (PDT)
+Date: Tue, 26 Aug 2025 10:16:21 -0700
+In-Reply-To: <9ef0d1f4-3257-4821-8241-aedae0957c6a@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v15 2/2] selftests/bpf: Enrich subtest_basic_usdt
- case in selftests to cover SIB handling logic
-Content-Language: en-GB
-To: Jiawei Zhao <phoenix500526@163.com>, ast@kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250823071839.1191350-1-phoenix500526@163.com>
- <20250823071839.1191350-3-phoenix500526@163.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20250823071839.1191350-3-phoenix500526@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20250821042915.3712925-1-sagis@google.com> <20250821042915.3712925-5-sagis@google.com>
+ <9ef0d1f4-3257-4821-8241-aedae0957c6a@linux.intel.com>
+Message-ID: <aK3r5cjLvF3vmJCi@google.com>
+Subject: Re: [PATCH v9 04/19] KVM: selftests: Expose function to allocate
+ guest vCPU stack
+From: Sean Christopherson <seanjc@google.com>
+To: Binbin Wu <binbin.wu@linux.intel.com>
+Cc: Sagi Shahar <sagis@google.com>, linux-kselftest@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
+On Tue, Aug 26, 2025, Binbin Wu wrote:
+> 
+> 
+> On 8/21/2025 12:28 PM, Sagi Shahar wrote:
+> > TDX guests' registers cannot be initialized directly using
+> > vcpu_regs_set(), hence the stack pointer needs to be initialized by
+> > the guest itself, running boot code beginning at the reset vector.
+> > 
+> > Expose the function to allocate the guest stack so that TDX
+> > initialization code can allocate it itself and skip the allocation in
+> > vm_arch_vcpu_add() in that case.
+> > 
+> > Signed-off-by: Sagi Shahar <sagis@google.com>
+> > ---
+> >   .../selftests/kvm/include/x86/processor.h       |  2 ++
+> >   tools/testing/selftests/kvm/lib/x86/processor.c | 17 ++++++++++++-----
+> >   2 files changed, 14 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+> > index 5c16507f9b2d..8fcc5118683e 100644
+> > --- a/tools/testing/selftests/kvm/include/x86/processor.h
+> > +++ b/tools/testing/selftests/kvm/include/x86/processor.h
+> > @@ -1111,6 +1111,8 @@ static inline void vcpu_clear_cpuid_feature(struct kvm_vcpu *vcpu,
+> >   	vcpu_set_or_clear_cpuid_feature(vcpu, feature, false);
+> >   }
+> > +vm_vaddr_t kvm_allocate_vcpu_stack(struct kvm_vm *vm);
+> > +
+> >   uint64_t vcpu_get_msr(struct kvm_vcpu *vcpu, uint64_t msr_index);
+> >   int _vcpu_set_msr(struct kvm_vcpu *vcpu, uint64_t msr_index, uint64_t msr_value);
+> > diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+> > index b2a4b11ac8c0..1eae92957456 100644
+> > --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+> > @@ -687,12 +687,9 @@ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
+> >   	vcpu_regs_set(vcpu, &regs);
+> >   }
+> > -struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+> > +vm_vaddr_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
+> >   {
+> > -	struct kvm_mp_state mp_state;
+> > -	struct kvm_regs regs;
+> >   	vm_vaddr_t stack_vaddr;
+> > -	struct kvm_vcpu *vcpu;
+> >   	stack_vaddr = __vm_vaddr_alloc(vm, DEFAULT_STACK_PGS * getpagesize(),
+> >   				       DEFAULT_GUEST_STACK_VADDR_MIN,
+> > @@ -713,6 +710,15 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+> >   		    "__vm_vaddr_alloc() did not provide a page-aligned address");
+> >   	stack_vaddr -= 8;
+> > +	return stack_vaddr;
+> > +}
+> > +
+> > +struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+> > +{
+> > +	struct kvm_mp_state mp_state;
+> > +	struct kvm_regs regs;
+> > +	struct kvm_vcpu *vcpu;
+> > +
+> >   	vcpu = __vm_vcpu_add(vm, vcpu_id);
+> >   	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+> >   	vcpu_init_sregs(vm, vcpu);
+> > @@ -721,7 +727,8 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+> >   	/* Setup guest general purpose registers */
+> >   	vcpu_regs_get(vcpu, &regs);
+> >   	regs.rflags = regs.rflags | 0x2;
+> > -	regs.rsp = stack_vaddr;
+> > +	if (vm->type != KVM_X86_TDX_VM)
+> > +		regs.rsp = kvm_allocate_vcpu_stack(vm);
+> 
+> I am wondering if this could be more generic.
+> I.e, make vcpu_regs_get() return the error code.
 
+It would need to be a double-underscores variant, i.e. __vcpu_regs_get().  But
+even then, I don't think it's worth getting that clever, because then to ensure
+selftests aren't hitting KVM bugs, we'd want to assert that failure only occurs
+for a TDX VM, i.e. we'd end up with:
 
-On 8/23/25 12:18 AM, Jiawei Zhao wrote:
-> When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-> optimization, the compiler will generate SIB addressing mode for global
-> array and PC-relative addressing mode for global variable,
-> e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
+	if (__vcpu_regs_get(vcpu, &regs)) {
+		TEST_ASERT(is_tdx_vm(vm), "blah blah blah"
+	} else {
 
-You can remove "-1@t+t1(%rip)" which is not relavent to this patch.
+	}
 
-Also, please also mention usage of STAP_PROBE_ASM so the test works
-for both gcc and clang.
+which doesn't really "save" anything relative to Sagi's proposed version of:
 
-I tested the patch with gcc/clang for x86_64 and it works fine.
-I didn't test 32-bit x86 arch.
+	if (is_tdx_vm(vm)) {
+        	vm_tdx_vcpu_add(vm, vcpu);
+	} else {
+        	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
 
->
-> In this patch:
-> - enrich subtest_basic_usdt test case to cover SIB addressing usdt argument spec
->    handling logic
->
-> Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
-> ---
->   tools/testing/selftests/bpf/prog_tests/usdt.c | 62 ++++++++++++++++++-
->   tools/testing/selftests/bpf/progs/test_usdt.c | 32 ++++++++++
->   2 files changed, 92 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-> index 9057e983cc54..4b264f7d3324 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-> @@ -10,6 +10,26 @@
->   
->   int lets_test_this(int);
->   
-> +#if defined(__x86_64__) || defined(__i386__)
-> +/*
-> + * SIB (Scale-Index-Base) addressing format:
-> + *   "size@(base_reg, index_reg, scale)"
-> + * - 'size' is the size in bytes of the array element, and its sign indicates
-> + *		whether the type is signed (negative) or unsigned (positive).
-> + * - 'base_reg' is the register holding the base address, normally rdx or edx
-> + * - 'index_reg' is the register holding the index, normally rax or eax
-> + * - 'scale' is the scaling factor (typically 1, 2, 4, or 8), which matches the
-> + *		size of the element type.
-> + *
-> + * For example, for an array of 'short' (signed 2-byte elements), the SIB spec would be:
-> + *	- size: -2 (negative because 'short' is signed)
-> + *	- scale: 2 (since sizeof(short) == 2)
-> + *	The resulting SIB format: "-2@(%%rdx,%%rax,2)"
-> + */
-> +static volatile short array[] = {-1, -2, -3, -4};
-> +#define USDT_SIB_ARG_SPEC -2@(%%rdx,%%rax,2)
-> +#endif
-> +
->   static volatile int idx = 2;
->   static volatile __u64 bla = 0xFEDCBA9876543210ULL;
->   static volatile short nums[] = {-1, -2, -3, -4};
-> @@ -25,6 +45,10 @@ unsigned short test_usdt0_semaphore SEC(".probes");
->   unsigned short test_usdt3_semaphore SEC(".probes");
->   unsigned short test_usdt12_semaphore SEC(".probes");
->   
-> +#if defined(__x86_64__) || defined(__i386__)
-> +unsigned short test_usdt_sib_semaphore SEC(".probes");
-> +#endif
-> +
->   static void __always_inline trigger_func(int x) {
->   	long y = 42;
->   
-> @@ -40,12 +64,27 @@ static void __always_inline trigger_func(int x) {
->   	}
->   }
->   
-> +#if defined(__x86_64__) || defined(__i386__)
-> +static void trigger_sib_spec(void)
-> +{
-> +	/* Base address + offset + (index * scale) */
-> +	/* Force SIB addressing with inline assembly */
-> +	asm volatile(
-> +		STAP_PROBE_ASM(test, usdt_sib, USDT_SIB_ARG_SPEC)
-> +		:
-> +		: "d"(array), "a"(0)
-> +		: "memory"
-> +	);
-> +}
-> +#endif
-> +
->   static void subtest_basic_usdt(void)
->   {
->   	LIBBPF_OPTS(bpf_usdt_opts, opts);
->   	struct test_usdt *skel;
->   	struct test_usdt__bss *bss;
->   	int err, i;
-> +	const __u64 expected_cookie = 0xcafedeadbeeffeed;
->   
->   	skel = test_usdt__open_and_load();
->   	if (!ASSERT_OK_PTR(skel, "skel_open"))
-> @@ -59,20 +98,29 @@ static void subtest_basic_usdt(void)
->   		goto cleanup;
->   
->   	/* usdt0 won't be auto-attached */
-> -	opts.usdt_cookie = 0xcafedeadbeeffeed;
-> +	opts.usdt_cookie = expected_cookie;
->   	skel->links.usdt0 = bpf_program__attach_usdt(skel->progs.usdt0,
->   						     0 /*self*/, "/proc/self/exe",
->   						     "test", "usdt0", &opts);
->   	if (!ASSERT_OK_PTR(skel->links.usdt0, "usdt0_link"))
->   		goto cleanup;
->   
-> +#if defined(__x86_64__) || defined(__i386__)
-> +	opts.usdt_cookie = expected_cookie;
-> +	skel->links.usdt_sib = bpf_program__attach_usdt(skel->progs.usdt_sib,
-> +								0 /*self*/, "/proc/self/exe",
-> +								"test", "usdt_sib", &opts);
+	        vcpu_init_sregs(vm, vcpu);
+	        vcpu_init_xcrs(vm, vcpu);
 
-formate issue in the above?
+        	/* Setup guest general purpose registers */
+	        vcpu_regs_get(vcpu, &regs);
+	        regs.rflags = regs.rflags | 0x2;
+	        regs.rsp = kvm_allocate_vcpu_stack(vm);
+	        vcpu_regs_set(vcpu, &regs);
+	}
 
-> +	if (!ASSERT_OK_PTR(skel->links.usdt_sib, "usdt_sib_link"))
-> +		goto cleanup;
-> +#endif
-> +
->   	trigger_func(1);
->   
->   	ASSERT_EQ(bss->usdt0_called, 1, "usdt0_called");
->   	ASSERT_EQ(bss->usdt3_called, 1, "usdt3_called");
->   	ASSERT_EQ(bss->usdt12_called, 1, "usdt12_called");
->   
-> -	ASSERT_EQ(bss->usdt0_cookie, 0xcafedeadbeeffeed, "usdt0_cookie");
-> +	ASSERT_EQ(bss->usdt0_cookie, expected_cookie, "usdt0_cookie");
->   	ASSERT_EQ(bss->usdt0_arg_cnt, 0, "usdt0_arg_cnt");
->   	ASSERT_EQ(bss->usdt0_arg_ret, -ENOENT, "usdt0_arg_ret");
->   	ASSERT_EQ(bss->usdt0_arg_size, -ENOENT, "usdt0_arg_size");
-> @@ -156,6 +204,16 @@ static void subtest_basic_usdt(void)
->   	ASSERT_EQ(bss->usdt3_args[1], 42, "usdt3_arg2");
->   	ASSERT_EQ(bss->usdt3_args[2], (uintptr_t)&bla, "usdt3_arg3");
->   
-> +#if defined(__x86_64__) || defined(__i386__)
-> +	trigger_sib_spec();
-> +	ASSERT_EQ(bss->usdt_sib_called, 1, "usdt_sib_called");
-> +	ASSERT_EQ(bss->usdt_sib_cookie, expected_cookie, "usdt_sib_cookie");
-> +	ASSERT_EQ(bss->usdt_sib_arg_cnt, 1, "usdt_sib_arg_cnt");
-> +	ASSERT_EQ(bss->usdt_sib_arg, nums[0], "usdt_sib_arg");
-> +	ASSERT_EQ(bss->usdt_sib_arg_ret, 0, "usdt_sib_arg_ret");
-> +	ASSERT_EQ(bss->usdt_sib_arg_size, sizeof(nums[0]), "usdt_sib_arg_size");
-> +#endif
-> +
->   cleanup:
->   	test_usdt__destroy(skel);
->   }
-> diff --git a/tools/testing/selftests/bpf/progs/test_usdt.c b/tools/testing/selftests/bpf/progs/test_usdt.c
-> index 096488f47fbc..63db72253316 100644
-> --- a/tools/testing/selftests/bpf/progs/test_usdt.c
-> +++ b/tools/testing/selftests/bpf/progs/test_usdt.c
-> @@ -107,4 +107,36 @@ int BPF_USDT(usdt12, int a1, int a2, long a3, long a4, unsigned a5,
->   	return 0;
->   }
->   
-> +
-> +int usdt_sib_called;
-> +u64 usdt_sib_cookie;
-> +int usdt_sib_arg_cnt;
-> +int usdt_sib_arg_ret;
-> +u64 usdt_sib_arg;
-> +int usdt_sib_arg_size;
-> +
-> +/*
-> + * usdt_sib is only tested on x86-related architectures, so it requires
-> + * manual attach since auto-attach will panic tests under other architectures
-> + */
-> +SEC("usdt")
-> +int usdt_sib(struct pt_regs *ctx)
-> +{
-> +	long tmp;
-> +
-> +	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
-> +		return 0;
-> +
-> +	__sync_fetch_and_add(&usdt_sib_called, 1);
-> +
-> +	usdt_sib_cookie = bpf_usdt_cookie(ctx);
-> +	usdt_sib_arg_cnt = bpf_usdt_arg_cnt(ctx);
-> +
-> +	usdt_sib_arg_ret = bpf_usdt_arg(ctx, 0, &tmp);
-> +	usdt_sib_arg = (short)tmp;
-
-Maybe change usdt_sib_arg type as short?
-
-> +	usdt_sib_arg_size = bpf_usdt_arg_size(ctx, 0);
-> +
-> +	return 0;
-> +}
-> +
->   char _license[] SEC("license") = "GPL";
-
+> If vcpu_regs_get() failed (for TDX, since it's guest state is protected, the
+> ioctl will return -EINVAL), the vcpu_regs_set(), including the allocation for
+> the vcpu stack, could be skipped.
+> 
+> >   	vcpu_regs_set(vcpu, &regs);
+> >   	/* Setup the MP state */
+> 
 
