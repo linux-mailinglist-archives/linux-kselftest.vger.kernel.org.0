@@ -1,151 +1,168 @@
-Return-Path: <linux-kselftest+bounces-40008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B385B3747A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 23:38:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F25B3B3748D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 23:49:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3E8736180B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 21:38:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE0B83A2F14
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 21:49:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE7628D850;
-	Tue, 26 Aug 2025 21:38:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41FB285042;
+	Tue, 26 Aug 2025 21:49:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kYNzSa1y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dt+yYGMD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E06F289805
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 21:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 029D7280325;
+	Tue, 26 Aug 2025 21:49:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756244319; cv=none; b=JYQs49Vqs6c+BMYbbY3VminOOQE75+3t+RUCAHBvjIQKtfqgQyGRrB8P1dbbqf0AuPmI2TgqwNE0IeqfKjkgThYS9/h1DxkPvlsW2WtoSqgzADrSNBv9wpmZ8tTmhhlgVLQJNZ6gz9+MWD2jAb4hkbEiS0Bb9vhuLl7E2we+b6s=
+	t=1756244990; cv=none; b=E5J9gg/7z47naOMhBH4+zP/2ljjwLSTcxcEKV8XyDLLTlyaZ1pLmWwV/MHI+XxuWzGthYVryJV5PALbZ0xLOtdJy8FHghnbnotVnpZn4m+rMWPTNTJfLXHGhoicC2VHSudmTUw9QYSErXHupr8HB5CjbAg/ngeUh/TjNa61k65A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756244319; c=relaxed/simple;
-	bh=tjjntmHYd9yX/bQsKUBCFfyjm57RPvKrOHRwfskNRjE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ha0EFKjIr/to8l0Cs8HRty2XXj9x/1kRQBKola582AaiYSprRyq+0uwaJH8hWQELhaqySjzwHHhQpbzE253ObQC5TQjo+uLWT5Hyqk/IrQeQNN9jsvaPI/zv17mDDA/7Yb8bt8oTvIrsIhMHs+TtkkmcbKsMVtbx2QDgYDpcbdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kYNzSa1y; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4b2dc20aebbso150701cf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 14:38:38 -0700 (PDT)
+	s=arc-20240116; t=1756244990; c=relaxed/simple;
+	bh=YTP7oljg0BII5171/1yq3+K9FoB8VehllhNiO9W07Y0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ttl46UR3Ve3LvP/WAJT0EtPDCSWTBif4/Pj4Q2qsHvjQmYP2lbGRxki5N4UsUbm8QJA1oOYI+qGsMi1bSzcSRxbAKwXyTDMGjpwyLBmDUowS9D53Pzh1uGvqPxyYptK3mhfHNB97VH1VWBMzbZakPyo9eXZnJDA2YY1l/uLL+D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dt+yYGMD; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-45b49f7aaf5so37296825e9.2;
+        Tue, 26 Aug 2025 14:49:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756244317; x=1756849117; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=89nUNyghQOdbDMTzejcrMWxMjVoZp0QLNZEDRB294gQ=;
-        b=kYNzSa1yl5SEOrAw2kMSyJYcMsEqJqtN2FQ+75SCQp0+JkP7QwFI0Ib7rTsIfXT3Ko
-         3xJvrJ+d0idnSejODRLcyKroSSKeMIN4wWLsh4j+k+Sp8xpiEyEEyiCLW85VHsMVcNrD
-         1v9egOQ/jjN4Ui9Tbz1POJluvCjQYQbcoD5iJJq7kcg2k1oxLNQw/9GArUCge6kEZyLC
-         qH3KbliDM+klvSahqKbeqz4THu6rDJg58tJfJRrL++1uZnlKecZWsGkvZnsVEYZ2uNSd
-         t71TZ8c1F2yTLqrnuWpdruBjmUbyw4q4Tv6j4LI+BJw3Mes4OF4s5p6hGzgPsFEBBpER
-         TvQA==
+        d=gmail.com; s=20230601; t=1756244987; x=1756849787; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UGxiUv+9T9MyXGrGc5hXaCPQg3e9+++0LsEZqWpGIE8=;
+        b=Dt+yYGMD9lnM74K8A38gF/rPYyRVomKyh8ELDySN34jrIS4aLJTT5c3VD2kyOeepbt
+         NCaaszPyQKASnnWcEF97vse38Yz+/D9R42+3llljfnjmRrIpE/IinIhAGwlLALxkyvrU
+         unNUreOxLj+6f6qk6qhpCgdd3zswc2HHitk/591thXcX0EhQfYX/YdV4yTGXrb4kQIyL
+         bF3/uUQ2RG5psRSSecbhqbXFRLIU3wEkzXvqYE0HIA9rewgPuwEylJkn0AdA45r6X88y
+         0g8pM+DlvSqqFHcm+ghvhl6fRCrAlybhEo1G1s1MtuhCJ+uCv6+yzgWA5BRb+8uVsJFt
+         RA6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756244317; x=1756849117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=89nUNyghQOdbDMTzejcrMWxMjVoZp0QLNZEDRB294gQ=;
-        b=TuTVp5sIB0EB8YAeGgBWscHrYa6JohfKRPGoD/hfakOEoH/2cAYBa0/lqaCG3aRejs
-         ebFkehWCg+MOT8BiPLnPsSqaVpAAH14G7BcZF8F232cJ5iKizy49IxrrlX0MY1mPUk0v
-         MFZT1IDvp/4E5hTDkEjFhQOiZZxrRqsElSoh3ZXH4Zz6xz3x6m8STjQ9FyqZcztter6r
-         Y6aezt3yb+20TxcJM4Yer4AG1crCCqS7HC8DSfCJfAfzq53DUwAAkfMFALVQSEAOHMV4
-         +SWlUAjEp9BeqYUasOtTRPwT0yjmlrV3bSPM/qpoKXRn/Uiw3ApNED5BJY37EbhN31PY
-         FVGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvsfRkWoS8OIPQa76W5Uuav62Oha8gEeWTj5zqzbO91wYI0du1BAOiHDxXEOZTpPXwr8HaPi0Ty6vc9g/GjRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwlUBAqwfu6WBLiCQobu9B3Gqyr0HcM25navivuwO0CLwTDgpF
-	Lxw07uHmTA5+7Qo3PvtPL+a2xo0AQyVOzStOdZMMTGbSgN9Yb7Mg7IP8Z2ay7BQB9a5Vz3UeoP+
-	JcjYkUGhouuucb1fHwfwuAXgcY6WUAwU6ahBa87Tz
-X-Gm-Gg: ASbGncvnZcPVtSBsnYiStglRRVRa6b+9k+LA583Y1U4BZ+ylJUllZ/zgJKwyoCqmXPm
-	v4nCP+Q6NDO/HGdfKxe3gHvE/ncoEmhBNgglgYKhRq647WuWjJf0HZ6PQWkOykfGsTkZK3VG5BN
-	e7YYf628yoWW4tT2Tun240KNlMNsuLKDwJtyoJtWMz9QRygz8f9sC3KDen9bZxvBLOH8feRTBcO
-	8G0fQ+9JUr+dKIMb9eLHP3Z7F9HQK3ZkVF4/Yp70n+wY21DQmqJR4X8cA==
-X-Google-Smtp-Source: AGHT+IHxeU94g08Uyt0q7MmK7MW0edM6nUge+D9EPJ9mUhKKigCb+AZKXdltlf0UfavBccb1nXT9sGeBu0yaftb6UHI=
-X-Received: by 2002:ac8:7d41:0:b0:4b2:d4cb:be58 with SMTP id
- d75a77b69052e-4b2e2c1b598mr6770261cf.9.1756244316909; Tue, 26 Aug 2025
- 14:38:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756244987; x=1756849787;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UGxiUv+9T9MyXGrGc5hXaCPQg3e9+++0LsEZqWpGIE8=;
+        b=ia8OTDqvmMjwCZZs5HzJycPUj3Zhk8AtuSOSvrEycpNE9vx4Y5zVjisy9g9rX3uHer
+         iY+Auu9SunzSRSLZfXURGL2aX2EdfE67NgvgqqBMUtlDBdZTI23NhmZU0RPif3xv+LcN
+         cKRAQe2aQYiGGe1PZYzx5J0G7WA5//5F9FZynqwgZzRF3pBVtzUQP7nKTxgcSQxnDsb2
+         UzS5tKkFfZl7ZkwWsS+ZJO6ftb9Yb5dVOAqyr55eFXOlmmRASd8JYkqizDlq60/GY4Sr
+         1SSkCYYACZqk/daeqDSZq0n4OFzJLQ00LK9BY6xuBNIq4fqCgQoHyTvAzRNF1l3tQ/JP
+         KZ7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUIHaU8I9E+rw7qQlpKUgrHVl25bJneEZ721Wm7+gFBTsppwaqgkSAaRuPTEXubGRyNdQvE52KkGwrxfX4=@vger.kernel.org, AJvYcCVigapHFx7x9vUZ+HOt8W3cNXUc98dQO/26Uo0Z9Zh9OwyO3pPukXsKo+MIm2VIDLBWF1CTW0xweP2WnUmxFsYA@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKYroGUfXzwIF4HViu9Hl3IyIlxgfv5wdmtC7j/DDB+fIbr3mu
+	voNkX7piEulsvSf6agETgdyfjoRJgxZBygJhl7URRt6/k/AhyUHdFZxQ
+X-Gm-Gg: ASbGnctBGxIuuHea23PTPWc5f4DyGWAwoF3bMNmeVFQPdFLsRFel5u9+XHzTbs0WBmL
+	pN6P6Kajc0u566qr9wTnIZKuaz9ijN7pp/mM/6lQW9QLeNilv7ax1kb9zYTPJykFVZUQ88z9ADG
+	rg1xvLjH4Tn5s8hLBGOo+eI1XL0+ueW0jWays5PfJQ99WCQ3qba6b2hoBSfpFJ+/va9RLajvfoV
+	tXJWj2lg2yZvzlOepOY5bAKUO+AHCz5VUmuxtzzfse+SqalCK1UQ7MzR0kXjjYFptKmhoCkm/Wr
+	tE8B1Ls6/+OsXAItt/r/lC3hcaLcGRQGaKYnAlw4xo/CMelEGSebl9k6DMXGVQuSsXC8/aWyUwo
+	i2fzVmdYPDpb00+fXGpFsmvNLw5u1whzZw9zvocrRuvZM5ljtDpuCbJdWVFXmGwMh
+X-Google-Smtp-Source: AGHT+IHv+Wry+OjQYum2M7c57rs+J3M7hZ2o5axY1fUO2E8dRSkddQaT/i6JHD3BgXqPOrIfoE/gqg==
+X-Received: by 2002:a05:600c:3b95:b0:459:df07:6db7 with SMTP id 5b1f17b1804b1-45b5179b2a1mr156669565e9.6.1756244987084;
+        Tue, 26 Aug 2025 14:49:47 -0700 (PDT)
+Received: from localhost.localdomain ([46.10.223.24])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c711211b19sm18309207f8f.39.2025.08.26.14.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Aug 2025 14:49:46 -0700 (PDT)
+From: "Nikola Z. Ivanov" <zlatistiv@gmail.com>
+To: bagasdotme@gmail.com,
+	Markus.Elfring@web.de,
+	broonie@kernel.org
+Cc: shuah@kernel.org,
+	will@kernel.org,
+	mark.rutland@arm.com,
+	ebiggers@google.com,
+	catalin.marinas@arm.com,
+	martin.petersen@oracle.com,
+	ardb@kernel.org,
+	thiago.bauermann@linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	"Nikola Z. Ivanov" <zlatistiv@gmail.com>
+Subject: [PATCH v2] selftests/arm64: Fix grammatical error in string literals
+Date: Wed, 27 Aug 2025 00:49:13 +0300
+Message-ID: <20250826214913.866695-1-zlatistiv@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250821042915.3712925-1-sagis@google.com> <20250821042915.3712925-16-sagis@google.com>
- <aK3vZ5HuKKeFuuM4@google.com> <68ae1604a387c_300e8f2947e@iweiny-mobl.notmuch>
- <CAAhR5DHPMPOb2XCJodyNMf2RTQfTZpAaCGMg6WeWxSWPLtkO4Q@mail.gmail.com>
- <CAAhR5DGeTQ4G-w2o5YCvNWkZZWFcXe=6rro+RcfhR18-4sT+PQ@mail.gmail.com> <aK4nwZ4FE1r8-GYd@google.com>
-In-Reply-To: <aK4nwZ4FE1r8-GYd@google.com>
-From: Sagi Shahar <sagis@google.com>
-Date: Tue, 26 Aug 2025 16:38:25 -0500
-X-Gm-Features: Ac12FXx43YYHIALem9VlFRybUWvBdHC-shjMO3WBIHuazSzxmrkHbtA3djEtUZc
-Message-ID: <CAAhR5DHLhoY=wz3QQLqjtqhSNewSfFqGk5wonA5TiJwnPmPLsw@mail.gmail.com>
-Subject: Re: [PATCH v9 15/19] KVM: selftests: Hook TDX support to vm and vcpu creation
-To: Sean Christopherson <seanjc@google.com>
-Cc: Ira Weiny <ira.weiny@intel.com>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Erdem Aktas <erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
-	Oliver Upton <oliver.upton@linux.dev>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Chao Gao <chao.gao@intel.com>, 
-	Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 26, 2025 at 4:31=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Tue, Aug 26, 2025, Sagi Shahar wrote:
-> > On Tue, Aug 26, 2025 at 3:29=E2=80=AFPM Sagi Shahar <sagis@google.com> =
-wrote:
-> > >
-> > > On Tue, Aug 26, 2025 at 3:14=E2=80=AFPM Ira Weiny <ira.weiny@intel.co=
-m> wrote:
-> > > >
-> > > > Sean Christopherson wrote:
-> > > > > Ugh.  IMO, this is a KVM bug.  Allowing KVM_CREATE_IRQCHIP for a =
-TDX VM is simply
-> > > > > wrong.  It _can't_ work.  Waiting until KVM_CREATE_VCPU to fail s=
-etup is terrible
-> > > > > ABI.
-> > > > >
-> > > > > If we stretch the meaning of ENOTTY a bit and return that when tr=
-ying to create
-> > > > > a fully in-kernel IRQCHIP for a TDX VM, then the selftests code J=
-ust Works thanks
-> > > > > to the code below, which handles the scenario where KVM was be bu=
-ilt without
-> > > >          ^^^^^^^^^^
-> > > >
-> > > > I'm not following.  Was there supposed to be a patch attached?
-> > > >
-> > >
-> > > I think Sean refers to the original implementation which was out of
-> > > the scope for the git diff so it was left out of the patch:
->
-> Yep, exactly.
->
+Fix grammatical error in <past tense verb> + <infinitive>
+construct related to memory allocation checks.
+In essence change "Failed to allocated" to "Failed to allocate".
 
-I took a stab at updating the KVM ABI and sent out a small patch [1]
-to fail KVM_CREATE_IRQCHIP with ENOTTY and the test passes without the
-special handling for SPLIT_IRQCHIP for TDX.
+Signed-off-by: Nikola Z. Ivanov <zlatistiv@gmail.com>
+---
+Changes in v2:
+- More descriptive commit message
 
-[1] https://lore.kernel.org/lkml/20250826213455.2338722-1-sagis@google.com/
+Original title is "Fix typos in malloc return value check"
 
-> > /*
-> >  * Allocate a fully in-kernel IRQ chip by default, but fall back to a
-> >  * split model (x86 only) if that fails (KVM x86 allows compiling out
-> >  * support for KVM_CREATE_IRQCHIP).
-> >  */
-> > r =3D __vm_ioctl(vm, KVM_CREATE_IRQCHIP, NULL);
-> > if (r && errno =3D=3D ENOTTY && kvm_has_cap(KVM_CAP_SPLIT_IRQCHIP))
-> >         vm_enable_cap(vm, KVM_CAP_SPLIT_IRQCHIP, 24);
-> > else
-> >         TEST_ASSERT_VM_VCPU_IOCTL(!r, KVM_CREATE_IRQCHIP, r, vm);
+ tools/testing/selftests/arm64/fp/fp-stress.c   | 2 +-
+ tools/testing/selftests/arm64/fp/kernel-test.c | 4 ++--
+ tools/testing/selftests/arm64/gcs/gcs-stress.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
+index 74e23208b94c..ddc01efea3f9 100644
+--- a/tools/testing/selftests/arm64/fp/fp-stress.c
++++ b/tools/testing/selftests/arm64/fp/fp-stress.c
+@@ -549,7 +549,7 @@ int main(int argc, char **argv)
+ 
+ 	evs = calloc(tests, sizeof(*evs));
+ 	if (!evs)
+-		ksft_exit_fail_msg("Failed to allocated %d epoll events\n",
++		ksft_exit_fail_msg("Failed to allocate %d epoll events\n",
+ 				   tests);
+ 
+ 	for (i = 0; i < cpus; i++) {
+diff --git a/tools/testing/selftests/arm64/fp/kernel-test.c b/tools/testing/selftests/arm64/fp/kernel-test.c
+index e3cec3723ffa..0c40007d1282 100644
+--- a/tools/testing/selftests/arm64/fp/kernel-test.c
++++ b/tools/testing/selftests/arm64/fp/kernel-test.c
+@@ -188,13 +188,13 @@ static bool create_socket(void)
+ 
+ 	ref = malloc(digest_len);
+ 	if (!ref) {
+-		printf("Failed to allocated %d byte reference\n", digest_len);
++		printf("Failed to allocate %d byte reference\n", digest_len);
+ 		return false;
+ 	}
+ 
+ 	digest = malloc(digest_len);
+ 	if (!digest) {
+-		printf("Failed to allocated %d byte digest\n", digest_len);
++		printf("Failed to allocate %d byte digest\n", digest_len);
+ 		return false;
+ 	}
+ 
+diff --git a/tools/testing/selftests/arm64/gcs/gcs-stress.c b/tools/testing/selftests/arm64/gcs/gcs-stress.c
+index bbc7f4950c13..cf316d78ea97 100644
+--- a/tools/testing/selftests/arm64/gcs/gcs-stress.c
++++ b/tools/testing/selftests/arm64/gcs/gcs-stress.c
+@@ -433,7 +433,7 @@ int main(int argc, char **argv)
+ 
+ 	evs = calloc(tests, sizeof(*evs));
+ 	if (!evs)
+-		ksft_exit_fail_msg("Failed to allocated %d epoll events\n",
++		ksft_exit_fail_msg("Failed to allocate %d epoll events\n",
+ 				   tests);
+ 
+ 	for (i = 0; i < gcs_threads; i++)
+-- 
+2.50.1
+
 
