@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-39904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EBACB3536F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 07:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43580B35391
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 07:51:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A4F11B6234A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 05:39:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 542EB1B62FDC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 05:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB2F12ED15D;
-	Tue, 26 Aug 2025 05:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B3002F1FC2;
+	Tue, 26 Aug 2025 05:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jgppWsx8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ihfwBdc3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE19611CA9;
-	Tue, 26 Aug 2025 05:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614102F0688;
+	Tue, 26 Aug 2025 05:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756186770; cv=none; b=SCkDaoUOluiyy+bRY72lVXZY8g5/jq8K0MUbzrSA76/PQlpsMk+zU1z/4D6j/7sfjupq2rdREfXy1LY0IkbKVdI3WnycMXCzeEBt3ijR7OtvZqzwzmEvPD7gCMfuFcmOP9E9eISB0lot499YPehZVMWUQWpTzgLOrxgaXwb04IA=
+	t=1756187506; cv=none; b=iPpeoFyMZgtw9pjxrJMvB74A/CuhiMZcitrY6eDpXLZe0iPw9sFh9x6S7hD4IIhpYN9+/SNNdqNxTdaOmJplG0xoYfsxV2bOYGG7cbXPEr/CDZVkrHHBgZWSoQuIkiD0kRpvBY64xE4RU1gGpSHnNePX3VlyWqDoK4hSl+Ca+8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756186770; c=relaxed/simple;
-	bh=HRJjcbcyRfvO3v41VLnMi0TCRariXmHmNsEbLs52GtQ=;
+	s=arc-20240116; t=1756187506; c=relaxed/simple;
+	bh=S8YR0Rk1hMRnRkLxiltLd6vcjaOaMt81cEXJbL0+Kco=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bJ/NcjcbhJ11tO09rmCO8S4aGUkbtvM3w26TPZ3QOpdb/lRhjKdZ22nJzroqKQXcKaRFMz3mczyJBVu1JojMzUco1JWTMPq65CS98uI0Auo2D822hNC6JfxroEz0kBbNvtESN8aEA65cbExj2YkUZKbyjEblJPjK8yLuO0z9Z2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jgppWsx8; arc=none smtp.client-ip=192.198.163.9
+	 In-Reply-To:Content-Type; b=hzib50mQI4CXQ+NzfnyKAwsEikyBjorb5nMI5MUh62FpVrGSW+VB0nciAft//Au/q+lpszUHbNQ+AavhtvcvojzAs69RChB96LEv59C5cTkPG/FJrP1yLxSgMnDc311uOiua4JkCPiES6tbbdlK6fyysfmXdI5a2lWa31HQTKRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ihfwBdc3; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756186769; x=1787722769;
+  t=1756187505; x=1787723505;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=HRJjcbcyRfvO3v41VLnMi0TCRariXmHmNsEbLs52GtQ=;
-  b=jgppWsx8Ew0fbwYIMvXJP/CvMMrHuHLttIeeJJOruX9ONSX2m7Xiir0h
-   NwuwXtvng2sdGyyq+HdjrVU6nD1dHJWHfKvHqSddm9LJ9594DZA7OcHfo
-   1vJX6JKJtHrTubUfPeoyixz6vThkE08LmqKmb1/ka6VQq89aALQVBq5v/
-   RBZse9Ady2RtjXM8kfMNCqDiID47n0KmOrjW5qon+Q1OWRyJwpoFP8YPo
-   SLD5dKVsg7IgzyuZh1OHXu3O1DkFZspdn6iEObzxkr/tzwX8iDAjcAzaX
-   qAcFYYUibBiQHNn1dc8EBmN/f/GJTl1dtzLOLRK2bShf93YGTlks27sqM
-   g==;
-X-CSE-ConnectionGUID: 1UfnXi8lRt6ZlbeeUckPrQ==
-X-CSE-MsgGUID: FOmdkIa0RqyRT1x6aNYLCQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11533"; a="69123201"
+  bh=S8YR0Rk1hMRnRkLxiltLd6vcjaOaMt81cEXJbL0+Kco=;
+  b=ihfwBdc3R6J4AHReXNRv9S2FlTNMumtwVetsU83FsSicmH2JmMyZG0zY
+   0bHytuEBji+eslypOPkCuelxu4PWCUkTBtmAyjx6RMcxSuNFu+SvFTXcM
+   vqJ8+lsVSpnUUAiRFzUEjyajcn+gj7iuyLVQth7HTLCfwj18b6tGDvc3b
+   vvM+Yf3/A2jplzcGTMQTkpa4OLfyxkvxZplGhwjo5e0uxr8P9Jzc7xEiP
+   bGrkHOOoCWsfRoXLHuOg2+MNL0f8GfCmNXplJPDtB7JohqfKSNdzal1pL
+   emsNxD9VVQtIvz5LZRonpr2FNj+pYtliL0sG9lMZFHnf6sDqxiI8VZz42
+   w==;
+X-CSE-ConnectionGUID: ahaMHbbISZeLWg8/xGZOJw==
+X-CSE-MsgGUID: sYUNtaq0RwSV4lLqIpxMzg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11533"; a="68682888"
 X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="69123201"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 22:39:28 -0700
-X-CSE-ConnectionGUID: 2eNAQR4oRJy8JCdYeCXpBA==
-X-CSE-MsgGUID: 6gzzK6PFS/yu5WF5x/yI6w==
+   d="scan'208";a="68682888"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 22:51:44 -0700
+X-CSE-ConnectionGUID: Wf7+/qZTRg+fabfNexeY9A==
+X-CSE-MsgGUID: AD1qFAIuTnOnYpqmer9K4w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="193154065"
+   d="scan'208";a="170312763"
 Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 22:39:23 -0700
-Message-ID: <9ef0d1f4-3257-4821-8241-aedae0957c6a@linux.intel.com>
-Date: Tue, 26 Aug 2025 13:39:20 +0800
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 22:51:39 -0700
+Message-ID: <176247c7-6801-4e06-860e-4a6b8e77ba20@linux.intel.com>
+Date: Tue, 26 Aug 2025 13:51:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 04/19] KVM: selftests: Expose function to allocate
- guest vCPU stack
+Subject: Re: [PATCH v9 05/19] KVM: selftests: Update
+ kvm_init_vm_address_properties() for TDX
 To: Sagi Shahar <sagis@google.com>
 Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
  Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
@@ -82,95 +82,98 @@ Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
  Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
  <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>,
  Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org
+ kvm@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>
 References: <20250821042915.3712925-1-sagis@google.com>
- <20250821042915.3712925-5-sagis@google.com>
+ <20250821042915.3712925-6-sagis@google.com>
 Content-Language: en-US
 From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20250821042915.3712925-5-sagis@google.com>
+In-Reply-To: <20250821042915.3712925-6-sagis@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 8/21/2025 12:28 PM, Sagi Shahar wrote:
-> TDX guests' registers cannot be initialized directly using
-> vcpu_regs_set(), hence the stack pointer needs to be initialized by
-> the guest itself, running boot code beginning at the reset vector.
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 >
-> Expose the function to allocate the guest stack so that TDX
-> initialization code can allocate it itself and skip the allocation in
-> vm_arch_vcpu_add() in that case.
+> Let kvm_init_vm_address_properties() initialize vm->arch.{s_bit, tag_mask}
+> similar to SEV.
 >
+> TDX sets the shared bit based on the guest physical address width and
+> currently supports 48 and 52 widths.
+>
+> Co-developed-by: Adrian Hunter <adrian.hunter@intel.com>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Co-developed-by: Sagi Shahar <sagis@google.com>
 > Signed-off-by: Sagi Shahar <sagis@google.com>
 > ---
->   .../selftests/kvm/include/x86/processor.h       |  2 ++
->   tools/testing/selftests/kvm/lib/x86/processor.c | 17 ++++++++++++-----
->   2 files changed, 14 insertions(+), 5 deletions(-)
+>   .../selftests/kvm/include/x86/tdx/tdx_util.h       | 14 ++++++++++++++
+>   tools/testing/selftests/kvm/lib/x86/processor.c    | 12 ++++++++++--
+>   2 files changed, 24 insertions(+), 2 deletions(-)
+>   create mode 100644 tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
 >
-> diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
-> index 5c16507f9b2d..8fcc5118683e 100644
-> --- a/tools/testing/selftests/kvm/include/x86/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86/processor.h
-> @@ -1111,6 +1111,8 @@ static inline void vcpu_clear_cpuid_feature(struct kvm_vcpu *vcpu,
->   	vcpu_set_or_clear_cpuid_feature(vcpu, feature, false);
->   }
->   
-> +vm_vaddr_t kvm_allocate_vcpu_stack(struct kvm_vm *vm);
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> new file mode 100644
+> index 000000000000..286d5e3c24b1
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef SELFTESTS_TDX_TDX_UTIL_H
+> +#define SELFTESTS_TDX_TDX_UTIL_H
 > +
->   uint64_t vcpu_get_msr(struct kvm_vcpu *vcpu, uint64_t msr_index);
->   int _vcpu_set_msr(struct kvm_vcpu *vcpu, uint64_t msr_index, uint64_t msr_value);
->   
+> +#include <stdbool.h>
+> +
+> +#include "kvm_util.h"
+> +
+> +static inline bool is_tdx_vm(struct kvm_vm *vm)
+> +{
+> +	return vm->type == KVM_X86_TDX_VM;
+> +}
+
+If the branch "vm->type != KVM_X86_TDX_VM" in patch 04/19
+is still needed, this helper could be added earlier and used instead of
+open code.
+
+> +
+> +#endif // SELFTESTS_TDX_TDX_UTIL_H
 > diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-> index b2a4b11ac8c0..1eae92957456 100644
+> index 1eae92957456..6dbf40cbbc2a 100644
 > --- a/tools/testing/selftests/kvm/lib/x86/processor.c
 > +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-> @@ -687,12 +687,9 @@ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
->   	vcpu_regs_set(vcpu, &regs);
+> @@ -8,6 +8,7 @@
+>   #include "kvm_util.h"
+>   #include "processor.h"
+>   #include "sev.h"
+> +#include "tdx/tdx_util.h"
+>   
+>   #ifndef NUM_INTERRUPTS
+>   #define NUM_INTERRUPTS 256
+> @@ -1190,12 +1191,19 @@ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+>   
+>   void kvm_init_vm_address_properties(struct kvm_vm *vm)
+>   {
+> +	uint32_t gpa_bits = kvm_cpu_property(X86_PROPERTY_GUEST_MAX_PHY_ADDR);
+> +
+> +	vm->arch.sev_fd = -1;
+> +
+>   	if (is_sev_vm(vm)) {
+>   		vm->arch.sev_fd = open_sev_dev_path_or_exit();
+>   		vm->arch.c_bit = BIT_ULL(this_cpu_property(X86_PROPERTY_SEV_C_BIT));
+>   		vm->gpa_tag_mask = vm->arch.c_bit;
+> -	} else {
+> -		vm->arch.sev_fd = -1;
+> +	} else if (is_tdx_vm(vm)) {
+> +		TEST_ASSERT(gpa_bits == 48 || gpa_bits == 52,
+> +			    "TDX: bad X86_PROPERTY_GUEST_MAX_PHY_ADDR value: %u", gpa_bits);
+> +		vm->arch.s_bit = 1ULL << (gpa_bits - 1);
+
+Nit: Use BIT_ULL().
+
+> +		vm->gpa_tag_mask = vm->arch.s_bit;
+>   	}
 >   }
 >   
-> -struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
-> +vm_vaddr_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
->   {
-> -	struct kvm_mp_state mp_state;
-> -	struct kvm_regs regs;
->   	vm_vaddr_t stack_vaddr;
-> -	struct kvm_vcpu *vcpu;
->   
->   	stack_vaddr = __vm_vaddr_alloc(vm, DEFAULT_STACK_PGS * getpagesize(),
->   				       DEFAULT_GUEST_STACK_VADDR_MIN,
-> @@ -713,6 +710,15 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
->   		    "__vm_vaddr_alloc() did not provide a page-aligned address");
->   	stack_vaddr -= 8;
->   
-> +	return stack_vaddr;
-> +}
-> +
-> +struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
-> +{
-> +	struct kvm_mp_state mp_state;
-> +	struct kvm_regs regs;
-> +	struct kvm_vcpu *vcpu;
-> +
->   	vcpu = __vm_vcpu_add(vm, vcpu_id);
->   	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
->   	vcpu_init_sregs(vm, vcpu);
-> @@ -721,7 +727,8 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
->   	/* Setup guest general purpose registers */
->   	vcpu_regs_get(vcpu, &regs);
->   	regs.rflags = regs.rflags | 0x2;
-> -	regs.rsp = stack_vaddr;
-> +	if (vm->type != KVM_X86_TDX_VM)
-> +		regs.rsp = kvm_allocate_vcpu_stack(vm);
-
-I am wondering if this could be more generic.
-I.e, make vcpu_regs_get() return the error code.
-If vcpu_regs_get() failed (for TDX, since it's guest state is protected, the
-ioctl will return -EINVAL), the vcpu_regs_set(), including the allocation for
-the vcpu stack, could be skipped.
-
->   	vcpu_regs_set(vcpu, &regs);
->   
->   	/* Setup the MP state */
 
 
