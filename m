@@ -1,452 +1,338 @@
-Return-Path: <linux-kselftest+bounces-39902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 242FCB352C6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 06:38:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E060EB3534F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 07:29:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15FDC1A84C5A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 04:38:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFEA11B282C6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 05:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A3D22DF718;
-	Tue, 26 Aug 2025 04:38:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E654B2ED87C;
+	Tue, 26 Aug 2025 05:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="LNPR+FqI"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Wq6Ux+WC";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sKuNjYhf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926202D23B6
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 04:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B2D2E88B0;
+	Tue, 26 Aug 2025 05:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756183098; cv=none; b=KsmwS1EOFRoQqhr2UPmCtevo5ZEn2wKWzDcuQUdQ9VeuFVN9xpGOs2NOcUhLTzoc8+76pK80adkP3TgOFiO5pmOSad6VfMdDtdXFx+KPFfUp8ZQMVMui4XNP2B2hsR4+0i57JGMnHFAZfvQHOJANTRN3D4YPdhrlYfJHWV8VgIE=
+	t=1756186164; cv=none; b=az6K58wE2ZuhLUUulPWzaP0uB4RmUpsPo6QLtt1F8/vck15xU+kDNanesjeHIlImSZSNAEE1No+djkDhk6G2nZ+QVfmw/k9Vzum82TFZ+OeuB0RFQXy5X2T+gSNdOJkcyy/mgMioP+b+NrZkKlzxG3tzA4AKOkF7dR2Dkv+8QvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756183098; c=relaxed/simple;
-	bh=X2421H26tLXUHDTMe41vhjohMOE82E/n39NqynbbubA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uWpmClqQgaGlhkgJSmdlROt2ttVCPirdgRs+Fh9xpXE780wZcYcXdu8CxYatfVxvqKO2YAjgsRctPQimcov4yGPLhSBz8VroGd04BFD8ux03Zt8N2egL6oWBjnf9VHtIBk343jb3NQ47NroKvMWB3v1UvJfAaJMueiyPz/9RRsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=LNPR+FqI; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4b109c59dc9so70022001cf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 21:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1756183095; x=1756787895; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pFgnn+/KkXNVaL/+B3uRwl6TtlDHiFj4dBOMY55dlhY=;
-        b=LNPR+FqI6Zhvj78Gt5ad6XYJqXYuZxeewPRFeWU+cseuliJ8SPz2DpYRhfEWHAIopD
-         2Nt9veCVgsvGqC2ilMWe+UX2IU5TlQgVGgtl7/UfUExHtmlSkep4A9iDJw5TV7IYmrLR
-         5k8SgODIxRp9ivp0Vpi9LypfesEJ6t9zrMwjYn7HJ+cKev00EwuAmXVqfwDPLS+9RBib
-         VIUHNkWylgvNl8qw6+2lUZVWtGI9WdS+sHDPPP4e/+A1avLZ4NVvyEP8oKNxHjj29AWJ
-         /ez5Ohkuvk8LDybIf5K+okuNfli1wehE+VmJGbAkn7vhA1QoEeQFI48294St1kEjepCx
-         8hsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756183095; x=1756787895;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pFgnn+/KkXNVaL/+B3uRwl6TtlDHiFj4dBOMY55dlhY=;
-        b=Tcuug/OGMjEb/pKYAUmsoQ3epav9Li977AOIpdMaOv9mtX/AMOLkFFoFo/m8uv7Nhk
-         JQr1UpR8BLI8CUuqxTAL6QCw5ujR1JLhifsPyVcssuYQ3SHOKjblz/YGYc4HfnXfUYM6
-         1UvSa0x18JrPsh4DUCeSXlzitIF2nx9feHo/b+xR91ho7nQn52LVNnk8e9yC2WZz0bmI
-         /wLdu+0yjLbRfx/Zi0PaxsIPmO4N26ZwEqE77Oe+DV08msq0nAoCXDTsOLYhkcMeFKXm
-         DhnbtQgqsPSuMENC5+mblcJxVw+ueNrRU3jsoAWsGU5CKKT6u9EzLFiPHGEtkaQQDst6
-         A2/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXrCDIULlL8XnIeyG2z+IBOD+Ckay/u6Ypo5LDmxE/xSg75DgfGYEIGSS3sQR6M7fVw6rxoS1X7ORcnI9KIAro=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTiK3Uh5JKp5Az1oPz67iuonL4Yxk4Zz5C4rCufgddDYMoU/yA
-	3pms9B8c1aY8vyESGe05Mg4zSKFwzWUygkf2oOUhb/8iix55Pc80NG6fQgUiLnIQPcfo9P1xv1z
-	+0+H684NC8v1gva2IFFOXTjbVssrk53wrqC5fqtZsBQ==
-X-Gm-Gg: ASbGncvUx30P6Etf4G2A8FXqX0fPmF8UD8YYkbLEAvbYESD5GLABE81PNOUQ43uce7K
-	HSGwIC1p3Huy0NfzhkjYOmOyxzApKByH1SQJJrCuJbIFihPJlW/V/GYinQlzi8/aP4dLWMSCOw9
-	5TM/cIi29ahHsasXmzCZvAYLqYcIhXeeqmn7eCs40E2r88Fq3LLYuyNFVMYHZqkmBhMyrO+5Q2W
-	95B
-X-Google-Smtp-Source: AGHT+IHEa8+pSI1Wy0Fw7b+dsO/b6DhMiB4aK96KXN4AsIVMUjL2PWvpxHoNQpi2wUkC4qjdixdxGk6/65/eeyTbpoI=
-X-Received: by 2002:a05:622a:1818:b0:4af:1cd4:d782 with SMTP id
- d75a77b69052e-4b2aaad2b0dmr171048541cf.45.1756183095317; Mon, 25 Aug 2025
- 21:38:15 -0700 (PDT)
+	s=arc-20240116; t=1756186164; c=relaxed/simple;
+	bh=zAA65t+biCTL2Eftd5Vt0eFjHTRHEoaWFGOLEH6aG4w=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=UYxPxwlZgGdIgruSQ7C1dSZ93g29QUCQmarcFeyug3QUHazF+IR63CYZ4BbXQckQ3J+USIm/B5Yle+0pnQ8rR916vQazG/cab/bR6/YP/P6BZqU5BsptsQ4btj1gRdQJKpiYPbBimMTHgFVWXPfysvzjGleSkQHHCjqYebkAlQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Wq6Ux+WC; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sKuNjYhf; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1756186159;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=65ayLE+QQynk9aQmcYEngRqdHtxeY4HUGz5dhtcY1F0=;
+	b=Wq6Ux+WC2gIff/jZ/isyQz+BbCWLrcjOr4FQaQf29+xxJllaVC2St0w7reMOMbwCf0ucpg
+	wMHNDP6oXt85ysteE3C15+xukHVemOZGaY/xYcgwf1ueeMfvan+cO7iHdI1hnvasFLMVKA
+	wIAtvnoJcQSfPrg80ljFFzoJ5dxD4sHJtTHMbgzvoK11ywq67dzS57viFFMo4nEgU8URaw
+	bO5LlyBGRQY5QRW0z/PfZzxaUodPaMCfOmz0JSuWlI04RKILD8IFxF+IlVeDTQ3ncL1LY5
+	sSe7w1h62t377FLJPMimvuWZtf6i7zY1EscHlJCgbxSJbBMJS+vE72xsTYZpGg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1756186159;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=65ayLE+QQynk9aQmcYEngRqdHtxeY4HUGz5dhtcY1F0=;
+	b=sKuNjYhfjcMqtbi/xJ6keKKcRYn6EZO9jbKAcc5QJRj9FYL4OA5rbvIG5YsuMAshlGQr/W
+	An4saYE4LMRJs5Bw==
+Date: Tue, 26 Aug 2025 07:29:11 +0200
+Subject: [PATCH] vdso: Remove struct getcpu_cache
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250822174715.1269138-1-jesse@rivosinc.com> <20250822174715.1269138-6-jesse@rivosinc.com>
-In-Reply-To: <20250822174715.1269138-6-jesse@rivosinc.com>
-From: Himanshu Chauhan <hchauhan@ventanamicro.com>
-Date: Tue, 26 Aug 2025 10:08:04 +0530
-X-Gm-Features: Ac12FXyOy-huds2B1fJwOJPw53ZPIRvf9djC3OVxcNJyBPYY2odcHNK5kYVsNfY
-Message-ID: <CAPd4Wexw_DtndDqRZzXK0PEOAkb4yWB4x8rf5eRdJOLMS-+8SQ@mail.gmail.com>
-Subject: Re: [PATCH 5/8] riscv: hw_breakpoint: Use icount for single stepping
-To: Jesse Taube <jesse@rivosinc.com>
-Cc: linux-riscv@lists.infradead.org, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Oleg Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Liang Kan <kan.liang@linux.intel.com>, Shuah Khan <shuah@kernel.org>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Conor Dooley <conor.dooley@microchip.com>, Deepak Gupta <debug@rivosinc.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Atish Patra <atishp@rivosinc.com>, 
-	Anup Patel <apatel@ventanamicro.com>, Mayuresh Chitale <mchitale@ventanamicro.com>, 
-	Evan Green <evan@rivosinc.com>, WangYuli <wangyuli@uniontech.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Nam Cao <namcao@linutronix.de>, 
-	Yunhui Cui <cuiyunhui@bytedance.com>, Joel Granados <joel.granados@kernel.org>, 
-	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Celeste Liu <coelacanthushex@gmail.com>, 
-	Chunyan Zhang <zhangchunyan@iscas.ac.cn>, Nylon Chen <nylon.chen@sifive.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Joey Gouly <joey.gouly@arm.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Joel Stanley <joel@jms.id.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250826-getcpu_cache-v1-1-8748318f6141@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIACZGrWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDCyNT3fTUkuSC0vjkxOSMVF3jxKTkFKNUM1MTY3MloJaCotS0zAqwcdG
+ xtbUAwJ29uV4AAAA=
+X-Change-ID: 20250825-getcpu_cache-3abcd2e65437
+To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Andy Lutomirski <luto@kernel.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Richard Weinberger <richard@nod.at>, 
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+ Johannes Berg <johannes@sipsolutions.net>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-s390@vger.kernel.org, linux-um@lists.infradead.org, 
+ linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756186155; l=9757;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=zAA65t+biCTL2Eftd5Vt0eFjHTRHEoaWFGOLEH6aG4w=;
+ b=oCH06dxxdjmFh7WWuVm9nzzFq2kCgh1Ogw3db72JXYeGBbeG8IW+QjHv1UcScE5HMJWzhJ0V8
+ RIFNkDMcDqBDhl6Nfn7WDqgAyYQep8GaP8LuLJF9TlYHxgP3yYaCx0i
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Fri, Aug 22, 2025 at 11:17=E2=80=AFPM Jesse Taube <jesse@rivosinc.com> w=
-rote:
->
-> The Sdtrig RISC-V ISA extension does not have a resume flag for
-> returning to and executing the instruction at the breakpoint.
-> To avoid skipping the instruction or looping, it is necessary to remove
-> the hardware breakpoint and single step. Use the icount feature of
-> Sdtrig to accomplish this. Use icount as default with an option to allow
-> software-based single stepping when hardware or SBI does not have
-> icount functionality, as it may cause unwanted side effects when reading
-> the instruction from memory.
+The cache parameter of getcpu() is not used by the kernel and no user ever
+passes it in anyways.
 
-Can you please elaborate on this? I remember noticing the absence of
-the resume flag which was causing loops.
+Remove the struct and its header.
 
->
-> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
-> ---
-> OpenSBI implementation of sbi_debug_read_triggers does not return the
-> updated CSR values. There needs to be a check for working
-> sbi_debug_read_triggers before this works.
->
-> https://lists.riscv.org/g/tech-prs/message/1476
->
-> RFC -> V1:
->  - Add dbtr_mode to rv_init_icount_trigger
->  - Add icount_triggered to check which breakpoint was triggered
->  - Fix typo: s/affects/effects
->  - Move HW_BREAKPOINT_COMPUTE_STEP to Platform type
-> V1 -> V2:
->  - Remove HW_BREAKPOINT_COMPUTE_STEP kconfig option
-> ---
->  arch/riscv/kernel/hw_breakpoint.c | 173 ++++++++++++++++++++++++++----
->  1 file changed, 155 insertions(+), 18 deletions(-)
->
-> diff --git a/arch/riscv/kernel/hw_breakpoint.c b/arch/riscv/kernel/hw_bre=
-akpoint.c
-> index 3f96e744a711..f12306247436 100644
-> --- a/arch/riscv/kernel/hw_breakpoint.c
-> +++ b/arch/riscv/kernel/hw_breakpoint.c
-> @@ -20,6 +20,7 @@
->  #define DBTR_TDATA1_DMODE              BIT_UL(__riscv_xlen - 5)
->
->  #define DBTR_TDATA1_TYPE_MCONTROL      (2UL << DBTR_TDATA1_TYPE_SHIFT)
-> +#define DBTR_TDATA1_TYPE_ICOUNT                (3UL << DBTR_TDATA1_TYPE_=
-SHIFT)
->  #define DBTR_TDATA1_TYPE_MCONTROL6     (6UL << DBTR_TDATA1_TYPE_SHIFT)
->
->  #define DBTR_TDATA1_MCONTROL6_LOAD             BIT(0)
-> @@ -62,6 +63,14 @@
->         (FIELD_PREP(DBTR_TDATA1_MCONTROL_SIZELO_FIELD, lo) | \
->          FIELD_PREP(DBTR_TDATA1_MCONTROL_SIZEHI_FIELD, hi))
->
-> +#define DBTR_TDATA1_ICOUNT_U                   BIT(6)
-> +#define DBTR_TDATA1_ICOUNT_S                   BIT(7)
-> +#define DBTR_TDATA1_ICOUNT_PENDING             BIT(8)
-> +#define DBTR_TDATA1_ICOUNT_M                   BIT(9)
-> +#define DBTR_TDATA1_ICOUNT_COUNT_FIELD         GENMASK(23, 10)
-> +#define DBTR_TDATA1_ICOUNT_VU                  BIT(25)
-> +#define DBTR_TDATA1_ICOUNT_VS                  BIT(26)
-> +
->  enum dbtr_mode {
->         DBTR_MODE_U =3D 0,
->         DBTR_MODE_S,
-> @@ -79,6 +88,7 @@ static DEFINE_PER_CPU(union sbi_dbtr_shmem_entry, sbi_d=
-btr_shmem);
->
->  /* number of debug triggers on this cpu . */
->  static int dbtr_total_num __ro_after_init;
-> +static bool have_icount __ro_after_init;
->  static unsigned long dbtr_type __ro_after_init;
->  static unsigned long dbtr_init __ro_after_init;
->
-> @@ -129,6 +139,7 @@ static int arch_smp_teardown_sbi_shmem(unsigned int c=
-pu)
->  static void init_sbi_dbtr(void)
->  {
->         struct sbiret ret;
-> +       unsigned long dbtr_count =3D 0;
->
->         /*
->          * Called by hw_breakpoint_slots and arch_hw_breakpoint_init.
-> @@ -143,6 +154,19 @@ static void init_sbi_dbtr(void)
->                 return;
->         }
->
-> +       ret =3D sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_NUM_TRIGGERS,
-> +               DBTR_TDATA1_TYPE_ICOUNT, 0, 0, 0, 0, 0);
-> +       if (ret.error) {
-> +               pr_warn("%s: failed to detect icount triggers. error: %ld=
-.\n",
-> +                       __func__, ret.error);
-> +       } else if (!ret.value) {
-> +               pr_warn("%s: No icount triggers available. "
-> +                       "Falling-back to computing single step address.\n=
-", __func__);
-> +       } else {
-> +               dbtr_count =3D ret.value;
-> +               have_icount =3D true;
-> +       }
-> +
->         ret =3D sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_NUM_TRIGGERS,
->                         DBTR_TDATA1_TYPE_MCONTROL6, 0, 0, 0, 0, 0);
->         if (ret.error) {
-> @@ -151,7 +175,7 @@ static void init_sbi_dbtr(void)
->         } else if (!ret.value) {
->                 pr_warn("%s: No mcontrol6 triggers available.\n", __func_=
-_);
->         } else {
-> -               dbtr_total_num =3D ret.value;
-> +               dbtr_total_num =3D min_not_zero((unsigned long)ret.value,=
- dbtr_count);
->                 dbtr_type =3D DBTR_TDATA1_TYPE_MCONTROL6;
->                 return;
->         }
-> @@ -166,7 +190,7 @@ static void init_sbi_dbtr(void)
->                 pr_err("%s: No mcontrol triggers available.\n", __func__)=
-;
->                 dbtr_total_num =3D 0;
->         } else {
-> -               dbtr_total_num =3D ret.value;
-> +               dbtr_total_num =3D min_not_zero((unsigned long)ret.value,=
- dbtr_count);
->                 dbtr_type =3D DBTR_TDATA1_TYPE_MCONTROL;
->         }
->  }
-> @@ -320,6 +344,36 @@ static int rv_init_mcontrol6_trigger(const struct pe=
-rf_event_attr *attr,
->         return 0;
->  }
->
-> +static int rv_init_icount_trigger(struct arch_hw_breakpoint *hw, enum db=
-tr_mode mode)
-> +{
-> +       unsigned long tdata1 =3D DBTR_TDATA1_TYPE_ICOUNT;
-> +
-> +       /* Step one instruction */
-> +       tdata1 |=3D FIELD_PREP(DBTR_TDATA1_ICOUNT_COUNT_FIELD, 1);
-> +
-> +       switch (mode) {
-> +       case DBTR_MODE_U:
-> +               tdata1 |=3D DBTR_TDATA1_ICOUNT_U;
-> +               break;
-> +       case DBTR_MODE_S:
-> +               tdata1 |=3D DBTR_TDATA1_ICOUNT_S;
-> +               break;
-> +       case DBTR_MODE_VS:
-> +               tdata1 |=3D DBTR_TDATA1_ICOUNT_VS;
-> +               break;
-> +       case DBTR_MODE_VU:
-> +               tdata1 |=3D DBTR_TDATA1_ICOUNT_VU;
-> +               break;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +
-> +       hw->tdata1 =3D tdata1;
-> +       hw->tdata2 =3D 0;
-> +
-> +       return 0;
-> +}
-> +
->  int hw_breakpoint_arch_parse(struct perf_event *bp,
->                              const struct perf_event_attr *attr,
->                              struct arch_hw_breakpoint *hw)
-> @@ -372,24 +426,28 @@ static int setup_singlestep(struct perf_event *even=
-t, struct pt_regs *regs)
->         /* Remove breakpoint even if return error as not to loop */
->         arch_uninstall_hw_breakpoint(event);
->
-> -       ret =3D get_insn_nofault(regs, regs->epc, &insn);
-> -       if (ret < 0)
-> -               return ret;
-> +       if (have_icount) {
-> +               rv_init_icount_trigger(bp, DBTR_MODE_U);
-> +       } else {
-> +               ret =3D get_insn_nofault(regs, regs->epc, &insn);
-> +               if (ret < 0)
-> +                       return ret;
->
-> -       next_addr =3D get_step_address(regs, insn);
-> +               next_addr =3D get_step_address(regs, insn);
->
-> -       ret =3D get_insn_nofault(regs, next_addr, &insn);
-> -       if (ret < 0)
-> -               return ret;
-> +               ret =3D get_insn_nofault(regs, next_addr, &insn);
-> +               if (ret < 0)
-> +                       return ret;
->
-> -       bp_insn.bp_type =3D HW_BREAKPOINT_X;
-> -       bp_insn.bp_addr =3D next_addr;
-> -       /* Get the size of the intruction */
-> -       bp_insn.bp_len =3D GET_INSN_LENGTH(insn);
-> +               bp_insn.bp_type =3D HW_BREAKPOINT_X;
-> +               bp_insn.bp_addr =3D next_addr;
-> +               /* Get the size of the intruction */
-> +               bp_insn.bp_len =3D GET_INSN_LENGTH(insn);
->
-> -       ret =3D hw_breakpoint_arch_parse(NULL, &bp_insn, bp);
-> -       if (ret)
-> -               return ret;
-> +               ret =3D hw_breakpoint_arch_parse(NULL, &bp_insn, bp);
-> +               if (ret)
-> +                       return ret;
-> +       }
->
->         ret =3D arch_install_hw_breakpoint(event);
->         if (ret)
-> @@ -400,6 +458,79 @@ static int setup_singlestep(struct perf_event *event=
-, struct pt_regs *regs)
->         return 0;
->  }
->
-> +/**
-> + * icount_triggered - Check if event's icount was triggered.
-> + * @event: Perf event to check
-> + *
-> + * Check the given perf event's icount breakpoint was triggered.
-> + *
-> + * Returns:    1 if icount was triggered.
-> + *             0 if icount was not triggered.
-> + *             negative on failure.
-> + */
-> +static int icount_triggered(struct perf_event *event)
-> +{
-> +       union sbi_dbtr_shmem_entry *shmem =3D this_cpu_ptr(&sbi_dbtr_shme=
-m);
-> +       struct sbiret ret;
-> +       struct perf_event **slot;
-> +       unsigned long tdata1;
-> +       int i;
-> +
-> +       for (i =3D 0; i < dbtr_total_num; i++) {
-> +               slot =3D this_cpu_ptr(&pcpu_hw_bp_events[i]);
-> +
-> +               if (*slot =3D=3D event)
-> +                       break;
-> +       }
-> +
-> +       if (i =3D=3D dbtr_total_num) {
-> +               pr_warn("%s: Breakpoint not installed.\n", __func__);
-> +               return -ENOENT;
-> +       }
-> +
-> +       raw_spin_lock_irqsave(this_cpu_ptr(&ecall_lock),
-> +                             *this_cpu_ptr(&ecall_lock_flags));
-> +
-> +       ret =3D sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIG_READ,
-> +                       i, 1, 0, 0, 0, 0);
-> +       tdata1 =3D shmem->data.tdata1;
-> +
-> +       raw_spin_unlock_irqrestore(this_cpu_ptr(&ecall_lock),
-> +                                  *this_cpu_ptr(&ecall_lock_flags));
-> +       if (ret.error) {
-> +               pr_warn("%s: failed to read trigger. error: %ld\n", __fun=
-c__, ret.error);
-> +               return sbi_err_map_linux_errno(ret.error);
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+We could also completely remove the parameter, but I am not sure if
+that is a good idea for syscalls and vDSO entrypoints.
+---
+ arch/loongarch/vdso/vgetcpu.c                   |  5 ++---
+ arch/s390/kernel/vdso64/getcpu.c                |  3 +--
+ arch/s390/kernel/vdso64/vdso.h                  |  4 +---
+ arch/x86/entry/vdso/vgetcpu.c                   |  5 ++---
+ arch/x86/include/asm/vdso/processor.h           |  4 +---
+ arch/x86/um/vdso/um_vdso.c                      |  7 +++----
+ include/linux/getcpu.h                          | 19 -------------------
+ include/linux/syscalls.h                        |  3 +--
+ kernel/sys.c                                    |  4 +---
+ tools/testing/selftests/vDSO/vdso_test_getcpu.c |  4 +---
+ 10 files changed, 13 insertions(+), 45 deletions(-)
 
-To avoid a flurry of events or messages, it would probably be good to
-disable the trigger.
+diff --git a/arch/loongarch/vdso/vgetcpu.c b/arch/loongarch/vdso/vgetcpu.c
+index 5301cd9d0f839eb0fd7b73a1d36e80aaa75d5e76..aefba899873ed035d70766a95b0b6fea881e94df 100644
+--- a/arch/loongarch/vdso/vgetcpu.c
++++ b/arch/loongarch/vdso/vgetcpu.c
+@@ -4,7 +4,6 @@
+  */
+ 
+ #include <asm/vdso.h>
+-#include <linux/getcpu.h>
+ 
+ static __always_inline int read_cpu_id(void)
+ {
+@@ -20,8 +19,8 @@ static __always_inline int read_cpu_id(void)
+ }
+ 
+ extern
+-int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused);
+-int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused)
++int __vdso_getcpu(unsigned int *cpu, unsigned int *node, void *unused);
++int __vdso_getcpu(unsigned int *cpu, unsigned int *node, void *unused)
+ {
+ 	int cpu_id;
+ 
+diff --git a/arch/s390/kernel/vdso64/getcpu.c b/arch/s390/kernel/vdso64/getcpu.c
+index 5c5d4a848b7669436e73df8e3b711e5b876eb3db..1e17665616c5fa766ca66c8de276b212528934bd 100644
+--- a/arch/s390/kernel/vdso64/getcpu.c
++++ b/arch/s390/kernel/vdso64/getcpu.c
+@@ -2,11 +2,10 @@
+ /* Copyright IBM Corp. 2020 */
+ 
+ #include <linux/compiler.h>
+-#include <linux/getcpu.h>
+ #include <asm/timex.h>
+ #include "vdso.h"
+ 
+-int __s390_vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
++int __s390_vdso_getcpu(unsigned *cpu, unsigned *node, void *unused)
+ {
+ 	union tod_clock clk;
+ 
+diff --git a/arch/s390/kernel/vdso64/vdso.h b/arch/s390/kernel/vdso64/vdso.h
+index 9e5397e7b590a23c149ccc6043d0c0b0d5ea8457..cadd307d7a365cabf53f5c8d313be3718625533d 100644
+--- a/arch/s390/kernel/vdso64/vdso.h
++++ b/arch/s390/kernel/vdso64/vdso.h
+@@ -4,9 +4,7 @@
+ 
+ #include <vdso/datapage.h>
+ 
+-struct getcpu_cache;
+-
+-int __s390_vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused);
++int __s390_vdso_getcpu(unsigned *cpu, unsigned *node, void *unused);
+ int __s390_vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz);
+ int __s390_vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts);
+ int __s390_vdso_clock_getres(clockid_t clock, struct __kernel_timespec *ts);
+diff --git a/arch/x86/entry/vdso/vgetcpu.c b/arch/x86/entry/vdso/vgetcpu.c
+index e4640306b2e3c95d74d73037ab6b09294b8e1d6c..6381b472b7c52487bccf3cbf0664c3d7a0e59699 100644
+--- a/arch/x86/entry/vdso/vgetcpu.c
++++ b/arch/x86/entry/vdso/vgetcpu.c
+@@ -6,17 +6,16 @@
+  */
+ 
+ #include <linux/kernel.h>
+-#include <linux/getcpu.h>
+ #include <asm/segment.h>
+ #include <vdso/processor.h>
+ 
+ notrace long
+-__vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
++__vdso_getcpu(unsigned *cpu, unsigned *node, void *unused)
+ {
+ 	vdso_read_cpunode(cpu, node);
+ 
+ 	return 0;
+ }
+ 
+-long getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *tcache)
++long getcpu(unsigned *cpu, unsigned *node, void *tcache)
+ 	__attribute__((weak, alias("__vdso_getcpu")));
+diff --git a/arch/x86/include/asm/vdso/processor.h b/arch/x86/include/asm/vdso/processor.h
+index 7000aeb59aa287e2119c3d43ab3eaf82befb59c4..93e0e24e5cb47f7b0056c13f2a7f2304ed4a0595 100644
+--- a/arch/x86/include/asm/vdso/processor.h
++++ b/arch/x86/include/asm/vdso/processor.h
+@@ -18,9 +18,7 @@ static __always_inline void cpu_relax(void)
+ 	native_pause();
+ }
+ 
+-struct getcpu_cache;
+-
+-notrace long __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused);
++notrace long __vdso_getcpu(unsigned *cpu, unsigned *node, void *unused);
+ 
+ #endif /* __ASSEMBLER__ */
+ 
+diff --git a/arch/x86/um/vdso/um_vdso.c b/arch/x86/um/vdso/um_vdso.c
+index cbae2584124fd0ff0f9d240c33fefb8d213c84cd..9aa2c62cce6b7a07bbaf8441014d347162d1950d 100644
+--- a/arch/x86/um/vdso/um_vdso.c
++++ b/arch/x86/um/vdso/um_vdso.c
+@@ -10,14 +10,13 @@
+ #define DISABLE_BRANCH_PROFILING
+ 
+ #include <linux/time.h>
+-#include <linux/getcpu.h>
+ #include <asm/unistd.h>
+ 
+ /* workaround for -Wmissing-prototypes warnings */
+ int __vdso_clock_gettime(clockid_t clock, struct __kernel_old_timespec *ts);
+ int __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz);
+ __kernel_old_time_t __vdso_time(__kernel_old_time_t *t);
+-long __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused);
++long __vdso_getcpu(unsigned int *cpu, unsigned int *node, void *unused);
+ 
+ int __vdso_clock_gettime(clockid_t clock, struct __kernel_old_timespec *ts)
+ {
+@@ -60,7 +59,7 @@ __kernel_old_time_t __vdso_time(__kernel_old_time_t *t)
+ __kernel_old_time_t time(__kernel_old_time_t *t) __attribute__((weak, alias("__vdso_time")));
+ 
+ long
+-__vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused)
++__vdso_getcpu(unsigned int *cpu, unsigned int *node, void *unused)
+ {
+ 	/*
+ 	 * UML does not support SMP, we can cheat here. :)
+@@ -74,5 +73,5 @@ __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused
+ 	return 0;
+ }
+ 
+-long getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *tcache)
++long getcpu(unsigned int *cpu, unsigned int *node, void *tcache)
+ 	__attribute__((weak, alias("__vdso_getcpu")));
+diff --git a/include/linux/getcpu.h b/include/linux/getcpu.h
+deleted file mode 100644
+index c304dcdb4eac2a9117080e6a14f4e3f28d07fd56..0000000000000000000000000000000000000000
+--- a/include/linux/getcpu.h
++++ /dev/null
+@@ -1,19 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _LINUX_GETCPU_H
+-#define _LINUX_GETCPU_H 1
+-
+-/* Cache for getcpu() to speed it up. Results might be a short time
+-   out of date, but will be faster.
+-
+-   User programs should not refer to the contents of this structure.
+-   I repeat they should not refer to it. If they do they will break
+-   in future kernels.
+-
+-   It is only a private cache for vgetcpu(). It will change in future kernels.
+-   The user program must store this information per thread (__thread)
+-   If you want 100% accurate information pass NULL instead. */
+-struct getcpu_cache {
+-	unsigned long blob[128 / sizeof(long)];
+-};
+-
+-#endif
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 77f45e5d44139da36a5dacbf9db7b65261d13398..81822d203eac5d8d91488a18ff7fcdc65670df54 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -59,7 +59,6 @@ struct compat_stat;
+ struct old_timeval32;
+ struct robust_list_head;
+ struct futex_waitv;
+-struct getcpu_cache;
+ struct old_linux_dirent;
+ struct perf_event_attr;
+ struct file_handle;
+@@ -714,7 +713,7 @@ asmlinkage long sys_getrusage(int who, struct rusage __user *ru);
+ asmlinkage long sys_umask(int mask);
+ asmlinkage long sys_prctl(int option, unsigned long arg2, unsigned long arg3,
+ 			unsigned long arg4, unsigned long arg5);
+-asmlinkage long sys_getcpu(unsigned __user *cpu, unsigned __user *node, struct getcpu_cache __user *cache);
++asmlinkage long sys_getcpu(unsigned __user *cpu, unsigned __user *node, void __user *cache);
+ asmlinkage long sys_gettimeofday(struct __kernel_old_timeval __user *tv,
+ 				struct timezone __user *tz);
+ asmlinkage long sys_settimeofday(struct __kernel_old_timeval __user *tv,
+diff --git a/kernel/sys.c b/kernel/sys.c
+index 1e28b40053ce206d7d0ed27e8a4fce8b616c3565..a830d78c1e1eb1d6cef31294feeb6a88dc0f83f3 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -31,7 +31,6 @@
+ #include <linux/tty.h>
+ #include <linux/signal.h>
+ #include <linux/cn_proc.h>
+-#include <linux/getcpu.h>
+ #include <linux/task_io_accounting_ops.h>
+ #include <linux/seccomp.h>
+ #include <linux/cpu.h>
+@@ -2813,8 +2812,7 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+ 	return error;
+ }
+ 
+-SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __user *, nodep,
+-		struct getcpu_cache __user *, unused)
++SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __user *, nodep, void __user *, unused)
+ {
+ 	int err = 0;
+ 	int cpu = raw_smp_processor_id();
+diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
+index cdeaed45fb26c61f6314c58fe1b71fa0be3c0108..994ce569dc37c6689b1a3c79156e3dfc8bf27f22 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_getcpu.c
++++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
+@@ -16,9 +16,7 @@
+ #include "vdso_config.h"
+ #include "vdso_call.h"
+ 
+-struct getcpu_cache;
+-typedef long (*getcpu_t)(unsigned int *, unsigned int *,
+-			 struct getcpu_cache *);
++typedef long (*getcpu_t)(unsigned int *, unsigned int *, void *);
+ 
+ int main(int argc, char **argv)
+ {
 
-> +       }
-> +
-> +       /*
-> +        * The RISC-V Debug Specification
-> +        * Tim Newsome, Paul Donahue (Ventana Micro Systems)
-> +        * Version 1.0, Revised 2025-02-21: Ratified
-I think mentioning the version number and section would be enough.
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250825-getcpu_cache-3abcd2e65437
 
-> +        * 5.7.13. Instruction Count (icount, at 0x7a1)
-> +        * When count is 1 and the trigger matches, then pending becomes =
-set.
-> +        * In addition count will become 0 unless it is hard-wired to 1.
-> +        * When pending is set, the trigger fires just before any further
-> +        * instructions are executed in a mode where the trigger is enabl=
-ed.
-> +        * As the trigger fires, pending is cleared. In addition, if coun=
-t is
-> +        * hard-wired to 1 then m, s, u, vs, and vu are all cleared.
-> +        */
-> +       if (FIELD_GET(DBTR_TDATA1_ICOUNT_COUNT_FIELD, tdata1) =3D=3D 0)
-> +               return 1;
-> +
-> +       if (FIELD_GET(DBTR_TDATA1_ICOUNT_COUNT_FIELD, tdata1) !=3D 1)
-> +               return 0;
-> +
-> +       if (tdata1 & DBTR_TDATA1_ICOUNT_U)
-> +               return 0;
-> +       if (tdata1 & DBTR_TDATA1_ICOUNT_S)
-> +               return 0;
-> +       if (tdata1 & DBTR_TDATA1_ICOUNT_VU)
-> +               return 0;
-> +       if (tdata1 & DBTR_TDATA1_ICOUNT_VU)
-> +               return 0;
-> +       return 1;
-> +}
-> +
->  /*
->   * HW Breakpoint/watchpoint handler
->   */
-> @@ -460,7 +591,10 @@ static int hw_breakpoint_handler(struct pt_regs *reg=
-s)
->
->                 if (bp->in_callback) {
->                         expecting_callback =3D true;
-> -                       if (regs->epc !=3D bp->next_addr) {
-> +                       if (have_icount) {
-> +                               if (icount_triggered(event) !=3D 1)
-> +                                       continue;
-> +                       } else if (regs->epc !=3D bp->next_addr) {
->                                 continue;
->                         }
->
-> @@ -477,7 +611,10 @@ static int hw_breakpoint_handler(struct pt_regs *reg=
-s)
->
->         }
->
-> -       if (expecting_callback) {
-> +       if (expecting_callback && have_icount) {
-> +               pr_err("%s: in_callback was set, but icount was not trigg=
-ered, epc (%lx).\n",
-> +                      __func__, regs->epc);
-> +       } else if (expecting_callback) {
->                 pr_err("%s: in_callback was set, but epc (%lx) was not at=
- next address(%lx).\n",
->                        __func__, regs->epc, bp->next_addr);
->         }
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-Is this just for debugging or do you want to commit it?
-
-Regards
-Himanshu
-> --
-> 2.43.0
->
 
