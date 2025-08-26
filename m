@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-39997-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18222B3731C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 21:33:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EE37B37328
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 21:34:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 324B21BA6229
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 19:34:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BEA74636FA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 19:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB4ED2D738F;
-	Tue, 26 Aug 2025 19:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094DA37C0F2;
+	Tue, 26 Aug 2025 19:34:03 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E28031A554;
-	Tue, 26 Aug 2025 19:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB2937C0ED;
+	Tue, 26 Aug 2025 19:34:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756236822; cv=none; b=e4z2lqr9w6lVK8pvFa2ipwe8G/4zoLBWX6Obz0641/6lsoW/xwtPrc5mzPorLOz3G+4/MDv1hrDTy9luNGHt0ZiL6zJ6e4V5m8xZFD5lvGEcWw7oacWslGe78pO21Xk8W1Ukl1h7EH6xSwIuE4/02UO+c4/Lh75SnBBUWQCR2SQ=
+	t=1756236842; cv=none; b=d/2QR8+ba1ZhmWlkEg+zAsOHOK6ZmLF9XAfM/Vt6uXYGoPvVx91piIz6gekT8gUuVPQBvZp9H/ljdytdN6oxeddYVFMaHpFgNJOfJkqBkPNpVcdZxhHbMZsd9vgbDn1srQsuWvFwXXPf9ba/GwapmjNMxWcwuZZGgN802xQyJyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756236822; c=relaxed/simple;
-	bh=jvVvE3VLnaJmAa7y4nJ+v2vcAkqXhABkYmXEVoBXTnY=;
+	s=arc-20240116; t=1756236842; c=relaxed/simple;
+	bh=62cIoZoaYR60eDZ7Y0bdRTw/uJx5RBWt0sV/Lpy1BLk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nRX7ouffzP6bWcdswqjrtrFPD2nhJLXzq8Mk3WS5Pa1FdPSk+9veOUCZq26qFADpFp9rshRAB/6BH8xsxSRrfcYYXvnpkmOfT88OionEkcuozlmL065+uuun3+wh+WigYOTjsIM25a+mbe/bcM3HBleSlOjBsuDJGDYoc8R5JgI=
+	 Content-Type:Content-Disposition:In-Reply-To; b=WfvD2vgEnQMfGrZdOPCGPiHpqgFbPtSaN04myupzoxGISXV8XslnJ0bIedPFD7ClWffvry7RmA4DpJDZJyunWFDxpSeODEbniBoE0QFAV27mWw98R4bPscAVrE9i+jRNcpHV9dLe4ApUeA9J8NKT+EN+WEo708glUOCsOSXyzAw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89AAAC4CEF1;
-	Tue, 26 Aug 2025 19:33:35 +0000 (UTC)
-Date: Tue, 26 Aug 2025 20:33:37 +0100
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3FDAC4CEF1;
+	Tue, 26 Aug 2025 19:33:55 +0000 (UTC)
+Date: Tue, 26 Aug 2025 20:33:58 +0100
 From: Catalin Marinas <catalin.marinas@arm.com>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
@@ -62,10 +62,10 @@ Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH 08/11] vdso: Drop kconfig GENERIC_COMPAT_VDSO
-Message-ID: <aK4MES_GHUQ-9zoY@arm.com>
+Subject: Re: [PATCH 09/11] vdso: Drop kconfig GENERIC_VDSO_DATA_STORE
+Message-ID: <aK4MJl3dfjsY8pPM@arm.com>
 References: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
- <20250826-vdso-cleanups-v1-8-d9b65750e49f@linutronix.de>
+ <20250826-vdso-cleanups-v1-9-d9b65750e49f@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,18 +75,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250826-vdso-cleanups-v1-8-d9b65750e49f@linutronix.de>
+In-Reply-To: <20250826-vdso-cleanups-v1-9-d9b65750e49f@linutronix.de>
 
-On Tue, Aug 26, 2025 at 08:17:11AM +0200, Thomas Weiﬂschuh wrote:
-> This configuration is never used.
+On Tue, Aug 26, 2025 at 08:17:12AM +0200, Thomas Weiﬂschuh wrote:
+> All users of the generic vDSO library also use the generic vDSO datastore.
 > 
-> Remove it.
+> Remove the now unnecessary kconfig symbol.
 > 
 > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 > ---
->  arch/arm64/Kconfig | 1 -
->  lib/vdso/Kconfig   | 5 -----
->  2 files changed, 6 deletions(-)
+>  arch/Kconfig                        | 2 +-
+>  arch/arm/mm/Kconfig                 | 1 -
+>  arch/arm64/Kconfig                  | 1 -
 
 Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 
