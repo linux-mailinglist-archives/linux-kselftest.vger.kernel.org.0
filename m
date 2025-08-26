@@ -1,132 +1,134 @@
-Return-Path: <linux-kselftest+bounces-39916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-39918-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5569B35444
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 08:20:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3C93B354C9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 08:52:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DCAE204ECE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 06:20:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91AA81B61F1D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Aug 2025 06:53:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BDEE2FB61D;
-	Tue, 26 Aug 2025 06:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05ED2F60A5;
+	Tue, 26 Aug 2025 06:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qff84Umw";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="faCkWxdj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mik7rsuI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201092853E9;
-	Tue, 26 Aug 2025 06:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159DB286D75;
+	Tue, 26 Aug 2025 06:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756189111; cv=none; b=Da+sbUlZK0IyyAL0FRlIZAkUvnyf53dr5deAm7e13UaJNKpBdcvvNvvsLfMAMUECPIjWmgBojR7YpEkFp2KcaFk8tzGlzforUw3iZc+ZwfRIZ9MHOwDwxbl+dM3ljwAqUaNmB1DK7l/3d17ldg1adwMmrRIA4Z04MsO2epGaiW8=
+	t=1756191162; cv=none; b=CM45DfdfuN/xPvUpoPyfwj24Fh6KksPf8xnh/ZPzArCBTpjhAC+C46v6l1UKa358Ov2aAFVgtwGyG/Gpgx52io5A8cl17nBwscbe4ZRDFUu5P0cuc8WODHsnXImsOvYEAQg2khsyyW3CTljEXWiMV/PRqKl8G26tzdQVjKF30RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756189111; c=relaxed/simple;
-	bh=e70kJzk3rr3WiO6RHhXGvE8arznJOv7er7zNzG1lBZY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AAan8sWtADeR5fQENN8SfRffYqpsa57iAapwSrF7h7fHFBhiQnywYRZszEU6Bje33EB1nH2xsPcfnQ8hf0RqHMmS6ujoNMldwChLn/eWVkez2fHcs6wXmbZ0iDgfZpE8Q5WBorKStJrS4EdjmVgFVb9GsaDMQOIZuWWhL4oz0CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qff84Umw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=faCkWxdj; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1756189106;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aUyzbl96JnTO9V3eNt5MssqL9K7R8ZPYrzwmUDypjtQ=;
-	b=qff84UmwLm8iFQvqm09Om+iEel23vC9BJ1wHMhpnGuRjjiVtocG2gJc/efnzy7UGv0bqDh
-	X4YctMH0aSIUxDd3i6X4JoDQFU5IM3b5mriVj4iiUX/4ke9TsrEXJU+QjgXN9L2Hvg/r1e
-	gVrERdEyqsHFDbRTatoD2jUbrkzofjIHreOcsZGCDEtvBgy1C9OjuykTbsIoRwvmsiEo67
-	TT3uKBDVEPfUk1K7JbyuNP89aqNk5szSg7Q98Esgpnao8uytgt5ztulcsAYjKovknEd1Gv
-	DdfAb+Xqa/DsFSf6/Qptu/gAQ+92+1NXjLnQVTycTHPHpfQqUdNFtsZzBM1PEQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1756189106;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aUyzbl96JnTO9V3eNt5MssqL9K7R8ZPYrzwmUDypjtQ=;
-	b=faCkWxdjd3FeEyW+rea8Q+WUcDNk36hjcPMaS1Mmo0pdEShLBn6gpn0pA+neXsTYaNOZIy
-	GVnfWQSajoT7S0Ag==
-Date: Tue, 26 Aug 2025 08:17:14 +0200
-Subject: [PATCH 11/11] vdso: Gate VDSO_GETRANDOM behind HAVE_GENERIC_VDSO
+	s=arc-20240116; t=1756191162; c=relaxed/simple;
+	bh=NZ3k1YFiXOLs+AVDlXX2D6tuby9ZGXWoy5E+XvSozb0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rF8wgK7ZRP0r5yZu2jiZwBXDB6UUnJShb5fLb14w2tRjAt/Qk4tR4W024IuWmFYPLMlDAhmBDWSVAc+t6/PBcvMNhpYS98k50Vv7yPr4di/Vo/2Amx+S4FChVBuYrnkez3mvC6RLpWTcGBBcdMxv7WTKTU02xzMHFKv5rINlnOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mik7rsuI; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756191157; x=1787727157;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NZ3k1YFiXOLs+AVDlXX2D6tuby9ZGXWoy5E+XvSozb0=;
+  b=Mik7rsuIhp364VAYefEnOXjGnEcLNi84N0NW8mNeIRJ5uNiG3DU2gO7E
+   im5NETR7CdlMmJXQnfva6aGgRocypMXrV41xCviBHbHmDobg/Wv2Oc81i
+   nI5rAKlQhzWn9awrO5EOrPPwmikjDIUgHJ1AaLosHBjUi49uUGXDVy8wZ
+   Noni1JY2McQ5pGcunh8rcliFzNKyEp5jUyWfQm9GW3HkUyPQBLw9oO5L+
+   QV+U68bBRiRon9XPhWDeZWRGTi/c31l6YcvXagp7lHlqTPI10lsJBAcIc
+   MFxP5BCqNlINhlA84qnUNbO8hguEYvFJonvL9bApnU03iv5sE/Cwd9RjV
+   A==;
+X-CSE-ConnectionGUID: irMkHSFBTNmkxs6KDx5Gfg==
+X-CSE-MsgGUID: 0kT302gXSLO3eAWPKUIobA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11533"; a="62232303"
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="62232303"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 23:52:36 -0700
+X-CSE-ConnectionGUID: OF8I5LewQM+yGKS5SNItCg==
+X-CSE-MsgGUID: d5QQK/++SIO6B1NrB+5JkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="169883550"
+Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 23:52:31 -0700
+Message-ID: <d780a249-ecb2-40e7-9520-19de8728c703@linux.intel.com>
+Date: Tue, 26 Aug 2025 14:52:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250826-vdso-cleanups-v1-11-d9b65750e49f@linutronix.de>
-References: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
-In-Reply-To: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
-To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>, Nam Cao <namcao@linutronix.de>, 
- Russell King <linux@armlinux.org.uk>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, 
- Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev, 
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-s390@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756189098; l=740;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=e70kJzk3rr3WiO6RHhXGvE8arznJOv7er7zNzG1lBZY=;
- b=Q6ersM0eWZuFWFRqw7St9QnfIHgjvUfXPslz3bmlle7dR6R1Tm8FlCD46/a/HTAHi+acl41TM
- HHiIuT3vNAnDyILoXrbvH+hSpTHjerUzqwG/UiWNkrt8K08Oly20NA4
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 08/19] KVM: selftests: Define structs to pass
+ parameters to TDX boot code
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
+ Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
+ Andrew Jones <ajones@ventanamicro.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Erdem Aktas <erdemaktas@google.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
+ <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org
+References: <20250821042915.3712925-1-sagis@google.com>
+ <20250821042915.3712925-9-sagis@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20250821042915.3712925-9-sagis@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-All architectures which want to implement getrandom() in the vDSO need to
-use the generic vDSO library.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- lib/vdso/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
-index 3d2c2b90d193f984e3a202e701fa7f0bfa8f1938..db87ba34ef1928fac0d5c58abca86312687cc159 100644
---- a/lib/vdso/Kconfig
-+++ b/lib/vdso/Kconfig
-@@ -19,9 +19,9 @@ config GENERIC_VDSO_OVERFLOW_PROTECT
- 	  time getter functions for the price of an extra conditional
- 	  in the hotpath.
- 
--endif
--
- config VDSO_GETRANDOM
- 	bool
- 	help
- 	  Selected by architectures that support vDSO getrandom().
-+
-+endif
+On 8/21/2025 12:29 PM, Sagi Shahar wrote:
+[...]
+> +
+> +/*
+> + * Allows each vCPU to be initialized with different eip and esp.
+> + *
+> + * __packed is used since the offsets are hardcoded in td_boot.S
+> + *
+> + * TODO: Replace hardcoded offsets with OFFSET(). This requires getting the
+> + * neccesry Kbuild scripts working in KVM selftests.
+neccesry -> necessary
 
--- 
-2.50.1
+Also, are the comments about "__packed" and "TODO" out dated?
 
+> + */
+> +struct td_per_vcpu_parameters {
+> +	uint32_t esp_gva;
+> +	uint64_t guest_code;
+> +};
+> +
+> +/*
+> + * Boot parameters for the TD.
+> + *
+> + * Unlike a regular VM, KVM cannot set registers such as esp, eip, etc
+> + * before boot, so to run selftests, these registers' values have to be
+> + * initialized by the TD.
+> + *
+> + * This struct is loaded in TD private memory at TD_BOOT_PARAMETERS_GPA.
+> + *
+> + * The TD boot code will read off parameters from this struct and set up the
+> + * vCPU for executing selftests.
+> + *
+> + * __packed is used since the offsets are hardcoded in td_boot.S
+Same as above for "__packed".
+
+> + */
+>
+[...]
 
