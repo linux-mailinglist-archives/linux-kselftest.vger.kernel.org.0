@@ -1,109 +1,137 @@
-Return-Path: <linux-kselftest+bounces-40044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B43DB37FEE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 12:32:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58BE3B3805B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 12:55:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 002A93B9142
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 10:32:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DBD01B65965
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 10:55:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BA8281504;
-	Wed, 27 Aug 2025 10:32:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4AA934AAFF;
+	Wed, 27 Aug 2025 10:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FXVfo9ed"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AMiMcPjb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C7021ADA4;
-	Wed, 27 Aug 2025 10:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705A634A331;
+	Wed, 27 Aug 2025 10:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756290755; cv=none; b=LxPlNqmYOrcCh5nPbmyns4tGhUHsEdcQeeJ+rxvjAWwm9dYWpV+oaUw0bALvGBKc858xHpNt3sxmCsW3cZXfIOFTIT6ta9BGXQuhKEE++Ns2WQ9mDgslkkTzFUZca1+KUNczP1sMydw8aRFu/LV/p68UfQkrhgyO9J4Dajm0HxI=
+	t=1756292105; cv=none; b=XvVr0HBRQ+nYDE/VnAxrVrvilPhXORdd89vd5UJIE1bMXzUePTQutal+NXNjRXHisCREepYCvVOvV8r7nHiJt78+PiFOISspV5Fmc/hd3lT/66hIQRXvdLwwuE4jJXjm2lcJrMiPn33zy1k869OXeDrIz8lViQZ0TDP4a7/08G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756290755; c=relaxed/simple;
-	bh=/smPvszByZaAF/Ideu82BSZu3Ndn1PjZSF6bQpSGf54=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jQEp5gK3JXBFXToYamN/hm4Ce8lCQfbPEokzlK59s5oPk0Fzm4nvHfqTvJ4V8lglVudqOu27xb1/0e/5ouSG4FphT5m202bVSCapSsToUBFa0DHL2B7r9Yphwj0xICuBJumfjDOl/U8Os1piXC+thZ+U2IgziMQFbpbOzXQNmEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FXVfo9ed; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EF5C4CEEB;
-	Wed, 27 Aug 2025 10:32:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756290754;
-	bh=/smPvszByZaAF/Ideu82BSZu3Ndn1PjZSF6bQpSGf54=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FXVfo9edvnfYDZY9oYOI1IjWhXElJtoKE/QXD0PNTUVuQ7jWQHsM6vpl8OWZxo97Y
-	 5zK137hjg10dzubzqUD+AKjAgN1X3+M3o5ODhhLWrTy+b22LjYDTN+tvwGUuhaghBW
-	 jBlFAeNQioSRejLwSAIgmX49dIlfTtx7vsp2uQzqffQHwK1KwIzJxeIezv1yqvfdH6
-	 Y07U7w4H+LyMwfBI0hahRiuJmRwRMm52R6cZ4dLrZttolx64vbzoaou3/CRXC4dgvz
-	 TIb6t8pPDFsfrBRQ9w7rbSRzeVGaTTaLytd3FaluUkdM73a4JKDNlmBLsNvHs1pg8y
-	 rpESJfOoFihjw==
-Date: Wed, 27 Aug 2025 11:32:29 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Nikola Z. Ivanov" <zlatistiv@gmail.com>
-Cc: bagasdotme@gmail.com, Markus.Elfring@web.de, shuah@kernel.org,
-	will@kernel.org, mark.rutland@arm.com, ebiggers@google.com,
-	catalin.marinas@arm.com, martin.petersen@oracle.com,
-	ardb@kernel.org, thiago.bauermann@linaro.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev
-Subject: Re: [PATCH v2] selftests/arm64: Fix grammatical error in string
- literals
-Message-ID: <d8bb28b7-7832-4c24-82bc-4663affcf57a@sirena.org.uk>
-References: <20250826214913.866695-1-zlatistiv@gmail.com>
+	s=arc-20240116; t=1756292105; c=relaxed/simple;
+	bh=brtTeOq7t9D29DOEYbCG+995QksqWJLkIz1HRzKOgFY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kaxtcrJmfP5KWxyyESwOKP/aAu5VgsylZJpPfibbMT9wQqbxFpDQIJjVCPQ6Us+T+mq8yTxtEYuosfzjjdQX9sZtibF6KXz6Pc5zCv94fohHalDDZX+qWHXPwFiurexTQslXaQ+lyhKiCGNtcWcBeAYY08ur6RNcBRQXIuulsqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AMiMcPjb; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24646202152so52301235ad.0;
+        Wed, 27 Aug 2025 03:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756292104; x=1756896904; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDBhuoyCHEkjgWaDPbp519QDqLxjbIBjIvhNBom08HM=;
+        b=AMiMcPjbrX/RA7PHWmNFNN3Q84pRMiWG79w5IhCn2aiKtHzVxwV5ZozoHVtaraZn9w
+         guZWYDUv4PpIw29fA/a51oO8BUY57xsG1/jklBdF2wiBGjyByhzqkN5WdphWBObikwu/
+         iaUmugg8qsIMYYzMhyQkTglljTlVuvVkY3FawDvImDxQXJMsbGzL532089yiPV6ZJO/s
+         X/K1neARxxUHOQbGTbd7SzAikm0Jx29xNRoHR8coHtrNnaRgoM64pvmiDRCtJ58o7mng
+         CazB0IxJE4d0A6h2G/yLFBr/4qU7tW75vGPN7vC1hwvIUzwfXl0DIQ22wIOFZmLzZlHH
+         KN5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756292104; x=1756896904;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KDBhuoyCHEkjgWaDPbp519QDqLxjbIBjIvhNBom08HM=;
+        b=ln7dRtf24NOj1x5/38up7sAsZ1SXoSDe8LsQkd/k7QpyuC4X3FeBThY8ymE5Fa1vzq
+         EsRYZhMdfUO3/aMQsqYpHVfuQeUR9X5cNhzTmbSAwPinb9bE9CwgZJ/olV9KnhtbIGp1
+         s699MfappF1Ylx2JdcgT3fJku/beshCosfb4oiKGqu66uHU05F7nnWYJ6cY6c7V3yAZa
+         UwgbE5XUGsm/ouev7gHCHRUsihF8IY6k5Oyi0c8S1ENuoBpXSXCqYIyQ7jswyvjmWXnz
+         hxirbOaZofzVfAoDrAIgoc2A1Kn6Bwq6B8LQInbfr/LRHAx945GurqAOlu0JmlRKxtMI
+         Y5/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVhv97D/pYE9MFrwZ/CA9Up2cwdzyONR8YCrgv61PSNWKu/wwK97JigmJcz3kGhJvziCeBs3S7ljd/nuT0=@vger.kernel.org, AJvYcCXkbzyIwhWGj0puWcgx179p9yk5FY8lSYdwlUsZ8pIclb1nhP3AtVr3/Wg/WRQa1GZrW8fMUaujgyl08F34SwuH@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrFAOdWkhs3+P+FB2fT5MbrE5l71ljXISnpmc3gF2/MfPoJoep
+	ZPWWQa05TRktXa0yc9lbc6bK9/7gxO3HXpzXSnTs1R4kv4mhrbT4wn7m
+X-Gm-Gg: ASbGncs5NDY9JWAITuW+PQ6jACZhv0A2KpTWlDkDcTmmafZ6hitPLFQjvyAFmcmXMpr
+	8uQqkLQjIVpL58QVfLbAp/mQbxw1ffXX8jKFoVSKIhmMapOlVVkQJ61CKuvwvVf4jWUwvhw6c3O
+	3WtLP+ZvPm3e8hIYhVaM0QX3hYQKeUy82Z7y6WwddrgMwcxBko5rr4BVlJSgTOsXpADKeOC2qSP
+	LMP0lOlbjLzCE5GrlrUL3JLfgy5sun7gl5wLrKqxGOUNqfGl084kdp9O/ENbyW5QlLpHzo4LkY2
+	KqEMYjhY3Oar0/jOZ29mdsHbAx7jWJeLRz6s3oozEjjspvzAqi8Z+6blPC0kiN5oSMtF/G1GHuo
+	mWJI9iMiZVREt9iNZeU9QkxcwKAZLKop0AwudxJ8KcP2maBcD
+X-Google-Smtp-Source: AGHT+IEhirihpN1QSJ58xrmifvBkFp/Oy5ttrOOp4jBR4YeWiJAGvBREB33nGZkv2OirbOnMcYZQZw==
+X-Received: by 2002:a17:902:dad1:b0:242:befb:b04e with SMTP id d9443c01a7336-2462ee9cbfcmr253453335ad.25.1756292103508;
+        Wed, 27 Aug 2025 03:55:03 -0700 (PDT)
+Received: from ti-am64x-sdk.. ([152.57.137.11])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24668779f6csm119573885ad.26.2025.08.27.03.54.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 03:55:03 -0700 (PDT)
+From: bhanuseshukumar <bhanuseshukumar@gmail.com>
+To: tglx@linutronix.de,
+	mingo@redhat.com,
+	shuah@kernel.org
+Cc: peterz@infradead.org,
+	dvhart@infradead.org,
+	dave@stgolabs.net,
+	andrealmeid@igalia.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	bigeasy@linutronix.de,
+	colin.i.king@gmail.com,
+	bhanuseshukumar@gmail.com
+Subject: [PATCH v2] selftests: futex; Fix spelling in test messages
+Date: Wed, 27 Aug 2025 16:24:12 +0530
+Message-Id: <20250827105412.19113-1-bhanuseshukumar@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="OQXy7X9uIo8z3XU8"
-Content-Disposition: inline
-In-Reply-To: <20250826214913.866695-1-zlatistiv@gmail.com>
-X-Cookie: Most people prefer certainty to truth.
+Content-Transfer-Encoding: 8bit
 
+    Correct few spelling mistakes in selftest output messages to improve
+    readability
 
---OQXy7X9uIo8z3XU8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: bhanuseshukumar <bhanuseshukumar@gmail.com>
+---
+ This fix is part of kselftest pre-requisite task for kernel mentorship fall 2025.
 
-On Wed, Aug 27, 2025 at 12:49:13AM +0300, Nikola Z. Ivanov wrote:
-> Fix grammatical error in <past tense verb> + <infinitive>
-> construct related to memory allocation checks.
-> In essence change "Failed to allocated" to "Failed to allocate".
->=20
-> Signed-off-by: Nikola Z. Ivanov <zlatistiv@gmail.com>
-> ---
-> Changes in v2:
-> - More descriptive commit message
+ --changes in v2 to v1
+     grammar fix : instead -> instead of 
+ tools/testing/selftests/futex/functional/futex_priv_hash.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Repeating my previous tag:
+diff --git a/tools/testing/selftests/futex/functional/futex_priv_hash.c b/tools/testing/selftests/futex/functional/futex_priv_hash.c
+index aea001ac4946..8a5735391f2e 100644
+--- a/tools/testing/selftests/futex/functional/futex_priv_hash.c
++++ b/tools/testing/selftests/futex/functional/futex_priv_hash.c
+@@ -132,7 +132,7 @@ static void usage(char *prog)
+ {
+ 	printf("Usage: %s\n", prog);
+ 	printf("  -c    Use color\n");
+-	printf("  -g    Test global hash instead intead local immutable \n");
++	printf("  -g    Test global hash instead of local immutable \n");
+ 	printf("  -h    Display this help message\n");
+ 	printf("  -v L  Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
+ 	       VQUIET, VCRITICAL, VINFO);
+@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
+ 	join_max_threads();
+ 
+ 	ret = futex_hash_slots_get();
+-	ksft_test_result(ret == 2, "No more auto-resize after manaul setting, got %d\n",
++	ksft_test_result(ret == 2, "No more auto-resize after manual setting, got %d\n",
+ 			 ret);
+ 
+ 	futex_hash_slots_set_must_fail(1 << 29);
+-- 
+2.34.1
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
-Please don't drop tags, it causes people to have to spend time repeating
-review.
-
---OQXy7X9uIo8z3XU8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiu3rwACgkQJNaLcl1U
-h9CGvwf/WeftVyVodR4qHALiv4Av0QxqR+iExFnfNIAqKJLensYxmI59/oGQNKSR
-2FxNc52TMWU8J2MaXnuTpZGnJSbSb+YMVDHO/FSZAtmp3JthRxtNwVdV67Pm02RS
-xGGvYzGLDQDMivz2dgiGirxZHfxevZrFLDeGA3h4a7mkM/aKJxLLjbL+cPOGlcri
-Zc0p0kHdhtzgK81Z1TaKe7DW8ygkXobECaeL1dwUbFIRBk2oB9Q0R/oHXCTue5Yr
-mILQcxhhO4Y4RZarEARwv00rfz0qWMUf6QaCkiTeMuspAvIR5SnjxoQcX8fFcsSn
-lBmAYNNzBpxc1gUqnsaj9M3bf4nWUQ==
-=AcWK
------END PGP SIGNATURE-----
-
---OQXy7X9uIo8z3XU8--
 
