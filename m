@@ -1,66 +1,65 @@
-Return-Path: <linux-kselftest+bounces-40088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40112-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70146B38CD7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 00:09:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE8C5B38E2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 00:22:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D921C1C230E9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 22:08:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3D987B8985
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 22:21:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614353128C1;
-	Wed, 27 Aug 2025 22:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13D8312836;
+	Wed, 27 Aug 2025 22:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SkNbdNsV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M0AykLCX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6250C30FC0F
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 Aug 2025 22:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5101A9FB0
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 Aug 2025 22:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756332352; cv=none; b=qJtsuzNjioRQ4TYNqQNnfjQd1sf1MSWW63qSMj5VwcBtKteRnLxoJB3Og7sH/FQXEt4HfexsHQPe3PCT4JTH6rB7k0y4BBYogVNOeiT/G4xTtk/ZTnC/zmEUkAXhOcUFfNMxegwcgYgW/RBKiQeFSLFghL/U4nIY9ACD619BiSY=
+	t=1756332848; cv=none; b=PEF0Yy9uN18dP8v05+DCQXNA2NY6t+qfrlsTN+vWzFqwpcFhzlTV7ow2R4jl82Fyc1v8S2wl/RQe+zJbCJciT8quU56QrIZPhIMHhoJ1+cFiGM0dOqlSTA7YYWIWcgrMry9OTawyuyQQqn+mRNO0afyMTMddiA+Le5IhIxs2Wgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756332352; c=relaxed/simple;
-	bh=uuA3p3/kOG4QXOgAuNiC6MGZZSl80XppoK4GH/OF9D4=;
+	s=arc-20240116; t=1756332848; c=relaxed/simple;
+	bh=qYYk6KZcslwxGKEwqkJsa/AY4n3xHnxHh8FtUFt6+As=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BickrMGkb5GRbUl2kBIjb1N8YvRAD6jAT3Z4Q86KKIu2vfegs23FoaattDA8pQJ9bsAT7weW/ZtjRM+KA8l51oXVgqHQW0Wp2ldwTDhzE2REGZx9df1khvaRRhCZffFHsn7nYTq67F6RsrXO5vjXn5kAZbxVcKBlsWQCbm5l+wE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SkNbdNsV; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=OfTTBrjHrhF0TckkMoHW35HjKcbq7amrXoLvjO2tJs0PF+MkNXw1avnsl6Fabs5cIOD0kTJIPv7cfVTRKP4iS+3YBpfcKMTUf2+mur1PZOZJPcs0OZ9bLHq/1eXgf5LlZddl5DjbyHTJTrIZLehC1kdLP3vwF64IMbmhbC+V1+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M0AykLCX; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756332349;
+	s=mimecast20190719; t=1756332846;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tOg+y93CWdttiSRHo5MMFmvDG+rRd/OMag8GX96YAWo=;
-	b=SkNbdNsV9EqcHyKML3LI9yC8F+hEetB3NRj9ypPDvONtVZ1kOg++v2iYv0h5l6hi+zUStq
-	e/VNYRlP7L92kIki5hWVVUuq3k/lNQrlXGR4Goc7WxXBjlbQo2/MOgmQs7T3f3KqjcHZ8S
-	IWv6NzX/oHwOZPjw8oh59TKAN7VU1yc=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=jt1gUZzcr2XqEG7AN90PiEkY48hGbYno8tKmbdcHa9Y=;
+	b=M0AykLCX0yZ5uL5W11zeQxBMd2kUOzwM2A+bzarAKsFZXWvZWECyrkQbl4S9depP6FELa4
+	REnLtkiot0qI0lfyepswQke1pGWryLNPsil8TXDU57n3L4oJaCI0fnnVGzF08RzB59OBtk
+	YZCLzgKmTE1UV2yShKMzyt/1NKQoga8=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-468-z4mlROjvMIiLD1GebYFmSQ-1; Wed,
- 27 Aug 2025 18:05:47 -0400
-X-MC-Unique: z4mlROjvMIiLD1GebYFmSQ-1
-X-Mimecast-MFC-AGG-ID: z4mlROjvMIiLD1GebYFmSQ_1756332341
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-522-J9sCWjtzNZKv3p8K8yqDNQ-1; Wed,
+ 27 Aug 2025 18:06:02 -0400
+X-MC-Unique: J9sCWjtzNZKv3p8K8yqDNQ-1
+X-Mimecast-MFC-AGG-ID: J9sCWjtzNZKv3p8K8yqDNQ_1756332357
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BEADE195419A;
-	Wed, 27 Aug 2025 22:05:41 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 230CF19560B0;
+	Wed, 27 Aug 2025 22:05:57 +0000 (UTC)
 Received: from t14s.redhat.com (unknown [10.22.80.195])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DDB1430001A5;
-	Wed, 27 Aug 2025 22:05:26 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5908830001A1;
+	Wed, 27 Aug 2025 22:05:42 +0000 (UTC)
 From: David Hildenbrand <david@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: David Hildenbrand <david@redhat.com>,
-	Zi Yan <ziy@nvidia.com>,
 	Alexander Potapenko <glider@google.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Brendan Jackman <jackmanb@google.com>,
@@ -105,10 +104,11 @@ Cc: David Hildenbrand <david@redhat.com>,
 	virtualization@lists.linux.dev,
 	Vlastimil Babka <vbabka@suse.cz>,
 	wireguard@lists.zx2c4.com,
-	x86@kernel.org
-Subject: [PATCH v1 12/36] mm: simplify folio_page() and folio_page_idx()
-Date: Thu, 28 Aug 2025 00:01:16 +0200
-Message-ID: <20250827220141.262669-13-david@redhat.com>
+	x86@kernel.org,
+	Zi Yan <ziy@nvidia.com>
+Subject: [PATCH v1 13/36] mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap()
+Date: Thu, 28 Aug 2025 00:01:17 +0200
+Message-ID: <20250827220141.262669-14-david@redhat.com>
 In-Reply-To: <20250827220141.262669-1-david@redhat.com>
 References: <20250827220141.262669-1-david@redhat.com>
 Precedence: bulk
@@ -120,71 +120,76 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Now that a single folio/compound page can no longer span memory sections
-in problematic kernel configurations, we can stop using nth_page().
+We can now safely iterate over all pages in a folio, so no need for the
+pfn_to_page().
 
-While at it, turn both macros into static inline functions and add
-kernel doc for folio_page_idx().
+Also, as we already force the refcount in __init_single_page() to 1,
+we can just set the refcount to 0 and avoid page_ref_freeze() +
+VM_BUG_ON. Likely, in the future, we would just want to tell
+__init_single_page() to which value to initialize the refcount.
 
-Reviewed-by: Zi Yan <ziy@nvidia.com>
+Further, adjust the comments to highlight that we are dealing with an
+open-coded prep_compound_page() variant, and add another comment explaining
+why we really need the __init_single_page() only on the tail pages.
+
+Note that the current code was likely problematic, but we never ran into
+it: prep_compound_tail() would have been called with an offset that might
+exceed a memory section, and prep_compound_tail() would have simply
+added that offset to the page pointer -- which would not have done the
+right thing on sparsemem without vmemmap.
+
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/mm.h         | 16 ++++++++++++++--
- include/linux/page-flags.h |  5 ++++-
- 2 files changed, 18 insertions(+), 3 deletions(-)
+ mm/hugetlb.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 2dee79fa2efcf..f6880e3225c5c 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -210,10 +210,8 @@ extern unsigned long sysctl_admin_reserve_kbytes;
- 
- #if defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
- #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
--#define folio_page_idx(folio, p)	(page_to_pfn(p) - folio_pfn(folio))
- #else
- #define nth_page(page,n) ((page) + (n))
--#define folio_page_idx(folio, p)	((p) - &(folio)->page)
- #endif
- 
- /* to align the pointer to the (next) page boundary */
-@@ -225,6 +223,20 @@ extern unsigned long sysctl_admin_reserve_kbytes;
- /* test whether an address (unsigned long or pointer) is aligned to PAGE_SIZE */
- #define PAGE_ALIGNED(addr)	IS_ALIGNED((unsigned long)(addr), PAGE_SIZE)
- 
-+/**
-+ * folio_page_idx - Return the number of a page in a folio.
-+ * @folio: The folio.
-+ * @page: The folio page.
-+ *
-+ * This function expects that the page is actually part of the folio.
-+ * The returned number is relative to the start of the folio.
-+ */
-+static inline unsigned long folio_page_idx(const struct folio *folio,
-+		const struct page *page)
-+{
-+	return page - &folio->page;
-+}
-+
- static inline struct folio *lru_to_folio(struct list_head *head)
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 4a97e4f14c0dc..1f42186a85ea4 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -3237,17 +3237,18 @@ static void __init hugetlb_folio_init_tail_vmemmap(struct folio *folio,
  {
- 	return list_entry((head)->prev, struct folio, lru);
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 5ee6ffbdbf831..faf17ca211b4f 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -316,7 +316,10 @@ static __always_inline unsigned long _compound_head(const struct page *page)
-  * check that the page number lies within @folio; the caller is presumed
-  * to have a reference to the page.
-  */
--#define folio_page(folio, n)	nth_page(&(folio)->page, n)
-+static inline struct page *folio_page(struct folio *folio, unsigned long n)
-+{
-+	return &folio->page + n;
-+}
+ 	enum zone_type zone = zone_idx(folio_zone(folio));
+ 	int nid = folio_nid(folio);
++	struct page *page = folio_page(folio, start_page_number);
+ 	unsigned long head_pfn = folio_pfn(folio);
+ 	unsigned long pfn, end_pfn = head_pfn + end_page_number;
+-	int ret;
+-
+-	for (pfn = head_pfn + start_page_number; pfn < end_pfn; pfn++) {
+-		struct page *page = pfn_to_page(pfn);
  
- static __always_inline int PageTail(const struct page *page)
++	/*
++	 * We mark all tail pages with memblock_reserved_mark_noinit(),
++	 * so these pages are completely uninitialized.
++	 */
++	for (pfn = head_pfn + start_page_number; pfn < end_pfn; page++, pfn++) {
+ 		__init_single_page(page, pfn, zone, nid);
+ 		prep_compound_tail((struct page *)folio, pfn - head_pfn);
+-		ret = page_ref_freeze(page, 1);
+-		VM_BUG_ON(!ret);
++		set_page_count(page, 0);
+ 	}
+ }
+ 
+@@ -3257,12 +3258,15 @@ static void __init hugetlb_folio_init_vmemmap(struct folio *folio,
  {
+ 	int ret;
+ 
+-	/* Prepare folio head */
++	/*
++	 * This is an open-coded prep_compound_page() whereby we avoid
++	 * walking pages twice by initializing/preparing+freezing them in the
++	 * same go.
++	 */
+ 	__folio_clear_reserved(folio);
+ 	__folio_set_head(folio);
+ 	ret = folio_ref_freeze(folio, 1);
+ 	VM_BUG_ON(!ret);
+-	/* Initialize the necessary tail struct pages */
+ 	hugetlb_folio_init_tail_vmemmap(folio, 1, nr_pages);
+ 	prep_compound_head((struct page *)folio, huge_page_order(h));
+ }
 -- 
 2.50.1
 
