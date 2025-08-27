@@ -1,113 +1,109 @@
-Return-Path: <linux-kselftest+bounces-40019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40020-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AAB4B375C9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 02:03:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F8BEB37663
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 03:00:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9CC81B67385
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 00:04:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFC11204295
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Aug 2025 01:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1C7DF59;
-	Wed, 27 Aug 2025 00:03:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF491EB9E3;
+	Wed, 27 Aug 2025 01:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="zU3fHBFx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c3ONXkFE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054F84C6C;
-	Wed, 27 Aug 2025 00:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1423595C;
+	Wed, 27 Aug 2025 01:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756253023; cv=none; b=nKacrsRRQJTuh1lxHI2BnI59ve6wxiPk3S74liFHo1FR21SsOZAiK85tKQ8PYxK7mN74wQQYpGLPPt4aDm992t0JUf/8/zupg8XzmZYOGLLSdKNm67l8hGTYCCX4rRmi74Nbo2OnxzCAsAssPafokAUSoD2EFkVhGsgvhE9gc0E=
+	t=1756256421; cv=none; b=MssUvpRNFFC2eI0kn55jPbEQuhGUNPg6XUDR1Dzd74NSDm/0U9j8q7ILMzDzjzotID5Baq5bC0fPeUr2jVhPM1ilwAWDgSeCr2It8Zwdgo52Qvie1l79PPj11TwHgDShVjNKHNGZqof5bz2ddxcqc8GeM59fnYLMFjzz2CBZIyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756253023; c=relaxed/simple;
-	bh=I8oPMo3mvwS3Bjjxb0BZcps4wLguxYSEV5nbVXUhU/8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rCQCu5+D45sg2bpAMBexYLsDtmvx08xHB7vCkquL0dfVTyxOmr6VzsVoUU54imNjtn6pAmukwvfHQDYKUg9dIdrLHmvDbwTPvMJdrbUGFl08txqWIQUfqwTtVlt2hjH1sf+exa6pyzpPDNCwa2RDwV7oTxchBiGqS9vta7Z2jHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=zU3fHBFx; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=Uk4pOKm9w1DFf3d0P5bL4B0MQh3SUsa1t5AwYgg9Fyw=; b=zU3fHBFx6AEsYZv+UoxMnHxjLP
-	hXnNntqpg8T2xkglr2er4K6A2mC3xfuHqDZE14q4wyRICdMYjK2lFezTyJ5PdpddodxgA1csOBd5J
-	i3OdSG2JTwgB7BARHbe9+CkvesWVYrZ5JxJG+a8DKL70CB/zEdI4QQwRxauq5ffiCh9GMEQJOh9V9
-	2QxlQS2AXBBSrdL8fzMPop1IyKgUIy9RH12JPkGsHTcJ2gMrL4eCT0pelksjD4TPOFoaGCngUqIvC
-	yL7y9dPIpMSLle+mqDh9sccw3RvCdLXBfjzkQfBzjbYFpPBChibTWm5Vs1EvWjw6n/dJNURcQF9lh
-	XdfeMZpA==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1ur3dc-0000000DOXO-1EJx;
-	Wed, 27 Aug 2025 00:03:40 +0000
-Message-ID: <cfeead98-4344-47e6-ac62-08eaa5f5b318@infradead.org>
-Date: Tue, 26 Aug 2025 17:03:39 -0700
+	s=arc-20240116; t=1756256421; c=relaxed/simple;
+	bh=Qb0Bn6XOd6kOJUcc0HaKqexJdc+0YjozBiZtiT/nIlw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ESad0wj4Qc7ZGGZc4k1MhCCLqrSU3o/KZAKc59jWJUqJmghCVJTvhgU4VQfbF47uoZSioVrO5e6OFDm+EqnAHoQUQDd2fDQpaGsBjKKuKzKnw5Nc07UfjkSu+uZ0XOY9n1oXlye6N0cRpucwpl32XCWv3JRVmB0n97LxNg6kqV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c3ONXkFE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8842C4CEF1;
+	Wed, 27 Aug 2025 01:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756256420;
+	bh=Qb0Bn6XOd6kOJUcc0HaKqexJdc+0YjozBiZtiT/nIlw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=c3ONXkFEaLLe35SdcifFyxf+BbiwGZz1ONX7WISfe6qkcB0QzAhHe6yV++szA7s1Q
+	 Mc772RnRopgA2aghhQGN+rWf1DJhM4W3OHg5lplipSep0xdBkzL61TE0/2gltqlPKR
+	 VBUeukasPgc1p1e9XEWXJeNwPbA0AooXr1zdQg2Zi4Vhwrz0ERKpV/Vylye4C9VxlT
+	 vayeDO1pwbX+03dzQE+FFJUEXZjK9IMG6gwozk2dCbapSFHvyh4FyxR4IoQYkc2327
+	 bgHRhcEWYFy0R+IpuWxC/0EtlinAJocqbGi2wpf+3KWtnM2XG6QYrgU031TCF9mcoP
+	 bOeMs2ZX3DJHQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70F22383BF70;
+	Wed, 27 Aug 2025 01:00:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/15] iommupt: Add the AMD IOMMU v1 page table format
-To: Jason Gunthorpe <jgg@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
- iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
- Justin Stitt <justinstitt@google.com>, Kevin Tian <kevin.tian@intel.com>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
- Shuah Khan <shuah@kernel.org>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Will Deacon <will@kernel.org>
-Cc: Alexey Kardashevskiy <aik@amd.com>,
- Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
- James Gowans <jgowans@amazon.com>, Michael Roth <michael.roth@amd.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
-References: <4-v4-0d6a6726a372+18959-iommu_pt_jgg@nvidia.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <4-v4-0d6a6726a372+18959-iommu_pt_jgg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/5] selftests: drv-net: ncdevmem: fix error
+ paths
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175625642798.155051.9564153907183706947.git-patchwork-notify@kernel.org>
+Date: Wed, 27 Aug 2025 01:00:27 +0000
+References: <20250825180447.2252977-1-kuba@kernel.org>
+In-Reply-To: <20250825180447.2252977-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ almasrymina@google.com, sdf@fomichev.me, joe@dama.to,
+ linux-kselftest@vger.kernel.org
 
+Hello:
 
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On 8/26/25 10:18 AM, Jason Gunthorpe wrote:
-> diff --git a/drivers/iommu/generic_pt/Kconfig b/drivers/iommu/generic_pt/Kconfig
-> index c35ddc7c827e92..1867e8d74b4be9 100644
-> --- a/drivers/iommu/generic_pt/Kconfig
-> +++ b/drivers/iommu/generic_pt/Kconfig
-> @@ -29,4 +29,16 @@ config IOMMU_PT
->  	  IOMMU_PT provides an implementation of the page table operations
->  	  related struct iommu_domain using GENERIC_PT to abstract the page
->  	  table format.
-> +
-> +if IOMMU_PT
-> +config IOMMU_PT_AMDV1
-> +	tristate "IOMMU page table for 64 bit AMD IOMMU v1"
+On Mon, 25 Aug 2025 11:04:42 -0700 you wrote:
+> Make ncdevmem clean up after itself. While at it make sure it sets
+> HDS threshold to 0 automatically.
+> 
+> v2: rework patch 4 into separate patches 4 and 5
+> v1: https://lore.kernel.org/20250822200052.1675613-1-kuba@kernel.org
+> 
+> Jakub Kicinski (5):
+>   selftests: drv-net: ncdevmem: remove use of error()
+>   selftests: drv-net: ncdevmem: save IDs of flow rules we added
+>   selftests: drv-net: ncdevmem: restore old channel config
+>   selftests: drv-net: ncdevmem: restore original HDS setting before
+>     exiting
+>   selftests: drv-net: ncdevmem: explicitly set HDS threshold to 0
+> 
+> [...]
 
-	                               64-bit
+Here is the summary with links:
+  - [net-next,v2,1/5] selftests: drv-net: ncdevmem: remove use of error()
+    https://git.kernel.org/netdev/net-next/c/6925f6171439
+  - [net-next,v2,2/5] selftests: drv-net: ncdevmem: save IDs of flow rules we added
+    https://git.kernel.org/netdev/net-next/c/6d04b36c73fd
+  - [net-next,v2,3/5] selftests: drv-net: ncdevmem: restore old channel config
+    https://git.kernel.org/netdev/net-next/c/b9f4f9529828
+  - [net-next,v2,4/5] selftests: drv-net: ncdevmem: restore original HDS setting before exiting
+    https://git.kernel.org/netdev/net-next/c/6351fadbd5bb
+  - [net-next,v2,5/5] selftests: drv-net: ncdevmem: explicitly set HDS threshold to 0
+    https://git.kernel.org/netdev/net-next/c/a9d533fbba0d
 
-> +	depends on !GENERIC_ATOMIC64 # for cmpxchg64
-> +	help
-> +	  iommu_domain implementation for the AMD v1 page table. AMDv1 is the
-> +	  "host" page table. It supports granular page sizes of almost every
-> +	  power of 2 and decodes an full 64 bit IOVA space.
-
-	                                 64-bit
-
-> +
-> +	  Selected automatically by an IOMMU driver that uses this format.
-> +endif
-
+You are awesome, thank you!
 -- 
-~Randy
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
