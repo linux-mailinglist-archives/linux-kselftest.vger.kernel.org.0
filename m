@@ -1,94 +1,93 @@
-Return-Path: <linux-kselftest+bounces-40233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08867B3ADE5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Aug 2025 00:54:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 176DEB3AE98
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Aug 2025 01:50:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C567D7A8097
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 22:52:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DAE8987078
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 23:50:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6D6299AAA;
-	Thu, 28 Aug 2025 22:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5512E1751;
+	Thu, 28 Aug 2025 23:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="L1f61/R9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JFOa59f7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E0628BABB;
-	Thu, 28 Aug 2025 22:54:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C192E03F2;
+	Thu, 28 Aug 2025 23:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756421655; cv=none; b=cXu99sWBMYtbzu3+72DIB+cAgyEwneLDjcVYPasfQKf9hmLFoR2mS2QI3G+C0aaZnKcPjnY4QEC3z6X0k2VZvfPUz9he/TizYeo81NPU+loc4jGktAeFHyvH67NE9BHwgLX0M0jTnXNOoEABBFEJ7JC52eYO3SlmQhXZtx97ihs=
+	t=1756425011; cv=none; b=PxKsXf3zfr1uEeppjJ77uStOohrZJW+vYqJurzADVI2Fcpdl1J2o3UgiXv+lj1FBPd9vrCEMphzvnzF4KwngBQsbeiPl1f7qo10D0TRBKxAEr2eurdXUehf4gCDVSKks8zhgucvfaws7J78dzV6leTo2AF87s5N0jRLiSe/X+Fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756421655; c=relaxed/simple;
-	bh=2+UzjJF2BlEl8nA15jThQAGkqhW2IMETJx5lsJ1gMK4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=J2jZhxvLgyTPTHbLA1tUay2z3oWcB5Nn/qC+6RVXBQLf4/TZ/Z9U4Qw1HSSU+kmO4IixsQp3bLn4wKT14beg7ICTmFsnu6AWLuEMoopfuIDZT0n2hIL9icxN0yUFtRD+s50vOn0pA3kfRlYiYOrv9NXliZrkqNyFHO1F4k1q8ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=L1f61/R9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE6E3C4CEEB;
-	Thu, 28 Aug 2025 22:54:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1756421653;
-	bh=2+UzjJF2BlEl8nA15jThQAGkqhW2IMETJx5lsJ1gMK4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=L1f61/R9NWDd46wsfh3wOnq5DAyDH1ultA74tABD9myh4H3YI7/pC6Qmnh9NvqvEL
-	 GM3tAXqIrrO9F1VaWGcXa7y5OdCe/japCYCzgUASGPbCeUQIkwbb7jeqQpEy6JmW+F
-	 qTNFK/FCMZNPGCwq9NU3g/7VQt4xYczY/vAy2OFo=
-Date: Thu, 28 Aug 2025 15:54:12 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: Brendan Jackman <jackmanb@google.com>, Ujwal Kundur
- <ujwal.kundur@gmail.com>, peterx@redhat.com, david@redhat.com,
- lorenzo.stoakes@oracle.com, vbabka@suse.cz, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Muhammad
- Usama Anjum <usama.anjum@collabora.com>
-Subject: Re: [PATCH v7 1/1] selftests/mm/uffd: Refactor non-composite global
- vars into struct
-Message-Id: <20250828155412.2b1b2095125428af24896af5@linux-foundation.org>
-In-Reply-To: <kd6uteyd4vzlnbdwzjydwd7hoqyxewc5fx24z5sq7svmtoa3oo@n57xyeu3vtyy>
-References: <20250817065211.855-1-ujwal.kundur@gmail.com>
-	<DCE2EJ3KWX3K.1Y198FHBV8UG7@google.com>
-	<kd6uteyd4vzlnbdwzjydwd7hoqyxewc5fx24z5sq7svmtoa3oo@n57xyeu3vtyy>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1756425011; c=relaxed/simple;
+	bh=hEvMwcHaMYxbctp+pq/7lchD2/F1IewpZFnz5o5psRs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=JnV5hV922ffnWv1bADbA6QrSPnj4je4DpFUPOPH9Ygfm2NFrNupjLHhkCL51YwxE/fliVU61HyK7Yhfg9KAvYGR8WPq8ByQu7pynaDwkdSCPR2ScbD4MjjcU8oXc2KPS/OfzWnPxhhbIe68EGPtBS5q4tDQWlcIgCi0eR+iExvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JFOa59f7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA2E2C4CEEB;
+	Thu, 28 Aug 2025 23:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756425010;
+	bh=hEvMwcHaMYxbctp+pq/7lchD2/F1IewpZFnz5o5psRs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=JFOa59f7aZ1YDdd4mtzu4pKJz0KEVBY0XURRBJxwigqPHdi0bViRNJlQWqvcAvBdx
+	 Qprb9zzms1GHfHLY2/KZY2+T0FUqvqWEjTuBY5ylILBqyXMuK2Lo51DJQoxAY54tKG
+	 vb8GoIfyprgFCu/mw0J/0TeDEU6rgOCJXkqsvL1JOQ2O3swU3Gl0lzbDbycDrMBwg6
+	 Qe76lUfFnie3R+Y07QOrKiOR1LCCnHmEr/qQ9d/msZOcoHyNAffSs4xISurl2Af7UX
+	 cyGId69dvO4RGiMmnrB+ezFiYLi1cpPplxU2EPQsjfsJRImEXGsQhF9P+A6CCHDpqP
+	 i3jujxc/GR0zQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EACF3383BF75;
+	Thu, 28 Aug 2025 23:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: drv-net: rss_ctx: fix the queue count
+ check
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175642501750.1650971.7067943520017959776.git-patchwork-notify@kernel.org>
+Date: Thu, 28 Aug 2025 23:50:17 +0000
+References: <20250827173558.3259072-1-kuba@kernel.org>
+In-Reply-To: <20250827173558.3259072-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ ecree.xilinx@gmail.com, gal@nvidia.com, linux-kselftest@vger.kernel.org
 
-On Thu, 28 Aug 2025 14:49:37 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
+Hello:
 
-> * Brendan Jackman <jackmanb@google.com> [250828 08:37]:
-> > On Sun Aug 17, 2025 at 6:52 AM UTC, Ujwal Kundur wrote:
-> > > -static void noop_alias_mapping(__u64 __unused *start, size_t __unused len,
-> > > -			       unsigned long __unused offset)
-> > > +static void noop_alias_mapping(uffd_global_test_opts_t *gopts, __u64 __unused *start,
-> > > +			       size_t __unused len, unsigned long __unused offset)
-> > 
-> > After a rebase this is now falling afoul of the -Wunused-parameter added
-> > here:
-> > 
-> > https://lore.kernel.org/all/20250731160132.1795351-5-usama.anjum@collabora.com/T/#m0449dc0d6a5ac3b1f71f7182c13b6829e1b444cf
-> > 
-> > I really don't think we want that flag, I'll comment on that thread, but
-> > just as an FYI here too.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 27 Aug 2025 10:35:58 -0700 you wrote:
+> Commit 0d6ccfe6b319 ("selftests: drv-net: rss_ctx: check for all-zero keys")
+> added a skip exception if NIC has fewer than 3 queues enabled,
+> but it's just constructing the object, it's not actually rising
+> this exception.
 > 
-> I was under the impression that it was decided to drop that flag,
-> otherwise I would have also spoken up about it.
+> Before:
+> 
+> [...]
 
-err, yes, I thought I'd dropped that.
+Here is the summary with links:
+  - [net-next] selftests: drv-net: rss_ctx: fix the queue count check
+    https://git.kernel.org/netdev/net-next/c/c158b5a570a1
 
-No -Wunused-parameter, please.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-The v2 series needs work and a v3 series is expected so I'll drop the
-v2 series "selftests/mm: Add compiler flags and fix found warnings".
 
 
