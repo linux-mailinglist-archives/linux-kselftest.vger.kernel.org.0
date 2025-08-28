@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-40203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE369B3A73E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 19:02:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD324B3A746
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 19:04:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79B876808AD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 17:02:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 717AE169945
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 17:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 656AA3314DE;
-	Thu, 28 Aug 2025 17:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E21793314B9;
+	Thu, 28 Aug 2025 17:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hPAkIzam"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TqIjF2eh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06A41E230E;
-	Thu, 28 Aug 2025 17:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA8F1624D5;
+	Thu, 28 Aug 2025 17:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756400563; cv=none; b=JLyOrmp+5Kme9clI7d/cA9y/qg9w6DqtWjEg9D36+UBrHfHqRLfUZlYIhy66yVnbgfi+UqGO4/2SmnlDz/rFkH1VLzgVeuNvqvOpbZynwE6+lD54Q7VHZ9qMw2SlwyUNis1aMEtGu7jB/CoY1EqQc5piHZIDwTzUr77uHQqZ3Vg=
+	t=1756400683; cv=none; b=O8V/TzsI/Chl5XFL7OKV/N7cxyaWfGm9R7uuk0N17RjlEhG7Bw52ePFUz7gImk8MThCJyYIeLOaep8kpxdh3cspB2qZk9Uun/A7/ZDjIMjDxx6DJURVlm6xDAiZjYiO82WjV7ThxJllUATZOkXFPnYgvoww9gocGQ78oo31Rf7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756400563; c=relaxed/simple;
-	bh=EJfRKUgvGLPSNp0OfWV+ZTfbV6gOuT39Bb9qfqn2J8A=;
+	s=arc-20240116; t=1756400683; c=relaxed/simple;
+	bh=ro7RSIiLzI/HFo3sLXaNXatjdUFS6DcqL5llpgvGnxM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qRmopEi6Pf6Y0nvf+EyqkMSaQK3hyu+2lbkN5sbB2zIbzvqtqcRwHSkGyYVCt0n/agg6EZ24uAYtUqpL3Lzs5fTeaxqwxl3I6kEB+sSUISCsw0TinkUoudEItFsow7sqLhGA22Djs6EGxluXYJBGxJ+kCPpTQ6cuOQTZghaOz1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hPAkIzam; arc=none smtp.client-ip=209.85.216.51
+	 To:Cc:Content-Type; b=djvDkqdDimku+Eukn/8umxflmJjSLI7brXFOe+D5fiZ9A4Yv4r/1kn5DIKQnjCInwGe7ExoGPXyRoBuxa8n+uoCsOGV4BZizJIX0H/zL+iNllhchHtAMJizZLM0aWXhE+hsjyIi0xNKewvJZBXCJu1DHQ5ajVclKMHdhD13+lKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TqIjF2eh; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-323267bc2eeso914075a91.1;
-        Thu, 28 Aug 2025 10:02:41 -0700 (PDT)
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b49c1c130c9so877056a12.0;
+        Thu, 28 Aug 2025 10:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756400561; x=1757005361; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756400682; x=1757005482; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U2nUVz8G1arCOueidxvkz6Q/l/3hFWxhgHyhVlr937E=;
-        b=hPAkIzamAoio5LL7j2P9MX8mkoE6l6DmpwWEY0AsDgGi+iVB2MzXqoDpKHWIvP19XM
-         M25Qj+V3r2pLwspMlTbTq8ZYHoucDDnF0Rm0waG1go4pYoEDu0WrMTkDIlxMJSvlq+Xu
-         /EgU1KxP0x6t3eSSidNU+wi5dX1FsfSWmm2IgDLrAXZPZ2PeauhgejDhxsD518ojTkH+
-         FlQdLmIfFQOgworfTrNdM9NqF3IhwftJDI8+i9zrRpo/6mSB3B7mNcs0pFkSeyqQFFn7
-         M/cyspPPuczMiEn4R2t61DuKxFKx0neMUMxf3CV8oNOO/72WB7lhiUIpyxXMrYY+vpsQ
-         ZQuA==
+        bh=W2wC2bic+HM0w4hPf0WG0ikD2mufCn5v6xkL6+MZy2Q=;
+        b=TqIjF2ehTlreF6k0K4kN55182G6+31r8+yNR7/ExgN63Z/i/CmkkezqJW/S8UFfImR
+         nSUwol5m5Hw3JgeuvZqfkuEf903TUP10RPVEqfVPrSqh/nVbR2kAVvuJ2k51LKpQUpVw
+         oZaXnk/Vn+vVlzyzywzUNXe3W1rAtnCki9TA/6NhkfsTpod9C1S50OVofJvlQRavVgpS
+         2B83ICz4thNmwqVWLyeF6GdSy8GvqSkpdZID5pcQheH0548Ed4ZBCGs2fc27HIfGS+6p
+         BX1NLMXpRg3gE95hsh5xEbxobGgA3DXWm+9Dr2cvy1AH4TQUZnlOsXWYtKltfrdF8PiF
+         5rVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756400561; x=1757005361;
+        d=1e100.net; s=20230601; t=1756400682; x=1757005482;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U2nUVz8G1arCOueidxvkz6Q/l/3hFWxhgHyhVlr937E=;
-        b=v1pihuG22hGlvoIiP3ure5RsqyO/wE8ZSgmuW8o1nS7iVjs8uCTWQlixJ6ckf67qdK
-         +j/P02nhNSWuTnRpwJJQ1pwGQ/C2z4aln15opXdx0DsEPwzePtjhLDnweJGlkCgw90Ge
-         Bi5LFDVBllNf96ofZ6D4qYc/3kcqD53l97wuisuoXTvg3yInA2wqsk/CRdN8L9pVvUsC
-         KS/RzwWxFdF5QfScP/M5gfdy2gChB2veRra04GZe2Bui8GsGCxi7DaRPp4zJhS5I9FaG
-         5YIL+h6+n0YV/41TQrSU2WSNWsiGXbtKFKKGMiyAvvRJJc9Tgpjvu4O7Kfo2xKmEZqMs
-         zi8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUItGDZVSnR4U47D3tLXhPtb5oGTFFmNuaBITBoa3WDFCDk98NlM+yEbj3xNj6rfSbpW3Y=@vger.kernel.org, AJvYcCV0DzHcnLEPC0A0yOpYklPhSIEqnVvzi0Fz8FaSfI5pagUUnNfpbmqd1p3h1LXs90athkbrBCmxdMnqNo9h@vger.kernel.org, AJvYcCWkub4za1z8N+eYFKkm/3hqCRbPSQqp8PkZOxpaXpcvxWjJ5tT83YUl5SNl6sBdI8Eb+knPLM2euwgzJPkUYmZ9@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfJgkntcmGGwYgW0IApWx191BRGMP5jreWOjdK5zumR2ECWoph
-	NzBaDY4eVzMKoqZ+Y6t6Qa1RYM6QCr5eU9ry9xdo6/yFLVFbhIv2qoLpIEG5qKeqeh5mgAZ/R48
-	YlesI9Na6uW9K9q4iENmPcvSciTq93as=
-X-Gm-Gg: ASbGnctZGbaP/krwWjNdzgew1CjraFisvbk75hQ/k4tjqTvhZdfJKRbIEyinkTRgo1k
-	YOmiR9czxV1Xd65J7FBB+l5kvTUmBpfB3zbTcnJjQcmBVITptJDWOAZ+SWtwxSVmfKUCMkDF4S6
-	48Q+DJb+WrHkkAci7k7/lDrNw578b/U4vkVUSdDRYAsRci5D2n+aPss3xn03o7rRRSJwFGBYkkO
-	cGP/NMM70KfzM4j8SYbQAZunAHeH5bxpIq4p5AO4RU=
-X-Google-Smtp-Source: AGHT+IH9Pnfp1hJF/NuyGfKEhtpuhN0OI49CJQdBn2/TDfZeldtzPzyiQeOZQBc7fdxMVowqvo/w5wOAMNHZcDnwnXw=
-X-Received: by 2002:a17:90b:2d83:b0:327:8c05:f8b0 with SMTP id
- 98e67ed59e1d1-3278c060374mr7137226a91.0.1756400560641; Thu, 28 Aug 2025
- 10:02:40 -0700 (PDT)
+        bh=W2wC2bic+HM0w4hPf0WG0ikD2mufCn5v6xkL6+MZy2Q=;
+        b=migjWQsJbO9pZeH/a7yaU6jqIXTYGmsM1W6xMtWyCcLtvw0OTTomQbLzmKm4TGmfKz
+         u2d/Jh7D2oq9NEkkTholE1LA8M6+Gg4N80snMpvFmPPkrWj+/MgRkxYLjthOV19w7ql3
+         /gnI2OgZlzc0dFleri0LsShLVpkn/2XMr/sKBgRAwzMRt4pysyDIohoUs5PBS4kogsuT
+         qWItqaa1UydHmuLR69egPw4e4stAHKBVckAHieEu1A8ysDN7wBnlay6cbD8AtfG5vyyL
+         6tfyTjDRlzr+gdJgyvQrlzmjsOB9wzY2I+KRZU8T1eKpcQ+pL3ncX43YIc8wJIeEEkd8
+         n0vw==
+X-Forwarded-Encrypted: i=1; AJvYcCV0prD57La6+O9cIdIaDr1WOf3yH62Xzc06qxK+yRVkT8MMkXwaV0Bu1CsAWmczFHiRKC8=@vger.kernel.org, AJvYcCX0OuxuHzJshEIjQgGE09zNXZVb5SOBm28yMl41JAE8unmQKOoRUTBnnYzB/5Bnd9DdjFC0/mqOfbLcbTLz@vger.kernel.org, AJvYcCXJtG71t4zqINlOREUNc2Z8DRvNDIF6UsxsIPVoFS6imThMv7SMecUw8qKjGCMr2BiB3rG/NCAuxsQBrj6lwx0k@vger.kernel.org
+X-Gm-Message-State: AOJu0YzScxQNhFB2HVXhrge7nEXGFsDLPZ9vTjmdVuXenZ1WFSqH+ws2
+	U245eQWSTD4LwXM1OyPHCHPwxLzVJ0Oa3oYoezMPKto9m3kPlq3U3slxfKokzK4qsKTVDVlXkIA
+	ktaGQfkQZLMJHahQuCjKoRqePoEcupFs=
+X-Gm-Gg: ASbGncvHSAU0kheG0Sstqh4gnLyn2adjLX/JM/omHrTNPgvLsG7bhYz/lDQfIGLrAm5
+	44Ied+dWTfQ1w+FoPMEvEUFlyNBuyoAqBThce5QEX/ZNQURNJcBGWZl7MYHMtEdF9AsB6VjlQGV
+	7TBWRwk8TjsHFC5Q4CAYpLzRacJ4misPrH3Kk4W4xkIkuenRzAdlejNc4N/8tJ5J10EDgCnNqw+
+	SZ3WIA9KlMgydLf6V4wpHpwOcp+73o6
+X-Google-Smtp-Source: AGHT+IFiz9Fltl3Ekl6BtNBgM/mYYAS5rXsGZowBgqkTJqyGF3lSFbLfo89hYUxN7PU+O0TF3aQJIJzRRbhaEBFoDdQ=
+X-Received: by 2002:a17:903:2ad0:b0:246:b93b:9739 with SMTP id
+ d9443c01a7336-246b93b9d0bmr190974475ad.22.1756400681424; Thu, 28 Aug 2025
+ 10:04:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1756378974.git.rtoax@foxmail.com> <tencent_A842AF5EA32A88970690424E592897FC2A08@qq.com>
-In-Reply-To: <tencent_A842AF5EA32A88970690424E592897FC2A08@qq.com>
+References: <cover.1756378974.git.rtoax@foxmail.com> <tencent_69BD268FBA201219240B51661D5E96A8D80A@qq.com>
+In-Reply-To: <tencent_69BD268FBA201219240B51661D5E96A8D80A@qq.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 28 Aug 2025 10:02:28 -0700
-X-Gm-Features: Ac12FXyNPRU_qoqhYwmgfgC8IvpGXyQw2UDaaIc8g2-dAY_5Rq1HHyksLn7lnCg
-Message-ID: <CAEf4Bzb9WE27ngUVsYh0x0O85e891rbuX-YChDkCRm_U27_04Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add tests for bpf_strnstr
+Date: Thu, 28 Aug 2025 10:04:29 -0700
+X-Gm-Features: Ac12FXzNK0vBhdz_ED_YsUdfZ9pdzwt-wk3B0YpHBu8eCPK40xcRRGNSxIQkCok
+Message-ID: <CAEf4Bza9=xYzT=QcoZjiqn7rnfBP9bjtEuWLu9qZKKodwOjgZg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf/helpers: bpf_strnstr: Exact match length
 To: Rong Tao <rtoax@foxmail.com>
 Cc: ast@kernel.org, daniel@iogearbox.net, vmalik@redhat.com, 
 	Rong Tao <rongtao@cestc.cn>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -94,53 +94,56 @@ Cc: ast@kernel.org, daniel@iogearbox.net, vmalik@redhat.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 28, 2025 at 4:08=E2=80=AFAM Rong Tao <rtoax@foxmail.com> wrote:
+On Thu, Aug 28, 2025 at 4:07=E2=80=AFAM Rong Tao <rtoax@foxmail.com> wrote:
 >
 > From: Rong Tao <rongtao@cestc.cn>
 >
-> Add two tests for bpf_strnstr():
+> strnstr should not treat the ending '\0' of s2 as a matching character,
+> otherwise the parameter 'len' will be meaningless, for example:
 >
->     bpf_strnstr("", "", 0) =3D 0
->     bpf_strnstr("hello world", "hello", 5) =3D 0
+>     1. bpf_strnstr("openat", "open", 4) =3D -ENOENT
+>     2. bpf_strnstr("openat", "open", 5) =3D 0
+>
+> This patch makes (1) return 0, indicating a successful match.
 >
 > Signed-off-by: Rong Tao <rongtao@cestc.cn>
 > ---
->  tools/testing/selftests/bpf/progs/string_kfuncs_success.c | 4 +++-
+>  kernel/bpf/helpers.c | 4 +++-
 >  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/=
-tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-> index 46697f381878..1b56bd5860e9 100644
-> --- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-> +++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-> @@ -30,7 +30,9 @@ __test(2) int test_strcspn(void *ctx) { return bpf_strc=
-spn(str, "lo"); }
->  __test(6) int test_strstr_found(void *ctx) { return bpf_strstr(str, "wor=
-ld"); }
->  __test(-ENOENT) int test_strstr_notfound(void *ctx) { return bpf_strstr(=
-str, "hi"); }
->  __test(0) int test_strstr_empty(void *ctx) { return bpf_strstr(str, "");=
- }
-> -__test(0) int test_strnstr_found(void *ctx) { return bpf_strnstr(str, "h=
-ello", 6); }
-> +__test(0) int test_strnstr_found1(void *ctx) { return bpf_strnstr("", ""=
-, 0); }
-> +__test(0) int test_strnstr_found2(void *ctx) { return bpf_strnstr(str, "=
-hello", 5); }
 
-add (str, "hello", 4) =3D=3D -ENOENT case?
+Add Fixes: tag?
 
-Also let's add negative ("", "a", 0) =3D=3D -ENOENT case?
-
-pw-bot: cr
-
-> +__test(0) int test_strnstr_found3(void *ctx) { return bpf_strnstr(str, "=
-hello", 6); }
->  __test(-ENOENT) int test_strnstr_notfound(void *ctx) { return bpf_strnst=
-r(str, "hi", 10); }
->  __test(0) int test_strnstr_empty(void *ctx) { return bpf_strnstr(str, ""=
-, 1); }
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 401b4932cc49..ced7132980fe 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -3672,10 +3672,12 @@ __bpf_kfunc int bpf_strnstr(const char *s1__ign, =
+const char *s2__ign, size_t len
 >
+>         guard(pagefault)();
+>         for (i =3D 0; i < XATTR_SIZE_MAX; i++) {
+> -               for (j =3D 0; i + j < len && j < XATTR_SIZE_MAX; j++) {
+> +               for (j =3D 0; i + j <=3D len && j < XATTR_SIZE_MAX; j++) =
+{
+
+
+that <=3D is a bit subtle, and combined with extra i+j=3D=3Dlen check below
+is a bit confusing, so I think it would be good to add a short comment
+explaining this corner case you caught and that we are doing this to
+ensure that we matched entire s2 (and thus we need to find NUL to
+confirm).
+
+>                         __get_kernel_nofault(&c2, s2__ign + j, char, err_=
+out);
+>                         if (c2 =3D=3D '\0')
+>                                 return i;
+> +                       if (i + j =3D=3D len)
+> +                               break;
+>                         __get_kernel_nofault(&c1, s1__ign + j, char, err_=
+out);
+>                         if (c1 =3D=3D '\0')
+>                                 return -ENOENT;
 > --
 > 2.51.0
 >
