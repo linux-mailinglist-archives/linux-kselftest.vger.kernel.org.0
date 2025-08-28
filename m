@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-40151-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81C8EB395CE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 09:45:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 032E1B395DF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 09:46:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3446517480E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 07:44:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BD1B2073CC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 07:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B3B2D6E5A;
-	Thu, 28 Aug 2025 07:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723AD26A095;
+	Thu, 28 Aug 2025 07:46:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DMd5HmQD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eHAsVJf/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A7E2D6410
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 07:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6025C274FF2
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 07:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756367078; cv=none; b=ms7aZ5mVXrXeTYx1IqiwWm+upPngUfNWr84fStc+9ews0tK3bwuuken33YZ59FK2/xpEdnIxII4qDedMG+g6vmMhFaUqjzULHvijt0CjZ9OHQb4BXCxP3lXdRTKOZF89D9wKWM3W5fBz8Fhf0vArU3QTuBgRRpZxK1ThcqKuQEE=
+	t=1756367195; cv=none; b=ZyvPdzAg6tsHCgiuGuqyziBTere7/G8kJ8hGmNWZh1Eo+oes6V01Lm3upRtA/FMvW+jfSXF4xNt4Ut7o9MLGjwqc6OCfy95Qjb/Scrl3FiTzG/iAOW2QBYNZWdgtlMGZr3SBHhnU2RV6upaonNpUxq6gkNHfqKwQg/t6OkoNmpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756367078; c=relaxed/simple;
-	bh=LPT74/tGhKQ3ye+BUqg+d+LsutJvnlasD4TgSt/ejpc=;
+	s=arc-20240116; t=1756367195; c=relaxed/simple;
+	bh=7Ac5/fFlxMMYJm2RX8zz5xHU7l2zHTYVR8+KP5LKWNI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SQWjtd9iLXzBX/PN1T7qbyF9YQL4iQsYnuTJcMG1kNEjOS8L+wlKffoZPfWFlmAN1q5fvBXpg0CrBWafgxPV58ekdNH14GSwQXLlmr+78m9CedE0jIcMhH6P6SKdVlka8OYteflzfygtyFp6+CJeZ+VSFtxICjUzwvj/Q3UAGzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DMd5HmQD; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=UCdUkOTccv+Lx/dfMz9045ivZCUz6kFYykTqQTPSGfneAgaWczYf1kImz4dDct/5W7LjU/j71UATk/4NSDiVpiRaG88S0Kbb823+81VgoTImXMXFKSWMW3didFsIQVI1b/yvI56i3tKyWey5wnSCm8uxl+hlYkOneTkPFn+h+3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eHAsVJf/; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756367074;
+	s=mimecast20190719; t=1756367192;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=dhK+BxA/iOgcFdCxhcrFsJ9ic9ebRUg2wIpkT+UYj24=;
-	b=DMd5HmQD2ktaSlU6LjNM00uPyQ+CoCkIwMqaAjkJRiepsUmwZ9YJ5OoB9m44zz1bPhGO2b
-	NVUyeOIyq8vsvgk2cVG7ydz6+yVYrnIgg+ct3Zu0sCWSVZ0ny1OtoKOk2bsb2ZMf+K2agN
-	IaBH+DbkXJq4mI7jzI+DhJON05Uy/8w=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=QIPVhNdDqwyEUU2mMSzlYSdtbuVp92JbzlpYQuyYJ0w=;
+	b=eHAsVJf/8JCIXyxJzzeRIBtueAyFwQ1Ln8zGGPP7Jn/ZqFZej9yBqXBPuqJpeIKUrYLrqg
+	1xoHS2SlYmj4WK2OKvOJUZcPn9ftNSqwF/WrEnBwV2qsdHR1BtStfOTUb2awfAYEiGC494
+	H8EctAe9BeyA52f6x+PPZHaN8DHbnJM=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-518-uyBZTLgkN-2zSsldl8iDGA-1; Thu, 28 Aug 2025 03:44:32 -0400
-X-MC-Unique: uyBZTLgkN-2zSsldl8iDGA-1
-X-Mimecast-MFC-AGG-ID: uyBZTLgkN-2zSsldl8iDGA_1756367071
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3c85ac51732so231046f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 00:44:32 -0700 (PDT)
+ us-mta-21-clY_KW5BPuiBx__SA6CaFw-1; Thu, 28 Aug 2025 03:46:31 -0400
+X-MC-Unique: clY_KW5BPuiBx__SA6CaFw-1
+X-Mimecast-MFC-AGG-ID: clY_KW5BPuiBx__SA6CaFw_1756367190
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3c6ae25997cso394600f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 00:46:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756367071; x=1756971871;
+        d=1e100.net; s=20230601; t=1756367190; x=1756971990;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dhK+BxA/iOgcFdCxhcrFsJ9ic9ebRUg2wIpkT+UYj24=;
-        b=KF8OEZrO0CbE2RBACtpGNvSHkf83sCg4kFLCCTGr8RQJIRs/hC15cPxAUzJVN1mrcw
-         0r3+pDiaq+79gKPR8qTT9azJftiTpD45gmVRA3vQ+WngI6ZpX/rgaeHY7fv3QXW1U834
-         pGiO8vA52dP2HWi0leNKrXQgzkadq/boIlXKig3WHZpakS88nKm57npjU6QbwNQXfj8+
-         zLatjEs+fRnAQC8+OmOtn56a6v6wKcxRsWEMrnRfCxtUB2RLkVfSK2zwHF0xASq9qNca
-         yYjItcSrGXqDLRbzgoZ/IVEbcQo0uXMOkxUGsPaLjTZetdDCVPfQk/SsKlEuH4G/rWSj
-         wd5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUB1QqNDbmUH/mmCTaCPS0/1Psyl/mrywo5/GvIDgsWqXEzjIHnymoYnYdu9JGoZDJzbq00ZTEoCSXRGq+zins=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaCP79ShDFAAS7ndboTsSgcYfKpKAWzwMkqZBYiyJTc+UE8Dh9
-	R+jxPVOlE0sQQauOdhaQagSnh2TyjO46npgxJvkPFmiwrorruwNPbGgidZE5zZ6qA2oCOT92AQb
-	qZiVoRG050dKRuhb41qKmKW4BYjzwUtsSwYq4Qw4w0QwErUYkqAGQQYlaVR+gH3fiduK9mg==
-X-Gm-Gg: ASbGncsutRo6NwahrbZ0fTt1HOilpdrlGcaCwVv1VFdleUnWVPYPRKV4PNf+jZDfhWe
-	603xmHQr7kf0pZ7dXXaVT8/fjoN8wFN7xwVxWgZOhkFji0soALwcMBsxSouxxw9L5IoCWyHA8N2
-	UryIahZIxJp3rtjD/dwGo3KbujwkbjzXRSvHUkiDbS8++fT2q5RV+SA1RtkqB7v14Ga9vsc/Htx
-	QznliiFvpdXHos1aGHFcnbD1ucGhBIs+kBvuP4fMxYHhIzeiHPhvIvtOFtaiohvIuK4SP5laQYi
-	Xtzuehxhd/BtmDnH23NmTDXrgxPY88nzkVfPjBh96og34jhgGNhTdKtWybajfMYnPozRpA/Qsuq
-	E5O8C0IZ8end7ssTi9IeYaaRGsupvMaA4Y7tLmj5vslHN38KRSaSIx4LVFt3CvhSTZog=
-X-Received: by 2002:a5d:5d0a:0:b0:3b8:f358:e80d with SMTP id ffacd0b85a97d-3c5db8ab097mr18867031f8f.5.1756367070887;
-        Thu, 28 Aug 2025 00:44:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHXm6ZHFF1yBgYNSUrsi9TF+wDF8WO4dw6T2lJHPZ3voQni8d+w8tpOsvfzaL30mwHhRdMyBw==
-X-Received: by 2002:a5d:5d0a:0:b0:3b8:f358:e80d with SMTP id ffacd0b85a97d-3c5db8ab097mr18866962f8f.5.1756367070322;
-        Thu, 28 Aug 2025 00:44:30 -0700 (PDT)
+        bh=QIPVhNdDqwyEUU2mMSzlYSdtbuVp92JbzlpYQuyYJ0w=;
+        b=lfD5658egzv1tf7D1lttar9BBx5fy86QC0IR1ibT/BwhenqZ3CW670Wj6k/sFD9VoL
+         a2RiCDolyEiMh0/586sho8pwWvnDxLeoT8TTRAl5OqD/8XcINBGmfmyG4U1pRnrG3g9I
+         q2TZUBeK6Cu3HzLADKlfUR3lmzqi49yD1FpZxWhvZj7BqsSH5H5DX6rlQR8m48Xet7b8
+         3k+RRALOK53c7RA0WxPLh4LMBtmxamRQ5Ay72ya/mQ6VL5V4z470/9r3xhFebM0Gzfu+
+         lx0SGpLlGO9+lwud2M3SE2hzk+kdbskBQblj3VvvpABhTkXLX1TuXlgbsLBGp7xYODYV
+         4S3g==
+X-Forwarded-Encrypted: i=1; AJvYcCU1ZTD17FvpKDxYe379Bmusyj+eK9jO3Im8qs9VWV/2M5Ci3SBph/pDk/xrE3ubpcx8MVxlNVKV6DevUZEalqM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxM14/HQHhqZS6a1jKQLG226bm142UqhxPIFbkxD/8QlnLNLfHU
+	zYN50KB2hAW3NM4G0ury52X66lbeDMuBa2QbGpiNVfT0n3KePh27rWvlf+WpTzIBCCw+qhegt39
+	br86qTmSbTOg35lYWzOU/HMFmru0+ufgDggCDAdO/4+TVfEhru7J5ELaFFqEUJUFsuSe1fQ==
+X-Gm-Gg: ASbGncu0xDyFmQdrhm8TQ0G1vgkMhDMEBYY0mvx2RycIhjyJITHOeHRcdPiifezaXea
+	iarSssZUD9CYxovIyGjTHXtACfTz+46/9+iL3GtQizMQ4Kxc6gAo0KffNy533dLCW3A0vq0B19W
+	m+Rzc46ddL/vJ3u5ENGd1MmXcQXrEGiMM0m+NiHsl8yLcygV9m0j1vQkr9SRRR0Jypzdjkp19W/
+	6AUMC/MYlJG7pE++RiFPj56ZRx+uxgrDnO5+5QM/BdDeldZ59c5+tf6DJzzf0cFIPEJBsSPhQrf
+	tyWLxwvqwqlUWrSJw5595NhznReEqZMH3MZutVGQ/aSL37oCKFSmHNVgxpzxXQSRI8YsD0kGkos
+	V+sGOWEZ0SUg/6+3J+zLprSMYpW3IKEDyw/+yq48VmpQkmYI6bUDYhURgdTErHoRJ8qI=
+X-Received: by 2002:a05:6000:18ad:b0:3b7:948a:1361 with SMTP id ffacd0b85a97d-3c5da741330mr15989052f8f.6.1756367189578;
+        Thu, 28 Aug 2025 00:46:29 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHbZS9TwQor8utX8Cftd7hubod4ESO9oJ14F94do36paGGmjXBbrC+y7X5MmcQWQ6JKGQD26w==
+X-Received: by 2002:a05:6000:18ad:b0:3b7:948a:1361 with SMTP id ffacd0b85a97d-3c5da741330mr15989008f8f.6.1756367189132;
+        Thu, 28 Aug 2025 00:46:29 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f28:c100:2225:10aa:f247:7b85? (p200300d82f28c100222510aaf2477b85.dip0.t-ipconnect.de. [2003:d8:2f28:c100:2225:10aa:f247:7b85])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cd2e01dd9dsm4501230f8f.60.2025.08.28.00.44.28
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b6b1cdf05sm35411485e9.1.2025.08.28.00.46.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Aug 2025 00:44:29 -0700 (PDT)
-Message-ID: <377449bd-3c06-4a09-8647-e41354e64b30@redhat.com>
-Date: Thu, 28 Aug 2025 09:44:27 +0200
+        Thu, 28 Aug 2025 00:46:28 -0700 (PDT)
+Message-ID: <0e1c0fe1-4dd1-46dc-8ce8-a6bf6e4c3e80@redhat.com>
+Date: Thu, 28 Aug 2025 09:46:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,10 +90,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 13/36] mm/hugetlb: cleanup
- hugetlb_folio_init_tail_vmemmap()
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Alexander Potapenko <glider@google.com>,
+Subject: Re: [PATCH v1 12/36] mm: simplify folio_page() and folio_page_idx()
+To: Wei Yang <richard.weiyang@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
+ Alexander Potapenko <glider@google.com>,
  Andrew Morton <akpm@linux-foundation.org>,
  Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
  Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
@@ -110,14 +110,15 @@ Cc: linux-kernel@vger.kernel.org, Alexander Potapenko <glider@google.com>,
  linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
  linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Marco Elver <elver@google.com>, Marek Szyprowski <m.szyprowski@samsung.com>,
- Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
- netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
- Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
- Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
- virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
- wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+ Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+ Muchun Song <muchun.song@linux.dev>, netdev@vger.kernel.org,
+ Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>,
+ Robin Murphy <robin.murphy@arm.com>, Suren Baghdasaryan <surenb@google.com>,
+ Tejun Heo <tj@kernel.org>, virtualization@lists.linux.dev,
+ Vlastimil Babka <vbabka@suse.cz>, wireguard@lists.zx2c4.com, x86@kernel.org
 References: <20250827220141.262669-1-david@redhat.com>
- <20250827220141.262669-14-david@redhat.com> <aLADXP89cp6hAq0q@kernel.org>
+ <20250827220141.262669-13-david@redhat.com>
+ <20250828074356.3xiuqugokg36yuxw@master>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -164,58 +165,14 @@ Autocrypt: addr=david@redhat.com; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <aLADXP89cp6hAq0q@kernel.org>
+In-Reply-To: <20250828074356.3xiuqugokg36yuxw@master>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 28.08.25 09:21, Mike Rapoport wrote:
-> On Thu, Aug 28, 2025 at 12:01:17AM +0200, David Hildenbrand wrote:
->> We can now safely iterate over all pages in a folio, so no need for the
->> pfn_to_page().
->>
->> Also, as we already force the refcount in __init_single_page() to 1,
->> we can just set the refcount to 0 and avoid page_ref_freeze() +
->> VM_BUG_ON. Likely, in the future, we would just want to tell
->> __init_single_page() to which value to initialize the refcount.
->>
->> Further, adjust the comments to highlight that we are dealing with an
->> open-coded prep_compound_page() variant, and add another comment explaining
->> why we really need the __init_single_page() only on the tail pages.
->>
->> Note that the current code was likely problematic, but we never ran into
->> it: prep_compound_tail() would have been called with an offset that might
->> exceed a memory section, and prep_compound_tail() would have simply
->> added that offset to the page pointer -- which would not have done the
->> right thing on sparsemem without vmemmap.
->>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
->>   mm/hugetlb.c | 20 ++++++++++++--------
->>   1 file changed, 12 insertions(+), 8 deletions(-)
->>
->> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->> index 4a97e4f14c0dc..1f42186a85ea4 100644
->> --- a/mm/hugetlb.c
->> +++ b/mm/hugetlb.c
->> @@ -3237,17 +3237,18 @@ static void __init hugetlb_folio_init_tail_vmemmap(struct folio *folio,
->>   {
->>   	enum zone_type zone = zone_idx(folio_zone(folio));
->>   	int nid = folio_nid(folio);
->> +	struct page *page = folio_page(folio, start_page_number);
->>   	unsigned long head_pfn = folio_pfn(folio);
->>   	unsigned long pfn, end_pfn = head_pfn + end_page_number;
->> -	int ret;
->> -
->> -	for (pfn = head_pfn + start_page_number; pfn < end_pfn; pfn++) {
->> -		struct page *page = pfn_to_page(pfn);
->>   
->> +	/*
->> +	 * We mark all tail pages with memblock_reserved_mark_noinit(),
->> +	 * so these pages are completely uninitialized.
 > 
->                               ^ not? ;-)
+> Curious about why it is in page-flags.h. It seems not related to page-flags.
 
-Can you elaborate?
+Likely because we have the page_folio() in there as well.
 
 -- 
 Cheers
