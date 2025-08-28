@@ -1,69 +1,70 @@
-Return-Path: <linux-kselftest+bounces-40168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40167-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10C41B39B22
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 13:12:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E4D9B39B05
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 13:07:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D288E360892
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 11:12:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A1AE1C8077E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 11:08:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB60130C60A;
-	Thu, 28 Aug 2025 11:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E90C30DD19;
+	Thu, 28 Aug 2025 11:07:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="ZzptfstS"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="odMWci1l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5357721D3EE;
-	Thu, 28 Aug 2025 11:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF7E30C63E;
+	Thu, 28 Aug 2025 11:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.192
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756379519; cv=none; b=ocVqWE6E/7rrNOIOFQCxCuAiRImtNYarJZO9DTiSc1Jnzlleo5sP4bzSQZiD2YJUw3tQU/gajOBAdNAYAmat9YOExhDpwhTRWN3z5Gu+5IHvI21hyYQZhn4nKvCPoXHCZLTJXTIgTsMDLhzk8onib8kEWY8zyYzmnUrodHdR/H0=
+	t=1756379260; cv=none; b=t76zQ/lJ0Q5BF1/OYJfgnRnoXo3a6mPC8IpHV+yKGpI4DdFrlKwbEMR5n5c99H64kHXS6Ta9YEDuONxgg3OXaUtWj0+Ao3R6RWmB5X4rQJmYNWD9NYNekwzo/w5YTMJ97XXKlpTbk6KKEWpr2FXz+3h4qc0F6ll+zFcDXgHtI5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756379519; c=relaxed/simple;
-	bh=NPxx/ey2tXKTRsHU1SUjCV4ADg0ZhVLhJz4gBqVmG84=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=NsmECoFov+aKCDnfxRqnMht6m35ygctPP0+ls9edOxSks5zw7dZ/C/tDSw/jhLFmkLctqHn1dFUlqgJSYYYbvizm0f2jsx6kzzbV/4l+Iml8Sj571C39fewNfhYWE+Obc0xhD9s6sXZQHMDQFUYhFD0rni0YNOCjd0di6seSwOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=ZzptfstS; arc=none smtp.client-ip=162.62.58.216
+	s=arc-20240116; t=1756379260; c=relaxed/simple;
+	bh=9MlaewShrzwNP5cMPLBFY2qQOGWyYpp79Q4CAVUza28=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=Aa8hCsjA2/scQtLRGEEAegtN/mJ8oq9mFD6m+/0BOHrWeLbrMW9kMjVV+ZO9h9+H2XAyLbtmsn2slcniP4ETS8GqT757GhGQvumL6cDskCNSSM8mAl2n1eZMTraITmiUh1oPfFhl1AedDGqGtGenFfF9VtIGgRoBNaBQYnTwEVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=odMWci1l; arc=none smtp.client-ip=203.205.221.192
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756379205;
-	bh=BcVs6RdP2pVoj2tAX1f2LpjoEbkeuktpGmJZui03meQ=;
-	h=From:To:Cc:Subject:Date;
-	b=ZzptfstStfO6aAXbq/AEKgn2QZUMn7vegJfZY4yz3ZnNphXtntqy9vxSbQzHtu0cm
-	 akJFo2ITBYBmWF2mtaPur9QTN0sOzDq6uNpg1q7j0ZuUl57Ogr3o+l6oMqHtJV9h9E
-	 BqkyrpzRcPWfF6Nh51HDScp5Y0oFHYlNsCDBNiJg=
+	s=s201512; t=1756379253;
+	bh=qD7BGCwe3Vj4PWN7gaUtbqxYjKU5h/fA619lif8uTXA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=odMWci1le40l6GLxukmnrLgpv0Na3rAILjORerE5Vc1AR7d0XGm0FT01nyNnFxEz2
+	 9d4CUf5D+VbYnWlDluCNb9iYMfiEr5pCiCkAQFjYY0210U0mjMs3YKLkpOwb6+kmAz
+	 KLFmjohAWDsrRpCx3AIck26S35Fw4ToydjenlzV0=
 Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrszb42-0.qq.com (NewEsmtp) with SMTP
-	id 1A914CDB; Thu, 28 Aug 2025 19:06:41 +0800
-X-QQ-mid: xmsmtpt1756379201tzxa3pir2
-Message-ID: <tencent_8B8FEE211A1A0009ED67855EA2AAECBDE20A@qq.com>
-X-QQ-XMAILINFO: NAtipnnbTPeaZftIKjm/rzpYqAps5Bu6jLMD80w4t5M+CXEhckWTv5o7AbnL5p
-	 f5CsG5CvIxXXyvoyRAsTNAzbjXQOoWeDfqffw4Q3JtCd79pHyEm3+D5XoKRS6KT+qCsmRLY89iL0
-	 ArrfBA6oCIdFkGbrtfqMu08UGDGSPC7TS5RLtGl4vQLXdSAdWytqFL3WjjQZU9ntQfWlXlYNiiR9
-	 j67iuVdY07/ASW5afemUwE3hhVP+jhUOogECLpggCetT0Q9slMFHRfHECLVZVSmH+dfRdyzu58Ml
-	 meB3+u9Z7nXKJ7syeEhK887iWP90QUwOa6ffsDJXLGimxZku8iZ01cQbOpoAMt0eCVI1cJIbc5gi
-	 NW8FrPbT296tHhOpbZ2hGaG1gk3J3HuPXa2YfhdJ6yq4nVwJIXSD5ULEGcypmvkTRhTKsFKTHqDH
-	 z+wpRb6S2YIjHj90ZSQFS+J1QsOQV3pNuQVkX0bphRazjurtvow1IjXOSpli3jTkpmYG0GtV5kDW
-	 ofOSPo3bm/Z4dUyXtfMK4Wmn+5IAGSM3KG3NV7W6uzkYmZwedUWwk+2PlW/5BFw47GTzwskSuQ3M
-	 TGl8yE+v1actqPHz34+anKqJK0Xawu3Eoo7bYAhjhR+JuTEAu0W79Hj7FdaZ1OcxvgsbescUqMP7
-	 p3e2ZJPVCea942MWOGHlC6pc8BEfOoIud+VRlkdsJiPomGgKqlXrts93pH2V3nugxw1ib9p4w44o
-	 +KdII4yjcnPKBHfCu2HnBlPfStYeIe1An+opThrqTgNTRKAKU+qhZDjEers24myxBDVynXrzSltk
-	 hFB6nTQDVxd69SVy35fhY1amJdhqvQLBFqH/W4s5fEq0g+Xj/8IV9kerlU3afBmDgDC+an7VT4Nq
-	 wYuq6yCoiC53QU5tL0e5s5XlYiQvidXE+ETysv+qo99yEXXFL58iyh7yb1hFgk7kD5+1Ltvc6MSG
-	 UosnqVUWbuzcU3x594CDIjTOasoXEXnRq653xwTdURTV8q9RKV1SHheSlSJM8q52fAkhy0xXV9Ru
-	 Kwkdj+fh/DdxQ/GKqs0gx/+1bZZGtWH+w+K8eyJUMv34SJDMFyDnJl9qsSXO8=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+	by newxmesmtplogicsvrsza29-0.qq.com (NewEsmtp) with SMTP
+	id 1DE1E2CC; Thu, 28 Aug 2025 19:07:30 +0800
+X-QQ-mid: xmsmtpt1756379250tp0spbd2d
+Message-ID: <tencent_69BD268FBA201219240B51661D5E96A8D80A@qq.com>
+X-QQ-XMAILINFO: ONU4XJpmPbTTjImKSTC6xTA7H7jVJEd0lRBTzVo1XZqwVwwd97/OBptyCG372x
+	 93pwtmzsxFr1LgxcKBfO+rwQMV9hGm9Ypde6Jy8fVfONCsER15JzNnzN5QxjC+BZ0WT+Esc98M2J
+	 ZVGUpGBbQ49vxNdxxqbfHn9UM1jsySGxmF7Pod8JmKtE3D2djJerffcEcbEl6FzuNsWucc1pjCIJ
+	 Vjk2uxrzQ5UyDZwiSdsd0n2WF2TuBs2L7zKd4PFF8JE2gd4lcRbt+u9O1Y4CcjKfbrb54F0I+v5d
+	 DbaQybu0UFIzlHNfXywn+Ub9uk+kLToJlx5EApzH5ROVpOXBwYcNZXMSlXYBLdNzM40bvUICDwb/
+	 gyg51eoeptXtRZSGK+hLXh8Iwb3L5U4tiUJT5uHnpBtHv0I3CE80ljQcjMXtCVR1fq8OiTSyYjPQ
+	 JIW/I8KYfd/Io4nYW5Wa8M42zmFQQwjTFpORqmUrEqoLxIh1Prk4M5L7hgSM1FlhrQtffDbWPmXH
+	 djc9P56dcMlFgy6zP0e2k0AuujVckUFeYu84de3SPI1RqRo1jk8BThm4yvi3nDIcPVS0EbCTXB+9
+	 RVNww1RS++RK3tV/sgjMXxYwZSu5s0trABJjWadYAMZCzrVsryZrXl7uDZ8riNFVpIv9tJ1TKszm
+	 7EdVYqmqMh8A24TV9W7e970YTKEE6oLKgkS4gcVw9deR7QbrMEIyksKICR/fQDT0KkCoZz1eOZf5
+	 2qfY2C8zdrfJvxJk0jWLBm2uQQKsKkKff/NRhdrEH0LQJ+wgpgjfjUSabK09HbnErZPYllWpaNOr
+	 7pG5ySRMRDc8hzZmT7XNldtcuib2RLqY0mF1oAQIS8IdwIwyjAUPEA3zOdBKIn2MjwdX4qaaLpxm
+	 sQObb0SOBMxF+7BmSFg3DX6LhysFlOOEQpB8vYMbl+7LrZiY3GzGx6SH7j2eTSG0sczXbex54w2S
+	 e4qNdFV7Ix+ukyyetYAiXAPT67BhqO4SjgJLw0ABRihOYnbgvmSH36CsYWG1h3F1Hiph77n9uhno
+	 MrYA0+ukG/8svOhbEYz0cKlCDYGBI=
+X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
 From: Rong Tao <rtoax@foxmail.com>
 To: andrii.nakryiko@gmail.com,
 	ast@kernel.org,
 	daniel@iogearbox.net,
 	vmalik@redhat.com
-Cc: Rong Tao <rtoax@foxmail.com>,
+Cc: Rong Tao <rongtao@cestc.cn>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -76,14 +77,15 @@ Cc: Rong Tao <rtoax@foxmail.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Mykola Lysenko <mykolal@fb.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Rong Tao <rongtao@cestc.cn>,
 	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
 	linux-kernel@vger.kernel.org (open list),
 	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v3 0/2] Fix bpf_strnstr len error
-Date: Thu, 28 Aug 2025 19:06:26 +0800
-X-OQ-MSGID: <cover.1756378974.git.rtoax@foxmail.com>
+Subject: [PATCH bpf-next v3 1/2] bpf/helpers: bpf_strnstr: Exact match length
+Date: Thu, 28 Aug 2025 19:07:13 +0800
+X-OQ-MSGID: <e37d08a0e813eed1bc82777e11f3335a0c7672e7.1756378974.git.rtoax@foxmail.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1756378974.git.rtoax@foxmail.com>
+References: <cover.1756378974.git.rtoax@foxmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,22 +94,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix bpf_strnstr() wrong 'len' parameter, bpf_strnstr("open", "open", 4)
-should return 0 instead of -ENOENT.
+From: Rong Tao <rongtao@cestc.cn>
 
-Rong Tao (2):
-  bpf/helpers: bpf_strnstr: Exact match length
-  selftests/bpf: Add tests for bpf_strnstr
+strnstr should not treat the ending '\0' of s2 as a matching character,
+otherwise the parameter 'len' will be meaningless, for example:
 
- kernel/bpf/helpers.c                                      | 4 +++-
- tools/testing/selftests/bpf/progs/string_kfuncs_success.c | 4 +++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+    1. bpf_strnstr("openat", "open", 4) = -ENOENT
+    2. bpf_strnstr("openat", "open", 5) = 0
 
+This patch makes (1) return 0, indicating a successful match.
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
-v3: Fix selftests/bpf error in v2, sorry about that;
-v2: Follow Andrii Nakryiko's advise, fix the 'wrong fix';
-    https://lore.kernel.org/lkml/tencent_DF4DA83EEBFB9246E5E3357BB40911CCA005@qq.com/
-v1: https://lore.kernel.org/lkml/tencent_65E5988AD52BEC280D22964189505CD6ED06@qq.com/
+ kernel/bpf/helpers.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 401b4932cc49..ced7132980fe 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3672,10 +3672,12 @@ __bpf_kfunc int bpf_strnstr(const char *s1__ign, const char *s2__ign, size_t len
+ 
+ 	guard(pagefault)();
+ 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
+-		for (j = 0; i + j < len && j < XATTR_SIZE_MAX; j++) {
++		for (j = 0; i + j <= len && j < XATTR_SIZE_MAX; j++) {
+ 			__get_kernel_nofault(&c2, s2__ign + j, char, err_out);
+ 			if (c2 == '\0')
+ 				return i;
++			if (i + j == len)
++				break;
+ 			__get_kernel_nofault(&c1, s1__ign + j, char, err_out);
+ 			if (c1 == '\0')
+ 				return -ENOENT;
 -- 
 2.51.0
 
