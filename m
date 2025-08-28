@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-40227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 185D2B3AB3B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 22:02:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6344B3AB4B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 22:08:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C22A4A00CA5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 20:02:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A028F2007A6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 20:08:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74BD284679;
-	Thu, 28 Aug 2025 20:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE3B1DE8BF;
+	Thu, 28 Aug 2025 20:08:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HR0At5W3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G77q/lQW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB52278E7E
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 20:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8F81862A
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 20:08:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756411332; cv=none; b=modhfpiSNyf68XlK5JZxF7z+IdJ9UTq8GUR6YtDi/o42opngD2xQuxP6rtZRhCJNF/qBYM7rvwTQsQhv0imUUp0Z9javf0EGte3v2to9DBDzWtA6JtcSVtnoB/EM3//GpKYOXxlvQululEYLZ6HyME47FGt0g4t238pX356Dh2E=
+	t=1756411719; cv=none; b=lEjeI7trRrZ5F51k1SUJUa1v9+yOTt5R/EGvtsgH0nr1Oy4euEffoiwEz9lRgXABLWXPxArU8e61tj2Q+OgkbSjuJbatdNm2fY9YxcxZL/6uMa8g3BMw7A8dAI9KDziqTKShYfiaE0LZ8LGSSEYyXV5K/Sxl000g7nmamcsPsW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756411332; c=relaxed/simple;
-	bh=2KpL/YbmEXnHuFTvSMBKGQC8nuR4dgX0UfBNcS0nW2A=;
+	s=arc-20240116; t=1756411719; c=relaxed/simple;
+	bh=5E1O+UiyxQ/swOde4rFAB1dAEwfdQZ8cuvjTa+rD2Bo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fqdESajaqTH/Uk/6tNDNCcM3PSaGZwVp7H7AUwnnSKPecmqcp4g7zVTYs88jUEIOPVf5E1gAK72mzMiyHlq2EYdJX9l9z8ijpVAjD1mpUsUE40w16DG2BOPC6dO62jcb633EmXIuZzL/AMEpN0ih+vJ9eyFRQV5zIVaTAtTQLUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HR0At5W3; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=WyoIwwn2SPqtuU5JWRmXq6Cq5uiUX16DDk3RJOymkrfaesbtWzk/6sTM+g//vN0ln600YYVBYHxRow8Y58XeLYSIBOx4AGFqpIOyfb7chowtkMfve3AlYkjL1BBCG11uf5oQsEKj1aTdaIcx+747et42gN2c6Hr/skyXYtv6T14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G77q/lQW; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756411328;
+	s=mimecast20190719; t=1756411707;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=kHCGitpqD+5wH/FOTflpYSjcwP5kCCQ1zm861x/hElE=;
-	b=HR0At5W3BQvB8xPvMXfyBa78lVwIyYbfmY+Lkp4yp5GcWG1jVI8X/ImEcxdGoRFYR5c8dO
-	692lLh0SssRKbHlxM89i9SxzDj+BBt5+SkNz+Nm3I2KibFTynvwIKnXrt711LVlxumoicE
-	LeGAJXV9Rfj7cynRQ5s91SgnZGEN2cE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=HfkgN5Na07CaAG4rz7Sn0/ahtXb5ykSorD4ldptE3LQ=;
+	b=G77q/lQWOpON5bgW/3YqwLmaPPqHa+nPlRRZPA2GVvjIrI89DnFZwLsXO+iK09rNTqD01m
+	tPXWt5MJtM+nBGcCXgyGEqd0JRUUJxKjw9bulAeTxvGGo2urhcp5s96zJzANA6WgMAjidA
+	TP0sjehENqctu9lpIMsp6dubqcTQ2Eo=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-534-aSb2giYFOlOStACC3RTwYw-1; Thu, 28 Aug 2025 16:02:07 -0400
-X-MC-Unique: aSb2giYFOlOStACC3RTwYw-1
-X-Mimecast-MFC-AGG-ID: aSb2giYFOlOStACC3RTwYw_1756411321
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3b9dc5c2ba0so645474f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 13:02:01 -0700 (PDT)
+ us-mta-201-FSrbC4LkNfKuQ8eitdg_lQ-1; Thu, 28 Aug 2025 16:07:47 -0400
+X-MC-Unique: FSrbC4LkNfKuQ8eitdg_lQ-1
+X-Mimecast-MFC-AGG-ID: FSrbC4LkNfKuQ8eitdg_lQ_1756411658
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3c85ac51732so538105f8f.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 13:07:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756411321; x=1757016121;
+        d=1e100.net; s=20230601; t=1756411657; x=1757016457;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kHCGitpqD+5wH/FOTflpYSjcwP5kCCQ1zm861x/hElE=;
-        b=QpxG26Rm82PsZXLoRR074fCPG6Ob44SoN3x8inmNDr+lbCW4FNV75oLnsrLNuJkz9E
-         yD8WWq7lk8sWRT3YYaHnI8NaMP8b93CxqPs7Tz7Vp0pvrerSgNBIc+xWKufLNH26qGUy
-         Abrt+MN9DyHbVgUniDAfVk+WPLzymLTWABtpXOaO5ucHl95mckh4Q3tINgBxwtQ1dhhD
-         WnKc/l5OYVqo/dJDyqmXWkSLdsYK9gv3qKLeYPYPyJ6msYAK05G3suFnDGp1mz8KKvdH
-         9YIJDYvwVRdTIQK8QhhC+DrmBb6MXP00ntVbgMo6+YLNe6ni3Y4SHmrYzDWl/Yj2P0SI
-         tf1g==
-X-Forwarded-Encrypted: i=1; AJvYcCVaO6TXIPSAL4hiUQgRBvvPVDSbGmRM5FbNOhY1LLp+VlqCqJywZdk8DrnV8gpD2PlGVoGJMeMT2aZ6I9DUBH4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuZJ2h7bfkCliWagWoatHMgpV4xsnnjkztS/mKXlm0ormqIXS6
-	43Ap9OeX80eIeVFyNWDxOtz0IQp9BTmsLiYJgxYNfSfaeGM+71AglsHZ4p6/J/ZFfp3QmzgREku
-	IVSqtYovFWLmnZ0cIg+lC/OgoiOO24AjHMZKEqiyZUw/7c/mB3B62epF40IVvr9lqDAPMlQ==
-X-Gm-Gg: ASbGncvkyO1/D4GnTZTJN5Wy1CtuI0nn86Q8gm8P1LnnHsB3ePXBBit6RdLOsRXYagG
-	xSqDBL+BMFyhyuT6VLUcFOv2sHeaddHIlahUu2TCOzqeCUeCRzi60vkuOpgTUSNj3SsaPBEU/hz
-	I6UY6TdeUntPK9ZIUIqKbMctpXOj4h8Xg/+rJWa2cneQV6kiU1DmlROzlk/VSZwDS/XetaffSRU
-	fF8S3nDvBwtWugD0U0/eEym8j7XnkhN3Abgbj3xZYpzc0ZBSSENYgG7fWNgm4wOdjgVIFqyVAZN
-	ZSQA9ZX/vvuTyfBoqTpT6DgyHzwWYbLViR8RfguB1wWGQOtzIocfAzVQWKedG3+Ys5qIGQEYKPR
-	saTTVFZcyKLtZ5+KPk23T5BYpLMYXgUa+VRwoJfcSeCkpkd1CunUIDaqA2FBFs0BfRzk=
-X-Received: by 2002:a05:6000:2203:b0:3c9:9b3b:53c9 with SMTP id ffacd0b85a97d-3c99b3b586fmr13112452f8f.44.1756411320652;
-        Thu, 28 Aug 2025 13:02:00 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFJfxknfutCFzm6P/qKfs5UtdmvpY/7sBFiB6PROkHg4xXnNZaYtYUH5wqWfppKoahFU7sb6A==
-X-Received: by 2002:a05:6000:2203:b0:3c9:9b3b:53c9 with SMTP id ffacd0b85a97d-3c99b3b586fmr13112421f8f.44.1756411320141;
-        Thu, 28 Aug 2025 13:02:00 -0700 (PDT)
+        bh=HfkgN5Na07CaAG4rz7Sn0/ahtXb5ykSorD4ldptE3LQ=;
+        b=laIvbHFRLzE8NPZwukEu+YUDt18jVm6p4kEq5vKPrwPR37QKhukEmvax04rUE8d0qs
+         IoNadT2xaGNBh/5h10xgT9LXGtudqlq9bruoDrXq4zYHR/3UuPlIcLhWhk4vjz0+h72w
+         Mes/xqYXs0k/zbVeeJfos1r5VcUrFdc+s5sChwczpfgEgeFsAuJrar0VDjvWrNVl6SER
+         pjZR77yhg+dcwVquEsrgmFX467XkU71IqcCh5Tkpv3ozU9oWrtcqC9YWFVVsYkt8tRo8
+         Udy4YWzzlf74O5HCG5ClaRQIq4ziAson1QBlOObHmffTKdMGqdJ3UjAPoqK1cksVmg8t
+         VHEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX3Py0Lx2N/vlVuVwk6y5snAyR9MuB7HCJhkiMygq49JOq6P8MKa80f+ykkb9I/jiyj00NucfDvzqe3tVwmDh4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5dLjdCHrvhBpGyQ1PTCbDL8iqVhpHqAo3aREF6Nw6ZLGTQnhT
+	bEuri2mAvWmgGoCh5/P0E4X97fKzSepVmrpfn6enUULdgSK5YQn2x9DH7Y2gwcn28zbJq7W2Fvw
+	Z7PMnyal3RbuZNa/WJ82VwcfFJjp5U57Yt+K7UWSMImHGn+sGl/vumYSie7Sj6XApUr5fxw==
+X-Gm-Gg: ASbGncu5r9p31d9j7YN2kmrt4IgPMbWO5eLNsy1iBtZmdYHX6eVDQRjXKaffTUp1BpN
+	MxjQUaNGomaiTIlkIU7fDaTu/aYM1pow1zeZPmH8o2GclD7NGICVwQqgAzbTzF1LEB2Gg4C6veR
+	AxdBuXmpzAvYi7lNhcuvEcdJilInnO8ccYRsUw36AFeSeLTczkRB1lV7FUWAq2l46IdlJfKGorM
+	kyrzb4dcou7wBYcVzFkkjhvJVtXt4aWtmtiBCxm10eCcVe4kkPNSwS/YNeBf4GO3lgoz7IrpHYI
+	71ETcpfCtpl2C/41UxIsX0iTPcUabnZ9gb164HiAgJJUqJs9XElBlhXO2b1F/iUfAQ6vS6GDHkz
+	0hjt3OBhXlJ2vxe9S5jwzHbqwCrbZuR+TZyesndBo/4jdVnRDBMXSPEwIqajjegVqIK0=
+X-Received: by 2002:a5d:5d0a:0:b0:3b8:f358:e80d with SMTP id ffacd0b85a97d-3c5db8ab097mr20900801f8f.5.1756411657450;
+        Thu, 28 Aug 2025 13:07:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEP13xjdaXPmMbhRXQ0NNNX783mn1a/GHXa2M1CskybuLFx4H09CyoqA4ByC/c5FlmnBNweJA==
+X-Received: by 2002:a5d:5d0a:0:b0:3b8:f358:e80d with SMTP id ffacd0b85a97d-3c5db8ab097mr20900775f8f.5.1756411656978;
+        Thu, 28 Aug 2025 13:07:36 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f28:c100:2225:10aa:f247:7b85? (p200300d82f28c100222510aaf2477b85.dip0.t-ipconnect.de. [2003:d8:2f28:c100:2225:10aa:f247:7b85])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b73cf86f4sm67580865e9.6.2025.08.28.13.01.59
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cf270fc496sm561557f8f.1.2025.08.28.13.07.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Aug 2025 13:01:59 -0700 (PDT)
-Message-ID: <d58425d4-8e4f-4b70-915f-322658e9878e@redhat.com>
-Date: Thu, 28 Aug 2025 22:01:58 +0200
+        Thu, 28 Aug 2025 13:07:36 -0700 (PDT)
+Message-ID: <ffe2f73a-6938-4079-b926-9d869f0642ca@redhat.com>
+Date: Thu, 28 Aug 2025 22:07:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,7 +90,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] KVM: guest_memfd: add generic population via write
+Subject: Re: [PATCH v4 0/2] KVM: guest_memfd: use write for population
 To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
  "pbonzini@redhat.com" <pbonzini@redhat.com>,
  "shuah@kernel.org" <shuah@kernel.org>
@@ -103,7 +103,6 @@ Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
  <jackabt@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>,
  "Cali, Marco" <xmarcalx@amazon.co.uk>
 References: <20250828153049.3922-1-kalyazin@amazon.com>
- <20250828153049.3922-2-kalyazin@amazon.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -150,33 +149,27 @@ Autocrypt: addr=david@redhat.com; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20250828153049.3922-2-kalyazin@amazon.com>
+In-Reply-To: <20250828153049.3922-1-kalyazin@amazon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 28.08.25 17:31, Kalyazin, Nikita wrote:
-> write syscall populates guest_memfd with user-supplied data in a generic
-> way, ie no vendor-specific preparation is performed.  This is supposed
-> to be used in non-CoCo setups where guest memory is not
-> hardware-encrypted.
+On 28.08.25 17:30, Kalyazin, Nikita wrote:
+> [ based on kvm/next ]
 > 
-> The following behaviour is implemented:
->   - only page-aligned count and offset are allowed
->   - if the memory is already allocated, the call will successfully
->     populate it
->   - if the memory is not allocated, the call will both allocate and
->     populate
->   - if the memory is already populated, the call will not repopulate it
-> 
-> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-> ---
+> Implement guest_memfd allocation and population via the write syscall.
+> This is useful in non-CoCo use cases where the host can access guest
+> memory.  Even though the same can also be achieved via userspace mapping
+> and memcpying from userspace, write provides a more performant option
+> because it does not need to set page tables and it does not cause a page
+> fault for every page like memcpy would.  Note that memcpy cannot be
+> accelerated via MADV_POPULATE_WRITE as it is not supported by
+> guest_memfd and relies on GUP.
 
-Just nothing that checkpatch complains about
+I also added this patch to the pile of guestmemfd preview patches located at
 
-a) Usage of "unsigned" instead of "unsigned int"
+https://git.kernel.org/pub/scm/linux/kernel/git/david/linux.git/log/?h=guestmemfd-preview
 
-b) The From doesn't completely match the SOB: "Kalyazin, Nikita" vs 
-"Nikita Kalyazin"
+There was only one minor conflict regarding setting file->f_mode.
 
 -- 
 Cheers
