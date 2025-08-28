@@ -1,127 +1,235 @@
-Return-Path: <linux-kselftest+bounces-40169-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40170-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44539B39B55
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 13:19:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0F5CB39CC0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 14:18:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BE24172B3F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 11:19:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CA32A0033B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 12:17:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 664082D738E;
-	Thu, 28 Aug 2025 11:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C29330FF21;
+	Thu, 28 Aug 2025 12:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="BwCfnwXr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b2h0o7lG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB53214813;
-	Thu, 28 Aug 2025 11:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752EA30F936
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 12:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756379971; cv=none; b=D0iXMwQMFMsfXWKbSadEtTJaJvFNis2PFYxvQlzxTSo+LWhk74qgUJY1Wiiy4KTo+6n7Mlbxyesn2l2alEQz+G/pP1rEW4rGlO1+oPc76vmMJWwgAX1bZVQr5aWttYVpV8a/wfe0qRWdZfdPSGGc4uVwYrJnFH11r4eK7/hBUdA=
+	t=1756383095; cv=none; b=BsORj76demOrsQ+dNGzE5iiN5m2kwHfmqgrkm6qrAK7vdNkbKJE1TJs66nP9Rhu3u6O6vMFHuH9oNcvBDNO49N4bZPjAIoL57h4VIJjhwy9TMb9aUjVNjQjVZDrunnZrT+9mZDdlo2rutkp9Yk2pIfyP+SpmuwwFpyMFXSvXt/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756379971; c=relaxed/simple;
-	bh=FXgfQymDrsmrepLJABIctJ0oih0TYDCQeRXty9SQJdw=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=X1TEc5sks74Zmg5b9SGaC4Jc0taz4kxWi56aS5OcdZQTYX/8mbP3xDSTZn63eE8/2MuiS3f2evxc7l0c4GspEKEiu2X2FaTzHJrKiC4TEHCkGE84vx/k5kxKVxC9Tb8VwOUe5q+uSTIyTdSTp5c9Ojdgx6WNxSGno51voayKqno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=BwCfnwXr; arc=none smtp.client-ip=162.62.57.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756379657;
-	bh=tcR1dyJby3rnBKKEPlwBslHLorWRcZCdjqllQkvmPyw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=BwCfnwXreQ31C2w/qPOdbXx+4uik5jw4wYAkBbQYW1NxX3oq6DoUvxN4mRZfbVUwr
-	 j89Rt2xtuR89kyq9SH1IYg7MgLBzxEWtMMPX3olIV7H3BFsGQFYCDmK8JOaOnDqztM
-	 4wmh4rKramiaoqm/U2IwlJeW+Pp4lHw689BQpSFI=
-Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
-	id 204184AE; Thu, 28 Aug 2025 19:08:04 +0800
-X-QQ-mid: xmsmtpt1756379284tcf27c71l
-Message-ID: <tencent_A842AF5EA32A88970690424E592897FC2A08@qq.com>
-X-QQ-XMAILINFO: N3l5ASPewLWq3KNqT5Iyod68V1MYkhI8XKpuANWh6xLWrgN9KAxvzDlV7wbX0r
-	 ++acAEkktHYeBNf31kmldATyh3lU+FuzWXEWHFoyvZvSbUx/QVdnB2SE3DqBZ9GjbzcF0NvpJaZU
-	 VQec3cH1S/R0kiuJJdlabiUo7F1RTmP30L5yCE8o5DrwokJcykmiduiHOW5wunTa+jFI6XK6oF3a
-	 P9wn/5ivIreAcVH7d4sWxZvzQNJOdnSAwhdm0s1Qn683ClMZDJ7/bCiC6o9l+9B3VUNizpctjkzd
-	 XCe3RtDpd2/l9ZZTQ9aUZBiGxQYkLH7ML/ShWhpuIM4WUAfCPqbo5dYaZocLVHj5fFjAXhM/5sMq
-	 gr0ir0bGG4K1OjaQd4uHaS/fkzlYleBW6MGaWnNX+IbUGUq4ycdmQggPeaZ1fqeNWoNg4nTCmYFq
-	 X2rGjau2+c7E/5NZsJZEYgZ7bLG/QJiBVuwiXJ6HCIhhpQicgxxvna9OKLm+LuPToy/xQoWvM7WH
-	 Leh2REUzVd5oj5un9zslNp4Nzeftbmm44fZM2Db3gupDQKHRuaBNUP8aqcS0LenpB0+sRuM9ej+5
-	 RQ9wp7VX7rjH8zqgo6y2Ne9zIXU1kn88vTJjCDkfVaryy/SXQiv8m+ne9LRVp1vFw3e4D32hk3Fc
-	 o8jMnhk4kOMKegoLzUUu/XWEbS1i4HE50TqFE2LOAZBsJKPfX+OMmkXHuzPjlBfK4y7d44mB4Oqf
-	 i2Mb2cgwyvMb2cIf6alv9qUhAlqVJWMsyG2YJy2aC6Ro7fPJ0y0fw5IwNix8SSkAqw7GypsbOalL
-	 K42tiYuj3iqyz3SteKjK4IdWhrKlKcbFvuSJcnRrjVMeXhqB33Zu07N4Rn0ms9bLoDAbDgd6OwCb
-	 weYHmfX/UfusgolCMDQa4tpsFNAaDzDs++iVrR2SO0CiH5Yc3cjc8jIeCUDkZB3/fCvQdnX1MAqc
-	 sMaqG5Pz7lve3o7sifCRfvNhJY6c1iht5G88I9wPeDSdNBGf+enj9mjgbLkrt2CUH0oo5KJmADlA
-	 wF3HoC715EKfhjdTyB/5gC1mCmxvU=
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-From: Rong Tao <rtoax@foxmail.com>
-To: andrii.nakryiko@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	vmalik@redhat.com
-Cc: Rong Tao <rongtao@cestc.cn>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add tests for bpf_strnstr
-Date: Thu, 28 Aug 2025 19:07:37 +0800
-X-OQ-MSGID: <01ab64c260739383c3f9253789c9b5ba0762776b.1756378974.git.rtoax@foxmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1756378974.git.rtoax@foxmail.com>
-References: <cover.1756378974.git.rtoax@foxmail.com>
+	s=arc-20240116; t=1756383095; c=relaxed/simple;
+	bh=2ktMdNY3k61aPA2/lm50+GCes4gOy0DJDNPYFQGl4fs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QFrfRa9cyMvH+D9ef0MDtYrY/ddM6Q9/3YggO09Hl0AzEOoM+P5fQD+o7q5FZc9UGc1fLKHEtvWIe2dyl79UR3PPEbkhiqCse6xSiiVRkvrqi/0a6V+jD3WWJReESHvr6UPJYtwU8HBjUBirDyl5KzUqTeJg+hyaC6vakf8rAqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b2h0o7lG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756383091;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2UGqflFI8eChQOA7+GEyiXkR47jGjc2vCRu3os6QQyo=;
+	b=b2h0o7lGP9NewypRJYFaNVf4JFY8KNFELmZZaCeuNMoEFCzBCcn71xRBRbS1k2NCGIDCj1
+	BWGbD+5kxZJHS2ajSz3wSvJofp3BtRh2C0hVuJVzYAoXQqYLmhEWTm2pa9yjyvtjYmbyyR
+	HWTg+IJ9Pxy8mVqOSd1IW9ryOG9FI+w=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-614-m11AM7EzPLWFk-Y1fySjLw-1; Thu, 28 Aug 2025 08:11:30 -0400
+X-MC-Unique: m11AM7EzPLWFk-Y1fySjLw-1
+X-Mimecast-MFC-AGG-ID: m11AM7EzPLWFk-Y1fySjLw_1756383089
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-325ce108e16so1472367a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 05:11:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756383089; x=1756987889;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2UGqflFI8eChQOA7+GEyiXkR47jGjc2vCRu3os6QQyo=;
+        b=II6pudznbMbWqF/Uj58lUDNj4XmhLpFyaqp9g9lIgYbMFnznqrKV0i+i98mBfUC90d
+         bshePlfgnL0PMAApFOJU4s0jl/1aKFSO3X1O98D5xechoQa1H2Lljm7r30ReLbLCTXEd
+         m5W38iPw3bCDTLsHS30qTiVJlcd+SeuKGEq47vOnjTMX0ItXgyvYOZbeOI2F9k+XDdNZ
+         PcrUbmg5QT8ztnOUGCc6EEl8NVPKzXn1v9tjxLW550wMVpuEt9TwwBc60l1Lc5nVSh58
+         YqjE9nEzf+YxqUjtZuNr/eJ7rBftBblNs/WhWRueLvEnx7ZB7626PpsrhJVaNf4yMJwC
+         yUsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXsBhqkRGA/sBFexIWt81WcmHTpf6EpwG6Zn4MyFz6pPcPksZ6JE0Lxqz3jyWaxU5EzMpjA0vjmaoqT7UblaMk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbNrlqfmya3b0xamshBQfxA79Ck6VUdc/hjTy8X7e+3GR1DF0M
+	VeIBtz7unYCE0tJQt/Q1gwciG2iS9Mo86EQ2X/wq5Ly07j3Eh5xmErswlQ51nUXhImqqJ5TILlP
+	SbZA02Qlli+PulVqoUBIl4P+ZIPurKKC0z7o11jdncmb8QmCfv/6EFkV3gOFvZChpOMCNl3QBt7
+	YTv/tnql3YcgfNOStS5q+XdiG90bcl/qF3ANjrgeA9xGil
+X-Gm-Gg: ASbGncvHstErKiRpIqvdBoeXO6DpxBtwC391VWD6JI3a85nsRomT4z77tDl9t9k7hMr
+	yWBQpogsBVdl9w17VdKVQ3uMP5QARlqA7ZoWJAI+OC0DTnx9Yo0YKyDIhHQFuIfcP7VaDOp3TiB
+	D4dzTbA02Mh3pVDCZj7Yk3lg==
+X-Received: by 2002:a17:90b:4ec7:b0:31f:42e8:a896 with SMTP id 98e67ed59e1d1-32518b8233amr27589478a91.34.1756383088814;
+        Thu, 28 Aug 2025 05:11:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG/1VuJO7sOj+w9DbBPxn7h7VRP4y4KKuh9IZVK6bmCJgpn+KrmoXKNVFrzEshD5AQ6z5yFNiOU64bGtA72s9Y=
+X-Received: by 2002:a17:90b:4ec7:b0:31f:42e8:a896 with SMTP id
+ 98e67ed59e1d1-32518b8233amr27589439a91.34.1756383088324; Thu, 28 Aug 2025
+ 05:11:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250827075209.2347015-1-chuhu@redhat.com> <20250827075209.2347015-2-chuhu@redhat.com>
+ <87956f34-e6b0-4d03-b30e-56be4f6b84f1@redhat.com>
+In-Reply-To: <87956f34-e6b0-4d03-b30e-56be4f6b84f1@redhat.com>
+From: Chunyu Hu <chuhu@redhat.com>
+Date: Thu, 28 Aug 2025 20:11:17 +0800
+X-Gm-Features: Ac12FXy5i29Lv7D_Qeef2pLLf4cwbU_o5j8qeJDX_02H1KqJvRXEd1sgycpMGA0
+Message-ID: <CAKJHmxy_zT7kT5mz85OAbThcjYHHKoMRNwkdh8m+i94keQR2BQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests/mm: fix hugepages cleanup too early
+To: David Hildenbrand <david@redhat.com>
+Cc: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz, 
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Rong Tao <rongtao@cestc.cn>
+On Wed, Aug 27, 2025 at 7:41=E2=80=AFPM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> On 27.08.25 09:52, Chunyu Hu wrote:
+> > The nr_hugepgs variable is used to keep the original nr_hugepages at th=
+e
+> > hugepage setup step at test beginning. After userfaultfd test, a cleaup=
+ is
+> > executed, both /sys/kernel/mm/hugepages/hugepages-*/nr_hugepages and
+> > /proc/sys//vm/nr_hugepages are reset to 'original' value before userfau=
+ltfd
+> > test starts.
+> >
+> > Issue here is the value used to restore /proc/sys/vm/nr_hugepages is
+> > nr_hugepgs which is the initial value before the vm_runtests.sh runs, n=
+ot
+> > the value before userfaultfd test starts. 'va_high_addr_swith.sh' tests
+> > runs after that will possibly see no hugepages available for test, and =
+got
+> > EINVAL when mmap(HUGETLB), making the result invalid.
+> >
+> > And before pkey tests, nr_hugepgs is changed to be used as a temp varia=
+ble
+> > to save nr_hugepages before pkey test, and restore it after pkey tests
+> > finish. The original nr_hugepages value is not tracked anymore, so no w=
+ay
+> > to restore it after all tests finish.
+> >
+> > Add a new variable nr_hugepgs_origin to save the original nr_hugepages,=
+ and
+> > and restore it to nr_hugepages after all tests finish. And change to us=
+e
+> > the nr_hugepgs variable to save the /proc/sys/vm/nr_hugeages after huge=
+page
+> > setup, it's also the value before userfaultfd test starts, and the corr=
+ect
+> > value to be restored after userfaultfd finishes. The va_high_addr_switc=
+h.sh
+> > broken will be resolved.
+> >
+> > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+> > ---
+> >   tools/testing/selftests/mm/run_vmtests.sh | 9 +++++++--
+> >   1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/=
+selftests/mm/run_vmtests.sh
+> > index 471e539d82b8..f1a7ad3ec6a7 100755
+> > --- a/tools/testing/selftests/mm/run_vmtests.sh
+> > +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> > @@ -172,13 +172,13 @@ fi
+> >
+> >   # set proper nr_hugepages
+> >   if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
+> > -     nr_hugepgs=3D$(cat /proc/sys/vm/nr_hugepages)
+> > +     nr_hugepgs_origin=3D$(cat /proc/sys/vm/nr_hugepages)
+>
+> I'd call this "orig_nr_hugepgs".
 
-Add two tests for bpf_strnstr():
+Hi David,
 
-    bpf_strnstr("", "", 0) = 0
-    bpf_strnstr("hello world", "hello", 5) = 0
+Thank you for your review and valuable feedback. I will rename it with
+a v2 and resend the two patches. Do you have suggestions on patch 2?
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/progs/string_kfuncs_success.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> But it's a shame that the naming is then out of sync with nr_size_hugepgs=
+?
 
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index 46697f381878..1b56bd5860e9 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -30,7 +30,9 @@ __test(2) int test_strcspn(void *ctx) { return bpf_strcspn(str, "lo"); }
- __test(6) int test_strstr_found(void *ctx) { return bpf_strstr(str, "world"); }
- __test(-ENOENT) int test_strstr_notfound(void *ctx) { return bpf_strstr(str, "hi"); }
- __test(0) int test_strstr_empty(void *ctx) { return bpf_strstr(str, ""); }
--__test(0) int test_strnstr_found(void *ctx) { return bpf_strnstr(str, "hello", 6); }
-+__test(0) int test_strnstr_found1(void *ctx) { return bpf_strnstr("", "", 0); }
-+__test(0) int test_strnstr_found2(void *ctx) { return bpf_strnstr(str, "hello", 5); }
-+__test(0) int test_strnstr_found3(void *ctx) { return bpf_strnstr(str, "hello", 6); }
- __test(-ENOENT) int test_strnstr_notfound(void *ctx) { return bpf_strnstr(str, "hi", 10); }
- __test(0) int test_strnstr_empty(void *ctx) { return bpf_strnstr(str, "", 1); }
- 
--- 
-2.51.0
+nr_size_hugepgs is for uffd-wp-mremap, the test need all sizes hugepages,
+it's used to save and restore the nr_hugepagees of all sizes of hugepages,
+it's a test case setup, not like nr_hugepgs which is a global/general setup=
+.
+They are not the same kind, maybe they don't need to be aligned...
+
+>
+>
+> >       needpgs=3D$((needmem_KB / hpgsize_KB))
+> >       tries=3D2
+> >       while [ "$tries" -gt 0 ] && [ "$freepgs" -lt "$needpgs" ]; do
+> >               lackpgs=3D$((needpgs - freepgs))
+> >               echo 3 > /proc/sys/vm/drop_caches
+> > -             if ! echo $((lackpgs + nr_hugepgs)) > /proc/sys/vm/nr_hug=
+epages; then
+> > +             if ! echo $((lackpgs + nr_hugepgs_origin)) > /proc/sys/vm=
+/nr_hugepages; then
+> >                       echo "Please run this test as root"
+> >                       exit $ksft_skip
+> >               fi
+> > @@ -189,6 +189,7 @@ if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
+> >               done < /proc/meminfo
+> >               tries=3D$((tries - 1))
+> >       done
+> > +     nr_hugepgs=3D$(cat /proc/sys/vm/nr_hugepages)
+> >       if [ "$freepgs" -lt "$needpgs" ]; then
+> >               printf "Not enough huge pages available (%d < %d)\n" \
+> >                      "$freepgs" "$needpgs"
+> > @@ -532,6 +533,10 @@ CATEGORY=3D"page_frag" run_test ./test_page_frag.s=
+h aligned
+> >
+> >   CATEGORY=3D"page_frag" run_test ./test_page_frag.sh nonaligned
+> >
+> > +if [ "${HAVE_HUGEPAGES}" =3D 1 ]; then
+> > +     echo "$nr_hugepgs_origin" > /proc/sys/vm/nr_hugepages
+> > +fi
+>
+> FWIW, I think the tests should maybe be doing that
+> (save+configure+restore) themselves, like we do with THP settings through=
+.
+>
+> thp_save_settings()
+> thp_write_settings()
+>
+> and friends.
+>
+> This is not really something run_vmtests.sh should bother with.
+>
+> A bigger rework, though ...
+
+Totally agree, with the c interface to do that is better. then the
+vm_runtest.sh would  be clean. It's a bigger rework outside of this topic..=
+.
+
+>
+> --
+> Cheers
+>
+> David / dhildenb
+>
+
+
+--
+----
+Thanks,
+Chunyu Hu
 
 
