@@ -1,149 +1,139 @@
-Return-Path: <linux-kselftest+bounces-40164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1734CB399FB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 12:33:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E702B39A65
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 12:40:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 061A2205A3A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 10:31:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B74813A6AC3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 10:38:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C40A930BF4B;
-	Thu, 28 Aug 2025 10:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A591530DD12;
+	Thu, 28 Aug 2025 10:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Cdngxen0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EI7KTp8P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CC830BB91
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 10:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC4830C624;
+	Thu, 28 Aug 2025 10:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756377049; cv=none; b=OZUBCo/6pLk8nbDbGL2QLHNY6ItJ8iX21J4CHMeHzCWCvSn1fsYNJSZkYsi5sS/zaeCTB0h1ATlFRPWbqnMfCG6wrJxw27D2Fag5klDQ3nq6ciUS5cqeG4gXokHtxEAocsD+oc9d2MY5vTvZqnrVV+ZIRaKfRFEZTuk5EwSX/58=
+	t=1756377376; cv=none; b=GYthD3XFuJQmHG7EBQ1zGTpB2M5osfNprwX1EsE16wwlemr6pkZpir74O+MpHIanTiPVgk4kYpdo+A8bGST7wGFVTZZkYJamp+32esO8KP2F9S6qFwERI5cSJ3Kfd58CK1pFjBw98ftdk9o8CR6YvYH3bnGlLx9TALCLWnak8lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756377049; c=relaxed/simple;
-	bh=nFrvEIERFAvwyT9kdcHXUPvc32k5PlGxOwgN8YIcKAw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DdtIG2hI5vfjdq/8M6uTY0Ktcm3aFpiUJpTze4+b4fn64PpzZCbMDh9lkOyedHAhvWos25ddYxlpmR+QhupZz4hLO7IZ94Z8hi+gnjq/u0ZS2t5yhKn+Vqk1uYTUa+g35qMSphTVD2xL4ZVkfZ9eplmMHAqSZQnuW/UbVci65y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Cdngxen0; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-55f3b4c9fb5so59115e87.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Aug 2025 03:30:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756377046; x=1756981846; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t4Kw4U85mgfg3dN5KJcd7BuidBkgxZ4ucMLd7EmPUzg=;
-        b=Cdngxen0DlNBpeTbqnj71ypJwaCLfj2Ugw35eFyzET6Zr2qCpNbrattqEPjdmyAkIT
-         fEhWl61HCluyLeWmDgjDSd12n35iVuUGPPut8MnNVfZkZdvBhn6hNPKdAE6elisdnMFH
-         jRK8mosYqPsdNRPtOun07TINfWQrQZCKS3Iq73Wq5yLn2YFgYG55zLjZYNUfbMUGR1/O
-         Vik8BagHntQvvl41m1aEchBKOqztCx0iVTH8gfAKrX68wH0Ju2pfFWkZN0IrfJpiFx8T
-         KbCcYcoApWfBQfa47GIZ+QKLnS1jMkmvqesWg43j1CW+7PfoVy2QKVeuBvZn5b7BOfS1
-         n3Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756377046; x=1756981846;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t4Kw4U85mgfg3dN5KJcd7BuidBkgxZ4ucMLd7EmPUzg=;
-        b=ttJTesnCKXV67hO71J4+S/vFVsg6uF3QpklRGgKUkKuE6GjCySHxCy5M5Opfq4e7q9
-         9WAueg7CA6JmEaGc4lD1juI8sO3cB6IdXMt6Ddrd0ofShNWH1RyRNYYE1dnc3rT/ZqFR
-         ITjCaKJDA3TV95G0WvzNYeAInsnZ0dbC7pXu/Y/CJ9elV1/NUnUzWkzDWzXD5e1bqCCh
-         MR+/KHIV43toPtoRlKl/XjadPUeBswVsMwoMQAIte1zyGSVWIVh1gRp+xLGlRwcUtOna
-         QPLapghJq/63pgGpomKvbpxQFmt/Q6FYM7Y6aB+3/yAca4TLwRFNfVSHAASOGFRKSrHZ
-         sbuw==
-X-Gm-Message-State: AOJu0YxV80ojZbQqlFEOpcd1D8kKuSG1SvBVTy+/pZkvi8+dV/vRF3tO
-	4hxHtQrBN4CDPi2aEnFFJAI8iDSa9sqinFhwW1uUA5SjiI/zUyrqzGfS8rveTlCMxnHoMivHXML
-	HETBt+zE=
-X-Gm-Gg: ASbGncsIGaPJHSNesBrJBD77OTNFuz0ohWVSNXZTfSzVvEtSX/2Z7dALRoOEZ53vLZu
-	Vnc+vgubrB8x699Dl3alXq0i1bJGrWVFKUDODx8wHB/OyaLR0XgpqnJot+kzSpqKq9P9G2ndNE1
-	hrUNv/15k6WpMfbJh2PKuyn05Y17JVqOewyK7f6oU2wL2CJg6jKEdPwk0qr//8o/z24XPcqKsQi
-	Cv2ylHk99mbMbxWmMz9kmtQRbvFktA//153Ve74PMqhHCZqEBDZaszjEh9Dju8fSyC5+Sg0/d93
-	6p6AtUevbg1v6iS9wC2oRidXAF1iSORdYztVZ7CEGOkOCAWXq5OLSVzWDU2GK28CL5DV8P4SxCr
-	F/Clgs5UMJ1WaCSbtyyNEZ0GfrABNtBcgOi6RWelM3iuDyn0jEyrg2SrDapNDWRq+CZ4IK/dIZL
-	NBJz4=
-X-Google-Smtp-Source: AGHT+IEtZ/FN1eZE/NpbPi7cNF8sNnh7uAwwZYEG2CH9o5wOOOAXUfYTY775jJvav0K0prTgFk9doA==
-X-Received: by 2002:a05:6512:108d:b0:55f:63c8:7e32 with SMTP id 2adb3069b0e04-55f63c887camr104573e87.5.1756377045890;
-        Thu, 28 Aug 2025 03:30:45 -0700 (PDT)
-Received: from localhost (c-85-229-7-191.bbcust.telenor.se. [85.229.7.191])
-        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-55f35c998b7sm3215305e87.107.2025.08.28.03.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Aug 2025 03:30:45 -0700 (PDT)
-From: Anders Roxell <anders.roxell@linaro.org>
-To: shuah@kernel.org,
-	brauner@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	dan.carpenter@linaro.org,
-	arnd@arndb.de,
-	benjamin.copeland@linaro.org,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH] selftests/filesystems: Skip file_stressor test on NFS root
-Date: Thu, 28 Aug 2025 12:30:42 +0200
-Message-ID: <20250828103042.1412850-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1756377376; c=relaxed/simple;
+	bh=Q++vDmJGmmqheRrUrP0W8dSS7fcanjr4UJG7gMXFg6o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E7DDjoJPCp8LD1C60kAwgxpCgiay8rN3pnCh2v47+bHZ+M129APzGpuKgIoUrei4PQLe+fYhYxjdjZAuuQ9MNNasBCUTMoX7HMRtSy7JLRc4UZNBrEehT3jmT+sSDBm5hLm2VMEcyGht5odhEWAD+BfmCJx4383Vl6PZoodAGCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EI7KTp8P; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756377375; x=1787913375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q++vDmJGmmqheRrUrP0W8dSS7fcanjr4UJG7gMXFg6o=;
+  b=EI7KTp8Pkv/KuGNq6iMaeNGcX7oZqe/zW0XobJEVyWN6WEk4vnqBfXxZ
+   iR20JrwF36o2mPO7G/MpIAHjbxliRSqsbdufmH34IGVbtRN7ZNnmQnMrH
+   Bmc1hq9BtGcCgdqArDgwKAfiUyPDLb0ZTKSiCLbeDRcTk7G4QYTpOK4cB
+   5PhY8Y2wsjCNyzZ3FO0PHyELe5DM2RFeVNLhA3pwoxKpsAnwAgxiByMF0
+   6Lm1GGW2hF502wVVSTkez5qADgmkrdekkt+yKjbcZb6+gTdCnJlIXWVwZ
+   TtAKFU5P4QyV3V68l4Su9p5PYjQh9DfLDyQd0/eI3Xv0qMiUivx0vYr5i
+   g==;
+X-CSE-ConnectionGUID: J+9phYcOT5ihtlS0WasbOg==
+X-CSE-MsgGUID: 8TSymqXeTmC3pFCMFRhIJg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="62465683"
+X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
+   d="scan'208";a="62465683"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 03:36:14 -0700
+X-CSE-ConnectionGUID: 0KXzwk6SSTqEhED/Xo7AIg==
+X-CSE-MsgGUID: uo1IoHNKR1Gi41sgQk9IWg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
+   d="scan'208";a="200992693"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 28 Aug 2025 03:36:08 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1urZzC-000TeJ-18;
+	Thu, 28 Aug 2025 10:36:06 +0000
+Date: Thu, 28 Aug 2025 18:35:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	Bobby Eshleman <bobbyeshleman@gmail.com>, berrange@redhat.com
+Subject: Re: [PATCH net-next v5 4/9] vsock/loopback: add netns support
+Message-ID: <202508281824.3XZiIgxs-lkp@intel.com>
+References: <20250827-vsock-vmtest-v5-4-0ba580bede5b@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250827-vsock-vmtest-v5-4-0ba580bede5b@meta.com>
 
-The file_stressor test creates directories in the root filesystem and
-performs mount namespace operations that can fail on NFS root filesystems
-due to network filesystem restrictions and permission limitations.
+Hi Bobby,
 
-Add NFS root filesystem detection using statfs() to check for
-NFS_SUPER_MAGIC and skip the test gracefully when running on NFS root,
-providing a clear message about why the test was skipped.
+kernel test robot noticed the following build warnings:
 
-This prevents spurious test failures in CI environments that use NFS
-root while preserving the test's ability to catch SLAB_TYPESAFE_BY_RCU
-related bugs on local filesystems where it can run properly.
+[auto build test WARNING on 242041164339594ca019481d54b4f68a7aaff64e]
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- tools/testing/selftests/filesystems/file_stressor.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/vsock-a-per-net-vsock-NS-mode-state/20250828-083629
+base:   242041164339594ca019481d54b4f68a7aaff64e
+patch link:    https://lore.kernel.org/r/20250827-vsock-vmtest-v5-4-0ba580bede5b%40meta.com
+patch subject: [PATCH net-next v5 4/9] vsock/loopback: add netns support
+config: nios2-randconfig-001-20250828 (https://download.01.org/0day-ci/archive/20250828/202508281824.3XZiIgxs-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250828/202508281824.3XZiIgxs-lkp@intel.com/reproduce)
 
-diff --git a/tools/testing/selftests/filesystems/file_stressor.c b/tools/testing/selftests/filesystems/file_stressor.c
-index 01dd89f8e52f..b9dfe0b6b125 100644
---- a/tools/testing/selftests/filesystems/file_stressor.c
-+++ b/tools/testing/selftests/filesystems/file_stressor.c
-@@ -10,12 +10,14 @@
- #include <string.h>
- #include <sys/stat.h>
- #include <sys/mount.h>
-+#include <sys/vfs.h>
- #include <unistd.h>
- 
- #include "../kselftest_harness.h"
- 
- #include <linux/types.h>
- #include <linux/mount.h>
-+#include <linux/magic.h>
- #include <sys/syscall.h>
- 
- static inline int sys_fsopen(const char *fsname, unsigned int flags)
-@@ -58,8 +60,13 @@ FIXTURE(file_stressor) {
- 
- FIXTURE_SETUP(file_stressor)
- {
-+	struct statfs sfs;
- 	int fd_context;
- 
-+	/* Skip test if root filesystem is NFS */
-+	if (statfs("/", &sfs) == 0 && sfs.f_type == NFS_SUPER_MAGIC)
-+		SKIP(return, "Test requires local root filesystem, NFS root detected");
-+
- 	ASSERT_EQ(unshare(CLONE_NEWNS), 0);
- 	ASSERT_EQ(mount(NULL, "/", NULL, MS_SLAVE | MS_REC, NULL), 0);
- 	ASSERT_EQ(mkdir("/slab_typesafe_by_rcu", 0755), 0);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508281824.3XZiIgxs-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/vmw_vsock/af_vsock.c:137:35: warning: 'vsock_net_callbacks' defined but not used [-Wunused-variable]
+    static struct vsock_net_callbacks vsock_net_callbacks;
+                                      ^~~~~~~~~~~~~~~~~~~
+
+
+vim +/vsock_net_callbacks +137 net/vmw_vsock/af_vsock.c
+
+   136	
+ > 137	static struct vsock_net_callbacks vsock_net_callbacks;
+   138	static DEFINE_MUTEX(vsock_net_callbacks_lock);
+   139	
+
 -- 
-2.50.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
