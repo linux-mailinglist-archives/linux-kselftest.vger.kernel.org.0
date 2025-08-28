@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-40136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1338BB39208
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 04:59:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BEE0B39207
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 04:59:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E082D1C24FDD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 02:59:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEBFD4656EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 02:59:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A572281520;
-	Thu, 28 Aug 2025 02:58:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA29284889;
+	Thu, 28 Aug 2025 02:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="KwtwZNgz"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="M3eG66oK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-245.mail.qq.com (out203-205-221-245.mail.qq.com [203.205.221.245])
+Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C16277036;
-	Thu, 28 Aug 2025 02:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6924227C158;
+	Thu, 28 Aug 2025 02:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756349928; cv=none; b=oP/JjBEJ49caXAWk2bf4CqsZVSS5pJ89L1GhjPEGY70PRNGdDhHlTeVGKmzFpwiga0uaiAvkpt9WJ9aTIVvqcK+so9UrODE01gYm4j1nW8+pUfkHO1PvoA+ufkBKpXaCWjzcXrWuD6NxYGKPp4IlcvJjFLabfZIgAxY/6JWhHw0=
+	t=1756349948; cv=none; b=oGCByzjjKpBsabYbFbWVtfKLHc/7ULVD+349u+9DKBrdFMf7KYEjpj+9ee2IKuT6dNrbXRN+iupe3mpJ3runkIJOEzfaW2j5gWnbKht2vIJjsKZUS5niRcbZ7t5EWVpJz+PLuqbEN+jb8cFh1USa6tDf3KBIFjldK/ZpLfrYYsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756349928; c=relaxed/simple;
-	bh=9MlaewShrzwNP5cMPLBFY2qQOGWyYpp79Q4CAVUza28=;
+	s=arc-20240116; t=1756349948; c=relaxed/simple;
+	bh=c/lXw1sC5mJHaO8msACLWB4EsF+7z/nKMyb4PEdLM9k=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=X1z8F44HpTreXVRguFdF0ES/0HSh47bhlajMt9GMFL2fjPOhVmNkQuS6XKIv8tF0S0h2iUJeSJnvNBSwp4Jb5+mPbnUdUk7Yeoa261pmCT9Hq64qELKQMJ58rqaEGdDPNWxSwTGY2/XqiUjiUagr97SNF1CLOyNyN+i/TtrEKWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=KwtwZNgz; arc=none smtp.client-ip=203.205.221.245
+	 MIME-Version; b=mCbmYsL5xvheiChCf2NxnQsVHJQpg/p46sOP+ZGTnF47LUvWe37gf8IPBIZey48nkf9hEx5uZvWgxpF48zHMh0ZWOk1eri+u2RIFph7FmJ2wZF6YGTzOWOUJmjAfctGaM5XQloJtB1Gyr6CbMec8vK4DqiQ7Q1be8p5qmk0u7y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=M3eG66oK; arc=none smtp.client-ip=203.205.221.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756349617;
-	bh=qD7BGCwe3Vj4PWN7gaUtbqxYjKU5h/fA619lif8uTXA=;
+	s=s201512; t=1756349643;
+	bh=LZVhn6BK7rxIqwcwVk6ASyAdIBsuUFL/q2EV3tE0yFg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=KwtwZNgzcaF5Zxzb5vzCdl5pQyvLnSNmA1usWFZWBb5mdma6flLH32hzPz0ze60m5
-	 z4OWvhEJ/MqsGsw1SJPXZytu1wHzKTv5Iuoo/tQQQWfQo77s2LEZm9644QNjj6LMqX
-	 6f1SY9GSDF+rLoUsTy3I4dvxtuzMKKQKkQROMR4A=
+	b=M3eG66oKxd5BZZ6I0RMK2O3h5lR41dbhYcYTLc9gP+93jXjllRzVAg7ipna7sQzX/
+	 cGsiqms9LMwA8a9Nm397RyZxxNbZspk+3yadBLyyPxK2eFMSYwZiDsE/WrMard5wSm
+	 p2MmHJ3J/kQ+++/yClfhuiWAaryfnecq9zqHiYvA=
 Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrsza36-0.qq.com (NewEsmtp) with SMTP
-	id D5E218EC; Thu, 28 Aug 2025 10:53:30 +0800
-X-QQ-mid: xmsmtpt1756349610tsimvv81o
-Message-ID: <tencent_DF4DA83EEBFB9246E5E3357BB40911CCA005@qq.com>
-X-QQ-XMAILINFO: MRb64KOzELYunc+ptYJ5Xg5rHPjjOlJVdWadpg+EZmUNNsWzuK8Ia1lYURXZ8O
-	 fI3rkxQNjSl9NJGmnpcPAPTLtSEtV9bLyp+lobNjHJmfRKqKBLky2r7yVxHhp/trrRjezlfnINNV
-	 L/Re3JsnuzrtGpTQu8Qa00msL9/2kuL76dH0vDHM+SvpzDNFI3aH3U9YAM5dYhr7zYVhssq31cKs
-	 VcPVyxbaj3cjrKL8cSsfkPDM0myuzfudTa83FBfUJSnQsBmK0nbBbLqQLm6pz5Y4sMmcB1rMXJGU
-	 I1K9sQ0SOxeMR64TM20TQ9VjWDkqZ7F8NCHWAW4KUT4mwBgMls7ypD1Bf2dwwlhlloebAxeqXGpV
-	 7IzDdaRglNjs4nlrVE5+0IW3YIQZphTjmVb0FLa8XoZqgUocWUeO/zpVEu9o5Q5l5MUeskTucrl0
-	 4a6+Tj2LpH90WGth9RKl6/Oj+95TC7mEVgZv7lQHXUwkVe+P56lJhA84kj/d3oUB/x5lM748mR2R
-	 TGeozq+cZBWZ7B9mQSGVSLZ3+25p0/ozfmnydscxdbU5GTH5o2KdtNm1MVun+5UZFn8GB8rvjc4D
-	 RTiXUNoWr00C+7rPgPm+wbMt5nLvtNQSrZzpMc11dQNITTIhT804MZXhl6wSvN6TR9iTplVH8LTZ
-	 g5+CSJkYWyezg6J9t8GLlvpHAA4tSJzqAyg64+CbRnXZxxdG9MGrDM8aJXEWqkv5TXb/nnPYak97
-	 /fkpNps91sMEOwJ8ztcSe7eNpcQRyLt7hSV3nasoSjkqQexgFlFgYVdN5ZXWQeXVGEFI/53tm5FF
-	 ZrEhCiElRefm4eK3OFNvsE8F82jpiuXFYjiC5JSbrYMce1ydsjw716jRj2tflltRDmjG0uv/ttbM
-	 A0OUr7PTN0hIsWT4X0YxS0DyJbk13q8C8IqPYH/v7t012aGdigdRslQtZs/9zNb8Arcxt5rTFOBP
-	 qI3hdpQAKiWnB+nZutCHnI0eGz4siSB70OgVHTomywiHAYx0qHXJzOyQkni4/5wsBsVse+FTPdsx
-	 S5Pce6MdVCs3keMuDzUYbPJEWrAyp+avy7liQ4/QufurC756S7iW6ptlx/Rlg=
+	by newxmesmtplogicsvrsza29-0.qq.com (NewEsmtp) with SMTP
+	id D79210B2; Thu, 28 Aug 2025 10:53:57 +0800
+X-QQ-mid: xmsmtpt1756349637t0nyoi3x6
+Message-ID: <tencent_952D95A0D7B8D15C4434831621A2ACCACB07@qq.com>
+X-QQ-XMAILINFO: OeJ9zRfntlNPiKb5kbzoPQTX2LTvjSLhVNZLoM5G9/5+eucXXvBSbue5Pb2uzp
+	 8z8/QMag0I/SCKxCy28f9bwUul3wpbxsAYG4bUKBtRcqZYLEHDn4I7DnF09VYPZixmVcKTtDDqlf
+	 XzwX2+L6untt3rcWPIz1gqRYqC2qUbdLoa/JcrG+SRKNJkmboAXTwDl7pMkrFAie1IlkRgnNA8sN
+	 PNkq85b2K8gz0YD0S51LBIDR8DZLgmHnX/Ztgzt8qdBIuMv/GHDRfBmsbWanV3+duWLoL+MKM35v
+	 PCJ8u0elsOSL6xm/AobsM/b/N+BmVzOZd6RAFdVZKBo78gwNpe87Ka70V/Mj3ELpd/rKkSqlcdNl
+	 3a8eB46VeS7Q0c+6HLFW4jVsdKLuquJBhWsGcxSfGiwV7qLu/qG+8PPvtBpTBvlNHStFFXWYxrHS
+	 0JoavfvpvHEF6HndDB5oQxFlWyLJMPzrfTKCvmThG+NPmauU2DIXcjpODsngM6Bg5rBwZY8b0Piz
+	 Hv1z9bl/SsKbkVkLPYBAcWo5vURG9Vb0sS/VJ577YsyIRamwmqs7oK+CIuEIEVNPKWV91V1X9mY6
+	 AWzYM9UKiAYUF5c7i+h17N41gchmNk0FAslziS8nt/Tz6p1/N7jmymsKYXr1rgldOh9kwK5psGyI
+	 A8+XBbF5gPD6CrW9qaP3UygDTOX2Nn1wePWJ2KK2w3wGeHMNxGx7yPpW+l11mrnYQT5eVwXY6/1O
+	 N4Zz8PHXI13z4QiWOLuycOxbri8Ipa3eGZD7DEmwVmOLd9ZkwFRp+/2b4d9zny+5ixTOJ3ZqtpnU
+	 yvHLNBTupUZ2ScM4bmzUdgb0uiy4XaXq1YfAD+ITpV+uHpfmJooSrSXEpBLfMHW2brVuqQHK7EKa
+	 7zm7AiBFOPKes29ZN4fGDp80s5NugYyelohBwoCos+2/ucZHTYPyDoKjCK8gKclV6pXkKfMmtBpr
+	 jpXwIqeCcYDHFOh28JWGdmUaOa/9FNf65EW1Wd0hVwvh+xkhAvKgW8uCTMuPwQ+xJB30d0OVlkU6
+	 RHTBw3eCfI8S+MpRgfNmX1AXPFLgWBCmopEyKy7DGvOTrR7TDUdxEcpcbOjTg=
 X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
 From: Rong Tao <rtoax@foxmail.com>
 To: andrii.nakryiko@gmail.com,
@@ -81,9 +81,9 @@ Cc: rtoax@foxmail.com,
 	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
 	linux-kernel@vger.kernel.org (open list),
 	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [bpf-next v2 1/2] bpf/helpers: bpf_strnstr: Exact match length
-Date: Thu, 28 Aug 2025 10:53:13 +0800
-X-OQ-MSGID: <e37d08a0e813eed1bc82777e11f3335a0c7672e7.1756348926.git.rongtao@cestc.cn>
+Subject: [bpf-next v2 2/2] selftests/bpf: Add tests for bpf_strnstr
+Date: Thu, 28 Aug 2025 10:53:41 +0800
+X-OQ-MSGID: <b5965757c3d14276fec1ac96bace13f05d099e43.1756348926.git.rongtao@cestc.cn>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1756348926.git.rongtao@cestc.cn>
 References: <cover.1756348926.git.rongtao@cestc.cn>
@@ -97,37 +97,29 @@ Content-Transfer-Encoding: 8bit
 
 From: Rong Tao <rongtao@cestc.cn>
 
-strnstr should not treat the ending '\0' of s2 as a matching character,
-otherwise the parameter 'len' will be meaningless, for example:
+Add two tests for bpf_strnstr():
 
-    1. bpf_strnstr("openat", "open", 4) = -ENOENT
-    2. bpf_strnstr("openat", "open", 5) = 0
-
-This patch makes (1) return 0, indicating a successful match.
+    bpf_strnstr("", "", 0) = 0
+    bpf_strnstr("hello world", "hello", 5) = 0
 
 Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- kernel/bpf/helpers.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/string_kfuncs_success.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 401b4932cc49..ced7132980fe 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -3672,10 +3672,12 @@ __bpf_kfunc int bpf_strnstr(const char *s1__ign, const char *s2__ign, size_t len
- 
- 	guard(pagefault)();
- 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
--		for (j = 0; i + j < len && j < XATTR_SIZE_MAX; j++) {
-+		for (j = 0; i + j <= len && j < XATTR_SIZE_MAX; j++) {
- 			__get_kernel_nofault(&c2, s2__ign + j, char, err_out);
- 			if (c2 == '\0')
- 				return i;
-+			if (i + j == len)
-+				break;
- 			__get_kernel_nofault(&c1, s1__ign + j, char, err_out);
- 			if (c1 == '\0')
- 				return -ENOENT;
+diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+index 46697f381878..f8fe14787b2e 100644
+--- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
++++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+@@ -30,6 +30,8 @@ __test(2) int test_strcspn(void *ctx) { return bpf_strcspn(str, "lo"); }
+ __test(6) int test_strstr_found(void *ctx) { return bpf_strstr(str, "world"); }
+ __test(-ENOENT) int test_strstr_notfound(void *ctx) { return bpf_strstr(str, "hi"); }
+ __test(0) int test_strstr_empty(void *ctx) { return bpf_strstr(str, ""); }
++__test(0) int test_strnstr_found(void *ctx) { return bpf_strnstr("", "", 0); }
++__test(0) int test_strnstr_found(void *ctx) { return bpf_strnstr(str, "hello", 5); }
+ __test(0) int test_strnstr_found(void *ctx) { return bpf_strnstr(str, "hello", 6); }
+ __test(-ENOENT) int test_strnstr_notfound(void *ctx) { return bpf_strnstr(str, "hi", 10); }
+ __test(0) int test_strnstr_empty(void *ctx) { return bpf_strnstr(str, "", 1); }
 -- 
 2.51.0
 
