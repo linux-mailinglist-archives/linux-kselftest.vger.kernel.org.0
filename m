@@ -1,104 +1,118 @@
-Return-Path: <linux-kselftest+bounces-40231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03B30B3ACF2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 23:46:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9215B3AD63
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Aug 2025 00:19:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DF061C858D6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 21:47:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 465BE582970
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Aug 2025 22:19:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F75B263C8E;
-	Thu, 28 Aug 2025 21:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C2925DB1A;
+	Thu, 28 Aug 2025 22:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ox.ac.uk header.i=@ox.ac.uk header.b="kG5UKnw8";
-	dkim=pass (2048-bit key) header.d=UniOxfordNexus.onmicrosoft.com header.i=@UniOxfordNexus.onmicrosoft.com header.b="ZLbPSrig"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NayFvqdb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fallback4.mail.ox.ac.uk (fallback4.mail.ox.ac.uk [129.67.1.171])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D6721146C;
-	Thu, 28 Aug 2025 21:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=129.67.1.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A048A1E5718;
+	Thu, 28 Aug 2025 22:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756417603; cv=fail; b=irnkaZADNEV7CnIqweeeDRA1MXJRp4IAiJtfqKx9QsiFSIzesS5Gpovvk3WdSisH71DhqC2QvLZaKqwEp2lUAe1JJkg7ods4NqhZ3b0raxOTusi+r+7En4vhp81HSUGmk4Ek6qxNcGY04nEoHJq47jtapRSAUGxNOPRz9efyr0Y=
+	t=1756419572; cv=fail; b=IErRX1Xvj+7rAERq29/kMslJsaHgHXdqdF6X/XHi8hzhQ2z+rgL9uRlOQRh6DXMtB5z0hofacwuExwQMjNQRwaKxOxjpC9DiqTz7ryzeIqpb03F8eizsUN/RDkfhGnmbcfeWXq/DZMnFh+0Oww98sLHDVeQw4VZbQ4RKs9DQ5Fo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756417603; c=relaxed/simple;
-	bh=HoKQjcNTbLr2hnk28qJuotqMOhlczQp+7v+3teVc//g=;
-	h=From:To:CC:Subject:Date:Message-Id:Content-Type:MIME-Version; b=MnHcdV5F7hKY+KW8pLbCUgOY0PzrVav544kZ39aybd9AHIUDgixy8kMYsNbr2vNHBS6QPVazPIgHhKdgQwJq7kChj5uYW40y+WqvVmhNuq8nw5ztiQuaTxR2AZ6o9WjgWPd1NCjQPnok0ELQSx5OUwCr1CQxE/i3Zjw07gtJxj4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=magd.ox.ac.uk; spf=pass smtp.mailfrom=magd.ox.ac.uk; dkim=pass (2048-bit key) header.d=ox.ac.uk header.i=@ox.ac.uk header.b=kG5UKnw8; dkim=pass (2048-bit key) header.d=UniOxfordNexus.onmicrosoft.com header.i=@UniOxfordNexus.onmicrosoft.com header.b=ZLbPSrig; arc=fail smtp.client-ip=129.67.1.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=magd.ox.ac.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magd.ox.ac.uk
-Received: from relay18.mail.ox.ac.uk ([163.1.2.165])
-	by fallback4.mail.ox.ac.uk with esmtp (Exim 4.92)
-	(envelope-from <praveen.balakrishnan@magd.ox.ac.uk>)
-	id 1urjvu-0002MW-Gv; Thu, 28 Aug 2025 22:13:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ox.ac.uk;
-	 s=flood; h=MIME-Version:Content-Type:Message-Id:Date:Subject:CC:To:From:
-	reply-to; bh=fvq77BtEl8U1b531Qv3Buv5jXhzDTV8N0fdosavxBA8=; t=1756415602;
-	x=1757279602; b=kG5UKnw8qA2qyeH3NUTwzaVhdzaMw9lc3rTtEbyxvii2S85Eo7yn7EFK3d5CC
-	RfQmTw8b/7LMTAjn76Zbvb/4fmtJI5sKxHYwBG+LmrRyKNg5CLBdGvwxlu3xfNjQ8ltKD3DW93nNa
-	D9mZma9gtLJBwnpdaZtMH1cpfNKImQj2hrGcWwIdkv50IDo+HydpGF3BxuQo8fxsn77O6HSJzDcET
-	kHqm9zykPeK22KcDeBtbcyWHrPJtQ0LiXYJGKaanszUeMfXoPW+AQyMss4x3fatXu6m712+dpOrif
-	IRHBDFDbnihDnM9SwyMG5eustELoR+B2ZKp42QnIvaTP5G9sfg==;
-Received: from ex02.nexus.ox.ac.uk ([163.1.154.242] helo=EX02.ad.oak.ox.ac.uk)
-	by relay18.mail.ox.ac.uk with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	(Exim 4.92)
-	(envelope-from <praveen.balakrishnan@magd.ox.ac.uk>)
-	id 1urjvX-0006e0-8p; Thu, 28 Aug 2025 22:12:59 +0100
-Received: from EX03.ad.oak.ox.ac.uk (163.1.154.243) by EX02.ad.oak.ox.ac.uk
- (163.1.154.242) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.58; Thu, 28 Aug
- 2025 22:12:57 +0100
-Received: from CWXP265CU008.outbound.protection.outlook.com (40.93.68.7) by
- EX03.ad.oak.ox.ac.uk (163.1.154.243) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58 via Frontend Transport; Thu, 28 Aug 2025 22:12:57 +0100
+	s=arc-20240116; t=1756419572; c=relaxed/simple;
+	bh=2c4FZ/tc1BF6ahumV09AeX3ytF/YbxFUQ1M4LUH/MNU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=tppmJehfT5Ur7uLYZgQxz3hLMrNjgL/q3/AoBrSydf9PXtA0MYDfJRvbOkWEtD48K+83logZwZq/+iImDs26fyop6ROlUAJZ2dzpEIe140mQuQxnrsgR750NoNpzZAMx+wKq+v2eBvT8rx53S9rUquylhMu2R9CLJm5a18HCwxA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NayFvqdb; arc=fail smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756419570; x=1787955570;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=2c4FZ/tc1BF6ahumV09AeX3ytF/YbxFUQ1M4LUH/MNU=;
+  b=NayFvqdbahYtP5R5gzQYNOPhl/LZbXusXjVYRg3eZyASpdlRFvqpRNBZ
+   0+3cOEUKwIS0aD9MeE69kh1gPaxmPzsaM8WcMrklxl8pqUxGhWr3W19zI
+   fi7ZX60c4Qq3G4FXk5Aq6UoTxbWp+FCIp4FFti1Pajiyk+orOwP8be9hk
+   dd7YsqzrxJetu2wJChCf/e1XgRCu1w3nm23X7//uJ3v9GFtaXnpeg7cWP
+   owCntY+K02YM+fN0zFtIgP5sw2+p2phRFbhhqMQJWJiHWt3tvO99dYaAZ
+   hO1DSJz+2f9tWZjtr9aVfVDKvgAVlXI6vWPhiqnslZ4lICvPDRPl3gp4U
+   Q==;
+X-CSE-ConnectionGUID: 2higqw+ySJmcrgrEwkoEBg==
+X-CSE-MsgGUID: CWel4UCGSDGuaJittf3cYg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="69413137"
+X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
+   d="scan'208";a="69413137"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 15:19:30 -0700
+X-CSE-ConnectionGUID: e8uTlS/MRCWblVdkWJtlng==
+X-CSE-MsgGUID: 4phzg57SSvedcZHohshQNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
+   d="scan'208";a="169526984"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 15:19:30 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Thu, 28 Aug 2025 15:19:29 -0700
+Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Thu, 28 Aug 2025 15:19:29 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (40.107.237.62)
+ by edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Thu, 28 Aug 2025 15:19:29 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vzPdckFDe3aIkqAUyHv2/194Q4kjL6fkVG0LdSHU3huUUflMybzZEj0VZ/63haP6xS8ApQZb8REyAcUuICgCFF5ou7syKxMFtwUG1b2JD7Vz61/rOiHdWRvZehzLW+iRnm1rxpzsf8c02IIQGtyen/HKA5KQG1amME14ROaxReNwrtIrRKTC+iFD9xLTPV2SWLYVe+8nC1GpKsaup8+/sv5MaAzMEw/KY6C/ZBDOZgXc17S+/XB3UMSfC/aQUNtf7XjRBWMccTEcYKxNCGqUE3hnkgjO4xU3Rs+xI78X2+hG90LNlua9lyQk+Irlw4FA/IOn/xi+BJ93eqkZvvelww==
+ b=blFcmyOHMIegT+P7maNM92yyd+JpV2YYSLDtPcqPcwH5bXDIW4zXAjcVHF0oXsvhDXPnoKBbGgDNSdRweDSWXkEQWJtLtmgXNgXZTLcg+VmHM158Jjdw7jEvq2PaAmFDgndju+JQETaPxSq8motTdqrcPE241HNcoYta2PLtMUz4z/j/Wr40Q6JYS1dFY8P43ztNY23uQlo3EbnEQQZ3uRuRM4fw19E4gRsbt7Ho16acLqpuk0R6jrOavfRuIDg5CjoVSEuGfmKZEIN+xf3Q9D4z9Z+IFyG7n4xPizlhdQ+vGbroARoGKER+4ft3x143BGhXVY2OA4MPc5yLXhOMbg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fvq77BtEl8U1b531Qv3Buv5jXhzDTV8N0fdosavxBA8=;
- b=vzOYJiImr4kJyKYORcrAheJv47Y3Br8oEZBxUGLgsRCYUEjzQrVi6xhw9QMMmlI77ivBCwoWJ5dLMRtf0gMRfbrYgbIO7x5hU5XZYZXqjWKAjaPBCS6IDW0jZ0zjmN9m/xRChJjMzTeg1FbJ8zU5TKLCqSIVv4r7YYH2Hl5XBoac/fb6kho0iUoQBRlzm+iEdoxr9rqIeaJLgkQnnGJuACA+PGGjYlzHYW9Asj9PBtDVBKROuSIq0JBdA1EFdP59gjyrJMuRem9B9bR8Db0B8Zk55HGqXoKRt8iWGIcwT1muYTfeuS1rdujx4iKzWpq4QWod2PrEMYvAXUuMdgay3A==
+ bh=xQL9EQEUUYdfAZ8wX7X8kP9E7X0HxSr6dojoF/DVgtc=;
+ b=Uvte1YSVBwUiyzOgu8+ihmolJYiHz1aEntAvch0LKPCnTm5YhKam8FzKTS5NuQE9Pv7kvwao67DiRgddkq5Hv/SMIEwH36bixoc/cYhgsBW9BpXD8dzN+lL3yj4ntD2knBwnwHleLjXIkpBuKB6b80x+xW0vWOUBSvCeh93pl80crieJCpgYopPvtnzmDWN7dS6w0/xJ+L0w0pMCmBbi4TvJaLZzOy1kxUAWezcN43dOebwLVP9ZWKvCuy9F+0UTp17Pgj9QaPnc88cAFRjckWLhQVEaDvClJtahmV1YlBkfuCeGXOWFNzNDF0CpcS3NKZTj9oCz7zJjXPnneRcr1A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=magd.ox.ac.uk; dmarc=pass action=none
- header.from=magd.ox.ac.uk; dkim=pass header.d=magd.ox.ac.uk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=UniOxfordNexus.onmicrosoft.com; s=selector2-UniOxfordNexus-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fvq77BtEl8U1b531Qv3Buv5jXhzDTV8N0fdosavxBA8=;
- b=ZLbPSrigtA4iIKwluctY8/3D7z9g8fa5p1ETwpxZ2CTS7kRiNeWQPntsYkEorp1+Rxy7DID7dwaCw7R7uh8B5ML7BY7o4IOveQiJvDBOYBTQ3VjqDY8EX4QcDfGUJgiysiyWcwogV3dsQsXyFs7zFkhxKt+DzyuB69RBvgxace/lhtahTdvVh+UwaiREGOKNT2ByCTWtRojCRffvczNJB/0hEirkRIbJ9UZy1UUjZ5iihbuaChiGkbQuVqQiGdjBxwhq4RjmfyQTcIgHHFY3KDlxyz/xOBZu3iMsTYvwbWdkweJDDB5iiL//3zXKdgpiNOn8uH3tTDaNgHAxqI3esQ==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=magd.ox.ac.uk;
-Received: from LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:323::12)
- by LO7P265MB7982.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:466::16) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by IA1PR11MB7823.namprd11.prod.outlook.com (2603:10b6:208:3f3::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.19; Thu, 28 Aug
- 2025 21:12:56 +0000
-Received: from LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM
- ([fe80::639f:86e3:3b7c:f6dd]) by LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM
- ([fe80::639f:86e3:3b7c:f6dd%4]) with mapi id 15.20.9073.016; Thu, 28 Aug 2025
- 21:12:55 +0000
-From: Praveen Balakrishnan <praveen.balakrishnan@magd.ox.ac.uk>
-To: <aconole@redhat.com>, <echaudro@redhat.com>, <i.maximets@ovn.org>,
-	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <horms@kernel.org>, <shuah@kernel.org>
-CC: Praveen Balakrishnan <praveen.balakrishnan@magd.ox.ac.uk>,
-	<netdev@vger.kernel.org>, <dev@openvswitch.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<skhan@linuxfoundation.org>, <linux-kernel-mentees@lists.linux.dev>
-Subject: [PATCH] selftests: net: fix spelling and grammar mistakes
-Date: Thu, 28 Aug 2025 22:11:00 +0100
-Message-Id: <20250828211100.51019-1-praveen.balakrishnan@magd.ox.ac.uk>
-X-Mailer: git-send-email 2.39.5
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO2P265CA0495.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:13a::20) To LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:323::12)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.17; Thu, 28 Aug
+ 2025 22:19:22 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44%6]) with mapi id 15.20.9073.010; Thu, 28 Aug 2025
+ 22:19:22 +0000
+Date: Thu, 28 Aug 2025 17:19:19 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: David Gow <davidgow@google.com>
+CC: Marie Zhussupova <marievic@google.com>, <marievictoria875@gmail.com>,
+	<rmoar@google.com>, <shuah@kernel.org>, <brendan.higgins@linux.dev>,
+	<mark.rutland@arm.com>, <elver@google.com>, <dvyukov@google.com>,
+	<thomas.hellstrom@linux.intel.com>, <rodrigo.vivi@intel.com>,
+	<linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+	<kasan-dev@googlegroups.com>, <intel-xe@lists.freedesktop.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>, "Stephen
+ Rothwell" <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v4 3/7] kunit: Pass parameterized test context to
+ generate_params()
+Message-ID: <lfplzm3dmmkployo2bw2oyhbzwhev4hriamd64th6my2xpsrkv@obol3k6z4u2z>
+References: <20250826091341.1427123-1-davidgow@google.com>
+ <20250826091341.1427123-4-davidgow@google.com>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20250826091341.1427123-4-davidgow@google.com>
+X-ClientProxiedBy: SJ0PR05CA0077.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::22) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -106,139 +120,288 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO6P265MB6985:EE_|LO7P265MB7982:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96d49cc7-6b4b-4f44-f34d-08dde677a837
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|IA1PR11MB7823:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73269f2f-084a-4676-fcca-08dde680f04a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|41320700013|376014|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?2ucGv2gnCHH1CFo2M9TU9RdA5dkTfwjmmZjQtxkdylNIvsaZ5jGto/NnCdbS?=
- =?us-ascii?Q?FqsBrVyaD+n7l8FG8EODrvUa7qHz7DaY/yhiB3Hl/4Oyp5H3tX67t0K+8Dz0?=
- =?us-ascii?Q?XJ4RAbg6zKF+tWCGwaDpvVXm+CJYzKYQ34wKjQ+JL1nA8pnhU9vQlmYNjU8n?=
- =?us-ascii?Q?Fp6p0zWgBfBDbLUMj2oGFuy0QhpVne11ZYBHD3iWpsK4Km9OfMReIJwrt8Ke?=
- =?us-ascii?Q?0dO96p7gy+rSuq022QdbYlpYq8Gdtj9RNiVEfWCtICdJNJv3Yg7oeNgIVX8d?=
- =?us-ascii?Q?/fP7SL2f3kaSFZTLckwe1QTJJx4bV+/Vyo6NSrHWdiSz7X4IXvRjnwt+QWid?=
- =?us-ascii?Q?Dc2iVRdHKHQtmMl748h1u/sTjR8+6M0aXw4T9Nn9GHbQBd140jUyCUpQpEwi?=
- =?us-ascii?Q?r4EtYU/gTLp7dhPHEAhC8hPIDeSv8Ek8uhM5UFDXRvLF6YKFfBhXCCwQSD9y?=
- =?us-ascii?Q?Iu8CGRfI06y3f0ZksBwx+6+MtfkKz6CfuZN9jWteAbXGyItZKxZqpaIzN3Ik?=
- =?us-ascii?Q?fc1xqJSWwItHpw4p/2ppP5XiR68VdFXo93LSC0ubxRqzLw7B853CQXZg/TWL?=
- =?us-ascii?Q?lcUpbfi9h5hRTzpocyXMvDC8LyhxVa87L8YZGJKGQ7sptw9pBDp5zcJS2eMe?=
- =?us-ascii?Q?Ew/M5kKObcnya4cV7rTCEYwol33+D37hfA3wakWjSZT6keP5J1/vLoBnq4R4?=
- =?us-ascii?Q?+ZL6JWt7whteooIA3jhf2FILibMn4LXdvSkkSux8WuUSN+hMrGY/m8V5dZV1?=
- =?us-ascii?Q?Du0/PIjEVm5fX+wf6cGRahRpeywZBR9ezL7r3v2LZQr0/f+B6BpdSN9ae1WZ?=
- =?us-ascii?Q?ydPvb2ka5F7LP6cO1jwk3k37blcOyVaUy0BNPKCcOcrN9d+DrMvbk5fpvoN2?=
- =?us-ascii?Q?mKjHxoKNPAxGF6FLQl5m6KKkv/wme3jaJVop4wi8iIft89+BFyqSpez9oAPd?=
- =?us-ascii?Q?nM0ZgJhZp+50fPXPAV4XlPmPl9nKs6WGjnFlEyj5eoeMNHI3vNT8AVDglm7F?=
- =?us-ascii?Q?TU/vGmYWmnwKsYiP/T/0kh35GrKt+kiYXM8xil1C616fKf4MAMJC61uoHyYu?=
- =?us-ascii?Q?3N/qfGh088qATh6+0I/ohlttr18jA3pDIuOs6Pq4Myk5Zxf9sSDPBYOHuVTg?=
- =?us-ascii?Q?gvqFNlBy5eAtykLsTpn3wWKsGYXsjY135xsJjiYXl2kllyFpj+FSx3gFuFct?=
- =?us-ascii?Q?XtHL8CuEHYsRk4LzvBKPzejIVonB6HZgBHAuNpho7/3bAqcgns3mSAfiVqUG?=
- =?us-ascii?Q?PGg+db914UIu2OE5vyDAv2bwD9RvSaI7F3Az9RAkRFHqzA6godAGVDpLtfI8?=
- =?us-ascii?Q?hDhRmNQ6yZLuta2EpCp2Oe5rN19lqp8VcM3qIVzrPRfZq3GdgyewLXNFVfRZ?=
- =?us-ascii?Q?dICEOLtF9ov+RW2jahet3aNX3npGNfa6xmI84YNsaVzHGFrkaQ=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(41320700013)(376014)(7416014)(1800799024);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?td12V4NaoWwqlpzbmfjb+KSkCPJrHnEoVXM4lPmcNQKSqJG1wnrwD91Ha5+U?=
+ =?us-ascii?Q?CAlKO8xRUZUMba2m0cGslDnd5xIzWfxJlq+9pf+hUB5OI9XAZGI2qQ8ddv11?=
+ =?us-ascii?Q?HCjke/C3mFXdnLSlxQYIhy+v7PErTKD0NSG3p+wzyma3RzuC199HcZlschrP?=
+ =?us-ascii?Q?MGfnKxoQrTwNi+l/7zY/UoAYecGAeCzQebWo8r/Zj+OKnaGJL4x3fkAlejsK?=
+ =?us-ascii?Q?4CjDrACjnk6SVs1K3OYB9CGhmcqztr5h1Rn+j6IKOgfjyTqN/OCrZjjDlDDZ?=
+ =?us-ascii?Q?Dfcd8E2U0Yx6YQb0cAsOkGnbCp/zG/NWMhotKsBCBRlszb4YKlM7u8btnbUc?=
+ =?us-ascii?Q?v6bQxrcE9HPoCPQlfJfs1js6EmtiRwbRZkvHjB6gNXhohONfzjKRs2e0edN1?=
+ =?us-ascii?Q?1Wxw+Pc65fue55oWUCVXwlQfJ29PGgn/CXA3ZY2SpgQ2Mjb7rMPg1ukXTb7L?=
+ =?us-ascii?Q?SGiz4eCCz7DYo7cQSWx86a33zeGzeTn9ddKX6FxTHCO9IotqJc3+DyXgmakx?=
+ =?us-ascii?Q?xffAkPMRB+i+U2n3MpQiFVCZky/v5BB+zO9Ps3Rlnf33zv/TyYaLeop7oRhy?=
+ =?us-ascii?Q?XWbY4qjyfmhdhLpgfE/DuYLDCwrog85IN2ttY0fLtcsuCuVQyuMqGv0aAr1Y?=
+ =?us-ascii?Q?YB7Nr5k2h2PF/Pf3IpxWGkVEvBuLXtC0m3Xia9+vsQ3xpJNQZv8SMf3sb0Qk?=
+ =?us-ascii?Q?F7SdsIljk/B49demKOXb+Qyqu9jn87v6wO+5mMHEoAlkfiptwMG07tNSnnkl?=
+ =?us-ascii?Q?AurNYJvuInzm/cXM12Q9yjQhWOGyvqzF9/pCXulMhWo3AJjZg6mYvpXzG0Mc?=
+ =?us-ascii?Q?VXO23U1FAgcgPX4FQKq7fdzJonF8Kw6qoEwoAfOYMEFPKbS93BqmwRZAu4x2?=
+ =?us-ascii?Q?kzACIMKSGmAm/kkW/aF/cNLhBkwfwMPQULj0jr+SUV0T6QOY6MUAECfJ/3cZ?=
+ =?us-ascii?Q?o77XjaEt8KFs22U6nHd6ccSmQZF3AZ96D+PbSIdBLWwHhVmj8fGLEx1S88ZB?=
+ =?us-ascii?Q?OzBAzHl+6JJbagnX9XQwMC1Miyrij8/YWL0PNw6s+h/lz+vHGmqKWEzI8sV6?=
+ =?us-ascii?Q?4f+yKma+O8Df6H5PCEujH3cyhSBr6MjscDP78ro3RYwNrFCXwglZRrFiDraK?=
+ =?us-ascii?Q?KMlDXUIw+xAMtpyyWQKEew6ptqG9D4R02CWlb4XbxPbg1qKurzNTmtzKUSUr?=
+ =?us-ascii?Q?yAluxko37vpTAU8RjwiBFfpaaYd9mfZEaQiGMYRj0Xc6bfJjtpx8VaH/hko/?=
+ =?us-ascii?Q?lhWdJCrzCK1fLmPi4+UF8EWUfj7/95mybHMgkPUa5m1h8r5m5kbTuYi6S0Po?=
+ =?us-ascii?Q?/LOHgYN5/KSclUUbOqSXJBPPJ35b08zXFvCFgKy+kj0YDWAqpUXIaMyOAZvG?=
+ =?us-ascii?Q?xA4vJiEzHytBNGCuTxoFRcGCnU0fgIpUpS2l142ocsQXuGQ8CtOYD5v8eAZb?=
+ =?us-ascii?Q?g8UmadlqpHc=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?K4X34X6ZhI5evvRTurCpTCrwcdCcKeTK5Rv9KclzwSQ2wfvosnfhlzhE6lDs?=
- =?us-ascii?Q?N5ZAbI4PVHkQyczp94gfOD2cGk1GvIskIWc0mWB0Y6hky3Mr159DdHpnocx3?=
- =?us-ascii?Q?U5blZ5f3A2NZ/O/8UU1Kcn3gJN3e0KQjI+qtPdyMoPAy4FRC01Chu1SX+JYG?=
- =?us-ascii?Q?gbBt1XRQcIH3GXrY47jI4GxSjhEu9dE6lmPIqS5ab4QeEap6B1UJ9iuU9OZU?=
- =?us-ascii?Q?mHX1l8nHdOl25R8MoVhMtXlGKaFtZ04xluNVIK5ve0MlbbW3A4LbcEkyvIp6?=
- =?us-ascii?Q?6sYy6bct/1de3N+1nvWQ/eZGn2rKE3mprN0PO0nQXtJ/E89hi5/7oWlicg5R?=
- =?us-ascii?Q?q1IFM9lKq/lV8i/gfOTRZ0rpTDvYTMlpDFuT5ZtRk/L/plqGx8ToMRqVe1s3?=
- =?us-ascii?Q?gzenKAEJiqsBFbqVZ2Hs2eb/fb3flLQCKI6vPRdSqmYQEuoj4sntRh7V5VAr?=
- =?us-ascii?Q?K6mKys87aXaTR6MfOPq2FQfw0MWw4FkbmJSwfyj8Tp04nBLwb4yLaML91NHk?=
- =?us-ascii?Q?VDEiZovQ9SqlRF3ung+UtN/pWdWqkLGAqXDAJ+oX6coFdZ9HPWxgX2R6q47K?=
- =?us-ascii?Q?scjy/833JW1juW+nwxWb2SADM5EulaINf3i79hmJDRTSCmhqhlphnHxXSr4P?=
- =?us-ascii?Q?f8L3HOiJ4Fv4+K3rs/Z6PVEMgswp8kr+4EMEwRbUxsWoLA0vuowLP1GPxtwz?=
- =?us-ascii?Q?x24AalyjahQzsps0tmZ849kFpU2ChEhonWcrJ201+DsWwR8XpoX3qJ3R4m9V?=
- =?us-ascii?Q?tEmXOIVz+aOAe2F4ej59KdK/rlikPWeKCgTrJyNHdRlQ2f9WOv+pSEhNW+kG?=
- =?us-ascii?Q?kdiN8soHwwWCiZvpm5fNdrfTv+iI/3Xu+1mhpSvY280yzxwtIbAzkXF9Fsry?=
- =?us-ascii?Q?00QKwh2x52OCCUjujF59zTMx/7izzq00QbtrhXAw0k83h99dsifT0QnoQxRn?=
- =?us-ascii?Q?XYpcwKGDKEP+7smV+q8Y4JD7zNR/nx0RmfQjh5l/DLDbxyUARq1IcwOELiq4?=
- =?us-ascii?Q?tLKIGAGn+iGkuXGLLRXt8J7YHUId7jrvnXvW7YszxQcFM+NKUfAivp0WciU2?=
- =?us-ascii?Q?zETnQVjOQPqWndzUEu0tsKxXG/CnTOjSOTIZvwwBAvzB4VayK6gQCPSl6ZFJ?=
- =?us-ascii?Q?FvIu/bs6S0CDXzHSRufnkHPTie34k/JudP+FU8hE4aO2RhxxYj45wFYYtVJ4?=
- =?us-ascii?Q?2eSvb8uCvg3C79pNFzkezihUhiBIAHyVLbA1khDNo6JNHlaqBZxFiwrTQvKL?=
- =?us-ascii?Q?TeRMxVu7pcpPwsowithaIdwsPoMnOpTzY+fiEI9qClPxKTWBWXYJLhQGXV7h?=
- =?us-ascii?Q?bp2aXjMhSaqwn8A9c5PTBqe1YzBKde0A4JFvB3brtdSunQ2W6AS1ugwyj2F4?=
- =?us-ascii?Q?oib3lbat2XOScCxRvSS6aAxtZ4rtjDRFsmFFKUwUnlTZXhX5z6wiL/nawL0p?=
- =?us-ascii?Q?6fXVgNdoUqNWZiMwrKKO1Zvz5vXbIlqfUDUYmHxZJtx7QtMBS6pgXUzAi/lS?=
- =?us-ascii?Q?vd5f1YFOMpedg4NHDcOq9rWfO6PTVdtNKILujnGFhLn2s5hA5QXUhE4059iK?=
- =?us-ascii?Q?I+iP3nxPjzKQ/d3n82JU4PA3yr+zgoGZoMj8Fs+U?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96d49cc7-6b4b-4f44-f34d-08dde677a837
-X-MS-Exchange-CrossTenant-AuthSource: LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4ws5s9AbzGmXvHrHVO18r1j4H3in/9gmbm3Dfzfm1qUrDU7n+YuTSdcY4UEi?=
+ =?us-ascii?Q?Gj/0og/L0xYC2PO9GYtC7MoZ/hD9X4H8NttgMUbpDMmF4+SImhGqSYL0U3qm?=
+ =?us-ascii?Q?LfHVmPHlKaOSBk3cBcBoIrTdeEGjIkUPY6FiSk2A3J5hXvWivv5ciACTVfYJ?=
+ =?us-ascii?Q?WV3dSwqThdMwG1HwDnj/jQHwUz5WQBBbVHnCzj1RxzrsDNNO7a+ssDEecfBK?=
+ =?us-ascii?Q?bMce0FTDXcvziReQIrTsXhBBuLIuCJX4x9pvD5MxBzk9Jqj+/Iqyyabp0fSG?=
+ =?us-ascii?Q?T8aJQmrKKZLF1IJlBnN55c4Hfbq1DmFFDsSEi32+6CS0Gnck2MviGltfaDxf?=
+ =?us-ascii?Q?q090Pjlghd8eoN0kcjrNhAEkao8zou7FREh68HUaB9GJvaWVjtY9NAnJJkSd?=
+ =?us-ascii?Q?YcJMaEWJ/K+X/7e0NBhYUFv61HqyNZGYqo2/OVVPoGNDlKu5R/yPuwboHZw/?=
+ =?us-ascii?Q?uVRhI3UMNo9E6qz8u1hj9u4KDZLDjSE0TTiADYbUhqhmdM+xLd70wf3ELOC7?=
+ =?us-ascii?Q?YYAVbtQgOmCipcbtnV5zph1PfC1o9NwScU0gJDPH/6vwY+J7g8pqTLGi/P1T?=
+ =?us-ascii?Q?yxr5/D49ckhCm4K3zdwU8U0tTPKTyOFpzYcScxdxbHvWfQ24lPDNpOyR3gcK?=
+ =?us-ascii?Q?C2lF9cLErPFXJGHsfXXowLrvY4piuv4iv/MwD5Qrqz/pZqMfc0TJ4XoxqlYm?=
+ =?us-ascii?Q?GR97bMEOBvKrJQLwfnYE/705xMECM85HiHamBdPbxGeWL4SJItGtjOECPZZ6?=
+ =?us-ascii?Q?0M+xL56g1ab3BK8N7j6pwbCvW70jm+XTlbPr19woGIo165ydyGDxjpgLXdv9?=
+ =?us-ascii?Q?JnswTJE7hxFmbdixgQ74EQQmwevHEKbwaRtrtr/viJlJ8X642GBZyLIrArK3?=
+ =?us-ascii?Q?7QpAIyeNnH85M5aDtCm7/LhWJR24RiBRrwG2+imnIs9iLAKTmnqFZnEfKczK?=
+ =?us-ascii?Q?fpdF6uucE6ZP0qIuWfgNs0cQA6ynX2Gqo+hRjtLbdAQSPpUsbx6piBMhfhxI?=
+ =?us-ascii?Q?k4m6pV3HK2JHQTdvkw08shiEdL1LGd36JdRIFo6NQWPKB2/40lpn4HJdHf6l?=
+ =?us-ascii?Q?bP6ji9vEXX9Fknqbh3OKpRxnIocUete3Liy4W9ucRPmQUq9JPBcDWpUwgmSP?=
+ =?us-ascii?Q?nSODT0ALhJ9YJUBZlf+2FDtDY6471zkcnO08+QLfysLmu97cZH8ZVS1+i2Me?=
+ =?us-ascii?Q?SYbWsLp+wia8ZjeKFSR9EtGUoWLect3U6VP0wjosAcNRyFb3+dKO+dUejSbG?=
+ =?us-ascii?Q?Coi9nVU6I58Bd23RNZIAB7bp3vADyvL0tUlew6rXGlVNe9qsFG57AkUeXWVh?=
+ =?us-ascii?Q?QWM5eXdhyh6awzOqXPpv9y+Wpx2zgh67f/lZtk441Vre44mI28rmafWXPtVs?=
+ =?us-ascii?Q?EIOhOasPSE6p8dhpSS7WdQ2mMNhSaLiS6GI1PPqnizpIh3L3oGFOt/vL7Sdh?=
+ =?us-ascii?Q?ZEavgd/A2fFGpwUaSsc0EMP6R/52q3Pu3+977BQD0nb++Xfqvm+JdPytzUg8?=
+ =?us-ascii?Q?EFYt8NYC1U5AnfiAqyISmFiOmmw7dy2wGomB7CPnUS382MvSFvye6KrD/jWI?=
+ =?us-ascii?Q?RNyfArY4r2rU94M7n6aDPyOQn9L+cOhs8o7hNtgY/PeZjhdphsz1earz1ME4?=
+ =?us-ascii?Q?xA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73269f2f-084a-4676-fcca-08dde680f04a
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2025 21:12:55.8118
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2025 22:19:22.2649
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: cc95de1b-97f5-4f93-b4ba-fe68b852cf91
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uKSZ06ivdayoFbP+PSdUILt+FWkhRnGeUB50j4tKD8+M7Y4oid/k04H8u9q+apw6+7qPThxadsHR/JN5dTWZTw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO7P265MB7982
-X-OriginatorOrg: magd.ox.ac.uk
-X-NTG-DKIM-verify: pass 
+X-MS-Exchange-CrossTenant-UserPrincipalName: WYJ1PVKhOlrArAZnTo9K+s8RwRjm7dRdFWW7FO22bpw/k6QkX7L9rrqGjur0jN4M7eEcVSvtTmuaFvs/Dg7bktYm/TLjU5ZXukz5NJ5xfro=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7823
+X-OriginatorOrg: intel.com
 
-Fix several spelling and grammatical mistakes in output messages from
-the net selftests to improve readability.
+On Tue, Aug 26, 2025 at 05:13:33PM +0800, David Gow wrote:
+>From: Marie Zhussupova <marievic@google.com>
+>
+>To enable more complex parameterized testing scenarios, the
+>generate_params() function needs additional context beyond just
+>the previously generated parameter. This patch modifies the
+>generate_params() function signature to include an extra
+>`struct kunit *test` argument, giving test users access to the
+>parameterized test context when generating parameters.
+>
+>The `struct kunit *test` argument was added as the first parameter
+>to the function signature as it aligns with the convention of other
+>KUnit functions that accept `struct kunit *test` first. This also
+>mirrors the "this" or "self" reference found in object-oriented
+>programming languages.
+>
+>This patch also modifies xe_pci_live_device_gen_param() in xe_pci.c
+>and nthreads_gen_params() in kcsan_test.c to reflect this signature
+>change.
+>
+>Reviewed-by: David Gow <davidgow@google.com>
+>Reviewed-by: Rae Moar <rmoar@google.com>
+>Acked-by: Marco Elver <elver@google.com>
+>Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+>Signed-off-by: Marie Zhussupova <marievic@google.com>
+>[Catch some additional gen_params signatures in drm/xe/tests --David]
+>Signed-off-by: David Gow <davidgow@google.com>
+>---
+>
+>Changes in v4:
+>v3: https://lore.kernel.org/linux-kselftest/20250815103604.3857930-4-marievic@google.com/
+>- Fixup some additional generate_params signature changes in xe_pci.
+>- These are also available as a separate patch here:
+>  https://lore.kernel.org/linux-kselftest/20250821135447.1618942-1-davidgow@google.com/
+>
+>Changes in v3:
+>v2: https://lore.kernel.org/all/20250811221739.2694336-4-marievic@google.com/
+>- Commit message formatting.
+>
+>Changes in v2:
+>v1: https://lore.kernel.org/all/20250729193647.3410634-4-marievic@google.com/
+>    https://lore.kernel.org/all/20250729193647.3410634-5-marievic@google.com/
+>    https://lore.kernel.org/all/20250729193647.3410634-6-marievic@google.com/
+>- generate_params signature changes in xe_pci.c and kcsan_test.c were
+>  squashed into a single patch to avoid in-between breakages in the series.
+>- The comments and the commit message were changed to reflect the
+>  parameterized testing terminology. See the patch series cover letter
+>  change log for the definitions.
+>
+>---
+> drivers/gpu/drm/xe/tests/xe_pci.c      | 14 +++++++-------
+> drivers/gpu/drm/xe/tests/xe_pci_test.h |  9 +++++----
 
-Only the message strings for the test output have been modified. No
-changes to the functional logic of the tests have been made.
 
-Signed-off-by: Praveen Balakrishnan <praveen.balakrishnan@magd.ox.ac.uk>
----
- tools/testing/selftests/net/openvswitch/ovs-dpctl.py |  2 +-
- tools/testing/selftests/net/rps_default_mask.sh      | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Acked-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 8a0396bfaf99..b521e0dea506 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -1877,7 +1877,7 @@ class OvsPacket(GenericNetlinkSocket):
-                     elif msg["cmd"] == OvsPacket.OVS_PACKET_CMD_EXECUTE:
-                         up.execute(msg)
-                     else:
--                        print("Unkonwn cmd: %d" % msg["cmd"])
-+                        print("Unknown cmd: %d" % msg["cmd"])
-             except NetlinkError as ne:
-                 raise ne
- 
-diff --git a/tools/testing/selftests/net/rps_default_mask.sh b/tools/testing/selftests/net/rps_default_mask.sh
-index 4287a8529890..b200019b3c80 100755
---- a/tools/testing/selftests/net/rps_default_mask.sh
-+++ b/tools/testing/selftests/net/rps_default_mask.sh
-@@ -54,16 +54,16 @@ cleanup
- 
- echo 1 > /proc/sys/net/core/rps_default_mask
- setup
--chk_rps "changing rps_default_mask dont affect existing devices" "" lo $INITIAL_RPS_DEFAULT_MASK
-+chk_rps "changing rps_default_mask doesn't affect existing devices" "" lo $INITIAL_RPS_DEFAULT_MASK
- 
- echo 3 > /proc/sys/net/core/rps_default_mask
--chk_rps "changing rps_default_mask dont affect existing netns" $NETNS lo 0
-+chk_rps "changing rps_default_mask doesn't affect existing netns" $NETNS lo 0
- 
- ip link add name $VETH type veth peer netns $NETNS name $VETH
- ip link set dev $VETH up
- ip -n $NETNS link set dev $VETH up
--chk_rps "changing rps_default_mask affect newly created devices" "" $VETH 3
--chk_rps "changing rps_default_mask don't affect newly child netns[II]" $NETNS $VETH 0
-+chk_rps "changing rps_default_mask affects newly created devices" "" $VETH 3
-+chk_rps "changing rps_default_mask doesn't affect newly child netns[II]" $NETNS $VETH 0
- ip link del dev $VETH
- ip netns del $NETNS
- 
-@@ -72,8 +72,8 @@ chk_rps "rps_default_mask is 0 by default in child netns" "$NETNS" lo 0
- 
- ip netns exec $NETNS sysctl -qw net.core.rps_default_mask=1
- ip link add name $VETH type veth peer netns $NETNS name $VETH
--chk_rps "changing rps_default_mask in child ns don't affect the main one" "" lo $INITIAL_RPS_DEFAULT_MASK
-+chk_rps "changing rps_default_mask in child ns doesn't affect the main one" "" lo $INITIAL_RPS_DEFAULT_MASK
- chk_rps "changing rps_default_mask in child ns affects new childns devices" $NETNS $VETH 1
--chk_rps "changing rps_default_mask in child ns don't affect existing devices" $NETNS lo 0
-+chk_rps "changing rps_default_mask in child ns doesn't affect existing devices" $NETNS lo 0
- 
- exit $ret
--- 
-2.39.5
+thanks
+Lucas De Marchi
 
+> include/kunit/test.h                   |  9 ++++++---
+> kernel/kcsan/kcsan_test.c              |  2 +-
+> lib/kunit/test.c                       |  5 +++--
+> 5 files changed, 22 insertions(+), 17 deletions(-)
+>
+>diff --git a/drivers/gpu/drm/xe/tests/xe_pci.c b/drivers/gpu/drm/xe/tests/xe_pci.c
+>index 9c715e59f030..f707e0a54295 100644
+>--- a/drivers/gpu/drm/xe/tests/xe_pci.c
+>+++ b/drivers/gpu/drm/xe/tests/xe_pci.c
+>@@ -44,9 +44,9 @@ KUNIT_ARRAY_PARAM(pci_id, pciidlist, xe_pci_id_kunit_desc);
+>  *
+>  * Return: pointer to the next parameter or NULL if no more parameters
+>  */
+>-const void *xe_pci_graphics_ip_gen_param(const void *prev, char *desc)
+>+const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc)
+> {
+>-	return graphics_ip_gen_params(prev, desc);
+>+	return graphics_ip_gen_params(test, prev, desc);
+> }
+> EXPORT_SYMBOL_IF_KUNIT(xe_pci_graphics_ip_gen_param);
+>
+>@@ -61,9 +61,9 @@ EXPORT_SYMBOL_IF_KUNIT(xe_pci_graphics_ip_gen_param);
+>  *
+>  * Return: pointer to the next parameter or NULL if no more parameters
+>  */
+>-const void *xe_pci_media_ip_gen_param(const void *prev, char *desc)
+>+const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc)
+> {
+>-	return media_ip_gen_params(prev, desc);
+>+	return media_ip_gen_params(test, prev, desc);
+> }
+> EXPORT_SYMBOL_IF_KUNIT(xe_pci_media_ip_gen_param);
+>
+>@@ -78,9 +78,9 @@ EXPORT_SYMBOL_IF_KUNIT(xe_pci_media_ip_gen_param);
+>  *
+>  * Return: pointer to the next parameter or NULL if no more parameters
+>  */
+>-const void *xe_pci_id_gen_param(const void *prev, char *desc)
+>+const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc)
+> {
+>-	const struct pci_device_id *pci = pci_id_gen_params(prev, desc);
+>+	const struct pci_device_id *pci = pci_id_gen_params(test, prev, desc);
+>
+> 	return pci->driver_data ? pci : NULL;
+> }
+>@@ -159,7 +159,7 @@ EXPORT_SYMBOL_IF_KUNIT(xe_pci_fake_device_init);
+>  * Return: pointer to the next &struct xe_device ready to be used as a parameter
+>  *         or NULL if there are no more Xe devices on the system.
+>  */
+>-const void *xe_pci_live_device_gen_param(const void *prev, char *desc)
+>+const void *xe_pci_live_device_gen_param(struct kunit *test, const void *prev, char *desc)
+> {
+> 	const struct xe_device *xe = prev;
+> 	struct device *dev = xe ? xe->drm.dev : NULL;
+>diff --git a/drivers/gpu/drm/xe/tests/xe_pci_test.h b/drivers/gpu/drm/xe/tests/xe_pci_test.h
+>index ce4d2b86b778..6d8bc56f7bde 100644
+>--- a/drivers/gpu/drm/xe/tests/xe_pci_test.h
+>+++ b/drivers/gpu/drm/xe/tests/xe_pci_test.h
+>@@ -7,6 +7,7 @@
+> #define _XE_PCI_TEST_H_
+>
+> #include <linux/types.h>
+>+#include <kunit/test.h>
+>
+> #include "xe_platform_types.h"
+> #include "xe_sriov_types.h"
+>@@ -25,9 +26,9 @@ struct xe_pci_fake_data {
+>
+> int xe_pci_fake_device_init(struct xe_device *xe);
+>
+>-const void *xe_pci_graphics_ip_gen_param(const void *prev, char *desc);
+>-const void *xe_pci_media_ip_gen_param(const void *prev, char *desc);
+>-const void *xe_pci_id_gen_param(const void *prev, char *desc);
+>-const void *xe_pci_live_device_gen_param(const void *prev, char *desc);
+>+const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc);
+>+const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc);
+>+const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc);
+>+const void *xe_pci_live_device_gen_param(struct kunit *test, const void *prev, char *desc);
+>
+> #endif
+>diff --git a/include/kunit/test.h b/include/kunit/test.h
+>index fc8fd55b2dfb..8eba1b03c3e3 100644
+>--- a/include/kunit/test.h
+>+++ b/include/kunit/test.h
+>@@ -128,7 +128,8 @@ struct kunit_attributes {
+> struct kunit_case {
+> 	void (*run_case)(struct kunit *test);
+> 	const char *name;
+>-	const void* (*generate_params)(const void *prev, char *desc);
+>+	const void* (*generate_params)(struct kunit *test,
+>+				       const void *prev, char *desc);
+> 	struct kunit_attributes attr;
+> 	int (*param_init)(struct kunit *test);
+> 	void (*param_exit)(struct kunit *test);
+>@@ -1703,7 +1704,8 @@ do {									       \
+>  * Define function @name_gen_params which uses @array to generate parameters.
+>  */
+> #define KUNIT_ARRAY_PARAM(name, array, get_desc)						\
+>-	static const void *name##_gen_params(const void *prev, char *desc)			\
+>+	static const void *name##_gen_params(struct kunit *test,				\
+>+					     const void *prev, char *desc)			\
+> 	{											\
+> 		typeof((array)[0]) *__next = prev ? ((typeof(__next)) prev) + 1 : (array);	\
+> 		if (__next - (array) < ARRAY_SIZE((array))) {					\
+>@@ -1724,7 +1726,8 @@ do {									       \
+>  * Define function @name_gen_params which uses @array to generate parameters.
+>  */
+> #define KUNIT_ARRAY_PARAM_DESC(name, array, desc_member)					\
+>-	static const void *name##_gen_params(const void *prev, char *desc)			\
+>+	static const void *name##_gen_params(struct kunit *test,				\
+>+					     const void *prev, char *desc)			\
+> 	{											\
+> 		typeof((array)[0]) *__next = prev ? ((typeof(__next)) prev) + 1 : (array);	\
+> 		if (__next - (array) < ARRAY_SIZE((array))) {					\
+>diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
+>index 49ab81faaed9..a13a090bb2a7 100644
+>--- a/kernel/kcsan/kcsan_test.c
+>+++ b/kernel/kcsan/kcsan_test.c
+>@@ -1383,7 +1383,7 @@ static void test_atomic_builtins_missing_barrier(struct kunit *test)
+>  * The thread counts are chosen to cover potentially interesting boundaries and
+>  * corner cases (2 to 5), and then stress the system with larger counts.
+>  */
+>-static const void *nthreads_gen_params(const void *prev, char *desc)
+>+static const void *nthreads_gen_params(struct kunit *test, const void *prev, char *desc)
+> {
+> 	long nthreads = (long)prev;
+>
+>diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+>index 0fe61dec5a96..50705248abad 100644
+>--- a/lib/kunit/test.c
+>+++ b/lib/kunit/test.c
+>@@ -700,7 +700,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+> 			/* Get initial param. */
+> 			param_desc[0] = '\0';
+> 			/* TODO: Make generate_params try-catch */
+>-			curr_param = test_case->generate_params(NULL, param_desc);
+>+			curr_param = test_case->generate_params(&test, NULL, param_desc);
+> 			test_case->status = KUNIT_SKIPPED;
+> 			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
+> 				  "KTAP version 1\n");
+>@@ -731,7 +731,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+>
+> 				/* Get next param. */
+> 				param_desc[0] = '\0';
+>-				curr_param = test_case->generate_params(curr_param, param_desc);
+>+				curr_param = test_case->generate_params(&test, curr_param,
+>+									param_desc);
+> 			}
+> 			/*
+> 			 * TODO: Put into a try catch. Since we don't need suite->exit
+>-- 
+>2.51.0.261.g7ce5a0a67e-goog
+>
 
