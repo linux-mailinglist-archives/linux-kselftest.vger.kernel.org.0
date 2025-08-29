@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-40297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11EF8B3BDA3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Aug 2025 16:28:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D430B3BDAE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Aug 2025 16:29:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C3EA7BC202
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Aug 2025 14:26:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37FD43BFC10
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Aug 2025 14:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7AC3218D4;
-	Fri, 29 Aug 2025 14:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48AAD3203B9;
+	Fri, 29 Aug 2025 14:28:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="doxBPOWs"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="EgQ+8Ff6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
+Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FAAE321444;
-	Fri, 29 Aug 2025 14:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.35.192.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A951729E110;
+	Fri, 29 Aug 2025 14:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.245.243.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756477656; cv=none; b=nri02Tgzj5zG3RGJhbI/kKMOHmOC6UBuEg6ilPyEUF5MD56OqlVZZipWDychx5e5K/LhemKv0hynFigg4cAhAi1SQ7MK6RX46MoNx/BvhWVeblVnj8c1Tm4aQhjHYkkELn69oY7//xJD3rwjtK5sF3rfWLbHHmBPcTSP0bJwPZc=
+	t=1756477682; cv=none; b=NRF6y0I06tWrSw1n8ZM4qq6gU+9DoUg63ClaybHHBeX6uwQDsNCR6Es97q3BB/I46ycfe5Ydxd2a2ajbGhw03JlEpGSpYahVPqSHmuwjF8XMa2D/UJedf/H5PNkifYRZzZBU15ld9q/7gg8N7XNleooJlSEkE3bQmiI4rkCyDn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756477656; c=relaxed/simple;
-	bh=y9gL/UGvJfVzOPZZ/KT87SlBY/VScKVrmeHHSQs3I3A=;
+	s=arc-20240116; t=1756477682; c=relaxed/simple;
+	bh=aSGoFnFQ0ZBKPYFtEyjLzr+DV+s1lmNOa+QCBhXKlPw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QN2MnReAbpLCXn2eDpr4a2n4o2yTIaNV7422TdOGEPwlbKCQzf79aTdQG6gZzBoqvaqLU2lM6sh6YQt4yqr2yJ8Kuy1iWi6b0tPoY301B8HLOpZWrx53q2T7NiH/mC6uV8PkC0vTQi6NqW44K/KcnlGpIl28szb85N90oL3mrY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=doxBPOWs; arc=none smtp.client-ip=52.35.192.45
+	 MIME-Version:Content-Type; b=gOkNisZkMRcpdwCVQi7ND0pPa+Zewc9/USrJwquIFrp1CCVip749CYxRb/Q5Tam09hBdd7ZR8aEvm+1KNFz6CGRMAslOTx0YE2XGwh3GHML5mJTmqYsckt9XNxyKll5DzQ1x4l37v+x4rmiG3ipaUfk4VHNffooekaX/Z23Xnzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=EgQ+8Ff6; arc=none smtp.client-ip=44.245.243.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1756477655; x=1788013655;
+  t=1756477680; x=1788013680;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0qBLhzlQ0K0cOHPaZz1B5AlYgKIDArcMpwFYu5ZedWI=;
-  b=doxBPOWsHv2LsvnnUwlAwK6cJE9had0cfgnvi5uHH0wc1LuPYkbAXaLU
-   VgwrSt7A/S8H9mHPWPvgANdOLb5jlhktrIu6qgDun9OX0wm5n/zjsjKI+
-   cJSI6TWQEy7elvW1LDN2WlSWrISNxb8fNS4quZ1KxevaZmlrbDhVWRjON
-   W28prRbxxuDOOYw272mG0J+d6FLRgwMIHxrO+2JFR9NRFSUqzuGwprEzT
-   iIU5O4IuMEHgaFXc9k919+LCuS5YhdY7uIUpDcFPXKzTi4BwI5qp/6qqs
-   hwmdeySj06Fz3INP3gqqaYV1ywt0hMHylfQgPLI9SLrGhGXuXdL6yoC2N
-   A==;
-X-CSE-ConnectionGUID: 5sLIGh9OT4CF7z/7qI9oNA==
-X-CSE-MsgGUID: vGYmQyhZRmCdw21oRGSVWw==
+  bh=SrDvul6Y20T+lfkQmfSur3fHwO9mehvp95HPlsLgOXw=;
+  b=EgQ+8Ff6sJh3jvxW3n++VJGJGdjIThGUs7R2SoWy/IzcYn9Vnv9zWOrn
+   z+Zjq0mM2pKEgosT0d/Iop9vG0nK63C5N0of+CYQLMFdDPZtecirGm05j
+   sYHYoFtg46NEqxavI+SN3clu4O9Ebz9Q1ZgBmKKCsU5QvxaZOX1aqDQha
+   g3qKoj9m9nkiIYd/q0Q1dAIVeQr3ycAL4iD/Y8O3AELSQuQk49R5kJ4hc
+   +llVG4cXY4gNxdyKEGnZLq7kHuRVCd5I6AjWM+gaXBvhAW+I0+jiSBQZY
+   fiz8mD4b9xCW/3rBjIDavWy2bYo3NWOSiK/leRIyJYhpVuITJLZNg6XPv
+   Q==;
+X-CSE-ConnectionGUID: OUUng9rLR2Cp84oeRZ08Bw==
+X-CSE-MsgGUID: yFjXuJCnRW+ZGIiu7kQrxA==
 X-IronPort-AV: E=Sophos;i="6.18,221,1751241600"; 
-   d="scan'208";a="1927937"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 14:27:33 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [10.0.38.20:52600]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.52.56:2525] with esmtp (Farcaster)
- id 9bde94d1-7135-4966-972f-6c1896eb93bc; Fri, 29 Aug 2025 14:27:32 +0000 (UTC)
-X-Farcaster-Flow-ID: 9bde94d1-7135-4966-972f-6c1896eb93bc
+   d="scan'208";a="2045020"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 14:27:58 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [10.0.38.20:52512]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.41.88:2525] with esmtp (Farcaster)
+ id 0eb3ccb2-a05f-4e8e-8737-06363af62346; Fri, 29 Aug 2025 14:27:58 +0000 (UTC)
+X-Farcaster-Flow-ID: 0eb3ccb2-a05f-4e8e-8737-06363af62346
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.17;
- Fri, 29 Aug 2025 14:27:32 +0000
+ Fri, 29 Aug 2025 14:27:57 +0000
 Received: from dev-dsk-aqibaf-1b-17060f52.eu-west-1.amazon.com (10.253.72.42)
  by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.17;
- Fri, 29 Aug 2025 14:27:31 +0000
+ Fri, 29 Aug 2025 14:27:55 +0000
 From: Aqib Faruqui <aqibaf@amazon.com>
-To: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	<kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
+To: Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<kvm@vger.kernel.org>
 CC: <nh-open-source@amazon.com>, <aqibaf@amazon.com>
-Subject: [PATCH 3/9] KVM: selftests: Add pthread_attr_setaffinity_np fallback
-Date: Fri, 29 Aug 2025 14:25:47 +0000
-Message-ID: <20250829142556.72577-4-aqibaf@amazon.com>
+Subject: [PATCH 4/9] selftests: kselftest: Add memfd_create syscall compatibility
+Date: Fri, 29 Aug 2025 14:25:48 +0000
+Message-ID: <20250829142556.72577-5-aqibaf@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250829142556.72577-1-aqibaf@amazon.com>
 References: <20250829142556.72577-1-aqibaf@amazon.com>
@@ -81,60 +81,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D039UWA001.ant.amazon.com (10.13.139.110) To
+X-ClientProxiedBy: EX19D042UWA002.ant.amazon.com (10.13.139.17) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-The pthread_attr_setaffinity_np function is a GNU extension that may not
-be available in non-glibc C libraries. Some KVM selftests use this
-function for CPU affinity control.
+The memfd_create function and related MFD_* flags may not be available
+in non-glibc C libraries. Some selftests use memfd_create for
+memory backing operations.
 
-Add a function declaration and weak stub implementation for non-glibc
-builds. This allows tests to build, with the affinity setting being a
-no-op and errno set for the caller when the actual function is not available.
+Add fallback definitions for MFD_CLOEXEC and MFD_HUGETLB flags, and
+provide a memfd_create wrapper.
 
 Signed-off-by: Aqib Faruqui <aqibaf@amazon.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util.h |  4 ++++
- tools/testing/selftests/kvm/lib/kvm_util.c     | 11 +++++++++++
- 2 files changed, 15 insertions(+)
+ tools/testing/selftests/kselftest.h        | 19 +++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c |  1 +
+ 2 files changed, 20 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 7fae7f5e7..8177178b5 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -31,6 +31,10 @@
- #include "kvm_util_types.h"
- #include "sparsebit.h"
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index c3b6d2604..f362c6766 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -57,6 +57,7 @@
+ #include <string.h>
+ #include <stdio.h>
+ #include <sys/utsname.h>
++#include <sys/syscall.h>
+ #endif
  
-+#ifndef __GLIBC__
-+int pthread_attr_setaffinity_np(pthread_attr_t *attr, size_t cpusetsize, const cpu_set_t *cpuset);
-+#endif /* __GLIBC__ */
-+
- #define KVM_DEV_PATH "/dev/kvm"
- #define KVM_MAX_VCPUS 512
+ #ifndef ARRAY_SIZE
+@@ -80,6 +81,24 @@
+ #endif
+ #endif /* end arch */
  
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index c3f5142b0..5ce80303d 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -20,6 +20,17 @@
- 
- #define KVM_UTIL_MIN_PFN	2
- 
-+#ifndef __GLIBC__
-+int __attribute__((weak))
-+pthread_attr_setaffinity_np(pthread_attr_t *__attr,
-+				size_t __cpusetsize,
-+				const cpu_set_t *__cpuset)
-+{
-+	errno = ENOSYS;
-+	return -1;
-+}
++#ifndef MFD_CLOEXEC
++#define MFD_CLOEXEC 0x0001U
 +#endif
 +
- uint32_t guest_random_seed;
- struct guest_random_state guest_rng;
- static uint32_t last_guest_seed;
++#ifndef MFD_HUGETLB
++#define MFD_HUGETLB 0x0004U
++#endif
++
++static inline int memfd_create(const char *name, unsigned int flags)
++{
++#ifdef __NR_memfd_create
++	return syscall(__NR_memfd_create, name, flags);
++#else
++	errno = ENOSYS;
++	return -1;
++#endif
++}
++
+ /* define kselftest exit codes */
+ #define KSFT_PASS  0
+ #define KSFT_FAIL  1
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 5ce80303d..cb5209f6a 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -15,6 +15,7 @@
+ #include <sys/resource.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/syscall.h>
+ #include <unistd.h>
+ #include <linux/kernel.h>
+ 
 -- 
 2.47.3
 
