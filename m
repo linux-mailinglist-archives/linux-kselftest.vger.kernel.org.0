@@ -1,123 +1,132 @@
-Return-Path: <linux-kselftest+bounces-40346-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B38E6B3C557
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 00:47:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 092C4B3C563
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 00:50:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5960A18963FF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Aug 2025 22:47:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D55DF584B3D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Aug 2025 22:50:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B82742DE71E;
-	Fri, 29 Aug 2025 22:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA5842C21C7;
+	Fri, 29 Aug 2025 22:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sxHn+asV"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pITCHuWU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199452DCF43
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 Aug 2025 22:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD9823507E;
+	Fri, 29 Aug 2025 22:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756507617; cv=none; b=HwSCP4VawLw5WwzhG9PMZVPRqL+olOhcUjM6TaigrIuLMnCVvEfH5jJ74gjHKnNVmH/kT7FbUwpgvdJfvPpPvNUouyI/Q+Y7F1ou67sopVN/+Hue8FiUyyuxCl/oiaZcLCXFRNHnVfDc5oSlOL8Xb7h8J5d+Gr9XXq9HJWsMZRo=
+	t=1756507850; cv=none; b=OxBZmZHUUXkGuqdU5jzhZeBjstZ14ExAcehFnz5XM3MnAdORZFpdRYdiNXWEYewjqmqi6Q99oVW09EfGxBaED1cVkxTUBAh9AaBdwv7TbJUjrMEBU9LvPiUxZ3eRwQn6izwDdzmeAMydmZvx3WRzr2U5a3WxsCDax2Rp6gcmbvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756507617; c=relaxed/simple;
-	bh=7iKeOMQFOEEVd5ETUGweiy0cPrlfaMl1uc16FWLXC+U=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dnxs2F56vYx2NIurb3HtJ7v8w7hIZJKQGVJ9+bd2Gcob6uA80xnCVWT0XKeMJ61Xl2AKEQaZcAMU3Hux7a/r2l4o6D0QtxB+MVkFcRNb/dACsY+4P9de/iMwEs+kQFOyXaqaUmmxaxFJAAsHBDb6Ctk16lyHjHanFH4Y9uHM/SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sxHn+asV; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-24868b07b5bso44876325ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Aug 2025 15:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756507615; x=1757112415; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=osO9EdDK8ULTUCgyPclw9xxVN7HnxTjhwUYL0zf8SiE=;
-        b=sxHn+asVQ4idbSkIMokYYwHvX5BKlIjEvztTGbGtxWdMJq8Dpm+UN+LyhbvYzDiN3V
-         ztqGH568RSndTnBePn/2H89LBuxwGBBLYVm20Bx0OUJ9Gx5ClnA3J0KHD4p9HOjXWPoR
-         05bO05UHpZ9lPQnHYlUvc2/nC1BcyqSFeYXmC8rCVRLM3fnrA2QUsTOGR8NOg36MZijs
-         U4iGMhwUpBt0h62fy5Dey8vrUM3nicKF2PZ14bzUNliT2i0wY55ri5zYBjUt/ojmDHyH
-         PZbN0MCJqVLVD6lKWSD4xvO/EGZ3nB5VaMbMFEO0cKYZZlpZWO44Vtpqn2stNE+34Xbq
-         tnSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756507615; x=1757112415;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=osO9EdDK8ULTUCgyPclw9xxVN7HnxTjhwUYL0zf8SiE=;
-        b=cF4oNOsIBp99QZtS1ORVd+5MmJMNyHw4XFJOS2o/C2u9hyiuN4nfEbETwQFju3IfpT
-         +mVCuQBAQMwkh4O+VlkFABPbQQ0+u10WZc5o9LiRS6geXsRh65TuDxgW8R9YZ0TyPUv8
-         eKqi/QMNSv2G5R+niIAI0w2KIMouYt0AZm9oQcuUYw3E58Pux72N64HJ/b4vRVFru/z7
-         60HS3KS+TiqKcBynmenIoFDFfMF91dKVXQaNhKUbB2Zshu5Gb/DjigLJcSoUGYT6rV6t
-         /gz6Y3cPCbqFiBVd43GQfbJB+cFRt+4kk3RC3dfTCuiSO06dcMzyQcSGhLrFy3engyES
-         pPxw==
-X-Forwarded-Encrypted: i=1; AJvYcCVxDMwGOlwB+SWebeviC55wY1pPpNZXUE7jNhxSsJtnl1QGJ/smup4dhoSXNbfnHMa1KHG45osGx8PIk1DBh0s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1Cqzlx38rNdFA49RBjPspqOs7F1d+lHI4ReeGJcsLMYKFzI3p
-	c7QBRS/8GI4amO+pA13bvY2Z49qiwGgg7GJKqlz2Dv3l7DrN/0PsrjTiPwmRO6BeeY9t/t3CDwA
-	ER/FUqw==
-X-Google-Smtp-Source: AGHT+IGkt/EAn947SVVMGSrEgo9yvNr3e4MeFQSbN7ad+YrLR9BbTewsN8HKmFTWK3fVBIpRGYfyACOyUfY=
-X-Received: from plbkq13.prod.google.com ([2002:a17:903:284d:b0:246:a8c3:9a07])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1448:b0:248:c5d7:1b94
- with SMTP id d9443c01a7336-24944b695e6mr2556105ad.53.1756507615340; Fri, 29
- Aug 2025 15:46:55 -0700 (PDT)
-Date: Fri, 29 Aug 2025 15:46:53 -0700
-In-Reply-To: <20250829142556.72577-3-aqibaf@amazon.com>
+	s=arc-20240116; t=1756507850; c=relaxed/simple;
+	bh=yQrl3gCtzdyKztNdAWjGjfEx4RFSnzGpjf6FUTnKgcQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SogMMMGrJ5Io2j8ViZodebUFWKwu5oGMop/hxgxLGEoJGt9bKXVkWqVVzYOhkEoewPHTX+xJvn9H/8AsBXE+vOp0NdRnpP5DyW/0L44mhlsAkX/Jx2hd4f4fsAM7D5gVi/hQzLGzYiJI0o5K0oCgiM3P3zYPJaU2vOjUPi4U8lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pITCHuWU; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=vBqocCSrw/I/eTnjICc/R9VLegWS9kJ8fWJ+dhUrmbM=; b=pITCHuWUJuiDHiaEscGXVXczcK
+	I0/Wd74s+NDD/sEhJ3i0C7fgA9qpUSo8PJP1moXRGQnykNvxDXnxrqB2EIlySGG8dICRLkd4z6RHb
+	8KmkRHhoO+I/My0S3KX39ab8d3rYDeE0cLqWyIEYKNp5So3JeyY3f4amPxDo5zRskH7MdCU2cT4Kg
+	lkyk0k5hFEHpftWgCDxLX8H16kaIyfhbK35YVpzi0iECQVlLfDs/SxqnbrdaJz7dKqPuxbamvVnQ7
+	pLhICedjX9Wm5Ox+ZzOhDlVKF8oktW8T2cu4SuiApJT5Yps43hWywifM8Dr6AoBWERW4ru+BpvfZ0
+	QYZbU3VQ==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1us7vg-00000006zQp-3RYK;
+	Fri, 29 Aug 2025 22:50:44 +0000
+Message-ID: <e11b42b9-8294-4cc3-b27c-2344ae898ce0@infradead.org>
+Date: Fri, 29 Aug 2025 15:50:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250829142556.72577-1-aqibaf@amazon.com> <20250829142556.72577-3-aqibaf@amazon.com>
-Message-ID: <aLIt3bm0uxSh8I1j@google.com>
-Subject: Re: [PATCH 2/9] KVM: selftests: Add __packed attribute fallback
-From: Sean Christopherson <seanjc@google.com>
-To: Aqib Faruqui <aqibaf@amazon.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	nh-open-source@amazon.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/15] genpt: Generic Page Table base API
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>,
+ Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+ Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+ James Gowans <jgowans@amazon.com>, Michael Roth <michael.roth@amd.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+References: <1-v4-0d6a6726a372+18959-iommu_pt_jgg@nvidia.com>
+ <bdbd466f-01d3-40ac-abca-81527dbfb901@infradead.org>
+ <20250829185124.GE79520@nvidia.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250829185124.GE79520@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 29, 2025, Aqib Faruqui wrote:
-> Kernel UAPI headers use __packed but don't provide the definition in
-> userspace builds.
+
+
+On 8/29/25 11:51 AM, Jason Gunthorpe wrote:
+> On Wed, Aug 27, 2025 at 12:11:40AM -0700, Randy Dunlap wrote:
+>>> +/**
+>>> + * pt_entry_num_contig_lg2() - Number of contiguous items for this leaf entry
+>>> + * @pts: Entry to query
+>>> + *
+>>> + * Returns the number of contiguous items this leaf entry spans. If the entry is
+>>
+>>  * Returns:
 > 
-> Add a fallback definition matching the kernel's implementation. This
-> follows the same pattern used by BPF and SGX selftests.
+> I think I prefer to leave many of these as is, putting the entire body
+> in a Returns: block seems too weird. I did the ones that seemed to fit
+> that pattern.
 
-Ugh.  No, this needs to be fixed in a central location, not splattered all over
-random subsystem selftests.  My first choice would be to copy (and keep synchronize)
-all of the include/linux/compiler*.h headers to tools/include/linux/.
+Sure, no problem.
 
-If for some reason that's not a viable option, we should yank the __packed and
-similar #defines out of tools/include/linux/compiler-gcc.h and place them in
-tools/include/linux/compiler.h.  AFAICT, none of them are actually GCC-only.
-
-> Signed-off-by: Aqib Faruqui <aqibaf@amazon.com>
-> ---
->  tools/testing/selftests/kvm/include/kvm_util.h | 4 ++++
->  1 file changed, 4 insertions(+)
+> Most of these descriptions are entirely talking about the return value
+> since that is the only thing the function does.
 > 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index 23a506d7e..7fae7f5e7 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -5,6 +5,10 @@
->  #ifndef SELFTEST_KVM_UTIL_H
->  #define SELFTEST_KVM_UTIL_H
->  
-> +#ifndef __packed
-> +#define __packed __attribute__((__packed__))
-> +#endif
-> +
->  #include "test_util.h"
->  
->  #include <linux/compiler.h>
-> -- 
-> 2.47.3
+>>> + * If true the caller use at level 0 pt_install_leaf_entry(PAGE_SHIFT). This is
+>>
+>>                          uses
+>> ?
+>> although it might just be missing a word or two? I can't tell.
 > 
+>  * If true the caller can use, at level 0, pt_install_leaf_entry(PAGE_SHIFT).
+>  * This is useful to create optimized paths for common cases of PAGE_SIZE
+>  * mappings.
+
+Ack.
+
+>>> + * Otherwise the bit in position pt_table_item_lg2sz() should be set indicating
+>>> + * that a non-contigous singe item leaf entry is supported. The following
+>>
+>>              non-contiguous
+>> Also, is that               single
+>> ?
+>> or is "singe" a real word here? (IDK.)
+> 
+>  * Otherwise the bit in position pt_table_item_lg2sz() should be set indicating
+>  * that a non-contiguous single item leaf entry is supported. The following
+
+Ack.
+
+thanks.
+
+-- 
+~Randy
+
 
