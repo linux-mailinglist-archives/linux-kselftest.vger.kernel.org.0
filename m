@@ -1,116 +1,72 @@
-Return-Path: <linux-kselftest+bounces-40357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40358-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75866B3C96D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 10:52:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2488B3CA47
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 12:39:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A30A1714CB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 08:52:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DE4A5E07A9
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 10:39:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E20D248F73;
-	Sat, 30 Aug 2025 08:52:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="GuMcrSCS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44BB6277CB3;
+	Sat, 30 Aug 2025 10:39:32 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39415BAF0;
-	Sat, 30 Aug 2025 08:51:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274D0207A0B;
+	Sat, 30 Aug 2025 10:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756543922; cv=none; b=HM6Orj4ke3D60a+EbFudE0smErQr7lrxuB/yRJH0l7Ia6eduuHoqvB3TAqyDYWqj+MzL9iYxw1eqcCEcjyHZCaT3aMsl5H6cm5vc2ZZUN7VjjVxAoSJ2DE9YIAYw8NIsKhxzjToxJOKkAJaQtYi4o1MeT+GsDy4G7HP6/O7spRI=
+	t=1756550372; cv=none; b=jTgdEd0O1LakRThUZR+fRDk3FRaTBWlHjGOR/X9aj4jIIMvDBg80vnPuVHob1cBQrzEjlMnRnwjpcAPp49e985YtQ9eq5roEYEqmLI8pP8Ic7VSIqxRFHD9QGSB+T14aFinBsixsVE0py4c5ZMKxQ4X2vDuZNGOQECKEJ6Exhuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756543922; c=relaxed/simple;
-	bh=LdU1RMECgRUSivnWM7MCoW1DKEMHMJgOPQkH0K6OPpM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PROcAue8buIucJ+NZsUK6REyOHTWyQB6IyjFc2s9pr0LrNaDA9cTuTzeZUMdaxmF5gM+p56l5szK3cfKfliIKlOqJK5YS1VayVBSvu2ULgBnO81TTAibF95FYpmQ6qvjcrQm6PFXanlnzqbsWwNTTKY8dwZqfcUosaJInEHfEnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=GuMcrSCS; arc=none smtp.client-ip=180.181.231.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=XvJAs0oWctTv+IZjXYqOb/DT/digU3gWo9ZFZvSPVF4=; b=GuMcrSCSc2h6K85gbh7d/Dq9GZ
-	qdyNHDeRuMDOrQKt7Bo9CsxZu4fhi8uxonjr50DYybHV+WdJ7DHOoy71QzTrH5fU3B4gS3MrLLeJZ
-	1yb0tB9r6ZBYeK/9cTotchZKYSs9UNaevFwWoiFaYrA1kDvZB73V07IEjWM7icXmel06ejOyu5tRM
-	WEVmUV2x3M+JWaNqJjuInd5prsC/KbA4Dm0FGrf3ZmC4vszTKkk+/5RVJ8rZbwzjF/v6sclO9TSJ8
-	zA89ssT/UNPKwDgfBFykggaqbG5N2LfCnIeOoYXu2AZxIIqU3jrjVfeakPWp8OpxRJWoq6dq/+xUB
-	J8hgQp0Q==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1usH32-0017AV-0k;
-	Sat, 30 Aug 2025 16:50:53 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 30 Aug 2025 16:50:52 +0800
-Date: Sat, 30 Aug 2025 16:50:52 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: David Hildenbrand <david@redhat.com>
-Cc: linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Alexander Potapenko <glider@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>,
-	Dmitry Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
-	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-	Jens Axboe <axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>,
-	John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com,
-	kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Marco Elver <elver@google.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
-	Muchun Song <muchun.song@linux.dev>, netdev@vger.kernel.org,
-	Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
-	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
-	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
-Subject: Re: [PATCH v1 32/36] crypto: remove nth_page() usage within SG entry
-Message-ID: <aLK7bP285OO83efR@gondor.apana.org.au>
-References: <20250827220141.262669-1-david@redhat.com>
- <20250827220141.262669-33-david@redhat.com>
+	s=arc-20240116; t=1756550372; c=relaxed/simple;
+	bh=G+WYl5zEZwCixATCLRwwqYylkCcLG2iKRsfwbDufMys=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OTwKpAAbZobf2HcSqKHv733bAYdjlmwuBCO9l82liU84oBf8+U+bBpHtcLNEs1FA3xcyviEpjXVm9vzXrioJtgJXOP2Fk7WRl5X42e1Nh54B4JKz+fbzYXyV6oGH1rT57W3UEGirWDd5VxCLhEm9QPJJZPA1ld7vewItWzSJE4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61259C4CEEB;
+	Sat, 30 Aug 2025 10:39:30 +0000 (UTC)
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kselftest/arm64: Don't open code SVE_PT_SIZE() in fp-ptrace
+Date: Sat, 30 Aug 2025 11:39:19 +0100
+Message-ID: <175655035973.1114907.5360306706910307227.b4-ty@arm.com>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250812-arm64-fp-trace-macro-v1-1-317cfff986a5@kernel.org>
+References: <20250812-arm64-fp-trace-macro-v1-1-317cfff986a5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250827220141.262669-33-david@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 28, 2025 at 12:01:36AM +0200, David Hildenbrand wrote:
-> It's no longer required to use nth_page() when iterating pages within a
-> single SG entry, so let's drop the nth_page() usage.
+On Tue, 12 Aug 2025 15:49:27 +0100, Mark Brown wrote:
+> In fp-trace when allocating a buffer to write SVE register data we open
+> code the addition of the header size to the VL depeendent register data
+> size, which lead to an underallocation bug when we cut'n'pasted the code
+> for FPSIMD format writes. Use the SVE_PT_SIZE() macro that the kernel
+> UAPI provides for this.
 > 
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  crypto/ahash.c               | 4 ++--
->  crypto/scompress.c           | 8 ++++----
->  include/crypto/scatterwalk.h | 4 ++--
->  3 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> [...]
 
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+Applied to arm64 (for-next/fixes), thanks!
 
-Thanks,
+[1/1] kselftest/arm64: Don't open code SVE_PT_SIZE() in fp-ptrace
+      https://git.kernel.org/arm64/c/d82aa5d3501b
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Catalin
+
 
