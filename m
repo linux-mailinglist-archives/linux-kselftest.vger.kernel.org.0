@@ -1,184 +1,139 @@
-Return-Path: <linux-kselftest+bounces-40355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A5FDB3C81A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 07:19:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C401B3C8E1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 09:46:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F8161C25739
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 05:19:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C5F91B24539
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 07:46:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE8AF1DE3CB;
-	Sat, 30 Aug 2025 05:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFD8264624;
+	Sat, 30 Aug 2025 07:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L8egTAxP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EbW/k7Hw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D7416A395
-	for <linux-kselftest@vger.kernel.org>; Sat, 30 Aug 2025 05:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11892264AD
+	for <linux-kselftest@vger.kernel.org>; Sat, 30 Aug 2025 07:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756531171; cv=none; b=qxOVqpixOF7BNMf0no7rrk0ViMLsh2tSoWq83aOSJN9m0YqVQbvW4QnQ5aHCZfZp7Sd+vLCdDbE44zxkkfj9IMAJIMIbm9e+vXkP619Cq1biugzE7SYrBMeF08MPGtx0tsbecc6u+QwM7lSwntjZRs5Xj0POtJ7d0aBqKJYQG3U=
+	t=1756539992; cv=none; b=R7x2vtW9agIdG2yNcpL29cbih+NzdBai1rpsCwQjhhCQILmOxOKttlaoojjpNKzdq5jKFqRoE/Ts/e/HvGXxo7/uwOS+IxEkgN/LOEANv/Gftr+i6KFokEMKN/eO985kvSeKNYkEJVNkvvgyDq9oF46yW5inHxdwQBxX0yM+kJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756531171; c=relaxed/simple;
-	bh=fE+9JJqLH4AQ9yTHjvttQQsxKEwxCv6Db6kes/Tc860=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lJ4BmRLfPE16rG90eMWwo7EB/jVa4VLJqSg4Ei/ikKNVwYUu+XXA+Q8/AR4VP6GIdq2N5h6mbfvaZra08Chn0Y37C8iFbCsBSvo3cpMKoGFOG7g96XyjC/Y2XQws0aG4iyv7+yy8ydyr/msWnWtVfGH6lOskj5Ji7ENMH6OYxiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L8egTAxP; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-24936b6f321so44005ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Aug 2025 22:19:29 -0700 (PDT)
+	s=arc-20240116; t=1756539992; c=relaxed/simple;
+	bh=OqAYBVUn/BDqYOKqySqeDTB3zGmjcoN7B78SpJKzWP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=trRMmU/JwwiDuoxwPZxhEkE5UOa+ydsa70nABh/ktCR9CpKTSV5HxQ7wBdsnwMl00NcVTCALWGpyg8hhhQ43J4cJGZ5i0K3rL67HCb2ChUNuoR+t4nF+FIoD4wwbYaYbbAR+CHd2O0Kf7z8zdZJM9/iiUhqtn79Z7eEQrJqLRZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EbW/k7Hw; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-61ca9a5b41bso3790315a12.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 30 Aug 2025 00:46:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756531169; x=1757135969; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1756539989; x=1757144789; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ppN7OhUjuwHgBU0fuTlsVS0risiTxfXqL+QgvTWau90=;
-        b=L8egTAxPr0WIy5pNuc5gQUltr/T9ORnc5hnVMhBXpZFNQ0qhwQQA5daPw+FlOV48F9
-         0sBQLQGDuweO3lfPQL2YWzN1taO8CENYldjfmwM7zlLSETevk0ifYgPgznhbTxQbCymN
-         9H5zxyZO+fRGYmKcJtUPF7kPe4OOTTrOdgzaIxRfiiHv5YT4rbl0uFpiaK/vFcUauQNl
-         D1oJgwhFpCDC29ArB3+m601FesF2qo4oJl5rCOkuBmlMAFxAsJYqP+MgguBEG0gRGp3V
-         iii1v7UsYPm1GfrlY5qkKsBBzn9eaUq8vVeOHsq9xHwr8jczBicdyZfLfVuRTEOwYDRF
-         NmQg==
+        bh=dXtX9Frtab9UqXTSJxGjWOLKxBJrHqjflBYkitY6e9s=;
+        b=EbW/k7Hw6fX0vtALByXrYwp24Cx5fc6+y8gGh08LxnvUabwAjTv4GcNSPF+tPeFZDv
+         5eBYl+TGIbddZ77p4UPrfJLs7Uw6tVF/ypzybP6YLR/c9sRwmrWl8qwWWPqKwDoC1IpJ
+         qQ8o4Vb002WkaOHih/NvXIGMRftSTcemFrjy5mLlO/VVBZ0/F67fUrhyV7xNvLxREW5r
+         rqoJbhgJF3+Br5n3dFjU+ZytvR3lSElXeFcWJVGIAAP/gu7NoDTx3veFLVOrVP2tgYhL
+         a0XhQOm9wBVZjjxMYcMWGsl1SOAiyFVdlTSO82ttLHUxdFWhQWnvl9kIqX8/hMiALJpp
+         gIJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756531169; x=1757135969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ppN7OhUjuwHgBU0fuTlsVS0risiTxfXqL+QgvTWau90=;
-        b=wFBQpNNu0HNI+dQ9WxMHMFEmX4bxnFEQ6o22yQ2htFizM7B/jwANteL9bYhuC/U1Zk
-         W1gLS4D22yuUGix4F8LzOhe/VdKqoADJoiVIZJ6uZoIDHw9Ii2pchETcKmZKSZWG6iC8
-         azKwvpo7NzAKTTLGGPhMVodvQlOdFKA6AGrdVIIjA/rdJ17kHi+J9HYdHi45PqrdLBp5
-         JECsLFZeZSYHIo5yM+fZNajG+22r2BMUdjzALlrzLY/bNnindZOgvsSz4meDFvf/ZjhO
-         FZ1X0nGvDolhqcCRsrNO6GpYiPLAd7TYXA3ZmemZ7rIKfPYGdJcw4uopsoOnuximQFeO
-         cM0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXt6Bd2lnnniE/bQei3yPkDlavSgC8Da/PyfoxTTCqDJOSg3B3305DsHJB/uaPrM1AP885/8p4iKQeZj4J8Ay0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhqKgCfHis8Oqd7eKxd0zxTc5X3/u7POMKJFBqr8iB7/wX6Vpl
-	URCF4Rd87B4gSCwmdL/74oK93GrdU0z10crRHWT3/54f3JtABKIpAQFe+1tQyQIpMsCzTvb2fO6
-	8ypnzG6L0m4cpff6AT6zrkwEnkQ3iWA0U1f7PvZQx
-X-Gm-Gg: ASbGnctBUvOFhsvP6iml7l8xPNzsXy+QfZIQyZjXJZJlSvEntQVISpNorA7OJyHlQ4W
-	XB3UaEXA7+IcErXRRH1cz9HeGbFZLN0juS1Gzlf6V8PcInyhLRwWrP1aG7n5a1ZqkItN39UG2i6
-	SLCBwTJyEOJCqTgaG9I+2MuLuHA2WjD8Y/s2UNvt+ekc5So93SOX+U4poTo4OQmF2HDM1BNMJWy
-	0twvGS7g2ENjVs=
-X-Google-Smtp-Source: AGHT+IGxJC9u3UnyTAxH/e5Fi0JDjKy84Qim0fFYobeDU62gk8OfykmppY/rr47My6krEuZYmNTSezladEhD1cMLYmA=
-X-Received: by 2002:a17:902:dac6:b0:240:640a:c564 with SMTP id
- d9443c01a7336-2493e7c6cb6mr2055445ad.3.1756531168997; Fri, 29 Aug 2025
- 22:19:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756539989; x=1757144789;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=dXtX9Frtab9UqXTSJxGjWOLKxBJrHqjflBYkitY6e9s=;
+        b=qFdHK8fcU28ooTSvWrqdzHemZ/dvTnB1u6sk1K6fSIA2UcOd+l7q3ol5Lp8OeiN3bm
+         Om9yleG/RxWcz2Dj1f2SQz7K7nkX7piOAUbPr6XS7FSRX5lCw9TyAHjiCiO0RRafUTNO
+         A4LjRSKa3qsqgKiacn0lZH7zPasfg+e03h/D3NpuoSSZVnUzfP2L85wmOddYiceWQ2dY
+         rH1UfreZaoupFgjU2iZm2epULvSX4jVrb/bypk7aNBUXZhj9q7hs5dwJ7Jz/m0GYzMsz
+         5r6vSucZpLMtdlj3N412oIMeRHlPhuLp2oiUnFkdhpq0CtkU0BCbe9rXr6AIKI2zpVb5
+         f/NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVSPipZSG1MV2fUB888Ies9bPZu54Q2eBFgOdiFP+yQEI0RgRKAGiyum+t8vCEtL6Xq4iIeItp6XoaA3CbBERo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUGDqRE2R8WZayUMhl6CezYP5oLULRJvpeqRHSD3nBk9pm06hp
+	74l0/AiCAxKaMyTFplco+jDy3ZWC9LPXz5sIw3o5zSF1uq5yFHgpKwI6
+X-Gm-Gg: ASbGncsUho3PrNmBZKgO5o52lys0zVOJxT+pt3hLNo9GyJP9uu/iCMjSbLMxvsSaKq+
+	u5ZtM1ajLpUkTiNAxZ3gm50jZ41uWiTHIy/ruZ5iGoAQDg9YjBWxB2+JXTb4C373vlBnJQkpNOJ
+	ro/pyKbTJLoR25v9NVpiabtYQqAqBKCeYSpN57Q/T4rqU1V8wQd8eJ6IIyQGZ1gxM3wZ+ZjxdR9
+	cci56D+4Zhi4ws3i5QdZ3v9iJUnyyM6DjukefO0sHn6E2NgLA7Iu2rI+akPw5ISwc+yPWIEsn3M
+	Mgis/S2aDDQNcXtE0mEpG1LbrJqVo33gL43pVf2f7Hzc/wF481fywBLSEqqB2HBxknid1vhLRKp
+	VkREYmNXjhGG9EMQj2o6DqQtMfA==
+X-Google-Smtp-Source: AGHT+IF+y93hNDhCFHUAbkTqB7bJ7rRk1NYfczRqTKcmtM/XlUDeBnRrXCkQu4Z3SKAA1EblyKm2yQ==
+X-Received: by 2002:a05:6402:3589:b0:61c:6fb9:c83d with SMTP id 4fb4d7f45d1cf-61d269881c8mr1010269a12.7.1756539988770;
+        Sat, 30 Aug 2025 00:46:28 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61cfc1c7edcsm3185195a12.6.2025.08.30.00.46.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 30 Aug 2025 00:46:28 -0700 (PDT)
+Date: Sat, 30 Aug 2025 07:46:27 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Wei Yang <richard.weiyang@gmail.com>, david@redhat.com,
+	lorenzo.stoakes@oracle.com, ziy@nvidia.com,
+	baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: directly add pagesize instead of increase
+ until page size
+Message-ID: <20250830074627.pitdp64svss6slyk@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20250830023102.14981-1-richard.weiyang@gmail.com>
+ <20250829200953.1757e85542b1126c4881d600@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250603203701.520541-1-blakejones@google.com> <174915723301.3244853.343931856692302765.git-patchwork-notify@kernel.org>
-In-Reply-To: <174915723301.3244853.343931856692302765.git-patchwork-notify@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 29 Aug 2025 22:19:17 -0700
-X-Gm-Features: Ac12FXwkB-c6nRSHHpBV2DQ1VDfQ04aGKYqJraiFmYlTg8c4hP6BoccqgTTCdoM
-Message-ID: <CAP-5=fWJQcmUOP7MuCA2ihKnDAHUCOBLkQFEkQES-1ZZTrgf8Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] libbpf: add support for printing BTF character
- arrays as strings
-To: Blake Jones <blakejones@google.com>, namhyung@kernel.org, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
-	shuah@kernel.org, ihor.solodrai@linux.dev, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-perf-users <linux-perf-users@vger.kernel.org>, Howard Chu <howardchu95@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250829200953.1757e85542b1126c4881d600@linux-foundation.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-On Thu, Jun 5, 2025 at 2:00=E2=80=AFPM <patchwork-bot+netdevbpf@kernel.org>=
- wrote:
+On Fri, Aug 29, 2025 at 08:09:53PM -0700, Andrew Morton wrote:
+>On Sat, 30 Aug 2025 02:31:02 +0000 Wei Yang <richard.weiyang@gmail.com> wrote:
 >
-> Hello:
+>> The check of is_backed_by_folio() is done on each page.
+>> 
+>> Directly move pointer to next page instead of increase one and check if
+>> it is page size aligned.
 >
-> This series was applied to bpf/bpf-next.git (master)
-> by Andrii Nakryiko <andrii@kernel.org>:
+>Why?
 >
-> On Tue,  3 Jun 2025 13:37:00 -0700 you wrote:
-> > The BTF dumper code currently displays arrays of characters as just tha=
-t -
-> > arrays, with each character formatted individually. Sometimes this is w=
-hat
-> > makes sense, but it's nice to be able to treat that array as a string.
-> >
-> > This change adds a special case to the btf_dump functionality to allow
-> > 0-terminated arrays of single-byte integer values to be printed as
-> > character strings. Characters for which isprint() returns false are
-> > printed as hex-escaped values. This is enabled when the new ".emit_stri=
-ngs"
-> > is set to 1 in the btf_dump_type_data_opts structure.
-> >
-> > [...]
+>> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+>> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+>> @@ -423,9 +423,8 @@ static void split_pte_mapped_thp(void)
+>>  
+>>  	/* smap does not show THPs after mremap, use kpageflags instead */
+>>  	thp_size = 0;
+>> -	for (i = 0; i < pagesize * 4; i++)
+>> -		if (i % pagesize == 0 &&
+>> -		    is_backed_by_folio(&pte_mapped[i], pmd_order, pagemap_fd, kpageflags_fd))
+>> +	for (i = 0; i < pagesize * 4; i += pagesize)
+>> +		if (is_backed_by_folio(&pte_mapped[i], pmd_order, pagemap_fd, kpageflags_fd))
+>>  			thp_size++;
 >
-> Here is the summary with links:
->   - [v3,1/2] libbpf: add support for printing BTF character arrays as str=
-ings
->     https://git.kernel.org/bpf/bpf-next/c/87c9c79a02b4
->   - [v3,2/2] Tests for the ".emit_strings" functionality in the BTF dumpe=
-r.
->     https://git.kernel.org/bpf/bpf-next/c/a570f386f3d1
->
-> You are awesome, thank you!
+>Looks like we're doing more work.  Is there something wrong with the
+>existing code?
 
-I believe this patch is responsible for segvs occurring in v6.17 in
-various perf tests when the perf tests run in parallel. There's lots
-of BPF things happening in parallel in the test but the failures are
-happening in a shell and I did get to attach a debugger. I've not seen
-this problem earlier as the patches weren't in the perf-tools-next
-tree. Through bisection I was able to blame the patch and I came up
-with this minimal fix:
-```
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index ccfd905f03df..71e198b30c5f 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -326,10 +326,10 @@ struct btf_dump_type_data_opts {
-       bool compact;           /* no newlines/indentation */
-       bool skip_names;        /* skip member/type names */
-       bool emit_zeroes;       /* show 0-valued fields */
--       bool emit_strings;      /* print char arrays as strings */
-+       //bool emit_strings;    /* print char arrays as strings */
-       size_t :0;
-};
--#define btf_dump_type_data_opts__last_field emit_strings
-+#define btf_dump_type_data_opts__last_field emit_zeroes
+Excuse me if I misunderstand the code.
 
-LIBBPF_API int
-btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index f09f25eccf3c..c7b5a376642f 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -2599,7 +2599,7 @@ int btf_dump__dump_type_data(struct btf_dump *d, __u3=
-2 id,
-       d->typed_dump->compact =3D OPTS_GET(opts, compact, false);
-       d->typed_dump->skip_names =3D OPTS_GET(opts, skip_names, false);
-       d->typed_dump->emit_zeroes =3D OPTS_GET(opts, emit_zeroes, false);
--       d->typed_dump->emit_strings =3D OPTS_GET(opts, emit_strings, false)=
-;
-+       d->typed_dump->emit_strings =3D true; // OPTS_GET(opts,
-emit_strings, false);
+Originally, i iterate from 0 to pagesize * 4 one by one and call
+is_backed_by_folio() when i is 0, 4096, 8192, 12288.
 
-       ret =3D btf_dump_dump_type_data(d, NULL, t, id, data, 0, 0);
+The change makes i just iterate on 0, 4096, 8192, 12288 and call
+is_backed_by_folio() respectively.
 
+Current code is not wrong, but not necessary to iterate one by one.
 
-```
-So I think the problem relates to modifying struct
-btf_dump_type_data_opts. Given I'm statically linking libbpf into perf
-I'm not sure on the exact route of the segv, no doubt this report will
-be enough for someone else to figure it out.
-
-Given this is a regression what should the fix be?
-
-Thanks,
-Ian
+-- 
+Wei Yang
+Help you, Help me
 
