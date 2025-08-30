@@ -1,45 +1,45 @@
-Return-Path: <linux-kselftest+bounces-40362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CA84B3CEB2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 20:38:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCE62B3CEBD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 20:44:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC83418941A0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 18:39:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8831C1897454
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Aug 2025 18:44:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D5BD25B30E;
-	Sat, 30 Aug 2025 18:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3E72DAFAE;
+	Sat, 30 Aug 2025 18:43:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWf9he+2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fj7Dj9Zh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6498199237;
-	Sat, 30 Aug 2025 18:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F2F2DAFA6;
+	Sat, 30 Aug 2025 18:43:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756579126; cv=none; b=C6hpqQ5DeHbKZOXnqEkgaoCTWC7nS3yd5QBm1HqsXiJcG/Yf7nSvxiXyBPWM9Q24UqLWck3VV0/txmb391ugRbEbBqsoAuoN04b21UW8KsX6Q/T7lo6tSWJwHXQAHKELnZv/shQcujkKPaK6mNOr9rRURZYCLSe0BCPT+ZwHRyg=
+	t=1756579401; cv=none; b=QA/iQUbv92jpbF2b3lTmVjlkbQKAa0TTQT94ANG5GCUXRilPpQbwTVJpwjA7ypW0KDNxX9EiQ+t7UDLE30NQJzEfzm0Yo1DuZ2+MFHKJx0EuFBIualiK5F4iq6n4x1NQacMjuLRdu05PYa26t5EY2vEd+T1R33xE++IbvboLCKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756579126; c=relaxed/simple;
-	bh=EswMiDxf5/gFdhos6ot+1GK0hWPxVoBsESqG4LOQCqc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rT7cgPoTSuCvxksTNN7qJ8HOBedH77D/bEUyPiTW9c0jeKj6xVhjjxwHqRulnLBnr8gzhcDKzQA75rZbQwhPVdD75HYM6T1D3NOd5tUtNlgQwEbccj+qTXjk+LjDVGPCk0jpCBLkDT/DYlNTvbtWW8WgCHVgpMB5L9/cm84qhoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWf9he+2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B7AC4CEEB;
-	Sat, 30 Aug 2025 18:38:45 +0000 (UTC)
+	s=arc-20240116; t=1756579401; c=relaxed/simple;
+	bh=fLsOGhl5G0JyK31g09dJEI8XL9BKyTjRDbIpcRsGYWM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aaCfIEE2QHW0HjjgtR94BBgs9qSfVSOJ1O23AbCsdOtxA74YXtRUSflOmrWuEuDtK9jBrH1Y3lQCvPyw/8u3BcJA6Bs3POiAisw9KmmFfsZpCK7L5O8Msy7lvM0HNRFiisXsEAELX564+O0JplSPXgvbgqEch1NWLfRgjgsxhUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fj7Dj9Zh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C6EC4CEEB;
+	Sat, 30 Aug 2025 18:43:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756579126;
-	bh=EswMiDxf5/gFdhos6ot+1GK0hWPxVoBsESqG4LOQCqc=;
+	s=k20201202; t=1756579401;
+	bh=fLsOGhl5G0JyK31g09dJEI8XL9BKyTjRDbIpcRsGYWM=;
 	h=From:To:Cc:Subject:Date:From;
-	b=LWf9he+29sdggbyIxgzs42V5T38ynY93FKiaO1YK6140LonW5p45Iprxgy85ZYoSd
-	 4nRm2u/YHjtePGhTQ3g9FEgBGbPcPSMeSKUNYA4AdiVMuPfJmiw+DsojVUUx9NS8lc
-	 EfTq9hI5BoGTStkMrkCFYrxgNFFQntAo81IYiSnMmJ4xDfyo6Z/9Ot2vCR4/iRJnnl
-	 r76msqoOBW/uiOc4mpUEc7o2rrl0KKU1rLZQREDUD3qZs7QalqnEOb0n6Bw6pH0uDp
-	 yrCw/EL5JMqQ6WBMaKIh3Z69ZaXdBLz2xNF0PCqiGmqboUiv+ZwUsIXYp7man7tigZ
-	 CcLqgyxoTW4ZQ==
+	b=fj7Dj9ZhgU+4rEyIz8DZhQz2GEClJJzfl5ZQcpY/PTa3mSWW/ZHLtPnlG5tTAUJDw
+	 Wb/TLimXC/BU4QXZVQq/WA+Apo45A7G39UnVYKI+iuZKPrLLV3F4QPyS14uj13LnYK
+	 nGzeBeX79BqW5xjso96jj5s2iFoXxclAO5Ybx6Sthw6T4uQjaHVbR9A+Qxd03E+G0T
+	 XVgWGISk1Lhfw3CuWL6bYwJQbjUu+XvzOxyklUlfgvSC9kRLYk7EwNa7179DbeB14D
+	 6l4/m1ZG7TttmlrW3DAgw40rP6yXB8cAsmiXlMZcnDhuE+HZvR7tMSLtcdF25a7Uwi
+	 dg0oNL3YT8tTg==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -47,14 +47,14 @@ Cc: netdev@vger.kernel.org,
 	pabeni@redhat.com,
 	andrew+netdev@lunn.ch,
 	horms@kernel.org,
-	shuah@kernel.org,
-	willemb@google.com,
+	joe@dama.to,
+	leitao@debian.org,
+	sdf@fomichev.me,
 	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	petrm@nvidia.com
-Subject: [PATCH net] selftests: drv-net: csum: fix interface name for remote host
-Date: Sat, 30 Aug 2025 11:38:42 -0700
-Message-ID: <20250830183842.688935-1-kuba@kernel.org>
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 1/2] selftests: drv-net: adjust tests before defaulting to shell=False
+Date: Sat, 30 Aug 2025 11:43:16 -0700
+Message-ID: <20250830184317.696121-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -64,43 +64,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use cfg.remote_ifname for arguments of remote command.
-Without this UDP tests fail in NIPA where local interface
-is called enp1s0 and remote enp0s4.
+Clean up tests which expect shell=True without explicitly passing
+that param to cmd(). There seems to be only one such case, and
+in fact it's better converted to a direct write.
 
-Fixes: 1d0dc857b5d8 ("selftests: drv-net: add checksum tests")
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-CC: shuah@kernel.org
-CC: willemb@google.com
-CC: petrm@nvidia.com
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/drivers/net/hw/csum.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/drivers/net/napi_threaded.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/csum.py b/tools/testing/selftests/drivers/net/hw/csum.py
-index cd23af875317..3e3a89a34afe 100755
---- a/tools/testing/selftests/drivers/net/hw/csum.py
-+++ b/tools/testing/selftests/drivers/net/hw/csum.py
-@@ -17,7 +17,7 @@ from lib.py import bkg, cmd, wait_port_listen
-     ip_args = f"-{ipver} -S {cfg.remote_addr_v[ipver]} -D {cfg.addr_v[ipver]}"
+diff --git a/tools/testing/selftests/drivers/net/napi_threaded.py b/tools/testing/selftests/drivers/net/napi_threaded.py
+index ed66efa481b0..f4be72b2145a 100755
+--- a/tools/testing/selftests/drivers/net/napi_threaded.py
++++ b/tools/testing/selftests/drivers/net/napi_threaded.py
+@@ -24,7 +24,8 @@ from lib.py import cmd, defer, ethtool
  
-     rx_cmd = f"{cfg.bin_local} -i {cfg.ifname} -n 100 {ip_args} -r 1 -R {extra_args}"
--    tx_cmd = f"{cfg.bin_remote} -i {cfg.ifname} -n 100 {ip_args} -r 1 -T {extra_args}"
-+    tx_cmd = f"{cfg.bin_remote} -i {cfg.remote_ifname} -n 100 {ip_args} -r 1 -T {extra_args}"
  
-     with bkg(rx_cmd, exit_wait=True):
-         wait_port_listen(34000, proto="udp")
-@@ -37,7 +37,7 @@ from lib.py import bkg, cmd, wait_port_listen
-     if extra_args != "-U -Z":
-         extra_args += " -r 1"
+ def _set_threaded_state(cfg, threaded) -> None:
+-    cmd(f"echo {threaded} > /sys/class/net/{cfg.ifname}/threaded")
++    with open(f"/sys/class/net/{cfg.ifname}/threaded", "wb") as fp:
++        fp.write(str(threaded).encode('utf-8'))
  
--    rx_cmd = f"{cfg.bin_remote} -i {cfg.ifname} -L 1 -n 100 {ip_args} -R {extra_args}"
-+    rx_cmd = f"{cfg.bin_remote} -i {cfg.remote_ifname} -L 1 -n 100 {ip_args} -R {extra_args}"
-     tx_cmd = f"{cfg.bin_local} -i {cfg.ifname} -L 1 -n 100 {ip_args} -T {extra_args}"
  
-     with bkg(rx_cmd, host=cfg.remote, exit_wait=True):
+ def _setup_deferred_cleanup(cfg) -> None:
 -- 
 2.51.0
 
