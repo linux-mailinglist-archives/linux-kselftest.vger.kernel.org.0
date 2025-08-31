@@ -1,147 +1,126 @@
-Return-Path: <linux-kselftest+bounces-40372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8124B3D0C3
-	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 04:17:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A1C9B3D0CB
+	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 04:27:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F102B7A4ABE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 02:16:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E63111A8078B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 02:27:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90EFE1BBBE5;
-	Sun, 31 Aug 2025 02:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27AFA1DED63;
+	Sun, 31 Aug 2025 02:27:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VWwiSIuf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TMuoyTOX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D152BB1D
-	for <linux-kselftest@vger.kernel.org>; Sun, 31 Aug 2025 02:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A47F1A7253
+	for <linux-kselftest@vger.kernel.org>; Sun, 31 Aug 2025 02:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756606653; cv=none; b=ev0kf+LQPgCot/E8067jNeXtG8LGRzBdGWw8T6A5kArsQIto9slJMwIVflBwnkuuGqgKEZSpimD+XR3/fh6S8XJEubpjULzfX96cNmNs6PVCk245h4BHf/xqZAsk2c7xUBj8WiKGRgm80t2/aqSfj5RNTbIVX4tOgnfNC9E6M34=
+	t=1756607230; cv=none; b=aKJEPa9fUudByDX7arZ977ys6eS+whw4gT5tc2pmFQ4hz+Lv+O9TqRs1GqrYl2cvSPw/M5LxQw0qTDqdEU0VpIYvn1ULYzJwY7HFwbr6BNJ4VQlFUrx3LEIyU9EorVsSq+hrTsp54E5jnu/YEgK1Z4QgmIX1GghPMjo+AMtCvEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756606653; c=relaxed/simple;
-	bh=OHppVaTN6p9+/ZMG87zsvxH8q+tfMKk67lb0jZzg6sc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q5RE07wcbwVjnzK10/VcwRdyKKrLzdNG2WnUCNdKcv+GIIx2akT9110aGG/B88R8KCQSUboakcY1562MBlb5CXdVizs9GvNEe07d5VZ3l78JibKD4bnZcpg2jYHtjEkpu4CE5qEsR5cj9CmPIm0Kn3Mo+KW5HioIa84y5kHbzZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VWwiSIuf; arc=none smtp.client-ip=209.85.208.43
+	s=arc-20240116; t=1756607230; c=relaxed/simple;
+	bh=FuTzmWh6EwBqUd91xLw2nUrpj5PU3M+KaZk97ellh2A=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=agFzuj5ja4cCAV2eOvS+hQ05I0tJhzAzjijMNjw9vxGnAIxMu+qEqqTT6/l1LfvsX45Df/DH+ttLqZPG0O1TO1zbQLKZ9sIW4XEWlddEpLVt/nMSbHnyJTaLUlSMrGhWkcd/MQp8NhXD2Mw8UasOxWEIXr4Uq/C3aSbMQfjnoig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TMuoyTOX; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-619487c8865so7694552a12.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 30 Aug 2025 19:17:31 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-61c26f3cf0dso5068191a12.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 30 Aug 2025 19:27:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756606650; x=1757211450; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1756607226; x=1757212026; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1WeT/zjIwqOiQO4cUG7X3O0wwJPbXUK+ur0y6w+idiU=;
-        b=VWwiSIufNUieLA//l4ijap2rJJvrINmAn+2IeQbrdMlV33sfBPYSFzoFb+y0iHtB85
-         noPzgi1kCyK4a9dNvXVmc3JskfYaTB5nV58/qmFieY7ui5zMMwGP8nj5gJUKcrJkeTJX
-         GtcCQZoV6DUFWg9Q/gqk3t1LI82YZW39P/p0ZBVH9LQ4i6nDpYfWOyWrsTA/Zb9Rw2Ck
-         gpF02hMQwzp/IsjKGRr7nEIEoOgSU3n3Jn0fNUO6ekYf5VjC4xYiysmD1LZ4NpqqPfHs
-         Z91NtqKgS267TnTVcTmgjAqx8H8xQkM173e/SFUit2dBFfnFievlmLwupHVj+Jhzemp/
-         BkBA==
+        bh=Qx5oAXDKVN11+SqKhk6XnmijMtN6s+BtalzbMhItzec=;
+        b=TMuoyTOX7D8XvJLy3d9QNb0iYfULpqiVtw4RnNbaGDlaPcDZiukUfiq4c2SM9iHpD5
+         q3Uydqmtl/tJAL1zzUMiZ7INI51b5iHy1547OLTmw5OTM6TULLGBAINUyid79/uquLPm
+         KYW8soORajS8BGRdpW1jtFttw94xo1N+eK8GC3zg/lSwZjz3Dr5N5+X+wnQOtXWmHcbG
+         6mGmlmCDn93di8RU/3MmeAoYEANUaFN4TD1+H0yUjCvx3LEInq7egLaBIO/LYrOF6KLZ
+         P9bYWVW3YAWsQjAjjvav4ZTs3fhBBiGb6o1OMTbWEP2qlO6J6L1trbMwcJD2m0coDYvW
+         FdOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756606650; x=1757211450;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1WeT/zjIwqOiQO4cUG7X3O0wwJPbXUK+ur0y6w+idiU=;
-        b=ShqA5eOlo5RZG0b1g/sWln7kVVZ2728BPwwo0KBWhpdx7GOjhnGnVwYu+oIRQALUAp
-         14kRombarlTCwSXw9QnUoqNNMfQQ6FtANrwQTQpR/XyFBym4oVnVQcNAnp4kEZJb01Oh
-         ZhMh6P76IAeuXvk6O1ZO0U882BBapTEln9OEope2cAu91Xqckgd0lklnp4BmkyT1OO78
-         MK86CFpOQzoACXqEC3IMN5xkdHpwMpYkclNo4JyTKzppNYtHFitVcQfTyRYlwpjh4oOo
-         NKjVwV+Fi7BHOFcXUYwWEOw2TeJyAku81ogBWnEkUSZ8TtPO0EGJL1NiyOJ/3E8bFmap
-         zsUA==
-X-Forwarded-Encrypted: i=1; AJvYcCXj1DXWihPvWPFj4eJ6IeFitI10RWoe7GonzzuRcxZAIvUiAt0BYNayy26f2Y6+zjlez8pEV7MAPO/jBrZeMn0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO1lmLYDHCyNB8t3eOAEU+O8LanpxVV2TUQdwNgzIjtIlPenyi
-	qcelc6Es3QoRWuTulgV6KifYuUuMQhL5JvMrTBRsA9Pt2epAMQ9K1Scs
-X-Gm-Gg: ASbGncvAtZqs7712uiYLGnYcuFIDkBa6YXD5Ii8oe8QSVO0H27Ki/nwJv+KRWc1EZs9
-	aabew7VnIFL21hpf18s6XN7VCrn187IiEhxoebEvesXEeyaNdy4lTRUBHlsjm+RktKyT3dVe72v
-	zD64PCP59XYmMw6mwr+brlCkGNE1ypODPRoozOa+8oiGcz2Ju7cHIbXK2qLQMCVmV9SYO+OAaRo
-	WIZ0l0yVmL5LyTo91Yg33qRbyF+0g5A1Iyg08lp8qNjNMdiRDAP9OrCvCtogZAt2moBtBaX6KAS
-	8VeucO+QMcKr18x9htZCM28e7l6lOxRXaGKk97u5Ae89wsbpdSQFCnyF44dkah+lb740h3cuHpy
-	Kuf4HJBgFkOBN2p9obc4GtUikzQ==
-X-Google-Smtp-Source: AGHT+IHpaE4oQ84bPky6E3Gt38jrVXiAH5Rw5HJyfEG7UTk3O51dnCY5NKNk5Jf8sLxJx9Xd+oG5ug==
-X-Received: by 2002:a17:907:97c4:b0:afe:d5bb:f41e with SMTP id a640c23a62f3a-b01081b3e5cmr457418566b.13.1756606650001;
-        Sat, 30 Aug 2025 19:17:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756607226; x=1757212026;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qx5oAXDKVN11+SqKhk6XnmijMtN6s+BtalzbMhItzec=;
+        b=XeJIK/Bjn2ckXcT73DOKP2MauS2vqz+fpQpWZHmhRKTe1eEmUn7VWzXJsvWC0TwRnx
+         c8SCUVjqr0sQT3mMeGJyAI0JB3FDuMvCnRFv85Nz/gFzlCbsJYR5szSCUNfC5NmpOy+O
+         /dIyZHZcQ6k6ikQwlYiZzSvE/xSqmjQw6l4fkPq0D62i2qvpTu63ERh/rEhjB/gebNp1
+         uEno6RqYUpJBya4VHObGe9znKrmqeh9Fl2O5p/vr+N3aidiEk642GTUnLzd+sz5Xz+yI
+         81YhvHm4bA5sRCYcQgnKgkqk6Wvrm9oORrz13C+xOfql5FPV1KIVJJBvTjXh7qScvdTJ
+         D1DA==
+X-Forwarded-Encrypted: i=1; AJvYcCXMlowl6WxDWUaNjyx2PuO8xLrd9YmZ/a1PaL6bInojf5Q1gyuHYehaUnyc0lWPUUYTdsXp0cJFWUN4fwKY994=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsynp74W5pj2pga7KU5f1NAFCEYNpN5NHvYcnkKA04vK5PKVXJ
+	/lwlfiswOfQFJfVzi4jO6a2G+Epj80hZxl8Kf/Pe75u4Q5bdAMInUQyE
+X-Gm-Gg: ASbGnctgSV28qDqoBG8HemT+SPMJLzKJ93aNGkVbeJn/eFZmMCwDCuz+6ii69jBtftf
+	UTxG1O+0Ku1GXdJVpJ8ncuh+Fmy/o7w1aM9AkAe3roDlwnGZRPaflGrfXLskfV/NEV+Uko15oXY
+	qeBk0YKdCktAb1rlufpg3i8xZ/DG3N3okyPWNEhjgdEjd5emPS0BdIoDj1BhUB2uEv0TlbflhHL
+	1/z/P+7M86fwu+kRlTghzbckpm3Xsj1T7UIrhGdLA5L2lF750/zzFx3BC8zgaAK3j4bJRHpL300
+	9ljreg0qwX0Hm6crXIp0Nw0QHOb3ynqOGQNTlnWab4GMmXuejsjrSjOFKXu2QaeA4yDmmrUz+aV
+	I+Zhv0G/yILWFBw3YwCl4a+YdZuXP2DcvqWys
+X-Google-Smtp-Source: AGHT+IGfcvjO3j3fIFIuIdn+jDiKXtrzcTeW6OXMfOiNJFGbP+eAQpnIa5i6CJs+MOMzNMFoo3pbGQ==
+X-Received: by 2002:a05:6402:3228:b0:61c:cbac:f6c with SMTP id 4fb4d7f45d1cf-61d26c33cc1mr4121687a12.23.1756607225676;
+        Sat, 30 Aug 2025 19:27:05 -0700 (PDT)
 Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b04189de5b5sm80240266b.10.2025.08.30.19.17.29
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61cfc4bbc6bsm4495215a12.29.2025.08.30.19.27.03
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 30 Aug 2025 19:17:29 -0700 (PDT)
-Date: Sun, 31 Aug 2025 02:17:29 +0000
+        Sat, 30 Aug 2025 19:27:04 -0700 (PDT)
 From: Wei Yang <richard.weiyang@gmail.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
-	david@redhat.com, lorenzo.stoakes@oracle.com,
-	baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: directly add pagesize instead of increase
- until page size
-Message-ID: <20250831021729.seingx2yto677ngq@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20250830023102.14981-1-richard.weiyang@gmail.com>
- <E0C570E7-C4CD-4E41-9590-DDB64757CA2C@nvidia.com>
+To: akpm@linux-foundation.org,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	ziy@nvidia.com,
+	baolin.wang@linux.alibaba.com
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Wei Yang <richard.weiyang@gmail.com>
+Subject: [Patch v2] selftests/mm: check content to see whether mremap corrupt data
+Date: Sun, 31 Aug 2025 02:27:01 +0000
+Message-Id: <20250831022701.2595-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E0C570E7-C4CD-4E41-9590-DDB64757CA2C@nvidia.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
 
-On Sat, Aug 30, 2025 at 09:32:58PM -0400, Zi Yan wrote:
->On 29 Aug 2025, at 22:31, Wei Yang wrote:
->
->> The check of is_backed_by_folio() is done on each page.
->>
->> Directly move pointer to next page instead of increase one and check if
->> it is page size aligned.
->>
->> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
->> ---
->>  tools/testing/selftests/mm/split_huge_page_test.c | 5 ++---
->>  1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
->> index 10ae65ea032f..7f7016ba4054 100644
->> --- a/tools/testing/selftests/mm/split_huge_page_test.c
->> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
->> @@ -423,9 +423,8 @@ static void split_pte_mapped_thp(void)
->>
->>  	/* smap does not show THPs after mremap, use kpageflags instead */
->>  	thp_size = 0;
->> -	for (i = 0; i < pagesize * 4; i++)
->> -		if (i % pagesize == 0 &&
->> -		    is_backed_by_folio(&pte_mapped[i], pmd_order, pagemap_fd, kpageflags_fd))
->> +	for (i = 0; i < pagesize * 4; i += pagesize)
->> +		if (is_backed_by_folio(&pte_mapped[i], pmd_order, pagemap_fd, kpageflags_fd))
->>  			thp_size++;
->>
->>  	if (thp_size != 4)
->
->It might be better to add
->
->if (pte_mapped[i] != (char)i)
->	ksft_exit_fail_msg("%ld byte corrupted\n", i);
->
->instead to make sure mremap() does not change pte_mapped[] values.
->
+After mremap(), add a check on content to see whether mremap corrupt
+data.
 
-Thanks, will use this.
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
 
->--
->Best Regards,
->Yan, Zi
+---
+v2: add check on content instead of just test backed folio
+---
+ tools/testing/selftests/mm/split_huge_page_test.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 10ae65ea032f..229b6dcabece 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -423,10 +423,14 @@ static void split_pte_mapped_thp(void)
+ 
+ 	/* smap does not show THPs after mremap, use kpageflags instead */
+ 	thp_size = 0;
+-	for (i = 0; i < pagesize * 4; i++)
++	for (i = 0; i < pagesize * 4; i++) {
++		if (pte_mapped[i] != (char)i)
++			ksft_exit_fail_msg("%ld byte corrupted\n", i);
++
+ 		if (i % pagesize == 0 &&
+ 		    is_backed_by_folio(&pte_mapped[i], pmd_order, pagemap_fd, kpageflags_fd))
+ 			thp_size++;
++	}
+ 
+ 	if (thp_size != 4)
+ 		ksft_exit_fail_msg("Some THPs are missing during mremap\n");
 -- 
-Wei Yang
-Help you, Help me
+2.34.1
+
 
