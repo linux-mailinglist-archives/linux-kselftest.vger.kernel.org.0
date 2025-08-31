@@ -1,333 +1,333 @@
-Return-Path: <linux-kselftest+bounces-40379-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40380-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40885B3D21C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 12:30:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59DB4B3D428
+	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 17:36:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB9613A5A25
-	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 10:29:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 165CE17A387
+	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 15:36:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8064324DCE9;
-	Sun, 31 Aug 2025 10:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C6926CE26;
+	Sun, 31 Aug 2025 15:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="T4qoJAiW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bregans-1.gladserv.net (bregans-1.gladserv.net [185.128.211.58])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2073.outbound.protection.outlook.com [40.107.93.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EDF942065;
-	Sun, 31 Aug 2025 10:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.128.211.58
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756636196; cv=none; b=K7Lac2rwOGo3mjvYSTEixmor88imB7lPOmiVFw/haENVUVnIVvhaEqeuCsORhu5AL8ThgDGosXWu/FGVHkwgei+Hg6AymJ3qaHN+URQxRzB4Lhu0fFhQBZd/1NoQJep21B3RIh94koSbxubbFFHXVwn9RUC6D3XOPWYbWYxB76w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756636196; c=relaxed/simple;
-	bh=2EsMqCtVHrXT7IjY5w8NhPLpj46DcUqkEIp0+bOlwXk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UamtXrf0l6IbofjPvaXn3ePpLZByXYOwVIwFNZu3GkwWLKSHaBQSBhF6p8OjQoKvzTwbclpkehErTmM34h34XC1HGN7JxbPRw9MvO4BE/r3v2W35CyyZs/+kAaW/wYwXrdKbDc0EN13PNUE2LF7LbDAPSZDiLcNh7qml/qQ51rA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=librecast.net; spf=pass smtp.mailfrom=librecast.net; arc=none smtp.client-ip=185.128.211.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=librecast.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=librecast.net
-From: Brett A C Sheffield <bacs@librecast.net>
-To: willemdebruijn.kernel@gmail.com
-Cc: bacs@librecast.net,
-	davem@davemloft.net,
-	edumazet@google.com,
-	gregkh@linuxfoundation.org,
-	horms@kernel.org,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	willemb@google.com
-Subject: [PATCH net-next v2] selftests: net: add test for ipv6 fragmentation
-Date: Sun, 31 Aug 2025 10:18:34 +0000
-Message-ID: <20250831102908.14655-1-bacs@librecast.net>
-X-Mailer: git-send-email 2.49.1
-In-Reply-To: <willemdebruijn.kernel.143e90d593cff@gmail.com>
-References: <willemdebruijn.kernel.143e90d593cff@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6ABC1F4CBB;
+	Sun, 31 Aug 2025 15:36:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756654569; cv=fail; b=jPWVw3yzy2vwmjryjMQvCCcltBuhr0b+16QNC8nutjJ1stEDebNndF3GmwiTIxrsCK+rVYOm5LsYYb8Y3lVeJJmRP1T04RBW8RGFK0D6vqauNVYAMAnRov8Fehgq3mWQ9lOnzQAiRrYElZ1exISRZpZQEnIH3n/tQyWogL3gCq8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756654569; c=relaxed/simple;
+	bh=MAXBn7V3CPpyiGZ3/VZA1vlNCvbjakV1ItBztk8SZMM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ah+5fJTULTb4abCq+QQpXpTLnI1iojYCDKSoj5vANenHOUZpwvVikBSmEFb/9PGRMeQ5hBCsrfM9Htxaou+NnmQVQS2ukZxB5oI7VFxmIcZoICOtdmfi38pE7EoVe6mEUlPz/YL8s/dkG2cv20mFxSECi9iuIzGNuRjOqV9LOUg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=T4qoJAiW; arc=fail smtp.client-ip=40.107.93.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ke9KvoDFfHQKz1ixdF6E9//q4hAmMDDR7aNcrL6hw8hk7c7HcZyNVDK8W9sTLeFNRkYzeE5WvAeLsI7nIL29XQg+fG/XRIpDvWK7ltnPdAsUfMWzGy7y1eECN6m/vePR5MpmpJPBsjHzyEYXgJPZ3Ol0tE6LrZX5jGk9ob6il1J5HL59ptCoqpqMMOdS1D6Vxm726RVYls5BsOdHr4L2mcp+9NiSYtUsonuQ11xiJQahkFLMKqM1S8isUaB2nJIS/xuy5OYPeXAx4OZI6cvo/gLYmzj4LM+RJiWecBHvE1KlMbUjQTMHYbQFrmdNy3K4Vg7jJ+NcJ5MKyoTyTvDjHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Eg37BFB2T9p8XtzlfB94utt1TpaA7SdQzEygxVAQ7Nc=;
+ b=xVEUdeAJ2ivgCzWVrgImWGhrzZ2E1nHtV+mDwXgIFuqz5qhCmug5wTIzd6FrW9+EV7z06v8f41uzmu0C+q0QTMjMyim8jFsyPz/r4f0THOhOMMog4CN3lQkdWETcqpRrWT6s7kzt7Kd/9EE0iWIk3wWCZxZeLHz/MXKq22uW3qfC/UBcpEbMccp3pjOOsMKR1j0qB1/JnSY8tTjRxK5Ru0tyhi6ttc0/nrFqLBhLfjN5nR5D1lEhsdbug3U31rxlAbRhOVSF3h4y+9H0UZ4j6Z7idLtVSmB4KgL+RUKbnmcoxmPt2Emsns0MHrS1Ms54IXZPNVlSjwjz7ShNsIwQsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Eg37BFB2T9p8XtzlfB94utt1TpaA7SdQzEygxVAQ7Nc=;
+ b=T4qoJAiWrGU0OznfvPFhOl9xNkDA2aIo/o52yBujrnTSFbsp3ecSadk3sCZy51dwhHRHwyh+G4HDMVrucMusqidTVd3SM11Cerkv/y2KZkX8XcQifFSxtkB/oGP9IRNZcbUiAlJ9PdWE+Qm2hoba7HJDpOLDOnE4G8qYEAqtbm74MIJQOxvtWnm8CMB1rpf8gu+TxcG+g8GapjB6tSptpGrvtV/RU8GHitk3V/GBLW10K8XnWRYaEqXZ9pYzb4M0ovIcWUgqJlGD4P18n28H+Vu9RVc1f766++yktO9B82PiKma8m30iwJo+qmpRG3JdfMqd8Ea2gC2INaOXFYeCWw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
+ by MW3PR12MB4428.namprd12.prod.outlook.com (2603:10b6:303:57::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.21; Sun, 31 Aug
+ 2025 15:36:03 +0000
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::66fc:f8a2:1bfb:6de8]) by SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::66fc:f8a2:1bfb:6de8%6]) with mapi id 15.20.9073.021; Sun, 31 Aug 2025
+ 15:36:03 +0000
+Date: Sun, 31 Aug 2025 18:35:49 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Sabrina Dubroca <sdubroca@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Shuah Khan <shuah@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ahmed Zaki <ahmed.zaki@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/5] net: add a common function to compute
+ features from lowers devices
+Message-ID: <aLRr1W3jKRDYsRSq@shredder>
+References: <20250829095430.443891-1-liuhangbin@gmail.com>
+ <20250829095430.443891-2-liuhangbin@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250829095430.443891-2-liuhangbin@gmail.com>
+X-ClientProxiedBy: TL2P290CA0014.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:2::17) To SA3PR12MB7901.namprd12.prod.outlook.com
+ (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|MW3PR12MB4428:EE_
+X-MS-Office365-Filtering-Correlation-Id: 17a5dad8-bcf4-4fee-8314-08dde8a417ce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|366016|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?vdR5oZ+0kBDGeOjpTMpJ+RC6mmiayrctmLjNnW6sAVdcg1GWnpItUNhwyuTe?=
+ =?us-ascii?Q?KbuYbAP6mPNI2xsUpMi2Fc9QL1/b4unbbnqV4GthtNuMAAEjoxCK6+2mWM5v?=
+ =?us-ascii?Q?69IaX8dBkrxRJa8TyF/GA7hakkmkN3pcI3JPWE8uARconZ7B7x7Wi7R8KYdJ?=
+ =?us-ascii?Q?ZV8unT2sHtwrEhtzH2ldI221X+Gr+HH0AuBCJlNjrQNuUNnywiw0YXUDK7tb?=
+ =?us-ascii?Q?M2+WwGgjB69pWK7TVwwpLHoV/aQP6vdH/5O7Dzt0ibVB+hmO6vMX1WG7dQDo?=
+ =?us-ascii?Q?mT+ODwYq1FVV4XCY9/SQ8qKNzHklzCRLTVU8SDC47DeluDh9gS3Q2PVRbeAI?=
+ =?us-ascii?Q?5S5EGFUK+OSBZJwjp8K6nXASA/vYJ4vMaPrp2EBrvSDzuJFJssFAuAUJ9BMk?=
+ =?us-ascii?Q?SpEp/WEaEsrmmn82u4lC1Gdyrx8ToOngYGxKYyeZZljgFVAXuIjjbWYk/8vD?=
+ =?us-ascii?Q?OcnCwfgo93v2lGZNDdgH/5lCp1J85ogs3TgHQYLe3N1iPMCPUyB+SOdXHDN/?=
+ =?us-ascii?Q?ThaY9gDpHgUgVhlxgPCEpnQfBFDBpy2CG4js3Dc3uG5h4Bw5Lb7/h2967wBK?=
+ =?us-ascii?Q?zSgCYlsf/uWxoSxKQCgjqlIKXgaWJ1u/uvnGbFioU81auB1IpnjwhmVbpy1p?=
+ =?us-ascii?Q?0yJlsoxGdLX633EHY59i1yGPQDDEIotkhb9SSjBswt2azacMlixVbE8mSFfz?=
+ =?us-ascii?Q?a1AJR3Fp4K8JzoPuXzWYpEZOCi0Dk06TMn1eAVN0gZt7X3Niz0LK2YudsHrl?=
+ =?us-ascii?Q?qJZWif4RTORqF7qH1amGLLs8uh4VWmSz6KhiXq+78ifpO8huPHPoe3+VkRtf?=
+ =?us-ascii?Q?z4Z0vvxRq8dcg1HPj3DbS2ZZwcQzdrPanH+GCAGXs9P91aBLpKqMV15qWeNf?=
+ =?us-ascii?Q?6RhGIyIOSgoDJrtjZEUmN0ggGgOU3vR15qZBu3Xz80MC/0ZdXMTqST0lefDh?=
+ =?us-ascii?Q?3rzx1yoyBm9e7rC3dG8ca7IAEaozr+QADPlA2cVaGdHh1dYLRJRduO95RA1S?=
+ =?us-ascii?Q?P1OA15ktvYV9oWlJROfnvP2QMCUoL2Eo79cEztk0YMcl69Gjn0+xb8va+P0n?=
+ =?us-ascii?Q?ZdJEEglnm/kCDu19OjWpgde0TtIYeBuJAvyGl4revpmM3PWVs2/IxmeOkhO0?=
+ =?us-ascii?Q?+rag9RW7swHRgR+8ngOwNzlpvTLHc/nCWLQ9HSa/AF5JuS5ivprB3cBOJ4E9?=
+ =?us-ascii?Q?MRHmCyKCSVJXW9u7oQVgX086yZdfCvC+4cnfzn8qGitkQUX1IKkdzwQbkkFy?=
+ =?us-ascii?Q?gt6F0AkLvod3oVLddkfQo0NsyirwIe6Ca+tzZKjHkCAfswvC9m8iEBYEzmlY?=
+ =?us-ascii?Q?Br8amthwR9SIsuqN7bW24rHcftWnFzCZ+Gy15aLJbpbv2JCq9TwZ/EC/QuYd?=
+ =?us-ascii?Q?15WxOSrVhLmNUwBe7y25FdJ0/oC1Sg+A2ZxZAh+D0THIb6Er1A=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?18lN0jr5S2k55y2O9xuUlN/8uyWxrGTCoay3KWkARiDHuIJHlN6O+Z7iEsVK?=
+ =?us-ascii?Q?SfUVZL9ZPP/fXzDl2DgbpEvbSAjR3e/EAOohmocTMrmkZONuDsCm4XHPBdaj?=
+ =?us-ascii?Q?Ba9urskcmn7eyoxKARt1uBWubiw4xmL6dRtzxjT80w4iXzahM/UnVbrrnk0H?=
+ =?us-ascii?Q?e1/WAVYIY+LiuYd9Tk6kswyLaD65QfWuwKAOFIlSWmqZNV1ZBMAPC/oMckGz?=
+ =?us-ascii?Q?0XUaYdGE/JiBdKynSjNgTR92F69SN74o4BWPMYw9IE+jNxHFTZefTYA2KbJ2?=
+ =?us-ascii?Q?YnIkPNumILNiobyYRpFiaipzT4szN/NlAz/5VrBTxZv1gVDxahWdSHYozyk0?=
+ =?us-ascii?Q?7Y08qfi5S/5BZ15s1pZ9MDFqStpcDtmIL1EtUVNmgzOp+2FXTZNRaQiXUAQj?=
+ =?us-ascii?Q?rBZeOA5W4+ScEFUldCXxaSHoTPJI5+/tUDB/CG+3h3ojOSEYpBBGlOVi+ie7?=
+ =?us-ascii?Q?lUQAUV7rfalcOdo6dnObKmTtKPpiPCKdT8WNurqTtX/IdTt20OVzE0d8UI/1?=
+ =?us-ascii?Q?wEGkIArp4+AO4ScxPzjy6cvqA53YZpQ+SAvzmtQNSKmzh9Cj7CiBydtkJ1R2?=
+ =?us-ascii?Q?BRmT3SNHhs0EXysHObHqqNHwAmVal8S4jGb0c3vDuADu9KKZT0mb43gqJamc?=
+ =?us-ascii?Q?jkZjtKTzBgNLT3J7nxQbM2QZib0do/3+0G9dlFXGHaR6V67iMmchos+r5OVE?=
+ =?us-ascii?Q?MhoWaI0lwMVeM/Sy2VXdN9/tS6CTcvbGtMPorKPpKwFa3I/gowVjMiuopjbc?=
+ =?us-ascii?Q?UaIWBqDU5aRhIjYwLcWUOrib2uBA248XUXR+rOGqfK9O9B1rEE9n6l4Rsr9A?=
+ =?us-ascii?Q?/Fqm/XLnarUGPKa1GyLj5bGPDzzJsezdhJtbnxhxjzjIL2YVHPHDEoApoXRJ?=
+ =?us-ascii?Q?d8zV2TKPGP4kuV6xplrpctxJCfEbbkGuaD7htGtcXrmeBVjelXVZTMqtQI73?=
+ =?us-ascii?Q?tv6rTMsboZK0EWlvSdyrmLVgKEopomGvprcBuUK8sqp6cNnOiNbYBCSlIpk1?=
+ =?us-ascii?Q?LW6guAt1eQMPBSiUBHSER3d3e5xeY/u2yNL+ndKMdrREZ0qL93hAj9E58Pej?=
+ =?us-ascii?Q?XdCYnty7vqJwbPV48IiNjw3Tkc/Va9f05fuAkMHTQgioy2sHNwbrDTAtAYaq?=
+ =?us-ascii?Q?xE0Wh5ZbFOfA0MHqplHRQ3Hm6S2x6pqIhNiW5nPKAyLCHN9BnQMBbRndrV7y?=
+ =?us-ascii?Q?o4Ckqym+gNE+9B+nCgcIczZJbYKovBOWHGKbXwKfN9lKqh8zp0p/UTvTOlNP?=
+ =?us-ascii?Q?NbfqKgfsY4RZLee0y5NKOHQKVlI0r0+X+lIKJmBiGHUn89dyiZvZYW4jKHwe?=
+ =?us-ascii?Q?mw0rdgBkOb23L9ufqF0r/UIMM+YbdsbqRbLpRdjGqw6YHkEnekSNACOkjarw?=
+ =?us-ascii?Q?Bh1SxyxrRp4qN61f9L8y9HY87qMjgXcHeVO/uUYaSpFqzpdssIM6cMGbv/9l?=
+ =?us-ascii?Q?zek7U9SHlSjPuadmdy8n0BKfZ9OiHhG9g7vB/pbec63RD9+DPlTK/5g8YM4I?=
+ =?us-ascii?Q?sJ3Rcqn1Kquhqd9XExlKqzN7EH883CIPMKxZ8flIuHNg2XH6WLGt0gtrRneF?=
+ =?us-ascii?Q?J1BNdfCeuQrxCFxIpqZILlCilCPjNtGAP+vE4h9D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17a5dad8-bcf4-4fee-8314-08dde8a417ce
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2025 15:36:02.9313
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hI0BmGbmLkuudQTX1H+I6umJkBDoLV7hq4z6qSUfBX5ZgmYiFOFQwAYO4qs4zeHY62c19TfZmmI0FCmooFWlxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4428
 
-Add selftest for the IPv6 fragmentation regression which affected
-several stable kernels.
+On Fri, Aug 29, 2025 at 09:54:26AM +0000, Hangbin Liu wrote:
+> Some high level virtual drivers need to compute features from lower
+> devices. But each has their own implementations and may lost some
+> feature compute. Let's use one common function to compute features
+> for kinds of these devices.
+> 
+> The new helper uses the current bond implementation as the reference
+> one, as the latter already handles all the relevant aspects: netdev
+> features, TSO limits and dst retention.
+> 
+> Suggested-by: Paolo Abeni <pabeni@redhat.com>
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> ---
+>  include/linux/netdevice.h | 19 ++++++++++
+>  net/core/dev.c            | 79 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 98 insertions(+)
+> 
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index f3a3b761abfb..42742a47f2c6 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -5279,6 +5279,25 @@ int __netdev_update_features(struct net_device *dev);
+>  void netdev_update_features(struct net_device *dev);
+>  void netdev_change_features(struct net_device *dev);
+>  
+> +/* netdevice features */
+> +#define VIRTUAL_DEV_VLAN_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> +					 NETIF_F_FRAGLIST | NETIF_F_GSO_SOFTWARE | \
+> +					 NETIF_F_GSO_ENCAP_ALL | \
+> +					 NETIF_F_HIGHDMA | NETIF_F_LRO)
+> +
+> +#define VIRTUAL_DEV_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> +					 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE | \
+> +					 NETIF_F_GSO_PARTIAL)
+> +
+> +#define VIRTUAL_DEV_MPLS_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> +					 NETIF_F_GSO_SOFTWARE)
+> +
+> +#define VIRTUAL_DEV_XFRM_FEATURES	(NETIF_F_HW_ESP | NETIF_F_HW_ESP_TX_CSUM | \
+> +					 NETIF_F_GSO_ESP)
+> +
+> +#define VIRTUAL_DEV_GSO_PARTIAL_FEATURES (NETIF_F_GSO_ESP)
+> +void netdev_compute_features_from_lowers(struct net_device *dev);
+> +
+>  void netif_stacked_transfer_operstate(const struct net_device *rootdev,
+>  					struct net_device *dev);
+>  
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 1d1650d9ecff..fcad2a9f6b65 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -12577,6 +12577,85 @@ netdev_features_t netdev_increment_features(netdev_features_t all,
+>  }
+>  EXPORT_SYMBOL(netdev_increment_features);
+>  
+> +/**
+> + *	netdev_compute_features_from_lowers - compute feature from lowers
+> + *	@dev: the upper device
+> + *
+> + *	Recompute the upper device's feature based on all lower devices.
+> + */
+> +void netdev_compute_features_from_lowers(struct net_device *dev)
+> +{
+> +	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM;
+> +	netdev_features_t gso_partial_features = VIRTUAL_DEV_GSO_PARTIAL_FEATURES;
+> +#ifdef CONFIG_XFRM_OFFLOAD
+> +	netdev_features_t xfrm_features  = VIRTUAL_DEV_XFRM_FEATURES;
+                                       ^ double space (in other places as well)
 
-Commit a18dfa9925b9 ("ipv6: save dontfrag in cork") was backported to
-stable without some prerequisite commits.  This caused a regression when
-sending IPv6 UDP packets by preventing fragmentation and instead
-returning -1 (EMSGSIZE).
+> +#endif
+> +	netdev_features_t mpls_features  = VIRTUAL_DEV_MPLS_FEATURES;
+> +	netdev_features_t vlan_features = VIRTUAL_DEV_VLAN_FEATURES;
+> +	netdev_features_t enc_features  = VIRTUAL_DEV_ENC_FEATURES;
+> +	unsigned short max_hard_header_len = ETH_HLEN;
 
-Add selftest to check for this issue by attempting to send a packet
-larger than the interface MTU. The packet will be fragmented on a
-working kernel, with sendmsg(2) correctly returning the expected number
-of bytes sent.  When the regression is present, sendmsg returns -1 and
-sets errno to EMSGSIZE.
+hard_header_len is not really a feature, so does not sound like it
+belongs here. I'm pretty sure it's not needed at all.
 
-Link: https://lore.kernel.org/stable/aElivdUXqd1OqgMY@karahi.gladserv.com
-Signed-off-by: Brett A C Sheffield <bacs@librecast.net>
----
-Willem: Thanks for the suggestion to check /sys/class/net/$DEV/operstate
+It was added to the bond driver in 2006 by commit 54ef31371407 ("[PATCH]
+bonding: Handle large hard_header_len") citing panics with gianfar on
+xmit. In 2009 commit 93c1285c5d92 ("gianfar: reallocate skb when
+headroom is not enough for fcb") fixed the gianfar driver to stop
+assuming that it has enough room to push its custom header. Further,
+commit bee9e58c9e98 ("gianfar:don't add FCB length to hard_header_len")
+from 2012 fixed this driver to use needed_headroom instead of
+hard_header_len.
 
-I did try this but, if I call unshare() and THEN create a TAP interface in the
-new namespace, operstate no longer seems to be visible to the process?
+The team driver is also adjusting hard_header_len according to the lower
+devices, but it most likely copied it from the bond driver. On the other
+hand, the bridge driver does not mess with hard_header_len and no
+problems were reported there (that I know of).
 
-The process can still read operstate for interfaces in the shared namespace, but
-not ones created in the unshare()d namespace.
+Might be a good idea to remove this hard_header_len logic from bond and
+team and instead set their needed_headroom according to the lower device
+with the highest needed_headroom. Paolo added similar logic in bridge
+and ovs but the use case is a bit different there.
 
-I'm sure I'm doing something wrong there, but after trying a few different
-things including reading operstate from netlink it suddenly occurred to me that
-a simpler and more reliable way to check whether an interface is ready to send
-is to, er, send, and then handle the error for the (unlikely) failure case and
-retry.
-
-I've incorporated your other review suggestions in this v2. Many thanks.
-
-v2 changes:
- - remove superfluous namespace calls - unshare(2) suffices
- - remove usleep(). Don't wait for the interface to be ready, just send, and
-   handle the (less likely) error case by retrying.
- - set destination address only once
- - document our use of the IPv6 link-local source address
- - send to port 9 (DISCARD) instead of 4242 (DONT PANIC)
- - ensure sockets are closed on failure paths
- - use KSFT exit codes for clarity
-
-v1: https://lore.kernel.org/netdev/20250825092548.4436-3-bacs@librecast.net
-
- tools/testing/selftests/net/.gitignore        |   1 +
- tools/testing/selftests/net/Makefile          |   1 +
- .../selftests/net/ipv6_fragmentation.c        | 189 ++++++++++++++++++
- 3 files changed, 191 insertions(+)
- create mode 100644 tools/testing/selftests/net/ipv6_fragmentation.c
-
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 47c293c2962f..3d4b4a53dfda 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -16,6 +16,7 @@ ip_local_port_range
- ipsec
- ipv6_flowlabel
- ipv6_flowlabel_mgr
-+ipv6_fragmentation
- log.txt
- msg_oob
- msg_zerocopy
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index eef0b8f8a7b0..276e0481d996 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -117,6 +117,7 @@ TEST_GEN_FILES += tfo
- TEST_PROGS += tfo_passive.sh
- TEST_PROGS += broadcast_pmtu.sh
- TEST_PROGS += ipv6_force_forwarding.sh
-+TEST_GEN_PROGS += ipv6_fragmentation
- TEST_PROGS += route_hint.sh
- 
- # YNL files, must be before "include ..lib.mk"
-diff --git a/tools/testing/selftests/net/ipv6_fragmentation.c b/tools/testing/selftests/net/ipv6_fragmentation.c
-new file mode 100644
-index 000000000000..4ba16bf56a32
---- /dev/null
-+++ b/tools/testing/selftests/net/ipv6_fragmentation.c
-@@ -0,0 +1,189 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Author: Brett A C Sheffield <bacs@librecast.net>
-+ *
-+ * Kernel selftest for the IPv6 fragmentation regression which affected stable
-+ * kernels:
-+ *
-+ *   https://lore.kernel.org/stable/aElivdUXqd1OqgMY@karahi.gladserv.com
-+ *
-+ * Commit: a18dfa9925b9 ("ipv6: save dontfrag in cork") was backported to stable
-+ * without some prerequisite commits.
-+ *
-+ * This caused a regression when sending IPv6 UDP packets by preventing
-+ * fragmentation and instead returning -1 (EMSGSIZE).
-+ *
-+ * This selftest demonstrates the issue by sending an IPv6 UDP packet from
-+ * the autoconfigured link-local address to an arbritrary multicast group.
-+ *
-+ * sendmsg(2) returns bytes sent correctly on a working kernel, and returns -1
-+ * (EMSGSIZE) when the regression is present.
-+ *
-+ * The regression was not present in the mainline kernel, but add this test to
-+ * catch similar breakage in future.
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include <fcntl.h>
-+#include <linux/if_tun.h>
-+#include <net/if.h>
-+#include <netinet/in.h>
-+#include <sched.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/socket.h>
-+#include <unistd.h>
-+#include "../kselftest.h"
-+
-+#define MTU 1500
-+#define LARGER_THAN_MTU 8192
-+
-+/* ensure MTU is smaller than what we plan to send */
-+static int set_mtu(int ctl, struct ifreq *ifr)
-+{
-+	ifr->ifr_mtu = MTU;
-+	return ioctl(ctl, SIOCSIFMTU, ifr);
-+}
-+
-+/* bring up interface */
-+static int interface_up(int ctl, struct ifreq *ifr)
-+{
-+	if (ioctl(ctl, SIOCGIFFLAGS, ifr) == -1) {
-+		perror("ioctl SIOCGIFFLAGS");
-+		return -1;
-+	}
-+	ifr->ifr_flags = ifr->ifr_flags | IFF_UP;
-+	return ioctl(ctl, SIOCSIFFLAGS, ifr);
-+}
-+
-+/* no need to wait for DAD in our namespace */
-+static int disable_dad(char *ifname)
-+{
-+	char sysvar[] = "/proc/sys/net/ipv6/conf/%s/accept_dad";
-+	char fname[IFNAMSIZ + sizeof(sysvar)];
-+	int fd;
-+
-+	snprintf(fname, sizeof(fname), sysvar, ifname);
-+	fd = open(fname, O_WRONLY);
-+	if (fd == -1) {
-+		perror("open accept_dad");
-+		return -1;
-+	}
-+	if (write(fd, "0", 1) != 1) {
-+		perror("write");
-+		return -1;
-+	}
-+	return close(fd);
-+}
-+
-+/* create TAP interface that will be deleted when this process exits */
-+static int create_interface(char *ifname, struct ifreq *ifr)
-+{
-+	int fd;
-+
-+	fd = open("/dev/net/tun", O_RDWR);
-+	if (fd == -1) {
-+		perror("open tun");
-+		return -1;
-+	}
-+
-+	ifr->ifr_flags = IFF_TAP | IFF_NO_PI;
-+	if (ioctl(fd, TUNSETIFF, (void *)ifr) == -1) {
-+		close(fd);
-+		perror("ioctl: TUNSETIFF");
-+		return -1;
-+	}
-+	strcpy(ifname, ifr->ifr_name);
-+
-+	return fd;
-+}
-+
-+static int setup(void)
-+{
-+	struct ifreq ifr = {0};
-+	char ifname[IFNAMSIZ];
-+	int fd = -1;
-+	int ctl;
-+
-+	/* we need to set MTU, so do this in a namespace to play nicely */
-+	if (unshare(CLONE_NEWNET) == -1)
-+		return -1;
-+
-+	ctl = socket(AF_LOCAL, SOCK_STREAM, 0);
-+	if (ctl == -1)
-+		return -1;
-+
-+	memset(ifname, 0, sizeof(ifname));
-+	fd = create_interface(ifname, &ifr);
-+	if (fd == -1)
-+		goto err_close_ctl;
-+	if (disable_dad(ifname) == -1)
-+		goto err_close_fd;
-+	if (interface_up(ctl, &ifr) == -1)
-+		goto err_close_fd;
-+	if (set_mtu(ctl, &ifr) == -1)
-+		goto err_close_fd;
-+	goto err_close_ctl;
-+err_close_fd:
-+	close(fd);
-+	fd = -1;
-+err_close_ctl:
-+	close(ctl);
-+	return fd;
-+}
-+
-+int main(void)
-+{
-+	/* destination doesn't matter, use an IPv6 link-local multicast group */
-+	struct in6_addr addr = {
-+		.s6_addr[0] = 0xff, /* multicast */
-+		.s6_addr[1] = 0x12, /* set flags (T, link-local) */
-+	};
-+	struct sockaddr_in6 sa = {
-+		.sin6_family = AF_INET6,
-+		.sin6_addr = addr,
-+		.sin6_port = 9      /* port 9/udp (DISCARD) */
-+	};
-+	char buf[LARGER_THAN_MTU] = {0};
-+	struct iovec iov = { .iov_base = buf, .iov_len = sizeof(buf)};
-+	struct msghdr msg = {
-+		.msg_iov = &iov,
-+		.msg_iovlen = 1,
-+		.msg_name = (struct sockaddr *)&sa,
-+		.msg_namelen = sizeof(sa),
-+	};
-+	ssize_t rc;
-+	int ns_fd;
-+	int err = KSFT_FAIL;
-+	int s;
-+
-+	printf("Testing IPv6 fragmentation\n");
-+	ns_fd = setup();
-+	if (ns_fd == -1) {
-+		printf("[FAIL] test setup failed\n");
-+		return KSFT_FAIL;
-+	}
-+	s = socket(AF_INET6, SOCK_DGRAM, 0);
-+send_again:
-+	rc = sendmsg(s, &msg, 0);
-+	if (rc == -1) {
-+		/* if interface wasn't ready, try again */
-+		if (errno == EADDRNOTAVAIL)
-+			goto send_again;
-+		printf("[FAIL] sendmsg: %s\n", strerror(errno));
-+		goto err_close_socket;
-+	} else if (rc != LARGER_THAN_MTU) {
-+		printf("[FAIL] sendmsg() returned %zi\n", rc);
-+		goto err_close_socket;
-+	}
-+	printf("[PASS] sendmsg() returned %zi\n", rc);
-+	err = KSFT_PASS;
-+
-+err_close_socket:
-+	close(s);
-+	close(ns_fd);
-+	return err;
-+}
--- 
-2.49.1
-
+> +	unsigned int tso_max_size = TSO_MAX_SIZE;
+> +	u16 tso_max_segs = TSO_MAX_SEGS;
+> +	struct net_device *lower_dev;
+> +	struct list_head *iter;
+> +
+> +	mpls_features = netdev_base_features(mpls_features);
+> +	vlan_features = netdev_base_features(vlan_features);
+> +	enc_features = netdev_base_features(enc_features);
+> +
+> +	netdev_for_each_lower_dev(dev, lower_dev, iter) {
+> +		gso_partial_features = netdev_increment_features(gso_partial_features,
+> +								 lower_dev->gso_partial_features,
+> +								 VIRTUAL_DEV_GSO_PARTIAL_FEATURES);
+> +
+> +		vlan_features = netdev_increment_features(vlan_features,
+> +							  lower_dev->vlan_features,
+> +							  VIRTUAL_DEV_VLAN_FEATURES);
+> +
+> +#ifdef CONFIG_XFRM_OFFLOAD
+> +		xfrm_features = netdev_increment_features(xfrm_features,
+> +							  lower_dev->hw_enc_features,
+> +							  VIRTUAL_DEV_XFRM_FEATURES);
+> +#endif
+> +
+> +		enc_features = netdev_increment_features(enc_features,
+> +							 lower_dev->hw_enc_features,
+> +							 VIRTUAL_DEV_ENC_FEATURES);
+> +
+> +		mpls_features = netdev_increment_features(mpls_features,
+> +							  lower_dev->mpls_features,
+> +							  VIRTUAL_DEV_MPLS_FEATURES);
+> +
+> +		dst_release_flag &= lower_dev->priv_flags;
+> +		if (lower_dev->hard_header_len > max_hard_header_len)
+> +			max_hard_header_len = lower_dev->hard_header_len;
+> +
+> +		tso_max_size = min(tso_max_size, lower_dev->tso_max_size);
+> +		tso_max_segs = min(tso_max_segs, lower_dev->tso_max_segs);
+> +	}
+> +
+> +	dev->gso_partial_features = gso_partial_features;
+> +	dev->hard_header_len = max_hard_header_len;
+> +	dev->vlan_features = vlan_features;
+> +	dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
+> +				    NETIF_F_HW_VLAN_CTAG_TX |
+> +				    NETIF_F_HW_VLAN_STAG_TX;
+> +#ifdef CONFIG_XFRM_OFFLOAD
+> +	dev->hw_enc_features |= xfrm_features;
+> +#endif
+> +	dev->mpls_features = mpls_features;
+> +	netif_set_tso_max_segs(dev, tso_max_segs);
+> +	netif_set_tso_max_size(dev, tso_max_size);
+> +
+> +	dev->priv_flags &= ~IFF_XMIT_DST_RELEASE;
+> +	if ((dev->priv_flags & IFF_XMIT_DST_RELEASE_PERM) &&
+> +	    dst_release_flag == (IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM))
+> +		dev->priv_flags |= IFF_XMIT_DST_RELEASE;
+> +
+> +	netdev_change_features(dev);
+> +}
+> +EXPORT_SYMBOL(netdev_compute_features_from_lowers);
+> +
+>  static struct hlist_head * __net_init netdev_create_hash(void)
+>  {
+>  	int i;
+> -- 
+> 2.50.1
+> 
 
