@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-40380-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59DB4B3D428
-	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 17:36:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D20E3B3D43A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 17:52:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 165CE17A387
-	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 15:36:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 951A1177204
+	for <lists+linux-kselftest@lfdr.de>; Sun, 31 Aug 2025 15:52:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C6926CE26;
-	Sun, 31 Aug 2025 15:36:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894CD212F89;
+	Sun, 31 Aug 2025 15:52:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="T4qoJAiW"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OQMuVqZW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2073.outbound.protection.outlook.com [40.107.93.73])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2050.outbound.protection.outlook.com [40.107.244.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6ABC1F4CBB;
-	Sun, 31 Aug 2025 15:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93764AEE2;
+	Sun, 31 Aug 2025 15:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756654569; cv=fail; b=jPWVw3yzy2vwmjryjMQvCCcltBuhr0b+16QNC8nutjJ1stEDebNndF3GmwiTIxrsCK+rVYOm5LsYYb8Y3lVeJJmRP1T04RBW8RGFK0D6vqauNVYAMAnRov8Fehgq3mWQ9lOnzQAiRrYElZ1exISRZpZQEnIH3n/tQyWogL3gCq8=
+	t=1756655537; cv=fail; b=tZPHu2xB6VWamhZrzg1Wfq7kAvtVsKFTrtjY03HRm8bUvqE+IWile7yWQT3waNSCjDW1vPasVc0p0n/2L7IY2RUsw9OLNhDlsPxOk2yaBFf54Juebbvl7YWD+r8YaQgpeGC8gkTp88WvIed3QrZApQPxfTzeI2/t9ua0FJHdL1k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756654569; c=relaxed/simple;
-	bh=MAXBn7V3CPpyiGZ3/VZA1vlNCvbjakV1ItBztk8SZMM=;
+	s=arc-20240116; t=1756655537; c=relaxed/simple;
+	bh=r+z3Tsa71fdOc9AyJn6Yb1ztyWDNnymnL9zZsgjDilU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ah+5fJTULTb4abCq+QQpXpTLnI1iojYCDKSoj5vANenHOUZpwvVikBSmEFb/9PGRMeQ5hBCsrfM9Htxaou+NnmQVQS2ukZxB5oI7VFxmIcZoICOtdmfi38pE7EoVe6mEUlPz/YL8s/dkG2cv20mFxSECi9iuIzGNuRjOqV9LOUg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=T4qoJAiW; arc=fail smtp.client-ip=40.107.93.73
+	 Content-Disposition:In-Reply-To:MIME-Version; b=obAE8nvHJjmNXRictIgRsuRtJloXfWNQpHaauxs90ujwxO35sT5Tg9LC6JfcJoVwhnpVuRVdnrym+b0X2PAK7ieWrbhlCpUmI4puJI3hlNs0vIggqq/4tfmyAx2ZexTU8PRfy3NNiTa7nlMxjmAMrmcOLbgpLUQmSZ+aqzbP0Uc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OQMuVqZW; arc=fail smtp.client-ip=40.107.244.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ke9KvoDFfHQKz1ixdF6E9//q4hAmMDDR7aNcrL6hw8hk7c7HcZyNVDK8W9sTLeFNRkYzeE5WvAeLsI7nIL29XQg+fG/XRIpDvWK7ltnPdAsUfMWzGy7y1eECN6m/vePR5MpmpJPBsjHzyEYXgJPZ3Ol0tE6LrZX5jGk9ob6il1J5HL59ptCoqpqMMOdS1D6Vxm726RVYls5BsOdHr4L2mcp+9NiSYtUsonuQ11xiJQahkFLMKqM1S8isUaB2nJIS/xuy5OYPeXAx4OZI6cvo/gLYmzj4LM+RJiWecBHvE1KlMbUjQTMHYbQFrmdNy3K4Vg7jJ+NcJ5MKyoTyTvDjHA==
+ b=Y3mGVSNArRLk0LzlXEPj+BIGO8+1gNJrWlMRm1/hYerJXyoDaHrAqxX/Uao2tb2L5ULYE/zq0Br1mdl0hcMeT2P3+fNtk/J3im+NHhGEGXWvp/epmrqf8+MIOmEnNhp3BlzPyQlvO3HrUD/ZoC2mnjP42jeHmMEevmfCLcvuA3bjBbn9/M6kVa+yVvqqs06naqJVE7sMC1RGRpd5mPqaUFBM9naK+QOKTbD3+ogw0AP6T+v/zbD7gWLqlaKHntt6ssQtqbGPCi2NIT4RueYRhTaIIhMWts2XWg4teRqbJk1XK/aJlv9Ub8SMO87MohfdIF61oHg/TKOMxRJxW2THOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Eg37BFB2T9p8XtzlfB94utt1TpaA7SdQzEygxVAQ7Nc=;
- b=xVEUdeAJ2ivgCzWVrgImWGhrzZ2E1nHtV+mDwXgIFuqz5qhCmug5wTIzd6FrW9+EV7z06v8f41uzmu0C+q0QTMjMyim8jFsyPz/r4f0THOhOMMog4CN3lQkdWETcqpRrWT6s7kzt7Kd/9EE0iWIk3wWCZxZeLHz/MXKq22uW3qfC/UBcpEbMccp3pjOOsMKR1j0qB1/JnSY8tTjRxK5Ru0tyhi6ttc0/nrFqLBhLfjN5nR5D1lEhsdbug3U31rxlAbRhOVSF3h4y+9H0UZ4j6Z7idLtVSmB4KgL+RUKbnmcoxmPt2Emsns0MHrS1Ms54IXZPNVlSjwjz7ShNsIwQsg==
+ bh=jOgy+ipFZPIMN20d+0mzI5bt31uHbTHphhw05LwIVgk=;
+ b=PBqsTlVWjAqKFuKK+Ji7CXTTH5J/WRwNXLzVtIhHwnIwSG9SGKWy6RWjcSBzpUC1Xv2q+oIPeOBQVeoaKn91F9QeUtyIVoC/8mWO61ckBRUWr1wcWxcMLF68bpU8WpXwmjR1NViwEnhn0rwXe3f7XAOniUXAn3kkH51lDNL9u9wJCh5vAGWtNwDYNtIeVeZH3nHEkIJoVk3VEOkXoaP8+03DQ4KSlQzhmF5uilgCK/lLa/+eODkT3RSQr1ze5xobRIu1csm5EZ1BTXKOVUV/pBAF9/2F5MBShi46UTfeDhH34OfijwTYfGGfRpA6AX0K1xMK+wVWSabDpjYbYGoOGQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Eg37BFB2T9p8XtzlfB94utt1TpaA7SdQzEygxVAQ7Nc=;
- b=T4qoJAiWrGU0OznfvPFhOl9xNkDA2aIo/o52yBujrnTSFbsp3ecSadk3sCZy51dwhHRHwyh+G4HDMVrucMusqidTVd3SM11Cerkv/y2KZkX8XcQifFSxtkB/oGP9IRNZcbUiAlJ9PdWE+Qm2hoba7HJDpOLDOnE4G8qYEAqtbm74MIJQOxvtWnm8CMB1rpf8gu+TxcG+g8GapjB6tSptpGrvtV/RU8GHitk3V/GBLW10K8XnWRYaEqXZ9pYzb4M0ovIcWUgqJlGD4P18n28H+Vu9RVc1f766++yktO9B82PiKma8m30iwJo+qmpRG3JdfMqd8Ea2gC2INaOXFYeCWw==
+ bh=jOgy+ipFZPIMN20d+0mzI5bt31uHbTHphhw05LwIVgk=;
+ b=OQMuVqZWdtzEeXg/7Y0PKPbOWZop3t/bvLYXa5G2s+LtE9Iq/Sm6u2uQ8yh1KWPIOiFzAVNx54JwP7VodUdUClEU+5lbmJylYrBt/iDk4iK2+Yct+AA8+SVHMYJcvUZCwvblF0yGQyfioInL0n4Y8Ma+7rfbXGaNjdE8FSxDHhLkJHbnDyJb6ADIfF0wOEqhcarhLsvwvSA87rlp7cANL2alFPCwoq1Lg/NS1HSyXb8xXM5w4KXQthQdWcE2UdN/r64aujivEYBhnFmYQQ1sQ+eCHwK35uIjH/DUjUJIAIjqCT72dzDxOcaJwsl/xIoR1xrFkFNFoBzCwppyNo3kkQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by MW3PR12MB4428.namprd12.prod.outlook.com (2603:10b6:303:57::15) with
+ by IA1PR12MB9529.namprd12.prod.outlook.com (2603:10b6:208:592::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.21; Sun, 31 Aug
- 2025 15:36:03 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.25; Sun, 31 Aug
+ 2025 15:52:11 +0000
 Received: from SA3PR12MB7901.namprd12.prod.outlook.com
  ([fe80::66fc:f8a2:1bfb:6de8]) by SA3PR12MB7901.namprd12.prod.outlook.com
  ([fe80::66fc:f8a2:1bfb:6de8%6]) with mapi id 15.20.9073.021; Sun, 31 Aug 2025
- 15:36:03 +0000
-Date: Sun, 31 Aug 2025 18:35:49 +0300
+ 15:52:11 +0000
+Date: Sun, 31 Aug 2025 18:52:01 +0300
 From: Ido Schimmel <idosch@nvidia.com>
 To: Hangbin Liu <liuhangbin@gmail.com>
 Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
@@ -73,16 +73,16 @@ Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
 	Ahmed Zaki <ahmed.zaki@intel.com>,
 	Alexander Lobakin <aleksander.lobakin@intel.com>,
 	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/5] net: add a common function to compute
- features from lowers devices
-Message-ID: <aLRr1W3jKRDYsRSq@shredder>
+Subject: Re: [PATCH net-next 5/5] selftests/net: add offload checking test
+ for virtual interface
+Message-ID: <aLRvoV33kUnzk_68@shredder>
 References: <20250829095430.443891-1-liuhangbin@gmail.com>
- <20250829095430.443891-2-liuhangbin@gmail.com>
+ <20250829095430.443891-6-liuhangbin@gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250829095430.443891-2-liuhangbin@gmail.com>
-X-ClientProxiedBy: TL2P290CA0014.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:2::17) To SA3PR12MB7901.namprd12.prod.outlook.com
+In-Reply-To: <20250829095430.443891-6-liuhangbin@gmail.com>
+X-ClientProxiedBy: TLZP290CA0008.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:9::20) To SA3PR12MB7901.namprd12.prod.outlook.com
  (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -91,242 +91,305 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|MW3PR12MB4428:EE_
-X-MS-Office365-Filtering-Correlation-Id: 17a5dad8-bcf4-4fee-8314-08dde8a417ce
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|IA1PR12MB9529:EE_
+X-MS-Office365-Filtering-Correlation-Id: ebe2153b-0ed5-4a7e-e6c5-08dde8a658cb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|366016|376014|7053199007;
+	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vdR5oZ+0kBDGeOjpTMpJ+RC6mmiayrctmLjNnW6sAVdcg1GWnpItUNhwyuTe?=
- =?us-ascii?Q?KbuYbAP6mPNI2xsUpMi2Fc9QL1/b4unbbnqV4GthtNuMAAEjoxCK6+2mWM5v?=
- =?us-ascii?Q?69IaX8dBkrxRJa8TyF/GA7hakkmkN3pcI3JPWE8uARconZ7B7x7Wi7R8KYdJ?=
- =?us-ascii?Q?ZV8unT2sHtwrEhtzH2ldI221X+Gr+HH0AuBCJlNjrQNuUNnywiw0YXUDK7tb?=
- =?us-ascii?Q?M2+WwGgjB69pWK7TVwwpLHoV/aQP6vdH/5O7Dzt0ibVB+hmO6vMX1WG7dQDo?=
- =?us-ascii?Q?mT+ODwYq1FVV4XCY9/SQ8qKNzHklzCRLTVU8SDC47DeluDh9gS3Q2PVRbeAI?=
- =?us-ascii?Q?5S5EGFUK+OSBZJwjp8K6nXASA/vYJ4vMaPrp2EBrvSDzuJFJssFAuAUJ9BMk?=
- =?us-ascii?Q?SpEp/WEaEsrmmn82u4lC1Gdyrx8ToOngYGxKYyeZZljgFVAXuIjjbWYk/8vD?=
- =?us-ascii?Q?OcnCwfgo93v2lGZNDdgH/5lCp1J85ogs3TgHQYLe3N1iPMCPUyB+SOdXHDN/?=
- =?us-ascii?Q?ThaY9gDpHgUgVhlxgPCEpnQfBFDBpy2CG4js3Dc3uG5h4Bw5Lb7/h2967wBK?=
- =?us-ascii?Q?zSgCYlsf/uWxoSxKQCgjqlIKXgaWJ1u/uvnGbFioU81auB1IpnjwhmVbpy1p?=
- =?us-ascii?Q?0yJlsoxGdLX633EHY59i1yGPQDDEIotkhb9SSjBswt2azacMlixVbE8mSFfz?=
- =?us-ascii?Q?a1AJR3Fp4K8JzoPuXzWYpEZOCi0Dk06TMn1eAVN0gZt7X3Niz0LK2YudsHrl?=
- =?us-ascii?Q?qJZWif4RTORqF7qH1amGLLs8uh4VWmSz6KhiXq+78ifpO8huPHPoe3+VkRtf?=
- =?us-ascii?Q?z4Z0vvxRq8dcg1HPj3DbS2ZZwcQzdrPanH+GCAGXs9P91aBLpKqMV15qWeNf?=
- =?us-ascii?Q?6RhGIyIOSgoDJrtjZEUmN0ggGgOU3vR15qZBu3Xz80MC/0ZdXMTqST0lefDh?=
- =?us-ascii?Q?3rzx1yoyBm9e7rC3dG8ca7IAEaozr+QADPlA2cVaGdHh1dYLRJRduO95RA1S?=
- =?us-ascii?Q?P1OA15ktvYV9oWlJROfnvP2QMCUoL2Eo79cEztk0YMcl69Gjn0+xb8va+P0n?=
- =?us-ascii?Q?ZdJEEglnm/kCDu19OjWpgde0TtIYeBuJAvyGl4revpmM3PWVs2/IxmeOkhO0?=
- =?us-ascii?Q?+rag9RW7swHRgR+8ngOwNzlpvTLHc/nCWLQ9HSa/AF5JuS5ivprB3cBOJ4E9?=
- =?us-ascii?Q?MRHmCyKCSVJXW9u7oQVgX086yZdfCvC+4cnfzn8qGitkQUX1IKkdzwQbkkFy?=
- =?us-ascii?Q?gt6F0AkLvod3oVLddkfQo0NsyirwIe6Ca+tzZKjHkCAfswvC9m8iEBYEzmlY?=
- =?us-ascii?Q?Br8amthwR9SIsuqN7bW24rHcftWnFzCZ+Gy15aLJbpbv2JCq9TwZ/EC/QuYd?=
- =?us-ascii?Q?15WxOSrVhLmNUwBe7y25FdJ0/oC1Sg+A2ZxZAh+D0THIb6Er1A=3D=3D?=
+	=?us-ascii?Q?TzppaOfpM8X4QM/IGXFGoTJ+ygyvj2ZJw0W3fUOMxtVGlQ3OfVyCiBkzkJ7T?=
+ =?us-ascii?Q?ad9TCANBhWjKkRy6jyn2QodOY0ptYfvp5lgZXyD5IQk9+p+Kudr2AYvfXOsK?=
+ =?us-ascii?Q?g6G3kuZgIBv20q/EBFW9pvutRjrq3WwlrAyotPnIwjzxvdEHMOn9dm8FDlV0?=
+ =?us-ascii?Q?W9UZUmzcUTIV2s0spx3ITtu73L11crAF1TYMcVRIou8N6W5Fcss9QPB1gmPg?=
+ =?us-ascii?Q?iCIiiKkKYRTQPPynHnS8LtcO8vn9X82astH2NYGJexvnMlszU1F0uoIlUHdB?=
+ =?us-ascii?Q?gHLWZMIh2czBLAh0f+/Yd4e8mVrcn1voHlY8qwh/ftU+7XEgL2Pt+DRU5Thn?=
+ =?us-ascii?Q?8zEQV3Zhp59zqQkzBx8rCDGiS00GCGJPBWpHuRApP/3/+KnWquzlTwCLQ7q/?=
+ =?us-ascii?Q?qyGSwjpgR8qpMSfnx9KBRV4HgXLRfox1oUaNG1Ru1F40MhZXD899DBB4On44?=
+ =?us-ascii?Q?9+9fhvcWK3qFH15wLJBco0E3MwwH3I7qjCo4t1rTHS+WzneW3udRZn2HPIAG?=
+ =?us-ascii?Q?vVQDVn7ggUNdlx62vABfiXj2XvUjYKlOANZeDbpJ8QYQIglxJ+JiEKinVDRf?=
+ =?us-ascii?Q?mm30mDrLwkBQW3bkbRmn7/gSZZtiu845bEt+LLIE8DMXYc6KC4dtzZt+R7ca?=
+ =?us-ascii?Q?0BwRgMWEmALcrDKoPjmUDkbBaapNj0+cV+DvRoUU3VUSJ3MYF495ljH4kSh+?=
+ =?us-ascii?Q?T+LNcemQaLTO/1ITw7JKucsONu8nJjhUnhk4V6/aIZqycNs/nKzYqMsZYRv8?=
+ =?us-ascii?Q?J+U5FpfWDp6UkV3TyHY8nMxD8+yhkENjWUqGfWITZlUDUIFaTMrZ4h2GkxyR?=
+ =?us-ascii?Q?fcFla8DMLfdKrw6fIfpIyRcjXwBBNwP9EVVgEkHbG50aD8lW5PQEdKZcwSBA?=
+ =?us-ascii?Q?BenZeKL5zU8F7sl+nysyf3gBVpX9scXAp3X9F1lIGCgU7ycqS23QjPlk2sXn?=
+ =?us-ascii?Q?uaehvbsxuYbBoRbvJEKBCu4NFap1CxyO6KlUiBsEaU5Okrtftgenkz/FLJgL?=
+ =?us-ascii?Q?Lxooiurisc2uxGQF0dNVHd2mWI+e80ypgnVbyWDYlGJgiBmPjGydczt05XQ7?=
+ =?us-ascii?Q?VUmrzLvFhVLJ0SZHgL0qLnd/pCVYSQgaxuVyyvW+GJny/79rYWTp3i99a3mm?=
+ =?us-ascii?Q?5/QPXLDX5kM4uRzQNDE7JsrZAIrgt+6LgpEHG7SnOssmKUO2SbLZI8QP90K+?=
+ =?us-ascii?Q?R0YYW2ApmycMvO+jMtcWDrAqIjbongXrfrVbtAE1kzhATtjvv+SlH8dj8Q2z?=
+ =?us-ascii?Q?BrDGghhZrjok4auFdY8SvJ3K826qqtq76SUXGaMuppUm0manCb1wLhHgCzBy?=
+ =?us-ascii?Q?jfE+sE1KbkRabm8DAuZy74h5HbCl0JeUzb+XQAdytMKKZyNJ99DW9rOdqICg?=
+ =?us-ascii?Q?WwPm1hOBpLfF6Sdq2/jVBM8zhVxm2a6yihADArEMBlMdpPcpEUDvcjWhK0x2?=
+ =?us-ascii?Q?R6MMmO7vOX4=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014)(7053199007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?18lN0jr5S2k55y2O9xuUlN/8uyWxrGTCoay3KWkARiDHuIJHlN6O+Z7iEsVK?=
- =?us-ascii?Q?SfUVZL9ZPP/fXzDl2DgbpEvbSAjR3e/EAOohmocTMrmkZONuDsCm4XHPBdaj?=
- =?us-ascii?Q?Ba9urskcmn7eyoxKARt1uBWubiw4xmL6dRtzxjT80w4iXzahM/UnVbrrnk0H?=
- =?us-ascii?Q?e1/WAVYIY+LiuYd9Tk6kswyLaD65QfWuwKAOFIlSWmqZNV1ZBMAPC/oMckGz?=
- =?us-ascii?Q?0XUaYdGE/JiBdKynSjNgTR92F69SN74o4BWPMYw9IE+jNxHFTZefTYA2KbJ2?=
- =?us-ascii?Q?YnIkPNumILNiobyYRpFiaipzT4szN/NlAz/5VrBTxZv1gVDxahWdSHYozyk0?=
- =?us-ascii?Q?7Y08qfi5S/5BZ15s1pZ9MDFqStpcDtmIL1EtUVNmgzOp+2FXTZNRaQiXUAQj?=
- =?us-ascii?Q?rBZeOA5W4+ScEFUldCXxaSHoTPJI5+/tUDB/CG+3h3ojOSEYpBBGlOVi+ie7?=
- =?us-ascii?Q?lUQAUV7rfalcOdo6dnObKmTtKPpiPCKdT8WNurqTtX/IdTt20OVzE0d8UI/1?=
- =?us-ascii?Q?wEGkIArp4+AO4ScxPzjy6cvqA53YZpQ+SAvzmtQNSKmzh9Cj7CiBydtkJ1R2?=
- =?us-ascii?Q?BRmT3SNHhs0EXysHObHqqNHwAmVal8S4jGb0c3vDuADu9KKZT0mb43gqJamc?=
- =?us-ascii?Q?jkZjtKTzBgNLT3J7nxQbM2QZib0do/3+0G9dlFXGHaR6V67iMmchos+r5OVE?=
- =?us-ascii?Q?MhoWaI0lwMVeM/Sy2VXdN9/tS6CTcvbGtMPorKPpKwFa3I/gowVjMiuopjbc?=
- =?us-ascii?Q?UaIWBqDU5aRhIjYwLcWUOrib2uBA248XUXR+rOGqfK9O9B1rEE9n6l4Rsr9A?=
- =?us-ascii?Q?/Fqm/XLnarUGPKa1GyLj5bGPDzzJsezdhJtbnxhxjzjIL2YVHPHDEoApoXRJ?=
- =?us-ascii?Q?d8zV2TKPGP4kuV6xplrpctxJCfEbbkGuaD7htGtcXrmeBVjelXVZTMqtQI73?=
- =?us-ascii?Q?tv6rTMsboZK0EWlvSdyrmLVgKEopomGvprcBuUK8sqp6cNnOiNbYBCSlIpk1?=
- =?us-ascii?Q?LW6guAt1eQMPBSiUBHSER3d3e5xeY/u2yNL+ndKMdrREZ0qL93hAj9E58Pej?=
- =?us-ascii?Q?XdCYnty7vqJwbPV48IiNjw3Tkc/Va9f05fuAkMHTQgioy2sHNwbrDTAtAYaq?=
- =?us-ascii?Q?xE0Wh5ZbFOfA0MHqplHRQ3Hm6S2x6pqIhNiW5nPKAyLCHN9BnQMBbRndrV7y?=
- =?us-ascii?Q?o4Ckqym+gNE+9B+nCgcIczZJbYKovBOWHGKbXwKfN9lKqh8zp0p/UTvTOlNP?=
- =?us-ascii?Q?NbfqKgfsY4RZLee0y5NKOHQKVlI0r0+X+lIKJmBiGHUn89dyiZvZYW4jKHwe?=
- =?us-ascii?Q?mw0rdgBkOb23L9ufqF0r/UIMM+YbdsbqRbLpRdjGqw6YHkEnekSNACOkjarw?=
- =?us-ascii?Q?Bh1SxyxrRp4qN61f9L8y9HY87qMjgXcHeVO/uUYaSpFqzpdssIM6cMGbv/9l?=
- =?us-ascii?Q?zek7U9SHlSjPuadmdy8n0BKfZ9OiHhG9g7vB/pbec63RD9+DPlTK/5g8YM4I?=
- =?us-ascii?Q?sJ3Rcqn1Kquhqd9XExlKqzN7EH883CIPMKxZ8flIuHNg2XH6WLGt0gtrRneF?=
- =?us-ascii?Q?J1BNdfCeuQrxCFxIpqZILlCilCPjNtGAP+vE4h9D?=
+	=?us-ascii?Q?KL2+5QPSGpnVbSmTzoZ4+lME1FEMjbXVQWXBo60boC7Co8GJTpG7Cnlisv6S?=
+ =?us-ascii?Q?e2YzLln8MPml3eaOGlw0NIXyO64x9PgJqzqdRd1KzcuxpimnNJLzQ+9HLc8D?=
+ =?us-ascii?Q?0u0KZeOHBo8gpjJVOzDD1nCFsqLQJkmHG8PduwLUjg7mqkHRz9p64ciKXohy?=
+ =?us-ascii?Q?KK6PLZbBvl6WS8CzQyFil4TxoTawuqwkRaiFrZObCYiWmCPH73euJPpYwzNa?=
+ =?us-ascii?Q?q8p6D9+JD5qLAUI+NkzfR499LwmDUTzbmy9iwnbD1Bp74t/PUgfL+AWTqH7T?=
+ =?us-ascii?Q?Uus334ybJo78RJxeqOI4kCfLTfHef9Ea8iYmHQW7vPGexIe9NQV6AheUuisz?=
+ =?us-ascii?Q?pC9A9fkZ5xlo4okJOuC0+5j0WwP+/N6hnh5SxPNb/mLHxW/EMStbuYAaF25k?=
+ =?us-ascii?Q?gQBTQUaEsM1fzUlBJ6Jea1Yf9Hx0ICTr/DBD+dhkmsJcI3f4hohRMK0Ex2lU?=
+ =?us-ascii?Q?bxyX3OsdjW2g4QZcoclTyEyIieh5ybFGPxarCOnkjVYO0rAQJPLs6fhoWEIy?=
+ =?us-ascii?Q?KZngoYugJcYGLHj3AJJ7eWizbeA9PuKF/2DYIi/qxPhGJ1mNGsu5IJLxGaEu?=
+ =?us-ascii?Q?4SSTU6QGdTDRAbWky7EECMvctIpactz8NPD0U3DJMWlYbNw4V5B9PgdF2EeW?=
+ =?us-ascii?Q?TPjCyI1VU7aBuZzvGSb6NMn1JMfl/6o0f+xIKD9L4r6ZvOriwdeHSPT+L0dz?=
+ =?us-ascii?Q?g8tZK7uSxu0Np571PmsHIwQBZWw6LYFDLbvhODO4g+4NlzvIadd7aBYT4QCv?=
+ =?us-ascii?Q?SAkn8vaCKO92ISSfB4gGvNQDHiCuvLw8aUNMZuggEUD+Cji30YE3RPUFhyJz?=
+ =?us-ascii?Q?y4UfeSVmTQ16QjCyP68FwZxwLqHYNwuqcssKtMw+Jc5xhXl8mgMz8fexhKa3?=
+ =?us-ascii?Q?27co9MxZDsX/+x8iI/v6HXr4KS6K4dMqtYjoW11g7iBzD9wbIBPFljetEJAc?=
+ =?us-ascii?Q?lk7628E53B/L1maoOPi4orn7ohnwYtCxXjaLxSCXtUaCyARx2UK7VUb1qSWU?=
+ =?us-ascii?Q?iULo0tCM2CYZK4Ywsv8VnCoOlEs+u5voVLC48w7gSLYBh5oj0wawgIO1zlzL?=
+ =?us-ascii?Q?i3vVHdiR+zQHhxQ74XseqyDkT9mZxo7Zeqw77s8ejpvIs/djCcs+11tdg0oF?=
+ =?us-ascii?Q?AJtG6G8sJgDf3uIfrlxLEO6XXYhAA7yFQnUQkOBWAp+t3D0kYTpjjb9ltoCA?=
+ =?us-ascii?Q?ifPyyYIKZcPTAmQf02IXt6+bXn+cIvT+gWdABxUfiZUypSktI3fgrv2V/pTj?=
+ =?us-ascii?Q?djaXMLaE//DQ4yVRLBtkQWWMsWxnZhxOm1pCdLdC6TZ9E7zHJjJVjjuxuVVU?=
+ =?us-ascii?Q?tYpdfRP9PdQhQsCjYtVNZOt5JFhdEvDWD6qHyJ5oHfcYwcee2HIfmZ6hRPDl?=
+ =?us-ascii?Q?G2sepMQJn3KCPzLLfuVjcB1btY091UbgWAtVfjKcg4cPv6b/nAcUhDyVZage?=
+ =?us-ascii?Q?iUCbSxzH8sdub7iMW/K4wPtluOrO6WND9T22kf2359IJnt2esK3tJ3HlmtCq?=
+ =?us-ascii?Q?LmKhiX+hg7+bX84p/YfdSggvAJxKOz+vdrESKXWvZV3fkJBuKoSHBB1cloyQ?=
+ =?us-ascii?Q?NQw1kcGV8iPgOKD9ZlmOVjxvQzf/gTukIMUl/Ubh?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17a5dad8-bcf4-4fee-8314-08dde8a417ce
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebe2153b-0ed5-4a7e-e6c5-08dde8a658cb
 X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2025 15:36:02.9313
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2025 15:52:10.9710
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hI0BmGbmLkuudQTX1H+I6umJkBDoLV7hq4z6qSUfBX5ZgmYiFOFQwAYO4qs4zeHY62c19TfZmmI0FCmooFWlxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4428
+X-MS-Exchange-CrossTenant-UserPrincipalName: c7bqwpFxsWi2NLRccQ5cPSniRvtzRKCpK9SR7nWDMketADTMJs0GSD+v/87khumv0A5fWg7+T35V5Z9k3MXw0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9529
 
-On Fri, Aug 29, 2025 at 09:54:26AM +0000, Hangbin Liu wrote:
-> Some high level virtual drivers need to compute features from lower
-> devices. But each has their own implementations and may lost some
-> feature compute. Let's use one common function to compute features
-> for kinds of these devices.
+On Fri, Aug 29, 2025 at 09:54:30AM +0000, Hangbin Liu wrote:
+> make sure the virtual interface offload setting is correct after
+> changing lower devices.
 > 
-> The new helper uses the current bond implementation as the reference
-> one, as the latter already handles all the relevant aspects: netdev
-> features, TSO limits and dst retention.
-> 
-> Suggested-by: Paolo Abeni <pabeni@redhat.com>
 > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 > ---
->  include/linux/netdevice.h | 19 ++++++++++
->  net/core/dev.c            | 79 +++++++++++++++++++++++++++++++++++++++
->  2 files changed, 98 insertions(+)
+>  tools/testing/selftests/net/config          |   2 +
+>  tools/testing/selftests/net/vdev_offload.sh | 174 ++++++++++++++++++++
+>  2 files changed, 176 insertions(+)
+>  create mode 100755 tools/testing/selftests/net/vdev_offload.sh
+
+Need to add to the Makefile
+
 > 
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index f3a3b761abfb..42742a47f2c6 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -5279,6 +5279,25 @@ int __netdev_update_features(struct net_device *dev);
->  void netdev_update_features(struct net_device *dev);
->  void netdev_change_features(struct net_device *dev);
->  
-> +/* netdevice features */
-> +#define VIRTUAL_DEV_VLAN_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
-> +					 NETIF_F_FRAGLIST | NETIF_F_GSO_SOFTWARE | \
-> +					 NETIF_F_GSO_ENCAP_ALL | \
-> +					 NETIF_F_HIGHDMA | NETIF_F_LRO)
+> diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+> index d548611e2698..0f3a64a86474 100644
+> --- a/tools/testing/selftests/net/config
+> +++ b/tools/testing/selftests/net/config
+> @@ -117,6 +117,7 @@ CONFIG_IP_SCTP=m
+>  CONFIG_NETFILTER_XT_MATCH_POLICY=m
+>  CONFIG_CRYPTO_ARIA=y
+>  CONFIG_XFRM_INTERFACE=m
+> +CONFIG_XFRM_OFFLOAD=y
+>  CONFIG_XFRM_USER=m
+>  CONFIG_IP_NF_MATCH_RPFILTER=m
+>  CONFIG_IP6_NF_MATCH_RPFILTER=m
+> @@ -128,3 +129,4 @@ CONFIG_NETKIT=y
+>  CONFIG_NET_PKTGEN=m
+>  CONFIG_IPV6_ILA=m
+>  CONFIG_IPV6_RPL_LWTUNNEL=y
+> +CONFIG_NET_TEAM=m
+> diff --git a/tools/testing/selftests/net/vdev_offload.sh b/tools/testing/selftests/net/vdev_offload.sh
+> new file mode 100755
+> index 000000000000..4926774aef19
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/vdev_offload.sh
+> @@ -0,0 +1,174 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +#define VIRTUAL_DEV_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
-> +					 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE | \
-> +					 NETIF_F_GSO_PARTIAL)
+> +# shellcheck disable=SC1091
+> +source lib.sh
 > +
-> +#define VIRTUAL_DEV_MPLS_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
-> +					 NETIF_F_GSO_SOFTWARE)
-> +
-> +#define VIRTUAL_DEV_XFRM_FEATURES	(NETIF_F_HW_ESP | NETIF_F_HW_ESP_TX_CSUM | \
-> +					 NETIF_F_GSO_ESP)
-> +
-> +#define VIRTUAL_DEV_GSO_PARTIAL_FEATURES (NETIF_F_GSO_ESP)
-> +void netdev_compute_features_from_lowers(struct net_device *dev);
-> +
->  void netif_stacked_transfer_operstate(const struct net_device *rootdev,
->  					struct net_device *dev);
->  
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 1d1650d9ecff..fcad2a9f6b65 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -12577,6 +12577,85 @@ netdev_features_t netdev_increment_features(netdev_features_t all,
->  }
->  EXPORT_SYMBOL(netdev_increment_features);
->  
-> +/**
-> + *	netdev_compute_features_from_lowers - compute feature from lowers
-> + *	@dev: the upper device
-> + *
-> + *	Recompute the upper device's feature based on all lower devices.
-> + */
-> +void netdev_compute_features_from_lowers(struct net_device *dev)
+> +# Set related offload on lower deivces and check if upper devices re-compute
+> +# Some fatures are fixed on veth interface. Just list here in case we have a
+
+s/fatures/features/ (:set spell)
+
+> +# better way to test in future.
+> +set_offload()
 > +{
-> +	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM;
-> +	netdev_features_t gso_partial_features = VIRTUAL_DEV_GSO_PARTIAL_FEATURES;
-> +#ifdef CONFIG_XFRM_OFFLOAD
-> +	netdev_features_t xfrm_features  = VIRTUAL_DEV_XFRM_FEATURES;
-                                       ^ double space (in other places as well)
+> +	local dev="$1"
+> +	local state="$2"
+> +
+> +	# VLAN features
+> +	# NETIF_F_FRAGLIST: tx-scatter-gather-fraglist
+> +	# shellcheck disable=SC2154
+> +	ip netns exec "$ns" ethtool -K "$dev" tx-scatter-gather-fraglist "$state"
+> +
+> +	# ENC features
+> +	# NETIF_F_RXCSUM: rx-checksum (bond/team/bridge fixed)
+> +
+> +	# XFRM features (veth fixed, netdevsim supports)
+> +	# NETIF_F_HW_ESP: esp-hw-offload
+> +	# NETIF_F_GSO_ESP: tx-esp-segmentation
+> +
+> +	# GSO partial features
+> +	# NETIF_F_GSO_PARTIAL: tx-gso-partial (veth/bond fixed)
+> +
+> +	# Common features
+> +	# NETIF_F_SG: tx-scatter-gather
+> +	ip netns exec "$ns" ethtool -K "$dev" tx-scatter-gather "$state" &> /dev/null
 
-> +#endif
-> +	netdev_features_t mpls_features  = VIRTUAL_DEV_MPLS_FEATURES;
-> +	netdev_features_t vlan_features = VIRTUAL_DEV_VLAN_FEATURES;
-> +	netdev_features_t enc_features  = VIRTUAL_DEV_ENC_FEATURES;
-> +	unsigned short max_hard_header_len = ETH_HLEN;
+Why the redirection here? I don't see it in other places
 
-hard_header_len is not really a feature, so does not sound like it
-belongs here. I'm pretty sure it's not needed at all.
-
-It was added to the bond driver in 2006 by commit 54ef31371407 ("[PATCH]
-bonding: Handle large hard_header_len") citing panics with gianfar on
-xmit. In 2009 commit 93c1285c5d92 ("gianfar: reallocate skb when
-headroom is not enough for fcb") fixed the gianfar driver to stop
-assuming that it has enough room to push its custom header. Further,
-commit bee9e58c9e98 ("gianfar:don't add FCB length to hard_header_len")
-from 2012 fixed this driver to use needed_headroom instead of
-hard_header_len.
-
-The team driver is also adjusting hard_header_len according to the lower
-devices, but it most likely copied it from the bond driver. On the other
-hand, the bridge driver does not mess with hard_header_len and no
-problems were reported there (that I know of).
-
-Might be a good idea to remove this hard_header_len logic from bond and
-team and instead set their needed_headroom according to the lower device
-with the highest needed_headroom. Paolo added similar logic in bridge
-and ovs but the use case is a bit different there.
-
-> +	unsigned int tso_max_size = TSO_MAX_SIZE;
-> +	u16 tso_max_segs = TSO_MAX_SEGS;
-> +	struct net_device *lower_dev;
-> +	struct list_head *iter;
-> +
-> +	mpls_features = netdev_base_features(mpls_features);
-> +	vlan_features = netdev_base_features(vlan_features);
-> +	enc_features = netdev_base_features(enc_features);
-> +
-> +	netdev_for_each_lower_dev(dev, lower_dev, iter) {
-> +		gso_partial_features = netdev_increment_features(gso_partial_features,
-> +								 lower_dev->gso_partial_features,
-> +								 VIRTUAL_DEV_GSO_PARTIAL_FEATURES);
-> +
-> +		vlan_features = netdev_increment_features(vlan_features,
-> +							  lower_dev->vlan_features,
-> +							  VIRTUAL_DEV_VLAN_FEATURES);
-> +
-> +#ifdef CONFIG_XFRM_OFFLOAD
-> +		xfrm_features = netdev_increment_features(xfrm_features,
-> +							  lower_dev->hw_enc_features,
-> +							  VIRTUAL_DEV_XFRM_FEATURES);
-> +#endif
-> +
-> +		enc_features = netdev_increment_features(enc_features,
-> +							 lower_dev->hw_enc_features,
-> +							 VIRTUAL_DEV_ENC_FEATURES);
-> +
-> +		mpls_features = netdev_increment_features(mpls_features,
-> +							  lower_dev->mpls_features,
-> +							  VIRTUAL_DEV_MPLS_FEATURES);
-> +
-> +		dst_release_flag &= lower_dev->priv_flags;
-> +		if (lower_dev->hard_header_len > max_hard_header_len)
-> +			max_hard_header_len = lower_dev->hard_header_len;
-> +
-> +		tso_max_size = min(tso_max_size, lower_dev->tso_max_size);
-> +		tso_max_segs = min(tso_max_segs, lower_dev->tso_max_segs);
-> +	}
-> +
-> +	dev->gso_partial_features = gso_partial_features;
-> +	dev->hard_header_len = max_hard_header_len;
-> +	dev->vlan_features = vlan_features;
-> +	dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
-> +				    NETIF_F_HW_VLAN_CTAG_TX |
-> +				    NETIF_F_HW_VLAN_STAG_TX;
-> +#ifdef CONFIG_XFRM_OFFLOAD
-> +	dev->hw_enc_features |= xfrm_features;
-> +#endif
-> +	dev->mpls_features = mpls_features;
-> +	netif_set_tso_max_segs(dev, tso_max_segs);
-> +	netif_set_tso_max_size(dev, tso_max_size);
-> +
-> +	dev->priv_flags &= ~IFF_XMIT_DST_RELEASE;
-> +	if ((dev->priv_flags & IFF_XMIT_DST_RELEASE_PERM) &&
-> +	    dst_release_flag == (IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM))
-> +		dev->priv_flags |= IFF_XMIT_DST_RELEASE;
-> +
-> +	netdev_change_features(dev);
+> +	# NETIF_F_GSO_SOFTWARE: NETIF_F_GSO_ACCECN: tx-tcp-accecn-segmentation
+> +	ip netns exec "$ns" ethtool -K "$dev" tx-tcp-accecn-segmentation "$state"
+> +	# NETIF_F_GSO_SOFTWARE: NETIF_F_GSO_SCTP: tx-sctp-segmentation
+> +	ip netns exec "$ns" ethtool -K "$dev" tx-sctp-segmentation "$state"
+> +	# NETIF_F_GSO_SOFTWARE: NETIF_F_GSO_FRAGLIST: tx-gso-list
+> +	ip netns exec "$ns" ethtool -K "$dev" tx-gso-list "$state"
 > +}
-> +EXPORT_SYMBOL(netdev_compute_features_from_lowers);
 > +
->  static struct hlist_head * __net_init netdev_create_hash(void)
->  {
->  	int i;
+> +__check_offload()
+> +{
+> +	local dev=$1
+> +	local opt=$2
+> +	local expect=$3
+> +
+> +	ip netns exec "$ns" ethtool --json -k "$dev" | \
+> +		jq -r -e ".[].\"$opt\".active == ${expect}" >/dev/null
+> +}
+> +
+> +check_offload()
+> +{
+> +	local dev=$1
+> +	local state=$2
+> +	RET=0
+> +
+> +	__check_offload "$dev" "tx-scatter-gather-fraglist" "$state" || RET=1
+> +	__check_offload "$dev" "tx-scatter-gather" "$state" || RET=1
+> +	__check_offload "$dev" "tx-tcp-accecn-segmentation" "$state" || RET=1
+> +	__check_offload "$dev" "tx-sctp-segmentation" "$state" || RET=1
+> +	__check_offload "$dev" "tx-gso-list" "$state" || RET=1
+> +}
+> +
+> +setup_veth()
+> +{
+> +	# Set up test netns
+> +	setup_ns ns switch
+> +
+> +	# shellcheck disable=SC2154
+> +	ip -n "$ns" link add veth0 type veth peer name veth0 netns "$switch"
+> +	ip -n "$ns" link add veth1 type veth peer name veth1 netns "$switch"
+> +	ip -n "$switch" link set veth0 up
+> +	ip -n "$switch" link set veth1 up
+> +
+> +	link_0=veth0
+> +	link_1=veth1
+> +}
+> +
+> +setup_netdevsim()
+> +{
+> +	setup_ns ns
+> +	# The create_netdevsim() function will set the interface up. Later,
+> +	# when it is added to bonded, we need to set it down first. And when
+> +	# set down, it will have no carrier. So we need to add netdevsim ourselves.
+> +	modprobe netdevsim
+> +	udevadm settle
+> +	echo "0 2" | ip netns exec "$ns" tee /sys/bus/netdevsim/new_device >/dev/null
+> +	link_0=$(ip netns exec "$ns" ls /sys/bus/netdevsim/devices/netdevsim0/net | head -n 1)
+> +	link_1=$(ip netns exec "$ns" ls /sys/bus/netdevsim/devices/netdevsim0/net | tail -n 1)
+> +}
+> +
+> +cleanup()
+> +{
+> +	cleanup_netdevsim 0
+> +	cleanup_all_ns
+> +}
+> +
+> +setup_bond()
+> +{
+> +	ip -n "$ns" link set "$link_0" nomaster
+> +	ip -n "$ns" link set "$link_1" nomaster
+> +	ip -n "$ns" link add bond0 type bond mode active-backup miimon 100
+> +	ip -n "$ns" link set "$link_0" master bond0
+> +	ip -n "$ns" link set "$link_1" master bond0
+> +	ip -n "$ns" link set bond0 up
+> +}
+> +
+> +setup_team()
+> +{
+> +	ip -n "$ns" link set "$link_0" nomaster
+> +	ip -n "$ns" link set "$link_1" nomaster
+> +	ip -n "$ns" link add team0 type team
+> +	ip -n "$ns" link set "$link_0" master team0
+> +	ip -n "$ns" link set "$link_1" master team0
+> +	ip -n "$ns" link set team0 up
+> +}
+> +
+> +setup_bridge()
+> +{
+> +	ip -n "$ns" link set "$link_0" nomaster
+> +	ip -n "$ns" link set "$link_1" nomaster
+> +	ip -n "$ns" link add br0 type bridge
+> +	ip -n "$ns" link set "$link_0" master br0
+> +	ip -n "$ns" link set "$link_1" master br0
+> +	ip -n "$ns" link set br0 up
+> +}
+> +
+> +check_xfrm()
+> +{
+> +	local dev=$1
+> +	local src=192.0.2.1
+> +	local dst=192.0.2.2
+> +	local key="0x3132333435363738393031323334353664636261"
+> +
+> +	RET=0
+> +
+> +	ip -n "$ns" xfrm state flush
+> +	ip -n "$ns" xfrm state add proto esp src "$src" dst "$dst" spi 9 \
+> +		mode transport reqid 42 aead "rfc4106(gcm(aes))" "$key" 128 \
+> +		sel src "$src"/24 dst "$dst"/24 offload dev "$dev" dir out
+> +
+> +	# shellcheck disable=SC2034
+> +	ip -n "$ns" xfrm state list | grep -q "crypto offload parameters: dev $dev dir" || RET=1
+> +	log_test "$dev" "xfrm offload"
+> +}
+> +
+> +do_test()
+> +{
+> +	local dev=$1
+
+IMO, it makes more sense to put "RET=0" in the same function that calls
+log_test() (like you have it in check_xfrm()), so I would put it here...
+
+> +	set_offload veth0 "on"
+> +	set_offload veth1 "on"
+> +	check_offload "$dev" "true"
+> +	log_test "$dev" "enable offload"
+> +
+
+... and here (instead of in check_offload())
+
+> +	set_offload veth0 "off"
+> +	set_offload veth1 "off"
+> +	check_offload "$dev" "false"
+> +	log_test "$dev" "disable offload"
+> +}
+> +
+> +trap cleanup EXIT
+> +setup_veth
+> +setup_bond
+> +do_test bond0
+> +setup_team
+> +do_test team0
+> +setup_bridge
+> +do_test br0
+> +
+> +# Check NETIF_F_HW_ESP
+> +# Only test bond as team and bridge haven't implemented xfrm offload
+> +setup_netdevsim
+> +setup_bond
+> +check_xfrm bond0
 > -- 
 > 2.50.1
 > 
