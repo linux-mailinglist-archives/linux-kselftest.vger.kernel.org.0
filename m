@@ -1,226 +1,132 @@
-Return-Path: <linux-kselftest+bounces-40437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51E7BB3E5E0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 15:45:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B86FB3E603
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 15:50:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F4961A84921
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 13:46:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6C183AF51F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 13:50:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2CD330F555;
-	Mon,  1 Sep 2025 13:45:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E85630F538;
+	Mon,  1 Sep 2025 13:50:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffU6S9bo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zyle+fcC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18D518C031;
-	Mon,  1 Sep 2025 13:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB97E2327A3;
+	Mon,  1 Sep 2025 13:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756734340; cv=none; b=WGVudnKHJCppcav2wcOqyxO2wdI4sS+HyIIWuGxYaNTC7SlNmWBwUEMssbvwp1wJD9QbeClbG25+Orwvubv3rjuuLGRRKao7HSSQxajWGThbZ7nIo4P2Lplsbqad5uz9F1VzDGl/Ue8NmPQ2oXss3rm4OzPAUQJXwYVvqLKoe5Q=
+	t=1756734613; cv=none; b=FpJ+sAn5o5A4YUOlF7SqvG6GCJbxqH/5AEyPceeapqZ028zuQ/GxcvwaGvJDyT54hGIWLs8p7AtOv5qSR2aA/y0OnwybB40lv30XV4VowVFtW2jofiUWiQ/+ocjZwlslJLUjjTbiV+kWI3+oIeHRgb/uv0nFrLNgZlKoHlfnhh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756734340; c=relaxed/simple;
-	bh=zUhb2Jpfmjjf8knvzp6hvnkIyqENIRiPfN7gIkKA9dI=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=Qg3Cw80AlbjI6FhzGDwHu2Hpf2F9wnZWOKXU399Nws0LVf4i8BpWiAIIXwWfgGsinefzu97mr/ONeJ7trY42MEwSs2zTLvYmv4qevc0uGsPzf4pf/+XnDqL5Yj8rZM7PNvSXdfM6BZPYKRqds6inqDQRpvarhrlwOyhhN5TzpVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ffU6S9bo; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4b109c6b9fcso43245291cf.3;
-        Mon, 01 Sep 2025 06:45:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756734338; x=1757339138; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rnTbdSPn2NkfEUUrX/KyL5G6w1/N0r+8MK+VhlrrUMU=;
-        b=ffU6S9bo8tO1nRvPbiySlPBSrRKqzkdZ4SFMSg+uzuGeGBDs0i7UIKRlILOSVxBFRF
-         w7I6WA/1RONrg+77nTn8KR1419wkQL3u5Lzv8E/y9cEIXejHkfIDW4BtuUgN5VC/I3bj
-         xTb0dYAaQ9gvRDJyduWHMi+SbmW7kfP+eEmMPt8QubxuKZHGF9PUDcQnm//kZ0aYJC5U
-         KBKXURaHGSVo3tLE0fcFLUqQtponKCFnkByuf7m9OYpuZRSRcQsVae4ttHu/oM+j4ma0
-         h7uzjwxU/6JiaE3hwMOBCzgOF2MO8iz80b75+0sxp7LASb3A2haYqaGFZ/LnYv/cEejt
-         TQyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756734338; x=1757339138;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rnTbdSPn2NkfEUUrX/KyL5G6w1/N0r+8MK+VhlrrUMU=;
-        b=JNeNLwFL0UJiDPaEga0kK/hLA83rr59CCU5dCDmKS7OQuRvg6YwG+nUshv59HST2cK
-         +DjxUdYQwHfE3kUXMcx2Yx+WWRqB4wWBF7RAJY97+xARU2qPaWwNmhySagieORMmD5UF
-         7tVpxm1cR4puPxwJ4T8NXP0QtioJPiRTTR3l0e4Rd3Q5AHXDVP1I0UaIhKuUeimXW38y
-         3PUuGoTilDxry4Tm7jGS3baJTCsjvCFK4nitBNGzsVSxnx7ZanBoy9RI3znU7t8FHYfY
-         hzIHxe7ApuANhj1+0x1fB7raECXLzx0dlOegReYnvPHf06xhY2g6XOar5afpFiq7aIVb
-         +/jA==
-X-Forwarded-Encrypted: i=1; AJvYcCVZf8LGH7iExY1yLGNLbKN8KqReukxHApSMBYn2p8O98KkwEaxDLRT3pmNj5H4Q830rs4oPEcQX@vger.kernel.org, AJvYcCW65MzZnXtfSyCs97chspd9rEPELx9tPuX7CNEFqaeGV9ArgGUk9Rl7sYV2vNqCLbduXOUuU3ynrJ95snI=@vger.kernel.org, AJvYcCXjc6Ty1FZ0hhVVNaSEjsuir7eXNgPzp/TXTAotSpmVRSllwBm/brElkyAu776ItRCaT1f863lap7aaALeW9UEM@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhKaLOE1L2qKEQ12Qw2h1H2fPiAxqnI9P4HEDPCXGiyAR0xzF/
-	GZXJvb5SOJVvHi0SEeGPvTvBNJl7BWghnQYwMTMu0ffd10ww008/t3QJ
-X-Gm-Gg: ASbGncveAQgX6FvBe3ILcQ0oKwFcu5/JS3NLzZreZCp7ffRJc4TFq/GtzvpiOxGjeO0
-	IeJt6S2JFDVQiI3mCPJ7y+KO7dkU3F5izp50pQW3F0jiGREuOu+lb8cv5fEueoFZTpbEmMRN+kT
-	Gy/OJqrdl5wn879EOy/nwy3hhdvrEJjgRk9quXwZfetq5dwyL4EXL9BfGw6gUen4AKOwauDspau
-	iGS8zx0nhWWPYvUfHjIsT6ODH/Nn31qWzzva5PPlH7N94MkgT4tR+Mf2IrKwRL1X4kfRHFPHrAX
-	5QkJwEbcjgN7wIiBWaa4uDqyt9b+JEON1eTx3mN9bAHm2dXXBjeSayO5xn5Lpmkpy5b8KYwtKb8
-	iFBAXdf/m8t04bfepPCZrk0zjjxQVFiJO8E+cfB6FkSksNEYLRbEEVA6qO1evYXzV7CiomxxajK
-	XaMg==
-X-Google-Smtp-Source: AGHT+IH8M9rH4vv23ATVd61t3Zi6RxFtLvxmp2lXF8X5fC1CN4BhB6ApLNK/rW1SxQaTjNebzoYudw==
-X-Received: by 2002:a05:622a:394:b0:4b2:9b56:84c5 with SMTP id d75a77b69052e-4b31d9e45a9mr90841861cf.26.1756734337774;
-        Mon, 01 Sep 2025 06:45:37 -0700 (PDT)
-Received: from gmail.com (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4b30b54d06csm60055641cf.13.2025.09.01.06.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Sep 2025 06:45:37 -0700 (PDT)
-Date: Mon, 01 Sep 2025 09:45:36 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Brett A C Sheffield <bacs@librecast.net>, 
- willemdebruijn.kernel@gmail.com
-Cc: bacs@librecast.net, 
- davem@davemloft.net, 
- edumazet@google.com, 
- gregkh@linuxfoundation.org, 
- horms@kernel.org, 
- kuba@kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, 
- pabeni@redhat.com, 
- shuah@kernel.org, 
- willemb@google.com
-Message-ID: <willemdebruijn.kernel.2e347bb16a45e@gmail.com>
-In-Reply-To: <20250901123757.13112-1-bacs@librecast.net>
-References: <20250901123757.13112-1-bacs@librecast.net>
-Subject: Re: [PATCH net-next v4] selftests: net: add test for ipv6
- fragmentation
+	s=arc-20240116; t=1756734613; c=relaxed/simple;
+	bh=jGIDM6obL+9eY84QltDCoL1pALb6doR94h6nUuX618I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=giK6xaOrdBLUhPZaDFWnBnMw3ZQ0gNSrurklxOlCWKHK7LbA0adS7p62sVJITSlfyn8yP9jrjDBSowmFMr2ABUk8pCreYL30w1I8tS7s0quW6PidJYrIPWbGGaKeaEnjDTaYfvlSs8tdLHtoIgVLyB7XNeRCr7bEru75xPgx3hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zyle+fcC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47170C4CEF1;
+	Mon,  1 Sep 2025 13:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756734612;
+	bh=jGIDM6obL+9eY84QltDCoL1pALb6doR94h6nUuX618I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Zyle+fcCf79Ug4opxaUokSYrLVFoQCkEIBgyqYG6oZ1S05muuk5IOnI5KFm+YNbSq
+	 G/Wi69fFjkml9tCGkwWOikDE6T+L7gY+WWH9vB5kMk/JQrYNgll52do5eRFncN4V0p
+	 Syf6WHjA1HO+j2IDtyRrzKsfDu+2Ytl5wTMIZ5f1wRdT/YmmBBrIPf42O4ZUmmHfCU
+	 6XMm1ajOV8vzh4f3u+F8V6P+j1PUHqemt8tbM02WD0gLpD9Jv2+dPr8ppJTFx4/OEy
+	 4eF/5S5m1iVIGCVCLeDoA3a0dKqG8qQLdNIIHI5agdI8IFJAiedn+HhtLVz0YKc/+W
+	 +heRGDXpSdauw==
+Date: Mon, 1 Sep 2025 14:50:08 +0100
+From: Simon Horman <horms@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, ecree.xilinx@gmail.com,
+	gal@nvidia.com, joe@dama.to, linux-kselftest@vger.kernel.org,
+	shuah@kernel.org
+Subject: Re: [PATCH net-next 1/2] selftests: drv-net: rss_ctx: use Netlink
+ for timed reconfig
+Message-ID: <20250901135008.GC15473@horms.kernel.org>
+References: <20250829220712.327920-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250829220712.327920-1-kuba@kernel.org>
 
-Brett A C Sheffield wrote:
-> Add selftest for the IPv6 fragmentation regression which affected
-> several stable kernels.
+On Fri, Aug 29, 2025 at 03:07:11PM -0700, Jakub Kicinski wrote:
+> The rss_ctx test has gotten pretty flaky after I increased
+> the queue count in NIPA 2->3. Not 100% clear why. We get
+> a lot of failures in the rss_ctx.test_hitless_key_update case.
 > 
-> Commit a18dfa9925b9 ("ipv6: save dontfrag in cork") was backported to
-> stable without some prerequisite commits.  This caused a regression when
-> sending IPv6 UDP packets by preventing fragmentation and instead
-> returning -1 (EMSGSIZE).
+> Looking closer it appears that the failures are mostly due
+> to startup costs. I measured the following timing for ethtool -X:
+>  - python cmd(shell=True)  : 150-250msec
+>  - python cmd(shell=False) :  50- 70msec
+>  - timed in bash           :  45- 55msec
+>  - YNL Netlink call        :   2-  4msec
+>  - .set_rxfh callback      :   1-  2msec
 > 
-> Add selftest to check for this issue by attempting to send a packet
-> larger than the interface MTU. The packet will be fragmented on a
-> working kernel, with sendmsg(2) correctly returning the expected number
-> of bytes sent.  When the regression is present, sendmsg returns -1 and
-> sets errno to EMSGSIZE.
+> The target in the test was set to 200msec. We were mostly measuring
+> ethtool startup cost it seems. Switch to YNL since it's 100x faster.
 > 
-> Link: https://lore.kernel.org/stable/aElivdUXqd1OqgMY@karahi.gladserv.com
-> Signed-off-by: Brett A C Sheffield <bacs@librecast.net>
+> Lower the pass criteria to ~75msec, no real science behind this number
+> but we removed ~150msec of overhead, and the old target was 200msec.
+> So any driver that was passing previously should still pass with 75msec.
+> 
+> Separately we should probably follow up on defaulting to shell=False,
+> when script doesn't explicitly ask for True, because the overhead
+> is rather significant.
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
++1
 
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
-> v4 changes:
->  - fix "else should follow close brace" (checkpatch ERROR)
-
-Reminder to send only only iteration to netdev per 24 hrs.
- 
-> v3 changes:
->  - add usleep instead of busy polling on sendmsg
->  - simplify error handling by using error() and leaving cleanup to O/S
->  - use loopback interface - don't bother creating TAP
->  - send to localhost (::1)
- 
-
-> +/* no need to wait for DAD in our namespace */
-> +static int disable_dad(char *ifname)
-> +{
-> +	char sysvar[] = "/proc/sys/net/ipv6/conf/%s/accept_dad";
-> +	char fname[IFNAMSIZ + sizeof(sysvar)];
-> +	int fd;
-> +
-> +	snprintf(fname, sizeof(fname), sysvar, ifname);
-> +	fd = open(fname, O_WRONLY);
-> +	if (fd == -1)
-> +		error(KSFT_FAIL, errno, "open accept_dad");
-> +	if (write(fd, "0", 1) != 1)
-> +		error(KSFT_FAIL, errno, "write accept_dad");
-> +
-> +	return close(fd);
-> +}
-
-Is this needed with loopback?
-
-> +int main(void)
-> +{
-> +	struct in6_addr addr = {
-> +		.s6_addr[15] = 0x01, /* ::1 */
-> +	};
-> +	struct sockaddr_in6 sa = {
-> +		.sin6_family = AF_INET6,
-> +		.sin6_addr = addr,
-> +		.sin6_port = 9      /* port 9/udp (DISCARD) */
-
-htons
-
-> +	};
-> +	char buf[LARGER_THAN_MTU] = {0};
-
-That's a large stack allocation. static char?
-
-> +	ns_fd = setup();
-> +	s = socket(AF_INET6, SOCK_DGRAM, 0);
-> +send_again:
-> +	rc = sendmsg(s, &msg, 0);
-> +	if (rc == -1) {
-> +		/* if interface wasn't ready, try again */
-> +		if (errno == EADDRNOTAVAIL) {
-> +			usleep(1000);
-> +			goto send_again;
-> +		}
-> +		printf("[FAIL] sendmsg: %s\n", strerror(errno));
-> +	} else if (rc != LARGER_THAN_MTU) {
-> +		printf("[FAIL] sendmsg() returned %zi, expected %i\n", rc, LARGER_THAN_MTU);
-> +	} else {
-> +		printf("[PASS] sendmsg() returned %zi\n", rc);
-> +		err = KSFT_PASS;
-
-slight preference to just fail with error() in the two error cases and
-let the expected common path be linear and succeed:
-
-    if (rc == -1) {
-            if (..)
-                    goto send_again;
-            error(KSFT_FAIL, ..);
-    }
-    if (rc != LARGER_THAN_MTU) {
-            error(KSFT_FAIL, ..);
-    }
-
-    printf(..)
-    return KSFT_PASS;
-
-> +	}
-> +	close(s);
-> +	close(ns_fd);
-
-ns_fd is always -1. Check all system calls return values. Now that
-setup internally can fail with error() no need for return values at
-all.
-
-> +	return err;
-> +}
+>  tools/testing/selftests/drivers/net/hw/rss_ctx.py | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> base-commit: 864ecc4a6dade82d3f70eab43dad0e277aa6fc78
+> diff --git a/tools/testing/selftests/drivers/net/hw/rss_ctx.py b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
+> index 9838b8457e5a..3fc5688605b5 100755
+> --- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
+> +++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
+> @@ -335,19 +335,20 @@ from lib.py import ethtool, ip, defer, GenerateTraffic, CmdExitFailure
+>      data = get_rss(cfg)
+>      key_len = len(data['rss-hash-key'])
+>  
+> -    key = _rss_key_rand(key_len)
+> +    ethnl = EthtoolFamily()
+> +    key = random.randbytes(key_len)
+
+Is the update to the generation of key intended?
+It's not clear to me how it relates to the rest of the patch.
+
+>  
+>      tgen = GenerateTraffic(cfg)
+>      try:
+>          errors0, carrier0 = get_drop_err_sum(cfg)
+>          t0 = datetime.datetime.now()
+> -        ethtool(f"-X {cfg.ifname} hkey " + _rss_key_str(key))
+> +        ethnl.rss_set({"header": {"dev-index": cfg.ifindex}, "hkey": key})
+>          t1 = datetime.datetime.now()
+>          errors1, carrier1 = get_drop_err_sum(cfg)
+>      finally:
+>          tgen.wait_pkts_and_stop(5000)
+>  
+> -    ksft_lt((t1 - t0).total_seconds(), 0.2)
+> +    ksft_lt((t1 - t0).total_seconds(), 0.075)
+>      ksft_eq(errors1 - errors1, 0)
+>      ksft_eq(carrier1 - carrier0, 0)
+>  
 > -- 
-> 2.49.1
+> 2.51.0
 > 
-
-
 
