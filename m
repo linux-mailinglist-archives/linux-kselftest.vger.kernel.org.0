@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-40420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2584EB3DEC2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 11:41:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D02AB3DECA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 11:41:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 169563A71B0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 09:40:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 009093BF7B9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 09:41:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D0B30EF7D;
-	Mon,  1 Sep 2025 09:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063A830F7FE;
+	Mon,  1 Sep 2025 09:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t6RgGr8z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="usB4Ybyx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762FB30EF7E;
-	Mon,  1 Sep 2025 09:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC42830BBA4;
+	Mon,  1 Sep 2025 09:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756719610; cv=none; b=EkHv/6REXGvl15MTby2aCgCJANmSysf2LYGpJ6WxsO/IHK7R4VoQ93jjF3FO4/h0cFcprMjST1sZPt6FL/t7kqO+tD/3vJx0QZAjh8Y5YmXJYWRjhk7OHN6MufYigV3Ws7RzG1tvS2UiUPiBDhvzsQ375Sv1z3bg7V0Le1n49Vk=
+	t=1756719613; cv=none; b=Fly6ZD6dTzsJ5hobLfi8U3OsY9nTFHj5+IQnSx5qgTQ/ZSpqCWMZAKuS71V66DGgCMsKuskuMbAPOeyxqXEboezg0Yp2Mzk4e3Pyy3JfFphOlmLjLidtzwskHBjebkrTTE2H34Dz2L/rLPqoaYhNVjaTJrzvxcbVphNkpz0JCFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756719610; c=relaxed/simple;
-	bh=k+CIqM4/nq+cvAampNpahv2V1eFDkAil5XdpuBPEHm4=;
+	s=arc-20240116; t=1756719613; c=relaxed/simple;
+	bh=dTJO1tCQOaPXCW9+vy4vy4eJa6ytua6sNKJ/OHhhNxk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=M1v0bbyClRZalFh3kEmiZ6CgMRPaAA6gVM1/RgJtjIyaQMhGTG8gHK2eYYdS9FQFVF41kBJdsnnu6flhvBVOaymXxxQT0oBOhMyS2oVcko2X4/l+EfCQOCJB1jUC5RfZdweNMc6Y4y8qmd9HNa6G2j6IEurP0Dxk9dQlQ9rlQ/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t6RgGr8z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46117C4CEF4;
-	Mon,  1 Sep 2025 09:40:07 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=giQNQ6nYUR+DEQHc500Ig5bSpuK4mZwCPiA4iFxCNTCq2OYMoV2WlQdEewwh/InvSrpMfXsTXG0YxLfjsBXIvmVL3a84JwsJ/ATquYUvBBwoOCcP5i7oNCTH0rbyaaUOP/dFhbGzaV2nQ86XUzr3Ljjznesj0HkS4LQGqXLy7cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=usB4Ybyx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E7D6C4CEF0;
+	Mon,  1 Sep 2025 09:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756719610;
-	bh=k+CIqM4/nq+cvAampNpahv2V1eFDkAil5XdpuBPEHm4=;
+	s=k20201202; t=1756719613;
+	bh=dTJO1tCQOaPXCW9+vy4vy4eJa6ytua6sNKJ/OHhhNxk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=t6RgGr8zIwVdGJbste4SsJLTdIYI8Dr0BhQtuSfKAmaiyrjmonfKirJX0N8epjZ+W
-	 RhT4bCXMzIHj5ClHBP5jRjKyH10RumqZ0WrH7c9TquiMOhR+uNIl/4NcNmYXu1+He1
-	 fOgV0TxbFM3vqc2nALeQUb2YeNQtsOLmaimX92i/eg/92X+qPhJadpd5wsw90W7QCb
-	 hTW8A9VpI8wRPVqC3RNEHJpB9dYwhRbR1ghQIKu22h+5m9Hme0S0Ukjaz3l0/uovgc
-	 4APPWQ5SkHotc3LMW79exIdeYKjLpC8HKr2CnhBt82XPLSCcP0HrtZzQmaJbgTLOWT
-	 J7/2wn/KhsVpg==
+	b=usB4Ybyx6nDuZseT+7sTTTH0ygaQIOw2TDRlEZkpWR0W1ijfZyNVma5LphI+fQ90L
+	 WaqWnrHGLzqGmqLhIaoP4pMh6KKILTMcGQcRMjV91proCAvYJ7O9nV3fnNQbI4Lg8Q
+	 OZhsW0AaLY8FI1Z80oRdw2v+zTY5phad7JIwNUSkq/XzTReJ/2egZF3o4QA4UQmLhC
+	 99Q59lKWjtkCCU5/5499iUM30McfSUZ6acNEUJUZsr9qRwwrr98fP66XvnnliAsWdg
+	 Mis4ymigYbvHpqUN2vnKwtBJxoA41trqyGxR0pIB8TVGBPvpYW9n8e/qygKJsMcAJS
+	 Zup01X6R5gJIg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 01 Sep 2025 11:39:12 +0200
-Subject: [PATCH net-next 3/6] selftests: mptcp: remove add_addr_timeout
- settings
+Date: Mon, 01 Sep 2025 11:39:13 +0200
+Subject: [PATCH net-next 4/6] selftests: mptcp: add checks for fallback
+ counters
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250901-net-next-mptcp-misc-feat-6-18-v1-3-80ae80d2b903@kernel.org>
+Message-Id: <20250901-net-next-mptcp-misc-feat-6-18-v1-4-80ae80d2b903@kernel.org>
 References: <20250901-net-next-mptcp-misc-feat-6-18-v1-0-80ae80d2b903@kernel.org>
 In-Reply-To: <20250901-net-next-mptcp-misc-feat-6-18-v1-0-80ae80d2b903@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -64,55 +64,186 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
+ Gang Yan <yangang@kylinos.cn>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1522; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=1nVFFqCHSNVwfmePtrb2XeOe0x0CCB6YRJAQqv0sIyM=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDK2Zr54GtQi9mjSoiVc5+QeWm2105iyfyfrhHr3is9Tr
- /21LXs5taOUhUGMi0FWTJFFui0yf+bzKt4SLz8LmDmsTCBDGLg4BWAiKXkM/wxFZW4Jz/8UoXid
- 9UfDvbuJSVO2tK1ir76xcS9nxic72wMM/xMdiwpXHFH9mMoy6URNYk3DavMDajsefvDo+qXj/G7
- tVWYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5270; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=TFqzr/DMh0lYxvep2tdsVTHnsEaN2pnZvUQretOY304=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDK2Zr50mXLoTL5jjSTjzdcPzirYtiepTnnt28AiX/Bp5
+ 62Ka7dzOkpZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACbiEsTIcM7f5PKXT6JTkm9+
+ P1olEZgY7nhgk//BZY9cb5dnGu0//JThv/d/nm3rao76J1UfmFv12F2ya73knjsZ6wJ+vd4dVGK
+ awQkA
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+From: Gang Yan <yangang@kylinos.cn>
 
-Now that add_addr_timeout can be dynamically adjusted, there is no need
-to set specific timeout values in the mptcp_join.sh tests. This patch
-removes the explicit sysctl settings for net.mptcp.add_addr_timeout
-from the test scripts.
+Recently, some mib counters about fallback has been added, this patch
+provides a method to check the expected behavior of these mib counters
+during the test execution.
 
-The change simplifies the test setup and ensures the tests work with
-the default or dynamically adjusted timeout values.
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/571
+Signed-off-by: Gang Yan <yangang@kylinos.cn>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 3 ---
- 1 file changed, 3 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 123 ++++++++++++++++++++++++
+ 1 file changed, 123 insertions(+)
 
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 82cae37d9c2026cc55466636d53a76f929a03452..e85bb62046e020dbacbbd44e1f9e110e1d0104c7 100755
+index e85bb62046e020dbacbbd44e1f9e110e1d0104c7..a97b568104bc284f050b2f0e09fe3fdd3341c5cb 100755
 --- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
 +++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -347,8 +347,6 @@ reset_with_add_addr_timeout()
- 		tables="${ip6tables}"
+@@ -74,6 +74,17 @@ unset join_create_err
+ unset join_bind_err
+ unset join_connect_err
+ 
++unset fb_ns1
++unset fb_ns2
++unset fb_infinite_map_tx
++unset fb_dss_corruption
++unset fb_simult_conn
++unset fb_mpc_passive
++unset fb_mpc_active
++unset fb_mpc_data
++unset fb_md5_sig
++unset fb_dss
++
+ # generated using "nfbpf_compile '(ip && (ip[54] & 0xf0) == 0x30) ||
+ #				  (ip6 && (ip6[74] & 0xf0) == 0x30)'"
+ CBPF_MPTCP_SUBOPTION_ADD_ADDR="14,
+@@ -1397,6 +1408,115 @@ chk_join_tx_nr()
+ 	print_results "join Tx" ${rc}
+ }
+ 
++chk_fallback_nr()
++{
++	local infinite_map_tx=${fb_infinite_map_tx:-0}
++	local dss_corruption=${fb_dss_corruption:-0}
++	local simult_conn=${fb_simult_conn:-0}
++	local mpc_passive=${fb_mpc_passive:-0}
++	local mpc_active=${fb_mpc_active:-0}
++	local mpc_data=${fb_mpc_data:-0}
++	local md5_sig=${fb_md5_sig:-0}
++	local dss=${fb_dss:-0}
++	local rc=${KSFT_PASS}
++	local ns=$1
++	local count
++
++	count=$(mptcp_lib_get_counter ${!ns} "MPTcpExtInfiniteMapTx")
++	if [ -z "$count" ]; then
++		rc=${KSFT_SKIP}
++	elif [ "$count" != "$infinite_map_tx" ]; then
++		rc=${KSFT_FAIL}
++		print_check "$ns infinite map tx fallback"
++		fail_test "got $count infinite map tx fallback[s] in $ns expected $infinite_map_tx"
++	fi
++
++	count=$(mptcp_lib_get_counter ${!ns} "MPTcpExtDSSCorruptionFallback")
++	if [ -z "$count" ]; then
++		rc=${KSFT_SKIP}
++	elif [ "$count" != "$dss_corruption" ]; then
++		rc=${KSFT_FAIL}
++		print_check "$ns dss corruption fallback"
++		fail_test "got $count dss corruption fallback[s] in $ns expected $dss_corruption"
++	fi
++
++	count=$(mptcp_lib_get_counter ${!ns} "MPTcpExtSimultConnectFallback")
++	if [ -z "$count" ]; then
++		rc=${KSFT_SKIP}
++	elif [ "$count" != "$simult_conn" ]; then
++		rc=${KSFT_FAIL}
++		print_check "$ns simult conn fallback"
++		fail_test "got $count simult conn fallback[s] in $ns expected $simult_conn"
++	fi
++
++	count=$(mptcp_lib_get_counter ${!ns} "MPTcpExtMPCapableFallbackACK")
++	if [ -z "$count" ]; then
++		rc=${KSFT_SKIP}
++	elif [ "$count" != "$mpc_passive" ]; then
++		rc=${KSFT_FAIL}
++		print_check "$ns mpc passive fallback"
++		fail_test "got $count mpc passive fallback[s] in $ns expected $mpc_passive"
++	fi
++
++	count=$(mptcp_lib_get_counter ${!ns} "MPTcpExtMPCapableFallbackSYNACK")
++	if [ -z "$count" ]; then
++		rc=${KSFT_SKIP}
++	elif [ "$count" != "$mpc_active" ]; then
++		rc=${KSFT_FAIL}
++		print_check "$ns mpc active fallback"
++		fail_test "got $count mpc active fallback[s] in $ns expected $mpc_active"
++	fi
++
++	count=$(mptcp_lib_get_counter ${!ns} "MPTcpExtMPCapableDataFallback")
++	if [ -z "$count" ]; then
++		rc=${KSFT_SKIP}
++	elif [ "$count" != "$mpc_data" ]; then
++		rc=${KSFT_FAIL}
++		print_check "$ns mpc data fallback"
++		fail_test "got $count mpc data fallback[s] in $ns expected $mpc_data"
++	fi
++
++	count=$(mptcp_lib_get_counter ${!ns} "MPTcpExtMD5SigFallback")
++	if [ -z "$count" ]; then
++		rc=${KSFT_SKIP}
++	elif [ "$count" != "$md5_sig" ]; then
++		rc=${KSFT_FAIL}
++		print_check "$ns MD5 Sig fallback"
++		fail_test "got $count MD5 Sig fallback[s] in $ns expected $md5_sig"
++	fi
++
++	count=$(mptcp_lib_get_counter ${!ns} "MPTcpExtDssFallback")
++	if [ -z "$count" ]; then
++		rc=${KSFT_SKIP}
++	elif [ "$count" != "$dss" ]; then
++		rc=${KSFT_FAIL}
++		print_check "$ns dss fallback"
++		fail_test "got $count dss fallback[s] in $ns expected $dss"
++	fi
++
++	return $rc
++}
++
++chk_fallback_nr_all()
++{
++	local netns=("ns1" "ns2")
++	local fb_ns=("fb_ns1" "fb_ns2")
++	local rc=${KSFT_PASS}
++
++	for i in 0 1; do
++		if [ -n "${!fb_ns[i]}" ]; then
++			eval "${!fb_ns[i]}" \
++				chk_fallback_nr ${netns[i]} || rc=${?}
++		else
++			chk_fallback_nr ${netns[i]} || rc=${?}
++		fi
++	done
++
++	if [ "${rc}" != "${KSFT_PASS}" ]; then
++		print_results "fallback" ${rc}
++	fi
++}
++
+ chk_join_nr()
+ {
+ 	local syn_nr=$1
+@@ -1482,6 +1602,8 @@ chk_join_nr()
+ 	join_syn_tx="${join_syn_tx:-${syn_nr}}" \
+ 		chk_join_tx_nr
+ 
++	chk_fallback_nr_all
++
+ 	if $validate_checksum; then
+ 		chk_csum_nr $csum_ns1 $csum_ns2
+ 		chk_fail_nr $fail_nr $fail_nr
+@@ -3334,6 +3456,7 @@ fail_tests()
+ 		join_csum_ns1=+1 join_csum_ns2=+0 \
+ 			join_fail_nr=1 join_rst_nr=0 join_infi_nr=1 \
+ 			join_corrupted_pkts="$(pedit_action_pkts)" \
++			fb_ns1="fb_dss=1" fb_ns2="fb_infinite_map_tx=1" \
+ 			chk_join_nr 0 0 0
+ 		chk_fail_nr 1 -1 invert
  	fi
- 
--	ip netns exec $ns1 sysctl -q net.mptcp.add_addr_timeout=1
--
- 	if ! ip netns exec $ns2 $tables -A OUTPUT -p tcp \
- 			-m tcp --tcp-option 30 \
- 			-m bpf --bytecode \
-@@ -2183,7 +2181,6 @@ signal_address_tests()
- 		pm_nl_add_endpoint $ns2 10.0.4.2 flags signal
- 
- 		# the peer could possibly miss some addr notification, allow retransmission
--		ip netns exec $ns1 sysctl -q net.mptcp.add_addr_timeout=1
- 		speed=slow \
- 			run_tests $ns1 $ns2 10.0.1.1
- 
 
 -- 
 2.50.1
