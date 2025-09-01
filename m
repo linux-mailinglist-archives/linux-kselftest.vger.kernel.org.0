@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-40440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C796B3E648
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 15:57:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BAF2B3E650
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 15:57:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C5CF169322
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 13:56:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C8571A85666
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 13:57:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43CAD33A009;
-	Mon,  1 Sep 2025 13:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876AE2F0690;
+	Mon,  1 Sep 2025 13:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="YZpKrzBs"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="EUxjjY9Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012061.outbound.protection.outlook.com [52.101.126.61])
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012014.outbound.protection.outlook.com [52.101.126.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04541338F45;
-	Mon,  1 Sep 2025 13:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD9233CEB4;
+	Mon,  1 Sep 2025 13:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.14
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756734991; cv=fail; b=kcVQAToRFmmFz1zFKRAI9H2d3CKqlV2VAFpsYFbhlsUyz37f5qRFk5y+Vc/3z4dI1uQHw56tKkXAOWJGtjXCkFyBT/iuCjf7W4jotgAUf6ldRNpDpQ52BYIY2ciC3ekF0Lglq3FcWrHFa4Zvl3K/UuZspfzNIr13LFenMnaK+y0=
+	t=1756734996; cv=fail; b=nXY/R+hV7T4Ob068wUl7OQnpBSzf0+G+tTuYnG5J8zpARmBtwdVogHyk6ZNaYq3/ank3E8S/CFwgLDeC2uvhryCnHwUFn/uuXXVBESTQalibv/D2FfWlD6dW726+4Bqm0Z9RflClx9Jvs8h6V4dRl3IB1Q0Yfg0lKvCcu+tNdEs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756734991; c=relaxed/simple;
-	bh=CZVbEfYLHTukYoi0yJ5A5ZdKGJxH0rbBMYbOHMikW6w=;
+	s=arc-20240116; t=1756734996; c=relaxed/simple;
+	bh=C8yROGxDQfHgBrnplT7Y0YtfGyb26G17Ien1qNFEFpc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RXoltvXC80iKdriHj0c+HToYgWVjBH7qSIkU+uO+QqRUSqzAbK3HKgLAwQtfWDWDM6AIQra+YsdT9MqhfQMQv4jUJwE6vy0gfXjBTbexSmxX83DIbCY7vJPzLhkVDzUSXJaa9YloR5FFKs3WNUhqD6PfzvXchNPQaGJMJj4Nxao=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=YZpKrzBs; arc=fail smtp.client-ip=52.101.126.61
+	 Content-Type:MIME-Version; b=IY7gR2WTriJ1lyvANHIB53EbrWhk83Jo0QdVVSVqAnnNaTqvk0CBiSI+zN2X/iclt5zbHlYq2/72uLRQ/WnaAVOqV4atmeDvT1h3wbtfU3ZGH3XNsTQbybG/ZnkcjpmHvcZ313JOyyuoV1TAIF6SHIpM5hU2qvqQLcEQo4UgjsI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=EUxjjY9Q; arc=fail smtp.client-ip=52.101.126.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sOSfzSvYRliDCkCoo3lryIWO3oWCz1LR7WOIlpTaAUx6evRvNRhAN63kzX1c0i0cV4qwIyX7Jqmwzm3hSrc+3HAxb9xEFs2k5wyI1m7Gp9Mii6FaPd8K4CusYaq+t1pdgractJOs+/ZvwrrwQ6Im+eINkVbIjMIwxhNhl6zO3qLj/z1b8dbphIRCKtAOBb3P8snhibQDMdRX7oHc5xbdlfH9tRZ5ysIwfem/VFlDZXXc3nneDuZy9R1TAv6Q9cEK9YLO0g/2TKOpSwvYWa/q87244c+HYE0wxBtklRUiqqNhANwyAs6bEABW5Gre2gem7xcTAn4lVI20llbLyRDJsA==
+ b=W+r+3tETn3LZf1NVDSAX+RYw9aWKu06XLZ3XWwGOwcCXb3WG4M2zt8Ken3Gy5YuGa9O/Um0wNToDNj5cG/s76sMgMlHrtloRNHV04Q5PmF0zfa8DhOHu9FmQteAjVqvLFMouTGXgHbbdU2rcMG+BeNvh7Y7VPk22YxPzn5TeR0KpGWqhqCr9yt64Hzr2sU6PG2ymuk3ojvtiWTWVMdkDKkhDM5PAe3uhPxW6IyTS4eX3+fknNvc3Ebq4KIz480sOc+svvAEVfcWzsIltpaMy3aUhqc7OhpDku1lcY7J4bbfWlpcf4185gFIIdpXSfYjrVZXPRQRxS+NCDbY5gvZQXw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=plv/UAaYjW+STiGjuOnd/ZCgpRGV6qysoNHlu64cIwY=;
- b=WLRPHqQUoVzoz8oXZq2qcQEHm51ZPEx4PEJb3FAoR2H99q7v+188Qq1QDhDGeLIyXnNV1K86jAIMDC8PnrkeLGNbF570Fek4qd4h9AOutIHzcH4QulbZvs2ueW6lwGeJSuFC8DaQuDMaU5/bc6XHBW6OZ6hNGqJCootb2/vpsfm8f5OzInAyc4HJKp8rn1RdIMctVgBfdeU2AVN1K8XGVZc09lbfipq+TYCI4h6iP3SConFB+OcWFqXzB54EyEEDFDGr9c562///zXjkMlwnz42ouG1BMfxErMP0TMD0phFMrjDsFtorxQKe7pf1HMEDslpDzSQnuQgSlAEQQVOxLg==
+ bh=DlNKsb78EJJhA2PlaFYieGHxgFKgfz1Fv/n9CUYr9o4=;
+ b=Ij3HGOd4CyNY/N+fMOfsQ6jxpAslZx5NEv+qu9XSDGUGFsnyaDmQv29/urWB4rqrIHhm9wAEqoyRFQKaCF6SufNXleoBQ7hUbAOq6imPGIMu0nLMdddTIuo7e8Qjma30H9Q5RgMCrp7vnsAUWVOaZDGfvK/mLA5PlfTeqFr0uLQ8sPW6xYmyWjD6STzwOi9blAGerMqbwmg4E/C6tYL2S03ThkSBNzTPqWdgcpVeRDMUoSLW8JUPetSEa7jX6BbRxutJBPKvOnbTygZct/3Izd8E4CnfjaTWNJTmJRhVS/qZkJDU5TJlNAo7nlZyzbSOt+NCLrfdw+63R+yF0Rhy2w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=plv/UAaYjW+STiGjuOnd/ZCgpRGV6qysoNHlu64cIwY=;
- b=YZpKrzBs3W9AEsIXKRZGWUEYUdtHJuz3NrFuEKMmdl8ODWUdKGHBxmi92XE+M/wctZ4Y+hyHlg7EzLwgKWxZcaw8EodBGtf+Dg4NyOGjfKfY02ZdrS5qPegeWV+Blg6wKiafHrm6iIMKIlIZ9Fpw45Qw5L0Fc8IvYTe9Q1Qh0LCWn8qn/562TM92yceY6ifJrbWMdK75/X1SDSRQ0EKYA+tdJzdh1Q5ItPV0F8TcEn3LFJbffJ+WzYcZn/Tp+YgB/NjWJS5LBqAEDPVVsAHksJzivjCVRgzqZmOy0PYAog5uTrr0HRgDDs2IKJkttLypG1OaQNE3hXjRDxxizu+ZtA==
+ bh=DlNKsb78EJJhA2PlaFYieGHxgFKgfz1Fv/n9CUYr9o4=;
+ b=EUxjjY9QWeW9ui62ORUYAfeTLgoh58qJBw67IEBJHHuTc48KX8DJzhMyTaOw1P4EZmdPwDUFBs+Vg28qSGbp3yw03xjxt45C/Vza8V81q4HuFnam2KGpaAEPDkvjoGdoEcheKSmPNVHUUycIkRjNdN7z8IkRTYuibPgb6Eqek/Dygs1WQmHLgCn1gc4RUCAlf/KwDrwKNP7p36AlfFQN4gm66st9Bq+Rsg7sUmZcdxwh6vMptBC0oAG81kUJL50yu+IQsVN1WloNw7eEfFxwSuj9zexn8iRTfOvXTgCCHcVjcS5/pu6N1MWOj6IDCRhInEVS+XRuqqwL1DOt5tGCYQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from KL1PR0601MB4324.apcprd06.prod.outlook.com (2603:1096:820:73::6)
  by TY0PR06MB5732.apcprd06.prod.outlook.com (2603:1096:400:270::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.27; Mon, 1 Sep
- 2025 13:56:27 +0000
+ 2025 13:56:31 +0000
 Received: from KL1PR0601MB4324.apcprd06.prod.outlook.com
  ([fe80::f8ee:b41e:af25:202]) by KL1PR0601MB4324.apcprd06.prod.outlook.com
  ([fe80::f8ee:b41e:af25:202%5]) with mapi id 15.20.9073.026; Mon, 1 Sep 2025
- 13:56:27 +0000
+ 13:56:31 +0000
 From: Lin Yikai <yikai.lin@vivo.com>
 To: Christian Loehle <christian.loehle@arm.com>,
 	Song Liu <song@kernel.org>,
@@ -80,14 +80,14 @@ To: Christian Loehle <christian.loehle@arm.com>,
 	Tejun Heo <tj@kernel.org>,
 	Lin Yikai <yikai.lin@vivo.com>
 Cc: zhaofuyu@vivo.com
-Subject: [PATCH v2 bpf-next 1/2] cpuidle: Implement BPF extensible cpuidle governor class
-Date: Mon,  1 Sep 2025 21:56:08 +0800
-Message-ID: <20250901135609.76590-2-yikai.lin@vivo.com>
+Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: Add selftests for cpuidle_gov_ext
+Date: Mon,  1 Sep 2025 21:56:09 +0800
+Message-ID: <20250901135609.76590-3-yikai.lin@vivo.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250901135609.76590-1-yikai.lin@vivo.com>
 References: <20250901135609.76590-1-yikai.lin@vivo.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-ClientProxiedBy: SI1PR02CA0018.apcprd02.prod.outlook.com
  (2603:1096:4:1f4::7) To KL1PR0601MB4324.apcprd06.prod.outlook.com
  (2603:1096:820:73::6)
@@ -99,699 +99,373 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: KL1PR0601MB4324:EE_|TY0PR06MB5732:EE_
-X-MS-Office365-Filtering-Correlation-Id: 59dafaf9-b344-477e-f145-08dde95f5836
+X-MS-Office365-Filtering-Correlation-Id: 4973c966-84f1-4688-abbb-08dde95f5adf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|52116014|7416014|1800799024|366016|38350700014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?akI0WDhOaG1GVUFNbVdRNnZhUjBjOUsxMHQ2RTVTUDdXbmp4bnJPc2FXWDYv?=
- =?utf-8?B?cTl0MHJnYldJdEU1SEJtSVBNUFU5SEhrdDIySEQyYk9uZW9BeG5xdTEzRDBl?=
- =?utf-8?B?UXM3VUxXRGtUR21tUk5HWmZmcG1idXlKaUJic0xwWTJCbVdHQVFmSXhRaDNN?=
- =?utf-8?B?K1o4c2tyUkJnTW4rVlRvTHVXM1M0eHZKaVN5Z0ZXNk1kbTA3N3VrV0l4Ukd6?=
- =?utf-8?B?T3BNL1FQVU1BYldRQXZMQWZoOStIUkcrTGtDVHpabTkrWmtXRkp0aG51Y002?=
- =?utf-8?B?MHdDRTJSSnpjenB1Y3N4SC9kclduL0FEenlVbWhCcjRSV0JZVUFCS3Y5NTVT?=
- =?utf-8?B?RUZXVFl6cmF2S0piRE9MbjJjVmtNa0N2N2RINTM2U2Nad2R2TWVCcEt4SVIx?=
- =?utf-8?B?cFpHeHJpMnd3YzdxbGZWSklxT0Z1QVg5c3FVTjBuT3IwcnlHcHZPSVJqamtM?=
- =?utf-8?B?L2ZZdjZSV0RIRWRsejYxRU90TnR2eE5HS0REK2U0OVcwOFRIVjFGbDVxMVNJ?=
- =?utf-8?B?NHhZbHpCWStTTUlMK1NBYitFVUhpMWVFeDM5dVFJZDd4SjIrcFhpcWZiSGc3?=
- =?utf-8?B?cWhGcGE0MGd1RVNyZlVIQktmbDRwSTlRUEFpRFdDQVVhWDE4Uk0xbGt3Q3BL?=
- =?utf-8?B?TWVrSXk0WDdYZjZTeWpIeHA3Sk9kU1R0bGRyM28wOTIrS0RseW0zWkxVbkVw?=
- =?utf-8?B?anBzK2RXSWY1L1BWNVIwbHlGS1RNb3VxUlVOdTNzVE5vNzZpZXRaM09ybFNP?=
- =?utf-8?B?SFo2b1BNODUxd3ZlUDcyZG9ZSkl4N01tRlAwQld1dEdzbmtVVzNSK2NMY3Zk?=
- =?utf-8?B?a1E3bzFrZjVnZGh5cEd5NjRqRFh0ZjdtWFozOWp3dXdOV1JKTEg5RHJnTnpQ?=
- =?utf-8?B?VzNWMHZVT01vQVZKTHJUWTZhK0VzOXlhaHZGbTRqSVZQNUVpY0hDK0s4SjRR?=
- =?utf-8?B?ekphb2lVdG03N1N5THZBMjlEZTRtMUJ6TTNhU2g3WUF5ZnJ6OHdSLzFRa2Fh?=
- =?utf-8?B?VDNRNzFyTWd3SXZYWllqeWxCRlY0KzJDT2hoRzkzTnhscTBnWVVkYm9DUy96?=
- =?utf-8?B?bElhNHNoL3c4dE9nOGlDN0YvTUJRSTMvWHlxVUs1MEpBZDZyczVPL014VUtQ?=
- =?utf-8?B?UHJadGVjRStsUytjNVlzdkhPK2cwUk9VN0hjc0FoVjFLeDBkOFUzMjMrV2dv?=
- =?utf-8?B?aDk1dGdnSjNlRlI2MS81UTdrVG9UODNjZk5oRGh6TW00bjk2QmhBeFdXY1Av?=
- =?utf-8?B?L1JYaXprL04wVHpVbyt1UVU1Z3pOUG9uM1pxT3RXYTBCSzdYT0Myc2lLUXNM?=
- =?utf-8?B?eThJU1VuQy9oQ3BLb0ZJWUZXTzJ4REkrakZTMUt5RHIxWGNjb1B6d0w0bFpt?=
- =?utf-8?B?OUNWcit0azNkZVJnTi9JNDF4YVc1YzY0V052WCtQWjQrWmdtMGQzSmpJaUlD?=
- =?utf-8?B?ZTd2dUhTbDlCUUhZQ0k3MGV4Ujh2c0puMS91ME9Oc1RHN0ovRk44ZVhjZHgv?=
- =?utf-8?B?YkxJRU5NY0RDQjh5Z2hydk9XNDMvcHBGRTFmVW5iSEdTcU1BRVdZeVgrYVJl?=
- =?utf-8?B?S3JCNTIzYzZUaGdFcE15YlpyQUJka1lHejBPUWVBeFQ4NnNTYWd1Q2FFcGF0?=
- =?utf-8?B?NW1zVWlXMTlpZkZtdGJSeXFTbGpHbHI2NnA4ZVBLeExVekRWanIrRjMvdzE3?=
- =?utf-8?B?aTFXTERodDhCcEtJMnZ2dHVoOWpQeDRySmdjSjhCVE1SVXBvUmJMSDNwNDkw?=
- =?utf-8?B?K3N3TnpVTzRaL2JLRWF0TWp4NUtPRktyYmp2Z3JtSkJCTmxwUDRybUd5dFli?=
- =?utf-8?B?WlBRekMwQXpia3R0YnBMUURWWFl3QU5Ca3pZWVoyWnFKMitOZTFQWFp4Qkty?=
- =?utf-8?B?RDVEZ05iWTUzcmRUUzMvTHRZdm1QREpGV1NjZ0ZWQ3lHMWE0d3kxY2U3eS9P?=
- =?utf-8?B?L0VtTWNuVDdsYmxCQlovcXhmb2FWckh2RklxRS96L3VtNDFBMkM2UjR1bVhv?=
- =?utf-8?Q?S6NwidlIHETGhAV0ws2K+e69ixeF58=3D?=
+	=?us-ascii?Q?0Qfu+ueh03BjuD5EvXnzyupVjrDFvQI9Sdt3mjVe1q5zFRE4+hDTIU+h6gsJ?=
+ =?us-ascii?Q?JY2LBGlFYOrinv2CxEyt+xzRXHSrxQc0z9OuatvoN63gIY1vUVYwjOeE4mV9?=
+ =?us-ascii?Q?Lp/eQW7T9X2LunaJdJY6IxQsvbS+1YAox7+xp6of4kYnB7OEKOfQNSLjRIYW?=
+ =?us-ascii?Q?W/F6tFoARYMu2ZKPEolfHBEVJEOubTQyQP065doTtpsQ2BvW3RnwLSXeYLvG?=
+ =?us-ascii?Q?oRtF2LqR3d9Q9RCnvXvkbcil+D6TilHTYl3uYXrgQMpB3GaGZndrWIdRhFZy?=
+ =?us-ascii?Q?JIU4BI0GIKPBKVze3Gw6+KD1vgCd39yy92GfaW1iBUeYsCYxphxjtsLsermh?=
+ =?us-ascii?Q?geWfhzRg29lfnPyTSsPmTisTBGzPCM115FM+VopEgfx+VmGKS0E87VVQTjJQ?=
+ =?us-ascii?Q?16Jogldfwv60mS9BYhlcbBBejxG64S1dKOnE9dkmfG7u81ObqLOk5WiIxRds?=
+ =?us-ascii?Q?jDjtt6Il6xcZtDeRjAqlAJ/xg09l8uFh25wKCaLA+ECwdShpTt2QxA7nHSAR?=
+ =?us-ascii?Q?u0nRuda00PztXyHSY4/rFrWT1N4f3WE2faDnFeaALhsU7s8U8sm7dbCi4Ry2?=
+ =?us-ascii?Q?k+EKotmL9I5YHS0QpW9RekDBjxCU4U6TGzNhs2qJ5UiqnyuDNpUIJv7nvOh0?=
+ =?us-ascii?Q?CENcoedFpuAVSovy2Xpqdu93jMPCYeAc+Md8XsnFdpBvToLS7zawOCD0ZhI6?=
+ =?us-ascii?Q?U+b2X61DLeFRJBKtjka70ryyLsMiMRpGo9sXbB2eBhKOswmVZFAk/fKsYyZM?=
+ =?us-ascii?Q?XNjK0TfaHNfZW89dK8bQ54fxaXkA0TuficS4i69iv4gEu/HYKopwJFE+OI7U?=
+ =?us-ascii?Q?wvP+y2bZw4DxVm1ClmXr84uszvvyXftnsnYAJjpZdvjBsgg6VUDaMzVe+4VD?=
+ =?us-ascii?Q?GP7tBDmQ5dYVYfsjH7EAAkGqyw6tA5X6Ak7KLIvUtqctsFv03Ttz8Cw+YBaW?=
+ =?us-ascii?Q?VO/o8LJ5WmBiDF7PUKZAi6jG8I07uC0d67+gaGxmgGN579tH+2G7QQGSOI+b?=
+ =?us-ascii?Q?1HMh+Zyl74EF9zyR1mvtsSWY7IMby0fiPG5YTZhHgxHBy3lLjAT2lZYKpZJm?=
+ =?us-ascii?Q?CTVWQsiNLw2AnTd3pBp5uRPSFyPjnqyF+e1kED3WaG5nNUueHlPm5lal4kEm?=
+ =?us-ascii?Q?JRmUfYROOzgyjosWg8ebQtjxAZHi8QslyLwKoJaxqCDK6ILzYUSy+GimxM+r?=
+ =?us-ascii?Q?S58MI8lbQAd8nL0jFHOJ8oFvUKYpKWT1kyNNMqU41c55r3UxiMJDBxlufwty?=
+ =?us-ascii?Q?j2myZ2faEhMxq1bVvnOY75wi+tu1xilPiaE0j2vllN1PsYAP84Kkrkcr0oDK?=
+ =?us-ascii?Q?RlypbjGLIsIwqCK5Q8z9xyaw0VCx85oiBmVl5yiFRMtIYuYRtaAa+jWO5Hue?=
+ =?us-ascii?Q?PzSvkKU3VzX7IUSQKdaMxWq5s6O6OTgZr7NtHVjftK83lWAqmUonXX16BG2J?=
+ =?us-ascii?Q?kpYiRc/0xQvi8SM1EV0l2dk45iSbbxhvP4fGt2YDorY9XzxbDmWVgJ4LIKc1?=
+ =?us-ascii?Q?z9i6UsQoX7NR12k=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR0601MB4324.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(1800799024)(366016)(38350700014)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V2hhT284K2FSTGNVelJ5YmxMNmU2b0hyUDByU0ZqdGtLeUNrS2I1a0RTUjdw?=
- =?utf-8?B?Wi9jd3phb0tHMHpna3VITC9GVWZmV05ia2xXeVQ2OFVFNFdiTWlrWVRMeW56?=
- =?utf-8?B?Smx3MWdHSjhldG8xKzdKZTV2WDZ3LzVPTmNFcS9IWTNiL0VaUFJZRlBVWDJI?=
- =?utf-8?B?QmhXWmZQcUQ2MlFPdGw5UTZVWWRUbXR2T3Q1OC96ZTFmTys3OFYzdm1nTWdh?=
- =?utf-8?B?ZmMxK01NVXoxdXAvcXhJYzR0SVk3Tys0OUkvcVM0Ynk3a0xmMHBvSytjd3pL?=
- =?utf-8?B?NVVaWXBLVVYzL2kyY3FPd1FWN3oxRFdicUtwRmZNTm9DWC9NNGYvUVhKak5F?=
- =?utf-8?B?ZUNjcDR0ZVJSQVNRd2ZCcjRIdlVZbktYMmpBM2ZWY3ZLTG1lbDFWdTAyV1Jt?=
- =?utf-8?B?aDRubFJvakJPUGkxMzlqMEF3eWN4NkZ0c2JnS1V5ejRRVUdRRDNyUlJoSVZB?=
- =?utf-8?B?NkpEMHVKOHNoTlFIcGZrMElKdTNEUnozTmxhUHErZndLMlJyc3FsUHZOWXFQ?=
- =?utf-8?B?TVJ1cmk1NC9QY0lvTTlFREllVE1tbVR5VG5WT3MrQVE0SSsvVEtxRjRRMzRn?=
- =?utf-8?B?NCtKSUNjZEUxY2FmV2c5ZFRiNFhEZWNqZUdQT2xQbHRKdDd4ek9SallXWkpt?=
- =?utf-8?B?Z3JYZGxUeHpQMS9vSXVMRHZJU3N0dGZjRWxnTEEwSW5tOVZobXVCcWZrUk5Z?=
- =?utf-8?B?cGdyN0U5T09Xck5FZkpqYjg2Uit6TEVianJSV2hocG9xQlhmVE5ySUQ0UHUy?=
- =?utf-8?B?MTJzblhlUXdOR2FybjIvSDA3Y05jakM3YXR5S3pLRmViQlQrUDAyMWRScFo0?=
- =?utf-8?B?MWlENDVhSXZVN0p6SFJROG9nb242K2ZycDNOYXNOTFN6ZEV5N0RJL3pUTDJW?=
- =?utf-8?B?QWRWanZlK1h1N0FSK0Z0R2lLcEFBdUNHU2w2Ujk2ejQzd2E2UXM0MjYydXox?=
- =?utf-8?B?M0U0MzVUcW01WGVIQTh0eUxpcUpack41bElzMGxmY1JwYjJVVmFyZ2ZjQzg1?=
- =?utf-8?B?Mk5Pa09JeU0xZmpxMWNrNWJmdWxOTGZMaXZEbVo2czY1ckNBUWFxNkdrSnBX?=
- =?utf-8?B?cC9GZVd1cEdCTElzTUxtdXpXb3EvQjF0YnJFWjFOb1NlaWUwdXZXWHRMeG8v?=
- =?utf-8?B?ekdkK3NWb1N5L3Y4cjc5eDNaTjRNZjV2T1h0cS9TZ20ySUM5UjdNS1FYcWtJ?=
- =?utf-8?B?a0lsaXJiU09WSDUxUjJDNzExTkJKTjRidjhyVS9IQ2wrc2hSQkxnaVdKcmlE?=
- =?utf-8?B?RmUyVTRncXcwMXROdWI1MUU0eVdkbks0SGtQWVUydldPWEsrc044L0dYdHp4?=
- =?utf-8?B?d1c5L0NNZmJkbktMaGdmRUpyckJUTjZVaDFvOUZiMXhqUkIvMU50SDdrYnkz?=
- =?utf-8?B?U2JVWlNMSW0wWlVkNkRlS0o4cjdyNCtHbkRGMC9WcExCS2k2cDRjT1NNeE1V?=
- =?utf-8?B?enFDRWVLMkE1RWJsU0ZnMUg2WXBQdnh6akIxME5Yd3BOckxzN3dvMGl6ZVBj?=
- =?utf-8?B?TDFPODhIN3NsNXpaUTJtT0orOWdhTlUxSHplYXZBaUFSQ1grc0RUa2ZBcUtr?=
- =?utf-8?B?SGJDem56UnVHTk9vOXNLYzJ0NWJ6akVLQTd1Skp0M2JEQlI2YkNHdklnK2Ez?=
- =?utf-8?B?QlJwQURlU3N3RTVCNElRKzdOMTFJN3kzWUhyYk5Jb05oVk54OVhld3l3Z0xw?=
- =?utf-8?B?QnhOTjEwU2dwaFluVHhSMzNvL05NVFpsSnJWRGN6NWthQnFneEFSQ1RBdFB5?=
- =?utf-8?B?dEdHNHp2Mzc3UmVLM2lpWUVaZ0VNWi8rN25WbVRhVHJhMllQVHIyRHA0YmpN?=
- =?utf-8?B?NldHZGNka2NJRVNOQnNKWitCUytMeW9odkNOSHdUNzRTRFNiL0JoUkwza01N?=
- =?utf-8?B?b3JtZytscnFqLzcrQVNmaXpYNkRHSWxHM2ZoZTZqSHBqQ0hlQUJXU0lSSk5v?=
- =?utf-8?B?VjM5Sy9TMTV5V0FpT2NZQ2d2YngwLzBOYmNtdW5YWnUwbk5MSmgvWXhVcTJB?=
- =?utf-8?B?UXVNbHdMTTRnOU53NU1wUDVrNC9GZFI3dExrL0g0clV5c2NwQkx3Rk8yRExS?=
- =?utf-8?B?clpjbEljQVR3bUxqdnEwU3VDMW9VT3hRdm1HdUtmaFJ2ME5pUDMxYW8yMHFE?=
- =?utf-8?Q?towIS8+IaqzQZ2jzJJ8Y31Hot?=
+	=?us-ascii?Q?nR05uqoDqy1oFhoKq9EDHw05GFpt1nbQAYlXf6Ryp7iQGhf28m6v1TPIFznv?=
+ =?us-ascii?Q?9f9zrESCRAX4IqJKWE0ejE8sQDXCheLBqHqvCyC8ckcLO4blxNKLt5eWljzR?=
+ =?us-ascii?Q?NYQlqB14qiWOaoIEsXImmkGjqVJFKmUCKbcdRJvcBLuWq3/HtnLGIBHyFZCK?=
+ =?us-ascii?Q?S0dUA1+VfLbasU+sPnTLJpH+qTNeiJObE4+qrOgl1xtlHE3yjWRvVwzr57kB?=
+ =?us-ascii?Q?avuYte1Cb4dzQRGAOgR/J6Tykj74m7l9yWcH4f5lu9+slGOAgW3aLodiqs7S?=
+ =?us-ascii?Q?jxG0Mccv5+eqnuZibTw7fvYapJwM0TuG/9CRkjrvmqYxZd6gs+hex/3rlCjC?=
+ =?us-ascii?Q?TZwLjpVsdJtBhsligDx56OmhrLOKxPfmP7SVLNR+WilUKbkqQ7kHd0GGTHcq?=
+ =?us-ascii?Q?CtPj9xFPP2B6aFRIB2BjoUPntEdvU1OIL710Orz/NSES7cwLbu2NBH5gnADx?=
+ =?us-ascii?Q?drtGdPSZD8Zq1XWHB4Ta2amRIv+3/dDS/wx2SPxkHltywcfTTe8b5pp5kmoA?=
+ =?us-ascii?Q?ZFEEaiivf+Xqt0OcA9SgQdV19tDoZ1BZUzBNpWWh9Gz1sF0zNA3myqL6SPnV?=
+ =?us-ascii?Q?viaUB3hi3t45ZGtXZIc4o8cHm/Q2efaG0lRL4lLh0LedufbgDX9C2md10MCV?=
+ =?us-ascii?Q?uRxKWSDLVCdEJ+vWUR73M7wTVGjLZ9tid+MvC/vgbQI8XjG+bJ24rIdZDal3?=
+ =?us-ascii?Q?pE6BpNMaL8uPbG5L7SYrWITGjprqH4ZGszz4dzPZaLxYeANYpRWOpwOo79PL?=
+ =?us-ascii?Q?NYoJQkY43+1LdZPfigwcskKJgi+TUABbib6khsPEnV9VjDJEfHWTMlY4W8/Q?=
+ =?us-ascii?Q?9b5FuAjR7sGwpmdeAFtFwtxz8MlarmtNEffR+xqmcosW3neiwbWCJmBtToVI?=
+ =?us-ascii?Q?xwPLzKP4PcEZ+nsXkemLcgdScEw+neO1xHSPUIoR5k7//ozPN3HRWjGrzSZb?=
+ =?us-ascii?Q?fnyGfjedIQKDHHRRLZM+1Lc814zB2DQP1M7Y04yVqm+LXlB+5RE1eoC5M2Xj?=
+ =?us-ascii?Q?PPAdYY2I423fHZlqMUu2FdiWptG9Eey+rLVrvuuvyvBlzr+JLlgDWY9lsLlu?=
+ =?us-ascii?Q?QWP7roPdIZlQX9lF5hPRjCRsXp86jZfLsO0DwgMnlNkz0quXgdoQmpwbdF72?=
+ =?us-ascii?Q?REcS9xpkCOb/n37nQIGK8uUpnpwEfaedXGf07ns+fZJb1orFqJVyMnDYsXf8?=
+ =?us-ascii?Q?lDI6Es6SKWcTIoVMSVXkkuAeyHOcgI1KvLemICu4MgzldwBVPFiDhly0BUh8?=
+ =?us-ascii?Q?+NBQK5KiVpiv+yklQQfH/4iDY1jzd3FpHwsVrhq+hk0nawq00VwhpOuD8qdL?=
+ =?us-ascii?Q?G5s59J31KsbYj4wTr65v2CJd6qTQEWT9GSGrjLDDpOqEZ8/RwPGc2kBRyYJG?=
+ =?us-ascii?Q?Gq6lNpILm+3HJxax1gSvnJis4Z9+R/Lp5IWWXSRFktd9wtMjFHRQNgPd9if+?=
+ =?us-ascii?Q?0BWPjld8TaI+CsYn1knsh32cXB8K8nkVf+EPjf+MWEMNRKLY1NJuv9G8Oz79?=
+ =?us-ascii?Q?3ku/2MHt67uiawdDG8WT253bG8shH2rFK8eMSvWOSnHJ7CHZy8wDhWmSftm6?=
+ =?us-ascii?Q?fD26Q+jNrtK+AOcw61Mh97GEhIkUGq/oJvWGU5Dl?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59dafaf9-b344-477e-f145-08dde95f5836
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4973c966-84f1-4688-abbb-08dde95f5adf
 X-MS-Exchange-CrossTenant-AuthSource: KL1PR0601MB4324.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2025 13:56:27.0961
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2025 13:56:31.4117
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SUFCOlmggbGyK8fGpaYOkSzxCRVuCfDh+7IcQgQX/tyq32u5nqJNAzoBq8AafGS5ZfQ4vNLhIsRx845yzkOANw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: MHuRTO08ivstcOVlbvrB+kd0FhocGIBq+nnAEE2sglwiCtd7H+MNUn5ZdSZ7UtDEtEaZCDmmvbvE6hEZQqLGRg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5732
 
-The BPF cpuidle ext governor registers at postcore_initcall()
-but remains disabled by default due to its low priority "rating" with value "1".
-Activation requires adjust higer "rating" than other governors within BPF.
+Add test to verify cpuidle governor ext's load, attach, and kfuncs.
 
-Core Components:
-1.**struct cpuidle_gov_ext_ops** – BPF-overridable operations:
-- ops.enable()/ops.disable(): enable or disable callback
-- ops.select(): cpu Idle-state selection logic
-- ops.set_stop_tick(): Scheduler tick management after state selection
-- ops.reflect(): feedback info about previous idle state.
-- ops.init()/ops.deinit(): Initialization or cleanup.
+This patch also provides a simple demonstration of `cpuidle_gov_ext_ops` usage:
+- In `ops.init()`, we set the "rating" value to 60 - significantly exceeding other governors' ratings - to activate `cpuidle_gov_ext`.
+- For specific scenarios (e.g., screen-off music playback on mobile devices), we can enable "expect_deeper" to transition to deeper idle states.
 
-2.**Critical kfuncs for kernel state access**:
-- bpf_cpuidle_ext_gov_update_rating():
-  Activate ext governor by raising rating must be called from "ops.init()"
-- bpf_cpuidle_ext_gov_latency_req(): get idle-state latency constraints
-- bpf_tick_nohz_get_sleep_length(): get CPU sleep duration in tickless mode
+This implementation serves as a foundation, not a final solution.
+We can explore further exploration of cpuidle strategies optimized for various usage scenarios.
+
+Test Results
+-----------
+:~/workplace/bpf/x86/submit/bpf_next/tools/testing/selftests/bpf$ make -j4
+
+:$ sudo ./test_progs -t test_cpuidle_gov_ext      
+#449     test_cpuidle_gov_ext: OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+Additionally, the kernel log shows:
+$sudo cat /dev/kmsg
+6,911,10997439785,-; cpuidle: using governor ext
+6,913,11010384887,-; cpuidle: using governor menu
+After `cpuidle_gov_ext` exits, the system will restore the previous governor.
 
 Signed-off-by: Lin Yikai <yikai.lin@vivo.com>
 ---
- drivers/cpuidle/Kconfig            |  12 +
- drivers/cpuidle/governors/Makefile |   1 +
- drivers/cpuidle/governors/ext.c    | 537 +++++++++++++++++++++++++++++
- 3 files changed, 550 insertions(+)
- create mode 100644 drivers/cpuidle/governors/ext.c
+ .../bpf/prog_tests/test_cpuidle_gov_ext.c     |  28 +++
+ .../selftests/bpf/progs/cpuidle_common.h      |  13 ++
+ .../selftests/bpf/progs/cpuidle_gov_ext.c     | 200 ++++++++++++++++++
+ 3 files changed, 241 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_cpuidle_gov_ext.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cpuidle_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/cpuidle_gov_ext.c
 
-diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-index cac5997dca50..4f2eac531b0b 100644
---- a/drivers/cpuidle/Kconfig
-+++ b/drivers/cpuidle/Kconfig
-@@ -44,6 +44,18 @@ config CPU_IDLE_GOV_HALTPOLL
- 
- 	  Some virtualized workloads benefit from using it.
- 
-+config CPU_IDLE_GOV_EXT
-+    bool "bpf cpuidle ext governor"
-+	depends on BPF_SYSCALL && BPF_JIT && DEBUG_INFO_BTF
-+	default y
-+	help
-+	  This governor implements a simple cpuidle ext governor,
-+	  which can be customized by a BPF program without modifying
-+	  kernel code.
-+
-+	  Some scenarios benefit where CPUidle policy needs
-+	  to be customized based on user-space requirements.
-+
- config DT_IDLE_STATES
- 	bool
- 
-diff --git a/drivers/cpuidle/governors/Makefile b/drivers/cpuidle/governors/Makefile
-index 63abb5393a4d..cd5eaf9f275f 100644
---- a/drivers/cpuidle/governors/Makefile
-+++ b/drivers/cpuidle/governors/Makefile
-@@ -7,3 +7,4 @@ obj-$(CONFIG_CPU_IDLE_GOV_LADDER) += ladder.o
- obj-$(CONFIG_CPU_IDLE_GOV_MENU) += menu.o
- obj-$(CONFIG_CPU_IDLE_GOV_TEO) += teo.o
- obj-$(CONFIG_CPU_IDLE_GOV_HALTPOLL) += haltpoll.o
-+obj-$(CONFIG_CPU_IDLE_GOV_EXT) += ext.o
-diff --git a/drivers/cpuidle/governors/ext.c b/drivers/cpuidle/governors/ext.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_cpuidle_gov_ext.c b/tools/testing/selftests/bpf/prog_tests/test_cpuidle_gov_ext.c
 new file mode 100644
-index 000000000000..9968ae482899
+index 000000000000..8b35771ada44
 --- /dev/null
-+++ b/drivers/cpuidle/governors/ext.c
-@@ -0,0 +1,537 @@
++++ b/tools/testing/selftests/bpf/prog_tests/test_cpuidle_gov_ext.c
+@@ -0,0 +1,28 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * ext.c - the cpuidle ext governor used by BPF
++ * test_cpuidle_gov_ext.c - test cpuidle governor ext's load, attach and kfuncs
 + *
 + * Copyright (C) Yikai Lin <yikai.lin@vivo.com>
 + */
 +
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/cpuidle.h>
-+#include <linux/percpu.h>
-+#include <linux/ktime.h>
-+#include <linux/cpumask.h>
-+#include <linux/slab.h>
-+#include <linux/sysfs.h>
-+#include <linux/tick.h>
++#include <test_progs.h>
++#include "cpuidle_gov_ext.skel.h"
 +
-+#define EXT_GOV_NAME	"ext"
-+
-+/********************************************************************************
-+ * Helpers that can be called from the BPF cpuidle gov.
-+ */
-+#include <linux/btf_ids.h>
-+#include <linux/btf.h>
-+
-+#include "../cpuidle.h"
-+
-+static struct cpuidle_governor *cpuidle_last_governor;
-+
-+/**
-+ * restore_cpuidle_last_governor - restore last governor after bpf ext gov exiting.
-+ */
-+static void restore_cpuidle_last_governor(void)
++void test_test_cpuidle_gov_ext(void)
 +{
-+	bool enabled = false;
++	struct cpuidle_gov_ext *skel;
++	int err;
 +
-+	if (cpuidle_curr_governor)
-+		enabled = !strncasecmp(cpuidle_curr_governor->name, EXT_GOV_NAME, CPUIDLE_NAME_LEN);
++	skel = cpuidle_gov_ext__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "cpuidle_gov_ext__open_and_load"))
++		return;
 +
-+	mutex_lock(&cpuidle_lock);
-+	if (enabled && cpuidle_last_governor)
-+		if (cpuidle_switch_governor(cpuidle_last_governor))
-+			cpuidle_last_governor = NULL;
-+	mutex_unlock(&cpuidle_lock);
++	skel->bss->expect_deeper = 1;
++	err = cpuidle_gov_ext__attach(skel);
++	if (!ASSERT_OK(err, "cpuidle_gov_ext__attach"))
++		goto cleanup;
++
++cleanup:
++	cpuidle_gov_ext__destroy(skel);
 +}
 +
-+__bpf_kfunc_start_defs();
+diff --git a/tools/testing/selftests/bpf/progs/cpuidle_common.h b/tools/testing/selftests/bpf/progs/cpuidle_common.h
+new file mode 100644
+index 000000000000..95402974c53e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/cpuidle_common.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) Yikai Lin <yikai.lin@vivo.com>
++ */
 +
-+/**
-+ * bpf_cpuidle_ext_gov_update_rating - update rating of bpf cpuidle ext governor.
-+ * @rating: target rating
++#ifndef _CPUIDLE_COMMON_H
++#define _CPUIDLE_COMMON_H
++
++int bpf_cpuidle_ext_gov_update_rating(unsigned int rating) __ksym __weak;
++s64 bpf_cpuidle_ext_gov_latency_req(unsigned int cpu) __ksym __weak;
++s64 bpf_tick_nohz_get_sleep_length(void) __ksym __weak;
++
++#endif /* _CPUIDLE_COMMON_H */
+diff --git a/tools/testing/selftests/bpf/progs/cpuidle_gov_ext.c b/tools/testing/selftests/bpf/progs/cpuidle_gov_ext.c
+new file mode 100644
+index 000000000000..66c437243270
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/cpuidle_gov_ext.c
+@@ -0,0 +1,200 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * cpuidle_gov_ext.c - test to use cpuidle governor ext by bpf
 + *
-+ * The BPF cpuidle ext governor is registered by default
-+ * but remains inactive due to its default @rating being set to 1
-+ * which is significantly lower than that of other governors.
-+ *
-+ * To activate it, adjust @rating to a higher value within the BPF program.
-+ *
-+ * This function should be called from ops.init().
++ * Copyright (C) Yikai Lin <yikai.lin@vivo.com>
 + */
-+__bpf_kfunc int bpf_cpuidle_ext_gov_update_rating(unsigned int rating)
-+{
-+	int ret = -EINVAL;
-+	struct cpuidle_governor *ext_gov;
 +
-+	ext_gov = cpuidle_find_governor(EXT_GOV_NAME);
-+	if (!ext_gov) {
-+		ret = -EEXIST;
-+		goto clean_up;
-+	}
-+	mutex_lock(&cpuidle_lock);
-+	if (!cpuidle_curr_governor || cpuidle_curr_governor->rating < rating) {
-+		cpuidle_last_governor = cpuidle_curr_governor;
-+		ret = cpuidle_switch_governor(ext_gov);
-+	}
-+	mutex_unlock(&cpuidle_lock);
++#include "vmlinux.h"
 +
-+clean_up:
-+	return ret;
-+}
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
 +
-+/**
-+ * bpf_cpuidle_ext_gov_latency_req - get target cpu's latency constraint
-+ * @cpu: Target CPU
-+ *
-+ * The BPF program may require this info.
-+ */
-+__bpf_kfunc s64 bpf_cpuidle_ext_gov_latency_req(unsigned int cpu)
-+{
-+	return cpuidle_governor_latency_req(cpu);
-+}
++#include "bpf_misc.h"
++#include "cpuidle_common.h"
 +
-+/**
-+ * bpf_tick_nohz_get_sleep_length - return the expected length of the current sleep
-+ *
-+ * The BPF program may require this info.
-+ */
-+__bpf_kfunc s64 bpf_tick_nohz_get_sleep_length(void)
-+{
-+	ktime_t delta_tick;
++char LICENSE[] SEC("license") = "GPL";
 +
-+	return (s64)tick_nohz_get_sleep_length(&delta_tick);
-+}
-+
-+__bpf_kfunc_end_defs();
-+
-+BTF_KFUNCS_START(cpuidle_ext_gov_kfuncs)
-+BTF_ID_FLAGS(func, bpf_cpuidle_ext_gov_update_rating)
-+BTF_ID_FLAGS(func, bpf_cpuidle_ext_gov_latency_req)
-+BTF_ID_FLAGS(func, bpf_tick_nohz_get_sleep_length)
-+BTF_KFUNCS_END(cpuidle_ext_gov_kfuncs)
-+
-+static const struct btf_kfunc_id_set cpuidle_ext_gov_kfuncs_set = {
-+	.owner  = THIS_MODULE,
-+	.set	= &cpuidle_ext_gov_kfuncs,
-+};
-+
-+static int cpuidle_gov_kfuncs_init(void)
-+{
-+	return register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &cpuidle_ext_gov_kfuncs_set);
-+}
-+
-+/********************************************************************************
-+ * bpf_struct_ops plumbing.
-+ */
-+#include <linux/bpf_verifier.h>
-+#include <linux/bpf.h>
-+
-+#define CPUIDLE_GOV_EXT_NAME_LEN 128
-+enum ops_enable_state {
-+	OPS_ENABLED,
-+	OPS_DISABLED,
-+};
-+
-+static const struct btf_type *cpuidle_device_type;
-+static u32 cpuidle_device_type_id;
-+static struct cpuidle_gov_ext_ops *ops;
-+
-+static DEFINE_MUTEX(ops_mutex);
-+DEFINE_STATIC_KEY_FALSE(ops_enabled_key);
-+static atomic_t ops_enable_state_var = ATOMIC_INIT(OPS_DISABLED);
-+
-+struct cpuidle_gov_ext_ops {
-+	/**
-+	 * enable - cpuidle ext governor enable
-+	 * @drv: cpuidle driver containing state data.
-+	 * @dev: target cpu
-+	 */
-+	int (*enable)(struct cpuidle_driver *drv, struct cpuidle_device *dev);
-+
-+	/**
-+	 * disable - cpuidle ext governor disable
-+	 * @drv: cpuidle driver containing state data.
-+	 * @dev: target cpu
-+	 */
-+	void (*disable)(struct cpuidle_driver *drv, struct cpuidle_device *dev);
-+
-+	/*
-+	 * select - select the next cpu idle state to enter
-+	 * @drv: cpuidle driver containing state data.
-+	 * @dev: target cpu
-+	 */
-+	int (*select)(struct cpuidle_driver *drv, struct cpuidle_device *dev);
-+
-+	/*
-+	 * set_stop_tick - whether or not to stop the scheduler tick
-+	 * automatically called after selecting cpuidle state
-+	 */
-+	bool (*set_stop_tick)(void);
-+
-+	/*
-+	 * reflect - Give the governor an opportunity to reflect on the outcome
-+	 * @dev: target cpu
-+	 * @index: last idle state which target cpu has entered
-+	 */
-+	void (*reflect)(struct cpuidle_device *dev, int index);
-+
-+	/**
-+	 * init - Initialize the BPF cpuidle governor
-+	 */
-+	int (*init)(void);
-+
-+	/**
-+	 * exit - Clean up after the BPF cpuidle governor
-+	 */
-+	void (*exit)(void);
-+
-+	/**
-+	 * name - BPF cpuidle governor name
-+	 */
-+	char name[CPUIDLE_GOV_EXT_NAME_LEN];
-+};
-+
-+static enum ops_enable_state get_ops_enable_state(void)
-+{
-+	return atomic_read(&ops_enable_state_var);
-+}
-+
-+static enum ops_enable_state
-+set_ops_enable_state(enum ops_enable_state to)
-+{
-+	return atomic_xchg(&ops_enable_state_var, to);
-+}
-+
-+static int enable_stub(struct cpuidle_driver *drv, struct cpuidle_device *dev) { return 0; }
-+static void disable_stub(struct cpuidle_driver *drv, struct cpuidle_device *dev) {}
-+static int select_stub(struct cpuidle_driver *drv, struct cpuidle_device *dev) { return 0; }
-+static bool set_stop_tick_stub(void) {return false; }
-+static void reflect_stub(struct cpuidle_device *dev, int index) {}
-+static int init_stub(void) { return 0; }
-+static void exit_stub(void) {}
-+
-+static struct cpuidle_gov_ext_ops __bpf_ops_cpuidle_gov_ext_ops = {
-+	.enable = enable_stub,
-+	.disable = disable_stub,
-+	.select = select_stub,
-+	.set_stop_tick = set_stop_tick_stub,
-+	.reflect = reflect_stub,
-+	.init = init_stub,
-+	.exit = exit_stub,
-+};
-+
-+static int ext_btf_struct_access(struct bpf_verifier_log *log,
-+					 const struct bpf_reg_state *reg, int off,
-+					 int size)
-+{
-+	const struct btf_type *t;
-+
-+	t = btf_type_by_id(reg->btf, reg->btf_id);
-+	if (t == cpuidle_device_type) {
-+		for (int i = 0; i < CPUIDLE_STATE_MAX; i++) {
-+			size_t base_offset = offsetof(struct cpuidle_device, states_usage[i]);
-+
-+			if (off >= base_offset + offsetof(struct cpuidle_state_usage, disable) &&
-+				off + size <= base_offset + offsetofend(struct cpuidle_state_usage, disable)) {
-+				return SCALAR_VALUE;
-+			}
-+		}
-+	}
-+
-+	return -EACCES;
-+}
-+
-+static const struct bpf_verifier_ops ops_verifier = {
-+	.get_func_proto = bpf_base_func_proto,
-+	.is_valid_access = btf_ctx_access,
-+	.btf_struct_access = ext_btf_struct_access,
-+};
-+
-+static void ops_disable(void)
-+{
-+	restore_cpuidle_last_governor();
-+	WARN_ON_ONCE(set_ops_enable_state(OPS_DISABLED) != OPS_ENABLED);
-+	static_branch_disable(&ops_enabled_key);
-+	if (ops->exit)
-+		ops->exit();
-+	memset(&ops, 0, sizeof(ops));
-+}
-+
-+static void ops_unreg(void *kdata, struct bpf_link *link)
-+{
-+	mutex_lock(&ops_mutex);
-+	ops_disable();
-+	mutex_unlock(&ops_mutex);
-+}
-+
-+static int ops_reg(void *kdata, struct bpf_link *link)
-+{
-+	mutex_lock(&ops_mutex);
-+	if (get_ops_enable_state() != OPS_DISABLED) {
-+		mutex_unlock(&ops_mutex);
-+		return -EEXIST;
-+	}
-+	/*
-+	 * Set ops, call ops.init(), and set enable state flag
-+	 */
-+	ops = (struct cpuidle_gov_ext_ops *)kdata;
-+	if (ops->init && ops->init()) {
-+		ops_disable();
-+		mutex_unlock(&ops_mutex);
-+		return -EINVAL;
-+	}
-+	WARN_ON_ONCE(set_ops_enable_state(OPS_ENABLED) != OPS_DISABLED);
-+	static_branch_enable(&ops_enabled_key);
-+
-+	mutex_unlock(&ops_mutex);
-+	return 0;
-+}
-+
-+static int ops_check_member(const struct btf_type *t,
-+				const struct btf_member *member,
-+				const struct bpf_prog *prog)
-+{
-+	u32 moff = __btf_member_bit_offset(t, member) / 8;
-+
-+	switch (moff) {
-+	case offsetof(struct cpuidle_gov_ext_ops, enable):
-+	case offsetof(struct cpuidle_gov_ext_ops, disable):
-+	case offsetof(struct cpuidle_gov_ext_ops, select):
-+	case offsetof(struct cpuidle_gov_ext_ops, set_stop_tick):
-+	case offsetof(struct cpuidle_gov_ext_ops, reflect):
-+	case offsetof(struct cpuidle_gov_ext_ops, init):
-+	case offsetof(struct cpuidle_gov_ext_ops, exit):
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+static int ops_init_member(const struct btf_type *t,
-+				const struct btf_member *member,
-+				void *kdata, const void *udata)
-+{
-+	const struct cpuidle_gov_ext_ops *uops = udata;
-+	struct cpuidle_gov_ext_ops *ops = kdata;
-+	u32 moff = __btf_member_bit_offset(t, member) / 8;
-+	int ret;
-+
-+	switch (moff) {
-+	case offsetof(struct cpuidle_gov_ext_ops, name):
-+		ret = bpf_obj_name_cpy(ops->name, uops->name,
-+				sizeof(ops->name));
-+		if (ret < 0)
-+			return ret;
-+		if (ret == 0)
-+			return -EINVAL;
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+static int ops_init(struct btf *btf)
-+{
-+	s32 type_id;
-+
-+	type_id = btf_find_by_name_kind(btf, "cpuidle_device", BTF_KIND_STRUCT);
-+	if (type_id < 0)
-+		return -EINVAL;
-+	cpuidle_device_type = btf_type_by_id(btf, type_id);
-+	cpuidle_device_type_id = type_id;
-+
-+	return 0;
-+}
-+
-+static int ops_update(void *kdata, void *old_kdata, struct bpf_link *link)
-+{
-+	/*
-+	 * Not support updating the actively-loaded BPF cpuidle governor
-+	 */
-+	return -EOPNOTSUPP;
-+}
-+
-+static int ops_validate(void *kdata)
-+{
-+	return 0;
-+}
-+
-+static struct bpf_struct_ops bpf_cpuidle_gov_ext_ops = {
-+	.verifier_ops = &ops_verifier,
-+	.reg = ops_reg,
-+	.unreg = ops_unreg,
-+	.check_member = ops_check_member,
-+	.init_member = ops_init_member,
-+	.init = ops_init,
-+	.update = ops_update,
-+	.validate = ops_validate,
-+	.name = "cpuidle_gov_ext_ops",
-+	.owner = THIS_MODULE,
-+	.cfi_stubs = &__bpf_ops_cpuidle_gov_ext_ops
-+};
-+
-+/********************************************************************************
-+ * default cpuidle ext governor implementations
-+ */
++#define ALPHA 10
 +#define ALPHA_SCALE 100
 +#define FIT_FACTOR 90
 +
-+struct cpuidle_gov_ext {
++#ifndef max
++#define max(a, b) ((a) > (b) ? (a) : (b))
++#endif
++#ifndef min
++#define min(a, b) ((a) < (b) ? (a) : (b))
++#endif
++
++/*
++ * For some low-power scenarios,
++ * such as the screen off scenario of mobile devices
++ * (which will be determined by the user-space BPF program),
++ * we aim to choose a deeper state
++ * At this point, we will somewhat disregard the impact on CPU performance.
++ */
++int expect_deeper = 0;
++
++struct cpuidle_gov_data {
 +	int cpu;
 +	int last_idx;
++	u64 last_pred;
 +	u64 last_duration;
 +	u64 next_pred;
 +};
 +
-+DEFINE_PER_CPU(struct cpuidle_gov_ext, cpuidle_gov_ext_data);
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, u32);
++	__type(value, struct cpuidle_gov_data);
++} cpuidle_gov_data_map SEC(".maps");
 +
-+static void update_predict_duration(struct cpuidle_gov_ext *data,
++static u64 calculate_ewma(u64 last, u64 new, u32 alpha, u32 alpha_scale)
++{
++	return (alpha * new + (alpha_scale - alpha) * last) / alpha_scale;
++}
++
++static void update_predict_duration(struct cpuidle_gov_data *data,
 +			struct cpuidle_driver *drv, struct cpuidle_device *dev)
 +{
 +	int idx;
-+	struct cpuidle_state *target;
++	struct cpuidle_state target;
 +
 +	if (!data || !drv || !dev)
 +		return;
 +	idx = data->last_idx;
 +	data->last_duration = dev->last_residency_ns;
 +	if (idx > 0) {
-+		target = &drv->states[idx];
-+		if (data->last_duration > target->exit_latency)
-+			data->last_duration -= target->exit_latency;
++		bpf_core_read(&target, sizeof(target), &drv->states[idx]);
++		if (data->last_duration > target.exit_latency)
++			data->last_duration -= target.exit_latency;
 +	}
-+	data->next_pred = data->last_duration;
++	data->last_pred = data->next_pred;
++	data->next_pred = calculate_ewma(data->next_pred,
++		data->last_duration, ALPHA, ALPHA_SCALE);
 +}
 +
-+static void ext_reflect_dfl(struct cpuidle_device *dev, int index)
++/* Enable the cpuidle governor */
++SEC("struct_ops.s/enable")
++int BPF_PROG(bpf_cpuidle_enable, struct cpuidle_driver *drv, struct cpuidle_device *dev)
 +{
-+	struct cpuidle_gov_ext *data = this_cpu_ptr(&cpuidle_gov_ext_data);
++	u32 key = 0;
++	struct cpuidle_gov_data *data;
 +
-+	if (!data)
-+		return;
-+	data->last_idx = index;
-+}
-+
-+static int ext_select_dfl(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-+				bool *stop_tick)
-+{
-+	int i, selected;
-+	struct cpuidle_gov_ext *data;
-+	ktime_t delta_tick;
-+	s64 delta = tick_nohz_get_sleep_length(&delta_tick);
-+	s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
-+
-+	data = this_cpu_ptr(&cpuidle_gov_ext_data);
++	bpf_printk("cpuidle_gov_ext: enabled");
++	data = bpf_map_lookup_percpu_elem(&cpuidle_gov_data_map, &key, dev->cpu);
 +	if (!data)
 +		return 0;
 +
-+	/*
-+	 * We aim to achieve function redefinition through BPF ops.select(),
-+	 * so we do not use complex algorithm here.
-+	 */
-+	update_predict_duration(data, drv, dev);
-+	for (i = drv->state_count - 1; i > 0; i--) {
-+		struct cpuidle_state *s = &drv->states[i];
-+		struct cpuidle_state_usage *su = &dev->states_usage[i];
-+
-+		if (su->disable)
-+			continue;
-+
-+		if (latency_req < s->exit_latency_ns)
-+			continue;
-+
-+		if (delta < s->target_residency_ns)
-+			continue;
-+
-+		if (data->next_pred / FIT_FACTOR * ALPHA_SCALE < s->target_residency_ns)
-+			continue;
-+		break;
-+	}
-+	selected = i;
-+	return selected;
-+}
-+
-+static int ext_enable_dfl(struct cpuidle_driver *drv, struct cpuidle_device *dev)
-+{
-+	struct cpuidle_gov_ext *data = &per_cpu(cpuidle_gov_ext_data, dev->cpu);
-+
-+	memset(data, 0, sizeof(struct cpuidle_gov_ext));
++	__builtin_memset(data, 0, sizeof(struct cpuidle_gov_data));
 +	data->cpu = dev->cpu;
 +	return 0;
 +}
 +
-+static void ext_disable_dfl(struct cpuidle_driver *drv, struct cpuidle_device *dev) { }
-+
-+/********************************************************************************
-+ * Register and init cpuidle governor
-+ */
-+static int ext_enable(struct cpuidle_driver *drv, struct cpuidle_device *dev)
++/* Disable the cpuidle governor */
++SEC("struct_ops.s/disable")
++void BPF_PROG(bpf_cpuidle_disable, struct cpuidle_driver *drv, struct cpuidle_device *dev)
 +{
-+	if (static_branch_likely(&ops_enabled_key))
-+		return ops->enable(drv, dev);
-+	return ext_enable_dfl(drv, dev);
++	bpf_printk("cpuidle_gov_ext: disabled");
 +}
 +
-+static void ext_disable(struct cpuidle_driver *drv, struct cpuidle_device *dev)
++/* Select the next idle state */
++SEC("struct_ops.s/select")
++int BPF_PROG(bpf_cpuidle_select, struct cpuidle_driver *drv, struct cpuidle_device *dev)
 +{
-+	if (static_branch_likely(&ops_enabled_key))
-+		return ops->disable(drv, dev);
-+	return ext_disable_dfl(drv, dev);
-+}
++	u32 key = 0;
++	s64 delta, latency_req, residency_ns;
++	int i;
++	unsigned long long disable;
++	struct cpuidle_gov_data *data;
++	struct cpuidle_state *cs;
 +
-+static int ext_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-+			   bool *stop_tick)
-+{
-+	int state = 0;
-+
-+	if (static_branch_likely(&ops_enabled_key)) {
-+		state = ops->select(drv, dev);
-+		*stop_tick = ops->set_stop_tick();
-+	} else {
-+		state = ext_select_dfl(drv, dev, stop_tick);
++	data = bpf_map_lookup_percpu_elem(&cpuidle_gov_data_map, &key, dev->cpu);
++	if (!data) {
++		bpf_printk("cpuidle_gov_ext: [%s] cpuidle_gov_data_map is NULL\n", __func__);
++		return 0;
 +	}
-+	return state;
++	latency_req = bpf_cpuidle_ext_gov_latency_req(dev->cpu);
++	delta = bpf_tick_nohz_get_sleep_length();
++
++	update_predict_duration(data, drv, dev);
++	for (i = ARRAY_SIZE(drv->states)-1; i > 0; i--) {
++		if (i >= drv->state_count)
++			continue;
++		cs = &drv->states[i];
++		disable = dev->states_usage[i].disable;
++		if (disable)
++			continue;
++		if (latency_req < cs->exit_latency_ns)
++			continue;
++
++		if (delta < cs->target_residency_ns)
++			continue;
++
++		if (data->next_pred / FIT_FACTOR * ALPHA_SCALE < cs->target_residency_ns)
++			continue;
++
++		break;
++	}
++	residency_ns = drv->states[i].target_residency_ns;
++	if (expect_deeper &&
++		i <= drv->state_count-2 &&
++		!dev->states_usage[i+1].disable &&
++		data->last_pred >= residency_ns &&
++		data->next_pred < residency_ns &&
++		data->next_pred / FIT_FACTOR * ALPHA_SCALE >= residency_ns &&
++		data->next_pred / FIT_FACTOR * ALPHA_SCALE >= data->last_duration &&
++		delta > residency_ns) {
++		i++;
++	}
++
++	return i;
 +}
 +
-+static void ext_reflect(struct cpuidle_device *dev, int index)
++//enable or disable scheduling tick after selecting cpuidle state
++SEC("struct_ops.s/set_stop_tick")
++bool BPF_PROG(bpf_cpuidle_set_stop_tick)
 +{
-+	if (static_branch_likely(&ops_enabled_key))
-+		ops->reflect(dev, index);
-+	ext_reflect_dfl(dev, index);
++	return false;
 +}
 +
-+static struct cpuidle_governor ext_governor = {
-+	.name = EXT_GOV_NAME,
-+	.rating =	1,
-+	.enable =	ext_enable,
-+	.disable = ext_disable,
-+	.select =	ext_select,
-+	.reflect =	ext_reflect,
++/* Reflect function called after entering an idle state */
++SEC("struct_ops.s/reflect")
++void BPF_PROG(bpf_cpuidle_reflect, struct cpuidle_device *dev, int index)
++{
++	u32 key = 0;
++	struct cpuidle_gov_data *data;
++
++	data = bpf_map_lookup_percpu_elem(&cpuidle_gov_data_map, &key, dev->cpu);
++	if (!data) {
++		bpf_printk("cpuidle_gov_ext: [%s] cpuidle_gov_data_map is NULL\n", __func__);
++		return;
++	}
++	data->last_idx = index;
++}
++
++/* Initialize the BPF cpuidle governor */
++SEC("struct_ops.s/init")
++int BPF_PROG(bpf_cpuidle_init)
++{
++	return bpf_cpuidle_ext_gov_update_rating(60);
++}
++
++/* Cleanup after the BPF cpuidle governor */
++SEC("struct_ops.s/exit")
++void BPF_PROG(bpf_cpuidle_exit) { }
++
++/* Struct_ops linkage for cpuidle governor */
++SEC(".struct_ops.link")
++struct cpuidle_gov_ext_ops ops = {
++	.enable  = (void *)bpf_cpuidle_enable,
++	.disable = (void *)bpf_cpuidle_disable,
++	.select  = (void *)bpf_cpuidle_select,
++	.set_stop_tick = (void *)bpf_cpuidle_set_stop_tick,
++	.reflect = (void *)bpf_cpuidle_reflect,
++	.init	= (void *)bpf_cpuidle_init,
++	.exit	= (void *)bpf_cpuidle_exit,
++	.name	= "BPF_cpuidle_gov"
 +};
-+
-+static int __init init_ext(void)
-+{
-+	int ret;
-+
-+	ret = cpuidle_register_governor(&ext_governor);
-+	if (ret)
-+		return ret;
-+
-+	ret = register_bpf_struct_ops(&bpf_cpuidle_gov_ext_ops, cpuidle_gov_ext_ops);
-+	if (ret) {
-+		pr_err("bpf_cpuidle_gov_ext_ops register fail: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = cpuidle_gov_kfuncs_init();
-+	if (ret) {
-+		pr_err("bpf cpuidle_gov_kfuncs_init register fail: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return ret;
-+}
-+
-+postcore_initcall(init_ext);
-+MODULE_LICENSE("GPL");
 -- 
 2.43.0
 
