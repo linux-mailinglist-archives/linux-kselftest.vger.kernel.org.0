@@ -1,246 +1,162 @@
-Return-Path: <linux-kselftest+bounces-40431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40432-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E06FB3E3AE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 14:51:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D39CB3E3B0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 14:51:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44AE6164F27
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 12:51:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31CA33A7FE9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 12:51:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF1832A3C4;
-	Mon,  1 Sep 2025 12:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 574C332A3C4;
+	Mon,  1 Sep 2025 12:51:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Uru6o/JA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B4A1SlfA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B361B3277BF
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Sep 2025 12:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9727F32BF3C
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Sep 2025 12:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756731061; cv=none; b=YMlXsvwEexocCHVhKDPvv7HPNQOaBFTAhFh+82jUgGD2DgLqg0NkmwbhREHykHVFVeySzzl0wNE+iBMLkFxwZegMGMajnWLqk+Juw6g7X6B20PVYKHCoPyjbD6whuC6cWBmh+rcA/kUgyMXyQuidz1JsrrIt79w/7sqWuCq6v64=
+	t=1756731091; cv=none; b=SyDg9cqOVWZnnBQwVL8RUH/8NzdfFQRhUve5Bx5PADbvSSn2xZTnf6V5PpsW76tC5ZTmTtW2vdicY7bg6gyGAZCAqzoSWWoapTVur6YGaXmHiyqbJofuaJH5gInbBi7EyPdM66f+e6OjnlHMP2AduK0QtDw/bq4Tjh4bOMWDYQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756731061; c=relaxed/simple;
-	bh=SFLY856JaK+DPw4da8ArP2uz/kcaMmLaqGMn/UNQ4QE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bj6u5eN8wobWo0nni71KQijr7NZYDnjQXouQ8DCqY5utxziKj9G12CevgD5aYdySpuimpzoz2Fz480AyUBczxKDwRLgvvK8LrEioMigUDWdgY3SH/aNNNWkUAuS+EjsZ0Ctszsyu1QtO0iE5fEkgvxcON8IBsM9yGeBKg3NilQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=Uru6o/JA; arc=none smtp.client-ip=209.85.222.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-8960d3a6c2fso479176241.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Sep 2025 05:50:59 -0700 (PDT)
+	s=arc-20240116; t=1756731091; c=relaxed/simple;
+	bh=0Y7KClPk+ctEkOn9laBkZuJ63ot0q6jxnS3ylVWJWkE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kIWA+53WFTH7veRPDXK4/vjnbB6U2yGZJGO0oHexbUxvmjGhCtP0eoMVxBGSqf0R2zCkDWXt6yxhcYs1Q70u1al9o1Ez5YfMFTpwg0/GppXE/Z8zwyoPTVp9zZ1aKJ/zE+LOe6FdnQwPiUYZ4fpg9Z4+NfwQsJifn/ejn3vGZrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B4A1SlfA; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-afede1b3d05so723370866b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Sep 2025 05:51:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1756731058; x=1757335858; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1756731088; x=1757335888; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RojBF6ZwlxZFZwX/0b1dSoMQba7iu3ojoy33z4p+HaQ=;
-        b=Uru6o/JAk9AFWovJhxQ9QupxivVbSko0ZyJf0OoP0lboryJC9dVeURBWQDPISewhOi
-         5iZUt+oz1qcKfkhJ1kKLa74GJYW3HebPNc1A1w5wANcAYcwBgrhUyhGZ6mEyYbnLqBkh
-         nbYVja9Dy1dyVWLt7IgsS2ug/s3PUklLy1WPqfYm//tI66rjRlYfyR1+fl7UvuJ+lk6N
-         Y/3pyTnQe6sF2J3rW51k1QZVAsvLJIJFZMfZu87e8Ff4Iq7DgWilNoKUL1sX0WdAWOJZ
-         gJdbn6b2hiWdBrVzYjeMr6lFwhBuB4yuYsAuxiObgyiDGAkIo2TqrJOC9yiOtFjr9Kat
-         KtXg==
+        bh=rqF+hZbPh+nXreNj4wa7WGyYViBQF8JL9gx4eQUgXJE=;
+        b=B4A1SlfA2HwzdDQ6BEbLsTGTnPsrcVaB9cvTCwWeNfG6xmYM2HltVFRC4/1w8VH76Q
+         455oa1zDK2iOp1ZemYzMY/VZdM2CIKYj2fypxXQ3RrmUMCdrJHhrzz0TD4j+tCla5lXO
+         V/0eWz2CrQXt3XR5emw2J3JAVC8koNTNqkVc3Ks1mW5WKbmznPpQ6A4uIc2flFanLKQS
+         JTx0SFqV6ZKJ1RmgZmz6zkYv6qzJDHYqgN2ZkwU06AfyGhbSoo02B4VHDHtsYYkdBD9Y
+         +Y8gkQOA43/t05pQMuMuejC1UsthBf9Z/cGDmzLUnjf0N4yNZ9/jI8etT7SebS9/xCAY
+         KuGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756731058; x=1757335858;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RojBF6ZwlxZFZwX/0b1dSoMQba7iu3ojoy33z4p+HaQ=;
-        b=nD9It/gdb56WoR11By6oyDLlXbGUpxD0XaeBxWj15kIk12YhB/O7F2JZyiWFtJ7aY4
-         y/mEU131BF/1VNQOpag0ENKI4TVOmcirnreWQkjEmmEnauhqiyiEw7hMS/Vkho87d5lR
-         K21rq8O/cDOx86GSVjKvUqtlm2FqOzTCjduC3abdIywJoMH4so8yDIFEkFQEFAht+fx4
-         pyg8dLRDcwmtwF0bkCxFjvywSBErPsHdvm/9hT2y+hvegZbnxmnvnL49l48MLsAV5ZL0
-         BnTmm77M8+A+hPPEWsGMjuMKJtVM567nRl/+JT5WoLxjlEh+g3PgMBK0Ui+vZKoMhCW6
-         yeAg==
-X-Forwarded-Encrypted: i=1; AJvYcCXi45bq6Ec9h8C9N5Tpk/EPhPYhslqYqB+2nm0MsKqXESS9nzIoj3kD8ffKq3JdF8zV4Z+YaGsZ5gI+nv3hEhg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywn2rM3eoMUerZOywoeV5XVSlV/SI8LAfvPMMv8fL1t6gMF7v8J
-	/PLE19BFXXHFy+VRVbpRkvVlyDXyNpCe8SSkddgjsNsuqzHNcXcMfP2tUz/wY7XD7mUL9vGCRv7
-	bazdF+y2h8vR/1sTWPMH/khcAnsNPkjpksA7MQEawBA==
-X-Gm-Gg: ASbGnctpZdeNyKgM1o+v1AP0lrTpxKXnm+/FgOzLlVDa2q3NzgjXZBj/zowsO+8Z4VG
-	ykVZrhIygA76dpaJ0rkGhdtQa2Y4Idfo8PvLl44E4KgZJXnzmreui758s8K2MZPjBP4X/9kwC0j
-	X+WmYxye2Paj4QooO8kxrasb/7pIYJTjqTDBosgLF9SzOXsWy4yMwtstEmyOd++h/E6sp6YKvdz
-	em3BxhkPpY/bWWsBYIwJr/tqJ7cB4M=
-X-Google-Smtp-Source: AGHT+IHr9UCL19brxa2iKAokFlw9VR4MD7FOmMAqfdtgQT+g1vRFoxL2i+IO+GvaPMnobuW4oatWNjOm6C5v2o0ix98=
-X-Received: by 2002:a05:6102:6447:b0:523:6f5:5b18 with SMTP id
- ada2fe7eead31-52b1b2eca8fmr2157651137.9.1756731058441; Mon, 01 Sep 2025
- 05:50:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756731088; x=1757335888;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=rqF+hZbPh+nXreNj4wa7WGyYViBQF8JL9gx4eQUgXJE=;
+        b=AMb5QsZjHxN4CpAX3+AvBwPRlHbndMEOvlbDA+/NlUp9upBjVwMohhEb84ZwDw6uJc
+         Cx8pV1Q7cWxB2cFKhvqYNKu4wmLQiolbX6zf+o+mVlOkQYHpYwOWcCX0jv5oyoa+S+1a
+         9fCUe/wEQ1nglnqNpbdRG5ZTnIIHkpD1vguNTVovDBrxu0h2E1PM0nXNEnCDTiTgkn2s
+         9eH/W4fUb2hW1MEtysGDQsc4mLRorhAjG1xbTPZJD79hl6HQOoXhGPTdsesHr9ai94Q4
+         PXEAnqs+bqesb5+1wbca5aPNvWR9eWndcCbElXEGUCjXWpotS0pMw+SJJmNwZPrBnZh0
+         k77Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXP5Bym5zn9hiW7zuqwj5xtfMML19hxFj7rBskVLSlWpAfVTqaq0P3A6x/QRzNrjfULxTgBcxzXgLcqELcDgdc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmN5ekAdnzSizAQbLhqTbiKuLHm1schFPcg30KUCNYa5Y718dQ
+	Q4TYOfWQgflvpJNIUcsBBkmhagWDjiTS1mp+IRZ/Vz7s0PukhdVhQFq9
+X-Gm-Gg: ASbGncvc743J/1lAbo5Ol++0qNqcXBR8Eyy+2CycZeJXzNmpegwE2AY9GGNi6t/JKuz
+	+xIxQt7pUgHqk4Lh2aS1b1yxIjPpychAWpuFiEf9gwE2R+mpbWCU6eA6eM6XRYoRATlczN1OYun
+	0YmVQsZCGlHFrn7FG4D5RG13PrnvmYJJMl98jqHbvQhrO+dL2/nhBXXQyz+AxshJn40qf56OEQH
+	Buz233JlJeSpB1WsSUQOMH8PjXhC4X81K6cz8NNedytrpQVq4pi6JB9e6at7VOXfkx8F4KkFfkk
+	qyhkvMK+FsdfRaXcbx7iNGzYAiz8lpc+iVEtDKrZiPpB0rYdZzKKQ44RmkNeh2lYoB80yZbHf7b
+	HCkZCyi4ejHw8jF6pr4R9YoYrfE0zcZznMa55
+X-Google-Smtp-Source: AGHT+IHvmHfcLHgFlGk/m8KuGlVWmwSTjF/X+LrwDzuawwRSwyxbRGkBHfPGjI/Zz8OpUZfMC+cDWQ==
+X-Received: by 2002:a17:906:299b:b0:b04:25e6:2dbe with SMTP id a640c23a62f3a-b0425e63044mr395870066b.63.1756731087624;
+        Mon, 01 Sep 2025 05:51:27 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b04148f95b5sm419796266b.92.2025.09.01.05.51.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 01 Sep 2025 05:51:27 -0700 (PDT)
+Date: Mon, 1 Sep 2025 12:51:26 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Zi Yan <ziy@nvidia.com>, Wei Yang <richard.weiyang@gmail.com>,
+	akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
+	baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: directly add pagesize instead of increase
+ until page size
+Message-ID: <20250901125126.furb4fkgim7adzhq@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20250830023102.14981-1-richard.weiyang@gmail.com>
+ <E0C570E7-C4CD-4E41-9590-DDB64757CA2C@nvidia.com>
+ <c89a9096-716a-4bbb-a911-99096ff8f0a0@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250825145719.29455-1-linyongting@bytedance.com>
- <20250825145719.29455-5-linyongting@bytedance.com> <18530429-cac2-42a4-891e-24033dc54461@oracle.com>
-In-Reply-To: <18530429-cac2-42a4-891e-24033dc54461@oracle.com>
-From: Yongting Lin <linyongting@bytedance.com>
-Date: Mon, 1 Sep 2025 20:50:47 +0800
-X-Gm-Features: Ac12FXzEc3BxXpFrvQO5A4KgSDp4VDpvBoAfQRVXMGVwFUBvUT7kQaY8ahX-wSk
-Message-ID: <CAFuXZ_UY6RrOVmTayW-DdxQX9TE978LPx7ad=Pzr01j1cZ4o2Q@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH 4/8] mshare: selftests: Add test case
- shared memory
-To: Anthony Yznaga <anthony.yznaga@oracle.com>
-Cc: khalid@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, akpm@linux-foundation.org, 
-	linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c89a9096-716a-4bbb-a911-99096ff8f0a0@redhat.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-On Fri, Aug 29, 2025 at 9:00=E2=80=AFAM Anthony Yznaga
-<anthony.yznaga@oracle.com> wrote:
+On Mon, Sep 01, 2025 at 11:32:11AM +0200, David Hildenbrand wrote:
+>On 31.08.25 03:32, Zi Yan wrote:
+>> On 29 Aug 2025, at 22:31, Wei Yang wrote:
+>> 
+>> > The check of is_backed_by_folio() is done on each page.
+>> > 
+>> > Directly move pointer to next page instead of increase one and check if
+>> > it is page size aligned.
+>> > 
+>> > Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>> > ---
+>> >   tools/testing/selftests/mm/split_huge_page_test.c | 5 ++---
+>> >   1 file changed, 2 insertions(+), 3 deletions(-)
+>> > 
+>> > diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+>> > index 10ae65ea032f..7f7016ba4054 100644
+>> > --- a/tools/testing/selftests/mm/split_huge_page_test.c
+>> > +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+>> > @@ -423,9 +423,8 @@ static void split_pte_mapped_thp(void)
+>> > 
+>> >   	/* smap does not show THPs after mremap, use kpageflags instead */
+>> >   	thp_size = 0;
+>> > -	for (i = 0; i < pagesize * 4; i++)
+>> > -		if (i % pagesize == 0 &&
+>> > -		    is_backed_by_folio(&pte_mapped[i], pmd_order, pagemap_fd, kpageflags_fd))
+>> > +	for (i = 0; i < pagesize * 4; i += pagesize)
+>> > +		if (is_backed_by_folio(&pte_mapped[i], pmd_order, pagemap_fd, kpageflags_fd))
+>> >   			thp_size++;
+>> > 
+>> >   	if (thp_size != 4)
+>> 
+>> It might be better to add
+>> 
+>> if (pte_mapped[i] != (char)i)
+>> 	ksft_exit_fail_msg("%ld byte corrupted\n", i);
+>> 
+>> instead to make sure mremap() does not change pte_mapped[] values.
 >
-> Hi Yongting,
+>We do have a corruption check later in that function, so I think we can just
+>keep it simple here.
 >
-> Thank you for doing this. This is a great start for testing mshare.
-> I do have some comments below.
+>So this as is LGTM
 >
-> On 8/25/25 7:57 AM, Yongting Lin wrote:
-> > This test case aims to verify the basic functionalities of mshare.
-> >
-> > Create a mshare file and use ioctl to create mapping for host mm
-> > with supportive flags, then create two processes to map mshare file
-> > to their memory spaces, and eventually verify the correctiness
-> > of sharing memory.
-> >
-> > Signed-off-by: Yongting Lin <linyongting@bytedance.com>
-> > ---
-> >   tools/testing/selftests/mshare/basic.c | 81 +++++++++++++++++++++++++=
--
-> >   1 file changed, 79 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/mshare/basic.c b/tools/testing/sel=
-ftests/mshare/basic.c
-> > index 35739b1133f7..2347d30adfee 100644
-> > --- a/tools/testing/selftests/mshare/basic.c
-> > +++ b/tools/testing/selftests/mshare/basic.c
-> > @@ -3,9 +3,86 @@
-> >   #include "../kselftest_harness.h"
-> >   #include "util.c"
-> >
-> > -TEST(basic)
-> > +#define STRING "I am Msharefs"
-> > +
-> > +FIXTURE(basic)
-> > +{
-> > +     char filename[128];
-> > +     size_t align_size;
-> > +     size_t allocate_size;
-> > +};
-> > +
-> > +FIXTURE_VARIANT(basic) {
-> > +     /* decide the time of real mapping size besed on align_size */
-> > +     size_t map_size_time;
-> > +     /* flags for ioctl */
-> > +     int map_flags;
-> > +};
-> > +
-> > +FIXTURE_VARIANT_ADD(basic, ANON_512G) {
-> > +     .map_size_time =3D 1,
-> > +     .map_flags =3D MAP_ANONYMOUS | MAP_SHARED | MAP_FIXED,
-> > +};
-> > +
-> > +FIXTURE_VARIANT_ADD(basic, HUGETLB_512G) {
-> > +     .map_size_time =3D 1,
-> > +     .map_flags =3D MAP_ANONYMOUS | MAP_HUGETLB | MAP_SHARED | MAP_FIX=
-ED,
-> > +};
-> > +
-> > +FIXTURE_VARIANT_ADD(basic, ANON_1T) {
-> > +     .map_size_time =3D 2,
-> > +     .map_flags =3D MAP_ANONYMOUS | MAP_SHARED | MAP_FIXED,
-> > +};
-> > +
-> > +FIXTURE_VARIANT_ADD(basic, HUGETLB_1T) {
-> > +     .map_size_time =3D 2,
-> > +     .map_flags =3D MAP_ANONYMOUS | MAP_HUGETLB | MAP_SHARED | MAP_FIX=
-ED,
-> > +};
-> > +
-> > +FIXTURE_SETUP(basic)
-> >   {
-> > -     printf("Hello mshare\n");
-> > +     int fd;
-> > +
-> > +     self->align_size =3D mshare_get_info();
-> > +     self->allocate_size =3D self->align_size * variant->map_size_time=
-;
-> > +
-> > +     fd =3D create_mshare_file(self->filename, sizeof(self->filename))=
-;
-> > +     ftruncate(fd, self->allocate_size);
-> > +
-> > +     ASSERT_EQ(mshare_ioctl_mapping(fd, self->allocate_size, variant->=
-map_flags), 0);
+>Acked-by: David Hildenbrand <david@redhat.com>
 >
-> The tests should differentiate between how much VA space is allocated to
-> an mshare region (i.e with ftruncate()) and how much memory is allocated
-> within an mshare region through the ioctl. While the bounds of an mshare
-> region need to be aligned to 512 GB, the memory allocated within it does
-> not. Right now the tests will try to map 512 GB or 1 TB of anon or
-> hugetlb memory in an mshare region which will fail on smaller systems to
-> due to insufficient memory. Better to allocate smaller amounts so the
-> tests can run on more systems.
+>As noted, we should just move from mremap() to mprotect() or sth like that
+>which has clearer semantics.
 >
-> Anthony
 
-I Changed my code to allocate a smaller chunk of memory (i.e.
-4K/8K/2M/4M), and these tests are passed.
+If my understanding is correct, we should
 
-But I found something different:
-step1:  ftruncate a mshare file to 512G
-step2:  ioctl map 8K
-step3: but after that, I am going to mmap 8K to a process but it
-fails, then I have up to mmap 512G memory to process.
-step4: Accessing the memory within the 8K boundary is fine but get
-segfault after exceling the boundary (as the vma of host mm only holds
-a memory region of 8K)
+   mmap 4 PMD_SIZE region with RW
+   madvise and fault in to allocate pmd-mapped thp
+   mprotect first page of each PMD to read-only to split to pte-mapped thp
+   check whether the page is backed by pmd-order folio
 
-Should the mmap region keep consistent with the ioctl map region in
-size? (currently, ioctl map region is 8K, but mmap region is 512G)
+Is this the correct way? 
 
-Yongting
->
-> > +     close(fd);
-> > +}
-> > +
-> > +FIXTURE_TEARDOWN(basic)
-> > +{
-> > +     ASSERT_EQ(unlink(self->filename), 0);
-> > +}
-> > +
-> > +TEST_F(basic, shared_mem)
-> > +{
-> > +     int fd;
-> > +     void *addr;
-> > +     pid_t pid =3D fork();
-> > +
-> > +     ASSERT_NE(pid, -1);
-> > +
-> > +     fd =3D open(self->filename, O_RDWR, 0600);
-> > +     ASSERT_NE(fd, -1);
-> > +
-> > +     addr =3D mmap(NULL, self->allocate_size, PROT_READ | PROT_WRITE,
-> > +                    MAP_SHARED, fd, 0);
-> > +     ASSERT_NE(addr, MAP_FAILED);
-> > +
-> > +     if (pid =3D=3D 0) {
-> > +             /* Child process write date the shared memory */
-> > +             memcpy(addr, STRING, sizeof(STRING));
-> > +             exit(0);
-> > +     }
-> > +
-> > +     ASSERT_NE(waitpid(pid, NULL, 0), -1);
-> > +
-> > +     /* Parent process should retrieve the data from the shared memory=
- */
-> > +     ASSERT_EQ(memcmp(addr, STRING, sizeof(STRING)), 0);
-> >   }
-> >
-> >   TEST_HARNESS_MAIN
->
+-- 
+Wei Yang
+Help you, Help me
 
