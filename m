@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-40422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE1A1B3DECE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 11:42:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A79FB3DEC7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 11:41:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17C293BD261
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 09:41:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E4CE7A85B0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 09:40:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68B1B30FF24;
-	Mon,  1 Sep 2025 09:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62A731062C;
+	Mon,  1 Sep 2025 09:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PddF6V6V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rjQ0rv7+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3527530FC33;
-	Mon,  1 Sep 2025 09:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840663101DB;
+	Mon,  1 Sep 2025 09:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756719617; cv=none; b=Z++r1+AbYTv7rdx3Kqu/vN+YBKwld665uLR1IP5g9LvFYITZMWFh5wOf9Kun1y0fTmc46rZK5EOEKtCpLmaqu3+GXG0e//ZZOr8s6oopCFarPyZw8gnYWY/eqgh84xlRXZgvelLzju0oZVcKU+tKRNtI9a1/ox/iYNHddxy9hN8=
+	t=1756719620; cv=none; b=ernCfy9/XlfGGcJ8vB+c4ll8HEASY8lM2E8lcz49yy6ibMgpzjDiFYWjFA0udm7gLqkZ4w7smP9JFDMxPcVWYjvYtITATpJB+FmTCjSb4engowsNkACMD0BJ1HukGOFazh5oQvpKWLQaJX2vqCVUWpsLx9B5zw/orE3wuShILoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756719617; c=relaxed/simple;
-	bh=drdbAkdFpvZAJ6wkGaaJxaCs0z5c3l+uoYeiTtWqED4=;
+	s=arc-20240116; t=1756719620; c=relaxed/simple;
+	bh=xXUKa/ahfEA+dPigVdk1wYHJYq2Hcf1En5xC3FDAHjM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E29G2pvktZx5aqADI4OU59WvA1FUZw9jFBiIt5PsK5FzDZzoDZBaQdaTNZdCiZGWTlam6q7cAIl1+wJbC97hH1RtaqSCPaFsRvJ5pwEnE7QxFKX4+LqyYXlxVm/UdQkwoGuLXWFaw9JTyjO6Nz3ScL0tcrGveovNr5FTwGt3Qw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PddF6V6V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2395C4CEF4;
-	Mon,  1 Sep 2025 09:40:13 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=Gwd2lgS50WOnof/kqvGKC7HmbGa0Iclq4ocQYzoxaxdm5fCq7I1K88XedNSaJ3YJ+5Xb/ltCu7tkK4MSCUj/768DiDZfQcI3ySoGfJwpZkUTt1VNSA4d5DUCcVjGqmHU+dZB0/WZLtcVa2NweUmTWY3a7Lo+L+zpAVpgY+satCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rjQ0rv7+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B93C4CEF7;
+	Mon,  1 Sep 2025 09:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756719616;
-	bh=drdbAkdFpvZAJ6wkGaaJxaCs0z5c3l+uoYeiTtWqED4=;
+	s=k20201202; t=1756719620;
+	bh=xXUKa/ahfEA+dPigVdk1wYHJYq2Hcf1En5xC3FDAHjM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=PddF6V6VqWIW97vOpKOtwh+Yhp8vXwH53jxVRDQZPAW5XlKfsuh6HzyfJnjG1lwcQ
-	 6reG5E4eVE3zLDmhkA7qyZdaTB7dTNL6SYWadMu00ZHru00y5MMGD3RBYrtY3I3y4r
-	 wO+/ax/JQc4CS+djRimqYjSx4S1MtIXP0tJshhzhJKsQ9B4+yb642EqF2b428X0EHT
-	 0YBtZClpBp4awGYO4LpahThYA/sfRxdg91Wm4pmfO3ApK2gj6lR5WDIfe+ifsH9NWg
-	 +KEOWYFcprstHVXkAkBNTH33OCn7cIokFqxwA6GU8LSyQG6TWnDSbyWvmHRiNpuH/H
-	 GfScABwFMCFUw==
+	b=rjQ0rv7+GecG8W/iYX14MaA2yBXstI7q3rKUFQ66j7uBiWVR31v1sluzWxo0WYj3E
+	 GCPaHBNB78gf8ExRdW8sSFk9ySZhU2cludGgYO2GOfD8uXckj6ne/mnpOi3I6KunRn
+	 51C/IP9brrZ1MP0a1SfKeAMA5kLjTaSe2h48TGApvNuAp62zKYq8RDhSbEo46dDziC
+	 G9kx66wYKHuq5f9m5zQyT5GH3Kdv0gqRdYZ5eoXlaw45tG6aTEtAn6It1fskyhHE/U
+	 PB0mDZ0wR+FNv+3fphW0lYYbO5MrOCMC4iB6KWiI8ivU2xb1drVpYGf/Hh4LqVGgnY
+	 OfyQXpCX+8kvA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 01 Sep 2025 11:39:14 +0200
-Subject: [PATCH net-next 5/6] net: Add rfs_needed() helper
+Date: Mon, 01 Sep 2025 11:39:15 +0200
+Subject: [PATCH net-next 6/6] mptcp: record subflows in RPS table
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250901-net-next-mptcp-misc-feat-6-18-v1-5-80ae80d2b903@kernel.org>
+Message-Id: <20250901-net-next-mptcp-misc-feat-6-18-v1-6-80ae80d2b903@kernel.org>
 References: <20250901-net-next-mptcp-misc-feat-6-18-v1-0-80ae80d2b903@kernel.org>
 In-Reply-To: <20250901-net-next-mptcp-misc-feat-6-18-v1-0-80ae80d2b903@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -65,157 +65,102 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Christoph Paasch <cpaasch@openai.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4310; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=+SDaulRT9vy5zXdtLFurruXTPo8//MkS7+WIicZWa9E=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDK2Zr4yy+r+ErUyf26xge3dv1rSLo3bu/+IlM87bMu0V
- KZ6xV/pjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIlov2Rk+LxIQy+j8Vn+ZsvE
- 2VoXdr7eKpGU3iF7WHF7aeO8rIQX2YwMh0/HvfT/IjlXbGO79mK/g5eKu+7+5Ww5brZBkeemp2I
- SPwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2920; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=FVq/DLjkSiShyfNhu4andsIboYNo8KQGQUci1ShMrjQ=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDK2Zr5JihI/W+L0RoHdca+w9oaamE9iKa9LBfNNXrXWT
+ eR/vlu2o5SFQYyLQVZMkUW6LTJ/5vMq3hIvPwuYOaxMIEMYuDgFYCI2Nxj+Cv5N73Bx1OaVsvLc
+ s/RQTum6yqms0qkm09pvdh+RSnbQZWTo6GPbVFH5WNMmK2P+J9mcpm8ZfxobdH8tuKBy4LLCcls
+ mAA==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Christoph Paasch <cpaasch@openai.com>
 
-Add a helper to check if RFS is needed or not. Allows to make the code a
-bit cleaner and the next patch to have MPTCP use this helper to decide
-whether or not to iterate over the subflows.
+Accelerated Receive Flow Steering (aRFS) relies on sockets recording
+their RX flow hash into the rps_sock_flow_table so that incoming packets
+are steered to the CPU where the application runs.
 
-tun_flow_update() was calling sock_rps_record_flow_hash() regardless of
-the state of rfs_needed. This was not really a bug as sock_flow_table
-simply ends up being NULL and thus everything will be fine.
-This commit here thus also implicitly makes tun_flow_update() respect
-the state of rfs_needed.
+With MPTCP, the application interacts with the parent MPTCP socket while
+data is carried over per-subflow TCP sockets. Without recording these
+subflows, aRFS cannot steer interrupts and RX processing for the flows
+to the desired CPU.
 
-Suggested-by: Matthieu Baerts <matttbe@kernel.org>
+Record all subflows in the RPS table by calling sock_rps_record_flow()
+for each subflow at the start of mptcp_sendmsg(), mptcp_recvmsg() and
+mptcp_stream_accept(), by using the new helper
+mptcp_rps_record_subflows().
+
+It does not by itself improve throughput, but ensures that IRQ and RX
+processing are directed to the right CPU, which is a
+prerequisite for effective aRFS.
+
 Signed-off-by: Christoph Paasch <cpaasch@openai.com>
-Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- include/net/rps.h | 85 ++++++++++++++++++++++++++++++++++++-------------------
- 1 file changed, 56 insertions(+), 29 deletions(-)
+ net/mptcp/protocol.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/include/net/rps.h b/include/net/rps.h
-index 9917dce42ca457e9c25d9e84ee450235f771d09b..f1794cd2e7fb32a36bde9959fab651663ab190fd 100644
---- a/include/net/rps.h
-+++ b/include/net/rps.h
-@@ -85,11 +85,8 @@ static inline void rps_record_sock_flow(struct rps_sock_flow_table *table,
- 		WRITE_ONCE(table->ents[index], val);
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index ad41c48126e44fda646f1ec1c81957db1407a6cc..a8d57b88578dfea807d3d55e430849aa8005c637 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -12,6 +12,7 @@
+ #include <linux/sched/signal.h>
+ #include <linux/atomic.h>
+ #include <net/aligned_data.h>
++#include <net/rps.h>
+ #include <net/sock.h>
+ #include <net/inet_common.h>
+ #include <net/inet_hashtables.h>
+@@ -1740,6 +1741,20 @@ static u32 mptcp_send_limit(const struct sock *sk)
+ 	return limit - not_sent;
  }
  
--#endif /* CONFIG_RPS */
--
--static inline void sock_rps_record_flow_hash(__u32 hash)
-+static inline void _sock_rps_record_flow_hash(__u32 hash)
++static void mptcp_rps_record_subflows(const struct mptcp_sock *msk)
++{
++	struct mptcp_subflow_context *subflow;
++
++	if (!rfs_is_needed())
++		return;
++
++	mptcp_for_each_subflow(msk, subflow) {
++		struct sock *ssk = mptcp_subflow_tcp_sock(subflow);
++
++		sock_rps_record_flow(ssk);
++	}
++}
++
+ static int mptcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
  {
--#ifdef CONFIG_RPS
- 	struct rps_sock_flow_table *sock_flow_table;
+ 	struct mptcp_sock *msk = mptcp_sk(sk);
+@@ -1753,6 +1768,8 @@ static int mptcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
  
- 	if (!hash)
-@@ -99,42 +96,33 @@ static inline void sock_rps_record_flow_hash(__u32 hash)
- 	if (sock_flow_table)
- 		rps_record_sock_flow(sock_flow_table, hash);
- 	rcu_read_unlock();
--#endif
- }
+ 	lock_sock(sk);
  
--static inline void sock_rps_record_flow(const struct sock *sk)
-+static inline void _sock_rps_record_flow(const struct sock *sk)
- {
--#ifdef CONFIG_RPS
--	if (static_branch_unlikely(&rfs_needed)) {
--		/* Reading sk->sk_rxhash might incur an expensive cache line
--		 * miss.
--		 *
--		 * TCP_ESTABLISHED does cover almost all states where RFS
--		 * might be useful, and is cheaper [1] than testing :
--		 *	IPv4: inet_sk(sk)->inet_daddr
--		 * 	IPv6: ipv6_addr_any(&sk->sk_v6_daddr)
--		 * OR	an additional socket flag
--		 * [1] : sk_state and sk_prot are in the same cache line.
-+	/* Reading sk->sk_rxhash might incur an expensive cache line
-+	 * miss.
-+	 *
-+	 * TCP_ESTABLISHED does cover almost all states where RFS
-+	 * might be useful, and is cheaper [1] than testing :
-+	 *	IPv4: inet_sk(sk)->inet_daddr
-+	 *	IPv6: ipv6_addr_any(&sk->sk_v6_daddr)
-+	 * OR	an additional socket flag
-+	 * [1] : sk_state and sk_prot are in the same cache line.
-+	 */
-+	if (sk->sk_state == TCP_ESTABLISHED) {
-+		/* This READ_ONCE() is paired with the WRITE_ONCE()
-+		 * from sock_rps_save_rxhash() and sock_rps_reset_rxhash().
++	mptcp_rps_record_subflows(msk);
++
+ 	if (unlikely(inet_test_bit(DEFER_CONNECT, sk) ||
+ 		     msg->msg_flags & MSG_FASTOPEN)) {
+ 		int copied_syn = 0;
+@@ -2131,6 +2148,8 @@ static int mptcp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		goto out_err;
+ 	}
+ 
++	mptcp_rps_record_subflows(msk);
++
+ 	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+ 
+ 	len = min_t(size_t, len, INT_MAX);
+@@ -3922,6 +3941,8 @@ static int mptcp_stream_accept(struct socket *sock, struct socket *newsock,
+ 				mptcp_sock_graft(ssk, newsock);
+ 		}
+ 
++		mptcp_rps_record_subflows(msk);
++
+ 		/* Do late cleanup for the first subflow as necessary. Also
+ 		 * deal with bad peers not doing a complete shutdown.
  		 */
--		if (sk->sk_state == TCP_ESTABLISHED) {
--			/* This READ_ONCE() is paired with the WRITE_ONCE()
--			 * from sock_rps_save_rxhash() and sock_rps_reset_rxhash().
--			 */
--			sock_rps_record_flow_hash(READ_ONCE(sk->sk_rxhash));
--		}
-+		_sock_rps_record_flow_hash(READ_ONCE(sk->sk_rxhash));
- 	}
--#endif
- }
- 
--static inline void sock_rps_delete_flow(const struct sock *sk)
-+static inline void _sock_rps_delete_flow(const struct sock *sk)
- {
--#ifdef CONFIG_RPS
- 	struct rps_sock_flow_table *table;
- 	u32 hash, index;
- 
--	if (!static_branch_unlikely(&rfs_needed))
--		return;
--
- 	hash = READ_ONCE(sk->sk_rxhash);
- 	if (!hash)
- 		return;
-@@ -147,6 +135,45 @@ static inline void sock_rps_delete_flow(const struct sock *sk)
- 			WRITE_ONCE(table->ents[index], RPS_NO_CPU);
- 	}
- 	rcu_read_unlock();
-+}
-+#endif /* CONFIG_RPS */
-+
-+static inline bool rfs_is_needed(void)
-+{
-+#ifdef CONFIG_RPS
-+	return static_branch_unlikely(&rfs_needed);
-+#else
-+	return false;
-+#endif
-+}
-+
-+static inline void sock_rps_record_flow_hash(__u32 hash)
-+{
-+#ifdef CONFIG_RPS
-+	if (!rfs_is_needed())
-+		return;
-+
-+	_sock_rps_record_flow_hash(hash);
-+#endif
-+}
-+
-+static inline void sock_rps_record_flow(const struct sock *sk)
-+{
-+#ifdef CONFIG_RPS
-+	if (!rfs_is_needed())
-+		return;
-+
-+	_sock_rps_record_flow(sk);
-+#endif
-+}
-+
-+static inline void sock_rps_delete_flow(const struct sock *sk)
-+{
-+#ifdef CONFIG_RPS
-+	if (!rfs_is_needed())
-+		return;
-+
-+	_sock_rps_delete_flow(sk);
- #endif
- }
- 
 
 -- 
 2.50.1
