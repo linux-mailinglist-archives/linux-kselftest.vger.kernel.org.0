@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-40388-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40389-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C13CFB3D7D5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 05:47:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27A05B3D7D8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 05:47:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBE8D7ACA1D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 03:45:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8D993BE5B3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 03:47:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAEAD23D7C8;
-	Mon,  1 Sep 2025 03:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D909242938;
+	Mon,  1 Sep 2025 03:43:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L1r6d+pJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iN0pmb3s"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF10523D283;
-	Mon,  1 Sep 2025 03:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1E02405ED;
+	Mon,  1 Sep 2025 03:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756698189; cv=none; b=lxt4qUnTDfVbbEUWR3ASfLqcNgZz0hHLHjmVjHOygI5Th9J41nTY+n+rv1K/4X2lvBGtR0CnMrvgsx/DfCneWMS1wp28tiomA5lNVixNhReEDR8cnAf4fn1MMxLdnfG2m80xpxtEwBcbExKBZWLcm8qdylnjdBBDuimgfQuh/JQ=
+	t=1756698194; cv=none; b=UQrMb/FpNHfeyAKjsDBMraG0FINudLuIXjUfB3+AoLIJYZY4gzVzzXFajH/GICqB1ek6s+534Fwhsp4oqfUGQrDaC/jQxn6/bVWXeCwcG22osKvWQQcwTF9KBsu0JNLCgxAAL4K9WpTOu4tFHKizQCITmbsJe5I+BFH9eIYwl7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756698189; c=relaxed/simple;
-	bh=8YXNScb3WUslXUHAr9SqwO7i8ipX6HOGoQ0I+T5e9EA=;
+	s=arc-20240116; t=1756698194; c=relaxed/simple;
+	bh=i7gSkUCwk/JiIR9BgJ4ibHddNjQt0Axni5e4z5GFIIg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=urzrgnJiRlbEQPdDgsJOpKiUPcx9xI+Toqd6TIkm/4v1kMKSuf1FezkRIY5frZ1z15bqZzhzUD6HYAptDJGoNK+qlbvTmB+L3lljaR5phvT/UlXrSS+pd7M9ySa8T/OHhrGfaEqR9nDDKmQ7Mt8VX5CjBW0TnzU0GCnOqd+jdDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L1r6d+pJ; arc=none smtp.client-ip=209.85.214.195
+	 MIME-Version; b=lLrs2MTdEQRsXPUvnZkf3874UR1ktqBO7X02J0I2YheaPYijJDoXZgpT3flPddKvM1cO/zbWFEg9n7zOFiNeEmPOnVk2jHEID0tk7jeVYKd8ESEIV+rqVqXr9KVimJrq2G0Igb7Le6efCvj85UDTl3ixvFYEqzvVTrgd1F8DBYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iN0pmb3s; arc=none smtp.client-ip=209.85.214.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-24a95f9420aso10664475ad.0;
-        Sun, 31 Aug 2025 20:43:07 -0700 (PDT)
+Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-2445824dc27so34677485ad.3;
+        Sun, 31 Aug 2025 20:43:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756698187; x=1757302987; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756698192; x=1757302992; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3JDYZDAUFLCV+pFRN5UCiynXeZxRPYp3mr9Scsq1QQw=;
-        b=L1r6d+pJuAehVqbkFce/H5fhXvKFLAK4uDhJp0VScM7nzEqkXLmJOtpkHTSUENQbub
-         H6pTyjA7OCRsBMmueqhUttA9hBn8b+n/JOkuN9EuMc3l3ovta1TVT2aThqZyp3W17vGp
-         B6TSCyQQTSBqkY0reWCqWh8CFVd5jl7nF9R3q8lr2KFgLXmefJdXsKLCd6BWkNE3qDJ/
-         JvEVuLCxK+7d7xIG33HgARxqOVYur71oC5NdrLchwVq+wJ1ju3CuAwUR8qCuQTOJrgRx
-         RPNfVDqt1ZXaJc7xxHpC7PGVOsZlEayX76kgaN2UWHTzKrTl+D/na6vsDb1DJ4fLfN7u
-         uAZw==
+        bh=lC+CeEUwLUwzxr+JN3oMfmOzLQazHlM77TzgOzfoiik=;
+        b=iN0pmb3sEChlDyD1UlnX6KKuUQwLHaCS2yO0NXSC9OvAI9OhZx4JD8eMURYGs46dkR
+         cj6d+EqRNBdcZC84tWe3ybIuMfBUA2zTjDvcq5XGzRjRgAzxqjC9mtZlxKgcE9/KTlrm
+         fgiLp7rfX4N5bdcXewGKqjxuUMhh3xmDZs6LyKBIDHit3ixTMiXM2A2qcYVfAq4FZsVt
+         WlFMnYRSb2h8gNvqYQXFXMvKefrAvhk5ijLHgPDCZ/BzvJwDPzQoIvN7LmmGFHbtGESS
+         2Lk9wW2JZIhDZS7gOKzLOXpxJb2PaYm5jxXW/I6/d4U24puVyiDpKMRqH3+hZy7qm7cF
+         3sSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756698187; x=1757302987;
+        d=1e100.net; s=20230601; t=1756698192; x=1757302992;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3JDYZDAUFLCV+pFRN5UCiynXeZxRPYp3mr9Scsq1QQw=;
-        b=peL2b/M45w2BwAiv/qx3rFa0vUMuVzxgigYHhtO2dhRs1D1+EZ7R6WZ5xmo1QDvYl+
-         iGIe4wCutgd5Y3xoO7ySyDpj1z28oPqI/sPoc3WKrkwXSRf5ltx2G+R+nUzq4h12SBZi
-         gAFwIK5cXxNXWR9ECWRzhAzJcpR02tNyRDDj+qj922eOtl9LUZEYelcWoi0q8p1d004r
-         XMFhsOf2dpM0VVRGsGjNbWuVIN2wMat8UyIzkFP32Iv/oY/84gT+hc2dqEBVJNEVbni3
-         032hCN5zliUk5Z5pIXgg4hJqa+erJsV+zF3DLBdHUIC4Widfck3D+ccwLnmIQ6FkFGS9
-         HJ7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUR4za1zhlI2ZbIthgPsvGGRUhl9QQpCToOli9I8mnTbo9WufIRJRqmNTB3Y9ji54xOVGvbLAPgL7wG+opW@vger.kernel.org, AJvYcCVCL3Vxg9xOizJjnC0pMajQ2X1a53k9m493oV7ekKrJmLMPxlXLmpki3uNhbGNducrbwQexJSRhMEi0/TIrTRhq@vger.kernel.org, AJvYcCVuUyZ2Csdwba6HITJJywzhp8mRaIM0I1/GjWtmUT5F3mGYYNkUZR0sgvcCGbGPNOuul5c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZmyfaIsVAe9MgL/jGYxbisxcszgPowUZMaJeuJZaUkOCKAy7E
-	OnaGnrxqPkxTNePxcwtViEEZc+w8LIIL126v7paO131scuLoTUS17nGE
-X-Gm-Gg: ASbGncuAaAJIYUCnRLklEX7lOVJ42NSMTUST5EXoYCk1s9QNFSOwMnr1RxaeMBHhZHY
-	oHAg2XN+dJHXdJufYyqPUsWMmKBWqoLHoiItY9GCf7TtoMH8inLpamVOpNeibZh/rmpeig3NuiR
-	gSFGmkMJNF8Db4NfbIHP0KOBi9TMsiY+qPPCZ6I/bbsWcC+m+5FrLTXWE8Q+BJOkNM8HvVLXdM+
-	ktoicMW1mBF/3KCya4OcnGD7I84/6INh6MJ9ZrqnpVFlq+hegjHGxtfyhfxpu7bFIqeMwbRmFTS
-	74o9ySdbSyXOIArv9hLyhB2ZZc4cDLliwxDOQgZgx6lBczK2W/xJn6hMZh/daa7SAJ38gi3of4l
-	39zkC4YHULw96Au5+HgNcaRU=
-X-Google-Smtp-Source: AGHT+IH9bbmZXoZCL3DdXqjKm0pHPxa2Mu4Suew3URwFdHcvaOIJITPqY7cQkl0Y29TNYCkLYn6fng==
-X-Received: by 2002:a17:903:ac8:b0:246:ea6a:6ed5 with SMTP id d9443c01a7336-24944b0dd22mr76931095ad.34.1756698186845;
-        Sun, 31 Aug 2025 20:43:06 -0700 (PDT)
+        bh=lC+CeEUwLUwzxr+JN3oMfmOzLQazHlM77TzgOzfoiik=;
+        b=rt5ul1A4hHgVmAJIcJUUFrwyQSYsd0y+EAnMEk0vOZ4GWR7kvlwUhCfrKrmnZKsbpW
+         Yi0b8GJAEhWOKi82w40oIvR9x0kPsUBX4HfSDiItCHkzY/KdrVaNiDL+E0bK9A/9SZnN
+         seneXvXMRBJdYSkKRo1M3vWDY1gfMDMu58RUpRc+yimb12icGoEu+n3efnsUx1gP9mWK
+         /aZcpLxqpzmE2WCblAn2lt2hTgujbWc2qeWU91FdN34Gfi6xVWCVXE1gggTbIj4LpyZJ
+         ew72Slx7klS8DRMYzIwSMPUomNA/Ty8CC0LDIbTqrsPX7jbq4shyaehai+6IkW/TW1I0
+         Zfyw==
+X-Forwarded-Encrypted: i=1; AJvYcCUgBNCUFqj1hW99LnwbbT9iCTBe3oN69UoA16KH8rwSm1JddI9jdK3ZiryqGkeYk93U/4M=@vger.kernel.org, AJvYcCWHI6Fqv2KUjMR/Yu3RSKy9iXBxDlNEI5BNOfr4xT0MGJ0+3Vmjl8ANr0bbU29k85bGaiHMfPbc84fxZ7+k@vger.kernel.org, AJvYcCWtGn6Woqc2smg6muvEx0ABLtFRK+eo0u8DvWHqWNVlaOapfN18MHF7TV9fRGjKwwJpatbwdQ02cKyUkWPJXxxS@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5/9mKv4d7pW/Bdcp9dcuC9L2bFS+bAbWBdgbJr31AaWiZuhZ0
+	akv1SPfxsczooSif+CINCMb8H2h9p0KWYcXNgbTq1SlB41AX1Q18OdVA
+X-Gm-Gg: ASbGncvyvVzc5mpOW4k5MCXXUHBlrTRr5y7cBr+VDAoNYaCXu4Ypml5Z07mZWNuh6JV
+	5jXMDU3UGaRpSXzDiVeWpG6Illz1ZvpbnYTsIqfk7Tk2SWKHhu4c1GuHzDB+M/xYCFUv4t1aWNH
+	W0dUUML7B5wnD7xd+PAfJiMfQMuCcqmuDU4wk7rSZrnJ4icdJL/Il6vyqDp1l8FaTXytZbTE0I8
+	Vgz/1C+jFevAwAOmaIaLtbto7KAJXmW8zkVGpB2fAEBsDqYslcOK8HnL7WRz1W0f1TgCzrrzD8W
+	VVbu5XkZ9GM/wA02pGVoZEEdULUh6MJQ6v5gWy6MLKM9CUYtMbHjvD9qGAz55ue0UVIQE+L+UdM
+	RRiSKoo8Amnd9tWmzrrGUPkVo2Ck2IH1qZA==
+X-Google-Smtp-Source: AGHT+IGblknEv+mLfyYEXLt/vYhI9xwIFFuVT8EX7Gy7xcaIakUVhjJiOVP/FRs+P9qIqyPFBVqCtw==
+X-Received: by 2002:a17:903:2302:b0:24a:aca0:7cfd with SMTP id d9443c01a7336-24aaca081f9mr56380085ad.18.1756698192032;
+        Sun, 31 Aug 2025 20:43:12 -0700 (PDT)
 Received: from 7940hx ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-249067de9f1sm88398265ad.151.2025.08.31.20.43.01
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-249067de9f1sm88398265ad.151.2025.08.31.20.43.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Aug 2025 20:43:06 -0700 (PDT)
+        Sun, 31 Aug 2025 20:43:11 -0700 (PDT)
 From: Menglong Dong <menglong8.dong@gmail.com>
 X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: andrii@kernel.org,
@@ -95,9 +95,9 @@ Cc: eddyz87@gmail.com,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/3] selftests/bpf: move get_ksyms and get_addrs to trace_helpers.c
-Date: Mon,  1 Sep 2025 11:42:50 +0800
-Message-ID: <20250901034252.26121-2-dongml2@chinatelecom.cn>
+Subject: [PATCH bpf-next v3 2/3] selftests/bpf: skip recursive functions for kprobe_multi
+Date: Mon,  1 Sep 2025 11:42:51 +0800
+Message-ID: <20250901034252.26121-3-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250901034252.26121-1-dongml2@chinatelecom.cn>
 References: <20250901034252.26121-1-dongml2@chinatelecom.cn>
@@ -109,508 +109,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We need to get all the kernel function that can be traced sometimes, so we
-move the get_syms() and get_addrs() in kprobe_multi_test.c to
-trace_helpers.c and rename it to bpf_get_ksyms() and bpf_get_addrs().
+Some functions is recursive for the kprobe_multi and impact the benchmark
+results. So just skip them.
 
 Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 ---
- .../bpf/prog_tests/kprobe_multi_test.c        | 220 +-----------------
- tools/testing/selftests/bpf/trace_helpers.c   | 214 +++++++++++++++++
- tools/testing/selftests/bpf/trace_helpers.h   |   3 +
- 3 files changed, 220 insertions(+), 217 deletions(-)
+v2:
+- introduce trace_blacklist instead of copy-pasting strcmp
+---
+ tools/testing/selftests/bpf/trace_helpers.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index e19ef509ebf8..171706e78da8 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -422,220 +422,6 @@ static void test_unique_match(void)
- 	kprobe_multi__destroy(skel);
- }
- 
--static size_t symbol_hash(long key, void *ctx __maybe_unused)
--{
--	return str_hash((const char *) key);
--}
--
--static bool symbol_equal(long key1, long key2, void *ctx __maybe_unused)
--{
--	return strcmp((const char *) key1, (const char *) key2) == 0;
--}
--
--static bool is_invalid_entry(char *buf, bool kernel)
--{
--	if (kernel && strchr(buf, '['))
--		return true;
--	if (!kernel && !strchr(buf, '['))
--		return true;
--	return false;
--}
--
--static bool skip_entry(char *name)
--{
--	/*
--	 * We attach to almost all kernel functions and some of them
--	 * will cause 'suspicious RCU usage' when fprobe is attached
--	 * to them. Filter out the current culprits - arch_cpu_idle
--	 * default_idle and rcu_* functions.
--	 */
--	if (!strcmp(name, "arch_cpu_idle"))
--		return true;
--	if (!strcmp(name, "default_idle"))
--		return true;
--	if (!strncmp(name, "rcu_", 4))
--		return true;
--	if (!strcmp(name, "bpf_dispatcher_xdp_func"))
--		return true;
--	if (!strncmp(name, "__ftrace_invalid_address__",
--		     sizeof("__ftrace_invalid_address__") - 1))
--		return true;
--	return false;
--}
--
--/* Do comparision by ignoring '.llvm.<hash>' suffixes. */
--static int compare_name(const char *name1, const char *name2)
--{
--	const char *res1, *res2;
--	int len1, len2;
--
--	res1 = strstr(name1, ".llvm.");
--	res2 = strstr(name2, ".llvm.");
--	len1 = res1 ? res1 - name1 : strlen(name1);
--	len2 = res2 ? res2 - name2 : strlen(name2);
--
--	if (len1 == len2)
--		return strncmp(name1, name2, len1);
--	if (len1 < len2)
--		return strncmp(name1, name2, len1) <= 0 ? -1 : 1;
--	return strncmp(name1, name2, len2) >= 0 ? 1 : -1;
--}
--
--static int load_kallsyms_compare(const void *p1, const void *p2)
--{
--	return compare_name(((const struct ksym *)p1)->name, ((const struct ksym *)p2)->name);
--}
--
--static int search_kallsyms_compare(const void *p1, const struct ksym *p2)
--{
--	return compare_name(p1, p2->name);
--}
--
--static int get_syms(char ***symsp, size_t *cntp, bool kernel)
--{
--	size_t cap = 0, cnt = 0;
--	char *name = NULL, *ksym_name, **syms = NULL;
--	struct hashmap *map;
--	struct ksyms *ksyms;
--	struct ksym *ks;
--	char buf[256];
--	FILE *f;
--	int err = 0;
--
--	ksyms = load_kallsyms_custom_local(load_kallsyms_compare);
--	if (!ASSERT_OK_PTR(ksyms, "load_kallsyms_custom_local"))
--		return -EINVAL;
--
--	/*
--	 * The available_filter_functions contains many duplicates,
--	 * but other than that all symbols are usable in kprobe multi
--	 * interface.
--	 * Filtering out duplicates by using hashmap__add, which won't
--	 * add existing entry.
--	 */
--
--	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
--		f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
--	else
--		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
--
--	if (!f)
--		return -EINVAL;
--
--	map = hashmap__new(symbol_hash, symbol_equal, NULL);
--	if (IS_ERR(map)) {
--		err = libbpf_get_error(map);
--		goto error;
--	}
--
--	while (fgets(buf, sizeof(buf), f)) {
--		if (is_invalid_entry(buf, kernel))
--			continue;
--
--		free(name);
--		if (sscanf(buf, "%ms$*[^\n]\n", &name) != 1)
--			continue;
--		if (skip_entry(name))
--			continue;
--
--		ks = search_kallsyms_custom_local(ksyms, name, search_kallsyms_compare);
--		if (!ks) {
--			err = -EINVAL;
--			goto error;
--		}
--
--		ksym_name = ks->name;
--		err = hashmap__add(map, ksym_name, 0);
--		if (err == -EEXIST) {
--			err = 0;
--			continue;
--		}
--		if (err)
--			goto error;
--
--		err = libbpf_ensure_mem((void **) &syms, &cap,
--					sizeof(*syms), cnt + 1);
--		if (err)
--			goto error;
--
--		syms[cnt++] = ksym_name;
--	}
--
--	*symsp = syms;
--	*cntp = cnt;
--
--error:
--	free(name);
--	fclose(f);
--	hashmap__free(map);
--	if (err)
--		free(syms);
--	return err;
--}
--
--static int get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel)
--{
--	unsigned long *addr, *addrs, *tmp_addrs;
--	int err = 0, max_cnt, inc_cnt;
--	char *name = NULL;
--	size_t cnt = 0;
--	char buf[256];
--	FILE *f;
--
--	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
--		f = fopen("/sys/kernel/tracing/available_filter_functions_addrs", "r");
--	else
--		f = fopen("/sys/kernel/debug/tracing/available_filter_functions_addrs", "r");
--
--	if (!f)
--		return -ENOENT;
--
--	/* In my local setup, the number of entries is 50k+ so Let us initially
--	 * allocate space to hold 64k entries. If 64k is not enough, incrementally
--	 * increase 1k each time.
--	 */
--	max_cnt = 65536;
--	inc_cnt = 1024;
--	addrs = malloc(max_cnt * sizeof(long));
--	if (addrs == NULL) {
--		err = -ENOMEM;
--		goto error;
--	}
--
--	while (fgets(buf, sizeof(buf), f)) {
--		if (is_invalid_entry(buf, kernel))
--			continue;
--
--		free(name);
--		if (sscanf(buf, "%p %ms$*[^\n]\n", &addr, &name) != 2)
--			continue;
--		if (skip_entry(name))
--			continue;
--
--		if (cnt == max_cnt) {
--			max_cnt += inc_cnt;
--			tmp_addrs = realloc(addrs, max_cnt);
--			if (!tmp_addrs) {
--				err = -ENOMEM;
--				goto error;
--			}
--			addrs = tmp_addrs;
--		}
--
--		addrs[cnt++] = (unsigned long)addr;
--	}
--
--	*addrsp = addrs;
--	*cntp = cnt;
--
--error:
--	free(name);
--	fclose(f);
--	if (err)
--		free(addrs);
--	return err;
--}
--
- static void do_bench_test(struct kprobe_multi_empty *skel, struct bpf_kprobe_multi_opts *opts)
- {
- 	long attach_start_ns, attach_end_ns;
-@@ -670,7 +456,7 @@ static void test_kprobe_multi_bench_attach(bool kernel)
- 	char **syms = NULL;
- 	size_t cnt = 0;
- 
--	if (!ASSERT_OK(get_syms(&syms, &cnt, kernel), "get_syms"))
-+	if (!ASSERT_OK(bpf_get_ksyms(&syms, &cnt, kernel), "bpf_get_ksyms"))
- 		return;
- 
- 	skel = kprobe_multi_empty__open_and_load();
-@@ -696,13 +482,13 @@ static void test_kprobe_multi_bench_attach_addr(bool kernel)
- 	size_t cnt = 0;
- 	int err;
- 
--	err = get_addrs(&addrs, &cnt, kernel);
-+	err = bpf_get_addrs(&addrs, &cnt, kernel);
- 	if (err == -ENOENT) {
- 		test__skip();
- 		return;
- 	}
- 
--	if (!ASSERT_OK(err, "get_addrs"))
-+	if (!ASSERT_OK(err, "bpf_get_addrs"))
- 		return;
- 
- 	skel = kprobe_multi_empty__open_and_load();
 diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index 81943c6254e6..d24baf244d1f 100644
+index d24baf244d1f..9577979bd84d 100644
 --- a/tools/testing/selftests/bpf/trace_helpers.c
 +++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -17,6 +17,7 @@
- #include <linux/limits.h>
- #include <libelf.h>
+@@ -19,6 +19,7 @@
  #include <gelf.h>
-+#include "bpf/hashmap.h"
+ #include "bpf/hashmap.h"
  #include "bpf/libbpf_internal.h"
++#include "bpf_util.h"
  
  #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
-@@ -519,3 +520,216 @@ void read_trace_pipe(void)
- {
- 	read_trace_pipe_iter(trace_pipe_cb, NULL, 0);
+ #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+@@ -540,8 +541,20 @@ static bool is_invalid_entry(char *buf, bool kernel)
+ 	return false;
  }
-+
-+static size_t symbol_hash(long key, void *ctx __maybe_unused)
-+{
-+	return str_hash((const char *) key);
-+}
-+
-+static bool symbol_equal(long key1, long key2, void *ctx __maybe_unused)
-+{
-+	return strcmp((const char *) key1, (const char *) key2) == 0;
-+}
-+
-+static bool is_invalid_entry(char *buf, bool kernel)
-+{
-+	if (kernel && strchr(buf, '['))
-+		return true;
-+	if (!kernel && !strchr(buf, '['))
-+		return true;
-+	return false;
-+}
-+
-+static bool skip_entry(char *name)
-+{
-+	/*
-+	 * We attach to almost all kernel functions and some of them
-+	 * will cause 'suspicious RCU usage' when fprobe is attached
-+	 * to them. Filter out the current culprits - arch_cpu_idle
-+	 * default_idle and rcu_* functions.
-+	 */
-+	if (!strcmp(name, "arch_cpu_idle"))
-+		return true;
-+	if (!strcmp(name, "default_idle"))
-+		return true;
-+	if (!strncmp(name, "rcu_", 4))
-+		return true;
-+	if (!strcmp(name, "bpf_dispatcher_xdp_func"))
-+		return true;
-+	if (!strncmp(name, "__ftrace_invalid_address__",
-+		     sizeof("__ftrace_invalid_address__") - 1))
-+		return true;
-+	return false;
-+}
-+
-+/* Do comparison by ignoring '.llvm.<hash>' suffixes. */
-+static int compare_name(const char *name1, const char *name2)
-+{
-+	const char *res1, *res2;
-+	int len1, len2;
-+
-+	res1 = strstr(name1, ".llvm.");
-+	res2 = strstr(name2, ".llvm.");
-+	len1 = res1 ? res1 - name1 : strlen(name1);
-+	len2 = res2 ? res2 - name2 : strlen(name2);
-+
-+	if (len1 == len2)
-+		return strncmp(name1, name2, len1);
-+	if (len1 < len2)
-+		return strncmp(name1, name2, len1) <= 0 ? -1 : 1;
-+	return strncmp(name1, name2, len2) >= 0 ? 1 : -1;
-+}
-+
-+static int load_kallsyms_compare(const void *p1, const void *p2)
-+{
-+	return compare_name(((const struct ksym *)p1)->name, ((const struct ksym *)p2)->name);
-+}
-+
-+static int search_kallsyms_compare(const void *p1, const struct ksym *p2)
-+{
-+	return compare_name(p1, p2->name);
-+}
-+
-+int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel)
-+{
-+	size_t cap = 0, cnt = 0;
-+	char *name = NULL, *ksym_name, **syms = NULL;
-+	struct hashmap *map;
-+	struct ksyms *ksyms;
-+	struct ksym *ks;
-+	char buf[256];
-+	FILE *f;
-+	int err = 0;
-+
-+	ksyms = load_kallsyms_custom_local(load_kallsyms_compare);
-+	if (!ksyms)
-+		return -EINVAL;
-+
-+	/*
-+	 * The available_filter_functions contains many duplicates,
-+	 * but other than that all symbols are usable to trace.
-+	 * Filtering out duplicates by using hashmap__add, which won't
-+	 * add existing entry.
-+	 */
-+
-+	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
-+		f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
-+	else
-+		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
-+
-+	if (!f)
-+		return -EINVAL;
-+
-+	map = hashmap__new(symbol_hash, symbol_equal, NULL);
-+	if (IS_ERR(map)) {
-+		err = libbpf_get_error(map);
-+		goto error;
-+	}
-+
-+	while (fgets(buf, sizeof(buf), f)) {
-+		if (is_invalid_entry(buf, kernel))
-+			continue;
-+
-+		free(name);
-+		if (sscanf(buf, "%ms$*[^\n]\n", &name) != 1)
-+			continue;
-+		if (skip_entry(name))
-+			continue;
-+
-+		ks = search_kallsyms_custom_local(ksyms, name, search_kallsyms_compare);
-+		if (!ks) {
-+			err = -EINVAL;
-+			goto error;
-+		}
-+
-+		ksym_name = ks->name;
-+		err = hashmap__add(map, ksym_name, 0);
-+		if (err == -EEXIST) {
-+			err = 0;
-+			continue;
-+		}
-+		if (err)
-+			goto error;
-+
-+		err = libbpf_ensure_mem((void **) &syms, &cap,
-+					sizeof(*syms), cnt + 1);
-+		if (err)
-+			goto error;
-+
-+		syms[cnt++] = ksym_name;
-+	}
-+
-+	*symsp = syms;
-+	*cntp = cnt;
-+
-+error:
-+	free(name);
-+	fclose(f);
-+	hashmap__free(map);
-+	if (err)
-+		free(syms);
-+	return err;
-+}
-+
-+int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel)
-+{
-+	unsigned long *addr, *addrs, *tmp_addrs;
-+	int err = 0, max_cnt, inc_cnt;
-+	char *name = NULL;
-+	size_t cnt = 0;
-+	char buf[256];
-+	FILE *f;
-+
-+	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
-+		f = fopen("/sys/kernel/tracing/available_filter_functions_addrs", "r");
-+	else
-+		f = fopen("/sys/kernel/debug/tracing/available_filter_functions_addrs", "r");
-+
-+	if (!f)
-+		return -ENOENT;
-+
-+	/* In my local setup, the number of entries is 50k+ so Let us initially
-+	 * allocate space to hold 64k entries. If 64k is not enough, incrementally
-+	 * increase 1k each time.
-+	 */
-+	max_cnt = 65536;
-+	inc_cnt = 1024;
-+	addrs = malloc(max_cnt * sizeof(long));
-+	if (addrs == NULL) {
-+		err = -ENOMEM;
-+		goto error;
-+	}
-+
-+	while (fgets(buf, sizeof(buf), f)) {
-+		if (is_invalid_entry(buf, kernel))
-+			continue;
-+
-+		free(name);
-+		if (sscanf(buf, "%p %ms$*[^\n]\n", &addr, &name) != 2)
-+			continue;
-+		if (skip_entry(name))
-+			continue;
-+
-+		if (cnt == max_cnt) {
-+			max_cnt += inc_cnt;
-+			tmp_addrs = realloc(addrs, max_cnt);
-+			if (!tmp_addrs) {
-+				err = -ENOMEM;
-+				goto error;
-+			}
-+			addrs = tmp_addrs;
-+		}
-+
-+		addrs[cnt++] = (unsigned long)addr;
-+	}
-+
-+	*addrsp = addrs;
-+	*cntp = cnt;
-+
-+error:
-+	free(name);
-+	fclose(f);
-+	if (err)
-+		free(addrs);
-+	return err;
-+}
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
-index 2ce873c9f9aa..9437bdd4afa5 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -41,4 +41,7 @@ ssize_t get_rel_offset(uintptr_t addr);
  
- int read_build_id(const char *path, char *build_id, size_t size);
- 
-+int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel);
-+int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel);
++static const char * const trace_blacklist[] = {
++	"migrate_disable",
++	"migrate_enable",
++	"rcu_read_unlock_strict",
++	"preempt_count_add",
++	"preempt_count_sub",
++	"__rcu_read_lock",
++	"__rcu_read_unlock",
++};
 +
- #endif
+ static bool skip_entry(char *name)
+ {
++	int i;
++
+ 	/*
+ 	 * We attach to almost all kernel functions and some of them
+ 	 * will cause 'suspicious RCU usage' when fprobe is attached
+@@ -559,6 +572,12 @@ static bool skip_entry(char *name)
+ 	if (!strncmp(name, "__ftrace_invalid_address__",
+ 		     sizeof("__ftrace_invalid_address__") - 1))
+ 		return true;
++
++	for (i = 0; i < ARRAY_SIZE(trace_blacklist); i++) {
++		if (!strcmp(name, trace_blacklist[i]))
++			return true;
++	}
++
+ 	return false;
+ }
+ 
 -- 
 2.51.0
 
