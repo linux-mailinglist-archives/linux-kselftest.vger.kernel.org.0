@@ -1,257 +1,365 @@
-Return-Path: <linux-kselftest+bounces-40490-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40491-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79AFCB3ECE4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 19:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09E77B3ECEB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 19:05:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34C6B4828DD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 17:04:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DED23A9B18
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 17:05:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C2042DF142;
-	Mon,  1 Sep 2025 17:04:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 489AA30E831;
+	Mon,  1 Sep 2025 17:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="khWdzjmF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GHQxuqkq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E281323B0
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Sep 2025 17:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756746272; cv=fail; b=W2pnQkYgLBDzTBWQFBONU8LNFIRaxCeJD3L9773kxj/3mUJfjRkf2yhtVwj4rufiQ7gE14SYqeAOSkezdv2dk26dRdLr+jEnkj2uNL6gNPYRj6DZW64dzJBzhyL031jfgqwbMTq0Jx8L+TuPdg2H9u3MZmjgp9PMMCVY41A+H68=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756746272; c=relaxed/simple;
-	bh=f3UeI0tJkMRxiSozVGCyolaftTWW70pT8KWrgBFeHXs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=daps4vOTro58ni18lYW/8paysdKtRea/nS8qyHqhRxXvCyb9gpldzoeTDHgprAKmOTJ+dcwzhgZyFtzbW6+emgmuca+uydNHtRAWLDNecHJHJA3aL8IDvIBGipTtzpanv7hA7fSmihOMqk9AXABFZFi0hSn7bSIercW5+Nc93mc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=khWdzjmF; arc=fail smtp.client-ip=40.107.244.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pse1Vv7DagOWXEK2FusO0QJO8zpKcXqWZNLeQip28+x/JyoYtZ8y35Sb54G8BE/Ekg3GrLVGKfI7sjuhaH1oHbyuj69a1c6PHKaYp85gaUowSSpbLFyaQituzuH9z2gS6tzrSYMivuYCtrn8xnNo06zea+bFX9y8JPbt3EQ32NzNXfAmnDWW7Spg5xR4HUSOKv4nerN8PPD40A4NeYSI7t7XispX/wQBs4uFQOjtO9vqHxvyk8x/UM0TrOwxAqvpttEimQTD6UEtSzAv2gCAC5hLWjbqsW9TDaJMx970t+gQdEHmMrcBVrEtTk7vA5Ebb5uWRfDYcT2DwwSPr1M8iQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9Tqcybgn631pMFTo7HnJK5lSXauNfPxAqNbRocBuaQA=;
- b=EXZYAVDt+B9UrqWCfOrlIMd16WYLZgVDDf+t5G+HDKRpudEdoS+HGa/YG2R7CuzfM8GQmQMc/TKiwD8V2kdxN/BxQ60VmgqtFWInDj5cVp0H4bU315GwCta5+d2ABhhOZXsIztw/CjtqPr0VN0KckFNe7FnEPzWlyofr2vXuF0tk/9pq7xEtN2FkKu+bo11Y0tjMFdzdC+5YA6ERNOxcLqHbbBRK7yMQ3e6a+77Rs3eCn9M7X9VObphzynwDybNm/zOBmNG6YvbsYir0UMSulpoNWO0RJcHNniAA/qyXQBL9QopS2GI9Ft4nqwTsf63I8kF00ceR4mjov11pzgWrNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9Tqcybgn631pMFTo7HnJK5lSXauNfPxAqNbRocBuaQA=;
- b=khWdzjmFb9f0VkPM1GSQnJdsSEXCym2vChJ9ekXo5ZHJIk8FH4Huzk4gtnN/QvxvxYXpHrYuwoDHCBq4CDR7AN3nF1VzVQHA9mvvwpXVwGubrjdAwbpkZ5u6Xwt8RqHzqRwosPnwg0zo6vEso5HtUdInzXQvHlV6+1Hg7I/Bd6+noEPS6cjHDvUFvASpHEj38IalMI26vziDZSPpZToDc8dP5Y/hVBUMJWzHjveXI1jotyLC+cb4teExxC0/Jej7cdrWwpvZ5hjrRa+QP0N3RyX4B0EblWEpNrLkumSsYovgtNl++kEmQ/0dc5Tr6a5fMPVSff4M/+OBUqvaVqy1Qw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- DS2PR12MB9712.namprd12.prod.outlook.com (2603:10b6:8:275::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9073.27; Mon, 1 Sep 2025 17:04:25 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a%6]) with mapi id 15.20.9073.021; Mon, 1 Sep 2025
- 17:04:25 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
- lorenzo.stoakes@oracle.com, baolin.wang@linux.alibaba.com,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [Patch v2] selftests/mm: check content to see whether mremap
- corrupt data
-Date: Mon, 01 Sep 2025 13:04:23 -0400
-X-Mailer: MailMate (2.0r6272)
-Message-ID: <1D88E773-C11E-4F28-A13A-1A681898198B@nvidia.com>
-In-Reply-To: <0a0b0018-9427-4201-bf53-6aeb251bc482@redhat.com>
-References: <20250831022701.2595-1-richard.weiyang@gmail.com>
- <f8e942de-1a50-412e-9020-1bc901b4243b@redhat.com>
- <61E58B7C-23D0-49FE-8D0C-CE0B672114E2@nvidia.com>
- <0a0b0018-9427-4201-bf53-6aeb251bc482@redhat.com>
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: BN9P222CA0004.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:408:10c::9) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7483730649C
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Sep 2025 17:05:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756746316; cv=none; b=pndXU/xopKvLzAHzXzup1BTDwD+d4hftzIEhW0ifgMKwI2gcyft0ID3eV5VIeECdowr5aLuMqfcstJyxsC4ddXbLVf0+SI1j1P/VRzIxTKf06ou6eaFCAqNYuCZylaPp7CW6rKc6x9qsrUSg1A5MyMlhkuuaRkPV31g0/FVZVfM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756746316; c=relaxed/simple;
+	bh=llCRiK3lXe/yiSxV/HR1Xc5Qrk4yyd3AIXRrlGnoLu8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uQXsDMMIf9Rz9fsTdtkX5tbK27kM/Ie1enkRxoZuULea655UK0+AFpvQ2SafeeRgu8CDe/EvmP47lU3jsTnJnJthopZKvAGKlt2SwR8dsGltAldS/CVsyyhXsgC74SSxMli337fbno3DMEs37suVB3aZ53f88OUr/7HQX6OaihU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GHQxuqkq; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-248f08d31dcso374615ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Sep 2025 10:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1756746314; x=1757351114; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4QoLjwxK8LzjBpJjG48ipDPj+TT/xUD3SQc2FJAfA6g=;
+        b=GHQxuqkq7UpcFCQk2+7PCcwS9ZjxjtnLztju6nRNSEp/XiMMTL1fh1saAVAZt/AhCn
+         WVJ7j47gb5V6/c2DU5AfSWG6VuXqKJGdD3+CoB6ZCrbpVrAP3GUQamIaXqrQD2RY+3WY
+         N4f8MweTrukQq87h6mTDrvu3s45somixyJysFDGBfsoAm6aH+Zw5I/aUufGOEo7cyphn
+         ldjr3MyxY7YAlsWCDers6QAUP/Gcw6svKIR8VdH6MjVUxbglOPDQULQUEvK87C9Iy7Um
+         lYrB4hYFElSMjftcr/PtDNo4g5iljaWmM0mDduulaVptwCHAmhNo6jANFuYZVCNigvLp
+         x8Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756746314; x=1757351114;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4QoLjwxK8LzjBpJjG48ipDPj+TT/xUD3SQc2FJAfA6g=;
+        b=lBXHhQlNfNqZMqi0GxFDRtBpZrM+fAjFeNyNJF3pe6JV7bfdbttG+C8Tiozxwt1JkH
+         XQnqRaqzX01m5VIFZxlxkA9V+tiV3RqKzYEXU8v1EOTIBFKCiP5eI/OQqNty15z/hU8d
+         sVhgaPwJbuGSBVpKv5mYT4aSHGjxkYhww1O2WotCaOh0Nh+1V6+dX6kt+oXYUtmQY+YS
+         SN7vMHg+V7TuHrNKVyD+It50iTK7MxheCMzu6hIsa4K9xuNOqCWfsg5DHPQ+eax/efQ8
+         C+vH2AuSdn41KUiD7n8WKbG/mCs95hlHiyi/HUFqbPjmlTBfGYP83PRE7UMj/V0lef6w
+         NFKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUPUCEFyDJjjKADSZG3mlLXKezMnaOwc2iI+fkY3ZNqDResGQOTU9j3g2WFsOMjPCS4cK/CFad7114uAxalyoE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOKFtt3VcL0urw7HO64peHTouyXiuG/eIUBbMvq5jkggMxfypE
+	2Q6v5aYWW7jh/9sFbVKYzDbZTrUjqkfvqSQomsM1cs9IZD9NL8JLais5I6FSuT22Njhbb1kZZpn
+	YnGT2eDSX8HZUmiER5Fyc1blnEdf7EE4IXfBMCmFC
+X-Gm-Gg: ASbGncsew5RThWv1j37BnqdgJvr/5oAHXsGI8A3HYWLBUahvJcLJOUiTxtrQSDfgNAZ
+	QgvRspNk1DwCvTuC19tkqMvl2E/DctgC5HZ3sw7hxCOLfooHxkO982PSH+EGm7fnvRRh5MbgFHb
+	EabayuAeh221Q52RGMuwJYIkRHfJ9e/vlOpZk6I+HRMjQioQxOqc8bX2CBBkjiYWdbEkrW4ScZl
+	g75X80w5KHKyo4UIUP2qX2gEg==
+X-Google-Smtp-Source: AGHT+IGxr2n1ICZCkOCSejEisAdttrmgKp3a/giGaeEq1JSBg/w2iNQL7nhul/1i1Mogs/tTZxLItOvyD2WkTxvPHbU=
+X-Received: by 2002:a17:902:b713:b0:248:aa0d:f826 with SMTP id
+ d9443c01a7336-2493e8fb30bmr4947575ad.6.1756746313082; Mon, 01 Sep 2025
+ 10:05:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|DS2PR12MB9712:EE_
-X-MS-Office365-Filtering-Correlation-Id: b5093016-7174-425e-d995-08dde9799a7a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?o2X6UJQTNXFZenMsgw9wle3flxxiXfdBRSodsqVIvGs3nxWshedXjiPP/zgm?=
- =?us-ascii?Q?zPea133O9k37cQZcvDbnytkDwaoW+Fzq+BS26WWmku9bHCnz1q4E8RO+7GiB?=
- =?us-ascii?Q?3ozpQW7QG6w35RJjh5WtKhk5ykux45dzzoe6yHgrmr0Izl3bqc70BlAB3Koy?=
- =?us-ascii?Q?7wT/He5rm80fYtJ+Zbb9B6GfcBxqU3y1XKgWT+5TCCgUpG1AoHeEfwJsscPA?=
- =?us-ascii?Q?07Lykx9eiBNDQJD2e0xnKFssYc2JfhNox0+zEYuU1XW26lLQpTp8XuyImQWa?=
- =?us-ascii?Q?SgqJ/6VcLmjXsaXYwd11mfllSXOfxjQlgZsxIy9IUCgwp7j1JdbnCRI4zlNJ?=
- =?us-ascii?Q?8YhZNuCwZ6jGw2qI2Q46nRxZYhnPlrJMOwzDm4qJ8C4aBpsXBS5BgY/QmsbJ?=
- =?us-ascii?Q?sAiJ1J8SF1Hmxm+YSbOTJx834XRBpkdocmjahbFrgzVnrS9PGgNQ1CRJKd3q?=
- =?us-ascii?Q?WbqFbkR9kleKQUEbJbl9BCz3B3K9xa82PMRxkLlNvnyvzFmKKjhIzfeTqEpt?=
- =?us-ascii?Q?aaZOxb+fUeFkQKM7SySq/PGvt6oO9pQfSAdrtP6+bzcMiA9DVi/PnzVf/r+G?=
- =?us-ascii?Q?tvtldZ77o1plODjvUDzeGTMpjx0n1cTF0KqpxNYjeMRPWFqK61FWDtn09lnM?=
- =?us-ascii?Q?EnqZeUBC8b4EfSQVNcnHMDon9qWxYxSqLpMW1xMEeUQ5NltgChxcg9ekcMjh?=
- =?us-ascii?Q?OXS06HqRPo27/5oxKo+7LkeQPQRJ+qpdhGAaw4LlB9CmTjtnm0DkqPvwFTBc?=
- =?us-ascii?Q?0ZTmiO8U4OxaYXiDgyb4NgfG5LIMRvoohJazRPE26uw0eIs4bsl6z3dyd/th?=
- =?us-ascii?Q?DNu7fdnf9J17OPk2zzmDpyg8wqLStPgi+Id1G1UaLdXIUp2fqKy173kd6G3N?=
- =?us-ascii?Q?vq5e6l4/rEaX4LcHdbF3M4ElI3YINQIX/eQ8yPgsRnsxXBCw1Va6e4LtI7ap?=
- =?us-ascii?Q?6URPfKnt4VqBqn8ovzE3C9b6Fxc+rHPpzSkbBaUv/FAwKUrpDoao66AE+jOd?=
- =?us-ascii?Q?eP2NS0sUm+rAQQAo7PteUUTjBg/vbaotgHy3oR04CS3Rt+OuItXEl6IXdxIO?=
- =?us-ascii?Q?qQVDsmdjbb+iG3BNsZxc1sKUYALUGIBjmPWezjPn9iNiQJL9dqZ+qSC0sYSB?=
- =?us-ascii?Q?v9+M5VQl0sHQjRXjcdx7fsFupk0bgNe+wmcqEPSdhLE20kj3uRDqsA0XSOuR?=
- =?us-ascii?Q?laYfAWMN75mwZ8KoGaAzJ70r/3tcc3hoUWpfir9tfbE8dIQfn9c9oKoBCHBZ?=
- =?us-ascii?Q?y8ElZNTFFomiq2I7aPjY2w8DNql3yw1JaoWe7zaxDi6ErUUfxRqJtIL74PuQ?=
- =?us-ascii?Q?6t0eQqcTXupq6gMLre3ov9bM58r9YuEluaJRDAX4yWAAhY86K213i6E3zqQi?=
- =?us-ascii?Q?IHqbhszfAMA0WnhuIDc7ZcrTgPT/MBNsQYX8d3Eg9cIGCgzlh0n42gbx34kK?=
- =?us-ascii?Q?FsIB3UszeVc=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?9b6k1GBIp1f9uO3vuZLCiPLnHCP97spTINCGc7DZm5OVRgvPT36OlqYKOwBk?=
- =?us-ascii?Q?YWPaYen7cTCkKKZ7/zA8HNvst2J3dTZ3HRejWSdoku8+NtJnwfwwPhqLYVO3?=
- =?us-ascii?Q?nnCaIv+g8+8/vnru7FxjGNsq0SkdcUUNywi9plE/USPlvkIImCfpgDfgBG92?=
- =?us-ascii?Q?wEuCjXcl5+ysWWtKdeJRWGcLuxg9LZPUsYvy/fWs+wh2Qf3BmZUYh1+/st/5?=
- =?us-ascii?Q?xzNBveLZN1irpiJOiMue7H2x2gCF/oqo+FgdgjFa4i3LvcIsO6keMt34gNmz?=
- =?us-ascii?Q?T5y3dareuiOErPc6dyDjyaSTe3F9NBJr+5FEtpFFNN18AMEqT+C6PoiYIvBI?=
- =?us-ascii?Q?jDxqukwZWYhyzabXCqXuRh+Va9ItotlU+Aonz/QeUDPqy/vrHOWz07RF6FMI?=
- =?us-ascii?Q?izPPJ1SAQEDLuFfX5nkYHAg9KOfU6X0hZcPxtXWXGpOcGOeilAkPDw8UTkpJ?=
- =?us-ascii?Q?fQ/K/eHwL4w12qEAriPY/RvluW4A69QRhXBwjKI2sKQXrxRvogWhjglOt2+N?=
- =?us-ascii?Q?Zyay5sjP29GgllwmLHfNem+LeItGTaqWUiMN0juMOn3F8jAELL8gXXS6KXoq?=
- =?us-ascii?Q?G2DjG8daH0bdYViHYUV186hYiz98fQHMK9CU3xYa65Z86fvVFGSOOqrBPEHi?=
- =?us-ascii?Q?fhJgGXpcIT5HAFNVmih9nb2AHXFRWSURKK03PPq4v/cRQR99nVTWKSrlIbf+?=
- =?us-ascii?Q?ZwZhdt36/DCOPOaVKKxk5807xumyT4i/eHvSAleF57NdHp7w6JTOEKzeCjkk?=
- =?us-ascii?Q?rZ/SzLOcvdns+brJWiRaUEbJTqEsuk4VDz9GeiLgJKeQdRgkDmASiovFSNLc?=
- =?us-ascii?Q?ureXILk7eYxI8h0xMdAHpdl12ppRFdjeshycdjj5hc1PY21q5SfMmEXOeOYR?=
- =?us-ascii?Q?6oqWTX1LqkPe9gX4gsAwLEs4IyJAXV/2mvlu0KVU6RUoHuZjYytjohCfrVu3?=
- =?us-ascii?Q?9Cqa1T8H7qVApgchSPDOUE+NYs5c3Kgx1Zq9OdekggDc29eCglDg07CSR9wN?=
- =?us-ascii?Q?L5NVn1dedcdrmQRPUnPYQa5hR72G2hhmKmXenP1RNZioNq3ji2e5j1vNrucB?=
- =?us-ascii?Q?mLq6RNYwSWzNSHSgj2RCIDV1qJfxJU0GiT7EHTKGpc3YYJwDTBTMrAtx28yz?=
- =?us-ascii?Q?AM0xch9t4czidI+McIQ/iaXfjE8tj72eK911RSCpl4kdX5XU3EWMKnFxXpEZ?=
- =?us-ascii?Q?bvg5ee8UZSoFpUmgKn/p/2qkDpkvs4esvGJgMxOGfQHa5jIeeG4TVeHNsI8W?=
- =?us-ascii?Q?qsU+hxRZngN+qgCfMNfhtSNfI0Eszb7C2jZb+jdOydpLHhQ2c1PseRcc/7yM?=
- =?us-ascii?Q?spNj/VUW28E4Q/nyiNW3AH+LMgMiZBNbcPdR8PACT7C30Om2lTaUjnNrO/iX?=
- =?us-ascii?Q?Xkp16KmZGZTzXBJ5Nzk+Namautj2etEzU5KaS2sh389dnV4MJTMh67DH4iPj?=
- =?us-ascii?Q?KZL1jDxADiZ89Dpe77WCnN+UP4lRPzPFSp4yz87y80mRgSL5VCcQsAG+0nQI?=
- =?us-ascii?Q?u1iZ7KzK3GJhAno8XeU4JC2NbTFOW5uZ0ROIpF6Z8IeAewrgNbPXwYjh/cPz?=
- =?us-ascii?Q?8JkNPp8f0rWPNNSkqpOqXoUFV2xxz40xvaqdabat?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5093016-7174-425e-d995-08dde9799a7a
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2025 17:04:24.9777
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I7vvEQIpT3cOGl8n8CnslGEhlc7aGbo6E0BT0uMMQmhsrySZRESKCH+rbZm1rvLW
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS2PR12MB9712
+References: <20250603203701.520541-1-blakejones@google.com>
+ <174915723301.3244853.343931856692302765.git-patchwork-notify@kernel.org>
+ <CAP-5=fWJQcmUOP7MuCA2ihKnDAHUCOBLkQFEkQES-1ZZTrgf8Q@mail.gmail.com>
+ <466d45ae-ce97-4256-9444-9f25f3328c51@linux.dev> <aLVR0-CUGgwHvFpF@google.com>
+In-Reply-To: <aLVR0-CUGgwHvFpF@google.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 1 Sep 2025 10:04:58 -0700
+X-Gm-Features: Ac12FXzgZcMksbwkyCOaS4g_EKgW3lTS0HlcliQGDdMfcvQaA-H39vJcWvqvrqI
+Message-ID: <CAP-5=fX8pw91DQCW0sva_U4A2UGXynNApOHcb3SVT8eRZ=DtyA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] libbpf: add support for printing BTF character
+ arrays as strings
+To: Namhyung Kim <namhyung@kernel.org>, song@kernel.org, 
+	Yonghong Song <yonghong.song@linux.dev>, jolsa@kernel.org, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Blake Jones <blakejones@google.com>, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, mykolal@fb.com, shuah@kernel.org, ihor.solodrai@linux.dev, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, 
+	linux-perf-users <linux-perf-users@vger.kernel.org>, Howard Chu <howardchu95@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1 Sep 2025, at 9:03, David Hildenbrand wrote:
-
-> On 01.09.25 14:56, Zi Yan wrote:
->> On 1 Sep 2025, at 3:22, David Hildenbrand wrote:
->>
->>> On 31.08.25 04:27, Wei Yang wrote:
->>>
->>> Subject: "selftests/mm: verify page content after remapping PMD throu=
-gh PTEs"
->>>
->>>> After mremap(), add a check on content to see whether mremap corrupt=
-
->>>> data.
->>>>
->>>> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
->>>>
->>>> ---
->>>> v2: add check on content instead of just test backed folio
->>>
->>> I'm confused, don't we have that exact check later in the function?
->>>
->>> Your v1 might have been better, unless I am missing something.
->>>
->>>> ---
->>>>    tools/testing/selftests/mm/split_huge_page_test.c | 6 +++++-
->>>>    1 file changed, 5 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/too=
-ls/testing/selftests/mm/split_huge_page_test.c
->>>> index 10ae65ea032f..229b6dcabece 100644
->>>> --- a/tools/testing/selftests/mm/split_huge_page_test.c
->>>> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
->>>> @@ -423,10 +423,14 @@ static void split_pte_mapped_thp(void)
->>>>     	/* smap does not show THPs after mremap, use kpageflags instead=
- */
->>>>    	thp_size =3D 0;
->>>> -	for (i =3D 0; i < pagesize * 4; i++)
->>>> +	for (i =3D 0; i < pagesize * 4; i++) {
->>>> +		if (pte_mapped[i] !=3D (char)i)
->>>> +			ksft_exit_fail_msg("%ld byte corrupted\n", i);
->>>> +
->>>>    		if (i % pagesize =3D=3D 0 &&
->>>>    		    is_backed_by_folio(&pte_mapped[i], pmd_order, pagemap_fd, k=
-pageflags_fd))
->>>>    			thp_size++;
->>>> +	}
->>>>     	if (thp_size !=3D 4)
->>>>    		ksft_exit_fail_msg("Some THPs are missing during mremap\n");
->>>
->>> I'm a bit confused with this test in general.
->>>
->>> We do a
->>>
->>> pte_mapped =3D mremap(one_page, pagesize, pagesize, MREMAP_MAYMOVE);
->>>
->>> which I read as a "NOP".
->>>
->>> Questions
->>>
->>> (a) Will this actually do anything? Also, maybe it does now, but can'=
-t the kernel just optimize that out in the future?
->>
->> It remaps each subpage of 4 PMD THPs into a contiguous 2MB vaddr range=
- and
->> perform split on that range.
+On Mon, Sep 1, 2025 at 12:57=E2=80=AFAM Namhyung Kim <namhyung@kernel.org> =
+wrote:
 >
-> I'm afraid I am missing the "why".
+> Hello,
 >
-> I would have thought that a "split_pte_mapped_thp" test would want to p=
-te-map THPs
-> to the see if they can be split.
+> On Sun, Aug 31, 2025 at 09:17:34PM -0700, Yonghong Song wrote:
+> >
+> >
+> > On 8/29/25 10:19 PM, Ian Rogers wrote:
+> > > On Thu, Jun 5, 2025 at 2:00=E2=80=AFPM <patchwork-bot+netdevbpf@kerne=
+l.org> wrote:
+> > > > Hello:
+> > > >
+> > > > This series was applied to bpf/bpf-next.git (master)
+> > > > by Andrii Nakryiko <andrii@kernel.org>:
+> > > >
+> > > > On Tue,  3 Jun 2025 13:37:00 -0700 you wrote:
+> > > > > The BTF dumper code currently displays arrays of characters as ju=
+st that -
+> > > > > arrays, with each character formatted individually. Sometimes thi=
+s is what
+> > > > > makes sense, but it's nice to be able to treat that array as a st=
+ring.
+> > > > >
+> > > > > This change adds a special case to the btf_dump functionality to =
+allow
+> > > > > 0-terminated arrays of single-byte integer values to be printed a=
+s
+> > > > > character strings. Characters for which isprint() returns false a=
+re
+> > > > > printed as hex-escaped values. This is enabled when the new ".emi=
+t_strings"
+> > > > > is set to 1 in the btf_dump_type_data_opts structure.
+> > > > >
+> > > > > [...]
+> > > > Here is the summary with links:
+> > > >    - [v3,1/2] libbpf: add support for printing BTF character arrays=
+ as strings
+> > > >      https://git.kernel.org/bpf/bpf-next/c/87c9c79a02b4
+> > > >    - [v3,2/2] Tests for the ".emit_strings" functionality in the BT=
+F dumper.
+> > > >      https://git.kernel.org/bpf/bpf-next/c/a570f386f3d1
+> > > >
+> > > > You are awesome, thank you!
+> > > I believe this patch is responsible for segvs occurring in v6.17 in
+> > > various perf tests when the perf tests run in parallel. There's lots
+> >
+> > Could you share the command line to reproduce this failure?
+> > This will help debugging. Thanks!
 >
-> Why is the mremap required? IOW, what exactly is the test trying to tes=
-t that
-> exceeds "split_pte_mapped_thp" ?
+> My reproducer is below:
+>
+> terminal 1: run perf trace in a loop.
+>
+>   $ while true; do sudo ./perf trace true; done
+>
+> terminal 2: run perf record in a loop until hit the segfault.
+>
+>   $ while true; do sudo ./perf record true || break; done
+>   ...
+>   perf: Segmentation fault
+>       #0 0x560b2db790e4 in dump_stack debug.c:366
+>       #1 0x560b2db7915a in sighandler_dump_stack debug.c:378
+>       #2 0x560b2d973b1b in sigsegv_handler builtin-record.c:722
+>       #3 0x7f975f249df0 in __restore_rt libc_sigaction.c:0
+>       #4 0x560b2dca1ee6 in snprintf_hex bpf-event.c:39
+>       #5 0x560b2dca2306 in synthesize_bpf_prog_name bpf-event.c:144
+>       #6 0x560b2dca2d92 in bpf_metadata_create bpf-event.c:401
+>       #7 0x560b2dca3838 in perf_event__synthesize_one_bpf_prog bpf-event.=
+c:673
+>       #8 0x560b2dca3dd5 in perf_event__synthesize_bpf_events bpf-event.c:=
+798
+>       #9 0x560b2d977ef5 in record__synthesize builtin-record.c:2131
+>       #10 0x560b2d9797c1 in __cmd_record builtin-record.c:2581
+>       #11 0x560b2d97db30 in cmd_record builtin-record.c:4376
+>       #12 0x560b2da0672e in run_builtin perf.c:349
+>       #13 0x560b2da069c6 in handle_internal_command perf.c:401
+>       #14 0x560b2da06b1f in run_argv perf.c:448
+>       #15 0x560b2da06e68 in main perf.c:555
+>       #16 0x7f975f233ca8 in __libc_start_call_main libc_start_call_main.h=
+:74
+>       #17 0x7f975f233d65 in __libc_start_main_alias_2 libc-start.c:128
+>       #18 0x560b2d959b11 in _start perf[4cb11]
+>
+>
+> I manually ran it with gdb to get some more hints.
+>
+>   Thread 1 "perf" received signal SIGSEGV, Segmentation fault.
+>   0x00005555558e8ee6 in snprintf_hex (buf=3D0x5555562c1d79 "", size=3D503=
+, data=3D0x40 <error: Cannot access memory at address 0x40>, len=3D8)
+>       at util/bpf-event.c:39
+>   39                    ret +=3D snprintf(buf + ret, size - ret, "%02x", =
+data[i]);
+>
+> The data is bpf_prog_info->prog_tags and it's called from
+> synthesize_bpf_prog_name().
+>
+>   (gdb) bt
+>   #0  0x00005555558e8ee6 in snprintf_hex (buf=3D0x5555562c1d79 "", size=
+=3D503, data=3D0x40 <error: Cannot access memory at address 0x40>,
+>       len=3D8) at util/bpf-event.c:39
+>   #1  0x00005555558e9306 in synthesize_bpf_prog_name (buf=3D0x5555562c1d7=
+0 "bpf_prog_", size=3D512, info=3D0x55555665e400, btf=3D0x5555562c5630,
+>       sub_id=3D0) at util/bpf-event.c:144
+>   #2  0x00005555558e9db5 in bpf_metadata_create (info=3D0x55555665e400) a=
+t util/bpf-event.c:403
+>   #3  0x00005555558ea85b in perf_event__synthesize_one_bpf_prog (session=
+=3D0x555556178510,
+>       process=3D0x5555555ba7ab <process_synthesized_event>, machine=3D0x5=
+55556178728, fd=3D25, event=3D0x5555561b73a0,
+>       opts=3D0x5555560d33a8 <record+328>) at util/bpf-event.c:674
+>   #4  0x00005555558eadf8 in perf_event__synthesize_bpf_events (session=3D=
+0x555556178510,
+>       process=3D0x5555555ba7ab <process_synthesized_event>, machine=3D0x5=
+55556178728, opts=3D0x5555560d33a8 <record+328>)
+>       at util/bpf-event.c:799
+>   #5  0x00005555555beef5 in record__synthesize (rec=3D0x5555560d3260 <rec=
+ord>, tail=3Dfalse) at builtin-record.c:2131
+>   #6  0x00005555555c07c1 in __cmd_record (rec=3D0x5555560d3260 <record>, =
+argc=3D1, argv=3D0x7fffffffe2e0) at builtin-record.c:2581
+>   #7  0x00005555555c4b30 in cmd_record (argc=3D1, argv=3D0x7fffffffe2e0) =
+at builtin-record.c:4376
+>   #8  0x000055555564d72e in run_builtin (p=3D0x5555560d63c0 <commands+288=
+>, argc=3D6, argv=3D0x7fffffffe2e0) at perf.c:349
+>   #9  0x000055555564d9c6 in handle_internal_command (argc=3D6, argv=3D0x7=
+fffffffe2e0) at perf.c:401
+>   #10 0x000055555564db1f in run_argv (argcp=3D0x7fffffffe0dc, argv=3D0x7f=
+ffffffe0d0) at perf.c:445
+>   #11 0x000055555564de68 in main (argc=3D6, argv=3D0x7fffffffe2e0) at per=
+f.c:553
+>
+> I seems bpf_prog_info is broken for some reason.
+>
+>   (gdb) up
+>   #1  0x00005555558e9306 in synthesize_bpf_prog_name (buf=3D0x5555563305b=
+0 "bpf_prog_", size=3D512, info=3D0x55555664e1d0, btf=3D0x55555637ad40,
+>       sub_id=3D0) at util/bpf-event.c:144
+>   144           name_len +=3D snprintf_hex(buf + name_len, size - name_le=
+n,
+>
+>   (gdb) p *info
+>   $1 =3D {type =3D 68, id =3D 80, tag =3D "\\\000\000\000\214\000\000", j=
+ited_prog_len =3D 152, xlated_prog_len =3D 164,
+>     jited_prog_insns =3D 824633721012, xlated_prog_insns =3D 118541097391=
+2, load_time =3D 1305670058276, created_by_uid =3D 352,
+>     nr_map_ids =3D 364, map_ids =3D 1975684956608, name =3D "\330\001\000=
+\000\350\001\000\000$\002\000\0004\002\000", ifindex =3D 576,
+>     gpl_compatible =3D 0, netns_dev =3D 2697239462496, netns_ino =3D 2834=
+678416000, nr_jited_ksyms =3D 756, nr_jited_func_lens =3D 768,
+>     jited_ksyms =3D 3418793968396, jited_func_lens =3D 3573412791092, btf=
+_id =3D 844, func_info_rec_size =3D 880, func_info =3D 3934190044028,
+>     nr_func_info =3D 928, nr_line_info =3D 952, line_info =3D 42949672969=
+88, jited_line_info =3D 4449586119680, nr_jited_line_info =3D 1060,
+>     line_info_rec_size =3D 1076, jited_line_info_rec_size =3D 1092, nr_pr=
+og_tags =3D 1108, prog_tags =3D 4861902980192,
+>     run_time_ns =3D 5085241279632, run_cnt =3D 5257039971512, recursion_m=
+isses =3D 5360119186644, verified_insns =3D 1264,
+>     attach_btf_obj_id =3D 1288, attach_btf_id =3D 1312}
 
-IMHO, it is an interesting test case for splitting a THP when only a subp=
-age
-is mapped into a vaddr range and in a contiguous vaddr each page comes fr=
-om
-different THPs. The mprotect test case you are mentioning would still hav=
-e all
-subpages mapped by contiguous vaddrs.
+Thanks Namhyung!
 
-But if you think both are just testing PTE-mapped THPs, feel free to repl=
-ace the
-existing one with the mprotect test case. In addition, is_backed_by_folio=
-()
-can be reverted back to its prior version, since it no longer needs to ha=
-ndle
-the case where subpages from different THPs can be mapped into a vaddr ra=
-nge.
+So it looks like my "fix" was breaking the tools/perf build feature
+test for btf_dump_type_data_opts opts.emit_strings and that was
+avoiding this code.
 
+Having terminal 1 run perf trace is going to be loading/unloading a
+BPF program for system call augmentation. This must be creating the
+race condition that is causing perf record to segv when it is
+inspecting the bpf_prog_info.
 
---
-Best Regards,
-Yan, Zi
+The cast in:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/tools/perf/util/bpf-event.c#n135
+```
+static int synthesize_bpf_prog_name(char *buf, int size,
+    struct bpf_prog_info *info,
+    struct btf *btf,
+    u32 sub_id)
+{
+u8 (*prog_tags)[BPF_TAG_SIZE] =3D (void *)(uintptr_t)(info->prog_tags);
+```
+looks concerning given the bad address comes from:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/tools/perf/util/bpf-event.c#n144
+```
+name_len +=3D snprintf_hex(buf + name_len, size - name_len,
+prog_tags[sub_id], BPF_TAG_SIZE);
+```
+Checking git blame this code has existed since 2019, commit
+7b612e291a5a ("perf tools: Synthesize PERF_RECORD_* for loaded BPF
+programs"):
+http://lkml.kernel.org/r/20190117161521.1341602-8-songliubraving@fb.com
+it was refactored in 2019 to a single memory allocation commit
+("a742258af131 perf bpf: Synthesize bpf events with
+bpf_program__get_prog_info_linear()")
+http://lkml.kernel.org/r/20190312053051.2690567-5-songliubraving@fb.com
+
+There seems like a potential race here:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/tools/perf/util/bpf-utils.c#n123
+```
+/* step 1: get array dimensions */
+err =3D bpf_obj_get_info_by_fd(fd, &info, &info_len);
+```
+and later:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/tools/perf/util/bpf-utils.c#n185
+```
+/* step 5: call syscall again to get required arrays */
+err =3D bpf_obj_get_info_by_fd(fd, &info_linear->info, &info_len);
+```
+There's a verification step that looks to cover issues with the race.
+I thought making those warnings fatal may help, but no:
+```
+--- a/tools/perf/util/bpf-utils.c
++++ b/tools/perf/util/bpf-utils.c
+@@ -202,14 +202,20 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
+                v1 =3D bpf_prog_info_read_offset_u32(&info, desc->count_off=
+set);
+                v2 =3D bpf_prog_info_read_offset_u32(&info_linear->info,
+                                                   desc->count_offset);
+-               if (v1 !=3D v2)
++               if (v1 !=3D v2) {
+                        pr_warning("%s: mismatch in element count\n", __fun=
+c__);
++                       free(info_linear);
++                       return ERR_PTR(-EFAULT);
++               }
+
+                v1 =3D bpf_prog_info_read_offset_u32(&info, desc->size_offs=
+et);
+                v2 =3D bpf_prog_info_read_offset_u32(&info_linear->info,
+                                                   desc->size_offset);
+-               if (v1 !=3D v2)
++               if (v1 !=3D v2) {
+                        pr_warning("%s: mismatch in rec size\n", __func__);
++                       free(info_linear);
++                       return ERR_PTR(-EFAULT);
++               }
+        }
+
+        /* step 7: update info_len and data_len */
+```
+
+Fwiw, the address of "data=3D0x40" in the stack trace makes it looks
+like an offset has been applied to NULL. 0x40 is 64 which corresponds
+with "name" info a bpf_prog_info by way of pahole:
+```
+struct bpf_prog_info {
+        __u32                      type;                 /*     0     4 */
+        /* --- cacheline 1 boundary (64 bytes) --- */
+...
+        char                       name[16];             /*    64    16 */
+```
+
+I feel we're relatively close to discovering a proper fix for the
+issue, if others could lend a hand as I'm not overly familiar with the
+BPF code. I'm wondering if the second bpf_obj_get_info_by_fd could be
+filling in offsets relative to NULL rather than returning an error,
+but this would be (I believe) a kernel issue :-(
+
+Thanks,
+Ian
 
