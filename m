@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-40399-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29833B3DB30
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 09:36:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35A50B3DB31
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 09:36:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5E1A17BC37
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 07:36:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53B38189BA48
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Sep 2025 07:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2495926F293;
-	Mon,  1 Sep 2025 07:36:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C0126F445;
+	Mon,  1 Sep 2025 07:36:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UWPgsldL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MW5OtWNz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9833526B75C;
-	Mon,  1 Sep 2025 07:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7199826F2BF;
+	Mon,  1 Sep 2025 07:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756712177; cv=none; b=epRIkrtnSnz+iqw6HhLyzp8v7K3YcFRr5mQFAvXn/FqQi8uMVJjS3JsavJqk4S7md9hrfKioTet4jD68hP8o8CXZWjsK0Wj93XR7Czgvsedfl574tuWgv0plGcEiYGxT/ilAmnfzJBGlZOnPJdTz6H0xa+p1HtAbb5JL5nFIdOw=
+	t=1756712183; cv=none; b=eDsLPCH6VVQcxouujj1x87tAaQir6rEkxDeW/6FwjlBW+vlGeWRE/Vl5azwBCzFG4qkWQZZyCMxDjfHfQqmrhkDM5JvNdGfJ3dZ8Kz8Gzm9Xe028gwC2Gh6QtsLe0xRP9WWjTaJCY8N+5gIrUGOiMF1l7u08DDh1p2/f5+G64oQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756712177; c=relaxed/simple;
-	bh=Jqcn0yG4SJ8XL8CUrnZ90nHHd5zVocksS0ZzfnOZPdA=;
+	s=arc-20240116; t=1756712183; c=relaxed/simple;
+	bh=LPo0JG8mkphRNQlJnM0Of6TNLhAtCZ+rwOl1RvG95zA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=f2MfonuyhOAJJmxQYbuXZaEBby0nw5n2mnJaV5Pyr1YTvaKjKkWOYSWFrq+PHV3eY5SNLbqNIeZczR38mu4Knp2n0T3LS2qycx6wQ6GHny4wTZM/j4RecY+QrzEjS7BrEAOf3Jk4lXARdfCkHZBRbsrOkeb5kFhhxbOOuuGAgCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UWPgsldL; arc=none smtp.client-ip=209.85.214.193
+	 MIME-Version; b=QFuhuQ8eTUkSuVpR+6pfaN7UhSGsebYuKC/8I7HJ5Zd0FXToduoAcgPWAjctG28noxHr6cBFRAkGwUZaQ21IRn0mS+F6ZjPS6pt1hEL2SXOmPV27nqeOwwwtn5Ev3sIdiW/N518sEOeQeOnHMLnYhqAxgLn1NsuRWCNbt3YKcws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MW5OtWNz; arc=none smtp.client-ip=209.85.214.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-24aafd1c2a1so10343075ad.3;
-        Mon, 01 Sep 2025 00:36:15 -0700 (PDT)
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-2445806df50so31519965ad.1;
+        Mon, 01 Sep 2025 00:36:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756712175; x=1757316975; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756712182; x=1757316982; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5oeHOkgW1SXEWkLO09M8aNICfxiWEQZMbiFzd9nXhNI=;
-        b=UWPgsldLhpdiy2FGInlF9IHqRVuwNmCLoEkaDcPE4D9tmjBi6PILsfCjuwcS4hESWV
-         AudJwGXYk4+2ZO+V+DRaV6ZbrsPHZ5pbpFmAnCwpoRzH1R2ga5wCh72cnBTK3ZkiMJnD
-         k+CCWOm4VZwrsjRluB4RRcWUN2rlXikIUQgRLJ/9xU49t7NZVxHgO3GtagRjBhx7/BN9
-         hFa6O+7UDS+n81/pC9AmvzyLCzz6wV64gaDudfnueQ08AYR7dgTxSjZk0Kg6iKM11d5L
-         mok6+FmRBl5SImxw6x1Mn3R8PuLtPv4DcgiyD9LVU4WmXrKqd4KlbyBJrwSSTMtb6K01
-         QqEQ==
+        bh=lI7sqxzwAb6+8qpfDyLKKtJ7Me1UGv0S+1RIHhygZjU=;
+        b=MW5OtWNzBLP6Chz0zz+6UQEKk5wdrymAKPsea3l5mMu/vju5D9hF5HXQ3CIugGg6QZ
+         C+6m/sxPlvgYFjeQuA1pLb7bGHtL1y+TPtGI2zkrUyA7D9IWnSacvfjXPjaMwuArHPlu
+         dRZvaJLKHuvo27Pa3GCa/a2GhEW069lJm7usQHJrX+UKxeLaIyyaAITiBedCnRYFJ6+i
+         eUVGhMEvJ5XY/cVWQOJBPuaepXinq4OERyiDp4UsuRxeH8JVeS+2AsdMoM3D3J34drru
+         8oTWC2tQ/9qMWIDUR19GPRNzSagCo7KM+jDlBN2hVI40MGfz2JKjOf1IvBf5DKDgNYTM
+         s7TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756712175; x=1757316975;
+        d=1e100.net; s=20230601; t=1756712182; x=1757316982;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5oeHOkgW1SXEWkLO09M8aNICfxiWEQZMbiFzd9nXhNI=;
-        b=EEZu9+Sg6VZyL8oNyHNK3E/gTh8byh7fqdvqnwfkwWmAs0y1F3bDrj7sXKyB18IMRK
-         HjiEnb707YqJwPOqbjJrToR9dbdUDeE130Gbh1WpbMaC51PD90sDV21ElqF5PEQQQAIY
-         KFNFJ+10aSy0vfxRuOLKYnYLYggcyZmOPh+iCbPuqlpR1JA/CaehrOybRFZebTFeFiAG
-         GFkZSc9904PtyIgmHsb49uOpitSK2324dgfHFPABbQixInyp6g4aFtYZFj+SWoZWz/oE
-         tvaOyckP9Ca2t0wLpsqrfZ1nN/lJdFVHNDVs9ag/O9C0+1U0M966gZTwDohQJpMVcvF8
-         qJHg==
-X-Forwarded-Encrypted: i=1; AJvYcCUpP6KNLP3n8hyRTbLSI5bxAoNvFH7tSu3rH35hhNDegwtGUsPAKobUKU9vcmrxqc1z58I=@vger.kernel.org, AJvYcCWioPzAqC1sK8JWv+tOYobe1rQqIaXxHtQF/yT5kbExEBB/iJ9/znGXUtqRY5Yrh2XzHtoC5SpaZ2FfN2E7@vger.kernel.org, AJvYcCXChjAfTcL7UHGEUkLSXUl/YIcG6af7eiWc5QzmmincQDC3uF0kULGv2QloqksSu3c9swABQsVgIPVYYpekFy7b@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRPztVPrSWNj7XIpp10Ib33h6IiebTfYeLi8msf671+C8X5I8o
-	ZeELrGxgIOwcVyW7T5Q4yK1S0d7WxeKf/0dcdRJXbyNTy5adtpsIsMMq
-X-Gm-Gg: ASbGncsVd0/N1EjqPYbGOTzlxZ3Nn264vbGNQ88vM8OSg9TM9v6kctwIvKfKy+xSrHO
-	kE8IXn/OtJ3uFZELomdeZlI8k3nLhdpxk9kZ6ldBgjAfCd3OR9qWTSzHF7c2WlGYYockc2MMq5C
-	CTRjqqVg3vYInGMOo11qVii/TdoHhiwtMjtvmAxd5z/INkDKSTz4bn0Nox27uFjOU1hi/0G8OP3
-	/MJyIvOM6grwwdO6IjYu6CslDfsNiJl0qaUGpvtP7gCHQvaq47n3Kh6rS1ds0KrsXfawHI6XP0A
-	Kxrif182WEtx9y5NMxIEC81qQiqOqGQ1ZYoQ0dK1oI+m9tF+ns6kKqHJUfbjCzf/WkiUoCQz5LQ
-	uX+J1ZpsU+m2FGu3s6kFa
-X-Google-Smtp-Source: AGHT+IEmw91k51+a/u/6Yg/p/QfXcjorBAKjeKm8LC1Ywv4G99JsY2MawriOAwBq5epZ8HFlkc1KVw==
-X-Received: by 2002:a17:902:ccd1:b0:246:de32:10d2 with SMTP id d9443c01a7336-24944a458c3mr90279695ad.15.1756712174848;
-        Mon, 01 Sep 2025 00:36:14 -0700 (PDT)
+        bh=lI7sqxzwAb6+8qpfDyLKKtJ7Me1UGv0S+1RIHhygZjU=;
+        b=l0d09+9NsxtLsRT2JNTb97I35sBTsQoJIJwo5gGN89PRUz89xXOjay5DpN9pxJI1V+
+         V0PbqbTiqZVoSfpganiiUuK3vJBSBWWvkBMjN6wjM7BwMHhtOdHWGr2h4ksUd3UzjDI0
+         H82XLdkAiNuIVSLpmeRiH9SPprS7iDuSZVqlUU2IofSC063bXf+znNks6kMO0XiSUZZi
+         65D9tpr7ErcyHfUmEvjk5EnrHsPCHPKvsi94ZLpUmMlBtzhc28pnBuReZhZXc8JwI1YE
+         RFcNV4xCmrPtG6QRG0t5a/pSscSdmuAeIDPuYg2IcEnAYtSXAAPZ6gIA8UKvzmcJpJXh
+         TdWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWikFD6qKdexhBpk+m3isxEils23u5M5edPs6NuyjjGRvg+bS09Dteg3IN48UdPoFkb+6slztc7KeRG/V+S@vger.kernel.org, AJvYcCXBWdHqtheyMUSbKZkmtAW8s6JGWg7byZ+8YI8zPi2DZ2CybKbN9nGlyHt9mE/aswnQZWU=@vger.kernel.org, AJvYcCXNOc+hv1dNPCwb9C/E7pFvauCQOCoeItm9NqmtEEbZIxzD5Bdc80xu2RHxKyxLm7PwM5ZmLBZYFFBS3AjRZlGa@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7drK8PsUixd9RZs6a9eoNZXSMDKN88KjWHYPC77xoeNqvjXi9
+	6Xo4NZJvEcohjt60BUpk/Z2UfbupdDAhv9VDaa5i/YkAMSBQhgPVF4No
+X-Gm-Gg: ASbGncsbpR5h7mVPuJ1ESvL2dD9MIckt0aSGTKUKZwle3jx6xpRn0+W4Id4fcsBmT6q
+	vBzNXqTLhpKmMXxCt859YvqCqWwQwWHu8tN7X5aFmuA8dNkhAOKNtjUAtauHpe3ZsuxznUgguRY
+	jIXsJAb3lM2ie2SHyp2MMNHRGbr5fr1TWBadhqafa/gv/hgKTzZjjMtOJNEf4qQMM5y8W29fqh/
+	skhxLVsswgTu/MCTPqEEILU6sum2smUPWehR4wdbcRFkMc8EDLDTc0UCJrBcdX51408HoweGean
+	uimBC8Ka2tMjwkbubthSPK9Ee1naDsp2pbqxPh9c9RYR7KMi82GxXAaLYKwr2P+q7ZVhns8qZ8L
+	/OZrUdfungsvdeZNlHHnK
+X-Google-Smtp-Source: AGHT+IH+dCQY4Kqqb6suPsSi0/Emx7fwwdzdMp+EJ6/IyH5dxTgGWWtb0vd7ZMANbaRLjtbZGTJDPw==
+X-Received: by 2002:a17:902:ef52:b0:248:dddf:e3f0 with SMTP id d9443c01a7336-24944a4faf4mr88999825ad.19.1756712181651;
+        Mon, 01 Sep 2025 00:36:21 -0700 (PDT)
 Received: from days-ASUSLaptop.lan ([2406:8dc0:6008:46::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24903737b05sm95867045ad.49.2025.09.01.00.36.08
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24903737b05sm95867045ad.49.2025.09.01.00.36.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Sep 2025 00:36:14 -0700 (PDT)
+        Mon, 01 Sep 2025 00:36:21 -0700 (PDT)
 From: dayss1224@gmail.com
 To: pbonzini@redhat.com,
 	shuah@kernel.org,
@@ -87,11 +87,11 @@ Cc: atish.patra@linux.dev,
 	linux-kernel@vger.kernel.org,
 	kvm-riscv@lists.infradead.org,
 	linux-riscv@lists.infradead.org,
-	Dong Yang <dayss1224@gmail.com>,
-	Quan Zhou <zhouquan@iscas.ac.cn>
-Subject: [PATCH v3 2/3] KVM: riscv: selftests: Add missing headers for new testcases
-Date: Mon,  1 Sep 2025 15:35:50 +0800
-Message-Id: <bfb66541918de68cd89b83bc3430af94bdc75a85.1756710918.git.dayss1224@gmail.com>
+	Quan Zhou <zhouquan@iscas.ac.cn>,
+	Dong Yang <dayss1224@gmail.com>
+Subject: [PATCH v3 3/3] KVM: riscv: selftests: Add common supported test cases
+Date: Mon,  1 Sep 2025 15:35:51 +0800
+Message-Id: <c447f18115b27562cd65863645e41a5ef89bd37b.1756710918.git.dayss1224@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1756710918.git.dayss1224@gmail.com>
 References: <cover.1756710918.git.dayss1224@gmail.com>
@@ -103,67 +103,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Dong Yang <dayss1224@gmail.com>
+From: Quan Zhou <zhouquan@iscas.ac.cn>
 
-Add missing headers to fix the build for new RISC-V KVM selftests.
+Some common KVM test cases are supported on riscv now as following:
+
+    access_tracking_perf_test
+    dirty_log_perf_test
+    memslot_modification_stress_test
+    memslot_perf_test
+    mmu_stress_test
+    rseq_test
 
 Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Dong Yang <dayss1224@gmail.com>
 ---
- tools/testing/selftests/kvm/access_tracking_perf_test.c        | 1 +
- tools/testing/selftests/kvm/include/riscv/processor.h          | 1 +
- tools/testing/selftests/kvm/memslot_modification_stress_test.c | 1 +
- tools/testing/selftests/kvm/memslot_perf_test.c                | 1 +
- 4 files changed, 4 insertions(+)
+ tools/testing/selftests/kvm/Makefile.kvm | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-index c9de66537ec3..b058f27b2141 100644
---- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-+++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-@@ -50,6 +50,7 @@
- #include "memstress.h"
- #include "guest_modes.h"
- #include "processor.h"
-+#include "ucall_common.h"
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index f6fe7a07a0a2..88613a851cc1 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -195,9 +195,15 @@ TEST_GEN_PROGS_s390 += rseq_test
+ TEST_GEN_PROGS_riscv = $(TEST_GEN_PROGS_COMMON)
+ TEST_GEN_PROGS_riscv += riscv/sbi_pmu_test
+ TEST_GEN_PROGS_riscv += riscv/ebreak_test
++TEST_GEN_PROGS_riscv += access_tracking_perf_test
+ TEST_GEN_PROGS_riscv += arch_timer
+ TEST_GEN_PROGS_riscv += coalesced_io_test
++TEST_GEN_PROGS_riscv += dirty_log_perf_test
+ TEST_GEN_PROGS_riscv += get-reg-list
++TEST_GEN_PROGS_riscv += memslot_modification_stress_test
++TEST_GEN_PROGS_riscv += memslot_perf_test
++TEST_GEN_PROGS_riscv += mmu_stress_test
++TEST_GEN_PROGS_riscv += rseq_test
+ TEST_GEN_PROGS_riscv += steal_time
  
- #include "cgroup_util.h"
- #include "lru_gen_util.h"
-diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
-index 162f303d9daa..e58282488beb 100644
---- a/tools/testing/selftests/kvm/include/riscv/processor.h
-+++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-@@ -9,6 +9,7 @@
- 
- #include <linux/stringify.h>
- #include <asm/csr.h>
-+#include <asm/vdso/processor.h>
- #include "kvm_util.h"
- 
- #define INSN_OPCODE_MASK	0x007c
-diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-index c81a84990eab..3cdfa3b19b85 100644
---- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-+++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-@@ -22,6 +22,7 @@
- #include "processor.h"
- #include "test_util.h"
- #include "guest_modes.h"
-+#include "ucall_common.h"
- 
- #define DUMMY_MEMSLOT_INDEX 7
- 
-diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
-index e3711beff7f3..5087d082c4b0 100644
---- a/tools/testing/selftests/kvm/memslot_perf_test.c
-+++ b/tools/testing/selftests/kvm/memslot_perf_test.c
-@@ -25,6 +25,7 @@
- #include <test_util.h>
- #include <kvm_util.h>
- #include <processor.h>
-+#include <ucall_common.h>
- 
- #define MEM_EXTRA_SIZE		SZ_64K
- 
+ TEST_GEN_PROGS_loongarch += coalesced_io_test
 -- 
 2.34.1
 
