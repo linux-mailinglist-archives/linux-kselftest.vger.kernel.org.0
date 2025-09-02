@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-40516-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40517-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBE1EB3F6A2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 09:26:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11F86B3F6AC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 09:27:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 427A83BC745
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 07:26:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 268732021F5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 07:26:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D4E42E6CBA;
-	Tue,  2 Sep 2025 07:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E5B2E718D;
+	Tue,  2 Sep 2025 07:26:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V85lubjW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bIESf+HV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E93B2E03FD;
-	Tue,  2 Sep 2025 07:26:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739CE2E6CAD;
+	Tue,  2 Sep 2025 07:26:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756798001; cv=none; b=b6JZdAYzH8fHwXa3AiJiO90BOhGmCpxg0c+ydz5zLwNlZmO7LEXrmg+Fjth4lpDmvnCZ1Hr3Sz1bZO6+b3T+a58bemZ+QTbLbJPgDoN/U29cjI3+OI6uxaNG04FoWBjJysvYjJREpYjIJURJeloi2Wtg7Q4Miol9mx6uWujD0F0=
+	t=1756798008; cv=none; b=G++NOmmXEMX+wQa1NZOTHuP4DdtegyIpTanDhQswOHTQ6D6Pp8mD0hO3EOaOiuJ80iaU09WtBSBviaVaeoo95qZ86hhrlucPyf6+/ibVEcKMVtd+RsYiF5e8z9VpL8OyHMVXwyKHdRl6IqVYoKvQNk9RI4kswt2wDAF8pLHCPxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756798001; c=relaxed/simple;
-	bh=LvKMJecvv6fCl08ak6wcz+usML93SEKeGztEfvaXXos=;
+	s=arc-20240116; t=1756798008; c=relaxed/simple;
+	bh=fpxAMTh1DHFN9bdroAryNzz1TbRNMH5pMcaPuAnjYMM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P2ozm+GaUEXw3GlQrEY4YzZE0oH8rX2S3CUEq1BK1ueWKpjLHTs6/gFvIBaxgHJvY00NjTBLa155mHMNfA0H0+aA0FJnf0JwL41amOhVHLxaulrRX3mjG+0/aoiy/S4uDUPgY20uD/l0+m72d2lj19tdeCs6yk6LZ7s7LqkV7js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V85lubjW; arc=none smtp.client-ip=209.85.210.172
+	 MIME-Version; b=gzkTlJnRyiUeH0b2YGAjRyEo+MX0YsZZlomSW0ZrfF3KJ2PMSKkmCmemL4IiuhTKdco940/47lvb0q2jx6S4UEc68AS2rp1QzZX8INBet1XdnFP+wfX5cyJgDGEI6YQ/Kuur1NKgUU8DRcxwPUNs23XUyGseLlAsBW4K7MT56VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bIESf+HV; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-77252278757so1305280b3a.3;
-        Tue, 02 Sep 2025 00:26:39 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-32753ef4e33so3719255a91.0;
+        Tue, 02 Sep 2025 00:26:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756797999; x=1757402799; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756798005; x=1757402805; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1ROTQkSqqAop+hXmMAfGEDF4zfkGUQT7wlA8Dp+fSV8=;
-        b=V85lubjWeT8ldMUBiVlNXyyDq46LmYMTWDWIdBhYQPwQKSCrWeKciXpw6g4As9zlp/
-         o7z5upJ+xap66D236RcO+NbQ+umlTOfTtwPDver1SCrjpzYlaqIs3KTscE6TMXL5h+PO
-         JXWO01GH3eB7lf+E3BSnAbFyz66kZvjwoxIoqPH91YST7xKm3HiM5iH8Rm7+ZZQkB4Q9
-         u1G+scGo0Ey4PxtTych5ng1itdTHBH9TOQpyk2iUKq2Uv+B1u8S/48TqCB7Crd1RYJMs
-         +/V5FMK+Cs9WwHjeBKRiTyNlNnWy/zRZv4Dy3LIDkYIB70ZyR8H6hcH4c6viqJHiAnzs
-         7waA==
+        bh=H6NPvT6bQ/Fm1Ox6j1QOMXLS7IgmyQZhMktUnB9yevI=;
+        b=bIESf+HV/+6JsKepdCJpZYZNJjUz9+dZfGgTkon+zF60+fLWy68ADjngP5MiG0gyWk
+         lzuZjVag2X9zWOKtK7EcnKcE2FXePHQYbKCozvWgGdtveXUdy0O8nP8tPNPXutr3SRow
+         Ea7lUKni2XyRH79xrqGfGcVSSZv7Ww9+rL10dBglZpClOag4MWkS6/BAc4tmQh7vEQAi
+         CmNCYb4xU9TVM8Ei8P1/M2mxPZikNNxJ41MQVYkpPZ37dbBvNQq9PYh353ahWHOebNxb
+         Hrl8u4S+tNR0cITa67br7mf97PaGHW3Az8UHrMenxFDNbHOP6eDfJN0p4g697Ikgxhp7
+         wJmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756797999; x=1757402799;
+        d=1e100.net; s=20230601; t=1756798005; x=1757402805;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1ROTQkSqqAop+hXmMAfGEDF4zfkGUQT7wlA8Dp+fSV8=;
-        b=TkYSvSZXetgoDH7pyL1skjSKM+NHiALQa0qaY2UDyb+ZD0gMGsp8BTPQgBiAQqqXKJ
-         DI3Zn7jnkRZ050dZT6h6takh5qDk7oMwfEWnETQUF2kPM24pR3oaKnNupZ34k5w1EzzQ
-         kLvLB6mNnVpn35wK16R19LzK3d1oS7J0p2BP6A5/sXA8i+20SCPl6EJmky2WIaYQPenT
-         DPkVil0O18THol2iDRDMprNUoK/Q+pzC7jiZoQht/yCT2xNHu1zIp+2x/27m12om/NWS
-         sD0IRO22NmF0/LWvhDCX3IxjxkFWoxu/5+3DVC/leOJUYunjNIoD6/6AzAwCaZdGBuqU
-         J8wg==
-X-Forwarded-Encrypted: i=1; AJvYcCXukEhybJijNSlj3FDezZ2Bui1y7InZGt/X3oNctRIT7G16FH3/hOkxOsaT075B+G891w03LnH3QDGdwtvlCZA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsDaQ8R/r1+/9Hbpv8eqgPkha+1d5w0UC6G0PNvCarPIa54G8E
-	rZbzIWPnO/Ru+EEzlL3cBJ6gLO2ZVHwoWOQEgV8ZIbjwI5kpEC6NaSIXUJFAFGfcWWs=
-X-Gm-Gg: ASbGncthVp0KMq+m0mnRRiTAVkpC3bKtsujEu9ygxaB1H05V2FBq5Gn97c8ikqqt/pW
-	R5BN1lVhDR4fvWh0/YV1B1BQmdw6wOfpktPPR9YaWuGWG2eyAaAE7dNLnTnIDp9fJSnqOt1ySMP
-	PAAuAyAE30zmwkP8liziejcoUXJGBrLgdGVoiPrGKPnRA1jM0bDGAp8uk/jnQbAEI4/rZ+YlQr0
-	4DIp49WNLinliRyYr1gm1z7Hpx7kPwkLgeJlKjy+tfIcp49U51i5qSW5234eX7tVC+/+mrTrVqj
-	jJ2Wkwpfli2k4susxow/H6WpT3iaVYV9mrDxHx0/kT+2jbAml3IhehQC4sLVrX5z7Tg1YH1zjms
-	/OoYuTQL/p4O/VaR89iB8zcQJQ2M26hAOZI3FJk7fYg==
-X-Google-Smtp-Source: AGHT+IFbsRKItnVYXBA/kLP0Fy939d8jTQ8sFMbOgaWYFiuxk/U/RaOtpPVINCeC5Eu/6XF0KKG1Bg==
-X-Received: by 2002:a05:6a20:12c5:b0:233:7c59:5bdd with SMTP id adf61e73a8af0-243d6e06de9mr14130688637.13.1756797998605;
-        Tue, 02 Sep 2025 00:26:38 -0700 (PDT)
+        bh=H6NPvT6bQ/Fm1Ox6j1QOMXLS7IgmyQZhMktUnB9yevI=;
+        b=C4splFLcSMagEtM2eGLnR1ICBjcwsSp9Ggzt5rYDItHNDGJfXAhoQuSQZrbHkPpomS
+         mPOjkYAKUPdQoy4sVqjj+SU0IID+/euqTg78nMoqB/xiqYZ3Fb1hxWdwD26aHSAD8+tK
+         6qZez9Xqg+pNkQog7sEMChBrAv0NoZ78Gvwsz5B0fCz+1bSTxgZhmm6IWSaXAaHEJvMi
+         EPmpGa99pCG4jr83yGA8RHij8tdpqABDCyoFJ/uV/wI+BriPaYsEnXOuDqywFyZ1f8vu
+         faFWeOvqgjrmCGNcZMuV54/CF1TkP08FU/fxKeCHbcu0PFC0c1WYUqycVWu4djV2i/5V
+         VP2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVNEhemOA1ROEZ4uN9TwpbTobbIvFQs3Vt63ufUd49/6eEKJtRhvnT1EXrhVM6jTybgcfzsU7Cy0iHBtXQ7eE4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGjLJ2FyPAGHHFgYjDp/1FNVadBiM/UWCAuZQoxCS/sAjPukFi
+	dExi/DUYRk4c27hZBOvFooNvdD4Sbtw9E+fMDykpMQgf9C3avDKhCddu36nHeZrbTmQ=
+X-Gm-Gg: ASbGncv2LOLSXvelZ58Du7hjdyBXgeITs7PV9HAtSCgyAuLPU/t3zsi7QSQR/XPWnAk
+	0Osqhheu4GbAacjGZ/2Vx8Baq1ChoIGRDuIheuWFeJWKoF6RiCFRtjk1fbab26b9T87hDpkTUPr
+	BtlHoVd+mvpruh1JPslFTESDG2rR9Wle3BROu4+1MuRFO3Vd2u+zNJYhth6Gq0GZzzBKJcmFlV4
+	s/r7MmC54WMw4k3E8NNHaDib9V8n4FpRYLixw6jGmLJhQNIqUH0Pzymn138Dd0ZvlEGwQUMdFOV
+	N7iZ3Ua1Ni1OPNzBj3vFBjGz+qEE+N95POC2eSl9M4vk0hyXtoz+rERy43VdG2YAP5i9+hl5Ms5
+	+ouEVmeHtStJ2quLmVlvHZ0CznbWJo56Gef48vUHZOw==
+X-Google-Smtp-Source: AGHT+IGdU/ZAXvhK+gb4+6xvuoWstmZphUO60Sh4mLhsd+VaRlO2+ZRrPNUFkcLVJ4111t7W01Yt3g==
+X-Received: by 2002:a17:90b:55c8:b0:314:2892:b1e0 with SMTP id 98e67ed59e1d1-328156e55d5mr13525247a91.34.1756798005409;
+        Tue, 02 Sep 2025 00:26:45 -0700 (PDT)
 Received: from fedora.redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-327d9347189sm13416648a91.9.2025.09.02.00.26.32
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-327d9347189sm13416648a91.9.2025.09.02.00.26.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 00:26:38 -0700 (PDT)
+        Tue, 02 Sep 2025 00:26:45 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Jay Vosburgh <jv@jvosburgh.net>,
@@ -93,9 +93,9 @@ Cc: Jay Vosburgh <jv@jvosburgh.net>,
 	bridge@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 net-next 2/5] bonding: use common function to compute the features
-Date: Tue,  2 Sep 2025 07:25:59 +0000
-Message-ID: <20250902072602.361122-3-liuhangbin@gmail.com>
+Subject: [PATCHv2 net-next 3/5] team: use common function to compute the features
+Date: Tue,  2 Sep 2025 07:26:00 +0000
+Message-ID: <20250902072602.361122-4-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250902072602.361122-1-liuhangbin@gmail.com>
 References: <20250902072602.361122-1-liuhangbin@gmail.com>
@@ -107,160 +107,155 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use the new functon netdev_compute_features_from_lowers() to compute the
-bonding features.
+Use the new helper netdev_compute_features_from_lowers() to compute the
+team device features. This helper performs both the feature computation
+and the netdev_change_features() call.
 
-Note that bond_compute_features() currently uses bond_for_each_slave()
-to traverse the lower devices list, and that is just a macro wrapper of
-netdev_for_each_lower_private(). We use similar helper
-netdev_for_each_lower_dev() in netdev_compute_features_from_lowers() to
-iterate the slave device, as there is not need to get the private data.
+Note that such change replace the lower layer traversing currently done
+using team->port_list with netdev_for_each_lower_dev(). Such change is
+safe as `port_list` contains exactly the same elements as
+`team->dev->adj_list.lower` and the helper is always invoked under the
+RTNL lock.
 
-No functional change intended.
+With this change, the explicit netdev_change_features() in
+team_add_slave() can be safely removed, as team_port_add()
+already takes care of the notification via
+netdev_compute_features_from_lowers(), and same thing for team_del_slave()
+
+This also fixes missing computations for MPLS, XFRM, and TSO/GSO partial
+features.
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- drivers/net/bonding/bond_main.c | 99 ++-------------------------------
- 1 file changed, 4 insertions(+), 95 deletions(-)
+ drivers/net/team/team_core.c | 73 ++----------------------------------
+ 1 file changed, 4 insertions(+), 69 deletions(-)
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 257333c88710..ec098a52ef75 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -1540,97 +1540,6 @@ static netdev_features_t bond_fix_features(struct net_device *dev,
- 	return features;
+diff --git a/drivers/net/team/team_core.c b/drivers/net/team/team_core.c
+index 17f07eb0ee52..018d876e140a 100644
+--- a/drivers/net/team/team_core.c
++++ b/drivers/net/team/team_core.c
+@@ -982,63 +982,6 @@ static void team_port_disable(struct team *team,
+ 	team_lower_state_changed(port);
  }
  
--#define BOND_VLAN_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
--				 NETIF_F_FRAGLIST | NETIF_F_GSO_SOFTWARE | \
--				 NETIF_F_GSO_ENCAP_ALL | \
--				 NETIF_F_HIGHDMA | NETIF_F_LRO)
+-#define TEAM_VLAN_FEATURES (NETIF_F_HW_CSUM | NETIF_F_SG | \
+-			    NETIF_F_FRAGLIST | NETIF_F_GSO_SOFTWARE | \
+-			    NETIF_F_HIGHDMA | NETIF_F_LRO | \
+-			    NETIF_F_GSO_ENCAP_ALL)
 -
--#define BOND_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
--				 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE | \
--				 NETIF_F_GSO_PARTIAL)
+-#define TEAM_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+-				 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE)
 -
--#define BOND_MPLS_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
--				 NETIF_F_GSO_SOFTWARE)
--
--#define BOND_GSO_PARTIAL_FEATURES (NETIF_F_GSO_ESP)
--
--
--static void bond_compute_features(struct bonding *bond)
+-static void __team_compute_features(struct team *team)
 -{
--	netdev_features_t gso_partial_features = BOND_GSO_PARTIAL_FEATURES;
+-	struct team_port *port;
+-	netdev_features_t vlan_features = TEAM_VLAN_FEATURES;
+-	netdev_features_t enc_features  = TEAM_ENC_FEATURES;
+-	unsigned short max_hard_header_len = ETH_HLEN;
 -	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE |
 -					IFF_XMIT_DST_RELEASE_PERM;
--	netdev_features_t vlan_features = BOND_VLAN_FEATURES;
--	netdev_features_t enc_features  = BOND_ENC_FEATURES;
--#ifdef CONFIG_XFRM_OFFLOAD
--	netdev_features_t xfrm_features  = BOND_XFRM_FEATURES;
--#endif /* CONFIG_XFRM_OFFLOAD */
--	netdev_features_t mpls_features  = BOND_MPLS_FEATURES;
--	struct net_device *bond_dev = bond->dev;
--	struct list_head *iter;
--	struct slave *slave;
--	unsigned short max_hard_header_len = ETH_HLEN;
--	unsigned int tso_max_size = TSO_MAX_SIZE;
--	u16 tso_max_segs = TSO_MAX_SEGS;
 -
--	if (!bond_has_slaves(bond))
+-	rcu_read_lock();
+-	if (list_empty(&team->port_list))
 -		goto done;
 -
 -	vlan_features = netdev_base_features(vlan_features);
--	mpls_features = netdev_base_features(mpls_features);
+-	enc_features = netdev_base_features(enc_features);
 -
--	bond_for_each_slave(bond, slave, iter) {
+-	list_for_each_entry_rcu(port, &team->port_list, list) {
 -		vlan_features = netdev_increment_features(vlan_features,
--			slave->dev->vlan_features, BOND_VLAN_FEATURES);
+-					port->dev->vlan_features,
+-					TEAM_VLAN_FEATURES);
+-		enc_features =
+-			netdev_increment_features(enc_features,
+-						  port->dev->hw_enc_features,
+-						  TEAM_ENC_FEATURES);
 -
--		enc_features = netdev_increment_features(enc_features,
--							 slave->dev->hw_enc_features,
--							 BOND_ENC_FEATURES);
--
--#ifdef CONFIG_XFRM_OFFLOAD
--		xfrm_features = netdev_increment_features(xfrm_features,
--							  slave->dev->hw_enc_features,
--							  BOND_XFRM_FEATURES);
--#endif /* CONFIG_XFRM_OFFLOAD */
--
--		gso_partial_features = netdev_increment_features(gso_partial_features,
--								 slave->dev->gso_partial_features,
--								 BOND_GSO_PARTIAL_FEATURES);
--
--		mpls_features = netdev_increment_features(mpls_features,
--							  slave->dev->mpls_features,
--							  BOND_MPLS_FEATURES);
--
--		dst_release_flag &= slave->dev->priv_flags;
--		if (slave->dev->hard_header_len > max_hard_header_len)
--			max_hard_header_len = slave->dev->hard_header_len;
--
--		tso_max_size = min(tso_max_size, slave->dev->tso_max_size);
--		tso_max_segs = min(tso_max_segs, slave->dev->tso_max_segs);
+-		dst_release_flag &= port->dev->priv_flags;
+-		if (port->dev->hard_header_len > max_hard_header_len)
+-			max_hard_header_len = port->dev->hard_header_len;
 -	}
--	bond_dev->hard_header_len = max_hard_header_len;
--
 -done:
--	bond_dev->gso_partial_features = gso_partial_features;
--	bond_dev->vlan_features = vlan_features;
--	bond_dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
--				    NETIF_F_HW_VLAN_CTAG_TX |
--				    NETIF_F_HW_VLAN_STAG_TX;
--#ifdef CONFIG_XFRM_OFFLOAD
--	bond_dev->hw_enc_features |= xfrm_features;
--#endif /* CONFIG_XFRM_OFFLOAD */
--	bond_dev->mpls_features = mpls_features;
--	netif_set_tso_max_segs(bond_dev, tso_max_segs);
--	netif_set_tso_max_size(bond_dev, tso_max_size);
+-	rcu_read_unlock();
 -
--	bond_dev->priv_flags &= ~IFF_XMIT_DST_RELEASE;
--	if ((bond_dev->priv_flags & IFF_XMIT_DST_RELEASE_PERM) &&
--	    dst_release_flag == (IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM))
--		bond_dev->priv_flags |= IFF_XMIT_DST_RELEASE;
+-	team->dev->vlan_features = vlan_features;
+-	team->dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
+-				     NETIF_F_HW_VLAN_CTAG_TX |
+-				     NETIF_F_HW_VLAN_STAG_TX;
+-	team->dev->hard_header_len = max_hard_header_len;
 -
--	netdev_change_features(bond_dev);
+-	team->dev->priv_flags &= ~IFF_XMIT_DST_RELEASE;
+-	if (dst_release_flag == (IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM))
+-		team->dev->priv_flags |= IFF_XMIT_DST_RELEASE;
 -}
 -
- static void bond_setup_by_slave(struct net_device *bond_dev,
- 				struct net_device *slave_dev)
+-static void team_compute_features(struct team *team)
+-{
+-	__team_compute_features(team);
+-	netdev_change_features(team->dev);
+-}
+-
+ static int team_port_enter(struct team *team, struct team_port *port)
  {
-@@ -2370,7 +2279,7 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
- 	}
+ 	int err = 0;
+@@ -1300,7 +1243,7 @@ static int team_port_add(struct team *team, struct net_device *port_dev,
+ 	port->index = -1;
+ 	list_add_tail_rcu(&port->list, &team->port_list);
+ 	team_port_enable(team, port);
+-	__team_compute_features(team);
++	netdev_compute_features_from_lowers(team->dev);
+ 	__team_port_change_port_added(port, !!netif_oper_up(port_dev));
+ 	__team_options_change_check(team);
  
- 	bond->slave_cnt++;
--	bond_compute_features(bond);
-+	netdev_compute_features_from_lowers(bond->dev);
- 	bond_set_carrier(bond);
+@@ -1382,7 +1325,7 @@ static int team_port_del(struct team *team, struct net_device *port_dev)
+ 	dev_set_mtu(port_dev, port->orig.mtu);
+ 	kfree_rcu(port, rcu);
+ 	netdev_info(dev, "Port device %s removed\n", portname);
+-	__team_compute_features(team);
++	netdev_compute_features_from_lowers(team->dev);
  
- 	/* Needs to be called before bond_select_active_slave(), which will
-@@ -2622,7 +2531,7 @@ static int __bond_release_one(struct net_device *bond_dev,
- 		call_netdevice_notifiers(NETDEV_RELEASE, bond->dev);
- 	}
+ 	return 0;
+ }
+@@ -1976,9 +1919,6 @@ static int team_add_slave(struct net_device *dev, struct net_device *port_dev,
  
--	bond_compute_features(bond);
-+	netdev_compute_features_from_lowers(bond->dev);
- 	if (!(bond_dev->features & NETIF_F_VLAN_CHALLENGED) &&
- 	    (old_features & NETIF_F_VLAN_CHALLENGED))
- 		slave_info(bond_dev, slave_dev, "last VLAN challenged slave left bond - VLAN blocking is removed\n");
-@@ -4126,7 +4035,7 @@ static int bond_slave_netdev_event(unsigned long event,
+ 	err = team_port_add(team, port_dev, extack);
+ 
+-	if (!err)
+-		netdev_change_features(dev);
+-
+ 	return err;
+ }
+ 
+@@ -1991,11 +1931,6 @@ static int team_del_slave(struct net_device *dev, struct net_device *port_dev)
+ 
+ 	err = team_port_del(team, port_dev);
+ 
+-	if (err)
+-		return err;
+-
+-	netdev_change_features(dev);
+-
+ 	return err;
+ }
+ 
+@@ -2190,7 +2125,7 @@ static void team_setup(struct net_device *dev)
+ 
+ 	dev->features |= NETIF_F_GRO;
+ 
+-	dev->hw_features = TEAM_VLAN_FEATURES |
++	dev->hw_features = VIRTUAL_DEV_VLAN_FEATURES |
+ 			   NETIF_F_HW_VLAN_CTAG_RX |
+ 			   NETIF_F_HW_VLAN_CTAG_FILTER |
+ 			   NETIF_F_HW_VLAN_STAG_RX |
+@@ -2994,7 +2929,7 @@ static int team_device_event(struct notifier_block *unused,
  	case NETDEV_FEAT_CHANGE:
- 		if (!bond->notifier_ctx) {
- 			bond->notifier_ctx = true;
--			bond_compute_features(bond);
-+			netdev_compute_features_from_lowers(bond->dev);
- 			bond->notifier_ctx = false;
+ 		if (!port->team->notifier_ctx) {
+ 			port->team->notifier_ctx = true;
+-			team_compute_features(port->team);
++			netdev_compute_features_from_lowers(port->team->dev);
+ 			port->team->notifier_ctx = false;
  		}
  		break;
-@@ -6109,7 +6018,7 @@ void bond_setup(struct net_device *bond_dev)
- 	 * capable
- 	 */
- 
--	bond_dev->hw_features = BOND_VLAN_FEATURES |
-+	bond_dev->hw_features = VIRTUAL_DEV_VLAN_FEATURES |
- 				NETIF_F_HW_VLAN_CTAG_RX |
- 				NETIF_F_HW_VLAN_CTAG_FILTER |
- 				NETIF_F_HW_VLAN_STAG_RX |
 -- 
 2.50.1
 
