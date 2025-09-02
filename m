@@ -1,91 +1,100 @@
-Return-Path: <linux-kselftest+bounces-40504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54D25B3F564
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:24:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9041B3F5CA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:45:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18A83203FA5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 06:24:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D4A23ABB2A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 06:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5663D2E36E3;
-	Tue,  2 Sep 2025 06:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7442D7DD1;
+	Tue,  2 Sep 2025 06:45:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="tkzdtSHF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlQd74Q3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02682E3373;
-	Tue,  2 Sep 2025 06:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78AF11CBA;
+	Tue,  2 Sep 2025 06:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756794247; cv=none; b=QcpT2BcWmW9G9eFtY79WnZyxDV0dMBVOhY+VBZoJd05EE8Jfc6Zt8NFoT5zTQ5O1+38k6CvZnGVykdkGINdAP0ALmiIkaLKHTqj8gmSzYX02kOZ4tFUVXyQOn4IWADZ9c1Wy5lmVWNgETdh9i+ov1DH6KtoEakhTiFMbAdP+sxo=
+	t=1756795521; cv=none; b=oNeYEH49gVqaRMw9g7Itvi5xix7zsSiDk/w1bfwoFgJNL0ngwYZrveITiyYtTYM05sjlqZlwW6gXvfgLNPHP7M16LNasDrNnvCFex7a3GGBftHYX8Q+CqZWex+FqHNTl8BcoY5p/ndfHy3r+A2WkTbmltKws7JlaniXb6N1qRCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756794247; c=relaxed/simple;
-	bh=LVB94l7OIqO0HP/kAtDPp8pMZNK+I+FVVI6efuDsYHA=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=THEehUh72RluneL+ZSvJKBoW5dbmV8cqlw6hBUEsb3DGzkRV/ggY88SNrF0r94WmxhW91tmqMawdSND5fnoDrQH9XfNPS1Fbm0pKEt2BFlSm/SmcaZBBlUQFlYUstWePMUo3GMWDX5AnB+6nrE2XU69KYn6YVMPqTKynhUubowA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=tkzdtSHF; arc=none smtp.client-ip=203.205.221.235
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756793941;
-	bh=GI0eUTf/hMdcFnYu4tIUQhlf6BEb4nTzRS3IPbwEns4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=tkzdtSHFrpfsG82Z9QibZ5JBdmeFgCyrjGlHWEV3nFkaY0eNa6y625gQzg97Cl6A+
-	 01rwzYKdI8h3I67ptkMw43kNcQbLfR2mW/SjPzH+8pCoFjLFDCrXQvH41u624YWkPr
-	 S+gyuaOCtgiIHolT5S9oClYQyuckAunVRgU4kRt0=
-Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
-	id 4B9200C5; Tue, 02 Sep 2025 14:18:57 +0800
-X-QQ-mid: xmsmtpt1756793937t9zzjdmof
-Message-ID: <tencent_4142FE591497F42A5FAF5EA36A8861068708@qq.com>
-X-QQ-XMAILINFO: Nwl7PuG5jlSkoyEuDKoEHKe/JOaSucJxIXrvzTSn3T2JafyMErWHfroOgk8ykX
-	 TSzbqiYvemk3nLO7nDgk6pAlHV3BJreRjmGVieJC/x7uFAw7qZodQdo6iSOFhoGpb1/z+bhmoo5c
-	 E148nDhTTIVFEpFtTVsnseRYmEbxnL29RHNTmZqm0tDopO2Jbed9EzxjVKNPVHeHhMXc4sd0d+lr
-	 61Uc4PpwAUJl8xrwjpdR0kJHe1UryTBkeuEwgL15ueb9p3epHxYXJa/UxxM/6YzyQ+87t2qYyBzg
-	 rXoM3yt6AxaDxWs8FqdwfvqpKIypWQWkdf57yMeizW3aovkZfyzlLD6SN480uj3yof7KecY2h31Z
-	 XFNcyIconvUKhy4pUx5HaOhCmeEKR5B8HNdhk5cB1SMAID/9EziGH/y8bLcrgLOK9psafRzGFm0J
-	 uEmo7XqDkbb4g49LqacB7wuHUp1SiPO1q6MWWBnkjbyY9T1vMEm6JTUmsX3gBOAkcaWs370ziE63
-	 2an6f4yi1hlPYruSr5EgCXhEaHw7ufHiPbg/j3vDDAnstXgA1V2O8SLjWZhyQG8no0nZ67E4iio/
-	 J1YwYoivNRgZOxYI2pctkHHPirMNmbsYv4H78wyt/AAOY8yYuXuu25BvwaB2nkOHYCUr0zMjqPEx
-	 JfUCkUhZB4AGoH2eVCr9/tlZyN+6pDv6HMZ2r6CZnSNcwAddnxtKu4sLXluyAq5seLUc9JIHQSf8
-	 Btp84paL0P4EpqpaDZPud0q8FfRGCrj7iFAcdcNeNPeWK9PPiXcLJM6sNYVgqJevulMuIAO6R4dG
-	 J/gGnQCuGv6s/3c+sdHlkrf1/w1DTtv/1jz8pivKruV60TF4dXWs6HpPfxXVpgBRY8XubvqJAJhm
-	 L+5HAdnjus8Qm8daOVljlueKa3zzmS8wpNatpQ3AcOo3Lfs3Gf3yLGgc+ZOiMEETyUA3IEUvn6g3
-	 tTIMPUs5W95dEI9EKvK6KVwvLepyPq/iFtwM378/F3UguckWJVShUd0a2gvZpfJ4AXREmYZxw5Yx
-	 yRmRRN3GCK8hL6C7oIuXaWBVnCxk7j3PSRf2l3yQ==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-From: Rong Tao <rtoax@foxmail.com>
-To: andrii@kernel.org,
-	ast@kernel.org,
-	vmalik@redhat.com
-Cc: rtoax@foxmail.com,
-	Rong Tao <rongtao@cestc.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
+	s=arc-20240116; t=1756795521; c=relaxed/simple;
+	bh=MZDGet5HvbyJe4I49Po29yzsJmGJlefb4UaCgiQD2as=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XwU7wxZ4PubMABEWApE5oy2lrPAwL1La4wngmB7AS8Bmba7MwtXQxdY1jawdpCXJzK+jf35z+YXaAiMe1KlSMYBVE8qpReLfLOt25z36t6IT4nr+WbwALGcY1ZpO/yqAu5H9ImrkqAK+K7+/inPh9etwanl+MVAvC/TlaMEun84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlQd74Q3; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7723f0924a3so2979476b3a.2;
+        Mon, 01 Sep 2025 23:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756795518; x=1757400318; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z1KdY6vBL5GsCdWVNZfyRlg3w7cF/fAODtNwJr3SZBw=;
+        b=IlQd74Q3OgP0II0hXSGyXv2/YGj8xuhPFLxd2GiQCR2P7BUl8s0UaZZ2jjanIj8j29
+         EiD6dykSQscMeKhkeeVJB7nJS5qLrgat2wBC2cawG3YHZTbVfajNOvFpqJsE1Zz+abQW
+         GEwlQkhQOUeWYSr+UxKXDBQbeaiwDAvQHUoK76Nwp//Z/Rhpe6j9HuMu7MyJIpWcSgso
+         oSo/8tUSubdGAA6uGE5qsnAcS5ffgoBJ5xHwXiPrY+k9YfCWvlv10ydOMbQgMqcbafG8
+         oKk041Vxkt01VawFwjB6a3uhiIUfRREs1bH+IIk0kJSTeD8IuLqRBRniGowg749Hnf3u
+         CU+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756795518; x=1757400318;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z1KdY6vBL5GsCdWVNZfyRlg3w7cF/fAODtNwJr3SZBw=;
+        b=P8oBrTMsGDXkQnZt+BN2KMQ/8cZll1ZugKUV2wvSWm9kgrb2Uy7bMpCRFK+Yn4J7HQ
+         ndr6rihGxSNIyKKZR+VdxsOLiq1sLNx1umUVb4TCu4MG6Xhnl/fq+yMwJeee8BF2d2RB
+         /PCKZpXjGovbgU3lv0U6vaSWBKSSHdp+ygeY2qYVXCE9U4GkRMutm8OL9QZcg40yiNe5
+         /2pf9qXB+HV5uHhgwt2EF+xJfvXzn0O9bXJqk7tBY2UX7zURMSDX9BrvtQGC5MWT5ImH
+         k+xANGSGd+JP/G7swM56OgWhsymx0jrndaPSK5QTHJBZFpJxWT1NBJfkSuuCeAekqnab
+         VWWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUf858e1MYZLVwmf51tK/zanClqg7B8jSq0ytFO1UwcytSxgEblhF2AXcs1pBVBbKxq0Cbx/7htYKNQsYB9XKxF@vger.kernel.org, AJvYcCUn/u/LJWa6uzuBbvKGf1mch588cnx2xZbw0KzjWtjG8RaDAxYxtAuCfAR2cv2p6btHPU82oD4hPbg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7fEOA2bKgMzD7lJ+o3y5O+voK7Rshw3WlgyZqsb5cuxF0qd5M
+	F1w3CDypMpPZ1urTlgyNpvWNSGLNE6ORKgT/1MNaq+04Oet+zHRsQOHtkhOBR3gG7dU=
+X-Gm-Gg: ASbGncuR7bpe0qIPU4ttt54gx7eFOHKIifGTvT0zxZ3Bs0lBtbklgouBfOepS4GxF+p
+	Pe+hV2huvxytLg01H+2mOxonVizRU1zPl6v07z7celPtZmlNJWWmVIeJZI8Bwpwv19VBvDUGy1s
+	/TT2JhChn4DRLk34gNVIy2dRczSkliFCzUZ/kgVRtZ7jzjOEqifGWNu1BWrimFWAyTB4Ta+Wt6f
+	MLnNEWCa5RvRXrCiXQUq2zyfkgt/sI5CNeRRHqe/nwsvHGpMOHgySa3T8y0ZWcDXGveDPtZf+es
+	+FT390jCEFiZbJJVS0mxxzUCn+reUsdlAEN83fc0deC1zxPRGJJ1SOOEHBW6sI5H2nmnaVUoFSv
+	CeMSinMN0/0wqHI5DWBBaXDPF/sx6+q0OWyYnu3yZCEdtXWWT/3sx
+X-Google-Smtp-Source: AGHT+IFlr6G4W7XvbKQI8j141P+hasUXu8hu79ecvZiU/MNbbbdttQ/E1hJ9ygf1TLpoDLexBr3O6Q==
+X-Received: by 2002:a05:6a21:32a0:b0:243:b125:16c5 with SMTP id adf61e73a8af0-243d6f581f5mr14101148637.49.1756795517864;
+        Mon, 01 Sep 2025 23:45:17 -0700 (PDT)
+Received: from fedora.redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4cd2ea3a04sm10936681a12.38.2025.09.01.23.45.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Sep 2025 23:45:17 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test kfunc bpf_strcasecmp
-Date: Tue,  2 Sep 2025 14:18:34 +0800
-X-OQ-MSGID: <7b7ace1a1b57c21e4ab92b1828397e7d0dd84200.1756793624.git.rongtao@cestc.cn>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1756793624.git.rongtao@cestc.cn>
-References: <cover.1756793624.git.rongtao@cestc.cn>
+	Jonathan Corbet <corbet@lwn.net>,
+	Petr Machata <petrm@nvidia.com>,
+	Amit Cohen <amcohen@nvidia.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	David Ahern <dsahern@gmail.com>,
+	Jonas Gorski <jonas.gorski@gmail.com>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv5 net-next 0/3] bonding: support aggregator selection based on port priority
+Date: Tue,  2 Sep 2025 06:44:58 +0000
+Message-ID: <20250902064501.360822-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,64 +103,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Rong Tao <rongtao@cestc.cn>
+This patchset introduces a new per-port bonding option: `ad_actor_port_prio`.
 
-Add testsuites for kfunc bpf_strcasecmp.
+It allows users to configure the actor's port priority, which can then be used
+by the bonding driver for aggregator selection based on port priority.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c | 6 ++++++
- tools/testing/selftests/bpf/progs/string_kfuncs_success.c  | 5 +++++
- 2 files changed, 11 insertions(+)
+This provides finer control over LACP aggregator choice, especially in setups
+with multiple eligible aggregators over 2 switches.
 
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-index 53af438bd998..99d72c68f76a 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-@@ -31,6 +31,8 @@ char *invalid_kern_ptr = (char *)-1;
- /* Passing NULL to string kfuncs (treated as a userspace ptr) */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_null1(void *ctx) { return bpf_strcmp(NULL, "hello"); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strcmp_null2(void *ctx) { return bpf_strcmp("hello", NULL); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_null1(void *ctx) { return bpf_strcasecmp(NULL, "HELLO"); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcasecmp_null2(void *ctx) { return bpf_strcasecmp("HELLO", NULL); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strchr_null(void *ctx) { return bpf_strchr(NULL, 'a'); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strchrnul_null(void *ctx) { return bpf_strchrnul(NULL, 'a'); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strnchr_null(void *ctx) { return bpf_strnchr(NULL, 1, 'a'); }
-@@ -49,6 +51,8 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return
- /* Passing userspace ptr to string kfuncs */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr2(void *ctx) { return bpf_strcmp("hello", user_ptr); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr1(void *ctx) { return bpf_strcasecmp(user_ptr, "HELLO"); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr2(void *ctx) { return bpf_strcasecmp("HELLO", user_ptr); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strchr_user_ptr(void *ctx) { return bpf_strchr(user_ptr, 'a'); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strchrnul_user_ptr(void *ctx) { return bpf_strchrnul(user_ptr, 'a'); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strnchr_user_ptr(void *ctx) { return bpf_strnchr(user_ptr, 1, 'a'); }
-@@ -69,6 +73,8 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { re
- /* Passing invalid kernel ptr to string kfuncs should always return -EFAULT */
- SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault1(void *ctx) { return bpf_strcmp(invalid_kern_ptr, "hello"); }
- SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault2(void *ctx) { return bpf_strcmp("hello", invalid_kern_ptr); }
-+SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault1(void *ctx) { return bpf_strcasecmp(invalid_kern_ptr, "HELLO"); }
-+SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault2(void *ctx) { return bpf_strcasecmp("HELLO", invalid_kern_ptr); }
- SEC("syscall") __retval(-EFAULT) int test_strchr_pagefault(void *ctx) { return bpf_strchr(invalid_kern_ptr, 'a'); }
- SEC("syscall") __retval(-EFAULT) int test_strchrnul_pagefault(void *ctx) { return bpf_strchrnul(invalid_kern_ptr, 'a'); }
- SEC("syscall") __retval(-EFAULT) int test_strnchr_pagefault(void *ctx) { return bpf_strnchr(invalid_kern_ptr, 1, 'a'); }
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index 46697f381878..67830456637b 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -12,6 +12,11 @@ char str[] = "hello world";
- /* Functional tests */
- __test(0) int test_strcmp_eq(void *ctx) { return bpf_strcmp(str, "hello world"); }
- __test(1) int test_strcmp_neq(void *ctx) { return bpf_strcmp(str, "hello"); }
-+__test(0) int test_strcasecmp_eq1(void *ctx) { return bpf_strcasecmp(str, "hello world"); }
-+__test(0) int test_strcasecmp_eq2(void *ctx) { return bpf_strcasecmp(str, "HELLO WORLD"); }
-+__test(0) int test_strcasecmp_eq3(void *ctx) { return bpf_strcasecmp(str, "HELLO world"); }
-+__test(1) int test_strcasecmp_neq1(void *ctx) { return bpf_strcasecmp(str, "hello"); }
-+__test(1) int test_strcasecmp_neq2(void *ctx) { return bpf_strcasecmp(str, "HELLO"); }
- __test(1) int test_strchr_found(void *ctx) { return bpf_strchr(str, 'e'); }
- __test(11) int test_strchr_null(void *ctx) { return bpf_strchr(str, '\0'); }
- __test(-ENOENT) int test_strchr_notfound(void *ctx) { return bpf_strchr(str, 'x'); }
+v5:
+a) rename 'prio' to 'actor_port_prio' in bond_ad_select_tbl (Jay Vosburgh)
+b) update document description
+
+v4:
+a) fix actor_port_prio minimal value (Jay Vosburgh)
+b) fix ad_agg_selection_test comment order (Paolo Abeni)
+c) restruct selftest, reduce duplication (Paolo Abeni)
+
+v3:
+a) add comments when init slave port_priority (Jonas Gorski)
+b) rename ad_lacp_port_prio to lacp_port_prio (Jay Vosburgh)
+
+v2:
+a) set default bond option value for port priority (Nikolay Aleksandrov)
+b) fix __agg_ports_priority coding style (Nikolay Aleksandrov)
+c) fix shellcheck warns
+
+Hangbin Liu (3):
+  bonding: add support for per-port LACP actor priority
+  bonding: support aggregator selection based on port priority
+  selftests: bonding: add test for LACP actor port priority
+
+ Documentation/networking/bonding.rst          |  25 +++-
+ drivers/net/bonding/bond_3ad.c                |  31 +++++
+ drivers/net/bonding/bond_netlink.c            |  16 +++
+ drivers/net/bonding/bond_options.c            |  45 +++++++-
+ include/net/bond_3ad.h                        |   2 +
+ include/net/bond_options.h                    |   1 +
+ include/uapi/linux/if_link.h                  |   1 +
+ .../selftests/drivers/net/bonding/Makefile    |   3 +-
+ .../drivers/net/bonding/bond_lacp_prio.sh     | 108 ++++++++++++++++++
+ tools/testing/selftests/net/forwarding/lib.sh |  24 ----
+ tools/testing/selftests/net/lib.sh            |  24 ++++
+ 11 files changed, 247 insertions(+), 33 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
+
 -- 
-2.51.0
+2.50.1
 
 
