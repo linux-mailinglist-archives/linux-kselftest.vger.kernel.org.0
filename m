@@ -1,142 +1,95 @@
-Return-Path: <linux-kselftest+bounces-40531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01328B3F853
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 10:29:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2296CB3F8CC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 10:41:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E70063ADD33
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:29:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CFB816BC55
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:41:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5E62DE709;
-	Tue,  2 Sep 2025 08:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496142EF665;
+	Tue,  2 Sep 2025 08:36:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EZACu5Ah"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fzotpgz8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D3F27BF7C
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 08:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E692EF65E
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 08:35:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756801739; cv=none; b=W2nl2hp1W8j98hfkkkdehfGi+GhxGL9LGNImM4VMxFIAsVrfhE11bk92NYLK4EiboQGXZVtouvaxxhDk3T9Q6NVTby9klBF0QIhH16JuiViR7MOBfMFpmmIYy7JQB1C7Qi+3QpUkJUTV6SDsol4TIWO1zTQTNnqpFTeoAjaAdm4=
+	t=1756802160; cv=none; b=qRaNDbbmtlyJrZeLddANxVnpbj3phHg8y4oTFguUbjHVuuUbXJ7gb9uZZq3pmnZX4HFhet1ibaMf8g7cLIsIu1nwAaZjGmsSiW4qiFvrL6LsZOpMhMOPKAvKuwfOrkakK5K0HCECfndwcLVMtLIheHR6rhXzT1orCwiKPsZ9MVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756801739; c=relaxed/simple;
-	bh=sn7TbfL1MsmjGeB5OWwrQkYgz80Xiex0nj9HOVrK/+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uaWhjeAEckUkA2qhxmeXWLRk40LeZeQh8Mt6PDz3ru4i85vFKn5edlFOsiZEh9OeroACIr+ac2gyDKcplwhMYdchMxVrcSzlxaDHYhzNAzHMzoAX/PNRfkgr0y5jAbZQX/413z6HcBeyb3xbwzDiwuAXgV13n8HAyd3MCiFhefQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EZACu5Ah; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-afcb7ae6ed0so753720266b.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 01:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756801736; x=1757406536; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U3P/CGRELA2cwqjSr7vg0wYPdyQiu1PsJ2peMY1heJU=;
-        b=EZACu5AhYQXvvWG4ZaE3DS64tYB+zGGBye8iJEoniEqr0BSGBPjogm9Xf7r1MPG3GD
-         yJUEyUSmGkeHQViSzMjgDNJBr/Xz8qRxVYvonX1r+Qbzw85gAakgXqRyar9m2xAFd7lT
-         1rmAW+X1kTb09OJ939WhqzImzpGrizEUw2Ea/mriU+KPRI8ITHITWHNKWiLPiFhdC0VY
-         BG3MJu67d8AWyLWIuUuenFbwKlZgh1LJZkd05KfYCvJ7bSKaETxnzJHBvvxxC2D5au7J
-         L9dE65kGN9XNE7llj5qb6hJJOhwWNVWa4OsXiMKxzV6mZ8GjjOg2JAhJZDv+PDePx13S
-         d1ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756801736; x=1757406536;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=U3P/CGRELA2cwqjSr7vg0wYPdyQiu1PsJ2peMY1heJU=;
-        b=LLug2ocPIFhwsXyhP7xk69zgzraqQzHspzqHHOczxNNE4m6EY5iyg7CZS1yi2umo9g
-         zVWVQVsgJLWMri8Tlr43ORpBUGwxP6UAKYUwUugxSL4qow2B/R2kixbwxfMO8ehhjvu6
-         /U01/LL//zjPpq7hTh4yhT1bAECsJ/iPR8+QjAUgKyHyAb34kTuSS5+MaYB4gzYGrtU/
-         nl61JucWj9f3U7YA/aKFE+S55gMM4REc89KGqtn1a3+2uMmepz/F+pl8TC8/AeDO5Q5c
-         7lu+eEuCMY+7udATzeyUPJcC7jKS4Dr9HG7FZECFwR7cNVQFLPu0rEyrla8lWJYmuElf
-         VB6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUI9iw9dbU1axDmMQktZ4W7WhfgRstbv+7rl1v0/l81oEY0cwV9EBo26QmBMMHrIR4yCEe8Oa22ogxqkIpFpYQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXcHOLahfue8zlRPF5mj84jGWL1GFFy+ipCfN/TgNLq+cnL7U3
-	iDpMO9PqGVs1HhaFusz4FGKffqGU1iSdOtMOkipFWpf7pvmj51+Ya50o
-X-Gm-Gg: ASbGnctbu1wHF4SYHG0gxIDFnTI7MiDDigh7hT6hQdGCGqPs9UXx20Gdwa7CtRCWSSF
-	pJuCQnlXgg3EB+RPTbv/32B+lOk8lXCWpNCcGQ/ZmB9Jrachijvg9FVK8ZiEwNZba1bSKzMLD6+
-	TBS4Xztqj3s0w2H0T40rag+Q6vEj4zxKRW3eTnQCK03rQOfSXZgh0FMqVZo3RV4z6/MTJaydXDE
-	xg2UsUbCoeroqd9roq3gsvo1811GoiBdnqSqafWGadmJrtGwPy6sQGDdhXcUivwliaquWF/q/X3
-	phMf/ppvDPCXSRvT3VGohqNff0Cm7TMwdEsB1EFWgVvMutVgK1ZwUb9bad5Y3k1GdtNB9LaB8aX
-	Tdtpvhf8XMgpkDr4Ag8AUvCQqUsz8wQizYC6uDX6b5+puynQ=
-X-Google-Smtp-Source: AGHT+IFb9rOq27uofOw29r92S0PkBoN7HR7b+VmwnUYUoa6nyVqak5YoGAa9Gh2DOlkMJeWTVVZPVA==
-X-Received: by 2002:a17:907:3e03:b0:b04:59d5:fb78 with SMTP id a640c23a62f3a-b0459d601aamr40455366b.62.1756801736121;
-        Tue, 02 Sep 2025 01:28:56 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b00e4b740fesm818710466b.47.2025.09.02.01.28.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 02 Sep 2025 01:28:55 -0700 (PDT)
-Date: Tue, 2 Sep 2025 08:28:55 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: Wei Yang <richard.weiyang@gmail.com>, Zi Yan <ziy@nvidia.com>,
-	akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
-	baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [Patch v2] selftests/mm: check content to see whether mremap
- corrupt data
-Message-ID: <20250902082855.muyi3wlxbmkcwiu5@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20250831022701.2595-1-richard.weiyang@gmail.com>
- <f8e942de-1a50-412e-9020-1bc901b4243b@redhat.com>
- <61E58B7C-23D0-49FE-8D0C-CE0B672114E2@nvidia.com>
- <0a0b0018-9427-4201-bf53-6aeb251bc482@redhat.com>
- <1D88E773-C11E-4F28-A13A-1A681898198B@nvidia.com>
- <5a796574-0a3c-4040-b0bc-3ff757402759@redhat.com>
- <20250902025112.d2n3o4imeptppctd@master>
- <dd30710a-a210-44dc-93f9-1e7ddf096251@redhat.com>
- <20250902081342.rthx5sopowmg4hyb@master>
- <05f628ba-c24b-4180-87be-e5a577dc4e4d@redhat.com>
+	s=arc-20240116; t=1756802160; c=relaxed/simple;
+	bh=zb4E8uuoHVDpJ7rFSQK0VoPBhUtoN+UJDYEdPHtBTuE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XiSy6eThUXXf48eYmeX+vbZHsHiopZBlelYjj890C8OvRemw2cOQoIk973Z+7lRHQpPLiSDULSyEPMjLHBLBhkk9vCOzzChkhZKu2zQoLPnSe4YQ8gj3TNd1N42IACIN13C/ZrNHab+Vjj3p6vWAdL+/SgaH6WeR+u0BQ6xWvoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fzotpgz8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44009C4CEED;
+	Tue,  2 Sep 2025 08:35:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756802159;
+	bh=zb4E8uuoHVDpJ7rFSQK0VoPBhUtoN+UJDYEdPHtBTuE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Fzotpgz8MS2XODqEHSKAxg1fvBHmGoRF66jm2IKSMBJETbeJlYOvt71Nz2si/7RXe
+	 w2ZqXkAH/9UsSv3ZDgfZ67YTAzyNJTsJDM4R6OBCAQMarqalHTLtnVN5SUBzF/mZas
+	 yEVh7Q3GfGMHJ6D4xUWlUVuqYixsLpMIvKQnfSL623b5eVXYMfMQmG/Hm2qPGJrkz8
+	 Y9LojSMCfE7lIqpIHpc0BSuHXvjikiQW0ItLbaVwRFzIzvAXO8G8XpFBD70hKQk7pd
+	 jDzme3Tk3kOBSyj2rJT2Ywvn8jQsFpQM69XWDVJitUsZVnANIYOHHiDeKp6hcgKvl8
+	 zIjMsp6OQ65HQ==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-kselftest@vger.kernel.org,
+	Xing Guo <higuoxing@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	shuah@kernel.org,
+	jhubbard@nvidia.com,
+	amir73il@gmail.com
+Subject: Re: [PATCH] selftests/fs/mount-notify: Fix compilation failure.
+Date: Tue,  2 Sep 2025 10:35:52 +0200
+Message-ID: <20250902-zumachen-sonst-f19e67e9b1e2@brauner>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250813031647.96411-1-higuoxing@gmail.com>
+References: <20250813031647.96411-1-higuoxing@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05f628ba-c24b-4180-87be-e5a577dc4e4d@redhat.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1216; i=brauner@kernel.org; h=from:subject:message-id; bh=zb4E8uuoHVDpJ7rFSQK0VoPBhUtoN+UJDYEdPHtBTuE=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRsW5M9x/piWdCSdetqKz89afoqoBoe5+/z8ctCz1/+S qeKjt3+21HKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjARq70M/+w1rrR4NVztznd/ 8S7SX1Mjje1ySZXOwZ+bLYWrX3WzajP8z1ZaIr7qTXhy4/ZtBumefQuS7naaLd7EvD/r43vf/y+ m8AEA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 02, 2025 at 10:23:51AM +0200, David Hildenbrand wrote:
->On 02.09.25 10:13, Wei Yang wrote:
->> On Tue, Sep 02, 2025 at 09:49:48AM +0200, David Hildenbrand wrote:
->> > > > +	/*
->> > > > +	 * To challenge spitting code, we will mremap page[x] of the
->> > > > +	 * thp[x] into a smaller area, and trigger the split from that
->> > > > +	 * smaller area. This will end up replacing the PMD mappings in
->> > > > +	 * the thp_area by PTE mappings first, leaving the THPs unsplit.
->> > > > +	 */
->> 
->> This confuse me a little. How about move "and trigger the split from that
->> smaller area" to the end? So that I know mremap convert to pte-mapping and
->> leave thp unsplit. Then we do the split.
->> 
->
->After spleeping over it, what about the following?
->
->+       /*
->+        * To challenge spitting code, we will mremap a single page of each
->+        * THP (page[i] of thp[i]) in the thp_area into page_area. This will
->+        * replace the PMD mappings in the thp_area by PTE mappings first,
->+        * but leaving the THP unsplit, to then create a page-sized hole in
->+        * the thp_area.
->+        * We will then manually trigger splitting of all THPs through the
->+        * single mremap'ed pages of each THP in the page_area.
->+        */
->
+On Wed, 13 Aug 2025 11:16:47 +0800, Xing Guo wrote:
+> Commit c6d9775c2066 ("selftests/fs/mount-notify: build with tools include
+> dir") introduces the struct __kernel_fsid_t to decouple dependency with
+> headers_install.  The commit forgets to define a macro for __kernel_fsid_t
+> and it will cause type re-definition issue.
+> 
+> 
 
-Much better, thanks :-)
+Applied to the vfs.fixes branch of the vfs/vfs.git tree.
+Patches in the vfs.fixes branch should appear in linux-next soon.
 
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
--- 
-Wei Yang
-Help you, Help me
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.fixes
+
+[1/1] selftests/fs/mount-notify: Fix compilation failure.
+      https://git.kernel.org/vfs/vfs/c/e51bd0e59547
+[1/1] selftests/fs/mount-notify: Fix compilation failure.
+      https://git.kernel.org/vfs/vfs/c/e51bd0e59547
 
