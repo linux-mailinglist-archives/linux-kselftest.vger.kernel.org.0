@@ -1,64 +1,55 @@
-Return-Path: <linux-kselftest+bounces-40545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40546-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E0D1B3FB5D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 11:55:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C90DB3FBB0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 12:04:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15B321892D06
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 09:55:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9ED203A34DE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 10:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A012ED855;
-	Tue,  2 Sep 2025 09:54:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 952FA2F4A05;
+	Tue,  2 Sep 2025 10:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Or0avDdB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E27hA+Co"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746EE2EB86F;
-	Tue,  2 Sep 2025 09:54:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628F42F49FC;
+	Tue,  2 Sep 2025 10:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756806848; cv=none; b=AlEOhPuJhojJ2CMrp8nBIFC6uFv4I7bfaaE4vPyhQj5HiqrsksHCpyD9AaiW3LFvjUA8rxowhVfJH0i33b43sAv61dgK8p0GvicpiSUxr1Odo9H6UGk2D2q/qu6k/EXzw8wSIUcC8rsTRFi5xZ8qayOQ1cKvqJqXco30vS7ASJA=
+	t=1756807384; cv=none; b=HcPBjtzNwtf6DmUQQB0l8E1NBd9RoCh/mmOu8X/pKqSsgHu8NCTnqhwWm7JKfbNWlPhrD2BtFGtBPmMQx1RPPcTSx3r9t4D7Dha75jRg66JM9mSTbRfmUabD3g/FL93Fs2Sfo5V2JdaNzkQbHOElg3dlY9WmAfdbafZg6/kFkWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756806848; c=relaxed/simple;
-	bh=F6MUX5AbAPBqp62Jqft20sY4a8sU1JZ5pPowDyOrZM4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JQ3NeXCO3KisMLY1b5ccsje653XEXA3+uh9lyLPBbPhh8Fq/0lKLtdBttadijqyJd0gArjeFIUhJXnLpllWIcPdmU2RFnHoFchNzibqhBHogaAdWqM/OLnO8AW3p5nb9svelWP+dbcvf9wHgF9tk3s3LKo44NB7rghWDdqkVSbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Or0avDdB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8558C4CEED;
-	Tue,  2 Sep 2025 09:54:05 +0000 (UTC)
+	s=arc-20240116; t=1756807384; c=relaxed/simple;
+	bh=b6/BfC8ztD20vSiS51W/7u+srH7z5AW8ewRgiLndpEg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aIZoXsDNM0yakr+v4ygDhfhqKkXq4ofGp7q3Ozu6IYiK+aatXYGHZ02QWUj0XN+vpuntq6OTnc9U+ja4sKc2pc+2VXSoE+SLjOlKsdLOpFhvhqvYgH7mWYYbE45UUlt2aeDPnVuljdapZdJMu1dpMJmDWAVLUHEoyEvTicVe/gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E27hA+Co; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF98C4CEF8;
+	Tue,  2 Sep 2025 10:03:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756806848;
-	bh=F6MUX5AbAPBqp62Jqft20sY4a8sU1JZ5pPowDyOrZM4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Or0avDdBFtpCAgQhlKBPNsV6zqu1OaaFxYAxkmLOdxoD7l67L3nRm7+BYIidWNFGo
-	 fxLJooaKj09FVO4GAgueCG0oMU7XGD+FMHjqPtfNjIYMDgsTeZIT8juYEXcRLZ8bki
-	 I6X6t2Kk+riw8RyV/nBCqnCncaWwgvhZOQ1vaN9MjQApDYXdSk/+T1aM0f5wFgqBqG
-	 e+Z4vjZvcuPljlQXBUO2rhbfT4ZRaWwJNlTpxcqnL/JwX2qRAgbyOMvDs+Feo5e4lA
-	 PjlJWAUnwyZHVYHYCneemXM7JpSspCbtu1ZMe8cryvPeSi/yDL3z6I5m2XJD0avPDU
-	 usIdwscKB2zLQ==
+	s=k20201202; t=1756807384;
+	bh=b6/BfC8ztD20vSiS51W/7u+srH7z5AW8ewRgiLndpEg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E27hA+CoE7S9suQrmeukP6WwB1DUInrAmKiIJUs5E+0253eC1MfeiXJ5i3o3Qmyn6
+	 TXPQ7bK7zhZGsfD27X5zndyAQLvh1e2GFRRUV9K5WOHji1A0ctNzVmS9/pN4Ca5suG
+	 y4tnE8Nyjn5Dk+n9mU+YTSvAJng8nfm9f+O4km3bX3//lMSO1UeemZ31AmHZxPzsfd
+	 bWGxJivlIo2amptKiq/EIb7OMM+/DB3Ob5IIauuzaqn8YrpXUZS9/md5M4KeSvv0ek
+	 nbdHGMYFvrTt0xi1KA/Q1GW5CpMSgJwF1E19/wh3PUFoJhZK71FGFt3A+ZTtvgRqHo
+	 0HsDXgZnuHXYA==
+Date: Tue, 2 Sep 2025 12:02:58 +0200
 From: Christian Brauner <brauner@kernel.org>
 To: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: (subset) [PATCH v4 0/4] procfs: make reference pidns more user-visible
-Date: Tue,  2 Sep 2025 11:54:01 +0200
-Message-ID: <20250902-amtsmissbrauch-korpulent-b2ea928b89bc@brauner>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Andy Lutomirski <luto@amacapital.net>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-api@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] procfs: make reference pidns more user-visible
+Message-ID: <20250902-gehofft-ruheraum-3c286b25b6d3@brauner>
 References: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -66,12 +57,11 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1374; i=brauner@kernel.org; h=from:subject:message-id; bh=F6MUX5AbAPBqp62Jqft20sY4a8sU1JZ5pPowDyOrZM4=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRs27dr3VTZPM/2B6uOP9oXsfFuiEGQccxaNt2Y50WbG dZUt4tP6ChlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZiI5h9GhqdvfITPGa0RuPfR 3C9rwrc5sxIsFeTerZL25uPxi5sodpOR4f4ptukJd6PZf1V1vdofuUXnZHzaUQHjK3JnZ3/f8LJ jLy8A
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
 
-On Tue, 05 Aug 2025 15:45:07 +1000, Aleksa Sarai wrote:
+On Tue, Aug 05, 2025 at 03:45:07PM +1000, Aleksa Sarai wrote:
 > Ever since the introduction of pid namespaces, procfs has had very
 > implicit behaviour surrounding them (the pidns used by a procfs mount is
 > auto-selected based on the mounting process's active pidns, and the
@@ -79,27 +69,138 @@ On Tue, 05 Aug 2025 15:45:07 +1000, Aleksa Sarai wrote:
 > 
 > /* pidns mount option for procfs */
 > 
-> [...]
+> This implicit behaviour has historically meant that userspace was
+> required to do some special dances in order to configure the pidns of a
+> procfs mount as desired. Examples include:
+> 
+>  * In order to bypass the mnt_too_revealing() check, Kubernetes creates
+>    a procfs mount from an empty pidns so that user namespaced containers
+>    can be nested (without this, the nested containers would fail to
+>    mount procfs). But this requires forking off a helper process because
+>    you cannot just one-shot this using mount(2).
+> 
+>  * Container runtimes in general need to fork into a container before
+>    configuring its mounts, which can lead to security issues in the case
+>    of shared-pidns containers (a privileged process in the pidns can
+>    interact with your container runtime process). While
+>    SUID_DUMP_DISABLE and user namespaces make this less of an issue, the
+>    strict need for this due to a minor uAPI wart is kind of unfortunate.
+> 
+> Things would be much easier if there was a way for userspace to just
+> specify the pidns they want. Patch 1 implements a new "pidns" argument
+> which can be set using fsconfig(2):
+> 
+>     fsconfig(procfd, FSCONFIG_SET_FD, "pidns", NULL, nsfd);
+>     fsconfig(procfd, FSCONFIG_SET_STRING, "pidns", "/proc/self/ns/pid", 0);
+> 
+> or classic mount(2) / mount(8):
+> 
+>     // mount -t proc -o pidns=/proc/self/ns/pid proc /tmp/proc
+>     mount("proc", "/tmp/proc", "proc", MS_..., "pidns=/proc/self/ns/pid");
+> 
+> The initial security model I have in this RFC is to be as conservative
+> as possible and just mirror the security model for setns(2) -- which
+> means that you can only set pidns=... to pid namespaces that your
+> current pid namespace is a direct ancestor of and you have CAP_SYS_ADMIN
+> privileges over the pid namespace. This fulfils the requirements of
+> container runtimes, but I suspect that this may be too strict for some
+> usecases.
+> 
+> The pidns argument is not displayed in mountinfo -- it's not clear to me
+> what value it would make sense to show (maybe we could just use ns_dname
+> to provide an identifier for the namespace, but this number would be
+> fairly useless to userspace). I'm open to suggestions. Note that
+> PROCFS_GET_PID_NAMESPACE (see below) does at least let userspace get
+> information about this outside of mountinfo.
+> 
+> Note that you cannot change the pidns of an already-created procfs
+> instance. The primary reason is that allowing this to be changed would
+> require RCU-protecting proc_pid_ns(sb) and thus auditing all of
+> fs/proc/* and some of the users in fs/* to make sure they wouldn't UAF
+> the pid namespace. Since creating procfs instances is very cheap, it
+> seems unnecessary to overcomplicate this upfront. Trying to reconfigure
+> procfs this way errors out with -EBUSY.
+> 
+> /* ioctl(PROCFS_GET_PID_NAMESPACE) */
+> 
+> In addition, being able to figure out what pid namespace is being used
+> by a procfs mount is quite useful when you have an administrative
+> process (such as a container runtime) which wants to figure out the
+> correct way of mapping PIDs between its own namespace and the namespace
+> for procfs (using NS_GET_{PID,TGID}_{IN,FROM}_PIDNS). There are
+> alternative ways to do this, but they all rely on ancillary information
+> that third-party libraries and tools do not necessarily have access to.
+> 
+> To make this easier, add a new ioctl (PROCFS_GET_PID_NAMESPACE) which
+> can be used to get a reference to the pidns that a procfs is using.
+> 
+> Rather than copying the (fairly strict) security model for setns(2),
+> apply a slightly looser model to better match what userspace can already
+> do:
+> 
+>  * Make the ioctl only valid on the root (meaning that a process without
+>    access to the procfs root -- such as only having an fd to a procfs
+>    file or some open_tree(2)-like subset -- cannot use this API). This
+>    means that the process already has some level of access to the
+>    /proc/$pid directories.
+> 
+>  * If the calling process is in an ancestor pidns, then they can already
+>    create pidfd for processes inside the pidns, which is morally
+>    equivalent to a pidns file descriptor according to setns(2). So it
+>    seems reasonable to just allow it in this case. (The justification
+>    for this model was suggested by Christian.)
+> 
+>  * If the process has access to /proc/1/ns/pid already (i.e. has
+>    ptrace-read access to the pidns pid1), then this ioctl is equivalent
+>    to just opening a handle to it that way.
+> 
+>    Ideally we would check for ptrace-read access against all processes
+>    in the pidns (which is very likely to be true for at least one
+>    process, as SUID_DUMP_DISABLE is cleared on exec(2) and is rarely set
+>    by most programs), but this would obviously not scale.
+> 
+> I'm open to suggestions for whether we need to make this stricter (or
+> possibly allow more cases).
+> 
+> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
 
-Applied to the vfs-6.18.procfs branch of the vfs/vfs.git tree.
-Patches in the vfs-6.18.procfs branch should appear in linux-next soon.
+Thanks for the patchset. Being able to specify what pid namespace the
+procfs instance is supposed to belong to is super useful and will make
+things easier for userspace for sure.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+The code you added contains a minor wrinkle that I disliked which I've
+changed and you tell me if you can live with this restriction or not.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+The way you've implemented it specifying a pid namespace that the caller
+holds privilege over would silently also override the user namespace the
+filesystem is supposed to belong to.
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+Specifically, you did something like:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-6.18.procfs
+        put_pid_ns(ctx->pid_ns);
+        ctx->pid_ns = get_pid_ns(target);
+        put_user_ns(fc->user_ns);
+        fc->user_ns = get_user_ns(ctx->pid_ns->user_ns);
 
-[1/4] pidns: move is-ancestor logic to helper
-      https://git.kernel.org/vfs/vfs/c/60d22c6ef41b
-[2/4] procfs: add "pidns" mount option
-      https://git.kernel.org/vfs/vfs/c/77e211dd1392
-[4/4] selftests/proc: add tests for new pidns APIs
-      https://git.kernel.org/vfs/vfs/c/568d4239002c
+This silently overrides the user namespace recorded at fsopen() time. I
+think that's too subtle and we should just not allow that at all for
+now.
+
+Instead I've changed this to:
+
+        if (fc->user_ns != target->user_ns)
+                return invalfc(fc, "owning user namespace of pid namespace doesn't match procfs user namespace");
+
+        put_pid_ns(ctx->pid_ns);
+        ctx->pid_ns = get_pid_ns(target);
+
+so we just refuse different owernship.
+
+I've also dropped the procfs ioctl because I'm not sure how much value
+it will actually add given that you can do this via /proc/1/ns/pid.
+
+If that is something that libpathrs despearately needs I would like to
+do it as a separate patch anyways.
+
+Thanks for the excellent cover letter. This was a pleasure merging!
 
