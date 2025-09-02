@@ -1,88 +1,89 @@
-Return-Path: <linux-kselftest+bounces-40529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68E72B3F840
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 10:24:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53917B3F84B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 10:26:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D5EF7A587A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:22:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A36A33B850D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50A5C2E5B3D;
-	Tue,  2 Sep 2025 08:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014B31400E;
+	Tue,  2 Sep 2025 08:26:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CRx2aJEx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IThPTPjl"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5455219E8
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 08:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B874F3D76
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 08:26:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756801439; cv=none; b=jsOD7nVhzADat+ejg0w2E4PMdBaxtg85fopJ9HEUR6TsCrYenAHgC7nNkCu2S7m1c+mGmm45QEwqgSmOvZ917WRPBjKvGdbRuf2PgwHdUsfRh4tP1xjs2jOfdoZFIZ9UttL1KrnJ4F7ItkLcFKl2vR3QS7iA2phYDfTwXkbgqoc=
+	t=1756801576; cv=none; b=BKlQ0hi6L34/uTR0z04Nb+YbJPdZ9yFBJZ+K0lPEtZIGEv8YcmQT8w1yPvUrQyAfFrtK2X98K7Bv0jFiyrRDC/W6gOt6rHsL8esKr+o5z0a1MlmxeDmnBHJ8FO+38CbIGoFMBEqwqezq6po9Gi78hMAB+ZBZSNr4F6n/+D6HClM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756801439; c=relaxed/simple;
-	bh=aMFJ34UwjSmjAutS+a86DxbvxJkc/UIErII+jVi2eb0=;
+	s=arc-20240116; t=1756801576; c=relaxed/simple;
+	bh=26TtLDJd84xYUwkKfs2Z55VgKjpuNnFnyEesi24VpMk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FVG8s6ZQQ1fuqmaJLucGvcp/SZgRFv/ahEmu6VuDTbaws3b64Pikb3IjFtVNlHl6uHxNs1KQOScRLgwrf5DNYvQ3cAz2Aj6VC9OE7jZHBLABWTqcwrscbsD/Ufy9uS5tA0Qe5aHLi7l4Bdubr2QUMcxauskvQY74oBr5ZoYzDvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CRx2aJEx; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=u3uLdw2hepLs4alDJarVfGeftIa625rZgnE/Bk76oYlWuUjj34QhSUZlzoIFfndpFPUT+BcIoq8eoeBNet6wacBA9U1o3UhyfmfPypQfXBQ8+iu9UqNRlwabOu3RXxULFK7vS78cbjnCou4x479jZnDCcge12wOP1nIN3J66NjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IThPTPjl; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756801436;
+	s=mimecast20190719; t=1756801573;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=KvxAM3vFK2Ke3HXVSRqbv/c2sggs3s08NYadXVb6dg0=;
-	b=CRx2aJExhXhALIxCtaYunnZ8+scXwdliIVGt4Zrkou4yjDKy6NSiHqBf6TcdsPhdZUpQUN
-	JV9I4FzK6rvooE9FzNluBBT5KyKRoXC/wTGcawGwJv8Z1LDtvkDQj+PHLrLzES312FAOAr
-	L1oGWQPOxfS6tinEfdpP6eqPz2Ju7Os=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=NT4cL3IBvSM+KsAgVhY9PNAtIvcQOi6uIxGIHK9QqtY=;
+	b=IThPTPjlwYSKsm90MeQZPiNXrOLvoRY/TfTYBNGeK39ESrZwIYQ9JaIXC4BZLZmJmO/DQy
+	FNBSxBlU7/m8A3gZFU36OgeX45NvHOkEp0JYB20zA8Qf1WN7tyrqJZnLzwWQE3PmbI9jDA
+	XGSMbpAEKnTIk425jPAWIgDFr9ZsBfU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-54-irI3S3Z6Mba234DJhi6kIQ-1; Tue, 02 Sep 2025 04:23:54 -0400
-X-MC-Unique: irI3S3Z6Mba234DJhi6kIQ-1
-X-Mimecast-MFC-AGG-ID: irI3S3Z6Mba234DJhi6kIQ_1756801433
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3cca50781ddso2189570f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 01:23:54 -0700 (PDT)
+ us-mta-252-1ndTPOwTO_io4HTiHtEURg-1; Tue, 02 Sep 2025 04:26:12 -0400
+X-MC-Unique: 1ndTPOwTO_io4HTiHtEURg-1
+X-Mimecast-MFC-AGG-ID: 1ndTPOwTO_io4HTiHtEURg_1756801571
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-45b7c01a6d3so28521255e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 01:26:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756801433; x=1757406233;
+        d=1e100.net; s=20230601; t=1756801571; x=1757406371;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KvxAM3vFK2Ke3HXVSRqbv/c2sggs3s08NYadXVb6dg0=;
-        b=pfZaRuX9bICkpI+VFMwWlbconO17OEuXKRqVqK5skWa9AXKdMk31helgEeL3tSUWW9
-         LniB2BLG7XelmU5TiYQTRiL+Kzw76r5cULwIOL7DuguyypzH/FPs5N0Xq4fdnclaQ386
-         x+UzubD+JkOgWewxvbCB/Lnhz4UThnVl7eeaMhSkrLtjy4ySLTBBwZpLoM17U8VuZBtf
-         ZxjGrkb7absiGQTSG2Pe91iIGuVA6RH3E3+GGGWXI/fryAzyekFIaDcNuoc/yAEtNVyn
-         o/n5ldlyvJStxNDuUbYJqxioPTEhva8O4SCr95C4T26OXj27r69kvsG8Gho9a4SGKM6H
-         26QQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVWymdeAxQq4kISH5MxumY5PUeG7vVsErvSRG3A5LJ88mdsxd200bBRyLkJQJ8AwsFJEZg/CkWS1nn9im22Am8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyAtGtqWa8tqU00ZSJBoXbS5JbGo0DwW8o6qvXQT8fyaLM/kEy
-	0li1ucpJPQLhHnIPgunByGb8pGJr+Io5wwgWJMOrtP1VSyLrZOvir4aCCpqeTpATR01RZl5F6Nh
-	PLZSYP6w+VoBM2LmLVnCper29ZjyQrn58kJz00XxEg2PIPpYZ9XQWNkg89eTNb8UhcBLCJA==
-X-Gm-Gg: ASbGnct9nWzXjT++NKGrz+7io+0Sym3GAqnNXqjsZWQAHg+ANojLuD836WF6ZjiIuLR
-	UN/6BSj02XPbLQpz/bGjPx1nxd2mdWHIV+by8p9AQ1h9Y5nNgQDcbWf47DINjKxPPBpw1YSnFJR
-	9OfXgy24v/CSAgy/CyCP286ExoI2zloTpUmjFFQGdjs7pxauq1c49mVc8D0/7vx8IWQn6TBTx4v
-	xliz1ahVyaNjB1cRzr/lUoSdtn5DA8IEIrtJj/Hw9/XVZrRlHiEi9xaJfWxEc6fgod1w+Ly0pJM
-	a85aRO28T4ddI4ZKBs1M6gYMfrpsvTbQJ7gXgEEQadYBhW7D5eNOAEbsB4a4FBVcjEWzOsZ5kk8
-	DsJVwDohXtDRE9NYZlm2arFsq/MGiFnTagRo1bseOyPaUKwSldT04z1fsHvRDscyZP9Q=
-X-Received: by 2002:a05:6000:24c1:b0:3d8:8f86:7b0b with SMTP id ffacd0b85a97d-3d88fa504ebmr2342615f8f.50.1756801433270;
-        Tue, 02 Sep 2025 01:23:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGePR3w/xMngBlylIPdnX7e6LlYWdH1m+Rn45nV4kPBWpyUDCkhsR/RDNmCwosoWathSfLsGQ==
-X-Received: by 2002:a05:6000:24c1:b0:3d8:8f86:7b0b with SMTP id ffacd0b85a97d-3d88fa504ebmr2342601f8f.50.1756801432817;
-        Tue, 02 Sep 2025 01:23:52 -0700 (PDT)
+        bh=NT4cL3IBvSM+KsAgVhY9PNAtIvcQOi6uIxGIHK9QqtY=;
+        b=tOFEhi+IPa3Ng5W7JmbSnmeK6aY6qs2FnerW0jOKxprdKYBHXRP15X4BpHEO0/5k1h
+         7mZjwWPGwkdj8TeDCqZfNzPOT4F1OsKSuc6/qzebK9tK5JJLOZUrj5t65xGOfNzmNo/4
+         eyaQ4tMIX7dsKa+zhinza/wgSnkdsIK8Hk6cQ42tF5AAKfeK2hz6SD8j8hfPLxoe0nfi
+         aKAu+fsp40gx7WmicvELAwLWVSVIoSjaqTbsHzCW1e4TAPYqORORDI49LV5WS+vNfFuV
+         8fiCs1KsQnrFEYNqkzDbZGjVziSbD+k8ohW3YMvcuqdD0EZLezEXyaHMWwO9tIsGXrym
+         J6cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX3nEnzQjmPCbogHrJKUmr9T33vhyi4KfrQ5NDUjhCCtHRYgzwVVYH7K+ePQsiGmIN0yAg/5y8oEQ3ZSvFWUx0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEHIECmFefv8HCFwy18h/qhYwFGEfx9I6Z0muYd1Za/r7OSaTB
+	BqEzoBg7/FJKY5MkqMYmI7Q63Z0EwcF7px8Vz6ybYhVA1eZ1/ZC2DJcSCgkMXSv0cMsyx9HDjmC
+	g1Bi8Hr8sckvfE5AmKV2ec4JKxtHHFbYtjMc2FJRUtxwZBlmdzLRYLhgFW3mbE0GtdPDcpMCCfA
+	KvdA==
+X-Gm-Gg: ASbGnctrgo6Xd/DC4QvqbXKTbfy+m72LLoqZzvOdn79irb+qB/Y2yb3RjAK+X4H1fCt
+	XN7FR+I2hZjde7BJJQ1bT08Neq56bl8lMAgSy49UypfyQ3Hir+ysOfAzJspqDP0kLdXUfxZDcC+
+	eMeGTpsUsJyJLUE2PNpxpMGttY6FqLIz+iinAk8stiy3r4Fl/LRApvxwpnzIDrYP69Agx5+9+Gw
+	8DAMJFfnCA779HsO2kcZWZs2/YVRDciz+K9MqHL8AToD4koVUSgJTByOgowiE94Mq1YKYU8Tv9t
+	HCxDygjhi2zyCPkgt/9XEP7/YTVk7mD+7AGrmUX1lxtvNZIvibQHIJJDRlC6daQgORZ5DLGLqbW
+	ppLnq+EyhK37IUG5TYDLzqinfqim3d1X0J12i4tw0HVgusAq4R0KZPX0bKxQ6Y4Uxww4=
+X-Received: by 2002:a05:600c:5303:b0:45b:86ee:415f with SMTP id 5b1f17b1804b1-45b86ee43ebmr82879635e9.6.1756801571123;
+        Tue, 02 Sep 2025 01:26:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHM1cxF4JIXl8kNx81ZZuv9bKqY/543YOwc/dJB5l0AuAAHxnmf034l5+/Y8FWgJjfldXBlOQ==
+X-Received: by 2002:a05:600c:5303:b0:45b:86ee:415f with SMTP id 5b1f17b1804b1-45b86ee43ebmr82879405e9.6.1756801570675;
+        Tue, 02 Sep 2025 01:26:10 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f1f:3f00:731a:f5e5:774e:d40c? (p200300d82f1f3f00731af5e5774ed40c.dip0.t-ipconnect.de. [2003:d8:2f1f:3f00:731a:f5e5:774e:d40c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cf270fbd01sm19047514f8f.13.2025.09.02.01.23.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b7271cd01sm259793375e9.23.2025.09.02.01.26.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Sep 2025 01:23:52 -0700 (PDT)
-Message-ID: <05f628ba-c24b-4180-87be-e5a577dc4e4d@redhat.com>
-Date: Tue, 2 Sep 2025 10:23:51 +0200
+        Tue, 02 Sep 2025 01:26:10 -0700 (PDT)
+Message-ID: <0c163e18-3684-4b1a-b379-be82fdc288fd@redhat.com>
+Date: Tue, 2 Sep 2025 10:26:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -102,9 +103,7 @@ References: <20250831022701.2595-1-richard.weiyang@gmail.com>
  <0a0b0018-9427-4201-bf53-6aeb251bc482@redhat.com>
  <1D88E773-C11E-4F28-A13A-1A681898198B@nvidia.com>
  <5a796574-0a3c-4040-b0bc-3ff757402759@redhat.com>
- <20250902025112.d2n3o4imeptppctd@master>
- <dd30710a-a210-44dc-93f9-1e7ddf096251@redhat.com>
- <20250902081342.rthx5sopowmg4hyb@master>
+ <20250902081632.mopnwlt3stpijejj@master>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -151,35 +150,65 @@ Autocrypt: addr=david@redhat.com; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20250902081342.rthx5sopowmg4hyb@master>
+In-Reply-To: <20250902081632.mopnwlt3stpijejj@master>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 02.09.25 10:13, Wei Yang wrote:
-> On Tue, Sep 02, 2025 at 09:49:48AM +0200, David Hildenbrand wrote:
->>>> +	/*
->>>> +	 * To challenge spitting code, we will mremap page[x] of the
->>>> +	 * thp[x] into a smaller area, and trigger the split from that
->>>> +	 * smaller area. This will end up replacing the PMD mappings in
->>>> +	 * the thp_area by PTE mappings first, leaving the THPs unsplit.
->>>> +	 */
+On 02.09.25 10:16, Wei Yang wrote:
+> On Mon, Sep 01, 2025 at 09:10:57PM +0200, David Hildenbrand wrote:
+> [...]
+>> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+>> index 10ae65ea032f6..aa0f0502efa06 100644
+>> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+>> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+>> @@ -390,67 +390,88 @@ static void split_pmd_thp_to_order(int order)
+>> static void split_pte_mapped_thp(void)
+>> {
+>> -	char *one_page, *pte_mapped, *pte_mapped2;
+>> -	size_t len = 4 * pmd_pagesize;
+>> -	uint64_t thp_size;
+>> +	const size_t nr_thps = 4;
+>> +	const size_t thp_area_size = nr_thps * pmd_pagesize;
+>> +	const size_t page_area_size = nr_thps * pagesize;
+>> +	char *thp_area, *page_area = NULL, *tmp;
+>> 	size_t i;
+>> -	one_page = mmap((void *)(1UL << 30), len, PROT_READ | PROT_WRITE,
+>> +	thp_area = mmap((void *)(1UL << 30), thp_area_size, PROT_READ | PROT_WRITE,
+>> 			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+>> -	if (one_page == MAP_FAILED)
+>> -		ksft_exit_fail_msg("Fail to allocate memory: %s\n", strerror(errno));
+>> +	if (thp_area == MAP_FAILED) {
+>> +		ksft_test_result_fail("Fail to allocate memory: %s\n", strerror(errno));
+>> +		goto out;
+>> +	}
+>> -	madvise(one_page, len, MADV_HUGEPAGE);
+>> +	madvise(thp_area, thp_area_size, MADV_HUGEPAGE);
+>> -	for (i = 0; i < len; i++)
+>> -		one_page[i] = (char)i;
+>> +	for (i = 0; i < thp_area_size; i++)
+>> +		thp_area[i] = (char)i;
+>> -	if (!check_huge_anon(one_page, 4, pmd_pagesize))
+>> -		ksft_exit_fail_msg("No THP is allocated\n");
+>> +	if (!check_huge_anon(thp_area, nr_thps, pmd_pagesize)) {
+>> +		ksft_test_result_skip("Not all THPs allocated\n");
 > 
-> This confuse me a little. How about move "and trigger the split from that
-> smaller area" to the end? So that I know mremap convert to pte-mapping and
-> leave thp unsplit. Then we do the split.
+> Not sure why we skip here?
+
+We usually don't want tests to fail simply because our memory is fragmented.
+
+If I'm going to send this I'll comment on all changes in the patch 
+description.
+
+[...]
+
+>> +
+>> +	/* Split failed? */
+>> +	for (i = 0; i < nr_thps; i++) {
+>> +		if (is_backed_by_folio(&page_area[i], 0, pagemap_fd, kpageflags_fd))
 > 
+> I guess we want to check (page_area + i * pagesize) here?
 
-After spleeping over it, what about the following?
-
-+       /*
-+        * To challenge spitting code, we will mremap a single page of each
-+        * THP (page[i] of thp[i]) in the thp_area into page_area. This will
-+        * replace the PMD mappings in the thp_area by PTE mappings first,
-+        * but leaving the THP unsplit, to then create a page-sized hole in
-+        * the thp_area.
-+        * We will then manually trigger splitting of all THPs through the
-+        * single mremap'ed pages of each THP in the page_area.
-+        */
+yes!
 
 -- 
 Cheers
