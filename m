@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-40508-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40509-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2A87B3F5D1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:45:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8322FB3F5D4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:45:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F12F205DB8
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 06:45:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4DB517A7ABD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 06:44:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652E32E4266;
-	Tue,  2 Sep 2025 06:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB2F2E36FD;
+	Tue,  2 Sep 2025 06:45:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHOjnbtZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWa0AWvH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB22511CBA;
-	Tue,  2 Sep 2025 06:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF5C2E540B;
+	Tue,  2 Sep 2025 06:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756795534; cv=none; b=WVdIrJJHBoRxmM3EXBm/0jvk6rDeJMeiXG+HVFunHIZeHj80DrqMIYdCmmI8ZVdkyBpDZhesNC1sEXZTHbFwDe55p+Tu4B90PaO1arTJqb9pdSQo4xq69IkRBkfeWqaHb65UX1uV6xOCtV6XSG03a1vX8sdyUdQEm4Cq3z1slYA=
+	t=1756795541; cv=none; b=Mv9bP7NReFU1mPwtLj4x+uGdJoWW1UvFPFOb4DvuQPR92VYCo9Hql/y6tnfIVCkTC83fmrs/qLuSh9JsWR2joe/0jFWjOdmg1dOCDPKZQ+X5nKOwwR7rzD30mzchVyhuxLVLKmxUWuI1qSkp8GOZlRdbxyCxOEvHxm8T/8ov3Mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756795534; c=relaxed/simple;
-	bh=+eEl2m6TKfSaL0Yru9MOtvYzTIoRjXZ7OWLtsLIgEis=;
+	s=arc-20240116; t=1756795541; c=relaxed/simple;
+	bh=rmtb2q9MbPGKaUSTzt5qidSt0q9ZAIfPd6d0SEYL5NM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S/FbYLYK6GAcs+Wu179LrOy6hmCkJy9+dWABuauXrJN47G4eLXc6c9d+VJo006PUnLk3MSnrZTEhXBkgT7X+Mj8EFzcyuvwJ2MCpQcGiSqnAXeh0S4CZT50B2dPwS2dPJSzVk/7OyfiuGlELhYShOT9+3HtFvuRn9o31w68afvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHOjnbtZ; arc=none smtp.client-ip=209.85.214.180
+	 MIME-Version; b=MVUeP5MvFW4Oa5QjvSEFAzV180PPkvLYhVHVEqO7i6OPWuhj3/d/HlGEyL3efsdYd3+ybWwBUrqfhb4ciPYS+mXTO1iW+Zp5CgXIqL1/vjVfn3fwi4Bk+8KYASPds/RBCrrCkG5VjDKW3X/agEC4KfFDfPAMQFBHKCZPX10iDHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWa0AWvH; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-24b21006804so904895ad.3;
-        Mon, 01 Sep 2025 23:45:32 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-323266cdf64so4070901a91.0;
+        Mon, 01 Sep 2025 23:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756795532; x=1757400332; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756795539; x=1757400339; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YixYVVVha+6cM9X90RkHk/OZLZUvkDM0mcQ22otlc+U=;
-        b=aHOjnbtZbZy+pluKJVzL/J7vteZCDQJH1VItvilJNk3SCOqaz4zCmB0quPMw8+ls9K
-         gAXwgjecPdmQglCSV/Yle5KgyO0tAIXZfwwOyjuLs4TDOlz2hluoLehkiaQpYIbJ/1sN
-         yLkkyuawE3tTn/r3yuhQn7YSiGTor+64AXALFl8NWRhPr5ktWzAs3PVBh+GE9WEoqclj
-         x+umpGIGorrDHczdDIASZvKs3O4FeVas3bMWk8CvjDP7qbCdXt9zl0V8kn3+YUyLKl7y
-         DobU/8T7Oc6bV1qABBsuIS9SwVO+158tYuEiady4415lSg89CoCMQRcbrQ/gP9qsPGBc
-         TBAA==
+        bh=LtcWNmCOv6gMQmL0rij+iQY538S9Maa5imuMzRg+K90=;
+        b=JWa0AWvH2GB+ayTgGXBIx/Sc6J/RYV+X1UP8vhhSaGruoZIrUWDYysTNj3AnHEXFCm
+         x3oOcYgszzfqDRVN7O4sht0xdQt1T8SyYAiSmQm1vj1RleFwkAbTEUV0ZRfVkpu80hiB
+         LEJlMsy1x9sgV+Ve/fC4gQ+cc4VnNI1Q7/OH4sd/Z/3v1JPKFIlR5fR2URl47UdiIFBz
+         RHFR6TK4Oq/7ScMVUo+qNBENNN2CmTelDitsZIopT9Drt6UdzP2aoOW2Bf/yiQr5WYxi
+         TjsWXeP4K0R/Vzta2+emavRKTEqU/e81hXal5jqEF23c8wOv/3eUhx1fhmj3ESu98nea
+         WLBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756795532; x=1757400332;
+        d=1e100.net; s=20230601; t=1756795539; x=1757400339;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YixYVVVha+6cM9X90RkHk/OZLZUvkDM0mcQ22otlc+U=;
-        b=pqjJk8A6uViGWlXmlPKjKhIpzY221b0ffwoosW0BdNI25hX0b0TUdPNUJIn93KL9PE
-         RCXkQVFGRrPluXAWP3QvHy6GkkbNxEWRP94cZQ8Ae9Rq7HKzUrB5RYjauVdDR/wOmPEE
-         d1OVb1mK/hu3wFQC3gzgpS1BzRkOv30Vb3jdY+IQ+bpthy+QujPThgpCFehrqFt8F6hg
-         ocq6YryUIB7VEnawFVP5HszJycBDIjtaGVMAhquyHxaHOxmJq/757mOK6u8aFKi9gkWh
-         Ay4yvn9IuKGUAiSmTfk7rsicpgR9DNiaZCArIE5c+MNaBKf+cH3z5YS0LyKTcWZg+hSe
-         9BbA==
-X-Forwarded-Encrypted: i=1; AJvYcCWfbiPo2BKFW4/RL10g3xgtYL6iqm1kCCpmZx+8mOMUQmcgB3XLfFiUPNKpumgxhpHCvodyj6fTazgoqNNdi0b9@vger.kernel.org, AJvYcCXQFj2M+A0DEmRzVl/Ns4A5HrGrjnfvFb5s+l60jsSg9a7VtbHN5xVlqerq7K5AjlWJZPNLXy0uPF8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQAeOqFGcfmSXNHS3mfeZznce6OZD7XRH1C4hr+w9XmWTT2mtv
-	jVTiddJjTB8qNjqyiv5Hogd/fOW8KcqB6DcRmYHRYHt68+gG2i4zV422NAfcvyfy28c=
-X-Gm-Gg: ASbGncvQ7FbJ99rLJiZxcrHle7XQCXKq/l474mBWk27zuIKlhCkq/zFAWRmJurhda+Z
-	OxJpHB/fHGo8aPie8XaT9Tnn4uIQE2ncitDc3rmgX8lwozA/H/+9eKzcOgGhDX3GwIZRjZ6PoJ4
-	GV9ZkOEb8StrbfHC14wx897vUPZSBnx11/cYUaqPwQVXi9zEj+ndmYhktQEgeJo6vc5czV0HJa2
-	tZdpRSSmzp5MptYwdCLlATgHUqw4iezCPlQfrRySHjrBoJ+G9dkOQAsc0sNqtY4HYmkbeNe8pA6
-	ZsO0YLfzXUcBIdVfO4H9ocYRHgUMt6dW2LtDPytQtTg5PAUBmMqvtMWRd6pD7LtKde53YyqniUo
-	wDcXpGwrRdWHO6o8E3ipec3kY4E2tYD+UEHnBYoy9aamJjhhFL7W+F+pSm4HrHcw=
-X-Google-Smtp-Source: AGHT+IGTV2LjWsR/Olr7Gi92Y2iiScB0dKVp4Vmv8+HdmhMHSgrcKy8uLt8ILimkEOzwPBUD82I8/A==
-X-Received: by 2002:a17:902:f54a:b0:24a:b073:c8e4 with SMTP id d9443c01a7336-24ab073cf85mr89197165ad.43.1756795531854;
-        Mon, 01 Sep 2025 23:45:31 -0700 (PDT)
+        bh=LtcWNmCOv6gMQmL0rij+iQY538S9Maa5imuMzRg+K90=;
+        b=pQf9f8z1bgaswEjVEpfK47AALhAS0X9jguTcdIaIHFbKtiD69e7Ykyz/n+WCEB031p
+         2cIjV9lfNwQzSJ1rLstRSYMkFdu5U0po+U3tsG2IeD8EjNu7EBOXYlFPbR5uQvKz2EpZ
+         PPIv9YMR06k8bfv/0N3cPtOS3JOyxPBtS5Vk8EEXNdLHeHXtS3BTeSO6ymetNsPqLocq
+         Fw5P7WBamV5OMhf/U/A4AK3Bn0xqqPe5mHlxI3SiuOYk4+mFcSFD6tOMg9026qH3Ideu
+         598w5wztVbAp3SHGUx1eQpj7fq24GN5h6yyT9AqLOYWCl4/3gyM5v2+Jn3pflE9d/tCJ
+         PGBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUP6KzmGNGQrmyKpMIqUIakbKaA3I9JivnUTkCOPN6Ndxb+K61yswz266BMw+16WwYRHhzG/HCe1CxeC48KAC71@vger.kernel.org, AJvYcCWjR0wERP7L2oXmNZg6ko4wm61Pbk4XeyVuSjGJKLVz6SCBwPYLkSXgaLossNif/HVLIW9gM1Fs054=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywmja01Q21teV14X8BVUTW9tDo8CQwMqnq+p2QUx9rWIqOCC6wK
+	uK+XRMAir8ByUhjNeJR7k31hwmQe16CHMBSH2On4mDScwt2EXt4FhGvfD6qRn5gVAgs=
+X-Gm-Gg: ASbGncshG0X7xnAnaDOoH48bbEsBgpPewfe2auWmcirRrOKMyxvZJKJ+ozKVP4wwskE
+	sSfeU5hy/Vts9ojQCySBzUo0bJMLndG2/SoTxeSK1jhPu+fstQK/rUW1fj4r51dm+uFKunYp02S
+	FeO7/FJxeXS5n93yebxY46rRrnBKaqGHv415BfJ5GFnIjDxtlPtEnHA/ACbC28FZPywajBtaD3M
+	EGmrIeFaNVcB6hHX3xVUfL94cPQ1q/jnaKGroYZlQjGECBrh62mIw08xETYyajGX7VX7X2Ljy/C
+	bggCfUYSmSMziqoXSHq18kDKKAJ+TMZl1o4R0Df3XQh2kyjFE3Ag0q6ZBqdwtXt+xTKlUDlU0I6
+	rAlRR4nrz3cOD5s0B1eqZB9Bhhj5y+WSKyFWmXutnjThVzz+eIc4S
+X-Google-Smtp-Source: AGHT+IFd8vZ+2Nr+vntvJxcPdYfnYzuJZodQS7WSFwE0LEVxJWsc7sCiWwmsSpdgvoZ5Qe5Th8PnjQ==
+X-Received: by 2002:a17:90b:3c05:b0:324:e794:70b1 with SMTP id 98e67ed59e1d1-32815412ac1mr14734934a91.4.1756795538882;
+        Mon, 01 Sep 2025 23:45:38 -0700 (PDT)
 Received: from fedora.redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4cd2ea3a04sm10936681a12.38.2025.09.01.23.45.25
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4cd2ea3a04sm10936681a12.38.2025.09.01.23.45.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Sep 2025 23:45:31 -0700 (PDT)
+        Mon, 01 Sep 2025 23:45:38 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Jay Vosburgh <jv@jvosburgh.net>,
@@ -93,9 +93,9 @@ Cc: Jay Vosburgh <jv@jvosburgh.net>,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv5 net-next 2/3] bonding: support aggregator selection based on port priority
-Date: Tue,  2 Sep 2025 06:45:00 +0000
-Message-ID: <20250902064501.360822-3-liuhangbin@gmail.com>
+Subject: [PATCHv5 net-next 3/3] selftests: bonding: add test for LACP actor port priority
+Date: Tue,  2 Sep 2025 06:45:01 +0000
+Message-ID: <20250902064501.360822-4-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250902064501.360822-1-liuhangbin@gmail.com>
 References: <20250902064501.360822-1-liuhangbin@gmail.com>
@@ -107,140 +107,223 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new ad_select policy 'port_priority' that uses the per-port
-actor priority values (set via ad_actor_port_prio) to determine
-aggregator selection.
+Add comprehensive selftest to verify:
+- Per-port actor priority setting via ad_actor_port_prio
+- Aggregator selection behavior with port_priority ad_select policy
 
-This allows administrators to influence which ports are preferred
-for aggregation by assigning different priority values, providing
-more flexible load balancing control in LACP configurations.
+Also move cmd_jq helper from forwarding/lib.sh to net/lib.sh for
+broader reusability across network selftests.
+
+Here is the result output
+  # ./bond_lacp_prio.sh
+  TEST: bond 802.3ad (ad_actor_port_prio setting)                     [ OK ]
+  TEST: bond 802.3ad (ad_actor_port_prio select)                      [ OK ]
+  TEST: bond 802.3ad (ad_actor_port_prio switch)                      [ OK ]
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- Documentation/networking/bonding.rst | 16 ++++++++++++----
- drivers/net/bonding/bond_3ad.c       | 27 +++++++++++++++++++++++++++
- drivers/net/bonding/bond_options.c   |  9 +++++----
- include/net/bond_3ad.h               |  1 +
- 4 files changed, 45 insertions(+), 8 deletions(-)
+ .../selftests/drivers/net/bonding/Makefile    |   3 +-
+ .../drivers/net/bonding/bond_lacp_prio.sh     | 108 ++++++++++++++++++
+ tools/testing/selftests/net/forwarding/lib.sh |  24 ----
+ tools/testing/selftests/net/lib.sh            |  24 ++++
+ 4 files changed, 134 insertions(+), 25 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
 
-diff --git a/Documentation/networking/bonding.rst b/Documentation/networking/bonding.rst
-index 1ca7830c24ea..706cf1312d71 100644
---- a/Documentation/networking/bonding.rst
-+++ b/Documentation/networking/bonding.rst
-@@ -250,10 +250,18 @@ ad_select
- 		ports (slaves).  Reselection occurs as described under the
- 		"bandwidth" setting, above.
+diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+index 44b98f17f8ff..3462783ed3ac 100644
+--- a/tools/testing/selftests/drivers/net/bonding/Makefile
++++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+@@ -11,7 +11,8 @@ TEST_PROGS := \
+ 	bond_options.sh \
+ 	bond-eth-type-change.sh \
+ 	bond_macvlan_ipvlan.sh \
+-	bond_passive_lacp.sh
++	bond_passive_lacp.sh \
++	bond_lacp_prio.sh
  
--	The bandwidth and count selection policies permit failover of
--	802.3ad aggregations when partial failure of the active aggregator
--	occurs.  This keeps the aggregator with the highest availability
--	(either in bandwidth or in number of ports) active at all times.
-+	actor_port_prio or 3
+ TEST_FILES := \
+ 	lag_lib.sh \
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh b/tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
+new file mode 100755
+index 000000000000..a483d505c6a8
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
+@@ -0,0 +1,108 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Testing if bond lacp per port priority works
++#
++#          Switch (s_ns)          Backup Switch (b_ns)
++#  +-------------------------+ +-------------------------+
++#  |          bond0          | |          bond0          |
++#  |            +            | |            +            |
++#  |      eth0  |  eth1      | |      eth0  |  eth1      |
++#  |        +---+---+        | |        +---+---+        |
++#  |        |       |        | |        |       |        |
++#  +-------------------------+ +-------------------------+
++#           |       |                   |       |
++#  +-----------------------------------------------------+
++#  |        |       |                   |       |        |
++#  |        +-------+---------+---------+-------+        |
++#  |      eth0     eth1       |       eth2     eth3      |
++#  |                          +                          |
++#  |                        bond0                        |
++#  +-----------------------------------------------------+
++#                        Client (c_ns)
 +
-+		The active aggregator is chosen by the highest total sum of
-+		actor port priorities across its active ports. Note this
-+		priority is actor_port_prio, not per port prio, which is
-+		used for primary reselect.
++lib_dir=$(dirname "$0")
++# shellcheck disable=SC1091
++source "$lib_dir"/../../../net/lib.sh
 +
-+	The bandwidth, count and actor_port_prio selection policies permit
-+	failover of 802.3ad aggregations when partial failure of the active
-+	aggregator occurs. This keeps the aggregator with the highest
-+	availability (either in bandwidth, number of ports, or total value
-+	of port priorities) active at all times.
- 
- 	This option was added in bonding version 3.4.0.
- 
-diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index 67ca78923b04..49717b7b82a2 100644
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -747,6 +747,18 @@ static int __agg_active_ports(struct aggregator *agg)
- 	return active;
- }
- 
-+static unsigned int __agg_ports_priority(const struct aggregator *agg)
++setup_links()
 +{
-+	struct port *port = agg->lag_ports;
-+	unsigned int prio = 0;
++	# shellcheck disable=SC2154
++	ip -n "${c_ns}" link add eth0 type veth peer name eth0 netns "${s_ns}"
++	ip -n "${c_ns}" link add eth1 type veth peer name eth1 netns "${s_ns}"
++	# shellcheck disable=SC2154
++	ip -n "${c_ns}" link add eth2 type veth peer name eth0 netns "${b_ns}"
++	ip -n "${c_ns}" link add eth3 type veth peer name eth1 netns "${b_ns}"
 +
-+	for (; port; port = port->next_port_in_aggregator)
-+		if (port->is_enabled)
-+			prio += port->actor_port_priority;
++	ip -n "${c_ns}" link add bond0 type bond mode 802.3ad miimon 100 \
++		lacp_rate fast ad_select actor_port_prio
++	ip -n "${s_ns}" link add bond0 type bond mode 802.3ad miimon 100 \
++		lacp_rate fast
++	ip -n "${b_ns}" link add bond0 type bond mode 802.3ad miimon 100 \
++		lacp_rate fast
 +
-+	return prio;
++	ip -n "${c_ns}" link set eth0 master bond0
++	ip -n "${c_ns}" link set eth1 master bond0
++	ip -n "${c_ns}" link set eth2 master bond0
++	ip -n "${c_ns}" link set eth3 master bond0
++	ip -n "${s_ns}" link set eth0 master bond0
++	ip -n "${s_ns}" link set eth1 master bond0
++	ip -n "${b_ns}" link set eth0 master bond0
++	ip -n "${b_ns}" link set eth1 master bond0
++
++	ip -n "${c_ns}" link set bond0 up
++	ip -n "${s_ns}" link set bond0 up
++	ip -n "${b_ns}" link set bond0 up
 +}
 +
- /**
-  * __get_agg_bandwidth - get the total bandwidth of an aggregator
-  * @aggregator: the aggregator we're looking at
-@@ -1708,6 +1720,9 @@ static struct aggregator *ad_agg_selection_test(struct aggregator *best,
- 	 * 4.  Therefore, current and best both have partner replies or
- 	 *     both do not, so perform selection policy:
- 	 *
-+	 * BOND_AD_PRIO: Select by total priority of ports. If priority
-+	 *     is equal, select by count.
-+	 *
- 	 * BOND_AD_COUNT: Select by count of ports.  If count is equal,
- 	 *     select by bandwidth.
- 	 *
-@@ -1729,6 +1744,14 @@ static struct aggregator *ad_agg_selection_test(struct aggregator *best,
- 		return best;
- 
- 	switch (__get_agg_selection_mode(curr->lag_ports)) {
-+	case BOND_AD_PRIO:
-+		if (__agg_ports_priority(curr) > __agg_ports_priority(best))
-+			return curr;
++test_port_prio_setting()
++{
++	RET=0
++	ip -n "${c_ns}" link set eth0 type bond_slave actor_port_prio 1000
++	prio=$(cmd_jq "ip -n ${c_ns} -d -j link show eth0" \
++		".[].linkinfo.info_slave_data.actor_port_prio")
++	[ "$prio" -ne 1000 ] && RET=1
++	ip -n "${c_ns}" link set eth2 type bond_slave actor_port_prio 10
++	prio=$(cmd_jq "ip -n ${c_ns} -d -j link show eth2" \
++		".[].linkinfo.info_slave_data.actor_port_prio")
++	[ "$prio" -ne 10 ] && RET=1
++}
 +
-+		if (__agg_ports_priority(curr) < __agg_ports_priority(best))
-+			return best;
++test_agg_reselect()
++{
++	local bond_agg_id slave_agg_id
++	local expect_slave="$1"
++	RET=0
 +
-+		fallthrough;
- 	case BOND_AD_COUNT:
- 		if (__agg_active_ports(curr) > __agg_active_ports(best))
- 			return curr;
-@@ -1794,6 +1817,10 @@ static int agg_device_up(const struct aggregator *agg)
-  * (slaves), and reselect whenever a link state change takes place or the
-  * set of slaves in the bond changes.
-  *
-+ * BOND_AD_PRIO: select the aggregator with highest total priority of ports
-+ * (slaves), and reselect whenever a link state change takes place or the
-+ * set of slaves in the bond changes.
-+ *
-  * FIXME: this function MUST be called with the first agg in the bond, or
-  * __get_active_agg() won't work correctly. This function should be better
-  * called with the bond itself, and retrieve the first agg from it.
-diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
-index 7cc9b033095b..a35733301bc3 100644
---- a/drivers/net/bonding/bond_options.c
-+++ b/drivers/net/bonding/bond_options.c
-@@ -162,10 +162,11 @@ static const struct bond_opt_value bond_lacp_rate_tbl[] = {
- };
++	# Trigger link state change to reselect the aggregator
++	ip -n "${c_ns}" link set eth1 down
++	sleep 0.5
++	ip -n "${c_ns}" link set eth1 up
++	sleep 0.5
++
++	bond_agg_id=$(cmd_jq "ip -n ${c_ns} -d -j link show bond0" \
++		".[].linkinfo.info_data.ad_info.aggregator")
++	slave_agg_id=$(cmd_jq "ip -n ${c_ns} -d -j link show $expect_slave" \
++		".[].linkinfo.info_slave_data.ad_aggregator_id")
++	# shellcheck disable=SC2034
++	[ "${bond_agg_id}" -ne "${slave_agg_id}" ] && \
++		RET=1
++}
++
++trap cleanup_all_ns EXIT
++setup_ns c_ns s_ns b_ns
++setup_links
++
++test_port_prio_setting
++log_test "bond 802.3ad" "actor_port_prio setting"
++
++test_agg_reselect eth0
++log_test "bond 802.3ad" "actor_port_prio select"
++
++# Change the actor port prio and re-test
++ip -n "${c_ns}" link set eth0 type bond_slave actor_port_prio 10
++ip -n "${c_ns}" link set eth2 type bond_slave actor_port_prio 1000
++test_agg_reselect eth2
++log_test "bond 802.3ad" "actor_port_prio switch"
++
++exit "${EXIT_STATUS}"
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 890b3374dacd..08121cb9dc26 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -571,30 +571,6 @@ wait_for_dev()
+         fi
+ }
  
- static const struct bond_opt_value bond_ad_select_tbl[] = {
--	{ "stable",    BOND_AD_STABLE,    BOND_VALFLAG_DEFAULT},
--	{ "bandwidth", BOND_AD_BANDWIDTH, 0},
--	{ "count",     BOND_AD_COUNT,     0},
--	{ NULL,        -1,                0},
-+	{ "stable",          BOND_AD_STABLE,    BOND_VALFLAG_DEFAULT},
-+	{ "bandwidth",       BOND_AD_BANDWIDTH, 0},
-+	{ "count",           BOND_AD_COUNT,     0},
-+	{ "actor_port_prio", BOND_AD_PRIO,      0},
-+	{ NULL,              -1,                0},
- };
- 
- static const struct bond_opt_value bond_num_peer_notif_tbl[] = {
-diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
-index e9188646e22e..c92d4a976246 100644
---- a/include/net/bond_3ad.h
-+++ b/include/net/bond_3ad.h
-@@ -26,6 +26,7 @@ enum {
- 	BOND_AD_STABLE = 0,
- 	BOND_AD_BANDWIDTH = 1,
- 	BOND_AD_COUNT = 2,
-+	BOND_AD_PRIO = 3,
- };
- 
- /* rx machine states(43.4.11 in the 802.3ad standard) */
+-cmd_jq()
+-{
+-	local cmd=$1
+-	local jq_exp=$2
+-	local jq_opts=$3
+-	local ret
+-	local output
+-
+-	output="$($cmd)"
+-	# it the command fails, return error right away
+-	ret=$?
+-	if [[ $ret -ne 0 ]]; then
+-		return $ret
+-	fi
+-	output=$(echo $output | jq -r $jq_opts "$jq_exp")
+-	ret=$?
+-	if [[ $ret -ne 0 ]]; then
+-		return $ret
+-	fi
+-	echo $output
+-	# return success only in case of non-empty output
+-	[ ! -z "$output" ]
+-}
+-
+ pre_cleanup()
+ {
+ 	if [ "${PAUSE_ON_CLEANUP}" = "yes" ]; then
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index c7add0dc4c60..4dca6893aa8a 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -645,3 +645,27 @@ wait_local_port_listen()
+ 		sleep 0.1
+ 	done
+ }
++
++cmd_jq()
++{
++	local cmd=$1
++	local jq_exp=$2
++	local jq_opts=$3
++	local ret
++	local output
++
++	output="$($cmd)"
++	# it the command fails, return error right away
++	ret=$?
++	if [[ $ret -ne 0 ]]; then
++		return $ret
++	fi
++	output=$(echo $output | jq -r $jq_opts "$jq_exp")
++	ret=$?
++	if [[ $ret -ne 0 ]]; then
++		return $ret
++	fi
++	echo $output
++	# return success only in case of non-empty output
++	[ ! -z "$output" ]
++}
 -- 
 2.50.1
 
