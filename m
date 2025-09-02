@@ -1,70 +1,71 @@
-Return-Path: <linux-kselftest+bounces-40625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E805B40A87
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 18:26:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8C69B40A88
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 18:26:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 059DF1BA2824
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 16:26:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21A131BA275C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 16:26:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E78A633CE8E;
-	Tue,  2 Sep 2025 16:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFBB2322743;
+	Tue,  2 Sep 2025 16:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sc317jNV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KfBJWZ+0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E91A3314C8
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 16:25:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70C6338F4A
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 16:25:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756830352; cv=none; b=eB/mJ7zNuJJhKW42+bntXKy30Uc5tUg8uV51jVGWF0A5BvertyCta/XqiiJrwCzRFrNYT+Bb7+HYs5SnASPEWwxKQjYqTXeY7cy3XMdPV3nL0Mg5kGl+qY7D6gUdmaxBOtViKVYgf7EZD+TRjtVuR3dMekzun6KBGhTuAJ61jH8=
+	t=1756830353; cv=none; b=Qcw4kSyhL9Jv6TsGd8RoazPixXl8HADrEz0h5AZ3ADNF+SssxkA44/ujbAre17aMTBUVr+aenOgl4fm57v6s4HL57qU0LG8t+H2g9PNT23F9hMcVnIlJQM/7Z43HiqZBf5gf2DiE/mUmTbNcdjuvZwVmTxSvGCDmv7ubSTUDcSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756830352; c=relaxed/simple;
-	bh=ASh/x9X/3Itsj4Qm1O67fkentIoPBZyLTFXa8/VaSzg=;
+	s=arc-20240116; t=1756830353; c=relaxed/simple;
+	bh=EPDKgQOgK+7zSwZkJ82YqCzR2US+XMjNJC6FYAnV0bU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BwK9Wi/ZWWnFYbMDGgbghM6OiXU0o/d7YVa0ALwFVGXNedCvnIfs4BAB3HHZk51X9ISwNGib6JUyIzJks//m8F6TeqEMSW1kK0q8HYuy1pjvrl1iORuYR67ySRPd2nvv/fDP5SiYXuoy0BcaED+MUoWEOpoGwdojglF1UgWPOs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sc317jNV; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=omHpM2hBOI/dp7CfHfRi7+w5cruYx+8Dn+B4WNYeuIL/pP0jUu8tXsFEfgV+6dHhz/KewcgKtbsZt+pvhoct5dB+teR4N4yAeqiXPVqHouE+LPniAySJUujg9Uy9brDuCJr8S5L01UF6U3MYAns/uSQOZCnyK1s1vxtBFIK6FTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KfBJWZ+0; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756830349;
+	s=mimecast20190719; t=1756830350;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fGt+rfAZPqOpC/usLmyRdPXY0e3SkpciH6+5LLOoAzw=;
-	b=Sc317jNVjK/DiyAK/nLbHp3t6XNFAYUTHSoZzaPL6Ox7shjvSbqD45wtUjW5ewtUP+YFNd
-	q0sGSdYrLCU0MppKTw5fY0GzAtlsIjT5Jaj2ESarX0gElzHjeE8jPBv2pVawULW9avnRmS
-	52SpXFBFKeO/uiVEPtZrF2PQKEWfN9g=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=sMnknAcw0zGmxUXxtl0RJkmxRxufvbi04WvYxzB4SiQ=;
+	b=KfBJWZ+0XcJwbxA4FdoLYPfq44UPvQUe9sYbnYLFQm8VUWjAXDwnjXHsgbHI7Noh9kAO2y
+	tWW9xHiggcD800HLfwJE6xR17P5j//J+2jp+mB3QkeXCT+rc37C4AOxD/3Bhl7l/kyqnJq
+	ksTajij0BA+BUSViGZz6vblyAMZZEmc=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-578-bSUXBqyPNWqsMD_lkbXvuA-1; Tue,
- 02 Sep 2025 12:25:46 -0400
-X-MC-Unique: bSUXBqyPNWqsMD_lkbXvuA-1
-X-Mimecast-MFC-AGG-ID: bSUXBqyPNWqsMD_lkbXvuA_1756830345
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-190-W1xsoQL6PVWgUup9MWJIow-1; Tue,
+ 02 Sep 2025 12:25:49 -0400
+X-MC-Unique: W1xsoQL6PVWgUup9MWJIow-1
+X-Mimecast-MFC-AGG-ID: W1xsoQL6PVWgUup9MWJIow_1756830348
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 983FE19560AD;
-	Tue,  2 Sep 2025 16:25:45 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2C7951800290;
+	Tue,  2 Sep 2025 16:25:48 +0000 (UTC)
 Received: from t14s.fritz.box (unknown [10.22.80.27])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D482230001A7;
-	Tue,  2 Sep 2025 16:25:43 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1C0AB300019F;
+	Tue,  2 Sep 2025 16:25:45 +0000 (UTC)
 From: David Hildenbrand <david@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	David Hildenbrand <david@redhat.com>
-Subject: [PATCH v2 1/2] selftests/mm: split_huge_page_test: fix occasional is_backed_by_folio() wrong results
-Date: Tue,  2 Sep 2025 18:25:35 +0200
-Message-ID: <20250902162536.956465-2-david@redhat.com>
+	David Hildenbrand <david@redhat.com>,
+	Zi Yan <ziy@nvidia.com>
+Subject: [PATCH v2 2/2] selftests/mm: split_huge_page_test: cleanups for split_pte_mapped_thp test
+Date: Tue,  2 Sep 2025 18:25:36 +0200
+Message-ID: <20250902162536.956465-3-david@redhat.com>
 In-Reply-To: <20250902162536.956465-1-david@redhat.com>
 References: <20250902162536.956465-1-david@redhat.com>
 Precedence: bulk
@@ -76,80 +77,183 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-When checking for actual tail or head pages of a folio, we must make
-sure that the KPF_COMPOUND_HEAD/KPF_COMPOUND_TAIL flag is paired with
-KPF_THP.
+There is room for improvement, so let's clean up a bit:
 
-For example, if we have another large folio after our large folio in
-physical memory, our "pfn_flags & (KPF_THP | KPF_COMPOUND_TAIL" would
-trigger even though it's actually a head page of the next folio.
+(1) Define "4" as a constant.
 
-If is_backed_by_folio() returns a wrong result, split_pte_mapped_thp()
-can fail with "Some THPs are missing during mremap".
+(2) SKIP if we fail to allocate all THPs (e.g., fragmented) and add
+    recovery code for all other failure cases: no need to exit the test.
 
-Fix it by checking for head/tail pages of folios properly. Add
-folio_tail_flags/folio_head_flags to improve readability and use these
-masks also when just testing for any compound page.
+(3) Rename "len" to thp_area_size, and "one_page" to "thp_area".
 
-Fixes: 169b456b0162 ("selftests/mm: reimplement is_backed_by_thp() with more precise check")
+(4) Allocate a new area "page_area" into which we will mremap the
+    pages; add "page_area_size". Now we can easily merge the two
+    mremap instances into a single one.
+
+(5) Iterate THPs instead of bytes when checking for missed THPs after
+    mremap.
+
+(6) Rename "pte_mapped2" to "tmp", used to verify mremap(MAP_FIXED)
+    result.
+
+(7) Split the corruption test from the failed-split test, so we can just
+    iterate bytes vs. thps naturally.
+
+(8) Extend comments and clarify why we are using mremap in the first
+    place.
+
+Reviewed-by: Zi Yan <ziy@nvidia.com>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- tools/testing/selftests/mm/split_huge_page_test.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ .../selftests/mm/split_huge_page_test.c       | 123 +++++++++++-------
+ 1 file changed, 74 insertions(+), 49 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index 10ae65ea032f6..72d6d8bb329ed 100644
+index 72d6d8bb329ed..7731191cc8e9b 100644
 --- a/tools/testing/selftests/mm/split_huge_page_test.c
 +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -44,6 +44,8 @@ int kpageflags_fd;
- static bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
- 		int kpageflags_fd)
+@@ -389,67 +389,92 @@ static void split_pmd_thp_to_order(int order)
+ 
+ static void split_pte_mapped_thp(void)
  {
-+	const uint64_t folio_head_flags = KPF_THP | KPF_COMPOUND_HEAD;
-+	const uint64_t folio_tail_flags = KPF_THP | KPF_COMPOUND_TAIL;
- 	const unsigned long nr_pages = 1UL << order;
- 	unsigned long pfn_head;
- 	uint64_t pfn_flags;
-@@ -61,7 +63,7 @@ static bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
+-	char *one_page, *pte_mapped, *pte_mapped2;
+-	size_t len = 4 * pmd_pagesize;
+-	uint64_t thp_size;
++	const size_t nr_thps = 4;
++	const size_t thp_area_size = nr_thps * pmd_pagesize;
++	const size_t page_area_size = nr_thps * pagesize;
++	char *thp_area, *tmp, *page_area = MAP_FAILED;
+ 	size_t i;
  
- 	/* check for order-0 pages */
- 	if (!order) {
--		if (pfn_flags & (KPF_THP | KPF_COMPOUND_HEAD | KPF_COMPOUND_TAIL))
-+		if (pfn_flags & (folio_head_flags | folio_tail_flags))
- 			return false;
- 		return true;
- 	}
-@@ -76,14 +78,14 @@ static bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
- 		goto fail;
+-	one_page = mmap((void *)(1UL << 30), len, PROT_READ | PROT_WRITE,
++	thp_area = mmap((void *)(1UL << 30), thp_area_size, PROT_READ | PROT_WRITE,
+ 			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+-	if (one_page == MAP_FAILED)
+-		ksft_exit_fail_msg("Fail to allocate memory: %s\n", strerror(errno));
++	if (thp_area == MAP_FAILED) {
++		ksft_test_result_fail("Fail to allocate memory: %s\n", strerror(errno));
++		return;
++	}
  
- 	/* head PFN has no compound_head flag set */
--	if (!(pfn_flags & (KPF_THP | KPF_COMPOUND_HEAD)))
-+	if ((pfn_flags & folio_head_flags) != folio_head_flags)
- 		return false;
+-	madvise(one_page, len, MADV_HUGEPAGE);
++	madvise(thp_area, thp_area_size, MADV_HUGEPAGE);
  
- 	/* check all tail PFN flags */
- 	for (i = 1; i < nr_pages; i++) {
- 		if (pageflags_get(pfn_head + i, kpageflags_fd, &pfn_flags))
- 			goto fail;
--		if (!(pfn_flags & (KPF_THP | KPF_COMPOUND_TAIL)))
-+		if ((pfn_flags & folio_tail_flags) != folio_tail_flags)
- 			return false;
- 	}
+-	for (i = 0; i < len; i++)
+-		one_page[i] = (char)i;
++	for (i = 0; i < thp_area_size; i++)
++		thp_area[i] = (char)i;
  
-@@ -94,11 +96,8 @@ static bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
- 	if (pageflags_get(pfn_head + nr_pages, kpageflags_fd, &pfn_flags))
- 		return true;
+-	if (!check_huge_anon(one_page, 4, pmd_pagesize))
+-		ksft_exit_fail_msg("No THP is allocated\n");
++	if (!check_huge_anon(thp_area, nr_thps, pmd_pagesize)) {
++		ksft_test_result_skip("Not all THPs allocated\n");
++		goto out;
++	}
  
--	/* this folio is bigger than the given order */
--	if (pfn_flags & (KPF_THP | KPF_COMPOUND_TAIL))
--		return false;
+-	/* remap the first pagesize of first THP */
+-	pte_mapped = mremap(one_page, pagesize, pagesize, MREMAP_MAYMOVE);
 -
--	return true;
-+	/* If we find another tail page, then the folio is larger. */
-+	return (pfn_flags & folio_tail_flags) != folio_tail_flags;
- fail:
- 	ksft_exit_fail_msg("Failed to get folio info\n");
- 	return false;
+-	/* remap the Nth pagesize of Nth THP */
+-	for (i = 1; i < 4; i++) {
+-		pte_mapped2 = mremap(one_page + pmd_pagesize * i + pagesize * i,
+-				     pagesize, pagesize,
+-				     MREMAP_MAYMOVE|MREMAP_FIXED,
+-				     pte_mapped + pagesize * i);
+-		if (pte_mapped2 == MAP_FAILED)
+-			ksft_exit_fail_msg("mremap failed: %s\n", strerror(errno));
+-	}
+-
+-	/* smap does not show THPs after mremap, use kpageflags instead */
+-	thp_size = 0;
+-	for (i = 0; i < pagesize * 4; i++)
+-		if (i % pagesize == 0 &&
+-		    is_backed_by_folio(&pte_mapped[i], pmd_order, pagemap_fd, kpageflags_fd))
+-			thp_size++;
+-
+-	if (thp_size != 4)
+-		ksft_exit_fail_msg("Some THPs are missing during mremap\n");
+-
+-	/* split all remapped THPs */
+-	write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
+-		      (uint64_t)pte_mapped + pagesize * 4, 0);
+-
+-	/* smap does not show THPs after mremap, use kpageflags instead */
+-	thp_size = 0;
+-	for (i = 0; i < pagesize * 4; i++) {
+-		if (pte_mapped[i] != (char)i)
+-			ksft_exit_fail_msg("%ld byte corrupted\n", i);
++	/*
++	 * To challenge spitting code, we will mremap a single page of each
++	 * THP (page[i] of thp[i]) in the thp_area into page_area. This will
++	 * replace the PMD mappings in the thp_area by PTE mappings first,
++	 * but leaving the THP unsplit, to then create a page-sized hole in
++	 * the thp_area.
++	 * We will then manually trigger splitting of all THPs through the
++	 * single mremap'ed pages of each THP in the page_area.
++	 */
++	page_area = mmap(NULL, page_area_size, PROT_READ | PROT_WRITE,
++			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	if (page_area == MAP_FAILED) {
++		ksft_test_result_fail("Fail to allocate memory: %s\n", strerror(errno));
++		goto out;
++	}
+ 
+-		if (i % pagesize == 0 &&
+-		    !is_backed_by_folio(&pte_mapped[i], 0, pagemap_fd, kpageflags_fd))
+-			thp_size++;
++	for (i = 0; i < nr_thps; i++) {
++		tmp = mremap(thp_area + pmd_pagesize * i + pagesize * i,
++			     pagesize, pagesize, MREMAP_MAYMOVE|MREMAP_FIXED,
++			     page_area + pagesize * i);
++		if (tmp != MAP_FAILED)
++			continue;
++		ksft_test_result_fail("mremap failed: %s\n", strerror(errno));
++		goto out;
++	}
++
++	/*
++	 * Verify that our THPs were not split yet. Note that
++	 * check_huge_anon() cannot be used as it checks for PMD mappings.
++	 */
++	for (i = 0; i < nr_thps; i++) {
++		if (is_backed_by_folio(page_area + i * pagesize, pmd_order,
++				       pagemap_fd, kpageflags_fd))
++			continue;
++		ksft_test_result_fail("THP %zu missing after mremap\n", i);
++		goto out;
+ 	}
+ 
+-	if (thp_size)
+-		ksft_exit_fail_msg("Still %ld THPs not split\n", thp_size);
++	/* Split all THPs through the remapped pages. */
++	write_debugfs(PID_FMT, getpid(), (uint64_t)page_area,
++		      (uint64_t)page_area + page_area_size, 0);
++
++	/* Corruption during mremap or split? */
++	for (i = 0; i < page_area_size; i++) {
++		if (page_area[i] == (char)i)
++			continue;
++		ksft_test_result_fail("%zu byte corrupted\n", i);
++		goto out;
++	}
++
++	/* Split failed? */
++	for (i = 0; i < nr_thps; i++) {
++		if (is_backed_by_folio(page_area + i * pagesize, 0,
++				       pagemap_fd, kpageflags_fd))
++			continue;
++		ksft_test_result_fail("THP %zu not split\n", i);
++	}
+ 
+ 	ksft_test_result_pass("Split PTE-mapped huge pages successful\n");
+-	munmap(one_page, len);
++out:
++	munmap(thp_area, thp_area_size);
++	if (page_area != MAP_FAILED)
++		munmap(page_area, page_area_size);
+ }
+ 
+ static void split_file_backed_thp(int order)
 -- 
 2.50.1
 
