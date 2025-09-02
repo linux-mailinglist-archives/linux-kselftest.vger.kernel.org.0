@@ -1,68 +1,70 @@
-Return-Path: <linux-kselftest+bounces-40524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40522-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 064F5B3F7A1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 10:06:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2542B3F76B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 10:02:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21D8416C7F5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:06:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DABD43A928F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC1F525A328;
-	Tue,  2 Sep 2025 08:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0DA2E8B6E;
+	Tue,  2 Sep 2025 08:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="OKAc/ubq"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="ZINgGH3v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097B52BF016;
-	Tue,  2 Sep 2025 08:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91B52E7BA5;
+	Tue,  2 Sep 2025 08:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756800389; cv=none; b=O/Nrd9mF+2ATrK7J9vdHOHPMTAbouBlsk3lI4kjU/AU/ivtFWvBFTgHvQvcm3+0qFeO8TpNLbenbc2SrYQ/RHdMyuHBA4W1pPYBF/W0er2fgxigjkS634ce4rCMtalY/IJxRhAqooYua3dZk+ATMYcwneB7eNFo+EV24bAXHBb0=
+	t=1756800048; cv=none; b=XRgwaUbQtMxXDaxYX6++9804KExMs5nmgoRvA63MfK/dgaiZycBwt+/xIoB7TRY9pRz8ROGl8IpA8KTTdX5aCWgXLCCcsFr2iUl6dwshgLHzAK+xb5Myx2mnEiApahhnel97qhI2eTPi6WheD/fcv5rraVW7uLd1gamkBFTmEeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756800389; c=relaxed/simple;
-	bh=0SOyxXX/qHl6SqSRp+x310BDxgQvjz3hk6Ncj8gXeAQ=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=tBHoe26TqSHXUIXMbTkuHwQPX1e+9qANrP827rLw603A7+YRsG7BB7EYWmMmGw8kRL6fknX6ZFpIM2l0Wa+OuItJfH/5vIAoACYLXNivGgjeETRdEHpV5zGJy1IqxAY4Zc4Hj1u59d9U4sG2/ptLdnT3OyXRvJbWLyt7AZha+iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=OKAc/ubq; arc=none smtp.client-ip=162.62.57.252
+	s=arc-20240116; t=1756800048; c=relaxed/simple;
+	bh=AnhWbFtadzDp+KVelZzMiEybBw+Cb3GyCRfsjMIZs84=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=QcC8NMkO8Ngi7B/t8/4md7Tkm1weVXD0/U8jdEda/9NwIryZXjah+oZ/XWx71MIzfg/CFwxa6HidU6vzxj0xbUyQGKVfqL4s2vztDkc1EiFvw/+oGRZEJqVTMjimw/zs3jkq6z04Gh0UGpC8pLdX7ICQoKeSY0kHHs+04Qwz6fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=ZINgGH3v; arc=none smtp.client-ip=162.62.57.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756800075;
-	bh=3zr6kbZjRQWUoOO88Q989Lx+h+cd8L+5MKlTJNAOsq0=;
-	h=From:To:Cc:Subject:Date;
-	b=OKAc/ubqji+YYCcA+KxqbqYap4/DS+qqBdoXVYR0yT/ccqZ0FsNCCz7cnvPpkIVXZ
-	 R/SvIUMd+HZh/MAr25MRUAhcyx995OYppm84SAeLWdV4YgW94JAv+/hmYhJX+VmYd3
-	 11m0BA6QpTce3BVRmn2QnLGe9DsTIpRTsD7ND3hk=
+	s=s201512; t=1756799740;
+	bh=bCivpz+VqiYG4IHGqHshtomf2YaYzPPHc5KMtAgauvY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ZINgGH3vNLM7Cx+bBrnF3czAx9A61lOmYJ6daQlkkpCbbU441/5MWXrAlorNmZ4/P
+	 c48bKJ3WOLR88t0v0dBN/Xj5r2ZbID+FILYGn39/e8vjjl0MvmifswPHnXOT/7nW1L
+	 pi6P/IBd2rd8/xyj6/fl8d5RDqn1ns/Z/k0yyy6E=
 Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrszc41-0.qq.com (NewEsmtp) with SMTP
-	id DC2344B2; Tue, 02 Sep 2025 15:55:02 +0800
-X-QQ-mid: xmsmtpt1756799702t8g2gddqa
-Message-ID: <tencent_B2594897022A82AF3AA370885B06A9421808@qq.com>
-X-QQ-XMAILINFO: Mm/8i8/T4yneWrhmr66C58xAgvc1xkJ6CihZB/SaNhmWsSGRtzzpfg0BmI5knl
-	 lw8eSoX4YxONSL7VuhnWskaRAg4LTrxyQXzzVg5hMi5OEfDoulQWLUmfXPLCA7EfYdFCrY/IKr2K
-	 IP5qqD5UN9maxrYBl9A018ShcodWqucL7EYn+7i+IiAjyvYasaMo262yhgbLErvCJCimHGWofWpz
-	 DyEHPUnHcdsrQzODfDNz2A+7rBuTOKMyWyDqGQuMbkojiiEDPP7JiS8t20ox2qhlL4obAG78u7h0
-	 ftUWJQBJRxp5kC/daMSFI33LcSKOmjwPqgwoXphLCVC3bc1jbO+Rhk53akoS0GeS4WKXmd3cmqqN
-	 nlHQIdoY+vh393IXo/yvXsAmakTvgQ82lF0n05DNCxXCb0c7rUfRQdWb4lBOIht+Z7pJ5IvfJMox
-	 93NuEqrPVpH4hu3Gnt+MkYxNJLvjU8ReKd+T9yTAdksGe8p0OAKMR/svdebFmEo86+bCipsrmLcP
-	 ErOxtW4tp5cgW0Vn7/IuWuT2gNqvecS8/YxBciLNX31ZnjtgCwQpTEIsIJNyn1ECqMyfmj7A0Qij
-	 IMtoGLdyvi5FsS0gqmIhqjFiDFoRWECIuQw10Q+2C98Ou/78aguu8ivzxXupKV4WRtxjFok+YrZ2
-	 rMSyiy1kR5kMU3K2F6wXKJKBCiMria4wBSsgVc8+LsKrbLQO4zsE3/Cbeh+B9Pyk7qW/ahDOQOna
-	 klVvz/iK91RXhqSQPRJa5OctUgGWloDVAIUAY5qelIQrqX5QIG8iTaaTAdmmXHSY6WpLwoywc9NF
-	 6ICtC63hz/HsfA2pMw1ugeQPJ/Xv0gEgWnGAiZ2iq74w6NiRLTLH30Kl1SzPb5u4zQag3nOe3VGE
-	 ediofonOog8yy/UNSD56hZJkp3Ghq2zH+sIOPoL9uGR3NBxx1R21vxbptWsDqHAImooUE2sBFB2m
-	 uhMNFcj7mB9bqS11g3aYv42WJtsad3Mc/Lz2j92eSR9MqI72JaHo7ijYFWuNIWDq36Fktycdc7hS
-	 67Fh0QlFkvDlqCPUihgI/8Gs4hrciNTFu7FdF2Ww==
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+	by newxmesmtplogicsvrsza56-0.qq.com (NewEsmtp) with SMTP
+	id DE41E213; Tue, 02 Sep 2025 15:55:36 +0800
+X-QQ-mid: xmsmtpt1756799736t6uu9cmny
+Message-ID: <tencent_8646158457D4511C447C833B21B3ACF6CB07@qq.com>
+X-QQ-XMAILINFO: N1JCMsqefaec/r8WWd6R0Q7caa5mpnhiJLlha23cEFJhuG0/Oe+O0/8X1Eb392
+	 GGa7MB74IJk7VNUYzGLAXF/lVYur74FmXMRjfm+cUE/0ID+gKzayfO2StoDiQEepP1VKmfR0xjaJ
+	 x7OfrgkLu2d/vjsct8/19cAGKboJB0eCanRoMDj3xR1vHCGF2lEu6xDa8GUWj/NyOtegeS6sg5bs
+	 u1WjLYRa3WOL8UmQdo7MkI4nzc4bWel6FiZfZhp5ymax+1Mlh9EoqJIT7iii+tkm+OafgZyf/QwX
+	 PylIj7ld23T72yIBFTDXN0bY2dLuim/BSzOKMIiTSpbzMh6dL7XuB4324VLKwviUp7+L1aXqI4i6
+	 uvQUs0XzuvOE21Tj9isnSvcBStYqCi72dC0fjO/D/AeUEXQ2StqQ5Vmex+g9AGGIJ6AGlmmxeljI
+	 sf63euQDNljMQp9dzs81z4222Pa6FfYr5s7uHEledJ89CO6CfDg0hasVYZYQGMLaeKz1oxaZsM0J
+	 Q8e1YGQ7QDKJpxuftZiZwZx0W+Wn0pqaN3eLC/HSNhUyok+9fNdzp7uhXi32QpYcvy/jsQRWtlq1
+	 aATIa5ipU04kJxyleUSAp9m+FyKeV2OPOz12WKYnILtMDu92d2gBeWur9lRrWBGtZQrAVe+n2/zI
+	 Upl7dvCm33+E9Rw4Xxi0NFuo+Uces+oVLBV66SE6zvyI1nkEVSkUQIWmCn5u17jmkQgb511JgCB0
+	 UjUUM3U37szNPtcWDv5DvFExqnsMi4Ondh50cJX7mzU4tPZ3mYV3DDQDsKICuAa4pl1+h6GT+drY
+	 G9AXJ8aDYDz0M7H4l0Xy6tpSz5R5RRVPeKPF+aGhVLIMKOfjHzEXhH6853yNQ6OdCsMluBg6xOxs
+	 uFdTOTO/6ezvYYhtXZifjP89HdxY9ZOW9XAqbYd34UpvUbAZxUbrUiLlzuewkRnhKHHcqBHdaIvV
+	 qdd+qZWLKQZjIZHemxb5pkY6StJlsnrRIG0ie7F9SFtHj5oQlUX9KIDs4rchbBf36+2oqwIom8EL
+	 2rn3D/K6ouu8e5o2OktrqtnTS6q9QP3Iqp8LSoJ2FXdIBps7/RPvH6kDLL778=
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
 From: Rong Tao <rtoax@foxmail.com>
 To: andrii@kernel.org,
 	ast@kernel.org,
 	vmalik@redhat.com
 Cc: rtoax@foxmail.com,
+	Rong Tao <rongtao@cestc.cn>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -75,14 +77,15 @@ Cc: rtoax@foxmail.com,
 	Jiri Olsa <jolsa@kernel.org>,
 	Mykola Lysenko <mykolal@fb.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Rong Tao <rongtao@cestc.cn>,
 	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
 	linux-kernel@vger.kernel.org (open list),
 	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v2 0/2] bpf: Add kfunc bpf_strcasecmp()
-Date: Tue,  2 Sep 2025 15:54:27 +0800
-X-OQ-MSGID: <cover.1756798860.git.rtoax@foxmail.com>
+Subject: [PATCH bpf-next v2 1/2] bpf: add bpf_strcasecmp kfunc
+Date: Tue,  2 Sep 2025 15:55:09 +0800
+X-OQ-MSGID: <3dde314ef1772aa3ab9775bd3ca50518b5ba4cc3.1756798860.git.rtoax@foxmail.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1756798860.git.rtoax@foxmail.com>
+References: <cover.1756798860.git.rtoax@foxmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,23 +94,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Kfunc already support bpf_strcmp, this patchset introduce bpf_strcasecmp
-and add some selftests.
+From: Rong Tao <rongtao@cestc.cn>
 
-Rong Tao (2):
-  bpf: add bpf_strcasecmp kfunc
-  selftests/bpf: Test kfunc bpf_strcasecmp
+bpf_strcasecmp() function performs same like bpf_strcmp() except ignoring
+the case of the characters.
 
- kernel/bpf/helpers.c                          | 68 +++++++++++++------
- .../bpf/progs/string_kfuncs_failure1.c        |  6 ++
- .../bpf/progs/string_kfuncs_failure2.c        |  1 +
- .../bpf/progs/string_kfuncs_success.c         |  5 ++
- 4 files changed, 60 insertions(+), 20 deletions(-)
-
-
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
-v2: Remove __ign prefix from __bpf_strcasecmp and add E2BIG failure test;
-v1: https://lore.kernel.org/lkml/tencent_5AE811A28781BE106AD6CDE59F4ADD2BFA06@qq.com/
+ kernel/bpf/helpers.c | 68 +++++++++++++++++++++++++++++++-------------
+ 1 file changed, 48 insertions(+), 20 deletions(-)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 401b4932cc49..238fd992c786 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3349,45 +3349,72 @@ __bpf_kfunc void __bpf_trap(void)
+  * __get_kernel_nofault instead of plain dereference to make them safe.
+  */
+ 
+-/**
+- * bpf_strcmp - Compare two strings
+- * @s1__ign: One string
+- * @s2__ign: Another string
+- *
+- * Return:
+- * * %0       - Strings are equal
+- * * %-1      - @s1__ign is smaller
+- * * %1       - @s2__ign is smaller
+- * * %-EFAULT - Cannot read one of the strings
+- * * %-E2BIG  - One of strings is too large
+- * * %-ERANGE - One of strings is outside of kernel address space
+- */
+-__bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
++int __bpf_strcasecmp(const char *s1, const char *s2, bool ignore_case)
+ {
+ 	char c1, c2;
+ 	int i;
+ 
+-	if (!copy_from_kernel_nofault_allowed(s1__ign, 1) ||
+-	    !copy_from_kernel_nofault_allowed(s2__ign, 1)) {
++	if (!copy_from_kernel_nofault_allowed(s1, 1) ||
++	    !copy_from_kernel_nofault_allowed(s2, 1)) {
+ 		return -ERANGE;
+ 	}
+ 
+ 	guard(pagefault)();
+ 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
+-		__get_kernel_nofault(&c1, s1__ign, char, err_out);
+-		__get_kernel_nofault(&c2, s2__ign, char, err_out);
++		__get_kernel_nofault(&c1, s1, char, err_out);
++		__get_kernel_nofault(&c2, s2, char, err_out);
++		if (ignore_case) {
++			c1 = tolower(c1);
++			c2 = tolower(c2);
++		}
+ 		if (c1 != c2)
+ 			return c1 < c2 ? -1 : 1;
+ 		if (c1 == '\0')
+ 			return 0;
+-		s1__ign++;
+-		s2__ign++;
++		s1++;
++		s2++;
+ 	}
+ 	return -E2BIG;
+ err_out:
+ 	return -EFAULT;
+ }
+ 
++/**
++ * bpf_strcmp - Compare two strings
++ * @s1__ign: One string
++ * @s2__ign: Another string
++ *
++ * Return:
++ * * %0       - Strings are equal
++ * * %-1      - @s1__ign is smaller
++ * * %1       - @s2__ign is smaller
++ * * %-EFAULT - Cannot read one of the strings
++ * * %-E2BIG  - One of strings is too large
++ * * %-ERANGE - One of strings is outside of kernel address space
++ */
++__bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
++{
++	return __bpf_strcasecmp(s1__ign, s2__ign, false);
++}
++
++/**
++ * bpf_strcasecmp - Compare two strings, ignoring the case of the characters
++ * @s1__ign: One string
++ * @s2__ign: Another string
++ *
++ * Return:
++ * * %0       - Strings are equal
++ * * %-1      - @s1__ign is smaller
++ * * %1       - @s2__ign is smaller
++ * * %-EFAULT - Cannot read one of the strings
++ * * %-E2BIG  - One of strings is too large
++ * * %-ERANGE - One of strings is outside of kernel address space
++ */
++__bpf_kfunc int bpf_strcasecmp(const char *s1__ign, const char *s2__ign)
++{
++	return __bpf_strcasecmp(s1__ign, s2__ign, true);
++}
++
+ /**
+  * bpf_strnchr - Find a character in a length limited string
+  * @s__ign: The string to be searched
+@@ -3832,6 +3859,7 @@ BTF_ID_FLAGS(func, bpf_iter_dmabuf_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
+ #endif
+ BTF_ID_FLAGS(func, __bpf_trap)
+ BTF_ID_FLAGS(func, bpf_strcmp);
++BTF_ID_FLAGS(func, bpf_strcasecmp);
+ BTF_ID_FLAGS(func, bpf_strchr);
+ BTF_ID_FLAGS(func, bpf_strchrnul);
+ BTF_ID_FLAGS(func, bpf_strnchr);
 -- 
 2.51.0
 
