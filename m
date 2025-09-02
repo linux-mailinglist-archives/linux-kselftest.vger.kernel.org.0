@@ -1,129 +1,246 @@
-Return-Path: <linux-kselftest+bounces-40622-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40623-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0D1EB4096D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 17:46:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C91EEB40A71
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 18:22:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8643248526F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 15:45:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F5B11BA260E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 16:22:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A2F231AF2E;
-	Tue,  2 Sep 2025 15:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38043306D49;
+	Tue,  2 Sep 2025 16:22:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hvvyrm+J"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nI8aVViy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6972E22FAFD
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 15:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973982DEA64;
+	Tue,  2 Sep 2025 16:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756827942; cv=none; b=P3+SJOb1uNPdLCO/7IA5CUZKdpXh6ZMr/XWJYRPwc9jy/xBf6PTMLR8UphPnv7Du6QciEMRetiR0esQUeDp6VZtuXAFKfpRSYlDFcZqDGnJ2hCwEscE7ymZGcfWyaVClzw6yTQr55p69QPfSoHsazjiX/ls8A3A7WfDXUU3YqQ4=
+	t=1756830133; cv=none; b=KwdDiy3+XBPgdODnlAu5jjwQYcGhHBFy4oXKxw5Jsi74whGYaDwd7INZgApqcTaoqbaLarQf/xM6HBMxutdWjvCyCCEg8Skmg388qgC0UZTxqWzkDBGR4zXQiynG5ZM6hJRpVLiiypWojuAdHNw5u8dc696Hz9VjTg1MvexdHBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756827942; c=relaxed/simple;
-	bh=fAiEOoWGsgZVWnQszf7mSNgrn30l+x24N176m36Ke1A=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ip7CXMVDP0JxxuKxiC7EuAnleHpccxMbY9Oe4Z5bqYSOJ474Zpt+t2XXIXWaCucT/md+btjSd614zVt63liTNt1xuqgcHIQPFLdDnyZviethMHKcyBhMM+HAkJdXGy4li5NnJ3xHzNI5vDv4ZrCCMo8yJVQ13d/wby2ss0HH5Fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hvvyrm+J; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-329cb4c3f78so1482419a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 08:45:41 -0700 (PDT)
+	s=arc-20240116; t=1756830133; c=relaxed/simple;
+	bh=T/KjOOsLhvMSRHctLIe0sEbSL/AegU7tU/jzAHfFzho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FcuLbJJnMMWrrodz1MLBnvlnBMv/xLj5ADX2ojKazhooCRnDPgGue01cBQaU4Mdwqc6sYIkNNOavIS5TigAAqlytQCoIqwuN5k74KBZlVDpGA94XzWubbCYhiHAedxqR6ZhWkEA3HaoerSDTtA04Hv7Zui1IOx9PAGiGgF47waQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nI8aVViy; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b49cf1d4f6fso3883723a12.3;
+        Tue, 02 Sep 2025 09:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756827940; x=1757432740; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=idXQYsgK/aGLRgfjtmw1Ddlh5JY9tGyYsy/t9zcVDwU=;
-        b=hvvyrm+J1TMO5zbc61g/N3cVDQtT/bB1etPMO7rZfKsbnGHXQxrGfj8Cu8uJpYbrxQ
-         muLDOaPOMqvOgmrU6VrTw6REgEz4r/yygluu9dzgXCDbMdug0NTq9g+MwXOFXBOzQKEq
-         IxXgNa4VeZYuGBMgnzmFrW4EEaYnVjk25KBkAdqzXrPi4izA3C53/ZN+OGiMvwkowx3/
-         4vAf52QieYAQ+cJeNJhHd43g0YUshJ0kHz4I7UmkFr1CWzKmmjAObC7Sbn55ZihoDmqG
-         E3ajNOcDvEmIj0KteCyGrH0EV7zqDAqKEUawZCnYvn9fbR1KZvtVr8OD1UwwioAbAtTS
-         EbQg==
+        d=gmail.com; s=20230601; t=1756830131; x=1757434931; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YrhZ8SbifWNGRbBXiNjXeMkZVlU0hBJ919giQwu5/3M=;
+        b=nI8aVViyLO7LduY2F/WtqrfGQGbHbWbkBzh8Ft5M/yLH/eKcNHoHZYNj9SbxErMqH8
+         xyJk62MKFec47weTEdK9IoBS14LmWi5xnm+Ju3gYKb2QIVHL23w3IaH3VAzA93/N/RZ4
+         xFbEShH3nq4yxQbUnLUWioG7mKbapNXLC7Rw+P4Mr10K1TRmUEk+EX6wZmiS1tafrPux
+         OWjIiq/JhmOXKtUkpqMqT080SfUy7z7iP4Plvu+1A7mcPWCEPxBm2pG9nF6vC2GkTBN1
+         mHQXGgawrzkkTDInjkPOGg3WdVhgRDwssRhLk3UoEeK7L6LMFELsmy9gIW4IyLLFIMca
+         iFtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756827940; x=1757432740;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=idXQYsgK/aGLRgfjtmw1Ddlh5JY9tGyYsy/t9zcVDwU=;
-        b=hreJL4hDA58ocB2dgiKXOyTqxMFzzRYRciBxjhnukGviEPm57b6gJv0u0wgvCjpPah
-         t+ZZeMhcDDBj7By4eJ9YIJrtXiWAZimndq6/ZAlBdctj5Lgo02lUytLlJ+VkZy5csctk
-         UE4Rx/G6z4JaPex2ChJuzS1ZQUB6JRqZ0EUvJbleKFEGLjNcbOCegc+wf7qNgpNJ7jv+
-         uvESsm/FelKiCoZTG68QEVTBIGI6Ydv03HPEyPTU4ZdEoHb+mlsljB3jdUBLJCdewb1y
-         zlnNGyTQsl2du18BsTiQxQQd6CrgV3hti60k0mSM37Lrpk3aWNalU+vH+Nu3H/1i6SbD
-         W2Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCWPUKAoCYkLXv8GLz0tHvbmF/5X9Jkt8iBjqu75zwt0ddA+Imyco+JYOpd+H7jj/RJxnN7wmI7fr+KVWTtGgY8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyx87ATVfoVaaaOujIMBg91TEy3uwXkF4vEk40gQzYJpkg8FLQK
-	0RfkRWxJG7cwVzPjYFdpiiQ8TPemPzXSwHCGhIROYPpp4o24nE8aVZF2r2ZzP/gR9hqKRYdK7H9
-	2k4YZVg==
-X-Google-Smtp-Source: AGHT+IH0Sgo9kbsCPDPAvdw6SKo64i6IWn2JUynJKfEHeEJJqslJKt0/A4YOwdvbBZ9fik2siemSYLkR5vc=
-X-Received: from pjbsn4.prod.google.com ([2002:a17:90b:2e84:b0:329:cb7d:8057])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:16d7:b0:328:192:b7a0
- with SMTP id 98e67ed59e1d1-328156b6395mr11717001a91.19.1756827940533; Tue, 02
- Sep 2025 08:45:40 -0700 (PDT)
-Date: Tue, 2 Sep 2025 08:45:38 -0700
-In-Reply-To: <18bf858c-e135-4a9b-bda8-a70be3b3720e@linux.intel.com>
+        d=1e100.net; s=20230601; t=1756830131; x=1757434931;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YrhZ8SbifWNGRbBXiNjXeMkZVlU0hBJ919giQwu5/3M=;
+        b=a6J4vlMGJdScH0T04w49NyCJSFX9zM1bl2+fdgWWmMywUJMNEvpvfN+ZlLpXcWoXsF
+         9PCysHIP0H2WRodEvKcQBZ7kB5fJe0tIvhAF8ANodSdCcZEiqON9EFT5wKFhuU7E9GEd
+         WCe9jgQXclqDwXB582ZBaH4PfSKzdemaSUBlRswpf5k+esdBvjFkZsuiNiw3wHH6dWxq
+         JINS4+dgD5MXwFKTF15efRhIH1VxduN3nVMFS2JW6VKtBALIrrh6o8aGR8rZUVz2nfb9
+         ToT3gj0jcufUJpSgtd9EBf3YRTfvnoVlOqq0HiGCiNHwX//fy5nu2PneFYNsR0G1P+6G
+         yRlA==
+X-Forwarded-Encrypted: i=1; AJvYcCVMevjed6vk3vxZOVAgFM0WcoUlM1WkSElnropwwl+gbgnRMPp2KvHCJFVHIuxqDrFdUB7AS2Mt2wi772/e2AY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3ALg1vYm8bSGe9gktmf4gjeU0zAjf0fTONoD3lWzq/xsWQPg8
+	n05ExkVU2adSE5yJWO3qFp+Abb+ioX2mZOIrktxCOmut9kc/kqQnmRk=
+X-Gm-Gg: ASbGncswbnbBZ2avIHFRqmFvS1I7jsN2ezbHX28VkYeAq8PiF3MkthR+/ruUVJcvI1H
+	WynS9AgkbJcMhh7bDlsReIYY5mWNBkP1ubcgaAqKEQSTidJmNCiWfl5cwTqi1+PSaq3JfFFsXc/
+	tluketDxOQdWgW3fNQMeWd7kXGmRp0Ceb1Zx8f16n6K7l2Yf7zm25v+iAYtgOJtC37Nf0t7V7xR
+	0IzRAPl2CY70n1fIQSmdZozGdzVhkgnRlygsnLn773BESO6t09lZTcOhnGxXMF8QXh1UZsND1x8
+	emWnCKqR1Z5Fj+s7l1KVP2lq60++2wk7Xres3H+qYnrC2k5SqedCRH1xN+FjzQ7X0YVnBrozB42
+	PZZH3g1eFgeZOxLfCviPI7BhSiV/Rlr98cPztAg5ANQhHvRDc5xFC4Jwcb3rud9Vs2zS4YBHksd
+	SKbQ4xqPJQL6U8cD4j8NxnJzqb9vkyLp/baGTiZcICdx85GTVOhJEifGx1DCCeK0w1iBVxVVgE4
+	EvK
+X-Google-Smtp-Source: AGHT+IHyDcasNmEHyeO6kcdp8vnamRAvkNnpljuz2J/TSAKeE8ghhhcuoQIxiBYP7sQiUc1mJNbjWQ==
+X-Received: by 2002:a17:902:d4cb:b0:249:2c76:54fc with SMTP id d9443c01a7336-24944a9e7b4mr159382985ad.39.1756830130600;
+        Tue, 02 Sep 2025 09:22:10 -0700 (PDT)
+Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-24905da2896sm137876915ad.81.2025.09.02.09.22.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Sep 2025 09:22:10 -0700 (PDT)
+Date: Tue, 2 Sep 2025 09:22:09 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Sabrina Dubroca <sdubroca@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ahmed Zaki <ahmed.zaki@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 3/5] team: use common function to compute the
+ features
+Message-ID: <aLcZsYrC7Q1sqpSv@mini-arch>
+References: <20250829095430.443891-1-liuhangbin@gmail.com>
+ <20250829095430.443891-4-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250821042915.3712925-1-sagis@google.com> <20250821042915.3712925-19-sagis@google.com>
- <18bf858c-e135-4a9b-bda8-a70be3b3720e@linux.intel.com>
-Message-ID: <aLcRIn8ryB2kXWcD@google.com>
-Subject: Re: [PATCH v9 18/19] KVM: selftests: Add ucall support for TDX
-From: Sean Christopherson <seanjc@google.com>
-To: Binbin Wu <binbin.wu@linux.intel.com>
-Cc: Sagi Shahar <sagis@google.com>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Erdem Aktas <erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>, 
-	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>, 
-	Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250829095430.443891-4-liuhangbin@gmail.com>
 
-On Wed, Aug 27, 2025, Binbin Wu wrote:
-> On 8/21/2025 12:29 PM, Sagi Shahar wrote:
-> > @@ -46,11 +69,23 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
-> >   {
-> >   	struct kvm_run *run = vcpu->run;
-> > -	if (run->exit_reason == KVM_EXIT_IO && run->io.port == UCALL_PIO_PORT) {
-> > -		struct kvm_regs regs;
-> > +	switch (vm_type) {
-> > +	case KVM_X86_TDX_VM:
-> > +		if (vcpu->run->exit_reason == KVM_EXIT_MMIO &&
-> > +		    vcpu->run->mmio.phys_addr == host_ucall_mmio_gpa &&
-> > +		    vcpu->run->mmio.len == 8 && vcpu->run->mmio.is_write) {
-> > +			uint64_t data = *(uint64_t *)vcpu->run->mmio.data;
-> > +
-> > +			return (void *)data;
-> > +		}
-> > +		return NULL;
+On 08/29, Hangbin Liu wrote:
+> Use the new helper netdev_compute_features_from_lowers() to compute the
+> team device features. This helper performs both the feature computation
+> and the netdev_change_features() call.
 > 
-> My first thought was how did SEV_ES or SNP work for this since they are not
-> able to get RDI neither.
-> Then I had a check in sev_smoke_test.c, both guest_sev_es_code() and
-> guest_snp_code() call GUEST_ASSERT(), which finally calls ucall_assert(), but
-> in test_sev(), the code doesn't handle ucall for SEV_ES or SNP.
-> Does it mean GUEST_ASSERT() is currently not working and ignored for SEV_ES
-> and SNP? Or did I miss anything?
+> Note that such change replace the lower layer traversing currently done
+> using team->port_list with netdev_for_each_lower_dev(). Such change is
+> safe as `port_list` contains exactly the same elements as
+> `team->dev->adj_list.lower` and the helper is always invoked under the
+> RTNL lock.
+> 
+> With this change, the explicit netdev_change_features() in
+> team_add_slave() can be safely removed, as team_port_add()
+> already takes care of the notification via
+> netdev_compute_features_from_lowers(), and same thing for team_del_slave()
+> 
+> This also fixes missing computations for MPLS, XFRM, and TSO/GSO partial
+> features.
+> 
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> ---
+>  drivers/net/team/team_core.c | 73 ++----------------------------------
+>  1 file changed, 4 insertions(+), 69 deletions(-)
+> 
+> diff --git a/drivers/net/team/team_core.c b/drivers/net/team/team_core.c
+> index 17f07eb0ee52..018d876e140a 100644
+> --- a/drivers/net/team/team_core.c
+> +++ b/drivers/net/team/team_core.c
+> @@ -982,63 +982,6 @@ static void team_port_disable(struct team *team,
+>  	team_lower_state_changed(port);
+>  }
+>  
+> -#define TEAM_VLAN_FEATURES (NETIF_F_HW_CSUM | NETIF_F_SG | \
+> -			    NETIF_F_FRAGLIST | NETIF_F_GSO_SOFTWARE | \
+> -			    NETIF_F_HIGHDMA | NETIF_F_LRO | \
+> -			    NETIF_F_GSO_ENCAP_ALL)
+> -
+> -#define TEAM_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> -				 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE)
+> -
+> -static void __team_compute_features(struct team *team)
+> -{
+> -	struct team_port *port;
+> -	netdev_features_t vlan_features = TEAM_VLAN_FEATURES;
+> -	netdev_features_t enc_features  = TEAM_ENC_FEATURES;
+> -	unsigned short max_hard_header_len = ETH_HLEN;
+> -	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE |
+> -					IFF_XMIT_DST_RELEASE_PERM;
+> -
+> -	rcu_read_lock();
+> -	if (list_empty(&team->port_list))
+> -		goto done;
+> -
+> -	vlan_features = netdev_base_features(vlan_features);
+> -	enc_features = netdev_base_features(enc_features);
+> -
+> -	list_for_each_entry_rcu(port, &team->port_list, list) {
+> -		vlan_features = netdev_increment_features(vlan_features,
+> -					port->dev->vlan_features,
+> -					TEAM_VLAN_FEATURES);
+> -		enc_features =
+> -			netdev_increment_features(enc_features,
+> -						  port->dev->hw_enc_features,
+> -						  TEAM_ENC_FEATURES);
+> -
+> -		dst_release_flag &= port->dev->priv_flags;
+> -		if (port->dev->hard_header_len > max_hard_header_len)
+> -			max_hard_header_len = port->dev->hard_header_len;
+> -	}
+> -done:
+> -	rcu_read_unlock();
+> -
+> -	team->dev->vlan_features = vlan_features;
+> -	team->dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
+> -				     NETIF_F_HW_VLAN_CTAG_TX |
+> -				     NETIF_F_HW_VLAN_STAG_TX;
+> -	team->dev->hard_header_len = max_hard_header_len;
+> -
+> -	team->dev->priv_flags &= ~IFF_XMIT_DST_RELEASE;
+> -	if (dst_release_flag == (IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM))
+> -		team->dev->priv_flags |= IFF_XMIT_DST_RELEASE;
+> -}
+> -
+> -static void team_compute_features(struct team *team)
+> -{
+> -	__team_compute_features(team);
+> -	netdev_change_features(team->dev);
+> -}
+> -
+>  static int team_port_enter(struct team *team, struct team_port *port)
+>  {
+>  	int err = 0;
+> @@ -1300,7 +1243,7 @@ static int team_port_add(struct team *team, struct net_device *port_dev,
+>  	port->index = -1;
+>  	list_add_tail_rcu(&port->list, &team->port_list);
+>  	team_port_enable(team, port);
+> -	__team_compute_features(team);
+> +	netdev_compute_features_from_lowers(team->dev);
+>  	__team_port_change_port_added(port, !!netif_oper_up(port_dev));
+>  	__team_options_change_check(team);
+>  
+> @@ -1382,7 +1325,7 @@ static int team_port_del(struct team *team, struct net_device *port_dev)
+>  	dev_set_mtu(port_dev, port->orig.mtu);
+>  	kfree_rcu(port, rcu);
+>  	netdev_info(dev, "Port device %s removed\n", portname);
+> -	__team_compute_features(team);
+> +	netdev_compute_features_from_lowers(team->dev);
+>  
+>  	return 0;
+>  }
 
-GUEST_ASSERT() "works" for -ES and -SNP in the sense that it generates as test
-failure due to the #VC not being handled (leads to SHUTDOWN).  But you're correct
-that ucall isn't functional yet.  x86/sev_smoke_test.c fudges around lack of ucall
-by using the GHCB MSR protocol to signal "done".
+[..]
 
-        /*
-         * TODO: Add GHCB and ucall support for SEV-ES guests.  For now, simply
-         * force "termination" to signal "done" via the GHCB MSR protocol.
-         */
-        wrmsr(MSR_AMD64_SEV_ES_GHCB, GHCB_MSR_TERM_REQ);
-        vmgexit();
+> @@ -1976,9 +1919,6 @@ static int team_add_slave(struct net_device *dev, struct net_device *port_dev,
+>  
+>  	err = team_port_add(team, port_dev, extack);
+>  
+> -	if (!err)
+> -		netdev_change_features(dev);
+> -
+>  	return err;
+>  }
+>  
+> @@ -1991,11 +1931,6 @@ static int team_del_slave(struct net_device *dev, struct net_device *port_dev)
+>  
+>  	err = team_port_del(team, port_dev);
+>  
+> -	if (err)
+> -		return err;
+> -
+> -	netdev_change_features(dev);
+> -
+>  	return err;
+>  }
+
+nit: change these to 'return team_port_xxx()' ? Can drop the 'err' as
+well, don't think it's needed anymore?
 
