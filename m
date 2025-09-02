@@ -1,202 +1,219 @@
-Return-Path: <linux-kselftest+bounces-40510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68DD0B3F5E0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 08:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1B24B3F635
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 09:08:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24252485C5B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 06:48:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DD133A8710
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 07:08:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765F52E54A8;
-	Tue,  2 Sep 2025 06:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588412E613C;
+	Tue,  2 Sep 2025 07:08:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X9UXFpzP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Il/g5DiC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED23721C17D;
-	Tue,  2 Sep 2025 06:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD6326A0BD
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 07:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756795677; cv=none; b=f/Csg5iXSzna4e8mwd2uGXRyllOnaZ7DdGhBNMvXaSvp0l3SNCfxNtz/JsX9Ax0pEZYRiLzusalAuN3GuqL936xVTVmEGp0hPsxxRGZxDXgvVp3al1Qt02iza9xu6j0c2mVnhj2TNiTXf772LDQOVTYjxeA4JlUd4lWuZby4NYg=
+	t=1756796934; cv=none; b=SYIiAI/589rV1MjnZe5cu+wqelopBZeP/1r6WIwNSC8fOVDqRP4a8so0IsIfrUIQd6iIKvE0dbMRqX6R+dmhd+ar9lQoJ3ijJZbIv6GXvsvVq98Gomk2goxsF+K+mIMdcZZgT02HLB7xGIWQXXuKHWKTkqwVvvICfmuIkSDBqB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756795677; c=relaxed/simple;
-	bh=y4iwgy1InLjVLkGHeHvw/N6MqMMDdI0sR73CE4+VRfs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nhuEaYz40mFU/x0k3FL0/v57vWW918zVHas2AomuisXCgydW78LQ4rMaDLhKTwPgFRpH34BQ7HkZuzr7Ld/xcDEyc1qELQUnfIe0ySQb2g/41rQiR0lmIV3Rcr7iB5dVTR1tGw/YQGE6OxMioXtbp+nfrVbrQAjmA7Jq6j/AFIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X9UXFpzP; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-24b13313b1bso3621175ad.2;
-        Mon, 01 Sep 2025 23:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756795675; x=1757400475; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LTPq8+2AdLPc961xK1EiH/64P90CB0xN8ApLWD7VVEA=;
-        b=X9UXFpzPCeDIilBvG0wKZ4Z2QhK1dlLVXgENP/+n6kRODPA7HZ8AG6YmN68ODXS3K7
-         4u6ppGwjrE0s50NY6ivJjD/CRqgLw66mjrDF9NpAIwMg8d6L81JW+IgXRqe7KhYWFOIu
-         9pnmod/YM5ckAKEHP4j9shIv+muSF/CzGuEnwt6mCcByO4RwkekZF6nYUusE8wt0LiOv
-         I3mhYfgOlS7COc7tgbLYHASJGIBuA9jwPX3edjunHGUYj7bOBwDXshB31+uTdL4DsAh3
-         lmWGWaUBMxrUiQLbMDel7wVqZqP96RuAjBKj0HSLN4zt8AFSv4kBPK7xjrZLhajJSGFr
-         y3pg==
+	s=arc-20240116; t=1756796934; c=relaxed/simple;
+	bh=im7NYadRTHyEfmXv2PI4/RAof9Bxr0cUGhtOOsLLb0E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ikvPXNCZ/REf+L0kme3AmWrDU4mhXk4ilQzliOJZl867psldhU290Ix/I7AwJcurgEyqkb1ZSmMspZT9GGwWCWbjFntUp7phu3/lf/lit071lZAbacjXak+BgONZuRewDm0i6tGC0rqCf4tHn5JaCmZUo6zSYgEqMYmow2xuvEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Il/g5DiC; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756796931;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gwnQVLWw3r5ceJM7DV94g3HH/db+9QctDZGqRZqZzX8=;
+	b=Il/g5DiCkND9j6cnuw94wDsygMEHeNPe5IC07rqUwfnzDKm8ReAV5HSMtzOY2XvSoz1zsA
+	ev28lh2vd3qRqgMdYupdnEPrk4luSYsR6O1imEKdu87Qi1KRdn8E132mtmEuUahpgGX6R7
+	coHtEuDJekKHC29Kj9MgOD1WD7pb9lA=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-356-9IeQt5tzMnOSCUd9mxcnbg-1; Tue, 02 Sep 2025 03:08:50 -0400
+X-MC-Unique: 9IeQt5tzMnOSCUd9mxcnbg-1
+X-Mimecast-MFC-AGG-ID: 9IeQt5tzMnOSCUd9mxcnbg_1756796930
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-70dd6d25992so95489256d6.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 00:08:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756795675; x=1757400475;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LTPq8+2AdLPc961xK1EiH/64P90CB0xN8ApLWD7VVEA=;
-        b=RzP63swP9Y8CYToipValt9iLomVu0C1fxyEWHS+SQjk38KCPnY5LyMXhDnbjftzWTE
-         IR7Yu7uASEGitc7WHwbpVqVWtWebdUZQrtcK6AV65PzkYvgUbC6wvmkBbpnn+fZw9x5k
-         UCEa8pRKvKX5b8ZI1Ju2c3HLkm1Nzj3NrOluYUbf+G9Q0DKEORHZUp5M4kIbhzV8f+iB
-         C7EWRp1vCNt3T85MJ45hs7vEuEAz8Xe9TRvNPg3S/ELktnmlg/5R5IcVx2DPGeA/O8SJ
-         V8qCvgFCJhJ6LG+O4JNxZZYe3SZXZeM+vMaoBD2UnSQvg1kRSefhELM/uGHGE9vdatkH
-         JHRw==
-X-Forwarded-Encrypted: i=1; AJvYcCX4iwQNg07rPibGPHzw4wvvL/78ODocQK36MuTCfaxXt5ErjxaGaLMRR7VrdV0MrZi+4+3pPkHKbTc=@vger.kernel.org, AJvYcCXx45BfRi/M+CEqousrffDnJHqbcf/ld5qfVlwkEbfHDa7kq9NmwHLKVHoJIgMXS4NUfdBJsFytmG8Gc968ps28@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRmRUjKxoEU983graLXJLx5L6Z5deAiNBE757mTjCzLhpuvH6N
-	AARAhqoT8rJG0H3TiCx4V+pDj7LWIVwruvU7xnO7pjC93FqUhMqou9w4HGkT3cfoprc=
-X-Gm-Gg: ASbGnct6wJoNDPwwMfL7GkH01avJEGWOwQcZv17PWPIAnS+6OvvqsXHQkpcmE1MjBH3
-	yuwNuxJtvRuD7qM+uQWbNUtLeq2JQtgkqIU+POeUUDqDhrMH9bAPSLk74SqzS1UyKbHScVXBO0V
-	CBJmo46i8zG1GZ57VEqiBpSmCmwGh+rTpq9LmoGHhU8s+ppcV4Q2EaJGLeJFo1uGMk2bo+jUumh
-	HSko5bJPaLRnDM5dyc64PQ6BhjOtj4Ck5jwjxPS6A76pGgr3yhM2CxhXtSKMr5nLVmSRCxrebL1
-	eRaCfVVisO/H8SW1GwY0/kzn7WhPPoothRDvBtgYmTy2DXSlzTwD//jM5Q938FSwmDC3bKk7NFe
-	GjKX+otUkgA+cci0WQQpxzGNOwY/RaSwBgEthWZXB3k50h0g52bw8
-X-Google-Smtp-Source: AGHT+IFqPfCf85R1WSNoSoStlsAU6Gwf4ETkoZiH7H/3zJ3Yl2D0KBpaXiFN05FTws4AOvDG2/uDSw==
-X-Received: by 2002:a17:902:e882:b0:243:e3:a4e5 with SMTP id d9443c01a7336-24944b51fd5mr159448465ad.48.1756795674950;
-        Mon, 01 Sep 2025 23:47:54 -0700 (PDT)
-Received: from fedora.redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4cd073c207sm10856900a12.18.2025.09.01.23.47.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Sep 2025 23:47:54 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Petr Machata <petrm@nvidia.com>,
-	Amit Cohen <amcohen@nvidia.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	David Ahern <dsahern@gmail.com>,
-	Jonas Gorski <jonas.gorski@gmail.com>,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv5 iproute2-next] iplink: bond_slave: add support for actor_port_prio
-Date: Tue,  2 Sep 2025 06:47:38 +0000
-Message-ID: <20250902064738.360874-1-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.50.1
+        d=1e100.net; s=20230601; t=1756796930; x=1757401730;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gwnQVLWw3r5ceJM7DV94g3HH/db+9QctDZGqRZqZzX8=;
+        b=xLAunReqTa9mOticgk/FubI8WRWY0+G1+TVkCuzhWzlfES3pg1HxFBbN/pZLlVu+zt
+         PZ5K6a3Nwbc6IiIovISEOxvT92YeP1kdqG7fTYlngOGWvLyIpsIvDWyLlBIkAP9l1IYk
+         GmBCkeU9D852ao3GlscDAKY4jRHuE17ozCCc9ysmmPE19XbwHl0U9Jjm7csMjfIqyDIN
+         g4InI/kOA3hB9yFqBY/8ioX0phj++zfOrN8goLgiVszXP7x9qEEHTjr5o0tMEMDf4F1L
+         whXOQWE/S9y6iSWkmqqu19hAAzTETlzlEfqjRd9DsaW2E6kgnevMH+RbhMUo5XrZzeqA
+         I0IQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqDPOm5911gjAFAoEhbFXkkYcCOkyBscIyPywaC4Zhgn5KdkX4Op22qKsrlL1NB0ZNEKFk5vzpYt11kRCyaUQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0doP86GkRrT36pqYpk/xOEyxzmkQMGG1XGvCo5HKmr0dkN6A/
+	UoO74rzsNXGh6qirYKqNnb4XLOu0L+nKa7thlgSi2vkYPXnCUa7pWgwugnv5swozknPta5MMeJt
+	TZ/PHHUMO7jGtJHTF+atps19Tb/IPDT9xf3Sgvt2+pV8ZHYTqAwFsZocwG2y7sWmMvcf3
+X-Gm-Gg: ASbGncvmY24Ij+n2pA9z3cV/Fr+bvr4zHg8myQCD24EsislsQzZGj1fOLXkLCBM3VO5
+	3IxngQFvSObysW+c90ZUbpxTpe3FFX2MRfVBogHnvTNv0pcIwogwChB9uYkFe+g7Av0J3f1cB7k
+	sNxwoXttCO36VTP050498xIIeyqowelzYvFS+FnrTKBm4/xGVIrV2iR3MsRHB9fQsbveOcq/FrH
+	MCnnEvmWr+QBruasvPAQ3FWVcrGS+OJ5Kx07CyN5coV1EaAjbJ3Svjw27kl+Yc9It7l0kUjjKe6
+	5GwtRmofikje8XLqa7escf62PpaHKIchxxY=
+X-Received: by 2002:a05:6214:5188:b0:719:12cf:50ef with SMTP id 6a1803df08f44-71912cf57e2mr76132286d6.28.1756796930166;
+        Tue, 02 Sep 2025 00:08:50 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGl9dp0yJxUygzcGwWlW4JH2MFXqf3SrOHhhWvvJyY3BMT7iNsAbljAlYrABN+Qx91wFDHhzQ==
+X-Received: by 2002:a05:6214:5188:b0:719:12cf:50ef with SMTP id 6a1803df08f44-71912cf57e2mr76131696d6.28.1756796929288;
+        Tue, 02 Sep 2025 00:08:49 -0700 (PDT)
+Received: from [10.43.17.17] ([85.93.96.130])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-720b644f2c9sm7383546d6.63.2025.09.02.00.08.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Sep 2025 00:08:48 -0700 (PDT)
+Message-ID: <f0194235-19ae-43de-b73d-b2d8b7f77035@redhat.com>
+Date: Tue, 2 Sep 2025 09:08:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] bpf: add bpf_strcasecmp kfunc
+To: Rong Tao <rtoax@foxmail.com>, andrii@kernel.org, ast@kernel.org
+Cc: Rong Tao <rongtao@cestc.cn>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>,
+ "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
+ <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <cover.1756793624.git.rongtao@cestc.cn>
+ <tencent_5AE811A28781BE106AD6CDE59F4ADD2BFA06@qq.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <tencent_5AE811A28781BE106AD6CDE59F4ADD2BFA06@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add support for the actor_port_prio option for bond slaves.
-This per-port priority can be used by the bonding driver in ad_select to
-choose the higher-priority aggregator during failover.
+On 9/2/25 08:17, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> bpf_strcasecmp() function performs same like bpf_strcmp() except ignoring
+> the case of the characters.
+> 
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+>  kernel/bpf/helpers.c | 56 +++++++++++++++++++++++++++++++++-----------
+>  1 file changed, 42 insertions(+), 14 deletions(-)
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 401b4932cc49..e807a708e5fc 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -3349,20 +3349,7 @@ __bpf_kfunc void __bpf_trap(void)
+>   * __get_kernel_nofault instead of plain dereference to make them safe.
+>   */
+>  
+> -/**
+> - * bpf_strcmp - Compare two strings
+> - * @s1__ign: One string
+> - * @s2__ign: Another string
+> - *
+> - * Return:
+> - * * %0       - Strings are equal
+> - * * %-1      - @s1__ign is smaller
+> - * * %1       - @s2__ign is smaller
+> - * * %-EFAULT - Cannot read one of the strings
+> - * * %-E2BIG  - One of strings is too large
+> - * * %-ERANGE - One of strings is outside of kernel address space
+> - */
+> -__bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
+> +int __bpf_strcasecmp(const char *s1__ign, const char *s2__ign, bool ignore_case)
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
-v5: rename port in ad_select_tbl to actor_port_prio
-v4: no update
-v3: rename ad_actor_port_prio to actor_port_prio
-v2: no update
----
- ip/iplink_bond.c       |  1 +
- ip/iplink_bond_slave.c | 18 ++++++++++++++++--
- man/man8/ip-link.8.in  |  6 ++++++
- 3 files changed, 23 insertions(+), 2 deletions(-)
+No need to use the `__ign` suffix here.
 
-diff --git a/ip/iplink_bond.c b/ip/iplink_bond.c
-index d6960f6d9b03..3ae626a03e6e 100644
---- a/ip/iplink_bond.c
-+++ b/ip/iplink_bond.c
-@@ -91,6 +91,7 @@ static const char *ad_select_tbl[] = {
- 	"stable",
- 	"bandwidth",
- 	"count",
-+	"actor_port_prio",
- 	NULL,
- };
- 
-diff --git a/ip/iplink_bond_slave.c b/ip/iplink_bond_slave.c
-index ad6875006950..c88100e248dd 100644
---- a/ip/iplink_bond_slave.c
-+++ b/ip/iplink_bond_slave.c
-@@ -15,7 +15,9 @@
- 
- static void print_explain(FILE *f)
- {
--	fprintf(f, "Usage: ... bond_slave [ queue_id ID ] [ prio PRIORITY ]\n");
-+	fprintf(f, "Usage: ... bond_slave [ queue_id ID ] [ prio PRIORITY ]\n"
-+		   "                      [ actor_port_prio PRIORITY ]\n"
-+	);
- }
- 
- static void explain(void)
-@@ -145,12 +147,18 @@ static void bond_slave_print_opt(struct link_util *lu, FILE *f, struct rtattr *t
- 			  state);
- 		print_slave_oper_state(f, "ad_partner_oper_port_state_str", state);
- 	}
-+
-+	if (tb[IFLA_BOND_SLAVE_ACTOR_PORT_PRIO])
-+		print_int(PRINT_ANY,
-+			  "actor_port_prio",
-+			  "actor_port_prio %d ",
-+			  rta_getattr_u16(tb[IFLA_BOND_SLAVE_ACTOR_PORT_PRIO]));
- }
- 
- static int bond_slave_parse_opt(struct link_util *lu, int argc, char **argv,
- 				struct nlmsghdr *n)
- {
--	__u16 queue_id;
-+	__u16 queue_id, actor_port_prio;
- 	int prio;
- 
- 	while (argc > 0) {
-@@ -164,6 +172,12 @@ static int bond_slave_parse_opt(struct link_util *lu, int argc, char **argv,
- 			if (get_s32(&prio, *argv, 0))
- 				invarg("prio is invalid", *argv);
- 			addattr32(n, 1024, IFLA_BOND_SLAVE_PRIO, prio);
-+		} else if (strcmp(*argv, "actor_port_prio") == 0) {
-+			NEXT_ARG();
-+			if (get_u16(&actor_port_prio, *argv, 0))
-+				invarg("actor prio is invalid", *argv);
-+			addattr16(n, 1024, IFLA_BOND_SLAVE_ACTOR_PORT_PRIO,
-+				  actor_port_prio);
- 		} else {
- 			if (matches(*argv, "help") != 0)
- 				fprintf(stderr,
-diff --git a/man/man8/ip-link.8.in b/man/man8/ip-link.8.in
-index e3297c577152..7995943ab11f 100644
---- a/man/man8/ip-link.8.in
-+++ b/man/man8/ip-link.8.in
-@@ -2846,6 +2846,12 @@ the following additional arguments are supported:
- (a 32bit signed value). This option only valid for active-backup(1),
- balance-tlb (5) and balance-alb (6) mode.
- 
-+.sp
-+.BI actor_port_prio " PRIORITY"
-+- set the slave's ad actor port priority for 802.3ad aggregation selection
-+logic during failover (a 16bit unsigned value). This option only valid for
-+802.3ad (4) mode.
-+
- .in -8
- 
- .TP
--- 
-2.50.1
+Otherwise LGTM. I guess that it could be useful in some applications.
+
+Viktor
+
+>  {
+>  	char c1, c2;
+>  	int i;
+> @@ -3376,6 +3363,10 @@ __bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
+>  	for (i = 0; i < XATTR_SIZE_MAX; i++) {
+>  		__get_kernel_nofault(&c1, s1__ign, char, err_out);
+>  		__get_kernel_nofault(&c2, s2__ign, char, err_out);
+> +		if (ignore_case) {
+> +			c1 = tolower(c1);
+> +			c2 = tolower(c2);
+> +		}
+>  		if (c1 != c2)
+>  			return c1 < c2 ? -1 : 1;
+>  		if (c1 == '\0')
+> @@ -3388,6 +3379,42 @@ __bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
+>  	return -EFAULT;
+>  }
+>  
+> +/**
+> + * bpf_strcmp - Compare two strings
+> + * @s1__ign: One string
+> + * @s2__ign: Another string
+> + *
+> + * Return:
+> + * * %0       - Strings are equal
+> + * * %-1      - @s1__ign is smaller
+> + * * %1       - @s2__ign is smaller
+> + * * %-EFAULT - Cannot read one of the strings
+> + * * %-E2BIG  - One of strings is too large
+> + * * %-ERANGE - One of strings is outside of kernel address space
+> + */
+> +__bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
+> +{
+> +	return __bpf_strcasecmp(s1__ign, s2__ign, false);
+> +}
+> +
+> +/**
+> + * bpf_strcasecmp - Compare two strings, ignoring the case of the characters
+> + * @s1__ign: One string
+> + * @s2__ign: Another string
+> + *
+> + * Return:
+> + * * %0       - Strings are equal
+> + * * %-1      - @s1__ign is smaller
+> + * * %1       - @s2__ign is smaller
+> + * * %-EFAULT - Cannot read one of the strings
+> + * * %-E2BIG  - One of strings is too large
+> + * * %-ERANGE - One of strings is outside of kernel address space
+> + */
+> +__bpf_kfunc int bpf_strcasecmp(const char *s1__ign, const char *s2__ign)
+> +{
+> +	return __bpf_strcasecmp(s1__ign, s2__ign, true);
+> +}
+> +
+>  /**
+>   * bpf_strnchr - Find a character in a length limited string
+>   * @s__ign: The string to be searched
+> @@ -3832,6 +3859,7 @@ BTF_ID_FLAGS(func, bpf_iter_dmabuf_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
+>  #endif
+>  BTF_ID_FLAGS(func, __bpf_trap)
+>  BTF_ID_FLAGS(func, bpf_strcmp);
+> +BTF_ID_FLAGS(func, bpf_strcasecmp);
+>  BTF_ID_FLAGS(func, bpf_strchr);
+>  BTF_ID_FLAGS(func, bpf_strchrnul);
+>  BTF_ID_FLAGS(func, bpf_strnchr);
 
 
