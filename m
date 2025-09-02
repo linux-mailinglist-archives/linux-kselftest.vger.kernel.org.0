@@ -1,66 +1,80 @@
-Return-Path: <linux-kselftest+bounces-40538-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40539-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F91AB3FA19
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 11:21:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EEBCB3FA27
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 11:22:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39AF67A423D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 09:20:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57DF94E1344
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 09:22:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7A12DFA2B;
-	Tue,  2 Sep 2025 09:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 047AD2EA46B;
+	Tue,  2 Sep 2025 09:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="SkjgygrE"
+	dkim=pass (2048-bit key) header.d=ursulin-net.20230601.gappssmtp.com header.i=@ursulin-net.20230601.gappssmtp.com header.b="BjJ4DkI0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-236.mail.qq.com (out203-205-221-236.mail.qq.com [203.205.221.236])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E051127466D;
-	Tue,  2 Sep 2025 09:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D252E8B7B
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 09:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756804903; cv=none; b=ftJGn4cFrhPmjUnFn5Ko4ZrFFpvliY8WYPZurNLOaCQ/aLJ8FXWvxJ7N1jenF3toMkqB7CSZbLo5gQIhbJrlny5AH/AOgS2zHuyjOsMQwOD/3V5qJMO161R9PhVFYUtVmnEWwtfsKf75uogQkmyKHCeg3mLNi90nCLXh9kjr4CQ=
+	t=1756804934; cv=none; b=Gvt3rdKcppO5j1yLVl/MXfSagMB9P5b4qOEkcc2CHrxu2aDJEvKVnIPvpDi4h6/FU3wwe2RLbwRavvkWJZokoi96xeegUbNB0EhU35q+7WvnTQGL9C2d5ISiNH9EYlJ2ziHc6WubU3UG3u7zqL/E/ObAqAJFe3hLYMNTblwtt4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756804903; c=relaxed/simple;
-	bh=fJ+8zjPxcFduC8vpbJmpStNAHjNkgFzRwt6qlypCTVo=;
+	s=arc-20240116; t=1756804934; c=relaxed/simple;
+	bh=Pv1NlzKjL0xFo8BfGbhy/7KnNZN8WrItjraHEOkXixw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AfOO+/GNkerEu22/WUx8jWN2vVtjOou1KZX3NSFeM5Kf9TImFkLvQMCab4RoK7VWUUOP0aoTKrojFHNgbkMHPPNgUROpsVGleoYvtvEH3CJCY5fYjF7LmMG6B39RK/60Pgu1ioQl72jS8wJpLCDfK8fiwR8F1Hmn6JPi80dQSUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=SkjgygrE; arc=none smtp.client-ip=203.205.221.236
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756804898;
-	bh=OxpOJmhECTdLgWfX9uIafSF9DcEyP9WjBjiAh0oefRo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=SkjgygrEtp/z3arybBz0wD8TZ9nJJVFCskkBxKWTV4Ucl+viBHNQ6fEFhgnUGCkb0
-	 43MkSXwYN1sEz4lC0VfGTuurpOl9OFvKfhn0XXAHsJxLQu4OdlEPbYGX7fcfivANFw
-	 71QO72QSUN2oLVfAcV2uZQRe5MQgw+uLzX/z2Kac=
-Received: from [10.56.52.9] ([39.156.73.10])
-	by newxmesmtplogicsvrszc41-0.qq.com (NewEsmtp) with SMTP
-	id 56221432; Tue, 02 Sep 2025 17:21:34 +0800
-X-QQ-mid: xmsmtpt1756804894t1p04q3ox
-Message-ID: <tencent_A364CD5CCEAA68BD7E8CAA2092180409150A@qq.com>
-X-QQ-XMAILINFO: NwU6Bou9okj/tbdOQoNWWLVwvWA8HB3wvWH6M8x+KFoP19lo9jLr+KYnags3Dx
-	 0SBm2+jH32YP8CngseKDGiIXeqNrBC7JVCTwwTShVUHDzd7d0t7QC57O/sPXUPNnNiNotl329G4y
-	 G900N+YePazTIfBf9bj+kybeVIVEqJnn15wq/75NMzn5nOv97E4IhfR1/dL2VvfgsZ7I7TY5NtXG
-	 QFKZ+hlY42JK9MP459rkbBHAVu/Geh/OmQMRViAA/7dsmclgBuIdw/71hQ8ztxM3Lj56AF4rwJIS
-	 l9WKiK1NYIL1lKoAcSe3KxDeBGsMhQ6aVgn4X7oaVVhUqMoxwKyX9UyvjK66cybHwDaBC31n5Xh2
-	 JF3nUXv06/O7tYZWXJ2T/Uop4/sywRVWxySf/ShV7/rH3FswuRtjTg0ZR7SL5frT7vmfTUldyqWo
-	 hmLT/3c6tRWjTvFlG40NGib5l/yS9Xe6o3h2h0Jt73eFIqMPy6LH9Rt75zW9rAvw5ROfnAB/COZh
-	 SHG/lFGWNpgQ0Qqa2n6NI5MYBhmBlmKgb3C6nQiVR3dk+xdnJ/gmUpu4Ah8XeaMXzsJi3RFDqtWw
-	 aQUDQ/6q0aHgDPLiebE474Efik6bTu9WpyWFlYgazp/wbHA52hwqVefo3Xi26sYPPgGE9Qj+D5w5
-	 bIcAoE0irshIZVsgmL5EqHtCexFwz7jNK7xJH0rGGr5u38Do7e5MI/5elapTWUMGyhlxzIWzaRJC
-	 t7PVuBr+vL1JlOhQTCe95zRwfELp4TWihUQtAzMlNhbEvZuYOxL89s//W/REc+mh0AdLG3SVwIvC
-	 6ABODXpbNokYC4YazA+4prY+aqtM2FxeFmpp2jApjr3mq5fdb3JBQmQYKQtKNyU5SyMSJEYKFwMI
-	 05JSGWsslwHS0pC2Jbo52MFSG4iCc/5Jmdg5C3Wx8gh7W42rN5BEviukGTTFJt4JVQAhR6uKfIZ0
-	 Xg9ljZgzOMQUDHFhnZQ408SUqdcM/yjtW/QJEGsKaVJvKb+kYQEV0bDxEXBfi742ETtXOuNxeN+j
-	 8dl4Gz1Wbq356nqOpPZukMIlo6THP38migzckgqkJDzR6X2VK8t6k0KLz6y7Y=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-X-OQ-MSGID: <4e5f23c2-32f8-4c6a-a4f3-f92b52007fbb@foxmail.com>
-Date: Tue, 2 Sep 2025 17:21:33 +0800
+	 In-Reply-To:Content-Type; b=tntzxT8B4GzymvsCQnvlrf+GQTIoz+VjR3G+NBaIFrOxtMff+vF9aazRffSbYnpztubRFLjR0XJpOBuhMKagsXZvgn/cz7j9UkG1Qer4MLvSGNmYuHP/TXsz/KH9tL0lz1VzrYMQsiYLJJGUhV5sRnE9fk9HAroIuoaG8MOYQZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ursulin.net; spf=none smtp.mailfrom=ursulin.net; dkim=pass (2048-bit key) header.d=ursulin-net.20230601.gappssmtp.com header.i=@ursulin-net.20230601.gappssmtp.com header.b=BjJ4DkI0; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ursulin.net
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ursulin.net
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45b8b2712d8so22268735e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 02:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ursulin-net.20230601.gappssmtp.com; s=20230601; t=1756804931; x=1757409731; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0Be300C9M54HN2j6qqn3KzILYOn0Dm/rUn/s4aJntRQ=;
+        b=BjJ4DkI0nOIeBWi829gHdcdGEnRHe1ZnQO1njdb+Jyp0kjPhbqnc/pH3IqlbX/mPRt
+         KImIiC5IOBhDUsCOe+bsijMfqcLKa+dXYa461vlf8W43jDTp2NN/HyQttUmEPfTyMDsa
+         +znjOYbf7zmMPfsw7iujVXgeGLUXtwGXlQ+SY2EucQk11hSB12zyiFkHuuLs1Vp+GMQK
+         znrByajiS5QwRXsCGGX/uEAkboujg3cDsCxXhSDvaaKtpi9xTJYSIPVmQMJW+nANv+26
+         x3bpMDTCAYkVqg6BQ0C/DVGa/O/iwl4l6QGYI8jJHyq5e0aZ7lgtishdDOyJn3yv5f02
+         d/Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756804931; x=1757409731;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Be300C9M54HN2j6qqn3KzILYOn0Dm/rUn/s4aJntRQ=;
+        b=WIVbaNQ/jvpLA4fKLWtSSZ/dZ3afW1aEmW7DVZeBgwERZyMVSWYrMrMU2eXm/MeE4l
+         t4t5fnX0y2Mr9DzZUUhOoiD0B3e390HObt4BVC/rxAyitGfZyOb09BCranX631vSACwD
+         5A8tTQ+9WIpsNugn7dhHuJIRKZ68pxehTBik8ngOUd0Ew3ENokD0fbdzifo5bwKiZjyV
+         jOLepICAc9LPPMEGBsZFV2J6FeHLVrL83gbpNiZjFcd8vKBH/ODcnXDVYtLVYJFq3gdN
+         5zncWIpW60/3qBrUUUi8o4V/tdd3IJ4Xex1ETFUHNq4MHsIrQxjaOkvxrRobqf1ooYYQ
+         svBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhUuW1ej0q5vH9uwVD8tRzllitoL5Wt2Uwhcj4cWESpEBDE3tfdlK5tlLReGXfk2rHWQCKCXF5Fytc75T2v8w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTXffoHLpS3EJ9a8yQc9UJWLXtB3OjhBc20jqO42eXeXQRcbt4
+	9ONh5n3qsaAOc58U8pXUX6nRNo3JYU3467NlZ0WouZBdli1jOPuq7cTdK20Bc37HAGk=
+X-Gm-Gg: ASbGncurpgs/4VroNsyC8Q0cSCfrzy2lNDtAtuz2MxDIp5Yhtu+lMBAVvKNH4IfbppB
+	+/qZZ0MX8xr7CTeviGWarSKTO89wwuijFYeB8VWf/jcRGwfH5vfxgZtPGS70JKNSDxEtKt0Epty
+	dYorZXatbQjywqRok4xZTq5rVvCS1Y0BsnZ9BimU/WveJ/tKkMdLT17yM8/VCQnu93HaH32JG1x
+	A+E5nxo0AMPCp/XVxmLYTiy/7EIDFfwH83X7lC1UgnS8QgNNMDuXSzM8lQdroIZVfaMsy6RA36T
+	uNx7UMy5vUMhBr9+2x9vwEFA4GUkzD6SYfE36eHwdP4Bbt4RW1P7qMZ3cSZi/a1cQT/4T/QXAs3
+	Ow+8PI3AabAaWtvPMRIxh1EYoL/fAgkCBpCk=
+X-Google-Smtp-Source: AGHT+IFjGWdM7r4OC2xPYq10JBW42QzIVS9ISDbv655toZnOdc57tKWSkMByc2ni755H7QY3mBnVYA==
+X-Received: by 2002:a05:600c:a04:b0:45b:7d24:beac with SMTP id 5b1f17b1804b1-45b8553335amr94619035e9.10.1756804930815;
+        Tue, 02 Sep 2025 02:22:10 -0700 (PDT)
+Received: from [192.168.0.101] ([84.66.36.92])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d0b9402299sm17994846f8f.18.2025.09.02.02.22.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Sep 2025 02:22:10 -0700 (PDT)
+Message-ID: <4bbf5590-7591-4dfc-a23e-0bda6cb31a80@ursulin.net>
+Date: Tue, 2 Sep 2025 10:22:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,107 +82,80 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test kfunc bpf_strcasecmp
-To: Viktor Malik <vmalik@redhat.com>, andrii@kernel.org, ast@kernel.org
-Cc: Rong Tao <rongtao@cestc.cn>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>,
- "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
- <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <cover.1756798860.git.rtoax@foxmail.com>
- <tencent_00107416F7259ACAC62BF8681F22B5C19D06@qq.com>
- <76f6ed83-48a2-4dad-9229-1169050e9552@redhat.com>
-Content-Language: en-US
-From: Rong Tao <rtoax@foxmail.com>
-In-Reply-To: <76f6ed83-48a2-4dad-9229-1169050e9552@redhat.com>
+Subject: Re: [PATCH v2 26/37] drm/i915/gem: drop nth_page() usage within SG
+ entry
+To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Alexander Potapenko <glider@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
+ Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org,
+ Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
+ Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
+ kasan-dev@googlegroups.com, kvm@vger.kernel.org,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Marco Elver <elver@google.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+ netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+ Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
+ Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+ virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+ wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+References: <20250901150359.867252-1-david@redhat.com>
+ <20250901150359.867252-27-david@redhat.com>
+Content-Language: en-GB
+From: Tvrtko Ursulin <tursulin@ursulin.net>
+In-Reply-To: <20250901150359.867252-27-david@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
-On 9/2/25 16:56, Viktor Malik wrote:
-> On 9/2/25 09:55, Rong Tao wrote:
->> From: Rong Tao <rongtao@cestc.cn>
->>
->> Add testsuites for kfunc bpf_strcasecmp.
->>
->> Signed-off-by: Rong Tao <rongtao@cestc.cn>
->> ---
->>   tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c | 6 ++++++
->>   tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c | 1 +
->>   tools/testing/selftests/bpf/progs/string_kfuncs_success.c  | 5 +++++
->>   3 files changed, 12 insertions(+)
->>
->> diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
->> index 53af438bd998..99d72c68f76a 100644
->> --- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
->> +++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
->> @@ -31,6 +31,8 @@ char *invalid_kern_ptr = (char *)-1;
->>   /* Passing NULL to string kfuncs (treated as a userspace ptr) */
->>   SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_null1(void *ctx) { return bpf_strcmp(NULL, "hello"); }
->>   SEC("syscall")  __retval(USER_PTR_ERR)int test_strcmp_null2(void *ctx) { return bpf_strcmp("hello", NULL); }
->> +SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_null1(void *ctx) { return bpf_strcasecmp(NULL, "HELLO"); }
->> +SEC("syscall")  __retval(USER_PTR_ERR)int test_strcasecmp_null2(void *ctx) { return bpf_strcasecmp("HELLO", NULL); }
->>   SEC("syscall")  __retval(USER_PTR_ERR)int test_strchr_null(void *ctx) { return bpf_strchr(NULL, 'a'); }
->>   SEC("syscall")  __retval(USER_PTR_ERR)int test_strchrnul_null(void *ctx) { return bpf_strchrnul(NULL, 'a'); }
->>   SEC("syscall")  __retval(USER_PTR_ERR)int test_strnchr_null(void *ctx) { return bpf_strnchr(NULL, 1, 'a'); }
->> @@ -49,6 +51,8 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return
->>   /* Passing userspace ptr to string kfuncs */
->>   SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
->>   SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr2(void *ctx) { return bpf_strcmp("hello", user_ptr); }
->> +SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr1(void *ctx) { return bpf_strcasecmp(user_ptr, "HELLO"); }
->> +SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr2(void *ctx) { return bpf_strcasecmp("HELLO", user_ptr); }
->>   SEC("syscall") __retval(USER_PTR_ERR) int test_strchr_user_ptr(void *ctx) { return bpf_strchr(user_ptr, 'a'); }
->>   SEC("syscall") __retval(USER_PTR_ERR) int test_strchrnul_user_ptr(void *ctx) { return bpf_strchrnul(user_ptr, 'a'); }
->>   SEC("syscall") __retval(USER_PTR_ERR) int test_strnchr_user_ptr(void *ctx) { return bpf_strnchr(user_ptr, 1, 'a'); }
->> @@ -69,6 +73,8 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { re
->>   /* Passing invalid kernel ptr to string kfuncs should always return -EFAULT */
->>   SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault1(void *ctx) { return bpf_strcmp(invalid_kern_ptr, "hello"); }
->>   SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault2(void *ctx) { return bpf_strcmp("hello", invalid_kern_ptr); }
->> +SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault1(void *ctx) { return bpf_strcasecmp(invalid_kern_ptr, "HELLO"); }
->> +SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault2(void *ctx) { return bpf_strcasecmp("HELLO", invalid_kern_ptr); }
->>   SEC("syscall") __retval(-EFAULT) int test_strchr_pagefault(void *ctx) { return bpf_strchr(invalid_kern_ptr, 'a'); }
->>   SEC("syscall") __retval(-EFAULT) int test_strchrnul_pagefault(void *ctx) { return bpf_strchrnul(invalid_kern_ptr, 'a'); }
->>   SEC("syscall") __retval(-EFAULT) int test_strnchr_pagefault(void *ctx) { return bpf_strnchr(invalid_kern_ptr, 1, 'a'); }
->> diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
->> index 89fb4669b0e9..e41cc5601994 100644
->> --- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
->> +++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
->> @@ -7,6 +7,7 @@
->>   char long_str[XATTR_SIZE_MAX + 1];
->>   
->>   SEC("syscall") int test_strcmp_too_long(void *ctx) { return bpf_strcmp(long_str, long_str); }
->> +SEC("syscall") int test_strcasecmp_too_long(void *ctx) { return bpf_strcasecmp(long_str, long_str); }
-> This is not sufficient, you also need to update
-> prog_tests/string_kfuncs.c so that the test case is actually triggered.
-Thanks Viktor, sorry about that, I just submit v3, please review.
-Rong Tao
->
-> Viktor
->
->>   SEC("syscall") int test_strchr_too_long(void *ctx) { return bpf_strchr(long_str, 'b'); }
->>   SEC("syscall") int test_strchrnul_too_long(void *ctx) { return bpf_strchrnul(long_str, 'b'); }
->>   SEC("syscall") int test_strnchr_too_long(void *ctx) { return bpf_strnchr(long_str, sizeof(long_str), 'b'); }
->> diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
->> index 46697f381878..67830456637b 100644
->> --- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
->> +++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
->> @@ -12,6 +12,11 @@ char str[] = "hello world";
->>   /* Functional tests */
->>   __test(0) int test_strcmp_eq(void *ctx) { return bpf_strcmp(str, "hello world"); }
->>   __test(1) int test_strcmp_neq(void *ctx) { return bpf_strcmp(str, "hello"); }
->> +__test(0) int test_strcasecmp_eq1(void *ctx) { return bpf_strcasecmp(str, "hello world"); }
->> +__test(0) int test_strcasecmp_eq2(void *ctx) { return bpf_strcasecmp(str, "HELLO WORLD"); }
->> +__test(0) int test_strcasecmp_eq3(void *ctx) { return bpf_strcasecmp(str, "HELLO world"); }
->> +__test(1) int test_strcasecmp_neq1(void *ctx) { return bpf_strcasecmp(str, "hello"); }
->> +__test(1) int test_strcasecmp_neq2(void *ctx) { return bpf_strcasecmp(str, "HELLO"); }
->>   __test(1) int test_strchr_found(void *ctx) { return bpf_strchr(str, 'e'); }
->>   __test(11) int test_strchr_null(void *ctx) { return bpf_strchr(str, '\0'); }
->>   __test(-ENOENT) int test_strchr_notfound(void *ctx) { return bpf_strchr(str, 'x'); }
+On 01/09/2025 16:03, David Hildenbrand wrote:
+> It's no longer required to use nth_page() when iterating pages within a
+> single SG entry, so let's drop the nth_page() usage.
+> 
+> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tursulin@ursulin.net>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Simona Vetter <simona@ffwll.ch>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>   drivers/gpu/drm/i915/gem/i915_gem_pages.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+> index c16a57160b262..031d7acc16142 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+> @@ -779,7 +779,7 @@ __i915_gem_object_get_page(struct drm_i915_gem_object *obj, pgoff_t n)
+>   	GEM_BUG_ON(!i915_gem_object_has_struct_page(obj));
+>   
+>   	sg = i915_gem_object_get_sg(obj, n, &offset);
+> -	return nth_page(sg_page(sg), offset);
+> +	return sg_page(sg) + offset;
+>   }
+>   
+>   /* Like i915_gem_object_get_page(), but mark the returned page dirty */
+
+LGTM. If you want an ack to merge via a tree other than i915 you have 
+it. I suspect it might be easier to coordinate like that.
+
+Regards,
+
+Tvrtko
 
 
