@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-40638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40639-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7E0CB40BAF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 19:10:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 045E9B40CDB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 20:09:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F622487231
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 17:10:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C75EE207F7C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Sep 2025 18:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF232341ABA;
-	Tue,  2 Sep 2025 17:10:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E69134AAF5;
+	Tue,  2 Sep 2025 18:09:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XvGFNRnR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RLgEAFLE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF1023D7C4;
-	Tue,  2 Sep 2025 17:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4213B34A31E;
+	Tue,  2 Sep 2025 18:09:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756833011; cv=none; b=N4ZkfrLFnQ0lKuWwEvZHjtDRmB+IN7wrPfXO/ml+IqxTWM71sHIZXOFRbwArODYVj9IYktDgIBpvo7Wj3fQQqNqNt+EKszpDM+2M48n2Whci0HaWwcbYaRYVPTpBp2RkCrNdG7uKlLEZkqjNmkPN7N+pdgy5yw6p87qb8ddlIoU=
+	t=1756836582; cv=none; b=pYL38AE4pGe5wX/JAfJvK+Q8zJrSoGwMTx0rZlPOh+QmkeUAMo5TGo1XIoXEeEKq3Zp0iGhFQHsgqrK0HTsaFC5QdywaakAjGeFoITjCJFq7GJb0AmkrD097CmBdCkJ/DGlxGIdfeywP1bctUjncPvGvRXVjqc2ailSYE3Whqqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756833011; c=relaxed/simple;
-	bh=EF6aZqNIoSXa0kptmEVVRLVollrxdh2NWJJq1QCOmQM=;
+	s=arc-20240116; t=1756836582; c=relaxed/simple;
+	bh=Y8eVLGI2fWWvzJfBBm0TDnfHO3IOvtrvvaZkZXCvssM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YwIGksdHEI/kdu71i2fmMNf4tqyOZeaif4tQduNEME7IQo7BqyLC07Dv+DA2H1TWBtKrpklTfJu7IQeneSdiWqPxHm4S7lw6Cx1NbU/j8fXlKyUdaQ+nff/+r2Gyw8Q9C6esSoxE4/drc41S7+p2NPnXDmEywv0Gh9MaTRg4yJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XvGFNRnR; arc=none smtp.client-ip=209.85.210.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=r4qBf9tpbeUWSsp2Bq9DtV+9uOZa2ZblrxZrdueIW4cdNwnd1Sf7Aa4DUcwX+9sNAF7ezvAuNc9Ur8hu+L7PS0grzS5h+kCbVWKfvBgErdmC4TVYb1rSWL/DBPm+bef/LZxI4TjfiyZRc/8eJlHugHQoqGVECpOVMJ67F+w10aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RLgEAFLE; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-772750f6b0eso738510b3a.1;
-        Tue, 02 Sep 2025 10:10:09 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-772679eb358so1460538b3a.1;
+        Tue, 02 Sep 2025 11:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756833009; x=1757437809; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756836579; x=1757441379; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ihQjC9yJ1X4I7i2TJOoe7K1INvxzQRyYcVly+4F6YMQ=;
-        b=XvGFNRnRZagP3hjX+6WSklFhFVWd2uJQyFRvv8KIzbT8yRDDm/GHsbSsPzqyyUiCt5
-         +YA12b72b3vJLEXrjFF5dqP7SO54Wb1fVLlyd9DHs1NsLTdm0Dnvern50PE0L5iVpLir
-         qkWxd2zCGaIEM9g6syaAXrLjvtxKOTQCCqNIcblOVnFM0daDMwc+WhtRDNBJEDUCvW6e
-         VZ8pnfXdnBfYpLymIw0IACBIbGLQqn25b8vmwPBGEUZgAdJBuhqEnwBRMDJlIeAk84XN
-         YBlsuIKFzB8tL3yu6SjDUb9C4COtjqhhsX4NnA4C7v/RbAKByRBWgLc5epWj0vGj9zks
-         rqDA==
+        bh=neKzYPHQoWMrppBOK0gWXa8x1/CVR4rUelW61BJWncA=;
+        b=RLgEAFLEplSvh1FyTsj9RAQTGxdbGMiLyJaeMqcOxynv/0ywoTuSS2GqkRI3TnRjQM
+         iBhonBqtsMKnhsMy1NKkWWXvZb+cWWcXfj/+LajGRpj7AL21SGR1sKcME9eIujz3SIRR
+         PxGKjg+7DI5RzBRYP1OAaIHcowjiwj697aibcYTgHWWVojSYcf8xmXRsiK+XYWHA8zzY
+         +JW9XX7mLTXw6rq3Y0M4qzoc0O7F4ay93Hm2PnKfPcD/5T9esH3H2g16llZzrLbIIxyS
+         1uZMxIWiLZnNsB6XAWda/GLr8SBPIIiXFreVLbD3lp3gSEsF+sYdhQy11X1gHbhlU4l3
+         /+Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756833009; x=1757437809;
+        d=1e100.net; s=20230601; t=1756836579; x=1757441379;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ihQjC9yJ1X4I7i2TJOoe7K1INvxzQRyYcVly+4F6YMQ=;
-        b=rSMIJmpiY9SEoTxJsVVWYEEs7j5TactwdaxtR0cNMgX/ibVErwWgai2so/nk1rVM0+
-         Q3qYQhzgU91Rgdrw7CCEQmHYIkSMjp3PnCLpGhENCEF5kQexKBE2SrLlABIwQnPYuj6N
-         TKNQeN/YMQYX5qK2Mkv7J+9EE8DUeq/OT5gBgi2rA2NLeaYk3YECBReAoOiWJVHNWV+d
-         WMTCYOS3uuyQGHEbkMJJOtmePRImsRMKeGBCr+Z+jBdm4UQOnl1qVmHYI4np07F3Oitf
-         ohLjzI8IyqfcH/ZFMeM9LJN/OYw4fp0UG2s2oB9QXlvmX/klbaP2z/AEgkZe1QgChZKl
-         kO9w==
-X-Forwarded-Encrypted: i=1; AJvYcCURw1Pz4PatowxBCXe39KI9PGOS6In8qsoFOP/jsXm6zcxQsl3+EsMi4fb54iH5Iywm4pM=@vger.kernel.org, AJvYcCUrMHSCbZr2zu9X2D1Y9YJYIICZ74bxk1fZ8xQnoWl4KDt38ZhWJQ22mUrUiHVjjjcZ9Z4TcElE@vger.kernel.org, AJvYcCUygK8hHVctNanF3NXJoDyW/v7xRJyoGSYsS/FqJoIC9ffFZVbWCuABO5+cb/MUDP/0l+8G1jMjE9lrhRbz@vger.kernel.org, AJvYcCXW2bJmX2tXay9g63GGqPhlV++BvS2nOzy0BViAvfWfH4rI/Yvf+Demh3W9zk0so3m1Xf6iRlH40bXlDhpZ6Y9q@vger.kernel.org, AJvYcCXhP/6trIPrb+6yw2t36Fh8XgmjVu7Uq2Lb+CxUIrljuBYrHbV3qiF/NdGRQzQQavaSQa2GTGFT8FUnBQ0H@vger.kernel.org
-X-Gm-Message-State: AOJu0YyveaIQnBXWueA+xkAre3ygbjEP+PH0b50ewXOiXzaUDBFNcMrL
-	Xyp5zBITYRde0xu181ZRYpD4/rC+EZZcdTMAYrF5RUyrHDKcvy6TtBij
-X-Gm-Gg: ASbGncvF/VJpcZJQwGFHAvbuAqS2TPNPPUVRsLH2lIDU++bioAtOjjctZ/1HnQfSyOt
-	yZqPL9jkMXYY8kS2GFv7S8fm2gNQltPkP/7U9eqymhkI5myRfCR2umyc0tCI8HpkCr7COVCwiKG
-	dALp2VH96W5W1bJC7Bbd/Rt6GdMZa4BI1upqrLfY0i2sV8+I0JS6qdkb24HdpFZ0iKUPS6Yifu/
-	wAth4LvdvEFQy+0aMP+/Gj6j7XQdWOAwSNz71j3SVVMzxj/9EFFlxx6J9Gk11y9XwZRAoDuwAnE
-	cloFAv0PYu6FC7RARqkVn5hp/GiblxcqonUlHT0jxvhvVwth2frxPhy0AchMZvIdUuUJU4Wecdx
-	xJzX29FLntt80wZLZSrKYFS4IQhZEnHQMQQuUFRK26D4=
-X-Google-Smtp-Source: AGHT+IGyUUiPrfchRjHRX3crNHUYbFF9RNjkv+OcfvEakWvZRQN9OH2MzLTdAngcH4AMJjIzQ+3iyg==
-X-Received: by 2002:a05:6a20:1093:b0:244:58:c159 with SMTP id adf61e73a8af0-2440058c3d1mr3642462637.22.1756833009146;
-        Tue, 02 Sep 2025 10:10:09 -0700 (PDT)
-Received: from devvm6216.cco0.facebook.com ([2a03:2880:2ff:2::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7726a0e7cb8sm3845860b3a.58.2025.09.02.10.10.07
+        bh=neKzYPHQoWMrppBOK0gWXa8x1/CVR4rUelW61BJWncA=;
+        b=Je/AXx2FNvswK+T1jEbbPJqBer+CLJR1ae3SCuBQhMt8f35FmRezaP4jyO0acpPp3M
+         n+KrTiG7eDDMuTBV6t9NmhGDVBACgmppFQ7mtj/wi7skDUmIGs3IqYcuuEbIXZqZXn4E
+         Eeiv0xioFnexaohyKANwRmQr5+6If5jq7pkDmyjPOeWPnshF/qnTZXPX1zpvzse5Fl2v
+         DHV0+ljzvIkIFuYJ6rEply7FCezvpySL7sane70LPq7Yd+6I5a1xQy4hjCdQ8bfMoLGn
+         OpF6CUzp3psgsjzKBZiQQHejv0xhLvLarCX21Y7Tkbdhq5qpAIFEFgiUsAi6ah+KtlAB
+         XkZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUgIdv7xQPCcL7J/k9OT7Hz7MaGQRlC1Umuo3AVAlx/KdYUZTL97QgWeHG0ecDVO0F3FpA=@vger.kernel.org, AJvYcCWGq3/XEfxo6C3EgWPRqmagdWhm9s9CN0R/p9ICUShj5CM29uMWTAwFoZ79jo2gUXYYV5BwaOcuIEXZgGXd@vger.kernel.org, AJvYcCXLrzgkyX6Q3dGeYO9n+SntAPEQ3HTChAsI6+oOlBDN9aT+xuV0S04yOVoG+JLL+u21CBPr9JpmLd06AVZG@vger.kernel.org, AJvYcCXO5nhUBYs7uLvrHbeTwL+acxz0nNqwOVxnQZvUzICmip1ZFT/j8JQdPGbKyia4pLpRQtanc6ccFRKyQoGlfUa0@vger.kernel.org, AJvYcCXdiTj8tafXmGE2L9y6etbPVb9HeR6bJTByjJAmqbOukwARYFVP9Ou/5cLZMCq3NC4DZIR/2E6S@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQgZl5D3+rTwMo6EeYAbaelPMaLwd3Nz+h8szr16moe1iyI8Rw
+	eHNKQS2bJLrSQM4hmcpElktNtfxPTS0PSRpXfnRKj+rryLf74uAARW5D
+X-Gm-Gg: ASbGncvumyjw3IuF1D7zczo1KFu77qeXuOr5AYYj69OSih9CpkYAfxn3LsvB6rGY1tr
+	wqtpVqY0BwOG+DmeZx7uUM1GpxLKEjQ0Fi75z6AhNDDQMyWntWw/dwlLcI6gQJO77ktvn10WIEC
+	nUE0iqwzbHMpBd2aU1VQWotoK1Pp+JaBG8obXq3bppteyhBN8cGAJTXw/+xTl3P66PBSvtREfRj
+	suEasjbBAjPGkaHw1REZ39Gp8iFqrQsDFBPX/dabp14T+GdfJd5q5qGSz8u48omjnfogojzVe4Z
+	PLiwFWdyWt2j5DUGDqHCKpT09PTQNfCQs5Q7AGIZIvm3ExHyVi4v7hVAjIpCxCsG3CEE2DZbBBg
+	QCOWziNk/m40Ji+7FnwDqpFp5G++Jkzq++O2BVa4z9M4/
+X-Google-Smtp-Source: AGHT+IEszkkL7/+2aZeioYDbLSYEbQhPu9BJi+NsfbBdMxh8of4z3v3uxhiTGB9aKQSvVtw1pfsRiQ==
+X-Received: by 2002:a05:6a20:3d07:b0:243:a251:cf5b with SMTP id adf61e73a8af0-243d6f7ec09mr15709679637.57.1756836579228;
+        Tue, 02 Sep 2025 11:09:39 -0700 (PDT)
+Received: from devvm6216.cco0.facebook.com ([2a03:2880:2ff:72::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-327c5fc5055sm16361875a91.14.2025.09.02.11.09.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 10:10:08 -0700 (PDT)
-Date: Tue, 2 Sep 2025 10:10:00 -0700
+        Tue, 02 Sep 2025 11:09:38 -0700 (PDT)
+Date: Tue, 2 Sep 2025 11:09:36 -0700
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
 To: Stefano Garzarella <sgarzare@redhat.com>
 Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
@@ -94,11 +94,11 @@ Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
 	berrange@redhat.com, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v5 3/9] vsock: add netns to vsock core
-Message-ID: <aLck6IIS3AiDJZPg@devvm6216.cco0.facebook.com>
+Subject: Re: [PATCH net-next v5 4/9] vsock/loopback: add netns support
+Message-ID: <aLcy4Kk0joVPbxkd@devvm6216.cco0.facebook.com>
 References: <20250827-vsock-vmtest-v5-0-0ba580bede5b@meta.com>
- <20250827-vsock-vmtest-v5-3-0ba580bede5b@meta.com>
- <gncp3ynz3inufzex64sla2ia3stjsen2n3hwhfuykdhmpuuegu@7hk5q2hjfxkv>
+ <20250827-vsock-vmtest-v5-4-0ba580bede5b@meta.com>
+ <mhjgn7fdztfqi6ku3gesgd42jj5atn4sqnvpyncw2jds23dpc3@iiupljayjxs4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -107,164 +107,422 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <gncp3ynz3inufzex64sla2ia3stjsen2n3hwhfuykdhmpuuegu@7hk5q2hjfxkv>
+In-Reply-To: <mhjgn7fdztfqi6ku3gesgd42jj5atn4sqnvpyncw2jds23dpc3@iiupljayjxs4>
 
-On Tue, Sep 02, 2025 at 05:39:10PM +0200, Stefano Garzarella wrote:
-> On Wed, Aug 27, 2025 at 05:31:31PM -0700, Bobby Eshleman wrote:
+On Tue, Sep 02, 2025 at 05:39:33PM +0200, Stefano Garzarella wrote:
+> On Wed, Aug 27, 2025 at 05:31:32PM -0700, Bobby Eshleman wrote:
 > > From: Bobby Eshleman <bobbyeshleman@meta.com>
-
-...
-
-> > {
-> > 	enum vsock_net_mode ret;
-> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-> > index 0538948d5fd9..68a8875c8106 100644
-> > --- a/net/vmw_vsock/af_vsock.c
-> > +++ b/net/vmw_vsock/af_vsock.c
-> > @@ -83,6 +83,24 @@
-> >  *   TCP_ESTABLISHED - connected
-> >  *   TCP_CLOSING - disconnecting
-> >  *   TCP_LISTEN - listening
-> > + *
-> > + * - Namespaces in vsock support two different modes configured
-> > + *   through /proc/sys/net/vsock/ns_mode. The modes are "local" and "global".
-> > + *   Each mode defines how the namespace interacts with CIDs.
-> > + *   /proc/sys/net/vsock/ns_mode is write-once, so that it may be configured
-> > + *   and locked down by a namespace manager. The default is "global". The mode
-> > + *   is set per-namespace.
-> > + *
-> > + *   The modes affect the allocation and accessibility of CIDs as follows:
-> > + *   - global - aka fully public
-> > + *      - CID allocation draws from the public pool
-> > + *      - AF_VSOCK sockets may reach any CID allocated from the public pool
-> > + *      - AF_VSOCK sockets may not reach CIDs allocated from private
-> > pools
+> > 
+> > Add NS support to vsock loopback. Sockets in a global mode netns
+> > communicate with each other, regardless of namespace. Sockets in a local
+> > mode netns may only communicate with other sockets within the same
+> > namespace.
+> > 
+> > Add callbacks for transport to hook into the initialization and exit of
+> > net namespaces.
+> > 
+> > The transport's init hook will be called once per netns init. Likewise
+> > for exit.
+> > 
+> > When a set of init/exit callbacks is registered, the init callback is
+> > called on each already existing namespace.
+> > 
+> > Only one callback registration is supported for now. Currently
+> > vsock_loopback is the only user.
 > 
-> Should we define what public and private pools are?
+> Why?
 > 
-> What I found difficult to understand was the allocation of CIDs, meaning I
-> had to reread it two or three times to perhaps understand it.
-> 
-> IIUC, netns with mode=global can only allocate public CIDs, while netns with
-> mode=local can only allocate private CIDs, right?
+> In general, commit descriptions (and code comments) should focus on the
+> reason (why?) to simplify also the review.
 > 
 
-Correct.
-
-> Perhaps we should first better define how CIDs are allocated and then
-> explain the interaction between them.
-> 
-
-Makes sense, I'll clarify that.
-
-> > + *
-> > + *   - local - aka fully private
-> > + *     - CID allocation draws only from the private pool, does not affect public pool
-> > + *     - AF_VSOCK sockets may only reach CIDs from the private pool
-> > + *     - AF_VSOCK sockets may not reach CIDs allocated from outside the pool
-> 
-> Why using "may" ? I mean, can be cases when this is not true?
-> 
-
-
-Good point, will change to stronger language since it is always true.
-
-[...]
+Sounds good, will improve the message/comments. I'm realizing as I type
+this there may be a way to avoid the callbacks altogether with
+pernet_operations, so I'll clarify that before next rev.
 
 > > 
-> > @@ -2636,6 +2670,137 @@ static struct miscdevice vsock_device = {
-> > 	.fops		= &vsock_device_ops,
-> > };
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 > > 
-> > +#define VSOCK_NET_MODE_STRING_MAX 7
+> > ---
+> > Changes in v5:
+> > - add callbacks code to avoid reverse dependency
+> > - add logic for handling vsock_loopback setup for already existing
+> >  namespaces
+> > ---
+> > include/net/af_vsock.h         |  34 +++++++++++++
+> > include/net/netns/vsock.h      |   5 ++
+> > net/vmw_vsock/af_vsock.c       | 110 +++++++++++++++++++++++++++++++++++++++++
+> > net/vmw_vsock/vsock_loopback.c |  72 ++++++++++++++++++++++++---
+> > 4 files changed, 213 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+> > index 83f873174ba3..9333a98b9a1e 100644
+> > --- a/include/net/af_vsock.h
+> > +++ b/include/net/af_vsock.h
+> > @@ -305,4 +305,38 @@ static inline bool vsock_net_check_mode(struct net *n1, struct net *n2)
+> > 	       (vsock_net_mode(n1) == VSOCK_NET_MODE_GLOBAL &&
+> > 		vsock_net_mode(n2) == VSOCK_NET_MODE_GLOBAL);
+> > }
 > > +
-> > +static int vsock_net_mode_string(const struct ctl_table *table, int write,
-> > +				 void *buffer, size_t *lenp, loff_t *ppos)
+> > +struct vsock_net_callbacks {
+> > +	int (*init)(struct net *net);
+> > +	void (*exit)(struct net *net);
+> > +	struct module *owner;
+> > +};
+> > +
+> > +#if IS_ENABLED(CONFIG_VSOCKETS_LOOPBACK)
+> > +
+> > +#define vsock_register_net_callbacks(__init, __exit) \
+> > +	__vsock_register_net_callbacks((__init), (__exit), THIS_MODULE)
+> > +
+> > +int __vsock_register_net_callbacks(int (*init)(struct net *net),
+> > +				   void (*exit)(struct net *net),
+> > +				   struct module *owner);
+> > +void vsock_unregister_net_callbacks(void);
+> > +
+> > +#else
+> > +
+> > +#define vsock_register_net_callbacks(__init, __exit) do { } while (0)
+> > +
+> > +static inline int __vsock_register_net_callbacks(int (*init)(struct net *net),
+> > +						 void (*exit)(struct net *net),
+> > +						 struct module *owner)
 > > +{
-> > +	char buf[VSOCK_NET_MODE_STRING_MAX] = {0};
-> 
-> Can we change `buf` name?
-> 
-> I find it confusing to have both a `buffer` variable and a `buf` variable in
-> the same function.
-> 
-
-Makes sense, will do.
-
-> > +	enum vsock_net_mode mode;
-> > +	struct ctl_table tmp;
-> > +	struct net *net;
-> > +	const char *p;
-> 
-> Can we move `p` declaration in the `if (!write) {` block?
-> 
-
-yes.
-
-> > +	int ret;
-> > +
-> > +	if (!table->data || !table->maxlen || !*lenp) {
-> > +		*lenp = 0;
-> > +		return 0;
-> > +	}
-> > +
-> > +	net = current->nsproxy->net_ns;
-> > +	tmp = *table;
-> > +	tmp.data = buf;
-> > +
-> > +	if (!write) {
-> > +		mode = vsock_net_mode(net);
-> > +
-> > +		if (mode == VSOCK_NET_MODE_GLOBAL) {
-> > +			p = "global";
-> > +		} else if (mode == VSOCK_NET_MODE_LOCAL) {
-> > +			p = "local";
-> > +		} else {
-> > +			WARN_ONCE(true, "netns has invalid vsock mode");
-> > +			*lenp = 0;
-> > +			return 0;
-> > +		}
-> > +
-> > +		strscpy(buf, p, sizeof(buf));
-> > +		tmp.maxlen = strlen(p);
-> > +	}
-> > +
-> > +	ret = proc_dostring(&tmp, write, buffer, lenp, ppos);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (write) {
-> > +		if (!strncmp(buffer, "global", 6))
-> 
-> Are we sure that the `buffer` is at least 6 bytes long and NULL-terminated?
-> 
-> Maybe we can just check that `lenp <= sizeof(buf)`...
-> 
-> Should we add macros for "global" and "local" ?
-> 
-
-That all sounds reasonable. IIRC I tested with some garbage writes, but might
-as well err on the side of caution.
-
-> 
-> > +			mode = VSOCK_NET_MODE_GLOBAL;
-> > +		else if (!strncmp(buffer, "local", 5))
-> > +			mode = VSOCK_NET_MODE_LOCAL;
-> > +		else
-> > +			return -EINVAL;
-> > +
-> > +		if (!vsock_net_write_mode(net, mode))
-> > +			return -EPERM;
-> > +	}
-> > +
 > > +	return 0;
 > > +}
 > > +
+> > +static inline void vsock_unregister_net_callbacks(void) {}
+> > +static inline int vsock_net_call_init(struct net *net) { return 0; }
+> > +static inline void vsock_net_call_exit(struct net *net) {}
+> > +
+> > +#endif /* CONFIG_VSOCKETS_LOOPBACK */
+> > +
+> > #endif /* __AF_VSOCK_H__ */
+> > diff --git a/include/net/netns/vsock.h b/include/net/netns/vsock.h
+> > index d4593c0b8dc4..08d9a933c540 100644
+> > --- a/include/net/netns/vsock.h
+> > +++ b/include/net/netns/vsock.h
+> > @@ -9,6 +9,8 @@ enum vsock_net_mode {
+> > 	VSOCK_NET_MODE_LOCAL,
+> > };
+> > 
+> > +struct vsock_loopback;
+> > +
+> > struct netns_vsock {
+> > 	struct ctl_table_header *vsock_hdr;
+> > 	spinlock_t lock;
+> > @@ -16,5 +18,8 @@ struct netns_vsock {
+> > 	/* protected by lock */
+> > 	enum vsock_net_mode mode;
+> > 	bool written;
+> > +#if IS_ENABLED(CONFIG_VSOCKETS_LOOPBACK)
+> > +	struct vsock_loopback *loopback;
+> 
+> If this is not protected by `lock`, please leave an empty line, but maybe we
+> should consider using locking (see comment later).
+> 
 
-...
+Will do.
+
+> > +#endif
+> > };
+> > #endif /* __NET_NET_NAMESPACE_VSOCK_H */
+> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> > index 68a8875c8106..5a73d9e1a96f 100644
+> > --- a/net/vmw_vsock/af_vsock.c
+> > +++ b/net/vmw_vsock/af_vsock.c
+> > @@ -134,6 +134,9 @@
+> > #include <uapi/linux/vm_sockets.h>
+> > #include <uapi/asm-generic/ioctls.h>
+> > 
+> > +static struct vsock_net_callbacks vsock_net_callbacks;
+> > +static DEFINE_MUTEX(vsock_net_callbacks_lock);
+> > +
+> > static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
+> > static void vsock_sk_destruct(struct sock *sk);
+> > static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
+> > @@ -2781,6 +2784,49 @@ static void vsock_net_init(struct net *net)
+> > 	net->vsock.mode = VSOCK_NET_MODE_GLOBAL;
+> > }
+> > 
+> > +#if IS_ENABLED(CONFIG_VSOCKETS_LOOPBACK)
+> > +static int vsock_net_call_init(struct net *net)
+> > +{
+> > +	struct vsock_net_callbacks *cbs;
+> > +	int ret;
+> > +
+> > +	mutex_lock(&vsock_net_callbacks_lock);
+> > +	cbs = &vsock_net_callbacks;
+> > +
+> > +	ret = 0;
+> > +	if (!cbs->owner)
+> > +		goto out;
+> > +
+> > +	if (try_module_get(cbs->owner)) {
+> > +		ret = cbs->init(net);
+> > +		module_put(cbs->owner);
+> > +	}
+> > +
+> > +out:
+> > +	mutex_unlock(&vsock_net_callbacks_lock);
+> > +	return ret;
+> > +}
+> > +
+> > +static void vsock_net_call_exit(struct net *net)
+> > +{
+> > +	struct vsock_net_callbacks *cbs;
+> > +
+> > +	mutex_lock(&vsock_net_callbacks_lock);
+> > +	cbs = &vsock_net_callbacks;
+> > +
+> > +	if (!cbs->owner)
+> > +		goto out;
+> > +
+> > +	if (try_module_get(cbs->owner)) {
+> > +		cbs->exit(net);
+> > +		module_put(cbs->owner);
+> > +	}
+> > +
+> > +out:
+> > +	mutex_unlock(&vsock_net_callbacks_lock);
+> > +}
+> > +#endif /* CONFIG_VSOCKETS_LOOPBACK */
+> > +
+> > static __net_init int vsock_sysctl_init_net(struct net *net)
+> > {
+> > 	vsock_net_init(net);
+> > @@ -2788,12 +2834,20 @@ static __net_init int vsock_sysctl_init_net(struct net *net)
+> > 	if (vsock_sysctl_register(net))
+> > 		return -ENOMEM;
+> > 
+> > +	if (vsock_net_call_init(net) < 0)
+> > +		goto err_sysctl;
+> > +
+> > 	return 0;
+> > +
+> > +err_sysctl:
+> > +	vsock_sysctl_unregister(net);
+> > +	return -ENOMEM;
+> > }
+> > 
+> > static __net_exit void vsock_sysctl_exit_net(struct net *net)
+> > {
+> > 	vsock_sysctl_unregister(net);
+> > +	vsock_net_call_exit(net);
+> > }
+> > 
+> > static struct pernet_operations vsock_sysctl_ops __net_initdata = {
+> > @@ -2938,6 +2992,62 @@ void vsock_core_unregister(const struct
+> > vsock_transport *t)
+> > }
+> > EXPORT_SYMBOL_GPL(vsock_core_unregister);
+> > 
+> > +#if IS_ENABLED(CONFIG_VSOCKETS_LOOPBACK)
+> > +int __vsock_register_net_callbacks(int (*init)(struct net *net),
+> > +				   void (*exit)(struct net *net),
+> > +				   struct module *owner)
+> > +{
+> > +	struct vsock_net_callbacks *cbs;
+> > +	struct net *net;
+> > +	int ret = 0;
+> > +
+> > +	mutex_lock(&vsock_net_callbacks_lock);
+> > +
+> > +	cbs = &vsock_net_callbacks;
+> > +	cbs->init = init;
+> > +	cbs->exit = exit;
+> > +	cbs->owner = owner;
+> > +
+> > +	/* call callbacks on any net previously created */
+> > +	down_read(&net_rwsem);
+> > +
+> > +	if (try_module_get(cbs->owner)) {
+> > +		for_each_net(net) {
+> > +			ret = cbs->init(net);
+> > +			if (ret < 0)
+> > +				break;
+> > +		}
+> > +
+> > +		if (ret < 0)
+> > +			for_each_net(net)
+> > +				cbs->exit(net);
+> > +
+> > +		module_put(cbs->owner);
+> > +	}
+> > +
+> > +	up_read(&net_rwsem);
+> > +	mutex_unlock(&vsock_net_callbacks_lock);
+> > +
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(__vsock_register_net_callbacks);
+> > +
+> > +void vsock_unregister_net_callbacks(void)
+> > +{
+> > +	struct vsock_net_callbacks *cbs;
+> > +
+> > +	mutex_lock(&vsock_net_callbacks_lock);
+> > +
+> > +	cbs = &vsock_net_callbacks;
+> > +	cbs->init = NULL;
+> > +	cbs->exit = NULL;
+> > +	cbs->owner = NULL;
+> > +
+> > +	mutex_unlock(&vsock_net_callbacks_lock);
+> > +}
+> > +EXPORT_SYMBOL_GPL(vsock_unregister_net_callbacks);
+> 
+> IIUC this function is called only in the error path of
+> `vsock_loopback_init()`, but shuold we call it also in the
+> vsock_loopback_exit() ?
+> 
+
+Ah right, that needs to be done there too.
+
+> > +#endif /* CONFIG_VSOCKETS_LOOPBACK */
+> > +
+> > module_init(vsock_init);
+> > module_exit(vsock_exit);
+> > 
+> > diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
+> > index 1b2fab73e0d0..f16d21711cb0 100644
+> > --- a/net/vmw_vsock/vsock_loopback.c
+> > +++ b/net/vmw_vsock/vsock_loopback.c
+> > @@ -28,8 +28,19 @@ static u32 vsock_loopback_get_local_cid(void)
+> > 
+> > static int vsock_loopback_send_pkt(struct sk_buff *skb)
+> > {
+> > -	struct vsock_loopback *vsock = &the_vsock_loopback;
+> > +	struct vsock_loopback *vsock;
+> > 	int len = skb->len;
+> > +	struct net *net;
+> > +
+> > +	if (skb->sk)
+> > +		net = sock_net(skb->sk);
+> > +	else
+> > +		net = NULL;
+> 
+> Why we can't use `virtio_vsock_skb_net` here?
+> 
+
+No reason why not. Using it should make it more uniform.
+
+> > +
+> > +	if (net && net->vsock.mode == VSOCK_NET_MODE_LOCAL)
+> > +		vsock = net->vsock.loopback;
+> > +	else
+> > +		vsock = &the_vsock_loopback;
+> > 
+> > 	virtio_vsock_skb_queue_tail(&vsock->pkt_queue, skb);
+> > 	queue_work(vsock->workqueue, &vsock->pkt_work);
+> > @@ -134,27 +145,72 @@ static void vsock_loopback_work(struct work_struct *work)
+> > 	}
+> > }
+> > 
+> > -static int __init vsock_loopback_init(void)
+> > +static int vsock_loopback_init_vsock(struct vsock_loopback *vsock)
+> > {
+> > -	struct vsock_loopback *vsock = &the_vsock_loopback;
+> > -	int ret;
+> > -
+> > 	vsock->workqueue = alloc_workqueue("vsock-loopback", 0, 0);
+> > 	if (!vsock->workqueue)
+> > 		return -ENOMEM;
+> > 
+> > 	skb_queue_head_init(&vsock->pkt_queue);
+> > 	INIT_WORK(&vsock->pkt_work, vsock_loopback_work);
+> > +	return 0;
+> > +}
+> > +
+> > +static void vsock_loopback_deinit_vsock(struct vsock_loopback *vsock)
+> > +{
+> > +	if (vsock->workqueue)
+> > +		destroy_workqueue(vsock->workqueue);
+> > +}
+> > +
+> > +/* called with vsock_net_callbacks lock held */
+> > +static int vsock_loopback_init_net(struct net *net)
+> > +{
+> > +	if (WARN_ON_ONCE(net->vsock.loopback))
+> > +		return 0;
+> > +
+> 
+> Do we need some kind of locking here? I mean when reading/setting
+> `net->vsock.loopback`?
+> 
+
+I could be wrong here, but I think net->vsock.loopback being set before
+vsock_core_register() prevents racing with net->vsock.loopback reads. We
+could add a lock to make sure and to make the protection explicit
+though.
+
+> > +	net->vsock.loopback = kmalloc(sizeof(*net->vsock.loopback),
+> > GFP_KERNEL);
+> > +	if (!net->vsock.loopback)
+> > +		return -ENOMEM;
+> > +
+> > +	return vsock_loopback_init_vsock(net->vsock.loopback);
+> > +}
+> > +
+> > +/* called with vsock_net_callbacks lock held */
+> > +static void vsock_loopback_exit_net(struct net *net)
+> > +{
+> > +	if (net->vsock.loopback) {
+> > +		vsock_loopback_deinit_vsock(net->vsock.loopback);
+> > +		kfree(net->vsock.loopback);
+> 
+> Should we set `net->vsock.loopback` to NULL here?
+> 
+
+Yes.
+
+> > +	}
+> > +}
+> > +
+> > +static int __init vsock_loopback_init(void)
+> > +{
+> > +	struct vsock_loopback *vsock = &the_vsock_loopback;
+> > +	int ret;
+> > +
+> > +	ret = vsock_loopback_init_vsock(vsock);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	ret = vsock_register_net_callbacks(vsock_loopback_init_net,
+> > +					   vsock_loopback_exit_net);
+> 
+> IIUC we need this only here because for now the only other transport
+> supported is vhost-vsock, and IIUC `struct vhost_vsock *` there is handled
+> with a map instead of a static variable, and `net` assigned when
+> /dev/vhost-vsock is opened, right?
+> 
+
+Correct. The vhost map lookup is modified to account for namespaces, but
+vsock loopback doesn't have a map to do that. The callbacks are used to
+hook into the netns initialization.
+
+I wonder if it is possible to do this with just pernet_operations
+though... when I wrote this I was pretty laser-focused on the
+sysctl/procfs + netns init code, and may not have realized there may be
+similar hooks that aren't bound to the sysctl/proc init. I'll clarify
+this before the next rev.
 
 
-Thanks for the review!
+> If in the future we will need to support G2H transports, like
+> virtio-transport, we need to do something similar, right?
+> 
+
+My guess is that we'll be able to avoid using these callbacks unless
+there is some per-net data we need to initialize. I'm guessing if we
+follow a similar path as using ioctl to assign the dev netns, then we
+won't need it. It might be moot if pernet_operations work to avoid the
+module circular dependency.
+
+> BTW I think we really need to exaplin this better in the commit description.
+> It tooks me a while to get all of this (if it's correct)
+> 
+
+Roger that, I'll improve this going forward.
 
 Best,
 Bobby
