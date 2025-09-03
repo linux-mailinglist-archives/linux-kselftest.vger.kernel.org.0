@@ -1,121 +1,133 @@
-Return-Path: <linux-kselftest+bounces-40684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40687-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B861FB423C9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Sep 2025 16:32:06 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0798B425E1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Sep 2025 17:49:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AC981BC2B13
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Sep 2025 14:32:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 937A14E51BB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Sep 2025 15:49:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F6391F3B85;
-	Wed,  3 Sep 2025 14:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 124D2289E30;
+	Wed,  3 Sep 2025 15:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="OO6D0bjv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FbegsJB4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948B31EE019
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Sep 2025 14:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE21287258;
+	Wed,  3 Sep 2025 15:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756909912; cv=none; b=o44XfBuhXjNmbRzFBVVNf9CUzmG3FTeA0Upq44UzwtKF4CHWPrtwdaOGq6mb6H59P06e7FObwxUCFlDnEf/zYvuds6/m0XkSDn2mZz15ni/1TS9//nXesJY5RBt/21JbDDVwqkNg5jZX59AEx8434ZOF+MyDhyrkIgdFh8kzgnA=
+	t=1756914563; cv=none; b=et+5FTMwyi4znW2Wi6Vijxw8YbwvF1366E/yJ+W1+NwYp+Ke9oZeCknFyfcmPmyY3WFtd47sTDK6spQYMc/l8MhvEe2WQFVk2Ffpg6ipD/a5B+NUCRsW+eMDLisy0E+A5e7guLQ/+N7nyt/A5x+TZRXvj5+B9CIZhx81Y/+kuIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756909912; c=relaxed/simple;
-	bh=dFJHOuSlomZMY1e1WhYT/9BjuUTdLl4qUfkdjnWwEdE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rd0IKDSbZRISNYV7idv3vWAK4idkwHupLaX/DP5vXDFrzCl+/+h7YHlC3Ndq5awPZ9PDMV2UKHyLxKWCScbtpq7ugMOQUJWWkrKnVApKJLg78JxmEdW0yAKz+7bcEZL55jpDM+N8ql/UnQ1aHs+dWY8ifJaPq98VEOuzDoUXkfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=OO6D0bjv; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3f663c57226so1888305ab.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Sep 2025 07:31:50 -0700 (PDT)
+	s=arc-20240116; t=1756914563; c=relaxed/simple;
+	bh=Vs+2TVX6P+MA0FIJTI8WR59Uh1EZN6KJg5/PMwt7YoQ=;
+	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=JiUdoB9oDlrh84HSZLulkFhweKMLkWIqSJCVMUnkUy+vJBn1tpNe6Z1zfQkarbV19EY9XbrL1ijTWUIbUfpDIv7DOb7hy9hIiZyhsM8xaeuTnhpfTNxpYKK2wvPpiYvkea+YxD7jjeEHe5pSzjLKDoLDS5RZ2bAEJSpnrVnE6O0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FbegsJB4; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-77287fb79d3so61912b3a.1;
+        Wed, 03 Sep 2025 08:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1756909909; x=1757514709; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+xK1Ixt22UPQpRV6eJF15nySq1ENYn93GAeXzGVGJzQ=;
-        b=OO6D0bjvsCNz4UDjJc/eT5GiK/c5J+Hxok4gpK5DlhwLVFp/jDdWosAR0he7yTlLMP
-         G0OtHeQ0jLvw2FPtrRVnOyiflVyHps0HdBMYaZqXglvh8vADnJ1lgEM1k8YFHsoFkjSA
-         vbkuvgwq1SheH2p7HotMXtBh0X7miwaXjKP5XsBqkssNoeuiOc17ydxcwo3wJXuura/i
-         Jn3WqYjZ6ytUt//11QiXNCZFMy7ZPoxAFiZ7Fa0kmb/v2X91DCa29XysIjuzkWZiCyns
-         9gn97QRkMgJ9tO3RnL7mjbWy0933idCIfYYoyissrdB4I8ngszURRBpkFLAF2IGTN2je
-         n/Eg==
+        d=gmail.com; s=20230601; t=1756914559; x=1757519359; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vs+2TVX6P+MA0FIJTI8WR59Uh1EZN6KJg5/PMwt7YoQ=;
+        b=FbegsJB4k4Tth3H0jU2Gdt078Oxe9rysRXwKQtuVGURyXoiUPf5dnS2fZ05cF0xKCS
+         T5hUsh/FlhOJdhApKvPBHjCMh2JST2Xah7Glb66bYnb7KSv033iiibO2ES1I+Fri813a
+         QLxEyGF6d8x77aFjknGWScW0aZWUHQC55yftUNKZncJls7cDq7ulBFJclO0MG/D5LjyX
+         noiASMz0kbBnPvuGrawqZ6VA+lKsCGsiRXHDH5xNsKp1YnyRQapwUiWZYV/fjdu1n69X
+         +xuO65GGJ0qVrKZbx7U+wx312oM2ot+eT+XUYVRdCwY27eHrALrTTLEDcXpYKfUbx23e
+         TXRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756909909; x=1757514709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+xK1Ixt22UPQpRV6eJF15nySq1ENYn93GAeXzGVGJzQ=;
-        b=wEyDZH9UZjJxatnLnjS71SOZdHBGCsHvXWPxDkCiJlQjc0tP9ZsecFKSVcDaq7j6gW
-         zy1K6gStsdjUvJLJWrHFVFXq4sW/U3stOWXOxFQPa+NOcA55zJy6o63Vad19Ms8OX6Uq
-         Wfm31raKb1SviKvrV0Dt3EOyb88zUE3g1atPqraQB0Jt6fqyewWzQSk7qVNolOSC+SN9
-         VM4xMhTMQhoPxiqCl93Ti3UIK3X6niMPdu+SLGY4Ls/VLe1Oz/goInYjg5fQjjwiUDUX
-         dV0FSQhsNSZHbrB1+hPEnF3JkKkpt973ZJ8RvHrXJb2IzmfElJV7UGZ7IBRgA8GKE5A+
-         XJXw==
-X-Forwarded-Encrypted: i=1; AJvYcCWPF2REOcTHPD56qQgx5Fce4b9xAKb8fI5jZ9ML8yvS+ReEIqLthztx24ocFEHNhFnrwirTeAqeVh3OSQngIBQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiJqOPWhdfORv1qI5GrKlPmtXphelMLMFXPw7GEAJajxWpTFqQ
-	1icnd3QLuKmhsqNSOKbdQCSBv0wVU2WWC71YLotYZHQzCBkSdK9zaPEEsDMQYm8Pj8ZKMsDsw9l
-	BHeP84zTSbgXNqD+b15hxQdEcaLE+MX0PEceSttLiIQ==
-X-Gm-Gg: ASbGncs8J0/AT4OGktcAUaD9JwLdTE3f+K4RouPLHPG7mWlNtNIYnfATP6oOgnNUFCT
-	QZBuZj/MTvj/FOts2dwXJyoM7Y09ys6fOghik/8pHmLVKAP4A570lLCFAkhqEoFJlzSxfZ+ssNW
-	ixjIAKVh40BLognO5F/CZTeBt9jYrBE69hzisMPdEJ3pR35YIjWuM2QYjDEeswMvPW3WRRU/Hgh
-	lwc4mmJNg9A6wygvUUbtw/NfQd2RIu68Yz+u8u5lJ9psYncqxq8s8Shw8fjsQ==
-X-Google-Smtp-Source: AGHT+IEdqptgFgnh5uv2GzzQGJFqAZUOszFTkmnyBR24wl/TgHUrHJeCtE9hinNDxe7tcZMD8cJExtpH41CpN+afzKw=
-X-Received: by 2002:a92:ca4a:0:b0:3f2:1a77:4876 with SMTP id
- e9e14a558f8ab-3f4024cb129mr260307905ab.26.1756909909294; Wed, 03 Sep 2025
- 07:31:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756914559; x=1757519359;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vs+2TVX6P+MA0FIJTI8WR59Uh1EZN6KJg5/PMwt7YoQ=;
+        b=Pl8n7Whu8Ovm40rlmHM5COK5AQZTLk07nS1Q6uEYdr0E/B9VvIihvTqzlVUT2WpPww
+         9vbW675xFe7rDpOP+Kf+bDpsrKMZyQF5NOXftTDE+fpBk/UclCLTw8OAuSaQdZlHLDWV
+         z+Nse6t5f3M5K87Sw8ep9jE02N4kftNuCR8zcnwb/GGNKePVjG2lUz87DowT5RfvGfR+
+         +QsMpfGv0t+oyT5UIpsZwG6pQVlgiRvpo8Z+gpN15Kpbc0qPL3T61OZa8wgLHFZLVWiI
+         nmLZc8wuaty8ZX+Ibf0DIVfWrTHlTLo6JfWbGlnc0Jv5/mf4wS9C3+tRsPIMnHMUioob
+         ud2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUcTn5qF/dIJ6dnA8ItzTVEIA8OXxV2mlGEBPmpsf1txCrv+FQL2FU6ceM2raDrY2XCX7tzAyW5lNG/spct@vger.kernel.org, AJvYcCXhK2416R7KQ/WsPkGCBZTwVjnxfSx/vYRIskpT/XMd9WVHBw0JeJznAKBR/FJfwoC4EeIpm1Xkl4UG0SK/DfHX@vger.kernel.org, AJvYcCXxjgVJe2AmaqwcMLQxju0qHezIXDomuYE/NelSAjYK9vPIOi+I7RiYRjOV5R8KxqLIuaMdpUOeZ4wcDKPOp8Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6c1qZ5tjoO52WipnfUPqXAlEou/arGi1eZVuN1v+rejBMo8GQ
+	MYssFiRdMVBiTt0KbGZu5XU7lNa1jlF+1IZ7+amyTNj9fW3q8TyVV4WbMtTRIEkx
+X-Gm-Gg: ASbGncsfxjnftJua/AKwThhHw6YblGaSrjFkKSgKb8fkaeve7UuNVqR9MFY+JpsVOK2
+	UJna3O918ZZMVMrYrrM0hCqzfSaNLHaK6ZrNclIUD7I/M86hwQXUmRBqnq5HBNJWfhtXL50V23Y
+	dmpjPeAYz3mV0WColFJ1Cxq1cx5JkV48aEqHTqqYnoBnly2ilYq3xI3j2fm6+/6vTyc/aTrLpaW
+	0i+8W8pRtOAygOpXcXQoyFeu3tVYzuVBSR0KErucsYob9vgvo4MGLOTeSyiMfTAqIbUhGhHw8e1
+	e2jYor+ge6bxvh+z8RW7+K3pPoVxHiWbf2wOxDgwhCp8PQLN9Wvwn4Desaz/cx6IRwXoiAPAfnI
+	gGA2Op7XPqj5H
+X-Google-Smtp-Source: AGHT+IHEPuzcLvALXYq4AVPl2zYVTMkj6o7Fq/hq4L7YwMdmGzEqIh26wAxzw4dE7sdM5dK2Az4LBw==
+X-Received: by 2002:a17:902:f691:b0:248:b542:d803 with SMTP id d9443c01a7336-249448f317dmr198535415ad.24.1756914559123;
+        Wed, 03 Sep 2025 08:49:19 -0700 (PDT)
+Received: from 1337 ([136.159.213.138])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24a92f897d8sm125285175ad.24.2025.09.03.08.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Sep 2025 08:49:18 -0700 (PDT)
+From: Abhinav Saxena <xandfury@gmail.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Paul Moore
+ <paul@paul-moore.com>, Kees Cook <kees@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4] selftests/tty: add TIOCSTI test suite
+Date: Wed, 03 Sep 2025 09:08:06 -0600
+References: <20250902-toicsti-bug-v4-1-e5c960e0b3d6@gmail.com>
+ <2025090312-pebbly-groggy-3df7@gregkh>
+User-agent: mu4e 1.10.8; emacs 30.2
+In-reply-to: <2025090312-pebbly-groggy-3df7@gregkh>
+Message-ID: <87jz2fk03m.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1756710918.git.dayss1224@gmail.com>
-In-Reply-To: <cover.1756710918.git.dayss1224@gmail.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Wed, 3 Sep 2025 20:01:37 +0530
-X-Gm-Features: Ac12FXwG5rgdOIo0vaX3JEvtxdbhO8ebAqv0PdEvBcoUhtsHNdiKMQlA4BgxMFY
-Message-ID: <CAAhSdy0DriNa-90QO_YgUbuxrjkDSQ_iTtNVG5ie0h09y2xSHA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] KVM: riscv: selftests: Enable supported test cases
-To: dayss1224@gmail.com
-Cc: pbonzini@redhat.com, shuah@kernel.org, atish.patra@linux.dev, 
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	alex@ghiti.fr, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; boundary="=-=-="
+
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 1, 2025 at 1:06=E2=80=AFPM <dayss1224@gmail.com> wrote:
->
-> From: Dong Yang <dayss1224@gmail.com>
->
-> Add supported KVM test cases and fix the compilation dependencies.
-> ---
-> Changes in v3:
-> - Reorder patches to fix build dependencies
-> - Sort common supported test cases alphabetically
-> - Move ucall_common.h include from common header to specific source files
->
-> Changes in v2:
-> - Delete some repeat KVM test cases on riscv
-> - Add missing headers to fix the build for new RISC-V KVM selftests
->
-> Dong Yang (1):
->   KVM: riscv: selftests: Add missing headers for new testcases
->
-> Quan Zhou (2):
->   KVM: riscv: selftests: Use the existing RISCV_FENCE macro in
->     `rseq-riscv.h`
->   KVM: riscv: selftests: Add common supported test cases
+Hi Greg,
 
-Queued this series for Linux-6.18
+Greg KH <gregkh@linuxfoundation.org> writes:
 
-Thanks,
-Anup
+> On Tue, Sep 02, 2025 at 06:17:56PM -0600, Abhinav Saxena wrote:
+>> TIOCSTI is a TTY ioctl command that allows inserting characters into
+>> the terminal input queue, making it appear as if the user typed those
+>> characters. This functionality has behavior that varies based on system
+>> configuration and process credentials.
+>
+> <snip>
+>
+> Any specific reason you didn=E2=80=99t cc: the tty/serial maintainers and=
+ the
+> linux-serial list for this?
+>
+> thanks,
+>
+> greg k-h
+
+My apologies for the oversight. I used b4 to collect to/cc addresses,
+and didn=E2=80=99t confirm them before sending the patch. I guess since thi=
+s is
+just a selftest, it did not include tty/serial maintainers.
+
+I=E2=80=99ll resend the series.
+
+-Abhinav=20
+
+--=-=-=--
 
