@@ -1,573 +1,351 @@
-Return-Path: <linux-kselftest+bounces-40673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72238B4117E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Sep 2025 02:54:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3506B41198
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Sep 2025 03:01:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21B847A4D8C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Sep 2025 00:52:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FFFB189E248
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Sep 2025 01:01:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0878E1917FB;
-	Wed,  3 Sep 2025 00:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21733192B7D;
+	Wed,  3 Sep 2025 01:01:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SjTCV1BO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RaSvF7Ya"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83AE272618;
-	Wed,  3 Sep 2025 00:54:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF8B6ADD
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Sep 2025 01:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756860851; cv=none; b=pjRhr4xsJiTrcplgjTpehN3pnpWiuO272Mv1Rt6HqHWnI6nurmYtyh8d1CR4e2BmjS2gG+pcPBkl7ZbtPPt6K6YmSp0JDko0zCHL5J4NyxW1sdw8Xm0yED2ASrTugl2q592qYlvyXQubfQ7PszLEGXq4nhYVwnJoWKPxfE7X9p0=
+	t=1756861284; cv=none; b=Et9QoDRry2iTO0IH9GHWK83KfFfPTjGma6JrKjr23bk2uhoC98hPPXmutpgqwmHa0Lxfa3xwJmGU/IsHxANoUb8uHHxgAVe+ss8O2KTCgkH3vnXy//ek4rn8ZIOPDNZGOaJl83jC/We8W2OqIV+WXyZcThAR30dFzYD6gJtcKT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756860851; c=relaxed/simple;
-	bh=kcNwJOzkqoX9rSeUpLch61HWAKlvtsQHVFyVO47m5F4=;
-	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=Hkzqdm2nN8USLldO7ivg7Sp6Spek7MDmaozqnUTM2otpz2759gXsd89YivjAmfS2cJ0lv04xDNXRApQSprDJ4CtDvN2Tvwxfr83+50rN/4bkdBT2q43UvRj4wBkU/d3l1Q3+4PVzHMDMVx4ZvPU7S6Cn9U8+s+0CwWwKvxmfmTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SjTCV1BO; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-32326e8005bso5972372a91.3;
-        Tue, 02 Sep 2025 17:54:09 -0700 (PDT)
+	s=arc-20240116; t=1756861284; c=relaxed/simple;
+	bh=eLxfhF7bXCU9jA/VGQSYK6FrKrYyNvjiNsfavzHX+g8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Sb0vBpGyJPNR4vN5WPpnNDOrSfasXR9Wqo7u8fzsrW2mB9zv1wIBKhIQkIRrW7oO0EpvbsG6YhSe7EaRro/SBIK64tyKXtBTs5G7f3fYMGVdWwFtTjKG5+5GyuuViCbfdo2ISmaKLE6udR8wxDnfJ7zor2zS79kHuA01V8+nrUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RaSvF7Ya; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-61cfbb21fd1so5232a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 18:01:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756860849; x=1757465649; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:user-agent:references:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DzJEWr0hHSTCHLW2ZPbPTexdMSB3GHBPnCsDiiEa0CE=;
-        b=SjTCV1BO2WllFNxIiSpTP31Hiot+2eWcwRbhOJ0zC4eVJh+bZ/7JlRIK5WiZRFUDVe
-         /aFi+zNT3LAW4u6Uz4Tk2iwolar1ptvo07P9zhvLUmfb2TPzPXbL76VnkQ+leRI2/JYn
-         FZ7zUC1hnGqlJcVIyr6YW505a/6UWMWa9Pv1A/Gphh/2hsICS6+MinD0cAnh9N9PWuia
-         dit2moQhqXwIeH+cqq3o1Kbk46nsj13/mEWDCtEFRZQXYb37DG0WQo7Kp9wlZtt8cfaq
-         TDgemLMc/ZGPpTD3mnkCa6Te2GwgxW38KEkgsgTyFx5RH/lvTH2vZfdU1dqlnvdruqKU
-         +0Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756860849; x=1757465649;
-        h=mime-version:message-id:in-reply-to:user-agent:references:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1756861280; x=1757466080; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DzJEWr0hHSTCHLW2ZPbPTexdMSB3GHBPnCsDiiEa0CE=;
-        b=av320V5ItACEZdPiASAHwCZvAiWI/qaZ2pLfzN5NdtvIJsbW819Kaylz+HkJDUt9ot
-         YQ9oYfmSI+31hQ6ph4zDU7q6QyK1KJ8Tah5fxxjYnNEMBlRasD8UR4IVdwkj+DmXaVFR
-         JVj3Lydao+9VijsZVut+HOLcirTsFILiO18tohgz2gGdf5R0uWlG99R6DWhOUXNjUWwk
-         D2FDR2cwqMtTUKDs7g68k8IAzcC00wMUi5qt939W+KbUcs6t9WzI1f8LWuZsrtMO/Aq4
-         wSeOo+1sUVduX2X5HS4OYKOEMxLgL/8qDQlJfu3NsywRPvlViUX0lU6e1OrybZ9xyNEf
-         1h1A==
-X-Forwarded-Encrypted: i=1; AJvYcCUAbj6ptgF6o7Z6j0xGBKT6aNxW4IFVWNurcqLSEzQzAiKEsYOGVunS3W/yZy1BcOJ6Q4hzHD5MesV60ZOQKmZ4@vger.kernel.org, AJvYcCUm3bLuMs0qjhwtYrl5/9rpR7T4xcgpqk8IyJ84Bl8KBJYcrjb54jrLuJGEH0dAY47Q+2ZvjAnZuKVFjjk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9qcpaU7mJSndMNnltwiFjbsAW29i39Nz3gAKJvKH4LjscvdQ+
-	qq8Jc4GOFQdj/X6zXcQJM6bjunq7cqlNGQL5q6i2Sp3UzWYSiOstJwzZ
-X-Gm-Gg: ASbGncubbeOlN8/k9rMNBxshPyYqDSTmXXa/uW+1fO4LfkhMD1U408Bsa4K01VbJdIq
-	JjZwwXoYC9TYai+OsYjP+AXGxUqo1mMlk70AFfXc6RbgTpGtVgEPpN/8KX8bwwWD09ANMpgyKsr
-	yS+o+cdE5E3t6Ui9qMlSq9Zsp4IcPbiL5tXVbPCJ0U47C0iR1DdioN48NEIZUW3qsF1IfvgD7PW
-	MKW6ihOGs6OxKp6oyUyZeAl+KzMX7shaHBcAzAuA2+nheWqklXJqtd3Rjjx7mrnXi3zCMa02qgS
-	3xw3t3jXntsUzEka74wDCfaH9VSXiqXiVNMHn4xDaPlLbSX5/OesBc19XeWgO3tUxxrsk3a4HuH
-	YcJyRKKIYS33S
-X-Google-Smtp-Source: AGHT+IHdJRbu698YeETZFzXq2+vUi4ALBmmNCdIrvup3Pn4gbUSIokcsFYQ5ZINuGQZKealxpkFTXg==
-X-Received: by 2002:a17:90b:582b:b0:328:acc:da37 with SMTP id 98e67ed59e1d1-32815414342mr12323150a91.5.1756860848466;
-        Tue, 02 Sep 2025 17:54:08 -0700 (PDT)
-Received: from 1337 ([136.159.213.138])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-327d93317f0sm15280215a91.6.2025.09.02.17.54.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 17:54:07 -0700 (PDT)
-From: Abhinav Saxena <xandfury@gmail.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Paul Moore <paul@paul-moore.com>, Kees Cook
- <kees@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3] selftests/tty: add TIOCSTI test suite
-Date: Tue, 02 Sep 2025 18:44:55 -0600
-References: <20250730-toicsti-bug-v3-1-dd2dac97f27a@gmail.com>
- <ytndgs2vwkhijeuruejvk55geqouuditkjpge6u7gb6qt6hxqa@uh2wnuapkb5f>
-User-agent: mu4e 1.10.8; emacs 30.2
-In-reply-to: <ytndgs2vwkhijeuruejvk55geqouuditkjpge6u7gb6qt6hxqa@uh2wnuapkb5f>
-Message-ID: <87ms7cjqz5.fsf@gmail.com>
+        bh=prIHZgIMxeJu5kX8nscCgw6jHJBtQKuVxSzcsFq4qHA=;
+        b=RaSvF7YabJD0u1rDr5VvK9g/u0KllHWfCFLBSlK1qUeNnh50yEUEzE4glhDppmJG6w
+         gZaplkH4H7tlKOhcHPCYNbLE7LKGvTzC3A0djU8NjUFl4v2ITOVh9wNLjDvVYaVjmqpl
+         3X7fuSTAL66pw1jftX+DsQgkLdCH4q5YGklw9a9oXrVNhkqlZ4MU58VAqx1+E+2SPc2y
+         aH7QxzfnGgudc67CkTGLEG+Flj3dQ9o5FJcMQODG4a31P+lg4s2TjqTZn8Ejm+SuPjZo
+         XpQBH0Elx8/XIC957mIeeK8W8g0p36UyC7DF4f9DG/kUoqoW6LNBncd/HZcmdE02gEOQ
+         pcUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756861280; x=1757466080;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=prIHZgIMxeJu5kX8nscCgw6jHJBtQKuVxSzcsFq4qHA=;
+        b=XQfnrZBAJD/vLeYWgJdHJ9gVKpKvcmdioFpaxnBoMcp5+IsrKzGEBjNfQDMCPk8eTk
+         p3Uxz8cpw1CVMVUyDL76yktW/FD976LZgvtjhw9YtbEpC7dLkmp1Qnsj41Kec/igk3YR
+         BbtbbMyTwSE09xk1rcMY4nYP0CvSXTwJiV0qVHrxvPNO9Q/BpTq9zUzK4Ie7gDZ2fQRt
+         vt68pd1vuIrSCT7fo2Rd/sVKtHWx3MpqfjXRptuVKO2qy9Eo3rfa3iG0NImbA/4bW8TW
+         YOoBqtvWi4gGUWidO3LwFvgVLfA7SUiX+Z8TrUCTQJt3Uzwcb1MdxkWw+44ddQDznI2w
+         7iMw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBMV+OWJ5dcum6ti20aUtf3Kw4wczoM7WNcxSk4PtRpl4N2NdpCEX+Ivzvw+IQmZLR6L4nsxFq832lXQ+Cu+Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgfFX8ylE58mVyKn1cr/VxNXf6Zvz+rimjtl1cuCl5bv97BA9N
+	UGbsxUmUxOQjXWpVsyHxWQF5n2+5Bral4YC6T4n/J+4o/JcmnJqiqHWRfLz8T6TROc1d2u086Vw
+	7NqlGSL4uXjSnRE1kabDt1zrHEHCLh0fF7yAVDlc6
+X-Gm-Gg: ASbGncuBdq6qan5ZyaeC1AEiArCyLutN+StdoeVnqDt/KhEfJo4UVyhP03VUMRYrQe8
+	DMpJ5o2nWkoUlAQOShLpJEVNRvXoiNvYLTrp+tNmUcN3GWNv7NovgWGrfEcgOH26XDS3PmNJX1Z
+	RMV9YqV2SeOcwzIAfIQrn/Oxr237K36gky0+6VebgSg6B5GO3ebkgaedh2ZVQ0nun9hvDuq/DnB
+	GgdWOPlnQoG5lEL+vSIQd6PIL5PAA1MzBxQ5RqheiRQ7qiF8uxyX4Uc+lGf0fGyMEseOo1l0SEW
+	1uh9pJLTZwA=
+X-Google-Smtp-Source: AGHT+IGn1ik1UlrKL/svGRoK0zBmPzkA9G5xalp5y5+CKZrF+WhYlbO1egi139cEOnIStGm6DznYYqjrEU42RAqcYe0=
+X-Received: by 2002:a05:6402:a0d4:b0:61c:d709:ce04 with SMTP id
+ 4fb4d7f45d1cf-61d21f8f882mr372306a12.7.1756861280154; Tue, 02 Sep 2025
+ 18:01:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20250902235504.4190036-1-marcharvey@google.com>
+In-Reply-To: <20250902235504.4190036-1-marcharvey@google.com>
+From: Marc Harvey <marcharvey@google.com>
+Date: Tue, 2 Sep 2025 18:01:09 -0700
+X-Gm-Features: Ac12FXwBh67Bi6XAe_3VAULG_oaQy1aErOpWPtAnf-8Qp9WdlrOMMW2URu-tx5I
+Message-ID: <CANkEMgnghooTAW-VqodTpwSUHicb6fb6c0mBi1vpxPHnSNQccg@mail.gmail.com>
+Subject: Re: [PATCH net-next] selftests: net: Add tests to verify team driver
+ option set and get.
+To: jiri@resnulli.us, andrew+netdev@lunn.ch
+Cc: edumazet@google.com, willemb@google.com, maheshb@google.com, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Justin Stitt <justinstitt@google.com> writes:
-
-Hi,
-
-> Hi,
+On Tue, Sep 2, 2025 at 4:55=E2=80=AFPM Marc Harvey <marcharvey@google.com> =
+wrote:
 >
-> On Wed, Jul 30, 2025 at 06:14:43PM -0600, Abhinav Saxena wrote:
+> There are currently no kernel tests that verify setting and getting
+> options of the team driver.
 >
-> <snip>
+> In the future, options may be added that implicitly change other
+> options, which will make it useful to have tests like these that show
+> nothing breaks. There will be a follow up patch to this that adds new
+> "rx_enabled" and "tx_enabled" options, which will implicitly affect the
+> "enabled" option value and vice versa.
 >
->> =E2=80=94
->>  tools/testing/selftests/tty/Makefile           |   6 +-
->>  tools/testing/selftests/tty/config             |   1 +
->>  tools/testing/selftests/tty/tty_tiocsti_test.c | 650 ++++++++++++++++++=
-+++++++
->>  3 files changed, 656 insertions(+), 1 deletion(-)
->>=20
->> diff =E2=80=93git a/tools/testing/selftests/tty/Makefile b/tools/testing=
-/selftests/tty/Makefile
->> index 50d7027b2ae3..7f6fbe5a0cd5 100644
->> =E2=80=94 a/tools/testing/selftests/tty/Makefile
->> +++ b/tools/testing/selftests/tty/Makefile
->> @@ -1,5 +1,9 @@
->>  # SPDX-License-Identifier: GPL-2.0
->>  CFLAGS =3D -O2 -Wall
->> -TEST_GEN_PROGS :=3D tty_tstamp_update
->> +TEST_GEN_PROGS :=3D tty_tstamp_update tty_tiocsti_test
->> +LDLIBS +=3D -lcap
->>=20=20
->>  include ../lib.mk
->> +
->> +# Add libcap for TIOCSTI test
->> +$(OUTPUT)/tty_tiocsti_test: LDLIBS +=3D -lcap
+> The tests use teamnl to first set options to specific values and then
+> gets them to compare to the set values.
 >
-> Is it necessary to append -lcap to LDLIBS twice? Once globally and once
-> for that TU?
+> Signed-off-by: Marc Harvey <marcharvey@google.com>
+> ---
+>  .../selftests/drivers/net/team/Makefile       |   6 +-
+>  .../selftests/drivers/net/team/options.sh     | 194 ++++++++++++++++++
+>  2 files changed, 198 insertions(+), 2 deletions(-)
+>  create mode 100755 tools/testing/selftests/drivers/net/team/options.sh
 >
-
-So I built the tests in two ways:
-
-1. Building all targets with `make -C tools/testing/selftests/tty/`
-2. Building a specific target which is tty_tiocsti_test in this case.
-   I do this with `make -C tools/testing/selftests/tty/ tty_tiocsti_test`
-
-I may be completely wrong here, but I think I need the global for (1)
-and TU specific append for (2). There may better ways to do this,
-however. Open to ideas :)
-
->> diff =E2=80=93git a/tools/testing/selftests/tty/config b/tools/testing/s=
-elftests/tty/config
->> new file mode 100644
->> index 000000000000..c6373aba6636
->> =E2=80=94 /dev/null
->> +++ b/tools/testing/selftests/tty/config
->> @@ -0,0 +1 @@
->> +CONFIG_LEGACY_TIOCSTI=3Dy
->> diff =E2=80=93git a/tools/testing/selftests/tty/tty_tiocsti_test.c b/too=
-ls/testing/selftests/tty/tty_tiocsti_test.c
->> new file mode 100644
->> index 000000000000..1eafef6e36fa
->> =E2=80=94 /dev/null
->> +++ b/tools/testing/selftests/tty/tty_tiocsti_test.c
->> @@ -0,0 +1,650 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * TTY Tests - TIOCSTI
->> + *
->> + * Copyright =C2=A9 2025 Abhinav Saxena <xandfury@gmail.com>
->> + */
->> +
->> +#include <stdio.h>
->> +#include <stdlib.h>
->> +#include <unistd.h>
->> +#include <fcntl.h>
->> +#include <sys/ioctl.h>
->> +#include <errno.h>
->> +#include <stdbool.h>
->> +#include <string.h>
->> +#include <sys/socket.h>
->> +#include <sys/wait.h>
->> +#include <pwd.h>
->> +#include <termios.h>
->> +#include <grp.h>
->> +#include <sys/capability.h>
->> +#include <sys/prctl.h>
->> +#include <pty.h>
->> +#include <utmp.h>
->> +
->> +#include =E2=80=9C../kselftest_harness.h=E2=80=9D
->> +
->> +enum test_type {
->> +	TEST_PTY_TIOCSTI_BASIC,
->> +	TEST_PTY_TIOCSTI_FD_PASSING,
->> +	/* other tests cases such as serial may be added. */
->> +};
->> +
->> +/*
->> + * Test Strategy:
->> + * - Basic tests: Use PTY with/without TIOCSCTTY (controlling terminal =
-for
->> + *   current process)
->> + * - FD passing tests: Child creates PTY, parent receives FD (demonstra=
-tes
->> + *   security issue)
->> + *
->> + * SECURITY VULNERABILITY DEMONSTRATION:
->> + * FD passing tests show that TIOCSTI uses CURRENT process credentials,=
- not
->> + * opener credentials. This means privileged processes can be given FDs=
- from
->> + * unprivileged processes and successfully perform TIOCSTI operations t=
-hat the
->> + * unprivileged process couldn=E2=80=99t do directly.
->> + *
->> + * Attack scenario:
->> + * 1. Unprivileged process opens TTY (direct TIOCSTI fails due to lack =
-of
->> + *    privileges)
->> + * 2. Unprivileged process passes FD to privileged process via SCM_RIGH=
-TS
->> + * 3. Privileged process can use TIOCSTI on the FD (succeeds due to its
->> + *    privileges)
->> + * 4. Result: Effective privilege escalation via file descriptor passing
->> + *
->> + * This matches the kernel logic in tiocsti():
->> + * 1. if (!tty_legacy_tiocsti && !capable(CAP_SYS_ADMIN)) return -EIO;
->> + * 2. if ((current->signal->tty !=3D tty) && !capable(CAP_SYS_ADMIN))
->> + *        return -EPERM;
->> + * Note: Both checks use capable() on CURRENT process, not FD opener!
->> + *
->> + * If the file credentials were also checked along with the capable() c=
-hecks
->> + * then the results for FD pass tests would be consistent with the basi=
-c tests.
->> + */
->> +
->> +FIXTURE(tiocsti)
->> +{
->> +	int pty_master_fd; /* PTY - for basic tests */
->> +	int pty_slave_fd;
->> +	bool has_pty;
->> +	bool initial_cap_sys_admin;
->> +	int original_legacy_tiocsti_setting;
->> +	bool can_modify_sysctl;
->> +};
->> +
->> +FIXTURE_VARIANT(tiocsti)
->> +{
->> +	const enum test_type test_type;
->> +	const bool controlling_tty; /* true=3Dcurrent->signal->tty `=3D tty */
->> +	const int legacy_tiocsti; /* 0=3Drestricted, 1=3Dpermissive */
->> +	const bool requires_cap; /* true=3Dwith CAP_SYS_ADMIN, false=3Dwithout=
- */
->> +	const int expected_success; /* 0=3Dsuccess, -EIO/-EPERM=3Dspecific err=
-or */
->> +};
->> +
->> +/*
->> + * Tests Controlling Terminal Variants (current->signal->tty =3D' tty)
->> + *
->> + * TIOCSTI Test Matrix:
->> + *
->> + * | legacy_tiocsti | CAP_SYS_ADMIN | Expected Result | Error |
->> + * |=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94-|=E2=80=94=E2=80=94=
-=E2=80=94=E2=80=94=E2=80=94|=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=
-=E2=80=93|=E2=80=94=E2=80=94-|
->> + * | 1 (permissive) | true          | SUCCESS         | -     |
->> + * | 1 (permissive) | false         | SUCCESS         | -     |
->> + * | 0 (restricted) | true          | SUCCESS         | -     |
->> + * | 0 (restricted) | false         | FAILURE         | -EIO  |
->> + */
->> +
->> +/* clang-format off */
->> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_permissive_withcap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
->> +	.controlling_tty =3D true,
->> +	.legacy_tiocsti =3D 1,
->> +	.requires_cap =3D true,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_permissive_nocap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
->> +	.controlling_tty =3D true,
->> +	.legacy_tiocsti =3D 1,
->> +	.requires_cap =3D false,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_restricted_withcap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
->> +	.controlling_tty =3D true,
->> +	.legacy_tiocsti =3D 0,
->> +	.requires_cap =3D true,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_restricted_nocap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
->> +	.controlling_tty =3D true,
->> +	.legacy_tiocsti =3D 0,
->> +	.requires_cap =3D false,
->> +	.expected_success =3D -EIO, /* FAILURE: legacy restriction */
->> +}; /* clang-format on */
->> +
->> +/*
->> + * Note for FD Passing Test Variants
->> + * Since we=E2=80=99re testing the scenario where an unprivileged proce=
-ss pass an FD
->> + * to a privileged one, .requires_cap here means the caps of the child =
-process.
->> + * Not the parent; parent would always be privileged.
->> + */
->> +
->> +/* clang-format off */
->> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_permissive_withcap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
->> +	.controlling_tty =3D true,
->> +	.legacy_tiocsti =3D 1,
->> +	.requires_cap =3D true,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_permissive_nocap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
->> +	.controlling_tty =3D true,
->> +	.legacy_tiocsti =3D 1,
->> +	.requires_cap =3D false,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_restricted_withcap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
->> +	.controlling_tty =3D true,
->> +	.legacy_tiocsti =3D 0,
->> +	.requires_cap =3D true,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_restricted_nocap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
->> +	.controlling_tty =3D true,
->> +	.legacy_tiocsti =3D 0,
->> +	.requires_cap =3D false,
->> +	.expected_success =3D -EIO,
->> +}; /* clang-format on */
->> +
->> +/*
->> + * Non-Controlling Terminal Variants (current->signal->tty !=3D tty)
->> + *
->> + * TIOCSTI Test Matrix:
->> + *
->> + * | legacy_tiocsti | CAP_SYS_ADMIN | Expected Result | Error |
->> + * |=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94-|=E2=80=94=E2=80=94=
-=E2=80=94=E2=80=94=E2=80=94|=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=
-=E2=80=93|=E2=80=94=E2=80=94-|
->> + * | 1 (permissive) | true          | SUCCESS         | -     |
->> + * | 1 (permissive) | false         | FAILURE         | -EPERM|
->> + * | 0 (restricted) | true          | SUCCESS         | -     |
->> + * | 0 (restricted) | false         | FAILURE         | -EIO  |
->> + */
->> +
->> +/* clang-format off */
->> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_permissive_withcap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
->> +	.controlling_tty =3D false,
->> +	.legacy_tiocsti =3D 1,
->> +	.requires_cap =3D true,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_permissive_nocap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
->> +	.controlling_tty =3D false,
->> +	.legacy_tiocsti =3D 1,
->> +	.requires_cap =3D false,
->> +	.expected_success =3D -EPERM,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_restricted_withcap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
->> +	.controlling_tty =3D false,
->> +	.legacy_tiocsti =3D 0,
->> +	.requires_cap =3D true,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_restricted_nocap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
->> +	.controlling_tty =3D false,
->> +	.legacy_tiocsti =3D 0,
->> +	.requires_cap =3D false,
->> +	.expected_success =3D -EIO,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_permissive_withcap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
->> +	.controlling_tty =3D false,
->> +	.legacy_tiocsti =3D 1,
->> +	.requires_cap =3D true,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_permissive_nocap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
->> +	.controlling_tty =3D false,
->> +	.legacy_tiocsti =3D 1,
->> +	.requires_cap =3D false,
->> +	.expected_success =3D -EPERM,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_restricted_withcap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
->> +	.controlling_tty =3D false,
->> +	.legacy_tiocsti =3D 0,
->> +	.requires_cap =3D true,
->> +	.expected_success =3D 0,
->> +};
->> +
->> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_restricted_nocap) {
->> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
->> +	.controlling_tty =3D false,
->> +	.legacy_tiocsti =3D 0,
->> +	.requires_cap =3D false,
->> +	.expected_success =3D -EIO,
->> +}; /* clang-format on */
->> +
->> +/* Helper function to send FD via SCM_RIGHTS */
->> +static int send_fd_via_socket(int socket_fd, int fd_to_send)
->> +{
->> +	struct msghdr msg =3D { 0 };
->> +	struct cmsghdr *cmsg;
->> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
->> +	char dummy_data =3D =E2=80=99F=E2=80=99;
->> +	struct iovec iov =3D { .iov_base =3D &dummy_data, .iov_len =3D 1 };
->> +
->> +	msg.msg_iov =3D &iov;
->> +	msg.msg_iovlen =3D 1;
->> +	msg.msg_control =3D cmsg_buf;
->> +	msg.msg_controllen =3D sizeof(cmsg_buf);
->> +
->> +	cmsg =3D CMSG_FIRSTHDR(&msg);
->> +	cmsg->cmsg_level =3D SOL_SOCKET;
->> +	cmsg->cmsg_type =3D SCM_RIGHTS;
->> +	cmsg->cmsg_len =3D CMSG_LEN(sizeof(int));
->> +
->> +	memcpy(CMSG_DATA(cmsg), &fd_to_send, sizeof(int));
->> +
->> +	return sendmsg(socket_fd, &msg, 0) < 0 ? -1 : 0;
->> +}
->> +
->> +/* Helper function to receive FD via SCM_RIGHTS */
->> +static int recv_fd_via_socket(int socket_fd)
->> +{
->> +	struct msghdr msg =3D { 0 };
->> +	struct cmsghdr *cmsg;
->> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
->> +	char dummy_data;
->> +	struct iovec iov =3D { .iov_base =3D &dummy_data, .iov_len =3D 1 };
->> +	int received_fd =3D -1;
->> +
->> +	msg.msg_iov =3D &iov;
->> +	msg.msg_iovlen =3D 1;
->> +	msg.msg_control =3D cmsg_buf;
->> +	msg.msg_controllen =3D sizeof(cmsg_buf);
->> +
->> +	if (recvmsg(socket_fd, &msg, 0) < 0)
->> +		return -1;
->> +
->> +	for (cmsg =3D CMSG_FIRSTHDR(&msg); cmsg; cmsg =3D CMSG_NXTHDR(&msg, cm=
-sg)) {
->> +		if (cmsg->cmsg_level `=3D SOL_SOCKET &&
->> +		    cmsg->cmsg_type =3D' SCM_RIGHTS) {
->> +			memcpy(&received_fd, CMSG_DATA(cmsg), sizeof(int));
->> +			break;
->> +		}
->> +	}
->> +
->> +	return received_fd;
->> +}
->> +
->> +static inline bool has_cap_sys_admin(void)
->> +{
->> +	cap_t caps =3D cap_get_proc();
->> +
->> +	if (!caps)
->> +		return false;
->> +
->> +	cap_flag_value_t cap_val;
->> +	bool has_cap =3D (cap_get_flag(caps, CAP_SYS_ADMIN, CAP_EFFECTIVE,
->> +				     &cap_val) `=3D 0) &&
->> +		       (cap_val =3D' CAP_SET);
->> +
->> +	cap_free(caps);
->> +	return has_cap;
->> +}
->> +
->> +/*
->> + * Drop to nobody user (uid/gid 65534) to lose all capabilities
->> + */
->> +static inline bool drop_to_nobody(struct __test_metadata *_metadata)
->> +{
+> diff --git a/tools/testing/selftests/drivers/net/team/Makefile b/tools/te=
+sting/selftests/drivers/net/team/Makefile
+> index eaf6938f100e..8b00b70ce67f 100644
+> --- a/tools/testing/selftests/drivers/net/team/Makefile
+> +++ b/tools/testing/selftests/drivers/net/team/Makefile
+> @@ -1,11 +1,13 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  # Makefile for net selftests
 >
-> Maybe we can retrieve the uid/gid from getpwnam(3) with:
->   const struct passwd *pw =3D getpwnam(=E2=80=9Cnobody=E2=80=9D);
+> -TEST_PROGS :=3D dev_addr_lists.sh propagation.sh
+> +TEST_PROGS :=3D dev_addr_lists.sh propagation.sh options.sh
 >
-> =E2=80=A6 then use pw->pw_{uid,gid}. I suggest this because there might be
-> portability issues with the hardcoded 65534 =E2=80=93 not 100% sure thoug=
-h.
+>  TEST_INCLUDES :=3D \
+>         ../bonding/lag_lib.sh \
+>         ../../../net/forwarding/lib.sh \
+> -       ../../../net/lib.sh
+> +       ../../../net/lib.sh \
+> +       ../../../net/in_netns.sh \
+> +       ../../../net/lib/sh/defer.sh \
 >
+>  include ../../../lib.mk
+> diff --git a/tools/testing/selftests/drivers/net/team/options.sh b/tools/=
+testing/selftests/drivers/net/team/options.sh
+> new file mode 100755
+> index 000000000000..b9c7aa357ad5
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/team/options.sh
+> @@ -0,0 +1,194 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +# These tests verify basic set and get functionality of the team
+> +# driver options over netlink.
+> +
+> +# Run in private netns.
+> +test_dir=3D"$(dirname "$0")"
+> +if [[ $# -eq 0 ]]; then
+> +        "${test_dir}"/../../../net/in_netns.sh "$0" __subprocess
+> +        exit $?
+> +fi
+> +
+> +ALL_TESTS=3D"
+> +        team_test_options
+> +"
+> +
+> +source "${test_dir}/../../../net/lib.sh"
+> +
+> +TEAM_PORT=3D"team0"
+> +MEMBER_PORT=3D"dummy0"
+> +
+> +setup()
+> +{
+> +        ip link add name "${MEMBER_PORT}" type dummy
+> +        ip link add name "${TEAM_PORT}" type team
+> +}
+> +
+> +get_and_check_value()
+> +{
+> +        local option_name=3D"$1"
+> +        local expected_value=3D"$2"
+> +        local port_flag=3D"$3"
+> +
+> +        local value_from_get
+> +
+> +        value_from_get=3D$(teamnl "${TEAM_PORT}" getoption "${option_nam=
+e}" \
+> +                "${port_flag}")
+> +        if [[ $? !=3D 0 ]]; then
 
-Thanks! Yep, I guess it is better to get rid of `nobody` logic
-completely for better portability. I replaced it with `drop_all_privs`
-in v4 [1].
+I'm aware of the shellcheck errors. Will wait to send v2 tomorrow for
+the 24 hour rule.
 
->> +	ASSERT_EQ(setgroups(0, NULL), 0);
->> +	ASSERT_EQ(setgid(65534), 0);
->> +	ASSERT_EQ(setuid(65534), 0);
->> +
->> +	ASSERT_FALSE(has_cap_sys_admin());
->> +	return true;
->> +}
->> +
->> +static inline int get_legacy_tiocsti_setting(struct __test_metadata *_m=
-etadata)
->> +{
->> +	FILE *fp;
->> +	int value =3D -1;
->> +
->> +	fp =3D fopen(=E2=80=9C/proc/sys/dev/tty/legacy_tiocsti=E2=80=9D, =E2=
-=80=9Cr=E2=80=9D);
->> +	if (!fp) {
->> +		/* legacy_tiocsti sysctl not available (kernel < 6.2) */
->> +		return -1;
->> +	}
->> +
->> +	if (fscanf(fp, =E2=80=9C%d=E2=80=9D, &value) =3D=3D 1) {
->> +		if (value < 0 || value > 1)
->> +			value =3D -1; /* Invalid value */
->> +	} else {
->> +		value =3D -1; /* Failed to parse */
->> +	}
->> +
->> +	fclose(fp);
->> +	return value;
->> +}
->> +
+> +                echo "Could not get option '${option_name}'" >&2
+> +                return 1
+> +        fi
+> +
+> +        if [[ "${value_from_get}" !=3D "${expected_value}" ]]; then
+> +                echo "Incorrect value for option '${option_name}'" >&2
+> +                echo "get (${value_from_get}) !=3D set (${expected_value=
+})" >&2
+> +                return 1
+> +        fi
+> +}
+> +
+> +set_and_check_get()
+> +{
+> +        local option_name=3D"$1"
+> +        local option_value=3D"$2"
+> +        local port_flag=3D"$3"
+> +
+> +        local value_from_get
+> +
+> +        teamnl "${TEAM_PORT}" setoption "${option_name}" "${option_value=
+}" \
+> +                "${port_flag}"
+> +        if [[ $? !=3D 0 ]]; then
+> +                echo "'setoption ${option_name} ${option_value}' failed"=
+ >&2
+> +                return 1
+> +        fi
+> +
+> +        get_and_check_value "${option_name}" "${option_value}" "${port_f=
+lag}"
+> +        return $?
+> +}
+> +
+> +# Get a "port flag" to pass to the `teamnl` command.
+> +# E.g. $?=3D"dummy0" -> "port=3Ddummy0",
+> +#      $?=3D""       -> ""
+> +get_port_flag()
+> +{
+> +        local port_name=3D"$1"
+> +
+> +        if [[ -n "${port_name}" ]]; then
+> +                echo "--port=3D${port_name}"
+> +        fi
+> +}
+> +
+> +attach_port_if_specified()
+> +{
+> +        local port_name=3D"${1}"
+> +
+> +        if [[ -n "${port_name}" ]]; then
+> +                ip link set dev "${port_name}" master "${TEAM_PORT}"
+> +                return $?
+> +        fi
+> +}
+> +
+> +detach_port_if_specified()
+> +{
+> +        local port_name=3D"${1}"
+> +
+> +        if [[ -n "${port_name}" ]]; then
+> +                ip link set dev "${port_name}" nomaster
+> +                return $?
+> +        fi
+> +}
+> +
+> +#######################################
+> +# Test that an option's get value matches its set value.
+> +# Globals:
+> +#   RET - Used by testing infra like `check_err`.
+> +#   EXIT_STATUS - Used by `log_test` to whole script exit value.
+> +# Arguments:
+> +#   option_name - The name of the option.
+> +#   value_1 - The first value to try setting.
+> +#   value_2 - The second value to try setting.
+> +#   port_name - The (optional) name of the attached port.
+> +#######################################
+> +team_test_option()
+> +{
+> +        local option_name=3D"$1"
+> +        local value_1=3D"$2"
+> +        local value_2=3D"$3"
+> +        local possible_values=3D"$2 $3 $2"
+> +        local port_name=3D"$4"
+> +        local port_flag
+> +
+> +        RET=3D0
+> +
+> +        echo "Setting '${option_name}' to '${value_1}' and '${value_2}'"
+> +
+> +        attach_port_if_specified "${port_name}"
+> +        check_err $? "Couldn't attach ${port_name} to master"
+> +        port_flag=3D$(get_port_flag "${port_name}")
+> +
+> +        # Set and get both possible values.
+> +        for value in ${possible_values}; do
+> +                set_and_check_get "${option_name}" "${value}" "${port_fl=
+ag}"
+> +                check_err $? "Failed to set '${option_name}' to '${value=
+}'"
+> +        done
+> +
+> +        detach_port_if_specified "${port_name}"
+> +        check_err $? "Couldn't detach ${port_name} from its master"
+> +
+> +        log_test "Set + Get '${option_name}' test"
+> +}
+> +
+> +#######################################
+> +# Test that getting a non-existant option fails.
+> +# Globals:
+> +#   RET - Used by testing infra like `check_err`.
+> +#   EXIT_STATUS - Used by `log_test` to whole script exit value.
+> +# Arguments:
+> +#   option_name - The name of the option.
+> +#   port_name - The (optional) name of the attached port.
+> +#######################################
+> +team_test_get_option_fails()
+> +{
+> +        local option_name=3D"$1"
+> +        local port_name=3D"$2"
+> +        local port_flag
+> +
+> +        RET=3D0
+> +
+> +        attach_port_if_specified "${port_name}"
+> +        check_err $? "Couldn't attach ${port_name} to master"
+> +        port_flag=3D$(get_port_flag "${port_name}")
+> +
+> +        # Just confirm that getting the value fails.
+> +        teamnl "${TEAM_PORT}" getoption "${option_name}" "${port_flag}"
+> +        check_fail $? "Shouldn't be able to get option '${option_name}'"
+> +
+> +        detach_port_if_specified "${port_name}"
+> +
+> +        log_test "Get '${option_name}' fails"
+> +}
+> +
+> +team_test_options()
+> +{
+> +        # Wrong option name behavior.
+> +        team_test_get_option_fails fake_option1
+> +        team_test_get_option_fails fake_option2 "${MEMBER_PORT}"
+> +
+> +        # Correct set and get behavior.
+> +        team_test_option mode activebackup loadbalance
+> +        team_test_option notify_peers_count 0 5
+> +        team_test_option notify_peers_interval 0 5
+> +        team_test_option mcast_rejoin_count 0 5
+> +        team_test_option mcast_rejoin_interval 0 5
+> +        team_test_option enabled true false "${MEMBER_PORT}"
+> +        team_test_option user_linkup true false "${MEMBER_PORT}"
+> +        team_test_option user_linkup_enabled true false "${MEMBER_PORT}"
+> +        team_test_option priority 10 20 "${MEMBER_PORT}"
+> +        team_test_option queue_id 0 1 "${MEMBER_PORT}"
+> +}
+> +
+> +require_command teamnl
+> +setup
+> +tests_run
+> +exit "${EXIT_STATUS}"
+> --
+> 2.51.0.355.g5224444f11-goog
 >
-> <snip>
->
->> =E2=80=94
->> base-commit: 283564a43383d6f26a55546fe9ae345b5fa95e66
->> change-id: 20250618-toicsti-bug-7822b8e94a32
->>=20
->> Best regards,
->> =E2=80=93=20
->> Abhinav Saxena <xandfury@gmail.com>
->>=20
->>
->
-> Justin
-
-Thanks for the feedback!
-
-=E2=80=A2 Abhinav
-
-[1] - Link to v4:
-<https://lore.kernel.org/all/20250902-toicsti-bug-v4-1-e5c960e0b3d6@gmail.c=
-om/>
-
---=-=-=--
 
