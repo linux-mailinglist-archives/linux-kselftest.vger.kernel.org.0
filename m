@@ -1,57 +1,57 @@
-Return-Path: <linux-kselftest+bounces-40771-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFC04B43837
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 12:14:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 539DEB4383F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 12:15:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEBAC188405D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 10:14:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EACA4188FBB4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 10:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D3B93019C4;
-	Thu,  4 Sep 2025 10:11:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24A3302CB8;
+	Thu,  4 Sep 2025 10:11:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ge0U+N1k"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tVLokF1Z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60895301029;
-	Thu,  4 Sep 2025 10:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D1E3019B3
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Sep 2025 10:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756980702; cv=none; b=lng4ZDFlUREl+1DUE47YyqL4XxAXwF7WlqkC2unIMJVdl8huTs2drtsq0M00qJOteh0nmIv+1mSutUTqGfcG1r5NxPaD3e8D35Rv0wieLtuPSZ6mYa+NvRgqCo1DYY0AejrjBXRoUNYzmPapOEiq5pL0T1UhLh3DVfHylslBou4=
+	t=1756980704; cv=none; b=a/QaOuNAI1HrgRgxxOhp83qZuuX5jCYjUSywC9wD4ujmR4zHDwxVYT7tPywxA7AF26vmZz6HVBI5Huj5aKBowT97kKmxeefcJKGYv6uJnSuacWNyFyL50d8bm5yxUurN7ClHhXxSyx1hJMH22bnK55w/Dg1Yja6F6eCC5CsRNt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756980702; c=relaxed/simple;
-	bh=pbQlyBzNHITQzd6CWr1gQ0jYLW1D3Z/wEudy+kGX6wY=;
+	s=arc-20240116; t=1756980704; c=relaxed/simple;
+	bh=ObHUgitkl4ii+FuTJ3z/UyJZi8O3WD6hGQaB2dHbUoU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hcGJ0BEovdn11dXjhS9Mq1oo4sycKw2dbzENPXVepEyw4neiAOfI3O066RBrNI8e/UPfZq6MrqZGy5RZ5Hcn9p06U4t1qbWohZiY8UFDNQ8F1SJ6rvBBcN1AzbZ3/PoLhxKv74jQQxErBa5eUcnc09PjdTJYcFIhpGxZTO7qLmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ge0U+N1k; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=V7kn0I/e4KDnNC437sPUdzV3WtARnIAMImvM9M/Bmxam6LZveezvVWzZuGnUtTKbDXrcqX0YJupI13G7CTN0IFbOz01neFqjBQ9sS0R6Gb2ZcJ9Ft1r1Jjp1MG8JPAqhPJHF/Y3Ul/osg52hnlHCu69xqAQbxel7f4nAB4vBNGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tVLokF1Z; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id A499C4E40C0A;
-	Thu,  4 Sep 2025 10:11:38 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id CB14EC6B3AC;
+	Thu,  4 Sep 2025 10:11:25 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7C2DF606BB;
-	Thu,  4 Sep 2025 10:11:38 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 882601C22DB98;
-	Thu,  4 Sep 2025 12:11:34 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id F3576606BB;
+	Thu,  4 Sep 2025 10:11:40 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 859791C22DF3D;
+	Thu,  4 Sep 2025 12:11:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1756980697; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1756980699; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=Qp7BCTV9OjXfRKO/Rz8MBVxIk2UvFsted2clppcEz0o=;
-	b=Ge0U+N1kysll8DayhZTHMB12XTJFvAO/rPK8yu0pDJZnB+L9FApagaRt2MAKrjjHyNhw9t
-	+6nM+36Phazg2jYQtMKdU0vYvFNsZjO7/MaRs/Ks3neN+nJjo0ruziwuuDM1lsL7xs2f2A
-	zQqBCRG4GHmmbdfsc+YaRxDUZfLlBQlMEUCldMBcjByBn4QGJHNywx233ypzhCbh4xXSH1
-	qwMwBvAdY6IPeefPPnasJgNX8vxwAhCHjPFncpnJbSbbigpTiwVjU86HJL5nHmvAQjDCms
-	ocUv9Y/OcV26QAp6PtDTVKsWtIUfJUX74VDBSsw4kiKP/rbW74TkV+JwRXkqRA==
+	bh=OoSsbwTG77G3LvK0ex+QYhPDANmBEsrhcJkUvp7LSZM=;
+	b=tVLokF1Z+gWcqPr9ZH7/PjFutS2zld+57OYYM0kKWNapwYUKB35eLSwd+rxKZGKgLU4gmg
+	5p/ytof8hZR0eHZQkiyeXrDKfczMb8l7PwzfbWaM9w1xL84iAayTabidpiqDO9r9zD5x/M
+	QLB4RGUntm0azpAdItQ6D8re/cjjoSONgFXaWfYXeTBYRQTBNnMeBpfl1lZV96D6hvbUel
+	2SuE5Bc0L+AoTtzBtNsMNmxKgIOtmllSXpUYdwzNb+/U1sYtbYAiOEfUaJyUXFIOoaRz5A
+	aDTUkr3zdwb6koCyqa3rRToTSZ7WtrG97LxwaGdSMcVcxyGqbeQqV0b6qA+m0g==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Thu, 04 Sep 2025 12:10:23 +0200
-Subject: [PATCH bpf-next v3 08/14] selftests/bpf: test_xsk: Don't exit
- immediately when gettimeofday fails
+Date: Thu, 04 Sep 2025 12:10:24 +0200
+Subject: [PATCH bpf-next v3 09/14] selftests/bpf: test_xsk: Don't exit
+ immediately when workers fail
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250904-xsk-v3-8-ce382e331485@bootlin.com>
+Message-Id: <20250904-xsk-v3-9-ce382e331485@bootlin.com>
 References: <20250904-xsk-v3-0-ce382e331485@bootlin.com>
 In-Reply-To: <20250904-xsk-v3-0-ce382e331485@bootlin.com>
 To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
@@ -85,55 +85,271 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-exit_with_error() is called when gettimeofday() fails. This exits the
-program immediately. It prevents the following tests from being run and
-isn't compliant with the CI.
+TX and RX workers can fail in many places. These failures trigger a call
+to exit_with_error() which exits the program immediately. It prevents the
+following tests from running and isn't compliant with the CI.
 
-Return TEST_FAILURE instead of calling exit_on_error().
+Add return value to functions that can fail.
+Handle failures more smoothly through report_failure().
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/test_xsk.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_xsk.c | 110 +++++++++++++++++++++++----------
+ 1 file changed, 76 insertions(+), 34 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
-index 6a9ad7a3a78667a1b70b688698103df3cae26c61..adefb50e2b08d923c412b17d7d31300f7eb7a0e7 100644
+index adefb50e2b08d923c412b17d7d31300f7eb7a0e7..bd26da9693ee501b3f754da5cf555aaee5c83af3 100644
 --- a/tools/testing/selftests/bpf/test_xsk.c
 +++ b/tools/testing/selftests/bpf/test_xsk.c
-@@ -1106,7 +1106,7 @@ static int receive_pkts(struct test_spec *test)
+@@ -142,24 +142,26 @@ static void umem_reset_alloc(struct xsk_umem_info *umem)
+ 	umem->next_buffer = 0;
+ }
  
- 	ret = gettimeofday(&tv_now, NULL);
- 	if (ret)
+-static void enable_busy_poll(struct xsk_socket_info *xsk)
++static int enable_busy_poll(struct xsk_socket_info *xsk)
+ {
+ 	int sock_opt;
+ 
+ 	sock_opt = 1;
+ 	if (setsockopt(xsk_socket__fd(xsk->xsk), SOL_SOCKET, SO_PREFER_BUSY_POLL,
+ 		       (void *)&sock_opt, sizeof(sock_opt)) < 0)
 -		exit_with_error(errno);
-+		return TEST_FAILURE;
++		return -errno;
  
- 	timeradd(&tv_now, &tv_timeout, &tv_end);
+ 	sock_opt = 20;
+ 	if (setsockopt(xsk_socket__fd(xsk->xsk), SOL_SOCKET, SO_BUSY_POLL,
+ 		       (void *)&sock_opt, sizeof(sock_opt)) < 0)
+-		exit_with_error(errno);
++		return -errno;
  
-@@ -1122,7 +1122,7 @@ static int receive_pkts(struct test_spec *test)
+ 	sock_opt = xsk->batch_size;
+ 	if (setsockopt(xsk_socket__fd(xsk->xsk), SOL_SOCKET, SO_BUSY_POLL_BUDGET,
+ 		       (void *)&sock_opt, sizeof(sock_opt)) < 0)
+-		exit_with_error(errno);
++		return -errno;
++
++	return 0;
+ }
  
- 		ret = gettimeofday(&tv_now, NULL);
+ int xsk_configure_socket(struct xsk_socket_info *xsk, struct xsk_umem_info *umem,
+@@ -769,7 +771,7 @@ static bool is_metadata_correct(struct pkt *pkt, void *buffer, u64 addr)
+ 	return true;
+ }
+ 
+-static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
++static int is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx, bool *supported)
+ {
+ 	struct bpf_map *data_map;
+ 	int adjust_value = 0;
+@@ -779,19 +781,21 @@ static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
+ 	data_map = bpf_object__find_map_by_name(skel_rx->obj, "xsk_xdp_.bss");
+ 	if (!data_map || !bpf_map__is_internal(data_map)) {
+ 		ksft_print_msg("Error: could not find bss section of XDP program\n");
+-		exit_with_error(errno);
++		return -EINVAL;
+ 	}
+ 
+ 	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &key, &adjust_value);
+ 	if (ret) {
+ 		ksft_print_msg("Error: bpf_map_lookup_elem failed with error %d\n", ret);
+-		exit_with_error(errno);
++		return ret;
+ 	}
+ 
+ 	/* Set the 'adjust_value' variable to -EOPNOTSUPP in the XDP program if the adjust_tail
+ 	 * helper is not supported. Skip the adjust_tail test case in this scenario.
+ 	 */
+-	return adjust_value != -EOPNOTSUPP;
++	*supported = adjust_value != -EOPNOTSUPP;
++
++	return 0;
+ }
+ 
+ static bool is_frag_valid(struct xsk_umem_info *umem, u64 addr, u32 len, u32 expected_pkt_nb,
+@@ -1443,7 +1447,7 @@ static int validate_tx_invalid_descs(struct ifobject *ifobject)
+ 	return TEST_PASS;
+ }
+ 
+-static void xsk_configure(struct test_spec *test, struct ifobject *ifobject,
++static int xsk_configure(struct test_spec *test, struct ifobject *ifobject,
+ 			  struct xsk_umem_info *umem, bool tx)
+ {
+ 	int i, ret;
+@@ -1460,24 +1464,34 @@ static void xsk_configure(struct test_spec *test, struct ifobject *ifobject,
+ 
+ 			/* Retry if it fails as xsk_socket__create() is asynchronous */
+ 			if (ctr >= SOCK_RECONF_CTR)
+-				exit_with_error(-ret);
++				return ret;
+ 			usleep(USLEEP_MAX);
+ 		}
+-		if (ifobject->busy_poll)
+-			enable_busy_poll(&ifobject->xsk_arr[i]);
++		if (ifobject->busy_poll) {
++			ret = enable_busy_poll(&ifobject->xsk_arr[i]);
++			if (ret)
++				return ret;
++		}
+ 	}
++
++	return 0;
+ }
+ 
+-static void thread_common_ops_tx(struct test_spec *test, struct ifobject *ifobject)
++static int thread_common_ops_tx(struct test_spec *test, struct ifobject *ifobject)
+ {
+-	xsk_configure(test, ifobject, test->ifobj_rx->umem, true);
++	int ret = xsk_configure(test, ifobject, test->ifobj_rx->umem, true);
++
++	if (ret)
++		return ret;
+ 	ifobject->xsk = &ifobject->xsk_arr[0];
+ 	ifobject->xskmap = test->ifobj_rx->xskmap;
+ 	memcpy(ifobject->umem, test->ifobj_rx->umem, sizeof(struct xsk_umem_info));
+ 	ifobject->umem->base_addr = 0;
++
++	return 0;
+ }
+ 
+-static void xsk_populate_fill_ring(struct xsk_umem_info *umem, struct pkt_stream *pkt_stream,
++static int xsk_populate_fill_ring(struct xsk_umem_info *umem, struct pkt_stream *pkt_stream,
+ 				   bool fill_up)
+ {
+ 	u32 rx_frame_size = umem->frame_size - XDP_PACKET_HEADROOM;
+@@ -1491,7 +1505,7 @@ static void xsk_populate_fill_ring(struct xsk_umem_info *umem, struct pkt_stream
+ 
+ 	ret = xsk_ring_prod__reserve(&umem->fq, buffers_to_fill, &idx);
+ 	if (ret != buffers_to_fill)
+-		exit_with_error(ENOSPC);
++		return -ENOSPC;
+ 
+ 	while (filled < buffers_to_fill) {
+ 		struct pkt *pkt = pkt_stream_get_next_rx_pkt(pkt_stream, &nb_pkts);
+@@ -1519,9 +1533,11 @@ static void xsk_populate_fill_ring(struct xsk_umem_info *umem, struct pkt_stream
+ 
+ 	pkt_stream_reset(pkt_stream);
+ 	umem_reset_alloc(umem);
++
++	return 0;
+ }
+ 
+-static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
++static int thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ {
+ 	LIBBPF_OPTS(bpf_xdp_query_opts, opts);
+ 	int mmap_flags;
+@@ -1541,27 +1557,34 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ 
+ 	bufs = mmap(NULL, umem_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
+ 	if (bufs == MAP_FAILED)
+-		exit_with_error(errno);
++		return -errno;
+ 
+ 	ret = xsk_configure_umem(ifobject, ifobject->umem, bufs, umem_sz);
+ 	if (ret)
+-		exit_with_error(-ret);
++		return ret;
+ 
+-	xsk_configure(test, ifobject, ifobject->umem, false);
++	ret = xsk_configure(test, ifobject, ifobject->umem, false);
++	if (ret)
++		return ret;
+ 
+ 	ifobject->xsk = &ifobject->xsk_arr[0];
+ 
+ 	if (!ifobject->rx_on)
+-		return;
++		return 0;
+ 
+-	xsk_populate_fill_ring(ifobject->umem, ifobject->xsk->pkt_stream, ifobject->use_fill_ring);
++	ret = xsk_populate_fill_ring(ifobject->umem, ifobject->xsk->pkt_stream,
++				     ifobject->use_fill_ring);
++	if (ret)
++		return ret;
+ 
+ 	for (i = 0; i < test->nb_sockets; i++) {
+ 		ifobject->xsk = &ifobject->xsk_arr[i];
+ 		ret = xsk_update_xskmap(ifobject->xskmap, ifobject->xsk->xsk, i);
  		if (ret)
 -			exit_with_error(errno);
-+			return TEST_FAILURE;
++			return ret;
+ 	}
++
++	return 0;
+ }
  
- 		if (timercmp(&tv_now, &tv_end, >)) {
- 			ksft_print_msg("ERROR: [%s] Receive loop timed out\n", __func__);
-@@ -1265,13 +1265,13 @@ static int wait_for_tx_completion(struct xsk_socket_info *xsk)
+ void *worker_testapp_validate_tx(void *arg)
+@@ -1571,10 +1594,17 @@ void *worker_testapp_validate_tx(void *arg)
+ 	int err;
  
- 	ret = gettimeofday(&tv_now, NULL);
- 	if (ret)
--		exit_with_error(errno);
-+		return TEST_FAILURE;
- 	timeradd(&tv_now, &tv_timeout, &tv_end);
+ 	if (test->current_step == 1) {
+-		if (!ifobject->shared_umem)
+-			thread_common_ops(test, ifobject);
+-		else
+-			thread_common_ops_tx(test, ifobject);
++		if (!ifobject->shared_umem) {
++			if (thread_common_ops(test, ifobject)) {
++				report_failure(test);
++				pthread_exit(NULL);
++			}
++		} else {
++			if (thread_common_ops_tx(test, ifobject)) {
++				report_failure(test);
++				pthread_exit(NULL);
++			}
++		}
+ 	}
  
- 	while (xsk->outstanding_tx) {
- 		ret = gettimeofday(&tv_now, NULL);
- 		if (ret)
--			exit_with_error(errno);
-+			return TEST_FAILURE;
- 		if (timercmp(&tv_now, &tv_end, >)) {
- 			ksft_print_msg("ERROR: [%s] Transmission loop timed out\n", __func__);
- 			return TEST_FAILURE;
+ 	err = send_pkts(test, ifobject);
+@@ -1594,29 +1624,41 @@ void *worker_testapp_validate_rx(void *arg)
+ 	int err;
+ 
+ 	if (test->current_step == 1) {
+-		thread_common_ops(test, ifobject);
++		err = thread_common_ops(test, ifobject);
+ 	} else {
+ 		xsk_clear_xskmap(ifobject->xskmap);
+ 		err = xsk_update_xskmap(ifobject->xskmap, ifobject->xsk->xsk, 0);
+-		if (err) {
++		if (err)
+ 			ksft_print_msg("Error: Failed to update xskmap, error %s\n",
+ 				       strerror(-err));
+-			exit_with_error(-err);
+-		}
+ 	}
+ 
+ 	pthread_barrier_wait(&barr);
+ 
++	/* We leave only now in case of error to avoid getting stuck in the barrier */
++	if (err) {
++		report_failure(test);
++		pthread_exit(NULL);
++	}
++
+ 	err = receive_pkts(test);
+ 
+ 	if (!err && ifobject->validation_func)
+ 		err = ifobject->validation_func(ifobject);
+ 
+ 	if (err) {
+-		if (test->adjust_tail && !is_adjust_tail_supported(ifobject->xdp_progs))
+-			test->adjust_tail_support = false;
+-		else
++		if (!test->adjust_tail) {
+ 			report_failure(test);
++		} else {
++			bool supported;
++
++			if (is_adjust_tail_supported(ifobject->xdp_progs, &supported))
++				report_failure(test);
++			if (!supported)
++				test->adjust_tail_support = false;
++			else
++				report_failure(test);
++		}
+ 	}
+ 
+ 	pthread_exit(NULL);
 
 -- 
 2.50.1
