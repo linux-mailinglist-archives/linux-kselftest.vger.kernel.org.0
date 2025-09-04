@@ -1,318 +1,130 @@
-Return-Path: <linux-kselftest+bounces-40787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EFD4B440C3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 17:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 87238B440F4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 17:48:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2638D1660C7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 15:36:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54D5A169FAB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 15:48:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D25627F00A;
-	Thu,  4 Sep 2025 15:36:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0FB0266B59;
+	Thu,  4 Sep 2025 15:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bz0XGNUL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dj5L0VLm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C42B274B37;
-	Thu,  4 Sep 2025 15:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E611FBC91;
+	Thu,  4 Sep 2025 15:48:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757000177; cv=none; b=BAgUj21N2EfP8dh6/UeCtYBKK58bF9JtrImtUculGBxiDzjavu7vITVi5Gqp0KR6L2RQ+1qxKPe3qPsLPgMssxpLc0QV+GlRs/mSWwiwKZOXIqjNKf8cKGoipYyuETpy2yf25eOY2Bsv3vKfT5/x41sT+8/ZXJO51AqDlcO29tE=
+	t=1757000932; cv=none; b=KygtOF5uLUWX6wnyCMtO3kxDU3SggHJneH8fKWuuXqDLb3v7hi58QeCp0/Qf3vYuAceaxez+Rf8rQEJRESjyo7Y7xO94l6FhEF97FXf4/miKvpQLr1GMFLLDk/GZznssCTkD78/IB/bAFgGHHFaPmfft65bNdzbiXU67IXmXpuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757000177; c=relaxed/simple;
-	bh=Zhh+/A9kJtldiBdmzD/Y+hpgYjPTJskTjHqrI3X31TM=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=bIF4WEaVQ9QTyC6nSJ1nTC49guaLbZ3LL7tiCdM1Ov1HZ4VNtul+5tDE/Gm0n9BQo6t5QeHUb6KTygARzC0s3q3+1m+mNmcpuckDwpxEsngqpypVP1WnqIgR440m5ShKlN6y+vKc1HK+ie//T0UZJVvh+mFTD0dUiomQZJa1BW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bz0XGNUL; arc=none smtp.client-ip=209.85.222.179
+	s=arc-20240116; t=1757000932; c=relaxed/simple;
+	bh=+vBSXd9sOWgC5H7/jhIKwGpSzEmuCrBs94PQmADH8Q8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WN0CR0A6yFxzLCa9eJxW8ppBiAackeS/KOyv69IjlyHs3dw+G9f2oEjOevgyR24x+TOKi3LGQYpi17vmP6FPOEYsAb6/kIP6bmwGklqXlLEw8/ZWr0HBBBW/hYJ8VgEMIpLoDq7INCgMxefvVDjWawlAzek33xGUUde2F+j1BJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dj5L0VLm; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7f04816589bso117083885a.3;
-        Thu, 04 Sep 2025 08:36:14 -0700 (PDT)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b482fd89b0eso945491a12.2;
+        Thu, 04 Sep 2025 08:48:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757000174; x=1757604974; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FbuSI1OlZ+wbAUYqL8HDadi/6F37Rp4puRFTgu+g04I=;
-        b=Bz0XGNULofM2ECEkRP7yGiZ03R4zmuxQvhX2QsWS8Dz+AUCtLJjvV3QTSD+cFKf1Xb
-         9Hb/f28DV1pfVoVXbKBpjtLsmCKbsGno4KHmECHNkC53yiZsOKqiMJm180VwK0awg6sB
-         jA1tuJXDLqpc22dq3BlZxoUItp7Q7z5Q1efEmG/gkPCjWv34CzFRtioEFy8TD9u+msFM
-         0gJ5T+vBb89MKiVw4EYiHxNxatpw5EUYExhMCkgNpTmB7zccIFQGSVXwQwq9vktJAcwQ
-         x/LANxxauXZjNUsKGBuhqQonADUTxrpQ8KstoRvvryJgtZOA4gJ/L36NEXqupQ1b1YaE
-         s/yw==
+        d=gmail.com; s=20230601; t=1757000931; x=1757605731; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Av1N5aGit/P+J1Yl+2LeeoH83qS/K0Xo7Da29MOYquc=;
+        b=dj5L0VLm2p4w+u7XGZufS+U+pc9Dmm0mSn/MbmXMSHCVxL28wZQ1r6fwNUYe8cCJye
+         jjAenCB/8rpqDOAHPoSFiBHmB481hR1H9KAPG+Bj6jI6ZqnZhYlyZA5pyVSRgLDrsfdC
+         /dl6QtKPvTdImn4tWlyB07m5rSukYqj1QrKUA4XA3WDIVYmf42wzroV+4wkjyQ7/sZ1P
+         4aXzYnYZ0zS33AX3sy7uEkicRat1xwMXmuH7wav5Y5ZhANDpv0oxh5R16gzGjAqn9U6M
+         UHCuNze4+rzKZVxkSV8DnKw4SiU4ZbWyZ5tfmnzAnq4LV44RPJaVOFsCXpNlryuz6Rnz
+         8ltQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757000174; x=1757604974;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FbuSI1OlZ+wbAUYqL8HDadi/6F37Rp4puRFTgu+g04I=;
-        b=rjIlppC+7i0NW0Mg2jLllKxUAUasGG+GFlFFY6nWv/aorK7gvMSthArM0ZyI+Q8sqS
-         14V3t6jBTAtaKm2tPVu0vvS7Q6oORoDsJS52VgF9q3EVEs+/YjnsROluKnVmjS4HEVLD
-         V2qP9DeF/T5KQVZUbX9AjsHpXkiBQrpO7JsEpoOQU+A+I87CO3moO1VO0Iw3T4Gfje8N
-         uSpXUaHeU4uSCmrmhdhjevtBgxqSbBicQ5pznueb/VkyiceaV3d18EnVVonGkzSgqm1X
-         jpAaf8TxDLphQHRmUqVKGuAS0VXf+M59UTY8xxPbyno8gR7EjTa2MKHJkQ4ELwyTY5Fq
-         ED4g==
-X-Forwarded-Encrypted: i=1; AJvYcCWMygYtqogbdhBq+0ynXaDunXBiKUa0Y7b6R7s/6NGG9ITt78Xxoe65UgeaP4SkqA7mCeU39DLV@vger.kernel.org, AJvYcCWYIVrbUNdTWDX74dJE5giXkKp5yuQN7UP/ECTEF0MrJmcZS2BbzWkIooMTLHgc/P1DXEPgWCjc24z5y9b4lK8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyX9oBD3xE87buVMIlfxQWQ4XgJMyALGiyuoBSJjlbxoXK1wzMd
-	AHKbWp0El+81IoA8L5xWWFjVT1LNxEuJk6dl9ieSMmFwR6PCbPQXD/dm
-X-Gm-Gg: ASbGnctAiEzobU7nHSwmR6vBue0zNuVBeWVkeBts5OP9y+NrxavDeN7G5A16mY3HZFX
-	LyR6Zeu9sSPIiqa3PvSE7KKoTyNhfMbNQKJvpbHvy+cTrm9p+vBRP/tk9DkrLtQn3aMXynS01MF
-	B2ddzDFKfGc67uXv9ZG1BmYj0OgfzVUj6YeqellMt/qiCf7HQ+GskNDMJevTk80lDzgLVEn98Al
-	6PXrmBN3AGm6A9P6FoRT1KPSp4zd2VxeW312JxnKqWpiinx06vE6LlWJfd4CefynC3oHJUugpGM
-	ggFwFW5gvsDfntxR3IQBR/sV7mK97neEXtbSMzfTs1U+eBUsypQp/VrULNoxLm4nYDoiQK9Lpx0
-	mV9Rd3qMISDCMLIkzbNeEWS+hvJ5fmXNKK/hFzeGnoE3fVm1Q8gRayYMkm+S1vcCIoftri3npji
-	K02BJVd38ZOreC
-X-Google-Smtp-Source: AGHT+IEUWEXialSoqxANvjGbEt3w97Qry/VSdQePFuCRtV3f3z4eKdLOAvK1JELh20Zu2eyARMKewA==
-X-Received: by 2002:a05:620a:4490:b0:810:919c:ed26 with SMTP id af79cd13be357-810919ced77mr28805185a.29.1757000173567;
-        Thu, 04 Sep 2025 08:36:13 -0700 (PDT)
-Received: from gmail.com (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4b48f7823casm30749311cf.42.2025.09.04.08.36.13
+        d=1e100.net; s=20230601; t=1757000931; x=1757605731;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Av1N5aGit/P+J1Yl+2LeeoH83qS/K0Xo7Da29MOYquc=;
+        b=pNR+CnlEoqSmnsvLs10Ygz4efpOTrTTJwgcKTR8ShYPSCVQb92N+Vu3InlFWA9gS1f
+         mjUamxrXnrQyZ50Di/nFNJNufywe86buEtIYFSyms+t0mp2zOIQZLoClr+N+rqkPbmdB
+         1Nvqb0O0cr/xJ73L5TJjMod6nURamiO9ouOURzCOTh0igQhv2N17IDu4B5P+cuLwlO1G
+         WWf7c4AETr6g0Gn9MfmK0MDNBFQbY+ocCLHU+ycfx3wQMikBBYR2J6ZGWD2/ZgHVyAdY
+         8MiQHN3Qz3oRESMrvJaPobOXkEUQf8i3gkIUcmx4bO/i8qUHkhP4dWGU3hMfshuN7LXI
+         fc+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWAn2dmiY7sCFwz8kDJS5JKE2htjzmaDuIizejR8lVz9xkQt3IcuHAfc6nDO69ep3q3bmrmGAAX58saXns=@vger.kernel.org, AJvYcCWcQ8E8Kzl4VUSQsh4a7bFJCkd+uzkwejf3LAHd8i/pCsZTOJJJ0tNRCLb5zP5+e4AL47gUpY98E6y8wg69AhYl@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaDbxqneaQMbOA13NIhxehR138Np0lSt965q/lO5B9txG4fmM/
+	dVgaEL+mQP/qEpqT4m5v+AU3Lf+N/6615TO1z/5Te9BXLSEW++X5UJWG
+X-Gm-Gg: ASbGncv/iUTeWgptqeJabgnKNYnqcdE0QXrPfKnmpf9fRZcliJ3lwnRLPTsOtoxyrJ0
+	eBykzs/HibG9b/w72GwvFQ8DG8xieP/5ZpsNuy2tRePLW/GILDYivBhepxDiWIBIdVfrc/Cw4tq
+	2YX4mUK3lyxg8eQB/67/nr1BHbzWyYRLL6MuTYi2Rj+tKF2BUVmW6hm6FkvitKJvQkCstva6Xdz
+	KA0fFAfOeb6o+JtadozQVlmpRh1PfAV9ootrVwmN0Rg6f++GoG9m7CS5f0/fTH9r/cvHQrt+szs
+	1Qxlbrly1zJcv2BwRdYD3y/k7O1rSRU0Wbt6MExp2haSWnI13wLe7sS9/q+6DVd8Sg0nzLR3lMA
+	RTJLd392PolHKhjqT6DM=
+X-Google-Smtp-Source: AGHT+IFvFCxcwLLfF8xIU765xduJQycqiwbtTv5fPpk1+u5jwXz+C/chGbozQDewxf+A8z/4Sew+ZA==
+X-Received: by 2002:a17:903:2b0e:b0:24c:7861:2ee9 with SMTP id d9443c01a7336-24c78613106mr106139185ad.2.1757000930537;
+        Thu, 04 Sep 2025 08:48:50 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24ccd763948sm17925345ad.118.2025.09.04.08.48.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Sep 2025 08:36:13 -0700 (PDT)
-Date: Thu, 04 Sep 2025 11:36:12 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Marc Harvey <marcharvey@google.com>, 
- jiri@resnulli.us, 
- andrew+netdev@lunn.ch
-Cc: edumazet@google.com, 
- willemb@google.com, 
- maheshb@google.com, 
- netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- kuba@kernel.org, 
- liuhangbin@gmail.com, 
- Marc Harvey <marcharvey@google.com>
-Message-ID: <willemdebruijn.kernel.22c2bf5d2d4f3@gmail.com>
-In-Reply-To: <20250904015424.1228665-1-marcharvey@google.com>
-References: <20250904015424.1228665-1-marcharvey@google.com>
-Subject: Re: [PATCH net-next v2] selftests: net: Add tests to verify team
- driver option set and get.
+        Thu, 04 Sep 2025 08:48:49 -0700 (PDT)
+Message-ID: <7a037c0579e1cbabb83935c05c24ddbc6bc43327.camel@gmail.com>
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Fix the invalid operand for
+ instruction issue
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Feng Yang <yangfeng59949@163.com>, ast@kernel.org, daniel@iogearbox.net,
+ 	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, 	yonghong.song@linux.dev, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Date: Thu, 04 Sep 2025 08:48:45 -0700
+In-Reply-To: <20250828020135.248869-1-yangfeng59949@163.com>
+References: <20250828020135.248869-1-yangfeng59949@163.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
 
-Marc Harvey wrote:
-> There are currently no kernel tests that verify setting and getting
-> options of the team driver.
-> 
-> In the future, options may be added that implicitly change other
-> options, which will make it useful to have tests like these that show
-> nothing breaks. There will be a follow up patch to this that adds new
-> "rx_enabled" and "tx_enabled" options, which will implicitly affect the
-> "enabled" option value and vice versa.
-> 
-> The tests use teamnl to first set options to specific values and then
-> gets them to compare to the set values.
-> 
-> Signed-off-by: Marc Harvey <marcharvey@google.com>
+On Thu, 2025-08-28 at 10:01 +0800, Feng Yang wrote:
+> From: Feng Yang <yangfeng@kylinos.cn>
+>=20
+> The following issue occurs when compiling with clang version 17.0.6:
+> progs/compute_live_registers.c:251:3: error: invalid operand for instruct=
+ion
+>   251 |                 "r0 =3D 1;"
+>       |                 ^
+> <inline asm>:1:22: note: instantiated into assembly here
+>     1 |         r0 =3D 1;r2 =3D 2;if r1 & 0x7 goto +1;exit;r0 =3D r2;exit=
+;
+>       |                             ^
+> 1 error generated.
+>=20
+> Use __imm_insn to fix this issue.
+>=20
+> Fixes: 4a4b84ba9e453 ("selftests/bpf: verify jset handling in CFG computa=
+tion")
+> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
 > ---
-> Changes in v2:
->   - Fixed shellcheck failures.
->   - Fixed test failing in vng by adding a config option to enable the
->     team driver's active backup mode.
->   - Link to v1: https://lore.kernel.org/netdev/20250902235504.4190036-1-marcharvey@google.com/
-> 
->  .../selftests/drivers/net/team/Makefile       |   6 +-
->  .../testing/selftests/drivers/net/team/config |   1 +
->  .../selftests/drivers/net/team/options.sh     | 192 ++++++++++++++++++
->  3 files changed, 197 insertions(+), 2 deletions(-)
->  create mode 100755 tools/testing/selftests/drivers/net/team/options.sh
-> 
-> diff --git a/tools/testing/selftests/drivers/net/team/Makefile b/tools/testing/selftests/drivers/net/team/Makefile
-> index eaf6938f100e..8b00b70ce67f 100644
-> --- a/tools/testing/selftests/drivers/net/team/Makefile
-> +++ b/tools/testing/selftests/drivers/net/team/Makefile
-> @@ -1,11 +1,13 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # Makefile for net selftests
->  
-> -TEST_PROGS := dev_addr_lists.sh propagation.sh
-> +TEST_PROGS := dev_addr_lists.sh propagation.sh options.sh
->  
->  TEST_INCLUDES := \
->  	../bonding/lag_lib.sh \
->  	../../../net/forwarding/lib.sh \
-> -	../../../net/lib.sh
-> +	../../../net/lib.sh \
-> +	../../../net/in_netns.sh \
-> +	../../../net/lib/sh/defer.sh \
 
-Where is defer used? Also no backslash at last line.
->  
->  include ../../../lib.mk
-> diff --git a/tools/testing/selftests/drivers/net/team/config b/tools/testing/selftests/drivers/net/team/config
-> index 636b3525b679..558e1d0cf565 100644
-> --- a/tools/testing/selftests/drivers/net/team/config
-> +++ b/tools/testing/selftests/drivers/net/team/config
-> @@ -3,4 +3,5 @@ CONFIG_IPV6=y
->  CONFIG_MACVLAN=y
->  CONFIG_NETDEVSIM=m
->  CONFIG_NET_TEAM=y
-> +CONFIG_NET_TEAM_MODE_ACTIVEBACKUP=y
->  CONFIG_NET_TEAM_MODE_LOADBALANCE=y
-> diff --git a/tools/testing/selftests/drivers/net/team/options.sh b/tools/testing/selftests/drivers/net/team/options.sh
-> new file mode 100755
-> index 000000000000..82bf22aa3480
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/team/options.sh
-> @@ -0,0 +1,192 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# These tests verify basic set and get functionality of the team
-> +# driver options over netlink.
-> +
-> +# Run in private netns.
-> +test_dir="$(dirname "$0")"
-> +if [[ $# -eq 0 ]]; then
-> +        "${test_dir}"/../../../net/in_netns.sh "$0" __subprocess
-> +        exit $?
-> +fi
-> +
-> +ALL_TESTS="
-> +        team_test_options
-> +"
-> +
-> +source "${test_dir}/../../../net/lib.sh"
-> +
-> +TEAM_PORT="team0"
-> +MEMBER_PORT="dummy0"
-> +
-> +setup()
-> +{
-> +        ip link add name "${MEMBER_PORT}" type dummy
-> +        ip link add name "${TEAM_PORT}" type team
-> +}
-> +
-> +get_and_check_value()
-> +{
-> +        local option_name="$1"
-> +        local expected_value="$2"
-> +        local port_flag="$3"
-> +
-> +        local value_from_get
-> +
-> +        if ! value_from_get=$(teamnl "${TEAM_PORT}" getoption "${option_name}" \
-> +                        "${port_flag}"); then
-> +                echo "Could not get option '${option_name}'" >&2
-> +                return 1
-> +        fi
-> +
-> +        if [[ "${value_from_get}" != "${expected_value}" ]]; then
-> +                echo "Incorrect value for option '${option_name}'" >&2
-> +                echo "get (${value_from_get}) != set (${expected_value})" >&2
-> +                return 1
-> +        fi
-> +}
-> +
-> +set_and_check_get()
-> +{
-> +        local option_name="$1"
-> +        local option_value="$2"
-> +        local port_flag="$3"
-> +
-> +        local value_from_get
-> +
-> +        if ! teamnl "${TEAM_PORT}" setoption "${option_name}" "${option_value}" \
-> +                        "${port_flag}"; then
-> +                echo "'setoption ${option_name} ${option_value}' failed" >&2
-> +                return 1
-> +        fi
-> +
-> +        get_and_check_value "${option_name}" "${option_value}" "${port_flag}"
-> +        return $?
-> +}
-> +
-> +# Get a "port flag" to pass to the `teamnl` command.
-> +# E.g. $1="dummy0" -> "port=dummy0",
-> +#      $1=""       -> ""
-> +get_port_flag()
-> +{
-> +        local port_name="$1"
-> +
-> +        if [[ -n "${port_name}" ]]; then
-> +                echo "--port=${port_name}"
-> +        fi
-> +}
-> +
-> +attach_port_if_specified()
-> +{
-> +        local port_name="${1}"
+Hi Feng,
 
-nit: parentheses around single character variable. Inconsistent.
+This message felt through cracks a bit.  It's a minor thing, of
+course, but there is a legit question of how much backward we'd like
+to support clang versions for the test suite.
 
-> +
-> +        if [[ -n "${port_name}" ]]; then
-> +                ip link set dev "${port_name}" master "${TEAM_PORT}"
-> +                return $?
-> +        fi
-> +}
-> +
-> +detach_port_if_specified()
-> +{
-> +        local port_name="${1}"
-> +
-> +        if [[ -n "${port_name}" ]]; then
-> +                ip link set dev "${port_name}" nomaster
-> +                return $?
-> +        fi
-> +}
-> +
-> +#######################################
-> +# Test that an option's get value matches its set value.
-> +# Globals:
-> +#   RET - Used by testing infra like `check_err`.
-> +#   EXIT_STATUS - Used by `log_test` to whole script exit value.
-> +# Arguments:
-> +#   option_name - The name of the option.
-> +#   value_1 - The first value to try setting.
-> +#   value_2 - The second value to try setting.
-> +#   port_name - The (optional) name of the attached port.
-> +#######################################
+Could you please provide some detail on your build environment,
+why do you want to run the tests with older clang?
 
-Just curious: is this a standard documentation format?
-
-> +team_test_option()
-> +{
-> +        local option_name="$1"
-> +        local value_1="$2"
-> +        local value_2="$3"
-> +        local possible_values="$2 $3 $2"
-> +        local port_name="$4"
-> +        local port_flag
-> +
-> +        RET=0
-> +
-> +        echo "Setting '${option_name}' to '${value_1}' and '${value_2}'"
-> +
-> +        attach_port_if_specified "${port_name}"
-> +        check_err $? "Couldn't attach ${port_name} to master"
-
-Can the rest of the test continue if this command failed?
-
-> +        port_flag=$(get_port_flag "${port_name}")
-> +
-> +        # Set and get both possible values.
-> +        for value in ${possible_values}; do
-> +                set_and_check_get "${option_name}" "${value}" "${port_flag}"
-> +                check_err $? "Failed to set '${option_name}' to '${value}'"
-> +        done
-> +
-> +        detach_port_if_specified "${port_name}"
-> +        check_err $? "Couldn't detach ${port_name} from its master"
-> +
-> +        log_test "Set + Get '${option_name}' test"
-> +}
-
+[...]
 
