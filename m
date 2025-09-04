@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-40755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB3C9B436F8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 11:23:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A065B43713
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 11:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50EA71C2717A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 09:23:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58D5B173A06
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 09:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 109282EF669;
-	Thu,  4 Sep 2025 09:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1872F4A0E;
+	Thu,  4 Sep 2025 09:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R6RV3lkL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1mky/tm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA192EF662;
-	Thu,  4 Sep 2025 09:23:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3480277CB4;
+	Thu,  4 Sep 2025 09:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756977803; cv=none; b=tqxfYdDS11YtI1hYTsFdzBE67E3ksyPYg7pHD7PS99BYyLgVsV+kvcQGIIL/2qQSdlAB0uvQKxHAK/H5xAOTLqvCTQuVgC3H2+p/EC9XDg1r9KWfz1HBsSHQEwGdx9u8e9FsBc7W6Py1Ku8eupna5NnZeM1xSZOgts5hPgMjjIg=
+	t=1756978073; cv=none; b=PL63Fqy4MNkV3R0iwBCN7NF4EPaNQV/mS2/K/ZVlOAWaplVyKBYoAEAo/Dvlbj9gJ4E2dLyoK2so8naN5s9s2N+/iCs2gt6ha31PQ5KhkGFTcjdql5Rm7FbE/yc3LMnQCYbT7HSi3XTESARoV7Yep0x/rprUF+8HmvNDitgXJnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756977803; c=relaxed/simple;
-	bh=TDSln1mF3xgUP8nsTtJypSwko7BDQHldbUJU4u28Q5k=;
+	s=arc-20240116; t=1756978073; c=relaxed/simple;
+	bh=3vmcO3IDLVqiIgvWlLZTNLw6ISoWbnTQAzKUb0u3ILk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TG5S2Npj/VRDhw4MKnO08e4bPSgo/q92U/VW9H6Z2098Z9DGH8xGbL9XYutNQGqcdeDxL4BCovgFg48obfNYz26tblIIHVtWiFFfBo6aX7QUN4CcuaBqVSdK2Ghsk/JtyfS35ezYiXDzt+tjM1+WdvM+SB33L9gcszL5Tj9PpFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R6RV3lkL; arc=none smtp.client-ip=192.198.163.10
+	 In-Reply-To:Content-Type; b=AY9FvpfbepdE5HdTy1405J+uvBoZjyObSrxBLmm8DYw9MWKW+7jhu+2VWahRmng+IYPppJ9e0z0O6XTwaK7fIxQc0LK6LpXyHnEEVjM+Gqe+0hpBkwZloja1OJZ86vjlHwnODDTUblOpL5LM2snIIwZ5uQ9ckRlKMbHdV8/+mn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1mky/tm; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756977801; x=1788513801;
+  t=1756978072; x=1788514072;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=TDSln1mF3xgUP8nsTtJypSwko7BDQHldbUJU4u28Q5k=;
-  b=R6RV3lkL/WCPnDdBuWG0HDTGl/y5PLg65Y+Ew036cc6jT7jasfpJ193d
-   ddP3dX8hPnIDI+hY7DHcCpe9amnXTkPI8ivlOUsKGvXJekQOwZexRxn4r
-   goaD+8uWFBoNnpDnARxLyhtLf5Sj1iyUBTjmVUcvtla/Chtn9/fiiNg1B
-   5sj4TSc5JjapEp2NfU3E92cvnsVDn7wjWWtZ12gRzhtcqKkOz6JfmfnT0
-   qSX/0bBkJgt9zTeouIz+EvhWdCCiAtMpIJZOfs1jgoB0gqT/zuYSDZeeK
-   8ecZTO9mvbUyct1HNBTYMeNNeRnQzsVt204XfN5nFa134+YFbG2McS0Mx
-   w==;
-X-CSE-ConnectionGUID: TmqzdbTsTMuTnmb/0+omPA==
-X-CSE-MsgGUID: o2T1I4oKRI27u3qrrukXyA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="70683128"
+  bh=3vmcO3IDLVqiIgvWlLZTNLw6ISoWbnTQAzKUb0u3ILk=;
+  b=b1mky/tmPhOHLK1kWPV1MQR5+zFwuFfLc+Lw0Zff42ob3FM4ODKxiXf/
+   uWH7QqcOEz4mkoazlmS20LnTSayphcYsAqPpi/GWTao/LM7Wp+7I7nDwT
+   1cW/YxknPRmONch1x+WJHH8J7rNkMxG8aMazfJT7dLwDoyS5Ue7eD7x+X
+   IDKA2DFcOql5E1ywLtjPjejWS2ijJlhZrs/R2msb6yT2Kbt1dCeY4VJVt
+   TErvcfWDTliSx/DcR8UrEIk5EBQ7rbxTrp+mGNn9OYL0Wmle49oTJ4XFu
+   bYblwhUf/U1O9ednK8Bpk3t/5sdWH6qpnet7Jc8Rm99fcV+WlXPmj4ZMa
+   Q==;
+X-CSE-ConnectionGUID: RHe/RclLR8Ku7DfT59fbqw==
+X-CSE-MsgGUID: Rjgn2z/KQm+K2YGtJ2gMJw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="62951487"
 X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="70683128"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 02:23:20 -0700
-X-CSE-ConnectionGUID: z1dtnF/cQLmbmzzeQ1j0pA==
-X-CSE-MsgGUID: 9JIJ4CuERhKgU/cdXTESqQ==
+   d="scan'208";a="62951487"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 02:27:51 -0700
+X-CSE-ConnectionGUID: wlcGnxx/Su2kFT5/P2TcRg==
+X-CSE-MsgGUID: RjDfgkfRS/unBfaFd0oW5g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="172209461"
+   d="scan'208";a="195501501"
 Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 02:23:16 -0700
-Message-ID: <41c87e38-4855-48da-bb7e-fd9b3c39a439@linux.intel.com>
-Date: Thu, 4 Sep 2025 17:23:13 +0800
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 02:27:46 -0700
+Message-ID: <9247e150-800c-4e95-a5e9-e0032dc7d3ed@linux.intel.com>
+Date: Thu, 4 Sep 2025 17:27:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 02/21] KVM: selftests: Expose functions to get default
- sregs values
+Subject: Re: [PATCH v10 03/21] KVM: selftests: Expose function to allocate
+ guest vCPU stack
 To: Sagi Shahar <sagis@google.com>
 Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
  Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
@@ -84,106 +84,88 @@ Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
  Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
  kvm@vger.kernel.org
 References: <20250904065453.639610-1-sagis@google.com>
- <20250904065453.639610-3-sagis@google.com>
+ <20250904065453.639610-4-sagis@google.com>
 Content-Language: en-US
 From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20250904065453.639610-3-sagis@google.com>
+In-Reply-To: <20250904065453.639610-4-sagis@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 9/4/2025 2:54 PM, Sagi Shahar wrote:
-> TDX can't set sregs values directly using KVM_SET_SREGS. Expose the
-> default values of certain sregs used by TDX VMs so they can be set
-> manually.
+> TDX guests' registers cannot be initialized directly using
+> vcpu_regs_set(), hence the stack pointer needs to be initialized by
+> the guest itself, running boot code beginning at the reset vector.
+>
+> Expose the function to allocate the guest stack so that TDX
+> initialization code can allocate it itself and skip the allocation in
+> vm_arch_vcpu_add() in that case.
 >
 > Signed-off-by: Sagi Shahar <sagis@google.com>
 
 Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
-One suggestion:
-It's better to add change history so that reviewers can know the change quickly
-without comparing b/t versions.
-
 > ---
->   .../selftests/kvm/include/x86/processor.h     | 33 +++++++++++++++++++
->   .../testing/selftests/kvm/lib/x86/processor.c | 12 +++----
->   2 files changed, 38 insertions(+), 7 deletions(-)
+>   .../selftests/kvm/include/x86/processor.h        |  2 ++
+>   tools/testing/selftests/kvm/lib/x86/processor.c  | 16 +++++++++++-----
+>   2 files changed, 13 insertions(+), 5 deletions(-)
 >
 > diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
-> index 2efb05c2f2fb..f610c09cadf4 100644
+> index f610c09cadf4..8e75df5e6bc9 100644
 > --- a/tools/testing/selftests/kvm/include/x86/processor.h
 > +++ b/tools/testing/selftests/kvm/include/x86/processor.h
-> @@ -27,6 +27,10 @@ extern uint64_t guest_tsc_khz;
->   #define MAX_NR_CPUID_ENTRIES 100
->   #endif
+> @@ -1109,6 +1109,8 @@ static inline void vcpu_clear_cpuid_feature(struct kvm_vcpu *vcpu,
+>   	vcpu_set_or_clear_cpuid_feature(vcpu, feature, false);
+>   }
 >   
-> +#ifndef NUM_INTERRUPTS
-> +#define NUM_INTERRUPTS 256
-> +#endif
+> +vm_vaddr_t kvm_allocate_vcpu_stack(struct kvm_vm *vm);
 > +
->   #define NONCANONICAL 0xaaaaaaaaaaaaaaaaull
+>   uint64_t vcpu_get_msr(struct kvm_vcpu *vcpu, uint64_t msr_index);
+>   int _vcpu_set_msr(struct kvm_vcpu *vcpu, uint64_t msr_index, uint64_t msr_value);
 >   
->   /* Forced emulation prefix, used to invoke the emulator unconditionally. */
-> @@ -1456,4 +1460,33 @@ void virt_map_level(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
->   
->   bool sys_clocksource_is_based_on_tsc(void);
->   
-> +static inline uint16_t kvm_get_default_idt_limit(void)
-> +{
-> +	return NUM_INTERRUPTS * sizeof(struct idt_entry) - 1;
-> +}
-> +
-> +static inline uint16_t kvm_get_default_gdt_limit(void)
-> +{
-> +	return getpagesize() - 1;
-> +}
-> +
-> +static inline uint64_t kvm_get_default_cr0(void)
-> +{
-> +	return X86_CR0_PE | X86_CR0_NE | X86_CR0_PG;
-> +}
-> +
-> +static inline uint64_t kvm_get_default_cr4(void)
-> +{
-> +	uint64_t cr4 = X86_CR4_PAE | X86_CR4_OSFXSR;
-> +
-> +	if (kvm_cpu_has(X86_FEATURE_XSAVE))
-> +		cr4 |= X86_CR4_OSXSAVE;
-> +	return cr4;
-> +}
-> +
-> +static inline uint64_t kvm_get_default_efer(void)
-> +{
-> +	return EFER_LME | EFER_LMA | EFER_NX;
-> +}
-> +
->   #endif /* SELFTEST_KVM_PROCESSOR_H */
 > diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-> index d4c19ac885a9..83efcf48faad 100644
+> index 83efcf48faad..82369373e843 100644
 > --- a/tools/testing/selftests/kvm/lib/x86/processor.c
 > +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-> @@ -498,15 +498,13 @@ static void vcpu_init_sregs(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
->   	vcpu_sregs_get(vcpu, &sregs);
+> @@ -658,12 +658,9 @@ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
+>   	vcpu_regs_set(vcpu, &regs);
+>   }
 >   
->   	sregs.idt.base = vm->arch.idt;
-> -	sregs.idt.limit = NUM_INTERRUPTS * sizeof(struct idt_entry) - 1;
-> +	sregs.idt.limit = kvm_get_default_idt_limit();
->   	sregs.gdt.base = vm->arch.gdt;
-> -	sregs.gdt.limit = getpagesize() - 1;
-> +	sregs.gdt.limit = kvm_get_default_gdt_limit();
+> -struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+> +vm_vaddr_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
+>   {
+> -	struct kvm_mp_state mp_state;
+> -	struct kvm_regs regs;
+>   	vm_vaddr_t stack_vaddr;
+> -	struct kvm_vcpu *vcpu;
 >   
-> -	sregs.cr0 = X86_CR0_PE | X86_CR0_NE | X86_CR0_PG;
-> -	sregs.cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
-> -	if (kvm_cpu_has(X86_FEATURE_XSAVE))
-> -		sregs.cr4 |= X86_CR4_OSXSAVE;
-> -	sregs.efer |= (EFER_LME | EFER_LMA | EFER_NX);
-> +	sregs.cr0 = kvm_get_default_cr0();
-> +	sregs.cr4 |= kvm_get_default_cr4();
-> +	sregs.efer |= kvm_get_default_efer();
+>   	stack_vaddr = __vm_vaddr_alloc(vm, DEFAULT_STACK_PGS * getpagesize(),
+>   				       DEFAULT_GUEST_STACK_VADDR_MIN,
+> @@ -684,6 +681,15 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+>   		    "__vm_vaddr_alloc() did not provide a page-aligned address");
+>   	stack_vaddr -= 8;
 >   
->   	kvm_seg_set_unusable(&sregs.ldt);
->   	kvm_seg_set_kernel_code_64bit(&sregs.cs);
+> +	return stack_vaddr;
+> +}
+> +
+> +struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+> +{
+> +	struct kvm_mp_state mp_state;
+> +	struct kvm_regs regs;
+> +	struct kvm_vcpu *vcpu;
+> +
+>   	vcpu = __vm_vcpu_add(vm, vcpu_id);
+>   	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+>   	vcpu_init_sregs(vm, vcpu);
+> @@ -692,7 +698,7 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+>   	/* Setup guest general purpose registers */
+>   	vcpu_regs_get(vcpu, &regs);
+>   	regs.rflags = regs.rflags | 0x2;
+> -	regs.rsp = stack_vaddr;
+> +	regs.rsp = kvm_allocate_vcpu_stack(vm);
+>   	vcpu_regs_set(vcpu, &regs);
+>   
+>   	/* Setup the MP state */
 
 
