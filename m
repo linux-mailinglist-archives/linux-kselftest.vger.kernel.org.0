@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-40734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC878B432F5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 08:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E04ABB432FA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 08:56:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B06CF582F9F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 06:56:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9588B5649B3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 06:56:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2705288C3F;
-	Thu,  4 Sep 2025 06:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BFF28B4FA;
+	Thu,  4 Sep 2025 06:55:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gAWG4MZM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1EWDlQ8D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51637288513
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Sep 2025 06:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F4C928935C
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Sep 2025 06:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756968912; cv=none; b=CXv3kahrD4ZfkPhTScy6g1R54dl9YBQ8OHxd7UbCShW5ntNxA3QjZUfPbHLN88Uy9lK47ZFhgXAMrgxdvqcn+uwnbXoPlqOlfUfvhMvtJkLAJ5TQJubmCMLn2RTB9NxaOWj+7AAN7RMQyaJbBNzoErPD9PGGoMsukM5qLsqaRqw=
+	t=1756968914; cv=none; b=hVtk4UZ0GSVqs4DAmxMJH7BMvMKouFtVthgicHwJlK0eYFyITbNX3yCJbWag3865T+SxrA+T6a0XUDcMhd9An56bHNhOYItlW3j0SIqxgEtdF8UhySfPXDxxVnMZARbQgeiGYh1G8wQ9RVH846fxvDptAAeRWRLoXIuTwEzct6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756968912; c=relaxed/simple;
-	bh=7B7lwBJ0jXTeacBWtIq12DWMmRMY2GhnIen+mcsaZ6A=;
+	s=arc-20240116; t=1756968914; c=relaxed/simple;
+	bh=jTAk0VRpOVV4bc0UhlAMxjyl0WAtBQgyMPsTPcfAW2Y=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=B7vu4Y78N07MxzBS+HTkoW8vFAIruHGTtpCmlSCsoSr8j62B2KhSIatHyaOJRiQaXyzE1vGT6acQQ57Ynpu5/HV3AR+hjgXLgdJ4T8y7yfH+geBMowSX/ywd7/y7w3h/Eh+i0AN4yiSq8L41CC/0dVniXmXMzJO5sCe7WUeo+I0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gAWG4MZM; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=kj5ZN049vvLMP+zAwBmcuXorpAG6PT8KidV4x0Q4QJYTMVAAP7uuE/MK8sGG/66xXc6zyewb0NMVoqfBooJwpkgYsvqwkp4DQXDb9z5mqw2HM7Q9jXDoTOuLWePLgQbIkAjEMfEmJHsW2qU7rDgQg7e2mbhG9YmBpAUUheksIsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1EWDlQ8D; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-329dca88b5aso2231319a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Sep 2025 23:55:11 -0700 (PDT)
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-249118cb74cso9046835ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Sep 2025 23:55:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756968911; x=1757573711; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1756968912; x=1757573712; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5YEQCBMmqJuzc9aQAf9Qk31e/qZjHLfuJ8wSwcpoTOE=;
-        b=gAWG4MZMEg2jKegzM1onX4lLzdH8stlLSwErx0eGW+fJls3ZlbFG80SVnKFA18I3zJ
-         2pe/fFlp7szapVeT+ibap3r4kShYKbezatqrc2hDiwKCFcYIUx7bTp18PKriv5gOQysr
-         F8dMboJjoYNA3IsTCVoO/LNtGAi1Om03DottE5nAx4hM6PoHeJTHFXkoziByUIN8WtYT
-         tc0NBQ1c9vp3to93Ajvh4f8qg6VqTa1VUj4axms1YVTm5xpy/6lh49PMNDBzOOe/b7TS
-         j2N66cO3UhtLBCxg+EBLftklRYACEL9j9BX+BZqUoNSD9gFHhiu/3Qvs4T1jQMhaXEJE
-         p9GA==
+        bh=2BNUyviqUil8XBJbXZDuQ3pKbq0VlqMJJavKpGuaG4I=;
+        b=1EWDlQ8DXnJpXX/L0K3Yobmk5UDc0JDWkin9dR8nha6JkLYuohLW+vT1v3qRZyMUNu
+         4Z2jkJQEGdHUsmPTG6E2W577bPvnDFbsYOnBPGncumnHRSKpEg6IlNp8nA2jxBzKkCcQ
+         7ZhaL3ly0abhZgpiQfgTFZRwocaX39b2UD5iOjIDCf139R87Iq8HPdcv6QhAg6ZGzlDq
+         Lg0ZU83dFU4he3Jq4GiTe/VmAsfFVG7YE+ocVRok2wnnGALThqEYBMwD7CXvLE11Z2sz
+         maEja5ANyXbFjmi6q/FvdRN0K1mxE5FbI6rQcbEaVneeKXoHGqkEuXC8+C1rs+TiBXAX
+         jXaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756968911; x=1757573711;
+        d=1e100.net; s=20230601; t=1756968912; x=1757573712;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5YEQCBMmqJuzc9aQAf9Qk31e/qZjHLfuJ8wSwcpoTOE=;
-        b=bM1Ahri4Qkyk3t+gxvgL+NvywsBwQB5SJ8wM11/mTjhcQwb5CKaijz6b4c/n4x5zgx
-         vdsV3jThjhN15APJva9nX4PB0HynAb1bULQpME22hn/zqZhQgepJMZ0KvQROI5ZDm0U5
-         g3uPgjf6qgHqObD1CwAAyi6oue97DWRADNs5yxk0LAlisgeNukjnAHEKWaCxN4cwLZRZ
-         2yWVjSVOkmdc2hGjFUXiPsyvvLzCSHZthdNTKOhdiFORv/B11R2qM0uwnpAwxbsg6BEA
-         phTEwwYuiqr67Mpz0soulj/b9qsItDSPU/PjHFyDS+OGac/mamb3hPa20kSz7HYtmO56
-         zd6g==
-X-Gm-Message-State: AOJu0YwlEsjyh/iqbpwwnK18UOF7EUHHML/ALwDBPb9RShREkmzw5dMA
-	HTxwSNP1Pwb8fS9ziOzH4fFlNVpdOtO1RaoA6nQoUBPf0wPmM1OfsbvJ46cCYOmu2sh3hzh+rky
-	CIND71IDxN3TydiRo0KSxy3UKc5YfRyB4oXDkJvOFxMeIE4Taa/rqUTuUFyAkiFwhTRflGbkJtX
-	rA0vMJZTpX/eg4fFto3fUT7sp7rw87tYqJxyjVOEi7oqw=
-X-Google-Smtp-Source: AGHT+IE9YYmncisXydvkAn1sJlRRuLIxllELyPyRwTcYcKt7NlhRMcgbBqYTWjEB12Ff/oJCvryXlzSM4Q==
-X-Received: from pjh4.prod.google.com ([2002:a17:90b:3f84:b0:329:d461:98a4])
- (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2d8c:b0:32b:6132:5f99
- with SMTP id 98e67ed59e1d1-32b61326264mr6170784a91.15.1756968910496; Wed, 03
- Sep 2025 23:55:10 -0700 (PDT)
-Date: Wed,  3 Sep 2025 23:54:35 -0700
+        bh=2BNUyviqUil8XBJbXZDuQ3pKbq0VlqMJJavKpGuaG4I=;
+        b=IPmjWhutgXlFr7r8+RfEJLiM845qV1P1kBrifCJiJkXt+jKljRCrxP8hATuRdDRpbQ
+         R0Pbsl75ATrVKFU5FNAxQRYDPpKVNL1P6eAUQhsXUjQDozk/RlEHAY30eLHKiZJd6jMe
+         M2EeLIC1Qwjcadc5cW/R3YTldsTOUe9r+WoDuYsLjl5NRxPu9a5pdTVh/QHQIzYHjGfF
+         Fu//3gpLj/9/GaOxWfRSoFPiPrhvYGJsn2hZrBHizYPmSCVQWxOwh4SK50jOOlo6zdyu
+         6vFhfnedZ4RSpuyLnfu29BPk5rqREHml542TQ/Hr9eAxP74gp3TPq3YKI0x97i+QFm/A
+         cGow==
+X-Gm-Message-State: AOJu0Yyo43RkPx+FNvXQ2F24twWSH3CV8L4cKgzd6kOAzNQjNowsB9PC
+	h7n26AJLZISmY/Ryu8kDYMeACFxiZfBAENblOachi0/LyaSYRbTGpBadB8VwvSPR+GjGBmoyCJl
+	96yV9DcGYtFWlJEcrMgUzW6zzGqXWKeyFOHkz+YP7zhc5TqSnn8V0OfO4zVZrnMGAaaPZ2ZZYjh
+	KuZID0aOsaXNvp7ywmYzjRPtYrqrqGkWimU+1B/dBrVBw=
+X-Google-Smtp-Source: AGHT+IH5hLY38bpfnaQsbJuP8cpIl0UsXd1oicIeqNFK0OMpEiH24w+v7AklRI93GhnSPuMBYNIePkxKxQ==
+X-Received: from plblm13.prod.google.com ([2002:a17:903:298d:b0:248:9b66:3356])
+ (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:28c:b0:248:811e:f873
+ with SMTP id d9443c01a7336-24944ab8f4bmr241345565ad.36.1756968912276; Wed, 03
+ Sep 2025 23:55:12 -0700 (PDT)
+Date: Wed,  3 Sep 2025 23:54:36 -0700
 In-Reply-To: <20250904065453.639610-1-sagis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,9 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250904065453.639610-1-sagis@google.com>
 X-Mailer: git-send-email 2.51.0.338.gd7d06c2dae-goog
-Message-ID: <20250904065453.639610-6-sagis@google.com>
-Subject: [PATCH v10 05/21] KVM: selftests: Expose segment definitons to
- assembly files
+Message-ID: <20250904065453.639610-7-sagis@google.com>
+Subject: [PATCH v10 06/21] KVM: selftests: Add kbuild definitons
 From: Sagi Shahar <sagis@google.com>
 To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
 	Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>, 
@@ -91,58 +90,43 @@ To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
 Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Move kernel segment definitions to a separate file which can be included
-from assembly files.
+Add kbuild.h that can be used by files under tools/
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Definitions are taken from the original definitions at
+include/linux/kbuild.h
+
+This is needed to expose values from c code to assembly code.
+
 Signed-off-by: Sagi Shahar <sagis@google.com>
 ---
- .../selftests/kvm/include/x86/processor_asm.h        | 12 ++++++++++++
- tools/testing/selftests/kvm/lib/x86/processor.c      |  5 +----
- 2 files changed, 13 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/x86/processor_asm.h
+ tools/include/linux/kbuild.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 tools/include/linux/kbuild.h
 
-diff --git a/tools/testing/selftests/kvm/include/x86/processor_asm.h b/tools/testing/selftests/kvm/include/x86/processor_asm.h
+diff --git a/tools/include/linux/kbuild.h b/tools/include/linux/kbuild.h
 new file mode 100644
-index 000000000000..7e5386a85ca8
+index 000000000000..62e20ba9380e
 --- /dev/null
-+++ b/tools/testing/selftests/kvm/include/x86/processor_asm.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Used for storing defines used by both processor.c and assembly code.
-+ */
-+#ifndef SELFTEST_KVM_PROCESSOR_ASM_H
-+#define SELFTEST_KVM_PROCESSOR_ASM_H
++++ b/tools/include/linux/kbuild.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __TOOLS_LINUX_KBUILD_H
++#define __TOOLS_LINUX_KBUILD_H
 +
-+#define KERNEL_CS	0x8
-+#define KERNEL_DS	0x10
-+#define KERNEL_TSS	0x18
++#include <stddef.h>
 +
-+#endif  // SELFTEST_KVM_PROCESSOR_ASM_H
-diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-index 2a44831e0cc9..623168ea9a44 100644
---- a/tools/testing/selftests/kvm/lib/x86/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-@@ -7,6 +7,7 @@
- #include "test_util.h"
- #include "kvm_util.h"
- #include "processor.h"
-+#include "processor_asm.h"
- #include "sev.h"
- #include "tdx/tdx_util.h"
- 
-@@ -14,10 +15,6 @@
- #define NUM_INTERRUPTS 256
- #endif
- 
--#define KERNEL_CS	0x8
--#define KERNEL_DS	0x10
--#define KERNEL_TSS	0x18
--
- vm_vaddr_t exception_handlers;
- bool host_cpu_is_amd;
- bool host_cpu_is_intel;
++#define DEFINE(sym, val) \
++	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"" : : "i" (val))
++
++#define BLANK() asm volatile("\n.ascii \"->\"" : : )
++
++#define OFFSET(sym, str, mem) \
++	DEFINE(sym, offsetof(struct str, mem))
++
++#define COMMENT(x) \
++	asm volatile("\n.ascii \"->#" x "\"")
++
++#endif /* __TOOLS_LINUX_KBUILD_H */
 -- 
 2.51.0.338.gd7d06c2dae-goog
 
