@@ -1,171 +1,138 @@
-Return-Path: <linux-kselftest+bounces-40756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40757-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A065B43713
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 11:27:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 242EBB4377E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 11:48:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58D5B173A06
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 09:27:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B14D83AA32A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 09:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1872F4A0E;
-	Thu,  4 Sep 2025 09:27:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4328B2F60DD;
+	Thu,  4 Sep 2025 09:48:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1mky/tm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ji4B1n1Z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3480277CB4;
-	Thu,  4 Sep 2025 09:27:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE652E62D1;
+	Thu,  4 Sep 2025 09:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756978073; cv=none; b=PL63Fqy4MNkV3R0iwBCN7NF4EPaNQV/mS2/K/ZVlOAWaplVyKBYoAEAo/Dvlbj9gJ4E2dLyoK2so8naN5s9s2N+/iCs2gt6ha31PQ5KhkGFTcjdql5Rm7FbE/yc3LMnQCYbT7HSi3XTESARoV7Yep0x/rprUF+8HmvNDitgXJnM=
+	t=1756979315; cv=none; b=nLk5Vdme2XkeQjkeJGgq1HYzge8KE981kD1gHkRKo5dC6ndobVhcGWM92UMabNsXhyii858ipiJppLrghVWLlJ3uwsH54/mdR7qA9igZ2s+/oZtsh3TRNgIY5FloPUn07zzLqlW78BW19IWL9p6sgT0sMpVMb/TuCGgix9H7Aqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756978073; c=relaxed/simple;
-	bh=3vmcO3IDLVqiIgvWlLZTNLw6ISoWbnTQAzKUb0u3ILk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AY9FvpfbepdE5HdTy1405J+uvBoZjyObSrxBLmm8DYw9MWKW+7jhu+2VWahRmng+IYPppJ9e0z0O6XTwaK7fIxQc0LK6LpXyHnEEVjM+Gqe+0hpBkwZloja1OJZ86vjlHwnODDTUblOpL5LM2snIIwZ5uQ9ckRlKMbHdV8/+mn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1mky/tm; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756978072; x=1788514072;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3vmcO3IDLVqiIgvWlLZTNLw6ISoWbnTQAzKUb0u3ILk=;
-  b=b1mky/tmPhOHLK1kWPV1MQR5+zFwuFfLc+Lw0Zff42ob3FM4ODKxiXf/
-   uWH7QqcOEz4mkoazlmS20LnTSayphcYsAqPpi/GWTao/LM7Wp+7I7nDwT
-   1cW/YxknPRmONch1x+WJHH8J7rNkMxG8aMazfJT7dLwDoyS5Ue7eD7x+X
-   IDKA2DFcOql5E1ywLtjPjejWS2ijJlhZrs/R2msb6yT2Kbt1dCeY4VJVt
-   TErvcfWDTliSx/DcR8UrEIk5EBQ7rbxTrp+mGNn9OYL0Wmle49oTJ4XFu
-   bYblwhUf/U1O9ednK8Bpk3t/5sdWH6qpnet7Jc8Rm99fcV+WlXPmj4ZMa
-   Q==;
-X-CSE-ConnectionGUID: RHe/RclLR8Ku7DfT59fbqw==
-X-CSE-MsgGUID: Rjgn2z/KQm+K2YGtJ2gMJw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="62951487"
-X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="62951487"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 02:27:51 -0700
-X-CSE-ConnectionGUID: wlcGnxx/Su2kFT5/P2TcRg==
-X-CSE-MsgGUID: RjDfgkfRS/unBfaFd0oW5g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="195501501"
-Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 02:27:46 -0700
-Message-ID: <9247e150-800c-4e95-a5e9-e0032dc7d3ed@linux.intel.com>
-Date: Thu, 4 Sep 2025 17:27:44 +0800
+	s=arc-20240116; t=1756979315; c=relaxed/simple;
+	bh=sSwkUYF31EYfDWUi1ekgZrvpYkbnG+yUu343gN42CB4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CABUOedoLfAovkxP/+oYARDFoAuxRF3ktRIem2Mgi4SOA8V+356ERIx4Sqw3yCvtIUK4c22cZGmCQHFDThyhJnIF6xdZPqwRsicn/em6KtwAbLkokxFNQJcfXZW9GTffLlIcAC7Iwvk3bLzZkmAv9NQENCCmVqMPgVDdME8d0xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ji4B1n1Z; arc=none smtp.client-ip=209.85.216.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-32326e20aadso865609a91.2;
+        Thu, 04 Sep 2025 02:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756979313; x=1757584113; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1IurcVIvDmIouCP1bc4ecxaPSklAYPP27lDW3IVEMq8=;
+        b=ji4B1n1ZeIOvEnmtihxYnxPG/TBXF4jPvs7SO/4wcwnOtJ9aC/ekqJGppLiDTIdzZ8
+         wxrCTvkY47Ahp10kSQjrHchgD2MOosc9ec2EuE29rAPwHFBKAIk0HBWlyz9G2Mw2sLif
+         M3bETKkxyQzArWfIjZmuBHIMfw41Ddpr+BnvmkDguKoaxzFSmRq2fBXVRl6nMW10MI2O
+         d6LvyQ5kODqdNl2KNws6Wlz370O5DPb84xzrlFth1ELYmVWwnOdTF+jeNzksMePrKRJk
+         N38zJaL/FdjwjHxmhM5gT+jTLN2TPlmWadmE365tvrHWskphia0KWmg18Pu8O5frRl5s
+         v6Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756979313; x=1757584113;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1IurcVIvDmIouCP1bc4ecxaPSklAYPP27lDW3IVEMq8=;
+        b=lxjsG9p4cN6WkJEMSqCDG8a7dRerpyKTRPqMmqLeOd8ArWUGK76D/7OwrrgXjmrrPJ
+         xfKY5UMPM8qXq6sAe1zF8bMkHPXjGgAmtWb9B/3ZJRfq3XzqypcLSA8U0pNW8wkCL/YS
+         LsyCyQqS9akxJjGVGupe8CitfC1JzW5GRN0GX+RE/60HwIjXKKCRB582bOn76TvBJIb8
+         LQR6qyxpPgIFnTGjXH1VKlxQzoLJ06C32ll59RsTuGLHaC4xdi64F5I/5V3O/3c1ASTm
+         E4uAAiHyeyRk9P8bp42nsKTW2LDGJ43gdd2qYn431OR0fwdrx1w5ghKfodGhMrO4faJe
+         0H2g==
+X-Forwarded-Encrypted: i=1; AJvYcCV55d26uDV4roLS+0lxke903YykNKEoP5n0U6il14bxpqm3P8hi7tbFUDUvuJpyILzo7fQ=@vger.kernel.org, AJvYcCWRDeM2piQYgAjcmZQq8khu80UAkiMLwXMjw9uNcEB74k8l/j08j/h4XXJzR6S4vnTe7cfF/3im8vfrkSDI@vger.kernel.org, AJvYcCWyHjOiwqPRTFzrmq6N2gJ64pZLxMd9HdAOYDHn1tjEj1IiAQQmL4MCBQsxWgxW528C4rDclcFvE4i9+1OY/xwE@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxig6BqUDSp7zfb02niM7swp7kCCDNyXRtQ+VJ5PauPzdJq6Dmv
+	QrgdtySqGzAIhYUaE7zhD5R8csO62ly1lnsxxmoh5Tt2i4AckDSO+aWf
+X-Gm-Gg: ASbGncsqK5bXPkuhYdg/cZ/+eU/pnXae/yxqzrHrYghjyEsYPnyPS3d/NQwy61h95n1
+	GUik7b6UhertqcE0gYpAMcUXmwdipyKTA8iUlX8y8mhyclsayAr1baHRlznsywpSRHOTnbsO/hn
+	ZnB5Yw1aW7CZga49+wjh3/MaP6VtAw2fvnzWIksOr2yxGvX9SyriewK4qDF/H5H73MQj6uN53qe
+	fF7lu0Gnbiaw9GAyzH+ZVtU53Bea/b8mcvk4O0dM5wydHcXBnQVg804xi+y316BFAsTqtK/i6VJ
+	vlL9xtPdNqdnFnq9T9kEtfKOJqCCjRD6VJ4jWUBTSj25haIgCN43PIKA/CiFddnIsQNHm735ldx
+	kmrnrnElpwtEb7NWYA6EdxKeM
+X-Google-Smtp-Source: AGHT+IEjJvp6rZMEUJSWcF25yiJN1Bj1VOnRLqvBit6RxKK7N20DSMX22/c7VA4ex8hcWLfqNlRIIw==
+X-Received: by 2002:a17:90b:1dcc:b0:31e:7410:a4d7 with SMTP id 98e67ed59e1d1-328156e473cmr24241658a91.33.1756979312777;
+        Thu, 04 Sep 2025 02:48:32 -0700 (PDT)
+Received: from days-ASUSLaptop ([50.7.253.114])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-329e1c8e07bsm7668990a91.4.2025.09.04.02.48.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Sep 2025 02:48:32 -0700 (PDT)
+Date: Thu, 4 Sep 2025 17:48:21 +0800
+From: Dong Yang <dayss1224@gmail.com>
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: pbonzini@redhat.com, shuah@kernel.org, anup@brainfault.org,
+	atish.patra@linux.dev, paul.walmsley@sifive.com, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, alex@ghiti.fr, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 0/3] KVM: riscv: selftests: Enable supported test cases
+Message-ID: <aLlf6ZQ1uNjs8XS+@days-ASUSLaptop>
+References: <cover.1756710918.git.dayss1224@gmail.com>
+ <20250902-9cc0d0dad59ba680062dbbf8@orel>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 03/21] KVM: selftests: Expose function to allocate
- guest vCPU stack
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
- Andrew Jones <ajones@ventanamicro.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Erdem Aktas <erdemaktas@google.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
- <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org
-References: <20250904065453.639610-1-sagis@google.com>
- <20250904065453.639610-4-sagis@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20250904065453.639610-4-sagis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250902-9cc0d0dad59ba680062dbbf8@orel>
 
-
-
-On 9/4/2025 2:54 PM, Sagi Shahar wrote:
-> TDX guests' registers cannot be initialized directly using
-> vcpu_regs_set(), hence the stack pointer needs to be initialized by
-> the guest itself, running boot code beginning at the reset vector.
->
-> Expose the function to allocate the guest stack so that TDX
-> initialization code can allocate it itself and skip the allocation in
-> vm_arch_vcpu_add() in that case.
->
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-
-> ---
->   .../selftests/kvm/include/x86/processor.h        |  2 ++
->   tools/testing/selftests/kvm/lib/x86/processor.c  | 16 +++++++++++-----
->   2 files changed, 13 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
-> index f610c09cadf4..8e75df5e6bc9 100644
-> --- a/tools/testing/selftests/kvm/include/x86/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86/processor.h
-> @@ -1109,6 +1109,8 @@ static inline void vcpu_clear_cpuid_feature(struct kvm_vcpu *vcpu,
->   	vcpu_set_or_clear_cpuid_feature(vcpu, feature, false);
->   }
->   
-> +vm_vaddr_t kvm_allocate_vcpu_stack(struct kvm_vm *vm);
-> +
->   uint64_t vcpu_get_msr(struct kvm_vcpu *vcpu, uint64_t msr_index);
->   int _vcpu_set_msr(struct kvm_vcpu *vcpu, uint64_t msr_index, uint64_t msr_value);
->   
-> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-> index 83efcf48faad..82369373e843 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-> @@ -658,12 +658,9 @@ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
->   	vcpu_regs_set(vcpu, &regs);
->   }
->   
-> -struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
-> +vm_vaddr_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
->   {
-> -	struct kvm_mp_state mp_state;
-> -	struct kvm_regs regs;
->   	vm_vaddr_t stack_vaddr;
-> -	struct kvm_vcpu *vcpu;
->   
->   	stack_vaddr = __vm_vaddr_alloc(vm, DEFAULT_STACK_PGS * getpagesize(),
->   				       DEFAULT_GUEST_STACK_VADDR_MIN,
-> @@ -684,6 +681,15 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
->   		    "__vm_vaddr_alloc() did not provide a page-aligned address");
->   	stack_vaddr -= 8;
->   
-> +	return stack_vaddr;
-> +}
-> +
-> +struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
-> +{
-> +	struct kvm_mp_state mp_state;
-> +	struct kvm_regs regs;
-> +	struct kvm_vcpu *vcpu;
-> +
->   	vcpu = __vm_vcpu_add(vm, vcpu_id);
->   	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
->   	vcpu_init_sregs(vm, vcpu);
-> @@ -692,7 +698,7 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
->   	/* Setup guest general purpose registers */
->   	vcpu_regs_get(vcpu, &regs);
->   	regs.rflags = regs.rflags | 0x2;
-> -	regs.rsp = stack_vaddr;
-> +	regs.rsp = kvm_allocate_vcpu_stack(vm);
->   	vcpu_regs_set(vcpu, &regs);
->   
->   	/* Setup the MP state */
-
+On Tue, Sep 02, 2025 at 10:36:10AM -0500, Andrew Jones wrote:
+> On Mon, Sep 01, 2025 at 03:35:48PM +0800, dayss1224@gmail.com wrote:
+> > From: Dong Yang <dayss1224@gmail.com>
+> > 
+> > Add supported KVM test cases and fix the compilation dependencies.
+> > ---
+> > Changes in v3:
+> > - Reorder patches to fix build dependencies
+> > - Sort common supported test cases alphabetically
+> > - Move ucall_common.h include from common header to specific source files
+> > 
+> > Changes in v2:
+> > - Delete some repeat KVM test cases on riscv
+> > - Add missing headers to fix the build for new RISC-V KVM selftests
+> > 
+> > Dong Yang (1):
+> >   KVM: riscv: selftests: Add missing headers for new testcases
+> > 
+> > Quan Zhou (2):
+> >   KVM: riscv: selftests: Use the existing RISCV_FENCE macro in
+> >     `rseq-riscv.h`
+> >   KVM: riscv: selftests: Add common supported test cases
+> > 
+> >  tools/testing/selftests/kvm/Makefile.kvm                    | 6 ++++++
+> >  tools/testing/selftests/kvm/access_tracking_perf_test.c     | 1 +
+> >  tools/testing/selftests/kvm/include/riscv/processor.h       | 1 +
+> >  .../selftests/kvm/memslot_modification_stress_test.c        | 1 +
+> >  tools/testing/selftests/kvm/memslot_perf_test.c             | 1 +
+> >  tools/testing/selftests/rseq/rseq-riscv.h                   | 3 +--
+> >  6 files changed, 11 insertions(+), 2 deletions(-)
+> > 
+> > -- 
+> > 2.34.1
+> 
+> In the future please CC previous reviewers on the entire series
+> (particularly when they have reviewed the entire previous series).
+Okay, I will pay attention to this in the future. Thanks.
+> 
+> For the series,
+> 
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
