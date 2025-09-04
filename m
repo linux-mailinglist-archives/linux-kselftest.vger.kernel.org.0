@@ -1,127 +1,102 @@
-Return-Path: <linux-kselftest+bounces-40718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 118B7B42EB9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 03:13:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 359FCB42EBD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 03:17:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 054337C6A72
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 01:13:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6D0C1C22612
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 01:17:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 285F419D092;
-	Thu,  4 Sep 2025 01:13:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A921A239D;
+	Thu,  4 Sep 2025 01:17:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Kfue+q4u"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sjCqXDKC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D5A84039
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Sep 2025 01:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19637339A8
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Sep 2025 01:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756948394; cv=none; b=s3qaTiMHOdojsW7KbpcKJpOJfnSQe5t1rEIUtBtoUb5tNjbRK8OzGqtjpVqwGk4qod4W1g60C4h4mpt16DA2qKvlXOgDqTusL6doruvMQdn+3vmQkDiU1fZRF1ORKjIoQ2HdXFOPVA0Jo60X9SXcNB+EZT6bGSyS+FDta3tcJhk=
+	t=1756948644; cv=none; b=OQbCLiBy2DHdbS5X+czXYHyUK+Kk4QxexvIQnOe9fkZEByFDA1iMqzyx0D3LtFDhs12Dc/c3PqfA7Z5gixvWlb7pa3ujtF31MeZ8kb4tc3L3I2FDV91Me3WJRHvjKvvJ3LOGO/HIqVWjzbtBrKBohf9/axhXxP+FLU3on3tKVuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756948394; c=relaxed/simple;
-	bh=EztcU3I2jQu/JANSrFiQs6YdssHNrEuZtzcIEgzOo50=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YJzDPOpq/gATH5NAqDq1HYXzHU51mNdEmTAh5osR8Sz+mjMQ7omCM+cQFv56lxqm55jg1Ok28xhtMvYJPi20K43GOpGxVSxBQ/6ZcfjDQyZk2QuBsApIG2JOWg5yuUhi4ZOcCqcTrLS8WIBsQXLby3YZ62QYa91kLzURLkWopaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Kfue+q4u; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1756948380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=T/YdEdpdY6Oro8d1rFM7+q7LaJ8Hyug3oWsbG3ERi6U=;
-	b=Kfue+q4urULTY/Sv4Jusx10FkSy7wsftg2H7iFLQgu5BAnzsUwZKOliqNMWYet95ck94M1
-	RFN69Bwv6howDbyF2Jy2bnhXr9ZmDxmRUSfzcPkuwxth+WHLLSi98e44xaggv9GmNITXtG
-	KBMnAz1skKwEZTrZaKmvPE3kigtD/JI=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Menglong Dong <menglong8.dong@gmail.com>,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: andrii@kernel.org, olsajiri@gmail.com, eddyz87@gmail.com, mykolal@fb.com,
- ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- yikai.lin@vivo.com, memxor@gmail.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH bpf-next v3 0/3] selftests/bpf: benchmark all symbols for
- kprobe-multi
-Date: Thu, 04 Sep 2025 09:12:18 +0800
-Message-ID: <2797578.mvXUDI8C0e@7940hx>
-In-Reply-To:
- <CAEf4BzZVTr26Uogf8uh=7HmgG6Qo_uVy3fX8bQgC+Xs63wZcCA@mail.gmail.com>
-References:
- <20250901034252.26121-1-dongml2@chinatelecom.cn>
- <CAEf4BzZVTr26Uogf8uh=7HmgG6Qo_uVy3fX8bQgC+Xs63wZcCA@mail.gmail.com>
+	s=arc-20240116; t=1756948644; c=relaxed/simple;
+	bh=8WHvKqvvSEubjuAjLqach/gWo8VeUE96OgFtsrxG0zY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D/gmLfvJcy3O4R7pl2v14t+cz/spEFqwd/PG7+sEI0awvmqVLE1nkQsExBg5UJyRaBtLBA7gPQ97iK4+tkatFMvTCuXav9qYjROc5EtAF1LDGLYwqFQMxiJzHBcZHH0vYW4U+8DgbbravA7aQQ2EukS7o/1YGhFc8bvzfkKIKEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sjCqXDKC; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-61d14448c22so3117a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Sep 2025 18:17:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1756948641; x=1757553441; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8WHvKqvvSEubjuAjLqach/gWo8VeUE96OgFtsrxG0zY=;
+        b=sjCqXDKCHJLkX57C1R322AwwlPTY1QdFRIEkjF2JXSFpTHZ7/DXxV/d2G1GFCyFuR5
+         kUl/dI5lJzyNInlocXVz1Crl/nNmVFnLEavGUmhS4eJAQWaFcYxbfImFZBLoHZ6hYl6K
+         srczSy+hQM4TobdUPYxrAbkFhfoH0JcI2Pn27srZnEX3Vi8CX1jkJ5Eh/d8RPkWqv9Bv
+         aEFZlz6zWHguC1XOV/9vzIYmDaIcfLlnoFfmTZVdKYQMM7JlFluzyoWimUTVeoikoWFt
+         qcmsGOYns/+lgiA1KsL8tx2YU9Z7XMXW+7BjSeISAGPXpWHdSBg75KgGeu4sYVw5Q0CZ
+         HkvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756948641; x=1757553441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8WHvKqvvSEubjuAjLqach/gWo8VeUE96OgFtsrxG0zY=;
+        b=clk5g+bqAuwl/BocZ0KtfYWicdxLR5QPnYijBN7ESrSUXylR9jLP1dg9HXQRz/DbfY
+         xO5sQcRpInGC3LyYOpRAgS9UatI99A3kHirwA1Z8+yLYxCdruiNwvXUft8ZR8uW/mu7n
+         bBFa6NQnVR5VAGKqMxbnhGmU0kNeq8mEoK/L3R0UrkDMoQD0VamlKjqB7ASZ33AmIDmp
+         Ca0TODpvkcnn7t7FufWlOFpPQTtpwvnUv0AZQM6bA943qDJPsUJCp2YaVvvUWUZHz7y1
+         RJCrxXPLvBAkq+QPjwVV1/JHaDbyLxBXosUZdc7QsjE9f3uwVAebb6vSdAs1gQt6hHhB
+         cydg==
+X-Forwarded-Encrypted: i=1; AJvYcCWi8Zk4dYvr3VGtnOYUFjO+uRf8t/Szw/YKaqzqno9G/Sq/s0WCbE/SrSb0e3babgLe1TOsk/Htm/NB6UIYTNw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeDpECkazYrcJfrkOe1J2yp/Uz4VSbjJwjKPTPag1eDX/7AG+A
+	bPJE+Srx9fhjlCArtMV85mmktRB33HAtTjSumktv1s8yeGWWyEoJBxOrorzEhYYbzUM1e0EHwqR
+	Ia/7hH0mG32juEmVcGaxupXzUyACfAqTGUogdJm/7
+X-Gm-Gg: ASbGncuMkRRMK0HA6x9gmP2KVM/hcHWTF4rww7dvYnLHEaymheLpAntO6hKOFR7jeRP
+	a6jMnqHkwixPRVrC6XGSsDVoFlobDzfyf7seZL36Jb5ysBCm6Rt8O9EFv/6STM6b7tjglDUGBFB
+	m9NG07iph2E1KHw8JeGRoCL+sF6ulSuKIjA1FbPePsgtGWOw1HC4w0JNRNKHMat9C18iGsjL/6T
+	BXENtbgLCrZtf47A9OGXERAMZ7GnBVZVdFHVx57jZ8p+A==
+X-Google-Smtp-Source: AGHT+IGNaVDWuTXLfEYCkZcF780c5W6sUlcccbr8SJ/Dixpmi2WMVpg+C3u1b++4ueIrG0C3O8SsxYci+0qeFibVDbI=
+X-Received: by 2002:aa7:d497:0:b0:61c:e774:38da with SMTP id
+ 4fb4d7f45d1cf-61f5c00d99dmr3416a12.5.1756948641405; Wed, 03 Sep 2025 18:17:21
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250902235504.4190036-1-marcharvey@google.com> <aLjlLl03-YJ_avaa@fedora>
+In-Reply-To: <aLjlLl03-YJ_avaa@fedora>
+From: Marc Harvey <marcharvey@google.com>
+Date: Wed, 3 Sep 2025 18:17:09 -0700
+X-Gm-Features: Ac12FXyfm3TngUE4mQAcz9NuluXDmrgAEDjytvy5pH-XdliFBTbBKspeqvai7_w
+Message-ID: <CANkEMgn4UT7GyN1MjdGCJKD13ENJ8BpAEvLotT=FkReZ9YBRyQ@mail.gmail.com>
+Subject: Re: [PATCH net-next] selftests: net: Add tests to verify team driver
+ option set and get.
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: jiri@resnulli.us, andrew+netdev@lunn.ch, edumazet@google.com, 
+	willemb@google.com, maheshb@google.com, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
 
-On 2025/9/4 07:50 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
-> On Sun, Aug 31, 2025 at 8:43=E2=80=AFPM Menglong Dong <menglong8.dong@gma=
-il.com> wrote:
-> >
-> > Add the benchmark testcase "kprobe-multi-all", which will hook all the
-> > kernel functions during the testing.
-> >
-> > This series is separated out from [1].
-> >
-> > Changes since V2:
-> > * add some comment to attach_ksyms_all, which notes that don't run the
-> >   testing on a debug kernel
-> >
-> > Changes since V1:
-> > * introduce trace_blacklist instead of copy-pasting strcmp in the 2nd
-> >   patch
-> > * use fprintf() instead of printf() in 3rd patch
-> >
-> > Link: https://lore.kernel.org/bpf/20250817024607.296117-1-dongml2@china=
-telecom.cn/ [1]
-> > Menglong Dong (3):
-> >   selftests/bpf: move get_ksyms and get_addrs to trace_helpers.c
-> >   selftests/bpf: skip recursive functions for kprobe_multi
-> >   selftests/bpf: add benchmark testing for kprobe-multi-all
-> >
->=20
-> this doesn't apply cleanly over bpf-next, can you please rebase and
-> resend to let CI run?
+On Wed, Sep 3, 2025 at 6:02=E2=80=AFPM Hangbin Liu <liuhangbin@gmail.com> w=
+rote:
+> I didn't find you use namespace for testing, so why include the in_netns.=
+sh ?
+> BTW, It's recommended to use namespace for testing to avoid affect the ma=
+in
+> net.
 
-Yeah, I just notice that. I'll rebase and resend it now.
-
-Thanks!
-Menglong Dong
-
->=20
-> >  tools/testing/selftests/bpf/bench.c           |   4 +
-> >  .../selftests/bpf/benchs/bench_trigger.c      |  61 +++++
-> >  .../selftests/bpf/benchs/run_bench_trigger.sh |   4 +-
-> >  .../bpf/prog_tests/kprobe_multi_test.c        | 220 +---------------
-> >  .../selftests/bpf/progs/trigger_bench.c       |  12 +
-> >  tools/testing/selftests/bpf/trace_helpers.c   | 234 ++++++++++++++++++
-> >  tools/testing/selftests/bpf/trace_helpers.h   |   3 +
-> >  7 files changed, 319 insertions(+), 219 deletions(-)
-> >
-> > --
-> > 2.51.0
-> >
->=20
->=20
-
-
-
-
+It does, at the beginning of the file it runs itself inside a namespace.
 
