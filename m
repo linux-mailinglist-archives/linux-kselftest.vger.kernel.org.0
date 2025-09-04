@@ -1,173 +1,321 @@
-Return-Path: <linux-kselftest+bounces-40793-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40798-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B916B443EC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 19:09:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C5E2B444D8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 19:52:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27F7F1CC07F5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 17:09:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 940F6188D886
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 17:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534352D47EB;
-	Thu,  4 Sep 2025 17:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E26F320CC4;
+	Thu,  4 Sep 2025 17:51:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YAs9TejA"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="vAJMMjGJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B9821B905
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Sep 2025 17:09:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5BB2C026D;
+	Thu,  4 Sep 2025 17:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757005742; cv=none; b=uEHZaJIP1rogkVZq/UDmLD8BTte10jAU54Qe32+Ub69gSSBA6e6g9zl0MMxtn1ldD69z3b5VrHuI+K1Wh/lNFUTLlfcT/+6ZQaIkrJIZZE8Cy6iC+73BdvDNrbJYXy4SEqwzuig2V5OxhjEq79M0AE0mh8Sudqsre3Vb1QSgBKE=
+	t=1757008305; cv=none; b=tHLLyPxa7Jc25xk8RaVWAFWpycOzsNhRzunWWI2BClbAi5S5hv8D/ZpS3Ki4/hWu4eaC5Hjx2TKT6r1cHXeakQTVYq+3uEuYfBHbUIRfwe+6laiE2lq9CdNMx7WNq23kqO20l81t2XWr3L7RL9XvgBhFamI8xHsB6zOeJfBIZXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757005742; c=relaxed/simple;
-	bh=rtVoiEqArhk6jdIIAM0VXZHs2vMtXnbobPVPXnd96Ss=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QtViax1w3iMFTynai1RAetnvU2B6w5RW0+o13kSYOflUpFHe7Cw45gh/fMTVfMQSVtMj+OyHtFH9nNJbKfwv0azqEMBfH2tesZ7cGAb1pgShVkyHkSLwoyxCwHTRKKynmmn36VJMdGoshLxlmoymMEhcKEqrR2rwCLn6X7MZ9SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YAs9TejA; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-61cfbb21fd1so747a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Sep 2025 10:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757005739; x=1757610539; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9l+BX4BeciP06MlQ3YhBfi/kk7JAIUUCElY1RG7/WT4=;
-        b=YAs9TejA4b4mW7lVC9ebOHUPc/lOxXuZdTCq7mi3GS93GIGAeGLiE/uc2DHbpFr5bC
-         CNyBETR3rxTLUO3Gk7POXXkpJA53uJnmXxb9dG0/aP4O2iGCXZ08eG63MU1RQ2hCZITU
-         de9OJcHSCZGtoY9uh7+lMQvg2Ocu7avUJg+mmpshVpYzOA4OSnIZNrTOXBWQGJvGSigJ
-         svm+m5/LxTOQlpgii4zQ86HyZjrrfginkOj+UN00yoaio3l0QkZTguThj2TaTctY0E2w
-         xs3RZkKttQ0ZJ0DRuz0g4h+ro+mUzfkznU4CyDm4U+KHKi8icbIAYPBmEGW9rx8VcTxS
-         B7YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757005739; x=1757610539;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9l+BX4BeciP06MlQ3YhBfi/kk7JAIUUCElY1RG7/WT4=;
-        b=fsP4gVjxnCBqo2deXT3fwh8vw8AYfs2Ut61UY3QmptAIiD2O/2rZMegQwTatPsSXld
-         GPXmN3BahO6e23wdkN+DOFmJBT6QwMnLOZFOWpSFA50zB7AF3KaJRYRU2GRB4J11hfw9
-         41dq6a7CheL6FCTuusgg0QW2tpVYC7xw/bcEeaWhnvtsWg7vAfA5KaTq73VSqYIZ1C7d
-         KyzhYRjXJa1z9M3peCwHVSQrCPbQaK4pgiYqXnCQWiw1+aUsdeaD+xV1k3XJ4D+VRLnf
-         bZFoz9MjiNj5Hy9H/fgG8JU81jLoeAmWl2ocTske+Ska8SuBmPQZnme0c+79QbInLJdS
-         f1zw==
-X-Forwarded-Encrypted: i=1; AJvYcCVPFlW0tOGZTQdLWyImqoJwWoAon+1dnFCk2Tr6qWvMw3zQ2uUCtsh9+dvYBvwKvDOiu2ojpt+zdFF32WEGnFI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1KgNWtea4o7k0ZMMqz7J1m58x3O1IOS37QzbkxZvM53lcW/H6
-	g89/Z3kDVHan+DXHhaw2H8iDydwtyuEOqxyNLtaDLOL1LNvmcHu4ivfDXhxkry2gEVnBBqtNJJt
-	o1mFh/e/t0vpops94ARLqg4nXF8Ki/tLqoX8t+Mt1
-X-Gm-Gg: ASbGncuA8bYtYEmpZkCebXs2WOXNC1PViTxj9IUVV6282AaxbYraIJiuAQ88qMVrMsO
-	mVru1kfz7xkXqGKm84chXVoaF6iX4MEdALro5CDPptCYzAwZ/ZP186QFB58/+4E7UDo3yKhDnFN
-	bjFCueksx259zSAhE07Fu9sGZjRu2/2SQVFlytxfan0xKelfTdrX8DKf7SPYpqaOREuxHuehQye
-	uFEwyZx+q1WBBfRc9bBrUceJQBXcukh+6XQE5SZ2Rn7AOu17S3ANay1kr/zT+fGzBgYiIwuxRcW
-X-Google-Smtp-Source: AGHT+IF2ruMQe+WqyRmQ/okwctanAc23wDnLh4q8x7OzuSo6MwWq8CGCK4IZ++J24eerKVtO/lIr742TQbMqgGEV01E=
-X-Received: by 2002:a50:934f:0:b0:61c:c9e3:18f9 with SMTP id
- 4fb4d7f45d1cf-61f5bd290c7mr71874a12.3.1757005738679; Thu, 04 Sep 2025
- 10:08:58 -0700 (PDT)
+	s=arc-20240116; t=1757008305; c=relaxed/simple;
+	bh=jDu+D0q8nRKICmZ6bnLrMMMfQ0qvf+zqJ4dVtnlIAf8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mJvOCf4oUtEdzseTbd0ux9edUR0ETrzPUTRlgxDv6JQzQZK2ZUbe8eoB2+u3y3RCaN+loEc78cXTguq7KXChIlVO2pS3FY6dpq+z5rQ6Txq9D6w3bJpqtF6bGOlhyZDHsdmoVgnEmNjsrq6OYLgwUV5LCjuNXCEvkFNxwQUfjKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=vAJMMjGJ; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=LsiKyVM8DaNk49lJby8XtmITtLhNnVn6b2laLK9bt4A=; b=vAJMMjGJ8dlaApYEToY9hKb/zg
+	fkqrPuBKVphEZ1nmIbmAyh75hmYOdTlEZtjAb2mnW/QHCYLapLVpmr3PcGAWt04+yR465nScjS75x
+	GjGCQmjVQwUUEHP5NGDS87iHkNCKuFPVqlPNWa47WyYjIv7hh1tXxnWbTIcaPbI89mdPbvu/t3FxW
+	2Plxvk/Qci1SbswNUTc3YMM08GcER8W1yJjnAFpNx5qRmAv/rZwFmJpArbwNYKFq+CdFcHdhrJs/i
+	STDsfnDfA0lD1mwNQf17hmFXejtzaUsfrEXOzVyX5X99UDNnb9VO7fhklNA/LfbUYeulOa4O+FyBJ
+	f08PIwcg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uuE7W-00000005U1W-1kes;
+	Thu, 04 Sep 2025 17:51:38 +0000
+Date: Thu, 4 Sep 2025 18:51:38 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Tom Hromatka <tom.hromatka@oracle.com>
+Cc: kees@kernel.org, luto@amacapital.net, wad@chromium.org,
+	sargun@sargun.me, corbet@lwn.net, shuah@kernel.org,
+	brauner@kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, YiFei Zhu <zhuyifei@google.com>
+Subject: Re: [PATCH] seccomp: Add SECCOMP_CLONE_FILTER operation
+Message-ID: <20250904175138.GA886028@ZenIV>
+References: <20250903203805.1335307-1-tom.hromatka@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250904015424.1228665-1-marcharvey@google.com> <willemdebruijn.kernel.22c2bf5d2d4f3@gmail.com>
-In-Reply-To: <willemdebruijn.kernel.22c2bf5d2d4f3@gmail.com>
-From: Marc Harvey <marcharvey@google.com>
-Date: Thu, 4 Sep 2025 10:08:46 -0700
-X-Gm-Features: Ac12FXw49kSh6GKY2h7-eXe1I6WZ_M0sYCUqMpP9WWQchylNNQte6QMg8ZJMPxM
-Message-ID: <CANkEMgmYHBw3YA5VBv20Y=BvjAx7a7b=YQfGPtmeFmDHvSauvw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] selftests: net: Add tests to verify team
- driver option set and get.
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: jiri@resnulli.us, andrew+netdev@lunn.ch, edumazet@google.com, 
-	willemb@google.com, maheshb@google.com, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kuba@kernel.org, liuhangbin@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250903203805.1335307-1-tom.hromatka@oracle.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-> >
-> >  TEST_INCLUDES := \
-> >       ../bonding/lag_lib.sh \
-> >       ../../../net/forwarding/lib.sh \
-> > -     ../../../net/lib.sh
-> > +     ../../../net/lib.sh \
-> > +     ../../../net/in_netns.sh \
-> > +     ../../../net/lib/sh/defer.sh \
->
-> Where is defer used? Also no backslash at last line.
+On Wed, Sep 03, 2025 at 08:38:03PM +0000, Tom Hromatka wrote:
 
-Thank you for the review Willem.
+> +static long seccomp_clone_filter(void __user *upidfd)
+> +{
+> +	struct task_struct *task;
+> +	unsigned int flags;
+> +	pid_t pidfd;
+> +
+> +	if (!capable(CAP_SYS_ADMIN))
+> +		return -EPERM;
 
-Acknowledged for the backslash, will add in next iteration.
+OK...
 
-Defer is used by net/lib.sh. If defer.sh isn't included here, then the
-test won't build correctly.
+> +	if (atomic_read(&current->seccomp.filter_count) > 0)
+> +		return -EINVAL;
 
-> > +attach_port_if_specified()
-> > +{
-> > +        local port_name="${1}"
->
-> nit: parentheses around single character variable. Inconsistent.
+If it's atomic, then presumably there's something that can change
+it asynchronously, right?  If so, what's there to prevent
+invalidation of the result of this test right after you've
+decided everything's fine?
 
-Acknowledged, will add in the next iteration.
+Let's check...
+; git grep -n -w filter_count
+<64 lines of output, most clearly unrelated to that>
+; git grep -n -w -c filter_count
+drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_utils_fw2x.c:1
+drivers/net/ethernet/intel/i40e/i40e_common.c:18
+drivers/net/ethernet/intel/i40e/i40e_prototype.h:4
+drivers/net/ethernet/qlogic/qede/qede_filter.c:13
+drivers/net/ipa/ipa.h:2
+drivers/net/ipa/ipa_cmd.c:1
+drivers/net/ipa/ipa_table.c:6
+fs/proc/array.c:1
+include/linux/seccomp_types.h:2
+init/init_task.c:1
+kernel/seccomp.c:3
+lib/kunit/executor.c:7
+lib/kunit/executor_test.c:5
 
-> > +#######################################
-> > +# Test that an option's get value matches its set value.
-> > +# Globals:
-> > +#   RET - Used by testing infra like `check_err`.
-> > +#   EXIT_STATUS - Used by `log_test` to whole script exit value.
-> > +# Arguments:
-> > +#   option_name - The name of the option.
-> > +#   value_1 - The first value to try setting.
-> > +#   value_2 - The second value to try setting.
-> > +#   port_name - The (optional) name of the attached port.
-> > +#######################################
->
-> Just curious: is this a standard documentation format?
+Sod drivers and lib/kunit, these are irrelevant.  Removing those
+hits yields this:
+; git grep -n -w filter_count|grep -v '[^dl]'
+fs/proc/array.c:340:                        atomic_read(&p->seccomp.filter_count));
+include/linux/seccomp_types.h:15: * @filter_count: number of seccomp filters
+include/linux/seccomp_types.h:24:       atomic_t filter_count;
+init/init_task.c:208:   .seccomp        = { .filter_count = ATOMIC_INIT(0) },
+kernel/seccomp.c:631:           atomic_set(&thread->seccomp.filter_count,
+kernel/seccomp.c:632:                      atomic_read(&caller->seccomp.filter_count));
+kernel/seccomp.c:932:   atomic_inc(&current->seccomp.filter_count);
 
-https://google.github.io/styleguide/shellguide.html#function-comments
-But I will make these fit in better with the rest of the selftests.
+Aha.  We have a reader in fs/proc/array.c, definition of that thing in
+seccomp_types.h, initialization in init_task.c and two places in
+seccomp.c, one around line 631 copying the value from one thread to
+another (seccomp_sync_threads()) and one at line 932 incrementing
+the damn thing (seccomp_attach_filter()).
 
->
-> > +team_test_option()
-> > +{
-> > +        local option_name="$1"
-> > +        local value_1="$2"
-> > +        local value_2="$3"
-> > +        local possible_values="$2 $3 $2"
-> > +        local port_name="$4"
-> > +        local port_flag
-> > +
-> > +        RET=0
-> > +
-> > +        echo "Setting '${option_name}' to '${value_1}' and '${value_2}'"
-> > +
-> > +        attach_port_if_specified "${port_name}"
-> > +        check_err $? "Couldn't attach ${port_name} to master"
->
-> Can the rest of the test continue if this command failed?
+Humm...  OK, former is copying the filter_count of current (caller is
+set to current there) to other threads in the same thread group and
+apparently that's serialized on ->signal->cred_guard_mutex of that
+bunch, as well as on current->sighand->siglock (and since all threads
+in the group are going to share ->sighand, it's the same thing
+as their ->sighand->siglock).
 
-The test will fail, but the rest of the test will still run. That
-being said, only the first error message is printed by the check_err
-function.
+The latter increments that thing for current, under ->sighand->siglock.
 
+So
+	* atomic_t for filter_count looks like cargo-culting (and unless I'm
+missing something, the only thing that cares about it is /proc/*/status;
+rudiment of some sort?)
+	* looks like the test can be invalidated by another thread hitting
+that seccomp_sync_threads() thing (from a quick look, SECCOMP_SET_MODE_FILTER
+with SECCOMP_FILTER_FLAG_TSYNC in flags).
 
->
-> > +        port_flag=$(get_port_flag "${port_name}")
-> > +
-> > +        # Set and get both possible values.
-> > +        for value in ${possible_values}; do
-> > +                set_and_check_get "${option_name}" "${value}" "${port_flag}"
-> > +                check_err $? "Failed to set '${option_name}' to '${value}'"
-> > +        done
-> > +
-> > +        detach_port_if_specified "${port_name}"
-> > +        check_err $? "Couldn't detach ${port_name} from its master"
-> > +
-> > +        log_test "Set + Get '${option_name}' test"
-> > +}
->
+> +	if (copy_from_user(&pidfd, upidfd, sizeof(pid_t)))
+> +		return -EFAULT;
+
+OK...
+
+> +	task = pidfd_get_task(pidfd, &flags);
+> +	if (IS_ERR(task))
+> +		return -ESRCH;
+
+OK...
+
+> +	spin_lock_irq(&current->sighand->siglock);
+> +	spin_lock_irq(&task->sighand->siglock);
+
+WTF?  You are apparently trying to lock both the current and the task you
+want to copy from, but... you are nesting two locks of the same sort
+here, with not even preventing the self-deadlock (task and current sharing
+->sighand - e.g. by belonging to the same thread group), let alone preventing
+the same from two threads trying to take the same couple of locks in the
+opposite orders.
+
+More to the point, why do you need both at once?
+
+> +	if (atomic_read(&task->seccomp.filter_count) == 0) {
+
+OK...  from the earlier digging it looks like this actually stands for
+"if task has no filter attached, piss off - nothing to copy".
+
+> +		spin_unlock_irq(&task->sighand->siglock);
+> +		spin_unlock_irq(&current->sighand->siglock);
+> +		put_task_struct(task);
+> +		return -EINVAL;
+> +	}
+> +
+> +	get_seccomp_filter(task);
+
+Umm...
+void get_seccomp_filter(struct task_struct *tsk)
+{
+        struct seccomp_filter *orig = tsk->seccomp.filter;
+	if (!orig)
+		return;
+	__get_seccomp_filter(orig);
+	refcount_inc(&orig->users);
+}
+and
+static void __get_seccomp_filter(struct seccomp_filter *filter)
+{
+	refcount_inc(&filter->refs);
+}
+
+So you are taking task->seccomp.filter and bumping refcounts on
+it, presumably allowing to unlock the task->sighand->siglock?
+
+> +	current->seccomp = task->seccomp;
+
+wait, what?  You are copying all fields at once, but... from the look
+at what seccomp_sync_threads() was doing, it not quite that simple.
+OK, atomic for filter_count is worthless, so plain copy will do,
+but what about ->seccomp.filter?  This
+                /* Make our new filter tree visible. */
+		smp_store_release(&thread->seccomp.filter,
+				  caller->seccomp.filter);
+is potentially more serious.  Granted, in this case we are doing store
+to our own thread's ->seccomp.filter, so the barrier implications
+might be unimportant - if all reads are either under ->sighand->siglock
+or done to current->seccomp.filter, we should be fine, but that needs
+to be verified _AND_ commented upon.  Memory barriers are subtle
+enough...
+
+Looks like the only lockless reader is
+	struct seccomp_filter *f =
+			READ_ONCE(current->seccomp.filter);
+in seccomp_run_filters(), so unless I've missed something (and "filter"
+is not a search-friendly name ;-/) we should be fine; that READ_ONCE()
+is there to handle *other* threads doing stores (with that
+smp_store_release() in seccomp_sync_threads()).  Incidentally, this
+	if (!lock_task_sighand(task, &flags))
+		return -ESRCH;
+
+	f = READ_ONCE(task->seccomp.filter);
+in proc_pid_seccomp_cache() looks cargo-culted - it's *not* a lockless
+access, so this READ_ONCE() is confusing.
+
+Anyway, that copying needs a comment.  What's more, this
+		__seccomp_filter_release(thread->seccomp.filter);
+just prior to smp_store_release() is more serious - it drops the old
+reference.  Yes, you count upon no old reference being there - that's
+what your check of current->seccomp.filter_count was supposed to
+guarantee, but... it could've appeared after the test.
+
+> +	spin_unlock_irq(&task->sighand->siglock);
+
+OK, finally unlocked the source...
+
+> +	set_task_syscall_work(current, SECCOMP);
+
+... marked current as "we have filters"
+
+> +	spin_unlock_irq(&current->sighand->siglock);
+
+... and unlocked the current.
+
+So basically you have
+
+	verify that current has no filters
+	lock current
+	lock source
+	verify that source has filters
+	grab reference to that
+	store it in current, assuming that it still has no filters
+	unlock source
+	mark current as having filters
+	unlock current
+
+For one thing, the first check is done before we locked current,
+making it racy.  For another, this "hold two locks at once" is
+asking for trouble - it could be dealt with, but do we really
+need both at once?  We do need the source locked for checking
+if it has filters and grabbing a reference, but we don't need
+current locked for that - the only thing this lock would give is
+protection against filters appearing, but it's done too late to
+guarantee that.  And the lock on source shouldn't be needed after
+we'd got its filters and grabbed the reference.  So... something
+along the lines of
+
+	lock source
+	verify that source has filters
+	grab reference to that
+	store it in local variable, along with filter_count and mode
+	unlock source
+	lock current
+	verify that current has no filters
+	copy the stuff we'd stashed into our local variabl to current
+	mark current as having filters
+	unlock current
+
+That would avoid all problems with nested locks, by virtue of never
+taking more than one at a time, but now we grab the reference(s)
+to source filters before checking that current has none.  Which
+means that we need to undo that on failure.  From the way an old
+reference is dropped by seccomp_sync_threads(), that would be
+__seccomp_filter_release(filters)...
+
+So something like this:
+	spin_lock_irq(&task->sighand->siglock);
+	if (atomic_read(&task->seccomp.filter_count) == 0) {
+		spin_unlock_irq(&task->sighand->siglock);
+		put_task_struct(task);
+		return -EINVAL;
+	}
+	get_seccomp_filter(task);
+	new_seccomp = task->seccomp;
+	spin_unlock_irq(&task->sighand->siglock);
+	spin_lock_irq(&current->sighand->siglock);
+	if (atomic_read(&current->seccomp.filter_count) > 0) {
+		spin_unlock_irq(&current->sighand->siglock);
+		__seccomp_filter_release(new_seccomp.filter);
+		put_task_struct(task);
+		return -EINVAL;
+	}
+	// no barriers - only current->seccomp.filter is read locklessly
+	current->seccomp = new_seccomp;
+	set_task_syscall_work(current, SECCOMP);
+	spin_unlock_irq(&current->sighand->siglock);
+	put_task_struct(task);
+	return 0;
+
+and I would suggest asking whoever had come up with that atomic for
+filter_count if it's needed (or ever had been, for that matter).
+Who was it, anyway?  Kees, unless I'm misreading the history,
+and AFAICS on Cc in this thread, so...
+
+Kees, is there any reason not to make it a plain int?  And what is
+that READ_ONCE() doing in proc_pid_seccomp_cache(), while we are
+at it...  That's 0d8315dddd28 "seccomp/cache: Report cache data
+through /proc/pid/seccomp_cache", by YiFei Zhu <yifeifz2@illinois.edu>,
+AFAICS.  Looks like YiFei Zhu <zhuyifei@google.com> is the current
+address [Cc'd]...
 
