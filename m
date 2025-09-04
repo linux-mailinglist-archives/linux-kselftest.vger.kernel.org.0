@@ -1,78 +1,79 @@
-Return-Path: <linux-kselftest+bounces-40758-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B7CCB437F7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 12:09:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73E4CB437F9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 12:09:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 422A23A658D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 10:09:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07050189C9D3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 10:09:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D351B2F7460;
-	Thu,  4 Sep 2025 10:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E40C2F90E2;
+	Thu,  4 Sep 2025 10:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pDViCc8I"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="IqPOdWru"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234062EC567;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233932C3259;
 	Thu,  4 Sep 2025 10:09:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756980561; cv=none; b=bOUKDhhab31TZ+kOYU5+z3Xs5lLyPwItgptLjoG7NHSgq1+WTYRgYkVWgoECyCs8AC5wZ8I2zAIhEVQuTffgf9/ZNXTvfggUDRj0k29OrXO4/w9/wv5t61MUPYbuwj3TeBi9irj6syGO/9v6mn+xeS3Gwz1vwXQb4bZGp0FjXpE=
+	t=1756980562; cv=none; b=teUVRd1NvGUCJNOeBkuXrDM+PHbToRN6GIQejLeg+0lDawrifgGPgW32MeRP4hcM8QeDnYamx0xJpaohCzRHXJI6JPjqMIwa4rr8wwYzaXnYVdjh4hU8kMCFJE8/opXCXhS5eAP7gnONM/IwXFNAdUtofZxjiTgq4xLp3JMDFPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756980561; c=relaxed/simple;
-	bh=lApIxGUUDg29VgPkxLWz3ivwjPt39ph2wV+HEdtYDco=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rQAHNG+H0P3m+QWl6VOBrzn4GRGGvcILFo2LEMgINblbOFV1QlbQZENZqeQkCxKJoPxD2DOQe+fcPobRZY3wWk8vgOV5UkaV7DqbSUp+jQrQ5PkfZzv3GiOXS1kojJKfv07GHI3CsPc9iliITe3Ot5iBFMagY5TmsFA/H3etmng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pDViCc8I; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1756980562; c=relaxed/simple;
+	bh=LBLS+yRW0kFOZJCDz7djs8aDlv6mKA39TFc3LHWU+ew=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=U3OWfNYBoTtNlwz6P0BEUBldK1sTOc0aP2mMiEGqdtW2iS/Pt+wQuZSkl6Trq8IrJFEff90650uf0Xce05SIbaCmCq2Kdde9vUlmnKSJqvh+0LGr9I0P6ugEqWXN3esZhy9nxOHXA/sptimaeKk/nzQNvuzZDi66UIIHmlmiHmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=IqPOdWru; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 583Mov8L014694;
-	Thu, 4 Sep 2025 10:08:46 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5848VcgI001237;
+	Thu, 4 Sep 2025 10:08:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=FCfIB0g19w/gBXxKkNHd0SAzNkeaeHjORouxgnQnU
-	zE=; b=pDViCc8IW2JP4VUNqe0+DcUcElnbbylmh66K+Ui/w7ueRLrilv12sc8oW
-	jjFN4HhpFLcT/HQzPo6DpkcnldvfYhXldn54xaCv4NVjNTZU/IkBhAiB5d04PkI8
-	udZO84R23EOH9rECk1rXbvp86d/k52YBkCijBjTpj2pmuLMYte9cXiupbZHr+s8e
-	eIUMR9EYeAbeTW8FjJWzyg4lBU6cJA8vr6Mc+IJT9nd8p+1jHRbtywB9t4A1SXkI
-	F89hHtqbtZ2iXCWSgIPfysj9vebFS2vRn0g5U+UnGebkwul2OlMc7mszE6hLFOxM
-	Om9kcTcRjnoYPRLffWKCKDnZc5J6w==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=bE5x8zUpq9vGEEzFm
+	mjIrWw50JOTHIlQuqc8WIdKmdw=; b=IqPOdWrurzdcv4q0QDPb8hFW8AYkP8VoM
+	CiOXc6zxbCwe4dxEyJKvxXq035lEVmOBuU7R3GE6sDKNhJyVIsKgTP8l9JEkTtC8
+	hnINJ6W0Ov7uSsQy3lwBLio0+TOWhClrSQ9RyeXKy0NVuZq64Zn0hkwkaVTWGxIe
+	ZNv0/sgRl4Sxd1zNDB03hPWH7oUc1gfE+KDBfoPZ6QUKWuKU5ofo1jhhjA9cy5R4
+	6W09sF4e5TEBU8M9RmkDu6Nh3hdSaPJEyxhs5YprA8z/6yhkY5yHpiBZ9PuFriUJ
+	+gYcoVxEfpBw4mhMFv9aWpJxgr0POC4VAQFEyTEpIrVt2d2Z/bIBw==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48wshf572t-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48wshf5734-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 04 Sep 2025 10:08:46 +0000 (GMT)
+	Thu, 04 Sep 2025 10:08:50 +0000 (GMT)
 Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5849rqAs013634;
-	Thu, 4 Sep 2025 10:08:45 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48wshf572r-1
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 584A4N3X002972;
+	Thu, 4 Sep 2025 10:08:50 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48wshf5731-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 04 Sep 2025 10:08:45 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 584916SF014345;
-	Thu, 4 Sep 2025 10:08:44 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 48veb3kn9c-1
+	Thu, 04 Sep 2025 10:08:50 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5847mFwR021420;
+	Thu, 4 Sep 2025 10:08:49 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 48vcmpuy6x-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 04 Sep 2025 10:08:44 +0000
+	Thu, 04 Sep 2025 10:08:49 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 584A8f5M49414534
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 584A8k7U52298220
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 4 Sep 2025 10:08:41 GMT
+	Thu, 4 Sep 2025 10:08:46 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3596C20073;
+	by IMSVA (Postfix) with ESMTP id 05EDF20073;
+	Thu,  4 Sep 2025 10:08:46 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8013320067;
 	Thu,  4 Sep 2025 10:08:41 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AC7A220067;
-	Thu,  4 Sep 2025 10:08:36 +0000 (GMT)
 Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.in.ibm.com (unknown [9.109.219.153])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  4 Sep 2025 10:08:36 +0000 (GMT)
+	Thu,  4 Sep 2025 10:08:41 +0000 (GMT)
 From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -84,10 +85,12 @@ Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
         christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
         mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
         iii@linux.ibm.com, shuah@kernel.org
-Subject: [PATCH bpf-next v3 0/4] powerpc64/bpf: Add support for bpf arena and arena atomics
-Date: Thu,  4 Sep 2025 15:38:31 +0530
-Message-ID: <20250904100835.1100423-1-skb99@linux.ibm.com>
+Subject: [PATCH bpf-next v3 1/4] powerpc64/bpf: Implement PROBE_MEM32 pseudo instructions
+Date: Thu,  4 Sep 2025 15:38:32 +0530
+Message-ID: <20250904100835.1100423-2-skb99@linux.ibm.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250904100835.1100423-1-skb99@linux.ibm.com>
+References: <20250904100835.1100423-1-skb99@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,18 +99,18 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JR7FPIcHfEQnGfz7BVi3W-hDsDegsZaT
-X-Authority-Analysis: v=2.4 cv=do3bC0g4 c=1 sm=1 tr=0 ts=68b9652e cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=HxOIHn79L73zkQQosxIA:9
-X-Proofpoint-ORIG-GUID: OhqdGAvzUkue9J7WOXEruG4O5p2dlXqe
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTAyMDA0MCBTYWx0ZWRfX26+bzVJt7zrS
- 6fJYW3rFrOZHLTbyItko32Ky21x3uYEslaG3cOtND5u6idICHm76lebAKX+8iHYvuyCs0kzqcTf
- byCDP2y44R+fkE2aN6/z7ehm4Jn/eA8lV1bdR+HqYp/u7AvVg2GknlCCbIeQV3oEI+gtvhpGXUz
- 0SCahV5VnlrrV4wqf7oQy5wpgBap9t6bH6fr6xs8/gCejXgDnZHKwmU/3F3ES8n4QDjiSflwptw
- bvevwOxDs+vfde2ofoMvHVBrup3g0QJFeaGblDe3U55Fb/Uf+SsUBukF8a+I1H0X6JcD89E8U5q
- RAee1UDYr5o7sC3IvVshVVG1JbB2OJqPT3olMjlpNzmjkRW1SxrDCMSeL/ocdx9krf1KqRnslD/
- irkBd6Um
+X-Proofpoint-GUID: vhU-3djvpboayNVkSuAIVRr04ShsbB60
+X-Authority-Analysis: v=2.4 cv=do3bC0g4 c=1 sm=1 tr=0 ts=68b96532 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=yJojWOMRYYMA:10 a=VnNF1IyMAAAA:8 a=Y3zdiQqfN-WssEDAR9wA:9
+X-Proofpoint-ORIG-GUID: iooR2kzz6BQqPJ5W0gKaCEHmnV0dqNBK
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTAyMDA0MCBTYWx0ZWRfX7R45/bbrhidS
+ kH5HRxUT7lFX1/xZN+z8wZIublqac9XOL0TKygq5E2w+gGjMse/jOHWWZTs2D4edx+g5Vtu9Rwu
+ G3ep8YvRGDht2UrmUjnO2d4wmDlENfupcEcDfb2r61tTNjd3ImkHL0eCAruUnRq9HCPW7PShAys
+ KUomy0MQ07wa9ViR2idksGCAQr3EPniDIz8l5LsAWek/hX+k0TCYi8xMvaspWE7j9qU1ExuOwkk
+ 3Hstxg1HV/KgLCzIbxXFcG9jQibL4NdE+ef6SS9VYkV/tIOiRboFr5IE9nv2gSz4PQzRZiRp/qz
+ 74orS6Ve1ddlKIZOEFHmZiz7ZE7VWkjJG1kFTObS+pIPMvN+bxMf0+rVXBgADyL7J2Z9AeTmRwe
+ B98vs14z
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-04_03,2025-08-28_01,2025-03-28_01
@@ -117,91 +120,403 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509020040
 
-This patch series introduces support for the PROBE_MEM32,
-bpf_addr_space_cast and PROBE_ATOMIC instructions in the powerpc BPF JIT,
-facilitating the implementation of BPF arena and arena atomics.
+Add support for [LDX | STX | ST], PROBE_MEM32, [B | H | W | DW]
+instructions.  They are similar to PROBE_MEM instructions with the
+following differences:
+- PROBE_MEM32 supports store.
+- PROBE_MEM32 relies on the verifier to clear upper 32-bit of the
+src/dst register
+- PROBE_MEM32 adds 64-bit kern_vm_start address (which is stored in _R26
+in the prologue). Due to bpf_arena constructions such _R26 + reg +
+off16 access is guaranteed to be within arena virtual range, so no
+address check at run-time.
+- PROBE_MEM32 allows STX and ST. If they fault the store is a nop. When
+LDX faults the destination register is zeroed.
 
-All selftests related to bpf_arena, bpf_arena_atomic(except
-load_acquire/store_release) enablement are passing:
+To support these on powerpc, we do tmp1 = _R26 + src/dst reg and then use
+tmp1 as the new src/dst register. This allows us to reuse most of the
+code for normal [LDX | STX | ST].
 
-# ./test_progs -t arena_list
-#5/1     arena_list/arena_list_1:OK
-#5/2     arena_list/arena_list_1000:OK
-#5       arena_list:OK
-Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+Additionally, bpf_jit_emit_probe_mem_store() is introduced to emit
+instructions for storing memory values depending on the size (byte,
+halfword, word, doubleword).
 
-# ./test_progs -t arena_htab
-#4/1     arena_htab/arena_htab_llvm:OK
-#4/2     arena_htab/arena_htab_asm:OK
-#4       arena_htab:OK
-Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+Stack layout is adjusted to introduce a new NVR (_R26) and to make
+BPF_PPC_STACKFRAME quadword aligned (local_tmp_var is increased by
+8 bytes).
 
-# ./test_progs -t verifier_arena
-#464/1   verifier_arena/basic_alloc1:OK
-#464/2   verifier_arena/basic_alloc2:OK
-#464/3   verifier_arena/basic_alloc3:OK
-#464/4   verifier_arena/iter_maps1:OK
-#464/5   verifier_arena/iter_maps2:OK
-#464/6   verifier_arena/iter_maps3:OK
-#464     verifier_arena:OK
-#465/1   verifier_arena_large/big_alloc1:OK
-#465/2   verifier_arena_large/big_alloc2:OK
-#465     verifier_arena_large:OK
-Summary: 2/8 PASSED, 0 SKIPPED, 0 FAILED
+Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+---
+ arch/powerpc/net/bpf_jit.h        |   5 +-
+ arch/powerpc/net/bpf_jit_comp.c   |  10 +-
+ arch/powerpc/net/bpf_jit_comp32.c |   2 +-
+ arch/powerpc/net/bpf_jit_comp64.c | 162 ++++++++++++++++++++++++++----
+ 4 files changed, 155 insertions(+), 24 deletions(-)
 
-# ./test_progs -t arena_atomics
-#3/1     arena_atomics/add:OK
-#3/2     arena_atomics/sub:OK
-#3/3     arena_atomics/and:OK
-#3/4     arena_atomics/or:OK
-#3/5     arena_atomics/xor:OK
-#3/6     arena_atomics/cmpxchg:OK
-#3/7     arena_atomics/xchg:OK
-#3/8     arena_atomics/uaf:OK
-#3/9     arena_atomics/load_acquire:SKIP
-#3/10    arena_atomics/store_release:SKIP
-#3       arena_atomics:OK (SKIP: 2/10)
-Summary: 1/8 PASSED, 2 SKIPPED, 0 FAILED
-
-Changes since v2:
-* Dropped arena_spin_lock selftest fix patch from the patchset as it has
-  to go via bpf-next while these changes will go via powerpc tree.
-
-v2:https://lore.kernel.org/all/20250829165135.1273071-1-skb99@linux.ibm.com/
-
-Changes since v1:
-
-Addressed comments from Chris:
-* Squashed introduction of bpf_jit_emit_probe_mem_store() and its usage in
-  one patch.
-* Defined and used PPC_RAW_RLDICL_DOT to avoid the CMPDI.
-* Removed conditional statement for fixup[0] = PPC_RAW_LI(dst_reg, 0);
-* Indicated this change is limited to powerpc64 in subject.
-
-Addressed comments from Alexei:
-* Removed skel->rodata->nr_cpus = get_nprocs() and its usage to get
-  currently online cpus(as it needs to be updated from userspace).
-
-Addressed comments from Hari:
-* Updated the bpf jit stack layout and associated macros to accommodate
-  new NVR.
-
-v1:https://lore.kernel.org/all/20250805062747.3479221-1-skb99@linux.ibm.com/
-
-Saket Kumar Bhaskar (4):
-  powerpc64/bpf: Implement PROBE_MEM32 pseudo instructions
-  powerpc64/bpf: Implement bpf_addr_space_cast instruction
-  powerpc64/bpf: Introduce bpf_jit_emit_atomic_ops() to emit atomic
-    instructions
-  powerpc64/bpf: Implement PROBE_ATOMIC instructions
-
- arch/powerpc/include/asm/ppc-opcode.h |   1 +
- arch/powerpc/net/bpf_jit.h            |   6 +-
- arch/powerpc/net/bpf_jit_comp.c       |  32 +-
- arch/powerpc/net/bpf_jit_comp32.c     |   2 +-
- arch/powerpc/net/bpf_jit_comp64.c     | 401 +++++++++++++++++++-------
- 5 files changed, 330 insertions(+), 112 deletions(-)
-
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index 4c26912c2e3c..2d095a873305 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -161,9 +161,10 @@ struct codegen_context {
+ 	unsigned int seen;
+ 	unsigned int idx;
+ 	unsigned int stack_size;
+-	int b2p[MAX_BPF_JIT_REG + 2];
++	int b2p[MAX_BPF_JIT_REG + 3];
+ 	unsigned int exentry_idx;
+ 	unsigned int alt_exit_addr;
++	u64 arena_vm_start;
+ };
+ 
+ #define bpf_to_ppc(r)	(ctx->b2p[r])
+@@ -201,7 +202,7 @@ int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg,
+ 
+ int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass,
+ 			  struct codegen_context *ctx, int insn_idx,
+-			  int jmp_off, int dst_reg);
++			  int jmp_off, int dst_reg, u32 code);
+ 
+ #endif
+ 
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index c0684733e9d6..7d070232159f 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -204,6 +204,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 
+ 	/* Make sure that the stack is quadword aligned. */
+ 	cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
++	cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux->arena);
+ 
+ 	/* Scouting faux-generate pass 0 */
+ 	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+@@ -326,7 +327,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+  */
+ int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass,
+ 			  struct codegen_context *ctx, int insn_idx, int jmp_off,
+-			  int dst_reg)
++			  int dst_reg, u32 code)
+ {
+ 	off_t offset;
+ 	unsigned long pc;
+@@ -355,6 +356,9 @@ int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass
+ 		(ctx->exentry_idx * BPF_FIXUP_LEN * 4);
+ 
+ 	fixup[0] = PPC_RAW_LI(dst_reg, 0);
++	if (BPF_CLASS(code) == BPF_ST || BPF_CLASS(code) == BPF_STX)
++		fixup[0] = PPC_RAW_NOP();
++
+ 	if (IS_ENABLED(CONFIG_PPC32))
+ 		fixup[1] = PPC_RAW_LI(dst_reg - 1, 0); /* clear higher 32-bit register too */
+ 
+@@ -579,7 +583,7 @@ static void bpf_trampoline_setup_tail_call_cnt(u32 *image, struct codegen_contex
+ {
+ 	if (IS_ENABLED(CONFIG_PPC64)) {
+ 		/* See bpf_jit_stack_tailcallcnt() */
+-		int tailcallcnt_offset = 6 * 8;
++		int tailcallcnt_offset = 7 * 8;
+ 
+ 		EMIT(PPC_RAW_LL(_R3, _R1, func_frame_offset - tailcallcnt_offset));
+ 		EMIT(PPC_RAW_STL(_R3, _R1, -tailcallcnt_offset));
+@@ -594,7 +598,7 @@ static void bpf_trampoline_restore_tail_call_cnt(u32 *image, struct codegen_cont
+ {
+ 	if (IS_ENABLED(CONFIG_PPC64)) {
+ 		/* See bpf_jit_stack_tailcallcnt() */
+-		int tailcallcnt_offset = 6 * 8;
++		int tailcallcnt_offset = 7 * 8;
+ 
+ 		EMIT(PPC_RAW_LL(_R3, _R1, -tailcallcnt_offset));
+ 		EMIT(PPC_RAW_STL(_R3, _R1, func_frame_offset - tailcallcnt_offset));
+diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+index 0aace304dfe1..3087e744fb25 100644
+--- a/arch/powerpc/net/bpf_jit_comp32.c
++++ b/arch/powerpc/net/bpf_jit_comp32.c
+@@ -1087,7 +1087,7 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 				}
+ 
+ 				ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx, insn_idx,
+-							    jmp_off, dst_reg);
++							    jmp_off, dst_reg, code);
+ 				if (ret)
+ 					return ret;
+ 			}
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index 025524378443..569619f1b31c 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -25,18 +25,18 @@
+  * with our redzone usage.
+  *
+  *		[	prev sp		] <-------------
+- *		[   nv gpr save area	] 5*8		|
++ *		[   nv gpr save area	] 6*8		|
+  *		[    tail_call_cnt	] 8		|
+- *		[    local_tmp_var	] 16		|
++ *		[    local_tmp_var	] 24		|
+  * fp (r31) -->	[   ebpf stack space	] upto 512	|
+  *		[     frame header	] 32/112	|
+  * sp (r1) --->	[    stack pointer	] --------------
+  */
+ 
+ /* for gpr non volatile registers BPG_REG_6 to 10 */
+-#define BPF_PPC_STACK_SAVE	(5*8)
++#define BPF_PPC_STACK_SAVE	(6*8)
+ /* for bpf JIT code internal usage */
+-#define BPF_PPC_STACK_LOCALS	24
++#define BPF_PPC_STACK_LOCALS	32
+ /* stack frame excluding BPF stack, ensure this is quadword aligned */
+ #define BPF_PPC_STACKFRAME	(STACK_FRAME_MIN_SIZE + \
+ 				 BPF_PPC_STACK_LOCALS + BPF_PPC_STACK_SAVE)
+@@ -44,6 +44,7 @@
+ /* BPF register usage */
+ #define TMP_REG_1	(MAX_BPF_JIT_REG + 0)
+ #define TMP_REG_2	(MAX_BPF_JIT_REG + 1)
++#define ARENA_VM_START  (MAX_BPF_JIT_REG + 2)
+ 
+ /* BPF to ppc register mappings */
+ void bpf_jit_init_reg_mapping(struct codegen_context *ctx)
+@@ -67,10 +68,12 @@ void bpf_jit_init_reg_mapping(struct codegen_context *ctx)
+ 	ctx->b2p[BPF_REG_AX] = _R12;
+ 	ctx->b2p[TMP_REG_1] = _R9;
+ 	ctx->b2p[TMP_REG_2] = _R10;
++	/* non volatile register for kern_vm_start address */
++	ctx->b2p[ARENA_VM_START] = _R26;
+ }
+ 
+-/* PPC NVR range -- update this if we ever use NVRs below r27 */
+-#define BPF_PPC_NVR_MIN		_R27
++/* PPC NVR range -- update this if we ever use NVRs below r26 */
++#define BPF_PPC_NVR_MIN		_R26
+ 
+ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
+ {
+@@ -89,9 +92,9 @@ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
+  *		[	prev sp		] <-------------
+  *		[	  ...       	] 		|
+  * sp (r1) --->	[    stack pointer	] --------------
+- *		[   nv gpr save area	] 5*8
++ *		[   nv gpr save area	] 6*8
+  *		[    tail_call_cnt	] 8
+- *		[    local_tmp_var	] 16
++ *		[    local_tmp_var	] 24
+  *		[   unused red zone	] 224
+  */
+ static int bpf_jit_stack_local(struct codegen_context *ctx)
+@@ -99,12 +102,12 @@ static int bpf_jit_stack_local(struct codegen_context *ctx)
+ 	if (bpf_has_stack_frame(ctx))
+ 		return STACK_FRAME_MIN_SIZE + ctx->stack_size;
+ 	else
+-		return -(BPF_PPC_STACK_SAVE + 24);
++		return -(BPF_PPC_STACK_SAVE + 32);
+ }
+ 
+ static int bpf_jit_stack_tailcallcnt(struct codegen_context *ctx)
+ {
+-	return bpf_jit_stack_local(ctx) + 16;
++	return bpf_jit_stack_local(ctx) + 24;
+ }
+ 
+ static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg)
+@@ -170,10 +173,17 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ 		if (bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+ 			EMIT(PPC_RAW_STD(bpf_to_ppc(i), _R1, bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+ 
++	if (ctx->arena_vm_start)
++		EMIT(PPC_RAW_STD(bpf_to_ppc(ARENA_VM_START), _R1,
++				 bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
++
+ 	/* Setup frame pointer to point to the bpf stack area */
+ 	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+ 		EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+ 				STACK_FRAME_MIN_SIZE + ctx->stack_size));
++
++	if (ctx->arena_vm_start)
++		PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
+ }
+ 
+ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx)
+@@ -185,6 +195,10 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+ 		if (bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+ 			EMIT(PPC_RAW_LD(bpf_to_ppc(i), _R1, bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+ 
++	if (ctx->arena_vm_start)
++		EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
++				bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
++
+ 	/* Tear down our stack frame */
+ 	if (bpf_has_stack_frame(ctx)) {
+ 		EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME + ctx->stack_size));
+@@ -396,11 +410,11 @@ void bpf_stf_barrier(void);
+ asm (
+ "		.global bpf_stf_barrier		;"
+ "	bpf_stf_barrier:			;"
+-"		std	21,-64(1)		;"
+-"		std	22,-56(1)		;"
++"		std	21,-80(1)		;"
++"		std	22,-72(1)		;"
+ "		sync				;"
+-"		ld	21,-64(1)		;"
+-"		ld	22,-56(1)		;"
++"		ld	21,-80(1)		;"
++"		ld	22,-72(1)		;"
+ "		ori	31,31,0			;"
+ "		.rept 14			;"
+ "		b	1f			;"
+@@ -409,6 +423,36 @@ asm (
+ "		blr				;"
+ );
+ 
++static int bpf_jit_emit_probe_mem_store(struct codegen_context *ctx, u32 src_reg, s16 off,
++					u32 code, u32 *image)
++{
++	u32 tmp1_reg = bpf_to_ppc(TMP_REG_1);
++	u32 tmp2_reg = bpf_to_ppc(TMP_REG_2);
++
++	switch (BPF_SIZE(code)) {
++	case BPF_B:
++		EMIT(PPC_RAW_STB(src_reg, tmp1_reg, off));
++		break;
++	case BPF_H:
++		EMIT(PPC_RAW_STH(src_reg, tmp1_reg, off));
++		break;
++	case BPF_W:
++		EMIT(PPC_RAW_STW(src_reg, tmp1_reg, off));
++		break;
++	case BPF_DW:
++		if (off % 4) {
++			EMIT(PPC_RAW_LI(tmp2_reg, off));
++			EMIT(PPC_RAW_STDX(src_reg, tmp1_reg, tmp2_reg));
++		} else {
++			EMIT(PPC_RAW_STD(src_reg, tmp1_reg, off));
++		}
++		break;
++	default:
++		return -EINVAL;
++	}
++	return 0;
++}
++
+ static int emit_atomic_ld_st(const struct bpf_insn insn, struct codegen_context *ctx, u32 *image)
+ {
+ 	u32 code = insn.code;
+@@ -960,6 +1004,50 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 			}
+ 			break;
+ 
++		case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
++		case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
++		case BPF_STX | BPF_PROBE_MEM32 | BPF_W:
++		case BPF_STX | BPF_PROBE_MEM32 | BPF_DW:
++
++			EMIT(PPC_RAW_ADD(tmp1_reg, dst_reg, bpf_to_ppc(ARENA_VM_START)));
++
++			ret = bpf_jit_emit_probe_mem_store(ctx, src_reg, off, code, image);
++			if (ret)
++				return ret;
++
++			ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx,
++						    ctx->idx - 1, 4, -1, code);
++			if (ret)
++				return ret;
++
++			break;
++
++		case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
++		case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
++		case BPF_ST | BPF_PROBE_MEM32 | BPF_W:
++		case BPF_ST | BPF_PROBE_MEM32 | BPF_DW:
++
++			EMIT(PPC_RAW_ADD(tmp1_reg, dst_reg, bpf_to_ppc(ARENA_VM_START)));
++
++			if (BPF_SIZE(code) == BPF_W || BPF_SIZE(code) == BPF_DW) {
++				PPC_LI32(tmp2_reg, imm);
++				src_reg = tmp2_reg;
++			} else {
++				EMIT(PPC_RAW_LI(tmp2_reg, imm));
++				src_reg = tmp2_reg;
++			}
++
++			ret = bpf_jit_emit_probe_mem_store(ctx, src_reg, off, code, image);
++			if (ret)
++				return ret;
++
++			ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx,
++						    ctx->idx - 1, 4, -1, code);
++			if (ret)
++				return ret;
++
++			break;
++
+ 		/*
+ 		 * BPF_STX ATOMIC (atomic ops)
+ 		 */
+@@ -1112,9 +1200,10 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 				 * Check if 'off' is word aligned for BPF_DW, because
+ 				 * we might generate two instructions.
+ 				 */
+-				if ((BPF_SIZE(code) == BPF_DW ||
+-				    (BPF_SIZE(code) == BPF_B && BPF_MODE(code) == BPF_PROBE_MEMSX)) &&
+-						(off & 3))
++				if ((BPF_SIZE(code) == BPF_DW && (off & 3)) ||
++				    (BPF_SIZE(code) == BPF_B &&
++				     BPF_MODE(code) == BPF_PROBE_MEMSX) ||
++				    (BPF_SIZE(code) == BPF_B && BPF_MODE(code) == BPF_MEMSX))
+ 					PPC_JMP((ctx->idx + 3) * 4);
+ 				else
+ 					PPC_JMP((ctx->idx + 2) * 4);
+@@ -1160,12 +1249,49 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 
+ 			if (BPF_MODE(code) == BPF_PROBE_MEM) {
+ 				ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx,
+-							    ctx->idx - 1, 4, dst_reg);
++							    ctx->idx - 1, 4, dst_reg, code);
+ 				if (ret)
+ 					return ret;
+ 			}
+ 			break;
+ 
++		/* dst = *(u64 *)(ul) (src + ARENA_VM_START + off) */
++		case BPF_LDX | BPF_PROBE_MEM32 | BPF_B:
++		case BPF_LDX | BPF_PROBE_MEM32 | BPF_H:
++		case BPF_LDX | BPF_PROBE_MEM32 | BPF_W:
++		case BPF_LDX | BPF_PROBE_MEM32 | BPF_DW:
++
++			EMIT(PPC_RAW_ADD(tmp1_reg, src_reg, bpf_to_ppc(ARENA_VM_START)));
++
++			switch (size) {
++			case BPF_B:
++				EMIT(PPC_RAW_LBZ(dst_reg, tmp1_reg, off));
++				break;
++			case BPF_H:
++				EMIT(PPC_RAW_LHZ(dst_reg, tmp1_reg, off));
++				break;
++			case BPF_W:
++				EMIT(PPC_RAW_LWZ(dst_reg, tmp1_reg, off));
++				break;
++			case BPF_DW:
++				if (off % 4) {
++					EMIT(PPC_RAW_LI(tmp2_reg, off));
++					EMIT(PPC_RAW_LDX(dst_reg, tmp1_reg, tmp2_reg));
++				} else {
++					EMIT(PPC_RAW_LD(dst_reg, tmp1_reg, off));
++				}
++				break;
++			}
++
++			if (size != BPF_DW && insn_is_zext(&insn[i + 1]))
++				addrs[++i] = ctx->idx * 4;
++
++			ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx,
++						    ctx->idx - 1, 4, dst_reg, code);
++			if (ret)
++				return ret;
++			break;
++
+ 		/*
+ 		 * Doubleword load
+ 		 * 16 byte instruction that uses two 'struct bpf_insn'
 -- 
 2.43.5
 
