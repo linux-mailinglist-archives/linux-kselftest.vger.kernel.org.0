@@ -1,274 +1,272 @@
-Return-Path: <linux-kselftest+bounces-40801-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40802-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32F01B444F1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 20:01:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53F3CB4451A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 20:10:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 947513BFE24
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 18:01:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2A5D1C87C9F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Sep 2025 18:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05AAF343205;
-	Thu,  4 Sep 2025 18:01:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1CAB341AC1;
+	Thu,  4 Sep 2025 18:10:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="P42hLdOQ";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="N/xhcgaF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A83B34166F;
-	Thu,  4 Sep 2025 18:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757008860; cv=none; b=qybEcCRjQx86HswRR7ot5Ffsgmv9UM6fn2X7ntXAmgMUC22tfgRZHNGPYrmtkycCQK0PiucAO8K7UoS3bsB40Cwjn2l38cFFQ5cHXhUGt6dWuZ1OMOJQRiO4LCU5x6FNIzB+fHG9phfrqIY0Gyw2MqEB8nU2OUZj/4joFw51nrk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757008860; c=relaxed/simple;
-	bh=Rj/aqwJo1eDbOH1a9/u0mZvk6QA6zymZcXs+2NbyVlw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=M7pRiuEtFklabBAVgLLvUMOVBJYW3I0O6EI6DxoERrKdED7Pf63oUW4Yrn6mnk3xNahmNqJypHQhOhHQ4qkVCpKWA/wcp/QkedjNlobwo1W/t5WB5B//4V/WdhOhOvDJpEPU951AjO68rOOLrfHupFoFgc7h68lFtOKvXyTuYTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6188b6f7f15so1854277a12.2;
-        Thu, 04 Sep 2025 11:00:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757008857; x=1757613657;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P8TcQd40DwftcY+OnUbKSA5yId8h3+mNgJMC7BEIRO4=;
-        b=eoV5xEyKc2LKj6d1kwoT+/PszprHB5cLbqf1tTsqL/LwlPikY78pNmpME7Skgh0kZt
-         CnsS+0xlTuKSf4VkGqdukuJbqjO1Qj0VnmbqqQSkN+JoODQTVrLX42rpZx9CPAIRwtZU
-         onnaY2AAtvYamFf7xSy7zfqQg25wGnnOUMckS68Cf8Rznysgyw56eHgxLFFZbNt4GLBQ
-         hutIyvtAmbVOWiAvCCUcKUSVQt3bGA7dsnqscNye4ic80djHJZugowTWTMl1O2CJHCMH
-         SjveSE4FpfCamsBmLnuRQt/AjxfjD2vOKFOluOxAAVHWHgv7y4Sd/X9Dgug9QkSLvD9Y
-         EJdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUQsA7qZhD7Q0UFEmyyxD+5cishYQal5p0TzyB9vNhOkV7SA0xpisEvVZZf5tLuEWf+9BzXZ2V+8cjifCH57I4=@vger.kernel.org, AJvYcCXSVI+OFF2yKPRWgTG+tkI0nhpiEYqjsk+8vNsh6dnMM7yXw4o16qRnPGDPEoJtqXu+9/uR5V/R@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzh0tYPEMkhDJP/5u7Bw1LiJLpAs945vQE/vTJllfLS1Mhft+3C
-	EYqBdMZ20nEPdJ7nijs3w6GT8NqzhAn1itPnm5Q/oJw0kx+93qzUArcs
-X-Gm-Gg: ASbGncs0Fqwq8KMMYGO9NDfINRLSaAhFPptrzqxJIrA5hcLWB5oHbZFTmFU9ea4r5uk
-	zNDCUD/QNx/Xji6eY0YYL9SrrzIJXqtPr9ap9G+fhINMymXXGr2MOp7D8p1T49XSexygaLdJ/dL
-	ChKOA9RnGuJMO+T9IYS4ue9HlzWG9jJwkhR+bS5Uy+iAU0IgoZBgt6mYpOQTO1dG+IUpoiO3ZIc
-	6RGbiN2RFZ2xdrS+fAJU8AvO6WwUbJJ3OeRvjjsnk+m6zCgjWf9eUs1wiVOOIX2I31mMIM72Yb/
-	mMSZV9tuFQTabuZhEGDBGj8LqBptgBtg0BOjQPCApjU8wKCH5YPQqjOwojv+I6BjEZTePtRB8Lk
-	k4D7dLImGIA==
-X-Google-Smtp-Source: AGHT+IGevcgoHTZIQ292kIzWTrPkKUWbWymSXeh3zV9OYq806RT7xD1Ty3dCoqV0TTU/yKG1Xkqrig==
-X-Received: by 2002:a05:6402:4382:b0:61a:9385:c795 with SMTP id 4fb4d7f45d1cf-61d26eb51f8mr18283230a12.38.1757008857070;
-        Thu, 04 Sep 2025 11:00:57 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-620e3289db2sm336619a12.4.2025.09.04.11.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Sep 2025 11:00:56 -0700 (PDT)
-From: Breno Leitao <leitao@debian.org>
-Date: Thu, 04 Sep 2025 11:00:41 -0700
-Subject: [PATCH net-next v2 2/2] selftest: netcons: create a torture test
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5E92356C9;
+	Thu,  4 Sep 2025 18:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757009450; cv=fail; b=bCVQMgTwkZ5GiZJ2Mtf5Mf0+0AizZsoxhFNpXnkpKHN8Vaf+tRu1Cit8he+4gKFmLpDiSfA6XOy/YUnWY9CE31C0jmm25pkbc59IbvlNTXTbuM74TZbN3VF3NeoJcantdZOw23wYXG/AO+uyBL2xe+NHZWuQOoa1qhi4kwuGbBI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757009450; c=relaxed/simple;
+	bh=OlM/uHpXgwBBjeU9qXr/8OCq9QZJ8uGJ/wlG+aLdxS0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Y/lMSmJlS6yFEL4rKXQ7wcxHKVSCFnvdb/YoO/dizi3CKCzA1nN6rShByJvp8hh5q2WajSZ31vK1SE48MQHHjjZVjJW4cOZkgruK9JT+Qmp13d/D2lW+TVyUTBkf30XShOUGgiXJXCZ5enbyJOAdNmZHCE0OokS0rh08HOU/kNQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=P42hLdOQ; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=N/xhcgaF; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 584I4eoY025943;
+	Thu, 4 Sep 2025 18:10:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=/JIbl8CTWINaNEjmy/tiMutyxfIw9vEL1YjybuRmSv4=; b=
+	P42hLdOQntfuu5iz+3H6OpgB7pj4yYp6r+Gdm97TKj/T9NrNOcYgfJ8Fw0gyHwIn
+	gPYsJA5L9F3HObmEliVHOHVbrTwu5kDxo1da4TVixBb2QFdGDnJg4qB/RMTe1MRb
+	iKQJz1YSpgaSkOexVm7Zcm+2OgIO4Z3swG/5yxTrPJvQfHVhMnBiDhbrxBhLebjg
+	xM1uZaNu5ZhFFQm2108+yNSYf+MoYoW6iTvQbTKxnFHA1KQoFTl7qTY9HjPKJCqI
+	xe31A6V13NYeqdG947f1XRevdB062FJ0u0VrUNMwPksTMJMsK09wIYc9ZurtDh3o
+	zeVbk+BoAS4wzE1qt92UFg==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48yfqq8098-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 04 Sep 2025 18:10:42 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 584GIMrU032645;
+	Thu, 4 Sep 2025 18:10:40 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11on2048.outbound.protection.outlook.com [40.107.236.48])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48uqrj71yu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 04 Sep 2025 18:10:40 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bvyYinndO7L3CbzZSbqpyizRysIfabXlomNp/sYcbzU+U+B1NPF6dcQhT2O4WrXHdDvV4lU2Uw/Y0EA35PyoRo3LbtTaSDydZJF97H96n+KBMJG+Z2+TL8JHob30nXh8M8P0wQsRfsvtSS8r54df1+VqoqEvrkWkpL1w9zoNvR7K4eVbwFUp+rUzz2lfYguhOGu4mJl72n/XUMySKgDjobD3Po86Hp6G+mHJ2PyOvgUGG+GoRdxI3ovlNns0mmseD6la7QGM0XjwOVKVNcTVF7+JzGbVltttxIrUM9ncTLfQFLsOfQiz3nDUdle2CT7Dfz/xj4/ecARwbQZG1snf1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/JIbl8CTWINaNEjmy/tiMutyxfIw9vEL1YjybuRmSv4=;
+ b=bN4h2+isIVY33h88aymfVzyIKKGlc1G7MHQtOvFgkDV8ZzkpvQRxLb1qCzkyAbHAptgzdYhAiUO1Ktaf+hZc22rbiV/9ITRd9Sx0qF22KdW40srM9OxFYGyVz1bJjbkm7DK88K5Cd8X3TtQJCscEnA24t06f2btSNPLC0O59vXK/myoSgC0R7cwocbqdSmaKq1TcV5V+x53QGGVWsrhzvAUpofBPwlEzLHHLzI1TaH+qlnSAlYUtriuLUTyp3vO/DGtzlLrfK1A9wCmfgh6d3V3TsrxytVJs0sTJnk5OEbdYaeK5jY88dODix0h/D1TD6+DLJirNMaje1expJ7ziag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/JIbl8CTWINaNEjmy/tiMutyxfIw9vEL1YjybuRmSv4=;
+ b=N/xhcgaFo+iri2umfeiW9Yvc4cNnTf1CQHagrP9yhBgxTWhN1WjeCwokz9kVqWMekUPXG/piKI9KMl7SbAc2WzFUVec5QGLWkh9CkB7R8WXkX8jUbjtcmdvBN9xAg9PB6lZ9fvsLnUxXWeAjym9a+3ldAp/YxDGlN3cQGADD22Y=
+Received: from SA1PR10MB5509.namprd10.prod.outlook.com (2603:10b6:806:1f5::20)
+ by SJ1PR10MB5932.namprd10.prod.outlook.com (2603:10b6:a03:489::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.27; Thu, 4 Sep
+ 2025 18:10:38 +0000
+Received: from SA1PR10MB5509.namprd10.prod.outlook.com
+ ([fe80::a9aa:1b53:1397:fe24]) by SA1PR10MB5509.namprd10.prod.outlook.com
+ ([fe80::a9aa:1b53:1397:fe24%3]) with mapi id 15.20.9073.026; Thu, 4 Sep 2025
+ 18:10:38 +0000
+Message-ID: <831c2cad-c929-4190-8c79-da8192124a9c@oracle.com>
+Date: Thu, 4 Sep 2025 12:10:32 -0600
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] seccomp: Add SECCOMP_CLONE_FILTER operation
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Sargun Dhillon <sargun@sargun.me>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+References: <20250903203805.1335307-1-tom.hromatka@oracle.com>
+ <CAADnVQLve3KgrqNqSqVrmL-wz6Jj1QUdjAcE5P26Z4wvh9e4HA@mail.gmail.com>
+ <42cf76db-6cda-4606-9128-6f433da57d48@oracle.com>
+ <CAADnVQJSgcAjEnU-A9bF6-9MQRFvbHqRsCCY7a0Y6bhVGtcGpA@mail.gmail.com>
+ <21b618d5-7f6c-4b06-81be-eea6cbac5ba6@oracle.com>
+ <20250904145420.GP39973@ZenIV>
+Content-Language: en-US
+From: Tom Hromatka <tom.hromatka@oracle.com>
+In-Reply-To: <20250904145420.GP39973@ZenIV>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CY3P220CA0010.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:930:fb::13) To SA1PR10MB5509.namprd10.prod.outlook.com
+ (2603:10b6:806:1f5::20)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250904-netconsole_torture-v2-2-5775ed5dc366@debian.org>
-References: <20250904-netconsole_torture-v2-0-5775ed5dc366@debian.org>
-In-Reply-To: <20250904-netconsole_torture-v2-0-5775ed5dc366@debian.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de, 
- calvin@wbinvd.org, kernel-team@meta.com, Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.15-dev-dd21f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5156; i=leitao@debian.org;
- h=from:subject:message-id; bh=Rj/aqwJo1eDbOH1a9/u0mZvk6QA6zymZcXs+2NbyVlw=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoudPUDrDLTIJL+kC+/eGhpFfugCgwWmtScz0VP
- 34vn+t1FCyJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaLnT1AAKCRA1o5Of/Hh3
- bebuD/9MStT2lufaDTldmt2sNGc2M2MNBes+dTYSaMN7WKcwz1LOGc/qrHwkZvekPgrtpSuNZIm
- NNR79RQcNOT6UTFis1Ndv4J7ER5Oiw5qB8j545sZiN2CQdD5kwCaa1qM8dvr7n6nXw7HPK79Txi
- 82qMNiZ3M4f/vHntZFco4kKMXhCYm8VzGIEo2fExqFKoiGHcU864cod1frLPWufVyJBODWSd8ov
- bt2Co8GtKwYFFX2CAuNH6NCBvGCL4Mi8FZ6g1CrIPOs3ZG+0PfGzVR0+nzmchUrUR/+gSMNOaXe
- k1FRG7GFRcDpFzBmPX0dDDJ7oUyPv5oPvzpAHLuLAlw8D2Lmg1TixBv0pS0xA91GMfh7cIHzzJe
- RPdsbh6iKLt4GfLerDLIysahvC3L9heOHIKee4VdOr2WSh/t6f1DMJNEmiEEw9vpXjJeU2Vlw90
- KsA8ZP3cuJuJryDeeWqqy5qLsRWKEVp6LKMaHp9lKi1G+kWNt0gyi2jAMJTXDH/Kak5U7Vb3+Nk
- fgpnodIIbs7szBLzLb2tBbwCOkKFqeWrwmu5uHHzLDF3Eu1EO1+M4RMNNQQc2J7t0LlfAHrZhzW
- Ugsr3H0XE9ruonOygV+Zq6MpMc0939T2T9+OqROomRpR93TV4U+O2tQicNLYGbxoBnTMWibOUU2
- bYhd1hYad4qhRGQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR10MB5509:EE_|SJ1PR10MB5932:EE_
+X-MS-Office365-Filtering-Correlation-Id: 936ab29f-cdd9-438b-3242-08ddebde59bf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UHBSWjlBbGoyM0lFWDZlR1JqTGUvWGpTSjhvRVNwaFR1SGk2TGFWUW41bmJi?=
+ =?utf-8?B?LytUR0Zrei9ZN3pTTkhCV1AxMFlxR0dMYVhqelVvVU92MEllODEzKzQzd1dm?=
+ =?utf-8?B?WDBiano5eHVob1VFRmRGNzZha0ZRS0xib08wY2dtME1ZMjdsQ3JtSjZ1ZjJi?=
+ =?utf-8?B?d1d4NDR4cmdJNU9hUnNsa1oxNE1qWE1yeWovYThFTmhnTS9lOWJCcmpEUE8x?=
+ =?utf-8?B?Wk5GMC9pa1owTi9BZ21lbCtmT3FLd0JhWkl4UTE2UlNoSmJKbXJxbzlKbTFo?=
+ =?utf-8?B?aDBlNlBZSkZCeUVrUy9EK2RHbG1qeE5rdlczSjlwdkx0ZVFKL2ROV0VLa0Fu?=
+ =?utf-8?B?enRlZ2t1d1ZJZStheTZEb3VDd29JNURjc2pMaXd3SnJSdmJidWpjYmZLYVdU?=
+ =?utf-8?B?YklpbnI5cUk4SWJVdDJjdWREbjNiREQzSTNVc1hVL1l0UXJGTDA5Z1NOdlhU?=
+ =?utf-8?B?NWVLb0RGTTlaSFViNXMwa3pIemR0R1JGdnQ3U0JjS01xTzlzZS81RVIxUGp0?=
+ =?utf-8?B?ZXhCcGdOZjFuZ1VHK2VVeFVXSGprYmVrVE9YZE16WlVnc3NuSER6VXRKb0Ft?=
+ =?utf-8?B?SWIzUFlQV1VUWGl1UnE3eTZJOWIwQUdiZ0hReEkzSklhMXRQd0pESEhmb1FS?=
+ =?utf-8?B?c1ltODRWRGFlZjBEQ1RuTk9wYW1IK2E0ZlNYMGRnZkVuZUhaME1qWFFZK2Vl?=
+ =?utf-8?B?a3ZCTGpab2hQWTN3SWttWit6dDE5eElLWkJzYW1heERRcVNTdEwzUU8yOVlm?=
+ =?utf-8?B?eXZ3ZGJWOXhTV3M4b2dlRGNhQ0hmenVTeDYrQWJuNGhuMFNkSGNLdXU3YzlG?=
+ =?utf-8?B?dWphUFRHdjlSNS91VVV5T1ovWEV5TTA2dlJNUGY1dXdnbXFtOTFBZmtTN0ZP?=
+ =?utf-8?B?U0F4Z3crcUV4Yzg4N2YrS3ZrM2lSZUFYZEJxWEN6M1lZZkVtWnB6by9JWXhO?=
+ =?utf-8?B?YUFoN1Y3b09CeHphQlRhV2JjNzVYUHMrYm1zV3BCMnpBQ3JxcG9zbE43UFJh?=
+ =?utf-8?B?eDdCVW5JWUdrYTZQY3piWlRZSWV2TWpwQmUzS3pWeW5kSFVCTmdFM1NDa2hV?=
+ =?utf-8?B?dDR1M3MyUUJuNTVKZGNXYWpOSWJGanNlb0NwNHNDU2NtM1FlMW4wdUZzbkJ3?=
+ =?utf-8?B?NVZ6YjB1SU1ORGdMaGRwMjNwN3NTbkNtdUFDYm9OcGtQZVppY2VDcFNzWTBO?=
+ =?utf-8?B?Skd3RE55WlRweDcxYllvS2hBNlV5WVBnNmQyZVVBK0MzR0RXZVRObmRRUTNr?=
+ =?utf-8?B?MUExeThyS2xma05yWXNBdjVoWmNRd1RjZDZudWdoNDlwZEFuWUpuRCtuaURL?=
+ =?utf-8?B?Y3B4OFBIVWpreDdzMlZ0YzEvR2tKWm9nSk12RE9IdEtaUzBTWkdFcWxHbXN4?=
+ =?utf-8?B?cWF6UGcwOVhaZUlaMXp2SnlFZnQ4WDl4bUNzbjg5YlZhYXVJUnpIZWRBM0Jq?=
+ =?utf-8?B?VVkxRVNNK2psUHBvVWQrVEdSbjRBSjY1eXlJMHM4b3hBSStCRHllVUJ1ZlRO?=
+ =?utf-8?B?U0NwemlMK3ZaR3FzKzRvQW5SYm5HeEdQb1RaZFpaSVFjV2hwV0VvbE8vQ0Zj?=
+ =?utf-8?B?Mm9ZbXpVc05IbkhWczFaT3p5c244MXZVZm8zaDhDMWlUa2c5WG9aQnQxcktP?=
+ =?utf-8?B?eEh6UUc4MG1PSHk3WGVVMjAzZ21sU2F6MlhPWi90dTBWT2hlbkd3c3hzMWR2?=
+ =?utf-8?B?ajhySGxHTFFDK25ES1FqN2xhdVFPSWU3S1MvM3FBUnRoTHc0V0JzalVLajRN?=
+ =?utf-8?B?aEZUaFJPUTIxRDd3bWk2Ti9DTU9XTFlya2tWL0JGVEY4dno0RThVenhkRHV1?=
+ =?utf-8?B?czlmeE80Q3BSL0U1VGdqUTZtS0xVZmF3TDhCS2orNG9pQmZKUFV3WHA2cU5X?=
+ =?utf-8?B?bFd1YTEwN05wSXhEbVJ2bFVINkpabE1EWkR5NkJiYlo0VG5COWVmcmg3Zzc2?=
+ =?utf-8?Q?hC+v75ixsOA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5509.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cnRxMGRGOE12TGZzaEpDK2NzSUdQcFFESFI4UnlheHRSdzBmU0g4dnZLUkhW?=
+ =?utf-8?B?bEdGcWl0U3F4d2hrTmhzZndrNGNPNU91QlZxYWt6YXZ6M3E5aTJYMjlBR1BY?=
+ =?utf-8?B?VjJiWkk4SWVsSmh0SVhpNHNQem5PMmZ3T0R0ZHhISStzMGxoL1NEcElNQml5?=
+ =?utf-8?B?enNCL3hucGhRTmhHOFZSdU5HY05taWdVKzZOQ2c3S3F0dnNPTk12dG1YYm5z?=
+ =?utf-8?B?c1ptLzJ0NFpnd1ZPVFM4cUEzbHNPejhQVDk3YnBjWmVsSGFPR3ZsNDIwUDNw?=
+ =?utf-8?B?NFdFZ0p4eEJQNmJLTDJUTnZNamhYUDJkV0FrLzNzOFJzSEZBTVNqVjcwWTFl?=
+ =?utf-8?B?bHRqQmxoSUQ2OVJyS2JiZFg3elo2ZDNWVnFKQjRwUGg3bkloRHkzRHZNQTNr?=
+ =?utf-8?B?TG1BSlJxQVM3OTU0WE81VG5IZ0FtaktJMEhPU2pXR1hUN2Qwa3dyY1NqYWdh?=
+ =?utf-8?B?ZjdCVEUwQkdkbFpOMjFyZVNVdFp6UjZwZDFvWThuSFJSaHY1ODFBODVTMlNv?=
+ =?utf-8?B?WC9mRGtnQ085azZxYmhJVm1qalhBZys0Rm8zcVJpSlVSRDJ5ZUlXSTB1L0Iz?=
+ =?utf-8?B?UGRkQ3YvRWJHME1jZG85eUZEVGF6K2xoZEZyQVphbVlzY3pqSituQlBKUXB5?=
+ =?utf-8?B?c21kd09GaXB3YmxXOS83WlVOVzNjK3Q0cnFJVERWYVlyR1padVpjRU5pZkMx?=
+ =?utf-8?B?dGdEbTBMTHdOU3h5dEtVVnVDWDJzUlBpdktYK1hrdmNRUFNkS0p5em54YzNh?=
+ =?utf-8?B?anpCN2hPejdKY041Y0xXZ0FJZzNXRVR5VDJWcFYxSGJWOWh1VjJMUlJHS0Jl?=
+ =?utf-8?B?TGNFc2gxVmlJbWRqRzQzVHd4NHJ1TXErWWoxMDVlMEU5MTdwcUk1ak5TVHYr?=
+ =?utf-8?B?TGJUZ3JFMTBldmZ6Rnluc1JjR2gwU0syTE9TQjVBai9URFZ3REwxbHF2d214?=
+ =?utf-8?B?NVVlQVFSUUpvTUFZTzBBbjZkYnEyTGdVNnRhajhOekU4R0tjSUtybTdlLzNE?=
+ =?utf-8?B?ZVNFS1BuU2Y1NndEUGVSWE5VTWhmdi9HcENDOEtpamFFZXpQc1U4M0wyTEZp?=
+ =?utf-8?B?V2grdTlMWkVid3ZJampOY2NzTVY2T1QyRTl0Qms2TjdhWFB3NWowRXlCWS9L?=
+ =?utf-8?B?cjhXaUx4WW4yRjhtVkdvQWhSY004RGxMVW9QY2JyZ0h5SGxxR1IxTGthUklh?=
+ =?utf-8?B?NlRTcGZGNzFWeE9ZbHo2ZldsUTV1NGgrQmg2Y0pERU4zbWJmRlJDM1VEVjNL?=
+ =?utf-8?B?dDRqaW50bllzU1hRU0wvL3Y0SEhQb0RDT0tQZEg5ZzhFUnhVTCsyL2tjRHFN?=
+ =?utf-8?B?cDVQNGQ5Ri9WVUZLYVNrcmNKYm8ydkpQNVIvQ0JUTWx3SlgxcEdiZThsdXRa?=
+ =?utf-8?B?UkFZclYwOHV0QW1lZks1WWFodFFra3NBcGNnTTFSTElUL09vMGZ2UjN1VTVs?=
+ =?utf-8?B?WHlUdDBQOTVzOTRrNDc0QThWNE9DekZaZlRrai9IaVY5ckt2RHFSejBPYkNK?=
+ =?utf-8?B?NVpDU2NlRWxOdW80dkNhNFBEaTQwNmhON0Y5TVRQdENzSzE5bEpiZ2J4OXdJ?=
+ =?utf-8?B?QjlvVVBxU0hLOWc0ZEpaV0dhNTJ5ODNuWmxDR09pLzJxRWFMWDh5SXh1QnVB?=
+ =?utf-8?B?UktMSW9la3ZNUlJuU0F4dVRsaXJ2Q3k4d3VxQUJFTCttTlZmcmhEYTBlVURX?=
+ =?utf-8?B?elRSYSt2cWFNeFBnV202WHE5SUpPZGh3OGpQS3ZTWXZZQUJya21hV2VoVmsz?=
+ =?utf-8?B?Mk5PY0pxS2toMzhaMDZXQjRldEg2M29WTHBIY0tFVHlicStSTDBBRGx5ZFgz?=
+ =?utf-8?B?U1ZSSENCMzZiUzBQS1M5eEFtMisvc0VGdWwwYVhGZHVnSHVTRldZOUlBRHAw?=
+ =?utf-8?B?WWphejhwZnpYQnBZb05pcVdGcHRCeTZLbGY5Mm1oUHRnbHJmS3ROeXpsWC9m?=
+ =?utf-8?B?YVhBRVIweXdxMGFwdk1RRExsMW9oWXN5VWtrbnhvY3NHMTFSeENVMVJoWExX?=
+ =?utf-8?B?d0JoRkJoR1hqWVYwV2ZXZTZXeHg5cm5TSzUwNWdsV3UxK3pjaWt5Z0ZZa0NP?=
+ =?utf-8?B?bjFkeGZFeFFTVS9zc09hYU1oSlZWNHpxWFFneTNSRlJqU0tTVDRjV1k0dlVJ?=
+ =?utf-8?Q?Q8GCRkK3fsr10AfjeHtDfnIhc?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	A4YDLwIU6TiiS8akjoznvHnwpACB8MGMKytzRm0G3mToCO0rbaLRBdH3wopYjE5++g/t7KNkUt6U3uSpJTMBCDeqsOSTZpf9EdmxQUm0HaoUz1hiRW7i6hQbTAAUVgiRvezQErc6HkCbP7E9kJe+0LrfIiw+KQ3DdTIelwBKtbxSLPiEHfVMQxEYnbBkMHW/+5YMEb5XaTLfs94ycaeDy65QJiIwpPhaznrKda59vkHAfH0Pd+7N/umHqzV6cq0WcfQVUM1Vrf7eTejzSLtsqWyYFtBWsnPZ41wSXO76B70GGQBaM8VJiZBiUUpFuX0cz3zoAKv0eHEHG3adq+Df2saFgbkax7rwxLx/3MD01MKpWzXAStTARhfxQTQJ8dZJ7JUjb0M4gYHgwHrvUoqpv8ZxmZAw/XK7c5rZauTdgyjdYceldKV9WLIF/wUKcBxFdqM952VEOPoWVuRgucMzOdSRQ/NbzfEu6LlSD9lQ1XWSBHq5tE3fPM58TtzVlRSskpoUQ4YKnEn9Ux4XW/ywba3YTd5QO5wboyvX1bNcAmSak+E8LPTM0Yo+6zlNFQnubEcB1kFM5y+MDISUyf8xUSaOZ3BxN+6gR7gO9koR1SY=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 936ab29f-cdd9-438b-3242-08ddebde59bf
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR10MB5509.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2025 18:10:38.0047
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SVdRx0ti9ksMU1mOoHzjRmv37eff3EUyZhfPy2+g7PAWuDsqJlKr4XIewt+W3KHEyLtcz1ggvvMNvyLu+gVcKg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR10MB5932
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-04_06,2025-09-04_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2508110000 definitions=main-2509040179
+X-Authority-Analysis: v=2.4 cv=J/+q7BnS c=1 sm=1 tr=0 ts=68b9d622 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=yJojWOMRYYMA:10 a=GoEa3M9JfhUA:10 a=3L3tFbXyUU9PfQ9DC0MA:9
+ a=QEXdDO2ut3YA:10 cc=ntf awl=host:12069
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA0MDE3OCBTYWx0ZWRfX7bavI7/j+HSo
+ hz57D0tAMbqP1tH2YgX4AE9QOYU+TCja/fg4w+CdguL47rz4ePuDxEL2cxAiptqir1RvqAmjFps
+ jQpqfGWVP4t3b3kM+Niu3nyFh7NsvoUJSsvdR63SzATrL90Ff9Mfs0J4N7bk4+jZTd9MKfhPiIp
+ VDPukCPBH0hW61hbKE4ey2uRjsaEzYNLzYvuN8y92tJUpYn2Q/1aPXZ9fquB9ZOWnm/QpChShKG
+ OzqO5t1ftbRK9Wj0YeEvl4NxsuqY7fI1qEbGW/LopPG933bmQxzaonE14aSZtdb+s8+b9bh1Rrp
+ xEV0Mm9tDCpPglZSDN4nfshDpXnkpwFVY9xtXVhsMxB1wYd6wzYyMQLlmo6rmfTgsJP9cnaZAl3
+ HTzgOrACojfy+K3+O9GEA8WxylBHuQ==
+X-Proofpoint-GUID: hUkwOhsPu-VXaa3hMwVfw_f77CTJvgFB
+X-Proofpoint-ORIG-GUID: hUkwOhsPu-VXaa3hMwVfw_f77CTJvgFB
 
-Create a netconsole test that puts a lot of pressure on the netconsole
-list manipulation. Do it by creating dynamic targets and deleting
-targets while messages are being sent. Also put interface down while the
-messages are being sent, as creating parallel targets.
+On 9/4/25 8:54 AM, Al Viro wrote:
+> On Thu, Sep 04, 2025 at 08:26:30AM -0600, Tom Hromatka wrote:
+> 
+>> This snippet addresses the double irq issue.  I also added a
+>> check to make sure that task != current.  (A user shouldn't
+>> do that but who knows what they'll actually do.)
+>>
+>>          if (task == current) {
+>>                  put_task_struct(task);
+>>                  return -EINVAL;
+>>          }
+>>
+>>          spin_lock_irq(&current->sighand->siglock);
+>>          spin_lock(&task->sighand->siglock);
+> 
+> What do you expect to happen if two tasks do that to each other
+> at the same time? 
 
-The code launches three background jobs on distinct schedules:
+As written, they'll deadlock sooner or later :(.
 
- * Toggle netcons target every 30 iterations
- * create and delete random_target every 50 iterations
- * toggle iface every 70 iterations
+But that should be easy to fix by adding two checks prior to
+grabbing locks:
+1.  Check that the source has 1 or more seccomp filters
+2.  Check that the target has 0 seccomp filters.
 
-This creates multiple concurrency sources that interact with netconsole
-states. This is good practice to simulate stress, and exercise netpoll
-and netconsole locks.
+This would ensure that for the same two processes, there's
+only one way the locks could be grabbed.
 
-This test already found an issue as reported in [1]
 
-Link: https://lore.kernel.org/all/20250901-netpoll_memleak-v1-1-34a181977dfc@debian.org/ [1]
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/drivers/net/Makefile       |   1 +
- .../selftests/drivers/net/netcons_torture.sh       | 127 +++++++++++++++++++++
- 2 files changed, 128 insertions(+)
+> Or, for that matter, if task has been spawned
+> by current with CLONE_VM | CLONE_SIGHAND?
 
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index 984ece05f7f92..2b253b1ff4f38 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -17,6 +17,7 @@ TEST_PROGS := \
- 	netcons_fragmented_msg.sh \
- 	netcons_overflow.sh \
- 	netcons_sysdata.sh \
-+	netcons_torture.sh \
- 	netpoll_basic.py \
- 	ping.py \
- 	queues.py \
-diff --git a/tools/testing/selftests/drivers/net/netcons_torture.sh b/tools/testing/selftests/drivers/net/netcons_torture.sh
-new file mode 100755
-index 0000000000000..ed95cdac7f47a
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/netcons_torture.sh
-@@ -0,0 +1,127 @@
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Repeatedly send kernel messages, toggles netconsole targets on and off,
-+# creates and deletes targets in parallel, and toggles the source interface to
-+# simulate stress conditions.
-+#
-+# This test aims verify the robustness of netconsole under dynamic
-+# configurations and concurrent operations.
-+#
-+# The major goal is to run this test with LOCKDEP, Kmemleak and KASAN to make
-+# sure no issues is reported.
-+#
-+# Author: Breno Leitao <leitao@debian.org>
-+
-+set -euo pipefail
-+
-+SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
-+
-+source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
-+
-+# Number of times the main loop run
-+ITERATIONS=${1:-1000}
-+
-+# Only test extended format
-+FORMAT="extended"
-+# And ipv6 only
-+IP_VERSION="ipv6"
-+
-+# Create, enable and delete some targets.
-+create_and_delete_random_target() {
-+	COUNT=2
-+	RND_PREFIX=$(mktemp -u netcons_rnd_XXXX_)
-+
-+	if [ -d "${NETCONS_CONFIGFS}/${RND_PREFIX}${COUNT}"  ] || \
-+	   [ -d "${NETCONS_CONFIGFS}/${RND_PREFIX}0" ]; then
-+		echo "Function didn't finish yet, skipping it." >&2
-+		return
-+	fi
-+
-+	# enable COUNT targets
-+	for i in $(seq ${COUNT})
-+	do
-+		RND_TARGET="${RND_PREFIX}"${i}
-+		RND_TARGET_PATH="${NETCONS_CONFIGFS}"/"${RND_TARGET}"
-+
-+		# Basic population so the target can come up
-+		_create_dynamic_target "${FORMAT}" "${RND_TARGET_PATH}"
-+	done
-+
-+	echo "netconsole selftest: ${COUNT} additional target was created" > /dev/kmsg
-+	# disable them all
-+	for i in $(seq ${COUNT})
-+	do
-+		RND_TARGET="${RND_PREFIX}"${i}
-+		RND_TARGET_PATH="${NETCONS_CONFIGFS}"/"${RND_TARGET}"
-+		echo 0 > "${RND_TARGET_PATH}"/enabled
-+		rmdir "${RND_TARGET_PATH}"
-+	done
-+}
-+
-+# Disable and enable the target mid-air, while messages
-+# are being transmitted.
-+toggle_netcons_target() {
-+	for i in $(seq 2)
-+	do
-+		if [ ! -d "${NETCONS_PATH}" ]
-+		then
-+			break
-+		fi
-+		echo 0 > "${NETCONS_PATH}"/enabled 2> /dev/null || true
-+		# Try to enable a bit harder, given it might fail to enable
-+		# Write to `enabled` might fail depending on the lock, which is
-+		# highly contentious here
-+		for _ in $(seq 5)
-+		do
-+			echo 1 > "${NETCONS_PATH}"/enabled 2> /dev/null || true
-+		done
-+	done
-+}
-+
-+toggle_iface(){
-+	ip link set "${SRCIF}" down
-+	ip link set "${SRCIF}" up
-+}
-+
-+# Start here
-+
-+modprobe netdevsim 2> /dev/null || true
-+modprobe netconsole 2> /dev/null || true
-+
-+# Check for basic system dependency and exit if not found
-+check_for_dependencies
-+# Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
-+echo "6 5" > /proc/sys/kernel/printk
-+# Remove the namespace, interfaces and netconsole target on exit
-+trap cleanup EXIT
-+# Create one namespace and two interfaces
-+set_network "${IP_VERSION}"
-+# Create a dynamic target for netconsole
-+create_dynamic_target "${FORMAT}"
-+
-+for i in $(seq "$ITERATIONS")
-+do
-+	for _ in $(seq 10)
-+	do
-+		echo "${MSG}: ${TARGET} ${i}" > /dev/kmsg
-+	done
-+	wait
-+
-+	if (( i % 30 == 0 )); then
-+		toggle_netcons_target &
-+	fi
-+
-+	if (( i % 50 == 0 )); then
-+		# create some targets, enable them, send msg and disable
-+		# all in a parallel thread
-+		create_and_delete_random_target &
-+	fi
-+
-+	if (( i % 70 == 0 )); then
-+		toggle_iface &
-+	fi
-+done
-+wait
-+
-+exit "${ksft_pass}"
+Don't know right off hand.  I'll look into it.
 
--- 
-2.47.3
+Thanks for the help!
 
+Tom
 
