@@ -1,119 +1,114 @@
-Return-Path: <linux-kselftest+bounces-40814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01D2CB4517C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 10:32:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97DDAB451BB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 10:40:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B02E97B6949
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 08:30:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26B273BA90A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 08:40:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D663126B0;
-	Fri,  5 Sep 2025 08:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A48A280018;
+	Fri,  5 Sep 2025 08:39:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GxqU0wHn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oaT3H2ES"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201DC3112C3
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Sep 2025 08:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55BB27F727
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Sep 2025 08:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757060962; cv=none; b=tRG3VBzYD4xyQNHycOIEgErO/wWWj7zFvfz5g1uMJ8ELtldRdnxvO1kphhYs0xLZIDdzDJqx6j2hVnrkkmcL2/1NyL8Mwrlzaw2MlNrNdbIx/ul2TmriSNT/mjNoV2M4KaZP5cWlzejSkku3LTIzLEPdU1Bwln9AVXhUW7BwOvo=
+	t=1757061598; cv=none; b=DEQPwdMUs27BNtUjy675MMumpFuPvRQUB99PXNU/jAAyOtEMhz/6Cp3TETj+bE0O0uGGEzUW0g3SUD3p2LY3OBhYpHk5UISiyuISXC67gQpbFOUjyLy+rBCzUT4q4692tthq9vDaWzfushw7FRyghSRFNmhJhuPHPr6XmQg5Kgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757060962; c=relaxed/simple;
-	bh=kwtRzEimvtpLrmOqqyXZ2f1tX9zUnglfb92WvRi+wAc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=G5yNjhTLioOx1LldDZJohyl+imvrGa0+tPiV0sSN6WoKnwqwKRiZ/3XWBNhORrsG/ZgyJlBFYBp6WlxyJ44OSaqczHY7+Gra/Bohsob/bGX6kDf9Nl150M0pKmHgUgZ0VUaPsu6+hQ2i/MIxH9KPVjbD3w/QikvM3JI3zf6ZS44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GxqU0wHn; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3ceb9c3d98cso1134827f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Sep 2025 01:29:19 -0700 (PDT)
+	s=arc-20240116; t=1757061598; c=relaxed/simple;
+	bh=2uw7HuzgrJw6Tl3/iFOPwWaXxB3idEJMwXtoGqGnLec=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=a6FoSXdRUH+JMfagxx8ePyXMWDq+1NXZG5GBPaDOaGCXckMjQaDxvb/O2RCo24PebBecGLZyk70Dg+BBeFYA019zuIyKvem+4+B+0kEwfBeDsKcoJXg7rcK/SslGTaZ9nGiFdHBD8mjXkS4axNK0Tb3Obyn6HjfH0QcHVQxlMNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oaT3H2ES; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-244581953b8so22894645ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Sep 2025 01:39:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757060958; x=1757665758; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AjrpyuHiQ2iH5gQyFoJsWbyIGpc1VmBeELccX5MB0vw=;
-        b=GxqU0wHnPbimGnQMJydFp9h6gRu+1fM/didYq1YsDD96ZNHK1tjOF15VNtlJmDn5Fa
-         FFUvA1YwRjbDNi+wACdQhRBrOyoRMAJEmWK25CA6P88qrYUALoNbrIfHZJ6lJCxSTi9Y
-         9yioZHy7uM3rpybbvtMQvsF3YNzA7KrhiePIJyJdkCv/2fA/UBl/oirI3jX+BRS0gbnA
-         JSOyuJ5Ww58FfBwBF82qHuBb/twVgCFK3KYs2COTOztUBQpo3ktNKde+iVLSxwQ69JJI
-         /4CKwGD6zsV0tzX+3VYft2qXLxNVht9ZF1fNEfgp3Y+dJ/bCDjUYQrvtIfnhx5wekKNh
-         Ah/A==
+        d=google.com; s=20230601; t=1757061596; x=1757666396; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KGaAkM61h3VIdibL8CNrJAlZjHRjWbnHUBI3WLmTg+w=;
+        b=oaT3H2ESt6P96BRnWGaynTcLVctNl1avg4xfFHk8s0LONtl3QPZ/1+dNBgJSVaKbb8
+         UmJhkZFe7EQTepcVu7vbVlG/YKxfD+f1KcQcso3UqnD2vAf1YmqWoEIvWd41bPIL7Gup
+         P1BJqA2YhJqVbzKze2NKgKIwJSYDz2nIddh+jZYarV3zgmPYFVEOd07Z1tkknUqmAL61
+         uH69+3gHiMMrPGZyWG5AEvb7fvwO/1LNf8+w2IRD7u2UWkW/dZDZRslJ9YKA+fFHqTlt
+         aq3YTNTqjBy0UrQHc3Y/yU3Ii0AfsG18k4ESHHiApMhArdCTeGgi3CkruXokMkFiNCgD
+         aTxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757060958; x=1757665758;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AjrpyuHiQ2iH5gQyFoJsWbyIGpc1VmBeELccX5MB0vw=;
-        b=wk1ZkJvvTL9Sci8lgo3/jBstIvAOLbUMSTp/dhweRcSAn+YLdLsh072P/rOU79mc0z
-         FF+cDwieDWyZApIkW6G9XAqaTgNKkZV+Eu4tCbwYoQMBe9yGD718q/iXyk5lVXVHNE0q
-         rYh1kZ4/6UDFCsLQUAGuHB3ahoR8MNg0X/GzvqlImwnsxqN0o1a2yst6m4zHV2BJj1ye
-         EXMJJH+ydhqWyBS0gaH5bHReaTVRx2ANvU0kh6CsMmXj9xrZK30zGCe7VaUi5uVmaOJP
-         l81DFJlJlQgKjuhw8O8o0lVv4Kjn2fnIiLyYWJOYc1fccnyL92udwYdKLix5zVQiVAgp
-         z6qA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHYRSu82mx8tDwm1Ugp3DdzO+iICBA6BVECgmFawIQgTtfEwVScu0fL6v0uu56lkgEO7jgF5YwGuXnnLod5f8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQqXEARuz8Jfy77y0KY/jNFxN8y99qUZDyYI9FW3oHJNiPecHB
-	X7u4akD92UznxEqvHYp0LB3WFRr6BfHarygR3MyMFjBmF9lwKcTnH6Q6SLAE2HfB+kk=
-X-Gm-Gg: ASbGnct/YzESPLatx3CxGOgjSL//0SjClS2opcpaxVe2I+ElQ7epm4FvcodHYW/0pe0
-	81/UPA+UNS6wYq9jKnHPYUwIhOW8Gu4duwj5kuaWHrnb7BwMTomg8GwoqbKQCwd43CWMvDg2iKg
-	vpnii43NVLiiGGsA8GoWAdE+m00vnVIbIgs94U8nSA8+XKVSNft8AjrugzJlN3uPsUWboyCxLlB
-	07frofa5r/7RrZBwylNYk8mx2cNWnhrR4spx5ZiSdnZOS2Gvpcuzj8JLljvH+aZFABw5jn/Thq0
-	l/I8a1UjmIzaFSWyKybi83o58lO+O89nvJJNhqZ6A/6PHkTaBvvydOFdasytkRnxZshmoPBrYkv
-	KvBdoAPbGFhQSOa9VjYcn2WfssxT1JOobNcXxzw==
-X-Google-Smtp-Source: AGHT+IFEvCT7cftOHZO5jf4iWcOS3253s9HffuDuqj0+9u9GDfbc5U393v8kkgducPBi6qjGPaKlww==
-X-Received: by 2002:a05:6000:22ca:b0:3ce:f0a5:d594 with SMTP id ffacd0b85a97d-3d1dca7bc64mr20100856f8f.13.1757060958381;
-        Fri, 05 Sep 2025 01:29:18 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45dcfcba94esm37384985e9.2.2025.09.05.01.29.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Sep 2025 01:29:18 -0700 (PDT)
-Date: Fri, 5 Sep 2025 11:29:14 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [bug report] selftest/bpf/benchs: Add benchmark for sockmap usage
-Message-ID: <aLqfWuRR9R_KTe5e@stanley.mountain>
+        d=1e100.net; s=20230601; t=1757061596; x=1757666396;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KGaAkM61h3VIdibL8CNrJAlZjHRjWbnHUBI3WLmTg+w=;
+        b=A22cW/2Lvtyb8mFkqibQGIFyN+iLQqRFVVvbOZZ5uhB0YJIFGcWYykzE+/07qdnOOL
+         UG3uU6qKKLHPrH64EVVLLKUdLHJrxA2CBkbMzw4dHekm96ixV90STh6SuWgW1jpyuDLV
+         tPMTtzZHSjGSmY260yHdxLZFSnrLHZa12CL827Ae2WqTEZuz0/Md+wBz8zUiFv8dHC+w
+         fwQdFheuxD7nPRy3EFcwSEThWoxiSI6uZs0gJ2Lc8wnPDXdI6zrOoO5yjZgIXYMejtwD
+         7Xmf0w2fZk+yMIRF3Gcj9wU0RYW4ARWVzVFjJx7i0wsKBp0TYllbhzu6+8fXI1NPAwQ6
+         j65A==
+X-Forwarded-Encrypted: i=1; AJvYcCU/ZdK8rxLH82mfOSU04QQAz27br/KOs/S+vrjiSDSZb7LfJ0PinLOQBeEU7iptMsxtmZvk13AE50+ThTdkRsU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3TGjgJASv+EG77B7hbEQj/+NnmPUwdhYAMA9/TlWcADv3brdK
+	TM/hI19IiE3K6KR4mJ5uzy45z1tuQQCgbDX0CCEtN2+Kh5+yir8C7tnRHPK9d+4xVhwe9nO+sqQ
+	vQOvI3w==
+X-Google-Smtp-Source: AGHT+IF9Ey0l0Twra047lmw7Mv180RmWg4iz+sNKmRb5BvkP839d48enj0OX/10NKGQmanskpRfLbSpQ8dw=
+X-Received: from pjbtd4.prod.google.com ([2002:a17:90b:5444:b0:32b:6e12:e965])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f790:b0:24c:ba67:95
+ with SMTP id d9443c01a7336-24cba67045fmr65288585ad.9.1757061596257; Fri, 05
+ Sep 2025 01:39:56 -0700 (PDT)
+Date: Fri, 5 Sep 2025 08:39:54 +0000
+In-Reply-To: <33701547-13AA-467D-AC41-A1A05963B1DD@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+References: <20250829142556.72577-1-aqibaf@amazon.com> <20250829142556.72577-6-aqibaf@amazon.com>
+ <aLIPs7eqA_i75Bgy@google.com> <33701547-13AA-467D-AC41-A1A05963B1DD@amazon.com>
+Message-ID: <aLqh2ojEpZZhjheT@google.com>
+Subject: Re: [PATCH 5/9] KVM: selftests: Prevent PAGE_SIZE redefinition on x86
+From: Sean Christopherson <seanjc@google.com>
+To: "Faruqui, Aqib" <aqibaf@amazon.co.uk>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Hello Jiayuan Chen,
++lists
 
-Commit 7b2fa44de5e7 ("selftest/bpf/benchs: Add benchmark for sockmap
-usage") from Apr 7, 2025 (linux-next), leads to the following Smatch
-static checker warning:
+Please keep discussions on-list unless there's something that can't/shouldn't be
+posted publicly, e.g. for confidentiality or security reasons.
 
-    tools/testing/selftests/bpf/benchs/bench_sockmap.c:129 bench_sockmap_prog_destroy()
-    error: buffer overflow 'ctx.fds' 5 <= 19
+On Tue, Sep 02, 2025, Faruqui, Aqib wrote:
+> I suppose a fix for blindly using PAGE_SIZE in subsequent macros:
+> 
+> #ifdef PAGE_SIZE
+> #undef PAGE_SIZE
+> #endif
+> #define PAGE_SIZE		(1ULL << PAGE_SHIFT)
+> 
+> Is no better and is instead blindly suppressing the compiler's redefinition warning. 
+> 
+> I'm having trouble finding what causes the conflict, any advice here?
 
-tools/testing/selftests/bpf/benchs/bench_sockmap.c
-    123 static void bench_sockmap_prog_destroy(void)
-    124 {
-    125         int i;
-    126 
-    127         for (i = 0; i < sizeof(ctx.fds); i++) {
-                                ^^^^^^^^^^^^^^^
-This should be ARRAY_SIZE(ctx.fds) otherwise it's a buffer overflow.
+Maybe try a newer compiler?  E.g. gcc-14.2 will spit out the exact location of the
+previous definition.
 
-    128                 if (ctx.fds[0] > 0)
-                            ^^^^^^^^^^
-Instead of .fds[0] it should be .fds[i], right?
-
---> 129                         close(ctx.fds[i]);
-    130         }
-    131 
-    132         bench_sockmap_prog__destroy(ctx.skel);
-    133 }
-
-regards,
-dan carpenter
+In file included from include/x86/svm_util.h:13,
+                 from include/x86/sev.h:15,
+                 from lib/x86/sev.c:5:
+include/x86/processor.h:373:9: error: "PAGE_SIZE" redefined [-Werror]
+  373 | #define PAGE_SIZE               (1ULL << PAGE_SHIFT)
+      |         ^~~~~~~~~
+include/x86/processor.h:370:9: note: this is the location of the previous definition
+  370 | #define PAGE_SIZE               BIT(12)
+      |         ^~~~~~~~~
 
