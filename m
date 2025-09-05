@@ -1,153 +1,120 @@
-Return-Path: <linux-kselftest+bounces-40811-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40812-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CF2AB44D7A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 07:28:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA52AB44DC6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 08:01:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9739F7BE528
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 05:26:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77C4BA04003
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 06:01:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB2126C3B3;
-	Fri,  5 Sep 2025 05:24:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AAD627E058;
+	Fri,  5 Sep 2025 06:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mY36iWyT"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Jg92GSH6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52BD10942;
-	Fri,  5 Sep 2025 05:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B5AF21D011;
+	Fri,  5 Sep 2025 06:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757049859; cv=none; b=iAFDDJsVHEekLNUsIJDO3EOoEhHlrUIYz73dk4uPwiqI92V5I97h3YcJv7AoUHFTqdDnZX1WkwYk/xfdWjGSNiMzxhSy9gvETJAGvvhlNandonG7vugmSNqSBlC//DlNvSqaVH5gvWZ7hLX4DN8smWqxc7262vgYqQXlSq/ztOo=
+	t=1757052110; cv=none; b=hRFT3esR9myWwp4TG7nj+hlE2bj+4QY24D+Hx25new72YpUGk6e+zBHkzQmEtv1C/fNUf1Dmc6ixDM5l9AqvzMJkZkYcp+cHy1uJsO9pVDQ9cLOUgtp2xI5WVnIgr7Qe21LlFAnqO4KPoIGVBaQd+tjzi2Xb4dk84KWpTGX8k3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757049859; c=relaxed/simple;
-	bh=H55g4kcERvNIDx1O7G1HQJWI8S4+ev9RwwNDcVQDI4Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MEutBBh1NS1mebmc4TdT/LLHz3TF0Jphe+sd1ei0YPhGowpx5WwNZiF14b5M+n4qRov4yQD5VyMERUsk5z//HazSHe1X8n/BHnyVPLj1TWzhSvIbP9gb/pNdgnp/LZ3C/JYWr26u6ROA633cm/0iV8Kl/3E5eCXXZR/tiletZGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mY36iWyT; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757049858; x=1788585858;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=H55g4kcERvNIDx1O7G1HQJWI8S4+ev9RwwNDcVQDI4Q=;
-  b=mY36iWyTIzQICcPWcEbh+ny2tFRVUc8gFv2K5tTaba+FzADZNFgm/RJb
-   L0W0k3kUhbRzeskE2mdhWxqaMQ0JbND6UdaPkFcvZuP3sNdeBwHrfjcN7
-   O6MbMZUxqYLPLRZuE8EMu7NMJ6Um8iTwaX2/WawivIYRdCPpwpAotwGPq
-   pgmp43KSjhHYIh6UASGy/SQ6ndTRrspBjZaiMh5hmLNLu9Cze61+qdgL5
-   rCUFHLkUEvHUQygT0DwHYzzoOq0uwr7+y1b60ftzv0pbyS8LRW98p/e5x
-   9dqdci2Ivz88NSvDoZ09/UjRh9vaQ/sXwlVo4bwnHWf7c283sIYMgRwce
-   Q==;
-X-CSE-ConnectionGUID: kSks9azKSVCUYGTCrEqhIw==
-X-CSE-MsgGUID: Bgak3UBlSPuP3CH0D2shBw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="59508681"
-X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="59508681"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 22:24:15 -0700
-X-CSE-ConnectionGUID: QX3PLvbxTu2Cn0Ln9lemHA==
-X-CSE-MsgGUID: C99e9a0PQ3OIYIwd+ObXjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="176411892"
-Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 22:24:11 -0700
-Message-ID: <c8f85609-aae2-4d5e-b983-e2703bb874c0@linux.intel.com>
-Date: Fri, 5 Sep 2025 13:24:08 +0800
+	s=arc-20240116; t=1757052110; c=relaxed/simple;
+	bh=3knstRovj93xkUytRtrTV4g+ye1JGAHeEex24QMnCko=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=h8CcI19c4cBlN2EU3luJwMgQFh+HjaT66j7W8+/qphZEntztaHNWs7OzsSETLdHw5TVlpN44umjAK/jJEagWIHvmJEbZYJTukxsd0IQhIqR0vsUKfbqJtDZg+7IxVZBJqjlIW9hB70kCiksH+uw7KrOSEhdH7aeCCWjogg0nOwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Jg92GSH6; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Od
+	8KnfSygcUPovid5hxz+wVBe3lxMm/XME01VPFpLt0=; b=Jg92GSH6RVWVFg6wot
+	74T4jMndPS0t3kUMA/e91Gfc+bTzmRNco9fP5qES/eQJ3suWB+LvaKEHom6y73W/
+	V/jJ+S74HkuxsWWuAxddboyIIt84XeTJa/spfyhnxLd7NbNjnm7MptPz7f6bkfvy
+	g0oogz6hwh/V16icIufEI9Cwo=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wC3eap7fLpok1QJGQ--.24371S2;
+	Fri, 05 Sep 2025 14:00:28 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: eddyz87@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	martin.lau@linux.dev,
+	sdf@fomichev.me,
+	song@kernel.org,
+	yangfeng59949@163.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Fix the invalid operand for instruction issue
+Date: Fri,  5 Sep 2025 14:00:26 +0800
+Message-Id: <20250905060026.1285979-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <7a037c0579e1cbabb83935c05c24ddbc6bc43327.camel@gmail.com>
+References: <7a037c0579e1cbabb83935c05c24ddbc6bc43327.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 05/21] KVM: selftests: Expose segment definitons to
- assembly files
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
- Andrew Jones <ajones@ventanamicro.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Erdem Aktas <erdemaktas@google.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
- <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org
-References: <20250904065453.639610-1-sagis@google.com>
- <20250904065453.639610-6-sagis@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20250904065453.639610-6-sagis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wC3eap7fLpok1QJGQ--.24371S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CrWxWFW5CrykKF1UCF48Zwb_yoW8JFWrpF
+	yrWr1DKF4rJFyUJr13Jw4aqF1Yvw4SkrWrGrW8Ar9rGr90ywsIyFyxGryY9asIgw47u3yY
+	9rW8X3yfCw4qyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRcTmhUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbipRO-eGi6aW8nQAACsA
 
+On Thu, 04 Sep 2025 08:48:45 -0700 Eduard Zingerman wrote:
 
+> On Thu, 2025-08-28 at 10:01 +0800, Feng Yang wrote:
+> > From: Feng Yang <yangfeng@kylinos.cn>
+> > 
+> > The following issue occurs when compiling with clang version 17.0.6:
+> > progs/compute_live_registers.c:251:3: error: invalid operand for instruction
+> >   251 |                 "r0 = 1;"
+> >       |                 ^
+> > <inline asm>:1:22: note: instantiated into assembly here
+> >     1 |         r0 = 1;r2 = 2;if r1 & 0x7 goto +1;exit;r0 = r2;exit;
+> >       |                             ^
+> > 1 error generated.
+> > 
+> > Use __imm_insn to fix this issue.
+> > 
+> > Fixes: 4a4b84ba9e453 ("selftests/bpf: verify jset handling in CFG computation")
+> > Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+> > ---
+> 
+> Hi Feng,
+> 
+> This message felt through cracks a bit.  It's a minor thing, of
+> course, but there is a legit question of how much backward we'd like
+> to support clang versions for the test suite.
+> 
+> Could you please provide some detail on your build environment,
+> why do you want to run the tests with older clang?
 
-On 9/4/2025 2:54 PM, Sagi Shahar wrote:
-> Move kernel segment definitions to a separate file which can be included
-> from assembly files.
->
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
+Hi Eduard,
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+Actually, there is no specific reason to test with an older version of Clang.
+It's just that the Clang downloaded from the source is this version,
+and installing a newer version by myself would be rather troublesome.
 
-> ---
->   .../selftests/kvm/include/x86/processor_asm.h        | 12 ++++++++++++
->   tools/testing/selftests/kvm/lib/x86/processor.c      |  5 +----
->   2 files changed, 13 insertions(+), 4 deletions(-)
->   create mode 100644 tools/testing/selftests/kvm/include/x86/processor_asm.h
->
-> diff --git a/tools/testing/selftests/kvm/include/x86/processor_asm.h b/tools/testing/selftests/kvm/include/x86/processor_asm.h
-> new file mode 100644
-> index 000000000000..7e5386a85ca8
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/x86/processor_asm.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Used for storing defines used by both processor.c and assembly code.
-> + */
-> +#ifndef SELFTEST_KVM_PROCESSOR_ASM_H
-> +#define SELFTEST_KVM_PROCESSOR_ASM_H
-> +
-> +#define KERNEL_CS	0x8
-> +#define KERNEL_DS	0x10
-> +#define KERNEL_TSS	0x18
-> +
-> +#endif  // SELFTEST_KVM_PROCESSOR_ASM_H
-> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-> index 2a44831e0cc9..623168ea9a44 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-> @@ -7,6 +7,7 @@
->   #include "test_util.h"
->   #include "kvm_util.h"
->   #include "processor.h"
-> +#include "processor_asm.h"
->   #include "sev.h"
->   #include "tdx/tdx_util.h"
->   
-> @@ -14,10 +15,6 @@
->   #define NUM_INTERRUPTS 256
->   #endif
->   
-> -#define KERNEL_CS	0x8
-> -#define KERNEL_DS	0x10
-> -#define KERNEL_TSS	0x18
-> -
->   vm_vaddr_t exception_handlers;
->   bool host_cpu_is_amd;
->   bool host_cpu_is_intel;
+clang version 17.0.6
+GNU Make 4.4.1
+gcc (GCC) 12.3.1
+linux version: 6.6
+arch: x86-64
 
 
