@@ -1,556 +1,341 @@
-Return-Path: <linux-kselftest+bounces-40808-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40809-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3960B44C3B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 05:24:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D7F0B44C92
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 06:05:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BA395866EE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 03:24:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4ED227A80AB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Sep 2025 04:03:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66B0221265;
-	Fri,  5 Sep 2025 03:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B48EC1F5423;
+	Fri,  5 Sep 2025 04:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ja8z72Di"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A2eYj7ef"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F796EEBD
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Sep 2025 03:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDF2CA5A
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Sep 2025 04:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757042681; cv=none; b=KVZ9ZBAGH53zfjTIkH30nyU8duG7066LSgCTbQeLo3RbSXQ0tL7GGgL75zjpJSUuAiMcJClkprGwi/d7tKVzqMuXkwhGQ+ZlsrXtKUIrg5Y0Hc3J2KyD2mWRoirfTHHHm93/Weu8tDiZM4DQFMf0z/uD3bhDzG6vtrMl8H6mpqs=
+	t=1757045091; cv=none; b=bigluECqwyrKisG8PXqNBv38PoSznw8iuAflMXAYN20uhjIWCg9Uy72S3fcFpdvX9qbZm3iEv8qd5kvceiRY9N9rYQqHGV1AxFKF08ohgnpHLO+wFC5IT6EqSpRnNV52mAPY+OI1HobpDjxsEApHDLB+fLDOdt5bWOxFmDfCLOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757042681; c=relaxed/simple;
-	bh=7tL0Th7H27K/T+dAo38L9OosJ2gXhWJi/ET9nRqb2KU=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=WANdyjbkCd9lMB0oig2DqKfaUcYSdKOvdayDDXcQjHvFdkSPTsjAFsCemyoUWgzI73epi6A2YNjDHR3apj5rXg072QnCjTnLyPonjLJoQvhK3yYC/MXOxt4J+C77QKlHo/Q2flVsYEftYJ8Ke2HaK4IXwURUcLitxnoJUIvWLsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ja8z72Di; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b0472bd218bso300216966b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Sep 2025 20:24:39 -0700 (PDT)
+	s=arc-20240116; t=1757045091; c=relaxed/simple;
+	bh=PwUTz7z+FWi8rvsQTOzsnt1R5+fa1UGAgcorB19lBko=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=MtKrj6Dv0AgY0fi+1Az7bzLUYu6M6ZhfcMLeOWTRcvo4Io+ozuckbCCxsnuFbGSqQihuhlXpxKr1Nj4nW3AmlvKhmrMYEIdWiBdxngHY4j3vc82pvFR1z8VAgodJ7M5CjsTRqHqGT3vnLfHPubj+45Yaiv6f6S4TEgQoVzDVgSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A2eYj7ef; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-329c76f70cbso1682790a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Sep 2025 21:04:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757042678; x=1757647478; darn=vger.kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y5hzaTMrp5ml0eZFuOPJb0IFdSE0eJU5kUu/t1q/83g=;
-        b=Ja8z72Di0PXkZlbGQpr2QGD7maGtN1oLSd8HBfeCyeN9qfWNHRTcsCh7YPU28UaFC6
-         y/ndgNxaTCsVDjSXcxRSSia8rQwDyG6UiO+lr/QW5GlfUe3JopqnWEsZkFllhoWnmvBW
-         lWuPUWsNptuksQcPqb7NFRcCQXVjIcxfB/ZA9NmLqjhWGoXXaAMjHZe6Fk6q5Z5A44Kc
-         GEpaqHra9qGHzVhI9QoO8jy8Hh6PaJjo74BcDM8TjCRsnIG6MCHmo5Ba2hL/vm+ag7S9
-         oPdZqAmOt3GvfeKxG2yWtI3b3yZr5D9PFB2M1tiK+pZzXFDc/m6HiNz31aw7uKdAxwEj
-         NCew==
+        d=google.com; s=20230601; t=1757045089; x=1757649889; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xzSe+BvKaMS0Yk/BDbkc11n2XGrcdPm0xDpK5jZXbqM=;
+        b=A2eYj7efz9YW7KfwtLxEQK/nWOhDL3Tj47YGPisoF5OslPCTe4+juOZFcV37bY0wkw
+         Q35kkjwIlBCSaYiP0Ur/vuVfUrYqSnv1bENEvOA2DOMc/0Wuvcr7ZIjxZYH47UrK5S7W
+         IWE2ErRupSRAdHNi67vqOez7/iXggzrYc1VsWzD3hDNkWXvsxnrHSODYErqFMKyen++H
+         K6TfCME0rKSLnp/sEc95MJubOEopkOPgJsN2GR2mJQLfxw4DiejaRzLpLNkTaZ0vdrMm
+         dX5YD/wzDutnLe9H83znABc/N+iKkYnfk7hgxeSIfNyUBFy7a4FECLRdVBP/KkMouS9a
+         8YJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757042678; x=1757647478;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y5hzaTMrp5ml0eZFuOPJb0IFdSE0eJU5kUu/t1q/83g=;
-        b=pq9t5PGWo+dklATcAtvnZkUvbXYjVukiRxwfdwMJaW1CwNAKuJ0evxSa9ax2b/332m
-         0hXqlxURRGpbvykGjGd6ENtQRD9BMbdl7f0rtU+jIEJrr+iAnEVrD6841cN1jxmMUiQs
-         KvsEVSieSCf+ADCI0jcyHdNrSMbbzOLhL9Mo7cs13zovUcLGjg0piJ/OrGKUHXOL/LSf
-         BjN4fBKcfJI5HVqiazN97IGtUkzaHneI0K4JaFG04yKCBk0TEfQg5FcdJ9xa17y8gpMx
-         WtzaATqNuC+kHOe7wf3W2wOyjGCac+BGFaZfnjEXUzhaRM6MlHuSP7QFHUvgJ//I9Icr
-         gWZg==
-X-Forwarded-Encrypted: i=1; AJvYcCVieCuHEeVo9kuQGrjhJwHd8SU+EBdJTu0OkdoAAPArfmCYwBzcKRKYt6C9aZrIDdSHT4xjP3V2fDGsSYsO5RE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDcCbfxD9IyeODudnNoOg2Qb2zYmugq7TMjJcXs/S7Qjyj0Ckr
-	jgvzSFe6k/zr/OKqaTxtygQTV+hUHZ++h5I8ceih+LTrdig0LYBtz0pC
-X-Gm-Gg: ASbGnctdOL1BQ+s6zJ6kVRyxtsOLay8W8Tttip5Je17F0BLNzakFDgGqCmZEGuD+So3
-	Pu8GGbFScQtbkw8FrMoJz8RiZNWnx4rWbgNlvVhv9t/kmfZUlGI1vwr2tSyseay9UBlBq5gc8Bb
-	MgjkCN6ARkdfLqBUehbpnocLgCPgiPZU0qYjbO4M0j6D4wbhVooW1tv8NT9xWR9X3zLokOKHrMh
-	YYODNV2O8BTikyEktbgRmSz8nQirus7o4AOWwRO/2D/e2Agb8tD94v8cmrZp3U/c5y2a81hYVBG
-	nQH2kiU7g3IBXDfGDlTT37Yyv/qGSE9xXNKCIB/NAuFB65FKyD90daAUL1NtPYpOD1OBs2S+ZjY
-	7jNfq+pvIbkZfMoK7vdO9ooMmIo7OmPzsglTj
-X-Google-Smtp-Source: AGHT+IGUZLDiw33/JusWKJMjCB0GaShc0TUfUDE9gcjWDTEOHG0oVAPEGOSLIPAriDt/zwEe39ntOg==
-X-Received: by 2002:a17:907:7250:b0:b04:35c3:40b3 with SMTP id a640c23a62f3a-b0435c3438amr1567507866b.15.1757042677580;
-        Thu, 04 Sep 2025 20:24:37 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b0423ed35e4sm1176915466b.25.2025.09.04.20.24.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 04 Sep 2025 20:24:37 -0700 (PDT)
-From: Wei Yang <richard.weiyang@gmail.com>
-To: akpm@linux-foundation.org
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	Wei Yang <richard.weiyang@gmail.com>,
-	David Hildenbrand <david@redhat.com>,
-	Zi Yan <ziy@nvidia.com>,
-	Donet Tom <donettom@linux.ibm.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>
-Subject: [PATCH] selftests/mm: refactore split_huge_page_test with kselftest_harness
-Date: Fri,  5 Sep 2025 03:24:31 +0000
-Message-Id: <20250905032431.22179-1-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        d=1e100.net; s=20230601; t=1757045089; x=1757649889;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xzSe+BvKaMS0Yk/BDbkc11n2XGrcdPm0xDpK5jZXbqM=;
+        b=DjJ90pYDqyFcRDwDu5bwvdjQaVMuZC3fVsJGprcxO8gdcnJZ+UV80QuT5u5NUGAeR9
+         iM0aP6nZX4YtNVVRAjYRbVHMU1KilfpS33SV2QoU8kUe+zujBp5ezxSX1GfC9s3UMpKe
+         U/rWbOchw4o9dRpNaEE0mWLr4rvOD5SmULDr5Use33vBvvBmFC+YbuQPkle4v8og0EFM
+         bLU3Ic9mQgD6ifLmT7mbjku3eqPz809fzTbQcbXTt5beIxyMLl+eb+ed+Tu9Vu+Arf16
+         DPGgwDITViya/njfYOqqMybm4v0xwV1l8JvR5vY8yMks5yQezUDS6IM4YuxB+Va1naPj
+         XgWw==
+X-Forwarded-Encrypted: i=1; AJvYcCW46mKz3M8tMlar5+Dn/6PdJi2MKj/ESkT7SZd7FYV1AHIoHg4eSRXTZz9OWvEvwvJwpf83EF4jdyFD0FHswts=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvnlxMOf0ONvo5HESaJbb7VAxI64KlmIpzhyOWycfdiHEqU/Aa
+	lLf52PEgcVKu2XgzFjnFcmcONV0Vgj6OAKraXyRBbbF2us93id41I61exbpJFFmm0D2uvdxaJTG
+	5Cpp/EK6qt27mQ9NKd1h91w==
+X-Google-Smtp-Source: AGHT+IFLKz6CiGy4wIk+cmybRuyHGuLxSct30ilYhoMtD9odIeFG5s/23vGOkVz9EMN2TikUejP2aNhF+gFem5mZ
+X-Received: from pjbsy8.prod.google.com ([2002:a17:90b:2d08:b0:32b:5f22:e5da])
+ (user=marcharvey job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:1848:b0:327:531b:b85c with SMTP id 98e67ed59e1d1-328156e38b4mr31773325a91.35.1757045088960;
+ Thu, 04 Sep 2025 21:04:48 -0700 (PDT)
+Date: Fri,  5 Sep 2025 04:04:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
+Message-ID: <20250905040441.2679296-1-marcharvey@google.com>
+Subject: [PATCH net-next v3] selftests: net: Add tests to verify team driver
+ option set and get.
+From: Marc Harvey <marcharvey@google.com>
+To: jiri@resnulli.us, andrew+netdev@lunn.ch
+Cc: edumazet@google.com, willemb@google.com, maheshb@google.com, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, kuba@kernel.org, 
+	liuhangbin@gmail.com, Marc Harvey <marcharvey@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Refactor split_huge_page_test with kselftest_harness, since there is a
-magic counting about valid tests.
+There are currently no kernel tests that verify setting and getting
+options of the team driver.
 
-The idea is simple:
+In the future, options may be added that implicitly change other
+options, which will make it useful to have tests like these that show
+nothing breaks. There will be a follow up patch to this that adds new
+"rx_enabled" and "tx_enabled" options, which will implicitly affect the
+"enabled" option value and vice versa.
 
-For standalone test, put it into TEST().
+The tests use teamnl to first set options to specific values and then
+gets them to compare to the set values.
 
-For tests iterating order/offset, define fixture and variant with
-order and offset. And skip it if order/offset is not valid.
-
-No functional change is expected.
-
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Donet Tom <donettom@linux.ibm.com>
-Cc: Ryan Roberts <ryan.roberts@arm.com>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Signed-off-by: Marc Harvey <marcharvey@google.com>
 ---
- .../selftests/mm/split_huge_page_test.c       | 308 ++++++++++++++----
- 1 file changed, 238 insertions(+), 70 deletions(-)
+Changes in v3:
+  - Applied minor style changes based on v2 feedback.
+  - Link to v2: https://lore.kernel.org/netdev/20250904015424.1228665-1-marcharvey@google.com/
 
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index 7731191cc8e9..2376c3530b26 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -20,14 +20,16 @@
- #include <stdbool.h>
- #include <time.h>
- #include "vm_util.h"
--#include "../kselftest.h"
-+#include "../kselftest_harness.h"
+Changes in v2:
+  - Fixed shellcheck failures.
+  - Fixed test failing in vng by adding a config option to enable the
+    team driver's active backup mode.
+  - Link to v1: https://lore.kernel.org/netdev/20250902235504.4190036-1-marcharvey@google.com/
+
+ .../selftests/drivers/net/team/Makefile       |   6 +-
+ .../testing/selftests/drivers/net/team/config |   1 +
+ .../selftests/drivers/net/team/options.sh     | 188 ++++++++++++++++++
+ 3 files changed, 193 insertions(+), 2 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/team/options.sh
+
+diff --git a/tools/testing/selftests/drivers/net/team/Makefile b/tools/testing/selftests/drivers/net/team/Makefile
+index eaf6938f100e..89d854c7e674 100644
+--- a/tools/testing/selftests/drivers/net/team/Makefile
++++ b/tools/testing/selftests/drivers/net/team/Makefile
+@@ -1,11 +1,13 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for net selftests
  
- uint64_t pagesize;
--unsigned int pageshift;
- uint64_t pmd_pagesize;
- unsigned int pmd_order;
- int *expected_orders;
+-TEST_PROGS := dev_addr_lists.sh propagation.sh
++TEST_PROGS := dev_addr_lists.sh propagation.sh options.sh
  
-+char *optional_xfs_path;
-+char fs_loc_template[] = "/tmp/thp_fs_XXXXXX";
-+
- #define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages"
- #define SMAP_PATH "/proc/self/smaps"
- #define INPUT_MAX 80
-@@ -41,6 +43,20 @@ const char *kpageflags_proc = "/proc/kpageflags";
- int pagemap_fd;
- int kpageflags_fd;
+ TEST_INCLUDES := \
+ 	../bonding/lag_lib.sh \
+ 	../../../net/forwarding/lib.sh \
+-	../../../net/lib.sh
++	../../../net/lib.sh \
++	../../../net/in_netns.sh \
++	../../../net/lib/sh/defer.sh
  
-+#define ADD_VARIANT_ORDER(fixture_name, ord)			\
-+	FIXTURE_VARIANT_ADD(fixture_name, order_##ord)		\
-+	{							\
-+		.order = ord,					\
-+	}
+ include ../../../lib.mk
+diff --git a/tools/testing/selftests/drivers/net/team/config b/tools/testing/selftests/drivers/net/team/config
+index 636b3525b679..558e1d0cf565 100644
+--- a/tools/testing/selftests/drivers/net/team/config
++++ b/tools/testing/selftests/drivers/net/team/config
+@@ -3,4 +3,5 @@ CONFIG_IPV6=y
+ CONFIG_MACVLAN=y
+ CONFIG_NETDEVSIM=m
+ CONFIG_NET_TEAM=y
++CONFIG_NET_TEAM_MODE_ACTIVEBACKUP=y
+ CONFIG_NET_TEAM_MODE_LOADBALANCE=y
+diff --git a/tools/testing/selftests/drivers/net/team/options.sh b/tools/testing/selftests/drivers/net/team/options.sh
+new file mode 100755
+index 000000000000..44888f32b513
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/team/options.sh
+@@ -0,0 +1,188 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +
-+#define ADD_VARIANT_ORDER_OFFSET(fixture_name, ord, stp)		\
-+	FIXTURE_VARIANT_ADD(fixture_name, order_##ord##_stp_##stp)	\
-+	{								\
-+		.order = ord,						\
-+		.step = stp,						\
-+	}
++# These tests verify basic set and get functionality of the team
++# driver options over netlink.
 +
++# Run in private netns.
++test_dir="$(dirname "$0")"
++if [[ $# -eq 0 ]]; then
++        "${test_dir}"/../../../net/in_netns.sh "$0" __subprocess
++        exit $?
++fi
 +
- static bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
- 		int kpageflags_fd)
- {
-@@ -255,6 +271,26 @@ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
- 	return status;
- }
- 
-+void prepare_proc_fd(void)
++ALL_TESTS="
++        team_test_options
++"
++
++source "${test_dir}/../../../net/lib.sh"
++
++TEAM_PORT="team0"
++MEMBER_PORT="dummy0"
++
++setup()
 +{
-+	pagemap_fd = open(pagemap_proc, O_RDONLY);
-+	if (pagemap_fd == -1)
-+		ksft_exit_fail_msg("read pagemap: %s\n", strerror(errno));
-+
-+	kpageflags_fd = open(kpageflags_proc, O_RDONLY);
-+	if (kpageflags_fd == -1)
-+		ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
++        ip link add name "${MEMBER_PORT}" type dummy
++        ip link add name "${TEAM_PORT}" type team
 +}
 +
-+void cleanup_proc_fd(void)
++get_and_check_value()
 +{
-+	if (pagemap_fd != -1)
-+		close(pagemap_fd);
++        local option_name="$1"
++        local expected_value="$2"
++        local port_flag="$3"
 +
-+	if (kpageflags_fd != -1)
-+		close(kpageflags_fd);
++        local value_from_get
++
++        if ! value_from_get=$(teamnl "${TEAM_PORT}" getoption "${option_name}" \
++                        "${port_flag}"); then
++                echo "Could not get option '${option_name}'" >&2
++                return 1
++        fi
++
++        if [[ "${value_from_get}" != "${expected_value}" ]]; then
++                echo "Incorrect value for option '${option_name}'" >&2
++                echo "get (${value_from_get}) != set (${expected_value})" >&2
++                return 1
++        fi
 +}
 +
- static void write_file(const char *path, const char *buf, size_t buflen)
- {
- 	int fd;
-@@ -292,10 +328,8 @@ static char *allocate_zero_filled_hugepage(size_t len)
- 	size_t i;
- 
- 	result = memalign(pmd_pagesize, len);
--	if (!result) {
--		printf("Fail to allocate memory\n");
--		exit(EXIT_FAILURE);
--	}
-+	if (!result)
-+		ksft_exit_fail_msg("Fail to allocate memory: %s\n", strerror(errno));
- 
- 	madvise(result, len, MADV_HUGEPAGE);
- 
-@@ -334,16 +368,19 @@ static void verify_rss_anon_split_huge_page_all_zeroes(char *one_page, int nr_hp
- 		       rss_anon_before, rss_anon_after);
- }
- 
--static void split_pmd_zero_pages(void)
-+TEST(split_pmd_zero_pages)
- {
- 	char *one_page;
- 	int nr_hpages = 4;
- 	size_t len = nr_hpages * pmd_pagesize;
- 
-+	prepare_proc_fd();
++set_and_check_get()
++{
++        local option_name="$1"
++        local option_value="$2"
++        local port_flag="$3"
 +
- 	one_page = allocate_zero_filled_hugepage(len);
- 	verify_rss_anon_split_huge_page_all_zeroes(one_page, nr_hpages, len);
--	ksft_test_result_pass("Split zero filled huge pages successful\n");
- 	free(one_page);
++        local value_from_get
 +
-+	cleanup_proc_fd();
- }
- 
- static void split_pmd_thp_to_order(int order)
-@@ -383,11 +420,10 @@ static void split_pmd_thp_to_order(int order)
- 	if (!check_huge_anon(one_page, 0, pmd_pagesize))
- 		ksft_exit_fail_msg("Still AnonHugePages not split\n");
- 
--	ksft_test_result_pass("Split huge pages to order %d successful\n", order);
- 	free(one_page);
- }
- 
--static void split_pte_mapped_thp(void)
-+TEST(split_pte_mapped_thp)
- {
- 	const size_t nr_thps = 4;
- 	const size_t thp_area_size = nr_thps * pmd_pagesize;
-@@ -395,6 +431,8 @@ static void split_pte_mapped_thp(void)
- 	char *thp_area, *tmp, *page_area = MAP_FAILED;
- 	size_t i;
- 
-+	prepare_proc_fd();
++        if ! teamnl "${TEAM_PORT}" setoption "${option_name}" \
++                        "${option_value}" "${port_flag}"; then
++                echo "'setoption ${option_name} ${option_value}' failed" >&2
++                return 1
++        fi
 +
- 	thp_area = mmap((void *)(1UL << 30), thp_area_size, PROT_READ | PROT_WRITE,
- 			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
- 	if (thp_area == MAP_FAILED) {
-@@ -470,14 +508,43 @@ static void split_pte_mapped_thp(void)
- 		ksft_test_result_fail("THP %zu not split\n", i);
- 	}
- 
--	ksft_test_result_pass("Split PTE-mapped huge pages successful\n");
- out:
- 	munmap(thp_area, thp_area_size);
- 	if (page_area != MAP_FAILED)
- 		munmap(page_area, page_area_size);
-+	cleanup_proc_fd();
++        get_and_check_value "${option_name}" "${option_value}" "${port_flag}"
++        return $?
 +}
 +
-+FIXTURE(split_file_backed_thp) {
-+};
-+
-+FIXTURE_VARIANT(split_file_backed_thp) {
-+	int order;
-+};
-+
-+FIXTURE_SETUP(split_file_backed_thp)
++# Get a "port flag" to pass to the `teamnl` command.
++# E.g. $1="dummy0" -> "port=dummy0",
++#      $1=""       -> ""
++get_port_flag()
 +{
-+	if (variant->order >= pmd_order)
-+		SKIP(return, "order %d is not supported", variant->order);
-+	prepare_proc_fd();
++        local port_name="$1"
++
++        if [[ -n "${port_name}" ]]; then
++                echo "--port=${port_name}"
++        fi
 +}
 +
-+FIXTURE_TEARDOWN(split_file_backed_thp)
++attach_port_if_specified()
 +{
-+	cleanup_proc_fd();
- }
- 
--static void split_file_backed_thp(int order)
-+ADD_VARIANT_ORDER(split_file_backed_thp, 0);
-+ADD_VARIANT_ORDER(split_file_backed_thp, 1);
-+ADD_VARIANT_ORDER(split_file_backed_thp, 2);
-+ADD_VARIANT_ORDER(split_file_backed_thp, 3);
-+ADD_VARIANT_ORDER(split_file_backed_thp, 4);
-+ADD_VARIANT_ORDER(split_file_backed_thp, 5);
-+ADD_VARIANT_ORDER(split_file_backed_thp, 6);
-+ADD_VARIANT_ORDER(split_file_backed_thp, 7);
-+ADD_VARIANT_ORDER(split_file_backed_thp, 8);
++        local port_name="$1"
 +
-+TEST_F(split_file_backed_thp, orders)
- {
- 	int status;
- 	int fd;
-@@ -487,7 +554,7 @@ static void split_file_backed_thp(int order)
- 	ssize_t num_written, num_read;
- 	char *file_buf1, *file_buf2;
- 	uint64_t pgoff_start = 0, pgoff_end = 1024;
--	int i;
-+	int i, order = variant->order;
- 
- 	ksft_print_msg("Please enable pr_debug in split_huge_pages_in_file() for more info.\n");
- 
-@@ -567,7 +634,6 @@ static void split_file_backed_thp(int order)
- 		ksft_exit_fail_msg("cannot remove tmp dir: %s\n", strerror(errno));
- 
- 	ksft_print_msg("Please check dmesg for more information\n");
--	ksft_test_result_pass("File-backed THP split to order %d test done\n", order);
- 	return;
- 
- close_file:
-@@ -579,6 +645,45 @@ static void split_file_backed_thp(int order)
- 	ksft_exit_fail_msg("Error occurred\n");
- }
- 
-+FIXTURE(split_pmd_thp_to_order) {
-+};
-+
-+FIXTURE_VARIANT(split_pmd_thp_to_order) {
-+	int order;
-+};
-+
-+FIXTURE_SETUP(split_pmd_thp_to_order)
-+{
-+	if (variant->order >= pmd_order)
-+		SKIP(return, "order %d is not supported", variant->order);
-+
-+	expected_orders = (int *)malloc(sizeof(int) * (pmd_order + 1));
-+	if (!expected_orders)
-+		ksft_exit_fail_msg("Fail to allocate memory: %s\n", strerror(errno));
-+
-+	prepare_proc_fd();
++        if [[ -n "${port_name}" ]]; then
++                ip link set dev "${port_name}" master "${TEAM_PORT}"
++                return $?
++        fi
 +}
 +
-+FIXTURE_TEARDOWN(split_pmd_thp_to_order)
++detach_port_if_specified()
 +{
-+	free(expected_orders);
-+	cleanup_proc_fd();
++        local port_name="$1"
++
++        if [[ -n "${port_name}" ]]; then
++                ip link set dev "${port_name}" nomaster
++                return $?
++        fi
 +}
 +
-+ADD_VARIANT_ORDER(split_pmd_thp_to_order, 0);
-+ADD_VARIANT_ORDER(split_pmd_thp_to_order, 2);
-+ADD_VARIANT_ORDER(split_pmd_thp_to_order, 3);
-+ADD_VARIANT_ORDER(split_pmd_thp_to_order, 4);
-+ADD_VARIANT_ORDER(split_pmd_thp_to_order, 5);
-+ADD_VARIANT_ORDER(split_pmd_thp_to_order, 6);
-+ADD_VARIANT_ORDER(split_pmd_thp_to_order, 7);
-+ADD_VARIANT_ORDER(split_pmd_thp_to_order, 8);
-+
-+TEST_F(split_pmd_thp_to_order, order)
++# Test that an option's get value matches its set value.
++# Globals:
++#   RET - Used by testing infra like `check_err`.
++#   EXIT_STATUS - Used by `log_test` for whole script exit value.
++# Arguments:
++#   option_name - The name of the option.
++#   value_1 - The first value to try setting.
++#   value_2 - The second value to try setting.
++#   port_name - The (optional) name of the attached port.
++team_test_option()
 +{
-+	split_pmd_thp_to_order(variant->order);
++        local option_name="$1"
++        local value_1="$2"
++        local value_2="$3"
++        local possible_values="$2 $3 $2"
++        local port_name="$4"
++        local port_flag
++
++        RET=0
++
++        echo "Setting '${option_name}' to '${value_1}' and '${value_2}'"
++
++        attach_port_if_specified "${port_name}"
++        check_err $? "Couldn't attach ${port_name} to master"
++        port_flag=$(get_port_flag "${port_name}")
++
++        # Set and get both possible values.
++        for value in ${possible_values}; do
++                set_and_check_get "${option_name}" "${value}" "${port_flag}"
++                check_err $? "Failed to set '${option_name}' to '${value}'"
++        done
++
++        detach_port_if_specified "${port_name}"
++        check_err $? "Couldn't detach ${port_name} from its master"
++
++        log_test "Set + Get '${option_name}' test"
 +}
 +
- static bool prepare_thp_fs(const char *xfs_path, char *thp_fs_template,
- 		const char **thp_fs_loc)
- {
-@@ -757,81 +862,144 @@ static void split_thp_in_pagecache_to_order_at(size_t fd_size,
- 	}
- }
- 
--int main(int argc, char **argv)
--{
--	int i;
--	size_t fd_size;
--	char *optional_xfs_path = NULL;
--	char fs_loc_template[] = "/tmp/thp_fs_XXXXXX";
-+FIXTURE(split_thp_in_pagecache_to_order) {
-+	bool created_tmp;
- 	const char *fs_loc;
-+};
-+
-+FIXTURE_VARIANT(split_thp_in_pagecache_to_order) {
-+	int order;
-+};
-+
-+FIXTURE_SETUP(split_thp_in_pagecache_to_order)
++# Test that getting a non-existant option fails.
++# Globals:
++#   RET - Used by testing infra like `check_err`.
++#   EXIT_STATUS - Used by `log_test` for whole script exit value.
++# Arguments:
++#   option_name - The name of the option.
++#   port_name - The (optional) name of the attached port.
++team_test_get_option_fails()
 +{
-+	/* limit order to less than pmd_order */
-+	if (variant->order >= pmd_order)
-+		SKIP(return, "order %d is not supported", variant->order);
-+	expected_orders = (int *)malloc(sizeof(int) * (pmd_order + 1));
-+	if (!expected_orders)
-+		ksft_exit_fail_msg("Fail to allocate memory: %s\n", strerror(errno));
++        local option_name="$1"
++        local port_name="$2"
++        local port_flag
 +
-+	self->created_tmp = prepare_thp_fs(optional_xfs_path, fs_loc_template,
-+					&self->fs_loc);
-+	prepare_proc_fd();
++        RET=0
++
++        attach_port_if_specified "${port_name}"
++        check_err $? "Couldn't attach ${port_name} to master"
++        port_flag=$(get_port_flag "${port_name}")
++
++        # Just confirm that getting the value fails.
++        teamnl "${TEAM_PORT}" getoption "${option_name}" "${port_flag}"
++        check_fail $? "Shouldn't be able to get option '${option_name}'"
++
++        detach_port_if_specified "${port_name}"
++
++        log_test "Get '${option_name}' fails"
 +}
 +
-+FIXTURE_TEARDOWN(split_thp_in_pagecache_to_order)
++team_test_options()
 +{
-+	cleanup_proc_fd();
-+	cleanup_thp_fs(self->fs_loc, self->created_tmp);
-+	free(expected_orders);
++        # Wrong option name behavior.
++        team_test_get_option_fails fake_option1
++        team_test_get_option_fails fake_option2 "${MEMBER_PORT}"
++
++        # Correct set and get behavior.
++        team_test_option mode activebackup loadbalance
++        team_test_option notify_peers_count 0 5
++        team_test_option notify_peers_interval 0 5
++        team_test_option mcast_rejoin_count 0 5
++        team_test_option mcast_rejoin_interval 0 5
++        team_test_option enabled true false "${MEMBER_PORT}"
++        team_test_option user_linkup true false "${MEMBER_PORT}"
++        team_test_option user_linkup_enabled true false "${MEMBER_PORT}"
++        team_test_option priority 10 20 "${MEMBER_PORT}"
++        team_test_option queue_id 0 1 "${MEMBER_PORT}"
 +}
 +
-+ADD_VARIANT_ORDER(split_thp_in_pagecache_to_order, 8);
-+ADD_VARIANT_ORDER(split_thp_in_pagecache_to_order, 7);
-+ADD_VARIANT_ORDER(split_thp_in_pagecache_to_order, 6);
-+ADD_VARIANT_ORDER(split_thp_in_pagecache_to_order, 5);
-+ADD_VARIANT_ORDER(split_thp_in_pagecache_to_order, 4);
-+ADD_VARIANT_ORDER(split_thp_in_pagecache_to_order, 3);
-+ADD_VARIANT_ORDER(split_thp_in_pagecache_to_order, 2);
-+ADD_VARIANT_ORDER(split_thp_in_pagecache_to_order, 1);
-+ADD_VARIANT_ORDER(split_thp_in_pagecache_to_order, 0);
-+
-+TEST_F(split_thp_in_pagecache_to_order, order)
-+{
-+	size_t fd_size = 2 * pmd_pagesize;
-+
-+	split_thp_in_pagecache_to_order_at(fd_size, self->fs_loc, variant->order, -1);
-+}
-+
-+FIXTURE(split_thp_in_pagecache_to_order_offset) {
- 	bool created_tmp;
-+	const char *fs_loc;
- 	int offset;
--	unsigned int nr_pages;
--	unsigned int tests;
-+};
- 
--	ksft_print_header();
-+FIXTURE_VARIANT(split_thp_in_pagecache_to_order_offset) {
-+	int order;
-+	int step;
-+};
- 
--	if (geteuid() != 0) {
--		ksft_print_msg("Please run the benchmark as root\n");
--		ksft_finished();
--	}
--
--	if (argc > 1)
--		optional_xfs_path = argv[1];
-+FIXTURE_SETUP(split_thp_in_pagecache_to_order_offset)
-+{
-+	int nr_pages = pmd_pagesize / pagesize;
-+	int offset = variant->step * MAX(nr_pages / 4, 1 << variant->order);
- 
--	pagesize = getpagesize();
--	pageshift = ffs(pagesize) - 1;
--	pmd_pagesize = read_pmd_pagesize();
--	if (!pmd_pagesize)
--		ksft_exit_fail_msg("Reading PMD pagesize failed\n");
-+	/* limit order to less than pmd_order */
-+	if (variant->order >= pmd_order)
-+		SKIP(return, "order %d is not supported", variant->order);
- 
--	nr_pages = pmd_pagesize / pagesize;
--	pmd_order = sz2ord(pmd_pagesize, pagesize);
-+	if (offset < nr_pages)
-+		self->offset = offset;
-+	else
-+		SKIP(return, "offset out of thp range");
- 
- 	expected_orders = (int *)malloc(sizeof(int) * (pmd_order + 1));
- 	if (!expected_orders)
- 		ksft_exit_fail_msg("Fail to allocate memory: %s\n", strerror(errno));
- 
--	tests = 2 + (pmd_order - 1) + (2 * pmd_order) + (pmd_order - 1) * 4 + 2;
--	ksft_set_plan(tests);
--
--	pagemap_fd = open(pagemap_proc, O_RDONLY);
--	if (pagemap_fd == -1)
--		ksft_exit_fail_msg("read pagemap: %s\n", strerror(errno));
--
--	kpageflags_fd = open(kpageflags_proc, O_RDONLY);
--	if (kpageflags_fd == -1)
--		ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-+	self->created_tmp = prepare_thp_fs(optional_xfs_path, fs_loc_template,
-+					&self->fs_loc);
-+	prepare_proc_fd();
-+}
- 
--	fd_size = 2 * pmd_pagesize;
-+FIXTURE_TEARDOWN(split_thp_in_pagecache_to_order_offset)
-+{
-+	cleanup_proc_fd();
-+	cleanup_thp_fs(self->fs_loc, self->created_tmp);
-+	free(expected_orders);
-+}
- 
--	split_pmd_zero_pages();
-+#define SPLIT_IN_PAGECACHE_ORDER_OFFSETS(ord)					 \
-+	ADD_VARIANT_ORDER_OFFSET(split_thp_in_pagecache_to_order_offset, ord, 0);\
-+	ADD_VARIANT_ORDER_OFFSET(split_thp_in_pagecache_to_order_offset, ord, 1);\
-+	ADD_VARIANT_ORDER_OFFSET(split_thp_in_pagecache_to_order_offset, ord, 2);\
-+	ADD_VARIANT_ORDER_OFFSET(split_thp_in_pagecache_to_order_offset, ord, 3)\
-+
-+SPLIT_IN_PAGECACHE_ORDER_OFFSETS(0);
-+SPLIT_IN_PAGECACHE_ORDER_OFFSETS(1);
-+SPLIT_IN_PAGECACHE_ORDER_OFFSETS(2);
-+SPLIT_IN_PAGECACHE_ORDER_OFFSETS(3);
-+SPLIT_IN_PAGECACHE_ORDER_OFFSETS(4);
-+SPLIT_IN_PAGECACHE_ORDER_OFFSETS(5);
-+SPLIT_IN_PAGECACHE_ORDER_OFFSETS(6);
-+SPLIT_IN_PAGECACHE_ORDER_OFFSETS(7);
-+SPLIT_IN_PAGECACHE_ORDER_OFFSETS(8);
-+
-+TEST_F(split_thp_in_pagecache_to_order_offset, order_offset)
-+{
-+	size_t fd_size = 2 * pmd_pagesize;
- 
--	for (i = 0; i < pmd_order; i++)
--		if (i != 1)
--			split_pmd_thp_to_order(i);
-+	split_thp_in_pagecache_to_order_at(fd_size, self->fs_loc,
-+			variant->order, self->offset);
-+}
- 
--	split_pte_mapped_thp();
--	for (i = 0; i < pmd_order; i++)
--		split_file_backed_thp(i);
-+int main(int argc, char **argv)
-+{
-+	int i;
- 
--	created_tmp = prepare_thp_fs(optional_xfs_path, fs_loc_template,
--			&fs_loc);
--	for (i = pmd_order - 1; i >= 0; i--)
--		split_thp_in_pagecache_to_order_at(fd_size, fs_loc, i, -1);
-+	if (geteuid() != 0) {
-+		ksft_print_msg("Please run the benchmark as root\n");
-+		ksft_finished();
-+	}
- 
--	for (i = 0; i < pmd_order; i++)
--		for (offset = 0;
--		     offset < nr_pages;
--		     offset += MAX(nr_pages / 4, 1 << i))
--			split_thp_in_pagecache_to_order_at(fd_size, fs_loc, i, offset);
--	cleanup_thp_fs(fs_loc, created_tmp);
-+	for (i = 1; i < argc; i++) {
-+		/* only one parameter supported */
-+		if (*argv[i] != '-') {
-+			optional_xfs_path = argv[i];
-+			break;
-+		}
- 
--	close(pagemap_fd);
--	close(kpageflags_fd);
--	free(expected_orders);
-+		/* option -l/-h has no parameter */
-+		if (*(argv[i] + 1) != 'l' && *(argv[i] + 1) != 'h')
-+			i++;
-+	}
- 
--	ksft_finished();
-+	pagesize = getpagesize();
-+	pmd_pagesize = read_pmd_pagesize();
-+	if (!pmd_pagesize)
-+		ksft_exit_fail_msg("Reading PMD pagesize failed\n");
-+	pmd_order = sz2ord(pmd_pagesize, pagesize);
- 
--	return 0;
-+	return test_harness_run(argc, argv);
- }
++require_command teamnl
++setup
++tests_run
++exit "${EXIT_STATUS}"
 -- 
-2.34.1
+2.51.0.384.g4c02a37b29-goog
 
 
