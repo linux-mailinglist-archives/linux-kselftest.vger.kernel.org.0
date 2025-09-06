@@ -1,96 +1,167 @@
-Return-Path: <linux-kselftest+bounces-40876-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40877-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34A16B46CF3
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Sep 2025 14:41:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C82B6B47346
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Sep 2025 17:59:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD7B91B240E0
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Sep 2025 12:41:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 499411887B6B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Sep 2025 16:00:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E35FD29D267;
-	Sat,  6 Sep 2025 12:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB97225762;
+	Sat,  6 Sep 2025 15:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Si/Qnn3F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26051235044
-	for <linux-kselftest@vger.kernel.org>; Sat,  6 Sep 2025 12:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609A422541B;
+	Sat,  6 Sep 2025 15:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757162465; cv=none; b=WMyahnKJNEu0Pa9WTv0IB9KQqBPEVTolqjNBfIi86lFeHX1eppEUpiL7r1FeBtHToBWB871kEII9xtZQ+S7vCcUDVu65a2iSILt8h6GXBgrkK//6U2zw+lQ6gY9mMdbdiT8RDg/YcRAMpfMszulZ7ypx52Z51eYkt4UQjdGON6U=
+	t=1757174388; cv=none; b=qlZvSqGnTM1Pw54XqZXVvFQrGv4NveokGuFrO/4+oOMh3ZRqpN3xuDQ+2qoNMU0XU5SY7kdl/AA4S3N24N9tnhiEvhEIto2aoGwdcdcrhkJBkYsfsxBer8S4U9kAJFdoa2ZaQF2f7wG3al224o3xhcwbZXEQj+Q7Wrswn28sfGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757162465; c=relaxed/simple;
-	bh=U7G7G+aVkZB2v3V/zUCuzgGGvDKqhdtnY8WhOjRRook=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=tAbCyjU++whlohI4/2GdLVXqSiU/fwlgVXK/HIVznl45JGfY5IUx6QTxvVjN6nJPjDx3g7AUw7qPZSK5uqPKeoFnQmz2RGcHNCCPIyCunqAwK6CRLPFoDVowMQQ1XyCYrtpsWEOBT1amT6s5nBqCmpNgeFKx9A4ilX+7YioRAJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3f2b8187ec9so76941845ab.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 06 Sep 2025 05:41:03 -0700 (PDT)
+	s=arc-20240116; t=1757174388; c=relaxed/simple;
+	bh=h4wiwBgaByzT8nTZ1ZqpoQOXMs896bVUy0Kfjd3++Q0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=OHhAXn3b9pHhxqfQzqqlPqUFPA7xWLI7gxRmlFAeiIDRtuQ81a7yKQ22QXihnUUtOfAcHPTdpuUnOqYYTbwKWugg2vbMKAxzrh4l8II3AwtZo0vjEwOCeqQanv1faizqe4e39kMRM0RI11C22ceK85WqgSu491+IfN6enpTlRKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Si/Qnn3F; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-76e2ea933b7so2715881b3a.1;
+        Sat, 06 Sep 2025 08:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757174387; x=1757779187; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XrIFwtSt9A6lyVVU3dEeMrt9dG3SP7YLN7A/4OIq3Uc=;
+        b=Si/Qnn3FUJ7ggnRygw+Rmo8TxUHUCcu2TGnl3aCDkAuMhSV2CvH1v81QK+/Zi7We3o
+         Cn7KWuPbEBIGNmx1TKaxZeCqTPXmeozbRmcbrjXtukK7JIQLjU3xHDJ+Ylq9Jd9Aho2r
+         Bnz9cHYtWI0iatbf5/Oi1kCisr/RIEvfJ0nmGkNIFzH0BMkiKwvssPMdgTquPqCjQBmm
+         IzC1Hc7w+W7ysoaPReN/7/p7lmgbzjbozlU9B//OechzqMqCqTyM1IObsb/3DbyaoaJL
+         jUnWAlJs6UG0GKAIC0nXV2KoTWrGzYtWMUjw2N6VzYaM//adUarSMlWXEllwGPTtR10A
+         P+2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757162463; x=1757767263;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iEKjptd+e9tTMEG8g0kTtT0/no/OlP4s8sHfIK6Y4+Y=;
-        b=v1VLFOX6Y5guYXWV+0vgavczhlWxYybXYFb6FHYL63qTTkXWZ1sMTqEUczhKwwtB4Y
-         riis7W+HIov1gHC5ALQRJsJRI4ja6YULXF3JeIb8V+joZjct25yGN4ztWhoE/v/OLvia
-         Oq2S+Yi0X5c2VHHCp/jDF8rOAJDCXAsT4wodzPF5wXE+5ydMtqT94z8RVLf+hkDCc9dB
-         tJjP2VypdqNG0XpOZ1XFrDc/KK1Q6JZUaR+HFU7xTztPKj31OHqDI+5SUSeooSqkz3Tz
-         CUg+cvMUfol5x7r6jsNc6vuypgtZaDn3A7ZcMv+gQlJXg0l4TCOV94FUZVHu/Fn6H51e
-         CFWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXDZaav50yfNAvQ/KgGSEb+dpT9n8SEl46fPdi2GugoCc6pSSjuxkvmXukKvk+IXcGxQvuF9ZT0I4RgFB5qq1w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzXpeX4Cq9W2G9u0C2LatFNlEzhaFVl5Hfib/YyFYIEkNEv2OJ
-	8tFFJiaT6HUiofdP24Vg6h0oq1NysjY+9Jug0eLcZJ+UxpKGMO7YtoYK+DkQ1qbN2I1YhTFw2LC
-	hen5eH3nKvca4mr+Mwl/1IVwOszBUKSFi4RYT8d7qmfSsr3dEq65h2Ctpiyg=
-X-Google-Smtp-Source: AGHT+IHxNVzyRSZvKDEdGlmnC8rBo6tj0A527j9A7QqwnVmZRh2c1L2jvTp4bM80v+o6jg5YbDExuc8bKDS+cnBSnKi+t5QY9sHX
+        d=1e100.net; s=20230601; t=1757174387; x=1757779187;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XrIFwtSt9A6lyVVU3dEeMrt9dG3SP7YLN7A/4OIq3Uc=;
+        b=YZsjeJQ0nqpH4FBU1OAYN7hvwgWniFXEMCBjQlGT+odRptPgyMEFRHg2dQsxLnVx9V
+         KVpg4EO85b7hOfgb2Zjs+iHwFtbPDVjvtm02/z9pMrDH6a0sUhgbTIQuXi0Hd3+r/kCD
+         xCoQW2Q3BSYOqovshDJ5dn10W82hMlRI8PVupg0S8W0vYF480YEfJeS2EO2OhdKjLwFW
+         cJHqUs/oSLl331nHL+f797R+pVbYwoQfpTvwC0p24X2YyJ4B2B2jQ/KHvLanmYcgxxkh
+         xkBl5BYXCh6Ttq1+r0ekw4Ni//ICQYYSJ88rIvxfsReWgnUrzQcQK3J8/ClzgILur7th
+         TOWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUMdbQ8M96wSjcA3wN2UsIQef7EF9uNGD6QqEddO6cbbrkejVPMiQ8TvKNIprLQb4wGLXhk5AAdvrUw1seO6LZy@vger.kernel.org, AJvYcCV/rQuP/tD8KxNo8XzC86ln+nFQaAwQPPRr5wEUviRJ96tNzgk7ElaLT7J4ExBYfYyajiQEHRCm7Nmuajw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFL+Ao+Hg22XzpWexljCf1NQV5i4M6ul37FEr37EV99W0l8LmD
+	2Kuth5+YhjewBWOhBhkq1c4hNJK/JQj/Sd77FRfhi5vYa9j97VXpdj/V
+X-Gm-Gg: ASbGncvaHfJ6eJ0VSh1+9OubJ1SmTlOWbRq44G54DXGOI4dJnCUa9Pf0on3GYbU2RXf
+	HgZP3ZTTkyJtgr1G8HGHhzt3miJPnkbiRWmAHmtaA7YAlW/fzr4rs2o43BTz8/FJV4813eBFqFN
+	8Dt9gQKro7n+OtqWZS4Mkleyk0wS7o//GJ87RepTY+DeyoMxXa9iL6bZ5oRyEJ6J33nnLokIpq9
+	EFyCntQQOltBHNU2gYn6q0G7Eu1fRGxTuKj84K0blEnIhg58O7FMiabA3nkwYpvir51Qhywaqeh
+	NQZrtoxoFv41/SL5dbs5ikoj9nJbKf1ZcsBacnt6ZKJN9VdQcwZDP9O6arI4v6VECS9JrRZgXXk
+	RlaegRm7hgM/p6PatSvKRxBkiGyspS1g=
+X-Google-Smtp-Source: AGHT+IHJkBfbaRZTfiawC3YBCWrAP6hCVu4FwytpXR+uUzJyLvZ6bKq0SL4BUl4mZxqTv0swGQezkw==
+X-Received: by 2002:a05:6a00:9162:b0:76e:7ab9:a238 with SMTP id d2e1a72fcca58-7741bf66911mr8160961b3a.15.1757174386587;
+        Sat, 06 Sep 2025 08:59:46 -0700 (PDT)
+Received: from localhost ([159.117.70.219])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-7722a26abdesm24451555b3a.1.2025.09.06.08.59.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Sep 2025 08:59:46 -0700 (PDT)
+From: Nai-Chen Cheng <bleach1827@gmail.com>
+Date: Sat, 06 Sep 2025 23:59:28 +0800
+Subject: [PATCH] selftests/net: fix unused return value warnings in ksft.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:451a:b0:3fe:f1f4:77b2 with SMTP id
- e9e14a558f8ab-3fef1f4788emr15491265ab.5.1757162463379; Sat, 06 Sep 2025
- 05:41:03 -0700 (PDT)
-Date: Sat, 06 Sep 2025 05:41:03 -0700
-In-Reply-To: <683d677f.a00a0220.d8eae.004b.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68bc2bdf.050a0220.192772.01ac.GAE@google.com>
-Subject: Re: [syzbot] [net?] possible deadlock in __netdev_update_features
-From: syzbot <syzbot+7e0f89fb6cae5d002de0@syzkaller.appspotmail.com>
-To: andrew+netdev@lunn.ch, andrew@lunn.ch, davem@davemloft.net, 
-	ecree.xilinx@gmail.com, edumazet@google.com, gal@nvidia.com, horms@kernel.org, 
-	jiri@resnulli.us, kuba@kernel.org, kuniyu@amazon.com, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, sdf@fomichev.me, shuah@kernel.org, 
-	stfomichev@gmail.com, syzkaller-bugs@googlegroups.com, tariqt@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250906-selftests-net-ksft-v1-1-f1577cea3f68@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAF9avGgC/x3MSwqAMAwA0atI1gZqqxW9irjwk2pQqjRFBPHuF
+ pdvMfOAUGASaLMHAl0sfPiEIs9gWge/EPKcDFrpSjXKotDuIkkU9BRxExfR1NraxtTjVM6QwjO
+ Q4/ufdv37fk3QvfpkAAAA
+X-Change-ID: 20250906-selftests-net-ksft-37266937bc4d
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev, 
+ Nai-Chen Cheng <bleach1827@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757174379; l=1664;
+ i=bleach1827@gmail.com; s=20250730; h=from:subject:message-id;
+ bh=h4wiwBgaByzT8nTZ1ZqpoQOXMs896bVUy0Kfjd3++Q0=;
+ b=doHOCBxnaG5mpY+1/18TuD7d+TAkG2uLQIUjLXuWgnXjJqEMnp8qGuPA1VO2R5Gi3UhOoJ2Gb
+ LZoWaVMySTBBc8DNJv13kgiS7zFebHmdowBV1UgYRBbP4MjMtupYCNE
+X-Developer-Key: i=bleach1827@gmail.com; a=ed25519;
+ pk=jahFPRplw20Aaim8fIt8SxlFMqkHbJ+s8zYBGbtHH5g=
 
-syzbot has bisected this issue to:
+The write() and read() system calls in ksft_ready() and ksft_wait()
+functions return values that were not being checked, causing complier
+warnings with GCC.
 
-commit f792709e0baad67224180d73d51c2f090003adde
-Author: Stanislav Fomichev <stfomichev@gmail.com>
-Date:   Fri May 16 23:22:05 2025 +0000
+Fix the warnings by casting the return values to void to indicate that
+ignoring them is intentional.
 
-    selftests: net: validate team flags propagation
+Signed-off-by: Nai-Chen Cheng <bleach1827@gmail.com>
+---
+ tools/testing/selftests/net/lib/ksft.h | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16a3ba42580000
-start commit:   d69eb204c255 Merge tag 'net-6.17-rc5' of git://git.kernel...
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=15a3ba42580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=11a3ba42580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9c302bcfb26a48af
-dashboard link: https://syzkaller.appspot.com/bug?extid=7e0f89fb6cae5d002de0
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12942962580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16942962580000
+diff --git a/tools/testing/selftests/net/lib/ksft.h b/tools/testing/selftests/net/lib/ksft.h
+index 17dc34a612c64e549f634e82a23f317b2ff6a282..0ca2cb408c643bc76c0aaea684f0e7e28e6b05a6 100644
+--- a/tools/testing/selftests/net/lib/ksft.h
++++ b/tools/testing/selftests/net/lib/ksft.h
+@@ -10,6 +10,7 @@ static inline void ksft_ready(void)
+ {
+ 	const char msg[7] = "ready\n";
+ 	char *env_str;
++	ssize_t ret;
+ 	int fd;
+ 
+ 	env_str = getenv("KSFT_READY_FD");
+@@ -24,7 +25,8 @@ static inline void ksft_ready(void)
+ 		fd = STDOUT_FILENO;
+ 	}
+ 
+-	write(fd, msg, sizeof(msg));
++	ret = write(fd, msg, sizeof(msg));
++	(void)ret;
+ 	if (fd != STDOUT_FILENO)
+ 		close(fd);
+ }
+@@ -33,6 +35,7 @@ static inline void ksft_wait(void)
+ {
+ 	char *env_str;
+ 	char byte;
++	ssize_t ret;
+ 	int fd;
+ 
+ 	env_str = getenv("KSFT_WAIT_FD");
+@@ -48,7 +51,8 @@ static inline void ksft_wait(void)
+ 		fd = STDIN_FILENO;
+ 	}
+ 
+-	read(fd, &byte, sizeof(byte));
++	ret = read(fd, &byte, sizeof(byte));
++	(void)ret;
+ 	if (fd != STDIN_FILENO)
+ 		close(fd);
+ }
 
-Reported-by: syzbot+7e0f89fb6cae5d002de0@syzkaller.appspotmail.com
-Fixes: f792709e0baa ("selftests: net: validate team flags propagation")
+---
+base-commit: d1d10cea0895264cc3769e4d9719baa94f4b250b
+change-id: 20250906-selftests-net-ksft-37266937bc4d
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Best regards,
+-- 
+Nai-Chen Cheng <bleach1827@gmail.com>
+
 
