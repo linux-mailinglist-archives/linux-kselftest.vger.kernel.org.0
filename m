@@ -1,208 +1,140 @@
-Return-Path: <linux-kselftest+bounces-40894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40895-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 290B0B475F6
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Sep 2025 19:43:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED0CFB47642
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Sep 2025 20:43:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 985E77A6DB7
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Sep 2025 17:41:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF3831C2223E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Sep 2025 18:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CFFF2ECEAB;
-	Sat,  6 Sep 2025 17:42:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B07F27CB31;
+	Sat,  6 Sep 2025 18:43:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="qZg+JVHY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bWMquRzK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WqNb8pV9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6821D26A0C6;
-	Sat,  6 Sep 2025 17:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF96315D2B;
+	Sat,  6 Sep 2025 18:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757180579; cv=none; b=DIwfpC7KWfjdGK9lBBNTL2wNTzCK+oSapTPTJYZsAjBl2FtLqKHFNjem1VH6B5khhi2LImVBVj8kJmVWtJlE98jdk3CpzQ56QO4Mj36hqc/JQLKgLf1KKkD7b66xNs+HDHBgBd1HO6W2coFhKsPFewF2TkdPN8mJE5hAMPK4vvE=
+	t=1757184231; cv=none; b=QnQhxRt1oMH59cPMShMfl9KTLkb7/58Mqi3d7H4byggrtfrJVJCvUH01RDb5KBQlFmQ1Ep1PHEm7vztold+xU5teiF4KOWEtPkvfJ52nOKLybH4w71NFycd8DaGC826JCOV2lyCB9OX1NHed4zSOid1TvMXJT3jFzoKOKAsaRmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757180579; c=relaxed/simple;
-	bh=AlmO+Tf6FLEqNohfsm1mf0OtxDGnNw0UIro4O81ldyY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J6AcunZOvO2ufoADccRUiLZO0/VbV73mDqKM5SrzrWo8XDqdshCnaSnPcy4/VbShR91aT2eoDEhhSnRePLXbzyyN1j5eyGTinLZDBPpi0mXOR7wFJN9LHpZ9KhvEGx0ec3LmpDBiSOAYjsfFicU52H40m5chTl1N3eAYrhpQOKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=qZg+JVHY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bWMquRzK; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
-	by mailfout.stl.internal (Postfix) with ESMTP id 045F61D002C2;
-	Sat,  6 Sep 2025 13:42:53 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-09.internal (MEProxy); Sat, 06 Sep 2025 13:42:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1757180573; x=
-	1757266973; bh=Avaw/UT4rW0baoJoTj/4g1D2JRLB5NY0sZE2BPGhPIA=; b=q
-	Zg+JVHYAqs5LTTS7+RqATWqyiBFOOA9r5F4fMThR+9+dLn6UaYeqmUXgeqpEIXA1
-	cofaMh+hhd6/ke8mDOLwtfKgtKiZ8+D6RhUKhjKIGcKeuiCxZKAlmdVqVUOkg1ib
-	eDWn8zIKj4mzebT5MxoREZlF0qaBmr+R0qOyFiHGbUsEE8xB9Rz83qN7aHDzCESl
-	6Yx8jaPsPOOpFlt/QfBicjxjY/HIkPuQhcM/wObkOVTHzFYP5Jm8zLas5U/VpUBY
-	CwMwP1WTAK6cJAzvrOf71Y5Lg4F6eCmXL3BOcJT7lPfwX3kmiFiRMT3ihWWWA+pZ
-	eUr3MlEu8P5EJETC0c1rA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1757180573; x=1757266973; bh=Avaw/UT4rW0baoJoTj/4g1D2JRLB5NY0sZE
-	2BPGhPIA=; b=bWMquRzKCF55ghr4LrbKxbM5/frfNUZyAU5+PTva46RO+rn7SPM
-	fy9tQgcQNCXWmRSSNeD1m0Mdl65FFTtFV2zQyx20E0yGva7+UuHTggfrhU/e+g4B
-	gYJ1VX37My8cyj99mV6NNGYolGVZ1KmE5k0OWD+pjiRdLx58BZXfWbKciN2pEwi7
-	7truExcFynPGMxIVJhMBHpiG6T/2Otk+l3FNqV2g3zmbQpgLIrzE0W2F/l3tN3FJ
-	HiauvJxC6CVysl/+Qjf9zBZZxGb61XsIenhDfLxKcQ5RQiXKGU3zkRmbfMeJ8DYD
-	tc3DCjWkGRmFA2BRdwXeV7ZnfkfNmEKTHWQ==
-X-ME-Sender: <xms:nHK8aFmnRoe-b8xJWVoVQ1wvbPZfKqyIntlfefXCH2Y61vlpQ19XMA>
-    <xme:nHK8aLHpOpRWb4YCL5xs4xnY6V1vIAGwW0ZIRNBeJtlzWJ8D9qgQH5fFIaN-o68at
-    rdowntHPSCmyqhTOzg>
-X-ME-Received: <xmr:nHK8aBEiX5WJHrGFac2s-ISGF61Ph2UgNd6U6K-oVsjDM2g4DTffrJksIoay>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduvdegtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpefurggsrhhinhgr
-    ucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrihhlrdhnvghtqeenucggtffrrg
-    htthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeegteehgeehieffgfeuvdeuffef
-    gfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepudekpdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopehlihhuhhgrnhhgsghinhesghhmrghilhdrtg
-    homhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgt
-    phhtthhopehjvhesjhhvohhssghurhhghhdrnhgvthdprhgtphhtthhopegrnhgurhgvfi
-    donhgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
-    ohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpd
-    hrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghn
-    ihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepjhhirhhisehrvghsnhhulhhlihdruh
-    hs
-X-ME-Proxy: <xmx:nHK8aL3mZ4L7lJE18dG3ivKN5VJvaycPWvI65ete3ZPV3qMtKhJKvg>
-    <xmx:nHK8aLej4d05DkeeYSxmn5gqFNVePs3ndq-zyVMwewZTX4t0gJG6wQ>
-    <xmx:nHK8aFLek2w5cm48_-w5TWUsvajTnqF6UiG6K8izJO_lKZapkgpjQg>
-    <xmx:nHK8aJELQig4zEUtRDzWO7k9vU0GzfDVm2s2bSVcrZ1A5buHLGzJ3A>
-    <xmx:nXK8aF70J--ieDHFCxYDYQum_-4ASe0Gd5LqnxzG4ByJHQ-D_2JeoaEs>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 6 Sep 2025 13:42:51 -0400 (EDT)
-Date: Sat, 6 Sep 2025 19:42:48 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Ahmed Zaki <ahmed.zaki@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv2 net-next 1/5] net: add a common function to compute
- features from lowers devices
-Message-ID: <aLxymFjpPjckFb2Q@krikkit>
-References: <20250902072602.361122-1-liuhangbin@gmail.com>
- <20250902072602.361122-2-liuhangbin@gmail.com>
+	s=arc-20240116; t=1757184231; c=relaxed/simple;
+	bh=A2SfHCO2en4ZibxLIFm+2RXjb315oSn5JIZ9vIAmY8E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Vg6fNb1kSgBO3Id6SghTbGls3OijS4sQKDhC912DKokvc6qI7wQIKeKb4Hfuq5F+0ocwlwFb6u7J1OTfsImNmd1/xvQV99hjkv8i0uTMrtNq6dtUigpY01ZQ35huTS5wyJYzoVN0lpp5oh3+V5pGvyzkxFRWjhWf5qn8ejE5j/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WqNb8pV9; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b02c719a117so572925466b.1;
+        Sat, 06 Sep 2025 11:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757184227; x=1757789027; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GPAi90Hux0mu62Ys4IXO2Pj4eDbqG6EQAkVC5R4v2uU=;
+        b=WqNb8pV91L9rJE3R0wpitjxd/17CVV1XLyhnrL4u7DR98CXLuj2avNnmGtgL2YM1r5
+         ZkKpC45jw6JpxjEwaGjd9XljXFb1EK//W92bjMT/eIEgaRBc4K+N6vslXxYAPtHMXTUu
+         BZlyomsbVCktzOoAqKXfXPmipmcLyABXiF8Z6UuIWtrAxWBvI7GPDMx9zk8fnOJV5XVv
+         SjO6HxqmCO+BqbQj2C5J/VisTZkR+0OcRhDHg8W9w4CVReA2ZDq9DFCJv9tcKXLb5B9X
+         954FGapAKOC0tzdseYvPaB0xTnUfHixtBtTHyPnAQR5/fQmp2ydj+za4AZaQhMkJpwFC
+         Zg+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757184227; x=1757789027;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GPAi90Hux0mu62Ys4IXO2Pj4eDbqG6EQAkVC5R4v2uU=;
+        b=KRULYuz/90Ywev2lATMxwv2N9BToghvikdw7gxTWRk5QrTFo1vn4r2U17MXa/0tJVV
+         IRMR+6vGxNc+ZYELr2tGCseg0hf8FM6yP0KI6gg40gIrtCWjBkjK27ZR0vxkEOW9i+Vw
+         UqvH66QWZfZz/9g7/zEhNlBpl6ZFFFbvhb9y2IF7su8wz0jyKJAfG7rDJAeGpt3B19Tb
+         KZc/+QR84QcrMag2ncOGyMg0o45MROVZtv4YBw8S4rvtEfL2Yk4+aYFFXVMaPgSprWY3
+         5I3BbgYkfJkVI0ptzox73YRkb0kAQ79UO9ZSixyAdQU8/xG1YkNtb+isZ4DGpElZwx+v
+         nF2A==
+X-Forwarded-Encrypted: i=1; AJvYcCVAW0HlVRRSFpEwhUnUCgMNb/MkrpvaF0xpWi9blLB9RcZB6ERXpIim6azcOk1ywyfzYt8Fd5wtZ1flKJKv@vger.kernel.org, AJvYcCVgFrYMeWC9T7oDke4aejmJB3a+EjnxvGthCo3DEzCDaCKwv2tW+4iUvjPS8kXi3+X0uuY=@vger.kernel.org, AJvYcCWHfmX8I4rxz3RU+SMIqjFRvjm/ISU8F+qRZ7jJ3iH+vGDAvSSYjF8/6BeLJ+ti87+4M7ke9WiNx1Twkl7sP3gC@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkjJPWb47SAiKVjDiknKG3rij3knHMAu7jmGEqoOHnYsEUJuko
+	VEUcwBBrUuOhBB5x5EFY41ebXoibB7bgf1seD8X4g7FMZgMzoeOCRan6
+X-Gm-Gg: ASbGncsPRkKLHFPuXS32oYZnNVYchxi4LpcwU82OgXcyD6HO0sFC8zfwkknvsEVopPE
+	POt3wrfsXvWm/G5kSXIgF5RuwGY2xobZowhFvw5UgqrGQLUJCtElEGdCO3p8MTCIdNm1KDXP7Oz
+	3Bbk3bQaEzfiNnftrbdiOG3LTpN43GZO3wTProluxLlQdDe/N/Q3aCF7ImtspBbXOuxxMluXf1n
+	NTBTjfKsCcfl79rn1NS4BvHauwbzz5KOIdnOuiIMUWXWnqrpxyGX6VARHPqTysezfWcH+HmCI3I
+	yt0KaxvrafD+6J0P0+p1qR6Z/oo6bieyX/9Uc7TWF/bN3NWUzyLRX1wCJ7oquUVmRt+rV28zEHf
+	MSwU8IN9pq6SJC80=
+X-Google-Smtp-Source: AGHT+IHE2NZIt0wrvI86xs9hDbwS5+mTK6rKNdU1UL89vVA8Qvv/fkz3LiQ4We8x5UFPjNvHXXIAog==
+X-Received: by 2002:a17:907:6d05:b0:b04:3c66:ee5a with SMTP id a640c23a62f3a-b04b147d878mr264654366b.23.1757184226681;
+        Sat, 06 Sep 2025 11:43:46 -0700 (PDT)
+Received: from hsukr3.. ([141.70.88.200])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b047b61cf00sm700359666b.15.2025.09.06.11.43.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Sep 2025 11:43:46 -0700 (PDT)
+From: Sukrut Heroorkar <hsukrut3@gmail.com>
+To: 
+Cc: skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com,
+	Sukrut Heroorkar <hsukrut3@gmail.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] selftests/kvm: Use vcpus count instead of hardcoded 0xff in test_icr
+Date: Sat,  6 Sep 2025 20:43:20 +0200
+Message-ID: <20250906184324.89974-1-hsukrut3@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250902072602.361122-2-liuhangbin@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-2025-09-02, 07:25:58 +0000, Hangbin Liu wrote:
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 1d1650d9ecff..5c1c8b016c8e 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -12577,6 +12577,82 @@ netdev_features_t netdev_increment_features(netdev_features_t all,
->  }
->  EXPORT_SYMBOL(netdev_increment_features);
->  
-> +/**
-> + *	netdev_compute_features_from_lowers - compute feature from lowers
-> + *	@dev: the upper device
-> + *
-> + *	Recompute the upper device's feature based on all lower devices.
-> + */
-> +void netdev_compute_features_from_lowers(struct net_device *dev)
-> +{
-> +	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM;
-> +	netdev_features_t gso_partial_features = VIRTUAL_DEV_GSO_PARTIAL_FEATURES;
-> +#ifdef CONFIG_XFRM_OFFLOAD
-> +	netdev_features_t xfrm_features  = VIRTUAL_DEV_XFRM_FEATURES;
-> +#endif
-> +	netdev_features_t mpls_features  = VIRTUAL_DEV_MPLS_FEATURES;
-> +	netdev_features_t vlan_features = VIRTUAL_DEV_VLAN_FEATURES;
-> +	netdev_features_t enc_features  = VIRTUAL_DEV_ENC_FEATURES;
-> +	unsigned int tso_max_size = TSO_MAX_SIZE;
-> +	u16 tso_max_segs = TSO_MAX_SEGS;
-> +	struct net_device *lower_dev;
-> +	struct list_head *iter;
-> +
-> +	mpls_features = netdev_base_features(mpls_features);
-> +	vlan_features = netdev_base_features(vlan_features);
-> +	enc_features = netdev_base_features(enc_features);
-> +
-> +	netdev_for_each_lower_dev(dev, lower_dev, iter) {
-> +		gso_partial_features = netdev_increment_features(gso_partial_features,
-> +								 lower_dev->gso_partial_features,
-> +								 VIRTUAL_DEV_GSO_PARTIAL_FEATURES);
-> +
-> +		vlan_features = netdev_increment_features(vlan_features,
-> +							  lower_dev->vlan_features,
-> +							  VIRTUAL_DEV_VLAN_FEATURES);
-> +
-> +#ifdef CONFIG_XFRM_OFFLOAD
-> +		xfrm_features = netdev_increment_features(xfrm_features,
-> +							  lower_dev->hw_enc_features,
-> +							  VIRTUAL_DEV_XFRM_FEATURES);
-> +#endif
-> +
-> +		enc_features = netdev_increment_features(enc_features,
-> +							 lower_dev->hw_enc_features,
-> +							 VIRTUAL_DEV_ENC_FEATURES);
-> +
-> +		mpls_features = netdev_increment_features(mpls_features,
-> +							  lower_dev->mpls_features,
-> +							  VIRTUAL_DEV_MPLS_FEATURES);
-> +
-> +		dst_release_flag &= lower_dev->priv_flags;
-> +
-> +		tso_max_size = min(tso_max_size, lower_dev->tso_max_size);
-> +		tso_max_segs = min(tso_max_segs, lower_dev->tso_max_segs);
-> +	}
-> +
-> +	dev->gso_partial_features = gso_partial_features;
-> +	dev->vlan_features = vlan_features;
-> +#ifdef CONFIG_XFRM_OFFLOAD
-> +	dev->hw_enc_features |= xfrm_features;
-> +#endif
+Replace the hardcoded 0xff in test_icr() with the actual number of vcpus
+created for the vm. This address the existing TODO and keeps the test
+correct if it is ever run with multiple vcpus.
 
-I'm not completely sure we want xfrm_features for upper devices other
-than bonding [1], but this will get overwritten immediately
-afterwards:
+Signed-off-by: Sukrut Heroorkar <hsukrut3@gmail.com>
+---
+ tools/testing/selftests/kvm/x86/xapic_state_test.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-> +	dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
-> +				    NETIF_F_HW_VLAN_CTAG_TX |
-> +				    NETIF_F_HW_VLAN_STAG_TX;
-
-
-[1] those lines in bond_compute_features were only added alongside
-bond IPsec offload, see 18cb261afd7b ("bonding: support hardware
-encryption offload to slaves")
-
-but AFAIU hw_enc_features is only used as a mask over dev->features so
-it shouldn't be a problem to have xfrm stuff in bridge/team as well
-
+diff --git a/tools/testing/selftests/kvm/x86/xapic_state_test.c b/tools/testing/selftests/kvm/x86/xapic_state_test.c
+index fdebff1165c7..4af36682503e 100644
+--- a/tools/testing/selftests/kvm/x86/xapic_state_test.c
++++ b/tools/testing/selftests/kvm/x86/xapic_state_test.c
+@@ -56,6 +56,17 @@ static void x2apic_guest_code(void)
+ 	} while (1);
+ }
+ 
++static unsigned int vm_nr_vcpus(struct kvm_vm *vm)
++{
++	struct kvm_vcpu *vcpu;
++	unsigned int count = 0;
++
++	list_for_each_entry(vcpu, &vm->vcpus, list)
++		count++;
++
++	return count;
++}
++
+ static void ____test_icr(struct xapic_vcpu *x, uint64_t val)
+ {
+ 	struct kvm_vcpu *vcpu = x->vcpu;
+@@ -124,7 +135,7 @@ static void test_icr(struct xapic_vcpu *x)
+ 	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
+ 	 */
+ 	icr = APIC_INT_ASSERT | 0xff;
+-	for (i = 0; i < 0xff; i++) {
++	for (i = 0; i < vm_nr_vcpus(vcpu->vm); i++) {
+ 		if (i == vcpu->id)
+ 			continue;
+ 		for (j = 0; j < 8; j++)
 -- 
-Sabrina
+2.43.0
+
 
