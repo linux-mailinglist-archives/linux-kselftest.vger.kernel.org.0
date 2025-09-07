@@ -1,159 +1,121 @@
-Return-Path: <linux-kselftest+bounces-40902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2EABB4787A
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Sep 2025 03:21:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CFD1B478AD
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Sep 2025 04:11:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D57911694E1
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Sep 2025 01:21:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32FD93C7F37
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Sep 2025 02:11:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4220D12DDA1;
-	Sun,  7 Sep 2025 01:21:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17958187346;
+	Sun,  7 Sep 2025 02:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ojML1cjx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uu53tzYX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B00C1DDF7;
-	Sun,  7 Sep 2025 01:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CC34A06;
+	Sun,  7 Sep 2025 02:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757208086; cv=none; b=AMvmWCsljS9sPJdV3BLmKmTvv5d90THTNA2OxeOS7u1QWc/lNn7a26crCbtkF9yyUVrtYCUj3erAC2LAaOmUKI3SAwtsThTh6spxLzQAOJfUyOwyvNdbFrj+WLSVgUL5pjc8DmkLKcS0ezW/EILXF/eeNF3gq0cc9yf6L2y1m0o=
+	t=1757211084; cv=none; b=kvT7VHYd9ypuvWtV78fAhWqK7M4EPcoUJQq0kn0rNN+uzfXhUUPCNqhNZ1wOG3ArnfzAiyn4WDcDzcALeWuIVO0zzDhMZK23hbRcY7tuNohNkkF9aDpaMGs9nu7aCUTOyJCfe0YFdVdG9hXsqwPMsdjVwekXhuQIDpi5p4Cg6rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757208086; c=relaxed/simple;
-	bh=rtX3oKEEiJXaqHWETBe8kB5dsg2UHl0IvweYcav6NfE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Uyg8xzcoBNzt8bL966dKsR9lg2SSybxI+3A9k2uakJqj2hElP9vj6Zhwc+X1O479tanJAvrypSDHOdkXQ0o+z8PlIOosZi7ktDYLKl7anOCTn/SRPDk3c8y00xOo1l0+yrdthIMZIUJnu9UZNrX3dLB2vS7M+ffcyyLPMnfZ/Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ojML1cjx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 357C0C4CEFB;
-	Sun,  7 Sep 2025 01:21:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757208085;
-	bh=rtX3oKEEiJXaqHWETBe8kB5dsg2UHl0IvweYcav6NfE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ojML1cjxV+4OLp77L1R+ovTJM2iA9silR38xXfNYryrJ5lgj9Q2c1OUqEhPjFbIZa
-	 qJy9Q4MR6oVIjVsiHQEJ7RazLSKmZ95sSx321t8rdf8ekNu9OWwmiuwNBqEeXHD/uy
-	 mTg8lY/9BYPe9lvxzDXs2iusn6v2LWzM4hOdwpcialX+BtWdVJXLyZ9cVmXNcPT6KU
-	 +5RlJnOOrX9HoPvvo4L5nZBV4HGBr9Y6Fgcm9mFPXY0L1kZM5B6Gp8+LKBUmtQgYct
-	 4+vR6J0kuYgRcNtxgmgSmH3tOcnlJW6/5iDZp/v49/M16A7+WAe1eSqx1Jon+sg+W4
-	 FZlU7lI8aVDDA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	dsahern@gmail.com,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 2/2] selftests: net: run groups from fcnal-test in parallel
-Date: Sat,  6 Sep 2025 18:21:16 -0700
-Message-ID: <20250907012116.3315344-2-kuba@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250907012116.3315344-1-kuba@kernel.org>
-References: <20250907012116.3315344-1-kuba@kernel.org>
+	s=arc-20240116; t=1757211084; c=relaxed/simple;
+	bh=OZCpA0chSjxv3Lgd+uW/ts5asDVyp+uuQl0W9GpliIU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W2CAZk0aGnBK6KClZOOEJ/b1aotsaSC2juLkU7VRDxtYZnHj/cWeSE7sFKPbOM0o5shVry/st9/bKH5uiKLKBCkoWGWmQR947ICoh6fvoZ/CYLPT93TTiXIcsT+R68JWX8eeqG1KoWZ3cwk9iuQr1Frp2Zu8Eju389n62wkk34Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uu53tzYX; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-88762f20125so257554839f.0;
+        Sat, 06 Sep 2025 19:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757211080; x=1757815880; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2kLVhBsN9dhNrlhLxW+XbovzQ/BZ8ochPm1sfsjRFYg=;
+        b=Uu53tzYXYjFZWPlASaFuLavLv/1vqrxgCtJuUtcTXWiwU8x0CubXsxxyEeAmHCumf1
+         YuBm88DCbyBwkdoILKKSG4UYhd18ZyuQc3uKCloGSY3dW6UWJdiLk4IaV+TmPY9FPG/6
+         UH1LaAgn1W9QlKNbx3zhIloIvmzt2691eJNW+pZ9lJTYTtY4zrPcDUJs/jM1RTWGIvXC
+         9ujdi0MmTzeOW37XJdg7Z2q+w8VdabMoJyH45+VllwU9x3JFBSXr2TT4MsX8mNlBJvun
+         eqO5JUIuIC6Eg0MBV0zaKiVSzePMb6jMYDssxVqnrPjX2JQTYe+1OYJgs2VDWMQKOtJU
+         0lyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757211080; x=1757815880;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2kLVhBsN9dhNrlhLxW+XbovzQ/BZ8ochPm1sfsjRFYg=;
+        b=O/++AwVo+6UP1Lvyhruu6BU8YmHFi19mJxZ9sNIoYMzzue7FeXxvWo2WKzj1rZpACa
+         Q09Ao0jDLCz/sAXuw+mhVlmKl1i7Mws2PBlm8kvWDUpYCpkGaLw+CGKIpsi3NX05wxv4
+         radHg3vsvfa1NP1otr3ErqdPZ3ISN6zWW05WJ3MZpX+H74kZUS4ZgUU28ljuvGKgkHkc
+         +SP9wbkEJ/ds3nZAs+SjmRSm1qu0eXAvm1gIYPaZLH4/Z00kPdS3baPCdl+z4CQCppKJ
+         coZ8tTMapozQpnVYFSMGG9qapjWZemOWhVXQHrWL7SPU7CRbkBSRwI4jI0cOO2cx+LTQ
+         CxsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXRsCf8fhuXFN+VQ0YCo0Lk9HDRBeOBlpIfZ+NhhWXSUwxJXQjtjUFJdssfaE1zIY4arTPtgXutIUKUx4HW7eA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQnXkopRW48+dKh/8iFoV2CX4mIzw1TxvyyoFLOJJwKYHNYBSL
+	rKlAGgbYwTk3m66b+7mmqVM07C6yyj4pfmNm00607Iwmy5Q215nAichD
+X-Gm-Gg: ASbGncvHrhiqT4/JwC37jd/vVwfhagQ1Hg+8Jm9JMauAZ4tr5p5H0GrItfkqo7e2WjH
+	2FCt6QW1lcgxJjw2/cM6wx970ZGD8oR7Iij2f779AZS0g9/JzVBOkqp8d/+UDNpMbGtkU7v0mhB
+	22wxnR4oM+Gla+Dtli+di5AeCTydNOuNhM0/NVgYw9lg08PgM9GdixdyBxMF9jgdrrg2aLayo59
+	xVIGbVokoHgF6DexHVJR9HUDMw6QaSw5rSNyhFG2eah0VRrVrkS7H2GaWOTS2CY10zYA2iBNT7P
+	GwVJ24MFnKTuIobV3iQB6c1zwKntdjYcJgfj8M37yM7RkAbTjewBkuwkGBjxXl9DMOMZ+D6Z3hm
+	6GzZYAT7Xyy37cZIzdYtBqsrTLLuYUe0H+XtYcgOo+wie0Gbr7rAsrtn2KxXqW5ee+X5i4EBy4e
+	9gPUUDxGaV/YxZe7pwQw4=
+X-Google-Smtp-Source: AGHT+IGfR179kG7864B43/0SNBFqoAPFytz/8tsks0C7teojneHa6P+vs74igS0RB7CarHog7x4GxA==
+X-Received: by 2002:a05:6602:6d11:b0:883:ee95:7266 with SMTP id ca18e2360f4ac-8877768cf57mr557808739f.9.1757211080482;
+        Sat, 06 Sep 2025 19:11:20 -0700 (PDT)
+Received: from ?IPV6:2601:282:1e02:1040:8951:1fac:8f57:51bb? ([2601:282:1e02:1040:8951:1fac:8f57:51bb])
+        by smtp.googlemail.com with ESMTPSA id ca18e2360f4ac-8872a4f8e38sm646686239f.27.2025.09.06.19.11.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Sep 2025 19:11:20 -0700 (PDT)
+Message-ID: <842ad1ae-6e82-4ffc-8338-da0b1401ea25@gmail.com>
+Date: Sat, 6 Sep 2025 20:11:18 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 2/2] selftests: net: run groups from fcnal-test
+ in parallel
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20250907012116.3315344-1-kuba@kernel.org>
+ <20250907012116.3315344-2-kuba@kernel.org>
+From: David Ahern <dsahern@gmail.com>
+In-Reply-To: <20250907012116.3315344-2-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-fcnal-test.sh takes almost hour and a half to finish.
-The tests are already grouped into ipv4, ipv6 and other.
-Run those groups separately.
+On 9/6/25 7:21 PM, Jakub Kicinski wrote:
+> fcnal-test.sh takes almost hour and a half to finish.
+> The tests are already grouped into ipv4, ipv6 and other.
+> Run those groups separately.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+>  tools/testing/selftests/net/Makefile       | 4 +++-
+>  tools/testing/selftests/net/fcnal-ipv4.sh  | 2 ++
+>  tools/testing/selftests/net/fcnal-ipv6.sh  | 2 ++
+>  tools/testing/selftests/net/fcnal-other.sh | 2 ++
+>  tools/testing/selftests/net/fcnal-test.sh  | 3 +++
+>  5 files changed, 12 insertions(+), 1 deletion(-)
+>  create mode 100755 tools/testing/selftests/net/fcnal-ipv4.sh
+>  create mode 100755 tools/testing/selftests/net/fcnal-ipv6.sh
+>  create mode 100755 tools/testing/selftests/net/fcnal-other.sh
+> 
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/net/Makefile       | 4 +++-
- tools/testing/selftests/net/fcnal-ipv4.sh  | 2 ++
- tools/testing/selftests/net/fcnal-ipv6.sh  | 2 ++
- tools/testing/selftests/net/fcnal-other.sh | 2 ++
- tools/testing/selftests/net/fcnal-test.sh  | 3 +++
- 5 files changed, 12 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/net/fcnal-ipv4.sh
- create mode 100755 tools/testing/selftests/net/fcnal-ipv6.sh
- create mode 100755 tools/testing/selftests/net/fcnal-other.sh
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 8c860782f9cd..8270f747ffbc 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -8,11 +8,12 @@ CFLAGS += -I../
- 
- TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
- 	      rtnetlink.sh xfrm_policy.sh
-+TEST_PROGS += fcnal-ipv4.sh fcnal-ipv6.sh fcnal-other.sh
- TEST_PROGS += fib_tests.sh fib-onlink-tests.sh pmtu.sh udpgso.sh ip_defrag.sh
- TEST_PROGS += udpgso_bench.sh fib_rule_tests.sh msg_zerocopy.sh psock_snd.sh
- TEST_PROGS += udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reuseport_addr_any.sh
- TEST_PROGS += test_vxlan_fdb_changelink.sh so_txtime.sh ipv6_flowlabel.sh
--TEST_PROGS += tcp_fastopen_backup_key.sh fcnal-test.sh l2tp.sh traceroute.sh
-+TEST_PROGS += tcp_fastopen_backup_key.sh l2tp.sh traceroute.sh
- TEST_PROGS += fin_ack_lat.sh fib_nexthop_multiprefix.sh fib_nexthops.sh fib_nexthop_nongw.sh
- TEST_PROGS += altnames.sh icmp.sh icmp_redirect.sh ip6_gre_headroom.sh
- TEST_PROGS += route_localnet.sh
-@@ -127,6 +128,7 @@ TEST_GEN_FILES += $(YNL_GEN_FILES)
- TEST_GEN_PROGS += $(YNL_GEN_PROGS)
- 
- TEST_FILES := settings
-+TEST_FILES += fcnal-test.sh
- TEST_FILES += in_netns.sh lib.sh setup_loopback.sh setup_veth.sh
- 
- TEST_GEN_FILES += $(patsubst %.c,%.o,$(wildcard *.bpf.c))
-diff --git a/tools/testing/selftests/net/fcnal-ipv4.sh b/tools/testing/selftests/net/fcnal-ipv4.sh
-new file mode 100755
-index 000000000000..82f9c867c3e8
---- /dev/null
-+++ b/tools/testing/selftests/net/fcnal-ipv4.sh
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+./fcnal-test.sh -t ipv4
-diff --git a/tools/testing/selftests/net/fcnal-ipv6.sh b/tools/testing/selftests/net/fcnal-ipv6.sh
-new file mode 100755
-index 000000000000..ab1fc7aa3caf
---- /dev/null
-+++ b/tools/testing/selftests/net/fcnal-ipv6.sh
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+./fcnal-test.sh -t ipv6
-diff --git a/tools/testing/selftests/net/fcnal-other.sh b/tools/testing/selftests/net/fcnal-other.sh
-new file mode 100755
-index 000000000000..a840cf80b32e
---- /dev/null
-+++ b/tools/testing/selftests/net/fcnal-other.sh
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+./fcnal-test.sh -t other
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 0e3304d37fd0..49d85d267925 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -4272,6 +4272,7 @@ EOF
- TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter"
- TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter"
- TESTS_OTHER="use_cases"
-+# note: each TEST_ group needs a dedicated runner, e.g. fcnal-ipv4.sh
- 
- PAUSE_ON_FAIL=no
- PAUSE=no
-@@ -4302,6 +4303,8 @@ elif [ "$TESTS" = "ipv4" ]; then
- 	TESTS="$TESTS_IPV4"
- elif [ "$TESTS" = "ipv6" ]; then
- 	TESTS="$TESTS_IPV6"
-+elif [ "$TESTS" = "other" ]; then
-+	TESTS="$TESTS_OTHER"
- fi
- 
- check_gen_prog "nettest"
--- 
-2.51.0
 
 
