@@ -1,148 +1,203 @@
-Return-Path: <linux-kselftest+bounces-40927-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40928-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8536FB48834
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 11:23:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 918A1B488A2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 11:36:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4602E16B6AC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 09:23:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37A3E3C449D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 09:36:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB862EE61D;
-	Mon,  8 Sep 2025 09:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864AB2E9ED4;
+	Mon,  8 Sep 2025 09:36:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yk24scfG"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="dyJGfsHt";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NIoj4X1e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC821C4A13;
-	Mon,  8 Sep 2025 09:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D190029ACD7;
+	Mon,  8 Sep 2025 09:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757323384; cv=none; b=Is9LxSOUDFpWCrXI8WyVTY//BUxCr4sQJWiFC+7CwycGLyR/ZVCqVYw2CHqc6KaVx3ijD4DNl/Po3KyvtvAUpMJhLYSXtPNOzh+wLUDLPBJWehftn6AwQlEiyaQCBi3LJ5696d8ZxZ1ldQMLS4KXM8FtHo0p8A8pBvI6Xnne79E=
+	t=1757324188; cv=none; b=oqOAPAcdGHWgZ/JxbR81xuGCWaX0LwXurmwxLKEcMuwbEWdjQXvDxOSfMjQeEVkWStL49265fV9wzeR7fxq0tInHZ83iN8Fy0D/zheMElQOSGveAO4NNVH9uTtz3AzdrsEt1jVU1C2zSWKpUfJyUVz27ZR93HUPlGcDdnVeR68A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757323384; c=relaxed/simple;
-	bh=r6CEOEZhGguz+T46D0YNklZcEc/4ZVQ7i6sW/89ApFg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H5dNEWJ5UyyV2KY19DiUtONIPZYOjGRZllw4q3TUeWxSq4P7ZlpQxfuViCxAdi5pyB5g6Q6OHOWgH26l4BzNIoym2f0A0/HNzn6FNvBROPPh7LtqumwO7Pc2tkTKqsm0/nrnYGcq4unKcLsH6N8uSB8egWkGqXzZRymPtfIyXFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yk24scfG; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757323383; x=1788859383;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=r6CEOEZhGguz+T46D0YNklZcEc/4ZVQ7i6sW/89ApFg=;
-  b=Yk24scfGXBuiFiNQJayaDKSIY/Fhe6S2NQNHOdl2VBw1KwIjY6XP/DVr
-   a3UbQ0wvX8csKCUdTScnERZ09AnfgvIoyo/pe8DTIstFQNwIoSrcjgeIM
-   tI7m2VGzvu73dSUp94oJhBR85v/jJrdQ5BTcHkxw5QKOQV0n0EKoFBqyW
-   O2Y7uYymk7zbPtetkIJKIaljM38jlqkAoLOGwCDWAuWBK83FgS5jPA5cu
-   8E+QgxbOArqg/4dMNuM6L+fikOLJJGPtKVd5MLhADjuZEYuwp2QiQnaWC
-   jHXg2ipM4VWb+y2Hpg8mQYY7u+z8v2mQ/Kg/z6COmzqZkfelIUmukXNBp
-   g==;
-X-CSE-ConnectionGUID: fHrEZ3z5QHeL75XQ2Y4hlA==
-X-CSE-MsgGUID: jwCNdX/rRxemuhDC+lCm4A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11546"; a="70278518"
-X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
-   d="scan'208";a="70278518"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 02:23:02 -0700
-X-CSE-ConnectionGUID: XWxThIliTqeVbgU08JP15A==
-X-CSE-MsgGUID: QWTScLrHQjGPlZSWcE063w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
-   d="scan'208";a="209904131"
-Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 02:22:57 -0700
-Message-ID: <0b176a5a-958d-4fb7-b4d3-e8aae2b5cf5c@linux.intel.com>
-Date: Mon, 8 Sep 2025 17:22:54 +0800
+	s=arc-20240116; t=1757324188; c=relaxed/simple;
+	bh=L35F8WHY9n0Vw/BUZevuTaPBgflUiN58uOkSnItcneo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iGdYtn7HShybqHtihEIaytS/W1VHSYZ3eTHwhWz5ylATp1uUf3EWJ6q6PUZ0Zb3ZTRBxiB+AsksHV1dRxQW3EJME6+DOk++Fqh3eIxidNS3eRsaM1WksVXVOxHDTnKOSdhH891fIo5UTqyZ1IarV1inuEMhdxf+c3x/ETAUOE2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=dyJGfsHt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NIoj4X1e; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 5DA937A0114;
+	Mon,  8 Sep 2025 05:36:24 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Mon, 08 Sep 2025 05:36:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1757324184; x=
+	1757410584; bh=yvL6Q1QOGKfSbFNCoqV7sDTrCKni+M0gmt9O7GiKe9Q=; b=d
+	yJGfsHtohz/M4X30wK5ItG9Xg31T4XKM6mAKy3dYTwjekjAz2s5Nr4qDcMz5R3vW
+	1UMu5wlW/RZ8/3AGqkjmX7RlzipeAVu07A6bDd7TBUPRtJnh5IgksIMCo9bgVg3M
+	ZVckP6boNZOm8YBdgspxlIDW7BpwVhqv1dWyrSI8VTfc+flhYoJ1hko2QyW0Hrt0
+	cf7X9crD2ChfdzPvvC5uoQcdn+q0BSBe3PbVEd9oHMCY050/md/Dly8kvIaVvOSV
+	C9VGxVluebv3QGg5TirkX2qQDLMNO1/PJ4fbVHxA19unKIHeFutdDsylVuUPURYl
+	YkH+CEhE/psg+g4lMvR5g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1757324184; x=1757410584; bh=yvL6Q1QOGKfSbFNCoqV7sDTrCKni+M0gmt9
+	O7GiKe9Q=; b=NIoj4X1eN40WQ3NiJMvwmtT502t7TG+E9WOmMS0Rr3qxGuSOig7
+	1iBsCJuA4EMj0k3XISF3g8vQ+o2cmojwia59XWQZSCWn2gP0PeAjNcRkgcnZprxc
+	ruv/4W833+RoCnZz65wNjbS7abak9L3D0C/DyZ+ddOZrl5goOg7/iVG35zNgeFbF
+	+myZocoM7jHrHqugk/2s2yil4WoZtoRW2mrf8UeLEwP/HP2KxoCwI+ZVcVh6CYTo
+	7EE+XVY/gvTSWnmaxnNd2yetStHGdNpeS0kHMycSMQMNlp3BHE+NFwayZHcIWt0M
+	h8xubIvAnAWmStY5ydZZi/uDT9rS0BVWoGA==
+X-ME-Sender: <xms:l6O-aIHOQDmRl3YMOaICkkXYQQWL_xVFM8Iu6qxvBj45LncQ-3ACPg>
+    <xme:l6O-aLmFy-M-wDlaw1AGX9IBKEX2HCix2O-in35fJqxQLN9RnzIYSgMalTGtpj5m6
+    VZWQGZguU_peMcsm8Q>
+X-ME-Received: <xmr:l6O-aHnBgCk5eUAcZQwbWaQArMDK0bCYRHnIFk4KwS9P4NkEydPfxjiflzmf>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddujedulecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpefurggsrhhinhgr
+    ucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrihhlrdhnvghtqeenucggtffrrg
+    htthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeegteehgeehieffgfeuvdeuffef
+    gfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepudekpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopehlihhuhhgrnhhgsghinhesghhmrghilhdrtg
+    homhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgt
+    phhtthhopehjvhesjhhvohhssghurhhghhdrnhgvthdprhgtphhtthhopegrnhgurhgvfi
+    donhgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
+    ohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpd
+    hrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghn
+    ihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepjhhirhhisehrvghsnhhulhhlihdruh
+    hs
+X-ME-Proxy: <xmx:l6O-aAU20O1tcsBm3zjV4GMERzUrVsyhsyxCufGu9KwapblEr3wG8g>
+    <xmx:l6O-aF8V5tZkEDNKUA0dc0WxnH7VG5qFfMGH_kcr7OvaCgEdcZKmgA>
+    <xmx:l6O-aNoydeg66V0NWnaqy1kfrPSJVX-arwQnf2Uveo2TCHgY6ShviA>
+    <xmx:l6O-aHk5hTZVAPIcUuXt3hxiJKeI6P3VYNzDHq9DPFSIcHXon5E2ww>
+    <xmx:mKO-aO6NuqyEoCod_csBglj9FSy_T6wGLhuVL13WC8_WL5FlcGYjwgxO>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 8 Sep 2025 05:36:22 -0400 (EDT)
+Date: Mon, 8 Sep 2025 11:36:21 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ahmed Zaki <ahmed.zaki@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv2 net-next 5/5] selftests/net: add offload checking test
+ for virtual interface
+Message-ID: <aL6jlYPhsPfDKT8C@krikkit>
+References: <20250902072602.361122-1-liuhangbin@gmail.com>
+ <20250902072602.361122-6-liuhangbin@gmail.com>
+ <aLyoEiWnuvQ-5ODz@krikkit>
+ <aL5YamjbZB5gsL30@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 12/21] KVM: selftests: TDX: Use KVM_TDX_CAPABILITIES
- to validate TDs' attribute configuration
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
- Andrew Jones <ajones@ventanamicro.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Erdem Aktas <erdemaktas@google.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
- <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org
-References: <20250904065453.639610-1-sagis@google.com>
- <20250904065453.639610-13-sagis@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20250904065453.639610-13-sagis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aL5YamjbZB5gsL30@fedora>
+
+2025-09-08, 04:15:38 +0000, Hangbin Liu wrote:
+> On Sat, Sep 06, 2025 at 11:30:58PM +0200, Sabrina Dubroca wrote:
+> > > +check_xfrm()
+> > > +{
+> > > +	local dev=$1
+> > > +	local src=192.0.2.1
+> > > +	local dst=192.0.2.2
+> > > +	local key="0x3132333435363738393031323334353664636261"
+> > > +
+> > > +	RET=0
+> > > +
+> > > +	ip -n "$ns" xfrm state flush
+> > > +	ip -n "$ns" xfrm state add proto esp src "$src" dst "$dst" spi 9 \
+> > > +		mode transport reqid 42 aead "rfc4106(gcm(aes))" "$key" 128 \
+> > > +		sel src "$src"/24 dst "$dst"/24 offload dev "$dev" dir out
+> > 
+> > It's maybe not something you would expect, but this codepath will not
+> > check that NETIF_F_HW_ESP is set on $dev (you can verify that by
+> > running "ip xfrm state add ... offload ..." on the same bond+netdevsim
+> > combination before/after toggling esp-hw-offload on/off for the
+> > bond). Why not use __check_offload again for this feature?
+> 
+> The esp-hw-offload is fixed on netdevsim
+> 
+> # ethtool -k eni0np1 | grep -i esp-hw-offload
+> esp-hw-offload: on [fixed]
+> 
+> There is no way to disable it.
+
+I don't think this is intentional. nsim_ipsec_init only adds
+NSIM_ESP_FEATURES to ->features but not to ->hw_features, but I think
+it was just forgotten. I added a few in 494bd83bb519 ("netdevsim: add
+more hw_features"), extending nsim_ipsec_init (and nsim_macsec_init
+since I made the same mistake) to also add features to ->hw_features
+would make sense to me.
 
 
+> After we add the netdevsim to bond,
+> the bond also shows "esp-hw-offload off" as the flag is inherit
+> in dev->hw_enc_features, not dev->features.
 
-On 9/4/2025 2:54 PM, Sagi Shahar wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> Make sure that all the attributes enabled by the test are reported as
-> supported by the TDX module.
->
-> This also exercises the KVM_TDX_CAPABILITIES ioctl.
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Co-developed-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> ---
->   tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> index aa0cb6c2205b..1b5c01faf1cd 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> @@ -234,6 +234,18 @@ static void vm_tdx_filter_cpuid(struct kvm_vm *vm,
->   	free(tdx_cap);
->   }
->   
-> +static void tdx_check_attributes(struct kvm_vm *vm, uint64_t attributes)
-> +{
-> +	struct kvm_tdx_capabilities *tdx_cap;
-> +
-> +	tdx_cap = tdx_read_capabilities(vm);
-> +
-> +	/* Make sure all the attributes are reported as supported by the TDX module */
+Did you mean dev->hw_features?
 
-I think "by the TDX module" can be dropped, since KVM only reports the
-attributes it supports.
+> It looks the only way to check if bond dev->hw_enc_features has NETIF_F_HW_ESP
+> is try set xfrm offload. As
 
-> +	TEST_ASSERT_EQ(attributes & tdx_cap->supported_attrs, attributes);
-> +
-> +	free(tdx_cap);
-> +}
-> +
->   void vm_tdx_init_vm(struct kvm_vm *vm, uint64_t attributes)
->   {
->   	struct kvm_tdx_init_vm *init_vm;
-> @@ -253,6 +265,8 @@ void vm_tdx_init_vm(struct kvm_vm *vm, uint64_t attributes)
->   	memcpy(&init_vm->cpuid, cpuid, kvm_cpuid2_size(cpuid->nent));
->   	free(cpuid);
->   
-> +	tdx_check_attributes(vm, attributes);
-> +
->   	init_vm->attributes = attributes;
->   
->   	vm_tdx_vm_ioctl(vm, KVM_TDX_INIT_VM, 0, init_vm);
+Was this test meant to check hw_enc_features?
 
+To check hw_enc_features, I think the only way would be sending GSO
+packets, since it's only used in those situations.
+
+
+> static int xfrm_api_check(struct net_device *dev)
+> {
+
+But this doesn't get called when creating a new xfrm state. Trying to
+create a new offloaded xfrm state doesn't look at any of the
+netdev->*features (and we can't change that behavior anymore).
+
+xfrm_api_check only gets called for NETDEV_REGISTER/NETDEV_FEAT_CHANGE
+to validate whether the netdevice is set up correctly.
+
+> #ifdef CONFIG_XFRM_OFFLOAD
+>         if ((dev->features & NETIF_F_HW_ESP_TX_CSUM) &&
+>             !(dev->features & NETIF_F_HW_ESP))
+>                 return NOTIFY_BAD;
+> 
+>         if ((dev->features & NETIF_F_HW_ESP) &&
+>             (!(dev->xfrmdev_ops &&
+>                dev->xfrmdev_ops->xdo_dev_state_add &&
+>                dev->xfrmdev_ops->xdo_dev_state_delete)))
+>                 return NOTIFY_BAD;
+> 
+> Please correct me if I made any mistake.
+> 
+> Thanks
+> Hangbin
+
+-- 
+Sabrina
 
