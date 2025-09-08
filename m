@@ -1,199 +1,177 @@
-Return-Path: <linux-kselftest+bounces-41004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E070B49C57
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 23:49:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 122FEB49D1E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 00:51:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E64C44E39AB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 21:49:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D5431898A24
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 22:52:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3340B2E0B48;
-	Mon,  8 Sep 2025 21:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA64A2EDD74;
+	Mon,  8 Sep 2025 22:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="ijyvcCdI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Idw82lCi"
+	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="lTKvbfh/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Bgo11MHD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4760919644B;
-	Mon,  8 Sep 2025 21:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C0C2DCF4C;
+	Mon,  8 Sep 2025 22:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757368146; cv=none; b=h9bz93tTk4oE4uu0hMIb8JAje2o4EpHdsIVmQ3AzZWffZd4IOxjh+qxFkwZ16QU6FBPm+Pj+Yjz5rwlxa3nMdJJJBAILXQVw95iW+CARNcmv+2g8HBJVCoNYolFHZJDL1QuGJnexgyD52FcEmneYrOXINaCNnQ5+W14lGw3KmVY=
+	t=1757371899; cv=none; b=k0x7jN8EuiTXn3xenG2FUz9jAKmALjDfInulPeSFQxay5cclrCelBPCWB0rL4QBTeE2kAC2JdwuPdX6Dn1fS9WLfXCCP4rNHlIC5TKsHYzNn7lJ8F8K6D5KHRZhok0wfjiJZtzfniib7j6zvdWobiJjixQXk9b42yniKdUfAF4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757368146; c=relaxed/simple;
-	bh=xZwtgP/SMxO4gXjpndSJj3OnJPcQq5Kzza2m2kq/YC8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FwRVzarooIAqydrWxRBQn0BT2GPVFSXTP8893VhmPcoct5IdvMjlXBqXEqsYo9tkKNChMt8pHolwquWFjsn5X8ahuVr9QBnAk0qpiBdO+EvfGw3b6COzN4mMC1O2iTPKQ3hKLe7fzGMSnlPTHGYkDwzE+3kAfEpRGBsre66rGSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=ijyvcCdI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Idw82lCi; arc=none smtp.client-ip=202.12.124.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id E284A7A00B2;
-	Mon,  8 Sep 2025 17:49:01 -0400 (EDT)
+	s=arc-20240116; t=1757371899; c=relaxed/simple;
+	bh=PUQDiQIr5kBg3FsFnfzGhoYijFmfm6QlTxG4268++SM=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=Ts1g7znMyWjdOKYUvhWOOLVBjFp9Zk+0Dax8KI8kfFYDUgpH4moOBnz47WO1rKhJ8SYsKk6A3aPRemLy0LuPtXxkBLVeQNVx8QN0FX1dCBKRds5AUC4OkkgWudutq3kikAoIhI7jVAYGs05BSVR/zy9ly5g7zlhonj4LrTfWCPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=lTKvbfh/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Bgo11MHD; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 7CDF87A0094;
+	Mon,  8 Sep 2025 18:51:35 -0400 (EDT)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Mon, 08 Sep 2025 17:49:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1757368141; x=
-	1757454541; bh=62PV9PUcHNBx3VeoR1lvE5yI4zsYl4Rz5Cp/8QhlRYU=; b=i
-	jyvcCdI2DydQgkTJZJRTCnVufP7BySkuCwAMRRwJ89vEUSdFr08RzB8QlP/XljID
-	yiXwxnUhEw9G4SCIBUToq8HhIwnj+TXtc/gqSxeasFePP5+zOqBNC9szevVzRH+q
-	mxo8vGL430f9W/4i1uSyMTSRlpxCZlow0MiAaDBxXg3yUOVFMk0WgxA+oPFVzV+2
-	pPvHo963OsYL6frYQXBkuNZh2iD3lC2Z6Bu3mxKojt1pMzhyr1JRPhe39xW0e6sm
-	wOZnudT7hsYiP2CTArKp1pfNXil2T0qitOAjPLrMmgsYP+jBPQRV1Ypcsfljv2ty
-	O/r0nb4JXg5oT15LOeoUQ==
+  by phl-compute-10.internal (MEProxy); Mon, 08 Sep 2025 18:51:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
+	 h=cc:cc:content-id:content-transfer-encoding:content-type
+	:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to; s=fm2; t=1757371895; x=1757458295; bh=hoAxRJyXOMnsB0mKPob0+
+	gpsSszdzYC1XPmYnOTPNu8=; b=lTKvbfh/rEbJcaRvNvV5cPVfhbQ+Ftsx6mxXI
+	yr3TV7x5z27+Fq82JQ60OmGRuNzBycREOftOCVBjhiaKFIavmPK8HomMteLHrZn3
+	Ute922wrtxFrLv1ss2ilBiUK1kYCiis8yYvbEiyeHpYCSiBEwSCB4GBqXWIs/z8e
+	QEdzzDa5mfQy4i14fh1+HOxLEOeHo6pYSPbOos0ZZCrvt84DXRt9nQFa7KhMXdSV
+	2ZEGAIVKUAfpX4uLmchffIezhECooeA9mxuq+yJ4TAi1Ou2ed0BAD3T2weALFtJw
+	4B6jhUVYFBYhMAbNuc6gJyHYikzMr2iyI0b1A0uwcjIqmE1dQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	messagingengine.com; h=cc:cc:content-id
+	:content-transfer-encoding:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1757368141; x=1757454541; bh=62PV9PUcHNBx3VeoR1lvE5yI4zsYl4Rz5Cp
-	/8QhlRYU=; b=Idw82lCiLKBSUuAl7bxnOKBUKRyVMY5QVJnkZHs6g3w/spwqIgd
-	QaFBPLhAiVYZugtH640jHc6c3zHUgJmjiiZvt4Y8ifJKIFAmxHiJIS95bk5+/5VS
-	T+UogD268hHUAGlTp/DGX2IEUxSVqjfHr0tz5fuSeqI0h4kkQF84h/xNV5SqZRC/
-	e2p6ric5XIUIMNzhfHROUqr8Obt9yC4Zg91DTrnGnrfvOknpYDaW0J4FfLEEicwP
-	UXxLD7CW9BL8iNhrWPOQJRpUwFrjVJVc0a4itmQlQC8lLvoNxeNyZipFxrbZl3z3
-	R0ALNmtla7afgYema2E73TtWA0ChVRXQ6PQ==
-X-ME-Sender: <xms:TU-_aHw62BNmUDVr7nLT1CZpBgtgefnYNMUXyZpAUeOXaxlBHFEwsg>
-    <xme:TU-_aJgBrDa-gpUHa3v8YFu30-nlhNQ9fr-eibpwhcPtMg0fxUOkUMV60rgcHw8l3
-    SBh4fCrxxcac1vEczo>
-X-ME-Received: <xmr:TU-_aGzZ87WENkF6V6HOhZRW3Jejh48TTkWqBJuWXNCDjmqtg-tBzI-_JHIt>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddukeeihecutefuodetggdotefrod
+	1757371895; x=1757458295; bh=hoAxRJyXOMnsB0mKPob0+gpsSszdzYC1XPm
+	YnOTPNu8=; b=Bgo11MHD/rDihzzrzBdiqywQ2AHkGEubc0a38ycs8UTHykIHRHR
+	inW1iIAf0o8fy1BrhsJQob0OS0HTPfR4kIz3Jd87Il/MGSEqR0lKB4+kB0iJDf7U
+	493yo19bhFpvcmachV7TfmMeuMxWcNiOXRlno3i6RO4W9AsQe5IkAJc48R0tjCCo
+	s71/j4z1F19MWp+f9W6lBjnUiHKJFiNwCX/aoTLhXkkax5JaV903bBotjlBLoJJC
+	w9SMVj1siQQgaxqpgltPVLKeuqyk/oR1NfxVlHq6WSm1M6aYAT6SlaTqd6Yw8Fqw
+	AQIWl4Hd+qLc/Re8WziFZrcjXjqL6IdMebQ==
+X-ME-Sender: <xms:9l2_aNQIBrSLEg_WarMTXmgdKXDMNmM0PY5l9f634-nXVWQPgDM0Pw>
+    <xme:9l2_aF9Vu911JZpl9TNDCO4wNgG2i9TVPiVtDQSZNVGbuhdpJBc9l_V3pWTsWyTgn
+    GyFmO5iLLsFe7-zKq0>
+X-ME-Received: <xmr:9l2_aFgePIqfEumtze3tX9TmB2OUNhU0W5hV7MTZ6EMGvm7XfCywjiNvopYV2xj6dUXYGQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddukeejjecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpefurggsrhhinhgr
-    ucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrihhlrdhnvghtqeenucggtffrrg
-    htthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeegteehgeehieffgfeuvdeuffef
-    gfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepudekpdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopehlihhuhhgrnhhgsghinhesghhmrghilhdrtg
-    homhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgt
-    phhtthhopehjvhesjhhvohhssghurhhghhdrnhgvthdprhgtphhtthhopegrnhgurhgvfi
-    donhgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
-    ohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpd
-    hrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghn
-    ihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepjhhirhhisehrvghsnhhulhhlihdruh
-    hs
-X-ME-Proxy: <xmx:TU-_aHy6WfAoRbt-jr2ZyfjZIOOpQp6jUoRhTPyFoltIs8ou__30gA>
-    <xmx:TU-_aApmKshoaxwGdZ6ziamKjb8tY38LfNW83HZgL56QEWlzQNvFlA>
-    <xmx:TU-_aKktqao7-eJxbfy7gjgcDBNKToUjmdrV7lMuzYruFAVNjWMqlw>
-    <xmx:TU-_aJz90FKSpG6RW7dma-84cBltYyc2rprhYhzGU-3EN03YRF4uJA>
-    <xmx:TU-_aCj90on4DFro_qdziXvCreuezMrZAOd4PNiA9iaSbfIyi1VsPbQ6>
-Feedback-ID: i934648bf:Fastmail
+    hrpefhvfevufgjfhfogggtgfffkfesthhqredtredtvdenucfhrhhomheplfgrhicuggho
+    shgsuhhrghhhuceojhhvsehjvhhoshgsuhhrghhhrdhnvghtqeenucggtffrrghtthgvrh
+    hnpeeuffevvddvfedujeefuedugfdtgfdutedtveefieelfffhgffhtdejkefhiedtkeen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepjhhvsehjvhhoshgsuhhrghhhrdhnvghtpdhnsggp
+    rhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrvhgvmh
+    esuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehlihhuhhgrnhhgsghinhesghhm
+    rghilhdrtghomhdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpd
+    hrtghpthhtohephhhorhhmsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhusggr
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtghpthht
+    ohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeifihhluggvrhesuh
+    hsrdhisghmrdgtohhm
+X-ME-Proxy: <xmx:9l2_aOY0TfCWiHW1avegdRDIbzE6AsOsvul3x7UBN4MN97btVtNboQ>
+    <xmx:9l2_aC9nHBmEruyz3JyIMWqoI8uhPmxV676KE4CI7p5LjLYOn-v5Kw>
+    <xmx:9l2_aIO_ql0joqj62Qf-WYz4bJpBWOOE0xGqgqtwC_RjYw5KA6U6dQ>
+    <xmx:9l2_aHEOhps-BoKO25NI8cyAcg7N8Q_F2xi6YHameEhy3HkkPm8bIg>
+    <xmx:912_aF6VotxxHt6zBP7DYY9fgzRQJH2f8w7NADfxBK3ghJyhYmeP-3E7>
+Feedback-ID: i53714940:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 8 Sep 2025 17:49:00 -0400 (EDT)
-Date: Mon, 8 Sep 2025 23:48:58 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
+ 8 Sep 2025 18:51:34 -0400 (EDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+	id 4CC279FCB4; Mon,  8 Sep 2025 15:51:33 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+	by famine.localdomain (Postfix) with ESMTP id 49D669FC6F;
+	Mon,  8 Sep 2025 15:51:33 -0700 (PDT)
+From: Jay Vosburgh <jv@jvosburgh.net>
 To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Ahmed Zaki <ahmed.zaki@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv2 net-next 5/5] selftests/net: add offload checking test
- for virtual interface
-Message-ID: <aL9PSoTwhn-HFWrH@krikkit>
-References: <20250902072602.361122-1-liuhangbin@gmail.com>
- <20250902072602.361122-6-liuhangbin@gmail.com>
- <aLyoEiWnuvQ-5ODz@krikkit>
- <aL5YamjbZB5gsL30@fedora>
- <aL6jlYPhsPfDKT8C@krikkit>
- <aL6soY3gEj-LIovi@fedora>
+cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+    "David S. Miller" <davem@davemloft.net>,
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+    Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+    Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+    David Wilder <wilder@us.ibm.com>
+Subject: Re: [PATCHv2 1/2] bonding: don't set oif to bond dev when getting NS
+ target destination
+In-reply-to: <20250908062802.392300-1-liuhangbin@gmail.com>
+References: <20250908062802.392300-1-liuhangbin@gmail.com>
+Comments: In-reply-to Hangbin Liu <liuhangbin@gmail.com>
+   message dated "Mon, 08 Sep 2025 06:28:01 -0000."
+X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aL6soY3gEj-LIovi@fedora>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2850155.1757371893.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 08 Sep 2025 15:51:33 -0700
+Message-ID: <2850156.1757371893@famine>
 
-2025-09-08, 10:14:57 +0000, Hangbin Liu wrote:
-> On Mon, Sep 08, 2025 at 11:36:21AM +0200, Sabrina Dubroca wrote:
-> > > The esp-hw-offload is fixed on netdevsim
-> > > 
-> > > # ethtool -k eni0np1 | grep -i esp-hw-offload
-> > > esp-hw-offload: on [fixed]
-> > > 
-> > > There is no way to disable it.
-> > 
-> > I don't think this is intentional. nsim_ipsec_init only adds
-> > NSIM_ESP_FEATURES to ->features but not to ->hw_features, but I think
-> > it was just forgotten. I added a few in 494bd83bb519 ("netdevsim: add
-> > more hw_features"), extending nsim_ipsec_init (and nsim_macsec_init
-> > since I made the same mistake) to also add features to ->hw_features
-> > would make sense to me.
-> 
-> This could be done in another patch.
+Hangbin Liu <liuhangbin@gmail.com> wrote:
 
-If it's not needed for this series, sure.
+>Unlike IPv4, IPv6 routing strictly requires the source address to be vali=
+d
+>on the outgoing interface. If the NS target is set to a remote VLAN inter=
+face,
+>and the source address is also configured on a VLAN over a bond interface=
+,
+>setting the oif to the bond device will fail to retrieve the correct
+>destination route.
+>
+>Fix this by not setting the oif to the bond device when retrieving the NS
+>target destination. This allows the correct destination device (the VLAN
+>interface) to be determined, so that bond_verify_device_path can return t=
+he
+>proper VLAN tags for sending NS messages.
+>
+>Reported-by: David Wilder <wilder@us.ibm.com>
+>Closes: https://lore.kernel.org/netdev/aGOKggdfjv0cApTO@fedora/
+>Suggested-by: Jay Vosburgh <jv@jvosburgh.net>
+>Fixes: 4e24be018eb9 ("bonding: add new parameter ns_targets")
+>Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 
+Acked-by: Jay Vosburgh <jv@jvosburgh.net>
 
-> > > After we add the netdevsim to bond,
-> > > the bond also shows "esp-hw-offload off" as the flag is inherit
-> > > in dev->hw_enc_features, not dev->features.
-> > 
-> > Did you mean dev->hw_features?
-> 
-> No, the xfrm_features in patch 01 updates dev->hw_enc_features, not
-> dev->hw_features.
+>---
+>
+>v2: split the patch into 2 parts, the kernel change and test update (Jay =
+Vosburgh)
+>
+>---
+> drivers/net/bonding/bond_main.c | 1 -
+> 1 file changed, 1 deletion(-)
+>
+>diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_m=
+ain.c
+>index 257333c88710..30cf97f4e814 100644
+>--- a/drivers/net/bonding/bond_main.c
+>+++ b/drivers/net/bonding/bond_main.c
+>@@ -3355,7 +3355,6 @@ static void bond_ns_send_all(struct bonding *bond, =
+struct slave *slave)
+> 		/* Find out through which dev should the packet go */
+> 		memset(&fl6, 0, sizeof(struct flowi6));
+> 		fl6.daddr =3D targets[i];
+>-		fl6.flowi6_oif =3D bond->dev->ifindex;
+> =
 
-Ok. But hw_enc_features is not the reason ethtool shows
-"esp-hw-offload off". This line is:
+> 		dst =3D ip6_route_output(dev_net(bond->dev), NULL, &fl6);
+> 		if (dst->error) {
+>-- =
 
-	bond_dev->hw_features |= BOND_XFRM_FEATURES;
-
-(from bond_setup)
-
-> Do you think if we should update dev->hw_features in the
-> patch?
-
-For dev->hw_features (and dev->features) maybe not, since that depends
-on the upper device's features and implementation. I'm not sure we can
-have a common function without changing the behavior on at least one
-type of device.
-
-But maybe ndo_fix_features could use a common
-netdev_fix_features_from_lowers? bond/team/bridge have very similar
-implementations.
-
-> > > It looks the only way to check if bond dev->hw_enc_features has NETIF_F_HW_ESP
-> > > is try set xfrm offload. As
-> > 
-> > Was this test meant to check hw_enc_features?
-> > 
-> > To check hw_enc_features, I think the only way would be sending GSO
-> > packets, since it's only used in those situations.
-> 
-> Oh.. That would make the test complex. Can we ignore this test first?
-
-Ok for me.
-
-> BTW, I'm a bit lost in the callbacks.gso_segment. e.g.
-> 
-> esp4_gso_segment
->  - xfrm4_outer_mode_gso_segment
->    - xfrm4_transport_gso_segment
->      - ops->callbacks.gso_segment
-> 
-> But who calls esp4_gso_segment? I can't find where the features is assigned.
-
-inet_gso_segment via inet_offloads[] (ESP is a L4 proto like UDP etc).
-
--- 
-Sabrina
+>2.50.1
+>
 
