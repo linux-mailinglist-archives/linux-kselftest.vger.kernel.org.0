@@ -1,142 +1,156 @@
-Return-Path: <linux-kselftest+bounces-40913-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40914-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1EB4B48307
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 05:51:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6072B48335
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 06:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6BB7189A6BD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 03:51:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6371E17BD08
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 04:16:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7FC321D5AF;
-	Mon,  8 Sep 2025 03:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56CC21D596;
+	Mon,  8 Sep 2025 04:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="ruVnsDTU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ELhI86dg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2481721C9E4
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Sep 2025 03:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD68621B19D;
+	Mon,  8 Sep 2025 04:15:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757303475; cv=none; b=Qefzf1oRH8nVycu/PO2KRX+gMQ+ecWFnD/CTV1SGp0nxtS1JVhB34Uvxey+31bI0evCZl6PVyjcgfx2YUTM2knqcIdID2HDXCiSLzkLZTjO15F5EerdxGNNjGLPEE7fY1E8rnrrDaCMfh5Y/WyfDrH04g5HBQK1h78+/y2mmKrc=
+	t=1757304950; cv=none; b=MYUtAMHA+hYPvkUhm5NeNouZHXkAeFUq5Lh1tilAAZjHEG4wIbxE+SzzW7L7O52Zw5dA5zkXXDlaHHRWh0rI60yT0FaGqNxsLr1rZrNKFX3tO4BCbGv2tdK5tZpagaP0iiizwYvvOL812SzZ6TladQZ5BI+pP2zMIX4fu3GfxZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757303475; c=relaxed/simple;
-	bh=VklWpKh2I9KYvBx6Az/wIjIwP5yxfg17gFuk9AVjD3g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=byhoY8M+YUaOq60ewdr39rH0Pz8+J+6taRkGD3HFL7Bk0a5PWGGWllwwlfOThZBOmRcjAi2SPk1gy31IqPLRks6C7HHL3C3SHBlCyXevsEyz+npAioNSh1AuXvhIWRko/edeZWrYCapmY7L3E29quFGLzWAyei6djZJI3fH140U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=ruVnsDTU; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-406ec5934caso3333615ab.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 07 Sep 2025 20:51:13 -0700 (PDT)
+	s=arc-20240116; t=1757304950; c=relaxed/simple;
+	bh=UCdNo4tJLMfRG2ThjczsmLh1pxSCdjn77qJ/oH+Pgh4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SEkOz6TVkWgs4rqKDUO5/DQ+vVHc9+SS1ZxDTFrn9xcGaX+sw9Y/uRmkHX51+7FRrA3BS2dS3oHJC/gPW+AqB3gImEu00D058mTR6psSO8wL40NBFnx8SNbdFCZds7UeThDIh1/xA5lk38JUVwgrujHY654cLdIfh1LIAWH/JbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ELhI86dg; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-329e47dfa3eso3528234a91.1;
+        Sun, 07 Sep 2025 21:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1757303473; x=1757908273; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hq2toZ1MStoLsAaQpze6/oEBhlqrv8NRJsOlpJj3oRE=;
-        b=ruVnsDTUrIQaiy6i3NMDxQoBTecEAwC2aRjExdIeXR8ew2Vxjs+R60+/jxYhnzkGUy
-         RRMFrRc9JFWnhiurb6MG5sbe+yc7hQf0kzCRivy/pJpiDCEZrzk/TJw9FrBRdWZ/zfxH
-         +AI6AvNZ5IFb8DWwX6enEamhGHPmimmyct0omVGOkqa10FW555IA2niOek4969zG+MxS
-         jzuYK2fFovbxXzlOFsvdosEHpE3jR7KXaCRKNKY+bfuk6CwbgZ3Sd0MrAYk9UH8BbGbX
-         P0oZeX6z/3aso+j3/QUIf8eGPkmD5RAcUziS9teZQuvFH2iD0cyCZtrhvXp9M+fcHvGV
-         I+CA==
+        d=gmail.com; s=20230601; t=1757304948; x=1757909748; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9QmVHYdYnytQawmE/GlyC7TmQ4rj+TZYEN+n5OB2Z78=;
+        b=ELhI86dglR9AoiA6jVui4471PNylvXm6g4Yk1O/wM4ZVFdKy59JkZCILoe1ocJYhdF
+         lOplp1AZ8GLIJQqWeIcxGs075oPAvmY9PKwBNJI4Ac06RLRsvvuV3pX8Lu2GqjRGDPkU
+         vRNIb5H+py1mKf+6FbG3/K+E/Y9JvKr1cDnkJqbrv+/kl1jrjY3mSsNXnOioqPiaMGy3
+         fZsDNY98TRnCZZyK+Zu6m9AkkmrpgsFSlG6TWZxSU8K8CoB0kPelBuNj972r7aRGNk6l
+         oXlMR7P/cRG03RWF6IbdrHfiWos+EXhQjb0fBeau+p1wDQDp5jPowHgYiuXcLB/cojfc
+         IPCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757303473; x=1757908273;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hq2toZ1MStoLsAaQpze6/oEBhlqrv8NRJsOlpJj3oRE=;
-        b=Kf17DWBQFxfB1WUrMXexTqV6CL2GD+O4j4qqZUMQI0DNh9hZvE9C9PnhQKWR9Mwirr
-         xMnHc0kAllC2gHhc7Gjkmr6PCp2kHYMQw3pAVhvXmxOeBxvjL+bPTuyWouJ3RBteYqII
-         DLFoko2GMM5KEheOL1PafZCK/1ZU6bCVi5WTrBe5IMgb7JCdrr0AuXrYfVe3QY7DWmzf
-         MSAm5XS7u25emjTg+3y0/qRstrTLchxapGtrm9mVYKJlcoCJPpKP2K2Oykl2B+7R19+/
-         IgHHYpn3blBzdBgLnQF2uXWcMcyxbiDLx4GF33tlgqCPKLxzABPE7/f2Z+3LB55SExKf
-         I6Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCVRDS2I9S624HCy8nUs9g1EaqEj4IYM4bBaauB1MUvp2slZeiiUjDI+t/GJnteJ01PuBAdnsA4o62lvF1s6Ye0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCjDxjRHpT5072kaWTlX57vneNNlo3+HVe52hgR64O1NvrKl3P
-	Pz5tWvxYiYvUdheHjjAVfunx8o+clRLkpdHIQPqEJ20nhXc+7rxhkksviDW2ZbF5gz+jjHN6BLy
-	v9ro03f/+lpX2G4dal6WHntTTPeEQB0RRKai2yGro3w==
-X-Gm-Gg: ASbGncsoKXoXt6QnqTlZ701sigSHMUCrXzSH7RQK8MN+tuFOIFoJkkXgtSeJHST11OH
-	v/Q26yB0+YTjjwEISr2n0Yq6cw1EcOaxcl9mb9pqm+D5ejU3H50wX5M/WeLlMUM69KyHw2QwPeW
-	lKd7ciD7yNJ+N+mcq5t69Z7pO5u5D2VzBMNxSqvQo22a8TirRrj8rLeJ8NhYm+61rVjNoAe18Te
-	QqwMjuewtNjn5NNB9tfkl1sn8pYwEUdbzzCTpry7oaTx9oHno8=
-X-Google-Smtp-Source: AGHT+IH4WAwWrAnnu4Rq1LOrwKuZ6PLy8v3SBH2WLczbYxVUoFRkmc/aL1MGlRWWeIeFxAJfFISceCNUeP2fr23Ivao=
-X-Received: by 2002:a05:6e02:1d9d:b0:3f6:80ec:bae with SMTP id
- e9e14a558f8ab-3fd853158bamr95133955ab.21.1757303473045; Sun, 07 Sep 2025
- 20:51:13 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757304948; x=1757909748;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9QmVHYdYnytQawmE/GlyC7TmQ4rj+TZYEN+n5OB2Z78=;
+        b=jN17EnIskEy428SMFKEuOurI/MS60jyhZaMUyZ1TilpaL7ReV2EoYOFG/iwHy1ytg3
+         jMiDVHYWywvBcji6QmrdclDB3m3lTFGf7f9RvIXCVAFDNlT3bxrUWyHhKhFuOMmSxE68
+         /PMUY8hFwCvw/hY1RybgRy9kKpKqcW+8vk5cw1j4+Yogtzv6Xs5ufvtgG6hZhogPLMvi
+         kdgsOPzsn6s+Tsk2II5WgIv9yWgrxwbws9eK7Pg4KqbsiHmyBfdDFyf2RFKGdTXHFjCX
+         p0VAYU5Qq6bC/QFIdlNhRD8QtmoOWAYKS6+ASTJI4FpF/fC0gnH7kXEw9B2FJ9t0cLTE
+         DBiA==
+X-Forwarded-Encrypted: i=1; AJvYcCWnL6NogU11RzX8uxy/pYseV3BJNA5pWGOx4+hEWdah6uarvwnO748bjRWJM7MXWp41LJMz+C/C953dXP1ni1k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz++licmg5nMjb/DFPpTojnBAWPk2Vp6YedqX71gCRIyXRlcdlc
+	MNfCQRqP5jmvItuOeYL1RFQ117cs0x2ltfW34dsb1dfYzmbcsaty8Yup
+X-Gm-Gg: ASbGncsfKQ/JcxNK61KkZq/XWlyNsjAg4aDI7cuRlmN+gkOucA/vSXJjsreF8KtIAu6
+	cM4aFHQqDbpQZ/juW3FrXVVDzmHm/xU1swjmdMu8cxo+Kq1vy1vZyMJt19alfr7Gpt7yNK+jJAr
+	FH0aWiceOsXU/zO04JHr43eg7Gj4GSEKumNRlbkeXyGzN5i4mFmXdHHgCUKWGQfvS5O18AISiCS
+	tboXp7Ww1pzsGvg6W+A9ZfEmy8mY64Oyid1gE4VqMiK8rlZ0UTXxmLB+8ABJYxaIqdFUgUeClQv
+	IXE+yZwrTOvkHo60xFrwR/crVA4rSLYPVLep5/Ilz3+7nJf/daYt6zCjySpi8o5tBkxc9kQ6BBR
+	7kIXPaFzhwo+doUt2K/RScZZ8cvs=
+X-Google-Smtp-Source: AGHT+IGFie3VQxK6NB2GC5r4dkSoil0H/yHLmWPqvuY/cl1GmZ+3lR6o3zidk2O+qIHaVF5KClDjCA==
+X-Received: by 2002:a17:90b:1646:b0:32b:7475:2aa with SMTP id 98e67ed59e1d1-32d43f9346amr8616078a91.26.1757304947965;
+        Sun, 07 Sep 2025 21:15:47 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-327d93317f0sm29097956a91.6.2025.09.07.21.15.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Sep 2025 21:15:47 -0700 (PDT)
+Date: Mon, 8 Sep 2025 04:15:38 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ahmed Zaki <ahmed.zaki@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv2 net-next 5/5] selftests/net: add offload checking test
+ for virtual interface
+Message-ID: <aL5YamjbZB5gsL30@fedora>
+References: <20250902072602.361122-1-liuhangbin@gmail.com>
+ <20250902072602.361122-6-liuhangbin@gmail.com>
+ <aLyoEiWnuvQ-5ODz@krikkit>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250823155947.1354229-1-apatel@ventanamicro.com>
-In-Reply-To: <20250823155947.1354229-1-apatel@ventanamicro.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Mon, 8 Sep 2025 09:21:00 +0530
-X-Gm-Features: Ac12FXxdad2U7i621spIzbFw-GpwyPTNC5JI8CApKugYuwHXgesJ9uOvv3sJqD4
-Message-ID: <CAAhSdy1jAmCeqWoPi7QpuzW4stH6U-Z0pSHmyC93jBYbSr6_xw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] ONE_REG interface for SBI FWFT extension
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: Atish Patra <atish.patra@linux.dev>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Andrew Jones <ajones@ventanamicro.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aLyoEiWnuvQ-5ODz@krikkit>
 
-On Sat, Aug 23, 2025 at 9:30=E2=80=AFPM Anup Patel <apatel@ventanamicro.com=
-> wrote:
->
-> This series adds ONE_REG interface for SBI FWFT extension implemented
-> by KVM RISC-V. This was missed out in accepted SBI FWFT patches for
-> KVM RISC-V.
->
-> These patches can also be found in the riscv_kvm_fwft_one_reg_v3 branch
-> at: https://github.com/avpatel/linux.git
->
-> Changes since v2:
->  - Re-based on latest KVM RISC-V queue
->  - Improved FWFT ONE_REG interface to allow enabling/disabling each
->    FWFT feature from KVM userspace
->
-> Changes since v1:
->  - Dropped have_state in PATCH4 as suggested by Drew
->  - Added Drew's Reviewed-by in appropriate patches
->
-> Anup Patel (6):
->   RISC-V: KVM: Set initial value of hedeleg in kvm_arch_vcpu_create()
->   RISC-V: KVM: Introduce feature specific reset for SBI FWFT
->   RISC-V: KVM: Introduce optional ONE_REG callbacks for SBI extensions
->   RISC-V: KVM: Move copy_sbi_ext_reg_indices() to SBI implementation
->   RISC-V: KVM: Implement ONE_REG interface for SBI FWFT state
->   KVM: riscv: selftests: Add SBI FWFT to get-reg-list test
+On Sat, Sep 06, 2025 at 11:30:58PM +0200, Sabrina Dubroca wrote:
+> > +check_xfrm()
+> > +{
+> > +	local dev=$1
+> > +	local src=192.0.2.1
+> > +	local dst=192.0.2.2
+> > +	local key="0x3132333435363738393031323334353664636261"
+> > +
+> > +	RET=0
+> > +
+> > +	ip -n "$ns" xfrm state flush
+> > +	ip -n "$ns" xfrm state add proto esp src "$src" dst "$dst" spi 9 \
+> > +		mode transport reqid 42 aead "rfc4106(gcm(aes))" "$key" 128 \
+> > +		sel src "$src"/24 dst "$dst"/24 offload dev "$dev" dir out
+> 
+> It's maybe not something you would expect, but this codepath will not
+> check that NETIF_F_HW_ESP is set on $dev (you can verify that by
+> running "ip xfrm state add ... offload ..." on the same bond+netdevsim
+> combination before/after toggling esp-hw-offload on/off for the
+> bond). Why not use __check_offload again for this feature?
 
-Queued this series for Linux-6.18
+The esp-hw-offload is fixed on netdevsim
 
-Regards,
-Anup
+# ethtool -k eni0np1 | grep -i esp-hw-offload
+esp-hw-offload: on [fixed]
 
->
->  arch/riscv/include/asm/kvm_vcpu_sbi.h         |  22 +-
->  arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h    |   1 +
->  arch/riscv/include/uapi/asm/kvm.h             |  15 ++
->  arch/riscv/kvm/vcpu.c                         |   3 +-
->  arch/riscv/kvm/vcpu_onereg.c                  |  60 +----
->  arch/riscv/kvm/vcpu_sbi.c                     | 172 +++++++++++--
->  arch/riscv/kvm/vcpu_sbi_fwft.c                | 227 ++++++++++++++++--
->  arch/riscv/kvm/vcpu_sbi_sta.c                 |  63 +++--
->  .../selftests/kvm/riscv/get-reg-list.c        |  32 +++
->  9 files changed, 467 insertions(+), 128 deletions(-)
->
-> --
-> 2.43.0
->
+There is no way to disable it. After we add the netdevsim to bond,
+the bond also shows "esp-hw-offload off" as the flag is inherit
+in dev->hw_enc_features, not dev->features.
+
+It looks the only way to check if bond dev->hw_enc_features has NETIF_F_HW_ESP
+is try set xfrm offload. As
+
+static int xfrm_api_check(struct net_device *dev)
+{
+#ifdef CONFIG_XFRM_OFFLOAD
+        if ((dev->features & NETIF_F_HW_ESP_TX_CSUM) &&
+            !(dev->features & NETIF_F_HW_ESP))
+                return NOTIFY_BAD;
+
+        if ((dev->features & NETIF_F_HW_ESP) &&
+            (!(dev->xfrmdev_ops &&
+               dev->xfrmdev_ops->xdo_dev_state_add &&
+               dev->xfrmdev_ops->xdo_dev_state_delete)))
+                return NOTIFY_BAD;
+
+Please correct me if I made any mistake.
+
+Thanks
+Hangbin
 
