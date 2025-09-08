@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-40995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25769B49BE0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 23:28:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50018B49BE6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 23:28:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C8893AC0E1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 21:28:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC7553BA618
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 21:28:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F84D2DF71F;
-	Mon,  8 Sep 2025 21:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CE992E0934;
+	Mon,  8 Sep 2025 21:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3jkUlFs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qwi9ViHs"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D6621FF39;
-	Mon,  8 Sep 2025 21:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC8221FF39;
+	Mon,  8 Sep 2025 21:27:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757366876; cv=none; b=Agfw5D4Xg6X5ZrdFFTLxf7jHxHsV53P8ZJG4oFJ4O0Hno4/B7jH35x1S+C9wMYEZ6DVtkeYl0D1m9j5OAwuLmV8TRFy8Z9kKH8vudZ92HTaw2zBBN8Xqv3nfn9xZEW+Y4o8p2+hgQk92Ca0Q8Pa/rBGGRS1HOMf1wFNNq8AeU20=
+	t=1757366880; cv=none; b=WcgLTRi+DdoqH7LyrvHU1UPK0VvQo9pq6C5Cwc5Ntip3o03o1t/6VKDeFUTQECX/sZYLgShOQ6MtKFqFNWf+sr8cig9eoWJ15A4bEghbe3Iv9cmPFYPaLODOXD9TXTk6kuLcEz4rrP8phX8wFeP9SCSuCcGt1GGYUnMHxuTiTeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757366876; c=relaxed/simple;
-	bh=2pnkprJwXgpBNzbLgqI2s8p4b2iZai3DkVfEhF0IFOE=;
+	s=arc-20240116; t=1757366880; c=relaxed/simple;
+	bh=3NT5DqK9ceTmzwhurXujvORIaKtG4LGDHLvhlVLs6D0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WmnoRNHkF2///z9n4EGzuNcwoBjs/+0TZeNuhgcaDIgQ3U0eIlJyxA+Ru1eh9Ka7aSEBrIxnDd+uHZW1nuNiAe+jwfoFnRx2DI70g23RPTP/i3/qdj8Em+PKvlwZUC/hsnHbJNR0+bFZT4Brqw+WA5oO8WTSSlL+R5XSX7NvZdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3jkUlFs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B48C4CEF9;
-	Mon,  8 Sep 2025 21:27:52 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=WRsF0xqBTcJ6OFrEVswwE2qYS9l9nbNk7VBCeSmUcuScwbtufdJ9yMuQdUooTrCIYgi48Dwfa0ZsphzubUxFg0XJh0W+CGKlElwNu7WYxqOa8/5GZexzl02A6VpH4AqV+gX0Tb2fdeHbfizWAe+nolncAfLsqRk8upQ5vLkcHT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qwi9ViHs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C6AC4CEF1;
+	Mon,  8 Sep 2025 21:27:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757366875;
-	bh=2pnkprJwXgpBNzbLgqI2s8p4b2iZai3DkVfEhF0IFOE=;
+	s=k20201202; t=1757366879;
+	bh=3NT5DqK9ceTmzwhurXujvORIaKtG4LGDHLvhlVLs6D0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=C3jkUlFsAXhgKn4zS221intRVHQASC087PDVppT4sbCPu/9u3ZDmu1RvrOYoY0HMr
-	 1oU1l/91o9Khjxf0sFcqvouS1qYv4IL1SYt8JD3Nve0eCEDrRNUEawf5tZuD8B4UZS
-	 wqsJgRdxO5c3OV0l3yHUpFFoAt5yA9deuRIkWdF53DNrcilhb1UVa2MQOF5+HTjVtn
-	 OJ60fj4en41jp0qASWvyd28cm48Qxb9l2CpLZRY4v/iSeQY/OVEqSRHMheR3mhYfn6
-	 l6ZeI3b7grUHLXXgZw4tVDmCgpfzCPQy05oP+3PzyRe/uQcNY8eAc+IDNBrV+ktQRV
-	 l7+EuYkONKJ3Q==
+	b=Qwi9ViHsD9iU8yiMgLNJHe1korADT7xRHNjN9bRrN/XtrNc7G9tNGM4+Lg05XcbVa
+	 dJ5HOvI7HZsqCv/tTlRldth1yR5PM4B9Fwf32CCh9eyZEsMT0zhePo6i+QsICVTQ2d
+	 KvTswjIqHWJjqp3RXcgl6Fib5vOkqgxuHw3TOk+PSNuBZW4n1iAO8evXCAKkxznpJR
+	 +v+xVaj8wd9M0TvrfwezPFuCZGtvdYCVwwzPaAE+Hd4qchfeiP/EgJWaAgGqwlEHwO
+	 HcszR6TmnwSJsGHGkHlSZOkvxri7hrZcJBMspr1bdcCYEI8M+P2VdknI+/qXFF9XLt
+	 DULdvu+XZ0lxQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 08 Sep 2025 23:27:27 +0200
-Subject: [PATCH net 1/3] netlink: specs: mptcp: fix if-idx attribute type
+Date: Mon, 08 Sep 2025 23:27:28 +0200
+Subject: [PATCH net 2/3] doc: mptcp: net.mptcp.pm_type is deprecated
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-1-5f2168a66079@kernel.org>
+Message-Id: <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-2-5f2168a66079@kernel.org>
 References: <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-0-5f2168a66079@kernel.org>
 In-Reply-To: <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-0-5f2168a66079@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -66,43 +66,48 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1084; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=2pnkprJwXgpBNzbLgqI2s8p4b2iZai3DkVfEhF0IFOE=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDL2ewWWXn1/beXCCTqdUh/uiDl/eelwfGHZ690xS/bZz
- uxOu5sr3FHKwiDGxSArpsgi3RaZP/N5FW+Jl58FzBxWJpAhDFycAjCRox0Mf6V1HuzeZd3uo38m
- 72959pSYH8Z/26xSub7e2Zv6Q6Gu7CxQRdZHlullLT+fateIRZybc/kiZ3dEheqmAwwfBc7Ul2/
- lAgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1853; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=3NT5DqK9ceTmzwhurXujvORIaKtG4LGDHLvhlVLs6D0=;
+ b=kA0DAAoWfCLwwvNHCpcByyZiAGi/SlOhh+wwQT7Ge4EoFszL8uduOHWE1fKWYaIlycU6jdlw4
+ Ih1BAAWCgAdFiEEG4ZZb5nneg10Sk44fCLwwvNHCpcFAmi/SlMACgkQfCLwwvNHCpduzgEAkGNZ
+ ouDFUTOkbBgLDu+PhROiOZ+KQyJ+nqccP33ZVmUA/2EqyaXnZbf6G8qUM8yznGz8c+WCwn7iI4n
+ YvycFhkkB
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-This attribute is used as a signed number in the code in pm_netlink.c:
+The net.mptcp.pm_type sysctl knob has been deprecated in v6.15,
+net.mptcp.path_manager should be used instead.
 
-  nla_put_s32(skb, MPTCP_ATTR_IF_IDX, ssk->sk_bound_dev_if))
+Adapt the section about path managers to suggest using the new sysctl
+knob instead of the deprecated one.
 
-The specs should then reflect that. Note that other 'if-idx' attributes
-from the same .yaml file use a signed number as well.
-
-Fixes: bc8aeb2045e2 ("Documentation: netlink: add a YAML spec for mptcp")
+Fixes: 595c26d122d1 ("mptcp: sysctl: set path manager by name")
 Cc: stable@vger.kernel.org
 Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- Documentation/netlink/specs/mptcp_pm.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/networking/mptcp.rst | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/netlink/specs/mptcp_pm.yaml b/Documentation/netlink/specs/mptcp_pm.yaml
-index 02f1ddcfbf1cfd81a398dd03c52bb9f281c1aa08..d15335684ec3d6256505f2b3887ce5818eb57462 100644
---- a/Documentation/netlink/specs/mptcp_pm.yaml
-+++ b/Documentation/netlink/specs/mptcp_pm.yaml
-@@ -256,7 +256,7 @@ attribute-sets:
-         type: u32
-       -
-         name: if-idx
--        type: u32
-+        type: s32
-       -
-         name: reset-reason
-         type: u32
+diff --git a/Documentation/networking/mptcp.rst b/Documentation/networking/mptcp.rst
+index 17f2bab611644727e19c3969fa08fa974c702d92..2e31038d6462051387be9bd8808a23230db08315 100644
+--- a/Documentation/networking/mptcp.rst
++++ b/Documentation/networking/mptcp.rst
+@@ -60,10 +60,10 @@ address announcements. Typically, it is the client side that initiates subflows,
+ and the server side that announces additional addresses via the ``ADD_ADDR`` and
+ ``REMOVE_ADDR`` options.
+ 
+-Path managers are controlled by the ``net.mptcp.pm_type`` sysctl knob -- see
+-mptcp-sysctl.rst. There are two types: the in-kernel one (type ``0``) where the
+-same rules are applied for all the connections (see: ``ip mptcp``) ; and the
+-userspace one (type ``1``), controlled by a userspace daemon (i.e. `mptcpd
++Path managers are controlled by the ``net.mptcp.path_manager`` sysctl knob --
++see mptcp-sysctl.rst. There are two types: the in-kernel one (``kernel``) where
++the same rules are applied for all the connections (see: ``ip mptcp``) ; and the
++userspace one (``userspace``), controlled by a userspace daemon (i.e. `mptcpd
+ <https://mptcpd.mptcp.dev/>`_) where different rules can be applied for each
+ connection. The path managers can be controlled via a Netlink API; see
+ netlink_spec/mptcp_pm.rst.
 
 -- 
 2.51.0
