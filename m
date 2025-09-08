@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-41000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8207B49C2F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 23:39:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFE9AB49C35
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 23:40:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DE581BC7B76
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 21:39:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AEF94E2421
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 21:39:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 537962EA74C;
-	Mon,  8 Sep 2025 21:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20E82ECD20;
+	Mon,  8 Sep 2025 21:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="E1hYuvhs"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Gq/0Mxzd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9568F2DF705;
-	Mon,  8 Sep 2025 21:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C5A2DF71C;
+	Mon,  8 Sep 2025 21:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757367206; cv=none; b=FnC83+tJE7WNsbYWmSHJMzhlGe8G+0qjyZebTjNmTOFugPSBZH1OhllA1mhbWgqt6YHvMqmZxPbS9bOEcCzamQmAPj4lfpUB0QhLZew2D07YoACq4aVhI6YB4Nrf0/S+AyvLEqEKZUyua2J2D9tRIZNB3trdE5V1876alhbmVN0=
+	t=1757367216; cv=none; b=A5VDNVtuvD0wf6KKsF3Zy1zJ2j/Ei1oJrr0u3VSmTjopJ5f8T+n0q93L6yc5bM/qUGR422rqB2JDIS5xodvEk+hOaNTsKEkErL+71nxju0/tAPT/c8tMYzp/oYVLX27kewZZUFXJgLM/hm3Gx5BVdpKwJOkyBXL20V56qgOPPFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757367206; c=relaxed/simple;
-	bh=f9LPBzgWad+KOxvJjX8NalTox3CpKgTBqcGiqD6aalo=;
+	s=arc-20240116; t=1757367216; c=relaxed/simple;
+	bh=dcdN9kLk7VQEOw9Elsf+i9vD+FkayaCDHoUI9tT7Jo4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZTHsFJTUka5lSjcFuAw/+A9iaC0lln8ErnZ/SdsrITHlgnyoFfCK3Fi1OJMjg/qbBHRm+qxPUviI3XU6slwxTIoPx65WAUL/dNvM+dpTQKx1s7+CHsSKasYeQgtU6sr4o5ISJUdzvVCDa2wniLEp6TIsHX7mrFl7BnuiIHTRfeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=E1hYuvhs; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=iKr391sWA2ObkyIek3wSrG85G3mo6siYiOlyuVGPWEqmx/UR5ADU1L6nf3IFYBJbeikGcuN5xeHJhHZHxiKjYdGqkyUGvxO7SsyFHbnwbBpQl+04zmaqXRmIGtJzqk8T6eZN3oETkojRyjwnyOIS1x8OZksnPa5fJ0JCoCA7TlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Gq/0Mxzd; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description;
-	bh=e+6M2G4SsyonChyGwoA7gCylBXiASD9sY4y3VUk+fa8=; b=E1hYuvhsbox3HG9HbDNvxy6wSZ
-	tWm2ODP5TPbLWHxvxx+q4IyYSALDqJ/acZ31+NEAnrobtiI+eRnhFkUDtrLpECSqtHBlvVZVnT0x1
-	WnB4eruq40O8jwwHe9ru/nPGclV4x9yxkvz89TXo8UKVHCtQWuZpBvfNp3+9geNKVTt/tb0g4FpnO
-	AWuLGv2pm6saRVrgYpthQQCl/0gpeXV6XrYkzN7ifWk4imAcxrUyQkz0htUfb1OOYQSQnS9LrTa4O
-	2vBHqNT4XiZAyfwq4osKfD6/TIAgvfGoeItaWYpwn2PYS89poF8sv1RJX3e/zuPUQlEcXSbpZsI88
-	PIMz6IUA==;
+	bh=WhcJ4ks4HR7lN45MGHC2zUK+ijZkfxtGRLCaVoT0v5s=; b=Gq/0MxzdEpQpNHdYEXw6rg22v3
+	jej35xilsOWPwV3rZEPBdCoN0yrqUe5upUU5hkRRsgmBSL8+fH9Cgs3b4zSi6zpamo0vMDWJCaxzs
+	RRVZe00tiChPX2z9Lrlh7rbync642scx8OC4ZtqEvvxdtLSW7sjzUx9V7OJNDDgFy1bFMGwApZLnT
+	FCVDV5MbR2ndmvi0LAJwomNTkdGoX5TGsgDbnBp+N+Zht0z0MmuRxqmfZNTFDGf5vAnYDfj7QcP66
+	zpwBC9WCjT5LMMOV5FJayNmQsjWjMlbxR3RBVWzcoV3sVLtomOeBHp4xPukv9AUyU39FYK/m2+LC6
+	cmo4m+MQ==;
 Received: from griffoul by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uvjUI-0000000DNxm-0dPr;
-	Mon, 08 Sep 2025 21:33:22 +0000
+	id 1uvjUT-0000000DO4m-03RQ;
+	Mon, 08 Sep 2025 21:33:33 +0000
 From: Fred Griffoul <griffoul@infradead.org>
 To: kvm@vger.kernel.org
 Cc: griffoul@gmail.com,
@@ -59,9 +59,9 @@ Cc: griffoul@gmail.com,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/5] KVM: pfncache: Restore guest-uses-pfn support
-Date: Mon,  8 Sep 2025 22:32:27 +0100
-Message-ID: <20250908213241.3189113-3-griffoul@infradead.org>
+Subject: [PATCH 3/5] KVM: x86: Add nested state validation for pfncache support
+Date: Mon,  8 Sep 2025 22:32:28 +0100
+Message-ID: <20250908213241.3189113-4-griffoul@infradead.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250908213241.3189113-1-griffoul@infradead.org>
 References: <20250908213241.3189113-1-griffoul@infradead.org>
@@ -75,218 +75,92 @@ Content-Transfer-Encoding: 8bit
 
 From: Fred Griffoul <fgriffo@amazon.co.uk>
 
-Restore functionality for guest page access tracking in pfncache,
-enabling automatic vCPU request generation when cache invalidation
-occurs through MMU notifier events.
+Implement state validation for nested virtualization to enable pfncache
+support for L1 guest pages.
 
-This feature is critical for nested VMX operations where both KVM and L2
-guest access guest-provided pages, such as APIC pages and posted
-interrupt descriptors.
+This adds a new nested_ops callback 'is_nested_state_invalid()' that
+detects when KVM needs to reload nested virtualization state. A
+KVM_REQ_GET_NESTED_STATE_PAGES request is triggered to reload affected
+pages before L2 execution when it detects invalid state. The callback
+monitors L1 guest pages during guest entry/exit while the vCPU runs in
+IN_GUEST_MODE.
 
-This change:
-
-- Reverts commit eefb85b3f031 ("KVM: Drop unused @may_block param from
-  gfn_to_pfn_cache_invalidate_start()")
-
-- Partially reverts commit a4bff3df5147 ("KVM: pfncache: remove
-  KVM_GUEST_USES_PFN usage"). Adds kvm_gpc_init_for_vcpu() to
-  initialize pfncache for guest mode access, instead of the
-  usage-specific flag approach.
+Currently, VMX implementations return false, with full support planned
+for the next patch.
 
 Signed-off-by: Fred Griffoul <fgriffo@amazon.co.uk>
 ---
- include/linux/kvm_host.h  | 29 +++++++++++++++++++++++++-
- include/linux/kvm_types.h |  1 +
- virt/kvm/kvm_main.c       |  3 ++-
- virt/kvm/kvm_mm.h         |  6 ++++--
- virt/kvm/pfncache.c       | 43 ++++++++++++++++++++++++++++++++++++---
- 5 files changed, 75 insertions(+), 7 deletions(-)
+ arch/x86/include/asm/kvm_host.h |  1 +
+ arch/x86/kvm/vmx/nested.c       |  6 ++++++
+ arch/x86/kvm/x86.c              | 14 +++++++++++++-
+ 3 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 8b47891adca1..2eb551a11818 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1397,6 +1397,9 @@ int kvm_vcpu_write_guest(struct kvm_vcpu *vcpu, gpa_t gpa, const void *data,
- 			 unsigned long len);
- void kvm_vcpu_mark_page_dirty(struct kvm_vcpu *vcpu, gfn_t gfn);
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index c56cc54d682a..97df7cac14e6 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1939,6 +1939,7 @@ struct kvm_x86_nested_ops {
+ 			 struct kvm_nested_state __user *user_kvm_nested_state,
+ 			 struct kvm_nested_state *kvm_state);
+ 	bool (*get_nested_state_pages)(struct kvm_vcpu *vcpu);
++	bool (*is_nested_state_invalid)(struct kvm_vcpu *vcpu);
+ 	int (*write_log_dirty)(struct kvm_vcpu *vcpu, gpa_t l2_gpa);
  
-+void __kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm,
-+		    struct kvm_vcpu *vcpu);
-+
- /**
-  * kvm_gpc_init - initialize gfn_to_pfn_cache.
-  *
-@@ -1407,7 +1410,11 @@ void kvm_vcpu_mark_page_dirty(struct kvm_vcpu *vcpu, gfn_t gfn);
-  * immutable attributes.  Note, the cache must be zero-allocated (or zeroed by
-  * the caller before init).
-  */
--void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm);
-+
-+static inline void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm)
-+{
-+	__kvm_gpc_init(gpc, kvm, NULL);
-+}
- 
- /**
-  * kvm_gpc_activate - prepare a cached kernel mapping and HPA for a given guest
-@@ -1489,6 +1496,26 @@ int kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, unsigned long len);
-  */
- void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc);
- 
-+/**
-+ * kvm_gpc_init_for_vcpu - initialize gfn_to_pfn_cache for pin/unpin usage
-+ *
-+ * @gpc:        struct gfn_to_pfn_cache object.
-+ * @vcpu:       vCPU that will pin and directly access this cache.
-+ * @req:        request to send when cache is invalidated while pinned.
-+ *
-+ * This sets up a gfn_to_pfn_cache for use by a vCPU that will directly access
-+ * the cached physical address. When the cache is invalidated while pinned,
-+ * the specified request will be sent to the associated vCPU to force cache
-+ * refresh.
-+ *
-+ * Note, the cache must be zero-allocated (or zeroed by the caller before init).
-+ */
-+static inline void kvm_gpc_init_for_vcpu(struct gfn_to_pfn_cache *gpc,
-+					 struct kvm_vcpu *vcpu)
-+{
-+	__kvm_gpc_init(gpc, vcpu->kvm, vcpu);
-+}
-+
- static inline bool kvm_gpc_is_gpa_active(struct gfn_to_pfn_cache *gpc)
- {
- 	return gpc->active && !kvm_is_error_gpa(gpc->gpa);
-diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-index 827ecc0b7e10..1c4bbf9947a4 100644
---- a/include/linux/kvm_types.h
-+++ b/include/linux/kvm_types.h
-@@ -64,6 +64,7 @@ struct gfn_to_pfn_cache {
- 	struct kvm_memory_slot *memslot;
- 	struct kvm *kvm;
- 	struct list_head list;
-+	struct kvm_vcpu *vcpu;
- 	rwlock_t lock;
- 	struct mutex refresh_lock;
- 	void *khva;
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 18f29ef93543..f42cfd524ecf 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -760,7 +760,8 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
- 	 * mn_active_invalidate_count (see above) instead of
- 	 * mmu_invalidate_in_progress.
- 	 */
--	gfn_to_pfn_cache_invalidate_start(kvm, range->start, range->end);
-+	gfn_to_pfn_cache_invalidate_start(kvm, range->start, range->end,
-+					  hva_range.may_block);
- 
- 	/*
- 	 * If one or more memslots were found and thus zapped, notify arch code
-diff --git a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
-index 31defb08ccba..f1ba02084bd9 100644
---- a/virt/kvm/kvm_mm.h
-+++ b/virt/kvm/kvm_mm.h
-@@ -58,11 +58,13 @@ kvm_pfn_t hva_to_pfn(struct kvm_follow_pfn *kfp);
- #ifdef CONFIG_HAVE_KVM_PFNCACHE
- void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm,
- 				       unsigned long start,
--				       unsigned long end);
-+				       unsigned long end,
-+				       bool may_block);
- #else
- static inline void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm,
- 						     unsigned long start,
--						     unsigned long end)
-+						     unsigned long end,
-+						     bool may_block)
- {
+ 	int (*enable_evmcs)(struct kvm_vcpu *vcpu,
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index aa4fe1fe571d..06187b8baa19 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -3472,6 +3472,11 @@ static bool vmx_get_nested_state_pages(struct kvm_vcpu *vcpu)
+ 	return true;
  }
- #endif /* HAVE_KVM_PFNCACHE */
-diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-index 728d2c1b488a..543466ff40a0 100644
---- a/virt/kvm/pfncache.c
-+++ b/virt/kvm/pfncache.c
-@@ -23,9 +23,11 @@
-  * MMU notifier 'invalidate_range_start' hook.
-  */
- void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm, unsigned long start,
--				       unsigned long end)
-+				       unsigned long end, bool may_block)
+ 
++static bool vmx_is_nested_state_invalid(struct kvm_vcpu *vcpu)
++{
++	return false;
++}
++
+ static int nested_vmx_write_pml_buffer(struct kvm_vcpu *vcpu, gpa_t gpa)
  {
-+	DECLARE_BITMAP(vcpu_bitmap, KVM_MAX_VCPUS);
- 	struct gfn_to_pfn_cache *gpc;
-+	bool evict_vcpus = false;
+ 	struct vmcs12 *vmcs12;
+@@ -7366,6 +7371,7 @@ struct kvm_x86_nested_ops vmx_nested_ops = {
+ 	.get_state = vmx_get_nested_state,
+ 	.set_state = vmx_set_nested_state,
+ 	.get_nested_state_pages = vmx_get_nested_state_pages,
++	.is_nested_state_invalid = vmx_is_nested_state_invalid,
+ 	.write_log_dirty = nested_vmx_write_pml_buffer,
+ #ifdef CONFIG_KVM_HYPERV
+ 	.enable_evmcs = nested_enable_evmcs,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 33fba801b205..db4a6b62f81f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -2125,12 +2125,24 @@ int kvm_emulate_monitor(struct kvm_vcpu *vcpu)
+ }
+ EXPORT_SYMBOL_GPL(kvm_emulate_monitor);
  
- 	spin_lock(&kvm->gpc_lock);
- 	list_for_each_entry(gpc, &kvm->gpc_list, list) {
-@@ -46,8 +48,21 @@ void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm, unsigned long start,
- 
- 			write_lock_irq(&gpc->lock);
- 			if (gpc->valid && !is_error_noslot_pfn(gpc->pfn) &&
--			    gpc->uhva >= start && gpc->uhva < end)
-+			    gpc->uhva >= start && gpc->uhva < end) {
- 				gpc->valid = false;
-+
-+				/*
-+				 * If a guest vCPU could be using the physical address,
-+				 * it needs to be forced out of guest mode.
-+				 */
-+				if (gpc->vcpu) {
-+					if (!evict_vcpus) {
-+						evict_vcpus = true;
-+						bitmap_zero(vcpu_bitmap, KVM_MAX_VCPUS);
-+					}
-+					__set_bit(gpc->vcpu->vcpu_idx, vcpu_bitmap);
-+				}
-+			}
- 			write_unlock_irq(&gpc->lock);
- 			continue;
- 		}
-@@ -55,6 +70,27 @@ void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm, unsigned long start,
- 		read_unlock_irq(&gpc->lock);
- 	}
- 	spin_unlock(&kvm->gpc_lock);
-+
-+	if (evict_vcpus) {
-+		/*
-+		 * KVM needs to ensure the vCPU is fully out of guest context
-+		 * before allowing the invalidation to continue.
-+		 */
-+		unsigned int req = KVM_REQ_OUTSIDE_GUEST_MODE;
-+		bool called;
-+
-+		/*
-+		 * If the OOM reaper is active, then all vCPUs should have
-+		 * been stopped already, so perform the request without
-+		 * KVM_REQUEST_WAIT and be sad if any needed to be IPI'd.
-+		 */
-+		if (!may_block)
-+			req &= ~KVM_REQUEST_WAIT;
-+
-+		called = kvm_make_vcpus_request_mask(kvm, req, vcpu_bitmap);
-+
-+		WARN_ON_ONCE(called && !may_block);
++static inline bool kvm_invalid_nested_state(struct kvm_vcpu *vcpu)
++{
++	if (is_guest_mode(vcpu) &&
++	    kvm_x86_ops.nested_ops->is_nested_state_invalid &&
++	    kvm_x86_ops.nested_ops->is_nested_state_invalid(vcpu)) {
++		kvm_make_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu);
++		return true;
 +	}
- }
- 
- static bool kvm_gpc_is_valid_len(gpa_t gpa, unsigned long uhva,
-@@ -382,7 +418,7 @@ int kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, unsigned long len)
- 	return __kvm_gpc_refresh(gpc, gpc->gpa, uhva);
- }
- 
--void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm)
-+void __kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm, struct kvm_vcpu *vcpu)
++	return false;
++}
++
+ static inline bool kvm_vcpu_exit_request(struct kvm_vcpu *vcpu)
  {
- 	rwlock_init(&gpc->lock);
- 	mutex_init(&gpc->refresh_lock);
-@@ -391,6 +427,7 @@ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm)
- 	gpc->pfn = KVM_PFN_ERR_FAULT;
- 	gpc->gpa = INVALID_GPA;
- 	gpc->uhva = KVM_HVA_ERR_BAD;
-+	gpc->vcpu = vcpu;
- 	gpc->active = gpc->valid = false;
+ 	xfer_to_guest_mode_prepare();
+ 
+ 	return READ_ONCE(vcpu->mode) == EXITING_GUEST_MODE ||
+-	       kvm_request_pending(vcpu) || xfer_to_guest_mode_work_pending();
++	       kvm_request_pending(vcpu) || xfer_to_guest_mode_work_pending() ||
++	       kvm_invalid_nested_state(vcpu);
  }
  
+ /*
 -- 
 2.51.0
 
