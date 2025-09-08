@@ -1,76 +1,78 @@
-Return-Path: <linux-kselftest+bounces-40916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 942C8B4842D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 08:28:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA74DB4842E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 08:28:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98FEE18931F4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 06:28:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 331CC1897026
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 06:28:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A562C224AF0;
-	Mon,  8 Sep 2025 06:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9F8B231845;
+	Mon,  8 Sep 2025 06:28:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jTjb1j48"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N+OZ3Dp0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E542F32;
-	Mon,  8 Sep 2025 06:28:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589572F32;
+	Mon,  8 Sep 2025 06:28:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757312895; cv=none; b=XuS/jdIsOKAp8Een79NYWckIC0oZSPOKkITQk2ClLtAU4SSbUne6NxM4lOeVwMiXTAa7TecDM2G5DEr4mlWQnxxUZZJZpRqMpLnqdZtioTMBsYRnxy1aM4Jd1CIm0TTIpx55xVAWYbIn0S+hpsJyvSZ4njWRQHHfzo3qUMPnLEQ=
+	t=1757312899; cv=none; b=sJs3ZQFiRfnNpGA4/A11Syjyngcr/rqxJ8Gq4T11XLKipEWe9EFS4EJfdCJ+Vk3FYDZUnLEthhyIP5oeSGqwFtsNkDmNff/erudrWtVhbawRrKuKUKuPvjGYean1c48SzQTsd46ds9aHN7WuKA1rYnbDIhtPjy1ZqzxqTGWYPwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757312895; c=relaxed/simple;
-	bh=ltGHhRsnNNUL4vfR88eApK9XsH3PP6Rb9TOxCfR95AI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AFfMJTjhIt4gxNsil6CNYBu1POEUByglAU64i5jUieH4lzPIw2UidpNIlbGrDUFScFSNJMbJNCAdqUSewT+mCb9zZ/62ptBh8v6bVLkqr1FhyCmXQnN8lVjhiuKglqszUoNCGm1YRZeEx+l4ijrcPTGuA9T7v6OamZO20acQ4h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jTjb1j48; arc=none smtp.client-ip=209.85.216.52
+	s=arc-20240116; t=1757312899; c=relaxed/simple;
+	bh=tKlsEbu9HDOYElRCUsWLC2XzJ6gWjtu9Q3ZfxnPBAIQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KlMgGa3mRfl/CZHaAGa3Sj7UCDwvY20kYNRQxmmVS8ui7hHtudCubvYaIhmEviuDqrxynXeebYofKK0m7yPQZj0ErmeIO+5AwFVGJKjb4OqjXdCu3/CiTvZAIHwxp0rE3ifp54v644NV4P5cLiIrdxF2E76Iz31SAONusfBo3P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N+OZ3Dp0; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-32d3e17d95dso1246283a91.3;
-        Sun, 07 Sep 2025 23:28:13 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7704f3c46ceso3075532b3a.2;
+        Sun, 07 Sep 2025 23:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757312893; x=1757917693; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RPBc83npyM3oZ6IcL9QGJfiYXUzPVNexDH9DXNnsPF0=;
-        b=jTjb1j48hnXycaNtBZ/HJTnonueCfkRM3eV7s/eN9TWv6B8PXivpx0gkMI749ZrOg/
-         H4YICqrvGAgQQwrLTnog+of+BACK/PKcSkrjH2mqkBCoOUvTAWsN0ny9KMU9rDpgO7oy
-         DQk4eFd2dBMsZQDUM1F4bWrTzUTnzgkhnTAVgQgim5ZJfzakKzSbU4hj2V9pC/gR+q7C
-         03kch70l5Y9QiW/5enary7NGV8xI3batJ5QYsoqB9MiHjSiyhwirlhOXGAN3Wgq2QBrR
-         dIPEiCJzwKIqSn7YLfMqHxEQkpq2H8HOps48HlxOvhHcpuuWAw/nRH2WvxU0v8mxL613
-         7cGA==
+        d=gmail.com; s=20230601; t=1757312897; x=1757917697; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nuOyzTTAq45ExTFXr1bmu2KD09m908J5cNHTTpfNEx8=;
+        b=N+OZ3Dp09E92XM4bMX8+4NUZa7sSwyfBnRWLPn5UpOXPl2wRFb3tAN6v380h8lMuWw
+         ZGskKc0nGW3l5NbnbeoUvlzWlLeX1WiBUPVWjeA3Oe3IsNRyv1KDa454QyXJXgeh92rF
+         oRDfIT8L60NObkhDnxNRNLmMGwGtwRjOz6vf2TqUpAI0Xjtv54/SHlWJHA9DeDTh0Bvg
+         RrHISFu+TijWnMLU3DXzMxk4HQKdaEIey23vdn44mBP2ivU5O7rW8Bhmg+lj6UWGE5jQ
+         mzDIInvy2erOu4iALiAYo9rin0lmznbCVvKVW1kdawpiwITIj8BNpkNFgrLIA1hwBYXe
+         8A5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757312893; x=1757917693;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RPBc83npyM3oZ6IcL9QGJfiYXUzPVNexDH9DXNnsPF0=;
-        b=s3stKCiGLiiAnHAWStECiL95cPYiMrpOGgMTPDk1gIqA5ipq5PaCfNCkic90i1pkve
-         ywWSj6mnTNDu3mpoon35f+IUIWrjEK0/gi45x8WeVOHFe4GNpliIINcVnp7767XKZM4j
-         uxE5vbBpWY9zx+LqfyshGe5VM3WaCY/TQ1WSjfVT5CrfwRUMWf+vUoIL/EhJ4qs49QFk
-         kz2GB+0oUItXbb4s/G1tqD8FerdMmyKtWztt6kLoIt1KNQyD3PDcSfqFujO11WRmnBQy
-         Ejc+xCQdmC8LdWd7POVsUqoNb400EgJzHsIxm1aMBSACYJCcPdhXdjVrRTj8eS/u+wVb
-         hY/g==
-X-Forwarded-Encrypted: i=1; AJvYcCWei8fVuPL9GiNhIKMWDaMyeA+8sosxEqpxkBJ7lAsbGpIDTAWXfhs0a9EgB9M67EOgBK7jhVGZrd5OdeX4AI0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz61p4fmTj1XPqnfIidzF6c5JGjm9fYvMUTIPosqLq8CFTzl3P+
-	9kAc32ndO83T0/NN+QKR47LjPQDgshWuVGq+H/1PCbqLnwv41Iylh+irUeIywn/gmB0=
-X-Gm-Gg: ASbGncsWiBeOJE8NJI2MI/cNwJTOvz/s3Llgg46RMchlfmq95sbAGPOxHDv85Jkok4i
-	IShLF71qx701DgXsrz/JeB8edSM9xVLTa32Bkfckf8CYXM1HR10nD8cL+mrQtJsGdmKhR9AebTs
-	fNtFZ+n5aBwm5G89LvaSshkjyXq9OWFb2AYJGX6FjlaoHzWc5yHpuGXc56Liyov5BZmnrtz8TjR
-	juWPUWgI6TDEIuN7Xie0+Y2wCgMAgrcv9UNR83sSoVyVNNGrA7HjlFI+mPdlI5vCOlBXlhNGqEk
-	q8nkXoyhvvV07YGN4d4rjh/CR04MF7iun+5aiQjzFBV6iV4VAS3O0rd5isqExdMypVRxxLG1xuX
-	hOz1hYotqRXYw2AKtl7uWcfjGFbPa0Gx9+4HIWKpilcht9C2ZcyLW
-X-Google-Smtp-Source: AGHT+IHRigGTvVKHGEqRM0ROOHKESyBE3/7Gz5SURVLP42ZMjdI3RsJVoxtkV7TRC+SmuLwHOLnpaQ==
-X-Received: by 2002:a17:90b:3c08:b0:329:e9da:35dd with SMTP id 98e67ed59e1d1-32d43f77076mr9091997a91.27.1757312892633;
-        Sun, 07 Sep 2025 23:28:12 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757312897; x=1757917697;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nuOyzTTAq45ExTFXr1bmu2KD09m908J5cNHTTpfNEx8=;
+        b=hVPXrUiRfB0G8NeBVp4TKrWDeVS1DIv/xN5mBUuZQ43UdOGkzeV674l0uNDOBKcHJJ
+         Q4FdNotp3RhQrQdnciT0DJFtIcdPGSF+e+3xooNTOZlHLHrEUgP1xjunJnazqNfY2HE5
+         oDnA0nJovA+C4uPeFufB0dtAH0x/LDojYMjo+yOw9eiKFb9z8pJwYGn1uUqfZXt8tU55
+         t6IKLlzH6NpS31VY8IbnyVPctCNRfXg1xImAOdc+Wm2zjO2XD8A9J21X3z9TDXguZhOX
+         1u27LqeiQNKFHfkYCQdsTnr8Q16V0iCJi1EXB/ADamqVZYXRpqbOlS4FYkuVtDjWC4jI
+         ZXtw==
+X-Forwarded-Encrypted: i=1; AJvYcCUwlGU/NVGjytMbNLTSW3Wm3WdcCw16R09VaAQ6NBlaRtbo0myy0xKvQLEN7tb/yIzOwzFTE9zdVsGLSZ5rpKY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXVMpfPjgdkx2BtR7HyflpzlfG6qy31UBHob21SU/rOO/RL64O
+	kcLQUtluBu3cNqa1IYZ9rPbIwr30h6ZlAIJYSyF6gjx8xOZq1LmmS8VY2L0GqEByilM=
+X-Gm-Gg: ASbGncuX0pGytFyceAFsWGkUxHvWTNzUq4eTdvtvuj1kozZwh+lP21dH4nEWog2dR4X
+	0i3xrLsJiF0+EnFpviulaeMKNyhDpFkUlzLI6LbzCK0p1CYLpFEnZy+i9gLcYs4HfXWPI0h5e3a
+	y1cfivy1ByEqLnE1W/8gpRb0Vgc9oiNtkV7AyBRCFqAmOWIEzo7INPTQhGNzNLCDYeOsUDEwkJx
+	qP1TMVNnmVyC7d9zR+w7xm7Vfp8aD0tKBrloSblvMAmuff4StDFhmYoWSCSxC9BLkDAJtiVdU/E
+	MZfrxA9/6K/Nr0v26ylpm+smrMO1ZrnjIizySf1EIcopqCl2vTsrmocNtUEmII4wGKk/XQaP8Vx
+	fs1wboGG9l76kwePnnQY6wSDpywgB3xYzxbdnaxLkkrRfHEKVsCYu
+X-Google-Smtp-Source: AGHT+IE4xeQtkHamtFSTqnjiblGZaGxYwYBtK1ZMzcVuFng1mIvxG2PgFOeVw0lR1soKh/eU4LuxZQ==
+X-Received: by 2002:a05:6a00:2ea8:b0:772:2fad:ff64 with SMTP id d2e1a72fcca58-7742dce028fmr9670666b3a.8.1757312897363;
+        Sun, 07 Sep 2025 23:28:17 -0700 (PDT)
 Received: from fedora.redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77285bb2614sm13134974b3a.58.2025.09.07.23.28.07
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77285bb2614sm13134974b3a.58.2025.09.07.23.28.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Sep 2025 23:28:12 -0700 (PDT)
+        Sun, 07 Sep 2025 23:28:16 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Jay Vosburgh <jv@jvosburgh.net>,
@@ -82,12 +84,13 @@ Cc: Jay Vosburgh <jv@jvosburgh.net>,
 	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	David Wilder <wilder@us.ibm.com>
-Subject: [PATCHv2 1/2] bonding: don't set oif to bond dev when getting NS target destination
-Date: Mon,  8 Sep 2025 06:28:01 +0000
-Message-ID: <20250908062802.392300-1-liuhangbin@gmail.com>
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv2 2/2] selftests: bonding: add vlan over bond testing
+Date: Mon,  8 Sep 2025 06:28:02 +0000
+Message-ID: <20250908062802.392300-2-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250908062802.392300-1-liuhangbin@gmail.com>
+References: <20250908062802.392300-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,42 +99,124 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Unlike IPv4, IPv6 routing strictly requires the source address to be valid
-on the outgoing interface. If the NS target is set to a remote VLAN interface,
-and the source address is also configured on a VLAN over a bond interface,
-setting the oif to the bond device will fail to retrieve the correct
-destination route.
+Add a vlan over bond testing to make sure arp/ns target works.
+Also change all the configs to mudules.
 
-Fix this by not setting the oif to the bond device when retrieving the NS
-target destination. This allows the correct destination device (the VLAN
-interface) to be determined, so that bond_verify_device_path can return the
-proper VLAN tags for sending NS messages.
-
-Reported-by: David Wilder <wilder@us.ibm.com>
-Closes: https://lore.kernel.org/netdev/aGOKggdfjv0cApTO@fedora/
-Suggested-by: Jay Vosburgh <jv@jvosburgh.net>
-Fixes: 4e24be018eb9 ("bonding: add new parameter ns_targets")
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
 
 v2: split the patch into 2 parts, the kernel change and test update (Jay Vosburgh)
 
 ---
- drivers/net/bonding/bond_main.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../drivers/net/bonding/bond_options.sh       | 59 +++++++++++++++++++
+ .../selftests/drivers/net/bonding/config      | 21 +++----
+ 2 files changed, 70 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 257333c88710..30cf97f4e814 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -3355,7 +3355,6 @@ static void bond_ns_send_all(struct bonding *bond, struct slave *slave)
- 		/* Find out through which dev should the packet go */
- 		memset(&fl6, 0, sizeof(struct flowi6));
- 		fl6.daddr = targets[i];
--		fl6.flowi6_oif = bond->dev->ifindex;
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond_options.sh b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
+index 7bc148889ca7..b3eb8a919c71 100755
+--- a/tools/testing/selftests/drivers/net/bonding/bond_options.sh
++++ b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
+@@ -7,6 +7,7 @@ ALL_TESTS="
+ 	prio
+ 	arp_validate
+ 	num_grat_arp
++	vlan_over_bond
+ "
  
- 		dst = ip6_route_output(dev_net(bond->dev), NULL, &fl6);
- 		if (dst->error) {
+ lib_dir=$(dirname "$0")
+@@ -376,6 +377,64 @@ num_grat_arp()
+ 	done
+ }
+ 
++vlan_over_bond_arp()
++{
++	local mode="$1"
++	RET=0
++
++	bond_reset "mode $mode arp_interval 100 arp_ip_target 192.0.3.10"
++	ip -n "${s_ns}" link add bond0.3 link bond0 type vlan id 3
++	ip -n "${s_ns}" link set bond0.3 up
++	ip -n "${s_ns}" addr add 192.0.3.1/24 dev bond0.3
++	ip -n "${s_ns}" addr add 2001:db8::3:1/64 dev bond0.3
++
++	slowwait_for_counter 5 5 tc_rule_handle_stats_get \
++		"dev eth0.3 ingress" 101 ".packets" "-n ${c_ns}" || RET=1
++	log_test "vlan over bond arp" "$mode"
++}
++
++vlan_over_bond_ns()
++{
++	local mode="$1"
++	RET=0
++
++	if skip_ns; then
++		log_test_skip "vlan_over_bond ns" "$mode"
++		return 0
++	fi
++
++	bond_reset "mode $mode arp_interval 100 ns_ip6_target 2001:db8::3:10"
++	ip -n "${s_ns}" link add bond0.3 link bond0 type vlan id 3
++	ip -n "${s_ns}" link set bond0.3 up
++	ip -n "${s_ns}" addr add 192.0.3.1/24 dev bond0.3
++	ip -n "${s_ns}" addr add 2001:db8::3:1/64 dev bond0.3
++
++	slowwait_for_counter 5 5 tc_rule_handle_stats_get \
++		"dev eth0.3 ingress" 102 ".packets" "-n ${c_ns}" || RET=1
++	log_test "vlan over bond ns" "$mode"
++}
++
++vlan_over_bond()
++{
++	# add vlan 3 for client
++	ip -n "${c_ns}" link add eth0.3 link eth0 type vlan id 3
++	ip -n "${c_ns}" link set eth0.3 up
++	ip -n "${c_ns}" addr add 192.0.3.10/24 dev eth0.3
++	ip -n "${c_ns}" addr add 2001:db8::3:10/64 dev eth0.3
++
++	# Add tc rule to check the vlan pkts
++	tc -n "${c_ns}" qdisc add dev eth0.3 clsact
++	tc -n "${c_ns}" filter add dev eth0.3 ingress protocol arp \
++		handle 101 flower skip_hw arp_op request \
++		arp_sip 192.0.3.1 arp_tip 192.0.3.10 action pass
++	tc -n "${c_ns}" filter add dev eth0.3 ingress protocol ipv6 \
++		handle 102 flower skip_hw ip_proto icmpv6 \
++		type 135 src_ip 2001:db8::3:1 action pass
++
++	vlan_over_bond_arp "active-backup"
++	vlan_over_bond_ns "active-backup"
++}
++
+ trap cleanup EXIT
+ 
+ setup_prepare
+diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
+index 4d16a69ffc65..cbd8b2769475 100644
+--- a/tools/testing/selftests/drivers/net/bonding/config
++++ b/tools/testing/selftests/drivers/net/bonding/config
+@@ -1,12 +1,13 @@
+-CONFIG_BONDING=y
+-CONFIG_BRIDGE=y
+-CONFIG_DUMMY=y
++CONFIG_BONDING=m
++CONFIG_BRIDGE=m
++CONFIG_DUMMY=m
+ CONFIG_IPV6=y
+-CONFIG_MACVLAN=y
+-CONFIG_IPVLAN=y
+-CONFIG_NET_ACT_GACT=y
+-CONFIG_NET_CLS_FLOWER=y
++CONFIG_MACVLAN=m
++CONFIG_IPVLAN=m
++CONFIG_NET_ACT_GACT=m
++CONFIG_NET_CLS_FLOWER=m
+ CONFIG_NET_CLS_MATCHALL=m
+-CONFIG_NET_SCH_INGRESS=y
+-CONFIG_NLMON=y
+-CONFIG_VETH=y
++CONFIG_NET_SCH_INGRESS=m
++CONFIG_NLMON=m
++CONFIG_VETH=m
++CONFIG_VLAN_8021Q=m
 -- 
 2.50.1
 
