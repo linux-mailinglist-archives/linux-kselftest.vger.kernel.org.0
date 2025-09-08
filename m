@@ -1,63 +1,87 @@
-Return-Path: <linux-kselftest+bounces-40923-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7FD3B485DC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 09:43:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49818B4863F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 10:00:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80DE4166508
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 07:41:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E3D817E9E9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 08:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF0552EA75A;
-	Mon,  8 Sep 2025 07:39:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B03C2EACF0;
+	Mon,  8 Sep 2025 08:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CLE8PUSP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WPpUnar5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39862EAB60;
-	Mon,  8 Sep 2025 07:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27992EA166
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Sep 2025 08:00:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757317159; cv=none; b=BhNCUdW0LLsniZDU1Q4bMG2b4jyl6Zr42Fc17t2FtbEp+PC9KTb9UcySWuyVA7yNgqAlLxUE4qOzMkaTtuznLedLfLNt4wq2VmWSFoctvMFHtAUNajreq1GgrQK8yRlY44JMPgKV9ukNMl8CE5+pG93QsLR59ya9bc1r/xpZ178=
+	t=1757318420; cv=none; b=G7rTjh9WydPrVwrVbyvH7TuF+ybqnv2CvfQWYU4U4a6Hgn748p//pNHkiqlSPnfzHGqfW/VAHaT8CawRF6jDxdMK3AB45uPdZutV6iUnayThflx/eumsxwVPI9u1ogXdFuQeROGeaw0TpNqfIX2mVFI3tPZpuF7y2l8ytQ5dezU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757317159; c=relaxed/simple;
-	bh=vvDisUrzXniDZ2UuL2xPxozwkB5ElxDwixP1w5ErZq4=;
+	s=arc-20240116; t=1757318420; c=relaxed/simple;
+	bh=+YwpdcGwlF5pvdpd2It9H4VZTjzT37L3k9Tc+m9Is7Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nNrGo5e0HuVO1Q3vxPLu2cJsSWOA/4QbPiILdn4z6Eg1xBpFKSN7I3Btc847tIrW6PrX4VGiZlqJ8H7gVRA6twcCO0sih/jzg5iobgDtzk5lLauwUGWXKbZoAB60o+jTrWCo7gMfuOEPJQvWmPQXlq1940nO+HR/8nu0SRmiHaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CLE8PUSP; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757317158; x=1788853158;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vvDisUrzXniDZ2UuL2xPxozwkB5ElxDwixP1w5ErZq4=;
-  b=CLE8PUSPNh12WqbOGBjq3MXVYIrGQ3hiLuo7J7O6vgpfuFj8mi52uGkW
-   Jmpp8Pn2hFVzAfWgSr4IFftKjrXr1zqsDwkqZdfjWJans1DTRQ8cvDgf8
-   m6MOI/SGwo3hSoYrm+p0sMbWxPNnxtAlqVMB4weNr77aSehJwCSJGKJxD
-   PGvlXsBp3yHriH4pXqbawackV295XBUkluqy4i58O60o2KVTCBZUq8Wuy
-   DWVIpzpU0fU9muhM1xfE6Kf++e9LRf8Pr4WmTt+AuZ8CA1ClPP11+Vhuz
-   9IdbExEaoTBIwppeGb16MZwu7Nl/g5lhxh03z/8o88iaHDBYjpLx5wqqn
-   g==;
-X-CSE-ConnectionGUID: JX6rcWBISLONsMHSxkD/2A==
-X-CSE-MsgGUID: iQmETyLEQnCuNfjZFnSHnA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63396031"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="63396031"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 00:39:15 -0700
-X-CSE-ConnectionGUID: JW2M+b+3T1imC2mICNTArw==
-X-CSE-MsgGUID: DIB4J4uWSXigkWJrWgocQw==
-X-ExtLoop1: 1
-Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 00:39:10 -0700
-Message-ID: <abbf92ae-3d43-4297-a4be-6f383e10bfa0@linux.intel.com>
-Date: Mon, 8 Sep 2025 15:39:08 +0800
+	 In-Reply-To:Content-Type; b=eRL3tLdB6UZ/rpbz8PncbKQv/uKZHrsbT71gVYtvnKWtHaMRB2KR/p48E6tnpCZa4Y+8uYqzWo9jwrEzw1Yz71q/B+gjL9K00HsdUf2+36GllAweE8rJQKafYKYi+Xcgt9vqZ+VhytNz/LyBSccVl9AoT+qe68FfGuqt+fz1xC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WPpUnar5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757318418;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=6ZtGxzPBBhWZb8TdeGEHePc9lnXNDI+6sWWhJSedy84=;
+	b=WPpUnar5ihBCwPM2Et+B5+ElxUd6nS4rMjSJfCvxhKPrvqHKEMn/KosSvxdu9XSlh1/m7F
+	UocT7QMKwCmU/TdZ6+IM0QZ9ucyWFn5sCJdfothB7ysG4dj2GF92bt7SPrUi0nM5FvcsJc
+	V+pY3Le4G8q4PPbodY0xAQVtXJZMU24=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-fAGE2eMsNQqONuT4TjSc9A-1; Mon, 08 Sep 2025 04:00:15 -0400
+X-MC-Unique: fAGE2eMsNQqONuT4TjSc9A-1
+X-Mimecast-MFC-AGG-ID: fAGE2eMsNQqONuT4TjSc9A_1757318409
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3e1260394dcso2061684f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Sep 2025 01:00:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757318409; x=1757923209;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6ZtGxzPBBhWZb8TdeGEHePc9lnXNDI+6sWWhJSedy84=;
+        b=iNzZ0IIIC+8RWf1IrEzVSFvEtlS43O2yLscvmL7W0uv7Po0mGxa4Y6/nt8QlRfVs40
+         VFBPYWdNf7eQ9nRQCETm1lGur3GPZDcMKAX4XuRZGA+1/oz8forF2wBuf+cuKVNDxKfb
+         3lUpS7oYyvG0jsMGnVL6WYMQTHMmZPMmgrnmb6TeO+2tN4ftyfymGTsrzHA03xCo25hI
+         SIsmp9Cu4BvsCYBuxZZD3Qs+xCaRU1p/qFjzLJvlbkI5jrMI0r4S7Vxr9f5kT7lsPCLQ
+         qnEYTrzjj6v3FvoCE2lKQb8SioN30h4GmmgX2WFTM/ArS8BHx8FpdwQliwcaPcYV7zIa
+         lALw==
+X-Forwarded-Encrypted: i=1; AJvYcCX9oNyWraJD5ZEEQGzLCHALLM7PrV46ckyhIWsUI6MKumxrVyghfseLGjB62FYq3qx+bXi8oS1tqMbcuV1XndQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsH17KzgvrzLFqfusU1apa9pS2Mg8KjJIQWPbxayHL0BRh0YVf
+	eml5/kK3LJRKZWIHTWf85FllrgUcdwT2UvX1ogWQa6BNayqgEZMDs/IRVQmuex6tCGCMoC4p7sw
+	wPS5UUjJeBGXJ/BLYFr9FSmpVBFHjA3k2e5Xjv2lYwSaGhuPgd3cFKrbhfKL4kwBEBx0DYw==
+X-Gm-Gg: ASbGncsjYA6g4taLw2bn9eGfAbnJV5w2HqFKwBCu30UlNIDL0HuqiG29x34p0lBPPmC
+	WH1/A2nR53kvZ/XisOmhddJBQt1QNJohJMLd7HpB+glS8wD8Yah3cDqB8daMUEHTVPLprETnh94
+	4K7MaeuIJICmtcZV7njWQhYANthM1k8BnOcg5Y7uD99FSBIrVEw+HQnpnznqQ4BMYjr3eWS4Kro
+	gM/uJ0YT6iY9QW77j0nOejOWjVFRR8IBKyGBEB1mhatHEnA0t+PiEoG/33ixSgMDcn+Nwne2OB4
+	bw17zImcvlJXvPNRXgANwF9nWXaUnj60/xbImK4VssRNBTV+aeyUl/nH2DMVkHA8G3yvHCs=
+X-Received: by 2002:a05:6000:26cd:b0:3e0:2a95:dc9e with SMTP id ffacd0b85a97d-3e64ce50347mr4840551f8f.57.1757318409174;
+        Mon, 08 Sep 2025 01:00:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF+e2xgTQYe5kT3rV+uD8LRSVafVXIklNJL7Am05EAxkn8s4rPl3yNNJ7oQs/EOmF2miaT83w==
+X-Received: by 2002:a05:6000:26cd:b0:3e0:2a95:dc9e with SMTP id ffacd0b85a97d-3e64ce50347mr4840495f8f.57.1757318408663;
+        Mon, 08 Sep 2025 01:00:08 -0700 (PDT)
+Received: from [192.168.3.141] (p57a1ae98.dip0.t-ipconnect.de. [87.161.174.152])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e740369f1esm6798834f8f.11.2025.09.08.01.00.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Sep 2025 01:00:08 -0700 (PDT)
+Message-ID: <28fc8fb3-f16b-4efb-b8e3-24081f035c73@redhat.com>
+Date: Mon, 8 Sep 2025 10:00:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,144 +89,96 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 09/21] KVM: selftests: Set up TDX boot code region
-To: Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
- Andrew Jones <ajones@ventanamicro.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Erdem Aktas <erdemaktas@google.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
- <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org
-References: <20250904065453.639610-1-sagis@google.com>
- <20250904065453.639610-10-sagis@google.com>
+Subject: Re: [PATCH v2 19/37] mm/gup: remove record_subpages()
+To: John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org
+Cc: Alexander Potapenko <glider@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
+ Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org,
+ Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
+ Johannes Weiner <hannes@cmpxchg.org>, kasan-dev@googlegroups.com,
+ kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Marco Elver <elver@google.com>, Marek Szyprowski <m.szyprowski@samsung.com>,
+ Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+ Muchun Song <muchun.song@linux.dev>, netdev@vger.kernel.org,
+ Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>,
+ Robin Murphy <robin.murphy@arm.com>, Suren Baghdasaryan <surenb@google.com>,
+ Tejun Heo <tj@kernel.org>, virtualization@lists.linux.dev,
+ Vlastimil Babka <vbabka@suse.cz>, wireguard@lists.zx2c4.com, x86@kernel.org,
+ Zi Yan <ziy@nvidia.com>, Aristeu Rozanski <aris@redhat.com>
+References: <20250901150359.867252-1-david@redhat.com>
+ <20250901150359.867252-20-david@redhat.com>
+ <016307ba-427d-4646-8e4d-1ffefd2c1968@nvidia.com>
+ <85e760cf-b994-40db-8d13-221feee55c60@redhat.com>
+ <0a28adde-acaf-4d55-96ba-c32d6113285f@nvidia.com>
+From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20250904065453.639610-10-sagis@google.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <0a28adde-acaf-4d55-96ba-c32d6113285f@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+>> Roughly, what I am thinking (limiting it to pte+pmd case) about is the
+>> following:
+> 
+> The code below looks much cleaner, that's great!
 
+Great, I (or Aristeu if he has capacity) will clean this all up soon.
 
-On 9/4/2025 2:54 PM, Sagi Shahar wrote:
-> Add memory for TDX boot code in a separate memslot.
->
-> Use virt_map() to get identity map in this memory region to allow for
-> seamless transition from paging disabled to paging enabled code.
->
-> Copy the boot code into the memory region and set up the reset vectors
+-- 
+Cheers
 
-vectors -> vector?
-
-> at this point. While it's possible to separate the memory allocation and
-> boot code initialization into separate functions, having all the
-> calculations for memory size and offsets in one place simplifies the
-> code and avoids duplications.
->
-> Handcode the reset vector as suggested by Sean Christopherson.
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Co-developed-by: Erdem Aktas <erdemaktas@google.com>
-> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-
-> ---
->   tools/testing/selftests/kvm/Makefile.kvm      |  1 +
->   .../selftests/kvm/include/x86/tdx/tdx_util.h  |  2 +
->   .../selftests/kvm/lib/x86/tdx/tdx_util.c      | 54 +++++++++++++++++++
->   3 files changed, 57 insertions(+)
->   create mode 100644 tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
->
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index d11d02e17cc5..52c90f1c0484 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -31,6 +31,7 @@ LIBKVM_x86 += lib/x86/sev.c
->   LIBKVM_x86 += lib/x86/svm.c
->   LIBKVM_x86 += lib/x86/ucall.c
->   LIBKVM_x86 += lib/x86/vmx.c
-> +LIBKVM_x86 += lib/x86/tdx/tdx_util.c
->   LIBKVM_x86 += lib/x86/tdx/td_boot.S
->   
->   LIBKVM_arm64 += lib/arm64/gic.c
-> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> index 286d5e3c24b1..ec05bcd59145 100644
-> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> @@ -11,4 +11,6 @@ static inline bool is_tdx_vm(struct kvm_vm *vm)
->   	return vm->type == KVM_X86_TDX_VM;
->   }
->   
-> +void vm_tdx_setup_boot_code_region(struct kvm_vm *vm);
-> +
->   #endif // SELFTESTS_TDX_TDX_UTIL_H
-> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> new file mode 100644
-> index 000000000000..a1cf12de9d56
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> @@ -0,0 +1,54 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <stdint.h>
-> +
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +#include "tdx/td_boot.h"
-> +#include "tdx/tdx_util.h"
-> +
-> +/* Arbitrarily selected to avoid overlaps with anything else */
-> +#define TD_BOOT_CODE_SLOT	20
-> +
-> +#define X86_RESET_VECTOR	0xfffffff0ul
-> +#define X86_RESET_VECTOR_SIZE	16
-> +
-> +void vm_tdx_setup_boot_code_region(struct kvm_vm *vm)
-> +{
-> +	size_t total_code_size = TD_BOOT_CODE_SIZE + X86_RESET_VECTOR_SIZE;
-> +	vm_paddr_t boot_code_gpa = X86_RESET_VECTOR - TD_BOOT_CODE_SIZE;
-> +	vm_paddr_t alloc_gpa = round_down(boot_code_gpa, PAGE_SIZE);
-> +	size_t nr_pages = DIV_ROUND_UP(total_code_size, PAGE_SIZE);
-> +	vm_paddr_t gpa;
-> +	uint8_t *hva;
-> +
-> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-> +				    alloc_gpa,
-> +				    TD_BOOT_CODE_SLOT, nr_pages,
-> +				    KVM_MEM_GUEST_MEMFD);
-> +
-> +	gpa = vm_phy_pages_alloc(vm, nr_pages, alloc_gpa, TD_BOOT_CODE_SLOT);
-> +	TEST_ASSERT(gpa == alloc_gpa, "Failed vm_phy_pages_alloc\n");
-> +
-> +	virt_map(vm, alloc_gpa, alloc_gpa, nr_pages);
-> +	hva = addr_gpa2hva(vm, boot_code_gpa);
-> +	memcpy(hva, td_boot, TD_BOOT_CODE_SIZE);
-> +
-> +	hva += TD_BOOT_CODE_SIZE;
-> +	TEST_ASSERT(hva == addr_gpa2hva(vm, X86_RESET_VECTOR),
-> +		    "Expected RESET vector at hva 0x%lx, got %lx",
-> +		    (unsigned long)addr_gpa2hva(vm, X86_RESET_VECTOR), (unsigned long)hva);
-> +
-> +	/*
-> +	 * Handcode "JMP rel8" at the RESET vector to jump back to the TD boot
-> +	 * code, as there are only 16 bytes at the RESET vector before RIP will
-> +	 * wrap back to zero.  Insert a trailing int3 so that the vCPU crashes
-> +	 * in case the JMP somehow falls through.  Note!  The target address is
-> +	 * relative to the end of the instruction!
-> +	 */
-> +	TEST_ASSERT(TD_BOOT_CODE_SIZE + 2 <= 128,
-> +		    "TD boot code not addressable by 'JMP rel8'");
-> +	hva[0] = 0xeb;
-> +	hva[1] = 256 - 2 - TD_BOOT_CODE_SIZE;
-> +	hva[2] = 0xcc;
-> +}
+David / dhildenb
 
 
