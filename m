@@ -1,96 +1,98 @@
-Return-Path: <linux-kselftest+bounces-40960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-40961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1129B49480
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 17:58:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0A66B495EF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 18:47:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7639167EC8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 15:57:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC827188447D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 16:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2358B3112D0;
-	Mon,  8 Sep 2025 15:56:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7B7D30F7F5;
+	Mon,  8 Sep 2025 16:47:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UP65rJin"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aRSmTrDx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA2F30F92E;
-	Mon,  8 Sep 2025 15:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5760E30CDB4;
+	Mon,  8 Sep 2025 16:47:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757346960; cv=none; b=TcRZ4e8kc/x+7egJuJSPI1poA4R5n/d/J533Xi4egGEmQvFTJCJQgaU+FqcciMPWkar+VM/fe5bYxObcB2NsjPusIncPf1BDvsxVuiRhEafIzfy/TtuuV7jVr1rvIKuECAULhNRLmrlP7earciumz7s0BB7VMYdT0q4C8r82Fl4=
+	t=1757350050; cv=none; b=bCkw/s2wDbdyLBWwKxLyOnZd8WLp0ViRO/FRZWyrOH+Inmf2uO8gMaLSG3OsTcjZkEOhyErtzqUZUQeWGJniHwH/pM2pybfvv2+zQAUxo2UYhVz3Py9PzV5AujijSetFlD8efNbr6KcXf4jdQ5pqJnUYd6RZ4jNStFuuOTlxTkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757346960; c=relaxed/simple;
-	bh=3QPTwbhduu2dP8D2E7G/tU0gXRTNUJdIG510wmSZlbY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W76HKWiThXoV8Qw7aE7uVMMTGrg5o3/UL09jrkyPd5f3xFyKR+CjOYdG1PLUHVCutj9E5fhVAAdhaD+i4PD2FQjFjzKqRe2i5CMj4LKNczgT7ozB75kq24+3/3arazfrbgIaHhX1ASzRhto+tNM96rdqkF1BdRl+CliGXCYKFsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UP65rJin; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC5EC4CEF1;
-	Mon,  8 Sep 2025 15:55:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757346959;
-	bh=3QPTwbhduu2dP8D2E7G/tU0gXRTNUJdIG510wmSZlbY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UP65rJin/AZ9cx5t+pjQ3qg22tsP5dc4u8R4ai2bBDukl9PkdnM/oZFBtptd0sZSn
-	 EySGVZ2WgWPkq4KLVHcw9JXAZ6lXyNWZYt/yooBIyTQChW6lDaS6CjRNyklPS+coqJ
-	 VMCsG+Bd/6wPWl4eNHWJhgneqc+gNkbOCwikVB0QChmaUN1QNRp9NkybRtYSxvUgGY
-	 81DmdrbB4t0qpG7ZtIKeGq02PTMxIHJVCRJJwHAipeQ0LW4XtK3r5TcDwX5LDkLPsJ
-	 +YbKvjYWUmXDjii8rBV6i55sf3XsUFplKmnx0ovwlPXba+VL5Wt9/2/6oyriaP1SJT
-	 kC37Z5fFpoGeA==
-From: Will Deacon <will@kernel.org>
-To: bagasdotme@gmail.com,
-	Markus.Elfring@web.de,
-	broonie@kernel.org,
-	"Nikola Z. Ivanov" <zlatistiv@gmail.com>
-Cc: catalin.marinas@arm.com,
-	kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	shuah@kernel.org,
-	mark.rutland@arm.com,
-	ebiggers@google.com,
-	martin.petersen@oracle.com,
-	ardb@kernel.org,
-	thiago.bauermann@linaro.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev
-Subject: Re: [PATCH v2] selftests/arm64: Fix grammatical error in string literals
-Date: Mon,  8 Sep 2025 16:55:34 +0100
-Message-Id: <175734463405.156831.1715928321630007279.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250826214913.866695-1-zlatistiv@gmail.com>
-References: <20250826214913.866695-1-zlatistiv@gmail.com>
+	s=arc-20240116; t=1757350050; c=relaxed/simple;
+	bh=lHuXjtnGIwA8Zzr3bT7RPQh03xIe4TvMRJ0gk9Qtcas=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HvhJrUz24KhWjmQ08cXpUiopmj4NdsuMP667wXLwhVVPK0k05mh643Jhpr7DdT2c88wDtmX6lsxAeIZojXKElXDJWKyuHzqQEen5k78yhK/VXlfQ9yRTY9/ZZsiBicYlzx0qJT942LSb7Ur5cclI50vTcFwcpQDX8D+iDekYhLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=aRSmTrDx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D15C4CEF7;
+	Mon,  8 Sep 2025 16:47:28 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aRSmTrDx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1757350043;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lHuXjtnGIwA8Zzr3bT7RPQh03xIe4TvMRJ0gk9Qtcas=;
+	b=aRSmTrDxIs6NpeGo93fkReDvlHN1nyKT78wEVvyAxjkAXAC2k2c3mxuz/bJ82L8IZW1yN6
+	pwkX2HXRtMpvSadVNNy+vTEk636HAjXuttfeyulU58v4gROvgN5dbku8+cv8xe9AeoEtRt
+	vJnlgruF24VRNpNpSmzpwMaYauNKy6E=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 51884059 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Mon, 8 Sep 2025 16:47:23 +0000 (UTC)
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-74382041c9eso3354814a34.3;
+        Mon, 08 Sep 2025 09:47:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU7Pv6YVG7Il5lZNPuFKdPV/ZNth31owx4UkUqYzKhvwZcw/HdKcdTJ8e1HQJSLBka6oWH9bMmomFMm@vger.kernel.org, AJvYcCUOqaYvG5mFXsLXXedQa+gwRe38TOfzwr0BGOcM5aNi7T5uvLIG/AYDllG6P1P/CkcyHl0t4WrQntqOED3h@vger.kernel.org, AJvYcCUigQYViV2GND3DmxJgbv0/kpp7hN2XucT5RTvsIU290xbGLhCrCQqrePRpUgvYBaphjhj72aUzyqrXow==@vger.kernel.org, AJvYcCVJi51fqijkdCF2YA0vAvPR35tRUY5itSeWU0keOGdm+StsUtp76juMOK/fcBwbDbuGr2JH@vger.kernel.org, AJvYcCVMirRgZKwR+bdaHvMMJFGZ985+jekUAe0ChGlJHxgdGaoOFfXzRHcm2xIvO3/Y2mF0BR30gU46jA==@vger.kernel.org, AJvYcCWN3RMpo/RZptUyTpqiam0AEveYrqwi7qyDloDf0JjytbpFdzHIE5ktmF94iAi0LuNUfN5cUCoraOF2rK5czBdi@vger.kernel.org, AJvYcCWiptBKvnbohr2ztuOXCUWOJhi+26Omn+OvyCW5EnqXGuFH1mBl2eAoQIEDv+ndnabc3/tToOu6g6s2Kw==@vger.kernel.org, AJvYcCWqDgHOfdhEr9YjxNlqZ3glhY5p6zS8PDQHcxbabxg4eXkoOTzmeJP/x+L7F8o/ow49oahL+eYz3mFk@vger.kernel.org, AJvYcCXpsnZWMoLrguQns5x81vpEW7ks4lgFtxUVCnB8WHYeLrNvWr76TM++aVDw/T0R6mv8zyNOyC/YIPgXHQ==@vger.kernel.org, AJvYcCXr69qyvZCcDfca7Eo4w+6MzSLcQNn0
+ uVOfkqSQmq9VY6cJXsoopTMmn0qiZNAWjsS+BkCGEuX6@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNpSyF4gzzGVujRQez0aqYHzvcoow35dour5xkma1y0Q5HA7HL
+	RfSAA0s90jFehWKpobcdB063kBKReopAJ6B1YxzYjlH2nNVpRVf+La4DMu3FFxMWugaXKQap5oy
+	BQWd0sE0NNefEHFxWpdaP1oc7XCcUmgM=
+X-Google-Smtp-Source: AGHT+IG1lksSpt4e4b7wpOLuoBOgU4CtzIVFITSYKRy7vIMNnTgG60R226zI8so9rVaf/KD14awSBHuCM8l64s4kZfU=
+X-Received: by 2002:a05:6808:2e4b:b0:438:37eb:62b2 with SMTP id
+ 5614622812f47-43b29b952ffmr4287499b6e.44.1757350039548; Mon, 08 Sep 2025
+ 09:47:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20250821200701.1329277-1-david@redhat.com> <20250821200701.1329277-6-david@redhat.com>
+In-Reply-To: <20250821200701.1329277-6-david@redhat.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date: Mon, 8 Sep 2025 18:47:08 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pO-g4qUUsbF+XZqcPcwfP3-N7AxR+MX6G73adc2-NAkA@mail.gmail.com>
+X-Gm-Features: AS18NWDayNVnEOpkO7Cmy5o2hUWkz6cio8gfE7ZsOxyaASSZD8l09i-KslFVPvE
+Message-ID: <CAHmME9pO-g4qUUsbF+XZqcPcwfP3-N7AxR+MX6G73adc2-NAkA@mail.gmail.com>
+Subject: Re: [PATCH RFC 05/35] wireguard: selftests: remove
+ CONFIG_SPARSEMEM_VMEMMAP=y from qemu kernel config
+To: David Hildenbrand <david@redhat.com>
+Cc: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	Alexander Potapenko <glider@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org, 
+	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev, 
+	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>, 
+	Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com, 
+	kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com, 
+	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org, 
+	linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Marco Elver <elver@google.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
+	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>, 
+	Robin Murphy <robin.murphy@arm.com>, Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>, 
+	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>, wireguard@lists.zx2c4.com, 
+	x86@kernel.org, Zi Yan <ziy@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 27 Aug 2025 00:49:13 +0300, Nikola Z. Ivanov wrote:
-> Fix grammatical error in <past tense verb> + <infinitive>
-> construct related to memory allocation checks.
-> In essence change "Failed to allocated" to "Failed to allocate".
-> 
-> 
-
-Applied to arm64 (for-next/selftests), thanks!
-
-[1/1] selftests/arm64: Fix grammatical error in string literals
-      https://git.kernel.org/arm64/c/14a41628c470
-
-Cheers,
--- 
-Will
-
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+Applied, thanks.
 
