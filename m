@@ -1,427 +1,199 @@
-Return-Path: <linux-kselftest+bounces-41003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48801B49C41
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 23:41:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E070B49C57
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 23:49:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59DD33AC8F9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 21:40:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E64C44E39AB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Sep 2025 21:49:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89EA0322A34;
-	Mon,  8 Sep 2025 21:33:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3340B2E0B48;
+	Mon,  8 Sep 2025 21:49:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="j7KRMTbT"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="ijyvcCdI";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Idw82lCi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A350C322A32;
-	Mon,  8 Sep 2025 21:33:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4760919644B;
+	Mon,  8 Sep 2025 21:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757367230; cv=none; b=h4fX2mgUB2QvI7GegtUPS3kyIOYgnmWVn/69EQllTj8q2JiyZktFPVmDYU+uiKLvG4iRtjecjIGeRTJadKAS288y39FfDCW4NWRlVoejJHPzpPMKEokcImqAAePFKuyqX+ujCMJ/E2f+KY0wUC7OpXtbnVrpLcaVNqs4zJa6arg=
+	t=1757368146; cv=none; b=h9bz93tTk4oE4uu0hMIb8JAje2o4EpHdsIVmQ3AzZWffZd4IOxjh+qxFkwZ16QU6FBPm+Pj+Yjz5rwlxa3nMdJJJBAILXQVw95iW+CARNcmv+2g8HBJVCoNYolFHZJDL1QuGJnexgyD52FcEmneYrOXINaCNnQ5+W14lGw3KmVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757367230; c=relaxed/simple;
-	bh=cWjZ/0tujnxmnc8VcuuOQHPCItl8OhAMSkPsY3SIRCo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SgYi8A5FuxvmoxppEjSemmrKKzkKjIr8ZCkuxHhGmxxVgX61v3t8tv39VWQ/gD2XkTYOuWAyh1XpS82pL/FWmXclbKljm64vxaz0uBuP/9BlF2daDJO8hw7tvKic8O/ijlQqUUs/Up3Py66f67wL7H1zLQmFH+S3JYMQUxEOTkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=j7KRMTbT; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description;
-	bh=YMBiXsmw3+pphIcAsuGv9ZDurAs5Mc73MEcRV/bqKLE=; b=j7KRMTbTSoct2yth0mxl6n/Dun
-	WCgeohzSmkryZCDkKbfYbPpadCGiwb3cn1OZ8JKXD9PrZSkVELmfRJoZdF14k/it9ptGmiCDGkxvn
-	Ivj/q2tQe9VC7ZUOi0D+vl3mPlFncfvjxMIzTGcZs+vq1zLOJOnSI+TsCNgrov6bSSiiWQG6LgNKR
-	y0dZgtqtEX25ZvmtSLD0f25c+w+/ZIy7OYJny/FsDkK94j+xtASkN3C8lmVqu7kjsPbOQloo7qbG9
-	kkUqvhNMXKrDuLGwznjZf+MqBmaMiO156wXKvqLtUgVVOmLkjKXdCeRb0Yq8rrvnrcoYFVMqRrdnx
-	oQvrAHdQ==;
-Received: from griffoul by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uvjUg-0000000DOEe-3ILa;
-	Mon, 08 Sep 2025 21:33:46 +0000
-From: Fred Griffoul <griffoul@infradead.org>
-To: kvm@vger.kernel.org
-Cc: griffoul@gmail.com,
-	Fred Griffoul <fgriffo@amazon.co.uk>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 5/5] KVM: selftests: Add nested VMX APIC cache invalidation test
-Date: Mon,  8 Sep 2025 22:32:30 +0100
-Message-ID: <20250908213241.3189113-6-griffoul@infradead.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250908213241.3189113-1-griffoul@infradead.org>
-References: <20250908213241.3189113-1-griffoul@infradead.org>
+	s=arc-20240116; t=1757368146; c=relaxed/simple;
+	bh=xZwtgP/SMxO4gXjpndSJj3OnJPcQq5Kzza2m2kq/YC8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FwRVzarooIAqydrWxRBQn0BT2GPVFSXTP8893VhmPcoct5IdvMjlXBqXEqsYo9tkKNChMt8pHolwquWFjsn5X8ahuVr9QBnAk0qpiBdO+EvfGw3b6COzN4mMC1O2iTPKQ3hKLe7fzGMSnlPTHGYkDwzE+3kAfEpRGBsre66rGSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=ijyvcCdI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Idw82lCi; arc=none smtp.client-ip=202.12.124.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id E284A7A00B2;
+	Mon,  8 Sep 2025 17:49:01 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Mon, 08 Sep 2025 17:49:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1757368141; x=
+	1757454541; bh=62PV9PUcHNBx3VeoR1lvE5yI4zsYl4Rz5Cp/8QhlRYU=; b=i
+	jyvcCdI2DydQgkTJZJRTCnVufP7BySkuCwAMRRwJ89vEUSdFr08RzB8QlP/XljID
+	yiXwxnUhEw9G4SCIBUToq8HhIwnj+TXtc/gqSxeasFePP5+zOqBNC9szevVzRH+q
+	mxo8vGL430f9W/4i1uSyMTSRlpxCZlow0MiAaDBxXg3yUOVFMk0WgxA+oPFVzV+2
+	pPvHo963OsYL6frYQXBkuNZh2iD3lC2Z6Bu3mxKojt1pMzhyr1JRPhe39xW0e6sm
+	wOZnudT7hsYiP2CTArKp1pfNXil2T0qitOAjPLrMmgsYP+jBPQRV1Ypcsfljv2ty
+	O/r0nb4JXg5oT15LOeoUQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1757368141; x=1757454541; bh=62PV9PUcHNBx3VeoR1lvE5yI4zsYl4Rz5Cp
+	/8QhlRYU=; b=Idw82lCiLKBSUuAl7bxnOKBUKRyVMY5QVJnkZHs6g3w/spwqIgd
+	QaFBPLhAiVYZugtH640jHc6c3zHUgJmjiiZvt4Y8ifJKIFAmxHiJIS95bk5+/5VS
+	T+UogD268hHUAGlTp/DGX2IEUxSVqjfHr0tz5fuSeqI0h4kkQF84h/xNV5SqZRC/
+	e2p6ric5XIUIMNzhfHROUqr8Obt9yC4Zg91DTrnGnrfvOknpYDaW0J4FfLEEicwP
+	UXxLD7CW9BL8iNhrWPOQJRpUwFrjVJVc0a4itmQlQC8lLvoNxeNyZipFxrbZl3z3
+	R0ALNmtla7afgYema2E73TtWA0ChVRXQ6PQ==
+X-ME-Sender: <xms:TU-_aHw62BNmUDVr7nLT1CZpBgtgefnYNMUXyZpAUeOXaxlBHFEwsg>
+    <xme:TU-_aJgBrDa-gpUHa3v8YFu30-nlhNQ9fr-eibpwhcPtMg0fxUOkUMV60rgcHw8l3
+    SBh4fCrxxcac1vEczo>
+X-ME-Received: <xmr:TU-_aGzZ87WENkF6V6HOhZRW3Jejh48TTkWqBJuWXNCDjmqtg-tBzI-_JHIt>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddukeeihecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpefurggsrhhinhgr
+    ucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrihhlrdhnvghtqeenucggtffrrg
+    htthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeegteehgeehieffgfeuvdeuffef
+    gfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepudekpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopehlihhuhhgrnhhgsghinhesghhmrghilhdrtg
+    homhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgt
+    phhtthhopehjvhesjhhvohhssghurhhghhdrnhgvthdprhgtphhtthhopegrnhgurhgvfi
+    donhgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
+    ohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpd
+    hrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghn
+    ihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepjhhirhhisehrvghsnhhulhhlihdruh
+    hs
+X-ME-Proxy: <xmx:TU-_aHy6WfAoRbt-jr2ZyfjZIOOpQp6jUoRhTPyFoltIs8ou__30gA>
+    <xmx:TU-_aApmKshoaxwGdZ6ziamKjb8tY38LfNW83HZgL56QEWlzQNvFlA>
+    <xmx:TU-_aKktqao7-eJxbfy7gjgcDBNKToUjmdrV7lMuzYruFAVNjWMqlw>
+    <xmx:TU-_aJz90FKSpG6RW7dma-84cBltYyc2rprhYhzGU-3EN03YRF4uJA>
+    <xmx:TU-_aCj90on4DFro_qdziXvCreuezMrZAOd4PNiA9iaSbfIyi1VsPbQ6>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 8 Sep 2025 17:49:00 -0400 (EDT)
+Date: Mon, 8 Sep 2025 23:48:58 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ahmed Zaki <ahmed.zaki@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv2 net-next 5/5] selftests/net: add offload checking test
+ for virtual interface
+Message-ID: <aL9PSoTwhn-HFWrH@krikkit>
+References: <20250902072602.361122-1-liuhangbin@gmail.com>
+ <20250902072602.361122-6-liuhangbin@gmail.com>
+ <aLyoEiWnuvQ-5ODz@krikkit>
+ <aL5YamjbZB5gsL30@fedora>
+ <aL6jlYPhsPfDKT8C@krikkit>
+ <aL6soY3gEj-LIovi@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aL6soY3gEj-LIovi@fedora>
 
-From: Fred Griffoul <fgriffo@amazon.co.uk>
+2025-09-08, 10:14:57 +0000, Hangbin Liu wrote:
+> On Mon, Sep 08, 2025 at 11:36:21AM +0200, Sabrina Dubroca wrote:
+> > > The esp-hw-offload is fixed on netdevsim
+> > > 
+> > > # ethtool -k eni0np1 | grep -i esp-hw-offload
+> > > esp-hw-offload: on [fixed]
+> > > 
+> > > There is no way to disable it.
+> > 
+> > I don't think this is intentional. nsim_ipsec_init only adds
+> > NSIM_ESP_FEATURES to ->features but not to ->hw_features, but I think
+> > it was just forgotten. I added a few in 494bd83bb519 ("netdevsim: add
+> > more hw_features"), extending nsim_ipsec_init (and nsim_macsec_init
+> > since I made the same mistake) to also add features to ->hw_features
+> > would make sense to me.
+> 
+> This could be done in another patch.
 
-Introduce selftest to verify nested VMX APIC virtualization page cache
-invalidation and refresh mechanisms for pfncache implementation.
+If it's not needed for this series, sure.
 
-The test exercises the nested VMX APIC cache invalidation path through:
 
-- L2 guest setup: creates a nested environment where L2 accesses the
-  APIC access page that is cached by KVM using pfncache.
+> > > After we add the netdevsim to bond,
+> > > the bond also shows "esp-hw-offload off" as the flag is inherit
+> > > in dev->hw_enc_features, not dev->features.
+> > 
+> > Did you mean dev->hw_features?
+> 
+> No, the xfrm_features in patch 01 updates dev->hw_enc_features, not
+> dev->hw_features.
 
-- Cache invalidation triggers: a separate update thread periodically
-  invalidates the cached pages using either:
-   - madvise(MADV_DONTNEED) to trigger MMU notifications.
-   - vm_mem_region_move() to trigger memslot changes.
+Ok. But hw_enc_features is not the reason ethtool shows
+"esp-hw-offload off". This line is:
 
-The test validates that:
-- L2 can successfully access APIC page before and after invalidation.
-- KVM properly handles cache refresh without guest-visible errors.
-- Both MMU notification and memslot change invalidation paths work
-  correctly.
+	bond_dev->hw_features |= BOND_XFRM_FEATURES;
 
-Signed-off-by: Fred Griffoul <fgriffo@amazon.co.uk>
----
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/x86/vmx_apic_update_test.c  | 302 ++++++++++++++++++
- 2 files changed, 303 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/vmx_apic_update_test.c
+(from bond_setup)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 90f03f00cb04..5d4505c7f6f0 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -136,6 +136,7 @@ TEST_GEN_PROGS_x86 += x86/max_vcpuid_cap_test
- TEST_GEN_PROGS_x86 += x86/triple_fault_event_test
- TEST_GEN_PROGS_x86 += x86/recalc_apic_map_test
- TEST_GEN_PROGS_x86 += x86/aperfmperf_test
-+TEST_GEN_PROGS_x86 += x86/vmx_apic_update_test
- TEST_GEN_PROGS_x86 += access_tracking_perf_test
- TEST_GEN_PROGS_x86 += coalesced_io_test
- TEST_GEN_PROGS_x86 += dirty_log_perf_test
-diff --git a/tools/testing/selftests/kvm/x86/vmx_apic_update_test.c b/tools/testing/selftests/kvm/x86/vmx_apic_update_test.c
-new file mode 100644
-index 000000000000..22f82cf6dd0c
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/vmx_apic_update_test.c
-@@ -0,0 +1,302 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * vmx_apic_update_test
-+ *
-+ * Copyright (C) 2025, mazon.com, Inc. or its affiliates. All Rights Reserved.
-+ *
-+ * Test L2 guest APIC access page writes with concurrent MMU
-+ * notifications and memslot move updates.
-+ */
-+#include <pthread.h>
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "vmx.h"
-+
-+#define VAPIC_GPA	0xc0000000
-+#define VAPIC_SLOT	1
-+
-+#define L2_GUEST_STACK_SIZE 64
-+
-+#define L2_DELAY	(100)
-+
-+static void l2_guest_code(void)
-+{
-+	uint32_t *vapic_addr = (uint32_t *) (VAPIC_GPA + 0x80);
-+
-+	/* Unroll the loop to avoid any compiler side effect */
-+
-+	WRITE_ONCE(*vapic_addr, 1 << 0);
-+	udelay(msecs_to_usecs(L2_DELAY));
-+
-+	WRITE_ONCE(*vapic_addr, 1 << 1);
-+	udelay(msecs_to_usecs(L2_DELAY));
-+
-+	WRITE_ONCE(*vapic_addr, 1 << 2);
-+	udelay(msecs_to_usecs(L2_DELAY));
-+
-+	WRITE_ONCE(*vapic_addr, 1 << 3);
-+	udelay(msecs_to_usecs(L2_DELAY));
-+
-+	WRITE_ONCE(*vapic_addr, 1 << 4);
-+	udelay(msecs_to_usecs(L2_DELAY));
-+
-+	WRITE_ONCE(*vapic_addr, 1 << 5);
-+	udelay(msecs_to_usecs(L2_DELAY));
-+
-+	WRITE_ONCE(*vapic_addr, 1 << 6);
-+	udelay(msecs_to_usecs(L2_DELAY));
-+
-+	WRITE_ONCE(*vapic_addr, 0);
-+	udelay(msecs_to_usecs(L2_DELAY));
-+
-+	/* Exit to L1 */
-+	vmcall();
-+}
-+
-+static void l1_guest_code(struct vmx_pages *vmx_pages)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	uint32_t control, exit_reason;
-+
-+	GUEST_ASSERT(prepare_for_vmx_operation(vmx_pages));
-+	GUEST_ASSERT(load_vmcs(vmx_pages));
-+	prepare_vmcs(vmx_pages, l2_guest_code,
-+		     &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	/* Enable APIC access */
-+	control = vmreadz(CPU_BASED_VM_EXEC_CONTROL);
-+	control |= CPU_BASED_ACTIVATE_SECONDARY_CONTROLS;
-+	vmwrite(CPU_BASED_VM_EXEC_CONTROL, control);
-+	control = vmreadz(SECONDARY_VM_EXEC_CONTROL);
-+	control |= SECONDARY_EXEC_VIRTUALIZE_APIC_ACCESSES;
-+	vmwrite(SECONDARY_VM_EXEC_CONTROL, control);
-+	vmwrite(APIC_ACCESS_ADDR, VAPIC_GPA);
-+
-+	GUEST_SYNC1(0);
-+	GUEST_ASSERT(!vmlaunch());
-+again:
-+	exit_reason = vmreadz(VM_EXIT_REASON);
-+	if (exit_reason == EXIT_REASON_APIC_ACCESS) {
-+		uint64_t guest_rip = vmreadz(GUEST_RIP);
-+		uint64_t instr_len = vmreadz(VM_EXIT_INSTRUCTION_LEN);
-+
-+		vmwrite(GUEST_RIP, guest_rip + instr_len);
-+		GUEST_ASSERT(!vmresume());
-+		goto again;
-+	}
-+
-+	GUEST_SYNC1(exit_reason);
-+	GUEST_ASSERT(exit_reason == EXIT_REASON_VMCALL);
-+	GUEST_DONE();
-+}
-+
-+static const char *progname;
-+static int update_period_ms = L2_DELAY / 4;
-+
-+struct update_control {
-+	pthread_mutex_t mutex;
-+	pthread_cond_t start_cond;
-+	struct kvm_vm *vm;
-+	bool running;
-+	bool started;
-+	int updates;
-+};
-+
-+static void wait_for_start_signal(struct update_control *ctrl)
-+{
-+	pthread_mutex_lock(&ctrl->mutex);
-+	while (!ctrl->started)
-+		pthread_cond_wait(&ctrl->start_cond, &ctrl->mutex);
-+
-+	pthread_mutex_unlock(&ctrl->mutex);
-+	printf("%s: starting update\n", progname);
-+}
-+
-+static bool is_running(struct update_control *ctrl)
-+{
-+	return READ_ONCE(ctrl->running);
-+}
-+
-+static void set_running(struct update_control *ctrl, bool running)
-+{
-+	WRITE_ONCE(ctrl->running, running);
-+}
-+
-+static void signal_thread_start(struct update_control *ctrl)
-+{
-+	pthread_mutex_lock(&ctrl->mutex);
-+	if (!ctrl->started) {
-+		ctrl->started = true;
-+		pthread_cond_signal(&ctrl->start_cond);
-+	}
-+	pthread_mutex_unlock(&ctrl->mutex);
-+}
-+
-+static void *update_madvise(void *arg)
-+{
-+	struct update_control *ctrl = arg;
-+	void *hva;
-+
-+	wait_for_start_signal(ctrl);
-+
-+	hva = addr_gpa2hva(ctrl->vm, VAPIC_GPA);
-+	memset(hva, 0x45, ctrl->vm->page_size);
-+
-+	while (is_running(ctrl)) {
-+		usleep(update_period_ms * 1000);
-+		madvise(hva, ctrl->vm->page_size, MADV_DONTNEED);
-+		ctrl->updates++;
-+	}
-+
-+	return NULL;
-+}
-+
-+static void *update_move_memslot(void *arg)
-+{
-+	struct update_control *ctrl = arg;
-+	uint64_t gpa = VAPIC_GPA;
-+
-+	wait_for_start_signal(ctrl);
-+
-+	while (is_running(ctrl)) {
-+		usleep(update_period_ms * 1000);
-+		gpa += 0x10000;
-+		vm_mem_region_move(ctrl->vm, VAPIC_SLOT, gpa);
-+		ctrl->updates++;
-+	}
-+
-+	return NULL;
-+}
-+
-+static void run(void * (*update)(void *), const char *name)
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	struct vmx_pages *vmx;
-+	struct update_control ctrl;
-+	struct ucall uc;
-+	vm_vaddr_t vmx_pages_gva;
-+	pthread_t update_thread;
-+	bool done = false;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
-+
-+	/* Allocate VMX pages */
-+	vmx = vcpu_alloc_vmx(vm, &vmx_pages_gva);
-+
-+	/* Allocate memory and create VAPIC memslot */
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, VAPIC_GPA,
-+				    VAPIC_SLOT, 1, 0);
-+
-+	/* Allocate guest page table */
-+	virt_map(vm, VAPIC_GPA, VAPIC_GPA, 1);
-+
-+	/* Set up nested EPT */
-+	prepare_eptp(vmx, vm, 0);
-+	nested_map_memslot(vmx, vm, 0);
-+	nested_map_memslot(vmx, vm, VAPIC_SLOT);
-+	nested_map(vmx, vm, VAPIC_GPA, VAPIC_GPA, vm->page_size);
-+
-+	vcpu_args_set(vcpu, 1, vmx_pages_gva);
-+
-+	pthread_mutex_init(&ctrl.mutex, NULL);
-+	pthread_cond_init(&ctrl.start_cond, NULL);
-+	ctrl.vm = vm;
-+	ctrl.running = true;
-+	ctrl.started = false;
-+	ctrl.updates = 0;
-+
-+	pthread_create(&update_thread, NULL, update, &ctrl);
-+
-+	printf("%s: running %s (tsc_khz %lu)\n", progname, name, guest_tsc_khz);
-+
-+	while (!done) {
-+		vcpu_run(vcpu);
-+
-+		switch (vcpu->run->exit_reason) {
-+		case KVM_EXIT_IO:
-+			switch (get_ucall(vcpu, &uc)) {
-+			case UCALL_SYNC:
-+				printf("%s: sync(%ld)\n", progname, uc.args[0]);
-+				if (uc.args[0] == 0)
-+					signal_thread_start(&ctrl);
-+				break;
-+			case UCALL_ABORT:
-+				REPORT_GUEST_ASSERT(uc);
-+				/* NOT REACHED */
-+			case UCALL_DONE:
-+				done = true;
-+				break;
-+			default:
-+				TEST_ASSERT(false, "Unknown ucall %lu", uc.cmd);
-+			}
-+			break;
-+		case KVM_EXIT_MMIO:
-+			/* Handle APIC MMIO access after memslot move */
-+			printf
-+			    ("%s: APIC MMIO access at 0x%llx (memslot move effect)\n",
-+			     progname, vcpu->run->mmio.phys_addr);
-+			break;
-+		default:
-+			TEST_FAIL("%s: Unexpected exit reason: %d (flags 0x%x)",
-+				  progname,
-+				  vcpu->run->exit_reason, vcpu->run->flags);
-+		}
-+	}
-+
-+	set_running(&ctrl, false);
-+	if (!ctrl.started)
-+		signal_thread_start(&ctrl);
-+	pthread_join(update_thread, NULL);
-+	printf("%s: completed with %d updates\n", progname, ctrl.updates);
-+
-+	pthread_mutex_destroy(&ctrl.mutex);
-+	pthread_cond_destroy(&ctrl.start_cond);
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int opt_madvise = 0;
-+	int opt_memslot_move = 0;
-+
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VMX));
-+	TEST_REQUIRE(kvm_cpu_has_ept());
-+
-+	if (argc == 1) {
-+		opt_madvise = 1;
-+		opt_memslot_move = 1;
-+	} else {
-+		int opt;
-+
-+		while ((opt = getopt(argc, argv, "amp:")) != -1) {
-+			switch (opt) {
-+			case 'a':
-+				opt_madvise = 1;
-+				break;
-+			case 'm':
-+				opt_memslot_move = 1;
-+				break;
-+			case 'p':
-+				update_period_ms = atoi(optarg);
-+				break;
-+			default:
-+				exit(1);
-+			}
-+		}
-+	}
-+
-+	TEST_ASSERT(opt_madvise
-+		    || opt_memslot_move, "No update test configured");
-+
-+	progname = argv[0];
-+
-+	if (opt_madvise)
-+		run(update_madvise, "madvise");
-+
-+	if (opt_memslot_move)
-+		run(update_move_memslot, "move memslot");
-+
-+	return 0;
-+}
+> Do you think if we should update dev->hw_features in the
+> patch?
+
+For dev->hw_features (and dev->features) maybe not, since that depends
+on the upper device's features and implementation. I'm not sure we can
+have a common function without changing the behavior on at least one
+type of device.
+
+But maybe ndo_fix_features could use a common
+netdev_fix_features_from_lowers? bond/team/bridge have very similar
+implementations.
+
+> > > It looks the only way to check if bond dev->hw_enc_features has NETIF_F_HW_ESP
+> > > is try set xfrm offload. As
+> > 
+> > Was this test meant to check hw_enc_features?
+> > 
+> > To check hw_enc_features, I think the only way would be sending GSO
+> > packets, since it's only used in those situations.
+> 
+> Oh.. That would make the test complex. Can we ignore this test first?
+
+Ok for me.
+
+> BTW, I'm a bit lost in the callbacks.gso_segment. e.g.
+> 
+> esp4_gso_segment
+>  - xfrm4_outer_mode_gso_segment
+>    - xfrm4_transport_gso_segment
+>      - ops->callbacks.gso_segment
+> 
+> But who calls esp4_gso_segment? I can't find where the features is assigned.
+
+inet_gso_segment via inet_offloads[] (ESP is a L4 proto like UDP etc).
+
 -- 
-2.51.0
-
+Sabrina
 
