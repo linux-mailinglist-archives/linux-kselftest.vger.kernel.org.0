@@ -1,107 +1,174 @@
-Return-Path: <linux-kselftest+bounces-41011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53D30B49F40
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 04:34:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A4E9B49F94
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 04:55:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 066DD4E2924
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 02:34:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B7F01893C7A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 02:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAB3B242D7B;
-	Tue,  9 Sep 2025 02:34:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D012571B3;
+	Tue,  9 Sep 2025 02:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6Ll46oX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SP1mJPVF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DA71531F9;
-	Tue,  9 Sep 2025 02:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6A522A7E4;
+	Tue,  9 Sep 2025 02:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757385289; cv=none; b=UfCsG9f75juKQIVX9OjXvFCzMhJ5UKSWWqjLICxIHwOQ+kz/WSdqd7CY1FHqVXogvaw9mYuB6pLlcmyV131wLSd2/LlZls5MkRW7lTkk1W9EMz2+OvjDn7ZlFtqF0ea/8d/omZmmkQhnVr8ucLD3ivKdLsC8feJo2gaj0p4+sXw=
+	t=1757386501; cv=none; b=f/5/hCTxWfh/+1tV0fYM3a4KrdZjx1scZzAuhe0Ne7HhkWkU2xv5NDcpCsp4x5AmkHcpl+Rk6TQWPURAxhu2HdCjfS9+X3HYLHS58QaHkmZJWjjqCYtvELlQNHZSZmkxUR+1P0yxucuS7SKXwcZOGBzi0JHMUoHDTUblBcgPWks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757385289; c=relaxed/simple;
-	bh=0fxHmtzAUPO1l0AwP428vHiE1jIdrSRMVjS1tUi9cTM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kjul1E1+rsgi4ywycehycA6dvRZNcf2BNkLLZdhCiBu7NIlvumXdb/5ThArk16TIZVAFgGe7RnqhUcTEmjuXPQVUV6MevzrjjIyw2V4kpPD7SzGR72ozFoP6V2KAwB6l5UPElTMHoR8+Dftc3dP83JkUt9FIxNmD2jRkAFMVHJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c6Ll46oX; arc=none smtp.client-ip=209.85.128.54
+	s=arc-20240116; t=1757386501; c=relaxed/simple;
+	bh=SODWK8iRJW+Kd8ixS7tgSWOcjpMFP1OafTXxlBzMwMo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JzsNUd9gwZRwxQsK6QhLwt469GNS0Yul2/t9fujYji2rhn5ihnA+zbv80l1LFC4VxIq7bDc5Sl6tnnnyKMDzMi3FdT9jSRZXHfUkY8VH2iURpQeqs17WwY+J+WljjImoP7NQMcoZ52UoODCx+7/71CwPOdY7uBhv1NEo6LS9Jbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SP1mJPVF; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-45b9853e630so47251645e9.0;
-        Mon, 08 Sep 2025 19:34:47 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b47475cf8ecso3399681a12.0;
+        Mon, 08 Sep 2025 19:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757385286; x=1757990086; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0fxHmtzAUPO1l0AwP428vHiE1jIdrSRMVjS1tUi9cTM=;
-        b=c6Ll46oXL49TxXJ2IGKx8qHofTy1R4bOhuHdSpEzMc7W01d1vjtXNuVkq8Zu1zvf5s
-         09FkdvaxRbflsQ0ZzZxnDoCC35kFn3xr9hlUD7Ye7ijjWhPpExUbhjxlMwqoYhNx61B8
-         /lstWg4Fbc58Hmcvc7OWjkjXZrIS5hnnGwVAVMQV8YsjqPSAFYZh/2n8vofavAeilI6O
-         4cxdv3XWKezH9NFGk9kh9cAsJeuRdg9QloKnyPH7NLn+RZd3Puav+H1K1kkouCV28flJ
-         CN+R6ZC4h5HLlDUK1pD79spZJSYE0D4GeeB0V/ipErsiMp266eQun+yC+mq4ZwaB/Kwq
-         Q5AA==
+        d=gmail.com; s=20230601; t=1757386499; x=1757991299; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=on/vw6koKUQbJCI+KSSCTjkF92ULMha9wVjXRly0E+U=;
+        b=SP1mJPVFagISL+0gIAb/nwa4pcS1J22I1XG47BbfHiMoH1jU58mjIQoohOVjGD/5J1
+         HHeeoy2MzUkBLh9+OdeBTNnWMoqWI9V0UzAx4wtox/fCYI9wKqJycHeWUnBDUv3ipYlT
+         PZb2GXktJPr/JQHtXZriF9H0LQDDi8OzgRWzOyePB1v1HEeznX5duodcCzEfHtfNfgJk
+         WpZkZ1Vu4NqY8Xbz2y+BrVTtUMpHcajQMn+ldKlqq/ueF0DRga9B/LQZLuz+nmzPk7kQ
+         D07OdzFboHVOMCIvHFjLAlmofkNy3W3GlvRzJZb51xgrfuJRITOCHzpoZyG3VDvh5yHt
+         jhAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757385286; x=1757990086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0fxHmtzAUPO1l0AwP428vHiE1jIdrSRMVjS1tUi9cTM=;
-        b=NJ7uyoVWAa1YBZ+ig7UiNZQ6KwpRQhg0clk0+IHTlF8yyFxxpeaMRQsCW6lfEBZ3Vq
-         Qc2colMi3jrQ0XqwdAjSBd66UZDjDOqiKMMBRqqH5WfGmJ2yvKW+8cP0SeHR9HZPT6/z
-         9IX/WYAwDwmGu8HirMxmu3IGzR95Xh+8hOY6nl5HgZ5L5VSrcq2Pm4YGd0nm24lG3pGC
-         pIj+Vee9jVWfFxKrQYhW/JSHx3rdo14uqbWn+hhlnXVO1QNunjxhQZHaHphyKsFgRobY
-         c2riczhMGAlloEY5JlCr9SO3/FH0S4jPIt3ZtngxOyHLv4F9AfX/RridcnlK4P+piJ2c
-         NYZg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoy5LQeA5/VFz+rELVUAsTgpcLMsJaKtUtzqukgJiMKgpG1iynIlK0YC2nwDGVLutSpthG2S9sE/MQRZ7k4A/R@vger.kernel.org, AJvYcCWIebQUBu28x4f/4sGgNk6jelw5YaSfVNIatL0HXNUoUJAGN5V0fNYw+AjrXscfLBP18y7Lb7GbPCkogWfK@vger.kernel.org, AJvYcCWuePFBh8s5jzq06lhrDWJUcD4yiSqkxHy3TGtF2l/1utxonz1JLWfYqVvX7vRHRVGmMxQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzO8bKBWW+yIaaJJp5Fn0TKMSwzQO1sLMaiJRWQQ4PNzNVXUgqv
-	B+M8eJhz1RJwFUxccs9r6Xn/mBao1TsGl6Dle8qIoGYgTReClgdxAy9HboP7FEF8DjXUC+rrAhw
-	/1sm08qnj7SzrT5UHJaMlbHEOnsRTFNU=
-X-Gm-Gg: ASbGnctzbN3ZXf5UiXdAdKJ+QUGdxjhqqPCGjugOcOeEBQQM5YjGYI8mopm83vXXhWd
-	FbxghM1P6UgAOW+6MONKc//naeRMMeD2nBCQWzYhilEzf1UELZRuULn1O4MrTgcsO26qXo7FQl1
-	AhMuRqAYHIym9kFm1z1HyCmeFUv17c9cj778STkUMjjjJcJ8fQgBMovcTQlQ/eTBAnUyZBf/V3Y
-	0g2iUNF6Lc6w0ciSL5Wpr8utN1cixm7lFEj
-X-Google-Smtp-Source: AGHT+IHGzEjNQ78v7147fv8udPqX8mhUgZElxGvZm8XRQmhD/8kiorE11oS+t1rco3nVVQ4BFCP0G5RZCk0mTCwI1Qs=
-X-Received: by 2002:a05:600c:4ed0:b0:45d:e28c:8741 with SMTP id
- 5b1f17b1804b1-45de712289emr40954855e9.29.1757385286149; Mon, 08 Sep 2025
- 19:34:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757386499; x=1757991299;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=on/vw6koKUQbJCI+KSSCTjkF92ULMha9wVjXRly0E+U=;
+        b=SlJqX0JAaGlqN4sy5yBTlTPWoZexZeUujR1sQMQfgOv9fJnublQfnOusw7HNjre5Ze
+         Ho7oxAEsEV6Z2BNEyW2bubn8yEvVX+ce5DuDDTbJ9/IOE4qB5GEckRYRVfmblp5nECGm
+         wtNxxK0yus1y/6FMu3cqA5D3mTpya84UFRbQvkuZw/kk+Ieos+vqIq6RXYRgIhNeVSyq
+         sG1W/vuy3vDHOvtdRPjt4Qm+7wzWYvNSzfuOGxIWTobGqKFn7iQ3/+tc9LuXRsFwus4p
+         QhNRIVWkiofVH2w7pn/ob89wq1loKwXQzuPMvVrjXAQJJ102Oj46Fir26k3Yw1rT9X20
+         d4Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCW5rM0GMjs0W9nuINvHRGImzx72c2ssKOBVzYwtifhuQh2fdYbULQYJS4/0tp7bQEBhGAcPQq8/1dGbiVuwtck=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUItcubQA9KGPwGAMObo7hTkTSG1VwjBURBJRnEwMeR1jln73G
+	Eea/MmFmfqmkgF9Qk3ySn07Mw0oRmv3aBXOc6YvEc5i2yCLMlA+8Sl3J
+X-Gm-Gg: ASbGncu350M5RZp6ItqcDMW/WO+GcrOButHWvA6g+9RIpu/pFKUlFtoBkB9RQlfDdh5
+	3vVt/ATh9+xN+DPN+E6tPaD9BifPj+n0isqOWt2oPtGc00eNX+dj8YeKDIZRcybcGVaSQQm2J8P
+	zkMnmmZpgX1BLwuT+hcQsYXy8DqaeclBA1je5tjKT8rF8ZjFT5PInyVWl68ZeNirj9oEBpCBIrB
+	FAEHDjjfOrjr20nNdRscV/ggavuG0jnTrY84lam33AD2ltoTHWyRuDfx/PUHx7yg+qpjWpkOkna
+	zUXcayJaxHryrd6HCyF3P8CeQwtRf+TJMmgT+7g9+BgEi1XlUvaR9xZZyt6ynWIfAp/B6uN4/IC
+	3rJM+8S0HyvonIqv+nJRHyHIPv+8VJEpQH7upQg==
+X-Google-Smtp-Source: AGHT+IG6fQEprMYRmastVBiiyh6tI+QaloXPCDm6oS/Iuu8O/6MRoczfFOWee08VD0/s5rJFKkaB+w==
+X-Received: by 2002:a17:902:d510:b0:24e:9e47:2327 with SMTP id d9443c01a7336-25170f37b63mr143674305ad.30.1757386499327;
+        Mon, 08 Sep 2025 19:54:59 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24cccba6624sm127708925ad.99.2025.09.08.19.54.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Sep 2025 19:54:58 -0700 (PDT)
+Date: Tue, 9 Sep 2025 02:54:49 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ahmed Zaki <ahmed.zaki@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv2 net-next 5/5] selftests/net: add offload checking test
+ for virtual interface
+Message-ID: <aL-W-YdGWOxgpPar@fedora>
+References: <20250902072602.361122-1-liuhangbin@gmail.com>
+ <20250902072602.361122-6-liuhangbin@gmail.com>
+ <aLyoEiWnuvQ-5ODz@krikkit>
+ <aL5YamjbZB5gsL30@fedora>
+ <aL6jlYPhsPfDKT8C@krikkit>
+ <aL6soY3gEj-LIovi@fedora>
+ <aL9PSoTwhn-HFWrH@krikkit>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909023130.28325-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20250909023130.28325-1-jiayuan.chen@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 8 Sep 2025 19:34:35 -0700
-X-Gm-Features: AS18NWCCrBOMdOF4e5-We_dOqe-bHQ46YfHjAQlm0V4QqSX5SVf48lBh1lZ-6rg
-Message-ID: <CAADnVQKDbNLwbAAreqdjA3eko9MHqCQCVmrghPttvJn=oaskzQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix incorrect array size calculation
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aL9PSoTwhn-HFWrH@krikkit>
 
-On Mon, Sep 8, 2025 at 7:31=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
-> wrote:
->
-> Fix it by using ARRAY_SIZE.
+On Mon, Sep 08, 2025 at 11:48:58PM +0200, Sabrina Dubroca wrote:
+> > > > After we add the netdevsim to bond,
+> > > > the bond also shows "esp-hw-offload off" as the flag is inherit
+> > > > in dev->hw_enc_features, not dev->features.
+> > > 
+> > > Did you mean dev->hw_features?
+> > 
+> > No, the xfrm_features in patch 01 updates dev->hw_enc_features, not
+> > dev->hw_features.
+> 
+> Ok. But hw_enc_features is not the reason ethtool shows
+> "esp-hw-offload off". This line is:
+> 
+> 	bond_dev->hw_features |= BOND_XFRM_FEATURES;
+> 
+> (from bond_setup)
 
-Fix what ?
-The commit log should be clear on its own and shouldn't require
-people clicking through the links.
+Ah, there it is. You remind me that I have a bonding xfrm feature patch
+not posted yet.
 
-pw-bot: cr
+> 
+> > Do you think if we should update dev->hw_features in the
+> > patch?
+> 
+> For dev->hw_features (and dev->features) maybe not, since that depends
+> on the upper device's features and implementation. I'm not sure we can
+> have a common function without changing the behavior on at least one
+> type of device.
+> 
+> But maybe ndo_fix_features could use a common
+> netdev_fix_features_from_lowers? bond/team/bridge have very similar
+> implementations.
+
+Thanks, will add this to my todo list.
+
+> 
+> > > > It looks the only way to check if bond dev->hw_enc_features has NETIF_F_HW_ESP
+> > > > is try set xfrm offload. As
+> > > 
+> > > Was this test meant to check hw_enc_features?
+> > > 
+> > > To check hw_enc_features, I think the only way would be sending GSO
+> > > packets, since it's only used in those situations.
+> > 
+> > Oh.. That would make the test complex. Can we ignore this test first?
+> 
+> Ok for me.
+> 
+> > BTW, I'm a bit lost in the callbacks.gso_segment. e.g.
+> > 
+> > esp4_gso_segment
+> >  - xfrm4_outer_mode_gso_segment
+> >    - xfrm4_transport_gso_segment
+> >      - ops->callbacks.gso_segment
+> > 
+> > But who calls esp4_gso_segment? I can't find where the features is assigned.
+> 
+> inet_gso_segment via inet_offloads[] (ESP is a L4 proto like UDP etc).
+
+Ah, I only saw ipip_gso_segment calls inet_gso_segment, didn't notice
+ipv4_offload_init() also init the callback with inet_gso_segment.
+
+Thanks
+Hangbin
 
