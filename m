@@ -1,96 +1,113 @@
-Return-Path: <linux-kselftest+bounces-41009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 712A7B49EEB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 04:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E6BFDB49F3D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 04:32:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B7523BFB79
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 02:02:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 708744428FF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 02:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A09D227599;
-	Tue,  9 Sep 2025 02:02:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BFC624468C;
+	Tue,  9 Sep 2025 02:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="bQfHnx6f"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="a37qJk+G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E2E1F4C8C;
-	Tue,  9 Sep 2025 02:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7DB1A8F97;
+	Tue,  9 Sep 2025 02:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757383370; cv=none; b=SeXvvaZ+7KAXqg4AXB718ftjpMVpzSWe0wjo9XLsi174wDptrH1iYsc82n/+VcFWUheefH2cdQkhYD2jd5CkF6LaY7ntRjTFtRjulqvJw/xGF8rJdEK+IMeENF2dbZHdZxcA1KRVmn7joGUOrjXaBern0kerpko9RYrXPkYEhrc=
+	t=1757385114; cv=none; b=jcx8rnXvubMLgG8GXEhPYY7NA5SX2TfOSaVtB3uNzPqMdYel3roWr2ieeUQs/huK8fczBlvF9eTvDHmk9MlzVHO5zY3XmfUZv8UCJ9JFS+pgVKzIIPa0GzDylgKtfByK0wR3E+tgTkRgMuamumZD6BqE3EyoK6fJPIdTPLE3MWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757383370; c=relaxed/simple;
-	bh=c5J+iIMRm2kgguzDoOwH0NIHbsCxHv+R42DDyiYg0Pw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=YhIWvCrNJWgDtQZ0m1YydL7mLi15GQ2SPETDbjG4OZpznbY8x5bN9kpLy3bWj5Vyyq699OhftgNarBrtNUGlrAUWNvjBfVY4T9zHkYqXzfH2BO9pb+mXVTYOWzsJQwZ9dUU0pBPfEoJ5al9I0rPYyvyTaq4zqLqtbiwB6+yuypM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=bQfHnx6f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66513C4CEF1;
-	Tue,  9 Sep 2025 02:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1757383369;
-	bh=c5J+iIMRm2kgguzDoOwH0NIHbsCxHv+R42DDyiYg0Pw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bQfHnx6f4Rd++MMzXx4qgIhsJbsEpEKKQX2LoB8hcv1eLKSTsJqoO+P48jWA6fUbX
-	 SWVr0MltkJjI4H5jIHt+/3pA6qiaZIF3x2v6qK45wR7zPmJXe+TmYgIRT7CEz0Y0Va
-	 pg7E8qshmdjwufRFKKCZ/NnlQVRVbE7TImnvZdxQ=
-Date: Mon, 8 Sep 2025 19:02:48 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Dev Jain <dev.jain@arm.com>
-Cc: david@redhat.com, shuah@kernel.org, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, npache@redhat.com,
- ryan.roberts@arm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] selftests/mm: uffd-stress fixes
-Message-Id: <20250908190248.d2d6de27715fefc4e89afb10@linux-foundation.org>
-In-Reply-To: <1634f29f-81a6-46f7-86d4-c9eac953d4f1@arm.com>
-References: <20250826070705.53841-1-dev.jain@arm.com>
-	<1634f29f-81a6-46f7-86d4-c9eac953d4f1@arm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1757385114; c=relaxed/simple;
+	bh=voIwO7aB55DFEwbmZ9+P0CiskzmhgCldk/xu8wyh4rc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o72KvHscDSy5hThy6EAXkr7p8DthSUYCeC+n7QShHdAY3w3pjAVlFLZ9p63PDXwa84JyWMQQH/Y6FDpH9nAxvcYKIpE59EMZamHiZNOvGg1OKRMMdnypflrpwIHr+EQq1EiTUeqahpbZ4W/MZs3mhSNO7gauWdZnbwFJsnEcU2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=a37qJk+G; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1757385109;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WweqMmyOHEemYumtjGpzECw+a4p1s0bPOHN7VW0FAYQ=;
+	b=a37qJk+GX00b+p+R4Pc8WBlLLIJbAZwzFVV9VOenmKfhjH/CkZw2JEW0lPE8OVuKlVM/g2
+	PVjtltxw5Z1LHp4IdCI1x6TPgxjGh/sxkzQJMj3ymqBcFdf1rZwQtzp0KjG24zPnNr6Q11
+	9xCnlrrRkEZX96CrsgDMN4XhIDpCQRM=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: jiayuan.chen@linux.dev
+Cc: Dan Carpenter <dan.carpenter@linaro.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/bpf: Fix incorrect array size calculation
+Date: Tue,  9 Sep 2025 10:31:12 +0800
+Message-ID: <20250909023130.28325-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 8 Sep 2025 13:52:05 +0530 Dev Jain <dev.jain@arm.com> wrote:
+Fix it by using ARRAY_SIZE.
 
-> 
-> On 26/08/25 12:37 pm, Dev Jain wrote:
-> > This patchset ensures that the number of hugepages is correctly set in the
-> > system so that the uffd-stress test does not fail due to the racy nature of
-> > the test. Patch 1 corrects the hugepage constraint in the run_vmtests.sh
-> > script, whereas patch 2 corrects the constraint in the test itself.
-> >
-> > Dev Jain (2):
-> >    selftests/mm/uffd-stress: Make test operate on less hugetlb memory
-> >    selftests/mm/uffd-stress: Stricten constraint on free hugepages before
-> >      the test
-> >
-> >   tools/testing/selftests/mm/run_vmtests.sh | 2 +-
-> >   tools/testing/selftests/mm/uffd-stress.c  | 2 +-
-> >   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> Hi Andrew,
-> 
-> I wanted to make a v2 of this series to replace 10 with min(32, nrcpus - 1)
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/bpf/aLqfWuRR9R_KTe5e@stanley.mountain/
+---
+ tools/testing/selftests/bpf/benchs/bench_sockmap.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-That sounds line a one-line change?  Send a one-line change ;)
+diff --git a/tools/testing/selftests/bpf/benchs/bench_sockmap.c b/tools/testing/selftests/bpf/benchs/bench_sockmap.c
+index 8ebf563a67a2..cfc072aa7fff 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_sockmap.c
++++ b/tools/testing/selftests/bpf/benchs/bench_sockmap.c
+@@ -10,6 +10,7 @@
+ #include <argp.h>
+ #include "bench.h"
+ #include "bench_sockmap_prog.skel.h"
++#include "bpf_util.h"
+ 
+ #define FILE_SIZE (128 * 1024)
+ #define DATA_REPEAT_SIZE 10
+@@ -124,8 +125,8 @@ static void bench_sockmap_prog_destroy(void)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < sizeof(ctx.fds); i++) {
+-		if (ctx.fds[0] > 0)
++	for (i = 0; i < ARRAY_SIZE(ctx.fds); i++) {
++		if (ctx.fds[i] > 0)
+ 			close(ctx.fds[i]);
+ 	}
+ 
 
-> (see computation of nr_parallel in uffd-stress.c) but I see that it has
-> been pulled into mm-new, and on top of that, the following patch makes
-> things complicated to just revert my commits in mm-new and make v2 on top of that -
-> https://lore.kernel.org/all/20250830033424.8C44FC4CEF0@smtp.kernel.org/
-> 
-> So shall I just send a new separate patch based off mm-new?
+base-commit: 60ef54156148ffaa719845bc5b1fdeafa67763fc
+-- 
+2.43.0
 
-Or just resend the whole series based on mainline or something?
 
