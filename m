@@ -1,139 +1,207 @@
-Return-Path: <linux-kselftest+bounces-41037-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7B50B4A64F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 11:01:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D89C9B4A5FF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 10:53:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 930F73A62DE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 09:00:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B11716712F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 08:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16BF32773F4;
-	Tue,  9 Sep 2025 09:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00691274650;
+	Tue,  9 Sep 2025 08:53:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U/WezDBF"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="RHV8byxJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2070.outbound.protection.outlook.com [40.107.212.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3BE246335;
-	Tue,  9 Sep 2025 09:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757408408; cv=none; b=i6v1ZdxDPKDwJVCwO2ZfFK85R59xX7t2NGViyqtR22w7Iv0wamPaDI6uXLuIqfy/cuRSsEgxI/h7EXPU+WLDcYXRxpyS50XjwGfnUpUq5qKwI6+RAmsojfrI2CSs32WsQcpg5kn/xeOjRgXU64l9UxFWOveuW2lJu0BlsFBg3kc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757408408; c=relaxed/simple;
-	bh=aFSUmCti6MLTcqlgBbhF05M3cBauzcyYGq99VlvOS14=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
-	 MIME-Version:Content-Type; b=PsHfGZ1Ldy7ppZ3DP94OHY5WF84Xwa2r7qiSq1CIctW5YOhvFO3246xQCws6EhTyeslb3QqEaayVxFBoBvCFAVPToh9ZS1n2dCCCm26vueaNv+TFYi1+A6m8bEPjk0cuuvrSUPMkgQpCrA5qWOJNzMCOLlnznfo1/ycJDvg7vuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U/WezDBF; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-45df0cde41bso2109395e9.3;
-        Tue, 09 Sep 2025 02:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757408404; x=1758013204; darn=vger.kernel.org;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2iATGGckum8OfAaFEr19Bj8rW51tZDxYm72q6WM1MEA=;
-        b=U/WezDBFrg3etBTmZiSynRRgOiqCSS2cJD9DhdII6LTeT2IBu8xCS3aaUj65ZBMXlI
-         Z26jOCdPmUmq8fv0HrVr/uOjkGe5ruB4ouDV+MgRFUQdIOrGTB4/q6QyOWz9H4nORCp8
-         rGK6t31Wt8k+HGC3Z778CI2KkWMnPaHxXIYLQd1dQI6+iwSWoR9yGOlkKCm+qZ6gpvH5
-         jgaWMShYKGMqzSmfr2YGoc4kksFMSgAcC8xObFNGBAh1dToiI1c/VwY7psEM31fEcVQN
-         gYL1w55mbfqacGZRjXjMvptPY4wQTY50shLqskmYwXWyydt/1lBLPnMvVcaTHMwZIg6F
-         UUCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757408404; x=1758013204;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2iATGGckum8OfAaFEr19Bj8rW51tZDxYm72q6WM1MEA=;
-        b=kICHzJ4iSsgkdJzaXI6p5CM3FgpVfRvIPoK8nOmXisZWup4eDU/ZTi4OzHS6uRo+Li
-         m3095Ah0FRbD0d+IxjpDVxqwnLRfKnDMsQv43Qc0bqeV5dsXsO+EqxhSg5mqSlmR8U7V
-         dKCRUau1muF14xsykaWwl1035RWsTW7IRv4V/jh5Umvnt4QPyWt+bGNjU1xsp97rxlh3
-         fj1QvY2xGhmXaMXXdsDCMGJJc8xXTawbu4Iozizm+Dl6NTSZUbx/TtvZ6HnQufq3u6p1
-         6wgQ9j6UtiDXKQ91ZKyL6Y4mKmaZNmuuSGGJIVd00+ZGPw0w9cOtSPaze+RoliebR/8m
-         Ba4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUUtUFaDP5+MZ9VgUxw4hiPym1HYGCsvzXwvX0TkftC9WOLGrb2XgJ2EI6QCk+EY123hEurqu+q@vger.kernel.org, AJvYcCV+S6KKug1uXm0SZVz06pbdR1I3vzTTPtb7sP7aLyZqxHYL15ebj47K8iR1A2zMasDhCUtN+R8/JZI=@vger.kernel.org, AJvYcCVx1kxi6KRV3xfBigFFzuTC56J+JO3gjBF8lSHHpDbAVq6HghcHW4CtDg9NEldMOodfaV3bK5CyR66mAEGU@vger.kernel.org, AJvYcCWqnf6WP9jbH2sTij8XAEa/6/x/aAysro/F15vs+K+MTGqwFrU+FzBgVvVwvDT0bOIUDDY3AZ4LpyVqV6pGbnfc@vger.kernel.org, AJvYcCXRyU2tT+sKQyJy2b6Z5IzzDnSVHUjyb5O5oh31tHb05HNJ7FdIbeSzWEp8gZyg/v5RE32x8yWN@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUmn8NxYBnC1iU5r6vCKeadQmkxPmuDi/o4rFZ40ADBVMjZPMz
-	/7mIhtvP2PZas2f+gbQAcgVbElw+boLvMCKh0WmHTuJO08xQa8rjW+ja8oZ3DRB/8LA=
-X-Gm-Gg: ASbGncvTh80qvvRpZ/eMbkcu1MrI7WiJoCJd1IwFGoFAI7hMSj5KjYqcJ2QqKC1aP9z
-	t7wJ8xF0BVrR4h3QDnj1701Ev2j8GlVX5mdjCOG0n9DSsS/eQldjk5vOnbVYhQmNNBVmxrrmJI0
-	8r5mbIH73CHvU0npR9PXNVUikG8UwviPzvDQLRqwvVAA6t8dC2OibnxcXjvsvfO4CjYvKwglOxR
-	C43A5GyMb0F9sverrol4vxans2cTlU5pmscH0W8lyYe9pYdsbJ7H7pM0OY+JZXrE7HKBzmdJDG7
-	Zc973sEXAw9IlAicASdziKNBPCl9td+kfgd2GJuTMSNVRJEAWyKV9euKi/jy4A1tCQKmNtfq1UH
-	WhgVi8ZfU8Ra48oySlYuV256HZoUhn/5KZA==
-X-Google-Smtp-Source: AGHT+IHi9nXrfKJGYALDvRRmSRzYypfCt5Kl/21MQbCCiY/bILW7ZiySngyv35dAVzFjI0zhrcNddA==
-X-Received: by 2002:a05:600c:1389:b0:45c:b580:f795 with SMTP id 5b1f17b1804b1-45dddedf80fmr83035805e9.34.1757408403794;
-        Tue, 09 Sep 2025 02:00:03 -0700 (PDT)
-Received: from imac ([2a02:8010:60a0:0:837:bf58:2f3c:aa2c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b7e92a42asm477565115e9.20.2025.09.09.02.00.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 02:00:03 -0700 (PDT)
-From: Donald Hunter <donald.hunter@gmail.com>
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: Mat Martineau <martineau@kernel.org>,  Geliang Tang
- <geliang@kernel.org>,  "David S. Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
- Abeni <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Davide
- Caratti <dcaratti@redhat.com>,  Jonathan Corbet <corbet@lwn.net>,  Shuah
- Khan <shuah@kernel.org>,  netdev@vger.kernel.org,  mptcp@lists.linux.dev,
-  linux-kernel@vger.kernel.org,  linux-doc@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  stable@vger.kernel.org
-Subject: Re: [PATCH net 1/3] netlink: specs: mptcp: fix if-idx attribute type
-In-Reply-To: <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-1-5f2168a66079@kernel.org>
-Date: Tue, 09 Sep 2025 09:44:40 +0100
-Message-ID: <m2plc0ui9z.fsf@gmail.com>
-References: <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-0-5f2168a66079@kernel.org>
-	<20250908-net-mptcp-misc-fixes-6-17-rc5-v1-1-5f2168a66079@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AFE3FFD;
+	Tue,  9 Sep 2025 08:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757407980; cv=fail; b=mP0qTjU38IOEQ887KpmQqleakiX7i3viPiJdDRGPP124cPug51vbDUPcw3OF4/IycBFqJwPqAuOJ0oB4OYWd+obdPbVLmRtCFdAWZE3c7QefjZ1qjEDnidyo0BhTTzIwWlgSNdOcqX84yEx0flv/JN8zy2z9Vjix8/YvMlsKR18=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757407980; c=relaxed/simple;
+	bh=SvMZtN5gwc7dlVNTPbxRNXYCvnevsJ9XhRQM6Ft0D1Y=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XqzYgd8oKijsyw9U6oXRgLpaF0cRkizdUPBWaD5Z+U+rNdxwn5tnS4I/TU5ehoVV30sWi9S3hQtFYHVWzyWJjzaqWgzvdOUA29mX9rJOiLqE6fqXJc2YPvO7FfV7ZHoL7nMTHpPShKI4uHAFg23kIAn3EeEw5jdjq8Qtgkt8NNo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=RHV8byxJ; arc=fail smtp.client-ip=40.107.212.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Kc5cyLKg+fb5Nw6waraSEqBqHqzuxol5ySo3U43UlxfECEvMr+o+6Bz++5/lDjqWOBk6H/KBdjqFK4LbPn0QKNy8D6PE9iRR94RzhR2Qj4iwXNkID8/Mq0I8FYoHpOWHhPFIKjae3EbkXEXDD2UT9q70hlxfRzKlRtXCQS6Y4rlqcj4nObej5zAhrBBrnDcYOE0iP+UziqXnKrD+veOUu4AYeLC8gvTa3aK8lT8s8+krhZSKf9QYJ7GO4DYYvHlvdVGuAWpKWYS47rB/ctnOt3/uBUFHHr2Z5A8OSPEG7HcRBqHN9Y47iSxRJcGRULiOceYHf4qdsJ5FR8joPaCcbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=elSaF+0E5ZJoPT15/fSkcURP0h+DIbnGSdobXWMcR3w=;
+ b=M8NCPkqrt+iITcVWnUZEKiN4t1IdeJcc+vM1QzNVFp0DQZbuilPrcsBJ0uaOi8e+SMG/CfFUhWr2+2vkhgM+OlrKHj40Z8Z31BSZSa6QKlhRq/e7sJv+SYH9Wzeo6PuELA016NsBSOeY3qgpS6CrykupccCoGpedk6kgWJS3Cx6AinP1BBEDhdP75tZ5K1Oc1ZC9mS7sYpGrdus7oMmUZHlasx+1Q3yIxL6ikwYHp0WM6e6KhOGwGmcHI/J1EgdoLO/UFZMIUs1J8Ub7P7Y3DTRR66GW3qYEDqg7LG/Ijwf1DwkgODvpfEe424POiYtXHfAE8DDxZ+BLmhLVghIO0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=elSaF+0E5ZJoPT15/fSkcURP0h+DIbnGSdobXWMcR3w=;
+ b=RHV8byxJ7LiTRs5khl140nLirU4PYseevDu/kZqjALQ5DEgvIDNYn0Bsl5gl1uecUWa13TS0gDKeeN4u1A8l3dmlsxHHpbBAMpxvQB6dG17HE0H92lphfb5W0lDaS+LrovTyuD5WvfvncqVoDUURncwEZhJ8iTR2OXwzBsZKRxcSOHhsRNGyOlZ8PO6U2mckSfFVv11VbCGk1RoW5J8Lmkk9Ml7hc4+4R022WeCiYBpl7joVjpTZuxH2PGJdA9v7YALbWv74YKpby0B4yxNPw1TslG7mg5+p7sPqbXwEe3dvOL81Hlk/CnBBHKsL2W1KHb+TTCyBHhUhuQ4W4rElTQ==
+Received: from BN9PR03CA0561.namprd03.prod.outlook.com (2603:10b6:408:138::26)
+ by SJ2PR12MB7821.namprd12.prod.outlook.com (2603:10b6:a03:4d2::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Tue, 9 Sep
+ 2025 08:52:53 +0000
+Received: from BN1PEPF00004687.namprd05.prod.outlook.com
+ (2603:10b6:408:138:cafe::ba) by BN9PR03CA0561.outlook.office365.com
+ (2603:10b6:408:138::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9094.22 via Frontend Transport; Tue,
+ 9 Sep 2025 08:52:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BN1PEPF00004687.mail.protection.outlook.com (10.167.243.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9115.13 via Frontend Transport; Tue, 9 Sep 2025 08:52:51 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Tue, 9 Sep
+ 2025 01:52:36 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Tue, 9 Sep 2025 01:52:35 -0700
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Tue, 9 Sep 2025 01:52:31 -0700
+From: Nimrod Oren <noren@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
+	<shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>
+CC: Dragos Tatulea <dtatulea@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
+	Carolina Jubran <cjubran@nvidia.com>, <netdev@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>, Nimrod Oren <noren@nvidia.com>
+Subject: [PATCH RFC net-next 0/5] selftests: drv-net: Convert XDP program to bpf_dynptr
+Date: Tue, 9 Sep 2025 11:52:31 +0300
+Message-ID: <20250909085236.2234306-1-noren@nvidia.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004687:EE_|SJ2PR12MB7821:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec681cf5-e896-40eb-8540-08ddef7e429b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700013|82310400026|13003099007|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Kuh5kBgbu5Zj4kfe+hMErNlqGNDr19QcTwucCBFJPhTxkGYFk1U4WDCm6kqp?=
+ =?us-ascii?Q?nGrrRcNa1dwKXE+N+ATlDAKSgIB6/tfQle5auwE9QBINWQqVL96noE+t4MKk?=
+ =?us-ascii?Q?s0dx2ikHCXxLo767gFDebRp650IBJCQFyyUpKA7BZP0UJ8UPaa27E2BPmF7S?=
+ =?us-ascii?Q?UbXbyvTB3+YRsby5RU2XULHA7yAH/znwSeTK8+xy5i9R3QdoY6jbcmEj+D7c?=
+ =?us-ascii?Q?PUlxxgOra8Z5fcNfK7UZTXzZ19FD0mjR0ghhPr6aw9IhUV4LuXoJbKOCL0jl?=
+ =?us-ascii?Q?qSjzfQfu0YzU2iEuEuo9O+KnXQ2GD6zIos2iFrXfS1RWyejSQgl8JKhcQGlE?=
+ =?us-ascii?Q?GywI/RNPXvAluBUYudLM0lLcpilQKr8pZnY9p9n4MCLoY7RfjUYyQ7O02tWk?=
+ =?us-ascii?Q?E11e38shar2pSiyN0EYaRAeJufFmZ2tjULT4NMM7Z7AXMZ2aXifdPRpUzUAi?=
+ =?us-ascii?Q?3IyZ98sFmQ135zm9N8J05DBYwAungGaucj6nM+ynGosFOA0KlCpqtV+5DT2c?=
+ =?us-ascii?Q?z0tXQaC0k8/VL8Nlm51q92qlogwJexpCTYmJ2UnHMpA/vhDN6wxIpG9LFZMX?=
+ =?us-ascii?Q?YHKHO+RVbEUY1djOlBAp9PTlWYvIvfXN9ittvda7y0SzGtxThkZxtm/SPb+j?=
+ =?us-ascii?Q?QfDYF0GvbQNH8ZdvV3Urap0hXPDo8qjZNckX2pbc0E1qRc9+m+zo5Udy5nUj?=
+ =?us-ascii?Q?18narPDTjM0wu5inMNWDpc/BxwitHoXASkrsMtTXXwKubucY9QYKDnYdNtA1?=
+ =?us-ascii?Q?g3jIlTugfVyH8TTtJR4d5nkrop71aOIVOaTp7o5QoiMH1fTU9ez5REXy94jL?=
+ =?us-ascii?Q?vy7XGOoY9LhafvGyJO4notfDfXOl0jGTW9eJ7kH4onDJRG0OgX/Tuk6v+iO9?=
+ =?us-ascii?Q?UbpeH5yoZ6jaiadI5EJKYiY1ENZOWda5qiTGqFYufnbhbbuLeEQV/XMYYrNZ?=
+ =?us-ascii?Q?6J40bsM7kuObqcibRHP+5m4N1rp7vAxINaFPddiHZ6GP95vhgImaDGA/bAT8?=
+ =?us-ascii?Q?UlNff2yld2cDoVTFN/QJa0xWWaKto4+atLWzuJE9cCgYdsAZwFm6DsdXoKeb?=
+ =?us-ascii?Q?ES8hhyj2DQak15QaTOBCiZINlw0ISAz2JJ8JqMtiwE6Fwh5XaySp8+vbUj4l?=
+ =?us-ascii?Q?h1CQelYk5c/Ro+f2fyGB0Z+f3Y3oNPnGjBODIXBxPmO9AX00M1gdFXk517hB?=
+ =?us-ascii?Q?eyuHFlUDxs+je7GINSPNAteS781pEjNHY07u97bosiJx6vvqAd87kbwVJNHR?=
+ =?us-ascii?Q?2Yp45uh9sTJny6+TDm6JCcGdPb4bWHef3gO2mH/2fYPyqHUFpqVi41693X0x?=
+ =?us-ascii?Q?CfJAIBOfr18KlMuGuJJhEmIc0zb7F3AaSKZCJZHT9OKSLdkIaIskCo2kHlHA?=
+ =?us-ascii?Q?znQOLW7DV6qhXNJ5LkkttRNtlarKmS2wKRoh/IczjZrdF/bYtcXk3VDlkHst?=
+ =?us-ascii?Q?EsmFZIpFzq6UkJKMZ/wOguKjj5si9bG4Kj+Vl1XqGqjLNtQS7vZ7YDhtscK3?=
+ =?us-ascii?Q?APHx5Bk81Kef5Wiql2v0OswX0DwZ5NJdfOvOEyNO1F3A8HjS+tlKDzwC1Q?=
+ =?us-ascii?Q?=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700013)(82310400026)(13003099007)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2025 08:52:51.7202
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec681cf5-e896-40eb-8540-08ddef7e429b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004687.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7821
 
-"Matthieu Baerts (NGI0)" <matttbe@kernel.org> writes:
+Hi all,
 
-> This attribute is used as a signed number in the code in pm_netlink.c:
->
->   nla_put_s32(skb, MPTCP_ATTR_IF_IDX, ssk->sk_bound_dev_if))
->
-> The specs should then reflect that. Note that other 'if-idx' attributes
-> from the same .yaml file use a signed number as well.
+This series updates the drv-net XDP program used by the new xdp.py selftest
+to use the bpf_dynptr APIs for packet access.
 
-Note that mptcp_pm_parse_entry has this, which should maybe be fixed at
-the same time:
+The selftest itself is unchanged.
 
-	u32 val = nla_get_s32(tb[MPTCP_PM_ADDR_ATTR_IF_IDX]);
+The original program accessed packet headers directly via
+ctx->data/data_end, implicitly assuming headers are always in the linear
+region. That assumption is incorrect for multi-buffer XDP and does not
+hold across all drivers. For example, mlx5 with striding RQ can leave the
+linear area empty, causing the multi-buffer cases to fail.
 
+Switching to bpf_xdp_load/store_bytes would work but always incurs copies.
+Instead, this series adopts bpf_dynptr, which provides safe,
+verifier-checked access across both linear and fragmented areas while
+avoiding copies.
 
-https://elixir.bootlin.com/linux/v6.16.5/source/net/mptcp/pm_netlink.c#L116
+Amery Hung has also proposed a series [1] that addresses the same issues in
+the program, but through the use of bpf_xdp_pull_data. My series is not
+intended as a replacement for that work, but rather as an exploration of
+another viable solution, each of which may be preferable under different
+circumstances.
 
->
-> Fixes: bc8aeb2045e2 ("Documentation: netlink: add a YAML spec for mptcp")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Geliang Tang <geliang@kernel.org>
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> ---
->  Documentation/netlink/specs/mptcp_pm.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/netlink/specs/mptcp_pm.yaml b/Documentation/netlink/specs/mptcp_pm.yaml
-> index 02f1ddcfbf1cfd81a398dd03c52bb9f281c1aa08..d15335684ec3d6256505f2b3887ce5818eb57462 100644
-> --- a/Documentation/netlink/specs/mptcp_pm.yaml
-> +++ b/Documentation/netlink/specs/mptcp_pm.yaml
-> @@ -256,7 +256,7 @@ attribute-sets:
->          type: u32
->        -
->          name: if-idx
-> -        type: u32
-> +        type: s32
->        -
->          name: reset-reason
->          type: u32
+In cases where the program does not return XDP_PASS, I believe dynptr has
+an advantage since it avoids an extra copy. Conversely, when the program
+returns XDP_PASS, bpf_xdp_pull_data may be preferable, as the copy will
+be performed in any case during skb creation.
+
+It may make sense to split the work into two separate programs, allowing us
+to test both solutions independently. Alternatively, we can consider a
+combined approach, where the more fitting solution is applied for each use
+case. I welcome feedback on which direction would be most useful.
+
+[1] https://lore.kernel.org/all/20250905173352.3759457-1-ameryhung@gmail.com/
+
+Thanks!
+Nimrod
+
+Nimrod Oren (5):
+  selftests: drv-net: Test XDP_TX with bpf_dynptr
+  selftests: drv-net: Test XDP tail adjustment with bpf_dynptr
+  selftests: drv-net: Test XDP head adjustment with bpf_dynptr
+  selftests: drv-net: Adjust XDP header data with bpf_dynptr
+  selftests: drv-net: Check XDP header data with bpf_dynptr
+
+ .../selftests/net/lib/xdp_native.bpf.c        | 219 ++++++++----------
+ 1 file changed, 96 insertions(+), 123 deletions(-)
+
+-- 
+2.45.0
+
 
