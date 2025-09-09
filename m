@@ -1,102 +1,84 @@
-Return-Path: <linux-kselftest+bounces-41039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C26CB4A7D9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 11:29:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69CE4B4A7F6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 11:32:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 408A27A7897
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 09:27:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 948304E71F7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 09:32:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F935284B35;
-	Tue,  9 Sep 2025 09:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 520082D0298;
+	Tue,  9 Sep 2025 09:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ojklGqLn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g6CQuOTf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE75278772;
-	Tue,  9 Sep 2025 09:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2838E2C374B;
+	Tue,  9 Sep 2025 09:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757409606; cv=none; b=PMC1IogAq1Wf4kj9ytHPkDbfDm4rniUJCGQM6zInU5IzjV1hQJEjdn0VhnbVpcYs1yEQFllss735cI34yAuQFH9SHHf9EVrAaU+vApV27YevZBxXYHJefoiQ49otdFvJgDFHgkhjtP4DGKQhNj5rR+P5VlbPhwUXAHJ/SXOg/fg=
+	t=1757409886; cv=none; b=DhX4mAFzMZIYapxI4nqP1pa0ZMUEDk0AdrY0A2avypTyjLP/rZFDN6cWFjnbczK+knRp5OZ94+01yb6GZSaWrlCX6NiEjVYBxnRLtZiC7WtlVJG9VpsOy48NC/ZIHC9NN8EhncDapnc5n60EnJuYkAgY8KHua4kG/ALmGb9Q64Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757409606; c=relaxed/simple;
-	bh=WfssuOqMXQC41TqaU9sewZ6QWPeMMfn7YgAYo5COuLg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=NP5jq0/EzK3mnj31E4CUokfBmSh+obmCAbh9UtNVI25kuefzcH1aufUy5LiwUqsnhRkmhCOiMLuo/QGXmGwGZnOf/4Lq8IVLqN6kG6QMPwTg7l9ETVW6d06QKMfq8okhaxHtQ4xa7q2k9jBaV+iNQh9lwezLKAIkEeVWiFsL05k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ojklGqLn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F306C4CEFA;
-	Tue,  9 Sep 2025 09:20:06 +0000 (UTC)
+	s=arc-20240116; t=1757409886; c=relaxed/simple;
+	bh=crP1HHzUmFBEyI7U2LL0UP+sAsNP6hV3Iu/cO7wIU6k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cUeVhleac7EBI6DGKQdw1anjzCYnoPECunPZiwEksKtgzHBjKRUPLaK5qTRL4iKUHQrt88m34+J2hrn4P0tdeIUvSKOC8sFQw3i/ruWkaWVwV74Ll0/rqrrBCvwWpxjnR+m2vyIhkQXDtCc/2JAar1SsioQRh1OFSZtD0GnnzBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g6CQuOTf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D47C4CEF4;
+	Tue,  9 Sep 2025 09:24:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757409606;
-	bh=WfssuOqMXQC41TqaU9sewZ6QWPeMMfn7YgAYo5COuLg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ojklGqLnOKtld3Vibv2Ryw/OuaXWvtntd8XJaCf9ubGxvRuofsDscF+CFuO8johc5
-	 OCu/CiTShbbHqgeTt2MK2Ke/QqLIZ2BeQXPdDrdStWgXUtcj9eswhGJBrUVOOS9bQg
-	 4alYG1/VyrJ+9y5jeXYKolIw6wd7m+QjOPxTtk7vtpDJcnyy0sD0cUL5viesfbt1Pj
-	 nvjomj3kxysy7O20WAFEOMJaNA4ZPqOLDVmyi7OUz7IlOA9nNMOaANZiQIS1gm0/wB
-	 8OWco3T3I2Tuyh1wWYPfYJ/eTJtl/kTEOMMCW3mJV+Vc/vhBM8m2bxB7QvWinlaTY9
-	 qr2By2ghM41Mw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAD37383BF69;
-	Tue,  9 Sep 2025 09:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1757409885;
+	bh=crP1HHzUmFBEyI7U2LL0UP+sAsNP6hV3Iu/cO7wIU6k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g6CQuOTfKtoiQ/KZtU1Hkxb8kmHFq43k7C2LU67Tc9yTDEP2/rb4MD2cjYuRBQxrW
+	 bBrhW3nEpYsiCYgq2JAuk1zUDH50a3mOn2LSYSd6KWatvJuiLjQ7AcXgoaira4tkLN
+	 0b5czq7VkMnnf+NCqde3FNb11pT3Bn5kv7zlbHiW7D/A7ZuMANH43M6Lv13zX48yIT
+	 tqfuCSj2wI8gAMLc48mbgAjD1Y+LzXL1UnxrS1r+U1ceN6U/PeQdCIwFpbN9ocp3OW
+	 2Hjlcenw2uRke3iW50LYNy1o+zUr8Qr+RoFd8wAl+O3kScdsIXKPmX9V5S0tOh4eRB
+	 c4r8EeWfG0sSw==
+Date: Tue, 9 Sep 2025 10:24:41 +0100
+From: Simon Horman <horms@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: net: speed up pmtu.sh by avoiding
+ unnecessary cleanup
+Message-ID: <20250909092441.GG2015@horms.kernel.org>
+References: <20250906214535.3204785-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv5 net-next 0/3] bonding: support aggregator selection
- based on
- port priority
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175740960963.593749.1942861170014079998.git-patchwork-notify@kernel.org>
-Date: Tue, 09 Sep 2025 09:20:09 +0000
-References: <20250902064501.360822-1-liuhangbin@gmail.com>
-In-Reply-To: <20250902064501.360822-1-liuhangbin@gmail.com>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, jv@jvosburgh.net, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, corbet@lwn.net, petrm@nvidia.com,
- amcohen@nvidia.com, vladimir.oltean@nxp.com, stephen@networkplumber.org,
- dsahern@gmail.com, jonas.gorski@gmail.com, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250906214535.3204785-1-kuba@kernel.org>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue,  2 Sep 2025 06:44:58 +0000 you wrote:
-> This patchset introduces a new per-port bonding option: `ad_actor_port_prio`.
+On Sat, Sep 06, 2025 at 02:45:35PM -0700, Jakub Kicinski wrote:
+> The pmtu test takes nearly an hour when run on a debug kernel
+> (10min on a normal kernel, so the debug slow down is quite significant).
+> NIPA tries to ensure all results are delivered by a certain deadline
+> so this prevents it from retrying the test in case of a flake.
 > 
-> It allows users to configure the actor's port priority, which can then be used
-> by the bonding driver for aggregator selection based on port priority.
+> Looks like one of the slowest operations in the test is calling out
+> to ./openvswitch/ovs-dpctl.py to remove potential leftover OvS interfaces.
+> Check whether the interfaces exist in the first place in sysfs,
+> since it can be done directly in bash it is very fast.
 > 
-> This provides finer control over LACP aggregator choice, especially in setups
-> with multiple eligible aggregators over 2 switches.
+> This should save us around 20-30% of the test runtime.
 > 
-> [...]
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Here is the summary with links:
-  - [PATCHv5,net-next,1/3] bonding: add support for per-port LACP actor priority
-    https://git.kernel.org/netdev/net-next/c/6b6dc81ee7e8
-  - [PATCHv5,net-next,2/3] bonding: support aggregator selection based on port priority
-    https://git.kernel.org/netdev/net-next/c/e5a6643435fa
-  - [PATCHv5,net-next,3/3] selftests: bonding: add test for LACP actor port priority
-    https://git.kernel.org/netdev/net-next/c/c2377f1763e9
+It would be interesting to know why this is so slow.
+But I agree that avoiding unnecessary work is a good approach
+if it is slow. And that appears to be the case.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Simon Horman <horms@kernel.org>
 
