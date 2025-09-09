@@ -1,65 +1,61 @@
-Return-Path: <linux-kselftest+bounces-41078-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41079-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EFCAB50915
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 01:16:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02AEAB50935
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 01:25:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F7771C6200E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 23:17:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A74E068176F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 23:25:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B2F2857FB;
-	Tue,  9 Sep 2025 23:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D7D287274;
+	Tue,  9 Sep 2025 23:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTeA5pIl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iEb7U+wg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFB6286887;
-	Tue,  9 Sep 2025 23:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89ECDDC3;
+	Tue,  9 Sep 2025 23:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757459787; cv=none; b=gIvEC9fWF2vg24uNjT6exKtCjtSiJ4t2WoMTz9W7qUcMvRtXTdupvRd1FWFcsTadAqtyVXFNxA1vTUDOuhzAPlnYZKSCztB0otOTc7H8dchyzX4GV7+wmQBPb3t+EuiNOU8UxwRsz1Cx6RhpldIoNAcAOs2abTFI2OActDVIJnU=
+	t=1757460352; cv=none; b=G947OloZLkZOJOQpQHTiPagVQ/dkF/xgx1uUFp30m/EvEKIkEzjeSnLT6VKmIgJYdXqyhDSjH2hBCuBpnO7B0foICg+9QWICdZ9aaFh7rT4F6ZJjOG5VDFX4U9Tdysy5sPqoWPuDSSOE5wnwbFqjO+d7E5T35/KzanptaW1w2Pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757459787; c=relaxed/simple;
-	bh=2cmXDFZTP2N7nkjntGlSJDhStoIGq2QBtQF2XGCW7Tw=;
+	s=arc-20240116; t=1757460352; c=relaxed/simple;
+	bh=MmJedLQVQoPpZEmi6tcHTlPXnNg/dw0WgmTvxcraOiM=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PS422O8EcjnxKK9yjTGFsgRBga2noyS9Yfs8eIJ6GkylNbpcTr6EWisrP0ObJno0B3LIS1jSf4ykWqlqCCnbqYQpsabodTy+h9/SvT+A7UL0CS0j+vnDT2cupBp1fFF1kxoKJXspubKC6jxvLkwAPXOqLnAPl3Jhz7VbCu4SICY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTeA5pIl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E4BC4CEF7;
-	Tue,  9 Sep 2025 23:16:26 +0000 (UTC)
+	 MIME-Version:Content-Type; b=CCs+bngG8o5W7MkRARMND5r2CIC2gE661FRQscCV0yPip5hY/DDb1iRM2AWT5+Z+9A9fY0wEiwBmH4wf79UtW+56Zg3AKRzEyFdD4J89wcXBD8fwGrrpOwbt30jvdROKlOL2phXqR0a4ji6tg5/4GTQoNaz1v6L1alAeDXli9/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iEb7U+wg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D14F6C4CEF4;
+	Tue,  9 Sep 2025 23:25:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757459786;
-	bh=2cmXDFZTP2N7nkjntGlSJDhStoIGq2QBtQF2XGCW7Tw=;
+	s=k20201202; t=1757460352;
+	bh=MmJedLQVQoPpZEmi6tcHTlPXnNg/dw0WgmTvxcraOiM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=RTeA5pIlFOKueEG9j3UnjmWhIxIg2GQ/AKRpSdRhibJXSNTUQrrqfWmm0fQ+CtQcL
-	 xYB5pqiRO3dGwpe6c99HHUR02wNaoo/v85wMeH5ar8ZzF0ScF/5gxDEpgJfXa1+8W2
-	 DhRhMbu7gnSVeR6lpE1qDxREajvzNwqMnQckJvNrq69V7LRlXrClz6NKdjGkdZeOwh
-	 2LeiKIIj6hUvCtH343vpkDVO5UGJ3VizgXR2FI/365bWxwiMPlf2iH7CW6qYOj2dwC
-	 aQw4Plz7mf67W4/9poaQCD93IPj4g670VKMART5MnE4Rw5wNWknKkW504L+aI9ZnH/
-	 Pzquvkpjkeumw==
-Date: Tue, 9 Sep 2025 16:16:25 -0700
+	b=iEb7U+wgQZLXonc4+Au+nE7Rg0TM+QO/1u6BPBSjyzh18acc8z+nKSEAjEJzFM18w
+	 owYQnivEsa5aZudPIpuoY+3+5kO0Iy1tLi7KEs9Uiw95n4SdFwZ8wOGIjblpmCy/Wh
+	 JJVZDSXqfs8w0XSolFsF/49Mrv+cyUnOKCTwsr64ogwhx0NMqi+C5jLrT/0FnnJ7wq
+	 B4rAE/YMgC2bTFH1LBE2O7+Tn8HvTu+6MjLlQzQkw7ZK62W37dgzTGvVXddFjNM5mX
+	 fcKfGtw7Q3QjJrD8kzUhiAWBDxME04a6AmaZ5O1O9y4v4+VPFFcqrnxE54/bJRjOUU
+	 RAW/lS4bqESNw==
+Date: Tue, 9 Sep 2025 16:25:51 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Calvin Owens <calvin@wbinvd.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Simon Horman <horms@kernel.org>, david decotigny
- <decot@googlers.com>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de,
- kernel-team@meta.com, stable@vger.kernel.org, jv@jvosburgh.net
-Subject: Re: [PATCH net v3 1/3] netpoll: fix incorrect refcount handling
- causing incorrect cleanup
-Message-ID: <20250909161625.470d2835@kernel.org>
-In-Reply-To: <kmvkrqkkrbfctpramlchpwqikg2x3btb3debshabqctt7azu2j@tv4ziqd4gldh>
-References: <20250905-netconsole_torture-v3-0-875c7febd316@debian.org>
-	<20250905-netconsole_torture-v3-1-875c7febd316@debian.org>
-	<aL9A3JDyx3TxAzLf@mozart.vkv.me>
-	<20250908182958.23dc4ba0@kernel.org>
-	<kmvkrqkkrbfctpramlchpwqikg2x3btb3debshabqctt7azu2j@tv4ziqd4gldh>
+To: "Nai-Chen(Simone) Cheng" <bleach1827@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kernel-mentees@lists.linux.dev
+Subject: Re: [PATCH] selftests/net: fix unused return value warnings in
+ ksft.h
+Message-ID: <20250909162551.5224a3dc@kernel.org>
+In-Reply-To: <a3d1c5ca-cdce-428d-8c1c-6a1f59e2dd76@gmail.com>
+References: <20250906-selftests-net-ksft-v1-1-f1577cea3f68@gmail.com>
+	<20250908182018.28d9ff10@kernel.org>
+	<a3d1c5ca-cdce-428d-8c1c-6a1f59e2dd76@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,19 +65,12 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 9 Sep 2025 13:17:27 -0700 Breno Leitao wrote:
-> On Mon, Sep 08, 2025 at 06:29:58PM -0700, Jakub Kicinski wrote:
-> > On Mon, 8 Sep 2025 13:47:24 -0700 Calvin Owens wrote:  
-> > > I wonder if there might be a demon lurking in bonding+netpoll that this
-> > > was papering over? Not a reason not to fix the leaks IMO, I'm just
-> > > curious, I don't want to spend time on it if you already did :)  
-> > 
-> > +1, I also feel like it'd be good to have some bonding tests in place
-> > when we're removing a hack added specifically for bonding.  
-> 
-> Do you prefer to have a separated bonding selftest, or, is it better to
-> add some bond operations in the torture selftest?
+On Tue, 9 Sep 2025 18:00:17 +0800 Nai-Chen(Simone) Cheng wrote:
+> Would it be acceptable to:
+> 1. Send a v2 of this patch with the direct void casting approach and 
+> more precise commit message?
+> 2. Send a separate patch to fix the selftests Makefile clean target to 
+> include $(INSTALL_DEPS_TARGET)?
 
-Normal test is preferable, given the flakiness rate and patch volume
-I'm a bit scared of randomized testing as part of CI.
+Sounds good!
 
