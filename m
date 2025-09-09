@@ -1,113 +1,107 @@
-Return-Path: <linux-kselftest+bounces-41010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6BFDB49F3D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 04:32:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53D30B49F40
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 04:34:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 708744428FF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 02:32:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 066DD4E2924
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 02:34:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BFC624468C;
-	Tue,  9 Sep 2025 02:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAB3B242D7B;
+	Tue,  9 Sep 2025 02:34:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="a37qJk+G"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6Ll46oX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7DB1A8F97;
-	Tue,  9 Sep 2025 02:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DA71531F9;
+	Tue,  9 Sep 2025 02:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757385114; cv=none; b=jcx8rnXvubMLgG8GXEhPYY7NA5SX2TfOSaVtB3uNzPqMdYel3roWr2ieeUQs/huK8fczBlvF9eTvDHmk9MlzVHO5zY3XmfUZv8UCJ9JFS+pgVKzIIPa0GzDylgKtfByK0wR3E+tgTkRgMuamumZD6BqE3EyoK6fJPIdTPLE3MWo=
+	t=1757385289; cv=none; b=UfCsG9f75juKQIVX9OjXvFCzMhJ5UKSWWqjLICxIHwOQ+kz/WSdqd7CY1FHqVXogvaw9mYuB6pLlcmyV131wLSd2/LlZls5MkRW7lTkk1W9EMz2+OvjDn7ZlFtqF0ea/8d/omZmmkQhnVr8ucLD3ivKdLsC8feJo2gaj0p4+sXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757385114; c=relaxed/simple;
-	bh=voIwO7aB55DFEwbmZ9+P0CiskzmhgCldk/xu8wyh4rc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o72KvHscDSy5hThy6EAXkr7p8DthSUYCeC+n7QShHdAY3w3pjAVlFLZ9p63PDXwa84JyWMQQH/Y6FDpH9nAxvcYKIpE59EMZamHiZNOvGg1OKRMMdnypflrpwIHr+EQq1EiTUeqahpbZ4W/MZs3mhSNO7gauWdZnbwFJsnEcU2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=a37qJk+G; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1757385109;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=WweqMmyOHEemYumtjGpzECw+a4p1s0bPOHN7VW0FAYQ=;
-	b=a37qJk+GX00b+p+R4Pc8WBlLLIJbAZwzFVV9VOenmKfhjH/CkZw2JEW0lPE8OVuKlVM/g2
-	PVjtltxw5Z1LHp4IdCI1x6TPgxjGh/sxkzQJMj3ymqBcFdf1rZwQtzp0KjG24zPnNr6Q11
-	9xCnlrrRkEZX96CrsgDMN4XhIDpCQRM=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: jiayuan.chen@linux.dev
-Cc: Dan Carpenter <dan.carpenter@linaro.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: Fix incorrect array size calculation
-Date: Tue,  9 Sep 2025 10:31:12 +0800
-Message-ID: <20250909023130.28325-1-jiayuan.chen@linux.dev>
+	s=arc-20240116; t=1757385289; c=relaxed/simple;
+	bh=0fxHmtzAUPO1l0AwP428vHiE1jIdrSRMVjS1tUi9cTM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kjul1E1+rsgi4ywycehycA6dvRZNcf2BNkLLZdhCiBu7NIlvumXdb/5ThArk16TIZVAFgGe7RnqhUcTEmjuXPQVUV6MevzrjjIyw2V4kpPD7SzGR72ozFoP6V2KAwB6l5UPElTMHoR8+Dftc3dP83JkUt9FIxNmD2jRkAFMVHJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c6Ll46oX; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-45b9853e630so47251645e9.0;
+        Mon, 08 Sep 2025 19:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757385286; x=1757990086; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0fxHmtzAUPO1l0AwP428vHiE1jIdrSRMVjS1tUi9cTM=;
+        b=c6Ll46oXL49TxXJ2IGKx8qHofTy1R4bOhuHdSpEzMc7W01d1vjtXNuVkq8Zu1zvf5s
+         09FkdvaxRbflsQ0ZzZxnDoCC35kFn3xr9hlUD7Ye7ijjWhPpExUbhjxlMwqoYhNx61B8
+         /lstWg4Fbc58Hmcvc7OWjkjXZrIS5hnnGwVAVMQV8YsjqPSAFYZh/2n8vofavAeilI6O
+         4cxdv3XWKezH9NFGk9kh9cAsJeuRdg9QloKnyPH7NLn+RZd3Puav+H1K1kkouCV28flJ
+         CN+R6ZC4h5HLlDUK1pD79spZJSYE0D4GeeB0V/ipErsiMp266eQun+yC+mq4ZwaB/Kwq
+         Q5AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757385286; x=1757990086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0fxHmtzAUPO1l0AwP428vHiE1jIdrSRMVjS1tUi9cTM=;
+        b=NJ7uyoVWAa1YBZ+ig7UiNZQ6KwpRQhg0clk0+IHTlF8yyFxxpeaMRQsCW6lfEBZ3Vq
+         Qc2colMi3jrQ0XqwdAjSBd66UZDjDOqiKMMBRqqH5WfGmJ2yvKW+8cP0SeHR9HZPT6/z
+         9IX/WYAwDwmGu8HirMxmu3IGzR95Xh+8hOY6nl5HgZ5L5VSrcq2Pm4YGd0nm24lG3pGC
+         pIj+Vee9jVWfFxKrQYhW/JSHx3rdo14uqbWn+hhlnXVO1QNunjxhQZHaHphyKsFgRobY
+         c2riczhMGAlloEY5JlCr9SO3/FH0S4jPIt3ZtngxOyHLv4F9AfX/RridcnlK4P+piJ2c
+         NYZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUoy5LQeA5/VFz+rELVUAsTgpcLMsJaKtUtzqukgJiMKgpG1iynIlK0YC2nwDGVLutSpthG2S9sE/MQRZ7k4A/R@vger.kernel.org, AJvYcCWIebQUBu28x4f/4sGgNk6jelw5YaSfVNIatL0HXNUoUJAGN5V0fNYw+AjrXscfLBP18y7Lb7GbPCkogWfK@vger.kernel.org, AJvYcCWuePFBh8s5jzq06lhrDWJUcD4yiSqkxHy3TGtF2l/1utxonz1JLWfYqVvX7vRHRVGmMxQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzO8bKBWW+yIaaJJp5Fn0TKMSwzQO1sLMaiJRWQQ4PNzNVXUgqv
+	B+M8eJhz1RJwFUxccs9r6Xn/mBao1TsGl6Dle8qIoGYgTReClgdxAy9HboP7FEF8DjXUC+rrAhw
+	/1sm08qnj7SzrT5UHJaMlbHEOnsRTFNU=
+X-Gm-Gg: ASbGnctzbN3ZXf5UiXdAdKJ+QUGdxjhqqPCGjugOcOeEBQQM5YjGYI8mopm83vXXhWd
+	FbxghM1P6UgAOW+6MONKc//naeRMMeD2nBCQWzYhilEzf1UELZRuULn1O4MrTgcsO26qXo7FQl1
+	AhMuRqAYHIym9kFm1z1HyCmeFUv17c9cj778STkUMjjjJcJ8fQgBMovcTQlQ/eTBAnUyZBf/V3Y
+	0g2iUNF6Lc6w0ciSL5Wpr8utN1cixm7lFEj
+X-Google-Smtp-Source: AGHT+IHGzEjNQ78v7147fv8udPqX8mhUgZElxGvZm8XRQmhD/8kiorE11oS+t1rco3nVVQ4BFCP0G5RZCk0mTCwI1Qs=
+X-Received: by 2002:a05:600c:4ed0:b0:45d:e28c:8741 with SMTP id
+ 5b1f17b1804b1-45de712289emr40954855e9.29.1757385286149; Mon, 08 Sep 2025
+ 19:34:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250909023130.28325-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20250909023130.28325-1-jiayuan.chen@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 8 Sep 2025 19:34:35 -0700
+X-Gm-Features: AS18NWCCrBOMdOF4e5-We_dOqe-bHQ46YfHjAQlm0V4QqSX5SVf48lBh1lZ-6rg
+Message-ID: <CAADnVQKDbNLwbAAreqdjA3eko9MHqCQCVmrghPttvJn=oaskzQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix incorrect array size calculation
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fix it by using ARRAY_SIZE.
+On Mon, Sep 8, 2025 at 7:31=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
+> wrote:
+>
+> Fix it by using ARRAY_SIZE.
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/bpf/aLqfWuRR9R_KTe5e@stanley.mountain/
----
- tools/testing/selftests/bpf/benchs/bench_sockmap.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Fix what ?
+The commit log should be clear on its own and shouldn't require
+people clicking through the links.
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_sockmap.c b/tools/testing/selftests/bpf/benchs/bench_sockmap.c
-index 8ebf563a67a2..cfc072aa7fff 100644
---- a/tools/testing/selftests/bpf/benchs/bench_sockmap.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_sockmap.c
-@@ -10,6 +10,7 @@
- #include <argp.h>
- #include "bench.h"
- #include "bench_sockmap_prog.skel.h"
-+#include "bpf_util.h"
- 
- #define FILE_SIZE (128 * 1024)
- #define DATA_REPEAT_SIZE 10
-@@ -124,8 +125,8 @@ static void bench_sockmap_prog_destroy(void)
- {
- 	int i;
- 
--	for (i = 0; i < sizeof(ctx.fds); i++) {
--		if (ctx.fds[0] > 0)
-+	for (i = 0; i < ARRAY_SIZE(ctx.fds); i++) {
-+		if (ctx.fds[i] > 0)
- 			close(ctx.fds[i]);
- 	}
- 
-
-base-commit: 60ef54156148ffaa719845bc5b1fdeafa67763fc
--- 
-2.43.0
-
+pw-bot: cr
 
