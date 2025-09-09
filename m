@@ -1,174 +1,219 @@
-Return-Path: <linux-kselftest+bounces-41012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41013-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A4E9B49F94
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 04:55:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F002B4A013
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 05:35:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B7F01893C7A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 02:55:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7891441BD8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 03:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D012571B3;
-	Tue,  9 Sep 2025 02:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5336C26FA67;
+	Tue,  9 Sep 2025 03:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SP1mJPVF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LXwEx3PV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6A522A7E4;
-	Tue,  9 Sep 2025 02:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B540A246782;
+	Tue,  9 Sep 2025 03:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757386501; cv=none; b=f/5/hCTxWfh/+1tV0fYM3a4KrdZjx1scZzAuhe0Ne7HhkWkU2xv5NDcpCsp4x5AmkHcpl+Rk6TQWPURAxhu2HdCjfS9+X3HYLHS58QaHkmZJWjjqCYtvELlQNHZSZmkxUR+1P0yxucuS7SKXwcZOGBzi0JHMUoHDTUblBcgPWks=
+	t=1757388898; cv=none; b=kBstfqaas2W7Z3Pr8TKSB+1CYzGj6Hx/R5TwNFlytcBDsSiQ9TD48vS1mpCjjSflVZvpyO0O0OUs4c+SlvML55BKEha/xlqrIdKVDyhnRSzuHWyFDwGz0X0m9xW4jN6DZbwoA3aFfjMUZNYOTFzQuwkEynufFginJr4ZeUtAiSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757386501; c=relaxed/simple;
-	bh=SODWK8iRJW+Kd8ixS7tgSWOcjpMFP1OafTXxlBzMwMo=;
+	s=arc-20240116; t=1757388898; c=relaxed/simple;
+	bh=orjSvwB7+hYUTKHAwQIDI/zbkxH7nvrr/dl1kUuPBK8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JzsNUd9gwZRwxQsK6QhLwt469GNS0Yul2/t9fujYji2rhn5ihnA+zbv80l1LFC4VxIq7bDc5Sl6tnnnyKMDzMi3FdT9jSRZXHfUkY8VH2iURpQeqs17WwY+J+WljjImoP7NQMcoZ52UoODCx+7/71CwPOdY7uBhv1NEo6LS9Jbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SP1mJPVF; arc=none smtp.client-ip=209.85.215.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=kfHUMRJonOM6UlX5vK9LmLiL2SvKcviE137p/KX2wNbr1Jaajmzkk03UgmfCxD0a0AlEXiJMzihD7rK4GACQtuS0c02s169/TrE1NkE1oS2eovwHNCgJVhgd9xDOkEGv5jl0WDHb6AoVKe9TQlp5ANcDDSlTYyIStk+dJwKqy/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LXwEx3PV; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b47475cf8ecso3399681a12.0;
-        Mon, 08 Sep 2025 19:55:00 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-76e2ea933b7so4574757b3a.1;
+        Mon, 08 Sep 2025 20:34:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757386499; x=1757991299; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=on/vw6koKUQbJCI+KSSCTjkF92ULMha9wVjXRly0E+U=;
-        b=SP1mJPVFagISL+0gIAb/nwa4pcS1J22I1XG47BbfHiMoH1jU58mjIQoohOVjGD/5J1
-         HHeeoy2MzUkBLh9+OdeBTNnWMoqWI9V0UzAx4wtox/fCYI9wKqJycHeWUnBDUv3ipYlT
-         PZb2GXktJPr/JQHtXZriF9H0LQDDi8OzgRWzOyePB1v1HEeznX5duodcCzEfHtfNfgJk
-         WpZkZ1Vu4NqY8Xbz2y+BrVTtUMpHcajQMn+ldKlqq/ueF0DRga9B/LQZLuz+nmzPk7kQ
-         D07OdzFboHVOMCIvHFjLAlmofkNy3W3GlvRzJZb51xgrfuJRITOCHzpoZyG3VDvh5yHt
-         jhAw==
+        d=gmail.com; s=20230601; t=1757388896; x=1757993696; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Y93QCEvHzdhBiLz070Y0aTFkqAkpWfOndtebv8x55Y0=;
+        b=LXwEx3PVeQMxp56ILA/4qwmA8FrJTtJqpnRzzNLW63F9nVS0Uuc4paYe9/OoUZoOAN
+         F1ntfLvb6/hcW8A+9FtHqCG9esus1rZ1NJF8Yp/FXLIDl8t0Jmys7Xw7xfaujZrChjUo
+         JEec4mQkV1E+o+vDuS/hbuu3gfMKM10pYkZLnSxToFrXTUXWuvZvb9assfq5O8D1Sv77
+         U1skVudHfFQNNob8/bpXK6CGG2XSzY5hGWhXGW29yRBIU7wa3JEhjw8dvtqf/i7w3E+7
+         dJtUVlthicozY+pj2p3MIBpKlHOz9ukGc2VLRnXPgw4MAd5+58IZ/N8oFuQlXi+nBFpp
+         f6Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757386499; x=1757991299;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=on/vw6koKUQbJCI+KSSCTjkF92ULMha9wVjXRly0E+U=;
-        b=SlJqX0JAaGlqN4sy5yBTlTPWoZexZeUujR1sQMQfgOv9fJnublQfnOusw7HNjre5Ze
-         Ho7oxAEsEV6Z2BNEyW2bubn8yEvVX+ce5DuDDTbJ9/IOE4qB5GEckRYRVfmblp5nECGm
-         wtNxxK0yus1y/6FMu3cqA5D3mTpya84UFRbQvkuZw/kk+Ieos+vqIq6RXYRgIhNeVSyq
-         sG1W/vuy3vDHOvtdRPjt4Qm+7wzWYvNSzfuOGxIWTobGqKFn7iQ3/+tc9LuXRsFwus4p
-         QhNRIVWkiofVH2w7pn/ob89wq1loKwXQzuPMvVrjXAQJJ102Oj46Fir26k3Yw1rT9X20
-         d4Mw==
-X-Forwarded-Encrypted: i=1; AJvYcCW5rM0GMjs0W9nuINvHRGImzx72c2ssKOBVzYwtifhuQh2fdYbULQYJS4/0tp7bQEBhGAcPQq8/1dGbiVuwtck=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUItcubQA9KGPwGAMObo7hTkTSG1VwjBURBJRnEwMeR1jln73G
-	Eea/MmFmfqmkgF9Qk3ySn07Mw0oRmv3aBXOc6YvEc5i2yCLMlA+8Sl3J
-X-Gm-Gg: ASbGncu350M5RZp6ItqcDMW/WO+GcrOButHWvA6g+9RIpu/pFKUlFtoBkB9RQlfDdh5
-	3vVt/ATh9+xN+DPN+E6tPaD9BifPj+n0isqOWt2oPtGc00eNX+dj8YeKDIZRcybcGVaSQQm2J8P
-	zkMnmmZpgX1BLwuT+hcQsYXy8DqaeclBA1je5tjKT8rF8ZjFT5PInyVWl68ZeNirj9oEBpCBIrB
-	FAEHDjjfOrjr20nNdRscV/ggavuG0jnTrY84lam33AD2ltoTHWyRuDfx/PUHx7yg+qpjWpkOkna
-	zUXcayJaxHryrd6HCyF3P8CeQwtRf+TJMmgT+7g9+BgEi1XlUvaR9xZZyt6ynWIfAp/B6uN4/IC
-	3rJM+8S0HyvonIqv+nJRHyHIPv+8VJEpQH7upQg==
-X-Google-Smtp-Source: AGHT+IG6fQEprMYRmastVBiiyh6tI+QaloXPCDm6oS/Iuu8O/6MRoczfFOWee08VD0/s5rJFKkaB+w==
-X-Received: by 2002:a17:902:d510:b0:24e:9e47:2327 with SMTP id d9443c01a7336-25170f37b63mr143674305ad.30.1757386499327;
-        Mon, 08 Sep 2025 19:54:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757388896; x=1757993696;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y93QCEvHzdhBiLz070Y0aTFkqAkpWfOndtebv8x55Y0=;
+        b=iUYvY4wR5YHa16mEsVlP/+IP7dQfLvUvJs/94V52aUgkjVumkm6t371d373TIfsP9P
+         7TNtOzMhQ3b5f9RTsqSv/Hm4Tsv/EoukoAPv2eIhScUVHybn9E60KiH3Z0PfyPERwiFc
+         BSMAdRsMl5U05OOvni+oE+y/FOyyOVDL8Bl6wK19TDJaRavnZoL89A0Ezq5u5kH6km3n
+         R8gDk5qCz7zj16eprAq7E+3614WGnvgA+fsTtCwKWC52y6kU3rN8cnvptXHlVqdsftYQ
+         6JSiraPVIPVDMOuemUoMSN6v/ODlcCqZxhqrAxVPyqTPo3W8GX/2RQBwuyAFKlPPgYV+
+         ajsA==
+X-Forwarded-Encrypted: i=1; AJvYcCVadJwFvGd3IITsokKutUaE9G9iKL0rEjQRbFf8Sy0NaBrT50Os74lD07+FuUPIl3J7wtpZf+hM8yCZUzj0VvM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQnYU7OOnROcApd4Q1XZRwhaf1a4QLa9t/f7AuX+Jqxox3nDHv
+	amwyUqmMwN30r5Sr3CwY+cwT8ClYUMS1E7yuG4SYajwmV3WoRQWkwDNzDvEfwwc0Va0=
+X-Gm-Gg: ASbGncuB43g83wOygQHtqzlxNJdPrn8dcK0kwIMn1Xoe3kwgABbl3HhHEgu5Dfs+odt
+	3Ryhhq1No8kTr/DcG7+ls0JLtqCEwAGShviRTbd0EYajJ5xrPuHot7sWtGEidHeXIhCYjKLOixZ
+	MEFkOdK9Qq/W3VaTeeiAn/8j5GybGioZ1Z5mGZgQ/77S3rENmvc0+sT/ZpFlPsT3tm7qXwB7tkq
+	VjyBMhReJrScWqj0WnmESKCrNyFSOXtxE7z6uct3OJjvlYxtjS6XlKHo/9Ba190zzvfxqAA4syi
+	BcpPF4O93GaxZBdh4eRjDHv+zE2jmat3lbwU/Me/U4f8iNxBNdJ+qkYx7rl8PHJOOOqUzFmnsIX
+	J8uFQF+2EbUeoJiDk3Q7BcN52zIM=
+X-Google-Smtp-Source: AGHT+IFWAxS7GwuQtDUJHjXYB714zrawjzVF4GAUe9Ho5fpPBIC8TOyzVIQWHR9c78UtLyb3yYKjcg==
+X-Received: by 2002:a05:6a00:7605:b0:772:2d49:4eb5 with SMTP id d2e1a72fcca58-7741bf5b1f2mr15716590b3a.14.1757388895968;
+        Mon, 08 Sep 2025 20:34:55 -0700 (PDT)
 Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24cccba6624sm127708925ad.99.2025.09.08.19.54.52
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-774660e5b5csm461701b3a.7.2025.09.08.20.34.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Sep 2025 19:54:58 -0700 (PDT)
-Date: Tue, 9 Sep 2025 02:54:49 +0000
+        Mon, 08 Sep 2025 20:34:55 -0700 (PDT)
+Date: Tue, 9 Sep 2025 03:34:48 +0000
 From: Hangbin Liu <liuhangbin@gmail.com>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
+To: Jay Vosburgh <jv@jvosburgh.net>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Ahmed Zaki <ahmed.zaki@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv2 net-next 5/5] selftests/net: add offload checking test
- for virtual interface
-Message-ID: <aL-W-YdGWOxgpPar@fedora>
-References: <20250902072602.361122-1-liuhangbin@gmail.com>
- <20250902072602.361122-6-liuhangbin@gmail.com>
- <aLyoEiWnuvQ-5ODz@krikkit>
- <aL5YamjbZB5gsL30@fedora>
- <aL6jlYPhsPfDKT8C@krikkit>
- <aL6soY3gEj-LIovi@fedora>
- <aL9PSoTwhn-HFWrH@krikkit>
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, Qiuling Ren <qren@redhat.com>
+Subject: Re: [PATCH net 1/2] bonding: set random address only when slaves
+ already exist
+Message-ID: <aL-gWAFWPAKuNoUi@fedora>
+References: <20250820091009.393785-1-liuhangbin@gmail.com>
+ <1546564.1755908490@famine>
+ <aKvhk8Cq3ZdWeH_7@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aL9PSoTwhn-HFWrH@krikkit>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aKvhk8Cq3ZdWeH_7@fedora>
 
-On Mon, Sep 08, 2025 at 11:48:58PM +0200, Sabrina Dubroca wrote:
-> > > > After we add the netdevsim to bond,
-> > > > the bond also shows "esp-hw-offload off" as the flag is inherit
-> > > > in dev->hw_enc_features, not dev->features.
-> > > 
-> > > Did you mean dev->hw_features?
+Hi Jay,
+
+On Mon, Aug 25, 2025 at 04:07:55AM +0000, Hangbin Liu wrote:
+> On Fri, Aug 22, 2025 at 05:21:30PM -0700, Jay Vosburgh wrote:
+> > Hangbin Liu <liuhangbin@gmail.com> wrote:
 > > 
-> > No, the xfrm_features in patch 01 updates dev->hw_enc_features, not
-> > dev->hw_features.
-> 
-> Ok. But hw_enc_features is not the reason ethtool shows
-> "esp-hw-offload off". This line is:
-> 
-> 	bond_dev->hw_features |= BOND_XFRM_FEATURES;
-> 
-> (from bond_setup)
-
-Ah, there it is. You remind me that I have a bonding xfrm feature patch
-not posted yet.
-
-> 
-> > Do you think if we should update dev->hw_features in the
-> > patch?
-> 
-> For dev->hw_features (and dev->features) maybe not, since that depends
-> on the upper device's features and implementation. I'm not sure we can
-> have a common function without changing the behavior on at least one
-> type of device.
-> 
-> But maybe ndo_fix_features could use a common
-> netdev_fix_features_from_lowers? bond/team/bridge have very similar
-> implementations.
-
-Thanks, will add this to my todo list.
-
-> 
-> > > > It looks the only way to check if bond dev->hw_enc_features has NETIF_F_HW_ESP
-> > > > is try set xfrm offload. As
-> > > 
-> > > Was this test meant to check hw_enc_features?
-> > > 
-> > > To check hw_enc_features, I think the only way would be sending GSO
-> > > packets, since it's only used in those situations.
+> > >Commit 5c3bf6cba791 ("bonding: assign random address if device address is
+> > >same as bond") fixed an issue where, after releasing the first slave and
+> > >re-adding it to the bond with fail_over_mac=follow, both the active and
+> > >backup slaves could end up with duplicate MAC addresses. To avoid this,
+> > >the new slave was assigned a random address.
+> > >
+> > >However, if this happens when adding the very first slave, the bond’s
+> > >hardware address is set to match the slave’s. Later, during the
+> > >fail_over_mac=follow check, the slave’s MAC is randomized because it
+> > >naturally matches the bond, which is incorrect.
 > > 
-> > Oh.. That would make the test complex. Can we ignore this test first?
-> 
-> Ok for me.
-> 
-> > BTW, I'm a bit lost in the callbacks.gso_segment. e.g.
+> > 	The description here seems confusing to me; what does "this"
+> > refer to?  I don't understand the sequence of events that lead to the
+> > issue being fixed here.
 > > 
-> > esp4_gso_segment
-> >  - xfrm4_outer_mode_gso_segment
-> >    - xfrm4_transport_gso_segment
-> >      - ops->callbacks.gso_segment
+> > 	I wonder if there's another bug somewhere, since nominally when
+> > releasing the last interface in the bond, __bond_release_one() should
+> > randomize the bond's MAC address, so it shouldn't match when adding (or
+> > re-adding ?) the first interface to the bond.
 > > 
-> > But who calls esp4_gso_segment? I can't find where the features is assigned.
 > 
-> inet_gso_segment via inet_offloads[] (ESP is a L4 proto like UDP etc).
+> Sorry I didn't make it clear. A easy reproducer would describe the issue. e.g.
+> (omit the lo interface)
+> 
+> [root@virtme-ng net]# ip link add type veth
+> [root@virtme-ng net]# ip link add bond0 type bond mode 1 miimon 100 fail_over_mac 2
+> [root@virtme-ng net]# ip link show
+> 3: veth0@veth1: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>     link/ether 02:0a:04:c2:d6:21 brd ff:ff:ff:ff:ff:ff
+> 4: veth1@veth0: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>     link/ether 82:a8:52:f4:81:4e brd ff:ff:ff:ff:ff:ff
+> 5: bond0: <BROADCAST,MULTICAST,MASTER> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>     link/ether 92:5d:9c:47:e7:53 brd ff:ff:ff:ff:ff:ff
+> [root@virtme-ng net]# ip link set veth0 master bond0
+> [root@virtme-ng net]# ip link show
+> 3: veth0@veth1: <NO-CARRIER,BROADCAST,MULTICAST,SLAVE,UP,M-DOWN> mtu 1500 qdisc noqueue master bond0 state LOWERLAYERDOWN mode DEFAULT group default qlen 1000
+>     link/ether 4e:b5:4a:b4:03:18 brd ff:ff:ff:ff:ff:ff
+> 4: veth1@veth0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>     link/ether 82:a8:52:f4:81:4e brd ff:ff:ff:ff:ff:ff
+> 5: bond0: <BROADCAST,MULTICAST,MASTER> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>     link/ether 02:0a:04:c2:d6:21 brd ff:ff:ff:ff:ff:ff
+> 
+> Here we can see the veth0's mac address is randomized. The reason is in
+> function bond_enslave(), we set the bond mac address to the same as slave's
+> if it's the first one.
+> 
+>         /* If this is the first slave, then we need to set the master's hardware
+>          * address to be the same as the slave's.
+>          */
+>         if (!bond_has_slaves(bond) &&
+>             bond->dev->addr_assign_type == NET_ADDR_RANDOM) {
+>                 res = bond_set_dev_addr(bond->dev, slave_dev);
+>                 if (res)
+>                         goto err_undo_flags;
+>         }
+> 
+> And later
+> 
+>        } else if (bond->params.fail_over_mac == BOND_FOM_FOLLOW &&
+>                    BOND_MODE(bond) == BOND_MODE_ACTIVEBACKUP &&
+>                    memcmp(slave_dev->dev_addr, bond_dev->dev_addr, bond_dev->addr_len) == 0) {
+>                 /* Set slave to random address to avoid duplicate mac
+>                  * address in later fail over.
+>                  */
+>                 eth_random_addr(ss.__data);
+>         } else {
+> 
+> Here we check the bond and slave's mac address, which would be the same
+> definitely, which cause the first slave's mac got changed.
 
-Ah, I only saw ipip_gso_segment calls inet_gso_segment, didn't notice
-ipv4_offload_init() also init the callback with inet_gso_segment.
+Any comments for this?
 
 Thanks
 Hangbin
+
+> 
+> > 
+> > >The issue is normally hidden since the first slave usually becomes the
+> > >active one, which restores the bond's MAC address. However, if another
+> > >slave is selected as the initial active interface, the issue becomes visible.
+> > >
+> > >Fix this by assigning a random address only when slaves already exist in
+> > >the bond.
+> > >
+> > >Fixes: 5c3bf6cba791 ("bonding: assign random address if device address is same as bond")
+> > >Reported-by: Qiuling Ren <qren@redhat.com>
+> > >Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> > >---
+> > > drivers/net/bonding/bond_main.c | 1 +
+> > > 1 file changed, 1 insertion(+)
+> > >
+> > >diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> > >index 257333c88710..8832bc9f107b 100644
+> > >--- a/drivers/net/bonding/bond_main.c
+> > >+++ b/drivers/net/bonding/bond_main.c
+> > >@@ -2132,6 +2132,7 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+> > > 		memcpy(ss.__data, bond_dev->dev_addr, bond_dev->addr_len);
+> > > 	} else if (bond->params.fail_over_mac == BOND_FOM_FOLLOW &&
+> > > 		   BOND_MODE(bond) == BOND_MODE_ACTIVEBACKUP &&
+> > >+		   bond_has_slaves(bond) &&
+> > > 		   memcmp(slave_dev->dev_addr, bond_dev->dev_addr, bond_dev->addr_len) == 0) {
+> > > 		/* Set slave to random address to avoid duplicate mac
+> > > 		 * address in later fail over.
+> > >-- 
+> > >2.50.1
+> > >
+> > 
+> > ---
+> > 	-Jay Vosburgh, jv@jvosburgh.net
+> > 
 
