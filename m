@@ -1,96 +1,154 @@
-Return-Path: <linux-kselftest+bounces-41045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41046-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C70A8B4A928
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 11:59:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9934B4A94D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 12:04:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A4093627E0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 09:59:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09D60189534C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 10:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58E62D23A4;
-	Tue,  9 Sep 2025 09:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1081331815E;
+	Tue,  9 Sep 2025 10:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=miraclelinux-com.20230601.gappssmtp.com header.i=@miraclelinux-com.20230601.gappssmtp.com header.b="DIMN1JAs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hyrqvrah"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DBA2D660A
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Sep 2025 09:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F58313E3E;
+	Tue,  9 Sep 2025 10:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757411910; cv=none; b=TKNg4Icyr5OIMLob8qCHD3Ja8wWhlOBDrP643AazWqVOpZHsHraMHUEcMEI9ztSX2Jo6ekNpPsRHWwR9RrLc/V4o8E9HkjdrjlJVYF9pkGpVtUFqomUBZKEblYJJSr+bR7IQv9i0eZOwooSbcefy16qxVGFEAAXanJ/Md7LXziQ=
+	t=1757412024; cv=none; b=jXWC7cOpLefwMKIvcH9kQywz93SflRLRmqBFD4IDmymIXlTLvzS5PwlJT94FyEEm8J2DnKP99B2D9EuVNGjfqfGwO5k50PWeDiX7E5yQlBMIaN+VYHRbmnjDLhnW5mfyDPKKFMircZ/RIXIB97gAsiPq74KyQWv5c5v8p4lQbAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757411910; c=relaxed/simple;
-	bh=BcPTgT4DaoNK+sqLNjn9V4T8XzfeAlyDj3xfj5ssbQ8=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Ulc40o8p7sWk56IdTFAlnR4vCl+hX1Huv/dWuKiouavIqhAwLgx+VDS/hfdlKs+KmmLETwRdN9QL+aU+PAWgN0XLRjiihJqS+1ahUJHuGyeTDVijTN3ibkQF2Mj4+tNIp15tz+RShjg+UNrCa31RrUmKq/prS+kf9hns6XoFVNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=miraclelinux.com; spf=pass smtp.mailfrom=miraclelinux.com; dkim=pass (2048-bit key) header.d=miraclelinux-com.20230601.gappssmtp.com header.i=@miraclelinux-com.20230601.gappssmtp.com header.b=DIMN1JAs; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=miraclelinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraclelinux.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-32bb1132c11so3275543a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Sep 2025 02:58:28 -0700 (PDT)
+	s=arc-20240116; t=1757412024; c=relaxed/simple;
+	bh=sel26hbdubN+palGD2gZ0/eOdFAx9Akb98dFmcE1PVU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hnp/SGCzsadCTKy4Gl/7HW/q8Cw+usBW+jJZcDipRz1eQQiem41duO+dg/SlTi8Tusqoe17YKOcxlZXgMosAbNbUHAWRv/9TxTChV4I708atOMN8YKRqsTi/LrYyl17+j7yZ9PtGU5SCTIYfWTfJ4A5na/YuGA2gOTrktphenSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hyrqvrah; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2445826fd9dso64105425ad.3;
+        Tue, 09 Sep 2025 03:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=miraclelinux-com.20230601.gappssmtp.com; s=20230601; t=1757411908; x=1758016708; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BcPTgT4DaoNK+sqLNjn9V4T8XzfeAlyDj3xfj5ssbQ8=;
-        b=DIMN1JAse1U/j1fqbaao3izdr1gD41+chyV1F124LiQ6zQr7Nv2KC3iRbcqu4QWe7I
-         N+saklMxd1CMGoQSHZ2sQJBouHRtdx3FJQHGmHO+2mxfwSFcGJ63faVug9QC5MnRncWA
-         ulRQeC+8334W9eFoxX41HUbLwHdrz8dpsmMvsohpTz9/xEkV2o0VXHr1VJ4XeTQ+DwpA
-         30GYOujz6tlACU5BK1bmt+UkpN49UmnU0IBHBV4BOEcYu3iwL8mQWMAp7hnfFMOhAccY
-         fhOc8UvG4cQDVdDpr2cs6oFv/3RmmupMf7zAklRgZl6faNpVpMZZrYq4eQp5K9kFn1hP
-         J8oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757411908; x=1758016708;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+        d=gmail.com; s=20230601; t=1757412023; x=1758016823; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BcPTgT4DaoNK+sqLNjn9V4T8XzfeAlyDj3xfj5ssbQ8=;
-        b=WW5xy8qHX4TYc19Z9edWZO9BPCZrDjlJ9aFF3RJU7CwOONPbvz3h4YJbmvQKUM9Ut9
-         2zTkf/LwSH/j5SVR5RnvuJjNuRjXwE1U9Oyszzmo+2YjQerS22FVunhAp/gz0tqEj7GO
-         1YkTi3WNwOW5oQR/q05j5vq5+sdic8x/laMuQTRY9ovAVFcCpcN4QOENOKJXFh01g2j0
-         yvbJ/E8xzp0GIEIOgJRtgjNS9Tc2Y73CL0KpI6ajk/J88mavU4Wrg4RgdIGRhRjV6aYy
-         6Tao2NsyTJcNgKp4VKVnVVcmKN1r1cfAsc39Py1sEvzVArrusHkpiJX0ut1U4y4EHV6S
-         daQw==
-X-Gm-Message-State: AOJu0YwzsFpEEzUKiovhqnw2+dICaTpkIl04feylJBBcnQBNnQRdRD7U
-	2U2wzYDOOhuT919dAtGERJsYLJU9LohmHynExiYw3i/cWQti73M4fTyxQ3yzkz86IWYGld7bKc/
-	JzyC4XgXIN/Wat8Z6TVfuHdvmJ+g+c/vbRZFIha+X/HeMH85A7QE=
-X-Gm-Gg: ASbGncslkzPBtJL8jpnHjFXLmszRtc2RGmE4QyRTuEExtw5ZenJF9xDmneEoEtiU148
-	4dW1pYKqnruWW4f0tRfkSNSixRZapN2ZANdrIRZr7KBo5KbAm6pjWF7dOnNLyUbyYo7QQ8tck8q
-	fB5xBymLk7NfHWgvg1vPDJSZRAOE+lHO1AQg+PFVuNGl4VJXiUiz1uDwCq/ZYdOCAJ1/aTxaBld
-	Ya1nXc=
-X-Google-Smtp-Source: AGHT+IF1m2rO1lq8YsNb1JZtLnx7YFPnA47qj42l6x17TNVIDAy2/K7vf752ZAqr693wrJ0dJTpLhqHDZ0QSSmGW6t8=
-X-Received: by 2002:a17:90b:2c8f:b0:327:53f0:6368 with SMTP id
- 98e67ed59e1d1-32d45037a0emr11618836a91.2.1757411907905; Tue, 09 Sep 2025
- 02:58:27 -0700 (PDT)
+        bh=jOx81+m5TMKBCfvFeUd2lc1fUQ8CVG2MRH89iHXYyPo=;
+        b=hyrqvrah7hSvGOqxW563p5/ejvbwhbwGbleoOl/Mc4+KfRDyXhVb02Cp1FfjSBKrJ+
+         oCOTXkhTWM46yWFgGO9fQHzbhZCIAD2kQBRy/ujRaw1+hgf4H8slS5X2K/Pq19DJI/XF
+         GVGiI2lrixdCgKhrZX1Wyi69IUfGmm0A2oQ62ffoQnteBWUEFiL1HHuuGy/kedx9E8Ih
+         eKVaf7C+j63PUikSlX9s3pEbXt5ebbvz1OH8kUG13E3vCP/tIoMc3vm10n/OXE/DdJhO
+         AWugg3O38TVIoo9b0hj/K8Nps1UfhVQdwB6M3BovzOZQta/BsMczGx5K+sV4YbQrZq0I
+         4sOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757412023; x=1758016823;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jOx81+m5TMKBCfvFeUd2lc1fUQ8CVG2MRH89iHXYyPo=;
+        b=t6WA3nFtKzV5QIPLYgstwNpun9GtlfOajgjyezXLi6ywiAsggzOoU/YoFi5LcP3ZCq
+         bWzfMlXhkavSvKqUO+r3hg8Hd3x2hN4dI6PS+p0i/XafJ3ZdN2Yn0RdcLPhxt3eifyzJ
+         EBJ9KXBQSyMkQb10Vpy6Fnj3LovWbAHudsJ0Nn5xK1rGaUypACyPQ90CJSVWZRi5/cWs
+         yj+uZDhMYYCrrKuazVlJGfJNWPHf6XjaRFYO1O3uXx035QUs+LO//Af6KQFBOzwpJ/mE
+         icpZWxjHDGfjq0OZCf7MVvy0wmdLWHIh7EZHTzciHlLzMv3/GPKpItedHbap7k8nK7J+
+         PlhA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+wRWaXFITv2qvEvDQhgGbll3rdJRKutjXcD2YfOypynrOnSJZTbtvDiGOUQdN3XM2BfgVDXI8@vger.kernel.org, AJvYcCUfMDYOnDxBVLbGzM0yrIqGJj4yYyQhDwHibpHG+Nz7+LBStwlLzMZZcVAtu+TSBtiMiSKAOFwqRJXkVS7vLSvK@vger.kernel.org, AJvYcCWpSHyLOW2BNUV3cDnG8yMpujCuHrTgqMhDXTJvS9ksYtB9w+6bfQKNNDyfdueHQZfELVVqiDIeF+zZZkk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTRNFoDOK391OBaduobUgjj8rPT9Mn7mlIzi4/zv5MfYUuvcgl
+	jDonPPPxQO8TPM3l+A+R7ai212OCwRBwYFbPuML4E4SOY47gI9zao6Ng
+X-Gm-Gg: ASbGncsL6NQDu+8OxUZ5JmAO5+7QtDzAr+ro81fP/g7wOCGPjV9pFuM3nTCID+IonI2
+	n6MYf+cLbDUco8Ku+L+yYKN8aRvSHauUoWY5PO3lSIn40qoubLtZPQ7twStdlx8lZvFfLNmZAAW
+	kXRlcJrKR12pi+4Rh5KazD1dyefMSO+26af+FZzatd0O+chHI2p1JQYZXc9uNUi/gwH4AzFEt3+
+	+QTgTj1MiD27usmjplsOHxLL6m/Ir8HJi5LchT97BIXazpr91KelR/iZyDlz5krKQLkX21bSFZ1
+	eaWbmKnS90sGXIMtC1SEJsbGjMXteOhqUlOYEo1jh7oHm3UCBhJYkU/ksTbOC9eFXlw6lUAftpj
+	4gVXh+nAdAdNbbOLsQJHJHXB4
+X-Google-Smtp-Source: AGHT+IFODb9BV49tp09UgtdQ81xWoNMdmIOHFlia0/7sBhuTUz5mRZhUGLhapz+IyBuFX8A7Wx0f4Q==
+X-Received: by 2002:a17:902:ec8e:b0:24c:d33d:418e with SMTP id d9443c01a7336-2516ef57cdfmr170678475ad.1.1757412022461;
+        Tue, 09 Sep 2025 03:00:22 -0700 (PDT)
+Received: from [10.101.1.72] ([140.124.249.9])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24ca63c9e71sm161671585ad.95.2025.09.09.03.00.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Sep 2025 03:00:22 -0700 (PDT)
+Message-ID: <a3d1c5ca-cdce-428d-8c1c-6a1f59e2dd76@gmail.com>
+Date: Tue, 9 Sep 2025 18:00:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Arisu Tachibana <arisu.tachibana@miraclelinux.com>
-Date: Tue, 9 Sep 2025 18:57:51 +0900
-X-Gm-Features: Ac12FXxcZ5tawe6vldEzR473P71-6XB_eXqZ2l7lI71wYP_rV2SpmrFPdLf5NAs
-Message-ID: <CANgtXuMNY0KfdSJuHZh2khaGtNr8ic3hNGPkEG4mKw3p7YOhZg@mail.gmail.com>
-Subject: [ANNOUNCE/CFP] Kernel Testing & Dependability Micro-conference at LPC
- Japan 2025 CFP postponed until 30th September
-To: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	shuah@kernel.org, gtucker@gtucker.io, sashal@kernel.org, 
-	kernelci@lists.linux.dev, automated-testing@lists.yoctoproject.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/net: fix unused return value warnings in ksft.h
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
+References: <20250906-selftests-net-ksft-v1-1-f1577cea3f68@gmail.com>
+ <20250908182018.28d9ff10@kernel.org>
+Content-Language: en-US
+From: "Nai-Chen(Simone) Cheng" <bleach1827@gmail.com>
+In-Reply-To: <20250908182018.28d9ff10@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello everyone,
+On 2025-09-09 09:20, Jakub Kicinski wrote:
+ > Is it just a GCC warning or rather a combination of GCC and some
+ > misguided glibc decorator to force check the return of read/write?
+ > Naming the compiler versions and the warning flag which enables
+ > this would be useful. We don't see it building with normal warning
+ > level today.
 
-The Call For Proposal (CFP) for the Kernel Testing & Dependability
-Micro-Conference at Linux Plumbers 2025 has been updated.
-https://lpc.events/event/19/contributions/2001/
+Thanks for the review!
 
-You still have time until the 30th September for sending your CFP:
-https://lpc.events/event/19/abstracts/
+I found that the warnings occur under specific build
+conditions that explain why it's not consistently seen:
+
+The warning appears when manually cleaning and rebuilding net/lib/:
+   cd tools/testing/selftests/net/lib/
+   make clean && make
+
+The warning messages are:
+
+ksft.h: In function ‘ksft_ready’:
+ksft.h:27:9: warning: ignoring return value of ‘write’ declared with 
+attribute ‘warn_unused_result’ [-Wunused-result]
+
+ksft.h: In function ‘ksft_wait’:
+ksft.h:51:9: warning: ignoring return value of ‘read’ declared with 
+attribute ‘warn_unused_result’ [-Wunused-result]
+
+This is triggered by:
+- GCC version: 14.2.0
+- -Wall flag (which includes -Wunused-result)
+
+During investigation of this unused result warning and following up on 
+the patch by Minh-Quang Bui [1], I also discovered an issue with the 
+selftests build system: running 'make clean' from 
+tools/testing/selftests/ doesn't clean objects in net/lib/ because the 
+clean target doesn't include $(INSTALL_DEPS_TARGET). This explains why 
+net/lib compiled objects persist after cleaning and why the warning only
+appears with manual cleaning of that specific directory.
+
+ > Can you not cast the read() to void directly?
+
+Sure. Direct casting is much cleaner. I haven't noticed it... Thanks for 
+the advice.
+
+Would it be acceptable to:
+1. Send a v2 of this patch with the direct void casting approach and 
+more precise commit message?
+2. Send a separate patch to fix the selftests Makefile clean target to 
+include $(INSTALL_DEPS_TARGET)?
+
+[1] 
+https://lore.kernel.org/all/20250601142914.13379-1-minhquangbui99@gmail.com/
 
 Thanks,
-Arisu & Guillaume & Shuah & Sasha
+Nai-Chen Cheng
 
