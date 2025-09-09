@@ -1,63 +1,64 @@
-Return-Path: <linux-kselftest+bounces-41056-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41057-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA8F3B50346
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 18:54:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBEC0B5034E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 18:55:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAE2E1C6475A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 16:55:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CD3C3ACF71
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 16:55:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38BBE352FF5;
-	Tue,  9 Sep 2025 16:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56EB35E4F4;
+	Tue,  9 Sep 2025 16:54:50 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f67.google.com (mail-ed1-f67.google.com [209.85.208.67])
+Received: from mail-ed1-f65.google.com (mail-ed1-f65.google.com [209.85.208.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841742264D5;
-	Tue,  9 Sep 2025 16:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081C135CEDA;
+	Tue,  9 Sep 2025 16:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757436888; cv=none; b=glzdCl0GouL9xU8CslBW3fLhodY9byXzFZtiqGadzqHmPACNPC8Tmw1/1GCeZ0Gs1jlt39aMJuQ6tj+BUmIQ0wA4bFAXjcIswAZSW8XpGD3ibgbUCOHUzUMAwr4jNbm0u+Ex45DPhRLsdHOuXB4rKagYQP1wRIxYwNqis0OpdRc=
+	t=1757436890; cv=none; b=uBDCuVpHrAddgmLAYlxKICRzh0h3o7yRjnMhFGFlYB5P0Ya1CTwF4TFkzIGOPzFUXEwrhOpJwltqjpbHjT8N9ygBGnU4zIYSKjjHnaN5HfFguBcOsE14y+NosJA9nrfaMXPACNrz7YEmM8R4mjZ15K15Q3N1D6Yw+OeC6O6KKEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757436888; c=relaxed/simple;
-	bh=bxDJ1Uw4J0KpleKnQNyutRybOnKsD5XTqIf7LZmhlfc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mNpD0sRhPF718Bcm/RfIk/ON3Xte7m0vMmtO7lxfTFUO4BMVn1CDVXlIuGJ3UrgZ9R8dgOgSKzBxnT3CQR2k/hr8OXJrn6DMJfTtaQUIXboB7epUtkbTGXaTY6DbP91ipJWuHymVqfJEg6jY58QCQxHPSk/MEhfEXAunL/QyhKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.67
+	s=arc-20240116; t=1757436890; c=relaxed/simple;
+	bh=jdbVfhyNDy3ScJwdpuXRbfGXLtpnNYn4aqpJz5iRAj4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ObSSK7Sla91O1p8J2+Pm4HXJHQDTCeGKBwhFB7Rtoe/0+rL6DjZOqAy5HnMLsjsbjzGI7vG/6l3uKZ/1xHZFiLC6bRbxcuiB3QjRERlowdlKwZDwQvG4KTE7MqeiZIIibqPlseGxAy5rWHcNryW1Ab/3BoyogPDE7BiMhHk59Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f67.google.com with SMTP id 4fb4d7f45d1cf-628f29d68ecso4639422a12.3;
-        Tue, 09 Sep 2025 09:54:46 -0700 (PDT)
+Received: by mail-ed1-f65.google.com with SMTP id 4fb4d7f45d1cf-6237202020bso5716013a12.3;
+        Tue, 09 Sep 2025 09:54:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757436885; x=1758041685;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MNTwRNFBMsyW1WoHdowH0Y6o+cSls4bW7O/Ck2bq7h8=;
-        b=sYF1/Idu13KA/JIaREX+jOfM/7u9jXQ7YCyGIn3BSLgCr/OWE7151PW4XYLAw9naT7
-         ldJe3rBrt+lzYIBymN7qDmMU7hjaz2I76jeYoZyhaf94YeVPCOjcXjEZNpgJg/ZX9FdL
-         BF9IwQdPN830AIfkoMkw9hE986sOGPbIvZp6qKZnkWL1zX5gQASHigqsKv7ybZ5QDSiS
-         g60JQ94pJ9OP976RNIlKzgYinF49+9K4zB67rO8BeVPVpKRy+rWXXKTpJ37CLtOswUpb
-         IoLl6BV3yXeK1RGio68WX2RDfBH0DbkwA+lWIrZzwVF8sJbpSwrc2icgmZGZYSHI/AIk
-         CAQA==
-X-Forwarded-Encrypted: i=1; AJvYcCUeQYRUtkD0ZzabCT9EDlMEoBj7MZy5wtgSuXNEUcm5spAEQBiOJnGm5e2KdmvqJ4kwc/Lmf5SMUmI+DVg=@vger.kernel.org, AJvYcCWrDVVJ6mrZ5f/Fqu36k/BSFncPNOaj5rOkvIZbjc+Fo2f0EBt7msmm7gsSJ0T4Dd1nt+6qBfOVVM0ijTSPZtoG@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAk2l/8/Q2HjGmmFy8G+GsCPhnc4Ju+Otxwwj5UJAZ0Yrl4kTZ
-	YLUZjDdq620FB4gPT0/wQuF5VIpDXbGaWX+kHrWMMRYInqrcx5Q65npXcEPlPM/f
-X-Gm-Gg: ASbGnctcSNHxmc/bMr7wvY0OQ+MLqTNuop+FcW0bS8I6TBCeuIa5JRUCo6IHgqICEx4
-	Umetxj/aZxOM5ut7A88qg3iOvkljgmMdehJVBRe+rX5ihoHeKyuP1jP45k+7GPACOcXr+dO0o83
-	R3RPCRPzxmSozvJE6iSbpD1WU01+h/w6xLhoa4eBUphR4N6SlnQEiYnSaa5VCJg9V1wqlo2f0PS
-	Dlh4xYnYURo8x6UMX/2kFSr2kEM88WHxNHbfhbbBeOUZgAOP22+UIda91p1k4+ynLHqrwBOODlu
-	8Bh6vY/AbxOfePl3jWXw8223Ko6H/TFkHMREa5R0OxBXb7zt205eFyOMfesRybLl9DMTr1YRgK9
-	/68E9Wi3jOdYVUWLHzlhd/0pGHatoK/bbHJhjAd821cQ51nhsfzUB+TsM0ZGTig==
-X-Google-Smtp-Source: AGHT+IFCWaywXA4laKwHuBxK3xcg+y9szPbeUAo5eHR/2wV7hbFsTBbCwRXsWsz8ZadmzmBc2Nmxmg==
-X-Received: by 2002:a05:6402:1ecf:b0:62a:82e8:e1f6 with SMTP id 4fb4d7f45d1cf-62a82e8e4afmr5766936a12.36.1757436884570;
-        Tue, 09 Sep 2025 09:54:44 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757436887; x=1758041687;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=US5eECN201nn2lBjMJZb8xxddZfYzRWCBlds6C0VTV4=;
+        b=matfhCoXWhr5qe1v4TEwrw4fTpXLGyPY+eyyC4UbWIm5bx+Sw/OCkVrjXbtdR9qPv2
+         fS4PJSL3g+Wf4R5H1Fw8eezxF6TJ6yRsjEeGpiFGMIjQTKYKcdLlnSSXuwpO1+MLHMZE
+         IVVJfDeGbsCv/bXSquOrMqvCJ/47o5FnbwBTE/TKab6sii8V9o6CJcI50IKGLCRdwEXg
+         Ex1xkNVipPQlgGpjc/cplIBDv7cK4vW8CKO2FIqG73S4E95sFgiaArNJSLLDwdbN4NT+
+         HiNXtN1y2NNvShDMbtqgrxn+NrHiu/bPSxv0pQpHEWk3lGkCAatiyI+oF6CVtE+y0BFH
+         AvRw==
+X-Forwarded-Encrypted: i=1; AJvYcCWGmfNbpKcAx0H4HKfqfoXXqrPfFRvGZJQPAGDkM/hEQp8zIkboO92gDqwRiDtJr1jOfvyB5jFAxSgIptWy1s/3@vger.kernel.org, AJvYcCWf8pPTXmx3NcRa3tpLZhQPCLW2gZ4u4qHPDGCGMEUohInKnAv17FyH6P4W70b63vPYwjPQWWvssULVWjU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6pViYAt/Aev5CUr2bYZqgSGc7JHafhgCQGF6muYdi+TGitbII
+	dmJ7/2GliF1/QK9mQ6XTt4l21nZGz1crj11jtKAtvDHay9fc1N6oJDnUNchu3pf3
+X-Gm-Gg: ASbGncsMLPIgd+BDodSsYW53aUKYanc5dlMjpoQ+Iyueg0nNgkp/m0LNzwoh2fkZjTH
+	MtFx39dWCBeRQQkvbC3tBCG25yKtAb4YX4fgbk6tkjSyS563zH7pium922CWUmvyI+uH9neJ//5
+	TJCmJrm3IXIWmSsLXj7EdMDYywZmLl2j2dbiDf2LZkL6yXEK5xk6wtTGzLND5liMlMj706j6IS5
+	aVkrTPN6Zlts3ZIIEJWBJYtbdEg3JEsTb0hdzuadkNF6LUv0VVBt8+6ruSW4hamdSNs/UUUyZZy
+	CO9x0262E1DbkDJWKh0mpyaYWHblpB8KpfKZU1cyrJJ7N/2zhNbhaWZfPJcNc/VbHynvGXAKMAC
+	I+EsphR6kBwuuonroYfY7z1L26Gm0fnUl7Hqz84r1yV9wzznXwEo4c45xrzlRrA==
+X-Google-Smtp-Source: AGHT+IF5WpQ9BlQlNSx4PkE0JwB3/n09qaYMSzzFOW9lj1zNEOvA7s98g8pDch1JVdTqJKMKLPTf/A==
+X-Received: by 2002:a05:6402:5215:b0:62c:9185:2200 with SMTP id 4fb4d7f45d1cf-62c91852b90mr1593061a12.22.1757436887245;
+        Tue, 09 Sep 2025 09:54:47 -0700 (PDT)
 Received: from im-t490s.redhat.com (78-80-97-40.customers.tmcz.cz. [78.80.97.40])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62c018f90cesm1497326a12.44.2025.09.09.09.54.43
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62c018f90cesm1497326a12.44.2025.09.09.09.54.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 09:54:44 -0700 (PDT)
+        Tue, 09 Sep 2025 09:54:46 -0700 (PDT)
 From: Ilya Maximets <i.maximets@ovn.org>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -75,10 +76,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Davide Caratti <dcaratti@redhat.com>,
 	Ido Schimmel <idosch@idosch.org>,
 	Ilya Maximets <i.maximets@ovn.org>
-Subject: [PATCH net v2 0/2] net: dst_metadata: fix DF flag extraction on tunnel rx
-Date: Tue,  9 Sep 2025 18:54:14 +0200
-Message-ID: <20250909165440.229890-1-i.maximets@ovn.org>
+Subject: [PATCH net v2 1/2] net: dst_metadata: fix IP_DF bit not extracted from tunnel headers
+Date: Tue,  9 Sep 2025 18:54:15 +0200
+Message-ID: <20250909165440.229890-2-i.maximets@ovn.org>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250909165440.229890-1-i.maximets@ovn.org>
+References: <20250909165440.229890-1-i.maximets@ovn.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,32 +90,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Two patches here, first fixes the issue where tunnel core doesn't
-actually extract DF bit from the outer IP header, even though both
-OVS and TC flower allow matching on it.  More details in the commit
-message.
+Both OVS and TC flower allow extracting and matching on the DF bit of
+the outer IP header via OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT in the
+OVS_KEY_ATTR_TUNNEL and TCA_FLOWER_KEY_FLAGS_TUNNEL_DONT_FRAGMENT in
+the TCA_FLOWER_KEY_ENC_FLAGS respectively.  Flow dissector extracts
+this information as FLOW_DIS_F_TUNNEL_DONT_FRAGMENT from the tunnel
+info key.
 
-The second is a selftest for openvswitch that reproduces the issue,
-but also just adds some basic coverage for the tunnel metadata
-extraction and related openvswitch uAPI.
+However, the IP_TUNNEL_DONT_FRAGMENT_BIT in the tunnel key is never
+actually set, because the tunneling code doesn't actually extract it
+from the IP header.  OAM and CRIT_OPT are extracted by the tunnel
+implementation code, same code also sets the KEY flag, if present.
+UDP tunnel core takes care of setting the CSUM flag if the checksum
+is present in the UDP header, but the DONT_FRAGMENT is not handled at
+any layer.
 
+Fix that by checking the bit and setting the corresponding flag while
+populating the tunnel info in the IP layer where it belongs.
 
-Version 2:
-  * Added missing tun_dst NULL check.
-  * Added Reviewed-by from Aaron for the selftest.
+Not using __assign_bit as we don't really need to clear the bit in a
+just initialized field.  It also doesn't seem like using __assign_bit
+will make the code look better.
 
-Version 1:
-  https://lore.kernel.org/netdev/20250905133105.3940420-1-i.maximets@ovn.org/
+Clearly, users didn't rely on this functionality for anything very
+important until now.  The reason why this doesn't break OVS logic is
+that it only matches on what kernel previously parsed out and if kernel
+consistently reports this bit as zero, OVS will only match on it to be
+zero, which sort of works.  But it is still a bug that the uAPI reports
+and allows matching on the field that is not actually checked in the
+packet.  And this is causing misleading -df reporting in OVS datapath
+flows, while the tunnel traffic actually has the bit set in most cases.
 
+This may also cause issues if a hardware properly implements support
+for tunnel flag matching as it will disagree with the implementation
+in a software path of TC flower.
 
-Ilya Maximets (2):
-  net: dst_metadata: fix IP_DF bit not extracted from tunnel headers
-  selftests: openvswitch: add a simple test for tunnel metadata
+Fixes: 7d5437c709de ("openvswitch: Add tunneling interface.")
+Fixes: 1d17568e74de ("net/sched: cls_flower: add support for matching tunnel control flags")
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+---
+ include/net/dst_metadata.h | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
- include/net/dst_metadata.h                    | 11 ++-
- .../selftests/net/openvswitch/openvswitch.sh  | 88 +++++++++++++++++--
- 2 files changed, 90 insertions(+), 9 deletions(-)
-
+diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+index 4160731dcb6e..1fc2fb03ce3f 100644
+--- a/include/net/dst_metadata.h
++++ b/include/net/dst_metadata.h
+@@ -3,6 +3,7 @@
+ #define __NET_DST_METADATA_H 1
+ 
+ #include <linux/skbuff.h>
++#include <net/ip.h>
+ #include <net/ip_tunnels.h>
+ #include <net/macsec.h>
+ #include <net/dst.h>
+@@ -220,9 +221,15 @@ static inline struct metadata_dst *ip_tun_rx_dst(struct sk_buff *skb,
+ 						 int md_size)
+ {
+ 	const struct iphdr *iph = ip_hdr(skb);
++	struct metadata_dst *tun_dst;
++
++	tun_dst = __ip_tun_set_dst(iph->saddr, iph->daddr, iph->tos, iph->ttl,
++				   0, flags, tunnel_id, md_size);
+ 
+-	return __ip_tun_set_dst(iph->saddr, iph->daddr, iph->tos, iph->ttl,
+-				0, flags, tunnel_id, md_size);
++	if (tun_dst && (iph->frag_off & htons(IP_DF)))
++		__set_bit(IP_TUNNEL_DONT_FRAGMENT_BIT,
++			  tun_dst->u.tun_info.key.tun_flags);
++	return tun_dst;
+ }
+ 
+ static inline struct metadata_dst *__ipv6_tun_set_dst(const struct in6_addr *saddr,
 -- 
 2.50.1
 
