@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-41027-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F196B4A50A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 10:20:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 296A5B4A506
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 10:20:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20B3B3A6225
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 08:20:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB38B17161A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 08:20:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFDCE24A078;
-	Tue,  9 Sep 2025 08:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A62324EA9D;
+	Tue,  9 Sep 2025 08:19:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f/LTX2fC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RgThm+Sx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1F124BBE4;
-	Tue,  9 Sep 2025 08:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C452124BBE4;
+	Tue,  9 Sep 2025 08:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757405976; cv=none; b=NIgqFeye17QFDeOqDuUJlls2MQ35GF0jQOPtG0AU/5xw0gRFGg0l+0ySg1PE6OS3K3eoj7PKFZAJHh1suY4uLed/S/4D1JE1RmXvZU2mWxx72HnGsbY0Vz3EM9gcPLKgbceeWgZRKdJq28MWIOvOWlhrSl34/zMfe6BPok+cYN4=
+	t=1757405984; cv=none; b=kHzChsY01i96yMkwVJ2AJ6Y8jqmOHGcsqsrA3fGQX7PeYz5dB9hV9knxkBcHsvs4MxK0T5OfZrgc3OmdKcx0wxA9SLf2xvPvL3DDF+gD/XGS4pTKRJ7YjZxnV9XW2wRXoX7BEhv5Jwmz5AJDwcVDS4DJohQXJK07ip1gvTlI4ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757405976; c=relaxed/simple;
-	bh=UIhlWxuqN69pLYi6tPZrXWF9cGhQLaJDRjRgty4I3Fc=;
+	s=arc-20240116; t=1757405984; c=relaxed/simple;
+	bh=Dgcs8MxHanr/0OJzZegDekRCw8UWXjmqJbMOO/yf2ls=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TArvWxsy81ldkn2YsxPmFw6CoGayEEJq9QU78X8WlWP5khwA0Dw8dsfGLILlC4juK0WJggo0gvWXOYwwRdjZ3tDYhABEzDmLD9md9+DUvpYZDiXx/CQE6Vpu208x6NQwIA/hqbqLSMJmWCBlIns0YXJ7r46G0usZisHitL+LTVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f/LTX2fC; arc=none smtp.client-ip=209.85.214.182
+	 MIME-Version; b=BJqcIVgoOASaxpxStbc9uf5UDvnjIytKqGzpizjar1Yq7kYhawTevVIoYaBA+TfKVo5/p62LS68fxExP+yuR2++efvbdHUXe2kpy/82xUh9PnD5ub1om78bXc1a8NacSP9Afa8e3wH0w6MbDVYCdsDjPdlERGyTcpYZrRYIrimM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RgThm+Sx; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-24c786130feso46497775ad.2;
-        Tue, 09 Sep 2025 01:19:35 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2518a38e7e4so31401415ad.1;
+        Tue, 09 Sep 2025 01:19:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757405974; x=1758010774; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757405982; x=1758010782; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+9kBZ8wSNbgVPLWYpqquJEoE5nIKe8yQyYCFGYvwsAQ=;
-        b=f/LTX2fChlFQ0cl1+0sx4UmEYim/+GUDQe2D4WSEI3oXlVUVHxATICF/BMDmi9Pia6
-         FbBu5P3oeLraMfNLOuh2eQRuVEfHHSLrFEGPSFRyrIq1pew5PZjWl+Bw54eYAVg3Y9k5
-         NkDiAITShI5ojZHUhhTzVNGZ+JnLJWERIkv0vaKvvPSAalZYidYbVscVVd5DPbh3iD6Y
-         Z5HyAxtwVzjo+b9GFKY1oG/CHU1/YqWhSWqpyCG9uDPe32BbQ/9darFtGeG2zS071GKo
-         vByDgfdgoqeiHBjGuNllK9KKYN9pqWfFCMZXxWX2OrgBMKBOg1L7pvclh/eqRR47OHB5
-         +Bcw==
+        bh=2kkYMhRFqiCQOalVGgl3DPBxokTZqQJbI+Err9BZ1ds=;
+        b=RgThm+SxQ2rQ53XEcPekeTefc6JEHaWOoLPbJ91qTpKlhXwMJ8CgeZUSrTYOft+QCS
+         1zT2JKO8CSYUu4BPjjk/Mpw7yEK7feuCc8i1Vj0utXNuFv85nhlVnuWo0ifkeR+x/dSE
+         SxWq6nnrHgYElI65j6B1/VTN1sKuWyXDNMurtDGKB5z7UE2wJxbfcjccReFFW0TUWkHe
+         KbiA/PjZ8f4VAIeRBWRnd5h6VhUY+ftjlLSley4rlksbtAtSmp7LaDb2LIu6XnilWeG+
+         z7Kd4Q8iyanvkxl6zoLyQdSSaaoIdFREA56gJcmujHsBGexkiE+h/G+S0ZNIuWvBsihN
+         vCng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757405974; x=1758010774;
+        d=1e100.net; s=20230601; t=1757405982; x=1758010782;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+9kBZ8wSNbgVPLWYpqquJEoE5nIKe8yQyYCFGYvwsAQ=;
-        b=RMnqrk6bBlOtxLN1IPuMPI8pmXj5B8vX6/yduVs+g0TT8GEcxpiZgB1YipjXLt4XCn
-         cPfzn+2BnIsAPPcKXuLdAQjRpX+Ve8T4oItjlA/6ENdgIqMoTHK6AbTb0z2CloqrCrRi
-         RbUWz5jtyFfEsa3Fb2D+jgvSoKGxvndHOH8w3lc23EB4sB5vaOgES7xbhve5ImHH25W4
-         fvbzu7YranrYCK3aCv1SL5RAzSqmrKv1nuAoth3NQPkHAAI/YhrierXPBgDOLEQAS7nY
-         6rJoGJgmUk5uG8pI2HC6HcX4GvJdh2/LUnC+0zPgzNHsKGdACcm0zIZ0oPIjRLVx0o78
-         vjlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9zU0EgNyjbKidFPEtyyNG3zmRtnOV82toK9TVkUP6VKyMvvJCuKCwqNURrIwIW42aSLwGaxqEC7dCbctqvEk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhmYOnefcHWuFgXdSEUeW2PqKQgu9LUEhT8GuuoA0O3keqhYms
-	E6qbnhrB8PMnze4UcTvxz/Z+ZMRNMhBnGgJa97kwxvyO5noa+oQFKLn7FtbGItndfKE=
-X-Gm-Gg: ASbGncv/N2Tmg9JuYiUaXdav3y47LgQMo1/ZmiBzaCi/ENcZQIfpHGF1eHy6W8Y1OHP
-	eIhYcAv1fAmFKKfqRwrqwFa5RWEaW4feUKRGS56L1NbYEhWsYiDXYFXKQHQ6ThzHcVFcLX14T2E
-	PProjf+vrVd3ci4GNOJolCHfWaeTLhNs0wNNcPXaziNO9dDQgWI7E8YF0/rD4zq+4FgGEwXb2yQ
-	DoFUA64kYwnY8RU6J/CXbaEA8DEffRM2OjgywEcr3r+AxYpkFW0dB+CiJCOICL5CE0wxnNwUWGp
-	5uVgKSWqwwBVGuTyMO4HhfSgoDCK/ZYT8yBJ/wCEl/ExVd1DVb23WXVN9jE1nU23aKzaRaqOjMo
-	n5SWd9ylriqXxflcCAADIpL06QDNwLH5bAtAWSTlDulaFGW8yubiO
-X-Google-Smtp-Source: AGHT+IFkevz+07KZP1RBJh2ujaoDNj45NZZpaRqI+pqsnwseopNaWUHlbdVezTUcHfaceDpVDyDddA==
-X-Received: by 2002:a17:902:fc44:b0:24b:62ef:9d38 with SMTP id d9443c01a7336-2516e887fd5mr144769785ad.19.1757405974451;
-        Tue, 09 Sep 2025 01:19:34 -0700 (PDT)
+        bh=2kkYMhRFqiCQOalVGgl3DPBxokTZqQJbI+Err9BZ1ds=;
+        b=EmynhUaxk3sUlUOf3XS9cD7u3b1pf+wawqKH2V7kg7Aq+zOdpMlVO0ujxMbNuU3eVd
+         DfcTGYNlqnDrigTzZ7xQwn+KtE9fEIYiZjUbEXtItJK6u35MfOvNkWrndDxWYFHhnV5D
+         y+gto/pMJc1nzbyS44R8SpcUasGHbM38dYMiJ0f7yOib6Egg2cDNaeMLmLVn+76wA+/k
+         4vLSBn45nChTYcvqDgM6qBjd0pQSxE3u/lF+1OP6/F9eNyHa8LYT6ETPQcQqwz5KgxUV
+         pi4m6PTtc294gCDcDHm6awRjfX5jxTG13uCXsIO1oHosCSjIuPfQgGQTKDuczD84Fyqe
+         sF4w==
+X-Forwarded-Encrypted: i=1; AJvYcCUUJ0Y6hc2Z3JZdmiBWmw8i6zTZ1VGFFb8/huQfuYAGoONuyyNk0C5tGEIwEJ+SvbJ+FKguHH0vAOgyvjJNYm8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGi0p4dcGBTm9lggqTmgEm3kRk/42EUchgFmzMPsSmR7Lro3/w
+	mGtXYSYrVZbI0P4SCJaxedevEdy/N5AAISb0lDBP+89LM/g/0so8d7+FcBlvX0nG4ag=
+X-Gm-Gg: ASbGncsHKihUVcAW7onAM6ISCtADk9anu9bPB5oM58h3xgo3gamy/YS24aRAHTHO5HY
+	EoGVRp70I5ccguy3PizsEuY/+CiuSgMaXNazEgbziigIMD+zv9NRP4GEqECU2Qq+osCA36fduw6
+	evZLmxDysZfweKXM4JVGA5vfNgUIHegfwNsG9xuUmKXxGEPWJN2sKxwzuv9NpCLgvZGtuQ0qmpK
+	ATykSwdIsEq9ovmYAKwujr/u0vEk379FeVUj+kW/IXlIzFu1lOE8SfGDK2hCRsLManQtAMXJkce
+	AgqJtpmJGookeSprPBwKtcBo7Kh0OJai0mXLN0Eug5qpTBvgCzoNEx+7MJrFpJkfFalypJ1fIQM
+	2CBY6+RZCVKhpqrj/JhjRyLB5LrnHw9Vh6WdJKHih232iNKvtOSGC
+X-Google-Smtp-Source: AGHT+IFPsqO9J0V2j7nWY4KCNV3228rVBXepKIlN3pJACIgkvAeC/KXN1N0FIs6Qijs0xiVKkktqgQ==
+X-Received: by 2002:a17:902:e811:b0:244:5bbe:acdd with SMTP id d9443c01a7336-25179f34dc0mr127684515ad.27.1757405981836;
+        Tue, 09 Sep 2025 01:19:41 -0700 (PDT)
 Received: from fedora.redhat.com ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24c7ecd9cafsm174370575ad.83.2025.09.09.01.19.27
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24c7ecd9cafsm174370575ad.83.2025.09.09.01.19.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 01:19:33 -0700 (PDT)
+        Tue, 09 Sep 2025 01:19:41 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Jay Vosburgh <jv@jvosburgh.net>,
@@ -94,9 +94,9 @@ Cc: Jay Vosburgh <jv@jvosburgh.net>,
 	bridge@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv3 net-next 4/5] net: bridge: use common function to compute the features
-Date: Tue,  9 Sep 2025 08:18:51 +0000
-Message-ID: <20250909081853.398190-5-liuhangbin@gmail.com>
+Subject: [PATCHv3 net-next 5/5] selftests/net: add offload checking test for virtual interface
+Date: Tue,  9 Sep 2025 08:18:52 +0000
+Message-ID: <20250909081853.398190-6-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250909081853.398190-1-liuhangbin@gmail.com>
 References: <20250909081853.398190-1-liuhangbin@gmail.com>
@@ -108,82 +108,181 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Previously, bridge ignored all features propagation and DST retention,
-only handling explicitly the GSO limits.
-
-By switching to the new helper netdev_compute_features_from_lowers(),
-the bridge now expose additional features, depending on the lowers
-capabilities.
-
-Since br_set_gso_limits() is already covered by the helper, it can be
-removed safely.
+make sure the virtual interface offload setting is correct after
+changing lower devices.
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- net/bridge/br_if.c | 22 +++-------------------
- 1 file changed, 3 insertions(+), 19 deletions(-)
+ tools/testing/selftests/net/Makefile        |   1 +
+ tools/testing/selftests/net/config          |   1 +
+ tools/testing/selftests/net/vdev_offload.sh | 137 ++++++++++++++++++++
+ 3 files changed, 139 insertions(+)
+ create mode 100755 tools/testing/selftests/net/vdev_offload.sh
 
-diff --git a/net/bridge/br_if.c b/net/bridge/br_if.c
-index 98c5b9c3145f..8fe44e8c008c 100644
---- a/net/bridge/br_if.c
-+++ b/net/bridge/br_if.c
-@@ -525,20 +525,6 @@ void br_mtu_auto_adjust(struct net_bridge *br)
- 	br_opt_toggle(br, BROPT_MTU_SET_BY_USER, false);
- }
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 8c860782f9cd..c77c55677a3a 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -119,6 +119,7 @@ TEST_PROGS += tfo_passive.sh
+ TEST_PROGS += broadcast_pmtu.sh
+ TEST_PROGS += ipv6_force_forwarding.sh
+ TEST_PROGS += route_hint.sh
++TEST_PROGS += vdev_offload.sh
  
--static void br_set_gso_limits(struct net_bridge *br)
--{
--	unsigned int tso_max_size = TSO_MAX_SIZE;
--	const struct net_bridge_port *p;
--	u16 tso_max_segs = TSO_MAX_SEGS;
--
--	list_for_each_entry(p, &br->port_list, list) {
--		tso_max_size = min(tso_max_size, p->dev->tso_max_size);
--		tso_max_segs = min(tso_max_segs, p->dev->tso_max_segs);
--	}
--	netif_set_tso_max_size(br->dev, tso_max_size);
--	netif_set_tso_max_segs(br->dev, tso_max_segs);
--}
--
- /*
-  * Recomputes features using slave's features
-  */
-@@ -652,8 +638,6 @@ int br_add_if(struct net_bridge *br, struct net_device *dev,
- 			netdev_err(dev, "failed to sync bridge static fdb addresses to this port\n");
- 	}
- 
--	netdev_update_features(br->dev);
--
- 	br_hr = br->dev->needed_headroom;
- 	dev_hr = netdev_get_fwd_headroom(dev);
- 	if (br_hr < dev_hr)
-@@ -694,7 +678,8 @@ int br_add_if(struct net_bridge *br, struct net_device *dev,
- 		call_netdevice_notifiers(NETDEV_CHANGEADDR, br->dev);
- 
- 	br_mtu_auto_adjust(br);
--	br_set_gso_limits(br);
+ # YNL files, must be before "include ..lib.mk"
+ YNL_GEN_FILES := busy_poller
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index d548611e2698..da4212373b84 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -128,3 +128,4 @@ CONFIG_NETKIT=y
+ CONFIG_NET_PKTGEN=m
+ CONFIG_IPV6_ILA=m
+ CONFIG_IPV6_RPL_LWTUNNEL=y
++CONFIG_NET_TEAM=m
+diff --git a/tools/testing/selftests/net/vdev_offload.sh b/tools/testing/selftests/net/vdev_offload.sh
+new file mode 100755
+index 000000000000..17b89a40a7d3
+--- /dev/null
++++ b/tools/testing/selftests/net/vdev_offload.sh
+@@ -0,0 +1,137 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +
-+	netdev_compute_features_from_lowers(br->dev);
- 
- 	kobject_uevent(&p->kobj, KOBJ_ADD);
- 
-@@ -740,7 +725,6 @@ int br_del_if(struct net_bridge *br, struct net_device *dev)
- 	del_nbp(p);
- 
- 	br_mtu_auto_adjust(br);
--	br_set_gso_limits(br);
- 
- 	spin_lock_bh(&br->lock);
- 	changed_addr = br_stp_recalculate_bridge_id(br);
-@@ -749,7 +733,7 @@ int br_del_if(struct net_bridge *br, struct net_device *dev)
- 	if (changed_addr)
- 		call_netdevice_notifiers(NETDEV_CHANGEADDR, br->dev);
- 
--	netdev_update_features(br->dev);
-+	netdev_compute_features_from_lowers(br->dev);
- 
- 	return 0;
- }
++# shellcheck disable=SC1091
++source lib.sh
++
++# Set related offload on lower deivces and check if upper device re-compute
++# Some features are fixed on veth interface. Just list here in case we have a
++# better way to test in future.
++set_offload()
++{
++	local dev="$1"
++	local state="$2"
++
++	# VLAN features
++	# NETIF_F_FRAGLIST: tx-scatter-gather-fraglist
++	# shellcheck disable=SC2154
++	ip netns exec "$ns" ethtool -K "$dev" tx-scatter-gather-fraglist "$state"
++
++	# ENC features
++	# NETIF_F_RXCSUM: rx-checksum (bond/team/bridge fixed)
++
++	# XFRM features (veth fixed, netdevsim supports)
++	# NETIF_F_HW_ESP: esp-hw-offload
++	# NETIF_F_GSO_ESP: tx-esp-segmentation
++
++	# GSO partial features
++	# NETIF_F_GSO_PARTIAL: tx-gso-partial (veth/bond fixed)
++
++	# Common features
++	# NETIF_F_SG: tx-scatter-gather
++	ip netns exec "$ns" ethtool -K "$dev" tx-scatter-gather "$state" &> /dev/null
++	# NETIF_F_GSO_SOFTWARE: NETIF_F_GSO_ACCECN: tx-tcp-accecn-segmentation
++	ip netns exec "$ns" ethtool -K "$dev" tx-tcp-accecn-segmentation "$state"
++	# NETIF_F_GSO_SOFTWARE: NETIF_F_GSO_SCTP: tx-sctp-segmentation
++	ip netns exec "$ns" ethtool -K "$dev" tx-sctp-segmentation "$state"
++	# NETIF_F_GSO_SOFTWARE: NETIF_F_GSO_FRAGLIST: tx-gso-list
++	ip netns exec "$ns" ethtool -K "$dev" tx-gso-list "$state"
++}
++
++__check_offload()
++{
++	local dev=$1
++	local opt=$2
++	local expect=$3
++
++	ip netns exec "$ns" ethtool --json -k "$dev" | \
++		jq -r -e ".[].\"$opt\".active == ${expect}" >/dev/null
++}
++
++check_offload()
++{
++	local dev=$1
++	local state=$2
++
++	__check_offload "$dev" "tx-scatter-gather-fraglist" "$state" || RET=1
++	__check_offload "$dev" "tx-scatter-gather" "$state" || RET=1
++	__check_offload "$dev" "tx-tcp-accecn-segmentation" "$state" || RET=1
++	__check_offload "$dev" "tx-sctp-segmentation" "$state" || RET=1
++	__check_offload "$dev" "tx-gso-list" "$state" || RET=1
++}
++
++setup_veth()
++{
++	# Set up test netns
++	setup_ns ns switch
++
++	# shellcheck disable=SC2154
++	ip -n "$ns" link add veth0 type veth peer name veth0 netns "$switch"
++	ip -n "$ns" link add veth1 type veth peer name veth1 netns "$switch"
++	ip -n "$switch" link set veth0 up
++	ip -n "$switch" link set veth1 up
++
++	link_0=veth0
++	link_1=veth1
++}
++
++cleanup()
++{
++	cleanup_all_ns
++}
++
++setup_bond()
++{
++	ip -n "$ns" link set "$link_0" nomaster
++	ip -n "$ns" link set "$link_1" nomaster
++	ip -n "$ns" link add bond0 type bond mode active-backup miimon 100
++	ip -n "$ns" link set "$link_0" master bond0
++	ip -n "$ns" link set "$link_1" master bond0
++	ip -n "$ns" link set bond0 up
++}
++
++setup_team()
++{
++	ip -n "$ns" link set "$link_0" nomaster
++	ip -n "$ns" link set "$link_1" nomaster
++	ip -n "$ns" link add team0 type team
++	ip -n "$ns" link set "$link_0" master team0
++	ip -n "$ns" link set "$link_1" master team0
++	ip -n "$ns" link set team0 up
++}
++
++setup_bridge()
++{
++	ip -n "$ns" link set "$link_0" nomaster
++	ip -n "$ns" link set "$link_1" nomaster
++	ip -n "$ns" link add br0 type bridge
++	ip -n "$ns" link set "$link_0" master br0
++	ip -n "$ns" link set "$link_1" master br0
++	ip -n "$ns" link set br0 up
++}
++
++do_test()
++{
++	local dev=$1
++
++	RET=0
++	set_offload veth0 "on"
++	set_offload veth1 "on"
++	check_offload "$dev" "true"
++	log_test "$dev" "enable offload"
++
++	RET=0
++	set_offload veth0 "off"
++	set_offload veth1 "off"
++	check_offload "$dev" "false"
++	log_test "$dev" "disable offload"
++}
++
++trap cleanup EXIT
++setup_veth
++setup_bond
++do_test bond0
++setup_team
++do_test team0
++setup_bridge
++do_test br0
 -- 
 2.50.1
 
