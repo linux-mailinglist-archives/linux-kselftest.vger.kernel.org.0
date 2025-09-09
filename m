@@ -1,64 +1,64 @@
-Return-Path: <linux-kselftest+bounces-41057-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41058-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBEC0B5034E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 18:55:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45245B5034C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 18:55:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CD3C3ACF71
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 16:55:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E44A7540E36
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 16:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56EB35E4F4;
-	Tue,  9 Sep 2025 16:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1875635FC3A;
+	Tue,  9 Sep 2025 16:54:54 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f65.google.com (mail-ed1-f65.google.com [209.85.208.65])
+Received: from mail-ed1-f67.google.com (mail-ed1-f67.google.com [209.85.208.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081C135CEDA;
-	Tue,  9 Sep 2025 16:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160E435FC32;
+	Tue,  9 Sep 2025 16:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757436890; cv=none; b=uBDCuVpHrAddgmLAYlxKICRzh0h3o7yRjnMhFGFlYB5P0Ya1CTwF4TFkzIGOPzFUXEwrhOpJwltqjpbHjT8N9ygBGnU4zIYSKjjHnaN5HfFguBcOsE14y+NosJA9nrfaMXPACNrz7YEmM8R4mjZ15K15Q3N1D6Yw+OeC6O6KKEY=
+	t=1757436894; cv=none; b=TYbVL7FHbfoFJWsMC4JP9ag01a7W1UBZG5HZqrqAxbVNtJj3tnjv2MknsgUE9/Dps4AH7Sunh4mhTBHOVMmOTfDFlDmgyLvYnlsMgYtvfE7DnUAuXSRU2o8WDC7oDj32uNiLUckVGA4Ua/anNx+ZmBXfgAPhOdF3qICbY3xKrR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757436890; c=relaxed/simple;
-	bh=jdbVfhyNDy3ScJwdpuXRbfGXLtpnNYn4aqpJz5iRAj4=;
+	s=arc-20240116; t=1757436894; c=relaxed/simple;
+	bh=nRz6JK3TGon9dwCEfHreJkbmmrfCML1mWMrSbHTV6aY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ObSSK7Sla91O1p8J2+Pm4HXJHQDTCeGKBwhFB7Rtoe/0+rL6DjZOqAy5HnMLsjsbjzGI7vG/6l3uKZ/1xHZFiLC6bRbxcuiB3QjRERlowdlKwZDwQvG4KTE7MqeiZIIibqPlseGxAy5rWHcNryW1Ab/3BoyogPDE7BiMhHk59Ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.65
+	 MIME-Version; b=SpcT9vEmBJPJ8xm6ns/cv/4nc2EhDy2a4936PpV8Wnm9bdx2kT0zWu8f5eyaODmB4fLt5fEQuWYz81uZQZ95n6lXuJiC4kGLqyi75Zcag1LzXbwDohNhkD4vT6L2exdOyrdk+ge08LC1qipnm01qObTx/HDST+B1iMRkXceEA/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f65.google.com with SMTP id 4fb4d7f45d1cf-6237202020bso5716013a12.3;
-        Tue, 09 Sep 2025 09:54:48 -0700 (PDT)
+Received: by mail-ed1-f67.google.com with SMTP id 4fb4d7f45d1cf-62105d21297so8772205a12.0;
+        Tue, 09 Sep 2025 09:54:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757436887; x=1758041687;
+        d=1e100.net; s=20230601; t=1757436890; x=1758041690;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=US5eECN201nn2lBjMJZb8xxddZfYzRWCBlds6C0VTV4=;
-        b=matfhCoXWhr5qe1v4TEwrw4fTpXLGyPY+eyyC4UbWIm5bx+Sw/OCkVrjXbtdR9qPv2
-         fS4PJSL3g+Wf4R5H1Fw8eezxF6TJ6yRsjEeGpiFGMIjQTKYKcdLlnSSXuwpO1+MLHMZE
-         IVVJfDeGbsCv/bXSquOrMqvCJ/47o5FnbwBTE/TKab6sii8V9o6CJcI50IKGLCRdwEXg
-         Ex1xkNVipPQlgGpjc/cplIBDv7cK4vW8CKO2FIqG73S4E95sFgiaArNJSLLDwdbN4NT+
-         HiNXtN1y2NNvShDMbtqgrxn+NrHiu/bPSxv0pQpHEWk3lGkCAatiyI+oF6CVtE+y0BFH
-         AvRw==
-X-Forwarded-Encrypted: i=1; AJvYcCWGmfNbpKcAx0H4HKfqfoXXqrPfFRvGZJQPAGDkM/hEQp8zIkboO92gDqwRiDtJr1jOfvyB5jFAxSgIptWy1s/3@vger.kernel.org, AJvYcCWf8pPTXmx3NcRa3tpLZhQPCLW2gZ4u4qHPDGCGMEUohInKnAv17FyH6P4W70b63vPYwjPQWWvssULVWjU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6pViYAt/Aev5CUr2bYZqgSGc7JHafhgCQGF6muYdi+TGitbII
-	dmJ7/2GliF1/QK9mQ6XTt4l21nZGz1crj11jtKAtvDHay9fc1N6oJDnUNchu3pf3
-X-Gm-Gg: ASbGncsMLPIgd+BDodSsYW53aUKYanc5dlMjpoQ+Iyueg0nNgkp/m0LNzwoh2fkZjTH
-	MtFx39dWCBeRQQkvbC3tBCG25yKtAb4YX4fgbk6tkjSyS563zH7pium922CWUmvyI+uH9neJ//5
-	TJCmJrm3IXIWmSsLXj7EdMDYywZmLl2j2dbiDf2LZkL6yXEK5xk6wtTGzLND5liMlMj706j6IS5
-	aVkrTPN6Zlts3ZIIEJWBJYtbdEg3JEsTb0hdzuadkNF6LUv0VVBt8+6ruSW4hamdSNs/UUUyZZy
-	CO9x0262E1DbkDJWKh0mpyaYWHblpB8KpfKZU1cyrJJ7N/2zhNbhaWZfPJcNc/VbHynvGXAKMAC
-	I+EsphR6kBwuuonroYfY7z1L26Gm0fnUl7Hqz84r1yV9wzznXwEo4c45xrzlRrA==
-X-Google-Smtp-Source: AGHT+IF5WpQ9BlQlNSx4PkE0JwB3/n09qaYMSzzFOW9lj1zNEOvA7s98g8pDch1JVdTqJKMKLPTf/A==
-X-Received: by 2002:a05:6402:5215:b0:62c:9185:2200 with SMTP id 4fb4d7f45d1cf-62c91852b90mr1593061a12.22.1757436887245;
-        Tue, 09 Sep 2025 09:54:47 -0700 (PDT)
+        bh=QDv4KH8jPHGSDUgmt5ktxwJjhGcORL8y42N6s1NDG7w=;
+        b=v7L/BeKWTvIdoBQjJDVhka/RZUU891/GVoQYERnVlaYAvbUxC+8oA6t0ZKNLjmZ12L
+         TPGSzuIt3q5snfZc04H0EtC8X0momO5MqeE/YLKRoc4ytAq9t33f35Fip2L+HNQVbSdR
+         Q0ueWSV8ZiTfkInNR1FrJent+Bw2HCm/jiFXrLHpaEsyLYixETY1rXxc9bowgG+okWs4
+         ckpQLOTKr3JNv0WLZ8m3j8CfA3bkPjWmpYkpssJky0Tlh1OFV/5i16BtLk8GkC/NX+cv
+         AvBDG7gJAbvW4g7wsU+fCj4jx5aTBkVmFs16xiD2g3549qBskauQFoQFnyRUrJa+3HXq
+         jntA==
+X-Forwarded-Encrypted: i=1; AJvYcCUtI6uPQXfDcV99Hq6uqb0sveK+QzOb4fKDF0zTKa7D8OsN2x0etkeXLszu4AIqCHIeQpxfAys5LzVVqFFBIsbL@vger.kernel.org, AJvYcCXNi07KtKMsirJ4gNCDberI2TukW/7XbpEEDFv3D1+eZKPZYk1eCIZKLmjZeaJmhdrGaJn/7pjfrESSpGA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySG6wwTe43eo44DOvtiJVBAqFM32XoLsPTwWTCfnPGD/wRugvG
+	vno+Oop4mce7WQ59FpnTysEip0406UUsWR2f1U+0AmMjPVFbJN3wyXHWdlwjJlH+
+X-Gm-Gg: ASbGncvvjml2GAYdxHf5DLRqN/UVw1XMcFXH1/Eyz9gNcIDUFLXlpFbvQXVnZeH0hse
+	rI8zKWHddInZ0tcTelKq0WYTT53N52l0wIVN1z4KF0BJpLVd1RKC71/szbfVTx69qMDgn0iCO+G
+	y1e4VfdgoOnP03z6AYjd4dyMVUBg4Vv8+4s++KFR6zFbkOHXMcT7UqP6DQYsA80o/ArgKxBOajy
+	Y9N19VRB8RVRKU13c3mkTJncQK/D67AyJdCSUFU6YVbt42IfFKbsZXLfjl7IhrBmNq5SaPwzyCT
+	NjSaxFUUoRl/IwSF4QWbcFhTH7Go6Yn80CI05o+kgewRXMs5NZktNvl/+QAVOkGBkxO2NH1K+H2
+	v9TVuJiq8J9WJ/0ohyIDI6tB/XgY5VXFdYSON44/5dwXPQU8/QprH1RPcAu9W+A==
+X-Google-Smtp-Source: AGHT+IHjBBi59dApkSXEMTE0JwWINS8IrghKjtG/hVSAeO9AlBwCCqtQiYBADFT1S3EMTBJawwaAgA==
+X-Received: by 2002:a05:6402:358f:b0:628:bee2:b31d with SMTP id 4fb4d7f45d1cf-628bee2b6e7mr7584590a12.3.1757436890039;
+        Tue, 09 Sep 2025 09:54:50 -0700 (PDT)
 Received: from im-t490s.redhat.com (78-80-97-40.customers.tmcz.cz. [78.80.97.40])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62c018f90cesm1497326a12.44.2025.09.09.09.54.46
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62c018f90cesm1497326a12.44.2025.09.09.09.54.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 09:54:46 -0700 (PDT)
+        Tue, 09 Sep 2025 09:54:49 -0700 (PDT)
 From: Ilya Maximets <i.maximets@ovn.org>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -76,9 +76,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Davide Caratti <dcaratti@redhat.com>,
 	Ido Schimmel <idosch@idosch.org>,
 	Ilya Maximets <i.maximets@ovn.org>
-Subject: [PATCH net v2 1/2] net: dst_metadata: fix IP_DF bit not extracted from tunnel headers
-Date: Tue,  9 Sep 2025 18:54:15 +0200
-Message-ID: <20250909165440.229890-2-i.maximets@ovn.org>
+Subject: [PATCH net v2 2/2] selftests: openvswitch: add a simple test for tunnel metadata
+Date: Tue,  9 Sep 2025 18:54:16 +0200
+Message-ID: <20250909165440.229890-3-i.maximets@ovn.org>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250909165440.229890-1-i.maximets@ovn.org>
 References: <20250909165440.229890-1-i.maximets@ovn.org>
@@ -90,78 +90,150 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Both OVS and TC flower allow extracting and matching on the DF bit of
-the outer IP header via OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT in the
-OVS_KEY_ATTR_TUNNEL and TCA_FLOWER_KEY_FLAGS_TUNNEL_DONT_FRAGMENT in
-the TCA_FLOWER_KEY_ENC_FLAGS respectively.  Flow dissector extracts
-this information as FLOW_DIS_F_TUNNEL_DONT_FRAGMENT from the tunnel
-info key.
+This test ensures that upon receiving decapsulated packets from a
+tunnel interface in openvswitch, the tunnel metadata fields are
+properly populated.  This partially covers interoperability of the
+kernel tunnel ports and openvswitch tunnels (LWT) and parsing and
+formatting of the tunnel metadata fields of the openvswitch netlink
+uAPI.  Doing so, this test also ensures that fields and flags are
+properly extracted during decapsulation by the tunnel core code,
+serving as a regression test for the previously fixed issue with the
+DF bit not being extracted from the outer IP header.
 
-However, the IP_TUNNEL_DONT_FRAGMENT_BIT in the tunnel key is never
-actually set, because the tunneling code doesn't actually extract it
-from the IP header.  OAM and CRIT_OPT are extracted by the tunnel
-implementation code, same code also sets the KEY flag, if present.
-UDP tunnel core takes care of setting the CSUM flag if the checksum
-is present in the UDP header, but the DONT_FRAGMENT is not handled at
-any layer.
+The ovs-dpctl.py script already supports all that is necessary for
+the tunnel ports for this test, so we only need to adjust the
+ovs_add_if() function to pass the '-t' port type argument in order
+to be able to create tunnel ports in the openvswitch datapath.
 
-Fix that by checking the bit and setting the corresponding flag while
-populating the tunnel info in the IP layer where it belongs.
-
-Not using __assign_bit as we don't really need to clear the bit in a
-just initialized field.  It also doesn't seem like using __assign_bit
-will make the code look better.
-
-Clearly, users didn't rely on this functionality for anything very
-important until now.  The reason why this doesn't break OVS logic is
-that it only matches on what kernel previously parsed out and if kernel
-consistently reports this bit as zero, OVS will only match on it to be
-zero, which sort of works.  But it is still a bug that the uAPI reports
-and allows matching on the field that is not actually checked in the
-packet.  And this is causing misleading -df reporting in OVS datapath
-flows, while the tunnel traffic actually has the bit set in most cases.
-
-This may also cause issues if a hardware properly implements support
-for tunnel flag matching as it will disagree with the implementation
-in a software path of TC flower.
-
-Fixes: 7d5437c709de ("openvswitch: Add tunneling interface.")
-Fixes: 1d17568e74de ("net/sched: cls_flower: add support for matching tunnel control flags")
+Reviewed-by: Aaron Conole <aconole@redhat.com>
 Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
 ---
- include/net/dst_metadata.h | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ .../selftests/net/openvswitch/openvswitch.sh  | 88 +++++++++++++++++--
+ 1 file changed, 81 insertions(+), 7 deletions(-)
 
-diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-index 4160731dcb6e..1fc2fb03ce3f 100644
---- a/include/net/dst_metadata.h
-+++ b/include/net/dst_metadata.h
-@@ -3,6 +3,7 @@
- #define __NET_DST_METADATA_H 1
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index 3c8d3455d8e7..b327d3061ed5 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -25,6 +25,7 @@ tests="
+ 	nat_related_v4				ip4-nat-related: ICMP related matches work with SNAT
+ 	netlink_checks				ovsnl: validate netlink attrs and settings
+ 	upcall_interfaces			ovs: test the upcall interfaces
++	tunnel_metadata				ovs: test extraction of tunnel metadata
+ 	drop_reason				drop: test drop reasons are emitted
+ 	psample					psample: Sampling packets with psample"
  
- #include <linux/skbuff.h>
-+#include <net/ip.h>
- #include <net/ip_tunnels.h>
- #include <net/macsec.h>
- #include <net/dst.h>
-@@ -220,9 +221,15 @@ static inline struct metadata_dst *ip_tun_rx_dst(struct sk_buff *skb,
- 						 int md_size)
- {
- 	const struct iphdr *iph = ip_hdr(skb);
-+	struct metadata_dst *tun_dst;
-+
-+	tun_dst = __ip_tun_set_dst(iph->saddr, iph->daddr, iph->tos, iph->ttl,
-+				   0, flags, tunnel_id, md_size);
- 
--	return __ip_tun_set_dst(iph->saddr, iph->daddr, iph->tos, iph->ttl,
--				0, flags, tunnel_id, md_size);
-+	if (tun_dst && (iph->frag_off & htons(IP_DF)))
-+		__set_bit(IP_TUNNEL_DONT_FRAGMENT_BIT,
-+			  tun_dst->u.tun_info.key.tun_flags);
-+	return tun_dst;
+@@ -113,13 +114,13 @@ ovs_add_dp () {
  }
  
- static inline struct metadata_dst *__ipv6_tun_set_dst(const struct in6_addr *saddr,
+ ovs_add_if () {
+-	info "Adding IF to DP: br:$2 if:$3"
+-	if [ "$4" != "-u" ]; then
+-		ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py add-if "$2" "$3" \
+-		    || return 1
++	info "Adding IF to DP: br:$3 if:$4 ($2)"
++	if [ "$5" != "-u" ]; then
++		ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py add-if \
++		    -t "$2" "$3" "$4" || return 1
+ 	else
+ 		python3 $ovs_base/ovs-dpctl.py add-if \
+-		    -u "$2" "$3" >$ovs_dir/$3.out 2>$ovs_dir/$3.err &
++		    -u -t "$2" "$3" "$4" >$ovs_dir/$4.out 2>$ovs_dir/$4.err &
+ 		pid=$!
+ 		on_exit "ovs_sbx $1 kill -TERM $pid 2>/dev/null"
+ 	fi
+@@ -166,9 +167,9 @@ ovs_add_netns_and_veths () {
+ 	fi
+ 
+ 	if [ "$7" != "-u" ]; then
+-		ovs_add_if "$1" "$2" "$4" || return 1
++		ovs_add_if "$1" "netdev" "$2" "$4" || return 1
+ 	else
+-		ovs_add_if "$1" "$2" "$4" -u || return 1
++		ovs_add_if "$1" "netdev" "$2" "$4" -u || return 1
+ 	fi
+ 
+ 	if [ $TRACING -eq 1 ]; then
+@@ -756,6 +757,79 @@ test_upcall_interfaces() {
+ 	return 0
+ }
+ 
++ovs_add_kernel_tunnel() {
++	local sbxname=$1; shift
++	local ns=$1; shift
++	local tnl_type=$1; shift
++	local name=$1; shift
++	local addr=$1; shift
++
++	info "setting up kernel ${tnl_type} tunnel ${name}"
++	ovs_sbx "${sbxname}" ip -netns ${ns} link add dev ${name} type ${tnl_type} $* || return 1
++	on_exit "ovs_sbx ${sbxname} ip -netns ${ns} link del ${name} >/dev/null 2>&1"
++	ovs_sbx "${sbxname}" ip -netns ${ns} addr add dev ${name} ${addr} || return 1
++	ovs_sbx "${sbxname}" ip -netns ${ns} link set dev ${name} mtu 1450 up || return 1
++}
++
++test_tunnel_metadata() {
++	which arping >/dev/null 2>&1 || return $ksft_skip
++
++	sbxname="test_tunnel_metadata"
++	sbx_add "${sbxname}" || return 1
++
++	info "setting up new DP"
++	ovs_add_dp "${sbxname}" tdp0 -V 2:1 || return 1
++
++	ovs_add_netns_and_veths "${sbxname}" tdp0 tns left0 l0 \
++		172.31.110.1/24 || return 1
++
++	info "removing veth interface from openvswitch and setting IP"
++	ovs_del_if "${sbxname}" tdp0 left0 || return 1
++	ovs_sbx "${sbxname}" ip addr add 172.31.110.2/24 dev left0 || return 1
++	ovs_sbx "${sbxname}" ip link set left0 up || return 1
++
++	info "setting up tunnel port in openvswitch"
++	ovs_add_if "${sbxname}" "vxlan" tdp0 ovs-vxlan0 -u || return 1
++	on_exit "ovs_sbx ${sbxname} ip link del ovs-vxlan0"
++	ovs_wait ip link show ovs-vxlan0 &>/dev/null || return 1
++	ovs_sbx "${sbxname}" ip link set ovs-vxlan0 up || return 1
++
++	configs=$(echo '
++	    1 172.31.221.1/24 1155332 32   set   udpcsum flags\(df\|csum\)
++	    2 172.31.222.1/24 1234567 45   set noudpcsum flags\(df\)
++	    3 172.31.223.1/24 1020304 23 unset   udpcsum flags\(csum\)
++	    4 172.31.224.1/24 1357986 15 unset noudpcsum' | sed '/^$/d')
++
++	while read -r i addr id ttl df csum flags; do
++		ovs_add_kernel_tunnel "${sbxname}" tns vxlan vxlan${i} ${addr} \
++			remote 172.31.110.2 id ${id} dstport 4789 \
++			ttl ${ttl} df ${df} ${csum} || return 1
++	done <<< "${configs}"
++
++	ovs_wait grep -q 'listening on upcall packet handler' \
++		${ovs_dir}/ovs-vxlan0.out || return 1
++
++	info "sending arping"
++	for i in 1 2 3 4; do
++		ovs_sbx "${sbxname}" ip netns exec tns \
++			arping -I vxlan${i} 172.31.22${i}.2 -c 1 \
++			>${ovs_dir}/arping.stdout 2>${ovs_dir}/arping.stderr
++	done
++
++	info "checking that received decapsulated packets carry correct metadata"
++	while read -r i addr id ttl df csum flags; do
++		arp_hdr="arp\\(sip=172.31.22${i}.1,tip=172.31.22${i}.2,op=1,sha="
++		addrs="src=172.31.110.1,dst=172.31.110.2"
++		ports="tp_src=[0-9]*,tp_dst=4789"
++		tnl_md="tunnel\\(tun_id=${id},${addrs},ttl=${ttl},${ports},${flags}\\)"
++
++		ovs_sbx "${sbxname}" grep -qE "MISS upcall.*${tnl_md}.*${arp_hdr}" \
++			${ovs_dir}/ovs-vxlan0.out || return 1
++	done <<< "${configs}"
++
++	return 0
++}
++
+ run_test() {
+ 	(
+ 	tname="$1"
 -- 
 2.50.1
 
