@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-41060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47591B505CB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 21:03:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7E63B505D2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 21:04:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 015F5561CFE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 19:03:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2AC41BC06E3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 19:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 045863019AF;
-	Tue,  9 Sep 2025 19:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A62A302172;
+	Tue,  9 Sep 2025 19:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jYicwdvO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OmjMGkyI"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C103D3009F7;
-	Tue,  9 Sep 2025 19:03:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F9C3002C3;
+	Tue,  9 Sep 2025 19:04:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757444610; cv=none; b=pZmFyp1pWMUX68UeyefVkKQnNpttK2FWJazZXnF8p5ZB3bgN1qUpN3FpL6ETo+KUgtLNYIJbpmWurjxvsym9dCUoTPzHlE2Z/0W94wv+2JCnQecfxkPgfZWijbMa5vUWEsX8UqDWgr5hj8wejFhg1Ct/OtbzPTCjSRFh7dVCo0o=
+	t=1757444666; cv=none; b=gGS8vhEYFzXRlC7Udi8T84qcXwYVOqRQmApRpzjyVQtv9P0s8xTqgIkyau2gUQcDq3SsvVXh94DjX5okGM9YJIkw45okBlfq3/rKvcw4NAZF4P2M7SipGuhTFTCJ68h8Wx1A/ny4aaiqL1rjdwTtRmIEyjISxssjUjIMsmyA+o4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757444610; c=relaxed/simple;
-	bh=iQ2hGEIaFfNxNx3BhJMnrqdW4TZqrof8lMc5P3dIvXQ=;
+	s=arc-20240116; t=1757444666; c=relaxed/simple;
+	bh=SUeQ7HwX00Wm+MAXVlX7FhoCnZHSaqLs8qCsarfPXaA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YUom5EtfvgVzMDhCXJ9ZPaNIxE2Y6c8M/M+531tTHy5IGeStaMagFQ4AxWnSLEA+W6hgwE59f3pUVW0ERRSKSpJDovFYGs2gpLdaYvWZvtgyzgzIpZTJu+qmtf5J2erBPrs8eS+hy5GzafppNLZOgDI+cKskBxlcKxxBdrrN1es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jYicwdvO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4089C4CEF4;
-	Tue,  9 Sep 2025 19:03:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=pxja63/uIyrAXMMP431R4HPYtjRH1hq/m6bNGYQJxLWwtylJN4s6/92BU7Xfz2d0NaoLv7cP6zPVIIsIc4a1X2IC9aGgd/ybQd0XLQOsKGxq7+xo/sjuMKcmRh6GeSl4YLIaMVXhlyr00AlI3BmGlhfqSXOPzGdzHWqtSEKnk4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OmjMGkyI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06100C4CEF4;
+	Tue,  9 Sep 2025 19:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757444610;
-	bh=iQ2hGEIaFfNxNx3BhJMnrqdW4TZqrof8lMc5P3dIvXQ=;
+	s=k20201202; t=1757444665;
+	bh=SUeQ7HwX00Wm+MAXVlX7FhoCnZHSaqLs8qCsarfPXaA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jYicwdvOmjWT1Dq6UAJeXBSgJ4KfbqCpNC5tMrV0G0JnCHKUnYLD6mytrDTZYigFo
-	 uJnodv7UqXfrHLM+NhKk3qrg72hH0morH0BJa0NifP/yLE1avYHJ1znVwil2fug2RL
-	 h6zo3VI+on5W5891blflhISF98niUWJ4dPEDM9UJ2orO3gv1rodLea9kznEbeI1Yew
-	 uhWC0k2rdlBBDgc6769JCQiyaJ0Mg2e3g9R754PYEfIrDJd8CKSOJJ3rtUN5oXX5rc
-	 55hCYGuhYlC63fWKQUo3SVyCFQ8IK4lJHtL2TBjhFGFZjTYsi5qqvE6cDWZRbszoSC
-	 5WUOfF4u6JfDQ==
-Date: Tue, 9 Sep 2025 20:03:24 +0100
+	b=OmjMGkyIFYDJxwqhAhpoM4Do8Kju/HoCYkdixxatIzsmt59kMUz0afrBqP4qa/waG
+	 dDNNxga9OhZbYdqqTL0dbB+bkHrq/tYs06Qxvndo3oWzXUXL0MeaDn1ZzHhL0t6xhr
+	 uTWQqDU4qGZOXduWjEGwk5zSYAKG+Gh9vyUghLVfJmCIG5UOgCS3X7LR9TsbWcDgSp
+	 TQi2NWgiBqjDklfEsQX1uDWQqFyUfPZCHKsubQs4/DX8ReYIkjXK98O7qoW/lML7W9
+	 /R2irpbO31dhc5WN9e0ri1yJdSZOZiifRkhAA9yLjO6wo1RGUF73OZ9FfjPFk0Stdf
+	 NEQlQUvkGtenw==
+Date: Tue, 9 Sep 2025 20:04:19 +0100
 From: Simon Horman <horms@kernel.org>
 To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
@@ -53,11 +53,11 @@ Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
 	netdev@vger.kernel.org, mptcp@lists.linux.dev,
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net 2/3] doc: mptcp: net.mptcp.pm_type is deprecated
-Message-ID: <20250909190324.GE20205@horms.kernel.org>
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 3/3] selftests: mptcp: shellcheck: support v0.11.0
+Message-ID: <20250909190419.GF20205@horms.kernel.org>
 References: <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-0-5f2168a66079@kernel.org>
- <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-2-5f2168a66079@kernel.org>
+ <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-3-5f2168a66079@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,17 +66,17 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-2-5f2168a66079@kernel.org>
+In-Reply-To: <20250908-net-mptcp-misc-fixes-6-17-rc5-v1-3-5f2168a66079@kernel.org>
 
-On Mon, Sep 08, 2025 at 11:27:28PM +0200, Matthieu Baerts (NGI0) wrote:
-> The net.mptcp.pm_type sysctl knob has been deprecated in v6.15,
-> net.mptcp.path_manager should be used instead.
+On Mon, Sep 08, 2025 at 11:27:29PM +0200, Matthieu Baerts (NGI0) wrote:
+> This v0.11.0 version introduces SC2329:
 > 
-> Adapt the section about path managers to suggest using the new sysctl
-> knob instead of the deprecated one.
+>   Warn when (non-escaping) functions are never invoked.
 > 
-> Fixes: 595c26d122d1 ("mptcp: sysctl: set path manager by name")
-> Cc: stable@vger.kernel.org
+> Except that, similar to SC2317, ShellCheck is currently unable to figure
+> out functions that are invoked via trap, or indirectly, when calling
+> functions via variables. It is then needed to disable this new SC2329.
+> 
 > Reviewed-by: Geliang Tang <geliang@kernel.org>
 > Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
