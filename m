@@ -1,202 +1,126 @@
-Return-Path: <linux-kselftest+bounces-41021-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41022-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 887ECB4A237
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 08:28:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97EBEB4A478
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 10:04:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 770DC18841B0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 06:29:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 586C53B34E6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Sep 2025 08:04:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 536D72FCBF9;
-	Tue,  9 Sep 2025 06:28:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3BBC243964;
+	Tue,  9 Sep 2025 08:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HEKaAma6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BtMLFa8C"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C32257853
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Sep 2025 06:28:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5A324338F;
+	Tue,  9 Sep 2025 08:04:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757399331; cv=none; b=S7d5YLvCnqYBsKt/flqF6vOoFwBk2MASFqO5rjNpVnnYB0rdYFJmdQ18zZbLnTMR7H84zHp9ge/bYskXCw9cFyQ36QxARB0lzdN5T33e4D1ZSP5/lEcDGv31bkYPrBRsY3KEGvFi+WBfc/FnmogF0nYJiMAF4K1gK5OnqnWJfNM=
+	t=1757405059; cv=none; b=T1byt788xBTciSXfd9RP8rK+hyZeEp16ALpWhgDkHc3x4AfhDOsIVDYLQkSkbcszZmmx/9DZPg9I1qUoyx8LK189Hz1PMSsQpSuC3307VvF6nxLmcTlUjbEckPZGKPYcFG2OAMaW4XD0cZO1EKHZf0nRaM9o8BDuoPWmV6e6NRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757399331; c=relaxed/simple;
-	bh=sqn3YnlyT5vG7W1VV/krwDHcUzX/8Kspxeonyc+uTX4=;
+	s=arc-20240116; t=1757405059; c=relaxed/simple;
+	bh=hheBO53S4cuD1hHV8+7z+fXYLzy/l5AiYW98zwt2iWs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iCL+/SJQe5mFhuXntkP7nbdMzidURSt/LkxqEXMAzH2HZ4TNyVy1HO2sNn+zQmJsVYcqQiFOFHtwEkcx6BJpIwiwYXWHSB68R3pTGlG0Ad2qq4gEBNhwsQ2yibBxYGDgwYsyN7BagCeMFSyaYqt7qtR0A3bOk3x45utK10OQvNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HEKaAma6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757399328;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GyfaMLhE+eR6r1x04SbjrHAzIJx46jGGeK7FcNu4fRE=;
-	b=HEKaAma6o3A8SYT6qaZp+dZs3hxVPOCxejl8nwLQXuxItqqSLwOGgyCLodgLuagjUu+l1B
-	Sav40bUz/9iKiXfIQjGMFnqkhqsq8cks6OFlFYl/OIBpdleMcdTc+zC4u9wMjtlZZs6aBs
-	awmuWBDXon5CB/vxhiXLCzo1Crw/LGM=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-479-rzDKvLShMXasmEw3AvcgEg-1; Tue,
- 09 Sep 2025 02:28:45 -0400
-X-MC-Unique: rzDKvLShMXasmEw3AvcgEg-1
-X-Mimecast-MFC-AGG-ID: rzDKvLShMXasmEw3AvcgEg_1757399323
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4336119560A7;
-	Tue,  9 Sep 2025 06:28:43 +0000 (UTC)
-Received: from gmail.com (unknown [10.72.112.88])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C7A1319560B8;
-	Tue,  9 Sep 2025 06:28:36 +0000 (UTC)
-Date: Tue, 9 Sep 2025 14:28:31 +0800
-From: Chunyu Hu <chuhu@redhat.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com
-Subject: Re: [PATCH v2 3/3] selftests/mm: fix va_high_addr_switch.sh failure
- on x86_64
-Message-ID: <aL_JD_vNvM2kXoRJ@gmail.com>
-References: <20250908124740.2946005-1-chuhu@redhat.com>
- <20250908124740.2946005-2-chuhu@redhat.com>
- <20250908124740.2946005-3-chuhu@redhat.com>
- <20250908124740.2946005-4-chuhu@redhat.com>
- <22a9dd3e-0755-4f7f-a59c-a79a52871f56@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OmGpjQXDMuaV5Pcu63L9tedLRSUS9mYw5zmVsUjtIs8FVQG2IZ8xULCb+kl4e/OW4ibGsibPcnxHTouW7g3PyFf2ZaTrOyTOpArz9CfnFxyPyridtcVmhv9VmTfWUA1r0X6ZrqQwsU8NdeFQbLcqe/Q+obNUEqONYiXSAERk/bU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BtMLFa8C; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757405058; x=1788941058;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=hheBO53S4cuD1hHV8+7z+fXYLzy/l5AiYW98zwt2iWs=;
+  b=BtMLFa8CxWte7EPEJYDSl4Uu4ie9Z9gzq7hGc/NXlZxpnUhewBEGr/11
+   eHgNr1P4y5Eu+A97EdAUev0bYOSo4Suyi1b6fqbfn7WXmqF93LNewtam/
+   ZiTJOUHpfrTK18pWCM56fu4815lECI+W6Ynd/Oon6/oWUWG7OdFNmAzd8
+   vgu5JTt+AA+i4ev125ziglSSjeVM1xtR/S5Y5TrR52YaQ4YIQtGTJSq9B
+   9CqGZaNEySLgcfadhhtoptzZdBlg2h1uleYHa3RSjmH49iABctMZIwbgu
+   tGOCt0fNKWByloz/6jTfBPiSw8mlgZdV6BWYxucJgmdpxG/cdvyn/yU/R
+   Q==;
+X-CSE-ConnectionGUID: uJj9OkJMQtyXS/R0SyqiVg==
+X-CSE-MsgGUID: VPoqZVzjT2u+FEV8j9uwfg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="62306729"
+X-IronPort-AV: E=Sophos;i="6.18,250,1751266800"; 
+   d="scan'208";a="62306729"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 01:04:17 -0700
+X-CSE-ConnectionGUID: aUhvH03JTpa8sKMWBcGqIQ==
+X-CSE-MsgGUID: PJIE3vMoSSis6CmgX1wFjQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,250,1751266800"; 
+   d="scan'208";a="196683482"
+Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.53])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 01:04:14 -0700
+Date: Tue, 9 Sep 2025 16:04:11 +0800
+From: "Lai, Yi" <yi1.lai@linux.intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Yi Lai <yi1.lai@intel.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, shuah@kernel.org, wad@chromium.org,
+	luto@amacapital.net, kees@kernel.org, usama.anjum@collabora.com
+Subject: Re: [PATCH] selftests/kselftest_harness: Add
+ harness-selftest.expected to TEST_FILES
+Message-ID: <aL/fe6xsyZCrJKIP@ly-workstation>
+References: <20250815091032.802171-1-yi1.lai@intel.com>
+ <20250815112711-473df6c4-d0d4-452f-9411-b72491adf2af@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <22a9dd3e-0755-4f7f-a59c-a79a52871f56@redhat.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250815112711-473df6c4-d0d4-452f-9411-b72491adf2af@linutronix.de>
 
-On Mon, Sep 08, 2025 at 03:09:24PM +0200, David Hildenbrand wrote:
-> On 08.09.25 14:47, Chunyu Hu wrote:
-> > The test will fail as below on x86_64 with cpu la57 support (will skip if
-> > no la57 support). Note, the test requries nr_hugepages to be set first.
+On Fri, Aug 15, 2025 at 11:28:40AM +0200, Thomas Weiﬂschuh wrote:
+> On Fri, Aug 15, 2025 at 05:10:32PM +0800, Yi Lai wrote:
+> > The harness-selftest.expected is not installed in INSTALL_PATH.
+> > Attempting to execute harness-selftest.sh shows warning:
 > > 
-> >    # running bash ./va_high_addr_switch.sh
-> >    # -------------------------------------
-> >    # mmap(addr_switch_hint - pagesize, pagesize): 0x7f55b60fa000 - OK
-> >    # mmap(addr_switch_hint - pagesize, (2 * pagesize)): 0x7f55b60f9000 - OK
-> >    # mmap(addr_switch_hint, pagesize): 0x800000000000 - OK
-> >    # mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0x800000000000 - OK
-> >    # mmap(NULL): 0x7f55b60f9000 - OK
-> >    # mmap(low_addr): 0x40000000 - OK
-> >    # mmap(high_addr): 0x1000000000000 - OK
-> >    # mmap(high_addr) again: 0xffff55b6136000 - OK
-> >    # mmap(high_addr, MAP_FIXED): 0x1000000000000 - OK
-> >    # mmap(-1): 0xffff55b6134000 - OK
-> >    # mmap(-1) again: 0xffff55b6132000 - OK
-> >    # mmap(addr_switch_hint - pagesize, pagesize): 0x7f55b60fa000 - OK
-> >    # mmap(addr_switch_hint - pagesize, 2 * pagesize): 0x7f55b60f9000 - OK
-> >    # mmap(addr_switch_hint - pagesize/2 , 2 * pagesize): 0x7f55b60f7000 - OK
-> >    # mmap(addr_switch_hint, pagesize): 0x800000000000 - OK
-> >    # mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0x800000000000 - OK
-> >    # mmap(NULL, MAP_HUGETLB): 0x7f55b5c00000 - OK
-> >    # mmap(low_addr, MAP_HUGETLB): 0x40000000 - OK
-> >    # mmap(high_addr, MAP_HUGETLB): 0x1000000000000 - OK
-> >    # mmap(high_addr, MAP_HUGETLB) again: 0xffff55b5e00000 - OK
-> >    # mmap(high_addr, MAP_FIXED | MAP_HUGETLB): 0x1000000000000 - OK
-> >    # mmap(-1, MAP_HUGETLB): 0x7f55b5c00000 - OK
-> >    # mmap(-1, MAP_HUGETLB) again: 0x7f55b5a00000 - OK
-> >    # mmap(addr_switch_hint - pagesize, 2*hugepagesize, MAP_HUGETLB): 0x800000000000 - FAILED
-> >    # mmap(addr_switch_hint , 2*hugepagesize, MAP_FIXED | MAP_HUGETLB): 0x800000000000 - OK
-> >    # [FAIL]
+> > diff: ./kselftest_harness/harness-selftest.expected: No such file or
+> > directory
 > > 
-> > addr_switch_hint is defined as DFEFAULT_MAP_WINDOW in the failed test (for
-> > x86_64, DFEFAULT_MAP_WINDOW is defined as (1UL<<47) - pagesize) in 64 bit.
+> > Add harness-selftest.expected to TEST_FILES.
 > > 
-> > Before commit cc92882ee218 ("mm: drop hugetlb_get_unmapped_area{_*}
-> > functions"), for x86_64 hugetlb_get_unmapped_area() is handled in arch code
-> > arch/x86/mm/hugetlbpage.c and addr is checked with map_address_hint_valid()
-> > after align with 'addr &= huge_page_mask(h)' which is a round down way, and
-> > it will fail the check because the addr is within the DEFAULT_MAP_WINDOW but
-> > (addr + len) is above the DFEFAULT_MAP_WINDOW. So it wil go through the
-> > hugetlb_get_unmmaped_area_top_down() to find an area within the
-> > DFEFAULT_MAP_WINDOW.
-> > 
-> > After commit cc92882ee218 ("mm: drop hugetlb_get_unmapped_area{_*}
-> > functions").  The addr hint for hugetlb_get_unmmaped_area() will be rounded
-> > up and aligned to hugepage size with ALIGN() for all arches.  And after the
-> > align, the addr will be above the default MAP_DEFAULT_WINDOW, and the
-> > map_addresshint_valid() check will pass because both aligned addr (addr0)
-> > and (addr + len) are above the DEFAULT_MAP_WINDOW, and the aligned hint
-> > address (0x800000000000) is returned as an suitable gap is found there,
-> > in arch_get_unmapped_area_topdown().
-> > 
-> > To still cover the case that addr is within the DEFAULT_MAP_WINDOW, and
-> > addr + len is above the DFEFAULT_MAP_WINDOW, make the addr hint one
-> > hugepage lower, so that after the align it's still within DEFAULT_MAP_WINDOW,
-> > and the addr + len (2 hugepages) will be above DEFAULT_MAP_WINDOW.
-> > 
-> > Fixes: cc92882ee218 ("mm: drop hugetlb_get_unmapped_area{_*} functions")
-> > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+> > Signed-off-by: Yi Lai <yi1.lai@intel.com>
+> 
+> Fixes: df82ffc5a3c1 ("selftests: harness: Add kselftest harness selftest")
+> Reviewed-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> 
+> Thanks!
+>
+
+Sorry for the late response. Thank you for review. I will send a v2
+patch containing the fixes tag.
+
+Regards,
+Yi Lai
+
 > > ---
-> >   tools/testing/selftests/mm/va_high_addr_switch.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >  tools/testing/selftests/kselftest_harness/Makefile | 1 +
+> >  1 file changed, 1 insertion(+)
 > > 
-> > diff --git a/tools/testing/selftests/mm/va_high_addr_switch.c b/tools/testing/selftests/mm/va_high_addr_switch.c
-> > index 896b3f73fc53..bd96dc3b5931 100644
-> > --- a/tools/testing/selftests/mm/va_high_addr_switch.c
-> > +++ b/tools/testing/selftests/mm/va_high_addr_switch.c
-> > @@ -230,10 +230,10 @@ void testcases_init(void)
-> >   			.msg = "mmap(-1, MAP_HUGETLB) again",
-> >   		},
-> >   		{
-> > -			.addr = (void *)(addr_switch_hint - pagesize),
-> > +			.addr = (void *)(addr_switch_hint - pagesize - hugepagesize),
-> 
-> Wouldn't it be more deterministic to do the alignment/rounding ourselves?
-> 
-> (void *)(ALIGN_DOWN(addr_switch_hint - pagesize), hugepagesize)
-> 
-> Unfortunately we don't have an ALIGN_DOWN helper available yet.
-> 
-> We could just move the one in pkey-helpers.h into vm_util.h
-
-Thanks for the review!
-
-This is good idea and it would be more deterministic if we provide an
-aligned address directly, then the kernel change won't affect the test.
-
-> 
-> 
-> But now I realize that, likely,
-> 
-> 	.addr = (void *)(addr_switch_hint - hugepagesize),
-> 
-> would just work and be aligned?
-
-Yes, it's aligned to the hugepagesize, align down and works. I prefer
-this way as it's easier and all other tests in the file do like this.
-Thanks for the suggestion.
-
-I thought we would lose some test coverage on testing if it will work when
-an un-hugepagesize aligned addr is provided. Do you think it's
-necessary? If not, I'll change to:
-
-	.addr = (void *)(addr_switch_hint - hugepagesize),
-
-or we can add them both if necesasry.
-
-> 
-> -- 
-> Cheers
-> 
-> David / dhildenb
-> 
-
+> > diff --git a/tools/testing/selftests/kselftest_harness/Makefile b/tools/testing/selftests/kselftest_harness/Makefile
+> > index 0617535a6ce4..d2369c01701a 100644
+> > --- a/tools/testing/selftests/kselftest_harness/Makefile
+> > +++ b/tools/testing/selftests/kselftest_harness/Makefile
+> > @@ -2,6 +2,7 @@
+> >  
+> >  TEST_GEN_PROGS_EXTENDED := harness-selftest
+> >  TEST_PROGS := harness-selftest.sh
+> > +TEST_FILES := harness-selftest.expected
+> >  EXTRA_CLEAN := harness-selftest.seen
+> >  
+> >  include ../lib.mk
+> > -- 
+> > 2.43.0
+> > 
 
