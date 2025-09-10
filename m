@@ -1,168 +1,116 @@
-Return-Path: <linux-kselftest+bounces-41117-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71969B512F4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 11:43:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB8F6B514CD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 13:06:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A2293B1E27
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 09:43:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66FB016F81E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 11:06:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5251A314B88;
-	Wed, 10 Sep 2025 09:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D4C231984C;
+	Wed, 10 Sep 2025 11:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="FjKKfRzp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HuPgdsxv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C40A3115B8
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 09:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6CF314A99;
+	Wed, 10 Sep 2025 11:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757497406; cv=none; b=g1wajs9P7lAYVo1TL0OPVOlP5TDJNUgOMOMqZw2c/ZK9avbSoah37n4GBVlEt5wUq4cJi0U7dk2I7ku711bnK1f+9yVRFqKH36KsjldG2UtUcDJxJdB4HlK428qjUb4pHGyF1XrIWUyvus6aJIjgz9xbO2uK2/6NcELrx/SiXYo=
+	t=1757502371; cv=none; b=XpuG2rzyeuOocBRHZJChI50jB2NSkclHJZf5sS2LA1kZz/vUc6FR3QLBBMjEvJkzjRgL6caAJ6HpCQjqncW14DvBLUJSBeLsdlBVfeFgeNYvHSbpZmT1p6oIanqYM5KLprSLOqcMf39MFoa3RFvCJW5i619+ggN5TM6PgNQvg8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757497406; c=relaxed/simple;
-	bh=GeZ8gRXpmuh4zIH2qzoEpO1TgLkvX/hmsfatSykJQdM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Dk1G2iezhsuEvX95kFtUaZBZ6pnLtRJy49obHCojW22fL59Nwlq6Dhr4gfdRZ57fshNxZvOuqvfIkPantnKyRophWrrQr3z+wLGfZdQ+GdwP8EP4PuWXLMxp6NAQWDvVkVqEaEl+tcLIWIzYb+nmZf2BXmk33NO0VdrsEBlNkG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=FjKKfRzp; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-621b8b0893bso8448888a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 02:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1757497403; x=1758102203; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UH6/XT0kvfyB5mO2cKrXbyp31DnusO7Ul6sUo8daz10=;
-        b=FjKKfRzp/hxCDsMl1xDnwLyR79PZ7k+UjNNip2MAJMvzJevAf8hf1i9LM2JlVoiP89
-         gIOxALJWod57EihdfypzXXN60vlCckxlrl40uKKNpD8oWrBcWoGOQK2JoRcB1cfTdqLk
-         CByM1UAJwhqzmvY8DMBwNDilIpKN22S2KShATesu3ITjrvRokazM7vRejCy423xXLksO
-         HHhgQCLMhpU0mszfYHGNXp7/x8lfsQzTqGt1mD0GpYoiPurGu8OrkqhDRQ27gZxE35tS
-         Xjzh0dT9DrWCx7+Od9DxF+JfIAM71+dcswESBHwjNixCD9StNMTGtEWZn7mqH/8xkzAW
-         XPxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757497403; x=1758102203;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UH6/XT0kvfyB5mO2cKrXbyp31DnusO7Ul6sUo8daz10=;
-        b=sCU9l3R1CiQwu0XHdENORzmgO8Vj29kTGFQKYU3rF20bgxdb8mTQyesx/ezZ2m4TFp
-         g0ZksK1jk/Afw634wkiObVNlBIvP5d8djDpHIZWcxpF8joV3WctuKDFeYxoCf1LlgLhh
-         p9OqSIS88VEF3aqIk3Guc3HrRAmzUFOaoPAFw7JlscfQg2Acf4L46bQPsWuzCvQeNBba
-         i08H9cfP8isNj9/W0h1lcPR4IPpWgBrk6qKE6eeRZtrZnWD09J58Jaei1chrzTQIzF5+
-         IuFplls82sBuXbSNreJFHtL9KIQmPfeb4KegsbcJfbNyVUPBDV4X/Ey5QbYpmP3tHPb3
-         SD3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXWCmt7TNTWg2A5q50uQRwyrJcUEXPj0YZmMYkBzHMXYwzpwEAJZWOM8FuHfptbfqsVU2hf+rWgaFhYY048fiY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWOFs9GYjnrROfHcOlcdQuuz3k8G8eXpnucdp6tslLtfXJgI65
-	5dWAwUJ8ge99BYOe1mocy4VVy0XEBQq0qDE4BQTf72s7lHx8ARHUqGuvggawxZnLA6M=
-X-Gm-Gg: ASbGncsHsvTRZbkOK7p2JUUN9hxCnGOQNY209HTGMDSR7EXWgFSbzFlOuvz2SzQQ7+L
-	aSHY5jRQn0zlnszdqMkv/sL7laawihip4NgR5LDDaaQkELBuATg1O3Elq6dRLPDN1m3n/Ip2L+Q
-	4D//vMlnfYkxiSU09vxmC34FunPznMkWA5QGo42yh/5728r9a9zjDQtyRXwRbdLjk5c1FzCAFSe
-	F/Bq+k/sAejmVfNDEBpQECQrhtvseQWwPkhPnNNFnidwJ0q4cVsbsUyoPyX3xGW1edWQp+3E1pX
-	6JtLEMm0A4FRgThbkz5B/yYRvgNYTS7e9Vov0xZmvBsg5fcXpxlRIoS+xeIyCTW9/YQSCO0MXGn
-	FJEvyKy40SicFt31wl7PXdg1VlQ==
-X-Google-Smtp-Source: AGHT+IHezEvVl+d9vvOZ0x6lYJthodH+9bMTe2BUEcXlfkeFgiHS5P2xoZIspY68/UNlg2yLMMtPQA==
-X-Received: by 2002:a05:6402:270d:b0:62c:3878:747 with SMTP id 4fb4d7f45d1cf-62c38784cc4mr4323427a12.33.1757497402738;
-        Wed, 10 Sep 2025 02:43:22 -0700 (PDT)
-Received: from cloudflare.com ([2a09:bac5:5063:2432::39b:94])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62c018f660esm2874458a12.38.2025.09.10.02.43.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Sep 2025 02:43:21 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Martin
- KaFai Lau <martin.lau@linux.dev>,  Eduard Zingerman <eddyz87@gmail.com>,
-  Song Liu <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,
-  John Fastabend <john.fastabend@gmail.com>,  KP Singh
- <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao Luo
- <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Mykola Lysenko
- <mykolal@fb.com>,  Shuah Khan <shuah@kernel.org>,  bpf@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/5] selftests/bpf: sockmap_redir: Simplify
- try_recv()
-In-Reply-To: <35912d55-eb6e-403a-9a7a-05cae551ccf3@rbox.co> (Michal Luczaj's
-	message of "Tue, 9 Sep 2025 23:25:16 +0200")
-References: <20250905-redir-test-pass-drop-v1-0-9d9e43ff40df@rbox.co>
-	<20250905-redir-test-pass-drop-v1-1-9d9e43ff40df@rbox.co>
-	<87ikhs54z2.fsf@cloudflare.com> <87bjnk53uo.fsf@cloudflare.com>
-	<35912d55-eb6e-403a-9a7a-05cae551ccf3@rbox.co>
-Date: Wed, 10 Sep 2025 11:43:20 +0200
-Message-ID: <877by663t3.fsf@cloudflare.com>
+	s=arc-20240116; t=1757502371; c=relaxed/simple;
+	bh=Fxptr2qexEblRNttIxD7S3z3TKAgwwVEg+pPWRBq01A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CaUpxOO1YWB+X6sVnCCmpjqdFxN39+ZC0X/S74JyM3mRtu9O0JjpH5G+Xa7daEr90NqBiSusuE5zr52pVeInDn4cQqpXXeE/ifknT7b3UEXCM8ingZuoDdBPwQ98x9/9bCyybF56Uiz4ryuDKpY2+fkYIS5V6stLHJ4ZhdF4uVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HuPgdsxv; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757502370; x=1789038370;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fxptr2qexEblRNttIxD7S3z3TKAgwwVEg+pPWRBq01A=;
+  b=HuPgdsxvwYVeRgWXgVU15jWE+Y1bLzxxBERawXZvk9rt1bDrTQEBhCcp
+   GYEb0uP1yM8L9vU1kP45jjkdzZ0UVjEcY5frmJK0gIBfuVIDl2CWwqG35
+   G49KCQj2Fi94klootOgG7OVzbx82latk4xc2EH9dmWZHx4WFxOU2OKNMJ
+   ZiZxhUZsQCYdy4SOrdGZeLn65H1mqfrsfWr+PJWPqJgdoTy66T1b8qHvv
+   eJ/hqRXCsZaA64qtpmzbVHwGoGO1LRGAuzllpOj7Qb64f4ayYF23RUEuC
+   wdpOnnVyHkOmhMg7I7YlJUiLMGYSmeJ5eDfInxdBWu7BGyPsyNG7/6jXg
+   Q==;
+X-CSE-ConnectionGUID: AjP1+qe+TMG9mwqh3VnR7Q==
+X-CSE-MsgGUID: eMl+r7fmTpWTkxTiJlzwew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="63437200"
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="63437200"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 04:06:09 -0700
+X-CSE-ConnectionGUID: xUB8gn45TLq9bHG9qWK/Dw==
+X-CSE-MsgGUID: S7dTMi/zQGS8UXVg1xZs/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="173276811"
+Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 10 Sep 2025 04:06:06 -0700
+Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uwIeJ-0005rT-21;
+	Wed, 10 Sep 2025 11:06:03 +0000
+Date: Wed, 10 Sep 2025 19:05:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andre Carvalho <asantostc@gmail.com>, Breno Leitao <leitao@debian.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Andre Carvalho <asantostc@gmail.com>
+Subject: Re: [PATCH net-next 4/5] netconsole: resume previously deactivated
+ target
+Message-ID: <202509101818.wKicbxgJ-lkp@intel.com>
+References: <20250909-netcons-retrigger-v1-4-3aea904926cf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250909-netcons-retrigger-v1-4-3aea904926cf@gmail.com>
 
-On Tue, Sep 09, 2025 at 11:25 PM +02, Michal Luczaj wrote:
-> On 9/9/25 12:15, Jakub Sitnicki wrote:
->> On Tue, Sep 09, 2025 at 11:51 AM +02, Jakub Sitnicki wrote:
->>> On Fri, Sep 05, 2025 at 01:11 PM +02, Michal Luczaj wrote:
->>>> try_recv() was meant to support both @expect_success cases, but all the
->>>> callers use @expect_success=false anyway. Drop the unused logic and fold in
->>>> MSG_DONTWAIT. Adapt callers.
->>>>
->>>> Subtle change here: recv() return value of 0 will also be considered (an
->>>> unexpected) success.
->>>>
->>>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
->>>> ---
->>>>  .../selftests/bpf/prog_tests/sockmap_redir.c       | 25 +++++++++-------------
->>>>  1 file changed, 10 insertions(+), 15 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c b/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c
->>>> index 9c461d93113db20de65ac353f92dfdbe32ffbd3b..c1bf1076e8152b7d83c3e07e2dce746b5a39cf7e 100644
->>>> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c
->>>> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c
->>>> @@ -144,17 +144,14 @@ static void get_redir_params(struct redir_spec *redir,
->>>>  		*redirect_flags = 0;
->>>>  }
->>>>  
->>>> -static void try_recv(const char *prefix, int fd, int flags, bool expect_success)
->>>> +static void fail_recv(const char *prefix, int fd, int more_flags)
->>>>  {
->>>>  	ssize_t n;
->>>>  	char buf;
->>>>  
->>>> -	errno = 0;
->>>> -	n = recv(fd, &buf, 1, flags);
->>>> -	if (n < 0 && expect_success)
->>>> -		FAIL_ERRNO("%s: unexpected failure: retval=%zd", prefix, n);
->>>> -	if (!n && !expect_success)
->>>> -		FAIL("%s: expected failure: retval=%zd", prefix, n);
->>>> +	n = recv(fd, &buf, 1, MSG_DONTWAIT | more_flags);
->>>> +	if (n >= 0)
->>>> +		FAIL("%s: unexpected success: retval=%zd", prefix, n);
->>>>  }
->>>
->>> This bit, which you highlighted in the description, I don't get.
->>>
->>> If we're expecting to receive exactly one byte, why treat a short read
->>> as a succcess? Why not make it a strict "n != 1" check?
->>>
->>> [...]
->> 
->> Nevermind. It makes sense now. We do want to report a failure for 0-len
->> msg recv as well. You're effectively checking if the rcv queue is empty.
->> 
->> I'd add MSG_PEEK, to signal that we're _just checking_ if the socket is
->> readable, and turn the check into the below to succeed only when
->> queue is empty:
->> 
->>         (n != -1 || (errno != EAGAIN && errno != EWOULDBLOCK))
->
-> Well, looks like adding MSG_PEEK exposed a bug in the test. I'll fix that.
+Hi Andre,
 
-The gift that keeps on giving xD
+kernel test robot noticed the following build warnings:
 
-Other alternatives that should also work, but who knows:
+[auto build test WARNING on 3b4296f5893d3a4e19edfc3800cb79381095e55f]
 
-- select/poll/epoll readability check
-- ioctl(SIOCINQ) but no way to tell if 0-len msg is pending
+url:    https://github.com/intel-lab-lkp/linux/commits/Andre-Carvalho/netconsole-add-target_state-enum/20250910-051601
+base:   3b4296f5893d3a4e19edfc3800cb79381095e55f
+patch link:    https://lore.kernel.org/r/20250909-netcons-retrigger-v1-4-3aea904926cf%40gmail.com
+patch subject: [PATCH net-next 4/5] netconsole: resume previously deactivated target
+config: i386-randconfig-014-20250910 (https://download.01.org/0day-ci/archive/20250910/202509101818.wKicbxgJ-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250910/202509101818.wKicbxgJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509101818.wKicbxgJ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/net/netconsole.c:177 struct member 'resume_wq' not described in 'netconsole_target'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
