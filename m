@@ -1,104 +1,92 @@
-Return-Path: <linux-kselftest+bounces-41091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41092-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 414B3B50AF4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 04:20:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CD50B50B00
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 04:26:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5005E1BC719A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 02:20:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60DA4189617F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 02:26:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1355238C2A;
-	Wed, 10 Sep 2025 02:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 745DB23C4F2;
+	Wed, 10 Sep 2025 02:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DKKsildu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L0ddagmg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5F3200C2;
-	Wed, 10 Sep 2025 02:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F5123CB;
+	Wed, 10 Sep 2025 02:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757470807; cv=none; b=HxsA1xz4zUphSHkDt/cbazWU3tNBbMaaBh9Vwnm6wCAjYL5zPLPFXwh/9SLnXRyGyKI8ymu6CJswsv8NhTqbGXIEDaLAw0vB+OkEAwDt++dUuO8fTKFILTCtdCzNeij+5P8YfWI/4NCIiDVDdYB+n4LL0kOsPoD95nh74knRTaU=
+	t=1757471168; cv=none; b=PBwokfRUQVso+P7PVmahzrCv4nYsk86v+Rc09WGD1voRTnhwVw1f25+M0z3277d2XhPrrKRkI1C3zyJwyYfgIuOEVQuYljSPqkPmgc3HJkHaVW60x9490xxIJBhW8gewFwx9pW0n19LDNgWamGvVMUdD5FNUPsOmqsmR5TYI+sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757470807; c=relaxed/simple;
-	bh=dIL5T/VhrMyP+D+xxxmzNfI252wmfOv3usV7QGTLrY0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=rIDQOBXXKSE3oHTN57GpIlBnb6jneNgk2Ixg+/iadXM1B0sNB0UHU+0nYwXm6wr7g8cFaSbPLaSzQkBTMRHIDohUpgq1W6fZU+AuDWCuZ/ehybNYokAek7lFg9BNdZyEGlxOt3kVOnT1VbasR1b82mmINQSE4C1MliA+3+NEjT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DKKsildu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B02EC4CEF4;
-	Wed, 10 Sep 2025 02:20:07 +0000 (UTC)
+	s=arc-20240116; t=1757471168; c=relaxed/simple;
+	bh=GxnvKUwX85agoJjvtTRn54fBAg9vLT1ovfRjs92Ns70=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JcAJzX+mi5V68YSZr0//eiGkuc50XRi/9xIaQgW3X1VeeIoD0rzcyXUpuxWkst5PMcxKyl+hH6pW6V2ujv8K+1ZBglgXwFew/DrPlL2kePvj1jTPT/uhxZg06UXF93QQHtPLscvWTlH6Kw+cckhU3mycFEAk2vY0a3SL1Tz2wYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L0ddagmg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E83EC4CEF4;
+	Wed, 10 Sep 2025 02:26:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757470807;
-	bh=dIL5T/VhrMyP+D+xxxmzNfI252wmfOv3usV7QGTLrY0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=DKKsildunjBuorqMDrDI7xVFFgvS7AvRsE/H9FOcIl6I7Rvp9Dk7wievMK9/osc/o
-	 h3Q3BQnD79NY3IVowhKlxhCN8L2SMlYCfAkINp2WeQ6jmecptDYLJCwaJp8lPP6Qik
-	 muD9YdTNr1aUjIE4mW5S9GnW0H+6NV0uCU/bGOLBB1oFCQPn0yqQdWQeUPlvTW2408
-	 dQyRoAX5nSvnClv8Y/dc0sbydgMGBGxVZCCeIHDtnpPw21wR1g+fIzFAFzRJsshP1B
-	 6SAleUdXYMi/jJd1kWz70J0rQOjI+pgJ9d+5bsfmkwTSfjYwllRhV5yZz7uNqEIDpQ
-	 erHNKOR/mJnpA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C37383BF69;
-	Wed, 10 Sep 2025 02:20:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1757471167;
+	bh=GxnvKUwX85agoJjvtTRn54fBAg9vLT1ovfRjs92Ns70=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=L0ddagmgy+s8s3JEjKCyJ863LKjBOg5sgNP7YOQoffwnWXQX0m6CwbVMkzb/jV4Do
+	 TIw2hrkJVbY0DJwY/VEScJVb59rTQ2c8C3zcqakcTv75WIMiYv6n+rRGJlRARg16FH
+	 /4SbfzXXM42O64SCsOnqsycNGrp/K+AeU+9R/ATKanUjywqr4kAxAdM5glxZUAHczC
+	 eWUb6YbbWxCwEPw7g/cqTgrM4ip3U58uepqYw04YI2AnC/r0UpEVR2G4ecFs8LUanM
+	 nkr7F4Xf1/8W/YGUhmILOEJtjtKY7hMgQUNCVFTlRD2z7tF6R8v7K/MBQj+KWLlQuL
+	 O4f5Wx2Ca2D3g==
+Date: Tue, 9 Sep 2025 19:26:06 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv2 2/2] selftests: bonding: add vlan over bond testing
+Message-ID: <20250909192606.6ac53aa4@kernel.org>
+In-Reply-To: <aMDciKMGjr-_sW6E@fedora>
+References: <20250908062802.392300-1-liuhangbin@gmail.com>
+	<20250908062802.392300-2-liuhangbin@gmail.com>
+	<20250909164600.04aa44c7@kernel.org>
+	<aMDciKMGjr-_sW6E@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/3] mptcp: make ADD_ADDR retransmission timeout
- adaptive
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175747081026.879618.4585653911597992298.git-patchwork-notify@kernel.org>
-Date: Wed, 10 Sep 2025 02:20:10 +0000
-References: 
- <20250907-net-next-mptcp-add_addr-retrans-adapt-v1-0-824cc805772b@kernel.org>
-In-Reply-To: 
- <20250907-net-next-mptcp-add_addr-retrans-adapt-v1-0-824cc805772b@kernel.org>
-To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, corbet@lwn.net, shuah@kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, cpaasch@openai.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sun, 07 Sep 2025 17:32:41 +0200 you wrote:
-> Currently, the MPTCP ADD_ADDR notifications are retransmitted after a
-> fixed timeout controlled by the net.mptcp.add_addr_timeout sysctl knob,
-> if the corresponding "echo" packets are not received before. This can be
-> too slow (or too quick), especially with a too cautious default value
-> set to 2 minutes.
+On Wed, 10 Sep 2025 02:03:52 +0000 Hangbin Liu wrote:
+> On Tue, Sep 09, 2025 at 04:46:00PM -0700, Jakub Kicinski wrote:
+> > On Mon,  8 Sep 2025 06:28:02 +0000 Hangbin Liu wrote:  
+> > > Add a vlan over bond testing to make sure arp/ns target works.
+> > > Also change all the configs to mudules.  
+> > 
+> > Why are you switching everything to module?
+> > The series needs to go to net, we should avoid unnecessary cleanups.
+> > And I think changing the config is unrelated to the selftest so it
+> > should be a standalone patch in the first place?  
 > 
-> - Patch 1: make ADD_ADDR retransmission timeout adaptive, using the
->   TCP's retransmission timeout. The corresponding sysctl knob is now
->   used as a maximum value.
-> 
-> [...]
+> On my local testing, there will be a lot default interfaces if all modules
+> build in. This could make the test environment more clean.
+> But it's just my preference.
 
-Here is the summary with links:
-  - [net-next,1/3] mptcp: make ADD_ADDR retransmission timeout adaptive
-    https://git.kernel.org/netdev/net-next/c/30549eebc4d8
-  - [net-next,2/3] selftests: mptcp: join: tolerate more ADD_ADDR
-    https://git.kernel.org/netdev/net-next/c/63c31d42cf6f
-  - [net-next,3/3] selftests: mptcp: join: allow more time to send ADD_ADDR
-    https://git.kernel.org/netdev/net-next/c/e2cda6343bfe
+No strong opinion on my side. Your point is fair. On the other hand
+sometimes dealing with modules is tricky (especially with vng when
+building kernel with O=build/). But not sure how much we should care
+about shortcomings of tooling which can be fixed. It's okay for our CI.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> As you said, we can do it with a stand alone
+> patch. I will re-post and drop the config update.
 
-
+Yup! For net we should avoid it.
 
