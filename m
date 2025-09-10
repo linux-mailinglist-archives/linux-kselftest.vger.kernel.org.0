@@ -1,228 +1,205 @@
-Return-Path: <linux-kselftest+bounces-41160-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41161-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 676BFB51BA9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 17:32:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BF08B51BB9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 17:33:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37C2F7B2B00
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 15:29:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8693545D60
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 15:33:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A19EF255F2D;
-	Wed, 10 Sep 2025 15:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 885E630FF23;
+	Wed, 10 Sep 2025 15:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PbrcSsIu"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KRHc1bx9";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qEsMitKb";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KRHc1bx9";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qEsMitKb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1178D8479
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 15:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93BE1261B72
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 15:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757518275; cv=none; b=oSThGylFGh2Xty1sVafAUY8IVasSQzUdNpbj4W6kj2Hb0vtu8ciC1y081Iutuv7SZxUpjuBVYpNdXOgEWNqrQaQ1QkpcdgnaCdg5fdDOrC5n0V0N4qd7csVi5c1pi093Vzmvzuk312wqLiFOlb/K3FvxeS7CWebBRnJ6Y28Dor0=
+	t=1757518417; cv=none; b=oYBg5zsasSvoBMTw650N9QgkCEd5/1qusxqrHd6VXMdLCZ8slAlMTIgKDV9TYnrFsN8IAKYgBnILbIIkbQElAvQGAyKqEt7i1in0eiXsUOoBaFLCVMMBRUDSMmhdnCblec4P47ZK4cD4JF3LehK0MzDvAHUHCHz2jJwf270Akxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757518275; c=relaxed/simple;
-	bh=jc2/UzEiHHii7qwYws85Ns4EPsygWxg33Jjz8SvEiiQ=;
+	s=arc-20240116; t=1757518417; c=relaxed/simple;
+	bh=lE6jA7p7IHcGMhIIhCmy/1BlcN99Vgk0Rz/tO0YufPA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iOioRhqGZabZNumBQ7B5rNs5xwCkk5Ph8kr3SpduNJyfbmiP13fo/V3cansUDU9QiBYY7x/SoIiKJXjb+NFUBtyJ45jUnLHySkf6K83eRmAQgCBR85/sVeCGcxXKCIsendHlZ0tLzh1lowlSY9IN32hTaZv7yLJ0Sd1GX5KPRGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PbrcSsIu; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-32b70820360so5670590a91.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 08:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757518273; x=1758123073; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aslT2dP/KbCqLz9yRRveBsORSsjyA/aQ8k1L0oN8zws=;
-        b=PbrcSsIuoYXNvNnkA8TMAiRC+U+K0vOeEVILZLZN1owUvd1zgZyNK/tO9mu/zDPnUo
-         OdRC41SUOaE4hE6nhVnQzFfJjr8dyqXZ3TktA1I0YUlBXbbKZHUsNrhWkpPWMFq9yGeT
-         QBZ0O4wy3goLWrL0lZPyT49UraPYUGs3ydzJRZw5gIxt+LU02ocOqXt4Jj3JcMUrqhoO
-         ZZ4rklPgyNM3gWLnh9H/PfVKdgHzJI5lMQLclUCxZs4VT3ZWhQd5imVjQueeZsf3xcL6
-         NFW+u2MDg+7a1460J27Fh4/OhVF7gWQtNdKujv8w1QWzuaUOD3ZrJctSjYNF/iUXJGJp
-         PjHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757518273; x=1758123073;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aslT2dP/KbCqLz9yRRveBsORSsjyA/aQ8k1L0oN8zws=;
-        b=eMSYxmHgWq5EOGj73qF7KXEyzDscF7E3ytMNd/eosEUKWF33kYd5WTUcWHDFbWjMcH
-         u7wPpKPbv9dCtZwQ8zvweW2tYijHhIkltoHedmkbWGdYcvp25PXDnQUzwPVEPZ0DYBeo
-         he4Z2eKavHwXa3W1DjkTN0CP+LAAVZHIOE9jrQ8F15xWDJboEvMlvMUz9X8u5bUE1Rv6
-         8HCpDLN3g6iHjSp5SAWdhQwyaqn1Tlacu7KWvpFprSMQavsg8PoKLm9Rh1cSTB9P7EBx
-         mO8Q6hfKgwWxbdsisBmvrE6D30bd8VteWZv94jSWFhav2ikNNjbsplj53IGodWG5T6xC
-         Oabg==
-X-Forwarded-Encrypted: i=1; AJvYcCUG2WpUZhnWkO+fEqoLyB0pbK2zMIl50Z2BAzMrHq8mG+1K/9XWt5dsYGvC6zQ2zuJxJaFpfrLOGzsXLNFoFi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeIH7za0XZPhnoxa21DPCh7fda1CW7KwCEzWCJHRk04K+6zEEE
-	i3WGTP5V5sGSlo7oBBLO0ohxbQlvlpuip93pabgD6RAI3vFeHLoO57A=
-X-Gm-Gg: ASbGncvsN2ysJeWS3luSs8Bl9CxjewX+D5QFXgicGjpBVYIeuW2E64QFyfGv/Zc1OtM
-	Q5/RxLMTeAqa9riW3WHZKf5JjMygNAjg6nt823myJHcbpyaRE+/5sL48sz3fDb8NjdfNFzLR3GG
-	VbDFRHwxyGD5k0P33RNr5CFs8rcggpr+vE5N7q69ZBnCEIIBjKiL43xaDpX3LsJ8317czmTvcEX
-	qkMwlPLIGuS7avgTPzS8+0naUujhGOYjv07OnBzznUDBdY1pUnb5AbisDT9zfTCD5x85YZ9zhpz
-	fpBQFqfv55ATZn47Oo3s3p/lGwfk9ptab7irNmOybMXrkJJ/CY6dLQPtCqJ9v1UO9PnS1C0/UW1
-	qT2kc9PYKrbD4a5RnyiCKwo+VkAFrwCuxw21aGIo2txBT3hhZKcIvElXea1AN8aY/YotjNY6Jxi
-	U/rifSVmnHZRij4hQhJwhuLXbUjSr5nOInMuEmIYI4Ihc/P/oTvGEwUirbFWndMQK10PycpWBBM
-	auY
-X-Google-Smtp-Source: AGHT+IFJAsN22RzEZGX9qXHrJTseEBNmURBALNvMji0DSxk8mi2vxAkq0iZRnzEUXZZujDM5omoPXg==
-X-Received: by 2002:a17:90b:1fc7:b0:321:38a:229a with SMTP id 98e67ed59e1d1-32d43ef084fmr19911611a91.7.1757518272964;
-        Wed, 10 Sep 2025 08:31:12 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-775f6b42023sm2592143b3a.87.2025.09.10.08.31.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Sep 2025 08:31:12 -0700 (PDT)
-Date: Wed, 10 Sep 2025 08:31:12 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Sabrina Dubroca <sdubroca@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Ahmed Zaki <ahmed.zaki@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv3 net-next 3/5] team: use common function to compute the
- features
-Message-ID: <aMGZwEnJ943Rwf-Q@mini-arch>
-References: <20250909081853.398190-1-liuhangbin@gmail.com>
- <20250909081853.398190-4-liuhangbin@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lykWkvc3sSE0zTFQax6ifyG6A2xSyyzoYAHHCgOKAQ+DFsP0F9FWyJnEiiu+J+zdCrjjavtdtEULKiL1YogIsD/cSnx3VraA4HFD1LtyZZ3a/8pBLF6gsiUKBqb1BUn5AnL1lkBqLSdpHdOW5zg3eC1deb53NwPJpBVQxPxk1LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KRHc1bx9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qEsMitKb; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KRHc1bx9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qEsMitKb; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 9382D38689;
+	Wed, 10 Sep 2025 15:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1757518412; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N+vVaYJZe/SeETDd76D8KQfnhKlDAMSjPgTY3xHnUJA=;
+	b=KRHc1bx9mBUGexHdDhHiY9svNhz7m5dWa5rtOmbk9lRRezDW/qSK6IFhT8Pu/KbIykAbAY
+	L45B6aph0QIXXzl8jpGSfnNzIfxfL73k35CmJ1vbNH076UxlCawwc7nyZUQ8dOHhahnssZ
+	/+yHZXY+phttyPipVnmlelJMmKLwVls=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1757518412;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N+vVaYJZe/SeETDd76D8KQfnhKlDAMSjPgTY3xHnUJA=;
+	b=qEsMitKbtLYp2C0/5PO528EyE8Ie+NzeUkZPBDX9fWRwhk24vSp4qGLXYQIWb8JQKoQLm5
+	zf0wICfqlQuCfMAw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1757518412; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N+vVaYJZe/SeETDd76D8KQfnhKlDAMSjPgTY3xHnUJA=;
+	b=KRHc1bx9mBUGexHdDhHiY9svNhz7m5dWa5rtOmbk9lRRezDW/qSK6IFhT8Pu/KbIykAbAY
+	L45B6aph0QIXXzl8jpGSfnNzIfxfL73k35CmJ1vbNH076UxlCawwc7nyZUQ8dOHhahnssZ
+	/+yHZXY+phttyPipVnmlelJMmKLwVls=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1757518412;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N+vVaYJZe/SeETDd76D8KQfnhKlDAMSjPgTY3xHnUJA=;
+	b=qEsMitKbtLYp2C0/5PO528EyE8Ie+NzeUkZPBDX9fWRwhk24vSp4qGLXYQIWb8JQKoQLm5
+	zf0wICfqlQuCfMAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4F8EC13301;
+	Wed, 10 Sep 2025 15:33:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ISZqE0yawWjuOAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Wed, 10 Sep 2025 15:33:32 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id AAC4FA0A2D; Wed, 10 Sep 2025 17:33:27 +0200 (CEST)
+Date: Wed, 10 Sep 2025 17:33:27 +0200
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>, 
+	linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
+	Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>, 
+	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>, 
+	Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 01/32] pidfs: validate extensible ioctls
+Message-ID: <myq5fyn7mlxqxxy4bw4sujz6k6otw5x4b2u3dhsb2lgohrjqtr@bxziyyawq3jk>
+References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
+ <20250910-work-namespace-v1-1-4dd56e7359d8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250909081853.398190-4-liuhangbin@gmail.com>
+In-Reply-To: <20250910-work-namespace-v1-1-4dd56e7359d8@kernel.org>
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	TAGGED_RCPT(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	R_RATELIMIT(0.00)[to_ip_from(RLbyy5b47ky7xssyr143sji8pp)];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.cz,gmail.com,vger.kernel.org,toxicpanda.com,kernel.org,yhndnzj.com,in.waw.pl,0pointer.de,cyphar.com,zeniv.linux.org.uk,kernel.dk,cmpxchg.org,suse.com,google.com,redhat.com,oracle.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -2.30
 
-On 09/09, Hangbin Liu wrote:
-> Use the new helper netdev_compute_features_from_lowers() to compute the
-> team device features. This helper performs both the feature computation
-> and the netdev_change_features() call.
+On Wed 10-09-25 16:36:46, Christian Brauner wrote:
+> Validate extensible ioctls stricter than we do now.
 > 
-> Note that such change replace the lower layer traversing currently done
-> using team->port_list with netdev_for_each_lower_dev(). Such change is
-> safe as `port_list` contains exactly the same elements as
-> `team->dev->adj_list.lower` and the helper is always invoked under the
-> RTNL lock.
-> 
-> With this change, the explicit netdev_change_features() in
-> team_add_slave() can be safely removed, as team_port_add()
-> already takes care of the notification via
-> netdev_compute_features_from_lowers(), and same thing for team_del_slave()
-> 
-> This also fixes missing computations for MPLS, XFRM, and TSO/GSO partial
-> features.
-> 
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
+
+Looks good. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->  drivers/net/team/team_core.c | 78 +++---------------------------------
->  1 file changed, 5 insertions(+), 73 deletions(-)
+>  fs/pidfs.c         |  2 +-
+>  include/linux/fs.h | 14 ++++++++++++++
+>  2 files changed, 15 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/team/team_core.c b/drivers/net/team/team_core.c
-> index 17f07eb0ee52..c5fbe392fc62 100644
-> --- a/drivers/net/team/team_core.c
-> +++ b/drivers/net/team/team_core.c
-> @@ -982,63 +982,6 @@ static void team_port_disable(struct team *team,
->  	team_lower_state_changed(port);
->  }
+> diff --git a/fs/pidfs.c b/fs/pidfs.c
+> index edc35522d75c..0a5083b9cce5 100644
+> --- a/fs/pidfs.c
+> +++ b/fs/pidfs.c
+> @@ -440,7 +440,7 @@ static bool pidfs_ioctl_valid(unsigned int cmd)
+>  		 * erronously mistook the file descriptor for a pidfd.
+>  		 * This is not perfect but will catch most cases.
+>  		 */
+> -		return (_IOC_TYPE(cmd) == _IOC_TYPE(PIDFD_GET_INFO));
+> +		return extensible_ioctl_valid(cmd, PIDFD_GET_INFO, PIDFD_INFO_SIZE_VER0);
+>  	}
 >  
-> -#define TEAM_VLAN_FEATURES (NETIF_F_HW_CSUM | NETIF_F_SG | \
-> -			    NETIF_F_FRAGLIST | NETIF_F_GSO_SOFTWARE | \
-> -			    NETIF_F_HIGHDMA | NETIF_F_LRO | \
-> -			    NETIF_F_GSO_ENCAP_ALL)
-> -
-> -#define TEAM_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
-> -				 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE)
-> -
-> -static void __team_compute_features(struct team *team)
-> -{
-> -	struct team_port *port;
-> -	netdev_features_t vlan_features = TEAM_VLAN_FEATURES;
-> -	netdev_features_t enc_features  = TEAM_ENC_FEATURES;
-> -	unsigned short max_hard_header_len = ETH_HLEN;
-> -	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE |
-> -					IFF_XMIT_DST_RELEASE_PERM;
-> -
-> -	rcu_read_lock();
-> -	if (list_empty(&team->port_list))
-> -		goto done;
-> -
-> -	vlan_features = netdev_base_features(vlan_features);
-> -	enc_features = netdev_base_features(enc_features);
-> -
-> -	list_for_each_entry_rcu(port, &team->port_list, list) {
-> -		vlan_features = netdev_increment_features(vlan_features,
-> -					port->dev->vlan_features,
-> -					TEAM_VLAN_FEATURES);
-> -		enc_features =
-> -			netdev_increment_features(enc_features,
-> -						  port->dev->hw_enc_features,
-> -						  TEAM_ENC_FEATURES);
-> -
-> -		dst_release_flag &= port->dev->priv_flags;
-> -		if (port->dev->hard_header_len > max_hard_header_len)
-> -			max_hard_header_len = port->dev->hard_header_len;
-> -	}
-> -done:
-> -	rcu_read_unlock();
-> -
-> -	team->dev->vlan_features = vlan_features;
-> -	team->dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
-> -				     NETIF_F_HW_VLAN_CTAG_TX |
-> -				     NETIF_F_HW_VLAN_STAG_TX;
-> -	team->dev->hard_header_len = max_hard_header_len;
-> -
-> -	team->dev->priv_flags &= ~IFF_XMIT_DST_RELEASE;
-> -	if (dst_release_flag == (IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM))
-> -		team->dev->priv_flags |= IFF_XMIT_DST_RELEASE;
-> -}
-> -
-> -static void team_compute_features(struct team *team)
-> -{
-> -	__team_compute_features(team);
-> -	netdev_change_features(team->dev);
-> -}
-> -
->  static int team_port_enter(struct team *team, struct team_port *port)
->  {
->  	int err = 0;
-> @@ -1300,7 +1243,7 @@ static int team_port_add(struct team *team, struct net_device *port_dev,
->  	port->index = -1;
->  	list_add_tail_rcu(&port->list, &team->port_list);
->  	team_port_enable(team, port);
-> -	__team_compute_features(team);
-> +	netdev_compute_features_from_lowers(team->dev);
->  	__team_port_change_port_added(port, !!netif_oper_up(port_dev));
->  	__team_options_change_check(team);
+>  	return false;
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index d7ab4f96d705..2f2edc53bf3c 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -4023,4 +4023,18 @@ static inline bool vfs_empty_path(int dfd, const char __user *path)
 >  
-> @@ -1382,7 +1325,7 @@ static int team_port_del(struct team *team, struct net_device *port_dev)
->  	dev_set_mtu(port_dev, port->orig.mtu);
->  	kfree_rcu(port, rcu);
->  	netdev_info(dev, "Port device %s removed\n", portname);
-> -	__team_compute_features(team);
-> +	netdev_compute_features_from_lowers(team->dev);
+>  int generic_atomic_write_valid(struct kiocb *iocb, struct iov_iter *iter);
 >  
->  	return 0;
->  }
-> @@ -1976,27 +1919,16 @@ static int team_add_slave(struct net_device *dev, struct net_device *port_dev,
->  
->  	err = team_port_add(team, port_dev, extack);
->  
-> -	if (!err)
-> -		netdev_change_features(dev);
-> -
->  	return err;
-
-do the same `return team_port_add` here as you do in team_del_slave?
+> +static inline bool extensible_ioctl_valid(unsigned int cmd_a,
+> +					  unsigned int cmd_b, size_t min_size)
+> +{
+> +	if (_IOC_DIR(cmd_a) != _IOC_DIR(cmd_b))
+> +		return false;
+> +	if (_IOC_TYPE(cmd_a) != _IOC_TYPE(cmd_b))
+> +		return false;
+> +	if (_IOC_NR(cmd_a) != _IOC_NR(cmd_b))
+> +		return false;
+> +	if (_IOC_SIZE(cmd_a) < min_size)
+> +		return false;
+> +	return true;
+> +}
+> +
+>  #endif /* _LINUX_FS_H */
+> 
+> -- 
+> 2.47.3
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
