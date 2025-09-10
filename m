@@ -1,141 +1,92 @@
-Return-Path: <linux-kselftest+bounces-41157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5A10B51B19
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 17:12:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B915B51B69
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 17:21:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 917A3B62579
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 15:01:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A97D2174AB5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 15:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0919A32C33B;
-	Wed, 10 Sep 2025 14:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 435642580E4;
+	Wed, 10 Sep 2025 15:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="sETkKnpY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CWpMje03"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="25I3jwM5";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="T/Jhi00Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C8532A80C;
-	Wed, 10 Sep 2025 14:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A192571B8;
+	Wed, 10 Sep 2025 15:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757516280; cv=none; b=m6ecqS4YhJMboQ7W6Ne7nvCtKjHoieNP+Z/ZwcspE8Ndj0zNqSmNH7QkfwOEObIa2SJP6+9240k1B4IgAGk53ZRCEbo8s0scfUnq8akUjYBDHp4uZxxFGZb+LVQOvGRYLcZYUJ+w26yK3tBL9tfdVSBvStMcBvt4YzbQblmiPfs=
+	t=1757517541; cv=none; b=D66gYkfQv+v3ZlnPe4QMwPRLpF+v/Y9DELqN6ZHd01HQz/p7dTGLVLNhETcby8VfBzwMtOxGbKaFDv8H0t9Lh8xOuBp+8Ppp4VgzaKeeasKpOakklIcpdligfy+XO07sJmwU/M1+Ut8H/CKIpGpMRRuIszWCTY1c7uhClSuShek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757516280; c=relaxed/simple;
-	bh=Vln8dfg2bHZWodEg9nnmVYDAn8PzYG29tHd56gGL644=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fxf3FUIIrdx+ozgzw3m7Am9zq0cSh5L0ou+/pgf62jPsFs0aqEHEHK7B97RAO+ptcdgrnMa+P1ohBAPdXLtQzUWZdrtI9CC9/a+MMKarBz4L6jrjIwjRsmCtRG2B+QM+/Otuc9oNmuby9dB3A7613KTjGlakPk6xvrCJ+HoLlMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=sETkKnpY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CWpMje03; arc=none smtp.client-ip=202.12.124.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 8B9101D0010A;
-	Wed, 10 Sep 2025 10:57:57 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Wed, 10 Sep 2025 10:57:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1757516277; x=
-	1757602677; bh=fj2WWlUvdozMy73vBjpbx8CvlLfiX/DewG58TQUw/5s=; b=s
-	ETkKnpYjusLWEXoNeNa85hC3l2VxvioJqMnlZncO4mSdlN+Wy+p5+Ptj8gHUegFo
-	raapCNQ5PC/o3QDw348mEcBfPaEUZIHjrKTxqiDThr7tfBM2WjTaR8auX+H6xmH1
-	zXg1NNnFxlACbJyvM3Bmaz8uS2YluiGNZbMpIzc5E/E6Q3vEyYd8R/IuDnslBdiS
-	/bvuf7U/GrH8k7jBRCBQMyAQ99JW62xuO35nn0CIfqRJZWzBB+aIvUCnOiYouY1c
-	UwE2+xwwuxIFjZPCokJV7OQmM7KEqILW5xNLFUAhaBioHaDttHVqqyRkavgsvTIr
-	+LAfQNeoo5W8NYP1v/pIw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1757516277; x=1757602677; bh=fj2WWlUvdozMy73vBjpbx8CvlLfiX/DewG5
-	8TQUw/5s=; b=CWpMje03a6T5qWXd3hlOihHGuBovJsdC4Z3ADrG0anuP9M30tRM
-	tqeWFgB/uXvh8hKOJapCnYNRjoSwoT3tEMKzoQv2j4/a5Ep8ycH1v0wcA5y9XRx5
-	C4027bqatCeUBIfcr1sYOtet7BOXcvQv9yewwWzxNv3H0smxF9wX7BnprXsRPm+G
-	+n8QcAAc+8L4IWy6pyfcQ32TF6nyeNs+19FE05rOlzOQxiZsgYQD5HGGOFZIbaA8
-	bW13kS87FXfPPl+/1poalwZf15cqqAubeKtIy/9RZ+MQPp4SwiP94I2C6AotF0fa
-	RxHmk+IjCviUseEiQvNp+tEdC/cavdK5p5g==
-X-ME-Sender: <xms:9JHBaMxhqglCpDKMVYP8e8AhT9hCYm_vW9XWMjbgsCN2Wz9n18_pcw>
-    <xme:9JHBaKieOE50pJ2hiii6EAkcuh9CHvCAeGYJSp2ktPM9DK7d235rXYehEMZNhT27B
-    Yh_hh3K35xKQbu1l2I>
-X-ME-Received: <xmr:9JHBaDwZr7ytM6UEkSAQt1WJ24fkjKSPcjoKYdvN3ltBLlUgHOG-L9ggqsGw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvfeehlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpefurggsrhhinhgr
-    ucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrihhlrdhnvghtqeenucggtffrrg
-    htthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeegteehgeehieffgfeuvdeuffef
-    gfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepudekpdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopehlihhuhhgrnhhgsghinhesghhmrghilhdrtg
-    homhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgt
-    phhtthhopehjvhesjhhvohhssghurhhghhdrnhgvthdprhgtphhtthhopegrnhgurhgvfi
-    donhgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
-    ohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpd
-    hrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghn
-    ihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepjhhirhhisehrvghsnhhulhhlihdruh
-    hs
-X-ME-Proxy: <xmx:9JHBaAzGKD3_Ef-FY6jEcp89YnqsHMzNpevTwGyu24f0392oizoNIQ>
-    <xmx:9JHBaFqydQnaNerRnnGOrEi4Q1oRjKuwVSiK_6NossEV5H9pkzW4lQ>
-    <xmx:9JHBaLmLCNjLRGSjwcxl0AHP5Xow0j7Bya4JRF-UbdSvOGOtlQ14_w>
-    <xmx:9JHBaGxqrul5Bo1bF8BBa6uuzM9PAbLLgh3uulAbuWL1tpNmxLWm-A>
-    <xmx:9ZHBaHgWVcH9x5WKs83y1vh8qbqkI61H32j3qTvimxa4qUaBk44kN_kZ>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 10 Sep 2025 10:57:55 -0400 (EDT)
-Date: Wed, 10 Sep 2025 16:57:54 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Stanislav Fomichev <stfomichev@gmail.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv3 net-next 5/5] selftests/net: add offload checking test
- for virtual interface
-Message-ID: <aMGR8vP9X0FOxJpY@krikkit>
-References: <20250909081853.398190-1-liuhangbin@gmail.com>
- <20250909081853.398190-6-liuhangbin@gmail.com>
+	s=arc-20240116; t=1757517541; c=relaxed/simple;
+	bh=hQMOysMfMqdcPXGlHHCUUYKFgmuPBJqSNTrJZkKd9xY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=hZdluzuVzGVwevB3r3KLMf54hckdechJpnadYO+fDiJp6KkKxHmcJGO0pB6KKNAOLHOAx+wWUxNsWlqJmDawnmArbv394MgqDNhtS+JjG392LciRx6IgBXCZlMdZT0LJwuP7j4tsTUFSeHJP1RbB671wKS0eDWFRD7GzZpd/Si8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=25I3jwM5; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=T/Jhi00Q; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1757517537;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hQMOysMfMqdcPXGlHHCUUYKFgmuPBJqSNTrJZkKd9xY=;
+	b=25I3jwM5cfQlIQWQHxw4tpKR/Nj1FPyQtLwKkSvCIcAtbpu3ZHPEKa/L5fa9qOMR9MyqVK
+	CtGSPsiROp6dHjVbLwC1mcosWodip5WCYSbANiqq4Nq4nO6/3cfY4kVSFfolEL6jHHDKe8
+	UZrRI2kooMqCcFfYDGp9yVfZNvQQr5s2JASn4bRO3hyg1J1DOkuDGApnQhD1dcOXMoWvyG
+	dQu4VjSg4j0iaKLEuTzg+rqiiZLxPPoiMxPvZySul1Y0yIoksF4DBjrVe3nlwEvI6eo8GS
+	XyvehR1SgFLnUfv5VcGIaQSnqvQaHuYJbL75nLsICV5reOrH6ZIq8vRp5pct3A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1757517537;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hQMOysMfMqdcPXGlHHCUUYKFgmuPBJqSNTrJZkKd9xY=;
+	b=T/Jhi00QXPPS0wEES91LpaUbQNQXfYGsRYv5gd8iZYjQz1AzmfP7BzsVrZUwhcWMctsVaY
+	/8J4zvl2IvOujKBA==
+To: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Amir
+ Goldstein <amir73il@gmail.com>, linux-fsdevel@vger.kernel.org
+Cc: Josef Bacik <josef@toxicpanda.com>, Jeff Layton <jlayton@kernel.org>,
+ Mike Yuan <me@yhndnzj.com>, Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?=
+ <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>, Daan De
+ Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, Michal
+ =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Eric Dumazet
+ <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Chuck Lever <chuck.lever@oracle.com>,
+ linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, netdev@vger.kernel.org, Christian Brauner
+ <brauner@kernel.org>
+Subject: Re: [PATCH 11/32] time: use ns_common_init()
+In-Reply-To: <20250910-work-namespace-v1-11-4dd56e7359d8@kernel.org>
+References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
+ <20250910-work-namespace-v1-11-4dd56e7359d8@kernel.org>
+Date: Wed, 10 Sep 2025 17:18:56 +0200
+Message-ID: <87348utjxb.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250909081853.398190-6-liuhangbin@gmail.com>
+Content-Type: text/plain
 
-2025-09-09, 08:18:52 +0000, Hangbin Liu wrote:
-> +__check_offload()
-> +{
-> +	local dev=$1
-> +	local opt=$2
-> +	local expect=$3
-> +
-> +	ip netns exec "$ns" ethtool --json -k "$dev" | \
-> +		jq -r -e ".[].\"$opt\".active == ${expect}" >/dev/null
+On Wed, Sep 10 2025 at 16:36, Christian Brauner wrote:
 
-Sorry Hangbin, I should have noticed this when we discussed the IPsec
-test, since the problem is similar for the other features set in
-netdev_compute_features_from_lowers:
+> Don't cargo-cult the same thing over and over.
+>
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
 
-`ethtool -k` does not test the dev->*_features (mpls, vlan, etc) set
-in the new common function, it only checks dev->features and
-dev->hw_features. So this will not test the new function.
-
--- 
-Sabrina
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 
