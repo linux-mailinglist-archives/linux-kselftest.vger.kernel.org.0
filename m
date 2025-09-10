@@ -1,116 +1,111 @@
-Return-Path: <linux-kselftest+bounces-41088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41089-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD9A3B50AB1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 04:04:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB1E8B50AEF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 04:17:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8174C461ED8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 02:04:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABA293B28CB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 02:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2576422FE0A;
-	Wed, 10 Sep 2025 02:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24131E5219;
+	Wed, 10 Sep 2025 02:17:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fqX6BVGg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xu52ySlx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F5422A4F6
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 02:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7723431D386;
+	Wed, 10 Sep 2025 02:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757469841; cv=none; b=MbWIbyg18kqCOZQocoeYZKKUBiAij0IUaJFn60kYdd1kgi1FDH7UpshLZZVEL5G0Ht7NovaWaDovA1g6/jE7CIameq07HlsTPKiZftmMuhAI9bbjxb5PdKqZLn1AsKSXZRijmK9EFOn7ZlpbAmoX1dFnj2PmRFEZUPialU35sSo=
+	t=1757470656; cv=none; b=hMJMkNTZcdcVDxRFTqPt/K8HpRjN3rLKaS3tK3+j6+xIgwjtmw9ciScQqk88mHYNviyzN2L/GyR4rul6M2rJVTpWbP2ENFoHQmksqSp12XtzwWR4u8fbyUH+1+5A5E7fwo8/XwZOFyBD5rTpeynPYP+buWTfu5lc4M6IkoHAiNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757469841; c=relaxed/simple;
-	bh=A8UZSafwblk0pzJBfHJ9Pb1lVpHVArTIzyweR+KHg28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eHFpJX5Bu+fxPKSc3RekroRBdD1YkzzzxE8GfF1U4pzDDFgDWmkUdWyrABXnFLSdptZZe7Be2cDhT9A35CnlyybTs2b6L+ttFNl7s0DxmaY/m5MTVQZQm4YhdCKLV9h8lRWj68kQQuTO1KpXM1awd3732TXuhI/Gpt1oFB3xOyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fqX6BVGg; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-25634c5ebdeso30873005ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Sep 2025 19:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757469839; x=1758074639; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tDPCc/01NbX/qdqx8tLh6Cy8tAJ4bABYrvs+o+VqOMg=;
-        b=fqX6BVGgVM7YHsGY8g+DzkgOZll2wm44F2ce2rJt9NysWy+u9YixOktSlvd9soimM+
-         kDCyOwsNCwzeCjgfJ29XrXlc7EF7wRspZ1PbBY/sv0W6ZYjrnkK5t3Tbldcy0VXcZfDD
-         4ILNuW9vmbRo+v9S0MUSBml4CPUxaQA2zaUorUIdOy6w8NVsSbH9zmXS1uy2wdaZFQAR
-         794LBxaNr32EYeBVppDEktKoiCLYKs6guy1SJ6hgg2sU9rkFzTxUm+gr6fzCEGHsJShs
-         vBhuVOZAZxJuo1+lNdliIte85cI8l50QSd3tg0m9I84A7jZgUAEE6VyrxMF1i4ymSDEb
-         u1WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757469839; x=1758074639;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tDPCc/01NbX/qdqx8tLh6Cy8tAJ4bABYrvs+o+VqOMg=;
-        b=vCfud6ydF4LYL+bj5v5QiDQKInOKntF5fd5Jim8SORTFV2WmhCI8dvfsJbsM+GeZjQ
-         ety2rOZtwWyfl8o/j/RK1mJU3tPkAC69xyKrGGVZ60RpttyuK65wuTW62nk4hmIQIkcx
-         IiURHSaLcVI/CsATN1HKgGcd9IoJMh/gwT9TB5WQw/QfuobVcd0AyVnfwgepNSZNss75
-         Pn7J3UDwNpnH2clgt1nS3n8j8CP22Zf2O7+HEa9RzVxxbIBx1ld142p+ZWmyVitcMGzU
-         yWy8hjUPq8TEJdLgHg8khOuKtP0lpRuCNeBd3ZLEsNxqsrsFFTwrqpi4hGWDExn82W8P
-         +M4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXifgfMML6lsIDiZ86gA0aSNx61mj6U+LryDR/fbJAGHTfIWppdRfdpLBJ9z34GzwUEew6OQJrAWaKfkEsS22U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywis+GONb6OmYV9RTyxY5uCX0+8qqsKsjvsCAZJPHzXlZHm6Xgn
-	/TaOGlKG6LtW4Jq9dBdfQtHDy0X5btjf6iBeAlNFj7Y3sZPJrghGWsbv
-X-Gm-Gg: ASbGnctzTw2IqMI/U4Rw3fta+LvpxwUnXbBGzP35coM9b92E5DOSXSZD4VL3Z+H5sT0
-	QPC6TU1AeN1gY8F06ax7BUJKs59embuE1C6JlBlyGV8zw4MP1mNT2fEvynpjfuesw6StbOJRY1q
-	yueiZOd6j7iXthlesTm4hE1fdHTttIldsb1oAeYi0LNz4sANeX6YPppfpZUPxZS3RqDD6ae+SmK
-	ql6XZv8h7cTAfXExx964qNwdYfBYMuJX20vOp8akMtAxK2akMXQ8yN5+1RVtDeFXBTNJ3WGGdfH
-	F3YeVll8aV3+CFFNCCQAWkU8bfrtREl3WDqR8e/WEbqVNzkecujSVKt2JpiDjNrdH6qE5Dh5DVq
-	QLJDSVtcgSjGH5pcm8E/NjZbirrY=
-X-Google-Smtp-Source: AGHT+IGvbsXBjLY4Fbf28Eq5y/fsJDH8VznrHYs+kMCnJL3AHDVfp47p+D4IJrxlwh0Ob35gaOgXUw==
-X-Received: by 2002:a17:903:380f:b0:24b:164d:4e61 with SMTP id d9443c01a7336-2516d531c06mr166441815ad.13.1757469838967;
-        Tue, 09 Sep 2025 19:03:58 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25a2a344a03sm10440465ad.70.2025.09.09.19.03.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 19:03:58 -0700 (PDT)
-Date: Wed, 10 Sep 2025 02:03:52 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv2 2/2] selftests: bonding: add vlan over bond testing
-Message-ID: <aMDciKMGjr-_sW6E@fedora>
-References: <20250908062802.392300-1-liuhangbin@gmail.com>
- <20250908062802.392300-2-liuhangbin@gmail.com>
- <20250909164600.04aa44c7@kernel.org>
+	s=arc-20240116; t=1757470656; c=relaxed/simple;
+	bh=O+kXOPriOGMHBz0rrVOFJlWQlUQvaqACDiqC83k1uTA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q4sSMtzRE6Y1wtXIMyh/Jly2SPHw6WNRTrFNk1125xp4XENkGBBvKwlyqNHeNdVKhk+h0bEvrey09Y5oXJLemH9pHkI+JOMEDOVDc84Y9GzdDeLLO/qb0YDhh4AHZNvkf0wAXOstD8Fw/N0hCVVIynugANHkkv1fNWM7hTm2SsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xu52ySlx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE4DC4CEF8;
+	Wed, 10 Sep 2025 02:17:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757470656;
+	bh=O+kXOPriOGMHBz0rrVOFJlWQlUQvaqACDiqC83k1uTA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Xu52ySlx4vdokIA/qwfaS8BkKO2Sa2771r9JHnM5eJ1fqdNE+b3B5qwZVB682gZIW
+	 blg9fsgvXV/q8lSR+muOTcBb/6/D6xzLV5mw+j6wsLeKpUMKa5VQ3kbYbhVl15tLYL
+	 KGL6OrhyJw3YMqv9GdZMlWqKOODmwXthT037WFCmrUriHSsZH5KjXcFLzPg5cBRkP0
+	 yhUE7KSRov/YyZX1jDxD8iLDtWGV2HqZhldeNVkA03ddlJtinmabbgj5g7PWe45Gp2
+	 dQM0heNefD/xerYhnZOQG15DZ4m1C13IzOnyJv2FQEr0kque+7xSmrbcIkYUlqd3Xk
+	 G3S7BMTVo/9kQ==
+Message-ID: <3a10e26e-5c15-4208-b79f-6fbf5011b8b6@kernel.org>
+Date: Tue, 9 Sep 2025 20:17:34 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250909164600.04aa44c7@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2] selftests: net: replace sleeps in fcnal-test
+ with waits
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <20250908200949.270433-1-kuba@kernel.org>
+ <20250909153346.4fa8c369@kernel.org>
+ <263f7204-6f5b-4bbc-8c05-222cdb04fb15@kernel.org>
+ <20250909170323.5b0dbcc0@kernel.org>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20250909170323.5b0dbcc0@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 09, 2025 at 04:46:00PM -0700, Jakub Kicinski wrote:
-> On Mon,  8 Sep 2025 06:28:02 +0000 Hangbin Liu wrote:
-> > Add a vlan over bond testing to make sure arp/ns target works.
-> > Also change all the configs to mudules.
+On 9/9/25 6:03 PM, Jakub Kicinski wrote:
+> On Tue, 9 Sep 2025 16:59:28 -0600 David Ahern wrote:
+>>> This makes some ping tests fail.
+>>>
+>>> https://netdev-3.bots.linux.dev/vmksft-net/results/289602/129-fcnal-other-sh/stdout
+>>> https://netdev-3.bots.linux.dev/vmksft-net/results/289602/128-fcnal-ipv6-sh/stdout
+>>>
+>>> I only tested with debug kernels, but the non-debug get upset.
+>>> I'll resend just the wait_local_port_listen changes. If the change
+>>> gets more complex it's probably good to separate them out in the first
+>>> place.  
+>>
+>> That is surprising to me. I will take look tomorrow.
 > 
-> Why are you switching everything to module?
-> The series needs to go to net, we should avoid unnecessary cleanups.
-> And I think changing the config is unrelated to the selftest so it
-> should be a standalone patch in the first place?
+> Thanks! FWIW I repro'd one with "pause on fail" enabled and trying 
+> to ping manually also wasn't working. Something odd.
 
-On my local testing, there will be a lot default interfaces if all modules
-build in. This could make the test environment more clean.
-But it's just my preference. As you said, we can do it with a stand alone
-patch. I will re-post and drop the config update.
+This fixes it:
 
-Thanks
-hangbin
+diff --git a/tools/testing/selftests/net/fcnal-test.sh
+b/tools/testing/selftests/net/fcnal-test.sh
+index 69941520e8e5..a527e3556763 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -189,7 +189,7 @@ show_hint()
+ kill_procs()
+ {
+        killall nettest ping ping6 >/dev/null 2>&1
+-       sleep 1
++       slowwait 2 sh -c 'test -z "$(pgrep '"'^(nettest|ping|ping6)$'"')"'
+ }
+
+ set_ping_group()
+@@ -424,6 +424,8 @@ create_ns()
+        ip netns exec ${ns} sysctl -qw net.ipv6.conf.all.keep_addr_on_down=1
+        ip netns exec ${ns} sysctl -qw net.ipv6.conf.all.forwarding=1
+        ip netns exec ${ns} sysctl -qw net.ipv6.conf.default.forwarding=1
++       ip netns exec ${ns} sysctl -qw net.ipv6.conf.default.accept_dad=0
++       ip netns exec ${ns} sysctl -qw net.ipv6.conf.all.accept_dad=0
+ }
+
+ # create veth pair to connect namespaces and apply addresses.
 
