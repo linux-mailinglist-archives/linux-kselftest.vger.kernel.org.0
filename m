@@ -1,147 +1,187 @@
-Return-Path: <linux-kselftest+bounces-41105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5046EB50DF5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 08:20:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51FDCB50E74
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 08:48:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C8E41C263D2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 06:20:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E3505E5340
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 06:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A0462DFF04;
-	Wed, 10 Sep 2025 06:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3421D30649B;
+	Wed, 10 Sep 2025 06:47:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="e3A9FrUX"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y/gg6LOd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569BF22259D;
-	Wed, 10 Sep 2025 06:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC6119D093
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 06:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757485205; cv=none; b=VAu7tcPnoiXPe07GmYZh+fHAqVDphRKcY/WHUo/vnBqDe5Ng2GO9Ep8WGyoNxQcltDi9MpWr48zl+85R9X2sKWLcyL+ZFbdaOhjYAeiUaAoc38As1B4Xeo5UVAAEwGzVby5GFbmNlpYjLZn7XMozI6XW+9bIZP310XQJHq6MDGs=
+	t=1757486844; cv=none; b=PVoYVL9MqjOHfQVU6CybgNs0Im9Zn5UIK8Mju3+A2ST+S1w1yyoRy5bdV/Bw0LELLGT+lUKV4nxjjklg3XILO0a7W1U48M0rnemQKaWfahkavhQbxGo+uQJYaI6vuLR+rj8jgXAc6WmlaUHdbPDZxiP2xqKZHHdg3CWirGa8hYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757485205; c=relaxed/simple;
-	bh=GNr5fSQdvX6LdqB/W1EZ8Bb6oXPTAA6ZnpCtLjpI0F4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KGEbV4IYVNsf5UHnC8B3al9O747UbP5QoNn/HgRxjwnsTitLRahkIFWi8skJjFpM5BCY6WeRvVeeNWMhAOmyNMcxYxKQ2Z+pb5FOcecei/2dhNHYsiICy5A6reuu9gIPIUxbml3o0w8Kln8RLeFqqML8cOtm5a2OLS2sZTOmWYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org; spf=none smtp.mailfrom=idosch.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=e3A9FrUX; arc=none smtp.client-ip=202.12.124.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=idosch.org
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id D14877A0226;
-	Wed, 10 Sep 2025 02:20:01 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Wed, 10 Sep 2025 02:20:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1757485201; x=1757571601; bh=olvJU0Qy+Cu3De8cG+SQ0iQ+feuXB8WHAz5
-	1Z2X5bxs=; b=e3A9FrUXfqCYN+Z1VXm1vmK8p1g31UUM+gOpvbK8X4vL1WJbOnZ
-	ZuyiKrP5shMmqqm8fviRgSod8O5FCkoMi7UqkfQ21fm1tSYLpXPepJK782qEdMjP
-	XCRVQfn/ZHHsg51CgPEsamm1/oEDRkdPvLn9CFx9uoW9sPXeCCB/QftmDvoEAfnV
-	crk+8/3FK8dgHVAeqUAQ5+QX61kDIGxpFviboBW3/phFHXhOHVRqLTZYIfstCSWb
-	uUmOMS2BPTHbYlplCrV1dlzqIu9nw456cYeJf0qSc88VlMSnbU339Z5N5T6ICxA1
-	pDNITfGyCjrwJ4efy99LbkL4nCFmBWh8y2A==
-X-ME-Sender: <xms:kBjBaBfnR2EAOSwulVIjvh1JNRdwP0Sbr9mmSNtYyg9Bxu0o8YmtYQ>
-    <xme:kBjBaOITm5T2x3sXdfGjQP87pQcShU44V0Ohk9FkpYB_ukHSfEorsCgSjXbhwfJJq
-    ImGAWYFbeYS0gA>
-X-ME-Received: <xmr:kBjBaGn25h3RLlXChcYVX-C0WGGnL9X0rpdMZYGrV6qZzEXG-tmjXMOY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvvdehhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfutghh
-    ihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtthgvrh
-    hnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeghfen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughosh
-    gthhesihguohhstghhrdhorhhgpdhnsggprhgtphhtthhopeduhedpmhhouggvpehsmhht
-    phhouhhtpdhrtghpthhtohepihdrmhgrgihimhgvthhssehovhhnrdhorhhgpdhrtghpth
-    htohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggr
-    vhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesgh
-    hoohhglhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgt
-    phhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohephhhorhhmsh
-    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgv
-    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsth
-    esvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:kBjBaOewaNQh3bOjkY4Lxlco38ywE736U85fc0wme3K30rbGddbbxw>
-    <xmx:kBjBaPyrCD3R8H9890vLqp3aI_sufil0HV264vKQhSsm1bnsV3hMcw>
-    <xmx:kBjBaPKsMPYC-f3cKh0_TTLdZ_dGXLihPjLY8n111UxbCbHL2fsalQ>
-    <xmx:kBjBaItu5oxZQLmd5rkC3nAvF_0T_PZiIG7VnG5jlMscnvEmY7ovGg>
-    <xmx:kRjBaLF9L6GpgRy7DDEtIbSTDS3LbPtjx795p_gjUTZ27zA09BU3i09g>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 10 Sep 2025 02:20:00 -0400 (EDT)
-Date: Wed, 10 Sep 2025 09:19:58 +0300
-From: Ido Schimmel <idosch@idosch.org>
-To: Ilya Maximets <i.maximets@ovn.org>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, dev@openvswitch.org,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Aaron Conole <aconole@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Davide Caratti <dcaratti@redhat.com>
-Subject: Re: [PATCH net v2 1/2] net: dst_metadata: fix IP_DF bit not
- extracted from tunnel headers
-Message-ID: <aMEYjvSNvxfD7iJz@shredder>
-References: <20250909165440.229890-1-i.maximets@ovn.org>
- <20250909165440.229890-2-i.maximets@ovn.org>
+	s=arc-20240116; t=1757486844; c=relaxed/simple;
+	bh=0krdSigjkNWm4whsMe2fv8fzKfNF5OL8bcqbJw08UQQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Qmgxl+c/asb42EnGU7myqjDpYuNnDZxwyPOilufLKd6nQNkt2cttATINm6nlk5fQOOsIwIysRz5Op315h1maRWzLgjHuj4MbyttmUhiCLXmCpodtCqAZvKlCQpUqWXt7PDEkJx7zCH0iUszdv/9tG/fRvfp4bUB8zhj6X+QYeRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y/gg6LOd; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757486841;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=DclbICh4vt4htwsTue4DjShXgYZNbK2BpNkYpPd7VQs=;
+	b=Y/gg6LOdjvb45YIFSC4V01/hhOGrtMTxzoMN2T0WbEfIGLJKdczvs1Rxiuq00WCgXEMasi
+	sOMmp/SQOw4+6Avdwdptn+yIZVHYY933+zKE1Rg8BUcA8GpUQdLsqnAw4/SdNLnRszZ5jz
+	mLbScrz07GFtwEMOzozJnLk384byHfA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-118-Udal8JAnPvikUrL-OS0bVQ-1; Wed, 10 Sep 2025 02:47:20 -0400
+X-MC-Unique: Udal8JAnPvikUrL-OS0bVQ-1
+X-Mimecast-MFC-AGG-ID: Udal8JAnPvikUrL-OS0bVQ_1757486839
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-45b990eb77cso1850885e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Sep 2025 23:47:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757486839; x=1758091639;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DclbICh4vt4htwsTue4DjShXgYZNbK2BpNkYpPd7VQs=;
+        b=ePIxfQFD7W9Tvx3I7vJ+T+GZ5dtsYuvO4dIcsGgdv5IqB6gpa2WQHZUJRuZddjgXDp
+         AzvuTZMxlr570dgqoLV7IACEQaLN26E3A8Z/zOWA/6rPVESqG4tWUSWaREYuVPR1SBcg
+         kz70kqOW5S151pk+0VSFHLukgKDTLSNTsgQ7ym42iY9SMy2Spnh3qkgNhxp6Y/KKZgIH
+         gWxn8hXWv+LUn9ef3ZwFr6YStgOCTCokQUO/MT1MCS2p2vm6Iu4FF5nNI6V67hiaCblR
+         h3CNjbM7ZTdZ6GcRvYu5KOgF/ftLbmdQ1y2/t7fy8hnktTpktXc9x5zH+LaqAfm06vt6
+         tqSw==
+X-Forwarded-Encrypted: i=1; AJvYcCVEnz976ebZaT4NVvNCn6VamQIvxa+3TsKBGkOdCT4Fqs8iu6VFQyjrODPsm5GKbBZB1aRu7maX/Keuv/YTfS0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzy3pjitB+KNPVRA77R8ODvEWXVdkXoZ9QPoP/Ain+JQuOFbTVK
+	x7m8Tuoqf57EcDVSx/+L/pYt+ZUjCj0jaeAcTEyyLPkjkDnpda9NczXmNIw/gl2OEMJx5ZpBK/+
+	7IEFh/s7lCRmPXb+xi3VOECtnCg5j3m49PhWeFi5SPeW2zHVzygMvIkvYkyro3qqpjmarCA==
+X-Gm-Gg: ASbGnctaFwUGp2VN4I40M8Ep5MTUQjGvVheM9cxuuqRx7fQVyJalPtZ6lXFPE475D3S
+	J1wn7lDBRtroQ5jmacoxB6WehbaxQBpvCaZaMgP8VCusZoGrvstDUoH0EzPoOX+GU2hr9a0+4gA
+	dtCDPUsHODN3b0OEQD2sSA4kE3JgY7mWGKZebOj+ChNDUdJTwQSRHPwwoIEfJlVos9mgym4e5W5
+	75FafWL+T+9+lJ/tXcIU2s38y98LPDgsMwzgchP+Kb28fwLKIBPcP0DZZhtjEd0ihCaZ8gzm51v
+	GQn09HaFVAg7u74o5aHP6DikJfMtGrKOknEdpZOPfX/03g3FzoGeG2+tecMBpqpn+mwaUlVFwle
+	Bax0prWKSjs92QsOZjdpiV7/QSzgmnst0wYrlKayhobt/yFE+zfsKeB4sEZIMzmxKxzg=
+X-Received: by 2002:a05:600c:3109:b0:45b:910c:adf with SMTP id 5b1f17b1804b1-45dd5b6870emr170580005e9.12.1757486838762;
+        Tue, 09 Sep 2025 23:47:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG83J5OJuXJRUwcDtMhsLLb63Ao7OmC+YBUOiY4RlDnVWFPTK7sefin7s19OlLvWaaiTz7/1A==
+X-Received: by 2002:a05:600c:3109:b0:45b:910c:adf with SMTP id 5b1f17b1804b1-45dd5b6870emr170579765e9.12.1757486838384;
+        Tue, 09 Sep 2025 23:47:18 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f17:9c00:d650:ab5f:74c2:2175? (p200300d82f179c00d650ab5f74c22175.dip0.t-ipconnect.de. [2003:d8:2f17:9c00:d650:ab5f:74c2:2175])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e75223898csm5855416f8f.39.2025.09.09.23.47.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Sep 2025 23:47:17 -0700 (PDT)
+Message-ID: <837a56d1-38ef-453d-9b94-b151765d5b84@redhat.com>
+Date: Wed, 10 Sep 2025 08:47:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250909165440.229890-2-i.maximets@ovn.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: remove PROT_EXEC req from file-collapse
+ tests
+To: Zach O'Keefe <zokeefe@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250909190534.512801-1-zokeefe@google.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20250909190534.512801-1-zokeefe@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 09, 2025 at 06:54:15PM +0200, Ilya Maximets wrote:
-> Both OVS and TC flower allow extracting and matching on the DF bit of
-> the outer IP header via OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT in the
-> OVS_KEY_ATTR_TUNNEL and TCA_FLOWER_KEY_FLAGS_TUNNEL_DONT_FRAGMENT in
-> the TCA_FLOWER_KEY_ENC_FLAGS respectively.  Flow dissector extracts
-> this information as FLOW_DIS_F_TUNNEL_DONT_FRAGMENT from the tunnel
-> info key.
+On 09.09.25 21:05, Zach O'Keefe wrote:
+> As of v6.8 commit 7fbb5e188248 ("mm: remove VM_EXEC requirement for THP eligibility")
+> thp collapse no longer requires file-backed mappings be created with
+> PROT_EXEC.
 > 
-> However, the IP_TUNNEL_DONT_FRAGMENT_BIT in the tunnel key is never
-> actually set, because the tunneling code doesn't actually extract it
-> from the IP header.  OAM and CRIT_OPT are extracted by the tunnel
-> implementation code, same code also sets the KEY flag, if present.
-> UDP tunnel core takes care of setting the CSUM flag if the checksum
-> is present in the UDP header, but the DONT_FRAGMENT is not handled at
-> any layer.
+> Remove the overly-strict dependency from thp collapse tests so we test
+> the least-strict requirement for success.
 > 
-> Fix that by checking the bit and setting the corresponding flag while
-> populating the tunnel info in the IP layer where it belongs.
+> Signed-off-by: Zach O'Keefe <zokeefe@google.com>
+> ---
+>   tools/testing/selftests/mm/khugepaged.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Not using __assign_bit as we don't really need to clear the bit in a
-> just initialized field.  It also doesn't seem like using __assign_bit
-> will make the code look better.
-> 
-> Clearly, users didn't rely on this functionality for anything very
-> important until now.  The reason why this doesn't break OVS logic is
-> that it only matches on what kernel previously parsed out and if kernel
-> consistently reports this bit as zero, OVS will only match on it to be
-> zero, which sort of works.  But it is still a bug that the uAPI reports
-> and allows matching on the field that is not actually checked in the
-> packet.  And this is causing misleading -df reporting in OVS datapath
-> flows, while the tunnel traffic actually has the bit set in most cases.
-> 
-> This may also cause issues if a hardware properly implements support
-> for tunnel flag matching as it will disagree with the implementation
-> in a software path of TC flower.
-> 
-> Fixes: 7d5437c709de ("openvswitch: Add tunneling interface.")
-> Fixes: 1d17568e74de ("net/sched: cls_flower: add support for matching tunnel control flags")
-> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index a18c50d51141..3fe7ef04ac62 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -394,7 +394,7 @@ static void *file_setup_area(int nr_hpages)
+>   		perror("open()");
+>   		exit(EXIT_FAILURE);
+>   	}
+> -	p = mmap(BASE_ADDR, size, PROT_READ | PROT_EXEC,
+> +	p = mmap(BASE_ADDR, size, PROT_READ,
+>   		 MAP_PRIVATE, finfo.fd, 0);
+>   	if (p == MAP_FAILED || p != BASE_ADDR) {
+>   		perror("mmap()");
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Cheers
+
+David / dhildenb
+
 
