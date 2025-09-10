@@ -1,124 +1,141 @@
-Return-Path: <linux-kselftest+bounces-41119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5DC8B51541
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 13:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E7A39B515BC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 13:31:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D17DB160C11
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 11:16:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FB91564014
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 11:31:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2CC9274668;
-	Wed, 10 Sep 2025 11:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42AD4317712;
+	Wed, 10 Sep 2025 11:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UQ5PQ1l/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iHDpGcR6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD6925A355;
-	Wed, 10 Sep 2025 11:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B212D3128BF;
+	Wed, 10 Sep 2025 11:30:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757502980; cv=none; b=c/QXowCy22ykHk1mg9vV8dv+4yvZZaavdKsImyQyz+egF5wWES68FAF/Bi9ziE+3C7bIdVfeNHsRbUrMx7MsDo+xIv4HLV5xNIzSflnHGPHUdPCDQUhcO0L80LnQXeJEJJEkxokAE3c4gjk5OEB1KSvL8eK69STP4aqtKwCSvbo=
+	t=1757503847; cv=none; b=EO1BJRtm1j+6qIj6DUv2BP2MhDdLMwxp/+XHEKj0Og8c1762OOxcBxPodayH9SXU+dXlUA9IedKiwlvZIYXr3HuIVVxjQy1q62I2gY4faSS5DruInOd6hs8Is4aY6AwdEdLz6G2aEtKw+Kj8bYA+OiUxZwDDMGcGZ5ynYnZMygE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757502980; c=relaxed/simple;
-	bh=2rASD+s8QFj1eS4oF5z2j1I3AkxBGsqd2eCLiUasoB8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cxl1YdsGDDzOeimlAFMnFyh2YP261bYUQl6m1+IF7sL3/jZ46asd9+VtTqcjxypaugS8sG4zdMVT1cUZc4+ss4SnhLp/WItxYd1QK+IMI+korNogbsdAkSyc8YAeIkE75eTRZ2ex4MVNKLaIHHoi5gPWoNaT7SnAxbZ3jxvC264=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UQ5PQ1l/; arc=none smtp.client-ip=209.85.215.177
+	s=arc-20240116; t=1757503847; c=relaxed/simple;
+	bh=9ZSLjDe+4Fc/v2AOr41UNDmXMbdnGl8t41vBsqh5l3o=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=M6DB7TGCJ/fPZNkdaGfTu9htLYTpiIAdJsyfU2hvbXezw5thlqdoZjgyWYFkneCsQ2uyhKgRV2sL9KK50xClNgQTG0Iaj/nnQkzU9ETfurb0lSYxW78/3rW1WzXDF7KvA0J5YbbLx+yWjyt37RP6ISkXTkSfJfPlof5qxN1WDag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iHDpGcR6; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b4ee87cc81eso6054255a12.1;
-        Wed, 10 Sep 2025 04:16:19 -0700 (PDT)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b4d118e13a1so4445450a12.3;
+        Wed, 10 Sep 2025 04:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757502978; x=1758107778; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MZbusY2YZDJHUgvIqP5aq8nFaPzc4Ije89rvbFvkmb4=;
-        b=UQ5PQ1l/iUadLMXI3f99zhGMgEzVVCq4bl1lzsRKSrsADYZ8hrc9PlTqNDdBPOpMP3
-         NZouYJGke5QN/uNvkV94v8KGV0rhe0GpZqdc7ajOh67GFo+BARP8KMc/Vf2BPxJ7lSLp
-         by6guwdiYfQHH4ACLhYV8BPXzoWZ+V3ygz6a725i7TQGCxAELdufYcK76hFZGp2zoEKW
-         44KEf7+3+QouM9aXPfjrjaDVvxQBWXCJivwhzh6vqoKeDDMDfnF7X4znq1gjwFSSZb4x
-         hjR3w8nYrbsDiTURqhmAKU2MAESOpvgtk2QZsIQSSRdGL3G+crTr/yAo8gU3OLtHbsLm
-         lfrg==
+        d=gmail.com; s=20230601; t=1757503845; x=1758108645; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=flW00o4TNs0w7ND8/adOgZPHVUNu6jf50PwpLW7fM5I=;
+        b=iHDpGcR6FIek1qNAo4AIJX4WQHCI/MqjD2TvgMy/NfJin15ZANQr84IuIygPgB6mo7
+         lq30mjhX4aVoNdCwBrCPsbTvrwfQfMpWMChbjXhgOeIgtaPmHBm8qiLo3PwyMG7HFogj
+         JBuzI2GKuBINXZHSkGXdDUMirq5cmWLlWdjaAVXw3b1Ct8DqtfQ3Y9GFtXWwKfrzkO0H
+         LstpaaQVl+2G+L+PgtUw6igzzqN0QZx4O1Dd5S+8xoGYk95S3iw2BPt69Wdyxf07iF8O
+         JOxpBD0NWKgDNzwbv7eydDjYMAQAV9+eCOclrnHIqRcixgWLplOH4wRXTfd/Nqz/C0Xr
+         SMEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757502978; x=1758107778;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MZbusY2YZDJHUgvIqP5aq8nFaPzc4Ije89rvbFvkmb4=;
-        b=abQcBXMnGvgRy84rE7srwkvOVi4ypmDYPk8+MjaWzOUT1fQYPiHz7zELcG+AYN9tiV
-         muxDuijyjVAuptsdXk0wWW+POsLh/4I6rw2YUqGfuH9TFtG0tjgX4zm6Z+etz9dHXPIh
-         d+HKYaUzFwTuL7qZZH97Q8Bh4qsu+LqD7orWpyGtTVo9m868C2Hqg7wwUqVNWxghseOX
-         PkO0tux2knOMGM9fysp0NTHqBEMES1hCgXuKmp7NPrdZwKpY6N123ODkLQv0jSVCNdih
-         EBZBPDqBIEtyCE7F1j5dJ6vH140AHYjmFMSMkC2ejwjA0B6pRtEC1g0GVZCzmaqEd74m
-         kA0w==
-X-Forwarded-Encrypted: i=1; AJvYcCUcEsjqnheP+7ZqxILVK/uZP2OI9A2/1LBPCzEypPaTpA3ExIolRy5aTWcBxMyKwM7wzG2sihQtwCZdzFo=@vger.kernel.org, AJvYcCUuKF/4ad2iBDxdZGuE+2IndJ09W/wFRDfz7HD6I8BvQDPk36ftYjvzsNTojdt4f1FM5+ZKnzUkKIkTj5TEX8Re@vger.kernel.org, AJvYcCXiI6Qf2/HXZXaZPXEs0sQllJg4lQ2W95Y3TYdw/ATIr07VdT/cQzqBnbcM6dgpfYwA3dl25B5D@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfbEAFQC/09ZOGLba0YFVEDeFdh7fo7zjbYG3lPrItR7EFWxz3
-	BiLPU6ijkk4PG/z5XxLPoiVCdV/GIJiRTYvv++aMtfdzBFE3cjFZ+Cie
-X-Gm-Gg: ASbGnctv9g6mUq6tpxzj1JzdneQiZmT0W0+z1rRMDVQS/yPYT9QS79hnWkVrzXA0jks
-	WpNkiucV5jOYjicz7fo6T1CW9TL+2jqnDlgu5IGw2hfeNjE5sXk6uGXFDO3lIJNhqjHyzrG/f8p
-	TsiaTskpGToxpTXilqR2KltVOmgkGA5FseWFpSoEN3+c7bEuORs4yoHznnkwOcOI7wVj3U0QYT5
-	dXST3x3vkTaUOfSB+61fByzKkk4A11EciqhwNzr3id1zSeals8j6bn+PW1k0FK1uI19MwxYD92n
-	8tvnCtb5wpBraf8IOGpq+1hgfunMByG9wjNfZ5sloKtGdnVF4y7fizCYa9lXoUh8jRHjM++rJhM
-	tVseULboUXIF0Zm6pvV//EZ4SmNXr6f4Tcf7kcHWbjEiQ1kMBnsUkMbkM+2sJOARn3K230OL7NX
-	056V5B6JdDf7ueQ+Z2RggvfilupGmNn5OupOee94FCF7XL9XKpw2Kq+YVkucHcnNid
-X-Google-Smtp-Source: AGHT+IHYJUR0byJaWrm8+KNFqANo8zElvFbaG5ym9raoJ7ygPAvqG0hpZXLy2KjyUuPvUxUS73wvMQ==
-X-Received: by 2002:a17:902:fc45:b0:246:464d:1194 with SMTP id d9443c01a7336-2516d81836dmr194708695ad.2.1757502978484;
-        Wed, 10 Sep 2025 04:16:18 -0700 (PDT)
-Received: from ?IPV6:2001:b400:e28d:ed7:4d5a:39b4:7c51:4c71? (2001-b400-e28d-0ed7-4d5a-39b4-7c51-4c71.emome-ip6.hinet.net. [2001:b400:e28d:ed7:4d5a:39b4:7c51:4c71])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25a2ac085f9sm23656115ad.117.2025.09.10.04.16.15
+        d=1e100.net; s=20230601; t=1757503845; x=1758108645;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=flW00o4TNs0w7ND8/adOgZPHVUNu6jf50PwpLW7fM5I=;
+        b=ljPoaZKaJHFDundY+XJ6TZMfW9nfqY/yblhBmsdIR3KT5SagSqMqCjDjud4GL2jd/4
+         /dUfmqic5BYqf92dYqmtlwXTibcgrCljKULF9DZbc+8glf1sAye36g2UYCnoEDOp4wR4
+         jJk4ijKoSCTARgrX7ivuu2kYHkNKVDn0UjZ3mZYUnb5KizK2+wQmhue1/TEOs9dGRK/V
+         3SrG0jRTsHGa25Q/WZh/VVoBRgzgpv6c1TRgxlNfxfIghptHAm/U7VJ5fsIw8IQx8OLX
+         VMLQ3smzMkFzobuzkrguLFZtpdG++pT+YeVvkbarL9y56xEw3tW/OT7XFT8qGaJXgnt2
+         8KWA==
+X-Forwarded-Encrypted: i=1; AJvYcCV3fzeqwNcpnqaJYVZcqkGObqzDgAbLBLFtGhFZRYgyr7atZKYR/ieBxJX6Wjio+P8WcF+a0tnThU9R7sQ=@vger.kernel.org, AJvYcCW4kUUCu7mkC1lsDumjMxSVlIOvOwNwu9zcmlJyZ06jiAiOgjjcv81OZUnJ5AsYxzuka+cdED9N0RzQ4gvfk80N@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt4SOe2vWSMtFYQsnqi1NRtX8ZFBog8hjkdG+5St/YMnsLVfmu
+	1pxyOOfN2iwjZifZduZcEoF3G+xgva1gKOfX1DfCpkx0REY1KU2NJrC5zDIiqg+O
+X-Gm-Gg: ASbGncsx52DvmXbzaIdL/Tt0+UB+eYcyky130w+PnBWvwVZ04kO8mzYnL0gSnqcGPy6
+	ls3z7zCWHReT+yMubr1F3hWsYHujcIXS1G/jrqTm8MUxkLImHpgwc//3ex7wrGLH7pekZK+K20p
+	MNxkm3obnlybs88Yj7xzQ91R5W8czCjN7I0Sr8EMFNl9hTk9FQhtTTC8aNjqmyIMoFPm49upuuz
+	ofTArWcJk/RPupuwTUiR7KR+q6oCOtSZ57/HM4l+gEbWU60CcYdZ//s4m3127HF7oB+onHQ4Oa7
+	7AhLXoqYpJr/vOIzHJlvBo+ZgU5svs9mbMmQln8iJOS6BK9T+rE/xlBHHtS87P1VyWfgPWWfPQ1
+	6yItLVrw1aY+o69CKHbeXemPuZ3H1Fx66hmUXoe6tWu0c+D3UzJbr5NjQp+k6AuPCRZZ4xprZ0T
+	BnjF7XG3JsGaLImh/p
+X-Google-Smtp-Source: AGHT+IGc7SMnCypPSiItYXmc89F0gz9NLoFugqdvp1jo9HA+2pBLrXEE7CO3WouVUiK/9GqKXLS5sw==
+X-Received: by 2002:a17:902:dace:b0:24b:11c8:2cfd with SMTP id d9443c01a7336-2516ce601bbmr241491715ad.7.1757503844712;
+        Wed, 10 Sep 2025 04:30:44 -0700 (PDT)
+Received: from localhost (2001-b400-e28d-0ed7-4d5a-39b4-7c51-4c71.emome-ip6.hinet.net. [2001:b400:e28d:ed7:4d5a:39b4:7c51:4c71])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-25a27df03a6sm24841345ad.56.2025.09.10.04.30.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Sep 2025 04:16:18 -0700 (PDT)
-Message-ID: <270488a6-ec6b-4b38-aa30-b5c9e08cdd18@gmail.com>
-Date: Wed, 10 Sep 2025 19:16:13 +0800
+        Wed, 10 Sep 2025 04:30:44 -0700 (PDT)
+From: Nai-Chen Cheng <bleach1827@gmail.com>
+Date: Wed, 10 Sep 2025 19:30:32 +0800
+Subject: [PATCH] selftests/Makefile: include $(INSTALL_DEP_TARGETS) in
+ clean target to clean net/lib dependency
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/net: fix unused return value warnings in ksft.h
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
-References: <20250906-selftests-net-ksft-v1-1-f1577cea3f68@gmail.com>
- <20250908182018.28d9ff10@kernel.org>
- <a3d1c5ca-cdce-428d-8c1c-6a1f59e2dd76@gmail.com>
- <20250909162551.5224a3dc@kernel.org>
-Content-Language: en-US
-From: "Nai-Chen(Simone) Cheng" <bleach1827@gmail.com>
-In-Reply-To: <20250909162551.5224a3dc@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250910-selftests-makefile-clean-v1-1-29e7f496cd87@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAFdhwWgC/x2MwQqDMBAFf0X27EJMkWJ/RTzE+FIX0yhZkYL47
+ waPwzBzkiILlD7VSRmHqKypQFNX5GeXvmCZCpM1tjVdY1gRww7dlX9uQZAI9hEusfc2jG+DDi9
+ LJd9ysf9n3Q/XdQOYbgM9agAAAA==
+X-Change-ID: 20250910-selftests-makefile-clean-cc2fb70e9e32
+To: Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev, 
+ Nai-Chen Cheng <bleach1827@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757503838; l=1181;
+ i=bleach1827@gmail.com; s=20250730; h=from:subject:message-id;
+ bh=9ZSLjDe+4Fc/v2AOr41UNDmXMbdnGl8t41vBsqh5l3o=;
+ b=kXMkH0zAKLkWvP+pZoQE1+O8Jn6o+7/9bPAhRss9NYSh6eI3XM3RkVxIOhufhacf0MniUQ/EC
+ 1hRfpU4jD4BDaAWHTm5r3e2zPbYyYvBM2wW5bj4bUWA52A4GsHa6243
+X-Developer-Key: i=bleach1827@gmail.com; a=ed25519;
+ pk=jahFPRplw20Aaim8fIt8SxlFMqkHbJ+s8zYBGbtHH5g=
 
+The selftests 'make clean' does not clean the net/lib because it only
+processes $(TARGETS) and ignores $(INSTALL_DEP_TARGETS). This leaves
+compiled objects in net/lib after cleaning, requiring manual cleanup.
 
-Hi Jakub,
+Include $(INSTALL_DEP_TARGETS) in clean target to ensure net/lib
+dependency is properly cleaned.
 
-On 2025-09-10 07:25, Jakub Kicinski wrote:
-> Sounds good!
+Signed-off-by: Nai-Chen Cheng <bleach1827@gmail.com>
+---
+ tools/testing/selftests/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I tried the direct void casting approach, but it still generates 
-warnings with GCC 14.2.0:
-     (void)write(fd, msg, sizeof(msg));
-     still shows: warning: ignoring return value of 'write'...
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 030da61dbff3a7e4a22d61ba3972e248a43d374d..a2d8e1093b005c9af3570246dd8b10b59e44b46b 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -314,7 +314,7 @@ gen_tar: install
+ 	@echo "Created ${TAR_PATH}"
+ 
+ clean:
+-	@for TARGET in $(TARGETS); do \
++	@for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+ 	done;
 
-After further researching, I found this appears to be a known GCC/glibc 
-issue dating back to 2015 where direct void casting doesn't work for 
-functions with __warn_unused_result__. [1] Since this is a long-standing 
-toolchain issue and direct void casting won't suppress warning, I think 
-you can skip this patch. Thank you!
+---
+base-commit: 9dd1835ecda5b96ac88c166f4a87386f3e727bd9
+change-id: 20250910-selftests-makefile-clean-cc2fb70e9e32
 
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66425
+Best regards,
+-- 
+Nai-Chen Cheng <bleach1827@gmail.com>
 
-Best Regards,
-Nai-Chen Cheng
 
