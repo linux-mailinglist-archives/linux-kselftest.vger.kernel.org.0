@@ -1,149 +1,128 @@
-Return-Path: <linux-kselftest+bounces-41199-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27475B5217E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 21:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BADE7B522F1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 22:52:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD1F35656A0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 19:59:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F7975871BE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 20:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C8C2E0930;
-	Wed, 10 Sep 2025 19:59:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF99F303A3C;
+	Wed, 10 Sep 2025 20:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lSUwoiKc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34A429D275
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 19:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0953019AD;
+	Wed, 10 Sep 2025 20:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757534377; cv=none; b=f/WqnFg602VBvJig50vrInwtfUmPGtPC2C7l+l0/RiXOGYAwWb/N7gl2Ea0Edq57qY0cAZEPYSk5BvLV20quOpGa+tfFlNayofXZg8XUh6vvrRizteoLxUEUbnllCUOw2E+E2/vbubq9x1Tf8WWuKbGy4OfnoGUUDkYPaq358dg=
+	t=1757537178; cv=none; b=Bk5DOFJuDMMsdsBxvRwViRxUKE0xneaBLidncokGqhhK09fzIO6C8EaAMcW23PpOuPIS7mA/ah+tbX0M3MIHFNMnCZci5+pXZa6tfOckwfS3M6SLn4DPLqC8jvODNsUfoZjPkp9OP9C87umvysd85sgKJoieqaVgHP0qvrH/OGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757534377; c=relaxed/simple;
-	bh=L+P5yZZfaz2UZ/A+ieU33ytsnNjJDuKZ4CYymzgFooE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jy6DKSih0ehtvw9wnaO3YEivu99et+JRVONrHUm+3uyqYp9wTyF27GMaVyAO4c4GR8pnnMyN83zppWO3EKvLIP2/syq/SQCfkb0meMLhynofXtrXZdCVDVT5MsAcSaURc8bPbu+aq3wLylugW0AiBL8a4OWOjjwArbkr2CW3sG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+	s=arc-20240116; t=1757537178; c=relaxed/simple;
+	bh=3jUJ7yRAPvTNEv7G8uUSApRLe1x8V8/iVjdKA8ADmx4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TbkFKgSuhuZ0f06zLoDafFiVTLZvM4e5k7Ptj9mVL+Xy6xfvJvPgFUXwMHrDsx7JmmAu42umjM7hCd1lD4FVRc4XT/kYgbmE36KwW/KWXXZKHxWw71ZwqMGExBFG+bALEF5DhDSTZG04Z3Y1xzYXeNDp1/7jC1ddH6CV2gUOnPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lSUwoiKc; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-620724883e6so12410370a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 12:59:35 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-81f9cfa70deso2500385a.1;
+        Wed, 10 Sep 2025 13:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757537176; x=1758141976; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zdPfGCbmStLnf7OkwFRjoXPyuHAb7oGF5r4POmSHGhY=;
+        b=lSUwoiKc/uUIRxj+Kx3bwrZ9VGHjIqMmCXPmEtAAq7ex3wfoknlssVj8RzTGxg5B8i
+         peQlD5duBlHDzgZF5LxYPvLXuFy/DgzcXw+YaTrgMjwyAClU28fSGsAPKmBG5z37Gmb9
+         JRzNM81K+gZNl2DGBEj2T7hFs6EbqWB6jW62f6XhSED8eK77YkCWpHcDvhWoG1nE7dvM
+         zzN4fJdbwmELsrmxWpT7po5SOiOmVchGoVpORL+CY/np0rf0DnJJ1dmm1Pnh1sqrQJOH
+         AmKmzlHyW6k3WvJxL89mVRL6zHTw18Dl89ddYB5NhkLwKMUqoDMlPeg/LgWGzEhXRKho
+         rQPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757534374; x=1758139174;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vSyW+bCKM+mTcYP257eKxq8oqjrK37Brx0AQ56rh9CU=;
-        b=Tb3TMZAcc/wYaofw2ABRpRTQqJ50VDE2TD2jDmiM4YkRISM9X5rVHxAhnzAwgU9BlJ
-         R28aQ9VqcocAF1qlrq23OiB5H2Zsdeq1bfr1vKF0AXbFVxq7VGT7FeXElThhgSp+eppe
-         i+426urPnLcF42zvCYg5iWG51EA6tHgTcqRH3IAQlcCrHMHNOAV3uFv9CaWGEgH+2+q4
-         O8dZgxEuUFjU92/7TDU7lXBB0NUfTclsrTpqEEyelM4FQxVz6E4WkXAzA+2dL6BjmlxN
-         6F0+ISOG//NbyysRsvzHS6y3mMBhVuPpgpPKmf9j8RJQSQQIwN31LP3A8rSMubShgdk0
-         Toag==
-X-Forwarded-Encrypted: i=1; AJvYcCWocGzJkAwhiD3rbV5iSvsb6HDklVqI0HwGzFuWOJTS+pQIxgWJot/MHcuYe+NUR8MUXcmpGrM5BoZYsTNa00c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygU8H95oWtUDZ8DlKqmzczdx1dH0S4Car50sXuU3QPO62JmWV9
-	kIZ7iT0JUL9W+PdWqMqOUE886dBDaS7zItQnvhjzsXBP/WiodFwX67Xn
-X-Gm-Gg: ASbGncsowaBNs8G/PwXPLvyRtQhnpdypXvVd2s62O28b4SKKYKT9UOo0RRj/rU3HRD/
-	WkWlczdo6Mc1i6O7dkyw8m9ksgR2CCZkjPJDTsjLR16dp85bXx38oEtQUZiQvY30z5mMF1gEgcp
-	AcWrdCmHFd8AsHlTXLA+LH8f3Bq9+FMbn7nPe10DAMU/BcNLxwkGhfwgqW6HT40PjiZaYtbtUIL
-	BIGEw6apOE0y7LnRK/GoeaXoap03+jp1Mgb+JLlcG1/FKiK/2H9xs252QzI66afgNdeZu/JzePy
-	iFN/mOZIN3VXoRxb5OH6w/bnFBjAL3MP/+ke3NWmxNjGf80uuFrH2EjShuFBt8Jp3v7+zd0Lg8I
-	oIvXf8oVK9hBnJg==
-X-Google-Smtp-Source: AGHT+IHnlnmQF7cjCqFq5bXs72wG6wVY2EzGivBZpZmg4onT8Pw3/dnwNDVwAAeyGz4vDiDC7oXEUw==
-X-Received: by 2002:a17:907:3c92:b0:b04:706a:bcfc with SMTP id a640c23a62f3a-b04b1547768mr1642728966b.33.1757534373934;
-        Wed, 10 Sep 2025 12:59:33 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:43::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b0783047d98sm227097666b.22.2025.09.10.12.59.32
+        d=1e100.net; s=20230601; t=1757537176; x=1758141976;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zdPfGCbmStLnf7OkwFRjoXPyuHAb7oGF5r4POmSHGhY=;
+        b=h5yRkUh3go/qaBzUak77e3HxixGMXEjlCbbHWWi3dDmSCVtK3aqes2WwbeL7MgG02p
+         AM8d/Q5YqPuWV0bPum77MOGLscL4FFxEZ8889KstRfyMwWSAcxotr7DmV648ApcHqWBK
+         YmIAG1PWpMJAlUJ+uL4GprYXs3NDIaTFt5tkldzooBxmalI13nUSxgFBF47gcU75WZMp
+         kqFWsUCfc6VDhjh1Gon9hIjDzAA6i/5FrtTYlosORRW15IToyZQWI/F6INbiLMwrUbpc
+         pC+iIvUFAmk/+jWss4A5CRrC0gvSqr6CIwle2H/Bfgp+u8lP8QeUIRVHKWUq369W5fhy
+         tGXw==
+X-Forwarded-Encrypted: i=1; AJvYcCX8iU4pBEmm/GHC/LtWdUILKc/EqdVgWBS/4iLlA6DAm9Vbr3Jw6x4yMY7Zp4KhZ0PqTRiBRzKhxFQ/TW0=@vger.kernel.org, AJvYcCXSR/hb5aLbuy0a9MJvSRtx5OMUviOfVUUOrUNfbeNmTfzQ2eVHbTdzgY2M9NaHJc3xSX5uJiw+cY9sj4kfcZwQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTHYNvUWD+JEFCeMVgHmd7mctjdFpyaCGronCGrUv6s0cVdu6h
+	5QreJaIDfa0wmISFickXJXZ4/x6FQOhK8eTQw1f5BQJxMPsnbUYfPjDQ
+X-Gm-Gg: ASbGncvIhH+h1nAMocdYgBj2tP9dFfUPfLtU1B+pf04gD/iNS5fje4eGQFB5xoAKrzp
+	R3bpr33aUzpl76P8nDg2Dg7iAIhzhRVgYy9QHEROyniwVd+xwgiFYVQ73uw+BiQtWj1nRHkNYRB
+	m+7QXkl+d2fs9mmlbU5k424Ar18xOT2I85IaZMs6pGTIBB64+xRim2apPJ+fm1LG/nAWAobV7lB
+	b387L09L6qC4G3MMUndobrLT4AKXXe9U0jNtGVklI6Jt6P9jp5oSX6JjBibuC2ZppeENQrvqUGl
+	xTZtBMs8txLT0L4xx/OU6ZZc/CmuX/7fYjdYQIfDtkwKvcdWCR/yP8bk1FrSlH/afZIXevWNoV5
+	o48df6LGc9KP4CIecHXs=
+X-Google-Smtp-Source: AGHT+IEyqefIg2aIVeybWhllIAFyMXyMtJhBmm1X475rnhW0Aevfer0/jPOsC0mHTu8niZEnKw8P6Q==
+X-Received: by 2002:a05:620a:4624:b0:80e:f187:7fd7 with SMTP id af79cd13be357-81ff74afbe7mr152223085a.36.1757537175991;
+        Wed, 10 Sep 2025 13:46:15 -0700 (PDT)
+Received: from localhost ([2a03:2880:20ff:5::])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-81b5e5c0079sm351700385a.43.2025.09.10.13.46.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Sep 2025 12:59:33 -0700 (PDT)
-Date: Wed, 10 Sep 2025 12:59:31 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Andre Carvalho <asantostc@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 5/5] selftests: netconsole: validate target
- reactivation
-Message-ID: <yj3q6gy5uxz5vosqxpmq7a24qpiu6zihj6gqgi6w7lnyekhqxk@silweslakkev>
-References: <20250909-netcons-retrigger-v1-0-3aea904926cf@gmail.com>
- <20250909-netcons-retrigger-v1-5-3aea904926cf@gmail.com>
+        Wed, 10 Sep 2025 13:46:15 -0700 (PDT)
+From: Usama Arif <usamaarif642@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Usama Arif <usamaarif642@gmail.com>,
+	Mark Brown <broonie@kernel.org>
+Subject: [PATCH] selftests/mm: include linux/mman.h for prctl_thp_disable
+Date: Wed, 10 Sep 2025 21:46:09 +0100
+Message-ID: <20250910204609.1720498-1-usamaarif642@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250909-netcons-retrigger-v1-5-3aea904926cf@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 09, 2025 at 10:12:16PM +0100, Andre Carvalho wrote:
-> diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-> index 984ece05f7f92e836592107ba4c692da6d8ce1b3..f47c4d57f7b4ce82b0b59bee4c87a9660819675e 100644
-> --- a/tools/testing/selftests/drivers/net/Makefile
-> +++ b/tools/testing/selftests/drivers/net/Makefile
-> @@ -17,6 +17,7 @@ TEST_PROGS := \
->  	netcons_fragmented_msg.sh \
->  	netcons_overflow.sh \
->  	netcons_sysdata.sh \
-> +	netcons_resume.sh \
+MADV_COLLAPSE is part of linux/mman.h and needs to be included
+for this selftest for glibc compatibility. It is also included
+in other tests that use MADV_COLLAPSE.
 
-we try to keep these tests alphabetically ordered.
+Fixes: d9c7ff4dae62 ("selftests: prctl: introduce tests for disabling THPs completely")
+Reported-by: Mark Brown <broonie@kernel.org>
+Closes: https://lore.kernel.org/all/c8249725-e91d-4c51-b9bb-40305e61e20d@sirena.org.uk/
+Signed-off-by: Usama Arif <usamaarif642@gmail.com>
+---
+ tools/testing/selftests/mm/prctl_thp_disable.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->  	netpoll_basic.py \
->  	ping.py \
->  	queues.py \
-> diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-> index 8e1085e896472d5c87ec8b236240878a5b2d00d2..ba7c865b1be3b60f53ea548aba269059ca74aee6 100644
-> --- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-> +++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-> @@ -350,6 +350,29 @@ function check_netconsole_module() {
->  	fi
->  }
->  
-> +function wait_target_state() {
-> +	local TARGET=${1}
-> +	local STATE=${2}
-> +	local FILENAME="${NETCONS_CONFIGFS}"/"${TARGET}"/"enabled"
-> +
-> +	if [ "${STATE}" == "enabled" ]
-> +	then
-> +		ENABLED=1
-> +	else
-> +		ENABLED=0
-> +	fi
-> +
-> +	if [ ! -f "$FILENAME" ]; then
-> +		echo "FAIL: Target does not exist." >&2
-> +		exit "${ksft_fail}"
-> +	fi
-> +
-> +	slowwait 2 sh -c 'test -n "$(grep '"'${ENABLED}'"' '"'${FILENAME}'"')"' || {
-
-shellcheck is not very happy with this line:
-
-https://netdev.bots.linux.dev/static/nipa/1000727/14224835/shellcheck/stderr
-
-> diff --git a/tools/testing/selftests/drivers/net/netcons_resume.sh b/tools/testing/selftests/drivers/net/netcons_resume.sh
-> new file mode 100755
-> index 0000000000000000000000000000000000000000..7e8ea74821fffdac8be0c3db2f1aa7953b4d5bd5
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/netcons_resume.sh
-> @@ -0,0 +1,68 @@
-> +#!/usr/bin/env bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# This test validates that netconsole is able to resume a target that was
-> +# deactivated when its interface was removed.
-> +#
-> +# The test configures a netconsole dynamic target and then removes netdevsim
-> +# module to cause the interface to disappear. The test veries that the target
-
-nit: s/veries/verifies/
-
+diff --git a/tools/testing/selftests/mm/prctl_thp_disable.c b/tools/testing/selftests/mm/prctl_thp_disable.c
+index feb711dca3a1d..84b4a4b345af5 100644
+--- a/tools/testing/selftests/mm/prctl_thp_disable.c
++++ b/tools/testing/selftests/mm/prctl_thp_disable.c
+@@ -9,6 +9,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <sys/mman.h>
++#include <linux/mman.h>
+ #include <sys/prctl.h>
+ #include <sys/wait.h>
+ 
+-- 
+2.47.3
 
 
