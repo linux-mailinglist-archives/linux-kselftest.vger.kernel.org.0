@@ -1,113 +1,234 @@
-Return-Path: <linux-kselftest+bounces-41122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07580B51909
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 16:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E593CB51963
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 16:31:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC1AD3A3F47
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 14:12:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D10F3A4A59
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Sep 2025 14:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2292322763;
-	Wed, 10 Sep 2025 14:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 808BB32A3FB;
+	Wed, 10 Sep 2025 14:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="Q8n65ogE";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hlM66NJL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2BB1A76D4;
-	Wed, 10 Sep 2025 14:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE315326D5D;
+	Wed, 10 Sep 2025 14:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757513529; cv=none; b=DKlp6BrCpe7z08YDXL5B113ueRj/Wdqz19qYY2oEzbFITWpW18B4Sp1d9tVRhewOaXxggTStG1hEl9IKpzfoSbA7dFElgjVTDVqRmox+tZAfpYxTwwj+xg4/E7cW7XrPy1y81vMDAF2cujSlxjUZyeyUsT9gzRJ62zz1Tf7uPSk=
+	t=1757514583; cv=none; b=diauaq2gdTYDuTRTT27MaL5vYVIHR5Fz0ZkHJOv+k+LewY1oSFh/LM3c+GlY8+W5DUFy0871xholxdcOxIbwDZtkcs5I88KZ2RFvas7++aHJ7iedenYZCWmsq3eNKDLuZl5o+Rpb2LnU+geIgOQhLJWE0/XzylbNEWS2HWwpoPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757513529; c=relaxed/simple;
-	bh=BuH07/Cum8ilWq7fktbOKN73y+hgVGVExicH3rzWbsU=;
+	s=arc-20240116; t=1757514583; c=relaxed/simple;
+	bh=cnhOwN9VcUf2Rz3l2C247ElIZrWqheCGQnJMuTwAZzA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CKJ6rLd9qJEBLYCQn3iOP8BXQkLnAVrclQKd3TyTZMQr03I08GVk/nQEe0YtMAS0cgYcYRbpL7zv3baPOd6o/1JDpvUMu2qN6OldVhbuDztmNWQ1Kkesh3e/8uYI0y4lBdSK+jgPcMepidTT0km10CyoBswCDRXdtArwff3SjP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b0418f6fc27so1137565066b.3;
-        Wed, 10 Sep 2025 07:12:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757513526; x=1758118326;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zeRS2yB/lYI/APOxiGv1ZbIrveAk9ANoUQjTZkTU2z0=;
-        b=YbfXI7/rv1/ynIW/7Ab1LCiOQSmmaqXmDb3YpjJILODJN6r7uoTjRONFW8vjwiJ661
-         cEbcmdeT7tnu3bQmjs076QHm5HU4g0+5yP3lw4j1Vpn7aCLO4t/0kN8DSsMHfO1V2fq1
-         PZFu+YOQ9OYfd6kkr/aZEZ5xhUhduT589ZXZCRDM3ZUS3J4c78lRiiVNR5dmZTDUyQDf
-         cUVh6KNecGoN+rcw23WJSuLTQJtwCxjau45wWv8uUNyMdF01rhouaNL78Hbq+v0rumIU
-         8nS6+2iWojLzKKF+TA5vXPsLIqnsB5pSR1oxmVZI32BgQZGyTpiYVnPcgGUh7nHhvjDv
-         seNw==
-X-Forwarded-Encrypted: i=1; AJvYcCUaOM5ZtLl4m9z6gj0R+hHar4QG/r3Jvf74wvYGsj1ow+UgFs3GbSoGyBxCBepny5sL3wKo4u7n@vger.kernel.org, AJvYcCVP4t3GM8GPgampVqOfSwp6rH/czsozFUpgphgnhqh1wNRLPej4mVHNZ4bA7f82ULY1CUnsaDWN/75FDZ4=@vger.kernel.org, AJvYcCVYYhniQwhvQOo5Vgm8uD+qDGX/fygN40onQJhvNvDQXzsJd2RlzI/Zgtqy7Apxzu3RAlwfaBdb5WGBM37vTItJ@vger.kernel.org, AJvYcCXukpDQQp6M5fceZg8RiGaQaWHudmSANk2FsnZVbyUXYafD6qPIMt0xUhbA8w/pTuQTfz9mJyeI@vger.kernel.org
-X-Gm-Message-State: AOJu0YwETpuPK2zOqz2w1MiWxiCzmpCWCO+IunMLA+sp86NO/zsykoK1
-	eRKiQ1TcewJOyyYtK6QU7L+yOLdE9vLV4E9Vjk4A7GUdmukpENvkEXaX
-X-Gm-Gg: ASbGncuKXGE6PQcAU+YXCxXpXopWZROX5Hp9wl5xZMf4f0D+zjRzBzoge8fU6/I1b+3
-	1cV68DZJlPNAezeCrcmFdP/j7RQBJSzVlTCkfDHPZzYWNf0Z0LKpnEfpEITEl3hxLQVhruESJXY
-	wV+PAUsgiwp3UK1PMBZW9HODNT8GG7P9kVpCsXp7h533XsgFkviXHLVOfO9VQWyF/ZWtSwpyXzo
-	4LF8FAr3E0NGoGH7U6IToSYYacOKG4QPnokqsXYoVyEriFZGhs9ZUk+VL+0ZPtM4eWQ0vdf+Znf
-	7ElXzt0fTfkxtnTK2tIpfNYr81O0pRIH+N8yzi+XS/k6k8l3QYEXFU2Yyjb3cxevNdX4xR6e1Tm
-	A3+CVycGg030Keg==
-X-Google-Smtp-Source: AGHT+IFmFSyfrWgMwdgHc71VO7KWawXXU+herwPNHRT2RcvmhjfTOzg1KJW7L0A2P6w4UTRGZBMcfg==
-X-Received: by 2002:a17:907:3c91:b0:af9:76cd:d836 with SMTP id a640c23a62f3a-b04b1458c7fmr1486696466b.13.1757513526255;
-        Wed, 10 Sep 2025 07:12:06 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:70::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b078334c317sm171503566b.63.2025.09.10.07.12.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Sep 2025 07:12:05 -0700 (PDT)
-Date: Wed, 10 Sep 2025 07:12:03 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Calvin Owens <calvin@wbinvd.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	david decotigny <decot@googlers.com>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de, kernel-team@meta.com, 
-	stable@vger.kernel.org, jv@jvosburgh.net
-Subject: Re: [PATCH net v3 1/3] netpoll: fix incorrect refcount handling
- causing incorrect cleanup
-Message-ID: <jibftqm5ihdgazmk3p5gsjhlc536itqaq7r5uag5fuiqtth6cp@abihzyykh4gy>
-References: <20250905-netconsole_torture-v3-0-875c7febd316@debian.org>
- <20250905-netconsole_torture-v3-1-875c7febd316@debian.org>
- <aL9A3JDyx3TxAzLf@mozart.vkv.me>
- <20250908182958.23dc4ba0@kernel.org>
- <kmvkrqkkrbfctpramlchpwqikg2x3btb3debshabqctt7azu2j@tv4ziqd4gldh>
- <20250909161625.470d2835@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=gOAZ4p28IwDK2dPi0E1qfxmbLKW9Cut6S37mYckBjmCvo1dywbjyTy25mC98i9wD5qvEn8/vELa/hlq0J49W4Npm0/GIiOozOrpHzJ8V+HUNWlU/xqsTHYrCCEvYcShkEfqlL6/5R2psd4LA8OTt9B7cu8yji0BL7GLetzHYzJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=Q8n65ogE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hlM66NJL; arc=none smtp.client-ip=202.12.124.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 820CB7A00BD;
+	Wed, 10 Sep 2025 10:29:39 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Wed, 10 Sep 2025 10:29:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1757514579; x=
+	1757600979; bh=biJc7z4/7ue8YKkVq7n3iWeGn8gkGXy/6MAB1eB6pa8=; b=Q
+	8n65ogEuz8cbOZVNXReIB442lNFc7eRgJpIE2LSxfp9pxE30QZNRZyc48S0DPyFQ
+	gWngSklMIR4GC05VtkrK4JAbhay8CtOso1yxk2REvy2fLx5jSNCEJdErDyyjLxdv
+	YXkQBkirscuW8z0P+cSJjkdoVS4VFQ7rlZJ3i1Zkm1OIW3rcLMF/tU42n8qN6n7h
+	8mmk8caCRSkAVK8I646JPP00xg77u4ccFl6NPFhNgWZ2db/PqJHL9Qo4348q6WI2
+	zBAlfPwcXQHxITuYH9msMzk+gEZ1JQZCsMXKn9TGSYO9rVuMzHLWD1IfoRACedwy
+	bzDtgcpw5UJEEB+yOAIqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1757514579; x=1757600979; bh=biJc7z4/7ue8YKkVq7n3iWeGn8gkGXy/6MA
+	B1eB6pa8=; b=hlM66NJLn5F8F64eNUMPtO13I8/bQh8jbdPW98EB/xQ7lJBpoX4
+	efvYZRilnMXTgfAQ8cbZPPC+Cg7YW0gZH95ao3RPsF/IjVWzqEG+0anoOTUVJSKX
+	FFmDhidAM2737QafQYzUT5KB+OdvZ0+GlFXnNhT9x152wADmOPcB1oI0xojIzY2q
+	FVZ8fRTZSH54NmcRg0Q4lpAgJzVkEqD5PfewztkyvFFNPBpVRNxiiORolBGVk/6X
+	rkoCWgi53wXG9eXOYOwS0uvEKhmT292qordbLMNiE70FVl00sbzLhvqMrFNiHgF/
+	8y8PX0WkmX6NbAnIWZEAc8VDAGD5R0hhgzg==
+X-ME-Sender: <xms:UYvBaC3fRrQVO1eX3q7oyueCtIlyVVAFyjECSd2cBRej1JDL3uE6Aw>
+    <xme:UYvBaLp90UcqFUHK5x1rZ0HJMHxbjbEJZK4ScPoXRfcjU19fpMF0ewXXUaG-bu7Xz
+    ZBR2FVodbguB-6pQ6I>
+X-ME-Received: <xmr:UYvBaMkBgxP5JjkYf1l8T_foxSwWEcrOnGDFdNAytkJ_jg9uV4AkumFvKv3U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvfeehfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdortddttdejnecuhfhrohhmpefurggsrhhinhgr
+    ucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrihhlrdhnvghtqeenucggtffrrg
+    htthgvrhhnpeejkeelveelkeefgfeuheevjeeukedvhedvueegvdekleeghfelgeeiveff
+    tdeuudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepudelpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopehiughoshgthhesnhhvihguihgrrdgtohhmpd
+    hrtghpthhtoheplhhiuhhhrghnghgsihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
+    nhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhvsehjvh
+    hoshgsuhhrghhhrdhnvghtpdhrtghpthhtoheprghnughrvgifodhnvghtuggvvheslhhu
+    nhhnrdgthhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtg
+    hpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhgs
+    rgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtg
+    homh
+X-ME-Proxy: <xmx:UYvBaNSqnaeHxD7nDX8qawpgjxj9iZckjlyiQG1F-pMkUD4U87hDrw>
+    <xmx:UYvBaGBswn3frJRVReoRQ4F-csrWfp2-iz_wqL138AZLT4AkOzQ5Cw>
+    <xmx:UYvBaFpZBXy1qSPN7zkyZ1L0d39s06UOOigHfbyJnRLHFvSuHgNLug>
+    <xmx:UYvBaMi-V4S7Dwbn3HOYBG_Pq3qOtzkPZePajoXfKwfmxjMR0TdL1A>
+    <xmx:U4vBaId6acKZWK9-pf-OCW1eTYX1z4EZA6CvGhi6LvLbqVLl0vPH9Knr>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 10 Sep 2025 10:29:37 -0400 (EDT)
+Date: Wed, 10 Sep 2025 16:29:35 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Shuah Khan <shuah@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ahmed Zaki <ahmed.zaki@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/5] net: add a common function to compute
+ features from lowers devices
+Message-ID: <aMGLTzACsKLRIsVb@krikkit>
+References: <20250829095430.443891-1-liuhangbin@gmail.com>
+ <20250829095430.443891-2-liuhangbin@gmail.com>
+ <aLRr1W3jKRDYsRSq@shredder>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250909161625.470d2835@kernel.org>
+In-Reply-To: <aLRr1W3jKRDYsRSq@shredder>
 
-On Tue, Sep 09, 2025 at 04:16:25PM -0700, Jakub Kicinski wrote:
-> On Tue, 9 Sep 2025 13:17:27 -0700 Breno Leitao wrote:
-> > On Mon, Sep 08, 2025 at 06:29:58PM -0700, Jakub Kicinski wrote:
-> > > On Mon, 8 Sep 2025 13:47:24 -0700 Calvin Owens wrote:  
-> > > > I wonder if there might be a demon lurking in bonding+netpoll that this
-> > > > was papering over? Not a reason not to fix the leaks IMO, I'm just
-> > > > curious, I don't want to spend time on it if you already did :)  
-> > > 
-> > > +1, I also feel like it'd be good to have some bonding tests in place
-> > > when we're removing a hack added specifically for bonding.  
+2025-08-31, 18:35:49 +0300, Ido Schimmel wrote:
+> On Fri, Aug 29, 2025 at 09:54:26AM +0000, Hangbin Liu wrote:
+> > Some high level virtual drivers need to compute features from lower
+> > devices. But each has their own implementations and may lost some
+> > feature compute. Let's use one common function to compute features
+> > for kinds of these devices.
 > > 
-> > Do you prefer to have a separated bonding selftest, or, is it better to
-> > add some bond operations in the torture selftest?
+> > The new helper uses the current bond implementation as the reference
+> > one, as the latter already handles all the relevant aspects: netdev
+> > features, TSO limits and dst retention.
+> > 
+> > Suggested-by: Paolo Abeni <pabeni@redhat.com>
+> > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> > ---
+> >  include/linux/netdevice.h | 19 ++++++++++
+> >  net/core/dev.c            | 79 +++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 98 insertions(+)
+> > 
+> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> > index f3a3b761abfb..42742a47f2c6 100644
+> > --- a/include/linux/netdevice.h
+> > +++ b/include/linux/netdevice.h
+> > @@ -5279,6 +5279,25 @@ int __netdev_update_features(struct net_device *dev);
+> >  void netdev_update_features(struct net_device *dev);
+> >  void netdev_change_features(struct net_device *dev);
+> >  
+> > +/* netdevice features */
+> > +#define VIRTUAL_DEV_VLAN_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> > +					 NETIF_F_FRAGLIST | NETIF_F_GSO_SOFTWARE | \
+> > +					 NETIF_F_GSO_ENCAP_ALL | \
+> > +					 NETIF_F_HIGHDMA | NETIF_F_LRO)
+> > +
+> > +#define VIRTUAL_DEV_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> > +					 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE | \
+> > +					 NETIF_F_GSO_PARTIAL)
+> > +
+> > +#define VIRTUAL_DEV_MPLS_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> > +					 NETIF_F_GSO_SOFTWARE)
+> > +
+> > +#define VIRTUAL_DEV_XFRM_FEATURES	(NETIF_F_HW_ESP | NETIF_F_HW_ESP_TX_CSUM | \
+> > +					 NETIF_F_GSO_ESP)
+> > +
+> > +#define VIRTUAL_DEV_GSO_PARTIAL_FEATURES (NETIF_F_GSO_ESP)
+> > +void netdev_compute_features_from_lowers(struct net_device *dev);
+> > +
+> >  void netif_stacked_transfer_operstate(const struct net_device *rootdev,
+> >  					struct net_device *dev);
+> >  
+> > diff --git a/net/core/dev.c b/net/core/dev.c
+> > index 1d1650d9ecff..fcad2a9f6b65 100644
+> > --- a/net/core/dev.c
+> > +++ b/net/core/dev.c
+> > @@ -12577,6 +12577,85 @@ netdev_features_t netdev_increment_features(netdev_features_t all,
+> >  }
+> >  EXPORT_SYMBOL(netdev_increment_features);
+> >  
+> > +/**
+> > + *	netdev_compute_features_from_lowers - compute feature from lowers
+> > + *	@dev: the upper device
+> > + *
+> > + *	Recompute the upper device's feature based on all lower devices.
+> > + */
+> > +void netdev_compute_features_from_lowers(struct net_device *dev)
+> > +{
+> > +	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM;
+> > +	netdev_features_t gso_partial_features = VIRTUAL_DEV_GSO_PARTIAL_FEATURES;
+> > +#ifdef CONFIG_XFRM_OFFLOAD
+> > +	netdev_features_t xfrm_features  = VIRTUAL_DEV_XFRM_FEATURES;
+>                                        ^ double space (in other places as well)
 > 
-> Normal test is preferable, given the flakiness rate and patch volume
-> I'm a bit scared of randomized testing as part of CI.
+> > +#endif
+> > +	netdev_features_t mpls_features  = VIRTUAL_DEV_MPLS_FEATURES;
+> > +	netdev_features_t vlan_features = VIRTUAL_DEV_VLAN_FEATURES;
+> > +	netdev_features_t enc_features  = VIRTUAL_DEV_ENC_FEATURES;
+> > +	unsigned short max_hard_header_len = ETH_HLEN;
 
-Ok, I will create a selftest to cover the netpoll part of bonding, as
-soon as my understanding is good enough. I don't think it will be quick,
-but, it is on my hi-pri todo list.
+Going back to this discussion about hard_header_len:
 
-Do you want to have the selftest done before merging this patch, or, can
-they go in parallel?
+> hard_header_len is not really a feature, so does not sound like it
+> belongs here. I'm pretty sure it's not needed at all.
+> 
+> It was added to the bond driver in 2006 by commit 54ef31371407 ("[PATCH]
+> bonding: Handle large hard_header_len") citing panics with gianfar on
+> xmit. In 2009 commit 93c1285c5d92 ("gianfar: reallocate skb when
+> headroom is not enough for fcb") fixed the gianfar driver to stop
+> assuming that it has enough room to push its custom header. Further,
+> commit bee9e58c9e98 ("gianfar:don't add FCB length to hard_header_len")
+> from 2012 fixed this driver to use needed_headroom instead of
+> hard_header_len.
+> 
+> The team driver is also adjusting hard_header_len according to the lower
+> devices, but it most likely copied it from the bond driver. On the other
+> hand, the bridge driver does not mess with hard_header_len and no
+> problems were reported there (that I know of).
+> 
+> Might be a good idea to remove this hard_header_len logic from bond and
+> team and instead set their needed_headroom according to the lower device
+> with the highest needed_headroom. Paolo added similar logic in bridge
+> and ovs but the use case is a bit different there.
+
+I'm not convinced removing adapting hard_header_len on bond/team is
+correct, even with old and broken drivers getting fixed years
+ago. hard_header_len will be used on the TX path (for some devices
+like bridge/macvlan via dev_forward_skb() and similar helpers, for IP
+tunnels setting their MTU, and via LL_RESERVED_SPACE).
+
+So I think we should keep setting hard_header_len to the largest of
+all lowers.
+
+-- 
+Sabrina
 
