@@ -1,245 +1,115 @@
-Return-Path: <linux-kselftest+bounces-41211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41212-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4362DB52A88
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 09:52:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0F1CB52B22
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 10:05:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64A9D7A5436
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 07:50:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BC333A7F2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 08:05:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 615BD29D26B;
-	Thu, 11 Sep 2025 07:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24E82D323D;
+	Thu, 11 Sep 2025 08:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l1AjlyyD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eykry1+l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20AF521CC4B;
-	Thu, 11 Sep 2025 07:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002322D29D0;
+	Thu, 11 Sep 2025 08:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757577129; cv=none; b=t0zCo3C5u2uNgHI/q1YaQCWQSoKfaTVhgowGqHMbhusihLsU4PZ/MTA2ujDtWYMbCOMkIm3vkRzXf4g51DGzzo77ex056IQBjy13i4VbGjJD5iG3CHFwAKbKJa3zSP3JGLrF8sRTqilXHGhGh+2X4EZvNk5gyvezBy9r2uVrj5M=
+	t=1757577933; cv=none; b=bEpMPTtqiqWsR18jeQr4g3LqeOzgZgwkoNBXOvFCXFajNuoWvM90bf8D0Kmv0BcmqiIOfGtPEljmN/kI/ET5nlpRqiSFOuT5quTxeS2b3ARCWrt58wgRsdoBfMMPx0kz2X+CVrXSXfkRazYkVHjH+rRcl01BPokMi9L5JHZnFuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757577129; c=relaxed/simple;
-	bh=zCa/Trshx6t//cjDi+8MplzJbi0R8aSBzBBF4hlrJaE=;
+	s=arc-20240116; t=1757577933; c=relaxed/simple;
+	bh=kyEZTSyTVT22OnQt8GD5B8uSiBJmJtF2ytLQyJXbi8A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VqRGPEMMvYtcEST3KCvT1SFpVR4TKpEmBc6NRzIxMbjKdDjXRBny8uuJ0CXdxGB7arVo19AMnueuDTSYWZVEy9CDJNkiVT5BP8D5Au65dXTyozmotc0NAvDSccEuiGlTCeA3EnUzm6M7Vygj+bWJSmmkROUVSA3/NLEyEB3VwZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l1AjlyyD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F95DC4CEF1;
-	Thu, 11 Sep 2025 07:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757577128;
-	bh=zCa/Trshx6t//cjDi+8MplzJbi0R8aSBzBBF4hlrJaE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l1AjlyyDYEn9GxWz2+UfShAjuVTVlMdY7BvFsdN/00ftJKHXadGlP1U0K16/N0l/d
-	 z/g18n4+AHhrm9ThUIFJjTovOyc7zU8l1+ehGq8MFzQBSAXjHzFWfpydpU2loJCKC7
-	 OruzJApGWUEdY/eehGGpa/sxpoF9tbT69+v1M9R1VFi4B5nbdPBPS3Nqbr6zOggqOv
-	 eD/nN7cQ+tJe/qnSpKEhJNf8J8keyAc6blrhW/elyTI3MQx/QwexR1TzakugRMZVCf
-	 jNEm99gJksMTsfEbG6bjnGZAggwyRKGRYexdRVXUtJRAi+U7YrSw/F+1rJRjYdPn3I
-	 9Abpbkkxf9MDQ==
-Date: Thu, 11 Sep 2025 09:52:00 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>, 
-	linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
-	Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>, 
-	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>, 
-	Daan De Meyer <daan.j.demeyer@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 29/32] nsfs: add missing id retrieval support
-Message-ID: <20250911-korallen-aufgibt-faafc9df8f9a@brauner>
-References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
- <20250910-work-namespace-v1-29-4dd56e7359d8@kernel.org>
- <2025-09-10-yawning-gross-samba-lox-6iVSwq@cyphar.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XilmAt33CHtOjwjtwdBpOtPpUpylg/oI1k5Pe5G2WPSGteog7SdNkJa5fmuPOJWpqooYXfzIZTlpKXilRVxd3mTkjxiOsJqUCZW2hm2R00vqa+uHqtbsQ26ydKXwtJqjAPM1+l8aW4tngygyU8jmDIeHdhEBm85tZ8YdWkZEWlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eykry1+l; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-45b9814efbcso9320595e9.0;
+        Thu, 11 Sep 2025 01:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757577930; x=1758182730; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WILfbNWCo4ARUml9R1JlxJoUwAPnqw4NB8gmHT/M6qY=;
+        b=eykry1+lrwbI2HbdlCpkQjGooFfiE0WiogxB8hulMIk3iR6AIXJ47uJeDFPIMDDv8i
+         E0zYnmLAzWAsDHyKii855aL4GtMzdJ8cULUp3+QGK6lNyf9E1b+p9fPoL5I2O8mTaqeI
+         ehTOho0xJyjwU744DtAdzxIh5dtS7d7ehO0jtEwf/JPUbKOBqRq/lNzprXEXij4pxzqM
+         aiLGY7I3oAGEPCm0otDJWIuoA+H9nFQAtCKD1rtrhqAKbn9QY12hxdl52TzGGl6uXYId
+         jDX4zNB56QPi5umdlwRvGVW5zvtAZRNR8nFcZpPH6MiOk9JRh9uyi1nsFAmx6xLBnKPO
+         zvkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757577930; x=1758182730;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WILfbNWCo4ARUml9R1JlxJoUwAPnqw4NB8gmHT/M6qY=;
+        b=w5lzcfPaZt5GFt/Fd2UTkYpUd26ZXSg+lISm66XNvFFk5QSLOSVNZDmiMb3CZcaezE
+         wQCyGiK4VjIBFf1UK5rmw1LStXQ8UaFhOA4oyBlfLfAfLFBptoewkD0PKAFtX2U8yTdh
+         wV0L5MXdjsgR4el54lHmDNL+aw0vKDKw+UNZBGHDO0OqWKI3hJ0Jlm+PYzwWKffhIjvQ
+         m8K8A/rHnggfhYt4IAz2gu5FzYpHuCGY0OYP7ZerJXbFBq+fBQZ43nCjVoO206KlURW4
+         wFJIWcIzDJZRqL+S/WKpMaoYYq1/1ij7s/lEIZjDJCdWu6tpjWEs8HbuKh+/FvVrLYGq
+         g7QA==
+X-Forwarded-Encrypted: i=1; AJvYcCW08nSJCo+tms9l/I4KqLAHEzNSkjpjT/swecsKNE/4tEPTPbeUf6gx62oY4OC+k8AagFDnvmY0@vger.kernel.org, AJvYcCWcqeK8xuNmI8zWVAPLIT+46tQJo2hCaAvhT5PXx+P1btdkndfiuIGgxZcBx0PmcFYhzLm3cvvN5wYkIXM=@vger.kernel.org, AJvYcCX7iuY4UItFIrAZAyaXuWMZggJusjJvVf8fXOGT++AIojhor7lo/Hcj5D9kaRptIitfzeawbP87uMmk41rvtUx4@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiJgU6+EhH8yurMHHWv+4gyXLnpKyKE2/MSAn4G184f4VR/j9r
+	aGombQ5WZPWjZtN5LHunp2/kyJUn1GcopHoEUrQt6Mjvyn5CYQ06o4Nc
+X-Gm-Gg: ASbGncu0vr2vKw1Azub2n9QBMozypaZdQTvpOuGy3w/OJVwvpg9qbu/t60cKRoqrVuk
+	8/S8AyWsx6WaB7+HoPFloPMH4XHaO5M0UwOKg0nan3W3ipxHURoiiXHL9uiWb7fuvYDpyMVwdPY
+	2Q1TkexKIuzA/uHPSbR5BXXP/5KmStMcdOy7/wKTxJId3eYoiJJZmzmwxmqTDFKA1D5VTF8XZMn
+	PCNnKAdJyVjDIN0WDCH4rKTDuYFcsR0v3GFx0VhO6NjLCVShGVnajWd6jOP1M4cu48NpdL4kHzk
+	GfeIXQXWNSMDoC9k4Pv8eD0qx5EzVg6W7ZaPOqe7GaCsPiA3C1FyAbeWwF5jUn2rg/t2BpLBhH7
+	KzzK1Q3se3q8azPbYQwo=
+X-Google-Smtp-Source: AGHT+IGgAGUcNXjgllFkYVY1TZbEoX/w4+CCWy19jehwdaJkLLJthfSn7prFns29wdUb+u9szALQ7Q==
+X-Received: by 2002:a05:600c:c0cd:b0:45c:b5c3:ea37 with SMTP id 5b1f17b1804b1-45dfd5e3d97mr17699455e9.11.1757577930042;
+        Thu, 11 Sep 2025 01:05:30 -0700 (PDT)
+Received: from archlinux ([143.58.192.81])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45e0152ffc1sm9246035e9.3.2025.09.11.01.05.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Sep 2025 01:05:29 -0700 (PDT)
+Date: Thu, 11 Sep 2025 09:05:27 +0100
+From: Andre Carvalho <asantostc@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 4/5] netconsole: resume previously deactivated
+ target
+Message-ID: <nvbscfpi75on4pkv5niyzxkheobyxqofju7lr5a6kfywssgedj@tn4cgo4zj3qc>
+References: <20250909-netcons-retrigger-v1-0-3aea904926cf@gmail.com>
+ <20250909-netcons-retrigger-v1-4-3aea904926cf@gmail.com>
+ <jcvsmfivr27bchhk2t2lt2l35ixjs2adaos6hqwfydpulq7gxm@5aprxim4vvoa>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2025-09-10-yawning-gross-samba-lox-6iVSwq@cyphar.com>
+In-Reply-To: <jcvsmfivr27bchhk2t2lt2l35ixjs2adaos6hqwfydpulq7gxm@5aprxim4vvoa>
 
-On Thu, Sep 11, 2025 at 02:49:49AM +1000, Aleksa Sarai wrote:
-> On 2025-09-10, Christian Brauner <brauner@kernel.org> wrote:
-> > The mount namespace has supported id retrieval for a while already.
-> > Add support for the other types as well.
-> > 
-> > Signed-off-by: Christian Brauner <brauner@kernel.org>
-> > ---
-> >  fs/nsfs.c                 | 74 +++++++++++++++++++++++++++++++++++++++--------
-> >  include/uapi/linux/nsfs.h | 12 ++++++--
-> >  2 files changed, 72 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/fs/nsfs.c b/fs/nsfs.c
-> > index 3c6fcf652633..527480e67fd1 100644
-> > --- a/fs/nsfs.c
-> > +++ b/fs/nsfs.c
-> > @@ -173,6 +173,13 @@ static bool nsfs_ioctl_valid(unsigned int cmd)
-> >  	case NS_GET_NSTYPE:
-> >  	case NS_GET_OWNER_UID:
-> >  	case NS_GET_MNTNS_ID:
-> > +	case NS_GET_NETNS_ID:
-> > +	case NS_GET_CGROUPNS_ID:
-> > +	case NS_GET_IPCNS_ID:
-> > +	case NS_GET_UTSNS_ID:
-> > +	case NS_GET_PIDNS_ID:
-> > +	case NS_GET_TIMENS_ID:
-> > +	case NS_GET_USERNS_ID:
-> >  	case NS_GET_PID_FROM_PIDNS:
-> >  	case NS_GET_TGID_FROM_PIDNS:
-> >  	case NS_GET_PID_IN_PIDNS:
-> > @@ -226,18 +233,6 @@ static long ns_ioctl(struct file *filp, unsigned int ioctl,
-> >  		argp = (uid_t __user *) arg;
-> >  		uid = from_kuid_munged(current_user_ns(), user_ns->owner);
-> >  		return put_user(uid, argp);
-> > -	case NS_GET_MNTNS_ID: {
-> > -		__u64 __user *idp;
-> > -		__u64 id;
-> > -
-> > -		if (ns->ops->type != CLONE_NEWNS)
-> > -			return -EINVAL;
-> > -
-> > -		mnt_ns = container_of(ns, struct mnt_namespace, ns);
-> > -		idp = (__u64 __user *)arg;
-> > -		id = mnt_ns->ns.ns_id;
-> > -		return put_user(id, idp);
-> > -	}
-> >  	case NS_GET_PID_FROM_PIDNS:
-> >  		fallthrough;
-> >  	case NS_GET_TGID_FROM_PIDNS:
-> > @@ -283,6 +278,61 @@ static long ns_ioctl(struct file *filp, unsigned int ioctl,
-> >  			ret = -ESRCH;
-> >  		return ret;
-> >  	}
-> > +	case NS_GET_MNTNS_ID:
-> > +		fallthrough;
-> > +	case NS_GET_NETNS_ID:
-> > +		fallthrough;
-> > +	case NS_GET_CGROUPNS_ID:
-> > +		fallthrough;
-> > +	case NS_GET_IPCNS_ID:
-> > +		fallthrough;
-> > +	case NS_GET_UTSNS_ID:
-> > +		fallthrough;
-> > +	case NS_GET_PIDNS_ID:
-> > +		fallthrough;
-> > +	case NS_GET_TIMENS_ID:
-> > +		fallthrough;
-> > +	case NS_GET_USERNS_ID: {
-> > +		__u64 __user *idp;
-> > +		__u64 id;
-> > +		int expected_type;
-> > +
-> > +		switch (ioctl) {
-> > +		case NS_GET_MNTNS_ID:
-> > +			expected_type = CLONE_NEWNS;
-> > +			break;
-> > +		case NS_GET_NETNS_ID:
-> > +			expected_type = CLONE_NEWNET;
-> > +			break;
-> > +		case NS_GET_CGROUPNS_ID:
-> > +			expected_type = CLONE_NEWCGROUP;
-> > +			break;
-> > +		case NS_GET_IPCNS_ID:
-> > +			expected_type = CLONE_NEWIPC;
-> > +			break;
-> > +		case NS_GET_UTSNS_ID:
-> > +			expected_type = CLONE_NEWUTS;
-> > +			break;
-> > +		case NS_GET_PIDNS_ID:
-> > +			expected_type = CLONE_NEWPID;
-> > +			break;
-> > +		case NS_GET_TIMENS_ID:
-> > +			expected_type = CLONE_NEWTIME;
-> > +			break;
-> > +		case NS_GET_USERNS_ID:
-> > +			expected_type = CLONE_NEWUSER;
-> > +			break;
-> > +		default:
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +		if (ns->ops->type != expected_type)
-> > +			return -EINVAL;
+On Wed, Sep 10, 2025 at 12:50:07PM -0700, Breno Leitao wrote:
+> > +		if (nt->state == STATE_DEACTIVATED && event == NETDEV_UP)  {
+> > +			if (!strncmp(nt->np.dev_name, dev->name, IFNAMSIZ))
 > 
-> While I get that having this be per-ns-type lets programs avoid being
-> tricked into thinking that one namespace ID is actually another
-> namespace, it feels a bit ugly to have to add a new ioctl for every new
-> namespace.
+> Don't you need to check for dev_mac here as well?
+
+I believe so. Will fix that and try to cover this case on the selftest too.
+
+> > +				schedule_work(&nt->resume_wq);
 > 
-> If we added a way to get the CLONE_* flag for a namespace (NS_GET_TYPE)
+> I would prefer to have the enablement done inline here, instead of
+> scheduling a task.
 
-That exists afaict: NS_GET_NSTYPE.
+That makes sense. I believe I'll need an alternative to netpoll_setup that can be 
+called with rtnl already held. I'll attempt to do this for v2.
 
-> we could have just NS_GET_ID. Of course, we would have to trust
-> userspace to do the right thing...
-
-So NS_GET_ID can just return the id and be done with it. If userspace
-wants to know what type it is they can issue a separate ioctl. But since
-the id space is shared all ids of all namespaces can be compared with
-each other reliably. So really for comparision you wouldn't need to
-care. IOW, yes.
-
-> 
-> > +
-> > +		idp = (__u64 __user *)arg;
-> > +		id = ns->ns_id;
-> > +		return put_user(id, idp);
-> > +	}
-> >  	}
-> >  
-> >  	/* extensible ioctls */
-> > diff --git a/include/uapi/linux/nsfs.h b/include/uapi/linux/nsfs.h
-> > index 97d8d80d139f..f7c21840cc09 100644
-> > --- a/include/uapi/linux/nsfs.h
-> > +++ b/include/uapi/linux/nsfs.h
-> > @@ -16,8 +16,6 @@
-> >  #define NS_GET_NSTYPE		_IO(NSIO, 0x3)
-> >  /* Get owner UID (in the caller's user namespace) for a user namespace */
-> >  #define NS_GET_OWNER_UID	_IO(NSIO, 0x4)
-> > -/* Get the id for a mount namespace */
-> > -#define NS_GET_MNTNS_ID		_IOR(NSIO, 0x5, __u64)
-> >  /* Translate pid from target pid namespace into the caller's pid namespace. */
-> >  #define NS_GET_PID_FROM_PIDNS	_IOR(NSIO, 0x6, int)
-> >  /* Return thread-group leader id of pid in the callers pid namespace. */
-> > @@ -42,6 +40,16 @@ struct mnt_ns_info {
-> >  /* Get previous namespace. */
-> >  #define NS_MNT_GET_PREV		_IOR(NSIO, 12, struct mnt_ns_info)
-> >  
-> > +/* Retrieve namespace identifiers. */
-> > +#define NS_GET_MNTNS_ID		_IOR(NSIO, 5,  __u64)
-> > +#define NS_GET_NETNS_ID		_IOR(NSIO, 13, __u64)
-> > +#define NS_GET_CGROUPNS_ID	_IOR(NSIO, 14, __u64)
-> > +#define NS_GET_IPCNS_ID		_IOR(NSIO, 15, __u64)
-> > +#define NS_GET_UTSNS_ID		_IOR(NSIO, 16, __u64)
-> > +#define NS_GET_PIDNS_ID		_IOR(NSIO, 17, __u64)
-> > +#define NS_GET_TIMENS_ID	_IOR(NSIO, 18, __u64)
-> > +#define NS_GET_USERNS_ID	_IOR(NSIO, 19, __u64)
-> > +
-> >  enum init_ns_ino {
-> >  	IPC_NS_INIT_INO		= 0xEFFFFFFFU,
-> >  	UTS_NS_INIT_INO		= 0xEFFFFFFEU,
-> > 
-> > -- 
-> > 2.47.3
-> > 
-> 
-> -- 
-> Aleksa Sarai
-> Senior Software Engineer (Containers)
-> SUSE Linux GmbH
-> https://www.cyphar.com/
-
-
+Thanks for the review!
 
