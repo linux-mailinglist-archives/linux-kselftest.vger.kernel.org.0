@@ -1,297 +1,306 @@
-Return-Path: <linux-kselftest+bounces-41245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 634A1B532DD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 14:57:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 975A7B532FD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 15:00:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 810517A293E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 12:55:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97C917B085C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 12:58:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1444D322A1F;
-	Thu, 11 Sep 2025 12:57:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 665D9324B32;
+	Thu, 11 Sep 2025 13:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="xvQtmMEh"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fydAjHaj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FF621C19D;
-	Thu, 11 Sep 2025 12:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757595432; cv=none; b=cag4pXUb+tdoD/P1y7Z7n3jn2mYJagrhzilJuomSL2PuVq8+f7ArH3FhThq1fnfjZjYl813OM3AP0nplQ37e0cSIxLTTjqWuOptZWhmAikuX6WWGFTnZWQM9szrd4wvcBrWkkc6qzM8mBT88zsVvUzqCW6qZMxYPXUewugHGEdA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757595432; c=relaxed/simple;
-	bh=K+4XD5yFY+tAfXUiIUiyJLrRhDxis6mu+vq20L3/Ahw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oLNvPbMfg9SLKZ5DFLNPL8tuNtodqoXyaigeJftSZ8HZIm5T23EeoZWaTLt9pvVsroTpFK6lOoUkIADL9QCz2GMKTs7xRt6fpOhZlO4L07uaJclDS/S3hjJ4t0wMUd2Bb0qts6sFFG6cQ1y8xqQ2L8grhsX5tlfVMaFDnlQVhpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=xvQtmMEh; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4cMyJ126d7z9v0c;
-	Thu, 11 Sep 2025 14:57:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1757595425;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FPtJkZGBhi1ttcgm/uOh+mtCdcmyZezd0zJhyU8kjvU=;
-	b=xvQtmMEhDN7sp7BbZrnxjOsANXMyN5Jj7p/Bbawllq4g41blJZhsaWR2uBmdlF4k2P7YiK
-	rfi1SXuRJeNcdp+XegJGtIUUi9OHdXNjQfrSVgy7TsbMbyINgcQFtPca+c5cYlGGoneMnt
-	YxDLq1qvg5HNqqhq9K7ji9sJ4SYaUxk7x7dvd2tb2lJlQEBgD3/jTvWXDcj1YP5BOzCHYK
-	YX3aaJQv02terwbVGfM77Uf5PWkeWMOqBkC0RFa8ex1w/SLtlkWWmc/3rCLHC2ST4kWuK0
-	CKdHHLAhzSrOhop14hbxAB/eh0OD6IGX1GX+k2WCCPAeTS4YgnenWIafeyp9Aw==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
-Date: Thu, 11 Sep 2025 22:56:44 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>, 
-	linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
-	Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>, 
-	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>, 
-	Daan De Meyer <daan.j.demeyer@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 29/32] nsfs: add missing id retrieval support
-Message-ID: <2025-09-11-edible-other-howl-rinse-HzYjnw@cyphar.com>
-References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
- <20250910-work-namespace-v1-29-4dd56e7359d8@kernel.org>
- <2025-09-10-yawning-gross-samba-lox-6iVSwq@cyphar.com>
- <20250911-korallen-aufgibt-faafc9df8f9a@brauner>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E3A324B16;
+	Thu, 11 Sep 2025 13:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757595615; cv=fail; b=FElRUs9LRQotfnQIAd9eETQuuJ0y9SO2FZJ6rQ0K1P78SLrzlPDGHg7ePpZVQsZrUE0xjLUGOFtdtnabkqH0M/XBq2pjgPkkax1v2yn2HCPfBDbfGWIZjJcRbVvbXgT7tCgaudeQh5kR2tQxKoVlcnHsntpVgDyFWQnDZ7pkPrU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757595615; c=relaxed/simple;
+	bh=VsiWVTJW+KYm4JhcPgycSmG1d/ACWWu32Tnm4kZrhvw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ByjeU/ATOctuUqiDvIS3dKU4/lBQmW251ZDg2QZi/IWIbDXh7oxoQC0uwOvUjEo9XA7PtmLsfR3msRhy2vE+w0c9W9BzH5s03kCHB+ENnsg0DmcLUYK98KwMCCz9t8mKVKNAdp9NqQO7yCyDAuCfoTnFxyGLlWSnklCrErc15s4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fydAjHaj; arc=fail smtp.client-ip=40.107.92.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Cq4VM8ueG6PTpzhf+Nsjpusp/gTzkNYYCxWV7V28VmWO3YG6KfQRZOzZtWJkEJgw7UAJwu/8GmpukTx0PtpI5t5l7n3ZSevC0iZVdNmZSzzJOxYlHQvNi6eVzBHGtAnnx/8cqK6qFgzv0wMJzA3+ezYgaRtADdCkjWdWFJ+M3NZEb+YUXpfrGDpudnkFrRGFLNUH/jtrkD4TOWZIyaM0HeHR9pUzNcKUv+kpVpY8aQyrMVm+NxoTJBH1gJuRaewuVMN65/HGHIaGCx+pztIMuI3Q5pGAk5tQgbctypni8jePEJuPYItTFFkLE2I716uxpEjNXd+p3K98GNR42Bfb4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YnsTrojJqhXlq6lcXmyv3rgfgTAI/QTYklAQb8wrMAU=;
+ b=bnVlYma+eimtCHUSgHsS5FCaeN2goq8JySXlUqdNL/rW/7BvvNfM5SBChi3Ax9foqYhFtAzy4N7udqw+58Lyixiu4yD4JJlcKhBNEy/8JAm/WklE/MO7udyzR+dCyImH22cUFtkKCb0E+/VL0GBcvKGml9SLRZg+Zw0wd4p/4bfcJb24PXW6sfkT0QA6EttMdtqArYdYFimJ0USNHXoknJ0b8C+qWszoOix7f47PmryMdU3JFHswHGf5AtPMTeI2/xTJSqXI06yYRlQVxhzEdpikn2sVA5cgpwYne6Cu2La094iJOwa/x0nP1+ZyKaprksezCFItp5kFA57F2wRmew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YnsTrojJqhXlq6lcXmyv3rgfgTAI/QTYklAQb8wrMAU=;
+ b=fydAjHajz3tD1I49gQHGI2Z5E7IYhLx5NdC3ktrcuM0ijOg954SQCYa3StqAp69DK0mpA1ZHDmsSin8u/j/OQa8LQAyFEEuHajRmmu5cM4lx84NvKdQJnbbbmpcLEP1feteHDLlXzcgq1rRyyFRB7H7FVL0fHVPO38vi4i+cUCOszS03P+lgw4k8ZZ4d8EgXOI3zxUXSLtFaIq4/Lm35mAOJb4hddMX2geM7NAyHdRPa7oXGkLiE1io2mQAyorhIkP6xqFwv2/a4s7Cl3pV6Hjz+sYVwz7O56wFbKTRRAsE4bF0UoKjFhuQlnQefaeQufTFXo72C89wbmk+zxZWfLw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
+ by PH8PR12MB6675.namprd12.prod.outlook.com (2603:10b6:510:1c2::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Thu, 11 Sep
+ 2025 13:00:08 +0000
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2%7]) with mapi id 15.20.9094.021; Thu, 11 Sep 2025
+ 13:00:08 +0000
+Date: Thu, 11 Sep 2025 15:59:59 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Shuah Khan <shuah@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ahmed Zaki <ahmed.zaki@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/5] net: add a common function to compute
+ features from lowers devices
+Message-ID: <aMLHz0P4KhHPNIcc@shredder>
+References: <20250829095430.443891-1-liuhangbin@gmail.com>
+ <20250829095430.443891-2-liuhangbin@gmail.com>
+ <aLRr1W3jKRDYsRSq@shredder>
+ <aMGLTzACsKLRIsVb@krikkit>
+ <aMGwcyKTvmz5StN1@shredder>
+ <aMG4W9xUGxjLAVys@krikkit>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aMG4W9xUGxjLAVys@krikkit>
+X-ClientProxiedBy: TL2P290CA0022.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:3::6)
+ To SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="k2h4kdmb347cx47i"
-Content-Disposition: inline
-In-Reply-To: <20250911-korallen-aufgibt-faafc9df8f9a@brauner>
-X-Rspamd-Queue-Id: 4cMyJ126d7z9v0c
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|PH8PR12MB6675:EE_
+X-MS-Office365-Filtering-Correlation-Id: e7ff26c9-1588-49f7-1d23-08ddf13322b4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?aXvGaU5WMPdeCvblXu48ui38uEoK1PLIeGpX0oopp3O64YE9+YyaZcf3Bptv?=
+ =?us-ascii?Q?mJDDMYXF2bBmCEQ7U8X2lC/WJ5Mui6cncsv44zy4gCd/ywAQ6NE0b4vO7ddL?=
+ =?us-ascii?Q?6YSgElfpANQrUg/x232rSW7fyja1Oe+tGvL92Sea4BW5WMtJvdvyUG2Fn5/A?=
+ =?us-ascii?Q?y3Mp4YLBu+PuJp69efLxumph8APfy4GCkJnudjlNQ/iYUKL2nC2Cyjm4Uc6A?=
+ =?us-ascii?Q?SKKIYdOq58LbsZM3BRDb9O8agjpj9vs+sY2YepsrBhWNSKTMisX74DfdiqSM?=
+ =?us-ascii?Q?pICmcnkD2UxzTMtlHg7543jPebTr9t0EZ9I40YJqttU2O7AAjuMfzzuDgjq0?=
+ =?us-ascii?Q?Hhbz20/orbg4ZJubQe/myudALffi2GbCIdHKq63R68lpSkZjUmt/IrmO0217?=
+ =?us-ascii?Q?4L9vgfz9838Qzx8fXntDSmm8uK92sPmKc5K+fSPXwpMnGfpmQO4zyIpwPW07?=
+ =?us-ascii?Q?LVqHwSLYPtwv0fYUY1erD2mYBtCq1A8dbVBQ8/+JDZzzmYviRPN47GvfK4KV?=
+ =?us-ascii?Q?/2GC7Dyk74Sp3FJpxo8C9rVN0T+/DS8Y8o2ZdyviMN71pgg3cGbKrHn7PvQK?=
+ =?us-ascii?Q?1j8T+R088gcTTKJSteKumv3VWccvVzNzmW+idIUyv8xEYCY3nPHvs8uwLPTN?=
+ =?us-ascii?Q?GXVHyhze5VMUUGNwGMC0zChoDJacINJ23vrL4fMpuvEAMCIhhDuQTjyqVgsO?=
+ =?us-ascii?Q?RTInXcb0bHKVVXm/vIKDm3JlDCPjeMrCzCxZHLbjeuzm8+0ZtPu11sfZkBb/?=
+ =?us-ascii?Q?jrI950J8Wmb68RYy8o/2uEu5leC5Lspfhea0IO9qUV54Vj1xtj1IgQEoLd+S?=
+ =?us-ascii?Q?Yz5f/kuHWwf5iM33SuRiiRsAPKK2nlG/Lz+6XExae/SXgLdaPDxtWEMgMSlb?=
+ =?us-ascii?Q?ICmCmLkQ7itYf1kg/BQPBEuIJY+s6xj8f88k8fro/1SwbsT6I0hYgMfgeF7m?=
+ =?us-ascii?Q?KVCmUOHpg+EBp4oP0OTmB1050qnxOY6nJYIoibFT4yKcBGDJiQ3h+7ptD4O5?=
+ =?us-ascii?Q?J+Z6vYdshb5BhPsARYzdDpRIurol6Rb23udH5VkBCZvVlsipIDBJqPfrPz+h?=
+ =?us-ascii?Q?TmgTYZc8hjp/f7QV4qZnSYRvjh5KFmOn6w+RUBxfKv9RDVWYrWxk5XsncCbs?=
+ =?us-ascii?Q?kYwGkN+NQH08OqdVdY6U1BomQJKhGM2uwYqYC3vgiu+aa13lY61LUtoXOnrP?=
+ =?us-ascii?Q?WEPoICCg9UHb1tVjy6HhHs9qjZWMnkWiofmWA+BtDnwCMw0Y9S9xqFhzLai9?=
+ =?us-ascii?Q?vHltBCyhQt/7N6pWz1tcCflt8d/Lx7bMMqsG4cgMRaT1HbPZ5BhmVFh2kw80?=
+ =?us-ascii?Q?t4DRLxNEjoqZs20qFlDtBFNO1UKQlgjAhlJZy+Jst2NagPe2/DQVAliKnpbF?=
+ =?us-ascii?Q?+Lee9H2wLTTzrb7brA1545jWGeEy+bqcoOeGq7zOPE1krGkDEBPlrrRuRPoO?=
+ =?us-ascii?Q?wwX7hIxTIA4=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?OnRD/3ob3y2Swqh3CLb6lfNmP54vQ+gw8nJargfpFlTkq5F+aiOheR9TLExh?=
+ =?us-ascii?Q?K0O22B9cTv+KpAw8eIsnHsRDawtOVi38eIjjj11tocFWIxJcwN0KSjPmUX5Z?=
+ =?us-ascii?Q?6biGgRzGLngmLlvaUK7ldqyb7f2MguFntU9VzXM2fi7sTPgDKTIR40BERavw?=
+ =?us-ascii?Q?7YaTwRtLHYCJsmdd7G0aiR3NMZeKfXKpZXF0TmMHsDniIZ9CqB3R5h9/sxBd?=
+ =?us-ascii?Q?cDgrmxjA8eYx4LtlSOXqahhjWl6QDAjMiAm3MaeTDeT0+NRw9MQ7UXzUZ022?=
+ =?us-ascii?Q?IFSg+7PlpSytqLzqERTzFNrzhUzsx2GUMGP1Tqiw0vZV1cOk6mEKLS5KxCQA?=
+ =?us-ascii?Q?F1oZD34R5s9jjm3WJU2twG/iv6Kr5REYx6zJf3BxP1k94CvdeMwQR0sX6Kf6?=
+ =?us-ascii?Q?Mutl2qESuAxnhA9zkCTED4V0iyT+Ff9lYv7UTlVR47x3kSrL4gFp1Os7+6l9?=
+ =?us-ascii?Q?sNsWMEZ3B9haxJK/BPFTRNZwRXKZnmA5VRzfo4HmA9OKPKDZsTBPQ12KSYTN?=
+ =?us-ascii?Q?GILFo6aaqCrPPRu1WsZIhtefVhpmezyOC+O0vLLE/B9A2ygWJAT+7E/vKS/x?=
+ =?us-ascii?Q?ga+jroVlj1vZxJED2FX/2tv5DlZ0m1SGRZ6x5AO+MB+w/limN/jRhVQWSn1u?=
+ =?us-ascii?Q?vkOFRH7NFYpkNPHGlH4gIcITkO2z//G/FVNiFMiyvBFxJ+0AYjWSx6tiq9La?=
+ =?us-ascii?Q?4l/ou0FbeT4UCqImTE+B4/vcb8ozL0H0wKuQtKSlnhXOnzW7MBLEp/3JG92n?=
+ =?us-ascii?Q?TMy3HTpuU2XTsFPEOPxTIXmoUvdvPQ39HEfoAt9xEzzn1Ii2iXm64diYTQfK?=
+ =?us-ascii?Q?ha43DmLB+sZFAIsnX9FcRfgn0Ny7SHDsiLwPZ/BPmyZ5R73Rj7/Uqpa38vXX?=
+ =?us-ascii?Q?zgkrEhReSCb6U9ZY4XEDtYPLIM8VRsOq9WPfszGwOS+YPBmh7LH0cuccK+GO?=
+ =?us-ascii?Q?Jgm/qJFwS2bkjt+vk5UwXV9OYhfZwt0sSyvuMhAP/EeWEWQZpLX7YJogn/Eu?=
+ =?us-ascii?Q?ikZD7Yl/isMpqUl0b3r85YLRKHWnDyReJZrKPKJZfjfkZvRgX3aXFMpZrhPJ?=
+ =?us-ascii?Q?a8tRm9w1+uKF2w+pWijg1r/GnjZQojGPzVHOxDk3oy0nID+uvQyWmYsmKWeW?=
+ =?us-ascii?Q?0DlnlDrDPdwQA8tXP4NWpBvjvcWESBBLoHDsY6xVjbX/UuLwj4CT0ZGWGsba?=
+ =?us-ascii?Q?dQkTGZlPWx17jg0m5cbnM4HRihpqLTrc6O9OzlBozVdZe59pKGU9nRdhOJ8t?=
+ =?us-ascii?Q?WfpB26XlvaD6s0VgoomJbdywnF3BnagR4Rx0m7T+UlILPDbNWh+lp8X/gYIx?=
+ =?us-ascii?Q?NvQ5kJ3HrZjN2S+E+QxvSUmFa0ZM/sAbmd4aY3bqyzcO58YdsM83buk04Esa?=
+ =?us-ascii?Q?FiLmP/ebuxl6DqkSekOfZIm2O+u/rL622ZnSSjxhc5auTnGjeVKZ3wRfSpVy?=
+ =?us-ascii?Q?mT6d/e8RTHyE0zJF7HkGEgVTZG0BtF3WuXubb6mksbV7P/v/lh8nG6SACp7D?=
+ =?us-ascii?Q?vje5xP/tp37O3okvU1BrEEK25pg1NRYlJGQHAR1tDk8WBhjyN7fwKfOnMvuX?=
+ =?us-ascii?Q?5MqmhAs2SKDq1f3lduB0G6afvujNEuZwAvqC0Ft0?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7ff26c9-1588-49f7-1d23-08ddf13322b4
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2025 13:00:08.5986
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: widVrn8YxlXEDexgTYy8msZUJDC21OxPlQ7dDSA21NxKDMXiaq7dQI+ajdlYxRpUGGHRhhCXAfUgFCtUzdaZRQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6675
 
+On Wed, Sep 10, 2025 at 07:41:47PM +0200, Sabrina Dubroca wrote:
+> 2025-09-10, 20:08:03 +0300, Ido Schimmel wrote:
+> > On Wed, Sep 10, 2025 at 04:29:35PM +0200, Sabrina Dubroca wrote:
+> > > 2025-08-31, 18:35:49 +0300, Ido Schimmel wrote:
+> > > > On Fri, Aug 29, 2025 at 09:54:26AM +0000, Hangbin Liu wrote:
+> > > > > Some high level virtual drivers need to compute features from lower
+> > > > > devices. But each has their own implementations and may lost some
+> > > > > feature compute. Let's use one common function to compute features
+> > > > > for kinds of these devices.
+> > > > > 
+> > > > > The new helper uses the current bond implementation as the reference
+> > > > > one, as the latter already handles all the relevant aspects: netdev
+> > > > > features, TSO limits and dst retention.
+> > > > > 
+> > > > > Suggested-by: Paolo Abeni <pabeni@redhat.com>
+> > > > > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> > > > > ---
+> > > > >  include/linux/netdevice.h | 19 ++++++++++
+> > > > >  net/core/dev.c            | 79 +++++++++++++++++++++++++++++++++++++++
+> > > > >  2 files changed, 98 insertions(+)
+> > > > > 
+> > > > > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> > > > > index f3a3b761abfb..42742a47f2c6 100644
+> > > > > --- a/include/linux/netdevice.h
+> > > > > +++ b/include/linux/netdevice.h
+> > > > > @@ -5279,6 +5279,25 @@ int __netdev_update_features(struct net_device *dev);
+> > > > >  void netdev_update_features(struct net_device *dev);
+> > > > >  void netdev_change_features(struct net_device *dev);
+> > > > >  
+> > > > > +/* netdevice features */
+> > > > > +#define VIRTUAL_DEV_VLAN_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> > > > > +					 NETIF_F_FRAGLIST | NETIF_F_GSO_SOFTWARE | \
+> > > > > +					 NETIF_F_GSO_ENCAP_ALL | \
+> > > > > +					 NETIF_F_HIGHDMA | NETIF_F_LRO)
+> > > > > +
+> > > > > +#define VIRTUAL_DEV_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> > > > > +					 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE | \
+> > > > > +					 NETIF_F_GSO_PARTIAL)
+> > > > > +
+> > > > > +#define VIRTUAL_DEV_MPLS_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> > > > > +					 NETIF_F_GSO_SOFTWARE)
+> > > > > +
+> > > > > +#define VIRTUAL_DEV_XFRM_FEATURES	(NETIF_F_HW_ESP | NETIF_F_HW_ESP_TX_CSUM | \
+> > > > > +					 NETIF_F_GSO_ESP)
+> > > > > +
+> > > > > +#define VIRTUAL_DEV_GSO_PARTIAL_FEATURES (NETIF_F_GSO_ESP)
+> > > > > +void netdev_compute_features_from_lowers(struct net_device *dev);
+> > > > > +
+> > > > >  void netif_stacked_transfer_operstate(const struct net_device *rootdev,
+> > > > >  					struct net_device *dev);
+> > > > >  
+> > > > > diff --git a/net/core/dev.c b/net/core/dev.c
+> > > > > index 1d1650d9ecff..fcad2a9f6b65 100644
+> > > > > --- a/net/core/dev.c
+> > > > > +++ b/net/core/dev.c
+> > > > > @@ -12577,6 +12577,85 @@ netdev_features_t netdev_increment_features(netdev_features_t all,
+> > > > >  }
+> > > > >  EXPORT_SYMBOL(netdev_increment_features);
+> > > > >  
+> > > > > +/**
+> > > > > + *	netdev_compute_features_from_lowers - compute feature from lowers
+> > > > > + *	@dev: the upper device
+> > > > > + *
+> > > > > + *	Recompute the upper device's feature based on all lower devices.
+> > > > > + */
+> > > > > +void netdev_compute_features_from_lowers(struct net_device *dev)
+> > > > > +{
+> > > > > +	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM;
+> > > > > +	netdev_features_t gso_partial_features = VIRTUAL_DEV_GSO_PARTIAL_FEATURES;
+> > > > > +#ifdef CONFIG_XFRM_OFFLOAD
+> > > > > +	netdev_features_t xfrm_features  = VIRTUAL_DEV_XFRM_FEATURES;
+> > > >                                        ^ double space (in other places as well)
+> > > > 
+> > > > > +#endif
+> > > > > +	netdev_features_t mpls_features  = VIRTUAL_DEV_MPLS_FEATURES;
+> > > > > +	netdev_features_t vlan_features = VIRTUAL_DEV_VLAN_FEATURES;
+> > > > > +	netdev_features_t enc_features  = VIRTUAL_DEV_ENC_FEATURES;
+> > > > > +	unsigned short max_hard_header_len = ETH_HLEN;
+> > > 
+> > > Going back to this discussion about hard_header_len:
+> > > 
+> > > > hard_header_len is not really a feature, so does not sound like it
+> > > > belongs here. I'm pretty sure it's not needed at all.
+> > > > 
+> > > > It was added to the bond driver in 2006 by commit 54ef31371407 ("[PATCH]
+> > > > bonding: Handle large hard_header_len") citing panics with gianfar on
+> > > > xmit. In 2009 commit 93c1285c5d92 ("gianfar: reallocate skb when
+> > > > headroom is not enough for fcb") fixed the gianfar driver to stop
+> > > > assuming that it has enough room to push its custom header. Further,
+> > > > commit bee9e58c9e98 ("gianfar:don't add FCB length to hard_header_len")
+> > > > from 2012 fixed this driver to use needed_headroom instead of
+> > > > hard_header_len.
+> > > > 
+> > > > The team driver is also adjusting hard_header_len according to the lower
+> > > > devices, but it most likely copied it from the bond driver. On the other
+> > > > hand, the bridge driver does not mess with hard_header_len and no
+> > > > problems were reported there (that I know of).
+> > > > 
+> > > > Might be a good idea to remove this hard_header_len logic from bond and
+> > > > team and instead set their needed_headroom according to the lower device
+> > > > with the highest needed_headroom. Paolo added similar logic in bridge
+> > > > and ovs but the use case is a bit different there.
+> > > 
+> > > I'm not convinced removing adapting hard_header_len on bond/team is
+> > > correct, even with old and broken drivers getting fixed years
+> > > ago. hard_header_len will be used on the TX path (for some devices
+> > > like bridge/macvlan via dev_forward_skb() and similar helpers, for IP
+> > > tunnels setting their MTU, and via LL_RESERVED_SPACE).
+> > > 
+> > > So I think we should keep setting hard_header_len to the largest of
+> > > all lowers.
+> > 
+> > It is not clear to me why we are setting hard_header_len to the largest
+> > of all lowers and not needed_headroom. While bond/team allow
+> > non-Ethernet lowers (unlike bridge, which is also adjusted to use this
+> > helper), they do verify that all the lower devices are of the same type.
+> > Shouldn't devices of the same type have the same hardware header length?
+> 
+> At least not with VLANs. Both basic ethernet and vlan devices are
+> ARPHRD_ETHER, but the hard_header_len of the vlan device will be
+> larger if we're not offloading:
+> 
+>     dev->hard_header_len = real_dev->hard_header_len + VLAN_HLEN;
 
---k2h4kdmb347cx47i
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 29/32] nsfs: add missing id retrieval support
-MIME-Version: 1.0
+This looks like a remanent from the time before needed_headroom was
+introduced, aimed at making sure that the kernel has enough room to push
+the VLAN tag when the hardware is unable to. I believe it should be
+converted to adjust needed_headroom instead. Otherwise, looking at
+__is_skb_forwardable(), an skb might be forwarded to a VLAN device when
+its real device does not support Tx VLAN acceleration and dropped
+otherwise (due to a smaller hard_header_len).
 
-On 2025-09-11, Christian Brauner <brauner@kernel.org> wrote:
-> On Thu, Sep 11, 2025 at 02:49:49AM +1000, Aleksa Sarai wrote:
-> > On 2025-09-10, Christian Brauner <brauner@kernel.org> wrote:
-> > > The mount namespace has supported id retrieval for a while already.
-> > > Add support for the other types as well.
-> > >=20
-> > > Signed-off-by: Christian Brauner <brauner@kernel.org>
-> > > ---
-> > >  fs/nsfs.c                 | 74 +++++++++++++++++++++++++++++++++++++=
-++--------
-> > >  include/uapi/linux/nsfs.h | 12 ++++++--
-> > >  2 files changed, 72 insertions(+), 14 deletions(-)
-> > >=20
-> > > diff --git a/fs/nsfs.c b/fs/nsfs.c
-> > > index 3c6fcf652633..527480e67fd1 100644
-> > > --- a/fs/nsfs.c
-> > > +++ b/fs/nsfs.c
-> > > @@ -173,6 +173,13 @@ static bool nsfs_ioctl_valid(unsigned int cmd)
-> > >  	case NS_GET_NSTYPE:
-> > >  	case NS_GET_OWNER_UID:
-> > >  	case NS_GET_MNTNS_ID:
-> > > +	case NS_GET_NETNS_ID:
-> > > +	case NS_GET_CGROUPNS_ID:
-> > > +	case NS_GET_IPCNS_ID:
-> > > +	case NS_GET_UTSNS_ID:
-> > > +	case NS_GET_PIDNS_ID:
-> > > +	case NS_GET_TIMENS_ID:
-> > > +	case NS_GET_USERNS_ID:
-> > >  	case NS_GET_PID_FROM_PIDNS:
-> > >  	case NS_GET_TGID_FROM_PIDNS:
-> > >  	case NS_GET_PID_IN_PIDNS:
-> > > @@ -226,18 +233,6 @@ static long ns_ioctl(struct file *filp, unsigned=
- int ioctl,
-> > >  		argp =3D (uid_t __user *) arg;
-> > >  		uid =3D from_kuid_munged(current_user_ns(), user_ns->owner);
-> > >  		return put_user(uid, argp);
-> > > -	case NS_GET_MNTNS_ID: {
-> > > -		__u64 __user *idp;
-> > > -		__u64 id;
-> > > -
-> > > -		if (ns->ops->type !=3D CLONE_NEWNS)
-> > > -			return -EINVAL;
-> > > -
-> > > -		mnt_ns =3D container_of(ns, struct mnt_namespace, ns);
-> > > -		idp =3D (__u64 __user *)arg;
-> > > -		id =3D mnt_ns->ns.ns_id;
-> > > -		return put_user(id, idp);
-> > > -	}
-> > >  	case NS_GET_PID_FROM_PIDNS:
-> > >  		fallthrough;
-> > >  	case NS_GET_TGID_FROM_PIDNS:
-> > > @@ -283,6 +278,61 @@ static long ns_ioctl(struct file *filp, unsigned=
- int ioctl,
-> > >  			ret =3D -ESRCH;
-> > >  		return ret;
-> > >  	}
-> > > +	case NS_GET_MNTNS_ID:
-> > > +		fallthrough;
-> > > +	case NS_GET_NETNS_ID:
-> > > +		fallthrough;
-> > > +	case NS_GET_CGROUPNS_ID:
-> > > +		fallthrough;
-> > > +	case NS_GET_IPCNS_ID:
-> > > +		fallthrough;
-> > > +	case NS_GET_UTSNS_ID:
-> > > +		fallthrough;
-> > > +	case NS_GET_PIDNS_ID:
-> > > +		fallthrough;
-> > > +	case NS_GET_TIMENS_ID:
-> > > +		fallthrough;
-> > > +	case NS_GET_USERNS_ID: {
-> > > +		__u64 __user *idp;
-> > > +		__u64 id;
-> > > +		int expected_type;
-> > > +
-> > > +		switch (ioctl) {
-> > > +		case NS_GET_MNTNS_ID:
-> > > +			expected_type =3D CLONE_NEWNS;
-> > > +			break;
-> > > +		case NS_GET_NETNS_ID:
-> > > +			expected_type =3D CLONE_NEWNET;
-> > > +			break;
-> > > +		case NS_GET_CGROUPNS_ID:
-> > > +			expected_type =3D CLONE_NEWCGROUP;
-> > > +			break;
-> > > +		case NS_GET_IPCNS_ID:
-> > > +			expected_type =3D CLONE_NEWIPC;
-> > > +			break;
-> > > +		case NS_GET_UTSNS_ID:
-> > > +			expected_type =3D CLONE_NEWUTS;
-> > > +			break;
-> > > +		case NS_GET_PIDNS_ID:
-> > > +			expected_type =3D CLONE_NEWPID;
-> > > +			break;
-> > > +		case NS_GET_TIMENS_ID:
-> > > +			expected_type =3D CLONE_NEWTIME;
-> > > +			break;
-> > > +		case NS_GET_USERNS_ID:
-> > > +			expected_type =3D CLONE_NEWUSER;
-> > > +			break;
-> > > +		default:
-> > > +			return -EINVAL;
-> > > +		}
-> > > +
-> > > +		if (ns->ops->type !=3D expected_type)
-> > > +			return -EINVAL;
-> >=20
-> > While I get that having this be per-ns-type lets programs avoid being
-> > tricked into thinking that one namespace ID is actually another
-> > namespace, it feels a bit ugly to have to add a new ioctl for every new
-> > namespace.
-> >=20
-> > If we added a way to get the CLONE_* flag for a namespace (NS_GET_TYPE)
->=20
-> That exists afaict: NS_GET_NSTYPE.
-
-D'oh, yeah that's all you need.
-
-> > we could have just NS_GET_ID. Of course, we would have to trust
-> > userspace to do the right thing...
->=20
-> So NS_GET_ID can just return the id and be done with it. If userspace
-> wants to know what type it is they can issue a separate ioctl. But since
-> the id space is shared all ids of all namespaces can be compared with
-> each other reliably. So really for comparision you wouldn't need to
-> care. IOW, yes.
-
-Ah, I didn't realise they're all in the same id-space -- in that case it
-makes even more sense to just have a single NS_GET_ID IMHO.
-
-> > > +
-> > > +		idp =3D (__u64 __user *)arg;
-> > > +		id =3D ns->ns_id;
-> > > +		return put_user(id, idp);
-> > > +	}
-> > >  	}
-> > > =20
-> > >  	/* extensible ioctls */
-> > > diff --git a/include/uapi/linux/nsfs.h b/include/uapi/linux/nsfs.h
-> > > index 97d8d80d139f..f7c21840cc09 100644
-> > > --- a/include/uapi/linux/nsfs.h
-> > > +++ b/include/uapi/linux/nsfs.h
-> > > @@ -16,8 +16,6 @@
-> > >  #define NS_GET_NSTYPE		_IO(NSIO, 0x3)
-> > >  /* Get owner UID (in the caller's user namespace) for a user namespa=
-ce */
-> > >  #define NS_GET_OWNER_UID	_IO(NSIO, 0x4)
-> > > -/* Get the id for a mount namespace */
-> > > -#define NS_GET_MNTNS_ID		_IOR(NSIO, 0x5, __u64)
-> > >  /* Translate pid from target pid namespace into the caller's pid nam=
-espace. */
-> > >  #define NS_GET_PID_FROM_PIDNS	_IOR(NSIO, 0x6, int)
-> > >  /* Return thread-group leader id of pid in the callers pid namespace=
-=2E */
-> > > @@ -42,6 +40,16 @@ struct mnt_ns_info {
-> > >  /* Get previous namespace. */
-> > >  #define NS_MNT_GET_PREV		_IOR(NSIO, 12, struct mnt_ns_info)
-> > > =20
-> > > +/* Retrieve namespace identifiers. */
-> > > +#define NS_GET_MNTNS_ID		_IOR(NSIO, 5,  __u64)
-> > > +#define NS_GET_NETNS_ID		_IOR(NSIO, 13, __u64)
-> > > +#define NS_GET_CGROUPNS_ID	_IOR(NSIO, 14, __u64)
-> > > +#define NS_GET_IPCNS_ID		_IOR(NSIO, 15, __u64)
-> > > +#define NS_GET_UTSNS_ID		_IOR(NSIO, 16, __u64)
-> > > +#define NS_GET_PIDNS_ID		_IOR(NSIO, 17, __u64)
-> > > +#define NS_GET_TIMENS_ID	_IOR(NSIO, 18, __u64)
-> > > +#define NS_GET_USERNS_ID	_IOR(NSIO, 19, __u64)
-> > > +
-> > >  enum init_ns_ino {
-> > >  	IPC_NS_INIT_INO		=3D 0xEFFFFFFFU,
-> > >  	UTS_NS_INIT_INO		=3D 0xEFFFFFFEU,
-> > >=20
-> > > --=20
-> > > 2.47.3
-> > >=20
-> >=20
-> > --=20
-> > Aleksa Sarai
-> > Senior Software Engineer (Containers)
-> > SUSE Linux GmbH
-> > https://www.cyphar.com/
->=20
->=20
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-https://www.cyphar.com/
-
---k2h4kdmb347cx47i
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaMLHDBsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIACgkQKJf60rfpRG/mzwEAx9h4AVzSTJqdqBhkS8zK
-BEnvqdVPIlPDANYwvmDIWUIBAOwZ/4o+AwKGmjWBo/SxQ951kZAsSKCS5CcqlP8p
-8FQB
-=EJ+O
------END PGP SIGNATURE-----
-
---k2h4kdmb347cx47i--
+Anyway, I'm OK with keeping hard_header_len for now, but ultimately I
+think netdev_compute_features_from_lowers() should be adjusting
+needed_headroom and not hard_header_len.
 
