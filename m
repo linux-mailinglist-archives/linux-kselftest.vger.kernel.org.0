@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-41243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CB5AB530DE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 13:39:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A32FB5315C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 13:48:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F4163A1DD5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 11:38:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2EA0164F37
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 11:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15D2531D72B;
-	Thu, 11 Sep 2025 11:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D32E7319879;
+	Thu, 11 Sep 2025 11:48:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QbgcjOFd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WnPnn9lN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9877F31C572
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Sep 2025 11:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34FF13191DE
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Sep 2025 11:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757590605; cv=none; b=MaDB/6aKTmJ3uEKwTSyXbahCBBJWaudwCsi1wVpzyw6FJjA0xhRZqTm+ekX0g51Ej9IXsxbN/q1HYypBDJGady6lNgGJ2wkGnbOaD3Rkq8iTKoIVi5JA+RWpqMzNwbMUEBqBey1ojxR4lPDSLvqtP8CQm1/hu3juwXzbsbc+r8U=
+	t=1757591308; cv=none; b=V8LYamlpgc1REb6hldTJi8xmvxUJAxDvEqNrEsCv2DUIlKDHS8ITaLrrr5FtU5Gj3ORrbpdubKktPE8B2H2Ab/+pFr27S0Zq4XVPMmlMx/mbTofgbiVXbQCCzd37J5gq2Htn46sLmfEo9bWfNXy7xTjo/3kllSk5YpgsQGZzAVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757590605; c=relaxed/simple;
-	bh=l3WS5mh3b7m+0CGnd7HwPGEX6fOXJSXSic0gzbaETOY=;
+	s=arc-20240116; t=1757591308; c=relaxed/simple;
+	bh=EkTK2XTSrHY3G5pm+FqDACFPq7N6pH7nHaRPNHNccS8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jC1QXjYO3YI0ocoN41PCc7GPOMnrPhmFaXpnH6pu7phL8ow8J2ZZ6am5cWNSaWhb+wLdFDWoZl4T5z2NrThcQeiBtd86AFWUflvOEzP+mE8WjVTZ6NzW9iAuhDb8ensTDDpPArliLD4tZjexks6sM3ivx2l725iVYv5Tg14ItlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QbgcjOFd; arc=none smtp.client-ip=209.85.208.52
+	 To:Cc:Content-Type; b=Fb8qt/z4+NdPF/45cVfZAuOW/KxjaP7AcZr2RpfK00aTdXv5KwwCAKBrmyl8S5cHEC5I7ipSutYCFNWNThlhqpDPhEpRuC3uI2DWIKj/8PwI2giFlAcvyDB6NyB0CDkG37i7GS9eApIsDjlv9/mQAXHuu/gB2NiMz9anGpAibHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WnPnn9lN; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6228de280a4so1046582a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Sep 2025 04:36:42 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b042eb09948so126582466b.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Sep 2025 04:48:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757590601; x=1758195401; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757591304; x=1758196104; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l3WS5mh3b7m+0CGnd7HwPGEX6fOXJSXSic0gzbaETOY=;
-        b=QbgcjOFdQCEX77z/FdlRwnzEmGsALvq3U9SOMI0CS5/Coz9cwTG3pr8H10coBpZ0ZT
-         ALfxzqhBFvmTlunvaBg5eojquIU2M0Jaj6+Hd0e8iXqgKuOZqpt4Pv6GARREjVuH73n6
-         hdS/4L12c0LlPui/1Ra+uKktXYpezhtgeFeBAindj/qegG++n014aPkSXSpYqw+JJt2x
-         5d9AacMrKkjsMmKaZ0myeESD6BMVT92frcJGeyabQR1LDI54v2GGB/cQhRWnOlA2P3pb
-         1nosawlRTBFeGlzHK360D6IZGmPAf3T+Q0SiPG4HX3udF0VqG3qAdTsBxdNsQnMuetky
-         AnCQ==
+        bh=EkTK2XTSrHY3G5pm+FqDACFPq7N6pH7nHaRPNHNccS8=;
+        b=WnPnn9lN6UEVALTkokHcSJwnGGCtTn2FndHOFVjUteY97stitD0fRCzqDQ0CuW0suu
+         bnab8Xl22IG1J3rTS3LjYh4TPcO8KG1xSKh401ZBxtn4pCMI3lZe6+B1taDKxNGzcLBU
+         jdm7/TkBM+ZobyrdQ+l0lyNwolYvSD7eJi2IPKaA04QjUkJyViB/DExHxD2KrQEdEQsm
+         TEo8FTuZhY+yvchYdh4Okg+H4kyievNtVumu8rfeBJPqWTy9wzV05JJL+95FY1OZupxC
+         /72RUfh7HZADmoAg7W3eUYtIWh0hDSxfCYwKn9xbZ84gSR0mMuf9XGAGnVZT3/zzB0gD
+         gmKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757590601; x=1758195401;
+        d=1e100.net; s=20230601; t=1757591304; x=1758196104;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l3WS5mh3b7m+0CGnd7HwPGEX6fOXJSXSic0gzbaETOY=;
-        b=MghVGNB2ZiLvRBaO2wFjf1Byyn/lEsGtyW2YVqTLwgHb/0x/4io9ShaGX04CAFVHdM
-         Q2MBMGiFX4tG82vlNIDjG+piwxRiojQfqaWhwHdZY8OIAUfyWt1w3UnP9Ff8sZdvfP6Z
-         5oXO/QHLoOb7bGcFHVXO73DFM8BnAOknLpiPAKykGlw7/mWXHGeyK4ggvXnJss1F/95N
-         o6MOH4uHS5qcEcmo5Qt6Z1nTTfXCC6ZNY5W+Xpj3+7729en+aMYC3Dp3h+Q/zls8Ajr/
-         bUErH0jPPerF9xjONFgqZaKu+UKmwlSkQWWHsVUwYYGqiHUX8Cr9LMZTqFKTyYs6kuBj
-         Q9AA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6T+ba0IMyDsfC89yF2kXHuoe34p+qSpWUtgnoIqg7edeb5FQnV5pGim3nab33BIRHjEF2uyIoNxn6u1yjTbY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6/lhH/lPghRBzFmBGFlrdgSexdJL8RuzDtYzKcGy2b2g/sPwm
-	D9W9eKuiaiwiP+qt2a9LnLVBT5SKU0hURYGD4WfHAi2K7Yn6JBtQzArbwaQQSBJeWGTbxexWE4G
-	xC9QHQTQF9nyXbCOmOftlbtrvAy4ALe0=
-X-Gm-Gg: ASbGnct6gmGcGBy5fpzVFx9OIJnR2rMjTulai4aWoqzRKTqwc79y6XAnfYxGz7Ruz4e
-	U7k1Hyrd8JGENAIjjZnVAlwNi6KkT9wZrwkwbeJu9bFY3bzl18/rFjrDc6yMlL98JdA5cC0+xiM
-	ipDNRRS74hC6+j82NnWVGuRHwQf1VkZq1so64srznnvweuKLmgcHVsQsnujKSUTwujqyMGmT38q
-	13c5UAQdEEvmhK+jg==
-X-Google-Smtp-Source: AGHT+IFTNKY6jjRUaK+95vjWoIXWhr+sTjejTLV8OOCQsfjrobYVHw8JMmZi1nhLUH2mOW0HugLlXyiAfLiI1n/62Pg=
-X-Received: by 2002:a05:6402:2685:b0:61d:dd9:20db with SMTP id
- 4fb4d7f45d1cf-6237c048793mr16217741a12.31.1757590600743; Thu, 11 Sep 2025
- 04:36:40 -0700 (PDT)
+        bh=EkTK2XTSrHY3G5pm+FqDACFPq7N6pH7nHaRPNHNccS8=;
+        b=Zu5kjahfy5KSpWKzEnPZtpML4pbsk25PORRwIGW+IC4x8thE/97ptNCJvGG7yH4IoX
+         I+IyT9H+p57Tw30yaqvyGjqGY5y8Ecpf3RvkdDkDaO5khEyoG7hBQ3ITHujBYf8NPzT2
+         fLIwjAe6Ke3BoBQygyN9D3mqMUU9FyjEz5ygz6iykgOGG41go3kqAP3ysgkRkKGsNnQo
+         lv0UvGUNLxange0L308p4nNN08UDKqXZdvCM59ZHHf+gmRyR6Eje5kj1lCDgMKotv1LJ
+         lTJSKeGqMIeL7GramJBgd+95SYtPXs8ULe5tajHqc/oTAYXmdeN6yt6bUK+hc1ejjElN
+         O6Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCWjYhl7mIAQi1RC6UwJ6HygMb/2pamhrLwEKoEhqK5YjCNSFiwVCtBrBu1MYChcC4nwiXi0Cvm8DOuRLTDdvuo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ6ih6mB/fY3iQljl+SFM4MpX3jHmODNcfzhElSkeIyhOP9wqr
+	tWSrNG2xh1BuZcnYlORuBZrikizUTXswSu0QV9ZajR8pN3a8XXTV4h/bg1dzYxYlXPaiYjMCwG5
+	igAM+pWdkr51Z9bCzmO26FbN3eohEy/s=
+X-Gm-Gg: ASbGncsX7AH9sfP30tSy4mhxOQeUu3QtOA0Ko4qj+CxEB3EK5oeyrAJZOCMpzZrUw5t
+	atT2v2YXH2vdvufkaBDKWKH77ZahLSCoC4qBSxz0bWJueEhQRYeyw+RUSesCY6mCFe8HNOQ2dZS
+	cB14VGWzNVvb5UngZqHRlFP4xfxha5WWHsMrPaQ1yYE6Zk/hIbCqCF5Pw3fy9/OBcJY+4wKFUv9
+	V5vD4S8gBK2ThoRJw==
+X-Google-Smtp-Source: AGHT+IFo70V+ej40+aX5Z/eRHJRCaW/Iqhahk/Ha781IK84/veOVnzt9N3EBI1U+cUalJ9ig/yIFZ2KLCeQ+wQEV8Cg=
+X-Received: by 2002:a17:907:e98b:b0:b04:85bc:a926 with SMTP id
+ a640c23a62f3a-b04b13fe4efmr1871379366b.11.1757591304254; Thu, 11 Sep 2025
+ 04:48:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,14 +76,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
- <20250910-work-namespace-v1-27-4dd56e7359d8@kernel.org> <CAOQ4uxgtQQa-jzsnTBxgUTPzgtCiAaH8X6ffMqd+1Y5Jjy0dmQ@mail.gmail.com>
- <20250911-werken-raubzug-64735473739c@brauner>
-In-Reply-To: <20250911-werken-raubzug-64735473739c@brauner>
+ <20250910-work-namespace-v1-32-4dd56e7359d8@kernel.org> <CAOQ4uxhwJBLCzfKs0dVFOpcgP=LQU5hkRxVeLLR6g-qOxb9ocQ@mail.gmail.com>
+ <20250911-ergriffen-autopilot-7e0488c135c7@brauner>
+In-Reply-To: <20250911-ergriffen-autopilot-7e0488c135c7@brauner>
 From: Amir Goldstein <amir73il@gmail.com>
-Date: Thu, 11 Sep 2025 13:36:28 +0200
-X-Gm-Features: Ac12FXxRFt9Ctd5Cl_pR-FdI4tarLWVQlbT7aCbaq2ftodBoMLqTaIDo5wMZnik
-Message-ID: <CAOQ4uxgMgzOjz4E-4kJFJAz3Dpd=Q6vXoGrhz9F0=mb=4XKZqA@mail.gmail.com>
-Subject: Re: [PATCH 27/32] nsfs: support file handles
+Date: Thu, 11 Sep 2025 13:48:12 +0200
+X-Gm-Features: Ac12FXzjtgrAdVd9rTS0ov85U74TI4ZgGunYM07J1bauwFv-Hur8qy96NfA8slA
+Message-ID: <CAOQ4uxh9mWHYtP6JdvW6HEPgCqe4=3pcJ0V4SVa__8i_EFxUmw@mail.gmail.com>
+Subject: Re: [PATCH 32/32] selftests/namespaces: add file handle selftests
 To: Christian Brauner <brauner@kernel.org>
 Cc: Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org, 
 	Josef Bacik <josef@toxicpanda.com>, Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>, 
@@ -99,66 +99,61 @@ Cc: Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 11, 2025 at 11:31=E2=80=AFAM Christian Brauner <brauner@kernel.=
+On Thu, Sep 11, 2025 at 11:15=E2=80=AFAM Christian Brauner <brauner@kernel.=
 org> wrote:
 >
-> On Wed, Sep 10, 2025 at 07:21:22PM +0200, Amir Goldstein wrote:
-> > On Wed, Sep 10, 2025 at 4:39=E2=80=AFPM Christian Brauner <brauner@kern=
+> On Wed, Sep 10, 2025 at 07:30:03PM +0200, Amir Goldstein wrote:
+> > On Wed, Sep 10, 2025 at 4:40=E2=80=AFPM Christian Brauner <brauner@kern=
 el.org> wrote:
 > > >
-> > > A while ago we added support for file handles to pidfs so pidfds can =
-be
-> > > encoded and decoded as file handles. Userspace has adopted this quick=
-ly
-> > > and it's proven very useful.
-> >
-> > > Pidfd file handles are exhaustive meaning
-> > > they don't require a handle on another pidfd to pass to
-> > > open_by_handle_at() so it can derive the filesystem to decode in.
+> > > Add a bunch of selftests for namespace file handles.
 > > >
-> > > Implement the exhaustive file handles for namespaces as well.
+> > > Signed-off-by: Christian Brauner <brauner@kernel.org>
 > >
-> > I think you decide to split the "exhaustive" part to another patch,
-> > so better drop this paragraph?
->
-> Yes, good point. I've dont that.
->
-> > I am missing an explanation about the permissions for
-> > opening these file handles.
+> > Obviously, I did not go over every single line, but for the general
+> > test template and test coverage you may add:
 > >
-> > My understanding of the code is that the opener needs to meet one of
-> > the conditions:
-> > 1. user has CAP_SYS_ADMIN in the userns owning the opened namespace
-> > 2. current task is in the opened namespace
->
-> Yes.
->
+> > Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 > >
-> > But I do not fully understand the rationale behind the 2nd condition,
-> > that is, when is it useful?
+> > However, see my comment on file handle support patch.
+> > The test matrix is incomplete.
 >
-> A caller is always able to open a file descriptor to it's own set of
-> namespaces. File handles will behave the same way.
+> I mean, I'll just drop to non-root in the non-cross ns tests:
+>
+> /* Drop to unprivileged uid/gid */
+> ASSERT_EQ(setresgid(65534, 65534, 65534), 0); /* nogroup */
+> ASSERT_EQ(setresuid(65534, 65534, 65534), 0); /* nobody */
 >
 
-I understand why it's safe, and I do not object to it at all,
-I just feel that I do not fully understand the use case of how ns file hand=
-les
-are expected to be used.
-A process can always open /proc/self/ns/mnt
-What's the use case where a process may need to open its own ns by handle?
+That would be good I think.
 
-I will explain. For CAP_SYS_ADMIN I can see why keeping handles that
-do not keep an elevated refcount of ns object could be useful in the same
-way that an NFS client keeps file handles without keeping the file object a=
-live.
+> > Maybe it would be complete if test is run as root and then
+> > as non root, but then I think the test needs some changes
+> > for running as root and opening non-self ns.
+> >
+> > I am not sure what the standard is wrt running the selftests
+> > as root /non-root.
+> >
+> > I see that the userns isolation tests do:
+> > /* Map current uid/gid to root in the new namespace */
+> >
+> > Are you assuming that non root is running this test
+> > or am I missing something?
+>
+> No, I'm not assuming that. I just need a new user namespace and become
+> root in it to assume privilege over it so I can test that decoding
+> doesn't work from an ancestor userns owned namespace.
+>
 
-But if you do not have CAP_SYS_ADMIN and can only open your own ns
-by handle, what is the application that could make use of this?
-and what's the benefit of such application keeping a file handle instead of
-ns fd?
+With dropping to unprivileged uid/gid in parent, I understand it should wor=
+k.
+I guess I wasn't sure if dropping to unprivileged uid/gid was required for =
+the
+test to pass when the test is run as root user, but with the addition of
+dropping to unprivileged uid/gid - feel free to add:
 
-Sorry. I feel that I may be missing something in the big picture.
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+
 
 Thanks,
 Amir.
