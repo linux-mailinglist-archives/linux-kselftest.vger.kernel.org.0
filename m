@@ -1,176 +1,119 @@
-Return-Path: <linux-kselftest+bounces-41266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41267-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFD9BB53D5D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 22:57:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 804E8B53D6B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 23:01:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65DAC488354
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 20:57:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3ABAA566399
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 21:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89DC62D948A;
-	Thu, 11 Sep 2025 20:57:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 130B325A2C3;
+	Thu, 11 Sep 2025 21:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="cSQfZyXH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AN10WaBm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993DF27A454;
-	Thu, 11 Sep 2025 20:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.147.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D948DB67F;
+	Thu, 11 Sep 2025 21:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757624262; cv=none; b=qTC8KQlYOcz/J69+d4CQrRIXvdpZMqqFmTZVFk78xGIlNEvpvUi/c9tNBLG853xy+CO9uND3PcAIMhiDe/ncgFeAL9CXQWqNoj59lQV6E/i8jLS6V8hJmvK5kb8OYswbzaxZM6qjvHYnDsj0LrpmMOwdNs1U4wn2Z4oNefIBesk=
+	t=1757624510; cv=none; b=NRsk4hEXK1lR7FH1+Wpo81Qv2m6mYZroLpmq6ggQvB4do+//Ch2nolx+xZorMRlR+EBa56h7nOIcvt++nvHQdU6NN1ei772yjyKVA5hDR5+0wfkWrqV+I4KSp7ykn1Jph0lFD8h/Ndh2kuFJDdOTD9Kzhs2kqDvN1DF4ncv/sxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757624262; c=relaxed/simple;
-	bh=bSsPa9XEyW8z/su++j6tQWWmZoPbZWL/uldiO/VimDE=;
+	s=arc-20240116; t=1757624510; c=relaxed/simple;
+	bh=TnKAQTc7XGro9Bv4vH66mq9n6MJAi4rgkbNv8BEGp+A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ld77nKsQP3eIAmXFVSo6G/iAwE7765ERfIFlrABO4kAB/uWn+jV5GMnQhyOse6JFYL8KXl62RSiwheuS35anfJ5yLP0ezlKOsyA1BZndOO+4c01kDgHC3rHCp3a35AIQG66SIvHKLN5fpka0HHFmlVMNVAwN2q7vT/41xen2nd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=cSQfZyXH; arc=none smtp.client-ip=148.163.147.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
-	by mx0a-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58BFINgC007212;
-	Thu, 11 Sep 2025 20:56:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps0720; bh=J0ID9F64YdLXnEJhVLSOMHkdqi
-	2X6q7O8dZhA/oVjxI=; b=cSQfZyXHw97+qAk5GLrVBgwewFdz885Cteb9qF6kZC
-	cl0B/IlTfIYZlYVAQL80a6ViC3RMb7LwXyVxWpyeUQW2ZjFRH89J7JwZPy7swLK8
-	bfJdi8MluU5znLPe19N6KRAHsTlRVjl9hc2fwjmchGWfXeicxabPj8CO4JJ95aRV
-	D+zFfqrdQw7/J2i1jmRyxhcTzHsKKP8MGvlaz9Bm3J2WYbe576VycumLp3m3y7wL
-	cmgGV0a94bE4YbFXaAsE3e48TESw/6B8qRdJ7MM59bacGyVJ3D/ggJqoVo67Ocpm
-	Hq8fo4AFsLG/i0MW3vGgTuCEWf3aENH+ykwjbcc2Wq1Q==
-Received: from p1lg14879.it.hpe.com ([16.230.97.200])
-	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 493p9xfpef-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Sep 2025 20:56:34 +0000 (GMT)
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 206FD132D3;
-	Thu, 11 Sep 2025 20:56:32 +0000 (UTC)
-Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 708208118D1;
-	Thu, 11 Sep 2025 20:56:28 +0000 (UTC)
-Date: Thu, 11 Sep 2025 15:56:26 -0500
-From: Kyle Meyer <kyle.meyer@hpe.com>
-To: "Luck, Tony" <tony.luck@intel.com>
-Cc: David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
-        corbet@lwn.net, linmiaohe@huawei.com, shuah@kernel.org,
-        Liam.Howlett@oracle.com, bp@alien8.de, hannes@cmpxchg.org,
-        jack@suse.cz, jane.chu@oracle.com, jiaqiyan@google.com,
-        joel.granados@kernel.org, laoar.shao@gmail.com,
-        lorenzo.stoakes@oracle.com, mclapinski@google.com, mhocko@suse.com,
-        nao.horiguchi@gmail.com, osalvador@suse.de, rafael.j.wysocki@intel.com,
-        rppt@kernel.org, russ.anderson@hpe.com, shawn.fan@intel.com,
-        surenb@google.com, vbabka@suse.cz, linux-acpi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] mm/memory-failure: Disable soft offline for HugeTLB
- pages by default
-Message-ID: <aMM3elPmG1MdUNrJ@hpe.com>
-References: <aMGkAI3zKlVsO0S2@hpe.com>
- <749511a8-7c57-4f97-9e49-8ebe8befe9aa@redhat.com>
- <aMMNVA9EXXHYvmKH@agluck-desk3>
+	 Content-Type:Content-Disposition:In-Reply-To; b=P1zLRcuHVHMhdvqZXkwvobphr9s1asLnTdwDAqsS08Cp2HsXTFGGJ17nlfc29Ghw5ztJ7wiDoz86WoLZ68buVkzzl3U1Ba5NMhngkav5euqyubK4I4Or/4kX4PsrLF+m7QneQWbA7ENWLM6bocBCHT53jVHcJuLx6JPN+c0kR/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AN10WaBm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B037BC4CEF0;
+	Thu, 11 Sep 2025 21:01:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757624509;
+	bh=TnKAQTc7XGro9Bv4vH66mq9n6MJAi4rgkbNv8BEGp+A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AN10WaBmgi+RXVhno4BE+S55iu8EnUJWANOscD0dQ6FBxV/ctEQVofudWCJwFvmYz
+	 yHPg5tSaSWUx6VV0B9WLKe/r1DEIB/s/ZQzAYrLYI+9MYzktAza/scMSJPqdAShmcD
+	 FjvHHKPc2HInQOfx8yNRu5co5MSNyDCw1nlwlRtmn6mWypUk0rA041rgWjLVzVHzVU
+	 qB+YNPEfYu7Nmx09q/in82XKv8qqYdWxMUGlH662MHmpSEY9L8iTa7ikRtEuayM39v
+	 tIsr/voF7PQtSbBM9rqYsf0uaB8mQTyPY0bibuuwH4xta1CG8bj4iosC3tDqwWQIf/
+	 5vtty7su7aKYA==
+Date: Thu, 11 Sep 2025 22:01:43 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	lkft-triage@lists.linaro.org,
+	Linux Regressions <regressions@lists.linux.dev>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Ben Copeland <benjamin.copeland@linaro.org>,
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: next-20250909: selftests/arm64/gcs/basic-gcs.c:390:30: error:
+ use of undeclared identifier 'HWCAP_GCS'
+Message-ID: <a275fc97-24d8-477d-b7aa-79c2d61d93ad@sirena.org.uk>
+References: <CA+G9fYv77X+kKz2YT6xw7=9UrrotTbQ6fgNac7oohOg8BgGvtw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="vzK/nDSaTzO/04Bu"
 Content-Disposition: inline
-In-Reply-To: <aMMNVA9EXXHYvmKH@agluck-desk3>
-X-Proofpoint-ORIG-GUID: Ethw6hHnLfczx3VAEZBXc-08gscPDyGN
-X-Proofpoint-GUID: Ethw6hHnLfczx3VAEZBXc-08gscPDyGN
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTExMDAyNiBTYWx0ZWRfXyI2+SdrKv+fr
- J09MeyCR3Ioip+tv+DaUAAlfVfIk22LrAWmlkzH/QV5q4UAWPgfHNFOl4+ub//1Adee37pHPb4b
- 764zMHo5pXXt1CcHaobNJvfMfwFmUUV/nH/D82/1aTPO6jutWA9MvX8an2UNfGrfTzL9DSk8XRW
- WdZT5V1erw/xxDMTunGIMHe9T2MS+FKEBZCOwsxI4yn8gC3OcGhueHg0cu+lqePY9/N+YX888Hk
- 3sUbWytd+nDRfz/JfHwjdEa8Usy/cqfyazlCUsltcgMUe3O7HboftW1ebSfQdBIJZ49UPQ+CDK2
- gt4/eks53CHvrIBOELJSndItTN1QUeIx7bgqpZ1GHhLx5QsJwOy/K+Q1x9blJwm1hm8x2x3EJNQ
- nmqPYiXa
-X-Authority-Analysis: v=2.4 cv=Ke/SsRYD c=1 sm=1 tr=0 ts=68c33782 cx=c_pps
- a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
- a=kj9zAlcOel0A:10 a=yJojWOMRYYMA:10 a=e0XSXhz86abGffj2R7MA:9
- a=CjuIK1q_8ugA:10
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-11_03,2025-09-11_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1015
- phishscore=0 bulkscore=0 impostorscore=0 spamscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2509110026
+In-Reply-To: <CA+G9fYv77X+kKz2YT6xw7=9UrrotTbQ6fgNac7oohOg8BgGvtw@mail.gmail.com>
+X-Cookie: Your domestic life may be harmonious.
 
-On Thu, Sep 11, 2025 at 10:56:36AM -0700, Luck, Tony wrote:
-> On Thu, Sep 11, 2025 at 10:46:10AM +0200, David Hildenbrand wrote:
-> > On 10.09.25 18:15, Kyle Meyer wrote:
-> > > Soft offlining a HugeTLB page reduces the available HugeTLB page pool.
-> > > Since HugeTLB pages are preallocated, reducing the available HugeTLB
-> > > page pool can cause allocation failures.
-> > > 
-> > > /proc/sys/vm/enable_soft_offline provides a sysctl interface to
-> > > disable/enable soft offline:
-> > > 
-> > > 0 - Soft offline is disabled.
-> > > 1 - Soft offline is enabled.
-> > > 
-> > > The current sysctl interface does not distinguish between HugeTLB pages
-> > > and other page types.
-> > > 
-> > > Disable soft offline for HugeTLB pages by default (1) and extend the
-> > > sysctl interface to preserve existing behavior (2):
-> > > 
-> > > 0 - Soft offline is disabled.
-> > > 1 - Soft offline is enabled (excluding HugeTLB pages).
-> > > 2 - Soft offline is enabled (including HugeTLB pages).
-> > > 
-> > > Update documentation for the sysctl interface, reference the sysctl
-> > > interface in the sysfs ABI documentation, and update HugeTLB soft
-> > > offline selftests.
-> > 
-> > I'm sure you spotted that the documentation for
-> > "/sys/devices/system/memory/soft_offline_pag" resides under "testing".
-> 
-> But that is only one of several places in the kernel that
-> feed into the page offline code.
-> 
-> This patch was motivated by the GHES path where BIOS indicates
-> a corrected error threshold was exceeded. There's also the
-> drivers/ras/cec.c path where Linux does it's own threshold
-> counting.
-> > 
-> > If your read about MADV_SOFT_OFFLINE in the man page it clearly says:
-> > 
-> > "This feature is intended for testing of memory error-handling code; it is
-> > available  only if the kernel was configured with CONFIG_MEMORY_FAILURE."
-> 
-> Agreed that this all depends on CONFIG_MEMORY_FAILURE ... so if any
-> part of the flow is compiled in when that is "=n" then some
-> changes are needed to fix that.
-> 
-> > 
-> > So I'm sorry to say: I miss why we should add all this complexity to make a
-> > feature used for testing soft-offlining work differently for hugetlb folios
-> > -- with a testing interface.
 
-I would also like to note that the current sysctl interface already affects
-testing interfaces. Please see the following commit:
+--vzK/nDSaTzO/04Bu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-56374430c5dfc ("mm/memory-failure: userspace controls soft-offlining pages")
+On Fri, Sep 12, 2025 at 12:48:47AM +0530, Naresh Kamboju wrote:
+> The following build warnings / errors noticed on arm64 defconfig
+> with clang-20 and gcc-13 toolchains on the Linux next-20250909
+> till next-20250911 tag while building selftests/arm64.
+>=20
+> Regression Analysis:
+> - New regression? Yes
+> - Reproducibility? yes
+>=20
+> First seen on  next-20250909
+>  Good: next-20250908
+>  Bad: next-20250909 till next-20250911
+>=20
+> Test regression: next-20250909:
+> selftests/arm64/gcs/basic-gcs.c:390:30: error: use of undeclared
+> identifier 'HWCAP_GCS'
 
-The sysctl interface should probably be mentioned in
-sysfs-memory-page-offline with or without this patch.
+This will be due to Thomas Wei=DFschuh's nolibc changes which went in
+during that time period and did change the program to use nolibc's
+getauxval, presumably that's broken with this clang version or
+something?
 
-Thanks,
-Kyle Meyer
+--vzK/nDSaTzO/04Bu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjDOLcACgkQJNaLcl1U
+h9BI/Qf9EK0NgoUZ4q96FEARPBhR/Va4JSSHIcl2WyWNfMuLGBi4fv3F6r3GQlnS
+/pv7buWYB/3owgjNjmJTDIjTCuqoaGSyoAsIQJCac6gAi1Fn99E6XQ6fP8dGHNAd
+A1H/dQsANu/5zzLxFZe2AHwBL9xrvWr55ZnhoL7R9C0eU+u3HbNzoiTr0sJvtOti
+vxDis4GP1Jc2b7W9R/t9iE7czTRIDSM3CbCzWn4PwSm5AkifhWzvgV18719x+NQB
+Sx/0X+5x2BcGr5a7RTc+3BhJvFg59eRvi6MrPHHTvGbebxSJ1Y0M6Jucix8WMQEI
+oUOM7SJHlvm4AIZS+P2HD2EsCC5Yuw==
+=zR3h
+-----END PGP SIGNATURE-----
+
+--vzK/nDSaTzO/04Bu--
 
