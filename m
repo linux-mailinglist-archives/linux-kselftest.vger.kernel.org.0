@@ -1,86 +1,96 @@
-Return-Path: <linux-kselftest+bounces-41215-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A9F5B52C63
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 11:00:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D8CEB52CBB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 11:10:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 167755A28A9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 09:00:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C2D43AC9DF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 09:10:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C532E6CD6;
-	Thu, 11 Sep 2025 08:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651382E88B2;
+	Thu, 11 Sep 2025 09:10:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7X39oPG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rSrKwj5r"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16AC2E6CBB;
-	Thu, 11 Sep 2025 08:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38339329F0A;
+	Thu, 11 Sep 2025 09:10:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757581198; cv=none; b=qsvfk3RMjsvbFVaQpfRsNNFyZ/NmXOnj9p0tx8qZhP+6slgmPPV02SFQ0/SrPdizI41xA6pZCZWhMO9+xeV4HmWVXyOFbRmoNq7iCKJmQmEEbl4aONyZn1iXcQ35AqBKfNJ3ZCaIo/UB80J1L9dQKLKN2k4ywfGJGLFQXlWU3RE=
+	t=1757581805; cv=none; b=kkLIK0YStXy0CE9w6r4juRkioiE5x+DIXClGbsKRMZ9u5zKque01ptRkSH/Qf15lwrP+MokWP3e9lpWxWs0eHBf6gzVG0qS3j57FzdvzD8cEYAmoxGc+3LDBJvYjJyQQf/87+tk6JCNpXqKVTm4kvRdDWMxqKiNRYdg+d16NyuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757581198; c=relaxed/simple;
-	bh=di3tOqn8KDjRSNmUzjcZz5ibzOySkfRcW/PH6lItTeg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rmc7/+7WB5MB/9q/Sshafgbu6iUGcIg1YKyP0+RBF6Mb5qsqSRKbF9aIQbqb6bN5rbZuqwVC4v2nPLFnxc5Sxig47d8X5anFs/zmkCmnIfvlFrTM55dswBS4Xyp5SIHsrTEczpAmy8FeOyd0l2M/qElkJiSLz9fB6K9j5/zwpa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7X39oPG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE82C4CEF0;
-	Thu, 11 Sep 2025 08:59:51 +0000 (UTC)
+	s=arc-20240116; t=1757581805; c=relaxed/simple;
+	bh=b3ZkVXca1i5pRnRuNF9MgQDWQNG/hIZN3GP7UyzgT1E=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=NH7p/lVAQV7e9RyOGMJjmCrLSowiF227SsHIeLE3nkqldUHXd3LW1L5sbtV6o89BRPD+JmFZNX2zO4Org06d9lHeSxaxohiI/sOX8SPJujIufBOo0r+QY80rK6zdS4cyNjCJjJrD/YG7EPNfWIb1QaK+vSNq1/NvwddADHtxmN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rSrKwj5r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CD3C4CEF0;
+	Thu, 11 Sep 2025 09:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757581197;
-	bh=di3tOqn8KDjRSNmUzjcZz5ibzOySkfRcW/PH6lItTeg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d7X39oPGOFriWKB/puO3tXJcs5u3pQmXfNPNNI8u5ge2mMCrfGBsH2Rh7NKcXunnn
-	 ObfoQli7du9d2GcWiz3ksJ57w7LGYFGJuZEsrqz1lxF9fFztZFpwweu8GBTjFMKdWd
-	 zkPbcElNMpHhcq3l0yKWfScfPTbVH2XNqm8qoZmuCWitfZdeAa/oZeWsoXXdZlx9mu
-	 S5M+MpRqQMTueSmR81hl4/YoijM9bnmlnmtRyzMgTXGtJCEvBAcQyUyWmzxy6VanGx
-	 iQETccGAWvBynljLCuzzzQgxgMZHVVp4JjtBQabjYy+linbjJ4XAqaGypJIvHsXRJw
-	 rzS47xbNu5qTQ==
-Date: Thu, 11 Sep 2025 10:59:49 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>, 
-	linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
-	Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>, 
-	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>, 
-	Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 32/32] selftests/namespaces: add file handle selftests
-Message-ID: <20250911-vorurteil-gemacht-c62d1349fc33@brauner>
-References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
- <20250910-work-namespace-v1-32-4dd56e7359d8@kernel.org>
- <f65cf3ae-069d-4ade-9fc9-03f01c7e1649@acm.org>
+	s=k20201202; t=1757581804;
+	bh=b3ZkVXca1i5pRnRuNF9MgQDWQNG/hIZN3GP7UyzgT1E=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=rSrKwj5rXKi5CCg9gz9X81FI6hP/asyafszIH6PlRqFk1X2ujo/Uwve+lCv/rN4HL
+	 d76GXsQhgFA8thrx9phmYRk63mPfkQ4rHsi59kS+YzEKOrxDujpfMkFiao7BE5dvdq
+	 cw9WST2PRHC0KfQVcbeTb2AUjEAHEujzwmQS1n8j8kAvmKCM9TGWfHVEuqFZmlbdQP
+	 iz1Sz1DuXDmODYzSzu0Wv63tz4Ngi/m6qLXlrdWO8I9hb2HhhpYMDpJj+Cmq0IRy0o
+	 rT6+Vgetdu9abZCTZbJRpZ/VTr4o+UJapNixsP5XxPSFkRIo7wwt9How8LIFfC7r6A
+	 ojYlLMH9KaCLw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B0296383BF69;
+	Thu, 11 Sep 2025 09:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f65cf3ae-069d-4ade-9fc9-03f01c7e1649@acm.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3] selftests: net: Add tests to verify team
+ driver
+ option set and get.
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175758180751.2096638.16103651833506796423.git-patchwork-notify@kernel.org>
+Date: Thu, 11 Sep 2025 09:10:07 +0000
+References: <20250905040441.2679296-1-marcharvey@google.com>
+In-Reply-To: <20250905040441.2679296-1-marcharvey@google.com>
+To: Marc Harvey <marcharvey@google.com>
+Cc: jiri@resnulli.us, andrew+netdev@lunn.ch, edumazet@google.com,
+ willemb@google.com, maheshb@google.com, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kuba@kernel.org, liuhangbin@gmail.com
 
-On Wed, Sep 10, 2025 at 02:46:21PM -0700, Bart Van Assche wrote:
-> On 9/10/25 7:37 AM, Christian Brauner wrote:
-> > +	snprintf(ns_path, sizeof(ns_path), "/proc/self/ns/net");
-> > +	ns_fd = open(ns_path, O_RDONLY);
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Fri,  5 Sep 2025 04:04:41 +0000 you wrote:
+> There are currently no kernel tests that verify setting and getting
+> options of the team driver.
 > 
-> Here and also in TEST(nsfs_uts_handle), ns_path is not modified. Does
-> this mean that "/proc/self/ns/net" can be stored in a static const char
-> array and also that the snprintf() call can be left out? In case I would
-> have missed the reason why the path is copied, how about using
-> asprintf() or strdup() instead of snprintf()?
+> In the future, options may be added that implicitly change other
+> options, which will make it useful to have tests like these that show
+> nothing breaks. There will be a follow up patch to this that adds new
+> "rx_enabled" and "tx_enabled" options, which will implicitly affect the
+> "enabled" option value and vice versa.
+> 
+> [...]
 
-Yep, that can just be a static string. Thanks.
+Here is the summary with links:
+  - [net-next,v3] selftests: net: Add tests to verify team driver option set and get.
+    https://git.kernel.org/netdev/net-next/c/db1b60066686
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
