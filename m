@@ -1,77 +1,78 @@
-Return-Path: <linux-kselftest+bounces-41247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 214C9B53449
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 15:49:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA85BB5344B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 15:49:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57DE318901E3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 13:50:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29713162824
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 13:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F82F324B33;
-	Thu, 11 Sep 2025 13:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4718032F75B;
+	Thu, 11 Sep 2025 13:49:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HbT2x4cC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YaDvvWnP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D962C1F03C5;
-	Thu, 11 Sep 2025 13:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BD132ED49;
+	Thu, 11 Sep 2025 13:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757598580; cv=none; b=gGCPiFwaJzzPg/kguZCLDVlttB3HTl+L3VrLNPSV8m39spagjhaMdMLe02bAGiPFtL+Rb5jvcaNXzf6KncsHFbaGP4OsA4D9VRd183esDvsphbo7PgA3GZJ2JcBv/yvxla3/jpcGGVAU+jsEc0OrjHl8e6Y3HTF0HScyRpM6v3s=
+	t=1757598584; cv=none; b=HvpY34UsW/Obc9P77QI3ne6h766O4Jap33SkpscExHwfB388VSMn0HmLfGG8bkHVqL15fpTiye/5bNpdc1jaUxa33vtlIiQDr7Cxz0MlJf0VUZPOKM1i0gump9EBRNZUA2CxNWB/C0kWE0OyZwKLGJHzB2mCwnaVJwoBZiWBWTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757598580; c=relaxed/simple;
-	bh=T8VtWbZoh0VIipzuyBrHjr9wwGoQSoHS3Ynzhj6XMgs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DEs431QpzrAZMBF93OvU33iE/e4+lMHY4pUA8TxL+XipXzsjPhJ9XLoGUVJZEMSePPr9lVWiHbbrrxreU0n2UNcZNRewU0J9HqiziG+qEZsI/gHrQd0mjeYHrZYnZETCcCFKXx+9sHkus6AjADojLSk8kh0XPTlWCS1erBQpOaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HbT2x4cC; arc=none smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1757598584; c=relaxed/simple;
+	bh=MgG36VJmw214zv4sHqDEvyy0doXE0b66hEX+1oPfR84=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=GauzH2Z+fytNU5t4W9n1jju7cZ92Cq7/Zesswcth7Tsp0F7YYYXv0PzWDxmg6Db55KuOTBG7r3YSEUskAq5I7D4Fps64Umgl2qDEpd2qKuuOQbIyYysktGb5+nHwetyqO4+aZcCeKemB/gTjawPUgyLYMYkUK+bACxGYZDIWWac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YaDvvWnP; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3e537dc30f7so459154f8f.2;
-        Thu, 11 Sep 2025 06:49:38 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45df09c7128so5951095e9.1;
+        Thu, 11 Sep 2025 06:49:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757598577; x=1758203377; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vEbc34OfcWsmZ87K3FZrtli36glSfRnoXSobn53PJa0=;
-        b=HbT2x4cC4bNjR/QYhSReIWByOFl75zoZ/5YsLd7pi964+gaFuBGuQ7PzYP/+ywC4ai
-         3gg78gEsDryBmeX9TDZEPA1nn0+UG257sM3sDtXbgL3MV+Ry9Dx/gfQXT0uthdYo45Qb
-         aCI8pzpPiG/KPhDmsKKiy0Hll5TvBQvBT6cKD3DTdIGVV8hahWjUH57025Hv6ieqDIaG
-         vQH0YzNniC41EZvkOwa29w7hD0K0cYY3fYu50/3mc5hLHYAjfjLPReIlcoot5z35kCFs
-         M+lHlIk8e3IgzxBfQPF0+pCnFkT7sNzhbQpYHJ67o77vOrovU2s1Gg05bWPtVQaq2ayX
-         XENA==
+        d=gmail.com; s=20230601; t=1757598581; x=1758203381; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AJBOYBviiAkHEGuAebJYs1rSMwBP/rg8f5sw3Y1zhrU=;
+        b=YaDvvWnPDhzBa16I8VZUKoi+aqG/tKR667NbI4tmyZFbhn3uhdi1iXsJBhvs3GhAdg
+         ApR7QHdO0XGmmHs/smrN0rhZP4Zbq9ThWLTBHABfzK9R0xIAoaMLyqj4TrlqjgD8RRMT
+         B6CjK6KEJbMDvuAKfiUBE3b44gFskimkjwVoht994TLsPMYkM0sAiPk+J+cyfD6c5MUq
+         q19sKsn/GzA9l1GA1YgLWa5lM/eAPAQf467i6waX6KWlQuat5gAWCzX1LfkMOrKxiPoV
+         EM1WGnSxqE4eRQoXkrtl/3RUMUv4DegIVueT1lCDSYIQ7mjk3eNap9XjzCBNdRLrDJHs
+         ZkgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757598577; x=1758203377;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vEbc34OfcWsmZ87K3FZrtli36glSfRnoXSobn53PJa0=;
-        b=ZSq7SGQcfiet8KxYkorwNFVAFPF/hlZqFmzHCp7e9H04H9eQmzr4lO3GFV2tfLI2JV
-         L9TdF2SPfbg+3xRnFG/94Auico3mLHELSD4JDkhIDkZLouZyohzavkC1gsRHCZXXBC+E
-         AXyIXaJgsIbuyOS4d2FmbDqhluQsgsB2PVhtw1/Tz5bH99QU6FjuoekMNyYrwTVNETPO
-         6i6jtrFXWmrZC31JXe6v8cpyz4jMMg6s3MvdDdqn4KT22cHxR1bP6MBTfdom08QyxXlA
-         7wsx7crMBgLDNtiNdth2SmMAMB2IJOvjYrV/cVnwtXWKOhdSRU9LnN7mAbvYqdYs1DK7
-         XKcA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCgi9FEjnoKT7fAbIk66PEu2PwbaTlWz2Ir18nmf5Taq9eauUrM5RgEpjjkduiH6zRBDt4PpRpkCS9uwI=@vger.kernel.org, AJvYcCVrV3IsXNWIKmn0FNnJtKvyf8huvfZ2x+h5cMenOFghxDvoCPd0E50k2HOmaZ8glUwPEUDYkNvPVnQZ/6lkPjtv@vger.kernel.org
-X-Gm-Message-State: AOJu0YzV0OKJqhn9Ql8sIOtjRYG+tqteyHMCMoAxjpVD2P1AOY/jemji
-	yz7b0Ki2hCYWFcYGBfgg8dKkxj6mwO0SWKz2TDwkwDNq1JuMgYvR61co
-X-Gm-Gg: ASbGncs8ZTrQqr7vKLHgg60RUZJWyPIoEzJzEonIM1vj0Gt9+Zr+sk8qe3tjT2F4UM1
-	xBXYENzf9yeT+GSQGkCuLXkmErSXneRearhKu9Si6azdZc4utyhuvBrMvBIUl7ceEm7hHS78/iu
-	etK8vPisuUo17HRA7YCoPDpmc0vNWYkauXyxLuBLjMtA/0HZVR1VlvKOP07RXdy4y1XmTXeThVx
-	28+GvgHI+cMnI22iIax63FgE7rOwxW89iLd+NIOkIojaVHKApzGhU9v+Jtk3tQwrUAgfs/aCdzP
-	vkg5l3Q3mKYzeA+QNllPwyAVgou28BT40qB5dNFsee3dhZQn/EB/OWwQ5O/y58lEjn4sWv6MC7d
-	6aCXkuMyvyclBVE/KIRS4m9ws9YwG6PCQdaIJ/mt4IfYN+EgsxcZPIGvQ/3zhzXpwTrmHyhgabn
-	7HpKc+/A8=
-X-Google-Smtp-Source: AGHT+IFuIFRdqHBZCko8vFOdNi4YwrG+SNtH2f5JJFAo5fww3TZYrgIbpWxJK/MEue66sSX1sYEkLQ==
-X-Received: by 2002:a05:6000:1ac6:b0:3df:f065:ca13 with SMTP id ffacd0b85a97d-3e64392b761mr17129810f8f.33.1757598577050;
-        Thu, 11 Sep 2025 06:49:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757598581; x=1758203381;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AJBOYBviiAkHEGuAebJYs1rSMwBP/rg8f5sw3Y1zhrU=;
+        b=KRYLrrsOfXcniLPuD0Exrpjgf6b7/04moPe3zpySEginn7eBKLB5X8PyarR1ABxXvJ
+         1KtqqS1tKyTd6kpCBVVRTJ3AegF1T5UTAzHA6FAJQGTODOkhYcZEsPbQmGW3twhtMT/M
+         BsQ7rArPkwSP5iiMH62VrODfQ5dN9874IDIatU2jyhJm6Cuyh7991dEwzcv+YPOQ6Lbb
+         HpuFVSiJ1Su2PDfVL1X0y+iCL0Z4DYumhJsD/UkUW7xOYqDbNlu7YI3dN562qx0qBAUs
+         rbwywd1fAxlT9A8484cYc1yaXl0eBKgml6LQ1t5Jz4ikxGHruyXm0/etp+TRlojoYbus
+         Tesg==
+X-Forwarded-Encrypted: i=1; AJvYcCWn82C4TXvKJSzgJANEQGQ3j/6ewA/r/ox+o4WGjVANRapS8TpjlvnzCYVSZ+j7D/s+hM3qeFVuhJvoeeD1WVtp@vger.kernel.org, AJvYcCXd1PM2TZCliiatFpIFgQmtaGNZ+G/G4eCTHviksrRgxxDzP/mG1NQD8a5yKuMhAj5bKhjDWv6Pk01ifqM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxqbqs5thuTrNeCT/91rPKZijgU8zhNndoTD99gH5Hmv58PeG10
+	Yfs/WLmn0+QyBzctNvmf6sPc7v1zh3gnINZTpnHYv1gY8iv96zInxHlx
+X-Gm-Gg: ASbGncvUm0QlDCrqA/+0xAD5iesLIDsMe5j3/0/0RnWy4k8sXF1B3O+f2Dn2xsYXWSY
+	WboyW43OCwB/E8PjUrkOfvTWmpitLq/qGQjSW3ZpM1mU17QxvA+Wp4Q/ONoKdViwIwyD2Y+JaXb
+	zX550VKOqPSogGe83NVcXHfxSCnfpG1Ou8fi/gJhrdR1nVf6vS6ivQL9hYbQLalFt27K8RUzRcm
+	Q0VDVZWf7h/voLH0zcpQXIzdOwcQ+d++A5l6g2ywY6gyzyUL4pfXkti6MQWvjNHgL2GiWp83IxL
+	hzL4sbYRhar+h2N+6UUUxXApeTjCFXUgHkKBbup1pWpW1sQzn7rE+w+jaP4h+WB76BG2b5ez06o
+	eDNdGtyAclsIpsRziW50Vj42cfAw55/dz4m4y8+brLOhatwIzPN9LRFnIDjcDpw==
+X-Google-Smtp-Source: AGHT+IF9gYWYpXj1cgrspFLvRu0yrW6lKAr/MmACXhsm2WBvm6knLxYnlrbbjGF1EG0D4ZDyCrnxvA==
+X-Received: by 2002:a05:600c:a103:b0:45b:910c:adf with SMTP id 5b1f17b1804b1-45dfd5e3d68mr29948455e9.12.1757598580729;
+        Thu, 11 Sep 2025 06:49:40 -0700 (PDT)
 Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.2.27])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e760778915sm2608361f8f.12.2025.09.11.06.49.35
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e760778915sm2608361f8f.12.2025.09.11.06.49.39
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 11 Sep 2025 06:49:36 -0700 (PDT)
+        Thu, 11 Sep 2025 06:49:40 -0700 (PDT)
 From: Jack Thomson <jackabt.amazon@gmail.com>
 To: maz@kernel.org,
 	oliver.upton@linux.dev,
@@ -90,10 +91,12 @@ Cc: joey.gouly@arm.com,
 	roypat@amazon.co.uk,
 	kalyazin@amazon.co.uk,
 	jackabt@amazon.com
-Subject: [PATCH 0/6] KVM ARM64 pre_fault_memory
-Date: Thu, 11 Sep 2025 14:46:42 +0100
-Message-Id: <20250911134648.58945-1-jackabt.amazon@gmail.com>
+Subject: [PATCH 1/6] KVM: arm64: Add __gmem_abort and __user_mem_abort
+Date: Thu, 11 Sep 2025 14:46:43 +0100
+Message-Id: <20250911134648.58945-2-jackabt.amazon@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250911134648.58945-1-jackabt.amazon@gmail.com>
+References: <20250911134648.58945-1-jackabt.amazon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -104,55 +107,88 @@ Content-Transfer-Encoding: 8bit
 
 From: Jack Thomson <jackabt@amazon.com>
 
-Overview:
+Adding __gmem_abort and __user_mem_abort that preserve -EAGAIN results.
+These will be used by the pre-fault implementation which needs to retry
+on -EAGAIN.
 
-This patch series adds ARM64 support for the KVM_PRE_FAULT_MEMORY
-feature, which was previously only available on x86 [1]. This allows
-a reduction in the number of stage-2 faults during execution. This is
-beneficial in post-copy migration scenarios, particularly in memory
-intensive applications, where high latencies are experienced due to
-the stage-2 faults when pre-populating memory via UFFD / memcpy.
+Also add an optional page_size output parameter to __user_mem_abort to
+return the VMA page size, which will be needed for pre-faulting.
 
-Patch Overview:
+No functional changes are intended
 
- - The first patch is a preparatory refactor.
+Signed-off-by: Jack Thomson <jackabt@amazon.com>
+---
+ arch/arm64/kvm/mmu.c | 36 +++++++++++++++++++++++++++++-------
+ 1 file changed, 29 insertions(+), 7 deletions(-)
 
- - The second patch is adding a page walk flag for pre-faulting.
-
- - The third patch adds support for the KVM_PRE_FAULT_MEMORY ioctl
-   on arm64.
-
- - The fourth patch fixes an issue with unaligned mmap allocations
-   in the selftests.
-
- - The fifth patch updates the pre_fault_memory_test to support
-   arm64.
-
- - The last patch extends the pre_fault_memory_test to cover
-   different vm memory backings.
-
-[1]: https://lore.kernel.org/kvm/20240710174031.312055-1-pbonzini@redhat.com
-
-Jack Thomson (6):
-  KVM: arm64: Add __gmem_abort and __user_mem_abort
-  KVM: arm64: Add KVM_PGTABLE_WALK_PRE_FAULT walk flag
-  KVM: arm64: Add pre_fault_memory implementation
-  KVM: selftests: Fix unaligned mmap allocations
-  KVM: selftests: Enable pre_fault_memory_test for arm64
-  KVM: selftests: Add option for different backing in pre-fault tests
-
- arch/arm64/include/asm/kvm_pgtable.h          |   3 +
- arch/arm64/kvm/Kconfig                        |   1 +
- arch/arm64/kvm/arm.c                          |   1 +
- arch/arm64/kvm/hyp/pgtable.c                  |   6 +-
- arch/arm64/kvm/mmu.c                          |  97 +++++++++++++--
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +-
- .../selftests/kvm/pre_fault_memory_test.c     | 110 +++++++++++++-----
- 8 files changed, 186 insertions(+), 45 deletions(-)
-
-
-base-commit: 42188667be387867d2bf763d028654cbad046f7b
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index a36426ccd9b5..082e7d8ae655 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -1521,9 +1521,9 @@ static void adjust_nested_fault_perms(struct kvm_s2_trans *nested,
+ 
+ #define KVM_PGTABLE_WALK_MEMABORT_FLAGS (KVM_PGTABLE_WALK_HANDLE_FAULT | KVM_PGTABLE_WALK_SHARED)
+ 
+-static int gmem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+-		      struct kvm_s2_trans *nested,
+-		      struct kvm_memory_slot *memslot, bool is_perm)
++static int __gmem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
++			struct kvm_s2_trans *nested,
++			struct kvm_memory_slot *memslot, bool is_perm)
+ {
+ 	bool write_fault, exec_fault, writable;
+ 	enum kvm_pgtable_walk_flags flags = KVM_PGTABLE_WALK_MEMABORT_FLAGS;
+@@ -1592,13 +1592,22 @@ static int gmem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+ 	if (writable && !ret)
+ 		mark_page_dirty_in_slot(kvm, memslot, gfn);
+ 
++	return ret;
++}
++
++static int gmem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
++		      struct kvm_s2_trans *nested,
++		      struct kvm_memory_slot *memslot, bool is_perm)
++{
++	int ret = __gmem_abort(vcpu, fault_ipa, nested, memslot, is_perm);
+ 	return ret != -EAGAIN ? ret : 0;
+ }
+ 
+-static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+-			  struct kvm_s2_trans *nested,
+-			  struct kvm_memory_slot *memslot, unsigned long hva,
+-			  bool fault_is_perm)
++static int __user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
++			    struct kvm_s2_trans *nested,
++			    struct kvm_memory_slot *memslot,
++			    long *page_size, unsigned long hva,
++			    bool fault_is_perm)
+ {
+ 	int ret = 0;
+ 	bool topup_memcache;
+@@ -1871,10 +1880,23 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+ 	kvm_release_faultin_page(kvm, page, !!ret, writable);
+ 	kvm_fault_unlock(kvm);
+ 
++	if (page_size)
++		*page_size = vma_pagesize;
++
+ 	/* Mark the page dirty only if the fault is handled successfully */
+ 	if (writable && !ret)
+ 		mark_page_dirty_in_slot(kvm, memslot, gfn);
+ 
++	return ret;
++}
++
++static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
++			  struct kvm_s2_trans *nested,
++			  struct kvm_memory_slot *memslot, unsigned long hva,
++			  bool fault_is_perm)
++{
++	int ret = __user_mem_abort(vcpu, fault_ipa, nested, memslot, NULL,
++			    hva, fault_is_perm);
+ 	return ret != -EAGAIN ? ret : 0;
+ }
+ 
 -- 
 2.43.0
 
