@@ -1,356 +1,305 @@
-Return-Path: <linux-kselftest+bounces-41219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE8EFB52D53
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 11:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ADEAEB52E18
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 12:15:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D42931C856B9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 09:32:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE8D3189F1A2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 10:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B2B2E610B;
-	Thu, 11 Sep 2025 09:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166A32773EC;
+	Thu, 11 Sep 2025 10:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DaoX3LOV"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Mg3Bl/KA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fra-out-002.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-002.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.65.3.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B3B207A32;
-	Thu, 11 Sep 2025 09:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE1D265CC9;
+	Thu, 11 Sep 2025 10:15:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.65.3.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757583099; cv=none; b=lc8IRGGTXzLQniZHiBoMe9zTOgg/t/AgZ/GuzOxGxdnx+UbIpjX0mbSp21g3zGa9ntqe7tq9u4yA7DZJBhT1OIs8R56+N4IsgbSBv0r4IY0cZNmuXTuuWAr03HZXaIskNhTM86BVI8u3pdtcO+UgX3qdE13nKc4DVMjDyH9t/Ac=
+	t=1757585727; cv=none; b=owX07q4+xMSqOLyMKvD9TEfntybDI8P9ACDiSC1/4PUoI/6VoKBLxveGzli/mbppi5OQuhQv9twAZB8bVYb2RzErq9d5kkkgpIBdjjE0HPPJj2TqUPo10NZ+fuC1zCPBdQlh5GHMzb5ol1UyaFhkwTIX7lq+FrrHl6Y4WlzXywg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757583099; c=relaxed/simple;
-	bh=z75pw58mpU1J8jn8uDK81j/Jt6tUNtkYOdcRD35A4/A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rSlVXTxblyII5LZHMFb7yLqZR3c6WstVeVKfI+85SXyqyFF/bXUABRRs+zEiAIFD7Fg8iWBebfjMPvMrNVE2oqz8bjlO2+SD2vg+6R5i83mHOv8ct1OC2qWBGXvG9Pfs0CSNZfGJpMf4WaTbQJcDjdY/d2vaxbFTkMdhl52kQzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DaoX3LOV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F021C4CEF0;
-	Thu, 11 Sep 2025 09:31:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757583099;
-	bh=z75pw58mpU1J8jn8uDK81j/Jt6tUNtkYOdcRD35A4/A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DaoX3LOV/jnceBoXDY0xHveKTV+2Iv/EfwWkiwJE6aNm57SGFK25WfhxafNju5RJy
-	 iz/QiR2A19eGrqXnNXpg+AyR+ipcRR0nBnXyEgJdGiMJmouIuaaA559rhYXeD/eF4+
-	 iyvnu5SQdc1qh0li51LCmsdDh4ByxqaIvEI7v0r5Lq96pqSX0IbpKTt+1gE6JAKAIB
-	 1utZ83kizHL1Yk7zSIF8IJuw3DNtG7Y3q+QjrFNF74VkPNT+K5n0V4sq8kRQ8liGfA
-	 x22V1tXu98kmCdVkkKN+gdULo1tIH7pCd//ufri8sZ6fVTfJbTTiA9A7J4UqtEBYVj
-	 4mRQg1Pq+Wq3w==
-Date: Thu, 11 Sep 2025 11:31:30 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org, 
-	Josef Bacik <josef@toxicpanda.com>, Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>, 
-	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>, 
-	Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 27/32] nsfs: support file handles
-Message-ID: <20250911-werken-raubzug-64735473739c@brauner>
-References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
- <20250910-work-namespace-v1-27-4dd56e7359d8@kernel.org>
- <CAOQ4uxgtQQa-jzsnTBxgUTPzgtCiAaH8X6ffMqd+1Y5Jjy0dmQ@mail.gmail.com>
+	s=arc-20240116; t=1757585727; c=relaxed/simple;
+	bh=qfByK8A76quZCJEvUoRsX5AtGpNwGrhhYA7hmt70vco=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ZVnSM68PPVSHlASFZNI5ANF2TOxBV0ChzlMELQ36fJ3rZ+49BsYLvCF0ZYQy/rz6bn0ex3H0BZdZDFDOVJ/z3HhVx5V069qurabb0zFeDCr6hO6NtR5ZXB9uQk6591WNsYGFBajv6aWHVWPAbTEJdzQUrQLUfhBSLk6H6OF2DGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Mg3Bl/KA; arc=none smtp.client-ip=3.65.3.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1757585725; x=1789121725;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=pBOXF5cUR6LGzOYbM3tKNFJCTf0YPJn8QfNkLLZc7fE=;
+  b=Mg3Bl/KAOv75OLQbJDX7RzC7bOOSL5gveYgoKSP1ndbR8VI9z0WHfPCP
+   2C+de8ZvZ3HXIjCUjp2ZauTchEzlLdhrxf8V+iXFhtVdu0LF+BlFK+9XH
+   Z7P8nA9gVnbzYc00FaZNgKr5Ovj5BKATO2Vo5u0meN6NCkMQZ3d8FYrCa
+   AMSXwkw9sW7VX/jkRpR4M3kJ/t5AM8kIVasWNJGPVUp+TVtMEbGYhX5us
+   ccbsXlE5EQisTH+uuzdRSNMrXLCx00GwwDcSGK+Ow7/hoHCR2DoDOmDeQ
+   GbJm2SaRgImym3b3n/OA6nV1HILEjW3Qc6aMUE7eySFYyNvIXXRuFeZQb
+   A==;
+X-CSE-ConnectionGUID: jRxUyoo3QmawX2nqYiay6w==
+X-CSE-MsgGUID: LuAmflx1Qx2BllfjvK602Q==
+X-IronPort-AV: E=Sophos;i="6.18,257,1751241600"; 
+   d="scan'208";a="1955965"
+Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
+  by internal-fra-out-002.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 10:15:14 +0000
+Received: from EX19MTAEUA002.ant.amazon.com [54.240.197.232:9714]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.44.170:2525] with esmtp (Farcaster)
+ id 1b8c8f7a-af85-4246-b525-572a67d46c92; Thu, 11 Sep 2025 10:15:14 +0000 (UTC)
+X-Farcaster-Flow-ID: 1b8c8f7a-af85-4246-b525-572a67d46c92
+Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
+ EX19MTAEUA002.ant.amazon.com (10.252.50.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Thu, 11 Sep 2025 10:15:14 +0000
+Received: from [192.168.31.34] (10.106.82.9) by EX19D022EUC002.ant.amazon.com
+ (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Thu, 11 Sep 2025
+ 10:15:13 +0000
+Message-ID: <87d562a1-89fe-42a8-aa53-c052acf4c564@amazon.com>
+Date: Thu, 11 Sep 2025 11:15:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v5 1/2] KVM: guest_memfd: add generic population via write
+To: James Houghton <jthoughton@google.com>, "Kalyazin, Nikita"
+	<kalyazin@amazon.co.uk>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"michael.day@amd.com" <michael.day@amd.com>, "david@redhat.com"
+	<david@redhat.com>, "Roy, Patrick" <roypat@amazon.co.uk>, "Thomson, Jack"
+	<jackabt@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>, "Cali,
+ Marco" <xmarcalx@amazon.co.uk>
+References: <20250902111951.58315-1-kalyazin@amazon.com>
+ <20250902111951.58315-2-kalyazin@amazon.com>
+ <CADrL8HV8+dh4xPv6Da5CR+CwGJwg5uHyNmiVmHhWFJSwy8ChRw@mail.gmail.com>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <CADrL8HV8+dh4xPv6Da5CR+CwGJwg5uHyNmiVmHhWFJSwy8ChRw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxgtQQa-jzsnTBxgUTPzgtCiAaH8X6ffMqd+1Y5Jjy0dmQ@mail.gmail.com>
+X-ClientProxiedBy: EX19D014EUC002.ant.amazon.com (10.252.51.161) To
+ EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
-On Wed, Sep 10, 2025 at 07:21:22PM +0200, Amir Goldstein wrote:
-> On Wed, Sep 10, 2025 at 4:39 PM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > A while ago we added support for file handles to pidfs so pidfds can be
-> > encoded and decoded as file handles. Userspace has adopted this quickly
-> > and it's proven very useful.
+
+
+On 10/09/2025 22:23, James Houghton wrote:
+> On Tue, Sep 2, 2025 at 4:20 AM Kalyazin, Nikita <kalyazin@amazon.co.uk> wrote:
+>>
+>> From: Nikita Kalyazin <kalyazin@amazon.com>
 > 
-> > Pidfd file handles are exhaustive meaning
-> > they don't require a handle on another pidfd to pass to
-> > open_by_handle_at() so it can derive the filesystem to decode in.
-> >
-> > Implement the exhaustive file handles for namespaces as well.
+> Hi Nikita,
+
+Hi James,
+
+Thanks for the review!
+
+
+>>
+>> write syscall populates guest_memfd with user-supplied data in a generic
+>> way, ie no vendor-specific preparation is performed.  This is supposed
+>> to be used in non-CoCo setups where guest memory is not
+>> hardware-encrypted.
 > 
-> I think you decide to split the "exhaustive" part to another patch,
-> so better drop this paragraph?
+> What's meant to happen if we do use this for CoCo VMs? I would expect
+> write() to fail, but I don't see why it would (seems like we need/want
+> a check that we aren't write()ing to private memory).
 
-Yes, good point. I've dont that.
+I am not so sure that write() should fail even in CoCo VMs if we access 
+not-yet-prepared pages.  My understanding was that the CoCoisation of 
+the memory occurs during "preparation".  But I may be wrong here.
 
-> I am missing an explanation about the permissions for
-> opening these file handles.
-> 
-> My understanding of the code is that the opener needs to meet one of
-> the conditions:
-> 1. user has CAP_SYS_ADMIN in the userns owning the opened namespace
-> 2. current task is in the opened namespace
-
-Yes.
-
-> 
-> But I do not fully understand the rationale behind the 2nd condition,
-> that is, when is it useful?
-
-A caller is always able to open a file descriptor to it's own set of
-namespaces. File handles will behave the same way.
-
-> And as far as I can tell, your selftest does not cover this condition
-> (only both true or both false)?
-
-I've added this now.
 
 > 
-> I suggest to start with allowing only the useful and important
-> cases, so if cond #1 is useful enough, drop cond #2 and we can add
-> it later if needed and then your selftests already cover cond #1 true and false.
+>> The following behaviour is implemented:
+>>   - only page-aligned count and offset are allowed
+>>   - if the memory is already allocated, the call will successfully
+>>     populate it
+>>   - if the memory is not allocated, the call will both allocate and
+>>     populate
+>>   - if the memory is already populated, the call will not repopulate it
+>>
+>> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+>> ---
+>>   virt/kvm/guest_memfd.c | 64 +++++++++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 63 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+>> index 08a6bc7d25b6..a2e86ec13e4b 100644
+>> --- a/virt/kvm/guest_memfd.c
+>> +++ b/virt/kvm/guest_memfd.c
+>> @@ -379,7 +379,9 @@ static int kvm_gmem_mmap(struct file *file, struct vm_area_struct *vma)
+>>   }
+>>
+>>   static struct file_operations kvm_gmem_fops = {
+>> -       .mmap           = kvm_gmem_mmap,
+>> +       .mmap           = kvm_gmem_mmap,
+>> +       .llseek         = default_llseek,
+>> +       .write_iter     = generic_perform_write,
 > 
-> >
-> > Signed-off-by: Christian Brauner <brauner@kernel.org>
-> 
-> After documenting the permissions, with ot without dropping cond #2
-> feel free to add:
-> 
-> Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+> You seem to have accidentally replaced some tabs with spaces here. :)
+> Please keep the style consistent.
 
-Thanks!
+Thanks for spotting that, will fix in the next version!
+
 
 > 
-> > ---
-> >  fs/nsfs.c                | 176 +++++++++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/exportfs.h |   6 ++
-> >  2 files changed, 182 insertions(+)
-> >
-> > diff --git a/fs/nsfs.c b/fs/nsfs.c
-> > index 6f8008177133..a1585a2f4f03 100644
-> > --- a/fs/nsfs.c
-> > +++ b/fs/nsfs.c
-> > @@ -13,6 +13,12 @@
-> >  #include <linux/nsfs.h>
-> >  #include <linux/uaccess.h>
-> >  #include <linux/mnt_namespace.h>
-> > +#include <linux/ipc_namespace.h>
-> > +#include <linux/time_namespace.h>
-> > +#include <linux/utsname.h>
-> > +#include <linux/exportfs.h>
-> > +#include <linux/nstree.h>
-> > +#include <net/net_namespace.h>
-> >
-> >  #include "mount.h"
-> >  #include "internal.h"
-> > @@ -417,12 +423,182 @@ static const struct stashed_operations nsfs_stashed_ops = {
-> >         .put_data = nsfs_put_data,
-> >  };
-> >
-> > +struct nsfs_fid {
-> > +       u64 ns_id;
-> > +       u32 ns_type;
-> > +       u32 ns_inum;
-> > +} __attribute__ ((packed));
-> > +
-> > +#define NSFS_FID_SIZE (sizeof(struct nsfs_fid) / sizeof(u32))
-> > +
-> > +static int nsfs_encode_fh(struct inode *inode, u32 *fh, int *max_len,
-> > +                         struct inode *parent)
-> > +{
-> > +       struct nsfs_fid *fid = (struct nsfs_fid *)fh;
-> > +       struct ns_common *ns = inode->i_private;
-> > +       int len = *max_len;
-> > +
-> > +       /*
-> > +        * TODO:
-> > +        * For hierarchical namespaces we should start to encode the
-> > +        * parent namespace. Then userspace can walk a namespace
-> > +        * hierarchy purely based on file handles.
-> > +        */
-> > +       if (parent)
-> > +               return FILEID_INVALID;
-> > +
-> > +       if (len < NSFS_FID_SIZE) {
-> > +               *max_len = NSFS_FID_SIZE;
-> > +               return FILEID_INVALID;
-> > +       }
-> > +
-> > +       len  = NSFS_FID_SIZE;
-> > +
-> > +       fid->ns_id = ns->ns_id;
-> > +       fid->ns_type = ns->ops->type;
-> > +       fid->ns_inum = inode->i_ino;
-> > +       *max_len = len;
-> > +       return FILEID_NSFS;
-> > +}
-> > +
-> > +static struct dentry *nsfs_fh_to_dentry(struct super_block *sb, struct fid *fh,
-> > +                                       int fh_len, int fh_type)
-> > +{
-> > +       struct path path __free(path_put) = {};
-> > +       struct nsfs_fid *fid = (struct nsfs_fid *)fh;
-> > +       struct user_namespace *owning_ns = NULL;
-> > +       struct ns_common *ns;
-> > +       int ret;
-> > +
-> > +       if (fh_len < NSFS_FID_SIZE)
-> > +               return NULL;
-> > +
-> > +       switch (fh_type) {
-> > +       case FILEID_NSFS:
-> > +               break;
-> > +       default:
-> > +               return NULL;
-> > +       }
-> > +
-> > +       scoped_guard(rcu) {
-> > +               ns = ns_tree_lookup_rcu(fid->ns_id, fid->ns_type);
-> > +               if (!ns)
-> > +                       return NULL;
-> > +
-> > +               VFS_WARN_ON_ONCE(ns->ns_id != fid->ns_id);
-> > +               VFS_WARN_ON_ONCE(ns->ops->type != fid->ns_type);
-> > +               VFS_WARN_ON_ONCE(ns->inum != fid->ns_inum);
-> > +
-> > +               if (!refcount_inc_not_zero(&ns->count))
-> > +                       return NULL;
-> > +       }
-> > +
-> > +       switch (ns->ops->type) {
-> > +#ifdef CONFIG_CGROUPS
-> > +       case CLONE_NEWCGROUP:
-> > +               if (!current_in_namespace(to_cg_ns(ns)))
-> > +                       owning_ns = to_cg_ns(ns)->user_ns;
-> > +               break;
-> > +#endif
-> > +#ifdef CONFIG_IPC_NS
-> > +       case CLONE_NEWIPC:
-> > +               if (!current_in_namespace(to_ipc_ns(ns)))
-> > +                       owning_ns = to_ipc_ns(ns)->user_ns;
-> > +               break;
-> > +#endif
-> > +       case CLONE_NEWNS:
-> > +               if (!current_in_namespace(to_mnt_ns(ns)))
-> > +                       owning_ns = to_mnt_ns(ns)->user_ns;
-> > +               break;
-> > +#ifdef CONFIG_NET_NS
-> > +       case CLONE_NEWNET:
-> > +               if (!current_in_namespace(to_net_ns(ns)))
-> > +                       owning_ns = to_net_ns(ns)->user_ns;
-> > +               break;
-> > +#endif
-> > +#ifdef CONFIG_PID_NS
-> > +       case CLONE_NEWPID:
-> > +               if (!current_in_namespace(to_pid_ns(ns))) {
-> > +                       owning_ns = to_pid_ns(ns)->user_ns;
-> > +               } else if (!READ_ONCE(to_pid_ns(ns)->child_reaper)) {
-> > +                       ns->ops->put(ns);
-> > +                       return ERR_PTR(-EPERM);
-> > +               }
-> > +               break;
-> > +#endif
-> > +#ifdef CONFIG_TIME_NS
-> > +       case CLONE_NEWTIME:
-> > +               if (!current_in_namespace(to_time_ns(ns)))
-> > +                       owning_ns = to_time_ns(ns)->user_ns;
-> > +               break;
-> > +#endif
-> > +#ifdef CONFIG_USER_NS
-> > +       case CLONE_NEWUSER:
-> > +               if (!current_in_namespace(to_user_ns(ns)))
-> > +                       owning_ns = to_user_ns(ns);
-> > +               break;
-> > +#endif
-> > +#ifdef CONFIG_UTS_NS
-> > +       case CLONE_NEWUTS:
-> > +               if (!current_in_namespace(to_uts_ns(ns)))
-> > +                       owning_ns = to_uts_ns(ns)->user_ns;
-> > +               break;
-> > +#endif
-> > +       default:
-> > +               return ERR_PTR(-EOPNOTSUPP);
-> > +       }
-> > +
-> > +       if (owning_ns && !ns_capable(owning_ns, CAP_SYS_ADMIN)) {
-> > +               ns->ops->put(ns);
-> > +               return ERR_PTR(-EPERM);
-> > +       }
-> > +
-> > +       /* path_from_stashed() unconditionally consumes the reference. */
-> > +       ret = path_from_stashed(&ns->stashed, nsfs_mnt, ns, &path);
-> > +       if (ret)
-> > +               return ERR_PTR(ret);
-> > +
-> > +       return no_free_ptr(path.dentry);
-> > +}
-> > +
-> > +/*
-> > + * Make sure that we reject any nonsensical flags that users pass via
-> > + * open_by_handle_at().
-> > + */
-> > +#define VALID_FILE_HANDLE_OPEN_FLAGS \
-> > +       (O_RDONLY | O_WRONLY | O_RDWR | O_NONBLOCK | O_CLOEXEC | O_EXCL)
-> > +
-> > +static int nsfs_export_permission(struct handle_to_path_ctx *ctx,
-> > +                                  unsigned int oflags)
-> > +{
-> > +       if (oflags & ~(VALID_FILE_HANDLE_OPEN_FLAGS | O_LARGEFILE))
-> > +               return -EINVAL;
-> > +
-> > +       /* nsfs_fh_to_dentry() is performs further permission checks. */
-> > +       return 0;
-> > +}
-> > +
-> > +static struct file *nsfs_export_open(struct path *path, unsigned int oflags)
-> > +{
-> > +       /* Clear O_LARGEFILE as open_by_handle_at() forces it. */
-> > +       oflags &= ~O_LARGEFILE;
-> > +       return file_open_root(path, "", oflags, 0);
-> > +}
-> > +
-> > +static const struct export_operations nsfs_export_operations = {
-> > +       .encode_fh      = nsfs_encode_fh,
-> > +       .fh_to_dentry   = nsfs_fh_to_dentry,
-> > +       .open           = nsfs_export_open,
-> > +       .permission     = nsfs_export_permission,
-> > +};
-> > +
-> >  static int nsfs_init_fs_context(struct fs_context *fc)
-> >  {
-> >         struct pseudo_fs_context *ctx = init_pseudo(fc, NSFS_MAGIC);
-> >         if (!ctx)
-> >                 return -ENOMEM;
-> >         ctx->ops = &nsfs_ops;
-> > +       ctx->eops = &nsfs_export_operations;
-> >         ctx->dops = &ns_dentry_operations;
-> >         fc->s_fs_info = (void *)&nsfs_stashed_ops;
-> >         return 0;
-> > diff --git a/include/linux/exportfs.h b/include/linux/exportfs.h
-> > index cfb0dd1ea49c..3aac58a520c7 100644
-> > --- a/include/linux/exportfs.h
-> > +++ b/include/linux/exportfs.h
-> > @@ -122,6 +122,12 @@ enum fid_type {
-> >         FILEID_BCACHEFS_WITHOUT_PARENT = 0xb1,
-> >         FILEID_BCACHEFS_WITH_PARENT = 0xb2,
-> >
-> > +       /*
-> > +        *
-> > +        * 64 bit namespace identifier, 32 bit namespace type, 32 bit inode number.
-> > +        */
-> > +       FILEID_NSFS = 0xf1,
-> > +
-> >         /*
-> >          * 64 bit unique kernfs id
-> >          */
-> >
-> > --
-> > 2.47.3
-> >
+>>          .open           = generic_file_open,
+>>          .release        = kvm_gmem_release,
+>>          .fallocate      = kvm_gmem_fallocate,
+>> @@ -390,6 +392,63 @@ void kvm_gmem_init(struct module *module)
+>>          kvm_gmem_fops.owner = module;
+>>   }
+>>
+>> +static int kvm_kmem_gmem_write_begin(const struct kiocb *kiocb,
+>> +                                    struct address_space *mapping,
+>> +                                    loff_t pos, unsigned int len,
+>> +                                    struct folio **foliop,
+>> +                                    void **fsdata)
+>> +{
+>> +       struct file *file = kiocb->ki_filp;
+>> +       pgoff_t index = pos >> PAGE_SHIFT;
+>> +       struct folio *folio;
+>> +
+>> +       if (!PAGE_ALIGNED(pos) || len != PAGE_SIZE)
+>> +               return -EINVAL;
+> 
+> Requiring pos to be page-aligned seems like a strange restriction, and
+> requiring len to be exactly PAGE_SIZE just seems wrong. I don't see
+> any reason why the below logic can't be made to work with an
+> unrestricted pos and len (in other words, I don't see how guest_memfd
+> is special vs other filesystems in this regard).
+
+I don't have a real reason to apply those restrictions.  Happy to remove 
+them, thanks.
+
+
+> 
+>> +
+>> +       if (pos + len > i_size_read(file_inode(file)))
+>> +               return -EINVAL;
+>> +
+>> +       folio = kvm_gmem_get_folio(file_inode(file), index);
+>> +       if (IS_ERR(folio))
+>> +               return -EFAULT;
+>> +
+>> +       if (WARN_ON_ONCE(folio_test_large(folio))) {
+>> +               folio_unlock(folio);
+>> +               folio_put(folio);
+>> +               return -EFAULT;
+>> +       }
+>> +
+>> +       if (folio_test_uptodate(folio)) {
+>> +               folio_unlock(folio);
+>> +               folio_put(folio);
+>> +               return -ENOSPC;
+> 
+> Does it actually matter for the folio not to be uptodate? It seems
+> unnecessarily restrictive not to be able to overwrite data if we're
+> saying that this is only usable for unencrypted memory anyway.
+
+In the context of direct map removal [1] it does actually because when 
+we mark a folio as prepared, we remove it from the direct map making it 
+inaccessible to the way write() performs the copy.  It does not matter 
+if direct map removal isn't enabled though.  Do you think it should be 
+conditional?
+
+[1]: https://lore.kernel.org/kvm/20250828093902.2719-1-roypat@amazon.co.uk
+
+> 
+> Is ENOSPC really the right errno for this? (Maybe -EFAULT?)
+
+I don't have a strong opinion here.  My reasoning was if the folio is 
+already "sealed" by the direct map removal, then it is no longer a part 
+of the "writable space", so -ENOSPC makes sense.  Maybe this intuition 
+only works for me so I'm happy to change to -EFAULT if it looks less 
+confusing.
+
+
+> 
+>> +       }
+>> +
+>> +       *foliop = folio;
+>> +       return 0;
+>> +}
+>> +
+>> +static int kvm_kmem_gmem_write_end(const struct kiocb *kiocb,
+>> +                                  struct address_space *mapping,
+>> +                                  loff_t pos, unsigned int len,
+>> +                                  unsigned int copied,
+>> +                                  struct folio *folio, void *fsdata)
+>> +{
+>> +       if (copied) {
+>> +               if (copied < len) {
+>> +                       unsigned int from = pos & (PAGE_SIZE - 1);
+> 
+> How about:
+> 
+> unsigned int from  = pos & ((1UL << folio_order(*folio)) - 1)
+> 
+> So that we don't need to require !folio_test_large() in
+> kvm_kmem_gmem_write_begin().
+
+Thanks, will apply to the next version.
+
+
+> 
+>> +
+>> +                       folio_zero_range(folio, from + copied, len - copied);
+>> +               }
+>> +               kvm_gmem_mark_prepared(folio);
+>> +       }
+>> +
+>> +       folio_unlock(folio);
+>> +       folio_put(folio);
+>> +
+>> +       return copied;
+>> +}
+>> +
+>>   static int kvm_gmem_migrate_folio(struct address_space *mapping,
+>>                                    struct folio *dst, struct folio *src,
+>>                                    enum migrate_mode mode)
+>> @@ -442,6 +501,8 @@ static void kvm_gmem_free_folio(struct folio *folio)
+>>
+>>   static const struct address_space_operations kvm_gmem_aops = {
+>>          .dirty_folio = noop_dirty_folio,
+>> +       .write_begin = kvm_kmem_gmem_write_begin,
+>> +       .write_end = kvm_kmem_gmem_write_end,
+>>          .migrate_folio  = kvm_gmem_migrate_folio,
+>>          .error_remove_folio = kvm_gmem_error_folio,
+>>   #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE
+>> @@ -489,6 +550,7 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
+>>          }
+>>
+>>          file->f_flags |= O_LARGEFILE;
+>> +       file->f_mode |= FMODE_LSEEK | FMODE_PWRITE;
+>>
+>>          inode = file->f_inode;
+>>          WARN_ON(file->f_mapping != inode->i_mapping);
+>> --
+>> 2.50.1
+>>
+
 
