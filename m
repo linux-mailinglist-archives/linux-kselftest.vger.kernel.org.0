@@ -1,155 +1,120 @@
-Return-Path: <linux-kselftest+bounces-41221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D8ABB52E1B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 12:15:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6253B52E29
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 12:18:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 284381BC5520
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 10:16:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 287671C25CEE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Sep 2025 10:18:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A98330E852;
-	Thu, 11 Sep 2025 10:15:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8262630F928;
+	Thu, 11 Sep 2025 10:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Dk93IZ+i"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Zd/CHr04"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.197.217.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0039823BD02;
-	Thu, 11 Sep 2025 10:15:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.197.217.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3452EDD52
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Sep 2025 10:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757585735; cv=none; b=i4LeUqgo8c9JVzvZN6huQiPoIKrPODMzFKS5NaF03p4yvnjyFNzzlCi4o/8BxUSPOIJMkwUvTgWzH8ON0VveI7sNu0m3haeOHfn/eGh5kqbNObYYRr6rpUb53sLE9X8Kh99R/MlEfzeBmvDGCzNpHUKFrTBh8dmn1JyjtnU8e0A=
+	t=1757585911; cv=none; b=Bf7gfqSAApSjXWsWs6QJAr1eMI5XjxjGeMlOJjtTa64BQwoliCp0181oiRgZgNOKW9I63hdx1O6DYPkm6gqmmWnndZKxWqEvxSdo7Z1SZnfAnUUvhHfvPehnMGYiPxt2CJirDCziIvF8Sor3TeGdg+Jaisg1bBp7WAgSvZkAR1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757585735; c=relaxed/simple;
-	bh=zVuHD9vaq/3pO7cQ+cA50BEiEgbiOPRCKoedY0PeuiU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=EXHYNUvOsnLvnYAJffMHum583Ac3ByqtbxdRV50CjLt3uZ+R9v35JWkgArxmt/Rt/fW90FIvQS1TvdbAXqoMirrXumRV/YzqefGZEIJWEYCfsSZG8ATHDkl8V0poH0lW8sXxpglnsEEHLMxyzREjHz8/+FAY3c/ifs+D2uZCaY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Dk93IZ+i; arc=none smtp.client-ip=18.197.217.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1757585911; c=relaxed/simple;
+	bh=b8kOCoUNiju/FWlmhh2Efh6jL8KK7YKRK8N0sSL+ihY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RQJ9pW1BFLIOyW1irlQK4LnUGUnGrn7FTgSI+KKZ73Ae0CULbKLLtewTEprwheYH/k7sVQxCQjXhP4KR7UHeFRLwkIrm5OS3Y0IkdIsFgbzEWsQNuj1b1svnjKmuVz3rhA4i2SPQ7JenOmVei3NhrP5q98yTZSqRijtKLYjh1ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Zd/CHr04; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4b3d3f6360cso5962601cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Sep 2025 03:18:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1757585733; x=1789121733;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=bRWwjxoC0kopJP7U5YHCw9aNNJL05/1S4i7yC6Ve5SA=;
-  b=Dk93IZ+icizXPX6c+nWzGC9GlL03pJlwltVEzwDtSfv7fYr6KWdKmkBt
-   bkCQ7zGK+4s2ePfVVriJcU1EZaHuQJdiaUWC1kipReh8XMFzg56LoRwXF
-   6GJLTOd5d4eC3A5QvGivU6F/GJ4fPQUGFpMPeDBjLX6tllSn68HCLZD+Y
-   dkJ1TaIKMk1ecPD1SvKJ9hiUpW7IlKk5jDba0aNG3ERq9toq/kvLkThKi
-   /OV96Jk8PZ3Wkm+sTQCouOq+F9ZlFUdo8B4HFtJ6dV010vDDF8wGyls9S
-   BlRWaQxGebQgkTKUzqagj96SZJXw2iZIdGpIWAYjVBnygt7MD8F/nehqg
-   w==;
-X-CSE-ConnectionGUID: eG2z8AMzS0iqf4J2MlqNOw==
-X-CSE-MsgGUID: MV6yqWC/RfW7emLLnuScfg==
-X-IronPort-AV: E=Sophos;i="6.18,257,1751241600"; 
-   d="scan'208";a="1954634"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 10:15:19 +0000
-Received: from EX19MTAEUB001.ant.amazon.com [54.240.197.234:26875]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.31.196:2525] with esmtp (Farcaster)
- id 4e420bf6-5c18-4b79-af7e-6ee7ec57638e; Thu, 11 Sep 2025 10:15:18 +0000 (UTC)
-X-Farcaster-Flow-ID: 4e420bf6-5c18-4b79-af7e-6ee7ec57638e
-Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
- EX19MTAEUB001.ant.amazon.com (10.252.51.26) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Thu, 11 Sep 2025 10:15:18 +0000
-Received: from [192.168.31.34] (10.106.82.9) by EX19D022EUC002.ant.amazon.com
- (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Thu, 11 Sep 2025
- 10:15:17 +0000
-Message-ID: <ad56d448-4016-46d8-90ca-f0f17f7587c7@amazon.com>
-Date: Thu, 11 Sep 2025 11:15:17 +0100
+        d=google.com; s=20230601; t=1757585909; x=1758190709; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b8kOCoUNiju/FWlmhh2Efh6jL8KK7YKRK8N0sSL+ihY=;
+        b=Zd/CHr04NiV8NK/uaWUmoo6yfow/Cm0ZQqeugNK/LjKfDLdzQSmpFAYY9SDXNibLYe
+         IHyaFVfLCp0VKbQZ+lsvYirwfOp6F5tBBVsAsjb/3lrtPf9W2Vc++e19PWYXIrS7v3eP
+         psh6KU0eZsU5vQ698A5+vN9NAkA6YdzJwTqvolvRWF8TI/3OC1lbSHrQGkqvrLvRpRIR
+         5LrWSTomqCnvN8BOPQn9yW1VYHfGRf2+uJs++Kg/o73obEGTwlg8keD793Z8OG11Ot8w
+         jjkqgYFTCmoQwkBoUXGSi9ffUqopG843/7ZrdJXLqVup9U8qQlF8mZXUdslGaeR+H5FT
+         p+4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757585909; x=1758190709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b8kOCoUNiju/FWlmhh2Efh6jL8KK7YKRK8N0sSL+ihY=;
+        b=WSR69rFix0d8i9hq5TweHVl4YQOiwwZfy+4u70uP1gXdt7uVikc1F1xFXEgLq5EnKy
+         7KJ9v734dhkYVFUQ/mfqriQcnjajFZCwk7prIsQiAfiVQ+F8/Phrz8rh9Gg6aC+wwDtj
+         OKP+xVSkItBP5DeKkwwqOeHkRK3ygd/B8LwHZspMyy9Ma6e2qu14Vgm5SfbVJbmEkSjG
+         wQXtg1BsbOZ2dWm5X9Qg/iJcVy7Z86splHnJyleNFdTxpK5BpFi9RkCzscGHednWbCw+
+         KgF7ccxdpaKu8+Ve2v92mtIHJp5s1F+jBtqiyEnCvUjoeEdoME/E8r5iKB5yr3fI1Hgp
+         btLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJK3W4q8pxcAc7lug8F6AixkxbJE89OCe4ZnlXpw4EXQo4RKoBJMRE1wjnt+RlU+wlQzaRpiU2fOAbDGowNb4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwX6uU9YyhFGLiPAJ2R5/jKteBveYdgmrgHzGeMuR9OQyMVLhGW
+	rzzhYQqy9GCSjBifDF/EuTzZoGpDmx9TWZeTchLGEeR6WfxG32GleIrYx478LNiBcx8Mu6JOn1y
+	96KczB/XuulOmGdWnEr/lNZZNCkLAFgp0wcegkpYn
+X-Gm-Gg: ASbGnctkEeTI9lII3OHfJEFMct8NWa8U0nNxURYaqu7qcLIRY2rLfrWL0bdZxnugHpR
+	xGedKJHbIz9OqB/I+9i0+7l3MA4E+zZZR4anEM1bhuywftxj/qzTx3JatQ5UrcH5WYzJsfbyT6a
+	+hITQGaepH3Q/6NTprrmQXet5QNyhbZevhP4r1mrwFTc7YAwuE6tJBc0HJoXkhw3oaxJogz8wUX
+	XoKoGgErMcxcF5r5uonVWPCvzQBRh1PK+0=
+X-Google-Smtp-Source: AGHT+IEqQMhkVh/lYGalDwkpiYZ6f35/G1vtOQ2l6IDxuZ/NsAD8i3LfdKsGnA8/soxwk9WffOfYsUldgmrLaRipwNs=
+X-Received: by 2002:ac8:5e49:0:b0:4b5:e822:36e0 with SMTP id
+ d75a77b69052e-4b5f839047fmr204347991cf.12.1757585908196; Thu, 11 Sep 2025
+ 03:18:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v5 0/2] KVM: guest_memfd: use write for population
-To: James Houghton <jthoughton@google.com>, "Kalyazin, Nikita"
-	<kalyazin@amazon.co.uk>
-CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "shuah@kernel.org"
-	<shuah@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"michael.day@amd.com" <michael.day@amd.com>, "david@redhat.com"
-	<david@redhat.com>, "Roy, Patrick" <roypat@amazon.co.uk>, "Thomson, Jack"
-	<jackabt@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>, "Cali,
- Marco" <xmarcalx@amazon.co.uk>
-References: <20250902111951.58315-1-kalyazin@amazon.com>
- <CADrL8HVEAUdg5eJrU+RveR1+s+9ArdO6wa7EntLQZMu_iwBm-w@mail.gmail.com>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <CADrL8HVEAUdg5eJrU+RveR1+s+9ArdO6wa7EntLQZMu_iwBm-w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: EX19D014EUC002.ant.amazon.com (10.252.51.161) To
- EX19D022EUC002.ant.amazon.com (10.252.51.137)
+References: <20250908173408.79715-1-chia-yu.chang@nokia-bell-labs.com> <20250908173408.79715-9-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20250908173408.79715-9-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 11 Sep 2025 03:18:17 -0700
+X-Gm-Features: Ac12FXyMpCAA7q3vBOdalZhfapQxJhqhSZEIpQwkhEKdjvw-ONLg3xPKC40oLaw
+Message-ID: <CANn89i+2=bNkkf89RysrYxb9DW0Vw9+jSg7FotqtaHZa7tmerA@mail.gmail.com>
+Subject: Re: [PATCH v17 net-next 08/14] tcp: accecn: AccECN needs to know
+ delivered bytes
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, linux-doc@vger.kernel.org, corbet@lwn.net, 
+	horms@kernel.org, dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com, 
+	kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com, 
+	jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch, 
+	donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org, 
+	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Sep 8, 2025 at 10:34=E2=80=AFAM <chia-yu.chang@nokia-bell-labs.com>=
+ wrote:
+>
+> From: Ilpo J=C3=A4rvinen <ij@kernel.org>
+>
+> AccECN byte counter estimation requires delivered bytes
+> which can be calculated while processing SACK blocks and
+> cumulative ACK. The delivered bytes will be used to estimate
+> the byte counters between AccECN option (on ACKs w/o the
+> option).
+>
+> Accurate ECN does not depend on SACK to function; however,
+> the calculation would be more accurate if SACK were there.
+>
+> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> Acked-by: Paolo Abeni <pabeni@redhat.com>
 
-
-On 10/09/2025 22:37, James Houghton wrote:
-> On Tue, Sep 2, 2025 at 4:20 AM Kalyazin, Nikita <kalyazin@amazon.co.uk> wrote:
->>
->> [ based on kvm/next ]
->>
->> Implement guest_memfd allocation and population via the write syscall.
->> This is useful in non-CoCo use cases where the host can access guest
->> memory.  Even though the same can also be achieved via userspace mapping
->> and memcpying from userspace, write provides a more performant option
->> because it does not need to set page tables and it does not cause a page
->> fault for every page like memcpy would.  Note that memcpy cannot be
->> accelerated via MADV_POPULATE_WRITE as it is  not supported by
->> guest_memfd and relies on GUP.
->>
->> Populating 512MiB of guest_memfd on a x86 machine:
->>   - via memcpy: 436 ms
->>   - via write:  202 ms (-54%)
-> 
-> Silly question: can you remind me why this speed-up is important?
-
-The speed-up is important for the Firecracker use case [1] because it is 
-likely for the population to stand on the hot path of the snapshot 
-restore process.  Even though we aim to prepopulate the guest memory 
-before it gets accessed by the guest, for large VMs the guest has a good 
-chance to hit a page that isn't yet populated triggering on-demand fault 
-handling which is much slower, and we'd like to avoid those as much as 
-we can.
-
-[1]: 
-https://github.com/firecracker-microvm/firecracker/blob/main/docs/snapshotting/handling-page-faults-on-snapshot-resume.md
-
-
-> 
-> Also, I think we can get the same effect as MADV_POPULATE_WRITE just
-> by making a second VMA for the memory file and reading the first byte
-> of each page. Is that a viable strategy for your use case?
-
-If I understand correctly what you mean, it doesn't look much different 
-from the memcpy option I mention above.  All those one-byte read 
-accesses will trigger user mapping faults for every page, and they are 
-quite slow.  write() allows to avoid them completely.
-
-
-> 
-> Seems fine to me to allow write() for guest_memfd anyway. :)
-
-Glad to hear that!
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
