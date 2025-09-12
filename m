@@ -1,142 +1,273 @@
-Return-Path: <linux-kselftest+bounces-41308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41319-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93253B54784
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:30:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55777B54AE0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 13:22:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9629A460545
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 09:30:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11A673BF1E5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E282D7DE0;
-	Fri, 12 Sep 2025 09:24:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAD0D2FFDD6;
+	Fri, 12 Sep 2025 11:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dqoyVcPX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAvDopTq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373B627A45C
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 09:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96A8277037;
+	Fri, 12 Sep 2025 11:22:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757669066; cv=none; b=kmUY2O5+a7VEbMcjVBYDD3z6Brk0pHSA2+2SinHbHXz9Am7lZGyRsKmg3H5kLxY5nxX/cjTb40tQCoet/veHvVTr3A0td/Wdk+v8KBjLsEnDqcO9ug8+lu//uBlpvEosBG+aZY52igI04MMITuryxebroCIlQVsuBxQFAgiLHAI=
+	t=1757676124; cv=none; b=Yr4NSO1kZOt+NNyqGyyUzgo7dHeccCLfwXgdz8P8ptGWxaXgiYUBDvw1cEPif079VrWD3O0qdIyWeliRvszuDZKZ+op8J5zwc17B4PrY+imZsQcZx85822gDeUIbnWf/k8EI+Tgugl/uw6a1HCqDdF3DXusFVarwg9CFjtX5rq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757669066; c=relaxed/simple;
-	bh=zZ3EdgDqG32koRVEzkCdU26BudT4DPvEmFEKbPHfTpc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dobfl/sSKp6E4T/9s/2NQgrPB14M5Ia7vFO7BAw+7Z1ofpvjlCxydi6DE/A8wt8Tzg2IttfNJvS5yo1pYyr3OaJPV/84o5xHrQyYpeJkmfNeRXvGE7/SmOidDJc3qPOYeTXqC292J7j3AaVWy/TsdE8uZt5T727X4cm7zPYodf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dqoyVcPX; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b00a9989633so313373666b.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 02:24:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757669062; x=1758273862; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ejOVXapMEGWfb71MDH1k0hVwflqRG+5TP6RxYPYRsR4=;
-        b=dqoyVcPXoTN93DExdiwxhhzwT6Vm/NElVLwtQ7IAwdx9yWDS2gwil6GCHlM3ZPaDRB
-         XS/Muo/J9WUP8B6EmhQgf24Fn6+D3wmfJZqr1mcvThPJDqKXR7ZCVmqJ5gNsIbjAf71G
-         p0WdPEgHsFd4WvVnxx1p5XG7XwuR5b3DfPeK/8IxAsgmaUpAqX4efcgzA4IfhzH5tMxt
-         xl9E6bJ1gtz46KSWGnm5GPPZxrTcSEZCBqCLbd2xxMgQmieI4HFDfr0ALK6CNThyftbv
-         UDm6DQ76I7oQmbn3ogZfsWlawpdRyaCW4y69Dw/llPfT+BNBXrmS9clG6Y/NZNpu74dM
-         9kPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757669062; x=1758273862;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ejOVXapMEGWfb71MDH1k0hVwflqRG+5TP6RxYPYRsR4=;
-        b=AD9lj/ZW+cFFjTLgwf+FfR7imJdhY0ZiPm35sYgrNkbmB+Bcfj/VlezUr0GLsfzgpW
-         UaDEXUCWSt8qWU0WFVldf6lgeyFYQvT+0KNWdfMextdYz1F8znc8CQgdbiCsLQ8wUOwh
-         ti55T4gapm9YeW0ABNXiTygxdNcBra0P9S2fYouI9Z6hmG3DR8+IrQ3fmcXun9je6Rj4
-         tngVsuBDbm047NXxVysGH2r5UGv78tXQBriV3Z9DbaETu244ZrqjssMnDqSE1+/shBg8
-         33TbxSex008xIRCySPmXjqDMMVSfH2dGp6mdCFOBeOOnKfjzY1eSWMIs4rPpkhedk1Pq
-         J2Bg==
-X-Forwarded-Encrypted: i=1; AJvYcCVs18iCPg3g0bmlO3wGpYdkoUxL6I0U/+EgTMQ9cnUsPKgeHWrjogly4fxSIBZitApDy5D5c/LpIhzSasqWOrM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnSQNHnjiANTLpWlBbdD5El9vdXbepRik0JJQxdpkg3MuLQ8Jr
-	4h/VmibwuZ0yxNfgDSlai0gE5lH2tq6SPXcWKvwYU4+Cl04bD8mKeR8ac5jyvukohQ/Phyi1oBD
-	Ds25kQai75lFo2xxhHja4ZnlD8AT0zBUtDSkti9KeFA==
-X-Gm-Gg: ASbGncvF3WXLNA0mjc0fU3EzEn92rt+nJWRXZOIt7FKg+S09VavVfMKYUmSoSboPCOS
-	/mM3Jjk1BWNTXAvP34e3jTP3i5CN6yZ9TJgAXB3eUGPmFDBcXpyFp6GV5tNBhTatm2IF59ZZHEU
-	FpY0Quk1hsG6A6l30zOJ+h7Z30WAE73qPVSmjTqKfHe3bjDJ7l6xPA7Yy8LfCPcA9cU7TZxbcsj
-	raM7LvoKddG6lA/XkUilpUgF7FBDYNtc/XGAERJbEeEtuPW
-X-Google-Smtp-Source: AGHT+IEG7d2O5fuiKOqLaxk4wNWtHu8A08plk+DQOGkfs2DJxQxya6tEWqjjc+qZvluiPc70wIKTosdznqW6MDbVNpE=
-X-Received: by 2002:a17:907:96a4:b0:b04:25e6:2dc2 with SMTP id
- a640c23a62f3a-b07c254393cmr229565966b.22.1757669062471; Fri, 12 Sep 2025
- 02:24:22 -0700 (PDT)
+	s=arc-20240116; t=1757676124; c=relaxed/simple;
+	bh=3PimEMBH0i74GFm0gTka/GsTCwaQkN7ujfGR5v/cKu8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Uisef0R/RdA64oP9BX3iOhPWLaf9dbMwr90mJGvyAeGsTJ1PU2RaRDBFNlxPmdQ6zxTUw1gbdg8P8ftexKPf++jvEXK8Ph8uNpzDQtHNbKIkprXRHjUZvn2Xs3gHEm2EvtAGdA6KScCaugHvt/gwjKSTcKKrFP+uwp5jWkruIo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAvDopTq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E90C4CEF1;
+	Fri, 12 Sep 2025 11:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757676124;
+	bh=3PimEMBH0i74GFm0gTka/GsTCwaQkN7ujfGR5v/cKu8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=aAvDopTqm6lPjisv+xS/BNjZPnJnp1zgCGyS2DVh873f4+Rqk6yPLl5B63vovcGxD
+	 hTZ88VISSi7k07ldOanuYgvGntxSJAXh7Kct8VSSRkyjk5C2f07zyleU9ewPCq5+dE
+	 0NEuIXHXam53+epJ06z6ajhEs1KZciHK4hrBv807a+kracbeCoD1MqtPbPQUNzJT7a
+	 5JV5uvtOKp7+V7g6R5/rl3cQyhci0C/eqk+RZ7pgf0eLMKbT9f642PtHECJ2bvL0Gm
+	 X0DUO9jNB71/WLMIdmlelV/LQhfuvD+ITUbKfs3KIb16U2U2x0FSq9kAJq1pxsoHjU
+	 qnnuckbiSwsdw==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v16 0/6] KVM: arm64: Provide guest support for GCS
+Date: Fri, 12 Sep 2025 10:25:26 +0100
+Message-Id: <20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250912081718.3827390-1-tzungbi@kernel.org> <2033c6cd-4112-4c8a-a9ef-2ab34f3504b8@kernel.org>
-In-Reply-To: <2033c6cd-4112-4c8a-a9ef-2ab34f3504b8@kernel.org>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Fri, 12 Sep 2025 11:24:10 +0200
-X-Gm-Features: Ac12FXwlBWZ3wqZGCB6PrzXYD4LYlvvCAzsc1bzxtVBUhf_RXrToQWQG2Wcs3jw
-Message-ID: <CACMJSeuKH+WKOXLNU92dMssqhK02xG3z=cT0VeXYM+ZGuPCB9g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] platform/chrome: Fix a possible UAF via revocable
-To: Krzysztof Kozlowski <krzk@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Benson Leung <bleung@chromium.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>, Dawid Niedzwiecki <dawidn@google.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAbnw2gC/23TS27cMAwG4KsEXtcFSb276j2KLPSgZow2M4EdG
+ A2CuXupFJ2RocIrC/4kkfz9MW28LrxN354+ppX3ZVuuF3lB++Vpyud4OfG8FFmYCEiBPHNcX6y
+ eT3mbWSHGBMU7CpN8n+LGc1rjJZ+beHt5bauvK9fl9+cRP57l/bxsb9f1/fPEHdvq370d2m7vH
+ WeYUzXW1aBSivb7T14v/OvrdT1NbZudOkq6pyS0ZMpYtM7EaaCqowp7qoTmUmqowUMJfqD6QT2
+ 4nmqh1ucalVwZbBio6ShRT43QwBU9lmIV6YHaO0WA0FMr1Hk2pnCMupSBugfF46lOKAFm7VUqz
+ pmB+n9UAx0Gv/vWplA5O2ed4jrQ8KCWTE+DUKhWaW1D8hUGivCwHg7TQWg9DoEpFcIA42QRO3w
+ sF1uiNCaPQTvOaawXqceHNmPLlCapWLBWNo74HiotMzpeu6WKiJLz8q8w84h1jw/9wpYrI4GCX
+ CwE+k/N92AZuTYccEuWYaV0ieiTPybrdrv9AUWNBEYABAAA
+X-Change-ID: 20230303-arm64-gcs-e311ab0d8729
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Oliver Upton <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+ kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+ Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+X-Mailer: b4 0.15-dev-56183
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8619; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=3PimEMBH0i74GFm0gTka/GsTCwaQkN7ujfGR5v/cKu8=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoxAJUc0pQvdhVzNQSe3Cv9baj9KDsshAOojnY1
+ j3A/310o1+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaMQCVAAKCRAk1otyXVSH
+ 0G8CB/sEPG43HXV6YJaoun+K78dtU+i2OjxzZ1hOlxZ2P+pNHXQtHdWOU2PGD1D34trjaTarWcg
+ xKkQgtaih9ePPSHHAYfOMrW6+cjFHfLgUNnF60vs5/u06h0A2DXqIV2ii9QLk5L/aKdp4Ma18RY
+ TUdvJ+0otTz9O1Rr1M7cQgi3xH5IX0g0soy1KOAQWRkCvXsEaaTcTwsd275UNL+pEBqcsbvfql5
+ fJs8ZvDKaRF3mL+QvCG3JgAxOVG6ErVSxYk86p0zbWgdukcxqJUraLAIbyylEjp7j5JPOPhJJZp
+ h57gLmgXifWSuefMyv9pZV44YYMtvBSP9O/n41YJiZh9Mvku
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Fri, 12 Sept 2025 at 11:09, Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On 12/09/2025 10:17, Tzung-Bi Shih wrote:
-> > This is a follow-up series of [1].  It tries to fix a possible UAF in the
-> > fops of cros_ec_chardev after the underlying protocol device has gone by
-> > using revocable.
-> >
-> > The 1st patch introduces the revocable which is an implementation of ideas
-> > from the talk [2].
-> >
-> > The 2nd and 3rd patches add test cases for revocable in Kunit and selftest.
-> >
-> > The 4th patch converts existing protocol devices to resource providers
-> > of cros_ec_device.
-> >
-> > The 5th patch converts cros_ec_chardev to a resource consumer of
-> > cros_ec_device to fix the UAF.
-> >
-> > [1] https://lore.kernel.org/chrome-platform/20250721044456.2736300-6-tzungbi@kernel.org/
-> > [2] https://lpc.events/event/17/contributions/1627/
-> >
-> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
->
-> Thanks for the work. Just a note, please start using b4, so above Cc
-> will be propagated to all patches. Folks above received only the cover
-> letter...
->
+The arm64 Guarded Control Stack (GCS) feature provides support for
+hardware protected stacks of return addresses, intended to provide
+hardening against return oriented programming (ROP) attacks and to make
+it easier to gather call stacks for applications such as profiling.
 
-Thanks to Krzysztof for making me aware of this. Could you please Cc
-my brgl@bgdev.pl address on the next iteration.
+When GCS is active a secondary stack called the Guarded Control Stack is
+maintained, protected with a memory attribute which means that it can
+only be written with specific GCS operations.  The current GCS pointer
+can not be directly written to by userspace.  When a BL is executed the
+value stored in LR is also pushed onto the GCS, and when a RET is
+executed the top of the GCS is popped and compared to LR with a fault
+being raised if the values do not match.  GCS operations may only be
+performed on GCS pages, a data abort is generated if they are not.
 
-I haven't looked into the details yet but the small size of the first
-patch strikes me as odd. The similar changes I did for GPIO were quite
-big and they were designed just for a single sub-system.
+The combination of hardware enforcement and lack of extra instructions
+in the function entry and exit paths should result in something which
+has less overhead and is more difficult to attack than a purely software
+implementation like clang's shadow stacks.
 
-During the talk you reference, after I suggested a library like this,
-Greg KH can be heard saying: do this for two big subsystems so that
-you're sure it's a generic solution. Here you're only using it in a
-single driver which makes me wonder if we can actually use it to
-improve bigger offenders, like for example I2C, or even replace the
-custom, SRCU-based solution in GPIO we have now. Have you considered
-at least doing a PoC in a wider kernel framework?
+This series implements support for managing GCS for KVM guests.
 
-Just my two cents.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v16:
+- Rebase onto v6.17-rc3.
+- Also expose the feature to nested guests.
+- Implement emulation of EXLOCK when returning from nested guests.
+- Rename enter_exception_gcs() to compute_exlock().
+- Move all ID_AA64PFR1_EL1 handling to the final kernel patch.
+- Drop unneeded forwarding of GCS exceptions.
+- Commit and cover message updates.
+- Link to v15: https://lore.kernel.org/r/20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org
 
-Bartosz
+Changes in v15:
+- Rebase onto v6.17-rc1.
+- Link to v14: https://lore.kernel.org/r/20241005-arm64-gcs-v14-0-59060cd6092b@kernel.org
+
+Changes in v14:
+- Rebase onto arm64/for-next/gcs which includes all the non-KVM support.
+- Manage the fine grained traps for GCS instructions.
+- Manage PSTATE.EXLOCK when delivering exceptions to KVM guests.
+- Link to v13: https://lore.kernel.org/r/20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org
+
+Changes in v13:
+- Rebase onto v6.12-rc1.
+- Allocate VM_HIGH_ARCH_6 since protection keys used all the existing
+  bits.
+- Implement mm_release() and free transparently allocated GCSs there.
+- Use bit 32 of AT_HWCAP for GCS due to AT_HWCAP2 being filled.
+- Since we now only set GCSCRE0_EL1 on change ensure that it is
+  initialised with GCSPR_EL0 accessible to EL0.
+- Fix OOM handling on thread copy.
+- Link to v12: https://lore.kernel.org/r/20240829-arm64-gcs-v12-0-42fec947436a@kernel.org
+
+Changes in v12:
+- Clarify and simplify the signal handling code so we work with the
+  register state.
+- When checking for write aborts to shadow stack pages ensure the fault
+  is a data abort.
+- Depend on !UPROBES.
+- Comment cleanups.
+- Link to v11: https://lore.kernel.org/r/20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org
+
+Changes in v11:
+- Remove the dependency on the addition of clone3() support for shadow
+  stacks, rebasing onto v6.11-rc3.
+- Make ID_AA64PFR1_EL1.GCS writeable in KVM.
+- Hide GCS registers when GCS is not enabled for KVM guests.
+- Require HCRX_EL2.GCSEn if booting at EL1.
+- Require that GCSCR_EL1 and GCSCRE0_EL1 be initialised regardless of
+  if we boot at EL2 or EL1.
+- Remove some stray use of bit 63 in signal cap tokens.
+- Warn if we see a GCS with VM_SHARED.
+- Remove rdundant check for VM_WRITE in fault handling.
+- Cleanups and clarifications in the ABI document.
+- Clean up and improve documentation of some sync placement.
+- Only set the EL0 GCS mode if it's actually changed.
+- Various minor fixes and tweaks.
+- Link to v10: https://lore.kernel.org/r/20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org
+
+Changes in v10:
+- Fix issues with THP.
+- Tighten up requirements for initialising GCSCR*.
+- Only generate GCS signal frames for threads using GCS.
+- Only context switch EL1 GCS registers if S1PIE is enabled.
+- Move context switch of GCSCRE0_EL1 to EL0 context switch.
+- Make GCS registers unconditionally visible to userspace.
+- Use FHU infrastructure.
+- Don't change writability of ID_AA64PFR1_EL1 for KVM.
+- Remove unused arguments from alloc_gcs().
+- Typo fixes.
+- Link to v9: https://lore.kernel.org/r/20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org
+
+Changes in v9:
+- Rebase onto v6.10-rc3.
+- Restructure and clarify memory management fault handling.
+- Fix up basic-gcs for the latest clone3() changes.
+- Convert to newly merged KVM ID register based feature configuration.
+- Fixes for NV traps.
+- Link to v8: https://lore.kernel.org/r/20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org
+
+Changes in v8:
+- Invalidate signal cap token on stack when consuming.
+- Typo and other trivial fixes.
+- Don't try to use process_vm_write() on GCS, it intentionally does not
+  work.
+- Fix leak of thread GCSs.
+- Rebase onto latest clone3() series.
+- Link to v7: https://lore.kernel.org/r/20231122-arm64-gcs-v7-0-201c483bd775@kernel.org
+
+Changes in v7:
+- Rebase onto v6.7-rc2 via the clone3() patch series.
+- Change the token used to cap the stack during signal handling to be
+  compatible with GCSPOPM.
+- Fix flags for new page types.
+- Fold in support for clone3().
+- Replace copy_to_user_gcs() with put_user_gcs().
+- Link to v6: https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org
+
+Changes in v6:
+- Rebase onto v6.6-rc3.
+- Add some more gcsb_dsync() barriers following spec clarifications.
+- Due to ongoing discussion around clone()/clone3() I've not updated
+  anything there, the behaviour is the same as on previous versions.
+- Link to v5: https://lore.kernel.org/r/20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org
+
+Changes in v5:
+- Don't map any permissions for user GCSs, we always use EL0 accessors
+  or use a separate mapping of the page.
+- Reduce the standard size of the GCS to RLIMIT_STACK/2.
+- Enforce a PAGE_SIZE alignment requirement on map_shadow_stack().
+- Clarifications and fixes to documentation.
+- More tests.
+- Link to v4: https://lore.kernel.org/r/20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org
+
+Changes in v4:
+- Implement flags for map_shadow_stack() allowing the cap and end of
+  stack marker to be enabled independently or not at all.
+- Relax size and alignment requirements for map_shadow_stack().
+- Add more blurb explaining the advantages of hardware enforcement.
+- Link to v3: https://lore.kernel.org/r/20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org
+
+Changes in v3:
+- Rebase onto v6.5-rc4.
+- Add a GCS barrier on context switch.
+- Add a GCS stress test.
+- Link to v2: https://lore.kernel.org/r/20230724-arm64-gcs-v2-0-dc2c1d44c2eb@kernel.org
+
+Changes in v2:
+- Rebase onto v6.5-rc3.
+- Rework prctl() interface to allow each bit to be locked independently.
+- map_shadow_stack() now places the cap token based on the size
+  requested by the caller not the actual space allocated.
+- Mode changes other than enable via ptrace are now supported.
+- Expand test coverage.
+- Various smaller fixes and adjustments.
+- Link to v1: https://lore.kernel.org/r/20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org
+
+---
+Mark Brown (6):
+      arm64/gcs: Ensure FGTs for EL1 GCS instructions are disabled
+      KVM: arm64: Manage GCS access and registers for guests
+      KVM: arm64: Set PSTATE.EXLOCK when entering an exception
+      KVM: arm64: Validate GCS exception lock when emulating ERET
+      KVM: arm64: Allow GCS to be enabled for guests
+      KVM: selftests: arm64: Add GCS registers to get-reg-list
+
+ arch/arm64/include/asm/el2_setup.h               |  5 +++
+ arch/arm64/include/asm/kvm_emulate.h             |  3 ++
+ arch/arm64/include/asm/kvm_host.h                | 14 +++++++++
+ arch/arm64/include/asm/vncr_mapping.h            |  2 ++
+ arch/arm64/include/uapi/asm/ptrace.h             |  1 +
+ arch/arm64/kvm/emulate-nested.c                  | 40 +++++++++++++++++++++++-
+ arch/arm64/kvm/hyp/exception.c                   | 37 ++++++++++++++++++++++
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h       | 31 ++++++++++++++++++
+ arch/arm64/kvm/hyp/vhe/sysreg-sr.c               | 10 ++++++
+ arch/arm64/kvm/nested.c                          |  7 +++--
+ arch/arm64/kvm/sys_regs.c                        | 32 +++++++++++++++++--
+ tools/testing/selftests/kvm/arm64/get-reg-list.c | 12 +++++++
+ 12 files changed, 188 insertions(+), 6 deletions(-)
+---
+base-commit: 1b237f190eb3d36f52dffe07a40b5eb210280e00
+change-id: 20230303-arm64-gcs-e311ab0d8729
+
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
+
 
