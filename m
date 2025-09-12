@@ -1,116 +1,105 @@
-Return-Path: <linux-kselftest+bounces-41404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F7C5B554B6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:33:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8CA9B554BE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:37:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5FAB7C68D3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:33:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 150801D65193
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:37:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7A131AF3F;
-	Fri, 12 Sep 2025 16:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E800931AF3F;
+	Fri, 12 Sep 2025 16:37:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IKDuNMrg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CCNI+kgL"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD06221FCA;
-	Fri, 12 Sep 2025 16:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58C030BBBD;
+	Fri, 12 Sep 2025 16:37:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757694819; cv=none; b=KdT3ocXK5AB9aXLne58Ex6ecsFie8Xh065xTLNxwvSlmkwPjcGDxjs1V2y7QoU/U/H23Y4AhFYD60BauBswEP9u06u9x7hnvhtZnaBhQu+mIshfgxybWjMWmm69HDxsTGexKUR5FPlQtD3aC223GmoIx/oiRrwHBTy8JMTFiC6A=
+	t=1757695026; cv=none; b=bGPJswGttXMX6i2HgrLB1mtRp1pV3rX3aIXwU4kaADVI9b0SXNh0iXZ+SBqoMfBv9CLESjS7Vv9FIqjuQwZzbTw/BWRdoGv5D8X4rnyLfX+ihQnEU57uKqZI2htIBCGoOQaKYkjyebwX9HqB5hh44OpYS526K211fcSHr/bkFdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757694819; c=relaxed/simple;
-	bh=40D3azo32aA432DW1jWO97dUK4u+gf4msaD08ReAdlc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TuBN9U3csWgOMCyTS3W8MP0xzSSMjKA3y7b0boJrAFUgkEIue8mOBmKmZO+IekRPnrfzghZpJUzhxemCU7/kj/Hl7TlXVCFC72tKy+0K95mAvEEm0gT8c0BS1HfPzGiaqvvclxQMZvLFerjNzNFyXlkg+xu/ctvx1YoWJzxGrD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IKDuNMrg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03B2CC4CEF1;
-	Fri, 12 Sep 2025 16:33:38 +0000 (UTC)
+	s=arc-20240116; t=1757695026; c=relaxed/simple;
+	bh=yh4xLWlcA8OHLdyLklXOk+519lgoO0D5wxn1LsqBYRc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mavJhHJ0X+NkMd122V4vs2PiDuMxHTmcm+Hcx+JGXGRL45RAv4s2FGDzjxICWwfebRffeyhKs6RDuq8oHVdx4TPl1+YSR9uU5VuaOMqeepYxbkJilBT1SwdsHAakgczdEBb7EmcqVmq10DgwYLm3j9XpClqSZPfkoK6CI/vfYnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CCNI+kgL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA3FC4CEF1;
+	Fri, 12 Sep 2025 16:37:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757694819;
-	bh=40D3azo32aA432DW1jWO97dUK4u+gf4msaD08ReAdlc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IKDuNMrgspTKbgKs/S3dV0K/yVqGkd+Mc06d0z1Hs9jytEautBcOG9mVnAMSOfi7T
-	 HvBDXePdazel5390VyNYnn/xv3+rn/vW2s6bgyLc/IBSG2NMWAFLMUDaes15fp2p0N
-	 DkZoRUnpad0gCJrmECdXdY+uE0FKo/3nLDL4jUbpZAgPBYKFVoYz9+TYtZl+8BESRn
-	 TeTVTxn0gytq7iBJd+TKhBxB9lhbqH31KQ7rRiqjzPOZope7CwxDgO2So/ErWAEal1
-	 gbJlZYEJ3DZPftPQBBosopqREX0gQnLwu1Wt5kw6lkociLd/HvQWradNN7SZ2zxMbp
-	 0tyAHTMyymsNQ==
-Date: Fri, 12 Sep 2025 17:33:36 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v16 2/6] KVM: arm64: Manage GCS access and registers for
- guests
-Message-ID: <aMRLYBWfDFiIB7wx@finisterre.sirena.org.uk>
-References: <20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org>
- <20250912-arm64-gcs-v16-2-6435e5ec37db@kernel.org>
- <865xdndgpw.wl-maz@kernel.org>
+	s=k20201202; t=1757695026;
+	bh=yh4xLWlcA8OHLdyLklXOk+519lgoO0D5wxn1LsqBYRc=;
+	h=From:Subject:Date:To:Cc:From;
+	b=CCNI+kgLbeQQz1G550kyMApK1z1n+nAFuJ7lxKjjqpeYRZxRilmoURC6OeaingmUA
+	 XaAHaAaKYuBqI7ngwAGYqv7dfy5b1ZqmTbHmRCtXCs2qv8Ns9Tvr+aWylrY9HEW6h7
+	 oRZ6A7oPQuwZB0kZCUr0Ay3BH0r38i81PepTEbKzejX8PGOest520rGPn3bf6xaUmD
+	 5SptnNVm7dlzo+WDM5q4nf3R1Wt9H1rBVCTsH6vtvu8D8oeyzQk63MCdY5tXnxJt7r
+	 VF9MwL8y3/GlD7E8BlNOGrm9tac4KKy6Jsi8CZ4HcIOZKp+TN4QAdqfKVxDgs+Gvo7
+	 TLW0MxKKHk5Wg==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 0/3] mptcp: misc minor cleanups
+Date: Fri, 12 Sep 2025 18:36:46 +0200
+Message-Id: <20250912-net-next-mptcp-minor-fixes-6-18-v1-0-99d179b483ad@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bzAqF05U+jmCCGjc"
-Content-Disposition: inline
-In-Reply-To: <865xdndgpw.wl-maz@kernel.org>
-X-Cookie: Filmed before a live audience.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB5MxGgC/zWMywqDMBBFf0Vm3YFMau3jV0oXwV51FsaQBBHEf
+ +8gdHEXh8s5OxVkRaFXs1PGqkWXaCCXhvopxBGsX2Pyzt/cUzxHVNtWeU61TzxrXDIPuqFwx/L
+ gIA7SSsAVd7JKyjhfi7zpL9PnOH4PiDfaewAAAA==
+X-Change-ID: 20250912-net-next-mptcp-minor-fixes-6-18-a10e141ae3e7
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Donald Hunter <donald.hunter@gmail.com>, Geliang Tang <geliang@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=945; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=yh4xLWlcA8OHLdyLklXOk+519lgoO0D5wxn1LsqBYRc=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKO+Gj37O8LPZu3a43K8g3nvavexLqUl+yLfud60D/gI
+ 5dwsv/3jlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIm4rmFkmJrNmrfb/drur9+Y
+ Pm7cJ25q3SrYFqxeZRnQHFGpzy9qyfA/Xq7f5/knmWz73bzhc42m1D089fpgCeeBM+W+LPUzcuU
+ 4AA==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
+Here are some small unrelated cleanups collected when working on some
+fixes recently.
 
---bzAqF05U+jmCCGjc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+- Patches 1 & 2: close file descriptors in exit paths in the selftests.
 
-On Fri, Sep 12, 2025 at 12:59:23PM +0100, Marc Zyngier wrote:
-> On Fri, 12 Sep 2025 10:25:28 +0100,
-> Mark Brown <broonie@kernel.org> wrote:
+- Patch 3: fix a wrong type (int i/o u32) when parsing netlink message.
 
-> >  		MAPPED_EL2_SYSREG(PIR_EL2,     PIR_EL1,     NULL	     );
-> >  		MAPPED_EL2_SYSREG(PIRE0_EL2,   PIRE0_EL1,   NULL	     );
-> >  		MAPPED_EL2_SYSREG(POR_EL2,     POR_EL1,     NULL	     );
-> > +		MAPPED_EL2_SYSREG(GCSCR_EL2,   GCSCR_EL1,   NULL             );
-> > +		MAPPED_EL2_SYSREG(GCSPR_EL2,   GCSPR_EL1,   NULL             );
-> >  		MAPPED_EL2_SYSREG(AMAIR_EL2,   AMAIR_EL1,   NULL	     );
-> >  		MAPPED_EL2_SYSREG(ELR_EL2,     ELR_EL1,	    NULL	     );
-> >  		MAPPED_EL2_SYSREG(SPSR_EL2,    SPSR_EL1,    NULL	     );
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Geliang Tang (2):
+      selftests: mptcp: close server file descriptors
+      selftests: mptcp: close server IPC descriptors
 
-> Just like the previous version, you're missing the accessors that
-> would be this table useful. Meaning that the vcpu_read_sys_reg() and
-> vcpu_write_sys_reg() accessors will fail for all 4 GSC registers.
+Matthieu Baerts (NGI0) (1):
+      mptcp: pm: netlink: fix if-idx type
 
-Just to confirm, this is __vcpu_{read,write}_sysreg()?
+ net/mptcp/pm_netlink.c                            | 2 +-
+ tools/testing/selftests/net/mptcp/mptcp_inq.c     | 9 +++++++--
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.c | 9 +++++++--
+ 3 files changed, 15 insertions(+), 5 deletions(-)
+---
+base-commit: dc2f650f7e6857bf384069c1a56b2937a1ee370d
+change-id: 20250912-net-next-mptcp-minor-fixes-6-18-a10e141ae3e7
 
-Sorry, I missed your comment about this on the prior version due to UI
-confusion with my mail cllent.  My mistake.
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
---bzAqF05U+jmCCGjc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjES10ACgkQJNaLcl1U
-h9AzDgf/duT63XwRmgWz0snIItmYAaIOhyi9DSxNDPK1rp7/ouyg/0hMk2fa5glv
-1ILW6aKRp8AdJeKuqbRnCdJ+G5dxtmtOV6BmkxcK7bPorQYP51Xlat7OqsLF56R2
-vRT2MwbM6VDt9cyp08gbJ6TVLrbHfwYz9XEr19HsrDqRYyCojz41cGf7QzPbKIBz
-6HeUZQHSZnsf6Ov7DIsZons63MmVdvYgKAv29I5tLca+TlnwVoumfVCGNeM1BB/4
-/9yhS+DQB47AvKDMX2jI3MzaQ3n3NLL7pYUF7c5K3e7uiToZZZRjxm2hTvPYGzrS
-I0ulFq9qRSGr6EH8H02+ru7NA5yWOA==
-=rXPS
------END PGP SIGNATURE-----
-
---bzAqF05U+jmCCGjc--
 
