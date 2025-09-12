@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-41407-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9BBCB554C4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33DD0B554C8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:38:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 558795C488D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:37:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3864B5C3E7B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:38:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B1931DDB2;
-	Fri, 12 Sep 2025 16:37:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F5D320CC7;
+	Fri, 12 Sep 2025 16:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7ptIAXf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukyTTcYM"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48BB631B126;
-	Fri, 12 Sep 2025 16:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E96320CB4;
+	Fri, 12 Sep 2025 16:37:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757695033; cv=none; b=oMrgwNYn0XmNn+XDrRB/GM7MDl0CQ+2M24DZSBedsZ3IBSaWtucTJpyPiq457c88Eix9yytMK9n4KxGicPJliyV6l9fgNRN3IX3sAvcjzFN57ofjUr0V9zkQMcWa64vjUtZ0PhGSugQTdXrGHaMxV57KDCWIPq/vfIRxkja5yW0=
+	t=1757695036; cv=none; b=OB9NNhMUt/1LbQqMRTDpCtcQlmS5piT4sUe25xnY3DtiTk2KpCfkwceqbFpzZqa05KDUFz2K3lXEL2ckNKHhItOtmspE4J9sZIzKTiorV54sht+eeYiyZhxVjhOD/58iTNB17mrx4UafoFQk75braMcZUxZy3FoSMH0fq0MWO3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757695033; c=relaxed/simple;
-	bh=MGDNUYkapRM8C1jFeBnXh80+SZemTEKjmnxYU7exbaY=;
+	s=arc-20240116; t=1757695036; c=relaxed/simple;
+	bh=02RbCJy/0KB0IDkyTE3zAtIENx+JAzvBYgUMKFwaNUk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BuJXVIS/LKAiLSi4P1A/D4IiBM8C51RFNBj9FWKjXAh0YmWpi+rslu+ojGqaMmgvLRQ58YREwQGtw2OK42NdNGCkNt+g3UmEyJamxgxpqqqnnfQIcNCfg5toYSqaCsEYuUDiykIgWnPUlJ/05Ehi9ukAciWjcYXaIw70aV8Uvho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7ptIAXf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC40C4CEFB;
-	Fri, 12 Sep 2025 16:37:09 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=Osn3kClwehJ8IvtbyrRRowoACacmZSQ+ZoDhVnXOF4peDJAvvaXwPioJU2XZwKDeUfdH98vSFk3CpPnzmpDvgQL0E8vDzYHWlKnjyzSiqr7cq/hZONEPOSy5lKb6OzeNjuwxjoRwY83Q1JE5ATqE6t7gUudnmwYUfwJNLHZH67U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukyTTcYM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA2EC4CEF9;
+	Fri, 12 Sep 2025 16:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757695031;
-	bh=MGDNUYkapRM8C1jFeBnXh80+SZemTEKjmnxYU7exbaY=;
+	s=k20201202; t=1757695034;
+	bh=02RbCJy/0KB0IDkyTE3zAtIENx+JAzvBYgUMKFwaNUk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=S7ptIAXfwtIUdA2+O/iMJ3pcGheSVG/bpgXiiCKgWlvYzcB9XcAyHzBRmnHMVs7Mg
-	 KLAQ6LgKddqOuYkkDHJUUPFegSy+LQuPys1GuH/XRn3VfTsdLoxjX3XHPnfilUOLas
-	 5tFZFG53JSxvZPQ03Y5O0DehF8niJO/u1Yi8uuImiQp5C733KB/v7k7k2p/ZhJM969
-	 9KfdX9Nsa1c3NH1sUAJaVZGOGpHTCu03GZcTBNGabY3wmhqybcS2LiA56tgeBtezm1
-	 /iVro/BkGlw2sCs7PFRHmbVFtY1Y+Wg1ItBEAxqCiKAIqAGMxNcq2sn/xDeWs7Itqm
-	 svQ6NQCN4SPsA==
+	b=ukyTTcYMqmmlKWVXqUMe0WzaVjWhmDOfYYtA93ssoHRHyQw54epQXk6n+nzhDaGtj
+	 HwHxv8FGyGmk5rAnpW9geeVrlct8uc84Vo73GRUsuV1TO9YqskRRzjPBlHjOc98v24
+	 LgnccMLCkCRl3RpEjTrRVs1yVCQazC/A0LSqLjMXEymre5MVz+6V7TPFGn442xOMbU
+	 UK3T4TbGqnkuFWSaVW2uIrwq5Leoqm+6ExG3rijM08SWeO4ytEamef5zuf8i6fMVyE
+	 dhUl89U+HcsliAw3Cy9re9E/su2g+g9pmCZ4jsgWs99MQYXshVozngBBAzuMYsZJ+Y
+	 8vGe8zTkAzQ+A==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 12 Sep 2025 18:36:48 +0200
-Subject: [PATCH net-next 2/3] selftests: mptcp: close server IPC
- descriptors
+Date: Fri, 12 Sep 2025 18:36:49 +0200
+Subject: [PATCH net-next 3/3] mptcp: pm: netlink: fix if-idx type
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250912-net-next-mptcp-minor-fixes-6-18-v1-2-99d179b483ad@kernel.org>
+Message-Id: <20250912-net-next-mptcp-minor-fixes-6-18-v1-3-99d179b483ad@kernel.org>
 References: <20250912-net-next-mptcp-minor-fixes-6-18-v1-0-99d179b483ad@kernel.org>
 In-Reply-To: <20250912-net-next-mptcp-minor-fixes-6-18-v1-0-99d179b483ad@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -63,77 +62,47 @@ To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
 Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
+ Donald Hunter <donald.hunter@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2169; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=SzQNF7P+VIga7z4erajbLk7KkSiLRbluQtVLzA5e2lQ=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKO+OjN2HnKMHrnxMok5tNz/yw1uF/wIlOsXbx6drcPu
- 0qXgcHJjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgImUz2D4p1AqvV9v+/79S79O
- OXI5guX6tsrZAlcs1mz3ZrsSGfTocSXDP1V28S33g3uWxncnfw3yKLr8gUvpmuGyL0fuXJt41p6
- BiREA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1280; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=02RbCJy/0KB0IDkyTE3zAtIENx+JAzvBYgUMKFwaNUk=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKO+Oif3qD3/X3luYob1moJvTddKi6Hn/7SYV1ZEPNqj
+ du8sv+vOkpZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACYS5sPwP/FvcN2+3vVNlkJ2
+ DmEhjVbCYXLipwsPh1ft0U8VVfvxjOF/satpwcVVc+0MHySIifE/Z/Btm+7upl1/eV/u/sim156
+ cAA==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+As pointed out by Donald, when parsing an entry, the wrong type was set
+for the temp value: this value is signed.
 
-The client-side function connect_one_server() properly closes its IPC
-descriptor after use, but the server-side code in both mptcp_sockopt.c
-and mptcp_inq.c was missing corresponding close() calls for their IPC
-descriptors, leaving file descriptors open unnecessarily.
+There are no real issues here, because the intermediate variable was
+only wrong for the sign, not for the size, and the final variable had
+the right sign. But this feels wrong, and is confusing, so fixing this
+small typo introduced by commit ef0da3b8a2f1 ("mptcp: move address
+attribute into mptcp_addr_info").
 
-This change ensures proper cleanup by:
-1. Adding missing close(pipefds[0]/unixfds[0]) in server processes
-2. Adding close(pipefds[1]/unixfds[1]) after server() function calls
-
-This ensures both ends of the IPC pipe are properly closed in their
-respective processes, preventing file descriptor leaks.
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Reported-by: Donald Hunter <donald.hunter@gmail.com>
+Closes: https://lore.kernel.org/m2plc0ui9z.fsf@gmail.com
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_inq.c     | 8 ++++++--
- tools/testing/selftests/net/mptcp/mptcp_sockopt.c | 8 ++++++--
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ net/mptcp/pm_netlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_inq.c b/tools/testing/selftests/net/mptcp/mptcp_inq.c
-index 40f2a1b24763e3b84e12bfae7b893c35e6c2af71..8e8f6441ad8b0a79216eaf8f3b34c4ed2c2a1736 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_inq.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_inq.c
-@@ -581,8 +581,12 @@ int main(int argc, char *argv[])
- 		die_perror("pipe");
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index 50aaf259959aeaf36e7ab954c6f7957eaf2bc390..2225b1c5b96666cd4121854c967a7f3a79824047 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -113,7 +113,7 @@ int mptcp_pm_parse_entry(struct nlattr *attr, struct genl_info *info,
+ 		return err;
  
- 	s = xfork();
--	if (s == 0)
--		return server(unixfds[1]);
-+	if (s == 0) {
-+		close(unixfds[0]);
-+		ret = server(unixfds[1]);
-+		close(unixfds[1]);
-+		return ret;
-+	}
+ 	if (tb[MPTCP_PM_ADDR_ATTR_IF_IDX]) {
+-		u32 val = nla_get_s32(tb[MPTCP_PM_ADDR_ATTR_IF_IDX]);
++		s32 val = nla_get_s32(tb[MPTCP_PM_ADDR_ATTR_IF_IDX]);
  
- 	close(unixfds[1]);
- 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-index b44b6c9b05507780fa85221e61813182cf7c082e..e9c359df941604b9d5eec17bb83d57afe1aa34fb 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-@@ -848,8 +848,12 @@ int main(int argc, char *argv[])
- 		die_perror("pipe");
- 
- 	s = xfork();
--	if (s == 0)
--		return server(pipefds[1]);
-+	if (s == 0) {
-+		close(pipefds[0]);
-+		ret = server(pipefds[1]);
-+		close(pipefds[1]);
-+		return ret;
-+	}
- 
- 	close(pipefds[1]);
- 
+ 		entry->ifindex = val;
+ 	}
 
 -- 
 2.51.0
