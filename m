@@ -1,178 +1,209 @@
-Return-Path: <linux-kselftest+bounces-41327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A103FB54B13
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 13:36:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 543DEB54B95
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 13:53:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BA10487AAA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:36:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03011467CB4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:53:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A3FF301013;
-	Fri, 12 Sep 2025 11:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA31301011;
+	Fri, 12 Sep 2025 11:53:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LkQmSVTi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hyhOAe9Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB393009D6
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 11:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B55F2957C2;
+	Fri, 12 Sep 2025 11:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757676973; cv=none; b=poTC0NBKPKcJlSKmulMAB4FuK1eyzuKFAChdjT8DhvgCWsmMbU+ked7mwNoIDNORGaoPbZJ48vpGA6aNitPTDS9ag+XB5IZ+89zCuTq4i0/U9sJrqeRB/OZttPjjklHHzbqZW337JHJJYC/AIcCeDtb2PK6uxR8krb9wAsMnees=
+	t=1757677980; cv=none; b=MKTw6A/X7iHjMGXfqTKRCNhKQgHMmWpx0OtYXMx9uClu+XYSreCY+cWTn5VMx0RUbQuqJ9zOCV3Bd0aD8cwTo1A36O1k98f3BtwIIJLO6r8niqfbnV4FunmfayphlwRuud4f2DZ4GJbxbVjqj/DMslZI49pqM0FKoAetdjil0XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757676973; c=relaxed/simple;
-	bh=6HhHl5Q9HyjWqX7Y9YXL8kJIJbLXHU49bGi4e4jAGxc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eJBiQGMYCCwf5jdPuaRuJRSeIkiQia7l5RE2UJ8OprtlRzvpN26x7TJvfIRxMdAwHJJ2i2F19UFWKhY3JX1/WxEynXKptbNGszr+s2RxfcF9HJmiOBieCC6bh0cAZ3Y1f2j17rRmOaBXhE4kUkcltHJlwyZod3VJQSBytlbju9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LkQmSVTi; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757676969;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=L4WTNdMCGh54uRDM/L4Uxaq4pm+e6gS6JQHYqsqi25s=;
-	b=LkQmSVTi3w7CnHye2EjhRoGSBA6NribyJn6XBb04vhLAuyd3L/JSPCc5g0PCOB1IxVRLxH
-	8cgQR6ObBes10ddyyg0U9ckXs0MYWVz2U2ppxxCZ3GSyfA+vlSTgKtr3lCP1vQaulkFWl1
-	rD0H1qpcaPAdFjfs0qdLbdQQWvyZhII=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-612-EBG_imfINVSMreeZdnS4YA-1; Fri, 12 Sep 2025 07:36:06 -0400
-X-MC-Unique: EBG_imfINVSMreeZdnS4YA-1
-X-Mimecast-MFC-AGG-ID: EBG_imfINVSMreeZdnS4YA_1757676965
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45dd9a66c3fso6481045e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 04:36:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757676965; x=1758281765;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L4WTNdMCGh54uRDM/L4Uxaq4pm+e6gS6JQHYqsqi25s=;
-        b=Opsxe+A81sd22Fyg8SySSX9eWpeo0t7WHFPF8KU1JzUZ9RTEdMtMtQqFIJtltMbFSH
-         SHLlUTK6tToSLy0IbZGVMvoZxy5RuqOaFcZUrWCfFFLUE21O3WGSoTqVHj4pzAL8/ed1
-         oKeqWlX40SCM7kuqJLrjgoHx/lk9NycC8Jc22nrSE6PQufnGK35KIwdpM8W90s1/Okq5
-         DHHlPBmPwnzW1X3eXlHtlnHhPc7W3MeiB9emVvFmm+wZPLzplbqPg1smhb0HgqCdADzH
-         nrREvjazEWljLZbcTE4/7UT0HKfBiUCRmuzkGdGo2I6tdvobVIeEPMErzL+gM2zXXeTN
-         pikg==
-X-Forwarded-Encrypted: i=1; AJvYcCWX9LaMhixxfHfpolPGOpGZQlXzUtytvii+JzSippF4dMaGukSp78olsLeVe63BvvZBQlTAAbN5A2V/54LS9og=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyj0J9sE3sp6ipyp4T5JQ+jq+l7bOCiI5OnkyKsl1FXKINVsvmN
-	8gSuQsLLvS5hoBNWUOmhfqzQUKgsELbjYY2kceo0mWtU9gjOVkgTwb9Yvh8qLcO2eE9S5GV/W7L
-	XhY1AbzGinERo+XsVffdU5xA5Su16QJgfO1EUERddi7Tpod5lFok0mlpyBtKoYA11wSd7hQ==
-X-Gm-Gg: ASbGncvYPBBDczAYz4sob6MekITJJxvx/jAvSXyyuvVJ1gIWsISZz58Ms1P7OjsPYQ0
-	X8SwEpkYDtnWYzY8Qs4lBE+R8GjNVZZKOyTZn5ue5Y7d4LTPlA4NQZfNFwdOybOVoMyvVsI1/yj
-	jrDHVSpU+9eDmb2TAqf3iYHKcFGVJKlSlIjOXI3RS3zposHz41CG+EJ3wje1htYtIQu3goPOMLV
-	4SbkHdmo32olorbZoAHMxOLfrMBVVdILxALyZkcDRDmmlqJx7/0saNZxyo5549VIs8iGvMl5ka5
-	NY5XM6+9pEbI8B/o5nJqC/P8EAV7BfH9o27ggpQlMC0SjNTnOvuseimK1eXnMaq7NqrgJECEk0p
-	0Wew/xituOSsAvz1UW+TIRFF7lOxiU9FqVHeYywNsLK2iBvL6579vWrg0cSXxOZ/ujN8=
-X-Received: by 2002:a05:600c:4e4b:b0:45d:cff6:733f with SMTP id 5b1f17b1804b1-45f211d517emr27953545e9.11.1757676965163;
-        Fri, 12 Sep 2025 04:36:05 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEApCot1i+5m775BUiDD6WRxTCaO0+qykFG5pVRf5Sw41hSYWcT5lrn+50Nw2D8nJepyAo5JA==
-X-Received: by 2002:a05:600c:4e4b:b0:45d:cff6:733f with SMTP id 5b1f17b1804b1-45f211d517emr27953335e9.11.1757676964784;
-        Fri, 12 Sep 2025 04:36:04 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f20:da00:b70a:d502:3b51:1f2d? (p200300d82f20da00b70ad5023b511f2d.dip0.t-ipconnect.de. [2003:d8:2f20:da00:b70a:d502:3b51:1f2d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e760775842sm6503959f8f.7.2025.09.12.04.36.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Sep 2025 04:36:04 -0700 (PDT)
-Message-ID: <3f739d3e-f6fc-4a3f-9bbb-151a6dc6c083@redhat.com>
-Date: Fri, 12 Sep 2025 13:36:03 +0200
+	s=arc-20240116; t=1757677980; c=relaxed/simple;
+	bh=NmIyJJYs4LCcRYXbb9KAw9QgbmU7rJnHEjrNjnl2vwc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YmU785W0kb/qXUziohO0fgdUaJESy8D6k6+Xp6VA5VTsbV82g3kBki3R3QguBYzObf3lMXPL3Z+x0GVbY47iNwSq/vKv6+68IPssCCEGR5ocV3jWGQ3ILL2ZV3Z4kX/bc5JJb7fPrsN++OsI2GVMRubP5CuPuCPxEsC2KNFZrY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hyhOAe9Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 662D0C4CEF1;
+	Fri, 12 Sep 2025 11:52:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757677979;
+	bh=NmIyJJYs4LCcRYXbb9KAw9QgbmU7rJnHEjrNjnl2vwc=;
+	h=From:Subject:Date:To:Cc:From;
+	b=hyhOAe9YjTHpuvO3AierKWjw5OD6myMMT9p9EcAITM9Pb1+NMH1wNQliBW4upbO8R
+	 QKLEJTkZOFgy6Z7Rcv0TWlRM6KFx3wbCWIslNfJQePl2ar/NACLfIVPK0JL1g/FEk2
+	 UVzJTaTZwpeS5oDpzxAq2Q0XeiyJAmJkrbdCsrmzy/2O5EdknZbZXqkgKD34w5Kt60
+	 cXZutEgXWMkzZ5SfXX25tYjEbHnq08JT7p33wBaq9iN79MiJHJtDg+uiC57+8BNmVQ
+	 sWORuSN82YYjCx/iPj7SywZx6RHpiSzNU9r/RWlkjqF0ywWC/uz9ptnOTs498c9DxA
+	 YX25RtJ36IZdQ==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH v2 00/33] ns: support file handles
+Date: Fri, 12 Sep 2025 13:52:23 +0200
+Message-Id: <20250912-work-namespace-v2-0-1a247645cef5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm: transhuge-stress: fix potential memory leak on
- realloc failure
-To: Haofeng Li <920484857@qq.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: 13266079573@163.com, lihaofeng@kylinos.cn, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- lorenzo.stoakes@oracle.com, ziy@nvidia.com
-References: <b6f38984-5f89-4a9d-a905-ddcdbd7510a3@redhat.com>
- <tencent_43768D3DB24034B62C249781C1DE7359C807@qq.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- qIws/H2t
-In-Reply-To: <tencent_43768D3DB24034B62C249781C1DE7359C807@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHcJxGgC/12OQQ6DIBQFr9KwLgaooHbVezQuEH6VWMF8DG1jv
+ HvRdNXlLObNW0kEdBDJ9bQShOSiCz6DOJ+IGbTvgTqbmQgmJGuYpK+AI/V6gjhrA9SouhbKWs1
+ sSbI0Izzc+xi8t5k7HYF2qL0Z9plJxwWwSKrgFUXDd2VwcQn4OS4kvou/Gmf/tcQpo6W1UkF1k
+ Y2tbyOgh2cRsCfttm1fpsF3PNAAAAA=
+X-Change-ID: 20250905-work-namespace-c68826dda0d4
+To: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>, 
+ linux-fsdevel@vger.kernel.org
+Cc: Josef Bacik <josef@toxicpanda.com>, Jeff Layton <jlayton@kernel.org>, 
+ Mike Yuan <me@yhndnzj.com>, 
+ =?utf-8?q?Zbigniew_J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, 
+ Lennart Poettering <mzxreary@0pointer.de>, 
+ Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>, 
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+ =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-block@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+ netdev@vger.kernel.org, Christian Brauner <brauner@kernel.org>, 
+ Thomas Gleixner <tglx@linutronix.de>
+X-Mailer: b4 0.14.3-dev-385fa
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5785; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=NmIyJJYs4LCcRYXbb9KAw9QgbmU7rJnHEjrNjnl2vwc=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQc4ZwyI2lNaoVFPNf3BDnj5GaDXQxxN1I1fs9oWW367
+ 9frOfqeHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABMxu83IMH/VM39dsQ/zo04o
+ iZVfafW8PHXXwzC+1TEyHJazH7zzns3I8DP76XfDrJULMx9GbpZJjbKKmZBxfmPTEbX26vULXRk
+ dmAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On 12.09.25 12:10, Haofeng Li wrote:
-> From: David Hildenbrand <david@redhat.com>
->> What do you think happens when a process exits? :)
-> 
->> Correct! All memory ever allocated to that process gets freed, avoiding
->> any memory leaks.
-> 
-> Thanks for pointing this out. You are absolutely correct that the operating system will reclaim all allocated memory when a process exits, so there is no persistent memory leak in this specific scenario.
-> 
-> I opted to add explicit memory freeing in the error path primarily as a practice for better long-term maintainability:
-> 
-> It ensures correctness if the code structure changes in the future (e.g., becomes part of a longer-running routine).
-> 
-> It maintains consistency with other error paths in the codebase.
-> 
-> It prevents false positives from static analysis tools (like valgrind).
-> 
-> I'm happy to adjust it if you still think it's preferable to remove the free() in this context.
+For a while now we have supported file handles for pidfds. This has
+proven to be very useful.
 
-No code changes are required. This patch adds more complexity without 
-any benefit.
+Extend the concept to cover namespaces as well. After this patchset it
+is possible to encode and decode namespace file handles using the
+commong name_to_handle_at() and open_by_handle_at() apis.
 
--- 
-Cheers
+Namespaces file descriptors can already be derived from pidfds which
+means they aren't subject to overmount protection bugs. IOW, it's
+irrelevant if the caller would not have access to an appropriate
+/proc/<pid>/ns/ directory as they could always just derive the namespace
+based on a pidfd already.
 
-David / dhildenb
+It has the same advantage as pidfds. It's possible to reliably and for
+the lifetime of the system refer to a namespace without pinning any
+resources and to compare them.
+
+Permission checking is kept simple. If the caller is located in the
+namespace the file handle refers to they are able to open it otherwise
+they must hold privilege over the owning namespace of the relevant
+namespace.
+
+Both the network namespace and the mount namespace already have an
+associated cookie that isn't recycled and is fully exposed to userspace.
+Move this into ns_common and use the same id space for all namespaces so
+they can trivially and reliably be compared.
+
+There's more coming based on the iterator infrastructure but the series
+is large enough and focuses on file handles.
+
+Extensive selftests included.
+
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+Changes in v2:
+- Address various review comments.
+- Use a common NS_GET_ID ioctl() instead of individual ioctls.
+- Link to v1: https://lore.kernel.org/20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org
+
+---
+Christian Brauner (33):
+      pidfs: validate extensible ioctls
+      nsfs: drop tautological ioctl() check
+      nsfs: validate extensible ioctls
+      block: use extensible_ioctl_valid()
+      ns: move to_ns_common() to ns_common.h
+      nsfs: add nsfs.h header
+      ns: uniformly initialize ns_common
+      cgroup: use ns_common_init()
+      ipc: use ns_common_init()
+      mnt: use ns_common_init()
+      net: use ns_common_init()
+      pid: use ns_common_init()
+      time: use ns_common_init()
+      user: use ns_common_init()
+      uts: use ns_common_init()
+      ns: remove ns_alloc_inum()
+      nstree: make iterator generic
+      mnt: support ns lookup
+      cgroup: support ns lookup
+      ipc: support ns lookup
+      net: support ns lookup
+      pid: support ns lookup
+      time: support ns lookup
+      user: support ns lookup
+      uts: support ns lookup
+      ns: add to_<type>_ns() to respective headers
+      nsfs: add current_in_namespace()
+      nsfs: support file handles
+      nsfs: support exhaustive file handles
+      nsfs: add missing id retrieval support
+      tools: update nsfs.h uapi header
+      selftests/namespaces: add identifier selftests
+      selftests/namespaces: add file handle selftests
+
+ block/blk-integrity.c                              |    8 +-
+ fs/fhandle.c                                       |    6 +
+ fs/internal.h                                      |    1 +
+ fs/mount.h                                         |   10 +-
+ fs/namespace.c                                     |  156 +--
+ fs/nsfs.c                                          |  201 ++-
+ fs/pidfs.c                                         |    2 +-
+ include/linux/cgroup.h                             |    5 +
+ include/linux/exportfs.h                           |    6 +
+ include/linux/fs.h                                 |   14 +
+ include/linux/ipc_namespace.h                      |    5 +
+ include/linux/ns_common.h                          |   29 +
+ include/linux/nsfs.h                               |   40 +
+ include/linux/nsproxy.h                            |   11 -
+ include/linux/nstree.h                             |   89 ++
+ include/linux/pid_namespace.h                      |    5 +
+ include/linux/proc_ns.h                            |   32 +-
+ include/linux/time_namespace.h                     |    9 +
+ include/linux/user_namespace.h                     |    5 +
+ include/linux/utsname.h                            |    5 +
+ include/net/net_namespace.h                        |    6 +
+ include/uapi/linux/fcntl.h                         |    1 +
+ include/uapi/linux/nsfs.h                          |   15 +-
+ init/main.c                                        |    2 +
+ ipc/msgutil.c                                      |    1 +
+ ipc/namespace.c                                    |   12 +-
+ ipc/shm.c                                          |    2 +
+ kernel/Makefile                                    |    2 +-
+ kernel/cgroup/cgroup.c                             |    2 +
+ kernel/cgroup/namespace.c                          |   24 +-
+ kernel/nstree.c                                    |  233 ++++
+ kernel/pid_namespace.c                             |   13 +-
+ kernel/time/namespace.c                            |   23 +-
+ kernel/user_namespace.c                            |   17 +-
+ kernel/utsname.c                                   |   28 +-
+ net/core/net_namespace.c                           |   59 +-
+ tools/include/uapi/linux/nsfs.h                    |   17 +-
+ tools/testing/selftests/namespaces/.gitignore      |    2 +
+ tools/testing/selftests/namespaces/Makefile        |    7 +
+ tools/testing/selftests/namespaces/config          |    7 +
+ .../selftests/namespaces/file_handle_test.c        | 1429 ++++++++++++++++++++
+ tools/testing/selftests/namespaces/nsid_test.c     |  986 ++++++++++++++
+ 42 files changed, 3257 insertions(+), 270 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250905-work-namespace-c68826dda0d4
 
 
