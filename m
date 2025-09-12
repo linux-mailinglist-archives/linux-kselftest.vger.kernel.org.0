@@ -1,318 +1,146 @@
-Return-Path: <linux-kselftest+bounces-41286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16F12B5450B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 10:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 405C5B5451C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 10:20:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E0683BBA3A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 08:19:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 684693A940A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 08:20:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C09D2D8779;
-	Fri, 12 Sep 2025 08:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97D12D73B6;
+	Fri, 12 Sep 2025 08:20:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSTprtzm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YoAdT8CJ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA692E401;
-	Fri, 12 Sep 2025 08:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FC12D739C;
+	Fri, 12 Sep 2025 08:20:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757665107; cv=none; b=gpyy/4vHNFJtvuFOHeIab7CWZ/N3EJ0OxhNFucIHOlbYgNip1Nu6Lxunx+UMB6i3uSKE7/SPQFbvMjthuZyfTfGdySj/mdcX5wLcScMGt0A7RgCH6nVKa58SZIOMnjpf76Jwqd2Buaa2Qfq/jB2qtiT2IHKxWjetf58aemA5zSo=
+	t=1757665208; cv=none; b=EN2VkutKcaxxTaDEoWUd1pfT4aaGRzSgPVCIjs1UHV411eWGze1PlFfuI0PR1BNt1O39A4eL/IDUsWDUcqVEDoK8b/Klgc6AcHS8AB6dQ29SyjdL1aSNjJCgk5q4/8yVoiBY69jd7q7Y0X+Sielfl4qi+rkB5c4kAk5F+YVcV4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757665107; c=relaxed/simple;
-	bh=LXH+SCB4NdyM2LOa87h4dCyYL3cFhysaqeVzB1y5l+8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EnqxfKTvQkR3U9Wx8P6dVnV1Dosf7Pnl+gnD2V5gDVfhzV4/mduVwd0FLhU7QAC4NjVqllf32si2/oZHU005k+lSTeNqVtuxh+IdDemD0aMPozBbZQbPnjqV66xgeRuEpkyMuh4tvP1xQ+clcNDy3LIM9fl2rMpeylIy/qrhw3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PSTprtzm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C2AC4CEF9;
-	Fri, 12 Sep 2025 08:18:25 +0000 (UTC)
+	s=arc-20240116; t=1757665208; c=relaxed/simple;
+	bh=OOusLVxnKHKzYYpqIszKMcMpYFoufzRxkmlgmDbuoAE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RIl/z+PTsAoK11LpN2Fbr1CKXLGKIR4GbKS5EZ93sIpgOvs7+nZySzJR5VFeMMuR/XoRu+X6wPJdQ3+k5CHXVrkmSqy3YNx7682ZXhwyTLtE9kBcWsVxQSUNpsSozeytQqPP40lUsqOZMq+vMw4zqTWPR/RDzGMf0qDxOlVsR9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YoAdT8CJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53489C4CEF4;
+	Fri, 12 Sep 2025 08:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757665107;
-	bh=LXH+SCB4NdyM2LOa87h4dCyYL3cFhysaqeVzB1y5l+8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PSTprtzm9jmMz9S4lfLL6xX6qV67wiq97cKlAQXFBFgYj3WK81nPaMlSOvArGNwNF
-	 ZFnWgYO/S/qPW/1/YBPYaHNUqMcApzvH1gEoiLAHnLXmaytxu1mHZw0TgILejyGVTh
-	 4oTes070KhUNWS83gT5CtfRsc/WzQTlobmSGl9f6t1vAZx3rmQQcRH+NPHtScdi9F5
-	 3+I3RRWLtOiVp+MXb0C96OLsvli6dPe47FGz75fUCjMj2CVxHbXXoD3qlU4HNUcNwa
-	 nWMckyJ8qDT1WJEscZrfeZ2pwb75Qm2nCXaTKz+2TsPVCiQy2h2GVkJazfA/BL3fwM
-	 uTqpqzzs9+G+w==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Benson Leung <bleung@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Dawid Niedzwiecki <dawidn@google.com>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	tzungbi@kernel.org
-Subject: [PATCH v3 5/5] platform/chrome: cros_ec_chardev: Consume cros_ec_device via revocable
-Date: Fri, 12 Sep 2025 08:17:17 +0000
-Message-ID: <20250912081718.3827390-6-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
-In-Reply-To: <20250912081718.3827390-1-tzungbi@kernel.org>
-References: <20250912081718.3827390-1-tzungbi@kernel.org>
+	s=k20201202; t=1757665208;
+	bh=OOusLVxnKHKzYYpqIszKMcMpYFoufzRxkmlgmDbuoAE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YoAdT8CJrYPBnrdP51NjrTWIRu+cXQR39oCZb/t/2jvT1bIJM9VXgbYW0tSIkbYrL
+	 NVMqDCnH8Dj8VBDVUAgtyQTvh/3MoRpno+6fCQoZSAox46ONzWRZJp1ktv5Lp5bhzi
+	 r9+106OXqgmFfl4iT7miTolwEFwmk1NdK/6Cdi2nBGnzY98SjgBObq8DEg7wHqVRms
+	 7AhZQLM74buaIeh3rrJVvSHBVOu3bHROqsVjaM45tLQQ8qPm3HTbOPAXBwytOq7FnC
+	 ofuKpTvPGQmC535taTMphjBBwAhRG1wg8Y14FaNzd9xz43E+4693r1aCn97d5Bj/T5
+	 ZXJ9rbbMWyWoQ==
+Date: Fri, 12 Sep 2025 10:19:57 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org, 
+	Josef Bacik <josef@toxicpanda.com>, Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>, 
+	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>, 
+	Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 27/32] nsfs: support file handles
+Message-ID: <20250912-wirsing-karibus-7f6a98621dd1@brauner>
+References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
+ <20250910-work-namespace-v1-27-4dd56e7359d8@kernel.org>
+ <CAOQ4uxgtQQa-jzsnTBxgUTPzgtCiAaH8X6ffMqd+1Y5Jjy0dmQ@mail.gmail.com>
+ <20250911-werken-raubzug-64735473739c@brauner>
+ <CAOQ4uxgMgzOjz4E-4kJFJAz3Dpd=Q6vXoGrhz9F0=mb=4XKZqA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxgMgzOjz4E-4kJFJAz3Dpd=Q6vXoGrhz9F0=mb=4XKZqA@mail.gmail.com>
 
-The cros_ec_chardev driver provides a character device interface to the
-ChromeOS EC.  A file handle to this device can remain open in userspace
-even if the underlying EC device is removed.
+On Thu, Sep 11, 2025 at 01:36:28PM +0200, Amir Goldstein wrote:
+> On Thu, Sep 11, 2025 at 11:31 AM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Wed, Sep 10, 2025 at 07:21:22PM +0200, Amir Goldstein wrote:
+> > > On Wed, Sep 10, 2025 at 4:39 PM Christian Brauner <brauner@kernel.org> wrote:
+> > > >
+> > > > A while ago we added support for file handles to pidfs so pidfds can be
+> > > > encoded and decoded as file handles. Userspace has adopted this quickly
+> > > > and it's proven very useful.
+> > >
+> > > > Pidfd file handles are exhaustive meaning
+> > > > they don't require a handle on another pidfd to pass to
+> > > > open_by_handle_at() so it can derive the filesystem to decode in.
+> > > >
+> > > > Implement the exhaustive file handles for namespaces as well.
+> > >
+> > > I think you decide to split the "exhaustive" part to another patch,
+> > > so better drop this paragraph?
+> >
+> > Yes, good point. I've dont that.
+> >
+> > > I am missing an explanation about the permissions for
+> > > opening these file handles.
+> > >
+> > > My understanding of the code is that the opener needs to meet one of
+> > > the conditions:
+> > > 1. user has CAP_SYS_ADMIN in the userns owning the opened namespace
+> > > 2. current task is in the opened namespace
+> >
+> > Yes.
+> >
+> > >
+> > > But I do not fully understand the rationale behind the 2nd condition,
+> > > that is, when is it useful?
+> >
+> > A caller is always able to open a file descriptor to it's own set of
+> > namespaces. File handles will behave the same way.
+> >
+> 
+> I understand why it's safe, and I do not object to it at all,
+> I just feel that I do not fully understand the use case of how ns file handles
+> are expected to be used.
+> A process can always open /proc/self/ns/mnt
+> What's the use case where a process may need to open its own ns by handle?
+> 
+> I will explain. For CAP_SYS_ADMIN I can see why keeping handles that
+> do not keep an elevated refcount of ns object could be useful in the same
+> way that an NFS client keeps file handles without keeping the file object alive.
+> 
+> But if you do not have CAP_SYS_ADMIN and can only open your own ns
+> by handle, what is the application that could make use of this?
+> and what's the benefit of such application keeping a file handle instead of
+> ns fd?
 
-This creates a classic use-after-free vulnerability.  Any file operation
-(ioctl, release, etc.) on the open handle after the EC device has gone
-would access a stale pointer, leading to a system crash.
+A process is not always able to open /proc/self/ns/. That requires
+procfs to be mounted and for /proc/self/ or /proc/self/ns/ to not be
+overmounted. However, they can derive a namespace fd from their own
+pidfd. And that also always works if it's their own namespace.
 
-To prevent this, leverage the revocable and convert cros_ec_chardev to a
-resource consumer of cros_ec_device.
+There's no need to introduce unnecessary behavioral differences between
+/proc/self/ns/, pidfd-derived namespace fs, and file-handle-derived
+namespace fds. That's just going to be confusing.
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
-v3:
-- Use specific labels for different cleanup in cros_ec_chardev_open().
+The other thing is that there are legitimate use-case for encoding your
+own namespace. For example, you might store file handles to your set of
+namespaces in a file on-disk so you can verify when you get rexeced that
+they're still valid and so on. This is akin to the pidfd use-case.
 
-v2: https://lore.kernel.org/chrome-platform/20250820081645.847919-6-tzungbi@kernel.org
-- Rename "ref_proxy" -> "revocable".
-- Fix a sparse warning by removing the redundant __rcu annotation.
-
-v1: https://lore.kernel.org/chrome-platform/20250814091020.1302888-4-tzungbi@kernel.org
-
- drivers/platform/chrome/cros_ec_chardev.c | 124 +++++++++++++++-------
- 1 file changed, 84 insertions(+), 40 deletions(-)
-
-diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
-index c9d80ad5b57e..2677b756e31c 100644
---- a/drivers/platform/chrome/cros_ec_chardev.c
-+++ b/drivers/platform/chrome/cros_ec_chardev.c
-@@ -22,6 +22,7 @@
- #include <linux/platform_data/cros_ec_proto.h>
- #include <linux/platform_device.h>
- #include <linux/poll.h>
-+#include <linux/revocable.h>
- #include <linux/slab.h>
- #include <linux/types.h>
- #include <linux/uaccess.h>
-@@ -32,7 +33,7 @@
- #define CROS_MAX_EVENT_LEN	PAGE_SIZE
- 
- struct chardev_priv {
--	struct cros_ec_device *ec_dev;
-+	struct revocable *ec_dev_rev;
- 	struct notifier_block notifier;
- 	wait_queue_head_t wait_event;
- 	unsigned long event_mask;
-@@ -55,6 +56,7 @@ static int ec_get_version(struct chardev_priv *priv, char *str, int maxlen)
- 	};
- 	struct ec_response_get_version *resp;
- 	struct cros_ec_command *msg;
-+	struct cros_ec_device *ec_dev;
- 	int ret;
- 
- 	msg = kzalloc(sizeof(*msg) + sizeof(*resp), GFP_KERNEL);
-@@ -64,12 +66,19 @@ static int ec_get_version(struct chardev_priv *priv, char *str, int maxlen)
- 	msg->command = EC_CMD_GET_VERSION + priv->cmd_offset;
- 	msg->insize = sizeof(*resp);
- 
--	ret = cros_ec_cmd_xfer_status(priv->ec_dev, msg);
--	if (ret < 0) {
--		snprintf(str, maxlen,
--			 "Unknown EC version, returned error: %d\n",
--			 msg->result);
--		goto exit;
-+	REVOCABLE(priv->ec_dev_rev, ec_dev) {
-+		if (!ec_dev) {
-+			ret = -ENODEV;
-+			goto exit;
-+		}
-+
-+		ret = cros_ec_cmd_xfer_status(ec_dev, msg);
-+		if (ret < 0) {
-+			snprintf(str, maxlen,
-+				 "Unknown EC version, returned error: %d\n",
-+				 msg->result);
-+			goto exit;
-+		}
- 	}
- 
- 	resp = (struct ec_response_get_version *)msg->data;
-@@ -92,22 +101,30 @@ static int cros_ec_chardev_mkbp_event(struct notifier_block *nb,
- {
- 	struct chardev_priv *priv = container_of(nb, struct chardev_priv,
- 						 notifier);
--	struct cros_ec_device *ec_dev = priv->ec_dev;
-+	struct cros_ec_device *ec_dev;
- 	struct ec_event *event;
--	unsigned long event_bit = 1 << ec_dev->event_data.event_type;
--	int total_size = sizeof(*event) + ec_dev->event_size;
-+	unsigned long event_bit;
-+	int total_size;
-+
-+	REVOCABLE(priv->ec_dev_rev, ec_dev) {
-+		if (!ec_dev)
-+			return NOTIFY_DONE;
-+
-+		event_bit = 1 << ec_dev->event_data.event_type;
-+		total_size = sizeof(*event) + ec_dev->event_size;
- 
--	if (!(event_bit & priv->event_mask) ||
--	    (priv->event_len + total_size) > CROS_MAX_EVENT_LEN)
--		return NOTIFY_DONE;
-+		if (!(event_bit & priv->event_mask) ||
-+		    (priv->event_len + total_size) > CROS_MAX_EVENT_LEN)
-+			return NOTIFY_DONE;
- 
--	event = kzalloc(total_size, GFP_KERNEL);
--	if (!event)
--		return NOTIFY_DONE;
-+		event = kzalloc(total_size, GFP_KERNEL);
-+		if (!event)
-+			return NOTIFY_DONE;
- 
--	event->size = ec_dev->event_size;
--	event->event_type = ec_dev->event_data.event_type;
--	memcpy(event->data, &ec_dev->event_data.data, ec_dev->event_size);
-+		event->size = ec_dev->event_size;
-+		event->event_type = ec_dev->event_data.event_type;
-+		memcpy(event->data, &ec_dev->event_data.data, ec_dev->event_size);
-+	}
- 
- 	spin_lock(&priv->wait_event.lock);
- 	list_add_tail(&event->node, &priv->events);
-@@ -166,7 +183,12 @@ static int cros_ec_chardev_open(struct inode *inode, struct file *filp)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	priv->ec_dev = ec_dev;
-+	priv->ec_dev_rev = revocable_alloc(ec_dev->revocable_provider);
-+	if (!priv->ec_dev_rev) {
-+		ret = -ENOMEM;
-+		goto free_priv;
-+	}
-+
- 	priv->cmd_offset = ec->cmd_offset;
- 	filp->private_data = priv;
- 	INIT_LIST_HEAD(&priv->events);
-@@ -178,9 +200,14 @@ static int cros_ec_chardev_open(struct inode *inode, struct file *filp)
- 					       &priv->notifier);
- 	if (ret) {
- 		dev_err(ec_dev->dev, "failed to register event notifier\n");
--		kfree(priv);
-+		goto free_revocable;
- 	}
- 
-+	return 0;
-+free_revocable:
-+	revocable_free(priv->ec_dev_rev);
-+free_priv:
-+	kfree(priv);
- 	return ret;
- }
- 
-@@ -251,11 +278,15 @@ static ssize_t cros_ec_chardev_read(struct file *filp, char __user *buffer,
- static int cros_ec_chardev_release(struct inode *inode, struct file *filp)
- {
- 	struct chardev_priv *priv = filp->private_data;
--	struct cros_ec_device *ec_dev = priv->ec_dev;
-+	struct cros_ec_device *ec_dev;
- 	struct ec_event *event, *e;
- 
--	blocking_notifier_chain_unregister(&ec_dev->event_notifier,
--					   &priv->notifier);
-+	REVOCABLE(priv->ec_dev_rev, ec_dev) {
-+		if (ec_dev)
-+			blocking_notifier_chain_unregister(&ec_dev->event_notifier,
-+							   &priv->notifier);
-+	}
-+	revocable_free(priv->ec_dev_rev);
- 
- 	list_for_each_entry_safe(event, e, &priv->events, node) {
- 		list_del(&event->node);
-@@ -273,6 +304,7 @@ static long cros_ec_chardev_ioctl_xcmd(struct chardev_priv *priv, void __user *a
- {
- 	struct cros_ec_command *s_cmd;
- 	struct cros_ec_command u_cmd;
-+	struct cros_ec_device *ec_dev;
- 	long ret;
- 
- 	if (copy_from_user(&u_cmd, arg, sizeof(u_cmd)))
-@@ -299,10 +331,17 @@ static long cros_ec_chardev_ioctl_xcmd(struct chardev_priv *priv, void __user *a
- 	}
- 
- 	s_cmd->command += priv->cmd_offset;
--	ret = cros_ec_cmd_xfer(priv->ec_dev, s_cmd);
--	/* Only copy data to userland if data was received. */
--	if (ret < 0)
--		goto exit;
-+	REVOCABLE(priv->ec_dev_rev, ec_dev) {
-+		if (!ec_dev) {
-+			ret = -ENODEV;
-+			goto exit;
-+		}
-+
-+		ret = cros_ec_cmd_xfer(ec_dev, s_cmd);
-+		/* Only copy data to userland if data was received. */
-+		if (ret < 0)
-+			goto exit;
-+	}
- 
- 	if (copy_to_user(arg, s_cmd, sizeof(*s_cmd) + s_cmd->insize))
- 		ret = -EFAULT;
-@@ -313,24 +352,29 @@ static long cros_ec_chardev_ioctl_xcmd(struct chardev_priv *priv, void __user *a
- 
- static long cros_ec_chardev_ioctl_readmem(struct chardev_priv *priv, void __user *arg)
- {
--	struct cros_ec_device *ec_dev = priv->ec_dev;
-+	struct cros_ec_device *ec_dev;
- 	struct cros_ec_readmem s_mem = { };
- 	long num;
- 
--	/* Not every platform supports direct reads */
--	if (!ec_dev->cmd_readmem)
--		return -ENOTTY;
-+	REVOCABLE(priv->ec_dev_rev, ec_dev) {
-+		if (!ec_dev)
-+			return -ENODEV;
- 
--	if (copy_from_user(&s_mem, arg, sizeof(s_mem)))
--		return -EFAULT;
-+		/* Not every platform supports direct reads */
-+		if (!ec_dev->cmd_readmem)
-+			return -ENOTTY;
- 
--	if (s_mem.bytes > sizeof(s_mem.buffer))
--		return -EINVAL;
-+		if (copy_from_user(&s_mem, arg, sizeof(s_mem)))
-+			return -EFAULT;
- 
--	num = ec_dev->cmd_readmem(ec_dev, s_mem.offset, s_mem.bytes,
--				  s_mem.buffer);
--	if (num <= 0)
--		return num;
-+		if (s_mem.bytes > sizeof(s_mem.buffer))
-+			return -EINVAL;
-+
-+		num = ec_dev->cmd_readmem(ec_dev, s_mem.offset, s_mem.bytes,
-+					  s_mem.buffer);
-+		if (num <= 0)
-+			return num;
-+	}
- 
- 	if (copy_to_user((void __user *)arg, &s_mem, sizeof(s_mem)))
- 		return -EFAULT;
--- 
-2.51.0.384.g4c02a37b29-goog
-
+Or just plainly for namespace comparison reasons where you keep a file
+handle to your own namespaces and can then easily check against others.
 
