@@ -1,118 +1,116 @@
-Return-Path: <linux-kselftest+bounces-41426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A462B5588C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:44:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82FF8B55895
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:45:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB1E65C3CC0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 21:44:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C470D1CC477D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 21:45:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 375462C11C2;
-	Fri, 12 Sep 2025 21:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C63DB2D2494;
+	Fri, 12 Sep 2025 21:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bJ6I3O6S"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tFP9k03y";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dcd6fEft"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084A1280CF1;
-	Fri, 12 Sep 2025 21:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D18B2D0C96;
+	Fri, 12 Sep 2025 21:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757713472; cv=none; b=gc/5MCdQxT2mqLbE5P5miyBgIa8I9gqSHnKSsrgRr7jibHvB9+bhR7LPXkpDFU4t2Qw6xIPIzivwOEEoOwczbOQ9CfIBqRV/uL7UIXDsXl63wimRPuS9g+g++sNxWC7Cnua/JB92m9FQ2f2af1H5mIs59lFWG0SIpbykugcaRKw=
+	t=1757713500; cv=none; b=bXt++6OTyoWCiOxK1eS2g6Xy2D/S3/OaCgzVhVUR0ObDFaInamPzWwNe67BKVG1+njWHvSIy4vXJTMnaXmMwgbmaECvVkCKrY5iEGtciA+iLLWF8xo5v5fHUnALyJ1iokuyy3mV5O6JNgWrv0QvyzCGpZOdOkx8BDRjptQJkYtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757713472; c=relaxed/simple;
-	bh=oSKfU+P7ccMg188II6EO2cJq+sduRk0IxK/pqog4cSU=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EPl7CZ3DKMCud5rEwr9KKxDswcn5/TGaYDSy2J6C27sv1DKaL0QtPAxKqToAtvqbvpd4RXJvPPz0H8RzvXn3RnGOg2eA9Sw4KZ8ZR2TKEma7i6IC0pJ5kGnsjqu/PPGAuw2cU/vkkQWxrhwmsqQcvHeAUe3XRFTrK7KHqY3OYJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bJ6I3O6S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83509C4CEF1;
-	Fri, 12 Sep 2025 21:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757713471;
-	bh=oSKfU+P7ccMg188II6EO2cJq+sduRk0IxK/pqog4cSU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bJ6I3O6StZuiXEUknMkPl1d+XBcHoYo8KEz0hmh0oJMDf7MhqDpzuxbw6otYgNdvz
-	 JUoafKn1e31LqhlISkZ1IQQvo20W6u8VnkDJhbEjZq7OJMpt2FSRjw/Yl3oEM4+MGl
-	 zJi+ZbrctAmToGrR+0+kYVvhWj9VNr4m1TTnmLaFSQFjQJcU7nQC8VBJld+w2K7JQ2
-	 hdA8NkZHEjRX3CRgndAuVA12VfXC6o5sknSnGqtHy8dpKWt8tPgRSI15ldZl+Y3dPR
-	 Qn/IlGW3uuiqPMX3IKQFlaHmaALAhaAVaovvJOzJFbPAoPJGokI84V/j4pO+QH6w0h
-	 J8cxwUlIailTg==
-Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=lobster-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1uxBZF-00000005pTe-1Lxi;
-	Fri, 12 Sep 2025 21:44:29 +0000
-Date: Fri, 12 Sep 2025 22:44:27 +0100
-Message-ID: <87cy7vz6pw.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	s=arc-20240116; t=1757713500; c=relaxed/simple;
+	bh=3bwpwH96FGD43V8N+Qioew5g8bhS8VcWR9Aib1bPJ3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nL04y4q3yIdEZSVH0ye6Ja5oEJq0bMcK5kBjhDPDn9+EA07AnurJL9aNlBWfyKyeoNTpJenZ+SjcXKFMhA+sa+woU4ksc+FPoakah9RHYSwosUDZZRhH4di1f1Q984jiCqO5PVHpa+Ba9stXBVmfQw/EeXRoJjah0nT2iMk2Nww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tFP9k03y; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dcd6fEft; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Fri, 12 Sep 2025 23:44:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1757713496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qXTiwDjhcLaZDRFliKAViVaEmmpH7tw9UemheZXgpg4=;
+	b=tFP9k03yleUE+hUQQynXhdIOm/FkEhl/zD3OwnTDv0FfPOphL6g2cXZjoonkRd90+U63kH
+	YEMPEZfOoGSijGRCUQv4sCYJd1oBCXzShm/Btq+f10c5i11gfn7YXhtaENu6rOLcxOgia/
+	sMMc9G8Bly5A//qqGTlveWvn2BYbWz10Q/FGlnphechNlp0Pdn70leOS+SZPiG9PPbMAOW
+	pqfQNH74I8e0wIoQ6uwXXX4Um2qv1je+8qHl+HFc8aiQur0V6IRzIdtQWEmgO+0Ql1SjTd
+	vsfqYJFNScY+9kCJhso97lffNl5QfaAp76rMZc8zGD9GnAopp0LfgGIvDrHBdw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1757713496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qXTiwDjhcLaZDRFliKAViVaEmmpH7tw9UemheZXgpg4=;
+	b=dcd6fEftFXzYf28tjOHQN/2x/RgZ27pswBmj/oUcB0QKOEkwZWTlL09pQSYvVt6PLv+yBy
+	XhNLbphNGB7ErkBA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Wake Liu <wakel@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v16 5/6] KVM: arm64: Allow GCS to be enabled for guests
-In-Reply-To: <20250912-arm64-gcs-v16-5-6435e5ec37db@kernel.org>
-References: <20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org>
-	<20250912-arm64-gcs-v16-5-6435e5ec37db@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/futex: Conditionally run futex_numa_mpol test
+Message-ID: <20250912214454.t0qhEqT2@linutronix.de>
+References: <20250908113721.4031242-1-wakel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.104.136.29
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250908113721.4031242-1-wakel@google.com>
 
-On Fri, 12 Sep 2025 10:25:31 +0100,
-Mark Brown <broonie@kernel.org> wrote:
+On 2025-09-08 19:37:20 [+0800], Wake Liu wrote:
+> The futex_numa_mpol test requires libnuma, which is not available on
+> all platforms. When the test is not built, the run.sh script fails
+> because it unconditionally tries to execute the test binary.
 > 
-> Now that required functionality for GCS is in place expose
-> ID_AA64PFR1_EL1.GCS, allowing guests to be given the feature.
+> Check for the futex_numa_mpol executable before running it. If the
+> binary is not present, print a skip message and continue.
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> This allows the test suite to run successfully on platforms that do
+> not have libnuma and therefore do not build the futex_numa_mpol
+> test.
+
+If you skip the test, how to you compile this?
+Does
+	https://lore.kernel.org/all/20250818135458.F352St6W@linutronix.de/
+
+help?
+
+> Signed-off-by: Wake Liu <wakel@google.com>
 > ---
->  arch/arm64/kvm/nested.c   | 7 ++++---
->  arch/arm64/kvm/sys_regs.c | 2 --
->  2 files changed, 4 insertions(+), 5 deletions(-)
+>  tools/testing/selftests/futex/functional/run.sh | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
-> index 153b3e11b115..d2d55e18c610 100644
-> --- a/arch/arm64/kvm/nested.c
-> +++ b/arch/arm64/kvm/nested.c
-> @@ -1459,9 +1459,10 @@ u64 limit_nv_id_reg(struct kvm *kvm, u32 reg, u64 val)
+> diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
+> index 81739849f299..f3e43eb806bf 100755
+> --- a/tools/testing/selftests/futex/functional/run.sh
+> +++ b/tools/testing/selftests/futex/functional/run.sh
+> @@ -88,4 +88,8 @@ echo
+>  ./futex_priv_hash -g $COLOR
 >  
->  	case SYS_ID_AA64PFR1_EL1:
->  		/* Only support BTI, SSBS, CSV2_frac */
-> -		val &= (ID_AA64PFR1_EL1_BT	|
-> -			ID_AA64PFR1_EL1_SSBS	|
-> -			ID_AA64PFR1_EL1_CSV2_frac);
-> +		val &= (ID_AA64PFR1_EL1_BT		|
-> +			ID_AA64PFR1_EL1_SSBS		|
-> +			ID_AA64PFR1_EL1_CSV2_frac	|
-> +			ID_AA64PFR1_EL1_GCS);
+>  echo
+> -./futex_numa_mpol $COLOR
+> +if [ -x ./futex_numa_mpol ]; then
+> +    ./futex_numa_mpol $COLOR
+> +else
+> +    echo "SKIP: futex_numa_mpol (not built)"
+> +fi
 
-How about updating the comment?
-
-	M.
-
--- 
-Jazz isn't dead. It just smells funny.
+Sebastian
 
