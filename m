@@ -1,231 +1,140 @@
-Return-Path: <linux-kselftest+bounces-41429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16E90B55946
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Sep 2025 00:34:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B787AB559D4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Sep 2025 01:10:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 438AC1C25AAB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 22:35:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE4BC7AF88D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:08:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C004B22FAFD;
-	Fri, 12 Sep 2025 22:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 568EB27587C;
+	Fri, 12 Sep 2025 23:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yQvoDpDf"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Q5CQp2O6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0BB220F24
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 22:34:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3CA25F7A5
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 23:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757716485; cv=none; b=o9AuzXXbz1WDYtlBjusg8tjysj640/vgq1lpVscrb8dpwdtQTl97AFPur6LdxkrKmOPhIlmR9lJcBUJb3fxrsXlUXMQyhNqsu2uFnByKMFLBaiilwa/LiHSrAv0IhcdzAMW0cpP7lQ4DIpDipusgya6yUhwxS1RsEfrdEhwT+AQ=
+	t=1757718594; cv=none; b=NxrLwkVpuGsdMrD55dr07PGfgr0dMiaH6+zMf7/iWKOK7Yf4EPbz8ux7XJSDgaBIcrYO3CWDCbccxAKy7lq89ZtYtO4nMVYInO0432137mK8MMDwUQLxt8cUQTYE/F5zurO9LUoN3c6fUo5trfOA7SoQua3eat8xmtPjVUARfmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757716485; c=relaxed/simple;
-	bh=+BDgsMX06Ju/kfaG0zZzie2LOuabqWLb2H21wc6L6XY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i2UFTKsrAAUAo8vCD39mrVYG1/p67h0eVpccMm/ltXWaEYGtSjjdwY0fRZUcazMRxWK8JkjGD8dGgLoeuyz1eRCqqCNEIwCfC5dTxjZuOwVvkI27mTz+Ab2GsJ8c6p38r8ZXwBWBGZ4B7CcL0aVxOvsjXp/1prH7pgsulsASM9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yQvoDpDf; arc=none smtp.client-ip=74.125.224.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-606b375eeb3so1262990d50.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 15:34:43 -0700 (PDT)
+	s=arc-20240116; t=1757718594; c=relaxed/simple;
+	bh=GRUOPBmcHG5rwny33Aqll6uFm6c2yeYTGyp3ev0i/kQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UlCnO2XoaiPZIFyDICxPxIhmNRMwRIzQPz1nZOVpmTFdJx+RAkS8zIFSL0DHm4YF01rQwXK0NJbGggwTqWSn4sBwdk2RfjtIyLjr2YR4BP+gK6xLYgsfbqiG84JlK2F9Fq7KkM+ljQgmAhZ5PyoDNGSP0tQguiMEVe4aJxOD0eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Q5CQp2O6; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-76e4f2e4c40so2220325b3a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 16:09:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757716483; x=1758321283; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d3zugougNjwzeyQ8N92kEFKnLBurBuSSiIdQ2OlaO4k=;
-        b=yQvoDpDf5691pshA6v5+mZ05cq+ehXVKCqiMTQ2zx3M456Yc9G/WcnoB1o5kquiCKL
-         2kvMbuLktV5wnnz0wUmEbRP2uaCmYjrRl+MTb4sgJU7KACrTsWxela1Sw4IcJx9crCLs
-         SN/UiOzy6NR9dJI67TVDjLCRQB/dXnnNgYkTjfnzp8El78RMB37w8Ig98YQKbTrWjX4l
-         h4wM5Knr7Zqu1F3oHgWf5PJtT4iaegjeH/0ia2RZ/d43CpDeo1Ocnpj0I3WL563ZEixM
-         uMcbz/RAZLt4Hjmhoz7VYfitEnl0sg55kD0s5P8KFKe0WAOZl6qXz4SrSzY30/xTa+r2
-         Z2Sw==
+        d=chromium.org; s=google; t=1757718592; x=1758323392; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wj2EzCDO/uH/NVYiO2SSDOzQUMFnuWGG6J5ju6LXtrM=;
+        b=Q5CQp2O69f1yH3w5fW9x9Vrg84tpfjAUvhJtgMCnUCzUFeFvlm813v6Sr/CNWCF63T
+         0G+cA2SxVWsib562VIodjvXc6z0nYLTbGJaAlK6AU3sQ+Hmx2hvSRDEJsnJZ5sMrYRAf
+         EGkdmHL6Z2/XcMOqmHTAFbLl18ZZxFRVnI1HE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757716483; x=1758321283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d3zugougNjwzeyQ8N92kEFKnLBurBuSSiIdQ2OlaO4k=;
-        b=lX0ngk8wR71YlbGmqGP42mPAIycN7Q1JX1Kt/4LNpRGQApfs4M6ohVTo5Wvz7wh5IU
-         LemJ8gc5ir2/wh5M+PMuP1jLAWLWpmnFnxmMTBRI3XNcFY92A484q6bqPeKtIfKnplLp
-         ek7hfW+r80f3+CxJZVIodWyZK0dnS/D5itvtbDmpPKd24jLgiVz3NLfAi/ZA58Hyo2/m
-         zp8W92UrsxhseDddU5pPcQ8j82akuT9yoT9GG1fOL2EOflYbUuc0UsuuAP3NG/2VxC1d
-         p6KiCLFIDZKeIiQuKBFomeasNza266GESSx6PHgCj7RwCUwlOs+3cWXw88b0VJ7sXoBx
-         cMTw==
-X-Forwarded-Encrypted: i=1; AJvYcCXex/+YE5hovAK5HpIZVFO0frEq/OjMBck+Iq0jTH7OSzYMZ31mQ9K4gkGLOA3lSyCSK1Sb4FYi3ZbhBBYwf38=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrUI8MoLZKJtqV9yiQ5d/E95bzgZpIhylcnFEWN1nxlDpQbchH
-	unMYSNrYBM6obnco9D81Yn94853MrulEeRNB5trBGz0wwVTPlPeUZntZUgt25vPk/duna6m2VMY
-	T1QlwVT8y8adCgmJcwCHsB4XqsaSuhP5UQHn4QxFP
-X-Gm-Gg: ASbGncutABCSv8vgnzYp0aunCywkyOWd1CWZ4sE/JR8o0TQKTLGkegSkyUeI45zfajz
-	cXoZ0S3AmTN/neiD9J1IdO2llgBUDxJ7PRyTf2V6Tmw33iVWljSDJdyb70YChPLAUTEjuiYBgwe
-	9w4AFSVULO50I53xqkY03QkJTcF+K7T8NVA755j7SGR+BshOaJgWnm9cjqzSNyDYCMIvCBrS0K9
-	J9wNGombtKvo025JiFvlAICx9HD65Kvexy9lfIGWBA6
-X-Google-Smtp-Source: AGHT+IH6Vti9lvQ8aUaABheCs9G3Hl3xVoC4+hQSx4/7LM8FjjVWBkZYCg/y4dcsvWJRkUBy/Nx2M5I2c/6Y8yIpI0U=
-X-Received: by 2002:a05:690e:88:b0:62b:8ae5:3fb0 with SMTP id
- 956f58d0204a3-62b8ae5402amr414384d50.0.1757716482689; Fri, 12 Sep 2025
- 15:34:42 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757718592; x=1758323392;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wj2EzCDO/uH/NVYiO2SSDOzQUMFnuWGG6J5ju6LXtrM=;
+        b=J8SVt4QAa51R0K5AH9dlXZW1A+GPGrgrvMPWHBG3YydhSxIFOG50ssdbt/L3TD5PTz
+         b+zEP58AHvAlEv5o+d6q728hHgNErikjjuTz3Tb7SsTN48hKP7TFeMzmgYVSXFG+zBl4
+         JNxEfEC2EzR/57qR8ZSlSU7XRGdrAFgCLHSi7Yp+HjJBwsq/BtWxabZd1hwcQHTkU66a
+         NFt2VJQR6Ls+N9XY8xX7dOGWgvHR5aGrWLrkczCRSEf9Vi96uvfzJZw5LoOGO7fDDyam
+         sEESHhVYOcjN75eTaVHQWH3DAdYrMMbPwNXmtdpt7K9YGoRCRQU88mQPBJV2VLcokcHl
+         S7uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVS08peibCNYQrq5hf4e8LlZ+y760fHRqMxUFEF7rHX8BvpEG7Mhncv+eQK37aShx9nQL6q48kZoz0mllnMasI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXdLif7bdKnz7gI998r5LTrjRrGArmRR+tcZ+q5RrLYFJg84pc
+	gq4TxEtk8+WK9ZgDhmV2teiBmM3o5zaxooLIXNOQGfMH9d/5wio8Vhlh2oWhmMJ/k024pfmqN53
+	3D4Q=
+X-Gm-Gg: ASbGncvOmhVAcBy7ws51iOz0r0G06QGBm4XZO5QTSikQFqY6OJsW/hhv4iBOtk8G9R4
+	/WG9bzrrtN+BmAqImUAbxlisxFRMYlIATlV1UO6ymiOvDkhp8CLaSvlmGlN5UIy3Qg0R09HfQdF
+	iiLLOeZFuCzLQtknx+1lCmkQrAGJ0PG7fQbSVLCqoet869jYz4qBQ0TtS9BnF5kE+VOVQG21Jaj
+	tXiuZzhCP0uGlK7oUgexJrzKufIPGZdMHLqQvR3xkziJmUQUK3KY/pTFFf4YYW/nFT0oZfknj5z
+	J2z128cfrkEw1EGANBm8hHhMnPE+kNeFi7FViHD/Dsxg+BoHXGbI63UB1eaeqQYpeRkwYR5DLlX
+	3tZo2YJeKcnk5Lfw/MVnKVJro8VC7NFlx3/aaNx/R0wvYCzFF4HEruEOp9PM=
+X-Google-Smtp-Source: AGHT+IE5DR0gvGWUro9z10EvotDyakdL5SHVeYZ/tNuNggcehVsLSaHVKcMNLMyAhxmQVoCyYfqTvQ==
+X-Received: by 2002:a05:6a20:9147:b0:251:9f29:454b with SMTP id adf61e73a8af0-2602bb59347mr5854185637.39.1757718592010;
+        Fri, 12 Sep 2025 16:09:52 -0700 (PDT)
+Received: from localhost ([2a00:79e0:2e14:7:e464:c3f:39d8:1bab])
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-32df97c3b9csm1227762a91.11.2025.09.12.16.09.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Sep 2025 16:09:51 -0700 (PDT)
+From: Brian Norris <briannorris@chromium.org>
+To: Bjorn Helgaas <bhelgaas@google.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>
+Cc: linux-pci@vger.kernel.org,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Richard Weinberger <richard@nod.at>,
+	Wei Liu <wei.liu@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	kunit-dev@googlegroups.com,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	linux-um@lists.infradead.org,
+	Brian Norris <briannorris@chromium.org>
+Subject: [PATCH 0/4] PCI: Add support and tests for FIXUP quirks in modules
+Date: Fri, 12 Sep 2025 15:59:31 -0700
+Message-ID: <20250912230208.967129-1-briannorris@chromium.org>
+X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250902111951.58315-1-kalyazin@amazon.com> <20250902111951.58315-2-kalyazin@amazon.com>
- <CADrL8HV8+dh4xPv6Da5CR+CwGJwg5uHyNmiVmHhWFJSwy8ChRw@mail.gmail.com> <87d562a1-89fe-42a8-aa53-c052acf4c564@amazon.com>
-In-Reply-To: <87d562a1-89fe-42a8-aa53-c052acf4c564@amazon.com>
-From: James Houghton <jthoughton@google.com>
-Date: Fri, 12 Sep 2025 15:34:06 -0700
-X-Gm-Features: AS18NWAw_XyCFedOeHxZhcAGyjfZOKpYwjL4OIfOUrwy6K1ggYgW8JlV5rraAH0
-Message-ID: <CADrL8HUObfEd80sr783dB3dPWGSX7H5=0HCp9OjiL6D_Sp+2Ww@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] KVM: guest_memfd: add generic population via write
-To: kalyazin@amazon.com
-Cc: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
-	"shuah@kernel.org" <shuah@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "michael.day@amd.com" <michael.day@amd.com>, 
-	"david@redhat.com" <david@redhat.com>, "Roy, Patrick" <roypat@amazon.co.uk>, 
-	"Thomson, Jack" <jackabt@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>, 
-	"Cali, Marco" <xmarcalx@amazon.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 11, 2025 at 3:15=E2=80=AFAM Nikita Kalyazin <kalyazin@amazon.co=
-m> wrote:
->
->
->
-> On 10/09/2025 22:23, James Houghton wrote:
-> > On Tue, Sep 2, 2025 at 4:20=E2=80=AFAM Kalyazin, Nikita <kalyazin@amazo=
-n.co.uk> wrote:
-> >>
-> >> From: Nikita Kalyazin <kalyazin@amazon.com>
-> >
-> > Hi Nikita,
->
-> Hi James,
->
-> Thanks for the review!
+This series primarily adds support for DECLARE_PCI_FIXUP_*() in modules.
+There are a few drivers that already use this, and so they are
+presumably broken when built as modules.
 
-:) I hope it's actually helpful.
+While at it, I wrote some unit tests that emulate a fake PCI device, and
+let the PCI framework match/not-match its vendor/device IDs. This test
+can be built into the kernel or built as a module.
 
->
->
-> >>
-> >> write syscall populates guest_memfd with user-supplied data in a gener=
-ic
-> >> way, ie no vendor-specific preparation is performed.  This is supposed
-> >> to be used in non-CoCo setups where guest memory is not
-> >> hardware-encrypted.
-> >
-> > What's meant to happen if we do use this for CoCo VMs? I would expect
-> > write() to fail, but I don't see why it would (seems like we need/want
-> > a check that we aren't write()ing to private memory).
->
-> I am not so sure that write() should fail even in CoCo VMs if we access
-> not-yet-prepared pages.  My understanding was that the CoCoisation of
-> the memory occurs during "preparation".  But I may be wrong here.
+I also include some infrastructure changes (patch 3 and 4), so that
+ARCH=um (the default for kunit.py), ARCH=arm, and ARCH=arm64 will run
+these tests by default. These patches have different maintainers and are
+independent, so they can probably be picked up separately. I included
+them because otherwise the tests in patch 2 aren't so easy to run.
 
-This sounds fine to me, but could you update the changelog with what
-the behavior is for CoCo VMs and why we don't allow writing to the
-same pages/regions twice? Something like:
 
-"Although write() is only meant to be used for non-CoCo VMs, it is
-valid for CoCo VMs as well: the written contents will be encrypted
-(when the page is prepared). Because the contents may be encrypted, it
-is nonsensical to write() again, so write()ing to prepared pages is
-disallowed (even if the no memory encryption occurs). Furthermore, in
-the near future, page preparation will also result in pages being
-removed from the direct map, so there will be no direct map through
-which to perform the second write()."
+Brian Norris (4):
+  PCI: Support FIXUP quirks in modules
+  PCI: Add KUnit tests for FIXUP quirks
+  um: Select PCI_DOMAINS_GENERIC
+  kunit: qemu_configs: Add PCI to arm, arm64
 
-(This is all provided that it's actually okay to write() content that
-will be encrypted... I don't know why that would be improper, but I'm
-not exactly an expert here.)
+ arch/um/Kconfig                           |   1 +
+ drivers/pci/Kconfig                       |  11 ++
+ drivers/pci/Makefile                      |   1 +
+ drivers/pci/fixup-test.c                  | 197 ++++++++++++++++++++++
+ drivers/pci/quirks.c                      |  62 +++++++
+ include/linux/module.h                    |  18 ++
+ kernel/module/main.c                      |  26 +++
+ tools/testing/kunit/qemu_configs/arm.py   |   1 +
+ tools/testing/kunit/qemu_configs/arm64.py |   1 +
+ 9 files changed, 318 insertions(+)
+ create mode 100644 drivers/pci/fixup-test.c
 
-> >> @@ -390,6 +392,63 @@ void kvm_gmem_init(struct module *module)
-> >>          kvm_gmem_fops.owner =3D module;
-> >>   }
-> >>
-> >> +static int kvm_kmem_gmem_write_begin(const struct kiocb *kiocb,
-> >> +                                    struct address_space *mapping,
-> >> +                                    loff_t pos, unsigned int len,
-> >> +                                    struct folio **foliop,
-> >> +                                    void **fsdata)
-> >> +{
-> >> +       struct file *file =3D kiocb->ki_filp;
-> >> +       pgoff_t index =3D pos >> PAGE_SHIFT;
-> >> +       struct folio *folio;
-> >> +
-> >> +       if (!PAGE_ALIGNED(pos) || len !=3D PAGE_SIZE)
-> >> +               return -EINVAL;
-> >
-> > Requiring pos to be page-aligned seems like a strange restriction, and
-> > requiring len to be exactly PAGE_SIZE just seems wrong. I don't see
-> > any reason why the below logic can't be made to work with an
-> > unrestricted pos and len (in other words, I don't see how guest_memfd
-> > is special vs other filesystems in this regard).
->
-> I don't have a real reason to apply those restrictions.  Happy to remove
-> them, thanks.
+-- 
+2.51.0.384.g4c02a37b29-goog
 
-Thanks! Presumably you'll make it so that any unaligned segments will
-be left as zeroes; please describe this in the changelog as well. :)
-
-> >> +
-> >> +       if (pos + len > i_size_read(file_inode(file)))
-> >> +               return -EINVAL;
-> >> +
-> >> +       folio =3D kvm_gmem_get_folio(file_inode(file), index);
-> >> +       if (IS_ERR(folio))
-> >> +               return -EFAULT;
-> >> +
-> >> +       if (WARN_ON_ONCE(folio_test_large(folio))) {
-> >> +               folio_unlock(folio);
-> >> +               folio_put(folio);
-> >> +               return -EFAULT;
-> >> +       }
-> >> +
-> >> +       if (folio_test_uptodate(folio)) {
-> >> +               folio_unlock(folio);
-> >> +               folio_put(folio);
-> >> +               return -ENOSPC;
-> >
-> > Does it actually matter for the folio not to be uptodate? It seems
-> > unnecessarily restrictive not to be able to overwrite data if we're
-> > saying that this is only usable for unencrypted memory anyway.
->
-> In the context of direct map removal [1] it does actually because when
-> we mark a folio as prepared, we remove it from the direct map making it
-> inaccessible to the way write() performs the copy.  It does not matter
-> if direct map removal isn't enabled though.  Do you think it should be
-> conditional?
-
-Oh, good point. It's simpler (both to implement and to describe) to
-disallow a second write() call in all cases (no matter if the direct
-map for the page has been removed or if the contents have been
-encrypted), so I'm all for leaving it unconditional like you have now.
-Thanks!
-
->
-> [1]: https://lore.kernel.org/kvm/20250828093902.2719-1-roypat@amazon.co.u=
-k
->
-> >
-> > Is ENOSPC really the right errno for this? (Maybe -EFAULT?)
->
-> I don't have a strong opinion here.  My reasoning was if the folio is
-> already "sealed" by the direct map removal, then it is no longer a part
-> of the "writable space", so -ENOSPC makes sense.  Maybe this intuition
-> only works for me so I'm happy to change to -EFAULT if it looks less
-> confusing.
-
-Oh actually.... how about EEXIST? That feels like the most natural.
-But also no strong opinion here.
-
-Thanks for all the clarification, Nikita. :)
 
