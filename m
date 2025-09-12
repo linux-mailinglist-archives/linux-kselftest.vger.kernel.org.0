@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-41323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1CCAB54AEC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 13:22:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7D89B54AEF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 13:23:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACE10A0374C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:22:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20DB2A05591
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B5083019D8;
-	Fri, 12 Sep 2025 11:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09262302767;
+	Fri, 12 Sep 2025 11:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvb/I5NW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7U9Zx/6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8F43019C1;
-	Fri, 12 Sep 2025 11:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAC0302754;
+	Fri, 12 Sep 2025 11:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757676135; cv=none; b=ThcHkUiCkcl1pLIQrK2E5VaFuVoevvf9rgP/FJYwuyCuYflRRKV5zbof4yyrkTS4IEMG8fFNaOoyg7/zbpjFvam5EwAS4vT6n5OS+vYv83l/9rzldrgLk44iaWZza2i7b0UvKj16bi58/IyTMe+4Za7PM5oVBRkc/0J5lKYweo8=
+	t=1757676137; cv=none; b=TuONo+Ji5Fi/vW6I88LlAYrCQrjVeEbVUgcjWOV53w9j+VOoTrVMf8LBgz496Omw/Ty/w3AML+sx7u5kdfBONlN+TdgmGBd7WJVDPQt4zBFqi2TP3NlQ3JJNkiwusR3+R9SmRv5fqUuudZl4DioPBUtpBGM/kT2Pj/Ur95zX8kM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757676135; c=relaxed/simple;
-	bh=xaVskRKfvaYHjeBh7ZUg/Y9QZVgaF1sqMd02LaZ+I3g=;
+	s=arc-20240116; t=1757676137; c=relaxed/simple;
+	bh=IeBrm10npHswatwOwtRAuiaKWaoJBlDnxxV0/8Ycbl8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Asiu8PFt3/JtSZgAyIZgb4W7TqXlxxYcMQDo+RT0cpS7HbhcG/i326qBQpwYhoaLwJWVabp5xAivEUCSa8kUJ2leEt8aidS0lWXWJxCJmdNXhqU3QGl1EoVU/BstfxlBmMgw590SxEKeYs7Fbjy5hB8TCwV3P/7STL/0Bnpxu3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvb/I5NW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89522C4CEF7;
-	Fri, 12 Sep 2025 11:22:12 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=YNaAat07yumcJCY43gMt7Dy2OVCpijmQJhh7Dv//ZRyQm9SieciZe6f+n/FDePr7QmL596VfZDd0UFwIkx3beAWBEp91xneA00oGulvARO6magaM/bBP3UUr+s08QbSBHLiFrDh/c/ttFII0keGxpiwqdMI81GUFVKrztgpYHOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7U9Zx/6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 356F2C4CEFD;
+	Fri, 12 Sep 2025 11:22:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757676134;
-	bh=xaVskRKfvaYHjeBh7ZUg/Y9QZVgaF1sqMd02LaZ+I3g=;
+	s=k20201202; t=1757676137;
+	bh=IeBrm10npHswatwOwtRAuiaKWaoJBlDnxxV0/8Ycbl8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=lvb/I5NWrp7HtvlplxuWpL2vNGssAA7pBilYGFeo9znUH28bTMemg3VODTUQ+KixA
-	 72S3Fwd3PD340IhxFsPTo36Eh4pbAbBpFnDGRTGPYDTCJL6ve3P040yvjYtnuKTswm
-	 HFzzFeTvv956UFQwEq7V+QgqFxyC60+CpUy7uU58cWez5ZToInUtUl6sllDaeh4N3L
-	 CSnunXYlowbD6jMyBu+2vZAkotAiPdhwD1EHWwupDGZ+8MgIqU2M3InbVhtHpchobe
-	 x66WdnLa1ybUqom7AYwWtbkI2k0e5LyCWwlj+wRMtebuVovqWoo9xnELzWrKYLMfDe
-	 KUQmhR5WJKoEg==
+	b=h7U9Zx/6aHXAM+5tj6gtPPv0G2aF8WwSGMYHqWTwTkFcejHy6ZqvlTQeqkpGpMBkg
+	 rEt+ZG2DqRiuxj/oVnUUkrTReuxciNyZqzHqDZHZSJmlnoahTTq3jI6kncqJpHwvLD
+	 ZSrFteZwKViocvHRfODMN1DjklciUy/lO01cZfzCtCypTUxjHC4hJHSan4f2JftKW2
+	 xsvUfTo9AdDmB1P5KSwFcYLXxWQMmqVxdXc3UfZp2VoNgsjs0VMcdNn9bRiRhEjfsT
+	 czqAnnPYAhS4QN6gao5KI2h/fst2jI6POG0dAiR3MXU33wtNgktbyRymQbeGkvs04X
+	 wwFUo0TzoNikw==
 From: Mark Brown <broonie@kernel.org>
-Date: Fri, 12 Sep 2025 10:25:30 +0100
-Subject: [PATCH v16 4/6] KVM: arm64: Validate GCS exception lock when
- emulating ERET
+Date: Fri, 12 Sep 2025 10:25:31 +0100
+Subject: [PATCH v16 5/6] KVM: arm64: Allow GCS to be enabled for guests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250912-arm64-gcs-v16-4-6435e5ec37db@kernel.org>
+Message-Id: <20250912-arm64-gcs-v16-5-6435e5ec37db@kernel.org>
 References: <20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org>
 In-Reply-To: <20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -64,96 +63,65 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
  kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-56183
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2656; i=broonie@kernel.org;
- h=from:subject:message-id; bh=xaVskRKfvaYHjeBh7ZUg/Y9QZVgaF1sqMd02LaZ+I3g=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoxAJXCR4RyxPnfSQCG7eAvAVupSzVjrtMNwsGJ
- 6JUwuO6RhmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaMQCVwAKCRAk1otyXVSH
- 0H5+B/9E8krfa7iOgqbgX6kd63Vmw1Uc5wEELqhQ42KmcIl9iZrDNCGP7GpjV3eHls/O7bCcH9n
- Rk8SxCyZl/k7lgtDSiyl7Kqtt+r9wvpuZFEDOKWfoIV+yDHHa5zKiEtCedUQyPAU/tBCQ8Er3jf
- 4QgXevDz+SIuD4yh66FtcZjq53tGrmXAFumQiSRx4IN1cTcU1a8kWwu5Jb1PyJFKTLVlR1P+Nl+
- Uc0Gkz3591iMuMXASYuJJuHDLpyo8VwazmAXaf+VmK0xTiBQmAy/e0oGFdyxJtRuEt/8SUdzbzL
- ZR3xu0yw47Co2/+JqwE7U0TU7ociDovb5/zoSo+Bk6SHfNWi
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1883; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=IeBrm10npHswatwOwtRAuiaKWaoJBlDnxxV0/8Ycbl8=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoxAJYbjs1gu8XoeJOTzmWGxk48gJgJmlcEt1sN
+ LwCLyb43WGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaMQCWAAKCRAk1otyXVSH
+ 0DPMB/9fvrbX2YUDNAXM4i/lFcz1NafZgkZpthkn7QrwZjcoEKj96jMloLwbl6pBdb3E5fIWVe1
+ PqCU5ujWX3mUMkpgrumSskfoO7VKMqjfm5GwxEdgY9bRU35oDo2rirXZRyecfQUgqLq1DhObN+q
+ ZAWp0lrURcA2PwCz0om5Plb1b9zv0b2TZZ/HkrjQaLQfXZajz+f+t1EeJcEzKqfgOHfR1zh9+dU
+ fsVZNXsSdG78RUOtsHZfkDYf2iMXoIrYgHhVM977K6cZC7P/m4vpAUujBf1YnmHPZstLLKoTfZ5
+ kbqadCyXSCm/NLJ8xibHuaCqiIwoi6otcOWdEwlmYk2BWidZ
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-As per DDI0487 R_TYTWB GCS adds an additional case where an illegal
-exception return can be generated. If all of:
-
- - PSTATE.EXLOCK is 0.
- - The EL is not being changed by the ERET.
- - GCSCR_ELx.EXLOCKEN is 1.
-
-are true then the return is illegal. Emulate this behaviour when
-emulating ERET for nested guests.
+Now that required functionality for GCS is in place expose
+ID_AA64PFR1_EL1.GCS, allowing guests to be given the feature.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kvm/emulate-nested.c | 40 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 39 insertions(+), 1 deletion(-)
+ arch/arm64/kvm/nested.c   | 7 ++++---
+ arch/arm64/kvm/sys_regs.c | 2 --
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/kvm/emulate-nested.c b/arch/arm64/kvm/emulate-nested.c
-index 90cb4b7ae0ff..9b02b85eda64 100644
---- a/arch/arm64/kvm/emulate-nested.c
-+++ b/arch/arm64/kvm/emulate-nested.c
-@@ -2632,6 +2632,41 @@ bool forward_debug_exception(struct kvm_vcpu *vcpu)
- 	return forward_mdcr_traps(vcpu, MDCR_EL2_TDE);
- }
+diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
+index 153b3e11b115..d2d55e18c610 100644
+--- a/arch/arm64/kvm/nested.c
++++ b/arch/arm64/kvm/nested.c
+@@ -1459,9 +1459,10 @@ u64 limit_nv_id_reg(struct kvm *kvm, u32 reg, u64 val)
  
-+/*
-+ * A subset of the pseudocode ELFromSPSR(), validity checks are
-+ * assumed to have been done in code that is not GCS specific.
-+ */
-+static inline int exlock_el_from_spsr(u64 spsr)
-+{
-+	return FIELD_GET(GENMASK(3, 2), spsr);
-+}
-+
-+/* See IllegalExceptionReturn() pseudocode */
-+static bool kvm_check_illegal_exlock_return(struct kvm_vcpu *vcpu, u64 spsr)
-+{
-+	u64 cur_el, target_el;
-+	u64 gcscr;
-+
-+	if (!kvm_has_gcs(vcpu->kvm))
-+		return false;
-+
-+	if (spsr & PSR_EXLOCK_BIT)
-+		return false;
-+
-+	cur_el = exlock_el_from_spsr(vcpu->arch.ctxt.regs.pstate);
-+	target_el = exlock_el_from_spsr(spsr);
-+
-+	if (cur_el != target_el)
-+		return false;
-+
-+	if (vcpu_is_el2(vcpu))
-+		gcscr = __vcpu_sys_reg(vcpu, GCSCR_EL2);
-+	else
-+		gcscr = __vcpu_sys_reg(vcpu, GCSCR_EL1);
-+
-+	return gcscr & GCSCR_ELx_EXLOCKEN;
-+}
-+
- static u64 kvm_check_illegal_exception_return(struct kvm_vcpu *vcpu, u64 spsr)
- {
- 	u64 mode = spsr & PSR_MODE_MASK;
-@@ -2642,12 +2677,15 @@ static u64 kvm_check_illegal_exception_return(struct kvm_vcpu *vcpu, u64 spsr)
- 	 * - trying to return to an illegal M value
- 	 * - trying to return to a 32bit EL
- 	 * - trying to return to EL1 with HCR_EL2.TGE set
-+	 * - GCSCR_ELx.EXLOCKEN is 1 and PSTATE.EXLOCK is 0 when attempting
-+	 *   to return from ELx the same EL.
- 	 */
- 	if (mode == PSR_MODE_EL3t   || mode == PSR_MODE_EL3h ||
- 	    mode == 0b00001         || (mode & BIT(1))       ||
- 	    (spsr & PSR_MODE32_BIT) ||
- 	    (vcpu_el2_tge_is_set(vcpu) && (mode == PSR_MODE_EL1t ||
--					   mode == PSR_MODE_EL1h))) {
-+					   mode == PSR_MODE_EL1h)) ||
-+	    kvm_check_illegal_exlock_return(vcpu, spsr)) {
- 		/*
- 		 * The guest is playing with our nerves. Preserve EL, SP,
- 		 * masks, flags from the existing PSTATE, and set IL.
+ 	case SYS_ID_AA64PFR1_EL1:
+ 		/* Only support BTI, SSBS, CSV2_frac */
+-		val &= (ID_AA64PFR1_EL1_BT	|
+-			ID_AA64PFR1_EL1_SSBS	|
+-			ID_AA64PFR1_EL1_CSV2_frac);
++		val &= (ID_AA64PFR1_EL1_BT		|
++			ID_AA64PFR1_EL1_SSBS		|
++			ID_AA64PFR1_EL1_CSV2_frac	|
++			ID_AA64PFR1_EL1_GCS);
+ 		break;
+ 
+ 	case SYS_ID_AA64MMFR0_EL1:
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index 03fb2dce0b80..60e234422064 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -1616,7 +1616,6 @@ static u64 __kvm_read_sanitised_id_reg(const struct kvm_vcpu *vcpu,
+ 		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_SME);
+ 		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_RNDR_trap);
+ 		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_NMI);
+-		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_GCS);
+ 		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_THE);
+ 		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_MTEX);
+ 		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_PFAR);
+@@ -2953,7 +2952,6 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+ 				     ~(ID_AA64PFR1_EL1_PFAR |
+ 				       ID_AA64PFR1_EL1_MTEX |
+ 				       ID_AA64PFR1_EL1_THE |
+-				       ID_AA64PFR1_EL1_GCS |
+ 				       ID_AA64PFR1_EL1_MTE_frac |
+ 				       ID_AA64PFR1_EL1_NMI |
+ 				       ID_AA64PFR1_EL1_RNDR_trap |
 
 -- 
 2.47.2
