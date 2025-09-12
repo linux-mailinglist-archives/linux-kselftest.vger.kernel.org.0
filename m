@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-41408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33DD0B554C8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:38:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F0EDB55530
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:59:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3864B5C3E7B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:38:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3F27AC3688
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:59:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F5D320CC7;
-	Fri, 12 Sep 2025 16:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7960931B130;
+	Fri, 12 Sep 2025 16:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukyTTcYM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f4ZaR96j"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E96320CB4;
-	Fri, 12 Sep 2025 16:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0DA1FCCF8;
+	Fri, 12 Sep 2025 16:58:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757695036; cv=none; b=OB9NNhMUt/1LbQqMRTDpCtcQlmS5piT4sUe25xnY3DtiTk2KpCfkwceqbFpzZqa05KDUFz2K3lXEL2ckNKHhItOtmspE4J9sZIzKTiorV54sht+eeYiyZhxVjhOD/58iTNB17mrx4UafoFQk75braMcZUxZy3FoSMH0fq0MWO3w=
+	t=1757696337; cv=none; b=jVPaEnIhn3p4YUEmImj3v4/mftmRtLUfbnV+9kpUw6DnwoH+kUPfB+Knp25obBph8wckhO/zagVjEIDgtvl8FovVrNBKOI2jpE9gPSiOvdKUHpas47kKfDl5sGhP+LjYatIosNTyO9s4NP4zWp6Y38hr5mmQpLZUE8fAlaYIN4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757695036; c=relaxed/simple;
-	bh=02RbCJy/0KB0IDkyTE3zAtIENx+JAzvBYgUMKFwaNUk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Osn3kClwehJ8IvtbyrRRowoACacmZSQ+ZoDhVnXOF4peDJAvvaXwPioJU2XZwKDeUfdH98vSFk3CpPnzmpDvgQL0E8vDzYHWlKnjyzSiqr7cq/hZONEPOSy5lKb6OzeNjuwxjoRwY83Q1JE5ATqE6t7gUudnmwYUfwJNLHZH67U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukyTTcYM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA2EC4CEF9;
-	Fri, 12 Sep 2025 16:37:12 +0000 (UTC)
+	s=arc-20240116; t=1757696337; c=relaxed/simple;
+	bh=gtfvdfI+H0ACLSjUJUR2tLLcJx+U29SK+JJDuNQ7ox8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JK74nUHqmhdW17Tmj4ryYGG5vljE8D6p+UMiUkhul/XROmE3T88MXBvPeyq2s+eJ3WVRhqkKEhKQLS/JscwSopZmCmykfAQiK5C5qChB76ds2zAavmf0D5RtsarO8SYzqPj/WOE4RMhokkjrUutkr3M9w14DmJyuaknbTk56GF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f4ZaR96j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61234C4CEF1;
+	Fri, 12 Sep 2025 16:58:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757695034;
-	bh=02RbCJy/0KB0IDkyTE3zAtIENx+JAzvBYgUMKFwaNUk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ukyTTcYMqmmlKWVXqUMe0WzaVjWhmDOfYYtA93ssoHRHyQw54epQXk6n+nzhDaGtj
-	 HwHxv8FGyGmk5rAnpW9geeVrlct8uc84Vo73GRUsuV1TO9YqskRRzjPBlHjOc98v24
-	 LgnccMLCkCRl3RpEjTrRVs1yVCQazC/A0LSqLjMXEymre5MVz+6V7TPFGn442xOMbU
-	 UK3T4TbGqnkuFWSaVW2uIrwq5Leoqm+6ExG3rijM08SWeO4ytEamef5zuf8i6fMVyE
-	 dhUl89U+HcsliAw3Cy9re9E/su2g+g9pmCZ4jsgWs99MQYXshVozngBBAzuMYsZJ+Y
-	 8vGe8zTkAzQ+A==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 12 Sep 2025 18:36:49 +0200
-Subject: [PATCH net-next 3/3] mptcp: pm: netlink: fix if-idx type
+	s=k20201202; t=1757696336;
+	bh=gtfvdfI+H0ACLSjUJUR2tLLcJx+U29SK+JJDuNQ7ox8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=f4ZaR96j9y4Fv5BDp+3cD7er4v0fcdLgYSL8Iv6eBUrcgDCxoCc6kPkEwHyqfpmoG
+	 Wcqf7jK79M4mn80aGGGjXIRk+9rSUI51Sqz6dOJ1jCOtVFwqCiG/4SDoxhxOyzQzwY
+	 YXO99uuwxX7AmbjdKQxrQgOA7o6wYROVT+DzYKTg6eAXxbE7dSc61Wr7yvBp5Ow3wi
+	 owL7QJadoG5ELCdNdwiIynbxhz6+ehKFLOfz/JbQCVpR2zd9qbXwrsFen/adADHur+
+	 4vpdkTZafAsKMjUPRjN2bPGDBxKjdkWbDOioPqWAp7+Y4ziMdye7MjdN9fD5gAWKQM
+	 bdIv+TXQWP+kA==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH v3 0/3] HID: hidraw: rework ioctls
+Date: Fri, 12 Sep 2025 18:58:48 +0200
+Message-Id: <20250912-b4-hidraw-ioctls-v3-0-cd2c6efd8c20@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,59 +52,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250912-net-next-mptcp-minor-fixes-6-18-v1-3-99d179b483ad@kernel.org>
-References: <20250912-net-next-mptcp-minor-fixes-6-18-v1-0-99d179b483ad@kernel.org>
-In-Reply-To: <20250912-net-next-mptcp-minor-fixes-6-18-v1-0-99d179b483ad@kernel.org>
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Donald Hunter <donald.hunter@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAEhRxGgC/2XOQQ6CMBCF4auQrh1SptCCK+9hWBQotFFbMyWoI
+ dxdIDGauPwX78ubWTTkTGTHZGZkJhdd8GuIQ8Jaq/1gwHVrM+RY8BILaHKwriP9ABfa8RpByl7
+ kWCkuULN1difTu+dOnuu1ewo3GC0Z/YVUlnGFZa5SLIWsJEIGmnx3uhjy5poGGjbKujgGeu3nJ
+ tzAzw/5/2NC4NAqhbJBIVVW/WL1sixvmJDOfewAAAA=
+X-Change-ID: 20250825-b4-hidraw-ioctls-66f34297032a
+To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Arnd Bergmann <arnd@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>, 
+ Arnd Bergmann <arnd@arndb.de>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1280; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=02RbCJy/0KB0IDkyTE3zAtIENx+JAzvBYgUMKFwaNUk=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKO+Oif3qD3/X3luYob1moJvTddKi6Hn/7SYV1ZEPNqj
- du8sv+vOkpZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACYS5sPwP/FvcN2+3vVNlkJ2
- DmEhjVbCYXLipwsPh1ft0U8VVfvxjOF/satpwcVVc+0MHySIifE/Z/Btm+7upl1/eV/u/sim156
- cAA==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757696335; l=1534;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=gtfvdfI+H0ACLSjUJUR2tLLcJx+U29SK+JJDuNQ7ox8=;
+ b=Ge/420ffPrqyxuns74cDDV0Rzuf5zWMRe4nIq/DbhZh85ai6UUD1mgEeZf8HLly0V4IMJgK8U
+ Y07ZmMzWIdsBXq4a2/Bh0mAqQj4DEk9dQW7aer/6ya+KE3b7p1/eKUr
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-As pointed out by Donald, when parsing an entry, the wrong type was set
-for the temp value: this value is signed.
+Arnd sent the v1 of the series in July, and it was bogus. So with a
+little help from claude-sonnet I built up the missing ioctls tests and
+tried to figure out a way to apply Arnd's logic without breaking the
+existing ioctls.
 
-There are no real issues here, because the intermediate variable was
-only wrong for the sign, not for the size, and the final variable had
-the right sign. But this feels wrong, and is confusing, so fixing this
-small typo introduced by commit ef0da3b8a2f1 ("mptcp: move address
-attribute into mptcp_addr_info").
+The end result is in patch 3/3, which makes use of subfunctions to keep
+the main ioctl code path clean.
 
-Reported-by: Donald Hunter <donald.hunter@gmail.com>
-Closes: https://lore.kernel.org/m2plc0ui9z.fsf@gmail.com
-Reviewed-by: Mat Martineau <martineau@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- net/mptcp/pm_netlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v3:
+- dropped the co-developed-by tag and put a blurb instead
+- change the attribution of patch 3/3 to me as requested by Arnd.
+- Link to v2: https://lore.kernel.org/r/20250826-b4-hidraw-ioctls-v2-0-c7726b236719@kernel.org
 
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index 50aaf259959aeaf36e7ab954c6f7957eaf2bc390..2225b1c5b96666cd4121854c967a7f3a79824047 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -113,7 +113,7 @@ int mptcp_pm_parse_entry(struct nlattr *attr, struct genl_info *info,
- 		return err;
- 
- 	if (tb[MPTCP_PM_ADDR_ATTR_IF_IDX]) {
--		u32 val = nla_get_s32(tb[MPTCP_PM_ADDR_ATTR_IF_IDX]);
-+		s32 val = nla_get_s32(tb[MPTCP_PM_ADDR_ATTR_IF_IDX]);
- 
- 		entry->ifindex = val;
- 	}
+changes in v2:
+- add new hidraw ioctls tests
+- refactor Arnd's patch to keep the existing error path logic
+- link to v1: https://lore.kernel.org/linux-input/20250711072847.2836962-1-arnd@kernel.org/
 
+---
+Benjamin Tissoires (3):
+      selftests/hid: hidraw: add more coverage for hidraw ioctls
+      selftests/hid: hidraw: forge wrong ioctls and tests them
+      HID: hidraw: tighten ioctl command parsing
+
+ drivers/hid/hidraw.c                     | 224 ++++++++-------
+ include/uapi/linux/hidraw.h              |   2 +
+ tools/testing/selftests/hid/hid_common.h |   6 +
+ tools/testing/selftests/hid/hidraw.c     | 473 +++++++++++++++++++++++++++++++
+ 4 files changed, 603 insertions(+), 102 deletions(-)
+---
+base-commit: 02d6eeedbc36d4b309d5518778071a749ef79c4e
+change-id: 20250825-b4-hidraw-ioctls-66f34297032a
+
+Best regards,
 -- 
-2.51.0
+Benjamin Tissoires <bentiss@kernel.org>
 
 
