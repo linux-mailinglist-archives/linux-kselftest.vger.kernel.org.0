@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-41431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41432-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4994AB559D5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Sep 2025 01:10:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7CF1B559DC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Sep 2025 01:10:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C13501CC4096
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:10:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDD327B3F7C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:08:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3103E283FC2;
-	Fri, 12 Sep 2025 23:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30453286408;
+	Fri, 12 Sep 2025 23:09:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="A5EqVE9p"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dXJcsp0H"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7632727E06C
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 23:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC22284663
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 23:09:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757718596; cv=none; b=WMw2plzI4kss7RPDpW4d1EFUBBQ0jIv3aqxCqR+Anr3UIiRoP+gw6un8pLcgSf+gHiUIMU5/+RvBZkz2FtUPfhYef9DUDOK4P7N9JOzYhW9H9XBhUQpz+Oop5QJmKHsEPIjw2iVvm9eK5R4ZEdHfWIiUQ4dOQd4vCjS+wVyWMpA=
+	t=1757718598; cv=none; b=Sh85Q4FR1IXQUTkM/lScOSSZpKDXLqkqu/Q3hIr30AZzsz0VJe3+aXB2bNn99kXwmj9ohxaj31ZSeeLwQvA+xxhMiZogsksXlW3lDSe+YUFYoFIDE8/lJ+1CEhGVX35krEo4Kh3MyxgSW5n+lG+D2cbS2mewf5BmLkyDmBJ9WzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757718596; c=relaxed/simple;
-	bh=sXvBWDb9hTBPsLaRegbOtBiO673LvoBjYekcWqme0qY=;
+	s=arc-20240116; t=1757718598; c=relaxed/simple;
+	bh=Lo3tg8ldYjfkigGNAQI4TicSETLTyzsBXIoJKJfX1qY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KFt1tI1tY4tNiCjqjen7I0A1LNDc0lObLR0r5LKIITR31QAAQ47UEFY5+Zj1HJYjdvSNnxW9khvoBbG86R274Bi2CC6LskihYJK5/osrMxsFQOdQdE0kbjoHjr0eng6PlKZ/TBBoY0duIr6kFSu4X0Rrf7i4Oegb+wvvatTos3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=A5EqVE9p; arc=none smtp.client-ip=209.85.210.173
+	 MIME-Version; b=d91gSH9/bA5PITVrvzBBavVqUPVFXoCC2wKSalZugNCWuPDn62Wm9sQ1/DXvHatD+OTHeZPhvz1WvVZZsMsenqw1Tc4CqO80x/vSbdrt1GYS9tvxMZxVVLCV+LK0oyCDS4CWON/n/cKtUK8+jTB3+AHy4JU/RctfijNv6HFB8oY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dXJcsp0H; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-76e6cbb991aso2418533b3a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 16:09:54 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7761578340dso1478631b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 16:09:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1757718594; x=1758323394; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1757718595; x=1758323395; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3dwNY0wU9h+Jp/qHmj3QCzMa4YfF1MmR36mm3/7OnW8=;
-        b=A5EqVE9pmugzFbDWRw9h5yEqB1aD+F0NpX/kb+FCZLiOR8ng8+zTLThkd6E99KifsL
-         oGgKnE62y6iDS+uoxPXQTFMLKbajfOcFmT/qg6H3cIj349iifoNMkK+dVjdrx//e6/Wu
-         gbsBm1UaHa3qcZuVb5w8WUXEYHhW+FpMGu0tI=
+        bh=lfbdyh7LZJFSoGiMjoTbUql5vPlkYLJxEsX0Qs2RYRI=;
+        b=dXJcsp0HhDMR23kBYaemQHXeDWH4iQgIyLD7rthJseylpgSAaYE2ZsnEDGEudbrN1r
+         iOL9vSd1l1pZKGJ3PR/Jj1E1yv6ccsP8534pMCra9PEAtctuZN7pSb2Z9QtUczvp45kt
+         Ru/GJyeT9Z33CGKZ0UWtpmEg77vAsDRN7kBQI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757718594; x=1758323394;
+        d=1e100.net; s=20230601; t=1757718595; x=1758323395;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3dwNY0wU9h+Jp/qHmj3QCzMa4YfF1MmR36mm3/7OnW8=;
-        b=KwzMc1jGN0W4pDZMpaSAb6+1+94Hr5xgavnKbM3wYHjq9o9fjLYQr5b5snlQrc2wKV
-         iW3rV6zs6r7j8D6Fd3NC/ZSO0CTRKiRtqxoP0SXOM5Lfnr/IwjhC0dk4y1pFBLRAQ8GR
-         PI1N0LqT1KEeqjZenNDfLeW/F0mAZ1kfWGL8G45P/748LgP1rAUL5osUpGpOGKNxwVPP
-         gnBGKBb4+MUC+0cnvArxVl3KsHlbidK44daiU1jSJece5ejoPN1Rf/QGOJItcB1iML9S
-         MKsfQm1e3/Ng9FviKcZA1Pd3fT3WzpChTxFS/gUv0q2U98JusWS/+5wnT+jbQ1pQGs5U
-         0SLg==
-X-Forwarded-Encrypted: i=1; AJvYcCVpPTiPJ0tEELorUN+evnqhsFVIKYvM7a068TA7AzHhZjM6niWk+AyDdUuivsJIYIE9aTwIBIMx3/ThYF11P2U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzX+3m8i/E7H4DgC8nubh9eYD5n83KVfDr+IS9JzMDz6vaXboG
-	Df/ueJq64zuPt3AMUsdzmVrTGCStJsLh2PXhrXktaLONmndwzCs9WhDsYIzAoWQVtg==
-X-Gm-Gg: ASbGncs3GL+YPG+diuWwpQe7mzoEFsaD//RjdC2H15wccm7ihZm4CV9CNCFwq24YQtz
-	WvW1mzOA9uXguWvTw6TPUUgbOJ1F6oNaxPWo7AytFBfwHlpeNT8y3uUNIpiaz9y9VXPeqRP2er4
-	gpaA/ku8gCmR3o53zNC/uNLngql6k1UBOuqjwF2BpegXS/8xcrpsEGr/gG/LBHmOuWXHaSk+9UV
-	8JhjB0/xpmJyi4jj/Q6AIDfxqZb6xixhkoFYpFBuXGieNCJ2nUsGl8fUMKa3pmNennjYxmjBNLs
-	Fv3uK+P5u089EpTWyl//mQYOmUxuxosdc8ly9zJWlcqSWQ1X546CyUYvJWb0NqBC5tDZRf9PHfj
-	4kc47ERmE1JqMdzGf5BOH7Y/H/7jJBxJj9qUjNO2k8qAlJ3LsdDXqkldzsG8=
-X-Google-Smtp-Source: AGHT+IFFuttMHqLS1NzNjjaUsptJHeOjOLiy3J4IGiKbJXBfuhvPakuAU9nJRFZCTzUYWTGc4g8XAg==
-X-Received: by 2002:a05:6a21:339c:b0:244:21:b477 with SMTP id adf61e73a8af0-2602a59371fmr5525527637.16.1757718593795;
-        Fri, 12 Sep 2025 16:09:53 -0700 (PDT)
+        bh=lfbdyh7LZJFSoGiMjoTbUql5vPlkYLJxEsX0Qs2RYRI=;
+        b=SXq0VpRgYbbRjPkdTq7wpgWLmuG3ChMchvbGrl6SuIGZYx0SdT1svif8IZx86yqqNG
+         o8eQDEUmlULFWoiFomDAsTIsJz6sfBDRpXNeXKaAGgxWtgEsyFgPRYYk62gVI7OrxKhK
+         G4A3uE/N16Wz5qTrIVG4BUYueFDmHzFlk3xg3vFaC39ktB/QQ+2AWVN3sWTjrRtUckFv
+         2Gj1omczcuyc4VMiy9oAksPSWzIDqvvAirEQ2C2jsgg37B7o0N0ZuI+EVSkHaP/itUb0
+         Atfnp00McKIGc6qmXPU14hP1i7nTLhFtDjhOJs75jIHKsa3iKbA57quILvl9CYKGtDFb
+         51hg==
+X-Forwarded-Encrypted: i=1; AJvYcCXdTsMYth8HAEh84Iahe7wODCRBBJ5nXTjTWv+97njT3LL+swI4y2t6b8E+I6YGBgUpM/Ug+NBniHds9ARr2BQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEifylOkA/AewraarBEUGR/Sop+YKA7whHyrvJCwIRrnR9MVnE
+	OjFa3a9NwPn3G1mgsNa/vyss6l1jEkU1HmbwPynniiWTT+PS5fLQZtEbEV2Fzi1JIg==
+X-Gm-Gg: ASbGncvtENYgIoThD+BHR6Erfg1RlApLahP5blGcQkEGywyneOp5mdG9Xkq4FoVJZOe
+	lnzM10SUc5a23q3otj6yVdriDrlezeVx4HhWWRKXdwPR6UvTJU6DR6caE0CSRYkaLdPWScQBTLN
+	Mp5j2206ryshFu82cUEX7LfyEdbURrJ72XVs7yKyA5S5wONdP6Q7eZL1J/XkPjiiWEZucJMVQeH
+	IC7F3poWQc66kdFm49oIB0r/rmOeD/DVkDJO7q1b9E3ANFtcPc4JtCOrUnsn+mhHP5oyIn1kM1l
+	v1eUkAiSi9Lfi7ppNsDznL/CrtU0T5B4LLzqJIVClt8kRgcTMuOUjbB/3J8M3fOx19mGTGYG/mr
+	q9L4oZMp7q88s1LRO1CQGcck2po8Y+c/OkWgpmx5TviU4L0NHhRPq45TqCGoc7H9j1yCsgA==
+X-Google-Smtp-Source: AGHT+IGftUvGS13nUHO5sPbO5aRdKW/iBhC0or62cpjUOnYlYwK3legDnb+L5xeL8qmZu3rVdhxD6Q==
+X-Received: by 2002:a05:6a20:3ca8:b0:24c:48f3:3fd2 with SMTP id adf61e73a8af0-2602a792dccmr5869556637.24.1757718595630;
+        Fri, 12 Sep 2025 16:09:55 -0700 (PDT)
 Received: from localhost ([2a00:79e0:2e14:7:e464:c3f:39d8:1bab])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-77607c473b9sm6643028b3a.93.2025.09.12.16.09.52
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b54a35b7b53sm5716718a12.7.2025.09.12.16.09.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Sep 2025 16:09:53 -0700 (PDT)
+        Fri, 12 Sep 2025 16:09:55 -0700 (PDT)
 From: Brian Norris <briannorris@chromium.org>
 To: Bjorn Helgaas <bhelgaas@google.com>,
 	Luis Chamberlain <mcgrof@kernel.org>,
@@ -90,9 +90,9 @@ Cc: linux-pci@vger.kernel.org,
 	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
 	linux-um@lists.infradead.org,
 	Brian Norris <briannorris@chromium.org>
-Subject: [PATCH 1/4] PCI: Support FIXUP quirks in modules
-Date: Fri, 12 Sep 2025 15:59:32 -0700
-Message-ID: <20250912230208.967129-2-briannorris@chromium.org>
+Subject: [PATCH 2/4] PCI: Add KUnit tests for FIXUP quirks
+Date: Fri, 12 Sep 2025 15:59:33 -0700
+Message-ID: <20250912230208.967129-3-briannorris@chromium.org>
 X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
 In-Reply-To: <20250912230208.967129-1-briannorris@chromium.org>
 References: <20250912230208.967129-1-briannorris@chromium.org>
@@ -104,179 +104,268 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The PCI framework supports "quirks" for PCI devices via several
-DECLARE_PCI_FIXUP_*() macros. These macros allow arch or driver code to
-match device IDs to provide customizations or workarounds for broken
-devices.
+The PCI framework supports device quirks via a series of macros and
+linker sections. This support previously did not work when used in
+modules. Add a basic set of tests for matching/non-matching devices.
 
-This mechanism is generally used in code that can only be built into the
-kernel, but there are a few occasions where this mechanism is used in
-drivers that can be modules. For example, see commit 574f29036fce ("PCI:
-iproc: Apply quirk_paxc_bridge() for module as well as built-in").
+Example run:
 
-The PCI fixup mechanism only works for built-in code, however, because
-pci_fixup_device() only scans the ".pci_fixup_*" linker sections found
-in the main kernel; it never touches modules.
-
-Extend the fixup approach to modules.
-
-I don't attempt to be clever here; the algorithm here scales with the
-number of modules in the system.
+  $ ./tools/testing/kunit/kunit.py run 'pci_fixup*'
+  [...]
+  [15:31:30] ============ pci_fixup_test_cases (2 subtests) =============
+  [15:31:30] [PASSED] pci_fixup_match_test
+  [15:31:30] [PASSED] pci_fixup_nomatch_test
+  [15:31:30] ============== [PASSED] pci_fixup_test_cases ===============
+  [15:31:30] ============================================================
+  [15:31:30] Testing complete. Ran 2 tests: passed: 2
+  [15:31:30] Elapsed time: 11.197s total, 0.001s configuring, 9.870s building, 1.299s running
 
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 
- drivers/pci/quirks.c   | 62 ++++++++++++++++++++++++++++++++++++++++++
- include/linux/module.h | 18 ++++++++++++
- kernel/module/main.c   | 26 ++++++++++++++++++
- 3 files changed, 106 insertions(+)
+ drivers/pci/Kconfig      |  11 +++
+ drivers/pci/Makefile     |   1 +
+ drivers/pci/fixup-test.c | 197 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 209 insertions(+)
+ create mode 100644 drivers/pci/fixup-test.c
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index d97335a40193..db5e0ac82ed7 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -207,6 +207,62 @@ extern struct pci_fixup __end_pci_fixups_suspend_late[];
+diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+index 9a249c65aedc..a4fa9be797e7 100644
+--- a/drivers/pci/Kconfig
++++ b/drivers/pci/Kconfig
+@@ -68,6 +68,17 @@ config PCI_QUIRKS
+ 	  Disable this only if your target machine is unaffected by PCI
+ 	  quirks.
  
- static bool pci_apply_fixup_final_quirks;
++config PCI_FIXUP_KUNIT_TEST
++	tristate "KUnit tests for PCI fixup code" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	depends on PCI_DOMAINS_GENERIC
++	default KUNIT_ALL_TESTS
++	help
++	  This builds unit tests for the PCI quirk/fixup framework. Recommended
++	  only for kernel developers.
++
++	  When in doubt, say N.
++
+ config PCI_DEBUG
+ 	bool "PCI Debugging"
+ 	depends on DEBUG_KERNEL
+diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
+index 67647f1880fb..ade400250ceb 100644
+--- a/drivers/pci/Makefile
++++ b/drivers/pci/Makefile
+@@ -20,6 +20,7 @@ endif
  
-+struct pci_fixup_arg {
-+	struct pci_dev *dev;
-+	enum pci_fixup_pass pass;
+ obj-$(CONFIG_OF)		+= of.o
+ obj-$(CONFIG_PCI_QUIRKS)	+= quirks.o
++obj-$(CONFIG_PCI_FIXUP_KUNIT_TEST) += fixup-test.o
+ obj-$(CONFIG_HOTPLUG_PCI)	+= hotplug/
+ obj-$(CONFIG_PCI_ATS)		+= ats.o
+ obj-$(CONFIG_PCI_IOV)		+= iov.o
+diff --git a/drivers/pci/fixup-test.c b/drivers/pci/fixup-test.c
+new file mode 100644
+index 000000000000..54b895fc8f3e
+--- /dev/null
++++ b/drivers/pci/fixup-test.c
+@@ -0,0 +1,197 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2025 Google, Inc.
++ */
++
++#include <kunit/device.h>
++#include <kunit/test.h>
++#include <linux/cleanup.h>
++#include <linux/pci.h>
++
++#define DEVICE_NAME		"pci_fixup_test_device"
++#define TEST_VENDOR_ID		0xdead
++#define TEST_DEVICE_ID		0xbeef
++
++#define TEST_CONF_SIZE		4096
++static u8 *test_conf_space;
++
++#define test_readb(addr)	(*(u8 *)(addr))
++#define test_readw(addr)	le16_to_cpu(*((__force __le16 *)(addr)))
++#define test_readl(addr)	le32_to_cpu(*((__force __le32 *)(addr)))
++#define test_writeb(addr, v)	(*(u8 *)(addr) = (v))
++#define test_writew(addr, v)	(*((__force __le16 *)(addr)) = cpu_to_le16(v))
++#define test_writel(addr, v)	(*((__force __le32 *)(addr)) = cpu_to_le32(v))
++
++static int test_config_read(struct pci_bus *bus, unsigned int devfn, int where,
++			    int size, u32 *val)
++{
++	if (PCI_SLOT(devfn) > 0)
++		return PCIBIOS_DEVICE_NOT_FOUND;
++
++	if (where + size > TEST_CONF_SIZE)
++		return PCIBIOS_BUFFER_TOO_SMALL;
++
++	if (size == 1)
++		*val = test_readb(test_conf_space + where);
++	else if (size == 2)
++		*val = test_readw(test_conf_space + where);
++	else if (size == 4)
++		*val = test_readl(test_conf_space + where);
++
++	return PCIBIOS_SUCCESSFUL;
++}
++
++static int test_config_write(struct pci_bus *bus, unsigned int devfn, int where,
++			     int size, u32 val)
++{
++	if (PCI_SLOT(devfn) > 0)
++		return PCIBIOS_DEVICE_NOT_FOUND;
++
++	if (where + size > TEST_CONF_SIZE)
++		return PCIBIOS_BUFFER_TOO_SMALL;
++
++	if (size == 1)
++		test_writeb(test_conf_space + where, val);
++	else if (size == 2)
++		test_writew(test_conf_space + where, val);
++	else if (size == 4)
++		test_writel(test_conf_space + where, val);
++
++	return PCIBIOS_SUCCESSFUL;
++}
++
++static struct pci_ops test_ops = {
++	.read = test_config_read,
++	.write = test_config_write,
 +};
 +
-+static int pci_module_fixup(struct module *mod, void *parm)
++static struct pci_dev *hook_device_early;
++static struct pci_dev *hook_device_header;
++static struct pci_dev *hook_device_final;
++static struct pci_dev *hook_device_enable;
++
++static void pci_fixup_early_hook(struct pci_dev *pdev)
 +{
-+	struct pci_fixup_arg *arg = parm;
-+	void *start;
-+	unsigned int size;
++	hook_device_early = pdev;
++}
++DECLARE_PCI_FIXUP_EARLY(TEST_VENDOR_ID, TEST_DEVICE_ID, pci_fixup_early_hook);
 +
-+	switch (arg->pass) {
-+	case pci_fixup_early:
-+		start = mod->pci_fixup_early;
-+		size = mod->pci_fixup_early_size;
-+		break;
-+	case pci_fixup_header:
-+		start = mod->pci_fixup_header;
-+		size = mod->pci_fixup_header_size;
-+		break;
-+	case pci_fixup_final:
-+		start = mod->pci_fixup_final;
-+		size = mod->pci_fixup_final_size;
-+		break;
-+	case pci_fixup_enable:
-+		start = mod->pci_fixup_enable;
-+		size = mod->pci_fixup_enable_size;
-+		break;
-+	case pci_fixup_resume:
-+		start = mod->pci_fixup_resume;
-+		size = mod->pci_fixup_resume_size;
-+		break;
-+	case pci_fixup_suspend:
-+		start = mod->pci_fixup_suspend;
-+		size = mod->pci_fixup_suspend_size;
-+		break;
-+	case pci_fixup_resume_early:
-+		start = mod->pci_fixup_resume_early;
-+		size = mod->pci_fixup_resume_early_size;
-+		break;
-+	case pci_fixup_suspend_late:
-+		start = mod->pci_fixup_suspend_late;
-+		size = mod->pci_fixup_suspend_late_size;
-+		break;
-+	default:
-+		return 0;
-+	}
++static void pci_fixup_header_hook(struct pci_dev *pdev)
++{
++	hook_device_header = pdev;
++}
++DECLARE_PCI_FIXUP_HEADER(TEST_VENDOR_ID, TEST_DEVICE_ID, pci_fixup_header_hook);
 +
-+	if (!size)
-+		return 0;
++static void pci_fixup_final_hook(struct pci_dev *pdev)
++{
++	hook_device_final = pdev;
++}
++DECLARE_PCI_FIXUP_FINAL(TEST_VENDOR_ID, TEST_DEVICE_ID, pci_fixup_final_hook);
 +
-+	pci_do_fixups(arg->dev, start, start + size);
++static void pci_fixup_enable_hook(struct pci_dev *pdev)
++{
++	hook_device_enable = pdev;
++}
++DECLARE_PCI_FIXUP_ENABLE(TEST_VENDOR_ID, TEST_DEVICE_ID, pci_fixup_enable_hook);
++
++static int pci_fixup_test_init(struct kunit *test)
++{
++	hook_device_early = NULL;
++	hook_device_header = NULL;
++	hook_device_final = NULL;
++	hook_device_enable = NULL;
 +
 +	return 0;
 +}
 +
- void pci_fixup_device(enum pci_fixup_pass pass, struct pci_dev *dev)
- {
- 	struct pci_fixup *start, *end;
-@@ -259,6 +315,12 @@ void pci_fixup_device(enum pci_fixup_pass pass, struct pci_dev *dev)
- 		return;
- 	}
- 	pci_do_fixups(dev, start, end);
++static void pci_fixup_match_test(struct kunit *test)
++{
++	struct device *dev = kunit_device_register(test, DEVICE_NAME);
 +
-+	struct pci_fixup_arg arg = {
-+		.dev = dev,
-+		.pass = pass,
-+	};
-+	module_for_each_mod(pci_module_fixup, &arg);
- }
- EXPORT_SYMBOL(pci_fixup_device);
- 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 3319a5269d28..7faa8987b9eb 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -539,6 +539,24 @@ struct module {
- 	int num_kunit_suites;
- 	struct kunit_suite **kunit_suites;
- #endif
-+#ifdef CONFIG_PCI_QUIRKS
-+	void *pci_fixup_early;
-+	unsigned int pci_fixup_early_size;
-+	void *pci_fixup_header;
-+	unsigned int pci_fixup_header_size;
-+	void *pci_fixup_final;
-+	unsigned int pci_fixup_final_size;
-+	void *pci_fixup_enable;
-+	unsigned int pci_fixup_enable_size;
-+	void *pci_fixup_resume;
-+	unsigned int pci_fixup_resume_size;
-+	void *pci_fixup_suspend;
-+	unsigned int pci_fixup_suspend_size;
-+	void *pci_fixup_resume_early;
-+	unsigned int pci_fixup_resume_early_size;
-+	void *pci_fixup_suspend_late;
-+	unsigned int pci_fixup_suspend_late_size;
-+#endif
- 
- 
- #ifdef CONFIG_LIVEPATCH
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c66b26184936..50a80c875adc 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2702,6 +2702,32 @@ static int find_module_sections(struct module *mod, struct load_info *info)
- 					      sizeof(*mod->kunit_init_suites),
- 					      &mod->num_kunit_init_suites);
- #endif
-+#ifdef CONFIG_PCI_QUIRKS
-+	mod->pci_fixup_early = section_objs(info, ".pci_fixup_early",
-+					    sizeof(*mod->pci_fixup_early),
-+					    &mod->pci_fixup_early_size);
-+	mod->pci_fixup_header = section_objs(info, ".pci_fixup_header",
-+					     sizeof(*mod->pci_fixup_header),
-+					     &mod->pci_fixup_header_size);
-+	mod->pci_fixup_final = section_objs(info, ".pci_fixup_final",
-+					    sizeof(*mod->pci_fixup_final),
-+					    &mod->pci_fixup_final_size);
-+	mod->pci_fixup_enable = section_objs(info, ".pci_fixup_enable",
-+					     sizeof(*mod->pci_fixup_enable),
-+					     &mod->pci_fixup_enable_size);
-+	mod->pci_fixup_resume = section_objs(info, ".pci_fixup_resume",
-+					     sizeof(*mod->pci_fixup_resume),
-+					     &mod->pci_fixup_resume_size);
-+	mod->pci_fixup_suspend = section_objs(info, ".pci_fixup_suspend",
-+					      sizeof(*mod->pci_fixup_suspend),
-+					      &mod->pci_fixup_suspend_size);
-+	mod->pci_fixup_resume_early = section_objs(info, ".pci_fixup_resume_early",
-+						   sizeof(*mod->pci_fixup_resume_early),
-+						   &mod->pci_fixup_resume_early_size);
-+	mod->pci_fixup_suspend_late = section_objs(info, ".pci_fixup_suspend_late",
-+						   sizeof(*mod->pci_fixup_suspend_late),
-+						   &mod->pci_fixup_suspend_late_size);
-+#endif
- 
- 	mod->extable = section_objs(info, "__ex_table",
- 				    sizeof(*mod->extable), &mod->num_exentries);
++	KUNIT_ASSERT_PTR_NE(test, NULL, dev);
++
++	test_conf_space = kunit_kzalloc(test, TEST_CONF_SIZE, GFP_KERNEL);
++	KUNIT_ASSERT_PTR_NE(test, NULL, test_conf_space);
++
++	/* Minimal configuration space: a stub vendor and device ID */
++	test_writew(test_conf_space + PCI_VENDOR_ID, TEST_VENDOR_ID);
++	test_writew(test_conf_space + PCI_DEVICE_ID, TEST_DEVICE_ID);
++
++	struct pci_host_bridge *bridge = devm_pci_alloc_host_bridge(dev, 0);
++
++	KUNIT_ASSERT_PTR_NE(test, NULL, bridge);
++	bridge->ops = &test_ops;
++
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_early);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_header);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_final);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_enable);
++
++	KUNIT_EXPECT_EQ(test, 0, pci_host_probe(bridge));
++
++	struct pci_dev *pdev __free(pci_dev_put) =
++		pci_get_slot(bridge->bus, PCI_DEVFN(0, 0));
++	KUNIT_ASSERT_PTR_NE(test, NULL, pdev);
++
++	KUNIT_EXPECT_PTR_EQ(test, pdev, hook_device_early);
++	KUNIT_EXPECT_PTR_EQ(test, pdev, hook_device_header);
++	KUNIT_EXPECT_PTR_EQ(test, pdev, hook_device_final);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_enable);
++
++	KUNIT_EXPECT_EQ(test, 0, pci_enable_device(pdev));
++	KUNIT_EXPECT_PTR_EQ(test, pdev, hook_device_enable);
++}
++
++static void pci_fixup_nomatch_test(struct kunit *test)
++{
++	struct device *dev = kunit_device_register(test, DEVICE_NAME);
++
++	KUNIT_ASSERT_PTR_NE(test, NULL, dev);
++
++	test_conf_space = kunit_kzalloc(test, TEST_CONF_SIZE, GFP_KERNEL);
++	KUNIT_ASSERT_PTR_NE(test, NULL, test_conf_space);
++
++	/* Minimal configuration space: a stub vendor and device ID */
++	test_writew(test_conf_space + PCI_VENDOR_ID, TEST_VENDOR_ID + 1);
++	test_writew(test_conf_space + PCI_DEVICE_ID, TEST_DEVICE_ID);
++
++	struct pci_host_bridge *bridge = devm_pci_alloc_host_bridge(dev, 0);
++
++	KUNIT_ASSERT_PTR_NE(test, NULL, bridge);
++	bridge->ops = &test_ops;
++
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_early);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_header);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_final);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_enable);
++
++	KUNIT_EXPECT_EQ(test, 0, pci_host_probe(bridge));
++
++	struct pci_dev *pdev __free(pci_dev_put) =
++		pci_get_slot(bridge->bus, PCI_DEVFN(0, 0));
++	KUNIT_ASSERT_PTR_NE(test, NULL, pdev);
++
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_early);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_header);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_final);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_enable);
++
++	KUNIT_EXPECT_EQ(test, 0, pci_enable_device(pdev));
++	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_enable);
++}
++
++static struct kunit_case pci_fixup_test_cases[] = {
++	KUNIT_CASE(pci_fixup_match_test),
++	KUNIT_CASE(pci_fixup_nomatch_test),
++	{}
++};
++
++static struct kunit_suite pci_fixup_test_suite = {
++	.name = "pci_fixup_test_cases",
++	.test_cases = pci_fixup_test_cases,
++	.init = pci_fixup_test_init,
++};
++
++kunit_test_suite(pci_fixup_test_suite);
++MODULE_DESCRIPTION("PCI fixups unit test suite");
++MODULE_LICENSE("GPL");
 -- 
 2.51.0.384.g4c02a37b29-goog
 
