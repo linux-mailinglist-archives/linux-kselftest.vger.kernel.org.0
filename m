@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-41425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DBECB55864
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:31:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A462B5588C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:44:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63F3EAC09CE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 21:31:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB1E65C3CC0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 21:44:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 353DB275AE6;
-	Fri, 12 Sep 2025 21:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 375462C11C2;
+	Fri, 12 Sep 2025 21:44:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NCQ4vNf6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bJ6I3O6S"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D06273D6D;
-	Fri, 12 Sep 2025 21:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084A1280CF1;
+	Fri, 12 Sep 2025 21:44:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757712659; cv=none; b=gqUBnKd/tNHK3oBdn++w0Qu4nKvJzb+u4qPViuH9OeHjXENRVMdAk7JFkrL1W48A4/Y5VtcKKZ7Wn4+80J1pStQaG1NlxvYU6B5VTRsg9NZv+uaWDfNurl3+eQcHi1oYQo3BvnybnnWlq5C1oBj86dUWqeVPayZQ07Vua0V3qAg=
+	t=1757713472; cv=none; b=gc/5MCdQxT2mqLbE5P5miyBgIa8I9gqSHnKSsrgRr7jibHvB9+bhR7LPXkpDFU4t2Qw6xIPIzivwOEEoOwczbOQ9CfIBqRV/uL7UIXDsXl63wimRPuS9g+g++sNxWC7Cnua/JB92m9FQ2f2af1H5mIs59lFWG0SIpbykugcaRKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757712659; c=relaxed/simple;
-	bh=ROOxPMoHZeX2C55B+T1892lm27mdEE7tXf8RWUdYD4s=;
+	s=arc-20240116; t=1757713472; c=relaxed/simple;
+	bh=oSKfU+P7ccMg188II6EO2cJq+sduRk0IxK/pqog4cSU=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pyD7Iu168c/8ASzoJKnBmq/YU6iN2RE7xBoap38S8gqeFUx4ZG5o+Pe359CG6+UIZ7alporvPS2z1RrhiulGk/S4m3Ei/TnoKPJh5zPoV0MGwc+yBBD0SrUYcitm8Otck9dj/ZCstzDG5Z2GY1yRaF3ZoZGyRKnlDRUUpEMHMgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NCQ4vNf6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F599C4CEF5;
-	Fri, 12 Sep 2025 21:30:58 +0000 (UTC)
+	 MIME-Version:Content-Type; b=EPl7CZ3DKMCud5rEwr9KKxDswcn5/TGaYDSy2J6C27sv1DKaL0QtPAxKqToAtvqbvpd4RXJvPPz0H8RzvXn3RnGOg2eA9Sw4KZ8ZR2TKEma7i6IC0pJ5kGnsjqu/PPGAuw2cU/vkkQWxrhwmsqQcvHeAUe3XRFTrK7KHqY3OYJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bJ6I3O6S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83509C4CEF1;
+	Fri, 12 Sep 2025 21:44:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757712658;
-	bh=ROOxPMoHZeX2C55B+T1892lm27mdEE7tXf8RWUdYD4s=;
+	s=k20201202; t=1757713471;
+	bh=oSKfU+P7ccMg188II6EO2cJq+sduRk0IxK/pqog4cSU=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NCQ4vNf6J1KUx693QddwsDnduxLLflhhPbPEkncW3RejjdZYdMemWaPGwzK895scA
-	 FyWtRO+KFAZVF+KUZ/nSMCGg7Gw+WoUrbjeCeG1pzZWodGGYDUNzD9LhKF1ZCV4cMk
-	 efPG20V13+oix10lAReteVa0qUaaSiIsgwEKXZfPsox3Kwiq8CVqELdFirC4M/Mu+A
-	 ETN271tzU5OyQJDNIQdOvha65YOINhAb+ur3AktrnqoANgU9dOE1a2T1kqfyXj/5dV
-	 jjTMDDJitjHRibc7Q7/INfgoyrckQe1yZef4IX2iefNuIHZEA/Fb+8QalMbFtTzFao
-	 EzEzQd+iPJvtQ==
+	b=bJ6I3O6StZuiXEUknMkPl1d+XBcHoYo8KEz0hmh0oJMDf7MhqDpzuxbw6otYgNdvz
+	 JUoafKn1e31LqhlISkZ1IQQvo20W6u8VnkDJhbEjZq7OJMpt2FSRjw/Yl3oEM4+MGl
+	 zJi+ZbrctAmToGrR+0+kYVvhWj9VNr4m1TTnmLaFSQFjQJcU7nQC8VBJld+w2K7JQ2
+	 hdA8NkZHEjRX3CRgndAuVA12VfXC6o5sknSnGqtHy8dpKWt8tPgRSI15ldZl+Y3dPR
+	 Qn/IlGW3uuiqPMX3IKQFlaHmaALAhaAVaovvJOzJFbPAoPJGokI84V/j4pO+QH6w0h
+	 J8cxwUlIailTg==
 Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=lobster-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <maz@kernel.org>)
-	id 1uxBM7-00000005pJX-3RCo;
-	Fri, 12 Sep 2025 21:30:55 +0000
-Date: Fri, 12 Sep 2025 22:30:53 +0100
-Message-ID: <87frcrz7ci.wl-maz@kernel.org>
+	id 1uxBZF-00000005pTe-1Lxi;
+	Fri, 12 Sep 2025 21:44:29 +0000
+Date: Fri, 12 Sep 2025 22:44:27 +0100
+Message-ID: <87cy7vz6pw.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Mark Brown <broonie@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -62,12 +62,10 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	kvmarm@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v16 2/6] KVM: arm64: Manage GCS access and registers for guests
-In-Reply-To: <aMRLYBWfDFiIB7wx@finisterre.sirena.org.uk>
+Subject: Re: [PATCH v16 5/6] KVM: arm64: Allow GCS to be enabled for guests
+In-Reply-To: <20250912-arm64-gcs-v16-5-6435e5ec37db@kernel.org>
 References: <20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org>
-	<20250912-arm64-gcs-v16-2-6435e5ec37db@kernel.org>
-	<865xdndgpw.wl-maz@kernel.org>
-	<aMRLYBWfDFiIB7wx@finisterre.sirena.org.uk>
+	<20250912-arm64-gcs-v16-5-6435e5ec37db@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -83,39 +81,35 @@ X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org,
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, 12 Sep 2025 17:33:36 +0100,
+On Fri, 12 Sep 2025 10:25:31 +0100,
 Mark Brown <broonie@kernel.org> wrote:
 > 
-> On Fri, Sep 12, 2025 at 12:59:23PM +0100, Marc Zyngier wrote:
-> > On Fri, 12 Sep 2025 10:25:28 +0100,
-> > Mark Brown <broonie@kernel.org> wrote:
+> Now that required functionality for GCS is in place expose
+> ID_AA64PFR1_EL1.GCS, allowing guests to be given the feature.
 > 
-> > >  		MAPPED_EL2_SYSREG(PIR_EL2,     PIR_EL1,     NULL	     );
-> > >  		MAPPED_EL2_SYSREG(PIRE0_EL2,   PIRE0_EL1,   NULL	     );
-> > >  		MAPPED_EL2_SYSREG(POR_EL2,     POR_EL1,     NULL	     );
-> > > +		MAPPED_EL2_SYSREG(GCSCR_EL2,   GCSCR_EL1,   NULL             );
-> > > +		MAPPED_EL2_SYSREG(GCSPR_EL2,   GCSPR_EL1,   NULL             );
-> > >  		MAPPED_EL2_SYSREG(AMAIR_EL2,   AMAIR_EL1,   NULL	     );
-> > >  		MAPPED_EL2_SYSREG(ELR_EL2,     ELR_EL1,	    NULL	     );
-> > >  		MAPPED_EL2_SYSREG(SPSR_EL2,    SPSR_EL1,    NULL	     );
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/kvm/nested.c   | 7 ++++---
+>  arch/arm64/kvm/sys_regs.c | 2 --
+>  2 files changed, 4 insertions(+), 5 deletions(-)
 > 
-> > Just like the previous version, you're missing the accessors that
-> > would be this table useful. Meaning that the vcpu_read_sys_reg() and
-> > vcpu_write_sys_reg() accessors will fail for all 4 GSC registers.
-> 
-> Just to confirm, this is __vcpu_{read,write}_sysreg()?
+> diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
+> index 153b3e11b115..d2d55e18c610 100644
+> --- a/arch/arm64/kvm/nested.c
+> +++ b/arch/arm64/kvm/nested.c
+> @@ -1459,9 +1459,10 @@ u64 limit_nv_id_reg(struct kvm *kvm, u32 reg, u64 val)
+>  
+>  	case SYS_ID_AA64PFR1_EL1:
+>  		/* Only support BTI, SSBS, CSV2_frac */
+> -		val &= (ID_AA64PFR1_EL1_BT	|
+> -			ID_AA64PFR1_EL1_SSBS	|
+> -			ID_AA64PFR1_EL1_CSV2_frac);
+> +		val &= (ID_AA64PFR1_EL1_BT		|
+> +			ID_AA64PFR1_EL1_SSBS		|
+> +			ID_AA64PFR1_EL1_CSV2_frac	|
+> +			ID_AA64PFR1_EL1_GCS);
 
-No.
-
-vcpu_{read,write}_sys_reg() and co are the broken high-level
-accessors. __vcpu_{read,write}_sysreg() call into those depending on
-the context, and __vcpu_{read,write}_sys_reg_{to,from}_cpu() have now
-been removed and replaced by similar (but private) accessors.
-
-See -rc4 for the details.
-
-In any case, a bunch of register accesses in this series are broken,
-as they don't respect the register life cycle of the guest.
+How about updating the comment?
 
 	M.
 
