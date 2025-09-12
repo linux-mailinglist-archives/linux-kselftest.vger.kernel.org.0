@@ -1,103 +1,137 @@
-Return-Path: <linux-kselftest+bounces-41315-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41316-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41753B54A74
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:57:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0887AB54A84
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 13:00:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D47A516109F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 10:57:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 925853BEA43
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:00:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8AB12FB97F;
-	Fri, 12 Sep 2025 10:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E31E2DECBC;
+	Fri, 12 Sep 2025 11:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="tVRFgT3w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9jIiJ0S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08501EA7DD;
-	Fri, 12 Sep 2025 10:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481F14207A;
+	Fri, 12 Sep 2025 11:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757674640; cv=none; b=p7bGDBCcN5dqrmH5SlLd+6/3DrZe2BE56RFR+5tf3BlsC845njByi0wXtGPy8AbpUNUzlLFCgOGyDNCqGyCfWSca3zXnGRlgHCZnxjVMf5Lk4n4Z7DOxkgjBWeTV0wAtNGA082ypzmZeoNVrKrDiQUUI60128ixRvrO7rV9U6xo=
+	t=1757674853; cv=none; b=gKCIWcgdt47ZD6DCCd0R0N6z0atPf3cXvSDG8aU3n1RO198rwbOyU/Q+Rs8AjREeupw0tHcliwrZeOcsSTIjd+Bg7uLScwkqvZk6MAXMiXMf733eEjOv3NE2FyUj3mhDzef6saAbUOA9RskGIQ6V/svW1Q80irQH0iN6sqNYIjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757674640; c=relaxed/simple;
-	bh=CMxrwtZy/ej5tje20LY39IhUva5QLPmlbeCy5NB1eG0=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=fx5xkThRguaFz60AGQrGuw1Hyb/qd1NKSnt0Jy1tHC+PwJSVcoA8cMNhAhJw3NWOqBEdx2C9np8J8KcquOYaedeJITsxAIfrXfvxJ5Wr8ip/4qSyLWey/VolMVFX9v7VGNkRbtUNE3ODSMXBCUC2OiQIURN/HENg2hIGPmZi9V8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=tVRFgT3w; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1757674635;
-	bh=CMxrwtZy/ej5tje20LY39IhUva5QLPmlbeCy5NB1eG0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=tVRFgT3wPYBUhvz+I5yGaaOIRcr0LyGbSRTT2P1N9PeCVOaLBduiBTQGUXLiGCvIA
-	 zjABJUVEI1WNKBNoAf92rvRgtrqlqM5MDvIT5QMBjKl1KtTmeph63lke6b+5ZITH0l
-	 GojC3Twv02/3b4xlee55++ebmE0Jb051+Wm5gbbU=
-Date: Fri, 12 Sep 2025 12:57:12 +0200 (GMT+02:00)
-From: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Mark Brown <broonie@kernel.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Ben Copeland <benjamin.copeland@linaro.org>,
-	Shuah Khan <shuah@kernel.org>
-Message-ID: <5e4d9943-3a8d-4281-9007-f49bfc66dc6d@weissschuh.net>
-In-Reply-To: <965c8d7e-c5f2-4bd8-ab7c-c3116632f015@sirena.org.uk>
-References: <CA+G9fYv77X+kKz2YT6xw7=9UrrotTbQ6fgNac7oohOg8BgGvtw@mail.gmail.com> <1e331ebb-3315-4cbe-b194-ccbeeaded4da@t-8ch.de> <965c8d7e-c5f2-4bd8-ab7c-c3116632f015@sirena.org.uk>
-Subject: Re: next-20250909: selftests/arm64/gcs/basic-gcs.c:390:30: error:
- use of undeclared identifier 'HWCAP_GCS'
+	s=arc-20240116; t=1757674853; c=relaxed/simple;
+	bh=9Hig5MO2Jffefaua87KEncrMekSgvRAlciqOrU/lgR8=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H75seW5tD+izcMwq96fSXlMbMy91kcUU0AJScQtrZnWx8gIi4Vo69O//rXcQWNlqLSZIgWtuTCTTQr19uxr/cR34OlIVuwl1yHE4Z6m59OSyZvMBHR3H9RFOhpdJbRQ4NreNuZPtsXn8mlhLsQyOKSheCjlwW9+If0/t8SX5yKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9jIiJ0S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1A1C4CEF1;
+	Fri, 12 Sep 2025 11:00:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757674852;
+	bh=9Hig5MO2Jffefaua87KEncrMekSgvRAlciqOrU/lgR8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Y9jIiJ0SlD76AkupUHHfrxAvk88t0QaJTxlubaz7Lee2xy2D0BRqnWy9kHOd+UEyZ
+	 ucw6CFXjEg23lC4HIKq0YD3BJL7UetQbE0vKECGBR/Bq0X6LlaR/kmSB/pu1+AnrxX
+	 cbiUamOX6fsmRIK6CpkZMPRvhxzpyKtLeDtJq93aoQoHkN4MmaA3LlKMATXFOqd28O
+	 x3Kko9USQF71yCJC0lsZsB8W+T4D7IKWsudRCawlXuGZmzWDSLJyfmcr1/MaTJWn0t
+	 R4lj6LhwbLOIqKDKh49o/fHDe5jximaOFTDlE8JCRYKZ4rL5P4zYCoLAmaKXoHibiN
+	 Om0+/jjPkBRVQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1ux1WM-00000005etW-1zmH;
+	Fri, 12 Sep 2025 11:00:50 +0000
+Date: Fri, 12 Sep 2025 12:00:50 +0100
+Message-ID: <867by4c4v1.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Itaru Kitayama <itaru.kitayama@linux.dev>
+Cc: Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Subject: Re: [PATCH] PMCR_EL0.N is RAZ/WI. At least a build failes in Ubuntu 22.04 LTS. Remove the set function.
+In-Reply-To: <20250912-selftest-fix3-v1-1-256710a5ae5b@linux.dev>
+References: <20250912-selftest-fix3-v1-1-256710a5ae5b@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <5e4d9943-3a8d-4281-9007-f49bfc66dc6d@weissschuh.net>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: itaru.kitayama@linux.dev, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, itaru.kitayama@fujitsu.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Sep 12, 2025 12:49:58 Mark Brown <broonie@kernel.org>:
+On Fri, 12 Sep 2025 09:27:40 +0100,
+Itaru Kitayama <itaru.kitayama@linux.dev> wrote:
+> 
+> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
 
-> On Fri, Sep 12, 2025 at 08:30:08AM +0200, Thomas Wei=C3=9Fschuh wrote:
->> On 2025-09-12 00:48:47+0530, Naresh Kamboju wrote:
->
->> index c99a6b39ac14..816b497634d6 100644
->> --- a/tools/testing/selftests/arm64/gcs/gcs-util.h
->> +++ b/tools/testing/selftests/arm64/gcs/gcs-util.h
->> @@ -26,6 +26,10 @@ struct user_gcs {
->> };
->> #endif
->>
->> +#ifndef HWCAP_GCS
->> +#define HWCAP_GCS (1UL << 32)
->> +#endif
->> +
->
-> We're doing that for glibc using tests because there's some unfortunate
-> interaction between including the relevant kernel header and glibc's
-> headers (I forget the details) which means that including the kernel
-> header directly conflicts with something glibc is doing.=C2=A0 For nolibc=
- I
-> would expect us to using the kernel's hwcap definitions?
+This isn't an acceptable commit message.
 
-nolibc doesn't even have its own asm/hwcap.h (or any asm/ header for that m=
-atter).
-So a kernel header has to be used,
-maybe an old one is pulled from somewhere?
+> ---
+> Seen a build failure with old Ubuntu 22.04 LTS, while the latest release
+> has no build issue, a write to the bit fields is RAZ/WI, remove the
+> function.
+> ---
+>  tools/testing/selftests/kvm/arm64/vpmu_counter_access.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+> index f16b3b27e32ed7ca57481f27d689d47783aa0345..56214a4430be90b3e1d840f2719b22dd44f0b49b 100644
+> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+> @@ -45,11 +45,6 @@ static uint64_t get_pmcr_n(uint64_t pmcr)
+>  	return FIELD_GET(ARMV8_PMU_PMCR_N, pmcr);
+>  }
+>  
+> -static void set_pmcr_n(uint64_t *pmcr, uint64_t pmcr_n)
+> -{
+> -	u64p_replace_bits((__u64 *) pmcr, pmcr_n, ARMV8_PMU_PMCR_N);
+> -}
+> -
+>  static uint64_t get_counters_mask(uint64_t n)
+>  {
+>  	uint64_t mask = BIT(ARMV8_PMU_CYCLE_IDX);
+> @@ -490,7 +485,6 @@ static void test_create_vpmu_vm_with_pmcr_n(uint64_t pmcr_n, bool expect_fail)
+>  	 * Setting a larger value of PMCR.N should not modify the field, and
+>  	 * return a success.
+>  	 */
+> -	set_pmcr_n(&pmcr, pmcr_n);
+>  	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), pmcr);
+>  	pmcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0));
+>  
+> 
 
-(I won't have access to a development machine today anymore)
+So what are you fixing here? A build failure? A semantic defect?
+Something else? What makes this a valid change?
 
-Thomas
+Frankly, I have no idea.
+
+But KVM definitely allows PMCR_EL0.N to be written from userspace, and
+that's not going to change.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
