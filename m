@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-41406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41407-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 562E5B554C0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:37:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9BBCB554C4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:37:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0722BAA48AF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:37:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 558795C488D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB4E931DDBC;
-	Fri, 12 Sep 2025 16:37:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B1931DDB2;
+	Fri, 12 Sep 2025 16:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9ldPuUE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7ptIAXf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAAE031DDB2;
-	Fri, 12 Sep 2025 16:37:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48BB631B126;
+	Fri, 12 Sep 2025 16:37:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757695029; cv=none; b=WFXUo694UpvdkfHLMdBp2CQl2LYWsD6ZEDR2Uq9Dxv3WBPAc1950QFxRJIomnw/amBAjjUhgM/6hK4gLRc83ESRaDFLYpjLBHu5pOtEAdsFoMsYGqkj0XDfVA9jhzwtqD0oLRglqk4fHlIneoNx8fVoEZsmdVqG6xtH83f2iiHI=
+	t=1757695033; cv=none; b=oMrgwNYn0XmNn+XDrRB/GM7MDl0CQ+2M24DZSBedsZ3IBSaWtucTJpyPiq457c88Eix9yytMK9n4KxGicPJliyV6l9fgNRN3IX3sAvcjzFN57ofjUr0V9zkQMcWa64vjUtZ0PhGSugQTdXrGHaMxV57KDCWIPq/vfIRxkja5yW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757695029; c=relaxed/simple;
-	bh=6jBa6+u6eDtKQ+KKne0oa/UNjl2R0gXUaeauUFcoiw8=;
+	s=arc-20240116; t=1757695033; c=relaxed/simple;
+	bh=MGDNUYkapRM8C1jFeBnXh80+SZemTEKjmnxYU7exbaY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EjFvkr/iiyMChsEzkVPlBuYWpKOPkjyQSv+XDzcjzc69Wgr2iJFjWVZLCskFgTAJYF8HAmQwEmMWYV9AUkfqgkAT3vBgYczhCfo31hOWvpew+OGNBM+6VyLWF3bo41vVIvBisxlUr3mUXQPxj5d/FshgfEOTbgVcdKb23xGpi5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9ldPuUE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0801C4CEF4;
-	Fri, 12 Sep 2025 16:37:06 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=BuJXVIS/LKAiLSi4P1A/D4IiBM8C51RFNBj9FWKjXAh0YmWpi+rslu+ojGqaMmgvLRQ58YREwQGtw2OK42NdNGCkNt+g3UmEyJamxgxpqqqnnfQIcNCfg5toYSqaCsEYuUDiykIgWnPUlJ/05Ehi9ukAciWjcYXaIw70aV8Uvho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7ptIAXf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC40C4CEFB;
+	Fri, 12 Sep 2025 16:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757695029;
-	bh=6jBa6+u6eDtKQ+KKne0oa/UNjl2R0gXUaeauUFcoiw8=;
+	s=k20201202; t=1757695031;
+	bh=MGDNUYkapRM8C1jFeBnXh80+SZemTEKjmnxYU7exbaY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=G9ldPuUEC7auONraJNxkM9upq64dA/o2Jlaa1o8egaUaws0MBm3sdHKLrW2eCibyj
-	 s1ngWyfu9JOB9yXadbNIK59CWxOJ2f5brqcFZYaZMfRVXxPs9ShTC6X0leDnUcWloi
-	 7t8yRh0jq+vp/inp+m/6+6NCvLTsqIoatFQYF85aArOCtL1OxeKlyk+sTta1EEtcoj
-	 1zmCQlAQixHLW1WAF1lB1jR6SBYgpNG8N8T5qyy3L8XSjUeYGxPgNFYP20aKj7L0Gg
-	 OlgU2gMiuZSxbWRJZa/IYCZYo62sH4P3fXJ3cyjPUy1W2MIqq8PvcOg2QtkxFgKaRl
-	 oxmabROhuUdMg==
+	b=S7ptIAXfwtIUdA2+O/iMJ3pcGheSVG/bpgXiiCKgWlvYzcB9XcAyHzBRmnHMVs7Mg
+	 KLAQ6LgKddqOuYkkDHJUUPFegSy+LQuPys1GuH/XRn3VfTsdLoxjX3XHPnfilUOLas
+	 5tFZFG53JSxvZPQ03Y5O0DehF8niJO/u1Yi8uuImiQp5C733KB/v7k7k2p/ZhJM969
+	 9KfdX9Nsa1c3NH1sUAJaVZGOGpHTCu03GZcTBNGabY3wmhqybcS2LiA56tgeBtezm1
+	 /iVro/BkGlw2sCs7PFRHmbVFtY1Y+Wg1ItBEAxqCiKAIqAGMxNcq2sn/xDeWs7Itqm
+	 svQ6NQCN4SPsA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 12 Sep 2025 18:36:47 +0200
-Subject: [PATCH net-next 1/3] selftests: mptcp: close server file
+Date: Fri, 12 Sep 2025 18:36:48 +0200
+Subject: [PATCH net-next 2/3] selftests: mptcp: close server IPC
  descriptors
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250912-net-next-mptcp-minor-fixes-6-18-v1-1-99d179b483ad@kernel.org>
+Message-Id: <20250912-net-next-mptcp-minor-fixes-6-18-v1-2-99d179b483ad@kernel.org>
 References: <20250912-net-next-mptcp-minor-fixes-6-18-v1-0-99d179b483ad@kernel.org>
 In-Reply-To: <20250912-net-next-mptcp-minor-fixes-6-18-v1-0-99d179b483ad@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -65,56 +65,74 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1620; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=Kzg2XB2o+mHfwAGKHZDWGGwwW0y7jRnKWHH47jzwYH0=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKO+OhIuetmS+pKMwpozjfLXLH0zyGetF++E8M6nm2+o
- PX3d71hRykLgxgXg6yYIot0W2T+zOdVvCVefhYwc1iZQIYwcHEKwET+3GJkuGSkKMjNerOr0Oij
- u1/9VpvyX8Hatl4Wf/ObvV+a7libxPCHO992nfq238sCQ6dHLvm79U14wcq/3ouzGVnWZ280EGv
- nAQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2169; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=SzQNF7P+VIga7z4erajbLk7KkSiLRbluQtVLzA5e2lQ=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKO+OjN2HnKMHrnxMok5tNz/yw1uF/wIlOsXbx6drcPu
+ 0qXgcHJjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgImUz2D4p1AqvV9v+/79S79O
+ OXI5guX6tsrZAlcs1mz3ZrsSGfTocSXDP1V28S33g3uWxncnfw3yKLr8gUvpmuGyL0fuXJt41p6
+ BiREA
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-The server file descriptor ('fd') is opened in server() but never closed.
-While accepted connections are properly closed in process_one_client(),
-the main listening socket remains open, causing a resource leak.
+The client-side function connect_one_server() properly closes its IPC
+descriptor after use, but the server-side code in both mptcp_sockopt.c
+and mptcp_inq.c was missing corresponding close() calls for their IPC
+descriptors, leaving file descriptors open unnecessarily.
 
-This patch ensures the server fd is properly closed after processing
-clients, bringing the sockopt and inq test cases in line with proper
-resource cleanup practices.
+This change ensures proper cleanup by:
+1. Adding missing close(pipefds[0]/unixfds[0]) in server processes
+2. Adding close(pipefds[1]/unixfds[1]) after server() function calls
 
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+This ensures both ends of the IPC pipe are properly closed in their
+respective processes, preventing file descriptor leaks.
+
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_inq.c     | 1 +
- tools/testing/selftests/net/mptcp/mptcp_sockopt.c | 1 +
- 2 files changed, 2 insertions(+)
+ tools/testing/selftests/net/mptcp/mptcp_inq.c     | 8 ++++++--
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.c | 8 ++++++--
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_inq.c b/tools/testing/selftests/net/mptcp/mptcp_inq.c
-index f3bcaa48df8f22e8f4833fcc3b919d21764bf7fb..40f2a1b24763e3b84e12bfae7b893c35e6c2af71 100644
+index 40f2a1b24763e3b84e12bfae7b893c35e6c2af71..8e8f6441ad8b0a79216eaf8f3b34c4ed2c2a1736 100644
 --- a/tools/testing/selftests/net/mptcp/mptcp_inq.c
 +++ b/tools/testing/selftests/net/mptcp/mptcp_inq.c
-@@ -502,6 +502,7 @@ static int server(int unixfd)
+@@ -581,8 +581,12 @@ int main(int argc, char *argv[])
+ 		die_perror("pipe");
  
- 	process_one_client(r, unixfd);
+ 	s = xfork();
+-	if (s == 0)
+-		return server(unixfds[1]);
++	if (s == 0) {
++		close(unixfds[0]);
++		ret = server(unixfds[1]);
++		close(unixfds[1]);
++		return ret;
++	}
  
-+	close(fd);
- 	return 0;
- }
+ 	close(unixfds[1]);
  
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-index e934dd26a59d9b50445d61e8b8013ce3c8d2a8a0..b44b6c9b05507780fa85221e61813182cf7c082e 100644
+index b44b6c9b05507780fa85221e61813182cf7c082e..e9c359df941604b9d5eec17bb83d57afe1aa34fb 100644
 --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
 +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-@@ -722,6 +722,7 @@ static int server(int pipefd)
+@@ -848,8 +848,12 @@ int main(int argc, char *argv[])
+ 		die_perror("pipe");
  
- 	process_one_client(r, pipefd);
+ 	s = xfork();
+-	if (s == 0)
+-		return server(pipefds[1]);
++	if (s == 0) {
++		close(pipefds[0]);
++		ret = server(pipefds[1]);
++		close(pipefds[1]);
++		return ret;
++	}
  
-+	close(fd);
- 	return 0;
- }
+ 	close(pipefds[1]);
  
 
 -- 
