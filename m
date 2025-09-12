@@ -1,144 +1,202 @@
-Return-Path: <linux-kselftest+bounces-41293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 882BDB54683
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:09:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D91CCB5468A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:12:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3872188BD8C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 09:09:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B0D33A9BE5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 09:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 169C6274FD7;
-	Fri, 12 Sep 2025 09:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11BE2765D9;
+	Fri, 12 Sep 2025 09:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jh3MYpH5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aploMs7w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90A82DC79E;
-	Fri, 12 Sep 2025 09:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63572749F1
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 09:12:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757668163; cv=none; b=Y82/hQ/Av29uYj2n2CjQ9L9u/q7TRRl7oJJV+/6VViOgUVVirwa8ULKA5+8atLz0z7ImlNYuSCkGPAsaCpuiRu3TFYICurj9TNaGTaBKBerpzz2X9WQVpggEHQ2i8pCszAndOMtSRCRscuNtNMh9EmL+LR/2wFjjxE67cSXpCpw=
+	t=1757668344; cv=none; b=eQEfPplUy6ZxerQOxowUYBXR2Oo4zkaFZ6UG61t/qLbV09WNLX+dTtqevJh/a5VZK7TxceZSRuG+BxhZ8LlWXO3r3xmDajDkf9ZJcaLxNUkgn/ykLGhWtmWGhtwi7gwpYnaz4W9RGd5coRN4cw+MFKNtDQPHI9UbGzAQgcxoX0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757668163; c=relaxed/simple;
-	bh=BZn300McnYIr9hlAzy92FI95myhALTcpe3y/w65pRgs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uMGgoZIIOytveEZAjHKoId0XGQHHyiM0rdg632/m4GzJDrdVz5E84c+jIDbFig/fTq07wexuAewKDsTYCA3lfWOqkpmL11mKKuWAApvYJrI5nKY6hoMvAzWDLt5WsyKaH9cFQftw92rInMkctavEHKHoxV/atX0Kvey6wBGGG6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jh3MYpH5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 212A1C4CEF1;
-	Fri, 12 Sep 2025 09:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757668161;
-	bh=BZn300McnYIr9hlAzy92FI95myhALTcpe3y/w65pRgs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Jh3MYpH5tn1Z/bweKxSNVjRA1l3ZoWx1h47aYfjY0X+9BoP8BIcMmsObUV02ccT0U
-	 ck55kYIGc+qi1fNtlqJVW07tRDyWrj6OUrmsRwQUsHCo22H//fbEfbzM3AGHdk0i9V
-	 /xsFNCuyW593TF/8NSSg58v8zdSmjRnOXJNQYFpNYEsdvZ1YWoDP5HZLphNCp8aCyM
-	 drWUPX9Zi8v3yYBrQ0c2yLgEvLGsFHePMsKq0jaYDC53ht13yGMX8w062DhEN4LgBq
-	 S+vNDO8w0FscM1S1+NKPLCte4HwhWOllPaSY1U/fbsNNpHFsAmey72ShuS0zO0lZQo
-	 yPuZNckBjcftA==
-Message-ID: <2033c6cd-4112-4c8a-a9ef-2ab34f3504b8@kernel.org>
-Date: Fri, 12 Sep 2025 11:09:16 +0200
+	s=arc-20240116; t=1757668344; c=relaxed/simple;
+	bh=ioIOH2p5Blrv6vNOqNmSCymoSvN1zmkkAsnVeBc1SMY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FO3PUiGAIFdfPzxEx3TyIpJVDAP9BjgDwnav4G7Uu5qQxzKK+Fa07gZHJ67hbAb7Y89T2VzhYy4OMeRtmLGDqPxYQKPTCtU25FupqjC9xJOSs9GUosydG04pf0Q3JfPXIA7p7WBq8nOGwm2SajaXrIswHvJAf2r3C1C5UC5PqQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aploMs7w; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b046f6fb230so320451966b.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 02:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757668341; x=1758273141; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ioIOH2p5Blrv6vNOqNmSCymoSvN1zmkkAsnVeBc1SMY=;
+        b=aploMs7whY/LgaXCAuOUQbkHlH9PozV3z9HFoHHh4tp/dJFhM6pt21fAvHgYgjlN8M
+         rmpVcHSueNagemUBdQowpA6BdoN7gqqaLplS1v3ScHX+yKhTwev5VBs4Bed/9bkH4dLN
+         4rfLLpcIvHJONxgYVXSLM7qEor3rn+MmXCTKDCzXypEm5HHBP38sGD0OFUOjAm326bQ+
+         1r2w7gh4g7621FkXF6rJzjHEIMZg4g13DDPyWgPK4mWuR3T6PMXO71Jvdha7GKG/r6lh
+         avbJhFNvPx4G+gPZm0XJKYAQwKp/BQENGe5DK6uHxVZst/QOlcM6CwamdS6qIfXycNC8
+         TKgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757668341; x=1758273141;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ioIOH2p5Blrv6vNOqNmSCymoSvN1zmkkAsnVeBc1SMY=;
+        b=wc+B7mAbPv+K6fGChsGxWzSF4yT1biqlmJ4ubcmNe1Dq5zoxuPUjTKGs/JXvOQZzP2
+         Eywza98j0F9/rWSN43/lf9qPMYs1jZWZxFdfMFQCcJQTVixCTgOQ3pcYHczZFL0s3Rr+
+         4s5Tj7iTWU8w42XXSJeTt7qKqd+wMzITly5qbf4fhENzwp12jNskqTxdTmfhZQFs1i5/
+         eomcvUq9yLJ/DEBvlX4f6xSXwbyU1GVDInpGszxk9ZItk+PAFDber3vuc1PPVYaLlLGU
+         kCuJNkbVzl7nHfVme4th0rP8Zere0g+8oLnKMLOH5oGnpoI7TCfu5Aj3jTqjK5Ys5n5/
+         VFDw==
+X-Forwarded-Encrypted: i=1; AJvYcCWk5qq1CETxvL/JDKP3FK+LxtVGOy3bHoFWxOpgSIcgTMbtoVDLUywqxzBsbFEfwzhNIslF2NBPsfEPKDWV6w4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnSts2qN10BeRIvl7AX8fkaWhRCNl9q1gS/MGB5rz+8vj4PhiU
+	7q9EtZn0Vmoy1adZEk+/Ar5J9vBRdipAwF/X5l/7l04pX2P7DeySvIjdqQgmviJmbO8oiquClEf
+	MMrGu/vhLeX12d46R/RmRltcmfMofv9M=
+X-Gm-Gg: ASbGncunbPaMoYJeqzLUGY8iEpLQK2/3VN8BB2xmh6qbxWlSlabtWFhPU/ogoOJHsxN
+	8NS4SpGfnR43rjzC6GmrOmS6UxV5KIWNe7Yd1sEPvL4GffS7RBEY6rZHk8JfPnwneHAgQQVFps+
+	cW9rl/7e7aP4qRhl3GmRoD1o5cNEIVjajtMmnJ5iMwBmwoCXcLTCWhtfyDhVkweaqF1hi/dgKRp
+	CHMKuo=
+X-Google-Smtp-Source: AGHT+IECQ2FSxCpELdyt8w8+Ta17OX81olY1L21qGnLXRiiNiAsbzwmD/JJZPTQJsBBXBb5BWfCf5Q2bF6gDjvOJbJk=
+X-Received: by 2002:a17:907:3e9f:b0:b04:3402:391c with SMTP id
+ a640c23a62f3a-b07a68bddd8mr590036766b.24.1757668340932; Fri, 12 Sep 2025
+ 02:12:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/5] platform/chrome: Fix a possible UAF via revocable
-To: Tzung-Bi Shih <tzungbi@kernel.org>, Benson Leung <bleung@chromium.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- Dawid Niedzwiecki <dawidn@google.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
- linux-kselftest@vger.kernel.org,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-References: <20250912081718.3827390-1-tzungbi@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250912081718.3827390-1-tzungbi@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
+ <20250910-work-namespace-v1-27-4dd56e7359d8@kernel.org> <CAOQ4uxgtQQa-jzsnTBxgUTPzgtCiAaH8X6ffMqd+1Y5Jjy0dmQ@mail.gmail.com>
+ <20250911-werken-raubzug-64735473739c@brauner> <CAOQ4uxgMgzOjz4E-4kJFJAz3Dpd=Q6vXoGrhz9F0=mb=4XKZqA@mail.gmail.com>
+ <20250912-wirsing-karibus-7f6a98621dd1@brauner>
+In-Reply-To: <20250912-wirsing-karibus-7f6a98621dd1@brauner>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Fri, 12 Sep 2025 11:12:09 +0200
+X-Gm-Features: Ac12FXzXlVrWyNxThzcVLm8bWdnJouio3PTW50wsmgaWY6Ne9FaEF2yc3iNy4og
+Message-ID: <CAOQ4uxgGpdQ42d-QRuHbvdrvZWrS9qz9=A2GRa2Bq-sMcK6w4w@mail.gmail.com>
+Subject: Re: [PATCH 27/32] nsfs: support file handles
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org, 
+	Josef Bacik <josef@toxicpanda.com>, Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>, 
+	=?UTF-8?Q?Zbigniew_J=C4=99drzejewski=2DSzmek?= <zbyszek@in.waw.pl>, 
+	Lennart Poettering <mzxreary@0pointer.de>, Daan De Meyer <daan.j.demeyer@gmail.com>, 
+	Aleksa Sarai <cyphar@cyphar.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-block@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/09/2025 10:17, Tzung-Bi Shih wrote:
-> This is a follow-up series of [1].  It tries to fix a possible UAF in the
-> fops of cros_ec_chardev after the underlying protocol device has gone by
-> using revocable.
-> 
-> The 1st patch introduces the revocable which is an implementation of ideas
-> from the talk [2].
-> 
-> The 2nd and 3rd patches add test cases for revocable in Kunit and selftest.
-> 
-> The 4th patch converts existing protocol devices to resource providers
-> of cros_ec_device.
-> 
-> The 5th patch converts cros_ec_chardev to a resource consumer of
-> cros_ec_device to fix the UAF.
-> 
-> [1] https://lore.kernel.org/chrome-platform/20250721044456.2736300-6-tzungbi@kernel.org/
-> [2] https://lpc.events/event/17/contributions/1627/
-> 
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Fri, Sep 12, 2025 at 10:20=E2=80=AFAM Christian Brauner <brauner@kernel.=
+org> wrote:
+>
+> On Thu, Sep 11, 2025 at 01:36:28PM +0200, Amir Goldstein wrote:
+> > On Thu, Sep 11, 2025 at 11:31=E2=80=AFAM Christian Brauner <brauner@ker=
+nel.org> wrote:
+> > >
+> > > On Wed, Sep 10, 2025 at 07:21:22PM +0200, Amir Goldstein wrote:
+> > > > On Wed, Sep 10, 2025 at 4:39=E2=80=AFPM Christian Brauner <brauner@=
+kernel.org> wrote:
+> > > > >
+> > > > > A while ago we added support for file handles to pidfs so pidfds =
+can be
+> > > > > encoded and decoded as file handles. Userspace has adopted this q=
+uickly
+> > > > > and it's proven very useful.
+> > > >
+> > > > > Pidfd file handles are exhaustive meaning
+> > > > > they don't require a handle on another pidfd to pass to
+> > > > > open_by_handle_at() so it can derive the filesystem to decode in.
+> > > > >
+> > > > > Implement the exhaustive file handles for namespaces as well.
+> > > >
+> > > > I think you decide to split the "exhaustive" part to another patch,
+> > > > so better drop this paragraph?
+> > >
+> > > Yes, good point. I've dont that.
+> > >
+> > > > I am missing an explanation about the permissions for
+> > > > opening these file handles.
+> > > >
+> > > > My understanding of the code is that the opener needs to meet one o=
+f
+> > > > the conditions:
+> > > > 1. user has CAP_SYS_ADMIN in the userns owning the opened namespace
+> > > > 2. current task is in the opened namespace
+> > >
+> > > Yes.
+> > >
+> > > >
+> > > > But I do not fully understand the rationale behind the 2nd conditio=
+n,
+> > > > that is, when is it useful?
+> > >
+> > > A caller is always able to open a file descriptor to it's own set of
+> > > namespaces. File handles will behave the same way.
+> > >
+> >
+> > I understand why it's safe, and I do not object to it at all,
+> > I just feel that I do not fully understand the use case of how ns file =
+handles
+> > are expected to be used.
+> > A process can always open /proc/self/ns/mnt
+> > What's the use case where a process may need to open its own ns by hand=
+le?
+> >
+> > I will explain. For CAP_SYS_ADMIN I can see why keeping handles that
+> > do not keep an elevated refcount of ns object could be useful in the sa=
+me
+> > way that an NFS client keeps file handles without keeping the file obje=
+ct alive.
+> >
+> > But if you do not have CAP_SYS_ADMIN and can only open your own ns
+> > by handle, what is the application that could make use of this?
+> > and what's the benefit of such application keeping a file handle instea=
+d of
+> > ns fd?
+>
+> A process is not always able to open /proc/self/ns/. That requires
+> procfs to be mounted and for /proc/self/ or /proc/self/ns/ to not be
+> overmounted. However, they can derive a namespace fd from their own
+> pidfd. And that also always works if it's their own namespace.
+>
+> There's no need to introduce unnecessary behavioral differences between
+> /proc/self/ns/, pidfd-derived namespace fs, and file-handle-derived
+> namespace fds. That's just going to be confusing.
+>
+> The other thing is that there are legitimate use-case for encoding your
+> own namespace. For example, you might store file handles to your set of
+> namespaces in a file on-disk so you can verify when you get rexeced that
+> they're still valid and so on. This is akin to the pidfd use-case.
+>
+> Or just plainly for namespace comparison reasons where you keep a file
+> handle to your own namespaces and can then easily check against others.
 
-Thanks for the work. Just a note, please start using b4, so above Cc
-will be propagated to all patches. Folks above received only the cover
-letter...
+OK. As I said no objections I was just curious about this use case.
 
-Best regards,
-Krzysztof
+FWIW, comparing current ns to a stored file handle does not really require
+permission to open_by_handle_at(). name_to_handle_at() the current ns
+and binary compare to the stored file handle should be a viable option.
 
+This was exactly the reason for introducing AT_HANDLE_FID, so that fanotify
+unprivileged watcher with no permission to open_by_handle_at() could compar=
+e
+an fid reported in an event with another fid they obtained earlier with
+name_to_handle_at() and kept in a map.
+
+Thanks for the explanation!
+Amir.
 
