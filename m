@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-41374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6FEDB54E32
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 14:39:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22BB0B54E45
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 14:42:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9C4616F844
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:36:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC2467AC034
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:41:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 296E53054D0;
-	Fri, 12 Sep 2025 12:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9229E301471;
+	Fri, 12 Sep 2025 12:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C+7TX9oq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CYa0B9SA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533B7304BD3
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 12:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CCE15E5D4
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 12:42:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757680549; cv=none; b=NMynHpkF7d9801uHticAq8hAJC7HRwKgup1MD9eOAdq3z2oPn8eY523wy/ho8ZZGznKJVs9Sd0f4XsOgKhfnHGKHZUGnFpkqrCIbS1Bvi0GRlx52fF1JwxMiyI3tkuQfcbIbINzMOluunROb2+0hxMntOWRc+F3XUudz2e0Ro80=
+	t=1757680966; cv=none; b=Cgoyhp3fwNFif0Zzjig9ju8VO3XUBesMZKQj3isAQzfuE1zcFP7Z1UVDB6b2q06VzIrrrnujMqqDgVGZgt5ryF1k7lEgtZfzK0Yf3P53QtQRcc5eYeew5I9r4f4VeALMD4JKz1NqQTIAKmXMjptAGdwQH3NR9s78nS+r3qvdivM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757680549; c=relaxed/simple;
-	bh=9naDuZ89ohkhST9nPdyMsS/odQGyMK2ICA4KVhv0buU=;
+	s=arc-20240116; t=1757680966; c=relaxed/simple;
+	bh=Sbr9UcuBSA1fnqSKyTmP6EE6X8W00T3WjaDqgVB3kyc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TME1nclMTEFqAjIHv7CEMlpEgt414Zp+62BXbdeUkRG2uDj9EuP+HsWTz1fwDQEZ6c4DzSNGgjBOxxPPyH02ccgjuJqKU0mSohNzrZJ3r+qo2cbEGQ98UGj6AVm/jHCvhGKCD89KJqFWWyNOXzsGhrtTPnRvdlMNkbbOygGMxUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C+7TX9oq; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=VGe0liQviblKIll53AVdbCzlw/kuksHWmppQ3xyusl9w9znHL4u4SS77oKJ0BMhzNGl8xLaxw8qnIZIGwexhdXdyYk7OIQF1ID1lie9ReF5Kyn9RKjcp0bydiOToXYTBavR7Pva8OGvZBrc2/3snjbjEbvRDF7k5wBhWSfu0zjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CYa0B9SA; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757680546;
+	s=mimecast20190719; t=1757680963;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Vl4F3QETQ6Qmt3iYKAH8GUoCSTGHR7l04Sg9h/MZCJE=;
-	b=C+7TX9oqLrppOBbv0t16W93Jb5oOgC1Btl7zBitJYbOFuUy2ceKkmTc35wa0osncv8DLt2
-	UDunEMw9PeHKyqkddSd/95wh+j0WBnp1ybYrP2uz3ZNx4v7Z7XcBBG10Q9dvBYie2QrbsF
-	HkI5d/noJ4motv/7s198c5ihsYOybTo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=G68/Vcl30gBKrC2/x62wn4zQW5Fw8/QtQkhUplaCLsc=;
+	b=CYa0B9SAJEf+q/mdrEbhQENhNCuSLZpzSAr8wclrz/p01KaKhs7vgVszIhrRYFrXMocb3M
+	hwHw+uMVIV0ghKaE5O1JjNalaGMidM5JCbOKPM8RVEHpUuV2WtxlZZib8Z+qFktQEY5w4v
+	7TYrYnPXAhyNnnJgvVMVL5w1jikbOOM=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-403-FLWGTnTKP8e0_FTxtCAP_Q-1; Fri, 12 Sep 2025 08:35:44 -0400
-X-MC-Unique: FLWGTnTKP8e0_FTxtCAP_Q-1
-X-Mimecast-MFC-AGG-ID: FLWGTnTKP8e0_FTxtCAP_Q_1757680544
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-45b9a856d58so17620295e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 05:35:44 -0700 (PDT)
+ us-mta-235-pVWxNbhrO5SI95pnj9dwow-1; Fri, 12 Sep 2025 08:42:42 -0400
+X-MC-Unique: pVWxNbhrO5SI95pnj9dwow-1
+X-Mimecast-MFC-AGG-ID: pVWxNbhrO5SI95pnj9dwow_1757680961
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-45b990eb77cso11624655e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 05:42:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757680544; x=1758285344;
+        d=1e100.net; s=20230601; t=1757680961; x=1758285761;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Vl4F3QETQ6Qmt3iYKAH8GUoCSTGHR7l04Sg9h/MZCJE=;
-        b=IHJ63zwzS5ggDPDOQ55CMmgNELl6oJan3My8eUleltQNEYaHgQc/6s9U/S9+lpBB3D
-         n9nUsF3mGNKcIx/epn52rmu0PKvoO23ej52xd1QCSIU/tsiRgNdDR9CeDE4saqbvfMdC
-         ud/o8gQOYYP+qNNwK2zc6FodbqgddgPWHKg1hqKlxoEkzqqQyUYDKtLgrGFkTz4cak8L
-         rLKPVerAhic95ZGMda/c02ay0CEx6zhoS0zMMS2ck7UOIqRlu4b/vmlcUUVYL58NU1cM
-         J9hqHp5cW2QpqAaTFDb65/FPhi9E8SeOc4yqcRwTtIPSb4UB1Mb7qtYCJFDrRuo/Dt0G
-         xg0w==
-X-Forwarded-Encrypted: i=1; AJvYcCU20nYVDdR6P7sUv095QUJz3rPxpwTijHS5oyINTB+NEcGxHqDvD5VecUNN6X/I2T4Un8yVf1zDG4Rjv5SGD4U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7uGEjt5UEyZ3zX6vv7FaroeUTyC1AlLO8AY877VBHJoU+B0Iw
-	6HtizvQMrXtDmI9r0l1TZB3hwwEh3iLEPKFxwko3VxwIL/AF69RXI9exsEgrXbagFpXcAm+wZf6
-	yscLj+MhfxyVCSVnKkr6SrtfKcUlr5YpBV2328okeHheOW4r9scnmfPrIZRYqPqXq8G1raQ==
-X-Gm-Gg: ASbGncv0QeiZwoE/vsm+9Em/HvXa74Y3yPZZt7embNevrmtmD6ntFMG/rryiqnQ5/RY
-	Qh3VvlGdqZulrZx7wu/23sHHTBEpUYjcLTsqhAvo4DCKEbx1wqU6ni5bzemWdhsL65APQLmUDHP
-	7P8Sp1pEkxiT0UB3RWQhh7ANRPCiSjPMxyEkpAnS0DY9ZvXO7mfB8114eDnryqx2g7W1MHO3G/Y
-	SJ2cEtempHnJKGSK5Djt4RWhUn2VNf1gS/ssya9bBLXzzcOxiLH+K7BUbqyXP7U/CUhLJi6YDPF
-	wW4Ko8uwRzoyMn7TDK5+Sp1HVgC7FULtzr287BkaCQ0CjvL6E2bVflQvW+d+in7FdJHbXZwTeIf
-	RkzDZW7NbT7NL9zCTMlCSbbZJG6IhGUmB0pBBXJ2JMBxXeOYQTWwz0hiP/lPZGaILv8c=
-X-Received: by 2002:a05:600c:6d41:b0:45b:47e1:ef68 with SMTP id 5b1f17b1804b1-45f21208123mr19823975e9.35.1757680543620;
-        Fri, 12 Sep 2025 05:35:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEN/oqbYA0X7f4pVcp67reuoA98LJhkZr0rCtEodluWIHcTYO0r2jSI0s6HquK2fSwltZexZQ==
-X-Received: by 2002:a05:600c:6d41:b0:45b:47e1:ef68 with SMTP id 5b1f17b1804b1-45f21208123mr19823715e9.35.1757680543157;
-        Fri, 12 Sep 2025 05:35:43 -0700 (PDT)
+        bh=G68/Vcl30gBKrC2/x62wn4zQW5Fw8/QtQkhUplaCLsc=;
+        b=qGKMSYAQGOUEx2y1d217OxIaeAAiRu51m5U43AVRUAJaiBkUAoAzwkhB3JolVEq2C+
+         LEugig+UFYpiWwYC4yBO8erh64r/Rgc/xaVUkEIqdUVWXXL5FFOdKW5un1EKTzsGgADB
+         2u15y/r2LBgprnO29N6yMn+lUI4AVYKoKzOa4YH/9yPl7aJpvMLjEW7eytGiNZMX5Nso
+         qzSJGodceudLnZemDbxtXGNZVpEyX5gX8MlsqQ9BP8riCNb4Fqd4mZV3MY9XlImwrRPL
+         ryDhzntQRc8zlJbqAL8mBry1nw9PQ3Scm2/trTMk1keW3T9I9v/BdWs0kziy5gc4q/88
+         /U2w==
+X-Gm-Message-State: AOJu0Yw/i1vqEcuWhzuYMCrJ/8VFs7Up2tAkAOscmYjaJhezlLl3ketG
+	wMdmnpSjnu/qLdkI3ykGxWya1wf49QkFfcuF87ALlJ3qgldJD8WuaXUoJgO5AmSPIOquvqYJ6Du
+	Z11BNPxWPOJ9PbYb2CfrO4INjLz5vQQr4ub8uF21CAd9IjB/R3j5gWCUyAiCuDXbuBCqq8XGTHM
+	VD0Q==
+X-Gm-Gg: ASbGncsy1apgSTiXGaWFp8N5KfIgSp2kZjSHX8MYisa13azJfy7e+x+xvfUhFoNeVIR
+	niDURtEHubxNrsZlBkisUaO4potwHIsoqJPjY6gZV9/T+rIA5+9eh2MEBnyhYF5o0XYPaRIEXKD
+	CaHHWm9VtkfmZ9zqRJzbY52zXTfumbvL1SNIKo3Z6iP4exySioNjiPTb0FcyipdrOAOtCNRI2Pe
+	GuUHqub9mRCfso6h98ETxLn3aTelhTPF0EvT6MGhPvBkVsqmm+KFpr9uBuKPpqUoNfITfBdR6f1
+	7kbJcTkyg9xPLUYBMG5ZBtBK3WZmIhEGyXV3oHzmGb4rqn2AaAQSNWKsyWwR6/Cl2Hi6LN48Bx4
+	4GHqTcBCgLBlPlHg+iMgXCMgKAo8Mnb77knw2nxp6ZUfEb9u+dQGZuZbrIkaqM3b9z84=
+X-Received: by 2002:a05:600c:3328:b0:45d:e728:ce6 with SMTP id 5b1f17b1804b1-45dfd7e75a1mr44551995e9.18.1757680960990;
+        Fri, 12 Sep 2025 05:42:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE8FYlxUSGpt9qV5IWzAmbChJ51bMVMip/23iOY5R9qJCjX4HDDSwisLFfp9Dft+/PJESOvyQ==
+X-Received: by 2002:a05:600c:3328:b0:45d:e728:ce6 with SMTP id 5b1f17b1804b1-45dfd7e75a1mr44551765e9.18.1757680960540;
+        Fri, 12 Sep 2025 05:42:40 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f20:da00:b70a:d502:3b51:1f2d? (p200300d82f20da00b70ad5023b511f2d.dip0.t-ipconnect.de. [2003:d8:2f20:da00:b70a:d502:3b51:1f2d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45e037b922csm65908345e9.15.2025.09.12.05.35.41
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45e017b3137sm66439175e9.19.2025.09.12.05.42.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Sep 2025 05:35:42 -0700 (PDT)
-Message-ID: <175479c6-d43f-48b1-8fb5-c78a555cd315@redhat.com>
-Date: Fri, 12 Sep 2025 14:35:40 +0200
+        Fri, 12 Sep 2025 05:42:40 -0700 (PDT)
+Message-ID: <302d47a7-4f20-4c74-ad3e-b8574970bce5@redhat.com>
+Date: Fri, 12 Sep 2025 14:42:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,24 +90,17 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] selftests/mm: Add -Wunreachable-code and fix warnings
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: kernel@collabora.com, Sidhartha Kumar <sidhartha.kumar@oracle.com>,
- Kevin Brodsky <kevin.brodsky@arm.com>
-References: <20250912123025.1271051-1-usama.anjum@collabora.com>
- <20250912123025.1271051-2-usama.anjum@collabora.com>
+Subject: Re: [PATCH v3 3/3] selftests/mm: fix va_high_addr_switch.sh failure
+ on x86_64
+To: Chunyu Hu <chuhu@redhat.com>, akpm@linux-foundation.org,
+ shuah@kernel.org, linux-mm@kvack.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com
+References: <20250912013711.3002969-1-chuhu@redhat.com>
+ <20250912013711.3002969-2-chuhu@redhat.com>
+ <20250912013711.3002969-3-chuhu@redhat.com>
+ <20250912013711.3002969-4-chuhu@redhat.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -154,36 +147,75 @@ Autocrypt: addr=david@redhat.com; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20250912123025.1271051-2-usama.anjum@collabora.com>
+In-Reply-To: <20250912013711.3002969-4-chuhu@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12.09.25 14:30, Muhammad Usama Anjum wrote:
-> Enable -Wunreachable-code flag to catch dead code and fix them.
+On 12.09.25 03:37, Chunyu Hu wrote:
+> The test will fail as below on x86_64 with cpu la57 support (will skip if
+> no la57 support). Note, the test requries nr_hugepages to be set first.
 > 
-> 1. Remove the dead code and write a comment instead:
-> hmm-tests.c:2033:3: warning: code will never be executed
-> [-Wunreachable-code]
->                  perror("Should not reach this\n");
->                  ^~~~~~
+>    # running bash ./va_high_addr_switch.sh
+>    # -------------------------------------
+>    # mmap(addr_switch_hint - pagesize, pagesize): 0x7f55b60fa000 - OK
+>    # mmap(addr_switch_hint - pagesize, (2 * pagesize)): 0x7f55b60f9000 - OK
+>    # mmap(addr_switch_hint, pagesize): 0x800000000000 - OK
+>    # mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0x800000000000 - OK
+>    # mmap(NULL): 0x7f55b60f9000 - OK
+>    # mmap(low_addr): 0x40000000 - OK
+>    # mmap(high_addr): 0x1000000000000 - OK
+>    # mmap(high_addr) again: 0xffff55b6136000 - OK
+>    # mmap(high_addr, MAP_FIXED): 0x1000000000000 - OK
+>    # mmap(-1): 0xffff55b6134000 - OK
+>    # mmap(-1) again: 0xffff55b6132000 - OK
+>    # mmap(addr_switch_hint - pagesize, pagesize): 0x7f55b60fa000 - OK
+>    # mmap(addr_switch_hint - pagesize, 2 * pagesize): 0x7f55b60f9000 - OK
+>    # mmap(addr_switch_hint - pagesize/2 , 2 * pagesize): 0x7f55b60f7000 - OK
+>    # mmap(addr_switch_hint, pagesize): 0x800000000000 - OK
+>    # mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0x800000000000 - OK
+>    # mmap(NULL, MAP_HUGETLB): 0x7f55b5c00000 - OK
+>    # mmap(low_addr, MAP_HUGETLB): 0x40000000 - OK
+>    # mmap(high_addr, MAP_HUGETLB): 0x1000000000000 - OK
+>    # mmap(high_addr, MAP_HUGETLB) again: 0xffff55b5e00000 - OK
+>    # mmap(high_addr, MAP_FIXED | MAP_HUGETLB): 0x1000000000000 - OK
+>    # mmap(-1, MAP_HUGETLB): 0x7f55b5c00000 - OK
+>    # mmap(-1, MAP_HUGETLB) again: 0x7f55b5a00000 - OK
+>    # mmap(addr_switch_hint - pagesize, 2*hugepagesize, MAP_HUGETLB): 0x800000000000 - FAILED
+>    # mmap(addr_switch_hint , 2*hugepagesize, MAP_FIXED | MAP_HUGETLB): 0x800000000000 - OK
+>    # [FAIL]
 > 
-> 2. ksft_exit_fail_msg() calls exit(). So cleanup isn't done. Replace it
->     with ksft_print_msg().
-> split_huge_page_test.c:301:3: warning: code will never be executed
-> [-Wunreachable-code]
->                  goto cleanup;
->                  ^~~~~~~~~~~~
+> addr_switch_hint is defined as DFEFAULT_MAP_WINDOW in the failed test (for
+> x86_64, DFEFAULT_MAP_WINDOW is defined as (1UL<<47) - pagesize) in 64 bit.
 > 
-> 3. Remove duplicate inline.
-> pkey_sighandler_tests.c:44:15: warning: duplicate 'inline' declaration
-> specifier [-Wduplicate-decl-specifier]
-> static inline __always_inline
+> Before commit cc92882ee218 ("mm: drop hugetlb_get_unmapped_area{_*}
+> functions"), for x86_64 hugetlb_get_unmapped_area() is handled in arch code
+> arch/x86/mm/hugetlbpage.c and addr is checked with map_address_hint_valid()
+> after align with 'addr &= huge_page_mask(h)' which is a round down way, and
+> it will fail the check because the addr is within the DEFAULT_MAP_WINDOW but
+> (addr + len) is above the DFEFAULT_MAP_WINDOW. So it wil go through the
+> hugetlb_get_unmmaped_area_top_down() to find an area within the
+> DFEFAULT_MAP_WINDOW.
 > 
-> Reviewed-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> After commit cc92882ee218 ("mm: drop hugetlb_get_unmapped_area{_*}
+> functions").  The addr hint for hugetlb_get_unmmaped_area() will be rounded
+> up and aligned to hugepage size with ALIGN() for all arches.  And after the
+> align, the addr will be above the default MAP_DEFAULT_WINDOW, and the
+> map_addresshint_valid() check will pass because both aligned addr (addr0)
+> and (addr + len) are above the DEFAULT_MAP_WINDOW, and the aligned hint
+> address (0x800000000000) is returned as an suitable gap is found there,
+> in arch_get_unmapped_area_topdown().
+> 
+> To still cover the case that addr is within the DEFAULT_MAP_WINDOW, and
+> addr + len is above the DFEFAULT_MAP_WINDOW, change to choose the last
+> hugepage aligned address within the DEFAULT_MAP_WINDOW as the hint addr,
+> and the addr + len (2 hugepages) will be one hugepage above the
+> DEFAULT_MAP_WINDOW.  An aligned address won't be affected by the page
+> round up or round down from kernel, so it's determistic.
+> 
+> Fixes: cc92882ee218 ("mm: drop hugetlb_get_unmapped_area{_*} functions")
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 > ---
-
 
 Acked-by: David Hildenbrand <david@redhat.com>
 
