@@ -1,126 +1,124 @@
-Return-Path: <linux-kselftest+bounces-41424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9856AB5580A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DBECB55864
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:31:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53A617C8461
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 21:06:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63F3EAC09CE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 21:31:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C74322A38;
-	Fri, 12 Sep 2025 21:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 353DB275AE6;
+	Fri, 12 Sep 2025 21:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Gdbk9Rzm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NCQ4vNf6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638BA20FA9C
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 21:06:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D06273D6D;
+	Fri, 12 Sep 2025 21:30:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757711182; cv=none; b=eGTYLxuAIxJN9p/zXnaqRZpiTaW4KqBWFsZ8tmN7+zzo56qg/bCaKC48CLv0XChm4TyZwAhUoYJmoQP9IMkTrLebTcDsYvXWl5G+xzi5jj1fBooMW3z1IeItE6w8u0qaolo1OlhEAYUw/SPMvMfjX+lt/BurfhnpKjMK/idsSr4=
+	t=1757712659; cv=none; b=gqUBnKd/tNHK3oBdn++w0Qu4nKvJzb+u4qPViuH9OeHjXENRVMdAk7JFkrL1W48A4/Y5VtcKKZ7Wn4+80J1pStQaG1NlxvYU6B5VTRsg9NZv+uaWDfNurl3+eQcHi1oYQo3BvnybnnWlq5C1oBj86dUWqeVPayZQ07Vua0V3qAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757711182; c=relaxed/simple;
-	bh=J0uLC7O54zZEqMTW/1kC7lXHzi7kn0Wiz3wS9V4s0nk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LCDA02a1G0hO05pxlCVq5O+/Gk1pgLgpnhMnvIwuKRw7GLdYkf9Qc2wyE4Ufef7vg6sJqriUmT7dFZq8iCeCXDSzP90qQiWw2ofFKfHncejzj7IKxNjzWJUI91nVN3+0RiwNBLCUx4tQoWsTFr3lYb8GATQ1N+uWQ3Q4SBDEeuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Gdbk9Rzm; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-55f6b77c91fso771e87.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 14:06:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757711178; x=1758315978; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J0uLC7O54zZEqMTW/1kC7lXHzi7kn0Wiz3wS9V4s0nk=;
-        b=Gdbk9Rzmm43q3XC1SuwbKR27h6gTtC9UTih2MIM6UPO5RdNR0+oYmS0tXFpoJa4Iuh
-         olz5CvZp9LuSdXZJPD95gxUvPFx0Ipjn6CaNTF7eHVdeKTeR8pFVCi63G+Ghklr2mSH2
-         YbpJI2i3PhRv/r/z+V73avfQDsj6tpYr3iKOoO0SNi5Ruum0wOIqwPoIRiRbVZ3kfuzi
-         fGgsu6pcSWrd4PJ0YVHHUlZ/zDt+njq1TT9pVtMssbMoqk0DNuoGXYPU9Glaa4Bacj8i
-         Oa2J06pWBtDV7eTSD4YGaIovPLWLFAsFR21FEAnPdfgyF/EmKT2H/Glg3tvZnezV4bjc
-         Is6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757711178; x=1758315978;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J0uLC7O54zZEqMTW/1kC7lXHzi7kn0Wiz3wS9V4s0nk=;
-        b=j6iWsTPR4B04IpKHy7BQFEcj83NGM9ZUxrfT94xNsWH4iDgXWBgJ3FQQBOM2RQYQQh
-         SSOVOX6OO8Jvw1IPcD9zcz7pYK75AWha/rR8FM4yJQ3sFPM0c+E0WEBoIsHYX/pbT8D2
-         mGv5I/vRSW90p7P2x91qcVnfvHpUsenIJRFzJvj4GMt0PlfKH3LUEMKgxlIOMiiLYtzB
-         4YKw/7/FwaM0VLckuhgw50siprln9dmivoMM7Bw3YFFnkRxmuQ32a0Gsa4Gr6TuVKQo7
-         7i5b8G4BOrh2LHFj42UbaMskSmR8WMx9GZC52XtlX8NIwErmrddV0qlmwpqJGTuEikaq
-         wLKg==
-X-Forwarded-Encrypted: i=1; AJvYcCV9/frSq5Gi0/faOgvWxl4IOXQAcJ6D0I/AO4a6RhjY5l7NrtqBzTzomfk+ZEsM8RHKoZGgZA5VttbPFlFTZVs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzvs92iXYnn6N3tHcA+7Tdj/qUAaVKnDRq5FXhx0GVAEzaXAb3F
-	egjoVeIWup2oGgIz/+gGAQXlTCVfrLVVV7bppYTfnLEHMI8mSChpY2op0P9k8p4hCGdE++2+jtX
-	SeHabb1VI1SegOJKgrW9ra361Z4/i47ma3v7d0+el
-X-Gm-Gg: ASbGncv2SyLBRtN9xy/UEpXXQY18kHm3BmzsU9/0JrVjq9hX+nVP5e9yMvew0Dt1kkh
-	Z+/JITB1WTDzbH8cZ3dt8KrlbYJZeJQCvgzmDSLpjy8IkSfwTpQkJSNhTJ37uCgyJd/xs76B0aS
-	ApC/junTCOqNnr7it6iGpKrLdhLjQuFVGijsAq7KUtXU0rFFeeEGzpybdZsF4cVYCZQ4EVVueuX
-	EEdhJmH9jO/a8rlm3/1fICZdFuVLCa9J72+3C1xu+qK5eU7N6o5/PI=
-X-Google-Smtp-Source: AGHT+IFo4cD/BxVNOTywCONMB0xxSgIfWIheC5wDA9CVLI7iF4J1whY/WrIulwEDO784Yw6phn3QOH0lmYu8KuRZe0o=
-X-Received: by 2002:a05:6512:4284:b0:55f:6aa7:c20 with SMTP id
- 2adb3069b0e04-571ec0f1920mr31259e87.2.1757711178303; Fri, 12 Sep 2025
- 14:06:18 -0700 (PDT)
+	s=arc-20240116; t=1757712659; c=relaxed/simple;
+	bh=ROOxPMoHZeX2C55B+T1892lm27mdEE7tXf8RWUdYD4s=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pyD7Iu168c/8ASzoJKnBmq/YU6iN2RE7xBoap38S8gqeFUx4ZG5o+Pe359CG6+UIZ7alporvPS2z1RrhiulGk/S4m3Ei/TnoKPJh5zPoV0MGwc+yBBD0SrUYcitm8Otck9dj/ZCstzDG5Z2GY1yRaF3ZoZGyRKnlDRUUpEMHMgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NCQ4vNf6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F599C4CEF5;
+	Fri, 12 Sep 2025 21:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757712658;
+	bh=ROOxPMoHZeX2C55B+T1892lm27mdEE7tXf8RWUdYD4s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NCQ4vNf6J1KUx693QddwsDnduxLLflhhPbPEkncW3RejjdZYdMemWaPGwzK895scA
+	 FyWtRO+KFAZVF+KUZ/nSMCGg7Gw+WoUrbjeCeG1pzZWodGGYDUNzD9LhKF1ZCV4cMk
+	 efPG20V13+oix10lAReteVa0qUaaSiIsgwEKXZfPsox3Kwiq8CVqELdFirC4M/Mu+A
+	 ETN271tzU5OyQJDNIQdOvha65YOINhAb+ur3AktrnqoANgU9dOE1a2T1kqfyXj/5dV
+	 jjTMDDJitjHRibc7Q7/INfgoyrckQe1yZef4IX2iefNuIHZEA/Fb+8QalMbFtTzFao
+	 EzEzQd+iPJvtQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1uxBM7-00000005pJX-3RCo;
+	Fri, 12 Sep 2025 21:30:55 +0000
+Date: Fri, 12 Sep 2025 22:30:53 +0100
+Message-ID: <87frcrz7ci.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v16 2/6] KVM: arm64: Manage GCS access and registers for guests
+In-Reply-To: <aMRLYBWfDFiIB7wx@finisterre.sirena.org.uk>
+References: <20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org>
+	<20250912-arm64-gcs-v16-2-6435e5ec37db@kernel.org>
+	<865xdndgpw.wl-maz@kernel.org>
+	<aMRLYBWfDFiIB7wx@finisterre.sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250912170611.676110-1-sdf@fomichev.me>
-In-Reply-To: <20250912170611.676110-1-sdf@fomichev.me>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 12 Sep 2025 14:06:06 -0700
-X-Gm-Features: Ac12FXyWyx4o42PDWjsODv1chbAaWgFV6VBuUC2qYTuwYWTDLJD2IV5Da0to1WE
-Message-ID: <CAHS8izNSeLSzkTsmhcVwJ1fF25Y_LY7vo_LTWtVL+Erc8dD6SQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] selftests: ncdevmem: remove sleep on rx
-To: Stanislav Fomichev <sdf@fomichev.me>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch, shuah@kernel.org, 
-	joe@dama.to, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, Sep 12, 2025 at 10:06=E2=80=AFAM Stanislav Fomichev <sdf@fomichev.m=
-e> wrote:
->
-> RX devmem sometimes fails on NIPA:
->
-> https://netdev-3.bots.linux.dev/vmksft-fbnic-qemu-dbg/results/294402/7-de=
-vmem-py/
->
-> Both RSS and flow steering are properly installed, but the wait_port_list=
-en
-> fails. Try to remove sleep(1) to see if the cause of the failure is
-> spending too much time during RX setup.
+On Fri, 12 Sep 2025 17:33:36 +0100,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> On Fri, Sep 12, 2025 at 12:59:23PM +0100, Marc Zyngier wrote:
+> > On Fri, 12 Sep 2025 10:25:28 +0100,
+> > Mark Brown <broonie@kernel.org> wrote:
+> 
+> > >  		MAPPED_EL2_SYSREG(PIR_EL2,     PIR_EL1,     NULL	     );
+> > >  		MAPPED_EL2_SYSREG(PIRE0_EL2,   PIRE0_EL1,   NULL	     );
+> > >  		MAPPED_EL2_SYSREG(POR_EL2,     POR_EL1,     NULL	     );
+> > > +		MAPPED_EL2_SYSREG(GCSCR_EL2,   GCSCR_EL1,   NULL             );
+> > > +		MAPPED_EL2_SYSREG(GCSPR_EL2,   GCSPR_EL1,   NULL             );
+> > >  		MAPPED_EL2_SYSREG(AMAIR_EL2,   AMAIR_EL1,   NULL	     );
+> > >  		MAPPED_EL2_SYSREG(ELR_EL2,     ELR_EL1,	    NULL	     );
+> > >  		MAPPED_EL2_SYSREG(SPSR_EL2,    SPSR_EL1,    NULL	     );
+> 
+> > Just like the previous version, you're missing the accessors that
+> > would be this table useful. Meaning that the vcpu_read_sys_reg() and
+> > vcpu_write_sys_reg() accessors will fail for all 4 GSC registers.
+> 
+> Just to confirm, this is __vcpu_{read,write}_sysreg()?
 
-OK, I can see that happening indeed.
+No.
 
-> I don't see a good reason to
-> have sleep in the first place. If there needs to be a delay between
-> installing the rules and receiving the traffic, let's add it to the
-> callers (devmem.py) instead.
->
+vcpu_{read,write}_sys_reg() and co are the broken high-level
+accessors. __vcpu_{read,write}_sysreg() call into those depending on
+the context, and __vcpu_{read,write}_sys_reg_{to,from}_cpu() have now
+been removed and replaced by similar (but private) accessors.
 
-Yeah, I was worried there would be something asynchronous about
-installing flow steering rules (such as by the time when ethtool
-returns, the rule is not yet fully active), that may cause some
-flaky-iness, but that's unlikely the case.
+See -rc4 for the details.
 
-> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+In any case, a bunch of register accesses in this series are broken,
+as they don't respect the register life cycle of the guest.
 
-Reviewed-by: Mina Almasry <almasrymina@google.com>
+	M.
 
-
---=20
-Thanks,
-Mina
+-- 
+Jazz isn't dead. It just smells funny.
 
