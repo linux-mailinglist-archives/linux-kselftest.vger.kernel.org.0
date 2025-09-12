@@ -1,130 +1,181 @@
-Return-Path: <linux-kselftest+bounces-41396-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346BCB55214
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:45:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 069D5B5522E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:49:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB0D716487C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 14:45:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C7847BF0A5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 14:47:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C6730DEBC;
-	Fri, 12 Sep 2025 14:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D7B30E0D1;
+	Fri, 12 Sep 2025 14:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="xtLnwq+r"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="NhVLix94"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.197.217.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F9D2FD1DA
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 14:45:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3EF30E84B;
+	Fri, 12 Sep 2025 14:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.197.217.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757688312; cv=none; b=U6Q4IQO+c3aJOXgSQpMwR1flAYApZVu6Blgpoi6bdvS3S1QcnCon9cExtOH9UJed7H9MJuqmkXj9LNt+8Uo9qPsJ8wCsZkHC8Bcbvht2oNn2qgTM69nHZ35xYZdnD8Y6+6JvJD0n1h9sc+gJCZ1YGrndObo79kNEuGrtkJiiS0k=
+	t=1757688532; cv=none; b=VSWADoB+iGRkyaEbLvNFtYsny2YW2akzagYzaOVwWiqDdmkPVKZk2ev5SOvdCvQCwNhnSRkssADk4CDikSDA1sx+jdfOEqvWWVQFOsGKK9UWRjrU8bKc/DW4vy3E3Vb64Lo/adS+WdNQj1fvtLEZi166ygi5YwJxArlf6cDTn4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757688312; c=relaxed/simple;
-	bh=U9KiIoN2wWAUp8EUJ+l29eyCQ1L8N80vpZij7DtvWUU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RGb+wP6UMOd0gH6PooMdtdPhF2YUHxdZhlnBW9iiJEZOByTFrvoR25s2DEduIkx40QEtx96AlDKa7K8f0xumVsy6QAxTna0HxoWBH8LsUYvCUdmtLVYtEJrgYjKAnirweE2+1fU+oZpcrfJmNXckywytKlIOunigpFLcDw50ad4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=xtLnwq+r; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-55f7c0fb972so2101366e87.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 07:45:10 -0700 (PDT)
+	s=arc-20240116; t=1757688532; c=relaxed/simple;
+	bh=ILOwdw+8/X9P9sqh/TGoh+Yj8hhDU7UscYwopqzb1Dc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=mUdbJVNwlGDCtOV4XeLtEgO0vUdgYQ98H8ZrKCzNEmoV1vRxM/PC+Jvf1PjmTvoFuVt4Ls+e+r1qIGR64Mzkub2yW4dUwLE9IaXX15kZPzNrgC4P97i1HV/xE5mfPWwlkkZ10r1miu7WnI0nEk0nv7ccmtP6tH8/teZBsL+xrK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=NhVLix94; arc=none smtp.client-ip=18.197.217.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757688309; x=1758293109; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qn+YPoQmxEr23a5PjO3DGoBuuC3lsckh2uIz0y1OKGI=;
-        b=xtLnwq+rQD6+WuJ2g34WOs/56qhVsAz1Y0Jmemd/mimt7s3aBIZrVe7o7UIPYCpH+M
-         LxjVoeKfT7ioxBvTVR68ZZ4GCJGTnHRUSfD21kjkiqEUxIdISwH8/KvVxD1HmmQ/hxWn
-         31ovnYTCIH9lwfhcd+/ffTHrw4f0SpZ7Mb7ZQQeDYmNstOL5fFbe81smahF10VuvTIrX
-         xUuToHif9LyqALIHlfL7yUAXnbPNoM7xqpsEIkVyQiBZdDDE9vgj2K7zsCaCfQP0jbsR
-         F8vN6S7UBsHT792FyS4a6qFevCuj7XvorMtnb/13JXpPsr8vtyE9/elJSEd0qzeVqc6H
-         Qhiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757688309; x=1758293109;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qn+YPoQmxEr23a5PjO3DGoBuuC3lsckh2uIz0y1OKGI=;
-        b=rvNU6kkSywQNR+BTmM2ry17uyAVhrz5UK26fw0KQSHk5gNJ58hfi4aqCJeRZTzcfl8
-         4bftzLm34GTnvbtONqJxAsVQOANU5d9QryIzRQhDTYJ4ZLVs3DQm1G7vMCG6m396Towi
-         L6AiVicLDvkhWne9/AELOFiK/VVjJrPqKv1HpsmeXM8c3nC1tfW2KqBgiDMlLQbmXnA5
-         jS9FmhBIUPDDrTQclG5D1QlIdZwV+rA9+p2+6m/P6bR98aHpAH4ylSjDHKV8TGWKOZ40
-         XALNoh9X2MKyiaj5IiGvgiO5ioIB3oIkW2w4hmadP5/uNcrUX5BkR7NhJksykExYvPiH
-         ez6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWflJ4fjgz7SDQE7eCmK6vIg9iVw9EQPGNHxUsyENYzx83dObfwxeyy2P8ssimNouJW6OT6fjSGQwyQ32QaKVk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqIz+K3hr/dgnOWEKsm4dDSoZXeXY4zZePus+rynFNbIlAwWSY
-	Q95i5i+p1P2Bs24j3hi+1DO6/bB3xAfrCEEpCcCiUKa6HHSoA4nOOy1lvlPAPi+Brc8h5MWdv30
-	BY0TzZYmvGCTyuUuWnwNBIqoTIS2oE36deSHgVF/D2A==
-X-Gm-Gg: ASbGncvR36RIszqi0H+I1EiW2vByQa+mdcms1RE++eoldDXRchN0dWBNbBi6hs8kPc6
-	/DmsphoFjkY5Alrenz5NHHIz2A4S0gAeq+8MUp3++Kks7O/iyy2DNnj5zURJJEZ7dTc5DgpWLJe
-	gdwGuX3VaoVkMhHKhjFf69PdulVWRwyHkkDEDf/brI3LuMro4jrq6MxTFhS7+1lmdYjimWkRG0+
-	QyeT6M9j7hivL6VxsZteE9COn0k1jM7l4jx0g==
-X-Google-Smtp-Source: AGHT+IGUzZFzSTkpABUHzFqSh86WYUDg9sPFuBwIrqL8MagbdIf4wFQyUDXaF+czSRNCauv6Lx/3Dva/JflQfhQYWUo=
-X-Received: by 2002:a05:6512:1286:b0:55b:8273:5190 with SMTP id
- 2adb3069b0e04-57049e24115mr1136950e87.18.1757688308574; Fri, 12 Sep 2025
- 07:45:08 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1757688530; x=1789224530;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=Rmxb9oICTSLggNhSJyI8b5ZCsmMUPRCvEQnPT27T0yA=;
+  b=NhVLix94cF6uofPhYk+vj2r3GWZWAXBjebkmvnHpC0pEYHyQpS7IGUfD
+   DOttZwk9BcT/pLU+pu9ZJv/WIiOp/drggv7WzZCUm0qRjD4wXDMAgFwgt
+   vNP6LuNcdTiFQsjapSni5COmGEyWRCfWq/RyO1L4e8lj8U2eBjMpBut4H
+   cKP1Q5oXP9azBnQFqFF7Jlqkaoce2Ex+G3wrAcSNCXynIqAHTzu4dZaan
+   wtRINJEwEuyEX2Y1BP1Ly10Y2RhTlB7izepHcwrCzaVnhXefljkaHxBNt
+   GoWgHl48R/d/BSL9DyDcu6NoKsZAVtGAodGR42vyRWHj698siJ6qVNz3v
+   w==;
+X-CSE-ConnectionGUID: psJj/C1kRGmHQMaRmCeG8g==
+X-CSE-MsgGUID: Yi2MyhueTGy18U9Y/ecwdg==
+X-IronPort-AV: E=Sophos;i="6.18,259,1751241600"; 
+   d="scan'208";a="2028649"
+Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
+  by internal-fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2025 14:48:38 +0000
+Received: from EX19MTAEUA001.ant.amazon.com [54.240.197.233:6406]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.1.26:2525] with esmtp (Farcaster)
+ id 1f70f2ba-cad2-4689-94e8-60b6da797a6a; Fri, 12 Sep 2025 14:48:37 +0000 (UTC)
+X-Farcaster-Flow-ID: 1f70f2ba-cad2-4689-94e8-60b6da797a6a
+Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
+ EX19MTAEUA001.ant.amazon.com (10.252.50.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Fri, 12 Sep 2025 14:48:37 +0000
+Received: from [192.168.23.20] (10.106.83.17) by EX19D022EUC002.ant.amazon.com
+ (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Fri, 12 Sep 2025
+ 14:48:36 +0000
+Message-ID: <bc26eaf1-9f01-4a65-87a6-1f73fcd00663@amazon.com>
+Date: Fri, 12 Sep 2025 15:48:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250912081718.3827390-1-tzungbi@kernel.org> <2033c6cd-4112-4c8a-a9ef-2ab34f3504b8@kernel.org>
- <CACMJSeuKH+WKOXLNU92dMssqhK02xG3z=cT0VeXYM+ZGuPCB9g@mail.gmail.com>
- <aMQW2jUFlx7Iu9U5@tzungbi-laptop> <20250912132656.GC31682@pendragon.ideasonboard.com>
- <2025091209-curfew-safari-f6e0@gregkh> <CAMRc=MfdoB50o=3Q2p94o+f7S2Bzr=TAtWWQcDrC5Wf3Q5nqAA@mail.gmail.com>
- <20250912135916.GF31682@pendragon.ideasonboard.com> <2025091220-private-verse-d979@gregkh>
- <20250912142646.GI31682@pendragon.ideasonboard.com> <2025091237-cortex-carnage-5c34@gregkh>
-In-Reply-To: <2025091237-cortex-carnage-5c34@gregkh>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri, 12 Sep 2025 16:44:56 +0200
-X-Gm-Features: Ac12FXwmroMltqxSRZA5meL-lv7f9pG4WBQaN79qLPeFe99REm_I5nZVDR76A38
-Message-ID: <CAMRc=Mf76m51VKktGc2K1uT4eacDqhsroRxG2RgtRyhQrhx0WA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] platform/chrome: Fix a possible UAF via revocable
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Dawid Niedzwiecki <dawidn@google.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Dan Williams <dan.j.williams@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v5 1/2] KVM: guest_memfd: add generic population via write
+To: David Hildenbrand <david@redhat.com>, James Houghton
+	<jthoughton@google.com>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"michael.day@amd.com" <michael.day@amd.com>, "Roy, Patrick"
+	<roypat@amazon.co.uk>, "Thomson, Jack" <jackabt@amazon.co.uk>, "Manwaring,
+ Derek" <derekmn@amazon.com>, "Cali, Marco" <xmarcalx@amazon.co.uk>
+References: <20250902111951.58315-1-kalyazin@amazon.com>
+ <20250902111951.58315-2-kalyazin@amazon.com>
+ <CADrL8HV8+dh4xPv6Da5CR+CwGJwg5uHyNmiVmHhWFJSwy8ChRw@mail.gmail.com>
+ <87d562a1-89fe-42a8-aa53-c052acf4c564@amazon.com>
+ <8e55ba3a-e7ae-422a-9c79-11aa0e17eae9@redhat.com>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <8e55ba3a-e7ae-422a-9c79-11aa0e17eae9@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EX19D010EUC001.ant.amazon.com (10.252.51.232) To
+ EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
-On Fri, Sep 12, 2025 at 4:40=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> Dan's proposal here is a good start, but the "sleep in cdev_del() until
-> the device drains all existing opens" is going to not really work well
-> for what we want.
->
-> So sure, make a new cdev api to use this, that's fine, then we will have
-> what, 5 different ways to use a cdev?  :)
->
-> Seriously, that would be good, then we can work to convert things over,
-> but I think overall it will look much the same as what patch 5/5 does
-> here.  But details matter, I don't really known for sure...
->
-> Either way, I think this patch series stands on its own, it doesn't
-> require cdev to implement it, drivers can use it to wrap a cdev if they
-> want to.  We have other structures that want to do this type of thing
-> today as is proof with the rust implementation for the devm api.
->
 
-Yeah, I'm not against this going upstream. If more development is
-needed for this to be usable in other parts of the kernel, that can be
-done gradually. Literally no subsystem ever was perfect on day 1.
 
-Tzung-Bi: I'm not sure if you did submit anything but I'd love to see
-this discussed during Linux Plumbers in Tokyo, it's the perfect fit
-for the kernel summit.
+On 12/09/2025 14:36, David Hildenbrand wrote:
+> On 11.09.25 12:15, Nikita Kalyazin wrote:
+>>
+>>
+>> On 10/09/2025 22:23, James Houghton wrote:
+>>> On Tue, Sep 2, 2025 at 4:20 AM Kalyazin, Nikita 
+>>> <kalyazin@amazon.co.uk> wrote:
+>>>>
+>>>> From: Nikita Kalyazin <kalyazin@amazon.com>
+>>>
+>>> Hi Nikita,
+>>
+>> Hi James,
+>>
+>> Thanks for the review!
+>>
+>>
+>>>>
+>>>> write syscall populates guest_memfd with user-supplied data in a 
+>>>> generic
+>>>> way, ie no vendor-specific preparation is performed.  This is supposed
+>>>> to be used in non-CoCo setups where guest memory is not
+>>>> hardware-encrypted.
+>>>
+>>> What's meant to happen if we do use this for CoCo VMs? I would expect
+>>> write() to fail, but I don't see why it would (seems like we need/want
+>>> a check that we aren't write()ing to private memory).
+>>
+>> I am not so sure that write() should fail even in CoCo VMs if we access
+>> not-yet-prepared pages.  My understanding was that the CoCoisation of
+>> the memory occurs during "preparation".  But I may be wrong here.
+> 
+> But how do you handle that a page is actually inaccessible and should
+> not be touched?
+> 
+> IOW, with CXL you could crash the host.
+> 
+> There is likely some state check missing, or it should be restricted to
+> VM types.
 
-Bartosz
+Sorry, I'm missing the link between VM types and CXL.  How are they related?
+
+My thinking was it is a regular (accessible) page until it is "prepared" 
+by the CoCo hardware, which is currently tracked by the up-to-date flag, 
+so it is safe to assume that until it is "prepared", it is accessible 
+because it was allocated by filemap_grab_folio() -> 
+filemap_alloc_folio() and hasn't been taken over by the CoCo hardware. 
+What scenario can you see where it doesn't apply as of now?
+
+I am aware of an attempt to remove preparation tracking from 
+guest_memfd, but it is still at an RFC stage AFAIK [1].
+
+> 
+> Do we know how this would interact with the direct-map removal?
+
+I'm using folio_test_uptodate() to determine if the page has been 
+removed from the direct map as kvm_gmem_mark_prepared() is what 
+currently removes the page from the direct map and marks it as 
+up-to-date.  [2] is a Firecracker feature branch where the two work in 
+combination.
+
+[1]: https://lore.kernel.org/kvm/20250715225523.yzmrwghbhi56tqux@amd.com
+[2]: 
+https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding
+
+> 
+> -- 
+> Cheers
+> 
+> David / dhildenb
+> 
+
 
