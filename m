@@ -1,116 +1,150 @@
-Return-Path: <linux-kselftest+bounces-41427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82FF8B55895
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB796B55898
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 23:46:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C470D1CC477D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 21:45:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A4BA1CC2E1E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 21:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C63DB2D2494;
-	Fri, 12 Sep 2025 21:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85380211A35;
+	Fri, 12 Sep 2025 21:46:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tFP9k03y";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dcd6fEft"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vg8ENwcS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D18B2D0C96;
-	Fri, 12 Sep 2025 21:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52FA81798F;
+	Fri, 12 Sep 2025 21:46:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757713500; cv=none; b=bXt++6OTyoWCiOxK1eS2g6Xy2D/S3/OaCgzVhVUR0ObDFaInamPzWwNe67BKVG1+njWHvSIy4vXJTMnaXmMwgbmaECvVkCKrY5iEGtciA+iLLWF8xo5v5fHUnALyJ1iokuyy3mV5O6JNgWrv0QvyzCGpZOdOkx8BDRjptQJkYtQ=
+	t=1757713587; cv=none; b=GfkebnmEeDQ9Tve99TkgAHZSzBqKOHnUm91x2k9I7hxEj58oyUOzgKLCJtXKrTANJoN0pbUz0IoP/mMWpkXcimt050BhCMovlkw5Y/5myajDJfFTgyYKFvIQlZgoeA+klW7sE3JFSDJGoEM3cylQTRyuyfzy6DocgDksaQobFFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757713500; c=relaxed/simple;
-	bh=3bwpwH96FGD43V8N+Qioew5g8bhS8VcWR9Aib1bPJ3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nL04y4q3yIdEZSVH0ye6Ja5oEJq0bMcK5kBjhDPDn9+EA07AnurJL9aNlBWfyKyeoNTpJenZ+SjcXKFMhA+sa+woU4ksc+FPoakah9RHYSwosUDZZRhH4di1f1Q984jiCqO5PVHpa+Ba9stXBVmfQw/EeXRoJjah0nT2iMk2Nww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tFP9k03y; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dcd6fEft; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 12 Sep 2025 23:44:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1757713496;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qXTiwDjhcLaZDRFliKAViVaEmmpH7tw9UemheZXgpg4=;
-	b=tFP9k03yleUE+hUQQynXhdIOm/FkEhl/zD3OwnTDv0FfPOphL6g2cXZjoonkRd90+U63kH
-	YEMPEZfOoGSijGRCUQv4sCYJd1oBCXzShm/Btq+f10c5i11gfn7YXhtaENu6rOLcxOgia/
-	sMMc9G8Bly5A//qqGTlveWvn2BYbWz10Q/FGlnphechNlp0Pdn70leOS+SZPiG9PPbMAOW
-	pqfQNH74I8e0wIoQ6uwXXX4Um2qv1je+8qHl+HFc8aiQur0V6IRzIdtQWEmgO+0Ql1SjTd
-	vsfqYJFNScY+9kCJhso97lffNl5QfaAp76rMZc8zGD9GnAopp0LfgGIvDrHBdw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1757713496;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qXTiwDjhcLaZDRFliKAViVaEmmpH7tw9UemheZXgpg4=;
-	b=dcd6fEftFXzYf28tjOHQN/2x/RgZ27pswBmj/oUcB0QKOEkwZWTlL09pQSYvVt6PLv+yBy
-	XhNLbphNGB7ErkBA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Wake Liu <wakel@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	s=arc-20240116; t=1757713587; c=relaxed/simple;
+	bh=LE/pKOZjl39+pd41X1ZUViQqZVkvkaULc0/s+XUleLM=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qba525/gFjVbvYCIPQ8e/I9zHsHoMyg5WG5yfoil9MsK6P70SiE0CVQmcoB6aEF7f6cs8S+tM6F/deFzdrWOWxAm/GYsOXZQ+plYsdeKuO/AZ9RKNFnslnms8rAR/V8IPMKP/N8U5INmgqpBRgS+KDsqFxyk032OIdTyeukI748=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vg8ENwcS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47F8C4CEF1;
+	Fri, 12 Sep 2025 21:46:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757713586;
+	bh=LE/pKOZjl39+pd41X1ZUViQqZVkvkaULc0/s+XUleLM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Vg8ENwcSM/0SbWBZCbjFFP2ze6ITCVRYLRkQzz1Vxr4GlnSTxb9plxsUwaJD1Z4ER
+	 DaJKDUOGVo3ytea8MNLu0g66lEck4hPQv8IPnhO5P49qKQybUVUaZ0rzurlgPWkKje
+	 TXepy2qTBZ4Sf4/KBC2FxpY/1Oo5f+B8YEV+dferDgflFqKw8RPsScXkMj2Esk1AAe
+	 GOiH2nsIN8KV7d6dIPbk5g6S9Z8uu0RZOPat05zfRK3xvolfSDDiu6uUwMHp7WCDHY
+	 x1s3m4I9FOn78LOeQ1quboX3Jn+99BdpLXOWN/GBR9zOJKbv08tUryVe3I3dJLD6Fi
+	 CZgzBAxhwVCdQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1uxBb6-00000005pVz-3V5f;
+	Fri, 12 Sep 2025 21:46:24 +0000
+Date: Fri, 12 Sep 2025 22:46:23 +0100
+Message-ID: <87bjnfz6mo.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/futex: Conditionally run futex_numa_mpol test
-Message-ID: <20250912214454.t0qhEqT2@linutronix.de>
-References: <20250908113721.4031242-1-wakel@google.com>
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+Subject: Re: [PATCH v16 6/6] KVM: selftests: arm64: Add GCS registers to get-reg-list
+In-Reply-To: <20250912-arm64-gcs-v16-6-6435e5ec37db@kernel.org>
+References: <20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org>
+	<20250912-arm64-gcs-v16-6-6435e5ec37db@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250908113721.4031242-1-wakel@google.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, thiago.bauermann@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 2025-09-08 19:37:20 [+0800], Wake Liu wrote:
-> The futex_numa_mpol test requires libnuma, which is not available on
-> all platforms. When the test is not built, the run.sh script fails
-> because it unconditionally tries to execute the test binary.
+On Fri, 12 Sep 2025 10:25:32 +0100,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> Check for the futex_numa_mpol executable before running it. If the
-> binary is not present, print a skip message and continue.
+> GCS adds new registers GCSCR_EL1, GCSCRE0_EL1, GCSPR_EL1 and GCSPR_EL0. Add
+> these to those validated by get-reg-list.
 > 
-> This allows the test suite to run successfully on platforms that do
-> not have libnuma and therefore do not build the futex_numa_mpol
-> test.
-
-If you skip the test, how to you compile this?
-Does
-	https://lore.kernel.org/all/20250818135458.F352St6W@linutronix.de/
-
-help?
-
-> Signed-off-by: Wake Liu <wakel@google.com>
+> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  tools/testing/selftests/futex/functional/run.sh | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  tools/testing/selftests/kvm/arm64/get-reg-list.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-> index 81739849f299..f3e43eb806bf 100755
-> --- a/tools/testing/selftests/futex/functional/run.sh
-> +++ b/tools/testing/selftests/futex/functional/run.sh
-> @@ -88,4 +88,8 @@ echo
->  ./futex_priv_hash -g $COLOR
->  
->  echo
-> -./futex_numa_mpol $COLOR
-> +if [ -x ./futex_numa_mpol ]; then
-> +    ./futex_numa_mpol $COLOR
-> +else
-> +    echo "SKIP: futex_numa_mpol (not built)"
-> +fi
+> diff --git a/tools/testing/selftests/kvm/arm64/get-reg-list.c b/tools/testing/selftests/kvm/arm64/get-reg-list.c
+> index 011fad95dd02..9bf33064377b 100644
+> --- a/tools/testing/selftests/kvm/arm64/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/arm64/get-reg-list.c
+> @@ -42,6 +42,12 @@ struct feature_id_reg {
+>  static struct feature_id_reg feat_id_regs[] = {
+>  	REG_FEAT(TCR2_EL1,	ID_AA64MMFR3_EL1, TCRX, IMP),
+>  	REG_FEAT(TCR2_EL2,	ID_AA64MMFR3_EL1, TCRX, IMP),
+> +	REG_FEAT(GCSPR_EL0,	ID_AA64PFR1_EL1, GCS, IMP),
+> +	REG_FEAT(GCSPR_EL1,	ID_AA64PFR1_EL1, GCS, IMP),
+> +	REG_FEAT(GCSPR_EL2,	ID_AA64PFR1_EL1, GCS, IMP),
+> +	REG_FEAT(GCSCRE0_EL1,	ID_AA64PFR1_EL1, GCS, IMP),
+> +	REG_FEAT(GCSCR_EL1,	ID_AA64PFR1_EL1, GCS, IMP),
+> +	REG_FEAT(GCSCR_EL2,	ID_AA64PFR1_EL1, GCS, IMP),
+>  	REG_FEAT(PIRE0_EL1,	ID_AA64MMFR3_EL1, S1PIE, IMP),
+>  	REG_FEAT(PIRE0_EL2,	ID_AA64MMFR3_EL1, S1PIE, IMP),
+>  	REG_FEAT(PIR_EL1,	ID_AA64MMFR3_EL1, S1PIE, IMP),
+> @@ -486,6 +492,9 @@ static __u64 base_regs[] = {
+>  	ARM64_SYS_REG(3, 0, 2, 0, 1),	/* TTBR1_EL1 */
+>  	ARM64_SYS_REG(3, 0, 2, 0, 2),	/* TCR_EL1 */
+>  	ARM64_SYS_REG(3, 0, 2, 0, 3),	/* TCR2_EL1 */
+> +	ARM64_SYS_REG(3, 0, 2, 5, 0),	/* GCSCR_EL1 */
+> +	ARM64_SYS_REG(3, 0, 2, 5, 1),	/* GCSPR_EL1 */
+> +	ARM64_SYS_REG(3, 0, 2, 5, 2),	/* GCSCRE0_EL1 */
+>  	ARM64_SYS_REG(3, 0, 5, 1, 0),	/* AFSR0_EL1 */
+>  	ARM64_SYS_REG(3, 0, 5, 1, 1),	/* AFSR1_EL1 */
+>  	ARM64_SYS_REG(3, 0, 5, 2, 0),	/* ESR_EL1 */
+> @@ -502,6 +511,7 @@ static __u64 base_regs[] = {
+>  	ARM64_SYS_REG(3, 0, 13, 0, 4),	/* TPIDR_EL1 */
+>  	ARM64_SYS_REG(3, 0, 14, 1, 0),	/* CNTKCTL_EL1 */
+>  	ARM64_SYS_REG(3, 2, 0, 0, 0),	/* CSSELR_EL1 */
+> +	ARM64_SYS_REG(3, 3, 2, 5, 1),	/* GCSPR_EL0 */
+>  	ARM64_SYS_REG(3, 3, 10, 2, 4),	/* POR_EL0 */
+>  	ARM64_SYS_REG(3, 3, 13, 0, 2),	/* TPIDR_EL0 */
+>  	ARM64_SYS_REG(3, 3, 13, 0, 3),	/* TPIDRRO_EL0 */
+> @@ -740,6 +750,8 @@ static __u64 el2_regs[] = {
+>  	SYS_REG(PIRE0_EL2),
+>  	SYS_REG(PIR_EL2),
+>  	SYS_REG(POR_EL2),
+> +	SYS_REG(GCSPR_EL2),
+> +	SYS_REG(GCSCR_EL2),
+>  	SYS_REG(AMAIR_EL2),
+>  	SYS_REG(VBAR_EL2),
+>  	SYS_REG(CONTEXTIDR_EL2),
+> 
 
-Sebastian
+More importantly, I'd expect a test that exercises the exception
+paths, as the current code is pretty broken.
+
+	M.
+
+-- 
+Jazz isn't dead. It just smells funny.
 
