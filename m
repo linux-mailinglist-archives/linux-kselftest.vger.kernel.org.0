@@ -1,167 +1,178 @@
-Return-Path: <linux-kselftest+bounces-41326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1F04B54B06
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 13:33:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A103FB54B13
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 13:36:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88D7F3AF82C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:33:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BA10487AAA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 11:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A922EE612;
-	Fri, 12 Sep 2025 11:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A3FF301013;
+	Fri, 12 Sep 2025 11:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MH9C2hqE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LkQmSVTi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9784A2701C0
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 11:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB393009D6
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 11:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757676834; cv=none; b=IilZd44mvGtfVoUYvlecVyrXcBGmXAwfn9Q80BwbVNEXFs+xjX15uDIFRR7EvEKf55OwbFzQKzmR1IRnldiXNOi1NqRpH5sNzhlfS4p4kFIvUq02mj9G3a2fjDqhx1lrTK18k9ugkT/oCXKyN6ydk7wPXcQPaDTWdIizkh5xICg=
+	t=1757676973; cv=none; b=poTC0NBKPKcJlSKmulMAB4FuK1eyzuKFAChdjT8DhvgCWsmMbU+ked7mwNoIDNORGaoPbZJ48vpGA6aNitPTDS9ag+XB5IZ+89zCuTq4i0/U9sJrqeRB/OZttPjjklHHzbqZW337JHJJYC/AIcCeDtb2PK6uxR8krb9wAsMnees=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757676834; c=relaxed/simple;
-	bh=XBHAModFzS9RT7TpF2/ykWjDQcNt9+bCE4YK2ZwUuV0=;
-	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
-	 Cc:In-Reply-To:To; b=rtwsR6nkdRNX2mu62IdTqak2j+LpHxMHsQHcY4ShtayQoKz19uxapSte1jVzX75CdT4wPLqZh/JHo61ITxLVLYNycCt0fHXC/CvYI7AQUblD9PP7bEPOAKzV4c0aF/AQZXVbKF1B5mJt38pMnxuO87Stw7eW5yvrFxjlBlvzrSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MH9C2hqE; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-323266d6f57so1925625a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 04:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757676832; x=1758281632; darn=vger.kernel.org;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Me3gQ2+XLChgmuRgGxhLuD7lEdljJYpRCmXxWniexUs=;
-        b=MH9C2hqEnNTNu/TciRFE1ayLBu/2QhgDxOnC908dXHqhNJNxIYzEHsvpyJ8s6f8OL1
-         lEE5eAdq2YdI5mUxtoo+VS/NuQJokgkNdAPVyXM/Wt5/YINrtvYvGQ/ozDn0j5Ky5rp6
-         h61TX1v2V5hV7z7WjWYzUby6xrGAwJ3+QYFth5h2GIuJ0z+mGMoaBHbLnDZVeQ2W/1Bc
-         lcPA+WkA7kMEuwrKteRAy9jAY2qq1iivUaa/KVVThTmDc2HZgApdBecuIlUgzY5bfHwW
-         h8NladE/4KBqwXgFd1EjZfLfajJBkF4Sl5872VYr2+63wzlYMMCSOttQJ4ve9MRChJrC
-         pPkw==
+	s=arc-20240116; t=1757676973; c=relaxed/simple;
+	bh=6HhHl5Q9HyjWqX7Y9YXL8kJIJbLXHU49bGi4e4jAGxc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eJBiQGMYCCwf5jdPuaRuJRSeIkiQia7l5RE2UJ8OprtlRzvpN26x7TJvfIRxMdAwHJJ2i2F19UFWKhY3JX1/WxEynXKptbNGszr+s2RxfcF9HJmiOBieCC6bh0cAZ3Y1f2j17rRmOaBXhE4kUkcltHJlwyZod3VJQSBytlbju9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LkQmSVTi; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757676969;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=L4WTNdMCGh54uRDM/L4Uxaq4pm+e6gS6JQHYqsqi25s=;
+	b=LkQmSVTi3w7CnHye2EjhRoGSBA6NribyJn6XBb04vhLAuyd3L/JSPCc5g0PCOB1IxVRLxH
+	8cgQR6ObBes10ddyyg0U9ckXs0MYWVz2U2ppxxCZ3GSyfA+vlSTgKtr3lCP1vQaulkFWl1
+	rD0H1qpcaPAdFjfs0qdLbdQQWvyZhII=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-612-EBG_imfINVSMreeZdnS4YA-1; Fri, 12 Sep 2025 07:36:06 -0400
+X-MC-Unique: EBG_imfINVSMreeZdnS4YA-1
+X-Mimecast-MFC-AGG-ID: EBG_imfINVSMreeZdnS4YA_1757676965
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45dd9a66c3fso6481045e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 04:36:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757676832; x=1758281632;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Me3gQ2+XLChgmuRgGxhLuD7lEdljJYpRCmXxWniexUs=;
-        b=xGrwkOBPOm7h9pzyzItHsyoHiPnEempjSFGkVL/w0ZC+V4cD0NiEeN0/kEyAZa83A1
-         ZaZTeMw3Pp5pQWNVwIoci3r91/BPafGeQvSG9D3FvR/QGWigKfXK+dol/An/FuXrWhWY
-         VRktM4KPAeAzJCNN0HdohmtqRqZ3TmrXsPJ541psUxfwS/1EeYZQMUhJVsZa/L6ZIaMe
-         JcCO3w4HVbskWcapLuvJtRmdFgj3/3W5pQ6QLdF1JAIF6NKseiJBcqk2Z9uruZH2FE09
-         rLb/3myaTmK4itp1c3PjdQxj8VDNUTa7HOTA3oivRbiXQRC8TwENWdM2lz+DGKQzPNJY
-         BW3g==
-X-Forwarded-Encrypted: i=1; AJvYcCUioGijxQJMWMxzc1ZOWTamE5mE7Q0BviB/t4tqtHtgo+Kjnk5fqRslQivAfFJeGMmZ6Jrv55Pke62v58+HcDY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHPV25Wzz94M/okRe2k1VaFp6H8eROhZPLX8DxmpfITEHMD68s
-	tZE12uLQJXB6BdAgqrESFqbVxpwECaBGQ3QJ11VEvrTre3ygygnqJegT
-X-Gm-Gg: ASbGnculV+pj982r0ItGRcPTxxAwcBxTlNmhGiJI+eu0KL3xJ7ceuBn98Vw84CswMub
-	XIpKjDVf4k08fCObgRlgXlXFbDggxjzKXk8grcYlyfBn5s767+8gcxT82KPC2Y5vEeDIiy8DfCU
-	Q2jl434+UbOhvGIoRjJvOCJf8sSqIR16akCvfRaqregnXZalqkjl4txAk3f9FQDyv/IyPUX6Bin
-	LNzZ/xUz+bpmEi1crVwSbyPTPTBsb007XpO8iaBbY1Mhztg4VB8WWmU8mdUwkQBkzM+WZS7N7kB
-	BL1JKOFCByHYRYotKnr02uKx0olZRkIRTZo3noSyjq2MI3hLuIPY68n4x6oyv0aqDreP0fvSH8E
-	BgizY3pdqcPevfaRxNeD4n63rIJtidsVAqaP882Ky9b3MQOC2cXLIB2SSeo9ln0sG5XXvcmp1Xa
-	1HOJFZgYQ=
-X-Google-Smtp-Source: AGHT+IG4CQOrsidgDKZqODfMcOoJgWe/C+OuZOd1ih4oVDYDwhAJqojGn09l0Bnkzu0cbpihXieC8w==
-X-Received: by 2002:a17:90b:3889:b0:32d:5721:df96 with SMTP id 98e67ed59e1d1-32de4f808f5mr2582134a91.32.1757676831756;
-        Fri, 12 Sep 2025 04:33:51 -0700 (PDT)
-Received: from smtpclient.apple (p73a27f58.hyognt01.ap.so-net.ne.jp. [115.162.127.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32dd7ceecfasm2203933a91.7.2025.09.12.04.33.51
+        d=1e100.net; s=20230601; t=1757676965; x=1758281765;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L4WTNdMCGh54uRDM/L4Uxaq4pm+e6gS6JQHYqsqi25s=;
+        b=Opsxe+A81sd22Fyg8SySSX9eWpeo0t7WHFPF8KU1JzUZ9RTEdMtMtQqFIJtltMbFSH
+         SHLlUTK6tToSLy0IbZGVMvoZxy5RuqOaFcZUrWCfFFLUE21O3WGSoTqVHj4pzAL8/ed1
+         oKeqWlX40SCM7kuqJLrjgoHx/lk9NycC8Jc22nrSE6PQufnGK35KIwdpM8W90s1/Okq5
+         DHHlPBmPwnzW1X3eXlHtlnHhPc7W3MeiB9emVvFmm+wZPLzplbqPg1smhb0HgqCdADzH
+         nrREvjazEWljLZbcTE4/7UT0HKfBiUCRmuzkGdGo2I6tdvobVIeEPMErzL+gM2zXXeTN
+         pikg==
+X-Forwarded-Encrypted: i=1; AJvYcCWX9LaMhixxfHfpolPGOpGZQlXzUtytvii+JzSippF4dMaGukSp78olsLeVe63BvvZBQlTAAbN5A2V/54LS9og=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj0J9sE3sp6ipyp4T5JQ+jq+l7bOCiI5OnkyKsl1FXKINVsvmN
+	8gSuQsLLvS5hoBNWUOmhfqzQUKgsELbjYY2kceo0mWtU9gjOVkgTwb9Yvh8qLcO2eE9S5GV/W7L
+	XhY1AbzGinERo+XsVffdU5xA5Su16QJgfO1EUERddi7Tpod5lFok0mlpyBtKoYA11wSd7hQ==
+X-Gm-Gg: ASbGncvYPBBDczAYz4sob6MekITJJxvx/jAvSXyyuvVJ1gIWsISZz58Ms1P7OjsPYQ0
+	X8SwEpkYDtnWYzY8Qs4lBE+R8GjNVZZKOyTZn5ue5Y7d4LTPlA4NQZfNFwdOybOVoMyvVsI1/yj
+	jrDHVSpU+9eDmb2TAqf3iYHKcFGVJKlSlIjOXI3RS3zposHz41CG+EJ3wje1htYtIQu3goPOMLV
+	4SbkHdmo32olorbZoAHMxOLfrMBVVdILxALyZkcDRDmmlqJx7/0saNZxyo5549VIs8iGvMl5ka5
+	NY5XM6+9pEbI8B/o5nJqC/P8EAV7BfH9o27ggpQlMC0SjNTnOvuseimK1eXnMaq7NqrgJECEk0p
+	0Wew/xituOSsAvz1UW+TIRFF7lOxiU9FqVHeYywNsLK2iBvL6579vWrg0cSXxOZ/ujN8=
+X-Received: by 2002:a05:600c:4e4b:b0:45d:cff6:733f with SMTP id 5b1f17b1804b1-45f211d517emr27953545e9.11.1757676965163;
+        Fri, 12 Sep 2025 04:36:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEApCot1i+5m775BUiDD6WRxTCaO0+qykFG5pVRf5Sw41hSYWcT5lrn+50Nw2D8nJepyAo5JA==
+X-Received: by 2002:a05:600c:4e4b:b0:45d:cff6:733f with SMTP id 5b1f17b1804b1-45f211d517emr27953335e9.11.1757676964784;
+        Fri, 12 Sep 2025 04:36:04 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f20:da00:b70a:d502:3b51:1f2d? (p200300d82f20da00b70ad5023b511f2d.dip0.t-ipconnect.de. [2003:d8:2f20:da00:b70a:d502:3b51:1f2d])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e760775842sm6503959f8f.7.2025.09.12.04.36.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Sep 2025 04:33:51 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: Itaru Kitayama <itaru.kitayama@gmail.com>
+        Fri, 12 Sep 2025 04:36:04 -0700 (PDT)
+Message-ID: <3f739d3e-f6fc-4a3f-9bbb-151a6dc6c083@redhat.com>
+Date: Fri, 12 Sep 2025 13:36:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] PMCR_EL0.N is RAZ/WI. At least a build failes in Ubuntu 22.04 LTS. Remove the set function.
-Date: Fri, 12 Sep 2025 20:33:39 +0900
-Message-Id: <3FEB4D87-EEAF-4A21-BCBC-291A4A7C2230@gmail.com>
-References: <867by4c4v1.wl-maz@kernel.org>
-Cc: Itaru Kitayama <itaru.kitayama@linux.dev>,
- Oliver Upton <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
- K Poulose Suzuki <suzuki.poulose@arm.com>,
- Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Itaru Kitayama <itaru.kitayama@fujitsu.com>
-In-Reply-To: <867by4c4v1.wl-maz@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-X-Mailer: iPhone Mail (22G100)
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm: transhuge-stress: fix potential memory leak on
+ realloc failure
+To: Haofeng Li <920484857@qq.com>, Andrew Morton <akpm@linux-foundation.org>
+Cc: 13266079573@163.com, lihaofeng@kylinos.cn, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ lorenzo.stoakes@oracle.com, ziy@nvidia.com
+References: <b6f38984-5f89-4a9d-a905-ddcdbd7510a3@redhat.com>
+ <tencent_43768D3DB24034B62C249781C1DE7359C807@qq.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <tencent_43768D3DB24034B62C249781C1DE7359C807@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 12.09.25 12:10, Haofeng Li wrote:
+> From: David Hildenbrand <david@redhat.com>
+>> What do you think happens when a process exits? :)
+> 
+>> Correct! All memory ever allocated to that process gets freed, avoiding
+>> any memory leaks.
+> 
+> Thanks for pointing this out. You are absolutely correct that the operating system will reclaim all allocated memory when a process exits, so there is no persistent memory leak in this specific scenario.
+> 
+> I opted to add explicit memory freeing in the error path primarily as a practice for better long-term maintainability:
+> 
+> It ensures correctness if the code structure changes in the future (e.g., becomes part of a longer-running routine).
+> 
+> It maintains consistency with other error paths in the codebase.
+> 
+> It prevents false positives from static analysis tools (like valgrind).
+> 
+> I'm happy to adjust it if you still think it's preferable to remove the free() in this context.
 
+No code changes are required. This patch adds more complexity without 
+any benefit.
 
-> On Sep 12, 2025, at 20:01, Marc Zyngier <maz@kernel.org> wrote:
->=20
-> =EF=BB=BFOn Fri, 12 Sep 2025 09:27:40 +0100,
-> Itaru Kitayama <itaru.kitayama@linux.dev> wrote:
->>=20
->> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
->=20
-> This isn't an acceptable commit message.
->=20
->> ---
->> Seen a build failure with old Ubuntu 22.04 LTS, while the latest release
->> has no build issue, a write to the bit fields is RAZ/WI, remove the
->> function.
->> ---
->> tools/testing/selftests/kvm/arm64/vpmu_counter_access.c | 6 ------
->> 1 file changed, 6 deletions(-)
->>=20
->> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/to=
-ols/testing/selftests/kvm/arm64/vpmu_counter_access.c
->> index f16b3b27e32ed7ca57481f27d689d47783aa0345..56214a4430be90b3e1d840f27=
-19b22dd44f0b49b 100644
->> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
->> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
->> @@ -45,11 +45,6 @@ static uint64_t get_pmcr_n(uint64_t pmcr)
->>    return FIELD_GET(ARMV8_PMU_PMCR_N, pmcr);
->> }
->>=20
->> -static void set_pmcr_n(uint64_t *pmcr, uint64_t pmcr_n)
->> -{
->> -    u64p_replace_bits((__u64 *) pmcr, pmcr_n, ARMV8_PMU_PMCR_N);
->> -}
->> -
->> static uint64_t get_counters_mask(uint64_t n)
->> {
->>    uint64_t mask =3D BIT(ARMV8_PMU_CYCLE_IDX);
->> @@ -490,7 +485,6 @@ static void test_create_vpmu_vm_with_pmcr_n(uint64_t p=
-mcr_n, bool expect_fail)
->>     * Setting a larger value of PMCR.N should not modify the field, and
->>     * return a success.
->>     */
->> -    set_pmcr_n(&pmcr, pmcr_n);
->>    vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), pmcr);
->>    pmcr =3D vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0));
->>=20
->>=20
->=20
-> So what are you fixing here? A build failure? A semantic defect?
-> Something else? What makes this a valid change?
->=20
-> Frankly, I have no idea.
->=20
-> But KVM definitely allows PMCR_EL0.N to be written from userspace, and
-> that's not going to change.
->=20
+-- 
+Cheers
 
-Then I=E2=80=99ll drop this patch.
+David / dhildenb
 
-Thanks,
-Itaru.
-
->    M.
->=20
-> --
-> Without deviation from the norm, progress is not possible.
 
