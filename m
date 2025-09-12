@@ -1,71 +1,73 @@
-Return-Path: <linux-kselftest+bounces-41363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97705B54D0C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 14:17:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2D45B54D67
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 14:24:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86B931894492
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:14:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94A121881C37
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:20:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEF6731A045;
-	Fri, 12 Sep 2025 12:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD46A30C377;
+	Fri, 12 Sep 2025 12:11:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="atpGPLOR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a0J2vXtV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7218319867;
-	Fri, 12 Sep 2025 12:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBC8307AE3;
+	Fri, 12 Sep 2025 12:11:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757678789; cv=none; b=Amfe3XOHzBi1suOJN+SiHSwzekYXIHM/xCEdXLNI/hJH+Y7yyiUaU3TGoR2BV9XhUSBPDAAs6uvP7zTOcsmMB3jw5EwjbWo29UO3ToN6z+FyH19j50RUHOFwX+0U6SuzPRHLkQZrfk2sO36M+J5mLaRs1Uc59AxkuL+IruhY0Sw=
+	t=1757679094; cv=none; b=tRb5Jd0IcsGYPMBrD/4YR4f3iif3hbFOcAgH0ynP39KOw0YMukngVNgTGWt9S9MBK6zLbhnEHVo6R/qHuZiXNV9al2s0l+pPyc0r3j8irEUZYwGUQC1gTK1RD7X2qLN709DQ3PpvmffC/6Ssbu2YEUx6+hmTjuqoSptV1/rVNaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757678789; c=relaxed/simple;
-	bh=A8petOVqvEdmsFYA3MjCwiqV/huIzU9ROOZeN0k+x1E=;
+	s=arc-20240116; t=1757679094; c=relaxed/simple;
+	bh=XRHXIkOFKo+7035cNRrBYS4AXTjDo5unw4Qr62yGDW0=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TLqSgOPHiwCVr1CEkrRJhoNQFTVBblhnLgkopo46yu9+Y/bFG727IBybe8Oxk46w0BryZK05HDmOHLpljL0cCIqhDH+rLVICSfO4b6gFMiTJYFRveWH5nhJX7Rx+1iql3sEOi1BYYjHOKx2WiSIN5V4NXbKlQe6YCjF1yu4Wu8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=atpGPLOR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC493C4CEF1;
-	Fri, 12 Sep 2025 12:06:28 +0000 (UTC)
+	 MIME-Version:Content-Type; b=JylvsrP5ThXNEw+rh1zyPBhnRKJeCkCVpDeOSzMpirTmJfMccu4G8J1RAQ7Mv5sNSRPojXmlbm7nvDKTEzgL+/LZRux3hYzLzDq81EOBEI3J280SauMuQtxrT/PVrq+AXZyT9ezzQE8cf2K/zkIZU0AZUf6AlzAbsosL9Qdepao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a0J2vXtV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AFC2C4CEF1;
+	Fri, 12 Sep 2025 12:11:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757678789;
-	bh=A8petOVqvEdmsFYA3MjCwiqV/huIzU9ROOZeN0k+x1E=;
+	s=k20201202; t=1757679094;
+	bh=XRHXIkOFKo+7035cNRrBYS4AXTjDo5unw4Qr62yGDW0=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=atpGPLOReo+o5b9Rzv1hFX5OHQtBhIslvrltVKK+XFmeOjKWb7HbOmV/MP2zAljnc
-	 f2268nyZ6gRgMvCP8U8fegkNEy6meOwcHuM7ZLnzHMlKqbsaX7Jl1o/LIVwWLUSBLK
-	 GclVPUTVBeBvDAXJ6RkjFsISQ3Yhi4RD4JqzPGUhzT/5sJR9fXEJQ9ApusaEC9d3oE
-	 haQTNGUKAfDqK+UO3xX0bRFPifFVMTxndB/QM09+/1UJ+HWIjUGQf1/9/301tryJKM
-	 sQpf0S2jyWpYK6KT48esOOoAE7+HJ+GsQ5NmD1P/udDXxVZaBU5qZ3Mt4hUZckmfeS
-	 d8abCAdiA5kWA==
+	b=a0J2vXtVQcgXKtlhg36EclpHdO5TWV0+E5eP6mUnhhft6bZE+UYwoVO5gQIXKiyY6
+	 M05n8cc0XTZLYqAl+S+Vy+3GK6+vjO8uMG0GnV3nuGerWKeyzujv9CKKiUTkF5WDSd
+	 pt94V79JVWG6GvonNI/l2/H2of8kjUYdX0H42/DdCT7YC5vg0SBKXVwVtq+WI+amZJ
+	 a6gxlIiLDqiyLMEifG0ZCcIv/eic7NTsgajrBEg/y3KYSEo4kQWxS+evyWFisGOyMC
+	 BXfK4eeyBdS5SnARYLycSD6C+pFbFh9mVekY1vgd3dmVwZWTc3vDYzj6AfpLROQuig
+	 zq+r2yIBt4f9A==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <maz@kernel.org>)
-	id 1ux2Xq-00000005g5A-3t5W;
-	Fri, 12 Sep 2025 12:06:27 +0000
-Date: Fri, 12 Sep 2025 13:06:26 +0100
-Message-ID: <864it7dge5.wl-maz@kernel.org>
+	id 1ux2cm-00000005gFU-0GlJ;
+	Fri, 12 Sep 2025 12:11:32 +0000
+Date: Fri, 12 Sep 2025 13:11:31 +0100
+Message-ID: <86348rdg5o.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
+To: Itaru Kitayama <itaru.kitayama@gmail.com>
+Cc: Itaru Kitayama <itaru.kitayama@linux.dev>,
 	Oliver Upton <oliver.upton@linux.dev>,
 	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	K Poulose Suzuki <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
 	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v16 4/6] KVM: arm64: Validate GCS exception lock when emulating ERET
-In-Reply-To: <20250912-arm64-gcs-v16-4-6435e5ec37db@kernel.org>
-References: <20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org>
-	<20250912-arm64-gcs-v16-4-6435e5ec37db@kernel.org>
+	linux-kernel@vger.kernel.org,
+	Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Subject: Re: [PATCH] PMCR_EL0.N is RAZ/WI. At least a build failes in Ubuntu 22.04 LTS. Remove the set function.
+In-Reply-To: <3FEB4D87-EEAF-4A21-BCBC-291A4A7C2230@gmail.com>
+References: <867by4c4v1.wl-maz@kernel.org>
+	<3FEB4D87-EEAF-4A21-BCBC-291A4A7C2230@gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -75,100 +77,82 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Rcpt-To: itaru.kitayama@gmail.com, itaru.kitayama@linux.dev, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, itaru.kitayama@fujitsu.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, 12 Sep 2025 10:25:30 +0100,
-Mark Brown <broonie@kernel.org> wrote:
-> 
-> As per DDI0487 R_TYTWB GCS adds an additional case where an illegal
-> exception return can be generated. If all of:
-> 
->  - PSTATE.EXLOCK is 0.
->  - The EL is not being changed by the ERET.
->  - GCSCR_ELx.EXLOCKEN is 1.
-> 
-> are true then the return is illegal. Emulate this behaviour when
-> emulating ERET for nested guests.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/kvm/emulate-nested.c | 40 +++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 39 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kvm/emulate-nested.c b/arch/arm64/kvm/emulate-nested.c
-> index 90cb4b7ae0ff..9b02b85eda64 100644
-> --- a/arch/arm64/kvm/emulate-nested.c
-> +++ b/arch/arm64/kvm/emulate-nested.c
-> @@ -2632,6 +2632,41 @@ bool forward_debug_exception(struct kvm_vcpu *vcpu)
->  	return forward_mdcr_traps(vcpu, MDCR_EL2_TDE);
->  }
->  
-> +/*
-> + * A subset of the pseudocode ELFromSPSR(), validity checks are
-> + * assumed to have been done in code that is not GCS specific.
-> + */
-> +static inline int exlock_el_from_spsr(u64 spsr)
-> +{
-> +	return FIELD_GET(GENMASK(3, 2), spsr);
-> +}
-> +
-> +/* See IllegalExceptionReturn() pseudocode */
-> +static bool kvm_check_illegal_exlock_return(struct kvm_vcpu *vcpu, u64 spsr)
-> +{
-> +	u64 cur_el, target_el;
-> +	u64 gcscr;
-> +
-> +	if (!kvm_has_gcs(vcpu->kvm))
-> +		return false;
-> +
-> +	if (spsr & PSR_EXLOCK_BIT)
-> +		return false;
-> +
-> +	cur_el = exlock_el_from_spsr(vcpu->arch.ctxt.regs.pstate);
-> +	target_el = exlock_el_from_spsr(spsr);
-> +
-> +	if (cur_el != target_el)
-> +		return false;
-> +
-> +	if (vcpu_is_el2(vcpu))
-> +		gcscr = __vcpu_sys_reg(vcpu, GCSCR_EL2);
-> +	else
-> +		gcscr = __vcpu_sys_reg(vcpu, GCSCR_EL1);
+On Fri, 12 Sep 2025 12:33:39 +0100,
+Itaru Kitayama <itaru.kitayama@gmail.com> wrote:
+>=20
+>=20
+>=20
+> > On Sep 12, 2025, at 20:01, Marc Zyngier <maz@kernel.org> wrote:
+> >=20
+> > =EF=BB=BFOn Fri, 12 Sep 2025 09:27:40 +0100,
+> > Itaru Kitayama <itaru.kitayama@linux.dev> wrote:
+> >>=20
+> >> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+> >=20
+> > This isn't an acceptable commit message.
+> >=20
+> >> ---
+> >> Seen a build failure with old Ubuntu 22.04 LTS, while the latest relea=
+se
+> >> has no build issue, a write to the bit fields is RAZ/WI, remove the
+> >> function.
+> >> ---
+> >> tools/testing/selftests/kvm/arm64/vpmu_counter_access.c | 6 ------
+> >> 1 file changed, 6 deletions(-)
+> >>=20
+> >> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b=
+/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+> >> index f16b3b27e32ed7ca57481f27d689d47783aa0345..56214a4430be90b3e1d840=
+f2719b22dd44f0b49b 100644
+> >> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+> >> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+> >> @@ -45,11 +45,6 @@ static uint64_t get_pmcr_n(uint64_t pmcr)
+> >>    return FIELD_GET(ARMV8_PMU_PMCR_N, pmcr);
+> >> }
+> >>=20
+> >> -static void set_pmcr_n(uint64_t *pmcr, uint64_t pmcr_n)
+> >> -{
+> >> -    u64p_replace_bits((__u64 *) pmcr, pmcr_n, ARMV8_PMU_PMCR_N);
+> >> -}
+> >> -
+> >> static uint64_t get_counters_mask(uint64_t n)
+> >> {
+> >>    uint64_t mask =3D BIT(ARMV8_PMU_CYCLE_IDX);
+> >> @@ -490,7 +485,6 @@ static void test_create_vpmu_vm_with_pmcr_n(uint64=
+_t pmcr_n, bool expect_fail)
+> >>     * Setting a larger value of PMCR.N should not modify the field, and
+> >>     * return a success.
+> >>     */
+> >> -    set_pmcr_n(&pmcr, pmcr_n);
+> >>    vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), pmcr);
+> >>    pmcr =3D vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0));
+> >>=20
+> >>=20
+> >=20
+> > So what are you fixing here? A build failure? A semantic defect?
+> > Something else? What makes this a valid change?
+> >=20
+> > Frankly, I have no idea.
+> >=20
+> > But KVM definitely allows PMCR_EL0.N to be written from userspace, and
+> > that's not going to change.
+> >=20
+>=20
+> Then I=E2=80=99ll drop this patch.
 
-At the point where we check for an illegal exception return, the state
-is live on the CPU. How does this work? Also, we only handle ERET
-traps for EL2, not EL1.
-
-> +
-> +	return gcscr & GCSCR_ELx_EXLOCKEN;
-> +}
-> +
->  static u64 kvm_check_illegal_exception_return(struct kvm_vcpu *vcpu, u64 spsr)
->  {
->  	u64 mode = spsr & PSR_MODE_MASK;
-> @@ -2642,12 +2677,15 @@ static u64 kvm_check_illegal_exception_return(struct kvm_vcpu *vcpu, u64 spsr)
->  	 * - trying to return to an illegal M value
->  	 * - trying to return to a 32bit EL
->  	 * - trying to return to EL1 with HCR_EL2.TGE set
-> +	 * - GCSCR_ELx.EXLOCKEN is 1 and PSTATE.EXLOCK is 0 when attempting
-> +	 *   to return from ELx the same EL.
->  	 */
->  	if (mode == PSR_MODE_EL3t   || mode == PSR_MODE_EL3h ||
->  	    mode == 0b00001         || (mode & BIT(1))       ||
->  	    (spsr & PSR_MODE32_BIT) ||
->  	    (vcpu_el2_tge_is_set(vcpu) && (mode == PSR_MODE_EL1t ||
-> -					   mode == PSR_MODE_EL1h))) {
-> +					   mode == PSR_MODE_EL1h)) ||
-> +	    kvm_check_illegal_exlock_return(vcpu, spsr)) {
-
-This code is simply never reached. Hint: kvm_hyp_handle_eret().
+I'm not asking you to drop it, I'm asking you to explain. If you found
+a problem, let's discuss it and fix it. But as it stands, you're not
+giving me much to go on.
 
 	M.
 
--- 
+--=20
 Without deviation from the norm, progress is not possible.
 
