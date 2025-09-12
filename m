@@ -1,107 +1,83 @@
-Return-Path: <linux-kselftest+bounces-41310-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41311-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16BABB54996
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:23:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11759B549CF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:28:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C738817A465
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 10:23:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66332B6269C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 10:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701562E283E;
-	Fri, 12 Sep 2025 10:21:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7421F2E973D;
+	Fri, 12 Sep 2025 10:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="JGg5hMTK"
+	dkim=pass (1024-bit key) header.d=ms29.hinet.net header.i=@ms29.hinet.net header.b="aK0GaeJq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.50])
+Received: from cdmsr2.hinet.net (210-65-1-144.hinet-ip.hinet.net [210.65.1.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3372472B5;
-	Fri, 12 Sep 2025 10:21:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7F62820D6
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 10:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.65.1.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757672487; cv=none; b=hLMw3MWZm7S3vAe5X8Yu3iMpw7oHWxxsaVIJ5XqlkKnpu9JwxK489k8QSeEG7pSGqckQvkqLu5vl/chcE18+Upsf5jwcRFZbwkSFM0Holf+Gtdp8ZzSMNMLvYnq1145OSBujjGkKJ4pw3Orhh94KHFugLzGSPJocjP/lBFLbCvk=
+	t=1757672513; cv=none; b=fT+LY3BtIjz3kTFVrYpDCMFwyB8CITuC9tJ0oWyOmP4mmzvPDbT7gYS147beby1RL0Ot2K0EFpDhXpqMB3B1TJF+khA1LFXoqpa1pIRMKwBqhJgrboTUFE9in8HusE717UaOQci1lnEsgEXTVyZcjmeXEsyMFOhKs2lPahSeNf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757672487; c=relaxed/simple;
-	bh=y6Mx8UxMbmbhKuu0xbpWx6yCgJ80CG76KHVXxl4xPyo=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=ESGy1diq9CzpR4uvdiJgr0AopSuCnScLKI+SQwxDVIndDueTnCwMldDcJBO7R950U5cIYp/6DW8nju8ItGmZ3S0k038zI3ztm+NVI0rplhR0Llf6wAHBlcNcVJcEsRCTs8cc85gywLVWir0hkU/zj+Q+egFjKyTSOhyYfP4LHU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=JGg5hMTK; arc=none smtp.client-ip=43.163.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1757672174; bh=7d6nPhgsu42OQ/nG1elx4UhCIT4hBtFOXQ5i6Y/4Ii4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=JGg5hMTKNkjNwRGosP9a7CSFOu3VBAjKbx/AoiTl1YInuPl0VxQgaJIrvqhuwz9ik
-	 TWea1vlIfhKcWtYhIpS8GMx2e+75lwv/VpZjXwJreQjEC05XnUxZmXKFERWzuHc89O
-	 gZSZelB/hagMDlf5lkrZ5uQXA+QUq0+jOqseD5Nw=
-Received: from localhost.localdomain ([116.128.244.171])
-	by newxmesmtplogicsvrszb20-1.qq.com (NewEsmtp) with SMTP
-	id 28731C2C; Fri, 12 Sep 2025 18:10:07 +0800
-X-QQ-mid: xmsmtpt1757671807t8ir1jn0w
-Message-ID: <tencent_43768D3DB24034B62C249781C1DE7359C807@qq.com>
-X-QQ-XMAILINFO: NY3HYYTs4gYSLjraKA0cvy+V5eHHSDp3c3cSlTTIdWJ8tEKnd72RcZdPrdHryB
-	 z1E+nv8urYdwczLXbZDt0oaAJvHuoUg56eSW5gjSCdRLAagHinVGQeHfJsQkC+gthvRidb6j5llO
-	 c93iG61cGynfhWo3BTgXtcaJEIBYpmBElsOAZMJ0STbc18AUq+WJ5d09h/8qTONpt1H+yHRUMbR9
-	 KhewYMsCsljKip+Or1hhf/ufGfuI57MIU+Tp2mg+1XS59DeQKd+ytdxkSUa5Gsifs23SrwmEZkYD
-	 l4udximR2n7lR20ggueqeKZfIF4UxAN5Dk2dQrjtel5muuxwNY/RJERqMzQLtq3MiLaXcabkQBYx
-	 mmPE7Dcft5ZnFULTVPLv3wma5ZTJLjKtMAQmb4EPnwUES4n4VHE4YMqveVaZYzjPYXMuHGprmRbD
-	 bhJM7TDS6PW/lze2nIz2wpKsRAhREwBMAN0zMCj8wflDzPQzChvrTwKGxNJ/IS7XT0MKjISw0tw4
-	 ChZUMe5ssepYVl+ZSQvinsyV6M/w8dXjTSv3B7xXNtlJA2+98nKfMwqpRZ9QidB8jpiRSvxISMfp
-	 CPqfz02OlrGJ03ZIfNYWjTF3ckNn7yZzYrkRekPeMBZpCX9D0IZXT8divmThDjHpULHp28GCAE4Y
-	 86ujWPwHTYy3Fr80KSFuYR3yGtds9OgsUXEmIz0q9PFeJFrdW0t15XCsKRJBbKtptSJPi9VXYGC6
-	 +l47rv0/IcHfyY6bA3RybC+QP7jAxXheS/0DMLyWrGz+p8gkKDpVNchoCkivZg85qb5A2fuVGqnj
-	 /zkkAN6UGuYEVZHv7no24xawc7QvIn0Fc9rsBHCwlbIPPmeoSpTyYasVMTDuXCFIQvnVTtfcQmDZ
-	 ISn3yXdWGvUzt7BhjYg4JTgNLQ4s8V1mX5l64tbdqtc5Xp6Bd/MLqJZT0HjbsmLfK+IaUAdPNIQz
-	 MmIwz3eBwg5XVzsLQRC+W/eHiG/a7ewU4vOH/hcPUZJeiDFpKWqs40qou5YAbmhj0pcuzrYIHtWU
-	 AERgm0xZLf7ipyv6a1pXjZEyGi/sE=
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-From: Haofeng Li <920484857@qq.com>
-To: david@redhat.com,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: 13266079573@163.com,
-	920484857@qq.com,
-	lihaofeng@kylinos.cn,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	lorenzo.stoakes@oracle.com,
-	ziy@nvidia.com
-Subject: Re: [PATCH] mm: transhuge-stress: fix potential memory leak on realloc failure
-Date: Fri, 12 Sep 2025 18:10:05 +0800
-X-OQ-MSGID: <20250912101005.1980065-1-920484857@qq.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <b6f38984-5f89-4a9d-a905-ddcdbd7510a3@redhat.com> 
-References: <b6f38984-5f89-4a9d-a905-ddcdbd7510a3@redhat.com>
+	s=arc-20240116; t=1757672513; c=relaxed/simple;
+	bh=P4V6Jz0xrusjuOvs53isunD9sVLdstinhBFPBgsMGK4=;
+	h=From:To:Subject:Message-ID:Date:MIME-Version:Content-Type; b=q8ftMl3dtyQMwuzgCArwOSZuV4xCt05Yd+XqBgTU9cyYGV+BHAoUlgH1t84oIh/tmqpFtgMOA+Ry+2gdyChNGM2nPiY2C49rb7tqOyV77uj47BKWCsEok7BATPuT+7ZjJKp9PblhBVGoGL9C0F6wRq2onq4b7/9jvZK1d0f8Jeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ms29.hinet.net; spf=pass smtp.mailfrom=ms29.hinet.net; dkim=pass (1024-bit key) header.d=ms29.hinet.net header.i=@ms29.hinet.net header.b=aK0GaeJq; arc=none smtp.client-ip=210.65.1.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ms29.hinet.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ms29.hinet.net
+Received: from cmsr10.hinet.net ([10.199.216.89])
+	by cdmsr2.hinet.net (8.15.2/8.15.2) with ESMTPS id 58CALkW2161050
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 18:21:49 +0800
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; d=ms29.hinet.net;
+	s=default; t=1757672509; bh=iHjs7SAZaFcj4phzP5bDgu5JqKA=;
+	h=From:To:Subject:Date;
+	b=aK0GaeJqHOPLhSKRhUsmqYDee/Mf7cdwwHwshX/WwF7YB3c+MaS21ip+zl4S2nMrg
+	 Zvmfi5BRGV7FXGmxebTYjAdCpKklpZiuipZGf/e/lv4Tk/4IJ1t3zxWekNuLko4hrS
+	 e2ivSYz5tSS19GjFIMN8q9m6oiITy7fMWhyCFX5U=
+Received: from [127.0.0.1] (61-228-55-181.dynamic-ip.hinet.net [61.228.55.181])
+	by cmsr10.hinet.net (8.15.2/8.15.2) with ESMTPS id 58CAF6Lh511552
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 18:16:16 +0800
+From: "Info - Albinayah 868" <Linux-kselftest@ms29.hinet.net>
+To: linux-kselftest@vger.kernel.org
+Reply-To: "Info - Albinayah." <europe-sales@albinayah-group.com>
+Subject: =?UTF-8?B?TmV3IFNlcHRlbWJlciBPcmRlci4gOTMwMzUgRnJpZGF5LCBTZXB0ZW1iZXIgMTIsIDIwMjUgYXQgMTI6MTY6MTQgUE0=?=
+Message-ID: <9bfa3f2b-060d-9753-b35f-f04de3c051f6@ms29.hinet.net>
+Content-Transfer-Encoding: 7bit
+Date: Fri, 12 Sep 2025 10:16:15 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+X-HiNet-Brightmail: Spam
+X-CMAE-Score: 100
+X-CMAE-Analysis: v=2.4 cv=Au5N3/9P c=0 sm=1 tr=0 ts=68c3f2f1
+	p=OrFXhexWvejrBOeqCD4A:9 a=yt2vnJcufJgYEsdr2blA5A==:117 a=IkcTkHD0fZMA:10
+	a=5KLPUuaC_9wA:10
 
-From: David Hildenbrand <david@redhat.com>
->What do you think happens when a process exits? :)
+Hi Linux-kselftest,
 
->Correct! All memory ever allocated to that process gets freed, avoiding 
->any memory leaks.
+Please provide a quote for your products:
 
-Thanks for pointing this out. You are absolutely correct that the operating system will reclaim all allocated memory when a process exits, so there is no persistent memory leak in this specific scenario.
+Include:
+1.Pricing (per unit)
+2.Delivery cost & timeline
+3.Quote expiry date
 
-I opted to add explicit memory freeing in the error path primarily as a practice for better long-term maintainability:
+Deadline: September
 
-It ensures correctness if the code structure changes in the future (e.g., becomes part of a longer-running routine).
+Thanks!
 
-It maintains consistency with other error paths in the codebase.
+Kamal Prasad
 
-It prevents false positives from static analysis tools (like valgrind).
-
-I'm happy to adjust it if you still think it's preferable to remove the free() in this context.
-
-Best regards,
-	Haofeng Li
-
+Albinayah Trading
 
