@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-41411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F746B55536
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:59:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36C21B5553A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 18:59:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1418C5C136D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:59:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E5001D6660B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 16:59:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAABF324B2E;
-	Fri, 12 Sep 2025 16:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24219329F11;
+	Fri, 12 Sep 2025 16:59:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qgxi7q4K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P7j2rEJg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE7430DD12;
-	Fri, 12 Sep 2025 16:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED615329F0B;
+	Fri, 12 Sep 2025 16:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757696340; cv=none; b=tNB96bj1o9lJWgV9APVwFhEOKxNsTDj57ndBb/4rl0CTqHrdksEVO7FskT2KdjKFoz6NFfCrL5SDdLqYxO/B+1koFYOi1WP62GPGx36Fhp4QG99gXV1NmehX9eLc2DPd6EhJhXR3HOpDnzo/yGdVxxIyr++KGlr4DQLr1N8lCt0=
+	t=1757696343; cv=none; b=jp3Me+29Q2w+M7Gd8Ss5EXSaKN1gfLxxHB3XliY9iz1f2rxW7+rjY2UDZr0YZ/wkajrY2PshPTORwXzGIAdynhhGPK96kv7gdG83fd98+WUZ2PAM+yTyEph98KHAri9DJj3QfomRbSOUhUH5bVu+9cb8bNStZaRnR2WS7EyZgsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757696340; c=relaxed/simple;
-	bh=IlMePipPTDazOklUtuC2COQIsM/h+CEoQ9yWVs4bDJw=;
+	s=arc-20240116; t=1757696343; c=relaxed/simple;
+	bh=mv+W9p3Tv6+0MLm2i3qDPz7HbebqWW25ckjAaTa8EKU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AQj03S+1iIxZ47jO7RFAY42I9RnAlm5CxPtAvTT77EpMm/o0aPM3tMheTjDEY03NSmIKXvTMTUgfztlO6FHkWocGI+lZkgomhySCjQcO+K8AjVMhRT1cOnBye9ahejogst/LfI0N3SyMcutjXHI02Oci/hdp06oCxBEKh1x7FqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qgxi7q4K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 044CCC4CEF4;
-	Fri, 12 Sep 2025 16:58:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=m5CLdyZYoOPNgitWfPWXXM8xwGKis0+A37b7RaIWbGUWRXFk66h8lLvSTgNPTvrb1k83sK6n1AP/X5Aj5oqF04upsKY0xw+Huj/LfnyWzvMP+1cONxFvvKp0/JKWhGpVeoZiMdDJBT+kVDI/rrJcDTCOasT+xsoxWiMxlkfJ8v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P7j2rEJg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5757C4CEF1;
+	Fri, 12 Sep 2025 16:59:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757696340;
-	bh=IlMePipPTDazOklUtuC2COQIsM/h+CEoQ9yWVs4bDJw=;
+	s=k20201202; t=1757696342;
+	bh=mv+W9p3Tv6+0MLm2i3qDPz7HbebqWW25ckjAaTa8EKU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Qgxi7q4KkB/q2N/2y9PwxPeIlOori9y8GnJJ/k7a6cI+hCXneMWRtojS+Oh5VyGAd
-	 1JCc3vm7nRGI56hmfKykafVjBnO4Wc9Itxm6D5QCrPiz/c9PgFvie0/9K777rEUdO4
-	 rWmIeZ8uiKyGTyqSh7OPzx+EYrkx7JUbov378C2xA1fjpR16v8ZW0J7AgexKMje7Sy
-	 1H77LxfA7m2I9r6DsmadClZ0No+9QFZnJH1lVO/oYzLXmWCDDig55pK6trgQRYz98A
-	 w7H7WWbFIlWaaYPmJz3pXqngdbgsmd8cPB9OzOrC4dwgtz9mCf8/Gen5/8RsmIZudf
-	 dGNjXF3ynvD3Q==
+	b=P7j2rEJgIGknIyu/8bxWcSasQlKt0MyukQ84xlpTG624a+r6eqA5agmHbLTe4ib0p
+	 njc7NCyxdoDNJyeIyv2TKyYLtFyhD+udacOIYxQv3nuQc5M6vUIH83LDFcfsE+iEEa
+	 JjTI2+Ns8R1qdpvONP+4r06J8ms9NqTwnJxuKIm6bO+PCIJF40dpVKDrtGCphZ8g8W
+	 GI88PdmhJMcwLnM4qbGQDTzKc3BVD7hnVAu5CKiY62QEQ9CastgMhD99bVNONodlYQ
+	 rOHIo7mejxwWp67kq2EIiB3ea9wCs6A6QWags/P3KT22JTanH5tZ+UiHgSnLWYOk9S
+	 gIRSNs/a/71hw==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Fri, 12 Sep 2025 18:58:50 +0200
-Subject: [PATCH v3 2/3] selftests/hid: hidraw: forge wrong ioctls and tests
- them
+Date: Fri, 12 Sep 2025 18:58:51 +0200
+Subject: [PATCH v3 3/3] HID: hidraw: tighten ioctl command parsing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,172 +52,319 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250912-b4-hidraw-ioctls-v3-2-cd2c6efd8c20@kernel.org>
+Message-Id: <20250912-b4-hidraw-ioctls-v3-3-cd2c6efd8c20@kernel.org>
 References: <20250912-b4-hidraw-ioctls-v3-0-cd2c6efd8c20@kernel.org>
 In-Reply-To: <20250912-b4-hidraw-ioctls-v3-0-cd2c6efd8c20@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>, 
  Arnd Bergmann <arnd@kernel.org>
 Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
+ linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>, 
+ Arnd Bergmann <arnd@arndb.de>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757696335; l=5515;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757696335; l=9010;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=IlMePipPTDazOklUtuC2COQIsM/h+CEoQ9yWVs4bDJw=;
- b=qsNqc+31neoyvlUgtAOtVIEq3T3gfaRnwgKXxxJcAoWtUo6FTE//fGjYaHY8RERg/o1U48XIH
- CdwOLBg2ZD3CJK5bau8OXWnMbf40h2ZAGBBkSKerBkCH3YhrQet5FTy
+ bh=mv+W9p3Tv6+0MLm2i3qDPz7HbebqWW25ckjAaTa8EKU=;
+ b=0mn5I+O6EUYxaJddRDFCF2SmhTfbyGnhug/hUk+jZJjaAZudsKFk/ZDpT6wyBhZS6V2fzpu0j
+ wL0McHPPFO+C9A2BBVV/IUvvMbFWr3ZYRCjH8CeFQl1VND1pRm/RMGH
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-We also need coverage for when the malicious user is not using the
-proper ioctls definitions and tries to work around the driver.
+The handling for variable-length ioctl commands in hidraw_ioctl() is
+rather complex and the check for the data direction is incomplete.
 
-Most of the scaffholding has been generated by claude-4-sonnet and then
-carefully reviewed.
+Simplify this code by factoring out the various ioctls grouped by dir
+and size, and using a switch() statement with the size masked out, to
+ensure the rest of the command is correctly matched.
 
-Suggested-by: Arnd Bergmann <arnd@kernel.org>
+Fixes: 9188e79ec3fd ("HID: add phys and name ioctls to hidraw")
+Reported-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- tools/testing/selftests/hid/hidraw.c | 127 +++++++++++++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
+ drivers/hid/hidraw.c        | 224 ++++++++++++++++++++++++--------------------
+ include/uapi/linux/hidraw.h |   2 +
+ 2 files changed, 124 insertions(+), 102 deletions(-)
 
-diff --git a/tools/testing/selftests/hid/hidraw.c b/tools/testing/selftests/hid/hidraw.c
-index 6d61d03e2ef05e1900fe5a3938d93421717b2621..d625772f8b7cf71fd94956d3a49d54ff44e2b34d 100644
---- a/tools/testing/selftests/hid/hidraw.c
-+++ b/tools/testing/selftests/hid/hidraw.c
-@@ -332,6 +332,133 @@ TEST_F(hidraw, ioctl_gfeature_invalid)
- 	ASSERT_EQ(errno, EIO) TH_LOG("expected EIO, got errno %d", errno);
+diff --git a/drivers/hid/hidraw.c b/drivers/hid/hidraw.c
+index c887f48756f4be2a4bac03128f2885bde96c1e39..bbd6f23bce78951c7d667ff5c1c923cee3509e3f 100644
+--- a/drivers/hid/hidraw.c
++++ b/drivers/hid/hidraw.c
+@@ -394,27 +394,15 @@ static int hidraw_revoke(struct hidraw_list *list)
+ 	return 0;
  }
  
-+/*
-+ * Test ioctl with incorrect nr bits
-+ */
-+TEST_F(hidraw, ioctl_invalid_nr)
-+{
-+	char buf[256] = {0};
-+	int err;
-+	unsigned int bad_cmd;
+-static long hidraw_ioctl(struct file *file, unsigned int cmd,
+-							unsigned long arg)
++static long hidraw_fixed_size_ioctl(struct file *file, struct hidraw *dev, unsigned int cmd,
++				    void __user *arg)
+ {
+-	struct inode *inode = file_inode(file);
+-	unsigned int minor = iminor(inode);
+-	long ret = 0;
+-	struct hidraw *dev;
+-	struct hidraw_list *list = file->private_data;
+-	void __user *user_arg = (void __user*) arg;
+-
+-	down_read(&minors_rwsem);
+-	dev = hidraw_table[minor];
+-	if (!dev || !dev->exist || hidraw_is_revoked(list)) {
+-		ret = -ENODEV;
+-		goto out;
+-	}
++	struct hid_device *hid = dev->hid;
+ 
+ 	switch (cmd) {
+ 		case HIDIOCGRDESCSIZE:
+-			if (put_user(dev->hid->rsize, (int __user *)arg))
+-				ret = -EFAULT;
++			if (put_user(hid->rsize, (int __user *)arg))
++				return -EFAULT;
+ 			break;
+ 
+ 		case HIDIOCGRDESC:
+@@ -422,113 +410,145 @@ static long hidraw_ioctl(struct file *file, unsigned int cmd,
+ 				__u32 len;
+ 
+ 				if (get_user(len, (int __user *)arg))
+-					ret = -EFAULT;
+-				else if (len > HID_MAX_DESCRIPTOR_SIZE - 1)
+-					ret = -EINVAL;
+-				else if (copy_to_user(user_arg + offsetof(
+-					struct hidraw_report_descriptor,
+-					value[0]),
+-					dev->hid->rdesc,
+-					min(dev->hid->rsize, len)))
+-					ret = -EFAULT;
++					return -EFAULT;
 +
-+	/*
-+	 * craft an ioctl command with wrong _IOC_NR bits
-+	 */
-+	bad_cmd = _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x00, sizeof(buf)); /* 0 is not valid */
++				if (len > HID_MAX_DESCRIPTOR_SIZE - 1)
++					return -EINVAL;
 +
-+	/* test the ioctl */
-+	err = ioctl(self->hidraw_fd, bad_cmd, buf);
-+	ASSERT_LT(err, 0) TH_LOG("ioctl read-write with wrong _IOC_NR (0) should have failed");
-+	ASSERT_EQ(errno, ENOTTY)
-+		TH_LOG("expected ENOTTY for wrong read-write _IOC_NR (0), got errno %d", errno);
++				if (copy_to_user(arg + offsetof(
++				    struct hidraw_report_descriptor,
++				    value[0]),
++				    hid->rdesc,
++				    min(hid->rsize, len)))
++					return -EFAULT;
 +
-+	/*
-+	 * craft an ioctl command with wrong _IOC_NR bits
-+	 */
-+	bad_cmd = _IOC(_IOC_READ, 'H', 0x00, sizeof(buf)); /* 0 is not valid */
+ 				break;
+ 			}
+ 		case HIDIOCGRAWINFO:
+ 			{
+ 				struct hidraw_devinfo dinfo;
+ 
+-				dinfo.bustype = dev->hid->bus;
+-				dinfo.vendor = dev->hid->vendor;
+-				dinfo.product = dev->hid->product;
+-				if (copy_to_user(user_arg, &dinfo, sizeof(dinfo)))
+-					ret = -EFAULT;
++				dinfo.bustype = hid->bus;
++				dinfo.vendor = hid->vendor;
++				dinfo.product = hid->product;
++				if (copy_to_user(arg, &dinfo, sizeof(dinfo)))
++					return -EFAULT;
+ 				break;
+ 			}
+ 		case HIDIOCREVOKE:
+ 			{
+-				if (user_arg)
+-					ret = -EINVAL;
+-				else
+-					ret = hidraw_revoke(list);
+-				break;
++				struct hidraw_list *list = file->private_data;
 +
-+	/* test the ioctl */
-+	err = ioctl(self->hidraw_fd, bad_cmd, buf);
-+	ASSERT_LT(err, 0) TH_LOG("ioctl read-only with wrong _IOC_NR (0) should have failed");
-+	ASSERT_EQ(errno, ENOTTY)
-+		TH_LOG("expected ENOTTY for wrong read-only _IOC_NR (0), got errno %d", errno);
++				if (arg)
++					return -EINVAL;
 +
-+	/* also test with bigger number */
-+	bad_cmd = _IOC(_IOC_READ, 'H', 0x42, sizeof(buf)); /* 0x42 is not valid as well */
-+
-+	err = ioctl(self->hidraw_fd, bad_cmd, buf);
-+	ASSERT_LT(err, 0) TH_LOG("ioctl read-only with wrong _IOC_NR (0x42) should have failed");
-+	ASSERT_EQ(errno, ENOTTY)
-+		TH_LOG("expected ENOTTY for wrong read-only _IOC_NR (0x42), got errno %d", errno);
-+
-+	/* also test with bigger number: 0x42 is not valid as well */
-+	bad_cmd = _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x42, sizeof(buf));
-+
-+	err = ioctl(self->hidraw_fd, bad_cmd, buf);
-+	ASSERT_LT(err, 0) TH_LOG("ioctl read-write with wrong _IOC_NR (0x42) should have failed");
-+	ASSERT_EQ(errno, ENOTTY)
-+		TH_LOG("expected ENOTTY for wrong read-write _IOC_NR (0x42), got errno %d", errno);
++				return hidraw_revoke(list);
+ 			}
+ 		default:
+-			{
+-				struct hid_device *hid = dev->hid;
+-				if (_IOC_TYPE(cmd) != 'H') {
+-					ret = -EINVAL;
+-					break;
+-				}
++			/*
++			 * None of the above ioctls can return -EAGAIN, so
++			 * use it as a marker that we need to check variable
++			 * length ioctls.
++			 */
++			return -EAGAIN;
++	}
+ 
+-				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCSFEATURE(0))) {
+-					int len = _IOC_SIZE(cmd);
+-					ret = hidraw_send_report(file, user_arg, len, HID_FEATURE_REPORT);
+-					break;
+-				}
+-				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGFEATURE(0))) {
+-					int len = _IOC_SIZE(cmd);
+-					ret = hidraw_get_report(file, user_arg, len, HID_FEATURE_REPORT);
+-					break;
+-				}
++	return 0;
 +}
-+
-+/*
-+ * Test ioctl with incorrect type bits
-+ */
-+TEST_F(hidraw, ioctl_invalid_type)
+ 
+-				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCSINPUT(0))) {
+-					int len = _IOC_SIZE(cmd);
+-					ret = hidraw_send_report(file, user_arg, len, HID_INPUT_REPORT);
+-					break;
+-				}
+-				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGINPUT(0))) {
+-					int len = _IOC_SIZE(cmd);
+-					ret = hidraw_get_report(file, user_arg, len, HID_INPUT_REPORT);
+-					break;
+-				}
++static long hidraw_rw_variable_size_ioctl(struct file *file, struct hidraw *dev, unsigned int cmd,
++					  void __user *user_arg)
 +{
-+	char buf[256] = {0};
-+	int err;
-+	unsigned int bad_cmd;
++	int len = _IOC_SIZE(cmd);
 +
-+	/*
-+	 * craft an ioctl command with wrong _IOC_TYPE bits
-+	 */
-+	bad_cmd = _IOC(_IOC_WRITE|_IOC_READ, 'I', 0x01, sizeof(buf)); /* 'I' should be 'H' */
-+
-+	/* test the ioctl */
-+	err = ioctl(self->hidraw_fd, bad_cmd, buf);
-+	ASSERT_LT(err, 0) TH_LOG("ioctl with wrong _IOC_TYPE (I) should have failed");
-+	ASSERT_EQ(errno, EINVAL) TH_LOG("expected EINVAL for wrong _IOC_NR, got errno %d", errno);
++	switch (cmd & ~IOCSIZE_MASK) {
++	case HIDIOCSFEATURE(0):
++		return hidraw_send_report(file, user_arg, len, HID_FEATURE_REPORT);
++	case HIDIOCGFEATURE(0):
++		return hidraw_get_report(file, user_arg, len, HID_FEATURE_REPORT);
++	case HIDIOCSINPUT(0):
++		return hidraw_send_report(file, user_arg, len, HID_INPUT_REPORT);
++	case HIDIOCGINPUT(0):
++		return hidraw_get_report(file, user_arg, len, HID_INPUT_REPORT);
++	case HIDIOCSOUTPUT(0):
++		return hidraw_send_report(file, user_arg, len, HID_OUTPUT_REPORT);
++	case HIDIOCGOUTPUT(0):
++		return hidraw_get_report(file, user_arg, len, HID_OUTPUT_REPORT);
++	}
+ 
+-				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCSOUTPUT(0))) {
+-					int len = _IOC_SIZE(cmd);
+-					ret = hidraw_send_report(file, user_arg, len, HID_OUTPUT_REPORT);
+-					break;
+-				}
+-				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGOUTPUT(0))) {
+-					int len = _IOC_SIZE(cmd);
+-					ret = hidraw_get_report(file, user_arg, len, HID_OUTPUT_REPORT);
+-					break;
+-				}
++	return -EINVAL;
 +}
-+
-+/*
-+ * Test HIDIOCGFEATURE ioctl with incorrect _IOC_DIR bits
-+ */
-+TEST_F(hidraw, ioctl_gfeature_invalid_dir)
+ 
+-				/* Begin Read-only ioctls. */
+-				if (_IOC_DIR(cmd) != _IOC_READ) {
+-					ret = -EINVAL;
+-					break;
+-				}
++static long hidraw_ro_variable_size_ioctl(struct file *file, struct hidraw *dev, unsigned int cmd,
++					  void __user *user_arg)
 +{
-+	__u8 buf[10] = {0};
-+	int err;
-+	unsigned int bad_cmd;
++	struct hid_device *hid = dev->hid;
++	int len = _IOC_SIZE(cmd);
++	int field_len;
 +
-+	/* set report ID 1 in first byte */
-+	buf[0] = 1;
-+
-+	/*
-+	 * craft an ioctl command with wrong _IOC_DIR bits
-+	 * HIDIOCGFEATURE should have _IOC_WRITE|_IOC_READ, let's use only _IOC_WRITE
-+	 */
-+	bad_cmd = _IOC(_IOC_WRITE, 'H', 0x07, sizeof(buf)); /* should be _IOC_WRITE|_IOC_READ */
-+
-+	/* try to get feature report with wrong direction bits */
-+	err = ioctl(self->hidraw_fd, bad_cmd, buf);
-+	ASSERT_LT(err, 0) TH_LOG("HIDIOCGFEATURE with wrong _IOC_DIR should have failed");
-+	ASSERT_EQ(errno, EINVAL) TH_LOG("expected EINVAL for wrong _IOC_DIR, got errno %d", errno);
-+
-+	/* also test with only _IOC_READ */
-+	bad_cmd = _IOC(_IOC_READ, 'H', 0x07, sizeof(buf)); /* should be _IOC_WRITE|_IOC_READ */
-+
-+	err = ioctl(self->hidraw_fd, bad_cmd, buf);
-+	ASSERT_LT(err, 0) TH_LOG("HIDIOCGFEATURE with wrong _IOC_DIR should have failed");
-+	ASSERT_EQ(errno, EINVAL) TH_LOG("expected EINVAL for wrong _IOC_DIR, got errno %d", errno);
++	switch (cmd & ~IOCSIZE_MASK) {
++	case HIDIOCGRAWNAME(0):
++		field_len = strlen(hid->name) + 1;
++		if (len > field_len)
++			len = field_len;
++		return copy_to_user(user_arg, hid->name, len) ?  -EFAULT : len;
++	case HIDIOCGRAWPHYS(0):
++		field_len = strlen(hid->phys) + 1;
++		if (len > field_len)
++			len = field_len;
++		return copy_to_user(user_arg, hid->phys, len) ?  -EFAULT : len;
++	case HIDIOCGRAWUNIQ(0):
++		field_len = strlen(hid->uniq) + 1;
++		if (len > field_len)
++			len = field_len;
++		return copy_to_user(user_arg, hid->uniq, len) ?  -EFAULT : len;
++	}
+ 
+-				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGRAWNAME(0))) {
+-					int len = strlen(hid->name) + 1;
+-					if (len > _IOC_SIZE(cmd))
+-						len = _IOC_SIZE(cmd);
+-					ret = copy_to_user(user_arg, hid->name, len) ?
+-						-EFAULT : len;
+-					break;
+-				}
++	return -EINVAL;
 +}
-+
-+/*
-+ * Test read-only ioctl with incorrect _IOC_DIR bits
-+ */
-+TEST_F(hidraw, ioctl_readonly_invalid_dir)
+ 
+-				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGRAWPHYS(0))) {
+-					int len = strlen(hid->phys) + 1;
+-					if (len > _IOC_SIZE(cmd))
+-						len = _IOC_SIZE(cmd);
+-					ret = copy_to_user(user_arg, hid->phys, len) ?
+-						-EFAULT : len;
+-					break;
+-				}
++static long hidraw_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 +{
-+	char buf[256] = {0};
-+	int err;
-+	unsigned int bad_cmd;
++	struct inode *inode = file_inode(file);
++	unsigned int minor = iminor(inode);
++	struct hidraw *dev;
++	struct hidraw_list *list = file->private_data;
++	void __user *user_arg = (void __user *)arg;
++	int ret;
+ 
+-				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGRAWUNIQ(0))) {
+-					int len = strlen(hid->uniq) + 1;
+-					if (len > _IOC_SIZE(cmd))
+-						len = _IOC_SIZE(cmd);
+-					ret = copy_to_user(user_arg, hid->uniq, len) ?
+-						-EFAULT : len;
+-					break;
+-				}
+-			}
++	down_read(&minors_rwsem);
++	dev = hidraw_table[minor];
++	if (!dev || !dev->exist || hidraw_is_revoked(list)) {
++		ret = -ENODEV;
++		goto out;
++	}
 +
-+	/*
-+	 * craft an ioctl command with wrong _IOC_DIR bits
-+	 * HIDIOCGRAWNAME should have _IOC_READ, let's use _IOC_WRITE
-+	 */
-+	bad_cmd = _IOC(_IOC_WRITE, 'H', 0x04, sizeof(buf)); /* should be _IOC_READ */
++	if (_IOC_TYPE(cmd) != 'H') {
++		ret = -EINVAL;
++		goto out;
++	}
+ 
++	if (_IOC_NR(cmd) > HIDIOCTL_LAST || _IOC_NR(cmd) == 0) {
+ 		ret = -ENOTTY;
++		goto out;
+ 	}
 +
-+	/* try to get device name with wrong direction bits */
-+	err = ioctl(self->hidraw_fd, bad_cmd, buf);
-+	ASSERT_LT(err, 0) TH_LOG("HIDIOCGRAWNAME with wrong _IOC_DIR should have failed");
-+	ASSERT_EQ(errno, EINVAL) TH_LOG("expected EINVAL for wrong _IOC_DIR, got errno %d", errno);
++	ret = hidraw_fixed_size_ioctl(file, dev, cmd, user_arg);
++	if (ret != -EAGAIN)
++		goto out;
 +
-+	/* also test with _IOC_WRITE|_IOC_READ */
-+	bad_cmd = _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x04, sizeof(buf)); /* should be only _IOC_READ */
++	switch (_IOC_DIR(cmd)) {
++	case (_IOC_READ | _IOC_WRITE):
++		ret = hidraw_rw_variable_size_ioctl(file, dev, cmd, user_arg);
++		break;
++	case _IOC_READ:
++		ret = hidraw_ro_variable_size_ioctl(file, dev, cmd, user_arg);
++		break;
++	default:
++		/* Any other IOC_DIR is wrong */
++		ret = -EINVAL;
++	}
 +
-+	err = ioctl(self->hidraw_fd, bad_cmd, buf);
-+	ASSERT_LT(err, 0) TH_LOG("HIDIOCGRAWNAME with wrong _IOC_DIR should have failed");
-+	ASSERT_EQ(errno, EINVAL) TH_LOG("expected EINVAL for wrong _IOC_DIR, got errno %d", errno);
-+}
+ out:
+ 	up_read(&minors_rwsem);
+ 	return ret;
+diff --git a/include/uapi/linux/hidraw.h b/include/uapi/linux/hidraw.h
+index d5ee269864e07fcaba481fa285bacbd98739e44f..ebd701b3c18d9d7465880199091933f13f2e1128 100644
+--- a/include/uapi/linux/hidraw.h
++++ b/include/uapi/linux/hidraw.h
+@@ -48,6 +48,8 @@ struct hidraw_devinfo {
+ #define HIDIOCGOUTPUT(len)    _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x0C, len)
+ #define HIDIOCREVOKE	      _IOW('H', 0x0D, int) /* Revoke device access */
+ 
++#define HIDIOCTL_LAST		_IOC_NR(HIDIOCREVOKE)
 +
- /*
-  * Test HIDIOCSFEATURE ioctl to set feature report
-  */
+ #define HIDRAW_FIRST_MINOR 0
+ #define HIDRAW_MAX_DEVICES 64
+ /* number of reports to buffer */
 
 -- 
 2.51.0
