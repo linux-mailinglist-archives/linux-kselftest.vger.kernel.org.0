@@ -1,158 +1,132 @@
-Return-Path: <linux-kselftest+bounces-41364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2D45B54D67
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 14:24:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A646B54DD0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 14:32:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94A121881C37
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:20:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82996481A93
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:29:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD46A30C377;
-	Fri, 12 Sep 2025 12:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0ACB287248;
+	Fri, 12 Sep 2025 12:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a0J2vXtV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sXL3nQyy"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBC8307AE3;
-	Fri, 12 Sep 2025 12:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A03D303A13;
+	Fri, 12 Sep 2025 12:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757679094; cv=none; b=tRb5Jd0IcsGYPMBrD/4YR4f3iif3hbFOcAgH0ynP39KOw0YMukngVNgTGWt9S9MBK6zLbhnEHVo6R/qHuZiXNV9al2s0l+pPyc0r3j8irEUZYwGUQC1gTK1RD7X2qLN709DQ3PpvmffC/6Ssbu2YEUx6+hmTjuqoSptV1/rVNaU=
+	t=1757679969; cv=none; b=Js5T49fTQp/mBOWNyxhMZi8WjgXCoBGMfEsz/eFLP2DL4tevye40iWvgtJGnWaetP1Gi8uiPVKj+8aRF8tGgPiS456qqpRWhZj8hjOm/g/JBtgAVkyfMf8u9I16TQiAGZZ3oGEj25BRYDQgHNP/6UJuKz5wjHL8Z/+hdOJLoaE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757679094; c=relaxed/simple;
-	bh=XRHXIkOFKo+7035cNRrBYS4AXTjDo5unw4Qr62yGDW0=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JylvsrP5ThXNEw+rh1zyPBhnRKJeCkCVpDeOSzMpirTmJfMccu4G8J1RAQ7Mv5sNSRPojXmlbm7nvDKTEzgL+/LZRux3hYzLzDq81EOBEI3J280SauMuQtxrT/PVrq+AXZyT9ezzQE8cf2K/zkIZU0AZUf6AlzAbsosL9Qdepao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a0J2vXtV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AFC2C4CEF1;
-	Fri, 12 Sep 2025 12:11:34 +0000 (UTC)
+	s=arc-20240116; t=1757679969; c=relaxed/simple;
+	bh=V39Rz+1RHwUbOx8EKfTfq2XSOPa4SX/Yzry+drXGDGk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TU3BJfdj4hKN4IeYN3d2BOIogut2EfLmoQ5Arjx63EQ+EQXr10puTc91BKe8/XOorP6Ism3Til3PjkKGzmnjVgFg3Om1JJO//SIEfw9z+6b2o/93qwyaiMeEVFIAmpvYcf2BrmbrzvhV+JQjlU+qcP0K9kP0gNso1NCAk9WdYD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sXL3nQyy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA65EC4CEF1;
+	Fri, 12 Sep 2025 12:26:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757679094;
-	bh=XRHXIkOFKo+7035cNRrBYS4AXTjDo5unw4Qr62yGDW0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=a0J2vXtVQcgXKtlhg36EclpHdO5TWV0+E5eP6mUnhhft6bZE+UYwoVO5gQIXKiyY6
-	 M05n8cc0XTZLYqAl+S+Vy+3GK6+vjO8uMG0GnV3nuGerWKeyzujv9CKKiUTkF5WDSd
-	 pt94V79JVWG6GvonNI/l2/H2of8kjUYdX0H42/DdCT7YC5vg0SBKXVwVtq+WI+amZJ
-	 a6gxlIiLDqiyLMEifG0ZCcIv/eic7NTsgajrBEg/y3KYSEo4kQWxS+evyWFisGOyMC
-	 BXfK4eeyBdS5SnARYLycSD6C+pFbFh9mVekY1vgd3dmVwZWTc3vDYzj6AfpLROQuig
-	 zq+r2yIBt4f9A==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1ux2cm-00000005gFU-0GlJ;
-	Fri, 12 Sep 2025 12:11:32 +0000
-Date: Fri, 12 Sep 2025 13:11:31 +0100
-Message-ID: <86348rdg5o.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Itaru Kitayama <itaru.kitayama@gmail.com>
-Cc: Itaru Kitayama <itaru.kitayama@linux.dev>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	K Poulose Suzuki <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Subject: Re: [PATCH] PMCR_EL0.N is RAZ/WI. At least a build failes in Ubuntu 22.04 LTS. Remove the set function.
-In-Reply-To: <3FEB4D87-EEAF-4A21-BCBC-291A4A7C2230@gmail.com>
-References: <867by4c4v1.wl-maz@kernel.org>
-	<3FEB4D87-EEAF-4A21-BCBC-291A4A7C2230@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1757679969;
+	bh=V39Rz+1RHwUbOx8EKfTfq2XSOPa4SX/Yzry+drXGDGk=;
+	h=From:Subject:Date:To:Cc:From;
+	b=sXL3nQyyiODekMqyUC/PMc+/0S5c+Ri2nfG74xqfpgZrviRepbJnUkosMtqTxDmwe
+	 M/a7HwXuoJuPhPb89c77ItJjF3fhuSVnET9ylIJcmkwDfRLEZPWnLgAFuKq7l+dpq2
+	 UoyM2gu9aqst6EF7ObH5tjnxkWUl1qYXlxJyBHaJ2L4k49MHxM01UMyTA0jb9thWog
+	 gQACrqKfqnz1CHwTtV74X0Pft9zVSQVsVhrK0ruf56QwAue0RNtfN5D1TuZbnLG+my
+	 WewJ1f6g/KveqhmTMYNTor+mvm6mdHQEw1vS3hBuHvl+ZvkzW+eJgMqumDQNfx1pxm
+	 69BZazdmcKuQg==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 0/5] selftests: mptcp: avoid spurious errors on TCP
+ disconnect
+Date: Fri, 12 Sep 2025 14:25:49 +0200
+Message-Id: <20250912-net-mptcp-fix-sft-connect-v1-0-d40e77cbbf02@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: itaru.kitayama@gmail.com, itaru.kitayama@linux.dev, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, itaru.kitayama@fujitsu.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE0RxGgC/x2MQQqAMAzAviI9W5gTFf2KeBiz0x6sYxsiiH+3e
+ AwkeSBTYsowVQ8kujjzKQpNXYHfnWyEvCqDNbYzY2NRqOARi48Y+MYcCvpThHzBYMbOrYPrqe1
+ B+5hIlf89g2awvO8HGTzwiXAAAAA=
+X-Change-ID: 20250912-net-mptcp-fix-sft-connect-f095ad7a6e36
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2680; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=V39Rz+1RHwUbOx8EKfTfq2XSOPa4SX/Yzry+drXGDGk=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKOCIavPKjm/fuz+brPSrw7en4IObgFn088st/qeu29l
+ Cl6/rZtHaUsDGJcDLJiiizSbZH5M59X8ZZ4+VnAzGFlAhnCwMUpABPxsmVkuDzrBp/nKmaVVQXO
+ HqHX1dh2XFirunuScHj4x00BK6dX3WVkmLZdaPoT7cx5Gy/vmC+3jG3Oa+fSlOmXNs1d0NVn03C
+ yjxEA
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Fri, 12 Sep 2025 12:33:39 +0100,
-Itaru Kitayama <itaru.kitayama@gmail.com> wrote:
->=20
->=20
->=20
-> > On Sep 12, 2025, at 20:01, Marc Zyngier <maz@kernel.org> wrote:
-> >=20
-> > =EF=BB=BFOn Fri, 12 Sep 2025 09:27:40 +0100,
-> > Itaru Kitayama <itaru.kitayama@linux.dev> wrote:
-> >>=20
-> >> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-> >=20
-> > This isn't an acceptable commit message.
-> >=20
-> >> ---
-> >> Seen a build failure with old Ubuntu 22.04 LTS, while the latest relea=
-se
-> >> has no build issue, a write to the bit fields is RAZ/WI, remove the
-> >> function.
-> >> ---
-> >> tools/testing/selftests/kvm/arm64/vpmu_counter_access.c | 6 ------
-> >> 1 file changed, 6 deletions(-)
-> >>=20
-> >> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b=
-/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> >> index f16b3b27e32ed7ca57481f27d689d47783aa0345..56214a4430be90b3e1d840=
-f2719b22dd44f0b49b 100644
-> >> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> >> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> >> @@ -45,11 +45,6 @@ static uint64_t get_pmcr_n(uint64_t pmcr)
-> >>    return FIELD_GET(ARMV8_PMU_PMCR_N, pmcr);
-> >> }
-> >>=20
-> >> -static void set_pmcr_n(uint64_t *pmcr, uint64_t pmcr_n)
-> >> -{
-> >> -    u64p_replace_bits((__u64 *) pmcr, pmcr_n, ARMV8_PMU_PMCR_N);
-> >> -}
-> >> -
-> >> static uint64_t get_counters_mask(uint64_t n)
-> >> {
-> >>    uint64_t mask =3D BIT(ARMV8_PMU_CYCLE_IDX);
-> >> @@ -490,7 +485,6 @@ static void test_create_vpmu_vm_with_pmcr_n(uint64=
-_t pmcr_n, bool expect_fail)
-> >>     * Setting a larger value of PMCR.N should not modify the field, and
-> >>     * return a success.
-> >>     */
-> >> -    set_pmcr_n(&pmcr, pmcr_n);
-> >>    vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), pmcr);
-> >>    pmcr =3D vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0));
-> >>=20
-> >>=20
-> >=20
-> > So what are you fixing here? A build failure? A semantic defect?
-> > Something else? What makes this a valid change?
-> >=20
-> > Frankly, I have no idea.
-> >=20
-> > But KVM definitely allows PMCR_EL0.N to be written from userspace, and
-> > that's not going to change.
-> >=20
->=20
-> Then I=E2=80=99ll drop this patch.
+This series should fix the recent instabilities seen by MPTCP and NIPA
+CIs where the 'mptcp_connect.sh' tests fail regularly when running the
+'disconnect' subtests with "plain" TCP sockets, e.g.
 
-I'm not asking you to drop it, I'm asking you to explain. If you found
-a problem, let's discuss it and fix it. But as it stands, you're not
-giving me much to go on.
+  # INFO: disconnect
+  # 63 ns1 MPTCP -> ns1 (10.0.1.1:20001      ) MPTCP     (duration   996ms) [ OK ]
+  # 64 ns1 MPTCP -> ns1 (10.0.1.1:20002      ) TCP       (duration   851ms) [ OK ]
+  # 65 ns1 TCP   -> ns1 (10.0.1.1:20003      ) MPTCP     Unexpected revents: POLLERR/POLLNVAL(19)
+  # (duration   896ms) [FAIL] file received by server does not match (in, out):
+  # -rw-r--r-- 1 root root 11112852 Aug 19 09:16 /tmp/tmp.hlJe5DoMoq.disconnect
+  # Trailing bytes are:
+  # /{ga 6@=#.8:-rw------- 1 root root 10085368 Aug 19 09:16 /tmp/tmp.blClunilxx
+  # Trailing bytes are:
+  # /{ga 6@=#.8:66 ns1 MPTCP -> ns1 (dead:beef:1::1:20004) MPTCP     (duration   987ms) [ OK ]
+  # 67 ns1 MPTCP -> ns1 (dead:beef:1::1:20005) TCP       (duration   911ms) [ OK ]
+  # 68 ns1 TCP   -> ns1 (dead:beef:1::1:20006) MPTCP     (duration   980ms) [ OK ]
+  # [FAIL] Tests of the full disconnection have failed
 
-	M.
+These issues started to be visible after some behavioural changes in
+TCP, where too quick re-connections after a shutdown() can now be more
+easily rejected. Patch 3 modifies the selftests to wait, but this
+resolution revealed an issue in MPTCP which is fixed by patch 1 (a fix
+for v5.9 kernel).
 
---=20
-Without deviation from the norm, progress is not possible.
+Patches 2 and 4 improve some errors reported by the selftests, and patch
+5 helps with the debugging of such issues.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Note: The last two patches are not strictly fixes, but they are useful
+in case similar issues happen again. That's why they have been added
+here in this series for -net. If that's an issue, please drop them, and
+I can re-send them later on.
+
+---
+Matthieu Baerts (NGI0) (5):
+      mptcp: propagate shutdown to subflows when possible
+      selftests: mptcp: connect: catch IO errors on listen side
+      selftests: mptcp: avoid spurious errors on TCP disconnect
+      selftests: mptcp: print trailing bytes with od
+      selftests: mptcp: connect: print pcap prefix
+
+ net/mptcp/protocol.c                               | 16 ++++++++++++++++
+ tools/testing/selftests/net/mptcp/mptcp_connect.c  | 11 ++++++-----
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh |  6 +++++-
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     |  2 +-
+ 4 files changed, 28 insertions(+), 7 deletions(-)
+---
+base-commit: 2690cb089502b80b905f2abdafd1bf2d54e1abef
+change-id: 20250912-net-mptcp-fix-sft-connect-f095ad7a6e36
+
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
 
