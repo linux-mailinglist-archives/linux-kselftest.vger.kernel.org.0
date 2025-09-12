@@ -1,166 +1,204 @@
-Return-Path: <linux-kselftest+bounces-41312-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE302B549A2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:24:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABF10B54A57
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 12:50:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E8E3AA5F28
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 10:24:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15BD61883515
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Sep 2025 10:50:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 189DA2E1F16;
-	Fri, 12 Sep 2025 10:23:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DAB2FF167;
+	Fri, 12 Sep 2025 10:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b2A/X3Je"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="pIhrbsz6";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="3KzBQV3s";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="pIhrbsz6";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="3KzBQV3s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AED5286D73
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 10:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A787F2FE581
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 10:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757672621; cv=none; b=aa3U99lRsZZMfyyX2mgIBDrrD3hPQJhM25YmDbsugNVnKhksQKw415P+4lMk72M9pO6MjHGOyf3P795pPj/SA63WtH4aphexYBV3sBtlrCU/nSBaesRQajhKNbGhP+Ygh7xZA83QoHs+rB+CiCqT3bRIsj9O5tyfPEvBS0yKyTA=
+	t=1757674115; cv=none; b=KpNUdy0fF5UX/kdflc5naswaIOMaiZmkXCf40gNm2NBFFxZVztXqZyDuHLxCRYMzCKozDCFe62sS0e7FVc9DHfdVaBYw5JwPHpazzDGJsJE9xhKoqRSxcqTs/yncA4c/iaKKrFzJJtORIQckVl19fqrVWXypVLFT3S9/Cqb3SNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757672621; c=relaxed/simple;
-	bh=L8+Vfsd5NRO7vLKj/WDn0QKcl6cnx+8yrLmAU9BNATI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NQPSJPFrgOsEp1aPqofiWlZ0CVyak2aKCDf5gBxpzr7bXB1X8vmN2re1Q99ziFERT4QAtsTKfUuAviT2WceeRCKRmfgjwBH/FQr/POP23uTLFbeygsrvNzZ1+gdS9dXnmaRDYF6oUy05iMINLC85E+fuCct3+f4jWJpjvJoT3TY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b2A/X3Je; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2570bf605b1so16272475ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 03:23:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757672619; x=1758277419; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yxaMEqYA6uym+Ir6zcrN22UPH27k/nnjzDJpTYQxN6I=;
-        b=b2A/X3JeeiNdU9a6TFOgWkW505F23XXTIo+yGa7or+lZ+5rLICZQmIcLDUU6s4PpsB
-         ZA0+I+hhYXVeu5HLA5TYdRc2pAGq/Zdr4xdTuDjwSlF9JhxkUP8aS8hURAxNLHXFuXzn
-         jfYhj73nTGIuE6Nen2evckS1aWix1ux42nPwjTPbDr4mPF3wBkEuQ7Yc4CwujcVE7wsR
-         4e+zbIP7szNCUEJRZ7qfiXcS26scl5KusgHRWhb0pwfjhJPyI2zl30OaYAsmVYbyd8g7
-         wruupgH3GsUzMId5XJS6PklTlJVydzUIXU8iIur36eOp9HuHrzJ9BsYiHX/gT0KiKKRN
-         Gwyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757672619; x=1758277419;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yxaMEqYA6uym+Ir6zcrN22UPH27k/nnjzDJpTYQxN6I=;
-        b=OjBJMIFjl8jq/BjCXLHiGF+6BS+WQ0s2q8VHfZ/mbl4SBiVegEb0YCXrSIyRjJ4VRf
-         zaD/AVYndnAk5YKL+qofth3pUmAIyZ5jWl6BcNWYCn668C1pBVEM+zxei8WTqBSh0gqC
-         QxP00DhXu7vl1yq5YnexHZv1VmN+y5wmj1TZnJPsGYNFxtUQ+ilJT4KNz5vo/gz5ILgG
-         t/lbpJpinjtlTeZLcIg+dgCoZC9HO8urUDt0RonhR6Zb+8S206yeHDON3XPaSSovckEZ
-         9VgOAwo8TRFFBE2nzHTTCskTVIPCIqg7WMfNC5kPpL5CJL4XuYullzVy98TFQbotfrGg
-         zCUw==
-X-Forwarded-Encrypted: i=1; AJvYcCWp2SkgM3eZj1vtq3XQ+rTTAEzuK16wwPYE3f85ySPFYzeBWFGV6bhdAtQplLvyOLSgzo2zcH7bTkFiPnHkx7o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9yl3JyE6Q3lAq5MrVsc8s6K7q++MfwgfB3hWlljXgBUz4VCpj
-	HpwKcfqLZz1oLUm6zxb7R9WX3W4bXI+hQxbNPL1aXnC6yCRkC59tzax6rq368TipyUNV6Jr3PG+
-	j+CrscbipVVyCLJ8rWjKOXausPa04aNj9UvHVdHj6GoxVf0TPrR03GL8=
-X-Gm-Gg: ASbGncsP3yZUtZ96PW0Nz88Ll2TURgZsXebyhQVsjHI2Flpueme0xyHrRECQuxM5lJ9
-	ibpZwRviFSaq4rX/MttpDljPCotGRNK6mqwJrvV1MQZdEivi9XzdvDloL0pJJbknGBAA87kpc+I
-	pINYQGq9M2Hn/d5MyomfemfxDTowHYk2YS+Sh2PM4xgEOQ5oTGIr6t3M58bDfP4ExsBCAat1dBh
-	9Lmn+WYq1SDB8ADWmvNiqofWOAhgHFv9g569aeTN3sG4mDv+BZniyrneo4VamUCq5ENY/TR/YhV
-	hbNpUIM=
-X-Google-Smtp-Source: AGHT+IFnlh7Lcvev/z+g8geBZVyzuCDqftK69x/3dM4A4/rPwhVxriJu5LaQAhPmA/dUWQDP37JDEPq7LkU6t/uT414=
-X-Received: by 2002:a17:903:2407:b0:240:3c51:1063 with SMTP id
- d9443c01a7336-25d2576f18bmr30549565ad.23.1757672618671; Fri, 12 Sep 2025
- 03:23:38 -0700 (PDT)
+	s=arc-20240116; t=1757674115; c=relaxed/simple;
+	bh=xj8SKsDc1sxZr1H/BYrv7BC55oRBLD49zCpgs1E0VxQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I1AOstYuEZbQ3zn/x0DrN5k4IH1V4yD3YLeboyFneRxUD4J0BvX7xRh1o6egg1hfkv6yu0wYB+ZIfSsgfoYQluDqE5jjcOjKCcppfM4VYowx+XnB7pZpJBus8NQREqT5GeCi0l6ObwtzcgXJwdehRR7A92V9NtAAJbeLvumAIBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=pIhrbsz6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=3KzBQV3s; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=pIhrbsz6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=3KzBQV3s; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 8A1A220760;
+	Fri, 12 Sep 2025 10:48:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1757674110; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CWphaHK8OZGZX1V68Y5uJkPgW2mcaEuIYhBomIwfjhY=;
+	b=pIhrbsz6PFEg2rsKfYIDk9LSisUudy3RRRF+vPTEdTVNBEc/IYjMGMRlHJPMd81a3PeAPQ
+	enViOBHkrPb/ixVfVxnLyPU7+6VjTklFYkyeXlsUfBRq5C+jV7UXdmEmLyAdx4Q3d4ezXR
+	1O/cIWn77hOKnup2fdLIdwqygTz6oOk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1757674110;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CWphaHK8OZGZX1V68Y5uJkPgW2mcaEuIYhBomIwfjhY=;
+	b=3KzBQV3sfhI2xmW0tXlMKSTmNI2mUbzMU7tkf31yqUEPagskAIo4a6mTeoFEttV9DasuS1
+	kLhxxYyMXH7/23Ag==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1757674110; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CWphaHK8OZGZX1V68Y5uJkPgW2mcaEuIYhBomIwfjhY=;
+	b=pIhrbsz6PFEg2rsKfYIDk9LSisUudy3RRRF+vPTEdTVNBEc/IYjMGMRlHJPMd81a3PeAPQ
+	enViOBHkrPb/ixVfVxnLyPU7+6VjTklFYkyeXlsUfBRq5C+jV7UXdmEmLyAdx4Q3d4ezXR
+	1O/cIWn77hOKnup2fdLIdwqygTz6oOk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1757674110;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CWphaHK8OZGZX1V68Y5uJkPgW2mcaEuIYhBomIwfjhY=;
+	b=3KzBQV3sfhI2xmW0tXlMKSTmNI2mUbzMU7tkf31yqUEPagskAIo4a6mTeoFEttV9DasuS1
+	kLhxxYyMXH7/23Ag==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8C11E13869;
+	Fri, 12 Sep 2025 10:48:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id RcKSHnn6w2gcWwAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Fri, 12 Sep 2025 10:48:25 +0000
+Date: Fri, 12 Sep 2025 11:48:15 +0100
+From: Pedro Falcato <pfalcato@suse.de>
+To: "Roy, Patrick" <roypat@amazon.co.uk>
+Cc: "Thomson, Jack" <jackabt@amazon.co.uk>, 
+	"Kalyazin, Nikita" <kalyazin@amazon.co.uk>, "Cali, Marco" <xmarcalx@amazon.co.uk>, 
+	"derekmn@amazon.co.uk" <derekmn@amazon.co.uk>, Elliot Berman <quic_eberman@quicinc.com>, 
+	"willy@infradead.org" <willy@infradead.org>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"pbonzini@redhat.com" <pbonzini@redhat.com>, "maz@kernel.org" <maz@kernel.org>, 
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>, "joey.gouly@arm.com" <joey.gouly@arm.com>, 
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com" <yuzenghui@huawei.com>, 
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>, 
+	"chenhuacai@kernel.org" <chenhuacai@kernel.org>, "kernel@xen0n.name" <kernel@xen0n.name>, 
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>, 
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "alex@ghiti.fr" <alex@ghiti.fr>, 
+	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>, 
+	"hca@linux.ibm.com" <hca@linux.ibm.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>, 
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "luto@kernel.org" <luto@kernel.org>, 
+	"peterz@infradead.org" <peterz@infradead.org>, "tglx@linutronix.de" <tglx@linutronix.de>, 
+	"mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>, 
+	"hpa@zytor.com" <hpa@zytor.com>, "trondmy@kernel.org" <trondmy@kernel.org>, 
+	"anna@kernel.org" <anna@kernel.org>, "hubcap@omnibond.com" <hubcap@omnibond.com>, 
+	"martin@omnibond.com" <martin@omnibond.com>, "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>, 
+	"brauner@kernel.org" <brauner@kernel.org>, "jack@suse.cz" <jack@suse.cz>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "david@redhat.com" <david@redhat.com>, 
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, 
+	"vbabka@suse.cz" <vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>, 
+	"surenb@google.com" <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, 
+	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
+	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>, 
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>, 
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, "john.fastabend@gmail.com" <john.fastabend@gmail.com>, 
+	"kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>, 
+	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org" <jolsa@kernel.org>, 
+	"jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>, 
+	"peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com" <jannh@google.com>, 
+	"axelrasmussen@google.com" <axelrasmussen@google.com>, "yuanchu@google.com" <yuanchu@google.com>, 
+	"weixugc@google.com" <weixugc@google.com>, "hannes@cmpxchg.org" <hannes@cmpxchg.org>, 
+	"zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>, "shakeel.butt@linux.dev" <shakeel.butt@linux.dev>, 
+	"shuah@kernel.org" <shuah@kernel.org>, "seanjc@google.com" <seanjc@google.com>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, 
+	"linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>, "devel@lists.orangefs.org" <devel@lists.orangefs.org>, 
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v6 01/11] filemap: Pass address_space mapping to
+ ->free_folio()
+Message-ID: <2w22wsqar437lyp3w4bltyoql4ksn3exppkyaia5ogtnt2ttte@6nptj6ed4qnm>
+References: <20250912091708.17502-1-roypat@amazon.co.uk>
+ <20250912091708.17502-2-roypat@amazon.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYv77X+kKz2YT6xw7=9UrrotTbQ6fgNac7oohOg8BgGvtw@mail.gmail.com>
- <1e331ebb-3315-4cbe-b194-ccbeeaded4da@t-8ch.de>
-In-Reply-To: <1e331ebb-3315-4cbe-b194-ccbeeaded4da@t-8ch.de>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 12 Sep 2025 15:53:26 +0530
-X-Gm-Features: AS18NWBiNtyoZJdw5AR77Ehen6tmbxWoHZEhVULSIr8zN1kPljDdD8rhs__pSZI
-Message-ID: <CA+G9fYvrcRNBbg15UEcaZuYgs1pHU2i7h=zvJ2yHNo5i4fZ_nA@mail.gmail.com>
-Subject: Re: next-20250909: selftests/arm64/gcs/basic-gcs.c:390:30: error: use
- of undeclared identifier 'HWCAP_GCS'
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: open list <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, Mark Brown <broonie@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Ben Copeland <benjamin.copeland@linaro.org>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250912091708.17502-2-roypat@amazon.co.uk>
+X-Spamd-Result: default: False [-2.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[amazon.co.uk,quicinc.com,infradead.org,lwn.net,redhat.com,kernel.org,linux.dev,arm.com,huawei.com,xen0n.name,sifive.com,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.ibm.com,linux.intel.com,linutronix.de,alien8.de,zytor.com,omnibond.com,zeniv.linux.org.uk,suse.cz,linux-foundation.org,oracle.com,google.com,suse.com,iogearbox.net,gmail.com,fomichev.me,ziepe.ca,nvidia.com,cmpxchg.org,bytedance.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,lists.orangefs.org,kvack.org];
+	R_RATELIMIT(0.00)[to_ip_from(RL1bpf5rdkmpo98mj6oa9xanz3)];
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[89];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amazon.co.uk:email,suse.de:email]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -2.30
 
-Hi Thomas,
+On Fri, Sep 12, 2025 at 09:17:31AM +0000, Roy, Patrick wrote:
+> From: Elliot Berman <quic_eberman@quicinc.com>
+> 
+> When guest_memfd removes memory from the host kernel's direct map,
+> direct map entries must be restored before the memory is freed again. To
+> do so, ->free_folio() needs to know whether a gmem folio was direct map
+> removed in the first place though. While possible to keep track of this
+> information on each individual folio (e.g. via page flags), direct map
+> removal is an all-or-nothing property of the entire guest_memfd, so it
+> is less error prone to just check the flag stored in the gmem inode's
+> private data.  However, by the time ->free_folio() is called,
+> folio->mapping might be cleared. To still allow access to the address
+> space from which the folio was just removed, pass it in as an additional
+> argument to ->free_folio, as the mapping is well-known to all callers.
+> 
+> Link: https://lore.kernel.org/all/15f665b4-2d33-41ca-ac50-fafe24ade32f@redhat.com/
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> [patrick: rewrite shortlog for new usecase]
+> Signed-off-by: Patrick Roy <roypat@amazon.co.uk>
 
-On Fri, 12 Sept 2025 at 12:00, Thomas Wei=C3=9Fschuh <linux@weissschuh.net>=
- wrote:
->
-> Hi Naresh,
->
-> On 2025-09-12 00:48:47+0530, Naresh Kamboju wrote:
-> > The following build warnings / errors noticed on arm64 defconfig
-> > with clang-20 and gcc-13 toolchains on the Linux next-20250909
-> > till next-20250911 tag while building selftests/arm64.
-> >
-> > Regression Analysis:
-> > - New regression? Yes
-> > - Reproducibility? yes
-> >
-> > First seen on  next-20250909
-> >  Good: next-20250908
-> >  Bad: next-20250909 till next-20250911
-> >
-> > Test regression: next-20250909:
-> > selftests/arm64/gcs/basic-gcs.c:390:30: error: use of undeclared
-> > identifier 'HWCAP_GCS'
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > ## Build log
-> > selftests/arm64/gcs/basic-gcs.c:390:30: error: use of undeclared
-> > identifier 'HWCAP_GCS'
-> >   390 |         if (!(getauxval(AT_HWCAP) & HWCAP_GCS))
-> >       |                                     ^
-> > 1 error generated.
-> >
-> > The suspected commit pointing to,
-> >   kselftest/arm64/gcs: Use nolibc's getauxval()
-> >   a985fe638344492727528e52416211dda1c391d5
->
-> That suspicion looks correct. I am wondering a bit how this works for
-> the other selftests which use this symbol.
->
-> Can you give this one a try:
->
+Reviewed-by: Pedro Falcato <pfalcato@suse.de>
 
-I have applied this patch and tested and reported build regressions
-got fixed.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-> diff --git a/tools/testing/selftests/arm64/gcs/gcs-util.h b/tools/testing=
-/selftests/arm64/gcs/gcs-util.h
-> index c99a6b39ac14..816b497634d6 100644
-> --- a/tools/testing/selftests/arm64/gcs/gcs-util.h
-> +++ b/tools/testing/selftests/arm64/gcs/gcs-util.h
-> @@ -26,6 +26,10 @@ struct user_gcs {
->  };
->  #endif
->
-> +#ifndef HWCAP_GCS
-> +#define HWCAP_GCS (1UL << 32)
-> +#endif
-> +
->  /* Shadow Stack/Guarded Control Stack interface */
->  #define PR_GET_SHADOW_STACK_STATUS     74
->  #define PR_SET_SHADOW_STACK_STATUS      75
-
---
-Linaro LKFT
+-- 
+Pedro
 
