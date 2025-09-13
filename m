@@ -1,182 +1,211 @@
-Return-Path: <linux-kselftest+bounces-41438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A9C5B55EDF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Sep 2025 08:14:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EBB9B55FC8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Sep 2025 11:14:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 059173A1FB3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Sep 2025 06:14:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 393651B27DDC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Sep 2025 09:14:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A68F72E6CD2;
-	Sat, 13 Sep 2025 06:14:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCC0B2EA473;
+	Sat, 13 Sep 2025 09:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L6blC4sc"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FWHFl+il"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41A0381AF
-	for <linux-kselftest@vger.kernel.org>; Sat, 13 Sep 2025 06:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C874230BDF;
+	Sat, 13 Sep 2025 09:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757744073; cv=none; b=TX5vc5Oe6AHzbg8sea1jqZhjZBhzLL24lFBx8MerbiZEFgKfIk1wqkeDapwIItInfuta875/Wejl95490HFcbsOdoyiWiYayVWaAqFEcnCf+Y9rgFMpj7REvvWEkmQRT54/L0+1mlUBPUxCW6q6SmdEx0v0xhE+3kDMmxc0wSU8=
+	t=1757754865; cv=none; b=HbR6ZFsF16fm5+YEwx5IA8tz4+3vVH9kR/MHl4QYyA7WnqtQp61erCcopvvmuJPII5Ntz/xLqn6Na+rZxr0+nItDiahqQS/y8TuH5Sb3SCTglTMlSfaBYY+IgG7fFQDKmN8YU8JwH28qhhyDEVdvq4u7IC8P38LGqQ9eKiwBl4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757744073; c=relaxed/simple;
-	bh=aka9VwKHllHoJlb6yXFx6AebhdsgKvLlBtJD6Knv8g8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xj4R1KTI+gTh9dOZrUpUWnnLPZRuI0lU/dEucbo8LUMMiNgocqYF/6VB4kMgy8shDk4q0o70NVtoC1VI3uU1IdKYanad5xjSjWfqcDC5ISL1OD6ABNM0A/pWTA7G/MQSzt4+vST9ClkxulAl7Myq7BOoHhMPXfxLqljGAJSKFFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L6blC4sc; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-7282a09a72aso15795076d6.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 23:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757744070; x=1758348870; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XCvwV5WoqoYVySUmFtMHQmX2ZgogkxDxtUeViriH4AA=;
-        b=L6blC4scI58PAMg06Vndw/gvSEYVhePMVkgPsQmpVH8J1uelRwg5GDN0Do+xpFSBjw
-         vYLjySfLA8bDAh247QmpRa3m4rv69BuIOyMymY1PdPyvvyEW38z4DFQJ+uNQU/5R1d1q
-         FIPDSTFfsTjX0oCjbmZl0DTDe2uEnTYcAQ4nV4ll5YoT7xbNTSfYmx/aP50Y/MAduH5d
-         ELa+vwlNpi2XEb3zQ+NfgwXv12rcxGwSR6GN6P0BHD57x03UbOwBQC59TSM9cO97eKYJ
-         +2fBfaouFduGWovcZ+7+rpvM/9d7/6a/1EdEbWWqp6Rpy/OcUS2n+kJFvNP2eDTRbGGe
-         i5gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757744070; x=1758348870;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XCvwV5WoqoYVySUmFtMHQmX2ZgogkxDxtUeViriH4AA=;
-        b=m2IIl56s/v9KpHbv5GpDf5vHfee4dY8Zuzu8u04S3146+9TTutbmgpFtkSPINrwb3U
-         YM8wUbEXimLtw1gQO69pe0KO6ZKScYj5/RLWhUOcPpEPf5jak7Uq/KF6JBsPQwRNgcyp
-         W+fohoHKcg8wmPUdBqGcyCjzc2ud1Xr6PYH/nMkO0FbfNZWJ0bnGnHAqw/im8gUZkDjM
-         Ogi46in8nlFGpQoOrMyCg+Bpse7FCPAmqyov1bV8QDX27sfSFxO+JdMk/J+X0UyAKi61
-         evW6pG74c3mQ/q58n2y2i6uX+M6QaI4kHhjbY9UTRMwzSXSuOEDree25fOaHl9UOC2xy
-         naBA==
-X-Forwarded-Encrypted: i=1; AJvYcCWwAn0s9+6V2Bv9RI4ctN2fMZteKuffTs9fqiAKZ4/+6+5D+Uj7IfAhgTLVI6MAo82cd0UEFAYEsS/3h7z9GlE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1yLajshl+8GAHoJjqN4fkqb+KNM8izIJl+sRO64dH6f5OO2g5
-	owBRrdB3xK6RH3KGhc9X9hu8r4j1JAcK3jRTuSSa+RI/b6M4A+7wUF6OUBDDXyRBoCS806zzZrc
-	NQun9mmPSKDinClb11Z95fzLEBTXLJO02SIf3OEk1
-X-Gm-Gg: ASbGncs6rbRlDtRZ8QdoZx4Wjlp14PQyo2y6XxUjov7873bnku6mQqCIKLzBSw8BMo4
-	SiTsAdBqhH1G0E+gURzJ2wHTxjYnefU0T/7VqBp3bBxHHEXFECpaX4mTETntv3rXZiDkVIDgggd
-	5GSnnddMez/uo4AUssPWLGGKwQhiEh0iWX8suVdy/IMRQXrA3TvzmCs5kmrOt5Ne8QwKtvI5osr
-	CfH4UPNMkRWkFiUKOCT/Gxpi20+5wOarw==
-X-Google-Smtp-Source: AGHT+IHJrx6ozvbMDWYDP71LNjU3nqhgVJjdnL9fmTR9g9kuYNj5UraKu8PJNDMK54JfJxbFZNaR1S+PCFRCKfHmv5I=
-X-Received: by 2002:ad4:5cea:0:b0:766:ab7c:3e89 with SMTP id
- 6a1803df08f44-767c5621b4bmr71883766d6.64.1757744070327; Fri, 12 Sep 2025
- 23:14:30 -0700 (PDT)
+	s=arc-20240116; t=1757754865; c=relaxed/simple;
+	bh=+qnsQee1LyeezvoNoW0nM0bf6EfuWq5Ish2LHgXEN7Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gy9emYCJMHyiC/mTCZI+9wMC14XjzYnIwsQJujFfh+8TeRcBpfGxSz1VeLbqNBsVCUKJaHXPueechr+LkIFdXtR3Nkz1OQ3rRMD+dg17CJqi+b4vQnCtYh9BJx2EL2xI8j1xIRSaZJBqS5rZ1giQq+5OGnwegRop6NVY4US2FJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FWHFl+il; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58D7afXo023364;
+	Sat, 13 Sep 2025 09:14:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=FoiVZdP+olli/54KUOjFx7GwmsNZliJqSYCn3idr9
+	MQ=; b=FWHFl+iljlhYxHEcrTFKQHDYUZ0OLX7b6P6PWWfccwy+jcgwHhoxcDC85
+	KuwzHXvGyX/oXcdzOM6W5IRjsLObM8NQKCnnlxe2NHzE4M07rCgcu+QodSOdTGQG
+	udCf6aeJv6gWYB9G0nZnn4oPvmHSfuHufNuuwXUcX/T0uaeos2JQYjysApEdgy0B
+	Hie6lM+/9a6tf9c/mn8rTNo6f2dG+5AsBIG7bEELi82R9Iki3mmTtN3y6zuScULT
+	iUYVk+kueS/OiQPeXzGw8w/Add81WsStBCH9lF/yurS0jok+Ruz2OB66ppiHnHh/
+	WGpMkkxD8FPKNxFkCKP6VUHQBb3Bg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49509xrvnn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 13 Sep 2025 09:14:00 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58D9DxbU004683;
+	Sat, 13 Sep 2025 09:13:59 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49509xrvng-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 13 Sep 2025 09:13:59 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58D4emjC001198;
+	Sat, 13 Sep 2025 09:13:58 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 491203xpb7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 13 Sep 2025 09:13:58 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58D9Ds2A47382940
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 13 Sep 2025 09:13:54 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7946020043;
+	Sat, 13 Sep 2025 09:13:54 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C3D0520040;
+	Sat, 13 Sep 2025 09:13:44 +0000 (GMT)
+Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.33.146])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Sat, 13 Sep 2025 09:13:44 +0000 (GMT)
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
+        andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        iii@linux.ibm.com, shuah@kernel.org
+Subject: [PATCH v3 bpf-next] selftests/bpf: Fix arena_spin_lock selftest failure
+Date: Sat, 13 Sep 2025 14:43:37 +0530
+Message-ID: <20250913091337.1841916-1-skb99@linux.ibm.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250908-kunit-uml-pci-v2-1-d8eba5f73c9d@linutronix.de>
-In-Reply-To: <20250908-kunit-uml-pci-v2-1-d8eba5f73c9d@linutronix.de>
-From: David Gow <davidgow@google.com>
-Date: Sat, 13 Sep 2025 14:14:18 +0800
-X-Gm-Features: AS18NWAwSSI4FfaR6_Z8Utcpxcsk0azDBC1iBVWsOW6hluo678X_JayUhmQMwFs
-Message-ID: <CABVgOSmCNs2DQbyj=MAm-LHBRbEiCO1Adb-mSt+fbgOa8v4iYA@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2] kunit: Enable PCI on UML without triggering WARN()
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	linux-um@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTEzMDAyMCBTYWx0ZWRfX1C1+IaIOaBM7
+ A/zHZH/02LNF5rHF+6fw4W+aOT0mqcomI+iMlkXEie8zluqc2k8PzN3kbyn8bT8TqrcfZHv4RNm
+ aFKjhRxhbNsunQMW7pFJjmsEV7hUWQAlll3qyVhrrCqqAN4CZ9p1Y4VcwC/F8n7icSCp/FKut+p
+ W4b2if0kKK2Gpy1berG2oOIptvwD3a4AKdIUqw5WcBkvNgW46Tm1Otv5WRdbaiEeVsNIX0WABsa
+ eZNqtea+PfDtr/DZq5kka1zKoLmP5bh6RWWZtx8HKp+p5l6/OJt165BmjdlBqC0Ptd/6fH+MU6k
+ 9WFupfkojN/j60Yk3tKdSwxXH5T6n1W5z3LfkbtQChRnTgTGlX+rnvtP3aM/Xsk3+oi1KBAhm0C
+ nWM14lK0
+X-Authority-Analysis: v=2.4 cv=OPYn3TaB c=1 sm=1 tr=0 ts=68c535d8 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=VDBL6iswcQKEKxwn1pUA:9
+X-Proofpoint-GUID: NAWLiaGerAFNkwaix02iGaKY4vjUsgs3
+X-Proofpoint-ORIG-GUID: XwJnrVJ3HluXiykCE2VXzpV5TVpklbYB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-13_02,2025-09-12_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1015 phishscore=0 suspectscore=0 spamscore=0
+ bulkscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509130020
 
-On Mon, 8 Sept 2025 at 15:03, Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> Various KUnit tests require PCI infrastructure to work. All normal
-> platforms enable PCI by default, but UML does not. Enabling PCI from
-> .kunitconfig files is problematic as it would not be portable. So in
-> commit 6fc3a8636a7b ("kunit: tool: Enable virtio/PCI by default on UML")
-> PCI was enabled by way of CONFIG_UML_PCI_OVER_VIRTIO=3Dy. However
-> CONFIG_UML_PCI_OVER_VIRTIO requires additional configuration of
-> CONFIG_UML_PCI_OVER_VIRTIO_DEVICE_ID or will otherwise trigger a WARN() i=
-n
-> virtio_pcidev_init(). However there is no one correct value for
-> UML_PCI_OVER_VIRTIO_DEVICE_ID which could be used by default.
->
-> This warning is confusing when debugging test failures.
->
-> On the other hand, the functionality of CONFIG_UML_PCI_OVER_VIRTIO is not
-> used at all, given that it is completely non-functional as indicated by
-> the WARN() in question. Instead it is only used as a way to enable
-> CONFIG_UML_PCI which itself is not directly configurable.
->
-> Instead of going through CONFIG_UML_PCI_OVER_VIRTIO, introduce a custom
-> configuration option which enables CONFIG_UML_PCI without triggering
-> warnings or building dead code.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-> Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
-> ---
+For systems having CONFIG_NR_CPUS set to > 1024 in kernel config
+the selftest fails as arena_spin_lock_irqsave() returns EOPNOTSUPP.
+(eg - incase of powerpc default value for CONFIG_NR_CPUS is 8192)
 
-Reviewed-by: David Gow <davidgow@google.com>
+The selftest is skipped incase bpf program returns EOPNOTSUPP,
+with a descriptive message logged.
 
-Cheers,
--- David
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+---
 
-> Changes in v2:
-> - Rebase onto v6.17-rc1
-> - Pick up review from Johannes
-> - Link to v1: https://lore.kernel.org/r/20250627-kunit-uml-pci-v1-1-a622f=
-a445e58@linutronix.de
-> ---
->  lib/kunit/Kconfig                           | 7 +++++++
->  tools/testing/kunit/configs/arch_uml.config | 5 ++---
->  2 files changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> index c10ede4b1d2201d5f8cddeb71cc5096e21be9b6a..1823539e96da30e165fa8d395=
-ccbd3f6754c836e 100644
-> --- a/lib/kunit/Kconfig
-> +++ b/lib/kunit/Kconfig
-> @@ -106,4 +106,11 @@ config KUNIT_DEFAULT_TIMEOUT
->           If unsure, the default timeout of 300 seconds is suitable for m=
-ost
->           cases.
->
-> +config KUNIT_UML_PCI
-> +       bool "KUnit UML PCI Support"
-> +       depends on UML
-> +       select UML_PCI
-> +       help
-> +         Enables the PCI subsystem on UML for use by KUnit tests.
-> +
->  endif # KUNIT
-> diff --git a/tools/testing/kunit/configs/arch_uml.config b/tools/testing/=
-kunit/configs/arch_uml.config
-> index 54ad8972681a2cc724e6122b19407188910b9025..28edf816aa70e6f408d9486ef=
-ff8898df79ee090 100644
-> --- a/tools/testing/kunit/configs/arch_uml.config
-> +++ b/tools/testing/kunit/configs/arch_uml.config
-> @@ -1,8 +1,7 @@
->  # Config options which are added to UML builds by default
->
-> -# Enable virtio/pci, as a lot of tests require it.
-> -CONFIG_VIRTIO_UML=3Dy
-> -CONFIG_UML_PCI_OVER_VIRTIO=3Dy
-> +# Enable pci, as a lot of tests require it.
-> +CONFIG_KUNIT_UML_PCI=3Dy
->
->  # Enable FORTIFY_SOURCE for wider checking.
->  CONFIG_FORTIFY_SOURCE=3Dy
->
-> ---
-> base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-> change-id: 20250626-kunit-uml-pci-a2b687553746
->
-> Best regards,
-> --
-> Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
->
+Changes since v2:
+* Separated arena_spin_lock selftest fix patch from the arena
+  patchset as it has to go via bpf-next tree.
+* For EOPNOTSUPP set test_skip to 3, to differentiate it from
+  scenarios when run conditions are not met as suggested by Hari.
+* Tweaked message displayed on SKIP to remove display of online
+  cpus.
+
+v2:https://lore.kernel.org/all/20250829165135.1273071-1-skb99@linux.ibm.com/
+
+Changes since v1:
+Addressed comments from Alexei:
+* Removed skel->rodata->nr_cpus = get_nprocs() and its usage to get
+  currently online cpus(as it needs to be updated from userspace).
+
+v1:https://lore.kernel.org/all/20250805062747.3479221-1-skb99@linux.ibm.com/
+
+---
+ .../selftests/bpf/prog_tests/arena_spin_lock.c      | 13 +++++++++++++
+ tools/testing/selftests/bpf/progs/arena_spin_lock.c |  5 ++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
+index 0223fce4db2b..693fd86fbde6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
+@@ -40,8 +40,13 @@ static void *spin_lock_thread(void *arg)
+ 
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+ 	ASSERT_OK(err, "test_run err");
++
++	if (topts.retval == -EOPNOTSUPP)
++		goto end;
++
+ 	ASSERT_EQ((int)topts.retval, 0, "test_run retval");
+ 
++end:
+ 	pthread_exit(arg);
+ }
+ 
+@@ -63,6 +68,7 @@ static void test_arena_spin_lock_size(int size)
+ 	skel = arena_spin_lock__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "arena_spin_lock__open_and_load"))
+ 		return;
++
+ 	if (skel->data->test_skip == 2) {
+ 		test__skip();
+ 		goto end;
+@@ -86,6 +92,13 @@ static void test_arena_spin_lock_size(int size)
+ 			goto end_barrier;
+ 	}
+ 
++	if (skel->data->test_skip == 3) {
++		printf("%s:SKIP: CONFIG_NR_CPUS exceed the maximum supported by arena spinlock\n",
++		       __func__);
++		test__skip();
++		goto end_barrier;
++	}
++
+ 	ASSERT_EQ(skel->bss->counter, repeat * nthreads, "check counter value");
+ 
+ end_barrier:
+diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+index c4500c37f85e..086b57a426cf 100644
+--- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
++++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+@@ -37,8 +37,11 @@ int prog(void *ctx)
+ #if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ 	unsigned long flags;
+ 
+-	if ((ret = arena_spin_lock_irqsave(&lock, flags)))
++	if ((ret = arena_spin_lock_irqsave(&lock, flags))) {
++		if (ret == -EOPNOTSUPP)
++			test_skip = 3;
+ 		return ret;
++	}
+ 	if (counter != limit)
+ 		counter++;
+ 	bpf_repeat(cs_count);
+-- 
+2.43.5
+
 
