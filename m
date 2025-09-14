@@ -1,137 +1,99 @@
-Return-Path: <linux-kselftest+bounces-41447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD1D0B56A3A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Sep 2025 17:29:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0C9CB56C9B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Sep 2025 23:40:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C88D13B67EE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Sep 2025 15:29:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCF8D1898D16
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Sep 2025 21:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D8742DAFCA;
-	Sun, 14 Sep 2025 15:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27232DE6F1;
+	Sun, 14 Sep 2025 21:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b="Zrd6Wehq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m6BElGVE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp1.iitb.ac.in (smtpd9.iitb.ac.in [103.21.126.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDC92586CE
-	for <linux-kselftest@vger.kernel.org>; Sun, 14 Sep 2025 15:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.21.126.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73569289E17;
+	Sun, 14 Sep 2025 21:40:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757863749; cv=none; b=apaaNPd9J9VdbA7TbJQ7oejt7oOUJDA/AfebrMMfOo7Jg/W3yvhZFIHm1x/T+AUPAKwXEzuCTPy1doStmbu/yk6ze2BYjKIHBCLZ1OmA2tytr2b1+sgn5zFMTZkybhNNYB6rNd7qmmivVe1h8MaB8S1JhAkkfKG1c+1OEYvMrRc=
+	t=1757886007; cv=none; b=U/btRKnijs+hZBM5DZhL0i7lMvJ8njSzp/Au2oe807SKvbMPP6CqF/BEV1kKgdKgWP1IfMcURYQQRfNOd7PLwXPFNKArN+1UiOZB9GF07xIiWy8rbMjDsq4+hEFcfr5lNg3zMr7uTEfUoFZ6vDFEb+EgTHFTnnRfdylawy5zhUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757863749; c=relaxed/simple;
-	bh=LPkK3jmQR33RMe+1MmDw4dMC0OqA+N1omWuhB09kNq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Rl1Uuck3jShfjQEtk9uRGIyZgN+WmKSiCREihs99kWmdY04RjJc2lGxq1nJBB8Je96jF6xdUCHwzSZJiozrVdFRSETnq4i8j4B8BKkEsTCDrQeJjQ9gAmf6pUhWVHplQdzL1v7LevE1tX/wFO6nY1yuShO2OTvNi7HnosdSvFhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in; spf=pass smtp.mailfrom=ee.iitb.ac.in; dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b=Zrd6Wehq; arc=none smtp.client-ip=103.21.126.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ee.iitb.ac.in
-Received: from ldns2.iitb.ac.in (ldns2.iitb.ac.in [10.200.12.2])
-	by smtp1.iitb.ac.in (Postfix) with SMTP id 59A31104D01F
-	for <linux-kselftest@vger.kernel.org>; Sun, 14 Sep 2025 20:58:52 +0530 (IST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.iitb.ac.in 59A31104D01F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iitb.ac.in; s=mail;
-	t=1757863732; bh=LPkK3jmQR33RMe+1MmDw4dMC0OqA+N1omWuhB09kNq4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Zrd6WehqccKCXVVYd3Kf/c/5vP4PTj6N/JoyZ75d1MVzeknjjQ0B9d/P9wTBf7Og9
-	 CTYOhilWPjFutOXJnIChqjtv/YGKDnhoFCCiYXUHJPGLC9pFL4LOK7eaDGJdEnDJsI
-	 NNCh+WF2WsMcnlMdzKiKKXA8nMYOXU+RZDAYgMm0=
-Received: (qmail 23281 invoked by uid 510); 14 Sep 2025 20:58:52 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns2 (envelope-from <akhilesh@ee.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/26337} 
- Clear:RC:1(10.200.1.25):SA:0(0.0/7.0):. Processed in 5.04255 secs; 14 Sep 2025 20:58:52 +0530
-X-Spam-Level: 
-X-Spam-Pyzor: Reported 0 times.
-X-Envelope-From: akhilesh@ee.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns2.iitb.ac.in) (10.200.1.25)
-  by ldns2.iitb.ac.in with SMTP; 14 Sep 2025 20:58:47 +0530
-Received: from bhairav.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	by ldns2.iitb.ac.in (Postfix) with ESMTP id CBFCA3414EA;
-	Sun, 14 Sep 2025 20:58:46 +0530 (IST)
-Received: from bhairav-test.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	(Authenticated sender: akhilesh)
-	by bhairav.ee.iitb.ac.in (Postfix) with ESMTPSA id 9DF5C1E8130D;
-	Sun, 14 Sep 2025 20:58:45 +0530 (IST)
-Date: Sun, 14 Sep 2025 20:58:41 +0530
-From: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-To: shuah@kernel.org, lizhijian@fujitsu.com
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akhileshpatilvnit@gmail.com, skhan@linuxfoundation.org
-Subject: [PATCH] selftests: watchdog: skip ping loop if WDIOF_KEEPALIVEPING
- not supported
-Message-ID: <20250914152840.GA3047348@bhairav-test.ee.iitb.ac.in>
+	s=arc-20240116; t=1757886007; c=relaxed/simple;
+	bh=fFoTBzYY/Y4wGukFdKJpceVN2SwaaFe6OdyADb7VuWk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=bVII1lY++aap1xFoLwGUezJFnZ+zypXMw9m2zVAZcFtyevGpyffV3JATJUyg+75Rfw48iB6cqJOH3/2pcKIufhe/LVGU+jEiDzppJQJxb4j7gowao4duU+5m8vtZaX+bekjJ+DIBxn7wPUaUocDk9yXdWp912jZ1LpVu92yvtaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m6BElGVE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D30C4CEF0;
+	Sun, 14 Sep 2025 21:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757886007;
+	bh=fFoTBzYY/Y4wGukFdKJpceVN2SwaaFe6OdyADb7VuWk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=m6BElGVEewbhw82WXRh+Q8GhAsRKkWaAmFJXK72tS6N8J0Uc7cVf5WEcbBBx9DKZR
+	 7sdo4e6Owitrr2d+xY0zOZKEBm85rSuayl9FJhduDYzj0xyXU9lcS7r/Ad2bQHdNd6
+	 qv3WT9xh0c+C3f6A3NAAY+asyJaObKrT+Nc3rjdgxfUysa9eLqelbhxgLoGwTT7yaU
+	 L3dOM+ByhUiKPUQBf3kEEJNFADYQyExfDyYDpABqEyV9WzS2c5cVcEx/tDoSPDemAi
+	 0EAndWIIO4Td88nY6YYYooiw7LyONobGnLKYzdnV0HlA4bVu3IMBCnHvvyeJhemT4d
+	 51FCiqzZ3FnUQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EACD239B167D;
+	Sun, 14 Sep 2025 21:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 0/2] net: dst_metadata: fix DF flag extraction on
+ tunnel rx
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175788600875.3557884.5011136723968202976.git-patchwork-notify@kernel.org>
+Date: Sun, 14 Sep 2025 21:40:08 +0000
+References: <20250909165440.229890-1-i.maximets@ovn.org>
+In-Reply-To: <20250909165440.229890-1-i.maximets@ovn.org>
+To: Ilya Maximets <i.maximets@ovn.org>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dev@openvswitch.org, echaudro@redhat.com, aconole@redhat.com,
+ shuah@kernel.org, jhs@mojatatu.com, dcaratti@redhat.com, idosch@idosch.org
 
-Check if watchdog device supports WDIOF_KEEPALIVEPING option before
-entering keep_alive() ping test loop. Fix watchdog-test silently looping
-if ioctl based ping is not supported by the device. Exit from test in
-such case instead of stucking in loop executing failing keep_alive()
+Hello:
 
-Fixes: d89d08ffd2c5 ("selftests: watchdog: Fix ioctl SET* error paths to take oneshot exit path")
-Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
----
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Testing: 
+On Tue,  9 Sep 2025 18:54:14 +0200 you wrote:
+> Two patches here, first fixes the issue where tunnel core doesn't
+> actually extract DF bit from the outer IP header, even though both
+> OVS and TC flower allow matching on it.  More details in the commit
+> message.
+> 
+> The second is a selftest for openvswitch that reproduces the issue,
+> but also just adds some basic coverage for the tunnel metadata
+> extraction and related openvswitch uAPI.
+> 
+> [...]
 
-# wdt_test_1 -f /dev/watchdog0 -i
-watchdog_info:
- identity:              m41t93 rtc Watchdog
- firmware_version:      0
-Support/Status: Set timeout (in seconds)
-Support/Status: Watchdog triggers a management or other external alarm not a reboot
+Here is the summary with links:
+  - [net,v2,1/2] net: dst_metadata: fix IP_DF bit not extracted from tunnel headers
+    https://git.kernel.org/netdev/net/c/a9888628cb2c
+  - [net,v2,2/2] selftests: openvswitch: add a simple test for tunnel metadata
+    https://git.kernel.org/netdev/net/c/6cafb93c1f2a
 
-# wdt_test_1 -f /dev/watchdog0 -d -t 5 -p 2 -e
-Watchdog card disabled.
-Watchdog timeout set to 5 seconds.
-Watchdog ping rate set to 2 seconds.
-Watchdog card enabled.
-WDIOC_KEEPALIVE not supported by this device
-
-without this change 
-# wdt_test_2 -f /dev/watchdog0 -d -t 5 -p 2 -e
-Watchdog card disabled.
-Watchdog timeout set to 5 seconds.
-Watchdog ping rate set to 2 seconds.
-Watchdog card enabled.
-Watchdog Ticking Away!
-^C
-(Where test stuck here forver silently)
----
- tools/testing/selftests/watchdog/watchdog-test.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index a1f506ba5578..4f09c5db0c7f 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -332,6 +332,12 @@ int main(int argc, char *argv[])
- 	if (oneshot)
- 		goto end;
- 
-+	/* Check if WDIOF_KEEPALIVEPING is supported */
-+	if (!(info.options & WDIOF_KEEPALIVEPING)) {
-+		printf("WDIOC_KEEPALIVE not supported by this device\n");
-+		goto end;
-+	}
-+
- 	printf("Watchdog Ticking Away!\n");
- 
- 	/*
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
