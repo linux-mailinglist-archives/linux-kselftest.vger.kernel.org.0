@@ -1,99 +1,106 @@
-Return-Path: <linux-kselftest+bounces-41448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0C9CB56C9B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Sep 2025 23:40:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C4FFB56CFB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 01:37:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCF8D1898D16
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Sep 2025 21:40:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B931817506B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Sep 2025 23:37:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27232DE6F1;
-	Sun, 14 Sep 2025 21:40:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F08261588;
+	Sun, 14 Sep 2025 23:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m6BElGVE"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="NFc6/z88"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73569289E17;
-	Sun, 14 Sep 2025 21:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F5524E00F
+	for <linux-kselftest@vger.kernel.org>; Sun, 14 Sep 2025 23:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757886007; cv=none; b=U/btRKnijs+hZBM5DZhL0i7lMvJ8njSzp/Au2oe807SKvbMPP6CqF/BEV1kKgdKgWP1IfMcURYQQRfNOd7PLwXPFNKArN+1UiOZB9GF07xIiWy8rbMjDsq4+hEFcfr5lNg3zMr7uTEfUoFZ6vDFEb+EgTHFTnnRfdylawy5zhUQ=
+	t=1757893051; cv=none; b=gtcvrKn4RHjghohIkktauK4cMIGYPV3ladKnQhPABjiAuV7L1AmHE8GvF1yMQTOc7+akQh8Q/r9t+Ilz9KBlHGAP0iTTnUEB+MjQS0o5Hu196beoM9cd+v5Hwi16LG8J/1d/UchTEkBcm8w6mzcTUfujArJAEZ0V9vfKgag12Cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757886007; c=relaxed/simple;
-	bh=fFoTBzYY/Y4wGukFdKJpceVN2SwaaFe6OdyADb7VuWk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bVII1lY++aap1xFoLwGUezJFnZ+zypXMw9m2zVAZcFtyevGpyffV3JATJUyg+75Rfw48iB6cqJOH3/2pcKIufhe/LVGU+jEiDzppJQJxb4j7gowao4duU+5m8vtZaX+bekjJ+DIBxn7wPUaUocDk9yXdWp912jZ1LpVu92yvtaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m6BElGVE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D30C4CEF0;
-	Sun, 14 Sep 2025 21:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757886007;
-	bh=fFoTBzYY/Y4wGukFdKJpceVN2SwaaFe6OdyADb7VuWk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=m6BElGVEewbhw82WXRh+Q8GhAsRKkWaAmFJXK72tS6N8J0Uc7cVf5WEcbBBx9DKZR
-	 7sdo4e6Owitrr2d+xY0zOZKEBm85rSuayl9FJhduDYzj0xyXU9lcS7r/Ad2bQHdNd6
-	 qv3WT9xh0c+C3f6A3NAAY+asyJaObKrT+Nc3rjdgxfUysa9eLqelbhxgLoGwTT7yaU
-	 L3dOM+ByhUiKPUQBf3kEEJNFADYQyExfDyYDpABqEyV9WzS2c5cVcEx/tDoSPDemAi
-	 0EAndWIIO4Td88nY6YYYooiw7LyONobGnLKYzdnV0HlA4bVu3IMBCnHvvyeJhemT4d
-	 51FCiqzZ3FnUQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EACD239B167D;
-	Sun, 14 Sep 2025 21:40:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1757893051; c=relaxed/simple;
+	bh=odlrz20IXfc9MUnEwi5nRwEYXd3V+Xkv2SYseouBhLA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=oYfVwm/UDAx6oXtZrQYL9kjhFjjWQ8LZ157v3QFcUhifHjTsQLfrV3vFxXYOunbBqX7yaL20xGcx2OLyLgwe0A7eIengxEWkXNp6MLMQxv4BqvwRL2C/EwgUBhbf/nUMyY9s+j+rO02rNWJcQQJXdmAMC+SESe09oKwzWmPDJnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=NFc6/z88; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 36617240101
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 01:37:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net; s=2017;
+	t=1757893041; bh=5xTBfcIgxXN2CX1CLHSz7aQ83atl75CzIOg3qYAIU7w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 From;
+	b=NFc6/z88ZyrxSxe1iPsQkkT3DK9pVl/ccf72vNiNCOfqRw9Luzza/fQzjeezsH89n
+	 0elwQm4LSB9Y1lvYvaTEw4oBCu+cw3Jjj+c5CjDMGN+7U9itUtKtFGbKtURRHs7xcQ
+	 0Bzizfz44ilnJLTGgaQsswnqa0WycxGbKZJA/vGfOK6U3oKLc5gAdyQBPt/rEijmiy
+	 /Ye+d0SXaIaBCHJ5Dqr3e/UAnwICURhA/50aNrsCKkL48DEpktLfeIyqkgvHA1Sbfo
+	 EnGL8Qk/QhF8IBdCS0foF/ScppWTyE0BfTJIHD/Ow/bh6i4dYQB5koYCwOdwc/Nlmf
+	 6A6rmxUBn29wQ==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4cQ4MB58Twz6tn4;
+	Mon, 15 Sep 2025 01:37:10 +0200 (CEST)
+From: Charalampos Mitrodimas <charmitro@posteo.net>
+To: syzbot <syzbot+9767c7ed68b95cfa69e6@syzkaller.appspotmail.com>
+Cc: alexei.starovoitov@gmail.com,  andrii@kernel.org,  ast@kernel.org,
+  bpf@vger.kernel.org,  daniel@iogearbox.net,  davem@davemloft.net,
+  eddyz87@gmail.com,  edumazet@google.com,  haoluo@google.com,
+  horms@kernel.org,  jiayuan.chen@linux.dev,  john.fastabend@gmail.com,
+  jolsa@kernel.org,  kpsingh@kernel.org,  kuba@kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  martin.lau@linux.dev,  mykolal@fb.com,  netdev@vger.kernel.org,
+  pabeni@redhat.com,  sdf@fomichev.me,  shuah@kernel.org,  song@kernel.org,
+  syzkaller-bugs@googlegroups.com,  tj@kernel.org,  yangfeng@kylinos.cn,
+  yonghong.song@linux.dev
+Subject: Re: [syzbot] [net?] WARNING: suspicious RCU usage in corrupted (3)
+In-Reply-To: <68bf3893.050a0220.192772.0885.GAE@google.com> (syzbot's message
+	of "Mon, 08 Sep 2025 13:12:03 -0700")
+References: <68bf3893.050a0220.192772.0885.GAE@google.com>
+Date: Sun, 14 Sep 2025 23:37:15 +0000
+Message-ID: <87h5x4obbt.fsf@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 0/2] net: dst_metadata: fix DF flag extraction on
- tunnel rx
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175788600875.3557884.5011136723968202976.git-patchwork-notify@kernel.org>
-Date: Sun, 14 Sep 2025 21:40:08 +0000
-References: <20250909165440.229890-1-i.maximets@ovn.org>
-In-Reply-To: <20250909165440.229890-1-i.maximets@ovn.org>
-To: Ilya Maximets <i.maximets@ovn.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- dev@openvswitch.org, echaudro@redhat.com, aconole@redhat.com,
- shuah@kernel.org, jhs@mojatatu.com, dcaratti@redhat.com, idosch@idosch.org
+Content-Type: text/plain
 
-Hello:
+syzbot <syzbot+9767c7ed68b95cfa69e6@syzkaller.appspotmail.com> writes:
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 7f12c33850482521c961c5c15a50ebe9b9a88d1e
+> Author: Charalampos Mitrodimas <charmitro@posteo.net>
+> Date:   Wed Jun 11 17:20:43 2025 +0000
+>
+>     net, bpf: Fix RCU usage in task_cls_state() for BPF programs
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13745562580000
+> start commit:   079e5c56a5c4 bpf: Fix error return value in bpf_copy_from_..
+> git tree:       bpf-next
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c6c517d2f439239
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9767c7ed68b95cfa69e6
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114915f4580000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15566170580000
+>
+> If the result looks correct, please mark the issue as fixed by replying with:
+>
+> #syz fix: net, bpf: Fix RCU usage in task_cls_state() for BPF programs
 
-On Tue,  9 Sep 2025 18:54:14 +0200 you wrote:
-> Two patches here, first fixes the issue where tunnel core doesn't
-> actually extract DF bit from the outer IP header, even though both
-> OVS and TC flower allow matching on it.  More details in the commit
-> message.
-> 
-> The second is a selftest for openvswitch that reproduces the issue,
-> but also just adds some basic coverage for the tunnel metadata
-> extraction and related openvswitch uAPI.
-> 
-> [...]
+Correct, also did test-run to make sure.
 
-Here is the summary with links:
-  - [net,v2,1/2] net: dst_metadata: fix IP_DF bit not extracted from tunnel headers
-    https://git.kernel.org/netdev/net/c/a9888628cb2c
-  - [net,v2,2/2] selftests: openvswitch: add a simple test for tunnel metadata
-    https://git.kernel.org/netdev/net/c/6cafb93c1f2a
+#syz fix: net, bpf: Fix RCU usage in task_cls_state() for BPF programs
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+C. Mitrodimas
 
-
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
