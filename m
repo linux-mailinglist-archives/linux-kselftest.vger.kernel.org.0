@@ -1,173 +1,126 @@
-Return-Path: <linux-kselftest+bounces-41450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DE4CB56DA5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 02:44:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9D47B57059
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 08:33:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37FD91773E7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 00:44:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8521E3B7747
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 06:33:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72DC91D86FF;
-	Mon, 15 Sep 2025 00:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E81C27A92B;
+	Mon, 15 Sep 2025 06:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ezRECmN0"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="iB0ibLlr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B711C5F2C
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 00:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421021F2361;
+	Mon, 15 Sep 2025 06:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757897049; cv=none; b=Edg2QY2U+hMYXDmgxGJNNC7MDRE40M6a+89skmk+WIwJ6AT3cg/2W0hHkUznexgL8YVF4w9aUB8v2oaKLr6XskQrTvDQQ6iYzxZuDmc/Aery8pTgYYnqoEZGjxh8545Qiq5J2tSqo7lEtErlH5lr3puodcBhFvvtMewcRC1Tfw8=
+	t=1757918000; cv=none; b=g/S+CPWQeVnx7mLIvTQIHVdAL4jz7KCDCHdDoDwbHElEvqLgl4NOrnuK8BC/saSE9xATVvxE7YAb4LVgfk9EVw79NU5LPm3zox5mMkRPx+3btILMMv2xl2SZBeb+BfBtDYqWZaNjI6md++MOwEE973Z39Wljih6x8vDsZ1Z49Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757897049; c=relaxed/simple;
-	bh=aA8qj6lRb3xePM94d10e4Y4cI1pxwAPWJSkyEKnf/Zo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JAMHZ47Tl5QcqL6P1Sa+70VnlrZ+X4BdUo1ZGzc30/f1BisfPnVXj/aDBiUEDGYWZm+murY85WVnO3jLNFPPB4cGI+QMoVKDgCVZ3eSmA6bwXII//nJeeryJ0tN5M7Z+TnJufHB+d2kXIwkBE+bAbYh6luJQN0tfuBhWJvHIhLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ezRECmN0; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4b796ff6d45so358881cf.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 14 Sep 2025 17:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757897045; x=1758501845; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V9JaDewgxuozpkxda6xKseXUycmdfaWorgRDXhlzyRo=;
-        b=ezRECmN0a4nK9kCzUpB+/lYvlQSMQlQCpSdX9Jpjx4TgeBsPGrEehTdeIAV4GK2qwx
-         Qs22HVTDByhu5MHfg3o34iBVzCTP31hl8p7tS9Xy4y4bcH4k5K2xGschCXCOcwlyTCGC
-         PTmBzeIMiRfULtg0Qx3I5BgslLQM2vwQNhEDNCwuDq61XrXIsOrpVGwTXlFyCNSAQScb
-         NBA4b5JDyCXfzSkFeo+weMPaCwpJezPgya0aun9F8jXyhc4YTQljzW2Y3f7KKSJ5ur+G
-         xfmnc94RaGISrlA+nG0HXS0h4gblzLwhnGPEmfwux3feD+8sohwY1A443F34F9A1kSYl
-         LRaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757897045; x=1758501845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V9JaDewgxuozpkxda6xKseXUycmdfaWorgRDXhlzyRo=;
-        b=nwLGwPAUbEPyr0Lvo62IajjRKQZ9kNktHk1rCGM8K7gNTmm6uVYh3IJ66wQbtIseBg
-         nMXJsTXhxEtndu10RSViWrNoOEne+3x/g9rHYDoJ75gJ1DuCRQARriT33h7h/zGnkhCt
-         DkbnHgroAQqoB3DVVpltl4D7L+Xu8jBwrrtKdls5gmJzpz8AOencr1lZ9pcTKdbKiEJN
-         bgCdS4YZggqGKbjvs/jHTevLWsT5MulqPCOrf3OcTNIm79p5PwNSu58N/8WCfOOk/mDp
-         Hqn010hc4XSoHEZssgtTxN77IilFMtx9CQP6jNh3l45pl6F1ZBA09n7wPx2v4UfMMbN6
-         7hCA==
-X-Forwarded-Encrypted: i=1; AJvYcCULOFbl3itnEw6JKNgidDz9U4zBXtbmEE9MnFfq9ipNpCRJ7gsoaiqfyyRapafRFEC7Gq0vKxnsipk7CZM2QQ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrL2j4JsSgge4p//7PLLmspK0DhVcY45C45y9ZnWtNPWM7YN+F
-	KvhCq5gog5fpI3k869Zo8JF+hTjpFS3DE2z+z0+TmcAB2UgJkIo3DV00/ZWdbxEeXoJZBSIGBk4
-	/VjUTw5OSpN3eDq3WfPE97ayz8mduGIgZA40T4b/L
-X-Gm-Gg: ASbGncsSTJqTa6Z0YyDokIbWYD1cuRgN59jxeLGJo1cQJX1A93yGemnVgXCpZFL6xir
-	7PGaBhM1KUwTsi7lsi7hCc4PDsec/W3+Xd5uksZXVeejT8EvCcn6WUb4bLh+lodX9h1/mUgAJPj
-	GyJKyO1DX1wwoMr1WjqRhVBUZHzTXN/CfvmdsDtXiTf3KAdjp92EWfZmTsEbidcmjHOXM8TBXyK
-	7QnTY/1Fj3/ngZkukciWXU=
-X-Google-Smtp-Source: AGHT+IEezB3iSLbeJTHsIwywK29EKKbUJtnk62B10GeCdyT9bGxf+jf23KN9V20U3FFXbSgM6H7iFnxQMLHkzklqJuw=
-X-Received: by 2002:a05:622a:900f:b0:4b3:7533:c1dd with SMTP id
- d75a77b69052e-4b78b98e1ecmr8313771cf.1.1757897045275; Sun, 14 Sep 2025
- 17:44:05 -0700 (PDT)
+	s=arc-20240116; t=1757918000; c=relaxed/simple;
+	bh=QlPxaZpQgAbJ15RgCwCxR2W4D+X5bJYrlbORaI22aqg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZReHTIuU1Q6CKMSDNpRDpwg1z8TXEqhlu+rzOxw6fF83rF2IiuiBFasJrkLrw1z3sF/xg+OAdj721l78cQ8Zn1xXHDpS9fpARtUO1gh1uY+gdo6Bh0YbTvCOf6SlrBMwvQvMYztsL+sUccTW5SB74N6Vp9TjYDBfUofUQ7QWI8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=iB0ibLlr; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=QlPxaZpQgAbJ15RgCwCxR2W4D+X5bJYrlbORaI22aqg=;
+	t=1757917999; x=1759127599; b=iB0ibLlrQzr7wy7mTR3wVlZtM1tW+Dvb9bTAcNPpdqEcP97
+	ZXgFeZx/7Tsv4GCH78ZhlKnAPYfcTqjposb3icB17MVqJBB5r4QmAN3/PZxlllz0XU8A7BCAbyo9S
+	T3MSYimLd6nSgK6SRwk9CiPcDGiSGjXgDdoVkWoz3NKozSnRrSEUeV6WoR2jaBY7PrdYCM4W4EpB5
+	7BLxS41xGD1a05iOgDy1NsyWyhJxgxjUCr8287iquvg/AU4gpFqEQcQkRdf1xpeb3XdwYQwhezXJg
+	nYRoyrHRQYmU5a4W2/fGkUvbrQCXnj51Z9MCt99P+SfUa6pIeUi5MicJcLyueNUw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1uy2lx-00000005sPh-0Vis;
+	Mon, 15 Sep 2025 08:33:09 +0200
+Message-ID: <8e75d6cc3847899ba8d6a0cbd0ef3ac57eabf009.camel@sipsolutions.net>
+Subject: Re: [PATCH 1/4] PCI: Support FIXUP quirks in modules
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Brian Norris <briannorris@chromium.org>, Bjorn Helgaas
+ <bhelgaas@google.com>,  Luis Chamberlain	 <mcgrof@kernel.org>, Petr Pavlu
+ <petr.pavlu@suse.com>, Daniel Gomez	 <da.gomez@kernel.org>
+Cc: linux-pci@vger.kernel.org, David Gow <davidgow@google.com>, Rae Moar	
+ <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, Sami Tolvanen	
+ <samitolvanen@google.com>, Richard Weinberger <richard@nod.at>, Wei Liu	
+ <wei.liu@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	kunit-dev@googlegroups.com, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ 	linux-um@lists.infradead.org
+Date: Mon, 15 Sep 2025 08:33:08 +0200
+In-Reply-To: <20250912230208.967129-2-briannorris@chromium.org> (sfid-20250913_010956_669404_FC913C9D)
+References: <20250912230208.967129-1-briannorris@chromium.org>
+	 <20250912230208.967129-2-briannorris@chromium.org>
+	 (sfid-20250913_010956_669404_FC913C9D)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250808152850.2580887-4-surenb@google.com> <20250914114308.3024033-1-clm@meta.com>
-In-Reply-To: <20250914114308.3024033-1-clm@meta.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Sun, 14 Sep 2025 17:43:54 -0700
-X-Gm-Features: AS18NWCmk4aMAnU5waOHNrHwd6qTif_tgIS8NTe99BvH87FvfzNuXoMxBTE1cSY
-Message-ID: <CAJuCfpGuvyRj6zxPuJDzCcGz_-x7feycsCkNQT0+Nzn4oUYcSA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] fs/proc/task_mmu: execute PROCMAP_QUERY ioctl
- under per-vma locks
-To: Chris Mason <clm@meta.com>
-Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
-	lorenzo.stoakes@oracle.com, david@redhat.com, vbabka@suse.cz, 
-	peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org, 
-	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
-	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
-	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
-	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, tjmercier@google.com, 
-	kaleshsingh@google.com, aha310510@gmail.com, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-malware-bazaar: not-scanned
 
-On Sun, Sep 14, 2025 at 6:24=E2=80=AFAM Chris Mason <clm@meta.com> wrote:
->
-> On Fri,  8 Aug 2025 08:28:49 -0700 Suren Baghdasaryan <surenb@google.com>=
- wrote:
->
-> > Utilize per-vma locks to stabilize vma after lookup without taking
-> > mmap_lock during PROCMAP_QUERY ioctl execution. If vma lock is
-> > contended, we fall back to mmap_lock but take it only momentarily
-> > to lock the vma and release the mmap_lock. In a very unlikely case
-> > of vm_refcnt overflow, this fall back path will fail and ioctl is
-> > done under mmap_lock protection.
-> >
-> > This change is designed to reduce mmap_lock contention and prevent
-> > PROCMAP_QUERY ioctl calls from blocking address space updates.
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > Acked-by: SeongJae Park <sj@kernel.org>
-> > ---
-> >  fs/proc/task_mmu.c | 103 +++++++++++++++++++++++++++++++++++++--------
-> >  1 file changed, 85 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > index c0968d293b61..e64cf40ce9c4 100644
-> > --- a/fs/proc/task_mmu.c
-> > +++ b/fs/proc/task_mmu.c
-> > @@ -132,6 +132,12 @@ static void release_task_mempolicy(struct proc_map=
-s_private *priv)
->
-> [ ... ]
->
-> > +static struct vm_area_struct *query_vma_find_by_addr(struct proc_maps_=
-locking_ctx *lock_ctx,
-> > +                                                  unsigned long addr)
-> > +{
-> > +     struct mm_struct *mm =3D lock_ctx->mm;
-> > +     struct vm_area_struct *vma;
-> > +     struct vma_iterator vmi;
-> > +
-> > +     if (lock_ctx->mmap_locked)
-> > +             return find_vma(mm, addr);
-> > +
-> > +     /* Unlock previously locked VMA and find the next one under RCU *=
-/
-> > +     unlock_ctx_vma(lock_ctx);
-> > +     rcu_read_lock();
-> > +     vma_iter_init(&vmi, mm, addr);
-> > +     vma =3D lock_next_vma(mm, &vmi, addr);
-> > +     rcu_read_unlock();
-> > +
-> > +     if (!vma)
-> > +             return NULL;
-> > +
-> > +     if (!IS_ERR(vma)) {
-> > +             lock_ctx->locked_vma =3D vma;
-> > +             return vma;
-> > +     }
-> > +
-> > +     if (PTR_ERR(vma) =3D=3D -EAGAIN) {
-> > +             /* Fallback to mmap_lock on vma->vm_refcnt overflow */
-> > +             mmap_read_lock(mm);
->
-> I know it's just a (very rare) fallback, but should we be using
-> mmap_read_lock_killable() for consistency?  I can see this impacting oom
-> kills or other times we really want to be able to get rid of procs.
+On Fri, 2025-09-12 at 15:59 -0700, Brian Norris wrote:
+> The PCI framework supports "quirks" for PCI devices via several
+> DECLARE_PCI_FIXUP_*() macros. These macros allow arch or driver code to
+> match device IDs to provide customizations or workarounds for broken
+> devices.
+>=20
+> This mechanism is generally used in code that can only be built into the
+> kernel, but there are a few occasions where this mechanism is used in
+> drivers that can be modules. For example, see commit 574f29036fce ("PCI:
+> iproc: Apply quirk_paxc_bridge() for module as well as built-in").
+>=20
+> The PCI fixup mechanism only works for built-in code, however, because
+> pci_fixup_device() only scans the ".pci_fixup_*" linker sections found
+> in the main kernel; it never touches modules.
+>=20
+> Extend the fixup approach to modules.
 
-That's a good idea. From a quick look it seems safe to fail with
--EINTR here, which will propagate all the way to do_procmap_query().
-Do you want to post a fixup patch?
-Thanks,
-Suren.
+This _feels_ a bit odd to me - what if you reload a module, should the
+fixup be done twice?=C2=A0Right now this was not possible in a module, whic=
+h
+is a bit of a gotcha, but at least that's only one for developers, not
+for users (unless someone messes up and puts it into modular code, as in
+the example you gave.)
 
->
-> -chris
+Although, come to think of it, you don't even apply the fixup when the
+module is loaded, so what I just wrote isn't really true. That almost
+seems like an oversight though, now the module has to be loaded before
+the PCI device is enumerated, which is unlikely to happen in practice?
+But then we get the next gotcha - the device is already enumerated, so
+the fixups cannot be applied at the various enumeration stages, and
+you're back to having to load the module before PCI enumeration, which
+could be tricky, or somehow forcing re-enumeration of a given device
+from userspace, but then you're firmly in "gotcha for the user"
+territory again ...
+
+I don't really have any skin in this game, but overall I'd probably
+argue it's better to occasionally have to fix things such as in the
+commit you point out but have a predictable system, than apply things
+from modules.
+
+Perhaps it'd be better to extend the section checking infrastructure to
+catch and error out on these sections in modules instead, so we catch it
+at build time, rather than finding things missing at runtime?
+
+And yeah, now I've totally ignored the kunit angle, but ... not sure how
+to combine the two requirements if they are, as I think, conflicting.
+
+johannes
 
