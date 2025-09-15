@@ -1,145 +1,151 @@
-Return-Path: <linux-kselftest+bounces-41523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FD07B584D0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 20:41:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBBD7B58533
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 21:15:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68E7C7A83D3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 18:40:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8568418997F4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 19:15:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3EDF2BE048;
-	Mon, 15 Sep 2025 18:41:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A16281358;
+	Mon, 15 Sep 2025 19:14:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RQh6+HDj"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jlEJqrmt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462DE27F010
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 18:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB823281526
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 19:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757961701; cv=none; b=WHjZDXpl/yyGzNOo1xtlEWELif41NKT/jlKMlgzApTD6q5AfwmBnH6X22RHu18RO8CpeYmtazQlkvs6YwhpeyX/RJCqKfjh3BOe960v5shWuHfeEjkLM9Qfp+9gjM1aYCd+CWAiyTAat7/b7PvtipLNhCJ+bWduJh6udsJtgmMg=
+	t=1757963696; cv=none; b=UqBGkW9nLIQgWpK+ny+z8yt46eY42UAUs/WIR1x7iiH4py0hh/aLk9vUj42T/+gIPUTuaavKLcpTKXZsiLRvufy+CLUg7Y8raY4uojtZ17WY6InWglaUHAlrGR3Od8dw+APmTN02AldsViCtCu59N8TUL76be77d+6qFvjUj/UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757961701; c=relaxed/simple;
-	bh=oPccXBrUqI8/MvE8k9QrGmavp+NZUnAV7TpP14XIh1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t8qlAO5SWukn5e1ycucqn4v/WJY0X1i/Tv4Rpeq+gc19Ve4JDZz/dYSBqTDX7Wg0L6BkIP77OYy1yGhPehggWsQQ3mwOSIGI48YSDZ4eXyRCWjx0KcTdhPDmcH9zZb7JGzYx9LLqKASDUi4xuP7aOyS8cdHgg3ENAS8lN3H9ZhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=RQh6+HDj; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-76e4f2e4c40so3944731b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 11:41:39 -0700 (PDT)
+	s=arc-20240116; t=1757963696; c=relaxed/simple;
+	bh=c/xwwXA3LmBOBhBu2xW7scBMnY4EehI2985j3EdXFks=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PM8T1+3KJWlCN7y7CUsPuJyKbVnTPAJ8U1rshCYad9mxfFqU6iphfatO/T8Ohl0f9bU6GJU7v72kT0xE0ddZm2UGNg47nLOJ7mu3oOyC9eRwrA5cFc4Yuiu3teccRxP44Nczo6S81VM38ljRut4uppwwQwUejUGVabK8vFEUI9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jlEJqrmt; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7742adc1f25so3158025b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 12:14:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1757961699; x=1758566499; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvNrOR4ellqZqvuE2ABZzj31gMsgVuW0rC+wrpkvP4k=;
-        b=RQh6+HDjWB8BIpncYrlpe38iW5hNnBqKNpT/1uDM85K/0//qGxzY3Ck5WLFTqOCUGO
-         MXAKljODka1QYTxPJV2v6OWBdyvXryogLe2JPPvRr44yB5bqVfBtY9qQ0IQ+cyMJ6xT6
-         rEqgVVmjJq9SgXkW2XcEaYLZ4c7zfckcqqnus=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757961699; x=1758566499;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1757963694; x=1758568494; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yvNrOR4ellqZqvuE2ABZzj31gMsgVuW0rC+wrpkvP4k=;
-        b=DfF1xqX3PJh/i5lXnqhKLKujTnxy1kFETu8ta8OTLiMEEZJfObyRnbFRCWFTUtic5U
-         e8HFQBoQndlENklIRHQsc80e/uYZ+VFrbaQcT1E01UdgDFLjrjeAXO8goPZOvNwUhaiq
-         hAxGYM+Fz7EjpOCOdb9qJIIOh6TKQtOtA2x9BKsuYDVgRY6FxYYzm0J2hVS+Kn0j26WU
-         tllOLFCib19N2pWV6Lv69YXek8sNeW1OTELs8IJZaqDMT4sb1xSqfRNgE3BU/gVw/P0F
-         M0292yM/PIrmeU8UKhYNQ2+fZPTFjUyNKwusk/GVRwRcOLCbwYvGmxacA87m4d3EcEiv
-         mYYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX9DKzlxx9ot4VI1/zKKo1Dyf8oynARkvv3nwUsklaFIL0PWqpoObqpjCjFoKGfABcIMrpOgBWfnKZPL2HCo/Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz78YZ6oHmaKUJjMcxd4bPGqSRrcy+Exqgm25xEsN0m4kje2FaX
-	3l19bFE/H1+ltHOgqeIU/uraQQNp92hHH8LgKMzy2ERJTXSPKzz1xEE1zWf8q4PZBA==
-X-Gm-Gg: ASbGnct/qLLE8Ls4LpI7EaZU3Ao37FIpuyq5lTZhBfspGl5SnrXJ+Pofq8LKXKFsjVc
-	CTY4RQKi8/bLGTTe8r9aSvz6LlanFHYrtTd1rLmmHyQSxb5CZVLX2nvR4icWYDRqE1tyX1c8FBZ
-	2e3tIxG04dW2JTT1UwBte2N1C0BFYOB11qjuAUT9FopwwCVVRtYOHlt0qMlV6YpQXJccfRTx88x
-	eARTDXck+dzfMD5l3xIEoIPF/il9mnqI5vJnL+z4cBQ1p51GIb/ML4lAClAnxuna/rjCuVTBeQj
-	5E6B0Mz+pIK0eC2P1JWXrkP52RZzaH1OCjXe3THN/xvBAX0jJfrc+5dm+jhzDLIj9pIlrQXdqGm
-	M0N6+ML37bPyRn0L0q9lS2Im5dhzzdZOifY/TiS3lTyO7gqeFq8LxiqII/weoNtL43hUYqiQ=
-X-Google-Smtp-Source: AGHT+IGlRm1d0pxmlp5QnmWl5T2hIZtYHRH5ZefBsxntjPmY3kpOuBh7Py9dWQ+bly9aiTvcXCvOzw==
-X-Received: by 2002:a05:6a00:9289:b0:772:4759:e433 with SMTP id d2e1a72fcca58-7761209bdeemr15688778b3a.2.1757961699464;
-        Mon, 15 Sep 2025 11:41:39 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e14:7:fd49:49b1:16e7:2c97])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-77607b33c45sm13983580b3a.71.2025.09.15.11.41.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Sep 2025 11:41:38 -0700 (PDT)
-Date: Mon, 15 Sep 2025 11:41:37 -0700
-From: Brian Norris <briannorris@chromium.org>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>, linux-pci@vger.kernel.org,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Richard Weinberger <richard@nod.at>, Wei Liu <wei.liu@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	kunit-dev@googlegroups.com,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	linux-um@lists.infradead.org
-Subject: Re: [PATCH 0/4] PCI: Add support and tests for FIXUP quirks in
- modules
-Message-ID: <aMhd4REssOE-AlYw@google.com>
-References: <20250912230208.967129-1-briannorris@chromium.org>
- <aMgZJgU7p57KC0DL@infradead.org>
+        bh=x6wqGfRu2qI7+46L6ERmQDqDyxlRm+K7+bHyAwd1/ys=;
+        b=jlEJqrmtHfQvrHt+RJ2K77Bi1DMrt2z4sYHpbdXzBuWZEJBMMFFrfCYuYjFcO9/zbx
+         sYbYKLTurMtBAaYl5T42NHK0TZctBCNI2dWU2qlXeUDvbZQIk8Wk+XHHzK3IQucLAYeY
+         g11iC1fV+fgrfdvGQ7mpJTMFrwiCXqgXgB/7yc7OuEZ7J0N98TPy9vwDdrMVDoj22cdF
+         K/ADqFZTSHa4JYaFXV/QZoqlbsWdTKOwXXq1VXLXvD8wNh57PHzYDW3Gc2kh94u6+q0k
+         aUBVVDt0/uknwv8D51oQ0b9PlfsB8rHPRcQuD/cg10wlI7er1wSWIT50Zv8MRqK4Of5x
+         FQ/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757963694; x=1758568494;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x6wqGfRu2qI7+46L6ERmQDqDyxlRm+K7+bHyAwd1/ys=;
+        b=THfcyfzZ44k/RdKk5gMdEx7oKzJBmyPbL8xtzVaWkRJ/iV9a47Fb7Su/MtUWr+yiKh
+         YU1U/eJcQdkZtFkXPneQP0HSzsk1d3Af+jDTzJCLrd0RYwO7zmzbqOVq/9fr/Z59oZU5
+         PL1gDtJ3dRKMiLJuW1mKns77p/E/y+JWWVl96kV4hZZMRLaWTEz7OcmVqlg2S/TFU/sq
+         Xc00TtvqEXrwyimQiTbmC+1hgAvh04Jr60IKDRw6eQfe3VBwt+Sdgm5GWyZOuErrZ1jG
+         RIIy+roNuP0vkH5MpYEkwWohqf4MI/Yr+Cp7M1GpZbyBEgrRagaEeQJg/sbiXNODBi3q
+         nFgg==
+X-Forwarded-Encrypted: i=1; AJvYcCXtaqu6Xtpoc23r72Ojmiqigxp51muyOO1uetZDy18RJbbuO1IvhN2FYLIuQc8x9i4E9j4ljo/IfhD/wHf8BhU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8YKF1D+R2wjqfKGsnpC+HTsGQBNOYrx0NlgmAAMo9fzcU2Fxs
+	DMjpn6JjNGLRxXIGG5B0KNQfyGnHfGB5HKpE73eDScNyXTRqDFZoyOMXS8jnFwgTo9z7dJ4HzT4
+	f5egwrKxrJxUeY/I3SAPGcXTG+ESYSLdjW5wh7nJk8Q==
+X-Gm-Gg: ASbGnctwu6RofOZZXEM9DrtIsbtmnDQ/InNf5n8i2NTCZev2y+shexGFqKr23vEEQR+
+	Fg3Xpgemew4ihqQmasDISavJnKjHE8vwEAF0esgUV1yM0NOjBFTAhszlQCS12WkOxLPhgwdtKjQ
+	jv8VaMuZqyszGotOKYhHT6h7OgzX3O/PXT3tgQDCZt+vWRR/1X1QaWcMvtzXIuwQH6cB8Uset2w
+	6d0Nskx3hSiqgJGXtuBq4ZHJPPexzpz3n9IDZXI2YU2mcEQklHUJL00jupuphZKbKoGcabnDC+7
+	JdK22g==
+X-Google-Smtp-Source: AGHT+IFS5Yosk8zDvCLXFq8KmRAPDnuqfaDSdxmgmvOa6yUNvkUlqGro+dILUrXNR4yBf3K+Z0YAEwYFzYRDWuMc2Nk=
+X-Received: by 2002:a17:903:40d1:b0:267:bd66:14f3 with SMTP id
+ d9443c01a7336-267bd661815mr9354435ad.51.1757963694201; Mon, 15 Sep 2025
+ 12:14:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aMgZJgU7p57KC0DL@infradead.org>
+References: <CA+G9fYv77X+kKz2YT6xw7=9UrrotTbQ6fgNac7oohOg8BgGvtw@mail.gmail.com>
+ <1e331ebb-3315-4cbe-b194-ccbeeaded4da@t-8ch.de> <965c8d7e-c5f2-4bd8-ab7c-c3116632f015@sirena.org.uk>
+ <5e4d9943-3a8d-4281-9007-f49bfc66dc6d@weissschuh.net> <b9b8b8cf-4920-4f9d-bcea-bea913058601@weissschuh.net>
+ <a1dc9839-ab45-4dd6-9eeb-4bbc35bf8d90@sirena.org.uk> <5fe12804-2538-42c5-b5c7-66d36ff947d9@t-8ch.de>
+In-Reply-To: <5fe12804-2538-42c5-b5c7-66d36ff947d9@t-8ch.de>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 16 Sep 2025 00:44:42 +0530
+X-Gm-Features: AS18NWAPyThDdNoP11CbNq-0STFMKwn1jS9ssO9hoUB8yYX9018L0FgtP4-g6Ow
+Message-ID: <CA+G9fYsnPBYoeVMzQJMCPA1JGhcJXr53Y-_uOMKdB_3D7ZGQNQ@mail.gmail.com>
+Subject: Re: next-20250909: selftests/arm64/gcs/basic-gcs.c:390:30: error: use
+ of undeclared identifier 'HWCAP_GCS'
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Mark Brown <broonie@kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Ben Copeland <benjamin.copeland@linaro.org>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Christoph,
+On Mon, 15 Sept 2025 at 14:53, Thomas Wei=C3=9Fschuh <linux@weissschuh.net>=
+ wrote:
+>
+> On 2025-09-12 12:14:00+0100, Mark Brown wrote:
+> > On Fri, Sep 12, 2025 at 01:07:58PM +0200, Thomas Wei=C3=9Fschuh wrote:
+> >
+> > > The Makefile does *not* use -nostdinc, so the nolibc program probably=
+ finds the toolchain's glibc asm/hwcap.h.
+> > > There also doesn't seem to be a static arm64 hwcap header in tools/in=
+clude in the first place.
+> > > I am still wondering how this works for the other tests.
+> >
+> > make headers_install puts a copy in usr/include, probably we just need
+> > to include that in the include path.
+>
+> Naresh, could you test the patch below?
+> The other custom $(CC) rules in the gcs directory are also not
+> respecting $(CFLAGS), but I'll leave these for now.
 
-On Mon, Sep 15, 2025 at 06:48:22AM -0700, Christoph Hellwig wrote:
-> On Fri, Sep 12, 2025 at 03:59:31PM -0700, Brian Norris wrote:
-> > This series primarily adds support for DECLARE_PCI_FIXUP_*() in modules.
-> > There are a few drivers that already use this, and so they are
-> > presumably broken when built as modules.
-> 
-> That's a reall bad idea, because it allows random code to insert quirks
-> not even bound to the hardware they support.
+I have applied this patch on top of Linux next-20250912 tag and
+tested and reported build regressions got fixed.
 
-I see fixups in controller drivers here:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-drivers/pci/controller/dwc/pci-imx6.c
-drivers/pci/controller/dwc/pci-keystone.c
-drivers/pci/controller/dwc/pcie-qcom.c
-drivers/pci/controller/pci-loongson.c
-drivers/pci/controller/pci-tegra.c
-drivers/pci/controller/pcie-iproc-bcma.c
-drivers/pci/controller/pcie-iproc.c
+> diff --git a/tools/testing/selftests/arm64/gcs/Makefile b/tools/testing/s=
+elftests/arm64/gcs/Makefile
+> index d2f3497a9..1fbbf0ca1 100644
+> --- a/tools/testing/selftests/arm64/gcs/Makefile
+> +++ b/tools/testing/selftests/arm64/gcs/Makefile
+> @@ -14,11 +14,11 @@ LDLIBS+=3D-lpthread
+>  include ../../lib.mk
+>
+>  $(OUTPUT)/basic-gcs: basic-gcs.c
+> -       $(CC) -g -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostd=
+lib \
+> -               -static -include ../../../../include/nolibc/nolibc.h \
+> +       $(CC) $(CFLAGS) -fno-asynchronous-unwind-tables -fno-ident -s -no=
+stdlib -nostdinc \
+> +               -static -I../../../../include/nolibc -include ../../../..=
+/include/nolibc/nolibc.h \
+>                 -I../../../../../usr/include \
+>                 -std=3Dgnu99 -I../.. -g \
+> -               -ffreestanding -Wall $^ -o $@ -lgcc
+> +               -ffreestanding $^ -o $@ -lgcc
+>
+>  $(OUTPUT)/gcs-stress-thread: gcs-stress-thread.S
+>         $(CC) -nostdlib $^ -o $@
+>
 
-Are any of those somehow wrong?
-
-And if they are not wrong, then is this a good reason to disallow making
-these drivers modular? (Yes, few of them are currently modular; but I
-don't see why that *must* be the case.)
-
-I agree, as with many kernel features, there are plenty of ways to use
-them incorrectly. But I'm just trying to patch over one rough edge about
-how to use them incorrectly, and I don't really see why it's such a bad
-idea.
-
-> So no, modules should not allow quirks, but the kernel should probably
-> be nice enough to fail compilation when someone is attemping that
-> instead of silently ignoring the quirks.
-
-Sure, if consensus says we should not support this, I'd definitely like
-to make this failure mode more obvious -- likely a build error.
-
-Thanks for your thoughts,
-Brian
+- Naresh
 
