@@ -1,106 +1,129 @@
-Return-Path: <linux-kselftest+bounces-41473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E30B574D3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 11:25:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7273B576CD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 12:42:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0CB13A4A34
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 09:23:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52AAF44568F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 10:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3742F3C29;
-	Mon, 15 Sep 2025 09:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E8082FD7A8;
+	Mon, 15 Sep 2025 10:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="mT+NeYvz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EqSLhXHh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1387D2ECEB8;
-	Mon, 15 Sep 2025 09:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1185D2FD1DB;
+	Mon, 15 Sep 2025 10:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757928237; cv=none; b=Hl5+9yyQeV0NqrQADH7irk+1OoHDfmAoFtOs3VMOtNcH7GZIJNdxkvO8Fu5BGaXT2xLVz/4wML0rs+IFrCIpd6TJg9McwP2irOp3aQ47GfYxCQh6i1fmPXiP5/uW84Py7bQu75gYgzw4eJitqvy+iWXG7BVjy3QmZQbC4d8bZVo=
+	t=1757932821; cv=none; b=EYTtBDKGoRTlI6uk5fLM5LFpiGTL5spWDelBv5pSsCPxpHPcyEnfdpyrqRNUla1MQJxUaRUy/sPpg/JLgn4SbAjmKhWJZ+nf07L1nK5Gy+Z5haDSFWkwiEHesE/fOT9qS7dvasXACY6ezZeW9TlhOe4q7loYL/QV2fuBQU7K2zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757928237; c=relaxed/simple;
-	bh=ibrtgmyavezo7/rV24wGdikXdfg56Q20YZWEB+mLWa0=;
+	s=arc-20240116; t=1757932821; c=relaxed/simple;
+	bh=Nzk/WGSFbYXU/3XfPyxSdJhM2+qxUftU2FcBdAr8OJY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HOq+u1UC9RxXat8VIIpGh1jfeR7MrGSeDnNZaWmdXt15KKP2N3mjldhOc1BZ5R9hhYBbSfbBJkuIa290aax0ecwjfOtK8ToBnz+EPiSTIrHi/svDJP9MEL5VKuIpBNnK9tZDEtdoyxiu/YGcstekZu/0/raqzhuQw2viLXAPpmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=mT+NeYvz; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1757928233;
-	bh=ibrtgmyavezo7/rV24wGdikXdfg56Q20YZWEB+mLWa0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mT+NeYvznIc4tPG4UG5JHS3hYDS7hbLnIscEPoWCJjLxsLpq8eXISCLHN3iQr6nXq
-	 Pmbzaou7G37f3CE3OrHyKvQjDsKQkNSE41iYJidnNRSU8IVII+WXzGW/NydWpEJX6p
-	 5II/Cn2fq61/rRvig2tbY5I36tEKVS4FXokWyQHI=
-Date: Mon, 15 Sep 2025 11:23:53 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Mark Brown <broonie@kernel.org>, 
-	Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: open list <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Ben Copeland <benjamin.copeland@linaro.org>, Shuah Khan <shuah@kernel.org>
-Subject: Re: next-20250909: selftests/arm64/gcs/basic-gcs.c:390:30: error:
- use of undeclared identifier 'HWCAP_GCS'
-Message-ID: <5fe12804-2538-42c5-b5c7-66d36ff947d9@t-8ch.de>
-References: <CA+G9fYv77X+kKz2YT6xw7=9UrrotTbQ6fgNac7oohOg8BgGvtw@mail.gmail.com>
- <1e331ebb-3315-4cbe-b194-ccbeeaded4da@t-8ch.de>
- <965c8d7e-c5f2-4bd8-ab7c-c3116632f015@sirena.org.uk>
- <5e4d9943-3a8d-4281-9007-f49bfc66dc6d@weissschuh.net>
- <b9b8b8cf-4920-4f9d-bcea-bea913058601@weissschuh.net>
- <a1dc9839-ab45-4dd6-9eeb-4bbc35bf8d90@sirena.org.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oxanHlWn/268rraULow/9mRx3lusG1zCde65HuVqo2N6yMqzaAY35uiAsmtoIDmEc4DEQ3+6baUzU2qP2UuO0dEWKEklACC3qTENb6ljwJt18ZaFZGrxrtg0g12L7NuFg0pu6Fa78dZSUn4p6IJZWvFRUNBtXm+0PlTs4a31T9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EqSLhXHh; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757932820; x=1789468820;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Nzk/WGSFbYXU/3XfPyxSdJhM2+qxUftU2FcBdAr8OJY=;
+  b=EqSLhXHh203T1aNowmFHhwqbydsdaChHTFbAzCmDS3Sayt0lhiue/V29
+   NQbnsWlAYrdGvQIaVejsV+JtyzIpUKYxGxAYyC9AsW2SwWxDWIUBolMOt
+   YbOimMHYnE5+EUnkH+VhHW6Be+qB+mqDgljnySnWQYKOB2+onAqaCuIJc
+   Yd3n93xGD3s/2KSykFHzQ9be2mBgrL5LXyeU9ja9D7DaY9guoCD8E+urY
+   MRTmcwdMdaS7vRRYIgSmyO+eAdxtY4zCr6d9pKXtERZ/n1S1SKRzz3clm
+   fuxy3S5UdIONXAgQC7hVroRMbfGpPIiMneR2EZx8SQzusri/Wb24qKzep
+   Q==;
+X-CSE-ConnectionGUID: J5pPtniRRQG4c8ynz07kkw==
+X-CSE-MsgGUID: nesyQA5hSICjoox5aXuZBA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11553"; a="60051244"
+X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
+   d="scan'208";a="60051244"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 03:40:20 -0700
+X-CSE-ConnectionGUID: 8iJJl0gJQhq5nxP18SkwKw==
+X-CSE-MsgGUID: zy0r3AIKSySNYAJ2rb6mUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,265,1751266800"; 
+   d="scan'208";a="173881637"
+Received: from lkp-server01.sh.intel.com (HELO 5b01dd97f97c) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 15 Sep 2025 03:40:17 -0700
+Received: from kbuild by 5b01dd97f97c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uy6d4-00008h-1O;
+	Mon, 15 Sep 2025 10:40:14 +0000
+Date: Mon, 15 Sep 2025 18:40:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Berg <benjamin@sipsolutions.net>, linux-um@lists.infradead.org,
+	Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	linux-kselftest@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Tiwei Bie <tiwei.btw@antgroup.com>,
+	Benjamin Berg <benjamin.berg@intel.com>
+Subject: Re: [PATCH 2/9] um: use tools/include for user files
+Message-ID: <202509151828.S0qPk6Du-lkp@intel.com>
+References: <20250915071115.1429196-3-benjamin@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a1dc9839-ab45-4dd6-9eeb-4bbc35bf8d90@sirena.org.uk>
+In-Reply-To: <20250915071115.1429196-3-benjamin@sipsolutions.net>
 
-On 2025-09-12 12:14:00+0100, Mark Brown wrote:
-> On Fri, Sep 12, 2025 at 01:07:58PM +0200, Thomas Weißschuh wrote:
-> 
-> > The Makefile does *not* use -nostdinc, so the nolibc program probably finds the toolchain's glibc asm/hwcap.h.
-> > There also doesn't seem to be a static arm64 hwcap header in tools/include in the first place.
-> > I am still wondering how this works for the other tests.
-> 
-> make headers_install puts a copy in usr/include, probably we just need
-> to include that in the include path.
+Hi Benjamin,
 
-Naresh, could you test the patch below?
-The other custom $(CC) rules in the gcs directory are also not
-respecting $(CFLAGS), but I'll leave these for now.
+kernel test robot noticed the following build errors:
 
-diff --git a/tools/testing/selftests/arm64/gcs/Makefile b/tools/testing/selftests/arm64/gcs/Makefile
-index d2f3497a9..1fbbf0ca1 100644
---- a/tools/testing/selftests/arm64/gcs/Makefile
-+++ b/tools/testing/selftests/arm64/gcs/Makefile
-@@ -14,11 +14,11 @@ LDLIBS+=-lpthread
- include ../../lib.mk
+[auto build test ERROR on uml/next]
+[also build test ERROR on uml/fixes linus/master v6.17-rc6 next-20250912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- $(OUTPUT)/basic-gcs: basic-gcs.c
--       $(CC) -g -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
--               -static -include ../../../../include/nolibc/nolibc.h \
-+       $(CC) $(CFLAGS) -fno-asynchronous-unwind-tables -fno-ident -s -nostdlib -nostdinc \
-+               -static -I../../../../include/nolibc -include ../../../../include/nolibc/nolibc.h \
-                -I../../../../../usr/include \
-                -std=gnu99 -I../.. -g \
--               -ffreestanding -Wall $^ -o $@ -lgcc
-+               -ffreestanding $^ -o $@ -lgcc
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Berg/tools-compiler-h-fix-__used-definition/20250915-152550
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux next
+patch link:    https://lore.kernel.org/r/20250915071115.1429196-3-benjamin%40sipsolutions.net
+patch subject: [PATCH 2/9] um: use tools/include for user files
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20250915/202509151828.S0qPk6Du-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 65ad21d730d25789454d18e811f8ff5db79cb5d4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250915/202509151828.S0qPk6Du-lkp@intel.com/reproduce)
 
- $(OUTPUT)/gcs-stress-thread: gcs-stress-thread.S
-        $(CC) -nostdlib $^ -o $@
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509151828.S0qPk6Du-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+>> <built-in>:3:10: fatal error: 'include/generated/autoconf.h' file not found
+       3 | #include "include/generated/autoconf.h"
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/x86/um/user-offsets.s] Error 1
+   make[3]: Target 'include/generated/user_constants.h' not remade because of errors.
+   make[2]: *** [arch/um/Makefile:121: archprepare] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
