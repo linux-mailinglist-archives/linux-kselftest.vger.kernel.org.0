@@ -1,126 +1,147 @@
-Return-Path: <linux-kselftest+bounces-41451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41453-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9D47B57059
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 08:33:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87FB8B57130
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 09:22:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8521E3B7747
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 06:33:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D91B189C400
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 07:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E81C27A92B;
-	Mon, 15 Sep 2025 06:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607C42D5C91;
+	Mon, 15 Sep 2025 07:22:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="iB0ibLlr"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="aFWdyqAk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421021F2361;
-	Mon, 15 Sep 2025 06:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741952D46BB;
+	Mon, 15 Sep 2025 07:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757918000; cv=none; b=g/S+CPWQeVnx7mLIvTQIHVdAL4jz7KCDCHdDoDwbHElEvqLgl4NOrnuK8BC/saSE9xATVvxE7YAb4LVgfk9EVw79NU5LPm3zox5mMkRPx+3btILMMv2xl2SZBeb+BfBtDYqWZaNjI6md++MOwEE973Z39Wljih6x8vDsZ1Z49Hc=
+	t=1757920927; cv=none; b=usHI52CPYhJTgiN7+TVRqr7rvC15q6PNWeFH7KgVOKFZTspJyNiiRExrU+vc4gUslXfLDjU3G1E31ciVmzlZRCeE+zMnAnTMO8IkMuzBkL8q1TlpFkm2o81vOiG+4Qkek0+IlsThGhblFjOLAfPj/dkSu7DC5abmtydckHHYOak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757918000; c=relaxed/simple;
-	bh=QlPxaZpQgAbJ15RgCwCxR2W4D+X5bJYrlbORaI22aqg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZReHTIuU1Q6CKMSDNpRDpwg1z8TXEqhlu+rzOxw6fF83rF2IiuiBFasJrkLrw1z3sF/xg+OAdj721l78cQ8Zn1xXHDpS9fpARtUO1gh1uY+gdo6Bh0YbTvCOf6SlrBMwvQvMYztsL+sUccTW5SB74N6Vp9TjYDBfUofUQ7QWI8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=iB0ibLlr; arc=none smtp.client-ip=168.119.38.16
+	s=arc-20240116; t=1757920927; c=relaxed/simple;
+	bh=5zo6GFc4izq4L/TOFgQ8My2XBCCoU7RHkkhmBxTMRvE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sn6rkTEo2nZEd3VCHlusr9hf0cSS3IcEXEk5zzzF2VB0Vh9k9neDrYStdGdaTPwbDAV6yIh19IfGJ2l10l/Hwx64kEA/tctVNIayBcU69CqpjcPKFQbcC6wXySJXES6ZGltvO+RxDjVKKwVaALkb3DlGS+v92a5ia3GJroc7+YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=aFWdyqAk; arc=none smtp.client-ip=168.119.38.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=QlPxaZpQgAbJ15RgCwCxR2W4D+X5bJYrlbORaI22aqg=;
-	t=1757917999; x=1759127599; b=iB0ibLlrQzr7wy7mTR3wVlZtM1tW+Dvb9bTAcNPpdqEcP97
-	ZXgFeZx/7Tsv4GCH78ZhlKnAPYfcTqjposb3icB17MVqJBB5r4QmAN3/PZxlllz0XU8A7BCAbyo9S
-	T3MSYimLd6nSgK6SRwk9CiPcDGiSGjXgDdoVkWoz3NKozSnRrSEUeV6WoR2jaBY7PrdYCM4W4EpB5
-	7BLxS41xGD1a05iOgDy1NsyWyhJxgxjUCr8287iquvg/AU4gpFqEQcQkRdf1xpeb3XdwYQwhezXJg
-	nYRoyrHRQYmU5a4W2/fGkUvbrQCXnj51Z9MCt99P+SfUa6pIeUi5MicJcLyueNUw==;
+	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
+	Resent-Message-ID:In-Reply-To:References;
+	bh=x19kbUYL2Cg9MV223qYaCq31NCabilripCrs7bHYZWA=; t=1757920924; x=1759130524; 
+	b=aFWdyqAkF8rSnhzMNpYiNQ8vjDhG6jD8MoBO5t7YtgcPtTCGuw5ZrJVzW9/yWxgMjtUU5ENWRqs
+	U5QCjt2DT8dY1691tWgsf7wMAEhS3A+XpuRIKjumKb3cRApsOSLldptTuoKwSkllSPdtkmOe/IB3B
+	k4F8U5OuRsEt1N6USLuZvBfqq3O74bgg2z/xVM0Yx/dW8z7hBmAHG+7jV+yS2XXY8zU5tfqCWhqbX
+	dGE/5vsdeYTRimx9aQ1+tYCT2tC32Jo0+WvLw4rSEn4Oiy77yrF11mMt8aadeEHYyiAvh9u/CW7Mm
+	X6ebzQNmRHzZ7NWYisesOYmBelAbKi30ln9A==;
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.98.2)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1uy2lx-00000005sPh-0Vis;
-	Mon, 15 Sep 2025 08:33:09 +0200
-Message-ID: <8e75d6cc3847899ba8d6a0cbd0ef3ac57eabf009.camel@sipsolutions.net>
-Subject: Re: [PATCH 1/4] PCI: Support FIXUP quirks in modules
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Brian Norris <briannorris@chromium.org>, Bjorn Helgaas
- <bhelgaas@google.com>,  Luis Chamberlain	 <mcgrof@kernel.org>, Petr Pavlu
- <petr.pavlu@suse.com>, Daniel Gomez	 <da.gomez@kernel.org>
-Cc: linux-pci@vger.kernel.org, David Gow <davidgow@google.com>, Rae Moar	
- <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, Sami Tolvanen	
- <samitolvanen@google.com>, Richard Weinberger <richard@nod.at>, Wei Liu	
- <wei.liu@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	kunit-dev@googlegroups.com, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- 	linux-um@lists.infradead.org
-Date: Mon, 15 Sep 2025 08:33:08 +0200
-In-Reply-To: <20250912230208.967129-2-briannorris@chromium.org> (sfid-20250913_010956_669404_FC913C9D)
-References: <20250912230208.967129-1-briannorris@chromium.org>
-	 <20250912230208.967129-2-briannorris@chromium.org>
-	 (sfid-20250913_010956_669404_FC913C9D)
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	(envelope-from <benjamin@sipsolutions.net>)
+	id 1uy3XC-00000005w6o-3hKR;
+	Mon, 15 Sep 2025 09:21:59 +0200
+From: Benjamin Berg <benjamin@sipsolutions.net>
+To: linux-um@lists.infradead.org,
+	Willy Tarreau <w@1wt.eu>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	linux-kselftest@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: linux-kernel@vger.kernel.org,
+	Tiwei Bie <tiwei.btw@antgroup.com>,
+	Benjamin Berg <benjamin.berg@intel.com>
+Subject: [PATCH 0/9] Start porting UML to nolibc
+Date: Mon, 15 Sep 2025 09:11:06 +0200
+Message-ID: <20250915071115.1429196-1-benjamin@sipsolutions.net>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2025-09-12 at 15:59 -0700, Brian Norris wrote:
-> The PCI framework supports "quirks" for PCI devices via several
-> DECLARE_PCI_FIXUP_*() macros. These macros allow arch or driver code to
-> match device IDs to provide customizations or workarounds for broken
-> devices.
->=20
-> This mechanism is generally used in code that can only be built into the
-> kernel, but there are a few occasions where this mechanism is used in
-> drivers that can be modules. For example, see commit 574f29036fce ("PCI:
-> iproc: Apply quirk_paxc_bridge() for module as well as built-in").
->=20
-> The PCI fixup mechanism only works for built-in code, however, because
-> pci_fixup_device() only scans the ".pci_fixup_*" linker sections found
-> in the main kernel; it never touches modules.
->=20
-> Extend the fixup approach to modules.
+From: Benjamin Berg <benjamin.berg@intel.com>
 
-This _feels_ a bit odd to me - what if you reload a module, should the
-fixup be done twice?=C2=A0Right now this was not possible in a module, whic=
-h
-is a bit of a gotcha, but at least that's only one for developers, not
-for users (unless someone messes up and puts it into modular code, as in
-the example you gave.)
+For a while now, we have discussed that it may be better to avoid using
+libc inside UML as it may be interfering in unexpected ways with kernel
+functionality. A major point of concern is that there is no guarantee
+that the libc is not using any address space that may conflict with
+kernel addresses.
 
-Although, come to think of it, you don't even apply the fixup when the
-module is loaded, so what I just wrote isn't really true. That almost
-seems like an oversight though, now the module has to be loaded before
-the PCI device is enumerated, which is unlikely to happen in practice?
-But then we get the next gotcha - the device is already enumerated, so
-the fixups cannot be applied at the various enumeration stages, and
-you're back to having to load the module before PCI enumeration, which
-could be tricky, or somehow forcing re-enumeration of a given device
-from userspace, but then you're firmly in "gotcha for the user"
-territory again ...
+This patchset is an attempt to start a nolibc port of UML. The goal is
+to port UML to use nolibc in smaller chunks to make the switch more
+manageable.
 
-I don't really have any skin in this game, but overall I'd probably
-argue it's better to occasionally have to fix things such as in the
-commit you point out but have a predictable system, than apply things
-from modules.
+There are three parts to this patchset:
+ * Two patches to use tools/include headers instead of kernel headers
+   for userspace files.
+ * A few nolibc fixes and a new NOLIBC_NO_STARTCODE compile flag for it
+ * Finally nolibc build support for UML and switching two files
 
-Perhaps it'd be better to extend the section checking infrastructure to
-catch and error out on these sections in modules instead, so we catch it
-at build time, rather than finding things missing at runtime?
+The first two parts could be merged independently. The last step to use
+nolibc inside UML obviously depends on the first two.
 
-And yeah, now I've totally ignored the kunit angle, but ... not sure how
-to combine the two requirements if they are, as I think, conflicting.
+Benjamin
 
-johannes
+Benjamin Berg (9):
+  tools compiler.h: fix __used definition
+  um: use tools/include for user files
+  tools/nolibc/stdio: remove perror if NOLIBC_IGNORE_ERRNO is set
+  tools/nolibc/dirent: avoid errno in readdir_r
+  tools/nolibc: use __fallthrough__ rather than fallthrough
+  tools/nolibc: add option to disable startup code
+  um: add infrastructure to build files using nolibc
+  um: use nolibc for the --showconfig implementation
+  um: switch ptrace FP register access to nolibc
+
+ arch/um/Makefile                              | 32 ++++++++++++++++---
+ .../um/include/shared/generated/asm-offsets.h |  1 +
+ .../include/shared/generated/user_constants.h |  1 +
+ arch/um/include/shared/init.h                 |  2 +-
+ arch/um/include/shared/os.h                   |  2 ++
+ arch/um/include/shared/user.h                 |  5 ---
+ arch/um/kernel/Makefile                       |  2 +-
+ arch/um/kernel/skas/stub.c                    |  1 +
+ arch/um/kernel/skas/stub_exe.c                |  4 +--
+ arch/um/os-Linux/skas/process.c               |  6 ++--
+ arch/um/os-Linux/start_up.c                   |  4 +--
+ arch/um/scripts/Makefile.rules                | 10 ++++--
+ arch/x86/um/Makefile                          |  6 ++--
+ arch/x86/um/os-Linux/Makefile                 |  5 ++-
+ arch/x86/um/os-Linux/registers.c              | 22 +++++--------
+ arch/x86/um/user-offsets.c                    |  1 -
+ tools/include/linux/compiler.h                |  2 +-
+ tools/include/nolibc/arch-arm.h               |  2 ++
+ tools/include/nolibc/arch-arm64.h             |  2 ++
+ tools/include/nolibc/arch-loongarch.h         |  2 ++
+ tools/include/nolibc/arch-m68k.h              |  2 ++
+ tools/include/nolibc/arch-mips.h              |  2 ++
+ tools/include/nolibc/arch-powerpc.h           |  2 ++
+ tools/include/nolibc/arch-riscv.h             |  2 ++
+ tools/include/nolibc/arch-s390.h              |  2 ++
+ tools/include/nolibc/arch-sh.h                |  2 ++
+ tools/include/nolibc/arch-sparc.h             |  2 ++
+ tools/include/nolibc/arch-x86.h               |  4 +++
+ tools/include/nolibc/compiler.h               |  4 +--
+ tools/include/nolibc/crt.h                    |  3 ++
+ tools/include/nolibc/dirent.h                 |  6 ++--
+ tools/include/nolibc/stackprotector.h         |  2 ++
+ tools/include/nolibc/stdio.h                  |  2 ++
+ tools/include/nolibc/stdlib.h                 |  2 ++
+ tools/include/nolibc/sys.h                    |  3 +-
+ tools/include/nolibc/sys/auxv.h               |  3 ++
+ 36 files changed, 108 insertions(+), 47 deletions(-)
+ create mode 120000 arch/um/include/shared/generated/asm-offsets.h
+ create mode 120000 arch/um/include/shared/generated/user_constants.h
+
+-- 
+2.51.0
+
 
