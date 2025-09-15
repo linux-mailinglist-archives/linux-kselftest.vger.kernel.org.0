@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-41456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41457-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE2F8B5713A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 09:22:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C74BB57139
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 09:22:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EA55189D636
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 07:23:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0DDE3B056A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 07:22:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E07C2D6E74;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E072D738F;
 	Mon, 15 Sep 2025 07:22:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="OV6Dg4KZ"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="v1QVZUfg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8972D660C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3CD92D6638;
 	Mon, 15 Sep 2025 07:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757920930; cv=none; b=LQiJfMto684WKqFeGUVk1h9a+SAmWlmP8hUtwa7UsbdbEY9cILT4ZtnIB0d6blzZR8OQgdGBUBr4WbqnnwhP4AkaBrO+WHleuJhc72NIyJv6cLpfYq8nWwEFChBTJUkB3naAbCNkAJ/n/1kv73dOvxWsniPALAb7OOo45HAXHfk=
+	t=1757920930; cv=none; b=ielL+LrZjbL08KkLj52yyWVC/2KVh2iZ1zoeOJNTz1Twalm3//s0MJ/ueXZc/ZJmDp7OMJayWVtwYgEbG/BhLll/RFHIB3n+S+pm4NEPQC9vzVCie+wr9KLgAlaV0jgWKtJt/HrcoB0d0K3QhKXo2RKh21Z/nxbm0D6NAxIcIy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1757920930; c=relaxed/simple;
-	bh=u9+YtwMWSh8mMH6JtvIEKuaRvKgm8bdVu6KY8R2BhEQ=;
+	bh=704uJj0Ip1OexW9zT7NZ1IplH08kL+cIIvWsiux3+es=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TPwk4TJZQBeL6g+2OhcdXNGZJtvvGu6zLrtOXFFtOpk64A29xLKocefCfwSWVttjcprsYttUC+KNrzBtt99rVyB3Z/Dap5/9uqKtQxq7qvBcCFcFUtc1RmbjARRv13l2d6Gs8OTmoof+4EeB+NsKZF0t56TR/xYZLLuVvKYVluE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=OV6Dg4KZ; arc=none smtp.client-ip=168.119.38.16
+	 MIME-Version; b=lZ2yHHy3Xhe4RV/H7MN24cyAwhNnvq/M4V8l+Io+f1MskaC7kvTysVHv3REtq4FK2hxg/+xwpEOL520WSJxcv6SLaD5sDJBJEucShecTxRpdu+kEiFyCuBg/kBxEOo3Pv56b1cmvIHV4u6ben9Vkag2/uYdmEIg2M7mQjSKTsIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=v1QVZUfg; arc=none smtp.client-ip=168.119.38.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=iRYpO586U8lxEybD+EbMysICiC2ETCm9BgFccrVd91I=;
-	t=1757920928; x=1759130528; b=OV6Dg4KZvWsGJAEp4A2o1y8f2ldH1QIStXnV7pPt18vb3nT
-	KWKe4/VFGuN5ftcpBAL7XAmuGJ7IdlMPDdu/DAV37aVPjieqE6f9f7Oh+mu6TI4FgGM1q4L9Br6/W
-	TwOtobyTI6bcb6hXcbFjx7xQXHFsHyPlg/hEhyjK7HFT2zxiki8kokmuUr3QNfNaSdLbriGgfpbrN
-	WgWO5G5bnbJCscACnPw1CK3YBjgPnhepC+phuKTPcM9Ss22YjU0f2dt6B3NG1tiAmDRVPM1emsEPz
-	fX1SfLKMd82ECUO+MQa+KWoiKUBt0JPvJgoGdM/ZNKj3b3Y5AZhiiKSJngWTUJcg==;
+	Resent-Cc:Resent-Message-ID; bh=uB+ZeSs+X9NMubgvNrYfiWUR+gb4lauP6HMzVhv7NVY=;
+	t=1757920929; x=1759130529; b=v1QVZUfgYGIQtYPFw+F+y1wGh8/UfL6Ke30lbylSCk8ow0a
+	zmtKAW5/AbUnA3OzNE9mASoKbvqS1pXsjNh2vcZ2jk2Ubds4bw+IwHl99XryeKsVAE6/WoApkupZE
+	4U7dtjYyNp2HFxnelg8Y+0affUNOeT54zKukm5fwAxFEQSq3qXgJDYRKqrPwgprziLsUjVeof+oaD
+	BWfgfAEwtvFEsgR9uBhejsueflEnq+cQfd3ahhk3C0S5IH3hi8hxVc9e3WzVZlLvqsdJfFrQTDhSz
+	FZ25qGZ/6SPhIJ4+jgOOGGBuClfU39c+CIGYk4QhOiRiOkf4KekH32TsWW0uhmqw==;
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.98.2)
 	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uy3XI-00000005w6o-0Hco;
-	Mon, 15 Sep 2025 09:22:04 +0200
+	id 1uy3XJ-00000005w6o-2p6w;
+	Mon, 15 Sep 2025 09:22:05 +0200
 From: Benjamin Berg <benjamin@sipsolutions.net>
 To: linux-um@lists.infradead.org,
 	Willy Tarreau <w@1wt.eu>,
@@ -55,9 +55,9 @@ To: linux-um@lists.infradead.org,
 Cc: linux-kernel@vger.kernel.org,
 	Tiwei Bie <tiwei.btw@antgroup.com>,
 	Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH 4/9] tools/nolibc/dirent: avoid errno in readdir_r
-Date: Mon, 15 Sep 2025 09:11:10 +0200
-Message-ID: <20250915071115.1429196-5-benjamin@sipsolutions.net>
+Subject: [PATCH 5/9] tools/nolibc: use __fallthrough__ rather than fallthrough
+Date: Mon, 15 Sep 2025 09:11:11 +0200
+Message-ID: <20250915071115.1429196-6-benjamin@sipsolutions.net>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250915071115.1429196-1-benjamin@sipsolutions.net>
 References: <20250915071115.1429196-1-benjamin@sipsolutions.net>
@@ -71,32 +71,29 @@ Content-Transfer-Encoding: 8bit
 
 From: Benjamin Berg <benjamin.berg@intel.com>
 
-Using errno is not possible when NOLIBC_IGNORE_ERRNO is set. Use
-sys_lseek instead of lseek as that avoids using errno.
+Use the version of the attribute with underscores to avoid issues if
+fallthrough has been defined by another header file already.
 
-Fixes: 665fa8dea90d ("tools/nolibc: add support for directory access")
 Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 ---
- tools/include/nolibc/dirent.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/include/nolibc/compiler.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/nolibc/dirent.h b/tools/include/nolibc/dirent.h
-index 758b95c48e7a..61a122a60327 100644
---- a/tools/include/nolibc/dirent.h
-+++ b/tools/include/nolibc/dirent.h
-@@ -86,9 +86,9 @@ int readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
- 	 * readdir() can only return one entry at a time.
- 	 * Make sure the non-returned ones are not skipped.
- 	 */
--	ret = lseek(fd, ldir->d_off, SEEK_SET);
--	if (ret == -1)
--		return errno;
-+	ret = sys_lseek(fd, ldir->d_off, SEEK_SET);
-+	if (ret < 0)
-+		return -ret;
+diff --git a/tools/include/nolibc/compiler.h b/tools/include/nolibc/compiler.h
+index 369cfb5a0e78..87090bbc53e0 100644
+--- a/tools/include/nolibc/compiler.h
++++ b/tools/include/nolibc/compiler.h
+@@ -41,8 +41,8 @@
+ #  define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
+ #endif /* __nolibc_has_attribute(no_stack_protector) */
  
- 	entry->d_ino = ldir->d_ino;
- 	/* the destination should always be big enough */
+-#if __nolibc_has_attribute(fallthrough)
+-#  define __nolibc_fallthrough do { } while (0); __attribute__((fallthrough))
++#if __nolibc_has_attribute(__fallthrough__)
++#  define __nolibc_fallthrough do { } while (0); __attribute__((__fallthrough__))
+ #else
+ #  define __nolibc_fallthrough do { } while (0)
+ #endif /* __nolibc_has_attribute(fallthrough) */
 -- 
 2.51.0
 
