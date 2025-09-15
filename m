@@ -1,138 +1,106 @@
-Return-Path: <linux-kselftest+bounces-41472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59ACDB57419
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 11:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C3E30B574D3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 11:25:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0136C3ABCB5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 09:08:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0CB13A4A34
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 09:23:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF302E9EC0;
-	Mon, 15 Sep 2025 09:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3742F3C29;
+	Mon, 15 Sep 2025 09:23:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="YF9Gvzw1"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="mT+NeYvz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0FB27604E;
-	Mon, 15 Sep 2025 09:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1387D2ECEB8;
+	Mon, 15 Sep 2025 09:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757927276; cv=none; b=k3RQUlsnb3wdW/rXZ7Z585qRW0c2Ve0gCBjsevZWBfA2UjkmmGEZi2RSNXMVwdTq5McNguUE2wW3TXCPQP60ouVX+fuZxiEHcwGsZTRI74ifLN+RtfELJK2i9zMTDSneMhVJvvGVgzQ7OyK2G4n6whrwCmptbP36XK9LMl7De6I=
+	t=1757928237; cv=none; b=Hl5+9yyQeV0NqrQADH7irk+1OoHDfmAoFtOs3VMOtNcH7GZIJNdxkvO8Fu5BGaXT2xLVz/4wML0rs+IFrCIpd6TJg9McwP2irOp3aQ47GfYxCQh6i1fmPXiP5/uW84Py7bQu75gYgzw4eJitqvy+iWXG7BVjy3QmZQbC4d8bZVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757927276; c=relaxed/simple;
-	bh=4yuYGuUCG9ZnWQ/ykpURTCRtVPfeMJh0JSqCuvBp7Jg=;
+	s=arc-20240116; t=1757928237; c=relaxed/simple;
+	bh=ibrtgmyavezo7/rV24wGdikXdfg56Q20YZWEB+mLWa0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rjZjXZsWCDNG7RC55B5X0+YArK1S/VK7xVMoT1aIim2C0bgvgVwW5vrLtv6SORzX5f4JTN90k+dbDCMWE2X2KJnqVKAXjFRDfFrbaTuyWGZhCF6OZ9tJOD/2G0r9BGCxgY2XaQPxDDvk5rGqNWlqv3zusaOC2vM223AKg95pejY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=YF9Gvzw1; arc=none smtp.client-ip=159.69.126.157
+	 Content-Type:Content-Disposition:In-Reply-To; b=HOq+u1UC9RxXat8VIIpGh1jfeR7MrGSeDnNZaWmdXt15KKP2N3mjldhOc1BZ5R9hhYBbSfbBJkuIa290aax0ecwjfOtK8ToBnz+EPiSTIrHi/svDJP9MEL5VKuIpBNnK9tZDEtdoyxiu/YGcstekZu/0/raqzhuQw2viLXAPpmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=mT+NeYvz; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1757927271;
-	bh=4yuYGuUCG9ZnWQ/ykpURTCRtVPfeMJh0JSqCuvBp7Jg=;
+	s=mail; t=1757928233;
+	bh=ibrtgmyavezo7/rV24wGdikXdfg56Q20YZWEB+mLWa0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YF9Gvzw1617gAlI8HLr3bJP6ANZID1fqEojln0udCjl7467q7pSw5zRbQImSH4vfK
-	 Je+2cwfLzNkXwZXT/ZeC6bqG4z5nVsZUYlKzPfmrdXsAvCJBPshS3yvJeM8i75jbGH
-	 zsHsfMMe0Y7HkyAQkM0zDWM5jnsSL4mxjEZonTMA=
-Date: Mon, 15 Sep 2025 11:07:51 +0200
+	b=mT+NeYvznIc4tPG4UG5JHS3hYDS7hbLnIscEPoWCJjLxsLpq8eXISCLHN3iQr6nXq
+	 Pmbzaou7G37f3CE3OrHyKvQjDsKQkNSE41iYJidnNRSU8IVII+WXzGW/NydWpEJX6p
+	 5II/Cn2fq61/rRvig2tbY5I36tEKVS4FXokWyQHI=
+Date: Mon, 15 Sep 2025 11:23:53 +0200
 From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Benjamin Berg <benjamin@sipsolutions.net>
-Cc: linux-um@lists.infradead.org, Willy Tarreau <w@1wt.eu>, 
-	linux-kselftest@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>, 
-	linux-kernel@vger.kernel.org, Tiwei Bie <tiwei.btw@antgroup.com>, 
-	Benjamin Berg <benjamin.berg@intel.com>
-Subject: Re: [PATCH 9/9] um: switch ptrace FP register access to nolibc
-Message-ID: <5502ceaf-0b40-4961-b9ba-0c5e63498778@t-8ch.de>
-References: <20250915071115.1429196-1-benjamin@sipsolutions.net>
- <20250915071115.1429196-10-benjamin@sipsolutions.net>
+To: Mark Brown <broonie@kernel.org>, 
+	Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Ben Copeland <benjamin.copeland@linaro.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: next-20250909: selftests/arm64/gcs/basic-gcs.c:390:30: error:
+ use of undeclared identifier 'HWCAP_GCS'
+Message-ID: <5fe12804-2538-42c5-b5c7-66d36ff947d9@t-8ch.de>
+References: <CA+G9fYv77X+kKz2YT6xw7=9UrrotTbQ6fgNac7oohOg8BgGvtw@mail.gmail.com>
+ <1e331ebb-3315-4cbe-b194-ccbeeaded4da@t-8ch.de>
+ <965c8d7e-c5f2-4bd8-ab7c-c3116632f015@sirena.org.uk>
+ <5e4d9943-3a8d-4281-9007-f49bfc66dc6d@weissschuh.net>
+ <b9b8b8cf-4920-4f9d-bcea-bea913058601@weissschuh.net>
+ <a1dc9839-ab45-4dd6-9eeb-4bbc35bf8d90@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250915071115.1429196-10-benjamin@sipsolutions.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a1dc9839-ab45-4dd6-9eeb-4bbc35bf8d90@sirena.org.uk>
 
-On 2025-09-15 09:11:15+0200, Benjamin Berg wrote:
-> From: Benjamin Berg <benjamin.berg@intel.com>
+On 2025-09-12 12:14:00+0100, Mark Brown wrote:
+> On Fri, Sep 12, 2025 at 01:07:58PM +0200, Thomas Weißschuh wrote:
 > 
-> The registers.c file only contain the routines for floating point
-> register access in ptrace mode and initial size detection. The file can
-> be moved over to nolibc by replacing the ptrace libc call with a simple
-> wrapper that does a direct syscall.
+> > The Makefile does *not* use -nostdinc, so the nolibc program probably finds the toolchain's glibc asm/hwcap.h.
+> > There also doesn't seem to be a static arm64 hwcap header in tools/include in the first place.
+> > I am still wondering how this works for the other tests.
 > 
-> Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
-> ---
->  arch/x86/um/os-Linux/Makefile    |  5 ++++-
->  arch/x86/um/os-Linux/registers.c | 22 ++++++++--------------
->  2 files changed, 12 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/x86/um/os-Linux/Makefile b/arch/x86/um/os-Linux/Makefile
-> index 77a308aaa5ec..d37320430822 100644
-> --- a/arch/x86/um/os-Linux/Makefile
-> +++ b/arch/x86/um/os-Linux/Makefile
-> @@ -3,10 +3,13 @@
->  # Licensed under the GPL
->  #
->  
-> -obj-y = registers.o mcontext.o
-> +obj-y = mcontext.o
->  
->  obj-$(CONFIG_X86_32) += tls.o
->  
->  USER_OBJS := $(obj-y)
->  
-> +obj-y += registers.o
-> +NOLIBC_OBJS := registers.o
-> +
->  include $(srctree)/arch/um/scripts/Makefile.rules
-> diff --git a/arch/x86/um/os-Linux/registers.c b/arch/x86/um/os-Linux/registers.c
-> index eb1cdadc8a61..55bce0d3f5d2 100644
-> --- a/arch/x86/um/os-Linux/registers.c
-> +++ b/arch/x86/um/os-Linux/registers.c
-> @@ -6,18 +6,20 @@
->  
->  #include <errno.h>
+> make headers_install puts a copy in usr/include, probably we just need
+> to include that in the include path.
 
-Given that you are explicitly disabling errno support for nolibc, is
-this include necessary?
+Naresh, could you test the patch below?
+The other custom $(CC) rules in the gcs directory are also not
+respecting $(CFLAGS), but I'll leave these for now.
 
->  #include <stdlib.h>
-> -#include <sys/ptrace.h>
-> +#include <linux/ptrace.h>
->  #ifdef __i386__
->  #include <sys/user.h>
->  #endif
->  #include <longjmp.h>
->  #include <sysdep/ptrace_user.h>
-> -#include <sys/uio.h>
-> +#include <linux/uio.h>
+diff --git a/tools/testing/selftests/arm64/gcs/Makefile b/tools/testing/selftests/arm64/gcs/Makefile
+index d2f3497a9..1fbbf0ca1 100644
+--- a/tools/testing/selftests/arm64/gcs/Makefile
++++ b/tools/testing/selftests/arm64/gcs/Makefile
+@@ -14,11 +14,11 @@ LDLIBS+=-lpthread
+ include ../../lib.mk
 
-It looks fairly trivial to add sys/uio.h to nolibc.
-Only 'struct iovec' (already provided by the UAPI) and readv()/writev()
-are necessary.
+ $(OUTPUT)/basic-gcs: basic-gcs.c
+-       $(CC) -g -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
+-               -static -include ../../../../include/nolibc/nolibc.h \
++       $(CC) $(CFLAGS) -fno-asynchronous-unwind-tables -fno-ident -s -nostdlib -nostdinc \
++               -static -I../../../../include/nolibc -include ../../../../include/nolibc/nolibc.h \
+                -I../../../../../usr/include \
+                -std=gnu99 -I../.. -g \
+-               -ffreestanding -Wall $^ -o $@ -lgcc
++               -ffreestanding $^ -o $@ -lgcc
 
->  #include <asm/sigcontext.h>
->  #include <linux/elf.h>
->  #include <registers.h>
->  #include <sys/mman.h>
->  
-> +#define my_ptrace(...) my_syscall4(__NR_ptrace, __VA_ARGS__)
+ $(OUTPUT)/gcs-stress-thread: gcs-stress-thread.S
+        $(CC) -nostdlib $^ -o $@
 
-Why not add sys/ptrace.h to nolibc and then use sys_ptrace()?
-In general I'm not a fan of the my_syscall() naming scheme and would
-like to change this in nolibc itself, so having fewer external users
-would be nice.
-
-> +
->  static unsigned long ptrace_regset;
->  unsigned long host_fp_size;
-
-(...)
 
