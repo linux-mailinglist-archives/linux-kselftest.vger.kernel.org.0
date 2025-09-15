@@ -1,98 +1,119 @@
-Return-Path: <linux-kselftest+bounces-41469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 361E1B57395
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 10:53:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DE1CB573BA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 10:58:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3B303B6B4F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 08:53:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 933C5188B8C3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 08:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F7B02F6191;
-	Mon, 15 Sep 2025 08:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D328F2F1FE2;
+	Mon, 15 Sep 2025 08:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="rBMdOFgF"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Fl+1jpAq"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9062F617B;
-	Mon, 15 Sep 2025 08:50:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4032D5C61;
+	Mon, 15 Sep 2025 08:55:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757926222; cv=none; b=fhQu8nyH5jD4T2Ddrt/Lv+cFMPWhqayqMzKzEwvwIMHjEYo13cofPwTqWJD6y20MB59zWdhVxgB+IHgtmekoGp4+EJUdbnOFrgiiMhR8xOi48jhJexaUL7B/DCraZSUoZykVDdPWihenh5SvPqYQgk5dMWyza7Wiu2nUcBtZ2Dw=
+	t=1757926547; cv=none; b=dq2lctV7AONEgwVDz4I7uujWuI4oCkXZSjnsD0elV50FLKWDTd1ja3TVrFMJkhNHXituWEQaFGMfWAilRwX5mY0K8qFTmZKVmSc6Twd/4KRHr2P7Ry9cshhaWmlsu/LrE25etH0fFviw6J6qMV8yBXsceJxu6/x69s/R58/dFIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757926222; c=relaxed/simple;
-	bh=8Abhke+wAvVYQkvLFpimTgcFAOpAqB5J5c1BWvnj6sk=;
+	s=arc-20240116; t=1757926547; c=relaxed/simple;
+	bh=wumQeK4aV33ZODZF7p8zwB+eZepT7/KIxwdWnzj3rqU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TGEQ+CipaG8MAWJUNZiXlDjw3x4DDKDEEn42xtLjG9pECFZT1i+N26CXPtbNkCzateAv5sPzqrtWaRmjwAA2eVW6ziR4+O6la9l5FJqJMAbv92NB9hj+Rj/GD5uUlJJsiejgFmCU2sWTqU2bFJgTZa7hnTSCxQS3GlAMaEpqPl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=rBMdOFgF; arc=none smtp.client-ip=159.69.126.157
+	 Content-Type:Content-Disposition:In-Reply-To; b=DbEumzWtCDvyL8LhS75Jdn7JgCTTD8lhxVY9TN216+zUFyvfrAd5zV8Pb989CePNKv+nwzHvb8KpQoHj5AypbPd1HOox9pQF77BhLPCu5xDtFP4ny3XspZCcR8Bv0lMrJqKPuiy9cOLglP1T5r7Ib7Sx1jXS+Mfa0xzVrSunisU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Fl+1jpAq; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1757926217;
-	bh=8Abhke+wAvVYQkvLFpimTgcFAOpAqB5J5c1BWvnj6sk=;
+	s=mail; t=1757926543;
+	bh=wumQeK4aV33ZODZF7p8zwB+eZepT7/KIxwdWnzj3rqU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rBMdOFgFALT5WBUoAQ3UCud5d0XBSQHOm5o/wLr6dqavwRynzE/b8lWzZJtGaBEW9
-	 5cnjmGg7XyPtoDgqeOxq7odOl+cH7/3jWrloetMLDKPtisbhntuPKPnvsjiLR5GztA
-	 YlI7LMu/EBnU+uOJG/sfCyyM261B2xHyAkJypUF8=
-Date: Mon, 15 Sep 2025 10:50:17 +0200
+	b=Fl+1jpAqH0FHqqwTKgrcFGzynJRpfwmNC9e7CqhsJUTZNS2/RFX8fZVfYPLvq2uJx
+	 463NTzafmNeUbz8S3a0LCQEKfqBENv+q7Zuc380YZIsfnZLX+a8VzigQ4PS7W9l0li
+	 Tn+Dxqjr1ykhhB/Tyq44MeGJheZsWced8yXw9lxg=
+Date: Mon, 15 Sep 2025 10:55:44 +0200
 From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 To: Benjamin Berg <benjamin@sipsolutions.net>
 Cc: linux-um@lists.infradead.org, Willy Tarreau <w@1wt.eu>, 
 	linux-kselftest@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>, 
 	linux-kernel@vger.kernel.org, Tiwei Bie <tiwei.btw@antgroup.com>, 
 	Benjamin Berg <benjamin.berg@intel.com>
-Subject: Re: [PATCH 5/9] tools/nolibc: use __fallthrough__ rather than
- fallthrough
-Message-ID: <6fff1ac0-2868-4377-b8a3-c10fe1a4c1f5@t-8ch.de>
+Subject: Re: [PATCH 6/9] tools/nolibc: add option to disable startup code
+Message-ID: <e2f2b0e3-a72d-4b6f-9677-02de711b7d3a@t-8ch.de>
 References: <20250915071115.1429196-1-benjamin@sipsolutions.net>
- <20250915071115.1429196-6-benjamin@sipsolutions.net>
+ <20250915071115.1429196-7-benjamin@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250915071115.1429196-6-benjamin@sipsolutions.net>
+In-Reply-To: <20250915071115.1429196-7-benjamin@sipsolutions.net>
 
-On 2025-09-15 09:11:11+0200, Benjamin Berg wrote:
+On 2025-09-15 09:11:12+0200, Benjamin Berg wrote:
 > From: Benjamin Berg <benjamin.berg@intel.com>
 > 
-> Use the version of the attribute with underscores to avoid issues if
-> fallthrough has been defined by another header file already.
+> In principle, it is possible to use nolibc for only some object files in
+> a program. In that case, the startup code in _start and _start_c is not
+> going to be used. Add the NOLIBC_NO_STARTCODE compile time option to
+> disable it entirely and also remove anything that depends on it.
 
-Not a really big fan, but as the underscore variant is documented there
-shouldn't be an issue.
+Not a big fan of the naming. More than only _start()/_start_c() are
+disabled. Maybe NOLIBC_NO_RUNTIME?  I'm horrible at naming...
 
-Acked-by: Thomas Weißschuh <linux@weissschuh.net>
-
+> Doing this avoids warnings from modpost for UML as the _start_c code
+> references the main function from the .init.text section while it is not
+> inside .init itself.
+> 
 > Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 > ---
->  tools/include/nolibc/compiler.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  tools/include/nolibc/arch-arm.h       | 2 ++
+>  tools/include/nolibc/arch-arm64.h     | 2 ++
+>  tools/include/nolibc/arch-loongarch.h | 2 ++
+>  tools/include/nolibc/arch-m68k.h      | 2 ++
+>  tools/include/nolibc/arch-mips.h      | 2 ++
+>  tools/include/nolibc/arch-powerpc.h   | 2 ++
+>  tools/include/nolibc/arch-riscv.h     | 2 ++
+>  tools/include/nolibc/arch-s390.h      | 2 ++
+>  tools/include/nolibc/arch-sh.h        | 2 ++
+>  tools/include/nolibc/arch-sparc.h     | 2 ++
+>  tools/include/nolibc/arch-x86.h       | 4 ++++
+>  tools/include/nolibc/crt.h            | 3 +++
+>  tools/include/nolibc/stackprotector.h | 2 ++
+>  tools/include/nolibc/stdlib.h         | 2 ++
+>  tools/include/nolibc/sys.h            | 3 ++-
+>  tools/include/nolibc/sys/auxv.h       | 3 +++
+>  16 files changed, 36 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/include/nolibc/compiler.h b/tools/include/nolibc/compiler.h
-> index 369cfb5a0e78..87090bbc53e0 100644
-> --- a/tools/include/nolibc/compiler.h
-> +++ b/tools/include/nolibc/compiler.h
-> @@ -41,8 +41,8 @@
->  #  define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
->  #endif /* __nolibc_has_attribute(no_stack_protector) */
+> diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+> index 1f66e7e5a444..24ad348cc1e8 100644
+> --- a/tools/include/nolibc/arch-arm.h
+> +++ b/tools/include/nolibc/arch-arm.h
+> @@ -185,6 +185,7 @@
+>  })
 >  
-> -#if __nolibc_has_attribute(fallthrough)
-> -#  define __nolibc_fallthrough do { } while (0); __attribute__((fallthrough))
-> +#if __nolibc_has_attribute(__fallthrough__)
-> +#  define __nolibc_fallthrough do { } while (0); __attribute__((__fallthrough__))
->  #else
->  #  define __nolibc_fallthrough do { } while (0)
->  #endif /* __nolibc_has_attribute(fallthrough) */
-> -- 
-> 2.51.0
-> 
+>  /* startup code */
+> +#ifndef NOLIBC_NO_STARTCODE
+
+I'd prefer the ifdef around the comments.
+
+>  void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector _start(void)
+>  {
+>  	__asm__ volatile (
+> @@ -193,5 +194,6 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector _s
+>  	);
+>  	__nolibc_entrypoint_epilogue();
+>  }
+> +#endif /* NOLIBC_NO_STARTCODE */
+
+(...)
 
