@@ -1,166 +1,168 @@
-Return-Path: <linux-kselftest+bounces-41511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58F46B5821F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 18:32:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F0D9B58266
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 18:46:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54559188FE94
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 16:30:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E5507AD03A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 16:44:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3DF29993F;
-	Mon, 15 Sep 2025 16:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D781223DF6;
+	Mon, 15 Sep 2025 16:45:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cZ1CyEQG"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vy4TDkOF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271F627D77A
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 16:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8361EB5D6
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 16:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757953752; cv=none; b=Hq3BlpOsvKjtBjwE/LD68fVRvY96mRsRMiFAQTywJEwzFudFOZcGEstxqbyd7MTgVym+eWJaA09pn8h8Pe6mWa8FgBRFYjBAP7Xp6wLW8swuod1tE5WFhKNCShl1L5WjCHKH6l54JDAaRbEC+lwTNYJlxKYhPfZiBQwkf7l35D8=
+	t=1757954740; cv=none; b=LhnK3RHVfD6Q4IQSYctlY9pzQeYZsn0v+sUmgwVDvc0tQ2zdzuZYYh2bCyOS+NsuU4Do9gDUKvAugcJ+6Q52ezSUsGYF0QhFtXWDRiZtbsk24oq7DRtwVvdzfKUH7u7q/pKlsdmvM8r/XDO5/k14xGAgqknJuD48hTWPN0fiORQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757953752; c=relaxed/simple;
-	bh=gE2E45uufUftZzzuWHCvT3/unryv2SJtCTK24vDB94Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RvJRFp34YkRibRWN++9hrr69cXKUVtpVK78NsxmWjyGYhm75JKh2FQRpBn4CLojDIp+7uum9Pd3h6OFCwvohMasFKlQ+HAOSkzUurGeEN9VBKZRnoRi75Vptct1rLdoZT/rcYpWWd5w5MkZJ/Z0LMUqSnaNGAkz4EQ9OiieFB2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cZ1CyEQG; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-887764c2834so277726039f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 09:29:08 -0700 (PDT)
+	s=arc-20240116; t=1757954740; c=relaxed/simple;
+	bh=zbBslusboByHikprpTmSMVoZIVvAXZzfHllUZVLH0Bg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=byUyM3z8aiSRd3aQQ9xkCIOSp3+2oUowyiD0evG8SdFxu4nVdmLoYjgsLuPxZHI3msBW6Xeaa18QWlQJndNfnBLQMxCSXommu+ChPYeVIlu2ebrsNWDBG4wRp5yH0y7x0K10QCxCO6Yysve/PGqNkPyEWj3Lcp5d9kvev0jVorc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vy4TDkOF; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b521ae330b0so3126222a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 09:45:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1757953748; x=1758558548; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f+sTjpO0cIpsChCn8JbuHptxP7HKcKjnaPUPmSOiAZ4=;
-        b=cZ1CyEQGGs39kqH7nfzoPBcNTRwqlQ1TdfDhySm4p+SSd65VpPId7F+E7wJ4ykPK1s
-         Mj9Q5PpQ5oooRDRzy9vMCbWP3T0FgbBNViIKhOs+gbcyhrGXiDf1aMjOXRKzfd2CwWyK
-         L7zCMlE1703RrOuf52J3RIEF2nLiF9OViRMME=
+        d=google.com; s=20230601; t=1757954737; x=1758559537; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rV+XG5RFGGx0WSlVed1inCLN42/DoGgCGt9RoOWZ17Y=;
+        b=vy4TDkOFlhGwaWqsF7dkZemIZKR5lPy1BJmdVy82vSrMlbTeEjIYmLCjJCORXS+azl
+         Mz95LzElxxdZKUI1biqNdwOLkoOBWItbauDVGx0jdY/IRVQsuLQe2CqbacWZTGA0PPpE
+         MoDzkIQ4q4wKmAki2PN/EqAd8yIfvbMsdrOpTubKTNSE4vmikpTq5RuFXjvfHPcyIuID
+         M9GBalHvC42bMT0EzkFaFqkTRfgrVeNWNKfUg4cZ/aLxxIgAm/1cUmaZV921ELXYz/xE
+         m/qf0em0s2nauKMC6sgncn2i2XJb2Xjm2pwsQbo3maG+WwDeCVsphisbL6ZH4ApvA6Ai
+         V2fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757953748; x=1758558548;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f+sTjpO0cIpsChCn8JbuHptxP7HKcKjnaPUPmSOiAZ4=;
-        b=FYahiWKseHp7aTFSWA8cf6ygzLgWAE/whranoLsH29tHdemgmlSQuSSgoEV0rWJqWh
-         nGsC7bcDkXjugZIR2xsKQwMtkChAgmWA639hsfLzg3cbP0Kd0Z5vYBO4t/kPAl5x6JEx
-         65Ye1ZEZzaMDDF6qwraZP484IheEsILhOKCzj3S6nEQeYltPbCEsi9hsk6c4wwyS9+rW
-         Onxj4bSjeCf+uD/CAQUMhNwmNU0Ra21d1imBAAz6QMKfZ9roS2bVHw7CLwDbk1OJUzhX
-         iLoQ3dePtmZnX3RnwY2t/SYUtAKtU7mDRL1PvLG9V1wQ64WvmXOZB8KzRvwMX2VN9klW
-         vIkg==
-X-Gm-Message-State: AOJu0Yybs1Rj+O6vtBPKI9UYDdC8HM3hqb01JAna8E4b5QPJFK5Pfj53
-	r7xJ4CWfKZmYiABQ6DmJPjxTxbNEVsG8ThmzxYvWJj9gJcUjOqymioE9gWi/DaODwlQ=
-X-Gm-Gg: ASbGnctpIFv08MziF+BY7HfApCcGQSjwZMkNuYhIs1VOhq2AU3yim4ss98+aC9/WwbK
-	4GN09g91ciGQbYSzJN1G3gzeIiJVp4FNDdXIwLtsbJ9qzele7QylwCTkXbGoensh2MgK26KG+8G
-	P8XMYccotvNc8/dZKcKlChNb2/DDyl/oUNTyL4CJlsANOLI0DUj0s65i/Hd/5cUj6b4EFwW+n9N
-	xHC+Wylt853JFvL85P7lo24hlGYs2g3+7aQtPOkZS9qX/IdBrkzYh/CUEacgPlJgCcS1w9Yls5o
-	eKjvinW412MrveWeHL+DWC03T3ETxqm9QBVVeUa96aRh4loxfw3AD2+KvvfEVbxrYtuT+IIcGgO
-	OXkOorGEUZ3T83Ur2CaiJF9R1ackKojzPSxT1EX2v+kL2f70=
-X-Google-Smtp-Source: AGHT+IEJzZF0BGCbIvlEszdewtPyiyEjXRaiR+hdFvugN44tYVhlRO+VJIO/vMCzUnVJIaBknAPoVg==
-X-Received: by 2002:a05:6602:140f:b0:887:48b8:fe74 with SMTP id ca18e2360f4ac-89034dd42c9mr1343262539f.17.1757953747088;
-        Mon, 15 Sep 2025 09:29:07 -0700 (PDT)
-Received: from [10.212.145.175] ([12.216.155.19])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-88f2f6c62a5sm465640039f.22.2025.09.15.09.29.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Sep 2025 09:29:06 -0700 (PDT)
-Message-ID: <3dc95227-2be9-48a0-bdea-3f283d9b2a38@linuxfoundation.org>
-Date: Mon, 15 Sep 2025 10:29:05 -0600
+        d=1e100.net; s=20230601; t=1757954737; x=1758559537;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rV+XG5RFGGx0WSlVed1inCLN42/DoGgCGt9RoOWZ17Y=;
+        b=LhbAo5R7UVXPoWel2s7+ou6Q4Vv5lTlbmJG5pqgfZlyXoul9ls/id/9xDGq7sV5HCa
+         k3yRl5Xoa/uBovUIz3ZKnASnzRAPDF5itZEi/llVt45UMTkp4tu1mUGKHwv6Qq9lqtAf
+         2xkf0pbdT5NObwEyI2HPAo0I5uzafkxzAXdi/qIITZ5k9WSVdTQJi0luqJDjagFvy8a4
+         zuPNQ37VV3b7aJkcftWAoXpEdYtghqaNVaj1PTyEB4NxaekckT9tqJq5YjyOfnpLnXUZ
+         nmMkHneyUA5UMY3CaabUUaLtG6Yu3btGSV1CP6mXXP1phls31J3HtM5w/yCCNYAGtYyS
+         TXUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUTllER+a401IP0A686JQjd3AmTbQ20pBSN49ra4fLw3EqJMdH4+Kx+6blHtZb4eosSOdQSkpdhDSq3VdVkdEc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEstz0nr1kTzwNCpOhGqGhe+QNMrnWxVnDYmtKvflTS8nohITX
+	ZIHp9a9a0lS50gPogWqS/WdeLihySsw0M9aPVQJd6zCC8+VuokBSiBHg5OPTOxZVh58jJMn9S5X
+	rSd4iRc0/JYcd+uv+Dg8VDgJx+g==
+X-Google-Smtp-Source: AGHT+IEAgY6VkXbGhl6l9muDNqmcvsiv9qd7+stbRvW4guJMBZCDnQLACUz038WuYWTWZXakBxrH9BGqLG7UDujvDA==
+X-Received: from pjk14.prod.google.com ([2002:a17:90b:558e:b0:32e:27d9:eda1])
+ (user=kaleshsingh job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a20:2449:b0:25b:d1a8:5ccf with SMTP id adf61e73a8af0-2602a593791mr17106705637.21.1757954736574;
+ Mon, 15 Sep 2025 09:45:36 -0700 (PDT)
+Date: Mon, 15 Sep 2025 09:36:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v2] kunit: Enable PCI on UML without triggering
- WARN()
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org, linux-um@lists.infradead.org
-References: <20250908-kunit-uml-pci-v2-1-d8eba5f73c9d@linutronix.de>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250908-kunit-uml-pci-v2-1-d8eba5f73c9d@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
+Message-ID: <20250915163838.631445-1-kaleshsingh@google.com>
+Subject: [PATCH v2 0/7] vma count: fixes, test and improvements
+From: Kalesh Singh <kaleshsingh@google.com>
+To: akpm@linux-foundation.org, minchan@kernel.org, lorenzo.stoakes@oracle.com, 
+	david@redhat.com, Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de
+Cc: kernel-team@android.com, android-mm@google.com, 
+	Kalesh Singh <kaleshsingh@google.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Kees Cook <kees@kernel.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/8/25 01:03, Thomas Weißschuh wrote:
-> Various KUnit tests require PCI infrastructure to work. All normal
-> platforms enable PCI by default, but UML does not. Enabling PCI from
-> .kunitconfig files is problematic as it would not be portable. So in
-> commit 6fc3a8636a7b ("kunit: tool: Enable virtio/PCI by default on UML")
-> PCI was enabled by way of CONFIG_UML_PCI_OVER_VIRTIO=y. However
-> CONFIG_UML_PCI_OVER_VIRTIO requires additional configuration of
-> CONFIG_UML_PCI_OVER_VIRTIO_DEVICE_ID or will otherwise trigger a WARN() in
-> virtio_pcidev_init(). However there is no one correct value for
-> UML_PCI_OVER_VIRTIO_DEVICE_ID which could be used by default.
-> 
-> This warning is confusing when debugging test failures.
-> 
-> On the other hand, the functionality of CONFIG_UML_PCI_OVER_VIRTIO is not
-> used at all, given that it is completely non-functional as indicated by
-> the WARN() in question. Instead it is only used as a way to enable
-> CONFIG_UML_PCI which itself is not directly configurable.
-> 
-> Instead of going through CONFIG_UML_PCI_OVER_VIRTIO, introduce a custom
-> configuration option which enables CONFIG_UML_PCI without triggering
-> warnings or building dead code.
-> 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
-> ---
-> Changes in v2:
-> - Rebase onto v6.17-rc1
-> - Pick up review from Johannes
-> - Link to v1: https://lore.kernel.org/r/20250627-kunit-uml-pci-v1-1-a622fa445e58@linutronix.de
-> ---
->   lib/kunit/Kconfig                           | 7 +++++++
->   tools/testing/kunit/configs/arch_uml.config | 5 ++---
->   2 files changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> index c10ede4b1d2201d5f8cddeb71cc5096e21be9b6a..1823539e96da30e165fa8d395ccbd3f6754c836e 100644
-> --- a/lib/kunit/Kconfig
-> +++ b/lib/kunit/Kconfig
-> @@ -106,4 +106,11 @@ config KUNIT_DEFAULT_TIMEOUT
->   	  If unsure, the default timeout of 300 seconds is suitable for most
->   	  cases.
->   
-> +config KUNIT_UML_PCI
-> +	bool "KUnit UML PCI Support"
-> +	depends on UML
-> +	select UML_PCI
-> +	help
-> +	  Enables the PCI subsystem on UML for use by KUnit tests.
+Hi all,
 
-I am applying this patch for 6.18-rc1.
+This is v2 to the VMA count patch I previously posted at:
 
-Please send a patch to fix the following warning on top of this one based
-on
+https://lore.kernel.org/r/20250903232437.1454293-1-kaleshsingh@google.com/
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=kunit
 
-WARNING: please write a help paragraph that fully describes the config symbol with at least 4 lines
-#136: FILE: lib/kunit/Kconfig:109:
-+config KUNIT_UML_PCI
-+	bool "KUnit UML PCI Support"
-+	depends on UML
-+	select UML_PCI
-+	help
-+	  Enables the PCI subsystem on UML for use by KUnit tests.
+I've split it into multiple patches to address the feedback.
 
-thanks,
--- Shuah
+The main changes in v2 are:
+
+- Use a capacity-based check for VMA count limit, per Lorenzo.
+- Rename map_count to vma_count, per David.
+- Add assertions for exceeding the limit, per Pedro.
+- Add tests for max_vma_count, per Liam.
+- Emit a trace event for failure due to insufficient capacity for
+  observability
+
+Tested on x86_64 and arm64:
+
+- Build test:
+    - allyesconfig for rename
+
+- Selftests:
+      cd tools/testing/selftests/mm && \
+          make && \
+          ./run_vmtests.sh -t max_vma_count
+
+       (With trace_max_vma_count_exceeded enabled)
+
+- vma tests:
+      cd tools/testing/vma && \
+          make && \
+	  ./vma
+
+Thanks,
+Kalesh
+
+Kalesh Singh (7):
+  mm: fix off-by-one error in VMA count limit checks
+  mm/selftests: add max_vma_count tests
+  mm: introduce vma_count_remaining()
+  mm: rename mm_struct::map_count to vma_count
+  mm: harden vma_count against direct modification
+  mm: add assertion for VMA count limit
+  mm/tracing: introduce max_vma_count_exceeded trace event
+
+ fs/binfmt_elf.c                               |   2 +-
+ fs/coredump.c                                 |   2 +-
+ include/linux/mm.h                            |  35 +-
+ include/linux/mm_types.h                      |   5 +-
+ include/trace/events/vma.h                    |  32 +
+ kernel/fork.c                                 |   2 +-
+ mm/debug.c                                    |   2 +-
+ mm/internal.h                                 |   1 +
+ mm/mmap.c                                     |  28 +-
+ mm/mremap.c                                   |  13 +-
+ mm/nommu.c                                    |   8 +-
+ mm/util.c                                     |   1 -
+ mm/vma.c                                      |  88 ++-
+ tools/testing/selftests/mm/Makefile           |   1 +
+ .../selftests/mm/max_vma_count_tests.c        | 709 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   5 +
+ tools/testing/vma/vma.c                       |  32 +-
+ tools/testing/vma/vma_internal.h              |  44 +-
+ 18 files changed, 949 insertions(+), 61 deletions(-)
+ create mode 100644 include/trace/events/vma.h
+ create mode 100644 tools/testing/selftests/mm/max_vma_count_tests.c
+
+
+base-commit: f83ec76bf285bea5727f478a68b894f5543ca76e
+-- 
+2.51.0.384.g4c02a37b29-goog
+
 
