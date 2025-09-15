@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-41517-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41518-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7DDBB5827A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 18:48:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69A35B58279
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 18:48:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19E021A207F8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 16:48:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7899C7B16E4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 16:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 688A7299954;
-	Mon, 15 Sep 2025 16:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8717C285CB3;
+	Mon, 15 Sep 2025 16:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LUADRP39"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gVZCAX6H"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA95292938
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 16:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA0B2820BA
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 16:47:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757954818; cv=none; b=HUkyM/3d0DrBfFG2hAAWO/zUabbI2tsMqI1JdIn5V968bYeTuFL4RFd3njXFuuhvvR0ToJKNqYdDB5J56+PlKtlFVOXd3cYtonUx5TItA5NPpGJYhqRnOJA/uXDae3egUqvGwk/GaUK9ExQ73TJVuBoKTdXMAnamFMgdh7FzfHM=
+	t=1757954832; cv=none; b=Z24UJT65h5Ue74zz54rDECwu2XMBRLBBj9wkShSPXlgbt+jmSEEQXHrzuuoE2/XzAqxf0DGJAfMAFK0rhG6h9TYTyfguGtkqFA74yE8mL2YtgLUIWkUQA0GNFiI+2T+d/q49MZC1QJ597Bke3zZErhm3dPyQ/4X58k765bcIsQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757954818; c=relaxed/simple;
-	bh=mxgSbuM3vTGaiZBQ17HgKAaGLPJx9xqthCVW+1kVVoQ=;
+	s=arc-20240116; t=1757954832; c=relaxed/simple;
+	bh=pvCfH5VsfNwVFReZuZTk36FRtKutRSyx+F6VGLxE6kM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=pgoprOyt/JnAM+ww4lbHpv9uoiRvdYwUTWvNC9ExMoOsyLVTxFoJ5n2wTNjVrtfQclBawCruxkaRvAkpS+YsSp4a2VAx7qAscEvrx15vJozf6OgVKAECWaPWK1J9aNLD8/DRLgYPwlS0G5CQGkL1wKAfBsKvcDuYOjAvKIdpIYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LUADRP39; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=XbJiREHJnrSGdAHshOmerCQZYEQkB/v7HFPDh/SXO2JHMJMmBaHyEkXBuC3jyoW8u9Bu27r9F0xUKaEZeoQDL5zP1exbPHk2hfwfSSkrERexssnHR1vuIClYC0piUkicacXhvg906xw5g0CqhSdEpqu6poPSK8kGiGrOULxNvsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gVZCAX6H; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b521995d498so3229908a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 09:46:55 -0700 (PDT)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b54dd0b6abaso116205a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 09:47:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757954814; x=1758559614; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1757954830; x=1758559630; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SbJK8pWy0CZE0crqWikRoe+l2baB0Rx7jlgQSj60pLY=;
-        b=LUADRP39biqSf8B0SAW3o65iokIzW92ZpxTMwpe6NSdZohY2MnahdT5A3GLorR8Xg1
-         KLmJ5EFJkLu75AW6Qhmbr3H6iFZ6FrvKVNPAaCbory4+DDebrUf2hLvg750OVAA4uRAo
-         7Bn6QPs8w9NVJq8J10Nx7fHJHm8XybkL7FHuzSAHosanrAXqc9FtsU862jxhUWR7Ao61
-         PHN7bU6Ah6uwG8YWcEssZusKB1mXeGdS4Elx9oia0O/NONZl7fyMVpK3YRpL7Lxzwtk4
-         q8UPl58h1/LpPKKlRC4eSEfWS99GPG9tmok1p3QSfV3bCsbKprI52gSb97GKe1+4r3J8
-         J8cg==
+        bh=hKwpABqpohuFqzMZ59NYGHVdaV3v0Z5awKHv0UgL8Ps=;
+        b=gVZCAX6HJOPfCYrrcb8VP55QLCj2yQ1s6oyBe+OSHPAbX1XUOkOkyCYncQ+BeHO6qm
+         H23YxZ9/AY0EpPXOgT3RmEvMMfhqFAuILCEebdYBFRECRLnNO4+KVkmdLYqBktY9RTxc
+         2kxkNEycjsVQBB4QftNiRhNmGSU3FKvjuInNXx76ApzEKe/jfj2uwrrS8dCoAUaDAcvZ
+         67P5JmI8cglRupSmoe3FLBdcqm7kKkhO6bbY9y7jf7RBuLFinschXcVgTz19dnHD2aZ2
+         yhNKpF/eDBgyD0ajOzj4ojTL0Tn6eTEr6AShmYxf7RcLa1UYYFgXcYjjCD2d9ZYSHj3y
+         zI+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757954814; x=1758559614;
+        d=1e100.net; s=20230601; t=1757954830; x=1758559630;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SbJK8pWy0CZE0crqWikRoe+l2baB0Rx7jlgQSj60pLY=;
-        b=JDN/3GypghDSKdWOQyDM2KE/93xTEyMBlsWtDpBptQ0OZelQqOjyASEbF8efz7I7LQ
-         PSZHMQrlWNb6pD1de03EaH9tJztgXMF4xoRgHJ6V6168cyZ9AXtxgCIx9UmLPJGbUlcF
-         j4QlIysbZp01PRyiySDeGeIF4rGuMx4+9ejwCHl9sFhyY/ZIgl5higjuHE8KILMweAl2
-         XutjA8HRFrhnQ+zKZKpPVMxcdpmaOXPZ+9OTXKnCEP5bxT2ItPp0tQBzkwrjf1A0Q+K3
-         BDtJBaSEbNW75MHRqwtSYrLBDZ5HI86fDScoX+jdMT7LqMjCtfnXOFNryLuQtCAku6ie
-         GzeA==
-X-Forwarded-Encrypted: i=1; AJvYcCXT7rHcn4VFYSwFAJVsFXHYhrQm9ArTmI5qvzqQWbqwA0po8YYhQmWcDj4Q3CNq6arDwBdmrl0wkJKgWcrcPns=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9v39AxjSUJIabd9tNAymzLU7jD5sOb0KRuuPy9hoaZP2mLLj9
-	VVsITZxyJrHLQVOutXKNz6rBTGgknvKXpq7tauZJ4fJy3YLi9jOLz6MAl9AewZ1NWTdzY3RH16X
-	yOe5cyqWAADDwGucdrFmQerDawg==
-X-Google-Smtp-Source: AGHT+IFj2fssKhkti4Yi38ezbH/JI+2/57SQchOc8iv6dsxeJ23DL0meIXHXVVhUOdfHhPdiopD3vNalm3MQQmXFcA==
-X-Received: from pleg2.prod.google.com ([2002:a17:902:e382:b0:25d:f53e:e5a4])
+        bh=hKwpABqpohuFqzMZ59NYGHVdaV3v0Z5awKHv0UgL8Ps=;
+        b=Wmyi9UKYld0VhJNMajOrlp2+5syWX69PVQG5YkJ4MQwP8SNXb8/Djf/cYW1m1RO6ae
+         BGUFFs1kIdJdcw0tAMhTJHf76gJkPWFu9a+ysK0ULHC3AaVxSu32KJEdfxsO25XM8Mly
+         RyNow/obtSZO7btBD9QPGWbNB+Zjr3dGadr6f0BdbzldRPknALkO8KGxV0japjfU0W8r
+         W+gF54rLufbQ8EYiGYMsLfggJCW/j/QZo7+CwEpVEbN6XqFubTlSr+zH6YsnRNJsZgwk
+         6i8UOWhsge0gEOtJWn+56lJtOkHDUAecGljLL5rSCfPi+ghWP99D6Dcjke5TKf2srFTG
+         UWag==
+X-Forwarded-Encrypted: i=1; AJvYcCWsUfTWcGOdeJ91JfRhdxHftDd1IgL4BQ7pOpK3amaLUDHMbEu4/mlfA/suLua1A8b+RbeVQaIJc6fZOkqCw/8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyr4gltsLKXVrzAhRh3xjtNdWw39UUqxUOjOjZJErnMffVP5wkS
+	iHfBNoVKBE7KZRX1lgJT5WUnVIr3jcTownj6tKdvZsiGTtHk+cPoUqTqKQ/WGwiFPBGUI8TQfLC
+	uloJlMLnWg8S81/fVrtifgpC9BQ==
+X-Google-Smtp-Source: AGHT+IHxs26EIdlIXz631Uz365/CGN6f9O6Xm7lLrsiaFhIbp7CDzVSSsE3TgFf9kclQMXvcquwmL00++yYPRtwtYA==
+X-Received: from plbnb15.prod.google.com ([2002:a17:903:15cf:b0:24c:af07:f077])
  (user=kaleshsingh job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:1b4c:b0:24c:b2a4:7089 with SMTP id d9443c01a7336-25d26077175mr169658175ad.31.1757954814330;
- Mon, 15 Sep 2025 09:46:54 -0700 (PDT)
-Date: Mon, 15 Sep 2025 09:36:36 -0700
+ 2002:a17:903:2448:b0:267:a55a:8684 with SMTP id d9443c01a7336-267a55a8724mr34282065ad.2.1757954829980;
+ Mon, 15 Sep 2025 09:47:09 -0700 (PDT)
+Date: Mon, 15 Sep 2025 09:36:37 -0700
 In-Reply-To: <20250915163838.631445-1-kaleshsingh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250915163838.631445-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
-Message-ID: <20250915163838.631445-6-kaleshsingh@google.com>
-Subject: [PATCH v2 5/7] mm: harden vma_count against direct modification
+Message-ID: <20250915163838.631445-7-kaleshsingh@google.com>
+Subject: [PATCH v2 6/7] mm: add assertion for VMA count limit
 From: Kalesh Singh <kaleshsingh@google.com>
 To: akpm@linux-foundation.org, minchan@kernel.org, lorenzo.stoakes@oracle.com, 
 	david@redhat.com, Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de
@@ -94,16 +94,17 @@ Cc: kernel-team@android.com, android-mm@google.com,
 	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-To make VMA counting more robust, prevent direct modification of the
-mm->vma_count field. This is achieved by making the public-facing
-member const via a union and requiring all modifications to go
-through a new set of helper functions the operate on a private
-__vma_count.
+Building on the vma_count helpers, add a VM_WARN_ON_ONCE() to detect
+cases where the VMA count exceeds the sysctl_max_map_count limit.
 
-While there are no other invariants tied to vma_count currently, this
-structural change improves maintainability; as it creates a single,
-centralized point for any future logic, such as adding debug checks
-or updating related statistics (in subsequent patches).
+This check will help catch future bugs or regressions where
+the VMAs are allocated exceeding the limit.
+
+The warning is placed in the main vma_count_*() helpers, while the
+internal *_nocheck variants bypass it. _nocheck helpers are used to
+ensure that the assertion does not trigger a false positive in
+the legitimate case of a temporary VMA increase past the limit
+by a VMA split in munmap().
 
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: David Hildenbrand <david@redhat.com>
@@ -114,208 +115,166 @@ Cc: Minchan Kim <minchan@kernel.org>
 Cc: Pedro Falcato <pfalcato@suse.de>
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 ---
- include/linux/mm.h               | 25 +++++++++++++++++++++++++
- include/linux/mm_types.h         |  5 ++++-
- kernel/fork.c                    |  2 +-
- mm/mmap.c                        |  2 +-
- mm/vma.c                         | 12 ++++++------
- tools/testing/vma/vma.c          |  2 +-
- tools/testing/vma/vma_internal.h | 30 +++++++++++++++++++++++++++++-
- 7 files changed, 67 insertions(+), 11 deletions(-)
+
+Changes in v2:
+  - Add assertions if exceeding max_vma_count limit, per Pedro
+
+ include/linux/mm.h               | 12 ++++++--
+ mm/internal.h                    |  1 -
+ mm/vma.c                         | 49 +++++++++++++++++++++++++-------
+ tools/testing/vma/vma_internal.h |  7 ++++-
+ 4 files changed, 55 insertions(+), 14 deletions(-)
 
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 138bab2988f8..8bad1454984c 100644
+index 8bad1454984c..3a3749d7015c 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -4219,4 +4219,29 @@ static inline bool snapshot_page_is_faithful(const struct page_snapshot *ps)
-
+@@ -4219,19 +4219,27 @@ static inline bool snapshot_page_is_faithful(const struct page_snapshot *ps)
+ 
  void snapshot_page(struct page_snapshot *ps, const struct page *page);
-
-+static inline void vma_count_init(struct mm_struct *mm)
-+{
-+	ACCESS_PRIVATE(mm, __vma_count) = 0;
-+}
+ 
++int vma_count_remaining(const struct mm_struct *mm);
 +
+ static inline void vma_count_init(struct mm_struct *mm)
+ {
+ 	ACCESS_PRIVATE(mm, __vma_count) = 0;
+ }
+ 
+-static inline void vma_count_add(struct mm_struct *mm, int nr_vmas)
++static inline void __vma_count_add_nocheck(struct mm_struct *mm, int nr_vmas)
+ {
+ 	ACCESS_PRIVATE(mm, __vma_count) += nr_vmas;
+ }
+ 
 +static inline void vma_count_add(struct mm_struct *mm, int nr_vmas)
 +{
-+	ACCESS_PRIVATE(mm, __vma_count) += nr_vmas;
++	VM_WARN_ON_ONCE(!vma_count_remaining(mm));
++	__vma_count_add_nocheck(mm, nr_vmas);
 +}
 +
-+static inline void vma_count_sub(struct mm_struct *mm, int nr_vmas)
-+{
-+	vma_count_add(mm, -nr_vmas);
-+}
-+
-+static inline void vma_count_inc(struct mm_struct *mm)
-+{
-+	vma_count_add(mm, 1);
-+}
-+
-+static inline void vma_count_dec(struct mm_struct *mm)
-+{
-+	vma_count_sub(mm, 1);
-+}
-+
- #endif /* _LINUX_MM_H */
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 4343be2f9e85..2ea8fc722aa2 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -1020,7 +1020,10 @@ struct mm_struct {
- #ifdef CONFIG_MMU
- 		atomic_long_t pgtables_bytes;	/* size of all page tables */
- #endif
--		int vma_count;			/* number of VMAs */
-+		union {
-+			const int vma_count;		/* number of VMAs */
-+			int __private __vma_count;
-+		};
-
- 		spinlock_t page_table_lock; /* Protects page tables and some
- 					     * counters
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 8fcbbf947579..ea9eff416e51 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1037,7 +1037,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
- 	mmap_init_lock(mm);
- 	INIT_LIST_HEAD(&mm->mmlist);
- 	mm_pgtables_bytes_init(mm);
--	mm->vma_count = 0;
-+	vma_count_init(mm);
- 	mm->locked_vm = 0;
- 	atomic64_set(&mm->pinned_vm, 0);
- 	memset(&mm->rss_stat, 0, sizeof(mm->rss_stat));
-diff --git a/mm/mmap.c b/mm/mmap.c
-index c6769394a174..30ddd550197e 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1828,7 +1828,7 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
- 		 */
- 		vma_iter_bulk_store(&vmi, tmp);
+ static inline void vma_count_sub(struct mm_struct *mm, int nr_vmas)
+ {
+-	vma_count_add(mm, -nr_vmas);
++	__vma_count_add_nocheck(mm, -nr_vmas);
+ }
  
--		mm->vma_count++;
-+		vma_count_inc(mm);
+ static inline void vma_count_inc(struct mm_struct *mm)
+diff --git a/mm/internal.h b/mm/internal.h
+index 39f1c9535ae5..e0567a3b64fa 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -1661,6 +1661,5 @@ static inline bool reclaim_pt_is_enabled(unsigned long start, unsigned long end,
+ void dup_mm_exe_file(struct mm_struct *mm, struct mm_struct *oldmm);
+ int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm);
  
- 		if (tmp->vm_ops && tmp->vm_ops->open)
- 			tmp->vm_ops->open(tmp);
+-int vma_count_remaining(const struct mm_struct *mm);
+ 
+ #endif	/* __MM_INTERNAL_H */
 diff --git a/mm/vma.c b/mm/vma.c
-index 64f4e7c867c3..0cd3cb472220 100644
+index 0cd3cb472220..0e4fcaebe209 100644
 --- a/mm/vma.c
 +++ b/mm/vma.c
-@@ -352,7 +352,7 @@ static void vma_complete(struct vma_prepare *vp, struct vma_iterator *vmi,
+@@ -323,15 +323,17 @@ static void vma_prepare(struct vma_prepare *vp)
+ }
+ 
+ /*
+- * vma_complete- Helper function for handling the unlocking after altering VMAs,
+- * or for inserting a VMA.
++ * This is the internal, unsafe version of vma_complete(). Unlike its
++ * wrapper, this function bypasses runtime checks for VMA count limits by
++ * using the _nocheck vma_count* helpers.
+  *
+- * @vp: The vma_prepare struct
+- * @vmi: The vma iterator
+- * @mm: The mm_struct
++ * Its use is restricted to __split_vma() where the VMA count can be
++ * temporarily higher than the sysctl_max_map_count limit.
++ *
++ * All other callers must use vma_complete().
+  */
+-static void vma_complete(struct vma_prepare *vp, struct vma_iterator *vmi,
+-			 struct mm_struct *mm)
++static void __vma_complete(struct vma_prepare *vp, struct vma_iterator *vmi,
++			   struct mm_struct *mm)
+ {
+ 	if (vp->file) {
+ 		if (vp->adj_next)
+@@ -352,7 +354,11 @@ static void vma_complete(struct vma_prepare *vp, struct vma_iterator *vmi,
  		 * (it may either follow vma or precede it).
  		 */
  		vma_iter_store_new(vmi, vp->insert);
--		mm->vma_count++;
-+		vma_count_inc(mm);
+-		vma_count_inc(mm);
++		/*
++		 * Explicitly allow vma_count to exceed the threshold to prevent,
++		 * blocking munmap() freeing resources.
++		 */
++		__vma_count_add_nocheck(mm, 1);
  	}
  
  	if (vp->anon_vma) {
-@@ -383,7 +383,7 @@ static void vma_complete(struct vma_prepare *vp, struct vma_iterator *vmi,
- 		}
- 		if (vp->remove->anon_vma)
- 			anon_vma_merge(vp->vma, vp->remove);
--		mm->vma_count--;
-+		vma_count_dec(mm);
- 		mpol_put(vma_policy(vp->remove));
- 		if (!vp->remove2)
- 			WARN_ON_ONCE(vp->vma->vm_end < vp->remove->vm_end);
-@@ -1266,7 +1266,7 @@ static void vms_complete_munmap_vmas(struct vma_munmap_struct *vms,
- 	struct mm_struct *mm;
- 
- 	mm = current->mm;
--	mm->vma_count -= vms->vma_count;
-+	vma_count_sub(mm, vms->vma_count);
- 	mm->locked_vm -= vms->locked_vm;
- 	if (vms->unlock)
- 		mmap_write_downgrade(mm);
-@@ -1795,7 +1795,7 @@ int vma_link(struct mm_struct *mm, struct vm_area_struct *vma)
- 	vma_start_write(vma);
- 	vma_iter_store_new(&vmi, vma);
- 	vma_link_file(vma);
--	mm->vma_count++;
-+	vma_count_inc(mm);
- 	validate_mm(mm);
- 	return 0;
+@@ -403,6 +409,26 @@ static void vma_complete(struct vma_prepare *vp, struct vma_iterator *vmi,
+ 		uprobe_mmap(vp->insert);
  }
-@@ -2495,7 +2495,7 @@ static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap)
- 	/* Lock the VMA since it is modified after insertion into VMA tree */
- 	vma_start_write(vma);
- 	vma_iter_store_new(vmi, vma);
--	map->mm->vma_count++;
-+	vma_count_inc(map->mm);
- 	vma_link_file(vma);
  
- 	/*
-@@ -2810,7 +2810,7 @@ int do_brk_flags(struct vma_iterator *vmi, struct vm_area_struct *vma,
- 	if (vma_iter_store_gfp(vmi, vma, GFP_KERNEL))
- 		goto mas_store_fail;
- 
--	mm->vma_count++;
-+	vma_count_inc(mm);
- 	validate_mm(mm);
- out:
- 	perf_event_mmap(vma);
-diff --git a/tools/testing/vma/vma.c b/tools/testing/vma/vma.c
-index 69fa7d14a6c2..ee5a1e2365e0 100644
---- a/tools/testing/vma/vma.c
-+++ b/tools/testing/vma/vma.c
-@@ -261,7 +261,7 @@ static int cleanup_mm(struct mm_struct *mm, struct vma_iterator *vmi)
++/*
++ * vma_complete- Helper function for handling the unlocking after altering VMAs,
++ * or for inserting a VMA.
++ *
++ * @vp: The vma_prepare struct
++ * @vmi: The vma iterator
++ * @mm: The mm_struct
++ */
++static void vma_complete(struct vma_prepare *vp, struct vma_iterator *vmi,
++			 struct mm_struct *mm)
++{
++	/*
++	 * __vma_complete() explicitly foregoes checking the new
++	 * vma_count against the sysctl_max_map_count limit, so
++	 * do it here.
++	 */
++	VM_WARN_ON_ONCE(!vma_count_remaining(mm));
++	__vma_complete(vp, vmi, mm);
++}
++
+ /*
+  * init_vma_prep() - Initializer wrapper for vma_prepare struct
+  * @vp: The vma_prepare struct
+@@ -564,8 +590,11 @@ __split_vma(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 		vma->vm_end = addr;
  	}
  
- 	mtree_destroy(&mm->mm_mt);
--	mm->vma_count = 0;
-+	vma_count_init(mm);
- 	return count;
- }
- 
+-	/* vma_complete stores the new vma */
+-	vma_complete(&vp, vmi, vma->vm_mm);
++	/*
++	 * __vma_complete stores the new vma without checking against the
++	 * sysctl_max_map_count (vma_count) limit.
++	 */
++	__vma_complete(&vp, vmi, vma->vm_mm);
+ 	validate_mm(vma->vm_mm);
+
+ 	/* Success. */
 diff --git a/tools/testing/vma/vma_internal.h b/tools/testing/vma/vma_internal.h
-index 15525b86145d..6e724ba1adf4 100644
+index 6e724ba1adf4..d084b1eb2a5c 100644
 --- a/tools/testing/vma/vma_internal.h
 +++ b/tools/testing/vma/vma_internal.h
-@@ -251,7 +251,10 @@ struct mutex {};
- 
- struct mm_struct {
- 	struct maple_tree mm_mt;
--	int vma_count;			/* number of VMAs */
-+	union {
-+		const int vma_count;		/* number of VMAs */
-+		int __vma_count;
-+	};
- 	unsigned long total_vm;	   /* Total pages mapped */
- 	unsigned long locked_vm;   /* Pages that have PG_mlocked set */
- 	unsigned long data_vm;	   /* VM_WRITE & ~VM_SHARED & ~VM_STACK */
-@@ -1526,4 +1529,29 @@ static int vma_count_remaining(const struct mm_struct *mm)
- 	return (max_count > vma_count) ? (max_count - vma_count) : 0;
+@@ -1534,11 +1534,16 @@ static inline void vma_count_init(struct mm_struct *mm)
+ 	mm->__vma_count = 0;
  }
- 
-+static inline void vma_count_init(struct mm_struct *mm)
-+{
-+	mm->__vma_count = 0;
-+}
-+
+
+-static inline void vma_count_add(struct mm_struct *mm, int nr_vmas)
++static inline void __vma_count_add_nocheck(struct mm_struct *mm, int nr_vmas)
+ {
+ 	mm->__vma_count += nr_vmas;
+ }
+
 +static inline void vma_count_add(struct mm_struct *mm, int nr_vmas)
 +{
-+	mm->__vma_count += nr_vmas;
++	__vma_count_add_nocheck(mm, nr_vmas);
 +}
 +
-+static inline void vma_count_sub(struct mm_struct *mm, int nr_vmas)
-+{
-+	vma_count_add(mm, -nr_vmas);
-+}
-+
-+static inline void vma_count_inc(struct mm_struct *mm)
-+{
-+	vma_count_add(mm, 1);
-+}
-+
-+static inline void vma_count_dec(struct mm_struct *mm)
-+{
-+	vma_count_sub(mm, 1);
-+}
-+
- #endif	/* __MM_VMA_INTERNAL_H */
+ static inline void vma_count_sub(struct mm_struct *mm, int nr_vmas)
+ {
+ 	vma_count_add(mm, -nr_vmas);
 -- 
 2.51.0.384.g4c02a37b29-goog
 
