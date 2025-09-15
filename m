@@ -1,64 +1,65 @@
-Return-Path: <linux-kselftest+bounces-41543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7855B5884E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 01:28:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 549EEB5885D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 01:41:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B9E01B23C79
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 23:29:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B92C7ABA03
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Sep 2025 23:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A3D02D838C;
-	Mon, 15 Sep 2025 23:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hH7uZ0kP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14B1B2D8774;
+	Mon, 15 Sep 2025 23:41:15 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB91229B36;
-	Mon, 15 Sep 2025 23:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F157C2D73A2;
+	Mon, 15 Sep 2025 23:41:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757978921; cv=none; b=kSV/o9Y4p0Adq81aFkwiGOGTEmxBeI46RV7OKsFmtADTy1jgWKc8zDacZBLGZCw13BlbqJKuudpxR3T8f6VLlVWqpWhsHOJQfeAze12E3rtmJmxnhFtlhisn7ydbrRJfbP8JxZ3ardF9ArbB2tUHLJv95i3xwgaQHRZYmxPIcO4=
+	t=1757979675; cv=none; b=c7tHck1jTcOIyR2XU4JyfRdPzErIQwCrHML91wGnLmEDDSDShQPAWWZvcb2doSBeShBh+YKBSFoeNIKzZ40cB9qTcu3huZH1mNI8RdVF2XKcwXayVadlqN+1eYcddnjtiIMfIAYNH0QM/Zi4fxgKikyX7gvUiaSgzdSLY5DJ2f4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757978921; c=relaxed/simple;
-	bh=PA6UoBlSVe0qI71y4d+0FeBhLV3+k7F2gbm2YXxBHSU=;
+	s=arc-20240116; t=1757979675; c=relaxed/simple;
+	bh=JuEMNNtyXAo945noq2fgyIyulS4lCT2taizRXolw8WA=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QvbFthgT8gfgmbRz4Dvq24TzUPPvl1g2ERHBT2OgZ1nZ5S6fWWMey2tqsxiazTG38oamLsEOupV9xFpVizG1U4mC3ne676tXRQEx+w0MHcyrKU3DRAapgDa+EJqfc1y0RXq6I5QqfOpbB2RMeBRj2qLVXSRbwwjn+PVQFqZXTi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hH7uZ0kP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B325C4CEF1;
-	Mon, 15 Sep 2025 23:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757978920;
-	bh=PA6UoBlSVe0qI71y4d+0FeBhLV3+k7F2gbm2YXxBHSU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=hH7uZ0kPPtDZeqFuCChGGhnIQmPfE/I+l2jSOEMr5lN3oMVpQjpevALXKVAon98Rh
-	 pBh8o5lRKjXUMjFTXf1aV4NpWIPjL0gYosArFnlxhM2rV2HP3k2SLp0EEHIOY5b0qD
-	 OureWc6oIamF/uUl6RkszeHt99ZB9MWEbHI9Z/9XWaclhlyg0DDeAqPd+Z57wVzJMX
-	 WaGF4+qZSQdRsBN9CBbcl5V+pygYkemNaQRAH+etJosOh+2ILRbRN35IlaP7DBkY6A
-	 hfbTaNs/hMttI5IKZ/Gk8CWN5Aw6Xj2zAsUonvSkug+87rWwwLEB3jXloTk9GRSYeb
-	 CqhRPj3BsT5hw==
-Date: Mon, 15 Sep 2025 16:28:38 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: pabeni@redhat.com, edumazet@google.com, linux-doc@vger.kernel.org,
- corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@amazon.com,
- bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com,
- jhs@mojatatu.com, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
- jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
- donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
- ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Subject: Re: [PATCH v18 net-next 00/14] AccECN protocol patch series
-Message-ID: <20250915162838.2d968900@kernel.org>
-In-Reply-To: <20250911110642.87529-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20250911110642.87529-1-chia-yu.chang@nokia-bell-labs.com>
+	 MIME-Version:Content-Type; b=YBs6ElFTzzrEvDwa2rGYL+8Isp/0ws0KNXnNnl2685DGCUBgtwT4PZMXbmhRFgffTDEV5lh0I3IBOtq6KVnEGv5PTraExsAmvsHNjPbPMcs24PfmGBnYGUxYBMsQPnBkkbq8yW5a7/G6TBWa8hapmBWuA8ztXjUlIvCRw051P6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id 0F89CC07CE;
+	Mon, 15 Sep 2025 23:41:03 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id E2C4D20026;
+	Mon, 15 Sep 2025 23:40:55 +0000 (UTC)
+Date: Mon, 15 Sep 2025 19:41:58 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Kalesh Singh <kaleshsingh@google.com>
+Cc: akpm@linux-foundation.org, minchan@kernel.org,
+ lorenzo.stoakes@oracle.com, david@redhat.com, Liam.Howlett@oracle.com,
+ rppt@kernel.org, pfalcato@suse.de, kernel-team@android.com,
+ android-mm@google.com, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
+ Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Kees Cook
+ <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan
+ <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Juri
+ Lelli <juri.lelli@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Valentin
+ Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>, Shuah Khan
+ <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 7/7] mm/tracing: introduce max_vma_count_exceeded
+ trace event
+Message-ID: <20250915194158.472edea5@gandalf.local.home>
+In-Reply-To: <20250915163838.631445-8-kaleshsingh@google.com>
+References: <20250915163838.631445-1-kaleshsingh@google.com>
+	<20250915163838.631445-8-kaleshsingh@google.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,11 +68,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Stat-Signature: xeh53t51osude5snikt49ygtg765jjcj
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: E2C4D20026
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX182V87XcZg9olTniRrbK41HEticcPkYuYw=
+X-HE-Tag: 1757979655-928162
+X-HE-Meta: U2FsdGVkX19Zx1if+NNOzNVMgDMyEiQRf5KCrWoxEDdLlNyy025itEj2zjYJBMkNwUQkqjVFWdtFRA5Ynf4Yz52t7Y1DGnQ2OrwsGDN+DfgeyZ/AjYltT/l+Fuc8hpc2wOnrMa4yD4BId/vidyDiRLVZf5kH/cEGKQMrhL9USmC5wPTmd/XZBCPSslcwAPZSJYKJrh1jOkhQdQrzGMZhwDuGvOx64jO6Sdz5jN+n3mxHtNycmWq2UKphdEubae/8110tkn8jyhlLd+mre6+YjdQCeFduvdoPDJUesJYNt8Y1VSJVf19uZJ2Wze55wXrfVIdxUSD+IxDLITtQ30dzIQMUtN1rlpTd
 
-On Thu, 11 Sep 2025 13:06:28 +0200 chia-yu.chang@nokia-bell-labs.com
-wrote:
-> Subject: [PATCH v18 net-next 00/14] AccECN protocol patch series
+On Mon, 15 Sep 2025 09:36:38 -0700
+Kalesh Singh <kaleshsingh@google.com> wrote:
 
-I'll apply the first four patches because they keep conflicting with
-other series in the CI. Please repost the rest.
+> Needed observability on in field devices can be collected with minimal
+> overhead and can be toggled on and off. Event driven telemetry can be
+> done with tracepoint BPF programs.
+> 
+> The process comm is provided for aggregation across devices and tgid is
+> to enable per-process aggregation per device.
+
+What do you mean about comm being used to aggregation across devices?
+What's special about this trace event that will make it used across devices?
+
+Note, if BPF is being used, can't the BPF program just add the current
+comm? Why waste space in the ring buffer for it?
+
+
+
+> +
+> +TRACE_EVENT(max_vma_count_exceeded,
+> +
+> +	TP_PROTO(struct task_struct *task),
+
+Why pass in the task if it's always going to be current?
+
+> +
+> +	TP_ARGS(task),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(comm,	task->comm)
+
+This could be:
+
+		__string(comm, current)
+
+But I still want to know what makes this trace event special over other
+trace events to store this, and can't it be retrieved another way,
+especially if BPF is being used to hook to it?
+
+-- Steve
+
+
+> +		__field(pid_t,	tgid)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(comm);
+> +		__entry->tgid = task->tgid;
+> +	),
+> +
+> +	TP_printk("comm=%s tgid=%d", __get_str(comm), __entry->tgid)
+> +);
+> +
 
