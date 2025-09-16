@@ -1,337 +1,176 @@
-Return-Path: <linux-kselftest+bounces-41592-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41594-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B4E5B59310
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 12:12:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E788CB594EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 13:19:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAABF1BC173F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 10:12:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E98757A24BE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 11:17:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80AC72F7AD5;
-	Tue, 16 Sep 2025 10:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B46982D47EF;
+	Tue, 16 Sep 2025 11:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQDbh1Va"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76AAA2F7ACB;
-	Tue, 16 Sep 2025 10:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707232773C3;
+	Tue, 16 Sep 2025 11:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758017544; cv=none; b=tEAJFonY7o8cd3rDEA3mWc8Ex87sDXmwSSKfkQutYw2w+LSAn5+R1vhOLMcLagRdJXGX0JNRgGa0ecgACGHvvJXvy/AtK6JT9iZMesATj+z2mGhs0AZ2CUgJW3ztqxd1QLJ4gDo/Nq34ucAOtBrh00vGbqcqkvghPmk8XgkkxeE=
+	t=1758021539; cv=none; b=EPkEazpkFKMm/0KT7zutLn7lCrawp2HXIN2RF/Y4s40EeRJ8ZiF516E/ywXAXrOCC6+N4Oq4IglM4jqowcr1Pt84mxi4dZMzKTQfexD7zx2qksQqDnsShcFyY13zK1jZqSjua5xLJuqKsuN6GODMRsrNcgDtNa728ZOI53xjaXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758017544; c=relaxed/simple;
-	bh=+jBhf7v7FWI9SUvmU0eP8Ap7x6YsUlvlITRjlGy9t8M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AC/ZNedjtcFPy3KVHETDyoWmKClT4mZdxsGjdcUrcVel6twVjZgBtT6fh0HANAd9wDQeVKTNFYXxEFpoeFec6ekUdu3WwdARbdcfzcuvtihKdlyeSFZgRa7gtuQKXWeHBcfe17x8+6tNTZll9hPZi6dNWOmz81sVj9gyCcLgYAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35CE912FC;
-	Tue, 16 Sep 2025 03:12:10 -0700 (PDT)
-Received: from [10.163.42.157] (unknown [10.163.42.157])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA3FE3F673;
-	Tue, 16 Sep 2025 03:12:09 -0700 (PDT)
-Message-ID: <a99eb11f-a7ac-48a3-a671-c5f0f6b5b491@arm.com>
-Date: Tue, 16 Sep 2025 15:42:07 +0530
+	s=arc-20240116; t=1758021539; c=relaxed/simple;
+	bh=fPi2jTo0hJ6xkgxaFB3CE37jdXxU+Q3zu80o0dV1unM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oif6+3BJVrYclfn356Z4EoofjbGMmvGIipGKdVufCUNZt3hfW+73iaejBRO8hCKG2XbSAR8ku3VnnFSy45DCmxvVBb67tCvbpxpi1EbCe4NUtPjMeT7dsEczhORDjn7EFuY4ScSfkDcHVEc1NtV1pKYaft09b6mapD5XQj1j9eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQDbh1Va; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3C2C4CEEB;
+	Tue, 16 Sep 2025 11:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758021538;
+	bh=fPi2jTo0hJ6xkgxaFB3CE37jdXxU+Q3zu80o0dV1unM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NQDbh1VaUF3+xG9O6//FoHCGnbQqBuJSEFwsn9AWaLs19tnsOKvOZeXgtT2Ppbvh7
+	 zDCkjUFEK2bdYgvEchH4TzeIt6kwysmCsoRqQjdVJbkIYKTZ3q04vmBlHo725QsvxO
+	 7AhrEzl52ZcqfZzj3uI7n5oA/VBZAihCXEtpKdn38X5G1vEogTg4rY1Xs4mpRx0rwL
+	 LuyuHxRxaub0nEEe9tvc8fAnssi5DcdHD1bYPfb2UJIA2PoTryL/GJ7dwW60Kxyoqy
+	 zIXqsQ3Dze7L2+355gXdYkt1Z58WO6RCsVslYfMxHuV++DyfOaya0rg/PVyTka9aHH
+	 QsrmJgW1c/GmA==
+Date: Tue, 16 Sep 2025 12:18:50 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
+	linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+	Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>,
+	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+	Lennart Poettering <mzxreary@0pointer.de>,
+	Daan De Meyer <daan.j.demeyer@gmail.com>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH v2 04/33] block: use extensible_ioctl_valid()
+Message-ID: <02da33e3-6583-4344-892f-a9784b9c5b1b@sirena.org.uk>
+References: <20250912-work-namespace-v2-0-1a247645cef5@kernel.org>
+ <20250912-work-namespace-v2-4-1a247645cef5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] mm/memory-failure: Support disabling soft offline for
- HugeTLB pages
-To: Kyle Meyer <kyle.meyer@hpe.com>, akpm@linux-foundation.org,
- corbet@lwn.net, david@redhat.com, linmiaohe@huawei.com, shuah@kernel.org,
- tony.luck@intel.com, jane.chu@oracle.com, jiaqiyan@google.com
-Cc: Liam.Howlett@oracle.com, bp@alien8.de, hannes@cmpxchg.org, jack@suse.cz,
- joel.granados@kernel.org, laoar.shao@gmail.com, lorenzo.stoakes@oracle.com,
- mclapinski@google.com, mhocko@suse.com, nao.horiguchi@gmail.com,
- osalvador@suse.de, rafael.j.wysocki@intel.com, rppt@kernel.org,
- russ.anderson@hpe.com, shawn.fan@intel.com, surenb@google.com,
- vbabka@suse.cz, linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org
-References: <aMiu_Uku6Y5ZbuhM@hpe.com>
-Content-Language: en-US
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <aMiu_Uku6Y5ZbuhM@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="pXrdOnUKtpdJm8VZ"
+Content-Disposition: inline
+In-Reply-To: <20250912-work-namespace-v2-4-1a247645cef5@kernel.org>
+X-Cookie: You dialed 5483.
 
-On 16/09/25 5:57 AM, Kyle Meyer wrote:
-> Soft offlining a HugeTLB page reduces the HugeTLB page pool.
-> 
-> Commit 56374430c5dfc ("mm/memory-failure: userspace controls soft-offlining pages")
-> introduced the following sysctl interface to control soft offline:
-> 
-> /proc/sys/vm/enable_soft_offline
-> 
-> The interface does not distinguish between page types:
-> 
->     0 - Soft offline is disabled
->     1 - Soft offline is enabled
-> 
-> Convert enable_soft_offline to a bitmask and support disabling soft
-> offline for HugeTLB pages:
-> 
-> Bits:
-> 
->     0 - Enable soft offline
->     1 - Disable soft offline for HugeTLB pages
-> 
-> Supported values:
-> 
->     0 - Soft offline is disabled
->     1 - Soft offline is enabled
->     3 - Soft offline is enabled (disabled for HugeTLB pages)
-> 
-> Existing behavior is preserved.
-> 
-> Update documentation and HugeTLB soft offline self tests.
-> 
-> Reported-by: Shawn Fan <shawn.fan@intel.com>
-> Suggested-by: Tony Luck <tony.luck@intel.com>
-> Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
-> ---
-> 
-> Tony's patch:
-> * https://lore.kernel.org/all/20250904155720.22149-1-tony.luck@intel.com
-> 
-> v1:
-> * https://lore.kernel.org/all/aMGkAI3zKlVsO0S2@hpe.com
-> 
-> v1 -> v2:
-> * Make the interface extensible, as suggested by David.
-> * Preserve existing behavior, as suggested by Jiaqi and David.
-> 
-> Why clear errno in self tests?
-> 
-> madvise() does not set errno when it's successful and errno is set by madvise()
-> during test_soft_offline_common(3) causing test_soft_offline_common(1) to fail:
-> 
-> # Test soft-offline when enabled_soft_offline=1
-> # Hugepagesize is 1048576kB
-> # enable_soft_offline => 1
-> # Before MADV_SOFT_OFFLINE nr_hugepages=7
-> # Allocated 0x80000000 bytes of hugetlb pages
-> # MADV_SOFT_OFFLINE 0x7fd600000000 ret=0, errno=95
-> # MADV_SOFT_OFFLINE should ret 0
-> # After MADV_SOFT_OFFLINE nr_hugepages=6
-> not ok 2 Test soft-offline when enabled_soft_offline=1
-> 
-> ---
->  .../ABI/testing/sysfs-memory-page-offline     |  3 ++
->  Documentation/admin-guide/sysctl/vm.rst       | 28 ++++++++++++++++---
->  mm/memory-failure.c                           | 17 +++++++++--
->  .../selftests/mm/hugetlb-soft-offline.c       | 19 ++++++++++---
->  4 files changed, 56 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-memory-page-offline b/Documentation/ABI/testing/sysfs-memory-page-offline
-> index 00f4e35f916f..d3f05ed6605e 100644
-> --- a/Documentation/ABI/testing/sysfs-memory-page-offline
-> +++ b/Documentation/ABI/testing/sysfs-memory-page-offline
-> @@ -20,6 +20,9 @@ Description:
->  		number, or a error when the offlining failed.  Reading
->  		the file is not allowed.
->  
-> +		Soft-offline can be controlled via sysctl, see:
-> +		Documentation/admin-guide/sysctl/vm.rst
-> +
 
-This update is applicable right away without other changes proposed.
-Probably can be moved into a separate patch in itself ?
->  What:		/sys/devices/system/memory/hard_offline_page
->  Date:		Sep 2009
->  KernelVersion:	2.6.33
-> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-> index 4d71211fdad8..ace73480eb9d 100644
-> --- a/Documentation/admin-guide/sysctl/vm.rst
-> +++ b/Documentation/admin-guide/sysctl/vm.rst
-> @@ -309,19 +309,39 @@ physical memory) vs performance / capacity implications in transparent and
->  HugeTLB cases.
->  
->  For all architectures, enable_soft_offline controls whether to soft offline
-> -memory pages.  When set to 1, kernel attempts to soft offline the pages
-> -whenever it thinks needed.  When set to 0, kernel returns EOPNOTSUPP to
-> -the request to soft offline the pages.  Its default value is 1.
-> +memory pages.
-> +
-> +enable_soft_offline is a bitmask:
-> +
-> +Bits::
-> +
-> +	0 - Enable soft offline
-> +	1 - Disable soft offline for HugeTLB pages
-> +
-> +Supported values::
-> +
-> +	0 - Soft offline is disabled
-> +	1 - Soft offline is enabled
-> +	3 - Soft offline is enabled (disabled for HugeTLB pages)
+--pXrdOnUKtpdJm8VZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This looks very adhoc even though existing behavior is preserved.
+On Fri, Sep 12, 2025 at 01:52:27PM +0200, Christian Brauner wrote:
+> Use the new extensible_ioctl_valid() helper which is equivalent to what
+> is done here.
 
-- Are HugeTLB pages the only page types to be considered ?
-- How the remaining bits here are going to be used later ?
+I'm seeing several LTP tests (at least getdents02, msync04, renameat01
+and statx12) failing in yesterday's -next pending-fixes on Raspberry Pi
+4 with bisections pointing to this commit.  renameat01 fails with:
 
-Also without a bit-wise usage roadmap, is not changing a procfs
-interface (ABI) bit problematic ?
-> +
-> +The default value is 1.
-> +
-> +If soft offline is disabled for the requested page type, EOPNOTSUPP is returned.
->  
->  It is worth mentioning that after setting enable_soft_offline to 0, the
->  following requests to soft offline pages will not be performed:
->  
-> +- Request to soft offline from sysfs (soft_offline_page).
-> +
->  - Request to soft offline pages from RAS Correctable Errors Collector.
->  
-> -- On ARM, the request to soft offline pages from GHES driver.
-> +- On ARM and X86, the request to soft offline pages from GHES driver.
->  
->  - On PARISC, the request to soft offline pages from Page Deallocation Table.
->  
-> +Note:
-> +	Soft offlining a HugeTLB page reduces the HugeTLB page pool.
-> +
->  extfrag_threshold
->  =================
->  
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index fc30ca4804bf..0ad9ae11d9e8 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -64,11 +64,14 @@
->  #include "internal.h"
->  #include "ras/ras_event.h"
->  
-> +#define SOFT_OFFLINE_ENABLED		BIT(0)
-> +#define SOFT_OFFLINE_SKIP_HUGETLB	BIT(1)
-> +
->  static int sysctl_memory_failure_early_kill __read_mostly;
->  
->  static int sysctl_memory_failure_recovery __read_mostly = 1;
->  
-> -static int sysctl_enable_soft_offline __read_mostly = 1;
-> +static int sysctl_enable_soft_offline __read_mostly = SOFT_OFFLINE_ENABLED;
->  
->  atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
->  
-> @@ -150,7 +153,7 @@ static const struct ctl_table memory_failure_table[] = {
->  		.mode		= 0644,
->  		.proc_handler	= proc_dointvec_minmax,
->  		.extra1		= SYSCTL_ZERO,
-> -		.extra2		= SYSCTL_ONE,
-> +		.extra2		= SYSCTL_THREE,
->  	}
->  };
->  
-> @@ -2799,12 +2802,20 @@ int soft_offline_page(unsigned long pfn, int flags)
->  		return -EIO;
->  	}
->  
-> -	if (!sysctl_enable_soft_offline) {
-> +	if (!(sysctl_enable_soft_offline & SOFT_OFFLINE_ENABLED)) {
->  		pr_info_once("disabled by /proc/sys/vm/enable_soft_offline\n");
->  		put_ref_page(pfn, flags);
->  		return -EOPNOTSUPP;
->  	}
->  
-> +	if (sysctl_enable_soft_offline & SOFT_OFFLINE_SKIP_HUGETLB) {
-> +		if (folio_test_hugetlb(pfn_folio(pfn))) {
-> +			pr_info_once("disabled for HugeTLB pages by /proc/sys/vm/enable_soft_offline\n");
-> +			put_ref_page(pfn, flags);
-> +			return -EOPNOTSUPP;
-> +		}
-> +	}
-> +
->  	mutex_lock(&mf_mutex);
->  
->  	if (PageHWPoison(page)) {
-> diff --git a/tools/testing/selftests/mm/hugetlb-soft-offline.c b/tools/testing/selftests/mm/hugetlb-soft-offline.c
-> index f086f0e04756..b87c8778cadf 100644
-> --- a/tools/testing/selftests/mm/hugetlb-soft-offline.c
-> +++ b/tools/testing/selftests/mm/hugetlb-soft-offline.c
-> @@ -5,6 +5,8 @@
->   *   offlining failed with EOPNOTSUPP.
->   * - if enable_soft_offline = 1, a hugepage should be dissolved and
->   *   nr_hugepages/free_hugepages should be reduced by 1.
-> + * - if enable_soft_offline = 3, hugepages should stay intact and soft
-> + *   offlining failed with EOPNOTSUPP.
->   *
->   * Before running, make sure more than 2 hugepages of default_hugepagesz
->   * are allocated. For example, if /proc/meminfo/Hugepagesize is 2048kB:
-> @@ -32,6 +34,9 @@
->  
->  #define EPREFIX " !!! "
->  
-> +#define SOFT_OFFLINE_ENABLED		(1 << 0)
-> +#define SOFT_OFFLINE_SKIP_HUGETLB	(1 << 1)
-> +
->  static int do_soft_offline(int fd, size_t len, int expect_errno)
->  {
->  	char *filemap = NULL;
-> @@ -56,6 +61,7 @@ static int do_soft_offline(int fd, size_t len, int expect_errno)
->  	ksft_print_msg("Allocated %#lx bytes of hugetlb pages\n", len);
->  
->  	hwp_addr = filemap + len / 2;
-> +	errno = 0;
->  	ret = madvise(hwp_addr, pagesize, MADV_SOFT_OFFLINE);
->  	ksft_print_msg("MADV_SOFT_OFFLINE %p ret=%d, errno=%d\n",
->  		       hwp_addr, ret, errno);
-> @@ -83,7 +89,7 @@ static int set_enable_soft_offline(int value)
->  	char cmd[256] = {0};
->  	FILE *cmdfile = NULL;
->  
-> -	if (value != 0 && value != 1)
-> +	if (value < 0 || value > 3)
->  		return -EINVAL;
->  
->  	sprintf(cmd, "echo %d > /proc/sys/vm/enable_soft_offline", value);
-> @@ -155,13 +161,17 @@ static int create_hugetlbfs_file(struct statfs *file_stat)
->  static void test_soft_offline_common(int enable_soft_offline)
->  {
->  	int fd;
-> -	int expect_errno = enable_soft_offline ? 0 : EOPNOTSUPP;
-> +	int expect_errno = 0;
->  	struct statfs file_stat;
->  	unsigned long hugepagesize_kb = 0;
->  	unsigned long nr_hugepages_before = 0;
->  	unsigned long nr_hugepages_after = 0;
->  	int ret;
->  
-> +	if (!(enable_soft_offline & SOFT_OFFLINE_ENABLED) ||
-> +	     (enable_soft_offline & SOFT_OFFLINE_SKIP_HUGETLB))
-> +		expect_errno = EOPNOTSUPP;
-> +
->  	ksft_print_msg("Test soft-offline when enabled_soft_offline=%d\n",
->  		       enable_soft_offline);
->  
-> @@ -198,7 +208,7 @@ static void test_soft_offline_common(int enable_soft_offline)
->  	// No need for the hugetlbfs file from now on.
->  	close(fd);
->  
-> -	if (enable_soft_offline) {
-> +	if (expect_errno == 0) {
->  		if (nr_hugepages_before != nr_hugepages_after + 1) {
->  			ksft_test_result_fail("MADV_SOFT_OFFLINE should reduced 1 hugepage\n");
->  			return;
-> @@ -219,8 +229,9 @@ static void test_soft_offline_common(int enable_soft_offline)
->  int main(int argc, char **argv)
->  {
->  	ksft_print_header();
-> -	ksft_set_plan(2);
-> +	ksft_set_plan(3);
->  
-> +	test_soft_offline_common(3);
->  	test_soft_offline_common(1);
->  	test_soft_offline_common(0);
->  
+  renameat01    0  TINFO  :  Using /tmp/LTP_renEtNZrS as tmpdir (nfs filesystem)
+  renameat01    1  TBROK  :  tst_device.c:97: Could not stat loop device 0
+  renameat01    2  TBROK  :  tst_device.c:97: Remaining cases broken
 
+Full log for that run:
+
+  https://lava.sirena.org.uk/scheduler/job/1830765#L6680
+
+bisect log for renameat (all the bisects cover the same builds, though I
+split the jobs up so it's different test jobs for some of the tests):
+
+# bad: [179688318d56cee63802eb49e3503d799c43db6c] Merge branch 'for-linux-next-fixes' of https://gitlab.freedesktop.org/drm/misc/kernel.git
+# good: [f83ec76bf285bea5727f478a68b894f5543ca76e] Linux 6.17-rc6
+# good: [690aa09b1845c0d5c3c29dabd50a9d0488c97c48] ASoC: Intel: catpt: Expose correct bit depth to userspace
+# good: [3254959b4dd065eae396cf78ccc1361460b2f53e] ASoC: amd: amd_sdw: Add quirks for some new Dell laptops
+# good: [9004a450fccbeb40a71cc173747da37a459fd4dc] ASoC: codecs: lpass-wsa-macro: Fix speaker quality distortion
+# good: [ec630c2c8ce215dd365b8c3644f004f645714a0f] ASoC: SDCA: Reorder members of hide struct to remove holes
+# good: [68f27f7c7708183e7873c585ded2f1b057ac5b97] ASoC: qcom: q6apm-lpass-dais: Fix NULL pointer dereference if source graph failed
+# good: [0c28431f6fe13f3a3be0978f79c1a7ae8a93d028] ASoC: SOF: imx: Fix devm_ioremap_resource check
+# good: [28edfaa10ca1b370b1a27fde632000d35c43402c] ASoC: SDCA: Add quirk for incorrect function types for 3 systems
+# good: [35fc531a59694f24a2456569cf7d1a9c6436841c] ASoC: SOF: Intel: hda-stream: Fix incorrect variable used in error message
+# good: [9b17d3724df55ecc2bc67978822585f2b023be48] ASoC: wm8974: Correct PLL rate rounding
+# good: [f54d87dad7619c8026e95b848d6ef677b9f2b55f] ASoC: rt712: avoid skipping the blind write
+git bisect start '179688318d56cee63802eb49e3503d799c43db6c' 'f83ec76bf285bea5727f478a68b894f5543ca76e' '690aa09b1845c0d5c3c29dabd50a9d0488c97c48' '3254959b4dd065eae396cf78ccc1361460b2f53e' '9004a450fccbeb40a71cc173747da37a459fd4dc' 'ec630c2c8ce215dd365b8c3644f004f645714a0f' '68f27f7c7708183e7873c585ded2f1b057ac5b97' '0c28431f6fe13f3a3be0978f79c1a7ae8a93d028' '28edfaa10ca1b370b1a27fde632000d35c43402c' '35fc531a59694f24a2456569cf7d1a9c6436841c' '9b17d3724df55ecc2bc67978822585f2b023be48' 'f54d87dad7619c8026e95b848d6ef677b9f2b55f'
+# test job: [690aa09b1845c0d5c3c29dabd50a9d0488c97c48] https://lava.sirena.org.uk/scheduler/job/1805508
+# test job: [3254959b4dd065eae396cf78ccc1361460b2f53e] https://lava.sirena.org.uk/scheduler/job/1769788
+# test job: [9004a450fccbeb40a71cc173747da37a459fd4dc] https://lava.sirena.org.uk/scheduler/job/1774162
+# test job: [ec630c2c8ce215dd365b8c3644f004f645714a0f] https://lava.sirena.org.uk/scheduler/job/1772919
+# test job: [68f27f7c7708183e7873c585ded2f1b057ac5b97] https://lava.sirena.org.uk/scheduler/job/1772831
+# test job: [0c28431f6fe13f3a3be0978f79c1a7ae8a93d028] https://lava.sirena.org.uk/scheduler/job/1762707
+# test job: [28edfaa10ca1b370b1a27fde632000d35c43402c] https://lava.sirena.org.uk/scheduler/job/1762245
+# test job: [35fc531a59694f24a2456569cf7d1a9c6436841c] https://lava.sirena.org.uk/scheduler/job/1762959
+# test job: [9b17d3724df55ecc2bc67978822585f2b023be48] https://lava.sirena.org.uk/scheduler/job/1758830
+# test job: [f54d87dad7619c8026e95b848d6ef677b9f2b55f] https://lava.sirena.org.uk/scheduler/job/1758090
+# test job: [179688318d56cee63802eb49e3503d799c43db6c] https://lava.sirena.org.uk/scheduler/job/1830765
+# bad: [179688318d56cee63802eb49e3503d799c43db6c] Merge branch 'for-linux-next-fixes' of https://gitlab.freedesktop.org/drm/misc/kernel.git
+git bisect bad 179688318d56cee63802eb49e3503d799c43db6c
+# test job: [4c3c40178b0e1578a3898092cc33ffb2618edc51] https://lava.sirena.org.uk/scheduler/job/1830986
+# good: [4c3c40178b0e1578a3898092cc33ffb2618edc51] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/zonefs.git
+git bisect good 4c3c40178b0e1578a3898092cc33ffb2618edc51
+# test job: [78ca913586336540ec12f262c5bdf16f8925de82] https://lava.sirena.org.uk/scheduler/job/1831233
+# bad: [78ca913586336540ec12f262c5bdf16f8925de82] Merge branch 'vfs.all' of https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+git bisect bad 78ca913586336540ec12f262c5bdf16f8925de82
+# test job: [06dd3eda0e958cdae48ca755eb5047484f678d78] https://lava.sirena.org.uk/scheduler/job/1831745
+# good: [06dd3eda0e958cdae48ca755eb5047484f678d78] Merge branch 'vfs-6.18.rust' into vfs.all
+git bisect good 06dd3eda0e958cdae48ca755eb5047484f678d78
+# test job: [a7ec4da2c05c5f8be52c2ac884d5672d0a805ee0] https://lava.sirena.org.uk/scheduler/job/1832263
+# bad: [a7ec4da2c05c5f8be52c2ac884d5672d0a805ee0] Merge patch series "ns: support file handles"
+git bisect bad a7ec4da2c05c5f8be52c2ac884d5672d0a805ee0
+# test job: [670f2f915084d1c53f14d59946011b7645601813] https://lava.sirena.org.uk/scheduler/job/1832304
+# bad: [670f2f915084d1c53f14d59946011b7645601813] nstree: make iterator generic
+git bisect bad 670f2f915084d1c53f14d59946011b7645601813
+# test job: [011090b6c0a97a3aa1f659d670d85bbf0eddbe06] https://lava.sirena.org.uk/scheduler/job/1832355
+# bad: [011090b6c0a97a3aa1f659d670d85bbf0eddbe06] cgroup: use ns_common_init()
+git bisect bad 011090b6c0a97a3aa1f659d670d85bbf0eddbe06
+# test job: [60949057a2e71c9244e82608adf269e62e6ac443] https://lava.sirena.org.uk/scheduler/job/1832402
+# bad: [60949057a2e71c9244e82608adf269e62e6ac443] block: use extensible_ioctl_valid()
+git bisect bad 60949057a2e71c9244e82608adf269e62e6ac443
+# test job: [4d906371d1f9fc9ce47b2c8f37444680246557bc] https://lava.sirena.org.uk/scheduler/job/1832439
+# good: [4d906371d1f9fc9ce47b2c8f37444680246557bc] nsfs: drop tautological ioctl() check
+git bisect good 4d906371d1f9fc9ce47b2c8f37444680246557bc
+# test job: [f8527a29f4619f74bc30a9845ea87abb9a6faa1e] https://lava.sirena.org.uk/scheduler/job/1832550
+# good: [f8527a29f4619f74bc30a9845ea87abb9a6faa1e] nsfs: validate extensible ioctls
+git bisect good f8527a29f4619f74bc30a9845ea87abb9a6faa1e
+# first bad commit: [60949057a2e71c9244e82608adf269e62e6ac443] block: use extensible_ioctl_valid()
+
+--pXrdOnUKtpdJm8VZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjJR5kACgkQJNaLcl1U
+h9CJ4Af+ISZ3lljoI72V72kUBKwG6lq4beym3VICH+8DyjBOtQJqkqIE5OlcUns9
+gY6sqsqpxxIvI+a6v6GPW0eqWuAu36UuvdqjURrMubJCQi6zeT4lYVIgcioh4U4G
+FWmhUV1LC5FGYKc7KfibPRCcggsT/XKqMH88jkIfAYSUiQHyuMZMaiA+vNDdVDK+
+f3ZZj6bKcB6h0wVse+BUtM5+Ha+RIzS4bpK9JNzJqV3pHra6Yg3myz2sd46lT4mg
+5K5amhS9uYN26RZGTr3ioMhuGUywjeyWsLccmtBq/fG+bofT1tEReGLdVC9fsvOO
+wPu0MoWdSMaeA2rJE/z5wrxA2nePqA==
+=6jkN
+-----END PGP SIGNATURE-----
+
+--pXrdOnUKtpdJm8VZ--
 
