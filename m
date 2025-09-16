@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-41551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61EF9B58AF4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 03:20:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B94B0B58AFC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 03:23:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9EC63A4FCE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 01:20:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10B677B27DB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 01:21:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610ED1E0E1F;
-	Tue, 16 Sep 2025 01:20:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A241E98F3;
+	Tue, 16 Sep 2025 01:23:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t3yX9JVb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zeo9TQsI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20F01B0F1E
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 01:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64451B4247
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 01:23:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757985608; cv=none; b=oRBIhwmBvxm05X8Rnri0yFYD+A1gl6nI6JZvX3kwWh8tv+Qdd/6d48dwOoB056Ci7XtCTf/2ZF43GUXYiw7TQB0puHYRUKFCMkvK6ubTewMUbaXNouM/a97Czsv/reOBwaOeWYqFU162/sw19yWJBIkIiZml3W3rbrl3PQCL7Is=
+	t=1757985804; cv=none; b=tkPO57HEuq7nwNEEIQ6SP0h9x32ukl0QpszrDIrmdPgLv/90AuamL43y9IIl2J9QnrDwzO9RDn50L1ngJzDxHwfA7N97gF6+8OLo7k8IQEKhJvLGsdJRu1Sd2D1WIFD531Vv/5gURzGiScGzCYiDxGmKR1ud6yEzfzwjva1zvnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757985608; c=relaxed/simple;
-	bh=cM01dnJgl02gEB+Phpru3MuVElFaY7DE57Wpqf4bhF0=;
+	s=arc-20240116; t=1757985804; c=relaxed/simple;
+	bh=HsXIpnYMm6eaR3cuQaveE8+FpukoKawmNaEcYM65w8M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nFgNu1nKbtQy6rehwyTdRVp3Uyyj+vDrnf0otVNJRipamnzhZylWsEx3hvpTpRG4wAHkvqyftD+DaRQC0EgecRkCDnMolyJHlCHomCHOqCKm00dM/5dwpAk5nWOBymrliZaK9htF9A9PL98OdzQhjUSbJ078T+hY0NhJmNJ3DXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=t3yX9JVb; arc=none smtp.client-ip=209.85.214.172
+	 To:Cc:Content-Type; b=XmAVbs/xc7keSANo5tNawQhJpqY5iXZ21Dze2DVBDdAqh7oZLSOVmy2xhiij6x6Xkka3dyGV5ozRN1qPKBthCaDPS5yVB1L3COb2lrR9DdutkBaY3X2POC9psoQeVr5niM/hXQ6Nv3wEfhuTO3MY/lQNNXJhw3j8DAJH0IRWlvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zeo9TQsI; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-265abad93bfso78335ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 18:20:06 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-265abad93bfso78715ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Sep 2025 18:23:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757985606; x=1758590406; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1757985802; x=1758590602; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7oc+YeAQI9jR6qkHLGj/AqXsrGbk3uwxOS3oQGgb06Q=;
-        b=t3yX9JVbsIp6PrRcKdGyGXvQay+V8nnFhsTTaf5l9/jqxO1qFuMbIepI02gcCktWev
-         kwAaM23yLDrO5hJxRaAhat1GGs/3KOCwkmPpXfcVyhGyvfFW31LSS8mSr5DrePCRr8bP
-         GGA9HKXeXdhUjEYiT5LkKQkQN6KaSCwJJx69l2uzigPSoy7F/oGqajy7oKn7RheZ63l1
-         PvGWg4+riI3SpHUCr0O/usbSPbg3fiaJIYihBuNoJ/8KUDF5vcg/jEyamReExWHb/4eS
-         iMJCOL9XyrrSleN9bao9DZdj2rZ7NeLjIfUE4tiLoGv081mOwhS+6buL8hXLe0sNYP3h
-         mW+A==
+        bh=FjrtyNvBONcUNbfRSx61Tjsk25VZay7l9mmVDCH4H9g=;
+        b=zeo9TQsI/Wq9czKIQJUP+q9TdoKaYhpsLKbqTofaavaWcQpPm100KwMIq9UU9lPK1e
+         YMuuZtLQvNAdTZSwJo+ht5nw12AkZ71wqpd+fTYPBhGiLjkleTfKMPK0ErPjS3Wvv1iF
+         dg1H3QkGsa+NhFD5bLbONNg6k09iAC94G16kf2aK8jsOPCN7YwxnEAMeH2X+AXPIcEc1
+         hSPwoB81gQJBTLAnK6ttme8wCQw9AswIro3T0byaMKRX/vOO+XhQG5MlTE3uom8Mcuoi
+         jAeMd4r61tU5YmRWr36tfmMCmbxRtYNNFYzKSfA4eojdwHLL9czw6vYNFHgQyQQejJHN
+         Lc/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757985606; x=1758590406;
+        d=1e100.net; s=20230601; t=1757985802; x=1758590602;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7oc+YeAQI9jR6qkHLGj/AqXsrGbk3uwxOS3oQGgb06Q=;
-        b=Ib35bwdY33czz56G5MpnsGu8arsvZLg8Oe68ysVLV7RxGY1TNHN3laaXBa2akNth/w
-         Lhz1ul6mRvUOtMXTEsM9LThn3BLgvKUiIZyCPAVMs9KEyC8+hc1bqjzT3mdUKUKYsyyN
-         5/ACUPlKMlpURTMXvdARrvOzvzJtnL3z1PiSL3D6r/yDf4vTl+cyevakdTJ0yQQmWInz
-         xo1DsjlD2SK3jJUr+VimmOqwtS3W1DpKRykZQN95DuQHmm8J2rA5fYVyZJgibDiUEiS+
-         RMgIgjKsPDs5txvuO7rZWAnDYNTUIr8qANFSXp6j7f1oppq14Kp1JFMzTuSrcjZDqboi
-         YSBA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+8sfV922JF0FjuK52hPq+0b/H4iUNWdarO5Daxm4oGr9OCRaChs5Chy3B6wyN+XWPDw1xH4nL2JtGH61u408=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo9ytaxvnvbmzO1VMub89St1wJSEr9lwgDWe15TzAmZr7Gnwzt
-	rQ5jLQf9/bnsEXiaReLCd1yLGSgWT+N8Yz63MtYFUMP+9wtAJwH7dG0016SnGn9O+t1VlINw17A
-	xBW/ttwAzjSNaFVXXjJxFt+i+bkuZm0quX8ZBmhPB
-X-Gm-Gg: ASbGncuw9lcm9tn/6j2cR9huNyOydKGURCm6kcg8qWiSxufp8Y+vqAGqAFWDv94CAVQ
-	3aWZxG9U6+Txs2DyeqTY/wel2NFPpw86JLNGmrXgSCqqULMR5V7p49uS92QBZeFJbXSE2pDv8UN
-	irab4nMUzUgQe5+m/lEsMWRudv5fC+nCz4q/ffrMJXsKvoJ5PwaCF6DidPztH4i1zHlyJBLhdK/
-	WxT8sN6QgUEK+TyRcIg0fwtJ2LczHtbPkPAwUgNZoJl
-X-Google-Smtp-Source: AGHT+IGwZ42ey53/Z1K5ZBDUQkGoZ+OwR1FjybKwy+/iwpTMAHOkHJQAI64NHEH+hr7wN2JIw+Y3z5X+5jsNmO1nwh4=
-X-Received: by 2002:a17:903:2c0b:b0:267:d7f8:4054 with SMTP id
- d9443c01a7336-267d7f84826mr65945ad.16.1757985605754; Mon, 15 Sep 2025
- 18:20:05 -0700 (PDT)
+        bh=FjrtyNvBONcUNbfRSx61Tjsk25VZay7l9mmVDCH4H9g=;
+        b=fcb0MtdfaG6lX2duqcOqMlPRXEMGx05uafm8uDIrOUK39DrmchEL/q0XMoDAWvIv+p
+         NeRosBgNh0V8bslUASL4YuAjjmei4uRj9nUFcl2OJ5dMaaplSnFS8w6uB7wxMRrGOym0
+         hOCX1relsMqz66y1pwb6T8Fe4fTLC98oSAepDVF0atlVQx51kXj4s34IwrKX3FHULP2v
+         N726RyB9a7GqfhDOxVC+XJbZNw3kMoGmUzaCaa4wtJMic85aRskCwvW9Kb1mnu7mvtuJ
+         rKPxts3Jij5rl6vH1HNb5O8leeIr21IAkiJcCtIFi4foqwLYV1HZkWU8ThB6Y1iaaWSI
+         SubQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXfkvg9x2KN73mArHZ17YCdc5xLEhuBioT+WEqIxNHIizdFDZxWrO3p56uaRISg0noa5nIg0262y/XLDLxSxKM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyI3KeUANZwtnpa27keFtIohSRqjoR1wIk7mWYMKZYsCudN+p6P
+	XPZSCms7N3SWRSBK398t9xbKKxhTV9zaKpeynH37sk0LbR7zPKjcUrTq+R7PBcTNPOXkxIov5vq
+	FCHAmsmWD023QYuEmRj2uKO8SlavOEQAY336Z7gho
+X-Gm-Gg: ASbGncvePe+CZ863w0gRAqa0/VvVEuIbTeCz1jZYKxLlOEpiQCiqVSL0fVqRBWUu34V
+	HCpf3KuQHX734yArZzH1QZCmpwBC0XuLc97pUGgxydCZCEu0xxbqk4Xod1G8H/znUGW2Gh8bBRc
+	x+0ns1f5ZsPZY0+NJrIJJwnDFeV2n5qZDN4q57vskYge/rgMrow5EysjUDQ6lydet5op/zyoY2G
+	BVIZPOmMGBal/kTBfSzU0meBlV1fuCLcgwrizRwdChS
+X-Google-Smtp-Source: AGHT+IF9+835PR8promdp069Tski48d465PNsDSz2RlGOWqnfbXegmXvA9IiYNUJE4/C+ZSOfFmqDmuCCV/FlktNcas=
+X-Received: by 2002:a17:902:f547:b0:246:1f3e:4973 with SMTP id
+ d9443c01a7336-267c1a5d5dfmr2675725ad.6.1757985801735; Mon, 15 Sep 2025
+ 18:23:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,143 +76,64 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250915163838.631445-1-kaleshsingh@google.com>
- <20250915163838.631445-8-kaleshsingh@google.com> <20250915194158.472edea5@gandalf.local.home>
-In-Reply-To: <20250915194158.472edea5@gandalf.local.home>
+ <20250915153401.61cbd5120871ee7a4e5b9cae@linux-foundation.org>
+ <CAC_TJvd=zwhRZcXTvDPfuzdjYV7j_jvZKZ--eKDRTsE+LBmASA@mail.gmail.com> <20250915170550.f24bfb96514835154e8d1633@linux-foundation.org>
+In-Reply-To: <20250915170550.f24bfb96514835154e8d1633@linux-foundation.org>
 From: Kalesh Singh <kaleshsingh@google.com>
-Date: Mon, 15 Sep 2025 18:19:53 -0700
-X-Gm-Features: Ac12FXyOHF1j3BB1NncU7x-UTlGuAAFshnZvp_tnlmREINkio1gvvq5R2YkXEUw
-Message-ID: <CAC_TJvconNNKPboAbsfXFBboiRCYgE2AN23ask1gdaj9=wuHAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] mm/tracing: introduce max_vma_count_exceeded trace event
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: akpm@linux-foundation.org, minchan@kernel.org, lorenzo.stoakes@oracle.com, 
-	david@redhat.com, Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de, 
+Date: Mon, 15 Sep 2025 18:23:09 -0700
+X-Gm-Features: Ac12FXwhWVu02OL4G53WutcplFT1I0VgCrjVK0f-v6OHM6tMSRuAEDbNEvAgPPY
+Message-ID: <CAC_TJvef-jLQm_H2kd9FX9WprMThZv8MvgxAuJeceG-qpRwryA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] vma count: fixes, test and improvements
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: minchan@kernel.org, lorenzo.stoakes@oracle.com, david@redhat.com, 
+	Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de, 
 	kernel-team@android.com, android-mm@google.com, 
 	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
 	Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+	Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, 
+	Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 15, 2025 at 4:41=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
+On Mon, Sep 15, 2025 at 5:05=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
 >
-> On Mon, 15 Sep 2025 09:36:38 -0700
-> Kalesh Singh <kaleshsingh@google.com> wrote:
+> On Mon, 15 Sep 2025 16:10:55 -0700 Kalesh Singh <kaleshsingh@google.com> =
+wrote:
 >
-> > Needed observability on in field devices can be collected with minimal
-> > overhead and can be toggled on and off. Event driven telemetry can be
-> > done with tracepoint BPF programs.
+> > > fwiw, there's nothing in the above which is usable in a [0/N] overvie=
+w.
+> > >
+> > > While useful, the "what changed since the previous version" info isn'=
+t
+> > > a suitable thing to carry in the permanent kernel record - it's
+> > > short-term treansient stuff, not helpful to someone who is looking at
+> > > the patchset in 2029.
+> > >
+> > > Similarly, the "how it was tested" material is also useful, but it
+> > > becomes irrelevant as soon as the code hits linux-next and mainline.
 > >
-> > The process comm is provided for aggregation across devices and tgid is
-> > to enable per-process aggregation per device.
+> > Hi Andrew,
+> >
+> > Thanks for the feedback. Do you mean the cover letter was not needed
+> > in this case or that it lacked enough context?
 >
-> What do you mean about comm being used to aggregation across devices?
-> What's special about this trace event that will make it used across devic=
-es?
->
-> Note, if BPF is being used, can't the BPF program just add the current
-> comm? Why waste space in the ring buffer for it?
->
->
->
-> > +
-> > +TRACE_EVENT(max_vma_count_exceeded,
-> > +
-> > +     TP_PROTO(struct task_struct *task),
->
-> Why pass in the task if it's always going to be current?
->
-> > +
-> > +     TP_ARGS(task),
-> > +
-> > +     TP_STRUCT__entry(
-> > +             __string(comm,  task->comm)
->
-> This could be:
->
->                 __string(comm, current)
->
-> But I still want to know what makes this trace event special over other
-> trace events to store this, and can't it be retrieved another way,
-> especially if BPF is being used to hook to it?
+> The latter.  As I've split up the series, please put together some
+> words to describe the remaining 6 patches if/when resending.
 
-Hi Steve,
+Hi Andrew,
 
-Thanks for the comments and suggestion you are right we can use bpf to
-get the comm. There is nothing special about this trace event.  I will
-drop comm in the next revision.
+Thanks for clarifying. I'll make sure to fix that when resending.
 
-The reason I did the task_struct parameter (current): I believe there
-is a limitation that we must  specify at least 1 parameter to the
-TRACE_EVENT()  PROTO and ARGS macros.
-
-Is there some way to use this without needing a parameter?
-
-I hit the build failure below, with no parameters:
-
-In file included from mm/vma.c:10:
-./include/trace/events/vma.h:10:1: error: expected parameter declarator
-   10 | TRACE_EVENT(max_vma_count_exceeded,
-      | ^
-...
-
-Below is the code for reference:
-
-/* SPDX-License-Identifier: GPL-2.0 */
-#undef TRACE_SYSTEM
-#define TRACE_SYSTEM vma
-
-#if !defined(_TRACE_VMA_H) || defined(TRACE_HEADER_MULTI_READ)
-#define _TRACE_VMA_H
-
-#include <linux/tracepoint.h>
-
-TRACE_EVENT(max_vma_count_exceeded,
-
-TP_PROTO(),
-
-TP_ARGS(),
-
-TP_STRUCT__entry(
-__field(pid_t, tgid)
-),
-
-TP_fast_assign(
-__entry->tgid =3D current->tgid;
-),
-
-TP_printk("tgid=3D%d", __entry->tgid)
-);
-
-#endif /*  _TRACE_VMA_H */
-
-/* This part must be outside protection */
-#include <trace/define_trace.h>
-
-Thanks,
-Kalesh
+--Kalesh
 
 >
-> -- Steve
->
->
-> > +             __field(pid_t,  tgid)
-> > +     ),
-> > +
-> > +     TP_fast_assign(
-> > +             __assign_str(comm);
-> > +             __entry->tgid =3D task->tgid;
-> > +     ),
-> > +
-> > +     TP_printk("comm=3D%s tgid=3D%d", __get_str(comm), __entry->tgid)
-> > +);
-> > +
+> Thanks.
 
