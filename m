@@ -1,155 +1,122 @@
-Return-Path: <linux-kselftest+bounces-41608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44769B59FB2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 19:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 62E84B59FB6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 19:48:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF0A91C00F5E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 17:48:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F19CC1C00FD8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 17:48:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5775826B77D;
-	Tue, 16 Sep 2025 17:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yn4UqOCD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B7628135F;
+	Tue, 16 Sep 2025 17:47:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B918223817E
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 17:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F7D27E04F;
+	Tue, 16 Sep 2025 17:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758044864; cv=none; b=f6HVNJ29DKu1liKOM7hyAZR9lxJ6xeEoWMWfXF8Ty9HItN8eEBJlAqtQCoJg8zWY6HS5sZEvSDe9p4+OwIo2nCnDxllZH88jdUrkQOp5cG1AmBEt0pGUgG2IXVv8EucAZi7j3/dzpgYeeYNJ3mPYBUwSLmtlkZSn3Pn/qXXcCUM=
+	t=1758044868; cv=none; b=h373A98JkU+2yup64zykIUCjVXYCxUj+ikCzjwPKXtzgOkwV8S8xs6Q2KZD2f5gZhM71/T6d+bqcZYVE/TqTBoU0WLD9czAsBj2fC61YObW3+UpVXHPq9x+Ck/4Wv7UpOkMSleaT8Ug9kVco5YnQk1vwiLzWMKMyEKgCOAAlUis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758044864; c=relaxed/simple;
-	bh=ytYn1xpYuNF6QYhgFt/snGrQld+uXtsG0hvu+3ooxIQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OlE0JmXUTrLCpbhL4vXOXcMv+8bOT0R6QJVFq5t3tS7bEGebgcVY7XFGKN9X8vfyhzqsA7jxth4ooXEqSIw2yDDLhxDiRUaq/XJ8IfFMR/O87/nZYMTm2bWOhUVsXjAQhpBFfXxdzBaipZ2v5otiOHrfMmCsQCqm4gBVFs9kFZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yn4UqOCD; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-267c90c426dso18395ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 10:47:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758044862; x=1758649662; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WV8PZeNRScOuv4YluUBiR/tynYHUDyQLkirKhaJTO4E=;
-        b=yn4UqOCDODnVitMhzAl57ZXsqmfdq8kJeuYTM4TJSvaRPMTvIvO6vSdvogM+lYPZFc
-         gzFt03tFDWVO3K9mvVicpVqc+MweUd1VRzVMK5FH03r8tU3On2XkiaO+7ac6H3bmfFHb
-         oGWOzg04z4Asw4fzBd1XmaOSZROVpHrN4mHK7dRROQ6J044RzJbGphbUgb5GWxr/Kuko
-         aYAZUOKyPbABm2ysH+obm2PriBneK3iEoc3akRmM7RvmTQNQk43O4B8sH1cX7y9OutGi
-         YMr2etzRTga0d/m0BDs6QkNlvP+riVwnZbE6QXISwmUHsQtvJeEOXIOuL749Kgi/Mt8g
-         xhzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758044862; x=1758649662;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WV8PZeNRScOuv4YluUBiR/tynYHUDyQLkirKhaJTO4E=;
-        b=TrQgbrs+gIi6f78b8nk1l7CLk2UPk5Z5Pzz7E0UHdgAAgLyY0aXR+EAhy2ZadLA7Rt
-         RWkf7Tgi/hTdEQ7t/58KcBlzA5fPv2sCNQmJ9WzDOLfoczZ21b8wb3/qrS0E/Ous9f5k
-         p14FljBmu56Q3QKQzF/VqH6gq3fhJMQqu7HLQHbQe72i2hfujkvubwH376oIVr98F75y
-         AzJR86Z1P1Pt5eq0toDAg60DSBBQAIl90o40HaD38Kdn2dOs6LpeXwRKcw6tifO9LyIp
-         r+xmoo46hrTVVpdqzgQMKvxErpSpfbH6glEiBqETTKLV4l4CdFD/KwUCjK8zmO4sbRVk
-         8hvw==
-X-Forwarded-Encrypted: i=1; AJvYcCWbZRYCxiTziS/25GhD6S2CrsAelVLmv0tzj6daI2bXQjYOVhAZL2m4IB0oZZ82V+OjckwqcK/FhgPzyshiWYg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUxHtDuV/lnTDwD/ztJNFvqaNQzi1UrsEb52UD7yZPldYNQ1Dv
-	Id2kFvSO4BdHm0YQOjBOVHYU0D+hmWcGvkkCc+/MdMioffdcdSfwPj7vDS+GHYc6dQXbECGNOaS
-	+Od45V4VlN4iMBFOL91obIqOwo8fZKwumTlKjbjoc
-X-Gm-Gg: ASbGnct7mQFoaxKnFo2/BwBVKFYLVaUVO4Xm2CkC02yp5/uTkXYB8zp4F+gegflB9+i
-	yXu9holx3DNDsXRn+rEaKDmXxGuPP2eLH6pk9JTKbq93USSyKdouxuX58DOEC3YqLiRA6JEN0y2
-	q40sZXkbvkD137J0EAUHbeLU9ygFIE/o3+DoHUw8hcBadBLsJhTx1o+awePpeUeQ5fuWXSoA60Z
-	sk9WpAt7eIS6eAwij0ipj4ohlrhCnNIGx43q96CxGHC8bEIGKbnnsM=
-X-Google-Smtp-Source: AGHT+IH481Ptt6TGK3gOl1kWB0jZ6sD/yNX/MW49IQWxuVmUns01xHRPJ06rIkyHQhotda3n4zze0byfKtMf1L55b6o=
-X-Received: by 2002:a17:902:ea06:b0:267:912b:2b4d with SMTP id
- d9443c01a7336-26801263c77mr123545ad.7.1758044861731; Tue, 16 Sep 2025
- 10:47:41 -0700 (PDT)
+	s=arc-20240116; t=1758044868; c=relaxed/simple;
+	bh=YqjelYCPt3ItQZeVSwG5EOEY2H7o04PZ4x8dk0USZ4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mn6+iEkQYb8RPvLrnIghqZ0BgVJRo/HvfbiKeiTdJzDm6hLcGvjLY7lWTBvFlI8Y251wOMLs9PzSUgZMQZYZAH0TRx3+d2v2AoZF1rJchKa4iVvcvnmnynzUFGxXGJtPxfXLOxD7dhGktDZvK3V2J7yqV9geenn9RCAS/z8xRtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id 2F291160281;
+	Tue, 16 Sep 2025 17:47:37 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf15.hostedemail.com (Postfix) with ESMTPA id EA69C1B;
+	Tue, 16 Sep 2025 17:47:29 +0000 (UTC)
+Date: Tue, 16 Sep 2025 13:48:33 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Kalesh Singh <kaleshsingh@google.com>
+Cc: akpm@linux-foundation.org, minchan@kernel.org,
+ lorenzo.stoakes@oracle.com, david@redhat.com, Liam.Howlett@oracle.com,
+ rppt@kernel.org, pfalcato@suse.de, kernel-team@android.com,
+ android-mm@google.com, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
+ Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Kees Cook
+ <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan
+ <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Juri
+ Lelli <juri.lelli@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Valentin
+ Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>, Shuah Khan
+ <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 7/7] mm/tracing: introduce max_vma_count_exceeded
+ trace event
+Message-ID: <20250916134833.281e7f8b@gandalf.local.home>
+In-Reply-To: <CAC_TJvdkVPcw+aKEjUOmTjwYfe8BevR51X_JPOo69hWSQ1MGcw@mail.gmail.com>
+References: <20250915163838.631445-1-kaleshsingh@google.com>
+	<20250915163838.631445-8-kaleshsingh@google.com>
+	<20250915194158.472edea5@gandalf.local.home>
+	<CAC_TJvconNNKPboAbsfXFBboiRCYgE2AN23ask1gdaj9=wuHAQ@mail.gmail.com>
+	<20250916115220.4a90c745@batman.local.home>
+	<CAC_TJvdkVPcw+aKEjUOmTjwYfe8BevR51X_JPOo69hWSQ1MGcw@mail.gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250915163838.631445-1-kaleshsingh@google.com>
- <20250915153401.61cbd5120871ee7a4e5b9cae@linux-foundation.org> <aa95777a-8012-4d08-abcf-7175f9e2691c@lucifer.local>
-In-Reply-To: <aa95777a-8012-4d08-abcf-7175f9e2691c@lucifer.local>
-From: Kalesh Singh <kaleshsingh@google.com>
-Date: Tue, 16 Sep 2025 10:47:30 -0700
-X-Gm-Features: AS18NWAFaSQqFXRnUy8iH8cngSLpkM9xdFvTXyHLo_pUfxdfSq_22GyY9mLtXWo
-Message-ID: <CAC_TJvdwt_66v_A3RnuUBS_XJ7xMwWhEwHEEeLpu2_M5aVQ=Fg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] vma count: fixes, test and improvements
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, minchan@kernel.org, david@redhat.com, 
-	Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de, 
-	kernel-team@android.com, android-mm@google.com, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, 
-	Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 5uqotgt5cqbtb693tzenck8fsp784zbq
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: EA69C1B
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19fYVEo+TQfqoFVoPY0drWwFJ5ox6HfaHo=
+X-HE-Tag: 1758044849-648048
+X-HE-Meta: U2FsdGVkX18pAhXbWHugGNFQkb4HsbkpHA3LSK9XLE+vsmwTM7qPsZjE2Q1AkokCaSSM3kECB5AtJoNuafNVa4c24DllJqRZBRvH3Zmhy5wNh7TxTIkWD37LWX+bmFtCcebRBnxRuw3/k7vvz39wmpkcHu/7IwevVpAu7R0GogngimDsXGbeq53gsFUSv11MEKrEXvPbk4fw2Y+CyjjJq7TcrXucdUHUeHf7eiqw5uLSPBWimQmNj30QjsGtyMec/D0hb09wfSYgY56Wz5pEFnLq6GYNKSiHSG5mPzJ0+9udgkbbXo4zTaOyLKWUXBfDcE7VEMWXx80P+tQi6apDTcgD1TYy32eR2VKzLPG+ZszbApg+pHDZug==
 
-On Tue, Sep 16, 2025 at 3:12=E2=80=AFAM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
->
-> On Mon, Sep 15, 2025 at 03:34:01PM -0700, Andrew Morton wrote:
-> > Anyhow, this -rc cycle has been quite the firehose in MM and I'm
-> > feeling a need to slow things down for additional stabilization and so
-> > people hopefully get additional bandwidth to digest the material we've
-> > added this far.  So I think I'll just cherrypick [1/7] for now.  A
-> > great flood of positive review activity would probably make me revisit
-> > that ;)
-> >
->
-> Kalesh - I do intend to look at this series when I have a chance. My revi=
-ew
-> workload has been insane so it's hard to keep up at the moment.
->
-> Andrew - This cycle has been crazy, speaking from point of view of somebo=
-dy
-> doing a lot of review, it's been very very exhausting from this side too,
-> and this kind of work can feel a little... thankless... sometimes :)
->
-> I feel like we maybe need a way to ask people to slow down, sometimes at
-> least.
->
-> Perhaps being less accepting of patches during merge window is one aspect=
-,
-> as the merge window leading up to this cycle was almost the same review
-> load as when the cycle started.
->
-> Anyway, TL;DR: I think we need to be mindful of reviewer sanity as a fact=
-or
-> in all this too :)
->
-> (I am spekaing at Kernel Recipes then going on a very-badly-needed 2.5 we=
-ek
-> vacataion afterwards over the merge window so I hope to stave off burnout
-> that way. Be good if I could keep mails upon return to 3 digits, but I ha=
-ve
-> my doubts :P)
+On Tue, 16 Sep 2025 10:36:57 -0700
+Kalesh Singh <kaleshsingh@google.com> wrote:
 
-Hi Lorenzo,
+> I completely agree with the principle that static tracepoints
+> shouldn't be used as markers if a dynamic probe will suffice. The
+> intent here is to avoid introducing overhead in the common case to
+> avoid regressing mmap, munmap, and other syscall latencies; while
+> still providing observability for the max vma_count exceeded failure
+> condition.
+> 
+> The original centralized check (before previous review rounds) was
+> indeed in a dedicated function, exceeds_max_map_count(), where a
+> kprobe/fprobe could have been easily attached without impacting the
+> common path. This was changed due to previous review feedback to the
+> capacity based vma_count_remaining() which necessitated the check to
+> be done externally by the callers:
+> 
+> https://lore.kernel.org/r/20250903232437.1454293-1-kaleshsingh@google.com/
+> 
+> Would you be ok with something like:
+> 
+> trace_max_vma_count_exceeded(mm);
+> 
+> TP_STRUCT__entry(
+> __field(unsigned int, mm_id)
+> __field(unsigned int vma_count)
+> )
+> 
+> mm_id would be the hash of the mm_struct ptr similar to rss_stat and
+> the vma_count is the current vma count (some syscalls have different
+> requirements on the capacity remaining: mremap requires 6 available
+> slots, other syscalls require 1).
+> 
 
-Absolutely, take care of yourself. We all appreciate the  amount of
-work you put into reviewing :)
+BTW, why the hash of the mm pointer and not the pointer itself? We save
+pointers in lots of places, and if it is the pointer, you could use an
+eprobe to attache to the trace event to dereference its fields.
 
-Have a good talk and enjoy your vacation. Don't worry about the backlog.
-
--- Kalesh
-
->
-> Cheers, Lorenzo
+-- Steve
 
