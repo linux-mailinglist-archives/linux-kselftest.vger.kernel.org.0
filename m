@@ -1,189 +1,245 @@
-Return-Path: <linux-kselftest+bounces-41571-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF467B58EE7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 09:15:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F191DB58F23
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 09:29:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A3D094E1A76
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 07:15:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 013077A38CA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 07:27:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C972528002B;
-	Tue, 16 Sep 2025 07:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 856E32E36E3;
+	Tue, 16 Sep 2025 07:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="gzCEr1zr"
+	dkim=pass (2048-bit key) header.d=wolber.net header.i=@wolber.net header.b="DMEj0aja";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nBon4aOM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74AC26AD9;
-	Tue, 16 Sep 2025 07:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.143.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12532265CAB;
+	Tue, 16 Sep 2025 07:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758006946; cv=none; b=nZusybGN31zZ7+agmpYPOb5f46arEyLj3WEiJNwIkaH3zLFpOUp06guHY+HKC6W2eZJnIxZy+ot0NMXJla58XbQXb169RhSQ06667UhgSw+qsL/yssc36cApwvNt+CoBkJTeILsPgkGB0TedS+XNo15/xl9/tLd6yYReEB8t7XA=
+	t=1758007753; cv=none; b=BCN4rB9btZAIKYzSTWF4K9jfGcIPQCf7q8TPC+dE/JA45awBScNIayOf4n//LRuXdZ14WWG5wKaJiaxa2EKR/Ro59FRRFzmTstONWlz6lafIbqukssRetd8mIxEIdQ6ehiNBNeGBaU6sWBKuSNLhb9niL9MplbFFG1hPxJd3ZPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758006946; c=relaxed/simple;
-	bh=9TGFGRFrsZuPEdOczwxH9h20pygBGQx5NQAOCly1tfs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NXa7sQR7q0oYN+smAxwqkEcGfsVbt7h3EyT44iOZ1Z/CqpVkc6fajwVRScT4TkTzwkczcNps4YPtU0CBdtjhmlQFNO77/0TBfP99f6D1R3kno9U7OunGAj8EeDNwBWEhfW7Ck/1Hhr21JjTnU3cEAQYfyfDOw2SV2hJeiyD9Bgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=gzCEr1zr; arc=none smtp.client-ip=148.163.143.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58G6r2OR028366;
-	Tue, 16 Sep 2025 07:14:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps0720; bh=bXxgqdEdSOzYOwQL2w5UISvG0T
-	Gek76RcB1QClzkCaE=; b=gzCEr1zrEMw5QI4COvPhj9vnEAdw8clFMy0uUvpy+T
-	LDc8ZLjsAVUmtceIeVN+zJo/fqj4P8qMCObtEcq9YhowTfiSiziEGx2oonZEDsEO
-	gp/TqzMa/Q4Z3eqG1Vrm3zfKL7cb1vAQ0hL+AYUTnpwZ0Q6SSdvR/t8CrE2n84yo
-	1wFUKjP4OcHjs5RBXHKZSd7vTk8xIbFfM/BAgvR9SBs2u6rywcKllWP0rNSbKAm0
-	ELnhL6N6mDA/1fRZ4Q/8sgcQYCzDj3sLIvQ9QHZtYRmq0Wvg0tqNpoK7bRJIsCl1
-	uzFc6PajWs9xu5ZGsgUO7VdFWbCCMuQNs+cnP1vkIPLQ==
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 49730x84ps-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Sep 2025 07:14:28 +0000 (GMT)
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 0FD0B130D0;
-	Tue, 16 Sep 2025 07:14:27 +0000 (UTC)
-Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id 9B2B980898D;
-	Tue, 16 Sep 2025 07:14:21 +0000 (UTC)
-Date: Tue, 16 Sep 2025 02:14:17 -0500
-From: Kyle Meyer <kyle.meyer@hpe.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: corbet@lwn.net, david@redhat.com, linmiaohe@huawei.com, shuah@kernel.org,
-        tony.luck@intel.com, jane.chu@oracle.com, jiaqiyan@google.com,
-        Liam.Howlett@oracle.com, bp@alien8.de, hannes@cmpxchg.org,
-        jack@suse.cz, joel.granados@kernel.org, laoar.shao@gmail.com,
-        lorenzo.stoakes@oracle.com, mclapinski@google.com, mhocko@suse.com,
-        nao.horiguchi@gmail.com, osalvador@suse.de, rafael.j.wysocki@intel.com,
-        rppt@kernel.org, russ.anderson@hpe.com, shawn.fan@intel.com,
-        surenb@google.com, vbabka@suse.cz, linux-acpi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2] mm/memory-failure: Support disabling soft offline for
- HugeTLB pages
-Message-ID: <aMkOCmGBhZKhKPrI@hpe.com>
-References: <aMiu_Uku6Y5ZbuhM@hpe.com>
- <20250915201618.7d9d294a6b22e0f71540884b@linux-foundation.org>
+	s=arc-20240116; t=1758007753; c=relaxed/simple;
+	bh=SLE/KpkX4ILZbIgU7Mq9dOECZQvnarmgylJgJY+pbz0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=F+xvhXd+UibKxif/tUpwEjz8w6fg5Jc5Suz7TNWbLGZfxZt1tMvMEUFExmczpkNNoQky5tlJWCw7DFwkgUt3uZIh1af75sty1HcFGsJ0XXnLGaEkclRoOBwcQLKQ2zD7qyZO4D7ut0gpR9yTG+3hC4RkippIOAUoAQlH9ZJq3EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wolber.net; spf=pass smtp.mailfrom=wolber.net; dkim=pass (2048-bit key) header.d=wolber.net header.i=@wolber.net header.b=DMEj0aja; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nBon4aOM; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wolber.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolber.net
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 283BC140026A;
+	Tue, 16 Sep 2025 03:29:10 -0400 (EDT)
+Received: from phl-imap-03 ([10.202.2.93])
+  by phl-compute-02.internal (MEProxy); Tue, 16 Sep 2025 03:29:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolber.net; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1758007750;
+	 x=1758094150; bh=0dG0DMsEGkyA0BzrklEyus+igoCRBk/3dmQ9mxYJ0v8=; b=
+	DMEj0aja9nt1pRxz2uOZdbZ0O6VlvxQ9UVj1Hab40BG30flvr/K5R5l3h1lDl/2S
+	Mw5eJBwdhZqrdYAMgaO7IXiSbD/Mp1yhLrwEaQ0C1FV/E9Ko/e/dLE2jkdUE41Ir
+	Krqg/AgPnhWjAH5CEnwjLOOq9GD0vsf6Mz9Wv2dk7xWv0EZ5v7u5Q+aOjOOm4CWT
+	J6kgvQ/KZjYwtC1vCo8Be5UrxcCA1/6wJGNGp7wmkL70SEo2xqXVjISUhUTD2YQ/
+	B04hf76elxyBcsiL1P1BqZwnWakUHPf6eysgQ03hlRzcwv6izTXLR6miM2O7aCOV
+	8FpTysctmorHnvKqFokJ9Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758007750; x=
+	1758094150; bh=0dG0DMsEGkyA0BzrklEyus+igoCRBk/3dmQ9mxYJ0v8=; b=n
+	Bon4aOM29Sk8Ta7RAanKX5YYuWFgARybA+fUnCDE8+lEQx0kisCoIF+HuXiTkzYP
+	xvgkPknqhMDSkqkCCc94W78F0j+MWUZmU+luuuZgMnDebYOQybkttFMNTRvGEiMk
+	tCl91JqyMZOw4Mjq1gsuicyw3eyX+DL7KUxTIRExokwVdvsJ2bYvazZXdOc14XQW
+	gj4zf5ae7CyO07kKqXRjFCkOXelU8KzyS/xf0b0VjgCKn6dWwijkmyNEe0J0JGit
+	ny2JD1nR1GFXLIIRJLEHYp6LnZHTy+OPtb089KDIaFnx+IVN5DR9p7qoWKSool83
+	riMmEDqGzhSka5ge9Vdhg==
+X-ME-Sender: <xms:xRHJaFKOxFkC4WXPNMFI-v83qD2O7hoYPCItKIFMizGM2BMYtE4MTg>
+    <xme:xRHJaBJhHGizG_gS2dWWzyzZKTBBpEGIIPCwV4yZ3OshaCp0sWciftMSOrXiDWQDp
+    iSwKKENboTJHJ7_5w4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdefleeljecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggfgtgffkfevuffhvffofhgjsehtqhertdertdejnecuhfhrohhmpedfvehhuhgt
+    khcuhgholhgsvghrfdcuoegthhhutghkseifohhlsggvrhdrnhgvtheqnecuggftrfgrth
+    htvghrnhepgefhieelvdfgvedvfffgudehueeukefgfeefhfeiudejieevheekgffhtddt
+    udetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheptg
+    hhuhgtkhesfiholhgsvghrrdhnvghtpdhnsggprhgtphhtthhopedugedpmhhouggvpehs
+    mhhtphhouhhtpdhrtghpthhtoheptghhuhgtkhifohhlsggvrhesghhmrghilhdrtghomh
+    dprhgtphhtthhopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhrtghpthhtohep
+    shhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhmsehkvh
+    grtghkrdhorhhgpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhi
+    ohhnrdhorhhgpdhrtghpthhtohepkhhsthgvfigrrhhtsehlihhnuhigfhhouhhnuggrth
+    hiohhnrdhorhhgpdhrtghpthhtohepshgrfhgvthihqdgrrhgthhhithgvtghtuhhrvges
+    lhhishhtshdrvghlihhsrgdrthgvtghhpdhrtghpthhtoheptghorhgsvghtsehlfihnrd
+    hnvghtpdhrtghpthhtoheprggtrghrmhhinhgrsehrvgguhhgrthdrtghomh
+X-ME-Proxy: <xmx:xRHJaHfmI42uPyXLmOkj0hO0DDvl5OpK8gQI-KvQBuQSt4nluqtQPg>
+    <xmx:xRHJaJCq0q1vz7Z1Txvn0ukmu8tOwILxUPFjS-2iFoBxw4SK-LdcDw>
+    <xmx:xRHJaG8jF4Bm9oHjY2s0DzoBflD93LK7Bvssugr7qlMUxnNQbVhGmg>
+    <xmx:xRHJaFrVLtTwanWydR6KUlFMXH2HHTpid37-2MUvB31jZHHLiYEO0g>
+    <xmx:xhHJaJ5qhSGMfkUkz8LX3TuX1rrq44XZf-Uq3pL5HrBDoKq7C_LBGddB>
+Feedback-ID: i5cf64821:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9D64C18E0069; Tue, 16 Sep 2025 03:29:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250915201618.7d9d294a6b22e0f71540884b@linux-foundation.org>
-X-Authority-Analysis: v=2.4 cv=KaTSsRYD c=1 sm=1 tr=0 ts=68c90e54 cx=c_pps
- a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
- a=kj9zAlcOel0A:10 a=yJojWOMRYYMA:10 a=MvuuwTCpAAAA:8 a=QyXUC8HyAAAA:8
- a=_fVqCaFjEFPFEyr0NywA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-GUID: aDOt515-H__Hl3R9V07wPh5jXDwBK7cM
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDA2NSBTYWx0ZWRfXxAY3BPV9SJA6
- yOok/WQpFEjJYGXprFhNvjR/MSlEPJF8gQD+4iCExdPx/MUr0x833mkvOuHKlTeKIBoAjRLyExx
- T1D3ZDzlDFNSXfVciL1ZS43a5lWeWLSl+Qm5BBGhojcd3MR3tK4dnjyM1r+8nfdur5U22Z1nWnp
- BOqPtmAezj/CPAQTwQOht+sjD82CQtE5HH8kUuszEVLtcQuoNZwYgjGbEZRSx7ud5T+cs9Ajrlo
- Zdr3sFE7xNwfT0kvHltnSQk86vhd+J9mFAIfo4GXZKolTeRqPTORud7OzdD9Ryn2qLB7uc5993r
- egpIJ+gjBaKykyay/cEipeEu8sl4ZXGHcWsvQBz4WPsQmGWyLsNUcS7ntdTgf3z+JbhL/mpeyzc
- Et4+cJQw
-X-Proofpoint-ORIG-GUID: aDOt515-H__Hl3R9V07wPh5jXDwBK7cM
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-16_02,2025-09-12_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 priorityscore=1501 phishscore=0 impostorscore=0 clxscore=1015
- spamscore=0 adultscore=0 suspectscore=0 malwarescore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2509160065
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 16 Sep 2025 07:29:08 +0000
+Message-Id: <DCU1QIJH8II0.17CHTYNIW9WSK@wolber.net>
+Cc: <linux-mm@kvack.org>, <safety-architecture@lists.elisa.tech>,
+ <acarmina@redhat.com>, <kstewart@linuxfoundation.org>,
+ <chuckwolber@gmail.com>, <chuck@wolber.net>, <rostedt@goodmis.org>
+Subject: Re: [RFC v2 PATCH 2/3] /dev/mem: Add initial documentation of
+ memory_open() and mem_fops
+From: "Chuck Wolber" <chuck@wolber.net>
+To: "Jonathan Corbet" <corbet@lwn.net>, "Gabriele Paoloni"
+ <gpaoloni@redhat.com>, <shuah@kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <gregkh@linuxfoundation.org>
+X-Mailer: aerc 0.21.0
+References: <20250910170000.6475-1-gpaoloni@redhat.com>
+ <20250910170000.6475-3-gpaoloni@redhat.com> <874it3gx2q.fsf@trenco.lwn.net>
+In-Reply-To: <874it3gx2q.fsf@trenco.lwn.net>
 
-On Mon, Sep 15, 2025 at 08:16:18PM -0700, Andrew Morton wrote:
-> On Mon, 15 Sep 2025 19:27:41 -0500 Kyle Meyer <kyle.meyer@hpe.com> wrote:
-> 
-> > Soft offlining a HugeTLB page reduces the HugeTLB page pool.
-> > 
-> > Commit 56374430c5dfc ("mm/memory-failure: userspace controls soft-offlining pages")
-> > introduced the following sysctl interface to control soft offline:
-> > 
-> > /proc/sys/vm/enable_soft_offline
-> > 
-> > The interface does not distinguish between page types:
-> > 
-> >     0 - Soft offline is disabled
-> >     1 - Soft offline is enabled
-> > 
-> > Convert enable_soft_offline to a bitmask and support disabling soft
-> > offline for HugeTLB pages:
-> > 
-> > Bits:
-> > 
-> >     0 - Enable soft offline
-> >     1 - Disable soft offline for HugeTLB pages
-> > 
-> > Supported values:
-> > 
-> >     0 - Soft offline is disabled
-> >     1 - Soft offline is enabled
-> >     3 - Soft offline is enabled (disabled for HugeTLB pages)
-> > 
-> > Existing behavior is preserved.
-> 
-> um, why?  What benefit does this patch provide to our users? 
-> Use-cases, before-and-after scenarios, etc?
+On Mon Sep 15, 2025 at 10:39 PM UTC, Jonathan Corbet wrote:
+> Gabriele Paoloni <gpaoloni@redhat.com> writes:
+>
+>> This patch proposes initial kernel-doc documentation for memory_open() a=
+nd
+>> most of the functions in the mem_fops structure.  The format used for th=
+e
+>> specifications follows the guidelines defined in
+>> Documentation/doc-guide/code-specifications.rst
+>
+> I'll repeat my obnoxious question from the first patch: what does that bu=
+y
+> for us?
 
-Thank you for the feedback.
+Fair question, and definitely not obnoxious.
 
-Some BIOS suppress ("cloak") corrected memory errors until a threshold
-is reached. Once that threshold is reached, BIOS reports a CPER with the
-"error threshold exceeded" bit set via GHES and the corresponding page is
-soft offlined.
+It might help to reframe this a bit. The idea is to take an engineering
+technique from one domain and apply it with modifications to another. The
+relevant terms of art are "forward engineering" and "reverse engineering".
 
-BIOS does not know the page type of the corresponding page. If the
-corresponding page happens to be a HugeTLB page, it will be dissolved,
-permanently reducing the HugeTLB page pool. This can be problematic for
-workloads that depend on a fixed number of HugeTLB pages.
 
-Currently, soft offline must be disabled to prevent HugeTLB pages from
-being soft offlined.
+> My kneejerk first reaction is: you are repeating the code of the function=
+ in
+> a different language.
 
-This patch provides a middle ground. Soft offline can be disabled for
-HugeTLB pages while remaining enabled for non-HugeTLB pages, preserving
-the benefits of soft offline without the risk of BIOS soft offlining
-HugeTLB pages.
+No disagreement on that perception. We have more work to do when it comes t=
+o
+communicating the idea, as well as developing a better implementation.
 
-> > Update documentation and HugeTLB soft offline self tests.
-> > 
-> > Reported-by: Shawn Fan <shawn.fan@intel.com>
-> 
-> Interesting.  What did Shawn report? (Closes:!).
+The design of the Linux kernel is emergent and, in the present state, all f=
+orms
+of testing are an (educated) guess at the intended design. We can demonstra=
+te
+this by picking a random bit of code from the kernel and assigning ourselve=
+s
+the task of writing a test for it.
 
-Tony or Shawn, could you please point me to the original report? Thanks!
+Are you certain that your test accurately reflects the true design intent? =
+You
+can read the code and test what you see. But that does not mean that your t=
+est
+is valid against the intent in someone else's head.
 
-> > Suggested-by: Tony Luck <tony.luck@intel.com>
-> > Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
-> >
-> > ...
-> >
-> >  .../ABI/testing/sysfs-memory-page-offline     |  3 ++
-> >  Documentation/admin-guide/sysctl/vm.rst       | 28 ++++++++++++++++---
-> >  mm/memory-failure.c                           | 17 +++++++++--
-> >  .../selftests/mm/hugetlb-soft-offline.c       | 19 ++++++++++---
-> >  4 files changed, 56 insertions(+), 11 deletions(-)
-> 
-> I'll add it because testing, but please do explain why I added it?
+Music instructors see this whenever their students play the right notes but
+clearly do not yet "feel" the music. The difference is noticeable even by
+casual listeners.
 
-Thanks,
-Kyle Meyer
+
+> If we are not convinced that the code is correct, how can we be more
+> confident that this set of specifications is correct?
+
+We have no reason to be independently convinced of either. When we describe
+this as importing a technique into a new domain, your question is an exampl=
+e of
+some of the concessions that have to be made.
+
+The Linux kernel is not a forward engineered system. Therefore it is not
+possible to develop code and test from the same seed. Our only option is to
+reverse engineer that seed to the best of our abilities.
+
+At that point we have a few options.
+
+Ideally, the original developer can weigh in and validate that our
+interpretation is correct. This has the effect of "simulating" a forward
+engineering scenario, because a test can be created from the validated seed=
+ (I
+am trying valiantly to avoid using the word kernel).
+
+Absent the original developer's validation, we have the option of simply
+asserting the specification. This is equivalent to the way testing is done
+today, except a test can be equally opaque with respect to what design it i=
+s
+attempting to validate.
+
+In either case, if a test is developed against the specification, even an
+initially incorrect specification, we have the ability to bring code,
+specification, and test into alignment over time.
+
+
+> And again, what will consume this text?
+
+Humans are the consumer. But to be clear - a machine readable template is g=
+oing
+to be required in the long run to ensure that code and specification remain
+aligned. Our intentent was to avoid confusing things with templates, and
+introduce them once we have made headway on the points you have brought up.
+
+It is probably also worth mentioning, we have already had an "a-ha" moment =
+from
+one kernel maintainer. I believe the words were something to the effect of,
+"this is great, I used to have to relearn that code every time I touch it".
+
+
+> How does going through this effort get us to a better kernel?
+
+I am hoping some of the above planted the seed to answer this one. Code mus=
+t
+be correct in two ways, it must be valid and it must be verified.
+
+Valid means - the code is doing the right thing.
+Verified means - the code is doing the thing right.
+
+If code and test accurately reflect the same idea, then we can alleviate
+maintainers of a large portion of the verification burden. Validation is in=
+ the
+"hearts and minds" of the users, so that burden never goes away.
+
+
+> Despite having been to a couple of your talks, I'm not fully understandin=
+g
+> how this comes together; people who haven't been to the talks are not goi=
+ng
+> to have an easier time getting the full picture.
+
+I agree. And thank you very much for attending those talks and engaging wit=
+h
+us. It truly means a lot.
+
+I have submitted a refereed talk to this year's Pumbers conference that is
+intended to go over these points in detail. My colleague (not on this threa=
+d)
+has also submitted a refereed talk on best practices for developing these
+specifications. His name is Matthew Whitehead and he is a recognized expert=
+ in
+that area.
+
+..Ch:W..
+
 
