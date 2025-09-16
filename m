@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-41566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41567-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60538B58CEF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 06:47:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60E77B58D9D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 06:57:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C5DE522184
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 04:47:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2759E1BC39FF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 04:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 062E91F1538;
-	Tue, 16 Sep 2025 04:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2D4E242D76;
+	Tue, 16 Sep 2025 04:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ox9L+D4w"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="vJo1rW7o"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1D322615;
-	Tue, 16 Sep 2025 04:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78131C75E2;
+	Tue, 16 Sep 2025 04:55:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757998017; cv=none; b=S/vs6ZCPFwQ5W6dgFqa14Z7r27+i56ASBXyrxVk7C2+HAy0NhKvBOzVHbGFTtw2XBOfoNWGU8L5kxT/re7lY2H8fwuBvBCUx0twRgfIwsxnDfOza0m1f6+1cEl+aTfegGQdvTOlxwF0UonZEeKdVm8egI8/0yL9/quQxsXPorXI=
+	t=1757998523; cv=none; b=X8y08rTIdxw2MbsmPWVU1xf3X1UfXGyjBVbIzxI7tMh0gWbyUGZBCXzAb5dWWNAlrO6cCB5UqSFcGQ+AXeuVAAWlKFYdW6TXfinbvZrclzCUEv0mxLI1g6pBZghXmFLmPjo7YtZw1XsJ2pL/rDjT7vDsY2AHZ9a3prZfEVaeKZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757998017; c=relaxed/simple;
-	bh=T74ZzuPspDPqp5WudzeQCOjSlkg1JjJh0e7aM3Wogno=;
+	s=arc-20240116; t=1757998523; c=relaxed/simple;
+	bh=StiPQtnvbkOQeER7YWId2jlb+ZLI0M7NP2wd91RD+B4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GXaHBUyPO6MOvO7M+z+bo4SVO0HuoSRxkzXszbxxpyBeQFampwpJRWN7mPkgI8IH4Cxpg8RBbrkE/t2kN5mSWtTz862/pMWIta5XhNe4MfNAlmwgKSYY6OEfxyydck92wAXHQ0xU1IOp0BhwBuPlXbj0oRzgTd2Liiu7FeEKRI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ox9L+D4w; arc=none smtp.client-ip=62.89.141.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=EmlAd0M0joeHKoZmWRoFuDkoUwT2NbOX1MrWFkG/js8AbW9E/gKkBG6tdHVPtUbYG/SpRYXnjuIytJilHvrQG+MLSOwVK/XGC0PGuzuWiip4HN+iHY/CuW/rrwub1NO4fZ0qnyspdfrmbazirNBSfJ56QsS46mfdbNv9l1iHzrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=vJo1rW7o; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zJKM8U9wCy2x6jEU9/NwYukpZ0MPjWkRmBpCq2d6jwc=; b=ox9L+D4w9ZzxQiIuAXM1mi0jo+
-	cpo4X3XUrxcCVbbybOIMHXV++lLyHSkYuzY6zrldFhpIHKroHTcHqn+4uvsO06MzSd09Wstynu3QI
-	ZLQTHvrztPXmZFd83ZDOOF+LklOXW4vKqmznuGXnDbkulwFPDcv2Q/ZK8BWICbufTK+Mg757vA379
-	/Kmkpw8+xQpAdRQDBQFf/jJEFIYBax9bhbP0ap9qjvNqCkvepSipkM7ff8o4c1AtcWvSgL4gP4V2y
-	M67uWR7GeK/WKuFr080DEOMuzrLCr5jStN+1NJ+K8kwcB1rIV7Vh2TA1rAq6J1GmZeBmzOjBYVyOw
-	G24wV40Q==;
+	bh=StiPQtnvbkOQeER7YWId2jlb+ZLI0M7NP2wd91RD+B4=; b=vJo1rW7olNwfuNc5FR0pjMX6/9
+	qC+ZZ61UqHO7M9LtWzS3LWXKjnfcvuwaOa5Qc8Y6b7q3DhI5HpAV7gvAUIzHnHeCynmW4WfTIOl0g
+	nINC1N8m7RIt6nq8NnqUfHa4tvWhP6vp1LnBAJ93G8FU5DvWFNZvi0SprrHKQxpeBEERwzleTPUWL
+	Ff3hVuMyE/7X5j7QIxvW4Ju5dBbQFuk9B0Je8gRsA6dmzOreHhHY0uzFKMfrRoemNejTtQiFwfDy9
+	N/3en7D+hJGJhpeBshYW5pbFaIHSjQieAExsjN1iYKs3c4idvVqx5lcJZHm0UFFCOVnmrpLzjnCty
+	p7K951cg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uyNaa-00000006Sju-3JxF;
-	Tue, 16 Sep 2025 04:46:48 +0000
-Date: Tue, 16 Sep 2025 05:46:48 +0100
+	id 1uyNio-00000006Zf2-2k8M;
+	Tue, 16 Sep 2025 04:55:18 +0000
+Date: Tue, 16 Sep 2025 05:55:18 +0100
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: Christian Brauner <brauner@kernel.org>
 Cc: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
@@ -62,13 +62,10 @@ Cc: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
 	Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-block@vger.kernel.org,
 	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v2 18/33] mnt: support ns lookup
-Message-ID: <20250916044648.GP39973@ZenIV>
+	netdev@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2 00/33] ns: support file handles
+Message-ID: <20250916045518.GQ39973@ZenIV>
 References: <20250912-work-namespace-v2-0-1a247645cef5@kernel.org>
- <20250912-work-namespace-v2-18-1a247645cef5@kernel.org>
- <20250916035633.GM39973@ZenIV>
- <20250916035949.GO39973@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,49 +74,16 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250916035949.GO39973@ZenIV>
+In-Reply-To: <20250912-work-namespace-v2-0-1a247645cef5@kernel.org>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Tue, Sep 16, 2025 at 04:59:49AM +0100, Al Viro wrote:
-> On Tue, Sep 16, 2025 at 04:56:33AM +0100, Al Viro wrote:
-> > 	if (!RB_EMPTY_NODE(to_ns_common(ns)->ns_tree_node))
-> 
->  	if (!RB_EMPTY_NODE(&to_ns_common(ns)->ns_tree_node))
-> 
-> obviously...
+On Fri, Sep 12, 2025 at 01:52:23PM +0200, Christian Brauner wrote:
 
-FWIW, how about the following - I put the commit below into never-rebased
-branch, pull it into #work.mount and you do the same to your branch
-just prior to 18/33?  The difference from one in #work.mount is that
-this variant checks RB_EMPTY_NODE(&ns->mnt_ns_tree_node) instead of
-list_empty(&ns->mnt_ns_list).  The reasons why it's safe lockless are
-pretty much the same...
+A nit on whatever script you are using:
 
-Objections?  Does vfs/vfs.git #no-rebases-mnt_ns_tree_remove look sane
-for you?
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
 
-mnt_ns_tree_remove(): DTRT if mnt_ns had never been added to mnt_ns_list
-    
-Actual removal is done under the lock, but for checking if need to bother
-the lockless RB_EMPTY_NODE() is safe - either that namespace had never
-been added to mnt_ns_tree, in which case the the node will stay empty, or
-whoever had allocated it has called mnt_ns_tree_add() and it has already
-run to completion.  After that point RB_EMPTY_NODE() will become false and
-will remain false, no matter what we do with other nodes in the tree.
-    
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
-diff --git a/fs/namespace.c b/fs/namespace.c
-index ae6d1312b184..39afeb521a80 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -187,7 +187,7 @@ static void mnt_ns_release_rcu(struct rcu_head *rcu)
- static void mnt_ns_tree_remove(struct mnt_namespace *ns)
- {
- 	/* remove from global mount namespace list */
--	if (!is_anon_ns(ns)) {
-+	if (!RB_EMPTY_NODE(&ns->mnt_ns_tree_node)) {
- 		mnt_ns_tree_write_lock();
- 		rb_erase(&ns->mnt_ns_tree_node, &mnt_ns_tree);
- 		list_bidir_del_rcu(&ns->mnt_ns_list);
+is less convenient than
+
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585 (v6.17-rc1)
 
