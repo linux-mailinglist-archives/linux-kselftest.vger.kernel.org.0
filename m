@@ -1,89 +1,121 @@
-Return-Path: <linux-kselftest+bounces-41567-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60E77B58D9D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 06:57:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD2B7B58E4F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 08:16:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2759E1BC39FF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 04:57:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29452525895
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Sep 2025 06:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2D4E242D76;
-	Tue, 16 Sep 2025 04:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5612DF712;
+	Tue, 16 Sep 2025 06:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="vJo1rW7o"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gri64SC9";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="g+EbPLBf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78131C75E2;
-	Tue, 16 Sep 2025 04:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2BE2DF3F9;
+	Tue, 16 Sep 2025 06:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757998523; cv=none; b=X8y08rTIdxw2MbsmPWVU1xf3X1UfXGyjBVbIzxI7tMh0gWbyUGZBCXzAb5dWWNAlrO6cCB5UqSFcGQ+AXeuVAAWlKFYdW6TXfinbvZrclzCUEv0mxLI1g6pBZghXmFLmPjo7YtZw1XsJ2pL/rDjT7vDsY2AHZ9a3prZfEVaeKZw=
+	t=1758003364; cv=none; b=OwVaeQ5QPYEf+J1L41S20S2gWpQMYwgMJzkQ0RPu12UivC8+/oSJlnuRf1Yv1jeDm1/y4ij+KNReqg16lrwaCuAdCKBCfpbHvUdyeZgR6Ad/Ev6yn7MZva85XI1KddZP4q8GhdSeU5Ar4N2HAgRl9nonVN7uF0PUE0xMlyKr9fU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757998523; c=relaxed/simple;
-	bh=StiPQtnvbkOQeER7YWId2jlb+ZLI0M7NP2wd91RD+B4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EmlAd0M0joeHKoZmWRoFuDkoUwT2NbOX1MrWFkG/js8AbW9E/gKkBG6tdHVPtUbYG/SpRYXnjuIytJilHvrQG+MLSOwVK/XGC0PGuzuWiip4HN+iHY/CuW/rrwub1NO4fZ0qnyspdfrmbazirNBSfJ56QsS46mfdbNv9l1iHzrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=vJo1rW7o; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=StiPQtnvbkOQeER7YWId2jlb+ZLI0M7NP2wd91RD+B4=; b=vJo1rW7olNwfuNc5FR0pjMX6/9
-	qC+ZZ61UqHO7M9LtWzS3LWXKjnfcvuwaOa5Qc8Y6b7q3DhI5HpAV7gvAUIzHnHeCynmW4WfTIOl0g
-	nINC1N8m7RIt6nq8NnqUfHa4tvWhP6vp1LnBAJ93G8FU5DvWFNZvi0SprrHKQxpeBEERwzleTPUWL
-	Ff3hVuMyE/7X5j7QIxvW4Ju5dBbQFuk9B0Je8gRsA6dmzOreHhHY0uzFKMfrRoemNejTtQiFwfDy9
-	N/3en7D+hJGJhpeBshYW5pbFaIHSjQieAExsjN1iYKs3c4idvVqx5lcJZHm0UFFCOVnmrpLzjnCty
-	p7K951cg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uyNio-00000006Zf2-2k8M;
-	Tue, 16 Sep 2025 04:55:18 +0000
-Date: Tue, 16 Sep 2025 05:55:18 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
-	linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-	Jeff Layton <jlayton@kernel.org>, Mike Yuan <me@yhndnzj.com>,
-	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-	Lennart Poettering <mzxreary@0pointer.de>,
-	Daan De Meyer <daan.j.demeyer@gmail.com>,
-	Aleksa Sarai <cyphar@cyphar.com>, Jens Axboe <axboe@kernel.dk>,
-	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	netdev@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v2 00/33] ns: support file handles
-Message-ID: <20250916045518.GQ39973@ZenIV>
-References: <20250912-work-namespace-v2-0-1a247645cef5@kernel.org>
+	s=arc-20240116; t=1758003364; c=relaxed/simple;
+	bh=3ZTBXQYIh1KylVz8qq5z88NYEalsc9rPcJ9GI9PBEhY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dCtiNXdcd4bVYjdCza7T3Fnk+tfetF17IA5jQm6C7vnHSiX1VeavcezpKiNPm0TEBS8apJNMRVm/Y7uqPLRy73StEkgh4HSsiLcreFlATXRsn6GSw5XJcUqcJvG3Wfnqnl9nkJUz7a+M5DGoQXu5WlvdhBGxU20uVa3zihicbpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gri64SC9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=g+EbPLBf; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1758003359;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GivhC8RZbTGVwI9Uiq7S9gZTcPa3vHaIHg4NSnQfTFU=;
+	b=gri64SC9BF5focC/t6YTC0PyvhpPbxEP2IbfWT9FJL4kprHpWauWVzqJ8NIuSyUoHWq4LM
+	SB/tP3bVWY0RqyH/+yvd2VYe9M7mGEMH4DoUgXbsZ9pZ6znIkkk9PVKuR2pfZ8Z3rzsA01
+	z65oaSPpnQ9iX2t9Mf+hlqfo0XYf/kqjwb/9lcGHgkMCPQbZKqbxT+hiy4anxdRZLNDWZx
+	34iVHZtjJudMj3kAFi2CyZ1wuzaNWE/sVni8Bg/pTYK2a36/BJvZ5iIqvOCjqgJxRCEt+e
+	DuwpTpmNkkN7v5nLWUlsuwc3p92X/laxR0Mh63KRbVyyATHL/9Ot053Sb7zT6w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1758003359;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GivhC8RZbTGVwI9Uiq7S9gZTcPa3vHaIHg4NSnQfTFU=;
+	b=g+EbPLBfz5H96EtvsxLhM/VCD+8+HPQogpVdG1AeIo5ZaYAH+JNN4rVtzEWyxdtYcyYDeZ
+	DTFruZDc8RHUBpCw==
+Date: Tue, 16 Sep 2025 08:15:46 +0200
+Subject: [PATCH] kunit: Extend kconfig help text for KUNIT_UML_PCI
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250912-work-namespace-v2-0-1a247645cef5@kernel.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250916-kunit-pci-kconfig-v1-1-6d1369f06f2a@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAJEAyWgC/x3MQQqAIBBA0avErBsw06KuEi3KRhsCC60IpLsnL
+ d/i/wSRAlOEvkgQ6ObIu8+oygLMOnlHyEs2SCG16KoGt8vziYdh3MzuLTusdSsbNc9KWwW5OwJ
+ Zfv7nML7vBwCdcZNjAAAA
+X-Change-ID: 20250916-kunit-pci-kconfig-357264bb45f4
+To: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Johannes Berg <johannes@sipsolutions.net>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758003353; l=1177;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=3ZTBXQYIh1KylVz8qq5z88NYEalsc9rPcJ9GI9PBEhY=;
+ b=xeqz1Ab257owlfkt12/0UbICWtnoDtZieVZDFHm3CWPDsePDNXDgZZHtyT/o83LfJqzHaMz9g
+ OO3NCNKlfLbBexm6q0lqjZGh38XN2McKeXok/xfyqI/ESLu/kiqbtPX
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Fri, Sep 12, 2025 at 01:52:23PM +0200, Christian Brauner wrote:
+Checkpatch.pl expects at least 4 lines of help text.
 
-A nit on whatever script you are using:
+Extend the help text to make checkpatch.pl happy.
 
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+Fixes: 031cdd3bc3f3 ("kunit: Enable PCI on UML without triggering WARN()")
+Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/lkml/3dc95227-2be9-48a0-bdea-3f283d9b2a38@linuxfoundation.org/
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Feel free to fold this into the original commit.
+---
+ lib/kunit/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-is less convenient than
+diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+index 1823539e96da30e165fa8d395ccbd3f6754c836e..7a6af361d2fc6276b9667be8c694b0c80e33c1e8 100644
+--- a/lib/kunit/Kconfig
++++ b/lib/kunit/Kconfig
+@@ -112,5 +112,9 @@ config KUNIT_UML_PCI
+ 	select UML_PCI
+ 	help
+ 	  Enables the PCI subsystem on UML for use by KUnit tests.
++	  Some KUnit tests require the PCI core which is not enabled by
++	  default on UML.
++
++	  If unsure, say N.
+ 
+ endif # KUNIT
 
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585 (v6.17-rc1)
+---
+base-commit: f20e264262f1e6a6e5302249e37da355d844b52b
+change-id: 20250916-kunit-pci-kconfig-357264bb45f4
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
