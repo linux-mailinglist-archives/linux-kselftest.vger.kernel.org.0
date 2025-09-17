@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-41745-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97EE5B8120A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 19:10:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43A0FB81270
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 19:22:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5B6434E2037
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 17:10:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36B267B104A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 17:21:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC5B72940B;
-	Wed, 17 Sep 2025 17:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB2D2FC01E;
+	Wed, 17 Sep 2025 17:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ujduGSxP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3gTftg7U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322AE34BA5E
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 17:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E31834BA25
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 17:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758129038; cv=none; b=LSW8xRSkkHrBw9cJ6j0t9wec1TDKtN4ScJMMI6yLAgJx+YrpeeLMBv9/EHmOUAP7C54nmWlXFCAxlvnvb74S6VS8iNvQ1BDbnC6RDHv+m0vsJ/jNeZBoCLcT5t1EB5DgfkQd68jDW8H3DXmfLihi0ui47L+KsMaZEca14P46fZo=
+	t=1758129759; cv=none; b=obiyr1C10yv/LZJcEkuSTiyDO1XPymmeeGtXJZ30Neatpv+tU6NOwYQjO+NYoMLGt+BlAP4aGJgBcUWFI5/CXnuhBfdyuFplhZbP4K8rAnSmLmhWcsNZ+wH8p6ejF8oQqHZx7BcG+/lZq6JO2x5H7FgRI5kNVDHukOmt1/fnxEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758129038; c=relaxed/simple;
-	bh=G2z78z3yauMJqPaeDTmkhMVkVrKmoIUwOjIXhNMkTQs=;
+	s=arc-20240116; t=1758129759; c=relaxed/simple;
+	bh=ikCoNCwLqPBNlRXdXhap1TrscZ5NIMCidUJQsIyZl7o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ClvAWL1pMjyovxBfNaVLxOPFFX7fRff1MK5EtMJjQ6DarLQuioAyotEGuw52BaBUuD6p984YBJz4CnCoKqb6yR7syzrz2JQmsVoIbvq17Q+trBLULPkuhHzY6k7R6080jbycX6i6jT2Nek0btBvx7rDvXqeFBx6IWNFoJjFX2+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ujduGSxP; arc=none smtp.client-ip=209.85.214.171
+	 To:Cc:Content-Type; b=ZvYE9A6LkaCKIsYaMJMWRl1HjxOlI3pixwv00AqoxKyWkYOWIhzCvMUPqzOkzct1RU6nSfiqoXRIKDKDFNYZJ4NFnEyYv7doKfgKMJIQjHQFSDMmwiZFB/40mV9oc5Rke/q+dU8CH+KyH4pHH1AV1aap2dbmee5h4keDKeErTaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3gTftg7U; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-265abad93bfso9795ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 10:10:36 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-265abad93bfso12215ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 10:22:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758129036; x=1758733836; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1758129757; x=1758734557; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=15u2gJ63Nvc+ryjb04blM2EZvX2JTQ7zkIDCOHZzkRg=;
-        b=ujduGSxPFIlAG+QnsapeuoRpdNPIxfZ9pixacot+GaT7TVfx3VFarvazf80LYhjHG7
-         z3AWLjVXCbpIZAhrXU5l6l2FrByts4/SFUrXCvBesRk9boBIAsxXtqF+m5h1fE7oO2TT
-         MdjRRq17ZUUHniuJW/UJ7HcmMspXTl8eAg2MAAnZ4ZdODotG5zo/iWesO/eXsN/YFk5w
-         1/1p4vWEtIVE1ESkjapUMg/Txi+SkFjkTPJbaKZ+jEOgENsjiiKsei8ierZjiLzp5mEh
-         YjPBcpoAyQhfPb1ls6gHI45hiAi2lQ3zDjjG+QoRxrA2m6IDUYUGf2j1/c7AfoRTY2p0
-         ZVMQ==
+        bh=r+E7E6CpklnGcp1ci3sPCCKWWgs8VUPg8eKk3JcOPP8=;
+        b=3gTftg7UvOaBYLkA7ZPl5A6sHZyVnwLS0d83YZsDMjG3/pFfaMuWOcLe5bdJdPFLkT
+         rHZWgJVMyzoxiFm9VK9aDiu3iYQ09mGw6qubfr7yqST5xV52x1/9HYYoYYxo3osfRI5C
+         gl4uDSY4oKw9gG/3eGoRS8Q9lMW2nqDiE5ey7a86WTdOxv/bZTmEA19UzS69A+Dtoxbd
+         44tSuSy/iUDlfPWAdhxvV3RzlkTSK3Q52W+XJ90TvlEerDjagERZllqiISNdfPdSO0gz
+         vtwnwTZEcX01xqaKkpYvxtkvPCV0lMWYphvGLw+pWm3DMDF5357ZvM11BDWKz2h76/+U
+         P3nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758129036; x=1758733836;
+        d=1e100.net; s=20230601; t=1758129757; x=1758734557;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=15u2gJ63Nvc+ryjb04blM2EZvX2JTQ7zkIDCOHZzkRg=;
-        b=d9rjQS4L0PC6AtA+Mn9xijLuZ5LFfvfeqNeuD/Bgc2VnR6jUX96ZRsESGho4fsdZk0
-         bjSpvQ/D9p8yeZ8hiefOO83HOi4FzO0IevuP2yf0rnvlyhG5z14X3MVHK42WG+hjH9/S
-         1RrKhexcLWgJdNGla3+BWS/3/t8SDEuzrAaoTF3KDf8fS6AOl0BGABuppHIoiSdJk9Lc
-         jnXH+hW2THKXW+LIw/4avS8/CGANDnaGwiFTek9qzHtzitJe03AYjaKREbj2YA9oXfAQ
-         wJJjN53Ghc5e7qvoG/ZU4YeEpiLIBvnTDxBfyWJBchO3IIsGlk2ycg8DZnrw6wj77Hj4
-         0m+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXNccfAvDe6BJM+qM74MzbeMkwh31RjL7r0Y2Ni/DHoSHrQE9ZXygM1N4z78bJoPX+o0fCFNvpa9jpwNEJFuPQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwM9CeHEK97QBRaeDGv2h2rl/HohRSAW5l68bqt57d+D9I59YIS
-	oPc7nlhgGXNnjx9gX/VQ0V/DX7yd2z3JpK1FeSWGYpGqlJifsDJLJATFITWjQQ4+LobhumjhpKK
-	crVBysipUTjdMEb4XzhsyLOm7mUVCB18gTyG4J4is
-X-Gm-Gg: ASbGncvWtNO2FS7Pvk5rieFGEgEm0JirOWack/ipyCgTV2tNAZ53yWLRAs3jdGMdtJ4
-	f3ScyCHguEeqe0SbnHf1/YoKkd1IPXoRt5t/njQcsSPsrnOBKnr64a5Gg/iKO955mb50RMpplEe
-	SF98dV22VUaQ4uTx36vEm/yr3g2hX20WjO8I/dMbgO7e2zI0YbNCgKBCg4xXiin18x/D+P2cA0l
-	og8S5nRw/RAHbCk8EUHE5YMS0jrB+92Wuqwls4s7n/F
-X-Google-Smtp-Source: AGHT+IFd4BAxZT/ufICRk+rEAu4Df/3LlVy7dl8wb8UYvf1Vkm7Wii7RkWbyYEbSSxpnLkv8kfjaHMhL5z1X210qqcg=
+        bh=r+E7E6CpklnGcp1ci3sPCCKWWgs8VUPg8eKk3JcOPP8=;
+        b=NKbcZ90+o7Fy6yKDG6EwNiJjJ2dsxiN3dGwZp0ftOBJUUBaJ7MMqTamwjoHpQ+t5Ow
+         NyHYA34C9AOAOxbDdvskbNV5ukDUg+VPm8+iHvHFLc9uYwR13csikkP9vzP1teTz038y
+         T4Gt12Sjknx6DZ+jU62PjECA1WQjmjHBpzxC7VgriGkDvfoi1XE4ia7SDvX3tik2PVJA
+         dRMCCxFJzKwcbZIaQ2vKuL3tYvW89aUQPxmkFX7ex9umI7ixPupl+Jc9Q9Rx3+CW4CF0
+         UZHqDNrvrXku8g8I2j1ObnHfIH0aAGrF8lO2aEJVoWarVJCGr8bOsPKxYGPLhVBL+YWa
+         FgnA==
+X-Forwarded-Encrypted: i=1; AJvYcCVIcQLyEZaxNipgP+1bDEwXmLsN4fdnIXNIJoLhXUdDAEor7iHRWJg1Gj2bwTAuH58Y8hauUOM4BObeQ8J0AdA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKoyJD5ewT/4caHThFXfnRz1Bm1UEiojmmgq6THxC2bL2pJ6Gt
+	MImFXOj8s/w0rzD6mx+Sb7EO4AzrQc3ajn0vdKkFBiKLfcENmnWaUP4haIbscLgQogLiPpu8Jzo
+	XufGn+4rU05Dv0WgzQK4mE8y1B4BarcbtTZP8AZdI
+X-Gm-Gg: ASbGncv7CJbUpKrwus8SDnRxf6SnQNubcV3cLPMUcnPc9AMMIv2h4XcMG1bi4nXESlk
+	T5VncaUOYLOs8IMqY/drjne8AkSK8MfIzS/PeQbdsqt1zwB4+tNuGfzbhlERdFh7HR38ampYtz8
+	F4Qa/cwyPdNPXw0uWj3bVfZ7Tig13liHvwBQr38eeV4UJ0Hci8Xe2wfxHbJEMMe9tWtKuiUQKos
+	vHgFdeCVTwOZFtOZUSMKStEn/JPLznNAN3ZqTf4GFRKUmhnJl7UXQg=
+X-Google-Smtp-Source: AGHT+IHeiEiZK89rCQTa9vJT7n+2u8jidRkSIY9SZNarvXZONROAFr8zQdlQ9JzID/8YZhac6C1RAxvIIaVZDc04CMY=
 X-Received: by 2002:a17:902:d2c9:b0:266:b8a2:f605 with SMTP id
- d9443c01a7336-26808a2fc00mr4248005ad.3.1758129035969; Wed, 17 Sep 2025
- 10:10:35 -0700 (PDT)
+ d9443c01a7336-26808a2fc00mr4313065ad.3.1758129756462; Wed, 17 Sep 2025
+ 10:22:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,13 +76,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250915163838.631445-1-kaleshsingh@google.com>
- <20250915163838.631445-4-kaleshsingh@google.com> <c6eacb69-86f5-4bdb-9c6b-04e3f7ef7c29@redhat.com>
-In-Reply-To: <c6eacb69-86f5-4bdb-9c6b-04e3f7ef7c29@redhat.com>
+ <20250915163838.631445-7-kaleshsingh@google.com> <eb7820ed-3351-4cb5-8341-d6a48ed7746f@redhat.com>
+In-Reply-To: <eb7820ed-3351-4cb5-8341-d6a48ed7746f@redhat.com>
 From: Kalesh Singh <kaleshsingh@google.com>
-Date: Wed, 17 Sep 2025 10:10:24 -0700
-X-Gm-Features: AS18NWB7v1zd5wRtV4XjcNUI2Kl7h_0nJ3bBXH5VRcSHiB0MqTNwu-jJe9fGDsw
-Message-ID: <CAC_TJvcXzrxhWFWyE7QEgPVmEJbnfT1W=s4TdgPGGAgCpn=8Og@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] mm: introduce vma_count_remaining()
+Date: Wed, 17 Sep 2025 10:22:25 -0700
+X-Gm-Features: AS18NWCUijB84Y15lF3r5d3C-Ej09R315cPK-C8knq1sNn05pRA_6ZbvAAxSzwc
+Message-ID: <CAC_TJvctkyGEKv8mVE83D2DzCd-HiXh9co_DuZfwuF86FJoiJw@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] mm: add assertion for VMA count limit
 To: David Hildenbrand <david@redhat.com>
 Cc: akpm@linux-foundation.org, minchan@kernel.org, lorenzo.stoakes@oracle.com, 
 	Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de, 
@@ -101,43 +101,21 @@ Cc: akpm@linux-foundation.org, minchan@kernel.org, lorenzo.stoakes@oracle.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 17, 2025 at 6:38=E2=80=AFAM David Hildenbrand <david@redhat.com=
+On Wed, Sep 17, 2025 at 6:44=E2=80=AFAM David Hildenbrand <david@redhat.com=
 > wrote:
 >
 > On 15.09.25 18:36, Kalesh Singh wrote:
-> > The checks against sysctl_max_map_count are open-coded in multiple
-> > places. While simple checks are manageable, the logic in places like
-> > mremap.c involves arithmetic with magic numbers that can be difficult
-> > to reason about. e.g. ... >=3D sysctl_max_map_count - 3
+> > Building on the vma_count helpers, add a VM_WARN_ON_ONCE() to detect
+> > cases where the VMA count exceeds the sysctl_max_map_count limit.
 > >
-> > To improve readability and centralize the logic, introduce a new helper=
-,
-> > vma_count_remaining(). This function returns the VMA count headroom
-> > available for a givine process.
->
-> s/givine/given/
->
-> s/process/mm/
->
+> > This check will help catch future bugs or regressions where
+> > the VMAs are allocated exceeding the limit.
 > >
-> > The most common case of checking for a single new VMA can be done with
-> > the convenience helper has_vma_count_remaining():
-> >
-> >      if (!vma_count_remaining(mm))
-> >
-> > And the complex checks in mremap.c become clearer by expressing the
-> > required capacity directly:
-> >
-> >      if (vma_count_remaining(mm) <  4)
-> >
-> > While a capacity-based function could be misused (e.g., with an
-> > incorrect '<' vs '<=3D' comparison), the improved readability at the ca=
-ll
-> > sites makes such errors less likely than with the previous open-coded
-> > arithmetic.
-> >
-> > As part of this change, sysctl_max_map_count is made static to
-> > mm/mmap.c to improve encapsulation.
+> > The warning is placed in the main vma_count_*() helpers, while the
+> > internal *_nocheck variants bypass it. _nocheck helpers are used to
+> > ensure that the assertion does not trigger a false positive in
+> > the legitimate case of a temporary VMA increase past the limit
+> > by a VMA split in munmap().
 > >
 > > Cc: Andrew Morton <akpm@linux-foundation.org>
 > > Cc: David Hildenbrand <david@redhat.com>
@@ -148,52 +126,62 @@ ll
 > > Cc: Pedro Falcato <pfalcato@suse.de>
 > > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 > > ---
->
-> [...]
->
-> >       /*
-> > @@ -1504,6 +1504,25 @@ struct vm_area_struct *_install_special_mapping(
-> >   int sysctl_legacy_va_layout;
-> >   #endif
 > >
-> > +static int sysctl_max_map_count __read_mostly =3D DEFAULT_MAX_MAP_COUN=
-T;
+> > Changes in v2:
+> >    - Add assertions if exceeding max_vma_count limit, per Pedro
+> >
+> >   include/linux/mm.h               | 12 ++++++--
+> >   mm/internal.h                    |  1 -
+> >   mm/vma.c                         | 49 +++++++++++++++++++++++++------=
+-
+> >   tools/testing/vma/vma_internal.h |  7 ++++-
+> >   4 files changed, 55 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index 8bad1454984c..3a3749d7015c 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -4219,19 +4219,27 @@ static inline bool snapshot_page_is_faithful(co=
+nst struct page_snapshot *ps)
+> >
+> >   void snapshot_page(struct page_snapshot *ps, const struct page *page)=
+;
+> >
+> > +int vma_count_remaining(const struct mm_struct *mm);
 > > +
-> > +/**
-> > + * vma_count_remaining - Determine available VMA slots
-> > + * @mm: The memory descriptor for the process.
-> > + *
-> > + * Check how many more VMAs can be created for the given @mm
-> > + * before hitting the sysctl_max_map_count limit.
-> > + *
-> > + * Return: The number of new VMAs the process can accommodate.
-> > + */
-> > +int vma_count_remaining(const struct mm_struct *mm)
+> >   static inline void vma_count_init(struct mm_struct *mm)
+> >   {
+> >       ACCESS_PRIVATE(mm, __vma_count) =3D 0;
+> >   }
+> >
+> > -static inline void vma_count_add(struct mm_struct *mm, int nr_vmas)
+> > +static inline void __vma_count_add_nocheck(struct mm_struct *mm, int n=
+r_vmas)
+> >   {
+> >       ACCESS_PRIVATE(mm, __vma_count) +=3D nr_vmas;
+> >   }
+> >
+> > +static inline void vma_count_add(struct mm_struct *mm, int nr_vmas)
 > > +{
-> > +     const int map_count =3D mm->map_count;
-> > +     const int max_count =3D sysctl_max_map_count;
+> > +     VM_WARN_ON_ONCE(!vma_count_remaining(mm));
 >
-> If we worry about rare races (sysctl_max_map_count changing?) we should
-> probably force a single read through READ_ONCE()?
->
-> Otherwise one might trick vma_count_remaining() into returning a
-> negative number I assume.
+> Can't that fire when changing the max count from user space at just the
+> wrong time?
 
-Agreed, I'll add the READ_ONCE when resending.
+You are right: technically it's possible if it was raised between the
+time of checking and when the new VMA is added.
+
+>
+> I assume we'll have to tolerated that and might just want to drop this
+> patch from the series.
+>
+
+It is compiled out in !CONFIG_VM_DEBUG builds, would we still want to drop =
+it?
 
 Thanks,
 Kalesh
 
->
-> > +
-> > +     return (max_count > map_count) ? (max_count - map_count) : 0;
-> > +}
->
-> Nothing else jumped at me.
->
-> Not sure what the buildbot complains about but I'm sure you'll figure it
-> out :)
->
 > --
 > Cheers
 >
