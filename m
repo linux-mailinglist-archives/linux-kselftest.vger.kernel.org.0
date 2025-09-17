@@ -1,147 +1,215 @@
-Return-Path: <linux-kselftest+bounces-41651-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E85A9B7CC6A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 14:10:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E0C1B7D24A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 14:20:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74A031B25B1D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 03:53:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFBDE4866F1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 04:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDA226E6FF;
-	Wed, 17 Sep 2025 03:52:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VPG52uPB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ED992C15AA;
+	Wed, 17 Sep 2025 04:01:00 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F09E26159E
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 03:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181C9263F34;
+	Wed, 17 Sep 2025 04:00:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758081173; cv=none; b=Yu73htYNsoF21CLIHsuDcj9t5rl0OWvJ6ecB3PJbvg03uwxlVfn9P2r2LA3v4dy/OXII1nTidHiuGNDzfXWLEeakcr4kwgpkZ50jYS9UM28jvLSDwUxRBewCU08RYgQbbx6IMSApYFRglCIN+EjPlFShqYlXms4upGsJPDWMshE=
+	t=1758081660; cv=none; b=DAMz1xOnEkEr7r5TAmL/UjXGGqULOswKKMYoVWIzL+e+uwHoGbHkfGdsYE53hzWHp04BMXvKIr12FfW9HGrerfa0SuZxVum3bVYNw/o9NW2F+GA/sdoo53LGZRPJgEBcMNACPHW1SH1w2b0JPEvtJ/4LmKpvvENeoF4WQ0emSao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758081173; c=relaxed/simple;
-	bh=CBOTbMPLyW6Qri05HDDpBJ2PvCULc1vyqw9jSPetlDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pynSjbjUR4tVrURGm2Kl9Oltjh4nk8bH0Liy1yc4gV0HONlAPeaPUvm9BUUQlNOfbNwrkaOjfjPgZJoCJbNs8Oh/Oxqrt6DBGpywGasJQpzvPKfnTx/idYMFzvKaENPqK7Iau3GDpROsr1RYquDtDtQPMA0CQ3WIJErPdG7tRtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VPG52uPB; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758081171;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JrKEzK18eUta4tCPwqfVqVURTriuK6G2hxnic40XtZ8=;
-	b=VPG52uPBBstb0lqWqXftQrA48zY0A+sZDrJGK3orOUGeccCFLGTqysxEsyVCShc0gfjpBc
-	hyqBNBZU86zZ3Cqd8eME9IiYcsKz32O6cDKPQ10H1Z5lZZE9os7DVS6nvU/SZ5uExSFKjX
-	U3ovNQAq0woljo7UuchOaQptMVMK9do=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-609-o75eMzOhNeaoS7J23TH45A-1; Tue,
- 16 Sep 2025 23:52:49 -0400
-X-MC-Unique: o75eMzOhNeaoS7J23TH45A-1
-X-Mimecast-MFC-AGG-ID: o75eMzOhNeaoS7J23TH45A_1758081168
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1937919560B0;
-	Wed, 17 Sep 2025 03:52:48 +0000 (UTC)
-Received: from fedora (unknown [10.72.120.8])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 149291800446;
-	Wed, 17 Sep 2025 03:52:43 +0000 (UTC)
-Date: Wed, 17 Sep 2025 11:52:38 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Uday Shankar <ushankar@purestorage.com>
-Cc: Caleb Sander Mateos <csander@purestorage.com>,
-	Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] selftests: ublk: add test to verify that feat_map is
- complete
-Message-ID: <aMowhqjOND9EdiKh@fedora>
-References: <20250916-ublk_features-v1-0-52014be9cde5@purestorage.com>
- <20250916-ublk_features-v1-3-52014be9cde5@purestorage.com>
+	s=arc-20240116; t=1758081660; c=relaxed/simple;
+	bh=E+vg+p+zLhuxWHfCrPbQKHJN8kzS3UQqdYSutjkxwcM=;
+	h=CC:Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=d89dX6tY4/l/HZyrYiApypOXiFmQyS88o8KO32/qvDxZAVkFugWZueSWW3jdnMIP+9dwuwErtKVRfvNMZ8T4+DNDKw+awq//TnVUqBDFi/8hGHo0NnSymlsqSNxex+EwQN7ST7lB8j3cMq0v5to5Zc1eID1eqYVZdrA/HixpjCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4cRQ1F5VTGzRkQj;
+	Wed, 17 Sep 2025 11:56:17 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 537AA1402E9;
+	Wed, 17 Sep 2025 12:00:55 +0800 (CST)
+Received: from kwepemq200018.china.huawei.com (7.202.195.108) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 17 Sep 2025 12:00:55 +0800
+Received: from [10.67.121.177] (10.67.121.177) by
+ kwepemq200018.china.huawei.com (7.202.195.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 17 Sep 2025 12:00:53 +0800
+CC: <yangyicong@hisilicon.com>, Jonathan Cameron
+	<jonathan.cameron@huawei.com>, <maz@kernel.org>, <oliver.upton@linux.dev>,
+	<corbet@lwn.net>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <joey.gouly@arm.com>, <suzuki.poulose@arm.com>,
+	<yuzenghui@huawei.com>, <shuah@kernel.org>,
+	<shameerali.kolothum.thodi@huawei.com>, <linuxarm@huawei.com>,
+	<prime.zeng@hisilicon.com>, <xuwei5@huawei.com>, <tangchengchang@huawei.com>,
+	<wangzhou1@hisilicon.com>
+Subject: Re: [PATCH v4 5/7] arm64: Add support for FEAT_{LS64, LS64_V}
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+References: <20250715081356.12442-1-yangyicong@huawei.com>
+ <20250715081356.12442-6-yangyicong@huawei.com>
+ <aL7Fgx__LeLfbDyU@willie-the-truck>
+ <5d2ba565-715b-9b17-951b-f805dde5988b@huawei.com>
+ <aMLvtpaCgRqPAU2Z@willie-the-truck> <20250912144736.00007673@huawei.com>
+ <666e3588-2e42-2275-f9ec-94ba0954bdc6@huawei.com> <aMl6u7xTDLhrZmqK@arm.com>
+ <0dfe5781-7ca7-7d9f-b099-b20da5e10a1b@huawei.com>
+From: Yicong Yang <yangyicong@huawei.com>
+Message-ID: <b63740fb-1f24-649c-4f18-46e4ffe5a41f@huawei.com>
+Date: Wed, 17 Sep 2025 12:00:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250916-ublk_features-v1-3-52014be9cde5@purestorage.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+In-Reply-To: <0dfe5781-7ca7-7d9f-b099-b20da5e10a1b@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemq200018.china.huawei.com (7.202.195.108)
 
-On Tue, Sep 16, 2025 at 04:05:57PM -0600, Uday Shankar wrote:
-> Add a test that verifies that the currently running kernel does not
-> report support for any features that are unrecognized by kublk. This
-> should catch cases where features are added without updating kublk's
-> feat_map accordingly, which has happened multiple times in the past (see
-> [1], [2]).
+On 2025/9/17 11:51, Yicong Yang wrote:
+> On 2025/9/16 22:56, Catalin Marinas wrote:
+>> On Mon, Sep 15, 2025 at 04:29:25PM +0800, Yicong Yang wrote:
+>>> On 2025/9/12 21:47, Jonathan Cameron wrote:
+>>>> On Thu, 11 Sep 2025 16:50:14 +0100
+>>>> Will Deacon <will@kernel.org> wrote:
+>>>>> On Tue, Sep 09, 2025 at 09:48:04AM +0800, Yicong Yang wrote:
+>>>>>> per ARM DDI0487 L.b section C3.2.6,
+>>>>>>
+>>>>>>   When the instructions access a memory type that is not one of the following,
+>>>>>>   a data abort for unsupported Exclusive or atomic access is generated...  
+>>>>>
+>>>>> That's about the memory _type_. I'm talking about a supported memory type
+>>>>> (e.g. writeback cacheable) but when the physical location doesn't support
+>>>>> the instruction. That's captured a little later in the same section:
+>>>>>
+>>>>>   | If the target memory location does not support the LD64B or ST64B
+>>>>>   | instructions, then one of the following behaviors occurs:
+>>>>>   |  * A stage 1 Data Abort, reported using the DFSC code of 0b110101,
+>>>>>   |    is generated.
+>>>>>   |  * The instruction performs the memory accesses, but the accesses
+>>>>>   |    are not single-copy atomic above the byte level
+>>
+>> Is this a new addition to the L.b release of the ARM ARM? Maybe it was
+>> there before in some other form (or a different place). At least it
+>> doesn't say "unpredictable".
+>>
 > 
-> Note that this new test may fail if the test suite is older than the
-> kernel, and the newer kernel contains a newly introduced feature. I
-> believe this is not a use case we currently care about - we only care
-> about newer test suites passing on older kernels.
+> i think it's new in L.b. didn't find this is mentioned in K.a either.
 > 
-> [1] https://lore.kernel.org/linux-block/20250606214011.2576398-1-csander@purestorage.com/t/#u
-> [2] https://lore.kernel.org/linux-block/2a370ab1-d85b-409d-b762-f9f3f6bdf705@nvidia.com/t/#m1c520a058448d594fd877f07804e69b28908533f
+>>>>> and I think that's a bad interface to expose blindly to userspace solely
+>>>>> as a boolean hwcap.
+>>>>
+>>>> Nasty, so now I'm curious. Any thoughts on how to expose what regions it is appropriate
+>>>> for?  I can think of various heavy weight options but wondering if there is a simple
+>>>> solution.
+>>>
+>>> in my understanding the hwcap only describes the capabilities of the CPU but not
+>>> the whole system. the users should make sure the function works as expected if the
+>>> CPU supports it and they're going to use it. specifically the LS64 is intended for
+>>> device memory only, so the user should take responsibility of using it on supported
+>>> memory.
+>>
+>> We have other cases like MTE where we avoid exposing the HWCAP to user
+>> if we know the memory system does not support MTE, though we intercepted
+>> this early and asked the (micro)architects to tie the CPU ID field to
+>> what the system supports.
+>>
 > 
-> Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-> ---
->  tools/testing/selftests/ublk/Makefile           |  1 +
->  tools/testing/selftests/ublk/test_generic_13.sh | 16 ++++++++++++++++
->  2 files changed, 17 insertions(+)
+> but we lack the same identification mechanism as CPU for the memory system, so it's just a
+> restriction for the hardware vendor that if certain feature is not supported for the whole
+> system (SoC) then do not advertise it in the CPU's ID field. otherwise i think we're currently
+> doing in the manner that if capability mismatch or cannot work as expected together then a
+> errata/workaround is used to disable the feature or add some workaround on this certain
+> platform.
 > 
-> diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
-> index 5d7f4ecfb81612f919a89eb442f948d6bfafe225..770269efe42ab460366485ccc80abfa145a0c57b 100644
-> --- a/tools/testing/selftests/ublk/Makefile
-> +++ b/tools/testing/selftests/ublk/Makefile
-> @@ -20,6 +20,7 @@ TEST_PROGS += test_generic_09.sh
->  TEST_PROGS += test_generic_10.sh
->  TEST_PROGS += test_generic_11.sh
->  TEST_PROGS += test_generic_12.sh
-> +TEST_PROGS += test_generic_13.sh
->  
->  TEST_PROGS += test_null_01.sh
->  TEST_PROGS += test_null_02.sh
-> diff --git a/tools/testing/selftests/ublk/test_generic_13.sh b/tools/testing/selftests/ublk/test_generic_13.sh
-> new file mode 100755
-> index 0000000000000000000000000000000000000000..ff5f22b078ddd08bc19f82aa66da6a44fa073f6f
-> --- /dev/null
-> +++ b/tools/testing/selftests/ublk/test_generic_13.sh
-> @@ -0,0 +1,16 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
-> +
-> +TID="generic_13"
-> +ERR_CODE=0
-> +
-> +_prep_test "null" "check that feature list is complete"
-> +
-> +if ${UBLK_PROG} features | grep -q unknown; then
-> +        ERR_CODE=255
-> +fi
-> +
-> +_cleanup_test "null"
-> +_show_result $TID $ERR_CODE
+> this is also the case for LS64 but a bit more complex, since it involves the completer outside
+> the SoC (the device) and could be a hotplug one (PCIe). from the SoC part we can restrict to
+> advertise the feature only if it's fully supported (what we've already done on our hardware).
+> 
+>>> may raise the similar question if use other atomic instructions (e.g. LSE) on the
+>>> memory does not support atomicity. find this restriction in ARM DDI0487 L.b section B2.2.6
+>>>
+>>>   Some system implementations might not support atomic instructions for all regions of the
+>>>   memory
+>>
+>> With exclusives or atomics, we require that the general purpose (system)
+>> RAM supports the feature, otherwise Linux won't work properly (I don't
+>> think we specifically documented this but it would be fairly obvious
+>> when the kernel doesn't boot or user-space randomly crashes).
+>>
+> 
+> yes the spec requires general purpose memory to support atomicity.
+> 
+>   The architecture only requires that Conventional memory that is mapped in this way supports
+>   this functionality
+> 
+> otherwise users should have knowledge whether the target memory agent support atomicity.
+> 
+>>> and if perform atomic instruction on unsupported memory it's allowed to implement as
+>>>
+>>>   * The instruction generates a synchronous External abort.
+>>>   * The instruction generates a System Error interrupt.
+>>>   * The instruction generates an IMPLEMENTATION DEFINED MMU fault reported using the Data
+>>>     Abort Fault status code of ESR_ELx.DFSC = 110101.
+>>>   * The instruction is treated as a NOP.
+>>>   * The instructions are performed, but there is no guarantee that the memory accesses were
+>>>     performed atomically in regard to other agents that access memory. In this case, the
+>>>     instruction might also generate a System Error interrupt.
+>>>
+>>> if instruction performed without generate a SEI in the last implementation, it's quite similar
+>>> to the condition of LS64.
+>>
+>> The difference is that we don't support Linux on such systems.
+>>
+>> Arguably, the use of LD/ST64B* is fairly specialised and won't be used
+>> on the general purpose RAM and by random applications. It needs a device
+>> driver to create the NC/Device mapping and specific programs/libraries
+>> to access it. I'm not sure the LS64 properties are guaranteed by the
+>> device alone or the device together with the interconnect. I suspect the
+>> latter and neither the kernel driver nor user space can tell. In the
+>> best case, you get a fault and realise the system doesn't work as
+>> expected. Worse is the non-atomicity with potentially silent corruption.
+>>
+> 
+> will be the latter one, both interconnect and the target device need to
+> support it. but I think the driver developer (kernel driver or userspace
+> driver) must have knowledge about the support status, otherwise they
+> should not use it.
+> 
+> for general purpose ram currently we have fault mechenism to avoid ld/st64b
+> usage (there's maybe an exception if FEAT_LS64WB is supported, which is
+> introduced in the latest feature list but no spec describe it and allows
+> perform ld/st64b on memory with write-back attribute. but currently I have
+> no details about this feature from any public documents)
+> 
+>> So, to Will's point, the HWCAP is not sufficient for user space to make
+>> an informed decision on whether it can safely use the LS64 instructions.
+>> Can a (generic) device driver tell or do we need additional information
+>> in firmware tables to advertise the correct behaviour?
+>>
+> 
+> my thoughts is that the driver developer should have known whether their
+> device support it or not if going to use this. the information in the
+> firmware table should be fine for platform devices, but cannot describe
+> information for hotpluggable ones like PCIe endpoint devices which may
+> not be listed in a firmware table.
+> 
 
-What if the ublk selftest is run on downstream kernel?
+another option is that we drop the advertisement from the hwcap and cpuinfo
+and let user retrieve the CPU suppport from the ID reg directly or from the
+dmesg. does it make sense?
 
-Maybe the output can changed to "unsupported" to show that ublk selftest
-code doesn't cover or use this feature.
-
-
-
-Thanks,
-Ming
-
+thanks.
 
