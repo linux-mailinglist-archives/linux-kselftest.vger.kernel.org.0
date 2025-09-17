@@ -1,114 +1,184 @@
-Return-Path: <linux-kselftest+bounces-41750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36176B815E1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 20:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BD7A0B81619
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 20:44:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F113A4644CA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 18:41:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E967468539
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 18:44:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A66043009E9;
-	Wed, 17 Sep 2025 18:41:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10023009E9;
+	Wed, 17 Sep 2025 18:44:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YEovyDBd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f8PqONEN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2DE2FFDFE;
-	Wed, 17 Sep 2025 18:41:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDA127C178;
+	Wed, 17 Sep 2025 18:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758134461; cv=none; b=MvIn+T7jHA0PLuWgqG7C8aX0WJzePrcDxD9vGERg/fSsPAuc5DP7U7gmW0WpTyz+qzRHEArVKYnRmkZgsyw8hLM/5m0MY2vBEuUptpsdO8GAy+Ig3xYQIqeolPR8+cJfhjY38gfZWPaKnbppIlLLLC2m0slfrl5Cukg1i64zaHk=
+	t=1758134669; cv=none; b=DG7O2IIvUMw2zhWA3N8enBBRWS7mtd2nOhoV3XfLBIZoRa7krVYHnO4GP5Jd6i7WtsmN5gBvCau/6LuEPA1FrXrm5Ha+uPdwwytLRbePhXWtzHZRsmYgGGELa+WwwLQEfBmNu1+9Hdlp9HWTglVu356nJ5unnvfdMYVAZwf1DR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758134461; c=relaxed/simple;
-	bh=v5a8HDMTWo9UE7JwWuCAP2Rrqh4yWlt5INN+qU7/k9Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pU33ezDuJbo2YyvcUzqqD9r1D8X8yxvo1xYW/XdpwoGMa0S22j4lyIHSls1pUDDrLqTbM76MYxOSNXwXXynJUb5vgIpjSRFXo9HXM5GM36qL2GL5iq5LezORdSDpvlnxfy2gg+sNCTVpFQUkWvGBz5dydFNkxa0EVKvev7rMk1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YEovyDBd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FE7C4CEE7;
-	Wed, 17 Sep 2025 18:40:55 +0000 (UTC)
+	s=arc-20240116; t=1758134669; c=relaxed/simple;
+	bh=OLoxa48QuwEBcofnDByK3uh1SCi2Z/yYPHdY5JEg1PI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mse3c3iHbPPRDQ6dWpZDLr42c9ZT1alileM1bTUxshysMdhAEWRs74ZVW57+Sjro4DQ0t5DyWOFNQ7Hf4VqMyos0mBY9sjBOGbi+aS1JtPgAx17B0Z4MBOY4PwP5KohntzW0z69g7nSQ7A4/3rUnfV/SE6YCbT3GVUGR4YiccM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f8PqONEN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33005C4CEE7;
+	Wed, 17 Sep 2025 18:44:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758134460;
-	bh=v5a8HDMTWo9UE7JwWuCAP2Rrqh4yWlt5INN+qU7/k9Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YEovyDBdAidm++9nE0MUACQWUj04x3i0Ti0RfsJxCYJ/A/Bh9kp/NLbQewbyVy9x6
-	 bG2fy1bnO0c9Z9UrKN1cVoWN6cC2aKk8DcZyLgs+cTEk2CRheotZ/Odnj1mY6ZrT3b
-	 BuUH1ydBNossTwdmb5SUjrluU98XRUxhNSiZi15s9kj/1f47j4sCHxpq3jte2+AmUB
-	 UeRdrUU6hOOlQ0IRdsT8cAtJEyNs9LtTLJTVa1rKrw74CGocsJS5/YBOPWXae5Shev
-	 c818Zgw3Vm9RnlLt2UFWwqZPbzDKMwxtPRdinyciOq29FgoFpiHKDNqVu1zmJhceK7
-	 vQaU+hJE99pvg==
-Date: Wed, 17 Sep 2025 19:40:53 +0100
-From: Simon Horman <horms@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryan-bt.tan@broadcom.com>,
-	Vishnu Dasa <vishnu.dasa@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	berrange@redhat.com, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v6 0/9] vsock: add namespace support to
- vhost-vsock
-Message-ID: <20250917184053.GV394836@horms.kernel.org>
-References: <20250916-vsock-vmtest-v6-0-064d2eb0c89d@meta.com>
- <20250917161928.GR394836@horms.kernel.org>
- <aMri5apAxBpHtZbJ@devvm11784.nha0.facebook.com>
+	s=k20201202; t=1758134668;
+	bh=OLoxa48QuwEBcofnDByK3uh1SCi2Z/yYPHdY5JEg1PI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=f8PqONENfOsX3iVnNu8gzDMdRStH7GoSN2gCmJumNxzU3dDXCWnKNl4/l6kfWb4LF
+	 tMPEko7Uxgu1oKN9QLzKTPw3vzijJvwTniwwi1XZdP9ocASlZFr6Xv5fP2btY8LA1m
+	 08UDfu7ijq2Vcndt64HGPL6kxN573aML1YCymlHCdtJmkqdb16Kvz1DoDVXDJv0f0n
+	 xqqKHWVaim5WsMbsY/6tS6/0VpPFmbkMNYj8aYyZAqvlUooCSpwv6gyUzjsjlLHXSp
+	 1W8KCDyXYPB33CHdXqrE9EgkeAw6/Dkh2S3gpiOdgXY8Q/Un712FbTj7PGc7comhQi
+	 kqT+zU22sKBBg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1uyx8j-00000007Bv9-3g4d;
+	Wed, 17 Sep 2025 18:44:25 +0000
+Date: Wed, 17 Sep 2025 19:44:25 +0100
+Message-ID: <86ms6s2a2e.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Itaru Kitayama <itaru.kitayama@linux.dev>
+Cc: Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	K Poulose Suzuki <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Subject: Re: [PATCH] PMCR_EL0.N is RAZ/WI. At least a build failes in Ubuntu 22.04 LTS. Remove the set function.
+In-Reply-To: <0524084A-9E82-408A-9F22-369ED25E42E9@linux.dev>
+References: <867by4c4v1.wl-maz@kernel.org>
+	<3FEB4D87-EEAF-4A21-BCBC-291A4A7C2230@gmail.com>
+	<86348rdg5o.wl-maz@kernel.org>
+	<0524084A-9E82-408A-9F22-369ED25E42E9@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aMri5apAxBpHtZbJ@devvm11784.nha0.facebook.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: itaru.kitayama@linux.dev, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, itaru.kitayama@fujitsu.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, Sep 17, 2025 at 09:33:41AM -0700, Bobby Eshleman wrote:
-> On Wed, Sep 17, 2025 at 05:19:28PM +0100, Simon Horman wrote:
-> > On Tue, Sep 16, 2025 at 04:43:44PM -0700, Bobby Eshleman wrote:
-> > 
-> > ...
-> > 
-> > > base-commit: 949ddfb774fe527cebfa3f769804344940f7ed2e
-> > 
-> > Hi Bobby,
-> > 
-> > This series does not seem to compile when applied to the commit above.
-> > Likewise when applied to current net-next (which is now slightly newer).
-> > 
-> > hyperv_transport.c: In function ‘hvs_open_connection’:
-> > hyperv_transport.c:316:14: error: too few arguments to function ‘vsock_find_bound_socket’
-> >   316 |         sk = vsock_find_bound_socket(&addr, vsock_global_dummy_net());
-> >       |              ^~~~~~~~~~~~~~~~~~~~~~~
-> > In file included from hyperv_transport.c:15:
-> > /home/horms/projects/linux/linux/include/net/af_vsock.h:218:14: note: declared here
-> >   218 | struct sock *vsock_find_bound_socket(struct sockaddr_vm *addr, struct net *net,
-> >       |              ^~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > -- 
-> > pw-bot: changes-requested
-> 
-> Ah dang it, looks like I had hvc disabled when I build tested it.
-> 
-> Thanks for the catch, I'll fix this in the next rev.
+On Mon, 15 Sep 2025 22:31:31 +0100,
+Itaru Kitayama <itaru.kitayama@linux.dev> wrote:
+>=20
+>=20
+>=20
+> > On Sep 12, 2025, at 21:11, Marc Zyngier <maz@kernel.org> wrote:
+> >=20
+> > On Fri, 12 Sep 2025 12:33:39 +0100,
+> > Itaru Kitayama <itaru.kitayama@gmail.com> wrote:
+> >>=20
+> >>=20
+> >>=20
+> >>> On Sep 12, 2025, at 20:01, Marc Zyngier <maz@kernel.org> wrote:
+> >>>=20
+> >>> =EF=BB=BFOn Fri, 12 Sep 2025 09:27:40 +0100,
+> >>> Itaru Kitayama <itaru.kitayama@linux.dev> wrote:
+> >>>>=20
+> >>>> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+> >>>=20
+> >>> This isn't an acceptable commit message.
+> >>>=20
+> >>>> ---
+> >>>> Seen a build failure with old Ubuntu 22.04 LTS, while the latest rel=
+ease
+> >>>> has no build issue, a write to the bit fields is RAZ/WI, remove the
+> >>>> function.
+> >>>> ---
+> >>>> tools/testing/selftests/kvm/arm64/vpmu_counter_access.c | 6 ------
+> >>>> 1 file changed, 6 deletions(-)
+> >>>>=20
+> >>>> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c=
+ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+> >>>> index f16b3b27e32ed7ca57481f27d689d47783aa0345..56214a4430be90b3e1d8=
+40f2719b22dd44f0b49b 100644
+> >>>> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+> >>>> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+> >>>> @@ -45,11 +45,6 @@ static uint64_t get_pmcr_n(uint64_t pmcr)
+> >>>>   return FIELD_GET(ARMV8_PMU_PMCR_N, pmcr);
+> >>>> }
+> >>>>=20
+> >>>> -static void set_pmcr_n(uint64_t *pmcr, uint64_t pmcr_n)
+> >>>> -{
+> >>>> -    u64p_replace_bits((__u64 *) pmcr, pmcr_n, ARMV8_PMU_PMCR_N);
+> >>>> -}
+> >>>> -
+> >>>> static uint64_t get_counters_mask(uint64_t n)
+> >>>> {
+> >>>>   uint64_t mask =3D BIT(ARMV8_PMU_CYCLE_IDX);
+> >>>> @@ -490,7 +485,6 @@ static void test_create_vpmu_vm_with_pmcr_n(uint=
+64_t pmcr_n, bool expect_fail)
+> >>>>    * Setting a larger value of PMCR.N should not modify the field, a=
+nd
+> >>>>    * return a success.
+> >>>>    */
+> >>>> -    set_pmcr_n(&pmcr, pmcr_n);
+> >>>>   vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), pmcr);
+> >>>>   pmcr =3D vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0));
+> >>>>=20
+> >>>>=20
+> >>>=20
+> >>> So what are you fixing here? A build failure? A semantic defect?
+> >>> Something else? What makes this a valid change?
+> >>>=20
+> >>> Frankly, I have no idea.
+> >>>=20
+> >>> But KVM definitely allows PMCR_EL0.N to be written from userspace, and
+> >>> that's not going to change.
+> >>>=20
+> >>=20
+> >> Then I=E2=80=99ll drop this patch.
+> >=20
+> > I'm not asking you to drop it, I'm asking you to explain. If you found
+> > a problem, let's discuss it and fix it. But as it stands, you're not
+> > giving me much to go on.
+> >=20
+>=20
+> You are right, while the bit fields are write ignored, to be
+> consistent with the handling of other bit fields of the register,
+> I=E2=80=99m fully convinced that checking the write operation in the
+> vpmu_counter_access.c file should be kept.
 
-Thanks, that would explain things.
-Stuff happens :)
+The bit field is *not* ignored when written from userspace. That's how
+we configure the PMU if the guest runs at EL1.
+
+> The build error I=E2=80=99ve seen with Ubuntu 22.04 LTS is below:
+
+[snip]
+
+Can you please detail what compiler version this is? I'm unlikely to
+install an ancient version of Ubuntu, but I can pick the corresponding
+compiler version.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
 
