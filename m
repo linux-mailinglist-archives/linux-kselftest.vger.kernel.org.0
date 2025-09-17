@@ -1,60 +1,61 @@
-Return-Path: <linux-kselftest+bounces-41659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4CEDB7CE56
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 14:12:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99292B7CF51
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 14:14:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DB8F04E313E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 07:24:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97811188B178
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 07:25:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BCC3016EE;
-	Wed, 17 Sep 2025 07:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A481F30171A;
+	Wed, 17 Sep 2025 07:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="eIZjr0wp"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="GgdphCm0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013000.outbound.protection.outlook.com [40.107.44.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA3D27AC41;
-	Wed, 17 Sep 2025 07:23:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780BC3016F6;
+	Wed, 17 Sep 2025 07:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.0
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758093817; cv=fail; b=FrMO1fWr5Ghdd9gDT0XV8RFQe8BdesAuO1G0exg2ypJDRKX0KGWd2y+dKlu8RmVWsuuCpIK6r6w5aMaWMCZIhgsdc25kZq7yQ6zusYCX0KINcQRnjz2ujOiGC05gOjXN1tIdDxBpRCR40bf984nxrqCVb4jf0/z/NIWcMKwMCZQ=
+	t=1758093820; cv=fail; b=uR/u/1j0lc2++vJmvFZgmd+w6CjXKl43WC5LoTceGurvmGvn6HX5twKdG4snheMQVXZGb+/46Uk4Zh9Lc01Q/mbanaObBr/IHSAw7ix17ILZcqANx/QJMD7stgDUoSdySFGxzW+MYRIqQhets9S5A0MC6TPagbA8nhNRUGkDvtk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758093817; c=relaxed/simple;
-	bh=0FxnngNjyBdTV6Tcf2EnHHMLAWWN5FtWHR2mbWkk4iM=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=ZkTwgfCH1ONqkUXsZnOjaskiqS48WROJp7/62NkJptQ7iZE5JmQDSZB0yz3yuH6KafQ4MJfRmJijTxu/gWJcPfDVZF3dXzmKdhSHviOXnPI56GNFWxsrC+bA8fqWAtUQMvbwj05Hd8d9OYGUvgQpr3tRBkgZ25r6mk1gluWk7jY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=eIZjr0wp; arc=fail smtp.client-ip=40.107.44.0
+	s=arc-20240116; t=1758093820; c=relaxed/simple;
+	bh=9+ejYfeAFd83QO7MarSlYXLhZ1fXbTqebkFXCRqiLu4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PerMYc4hduPxEBz+02eZPEQpzejQlM+3pDSrt+r8t/0iKFQZTTb5TOlvpSTLJOYR3rIXWOg+Qn8gSZfUEeWWobX9r8rG80R2TGy5YwBJM7j6nmUA/4WYB2i0lxVSSlnhBh8fYCuPDLy0ByY0fWo4hIBc7pSo0cqEvD8sCgOXuiA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=GgdphCm0; arc=fail smtp.client-ip=40.107.44.0
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PS93NAvqDvk4T5pX/3uXU4IbjA21r612nhKKrKC6NMziEcNFLECsmCE6Pr/iheiYgPQ1RYJIkoBTwvyPrKd/KrYT1vmcZY44N/cb3fuyT+v+ESXwtIKklWxCdrQ2JMKbA4y+3GnXDiC+3bQzsfcFWux0uRCuLcnkvOR4Lsj6+omBbjbJOdblElMqJ+SxJjrtK+xeT/REG49qBPxpuTK65UvzRbOy0w5FDu7AHZHEG7xKjiLilpq8O8rHpcVdHGQtm+aKIp2TFHaVmv0uVlaNZoyR8e84aoVj6KrYLvLO+3tx9FC1iSxXB3/iXDLTlWUJfijP/jE09PiI0EK60Kx1rw==
+ b=NwccvdfSA+p37tD9DhH9vNFHuEHGq/cenMCdyh08N3CqDpBIPo8ih1fterCJzQMuH9jb3c3zq2ZV0ip97gzCvQvQm1O4hyIxJPVdUMKniZhq/XAdxMuAIWvsNKo/OvpYJnSgokbgqPsm/5CXm2J9b4qcnNQhFF1OY4AZOSb+oxjbwfwVNqq5eXvyJcytFH7oneJwdM7xRvpqQa3uEsJsN+xXryTASNJ2PlexbBHW5ImcYfp40ko+z7RJV4eKvJw/KRTA8qiACh7R9U5IDqNKQ7pDDI1dtg1nkK2qQfeOhAdrlRX74MxSOpQVtu5+Vps4O3GuAmhPnH55EYJ56uQUJQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1kMjQ//aytmUsVOT96ZknqMmVLVUk8goFOHUmHe6rkA=;
- b=zPPUUomcyTTIRIIMu1iN/bM5qETa4qKu4n7WFLJ9ywcEXy+gxLkliI2g07Skjjo8d/z5DB38C7S1UAZnjlL29Q4sYW2l3f0AJ4x20TSb1bxHoe2XKweRtCr3jePZ7nJ3rHPev0Ze7D1PXttindTdA6hmNu2WrSiQCuhlPKZhis7cHR79sANMbZFYfIZoCJMfH6ou3gWyK2HxGgD51W9LF3u8FVdBg6zsgMr6S0ZNm3eUdVx6F0LBAY6+wf1rJhVHByBb3aLSlVP+/W9Im10gCxQpmy+ubtT6De01gWvFCsvWwFam9oTQ8iTS0shWwDRhVklvzPlJ/BrrbpWWGPOBLg==
+ bh=hRo19hDr5AtkWZPl/HJOdkMxAMyDEbkSfhGIiamt2+s=;
+ b=NtpA1q1uhRqsb13wUk1PvaswqR8wtYDG2vc/s/2LCgb/h4tYKjfF7qMizfXCQMXNthNcLtIbqJD2MDrnHT1En9D6795N7kK2AMCpewuccE+jsQlAhorZ7t5hMITUX4W2TAqavjiIR/tBKD1241OR5iZLhPV/dfrqBTMJdtYqqtQJwSUUCJ0z6U2Ln/MO6l3S4gFohWYZdCy3KIq/6OAWG1o8GnNv3fUJup8I6G/Vl+u+G7vQA2IZqIBe6WY65cOexQTUXh5U/HXDfdjEfUGPXIEYqVEGj6JJCptZGFxU35mWkTNnqAuuVL6EP2F4m1huhp7ej1l+b8ljd3knCdxxkA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1kMjQ//aytmUsVOT96ZknqMmVLVUk8goFOHUmHe6rkA=;
- b=eIZjr0wptcdlgfeFA4KpTMnwIY1QhI18IF7UgCFGwFEO49EKKZVOlt0lyfLbNM0RsRIm7ckYZCqJvCKKp9SG+JsnSjedvPBMCJGK5lint90bXKNeDLSBCLE1axcodo4XFFEx8g0MN4ru4a8ymTM/zvl3LCErvYW3argWqymZ4+c1axyuQQy8pe4xlpn21PYdKEzTMS5cOnYX8WaRHovN8GS2Sb1zmxsGFg7pKDqGvW75P+eGLExCPJ8G3EgokO7yqcyJTdiLmctOoqBH0Yk9b9Rpl4EtVsIfQ+ukmGacr3a8Zcu9UICr2w5Gthmze0Pi/6I+nMz4jrCf5KZfDazKRQ==
+ bh=hRo19hDr5AtkWZPl/HJOdkMxAMyDEbkSfhGIiamt2+s=;
+ b=GgdphCm0O4sRAX+OMPbaZftcEt4mebAdlKd3k0zlaU54iIKd/iSHKGfO3dNWZn0hYmSiXysXp7r12w8LLYMYMMfFWprTnvgZVbqI7F7srQe43qV7VY6drMN7CMlp1iQvZivohixJBU94BGZAmt4pHib9MDcUGlym4jsfAvis0s7NpFdikRb2hKwHnMTJchxt8oXSLMrpFNG8a2E5XmvFylYL7aVaYGBelSGKj6HRqgOQwsOleuPGhC04u3zNN6MYESLKL6Nm0eokFGx9NLr332K87i/HUhzIcAdDGvglRvj4fdkW6eep160wvicG/ptvHylD4mKhiUCwG9tw/Ucyuw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
  by KL1PR06MB6043.apcprd06.prod.outlook.com (2603:1096:820:d6::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.23; Wed, 17 Sep
- 2025 07:23:28 +0000
+ 2025 07:23:31 +0000
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571%4]) with mapi id 15.20.9137.012; Wed, 17 Sep 2025
- 07:23:27 +0000
+ 07:23:31 +0000
 From: Fuyu Zhao <zhaofuyu@vivo.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -84,10 +85,12 @@ To: ast@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
 Cc: yikai.lin@vivo.com
-Subject: [RFC PATCH bpf-next v1 0/3] bpf: Add BPF program type for overriding tracepoint probes
-Date: Wed, 17 Sep 2025 15:22:39 +0800
-Message-ID: <20250917072242.674528-1-zhaofuyu@vivo.com>
+Subject: [RFC PATCH bpf-next v1 1/3] bpf: Introduce BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE
+Date: Wed, 17 Sep 2025 15:22:40 +0800
+Message-ID: <20250917072242.674528-2-zhaofuyu@vivo.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250917072242.674528-1-zhaofuyu@vivo.com>
+References: <20250917072242.674528-1-zhaofuyu@vivo.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SI2PR02CA0043.apcprd02.prod.outlook.com
@@ -101,158 +104,569 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|KL1PR06MB6043:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0c71d168-3b19-4853-525b-08ddf5bb1861
+X-MS-Office365-Filtering-Correlation-Id: ad0b585e-2488-4012-6ba6-08ddf5bb1ac6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|52116014|38350700014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?eIIl6QPhAWFPbwxIEp7aJZaTxoQekuMEvqNCLotmIOCdT+MvPPrNSG6R35do?=
- =?us-ascii?Q?tutgW0nqtCeUa+XYtoZ13UACbrceKdOn3VStxN2UqoQQF2tVMwcFHtd+bRRB?=
- =?us-ascii?Q?JV7uyrBICaX4aiqm5In1b9+IJrpNBUbA1TCHQ1eNxypet4BdbGXEj6M5X4YB?=
- =?us-ascii?Q?xtQHV4jTnt2q8WTwT7moI91MRBdMJo96sR6WzGThW+RORxwcKdiRI1CBySnB?=
- =?us-ascii?Q?deSvT3fBGPSfGEkyzXSIBYLqBjdIIaxKUyFcBaHv0Auw/L2KlOV8k3ADsXky?=
- =?us-ascii?Q?fYpSHRwtz/jrvUyd1hW+Jp8f0FRf8ClPutASJ7ZMp3nSqLpR1Hye/zkcdP5D?=
- =?us-ascii?Q?xLsLLCrmRA241TeOi0+mDq2CINWbptvxBiDP/XFV8T1bW5z5/DP3Ff/v+Rfm?=
- =?us-ascii?Q?f6J1es5i/cLALv/uwJAKJGi+tNhMZA1auY5emQSJOf4bPogWDgakD/KzPvzw?=
- =?us-ascii?Q?qkU1sh/nMzua8YZBKWb15wSpGh75iqfsxoEi5E9xx7zYH2LzX5YK+pCU1N+2?=
- =?us-ascii?Q?xV4pI+gQ4IIk4M+OLe2fRMSibM68fxfG+atKeSpmF5y7b+GOD+jb1JPGa+aZ?=
- =?us-ascii?Q?ciPwRAcPaMggdVqUV6RX2G3xHAvEjEIygSy6VLyHLpbZ1I6pQtocRX9g7qo2?=
- =?us-ascii?Q?5rIJup2riaQSfG/PD/uTry9vDnUXAJgJcrXpJe+wbiX+mNs9SKOnez00F9wj?=
- =?us-ascii?Q?xQ6XfJ5uEKebaOqZ22P2BkDsJaCw70grJLR8aYuZx7BUjYtrg7LJuapNWbVO?=
- =?us-ascii?Q?KHvM7atvy6G8BovsXmXCGt9ZbdxC4HKBBPUL0Q2S/s9B5+sbyiygJTjmyRqE?=
- =?us-ascii?Q?G+0hKcVS1zsNNaA030oqeXKIuvNZ4TQYt90QcYH/q6J00Up0vszPRi6PoGb3?=
- =?us-ascii?Q?KCz5cC+CGiAW3n1Lf+wWL3NOk7N6Z1Ah0zWnbOen9fwH2TeWfbFzc8bHCvIs?=
- =?us-ascii?Q?1Otnd+2PH8morz2oO82Xiu2gdHnHobL8j6fx4lmCW2PyE6WMbvW9Ece2wt2K?=
- =?us-ascii?Q?t0B1btbnDB3nbgSwdU1ELcyg55SJ1YloLN06Otbch5fJP8TZMJjxdPJcibz1?=
- =?us-ascii?Q?h8lxXAz2d+rLIAoZZj/+17qox9VBS5ixGY7lPoMwU4EXbJGA9w0hPz7QcR1C?=
- =?us-ascii?Q?/rtTrdF3KnHV/bgmaVckiHmuGpP18vPbW+V6aw2tLdUZkikhFdf4ftJqLwKP?=
- =?us-ascii?Q?6KePtoFRdS7xzcRGFJ9XMbKaS1zO9GQeiRhMudlGxpxUzkzF0yrQ+dHCxAAL?=
- =?us-ascii?Q?nkihxsFGAKLU+X7euU+/FLHSxRo5YN/xCc3vsTKwYJ5btYSvmI6AFhgehS/H?=
- =?us-ascii?Q?k16neBQ4FCKA7GUodxDTrI/LOY+Dtd/9bGoaKZ/bYqiC5G9Ajx6BCPD+HMmQ?=
- =?us-ascii?Q?MwzyL/1I4sTp7hMVnBHCbNsbbY6Xw8b65GeT0zECUH5fHvFjlxGz49ZZYmdC?=
- =?us-ascii?Q?u/UkRYNc5XnPttzwJqYeFCHUn4tSmdiVRXs8oSwYf8hgcKEQZfDKjcI47xiz?=
- =?us-ascii?Q?vouuaFxSeBS/WIo=3D?=
+	=?us-ascii?Q?pK9retHz9TnmYYfGJKvuO+bXzK7zKlf6H5TVac86X1EttxwzEMY1/oi5wuwT?=
+ =?us-ascii?Q?UwON7dC/iRJKYXVw1yWoYn78AozyOtbz6C+vzoKvpepgkxiX2MHoY7C6ZHxz?=
+ =?us-ascii?Q?xEs/cSgS3JQggq1Z6B20x0ExMQAxwxTblSy5PhbU+61IOT7Yg2YoKOuMbQt6?=
+ =?us-ascii?Q?2hbRiG+ohmUyxmNbTxdCvfNMgX+gsM+RtrjY8ARGIvjb6V+RUaD6Bmyb+uYZ?=
+ =?us-ascii?Q?Ecd1FL85tgQu5nAem98mK2mc2beskFVCILbqc/g3aJ67ibjuYECa1mftQlY6?=
+ =?us-ascii?Q?OyEzDBfb3/orJp0dnE463UMG1zA2cxg/lO81rtC4NTtjr1Wq9bCqPCFvlaqC?=
+ =?us-ascii?Q?mDCXOcOEetKh2LvjOXeYt8+G9/qS5Lx3mqPiH9r1prUVJvFMYWxsSuCknw4q?=
+ =?us-ascii?Q?X6EkSGq8f4cVzVTxrRDN1s49QZrrr5/+ITcm6cy75HWlckZBZh0UIsu24zNy?=
+ =?us-ascii?Q?eyCJBvQQo1qCZOdOc9erkVsxjryGlt1DeRBddHsYgSTckwUoUkzb4CrX+vUZ?=
+ =?us-ascii?Q?XucwOjIBWpPjOeHegdo3e0V8Dmt9WlSwpY+Vf9DLwwG9bJQp+E3Y+DHLJWUe?=
+ =?us-ascii?Q?H/VOk41X2xxmMfIpTx5A0vrjV9zFRqQdjvXnmjkshGWN2JUmywiHg6QT3pZi?=
+ =?us-ascii?Q?vODHNhws2aLUmthl50tAv4ac4byTloVphrfTUdYhR6dMDj83Tgu3Q8DrvTIs?=
+ =?us-ascii?Q?O/kGRfHSCpW9VGWCWJSMAxTwx+H6RoB9inhX+TVUq7CAEqwFQAsKgyzdEkkM?=
+ =?us-ascii?Q?Pv2VWNAcOXh442aAu5ZUUfsmXFtk2YubM5BGGSYTaieZykVW3x67GYEMVCvL?=
+ =?us-ascii?Q?Gq7s50NB2R+NLo3AVh0AmfiCMhuxHgo4/40fjFHh65d1XxbuIMDnhX+lBV3Q?=
+ =?us-ascii?Q?6YO1EN8FE3ZbLOp724cpdzm9Lq5EvNIN1JURMi1TljFMkKvX+dMqOt+MX/fg?=
+ =?us-ascii?Q?VytwMdFlIR0k40KtuAXCZ3tHL0t1Is1zL7QvpgD158zQbpJx/3O7xNquQez3?=
+ =?us-ascii?Q?rlw1qKZsk/AomwSdaKYdh8bj7xGK1/VBAT9Q24CPn66zkOsSYTtsSkOXFznu?=
+ =?us-ascii?Q?ma57QEDew7cWGrmwuNvWBPCE90vIjzVQT3VC8osfOFp9ItU4L3TuKYFpHEUz?=
+ =?us-ascii?Q?lS6XyLre06lQkLILfjCBBjV79RS2wVLurj1bGMuENoFDqs5pMO/Dh8wlevn6?=
+ =?us-ascii?Q?iEFQP5fgL1GKHxBGJs7bffRjOQsrO3jE8P8ilkZsh3wi4wlMh0/kE34sDSsg?=
+ =?us-ascii?Q?YTufPDi6XeDMbtnEMmBB2LhYKcruwiRAYik3tRAluJOglTaikkni7LQ53ygI?=
+ =?us-ascii?Q?wXefyzgzMRaz34sANWuQCtsBd2+okJByBzS0YqR2fsF3nWnYn4WsLnPwgu26?=
+ =?us-ascii?Q?0vqcMhLOkWNmEYsth5Az32Rw5OHGNKir7ZBH96jm1MNrraHpzEQvGoFNiBO1?=
+ =?us-ascii?Q?G61uTweoElS49NQSgkKPmRqkblcsXdKPqMKd888tlZDeoMWAgeZlqOvhdFRa?=
+ =?us-ascii?Q?/zSR+YzxHGaqstA=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(52116014)(38350700014)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?9IwFyHy7ZWC4VLU4Ud1mUSap/tTV1M+aN6PIWo6a3DV+iwkcMgR1IKRPEK/u?=
- =?us-ascii?Q?5JE8heg7bcfNGQ3g9JM5mNudpt51fj4BYPpw8ESEbWS8qPFXqqtI3IFiz3Xp?=
- =?us-ascii?Q?XsjGmjRCVgRW9xl75KZK0TM9M4LdbmNetWapbnC6NAwSuKguM9DfBZ8ZGyKB?=
- =?us-ascii?Q?d4w4UAomA786HOSQjk/b9JY/ttcSYaUObDmgjYFtvvFjv9OuM0HDhHIwrXFe?=
- =?us-ascii?Q?lvNJnq7TjCXk+C5c4DyjFYVh9HCa8HVjkEktXdBQ6sGSe0A8qRXS4kcp9exg?=
- =?us-ascii?Q?BEJ5Ew73Y+5SW7fRPcJPh1ucuVGQXOHSvb2QtmObuZiDXmxNl7CkEwaOnw3V?=
- =?us-ascii?Q?5SCfRBGosaKY/ElW4a8Z9oK2Nd25OgcdkC7YJKKgAvm9oJx6jbJ/4fyea3bv?=
- =?us-ascii?Q?iQ8VvX69gf0FkMZnGJbBFxbEDIFizEwBaJJ3TxzBYBUIp/UMRQ0HCc/zuiIg?=
- =?us-ascii?Q?I5PZbkKCROEdogqGVTVCjTv9ebC0AoIHP/n52WA9Eq7UcORmUYyxgQ7oqxby?=
- =?us-ascii?Q?OSJLtVcsMpNxNpINIbePXsmmMePW7rbHBqV6Z3cyLXLJP8TdswByihoVWd46?=
- =?us-ascii?Q?+sdDEuo6DjbLSXl+IQlWKgUngsyETLFXXJVuUn2W4+MGLly76ABkH7IpZr7B?=
- =?us-ascii?Q?ifua0hRpHYFJENRc+FBgKJ8qepqOjf44/BkwlzWv/KvdlOCnJI4FIBhB8k1p?=
- =?us-ascii?Q?h8nKXXMu/qvKhWUpP+i7CPXXqgEmPsl3OGuZMAs0lnDhSB4Bl76X/ozLIRxE?=
- =?us-ascii?Q?6KUquXv+noCcFBXLQd3NFIS4cGDXPFol1g1U6xJFl7lP30sZBP7dd5JR54Gx?=
- =?us-ascii?Q?0wZFEbH3N6obzh+d5MwsY5ADHH2AJBkRmBgzTWAnUcp4F2E7xiHFfnu8kTST?=
- =?us-ascii?Q?QHQTF7HzM8d9+luhcuPgLKpIuBMp48eksJSM9JRrDTWKwiocc1Vy/cDNyGRY?=
- =?us-ascii?Q?2NemaNTN1bokolQzjN19nnXcEzzLNqTCzFATPFWUfJxXDV6MzxbK+q3Tt/wX?=
- =?us-ascii?Q?ebNfPv2hMYtLEeDEuthUTXtVoWskW8n2s8fjMOJt+9CDrfOJ61dVpY7iIzZG?=
- =?us-ascii?Q?20RWw7Rl2FSK5ZrN+OdLhJm/9rSNo0LQlT3msBP0mAzxLpAllVbVrKXRODU0?=
- =?us-ascii?Q?d9K0X4/B4VpdIVelhWWyk1CcYnrvb3OuCAyTlH+bif9mFoMfLi6THTHa2eg3?=
- =?us-ascii?Q?glTGrkFsa7qtWf3rygX8cNsgH4KTP+Sz7Ki8vn6XOVTs1DbXzp8URnjSvAfo?=
- =?us-ascii?Q?dH2Bsxb5bYPLNe0rA2K/mZR9ysIQnRlKhpk54FcppCypqFQrc6bCqZShwy3/?=
- =?us-ascii?Q?mQT2wv31tuP80nFxrgECIJSyLpzDrCatnoZBIfNTVmhbF8iKZo0SbQhDSx0H?=
- =?us-ascii?Q?yoHzpZ286nXAryQvSKUE2W5ANiHwQgzdWjSq3WZXZLD4Z7/Qvw5sol+m+dkz?=
- =?us-ascii?Q?2iDXWwIAg5DLMWq37TbQmC2VYr0ElETrwPnktMjASICMAJWY6ybFAUlTKmdK?=
- =?us-ascii?Q?T1+khQVJJv/1AEcTbU0haK66XvQ/HTc9yUlVT1AYxvVqhlosHKUmg0JZuB4X?=
- =?us-ascii?Q?zFJHUCCpAWPfNdYiB/1Z8uy69bp9h6ufbAt8XIXa?=
+	=?us-ascii?Q?TEItbHJ0N4IlHLZKRjsBwbD3Ou5T+XyYFERO9pZGws+oixs60vssWfDgjuFp?=
+ =?us-ascii?Q?wXmuocFDPOPB8/v+O7v4RKkHbmsgApQxWGtwW9mEx4Y3UnRDm9d2Vyx0rmB5?=
+ =?us-ascii?Q?911gtU2w5v+1SgDyZ8U9Omd+6KbV7yklZYuUgnq5gXndkuN42ljezoawUDw7?=
+ =?us-ascii?Q?uE78CzYhHKiR7QRzVR8o3KoDuthw5GBe53eXdv/oEzGjR+D2jmhwIMxhY0RF?=
+ =?us-ascii?Q?FvarbTUp6glR7gBNhSUJCXVe20V9oF0kxPMKTxVxMoCspJyKf98tqZguQOJA?=
+ =?us-ascii?Q?CWyJcyKQ8XjnnkBo8e/qDYixMsqLEZFVe1DuUY5T86X0kpfawr43SAqTnsCi?=
+ =?us-ascii?Q?KyoIcvqRkY88Pr9JCVPTgCKc9Ni33Tf53Qhf8WBSgmin1UzCVl/7gqfjQUF8?=
+ =?us-ascii?Q?DNE8pWxuxCIp9Hv3dR5T2DrWWW+2OnqgUYwbfAsD4Ts2E6XF0+++TeJD2dge?=
+ =?us-ascii?Q?vhLWgePZsoE65g/27jo8TX4/zuMot2lAnKLAZ59DPm6fNvve7ZPKOaXjGJLj?=
+ =?us-ascii?Q?MZ6sAdBUb0ieeYd0dLBkxRvH2TRdS3bleJnijSdUii4ErG/B5CgqYLKzQju2?=
+ =?us-ascii?Q?QSdgRJI1ayNEXgPWbjSUSuDGEa/pr1nfXk9VAgrBTTdOA6CxOj9ms1PJpyg6?=
+ =?us-ascii?Q?tKqXTV/e06NMvF6DVU6wsFLGiozer4cs1jviYP0jcWl93sI9aHRM7YvD0fAo?=
+ =?us-ascii?Q?9IDTD8hRA1cjcFOso2mlVWviCeUZdTVtH3RkB+WmyQBv15ILcJTk800tWFnx?=
+ =?us-ascii?Q?wHS7o8Np6dMt7w+gNhqZf2lPQwRUyXQX7fLDgvndryIim64RaaglKxhFHRwe?=
+ =?us-ascii?Q?F+TuF8qGMQmlCnQLDfAJLVMxAR07oZMPJ4ybIh9KpIF8GNtX2FId3o4X/Jut?=
+ =?us-ascii?Q?Zoq+CUD1hP3VXnbJpmbrra1z/C885enrAMCc3CJ+relYbq1F6JWhhatRP6rT?=
+ =?us-ascii?Q?wes37ugwvV523YpLlAEzJm8KK7aT20frtNbMrTTIdyuMImZ3o4+WjaicusGR?=
+ =?us-ascii?Q?TSbA+lFWGkFda2rI8Xa/aPSBNPXW/hD2B37ePfEU5S2O1PqwsDSWAqEItWp3?=
+ =?us-ascii?Q?TrrwL4a/+1+mVIpKmMtCy8PKGeQ6VjCpIyccgMN+iQ6LmtBR1QIWQjLpND5A?=
+ =?us-ascii?Q?wkfp/LNztpfYUUooIkfUKZbJPCLflEt4ct4HjiGv3biTYEQlJBbLZO1zZ2lp?=
+ =?us-ascii?Q?jvPd8Ubuoaa9AkLPiAGUzDcIknkEd//Qn0htPQdBxiso7JZLXq5KRw/kRh/4?=
+ =?us-ascii?Q?NEPpSlCPL9wQHh6zfueGHPuBoz7XQhJoz/kyWGnrTD2/WdLaKStC7eixyeVc?=
+ =?us-ascii?Q?OotMIcwqsOonTCJ82q2csAmfs86de6wzARZPQCP60EMj5fc7xpD3dDcjy8+o?=
+ =?us-ascii?Q?mpkmVQqtekKcu5yvZ05ZfngCk89ZK87jYE8GHQePJAZGmnwdZ7bPz/ES3MI5?=
+ =?us-ascii?Q?VJ6NPptbvdrLnlxJdVzu0zsG38ZmEKNC97MWrJ6COiiJ/TF9IW8yN4Z813c2?=
+ =?us-ascii?Q?ec2cxmobnqLTwKbjdURTryDoNml/dxe0cTTo05zT6KOY4kynj9XLt0tq/Fmw?=
+ =?us-ascii?Q?uezLRs1sJf4nLnsEq0zIXCE0xFvQ9EshmRPQieHF?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c71d168-3b19-4853-525b-08ddf5bb1861
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad0b585e-2488-4012-6ba6-08ddf5bb1ac6
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2025 07:23:27.6253
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2025 07:23:31.5308
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UsxrZEKU6y4n4Ms5ZyncZYB9MWDu0hwUYjj4vqh3/RxHUiNaAdYZqNFhPPB7ABEfghWQlXRL0Bad1IU2Vh7qQA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3lPfSvAaqzmRzse54zjzL/gO0wgRSGUoGsLRluR+dGf6ANuAcg1zJa65GVlFlVokdS9hV0VDDBCCZLD42uZWOw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6043
 
-Hi everyone,
+This patch introduces a new program type -- BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE.
+Program of this type requires an additional parameter -- probe_name, to locate
+the target tracepoint probe function registered by register_trace_* in the kernel.
 
-This patchset introduces a new BPF program type that allows overriding
-a tracepoint probe function registered via register_trace_*.
+This type reuses existing RAW_TRACEPOINT infrastructure, and differs
+only when probe_name is specified. In that case, the newly attached
+RAW_TRACEPOINT_OVERRIDE program and the target probe function are paired
+and stored in a snapshot.
 
-Motivation
-----------
-Tracepoint probe functions registered via register_trace_* in the kernel
-cannot be dynamically modified, changing a probe function requires recompiling
-the kernel and rebooting. Nor can BPF programs change an existing
-probe function.
+When the BPF program is detached, snapshots are consulted to determine
+whether restoration of the original probe function is required.
 
-Overiding tracepoint supports a way to apply patches into kernel quickly
-(such as applying security ones), through predefined static tracepoints,
-without waiting for upstream integration.
+Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
+---
+ include/linux/bpf_types.h       |   2 +
+ include/linux/trace_events.h    |   9 ++
+ include/linux/tracepoint-defs.h |   6 +
+ include/linux/tracepoint.h      |   3 +
+ include/uapi/linux/bpf.h        |   2 +
+ kernel/bpf/syscall.c            |  35 ++++--
+ kernel/trace/bpf_trace.c        |  31 ++++++
+ kernel/tracepoint.c             | 190 +++++++++++++++++++++++++++++++-
+ 8 files changed, 269 insertions(+), 9 deletions(-)
 
-This patchset demonstrates the way to override probe functions by BPF program.
-
-Overview
---------
-This patchset adds BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE program type.
-When this type of BPF program attaches, it overrides the target tracepoint
-probe function.
-
-And it also extends a new struct type "tracepoint_func_snapshot", which extends
-the tracepoint structure. It is used to record the original probe function
-registered by kernel after BPF program being attached and restore from it
-after detachment. 
-
-Critical steps
---------------
-
-1. Attach: Attach programs via the raw_tracepoint_open syscall.
-2. Override: 
-   (a) Locate the target probe by `probe_name`.
-   (b) Override target probe with the BPF program.
-   (c) Save the BPF program and target probe function into "tracepoint_func_snapshot".
-3. Restore: When the BPF program is detached, automatically restore
-   the original probe function from earlier saved snapshot.
-
-Future work
------------
-This patchset is intended as a first step toward supporting BPF programs
-that can override tracepoint probes. The current implementation may not yet
-cover all use cases or handle every corner case.
-
-I welcome feedback and suggestions from the community, and will continue to
-refine and improve the design based on comments and real-world requirements.
-
-Thanks!
-Fuyu
-
-Fuyu Zhao (3):
-  bpf: Introduce BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE
-  libbpf: Add support for BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE
-  selftests/bpf: Add selftest for "raw_tp.o"
-
- include/linux/bpf_types.h                     |   2 +
- include/linux/trace_events.h                  |   9 +
- include/linux/tracepoint-defs.h               |   6 +
- include/linux/tracepoint.h                    |   3 +
- include/uapi/linux/bpf.h                      |   2 +
- kernel/bpf/syscall.c                          |  35 +++-
- kernel/trace/bpf_trace.c                      |  31 +++
- kernel/tracepoint.c                           | 190 +++++++++++++++++-
- tools/include/uapi/linux/bpf.h                |   2 +
- tools/lib/bpf/bpf.c                           |   1 +
- tools/lib/bpf/bpf.h                           |   3 +-
- tools/lib/bpf/libbpf.c                        |  27 ++-
- tools/lib/bpf/libbpf.h                        |   3 +-
- .../bpf/prog_tests/raw_tp_override_test_run.c |  23 +++
- .../bpf/progs/test_raw_tp_override_test_run.c |  20 ++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |   7 +
- 16 files changed, 352 insertions(+), 12 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_override_test_run.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_raw_tp_override_test_run.c
-
+diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+index fa78f49d4a9a..e5cf8a1af6cd 100644
+--- a/include/linux/bpf_types.h
++++ b/include/linux/bpf_types.h
+@@ -48,6 +48,8 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, raw_tracepoint_writable,
+ 	      struct bpf_raw_tracepoint_args, u64)
+ BPF_PROG_TYPE(BPF_PROG_TYPE_TRACING, tracing,
+ 	      void *, void *)
++BPF_PROG_TYPE(BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE, raw_tracepoint_override,
++	      struct bpf_raw_tracepoint_args, u64)
+ #endif
+ #ifdef CONFIG_CGROUP_BPF
+ BPF_PROG_TYPE(BPF_PROG_TYPE_CGROUP_DEVICE, cg_dev,
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 04307a19cde3..fcb2d62d0c9f 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -768,6 +768,9 @@ int perf_event_query_prog_array(struct perf_event *event, void __user *info);
+ struct bpf_raw_tp_link;
+ int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_raw_tp_link *link);
+ int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf_raw_tp_link *link);
++int bpf_probe_override(struct bpf_raw_event_map *btp,
++		       struct bpf_raw_tp_link *link,
++		       const char *probe_name);
+ 
+ struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name);
+ void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp);
+@@ -805,6 +808,12 @@ static inline int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf
+ {
+ 	return -EOPNOTSUPP;
+ }
++static inline int bpf_probe_override(struct bpf_raw_event_map *btp,
++				     struct bpf_raw_tp_link *link,
++				     const char *probe_name)
++{
++	return -EOPNOTSUPP;
++}
+ static inline struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
+ {
+ 	return NULL;
+diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
+index aebf0571c736..9d7b1710c0aa 100644
+--- a/include/linux/tracepoint-defs.h
++++ b/include/linux/tracepoint-defs.h
+@@ -29,6 +29,11 @@ struct tracepoint_func {
+ 	int prio;
+ };
+ 
++struct tracepoint_func_snapshot {
++	struct tracepoint_func orig;
++	struct tracepoint_func override;
++};
++
+ struct tracepoint_ext {
+ 	int (*regfunc)(void);
+ 	void (*unregfunc)(void);
+@@ -45,6 +50,7 @@ struct tracepoint {
+ 	void *probestub;
+ 	struct tracepoint_func __rcu *funcs;
+ 	struct tracepoint_ext *ext;
++	struct tracepoint_func_snapshot *snapshot;
+ };
+ 
+ #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+index 826ce3f8e1f8..399001e2afca 100644
+--- a/include/linux/tracepoint.h
++++ b/include/linux/tracepoint.h
+@@ -50,6 +50,9 @@ tracepoint_probe_register_may_exist(struct tracepoint *tp, void *probe,
+ 	return tracepoint_probe_register_prio_may_exist(tp, probe, data,
+ 							TRACEPOINT_DEFAULT_PRIO);
+ }
++extern int
++tracepoint_probe_override(struct tracepoint *tp, void *probe, void *data,
++			  const char *func_replaced);
+ extern void
+ for_each_kernel_tracepoint(void (*fct)(struct tracepoint *tp, void *priv),
+ 		void *priv);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 233de8677382..cd3d889fe634 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1071,6 +1071,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_SK_LOOKUP,
+ 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
+ 	BPF_PROG_TYPE_NETFILTER,
++	BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE,
+ 	__MAX_BPF_PROG_TYPE
+ };
+ 
+@@ -1707,6 +1708,7 @@ union bpf_attr {
+ 		__u32		prog_fd;
+ 		__u32		:32;
+ 		__aligned_u64	cookie;
++		__aligned_u64	probe_name;
+ 	} raw_tracepoint;
+ 
+ 	struct { /* anonymous struct for BPF_BTF_LOAD */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 3f178a0f8eb1..e360062db34e 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4092,14 +4092,16 @@ static int bpf_perf_link_attach(const union bpf_attr *attr, struct bpf_prog *pro
+ #endif /* CONFIG_PERF_EVENTS */
+ 
+ static int bpf_raw_tp_link_attach(struct bpf_prog *prog,
+-				  const char __user *user_tp_name, u64 cookie,
++				  const char __user *user_tp_name,
++				  const char __user *user_probe_name,
++				  u64 cookie,
+ 				  enum bpf_attach_type attach_type)
+ {
+ 	struct bpf_link_primer link_primer;
+ 	struct bpf_raw_tp_link *link;
+ 	struct bpf_raw_event_map *btp;
+-	const char *tp_name;
+-	char buf[128];
++	const char *tp_name, *probe_name;
++	char buf[128], probe[128];
+ 	int err;
+ 
+ 	switch (prog->type) {
+@@ -4124,6 +4126,17 @@ static int bpf_raw_tp_link_attach(struct bpf_prog *prog,
+ 		buf[sizeof(buf) - 1] = 0;
+ 		tp_name = buf;
+ 		break;
++	case BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE:
++		if (strncpy_from_user(buf, user_tp_name, sizeof(buf) - 1) < 0)
++			return -EFAULT;
++		buf[sizeof(buf) - 1] = 0;
++		tp_name = buf;
++
++		if (strncpy_from_user(probe, user_probe_name, sizeof(probe) - 1) < 0)
++			return -EFAULT;
++		probe[sizeof(probe) - 1] = 0;
++		probe_name = probe;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -4149,7 +4162,10 @@ static int bpf_raw_tp_link_attach(struct bpf_prog *prog,
+ 		goto out_put_btp;
+ 	}
+ 
+-	err = bpf_probe_register(link->btp, link);
++	if (prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE)
++		err = bpf_probe_override(link->btp, link, probe_name);
++	else
++		err = bpf_probe_register(link->btp, link);
+ 	if (err) {
+ 		bpf_link_cleanup(&link_primer);
+ 		goto out_put_btp;
+@@ -4162,12 +4178,12 @@ static int bpf_raw_tp_link_attach(struct bpf_prog *prog,
+ 	return err;
+ }
+ 
+-#define BPF_RAW_TRACEPOINT_OPEN_LAST_FIELD raw_tracepoint.cookie
++#define BPF_RAW_TRACEPOINT_OPEN_LAST_FIELD raw_tracepoint.probe_name
+ 
+ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
+ {
+ 	struct bpf_prog *prog;
+-	void __user *tp_name;
++	void __user *tp_name, *probe_name;
+ 	__u64 cookie;
+ 	int fd;
+ 
+@@ -4180,7 +4196,9 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
+ 
+ 	tp_name = u64_to_user_ptr(attr->raw_tracepoint.name);
+ 	cookie = attr->raw_tracepoint.cookie;
+-	fd = bpf_raw_tp_link_attach(prog, tp_name, cookie, prog->expected_attach_type);
++	probe_name = u64_to_user_ptr(attr->raw_tracepoint.probe_name);
++	fd = bpf_raw_tp_link_attach(prog, tp_name, probe_name,
++				    cookie, prog->expected_attach_type);
+ 	if (fd < 0)
+ 		bpf_prog_put(prog);
+ 	return fd;
+@@ -5565,7 +5583,8 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+ 			goto out;
+ 		}
+ 		if (prog->expected_attach_type == BPF_TRACE_RAW_TP)
+-			ret = bpf_raw_tp_link_attach(prog, NULL, attr->link_create.tracing.cookie,
++			ret = bpf_raw_tp_link_attach(prog, NULL, NULL,
++						     attr->link_create.tracing.cookie,
+ 						     attr->link_create.attach_type);
+ 		else if (prog->expected_attach_type == BPF_TRACE_ITER)
+ 			ret = bpf_iter_link_attach(attr, uattr, prog);
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 606007c387c5..1e965517ba05 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1998,6 +1998,14 @@ const struct bpf_verifier_ops raw_tracepoint_writable_verifier_ops = {
+ const struct bpf_prog_ops raw_tracepoint_writable_prog_ops = {
+ };
+ 
++const struct bpf_verifier_ops raw_tracepoint_override_verifier_ops = {
++	.get_func_proto  = raw_tp_prog_func_proto,
++	.is_valid_access = raw_tp_writable_prog_is_valid_access,
++};
++
++const struct bpf_prog_ops raw_tracepoint_override_prog_ops = {
++};
++
+ static bool pe_prog_is_valid_access(int off, int size, enum bpf_access_type type,
+ 				    const struct bpf_prog *prog,
+ 				    struct bpf_insn_access_aux *info)
+@@ -2307,6 +2315,29 @@ BPF_TRACE_DEFN_x(10);
+ BPF_TRACE_DEFN_x(11);
+ BPF_TRACE_DEFN_x(12);
+ 
++int bpf_probe_override(struct bpf_raw_event_map *btp,
++		       struct bpf_raw_tp_link *link,
++		       const char *probe_name)
++{
++	struct tracepoint *tp = btp->tp;
++	struct bpf_prog *prog = link->link.prog;
++
++	if (!probe_name)
++		return -EINVAL;
++
++	/*
++	 * check that program doesn't access arguments beyond what's
++	 * available in this tracepoint
++	 */
++	if (prog->aux->max_ctx_offset > btp->num_args * sizeof(u64))
++		return -EINVAL;
++
++	if (prog->aux->max_tp_access > btp->writable_size)
++		return -EINVAL;
++
++	return tracepoint_probe_override(tp, (void *)btp->bpf_func, link, probe_name);
++}
++
+ int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_raw_tp_link *link)
+ {
+ 	struct tracepoint *tp = btp->tp;
+diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+index 62719d2941c9..3b8317306edc 100644
+--- a/kernel/tracepoint.c
++++ b/kernel/tracepoint.c
+@@ -14,6 +14,7 @@
+ #include <linux/sched/signal.h>
+ #include <linux/sched/task.h>
+ #include <linux/static_key.h>
++#include <linux/kallsyms.h>
+ 
+ enum tp_func_state {
+ 	TP_FUNC_0,
+@@ -130,6 +131,121 @@ static void debug_print_probes(struct tracepoint_func *funcs)
+ 		printk(KERN_DEBUG "Probe %d : %pSb\n", i, funcs[i].func);
+ }
+ 
++static struct tracepoint_func *
++find_func_to_override(struct tracepoint_func *funcs,
++		      unsigned long probe_addr)
++{
++	int iter;
++
++	if (!funcs)
++		return NULL;
++
++	for (iter = 0; funcs[iter].func; iter++) {
++		if ((unsigned long)funcs[iter].func == probe_addr)
++			return &(funcs[iter]);
++	}
++
++	return NULL;
++}
++
++static struct tracepoint_func_snapshot *
++find_func_snapshot(struct tracepoint_func_snapshot **ss,
++		   struct tracepoint_func *func,
++		   bool *is_override)
++{
++	int iter;
++	struct tracepoint_func_snapshot *shots;
++
++	shots = *ss;
++	if (!shots)
++		return NULL;
++
++	for (iter = 0; shots[iter].override.func; iter++) {
++		if (shots[iter].override.func == func->func &&
++		   shots[iter].override.data == func->data) {
++			*is_override = true;
++			return &(shots[iter]);
++		}
++
++		if (shots[iter].orig.func == func->func &&
++		   shots[iter].orig.data == func->data) {
++			*is_override = false;
++			return &(shots[iter]);
++		}
++	}
++
++	return NULL;
++}
++
++static void drop_func_snapshot(struct tracepoint_func_snapshot **ss,
++			       struct tracepoint_func_snapshot *drop)
++{
++	struct tracepoint_func_snapshot *old, *new;
++	int nr_snapshots;	/* Counter for snapshots */
++	int iter;		/* Iterate over old snapshots */
++	int idx = 0;		/* Index of snapshot to drop */
++
++	old = *ss;
++	if (!old)
++		return;
++
++	for (nr_snapshots = 0; old[nr_snapshots].override.func; nr_snapshots++) {
++		if (&(old[nr_snapshots]) == drop)
++			idx = nr_snapshots;
++	}
++
++	if (nr_snapshots == 0) {
++		kfree(old);
++		*ss = NULL;
++		return;
++	}
++
++	new = kmalloc_array(nr_snapshots, sizeof(struct tracepoint_func_snapshot), GFP_KERNEL);
++	if (!new) {
++		for (iter = idx; iter < nr_snapshots - 1; iter++)
++			old[iter] = old[iter + 1];
++		memset(&(old[nr_snapshots - 1]), 0, sizeof(struct tracepoint_func_snapshot));
++	} else {
++		int j = 0;
++
++		for (iter = 0; iter < nr_snapshots; iter++) {
++			if (iter != idx)
++				new[j++] = old[iter];
++		}
++		kfree(old);
++		*ss = new;
++	}
++}
++
++static int save_func_snapshot(struct tracepoint_func_snapshot **ss,
++			      struct tracepoint_func *new_func,
++			      struct tracepoint_func *old_func)
++{
++	struct tracepoint_func_snapshot *old, *new;
++	int nr_shots = 0;	/* Counter for old snapshots */
++	int total;		/* Total count of new snapshots */
++
++	old = *ss;
++	if (old)
++		while (old[nr_shots].override.func)
++			nr_shots++;
++
++	/* + 2 : one for new snapshot, one for NULL snapshot */
++	total = nr_shots + 2;
++	new = kmalloc_array(total, sizeof(struct tracepoint_func_snapshot), GFP_KERNEL);
++	if (!new)
++		return -ENOMEM;
++
++	memcpy(new, old, nr_shots * sizeof(struct tracepoint_func_snapshot));
++	new[nr_shots].orig = *old_func;
++	new[nr_shots].override = *new_func;
++	new[nr_shots + 1].override.func = NULL;
++
++	*ss = new;
++	kfree(old);
++	return 0;
++}
++
+ static struct tracepoint_func *
+ func_add(struct tracepoint_func **funcs, struct tracepoint_func *tp_func,
+ 	 int prio)
+@@ -412,6 +528,52 @@ static int tracepoint_remove_func(struct tracepoint *tp,
+ 	return 0;
+ }
+ 
++static int tracepoint_override_func(struct tracepoint *tp,
++				    struct tracepoint_func *func,
++				    struct tracepoint_func *func_override)
++{
++	int ret = tracepoint_remove_func(tp, func);
++
++	return ret ? : tracepoint_add_func(tp, func_override,
++					   func_override->prio, false);
++}
++
++static int tracepoint_restore_func(struct tracepoint *tp,
++				   struct tracepoint_func *func,
++				   struct tracepoint_func *func_restore)
++{
++	int ret = tracepoint_remove_func(tp, func);
++
++	return ret ? : tracepoint_add_func(tp, func_restore,
++					   func_restore->prio, false);
++}
++
++int tracepoint_probe_override(struct tracepoint *tp, void *probe,
++			      void *data, const char *probe_name)
++{
++	struct tracepoint_func tp_func;
++	struct tracepoint_func *target_func;
++	unsigned long probe_addr;
++	int ret;
++
++	probe_addr = kallsyms_lookup_name(probe_name);
++	mutex_lock(&tracepoints_mutex);
++	target_func = find_func_to_override(tp->funcs, probe_addr);
++	if (!target_func)
++		return -ESRCH;
++	tp_func.func = probe;
++	tp_func.data = data;
++	tp_func.prio = target_func->prio;
++	ret = save_func_snapshot(&(tp->snapshot), &tp_func, target_func);
++	if (ret)
++		goto unlock;
++
++	ret = tracepoint_override_func(tp, target_func, &tp_func);
++unlock:
++	mutex_unlock(&tracepoints_mutex);
++	return ret;
++}
++
+ /**
+  * tracepoint_probe_register_prio_may_exist -  Connect a probe to a tracepoint with priority
+  * @tp: tracepoint
+@@ -496,12 +658,38 @@ EXPORT_SYMBOL_GPL(tracepoint_probe_register);
+ int tracepoint_probe_unregister(struct tracepoint *tp, void *probe, void *data)
+ {
+ 	struct tracepoint_func tp_func;
++	struct tracepoint_func_snapshot *shot;
+ 	int ret;
++	bool is_override;	/* whether probe is an overriding func */
+ 
+ 	mutex_lock(&tracepoints_mutex);
+ 	tp_func.func = probe;
+ 	tp_func.data = data;
+-	ret = tracepoint_remove_func(tp, &tp_func);
++
++	shot = find_func_snapshot(&(tp->snapshot), &tp_func, &is_override);
++	if (!shot) {
++		ret = tracepoint_remove_func(tp, &tp_func);
++	} else {
++		/* unregister probe rengistered by raw_tracepoint_open,
++		 * restore to original tp_func.
++		 *
++		 * 1. restore orig func from snapshot.
++		 * 2. remove snapshot.
++		 */
++		if (is_override)
++			ret = tracepoint_restore_func(tp, &tp_func, &(shot->orig));
++		/* unregister orig probe registered by register_trace_*.
++		 *
++		 * 1. remove curr probe func(registered by raw_tracepoint_open)
++		 *    from tp->funcs.
++		 * 2. remove snapshot.
++		 */
++		else
++			ret = tracepoint_remove_func(tp, &(shot->override));
++		if (!ret)
++			drop_func_snapshot(&(tp->snapshot), shot);
++	}
++
+ 	mutex_unlock(&tracepoints_mutex);
+ 	return ret;
+ }
 -- 
 2.43.0
 
