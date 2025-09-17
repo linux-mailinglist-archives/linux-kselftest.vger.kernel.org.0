@@ -1,129 +1,121 @@
-Return-Path: <linux-kselftest+bounces-41641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41642-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F33FAB7C3D8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 13:56:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A4E7B7D712
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 14:28:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71CEC1777C1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 00:06:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D16F87AE5AA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 00:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 485EEAD23;
-	Wed, 17 Sep 2025 00:06:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE12A19F137;
+	Wed, 17 Sep 2025 00:35:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YF8WLnmW"
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="fEJ3VkAV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-pg1-f225.google.com (mail-pg1-f225.google.com [209.85.215.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FA41388
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 00:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396A81534EC
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 00:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758067595; cv=none; b=tsik8KUAtbbPWR/iIHJfz6kFt2XvFfmeUgY62JChKTY9CAa9vl7SK9Wy8lIzgMhul94t7i0kEfN1qNxuhmkdTDIckb//LTEy6LrWpRRJ2tov3rmrXYCyx6dDhpj7Iqrj+O+2cEDryZoTE8fMMIHFh0DsxJG2hPc5f7Y+fIGaeK8=
+	t=1758069350; cv=none; b=mzZuJPI2kn/LfSWDS0clE0oPZereTBYjvMx1Gzki6jakOZM4V5f4qnPqyeVONqo20m5kpgbw3WE5W4Z7RRsZ58+Nu7uu3TwOyJbeUSN4BzsgmKZq+mbFYrqPFroT1B6V8U3c/hKPjRBLu56fU8wJBj0V0lDJNljRaokL6o702lU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758067595; c=relaxed/simple;
-	bh=ngJ4kkJ7aphmAfgCY+dWMJwxPcmplYJ6YWrKkonh64U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AzNavCCaVdqBoPUnnT7qlTPimgo5qHAfKIluinRFWNEMPfX08Z5ZisJrx3N0c+5/+grWYrN5tdy8EIt+lvAKeetlkKJZEFnWZIxUrF5pivL4AscALD5Q0v4UGR3535XRMfJIgHWj9Ne3hn2nluiWSyxJ/OAzfq3vUWkdEPQao14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YF8WLnmW; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8276e579242so345149985a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 17:06:32 -0700 (PDT)
+	s=arc-20240116; t=1758069350; c=relaxed/simple;
+	bh=L8phg8Yd0a8z0cJtU511m+EDzsT+ImjO6rzk1+SZ1CE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ETeC1zS0/qpAwOTcftHbF7cTMHyOKnX6zkLfQGOKoN0N+Ytzs0IB3bfxzJUMSSXPp27V9dW+xCC+Db7569uaS4xshsdsL8bqNYFBwAFc1JKcqqbzI07uuyqoBj9DauTLzRgf/KkimrVC72KCR4on9aLpWzYo2EmQzjEQ4RAYsKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=fEJ3VkAV; arc=none smtp.client-ip=209.85.215.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+Received: by mail-pg1-f225.google.com with SMTP id 41be03b00d2f7-b4cb3367d87so4075399a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 17:35:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1758067591; x=1758672391; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=i6mI7kMMJCYUaZU1FUYIKeSfbHM2lLryh9bTV5PX1CI=;
-        b=YF8WLnmWg2kLtLqc9AX6/3+NaOSgCpq5kLQAUnwU5Nc8rtEji9suXSIeQKDerjue8Y
-         9sTJRTE8ipMf7ZM9HrtXOC5ThFDPKoOVVqYpJImweH9R6s5dmhy3EVZFl7fRxk+Yyvgh
-         2lJeuwBtOGZKpAPJJSMS61lAFdDpIFgUEvEnw=
+        d=purestorage.com; s=google2022; t=1758069347; x=1758674147; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sbI8L9M4JYXwDBQdPDmo55hFH7biVlrOkrfO/tfqIAg=;
+        b=fEJ3VkAV4tAePxhBWANbdMBRIuG6tOVI/78Knllr+QP04AiZJ+nrBDvEp31BasMTyU
+         Y+j0VBIwYVDV4CFVR7mFmoxpy0qfc6qZOR0+U07gnS+3AoPOmcNgzHMj/TdV2ED9d1hs
+         4i3qthqegoY2NnzksO2tvsoI1Ocz3Ll72oayQx+YJiM1G/Qss+9Uv8INbY2VXEwYt9Dq
+         m/spOD8I4JwFaeCKBgp/2nmynufp1WwGqaOhAArMNSR41C8DvZ4WITxgxjcIKrNtqNnD
+         4IhOLHs1aA5uvX6I24dLj9McbejwiLLSyBRj3lU3AQkcLc6EhdOeLXTkFq9poEb4oMWX
+         HsbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758067591; x=1758672391;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i6mI7kMMJCYUaZU1FUYIKeSfbHM2lLryh9bTV5PX1CI=;
-        b=poYEPPqSwgEM4BS/8ptfxldrXRlytHKEPVOYt4Pw8El52frSEWnwsX8HsDWekANA/9
-         kgyogEHGxfuM4OhhdmvE2LPLIJnsxKF8Hlc72R/pbxh4ZqeNoyd5vPAFMblNpX9AE5W/
-         sm4b3sPdQ9fJT7vHBSNSCyOWq/VHC1PHN+LOTgu7R/PuQ88TXHew6fG2KiAw4r44HEXJ
-         lOGRlOqv/EvpNXW5c9DL9iu4ZhdGeoePfSLNJHqUg3wJ3USmydinNR00ErNXIJ8tYAQm
-         rjXoYmwXKXAJl9zOzOdPsfdbs1/h0cGx4NmVyUvBpnvhC3oP6oxaHWo5U43pIdPI6Gxw
-         BNlw==
-X-Forwarded-Encrypted: i=1; AJvYcCXHLl7H9LSAF8qOYmQ/z1lGpDg9wThvCow5J05RkZv4iTBHR1wA/gUMSO+XvMq3Y2uuSLDhRwc7CGmN0sSJDoQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoFbJ4zwlBo6Pj65zgoF2dIF7BryBQc73ezLok+FwLtEoAqS2z
-	o8JDrcvB2pCBsjhoAGFKyhGrS/L8KSib4s2k1TQqlIQ1hOQ4VEqOQl5taqfWgv+fPxM=
-X-Gm-Gg: ASbGncuElJ1XH19dO7TVXGcLHWyyYahhCt1WY2NQ5LELKNvrh7+eftDML5GaJF0iDkJ
-	bApbozqdI0pVwK6bM4QBVAIF8aDCpvFuyWi9CC0+6/zbBUvUBCTBHAsMP/zXAI9fLSKDZEXHgVP
-	Cw//MyxqBj9HqyDnEEBE0+Nze4+cHzSAmNMS+pUuYokVBgaLSh0Y96+tc2qj64mdz11HbTQrtw7
-	/uGDR45V34JOiLWmOeFFH+TtenxC1aJtwFhZ+8TiSJbL5cSySGbldGiVqeCzCnZ9+bXm0zxQWUe
-	gGSSS2EC0v6JjVOI8jacjCpfP0W8c3/a2RKPb3aK7S1Y0LGcsKXWdNakma81mzCHmMxL60aY7Wi
-	ES219xCKMUb/URviYy3j0QxP6zbfq9nTpbtkKckY2yx98ME4c0IT59YdIWcILAG5puwN0UhzaR9
-	xeWEiCOJnGxxz/9xy5hC4a8k36kVjN7wFcfTRqSvQHM/I=
-X-Google-Smtp-Source: AGHT+IH5c4maWyfkVF5FZpUNfpUKnCiWWiu0hC91XpGrz9njbNR8U16fgNo/b40+XvnCWlfU+uhSmw==
-X-Received: by 2002:a05:620a:4607:b0:82b:988:11bb with SMTP id af79cd13be357-831162653fdmr28239185a.73.1758067591381;
-        Tue, 16 Sep 2025 17:06:31 -0700 (PDT)
-Received: from [192.168.226.35] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-82b19347ef5sm285484585a.44.2025.09.16.17.06.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Sep 2025 17:06:30 -0700 (PDT)
-Message-ID: <39da8772-a44f-466b-ba2e-425ae464abb2@linuxfoundation.org>
-Date: Tue, 16 Sep 2025 18:06:29 -0600
+        d=1e100.net; s=20230601; t=1758069347; x=1758674147;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sbI8L9M4JYXwDBQdPDmo55hFH7biVlrOkrfO/tfqIAg=;
+        b=AvVaV6oLmC63CoHPc5x44cexsDxszqenJQ7nzgdNfDFpbIHC4pID1goh5liRCvyqhP
+         tspSKXCkdDtRHdcJcq3UiXmicWSD2BmFlvF3IGgHxeSCkmNgfeuXMLLGGuTqhHD8YY0L
+         IY1s5u9rFlL9BaR+yLKBCLc2V0zhaQjBvrRvJQJn9EdbSjpfNvqGgEaCCTWPirT1NM33
+         YmI5U7lPnGr3MeJC/i2W/o9aqP7AqmNrzdm5b7iCGCvgD/AmOaYiah1YjIhUvLt70NrD
+         VSUeNAZddJSoHJ3QPTX/JCWJNEXIHfOZf+MtTY+vClk9Er41X5ybRhy9RMrxpIJO8kvH
+         TWIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVEMhgpfNZ0qTd9OXf6pzi173buMeh84kYA701fycDrZJw9AhutNOZPoiLpwLmBJdm0GjUVyBWtYL4JN5du2s0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyw6MqYXetc/lKDL3hxKr7pZUWs2msGMvN0DbBlYZ8fC32DXVWW
+	lICjT9vEzjaXx/0KOmuCn60NtZO+1Yy2D84QSNjJuQ2al93ST57rw+KR2RaMyco2U2gnnTqsaev
+	IKcxlNr8V1tDcpwmVC/HGmggG315M4UZpQhHYgWjh0fDxJooQtHhb
+X-Gm-Gg: ASbGnct4y1RjXs7rbDPAZg2uFBFdy5OWstGUuWGNo7Ip3pJq0luyO+sedDFcSEyFSmK
+	v9tj1vcGz/J9R7U1nJGcLgD25G5ZqwLNPlgIm2QjSfoUD6o1kUugn88C+5+UsPuDFGi42vDutA8
+	+j6DcXPdFSORWShRHqmJ7Rek3ht5uwH6WRYBY3LdD9vSFtlQV23RfWduOmZbQpUy0z3QtgVrJ9M
+	Gka9jz3ijO1KFSuWtH6Mj8jzO0+lm/rU3OmLKR17emOm+RuWiQfBjRyHrwihKWln7Y9a7JxbXmq
+	FGRgYBBg7hw7LAiNyoKwB8vSgt37s40UhMBqR0Xji5i2zo0Fws9wONqr+nQ=
+X-Google-Smtp-Source: AGHT+IEiIDXkSrx5GtdhuqYIDr1VIfuMjIQs0tgYZcUIgrXb9WrfiLPKfhN0RTcxZ2Cl9VKZoSsr0L7/MMXA
+X-Received: by 2002:a17:903:3d05:b0:267:44e6:11dd with SMTP id d9443c01a7336-26813bf0cb6mr2254435ad.53.1758069347404;
+        Tue, 16 Sep 2025 17:35:47 -0700 (PDT)
+Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-267b5deb158sm4934865ad.46.2025.09.16.17.35.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Sep 2025 17:35:47 -0700 (PDT)
+X-Relaying-Domain: purestorage.com
+Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [IPv6:2620:125:9007:640:7:70:36:0])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id AED7E3402ED;
+	Tue, 16 Sep 2025 18:35:46 -0600 (MDT)
+Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
+	id 9240BE40EC3; Tue, 16 Sep 2025 18:35:46 -0600 (MDT)
+Date: Tue, 16 Sep 2025 18:35:46 -0600
+From: Uday Shankar <ushankar@purestorage.com>
+To: Caleb Sander Mateos <csander@purestorage.com>,
+	Ming Lei <ming.lei@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: ublk: fix behavior when fio is not installed
+Message-ID: <aMoCYseJUVcbC7gl@dev-ushankar.dev.purestorage.com>
+References: <20250916-ublk_fio-v1-1-8d522539eed7@purestorage.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/kselftest_harness: Add
- harness-selftest.expected to TEST_FILES
-To: Yi Lai <yi1.lai@intel.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, wad@chromium.org,
- luto@amacapital.net, kees@kernel.org, thomas.weissschuh@linutronix.de,
- usama.anjum@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250909082619.584470-1-yi1.lai@intel.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250909082619.584470-1-yi1.lai@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250916-ublk_fio-v1-1-8d522539eed7@purestorage.com>
 
-On 9/9/25 02:26, Yi Lai wrote:
-> The harness-selftest.expected is not installed in INSTALL_PATH.
-> Attempting to execute harness-selftest.sh shows warning:
+On Tue, Sep 16, 2025 at 04:11:53PM -0600, Uday Shankar wrote:
+> Some ublk selftests have strange behavior when fio is not installed.
+> While most tests behave correctly (run if they don't need fio, or skip
+> if they need fio), the following tests have different behavior:
 > 
-> diff: ./kselftest_harness/harness-selftest.expected: No such file or
-> directory
+> - test_null_01 and test_null_02 try to run fio without checking if it
+>   exists first, and fail on any failure of the fio command (including
+>   "fio command not found"). So these tests fail when they should skip.
+> - test_stress_05 runs fio without checking if it exists first, but
+>   doesn't fail on fio command failure. This test passes, but that pass
+>   is misleading as the test doesn't do anything useful without fio
+>   installed. So this test passes when it should skip.
 > 
-> Add harness-selftest.expected to TEST_FILES.
+> Fix these issues by adding _have_program fio checks to the top of all
+> three of these tests.
 > 
-> Fixes: df82ffc5a3c1 ("selftests: harness: Add kselftest harness selftest")
-> Signed-off-by: Yi Lai <yi1.lai@intel.com>
-> Reviewed-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
->   tools/testing/selftests/kselftest_harness/Makefile | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/kselftest_harness/Makefile b/tools/testing/selftests/kselftest_harness/Makefile
-> index 0617535a6ce4..d2369c01701a 100644
-> --- a/tools/testing/selftests/kselftest_harness/Makefile
-> +++ b/tools/testing/selftests/kselftest_harness/Makefile
-> @@ -2,6 +2,7 @@
->   
->   TEST_GEN_PROGS_EXTENDED := harness-selftest
->   TEST_PROGS := harness-selftest.sh
-> +TEST_FILES := harness-selftest.expected
->   EXTRA_CLEAN := harness-selftest.seen
->   
->   include ../lib.mk
+> Signed-off-by: Uday Shankar <ushankar@purestorage.com>
 
-Applied to linux-kselftest next for Linux 6.18-rc1
+Please disregard; it was pointed out to me that I missed a few tests.
+Will post an updated v2 soon.
 
-thanks,
--- Shuah
 
