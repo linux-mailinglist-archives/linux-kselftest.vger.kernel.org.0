@@ -1,254 +1,145 @@
-Return-Path: <linux-kselftest+bounces-41780-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E751CB81F64
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 23:26:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31933B82006
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 23:40:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B238721051
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 21:26:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE9414A5986
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 21:40:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCAE3126AF;
-	Wed, 17 Sep 2025 21:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F53030DEB6;
+	Wed, 17 Sep 2025 21:40:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Up/BQdzi"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="TS+ImPEM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2459831197F;
-	Wed, 17 Sep 2025 21:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6B0224B04;
+	Wed, 17 Sep 2025 21:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.147.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758144217; cv=none; b=GPmIQ16EMpMXQlBxorADzCT5zMIOCGX8AU1lwWswJdawPyL845ecOSeohtDNhmmwyL6SyzBBwiKjxmFNe/ixMYH6KBcxrH6kW9FruZPC+zt9J+/NmiZM5IiCCCAjqxUO4/4zTTBNkzEAgXPa3PJc6wXjcxno64LEnzjB5gYBcAQ=
+	t=1758145201; cv=none; b=OFtQsdEG2NU71VeMdXKF/OMS1SFEzcQrWO2DqxZVpoIN/Ou096f6voGvRiQN9ba0b0VLafkQGrEtZfd3RKncuSybf50ah3aWa1j9z2nFXOeYjDK/hFFSRlJNNbo/WQgv5uFARoqsyjKEhXUfdUvoSIsB3sJLgiuf1YdOyZqPUIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758144217; c=relaxed/simple;
-	bh=684wNoj1MWEdeMobB+YxiUgzPPpaWFF1mzncYo2aXPc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uU+J62/HkZk+x7U7r0haN/gVK14Xvhfx/4chCc5SEbyX7crf+J6a2Y/1el1dDFqMENluQeQSZUFdq2O+rD1mLf//2oY8DZedNwuiyjZTYZAOycVOq60ulx6OwkUdU5rmDcEZjVZsDmkeF3JU3K6Qyxe2UfIvY4n+GOCTB2T27Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Up/BQdzi; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=3P5HtVQ2Tt3lBmmjFmS96/9Icqhu8ftHeTOFI/efAlQ=; b=Up/BQdziiUcXVTFXWZ3Ls9je4z
-	aTyN45XR+wHSJFAaH3zKSzEbqGLRwrCBRSonafuY5KvL7FyH7k58f9fe5BA1H2BGbZa2+KEKYX0GY
-	ukFtqJNOOOpkhF2lEfVFN6UKm/w4JsZedINMbpcCW36rXEVlVhGMObJMX61KCYfa7aN0Sx+uEus3w
-	A2CT8+OlWN4LDUFpzkJ9sZt2StYHIgWmFkwEP4ly9lP8gL6VIcPywoLxg3UCChMyWmI1AoJwFBqJJ
-	LtdF2XPId3uRgvMRUB3n4x1FekUNo6fAOQsk+wx+1E6nKTZ0YDt5M0TOQOHTUd03xZqdmiXXotUFZ
-	tbapch0w==;
-Received: from [191.204.197.103] (helo=[192.168.15.100])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uyzck-00CsMq-6Q; Wed, 17 Sep 2025 23:23:34 +0200
-From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Date: Wed, 17 Sep 2025 18:21:54 -0300
-Subject: [PATCH v3 15/15] selftests/futex: Remove logging.h file
+	s=arc-20240116; t=1758145201; c=relaxed/simple;
+	bh=j0oSCi9JCNB/n2boWWo+usbN9ISUZr1EE+q7YBlMKUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mMbDstpClRf44YsJGe16wTzhqmUyqm6ukRznoJOEELNNhDPvnlIOk7ZGHgSmnmaxLCoU2ejapegpF239H5WgAqn35kinHNh5zxd4wAom0XEf/+zyaLqiu1HbUv3braK8suq+BjYKIgKpsTuWH4lLbaX26LltznKL9813KYTgISw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=TS+ImPEM; arc=none smtp.client-ip=148.163.147.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58HLbTx2031830;
+	Wed, 17 Sep 2025 21:39:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps0720; bh=e7aywbVgoWACndDeOW0D7B3YoI
+	kDJpnENYBe2GyDpVE=; b=TS+ImPEM9BnHP3pjsIAzoxU99Ze3vLHdShH8ASvMm8
+	FwykYSUvQfUo4b69MoVprjuxbc5xtMnnAggTGlywAy1mRBGpw1hiiy7Pdr+GrtDh
+	mVYloPY8I5cBTrKCxWuGN+hgiJNRayFGiJhC6DOIrhD9QzHvcAz8UjP2qOgKlZpN
+	SQIXDNidMKF9KrtOobcTEPKv8CJ666Eftw+csaSfkhgIOAa4ufr1Oh0YrHveLsvH
+	8RGhGG/OZlOd/qUqz7jZA4r0pLWR3Z1j6G/VprUKBmshuhN32+XIhIu6dVqt/kHB
+	EFsgAN9OvseDuBWr5X/BdwI48sHnuTfa9mXjPp7wosEw==
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 497y4f2xjm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Sep 2025 21:39:12 +0000 (GMT)
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 0A89D130D6;
+	Wed, 17 Sep 2025 21:39:11 +0000 (UTC)
+Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.36])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 1A621804CDB;
+	Wed, 17 Sep 2025 21:39:08 +0000 (UTC)
+Date: Wed, 17 Sep 2025 16:39:01 -0500
+From: Kyle Meyer <kyle.meyer@hpe.com>
+To: "Luck, Tony" <tony.luck@intel.com>
+Cc: Jiaqi Yan <jiaqiyan@google.com>, David Hildenbrand <david@redhat.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        akpm@linux-foundation.org, corbet@lwn.net, linmiaohe@huawei.com,
+        shuah@kernel.org, jane.chu@oracle.com, Liam.Howlett@oracle.com,
+        bp@alien8.de, hannes@cmpxchg.org, jack@suse.cz,
+        joel.granados@kernel.org, laoar.shao@gmail.com,
+        lorenzo.stoakes@oracle.com, mclapinski@google.com, mhocko@suse.com,
+        nao.horiguchi@gmail.com, osalvador@suse.de, rafael.j.wysocki@intel.com,
+        rppt@kernel.org, russ.anderson@hpe.com, shawn.fan@intel.com,
+        surenb@google.com, vbabka@suse.cz, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2] mm/memory-failure: Support disabling soft offline for
+ HugeTLB pages
+Message-ID: <aMsqdesM1ImJp1yt@hpe.com>
+References: <aMiu_Uku6Y5ZbuhM@hpe.com>
+ <a99eb11f-a7ac-48a3-a671-c5f0f6b5b491@arm.com>
+ <8c3188da-7078-4099-973a-1d0d74db2720@redhat.com>
+ <aMsDJ3EU1zVJ00cX@hpe.com>
+ <cd71fac2-bb9d-4e84-a074-2b695654e655@redhat.com>
+ <CACw3F52p45t3iSZPjx_Lq9kBn1ZGTDZsxk+iQ-xFA1zdvdqqrw@mail.gmail.com>
+ <aMsR4Tr9ov1pfucC@agluck-desk3>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250917-tonyk-robust_test_cleanup-v3-15-306b373c244d@igalia.com>
-References: <20250917-tonyk-robust_test_cleanup-v3-0-306b373c244d@igalia.com>
-In-Reply-To: <20250917-tonyk-robust_test_cleanup-v3-0-306b373c244d@igalia.com>
-To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel-dev@igalia.com, 
- =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aMsR4Tr9ov1pfucC@agluck-desk3>
+X-Authority-Analysis: v=2.4 cv=FoUF/3rq c=1 sm=1 tr=0 ts=68cb2a80 cx=c_pps
+ a=UObrlqRbTUrrdMEdGJ+KZA==:117 a=UObrlqRbTUrrdMEdGJ+KZA==:17
+ a=kj9zAlcOel0A:10 a=yJojWOMRYYMA:10 a=-yUDYzNKurD68FfYE3YA:9
+ a=CjuIK1q_8ugA:10
+X-Proofpoint-GUID: -t5EYyscZvkXoKgU1Fr4v8bU1oBCB3c2
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE3MDE0NCBTYWx0ZWRfX3tXC0LyiZmGA
+ EQSbxobfpqBJ2/TPQVKW8un6ill+kJamYAOG2TNuIPQIDu6vQ4oz/swV8qQUbtXFdefRyu3kzD0
+ 0/RqovEVpnKbXv7WT+CSeihWkbOyM3Q26jnL2O0SNy9YpUBnXaDgXQP3fN1ANJRH6/e143PFK+T
+ GnGm++4JBCUndCS1f4ekeoy7NuWS7nDFC+12d3b1Poz5lIJYQcxeEnzQtQGg9MTISmoyl3T+5ak
+ 2uf60DEbMDNIuFuFx7GIuUHLszdqS7NMXf0Xd/ndH6KyLRmnmoqXKGPbmep0T4d23Pt9VhCo7Xp
+ 4/orMAto6QC504pcbM8XW0vX4ybFk+kvdP1UNm7YC3ZKDuFlT8pguL5yvNbe34N6rR5o8EArpd9
+ 0RfUBX9b
+X-Proofpoint-ORIG-GUID: -t5EYyscZvkXoKgU1Fr4v8bU1oBCB3c2
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-17_01,2025-09-17_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 suspectscore=0 impostorscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509170144
 
-Every futex selftest uses the kselftest_harness.h helper and don't need
-the logging.h file. Delete it.
+On Wed, Sep 17, 2025 at 12:54:09PM -0700, Luck, Tony wrote:
+> On Wed, Sep 17, 2025 at 12:32:47PM -0700, Jiaqi Yan wrote:
+> > +1. Given /proc/sys/vm/enable_soft_offline is extensible, I would
+> > prefer a compact userspace API.
+> > 
+> > > would create a new file, and the file has weird semantics such that it
+> > > has no meaning when enable_soft_offline=0.
+> 
+> So the expand the bitmask idea from earlier in this thread?
+> 
+> Bit0	0 = soft offline disabled. 1 = Enabled (but see other bits)
+> Bit1	0 = allow offline of 4K pages, 1 = suppress 4K offline
+> Bit2	0 = allow offline of hugetlb, 1 = suppress hugetlb offline
+> Bit3	0 = allow breakup of transparent huge pages to just offline 4K, 1 = suppress transparent breakup
+> Bit4+	Reserved for suppressing other page types we invent in the future
+> 
+> Values 0 and 1 keep their original meaning.
+> 
+> Value 5 means: offline 4K, keep hugetlb, breakup transparent huge pages.
 
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
----
- tools/testing/selftests/futex/functional/Makefile |   3 +-
- tools/testing/selftests/futex/include/logging.h   | 148 ----------------------
- 2 files changed, 1 insertion(+), 150 deletions(-)
+Do you happen to have any use cases or reasoning for why someone might want
+to disable soft offline for 4K pages or transparent huge pages? I'd like to
+understand the motivation for adding the extra bits.
 
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index bd50aecfca8a31d9545be1e44295594dc9eab6be..490ace1f017e8635a4bc2a414220f7657a9d8f85 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -8,8 +8,7 @@ LDLIBS := -lpthread -lrt -lnuma
- 
- LOCAL_HDRS := \
- 	../include/futextest.h \
--	../include/atomic.h \
--	../include/logging.h
-+	../include/atomic.h
- TEST_GEN_PROGS := \
- 	futex_wait_timeout \
- 	futex_wait_wouldblock \
-diff --git a/tools/testing/selftests/futex/include/logging.h b/tools/testing/selftests/futex/include/logging.h
-deleted file mode 100644
-index 874c69ce5cce9efa3a9d6de246f5972a75437dbf..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/futex/include/logging.h
-+++ /dev/null
-@@ -1,148 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/******************************************************************************
-- *
-- *   Copyright © International Business Machines  Corp., 2009
-- *
-- * DESCRIPTION
-- *      Glibc independent futex library for testing kernel functionality.
-- *
-- * AUTHOR
-- *      Darren Hart <dvhart@linux.intel.com>
-- *
-- * HISTORY
-- *      2009-Nov-6: Initial version by Darren Hart <dvhart@linux.intel.com>
-- *
-- *****************************************************************************/
--
--#ifndef _LOGGING_H
--#define _LOGGING_H
--
--#include <stdio.h>
--#include <string.h>
--#include <unistd.h>
--#include <linux/futex.h>
--#include "kselftest.h"
--
--/*
-- * Define PASS, ERROR, and FAIL strings with and without color escape
-- * sequences, default to no color.
-- */
--#define ESC 0x1B, '['
--#define BRIGHT '1'
--#define GREEN '3', '2'
--#define YELLOW '3', '3'
--#define RED '3', '1'
--#define ESCEND 'm'
--#define BRIGHT_GREEN ESC, BRIGHT, ';', GREEN, ESCEND
--#define BRIGHT_YELLOW ESC, BRIGHT, ';', YELLOW, ESCEND
--#define BRIGHT_RED ESC, BRIGHT, ';', RED, ESCEND
--#define RESET_COLOR ESC, '0', 'm'
--static const char PASS_COLOR[] = {BRIGHT_GREEN, ' ', 'P', 'A', 'S', 'S',
--				  RESET_COLOR, 0};
--static const char ERROR_COLOR[] = {BRIGHT_YELLOW, 'E', 'R', 'R', 'O', 'R',
--				   RESET_COLOR, 0};
--static const char FAIL_COLOR[] = {BRIGHT_RED, ' ', 'F', 'A', 'I', 'L',
--				  RESET_COLOR, 0};
--static const char INFO_NORMAL[] = " INFO";
--static const char PASS_NORMAL[] = " PASS";
--static const char ERROR_NORMAL[] = "ERROR";
--static const char FAIL_NORMAL[] = " FAIL";
--const char *INFO = INFO_NORMAL;
--const char *PASS = PASS_NORMAL;
--const char *ERROR = ERROR_NORMAL;
--const char *FAIL = FAIL_NORMAL;
--
--/* Verbosity setting for INFO messages */
--#define VQUIET    0
--#define VCRITICAL 1
--#define VINFO     2
--#define VMAX      VINFO
--int _verbose = VCRITICAL;
--
--/* Functional test return codes */
--#define RET_PASS   0
--#define RET_ERROR -1
--#define RET_FAIL  -2
--
--/**
-- * log_color() - Use colored output for PASS, ERROR, and FAIL strings
-- * @use_color:	use color (1) or not (0)
-- */
--void log_color(int use_color)
--{
--	if (use_color) {
--		PASS = PASS_COLOR;
--		ERROR = ERROR_COLOR;
--		FAIL = FAIL_COLOR;
--	} else {
--		PASS = PASS_NORMAL;
--		ERROR = ERROR_NORMAL;
--		FAIL = FAIL_NORMAL;
--	}
--}
--
--/**
-- * log_verbosity() - Set verbosity of test output
-- * @verbose:	Enable (1) verbose output or not (0)
-- *
-- * Currently setting verbose=1 will enable INFO messages and 0 will disable
-- * them. FAIL and ERROR messages are always displayed.
-- */
--void log_verbosity(int level)
--{
--	if (level > VMAX)
--		level = VMAX;
--	else if (level < 0)
--		level = 0;
--	_verbose = level;
--}
--
--/**
-- * print_result() - Print standard PASS | ERROR | FAIL results
-- * @ret:	the return value to be considered: 0 | RET_ERROR | RET_FAIL
-- *
-- * print_result() is primarily intended for functional tests.
-- */
--void print_result(const char *test_name, int ret)
--{
--	switch (ret) {
--	case RET_PASS:
--		ksft_test_result_pass("%s\n", test_name);
--		ksft_print_cnts();
--		return;
--	case RET_ERROR:
--		ksft_test_result_error("%s\n", test_name);
--		ksft_print_cnts();
--		return;
--	case RET_FAIL:
--		ksft_test_result_fail("%s\n", test_name);
--		ksft_print_cnts();
--		return;
--	}
--}
--
--/* log level macros */
--#define info(message, vargs...) \
--do { \
--	if (_verbose >= VINFO) \
--		fprintf(stderr, "\t%s: "message, INFO, ##vargs); \
--} while (0)
--
--#define error(message, err, args...) \
--do { \
--	if (_verbose >= VCRITICAL) {\
--		if (err) \
--			fprintf(stderr, "\t%s: %s: "message, \
--				ERROR, strerror(err), ##args); \
--		else \
--			fprintf(stderr, "\t%s: "message, ERROR, ##args); \
--	} \
--} while (0)
--
--#define fail(message, args...) \
--do { \
--	if (_verbose >= VCRITICAL) \
--		fprintf(stderr, "\t%s: "message, FAIL, ##args); \
--} while (0)
--
--#endif
-
--- 
-2.51.0
-
+Thanks,
+Kyle Meyer
 
