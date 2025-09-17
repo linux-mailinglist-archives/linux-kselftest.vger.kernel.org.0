@@ -1,87 +1,131 @@
-Return-Path: <linux-kselftest+bounces-41663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C338AB7D0CF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 14:16:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A60B7D8A9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 14:30:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69668464B52
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 07:29:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3F754810D6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 07:44:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB7F2F7469;
-	Wed, 17 Sep 2025 07:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D25430217F;
+	Wed, 17 Sep 2025 07:44:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NzJfLEVu";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3maXnGZq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hbSauEvn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E6E1304965;
-	Wed, 17 Sep 2025 07:28:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F50248F68;
+	Wed, 17 Sep 2025 07:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758094084; cv=none; b=CPjaQN+n4qn+5rgFTn/5WLN361sTF4vgznjmIPG8N5fcp1qrJKOR0EH8Iw/KT9d+kIzILqNQEllhYSUw455Ft0jJBPZiZjz+KxZONUOAIQrs4yib9ebZEpm48ypilr8k0Y3XRKIeq2zuCs3q2+wkvI8nfFpQSsBqIIleBDLEHCk=
+	t=1758095056; cv=none; b=jRGTW24+OEvvbIJxW9Zu9kQ0Wnz8jyb1rUKRi42lm9DzCBuBh/tE0yxoE3kleQ6tn2n+30MjP/AGFO68STJYqDb+z7iDekgB05+B7XlphGTDGIEnAQBqg2WnlJeJA4YQvb2emXbpaxs5IA5sHMJATUIv/oqtoDjPoxRfynwHGfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758094084; c=relaxed/simple;
-	bh=vlReshKq7aZiP2IfeO+rloJkTdp+7ht9eznCdHzR5lM=;
-	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=IXxw6cKNJN5Dc64rS0Z6niVVpN8NcEOgqmIzJk08H/gRbKGGQkU0J3RmreJwNvr8JRdQ7TLj0vVbxUxY5zMSpwWpTo5iHnOGRVTKx014bvvO0crDbir4DC6WERPK7LyT7YsgXzvNl28ql1pH3Z2fkH/AiDobVuByA1JjN0eGCgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NzJfLEVu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3maXnGZq; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1758094079;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vlReshKq7aZiP2IfeO+rloJkTdp+7ht9eznCdHzR5lM=;
-	b=NzJfLEVuUnqN+7gW7+P5zXHZLrBbaclyUPsaVxuKZ/TWksQeQLoQf4GzlWDpBklzq34scv
-	RyU4kvLMYQR5J1sU/iMzC0dXiuMLZrUjsbwZ0twDRVkkIJjr/hrb1/SnTKSHU4LkG/bGty
-	iGOziT3CHWrLy/WPTIMBAwY362Z9VmQVwtdO+2x+wsICKBELLsPzE15wJdFpTV2tdBtXHs
-	lIJRnPry5lO/tw+bBsgNnZp87W8DCWZi3R7MoyFOnrpRJb4GxJxNXCAArm1FJkQHfD3W3v
-	I0bcmkal5qoJN2J1LWBFeozK31msYacyYFQmOOG59ADugxKMeimJPzBbPgkf8Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1758094079;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vlReshKq7aZiP2IfeO+rloJkTdp+7ht9eznCdHzR5lM=;
-	b=3maXnGZqsZADUCiXBeytBnMWW/Xyr5mpq/7hpeT3sbGgqE+99hrN0eacNNKjyWQvn+Dq26
-	ld+tNp7RGGoZqjCw==
-To: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
- <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan
- <shuah@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, Soheil Hassas
- Yeganeh <soheil@google.com>, Khazhismel Kumykov <khazhy@google.com>,
- Willem de Bruijn <willemb@google.com>, Eric Dumazet <edumazet@google.com>,
- Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/2] eventpoll: Fix epoll_wait() report false negative
-In-Reply-To: <cover.1752824628.git.namcao@linutronix.de>
-References: <cover.1752824628.git.namcao@linutronix.de>
-Date: Wed, 17 Sep 2025 09:27:59 +0200
-Message-ID: <875xdh35ds.fsf@yellow.woof>
+	s=arc-20240116; t=1758095056; c=relaxed/simple;
+	bh=O32d9nMpfCjkvZmQj+LHF+wrVeinQYtykhIahUtbw28=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iSJtplyrVDTCqp4EoHbm5Xf1zECwq4gsCit9yZfw6SiScHAIFj9dvMVNXu5Gf2ezcqTyQ9B/scqsA5QgeFSX0zGxb5Pait72TtjDcLCg7BqzssbfgzNv8QmbHu3xugoQTHpQ9GfVo7KoU3O06TGYcRabTnHD62X4GbZgL/geado=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hbSauEvn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E97C4CEF0;
+	Wed, 17 Sep 2025 07:44:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758095055;
+	bh=O32d9nMpfCjkvZmQj+LHF+wrVeinQYtykhIahUtbw28=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hbSauEvn8Wn3EmtIF1IR8j8PX6fACuh6JMywy6s8FmmriFeqeH4xYjv3rsgkiiCHw
+	 UyXW6ZCZNvyZE6RGZMkRkFVYho1qOiCrBlbKLbvA3DYc3eG5k5Z3b3t4Ah6Vut8N9F
+	 mz9Od2K/Zjhb48M5Pz2QeuVL8vkMb1oj5uZE9k+U3z9YRyXC2W/V4Q1Rs0QQvxv6oI
+	 TuhwBy01nl82bA0BWe24Tay45kPxpRH5HoKH4BQiwqA0cpTdkVZWobrGlHTzenVrMv
+	 tcbISR9d3OsZQnCUcEViB7xZ1G39ye6jJ1F7RiGRvM7WXqTvJfZlKNBNHAG6K+b2bD
+	 GaMy0M7pskqyA==
+From: SeongJae Park <sj@kernel.org>
+To: Kalesh Singh <kaleshsingh@google.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	akpm@linux-foundation.org,
+	minchan@kernel.org,
+	lorenzo.stoakes@oracle.com,
+	david@redhat.com,
+	Liam.Howlett@oracle.com,
+	rppt@kernel.org,
+	pfalcato@suse.de,
+	kernel-team@android.com,
+	android-mm@google.com,
+	stable@vger.kernel.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Kees Cook <kees@kernel.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Jann Horn <jannh@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] mm: fix off-by-one error in VMA count limit checks
+Date: Wed, 17 Sep 2025 00:44:13 -0700
+Message-Id: <20250917074413.58886-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250915163838.631445-2-kaleshsingh@google.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Nam Cao <namcao@linutronix.de> writes:
-> While staring at epoll, I noticed ep_events_available() looks wrong. I
-> wrote a small program to confirm, and yes it is definitely wrong.
->
-> This series adds a reproducer to kselftest, and fix the bug.
+On Mon, 15 Sep 2025 09:36:32 -0700 Kalesh Singh <kaleshsingh@google.com> wrote:
 
-Friendly reminder that this exists.
+> The VMA count limit check in do_mmap() and do_brk_flags() uses a
+> strict inequality (>), which allows a process's VMA count to exceed
+> the configured sysctl_max_map_count limit by one.
+> 
+> A process with mm->map_count == sysctl_max_map_count will incorrectly
+> pass this check and then exceed the limit upon allocation of a new VMA
+> when its map_count is incremented.
+> 
+> Other VMA allocation paths, such as split_vma(), already use the
+> correct, inclusive (>=) comparison.
+> 
+> Fix this bug by changing the comparison to be inclusive in do_mmap()
+> and do_brk_flags(), bringing them in line with the correct behavior
+> of other allocation paths.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Cc: <stable@vger.kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Cc: Mike Rapoport <rppt@kernel.org>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Pedro Falcato <pfalcato@suse.de>
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 
-This probably only appears once in a blue moon, and the impact is
-probably not significant. But it still should be fixed.
+Acked-by: SeongJae Park <sj@kernel.org>
 
-Nam
+
+Thanks,
+SJ
+
+[...]
 
