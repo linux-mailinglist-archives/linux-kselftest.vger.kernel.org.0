@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-41655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21EA6B80185
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 16:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E485B8018E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 16:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AF271899EFF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 05:57:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99BFD1C0014B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 05:59:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32EF326A0C6;
-	Wed, 17 Sep 2025 05:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B33C127E077;
+	Wed, 17 Sep 2025 05:59:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7891C5F23
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 05:56:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F1627E076
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 05:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758088599; cv=none; b=kLIXYRxLVnn0ikGmi8C/w5fOu7IZAYyr9iur0vXilsk41F0ncMhwh6z3W7q54INNUKnZJNtrID39dDxO4MIwun0VAXDkSqAMHvDwSMz0gsJJ1mIVVkdssQpMprs4N602qTOBl6h4zfWttzK3dgYcZJE9/MhV+IYfStF9F4b/Xnk=
+	t=1758088765; cv=none; b=R1QK4FajvgYewpu6zw3Pxj3AKFaLD7XL3gK8yP1xbXB18hkt/hfRaJHUpOQu897Yfw04ms0oxclAEaVS9GUGVsBhnWJNLQrEvd2gZrzgFqDBl6qfhrv2K/Th23sjCke0KRYvGK95oHdphFbwgnOcOXC8VhrbkRR33ovpv1Kf1U4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758088599; c=relaxed/simple;
-	bh=HEAtg16SjSSpTPSJTLyQUgy2jQeNKW9e6mUD3MY3hAM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qTPabAki3VvrGnvDnl+v2vUemWxocXXA0rYC1pr3FeoopnaM3Bkzro+7ZAToywZ/hegJYq+FukfUaXza/CoTAK0xuaHhTGH6qCEZ86u58EUfLoOFAILXHoHMqMa+rDA/akHxgBuZRxF5S22vep7FftN8azGnqbnIoD4gKfaDl8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1758088765; c=relaxed/simple;
+	bh=8R658MgjSKQ6OjkgZybldgeN9jzE69wFj18W4yvtA1k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NjmH5V/h3BtivTaBDM51XUsPQwnFr6Rty2tu1jaCj8x95vHxsVhHA/hoTryZ519VTmKx3zn/6k+HdO+Yjbi5ynTUr8KH8Ka5xtFjhzwtGLKpRAF6auk1gxhJvAYnv4ekSTfAvzC0DqDXMzTKKeouVn/8HV26NwA23axK4Y+c2fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3e9042021faso2534903f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 22:56:37 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45f2c9799a3so21410735e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 22:59:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758088596; x=1758693396;
+        d=1e100.net; s=20230601; t=1758088762; x=1758693562;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4rL2rlM29fREnsY3UP4GCd3w0RbbtqI2tzuuAuaZNNM=;
-        b=fwJvhdm421lkUZ+m7QrSDk2cMA6zPSsOY+1nS3gFhz7fCeaqqWvKZdn9xm9R7cVwJw
-         erDRsLmw3MbL4Y+QdjIdfYmuIgV1fttml+wG2sUREU4c2k//4l5x5MqZ29bSPpycYkPT
-         u45ufrrUyz4bWKCBn9f1fMZ6JcjM1TYcThuBpdcX4bVEEUKIS5C59s9Q9m8TxvDYRCby
-         N2DR+6MpGu1l35hgs1ET7mdEjEyZPK6hXpwQxyfBgJKSN7QVB8bUuClX3DHinTYinBdK
-         cvtcedzuY5NT1HUtX6H83IITrVf/9guyTWoLcLI3OEeDUAGS6DkYHK+nVHaNKICis2g+
-         n+jg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXrJUoW14jIkfMosHHpqT3m5NbB/VVRkR2KoCinorDhJKxoc857/T4bKpH+2ooJ382VsGDDjb2Luj/KGwr6xY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFXBa80wUBgEbR3wyeqQSCwI1CUzttK8jgL2HNvSSM3/iMRV3F
-	/IB4US0qBUk9K26IwbzyF9s/lmjFtVXnVLw5W8L1Nbx/xY9scDNLRulpYuekUw==
-X-Gm-Gg: ASbGncsDqhJNVfQiCxw0Lya/SH/fkCcDoL3dkPtN8jX74E9B0hNZWV3ReOaaERgb5wK
-	7PCnm2kUc26Elpmw95rSq5+ZARdNR7+qJmr9Ix7LLDcoxjbpDKb7VKMEgx/XNyqE0afyEyWGcil
-	xEMng/ImquXdT03aGk3kfdFmJpgCtXY0uu35dfoNez/iSO4C34R2U67UIi6Ym8qG/a5GTUJ+2HD
-	qJU+BEVkw+jmxnursyCTxPOT1YvMyJ+uhcWMGgaiWvaEID/9nJf2Gmgik8Y/Sk5rVDHY1tmRIbT
-	fZjPI1yOCilqexCG19tVkAZFC/yqrJqkuNi4aVbQ5zFkouXtfhyY+JlH9uTg/preJoQXK3ANdxq
-	hdg+zCOQd
-X-Google-Smtp-Source: AGHT+IGjxHPHG8T6fPu431Ka9rSzcuna7td6QNzojHq1qsMru8NT7pUxzrEnuuQd7KWe/4SL2weFmQ==
-X-Received: by 2002:a5d:64c8:0:b0:3ea:e0fd:28ea with SMTP id ffacd0b85a97d-3ecdfa0d2e6mr682457f8f.39.1758088595501;
-        Tue, 16 Sep 2025 22:56:35 -0700 (PDT)
+        bh=XlrrbpNOChtNjzl9J83pPts581jGsxoyMpwY2SqwJY4=;
+        b=FFzmvn2hjhVwhk9hJhDhrk2B1bFtpYmrOf1CE/5N4oDlKwKxNiOB0f2fSxl0vXzEw6
+         gaiSwsa+2uHw1Rr4SIF5Ch8cqwOpS586OUQJon9Bpd4Vx8mNU9i2EDq/JQDTgfP+FDOh
+         pyy/XjhAy8PXJMlwU2B0tUfnBOiyhO6PRCdANi3NdBEGqmcvzn3u3yHfCvRjpsGh+bcn
+         g3GEfhklv8XwOxjFcRWzIA8ow0OjX7XPqcN90kbVZyEzrdaTfiZHDzfp2X4B/+qIdhg8
+         RPz6PT7gGTLcciu2Fil2HQkxhaJXc+mOF9wfz7wmiJUEE3vx7NAO9lRRTUewXQK3hVon
+         X2Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCW2LWjgT8mV5zk1komPU8sdaeD1ExcfuOjle1TWFF/LlkmAxFzgAXcK0Mk4+XtIRPZWSsqygEaDN08yfkDQ3QE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBBWRqH3udz711zba0Zrk8itRm5I9mk0GTt1HX3r35ezrqEoB5
+	DHi7w2VzE9ekFN9Vnar/bjg5PnVXu/5VqoLTHEql6E5GvZUaX1LMQ3HM
+X-Gm-Gg: ASbGncvFixqpl+TCYqkBbUc5tauMvXEG3PnOkiajuxhJes4gRJcdYTe/0qout1jtRa7
+	k9tVNJmypHhx9kcIrYqrWORIaMiwufxDXuGEMSkKtRbAc6yMCII+OjjQ32iZeRKzqHTmJF6DlAq
+	jxOUnF4MePxzUVpatZkh+ADJllupW8HMraYx+NT3mTK00YR4L0kK/8TdzRVHogQBQvI4mAQ8lyg
+	odJMGgZOPIdhDneQj1jHkQjDowKLKJo/4tcfQbIMztGfKkuWI3RBATOVvYEbGE795kcY++GglqG
+	oU1S9sVfo/SG4Zj/WpE/U70QLleL6aQOaTSczw6Pp4Q+eP/6TPkEl+OmnzMPdNDPh1iYovy7ANM
+	dkXx1LicmNwEDpLA93gk=
+X-Google-Smtp-Source: AGHT+IH9W7esOzFT5IkroJVMwtaxdDK6d7E9R4NeEsWdBedzAfyvLtUnHVT1+OGn9VtvheonzXFrmg==
+X-Received: by 2002:a05:6000:1863:b0:3e7:6474:1b63 with SMTP id ffacd0b85a97d-3ecdfa3d20fmr589203f8f.63.1758088761975;
+        Tue, 16 Sep 2025 22:59:21 -0700 (PDT)
 Received: from EBJ9932692.tcent.cn ([2a09:0:1:2::3086])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ecdf0bbf24sm1433237f8f.63.2025.09.16.22.56.32
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7c778f764sm19485191f8f.57.2025.09.16.22.59.19
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 16 Sep 2025 22:56:34 -0700 (PDT)
+        Tue, 16 Sep 2025 22:59:21 -0700 (PDT)
 From: Lance Yang <lance.yang@linux.dev>
 To: akpm@linux-foundation.org,
 	david@redhat.com,
@@ -68,9 +68,9 @@ Cc: shuah@kernel.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	Lance Yang <lance.yang@linux.dev>
-Subject: [PATCH 1/1] selftests/mm: skip soft-dirty tests when CONFIG_MEM_SOFT_DIRTY is disabled
-Date: Wed, 17 Sep 2025 13:56:22 +0800
-Message-ID: <20250917055622.46564-1-lance.yang@linux.dev>
+Subject: [PATCH RESEND 1/1] selftests/mm: skip soft-dirty tests when CONFIG_MEM_SOFT_DIRTY is disabled
+Date: Wed, 17 Sep 2025 13:59:13 +0800
+Message-ID: <20250917055913.49759-1-lance.yang@linux.dev>
 X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -88,6 +88,7 @@ CONFIG_MEM_SOFT_DIRTY is disabled.
 Introduce a new helper softdirty_is_supported() into vm_util.c/h to ensure
 tests are properly skipped when the feature is not enabled.
 
+Suggested-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Lance Yang <lance.yang@linux.dev>
 ---
  tools/testing/selftests/mm/madv_populate.c | 21 ++--------------
