@@ -1,260 +1,283 @@
-Return-Path: <linux-kselftest+bounces-41786-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9B30B8207E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 23:52:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BF1DB821E0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 00:12:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A69F4A32E1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 21:52:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E17FB1C80135
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 22:13:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BB3430F95A;
-	Wed, 17 Sep 2025 21:51:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D118630DEC0;
+	Wed, 17 Sep 2025 22:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zf/F+8ac"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fq99C4CH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9511030F55B
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 21:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A28730CD81;
+	Wed, 17 Sep 2025 22:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758145878; cv=none; b=stZMjoayk6TXsVZeM9YS6ziVzVJ5Po3NrC8uXOo1U5JeT9H3h+2Ofi6139rLBoKVw8Ye1St2mxSyw8jfojas4UaBxa4z9uC6BkREWnSseqpLM2WlcAyAcLpNLOH4vORcQn8FWwQywSQ5YN5uTgPrLpJuLL54qEiAcA0uD6xpfAI=
+	t=1758147153; cv=none; b=HFaGHD6VfSp8TfjPh9PLZ7Hs554OX8DiOsztUCQ0I5puQZVsK+Zapwd5tOZ7i9xbZRbWo2xqrKDYYbk3Ezvb9V+CX8cK4MQoBjf4vefcexOWwXd2SQrhMMPCRJeaCUxBJElvFaRdum1mOyBIlyFQLMsCeSJG62LCPYikozxV0jE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758145878; c=relaxed/simple;
-	bh=ZHa0B2RyRZZWLlneOhPUdWjyzFgnqipxJK7LB4AWbX0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fuZrLuzvH27FbjpU0O3zkqg/ztB7DnFi0S9lbmqi8kgpLb4Uh83fCnkYaYQRKmIVW+ze9qim6xkFWxBDoO+N1m6MRpmwzdVRmVHhk2JgvZPLlsJj4pKXbjn5WTdjDo2L5le8uz2MZM6Kj21+Ena0R9cR/tliF0WKPw9uhGi6CZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zf/F+8ac; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-26985173d8eso2053165ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 14:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758145876; x=1758750676; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5LPrk/XrebsawKeQuGZAG8oqG4rtdkfDSdLwnedRBtY=;
-        b=zf/F+8acakUrGVvkPqJBm09jHumox5HWGxK10QenjcFR/HEOUrItbbDXG1FbHQF2LU
-         Yn42WGuivoJ8Es0aFhzM9LBGBXfEiSv8gs6D0/SwxsP9Ds9Q1wtpr5+r3eQ6BJkdHiLV
-         62ySUy9of21fXeKV1pM3tnbIM32f66Gs4D/kyek5iLdvvN4Y+M9Yzu+wfawFA/ly7Tei
-         MLcE/1AWMpNpCMUX51n+FN7afZln7UdVf5qDezlx91VPrq9VwQZ2ndPdhjWigze1wFVl
-         wp7N3gyZG44e5EKUer5rqcnpjNeySjSO0ZfpFslaLNvcq/6MqiYl1CZ9aBw/fFLpH550
-         ZGTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758145876; x=1758750676;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5LPrk/XrebsawKeQuGZAG8oqG4rtdkfDSdLwnedRBtY=;
-        b=knfDP2C1yWMxagwj0lkerlBrzx2brsSa6c6ybv9MEUU2CeICbIH7GveYKjQH50rjH7
-         z5SkLN5NsHCntxd9gC+NUhbRBDtSC6ByJiBZTCpD9wjKNHarOs1WNKkIHu8CfyCAx21D
-         I6YEW3sGbBAJ4BwJu/l/kbb143P/Xml1dW5CFaQNM3LMQ8v10QDyOVyzFzzriD83i6Uu
-         BeNQppfB22XLEClAT8YtCrgcQEVnz2bHggkmUtDRlvzYRQDyaztOXR/ueXM6ixPYIpqw
-         Wm/tZDTL26AlzETNEXNe4xKwu3bY+pmQyLoK58Z1q4LeGeiG7ozgLZvVUaUk/itPDzgn
-         Hkyg==
-X-Forwarded-Encrypted: i=1; AJvYcCUn/iDr3UVp+OB33e65NCyQ4nX1vSUGZ9ZcGeTMvtqmjmCKR5CHixGzOfIgguuFiJTBFkf+3qDUqtBwQJayIW0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVumrepmq+z4img/3peuvNtgveey+/DElOWTT3U/R9f4tROYrw
-	T+qjeX64rW+eUt+vP/BaT0egArYFDWSwd/cwN5pVcYL4f+jBsZEAOrTAs9FGOQIo+/7ibXqHHVL
-	+cPDiT0xDO23iAQ==
-X-Google-Smtp-Source: AGHT+IFoisWsHyss64Oz8zIvxNbXaBwzLk0hgbLNl+OnOjuMwsVc60SyjmWex22OLqE66ILVy9fzMQNhZRGkuA==
-X-Received: from pjwx7.prod.google.com ([2002:a17:90a:c2c7:b0:327:d54a:8c93])
- (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:38c7:b0:264:3519:80d0 with SMTP id d9443c01a7336-268137f8405mr45310735ad.33.1758145875970;
- Wed, 17 Sep 2025 14:51:15 -0700 (PDT)
-Date: Wed, 17 Sep 2025 14:48:40 -0700
-In-Reply-To: <20250917215031.2567566-1-jmattson@google.com>
+	s=arc-20240116; t=1758147153; c=relaxed/simple;
+	bh=jZp3N4yfbt6bvqKivm7Q5Md9rUK3bDVNKY5H7aGaV+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=en78npC+rAX9eF9WeSQJ8uMJPczV1k8T+y0kpTSF2PQuPE0WGa4HthOHpVEV5B5kDlnr5+ALTLvrV1YfRba3kUvMvE/cJFn9AhUxKuvGGwkEikhh5TdcJYgwn1IkXU+Ig1HZCoBDe6Nbt+DLRori/2sNTbHanQ3vV2vuGyR9TFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fq99C4CH; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758147152; x=1789683152;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jZp3N4yfbt6bvqKivm7Q5Md9rUK3bDVNKY5H7aGaV+M=;
+  b=Fq99C4CHFd3rYpR5hA6FXZdB7f+De5td5vjPEUw42OB5Ytob1DGDsPzh
+   EnIuyDAFeda5ktL8F0IIyUgDUCw/W93LyjludrwCXmyfBLXzKLK+p8H5F
+   G3JimJ7bMRNY4tV76p0vET/DvrS86IQD9CSN6vPgTuPbKNUf9oEV8145M
+   OU+YEc2hVNXFbxAQEGThv97GKVzKX/SeheQS1YS8hA5YBK+1Cew3LTIyX
+   GsRqRzFaReVxuxxnm+/VeMPPIzRNDtYNzALv+DBMsoAvKVt2Ljtwmue2T
+   3wvyO4J4ouyKanwJbwRyciHS/ObZeilz55OANGG563IWOGERr0w6iP6Bn
+   w==;
+X-CSE-ConnectionGUID: DTzcPlaaQFGqNGLJVx0eiQ==
+X-CSE-MsgGUID: 9mSHxz9cTdWa9ceZc7ok3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60417092"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="60417092"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 15:12:31 -0700
+X-CSE-ConnectionGUID: MqFrv36QTHKL0YfvttMEsg==
+X-CSE-MsgGUID: i6jXJOllTwSCTYOM/OP7zA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,273,1751266800"; 
+   d="scan'208";a="176142295"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 17 Sep 2025 15:12:25 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uz0Nz-0002Vv-1B;
+	Wed, 17 Sep 2025 22:12:23 +0000
+Date: Thu, 18 Sep 2025 06:12:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	Bobby Eshleman <bobbyeshleman@gmail.com>, berrange@redhat.com
+Subject: Re: [PATCH net-next v6 3/9] vsock: add netns to vsock core
+Message-ID: <202509180511.5pJaP7gr-lkp@intel.com>
+References: <20250916-vsock-vmtest-v6-3-064d2eb0c89d@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250917215031.2567566-1-jmattson@google.com>
-X-Mailer: git-send-email 2.51.0.470.ga7dc726c21-goog
-Message-ID: <20250917215031.2567566-5-jmattson@google.com>
-Subject: [PATCH 4/4] KVM: selftests: Add a VMX test for LA57 nested state
-From: Jim Mattson <jmattson@google.com>
-To: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Sean Christopherson <seanjc@google.com>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Andrew Jones <ajones@ventanamicro.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
-	Kai Huang <kai.huang@intel.com>, Eric Auger <eric.auger@redhat.com>, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Cc: Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250916-vsock-vmtest-v6-3-064d2eb0c89d@meta.com>
 
-Add a selftest that verifies KVM's ability to save and restore
-nested state when the L1 guest is using 5-level paging and the L2
-guest is using 4-level paging. Specifically, canonicality tests of
-the VMCS12 host-state fields should accept 57-bit virtual addresses.
+Hi Bobby,
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
----
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../kvm/x86/vmx_la57_nested_state_test.c      | 137 ++++++++++++++++++
- 2 files changed, 138 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/vmx_la57_nested_state_test.c
+kernel test robot noticed the following build errors:
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 41b40c676d7f..f1958b88ec59 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -116,6 +116,7 @@ TEST_GEN_PROGS_x86 += x86/vmx_exception_with_invalid_guest_state
- TEST_GEN_PROGS_x86 += x86/vmx_msrs_test
- TEST_GEN_PROGS_x86 += x86/vmx_invalid_nested_guest_state
- TEST_GEN_PROGS_x86 += x86/vmx_set_nested_state_test
-+TEST_GEN_PROGS_x86 += x86/vmx_la57_nested_state_test
- TEST_GEN_PROGS_x86 += x86/vmx_tsc_adjust_test
- TEST_GEN_PROGS_x86 += x86/vmx_nested_tsc_scaling_test
- TEST_GEN_PROGS_x86 += x86/apic_bus_clock_test
-diff --git a/tools/testing/selftests/kvm/x86/vmx_la57_nested_state_test.c b/tools/testing/selftests/kvm/x86/vmx_la57_nested_state_test.c
-new file mode 100644
-index 000000000000..7c3c4c1c17f6
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/vmx_la57_nested_state_test.c
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * vmx_la57_nested_state_test
-+ *
-+ * Copyright (C) 2025, Google LLC.
-+ *
-+ * Test KVM's ability to save and restore nested state when the L1 guest
-+ * is using 5-level paging and the L2 guest is using 4-level paging.
-+ *
-+ * This test would have failed prior to commit 9245fd6b8531 ("KVM: x86:
-+ * model canonical checks more precisely").
-+ */
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "vmx.h"
-+
-+#define LA57_GS_BASE 0xff2bc0311fb00000ull
-+
-+static void l2_guest_code(void)
-+{
-+	/*
-+	 * Sync with L0 to trigger save/restore.  After
-+	 * resuming, execute VMCALL to exit back to L1.
-+	 */
-+	GUEST_SYNC(1);
-+	vmcall();
-+}
-+
-+static void l1_guest_code(struct vmx_pages *vmx_pages)
-+{
-+#define L2_GUEST_STACK_SIZE 64
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	u64 guest_cr4;
-+	vm_paddr_t pml5_pa, pml4_pa;
-+	u64 *pml5;
-+	u64 exit_reason;
-+
-+	/* Set GS_BASE to a value that is only canonical with LA57. */
-+	wrmsr(MSR_GS_BASE, LA57_GS_BASE);
-+	GUEST_ASSERT(rdmsr(MSR_GS_BASE) == LA57_GS_BASE);
-+
-+	GUEST_ASSERT(vmx_pages->vmcs_gpa);
-+	GUEST_ASSERT(prepare_for_vmx_operation(vmx_pages));
-+	GUEST_ASSERT(load_vmcs(vmx_pages));
-+
-+	prepare_vmcs(vmx_pages, l2_guest_code,
-+		     &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	/*
-+	 * Set up L2 with a 4-level page table by pointing its CR3 to L1's
-+	 * PML4 table and clearing CR4.LA57. This creates the CR4.LA57
-+	 * mismatch that exercises the bug.
-+	 */
-+	pml5_pa = get_cr3() & PHYSICAL_PAGE_MASK;
-+	pml5 = (u64 *)pml5_pa;
-+	pml4_pa = pml5[0] & PHYSICAL_PAGE_MASK;
-+	vmwrite(GUEST_CR3, pml4_pa);
-+
-+	guest_cr4 = vmreadz(GUEST_CR4);
-+	guest_cr4 &= ~X86_CR4_LA57;
-+	vmwrite(GUEST_CR4, guest_cr4);
-+
-+	GUEST_ASSERT(!vmlaunch());
-+
-+	exit_reason = vmreadz(VM_EXIT_REASON);
-+	GUEST_ASSERT(exit_reason == EXIT_REASON_VMCALL);
-+}
-+
-+void guest_code(struct vmx_pages *vmx_pages)
-+{
-+	if (vmx_pages)
-+		l1_guest_code(vmx_pages);
-+
-+	GUEST_DONE();
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	vm_vaddr_t vmx_pages_gva = 0;
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_x86_state *state;
-+	struct ucall uc;
-+	int stage;
-+
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VMX));
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_LA57));
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_NESTED_STATE));
-+
-+	vm = vm_create_shape_with_one_vcpu(VM_SHAPE(VM_MODE_PXXV57_4K), &vcpu,
-+					   guest_code);
-+
-+	/*
-+	 * L1 needs to read its own PML5 table to set up L2. Identity map
-+	 * the PML5 table to facilitate this.
-+	 */
-+	virt_map(vm, vm->pgd, vm->pgd, 1);
-+
-+	vcpu_alloc_vmx(vm, &vmx_pages_gva);
-+	vcpu_args_set(vcpu, 1, vmx_pages_gva);
-+
-+	for (stage = 1;; stage++) {
-+		vcpu_run(vcpu);
-+		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_ABORT:
-+			REPORT_GUEST_ASSERT(uc);
-+			/* NOT REACHED */
-+		case UCALL_SYNC:
-+			break;
-+		case UCALL_DONE:
-+			goto done;
-+		default:
-+			TEST_FAIL("Unknown ucall %lu", uc.cmd);
-+		}
-+
-+		TEST_ASSERT(uc.args[1] == stage,
-+			    "Expected stage %d, got stage %lu", stage, (ulong)uc.args[1]);
-+		if (stage == 1) {
-+			pr_info("L2 is active; performing save/restore.\n");
-+			state = vcpu_save_state(vcpu);
-+
-+			kvm_vm_release(vm);
-+
-+			/* Restore state in a new VM. */
-+			vcpu = vm_recreate_with_one_vcpu(vm);
-+			vcpu_load_state(vcpu, state);
-+			kvm_x86_state_cleanup(state);
-+		}
-+	}
-+
-+done:
-+	kvm_vm_free(vm);
-+	return 0;
-+}
+[auto build test ERROR on 949ddfb774fe527cebfa3f769804344940f7ed2e]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/vsock-a-per-net-vsock-NS-mode-state/20250917-074823
+base:   949ddfb774fe527cebfa3f769804344940f7ed2e
+patch link:    https://lore.kernel.org/r/20250916-vsock-vmtest-v6-3-064d2eb0c89d%40meta.com
+patch subject: [PATCH net-next v6 3/9] vsock: add netns to vsock core
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20250918/202509180511.5pJaP7gr-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250918/202509180511.5pJaP7gr-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509180511.5pJaP7gr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   net/vmw_vsock/hyperv_transport.c: In function 'hvs_open_connection':
+>> net/vmw_vsock/hyperv_transport.c:316:14: error: too few arguments to function 'vsock_find_bound_socket'
+     316 |         sk = vsock_find_bound_socket(&addr, vsock_global_dummy_net());
+         |              ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/vmw_vsock/hyperv_transport.c:15:
+   include/net/af_vsock.h:218:14: note: declared here
+     218 | struct sock *vsock_find_bound_socket(struct sockaddr_vm *addr, struct net *net,
+         |              ^~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/vsock_find_bound_socket +316 net/vmw_vsock/hyperv_transport.c
+
+   294	
+   295	static void hvs_open_connection(struct vmbus_channel *chan)
+   296	{
+   297		guid_t *if_instance, *if_type;
+   298		unsigned char conn_from_host;
+   299	
+   300		struct sockaddr_vm addr;
+   301		struct sock *sk, *new = NULL;
+   302		struct vsock_sock *vnew = NULL;
+   303		struct hvsock *hvs = NULL;
+   304		struct hvsock *hvs_new = NULL;
+   305		int rcvbuf;
+   306		int ret;
+   307		int sndbuf;
+   308	
+   309		if_type = &chan->offermsg.offer.if_type;
+   310		if_instance = &chan->offermsg.offer.if_instance;
+   311		conn_from_host = chan->offermsg.offer.u.pipe.user_def[0];
+   312		if (!is_valid_srv_id(if_type))
+   313			return;
+   314	
+   315		hvs_addr_init(&addr, conn_from_host ? if_type : if_instance);
+ > 316		sk = vsock_find_bound_socket(&addr, vsock_global_dummy_net());
+   317		if (!sk)
+   318			return;
+   319	
+   320		lock_sock(sk);
+   321		if ((conn_from_host && sk->sk_state != TCP_LISTEN) ||
+   322		    (!conn_from_host && sk->sk_state != TCP_SYN_SENT))
+   323			goto out;
+   324	
+   325		if (conn_from_host) {
+   326			if (sk->sk_ack_backlog >= sk->sk_max_ack_backlog)
+   327				goto out;
+   328	
+   329			new = vsock_create_connected(sk);
+   330			if (!new)
+   331				goto out;
+   332	
+   333			new->sk_state = TCP_SYN_SENT;
+   334			vnew = vsock_sk(new);
+   335	
+   336			hvs_addr_init(&vnew->local_addr, if_type);
+   337	
+   338			/* Remote peer is always the host */
+   339			vsock_addr_init(&vnew->remote_addr,
+   340					VMADDR_CID_HOST, VMADDR_PORT_ANY);
+   341			vnew->remote_addr.svm_port = get_port_by_srv_id(if_instance);
+   342			ret = vsock_assign_transport(vnew, vsock_sk(sk));
+   343			/* Transport assigned (looking at remote_addr) must be the
+   344			 * same where we received the request.
+   345			 */
+   346			if (ret || !hvs_check_transport(vnew)) {
+   347				sock_put(new);
+   348				goto out;
+   349			}
+   350			hvs_new = vnew->trans;
+   351			hvs_new->chan = chan;
+   352		} else {
+   353			hvs = vsock_sk(sk)->trans;
+   354			hvs->chan = chan;
+   355		}
+   356	
+   357		set_channel_read_mode(chan, HV_CALL_DIRECT);
+   358	
+   359		/* Use the socket buffer sizes as hints for the VMBUS ring size. For
+   360		 * server side sockets, 'sk' is the parent socket and thus, this will
+   361		 * allow the child sockets to inherit the size from the parent. Keep
+   362		 * the mins to the default value and align to page size as per VMBUS
+   363		 * requirements.
+   364		 * For the max, the socket core library will limit the socket buffer
+   365		 * size that can be set by the user, but, since currently, the hv_sock
+   366		 * VMBUS ring buffer is physically contiguous allocation, restrict it
+   367		 * further.
+   368		 * Older versions of hv_sock host side code cannot handle bigger VMBUS
+   369		 * ring buffer size. Use the version number to limit the change to newer
+   370		 * versions.
+   371		 */
+   372		if (vmbus_proto_version < VERSION_WIN10_V5) {
+   373			sndbuf = RINGBUFFER_HVS_SND_SIZE;
+   374			rcvbuf = RINGBUFFER_HVS_RCV_SIZE;
+   375		} else {
+   376			sndbuf = max_t(int, sk->sk_sndbuf, RINGBUFFER_HVS_SND_SIZE);
+   377			sndbuf = min_t(int, sndbuf, RINGBUFFER_HVS_MAX_SIZE);
+   378			sndbuf = ALIGN(sndbuf, HV_HYP_PAGE_SIZE);
+   379			rcvbuf = max_t(int, sk->sk_rcvbuf, RINGBUFFER_HVS_RCV_SIZE);
+   380			rcvbuf = min_t(int, rcvbuf, RINGBUFFER_HVS_MAX_SIZE);
+   381			rcvbuf = ALIGN(rcvbuf, HV_HYP_PAGE_SIZE);
+   382		}
+   383	
+   384		chan->max_pkt_size = HVS_MAX_PKT_SIZE;
+   385	
+   386		ret = vmbus_open(chan, sndbuf, rcvbuf, NULL, 0, hvs_channel_cb,
+   387				 conn_from_host ? new : sk);
+   388		if (ret != 0) {
+   389			if (conn_from_host) {
+   390				hvs_new->chan = NULL;
+   391				sock_put(new);
+   392			} else {
+   393				hvs->chan = NULL;
+   394			}
+   395			goto out;
+   396		}
+   397	
+   398		set_per_channel_state(chan, conn_from_host ? new : sk);
+   399	
+   400		/* This reference will be dropped by hvs_close_connection(). */
+   401		sock_hold(conn_from_host ? new : sk);
+   402		vmbus_set_chn_rescind_callback(chan, hvs_close_connection);
+   403	
+   404		/* Set the pending send size to max packet size to always get
+   405		 * notifications from the host when there is enough writable space.
+   406		 * The host is optimized to send notifications only when the pending
+   407		 * size boundary is crossed, and not always.
+   408		 */
+   409		hvs_set_channel_pending_send_size(chan);
+   410	
+   411		if (conn_from_host) {
+   412			new->sk_state = TCP_ESTABLISHED;
+   413			sk_acceptq_added(sk);
+   414	
+   415			hvs_new->vm_srv_id = *if_type;
+   416			hvs_new->host_srv_id = *if_instance;
+   417	
+   418			vsock_insert_connected(vnew);
+   419	
+   420			vsock_enqueue_accept(sk, new);
+   421		} else {
+   422			sk->sk_state = TCP_ESTABLISHED;
+   423			sk->sk_socket->state = SS_CONNECTED;
+   424	
+   425			vsock_insert_connected(vsock_sk(sk));
+   426		}
+   427	
+   428		sk->sk_state_change(sk);
+   429	
+   430	out:
+   431		/* Release refcnt obtained when we called vsock_find_bound_socket() */
+   432		sock_put(sk);
+   433	
+   434		release_sock(sk);
+   435	}
+   436	
+
 -- 
-2.51.0.470.ga7dc726c21-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
