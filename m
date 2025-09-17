@@ -1,200 +1,239 @@
-Return-Path: <linux-kselftest+bounces-41670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93D42B7CFD0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 14:15:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B23B6B7DA1E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 14:32:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 866715813A2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 10:58:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 375761C04007
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 11:06:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 943B32D7D3A;
-	Wed, 17 Sep 2025 10:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D8562E611B;
+	Wed, 17 Sep 2025 11:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gohQAgu+"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lvRnFj3K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD00275B1F
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 10:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C20F2BEFEE
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 11:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758106723; cv=none; b=bi1DPCPYX4oiUXFlfSzZoC1uk8eb3es/Ikcb32sq3KaKjKiXeoOHf+pcKiZ5j6qxVNayHOsSIPJc22if6PCMeMJyOn/PAgzbi4ZmxdTjAMiN19cOllr1MYHV9X6jiBAEWf70lI/dy7YQ1e1Ujfir+cpexdvApVN2jP4K3Ddedt0=
+	t=1758107170; cv=none; b=gyELUjaHO72lT0fBmWZhJAoaKYNXcUZhvH6029OSgBqYjpgWd7iZVGsjgzTbS/irDnGh4ElfWE8lpe/lc0g0ByTjNuOacHHfON38JAVTlCoJFZ4cFaWZ4U0DZUrSEAKCW8Zu/ptjx52mfXl86VwXnmmj+T2i+0drJOuXPsP+PCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758106723; c=relaxed/simple;
-	bh=Izdcts6h65LPN1G5a3zTjxcIrlr+ukYYyT16tAVPvkQ=;
+	s=arc-20240116; t=1758107170; c=relaxed/simple;
+	bh=8FUotb9Lid3Lmal2qWsTDiT/27OCnrqeixu8Tv+59WI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N9Sp8tmmpTtqS6pNpOQmtiMwcedRa1VLbrmf1jcHKz/AwGnqGziKVT5rWmy1JJ+E0+Qa9NDjPuYdCg/HAvdIQTU5atxfQeyBvUrmVI9G+EGdYQ+pu9eJK50H1sBI/vDvNIztPJWu+TQvYSblKQb9RIWXO85M4B8p6Vc6k9Qve24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gohQAgu+; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758106721;
+	 In-Reply-To:Content-Type; b=jwjIS1Yjq1x2ta7okbKBlL/wZsSAC444hyQt6hRaykIreD7hojq6fj8757uR8PoPKWLalMkrtDS19Gbfxc0irR1l9k7gA9pZhRSxthvTz7aMW459bhERhl/AfZCFoIN1f8qwCv48bIttA7gr2uiBqREZI5gY3hSwCjKd7dk+cWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lvRnFj3K; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <1e75f092-b3ac-48d9-a304-c980e1d61472@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1758107154;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=7JkjtbRP7dMtBFUCBqCV1SQcXuhyJiXUoZv2gn/Tp1M=;
-	b=gohQAgu+Xl71BuVyh7mtMqDaDLwB4NwEMQsHmXViV+HWZwDsK8DaFm5DvRkcqo0Q++r0Sa
-	mEuT4vA7Z1yzKCEOAdyljutkCaNOpRJs2N0iHDl+aKkq3a9wv/P0y1TOoCS+VLMirLG7rv
-	Krc6SSQQD4fztR8QgdDWuierUkuut2I=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-665-ucta3AyzNM23T5x3SS8yDw-1; Wed, 17 Sep 2025 06:58:39 -0400
-X-MC-Unique: ucta3AyzNM23T5x3SS8yDw-1
-X-Mimecast-MFC-AGG-ID: ucta3AyzNM23T5x3SS8yDw_1758106719
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-45deddf34b9so4484605e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 03:58:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758106719; x=1758711519;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7JkjtbRP7dMtBFUCBqCV1SQcXuhyJiXUoZv2gn/Tp1M=;
-        b=YQQBAPfARyfMdcqx0i0/pn2T9fWtUN4Emm/k6W1GO953fadrS79sVWaWa91VBag767
-         HWcSMXyuc6H/LntLnD/NK74UcUdHxN/7FnS13ZZsv/WKfoMJIHeT8SAeO9JoIehD70Nm
-         YAJgPBP3No8J68fVfDGcOqlb93S6/TAmEgnY5KZtNoEd9DVD0rDysDIIf5saM4vVp2yy
-         6vjZ8bzZmdPS4UqS5Ygldfq+TKEGJIzBG/tSaQolhkQfFZRlyZp4nq+VUQUjDYcJbUV4
-         r1Dbp40gaQWHCFGZScJcIkeD/gnwItbSgKN4XgjjtAdN2Bh3oM+9+U0S6vmOf8RiIYVr
-         kPCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUuvGLnOPzCgOiAbF3eDMHA6Rc+Ja+yz104ArevOH+NmKMj7x1xl2+hwOlirjusQQqL8V4I0J/QRuZ3kRIG3hc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyI6XDNP8HsTkH9LB14r8GmBpC2w/tgB8maniO86947HYr/FDhm
-	eeUwO9ITJaBPHL82WyUlVw4uEVR10oTosh+Md1oPWiWWQzmW1+Di5LJQrGCAoIs+jtbh65xjMY4
-	wm8PYpgRMglcr70Qd+hROTCNhrAmkCi111NYd+ueeSrV0S0N1eYrtyOC5tm3keqEdzy08JQ==
-X-Gm-Gg: ASbGncv/0b1dHqyzYCtp0MVY4dt/g5JahyJNIUMItprXgpkbSNjKEdmYwbeZe0vfPtG
-	3MCh/Ar3UF9yTS46Azs3UGgz2Y86E4jPu8+MyRCr0pqySYMVVb7NlghEdXWJ8THR+ttcDttyyxn
-	3KkeYoUywynGLdVbb2SWKWDJ5SopUJVWVNqSpR9Iy1yeON507Qox/AQdV8UvTOVDapGAtxZ0J7d
-	vEcdK8kCaklN9CQIkz5YKokSeiPKAeTsZzu8XCKc8Y8qRuhI03MTv6M6VH7yeUVyWu/Jkc6GHE1
-	Fp1NuHPkpIOsQRxO1w2Qv/XaUShX2ffT0SVKDScTs1J4jXoWpJUl7Djsg0hwecPmbbzrUsoyjJH
-	B+XhPrn6y5sZKzAaSN+OPimDwNInqqVtHJQfZ0SfeELoC3kjmfDEylal2nQ2vMZBZ
-X-Received: by 2002:a05:600c:608b:b0:45d:e775:d8b8 with SMTP id 5b1f17b1804b1-45f32d002bamr64516825e9.1.1758106718680;
-        Wed, 17 Sep 2025 03:58:38 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGYHfjJCnarL426rUzCpUmPlFf0QrjHqktYk5gtQG/LD4ICoTbUxGn3yS+4cVVuXKN0QVM+1w==
-X-Received: by 2002:a05:600c:608b:b0:45d:e775:d8b8 with SMTP id 5b1f17b1804b1-45f32d002bamr64516205e9.1.1758106718247;
-        Wed, 17 Sep 2025 03:58:38 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f27:6d00:7b96:afc9:83d0:5bd? (p200300d82f276d007b96afc983d005bd.dip0.t-ipconnect.de. [2003:d8:2f27:6d00:7b96:afc9:83d0:5bd])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ece199ad24sm745170f8f.50.2025.09.17.03.58.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Sep 2025 03:58:37 -0700 (PDT)
-Message-ID: <1308de0e-bb5a-481f-a447-ee4440ffb419@redhat.com>
-Date: Wed, 17 Sep 2025 12:58:35 +0200
+	 in-reply-to:in-reply-to:references:references;
+	bh=TuuVoVWXNYbl+ds4b8F2xNM0nTUIAdxFSHG+zKy+0Ho=;
+	b=lvRnFj3KdzdsDt8rnP8I8JemxUlfemkDZK1FMj4IeOLHK++G2cTWs6v75mkO745sIBJf6g
+	diqCfbSHzhn9dc/JmzXuR5/6qcNySJy+behVS5O9VkOh150PtAMA/kfzNDSpYRHqY+P0d9
+	JsKzG0wdMdDmkN5Hxfa/vhBZ6p8QcPs=
+Date: Wed, 17 Sep 2025 19:05:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/7] mm/selftests: add max_vma_count tests
-To: Kalesh Singh <kaleshsingh@google.com>, akpm@linux-foundation.org,
- minchan@kernel.org, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
- rppt@kernel.org, pfalcato@suse.de
-Cc: kernel-team@android.com, android-mm@google.com,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
- <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
- Valentin Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250915163838.631445-1-kaleshsingh@google.com>
- <20250915163838.631445-3-kaleshsingh@google.com>
-From: David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH RESEND 1/1] selftests/mm: skip soft-dirty tests when
+ CONFIG_MEM_SOFT_DIRTY is disabled
 Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20250915163838.631445-3-kaleshsingh@google.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: shuah@kernel.org, ioworker0@gmail.com, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ akpm@linux-foundation.org, lorenzo.stoakes@oracle.com
+References: <20250917055913.49759-1-lance.yang@linux.dev>
+ <353bf8f0-d9ad-4800-80d7-4177ae64eb95@redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Lance Yang <lance.yang@linux.dev>
+In-Reply-To: <353bf8f0-d9ad-4800-80d7-4177ae64eb95@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-> + * test_suite_setup - Set up the VMA layout for VMA count testing.
-> + *
-> + * Sets up the following VMA layout:
-> + *
-> + * +----- base_addr
-> + * |
-> + * V
-> + * +--------------+----------------------+--------------+----------------+--------------+----------------+--------------+-----+----------------+--------------+
-> + * |  Guard Page  |                      |  Guard Page  |  Extra Map 1   | Unmapped Gap |  Extra Map 2   | Unmapped Gap | ... |  Extra Map N   | Unmapped Gap |
-> + * |  (unmapped)  |      TEST_AREA       |  (unmapped)  | (mapped page)  |  (1 page)    | (mapped page)  |  (1 page)    | ... | (mapped page)  |  (1 page)    |
-> + * |   (1 page)   | (unmapped, 3 pages)  |   (1 page)   |    (1 page)    |              |    (1 page)    |              |     |    (1 page)    |              |
-> + * +--------------+----------------------+--------------+----------------+--------------+----------------+--------------+-----+----------------+--------------+
-> + * ^              ^                      ^              ^                                                                  ^
-> + * |              |                      |              |                                                                  |
-> + * +--GUARD_SIZE--+                      |              +-- EXTRA_MAPS points here             Sufficient EXTRA_MAPS to ---+
-> + *    (PAGE_SIZE) |                      |                                                         reach MAX_VMA_COUNT
-> + *                |                      |
-> + *                +--- TEST_AREA_SIZE ---+
-> + *                |   (3 * PAGE_SIZE)    |
-> + *                ^
-> + *                |
-> + *                +-- TEST_AREA starts here
-> + *
->
 
-Just wondering if we could find a different name than "guard page" here, 
-to not confuse stuff with guard ptes
 
-Will the current "guard page" we a valid vma or just a hole?
+On 2025/9/17 18:51, David Hildenbrand wrote:
+> On 17.09.25 07:59, Lance Yang wrote:
+>> From: Lance Yang <lance.yang@linux.dev>
+>>
+>> The madv_populate and soft-dirty kselftests currently fail on systems 
+>> where
+>> CONFIG_MEM_SOFT_DIRTY is disabled.
+>>
+>> Introduce a new helper softdirty_is_supported() into vm_util.c/h to 
+>> ensure
+>> tests are properly skipped when the feature is not enabled.
+> 
+> I'll note that tools/testing/selftests/mm/config contains
+> 
+>      CONFIG_MEM_SOFT_DIRTY=y
+> 
+> But yes, the current arm64 handling is nasty, because some other archs 
+> (e.g., riscv) also don't support it yet.
 
--- 
-Cheers
+Yep.
 
-David / dhildenb
+> 
+> LGTM, some nits below:
+
+Thanks for taking time to review!
+
+> 
+>>
+>> Suggested-by: David Hildenbrand <david@redhat.com>
+>> Signed-off-by: Lance Yang <lance.yang@linux.dev>
+>> ---
+>>   tools/testing/selftests/mm/madv_populate.c | 21 ++--------------
+>>   tools/testing/selftests/mm/soft-dirty.c    |  5 +++-
+>>   tools/testing/selftests/mm/vm_util.c       | 28 ++++++++++++++++++++++
+>>   tools/testing/selftests/mm/vm_util.h       |  1 +
+>>   4 files changed, 35 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/ 
+>> testing/selftests/mm/madv_populate.c
+>> index b6fabd5c27ed..43dac7783004 100644
+>> --- a/tools/testing/selftests/mm/madv_populate.c
+>> +++ b/tools/testing/selftests/mm/madv_populate.c
+>> @@ -264,23 +264,6 @@ static void test_softdirty(void)
+>>       munmap(addr, SIZE);
+>>   }
+>> -static int system_has_softdirty(void)
+>> -{
+>> -    /*
+>> -     * There is no way to check if the kernel supports soft-dirty, other
+>> -     * than by writing to a page and seeing if the bit was set. But the
+>> -     * tests are intended to check that the bit gets set when it 
+>> should, so
+>> -     * doing that check would turn a potentially legitimate fail into a
+>> -     * skip. Fortunately, we know for sure that arm64 does not support
+>> -     * soft-dirty. So for now, let's just use the arch as a corse guide.
+>> -     */
+>> -#if defined(__aarch64__)
+>> -    return 0;
+>> -#else
+>> -    return 1;
+>> -#endif
+>> -}
+>> -
+>>   int main(int argc, char **argv)
+>>   {
+>>       int nr_tests = 16;
+>> @@ -288,7 +271,7 @@ int main(int argc, char **argv)
+>>       pagesize = getpagesize();
+>> -    if (system_has_softdirty())
+>> +    if (softdirty_is_supported())
+>>           nr_tests += 5;
+>>       ksft_print_header();
+>> @@ -300,7 +283,7 @@ int main(int argc, char **argv)
+>>       test_holes();
+>>       test_populate_read();
+>>       test_populate_write();
+>> -    if (system_has_softdirty())
+>> +    if (softdirty_is_supported())
+>>           test_softdirty();
+>>       err = ksft_get_fail_cnt();
+>> diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/ 
+>> selftests/mm/soft-dirty.c
+>> index 8a3f2b4b2186..98e42d2ac32a 100644
+>> --- a/tools/testing/selftests/mm/soft-dirty.c
+>> +++ b/tools/testing/selftests/mm/soft-dirty.c
+>> @@ -200,8 +200,11 @@ int main(int argc, char **argv)
+>>       int pagesize;
+>>       ksft_print_header();
+>> -    ksft_set_plan(15);
+>> +    if (!softdirty_is_supported())
+>> +        ksft_exit_skip("soft-dirty is not support\n");
+>> +
+>> +    ksft_set_plan(15);
+>>       pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
+>>       if (pagemap_fd < 0)
+>>           ksft_exit_fail_msg("Failed to open %s\n", PAGEMAP_FILE_PATH);
+>> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/ 
+>> selftests/mm/vm_util.c
+>> index 56e9bd541edd..3173335df775 100644
+>> --- a/tools/testing/selftests/mm/vm_util.c
+>> +++ b/tools/testing/selftests/mm/vm_util.c
+>> @@ -449,6 +449,34 @@ bool check_vmflag_pfnmap(void *addr)
+>>       return check_vmflag(addr, "pf");
+>>   }
+>> +bool softdirty_is_supported(void)
+> 
+> I'd just call it "softdirty_supported" similar to 
+> "pagemap_scan_supported()".
+
+Got it.
+
+> 
+>> +{
+>> +    char *addr;
+>> +    int ret = 0;
+> 
+> bool supported = false;
+> 
+>> +    size_t pagesize;
+>> +
+>> +    /* We know for sure that arm64 does not support soft-dirty. */
+>> +#if defined(__aarch64__)
+>> +    return ret;
+>> +#endif
+> 
+> Just drop this arm special case now.
+
+OK
+
+> 
+>> +    pagesize = getpagesize();
+> 
+> const size_t pagesize = getpagesize();
+> 
+>> +    /*
+>> +     * __mmap_complete() always sets VM_SOFTDIRTY for new VMAs, so we
+>> +     * just mmap a small region and check its VmFlags in /proc/self/ 
+>> smaps
+>> +     * for the "sd" flag.
+>> +     */
+> 
+> /* New mappings are expected to be marked with VM_SOFTDIRTY (sd). */
+
+Cool. Much better!
+
+> 
+>> +    addr = mmap(0, pagesize, PROT_READ | PROT_WRITE,
+>> +            MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
+>> +    if (!addr)
+>> +        ksft_exit_fail_msg("mmap failed\n");
+>> +
+>> +    if (check_vmflag(addr, "sd"))
+>> +        ret = 1;
+> 
+> supported = true;
+
+I'll adjust as you suggested ;)
+
+> 
+>> +
+>> +    munmap(addr, pagesize);
+>> +    return ret;
+>> +}
+>> +
+> 
+
+Cheers,
+Lance
 
 
