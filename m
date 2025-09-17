@@ -1,184 +1,172 @@
-Return-Path: <linux-kselftest+bounces-41751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41752-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD7A0B81619
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 20:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 87851B81644
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 20:52:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E967468539
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 18:44:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A23717EF33
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 18:52:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10023009E9;
-	Wed, 17 Sep 2025 18:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75ECA3002B6;
+	Wed, 17 Sep 2025 18:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f8PqONEN"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="jWFOpMYJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDA127C178;
-	Wed, 17 Sep 2025 18:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AF61E1C22;
+	Wed, 17 Sep 2025 18:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.147.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758134669; cv=none; b=DG7O2IIvUMw2zhWA3N8enBBRWS7mtd2nOhoV3XfLBIZoRa7krVYHnO4GP5Jd6i7WtsmN5gBvCau/6LuEPA1FrXrm5Ha+uPdwwytLRbePhXWtzHZRsmYgGGELa+WwwLQEfBmNu1+9Hdlp9HWTglVu356nJ5unnvfdMYVAZwf1DR0=
+	t=1758135174; cv=none; b=X6FsjheJbwrZIrkS6PMdCG0maP6ZqgVRbj0x/MMwmibzSNFX57mjkp3lfUsw/t3wJsace99RJFQmqBOE0oyV1oawV3bN3U/F9MuFK8Gk7tYk3yQgsTldR6YaXgLCSiRueeq5PqigIkCuONdsNM/vIMEpX3n7Exa9Ua5QN1N/U+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758134669; c=relaxed/simple;
-	bh=OLoxa48QuwEBcofnDByK3uh1SCi2Z/yYPHdY5JEg1PI=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mse3c3iHbPPRDQ6dWpZDLr42c9ZT1alileM1bTUxshysMdhAEWRs74ZVW57+Sjro4DQ0t5DyWOFNQ7Hf4VqMyos0mBY9sjBOGbi+aS1JtPgAx17B0Z4MBOY4PwP5KohntzW0z69g7nSQ7A4/3rUnfV/SE6YCbT3GVUGR4YiccM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f8PqONEN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33005C4CEE7;
-	Wed, 17 Sep 2025 18:44:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758134668;
-	bh=OLoxa48QuwEBcofnDByK3uh1SCi2Z/yYPHdY5JEg1PI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=f8PqONENfOsX3iVnNu8gzDMdRStH7GoSN2gCmJumNxzU3dDXCWnKNl4/l6kfWb4LF
-	 tMPEko7Uxgu1oKN9QLzKTPw3vzijJvwTniwwi1XZdP9ocASlZFr6Xv5fP2btY8LA1m
-	 08UDfu7ijq2Vcndt64HGPL6kxN573aML1YCymlHCdtJmkqdb16Kvz1DoDVXDJv0f0n
-	 xqqKHWVaim5WsMbsY/6tS6/0VpPFmbkMNYj8aYyZAqvlUooCSpwv6gyUzjsjlLHXSp
-	 1W8KCDyXYPB33CHdXqrE9EgkeAw6/Dkh2S3gpiOdgXY8Q/Un712FbTj7PGc7comhQi
-	 kqT+zU22sKBBg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1uyx8j-00000007Bv9-3g4d;
-	Wed, 17 Sep 2025 18:44:25 +0000
-Date: Wed, 17 Sep 2025 19:44:25 +0100
-Message-ID: <86ms6s2a2e.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Itaru Kitayama <itaru.kitayama@linux.dev>
-Cc: Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	K Poulose Suzuki <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Subject: Re: [PATCH] PMCR_EL0.N is RAZ/WI. At least a build failes in Ubuntu 22.04 LTS. Remove the set function.
-In-Reply-To: <0524084A-9E82-408A-9F22-369ED25E42E9@linux.dev>
-References: <867by4c4v1.wl-maz@kernel.org>
-	<3FEB4D87-EEAF-4A21-BCBC-291A4A7C2230@gmail.com>
-	<86348rdg5o.wl-maz@kernel.org>
-	<0524084A-9E82-408A-9F22-369ED25E42E9@linux.dev>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1758135174; c=relaxed/simple;
+	bh=DXr83c8H68AmyRHJYwElnxjbw+hVHN4OMw8EgrecAh8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LM3zl2eDeCkNFJ/sF2RbqalvlTGa8QsdaJwgZC1BFPGQBiwGFtMkGxxSO9zAGVNgRwvaObJSsyIUZPmpp84gn6iY35aQEIaYGqFI6mUI52QqncaiDXhlyzTFOQpG0xTpEqDYaZYUf2VSVxp06llpe9h+0r2EXoX3OqBj0sE2qEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=jWFOpMYJ; arc=none smtp.client-ip=148.163.147.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58HEqJIo000856;
+	Wed, 17 Sep 2025 18:51:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps0720; bh=7LK4ZWeL13dQx21QB7xV/bkzeQ
+	Zco1h+3vZiyoJhjtY=; b=jWFOpMYJRJhXejKedoiFYdR2KftHonRBNBFdijPrKN
+	Fm6jZCWSlpA0hrAKcIwQmZnEJQzA8SyrO8nzcsWr/W3MtBBR9XFjohkWD37IFii3
+	JOBP27v4iTL3ylCoEl6DMsY8SGw18ikcfEEUjJaZ49Z3Po/5VtlstD0H81GgOkUH
+	Mc8ozVMyq51PmpKxinbS145Q9c/ynFbkBSK56swemZER5/2ROeg7+uYO8syOIJbk
+	+gHkNTK6mJMj8o6MLk8WZ/fmXoAFzq2cgp6P/vlRspwK/KuenQd5UKFhbvTMxmOA
+	KxlwQbdFAEqnQTFtZkkOcXrNdJIwNv7DgI85CSuqZBWA==
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 497y4fstv4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Sep 2025 18:51:41 +0000 (GMT)
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 800CA805E3B;
+	Wed, 17 Sep 2025 18:51:28 +0000 (UTC)
+Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id D65EB801FF9;
+	Wed, 17 Sep 2025 18:51:24 +0000 (UTC)
+Date: Wed, 17 Sep 2025 13:51:19 -0500
+From: Kyle Meyer <kyle.meyer@hpe.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Anshuman Khandual <anshuman.khandual@arm.com>, akpm@linux-foundation.org,
+        corbet@lwn.net, linmiaohe@huawei.com, shuah@kernel.org,
+        tony.luck@intel.com, jane.chu@oracle.com, jiaqiyan@google.com,
+        Liam.Howlett@oracle.com, bp@alien8.de, hannes@cmpxchg.org,
+        jack@suse.cz, joel.granados@kernel.org, laoar.shao@gmail.com,
+        lorenzo.stoakes@oracle.com, mclapinski@google.com, mhocko@suse.com,
+        nao.horiguchi@gmail.com, osalvador@suse.de, rafael.j.wysocki@intel.com,
+        rppt@kernel.org, russ.anderson@hpe.com, shawn.fan@intel.com,
+        surenb@google.com, vbabka@suse.cz, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2] mm/memory-failure: Support disabling soft offline for
+ HugeTLB pages
+Message-ID: <aMsDJ3EU1zVJ00cX@hpe.com>
+References: <aMiu_Uku6Y5ZbuhM@hpe.com>
+ <a99eb11f-a7ac-48a3-a671-c5f0f6b5b491@arm.com>
+ <8c3188da-7078-4099-973a-1d0d74db2720@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: itaru.kitayama@linux.dev, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, itaru.kitayama@fujitsu.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c3188da-7078-4099-973a-1d0d74db2720@redhat.com>
+X-Authority-Analysis: v=2.4 cv=I8JlRMgg c=1 sm=1 tr=0 ts=68cb033d cx=c_pps
+ a=FAnPgvRYq/vnBSvlTDCQOQ==:117 a=FAnPgvRYq/vnBSvlTDCQOQ==:17
+ a=kj9zAlcOel0A:10 a=yJojWOMRYYMA:10 a=43ExOtPKq08pkoLMMGwA:9
+ a=CjuIK1q_8ugA:10
+X-Proofpoint-GUID: gURhVSCbrA3Jh1Kv2mx01oxTFQRbHNwi
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE3MDE0NCBTYWx0ZWRfXxREiFP4uvNdQ
+ luYfTSm6FT7NARVcxFXF5eDPm6eWrw/vSSRhnFbUJTExtryAN8OyHivFKXVp2DXjrrEYU81oEkk
+ 5q7sNERRo1G3rslZr4Hvu4wDXgMksi6DVcUcVEn1Jm9XGgnxUFqk4p3CoD+bPhwsqZxS1xcAYQ4
+ Dp/MxMo4WwcXxCillnvMoPyyXCZGxG2pYV2uLdQA80IN1g6J0xJv+4+vtUBA7j1ETAufUhRib/2
+ 8R96kyTjXUhkY4eVynbRMr6M6ioQUcTk6f1tu73K5enqoM9wo/kkJYCNXloyiZa6gVd09xfpiQj
+ uw8dvRGHNHlVTTSTUbjgc81C5t05O2spqBZr0hBznEYUw99l5wMGpVhU7QIqJqSMM3aXF7Mq7U8
+ dd9rufKu
+X-Proofpoint-ORIG-GUID: gURhVSCbrA3Jh1Kv2mx01oxTFQRbHNwi
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-17_01,2025-09-17_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 phishscore=0 spamscore=0 bulkscore=0 clxscore=1011
+ impostorscore=0 malwarescore=0 adultscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509170144
 
-On Mon, 15 Sep 2025 22:31:31 +0100,
-Itaru Kitayama <itaru.kitayama@linux.dev> wrote:
->=20
->=20
->=20
-> > On Sep 12, 2025, at 21:11, Marc Zyngier <maz@kernel.org> wrote:
-> >=20
-> > On Fri, 12 Sep 2025 12:33:39 +0100,
-> > Itaru Kitayama <itaru.kitayama@gmail.com> wrote:
-> >>=20
-> >>=20
-> >>=20
-> >>> On Sep 12, 2025, at 20:01, Marc Zyngier <maz@kernel.org> wrote:
-> >>>=20
-> >>> =EF=BB=BFOn Fri, 12 Sep 2025 09:27:40 +0100,
-> >>> Itaru Kitayama <itaru.kitayama@linux.dev> wrote:
-> >>>>=20
-> >>>> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-> >>>=20
-> >>> This isn't an acceptable commit message.
-> >>>=20
-> >>>> ---
-> >>>> Seen a build failure with old Ubuntu 22.04 LTS, while the latest rel=
-ease
-> >>>> has no build issue, a write to the bit fields is RAZ/WI, remove the
-> >>>> function.
-> >>>> ---
-> >>>> tools/testing/selftests/kvm/arm64/vpmu_counter_access.c | 6 ------
-> >>>> 1 file changed, 6 deletions(-)
-> >>>>=20
-> >>>> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c=
- b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> >>>> index f16b3b27e32ed7ca57481f27d689d47783aa0345..56214a4430be90b3e1d8=
-40f2719b22dd44f0b49b 100644
-> >>>> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> >>>> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> >>>> @@ -45,11 +45,6 @@ static uint64_t get_pmcr_n(uint64_t pmcr)
-> >>>>   return FIELD_GET(ARMV8_PMU_PMCR_N, pmcr);
-> >>>> }
-> >>>>=20
-> >>>> -static void set_pmcr_n(uint64_t *pmcr, uint64_t pmcr_n)
-> >>>> -{
-> >>>> -    u64p_replace_bits((__u64 *) pmcr, pmcr_n, ARMV8_PMU_PMCR_N);
-> >>>> -}
-> >>>> -
-> >>>> static uint64_t get_counters_mask(uint64_t n)
-> >>>> {
-> >>>>   uint64_t mask =3D BIT(ARMV8_PMU_CYCLE_IDX);
-> >>>> @@ -490,7 +485,6 @@ static void test_create_vpmu_vm_with_pmcr_n(uint=
-64_t pmcr_n, bool expect_fail)
-> >>>>    * Setting a larger value of PMCR.N should not modify the field, a=
-nd
-> >>>>    * return a success.
-> >>>>    */
-> >>>> -    set_pmcr_n(&pmcr, pmcr_n);
-> >>>>   vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), pmcr);
-> >>>>   pmcr =3D vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0));
-> >>>>=20
-> >>>>=20
-> >>>=20
-> >>> So what are you fixing here? A build failure? A semantic defect?
-> >>> Something else? What makes this a valid change?
-> >>>=20
-> >>> Frankly, I have no idea.
-> >>>=20
-> >>> But KVM definitely allows PMCR_EL0.N to be written from userspace, and
-> >>> that's not going to change.
-> >>>=20
-> >>=20
-> >> Then I=E2=80=99ll drop this patch.
-> >=20
-> > I'm not asking you to drop it, I'm asking you to explain. If you found
-> > a problem, let's discuss it and fix it. But as it stands, you're not
-> > giving me much to go on.
-> >=20
->=20
-> You are right, while the bit fields are write ignored, to be
-> consistent with the handling of other bit fields of the register,
-> I=E2=80=99m fully convinced that checking the write operation in the
-> vpmu_counter_access.c file should be kept.
+On Wed, Sep 17, 2025 at 09:02:55AM +0200, David Hildenbrand wrote:
+> 
+> > > +
+> > > +	0 - Enable soft offline
+> > > +	1 - Disable soft offline for HugeTLB pages
+> > > +
+> > > +Supported values::
+> > > +
+> > > +	0 - Soft offline is disabled
+> > > +	1 - Soft offline is enabled
+> > > +	3 - Soft offline is enabled (disabled for HugeTLB pages)
+> > 
+> > This looks very adhoc even though existing behavior is preserved.
+> > 
+> > - Are HugeTLB pages the only page types to be considered ?
+> > - How the remaining bits here are going to be used later ?
+> > 
+> 
+> What I proposed (that could be better documented here) is that all other
+> bits except the first one will be a disable mask when bit 0 is set.
+> 
+> 2 - ... but yet disabled for hugetlb
+> 4 - ... but yet disabled for $WHATEVER
+> 8 - ... but yet disabled for $WHATEVERELSE
+> 
+> > Also without a bit-wise usage roadmap, is not changing a procfs
+> > interface (ABI) bit problematic ?
+> 
+> For now we failed setting it to values that are neither 0 or 1, IIUC
+> set_enable_soft_offline() correctly?
 
-The bit field is *not* ignored when written from userspace. That's how
-we configure the PMU if the guest runs at EL1.
+Yes, -EINVAL will be returned.
 
-> The build error I=E2=80=99ve seen with Ubuntu 22.04 LTS is below:
+> So there should not be any problem, or which scenario do you have in mind?
 
-[snip]
+Here's an alternative approach.
 
-Can you please detail what compiler version this is? I'm unlikely to
-install an ancient version of Ubuntu, but I can pick the corresponding
-compiler version.
+Do not modify the existing sysctl parameter:
 
-	M.
+/proc/sys/vm/enable_soft_offline
 
---=20
-Without deviation from the norm, progress is not possible.
+0 - Soft offline is disabled
+1 - Soft offline is enabled
+
+Instead, introduce a new sysctl parameter:
+
+/proc/sys/vm/enable_soft_offline_hugetlb
+
+0 - Soft offline is disabled for HugeTLB pages
+1 - Soft offline is enabled for HugeTLB pages
+
+and note in documentation that this setting only takes effect if
+enable_soft_offline is enabled.
+
+Anshuman (and David), would you prefer this?
+
+Thanks,
+Kyle Meyer
 
