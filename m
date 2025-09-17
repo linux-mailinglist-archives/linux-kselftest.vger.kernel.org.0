@@ -1,333 +1,222 @@
-Return-Path: <linux-kselftest+bounces-41733-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DCF5B80A43
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 17:39:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1020B80A6D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 17:40:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB010622B1F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 15:39:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1E90468290
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Sep 2025 15:40:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2633705AC;
-	Wed, 17 Sep 2025 15:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B188362089;
+	Wed, 17 Sep 2025 15:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cfBQD6ln"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZADxscQ2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB6E33B472;
-	Wed, 17 Sep 2025 15:37:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AECED33AE87
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 15:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758123466; cv=none; b=YHoRJrPExeOGJqmTdN0GhKb846XwahJ3GM3xIv2qsj0v+dsK0lLmlzl4sp/RHjRXE8Y7qd1GDguQQd9RUTenjLHUnTACo8qxzk0RmJjUky/mGbN0esK4sTvSLhnHWc5HvhyA6UApjRw95Z+xR2Uzmvie9EX+BzE16EkjwojLhDI=
+	t=1758123533; cv=none; b=Wy/RN+N//n6c1J33e9xy2gWKhmWHzfqRpzgUVfBz0T7aiEi2xgPZLmwhySY+JhItae7eNqMyvYMBKrtGEqNp5+zKlA+j3hTUOqbr5lu7hjtW+CFHFdnndP7ftmmZpN3kHSw79Fi1J+6FKWkKMFmC17Y9txy12ez6z1UgbT/CQeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758123466; c=relaxed/simple;
-	bh=MeUni8BMkE51AXY4WYnb0RnjXbbI5tBqofM6SoODgLs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vn/PtZ2KzCRT1ubb+fRawp37Kjnb8v4Zstgo+go0L+R96TQdlxCa83JUiNmPX0QEkqxhI8PndZYOohwOvi34EBq5/AB8L789u06z837PTJQ/OCLtma4Mc7dVtnd+wUDe45fhFqfcIScbkhGIGvjHCQx1sY3sAMkgnRYSqijOv/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cfBQD6ln; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id D5D9FC0078E;
-	Wed, 17 Sep 2025 15:37:24 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 5C0E16063E;
-	Wed, 17 Sep 2025 15:37:41 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3AB3B102F1BFC;
-	Wed, 17 Sep 2025 17:37:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1758123460; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=JuYim+SlVrtNYeSwdN0cSCkxCqIdEwBN5vppKoroMbc=;
-	b=cfBQD6ln14eDJpiVMnMGJ0X9kLqUH6pTTbkpMHNYJ3FalGMMbIIzHBN/2byBwyVQe9aVbT
-	MNRkipNTQBtdDvKX07LGfyYMMliFu84s0ImltrNbbJ4Tnv2dT1B3Pgmeyk0v0c2sHcurzW
-	9WAAh4OkknS5MUlaPd4SKf8Eg2kcjIVmNg+kScLmQ1pebMt4dRABOxSOpZfcdGvDaJgi+8
-	rrVZnju+KuFnCVvtG2WR9rGYh0IGxK1o7bbGF6uXL1/1z7VdqFxSO4yIgGiGsfrWOU760t
-	kZ+vfvm727A+ar6N9ugZUCrVw/yU4PpQAO90Un5Jb+wyC9MS4mCp9w12lfz+QQ==
-Message-ID: <fa9ca4f6-f34d-4957-9100-ba006500116e@bootlin.com>
-Date: Wed, 17 Sep 2025 17:37:32 +0200
+	s=arc-20240116; t=1758123533; c=relaxed/simple;
+	bh=LB7piiKR7QrRUi/bNOQ3i5gVlRn+pQtHDDNHk6T+viw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mNy4QAVgBmkaZDZlaNUZmD2ds/A6EOi/JJYBeHUlKbP34GJfkexL3KTdHV7HiJBioEuNjUPX/26RhRC3gp1JoPChRswHkyjEpQvsQQL2E99+wb21FjkxVtZUDpUixQ9jWITacfmv0TOF2ca/hFaRkghJMLwm75FIDjU9trHySI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZADxscQ2; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758123530;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wzDrhoqrJLVBFYiFwQ2SZoCYFfAfOJ2dJ5Nixz692Nk=;
+	b=ZADxscQ2sBs6IDit/ADxXQP3JbxYbXWjPlwwq46jndQ6aRXi1k75PsBs1Y+zOoEyYjCL/T
+	6WzN6KcDBc3mkw8JCIpVBFBxYAJDEXDXyYVyKrIw4kbSUZnwPbDn9rm1054nARsgxRul10
+	A59/LKWmHSP227iUGvY+SZ9QstOL6sw=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-116-Hce-dmhhNP6DHAQWVJvN_g-1; Wed, 17 Sep 2025 11:38:38 -0400
+X-MC-Unique: Hce-dmhhNP6DHAQWVJvN_g-1
+X-Mimecast-MFC-AGG-ID: Hce-dmhhNP6DHAQWVJvN_g_1758123518
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4b302991816so134890621cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 08:38:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758123518; x=1758728318;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wzDrhoqrJLVBFYiFwQ2SZoCYFfAfOJ2dJ5Nixz692Nk=;
+        b=ZsW3FuPyun1L0HavT0hCrE77L/cN3yfZzFdbQgeASrpOBJX1SQEvTdM+8i90P5uqaF
+         yIhVDV8CCc+WXcrwT/SM4Mt7+0B6Cxf+8ozmtIEmCKdKcgF7GWkAoEn/f9n5dGZXozc8
+         sxHdggSFYwdU8f3ASI4oEYFrYo+GO9Dz45TEit3GNHS6ziwMSNCxk915tYDPblaJ3FQo
+         dinw4A5BnRB+fXXPvWuFZ6PyAO7Lze2A9KB6hC1TNrKpY9F6zOSrKP2gei9eoF5W3938
+         QCBTr9pKkI7JvGdiWQlMIdtchLgpk5hzXT6MjX1TF0FOJo/ewgPKPRrtvEOVLiozpEQi
+         fklA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/1WbrUgjqpHMlRxaO80s105frVk0GBlAkM/OADaypwFSq3E3TT7IL8ll6tVyopee2D1z/wyrjUt8DNdxVtds=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxURBLsW4Mkj32p2N6CvgG2IcBw/L20pllNpZLZ/RpvFCrETyQJ
+	NliRqRDltEMEcw5+YK1KVPP57GtMRDu2FZOGZqnM5qieYiQkwByzx9zW6hC3WTffDBmjTlzAomX
+	a4j9d8/cCxnuSRV+wzCU/V79UJiVVsf0zqwOp5eefeXBzkpCqQT5ybrNMZu1D1PzvH350BOVijC
+	5MSJ1iZOiXlstxkD2RV6iiFtEfCbzAgT+z4uf2qP6qcmIS
+X-Gm-Gg: ASbGnctePVarqe1fhbY3CnTHgq699U5iwY7qQ+O6s0D7HGtpXeP2azucuS/+D8Td3qN
+	Xv/wjZeoBG1NUfmtS+2auBAoWsqV/IPwjaF17Wl62sIfWTWMiyBSKia8msA3TmxffYR9HH6d6OI
+	sVEQ/S5wi4rHr+fhXAj+FORTrBtBZJc5hWP7aH0kTOw5+H3RUGyeaQ8A==
+X-Received: by 2002:ac8:6f1b:0:b0:4b2:fdda:f7be with SMTP id d75a77b69052e-4ba6618b9aemr26320411cf.3.1758123517637;
+        Wed, 17 Sep 2025 08:38:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHPZbhJSMxuKHfrTjKxJCkJbacm2wHdKQT9Bzco4e/BiqN9eL3IFcF/vIvKnAOF3my7lb81Pi2uNb/6ZJFMKnU=
+X-Received: by 2002:ac8:6f1b:0:b0:4b2:fdda:f7be with SMTP id
+ d75a77b69052e-4ba6618b9aemr26320041cf.3.1758123517106; Wed, 17 Sep 2025
+ 08:38:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 14/14] selftests/bpf: test_xsk: Integrate
- test_xsk.c to test_progs framework
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Jonathan Lemon <jonathan.lemon@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Alexis Lothore <alexis.lothore@bootlin.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250904-xsk-v3-0-ce382e331485@bootlin.com>
- <20250904-xsk-v3-14-ce382e331485@bootlin.com> <aMmpYilJr35/acaP@boxer>
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <aMmpYilJr35/acaP@boxer>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20250910170000.6475-1-gpaoloni@redhat.com> <20250910170000.6475-3-gpaoloni@redhat.com>
+ <874it3gx2q.fsf@trenco.lwn.net>
+In-Reply-To: <874it3gx2q.fsf@trenco.lwn.net>
+From: Gabriele Paoloni <gpaoloni@redhat.com>
+Date: Wed, 17 Sep 2025 17:38:25 +0200
+X-Gm-Features: AS18NWDxjPkZ_bdK-V6Pzd1fFU51OydVEbc_fWStALboJrBYI93hRwf9Wba0uR8
+Message-ID: <CA+wEVJatTLKt-3HxyExtXf4M+fmD6pXcmmCuhd+3-n2J_2Tw8A@mail.gmail.com>
+Subject: Re: [RFC v2 PATCH 2/3] /dev/mem: Add initial documentation of
+ memory_open() and mem_fops
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	gregkh@linuxfoundation.org, linux-mm@kvack.org, 
+	safety-architecture@lists.elisa.tech, acarmina@redhat.com, 
+	kstewart@linuxfoundation.org, chuckwolber@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Maciej,
+Hi Jonathan
 
-On 9/16/25 8:16 PM, Maciej Fijalkowski wrote:
-> On Thu, Sep 04, 2025 at 12:10:29PM +0200, Bastien Curutchet (eBPF Foundation) wrote:
->> test_xsk.c isn't part of the test_progs framework.
->>
->> Integrate the tests defined by test_xsk.c into the test_progs framework
->> through a new file : prog_tests/xsk.c. ZeroCopy mode isn't tested in it
->> as veth peers don't support it.
->>
->> Move test_xsk{.c/.h} to prog_tests/.
->>
->> Add the find_bit library to test_progs sources in the Makefile as it is
->> is used by test_xsk.c
->>
->> Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
->> ---
->>   tools/testing/selftests/bpf/Makefile               |  13 +-
->>   .../selftests/bpf/{ => prog_tests}/test_xsk.c      |   0
->>   .../selftests/bpf/{ => prog_tests}/test_xsk.h      |   0
->>   tools/testing/selftests/bpf/prog_tests/xsk.c       | 146 +++++++++++++++++++++
->>   tools/testing/selftests/bpf/xskxceiver.c           |   2 +-
->>   5 files changed, 158 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index 4bb4f3ee822c1adce0fbd82725b40983695d38b9..1af7d4b9fe54b777131bce0cbb8ca328c885c23a 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -541,6 +541,8 @@ TRUNNER_TEST_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.test.o,	\
->>   				 $$(notdir $$(wildcard $(TRUNNER_TESTS_DIR)/*.c)))
->>   TRUNNER_EXTRA_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o,		\
->>   				 $$(filter %.c,$(TRUNNER_EXTRA_SOURCES)))
->> +TRUNNER_LIB_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o,		\
->> +				 $$(filter %.c,$(TRUNNER_LIB_SOURCES)))
->>   TRUNNER_EXTRA_HDRS := $$(filter %.h,$(TRUNNER_EXTRA_SOURCES))
->>   TRUNNER_TESTS_HDR := $(TRUNNER_TESTS_DIR)/tests.h
->>   TRUNNER_BPF_SRCS := $$(notdir $$(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c))
->> @@ -672,6 +674,10 @@ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
->>   	$$(call msg,EXT-OBJ,$(TRUNNER_BINARY),$$@)
->>   	$(Q)$$(CC) $$(CFLAGS) -c $$< $$(LDLIBS) -o $$@
->>   
->> +$(TRUNNER_LIB_OBJS): $(TRUNNER_OUTPUT)/%.o:$(TOOLSDIR)/lib/%.c
->> +	$$(call msg,LIB-OBJ,$(TRUNNER_BINARY),$$@)
->> +	$(Q)$$(CC) $$(CFLAGS) -c $$< $$(LDLIBS) -o $$@
->> +
->>   # non-flavored in-srctree builds receive special treatment, in particular, we
->>   # do not need to copy extra resources (see e.g. test_btf_dump_case())
->>   $(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
->> @@ -685,6 +691,7 @@ $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
->>   
->>   $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
->>   			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
->> +			     $(TRUNNER_LIB_OBJS)			\
->>   			     $(RESOLVE_BTFIDS)				\
->>   			     $(TRUNNER_BPFTOOL)				\
->>   			     $(OUTPUT)/veristat				\
->> @@ -718,6 +725,7 @@ TRUNNER_EXTRA_SOURCES := test_progs.c		\
->>   			 json_writer.c 		\
->>   			 flow_dissector_load.h	\
->>   			 ip_check_defrag_frags.h
->> +TRUNNER_LIB_SOURCES := find_bit.c
->>   TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
->>   		       $(OUTPUT)/liburandom_read.so			\
->>   		       $(OUTPUT)/xdp_synproxy				\
->> @@ -755,6 +763,7 @@ endif
->>   TRUNNER_TESTS_DIR := map_tests
->>   TRUNNER_BPF_PROGS_DIR := progs
->>   TRUNNER_EXTRA_SOURCES := test_maps.c
->> +TRUNNER_LIB_SOURCES :=
->>   TRUNNER_EXTRA_FILES :=
->>   TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
->>   TRUNNER_BPF_CFLAGS :=
->> @@ -776,8 +785,8 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
->>   	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
->>   
->>   # Include find_bit.c to compile xskxceiver.
->> -EXTRA_SRC := $(TOOLSDIR)/lib/find_bit.c
->> -$(OUTPUT)/xskxceiver: $(EXTRA_SRC) test_xsk.c test_xsk.h xskxceiver.c xskxceiver.h $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
->> +EXTRA_SRC := $(TOOLSDIR)/lib/find_bit.c prog_tests/test_xsk.c prog_tests/test_xsk.h
->> +$(OUTPUT)/xskxceiver: $(EXTRA_SRC) xskxceiver.c xskxceiver.h $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
->>   	$(call msg,BINARY,,$@)
->>   	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
->>   
->> diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
->> similarity index 100%
->> rename from tools/testing/selftests/bpf/test_xsk.c
->> rename to tools/testing/selftests/bpf/prog_tests/test_xsk.c
->> diff --git a/tools/testing/selftests/bpf/test_xsk.h b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
->> similarity index 100%
->> rename from tools/testing/selftests/bpf/test_xsk.h
->> rename to tools/testing/selftests/bpf/prog_tests/test_xsk.h
->> diff --git a/tools/testing/selftests/bpf/prog_tests/xsk.c b/tools/testing/selftests/bpf/prog_tests/xsk.c
->> new file mode 100644
->> index 0000000000000000000000000000000000000000..7ce5ddd7d3fc848df27534f00a6a9f82fbc797c5
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/xsk.c
->> @@ -0,0 +1,146 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <net/if.h>
->> +#include <stdarg.h>
->> +
->> +#include "network_helpers.h"
->> +#include "test_progs.h"
->> +#include "test_xsk.h"
->> +#include "xsk_xdp_progs.skel.h"
->> +
->> +#define VETH_RX "veth0"
->> +#define VETH_TX "veth1"
->> +#define MTU	1500
->> +
->> +int setup_veth(bool busy_poll)
->> +{
->> +	SYS(fail,
->> +	"ip link add %s numtxqueues 4 numrxqueues 4 type veth peer name %s numtxqueues 4 numrxqueues 4",
->> +	VETH_RX, VETH_TX);
->> +	SYS(fail, "sysctl -wq net.ipv6.conf.%s.disable_ipv6=1", VETH_RX);
->> +	SYS(fail, "sysctl -wq net.ipv6.conf.%s.disable_ipv6=1", VETH_TX);
->> +
->> +	if (busy_poll) {
->> +		SYS(fail, "echo 2 > /sys/class/net/%s/napi_defer_hard_irqs", VETH_RX);
->> +		SYS(fail, "echo 200000 > /sys/class/net/%s/gro_flush_timeout", VETH_RX);
->> +		SYS(fail, "echo 2 > /sys/class/net/%s/napi_defer_hard_irqs", VETH_TX);
->> +		SYS(fail, "echo 200000 > /sys/class/net/%s/gro_flush_timeout", VETH_TX);
->> +	}
->> +
->> +	SYS(fail, "ip link set %s mtu %d", VETH_RX, MTU);
->> +	SYS(fail, "ip link set %s mtu %d", VETH_TX, MTU);
->> +	SYS(fail, "ip link set %s up", VETH_RX);
->> +	SYS(fail, "ip link set %s up", VETH_TX);
->> +
->> +	return 0;
->> +
->> +fail:
->> +	return -1;
->> +}
->> +
->> +void delete_veth(void)
->> +{
->> +	SYS_NOFAIL("ip link del %s", VETH_RX);
->> +	SYS_NOFAIL("ip link del %s", VETH_TX);
->> +}
->> +
->> +int configure_ifobj(struct ifobject *tx, struct ifobject *rx)
->> +{
->> +	rx->ifindex = if_nametoindex(VETH_RX);
->> +	if (!ASSERT_OK_FD(rx->ifindex, "get RX ifindex"))
->> +		return -1;
->> +
->> +	tx->ifindex = if_nametoindex(VETH_TX);
->> +	if (!ASSERT_OK_FD(tx->ifindex, "get TX ifindex"))
->> +		return -1;
->> +
->> +	tx->shared_umem = false;
->> +	rx->shared_umem = false;
->> +
->> +
->> +	return 0;
->> +}
->> +
->> +static void test_xsk(const struct test_spec *test_to_run, enum test_mode mode)
->> +{
->> +	struct ifobject *ifobj_tx, *ifobj_rx;
->> +	struct test_spec test;
->> +	int ret;
->> +
->> +	ifobj_tx = ifobject_create();
->> +	if (!ASSERT_OK_PTR(ifobj_tx, "create ifobj_tx"))
->> +		return;
->> +
->> +	ifobj_rx = ifobject_create();
->> +	if (!ASSERT_OK_PTR(ifobj_rx, "create ifobj_rx"))
->> +		goto delete_tx;
->> +
->> +	if (!ASSERT_OK(setup_veth(false), "setup veth"))
->> +		goto delete_rx;
->> +
->> +	if (!ASSERT_OK(configure_ifobj(ifobj_tx, ifobj_rx), "conigure ifobj"))
->> +		goto delete_veth;
->> +
->> +	ret = get_hw_ring_size(ifobj_tx->ifname, &ifobj_tx->ring);
->> +	if (!ret) {
->> +		ifobj_tx->hw_ring_size_supp = true;
->> +		ifobj_tx->set_ring.default_tx = ifobj_tx->ring.tx_pending;
->> +		ifobj_tx->set_ring.default_rx = ifobj_tx->ring.rx_pending;
->> +	}
->> +
->> +	if (!ASSERT_OK(init_iface(ifobj_rx, worker_testapp_validate_rx), "init RX"))
->> +		goto delete_veth;
->> +	if (!ASSERT_OK(init_iface(ifobj_tx, worker_testapp_validate_tx), "init TX"))
->> +		goto delete_veth;
->> +
->> +	test_init(&test, ifobj_tx, ifobj_rx, 0, &tests[0]);
->> +
->> +	test.tx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
->> +	if (!ASSERT_OK_PTR(test.tx_pkt_stream_default, "TX pkt generation"))
->> +		goto delete_veth;
->> +	test.rx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
->> +	if (!ASSERT_OK_PTR(test.rx_pkt_stream_default, "RX pkt generation"))
->> +		goto delete_veth;
->> +
->> +
->> +	test_init(&test, ifobj_tx, ifobj_rx, mode, test_to_run);
->> +	ret = test.test_func(&test);
->> +	if (ret != TEST_SKIP)
->> +		ASSERT_OK(ret, "Run test");
->> +	pkt_stream_restore_default(&test);
->> +
->> +	if (ifobj_tx->hw_ring_size_supp)
->> +		hw_ring_size_reset(ifobj_tx);
->> +
->> +	pkt_stream_delete(test.tx_pkt_stream_default);
->> +	pkt_stream_delete(test.rx_pkt_stream_default);
->> +	xsk_xdp_progs__destroy(ifobj_tx->xdp_progs);
->> +	xsk_xdp_progs__destroy(ifobj_rx->xdp_progs);
->> +
->> +delete_veth:
->> +	delete_veth();
->> +delete_rx:
->> +	ifobject_delete(ifobj_rx);
->> +delete_tx:
->> +	ifobject_delete(ifobj_tx);
->> +}
->> +
->> +void test_ns_xsk_skb(void)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
->> +		if (test__start_subtest(tests[i].name))
->> +			test_xsk(&tests[i], TEST_MODE_SKB);
-> 
-> Ouff. Feels not optimal to setup everything per each test case. Was there
-> any stopper from keeping the veth pair per each test mode?
-> 
+On Tue, Sep 16, 2025 at 12:39=E2=80=AFAM Jonathan Corbet <corbet@lwn.net> w=
+rote:
+>
+> Gabriele Paoloni <gpaoloni@redhat.com> writes:
+>
+> > This patch proposes initial kernel-doc documentation for memory_open()
+> > and most of the functions in the mem_fops structure.
+> > The format used for the specifications follows the guidelines
+> > defined in Documentation/doc-guide/code-specifications.rst
+>
+> I'll repeat my obnoxious question from the first patch: what does that
+> buy for us?
 
-Indeed, it can feel heavy, but IMHO, creating new veth pairs for each 
-test case is good way to ensure that the test cases don't collide with 
-each other.
+I tried to explain my reply on patch 1
 
-Best regards,
--- 
-Bastien Curutchet, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> > Signed-off-by: Gabriele Paoloni <gpaoloni@redhat.com>
+> > ---
+> >  drivers/char/mem.c | 231 +++++++++++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 225 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+> > index 48839958b0b1..e69c164e9465 100644
+> > --- a/drivers/char/mem.c
+> > +++ b/drivers/char/mem.c
+> > @@ -75,9 +75,54 @@ static inline bool should_stop_iteration(void)
+> >       return signal_pending(current);
+> >  }
+> >
+> > -/*
+> > - * This funcion reads the *physical* memory. The f_pos points directly=
+ to the
+> > - * memory location.
+> > +/**
+> > + * read_mem - read from physical memory (/dev/mem).
+> > + * @file: struct file associated with /dev/mem.
+> > + * @buf: user-space buffer to copy data to.
+> > + * @count: number of bytes to read.
+> > + * @ppos: pointer to the current file position, representing the physi=
+cal
+> > + *        address to read from.
+> > + *
+> > + * This function checks if the requested physical memory range is vali=
+d
+> > + * and accessible by the user, then it copies data to the input
+> > + * user-space buffer up to the requested number of bytes.
+> > + *
+> > + * Function's expectations:
+> > + *
+> > + * 1. This function shall check if the value pointed by ppos exceeds t=
+he
+> > + *    maximum addressable physical address;
+> > + *
+> > + * 2. This function shall check if the physical address range to be re=
+ad
+> > + *    is valid (i.e. it falls within a memory block and if it can be m=
+apped
+> > + *    to the kernel address space);
+> > + *
+> > + * 3. For each memory page falling in the requested physical range
+> > + *    [ppos, ppos + count - 1]:
+> > + *   3.1. this function shall check if user space access is allowed (i=
+f
+> > + *        config STRICT_DEVMEM is not set, access is always granted);
+> > + *
+> > + *   3.2. if access is allowed, the memory content from the page range=
+ falling
+> > + *        within the requested physical range shall be copied to the u=
+ser space
+> > + *        buffer;
+> > + *
+> > + *   3.3. zeros shall be copied to the user space buffer (for the page=
+ range
+> > + *        falling within the requested physical range):
+> > + *     3.3.1. if access to the memory page is restricted or,
+> > + *     3.2.2. if the current page is page 0 on HW architectures where =
+page 0 is
+> > + *            not mapped.
+> > + *
+> > + * 4. The file position '*ppos' shall be advanced by the number of byt=
+es
+> > + *    successfully copied to user space (including zeros).
+>
+> My kneejerk first reaction is: you are repeating the code of the
+> function in a different language.  If we are not convinced that the code
+> is correct, how can we be more confident that this set of specifications
+> is correct?  And again, what will consume this text?  How does going
+> through this effort get us to a better kernel?
+
+In summary specifications provide the criteria to be used in verifying the
+code (both when reviewing and testing).
+Otherwise:
+1) Developers and reviewers have no criteria to evaluate the code, other
+than their expertise and judgement when they read it;
+2) Testers would write test cases based on the code itself (so it is more
+likely that a wrong code is not detected due to wrong test cases).
+
+WRT your first point, if specifications are wrong, a reviewer or a test
+would detect a gap between code and associated specs, hence leading
+to process of scrutiny of both code and specs where such a gap must
+be resolved. This is the reason why the duality of specification and tests
+VS the code being verified lead to confidence in code becoming more
+dependable (also from a user point of view that can now clearly see
+the assumptions to be met when invoking the code)
+
+Thanks
+Gab
+
+>
+> Despite having been to a couple of your talks, I'm not fully
+> understanding how this comes together; people who haven't been to the
+> talks are not going to have an easier time getting the full picture.
+>
+> Thanks,
+>
+> jon
+>
 
 
