@@ -1,156 +1,127 @@
-Return-Path: <linux-kselftest+bounces-41817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41818-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9303AB83B13
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 11:09:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7582B83EEB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 11:57:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 455584680EF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 09:09:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8705E620467
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 09:57:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B6012FE588;
-	Thu, 18 Sep 2025 09:09:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E6762DA76F;
+	Thu, 18 Sep 2025 09:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="l+p/vkH+";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2ZxPIDp8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4491D2F83DE;
-	Thu, 18 Sep 2025 09:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A8628F1;
+	Thu, 18 Sep 2025 09:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758186565; cv=none; b=Qq0Q4JtjLSIONz8tDdtC7jxKB2cVmjL5OkC9WyebfiZTJYiKMdZfxRrE3TcAI4WLUcRvivvoVEZKXbovWG8DkkVbMlJea1oxa/QYjyOIcOJn8vbVK2t4nlm+xRDqhRbUcXo///UvZferfx9IDm9ab3tGh2JfPZ2qF/+OqQsc5F4=
+	t=1758189427; cv=none; b=Oqoz0reJUJ0sl/rG9muuqI0wKs4SHXcpSvXajCBXcMDPKTyPh5JPgu/zZw3gZE9JsR7KtKHF9Y/lQtvMdPxttg6C51p96ZDr2uQ6bUI7vWXQaAREtxX1MrIndXlR0hFXJlpfRtkemWqHGn9gmVC756k1e4Z38h3ocm2q+awTDJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758186565; c=relaxed/simple;
-	bh=Yn0JXsMq6PzjFSMGEWdVDLRGn6/DWrTZMGaHrzjn+Zg=;
-	h=CC:Subject:To:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=B/XKIp93LE5z/xbU9qSe2BQOmVQNqFKopAmJ0rvJ7j7QNtff1ZCX0IUx3GvziiQK8QxZOnk7stvMwgOkzYYVi9BfnZwkQwPelL8lgAY/bQ7uwuEeOIhDyySjy/6ItyXtsg95nMT7mSfjC2inDW3jX4hkaK3wJEFm1KYrWGAWtDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4cS8ph3Gdwz2Cf3x;
-	Thu, 18 Sep 2025 17:04:44 +0800 (CST)
-Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 467F91400CB;
-	Thu, 18 Sep 2025 17:09:20 +0800 (CST)
-Received: from kwepemq200018.china.huawei.com (7.202.195.108) by
- dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 18 Sep 2025 17:09:20 +0800
-Received: from [10.67.121.177] (10.67.121.177) by
- kwepemq200018.china.huawei.com (7.202.195.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 18 Sep 2025 17:09:19 +0800
-CC: <yangyicong@hisilicon.com>, Will Deacon <will@kernel.org>, "Jonathan
- Cameron" <jonathan.cameron@huawei.com>, <maz@kernel.org>,
-	<oliver.upton@linux.dev>, <corbet@lwn.net>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<joey.gouly@arm.com>, <suzuki.poulose@arm.com>, <yuzenghui@huawei.com>,
-	<shuah@kernel.org>, <shameerali.kolothum.thodi@huawei.com>,
-	<linuxarm@huawei.com>, <prime.zeng@hisilicon.com>, <xuwei5@huawei.com>,
-	<tangchengchang@huawei.com>, <wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v4 5/7] arm64: Add support for FEAT_{LS64, LS64_V}
-To: Catalin Marinas <catalin.marinas@arm.com>
-References: <20250715081356.12442-1-yangyicong@huawei.com>
- <20250715081356.12442-6-yangyicong@huawei.com>
- <aL7Fgx__LeLfbDyU@willie-the-truck>
- <5d2ba565-715b-9b17-951b-f805dde5988b@huawei.com>
- <aMLvtpaCgRqPAU2Z@willie-the-truck> <20250912144736.00007673@huawei.com>
- <666e3588-2e42-2275-f9ec-94ba0954bdc6@huawei.com> <aMl6u7xTDLhrZmqK@arm.com>
- <0dfe5781-7ca7-7d9f-b099-b20da5e10a1b@huawei.com> <aMrDuieMX9WL4jkB@arm.com>
-From: Yicong Yang <yangyicong@huawei.com>
-Message-ID: <f6a0a078-fec6-d29c-1144-103eddf1462a@huawei.com>
-Date: Thu, 18 Sep 2025 17:09:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+	s=arc-20240116; t=1758189427; c=relaxed/simple;
+	bh=jK7EvwxigtoJEFKIhDuhDv3qFvNtLHjdtdaIK8mzC3o=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BjDh/eHspJmCbE3REfFwN66sCbkqX94fQ/8BAFPYYYXtd9s6iGhxmhtvxkFjna+wBx0XOkkzdl1MgEJ0iI5sQyCPmE2nid8TpEj6cw1SiJfgq+QRkprdakTlsp5o44JXLCfpbrg/RErjHJCYTZgJ5XOa7HuABk8sswk/gh2qclo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=l+p/vkH+; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2ZxPIDp8; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1758189423;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5VbA+um2A2j6OFBZRmVPvhlrOodmplDW/1hXbUCAAZc=;
+	b=l+p/vkH+yTsb+/l5dMzTZIFmQuwe4pw8Ju2iidJURNBXkibQEjmuX7gRgonXJNvpt2Bcdw
+	oAFHRiL0kCraaE8Vjh2jLaBij9C4Oenp5VMC0EsGvzKoHAlxQqHETXr8dSIBTjeJTmDoBx
+	zLKKPMVrH5ghZaJ5WPGQUegE1eQaHRs72uD7r52jRrt5/P+62ceWRbZsrBHfSonhLmksDZ
+	kZYhjwUE1GwbL237BuMf23cp2kNgWMAKz0weCnaV2UpbvOnjNXfAdOywZFtxxJIqrpARP6
+	vXopnazIvTeA2G9gHbIctTqcDXBzIYEjYGODVfTWr2wbKhYYYH9RDnh4AlE2rQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1758189423;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5VbA+um2A2j6OFBZRmVPvhlrOodmplDW/1hXbUCAAZc=;
+	b=2ZxPIDp8ZaRAI3lqfYen8RUqlbQx9sAqb51acEdpaB/7qmLq3/19qLVb3hXSM2g5liQ9we
+	1xX5dSQ3yxlR7jDg==
+Date: Thu, 18 Sep 2025 11:56:36 +0200
+Subject: [PATCH] selftests: always install UAPI headers to the correct
+ directory
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <aMrDuieMX9WL4jkB@arm.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemq200018.china.huawei.com (7.202.195.108)
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250918-kselftest-uapi-out-of-tree-v1-1-f4434f28adcd@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAFPXy2gC/x3MQQqDMBAF0KvIrDswigHTq5QuRH/aQTGSiSKId
+ ze4fJt3kiEpjN7VSQm7msaloH5VNPz75QfWsZgaaZz4uuPJMIcMy7z1q3LcMsfAOQHsu9FJcF5
+ aGagEa0LQ48k/3+u6AZVX+uNsAAAA
+X-Change-ID: 20250918-kselftest-uapi-out-of-tree-98d50f59040c
+To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Jason Gunthorpe <jgg@ziepe.ca>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758189423; l=1688;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=jK7EvwxigtoJEFKIhDuhDv3qFvNtLHjdtdaIK8mzC3o=;
+ b=upanb3vkp6zgRbRMcDJ2oRh6+Vx/Fqriu9XiCv0O3HjAw1otsopd1gRZ6TIlOjU78+qqMgBaD
+ mHwCnAUn7uNBfcwb83k76bkTeCosx+QfCmpqCg67eiH2QtyD+RtDIwK
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On 2025/9/17 22:20, Catalin Marinas wrote:
-> On Wed, Sep 17, 2025 at 11:51:20AM +0800, Yicong Yang wrote:
->> On 2025/9/16 22:56, Catalin Marinas wrote:
->>> On Mon, Sep 15, 2025 at 04:29:25PM +0800, Yicong Yang wrote:
->>>> in my understanding the hwcap only describes the capabilities of the CPU but not
->>>> the whole system. the users should make sure the function works as expected if the
->>>> CPU supports it and they're going to use it. specifically the LS64 is intended for
->>>> device memory only, so the user should take responsibility of using it on supported
->>>> memory.
->>>
->>> We have other cases like MTE where we avoid exposing the HWCAP to user
->>> if we know the memory system does not support MTE, though we intercepted
->>> this early and asked the (micro)architects to tie the CPU ID field to
->>> what the system supports.
->>
->> but we lack the same identification mechanism as CPU for the memory system, so it's just a
->> restriction for the hardware vendor that if certain feature is not supported for the whole
->> system (SoC) then do not advertise it in the CPU's ID field. otherwise i think we're currently
->> doing in the manner that if capability mismatch or cannot work as expected together then a
->> errata/workaround is used to disable the feature or add some workaround on this certain
->> platform.
->>
->> this is also the case for LS64 but a bit more complex, since it involves the completer outside
->> the SoC (the device) and could be a hotplug one (PCIe). from the SoC part we can restrict to
->> advertise the feature only if it's fully supported (what we've already done on our hardware).
-> 
-> That's good to know. Hopefully other vendors do the same.
-> 
-> I think the ARM ARM would benefit from a note here that the system
-> designers should not advertise this if the interconnect does not support
-> it. I can raise this internally.
-> 
+Currently the UAPI headers are always installed into the source directory.
+When building out-of-tree this doesn't work, as the include path will be
+wrong and it dirties the source tree, leading to complains by kbuild.
 
-one complementation, only ld64b/st64b (FEAT_LS64) need this concerns. otherwise
-for st64bv/st64bv0 that support return a status, user can check the status result:
+Make sure the 'headers' target installs the UAPI headers in the correctly.
 
-  If the target memory location does not support the ST64BV or ST64BV0 instructions,
-  then the register specified by <Xs> is set to 0xFFFFFFFF_FFFFFFFF.
+The real target directory can come from multiple places. To handle them all
+extract the target directory from KHDR_INCLUDES.
 
->>> Arguably, the use of LD/ST64B* is fairly specialised and won't be used
->>> on the general purpose RAM and by random applications. It needs a device
->>> driver to create the NC/Device mapping and specific programs/libraries
->>> to access it. I'm not sure the LS64 properties are guaranteed by the
->>> device alone or the device together with the interconnect. I suspect the
->>> latter and neither the kernel driver nor user space can tell. In the
->>> best case, you get a fault and realise the system doesn't work as
->>> expected. Worse is the non-atomicity with potentially silent corruption.
->>
->> will be the latter one, both interconnect and the target device need to
->> support it. but I think the driver developer (kernel driver or userspace
->> driver) must have knowledge about the support status, otherwise they
->> should not use it.
-> [...]
->> my thoughts is that the driver developer should have known whether their
->> device support it or not if going to use this. the information in the
->> firmware table should be fine for platform devices, but cannot describe
->> information for hotpluggable ones like PCIe endpoint devices which may
->> not be listed in a firmware table.
-> 
-> There's a risk of such instructions ending up in more generic
-> copy_to/from_io implementations but it's not much we can do other than
-> not enabling the feature at all.
-> 
-> So, I think a HWCAP bit is useful but we need (a) clarification that the
-> CPUID field won't be set if the system doesn't support it and (b)
-> document the Linux bit that it's a per-device capability even if the
-> CPU/system supports it (the HWCAP is only a prerequisite to be able to
-> use the instructions; the driver can fall back to non-atomic ops, maybe
-> with a DGH if it helps performance).
-> 
+Reported-by: Jason Gunthorpe <jgg@nvidia.com>
+Closes: https://lore.kernel.org/lkml/20250917153209.GA2023406@nvidia.com/
+Fixes: 1a59f5d31569 ("selftests: Add headers target")
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ tools/testing/selftests/lib.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-sure. will mention this in Documentation/arch/arm64/elf_hwcaps.rst for HWCAP3_LS64
-as well as the commit message.
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 5303900339292e618dee4fd7ff8a7c2fa3209a68..a448fae57831d86098806adaff53f6f1a747febb 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -228,7 +228,10 @@ $(OUTPUT)/%:%.S
+ 	$(LINK.S) $^ $(LDLIBS) -o $@
+ endif
+ 
++# Extract the expected header directory
++khdr_output := $(patsubst %/usr/include,%,$(filter %/usr/include,$(KHDR_INCLUDES)))
++
+ headers:
+-	$(Q)$(MAKE) -C $(top_srcdir) headers
++	$(Q)$(MAKE) -f $(top_srcdir)/Makefile -C $(khdr_output) headers
+ 
+ .PHONY: run_tests all clean install emit_tests gen_mods_dir clean_mods_dir headers
 
-thanks.
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250918-kselftest-uapi-out-of-tree-98d50f59040c
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
