@@ -1,140 +1,120 @@
-Return-Path: <linux-kselftest+bounces-41886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41887-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00AD5B8654E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 19:56:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9541B86609
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 20:07:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A57B07C686D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 17:56:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90A2A547A92
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 18:07:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A1F283124;
-	Thu, 18 Sep 2025 17:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721D12C1780;
+	Thu, 18 Sep 2025 18:07:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="soMw9Xnj"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N9KivoIk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568B014B06C;
-	Thu, 18 Sep 2025 17:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F5F208A7
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 18:06:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758218171; cv=none; b=dA53Rrty9dNcgiKUeRAojChBdx34kAPsT3wz+HzggCc84wSBGn9CnG34ulrFVoJJKd7lDB5DtBDrYZU7qo8rdqYspIEoeHEAq171eAT2Al/HEGGQNrdov92w2LCPDdifPUUado/jg2FoLC6cA6eB70yZVPjU3svh/6TRnwkIkY0=
+	t=1758218822; cv=none; b=JQTX958hzR96g5Y53XQBPKG+y11L+PwfBlLJgOCE+w/YDxWXpP+bLFAqkWj7689YUItdtXeQ/LPVRgR2om5vkc6My/b2rH/+s7UgJV1mMvAqjImYG1AiZRpU3tCeYaarjtGcicvOfdylcmLRwyjPHPO6wz4bHkmLIzo9a35aRBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758218171; c=relaxed/simple;
-	bh=mEfVkBpEmX4LqDSdnh5MGlyopQoeHAPLnvqvAtXytRA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FJb6cXPcpkaMuzjhp8dUbdWlGoyq2J9FcqOhGMFvyJyRDn/XmVpmieMEhvFi313SzpKGRF7z2JE4wr3IpTjnrGueFzV7iMmlZBIdU7lOOwzW5Wq1y6ldQorrH9Chxc6Z2jiTY1AT7kGNvcPnPqp2ujYqrn/UnXaJtAHSoWtTFkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=soMw9Xnj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD01C4CEE7;
-	Thu, 18 Sep 2025 17:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758218171;
-	bh=mEfVkBpEmX4LqDSdnh5MGlyopQoeHAPLnvqvAtXytRA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=soMw9Xnj+exAZ2k8HgMA91ndd6uOHczKxaGV9dhZx9DL3fmpsG3RkkqOQKF8Dgo0m
-	 ou2AY8VcM8wE7AqAa5ioL45ieaVEOapn85yGQRf+EiIUv8hTFsXNgwcTCwu1y2O6Zp
-	 IeMOKHjRkHg0LNc6PhPP7lu+n2iiX3HCw4E/uvFrO74qag4qYtUb3G9ZdqmKsC9DX4
-	 3pxZ2+ipeB+WyBXaOvrqoMK92Cbn8IxcWyBBXesgf32AP9SuvuzKarbTlkp8EOGcTl
-	 UyDbvx6rrmuLhWCkAHvQeQXluiGnULUCyDrjnZzJ6+jwbD98sg2pstQGE4de9eOpqb
-	 9jHtxj2T2gtEw==
-Date: Thu, 18 Sep 2025 18:56:02 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Will Deacon <will@kernel.org>
-Cc: brauner@kernel.org, "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>, jannh@google.com,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	Wilco Dijkstra <wilco.dijkstra@arm.com>,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
-	Kees Cook <kees@kernel.org>,
-	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
-Subject: Re: [PATCH v21 4/8] fork: Add shadow stack support to clone3()
-Message-ID: <21954e72-94e9-433a-a155-222c9052d4c6@sirena.org.uk>
-References: <20250916-clone3-shadow-stack-v21-0-910493527013@kernel.org>
- <20250916-clone3-shadow-stack-v21-4-910493527013@kernel.org>
- <aMv9XRq_sAQbQwjI@willie-the-truck>
- <aMwtdtRHT7oHhYLf@willie-the-truck>
+	s=arc-20240116; t=1758218822; c=relaxed/simple;
+	bh=b1VI56OWvK1tmwsX2dbcopiTFH8Zr46g+PeA7taEl/E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qrkY52bxW21nMIAugJkmHZauJ6doMfkdGwcuTtEklfePkMqtd/Tk+mZuTJ3j/4s8fKpP4d5I/Y0Bz3kxwxl7RSp2/LfptGqa6QtKvOWCadr+HgkFd64x9unC+uMP2MICoRIBQ6VakVGvQWJNQeLu9SG0w+zHetvVhdCJ4L6eNvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N9KivoIk; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-7960d69f14bso4893936d6.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 11:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1758218818; x=1758823618; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mPBEn4/fueUrJT4RnliR6Zn3+7CEMnoE1lnAFIQBudU=;
+        b=N9KivoIka+dKRgzWt96FZT7HBlZSFZMnelXRrjkDAo59HIf3aH9HxRL08dK1r3SImB
+         PqhZKZL7cZRRS1PkvRiZYbs7njh+fpTGh3FzJAzy7ExF0ibmMdSMtPB9XjKxpuPNNiQl
+         zRn81F5wc667GlBqynLWLElcgs96yxPVhEfEU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758218818; x=1758823618;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mPBEn4/fueUrJT4RnliR6Zn3+7CEMnoE1lnAFIQBudU=;
+        b=P96oY3sED+6r3l6Expo83DaWf4FUtzBvpTc5OndpXH/aBTuuJweYLKxs37UnJPc9Hq
+         VV/WFhvoydlnSJqR02FT60HiWExnpWGRqfohmh9EV6n2LUbAHBQqxJ8z3sZUy/a8uUzn
+         Bh+xk7eeIFvAzzy8vyZ0XsXaQDYlW+iNhZewUv2SRppJQVhlKXA8PHOgpWWka6ULrOMC
+         RedpH5xUiyeC3xrwn42AahdI5qWuXUkrp0YnxlmIH2/uJyZAIDlht3mCp7T3VID4t7Gp
+         JaFRddj8t6wvNohB+5OvdFPqueAlGGrVoq/DGSMkaabJvzOn/kd3qv+1U56o8Ctpw2rP
+         FgHQ==
+X-Gm-Message-State: AOJu0YwWmlyYfyv5KW2sMk9EiuDv5iUz1hjqF0C8FJMZEk5ybRXo6OwA
+	jyOTh5RbhQFm2zrkDC17Dn60+Q19ERnsqOPsyUqncJnxoG3tsDg72/KsMlRxVUCxLRQ=
+X-Gm-Gg: ASbGnctbgcHEBBuJw5ijkAh0YqsH3GTBvkqPDqCD7qgMzUJyJYbTdS5FFryneKJ3jer
+	NVtg//eEQNRZKr51eyheFHfum4TBb5UG6ayqTWeCQPATO5hIXW0YT/5bSeRu0w5A+5isK7wGQ7P
+	iliDn4p4OZq2gbOqiRlqIbn/7i/Td+ON7hgkl3mDTrpIY9t+NGQZ75FcBDlXVb+28GJp4NGv8v0
+	t8HHT47Jhqnu9yaUYdLWSm8+tBZw3kGFsxW/VHvzOcuQcWRG9dMhiLz44aDT67IIMTNsUyUTZK9
+	Ib3YaVgLlD4eZs907oS/h9nYK2SAmCd81LPH1wmjFXvwE9wzCkdU6SPy29epO+gcGsh0e+wLr6c
+	oonSv3yMshftq6L24c/XYpwYw7cxR58/34wIqZO5JhksBo57zuMaKFCjxoEV1QIvyalbCqUrsXI
+	SIEaOVIGj+RilD/R+mHkFO2YnRb+oAW3RTzCqPpAxWcm77TsdhkTkgaR/VDtuA
+X-Google-Smtp-Source: AGHT+IEYz4mCFMtgI1U2y62M08ruBZjhmxD/qpb8wLHUyuXItNye5CldaDF1VaKgqhs6Ma/cWnWPow==
+X-Received: by 2002:a05:6214:2462:b0:711:75c9:1766 with SMTP id 6a1803df08f44-7991c124caemr4124536d6.40.1758218817573;
+        Thu, 18 Sep 2025 11:06:57 -0700 (PDT)
+Received: from [192.168.1.239] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-79351f70e9esm16735056d6.42.2025.09.18.11.06.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Sep 2025 11:06:57 -0700 (PDT)
+Message-ID: <53ec38e9-5ba2-4a5e-9bfb-ba43e411be7f@linuxfoundation.org>
+Date: Thu, 18 Sep 2025 12:06:56 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XiyciUMuZFVOfLZH"
-Content-Disposition: inline
-In-Reply-To: <aMwtdtRHT7oHhYLf@willie-the-truck>
-X-Cookie: Victory uber allies!
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: always install UAPI headers to the correct
+ directory
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Jason Gunthorpe <jgg@ziepe.ca>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250918-kselftest-uapi-out-of-tree-v1-1-f4434f28adcd@linutronix.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250918-kselftest-uapi-out-of-tree-v1-1-f4434f28adcd@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 9/18/25 03:56, Thomas Weißschuh wrote:
+> Currently the UAPI headers are always installed into the source directory.
+> When building out-of-tree this doesn't work, as the include path will be
+> wrong and it dirties the source tree, leading to complains by kbuild.
+> 
+> Make sure the 'headers' target installs the UAPI headers in the correctly.
+> 
+> The real target directory can come from multiple places. To handle them all
+> extract the target directory from KHDR_INCLUDES.
+> 
+> Reported-by: Jason Gunthorpe <jgg@nvidia.com>
+> Closes: https://lore.kernel.org/lkml/20250917153209.GA2023406@nvidia.com/
+> Fixes: 1a59f5d31569 ("selftests: Add headers target")
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>   tools/testing/selftests/lib.mk | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
 
---XiyciUMuZFVOfLZH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to linux-kselftest next branch for Linux 6.18-rc1
 
-On Thu, Sep 18, 2025 at 05:04:06PM +0100, Will Deacon wrote:
-> On Thu, Sep 18, 2025 at 01:38:53PM +0100, Will Deacon wrote:
-
-> > It would be great if Christian could give this the thumbs up, given that
-> > it changes clone3(). I think the architecture parts are all ready at this
-> > point.
-
-> ah, I may have spoken too soon :/
-
-Well, there's also the fact that this is based on the vfs tree (or would
-have conflicts with it).
-
-> Catalin pointed me at this glibc thread:
-
-> https://marc.info/?l=glibc-alpha&m=175811917427562
-
-> which sounds like they're not entirely on board with the new ABI.
-
-I think we're getting there on that one, and the main thing they're
-asking for is the ability to reuse the GCS after the thread has exited
-which would be orthogonal to this stuff.  I see Catalin replied on the
-glibc side so I'll direct most of my reply there.
-
-It would be really helpful to get a clear idea of where we're going with
-this series, it's been almost landed for an incredibly long time and
-having it in that state is getting disruptive to doing cleanup to try to
-factor code out of the arches especially with the RISC-V stuff also up
-in the air.  I do think the issues glibc have with this are orthogonal
-to the changes here so hopefully this can go as is.
-
---XiyciUMuZFVOfLZH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjMR7EACgkQJNaLcl1U
-h9D1nQf/S4za9m0EXxhhOOufFtQwWatoF5T4w9ZO30g2u5/wuQAFZeTtARtrFj4I
-Xm26dM7BBBElSdWXIWVxzROT10yXZTN0Hl50o6jhgohNXiV+Bf0dpAR+rGHp7sDh
-0/TpMZMKikrTMhN89mQoHzvIktHJW1v14t3eUTrE/GZaPMdoIg1hIGY00tEVSArg
-nraXjUQMb4uSswTMGJWAzMIiQWQfJ7A+7Yj7Zu14xD+cY55s+xVeAQ2HmRufGpkB
-k7LBGaC7bzkqn7QkqMbwF558gcSC3Nl0WEvzndmxg4i9aN+Xafl4+kQVogguI39S
-UfARm8uNUebl5zS2zY71r5esgHQCXA==
-=Qji3
------END PGP SIGNATURE-----
-
---XiyciUMuZFVOfLZH--
+thanks,
+-- Shuah
 
