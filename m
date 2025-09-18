@@ -1,156 +1,229 @@
-Return-Path: <linux-kselftest+bounces-41867-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41868-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B1DDB85E7F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 18:09:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5671FB85F65
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 18:22:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B1E162443C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 16:05:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CEF97AF249
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 16:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE84F3161B4;
-	Thu, 18 Sep 2025 16:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA897314D34;
+	Thu, 18 Sep 2025 16:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HjgGsBQW"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="L/MI4hPj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013060.outbound.protection.outlook.com [52.101.83.60])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2C131619A
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 16:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758211458; cv=none; b=DqvRpdD/kAweEH+keX/IpoCl3Atho3vfXYD7l6b+txZ8AeoFXrPZdynqeOP/ckbpMqlM6kTf7mc01NKGQAapS0VoOM6M39UpbiCm301R/U79LVJOkIhoq1eh2GvD6yynvoHoSypWcwClsJZJmO0OJzx+VwFVSIryUEiQTg9yfsI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758211458; c=relaxed/simple;
-	bh=y6c8lw8EKlOPBKyWspS/31sWHR2owEThgD2fvz6wrA0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WwosqMnJe5nmbOwz3AvPd+7gYeFW+DW/BBRepilkSKl89JsCZfb3zQMUPGZf+SiUbZaSk/zWDGsodZSb5XXWGV5ztXlYR5aawV6y1lWOcwcjc1saiOPJgfARPfqsYK3JJgxlDqweDiV7xd4UogvzccGH7l2y9Z5pbJFMakciw/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HjgGsBQW; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8250869d5d8so151037085a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 09:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1758211456; x=1758816256; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JQgPx54SvuoVw16CwN5aQ4H7UCLvlv+FoxUfiYTem8g=;
-        b=HjgGsBQW/ujV3dr1oewnRVQi5GiLtqBFU+HTqI6pDGmpiMuWK0EiFL/Naw7PPocwkW
-         J3U0jO2QSxjtiVADvZnAmvdyYRh0X5FWI8Biyvlpg4wx6WDJENE2EtRpCkhuEDaTWA+x
-         OB/4434CTDCYrgkkvq1FkMA8G7vJ83nI+b9XY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758211456; x=1758816256;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JQgPx54SvuoVw16CwN5aQ4H7UCLvlv+FoxUfiYTem8g=;
-        b=Ub0uxbXPwSIX3F4IuI3KQTFJ98q5Hx0LVkARSKkHgtZrF0248Z9vCTmi5l3XPUH7J9
-         CjVsexLUuoyTzhDLX6n8Wi4UgVdbcwqKQhnizQipmnbdqO8qR2nygdNiTAx+WpOcVtRV
-         RUBTkhRZhBGiw9zmJmlKovk8IgBL/THSYucYarFdkWEmnjKWohuxec0Llhr49SooVk0L
-         aV6Dx+t4QwGz3I45+UVkIP5Ep0kzEwcEtFVNPAXn6xmUS/bQfqz1mBEpWlfUkiVPUMw/
-         2ez4tGNAZKZ0WZYKeJFhfbCX9LHRTmH1hUD1k1g95wOS33KdwoUmEnAw2MIOWTI9Mm07
-         10Mw==
-X-Gm-Message-State: AOJu0Yz/hVxro0/2c7o6mWbGRXNYdkk17MVTYuXDcULtUXAFToD0NeAg
-	GlzPKE7CVX3HaZWuJ5jKt1UfJB0vzIVGTVdIDkiCOYUhnJJuKRLKNdVgC9BvtWB76JU=
-X-Gm-Gg: ASbGncssRcbcgI4vHVVTkEmUH6aqMqV7hkuwf+ijnCSc0DGPFhanz42/FuRsavcLuO/
-	NzFrw40ATEPjabnifSVwhJCUyXa9VvCImHBrHj8GMtifjuyvcU/ZPO2m9UuNqYN/aHVs/M9kOTP
-	ljFJst36hZbJF5ij63ro5LG22HTQUfVB+d2tBhmD79zmG3FDDtacicN7MSzs+5tFbMuBlrxqFHN
-	fO2qY5fX9D4TbAyUcCa+DjrNmt6LwaHr9CiZK8mS2Hrp/3579e5M3Xm8+LtvQQXr5263IKgFVXJ
-	xdXn+ct6ovubzg9BGm4qMV8Xat3AIvbUL/23j/Sfgtl2cbFeUv5dVsQ9LGpFHHGN7k+F55mxBSa
-	rtekhokcDrsUJ6m0jTmlPogTgxoQHG5ZibC8veTKuTVC59AZPNdNcsAI1qs69kdj+XwDdCOc2V5
-	ixrbzgiutWUVRwdEUi28nMqTEOVxGPW+jifvwWidJFAEfa256UW0h1Jg80lq0mNhaGnoRm6ho=
-X-Google-Smtp-Source: AGHT+IGIwAd/uoNV9XL+0qecZOvEJzFlnVi+Hy8TF9s9PCR5fJ4tPFqi0Aa5Sz/TtZFISSFPPfxp7g==
-X-Received: by 2002:a05:620a:205e:b0:825:4783:5c6a with SMTP id af79cd13be357-83ba29b6c60mr12732285a.11.1758211455131;
-        Thu, 18 Sep 2025 09:04:15 -0700 (PDT)
-Received: from [192.168.1.239] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-836262b559dsm183650585a.1.2025.09.18.09.04.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Sep 2025 09:04:14 -0700 (PDT)
-Message-ID: <6712e20a-0fa9-44f5-ae0d-f4d9c3324028@linuxfoundation.org>
-Date: Thu, 18 Sep 2025 10:04:13 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D6E312836;
+	Thu, 18 Sep 2025 16:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758212502; cv=fail; b=aIALtu5qMeN49IUN3dcZN1jxwAeTFzub+42G+yxENub9RuiIUN9t9XX1fAUb6px9Cc7DjDeOXNtbkog75GiKR0IInU43ZcYBdqHYFnRPuk6MM6icaM8GhFQPeZmTZZkYq0xZCBKjQWDci2Etawck/8B5ADSZnD5ixKXCC+CiP7s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758212502; c=relaxed/simple;
+	bh=VxEvj2noUBZZ3VLVLhObYr+XwHtnWlwRBEaKarmbvnU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=hYOZHeFTASMxSMTI3XrfIB+MH68dmaDN3eTZAhLg1UcRo7od8IRPZUGkap5BP0wpx2jnJojTeikTIYZEeSBxjeoADyYZ0Zql2OzEAvLLt8qZWDqOQ+FRvgVLB0nupNCreFILG1cyiRx+FpkUDh+SNF9iw3JRTHdFw92ZDdwSdSw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=L/MI4hPj; arc=fail smtp.client-ip=52.101.83.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UoJ01TUgqIlwBxmAluHaNKNQk+MTKp/BC3IKsDEkhxZia+gzQ0g5x7KrsQkyOkUCmBGvnpVHwDnbAbcMOumDmgGntXAJl9iFC7QP1sAp/J1ssohQ2Wm5gaQ0RE2SZ9oICHs5911tqTp1uLY9YDXq74goBHHg9O+3pI3HJ8Vg5Cp+HyRpYSLaBxuXClG66cdwGAa1+5va+b2vDd+uOAfQgdTuUuW0C2jEaKaZHWS4qoQhijii+QtlufA1wZpcKtetvVC3ye7BQYCKqVF8ZRApWxo57A4THKx5KgEJ3gE1fuF7NmvzAHu14m9zAxKW0YtvXvgE6vUquOTGLWqwMq1Xqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y697nvhJ3awJ0wOZdYsic+UlfgJM1iAIkamvrbSgEvM=;
+ b=rcljBqaFEM5JItc4EEUlnvSR4eJ4L69CwF25n3yZemqIw8KeG9zdI918l2JxgasJbJZwGH2zTNxSrA4KwwOGWWY7oQwjkmGQ0KDfw5FzLo9S4XUfdtKB4qGRJf9iW6EjOusF4pW5kMLr/ktp+xE8diDFYbsUdTzKADvbNxJw120ZxQ8w3CM4D1MVq570ieElOUtNe1blWA5n8TRQ9hlMTiw2ALbwjO36G2wYfbCjrIZBI58Vj/xUdCNFFLndBE6QHLqH8KhZ7hnoSn/sWqlsgiGCvMy0KVGE5RgU2GzE58qqFIYwzW4voCj7gJ4ns2EKsNCoSuSEOk+/jsU+Eo+92w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.240) smtp.rcpttodomain=amazon.com
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=nokia-bell-labs.com; dkim=none (message not signed);
+ arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y697nvhJ3awJ0wOZdYsic+UlfgJM1iAIkamvrbSgEvM=;
+ b=L/MI4hPj6+wQRtG1whkQyb5KIe7EEU9itkhIYRQ0flwA7QmjHGPlCDuj8EOV7nLWGvgDKKRX4lX2ZR8eoX0A7yKtQHP/doC/3AoZS7qLqSuauwI1Cw5HE49ycMryNm0D/RBiUZ4Oy5QRiF+K9Dzr9Zt4b6L+ptIOmk4Ks16gQ703vWnN/r1XkhkPIJ7F23FqJVFtsS/HZAJbUH1fndabiZGPwepWyIt54sTemIRhN+SQ2HHsd2YBRso2bp8355Zmx62XhQ9FF8vTUW6DSQTgF7gwZQrubAq7vRt9mUw52d9DcyfhFptfJaFMNn5w4eWZ4XSChEfZN2zfFSCAlIteLA==
+Received: from DB9PR05CA0002.eurprd05.prod.outlook.com (2603:10a6:10:1da::7)
+ by PA1PR07MB11096.eurprd07.prod.outlook.com (2603:10a6:102:501::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.13; Thu, 18 Sep
+ 2025 16:21:37 +0000
+Received: from DB3PEPF0000885D.eurprd02.prod.outlook.com
+ (2603:10a6:10:1da:cafe::1b) by DB9PR05CA0002.outlook.office365.com
+ (2603:10a6:10:1da::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.13 via Frontend Transport; Thu,
+ 18 Sep 2025 16:21:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.240)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.2.240 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.2.240;
+ helo=fihe3nok0735.emea.nsn-net.net; pr=C
+Received: from fihe3nok0735.emea.nsn-net.net (131.228.2.240) by
+ DB3PEPF0000885D.mail.protection.outlook.com (10.167.242.8) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.12
+ via Frontend Transport; Thu, 18 Sep 2025 16:21:37 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fihe3nok0735.emea.nsn-net.net (Postfix) with ESMTP id CFCC220107;
+	Thu, 18 Sep 2025 19:21:35 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: pabeni@redhat.com,
+	edumazet@google.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@amazon.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v2 net-next 00/14] AccECN protocol case handling series
+Date: Thu, 18 Sep 2025 18:21:19 +0200
+Message-Id: <20250918162133.111922-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: kselftest and cargo
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- linux-integrity@vger.kernel.org, rust-for-linux@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <aMlqouOSU8XN7V5H@kernel.org>
- <f18854b2-f9c8-44a3-a09d-3b2ddbcb971a@linuxfoundation.org>
- <aMwf89qekCuAdD1L@kernel.org> <aMwh95tMxB7sMEzy@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <aMwh95tMxB7sMEzy@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB3PEPF0000885D:EE_|PA1PR07MB11096:EE_
+X-MS-Office365-Filtering-Correlation-Id: 575ca6f8-8501-4526-cf90-08ddf6cf712f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|7416014|376014|36860700013|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ODVlSkRFSGtBZFRrTXoyR2VVTDMxTGF0RmJxM1R3L2tNZmpNakI2MnhMQ0Js?=
+ =?utf-8?B?QW43aWpzR0p3b3M1Uk14RE4xTUlZbFFxb3Zsc1puQ3U0dXdLZTYwTHNLVTRh?=
+ =?utf-8?B?L25SRkRKZ2JJOHBrOTI5Q3o3Nmk2Q1h5bEtkYWRldkc1VWVuQmVtd0tSL3ZU?=
+ =?utf-8?B?OCswRFJmRnlnMnFyYjVYWGJ4a0t3aTVydkxKb0trMFZML2RUWDBYc2xvT1I0?=
+ =?utf-8?B?QmhnNEh1RWdxaFhXcEs4eHZLNFpZYlUvMVdUYjdiSkFoYXl6UzFPZjk1eDVQ?=
+ =?utf-8?B?c3lOd1IwcFFEam05eHF3OS9sK1dwOFc5T2hIemorTmpIdlBSQkwvVXlKeURh?=
+ =?utf-8?B?Y1d0R21YN0c4dHJlTmtvOVlnVkdKZ1kvbUt5VDdtTng3TFVNU29NSzhiWDRx?=
+ =?utf-8?B?cCtJc0tKdHNNY0k1c3hraXkyMFNEL0krM1hYNzRlVTRrVUl3ZGp3bjhEMGgy?=
+ =?utf-8?B?Nk1MS3pWdzBiSmpPQVdhMGU5TW5HMmdGUTZlSG03QkdMV0gyM3FvdEx1TTEy?=
+ =?utf-8?B?ZG5YMXNsRzYrWEhFczJKSEdYMkp2K3BiSkpIZUhEa055VUgvTVFUcGxJZmQw?=
+ =?utf-8?B?UElvTEwyZXkrZjFCczhtbGFMdnlhdnhHK0dKUGMyTHBzUmYvMEpxMkl5Sm9D?=
+ =?utf-8?B?aDQrTjdjazl0d0V1R2dFWi81N2RrV0JOWnJBWlRoNGdWSjJpQjVNeTYyTE1m?=
+ =?utf-8?B?MFVxakkyOVIyN1o4cDJJNXFMVC9US2JjOHRCRXFDR3ljbHJ6ZzRTRlFrMkZk?=
+ =?utf-8?B?QjZzbG1PQjRkbVY1SDdNUzN0NW45UlloeFltNzlsYmF1cllNS3hZVEtkd29V?=
+ =?utf-8?B?QjNuN1FIeXZJaFhDVHkrZlRwQXo1QlgxS1lNSm8wOU0zM3JTWjYvckZQOS9x?=
+ =?utf-8?B?SHZNU0dwTjd5cEdXS3RTK2NPVkZCVmFEdldZNnorcFBoRlhDYVJ0djhEOFdJ?=
+ =?utf-8?B?b1RGTm1Wd3VCMDVEUzEybjRYeWk1OEFVVktQVzBHRWZsNlFna0ZGSXFMeTNn?=
+ =?utf-8?B?YmgyRXdpSFJvUVg0N1A5MVhJTXNDZHhWWHhaMER2L1l0WkQ4K1Z0eDdZeVlH?=
+ =?utf-8?B?d3BsVGc5S0UxSGlCeDlDZksyTVdqWHlNSXpHOHpoYm94SEY3Vkk2MkpyUi96?=
+ =?utf-8?B?ZW9OSmJEWEdqQklMdC9TRmhubVZiNXUva3BPajZJYTlMYW1VZWViUytEdXNE?=
+ =?utf-8?B?SHFpcU1aMEhLOERHTUo2aXRYRGdONU95ZkhTWlo2MTdLOUVJeTdWUFhZUEJH?=
+ =?utf-8?B?SndhbGFGbDRHK0FDcVlkcHhNWVdZRXI0YWFjamQ1SGpYMXJ4Vjdna3NqVWZ3?=
+ =?utf-8?B?NmNIeEk3ZklOSkJLQVNIa1NRWHRyRVlnSHQzTTF6Wm5QU296UUNTWk1TS1U1?=
+ =?utf-8?B?SUN4U05GLys5Y2gwSUxtSlVpVTlVYTNCV1l2ZDVjL3d2SkZUd25mcVFkZkNO?=
+ =?utf-8?B?NkRsdEYrb3ArVkFhVnVMZFd0S2ZDSU82WmhmUzIrdm9GMEpYYm1jNGxtZDJ3?=
+ =?utf-8?B?VE4rOURmMU11K2FLWUcwNzA2SHpUZ2svMCtoZ3NMR0dkb3FhTXNXemlXUWZh?=
+ =?utf-8?B?a3E5aExUTFFzeWU4VE1jVmtTTmNIaGx4TzcvaW8wTnZXUWEzWVZLYVE1eUJE?=
+ =?utf-8?B?dk5CdUthVmdONXcwTE5vanRIcEJjSTRjQ2I3V05QbEYvbVl6KzB6dFhRdkxG?=
+ =?utf-8?B?L2tpeno0bDU2U1AyQXZXaWk2Mmc1NE1YRzQvVkJlcXhuTnMzc3dTZ1NKSEI1?=
+ =?utf-8?B?QkdQa0tzeTNYdTFBdkhRaFlsc3Z1a21pd1A3TTBic2NtOG1aTnZjc09pMzFo?=
+ =?utf-8?B?OXkvTm5Jbmh4aFNHSUlUbzhZcDhPMGpqeXZBRTFvaVFhUzZybmxTbEpJblU0?=
+ =?utf-8?B?UEhIaTJRZ2hXNHVvTGlHN3l4NTI0UWtZbmk1UTQrVm8vcXlaczBab2Q4dVpX?=
+ =?utf-8?B?R0RGbXUxZDB3RzRYWk9sNmhyd0liT2hYTWFQWU9sanQ3WTNSOXFTWnRDM2xG?=
+ =?utf-8?B?ZS9BQ2ZSMXZNV01ndkZVUmpwNnYzVUpnZUFUZDI1R2M4RXBjMHlFcVJNcW5w?=
+ =?utf-8?B?clF2a1hLMFN3MFJYVEd2Kzk0SCtiQ1h5eldJUT09?=
+X-Forefront-Antispam-Report:
+	CIP:131.228.2.240;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0735.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(7416014)(376014)(36860700013)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2025 16:21:37.3307
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 575ca6f8-8501-4526-cf90-08ddf6cf712f
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.240];Helo=[fihe3nok0735.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DB3PEPF0000885D.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR07MB11096
 
-On 9/18/25 09:15, Jarkko Sakkinen wrote:
-> On Thu, Sep 18, 2025 at 06:06:31PM +0300, Jarkko Sakkinen wrote:
->> On Tue, Sep 16, 2025 at 04:39:37PM -0600, Shuah Khan wrote:
->>> On 9/16/25 07:48, Jarkko Sakkinen wrote:
->>>> Hi,
->>>>
->>>> The pre-existing kselftest for TPM2 is derived works of my earlier Python
->>>> based rudimentary TPM2 stack called 'tpm2-scripts'.
->>>>
->>>> In order to get more coverage and more mainintainable and extensible test
->>>> suite I'd like to eventually rewrite the tests with bash and tpm2sh, which
->>>> is a TPM2 cli written with Rust and based on my new TPM2 stack [1] [2].
->>>>
->>>> Given linux-rust work, would it be acceptable to require cargo to install
->>>> a runner for kselftest? 
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-What is runner for kselftest in this context?
+Hello,
 
-I'm finishing off now 0.11 version of the tool,
->>>> which will take some time (versions before that are honestly quite bad,
->>>> don't try them) but after that this would be something I'd like to
->>>> put together.
->>>
->>> Probably fine - how does this impact kselftest default run?
->>
->> OK so this was early query: I might introduce such test as part
->> of series that hasa waited for long time for an update [1]. I can
->> use tpm2sh more easily to reproduce equivalent crypto as kernel
->> does and make a test that can compare the results in a meaningful
->> manner. I also plan to relocate tpm2sh as part of git.kernel.org
->> custody from Github, as its main dependency tpm2-protocol crate
->> already is [2].
-> 
-> Some motivation context, I left out on doing the aforementioned
-> patch set because I did not see importing TPM2 keys useful enough
-> application but recently I've been dealing with remote attestation
-> and that levels up the feature something quite useful.
-> 
-> I.e. so called attestation identity keys are persisted to the NVRAM of a
-> TPM chip and it would great if kernel could at boot time reserve
-> selected (in the command-line) NV indexes and wrap them up into keyring
-> keys. Since in UKI model command-line is signed that effectively locks
-> them in into controlled use only through keyring as kernel can
-> guard that via the device.
-> 
-> I could put tons more detail into this but point to open up this
-> complexity is that getting all cryptography right is easiest done
-> by reproducing it in a test in user space and comparing the
-> results, and Rust and the crate I did give sort of powerful
-> way to describe all this. And also because of the complexity
-> it needs to be anchroed with some kind of sufficient test.
-> 
+Plesae find the v2 AccECN case handling patch series, which covers
+several excpetional case handling of Accurate ECN spec (RFC9768),
+adds new identifiers to be used by CC modules, adds ecn_delta into
+rate_sample, and keeps the ACE counter for computation, etc.
 
-I would say get this in a shape where you can share it for review.
-We can discuss the changes. One thing to keep in mind is dependencies
-for kselftest default run need to be minimal so these tests can run
-on rings with minimal tool support.
+This patch series is part of the full AccECN patch series, which is available at
+https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
 
-thanks,
--- Shuah
+Best regards,
+Chia-Yu
+
+---
+Chia-Yu Chang (11):
+  tcp: L4S ECT(1) identifier and NEEDS_ACCECN for CC modules
+  tcp: disable RFC3168 fallback identifier for CC modules
+  tcp: accecn: handle unexpected AccECN negotiation feedback
+  tcp: accecn: retransmit downgraded SYN in AccECN negotiation
+  tcp: move increment of num_retrans
+  tcp: accecn: retransmit SYN/ACK without AccECN option or non-AccECN
+    SYN/ACK
+  tcp: accecn: unset ECT if receive or send ACE=0 in AccECN negotiaion
+  tcp: accecn: fallback outgoing half link to non-AccECN
+  tcp: accecn: verify ACE counter in 1st ACK after AccECN negotiation
+  tcp: accecn: stop sending AccECN opt when loss ACK w/ option
+  tcp: accecn: enable AccECN
+
+Ilpo Järvinen (3):
+  tcp: try to avoid safer when ACKs are thinned
+  gro: flushing when CWR is set negatively affects AccECN
+  tcp: accecn: Add ece_delta to rate_sample
+
+ .../networking/net_cachelines/tcp_sock.rst    |  1 +
+ include/linux/tcp.h                           |  4 +-
+ include/net/inet_ecn.h                        | 20 +++-
+ include/net/tcp.h                             | 30 +++++-
+ include/net/tcp_ecn.h                         | 85 ++++++++++++-----
+ net/ipv4/sysctl_net_ipv4.c                    |  2 +-
+ net/ipv4/tcp.c                                |  2 +
+ net/ipv4/tcp_cong.c                           |  9 +-
+ net/ipv4/tcp_input.c                          | 91 +++++++++++++------
+ net/ipv4/tcp_minisocks.c                      | 40 +++++---
+ net/ipv4/tcp_offload.c                        |  3 +-
+ net/ipv4/tcp_output.c                         | 38 +++++---
+ 12 files changed, 239 insertions(+), 86 deletions(-)
+
+-- 
+2.34.1
+
 
