@@ -1,152 +1,156 @@
-Return-Path: <linux-kselftest+bounces-41866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41867-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 659BFB85E76
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 18:08:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B1DDB85E7F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 18:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00F823BC38E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 16:04:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B1E162443C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 16:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E91D2315D57;
-	Thu, 18 Sep 2025 16:04:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE84F3161B4;
+	Thu, 18 Sep 2025 16:04:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dscna0nG"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HjgGsBQW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6E0314A62;
-	Thu, 18 Sep 2025 16:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2C131619A
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 16:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758211455; cv=none; b=fiWGvBhHrjfxASKMnfA7xkL0pRurIOvi14/r1PoNgRZIZQqqX8CmLU93uCdF4sdkI0VefamvfhljZSrc10r2PPBNjek0gWTEBX/rOvgFw/Qgrs1CPqI6fL9JPVYufpdL5Sql9S3IA1Z2sOa4yTW1WnYTvSY+9scoRY2hm+vgRcM=
+	t=1758211458; cv=none; b=DqvRpdD/kAweEH+keX/IpoCl3Atho3vfXYD7l6b+txZ8AeoFXrPZdynqeOP/ckbpMqlM6kTf7mc01NKGQAapS0VoOM6M39UpbiCm301R/U79LVJOkIhoq1eh2GvD6yynvoHoSypWcwClsJZJmO0OJzx+VwFVSIryUEiQTg9yfsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758211455; c=relaxed/simple;
-	bh=KoVegkDPh0ZM36aRdHcQyVrYFVVEpjR6Sp+OFwQrv48=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kQF1z2/SHg4b34vtntgFtRoh3pMwuVMB0YAdzzBY4IGbOf7h5di/inc8WhDh21MnCOMzvsmSWE35RgrczdW8VdKxKZg3LlhRS20+fZ+5WHFCme1k1bmXBBwxP4qWv1NH7+/v7iMJ4wgx/41ponO/YI6uv3MSzahsdIGZFq5Mrng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dscna0nG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 145F1C4CEF7;
-	Thu, 18 Sep 2025 16:04:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758211455;
-	bh=KoVegkDPh0ZM36aRdHcQyVrYFVVEpjR6Sp+OFwQrv48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Dscna0nGYhWGehI2V//TDn/qvcHItUF/gbzWHKcwPKVxSUt2uVtcVXY6GmGg9I/Ek
-	 I/S3gCHbNFOHrRMa6c21b57WXDeLXSH1/ul7o3hjTUvnboJdIBqkq0vjskW3rjLBch
-	 EtiDlPeSJS+ioTfYmaeXOOPNvJNAfnpOmgvlWDOyFt2nG1fmVJy4MTMxuphCi+/ehm
-	 nh8u5Gt7vfbaprkebj1k5Zmpjy2v0W7N7fbxekGIac4ZXpWhz/hfCgaZio/aCTxGOY
-	 nfVhloTAhAvQDl2RUMsX+HB3v2nG2J4fm8z1GvnWpD9UiJmADjQLlP6GHupIQRDZEF
-	 LfRt9ejSMHiEA==
-Date: Thu, 18 Sep 2025 17:04:06 +0100
-From: Will Deacon <will@kernel.org>
-To: Mark Brown <broonie@kernel.org>, brauner@kernel.org
-Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>, jannh@google.com,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	Wilco Dijkstra <wilco.dijkstra@arm.com>,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH v21 4/8] fork: Add shadow stack support to clone3()
-Message-ID: <aMwtdtRHT7oHhYLf@willie-the-truck>
-References: <20250916-clone3-shadow-stack-v21-0-910493527013@kernel.org>
- <20250916-clone3-shadow-stack-v21-4-910493527013@kernel.org>
- <aMv9XRq_sAQbQwjI@willie-the-truck>
+	s=arc-20240116; t=1758211458; c=relaxed/simple;
+	bh=y6c8lw8EKlOPBKyWspS/31sWHR2owEThgD2fvz6wrA0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WwosqMnJe5nmbOwz3AvPd+7gYeFW+DW/BBRepilkSKl89JsCZfb3zQMUPGZf+SiUbZaSk/zWDGsodZSb5XXWGV5ztXlYR5aawV6y1lWOcwcjc1saiOPJgfARPfqsYK3JJgxlDqweDiV7xd4UogvzccGH7l2y9Z5pbJFMakciw/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HjgGsBQW; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8250869d5d8so151037085a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 09:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1758211456; x=1758816256; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JQgPx54SvuoVw16CwN5aQ4H7UCLvlv+FoxUfiYTem8g=;
+        b=HjgGsBQW/ujV3dr1oewnRVQi5GiLtqBFU+HTqI6pDGmpiMuWK0EiFL/Naw7PPocwkW
+         J3U0jO2QSxjtiVADvZnAmvdyYRh0X5FWI8Biyvlpg4wx6WDJENE2EtRpCkhuEDaTWA+x
+         OB/4434CTDCYrgkkvq1FkMA8G7vJ83nI+b9XY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758211456; x=1758816256;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JQgPx54SvuoVw16CwN5aQ4H7UCLvlv+FoxUfiYTem8g=;
+        b=Ub0uxbXPwSIX3F4IuI3KQTFJ98q5Hx0LVkARSKkHgtZrF0248Z9vCTmi5l3XPUH7J9
+         CjVsexLUuoyTzhDLX6n8Wi4UgVdbcwqKQhnizQipmnbdqO8qR2nygdNiTAx+WpOcVtRV
+         RUBTkhRZhBGiw9zmJmlKovk8IgBL/THSYucYarFdkWEmnjKWohuxec0Llhr49SooVk0L
+         aV6Dx+t4QwGz3I45+UVkIP5Ep0kzEwcEtFVNPAXn6xmUS/bQfqz1mBEpWlfUkiVPUMw/
+         2ez4tGNAZKZ0WZYKeJFhfbCX9LHRTmH1hUD1k1g95wOS33KdwoUmEnAw2MIOWTI9Mm07
+         10Mw==
+X-Gm-Message-State: AOJu0Yz/hVxro0/2c7o6mWbGRXNYdkk17MVTYuXDcULtUXAFToD0NeAg
+	GlzPKE7CVX3HaZWuJ5jKt1UfJB0vzIVGTVdIDkiCOYUhnJJuKRLKNdVgC9BvtWB76JU=
+X-Gm-Gg: ASbGncssRcbcgI4vHVVTkEmUH6aqMqV7hkuwf+ijnCSc0DGPFhanz42/FuRsavcLuO/
+	NzFrw40ATEPjabnifSVwhJCUyXa9VvCImHBrHj8GMtifjuyvcU/ZPO2m9UuNqYN/aHVs/M9kOTP
+	ljFJst36hZbJF5ij63ro5LG22HTQUfVB+d2tBhmD79zmG3FDDtacicN7MSzs+5tFbMuBlrxqFHN
+	fO2qY5fX9D4TbAyUcCa+DjrNmt6LwaHr9CiZK8mS2Hrp/3579e5M3Xm8+LtvQQXr5263IKgFVXJ
+	xdXn+ct6ovubzg9BGm4qMV8Xat3AIvbUL/23j/Sfgtl2cbFeUv5dVsQ9LGpFHHGN7k+F55mxBSa
+	rtekhokcDrsUJ6m0jTmlPogTgxoQHG5ZibC8veTKuTVC59AZPNdNcsAI1qs69kdj+XwDdCOc2V5
+	ixrbzgiutWUVRwdEUi28nMqTEOVxGPW+jifvwWidJFAEfa256UW0h1Jg80lq0mNhaGnoRm6ho=
+X-Google-Smtp-Source: AGHT+IGIwAd/uoNV9XL+0qecZOvEJzFlnVi+Hy8TF9s9PCR5fJ4tPFqi0Aa5Sz/TtZFISSFPPfxp7g==
+X-Received: by 2002:a05:620a:205e:b0:825:4783:5c6a with SMTP id af79cd13be357-83ba29b6c60mr12732285a.11.1758211455131;
+        Thu, 18 Sep 2025 09:04:15 -0700 (PDT)
+Received: from [192.168.1.239] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-836262b559dsm183650585a.1.2025.09.18.09.04.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Sep 2025 09:04:14 -0700 (PDT)
+Message-ID: <6712e20a-0fa9-44f5-ae0d-f4d9c3324028@linuxfoundation.org>
+Date: Thu, 18 Sep 2025 10:04:13 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aMv9XRq_sAQbQwjI@willie-the-truck>
+User-Agent: Mozilla Thunderbird
+Subject: Re: kselftest and cargo
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ linux-integrity@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <aMlqouOSU8XN7V5H@kernel.org>
+ <f18854b2-f9c8-44a3-a09d-3b2ddbcb971a@linuxfoundation.org>
+ <aMwf89qekCuAdD1L@kernel.org> <aMwh95tMxB7sMEzy@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <aMwh95tMxB7sMEzy@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 18, 2025 at 01:38:53PM +0100, Will Deacon wrote:
-> On Tue, Sep 16, 2025 at 12:12:09AM +0100, Mark Brown wrote:
-> > Unlike with the normal stack there is no API for configuring the shadow
-> > stack for a new thread, instead the kernel will dynamically allocate a
-> > new shadow stack with the same size as the normal stack. This appears to
-> > be due to the shadow stack series having been in development since
-> > before the more extensible clone3() was added rather than anything more
-> > deliberate.
-> > 
-> > Add a parameter to clone3() specifying a shadow stack pointer to use
-> > for the new thread, this is inconsistent with the way we specify the
-> > normal stack but during review concerns were expressed about having to
-> > identify where the shadow stack pointer should be placed especially in
-> > cases where the shadow stack has been previously active.  If no shadow
-> > stack is specified then the existing implicit allocation behaviour is
-> > maintained.
-> > 
-> > If a shadow stack pointer is specified then it is required to have an
-> > architecture defined token placed on the stack, this will be consumed by
-> > the new task, the shadow stack is specified by pointing to this token.  If
-> > no valid token is present then this will be reported with -EINVAL.  This
-> > token prevents new threads being created pointing at the shadow stack of
-> > an existing running thread.  On architectures with support for userspace
-> > pivoting of shadow stacks it is expected that the same format and placement
-> > of tokens will be used, this is the case for arm64 and x86.
-> > 
-> > If the architecture does not support shadow stacks the shadow stack
-> > pointer must be not be specified, architectures that do support the
-> > feature are expected to enforce the same requirement on individual
-> > systems that lack shadow stack support.
-> > 
-> > Update the existing arm64 and x86 implementations to pay attention to
-> > the newly added arguments, in order to maintain compatibility we use the
-> > existing behaviour if no shadow stack is specified. Since we are now
-> > using more fields from the kernel_clone_args we pass that into the
-> > shadow stack code rather than individual fields.
-> > 
-> > Portions of the x86 architecture code were written by Rick Edgecombe.
-> > 
-> > Acked-by: Yury Khrustalev <yury.khrustalev@arm.com>
-> > Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Signed-off-by: Mark Brown <broonie@kernel.org>
-> > ---
-> >  arch/arm64/mm/gcs.c              | 47 +++++++++++++++++++-
-> >  arch/x86/include/asm/shstk.h     | 11 +++--
-> >  arch/x86/kernel/process.c        |  2 +-
-> >  arch/x86/kernel/shstk.c          | 53 ++++++++++++++++++++---
-> >  include/asm-generic/cacheflush.h | 11 +++++
-> >  include/linux/sched/task.h       | 17 ++++++++
-> >  include/uapi/linux/sched.h       |  9 ++--
-> >  kernel/fork.c                    | 93 ++++++++++++++++++++++++++++++++++------
-> >  8 files changed, 217 insertions(+), 26 deletions(-)
+On 9/18/25 09:15, Jarkko Sakkinen wrote:
+> On Thu, Sep 18, 2025 at 06:06:31PM +0300, Jarkko Sakkinen wrote:
+>> On Tue, Sep 16, 2025 at 04:39:37PM -0600, Shuah Khan wrote:
+>>> On 9/16/25 07:48, Jarkko Sakkinen wrote:
+>>>> Hi,
+>>>>
+>>>> The pre-existing kselftest for TPM2 is derived works of my earlier Python
+>>>> based rudimentary TPM2 stack called 'tpm2-scripts'.
+>>>>
+>>>> In order to get more coverage and more mainintainable and extensible test
+>>>> suite I'd like to eventually rewrite the tests with bash and tpm2sh, which
+>>>> is a TPM2 cli written with Rust and based on my new TPM2 stack [1] [2].
+>>>>
+>>>> Given linux-rust work, would it be acceptable to require cargo to install
+>>>> a runner for kselftest? 
+
+What is runner for kselftest in this context?
+
+I'm finishing off now 0.11 version of the tool,
+>>>> which will take some time (versions before that are honestly quite bad,
+>>>> don't try them) but after that this would be something I'd like to
+>>>> put together.
+>>>
+>>> Probably fine - how does this impact kselftest default run?
+>>
+>> OK so this was early query: I might introduce such test as part
+>> of series that hasa waited for long time for an update [1]. I can
+>> use tpm2sh more easily to reproduce equivalent crypto as kernel
+>> does and make a test that can compare the results in a meaningful
+>> manner. I also plan to relocate tpm2sh as part of git.kernel.org
+>> custody from Github, as its main dependency tpm2-protocol crate
+>> already is [2].
 > 
-> It would be great if Christian could give this the thumbs up, given that
-> it changes clone3(). I think the architecture parts are all ready at this
-> point.
+> Some motivation context, I left out on doing the aforementioned
+> patch set because I did not see importing TPM2 keys useful enough
+> application but recently I've been dealing with remote attestation
+> and that levels up the feature something quite useful.
+> 
+> I.e. so called attestation identity keys are persisted to the NVRAM of a
+> TPM chip and it would great if kernel could at boot time reserve
+> selected (in the command-line) NV indexes and wrap them up into keyring
+> keys. Since in UKI model command-line is signed that effectively locks
+> them in into controlled use only through keyring as kernel can
+> guard that via the device.
+> 
+> I could put tons more detail into this but point to open up this
+> complexity is that getting all cryptography right is easiest done
+> by reproducing it in a test in user space and comparing the
+> results, and Rust and the crate I did give sort of powerful
+> way to describe all this. And also because of the complexity
+> it needs to be anchroed with some kind of sufficient test.
+> 
 
-ah, I may have spoken too soon :/
+I would say get this in a shape where you can share it for review.
+We can discuss the changes. One thing to keep in mind is dependencies
+for kselftest default run need to be minimal so these tests can run
+on rings with minimal tool support.
 
-Catalin pointed me at this glibc thread:
-
-https://marc.info/?l=glibc-alpha&m=175811917427562
-
-which sounds like they're not entirely on board with the new ABI.
-
-Will
+thanks,
+-- Shuah
 
