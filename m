@@ -1,111 +1,113 @@
-Return-Path: <linux-kselftest+bounces-41827-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41828-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D223B845D5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 13:31:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85561B84614
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 13:39:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C01571BC21A0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 11:32:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D4A21BC45FF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 11:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330BD302772;
-	Thu, 18 Sep 2025 11:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BA55303A06;
+	Thu, 18 Sep 2025 11:39:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lhdT2L1t";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RiyRI2no";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mZ/uXFCm";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="F4mpeiMA"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yAbG/z53";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="wEOWNzPt";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yAbG/z53";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="wEOWNzPt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7334F2EF660
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 11:31:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9709302740
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 11:39:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758195104; cv=none; b=AetmHIm4rqQUbRHwp77d7aSo1dE0gtZdwsrV6YVsk2RvE2ZZvTWankZQwLQCCjXGWlOFtAL/505YrlTZskdg0lWHFpvlBTlYDXqSCLjDh+RAsDMcavk0J22bZuYYh7DyinYQY/KHtyuE6IlJ3KiroRhDChCSA/YdjwDkLaC5N5g=
+	t=1758195544; cv=none; b=CkNU/xJ5jxYblg6F/DLkDGxz+HwA4TosCx78HaAH1xtsFY07GzyYSlfXW4jALvrzx8e/obQFCXuXVMVmiY70scUL/DFcewYy1kj6arwLLpj1/Ddr6W5l9oO8KFq7EDev69lqPvi2Z93q4G6tDztsgTOrgWik2Gq0K0iTZ1fiDkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758195104; c=relaxed/simple;
-	bh=MLl6OKx32oF/mUyZeLnKIVTtA/C1JJP+sSJUZhdTOM8=;
+	s=arc-20240116; t=1758195544; c=relaxed/simple;
+	bh=FiCYTYBmBwByIybftqCSpMtDVDCIhnvrAqqcqSn93Yg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cGvTpshiz/S4kApePYhHxgM1IXeHC3dCnXFSKPtIA6b+jVQqQR+Hwj0d1o5rk/01wAPvsuH6/v3saHYJT19m4SqCqxleec2USdDStKT7Z1HWvRjkU1o0sBPdEjIPmtMpfErAPvnl47rTfbjQnqE9gxNf2ZWwjbSgXzPPFB44JCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lhdT2L1t; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RiyRI2no; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mZ/uXFCm; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=F4mpeiMA; arc=none smtp.client-ip=195.135.223.130
+	 Content-Type:Content-Disposition:In-Reply-To; b=b4dNnz+O53MRllj+Unc4/8E92LUtY6I5vlhv8vKa/WQiy02Cxp26tXzrYw0xYMN58vDgKSk6zQiHGyqwmYmu8cLAB6B/a1c587neJt0B75ek4bN+MWwMy5msvHZ3IjMY5BQi23hM8ML1cW/3gSB+0iJBSVAP04B0jyVW4SNJ25M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yAbG/z53; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=wEOWNzPt; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yAbG/z53; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=wEOWNzPt; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8AE0233791;
-	Thu, 18 Sep 2025 11:31:38 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id AA3D31F393;
+	Thu, 18 Sep 2025 11:39:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758195099; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1758195540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=F0jk5pHWcSpilbLxJaV/z4FUuxkpZfccsNZuNA2Q9Bo=;
-	b=lhdT2L1tZ/eU01dAvv55m+bCEsqSXn9IA/5PI3U3FxpNs0aIVG5VXdU/1hy0iSeEN7Pw79
-	Bofhd8h+Lu/NUDQgTx+DFJ2rfruf0Ez7PC6X5J22of1d6Wb9cAQUAzeg5iFC2cXxYAzxBy
-	JAGOlD4SlPjr6tEiifhJG8ab/O4KClw=
+	bh=pXXknVDpmNYnLUtM1qz0zJi5d3AHN3Yxt2BrVK20pvY=;
+	b=yAbG/z53WbruUxX/3ies41/VNu2qWdBGFLaPMVRN80Cqe+oNynqfJXnyf+t56Cx0mM2SdW
+	+RVPmSGF6YFbQCt9A4UJ5/Jc4haI1+n43JilnK3sGxohsgBrAS2Jw3Ki3js3oL6P4rR15/
+	f5tG+7EqBS5TJH4OmQlCKzmqFbTeoe8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758195099;
+	s=susede2_ed25519; t=1758195540;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=F0jk5pHWcSpilbLxJaV/z4FUuxkpZfccsNZuNA2Q9Bo=;
-	b=RiyRI2nob+MF0STXidJ4xVHvz+Hvs6a7btnXjChpqptOZmH1OMRuQau6ztX6QilOsI19tM
-	mWjgrlV4vqR3/4AQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="mZ/uXFCm";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=F4mpeiMA
+	bh=pXXknVDpmNYnLUtM1qz0zJi5d3AHN3Yxt2BrVK20pvY=;
+	b=wEOWNzPth5hUlnK6FcdpsFJbnSHl9DOJAzXfjeo/GAewIY/wgz1P66A196GZT8LOd2sBZM
+	mNY8RzOOf0aePvAA==
+Authentication-Results: smtp-out2.suse.de;
+	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758195098; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1758195540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=F0jk5pHWcSpilbLxJaV/z4FUuxkpZfccsNZuNA2Q9Bo=;
-	b=mZ/uXFCm/LcB68G+Pulz+vmUd3OkOcAShB69OktBNN3CDzNOUlingOy/CvYD7qdUPgI1pD
-	SIT86IppWhAFXzD3Adv0o6HXgCYSPrRAOiK85uI5+GizLBu7dT+PSMZDf/D257u/Ah4LNl
-	j2rcNCxlLRaGLIFjVQ9W0ZkBFdbN/vw=
+	bh=pXXknVDpmNYnLUtM1qz0zJi5d3AHN3Yxt2BrVK20pvY=;
+	b=yAbG/z53WbruUxX/3ies41/VNu2qWdBGFLaPMVRN80Cqe+oNynqfJXnyf+t56Cx0mM2SdW
+	+RVPmSGF6YFbQCt9A4UJ5/Jc4haI1+n43JilnK3sGxohsgBrAS2Jw3Ki3js3oL6P4rR15/
+	f5tG+7EqBS5TJH4OmQlCKzmqFbTeoe8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758195098;
+	s=susede2_ed25519; t=1758195540;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=F0jk5pHWcSpilbLxJaV/z4FUuxkpZfccsNZuNA2Q9Bo=;
-	b=F4mpeiMAiFwgKtIBR86KL8f7OjWr7aG5rnz8aOXCA4LWMC1X5SXu1uiugKiTYOreT33gH6
-	4P4VfZBx5MQ+j7Cw==
+	bh=pXXknVDpmNYnLUtM1qz0zJi5d3AHN3Yxt2BrVK20pvY=;
+	b=wEOWNzPth5hUlnK6FcdpsFJbnSHl9DOJAzXfjeo/GAewIY/wgz1P66A196GZT8LOd2sBZM
+	mNY8RzOOf0aePvAA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 80F0C13A51;
-	Thu, 18 Sep 2025 11:31:36 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B186F13A51;
+	Thu, 18 Sep 2025 11:38:58 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id r3swHJjty2gJBQAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Thu, 18 Sep 2025 11:31:36 +0000
-Date: Thu, 18 Sep 2025 12:31:30 +0100
+	id luEtKFLvy2i6BwAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Thu, 18 Sep 2025 11:38:58 +0000
+Date: Thu, 18 Sep 2025 12:38:56 +0100
 From: Pedro Falcato <pfalcato@suse.de>
-To: Kalesh Singh <kaleshsingh@google.com>
-Cc: akpm@linux-foundation.org, minchan@kernel.org, 
-	lorenzo.stoakes@oracle.com, david@redhat.com, Liam.Howlett@oracle.com, rppt@kernel.org, 
-	kernel-team@android.com, android-mm@google.com, stable@vger.kernel.org, 
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Kalesh Singh <kaleshsingh@google.com>, akpm@linux-foundation.org, 
+	minchan@kernel.org, lorenzo.stoakes@oracle.com, david@redhat.com, 
+	Liam.Howlett@oracle.com, rppt@kernel.org, kernel-team@android.com, android-mm@google.com, 
 	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
 	Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
 	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
 	Valentin Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>, 
 	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
 	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/7] mm: fix off-by-one error in VMA count limit checks
-Message-ID: <zol3d77dnwgrkbwc7lui3qm2mkwqftzifr6gn7smtbg4jo4bte@y4dzwfvt2xtj>
+Subject: Re: [PATCH v2 7/7] mm/tracing: introduce max_vma_count_exceeded
+ trace event
+Message-ID: <6x64jf7szyy52gug6qoixhhjq6vsrcqpozqj4ambsehh2jprj2@qeye6qevem4g>
 References: <20250915163838.631445-1-kaleshsingh@google.com>
- <20250915163838.631445-2-kaleshsingh@google.com>
+ <20250915163838.631445-8-kaleshsingh@google.com>
+ <20250915194158.472edea5@gandalf.local.home>
+ <CAC_TJvconNNKPboAbsfXFBboiRCYgE2AN23ask1gdaj9=wuHAQ@mail.gmail.com>
+ <20250916115220.4a90c745@batman.local.home>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -114,71 +116,66 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250915163838.631445-2-kaleshsingh@google.com>
+In-Reply-To: <20250916115220.4a90c745@batman.local.home>
 X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 8AE0233791
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.01 / 50.00];
+X-Spamd-Result: default: False [-3.80 / 50.00];
 	BAYES_HAM(-3.00)[99.99%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
 	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
 	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
 	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[34];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	R_RATELIMIT(0.00)[to_ip_from(RLg31yqq1xypujqsbh8raoa6zf)];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux-foundation.org:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,oracle.com:email,suse.de:dkim,suse.de:email]
-X-Spam-Score: -4.01
+	RCVD_TLS_ALL(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLtinr53e731m8tnofz4ju9k8y)];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
 
-On Mon, Sep 15, 2025 at 09:36:32AM -0700, Kalesh Singh wrote:
-> The VMA count limit check in do_mmap() and do_brk_flags() uses a
-> strict inequality (>), which allows a process's VMA count to exceed
-> the configured sysctl_max_map_count limit by one.
+On Tue, Sep 16, 2025 at 11:52:20AM -0400, Steven Rostedt wrote:
+> On Mon, 15 Sep 2025 18:19:53 -0700
+> Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> A process with mm->map_count == sysctl_max_map_count will incorrectly
-> pass this check and then exceed the limit upon allocation of a new VMA
-> when its map_count is incremented.
 > 
-> Other VMA allocation paths, such as split_vma(), already use the
-> correct, inclusive (>=) comparison.
+> > Hi Steve,
+> > 
+> > Thanks for the comments and suggestion you are right we can use bpf to
+> > get the comm. There is nothing special about this trace event.  I will
+> > drop comm in the next revision.
+> > 
+> > The reason I did the task_struct parameter (current): I believe there
+> > is a limitation that we must  specify at least 1 parameter to the
+> > TRACE_EVENT()  PROTO and ARGS macros.
 > 
-> Fix this bug by changing the comparison to be inclusive in do_mmap()
-> and do_brk_flags(), bringing them in line with the correct behavior
-> of other allocation paths.
+> OK, then this is another issue. We don't want tracepoint "markers".
+> Each tracepoint can take up to 5K in memory due to the code it
+> generates and the meta data to control it.
 > 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Cc: <stable@vger.kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> Cc: Mike Rapoport <rppt@kernel.org>
-> Cc: Minchan Kim <minchan@kernel.org>
-> Cc: Pedro Falcato <pfalcato@suse.de>
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> For something like that, we highly recommend dynamic probes (fprobes,
+> kprobes, etc).
+> 
+> The only purpose of a static tracepoint is to get data within a
+> function that is too difficult to get via a probe. It should never be
+> used as a trigger where its purpose is "we hit this path".
+>
 
+Isn't the usual problem with that approach, that of static functions/static
+inline functions? I was tracing through a problem a few months ago, and man
+I really did think "wouldn't it be nice to have a tracepoint instead of fishing
+around for kprobe spots".
 
-Reviewed-by: Pedro Falcato <pfalcato@suse.de>
+Not that I particularly think a tracepoint is super worth it in this case, but,
+y'know.
 
 -- 
 Pedro
