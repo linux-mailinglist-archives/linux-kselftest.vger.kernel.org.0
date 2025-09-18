@@ -1,89 +1,101 @@
-Return-Path: <linux-kselftest+bounces-41884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A205B860F0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 18:35:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47D62B86130
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 18:43:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 537CB4A3014
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 16:35:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 029193B19E9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 16:43:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3D52FFDFD;
-	Thu, 18 Sep 2025 16:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3789E311C01;
+	Thu, 18 Sep 2025 16:43:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pqwp1By0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MzT016lF"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FCF291C1F;
-	Thu, 18 Sep 2025 16:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0774523D7E9;
+	Thu, 18 Sep 2025 16:43:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758213348; cv=none; b=icoiToL9lJLzmiNjQJ1enaGUPXgTjlp7qXfJ3PuGQ7Ofo3KtPK2NSxKrtKsAp6Ko1QmEXDj1OnmnbaPDpe/Lx921Qc4g9Gq2BW0AsyvwQJRVXu93AGWhN4GqBsgu2FosAjora71vp4f3XDOne2qotCdTq25yJcZsECqWTnUxokI=
+	t=1758213803; cv=none; b=ME1aJSEFqvHpI/fJpEUX8BOWLSOH4WXXi+OLCRyVCJ01oIDmmq14cjJGgE+ouGhxecJ9cTlCo9U/BXzoAZ8had3xm5hf2vG6zZEcKjhjDHUC+e8r78DOLlczwnFG8qYukvyqof/js/5cNj9PTXJ73j5n0i5W836IqbO1jl9g2EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758213348; c=relaxed/simple;
-	bh=uxbX3t65LxbL3UUj4PABQhIPHTRcI8HpQVH4OGiCm8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hHjzEkwv43lLHwc5X+FGlesxnlxUtxwcR15AkDIhIa9u77ozrP5PzcWC32pr4HF/obqqYjagrGQiBghJ3KXNZaycyZpd++q2GKC/ARrKnLIS/tlZNjUwskvMtT7GYyJIfxMYl9UwNHpwL92dj1cVC79qwwE9vJ1VP0r/LrogUbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pqwp1By0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2CC9C4CEE7;
-	Thu, 18 Sep 2025 16:35:46 +0000 (UTC)
+	s=arc-20240116; t=1758213803; c=relaxed/simple;
+	bh=Hj8pTaQfwTaM3cwtIdwgHTA6BIscCoAxZ6jBPJ5Yk74=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=huCVqA3UYUOMfjq6OCYuQpKx2bLMTEqEBGdqK6BEoeLvn0zugFnNQx88H/SkarUX8nRNvglAodKZfD7PwLCuM9447v56MrNB8/UdLJpdJh5G33+p/jS+nk0YHTriTfGyZ4sGw+NQtZqg7kOnAvUZsKGdQzaKNqUVOLA+h3xIeSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MzT016lF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE6CFC4CEE7;
+	Thu, 18 Sep 2025 16:43:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758213347;
-	bh=uxbX3t65LxbL3UUj4PABQhIPHTRcI8HpQVH4OGiCm8M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pqwp1By0aLBYXZSos7hikkd57+UkiZqpzTzsct6C1oCr4v4HxkJq+ywbiYD+eg7AF
-	 Mkaqizqg6vbSGGjcMdUGSk3iNE2PPyN4dhfzBt34BIiF4wETQszSvRG3lEUNyrKuzR
-	 gaoQm7PTRi7GhvzxrCXkpsg8VIgJSiCOMN0kr25ym9GXH4Pn/gC2LEq/VAd7Jbaqjy
-	 ZjuCT7VL36rm15P8NNiKlLauHiH0URE4Z1O/5G3ppmIyv57ahV//NF5ZQEnR7ycsSr
-	 OGXbuloZdCQrFboMMXHnxVA0SW25H+7I2OxWNzCK45tUtfSB8R3E9h5UeZfGxOL1l6
-	 gDW/kl+Y+6RTw==
-Date: Thu, 18 Sep 2025 19:35:43 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	linux-integrity@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: kselftest and cargo
-Message-ID: <aMw032Im4D9zy77g@kernel.org>
-References: <aMlqouOSU8XN7V5H@kernel.org>
- <f18854b2-f9c8-44a3-a09d-3b2ddbcb971a@linuxfoundation.org>
- <aMwf89qekCuAdD1L@kernel.org>
- <aMwh95tMxB7sMEzy@kernel.org>
- <6712e20a-0fa9-44f5-ae0d-f4d9c3324028@linuxfoundation.org>
+	s=k20201202; t=1758213802;
+	bh=Hj8pTaQfwTaM3cwtIdwgHTA6BIscCoAxZ6jBPJ5Yk74=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MzT016lF5TBlLBjwTa1uAzTe90ShZG7KFJ6tHUwl7fSx12bW3Q49zKhwKI/si1F+s
+	 ya6CzK2u3C7M/JOHvbr9Gb7gt0CEA8z9OBnixmEn18IVy3CV3AcOSQv/FiSxc69CnQ
+	 r5800M9Ftmptj7H9fGsY2N6J8jeOLE2Vq6dYjW2701+5BRroHCtPDATKRxsb/98WFm
+	 QZn0qsl4YerQczKD5J6N66xBLuJ6WfS1VWRutm8mWYUeJUaiif2IDwgJMePXX7mfSN
+	 H5Pb30xsUFzbUsN082PTDxLKM7KeH7rGbNeZ5JPwI2qIJPrG/QBMQpIYpzYm7Zf1PM
+	 /wGgTZZ7a4Kyg==
+From: Will Deacon <will@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Luis Machado <luis.machado.foss@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH 0/5] arm64/sme: Support disabling streaming mode via ptrace on SME only systems
+Date: Thu, 18 Sep 2025 17:43:06 +0100
+Message-Id: <175819643529.3451422.10117622348778381735.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250820-arm64-sme-ptrace-sme-only-v1-0-f7c22b2871f8@kernel.org>
+References: <20250820-arm64-sme-ptrace-sme-only-v1-0-f7c22b2871f8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6712e20a-0fa9-44f5-ae0d-f4d9c3324028@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 18, 2025 at 10:04:13AM -0600, Shuah Khan wrote:
-> On 9/18/25 09:15, Jarkko Sakkinen wrote:
-> > On Thu, Sep 18, 2025 at 06:06:31PM +0300, Jarkko Sakkinen wrote:
-> > > On Tue, Sep 16, 2025 at 04:39:37PM -0600, Shuah Khan wrote:
-> > > > On 9/16/25 07:48, Jarkko Sakkinen wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > The pre-existing kselftest for TPM2 is derived works of my earlier Python
-> > > > > based rudimentary TPM2 stack called 'tpm2-scripts'.
-> > > > > 
-> > > > > In order to get more coverage and more mainintainable and extensible test
-> > > > > suite I'd like to eventually rewrite the tests with bash and tpm2sh, which
-> > > > > is a TPM2 cli written with Rust and based on my new TPM2 stack [1] [2].
-> > > > > 
-> > > > > Given linux-rust work, would it be acceptable to require cargo to install
-> > > > > a runner for kselftest?
+On Wed, 20 Aug 2025 19:29:02 +0100, Mark Brown wrote:
+> Currently it is not possible to disable streaming mode via ptrace on SME
+> only systems, the interface for doing this is to write via NT_ARM_SVE but
+> such writes will be rejected on a system without SVE support. Enable this
+> functionality by allowing userspace to write SVE_PT_REGS_FPSIMD format data
+> via NT_ARM_SVE with the vector length set to 0 on SME only systems. Such
+> writes currently error since we require that a vector length is specified
+> which should minimise the risk that existing software is relying on current
+> behaviour.
 > 
-> What is runner for kselftest in this context?
+> [...]
 
-It would really just a bash commanding tpm2sh and with conditional
-check the binding is kept loose.
+Applied first two selftests to arm64 (for-next/selftests), thanks!
 
-BR, Jarkko
+[1/5] kselftest/arm64: Verify that we reject out of bounds VLs in sve-ptrace
+      https://git.kernel.org/arm64/c/dd68f51febbd
+[2/5] kselftest/arm64: Check that unsupported regsets fail in sve-ptrace
+      https://git.kernel.org/arm64/c/09b5febf8426
+
+Cheers,
+-- 
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
 
