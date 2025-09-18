@@ -1,203 +1,155 @@
-Return-Path: <linux-kselftest+bounces-41802-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7659BB82F19
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 07:08:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08F66B82F4F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 07:12:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3114B3A7378
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 05:08:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEA843AD7F6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 05:12:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 859A4242D8C;
-	Thu, 18 Sep 2025 05:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C252C257AC2;
+	Thu, 18 Sep 2025 05:12:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WOJQYG1V"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1bCS5Qxk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010002.outbound.protection.outlook.com [40.93.198.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F3034BA43
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 05:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.2
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758172082; cv=fail; b=YzLGxoBlcA5Y17cKncHSMwy0dRPgmeNF32So60KWqIYrMy/7uUarIbEydWNDXGZi8C51CUYWDOVW0xL+Usq19yiEnxZcejL7qOAlB8wRcPDInKzSz2iSfeDZRZL4pZXjnzFTP50IVWo28+yEobAcjSKbAZT6nne36HlS+hiIKnk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758172082; c=relaxed/simple;
-	bh=r5bNBvzKBTkIpQ6TZ1cCk2cdjQEP0Ymcca6MTMyuMuM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IpyuLF1DH+itIGBA4wB+6ckZoVOzz9ToUIUqqSPGSaru3ui3pgmK5fBWK0ng/P1oWrG7VDm5G5ZIyn/ScJkrDFr9AFFGCLgeVks2vdZrEaSmZRXXYLo4EyOtVUFzadIsGyMKuNwn7HoYYsC+ioujrqGwVZI//qLGrL2gtL3Ry1A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WOJQYG1V; arc=fail smtp.client-ip=40.93.198.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lb2uKUfnS3C9EwAumbOzZaLRhlbZ9NKVRCKYJ4f1pB2mCtfFggp8U610L52HC+uSf1aH+zorj1v6nvXpfaS21m9lcP8yWin6BzCuggtvaRJLU/iDnTi9O74HtPNjQBlTepSQBAMhn05ypH2lLdNkQkFcEzmyZlAw15AEWxY1S3DGL4GF4mcZBgEcwgjATluMwCoM7SRaAcYMgnwuzMleoOkfASCWS/QXK4T7nbF5RRDdho7E8C+2PgDZYC9ayzVWYfiyXleEWjyIKROmsTcHDHHBAs2+jxPUcXPwjGb4pzy38xHsmKpEs6IEB8OYkVL/ZX2miDoFwMBT5LWHKwp4CA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rYapbWjkp7+/2/LaR/0oh1/2U8/MapQ9OEL7YyKMHJc=;
- b=cFFJ7MoVrp5v9rkqUaetI5m5dZxj+FeOEUPSgbiVrHwTl3sVezXLVrRzjd9XSssM/H4NZHpHOTUAkVDKmbMI1cV8e+0+HU/rKhjOIaSCDHCsHz/OwUf+LYBnxYFtXwXjW4wGkdHI8hvIrGuO68vPCYTEM0zavtJzAr9CWVeBIIEXRQgVUENT+yw1Hl19AFJnK3fejRVCVWUenJnCfBaL8WW6jGmFzITlqpz6bub8Lu48gC14F9+U+wEyc+9tyCSSouC98iv7lCU30rHEAo/RnSscdQ16WYBxBIQgPY6XMKWQfyIiyQIvv9Dq1zdu/RbPUuKI79qtPqNwE/0fxWgXfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rYapbWjkp7+/2/LaR/0oh1/2U8/MapQ9OEL7YyKMHJc=;
- b=WOJQYG1Vb3xaMFy3TvmFYvidfkUeCjC1RmpHWtxGqhgrR/bSdvuyOuIbs1CLZwWqUJ4xgR2Kqw1O3/XQsHGQwjo7J13LI4383x+08aqroNsibjvJjVyeTE83GSA39ebSBbZKtqHz1qqm7KQXqopVI8w3KBq9dqUOIeXGkctAPTx4s+owTAQ6aOIP3R3oyqLb2+fZ1KTjotXOocgL2RDKyoDUdfspMzv1Po0YAXpd49SpvQOc1NscIsGiVVoA6LygOy6i3ZQ6hne2ihGBD8idc8xaw/Z9UdJBxUq2auaFvmK5+XzqRZgdkE/8mNTFTFcuNha++iImF2HvafkFPYImzA==
-Received: from CH2PR02CA0007.namprd02.prod.outlook.com (2603:10b6:610:4e::17)
- by CH3PR12MB8186.namprd12.prod.outlook.com (2603:10b6:610:129::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.23; Thu, 18 Sep
- 2025 05:07:54 +0000
-Received: from DS2PEPF0000343B.namprd02.prod.outlook.com
- (2603:10b6:610:4e:cafe::25) by CH2PR02CA0007.outlook.office365.com
- (2603:10b6:610:4e::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.14 via Frontend Transport; Thu,
- 18 Sep 2025 05:07:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DS2PEPF0000343B.mail.protection.outlook.com (10.167.18.38) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9137.12 via Frontend Transport; Thu, 18 Sep 2025 05:07:54 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 17 Sep
- 2025 22:07:41 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 17 Sep
- 2025 22:07:40 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Wed, 17 Sep 2025 22:07:40 -0700
-Date: Wed, 17 Sep 2025 22:07:38 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>, Kevin Tian
-	<kevin.tian@intel.com>, <linux-kselftest@vger.kernel.org>, Robin Murphy
-	<robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Will Deacon
-	<will@kernel.org>, Lu Baolu <baolu.lu@linux.intel.com>,
-	<patches@lists.linux.dev>,
-	<syzbot+80620e2d0d0a33b09f93@syzkaller.appspotmail.com>
-Subject: Re: [PATCH 1/3] iommufd: Fix race during abort for file descriptors
-Message-ID: <aMuTmuBKd9aU7ngO@Asurada-Nvidia>
-References: <0-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
- <1-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCC123A9B0
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 05:12:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758172366; cv=none; b=DBM7n+GBvqTchoTm/Bl9Gz40Y9E5P6ovt8rTWal3naJvubK8FVgkMgvuay3SuozHCrOSZpHcuVjh36PoDoMeI8SH0GaKFZfEWTs5vMxnAgbj8PgFKOxDyAU+MicCtvXy0CQlEKHBJq8KPFM6J7R71XU7/nxMIDWD1TpJCul/RUM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758172366; c=relaxed/simple;
+	bh=Mh3Rb8qzvN7yL5v05SvQTB+/2yoj8j78rm5Ni0AvREM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CfEb0p3Z2i3Vlv+rHvJCSaWXm+DmWmD1j6fT1IgXjq8VDaz/Mfr+h/tR44h5KAcilEqVCQ8A9OkIXV/OKb6oauSsvMGcNtqIOZMgnba6+34CLqW1e57QmpPsxRhNMqHS2INLWfWDKUFHlJJo4nR2zGOz17F5BSRtWj+M6BsrO9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1bCS5Qxk; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4b79773a389so6007311cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 22:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758172364; x=1758777164; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=46GgRE9cJRD9WIMiWmVC4N43zD13z9B2YDaD/7KbtrA=;
+        b=1bCS5QxkhvmDeV84fEQkaWHIfHEKLYciK6TxsyxSR3a9j+MA6X2Q8pooM4bF7wG3CH
+         tYgGsYmVi3i87C4JU2dHD00d1ToTikogRuWkbWuwmjwTo+5FYhnfPNF2JngC6i6zhbQy
+         0phqoZatZN9JBb4cNcVkmofa57Qbep4AFNJggV/JAU40DWT6132VktV18P/Jh4NCcMeP
+         TBF3+04AaAyR5S2AktfTtmeADbO0wFQhLun+BDo+5U+/9ZAslUI4rdGxDtRyqRT9vojB
+         XNv82oDmHCz+LuQ0ShBTAyxb60H84qGMMl2NY9UN4RMoPh+zrvN4tBXkt4JrisRaf+fg
+         wypg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758172364; x=1758777164;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=46GgRE9cJRD9WIMiWmVC4N43zD13z9B2YDaD/7KbtrA=;
+        b=tAGXwMM2crkj/kYUH6nTwG4a5sbX5tQZk+gAVh2lD5zkJS5Fn9bR9Hpw/3ggnYcna0
+         dUsUF8Br0nOU4u3Hgd0wY5dDUGGFH2rA+dnaZCc+1M9RcBM4aNGfS1gOc0lYifupXGNA
+         s2hhxQgC6fmC90UIryVuNkh35xCMROiqWow6DEKtEMdo5r65AO0C7FgyvvSYogPJxrT6
+         xPpWe8j8+f8zOOHyOKMedxnDPp4+ZoDc8wsQtZQXiTgKCZfqLqe89xRxk6ZZsv/YI0xX
+         0tnXk0Xiy3L4JD97I3XYrEAhEPtDmM/11ETyiIIwy1iIuR0hA1mO1Vcw4u5vsBLb4nC0
+         Ib1g==
+X-Forwarded-Encrypted: i=1; AJvYcCW0bwvHz2CzgUrpOxo1GI92rhci1X074G/XX7gy16GUq4AP27bQpx1VcySqvmRljtF5CMZULbj2ywwij14O+IY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygQ1HWuo91WllGRof5iTbzN20bi2BQRkIAIwjzf6iJu42hAjTB
+	NiFsA+MgjA1uu2njW7AnRwsWVg+Qec+1JmmeQVK2V1J8KVjiVFHqrNT0oZkFvDqloC85OonxGWO
+	+Itxe6kFGSfEer5Q97aTYFf0TS/W5/uz3L7Za5ScG
+X-Gm-Gg: ASbGnctqOj5eB6a/GcWAJrvxZlnGDHAUXlyRzoM4leL2qoCB3Ge313Gmf1tV173z23B
+	uSBkQJMbGE/IaobI+AuuNn7K8h44Ybidaud9n8tcHbesEtWCUWZpNzavIOoHWnn4usPVYLlqxXo
+	qac0Q909XJjdruVtVHX4uqleiTm9gWKdpsxG+y0aaKHZ1jIEPoxT2KEDRS3uLub8ugv2tGb9F3f
+	1BKj/VombyXgKnV3/eCXeBIvq2DhBIc
+X-Google-Smtp-Source: AGHT+IH2eMsycX5qrNhd3fiNSpA/EDn3RQVVh2/eFGCePPiTuhmd65h+bpks81OoXdbkceVO2QwJqAJyquBk6/CKTMQ=
+X-Received: by 2002:a05:622a:1a02:b0:4b3:417a:adcb with SMTP id
+ d75a77b69052e-4ba6ca8d6ebmr60180621cf.84.1758172363628; Wed, 17 Sep 2025
+ 22:12:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF0000343B:EE_|CH3PR12MB8186:EE_
-X-MS-Office365-Filtering-Correlation-Id: 818f5c02-647c-42a6-cdd7-08ddf6715337
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|36860700013|82310400026|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ppN3DSyUCD1nyG9DKxzqLU8Z3Kpf3Ux17RJ+7lqZYhKaNOpsQ1SotdcxQJEh?=
- =?us-ascii?Q?v5GGEq8AxaF3xQSKrg26EPr6lEc2iect0OlHI1eX1prMxccH22Pan63/JrKd?=
- =?us-ascii?Q?Z7fpNcVpFHP5IdoNlwJIlcaMx3oZ5njSAyKvAgruZvf2O6Rwxz4qZTIjELTw?=
- =?us-ascii?Q?3aSf2+CdW560GNjm2lKTMfHugsgIaxs+XOvBowy8bpqkz6e+ZyMTf4fMSo1M?=
- =?us-ascii?Q?nhLbRnz+40EjW4OZrIS41TMmWWTMbm/HgHQBED/uUPlKMTGI02HnzuMoms+D?=
- =?us-ascii?Q?4sGnvjjEQVKo1wRbmupNrpcanHAdUDEBz0dHcjIIPqiFCzlXvIxk47q3E2xV?=
- =?us-ascii?Q?5/gpSROHDS5LzoYIfXF1u0qGC7H6S+BLmPMXJNACFTD0+qNEo7WVbi1n22Uo?=
- =?us-ascii?Q?hkIgUmdHk5JF8xiknnE2xTQOtS6tddwFW4mZuhAhUet7cS20xKSoK83pobDE?=
- =?us-ascii?Q?rIh2Hs+IdDrONIT8CFKOENAPFlaNyA4jmBBX9vCDNP0sv0JgRUnmawPEGHnY?=
- =?us-ascii?Q?saryD4fAkZ/qlY38m3s5/P3zTwfUJBGGuZHG7sTiIJXYt8Qj8a8Ns5ka1Vvf?=
- =?us-ascii?Q?3sjosgFC1ZvCd5DyQFgpZOsA5tUAx5xKKDnsKBgzdVAWEs/Wv+GjR3icDjUa?=
- =?us-ascii?Q?DHSjzN+U5fvDkMGoTS7+9RkDqDO8oPWk7E1pGaTZmCeVrRlXIdWxyNxJ5x9C?=
- =?us-ascii?Q?zPJj2b+QifwVD2CrCkWvuY3XgMGdNOa/7Do7BtTUsT94gDNs0d17pkwbq4cq?=
- =?us-ascii?Q?XzE2ps61sAStlj/22gfMUshNjqCSe08CAXT7v5oWT1Wi0iqB4IlRmgw9wEZo?=
- =?us-ascii?Q?m8hXyzC3BSyXa1cV+XPJO3SIjsV/mk7GQ+CU/2hgLPNGl+KFeF5ehIC80Gh+?=
- =?us-ascii?Q?fxboDq2poaILZkHz8pgv6IpPZnBuxycjiGeM1EGvAf+8wlUoEb40dELX0MDC?=
- =?us-ascii?Q?vs6c0OuiMjDDYHvCmomdMepiCaNKqp37EJ3gIhSlaXbOfkQ1sA694CxfCuD/?=
- =?us-ascii?Q?cScJyvkeuQz35ebwy5WRBJui8tasjzbH8pPHJVIMbjXxo2dnWhqGgvDIk4L0?=
- =?us-ascii?Q?AEW+tc0SjJqguBLFt+qMrEGNBGtvE7EbfpA7w9Pc0rasCFjdH1Amniwv3DsQ?=
- =?us-ascii?Q?EUd7fovgoMaH57SRDC12ANY8t41/w7KiMsTGqUHtNOQIvEPtf1QIuhplPzBg?=
- =?us-ascii?Q?sIJAjUeRV09KjwESscndMeB4xZwP3T4vaDY1nki5nLStUt5zgiabumxIvXT2?=
- =?us-ascii?Q?GP1lZ4rBP6LTUzTeA0XrnydCsaKSjo93ld310aVB2vXumCIrrBphBl2jBP89?=
- =?us-ascii?Q?Os1nz0MhKJOmbstHoz1YHhLO7c63C/5gCoIfosm/E45EHtUO54mluL6ZgUZu?=
- =?us-ascii?Q?0C3bTvX8/yriWBsCr5S6Y4SLKWO0KiPb/juLFS0ZXTuR+tLgsRYRRKcus7L9?=
- =?us-ascii?Q?Bs8jIVatZQJCBPVd9CMGAJD/eHbWd6ryAtmCxZ9/NI5j+jUgzwdH1Xd1tw4k?=
- =?us-ascii?Q?jADu0FPzY8Znu1eLde3lKIe6nzSgXiSfTuZd?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(36860700013)(82310400026)(13003099007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2025 05:07:54.2883
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 818f5c02-647c-42a6-cdd7-08ddf6715337
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS2PEPF0000343B.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8186
+References: <20250916082434.100722-1-chia-yu.chang@nokia-bell-labs.com> <20250916082434.100722-11-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20250916082434.100722-11-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 17 Sep 2025 22:12:32 -0700
+X-Gm-Features: AS18NWBW4UjUVwdr3JfUY4L8f3cpv4Wq-6_LdiqGPFoy9WDff-KYdYxjvm7ff7Y
+Message-ID: <CANn89iLewmikW_R5hFrUiwnOBJTYxtK5_d2RVEQXM4e2hNFmyA@mail.gmail.com>
+Subject: Re: [PATCH v19 net-next 10/10] tcp: accecn: try to fit AccECN option
+ with SACK
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, linux-doc@vger.kernel.org, corbet@lwn.net, 
+	horms@kernel.org, dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com, 
+	kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com, 
+	jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch, 
+	donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org, 
+	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 17, 2025 at 05:01:47PM -0300, Jason Gunthorpe wrote:
-> Fix this by putting the core code in charge of the file lifetime, and call
-> __fput_sync() during abort to ensure that release() is called before
-> kfree. __fput_sync() is a bit too tricky to open code in all the object
-> implementations
+On Tue, Sep 16, 2025 at 1:25=E2=80=AFAM <chia-yu.chang@nokia-bell-labs.com>=
+ wrote:
+>
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+>
+> As SACK blocks tend to eat all option space when there are
+> many holes, it is useful to compromise on sending many SACK
+> blocks in every ACK and attempt to fit the AccECN option
+> there by reducing the number of SACK blocks. However, it will
+> never go below two SACK blocks because of the AccECN option.
+>
+> As the AccECN option is often not put to every ACK, the space
+> hijack is usually only temporary. Depending on the reuqired
+> AccECN fields (can be either 3, 2, 1, or 0, cf. Table 5 in
+> AccECN spec) and the NOPs used for alignment of other
+> TCP options, up to two SACK blocks will be reduced. Please
+> find below tables for more details:
+>
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> | Number of | Required | Remaining |  Number of  |    Final    |
+> |   SACK    |  AccECN  |  option   |  reduced    |  number of  |
+> |  blocks   |  fields  |  spaces   | SACK blocks | SACK blocks |
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> |  x (<=3D2)  |  0 to 3  |    any    |      0      |      x      |
+> +-----------+----------+-----------+-------------+-------------+
+> |     3     |    0     |    any    |      0      |      3      |
+> |     3     |    1     |    <4     |      1      |      2      |
+> |     3     |    1     |    >=3D4    |      0      |      3      |
+> |     3     |    2     |    <8     |      1      |      2      |
+> |     3     |    2     |    >=3D8    |      0      |      3      |
+> |     3     |    3     |    <12    |      1      |      2      |
+> |     3     |    3     |    >=3D12   |      0      |      3      |
+> +-----------+----------+-----------+-------------+-------------+
+> |  y (>=3D4)  |    0     |    any    |      0      |      y      |
+> |  y (>=3D4)  |    1     |    <4     |      1      |     y-1     |
+> |  y (>=3D4)  |    1     |    >=3D4    |      0      |      y      |
+> |  y (>=3D4)  |    2     |    <8     |      1      |     y-1     |
+> |  y (>=3D4)  |    2     |    >=3D8    |      0      |      y      |
+> |  y (>=3D4)  |    3     |    <4     |      2      |     y-2     |
+> |  y (>=3D4)  |    3     |    <12    |      1      |     y-1     |
+> |  y (>=3D4)  |    3     |    >=3D12   |      0      |      y      |
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> Co-developed-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
+> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
 
-Mind elaborating this "too tricky"? I thought that we're supposed
-to use __fput_sync(), instead of fput(), in the alloc function in
-the first place?
-
-> Cc: stable@vger.kernel.org
-> Fixes: 07838f7fd529 ("iommufd: Add iommufd fault object")
-> Reported-by: syzbot+80620e2d0d0a33b09f93@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/r/68c8583d.050a0220.2ff435.03a2.GAE@google.com
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-
-The patch looks good to me though:
-
-Reviewed-by: Nicolin Chen <nicolinc@nvidia.com>
-
-> @@ -131,10 +132,30 @@ void iommufd_object_abort(struct iommufd_ctx *ictx, struct iommufd_object *obj)
->  void iommufd_object_abort_and_destroy(struct iommufd_ctx *ictx,
->  				      struct iommufd_object *obj)
->  {
-> -	if (iommufd_object_ops[obj->type].abort)
-> -		iommufd_object_ops[obj->type].abort(obj);
-> +	const struct iommufd_object_ops *ops = &iommufd_object_ops[obj->type];
-> +
-> +	if (ops->file_offset) {
-> +		struct file **filep = ((void *)obj) + ops->file_offset;
-> +
-> +		/*
-> +		 * files should hold a users refcount while the file is open and
-> +		 * put it back in their release. They should hold a pointer to
-> +		 * obj in their private data. Normal fput() is deferred to a
-
-Nit: there is only one file_offset per obj, so it should be "file"
-and "it/its"?
-
-> +		 * workqueue and can get out of order with the following
-> +		 * kfree(obj). Using the sync version ensures the release
-> +		 * happens immediately. During abort we require the file
-> +		 * refcount is one at this point - meaning the object alloc
-> +		 * function cannot do anything to allow another thread to take a
-> +		 * refcount prior to a guaranteed success.
-> +		 */
-
-Thanks
-Nicolin
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
