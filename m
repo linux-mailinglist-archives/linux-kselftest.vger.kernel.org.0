@@ -1,112 +1,88 @@
-Return-Path: <linux-kselftest+bounces-41859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7943B8584C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 17:19:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90A2BB8597B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 17:29:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD9133A84E2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 15:15:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 044021C0098C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 15:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268D92C21C5;
-	Thu, 18 Sep 2025 15:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="trja0lui"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDC2C30F804;
+	Thu, 18 Sep 2025 15:23:33 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF472264CB;
-	Thu, 18 Sep 2025 15:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF7230E0E9;
+	Thu, 18 Sep 2025 15:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758208507; cv=none; b=DH79wHslMvBHrH4KIBkqSa5BdkgCWveAuFsFG4HWdOYC+MsSAk8S7Hzb8NMs7936QjI7ZjSnw4SfD+0xwrngKxUI+Kq0UIDAnvp/m1pCUWR5BJaGURxgHrMkOH8f5q/mW3sBcsZVXFIF1/89SloQOw2rjRfoBBXxXH580/ZmbIg=
+	t=1758209013; cv=none; b=DK2atUWxDEJqp5hsDzw8D/ADnFB4JGXEUv2Q/bKIWZo+qUezbwLNqvoaP9SxVIMNMPUcnyCHi/41VmYpjqE3yye3/cAFUd+KwmDXuKOSdJwpNvnOm8b1HZCLW+wAYmIoJCQq5vT69u/ibCuwCAqwmwVFzYvjk9EYpK8pQYSDyVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758208507; c=relaxed/simple;
-	bh=9cbSk6+mZ/JrPOLQ24x/4/EE/51AgOhzhqGiKBm5vf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sIQBbrMz0H1gIHNq1d9/kEuWKLo//6g1UkqX8B66nH7hfrDgk6AVMXWMTKEft7wWFb/9qy9C389F/XlVJ8rD89OUNFsC808Mi6zRy37eyTZyqaVKXP4nhFr5sYVIWd64CQ3rwlXikk1iaUs1OPUJV8Nc08Ktd/4NczOpBzvHTlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=trja0lui; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78381C4CEE7;
-	Thu, 18 Sep 2025 15:15:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758208506;
-	bh=9cbSk6+mZ/JrPOLQ24x/4/EE/51AgOhzhqGiKBm5vf0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=trja0luiZFB9ihF1GlN40zg9VSi0MgAYsxgoSIytd5SNUo3LldZJa4NQr+cW6cD2K
-	 18DtQsxD6IhMEIVfeChbR8/sgkELiVIgL1G+clAcmh5eKnnJ3wO11xK/+wjkFQSFGp
-	 ZiA+pHuAg3wpAAwUgxifcaICq08APfJc6NbNUFdRnKbyaDRGbJQPc1iAnEyP9gC6oK
-	 HpLqC15tQej3bnzyl1JZ0OM9f4PRXEXE0iTZzs2zjaPkti9uZAHbYLKX50Doa4nb29
-	 xQnD28cTyVvmz5XuVP/gV/2JPCZiyDJIFhFHjTOub8MdTcw2ZMa4XR64ZuCSl4X2/N
-	 7Flsj1J/DQWpg==
-Date: Thu, 18 Sep 2025 18:15:03 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	linux-integrity@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: kselftest and cargo
-Message-ID: <aMwh95tMxB7sMEzy@kernel.org>
-References: <aMlqouOSU8XN7V5H@kernel.org>
- <f18854b2-f9c8-44a3-a09d-3b2ddbcb971a@linuxfoundation.org>
- <aMwf89qekCuAdD1L@kernel.org>
+	s=arc-20240116; t=1758209013; c=relaxed/simple;
+	bh=NHZ2ORArzxNUylF6vygV6kCOeIu2Wbgv9ac/4epvHK4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CBLM7xgzqceHDdN92Mn3izVuOd1zXzP7KdGxC6KqCEB72HWF+azAD5A1tzp64M5nqATnub6yDBU5wM2jm0hmZwutl01Qw258SF8Ws3TPZVQZo/m7jl7/RsSc50hWFxuaKhaYy/cR3PlYqQCA/8zAzc6en8hsw74oHwKcrumf6YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id B88C3B756B;
+	Thu, 18 Sep 2025 15:23:22 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf09.hostedemail.com (Postfix) with ESMTPA id 6C22E20025;
+	Thu, 18 Sep 2025 15:23:17 +0000 (UTC)
+Date: Thu, 18 Sep 2025 11:24:25 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Fuyu Zhao <zhaofuyu@vivo.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ haoluo@google.com, jolsa@kernel.org, eddyz87@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ shuah@kernel.org, willemb@google.com, kerneljasonxing@gmail.com,
+ paul.chaignon@gmail.com, chen.dylane@linux.dev, memxor@gmail.com,
+ martin.kelly@crowdstrike.com, ameryhung@gmail.com,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ yikai.lin@vivo.com
+Subject: Re: [RFC PATCH bpf-next v1 0/3] bpf: Add BPF program type for
+ overriding tracepoint probes
+Message-ID: <20250918112425.23d4d379@gandalf.local.home>
+In-Reply-To: <e8e8b5e2-35fe-43cc-ba41-c84ccba189f7@vivo.com>
+References: <20250917072242.674528-1-zhaofuyu@vivo.com>
+	<20250917153055.6fee814f@gandalf.local.home>
+	<e8e8b5e2-35fe-43cc-ba41-c84ccba189f7@vivo.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aMwf89qekCuAdD1L@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Stat-Signature: fqyhtzmk4ch6fggf79z9gc37wtq3dwu1
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 6C22E20025
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18P1hRjLcFAJR/HlcDkMOBrSvLYf6Ril7w=
+X-HE-Tag: 1758208997-146052
+X-HE-Meta: U2FsdGVkX19KLlcfuUHlnoX7WA6C2lDCWiD1hUjNLxixnDz/qr5at9WuFIcm+IE0hVWwHrzDnHtL/FhxnH6Lc9flXhRLnxNC+3Jfx5/CuhM0gcDZCq2qZmbp8fBv5MXvrlbsGHKFyjKeGbR/EivgAkrA9auX3H+7PRBDl9PZVJVtH+Nv39QCqMkBNMz0Dw2fpF+rmQ2sMhN/5kNTLsdxV7gA4YvTEde3iwnB7rz1txvHFxJMs/fmjcVj9NMspXvvSPah+cbky9LCU8jjwf2WeARwDTePM7z7Sq4KFBeX5xPlAm8ApHORE3uXXqzKxVBcDjJNQrE5yTxmBwC5bf3AvlJtPfXsEK7c
 
-On Thu, Sep 18, 2025 at 06:06:31PM +0300, Jarkko Sakkinen wrote:
-> On Tue, Sep 16, 2025 at 04:39:37PM -0600, Shuah Khan wrote:
-> > On 9/16/25 07:48, Jarkko Sakkinen wrote:
-> > > Hi,
-> > > 
-> > > The pre-existing kselftest for TPM2 is derived works of my earlier Python
-> > > based rudimentary TPM2 stack called 'tpm2-scripts'.
-> > > 
-> > > In order to get more coverage and more mainintainable and extensible test
-> > > suite I'd like to eventually rewrite the tests with bash and tpm2sh, which
-> > > is a TPM2 cli written with Rust and based on my new TPM2 stack [1] [2].
-> > > 
-> > > Given linux-rust work, would it be acceptable to require cargo to install
-> > > a runner for kselftest? I'm finishing off now 0.11 version of the tool,
-> > > which will take some time (versions before that are honestly quite bad,
-> > > don't try them) but after that this would be something I'd like to
-> > > put together.
-> > 
-> > Probably fine - how does this impact kselftest default run?
-> 
-> OK so this was early query: I might introduce such test as part
-> of series that hasa waited for long time for an update [1]. I can
-> use tpm2sh more easily to reproduce equivalent crypto as kernel
-> does and make a test that can compare the results in a meaningful
-> manner. I also plan to relocate tpm2sh as part of git.kernel.org
-> custody from Github, as its main dependency tpm2-protocol crate 
-> already is [2].
+On Thu, 18 Sep 2025 20:33:22 +0800
+Fuyu Zhao <zhaofuyu@vivo.com> wrote:
 
-Some motivation context, I left out on doing the aforementioned
-patch set because I did not see importing TPM2 keys useful enough
-application but recently I've been dealing with remote attestation
-and that levels up the feature something quite useful.
+> At the moment, I don=E2=80=99t have a solid real-world example to provide.
+> This work is still in an exploratory stage.
 
-I.e. so called attestation identity keys are persisted to the NVRAM of a
-TPM chip and it would great if kernel could at boot time reserve
-selected (in the command-line) NV indexes and wrap them up into keyring
-keys. Since in UKI model command-line is signed that effectively locks
-them in into controlled use only through keyring as kernel can
-guard that via the device.
+We shouldn't be in the business of "if you build it, they will come".
+Unless there is a concrete use case now, I would not be adding anything.
 
-I could put tons more detail into this but point to open up this
-complexity is that getting all cryptography right is easiest done
-by reproducing it in a test in user space and comparing the 
-results, and Rust and the crate I did give sort of powerful
-way to describe all this. And also because of the complexity
-it needs to be anchroed with some kind of sufficient test.
+My entire workflow for what I created in the tracing system was "I have a
+need, I will implement it". The "need" came first. I then wrote code to
+satisfy that need. It should not be the other way around.
 
-BR, Jarkko
+-- Steve
 
