@@ -1,271 +1,357 @@
-Return-Path: <linux-kselftest+bounces-41834-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A385B84984
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 14:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D4D9B849C9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 14:39:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D37C1C826A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 12:34:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B66121C83AB6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Sep 2025 12:39:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEA525D549;
-	Thu, 18 Sep 2025 12:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405252DF6E6;
+	Thu, 18 Sep 2025 12:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="hazEX3Px"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZyNl1F+L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013028.outbound.protection.outlook.com [40.107.44.28])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011070.outbound.protection.outlook.com [52.101.62.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C93F3594E;
-	Thu, 18 Sep 2025 12:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCC42FF644
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Sep 2025 12:39:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.70
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758198816; cv=fail; b=HU5ZJh3YP3Ku+pCOeGH9nkX7rjQIQRNlcitxI+Yc92jOjwaJyaCOqCmQEsxOVoTDUzxST5ZQ61xaGpxiE2TTEh+iBGFxKRtkVxQ/ivO+1Q0hw729MVxP6dx6x6ZgpALS0mG2D+ZKsm/4saJ9auyBgpdEnV4EliTQUNwglqPtRKY=
+	t=1758199146; cv=fail; b=uwX6Q8WG66imPBQHTdpsuwNjfTwPGVrIFLe4GJjKOUxrNfuMXvxRgXNQoMN33YmIh6naSrOaYlR+G3fphck86pDVKYBzb4M9Z2bCmeIxvNE/tY3WaWv/Rwa0DC8mr4Q0eQI/VEwTT6ZPyfzJ9tAgw9knEtDVX933qBpKTvjvQbg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758198816; c=relaxed/simple;
-	bh=mZAX4T9olV1uwd4Fr/q8mnGijcXilVjrkUiEhO6+T6Q=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=nic4mR1JboorvASoDqCkrcoP9GGXHnUuHDlfg45pL2iCh6+VDiPc37IXXkYRKvYDGbXOvvWBfyp5NesdQr5PdH2QsW1juWsasCM83TKv9iKFG4MpKn+kuLJjVGdVeNcyhZihVurnME+AmaCPU2kfn0UQODJFt8KwauPy3GztA0s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=hazEX3Px; arc=fail smtp.client-ip=40.107.44.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+	s=arc-20240116; t=1758199146; c=relaxed/simple;
+	bh=OxZP3ieveybUZpBKRRlAXwS9tiUY8dxlKGSWWgyaiNw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ajjuYaF2mtOFaUiTycTlCZyQGkR+s1r5xRI01JeezSgUuoapzhhBwlMLWdQi8IGlt6AMLZTkjrNLXCq3JZ6Q69TwZm0XbCfW3VPAHfsx7GDhpNTUV/xXqtYq158E91skdb2CZmCh+pG3JGvDYe1JFlCEeLVFNJE3AqNdKdRPNok=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZyNl1F+L; arc=fail smtp.client-ip=52.101.62.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TbbSAV5RLSXJxmiI+TVmT5Bx1+mw3u6F+1CbZPprgul+lGm3C6C4bobjDa1kGTLdGHNbGpqF6YoQXgiLODD4dfNRbFBSK/MY/SIHVTE1A+RQSGHdUMe3fk/PsLwT7X6aQJTjGnJ6+YtdHiQjERn0GXYwE3Dm8LIkIWKJtFi47IfaVipFV70CrBL59XLvypfpy8cuJUTBfYF/GHkQCl9WqV4PJWWeFGnjO9o9CXfCmXlTc8qHEmjakkqLncLgPu9cnN3v18XbuxKrBOv6gSZwM82vq5ihxC8+FR88aBkP1X78fzsYjC3FAve88cfLzZb2maVBubr6J+UhUYCLXlffFg==
+ b=GMaYiV/KbF43yqkPBx0k2/hzK+pqqDnSbbiGVxVQp/VJaPI1bMYDOEg4m0UMMRYzcwqAfNcKBNhR8WrZUXBcDeMQAAw7yEUI2Y8DN0/4AzdXq69cdt3whmtH3eK8d0Nfh/KQF9I2Dvhinan4AH6dpHTr3vE7zTnGlWRXYuSJAEok9f4V8iJt4wWHy/2VNlARGYLhfdqxmfzYr2JZ9jGONClUU8vPBNSvhYaujkYWvg/0CoEnOL6ixE5AuguBL0H/zDPvml6kELKfjCKQGYh/jlWv2R3nFNHRXMcWe6/sgwBUgje5/t2Ic2GDS1Lqhf3L15YX4073M+j/bLEikNrULA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s3g3x4mJh7ejRGrDyU1HoUdJUTyJGuJV2/5hNkZHM6A=;
- b=JPciuNSW0E8T80Qu2YMyOl2I/Oilb/3KmTGGad9cNf0ytT85ea2ji8za0XAg296ZRc3Miy3zbCSiLPKXoCPm17XxbHXH6ZsK8R2pAZ+EfOqwFUzEFJ6Nrqg0IqWoLN8ktq/l8Osc/zmD/WUr4/Dbih4wWP9iBITJOZPWGBO+/Oa/9RIP65e7kBe6C8RDe8RIT+62eyggdib4ScH84zGP0HhWyi5iUZG1MH75kmJ0tztBKhT+nxklf8f7YNA7gDxEMe4c64oqJw8Yc/LmJlFxZitgciADnHzpu4wdf2wRsv3ewAAGOhARjkwBC/9ycXT3PhGAVvO5GlbaHvAAnHB59w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ bh=jomRPpGfHF+KEa6GmU9Y3+1Mr22sYkkmXq/uVRHRmDE=;
+ b=c9uCrPgPgUknTk9JW2qgCuy9o1HCiQaXNNR9bGKQzK/pSh13H0irS+XhrkYa2Cb32PQir5Lsfls8TkD5IMnvp/2BbZfBvTMUduphvxyHJoeytH1FjiNk+tvsUEqa/4nkbyYDGyXIN4MOCq/JSHl5DNsaMi0PXKVBuzPgtiTvDiPSWdTDNhcCtst4Am1HmRu53mN4RH0slf4wHSCFRre6yOv9JM5iQYTI+PcGsDkQVMXyTPhBX+4vQ95BA4KyImcqY9K8d3PQFFOmsjIOHwXwYoj6m2ZFd479ZsS+lwOgjMcCuT9UxPCAzKV01xF8LbFYzUhdthDZnXSopsSVQLftsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s3g3x4mJh7ejRGrDyU1HoUdJUTyJGuJV2/5hNkZHM6A=;
- b=hazEX3PxRYnrra0C5PVUTrVgp93lqonBn2TfRML3DJv+YTH4VsNFWUJ6z/xY6mrY1OkJNaavmwTPsYN6hgNFdSU3+cHF058g5HXxke+40XjjsqtbBfK1IPafbEMjgSbA4LjZMBeJpgTlo2+PpErNrnIxrBiXK1bLbe/6MnNOcogEF8Je4tBVOGnoSoXMAGDxZmi5aHbImKcRqyX3JH4MQpaehKZRytr/E1T5ulHke3oDDH4kryIzClFbq/szx+xUPktHfZ+gGAZGVYHi2PzLJKm6IZ4FXfd+aP6X5XKgp5nj+ujuNrJJ31S/2lXonPD32gcdQgiW0Hf4sEACR/DE/w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
- by SEZPR06MB6816.apcprd06.prod.outlook.com (2603:1096:101:191::7) with
+ bh=jomRPpGfHF+KEa6GmU9Y3+1Mr22sYkkmXq/uVRHRmDE=;
+ b=ZyNl1F+L5i4Fra8znpkbyZiSJdwj0wYVjK490kH43jAVeUv1dFcpk1V/TPh5TlKGu4CHRBjR8jiSQV22GYQjKZUVcAfm+iftvnJ8SiTagObKOq5ZLDXqGJHGy6lmlLLE0JZSlpw/yLEufZlUH/X4H4I95/H5Hdnb24c0n6SPuBror59A5bW6zS84Yb3C5G/L/cZYGGhs6yvhb6S14moRJ7jYB4W9kenR33CDq8TGGdLZqOABnvj2zxlxj0VgAa4TXZlIJprIv9HnQRQVfOzj+RpJG+v5f+MGO5ohpI/SFeUarmTN1p4xVV4OxDtk2/4xmqhkuVxCCwAgJO3Sdd/Z1w==
+Received: from BL1P223CA0011.NAMP223.PROD.OUTLOOK.COM (2603:10b6:208:2c4::16)
+ by CH3PR12MB9731.namprd12.prod.outlook.com (2603:10b6:610:253::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Thu, 18 Sep
- 2025 12:33:29 +0000
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571%4]) with mapi id 15.20.9137.012; Thu, 18 Sep 2025
- 12:33:29 +0000
-Message-ID: <e8e8b5e2-35fe-43cc-ba41-c84ccba189f7@vivo.com>
-Date: Thu, 18 Sep 2025 20:33:22 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next v1 0/3] bpf: Add BPF program type for
- overriding tracepoint probes
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- haoluo@google.com, jolsa@kernel.org, eddyz87@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- shuah@kernel.org, willemb@google.com, kerneljasonxing@gmail.com,
- paul.chaignon@gmail.com, chen.dylane@linux.dev, memxor@gmail.com,
- martin.kelly@crowdstrike.com, ameryhung@gmail.com,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- yikai.lin@vivo.com
-References: <20250917072242.674528-1-zhaofuyu@vivo.com>
- <20250917153055.6fee814f@gandalf.local.home>
-From: Fuyu Zhao <zhaofuyu@vivo.com>
-In-Reply-To: <20250917153055.6fee814f@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TYCP286CA0095.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:2b4::18) To PUZPR06MB4742.apcprd06.prod.outlook.com
- (2603:1096:301:b5::13)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.22; Thu, 18 Sep
+ 2025 12:39:01 +0000
+Received: from BN2PEPF000055DC.namprd21.prod.outlook.com
+ (2603:10b6:208:2c4:cafe::e1) by BL1P223CA0011.outlook.office365.com
+ (2603:10b6:208:2c4::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.14 via Frontend Transport; Thu,
+ 18 Sep 2025 12:39:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN2PEPF000055DC.mail.protection.outlook.com (10.167.245.6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9160.0 via Frontend Transport; Thu, 18 Sep 2025 12:39:01 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 18 Sep
+ 2025 05:38:43 -0700
+Received: from [10.221.136.181] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 18 Sep
+ 2025 05:38:40 -0700
+Message-ID: <12171a1f-d385-4f40-87f8-004f37c50142@nvidia.com>
+Date: Thu, 18 Sep 2025 14:37:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] iommufd: Fix race during abort for file descriptors
+To: Jason Gunthorpe <jgg@nvidia.com>, <iommu@lists.linux.dev>, Joerg Roedel
+	<joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+	<linux-kselftest@vger.kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	"Shuah Khan" <shuah@kernel.org>, Will Deacon <will@kernel.org>
+CC: Lu Baolu <baolu.lu@linux.intel.com>, <patches@lists.linux.dev>,
+	<syzbot+80620e2d0d0a33b09f93@syzkaller.appspotmail.com>
+References: <1-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
+Content-Language: en-US
+From: Nirmoy Das <nirmoyd@nvidia.com>
+In-Reply-To: <1-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|SEZPR06MB6816:EE_
-X-MS-Office365-Filtering-Correlation-Id: 360b106a-70e6-4c08-b0dd-08ddf6af9219
+X-MS-TrafficTypeDiagnostic: BN2PEPF000055DC:EE_|CH3PR12MB9731:EE_
+X-MS-Office365-Filtering-Correlation-Id: 666d5096-2ae6-4808-f192-08ddf6b05849
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|7416014|376014|82310400026;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WWhRVUVmeGJrdk00SXlkYTZDQWpnc1BEcXp5SVAwN0RPUG5zc3l1bzhHcFpr?=
- =?utf-8?B?SVBVS3pnMzNRb1ZVYVhPejVJUWs5WUpuclZoSlB2ZXFaV0V6Q0JEZ2ZDRmp0?=
- =?utf-8?B?bHovUEUyb2lkdzI5bjJabHk1K1RIMy8zQ0F0QlZOS21Xa1dpZy95MS8zNGth?=
- =?utf-8?B?Q2pZaVNVeVV3YkhQM0xxN2tFOVdBSjdBNXBmekpNTDZVWjFHcmgvK1NZMVh0?=
- =?utf-8?B?MUZyak5UUUxSdHlrKzlPN1VaZHN6THdxeHl6RHNlS2taTWJDQTJteHBuSThs?=
- =?utf-8?B?TkZOeUdiRmZXemNBS2gxTkluL0UzYXhpdWtKcUlHNWJDSXNNVVJad00zM2ht?=
- =?utf-8?B?UHNiUnpLb21HNUlTZUZMMG5EeFg4blBFYmdtaHdyQkFMaE9HcVRVc0oycHB2?=
- =?utf-8?B?YWR6TlNhczNYNTBVU1JWNERTUXVzWU5wOXZZNGU3SG5XZEt4M01TazUwUEpY?=
- =?utf-8?B?ZThjSXNNNHJIZG1DVGVLY0V1cm5oSHlScVpuWWtEcThGWUEzN3VKdVIzMjBv?=
- =?utf-8?B?VGxXeURyYVpzb3AvcW9GNDl0OXdMOU1RWDNRQ2hwNDA0QVJrQTk0MDZOb1hz?=
- =?utf-8?B?Z0xzR3daYVJETUVqbXoyQlBxcVpOaTd6M0w0Y0JQQkhWeUlpYzZsYTZXSHcy?=
- =?utf-8?B?Z3pFVFd0VXBJTDFXT2NDaW1CUFplcWJtTFFpZ01aaXltNnRMZCtkQmVwamVv?=
- =?utf-8?B?LzFOaHBsN2RYTWNZOWMvMXlsRGZ6VHYxL2tNT2hCZ1hWQ044a2VmSENMeURq?=
- =?utf-8?B?UzFjZGFOKzdOQVRENk5DZnE1Y21CVG5lOVhQRDhTVE1acjRPSklDSVRiTGxS?=
- =?utf-8?B?VWVaL0dhWC9FY3RTd3NqM1lnekZ0QXVibUs4U0UvclJoMmRxcmNERTBnU0xs?=
- =?utf-8?B?R1VQVVI5NW05RENDWjl0b0t5M2FYSEtiWVRXUHBTZDQyUXFmdGhoZytKN2pF?=
- =?utf-8?B?cWdYdW9UOGI2dnArK1VVT1R0dHBhVHVHRkV3R0NubUQzRTFpVU5pOXliVEFK?=
- =?utf-8?B?c3U5QUNzU09DQVNXWWNRSFM3eDRVRDBkek9tL3ZCY1FOdTZFR0pXMlJPeDhW?=
- =?utf-8?B?R1craG5vbFc0Vm9kYmh5TkdKYm1pUUFLRVB5eW1UKzlNdTBnZ3NJK29nWGVl?=
- =?utf-8?B?L1JudUdwOEdnM01FWFNXbm9ldFpIQXEvT2dhbnVLMkl6cWswS1BkRVFRcGIv?=
- =?utf-8?B?Wm9NblM4YzNpclZNYzZGK1l0VUUreXZ0TmtvSHhxN2ZpNFZVcFR6dmJ2cFR4?=
- =?utf-8?B?ZzFyd1U1c3NYcWJSSEE2azdYQkxkZ2lTTk5aT0J2OVE1eWhYUFNqekdNQkpt?=
- =?utf-8?B?STlyM2tmZHJTM3pmUGZ4SFJ0N1N5bk94K1orOUlSUW0xaTIraUhvaHJpNzY5?=
- =?utf-8?B?dkV5UHZ4OXFNRmtLc3FxNXJUUTBvL1hWNE1VVHI0N1o5UGQzaWVJd2JnVWJD?=
- =?utf-8?B?RU8vT2xyODJrOElGN1hEQkFVbjVpVC9ETHI1UzAwYmloU1hEMTB3d0U3ZmJm?=
- =?utf-8?B?TFhEV1VCdmh0VHdEVkU4SlRnc0lyWWQ5QmNHdy9HVlpKVHIyVFlzL3hlcE9x?=
- =?utf-8?B?b2tGclVLYUw4RXFpckVmZUlmbmJSbDhQc1R5aEtNVExaU2FTb0dkMS9tcXNL?=
- =?utf-8?B?cGIrQ2RlTkh2ZmxMVVliRE5RQUFFL2xPUk9DOWFFZ1ZvL3ZUTndCVUo0U09p?=
- =?utf-8?B?djR5bXNURWY5SCszU1owQ3lEdGhmU2ZJQW1qQ1o2ZUg2NHVZSFZybmMrRGo1?=
- =?utf-8?B?UUxiL2p3WFV5VWkvdzVBeHIybmV5SjhkY0tUQy8yaDRGTmRLcWdKUVBMWkNr?=
- =?utf-8?B?RkRDRmRTbW1DVGwvOEc0K280WkIxWlEwTm9zeW1xVkl5VlJ2emFTakgvQXBM?=
- =?utf-8?B?eGZQOFkrb2R6aUdxTm9hYzVKaDhWWXFKWmNHSnllRFk4U1A1djdzRXpiOFVj?=
- =?utf-8?Q?IpveJR5DgWE=3D?=
+	=?utf-8?B?cDUrNnlqTlpqU29zUFBLajh3RlJUTm9EWkpKeWZJOC83ZTlodjI3cGlicG5E?=
+ =?utf-8?B?R3dwM29jN0c3MlNVU2xnWU4vMWRPMGgvV3ZCbFUzc05DMzVhTlgrdVA1SEVI?=
+ =?utf-8?B?aDgxYzNnL3FPdHpQR3BxTXQ1WFowTWFrb3ZuV1lNWjFYQUVWSytzZnJ6bjk1?=
+ =?utf-8?B?bFArdC82QjluS0FkbUhGWUtkSVBJM0tpeWlWajZpYUE3Y29TRngrZ0x6Q1k4?=
+ =?utf-8?B?Wm5VY0k1ZXBPZTlyb2MrVU1scFFZdGtsQ0JrcWNYeDdBVm1BemxYa1pKYUhC?=
+ =?utf-8?B?T0UzN2ZEbjlseFloZ09oK29CRkU1cDRzZFJHM25RQWRORWw4Wll6TVBtV1VR?=
+ =?utf-8?B?Uk8vNngrUHdONS9kN2FJbTFkWDBLU2h2MWxVUjZGVHN2cFRLNzdoNlZyQ2M3?=
+ =?utf-8?B?YkNjZlRJdWVGVnpLcmEvK2tCWDBBNk1MYXdCWWJySjI2U3dZMjhNRXF3YThY?=
+ =?utf-8?B?R2svWHNrQkVnZFg3azh2alFZN3VZSU9YYUkzWTVOeWM5NFRIaHJaREdJdytp?=
+ =?utf-8?B?MmZYZTRLK250OFkzaFNFZDhhM3dFeDF3M3p4cGFpL3hRUWVVMFBNcmNIM3dm?=
+ =?utf-8?B?V0c0WlFEaVJ3UjZsWkc0cXhwOXB1UUgrSWg1a0FSQzJuUi9UM0NBbWpKZXVG?=
+ =?utf-8?B?WFBjYWN4L3F4eUYxQ0NBZDU3YSt2T1JhNHNYRFc1UDJSeTg0RWZpUEgxRlFP?=
+ =?utf-8?B?dVM2MHFXTklvZ2Iyc01vdEFWVmhXbXpuL28zV2cvOFRrc3c1Zm5XSVk4Z2kx?=
+ =?utf-8?B?OEV2VWxLVWM3VTFjU1JzUmZzdE8yOE11cGk3TS9mN0JRSUVXZzNyY0lGVE1E?=
+ =?utf-8?B?QnJXVGhoazZCaHdFaHNjdDFBMm42OGptelYweWliSFdSQi85STZkMU5vVHpi?=
+ =?utf-8?B?dE5XZWZiT21LOU1WQzVPQ0hydDNCazRKYzJYeXNWOTZsNTVSK0JCSnp3NlB2?=
+ =?utf-8?B?eWRRQlhkckdsa20rMFhHaXNvNjAzVVV4TEpLWkx3M0VuR0RnU3RiV3o0K3JN?=
+ =?utf-8?B?YmhodlMwZ3pRTjdJTklSMVRYaG1sc1V5QzdkeVAva2ZzUmRYZEgrcnc3S016?=
+ =?utf-8?B?dWZsVHNzQjA2azdsS1ZYdm9ldzc1OTV3dDdzQzFkdFJiL1VYUExmeHVEVEdG?=
+ =?utf-8?B?K2JiRkFvRmk3ZVlDcFRJbElmbmtpODdBejJZVURiVkEwc1V1Yk0wSWVvTE96?=
+ =?utf-8?B?ZkJsaFgyRHdEbmFqdWRBUXV6cnhqT0VDaDVKNDB5Z21rTWNVVGxuMGdGUmVo?=
+ =?utf-8?B?NnR4UE9hQ1FBNnZUZ3pTTThoTi9MSjFtdEVlQk56V3NKQVFjYkRIajNiWE9o?=
+ =?utf-8?B?c1dNQll2TkpBNnZQeHhsc2FIQWdjRU1VejdqSkxuY1BjeEdjUjF2Ly9IcUs4?=
+ =?utf-8?B?UHQybUF3WFl2REI0SExSbGxIK0R0cE9OcnArUjZ4RGlSVjZnMysvcC96cHlI?=
+ =?utf-8?B?M3dLaW9nUGdOczYzQkQ1Sm9pUmVzOUpsbmVzUlArZGxhbHhTbEJDengwNXlK?=
+ =?utf-8?B?NDBNeXRBL0NROURSeEVtakdSY2lhbWIzOGRaVEYzRkhaQTIxdlA1VGthcVNH?=
+ =?utf-8?B?OVBJUHlVb3pXdW15cVVmaklDck9IMUZIUmxBMzU4MG5YeHltY04rWmQ0Nk96?=
+ =?utf-8?B?Q2tYZC9BZnl4UHR5eU9OYUFSWjVkSThkMHFZd0lNQ3RxWTFldk1SZDlzak05?=
+ =?utf-8?B?eGViN2ZHTWdKWU1jQkpNL3RZcTlKOGdPUWFqcXZ0ekxxL1dLcVQ2Nm52UmhU?=
+ =?utf-8?B?aFJTM24veEtnRUlqa1VqVWluV1RCVk1Rdmxod0VvUGhwSmZRVmlTNlY1MnJy?=
+ =?utf-8?B?QmpDc25ENGgxSlNHRmRwYkxaTFZmTkI3S0F3VFdHRm5XNWlpSlpaalBNZlVk?=
+ =?utf-8?B?L0xZZ3FWalVpdStueGF5TEI4aUFhcW14VkQ1U0xzYlp5emZMZkQyTkU3c3RN?=
+ =?utf-8?B?WS9PN3lMdWxQcU12cE1UUEZpczBOVWZtRU5rTkpLTDAvdGgwckd3ZHBkRC8y?=
+ =?utf-8?B?YlhQRDJ5QmsvdkRQMXEwSnF1NndURXcyRzFzdEZ6SkFXbWlrT09yc2swcU5J?=
+ =?utf-8?B?MHNqOEF5eGpOTlBrancwRnBYd3lld0V3MXRnUT09?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bTRvVGgrVytnRzJsUUhkMUNBNzZxK3drcll1c1NYemdvN3BpQUlmZXNoN0VE?=
- =?utf-8?B?Vnk5S0NLWnRncWkwaWVGL2d2VXNsZ3NMUXNKM3BaYU9zZXoxVU5XNHUrTklw?=
- =?utf-8?B?eTdmdlI4dXR6WkJGLzVGbUlaajFCZGFJRElQdHV5bVNOc1ZBK05IRU5RTWkr?=
- =?utf-8?B?ZlUxc1B1Z0FtU1JCSkg3N282WFNVNVRnQTRCS3plcVRqWW9DVnQ0a1hjWEVD?=
- =?utf-8?B?di9KZVdQTUxxTmlyc3RSdyt0bW1OQTJsS0tFSUsxY2grNS9iaHJsbmg4NjN4?=
- =?utf-8?B?YXRjNWdBTWR6SGRqVHhHcFlGKzNGSU52MUhqWkQ0bFMzM2NOTzhlaVZFMHpP?=
- =?utf-8?B?K3MyNjlpbFlKbjRqQVVBZlZHaFFnKy9seUkwcmtHZWJ5OFNINmYvZWJ3M0hv?=
- =?utf-8?B?WEpUNFUvdktUU3Y2cXkyMGl2MDRDbFU1YXcwQVd3WEg4enpMWHkyRXNHWWVT?=
- =?utf-8?B?STgvTjdkenJmRDFINEhZR3Q0WWlRdnhhN1kyNnRmVmp6OVNXdHpwTHlnQisw?=
- =?utf-8?B?ci9qS0I4T0ltK1ByVDhoak91QUlnU0REWFEyOFVlVnM4TzMxUGl2ckVlRjZi?=
- =?utf-8?B?ZnNQNCtxS1UzTjJZMW90WEZnYXQ1MnhvbXF6akt0SkovYVlnK1RwR3lIeUtX?=
- =?utf-8?B?c3BmMDBVSXpIR3ZyUm81amFYclY3U0V1VkgvL21NWVdQdjludnA4cllTaTIv?=
- =?utf-8?B?TnAxSU1uM0VwRzE3c25yeVNyT1BZSEZlU3VNcDYxL0hJYVdOdno5bHF1VENl?=
- =?utf-8?B?ZDZzV3VwV3k2aDNad3BCU2drMVdwR0w2bklSZDRWcHZZb1dFaWZ6bm0rV3JW?=
- =?utf-8?B?akNDRk5lMUFteG1qNGozUmh3bFZSV1FocHdWWkZrV1czU0tHdENvR2xZZGhi?=
- =?utf-8?B?VE53T1JuOExNYUJhVnp6bU5jWm1aTDFmYTZVRnhRc0ZmeGdQeXVRRWIrYWU0?=
- =?utf-8?B?MCtQM0hGUkY2ZVZ6ZS9WSm1tUG9saEZIMUZyNWRGUWtzeHhBdlJNaTI2eisz?=
- =?utf-8?B?bUdaQkw0SVdnRVJxamJmdE1xU28wZVdBVmdRcndzTVJQT1A3ODk5T0hUWUxl?=
- =?utf-8?B?bGswY3kyTVRwQkpWSmdhT0txQTYvT1E5aHdqNGxSSFhIWm1HL2N3ZWg3Q3VS?=
- =?utf-8?B?dEdhWm5CNEgzRkd3QitpMzF6aFF2Z1FUV3NDR1lSS0MzK2MyOGZ4d3dDYUNY?=
- =?utf-8?B?R21tRCs3K1ZzQ2FYTUZkR3N0WlR2WHFNK2RjRVZjaEZUVDJpdFBwYmpmb2NK?=
- =?utf-8?B?ZS9say9IWnhxRzRVTFVTcElSSE5nK0dYZVRuRzYyak0yeTZmcGhyOWVaeGxE?=
- =?utf-8?B?K2creVVTNDdtSzhrREdsQXZTcWhPMWxnWmpXelBldVI5RlZhQzNVOXVkcEl6?=
- =?utf-8?B?WVdNclZnWWxuaGlLU0xLYUUyTnRhQUloa3JQaDRianlxem5RQ2x2RDNyWVFP?=
- =?utf-8?B?Q0MvaUVkWGZCdG5OcVdmZ0lOWTNYVmhtRU82VVdUUkRZRm1abnRoa1AwWHVM?=
- =?utf-8?B?Y3RkeFNFenBBYlJDN2xldmdsUTU0eG8yQ0JwZHVqY3kzY24zNEhrSUF5Q01k?=
- =?utf-8?B?dE9md2d6M3lkQjkyL0REbU5hZVFoWFVXSjRHWDhkZG1SRDF3V1AyeTZ5ZEZz?=
- =?utf-8?B?TC9BMndudTRIdEt2aU00blhCckNjRVloeTJScy9oeGQwUzI0NFdrWVF4dnBa?=
- =?utf-8?B?M1V2R2lsTVVWaDZtN3VaQ1cyQ2lnZ1ZReTRpbmk1Z1pnT0hYb21iSHREamVp?=
- =?utf-8?B?SW1USm9jMkpKUE5Ja25BMzdmRmJ3OTlnSzUxTnpkME92SUpYOFJjdWFuU1hx?=
- =?utf-8?B?Vk9EYjUwZjZwdS9XME9INkRoVEZtTnFWMzRYdCs3UUlMdE9jQTBrM3Rub3NY?=
- =?utf-8?B?NjZDTXBlaGV1ZzNycDk2OFRPVUZteHkvSkhVcXhIZE9vSzVwM055NElxWmU2?=
- =?utf-8?B?LzlSWW9nSnNNaFEvTHgvMWI1NWJtV2JreERucXZzby9lUlQ2VVRUTGtob2t4?=
- =?utf-8?B?MjdES1JocWJQRXRiY0g2WWpWK1EyR1l2Y1NwTHJBRHpxR284SmU1Y1ZXZlcx?=
- =?utf-8?B?ZUZnUFh2cm95WnFkVVgvWHM1cEZQK0p6bUVYV2ZKaHZRdlQ0OGJXNFhEQUs2?=
- =?utf-8?Q?AkLVK1WpyfU5iREid5vx21nUx?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 360b106a-70e6-4c08-b0dd-08ddf6af9219
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2025 12:33:28.9715
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(7416014)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2025 12:39:01.0467
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xe8V6QlaKW09KGk/Ir0gvJKPKRRMjINtr862jLhe2WkaxQ4K9Fclz/X7ZEypWsPSaw0Yk8oAdsES6mv5GovdJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6816
+X-MS-Exchange-CrossTenant-Network-Message-Id: 666d5096-2ae6-4808-f192-08ddf6b05849
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN2PEPF000055DC.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9731
 
 
-Sorry, I just realized that I forgot to include the CC list in my first reply.
-Resending with CCs. Apologies to Steven for the extra noise.
+On 17.09.25 22:01, Jason Gunthorpe wrote:
+> fput() doesn't actually call file_operations release() synchronously, it
+> puts the file on a work queue and it will be released eventually.
+>
+> This is normally fine, except for iommufd the file and the iommufd_object
+> are tied to gether. The file has the object as it's private_data and holds
+> a users refcount, while the object is expected to remain alive as long as
+> the file is.
+>
+> When the allocation of a new object aborts before installing the file it
+> will fput() the file and then go on to immediately kfree() the obj. This
+> causes a UAF once the workqueue completes the fput() and tries to
+> decrement the users refcount.
+>
+> Fix this by putting the core code in charge of the file lifetime, and call
+> __fput_sync() during abort to ensure that release() is called before
+> kfree.
 
-On 9/18/2025 3:30 AM, Steven Rostedt wrote:
-> On Wed, 17 Sep 2025 15:22:39 +0800
-> Fuyu Zhao <zhaofuyu@vivo.com> wrote:
-> 
->> Hi everyone,
->>
->> This patchset introduces a new BPF program type that allows overriding
->> a tracepoint probe function registered via register_trace_*.
->>
->> Motivation
->> ----------
->> Tracepoint probe functions registered via register_trace_* in the kernel
->> cannot be dynamically modified, changing a probe function requires recompiling
->> the kernel and rebooting. Nor can BPF programs change an existing
->> probe function.
-> 
-> I'm confused by what you mean by "tracepoint probe function"?
-> 
-> You mean the function callback that gets called via the "register_trace_*()"?
-> 
+Thanks for the detailed description. I had looked into this but couldn't 
+find a straightforward solution.
 
-Yes, that’s correct.
-My earlier wording was not very precise — thanks for pointing that out.
+Reviewed-by: Nirmoy Das <nirmoyd@nvidia.com>
 
->>
->> Overiding tracepoint supports a way to apply patches into kernel quickly
->> (such as applying security ones), through predefined static tracepoints,
->> without waiting for upstream integration.
-> 
-> This sounds way out of scope for tracepoints. Please provide a solid
-> example for this.
-> 
 
-I appreciate your comment. The example I gave about security patches probably
-wasn’t a good one here — I just meant to show the idea of changing kernel
-behavior at runtime. Sorry for the confusion.
-
-At the moment, I don’t have a solid real-world example to provide.
-This work is still in an exploratory stage.
-
-One possible use case is CPU core selection under certain scenarios. For example,
-developers may want to experiment with alternative strategies for deciding
-which CPU a task should run on to improve performance.
-
-If a tracepoint is added as a hook point in this path, then overriding its
-function callback could make it possible to dynamically adjust the
-cpu-selection logic without rebuilding and rebooting the kernel.
-
-The same mechanism could also be applied in other kernel paths where
-developers want to make quick changes from user space.
-
->>
->> This patchset demonstrates the way to override probe functions by BPF program.
->>
->> Overview
->> --------
->> This patchset adds BPF_PROG_TYPE_RAW_TRACEPOINT_OVERRIDE program type.
->> When this type of BPF program attaches, it overrides the target tracepoint
->> probe function.
->>
->> And it also extends a new struct type "tracepoint_func_snapshot", which extends
->> the tracepoint structure. It is used to record the original probe function
->> registered by kernel after BPF program being attached and restore from it
->> after detachment. 
-> 
-> The tracepoint structure exists for every tracepoint in the kernel. By
-> adding a pointer to it, you just increased the size of the tracepoint. I'm
-> already complaining that each tracepoint causes around 5K of memory
-> overhead, and I'd like to make it smaller.
-> 
-> -- Steve
-> 
-
-It is true that adding a pointer to the tracepoint structure increases
-memory overhead. However, memory for "snapshot" pointer will only be allocated
-after a BPF program is attached, and freed once it is dettached.
-
-I am also considering whether it is possible to reuse existing structures
-to reduce memory usage.
-
-I'd be very grateful for any suggestions or guidance you might have.
-
-Thanks,
-Fuyu
-
+>   __fput_sync() is a bit too tricky to open code in all the object
+> implementations. Instead the objects tell the core code where the file
+> pointer is and the core will take care of the life cycle.
+>
+> If the object is successfully allocated then the file will hold a users
+> refcount and the iommufd_object cannot be destroyed.
+>
+> It is worth noting that close(); ioctl(IOMMU_DESTROY); doesn't have an
+> issue because close() is already using a synchronous version of fput().
+>
+> The UAF looks like this:
+>
+>      BUG: KASAN: slab-use-after-free in iommufd_eventq_fops_release+0x45/0xc0 drivers/iommu/iommufd/eventq.c:376
+>      Write of size 4 at addr ffff888059c97804 by task syz.0.46/6164
+>
+>      CPU: 0 UID: 0 PID: 6164 Comm: syz.0.46 Not tainted syzkaller #0 PREEMPT(full)
+>      Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/18/2025
+>      Call Trace:
+>       <TASK>
+>       __dump_stack lib/dump_stack.c:94 [inline]
+>       dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+>       print_address_description mm/kasan/report.c:378 [inline]
+>       print_report+0xcd/0x630 mm/kasan/report.c:482
+>       kasan_report+0xe0/0x110 mm/kasan/report.c:595
+>       check_region_inline mm/kasan/generic.c:183 [inline]
+>       kasan_check_range+0x100/0x1b0 mm/kasan/generic.c:189
+>       instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
+>       atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:400 [inline]
+>       __refcount_dec include/linux/refcount.h:455 [inline]
+>       refcount_dec include/linux/refcount.h:476 [inline]
+>       iommufd_eventq_fops_release+0x45/0xc0 drivers/iommu/iommufd/eventq.c:376
+>       __fput+0x402/0xb70 fs/file_table.c:468
+>       task_work_run+0x14d/0x240 kernel/task_work.c:227
+>       resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+>       exit_to_user_mode_loop+0xeb/0x110 kernel/entry/common.c:43
+>       exit_to_user_mode_prepare include/linux/irq-entry-common.h:225 [inline]
+>       syscall_exit_to_user_mode_work include/linux/entry-common.h:175 [inline]
+>       syscall_exit_to_user_mode include/linux/entry-common.h:210 [inline]
+>       do_syscall_64+0x41c/0x4c0 arch/x86/entry/syscall_64.c:100
+>       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 07838f7fd529 ("iommufd: Add iommufd fault object")
+> Reported-by: syzbot+80620e2d0d0a33b09f93@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/r/68c8583d.050a0220.2ff435.03a2.GAE@google.com
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.coz>
+> ---
+>   drivers/iommu/iommufd/eventq.c |  9 ++-------
+>   drivers/iommu/iommufd/main.c   | 35 +++++++++++++++++++++++++++++++---
+>   2 files changed, 34 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/iommu/iommufd/eventq.c b/drivers/iommu/iommufd/eventq.c
+> index fc4de63b0bce64..e23d9ee4fe3806 100644
+> --- a/drivers/iommu/iommufd/eventq.c
+> +++ b/drivers/iommu/iommufd/eventq.c
+> @@ -393,12 +393,12 @@ static int iommufd_eventq_init(struct iommufd_eventq *eventq, char *name,
+>   			       const struct file_operations *fops)
+>   {
+>   	struct file *filep;
+> -	int fdno;
+>   
+>   	spin_lock_init(&eventq->lock);
+>   	INIT_LIST_HEAD(&eventq->deliver);
+>   	init_waitqueue_head(&eventq->wait_queue);
+>   
+> +	/* The filep is fput() by the core code during failure */
+>   	filep = anon_inode_getfile(name, fops, eventq, O_RDWR);
+>   	if (IS_ERR(filep))
+>   		return PTR_ERR(filep);
+> @@ -408,10 +408,7 @@ static int iommufd_eventq_init(struct iommufd_eventq *eventq, char *name,
+>   	eventq->filep = filep;
+>   	refcount_inc(&eventq->obj.users);
+>   
+> -	fdno = get_unused_fd_flags(O_CLOEXEC);
+> -	if (fdno < 0)
+> -		fput(filep);
+> -	return fdno;
+> +	return get_unused_fd_flags(O_CLOEXEC);
+>   }
+>   
+>   static const struct file_operations iommufd_fault_fops =
+> @@ -452,7 +449,6 @@ int iommufd_fault_alloc(struct iommufd_ucmd *ucmd)
+>   	return 0;
+>   out_put_fdno:
+>   	put_unused_fd(fdno);
+> -	fput(fault->common.filep);
+>   	return rc;
+>   }
+>   
+> @@ -536,7 +532,6 @@ int iommufd_veventq_alloc(struct iommufd_ucmd *ucmd)
+>   
+>   out_put_fdno:
+>   	put_unused_fd(fdno);
+> -	fput(veventq->common.filep);
+>   out_abort:
+>   	iommufd_object_abort_and_destroy(ucmd->ictx, &veventq->common.obj);
+>   out_unlock_veventqs:
+> diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+> index 109de747e8b3ed..b8475194279a9a 100644
+> --- a/drivers/iommu/iommufd/main.c
+> +++ b/drivers/iommu/iommufd/main.c
+> @@ -23,6 +23,7 @@
+>   #include "iommufd_test.h"
+>   
+>   struct iommufd_object_ops {
+> +	size_t file_offset;
+>   	void (*pre_destroy)(struct iommufd_object *obj);
+>   	void (*destroy)(struct iommufd_object *obj);
+>   	void (*abort)(struct iommufd_object *obj);
+> @@ -131,10 +132,30 @@ void iommufd_object_abort(struct iommufd_ctx *ictx, struct iommufd_object *obj)
+>   void iommufd_object_abort_and_destroy(struct iommufd_ctx *ictx,
+>   				      struct iommufd_object *obj)
+>   {
+> -	if (iommufd_object_ops[obj->type].abort)
+> -		iommufd_object_ops[obj->type].abort(obj);
+> +	const struct iommufd_object_ops *ops = &iommufd_object_ops[obj->type];
+> +
+> +	if (ops->file_offset) {
+> +		struct file **filep = ((void *)obj) + ops->file_offset;
+> +
+> +		/*
+> +		 * files should hold a users refcount while the file is open and
+> +		 * put it back in their release. They should hold a pointer to
+> +		 * obj in their private data. Normal fput() is deferred to a
+> +		 * workqueue and can get out of order with the following
+> +		 * kfree(obj). Using the sync version ensures the release
+> +		 * happens immediately. During abort we require the file
+> +		 * refcount is one at this point - meaning the object alloc
+> +		 * function cannot do anything to allow another thread to take a
+> +		 * refcount prior to a guaranteed success.
+> +		 */
+> +		if (*filep)
+> +			__fput_sync(*filep);
+> +	}
+> +
+> +	if (ops->abort)
+> +		ops->abort(obj);
+>   	else
+> -		iommufd_object_ops[obj->type].destroy(obj);
+> +		ops->destroy(obj);
+>   	iommufd_object_abort(ictx, obj);
+>   }
+>   
+> @@ -659,6 +680,12 @@ void iommufd_ctx_put(struct iommufd_ctx *ictx)
+>   }
+>   EXPORT_SYMBOL_NS_GPL(iommufd_ctx_put, "IOMMUFD");
+>   
+> +#define IOMMUFD_FILE_OFFSET(_struct, _filep, _obj)                           \
+> +	.file_offset = (offsetof(_struct, _filep) +                          \
+> +			BUILD_BUG_ON_ZERO(!__same_type(                      \
+> +				struct file *, ((_struct *)NULL)->_filep)) + \
+> +			BUILD_BUG_ON_ZERO(offsetof(_struct, _obj)))
+> +
+>   static const struct iommufd_object_ops iommufd_object_ops[] = {
+>   	[IOMMUFD_OBJ_ACCESS] = {
+>   		.destroy = iommufd_access_destroy_object,
+> @@ -669,6 +696,7 @@ static const struct iommufd_object_ops iommufd_object_ops[] = {
+>   	},
+>   	[IOMMUFD_OBJ_FAULT] = {
+>   		.destroy = iommufd_fault_destroy,
+> +		IOMMUFD_FILE_OFFSET(struct iommufd_fault, common.filep, common.obj),
+>   	},
+>   	[IOMMUFD_OBJ_HW_QUEUE] = {
+>   		.destroy = iommufd_hw_queue_destroy,
+> @@ -691,6 +719,7 @@ static const struct iommufd_object_ops iommufd_object_ops[] = {
+>   	[IOMMUFD_OBJ_VEVENTQ] = {
+>   		.destroy = iommufd_veventq_destroy,
+>   		.abort = iommufd_veventq_abort,
+> +		IOMMUFD_FILE_OFFSET(struct iommufd_veventq, common.filep, common.obj),
+>   	},
+>   	[IOMMUFD_OBJ_VIOMMU] = {
+>   		.destroy = iommufd_viommu_destroy,
 
