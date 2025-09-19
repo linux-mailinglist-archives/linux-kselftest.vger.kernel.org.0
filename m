@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-41937-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41938-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 577FAB895BA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 14:10:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D412B895CC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 14:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8621B7BBB00
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 12:08:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B3973BB7A6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 12:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70CC230FC27;
-	Fri, 19 Sep 2025 12:09:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4542A3101B0;
+	Fri, 19 Sep 2025 12:09:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uMaw+ETt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BkX92YNz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F8D30FC1E;
-	Fri, 19 Sep 2025 12:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162FF3101A3;
+	Fri, 19 Sep 2025 12:09:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758283766; cv=none; b=bEeQMwq5Sqp/ehomt+fnbXck7xscpCbKZODnVIoa7z4bukdpAbHZQ+5jMG4VG300eaZckuBcHhqzCmKBWoql05q5uwC+HRIxRrbCzVfalFytJRn8f6J+IQv3sUxY/fF+oSyrygpWjRy3W73J58CNttlnTnTWP1eFdkD6jYs/NQg=
+	t=1758283769; cv=none; b=pFVlQrGX/ZziYNDlhVWToco+d3W+Mg/pCgUuyYltMAxrsXoi20gFzStGDra66n6mNZLHIjeEbmVYnrUX26jsoHF/ha8TantU7E1EiLhyLjipObn3F+p5xuF9oKyu40JvTTY/ADfYzVjw1W1dQXQgv3JUMZt+gBJD3jB0S0phAdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758283766; c=relaxed/simple;
-	bh=cOC4ACMpttzSGbbpqXDXgZXuredZmIIfxtg1D195peM=;
+	s=arc-20240116; t=1758283769; c=relaxed/simple;
+	bh=oDLvnTwLCa3sWaxsvqNmO3APT6MP7ApIhxWpZvrDDc0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=g0VXyfhOnSoS9OhjmuVisUlQQMC8TkkkrT2DCcehQqkeeWpegiXLUJXcxRwNxk9UolaxgFLM+XHrUJ4oY8am3SVjMG4Kl9AncfwjpbzxAGrXenLSw6AsOUtWZDRLipVy4jh9jbw/8mMSYklmaKKlkIw758a2Du96XwZ34miEKro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uMaw+ETt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F61CC4CEF5;
-	Fri, 19 Sep 2025 12:09:23 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=V7S27sS/a4Q04rH7tKXqB1lTGT+jGVVnB6awe/btXO03ZnCqdM4lBWrqsXlpkbXLZAjd9eMG2ogBBqvBEMIW9/CC6VSsUHqRolJtHVAJpAm0fEg4i3+CONwclA8nh9KyViWmfA/HfePX4gQMkCYA000hoHrOxmkLQbKgPklNjZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BkX92YNz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36584C4CEF0;
+	Fri, 19 Sep 2025 12:09:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758283765;
-	bh=cOC4ACMpttzSGbbpqXDXgZXuredZmIIfxtg1D195peM=;
+	s=k20201202; t=1758283768;
+	bh=oDLvnTwLCa3sWaxsvqNmO3APT6MP7ApIhxWpZvrDDc0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=uMaw+ETtuJjs1h8NTkI3IXd4fhEEF36P6+nTqthhJPuwebZeibMmFn6OJmOEXMEUr
-	 1iQ5STMFigTNZ6DJlStynH4+uQBGc3FjKgGXTzEWQ88doWww/zCKrPmvOSz/AyT9KM
-	 RhiB3rbTPJc8DQxqWcJY58Dox3Yzz+smgZq8WfWDPhCGiCAIMxFbc9P7baVmWPkdse
-	 NBOEDIZkoz/EXNinEPcyHVC4sIs4Z2+YV8P8ZMbHrbifOwpulAAMflWQTNUV+dR/en
-	 AWkbBa9WoRQYKA9lmzoW7xMwUlpLgJ7kKTViycDINKY7AY+GlVcQ+/JnsCuaEkZFme
-	 kCJ2+TYlKGueA==
+	b=BkX92YNzz9PAL+XNTyA4VjjI1apiGSWGsmk8LKMpwuxjJ37iFmPNlnZvkonaAF1eG
+	 BddS6qFA/M+zr1GJWe3+MpFvZoAD2bSkQZUIY8j3lhEGWJYa5JnZDbHB7sGJ0QOAyQ
+	 v9XXF4qxGpLoo1wZRyFFtDRWOFK1P043AYU27aTridoK6rzG5tiov+iMC4qV7mJbml
+	 9fLOKlFovqpmFKm0a7l9+ChV28AbpGr0l75+KMunFnkJ2LNEIkFnmAF90jYeTyjzI9
+	 RGeqcT+m/zfoATgCJRpEWYkkjW9dhaD/e93wOZY3h5xcY8jWZe204GFnm/jr1LCn/o
+	 qKTk6yU986RDQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 19 Sep 2025 14:09:00 +0200
-Subject: [PATCH net-next 3/6] mptcp: pm: netlink: deprecate server-side
- attribute
+Date: Fri, 19 Sep 2025 14:09:01 +0200
+Subject: [PATCH net-next 4/6] selftests: mptcp: pm: get server-side flag
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250919-net-next-mptcp-server-side-flag-v1-3-a97a5d561a8b@kernel.org>
+Message-Id: <20250919-net-next-mptcp-server-side-flag-v1-4-a97a5d561a8b@kernel.org>
 References: <20250919-net-next-mptcp-server-side-flag-v1-0-a97a5d561a8b@kernel.org>
 In-Reply-To: <20250919-net-next-mptcp-server-side-flag-v1-0-a97a5d561a8b@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -65,52 +64,74 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1461; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=cOC4ACMpttzSGbbpqXDXgZXuredZmIIfxtg1D195peM=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLOuj/bu8ulS+PjkvrWzOCVVX+sFBeJHlATnmJtpvJ0v
- 233+sWfO0pZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACZyay7DT8aTT64b7J/6Y7fq
- vySz21kP07cuqjpw88ztyTODFP3mJTxh+CuX17RKr9dw9RZZifqGt/Uxbhzqt7huPbLi9X8i/W/
- ZOgYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2116; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=oDLvnTwLCa3sWaxsvqNmO3APT6MP7ApIhxWpZvrDDc0=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLOuj83PDWtYa5sR/pEnZcHVe9NmhN95d+7TZJuEspz/
+ hse2HB4akcpC4MYF4OsmCKLdFtk/sznVbwlXn4WMHNYmUCGMHBxCsBEtO8x/GYNfs2d3Nd1SDKx
+ 9yrDo3hBa0WdHXvY8+3vb5He8/Hov0RGhgablAN3lhyyki60OviS4fons745U5dvuSR3sX+CvJD
+ 7LE4A
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Now that such info is in the 'flags' attribute, it is time to deprecate
-the dedicated 'server-side' attribute.
+server-side info linked to the MPTCP connect/established events can now
+come from the flags, in addition to the dedicated attribute.
 
-It will be removed in a few versions.
+The attribute is now deprecated -- in favour of the new flag, and will
+be removed later on.
+
+Print this info only once.
 
 Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- Documentation/netlink/specs/mptcp_pm.yaml | 1 +
- net/mptcp/pm_netlink.c                    | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/mptcp/pm_nl_ctl.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/netlink/specs/mptcp_pm.yaml b/Documentation/netlink/specs/mptcp_pm.yaml
-index fc47a2931014c0304efd3215cc24485ea22e1ede..ba30a40b9dbf2d2d4f25cc07b309ea560712f65e 100644
---- a/Documentation/netlink/specs/mptcp_pm.yaml
-+++ b/Documentation/netlink/specs/mptcp_pm.yaml
-@@ -266,6 +266,7 @@ attribute-sets:
-       -
-         name: server-side
-         type: u8
-+        doc: "Deprecated: use 'flags'"
+diff --git a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
+index 93fea3442216c8fef43731a99c1d5710f234b150..d4981b76693bbddca74169437a540ad6294cf1d5 100644
+--- a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
++++ b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
+@@ -2,6 +2,7 @@
  
- operations:
-   list:
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index aa0c73faaa6acad3fd66ea0942726ecd4d0abcc0..d5b383870f79956ce5e10bf384695621604f3ce9 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -416,7 +416,7 @@ static int mptcp_event_created(struct sk_buff *skb,
- 	if (READ_ONCE(msk->pm.server_side)) {
- 		flags |= MPTCP_PM_EV_FLAG_SERVER_SIDE;
+ #include <errno.h>
+ #include <error.h>
++#include <stdbool.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -113,6 +114,8 @@ static int capture_events(int fd, int event_group)
+ 		error(1, errno, "could not join the " MPTCP_PM_EV_GRP_NAME " mcast group");
  
--		/* only set when it is the server side */
-+		/* Deprecated, and only set when it is the server side */
- 		if (nla_put_u8(skb, MPTCP_ATTR_SERVER_SIDE, 1))
- 			return -EMSGSIZE;
- 	}
+ 	do {
++		bool server_side = false;
++
+ 		FD_ZERO(&rfds);
+ 		FD_SET(fd, &rfds);
+ 		res_len = NLMSG_ALIGN(sizeof(struct nlmsghdr)) +
+@@ -187,18 +190,22 @@ static int capture_events(int fd, int event_group)
+ 				else if (attrs->rta_type == MPTCP_ATTR_ERROR)
+ 					fprintf(stderr, ",error:%u", *(__u8 *)RTA_DATA(attrs));
+ 				else if (attrs->rta_type == MPTCP_ATTR_SERVER_SIDE)
+-					fprintf(stderr, ",server_side:%u", *(__u8 *)RTA_DATA(attrs));
++					server_side = !!*(__u8 *)RTA_DATA(attrs);
+ 				else if (attrs->rta_type == MPTCP_ATTR_FLAGS) {
+ 					__u16 flags = *(__u16 *)RTA_DATA(attrs);
+ 
+ 					/* only print when present, easier */
+ 					if (flags & MPTCP_PM_EV_FLAG_DENY_JOIN_ID0)
+ 						fprintf(stderr, ",deny_join_id0:1");
++					if (flags & MPTCP_PM_EV_FLAG_SERVER_SIDE)
++						server_side = true;
+ 				}
+ 
+ 				attrs = RTA_NEXT(attrs, msg_len);
+ 			}
+ 		}
++		if (server_side)
++			fprintf(stderr, ",server_side:1");
+ 		fprintf(stderr, "\n");
+ 	} while (1);
+ 
 
 -- 
 2.51.0
