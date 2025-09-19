@@ -1,95 +1,137 @@
-Return-Path: <linux-kselftest+bounces-41980-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 082A2B8AF2F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 20:38:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39B56B8B3E4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 22:51:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCCA51C87CFE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 18:38:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFAD517E339
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 20:51:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B618B25CC64;
-	Fri, 19 Sep 2025 18:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28CF22C178E;
+	Fri, 19 Sep 2025 20:51:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1aIsfRY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AEw63Uh+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869AD247295;
-	Fri, 19 Sep 2025 18:38:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6142765ED;
+	Fri, 19 Sep 2025 20:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758307108; cv=none; b=K0a86+yWwbqI0G4wzLgLgb4wZcBVZEVwTe9xBVVLnBJPbuuoE9pMQt3Iiuyi3ZAykech5Pe0RummaUubSPWfP3d3+K9SimfLgMKj/q6Ld0qAck7UBUqh5YIydqc+Qbh8F7j+ilhquMXuEUg1hy4WaByw0yh8cks58Vk6XwN2xkU=
+	t=1758315093; cv=none; b=VnY15FKO7aF3FerslSsPsdxeC5V9YqBlVSctnQVcfdjERMnMzl2AF6o6RNalXSMfSv17WethkVEjrFPcdrUUWd6vyE/1Ev7KQ+e5EPM83gpYuRP1tG32S0rws3EYxZVvO34W6IjmSIOoylhzz0xwoTbg9jdOCpD+JoV/zeX9Vws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758307108; c=relaxed/simple;
-	bh=EeZzWFrfZxrU8fh2GXxBtvaOZgVq6ueEnBhBSJauFWs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zz1yvi1c5flFE7+GpIMdyNTyO3Qi+az8MKToN7UBUh73ufya3y3s1eJelM2yWNU6LxPj+KYT0NgIdPrCn7VpPCmGS9lw3m7HCBQjoArHIjtRMsd8vodX8h+p9RGAXb9AY318fZTar9eUH2v3B1GUTYfqJDuIZn6Ij25uVSiHLrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1aIsfRY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50919C4CEF0;
-	Fri, 19 Sep 2025 18:38:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758307108;
-	bh=EeZzWFrfZxrU8fh2GXxBtvaOZgVq6ueEnBhBSJauFWs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=S1aIsfRYpwgGG1ulRgCexm9tZ8cz18SxSmW+AJ/e1l9FzTrztVNzTIa5Y4SAAxR0W
-	 oipQkNRT+vAf9yvlaQ6ds6/i9hJOH70tMF9tvymO1jje7ABHNywjN41zug7yYaEY2+
-	 wgN+TEhvZpe6htN23Fb+fdqpftk20KG985QTMQeZp+fYbMcm8BQn+JuLwUnfDTT7aP
-	 Ok01ljK2KHuj+tPXU7VVbRZ38bjhTepyoU1NlNyUfC5/4KMNXoyCzXmOzUlvtYcp/a
-	 sNHOglQ0n1CFJrEUf+lUxTwmRovEDIaSwrk7JuQFw5+0OzLM9TurShOAINtombvFWy
-	 DYgp0Wy26aCsQ==
-From: Will Deacon <will@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Mark Brown <broonie@kernel.org>
-Cc: kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
+	s=arc-20240116; t=1758315093; c=relaxed/simple;
+	bh=WT/AtW2xlYNnS+78n8UELvwDofVsJ6EkkO2i5EOJ8R8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N5zkSSxjMUcRnu3CDgAFuWTZ7lkQoI5QscEHpgPm1wwAmS9sEvpEB7o4f9+c+Z3Jl6dKZi4LyWUJFEXX7gM3nZMRvcXZHAvVQu59aT02Y0fC95eSD/797tvyMfu25A7Wf/itF1odwGA0zq6wcansIyBUpuMtBV+B7thyZ0ESEn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AEw63Uh+; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758315090; x=1789851090;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WT/AtW2xlYNnS+78n8UELvwDofVsJ6EkkO2i5EOJ8R8=;
+  b=AEw63Uh+gdvP8TBnHl1KmtGek+0aYVhxjw+pxhqAY03igZaKu0VQdI08
+   ZZzvzxWyfQb9H3ewefaKarkH0YmUB1jjrqQLjd3hDJGsnGkPQifphP+M/
+   N2vJunhgNfOs78LId1GkRhx4qWmm8PuMa/yiOcl+t+82gvMa0WMpUsR6/
+   3RmZMvqiXJ7rCdCnFQ8C//Mg7ijtbiNyoXtjnR5iekDikPL+8xtndMxqZ
+   ZosUeaNTO+cH1Y9ZJY8ojAaM0j4sHbVLeYihGvcvapYYtEdaqQP70rZFa
+   eRyEu4Dz1y5HvjWdIsFjQytvW/8mjubBGqkI9RYRgYgho2ehwFo66s6GK
+   g==;
+X-CSE-ConnectionGUID: EpoJiZEDQxyLoxLtcTxrfw==
+X-CSE-MsgGUID: 9Nmgt+lgRQ2z8qBwhqGBqA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64469596"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="64469596"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 13:51:29 -0700
+X-CSE-ConnectionGUID: XwD47sDGR+igIFw7EOnX+A==
+X-CSE-MsgGUID: mlNyeTdkTUyEuCqKl1bt8w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,279,1751266800"; 
+   d="scan'208";a="175847193"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 19 Sep 2025 13:51:27 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uzi4i-0004nP-3C;
+	Fri, 19 Sep 2025 20:51:24 +0000
+Date: Sat, 20 Sep 2025 04:50:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Berg <benjamin@sipsolutions.net>, linux-um@lists.infradead.org,
+	Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	linux-kselftest@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] arm64: Support FEAT_LSFE (Large System Float Extension)
-Date: Fri, 19 Sep 2025 19:38:17 +0100
-Message-Id: <175828261879.3019927.22813258731218689.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250918-arm64-lsfe-v4-0-0abc712101c7@kernel.org>
-References: <20250918-arm64-lsfe-v4-0-0abc712101c7@kernel.org>
+	Benjamin Berg <benjamin.berg@intel.com>
+Subject: Re: [PATCH v2 11/11] um: switch ptrace FP register access to nolibc
+Message-ID: <202509200433.l6pWDPhh-lkp@intel.com>
+References: <20250919153420.727385-12-benjamin@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250919153420.727385-12-benjamin@sipsolutions.net>
 
-On Thu, 18 Sep 2025 20:42:05 +0100, Mark Brown wrote:
-> FEAT_LSFE is optional from v9.5, it adds new instructions for atomic
-> memory operations with floating point values.  We have no immediate use
-> for it in kernel, provide a hwcap so userspace can discover it and allow
-> the ID register field to be exposed to KVM guests.
-> 
-> 
+Hi Benjamin,
 
-Applied selftest update to arm64 (for-next/selftests), thanks!
+kernel test robot noticed the following build errors:
 
-[2/2] kselftest/arm64: Add lsfe to the hwcaps test
-      https://git.kernel.org/arm64/c/777fb19ed8d6
+[auto build test ERROR on uml/next]
+[also build test ERROR on uml/fixes shuah-kselftest/next shuah-kselftest/fixes linus/master v6.17-rc6 next-20250919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Berg/tools-compiler-h-fix-__used-definition/20250919-233959
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux next
+patch link:    https://lore.kernel.org/r/20250919153420.727385-12-benjamin%40sipsolutions.net
+patch subject: [PATCH v2 11/11] um: switch ptrace FP register access to nolibc
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20250920/202509200433.l6pWDPhh-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509200433.l6pWDPhh-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509200433.l6pWDPhh-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> arch/x86/um/os-Linux/registers.c:11:10: fatal error: 'sys/user.h' file not found
+      11 | #include <sys/user.h>
+         |          ^~~~~~~~~~~~
+   1 error generated.
+--
+>> clang: warning: no such include directory: './arch/um/include/shared' [-Wmissing-include-dirs]
+
+
+vim +11 arch/x86/um/os-Linux/registers.c
+
+14c8a77e1bbd69 arch/um/os-Linux/sys-i386/registers.c Jeff Dike          2008-06-12 @11  #include <sys/user.h>
+38b64aed786d59 arch/x86/um/os-Linux/registers.c      Richard Weinberger 2011-08-18  12  #endif
+37185b33240870 arch/x86/um/os-Linux/registers.c      Al Viro            2012-10-08  13  #include <longjmp.h>
+37185b33240870 arch/x86/um/os-Linux/registers.c      Al Viro            2012-10-08  14  #include <sysdep/ptrace_user.h>
+a78ff1112263fd arch/x86/um/os-Linux/registers.c      Eli Cooper         2016-03-20  15  #include <sys/uio.h>
+a78ff1112263fd arch/x86/um/os-Linux/registers.c      Eli Cooper         2016-03-20  16  #include <asm/sigcontext.h>
+a78ff1112263fd arch/x86/um/os-Linux/registers.c      Eli Cooper         2016-03-20  17  #include <linux/elf.h>
+dbba7f704aa0c3 arch/x86/um/os-Linux/registers.c      Al Viro            2021-09-20  18  #include <registers.h>
+3f17fed2149192 arch/x86/um/os-Linux/registers.c      Benjamin Berg      2024-10-23  19  #include <sys/mman.h>
+^1da177e4c3f41 arch/um/os-Linux/sys-i386/registers.c Linus Torvalds     2005-04-16  20  
+
 -- 
-Will
-
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
