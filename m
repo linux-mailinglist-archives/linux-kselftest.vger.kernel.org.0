@@ -1,179 +1,148 @@
-Return-Path: <linux-kselftest+bounces-41919-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41920-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E847B88603
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 10:17:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC642B88671
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 10:25:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 292C22A2EE1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 08:17:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F1DE1C85CA1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 08:26:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 749302EA721;
-	Fri, 19 Sep 2025 08:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3BBD2F531B;
+	Fri, 19 Sep 2025 08:25:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IbKvXvCc"
+	dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="rY5hIkwm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.178.143.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C7F2E7BC2
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Sep 2025 08:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758269841; cv=fail; b=N7sF3+jPufcSUp+nfN5MjoidovzI2jo/mE1DIzljaLki/1XDW9E1xUxNgVS2zki/UWEbmBUoSD7ykikjyq+D2kN3KpRSHjiSzNz8vgee8gUprO5LKiM1dmplSPLPGy40rgiNXHL2hGQQiYy3bIg/p2b7BblasS0YiVkXAmNA57E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758269841; c=relaxed/simple;
-	bh=8FX31wIWSPhOHwU5cIdUGl02QYFycA65bdjhXGavX34=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E18C2E7162;
+	Fri, 19 Sep 2025 08:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.178.143.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758270351; cv=none; b=pzNCbm45+PrHHvXdCFLLFnGPBS+qiBHUKcDOEQNuJnhlke3Qr1m6yeDcHBp9xHWTBls9+7bQ/uIrRVmycRhlhzGG6rKI673ooJaeBxTy9l3ZSM0cpBP60cTmu2sTRkidQVWxqOg4SG8PeDg5TNpobns4eBLY7heLNMXDrBe5Ywg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758270351; c=relaxed/simple;
+	bh=BA/sRPI6jXhN56RrqZT1cQZlEyECp3Dmd4VItUSB6n0=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ZaIjnJseNEHsTmTjGOCu05bs4auUz2hcyqtvWGpys0ljwFflDvmv45WQiT4Zi2g64L36hILmZ4fcRbMqkB4DL93vRZVtlYmFf5Vk5L+nsW1+e44wm/HWVaFhE6sYFXB830HYOYwfCzwQu0S0f6/U+haVVSSc6GH32ZKvT9gEy0s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IbKvXvCc; arc=fail smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758269840; x=1789805840;
+	 Content-Type:MIME-Version; b=YlXmsKi2K8wMgEtKqjoYjuwlSGCJhc/mShEkmF5a6OSYblZkECYpJXr9YgI8egJAnesCcrdNDA58cJ+Uy7zxHXeZLPQOjIDgGmS6+McQJQk1brOAPsFsk+Y1subXYk96ufxlldfhCQxiZ2dUHgx+V6pIiIrJu21i1r25vaafxj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=rY5hIkwm; arc=none smtp.client-ip=63.178.143.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazoncorp2; t=1758270349; x=1789806349;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=8FX31wIWSPhOHwU5cIdUGl02QYFycA65bdjhXGavX34=;
-  b=IbKvXvCcG43xYQLhb72ghKEML38913sPFvf1DAMWENanPFE6gHStemdJ
-   g6bNzj0ziwzQsXab7ZX1ZrOj6n2jzzj18YrsrNu+zr61bfETpeoXUZkbJ
-   eECdqEk4rUEbxNZgucUB4oi0/hShrZIyaNT4aZbhBeH+1Byhh73GXJ+XB
-   s3wz7LAYQTaxbPNGyplHFxf7KqlI68Jam6ZJG98Fpja4WMjJQdGPJA5c1
-   xn6mKy/T6MaxXZ1a5dE5mvzoLH/ZXLhzYWLFTgVTYH64L0fFFVsAk92aW
-   ZI0cIjCpeZ7gCJ2TKjEqLKiodo5ETK95QbOyuc0RudqT6XKcexj2TEK4J
-   Q==;
-X-CSE-ConnectionGUID: fYlQHt/cSoadJwpBTMea+w==
-X-CSE-MsgGUID: 1k4hX1SZQkiq0hCebJROmw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="60676851"
-X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
-   d="scan'208";a="60676851"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 01:17:19 -0700
-X-CSE-ConnectionGUID: BcKCikpTRKOsF1TC7KY8BQ==
-X-CSE-MsgGUID: OJjnevP/Qo6s4hoZEVsz6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
-   d="scan'208";a="176218348"
-Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 01:17:19 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Fri, 19 Sep 2025 01:17:18 -0700
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Fri, 19 Sep 2025 01:17:18 -0700
-Received: from BL0PR03CU003.outbound.protection.outlook.com (52.101.53.36) by
- edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Fri, 19 Sep 2025 01:17:18 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TLlDYGdXPE0JtkIhcfUdvVwXWdA5uAwBKm19LVqv9CafROrMNGgwlBY5ZXV+T7RQs1dN6HLVBYkqlTzY1nYATvUIdnc5cJs0jH6Wj8CiCnyo7CUKk1sNFQUHdYrnIA9Kw/Ez8bnd3USwo69khOQ+TXtoT8vTL4xlop6AyzkRo7f6PfzxzXxO0w3Iu/hnEOHw6ijPwNOc8pBe2HXxlFMGEu/Kt6owv8A/KDGhHVnzuVDIPfI74hDHKWTWe+ZeKWqeNXa7ITp1NEbxxsrurEUOo5k2rKOhBkP/QN/7YeJyd+sMlVsO8+LmUq4cbAHLlprg5vKX2V5eFiZb/q3VWJtVdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8FX31wIWSPhOHwU5cIdUGl02QYFycA65bdjhXGavX34=;
- b=yu6bRIfF5NNQCEjZe1IH3CnDehDl932mVF7Z3sU7qZtvAeuiU21epi7QgiDWRoMJOvfIijFxXtaZHgkcWN1jOpR2mpwMApVi5+jBcgpucr7feMFmBDlb7D0tEboE7pazPh+tAMt4ecQ0b048Vh2cdk7M7JZpw8N46Hx+HOUk+bdejfW+fQTShAuQqRr8ofHrNIc+fZzbHWAhy97TjqFa6TAgRv8UnQXylpxSO+9Ov2YI3RPlFioCchm+LX+eatfNrQ3ud6/a8s5Vjf74H4FeEKBgYpkvDoF0SnSOfhi0U0Tvhk6Zd84CxLNOh0HViaKljbtbBggMBn25RbEBTDBPHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by PH7PR11MB5796.namprd11.prod.outlook.com (2603:10b6:510:13b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Fri, 19 Sep
- 2025 08:17:15 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1%5]) with mapi id 15.20.9137.012; Fri, 19 Sep 2025
- 08:17:14 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Robin
- Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Will Deacon
-	<will@kernel.org>
-CC: Lu Baolu <baolu.lu@linux.intel.com>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>,
-	"syzbot+80620e2d0d0a33b09f93@syzkaller.appspotmail.com"
-	<syzbot+80620e2d0d0a33b09f93@syzkaller.appspotmail.com>
-Subject: RE: [PATCH 3/3] iommufd/selftest: Update the fail_nth limit
-Thread-Topic: [PATCH 3/3] iommufd/selftest: Update the fail_nth limit
-Thread-Index: AQHcKA351mFeqi8UzEyI3mk3FSBm4rSaK2QA
-Date: Fri, 19 Sep 2025 08:17:14 +0000
-Message-ID: <BN9PR11MB527693D00256306E37F7A2128C11A@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <0-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
- <3-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
-In-Reply-To: <3-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
+  bh=GFL7BzHqZtJ+hf0GoLUZhF6DxwKb7xJe9EgTIEodTbE=;
+  b=rY5hIkwmnf28yDoZF+O4efBCPae4e34Ds0qa2E7C+9AHflfREUlaSuCa
+   yQKaIGSUHPCrR9hYqSnr6CsUAwNmZ+UUn3lRZoSu54dSrsdd6/kOOz7FZ
+   t3t12Xo7lKTDBPokRitIYYcXcmO8Uc8mrEc3W25R1sOYe8jKft1rU8+3b
+   lwVPA0KDgXIDrPkUzId2mju68+9mYOwJ8OYoFZfwIQQmP5ZFMbqQoVa5X
+   um/wc1fkX87nnCrX/Pw3S8u280AjfXxFq5uoHJayqfzsdgaKNiJI6jkRa
+   qc3KSAIK4rGTNU+MGS/pUrG7T2tylJZUlHGPGn2b5CvwYVMMx92Zs3yuv
+   w==;
+X-CSE-ConnectionGUID: IsZxf8f8SjWiNUjgDVp6Og==
+X-CSE-MsgGUID: xwNyaF2SS7eyXLTiQsdIFQ==
+X-IronPort-AV: E=Sophos;i="6.18,277,1751241600"; 
+   d="scan'208";a="2255186"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 08:25:37 +0000
+Received: from EX19MTAEUA001.ant.amazon.com [54.240.197.233:22673]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.0.240:2525] with esmtp (Farcaster)
+ id 99b608d7-c465-47ba-b3fb-c53cc7a3b236; Fri, 19 Sep 2025 08:25:37 +0000 (UTC)
+X-Farcaster-Flow-ID: 99b608d7-c465-47ba-b3fb-c53cc7a3b236
+Received: from EX19D015EUB003.ant.amazon.com (10.252.51.113) by
+ EX19MTAEUA001.ant.amazon.com (10.252.50.192) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Fri, 19 Sep 2025 08:25:36 +0000
+Received: from EX19D015EUB004.ant.amazon.com (10.252.51.13) by
+ EX19D015EUB003.ant.amazon.com (10.252.51.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Fri, 19 Sep 2025 08:25:36 +0000
+Received: from EX19D015EUB004.ant.amazon.com ([fe80::2dc9:7aa9:9cd3:fc8a]) by
+ EX19D015EUB004.ant.amazon.com ([fe80::2dc9:7aa9:9cd3:fc8a%3]) with mapi id
+ 15.02.2562.020; Fri, 19 Sep 2025 08:25:36 +0000
+From: "Roy, Patrick" <roypat@amazon.co.uk>
+To: "rppt@kernel.org" <rppt@kernel.org>
+CC: "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "alex@ghiti.fr"
+	<alex@ghiti.fr>, "andrii@kernel.org" <andrii@kernel.org>, "anna@kernel.org"
+	<anna@kernel.org>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"ast@kernel.org" <ast@kernel.org>, "axelrasmussen@google.com"
+	<axelrasmussen@google.com>, "borntraeger@linux.ibm.com"
+	<borntraeger@linux.ibm.com>, "bp@alien8.de" <bp@alien8.de>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "brauner@kernel.org"
+	<brauner@kernel.org>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"chenhuacai@kernel.org" <chenhuacai@kernel.org>, "corbet@lwn.net"
+	<corbet@lwn.net>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"david@redhat.com" <david@redhat.com>, "derekmn@amazon.co.uk"
+	<derekmn@amazon.co.uk>, "devel@lists.orangefs.org"
+	<devel@lists.orangefs.org>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
+	"gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+	"gor@linux.ibm.com" <gor@linux.ibm.com>, "hannes@cmpxchg.org"
+	<hannes@cmpxchg.org>, "haoluo@google.com" <haoluo@google.com>,
+	"hca@linux.ibm.com" <hca@linux.ibm.com>, "hpa@zytor.com" <hpa@zytor.com>,
+	"hubcap@omnibond.com" <hubcap@omnibond.com>, "jack@suse.cz" <jack@suse.cz>,
+	"Thomson, Jack" <jackabt@amazon.co.uk>, "jannh@google.com"
+	<jannh@google.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
+	<jhubbard@nvidia.com>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "jolsa@kernel.org"
+	<jolsa@kernel.org>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
+	"kernel@xen0n.name" <kernel@xen0n.name>, "kpsingh@kernel.org"
+	<kpsingh@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "luto@kernel.org"
+	<luto@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
+	"martin@omnibond.com" <martin@omnibond.com>, "maz@kernel.org"
+	<maz@kernel.org>, "mhocko@suse.com" <mhocko@suse.com>, "mingo@redhat.com"
+	<mingo@redhat.com>, "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "paul.walmsley@sifive.com"
+	<paul.walmsley@sifive.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"peterx@redhat.com" <peterx@redhat.com>, "peterz@infradead.org"
+	<peterz@infradead.org>, "pfalcato@suse.de" <pfalcato@suse.de>, "Roy, Patrick"
+	<roypat@amazon.co.uk>, "sdf@fomichev.me" <sdf@fomichev.me>,
+	"seanjc@google.com" <seanjc@google.com>, "shakeel.butt@linux.dev"
+	<shakeel.butt@linux.dev>, "shuah@kernel.org" <shuah@kernel.org>,
+	"song@kernel.org" <song@kernel.org>, "surenb@google.com" <surenb@google.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "svens@linux.ibm.com"
+	<svens@linux.ibm.com>, "tglx@linutronix.de" <tglx@linutronix.de>,
+	"trondmy@kernel.org" <trondmy@kernel.org>, "vbabka@suse.cz" <vbabka@suse.cz>,
+	"viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>, "weixugc@google.com"
+	<weixugc@google.com>, "will@kernel.org" <will@kernel.org>,
+	"willy@infradead.org" <willy@infradead.org>, "x86@kernel.org"
+	<x86@kernel.org>, "Cali, Marco" <xmarcalx@amazon.co.uk>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, "yuanchu@google.com"
+	<yuanchu@google.com>, "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+	"zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH v6 05/11] KVM: guest_memfd: Add flag to remove from direct
+ map
+Thread-Topic: [PATCH v6 05/11] KVM: guest_memfd: Add flag to remove from
+ direct map
+Thread-Index: AQHcKT757eD2hLtXdESX+jHFR62e2Q==
+Date: Fri, 19 Sep 2025 08:25:36 +0000
+Message-ID: <20250919082534.17376-1-roypat@amazon.co.uk>
+References: <aMZyacbUEM7HErM1@kernel.org>
+In-Reply-To: <aMZyacbUEM7HErM1@kernel.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB5796:EE_
-x-ms-office365-filtering-correlation-id: 88556512-55f1-42d3-6b6d-08ddf754f0a5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024|38070700021;
-x-microsoft-antispam-message-info: =?us-ascii?Q?jAnGDGI8DOPj4oRc+zCxo7zWYMMsTJtbpWwI2AV3erknKyBIrVVbtDN51oB8?=
- =?us-ascii?Q?zjle+py+3Y6d86EaxwM1u1mtMYIHZ/6AMAE9ODyxCnqqz+UWkV9kmap1Wnwp?=
- =?us-ascii?Q?EVyxcT5o8Gj7ksEaiC/TaEH776eIoAlwE0UOw51b9KDQxzQApZyTs0ubIJtl?=
- =?us-ascii?Q?EEH1u/u5Dlt/I9XDVloIfgb57z5FigOuDP4kWOsq9J0FE9peyX9ZxsysSY4Q?=
- =?us-ascii?Q?mug/MF4swvcc8QCea2quXsWeUzH1kO5S7iKna4ZQDsmzJjq1QI+YIxfP0tF5?=
- =?us-ascii?Q?hMw/4xnR6aBzmqwloWG0tT2t1zo/BCwKMenXjodMeRojHJ7+lf54lvYfP77C?=
- =?us-ascii?Q?lZxzeyYRa8a2/pSCP1RXXfz9eHjRpFRVAPUNWmUYZ97t7ZTnWbahNykp6I4r?=
- =?us-ascii?Q?VbU0fAUNDhQDzMNryjc56ZMS/MTBKysqjH2Q2CzVTyIiqloe1OXjwG0afJRL?=
- =?us-ascii?Q?TVvKhi0ATh3YjHoDamWfjGqLf5uSO8KHJR+eMckihcoFeHc1vEhIz+AmCHyb?=
- =?us-ascii?Q?E1fS8PxrwbHo2hVWHUyZiLCUX8ffN5wREpxS6fr7YvfPi2xB7X4sTIYOTLen?=
- =?us-ascii?Q?bXYSlLKO/GyVz1MGOi9YQF6yov4cfiKUIcl7hQ+/tBoyB2Hq6I1c/mwrQlYX?=
- =?us-ascii?Q?k1jDXkNjyoyRfb3HDQxorddb0S05ejMrftG9P3VcDhEr+uTPqwlVYOWHdQ7C?=
- =?us-ascii?Q?+IXqBW8n/eK/tBvQsR/qMjo7jOIKvUBTyULQxkYU8q4jtNuI+kPxMlH3fzCs?=
- =?us-ascii?Q?Jd7kXPVfqMa61/11Q5XbwpYGGg2X70VuiWUO/x52lDcn8MvMycEVwDSt7Bn/?=
- =?us-ascii?Q?nL7RG8gb2xaDE2xj8Ijn5mJWGw067rChj6KuqZnAseg24/OpISmVzVuE2hJ0?=
- =?us-ascii?Q?eD5/sdHkI42ttsQqSFmblKUuKcz+xjXJ0VOoDzEqmluzYd+jxAsop3MmDUjr?=
- =?us-ascii?Q?CuZnXaa24YCRuiVYtyQ866GSTT2s7gP6V/16gp9mE1WbLjnulpc4rhuZ45AB?=
- =?us-ascii?Q?nYnjnNxj3+7cGTrrNd3WR9nhLhPVukkjhRM0DT/TT1n3TsnJCvU2F10vI4r5?=
- =?us-ascii?Q?ruosvcAkpfhAl3GtW+5oI9NjraRgVAVtjZCnK4+FSz2vNsr5qOHGgem97+6t?=
- =?us-ascii?Q?bUVBXn4AOsbZkgjEz6thDw6cZir2TopNbxh72MJsSz8urhC80AmcFP2Ooa/+?=
- =?us-ascii?Q?l7xZxsndkGuxwGmwyF0KbB8Rhp8STJ4JhUEVjuWtDH8aneKTFb1bcWcUNKK7?=
- =?us-ascii?Q?i04xaNfkkHSY3qphnOeCcKh2RLWR37M3Mn+ahcJsNFARpZy02eoirdDt7TKw?=
- =?us-ascii?Q?sXwqJkeAnr9ohuhdgaSRMNOgp6bdyLocMOcqTiBlZkDZnvGkDdT2gawkfNf1?=
- =?us-ascii?Q?NEAJCCQ1RP5axbknEqCmXDvK4Ee6Q8Rf1mJLvYVzfYamaTGcqGcyJ08BQJ5l?=
- =?us-ascii?Q?fvNwfgP13/jXaOzu9vvjPLsKqFzXMtcEnCG14wTA0Vv9kYhEbCE95w=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5gn+Gbhr0Vp+5q+/YG4hj7Tz1FQM9H6fHab/fu66m53LWe3UGO2zMYpdcJnU?=
- =?us-ascii?Q?dpzAyNGopbZ8Suo1yJdK3dwARu/1Q0CN6w2b5Bf/mCNMrE2TZCQ0oQjO7Cdx?=
- =?us-ascii?Q?tinY32nVdU9ZiQYhp3F7xrjRy/wgSSo+sU43thacuJ2DzHra+4raF8QAIWog?=
- =?us-ascii?Q?FAOigOk9Tj4uG/Vwt9NA7gSRismd7m2OwWrNSFL0WyXqjQv2uPaz8jBy2QWF?=
- =?us-ascii?Q?wkv0EdpaC71X3QRrYWBjOCB03X5ZMm/T7Gmmi8+Thw4QImpJz8UCdGFmvFPB?=
- =?us-ascii?Q?j4tWivPqUFxYUzhLBrOml6QkNTeDPDuQvbbO0mMqTNmKFBzJtRpvxTBSOYyx?=
- =?us-ascii?Q?WinFmTCCk2A04rg49X9a+5JpB759MM/1No22mVVZesGESPd6ktbLpJDX/UF8?=
- =?us-ascii?Q?VHlDlJojoCqiVMMrC8R20sKG9niDe7zzGWj7HqJJe0lvp81MnTuEneiHL52N?=
- =?us-ascii?Q?YI58bpNl7yvGj5OvyK/grSA9tqciwADvuLI0pg+ZWvJ6EEJ0z/2SL6AFd6WM?=
- =?us-ascii?Q?++YpoaC6kf4V3tSK+gS2fNuCuPsQpMcAIA6QKl7WHbdWRU/wCxlXKgve13Gw?=
- =?us-ascii?Q?yrQFCVyJ7Mw5JvfL12XnQsKJRBwipvgsQGAJtAizDeiNE3gGWyyYspO2amXK?=
- =?us-ascii?Q?YaBSSwhIkzEbCxfHUs6H6vUyeeRLKs5+OIH5EkW0tUrSd3ypS31mImbI+46H?=
- =?us-ascii?Q?vjFv30M+agLRRHrE4PjvQCrzp8psOrI/r0BXXG18LN2WqfUujSWgEnyN24fX?=
- =?us-ascii?Q?VeurAq0cVMd9lsscu+s503iZr+h01XQT7KGgsRpe0PiLOgoI1nfO3wsO7mQD?=
- =?us-ascii?Q?FVsiMTYUWyZWz+PXOJKv9hy7R/Hz0VAUUTMroRUFIpgrxLKkYyfgBCFGXvWv?=
- =?us-ascii?Q?FsPm+gEidnI5wFt3z7oz8Ri1bDfXllt+LkFP3g3WL1wKw30eWo0f1kQofUbS?=
- =?us-ascii?Q?C+HhALJt50E+JIqzX9GWncAmK8mLn5YWzme0xr5gAJ6icWtPz3EAK0eLKKiJ?=
- =?us-ascii?Q?q5CMBCIlVqDWIRQriCyb2l3jPoVYppi+++cqelJhapPkEfXu5/T9o67C7NoA?=
- =?us-ascii?Q?LwkYf11pnSYxPEghqFYt6Ig1bo5wPF/ZO8kJ4iKxbosuBxOfjWsFAi+kt/3Y?=
- =?us-ascii?Q?bkIlCxtMDDCv30qA6DyTgC75PsW4Vk8PesGBuiBdP7Wdirz6+OdvLv51fdZ5?=
- =?us-ascii?Q?/7i2dIb60euCpTLeck8c6HexJbM0EzkkBt3rtHCKIRvVWeQufHzqBysAaeMW?=
- =?us-ascii?Q?zJVVfQDaP9ZfGN/vZp6xPUs7yV9xTIXX9VXEA0kKNC6w+a8wee6v4hgUojwI?=
- =?us-ascii?Q?yMFOH7zfg7ct8msz0PLoZQqo/38+sIYmbrznjhe5MEMnseb3qCXuiYc3qSB3?=
- =?us-ascii?Q?Kx0ZCUeGc7yQoaq3nJi66IbQpFrstHpyXb7223F3S7Kv+91nGdE2aHEokZ8/?=
- =?us-ascii?Q?jBvdiKeEvbCN5+vER7srTuW8ZuXoSJPOqEa+Oem3KYKgkKioYnr6RjTbPhJY?=
- =?us-ascii?Q?N30585enQ/rm4anj3g43bZfbJgBwxF1M1o/HTtuxdW3LT0YSoGKWt62qH7Zr?=
- =?us-ascii?Q?SFXwg80N1Vt2uP8C5a07r03tH7ggbLEtYCDuzuAt?=
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -181,26 +150,251 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88556512-55f1-42d3-6b6d-08ddf754f0a5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Sep 2025 08:17:14.2657
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Qi/PXsdokc0WatY8B+nbAQrJvBctvACn+8IqCHNSfmsjQP3PvXwyAWCD4q+ijTMi20JIJEkn4HoBBrPdtGkO7A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5796
-X-OriginatorOrg: intel.com
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Thursday, September 18, 2025 4:02 AM
->=20
-> There are more failure conditions now so 400 iterations is not enough pas=
-s
-> them all, up it to 1000. The limit exists so it doesn't infinite loop.
->=20
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Hi Mike,=0A=
+=0A=
+...=0A=
+=0A=
+>> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/=
+kvm_host.h=0A=
+>> index 2f2394cce24e..0bfd8e5fd9de 100644=0A=
+>> --- a/arch/arm64/include/asm/kvm_host.h=0A=
+>> +++ b/arch/arm64/include/asm/kvm_host.h=0A=
+>> @@ -19,6 +19,7 @@=0A=
+>>  #include <linux/maple_tree.h>=0A=
+>>  #include <linux/percpu.h>=0A=
+>>  #include <linux/psci.h>=0A=
+>> +#include <linux/set_memory.h>=0A=
+>>  #include <asm/arch_gicv3.h>=0A=
+>>  #include <asm/barrier.h>=0A=
+>>  #include <asm/cpufeature.h>=0A=
+>> @@ -1706,5 +1707,16 @@ void compute_fgu(struct kvm *kvm, enum fgt_group_=
+id fgt);=0A=
+>>  void get_reg_fixed_bits(struct kvm *kvm, enum vcpu_sysreg reg, u64 *res=
+0, u64 *res1);=0A=
+>>  void check_feature_map(void);=0A=
+>>=0A=
+>> +#ifdef CONFIG_KVM_GUEST_MEMFD=0A=
+>> +static inline bool kvm_arch_gmem_supports_no_direct_map(void)=0A=
+>> +{=0A=
+>> +     /*=0A=
+>> +      * Without FWB, direct map access is needed in kvm_pgtable_stage2_=
+map(),=0A=
+>> +      * as it calls dcache_clean_inval_poc().=0A=
+>> +      */=0A=
+>> +     return can_set_direct_map() && cpus_have_final_cap(ARM64_HAS_STAGE=
+2_FWB);=0A=
+>> +}=0A=
+>> +#define kvm_arch_gmem_supports_no_direct_map kvm_arch_gmem_supports_no_=
+direct_map=0A=
+>> +#endif /* CONFIG_KVM_GUEST_MEMFD */=0A=
+>>=0A=
+>>  #endif /* __ARM64_KVM_HOST_H__ */=0A=
+>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h=0A=
+>> index 1d0585616aa3..a9468bce55f2 100644=0A=
+>> --- a/include/linux/kvm_host.h=0A=
+>> +++ b/include/linux/kvm_host.h=0A=
+>> @@ -36,6 +36,7 @@=0A=
+>>  #include <linux/rbtree.h>=0A=
+>>  #include <linux/xarray.h>=0A=
+>>  #include <asm/signal.h>=0A=
+>> +#include <linux/set_memory.h>=0A=
+> =0A=
+> The set_memory APIs are not used in the header, no need to include it her=
+e.=0A=
+> =0A=
+=0A=
+Ack!=0A=
+=0A=
+>>  #include <linux/kvm.h>=0A=
+>>  #include <linux/kvm_para.h>=0A=
+>> @@ -731,6 +732,12 @@ static inline bool kvm_arch_has_private_mem(struct =
+kvm *kvm)=0A=
+>>  bool kvm_arch_supports_gmem_mmap(struct kvm *kvm);=0A=
+>>  #endif=0A=
+>>=0A=
+>> +#ifdef CONFIG_KVM_GUEST_MEMFD=0A=
+>> +#ifndef kvm_arch_gmem_supports_no_direct_map=0A=
+>> +#define kvm_arch_gmem_supports_no_direct_map can_set_direct_map=0A=
+>> +#endif=0A=
+>> +#endif /* CONFIG_KVM_GUEST_MEMFD */=0A=
+>> +=0A=
+>>  #ifndef kvm_arch_has_readonly_mem=0A=
+>>  static inline bool kvm_arch_has_readonly_mem(struct kvm *kvm)=0A=
+>>  {=0A=
+>> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h=0A=
+>> index 6efa98a57ec1..33c8e8946019 100644=0A=
+>> --- a/include/uapi/linux/kvm.h=0A=
+>> +++ b/include/uapi/linux/kvm.h=0A=
+>> @@ -963,6 +963,7 @@ struct kvm_enable_cap {=0A=
+>>  #define KVM_CAP_RISCV_MP_STATE_RESET 242=0A=
+>>  #define KVM_CAP_ARM_CACHEABLE_PFNMAP_SUPPORTED 243=0A=
+>>  #define KVM_CAP_GUEST_MEMFD_MMAP 244=0A=
+>> +#define KVM_CAP_GUEST_MEMFD_NO_DIRECT_MAP 245=0A=
+>>=0A=
+>>  struct kvm_irq_routing_irqchip {=0A=
+>>       __u32 irqchip;=0A=
+>> @@ -1600,6 +1601,7 @@ struct kvm_memory_attributes {=0A=
+>>=0A=
+>>  #define KVM_CREATE_GUEST_MEMFD       _IOWR(KVMIO,  0xd4, struct kvm_cre=
+ate_guest_memfd)=0A=
+>>  #define GUEST_MEMFD_FLAG_MMAP        (1ULL << 0)=0A=
+>> +#define GUEST_MEMFD_FLAG_NO_DIRECT_MAP (1ULL << 1)=0A=
+>>=0A=
+>>  struct kvm_create_guest_memfd {=0A=
+>>       __u64 size;=0A=
+>> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c=0A=
+>> index 81028984ff89..3c64099fc98a 100644=0A=
+>> --- a/virt/kvm/guest_memfd.c=0A=
+>> +++ b/virt/kvm/guest_memfd.c=0A=
+>> @@ -4,6 +4,7 @@=0A=
+>>  #include <linux/kvm_host.h>=0A=
+>>  #include <linux/pagemap.h>=0A=
+>>  #include <linux/anon_inodes.h>=0A=
+>> +#include <linux/set_memory.h>=0A=
+>>=0A=
+>>  #include "kvm_mm.h"=0A=
+>>=0A=
+>> @@ -42,9 +43,24 @@ static int __kvm_gmem_prepare_folio(struct kvm *kvm, =
+struct kvm_memory_slot *slo=0A=
+>>       return 0;=0A=
+>>  }=0A=
+>>=0A=
+>> -static inline void kvm_gmem_mark_prepared(struct folio *folio)=0A=
+>> +static bool kvm_gmem_test_no_direct_map(struct inode *inode)=0A=
+>>  {=0A=
+>> -     folio_mark_uptodate(folio);=0A=
+>> +     return ((unsigned long) inode->i_private) & GUEST_MEMFD_FLAG_NO_DI=
+RECT_MAP;=0A=
+>> +}=0A=
+>> +=0A=
+>> +static inline int kvm_gmem_mark_prepared(struct folio *folio)=0A=
+>> +{=0A=
+>> +     struct inode *inode =3D folio_inode(folio);=0A=
+>> +     int r =3D 0;=0A=
+>> +=0A=
+>> +     if (kvm_gmem_test_no_direct_map(inode))=0A=
+>> +             r =3D set_direct_map_valid_noflush(folio_page(folio, 0), f=
+olio_nr_pages(folio),=0A=
+>> +                                              false);=0A=
+>> +=0A=
+>> +     if (!r)=0A=
+>> +             folio_mark_uptodate(folio);=0A=
+>> +=0A=
+>> +     return r;=0A=
+>>  }=0A=
+>>=0A=
+>>  /*=0A=
+>> @@ -82,7 +98,7 @@ static int kvm_gmem_prepare_folio(struct kvm *kvm, str=
+uct kvm_memory_slot *slot,=0A=
+>>       index =3D ALIGN_DOWN(index, 1 << folio_order(folio));=0A=
+>>       r =3D __kvm_gmem_prepare_folio(kvm, slot, index, folio);=0A=
+>>       if (!r)=0A=
+>> -             kvm_gmem_mark_prepared(folio);=0A=
+>> +             r =3D kvm_gmem_mark_prepared(folio);=0A=
+> =0A=
+> If this fails, shouldn't we undo __kvm_gmem_prepare_folio()?=0A=
+>=0A=
+=0A=
+Yes, good point. I'm not sure if we can undo preparation (its only used=0A=
+by AMD-SEV right now, for passing off the page to the CoCo context). But=0A=
+not undoing it means that guest_memfd will consider the page unprepared,=0A=
+and zero it again the next time it's accesses, which will cause a=0A=
+machine check because the page has already been passed off to the=0A=
+confidential world.=0A=
+=0A=
+We talked about this in the guest_memfd upstream call yesterday, and=0A=
+decided that in addition to this problem, we want to separate=0A=
+preparedness tracking from direct map removal state tracking anyway (and=0A=
+move preparedness tracking outside of guest_memfd into the arch specific=0A=
+code). And if direct map state and preparedness are separate bits, then=0A=
+we can accurately record the state of "preparation worked but direct map=0A=
+removal failed".=0A=
+=0A=
+>>=0A=
+>>       return r;=0A=
+>>  }=0A=
+>> @@ -344,8 +360,15 @@ static vm_fault_t kvm_gmem_fault_user_mapping(struc=
+t vm_fault *vmf)=0A=
+>>       }=0A=
+>>=0A=
+>>       if (!folio_test_uptodate(folio)) {=0A=
+>> +             int err =3D 0;=0A=
+>> +=0A=
+>>               clear_highpage(folio_page(folio, 0));=0A=
+>> -             kvm_gmem_mark_prepared(folio);=0A=
+>> +             err =3D kvm_gmem_mark_prepared(folio);=0A=
+>> +=0A=
+>> +             if (err) {=0A=
+>> +                     ret =3D vmf_error(err);=0A=
+>> +                     goto out_folio;=0A=
+>> +             }=0A=
+>>       }=0A=
+>>=0A=
+>>       vmf->page =3D folio_file_page(folio, vmf->pgoff);=0A=
+>> @@ -436,6 +459,16 @@ static void kvm_gmem_free_folio(struct address_spac=
+e *mapping,=0A=
+>>       kvm_pfn_t pfn =3D page_to_pfn(page);=0A=
+>>       int order =3D folio_order(folio);=0A=
+>>=0A=
+>> +     /*=0A=
+>> +      * Direct map restoration cannot fail, as the only error condition=
+=0A=
+>> +      * for direct map manipulation is failure to allocate page tables=
+=0A=
+>> +      * when splitting huge pages, but this split would have already=0A=
+>> +      * happened in set_direct_map_invalid_noflush() in kvm_gmem_mark_p=
+repared().=0A=
+>> +      * Thus set_direct_map_valid_noflush() here only updates prot bits=
+.=0A=
+>> +      */=0A=
+>> +     if (kvm_gmem_test_no_direct_map(mapping->host))=0A=
+>> +             set_direct_map_valid_noflush(page, folio_nr_pages(folio), =
+true);=0A=
+>> +=0A=
+>>       kvm_arch_gmem_invalidate(pfn, pfn + (1ul << order));=0A=
+>>  }=0A=
+>>=0A=
+>> @@ -500,6 +533,9 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t=
+ size, u64 flags)=0A=
+>>       /* Unmovable mappings are supposed to be marked unevictable as wel=
+l. */=0A=
+>>       WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));=0A=
+>>=0A=
+>> +     if (flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP)=0A=
+>> +             mapping_set_no_direct_map(inode->i_mapping);=0A=
+>> +=0A=
+>>       kvm_get_kvm(kvm);=0A=
+>>       gmem->kvm =3D kvm;=0A=
+>>       xa_init(&gmem->bindings);=0A=
+>> @@ -524,6 +560,9 @@ int kvm_gmem_create(struct kvm *kvm, struct kvm_crea=
+te_guest_memfd *args)=0A=
+>>       if (kvm_arch_supports_gmem_mmap(kvm))=0A=
+>>               valid_flags |=3D GUEST_MEMFD_FLAG_MMAP;=0A=
+>>=0A=
+>> +     if (kvm_arch_gmem_supports_no_direct_map())=0A=
+>> +             valid_flags |=3D GUEST_MEMFD_FLAG_NO_DIRECT_MAP;=0A=
+>> +=0A=
+>>       if (flags & ~valid_flags)=0A=
+>>               return -EINVAL;=0A=
+>>=0A=
+>> @@ -768,7 +807,7 @@ long kvm_gmem_populate(struct kvm *kvm, gfn_t start_=
+gfn, void __user *src, long=0A=
+>>               p =3D src ? src + i * PAGE_SIZE : NULL;=0A=
+>>               ret =3D post_populate(kvm, gfn, pfn, p, max_order, opaque)=
+;=0A=
+>>               if (!ret)=0A=
+>> -                     kvm_gmem_mark_prepared(folio);=0A=
+>> +                     ret =3D kvm_gmem_mark_prepared(folio);=0A=
+>>=0A=
+>>  put_folio_and_exit:=0A=
+>>               folio_put(folio);=0A=
+...=0A=
+=0A=
+>=0A=
+> Sincerely yours,=0A=
+> Mike.=0A=
+Best, =0A=
+Patrick=0A=
+=0A=
 
