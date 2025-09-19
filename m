@@ -1,103 +1,159 @@
-Return-Path: <linux-kselftest+bounces-41958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C183B8A0D0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 16:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C007B8A3B9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 17:17:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D833C583BBA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 14:44:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA1AD16529B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 15:14:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B5531328D;
-	Fri, 19 Sep 2025 14:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9FB1315778;
+	Fri, 19 Sep 2025 15:14:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XtctAxtt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eg4JKZQO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8696C2FC03B;
-	Fri, 19 Sep 2025 14:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BB03148D7;
+	Fri, 19 Sep 2025 15:14:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758293040; cv=none; b=Z4xWN9jZ9ckdQhNinYjAAs2l0IUqhT/AjpfBgg6XfSwXc/zx6wy/2o3Ot461hJhX16NtvwBsjZ0PiyBWuakVg6Ul3oZ82W9iR4AAppGCa0wJkyZ2LpW3L4PmTXLsB/cMaRVFoZlN/oWlYJ00wHTL2aMUdv0ffg0BG+5xpBGVspg=
+	t=1758294893; cv=none; b=Ra0MF0e+RA7SYkM+WkYlB9+ngXrDdVCLU4YSbWxsVvZaPLjndl+7NDwogt4mXIfwgdMykKcU8zSu5v0bYsuN8miWA/mzhMRQfgP0JoBcr9T4xMb0+mwAOpLF6Hf9bGoe5fv0vokXh5uvLypqc6g1BlGPHSS6DqzAcMyrjo8sCFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758293040; c=relaxed/simple;
-	bh=tgkIwZkXy82iLvUj6D+P1CNw4VBnnKn2FdkseccjCec=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iGbwN3y33bsZEVlsjWVrtYQu4M1UrpBLdGs1cgwkcOhNWKuMZXVo6sUFzb0X/TLuiBvnnnkg3OxJdAiFkdGEiCbRi1DxLGw2CBM8XOFM86IgjnUjuCjzf2JuTswn8huqlHzdHQo6FAz55SLaWnf1rK/NNlBFlsggAEGeMU0fLzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XtctAxtt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BFECC4CEF0;
-	Fri, 19 Sep 2025 14:44:00 +0000 (UTC)
+	s=arc-20240116; t=1758294893; c=relaxed/simple;
+	bh=NNpcBJB4jVrgHcageJLDdkxE2rXZt7r2rrDsKSC+D9I=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=heQzel7A5h5fiVP3dufdJDE2HrutfUFYulz+2MU643RUGqoqOW2kDq4LUXUhGsTOJXvqT68fBqu8iDV3b81AnCYpJtXpBCNVGKMA8kdyR7spmcNjmEX2BEm3PM9lQ15ro444SW5/JZp+3iYf68S2yR9VoTwwyaBIfpki1P3PoeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eg4JKZQO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D2CAC4CEF0;
+	Fri, 19 Sep 2025 15:14:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758293040;
-	bh=tgkIwZkXy82iLvUj6D+P1CNw4VBnnKn2FdkseccjCec=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XtctAxttB0At3TcPH73mcchGwf4+wczzFO0nvukNwWi4g4gSEIf1w3kbNi+inY2yu
-	 y/n4dZFmRxTdr77RTf/gs1RfrEnVNZXyNHWLdDBBJ13dZeU2oFgyRGaETNRm/cuSrR
-	 7YGPqQHU+45rfI5rvD5VIkBdbSeDeN2z6lFyE+SGlVgXC4bKSNpd37cGqFmNDR8oRW
-	 mPGePVGGHIjmt2pr1OVL1/42X3QF5YHmIg6zO3rIBZBGbWgZZC05V3hMi9XbyVtwWN
-	 5jHd7Nyu+FyPZ0JF4anScbTzNPYFeosEX5sxi2w+WXdRIelu33/WnhGAJk0hniV7Ge
-	 0Cv0Bsj/LL7TQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+	s=k20201202; t=1758294893;
+	bh=NNpcBJB4jVrgHcageJLDdkxE2rXZt7r2rrDsKSC+D9I=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Eg4JKZQOCeE8iQvdN+xzthu0malVpcqAn0K+LiPgASso6UWuMIahP8/vuL5Db7Emp
+	 KPSeSEMTwefKp+sQCDJi0DuCii2L1du0M3dAWHrgaJBt4zPfAXrHYyy67gvjIjERRz
+	 tj1rbbnelqbucGoG7/6yVqjB8Rgx8QIdB/xvn2AsXqqgFPKb9kg3+oR9+Yeavhd5V2
+	 pvW8A0RgP4ZeMdERb6nPXfzTdfn0ROHkrp37kn3VWetHLFALyiOLxnVEjQG3XQgldV
+	 XYK7lQ+cv/HgUX+q39HLhNdPzpidVAOswo0VJCb2577KR+MbrZ16P1IzVmVt6qJi0E
+	 YTmssBMmAHYDw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <maz@kernel.org>)
-	id 1uzcL7-00000007oFw-3HTw;
-	Fri, 19 Sep 2025 14:43:57 +0000
+	id 1uzcp0-00000007oto-3G9H;
+	Fri, 19 Sep 2025 15:14:50 +0000
+Date: Fri, 19 Sep 2025 16:14:49 +0100
+Message-ID: <87zfaqxymu.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Oliver Upton <oliver.upton@linux.dev>,
+To: Mark Brown <broonie@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>,
 	Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <shuah@kernel.org>,
-	Mark Brown <broonie@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: Re: (subset) [PATCH v4 1/2] KVM: arm64: Expose FEAT_LSFE to guests
-Date: Fri, 19 Sep 2025 15:43:54 +0100
-Message-ID: <175829303126.1764550.939188785634158487.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20250918-arm64-lsfe-v4-1-0abc712101c7@kernel.org>
-References: <20250918-arm64-lsfe-v4-0-0abc712101c7@kernel.org> <20250918-arm64-lsfe-v4-1-0abc712101c7@kernel.org>
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v8 06/29] KVM: arm64: Introduce non-UNDEF FGT control
+In-Reply-To: <20250902-kvm-arm64-sme-v8-6-2cb2199c656c@kernel.org>
+References: <20250902-kvm-arm64-sme-v8-0-2cb2199c656c@kernel.org>
+	<20250902-kvm-arm64-sme-v8-6-2cb2199c656c@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, broonie@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+X-SA-Exim-Rcpt-To: broonie@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, catalin.marinas@arm.com, suzuki.poulose@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, Dave.Martin@arm.com, tabba@google.com, mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, peter.maydell@linaro.org, eric.auger@redhat.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, 18 Sep 2025 20:42:06 +0100, Mark Brown wrote:
-> FEAT_LSFE (Large System Float Extension), providing atomic floating point
-> memory operations, is optional from v9.5. This feature adds no new
-> architectural state, expose the relevant ID register field to guests so
-> they can discover it.
+On Tue, 02 Sep 2025 12:36:09 +0100,
+Mark Brown <broonie@kernel.org> wrote:
 > 
+> We have support for determining a set of fine grained traps to enable for
+> the guest which is tied to the support for injecting UNDEFs for undefined
+> features. This means that we can't use the mechanism for system registers
+> which should be present but need emulation, such as SMPRI_EL1 which should
+> be accessible when SME is present but if SME priority support is absent
+> SMPRI_EL1.Priority should be RAZ.
 > 
+> Add an additional set of fine grained traps fgt, mirroring the existing fgu
+> array. We use the same format where we always set the bit for the trap in
+> the array as for FGU. This makes it clear what is being explicitly managed
+> and keeps the code consistent.
+> 
+> We do not convert the handling of ARM_WORKAROUND_AMPERE_ACO3_CPU_38 to this
+> mechanism since this only enables a write trap and when implementing the
+> existing UNDEF that we would share the read and write trap enablement (this
+> being the overwhelmingly common case).
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/include/asm/kvm_host.h       | 6 ++++++
+>  arch/arm64/kvm/hyp/include/hyp/switch.h | 7 ++++---
+>  2 files changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 2f2394cce24e..b501c2880ba2 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -302,6 +302,12 @@ struct kvm_arch {
+>  	 */
+>  	u64 fgu[__NR_FGT_GROUP_IDS__];
+>  
+> +	/*
+> +	 * Additional FGTs to enable for the guests, eg. for emulated
+> +	 * registers,
+> +	 */
+> +	u64 fgt[__NR_FGT_GROUP_IDS__];
+> +
 
-Applied to next, thanks!
+Conceptually, this serves the same role as the existing control
+registers (HCR_EL2, HCRX_EL2, MDCR_EL2), which are obviously
+per-vcpu. So having this on a per-VM basis doesn't really work,
+because we definitely don't expect this to be uniform (see
+20250917203125.283116-3-oliver.upton@linux.dev for an example of why
+this is not the case).
 
-[1/2] KVM: arm64: Expose FEAT_LSFE to guests
-      commit: 5d20605c8e7930254f7bee41336e421be247181c
+FGUs are uniform, because when something doesn't exist on a vcpu, it
+doesn't exist on *any* vcpu. Non-FGU use of FGTs, however, has to be
+more flexible because that's part of the emulation, and is actually
+pretty rare that we want to trap something at all times, on all vcpus.
 
-Cheers,
+For the same reason, conflating the R and W registers doesn't work
+either. For the above example, I want to be able to trap write
+accesses to MDSCR_EL1, and not reads, just like the Ampere
+brain-damage.
+
+So please make this per-vcpu, decouple R and W FGTs, and convert the
+Ampere horror to this scheme.
+
+Thanks,
 
 	M.
+
 -- 
-Without deviation from the norm, progress is not possible.
-
-
+Jazz isn't dead. It just smells funny.
 
