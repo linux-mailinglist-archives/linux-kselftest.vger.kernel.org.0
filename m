@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-41962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65A05B8A527
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 17:36:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E37B8A530
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 17:36:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D293B639F7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 15:34:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F8A51C82BAC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 15:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6D3318153;
-	Fri, 19 Sep 2025 15:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA23731690F;
+	Fri, 19 Sep 2025 15:36:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="NhvMMFDu"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="n4xvTQm/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DA1263F52;
-	Fri, 19 Sep 2025 15:36:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F862F83BA;
+	Fri, 19 Sep 2025 15:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758296167; cv=none; b=fQsyI9IJ4GGKP9ZbIgjj6FaMX95WQOSaxqvPKq63W/LI/oyz8IHIerLEGrh3PjqaRW1Di9Q6r6xTWQ35E2DZ6A0y1iZoMR2RM4Ox304ZLYDgWf5Q1rpyyp7SDx4xQF/RBCEW6m0zisXW5U97SsCQvIlK9feg4JMueKyVAEyz2bo=
+	t=1758296166; cv=none; b=e25cU4x7e3JWQdcgtu8uRP8qk4FEoCMUaKoDo1D4uCEB3I4Qw49NJHlNvEeJsnxjMhqRRkdb7GlJBnYfG0nDMOQU818sXrfMhygR31cT9cst70dyS4BByOnPe8r+CT4sWYVBVj09JB1WMRCDvnRes7Zju+HRNh6ug4E4M1RRluw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758296167; c=relaxed/simple;
-	bh=PRT07XBigAUomxauCtvGE3E/7dxDQ7qSMfDJLAMwWiE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bwQGb9hx+mCH35bNcMqG6qbUOMVe1cBlxvv7YCJAjSI0iLI8w0INfccIcyXPD9JYIZPmJadQjH6mDbwk9xYLrPGwaI7k+U69hp6ddFtdtEhfFsw16hIJBIti4QYGTQntppWPegb/cZ8UWleKY9sYycljPsJG+NBnt7RG9iOm01c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=NhvMMFDu; arc=none smtp.client-ip=168.119.38.16
+	s=arc-20240116; t=1758296166; c=relaxed/simple;
+	bh=OnThKVkAxTbvu2cs4FLMAMZ+dEhCwYFgliP6EBhRpLM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lFSrfEbCdzSySQGFqF/5b/SVrMVH+TokG8uzbXplb4HpompuysSnYKs8hEWVIrpSteuNMXYw4OEUCc+1qwFu68/Ic5K3SbZG8YyGfnNhMI6M2guvCHOEGkdu9rYnK+8uYMmticG36LzmVMOIqnAcUbkgPVzMOMtP6JwAqnVzsYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=n4xvTQm/; arc=none smtp.client-ip=168.119.38.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
-	Resent-Message-ID:In-Reply-To:References;
-	bh=2kkh21e/IwlRCoBO9MaQ5jF2MRbtUk5+kD17PYi26nM=; t=1758296163; x=1759505763; 
-	b=NhvMMFDu9PjXFroQy0jvBoXRHAOJW6LjOVjQVMr+lCe2r4IqR84kQt6QOiz1hf6S8yTDuuYnaYp
-	++kxr3uCsG8BywdK4k2bdL+ZIwcSiM27N5KPkOZVbCgTX6EaMI8pmvp/hv0HZn+6OoMoEXkNqu+iZ
-	7rTKwGRJc2rzVqNc6nWY5AneBLvDGQi5CK6wNNb94OCGOGuYWhBtmEeIRNUzDp/wLXXkCZlWVmZ7W
-	JXlgrgaYmNxzK5+HImQTDkKA/Z/MPNDGunVx8ycwXq+By3gxHQ5xPvwNoL4MpKwzEUAoosVYrykZi
-	bFGZ6LLG/5uTdBClnZrKTjk9WF13QV/5Uc/g==;
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=w0zvkyHycNf62ji7JboPNe59KMTBMZPeiYVTw++Mcio=;
+	t=1758296164; x=1759505764; b=n4xvTQm/qmzoOF+LkA+Oqzqi9cLqBe/n/LzwIseLCoUMqqB
+	QBeedQR6gd0IiYAl8aWXwuOz2zQXz43AvC6Cq6mTnjWCsn77CNcQeyVbdoErgfabwAC8e6nKOgPPw
+	zh4eCTWXlMSi2W+T40+D79oYRl3N27urzdZucv3gY0sbZ98202bKMxeF0LLUcagXKcPW32iYW27ut
+	lwsb+RhDZgQS5Rw8GBgLGr3cbt5CIU1r4QwBcpuxcole96fzuh+8rnlhrq0oX1IQxtrQwdorf9s2x
+	wOHgCYTrPUEAI8STLqLGc+d9eGT7p4uS2IvvLp1cHhfPYFh48QQoWsmrBl3UwLbA==;
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.98.2)
 	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uzd9S-0000000G6O6-33lI;
-	Fri, 19 Sep 2025 17:35:58 +0200
+	id 1uzd9T-0000000G6O6-2i20;
+	Fri, 19 Sep 2025 17:35:59 +0200
 From: Benjamin Berg <benjamin@sipsolutions.net>
 To: linux-um@lists.infradead.org,
 	Willy Tarreau <w@1wt.eu>,
@@ -54,10 +54,12 @@ To: linux-um@lists.infradead.org,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
 Cc: linux-kernel@vger.kernel.org,
 	Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH v2 00/11] Start porting UML to nolibc
-Date: Fri, 19 Sep 2025 17:34:09 +0200
-Message-ID: <20250919153420.727385-1-benjamin@sipsolutions.net>
+Subject: [PATCH v2 01/11] tools compiler.h: fix __used definition
+Date: Fri, 19 Sep 2025 17:34:10 +0200
+Message-ID: <20250919153420.727385-2-benjamin@sipsolutions.net>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20250919153420.727385-1-benjamin@sipsolutions.net>
+References: <20250919153420.727385-1-benjamin@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,90 +72,31 @@ X-malware-bazaar: not-scanned
 
 From: Benjamin Berg <benjamin.berg@intel.com>
 
-This patchset is an attempt to start a nolibc port of UML. The goal is
-to port UML to use nolibc in smaller chunks to make the switch more
-manageable.
+The define mapped to __attribute__((__unused__)) instead of using
+__used__. Having the wrong definition here may result in the linker
+incorrectly removing the symbol. Also, this now matches the definition
+in include/linux/compiler_attributes.h.
 
-There are three parts to this patchset:
- * Two patches to use tools/include headers instead of kernel headers
-   for userspace files.
- * A few nolibc fixes and a new NOLIBC_NO_STARTCODE compile flag for it
- * Finally nolibc build support for UML and switching two files while
-   adding the appropriate support in nolibc itself.
+Fixes: e58e871becec ("tools/lib/lockdep: Remove private kernel headers")
+Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/include/linux/compiler.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v1 of this patchset was
-  https://lore.kernel.org/all/20250915071115.1429196-1-benjamin@sipsolutions.net/
-
-Changes in v2:
-- add sys/uio.h and sys/ptrace.h to nolibc
-- Use NOLIBC_NO_RUNTIME to disable nolibc startup code
-- Fix out-of-tree build
-- various small improvements and cleanups
-
-Should the nolibc changes be merged separately or could everything go
-through the same branch?
-
-Also, what about tools/include/linux/compiler.h? It seems that was added
-for the tracing code, but it is not clear to me who might ACK that fix.
-
-Benjamin
-
-Benjamin Berg (11):
-  tools compiler.h: fix __used definition
-  um: use tools/include for user files
-  tools/nolibc/stdio: remove perror if NOLIBC_IGNORE_ERRNO is set
-  tools/nolibc/dirent: avoid errno in readdir_r
-  tools/nolibc: use __fallthrough__ rather than fallthrough
-  tools/nolibc: add option to disable runtime
-  um: add infrastructure to build files using nolibc
-  um: use nolibc for the --showconfig implementation
-  tools/nolibc: add uio.h with readv and writev
-  tools/nolibc: add ptrace support
-  um: switch ptrace FP register access to nolibc
-
- arch/um/Makefile                             | 38 +++++++++++---
- arch/um/include/shared/init.h                |  2 +-
- arch/um/include/shared/os.h                  |  2 +
- arch/um/include/shared/user.h                |  6 ---
- arch/um/kernel/Makefile                      |  2 +-
- arch/um/kernel/skas/stub.c                   |  1 +
- arch/um/kernel/skas/stub_exe.c               |  4 +-
- arch/um/os-Linux/skas/process.c              |  6 +--
- arch/um/os-Linux/start_up.c                  |  4 +-
- arch/um/scripts/Makefile.rules               | 10 +++-
- arch/x86/um/Makefile                         |  6 ++-
- arch/x86/um/os-Linux/Makefile                |  5 +-
- arch/x86/um/os-Linux/registers.c             | 16 ++----
- arch/x86/um/user-offsets.c                   |  1 -
- tools/include/linux/compiler.h               |  2 +-
- tools/include/nolibc/Makefile                |  2 +
- tools/include/nolibc/arch-arm.h              |  2 +
- tools/include/nolibc/arch-arm64.h            |  2 +
- tools/include/nolibc/arch-loongarch.h        |  2 +
- tools/include/nolibc/arch-m68k.h             |  2 +
- tools/include/nolibc/arch-mips.h             |  2 +
- tools/include/nolibc/arch-powerpc.h          |  2 +
- tools/include/nolibc/arch-riscv.h            |  2 +
- tools/include/nolibc/arch-s390.h             |  2 +
- tools/include/nolibc/arch-sh.h               |  2 +
- tools/include/nolibc/arch-sparc.h            |  2 +
- tools/include/nolibc/arch-x86.h              |  4 ++
- tools/include/nolibc/compiler.h              |  4 +-
- tools/include/nolibc/crt.h                   |  3 ++
- tools/include/nolibc/dirent.h                |  6 +--
- tools/include/nolibc/nolibc.h                |  2 +
- tools/include/nolibc/stackprotector.h        |  2 +
- tools/include/nolibc/stdio.h                 |  2 +
- tools/include/nolibc/stdlib.h                |  2 +
- tools/include/nolibc/sys.h                   |  3 +-
- tools/include/nolibc/sys/auxv.h              |  3 ++
- tools/include/nolibc/sys/ptrace.h            | 52 ++++++++++++++++++++
- tools/include/nolibc/sys/uio.h               | 49 ++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c | 11 +++++
- 39 files changed, 222 insertions(+), 48 deletions(-)
- create mode 100644 tools/include/nolibc/sys/ptrace.h
- create mode 100644 tools/include/nolibc/sys/uio.h
-
+diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
+index 33411ca0cc90..b2c40621d441 100644
+--- a/tools/include/linux/compiler.h
++++ b/tools/include/linux/compiler.h
+@@ -127,7 +127,7 @@
+ #endif
+ 
+ #ifndef __used
+-# define __used		__attribute__((__unused__))
++# define __used		__attribute__((__used__))
+ #endif
+ 
+ #ifndef __packed
 -- 
 2.51.0
 
