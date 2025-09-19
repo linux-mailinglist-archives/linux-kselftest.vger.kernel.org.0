@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-41971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64F48B8A55B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 17:37:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35C40B8A572
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 17:38:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 970FF3B1B1F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 15:37:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E8431CC2EDF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 15:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FBB31DD85;
-	Fri, 19 Sep 2025 15:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE60631E884;
+	Fri, 19 Sep 2025 15:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="FBC2YWFr"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="papsG43X"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B14131D369;
-	Fri, 19 Sep 2025 15:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281F431D753;
+	Fri, 19 Sep 2025 15:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758296176; cv=none; b=iWRUGGiY9I1fCa/m4GEp0VOk1fpNu9QpekrUVBVYras00ysfxRj++7dFCu5G3VF2QHfV+ulfeGij9e6c2Tni92osS8g7dN8sTZUlt4vRs5mwNtsXC7N280QKa0NzxtsAVU7mXFlIsXPmAiUKXuLvK0njVh2FbHM371CH5qBigMk=
+	t=1758296177; cv=none; b=qJPNj6jCszpnQu5BBIv+WygLn2M+IuqP16a9nC04/hiwbOoFh9FeQ2j2JHADXMtncWXuLLwZLwSyXe/nFAR6pYDYkO9xGIXWqQ8j7vDp69fEVh2ic8eHelceb3/Roc+86CcFidUEPUq5Lu6YV/GZ1hiu6EbUrd1GMPDE0AkEiaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758296176; c=relaxed/simple;
-	bh=rJjlvQq2edYfrYlSPc09wTCxHjzMxtUi0IeHlrgomMU=;
+	s=arc-20240116; t=1758296177; c=relaxed/simple;
+	bh=uXhIw5zxMb39SCOcYyn2/s8W7NvYLQ4cNhq6hCD5gAc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hPjHtEJhbczKavkBnEJQxsyYfeI+kQbh6Mtpigsn4XrnxdD6BT4OYlR/iwtISy8xjmCtcsh51rGUYzwSV2yR+W/SGFGxuK9gZheMk5xZ2HMcy0R6As5LEvaOiX+Gjs0a1aRpSbp9cd7MCdGJ+M8K8kFmGqn3hXLlew34A/v7Hc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=FBC2YWFr; arc=none smtp.client-ip=168.119.38.16
+	 MIME-Version; b=pZqwD2T+OZXcbdFqQ10qLhAPeqariBmsIKCnvjRSkGWOUuFGRzlsRz3bY1spwrrusI9Zgt5JxSaUGbvYJsUXhrsMv+Fz6/bksnZoAFP32D8COfS2+qXGJNkXcZeXt12g3y3GP2+gaqCbhyzsTTcOGfgj69q9gNJh4AZNSQiCHE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=papsG43X; arc=none smtp.client-ip=168.119.38.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=RXl6ubRbFlom4y2e4H1GJqpLZi638eTvTDwJgOCQyw8=;
-	t=1758296174; x=1759505774; b=FBC2YWFrEcRv7WbqI/XbgqRjtwxu+bDY/6kup4e3sr5BAkE
-	hXywxPWRlzVTaF2cqEoxCVWzqdV6czu/PcrcsYrEY3GuV8WzPAeDZsnYI33L29lAmdMjfxV3iAqIY
-	KLLHIze5TP4kMkDxFP3T+2cHcNT2v792gTCU1vZvgyUrOJuLiRAW2Mng/6f2Ct2c/4NHcgGR8YSDK
-	saIIsdM3wXg2hrFvmXstn7kMeBMINp6r83Vx4zMDPmG6kmEryNBShLURfltAD7bNCEUTylUSxv/rm
-	eHiZDniWu3K8+fM5hLYMgzuSmShfRzPynD2MOpsRFZQEqNWgJNB6pUsrz0FCl24w==;
+	Resent-Cc:Resent-Message-ID; bh=xO+mVCdWx08eTZ/4OCDNFnsQTwYMKX45MEVddt3khI4=;
+	t=1758296176; x=1759505776; b=papsG43XvMRSg+BRjdqjPlwpTANAiJy/UZS8+DyLzRMK44I
+	r9PUAneVF7eFNYdWaOa2O/8ZPUbrBeLsAusZCFiCXXSUMmxWRuwTBOSAdq4f4xb38sbPwNHwmpGLn
+	zRzwhvUkyKO2biFM/gH3mkUuq+XaehHLjMrvAP5u32i/ML55xV9t3XQ0hyNhi1VJZM0nMdyP06ioi
+	LONmjghvX4ZxO/veYD/uENkWgdLIrzeYhEvmfatG8AHPqx54U5V2W34AnTS/uK3OJJ41tks2+K/uL
+	siJBDBeMka3WTnh03phCpMkrJYFRt2p+MywloQ5F0RKsWWs8A6NNNAtH2c06xqRA==;
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.98.2)
 	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uzd9f-0000000G6O6-0Sob;
-	Fri, 19 Sep 2025 17:36:11 +0200
+	id 1uzd9f-0000000G6O6-44uB;
+	Fri, 19 Sep 2025 17:36:12 +0200
 From: Benjamin Berg <benjamin@sipsolutions.net>
 To: linux-um@lists.infradead.org,
 	Willy Tarreau <w@1wt.eu>,
@@ -54,9 +54,9 @@ To: linux-um@lists.infradead.org,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
 Cc: linux-kernel@vger.kernel.org,
 	Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH v2 10/11] tools/nolibc: add ptrace support
-Date: Fri, 19 Sep 2025 17:34:19 +0200
-Message-ID: <20250919153420.727385-11-benjamin@sipsolutions.net>
+Subject: [PATCH v2 11/11] um: switch ptrace FP register access to nolibc
+Date: Fri, 19 Sep 2025 17:34:20 +0200
+Message-ID: <20250919153420.727385-12-benjamin@sipsolutions.net>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250919153420.727385-1-benjamin@sipsolutions.net>
 References: <20250919153420.727385-1-benjamin@sipsolutions.net>
@@ -70,119 +70,88 @@ Content-Transfer-Encoding: 8bit
 
 From: Benjamin Berg <benjamin.berg@intel.com>
 
-Add ptrace support, as it will be useful in UML.
+The registers.c file only contains the routines for floating point
+register access in ptrace mode and initial size detection. After the
+addition of sys/uio.h and sys/ptrace.h to nolibc it can be moved to use
+it by using the sys_ptrace() wrapper.
 
 Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
----
- tools/include/nolibc/Makefile                |  1 +
- tools/include/nolibc/nolibc.h                |  1 +
- tools/include/nolibc/sys/ptrace.h            | 52 ++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c |  2 +
- 4 files changed, 56 insertions(+)
- create mode 100644 tools/include/nolibc/sys/ptrace.h
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 9bbbba32dac6..8e0cac3ac522 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -53,6 +53,7 @@ all_files := \
- 		sys/mman.h \
- 		sys/mount.h \
- 		sys/prctl.h \
-+		sys/ptrace.h \
- 		sys/random.h \
- 		sys/reboot.h \
- 		sys/resource.h \
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index b4bc1c9b883d..590eef545ca6 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -101,6 +101,7 @@
- #include "sys/mman.h"
- #include "sys/mount.h"
- #include "sys/prctl.h"
-+#include "sys/ptrace.h"
- #include "sys/random.h"
- #include "sys/reboot.h"
- #include "sys/resource.h"
-diff --git a/tools/include/nolibc/sys/ptrace.h b/tools/include/nolibc/sys/ptrace.h
-new file mode 100644
-index 000000000000..3119abdeeecb
---- /dev/null
-+++ b/tools/include/nolibc/sys/ptrace.h
-@@ -0,0 +1,52 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * ptrace for NOLIBC
-+ * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-+ * Copyright (C) 2025 Intel Corporation
-+ */
+---
+v2:
+- Use new sys_ptrace from nolibc
+---
+ arch/x86/um/os-Linux/Makefile    |  5 ++++-
+ arch/x86/um/os-Linux/registers.c | 16 ++++------------
+ 2 files changed, 8 insertions(+), 13 deletions(-)
+
+diff --git a/arch/x86/um/os-Linux/Makefile b/arch/x86/um/os-Linux/Makefile
+index 77a308aaa5ec..d37320430822 100644
+--- a/arch/x86/um/os-Linux/Makefile
++++ b/arch/x86/um/os-Linux/Makefile
+@@ -3,10 +3,13 @@
+ # Licensed under the GPL
+ #
+ 
+-obj-y = registers.o mcontext.o
++obj-y = mcontext.o
+ 
+ obj-$(CONFIG_X86_32) += tls.o
+ 
+ USER_OBJS := $(obj-y)
+ 
++obj-y += registers.o
++NOLIBC_OBJS := registers.o
 +
-+/* make sure to include all global symbols */
-+#include "../nolibc.h"
-+
-+#ifndef _NOLIBC_SYS_PTRACE_H
-+#define _NOLIBC_SYS_PTRACE_H
-+
-+#include "../sys.h"
-+#include "uio.h"
-+
-+
-+#include <linux/ptrace.h>
-+
-+/*
-+ * long ptrace(int op, pid_t pid, void *addr, void *data);
-+ *
-+ * However, addr may also be an integer in some cases.
-+ */
-+static __attribute__((unused))
-+long sys_vptrace(int op, pid_t pid, va_list args)
-+{
-+	return my_syscall4(__NR_ptrace, op, pid,
-+			   va_arg(args, void *), va_arg(args, void *));
-+}
-+
-+static __attribute__((unused))
-+ssize_t sys_ptrace(int op, pid_t pid, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, pid);
-+	return sys_vptrace(op, pid, args);
-+	va_end(args);
-+}
-+
-+static __attribute__((unused))
-+ssize_t ptrace(int op, pid_t pid, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, pid);
-+	return __sysret(sys_vptrace(op, pid, args));
-+	va_end(args);
-+}
-+
-+#endif /* _NOLIBC_SYS_PTRACE_H */
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 1907128bc3f6..4c1b9ee32b7d 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -17,6 +17,7 @@
- #include <sys/mman.h>
- #include <sys/mount.h>
- #include <sys/prctl.h>
-+#include <sys/ptrace.h>
- #include <sys/random.h>
- #include <sys/reboot.h>
- #include <sys/resource.h>
-@@ -1404,6 +1405,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(readv_zero);        EXPECT_SYSZR(1, readv(1, NULL, 0)); break;
- 		CASE_TEST(writev_badf);       EXPECT_SYSER(1, writev(-1, &iov_one, 1), -1, EBADF); break;
- 		CASE_TEST(writev_zero);       EXPECT_SYSZR(1, writev(1, NULL, 0)); break;
-+		CASE_TEST(ptrace);            EXPECT_SYSER(1, ptrace(PTRACE_CONT, getpid(), NULL, NULL), -1, ESRCH); break;
- 		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
- 		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
- 		CASE_TEST(namespace);         EXPECT_SYSZR(euid0 && proc, test_namespace()); break;
+ include $(srctree)/arch/um/scripts/Makefile.rules
+diff --git a/arch/x86/um/os-Linux/registers.c b/arch/x86/um/os-Linux/registers.c
+index eb1cdadc8a61..e570e29c3d73 100644
+--- a/arch/x86/um/os-Linux/registers.c
++++ b/arch/x86/um/os-Linux/registers.c
+@@ -28,9 +28,7 @@ int get_fp_registers(int pid, unsigned long *regs)
+ 		.iov_len = host_fp_size,
+ 	};
+ 
+-	if (ptrace(PTRACE_GETREGSET, pid, ptrace_regset, &iov) < 0)
+-		return -errno;
+-	return 0;
++	return sys_ptrace(PTRACE_GETREGSET, pid, ptrace_regset, &iov);
+ }
+ 
+ int put_fp_registers(int pid, unsigned long *regs)
+@@ -40,9 +38,7 @@ int put_fp_registers(int pid, unsigned long *regs)
+ 		.iov_len = host_fp_size,
+ 	};
+ 
+-	if (ptrace(PTRACE_SETREGSET, pid, ptrace_regset, &iov) < 0)
+-		return -errno;
+-	return 0;
++	return sys_ptrace(PTRACE_SETREGSET, pid, ptrace_regset, &iov);
+ }
+ 
+ int arch_init_registers(int pid)
+@@ -60,9 +56,7 @@ int arch_init_registers(int pid)
+ 
+ 	/* GDB has x86_xsave_length, which uses x86_cpuid_count */
+ 	ptrace_regset = NT_X86_XSTATE;
+-	ret = ptrace(PTRACE_GETREGSET, pid, ptrace_regset, &iov);
+-	if (ret)
+-		ret = -errno;
++	ret = sys_ptrace(PTRACE_GETREGSET, pid, ptrace_regset, &iov);
+ 
+ 	if (ret == -ENODEV) {
+ #ifdef CONFIG_X86_32
+@@ -71,9 +65,7 @@ int arch_init_registers(int pid)
+ 		ptrace_regset = NT_PRFPREG;
+ #endif
+ 		iov.iov_len = 2 * 1024 * 1024;
+-		ret = ptrace(PTRACE_GETREGSET, pid, ptrace_regset, &iov);
+-		if (ret)
+-			ret = -errno;
++		ret = sys_ptrace(PTRACE_GETREGSET, pid, ptrace_regset, &iov);
+ 	}
+ 
+ 	munmap(iov.iov_base, 2 * 1024 * 1024);
 -- 
 2.51.0
 
