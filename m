@@ -1,120 +1,112 @@
-Return-Path: <linux-kselftest+bounces-41916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35697B88578
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 10:11:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32E15B885FC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 10:16:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1A2B7ABE1D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 08:09:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1D893A9A10
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 08:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDB33054D4;
-	Fri, 19 Sep 2025 08:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D313C2E54A7;
+	Fri, 19 Sep 2025 08:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K6tD1nDr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BzNnXqB0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F2C30507B;
-	Fri, 19 Sep 2025 08:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C562D3A86
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Sep 2025 08:16:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758269478; cv=fail; b=JIAiTa+k1nvqOlP9sVyrVdQGViX5Ef23acKqlTW9A6WXb+U0phNTgUmw7/KfuFRKCYbNRhEgURCTy7NW/PRTmUnU9oflqlp8cj0k1p0Dllgk7XSKFW7AJ6sg3/sf6Yfy42CCCcBQ9JQoxT+Xo7IdMAcXQxzanwA1al8SH0t+XfQ=
+	t=1758269800; cv=fail; b=th8u2msrQZFsF8nTUovdMkrNyRhtdJzNBMS4uSYSRxANRFIUgrooCxE6Oid79PEKR/QYgeAqpLcNb4WP0thSj+tCfu7LxT63qSUdthkyl++nzSpynnk9ev1WAQ+mLMeQ+9mOuZt9x6LfJX9tsnjb03BSm0NTI2XQmC/IAbZXsuw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758269478; c=relaxed/simple;
-	bh=LZPTr6+7Oj8wfOF/nQHlAr5hxhGXi+hj4cmfg7ZAXEU=;
+	s=arc-20240116; t=1758269800; c=relaxed/simple;
+	bh=rT00wrG360UHff6BYYJBBPCRBsmEC+2qP7iy0OODD4I=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=bAK2kHRx9uPI9UG1NUedPQdiOlfAUTo1juJVdYzcRsTAj436JNmBzkzxs5VwWkq8OdCvTY6DJ74FJ4RCnDZ13P4uydcTty6wJQEvAImYoY/ModjVHmb2/np9HepxgD1Z9wDGWF8hnyI7NqAGcyC8fGp1+TVDYYFQPWEmZcZF25Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K6tD1nDr; arc=fail smtp.client-ip=192.198.163.18
+	 Content-Type:MIME-Version; b=WvIzdXV8J+/mJc9kPgxIHerCV5vgLm36IxD2qpk5zMvWyZ66SYorNBc9Yi0WBSzW27vAfj2+Sqgx/zj7PtfruUREuAT53C3v1ztoEwFFIyVuQ03L946Re3+CfTKL9JzTbyXSQWRoDY/UmK02X4QBepMMH2jBch9eCMk4+LDVhkw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BzNnXqB0; arc=fail smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758269475; x=1789805475;
+  t=1758269799; x=1789805799;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=LZPTr6+7Oj8wfOF/nQHlAr5hxhGXi+hj4cmfg7ZAXEU=;
-  b=K6tD1nDrKEkG+P7W+rDJKPnCmMo99ljIBZRq20PKKw2WZn5gqgyv7TuE
-   uueAdelfZl4oweDUN7HlGILRV4G1RImMDWjEAKD4s19jjSntIK0oyWz/K
-   VW/IRXnQu3VnbZrhRmpzOf6EhVPHg+7MuGtk6s8AUrsApAJYtdAGPOtYE
-   l1GwPgRlU7SCrNG2u8h8UGLYhKaCieQjtmT9OyUQnxMs7n3P1ltj5dkZT
-   go1glAsbU+tkb4vKGNfhDrMQT8acSK6sVRCxMGgc6p4WZ3MLvDM8DpG/d
-   3X9o35OIP1xm7KdgdvAwq6sC2Z4xjkJSAxOuQUDByl4DCrPc8ycl8iUq5
+  bh=rT00wrG360UHff6BYYJBBPCRBsmEC+2qP7iy0OODD4I=;
+  b=BzNnXqB0ZYa31xZksb0yRDO6A/PsN5KEiBumx/8KgdFJhcozSFv/0Hsj
+   CXxLp/iz/wbk59mjMBRfXfY9IjaPhN9odWQMakjQYntKr3/olF5zJAMMM
+   IFb0Vp6EdBX4BqIv1ZYTojtA/IVmGoBrtGRx+J63E5YRB+OoJYSWRi6RF
+   iesGOCp6RUHb/V8ewI+z0XIJ3846bTRcoYvpRooXBzYSRDqEVXsd5LFq4
+   SDxOs0057uXRJk5ffnbSzR+pQEXHbPUpON7PfkCEkVF8/bYc6TPR/QLhq
+   8jRDNhG1XZRglhhoIWG3ZrjHnKPg4HFpd1xie4eqgLZ6MQ8ph3d/k4lvd
    g==;
-X-CSE-ConnectionGUID: NDEXzK9OQtCjSM9ojgwABw==
-X-CSE-MsgGUID: cdrpzb4+SjC+EIkaZ0DAOg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="59833170"
+X-CSE-ConnectionGUID: V+fygZxHQG+SxptrNosT5g==
+X-CSE-MsgGUID: +kIRdY+eS7SpzhV1TWVPDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="59833700"
 X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
-   d="scan'208";a="59833170"
+   d="scan'208";a="59833700"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 01:11:15 -0700
-X-CSE-ConnectionGUID: PtbecaS4Qi2gf4VnUbFnCw==
-X-CSE-MsgGUID: UZ0DUozaSPiKTykdjzaEpw==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 01:16:38 -0700
+X-CSE-ConnectionGUID: O/BcSp+rToiEPKqSyhq7Wg==
+X-CSE-MsgGUID: Dpgxk85bRoiu5XJ+lybaYQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
-   d="scan'208";a="206719779"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 01:11:14 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+   d="scan'208";a="206721259"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 01:16:26 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Fri, 19 Sep 2025 01:11:13 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ 15.2.2562.17; Fri, 19 Sep 2025 01:16:26 -0700
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Fri, 19 Sep 2025 01:11:13 -0700
-Received: from DM5PR21CU001.outbound.protection.outlook.com (52.101.62.38) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ 15.2.2562.17 via Frontend Transport; Fri, 19 Sep 2025 01:16:26 -0700
+Received: from BL0PR03CU003.outbound.protection.outlook.com (52.101.53.8) by
+ edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Fri, 19 Sep 2025 01:11:13 -0700
+ 15.2.2562.17; Fri, 19 Sep 2025 01:16:25 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=L0xYXsBD16tJpZ1qLz5X8hW29W9kdgWfGgpfwJTtMTgMZK3/sReqgVcCe85XLQniJuMH2ZdxeLQZq+g5cGI3G37TKUX3x+f+KPn6d1PAqL/bVU+dBx3ZkWX7LHbo+nrqj0rM2q/2qUNmN29A5w4rEmYZgxBAyhwznJOsgmFMnRmMt2PxLXURNOs4AmaMiajgFFje9X4YEe8HgyseXGsYn53IJGFJyI4JjAiZ/CaHW1F3PxN8pkAIVTqlO6Xei12BGrIlj9T9QhoDeCEi6c7PLanh2pQL7Qyfj13Bgv6GWk3C5J1ZQNP8XBUU+jpI9Z9ClmIvUQdAbOabO/8WRx2r5Q==
+ b=CKlnnvVkuA7cZJjPNcWPO2AtJSKgsEzqtMnu3WSHp1x9alAQqfxKBhSkanslRNjJodeIe/xAj0wHp2ordw54hKzD6TQ2KL5hf+8vVufkCyvJTYW2u52/B6yq1CM9iMqjeuGL5D5pz7gdLebz/AHTosOX5BEOP8VaikI1V4EsQDy2rupMUBixfBtA3nvIDWNq5m0f6+SPEAXX4xClg/W6EDufTD5/GwBNyo+T175vnSZIIK6K3A308YyKyYEH5MrXrI0d2o+RKEV3ROupOL+PCIf1uCzdByefKJz9EdM2d2rJHAk5j8H+2JWyUu4HsUqd+k1G0ZL+4bnt4BBQv4+U4A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sNOY0qQCYo3EjMARplP3KzRYzcvjGjFdeunpWtGVPZw=;
- b=xkqs2RS+ALThZ6ONT6XYfafvo6fD8d3x/UetfHrtUFkbxNwTW8ShWlQTCXwNtOY3e/oFUQNA/7heQwrUgJyNbZUE5av+bNHi/ZWQrjNVruZdUBIa+14m1Y88B/eqkmONxIkzPDN9EzJYIEP4E8yTLR3xGsRJRqeaZRt5YnfxdLRSyLsQfBCoBrkKu6l2VJL+rDn5fqTV7sp9XIlQxdONCoCLUWYN3S57Zx1KkSUxrVNT6c8X2rH6H4qwqajZekdzJc6AJ1w+HL2YAcL6pJMDkN85/MSWxNmhLESbCTIN0PYI8Hr75vADiUSskdzOBGNd2hE48P5pZRufoZWz7BTbug==
+ bh=gsC1aNnTvjPF2z9n+Z2KaHGkgqPSpzVNk22DPgnIWeg=;
+ b=qQAYh0XJNT3tkkcGadiQBFOENw0Kseo+ShSdQR1v2v0mato/RitRZoOfWg9XCQGxeynutcUyhXJ6Cg63CmPsMVK90W/H7BsZJlDxM1xEoybLvh2AxPcG8ym83YhktAEDMzct1d535Z2JltefpbPZOdA80WUutKiofuxy0VuIXKqp7HqNSXQVp68qbIUChmfOakGbmwcQrQRESZP+NCJrRZC2G4bPK3SvwXRRyr8PbokEuJtRWTtfBQhYDkbVP8QHzW1KVIqxP0+GtKcKnUY/9rg7ep1oRv5SXOSEW+3S2TIezDVDXstjJctnthM7+uZOfOQ/b/no3Pf440YLlXWNyg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BL1PR11MB5256.namprd11.prod.outlook.com (2603:10b6:208:30a::10) with
+ by PH7PR11MB5796.namprd11.prod.outlook.com (2603:10b6:510:13b::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.17; Fri, 19 Sep
- 2025 08:11:11 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Fri, 19 Sep
+ 2025 08:16:18 +0000
 Received: from BN9PR11MB5276.namprd11.prod.outlook.com
  ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
  ([fe80::b576:d3bd:c8e0:4bc1%5]) with mapi id 15.20.9137.012; Fri, 19 Sep 2025
- 08:11:11 +0000
+ 08:16:17 +0000
 From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: Jonathan Corbet <corbet@lwn.net>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>, Justin Stitt
-	<justinstitt@google.com>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>, "Shuah
- Khan" <shuah@kernel.org>, Suravee Suthikulpanit
-	<suravee.suthikulpanit@amd.com>, Will Deacon <will@kernel.org>, "Alexey
- Kardashevskiy" <aik@amd.com>, Alejandro Jimenez
-	<alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, "Michael
- Roth" <michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
-	"patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH v5 01/15] genpt: Generic Page Table base API
-Thread-Topic: [PATCH v5 01/15] genpt: Generic Page Table base API
-Thread-Index: AQHcHPrLfNePWPa2q0qW7OShpmqDlbSXCZ4ggAJKd4CAAOIbQA==
-Date: Fri, 19 Sep 2025 08:11:11 +0000
-Message-ID: <BN9PR11MB5276A9B144DE3CE042A448D48C11A@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
- <1-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
- <BN9PR11MB527669A84AD24A550FDDD85A8C16A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20250918180657.GA2132010@nvidia.com>
-In-Reply-To: <20250918180657.GA2132010@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>, "iommu@lists.linux.dev"
+	<iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Robin
+ Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Will Deacon
+	<will@kernel.org>
+CC: Lu Baolu <baolu.lu@linux.intel.com>, "patches@lists.linux.dev"
+	<patches@lists.linux.dev>,
+	"syzbot+80620e2d0d0a33b09f93@syzkaller.appspotmail.com"
+	<syzbot+80620e2d0d0a33b09f93@syzkaller.appspotmail.com>
+Subject: RE: [PATCH 1/3] iommufd: Fix race during abort for file descriptors
+Thread-Topic: [PATCH 1/3] iommufd: Fix race during abort for file descriptors
+Thread-Index: AQHcKA4TqDOlm8lOH0SfJBLOxMHGfLSaKxmQ
+Date: Fri, 19 Sep 2025 08:16:17 +0000
+Message-ID: <BN9PR11MB5276152E660B489C4C5313C98C11A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <0-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
+ <1-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
+In-Reply-To: <1-v1-02cd136829df+31-iommufd_syz_fput_jgg@nvidia.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -122,65 +114,65 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BL1PR11MB5256:EE_
-x-ms-office365-filtering-correlation-id: e2bad0de-d19e-4b42-d0cb-08ddf7541869
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB5796:EE_
+x-ms-office365-filtering-correlation-id: e7011e50-21ca-436b-8f32-08ddf754cefe
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7416014|38070700021;
-x-microsoft-antispam-message-info: =?us-ascii?Q?1wA3Vgl2FYytF7utbakItTW/90TzjRQq9DvjwpZmzfx8FFWuzCaRKUCwOmM9?=
- =?us-ascii?Q?njinE2mt5Qs2wfyFCOSKNFD4dk+LFv61rLXsrhJLMiJU+FrBFtI8EOOk742k?=
- =?us-ascii?Q?BhoTZG85IwlMBUY+2uKWYb35jprPlWjuCbvahkReVae5s7mbm7Q4DuAKuKKV?=
- =?us-ascii?Q?9rG4iCEpRKk5ezpBILVa7qJrrZF1RkxQSvkd93QB2HCq2JAzIqPxQWCLMYbT?=
- =?us-ascii?Q?Z3trQbwkOtlfUasPf8T2Koi0HzwTsZmjVcXFFYruMQuor3S/UjPTFdpi4yHy?=
- =?us-ascii?Q?9UDD91Fh80aWG6eeSgPh046N7BFRU9EojF/peK5p2RUgWHMPG4Ss1sKVEdAj?=
- =?us-ascii?Q?vJs9F0+6sJzDMNgkMxuNyZcoOjLc6zCsEGTZJAWUpGokpg4qWXYCYNKracWJ?=
- =?us-ascii?Q?bv3iprDVpzuSto/M+7k31F75wem19GiolWGBPiml4yOEFH/YGoAAruT7e6TN?=
- =?us-ascii?Q?D9FujVqifsIG+bZ9FnMpM/OZeCmQOI45AcYLutqppZpZEzfynLMbfL1jTCtx?=
- =?us-ascii?Q?tEgKbbxeLfMJndomh9OWChZNHIbeq5uiO5PT+I7nV09dVF+7c8NbvUKwyl+Z?=
- =?us-ascii?Q?RcGOATujqihKGpFZ/Y4TmQvkTz1JTh1naudNo9axryCUGCjpR2D2dJk56iY4?=
- =?us-ascii?Q?bNP3E6neYuyuztifuTH9JY26drUO1ERe7oCI3dBn2Ryq5f42gOieiWBFTk9G?=
- =?us-ascii?Q?BdwsSC39fCW7Po5GImZwdUdLSOfSbNqDTO6hNgdCvH/jgvmn1McWIlGzJtDb?=
- =?us-ascii?Q?8oLbryXPyuw+UkKGvC4vuxAb8KPfFXnpk8bwSd7oOsGNyi19VUUt5tyVaCem?=
- =?us-ascii?Q?8Ds1qoxeLbz6sTarx43YjD9AOMV8VzNwW3Nj8G3bU+VJbOo6vYwh7yIiEWGc?=
- =?us-ascii?Q?M2Tl8G7hkUrpl/m8W5Lrg94e1vdx6uZQJFzH4yLuapHD6HCL6dMilWE8dl94?=
- =?us-ascii?Q?JN/fy0f47U/4I+1nYqrYaUWXxPvnor1K94ZA9F5//PzVUy06bvP+dcVtIJxZ?=
- =?us-ascii?Q?9cm2Uv6t+0Ap5tFobZs+UaYsjOGQuR3p0OsJoRNJJvv6WMSp8xveRK8n2pUz?=
- =?us-ascii?Q?VHKZkDlA+qmb9g22/V8qz4reNv45UCBRIXe22RAsZekJLtwpiULNb5G9v/3E?=
- =?us-ascii?Q?hFtJQQxzFpbX49OVfcQ0WvM9HPQ4JsT2h2/FWjVI62nj4gnkxsUxN0MY6THD?=
- =?us-ascii?Q?PHhojzR9pfsoAx5iRMn9J+jwOtSFFm0WRKOk807J4KET9fIxEtg2FGQJ0vUU?=
- =?us-ascii?Q?nxd1ZlLjtl1m5uVtDUyG6vozddjKWMXWW7TtAHwF61C9d/K6CogTwdKvyQer?=
- =?us-ascii?Q?A+AJnT2kn5/E2dBzNYtglR12pDVpsELIxg244SAt1h/QVUn+jnHjkzHnG7rw?=
- =?us-ascii?Q?NxUvIoTokJMzUQWzXwyLWx9hX46ksF5tcuawZNhNIX4OdB4gx13E8fmXjQHD?=
- =?us-ascii?Q?sWe9uI2AovyojWURfXBHdrRiNc4ipXV/uTmFkNMbuwpcma7V7WoJJw=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(38070700021);DIR:OUT;SFP:1101;
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024|38070700021;
+x-microsoft-antispam-message-info: =?us-ascii?Q?ucrRze3qzqQldvaoYYuF5XJEAOpNYiabIUFdFy/xUJuComywUWdZgCVnIPOu?=
+ =?us-ascii?Q?LNzH1ichmLnrMj3N8Qy8MGP7r944Vb6B0K9BVFrA9Qj3Kz1s+cQ1x9P6Y+D9?=
+ =?us-ascii?Q?zFWiQdMcGY4QppDB+t69Fs+aDsnfCzvl1mpJphTnfsQHRlCYVY7smGO/RG/V?=
+ =?us-ascii?Q?pEk5/Dz1LP3PbKvOfDhIvzmjQtbqapLQr4ghWyzMkV4aLJt5oA0D3rlgbNVK?=
+ =?us-ascii?Q?4o3En/9y52dms5K649tOCsRkPjPNQfo01fX/PvG6LAxWlPh7D8eb6NEgHXCU?=
+ =?us-ascii?Q?eYTgwMYBMsH8GyFXdFZhRthzBuba5YlKXr2pgf6Xrl4DeWiPWoBjjfKM6KUc?=
+ =?us-ascii?Q?/8VRKOAfC2BvuBrm2RUCOoRPd12dag7QqLp/FqJRnoXdZBF9uyEo/rSkuuBM?=
+ =?us-ascii?Q?91er6vkfDY5YjoV2Ri8ND29HvCyL/qQX4DOnmPTUjdjBgWs0WJdhaN7WNo/k?=
+ =?us-ascii?Q?UVoADbWWOde3Y7ImweWTS8RSMniLqmwxMGpCMVP/Mc3WQkopB4TBiCsBKdzt?=
+ =?us-ascii?Q?dDuFJuOG42TAf0V3U1rmIOlvfhAJ+2UhxA/BxVZMYj0IWYa1k5w9tOokaazF?=
+ =?us-ascii?Q?bIFRlnHE3MvpJlIutyWgTfzhSECUeq8fnIIdsyysChPaiQPY+EcuiYeuBbbd?=
+ =?us-ascii?Q?f8F6ZZ2NOgdjMaNjYOW2lWMbqI798bsanMOSdoVhLY24AeDk+dYD7o6EoQi7?=
+ =?us-ascii?Q?3Q4lLbQ/NF5zD6HBXVJNXUB08NraKGL/8DHd2kH4i2zQ3uEgCiiUh/5p2q0N?=
+ =?us-ascii?Q?RYxf+U57zb1hl+4oMc8tAscjWanmpoqtV4q6KWSiJLucMxRhimSRvNGBwQdq?=
+ =?us-ascii?Q?xOZnmpOe8Bt+0fcYgCEg94AweiFI7qxcoll/qgvqyuiGEDzZceQi6eRfGvXY?=
+ =?us-ascii?Q?ohHYi+92OVsGDJuvyvwO1LexiXcU72RsjL1850cM3oIVFEImosOF/fSvBt07?=
+ =?us-ascii?Q?OzJ74nbmugMQ+mRTRhTEgByWZpPfN/Ilxsg52qUPhRaM+bM94JVMUQa7erwM?=
+ =?us-ascii?Q?rjNp6LMDYQ3wid/M5KuswUDLd5msiG1hMsQbkj4ezRLHjTyYEgqGMJhHmpms?=
+ =?us-ascii?Q?vp99gx1plKABqIC0bAzN+BdMR7d7V8b/iRhhVkV1h7gInyOohNetxC5DH/gT?=
+ =?us-ascii?Q?f5DKIi+qvl8W6p66MLdYy+HJPqi7JNaZ5tccefLB0uTLQH4XUEDaqxmesrLz?=
+ =?us-ascii?Q?H3xIwTfRULqJJoJVi96cT9Hfim/TCYgYu5Ca6tf+EQI1wjFfcGV6XYW5Ubbd?=
+ =?us-ascii?Q?GDbM3URWANaNPQRTu47oJXdTPepknJzJvwMYBm8Rwx3+hw+eBbJViDRp03UY?=
+ =?us-ascii?Q?mFT2imS2U0bxw6PKamrAWpWjONv8akn0FedKraZZUIeHCb+aiin9CCXq0mKU?=
+ =?us-ascii?Q?LAKxP/J/4+LGO32b7oUHnOpY3c7rOvM+CZvsub4wM+LQbmCDSz/t/70VORZj?=
+ =?us-ascii?Q?C3htPKWdvtY=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(38070700021);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IsSFt4kUdJjugv29JKmB3KTyLmFYl7Yt0S1jB+1GWnT/lNuejR5svXmYyGwL?=
- =?us-ascii?Q?Ja5+bbpWW2vVCVGhBuciXEoizM1/seYISjvnK3kGpdbaH5KrtHmBM3lOL+tt?=
- =?us-ascii?Q?Y+rVBdD7SCbG+fqnaWYiPV/Stw4FLssDcOqru1cK0/syeRRj6DC+gfirvZc5?=
- =?us-ascii?Q?s5HNqb0uqaGYuePSuP48d/acJ1AGBMngAkByXarBsVvkNbTHrdQJMitmbM64?=
- =?us-ascii?Q?0DvmOR7ymn2zN9Mpw2dZvWRp2C19E3DvER2llSGCMYFEuOo0fXTztei+RQ2l?=
- =?us-ascii?Q?xeFcxoHaCI4NpxmxLT151pIGBPOqchQKh3ZOrb0hWqLU6YP+B5xoRNLr+kbj?=
- =?us-ascii?Q?zh+UmE2264DqKUY2iGwmzHYdnD/cd9g/Okt4NGPFoSL6FwloYGnVROlt2EO2?=
- =?us-ascii?Q?Qt3z65HeufrTDwdmm2nxjNtuMj9BXscPw5ajdoRhAYTEub26c9WtjGHgjBC3?=
- =?us-ascii?Q?Veyq2u/GmXh43aN8Yb1/8ZH7CphXV1CWaSDx7YLHTgc6o1v/Ye1hy303el7V?=
- =?us-ascii?Q?oyLiPPwMpQZPcmQB79Aux2lMXhFEU2ILQmI94edioqcoIYc7X02/V6FjjfDM?=
- =?us-ascii?Q?x9xIr4LVsqY5KP/lj7NqcjECYOzvgRzevPDmqCefuWMuV9NVnVSLkI5zc3X1?=
- =?us-ascii?Q?Z6gnz9LA/58Rb+oprlkuLi8ZOt5LXxVRIpJJW2esCE4qHeKvDaQQZc0NYiBe?=
- =?us-ascii?Q?vAC0YVlUxm2hRqLMvzD+dxZsPjhZQPLtvgG8u7bA5MU0fP4r+O/o+6/SRUu2?=
- =?us-ascii?Q?IKEKSdaK/biS7QiQJwV9LHjaXsPWR/ZR6T3d/JLSZZjA0TRkEJ2nLl+Ls6Wj?=
- =?us-ascii?Q?HB0UAh2bC0e7v8HxYr0gSDc658Xdx66CZ4ybvwsndtVa+ZXhsUyKpaou/DS0?=
- =?us-ascii?Q?x/LKXxP1Bc1pNyrTyBhSa9JB8jCZnitJPfypuHMiY8JEUCmMOZ89mM4uyg+c?=
- =?us-ascii?Q?cVJv10Wt+M9m35MmAI26MmHfXmkob2E9kCvBmfxLdsbaOkLcVd1kKibximOz?=
- =?us-ascii?Q?9zMRANjVzff7+Ux+mk7OARWNcK7tZP1doetg0dGjQ1c5obi1sADkqAiL0w8/?=
- =?us-ascii?Q?1/hLAk0YAkPF+XP/5OueFv/XNgUVnacjRAZ585rrGk0OBWg+YMIqVV7egNyw?=
- =?us-ascii?Q?4Ys0JVWQaq1eAOYiRr664DDgyHc/FIwLxuZ3BBwQe7QFnQJIKEgXHBVWC2VU?=
- =?us-ascii?Q?Os0ZYBLauLjg6eOYdCZUUt6lNCj7YOvLw7ubd+ePVisaV63sGNZ2ek8cyJqy?=
- =?us-ascii?Q?+q9yLfH39aYXyW6VHS+urTmwnJkK++rNgLo+L8aQ3PgV2q+VLXdan9hJtStQ?=
- =?us-ascii?Q?c9/I6h9E5LwszPl5EqG1hBJwP5wdTCYaWE4povUEytIUcVM9ZqHx/Ql5VWGB?=
- =?us-ascii?Q?nLQgqHU25MpyVpJWKhmO4xXDRRyLyHTmi+7DMLBZj+MGkxgqIgRv83YlUL0H?=
- =?us-ascii?Q?rD4NiTMaPkEpHqwnfawI1MgZGblIbDw5FIDkNDGh04WVtQo/JJabfPp5+GP7?=
- =?us-ascii?Q?33k9HJmb8U2ljVMzgt9eaPX1n2NaSUmEWRi+1BuVQSuOtQHNrxcFsqWoqCjT?=
- =?us-ascii?Q?YmXq//QepW1AuQNkX/Q4OWgq6qP769MMWJyE2lig?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?STZd2iSFBbZcM14tKY5hPK3pg6ISEfbLkv7/wccEJF7yVBPZg51+13asFBAq?=
+ =?us-ascii?Q?HQsGuvzh5APXbYDPSH5nLy6BmndRtEI9CcCdgTEO6fOmwzCjHTtKJ2TY7Msr?=
+ =?us-ascii?Q?j2wugcaBWHl32BQYXUtrJsEqTaTKccOc06QVRUFjdCWgM2k3iGgN3xLFgtRA?=
+ =?us-ascii?Q?L4pl+PrZilKRo/+i54z3Sl+oQfNp2jEz/o3QLbPgpLy1b/SjLboSRW1iIiqZ?=
+ =?us-ascii?Q?k0ozI9KtIFJ+kAEQAiwEWm6bVjm2Z5R4CxOkFipd2W10E6MbRXQ1w11yvetp?=
+ =?us-ascii?Q?/BjCcnC+cJrmraZ4axMmqJCzbt1CV9UDQmUWgpGwLz5Ca65eQ8/B0yywbQPK?=
+ =?us-ascii?Q?n4c/x0UNMx8hJeorK8ALh/SHK0qgpVMKMv6AK/qH+E4HzjlL5Dg4eSV9oQ9K?=
+ =?us-ascii?Q?slnhKfBOe47QxpLfN84jPi3a43ZFstqHDEQffKjfYRG0djGOg7+HRaMfi7m6?=
+ =?us-ascii?Q?L4jAOQ31erL54qXg+1pYzGlUwWHzst46peXt9mO9OKitUpEBpv6sLbsWUglB?=
+ =?us-ascii?Q?YfElbMY4U6WKSUf8R39UqXaNuIMyiL6O3i4rc0g6e73jLuzN0fgtigXeQThn?=
+ =?us-ascii?Q?dafN1he2X3L96AW+TdoaIQ20VqisWdhGhMtqjWXl8I2wStopBupd56RSI6eM?=
+ =?us-ascii?Q?U6PWfJOckTfh8MSaXBLiyomZc7i7az9qPy7AKYGf1jjz0BJaAf86fJ7cvdV2?=
+ =?us-ascii?Q?DNH77/znq6ci1JhFvSIdLwNrfR0AwsliPqLTNAiX80b3z2bAPICJb2lzicV0?=
+ =?us-ascii?Q?GOidIrhiEpxgAMiA3O8YzlxBVwWsUkBCvp+X/Fcuh5EZMZQgqi1xf/UAkSfs?=
+ =?us-ascii?Q?nvKtpDy+BihtUsQq1C8w3ht8zdd+aVaKkBlVrYfabd4UEUiFdnJqdtBG2GQw?=
+ =?us-ascii?Q?lP6L6Zpsflt/qdxeCTDVbdc0g8Y/x4jJUyo9WQSNaHanQR0UYCqH58ngy6ZB?=
+ =?us-ascii?Q?0d1dTb3l/D2QLu9uDrN2kp2cTZrpDapK7xZuz06tZLzMPxuGKgUvaF+LwvHG?=
+ =?us-ascii?Q?N04FP/JJ/Ay77h/HQFKEQ8pAd/7cA1D9Dr/aJfXOZZ8IGCfnxQ+IFGcS9qPX?=
+ =?us-ascii?Q?iyEpcHwTvESwqL3zeKXE4COIfPCTosJSmrbIrayjKSyl2/hzO+RPYh3ShdzT?=
+ =?us-ascii?Q?ZG7uLX45hJyQQ5XLUb5yg7e8XcvUcUBTxa4303Pky3Eiom5W5a6iYjpHBIIO?=
+ =?us-ascii?Q?bI3nB49gMNKqELak29aIDK887U/et8fhRs+0JGVSn4TKVT5XbAV9W0+auUlT?=
+ =?us-ascii?Q?NFpuI+FMQvDg0z4P4XHljyAUr9KO6//t0kvPgQuq340tnKLys8ALxbsZE3Rt?=
+ =?us-ascii?Q?Qx5Ckj1E6u5HzCJoG3W2cXKLA0niUxZ78LUKmsU85wK5VD7WtAyehLx3NuQx?=
+ =?us-ascii?Q?DMgRCQjU/91t3vw4FIVS42EM1BmlJCoxRkfI/ACgoKNfxBYhLQuEsO7bA7I0?=
+ =?us-ascii?Q?L1lJ7rtDLljp39ewoDQLct/lvHcOnZqwakZ1cBAdnJnhPNMlpO6bFsuxSeIH?=
+ =?us-ascii?Q?oLD7MNKHeXI9W749iFystmLuJVdrdzxd2U9nkeMMShRmC8kA4dvxIjW4i5YL?=
+ =?us-ascii?Q?NQ+5s2ZBdmecP7snBGkPKjOBHl7w0xMeRvfOP7W6?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -191,198 +183,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2bad0de-d19e-4b42-d0cb-08ddf7541869
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Sep 2025 08:11:11.4787
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7011e50-21ca-436b-8f32-08ddf754cefe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Sep 2025 08:16:17.8265
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7jyLjKqmOnNpFlDs1GtfHDD9L4Tj6IFDW839FIUroemevtoTnX2C10Jy0Z8R41mdj7f8A7CXh+0S65Vv4gH5KQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5256
+X-MS-Exchange-CrossTenant-userprincipalname: p/mdCA40Sy0PgmVoxN6OQiFfCGYcQGhFdmoLt+LdyT7R/OqP9joz/HiMa/tolZFnKSQfYuoqgooz0/K0hxi3iA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5796
 X-OriginatorOrg: intel.com
 
 > From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Friday, September 19, 2025 2:07 AM
+> Sent: Thursday, September 18, 2025 4:02 AM
 >=20
-> On Thu, Sep 18, 2025 at 06:49:08AM +0000, Tian, Kevin wrote:
-> > > This is enough to implement the 8 initial format variations with all =
-of
-> > > their features:
-> > >  * Entries comprised of contiguous blocks of IO PTEs for larger page
-> > >    sizes (AMDv1, ARMv8)
-> > >  * Multi-level tables, up to 6 levels. Runtime selected top level
-> > >  * Runtime variable table level size (ARM's concatenated tables)
-> > >  * Expandable top level (AMDv1)
-> >
-> > any more context about this one? how is it different from the earlier
-> > "runtime selected top level"?
+> fput() doesn't actually call file_operations release() synchronously, it
+> puts the file on a work queue and it will be released eventually.
 >=20
-> How about:
+> This is normally fine, except for iommufd the file and the iommufd_object
+> are tied to gether. The file has the object as it's private_data and hold=
+s
+> a users refcount, while the object is expected to remain alive as long as
+> the file is.
 >=20
->  * The size of the top table level can be selected at runtime (ARM's
->    concatenated tables)
->  * The number of levels in the table can optionally increase dynamically
->    during map (AMDv1)
+> When the allocation of a new object aborts before installing the file it
+> will fput() the file and then go on to immediately kfree() the obj. This
+> causes a UAF once the workqueue completes the fput() and tries to
+> decrement the users refcount.
+>=20
+> Fix this by putting the core code in charge of the file lifetime, and cal=
+l
+> __fput_sync() during abort to ensure that release() is called before
+> kfree. __fput_sync() is a bit too tricky to open code in all the object
+> implementations. Instead the objects tell the core code where the file
+> pointer is and the core will take care of the life cycle.
+>=20
+> If the object is successfully allocated then the file will hold a users
+> refcount and the iommufd_object cannot be destroyed.
+>=20
+> It is worth noting that close(); ioctl(IOMMU_DESTROY); doesn't have an
+> issue because close() is already using a synchronous version of fput().
+>=20
+> The UAF looks like this:
+>=20
+>     BUG: KASAN: slab-use-after-free in
+> iommufd_eventq_fops_release+0x45/0xc0
+> drivers/iommu/iommufd/eventq.c:376
+>     Write of size 4 at addr ffff888059c97804 by task syz.0.46/6164
+>=20
+>     CPU: 0 UID: 0 PID: 6164 Comm: syz.0.46 Not tainted syzkaller #0
+> PREEMPT(full)
+>     Hardware name: Google Google Compute Engine/Google Compute Engine,
+> BIOS Google 08/18/2025
+>     Call Trace:
+>      <TASK>
+>      __dump_stack lib/dump_stack.c:94 [inline]
+>      dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+>      print_address_description mm/kasan/report.c:378 [inline]
+>      print_report+0xcd/0x630 mm/kasan/report.c:482
+>      kasan_report+0xe0/0x110 mm/kasan/report.c:595
+>      check_region_inline mm/kasan/generic.c:183 [inline]
+>      kasan_check_range+0x100/0x1b0 mm/kasan/generic.c:189
+>      instrument_atomic_read_write include/linux/instrumented.h:96 [inline=
+]
+>      atomic_fetch_sub_release include/linux/atomic/atomic-
+> instrumented.h:400 [inline]
+>      __refcount_dec include/linux/refcount.h:455 [inline]
+>      refcount_dec include/linux/refcount.h:476 [inline]
+>      iommufd_eventq_fops_release+0x45/0xc0
+> drivers/iommu/iommufd/eventq.c:376
+>      __fput+0x402/0xb70 fs/file_table.c:468
+>      task_work_run+0x14d/0x240 kernel/task_work.c:227
+>      resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+>      exit_to_user_mode_loop+0xeb/0x110 kernel/entry/common.c:43
+>      exit_to_user_mode_prepare include/linux/irq-entry-common.h:225
+> [inline]
+>      syscall_exit_to_user_mode_work include/linux/entry-common.h:175
+> [inline]
+>      syscall_exit_to_user_mode include/linux/entry-common.h:210 [inline]
+>      do_syscall_64+0x41c/0x4c0 arch/x86/entry/syscall_64.c:100
+>      entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>=20
+> Cc: stable@vger.kernel.org
+> Fixes: 07838f7fd529 ("iommufd: Add iommufd fault object")
+> Reported-by: syzbot+80620e2d0d0a33b09f93@syzkaller.appspotmail.com
+> Closes:
+> https://lore.kernel.org/r/68c8583d.050a0220.2ff435.03a2.GAE@google.com
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 
-clearer.
-
-> > > + *  item/entry_size
-> > > + *     The number of bytes of VA the table translates for.
-> > > + *     If the item is a table entry then the next table covers
-> > > + *     this size. If the entry is an output address then the
-> >
-> > s/is/translates/
->=20
-> Don't follow?
-
-entry is not an address. So I meant:
-
-"If the entry translates to an output address"
-
-> > > +/*
-> > > + * PT_WARN_ON is used for invariants that the kunit should be checki=
-ng
-> > > can't
-> > > + * happen.
-> > > + */
-> > > +#if IS_ENABLED(CONFIG_DEBUG_GENERIC_PT)
-> > > +#define PT_WARN_ON WARN_ON
-> > > +#else
-> > > +static inline bool PT_WARN_ON(bool condition)
-> > > +{
-> > > +	return false;
-> > > +}
-> > > +#endif
-> >
-> > Then call it PT_DBG_WARN_ON() to be more explicit?
->=20
-> Ah, I'd rather leave it..
->=20
-> > btw looks there is no plain WARN_ON() used in generic-pt. Just be curio=
-us
-> > about the rationale behind. Is it a new trend to contain all warnings u=
-nder
-> > a debug option?
->=20
-> It is sort of like VM_WARN_ON(), the places that got put are largely
-> performance path so you don't want it enabled unless doing debugging.
->=20
-> Generally the idea is to use PT_WARN_ON() on performance path cases
-> only, and leave normal stuff to normal WARN_ON.
-
-Good to know
-
-> > > +
-> > > +/* If not supplied by the format then contiguous pages are not
-> supported */
-> > > +#ifndef pt_entry_num_contig_lg2
-> > > +static inline unsigned int pt_entry_num_contig_lg2(const struct pt_s=
-tate
-> > > *pts)
-> > > +{
-> > > +	return ilog2(1);
-> > > +}
-> > > +
-> > > +static inline unsigned short pt_contig_count_lg2(const struct pt_sta=
-te
-> *pts)
-> > > +{
-> > > +	return ilog2(1);
-> > > +}
-> >
-> > what is the difference between above two helpers?
->=20
-> Oh, pt_contig_count_lg2 didn't get kdocs because they are internal
-> helpers to build other functions..
->=20
-> Like this:
->=20
-> /*
->  * If not supplied by the format then contiguous pages are not supported.
->  *
->  * If contiguous pages are supported then the format must also provide
->  * pt_contig_count_lg2() if it supports a single contiguous size per leve=
-l,
->  * or pt_possible_sizes() if it supports multiple sizes per level.
-
-could be simplified to require the format to always support pt_possible_siz=
-es()
-if contiguous sizes are supported, no matter being a single size or multipl=
-e.
-
->  */
-> #ifndef pt_entry_num_contig_lg2
-> static inline unsigned int pt_entry_num_contig_lg2(const struct pt_state =
-*pts)
-> {
-> 	return ilog2(1);
-> }
->=20
-> /*
->  * Return the number of contiguous OA items forming an entry at this tabl=
-e
-> level
->  */
-> static inline unsigned short pt_contig_count_lg2(const struct pt_state *p=
-ts)
-> {
-> 	return ilog2(1);
-> }
-> #endif
->=20
-> > It's currently not implemented by any driver so will have the default v=
-ersion
-> > returning 0. and it is only used by default pt_possible_sizes(), which =
-then
-> > returns only one page size accordingly.
->=20
-> ARM and RISCV use it. AMD is the only format that support more than
-> one size of contiguous per level.
-
-hmm I didn't find ARM/RISCV defining pt_contig_count_lg2(). So in all cases
-it's the default version returning ilog2(1). Then what's the point of keepi=
-ng
-it instead of directly using ilog2(1) in default pt_possible_sizes? sorry t=
-hat=20
-I still didn't connect the dots here.
-
-> > > +
-> > > +/**
-> > > + * pt_item_fully_covered() - Check if the item or entry is entirely
-> contained
-> > > + *                           within pts->range
-> >
-> > when using pts it's more accurate to call it pt_entry_fully_covered()
->=20
-> Not so much related to PTS, as pts could be either, but it makes more
-> sense to refer to table poitner as an entry than does it to refer to a
-> contiguous entry an item.
-
-make sense.
-
->=20
-> > > +	PT_FEAT_FLUSH_RANGE,
-> > > +	/**
-> > > +	 * @PT_FEAT_FLUSH_RANGE_NO_GAPS: Like PT_FEAT_FLUSH_RANGE
-> > > except that
-> > > +	 * the optimization objective is to only flush IOVA that has been
-> > > +	 * changed. This mode is suitable for cases like hypervisor shadowi=
-ng
-> > > +	 * where flushing unchanged ranges may cause the hypervisor to
-> > > reparse
-> > > +	 * significant amount of page table.
-> > > +	 */
-> > > +	PT_FEAT_FLUSH_RANGE_NO_GAPS,
-> >
-> > FLUSH_RANGE and FLUSH_RANGE_NO_GAPS are mutually exclusive but
-> > one format must select one? then we could just keep one flag (NO_GAP)
-> > then feature off means FLUSH_RANGE.
->=20
-> I think at least one or two more flushing modes will be needed, and
-> they would be mutually exclusive. It is setup with this one hot
-> encoding because of how the pt_feature function compile optimization
-> works.
->=20
-
-clear now.
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 
