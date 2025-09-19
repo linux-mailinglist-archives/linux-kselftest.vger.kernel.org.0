@@ -1,77 +1,119 @@
-Return-Path: <linux-kselftest+bounces-41973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21D75B8A5C3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 17:42:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1560B8A6E6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 17:53:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B6CD1BC0725
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 15:41:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80D1B189D60F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 15:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9830631B10A;
-	Fri, 19 Sep 2025 15:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC0D231C56D;
+	Fri, 19 Sep 2025 15:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="d5QwcbEB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aOV8MwTf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FA831AF23;
-	Fri, 19 Sep 2025 15:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51AE2C21F8;
+	Fri, 19 Sep 2025 15:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758296442; cv=none; b=GNuOG7LdtGsufHPNWockQgDEG4qfp5cn2x4gst8OpVE1AnNfvJpjRrC+snWkVW0+az+aH2S0sbuRDM8QfLNESLOFc5bJknMPVBrSSBFkOXPuNOH+48lYJJG/i4wguRtT2oam/ct+9RuWM9+BHJmfHn2hU4NhkR6kPV2fX1e/B1M=
+	t=1758297191; cv=none; b=AzI3f0YUDB9kLk3xhHmLtSwMpfmXlnsYgF3Zy123OW5MrIzXWvPtk6SESFp4O3p0zicRUiJ0k00i4iEoepGFeuQsh0YaqzixTxOkS8qHYsj0ZP8IZnrK8S6bsVXkSnd/mAiUFvqlWR5y/yT6qUET/M4VRDfXVCDb68zFqxKp5kM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758296442; c=relaxed/simple;
-	bh=rD+5ViKgJptdVexEPid2ZBaWhl89gqDdDSGw11P4dpQ=;
+	s=arc-20240116; t=1758297191; c=relaxed/simple;
+	bh=LY8UCU+64dez0iKU9byrdE3xtr9uB9iMyeO1oDOL/3o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mOVdn3OqrrZAV3tOsgoQBSFB/A1eDW0MRszGZQL7w2cXiiPbl5ymxS6C4hTiP7nE9pMdMd1qRU+UScsk7SNpn8iPK/b98dO4ih+ZIHyhlw2ODPSCIWaqLKiza+O6WCeyTi4UUg3SFWgvHzozGJcF0c0SuScSlFqyvghiE5e9eWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=d5QwcbEB; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=z9HQEie4yyR1EvlQG0pJEaoVYImYR1NNOaRDN3iYsdg=; b=d5QwcbEB38kmC30MGaAeYFHbTM
-	Th0xqTbRMdS9k/FmbDQnotSj+/7ca0ivwB6ODOsXMjI0TKaM9ayO9CP7JAaxKgv2EzgBwJ1A79VdE
-	QfYzYtwI2q8Pt6JzWzMTEfhfJ0LgC9GbxtFlJDNP7r30QbHAigIj6ITRk9nTNDxxOvfISg4yFaPiU
-	PXjAKyd3hNa+8wSyZ9ucI1pjlrSq51Cy6uHvhk7E4gDYHjRetcPo3YO+mwWqyNYiZmsO6pgqMDZPE
-	+c+pnWc+BSdZMVXgmR5jEOeDzZGTLYG63sA7WWDKWaYrsfLwEchvByHL9W5nujOqAGfBTXfeXv449
-	dw0nwh7A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uzdE0-00000003NNn-1nR1;
-	Fri, 19 Sep 2025 15:40:40 +0000
-Date: Fri, 19 Sep 2025 08:40:40 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Benjamin Berg <benjamin@sipsolutions.net>
-Cc: linux-um@lists.infradead.org, Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	linux-kselftest@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	Benjamin Berg <benjamin.berg@intel.com>
-Subject: Re: [PATCH v2 00/11] Start porting UML to nolibc
-Message-ID: <aM15eChUObXfxLzs@infradead.org>
-References: <20250919153420.727385-1-benjamin@sipsolutions.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=MvBbwZGfXxhCV87uszwgaTr94SFnHK/JckYQLs8pGpFNqxXTFJfW+DQkm6s0Y5uNJuC/uK5Z6lyq0X0+KqfR0+Vw9dbR0Y5OwcsL+NuDTEvmJeQ0pOJOyjM40tP9qONQmU0wVSN9lcLnboONKm9ip0KB7A/nX1o0YDivUvO6fko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aOV8MwTf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B428BC4CEF0;
+	Fri, 19 Sep 2025 15:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758297191;
+	bh=LY8UCU+64dez0iKU9byrdE3xtr9uB9iMyeO1oDOL/3o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aOV8MwTfLG18DZwwAPFD7Rm3sJbkyFo6QukFWydz9vWeSc3v1IRTSVl/a7ocNxvwc
+	 wMqEh/9o0j5TxAusXbyoSzPbete1PUJjByFf64KM1Z4oeTbiDTV+gYibMfkkeQMBwS
+	 qbaBJOFWiRtx2AmG8a80m2G8+8EZ/dlJyp+QcYLrP3ReF30/gSvI0anIRYts6wkj/S
+	 LM95N3RzmWzVm4wpTF4ARgK/7l+X4l7di8KcnVlEbS5A5ZBFw+umfAduBXS0e57DoH
+	 dtEz7AaZT1SUQ3IYanPM99hXRfIAgGz3ZCkxozn+1RPQf91a4fmhmeZtmw1CJ6MWDM
+	 j1kIgvB2pty8g==
+Date: Fri, 19 Sep 2025 16:53:04 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v8 06/29] KVM: arm64: Introduce non-UNDEF FGT control
+Message-ID: <d27a1c5a-9173-465b-90f9-fec528181ba7@sirena.org.uk>
+References: <20250902-kvm-arm64-sme-v8-0-2cb2199c656c@kernel.org>
+ <20250902-kvm-arm64-sme-v8-6-2cb2199c656c@kernel.org>
+ <87zfaqxymu.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="vZXtN3VZj3O/Y/5x"
+Content-Disposition: inline
+In-Reply-To: <87zfaqxymu.wl-maz@kernel.org>
+X-Cookie: Don't read everything you believe.
+
+
+--vZXtN3VZj3O/Y/5x
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250919153420.727385-1-benjamin@sipsolutions.net>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Fri, Sep 19, 2025 at 05:34:09PM +0200, Benjamin Berg wrote:
-> From: Benjamin Berg <benjamin.berg@intel.com>
-> 
-> This patchset is an attempt to start a nolibc port of UML.
+On Fri, Sep 19, 2025 at 04:14:49PM +0100, Marc Zyngier wrote:
 
-It would be useful to explain why that is desirable.
+> FGUs are uniform, because when something doesn't exist on a vcpu, it
+> doesn't exist on *any* vcpu. Non-FGU use of FGTs, however, has to be
+> more flexible because that's part of the emulation, and is actually
+> pretty rare that we want to trap something at all times, on all vcpus.
 
+> For the same reason, conflating the R and W registers doesn't work
+> either. For the above example, I want to be able to trap write
+> accesses to MDSCR_EL1, and not reads, just like the Ampere
+> brain-damage.
+
+> So please make this per-vcpu, decouple R and W FGTs, and convert the
+> Ampere horror to this scheme.
+
+OK, that makes more sense - it was a bit confusing that all the FGT
+handling was done per VM not per vCPU without even any provision for
+per-vCPU or distinct R/W stuff, it seemed strange.  Since the SME
+requirement also ends up being per VM anyway I just tried to fit in with
+what was there but if we don't want that behaviour it's certainly more
+obvious to make it per-vCPU and to split read and write.
+
+--vZXtN3VZj3O/Y/5x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjNfGAACgkQJNaLcl1U
+h9DpYwf9GkvMEDYrTVm6kitHOpS+F99swSxSDy+9IjuOkcqkQIm18C2AoZe1iD0A
+ZOB8PfTlFDFJGW4gxWHcWHk5prOp89I4xC2kXlguPQYe3T8QHfcsDDAJFxwhX7Xb
+C0ICRPJQC6+q1td6A51wmqsCQ+N7cWd5oBz4A02evYJBcQ/7ZGlF3ykFUZTRhW+1
+c5HGNIW9RSsbdoFLFtSAJYzFmXfMSgDdJB/5AG6BJ1wdY9CF4cdRzNI9TyhmAWti
+qh/oncDSwLMg6VU1rkNhaibL7vRbtKI/7D3RldFVPyXuf+gqRjp7rC991dMcSgh7
+iXujfThG7ZrCubxYhsccwtS4pIR5Jw==
+=0qCo
+-----END PGP SIGNATURE-----
+
+--vZXtN3VZj3O/Y/5x--
 
