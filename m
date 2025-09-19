@@ -1,220 +1,144 @@
-Return-Path: <linux-kselftest+bounces-41929-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9461BB89282
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 12:54:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BAB2B89307
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 13:06:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F95F3A7A63
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 10:54:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3D221BC6233
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Sep 2025 11:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABA9C309DDD;
-	Fri, 19 Sep 2025 10:54:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D9E30B516;
+	Fri, 19 Sep 2025 11:06:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="j6AUy+sj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q8SC6C39"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42CA19755B
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Sep 2025 10:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BFF3093C7
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Sep 2025 11:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758279245; cv=none; b=VTxVWbFR/BLy87XSosW5IxnH3Bo0SircmeZtWqhNDEnBHbS+eRjqqydRc73r+KK/58PdBUBZW970NQ3aMk0P+rAu/x+YSIL3KXdL16NmJH59tfksne1WNmpBiL2SET3+2s+IWS/zmleJXt38meW8gNWExzoEF7YvbVEnhAgksyc=
+	t=1758279985; cv=none; b=HsRpiGUU33kvcwCVBJxzw16cZP/bJ4ZK/Jams53WkCSn2PQAi0dfhbJXhnTFMpa6eF6S3GTiIHwaLpJNBRndwvt9gXbqUu13ACUA0t3riQKptcoKnIYHyzV4bUVly8QkBKpr7dNhfzwk5nnFY1Fh8EDWwt3MDNMthSSRCuiTJso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758279245; c=relaxed/simple;
-	bh=dlBqN6s2KaMTj78q1hAYaCO2jqx4CfAlVXMMxWBVwRg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=paQcXsFjEdJF+13p9DwogiONGwhR2IonuzGZsarZqPfm6/xPOEa/XJjMGPpYN3dvkKxXdvmAV9qh11Ea8NIdBFetF5ksYU7OStgwMKuE6yc5GjKApCpA6N1GDexuaHX/SYsA4qspm4Vx6olWLny3aWeDduvdK5o6GGowzTjaFTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=j6AUy+sj; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-32eb76b9039so2318067a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Sep 2025 03:54:03 -0700 (PDT)
+	s=arc-20240116; t=1758279985; c=relaxed/simple;
+	bh=FeRgsSRi/iWOgqISnP+r+zKDQoLdP8inVV16qsd7MGI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WNH29HDj0l7Tgt/K6cY9J7ZwuBdH2HBboNIccijDIOk1cuvCN53NrTS9MeD9SqIFntn8T0qTi5oYPX2wulTbI8fmyCAAj0U/hs+JyvOqY3cBsKJDfZy5jf0eU7FWFfG6nPnG3QqvR/w/zFWFFD2gx2slJr3aq5ft64Q/jKA7vIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q8SC6C39; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3ee12a63af1so897599f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Sep 2025 04:06:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1758279243; x=1758884043; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VwXF4nj9Ctk9ENZA1Gy7QLttXCNWXb5F14RFISsUWAo=;
-        b=j6AUy+sjsf5jch97JcB6QIfaCndwK06Zlj1lIXlmhCFXw92DHL+/v/r+QY3Ss+EZ5r
-         wALy7WeyOsgFytV8M+iElL98Y64CHt/3FBvavJQbfBapoLudetClyRWABv+9lOAkbjxV
-         6mmfaZrB1AtGNxA3o9TMga+a/7fvQavYjCG9iOajkq4F63GG4gFDRqYT7jEiV1fCloez
-         LPm+Bb+0njjIdBWN3Xt0c0v6oIRTAaE9ArBZPIfG4u8Z2kjOzG+xbaahKTaDx2AQyKT4
-         hIPBUSI/9A2EJhtTbdUW/oix1ZWhLRZdw08g/U0Lwqmnigg2yvkgKPvmWuPuI9/32Vcs
-         5n8g==
+        d=gmail.com; s=20230601; t=1758279982; x=1758884782; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=E0gpwB10/6E2U+Sby0w+MPfG8NeegflF3tJftb7joqA=;
+        b=Q8SC6C39HSzMllgd/UNkS5pHqobCWsVLBjBEoSNzLAi1wsLTx93PZqvd4EabCCHfh6
+         cMHspRcNaxe1EUOPs1/THG2wDGA3vz51R9eOdzC/3l3r4e/iQd7To8YerJGalNMfVJqC
+         uiTF0rDFb5fx5D9veDlLBTYsbpNcME9/bbEld9/ZGMIf1TlCyonJUAKCmx5vMZkm7D7X
+         tQXLJa+AwBiM/GRvYgxFU7pDgyWOKdyD2J/kznrNiArhSTDytaR7xmFm+cCYX1LDG24o
+         /8c/T8JCJDl3Yhlwn41FOJWVLglJoXkfu4FjDDbjHn/fkX+AsKjHR5nWxq05trMcuq1A
+         eOWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758279243; x=1758884043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VwXF4nj9Ctk9ENZA1Gy7QLttXCNWXb5F14RFISsUWAo=;
-        b=klR5Np0P+SkRaQhrouVD6su2Xp9j+zN5DrjWVzfJBWSR0nrNPl4YdGJUyz9FyR6nUB
-         Yi42qkrPHZKTuorVUYvhBaK7sF9pTlTqs2zeCZE1JiAkARnRwrb0cghwzhVwgVHJ1en0
-         y1CBPtviCLfEqNKgDKRHcfGKwPdkn+KGOpO5rKABskGFhvxXEa6Vt0D5cjPM0RjHZUns
-         XwciUaZ/UVEk30wXQ5kqOoUBfWyZQ1T6mMcp1tysXTzfkt3N/zwDm5zCtq1bsieW+JTt
-         CJzFQdpSL7C6bTODqzfBGP8KFpzeV4ZqYQo1HtIx3MvIYwSnL1YxYdwVHUDWCzgQsxuK
-         zmAw==
-X-Forwarded-Encrypted: i=1; AJvYcCWwkMrS15ukOcd8OnEKtb9ZvN47hRBOEcYYApanuF3TayybcQpuqd2YCNYoOBEaMb5kj/JXvisVUZXrksUWt20=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz2H4r1FIVZ0UQXMEYu9c0i6RDMnFNpuyBBl9uQjQwrGRd07kY
-	jBiUJxdByeZ2AHu2DXSgkQpB7o6tIsqBfyeLBCmabFKtdvlNsguGryZHQac8XQkipbLdDctFIzf
-	jrSOW0ZI1Q986myo6FHsK7zq3FPvOMH6+OqOOAj/xCg==
-X-Gm-Gg: ASbGncvoDntfuM50nO+o5DPDa2No39m4zfj4PucjD3dKZnry7kDmvYqMB/xAAVP2pgy
-	TAWtjcwdy1iV7xD46KSjwM4gVE40JDKACMfJoM1ggyHNnea0C4MBooCWx84W5w/QqMuTyt+0i21
-	Uy8b1gDjbM6BEYAL3bWcZxPoEJvgrjcN2Or672eMfknzrTNjhUwMpNMaDHCK/35oHO+5Mlk19Zw
-	Eti83E0vup5N7CNKXVOiLeUh8xaUuvihl7NCta2jDNpa9Vwx6eN
-X-Google-Smtp-Source: AGHT+IFxeJMPLYhVopFZ/wMGe4/MLpf50j7fyW/JSos7YqNV48KuEAenh3nTAVS5vu18B3CE2dLqvQk2LQK3xveldfU=
-X-Received: by 2002:a17:90b:3fcf:b0:330:6f16:c4d8 with SMTP id
- 98e67ed59e1d1-33097fd4e41mr3511663a91.7.1758279243172; Fri, 19 Sep 2025
- 03:54:03 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758279982; x=1758884782;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E0gpwB10/6E2U+Sby0w+MPfG8NeegflF3tJftb7joqA=;
+        b=SfpF8GLI6lMj9u7zdSs1wjRoP9O8GbUjQkeLgejM1mGPJDzk9h1Cea4sXClk1qMXwk
+         xo8kdo8Vx6d3wsaeIhL0axnxSeUfO6yaJ9Vb6cBqClz7EaMgCF1pkAZ/mlSJCFnIZH9O
+         hlmfeYIP+w0wjSsXq7vp00K/TU9e7xiS9q00xcxqP5g+h3lauiD/Vg/6D3aDw9jAcmkv
+         yif7G5MR/U+HNlMPjqnUJbhAAGgZhbhbH8dCmwFcT5uL91/iGigEqTWu8SudQEFTrmx/
+         sXihxvcXk/bw/2tbwVYXuGJbVMjxMlb6QziGPpnJ6JdHicshC/CW0gMn8Ne1GRTBA3P7
+         FSwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdECL5r655VpAuV4epkE0DWxt/iikvxXol4hDzoTwtrq2SdRLMjTAOqrvevJCsGnsGzpZvBQ8K2Evv11+HCD4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkO9O59r9DDEQxBkfD4+JNJxKvhYCJPE8U9Pe6nhOwFHd87K7W
+	pXF+ga3v1vlpK85OBLEV027R4ePXzVPPDGN/XOWqg3cspXP7sNhwfuD1
+X-Gm-Gg: ASbGncudoXlrOpWwCqyUJhYQpOWe2x6nhY1Ony6MwrS9GUnDoRGcPBj0AVOD4GsfgrN
+	xb4rR0D3HetuBqcv6uNkY/WsZV3gM134Q6qKSynm2w3hL2MySAHUQ5WTGxkWFTQ31NiN6eQVNPx
+	atr5YfsQQiElLcLh+FjVMRFLsixRKxddy0KRsUxo+q7cmxB8rSL+Z3POMeh9WU2DUuDpB8WnfMA
+	9QUZr2m6oEx91sP+HoUQd1gQxj/5NmaJW7p+rcVhV58YCmlLTMfUn63c5It4aD/jdENAG5BK0r7
+	pq1wFpEaJQBoafjf1rlEW25XLTQBYfF4JJHqLtf49a4xrc+U0xgn4Aa+ip4qsmBF1CwGHfw9GHg
+	w/EyIts3JSQewNePoAMHL
+X-Google-Smtp-Source: AGHT+IF2Z0bInAWZqDYYETRVnCkFEjbkAn2Fex4pkyig1CAMuVquXF5ao4cQ8XxsbTLy1k2XXr+50A==
+X-Received: by 2002:a05:6000:2881:b0:3eb:dcf:bfa4 with SMTP id ffacd0b85a97d-3ee868a75b0mr2033940f8f.54.1758279981950;
+        Fri, 19 Sep 2025 04:06:21 -0700 (PDT)
+Received: from andrea ([176.201.192.207])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46138694957sm139550595e9.4.2025.09.19.04.06.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Sep 2025 04:06:21 -0700 (PDT)
+Date: Fri, 19 Sep 2025 13:06:15 +0200
+From: Andrea Parri <parri.andrea@gmail.com>
+To: Xu Lu <luxu.kernel@bytedance.com>
+Cc: corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, alex@ghiti.fr, will@kernel.org,
+	peterz@infradead.org, boqun.feng@gmail.com, mark.rutland@arm.com,
+	ajones@ventanamicro.com, brs@rivosinc.com, anup@brainfault.org,
+	atish.patra@linux.dev, pbonzini@redhat.com, shuah@kernel.org,
+	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, apw@canonical.com, joe@perches.com,
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+Subject: Re: [External] Re: [PATCH v3 0/8] riscv: Add Zalasr ISA extension
+ support
+Message-ID: <aM05J6FU0xG3SBzR@andrea>
+References: <20250919073714.83063-1-luxu.kernel@bytedance.com>
+ <aM0qlTNPiaQRY2Nv@andrea>
+ <CAPYmKFsP+=S56Cj2XT0DjdvBT_SY84moM4LVeqxHTVWbtq4EVw@mail.gmail.com>
+ <CAPYmKFsV_ZPifJBtvPOdqM6_Mzhac9A4-PH9zt8TirOqAwKGhw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250919073714.83063-1-luxu.kernel@bytedance.com>
- <aM0qlTNPiaQRY2Nv@andrea> <CAPYmKFsP+=S56Cj2XT0DjdvBT_SY84moM4LVeqxHTVWbtq4EVw@mail.gmail.com>
-In-Reply-To: <CAPYmKFsP+=S56Cj2XT0DjdvBT_SY84moM4LVeqxHTVWbtq4EVw@mail.gmail.com>
-From: Xu Lu <luxu.kernel@bytedance.com>
-Date: Fri, 19 Sep 2025 18:53:52 +0800
-X-Gm-Features: AS18NWDkb7q9MGkDnErZbfpP4LgF33f4wEnUX8H6rIWl06tQwmVParxSdVieQQ4
-Message-ID: <CAPYmKFsV_ZPifJBtvPOdqM6_Mzhac9A4-PH9zt8TirOqAwKGhw@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v3 0/8] riscv: Add Zalasr ISA extension support
-To: Andrea Parri <parri.andrea@gmail.com>
-Cc: corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	alex@ghiti.fr, will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com, 
-	mark.rutland@arm.com, ajones@ventanamicro.com, brs@rivosinc.com, 
-	anup@brainfault.org, atish.patra@linux.dev, pbonzini@redhat.com, 
-	shuah@kernel.org, devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, apw@canonical.com, joe@perches.com, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPYmKFsV_ZPifJBtvPOdqM6_Mzhac9A4-PH9zt8TirOqAwKGhw@mail.gmail.com>
 
-On Fri, Sep 19, 2025 at 6:39=E2=80=AFPM Xu Lu <luxu.kernel@bytedance.com> w=
-rote:
->
-> Hi Andrea,
->
-> On Fri, Sep 19, 2025 at 6:04=E2=80=AFPM Andrea Parri <parri.andrea@gmail.=
-com> wrote:
-> >
-> > On Fri, Sep 19, 2025 at 03:37:06PM +0800, Xu Lu wrote:
-> > > This patch adds support for the Zalasr ISA extension, which supplies =
-the
-> > > real load acquire/store release instructions.
+> > > (not a review, just looking at this diff stat) is changing the fastpath
 > > >
-> > > The specification can be found here:
-> > > https://github.com/riscv/riscv-zalasr/blob/main/chapter2.adoc
+> > >   read_unlock()
+> > >   read_lock()
 > > >
-> > > This patch seires has been tested with ltp on Qemu with Brensan's zal=
-asr
-> > > support patch[1].
+> > > from something like
 > > >
-> > > Some false positive spacing error happens during patch checking. Thus=
- I
-> > > CCed maintainers of checkpatch.pl as well.
+> > >   fence rw,w
+> > >   amodadd.w
+> > >   amoadd.w
+> > >   fence r,rw
 > > >
-> > > [1] https://lore.kernel.org/all/CAGPSXwJEdtqW=3Dnx71oufZp64nK6tK=3D0r=
-ytVEcz4F-gfvCOXk2w@mail.gmail.com/
+> > > to
 > > >
-> > > v3:
-> > >  - Apply acquire/release semantics to arch_xchg/arch_cmpxchg operatio=
-ns
-> > >  so as to ensure FENCE.TSO ordering between operations which precede =
-the
-> > >  UNLOCK+LOCK sequence and operations which follow the sequence. Thank=
-s
-> > >  to Andrea.
-> > >  - Support hwprobe of Zalasr.
-> > >  - Allow Zalasr extensions for Guest/VM.
+> > >   fence rw,rw
+> > >   amoadd.w
+> > >   amoadd.w
+> > >   fence rw,rw
 > > >
-> > > v2:
-> > >  - Adjust the order of Zalasr and Zalrsc in dt-bindings. Thanks to
-> > >  Conor.
-> > >
-> > > Xu Lu (8):
-> > >   riscv: add ISA extension parsing for Zalasr
-> > >   dt-bindings: riscv: Add Zalasr ISA extension description
-> > >   riscv: hwprobe: Export Zalasr extension
-> > >   riscv: Introduce Zalasr instructions
-> > >   riscv: Use Zalasr for smp_load_acquire/smp_store_release
-> > >   riscv: Apply acquire/release semantics to arch_xchg/arch_cmpxchg
-> > >     operations
-> > >   RISC-V: KVM: Allow Zalasr extensions for Guest/VM
-> > >   KVM: riscv: selftests: Add Zalasr extensions to get-reg-list test
-> > >
-> > >  Documentation/arch/riscv/hwprobe.rst          |   5 +-
-> > >  .../devicetree/bindings/riscv/extensions.yaml |   5 +
-> > >  arch/riscv/include/asm/atomic.h               |   6 -
-> > >  arch/riscv/include/asm/barrier.h              |  91 ++++++++++--
-> > >  arch/riscv/include/asm/cmpxchg.h              | 136 ++++++++--------=
---
-> > >  arch/riscv/include/asm/hwcap.h                |   1 +
-> > >  arch/riscv/include/asm/insn-def.h             |  79 ++++++++++
-> > >  arch/riscv/include/uapi/asm/hwprobe.h         |   1 +
-> > >  arch/riscv/include/uapi/asm/kvm.h             |   1 +
-> > >  arch/riscv/kernel/cpufeature.c                |   1 +
-> > >  arch/riscv/kernel/sys_hwprobe.c               |   1 +
-> > >  arch/riscv/kvm/vcpu_onereg.c                  |   2 +
-> > >  .../selftests/kvm/riscv/get-reg-list.c        |   4 +
-> > >  13 files changed, 242 insertions(+), 91 deletions(-)
+> > > no matter Zalasr or !Zalasr.  Similarly for other atomic operations with
+> > > release or acquire semantics.  I guess the change was not intentional?
+> > > If it was intentional, it should be properly mentioned in the changelog.
 > >
-> > I wouldn't have rushed this submission while the discussion on v2 seems
-> > so much alive;  IAC, to add and link to that discussion, this version
->
-> Thanks. This version is sent out to show my solution to the FENCE.TSO
-> problem you pointed out before. I will continue to improve it. Look
-> forward to more suggestions from you.
->
-> > (not a review, just looking at this diff stat) is changing the fastpath
-> >
-> >   read_unlock()
-> >   read_lock()
-> >
-> > from something like
-> >
-> >   fence rw,w
-> >   amodadd.w
-> >   amoadd.w
-> >   fence r,rw
-> >
-> > to
-> >
-> >   fence rw,rw
-> >   amoadd.w
-> >   amoadd.w
-> >   fence rw,rw
-> >
-> > no matter Zalasr or !Zalasr.  Similarly for other atomic operations wit=
-h
-> > release or acquire semantics.  I guess the change was not intentional?
-> > If it was intentional, it should be properly mentioned in the changelog=
-.
->
-> Sorry about that. It is intended. The atomic operation before
-> __atomic_acquire_fence or operation after __atomic_release_fence can
-> be just a single ld or sd instruction instead of amocas or amoswap. In
-> such cases, when the store release operation becomes 'sd.rl', the
-> __atomic_acquire_fence via 'fence r, rw' can not ensure FENCE.TSO
-> anymore. Thus I replace it with 'fence rw, rw'.
+> > Sorry about that. It is intended. The atomic operation before
+> > __atomic_acquire_fence or operation after __atomic_release_fence can
+> > be just a single ld or sd instruction instead of amocas or amoswap. In
+> > such cases, when the store release operation becomes 'sd.rl', the
+> > __atomic_acquire_fence via 'fence r, rw' can not ensure FENCE.TSO
+> > anymore. Thus I replace it with 'fence rw, rw'.
 
-This is also the common implementation on other architectures who use
-aq/rl instructions like ARM. And you certainly already knew it~
+But you could apply similar changes you performed for xchg & cmpxchg: use
+.AQ and .RL for other atomic RMW operations as well, no?  AFAICS, that is
+what arm64 actually does in arch/arm64/include/asm/atomic_{ll_sc,lse}.h .
 
->
-> I will make it a separate commit and provide more messages in the
-> changelog. Maybe alternative mechanism can be applied to accelerate
-> it.
->
-> Best Regards,
-> Xu Lu
->
-> >
-> >   Andrea
+  Andrea
+
+
+> This is also the common implementation on other architectures who use
+> aq/rl instructions like ARM. And you certainly already knew it~
 
