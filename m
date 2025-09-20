@@ -1,176 +1,189 @@
-Return-Path: <linux-kselftest+bounces-41986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F9B6B8BEF9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 06:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C1A2B8C07E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 08:10:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 374D91C06BB8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 04:20:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DBD81C041B6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 06:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA8F1F4C8E;
-	Sat, 20 Sep 2025 04:19:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8DF2367B0;
+	Sat, 20 Sep 2025 06:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D1scGMp+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IR3NkpNt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144BD6FC3
-	for <linux-kselftest@vger.kernel.org>; Sat, 20 Sep 2025 04:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1EF922836C
+	for <linux-kselftest@vger.kernel.org>; Sat, 20 Sep 2025 06:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758341983; cv=none; b=guND+bf4LI3jC+35mY5ipqO00BIAkCeGWIqFWD8V7W7JRB0ETzjWvSlNhzSQT90zp3l2ZA34t41z4JaiYh3sz0xJAh0+Ta68x8RPA+pbs3hxixTnIzHIRpJON9VlLtP4e1idZUnLlrr+D9Fupm0XbTgiOGaaXHOeMi9owVeoFFU=
+	t=1758348634; cv=none; b=FL/9cI33rIS51NYRbEqatlP8O/cbEZ+IhxhS50eMaXtz+ELo2eSFzHi/W5jtuEudw+oQnlWnomuhZUnYyq212uVWpPFBu1ODO6uvp1G6vzj/0m6OxVS1DDTl+ztQT55Z42To2dOrum13vJsRFaBEPeN4IrS6lCmUeMcgTJOCtiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758341983; c=relaxed/simple;
-	bh=tPb8ZwTKiJD+qGUqRVTvDMnB6kbRjplfxr68r6FEXt4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P2Wp0dXdadOsoRZtwW8cYOCS+iOVVMi022Lm+qKNVDq824xetbE9Kkd9y/WCe2fVze+wi1nFftHhkp/QXt9M2ohYTRpXG8DWsSXK1pP7slvoA/hgJOaZGThuluWj366nF3d48P2mGGyGTIKQRmAm0mPz8856qN38vGd/ZgGkZeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D1scGMp+; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1758348634; c=relaxed/simple;
+	bh=bo2Ndb5QdjF0C5RExvUQJNNOB01lRnxcWM4euD7xwfM=;
+	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=PBxvSc5RZXprr7q+xQpTwmColXd4rNKkBchPLqcNLnpNXh1vwpQz4cEtHoFEU/VPyeER+F74YSDQXW++fZ7OWG03Mf/rsUyc7HD28Lzst5X9ymeKf9fJz0sSZLffzxs94g+RyXiAzxaENpxInlLVlMaTFEIrQE/rk4V2NnisXEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IR3NkpNt; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-77f2077d1c8so17648b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Sep 2025 21:19:41 -0700 (PDT)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-32eb76b9039so3227037a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Sep 2025 23:10:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758341981; x=1758946781; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TtQtR1uGPAfF6Ic5yrjJTv73t4pCjLo/Eqk0WSj/PCU=;
-        b=D1scGMp+VShd9aDLfWe6kCNtrCywJxvY1f63YI47TlWhNQYtIs//z1XY/Axr05DkrP
-         mIA4zhPv/7iExmI66iZ+LLWJSOByKTfoabMyHY0VQ/ClkO7U38ptGMLVSeMrR0lArIdp
-         EuY52XLMbtemNJoopYooIqu5CNo6nPJmXURvAYQlu2J8vcpFsaWzmtTaybnSIPLdS8tf
-         VaLb+2oBCNrSWrLRi7Uor8lPJX3kKwl/6DAK1h8tfHnBUcqZJ7KsuS+efStaFh6Bd6I5
-         0ksEk9HvjiKHQBAztzYDFue7uM2tGf7srWbWX/lUu/bbe7Nq3YK4/yK5Dtdd6Gcny7Y/
-         z34Q==
+        d=gmail.com; s=20230601; t=1758348631; x=1758953431; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hou6AJPM8wejR725iDsnasOHuRSCpfZoVQThJpW/xQI=;
+        b=IR3NkpNtQB/0tFFNV7IqLAhjTEeFp4qIW9P/R3awtnebNRXrYR8+hPv0S6wByiRld9
+         GwgokRdQbDlHGKnmqmPLeEHe5hKx6lX9axiuiBooVxUUOjg28jwZPkFK4tD6TagCBNgs
+         AwbTRsLGauWgz1X+vcRDEfTtpkYaOav8t6cBv/biEqdFb2cpub0JRPe46AwtREeRpBU3
+         RlZAMBHiBgYfFzmg/xDjdaZHvEAqwr4ds3cIBM0nk5HrAkUssSdgkE1WOVbcODKRlr2G
+         JIbWWjBttrMcyJDGdldhqy8wi7IHArKIPHXvZ1NNEr0UT+TCRNjT0AMmq1+BfpUEJ2/j
+         /SLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758341981; x=1758946781;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TtQtR1uGPAfF6Ic5yrjJTv73t4pCjLo/Eqk0WSj/PCU=;
-        b=GVmIFYfhQFu/GTttAftfNqXHgKP+PyWF3MTm/Coo5tDXgCbXdansfm+COkIOga4RUf
-         hPp9a+ubXmx0RxPBVTRhpcbprFRy5I08ExtnCmNMx9PW9650uGSzqLagNFgjVHPeRfxD
-         xV+UEhz4Y1AfJyNxq5Luq2GAYyUqtTGf/EhA+Q4OtAwnaHDneXQ3FjuMzyq9TGzY9afm
-         5YGPCBUEj0M79lsEDXBnw3nRwEk7pDNPydmqeINa/OUC2h7tEQx5mG8QeFzlYNg3hGH9
-         TDWH0Uwf6SPke+h8YLK4WcCGo9/APFYizLkjniiGEbVQZzo4gVex9mbvciNC66XoxBi2
-         lI1A==
-X-Gm-Message-State: AOJu0YzuzOoEqRtQBbhDDBIuC7n9SKlqLwct/i4iesCX5nT0ySgc4R+2
-	J1OsehRbTPrkDoDZM9BZdu4HeZdVJ3S368g7E7sv4Dm59Bm5B+oPjZ16
-X-Gm-Gg: ASbGnctHp4+7CncGQpDOHSOJo+YhAg17slnR+YclUn8UEOH0yWsWsPzIawMgF8thNZM
-	f1P106PrKMOJvEraqop/tdrKGFanimRu2zMYiPSirLZO2zaVzN3Rz5n6fCq+gh0ZYFC2L8Lczgn
-	/IjWuog9/dGBMyqVtjlL84Kh+ihR9jaotHqdz1O9nJquEihcWfali5RoArDpmnteQBsyxOhYsX7
-	4RoSxM4v1zqRBi99Dl+5Xlm8WIbk7GhazAvO7ymc6jqng2cqGxJhGo7MQdfVusvMZIWuaj+f/ao
-	NwDdVQbaJrCfrTr7wf89zZG1cqEHykDdODwaa1rrnElCGu+r4PJcr1kqVjW2092HDtVgEyyDqX2
-	gPjbpBE5eUeU2bVKca7IFdlZ0E+Jlyfd0iD1vEQiDPCOxSW1aVKFl8761B6IIQY3uIyZMfnVDuY
-	XPMtgcu/m94ueL0Q==
-X-Google-Smtp-Source: AGHT+IGUEiDuSiuGJOo8KQHJULEexVcAUHHiZasqs4cUJt9M2KVq4dwuHSlb5BHYKooThmDf3+ENQQ==
-X-Received: by 2002:a05:6a20:b917:b0:247:55a7:695a with SMTP id adf61e73a8af0-292148b82e5mr5949092637.15.1758341981154;
-        Fri, 19 Sep 2025 21:19:41 -0700 (PDT)
-Received: from debian.domain.name ([223.185.130.103])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32ed2771d43sm9750093a91.26.2025.09.19.21.19.37
+        d=1e100.net; s=20230601; t=1758348631; x=1758953431;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hou6AJPM8wejR725iDsnasOHuRSCpfZoVQThJpW/xQI=;
+        b=TaupKhIr1T0kUW7OBogtkbCwjIcNUG9N1C+ggs2rhTEdRE65HtjpLElSe1lRJ+qHOc
+         eUs7PLSXKqvxqqWd4OEWABvKr09OE6FAXi7Dt5KKDuCssuEG+zLkExsXaA2JFd21Hlb2
+         5r0rk/MJario+YjywCFLaV2JXNKZINPphSxjuyWYwLl97czPuyrbZu0QEqtNMIiXSWxf
+         44HuKeZgxCtnZQDpQ8oBbw4fHHoxZ+53oHVKiU/RSTHoQ9KPkX4XYnEWWP4jOo7VSNXO
+         3yXQQAZZIUr9CWtWUUigC9GOQ36mHvheiVkENfiPS6lm8lAh+LMmaWjvHs133IAvdoJW
+         d8og==
+X-Forwarded-Encrypted: i=1; AJvYcCUPs7xXhg6Y0JqgG2FXPyMx6tA/kMVx7y0wxh73ClNUClznCy1yvyQjqivbZKFPnEnwId8Ohh/tqzwiel/A5Jk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybCwRhX50/YlTJVt4ToeKNV/eH0pjClg2x7s4Iv3tCUx7a7Vcc
+	DBdlGp//dABp2n+sCuTQO9rBSAylpPg+L2F9226NkVOWKspHNmxRYpYY
+X-Gm-Gg: ASbGncvNUbS2sHjtDUgTlMzFvf+mobm33mc6gTq3vdqsrg++ghwwBMTODfJs1KJsXY2
+	kFtpMVbTv6e6VOGiV6sxIpKzFT9GJtWn+a1yDnRmIfwZImG8ovHoSlpCu/xY6aDhnq9jbO7vRq0
+	sUAHYYU/2DeeIAxpMw+kl64SiPJwxfQ5/2S1YdxX3vEoE6JooGqg/TihVgHOBKHCN8+ZsTUOaNg
+	l5tOCoOJacTt1l8k8oxoe5cQ3auM9WN73N/l19bIDRpab4m4Lfp9Vcol0TDnd4v71HRhIrLXKrn
+	6eyMJZlKoji+rxVrs/2+dCd+N6vC7kwLFx2vj0rtA88rzQwMZrcMCj5QTIMOpubvboC4xl4u1cS
+	UdWOOgCKdT+97
+X-Google-Smtp-Source: AGHT+IH2YsbIL9bmM2wkE8sVKgdbADyeo6xeBPeiRV0b4d2jfA5VE26z/kBsRCKoBlEJw3bJUDuezg==
+X-Received: by 2002:a17:90b:52d0:b0:32e:d011:ea1c with SMTP id 98e67ed59e1d1-33097ffd1b2mr8090816a91.15.1758348630860;
+        Fri, 19 Sep 2025 23:10:30 -0700 (PDT)
+Received: from 1337 ([136.159.213.204])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b5531d90d1asm1179569a12.18.2025.09.19.23.10.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Sep 2025 21:19:40 -0700 (PDT)
-From: I Viswanath <viswanathiyyappan@gmail.com>
-To: shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	david.hunter.linux@gmail.com,
-	I Viswanath <viswanathiyyappan@gmail.com>
-Subject: [PATCH] selftests: Fix Makefile to run targets even the ones in SKIP_TARGETS
-Date: Sat, 20 Sep 2025 09:49:14 +0530
-Message-ID: <20250920041914.7253-1-viswanathiyyappan@gmail.com>
-X-Mailer: git-send-email 2.47.3
+        Fri, 19 Sep 2025 23:10:30 -0700 (PDT)
+From: Abhinav Saxena <xandfury@gmail.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Jeff Xu <jeffxu@google.com>, jeffxu@chromium.org,
+ skhan@linuxfoundation.org, keescook@chromium.org,
+ akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+ dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, jannh@google.com, linux-hardening@vger.kernel.org,
+ linux-security-module@vger.kernel.org, kernel test robot <lkp@intel.com>,
+ =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BC?=
+ =?utf-8?Q?nther?= Noack <gnoack@google.com>, Fan
+ Wu <wufan@kernel.org>, Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH v7 6/6] mm/memfd: security hook for memfd_create
+Date: Fri, 19 Sep 2025 23:54:06 -0600
+References: <20221209160453.3246150-1-jeffxu@google.com>
+ <20221209160453.3246150-7-jeffxu@google.com>
+ <CAHC9VhRBMTQvnBdSwMbkOsk9eemYfvCmj9TRgxtMeuex4KLCPA@mail.gmail.com>
+ <CALmYWFvrasXnshO01YGWRyC7qKk4o0G88yAgkgjO1YBumF5zeA@mail.gmail.com>
+ <CAHC9VhQKsjiGv3Af0iqg_TLNzCvdTaLnhw+BRTF9OEtJg1hX7g@mail.gmail.com>
+User-agent: mu4e 1.10.8; emacs 30.2
+In-reply-to: <CAHC9VhQKsjiGv3Af0iqg_TLNzCvdTaLnhw+BRTF9OEtJg1hX7g@mail.gmail.com>
+Message-ID: <87o6r5ac2z.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="=-=-="
 
-With the current Makefile, if the user tries something like
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-make TARGETS="bpf mm"
+Paul Moore <paul@paul-moore.com> writes:
 
-only mm is run and bpf is skipped, which is not intentional.
+> On Tue, Dec 13, 2022 at 10:00 AM Jeff Xu <jeffxu@google.com> wrote:
+>> On Fri, Dec 9, 2022 at 10:29 AM Paul Moore <paul@paul-moore.com> wrote:
+>> > On Fri, Dec 9, 2022 at 11:05 AM <jeffxu@chromium.org> wrote:
+>> > >
+>> > > From: Jeff Xu <jeffxu@google.com>
+>> > >
+>> > > The new security_memfd_create allows lsm to check flags of
+>> > > memfd_create.
+>> > >
+>> > > The security by default system (such as chromeos) can use this
+>> > > to implement system wide lsm to allow only non-executable memfd
+>> > > being created.
+>> > >
+>> > > Signed-off-by: Jeff Xu <jeffxu@google.com>
+>> > > Reported-by: kernel test robot <lkp@intel.com>
+>> > > =E2=80=94
+>> > >  include/linux/lsm_hook_defs.h | 1 +
+>> > >  include/linux/lsm_hooks.h     | 4 ++++
+>> > >  include/linux/security.h      | 6 ++++++
+>> > >  mm/memfd.c                    | 5 +++++
+>> > >  security/security.c           | 5 +++++
+>> > >  5 files changed, 21 insertions(+)
+>> >
+>> > We typically require at least one in-tree LSM implementation to
+>> > accompany a new LSM hook.  Beyond simply providing proof that the hook
+>> > has value, it helps provide a functional example both for reviewers as
+>> > well as future LSM implementations.  Also, while the BPF LSM is
+>> > definitely =E2=80=9Cin-tree=E2=80=9D, its nature is such that the actu=
+al
+>> > implementation lives out-of-tree; something like SELinux, AppArmor,
+>> > Smack, etc. are much more desirable from an in-tree example
+>> > perspective.
+>>
+>> Thanks for the comments.
+>> Would that be OK if I add a new LSM in the kernel  to block executable
+>> memfd creation ?
+>
+> If you would be proposing the LSM only to meet the requirement of
+> providing an in-tree LSM example, no that would definitely *not* be
+> okay.
+>
+> Proposing a new LSM involves documenting a meaningful security model,
+> implementing it, developing tests, going through a (likely multi-step)
+> review process, and finally accepting the long term maintenance
+> responsibilities of this new LSM.  If you are proposing a new LSM
+> because you feel the current LSMs do not provide a security model
+> which meets your needs, then yes, proposing a new LSM might be a good
+> idea.  However, if you are proposing a new LSM because you don=E2=80=99t =
+want
+> to learn how to add a new hook to an existing LSM, then I suspect you
+> are misguided/misinformed with the amount of work involved in
+> submitting a new LSM.
+>
+>> Alternatively,  it might be possible to add this into SELinux or
+>> landlock, it will be a larger change.
+>
+> It will be a much smaller change than submitting a new LSM, and it
+> would have infinitely more value to the community than a throw-away
+> LSM where the only use-case is getting your code merged upstream.
 
-`bpf` and `sched_ext` are always filtered out even when TARGETS is set
-explicitly due to how SKIP_TARGETS is implemented.
+Hi Paul/everyone!
 
-This default skip exists because these tests require newer LLVM/Clang
-versions that may not be available on all systems.
+I am not sure what is the latest here. But it seems both landlock[1] and
+IPE[2] have a use case for memfd_create(2) LSM hook.
 
-Fix the SKIP_TARGETS logic so that bpf and sched_ext remain
-skipped when TARGETS is taken from the Makefile but are included when
-the user specifies them explicitly.
+I would be happy to work on the use case for such a hook for landlock.
 
-Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
----
-make --silent summary=1 TARGETS="bpf size" kselftest
+CC=E2=80=99ing maintainers for both LSMs.
 
-make[3]: Entering directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/bpf'
+-Abhinav
 
-Auto-detecting system features:
-...                                    llvm: [ OFF ]
+[1] - <https://lore.kernel.org/all/20250719-memfd-exec-v1-0-0ef7feba5821@gm=
+ail.com/>
+[2] - <https://lore.kernel.org/linux-security-module/20250129203932.22165-1=
+-wufan@kernel.org/>
 
-Makefile:127: tools/build/Makefile.feature: No such file or directory
-make[4]: *** No rule to make target 'tools/build/Makefile.feature'.  Stop.
-make[3]: *** [Makefile:344: /home/user/kernel-dev/linux-next/tools/testing/selftests/bpf/tools/sbin/bpftool] Error 2
-make[3]: Leaving directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/bpf'
-make[3]: Nothing to be done for 'all'.
-make[3]: Entering directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/bpf'
-
-Auto-detecting system features:
-...                                    llvm: [ OFF ]
-
-Makefile:127: tools/build/Makefile.feature: No such file or directory
-make[4]: *** No rule to make target 'tools/build/Makefile.feature'.  Stop.
-make[3]: *** [Makefile:344: /home/user/kernel-dev/linux-next/tools/testing/selftests/bpf/tools/sbin/bpftool] Error 2
-make[3]: Leaving directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/bpf'
-TAP version 13
-1..1
-# selftests: size: get_size
-ok 1 selftests: size: get_size
-
-make --silent summary=1 kselftest (bpf is between arm64 and breakpoints in TARGETS)
-
-make[3]: Nothing to be done for 'all'.
-make[3]: Entering directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/alsa'
-make[3]: Nothing to be done for 'all'.
-make[3]: Leaving directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/alsa'
-make[3]: Entering directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/amd-pstate'
-make[3]: Nothing to be done for 'all'.
-make[3]: Leaving directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/amd-pstate'
-make[3]: Entering directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/arm64'
-make[3]: Leaving directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/arm64'
-make[3]: Entering directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/breakpoints'
-make[3]: Nothing to be done for 'all'.
-make[3]: Leaving directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/breakpoints'
-make[3]: Nothing to be done for 'all'.
-
- tools/testing/selftests/Makefile | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index babed7b1c2d1..c6cedb09c372 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -145,7 +145,10 @@ endif
- # User can optionally provide a TARGETS skiplist. By default we skip
- # targets using BPF since it has cutting edge build time dependencies
- # which require more effort to install.
--SKIP_TARGETS ?= bpf sched_ext
-+ifeq ($(origin TARGETS), file)
-+        SKIP_TARGETS ?= bpf sched_ext
-+endif
-+
- ifneq ($(SKIP_TARGETS),)
- 	TMP := $(filter-out $(SKIP_TARGETS), $(TARGETS))
- 	override TARGETS := $(TMP)
--- 
-2.47.3
-
+--=-=-=--
 
