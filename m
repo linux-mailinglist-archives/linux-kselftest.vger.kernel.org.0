@@ -1,95 +1,98 @@
-Return-Path: <linux-kselftest+bounces-42000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36172B8CA62
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 16:37:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67E20B8CA7D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 16:42:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF35D7E58B3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 14:37:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D000E624AF3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 14:42:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD80D26E16F;
-	Sat, 20 Sep 2025 14:37:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 627EE2FB97B;
+	Sat, 20 Sep 2025 14:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IuOAYaht";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LiyXhnJE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WBh26vfu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C169F183CC3;
-	Sat, 20 Sep 2025 14:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873FB2FD7A5
+	for <linux-kselftest@vger.kernel.org>; Sat, 20 Sep 2025 14:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758379062; cv=none; b=AwGgvVPaKJUfHrlvIXECAV81UuEsGWIyLHeje5XxXnUIRBk4HIASB4A1/HoMXZxp/SDBZPdDP0zmsZbkfG3v3CNmcIV+QgC3GOhik1onfJjbef4by+jpx/6tiApeORYUxIZI+kgP1dKrA7ezCvmva4mf7SLiTVOPNakJacuMzz0=
+	t=1758379338; cv=none; b=YD/CUpKohWEfR2tM7nNhywnJCVcLhoQOMCnEmyCLKXZh0f6Zc1cthfrhPZggYriZbh+/AvmjxzSJSuAk5CJMNiqJ+7bP99BGjhwvzzldEIxsIjrRKl/t9LhsCwEyRE03RPQ3tJLi0+yuaQKttXLwMzLbL2L8f5VsTyjYnWdI97c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758379062; c=relaxed/simple;
-	bh=zl7kC1EIRM1bovNYL1w209PeOAD8n12bCeV2ctXIJKA=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=TRoYLu4UAKY5N66jitA5cMA+18o1feD19y4vSBMEYjTvL+PJrfjApdRtnnG2181++k7sk0Bz4hj+OF6w9gWF3YjCqcaTKCKjWPLjUXclGfvhGoA4pT5aEwByj7T+IpKxxqhEqHQ4sUfWpxfCPlAJ+F7e4knUlboiInc+nhWBfa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IuOAYaht; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LiyXhnJE; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Sat, 20 Sep 2025 16:37:31 +0200 (GMT+02:00)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1758379058;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zl7kC1EIRM1bovNYL1w209PeOAD8n12bCeV2ctXIJKA=;
-	b=IuOAYaht68bYkyaAnw8mBbLpF0dn3cHPZYb3bHY/9Qnt9yej59kdqYZJUWNbDzZGSJ3TIy
-	vjrvCVj7pN9urWJ8vbE7f5Y7s06j1F7C25eooUUWlI/++co+NpbE+0c3O9gU8JhqiQ4SOp
-	nEr9GIBlux69WP9tMhPFg67LTHmTvdVHi2p9ozbkfo80InufXiIgLtH8e3RsPcupcPYRP2
-	nssGv7o6Yg5ve4IE1rmDb+lFxtqdTCMXnzYxTXl6UFFDzvLF6IKJDyxsjpNQs2JoC30EGY
-	l4VSzJrhtm6l5eUJHa5gMp4mr91o6zftCBBdh0zhww52FxDcaykrwIYDsaTHpA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1758379058;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zl7kC1EIRM1bovNYL1w209PeOAD8n12bCeV2ctXIJKA=;
-	b=LiyXhnJEAMLAmv3dP0IXuri7G82RDp9AQI+GKRfiI7mQ/gNlgkAkJhXcdz7geMJwt+zvtQ
-	OagdT5Ug6EumENCg==
-From: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nick Alcock <nick.alcock@oracle.com>,
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
-	Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-s390@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Message-ID: <48fd164e-959b-4263-b3c7-cef5771aa40a@linutronix.de>
-In-Reply-To: <9a122c6cf3e2e0e61a62b0512eb97804acebeee9.camel@physik.fu-berlin.de>
-References: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de> <9a122c6cf3e2e0e61a62b0512eb97804acebeee9.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v3 00/36] sparc64: vdso: Switch to the generic vDSO
- library
+	s=arc-20240116; t=1758379338; c=relaxed/simple;
+	bh=Usj+C0PegNI69LjXkoxW4n3D3nNnaTN61TPyqGGREUg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dkS8yxzYF0WSTi508O6tg+yQJBLo6aYb8TlfGfzPCyGItI3BDCaedvfZfGj39G0amq9859OBYNawaUmRV336ae0GGnZpbjt+1dvdC1IcAiBtdOm6yvHNPhFI2kw/MQAMynJt9KcyNxRkcnqG3ZXhtCLvX6jq9uAWkzNgrdJdoKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WBh26vfu; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3e9c5faa858so2715810f8f.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 20 Sep 2025 07:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758379335; x=1758984135; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zEtvZFtGHRjuP+b5JrK4y2e0Le4iom+VLjgkoz3MMAI=;
+        b=WBh26vfuPt1v7nUePPcsFH84PRSWsZRe01lfn30cpMtrepsl71yLYCLV+se2DVfnD2
+         3kBlNEAQdErnoHHlmWYchDCqpeV1WrNmDizsfWReIMYSvZL7NicvIsUtpw96i8jQZ7qE
+         o/Y70ZGKrM0vCd/Hlud7M84kweUA3x6dfKG6m5FMD0AfL0rlzsYCTvDBKdDdVNnPyM0f
+         fw0h+/iH9LxW3p51Qaot0+K5noDp5q28cuEvXVRDIUTRTMoS8VzAB3kP2KtkbfjN8ZvS
+         g31UsestdnSZAKkIgHcIIsi/mufkmwcLqPzkdj9jIGG2ChKnfylNm9TksgHuIlIhelig
+         pOTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758379335; x=1758984135;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zEtvZFtGHRjuP+b5JrK4y2e0Le4iom+VLjgkoz3MMAI=;
+        b=NsWJgFgBC4Syc8gKRoYVlvOjYjoebUUvvUqvLcvrvqlqNWVNH8WNhipKpME2XrLH8e
+         4GEYB3VSbpm0AQd/4WeEFaDv2lEivukXX8PIBoyqddNXX68AiH9BFnG/Uv+jGAk5EOSj
+         ieRC2zrSOEmCv51C0484ESGt/5LQTF040Rc3GUS/NHduwl220IA4DT7LPTOAsiDfQusP
+         WgYOyxlJk3kWqKcKTzo5lQ1K9ZdQ8x0/az86M+tSjyL8ZJCucmybtWg6PWqGGMNAJVUi
+         nR+xF+DbVJPKJHFTCkJE8r5TFyVTNXL5V/bc16sHcKIdNv6/JNI1esd5S37pTv8fxakZ
+         XT5g==
+X-Forwarded-Encrypted: i=1; AJvYcCUbWriUdGoR4hYZw5IKbR9VXWbuGrhrW6sPlokonKk1rF453ydCJ8zumvGh8aihmP9CwLHRYOSTBZGbBGjMjCo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIlNMdn/UNf+ex5j2aXAZPg9c38teTdtxRZOnEXQ2wcGEQSH2I
+	8HwpaBdsN4WA9U+LpRM34qRNmuZRzC0Msg0WXZ8IvJvG/0O6qUuFbPhh
+X-Gm-Gg: ASbGncvK4+9tB18joJbi00gRlgHWDJbUW8G6cmn1THqU6stRHBirpPK46sCcCM3akfl
+	FhkS12p0ADctEWfVSsJ+i/2QM26J9vq0e1emE3bjKj5xELBOlWU6RD5zpn7pTNQ7saNiTHgIHEE
+	YMqxoBWQ+rPUq1TnYRjWkqsBSa7LKa8XPy4F9+9ZBURVPRLQzHICIBX2UnHqJ8NFeodTEGnxphi
+	A3Cja58dbsHY+vsp2XGJS0ehRCFKDDkkaw1XMPtzdk/PbAq2VesatrD8sVUZXPUeCURgH2JP5DJ
+	QLkpKT2+QvEkyrpvthu/2mQr2MN6H/vttm+8WmHZpNWWJXvyDmTI2t802yI2D8Oyg9pQkzmT19+
+	rDVqMnx2F4A2YJjp3+NCQtSPTG/EDZBNFvBoRREJbkhUsSPoSk9CEFWOCKDvCKOc90eoHhD8=
+X-Google-Smtp-Source: AGHT+IE1XfrrZKs7jUn/HCTxExNiug3StteTdhLU8bG47WeeJj4XJHY17xNSaGVA8TgcYBm5il8CoA==
+X-Received: by 2002:adf:8bc5:0:b0:3f0:9bf0:a37b with SMTP id ffacd0b85a97d-3f09bf0a4afmr3138635f8f.43.1758379334535;
+        Sat, 20 Sep 2025 07:42:14 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-464f6695a9dsm132985055e9.24.2025.09.20.07.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Sep 2025 07:42:14 -0700 (PDT)
+Date: Sat, 20 Sep 2025 15:42:12 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Nam Cao <namcao@linutronix.de>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara
+ <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, Davidlohr Bueso
+ <dave@stgolabs.net>, Soheil Hassas Yeganeh <soheil@google.com>, Khazhismel
+ Kumykov <khazhy@google.com>, Willem de Bruijn <willemb@google.com>, Eric
+ Dumazet <edumazet@google.com>, Jens Axboe <axboe@kernel.dk>,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] eventpoll: Fix epoll_wait() report false negative
+Message-ID: <20250920154212.70138da8@pumpkin>
+In-Reply-To: <CAGudoHFLrkk_FBgFJ_ppr60ARSoJT7JLji4soLdKbrKBOxTR1Q@mail.gmail.com>
+References: <cover.1752824628.git.namcao@linutronix.de>
+	<43d64ad765e2c47e958f01246320359b11379466.1752824628.git.namcao@linutronix.de>
+	<aflo53gea7i6cyy22avn7mqxb3xboakgjwnmj4bqmjp6oafejj@owgv35lly7zq>
+	<87zfat19i7.fsf@yellow.woof>
+	<CAGudoHFLrkk_FBgFJ_ppr60ARSoJT7JLji4soLdKbrKBOxTR1Q@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,43 +101,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <48fd164e-959b-4263-b3c7-cef5771aa40a@linutronix.de>
 
-Sep 20, 2025 15:25:11 John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.=
-de>:
+On Wed, 17 Sep 2025 18:05:45 +0200
+Mateusz Guzik <mjguzik@gmail.com> wrote:
 
-> On Wed, 2025-09-17 at 16:00 +0200, Thomas Wei=C3=9Fschuh wrote:
->> The generic vDSO provides a lot common functionality shared between
->> different architectures. SPARC is the last architecture not using it,
->> preventing some necessary code cleanup.
->>
->> Make use of the generic infrastructure.
->>
->> Follow-up to and replacement for Arnd's SPARC vDSO removal patches:
->> https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
->>
->> Tested on a Niagara T4 and QEMU.
->>
->> This has a semantic conflict with my series "vdso: Reject absolute
->> relocations during build". The last patch of this series expects all use=
-rs
->> of the generic vDSO library to use the vdsocheck tool.
->> This is not the case (yet) for SPARC64. I do have the patches for the
->> integration, the specifics will depend on which series is applied first.
->>
->> Based on tip/timers/vdso.
->
-> Could you share a version of the series based on top of 6.17.0-rcN for
-> testing purposes? I would like to test the series on a Sun Netra 240
-> which is based on the UltraSPARC IIIi.
+> On Wed, Sep 17, 2025 at 3:41=E2=80=AFPM Nam Cao <namcao@linutronix.de> wr=
+ote:
+> > My question is whether the performance of epoll_wait() with zero
+> > timeout is really that important that we have to complicate
+> > things. If epoll_wait() with zero timeout is called repeatedly in a loop
+> > but there is no event, I'm sure there will be measurabled performance
+> > drop. But sane user would just use timeout in that case.
+> >
+> > epoll's data is protected by a lock. Therefore I think the most
+> > straightforward solution is just taking the lock before reading the
+> > data.
+> > =20
+>=20
+> I have no idea what the original use case is. I see the author of the
+> patch is cc'ed, so hopefully they will answer.
+>=20
+> > Lockless is hard to get right and may cause hard-to-debug problems. So
+> > unless this performance drop somehow bothers someone, I would prefer
+> > "keep it simple, stupid".
+> > =20
+>=20
+> Well epoll is known to suffer from lock contention, so I would like to
+> think the lockless games were motivated by a real-world need, but I'm
+> not going peruse the history to find out.
+>=20
+> I can agree the current state concerning ep_events_available() is
+> avoidably error prone and something(tm) should be done. fwiw the
+> refcount thing is almost free on amd64, I have no idea how this pans
+> out on arm64.
 
-Here is the git branch based on rc4:
-https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git=
-/log/?h=3Db4/vdso-sparc64-generic-2
+Atomic operations are anything but free....
+They are likely to be a similar cost to an uncontested spinlock entry.
 
-Does that work for you?
+	David
 
-Thanks for testing!
-
-Thomas
 
