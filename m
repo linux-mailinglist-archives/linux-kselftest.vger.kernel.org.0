@@ -1,186 +1,134 @@
-Return-Path: <linux-kselftest+bounces-41998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-41999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88CC6B8C80D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 14:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C54DB8C8D9
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 15:25:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E5B8586EED
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 12:22:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DBF8580D02
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 13:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A68C3303A2A;
-	Sat, 20 Sep 2025 12:21:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE84E1F152D;
+	Sat, 20 Sep 2025 13:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LG+h6s1R"
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="k0NH52mT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA3C3016FA;
-	Sat, 20 Sep 2025 12:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89B0188CB1;
+	Sat, 20 Sep 2025 13:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758370892; cv=none; b=l15leEMf+QYH5+/ccOFJJ606keKf+U4ZAFxc4CxqgY7uMMSpIRPAIkoz1t8z1Sq6lcL3tiwYJI0JcJN74hFhwdBX6o9rWT5RvxMMB71bQ0Od5eX2z2s+qwJ2wmMO7Vpj0vdH9+dYsJNon6xpAcMcsK4nAe22IPiCweTkh0Vjyc4=
+	t=1758374725; cv=none; b=guiErapX4C2/2fcNie6idKp9E91Yl94iRtVXNeryBBgo6drhBS944D27w1NZtvhUnbtIlc3HlAofcl5bPkOhhjQ/PeNj1uL9dOakrCphHtDOqW9Vq+mv5jRylz55aeVD4O+/nsnWxqjytNZ1FUT71ACzy5EoDZkUnBIhHdAhvCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758370892; c=relaxed/simple;
-	bh=/3PcZtglAS6v94LhLUzpf56x/49epFwaN6NzshGiP3Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QBMzJKU772tYTgSb2piafA6fKjbUI7+0f2mstmhWZJWmASFBN+WpcZA0GbbzLlSHWKuA74h/SmlXOsbSoVLTkyCz4AT4k5CTzNiswRqdhNLmsLCtTRYrjjKB73IPggkh9fIRMAA21wuKEWiDA3zTalpytvLjKsD0fkBfISaM+04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LG+h6s1R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2CCC4CEEB;
-	Sat, 20 Sep 2025 12:21:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758370892;
-	bh=/3PcZtglAS6v94LhLUzpf56x/49epFwaN6NzshGiP3Q=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=LG+h6s1RMLe9Z2PLjFs9JrlGsLSc2PglV0gA+YuH2zbbTGKRUtIEiBB9J3I6+EiXr
-	 h6x/Cg8HvCRZ08VYSPCaTvkV7U4UjhpBVqWnX6jBieLcgipJEqgkVTM3woTgrZalUv
-	 wN0RFMhQ/ryRjsQLnI/k7j4EDt4Azx34rI8WJTQw4R6n9HbWfpwR8XiCQfnrCoxWmx
-	 vV7H8AU13/RCtcdNbwVGK9saivT3eO/0o9w85dLZsjQtiSsQuYy0Wc8c8QBFeuBbfM
-	 0jNt0TAsXrI8TBAEKK2KWLq7G9tUA+eUGJScflbC/jH0yb3F5bTKn16xbos5oO1+ip
-	 7mHVOqN3D1D+A==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Sat, 20 Sep 2025 14:20:32 +0200
-Subject: [PATCH RFC bpf-next 6/6] selftests/bpf: Add
- bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
+	s=arc-20240116; t=1758374725; c=relaxed/simple;
+	bh=dBrhZ658+q7SnJqsPpJg+tswJRFTHmQ78cNgPBroFd4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qgeVJklCiqGVSzTS8twLx/UVFEtaWhPyEJWdKe+vb4o1Lwp/8SiFFUNN4VjRClxBMDWvBR4S7fQ2XDSG7o9uI722Hp1cM4baOFeiLhb2ZO1mhW4Efy56NGAM37fIzXl6xZgx0uYmZLNCfy23x3yzl+tEhx0ZaKGXFmftid5psbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=k0NH52mT; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
+	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=e2U0S+R40JA/8Y/UUs6naRgYG7DrA2GyrAQ3SGnFjZ4=; t=1758374722;
+	x=1758979522; b=k0NH52mTUMTMIupoVjCT3GqXZpfkWbQozThKOrJTg54zTgAhkrV0hizGUvB4h
+	pqe9g5ahCnKN3L2jlSVVBDohP0pWrs3a5kDGt84MLRG7QkBkexJdM9G6/l6tZgPkjIYloiVAI2RLs
+	iMtN1zPVobBec84CCuzNg598Swri9IdKbx8esCLCI4rDiwdrUeL98ZKJ9lUvxD1o0U6V9ilfvG1J2
+	RW7BnCLuZc7HxCE0yLokhLxfjtz6CglAPPVptKRd2ughkfmzF57s3pXWZ04Xyt1o5+BQEKgy9VGOG
+	tvis7DTydNQ5dTNQ/4FQEJHpxtkl/V8uBxLC3+HiPJHn6i0tTQ==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.98)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1uzxa9-00000002Tuo-1mKc; Sat, 20 Sep 2025 15:24:53 +0200
+Received: from dynamic-077-011-103-224.77.11.pool.telefonica.de ([77.11.103.224] helo=[192.168.178.50])
+          by inpost2.zedat.fu-berlin.de (Exim 4.98)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1uzxa9-00000000uE8-0N7C; Sat, 20 Sep 2025 15:24:53 +0200
+Message-ID: <9a122c6cf3e2e0e61a62b0512eb97804acebeee9.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v3 00/36] sparc64: vdso: Switch to the generic vDSO
+ library
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>, 
+ Andy Lutomirski	 <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Vincenzo Frascino	 <vincenzo.frascino@arm.com>, Arnd Bergmann
+ <arnd@arndb.de>, "David S. Miller"	 <davem@davemloft.net>, Andreas Larsson
+ <andreas@gaisler.com>, Nick Alcock	 <nick.alcock@oracle.com>, John Stultz
+ <jstultz@google.com>, Stephen Boyd	 <sboyd@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Catalin Marinas	 <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Theodore Ts'o	 <tytso@mit.edu>, "Jason A. Donenfeld"
+ <Jason@zx2c4.com>, Russell King	 <linux@armlinux.org.uk>, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy	
+ <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, WANG
+ Xuerui	 <kernel@xen0n.name>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, Vasily
+ Gorbik <gor@linux.ibm.com>, Alexander Gordeev	 <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,  Sven Schnelle
+ <svens@linux.ibm.com>, Nagarathnam Muthusamy
+ <nagarathnam.muthusamy@oracle.com>, Shannon Nelson	 <sln@onemain.com>
+Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Arnd Bergmann
+	 <arnd@kernel.org>
+Date: Sat, 20 Sep 2025 15:24:51 +0200
+In-Reply-To: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
+References: 
+	<20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250920-xdp-meta-rxcksum-v1-6-35e76a8a84e7@kernel.org>
-References: <20250920-xdp-meta-rxcksum-v1-0-35e76a8a84e7@kernel.org>
-In-Reply-To: <20250920-xdp-meta-rxcksum-v1-0-35e76a8a84e7@kernel.org>
-To: Donald Hunter <donald.hunter@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Tony Nguyen <anthony.l.nguyen@intel.com>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- Alexander Lobakin <aleksander.lobakin@intel.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org, 
- Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.2
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-Introduce the capability to dump HW rx checksum in xdp_hw_metadat
-program via bpf_xdp_metadata_rx_checksum() kfunc.
+Hi Thomas,
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |  7 ++++++
- tools/testing/selftests/bpf/xdp_hw_metadata.c      | 27 ++++++++++++++++++++++
- tools/testing/selftests/bpf/xdp_metadata.h         | 10 +++++---
- 3 files changed, 41 insertions(+), 3 deletions(-)
+On Wed, 2025-09-17 at 16:00 +0200, Thomas Wei=C3=9Fschuh wrote:
+> The generic vDSO provides a lot common functionality shared between
+> different architectures. SPARC is the last architecture not using it,
+> preventing some necessary code cleanup.
+>=20
+> Make use of the generic infrastructure.
+>=20
+> Follow-up to and replacement for Arnd's SPARC vDSO removal patches:
+> https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
+>=20
+> Tested on a Niagara T4 and QEMU.
+>=20
+> This has a semantic conflict with my series "vdso: Reject absolute
+> relocations during build". The last patch of this series expects all user=
+s
+> of the generic vDSO library to use the vdsocheck tool.
+> This is not the case (yet) for SPARC64. I do have the patches for the
+> integration, the specifics will depend on which series is applied first.
+>=20
+> Based on tip/timers/vdso.
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-index 330ece2eabdb454da2bb2cbd297d2b2dd6efddc0..dc62d572e3ac6e2ef173b330da515757ea543415 100644
---- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -110,6 +110,13 @@ int rx(struct xdp_md *ctx)
- 	else
- 		meta->hint_valid |= XDP_META_FIELD_VLAN_TAG;
- 
-+	err = bpf_xdp_metadata_rx_checksum(ctx, &meta->ip_summed,
-+					   &meta->cksum_meta);
-+	if (err)
-+		meta->rx_cksum_err = err;
-+	else
-+		meta->hint_valid |= XDP_META_FIELD_CHECKSUM;
-+
- 	__sync_add_and_fetch(&pkts_redir, 1);
- 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
- }
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index 3d8de0d4c96a7afdf5f60b2fdff73c22b876ce54..5e38aa1b565735c2e55fcf2f7b9e672db1348233 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -219,6 +219,28 @@ static void print_vlan_tci(__u16 tag)
- 	printf("PCP=%u, DEI=%d, VID=0x%X\n", pcp, dei, vlan_id);
- }
- 
-+static void print_rx_cksum(__u8 ip_summed, __u32 cksum_meta)
-+{
-+	const char *cksum = "CHECKSUM_NONE";
-+
-+	switch (ip_summed) {
-+	case CHECKSUM_UNNECESSARY:
-+		cksum = "CHECKSUM_UNNECESSARY";
-+		break;
-+	case CHECKSUM_COMPLETE:
-+		cksum = "CHECKSUM_COMPLETE";
-+		break;
-+	case CHECKSUM_PARTIAL:
-+		cksum = "CHECKSUM_PARTIAL";
-+		break;
-+	case CHECKSUM_NONE:
-+	default:
-+		break;
-+	}
-+
-+	printf("rx-cksum: %s, csum_meta=0x%x\n", cksum, cksum_meta);
-+}
-+
- static void verify_xdp_metadata(void *data, clockid_t clock_id)
- {
- 	struct xdp_meta *meta;
-@@ -254,6 +276,11 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
- 		printf("No rx_vlan_tci or rx_vlan_proto, err=%d\n",
- 		       meta->rx_vlan_tag_err);
- 	}
-+
-+	if (meta->hint_valid & XDP_META_FIELD_CHECKSUM)
-+		print_rx_cksum(meta->ip_summed, meta->cksum_meta);
-+	else
-+		printf("No rx_chsum, err=%d\n", meta->rx_cksum_err);
- }
- 
- static void verify_skb_metadata(int fd)
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index f0ef17b328866206b1e63f7d751abeaa78e90932..0fd5e7172fe891275b3b1eb69c51a93a60ae353e 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -28,6 +28,7 @@ enum xdp_meta_field {
- 	XDP_META_FIELD_TS	= BIT(0),
- 	XDP_META_FIELD_RSS	= BIT(1),
- 	XDP_META_FIELD_VLAN_TAG	= BIT(2),
-+	XDP_META_FIELD_CHECKSUM = BIT(3),
- };
- 
- #define CHECKSUM_NONE		0
-@@ -53,9 +54,12 @@ struct xdp_meta {
- 		};
- 		__s32 rx_vlan_tag_err;
- 	};
--	struct {
--		__u8 ip_summed;
--		__u32 cksum_meta;
-+	union {
-+		struct {
-+			__u8 ip_summed;
-+			__u32 cksum_meta;
-+		};
-+		__s32 rx_cksum_err;
- 	};
- 	enum xdp_meta_field hint_valid;
- };
+Could you share a version of the series based on top of 6.17.0-rcN for
+testing purposes? I would like to test the series on a Sun Netra 240
+which is based on the UltraSPARC IIIi.
 
--- 
-2.51.0
+Adrian
 
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
