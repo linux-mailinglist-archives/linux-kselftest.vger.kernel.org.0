@@ -1,122 +1,94 @@
-Return-Path: <linux-kselftest+bounces-42013-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42014-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16D5CB8D6FF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 09:55:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DC10B8D70D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 09:59:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C59603AAE87
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 07:55:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25E4A1668BE
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 07:59:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 107452857F0;
-	Sun, 21 Sep 2025 07:55:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 549E82D130A;
+	Sun, 21 Sep 2025 07:59:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="DB4Dd6b8"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kKdha3PW";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rc1bcWmg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17F746B5;
-	Sun, 21 Sep 2025 07:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D072746B5;
+	Sun, 21 Sep 2025 07:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758441324; cv=none; b=gqSMQ3fjUtHQ1evzEhv0HHgOU8iE2CMiVpqMKXpa0f0XSwD55VvX5J6bA2+iNdI9EEwdbhABkrnCnoDlDjA5KXX0ibECZcwwxLMCHtXP6LekxvmrNXiV36QFGfLYVD0zBasuEN5MiFnt3HDA7eessHRo/68wz+gx2NMVG2TJCbE=
+	t=1758441572; cv=none; b=eLAsfvKSQ3O9NK9PzblM98ZkeqfRtY6JOyMltgAGOoLXxiegRHQCMZ0vtMSFTVdYlxuJLb06D7YhV4B8w8l8tF7+2Isd+rSmVwNKD8VYDAS3u0WIuo0Lsd+eBEiUKOBNCzhAQBG6yqhXF+J2ixsAwrfjTLt9HsiDI+acIXEYjbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758441324; c=relaxed/simple;
-	bh=lKDmDZHl4eHCumYTD88vWQjemvqbC5h5bl4ao4WRI00=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o/Sdee2120RyRNe4GUwAtW7eYLhtwG90ojollZqcjfN1jRFtlL4I4DiAch/xYexQJVLOUycjn7oBZfeHP8cXG9qSGTkvfBEGZTrGRqtvUKdCTvqApCfMS6eat7Na5pABTzYTIwRKHI5nt34mJOTwE3ZXLRrYXbRz765Szzo5PN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=DB4Dd6b8; arc=none smtp.client-ip=51.159.59.229
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
-	t=1758441312; bh=qtuWRkILHisXI4pbHnjs5IBitzDy5cn+s0usEaACUk4=;
-	h=From:Message-ID:From;
-	b=DB4Dd6b8tztBECBsHoDwvgsxTvpTO3LN3rTHvuOFbuV7UUv81ZV/TS57SCmDLhsoP
-	 L+QmDz5P1gv1qJRuw5BLp6veIeWYt4v/w2phbxq3VN9S/kTOMs72TxCWwPSqpsV6f/
-	 w9noQs2v6lPOnb0mUBvm6XAxtZF3kDTHdK3Fd+jA=
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by mta1.formilux.org (Postfix) with ESMTP id 005E0C072E;
-	Sun, 21 Sep 2025 09:55:11 +0200 (CEST)
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 58L7tBjS016692;
-	Sun, 21 Sep 2025 09:55:11 +0200
-Date: Sun, 21 Sep 2025 09:55:11 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Benjamin Berg <benjamin@sipsolutions.net>
-Cc: linux-um@lists.infradead.org,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        linux-kselftest@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        linux-kernel@vger.kernel.org, Benjamin Berg <benjamin.berg@intel.com>
-Subject: Re: [PATCH v2 03/11] tools/nolibc/stdio: remove perror if
- NOLIBC_IGNORE_ERRNO is set
-Message-ID: <20250921075511.GA16684@1wt.eu>
-References: <20250919153420.727385-1-benjamin@sipsolutions.net>
- <20250919153420.727385-4-benjamin@sipsolutions.net>
+	s=arc-20240116; t=1758441572; c=relaxed/simple;
+	bh=PtSTT4p20a/LZGlJuc4NQQnsML1a972kpDpubnns6Rs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=CBG6wo7JF6JGZ6FUQMsO7R7XRz4wbkH/7KFxmQdrS7JlRusJZdNJKHFnVcjERgLvMBv/divjRTLGC0DFRc4hoL+gxGAu9oj7v8BBITSBU70B6zp+4qs4H/WJuFLqe9ZNEPthptMFJx3SYCADT/bMO0KcAur/kkpgYiqnhTxVv5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kKdha3PW; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rc1bcWmg; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1758441568;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qgzTW+fNXfoELpXTfDFx6F6ILchBQgnAN8zjC0dBrjE=;
+	b=kKdha3PWFHhtuCZgx3r/mUJwryEbl6EfdCZVvSaoFERn9DTsjePgVn4RJokc7eaDZH6CJz
+	CZCgljVLHt1KGKMkuySbd9npSyxnu7ea5rd28cYyxEK17nc5pt9kML5QklTyM2aIKslngz
+	KjSTJipr/DUNiF1H5fiFvX0qoq0iMFKQxPE5W8Cqx2rdwT1YnJrV2RtBnkcbiCuNEOPLX0
+	tE/3JO61vA6f/gdkjHe/5MjDzpvEAnTRWskZuZ7bxiEKNwMO24B0wFP2EK33hNycVljIJl
+	y079jKqO/XDkBUmHyJ9EFGgRnueQZhiVtBfbKItZD4DC9x9cKwkJGz16cMDKEw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1758441568;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qgzTW+fNXfoELpXTfDFx6F6ILchBQgnAN8zjC0dBrjE=;
+	b=rc1bcWmgmyAGk9xtXsuLiImVzQSaTXW/J1c/XX5bozwpOk6GDSbwaKWFG3qjojWFXcVyHL
+	OPS5Gj39MBvQ1zBQ==
+To: Wake Liu <wakel@google.com>, John Stultz <jstultz@google.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker
+ <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, wakel@google.com
+Subject: Re: [PATCH] selftests/timers: Skip some posix_timers tests on
+ kernels < 6.13
+In-Reply-To: <20250807085042.1690931-1-wakel@google.com>
+References: <20250807085042.1690931-1-wakel@google.com>
+Date: Sun, 21 Sep 2025 09:59:27 +0200
+Message-ID: <87o6r46xsw.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250919153420.727385-4-benjamin@sipsolutions.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 
-Hi Benjamin,
+On Thu, Aug 07 2025 at 16:50, Wake Liu wrote:
+> Several tests in the posix_timers selftest fail on kernels older
+> than 6.13. These tests check for timer behavior related to SIG_IGN,
+> which was refactored in the 6.13 kernel cycle, notably by
+> commit caf77435dd8a ("signal: Handle ignored signals in
+> do_sigaction(action != SIG_IGN)").
+>
+> To ensure the selftests pass on older, stable kernels, gate the
+> affected tests with a ksft_min_kernel_version(6, 13) check.
 
-On Fri, Sep 19, 2025 at 05:34:12PM +0200, Benjamin Berg wrote:
-> From: Benjamin Berg <benjamin.berg@intel.com>
-> 
-> There is no errno variable when NOLIBC_IGNORE_ERRNO is defined. As such,
-> the perror function does not make any sense then and cannot compile.
-> 
-> Fixes: acab7bcdb1bc ("tools/nolibc/stdio: add perror() to report the errno value")
-> Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
-> Acked-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
->  tools/include/nolibc/stdio.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-> index 7630234408c5..c512159b8374 100644
-> --- a/tools/include/nolibc/stdio.h
-> +++ b/tools/include/nolibc/stdio.h
-> @@ -597,11 +597,13 @@ int sscanf(const char *str, const char *format, ...)
->  	return ret;
->  }
->  
-> +#ifndef NOLIBC_IGNORE_ERRNO
->  static __attribute__((unused))
->  void perror(const char *msg)
->  {
->  	fprintf(stderr, "%s%serrno=%d\n", (msg && *msg) ? msg : "", (msg && *msg) ? ": " : "", errno);
->  }
-> +#endif
+What's the point of emitting 9 times the same skip message?
 
-Please instead place the ifndef inside the function so that code calling
-perror() continues to build. The original goal of that macro was to
-further shrink programs at the expense of losing error details. But we
-should be able to continue to build working programs with that macro
-defined. There's nothing hard set in stone regarding this but here it's
-easy to preserve a working behavior by having something like this for
-example:
+There is no value at all and this can nicely be solved in main() by
+checking the kernel version once, registering either 10 or 19 tests and
+not invoking the tests which depend on 6.13+ in the first place, No?
 
-  static __attribute__((unused))
-  void perror(const char *msg)
-  {
- +#ifdef NOLIBC_IGNORE_ERRNO
- + 	fprintf(stderr, "%s\n", (msg && *msg) ? msg : "unknown error");
- +#else
-  	fprintf(stderr, "%s%serrno=%d\n", (msg && *msg) ? msg : "", (msg && *msg) ? ": " : "", errno);
- +#endif
-  }
+Thanks,
 
-thanks!
-Willy
+        tglx
+
 
