@@ -1,111 +1,98 @@
-Return-Path: <linux-kselftest+bounces-42030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6BDAB8E1F7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 19:29:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E3CB8E321
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 20:26:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1CFA3B1680
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 17:29:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C70C16AE88
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 18:26:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2ECF26D4E6;
-	Sun, 21 Sep 2025 17:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05512750FB;
+	Sun, 21 Sep 2025 18:26:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jxo8s54O"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="SiLXF84u"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3293226CE2E
-	for <linux-kselftest@vger.kernel.org>; Sun, 21 Sep 2025 17:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1E4274666;
+	Sun, 21 Sep 2025 18:26:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758475769; cv=none; b=JwApeWZm7LK2XdrFQF1n7OmvTTKQdpRAEAosRqkoVNPocKxsJNsfENQDbfKBZ9IqCVl4RO1XAXsvhuOBGPJL6+Cl5rsQKNl/82o2axIarsxTvA8lUy55YBKFEl6IUXOAp8Im23gIk4gsDvwsZvZSjLzZRxwsyNdwe0Ch4A8XhTQ=
+	t=1758479199; cv=none; b=IX+zBrxvIt9qbSTMMbJdySGOPPllJc9OVnvA65Rxl3BxEgDq5V5iW2dUgVEVKNxrflYuCJ5NcV1o5WfjMsBqGDhPCr0mfRIlYXZnTBdLmZrB73orZfRA8Vlg0VjAD9gDQEK+bo4hHMmqCQskSPlp8cdATIu3QF6uW8QY/NDI6w0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758475769; c=relaxed/simple;
-	bh=EKTu85teQ1TxZrXrUJn05KIs5vLfN9ijQcWezZYc/pg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GYcgAocPfgrvKoKzXi1IOc8GONzohGXn++9XlMc+ffbKryD9EawaoR/j5DUFbXXIfW43W6LQSmCK8mQ3B47lIMrY09TiZUKpXyUAc+iB6aFA6bkry1t3BLKiJ/VymA1OWe7d6OBW+222/8L3aHRFjrYpUUWRetojY8S2o99aTow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jxo8s54O; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-77f2e960728so577953b3a.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Sep 2025 10:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758475767; x=1759080567; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K0uzWoATR0pUTQbyWW9yEXcY/reaD1e4f5P0l2JW6cU=;
-        b=jxo8s54OwjFxG50Jf+0X1eVaivE4HM+9kFb3vZEC7YP0hwq8jKkoT4FriDYScCdK5s
-         sHWyAiEVA8bWEotbec5/xek2kiOHObQ6LWEbKMfkoBa0QrhcwVGH57J65V6z2lud6Seq
-         /oxKky6pPuiV33m/b9I23GsMuaQB/qG+k3SoozITBG2GRunnv90CMOptew2PoN7Xj/VS
-         K+/y7dFrgi9Mlmy28ugrI3Irr+bX8+5nryIFk5Mg7Z3I/6hU0PQDdF3bhY/mngmxK5H+
-         uhD8tDcjtPvkRuSxtjftF78NzI3NCi1dunUPqU0urxiibKdHiISGEaT9OqQsDSSYBRNx
-         IlQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758475767; x=1759080567;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K0uzWoATR0pUTQbyWW9yEXcY/reaD1e4f5P0l2JW6cU=;
-        b=LQJee773UvVOtrf/DuL6VBnks+D/YWaQAqCtIDP3LOFGuOgdLFxDFU9BQqddSbXkC2
-         REhuJC6QqGCu8Q22l0oSkpt81+8lkx7xJsUd1bA41MHi0C0hxDhs+8k/CYooZ8K/dQ0S
-         kwQwQmAl9HYd2kMA3CK3HqkjTNrOB7FgMimf0pGwCgE6cWZzpvrEi54SB05unlz5TvJB
-         5nGeLU0YwFIdolZqT5jGpKdrwvt0kS4preF8LKy9wKeYg2WidWF0FON5/G0eoUuwwnMB
-         ETN/8EOHDHReEJ0LC4c9B+g5j8lqdgIynhmadmo9mTLlgzAz2xA5zB2DEBSWMKjTnPNJ
-         +GSw==
-X-Gm-Message-State: AOJu0YxanueVZs0zijy+P2T7Zf8+BtrIhegRFLfEL0u7f0Clg0EapwF7
-	Xm2aN3DVmEmOV5XzMIU15zoqyNn/VuYXAsM0qkjw+I1b+oYEFW92nJVf
-X-Gm-Gg: ASbGnctAaYftLh+rmAwQV9jvR6QX3bB1uFv5y3qY0cZctWshf7TT2KAhD4c9UUhGa0b
-	E7LdpqEjNtrcR1vYJR4YuqPRfd7063U9cAY+t0ltf2JjR/r0Faj7thEnn1uosl09Eynje50SJpv
-	W+7qVOtFePH0tWSo88Rrq7koQ99b34g908G+a9V75EXcHYq5VQrUrfx6QTjqkBcu+Ej5XLfvW8Z
-	ZyAgZ5N5Ct6k2cJ8qOYH4twy0Db33bAgMmc7OASk+SyK8iUZf/24vcbNSbVXJyOs/7Vb23XtMUq
-	j2eV8JOMEhuScgpvlDLhdsGktv2yWYvxhIPjk8VDnI0NsTg6hdtevsq1xabRWOJp9YwiWOn1JZq
-	NJWTC+Gr3iBt6cv0uhKO4+KWh
-X-Google-Smtp-Source: AGHT+IGuNztlcymR1AZgLQugJMoVKgSqy3Yf45mv6QmCw2RApZSDv88MTQ6VcIfL8NhXwZBVgnXGxA==
-X-Received: by 2002:a05:6a20:549d:b0:250:b053:53c5 with SMTP id adf61e73a8af0-2927405e4c0mr14591768637.51.1758475767523;
-        Sun, 21 Sep 2025 10:29:27 -0700 (PDT)
-Received: from archlinux ([36.255.84.61])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b551b31ebb2sm6726467a12.6.2025.09.21.10.29.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Sep 2025 10:29:27 -0700 (PDT)
-From: Madhur Kumar <madhurkumar004@gmail.com>
-To: shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Madhur Kumar <madhurkumar004@gmail.com>
-Subject: [PATCH] selftests/kexec: Add .gitignore for generated binary
-Date: Sun, 21 Sep 2025 22:59:17 +0530
-Message-ID: <20250921172917.77705-1-madhurkumar004@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1758479199; c=relaxed/simple;
+	bh=QXSeu2WytESQlQTkLgYKHrixkheQCq3k1bXCbILkUkY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wf8u9CU7+VO70WqYtVn94B0z8mH2jUpSL0McA3Xvr6zz/NRpDmorlsNhlmr7xqvnAtDW6VoRUY3Q9lvHJYj6UejgHJuOT8/F75nyfUGYo/fEbd4g2dp7vlsjf/nZfy4BLYcfrc8RX2FP18JCNCyGPwHzqptuXQTY5FYvGHoFwpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=SiLXF84u; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1758479195;
+	bh=QXSeu2WytESQlQTkLgYKHrixkheQCq3k1bXCbILkUkY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SiLXF84uJ0cUlIgVvdme+rvvump7e0qFUDt78/BvjcglFbOXDjhwbf7kipCnvhAIg
+	 VGQRuIzId+t3NRqqzGLa+NAnfmlI0tetXYU3BkaQ9zT7rj+SuTHj6sv5a9h6IZHdTN
+	 7DmNwSVHcqA5pgtPDP0FiJtt95XJFiFofNN0isbQ=
+Date: Sun, 21 Sep 2025 20:26:35 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>
+Cc: Benjamin Berg <benjamin@sipsolutions.net>, 
+	linux-um@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/11] tools/nolibc/stdio: remove perror if
+ NOLIBC_IGNORE_ERRNO is set
+Message-ID: <70421908-6300-4df2-a54c-2dca03e8184e@t-8ch.de>
+References: <20250919153420.727385-1-benjamin@sipsolutions.net>
+ <20250919153420.727385-4-benjamin@sipsolutions.net>
+ <20250921075511.GA16684@1wt.eu>
+ <c10503a9-5c63-44a8-9ea7-a7bf6c4ed3fb@t-8ch.de>
+ <54d0bf1d1010530941b595129312a56cfdea7c7b.camel@sipsolutions.net>
+ <20250921171323.GC28238@1wt.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250921171323.GC28238@1wt.eu>
 
-The test_kexec_jump binary is generated during 'make kselftest' but was
-not ignored, leading to it appearing as untracked in `git status`.
-Create a .gitignore file for selftests/kexec and add this
-generated file to it.
+On 2025-09-21 19:13:23+0200, Willy Tarreau wrote:
+> On Sun, Sep 21, 2025 at 07:05:24PM +0200, Benjamin Berg wrote:
+> > This also ties to the question of the other mail. I prefer "errno" not
+> > to be available if it is not actually safe to use. UML does use threads
+> > in some places (and may use it extensively in the future). The current
+> > "errno" implementation is not threadsafe and I see neither an obvious
+> > way nor a need to change that. By setting NOLIBC_IGNORE_ERRNO any
+> > unsafe code will not compile and can be changed to use the sys_*
+> > functions to avoid errno.
+> 
+> That's the point I disagree with because here we're not using errno
+> more than printf() or dirent(). Why fix dirent() to build without errno
+> and break perror() ? Why not also break printf() then ? All of this must
+> be consistent. We're unbreaking some arbitrary functions and breaking
+> other arbitrary ones, that's not logical.
 
-Signed-off-by: Madhur Kumar <madhurkumar004@gmail.com>
----
- tools/testing/selftests/kexec/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
- create mode 100644 tools/testing/selftests/kexec/.gitignore
+printf() is already broken. So by breaking perror() it would have been
+consistent :-/.
 
-diff --git a/tools/testing/selftests/kexec/.gitignore b/tools/testing/selftests/kexec/.gitignore
-new file mode 100644
-index 000000000000..6cbe9a1049f3
---- /dev/null
-+++ b/tools/testing/selftests/kexec/.gitignore
-@@ -0,0 +1 @@
-+test_kexec_jump
--- 
-2.51.0
+> I'm totally fine with saying that errno shouldn't be defined when building
+> without errno, but all functions must continue to be defined. perror() is
+> used to print an error message, it's a valid use case just as printf() and
+> should remain.
+> 
+> If we disable perror for this, then we must also disable usage of printf
+> for consistency (and I don't want this either).
 
+Then let's also fix printf(). Benjamin, do you want to add this to your
+series? It should be consitent with the perror() fallback.
+
+
+Thomas
 
