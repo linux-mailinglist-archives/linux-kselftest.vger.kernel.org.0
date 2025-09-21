@@ -1,109 +1,134 @@
-Return-Path: <linux-kselftest+bounces-42016-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 021FCB8D75A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 10:19:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D9D0B8D9FC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 13:25:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA9951887332
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 08:20:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C759A7A8E96
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 11:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 505FA23815D;
-	Sun, 21 Sep 2025 08:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="uOjdlXkb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E662259C94;
+	Sun, 21 Sep 2025 11:25:29 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9684B41A8F;
-	Sun, 21 Sep 2025 08:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F73C34BA36;
+	Sun, 21 Sep 2025 11:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758442792; cv=none; b=Rmi5cRVyLhRa3DfkpsIR/obrV9R4BtLY9azL+kUf+7ImnNglGqIQUdQ7DFxqZ0Iahl2dSPSs+3lnzXEzk0OgJLdc7kMsquzHqemyAsCbTNHhjh2LPl9yWkHAS1/QCEE+inwZP6Z97YCwqH9hu259RC99SaJuktCz0kzDwJI259I=
+	t=1758453929; cv=none; b=XgP4smUo2Mqzo3F+lM78hc3V8F9+euFfYFC+HYFBsdVu9bu6qjKRjYAfsmwdZdHZqvCEbzckfrqDQUYoojOjjzGi1vrxt+k3WuMnzT53AtKE79t9ouL5q8j+NCVjBvp8uS5Yz+FdNlYL/w4+MAP9g4itkMUldM7l/pWKnUGQ4gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758442792; c=relaxed/simple;
-	bh=eaOczpgidCzBKUgHgRwKsTdsk2t/MjXYDxOj8DZ/pxo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yo4tdbqfKGZtdKeayEYSmI9I0w7g9c/OVjiuusw4wDH2VBw9vxMobPm2WnYFgw2/PuM+KsGnMTKhGOTJ/WY01x3ycfA6btDq07sQaeDr0cq8KfdPRWgTeoblpYPZOJUrS245+j9fVSLPApelxiVWo58uiva7ASZh5RZvtdF619M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=uOjdlXkb; arc=none smtp.client-ip=51.159.59.229
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
-	t=1758442787; bh=jLJuxKB/PPgDic7rB4z6F9PG20pfktyXJQHHD419PVM=;
-	h=From:Message-ID:From;
-	b=uOjdlXkb4h5eCFeMT4fMig8ZEDmQ2dOZSazY6P5NlAnTrN9FOxideYmLGTYRW2zkX
-	 HqUSp8kuIjzAEOcJqcfvS0xm3JcgKN5wFqrs/b6SrgnPUCoSUHC8rUVubzXQ5nbelX
-	 Pmb8vlnIAWWRtT6gPbWLJgGYcFX/Xm/0jkFzeTD0=
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by mta1.formilux.org (Postfix) with ESMTP id 71BEDC072E;
-	Sun, 21 Sep 2025 10:19:47 +0200 (CEST)
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 58L8Jlt9016845;
-	Sun, 21 Sep 2025 10:19:47 +0200
-Date: Sun, 21 Sep 2025 10:19:47 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Benjamin Berg <benjamin@sipsolutions.net>, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        linux-kernel@vger.kernel.org, Benjamin Berg <benjamin.berg@intel.com>
-Subject: Re: [PATCH v2 10/11] tools/nolibc: add ptrace support
-Message-ID: <20250921081947.GC16684@1wt.eu>
-References: <20250919153420.727385-1-benjamin@sipsolutions.net>
- <20250919153420.727385-11-benjamin@sipsolutions.net>
- <eced0e2b-8fb3-490f-bcbe-40a72e430db7@t-8ch.de>
+	s=arc-20240116; t=1758453929; c=relaxed/simple;
+	bh=YlrmXyjeO7GcRsXhqWeRYbpRf9DLv5IX+7MRr6Xm76s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cd+8/eHPHlgvTtORZ5xf2O6QkQDVqt4EFHy5dyZP+BgZpZotXjPFYmFQYTlp/pk3y9FIajCNeYc/7vDPoRqKH87R3GknWM13t1QzAU8RjDGBmapyWyWym6Ak18SPGiV7VqjdhUmiF9o3B+PAUe6/Peqc0xHoCt2H5qxn396eIYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 311F21516;
+	Sun, 21 Sep 2025 04:25:18 -0700 (PDT)
+Received: from [10.163.39.139] (unknown [10.163.39.139])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D5DF23F673;
+	Sun, 21 Sep 2025 04:25:17 -0700 (PDT)
+Message-ID: <49731a4e-d00f-4f84-aaac-87405d6eadbf@arm.com>
+Date: Sun, 21 Sep 2025 16:55:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] mm/memory-failure: Support disabling soft offline for
+ HugeTLB pages
+To: David Hildenbrand <david@redhat.com>, Kyle Meyer <kyle.meyer@hpe.com>
+Cc: akpm@linux-foundation.org, corbet@lwn.net, linmiaohe@huawei.com,
+ shuah@kernel.org, tony.luck@intel.com, jane.chu@oracle.com,
+ jiaqiyan@google.com, Liam.Howlett@oracle.com, bp@alien8.de,
+ hannes@cmpxchg.org, jack@suse.cz, joel.granados@kernel.org,
+ laoar.shao@gmail.com, lorenzo.stoakes@oracle.com, mclapinski@google.com,
+ mhocko@suse.com, nao.horiguchi@gmail.com, osalvador@suse.de,
+ rafael.j.wysocki@intel.com, rppt@kernel.org, russ.anderson@hpe.com,
+ shawn.fan@intel.com, surenb@google.com, vbabka@suse.cz,
+ linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <aMiu_Uku6Y5ZbuhM@hpe.com>
+ <a99eb11f-a7ac-48a3-a671-c5f0f6b5b491@arm.com>
+ <8c3188da-7078-4099-973a-1d0d74db2720@redhat.com> <aMsDJ3EU1zVJ00cX@hpe.com>
+ <cd71fac2-bb9d-4e84-a074-2b695654e655@redhat.com>
+Content-Language: en-US
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <cd71fac2-bb9d-4e84-a074-2b695654e655@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <eced0e2b-8fb3-490f-bcbe-40a72e430db7@t-8ch.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Sep 20, 2025 at 11:27:19AM +0200, Thomas Wei�schuh wrote:
-> > +/*
-> > + * long ptrace(int op, pid_t pid, void *addr, void *data);
-> > + *
-> > + * However, addr may also be an integer in some cases.
+
+
+On 18/09/25 12:35 AM, David Hildenbrand wrote:
+> On 17.09.25 20:51, Kyle Meyer wrote:
+>> On Wed, Sep 17, 2025 at 09:02:55AM +0200, David Hildenbrand wrote:
+>>>
+>>>>> +
+>>>>> +    0 - Enable soft offline
+>>>>> +    1 - Disable soft offline for HugeTLB pages
+>>>>> +
+>>>>> +Supported values::
+>>>>> +
+>>>>> +    0 - Soft offline is disabled
+>>>>> +    1 - Soft offline is enabled
+>>>>> +    3 - Soft offline is enabled (disabled for HugeTLB pages)
+>>>>
+>>>> This looks very adhoc even though existing behavior is preserved.
+>>>>
+>>>> - Are HugeTLB pages the only page types to be considered ?
+>>>> - How the remaining bits here are going to be used later ?
+>>>>
+>>>
+>>> What I proposed (that could be better documented here) is that all other
+>>> bits except the first one will be a disable mask when bit 0 is set.
+>>>
+>>> 2 - ... but yet disabled for hugetlb
+>>> 4 - ... but yet disabled for $WHATEVER
+>>> 8 - ... but yet disabled for $WHATEVERELSE
+>>>
+>>>> Also without a bit-wise usage roadmap, is not changing a procfs
+>>>> interface (ABI) bit problematic ?
+>>>
+>>> For now we failed setting it to values that are neither 0 or 1, IIUC
+>>> set_enable_soft_offline() correctly?
+>>
+>> Yes, -EINVAL will be returned.
+>>
+>>> So there should not be any problem, or which scenario do you have in mind?
+>>
+>> Here's an alternative approach.
+>>
+>> Do not modify the existing sysctl parameter:
+>>
+>> /proc/sys/vm/enable_soft_offline
+>>
+>> 0 - Soft offline is disabled
+>> 1 - Soft offline is enabled
+>>
+>> Instead, introduce a new sysctl parameter:
+>>
+>> /proc/sys/vm/enable_soft_offline_hugetlb
+>>
+>> 0 - Soft offline is disabled for HugeTLB pages
+>> 1 - Soft offline is enabled for HugeTLB pages
+>>
+>> and note in documentation that this setting only takes effect if
+>> enable_soft_offline is enabled.
+>>
+>> Anshuman (and David), would you prefer this?
 > 
-> This comment is a bit confusing. It reads like it can be an integer as
-> in 'int' datatype. But the kernel expects an integer compatible with
-> 'void *', so 'unsigned long'. I think we can drop the comment.
+> Hmm, at least I don't particularly like that. For each new exception we would create a new file, and the file has weird semantics such that it has no meaning when enable_soft_offline=0.
 
-Or if the point is to insist that void* is not strictly required, a
-comment might as well say "types for addr and data are ignored and
-will be cast to void*". But given that the man page indicates two
-void*, I think that callers are expected to cast ints to void* in
-any case, and if so maybe indeed not saying anything about it would
-be better.
-
-> > + */
-> > +static __attribute__((unused))
-> > +long sys_vptrace(int op, pid_t pid, va_list args)
-> > +{
-> > +	return my_syscall4(__NR_ptrace, op, pid,
-> > +			   va_arg(args, void *), va_arg(args, void *));
-> > +}
-> > +
-> > +static __attribute__((unused))
-> > +ssize_t sys_ptrace(int op, pid_t pid, ...)
-> 
-> ptrace(2) does not document addr and data to be optional.
-> While it does acknowledge the fact that it is variadic on glibc,
-> users are still recommended to always supply all arguments.
-> I'd prefer to keep it simple and avoid the va_list.
-
-The man indeed says they are *ignored*, not optional. I agree then that
-it would be better not doing simpler than the standard and have to roll
-back later. Let's just pass unused arguments to the system.
-
-Thanks,
-Willy
+Agree with David here. Adding a new procfs file for a particular page
+type's soft offline disable scenario does not really make sense. This
+will extend the ABI unnecessarily without adding much benefit.
 
