@@ -1,124 +1,156 @@
-Return-Path: <linux-kselftest+bounces-42007-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88A72B8D01B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 21:59:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 956C4B8D528
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 07:10:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 640567E3C32
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Sep 2025 19:58:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7738A189D888
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 05:11:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78EA26C3B0;
-	Sat, 20 Sep 2025 19:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB87B29BDA9;
+	Sun, 21 Sep 2025 05:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IGwwqtVP"
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="TfSXBXHn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE8226C39B;
-	Sat, 20 Sep 2025 19:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1927B3E1;
+	Sun, 21 Sep 2025 05:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758398307; cv=none; b=BNAq9pC8B7iIyz/TflZSjgvsfRB+JLnT+0Cko4GDTeC1UDeyppfPjBPwHoeQsmoSyIiZZfwPXoyy06f/jGqfwvWtoT0EEy42YEwAZriOPNWsGeX1ygPVmJgsqKdA9cJd6s7HrbxyPy2ZUJv8bH7mkB4kdsRLQQzUGajOOy+q1CA=
+	t=1758431441; cv=none; b=riGjHKyJrzvmwe1Qm6b3xDUaAZDHQSGLMDFu8qdOFS1kt1SBXsSR0RpeO22uHXU40hUiS1Ty23YrphlTRv7hO/Yq9ryEW17ljeefe/sBOswrHRUDRIAQGH3EkcsWDSy0iadxLk9mP3/i4jRdvSeAoVlorGLcbzfySV5BuAdIdS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758398307; c=relaxed/simple;
-	bh=orK/rxMSHEqI9JzhhkIKyObIXyhNnpoojzfzCXkiSJc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nyLoBTjRXMXiBV7qi1DPNuHea7eEgRs7vp+HhUPG0WrS+SQebMaMnWqLvcvYkJxX/saVcFWgm02YJOGOWZ05uIX1JCfUl/pFgFbbJdt/H/yZKH2Y01SmoRgpXjMUETEYw/HfQVzTTP1KDHcjwmpCYfgfhab+TpzeKOPKR71ip9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IGwwqtVP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA457C4CEEB;
-	Sat, 20 Sep 2025 19:58:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758398307;
-	bh=orK/rxMSHEqI9JzhhkIKyObIXyhNnpoojzfzCXkiSJc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IGwwqtVPIQi2VQkNfYuTHsXktRxPjwCCszOKuTTGYejxWYA448m6clFU6KYa2twqE
-	 3LfWQhb/R2bVrlVyhy+3JnzhKYLmL4lqC1k8YD5sutx4ZLWX3P+QmYii2lol/dbtkQ
-	 1DrBY4W8cTE9ggL9T8WG3TLsp6YV/wz/zk0uhz54Yn1J8rX9ExPoSthg5tIAdvlnGo
-	 IyOXK6O4uoPcCRJbw+xOwN9JEWp6BeVIP6oyxklMN67WR7S0is2H9Zmd6V/o+L6p7Q
-	 iJRpTiVRLKw3J6No4WAI0hrk8cXYK1mUia/bLjx1/PHeBWoIektrnd1QHxqOWy6uWZ
-	 q0Hwm3D0oPFjA==
-From: Mark Brown <broonie@kernel.org>
-Date: Sat, 20 Sep 2025 20:52:00 +0100
-Subject: [PATCH 2/2] KVM: arm64: selftests: Cover ID_AA64ISAR3_EL1 in
- set_id_regs
+	s=arc-20240116; t=1758431441; c=relaxed/simple;
+	bh=w9oZ1uNQV8PhWrk7R2+HhaHhimhUFnbPVXpj77GRNI8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mGwcxW+TdciW/U8kLvuG1c7HsAJVYFcniIUaVufUyoayCpWhN/gBDMmfxEvtJHxdsWm0pQ5eM+4Cbq82JJakp7pIWqLDuq/bcPvrFiF9M4JDrXFAuwjcL0AwYyVunwXGbNxmL3l7c9yvXgeH2a/OGIfSXojPOo+YMN9dDLG+9Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=TfSXBXHn; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
+	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=NvoDm3rY6iriVEHdymAWHHxK+7OKvhuVhhBYM9dD7Fk=; t=1758431439;
+	x=1759036239; b=TfSXBXHnlva/4cZood1ATYlgO/P9Xe/U8IcZnesM0Oa3xsyaeUFw3pHprF8ze
+	9SiLK8l2uMm7E2N/El1HrO65XGu7L+BlpJWXdA0nY5wmjH6r/rpFRCp6FGnH2LvokMF4VaBNupViy
+	hVXkNXD51/zzm2g+UlgVcbs6XQeWJlL3msaDOzy8p7h0RGARVq8aE80MABwibXT9pl98WBPeh4RzU
+	ShwfPmpxKqG17oyiM0BH7EyjSJX5pI4gYj25ROHlOoKKPVYywSH0ilY1qdchRki+yoH26lDYmaZMy
+	MbNfFC0qPTPOwwOo9KEYiJkLMR6PMXp4YphQQNja+xkTm5/k0g==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.98)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1v0CGh-00000000RZV-2NJn; Sun, 21 Sep 2025 07:05:47 +0200
+Received: from dynamic-002-245-016-030.2.245.pool.telefonica.de ([2.245.16.30] helo=[192.168.178.50])
+          by inpost2.zedat.fu-berlin.de (Exim 4.98)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1v0CGh-00000002SmM-0yJw; Sun, 21 Sep 2025 07:05:47 +0200
+Message-ID: <9198795c08a6c3d448bbcbdfe620ada792af8dd3.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v3 00/36] sparc64: vdso: Switch to the generic vDSO
+ library
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+  Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann
+ <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,  Andreas Larsson
+ <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, John Stultz
+ <jstultz@google.com>,  Stephen Boyd <sboyd@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
+ <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld"
+ <Jason@zx2c4.com>,  Russell King <linux@armlinux.org.uk>, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Michael Ellerman	 <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy	
+ <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, WANG
+ Xuerui	 <kernel@xen0n.name>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, Vasily
+ Gorbik <gor@linux.ibm.com>, Alexander Gordeev	 <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,  Sven Schnelle
+ <svens@linux.ibm.com>, Nagarathnam Muthusamy
+ <nagarathnam.muthusamy@oracle.com>, Shannon Nelson	 <sln@onemain.com>,
+ linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Arnd Bergmann	
+ <arnd@kernel.org>
+Date: Sun, 21 Sep 2025 07:05:44 +0200
+In-Reply-To: <48fd164e-959b-4263-b3c7-cef5771aa40a@linutronix.de>
+References: 
+	<20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
+	 <9a122c6cf3e2e0e61a62b0512eb97804acebeee9.camel@physik.fu-berlin.de>
+	 <48fd164e-959b-4263-b3c7-cef5771aa40a@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250920-kvm-arm64-id-aa64isar3-el1-v1-2-1764c1c1c96d@kernel.org>
-References: <20250920-kvm-arm64-id-aa64isar3-el1-v1-0-1764c1c1c96d@kernel.org>
-In-Reply-To: <20250920-kvm-arm64-id-aa64isar3-el1-v1-0-1764c1c1c96d@kernel.org>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
- Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-56183
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1930; i=broonie@kernel.org;
- h=from:subject:message-id; bh=orK/rxMSHEqI9JzhhkIKyObIXyhNnpoojzfzCXkiSJc=;
- b=owGbwMvMwMWocq27KDak/QLjabUkhozz7FF1gnFzGo5dqztrUXrEL71JrXbSCzuBXlZ5hwXZ2
- Ru2z2bsZDRmYWDkYpAVU2RZ+yxjVXq4xNb5j+a/ghnEygQyhYGLUwAm0pPGwdA4s3zroZU6R9IU
- Xk/4Y2Zmdzp5w8esjpUnI473VIS0iHNcvfrKTla6Unx+wXLBs0rvvkt/Uq+Sy9bmN5oSvTol2EY
- vUCyRg2fW55nF7p/0nM+onP8lqGGo8Z3RWWF+UX85T6zXrTNnnZZrPTBKPrvB++XZENect8kKtg
- 2Vm/3NF+YYsVgnmM9rC9dgExZQO/XO/939TlPulV+1DA89WVJm1m/orat5TD2mPGH+3biJny6Ja
- Kr+Urf/dKP/1Sr1nw/+lbq8jfmx36zZzmjajxfxoqai9yrqm49wTGevK3Ln/7GQXeEE24zF1fvE
- 81y2ykfGnUv3flont3u92209rW39f/8y7P26pbVgbcIuAA==
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-We have a couple of writable bitfields in ID_AA64ISAR3_EL1 but the
-set_id_regs selftest does not cover this register at all, add coverage.
+Hi Thomas,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/arm64/set_id_regs.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On Sat, 2025-09-20 at 16:37 +0200, Thomas Wei=C3=9Fschuh wrote:
+> Sep 20, 2025 15:25:11 John Paul Adrian Glaubitz <glaubitz@physik.fu-berli=
+n.de>:
+>=20
+> > On Wed, 2025-09-17 at 16:00 +0200, Thomas Wei=C3=9Fschuh wrote:
+> > > The generic vDSO provides a lot common functionality shared between
+> > > different architectures. SPARC is the last architecture not using it,
+> > > preventing some necessary code cleanup.
+> > >=20
+> > > Make use of the generic infrastructure.
+> > >=20
+> > > Follow-up to and replacement for Arnd's SPARC vDSO removal patches:
+> > > https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org=
+/
+> > >=20
+> > > Tested on a Niagara T4 and QEMU.
+> > >=20
+> > > This has a semantic conflict with my series "vdso: Reject absolute
+> > > relocations during build". The last patch of this series expects all =
+users
+> > > of the generic vDSO library to use the vdsocheck tool.
+> > > This is not the case (yet) for SPARC64. I do have the patches for the
+> > > integration, the specifics will depend on which series is applied fir=
+st.
+> > >=20
+> > > Based on tip/timers/vdso.
+> >=20
+> > Could you share a version of the series based on top of 6.17.0-rcN for
+> > testing purposes? I would like to test the series on a Sun Netra 240
+> > which is based on the UltraSPARC IIIi.
+>=20
+> Here is the git branch based on rc4:
+> https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.g=
+it/log/?h=3Db4/vdso-sparc64-generic-2
+>=20
+> Does that work for you?
 
-diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-index bfb70926272d..c7c38b1a1f10 100644
---- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
-+++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-@@ -125,6 +125,13 @@ static const struct reg_ftr_bits ftr_id_aa64isar2_el1[] = {
- 	REG_FTR_END,
- };
- 
-+static const struct reg_ftr_bits ftr_id_aa64isar3_el1[] = {
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ISAR3_EL1, FPRCVT, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ISAR3_EL1, LSFE, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ISAR3_EL1, FAMINMAX, 0),
-+	REG_FTR_END,
-+};
-+
- static const struct reg_ftr_bits ftr_id_aa64pfr0_el1[] = {
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR0_EL1, CSV3, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR0_EL1, CSV2, 0),
-@@ -221,6 +228,7 @@ static struct test_feature_reg test_regs[] = {
- 	TEST_REG(SYS_ID_AA64ISAR0_EL1, ftr_id_aa64isar0_el1),
- 	TEST_REG(SYS_ID_AA64ISAR1_EL1, ftr_id_aa64isar1_el1),
- 	TEST_REG(SYS_ID_AA64ISAR2_EL1, ftr_id_aa64isar2_el1),
-+	TEST_REG(SYS_ID_AA64ISAR3_EL1, ftr_id_aa64isar3_el1),
- 	TEST_REG(SYS_ID_AA64PFR0_EL1, ftr_id_aa64pfr0_el1),
- 	TEST_REG(SYS_ID_AA64PFR1_EL1, ftr_id_aa64pfr1_el1),
- 	TEST_REG(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0_el1),
-@@ -239,6 +247,7 @@ static void guest_code(void)
- 	GUEST_REG_SYNC(SYS_ID_AA64ISAR0_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64ISAR1_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64ISAR2_EL1);
-+	GUEST_REG_SYNC(SYS_ID_AA64ISAR3_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64PFR0_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64MMFR0_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64MMFR1_EL1);
+Thanks, I'll give it a try.
 
--- 
-2.47.2
+> Thanks for testing!
 
+Of course, I want to make sure the kernel stays working on these machines a=
+nd
+you're introducing large changes.
+
+Adrian
+
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
