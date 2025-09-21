@@ -1,126 +1,119 @@
-Return-Path: <linux-kselftest+bounces-42009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 483F8B8D53B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 07:19:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45B23B8D5D8
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 08:42:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 34A6D189EF7E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 05:19:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08CB7189F844
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Sep 2025 06:42:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A9EE285069;
-	Sun, 21 Sep 2025 05:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0552C3276;
+	Sun, 21 Sep 2025 06:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Rf4ZLtRn"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GBySzmd0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728BF1A8412
-	for <linux-kselftest@vger.kernel.org>; Sun, 21 Sep 2025 05:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275E22C3247;
+	Sun, 21 Sep 2025 06:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758431935; cv=none; b=CVAgBxKl+ZNFPoxu3GpJLVvn2elmdLxjzp8ScxWwMvQuf3j+2LRhroBera5pMXgzv700WWpGvBmBP7cSGD+Ly60vfisQvQldX3iKN9NzLEiZNR465gfns811OuHTyENp9DjFG2PlV51GjABMCnPEDcOeW5Nm3KTag1SI7NAar5s=
+	t=1758436907; cv=none; b=hHTVhNsXvpedBGk3+j8SpQrll0fT/ZeTqSUdg0bv49PfnNxrzMLgWV+xRIY0eVou3Knlo4u5KDeBAWbHUl4k5rq+jFPDvTZEHmfFNlwud7CVzO88jI/X/XZmsTLl7WFkLKYF1FEz0BamiSRB+h0WVI1isHCrkHNE3rleTvvucrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758431935; c=relaxed/simple;
-	bh=TjboM2/L0f9nAWei19mZ8FDgalcu/2Q2kDV4Dvf75pU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=OImk1CfTEMIGfn5EYB4ZaPsuNV5BHeROksDXJq4LydUbG7GsK/IQNi1BcvEAtePR6rmwa7GT+FlFQJMJBFjPC4Y/Uz3x2c1NsjTYp5EC1TjktiM5nLMNONZKsMCcbfabKeI14ac7pA4DD8tMhH2fZEzKC7l8qf8EHCc0GtA5yBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Rf4ZLtRn; arc=none smtp.client-ip=209.85.166.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-42480cb42e9so12399985ab.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 20 Sep 2025 22:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1758431931; x=1759036731; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QHhQbTj4kYsvAqUw74p0VJZScNEJAQRLYPDi0Xv2iJk=;
-        b=Rf4ZLtRnM/swyZ+onh9AIO39xwimd1PqNKZpqiFBSx0/evRNqadCxPKbxA7FqoT7/e
-         KXMA3YJu1O+rlrAZYK6bC3LH9qHqlQgexvPR8SuN8ReGxLtm4My0LX3fC8Q6n3Z7AHaK
-         VOA4j6urQvn8hm86BtuezdHi51GF3Lnz4Fh4Tx1ctqB8ORj0LNn35mjTn6tcb/e/Ti8U
-         K6tbpBDSpVrjr8u8ghFQRmOqdxcLN72X2B6Ez+CPgoGi2nEpMPTTTjGqPsqOH2jDh2io
-         ik8Rdx9jmDYjT+LhA+Zhp45BLjJE3NJD+qJ+UdC86DMz/V5ef8rqFV6ZMVN52/t2fK5J
-         YK2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758431931; x=1759036731;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QHhQbTj4kYsvAqUw74p0VJZScNEJAQRLYPDi0Xv2iJk=;
-        b=LMolNb0WeXeR7dv2sa66MSUomOb9Wr1B7HEBIUi/4g/kiBfitGpuCIpSL9LaldVun2
-         YV3FcZdCo+JTebCBWnS65mnuPPMeh0+bNzr0k6g/s951/QRkCbIZ97j+E3w7bwD7bYWa
-         g9sipGOjpdL1yFdWw9qEzvxRjggQAL/rS34NLOw6zVMGtqWqCnyYsFe9HAJqpVdGU5ea
-         LcE1szMhqhpNhfie+Re4B2mTOkGsp+Kcc4SH/lc3E4yke2flm29StpugF5zCyuBhNDE5
-         dmCiiPQEtzCy/MVWSd+uGmx1JtBZpmyipE3q4eaYo8QaZvAZsqbHhtIx18jJRHuFhyiL
-         cvYA==
-X-Forwarded-Encrypted: i=1; AJvYcCVeHqvxnsrZi63laV1F5f0qL4ef2iTpDbkgpcfGoszz5NbMXjiU76EYxkNDbIYH1XYxVSlME55jgXDzrF/oDdc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrwPzzvd2zVP5zzRMAGW7YjsvIcH1eMNd3ata6UX9TMWcyGE0N
-	McJDfHhq1W3E1FjtsMyc5zkkfzzwey9h7cHUEW4FCp4vy5FRKliuQwMf1yUix+ZLiBg=
-X-Gm-Gg: ASbGncsdOk1qDNt9gPSxu3KtIpsqmy0h5y2ZEGAmBhouH3RORxhmESEj2rcUzYj/gRI
-	AfW5CuBtOXsedAj3eZO2XEzR6VWDWWRdpFR37A2GQYJbg8mG43gfA68A63JoVfhbgWJ0a86gQmA
-	/Oomg8OnxuuDm4AhRBNVJmHvvlGJyo8TLW9FJRf8kyY6c0Ght+IMN1YMZmsgz8MVi97JPla46BQ
-	LBj+FS5ZrjdINKhTzmRy2EEC+preCrzkKeHe5E1DwK/vaGHksc1NkVcLD2UFI/LbOErNgg84QB5
-	34RRLw7Ytnemi8A64mIPZeaJ8d4Y81+r+UpmZg0MOCvW6193MaaTZ+Oq5ArD
-X-Google-Smtp-Source: AGHT+IGjpV4kJ4Qy0bZ3vJ4qp7i08XpmUB+fTdg2aDRru5IriHCuc6P8XxrDuu6gS89i52MJD4LExQ==
-X-Received: by 2002:a05:6e02:148c:b0:424:80c5:87a with SMTP id e9e14a558f8ab-42481984015mr120728015ab.19.1758431931221;
-        Sat, 20 Sep 2025 22:18:51 -0700 (PDT)
-Received: from [127.0.0.1] ([99.196.128.67])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-53d50aa5db9sm4228746173.43.2025.09.20.22.18.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Sep 2025 22:18:50 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: Mohit Gupta <mgupta@purestorage.com>, 
- Caleb Sander Mateos <csander@purestorage.com>, 
- Ming Lei <ming.lei@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Uday Shankar <ushankar@purestorage.com>
-Cc: linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20250916-ublk_fio-v2-1-04852e6bf42a@purestorage.com>
-References: <20250916-ublk_fio-v2-1-04852e6bf42a@purestorage.com>
-Subject: Re: [PATCH v2] selftests: ublk: fix behavior when fio is not
- installed
-Message-Id: <175843192257.42245.2136343963364128168.b4-ty@kernel.dk>
-Date: Sat, 20 Sep 2025 23:18:42 -0600
+	s=arc-20240116; t=1758436907; c=relaxed/simple;
+	bh=v3yR36KwvuptwusMELrktsI6NwfP+gZuT+gaH8sI5Ho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e+i73NiXqsQByQM5vi4XmBmpWvMgjMAyybA/SCVW5ze0R5G9t6l+TU4kFdM8eDJyGdknvjL38dTSpXGTKfP/MeU2jxiJuIWJmzC2d4e1bir+hMpOCGaaMQpaokEfG46S6m7kxVLH25RDRYE37didpCO3G3hTwXNlxSkTBweSWA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org; spf=none smtp.mailfrom=idosch.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GBySzmd0; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=idosch.org
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id D6C13EC0099;
+	Sun, 21 Sep 2025 02:41:43 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Sun, 21 Sep 2025 02:41:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1758436903; x=1758523303; bh=5NNXK9C0jEkb7A0rE8+6BRc5c5cH8w5cLXh
+	+W5FM/rk=; b=GBySzmd0QuFN3TuyW9XGyZEDbNxBcaSqSCTd8pvb1+VChO+O2Ge
+	aMaWX3Lll2RJo5V8gGK+CkMJn1Y8NttHILwoFeFyQ2yNRg/g4BsRuOFdMzEATjIJ
+	K0PG/PDfrWrfX0jNrvbZ9UIkpZJ7b/ItWEGrXSqAGd76tyBjZ6tXI8khxoYyb0E4
+	zHaIrvJWuXt+NvoOrP7btBr4NbZAwEh7t88RE/sfJfcFbyPcZYsRanF9jLYZpOjt
+	FqXa/I2UClErhKOshUzHK8/En5mMwyjLRSPatw6cxfvPBrbyOdUEZxCx7yGLILOz
+	7AmI7fhmuh+DtkddutbHG4lQDZQ6Z2e7evg==
+X-ME-Sender: <xms:J57PaN1dec1eqfhBX-2gsX5e4Efr2IPebZdEU75S0CGSfhoGNjnS2w>
+    <xme:J57PaEj4Z-hz2Irb6d1VeTbymVe_J38HVP9sG-cPzdB41HpvzkqXPQ94ogT4A6_tY
+    4eaCQHqRmU-X0s>
+X-ME-Received: <xmr:J57PaNrWmBB_sONpf-rJPj8_7Hwk7pnWJL5TtVLNVNMXwX3qikFAwPcD>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdehgedvkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfutghh
+    ihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtthgvrh
+    hnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeghfen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughosh
+    gthhesihguohhstghhrdhorhhgpdhnsggprhgtphhtthhopeduhedpmhhouggvpehsmhht
+    phhouhhtpdhrtghpthhtohepmhhmhigrnhhgfhhlsehgmhgrihhlrdgtohhmpdhrtghpth
+    htohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggr
+    vhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesgh
+    hoohhglhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgt
+    phhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohephhhorhhmsh
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepphgvthhrmhesnhhvihguihgrrdgtohhm
+X-ME-Proxy: <xmx:J57PaHMmpdXoxsgzfaHdfMNsObwA_YfrSpI6rOwYXdgXRK7esgrV6g>
+    <xmx:J57PaJ27i57mjbGk35dKG2vURcWjIx-RsQk_M7mHAMOlAwCk1Wr2kQ>
+    <xmx:J57PaFpPfdoUhLtt7fed2PlIxwnPrY4YqO5CHBjDeQK6Gn1fG_a1mQ>
+    <xmx:J57PaDct7-PY8DvzY311DCJJeA_iCtQhj7IomSwCm_mSFxq72yYC5Q>
+    <xmx:J57PaPEN8w2G2y_lNiiui_PfCTRAzKGuFb66y4394_UYmH_InwTkqUU6>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 21 Sep 2025 02:41:42 -0400 (EDT)
+Date: Sun, 21 Sep 2025 09:41:40 +0300
+From: Ido Schimmel <idosch@idosch.org>
+To: David Yang <mmyangfl@gmail.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Petr Machata <petrm@nvidia.com>, Amit Cohen <amcohen@nvidia.com>,
+	Li Shuang <shuali@redhat.com>,
+	Alessandro Zanni <alessandro.zanni87@gmail.com>,
+	Hangbin Liu <liuhangbin@gmail.com>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3] selftests: forwarding: Reorder (ar)ping
+ arguments to obey POSIX getopt
+Message-ID: <aM-eJIAj2cnj34On@shredder>
+References: <20250919053538.1106753-1-mmyangfl@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3-dev-2ce6c
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250919053538.1106753-1-mmyangfl@gmail.com>
 
-
-On Tue, 16 Sep 2025 18:42:52 -0600, Uday Shankar wrote:
-> Some ublk selftests have strange behavior when fio is not installed.
-> While most tests behave correctly (run if they don't need fio, or skip
-> if they need fio), the following tests have different behavior:
+On Fri, Sep 19, 2025 at 01:35:33PM +0800, David Yang wrote:
+> Quoted from musl wiki:
 > 
-> - test_null_01, test_null_02, test_generic_01, test_generic_02, and
->   test_generic_12 try to run fio without checking if it exists first,
->   and fail on any failure of the fio command (including "fio command
->   not found"). So these tests fail when they should skip.
-> - test_stress_05 runs fio without checking if it exists first, but
->   doesn't fail on fio command failure. This test passes, but that pass
->   is misleading as the test doesn't do anything useful without fio
->   installed. So this test passes when it should skip.
+>   GNU getopt permutes argv to pull options to the front, ahead of
+>   non-option arguments. musl and the POSIX standard getopt stop
+>   processing options at the first non-option argument with no
+>   permutation.
 > 
-> [...]
+> Thus these scripts stop working on musl since non-option arguments for
+> tools using getopt() (in this case, (ar)ping) do not always come last.
+> Fix it by reordering arguments.
+> 
+> Signed-off-by: David Yang <mmyangfl@gmail.com>
 
-Applied, thanks!
-
-[1/1] selftests: ublk: fix behavior when fio is not installed
-      commit: a3835a44107fcbf05f183b5e8b60a8e4605b15ea
-
-Best regards,
--- 
-Jens Axboe
-
-
-
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
