@@ -1,142 +1,120 @@
-Return-Path: <linux-kselftest+bounces-42072-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 299E9B92146
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 17:55:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54D09B92154
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 17:55:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E06852A36DD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 15:55:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31DBD7AB74C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 15:54:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49ADA30BB8F;
-	Mon, 22 Sep 2025 15:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D624B302148;
+	Mon, 22 Sep 2025 15:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CqQf93gW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3xad9+w"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D31D44C63;
-	Mon, 22 Sep 2025 15:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70CD48CFC;
+	Mon, 22 Sep 2025 15:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758556529; cv=none; b=DORS3MaBInVn8va8WdiWVaRJd+LiKwn5EcLMwV5BW3VggLFYMeZJTJ1paL3kvh0lIfRdTgDOKtSAAzcY1hIPpEcEpIMru8uulqhM1PRO8c1/RZhe3HJ+KG3+Rw1C5WGO+MJcft7A9xzRW20JRri4tKN3t3kY3wgfkCZy2X7E0lE=
+	t=1758556548; cv=none; b=cFEzSc5lY63IFeUIO1F2ZExz/y6DatoNijRYS1ciP/rAh9Haz/3j8KUdr3YW4ZWw65wBhIodtqycME6/cywAZ7DVDrxBjRR2avmDgeVKjbk2/nDwI1m9BXWVWQKpmKFhtZgd6pMVvsNNpThq8msEkwLqBdn+aiD4ZsuL5uTA2dY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758556529; c=relaxed/simple;
-	bh=Onf3CcsEJl0ngxXMEOYfC15DjUX6QEH0Zyjt05mjWVo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lpiSD3ue2TdwAC2wF1tUpucM7ZK1nKUPpWOvVQS8q2QCWlDaXAETfJswac0KzTWCdx8qv48dyJ9ifh1L/EO3bcZ3HlDt6i6Nw+dHykrF4AHLS76K/Ks0oLuc/1cwGexa+aCm4ClJqiVA2e99l6wiJU8odGMqTtcLxuc0JonsHro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CqQf93gW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19994C4CEF0;
-	Mon, 22 Sep 2025 15:55:27 +0000 (UTC)
+	s=arc-20240116; t=1758556548; c=relaxed/simple;
+	bh=JerfD2CXPVA7ixQHD/FykyLShgV2ysRS6+rq+iXw0b0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=BS3lrX8Kdn0DRY9AqGghiWJvYIiiaKLg/9XEsHWYxWOH4S6T50dD60cFr2a/xYaS2JRNfnHJljgpTkY/IvXg+Qxv7WdPU0kVx5184V4zeoYVwBv2DdlVLmNCr/dL8gZAPLr7ebLxlpfVcXRxBkU8zmXrWrSh9BylJQXchMBqOD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U3xad9+w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1169C4CEF7;
+	Mon, 22 Sep 2025 15:55:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758556527;
-	bh=Onf3CcsEJl0ngxXMEOYfC15DjUX6QEH0Zyjt05mjWVo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CqQf93gWSxKJStGz129YFX6KAQwrxTlN5QqPXhCPOyO3gDva8XoByKeTQzuv5anyr
-	 zLtDABiPBw0iutIDE1ciQelQjDWj4pbHa94uLii2EtmR9LqJDYeZRqdthdLta6AvRo
-	 /EFlKzIzi/GUIZfQ8DUscmCVWOzfHs6zo7BE8gk6ZWHDnuMuZAVFE+LJ8dzaAkh+u5
-	 dyExzz37ACD7g3U75rBi6hH87mw1VetRNWkuixHOj+LaFNL7R0GlZ5pp86Mq9pI1ud
-	 2Gi+QytZJ8Gc2HxWLMaiSQMTa0z9j5lqR8rXoFtgVnMh/0EPxrbRbm5VMvO9R6OOWM
-	 wcMPEAeusSm0w==
-Date: Mon, 22 Sep 2025 17:55:25 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC bpf-next 1/6] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-Message-ID: <aNFxbVqzM1VhxD_G@lore-desk>
-References: <20250920-xdp-meta-rxcksum-v1-0-35e76a8a84e7@kernel.org>
- <20250920-xdp-meta-rxcksum-v1-1-35e76a8a84e7@kernel.org>
- <aNFtljcYeLK3uVo3@mini-arch>
+	s=k20201202; t=1758556548;
+	bh=JerfD2CXPVA7ixQHD/FykyLShgV2ysRS6+rq+iXw0b0=;
+	h=Date:Cc:To:From:Subject:References:In-Reply-To:From;
+	b=U3xad9+w+MyWVhDs7wO3wNQSfBrhZXe+knEgo75Xu6QLh/n55u9BCsAAD84eX8omB
+	 jECPqkDsYESZFK43L5f6icNH5/yLmfNXNx7KcBTZzb9PsufGlwGbq1YXzVEijiAP2t
+	 G+rpPLlIyvJQhVLL3ebbsklHDQjiQ9IKYMAZfHnMusb5pU9C3e8b5KAavl46zIaLYw
+	 HndNh02DAcQofAMtJbxV1uMzOB2NUymD1IGwE9FB1ataO2opx7QUngqf9pSvkuYDj8
+	 DD2qMImsfx/88HKGWjv9Os6ThN5BaLe86gQ03hrJM10QfwP9GLT3xZY/QbCAbo0KRs
+	 2+ft8vb1FHvbw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bRMqdsBuSfWUVEkl"
-Content-Disposition: inline
-In-Reply-To: <aNFtljcYeLK3uVo3@mini-arch>
-
-
---bRMqdsBuSfWUVEkl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 22 Sep 2025 17:55:43 +0200
+Message-Id: <DCZG9N3QIRNP.1HUDPVL61FZVR@kernel.org>
+Cc: "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Bartosz Golaszewski"
+ <brgl@bgdev.pl>, "Tzung-Bi Shih" <tzungbi@kernel.org>, "Bartosz
+ Golaszewski" <bartosz.golaszewski@linaro.org>, "Krzysztof Kozlowski"
+ <krzk@kernel.org>, "Benson Leung" <bleung@chromium.org>, "Rafael J .
+ Wysocki" <rafael@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
+ Khan" <shuah@kernel.org>, "Dawid Niedzwiecki" <dawidn@google.com>,
+ <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <chrome-platform@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
+ "Wolfram Sang" <wsa+renesas@sang-engineering.com>, "Dan Williams"
+ <dan.j.williams@intel.com>
+To: "Jason Gunthorpe" <jgg@nvidia.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH v3 0/5] platform/chrome: Fix a possible UAF via
+ revocable
+References: <20250912081718.3827390-1-tzungbi@kernel.org>
+ <2033c6cd-4112-4c8a-a9ef-2ab34f3504b8@kernel.org>
+ <CACMJSeuKH+WKOXLNU92dMssqhK02xG3z=cT0VeXYM+ZGuPCB9g@mail.gmail.com>
+ <aMQW2jUFlx7Iu9U5@tzungbi-laptop>
+ <20250912132656.GC31682@pendragon.ideasonboard.com>
+ <2025091209-curfew-safari-f6e0@gregkh>
+ <CAMRc=MfdoB50o=3Q2p94o+f7S2Bzr=TAtWWQcDrC5Wf3Q5nqAA@mail.gmail.com>
+ <20250912135916.GF31682@pendragon.ideasonboard.com>
+ <2025091220-private-verse-d979@gregkh>
+ <20250912142646.GI31682@pendragon.ideasonboard.com>
+ <20250922151040.GA2546062@nvidia.com>
+In-Reply-To: <20250922151040.GA2546062@nvidia.com>
 
-On Sep 22, Stanislav Fomichev wrote:
-> On 09/20, Lorenzo Bianconi wrote:
-> > Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
-> > checksum will be use by devices capable of exposing receive checksum
-> > result via bpf_xdp_metadata_rx_checksum().
-> >=20
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > ---
-> >  Documentation/netlink/specs/netdev.yaml | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >=20
-> > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/ne=
-tlink/specs/netdev.yaml
-> > index e00d3fa1c152d7165e9485d6d383a2cc9cef7cfd..00699bf4a7fdb67c6b9ee35=
-48098b0c933fd39a4 100644
-> > --- a/Documentation/netlink/specs/netdev.yaml
-> > +++ b/Documentation/netlink/specs/netdev.yaml
-> > @@ -61,6 +61,11 @@ definitions:
-> >          doc: |
-> >            Device is capable of exposing receive packet VLAN tag via
-> >            bpf_xdp_metadata_rx_vlan_tag().
-> > +      -
-> > +        name: checksum
-> > +        doc: |
-> > +          Device is capable of exposing receive checksum result via
-> > +          bpf_xdp_metadata_rx_checksum().
-> >    -
-> >      type: flags
-> >      name: xsk-flags
->=20
-> nit: let's fold it into patch 2? Will be easier to git blame the
-> feature..
+On Mon Sep 22, 2025 at 5:10 PM CEST, Jason Gunthorpe wrote:
+> As was said later in this thread, it would be a real shame to see
+> people implement revocable in drivers instead of rely on subsystems to
+> have sane unregistration semantics where the subsystem guarentees that
+> no driver callbacks are running after unregister. You never need
+> driver revocable in a world like that.
 
-ack, I will do it posting a proper series.
+I fully agree with that, in C there is indeed no value of a revocable type =
+when
+subsystems can guarantee "sane unregistration semantics".
 
-Regards,
-Lorenzo
+I say "in C" because in C there is no way to get a proof by the compiler th=
+at
+we're in a scope (e.g. through the subsystem guarentee) where the device is
+guaranteed to be bound (which we can in Rust).
 
---bRMqdsBuSfWUVEkl
-Content-Type: application/pgp-signature; name=signature.asc
+So, effectively, we're not getting any value out of the revocable in C in s=
+uch a
+case: In the best case, we're just bypassing the revocable by accessing the
+pointer unchecked (regardless whether that's valid or not); in the worst ca=
+se
+we're introducing a useless SRCU read side critical section.
 
------BEGIN PGP SIGNATURE-----
+(In Rust the compiler will stop us from accessing the pointer unchecked if =
+we're
+not in a scope where unchecked access is valid.)
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaNFxbQAKCRA6cBh0uS2t
-rNMHAQCZQ8ZRjtV8RUnz2vY6o7/MqAASpGYpoP/69OTl9wjz7QEA0EogEhTfo2Hk
-xMcNGq1A1zWlgoqIzDCE3KQhy/c4BgA=
-=RRWF
------END PGP SIGNATURE-----
+So, I think in C revocable should be restricted to use-cases where scopes a=
+re
+unbound by design. DRM device callbacks are an example for that and it's th=
+e
+reason why things like drm_dev_{enter,exit}() and drm_dev_unplug() exist. I=
+n the
+end, those are exactly the same as revocable implemented in a slightly diff=
+erent
+way.
 
---bRMqdsBuSfWUVEkl--
+- Danilo
 
