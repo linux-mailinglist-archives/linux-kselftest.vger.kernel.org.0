@@ -1,108 +1,93 @@
-Return-Path: <linux-kselftest+bounces-42043-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC605B8ECF6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 04:44:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2E57B8F23A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 08:26:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 847AC179B74
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 02:44:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9EBE188A86B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 06:27:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E812318DB37;
-	Mon, 22 Sep 2025 02:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 536712517AC;
+	Mon, 22 Sep 2025 06:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgX4zQG9"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CwsjDxxl";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wu4D2YFm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4A31547CC;
-	Mon, 22 Sep 2025 02:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C2C16CD33;
+	Mon, 22 Sep 2025 06:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758509062; cv=none; b=mWJrCsJOt6QXCtileceQF5DJDYMRj2OUFSmDFzTZU1sNuD8DeHAPLxMWuQpHpqlqJjuGz8JnrqUcYK8SXaQJwfiC69VA7vIMrndBcEe9Q4tzb7n2fnxEndZUXjXmjact64HY5ZZfTpdEcRUJGB2/PYV4HvXiqDjCGHmkgKuXfrU=
+	t=1758522397; cv=none; b=Ov0UnjCMlEy9Q6TOoTL39HbNJ1reXImPPWOETnenC74zxjzHcEFjssp5EKcVaJTeExbzMHCQHEnDa3qFeAkZBT6NaA4ZsOGL7eQg/brkbagWECdj2D1aio6PSh7YB1ekWzxB3DBY/5sdvE7wmWaqSuLVw0eqqp8sTQ6a+ja+PJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758509062; c=relaxed/simple;
-	bh=i9vAa0AsWTqSQzz6uFyc7VXVf8ZJ7QlTL9Ja3Bg/hgg=;
+	s=arc-20240116; t=1758522397; c=relaxed/simple;
+	bh=mTlCST+NV6monq4VDOGsq1nkeaCC9gjKSnK3woeXd44=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=CdIJ5aJruR1KvkHWp2rUC+G2S2acSkJxfzI4WMKFqw6vWPGXZJKlIiv62I51RV+RCJCEmS1ho++emt2wbeezj6q+Ic7frlAduMghisDFoBslumYZtqm9ZCMz2nzHm5pZkfNH83vCrBPjultrSFCN0z0yYYr3m5woCZtWY2s8FUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgX4zQG9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8F6C4CEE7;
-	Mon, 22 Sep 2025 02:44:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758509061;
-	bh=i9vAa0AsWTqSQzz6uFyc7VXVf8ZJ7QlTL9Ja3Bg/hgg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=kgX4zQG9Ggek7o49bHXrtRIo5kLI9byQA1VGrO0g2NhIfgF+O7g3DmNB4VQlWu1RU
-	 rvn5Ng1I/gwc6uqXQlAM/GSftBSoRv2cs1GgW98+sggq0LEaVHB/4xzRlQDOEBTq1V
-	 1JYbrUBIXkWzk+Fxrb0Sh9GHTmuk2EE+mV4Erfh9IKaJWfsdSPKF2RmfatCJ5ey+OJ
-	 pKeM2giE9tz2rFVxxjrnv7iaAggC9I9+OA/rkyeZeNdXzU1EZLtTCagulCOYZflJrI
-	 fxVswkLQWeowr2MiQl8Ix33L2RboXxqNbIRe1zX9vbj1iHayNHW05Rw5FrDBFRHP5w
-	 e32O7vOprApgQ==
-From: Michael Ellerman <mpe@kernel.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>, Thomas =?utf-8?Q?Wei?=
- =?utf-8?Q?=C3=9Fschuh?=
- <thomas.weissschuh@linutronix.de>, Andy Lutomirski <luto@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino
- <vincenzo.frascino@arm.com>, Arnd Bergmann <arnd@arndb.de>, "David S.
- Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Nick
- Alcock <nick.alcock@oracle.com>, John Stultz <jstultz@google.com>, Stephen
- Boyd <sboyd@kernel.org>, John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore
- Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King
- <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Nicholas Piggin <npiggin@gmail.com>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, Vasily
- Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
- <svens@linux.ibm.com>, Nagarathnam Muthusamy
- <nagarathnam.muthusamy@oracle.com>, Shannon Nelson <sln@onemain.com>,
- Nicholas Piggin <npiggin@gmail.com>
-Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 07/36] powerpc/vdso: Explicitly include
- asm/cputable.h and asm/feature-fixups.h
-In-Reply-To: <41d100c5-4706-400e-a61a-46b068f1bc74@csgroup.eu>
-References: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
- <20250917-vdso-sparc64-generic-2-v3-7-3679b1bc8ee8@linutronix.de>
- <41d100c5-4706-400e-a61a-46b068f1bc74@csgroup.eu>
-Date: Mon, 22 Sep 2025 12:44:18 +1000
-Message-ID: <m1348fmcjh.fsf@mpe.ellerman.id.au>
+	 MIME-Version:Content-Type; b=vE5fw6KmIJATxmGCIjO11ILPCZm2BvaRJhtqQCWGPv2+A7f0IZ1vKxnMFbLDsEfeGYLcetA7LONJg3hfwLg+OaK04v8Gp7XCrTj2mcojdGArC29C2pt09J+sgrhvGb1ft35GjeBV3zLc+yPmV3QTFFp1PGgi9NvDGml2tMPhwlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CwsjDxxl; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wu4D2YFm; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1758522392;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mTlCST+NV6monq4VDOGsq1nkeaCC9gjKSnK3woeXd44=;
+	b=CwsjDxxlHNkml+W3XMI/NH9FoEPr3tY3Yipw6ooOdoWPglQmbvWmxh7WpyqD6T/rnr1BoX
+	x8EYY1ToGm6T15s2flEIA8Q+uVu9Fq5dU8PF8pRGRdAafezhgagsUgH7RwPZlfCKbEOwiw
+	EtuQntYV9GyksLRZB3WvX5we5IdsgxClxjspoVdEtlYXRd9NN+JM9cWUE3BuPNeUgB7Mn7
+	M0tov5A0Vry0YCWPREOJp41V58SeLiQ2Z6ivWgjTeQutq8gPRP6RMxrlhlz04m7jgkIWuX
+	uVZ8im9wantJn0jr1Tha+FXSv9cLYzCSrkyYAkJFjjG3YFDDbbifEgpdKbIZ0g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1758522392;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mTlCST+NV6monq4VDOGsq1nkeaCC9gjKSnK3woeXd44=;
+	b=wu4D2YFmKcfY9Afa/rL7Stcq7Qf4DibBFtqNw42AMRXDqiOqDyv4xakDvdI1GbFVrge3Sr
+	CiNMfbqm2yd4ErDg==
+To: Mateusz Guzik <mjguzik@gmail.com>, Khazhy Kumykov <khazhy@chromium.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
+ <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan
+ <shuah@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, Soheil Hassas
+ Yeganeh <soheil@google.com>, Willem de Bruijn <willemb@google.com>, Eric
+ Dumazet <edumazet@google.com>, Jens Axboe <axboe@kernel.dk>,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] eventpoll: Fix epoll_wait() report false negative
+In-Reply-To: <CAGudoHF8pKE3ODqY-WnbV=ZpjC9hH+U+COq_KE=aH7mEW8fsKQ@mail.gmail.com>
+References: <cover.1752824628.git.namcao@linutronix.de>
+ <43d64ad765e2c47e958f01246320359b11379466.1752824628.git.namcao@linutronix.de>
+ <aflo53gea7i6cyy22avn7mqxb3xboakgjwnmj4bqmjp6oafejj@owgv35lly7zq>
+ <87zfat19i7.fsf@yellow.woof>
+ <CAGudoHFLrkk_FBgFJ_ppr60ARSoJT7JLji4soLdKbrKBOxTR1Q@mail.gmail.com>
+ <CAGudoHE=iaZp66pTBYTpgcqis25rU--wFJecJP-fq78hmPViCg@mail.gmail.com>
+ <CACGdZYKcQmJtEVt8xoO9Gk53Rq1nmdginH4o5CmS4Kp3yVyM-Q@mail.gmail.com>
+ <CACGdZYLByXsRruwv+BNWG-EqK+-f6V0inki+6gg31PGw5oa90A@mail.gmail.com>
+ <CAGudoHF8pKE3ODqY-WnbV=ZpjC9hH+U+COq_KE=aH7mEW8fsKQ@mail.gmail.com>
+Date: Mon, 22 Sep 2025 08:26:30 +0200
+Message-ID: <87qzvz9f55.fsf@yellow.woof>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Le 17/09/2025 =C3=A0 16:00, Thomas Wei=C3=9Fschuh a =C3=A9crit=C2=A0:
->> The usage of ASM_FTR_IFCLR(CPU_TR_ARCH_31) requires asm/cputable.h and
->> asm/feature-fixups.h. Currently these headers are included transitively,
->> but that transitive inclusion is about to go away.
->
-> Hum ...
->
-> That was unexpectedly added by commit 9c7bfc2dc21e ("powerpc/64s: Make=20
-> POWER10 and later use pause_short in cpu_relax loops")
->
-> In theory, vdso/ headers shouldn't include any headers outside of vdso/
+Mateusz Guzik <mjguzik@gmail.com> writes:
+> a sequence counter around shenanigans will sort it out, but I don't
+> know if it is worth it and don't really want to investigate myself.
 
-Oops, looks like that was my fault.
+The original commit did mention "1% CPU/RPC reduction in RPC benchmarks".
+I'm not sure what "RPC" stands for and which benchmark it is. But if it
+is really important, we must have heard by now.
 
-It's expected that there can be feature fixups needed in the VDSO,
-vdso_feature_fixups() handles them, so that's OK. But the headers
-pulling from outside vdso is a pity.
-
-Still this patch is fine as-is.
-
-cheers
+Nam
 
