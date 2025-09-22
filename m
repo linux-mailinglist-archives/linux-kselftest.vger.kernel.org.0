@@ -1,80 +1,107 @@
-Return-Path: <linux-kselftest+bounces-42083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42084-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15700B92A86
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 20:52:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDC0BB92B46
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 21:00:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C37923B2D92
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 18:52:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8510D3A8E5D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 19:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166C131A55F;
-	Mon, 22 Sep 2025 18:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45D873164C5;
+	Mon, 22 Sep 2025 19:00:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UFCjiWvF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aQkU0QSN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C1531A553;
-	Mon, 22 Sep 2025 18:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CAD19A288;
+	Mon, 22 Sep 2025 19:00:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758567161; cv=none; b=NxdLoG+56fJkMYMZzp2rzzuqlyvb77g8VzY4vPg/sr7tkGAWzruEAs19A9wYOKhZv2xJdCWDxQqaYP4Ru4CH57m96o5beUcw3DdYDc89bLKw3mBm2Qe2DxaAetUiuNcRx6FhKCU8acLmTfls/Id8bPKsX23sNQlWb9vJ4x9Ipkw=
+	t=1758567627; cv=none; b=oX6So9gRZrNjMLw302fRdPZ7dxsbJB8vdFEeqf+WlGM3tiLNvstYRkQWhcJecT/ImzZUCo4XK1/732btNexCdBW+veIgYRdFGh2ssxpiM6DxBV5B3naWynGqfLyGJ9df/FfAuqWgi4/Pt7JcOIgds7msSoKw0Y7pqvI/AJ6SzcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758567161; c=relaxed/simple;
-	bh=zzPDjUd3ZXXbtwbaeNu8cGUP2U9NzJAtLzJgqUtgzkk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BkG6T5uDqHVfB+VauWKI6+b59i/QH02mg87SomNaA8YFE4wj3XjyjcYgyS+k7q09kHPZqq2dKr2PRmlFH9KKx5k86HRFU+x9C/2Q2U7d3XarL8Om6nuPT+YXz0K2kARs4tTyQ+osJJgRqKSJDw2BXEwU4J0oHN3iWzPd91J5MHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UFCjiWvF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30EA8C4CEF0;
-	Mon, 22 Sep 2025 18:52:40 +0000 (UTC)
+	s=arc-20240116; t=1758567627; c=relaxed/simple;
+	bh=8U5r7MWC4C6QDYlXsPEZHC2SwxespT/dx+lT/gIoY7M=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=euURpmzmeBIlXK3MxSWhALo1HGz6LBFmgrd/ikP5AjRLjZGbQ5LNd+5Su2JHyUl+J3etqAwcVuYirWqcnrwusBdIe6U6ommRQc+Zxndr119H85PEyRjGZEVf0qZFe98bdAAlTmxiaRr3zXhASFy7JuXoe0ETyZMTkfrmEoKKpZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aQkU0QSN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA46C4CEF0;
+	Mon, 22 Sep 2025 19:00:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758567160;
-	bh=zzPDjUd3ZXXbtwbaeNu8cGUP2U9NzJAtLzJgqUtgzkk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UFCjiWvFdiUb0wZzf+2dUrxNH2q/9TmWe8mLqxDj852L09tSlE5NGMVPG0e/Uy5zh
-	 N4enV7X6tpaTfmBlazdRrmJqUgJmqFkeLTR9P65OtGjiLpqhNaHVvWwX0s9Guuwbbl
-	 GVOwpADhclbuZVWJX3Yic2USLVVHLgU2Ns7+/J7dQHl/H1zCV1Oemo1zX7ESbbDvRI
-	 KyP22d1BoOCE1hyo75YZdqpyxikyvNEyDpOM9IEqhggbfjzBKoeHUlXO19xyx+JkxG
-	 8UklWFXYgwIwr1TmyARoRILE5VieYGqcJvghWWMTgDck8LMFjEN3WZncJKBq4tT2YM
-	 w7YQ4PrX7iZig==
-Date: Mon, 22 Sep 2025 11:52:39 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/6] mptcp: pm: netlink: only add server-side
- attr when true
-Message-ID: <20250922115239.21e4afaa@kernel.org>
-In-Reply-To: <20250919-net-next-mptcp-server-side-flag-v1-1-a97a5d561a8b@kernel.org>
-References: <20250919-net-next-mptcp-server-side-flag-v1-0-a97a5d561a8b@kernel.org>
-	<20250919-net-next-mptcp-server-side-flag-v1-1-a97a5d561a8b@kernel.org>
+	s=k20201202; t=1758567626;
+	bh=8U5r7MWC4C6QDYlXsPEZHC2SwxespT/dx+lT/gIoY7M=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=aQkU0QSNuNyPQOddF8/8SKdXidWzfNKzXYBCKpX3NterDRsdrxxyakEzpejxN6LCm
+	 suKZ1LxYsumb/LrjOc50uEmfzZbMq/Oyy4Odkb6ch14PlftgRqiXvmYxmdzOVJ3uzo
+	 muIYH68lw8Tg3b2PvvvSzoV+RFYiOwU2GMa93RHShKjMXOy4jEsp+NGd9+kaRjthBU
+	 iyrdMqzaZdKw5b+82zCaDb+cjozYE1ZKD6LaGqP4fjokSYDA4/mCaeQ93eYY62TB6q
+	 aqYdfQHJIzLUBJhLEf9DSfmNaEtSVY/l3+V/ZsSECsKwAIKPtXsOhjyPKffcg8X3v/
+	 qpwqNjxHU/73Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D9D39D0C20;
+	Mon, 22 Sep 2025 19:00:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/6] mptcp: pm: netlink: announce server-side
+ flag
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175856762426.1122110.4750649388400694679.git-patchwork-notify@kernel.org>
+Date: Mon, 22 Sep 2025 19:00:24 +0000
+References: 
+ <20250919-net-next-mptcp-server-side-flag-v1-0-a97a5d561a8b@kernel.org>
+In-Reply-To: 
+ <20250919-net-next-mptcp-server-side-flag-v1-0-a97a5d561a8b@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: martineau@kernel.org, geliang@kernel.org, donald.hunter@gmail.com,
+ kuba@kernel.org, davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-On Fri, 19 Sep 2025 14:08:58 +0200 Matthieu Baerts (NGI0) wrote:
-> This attribute is a boolean. No need to add it to set it to 'false'.
-> 
-> Indeed, the default value when this attribute is not set is naturally
-> 'false'. A few bytes can then be saved by not adding this attribute if
-> the connection is not on the server side.
-> 
-> This prepares the future deprecation of its attribute, in favour of a
-> new flag.
+Hello:
 
-Removing attrs from netlink messages is a bit of a gray zone.
-If anyone complains we'll have to revert..
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 19 Sep 2025 14:08:57 +0200 you wrote:
+> Now that the 'flags' attribute is used, it seems interesting to add one
+> flag for 'server-side', a boolean value.
+> 
+> Here are a few patches related to the 'server-side' attribute:
+> 
+> - Patch 1: only announce this attribute on the server side.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/6] mptcp: pm: netlink: only add server-side attr when true
+    https://git.kernel.org/netdev/net-next/c/c9809f03c158
+  - [net-next,2/6] mptcp: pm: netlink: announce server-side flag
+    https://git.kernel.org/netdev/net-next/c/3d7ae91107b8
+  - [net-next,3/6] mptcp: pm: netlink: deprecate server-side attribute
+    https://git.kernel.org/netdev/net-next/c/c8bc168f5f3d
+  - [net-next,4/6] selftests: mptcp: pm: get server-side flag
+    https://git.kernel.org/netdev/net-next/c/e6c35529452e
+  - [net-next,5/6] mptcp: use _BITUL() instead of (1 << x)
+    https://git.kernel.org/netdev/net-next/c/5c967ebb5519
+  - [net-next,6/6] mptcp: remove unused returned value of check_data_fin
+    https://git.kernel.org/netdev/net-next/c/1be5b82c4585
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
