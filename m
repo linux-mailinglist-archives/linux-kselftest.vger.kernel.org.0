@@ -1,120 +1,177 @@
-Return-Path: <linux-kselftest+bounces-42073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42074-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54D09B92154
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 17:55:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6838B92163
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 17:56:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31DBD7AB74C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 15:54:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 786092A3567
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 15:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D624B302148;
-	Mon, 22 Sep 2025 15:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E162FE566;
+	Mon, 22 Sep 2025 15:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3xad9+w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7F94CZG"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70CD48CFC;
-	Mon, 22 Sep 2025 15:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE2013D2B2;
+	Mon, 22 Sep 2025 15:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758556548; cv=none; b=cFEzSc5lY63IFeUIO1F2ZExz/y6DatoNijRYS1ciP/rAh9Haz/3j8KUdr3YW4ZWw65wBhIodtqycME6/cywAZ7DVDrxBjRR2avmDgeVKjbk2/nDwI1m9BXWVWQKpmKFhtZgd6pMVvsNNpThq8msEkwLqBdn+aiD4ZsuL5uTA2dY=
+	t=1758556584; cv=none; b=hbCV7dVmcmwMVhJyTzk9iTitx+TGsfjfcetXXcQbUoucAUTx2tik+VRxvrmmOxgYJKMsNHQ6agqaX3ZW8INMgjCoR4Q7LqlOxUzmVyOLT6fXsJHQ4+l+j6f89Y2uCSq1D79QGADIa8rSXaA3cTQ/fiuPqdJO8D3sXVUZNC6pdJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758556548; c=relaxed/simple;
-	bh=JerfD2CXPVA7ixQHD/FykyLShgV2ysRS6+rq+iXw0b0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=BS3lrX8Kdn0DRY9AqGghiWJvYIiiaKLg/9XEsHWYxWOH4S6T50dD60cFr2a/xYaS2JRNfnHJljgpTkY/IvXg+Qxv7WdPU0kVx5184V4zeoYVwBv2DdlVLmNCr/dL8gZAPLr7ebLxlpfVcXRxBkU8zmXrWrSh9BylJQXchMBqOD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U3xad9+w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1169C4CEF7;
-	Mon, 22 Sep 2025 15:55:44 +0000 (UTC)
+	s=arc-20240116; t=1758556584; c=relaxed/simple;
+	bh=A6td5LYxhItzS+7GkGUIeiplez2Gyg59sgZwyjPm6Rs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d/+UEjhD510AkQRG7P7vkGNzSDQvFiqy/IZLfHhEDsHUlCU9Ryn6scNlSTTE0yrQTfki7fB1bByENW28eHWbTuhy43bV7vwGtgGHGlZM7oWEvxQ30l8B+in7ktBuqa/49NKwKXd/2vm2Y3SB6ZOhke4YG3DV4S2+9wD2sWbn8eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7F94CZG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55A9AC4CEF0;
+	Mon, 22 Sep 2025 15:56:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758556548;
-	bh=JerfD2CXPVA7ixQHD/FykyLShgV2ysRS6+rq+iXw0b0=;
-	h=Date:Cc:To:From:Subject:References:In-Reply-To:From;
-	b=U3xad9+w+MyWVhDs7wO3wNQSfBrhZXe+knEgo75Xu6QLh/n55u9BCsAAD84eX8omB
-	 jECPqkDsYESZFK43L5f6icNH5/yLmfNXNx7KcBTZzb9PsufGlwGbq1YXzVEijiAP2t
-	 G+rpPLlIyvJQhVLL3ebbsklHDQjiQ9IKYMAZfHnMusb5pU9C3e8b5KAavl46zIaLYw
-	 HndNh02DAcQofAMtJbxV1uMzOB2NUymD1IGwE9FB1ataO2opx7QUngqf9pSvkuYDj8
-	 DD2qMImsfx/88HKGWjv9Os6ThN5BaLe86gQ03hrJM10QfwP9GLT3xZY/QbCAbo0KRs
-	 2+ft8vb1FHvbw==
+	s=k20201202; t=1758556583;
+	bh=A6td5LYxhItzS+7GkGUIeiplez2Gyg59sgZwyjPm6Rs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U7F94CZGzy39yWMnpePBwU1gAZA6GtnNm5q+R2fJLT4HR32EAcFKOI5IJ2xzGPx8G
+	 ZlR+IorUm91M5N+ibx/KQfekktoMKN4Rz6K2FVBAKMAFbQcNQV6Dsb75Gfd96BUWg5
+	 eIlDggoK1y8rbZBKwwwdieyIQdnyz8spf5GVqiZgpg10zoVqkYGpWmanQWoIwojifh
+	 noOvNDu7DXpWScIj3NPn8L/lXRRtyeMBEynT8PC6xERBL+K813kxbijUkLkeWg1brJ
+	 7wMKAzsn/NSzP90e0Tts4xYJ5RxKUoZ8Bbh68hRndyEymRCvUAQvF2nfDTHHsA6L5p
+	 A4YorxVN+bKDg==
+Date: Mon, 22 Sep 2025 17:56:21 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next 2/6] net: xdp: Add xmo_rx_checksum callback
+Message-ID: <aNFxpVGo7YdHKMMn@lore-desk>
+References: <20250920-xdp-meta-rxcksum-v1-0-35e76a8a84e7@kernel.org>
+ <20250920-xdp-meta-rxcksum-v1-2-35e76a8a84e7@kernel.org>
+ <aNFupGy1QxlhRSUE@mini-arch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="oLV4KCwzri5jB3PU"
+Content-Disposition: inline
+In-Reply-To: <aNFupGy1QxlhRSUE@mini-arch>
+
+
+--oLV4KCwzri5jB3PU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 22 Sep 2025 17:55:43 +0200
-Message-Id: <DCZG9N3QIRNP.1HUDPVL61FZVR@kernel.org>
-Cc: "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Bartosz Golaszewski"
- <brgl@bgdev.pl>, "Tzung-Bi Shih" <tzungbi@kernel.org>, "Bartosz
- Golaszewski" <bartosz.golaszewski@linaro.org>, "Krzysztof Kozlowski"
- <krzk@kernel.org>, "Benson Leung" <bleung@chromium.org>, "Rafael J .
- Wysocki" <rafael@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
- Khan" <shuah@kernel.org>, "Dawid Niedzwiecki" <dawidn@google.com>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <chrome-platform@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
- "Wolfram Sang" <wsa+renesas@sang-engineering.com>, "Dan Williams"
- <dan.j.williams@intel.com>
-To: "Jason Gunthorpe" <jgg@nvidia.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v3 0/5] platform/chrome: Fix a possible UAF via
- revocable
-References: <20250912081718.3827390-1-tzungbi@kernel.org>
- <2033c6cd-4112-4c8a-a9ef-2ab34f3504b8@kernel.org>
- <CACMJSeuKH+WKOXLNU92dMssqhK02xG3z=cT0VeXYM+ZGuPCB9g@mail.gmail.com>
- <aMQW2jUFlx7Iu9U5@tzungbi-laptop>
- <20250912132656.GC31682@pendragon.ideasonboard.com>
- <2025091209-curfew-safari-f6e0@gregkh>
- <CAMRc=MfdoB50o=3Q2p94o+f7S2Bzr=TAtWWQcDrC5Wf3Q5nqAA@mail.gmail.com>
- <20250912135916.GF31682@pendragon.ideasonboard.com>
- <2025091220-private-verse-d979@gregkh>
- <20250912142646.GI31682@pendragon.ideasonboard.com>
- <20250922151040.GA2546062@nvidia.com>
-In-Reply-To: <20250922151040.GA2546062@nvidia.com>
 
-On Mon Sep 22, 2025 at 5:10 PM CEST, Jason Gunthorpe wrote:
-> As was said later in this thread, it would be a real shame to see
-> people implement revocable in drivers instead of rely on subsystems to
-> have sane unregistration semantics where the subsystem guarentees that
-> no driver callbacks are running after unregister. You never need
-> driver revocable in a world like that.
+> On 09/20, Lorenzo Bianconi wrote:
+> > Introduce xmo_rx_checksum netdev callback in order allow the eBPF
+> > program bounded to the device to retrieve the RX checksum result comput=
+ed
+> > by the hw NIC.
+> >=20
+> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > ---
+> >  include/net/xdp.h |  6 ++++++
+> >  net/core/xdp.c    | 29 +++++++++++++++++++++++++++++
+> >  2 files changed, 35 insertions(+)
+> >=20
+> > diff --git a/include/net/xdp.h b/include/net/xdp.h
+> > index 6fd294fa6841d59c3d7dc4475e09e731996566b0..481b39976ac8c8d4db2de39=
+055c72ba8d0d511c3 100644
+> > --- a/include/net/xdp.h
+> > +++ b/include/net/xdp.h
+> > @@ -581,6 +581,10 @@ void xdp_attachment_setup(struct xdp_attachment_in=
+fo *info,
+> >  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+> >  			   bpf_xdp_metadata_rx_vlan_tag, \
+> >  			   xmo_rx_vlan_tag) \
+> > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> > +			   bpf_xdp_metadata_rx_checksum, \
+> > +			   xmo_rx_checksum)
+> > =20
+> >  enum xdp_rx_metadata {
+> >  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> > @@ -644,6 +648,8 @@ struct xdp_metadata_ops {
+> >  			       enum xdp_rss_hash_type *rss_type);
+> >  	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, __be16 *vlan_proto,
+> >  				   u16 *vlan_tci);
+> > +	int	(*xmo_rx_checksum)(const struct xdp_md *ctx, u8 *ip_summed,
+> > +				   u32 *cksum_meta);
+> >  };
+> > =20
+> >  #ifdef CONFIG_NET
+> > diff --git a/net/core/xdp.c b/net/core/xdp.c
+> > index 9100e160113a9a1e2cb88e7602e85c5f36a9f3b9..3edab2d5e5c7c2013b1ef98=
+c949a83655eb94349 100644
+> > --- a/net/core/xdp.c
+> > +++ b/net/core/xdp.c
+> > @@ -961,6 +961,35 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const=
+ struct xdp_md *ctx,
+> >  	return -EOPNOTSUPP;
+> >  }
+> > =20
+> > +/**
+> > + * bpf_xdp_metadata_rx_checksum - Read XDP frame RX checksum.
+> > + * @ctx: XDP context pointer.
+> > + * @ip_summed: Return value pointer indicating checksum result.
+> > + * @cksum_meta: Return value pointer indicating checksum result metada=
+ta.
+> > + *
+> > + * In case of success, ``ip_summed`` is set to the RX checksum result.=
+ Possible
+> > + * values are:
+> > + * ``CHECKSUM_NONE``
+> > + * ``CHECKSUM_UNNECESSARY``
+> > + * ``CHECKSUM_COMPLETE``
+> > + * ``CHECKSUM_PARTIAL``
+>=20
+> What do you think about adding new UAPI enum here? Similar to
+> xdp_rss_hash_type for the hash. The values can match the internal
+> CHECKSUM_XXX ones with (BUILD_BUG_ONs to enforce the relationship).
+> Will be a bit nicer api-wise to have an enum than an opaque u8.
 
-I fully agree with that, in C there is indeed no value of a revocable type =
-when
-subsystems can guarantee "sane unregistration semantics".
+ack, fine. I will fix it v1.
 
-I say "in C" because in C there is no way to get a proof by the compiler th=
-at
-we're in a scope (e.g. through the subsystem guarentee) where the device is
-guaranteed to be bound (which we can in Rust).
+Regards,
+Lorenzo
 
-So, effectively, we're not getting any value out of the revocable in C in s=
-uch a
-case: In the best case, we're just bypassing the revocable by accessing the
-pointer unchecked (regardless whether that's valid or not); in the worst ca=
-se
-we're introducing a useless SRCU read side critical section.
 
-(In Rust the compiler will stop us from accessing the pointer unchecked if =
-we're
-not in a scope where unchecked access is valid.)
+--oLV4KCwzri5jB3PU
+Content-Type: application/pgp-signature; name=signature.asc
 
-So, I think in C revocable should be restricted to use-cases where scopes a=
-re
-unbound by design. DRM device callbacks are an example for that and it's th=
-e
-reason why things like drm_dev_{enter,exit}() and drm_dev_unplug() exist. I=
-n the
-end, those are exactly the same as revocable implemented in a slightly diff=
-erent
-way.
+-----BEGIN PGP SIGNATURE-----
 
-- Danilo
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaNFxpQAKCRA6cBh0uS2t
+rDlFAP9f4DjX1fOKxrEiOYqDgqgqHd37X+FW2Ruk7neFu2Lh3gEAvTvJwg8PnFeY
+ayPyTpytuunY9VYrc/mA8PIfy/FidgU=
+=lFKD
+-----END PGP SIGNATURE-----
+
+--oLV4KCwzri5jB3PU--
 
