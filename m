@@ -1,68 +1,68 @@
-Return-Path: <linux-kselftest+bounces-42065-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42066-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9106B903D2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 12:46:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 602B6B903ED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 12:47:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0E65423698
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 10:44:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 500BF1886AE2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 10:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CDA7302149;
-	Mon, 22 Sep 2025 10:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748B9302CBA;
+	Mon, 22 Sep 2025 10:41:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="mtZREnRA"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Qo6O8a8a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.64.237.68])
+Received: from fra-out-013.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-013.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.178.132.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EBC2FFF98;
-	Mon, 22 Sep 2025 10:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.64.237.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD072FBE12;
+	Mon, 22 Sep 2025 10:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.178.132.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758537649; cv=none; b=dKoyOlnSEkaC0glcEwl2jqmudVXFRFLpN7cTBertu1cdhrXtwhJzzrrfFrEjqHZK1WJdW7srZh83PkZ5NVgKGqYcwHszpdNoeujSkYBboH3XiyMfhdgSXFxfsZAgt99GrhyNEY7MQ1Ynhy5m7g8EHCVC77D/t2awLmY4fpmzRrs=
+	t=1758537673; cv=none; b=cOxCdqKJx0S6vPN0ab4ZKFq+RMkJdLPE3k+fVdtpfwWUljR4MFdRs2EjDEU8IVVkPdvsl20KvekZiFaX2Aj8c8GAaCk/Ahdz8vzmtWtCQDFhOtm6ktG9fUAGv70eJJkF+2ArTaR5NQkwb3e1+l9te0uOiU85e4oKY5r8v09UCoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758537649; c=relaxed/simple;
-	bh=M+DzBGorF0x2HwKxbRALu5Mz4okNvOwcKTlN8glrxuQ=;
+	s=arc-20240116; t=1758537673; c=relaxed/simple;
+	bh=V2L3IilwofpV6SrsfVTvut5ipDXkokIOm+dTBT4i7eQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=V3ZBUb57ijI06Db117/ytwj+njiaz/k/9PDDnHMsVrt3+EhJTKWZUYF27+ltgyzNqdtp+RkfHROv5ePhk8t9Lv/Se8SH8MkRPLMhb37E8YqH++Y3LWeawT8vp8vEiSM314j9qMc89Zz/hlRR8PgkJHtfFmDF0muDoZKuR0HHkVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=mtZREnRA; arc=none smtp.client-ip=3.64.237.68
+	 MIME-Version:Content-Type; b=o6Gms3nHLrKrk4eis2FDbt6IeSCCYLS/2m/BBf9Opd00zN65LBKUaF8ZuqeY+b+K8OH2tWp+QrM2K4tA5IF017ilb+YV1hrgqGirS4aWvl92t8G7n4mRkGEN6cZ1xmcSwtJdukq8yeAxjjctbhgA62Sd5b2TjEmWd0Sbaw5pxPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Qo6O8a8a; arc=none smtp.client-ip=63.178.132.221
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1758537648; x=1790073648;
+  t=1758537671; x=1790073671;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8djAgabF22BDsxfYcNFa72Q6mXnC3doUyHk+thXHzBc=;
-  b=mtZREnRAUfyFd8mngCLmq3l+TxqkeNXe4VJrW+jB4CKIyvy6pZmIhUW3
-   tnWlWJhxqRjzUUtzKlT5ejaKO1eceuICzwxDLRIvICo/pt46GEn0ZjXUY
-   1aRwvRRDTAlYHBewmmSObMBOINUAwUTmXfzwjQQLu4VWMQbsnCFoKhec6
-   1VVZVAFjc/PN+C8LJxeZFl9O3rZUpb2y/3k3y4ZUhlQJuqJFg3ctfKwxE
-   zWQHtxZ+B2DldWpHHxLS1tuOgCzX0+iZtEdMENJhbSpXhDL7jdns8dWll
-   95wR4U47S5nVP1TPnlDVFkSK7fSPGZa1CJbPzo/lmhzrkgAUY2XpsYeog
-   Q==;
-X-CSE-ConnectionGUID: yPKUa6hNQIyWV81ZIlYO4w==
-X-CSE-MsgGUID: Lb1CdkBpSKmBQFpgA4mZdw==
+  bh=k0dUe76w+6n5/NfsPbyefGVCom+xh3GGcFcV3Olhmks=;
+  b=Qo6O8a8a963sLPcVEqwurfFk9sEryrbPl+aCDwVFoRTSyNMY2/lzItad
+   nqjBypr/4OLtzDcc93q7Cp0J14yV5DD6cwNzHAWQOLbUpEn+I3aLmLxtK
+   XWpNHl/jsoabgK/EJoYo5Y5Mc1/d38r3v4oxtLjAEaoSiTYOZTEDtuPIf
+   PaSI9Zk9eBtD8IwUKelTTS+xcHtROEO4gRbbJUwwHL6T91oE7WgWYljGz
+   PBmKmtMMueDkDDvTexaOwT31Ne5JgGNID6EskuGE9HKc75QBsecRE7B7s
+   dWcxx7ln1MJq2KZ/hkKvWdPVeWivDDpmbAIEZgoynuo5D+Nd+MGXxWSVC
+   A==;
+X-CSE-ConnectionGUID: nGdSMg2KRJqwFKGugNMByw==
+X-CSE-MsgGUID: 1oNLGvSNSbarq0bxcHDlmw==
 X-IronPort-AV: E=Sophos;i="6.18,284,1751241600"; 
-   d="scan'208";a="2376821"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 10:40:40 +0000
-Received: from EX19MTAEUA001.ant.amazon.com [54.240.197.233:3914]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.0.240:2525] with esmtp (Farcaster)
- id f9be43a7-3f48-4cdf-89db-ef1f9aebed8b; Mon, 22 Sep 2025 10:40:39 +0000 (UTC)
-X-Farcaster-Flow-ID: f9be43a7-3f48-4cdf-89db-ef1f9aebed8b
+   d="scan'208";a="2372418"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-013.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 10:41:07 +0000
+Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:9689]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.1.3:2525] with esmtp (Farcaster)
+ id 549405e1-3e62-41e8-bf89-796f0cf76dce; Mon, 22 Sep 2025 10:41:06 +0000 (UTC)
+X-Farcaster-Flow-ID: 549405e1-3e62-41e8-bf89-796f0cf76dce
 Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
- EX19MTAEUA001.ant.amazon.com (10.252.50.50) with Microsoft SMTP Server
+ EX19MTAEUC002.ant.amazon.com (10.252.51.245) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Mon, 22 Sep 2025 10:40:34 +0000
+ Mon, 22 Sep 2025 10:41:01 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by EX19D018EUA004.ant.amazon.com (10.252.50.85) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Mon, 22 Sep 2025
- 10:40:08 +0000
+ 10:40:34 +0000
 From: Eliav Farber <farbere@amazon.com>
 To: <richard@nod.at>, <anton.ivanov@cambridgegreys.com>,
 	<johannes@sipsolutions.net>, <dave.hansen@linux.intel.com>,
@@ -110,9 +110,9 @@ CC: Christoph Hellwig <hch@infradead.org>, Dan Carpenter
  Axboe" <axboe@kernel.dk>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
 	Mateusz Guzik <mjguzik@gmail.com>, Matthew Wilcox <willy@infradead.org>,
 	Pedro Falcato <pedro.falcato@gmail.com>
-Subject: [PATCH 14/15 6.6.y] minmax.h: simplify the variants of clamp()
-Date: Mon, 22 Sep 2025 10:32:40 +0000
-Message-ID: <20250922103241.16213-15-farbere@amazon.com>
+Subject: [PATCH 15/15 6.6.y] minmax.h: remove some #defines that are only expanded once
+Date: Mon, 22 Sep 2025 10:32:41 +0000
+Message-ID: <20250922103241.16213-16-farbere@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250922103241.16213-1-farbere@amazon.com>
 References: <20250922103241.16213-1-farbere@amazon.com>
@@ -129,15 +129,20 @@ X-ClientProxiedBy: EX19D040UWB004.ant.amazon.com (10.13.138.91) To
 
 From: David Laight <David.Laight@ACULAB.COM>
 
-[ Upstream commit 495bba17cdf95e9703af1b8ef773c55ef0dfe703 ]
+[ Upstream commit 2b97aaf74ed534fb838d09867d09a3ca5d795208 ]
 
-Always pass a 'type' through to __clamp_once(), pass '__auto_type' from
-clamp() itself.
+The bodies of __signed_type_use() and __unsigned_type_use() are much the
+same size as their names - so put the bodies in the only line that expands
+them.
 
-The expansion of __types_ok3() is reasonable so it isn't worth the added
-complexity of avoiding it when a fixed type is used for all three values.
+Similarly __signed_type() is defined separately for 64bit and then used
+exactly once just below.
 
-Link: https://lkml.kernel.org/r/8f69f4deac014f558bab186444bac2e8@AcuMS.aculab.com
+Change the test for __signed_type from CONFIG_64BIT to one based on gcc
+defined macros so that the code is valid if it gets used outside of a
+kernel build.
+
+Link: https://lkml.kernel.org/r/9386d1ebb8974fbabbed2635160c3975@AcuMS.aculab.com
 Signed-off-by: David Laight <david.laight@aculab.com>
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Arnd Bergmann <arnd@kernel.org>
@@ -152,71 +157,51 @@ Cc: Pedro Falcato <pedro.falcato@gmail.com>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- include/linux/minmax.h | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ include/linux/minmax.h | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
 diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index 75fb7a6ad4c6..2bbdd5b5e07e 100644
+index 2bbdd5b5e07e..eaaf5c008e4d 100644
 --- a/include/linux/minmax.h
 +++ b/include/linux/minmax.h
-@@ -183,29 +183,29 @@
- #define __clamp(val, lo, hi)	\
- 	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
- 
--#define __clamp_once(val, lo, hi, uval, ulo, uhi) ({				\
--	__auto_type uval = (val);						\
--	__auto_type ulo = (lo);							\
--	__auto_type uhi = (hi);							\
-+#define __clamp_once(type, val, lo, hi, uval, ulo, uhi) ({			\
-+	type uval = (val);							\
-+	type ulo = (lo);							\
-+	type uhi = (hi);							\
- 	BUILD_BUG_ON_MSG(statically_true(ulo > uhi),				\
- 		"clamp() low limit " #lo " greater than high limit " #hi);	\
- 	BUILD_BUG_ON_MSG(!__types_ok3(uval, ulo, uhi),				\
- 		"clamp("#val", "#lo", "#hi") signedness error");		\
- 	__clamp(uval, ulo, uhi); })
- 
--#define __careful_clamp(val, lo, hi) \
--	__clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
-+#define __careful_clamp(type, val, lo, hi) \
-+	__clamp_once(type, val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
- 
- /**
-- * clamp - return a value clamped to a given range with strict typechecking
-+ * clamp - return a value clamped to a given range with typechecking
-  * @val: current value
-  * @lo: lowest allowable value
-  * @hi: highest allowable value
-  *
-- * This macro does strict typechecking of @lo/@hi to make sure they are of the
-- * same type as @val.  See the unnecessary pointer comparisons.
-+ * This macro checks @val/@lo/@hi to make sure they have compatible
-+ * signedness.
+@@ -46,10 +46,8 @@
+  * comparison, and these expressions only need to be careful to not cause
+  * warnings for pointer use.
   */
--#define clamp(val, lo, hi) __careful_clamp(val, lo, hi)
-+#define clamp(val, lo, hi) __careful_clamp(__auto_type, val, lo, hi)
- 
- /**
-  * clamp_t - return a value clamped to a given range using a given type
-@@ -217,7 +217,7 @@
-  * This macro does no typechecking and uses temporary variables of type
-  * @type to make all the comparisons.
-  */
--#define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
-+#define clamp_t(type, val, lo, hi) __careful_clamp(type, val, lo, hi)
- 
- /**
-  * clamp_val - return a value clamped to a given range using val's type
-@@ -230,7 +230,7 @@
-  * type and @lo and @hi are literals that will otherwise be assigned a signed
-  * integer type.
-  */
--#define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
-+#define clamp_val(val, lo, hi) __careful_clamp(typeof(val), val, lo, hi)
+-#define __signed_type_use(ux) (2 + __is_nonneg(ux))
+-#define __unsigned_type_use(ux) (1 + 2 * (sizeof(ux) < 4))
+ #define __sign_use(ux) (is_signed_type(typeof(ux)) ? \
+-	__signed_type_use(ux) : __unsigned_type_use(ux))
++	(2 + __is_nonneg(ux)) : (1 + 2 * (sizeof(ux) < 4)))
  
  /*
-  * Do not check the array parameter using __must_be_array().
+  * Check whether a signed value is always non-negative.
+@@ -57,7 +55,7 @@
+  * A cast is needed to avoid any warnings from values that aren't signed
+  * integer types (in which case the result doesn't matter).
+  *
+- * On 64-bit any integer or pointer type can safely be cast to 'long'.
++ * On 64-bit any integer or pointer type can safely be cast to 'long long'.
+  * But on 32-bit we need to avoid warnings about casting pointers to integers
+  * of different sizes without truncating 64-bit values so 'long' or 'long long'
+  * must be used depending on the size of the value.
+@@ -66,12 +64,12 @@
+  * them, but we do not use s128 types in the kernel (we do use 'u128',
+  * but they are handled by the !is_signed_type() case).
+  */
+-#ifdef CONFIG_64BIT
+-  #define __signed_type(ux) long
++#if __SIZEOF_POINTER__ == __SIZEOF_LONG_LONG__
++#define __is_nonneg(ux) statically_true((long long)(ux) >= 0)
+ #else
+-  #define __signed_type(ux) typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L))
++#define __is_nonneg(ux) statically_true( \
++	(typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L)))(ux) >= 0)
+ #endif
+-#define __is_nonneg(ux) statically_true((__signed_type(ux))(ux) >= 0)
+ 
+ #define __types_ok(ux, uy) \
+ 	(__sign_use(ux) & __sign_use(uy))
 -- 
 2.47.3
 
