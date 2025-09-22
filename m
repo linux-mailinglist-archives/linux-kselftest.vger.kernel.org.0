@@ -1,119 +1,87 @@
-Return-Path: <linux-kselftest+bounces-42088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42089-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D715B93860
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 00:57:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74B72B939A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 01:36:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D63F17119E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 22:57:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FB163B2277
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 23:36:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C91B2C21D8;
-	Mon, 22 Sep 2025 22:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2565E289340;
+	Mon, 22 Sep 2025 23:35:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dpcw6JrB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bhknsX6/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D3B26B779
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Sep 2025 22:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDBC26B769
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Sep 2025 23:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758581857; cv=none; b=WW51rKn9FDSG++qZrQfN9JDUth2wDArX7X+nHwF4Dzat+jfoyg7KLhFEJgmDvUgEQbCPGiwkaQTC1b2iXkGnObRuE2iqZxn7M4ZVJAoKi7j8nRsKD0yraTOFY7SWMPvCEVdwShqZP2Z/S6ifSUIG2IwiJpOO/nPRL9945StY948=
+	t=1758584159; cv=none; b=eKdv5pJA+PJ78AKYW+RYSnCWHCiaxkS1CHPNMBDStZGpvce4n2psfeZVRatwMjjmy03JW7Q6v4pNvZ84a3Bo5DPfkpFmURftjDXc/tcz6qL7vhJYMtKesUYCwc3hcE/ZXPByltB7PLAlL7AcYTcyTBAarplV/4BXLnlncbVpS9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758581857; c=relaxed/simple;
-	bh=wJcpJFENZM3XJoASue2WgV0KmkWQXXkTgGWB1tLNT3o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LeX5OC4fgxc3xAtF0i34bmC8cA7Zr5AKORbqKesZBg0/6v76y+w2pBJFb8ojCtaG/3HfT7K7gkqY1GhC4DgUccQdSlVoZKz4o5JSPZeN20ZZelgzq4HWAFFJeK3uHh1WhiPCXymLvtMUWWvvQHIMgPvMJGpClvcAjp3cUq1MZIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dpcw6JrB; arc=none smtp.client-ip=209.85.222.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-89018ea5625so1410036241.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Sep 2025 15:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758581855; x=1759186655; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4PmeTUZt1oKPH7ak6kJVKMIBti4fjRyL0GgGscNM+JY=;
-        b=dpcw6JrBZONtlfbZf9OG2m5/KRfsla9uLol1Tw++vgQFsv4TrT1yqfiOFt+Opzb4sx
-         UyDRxhFZfPTEhKGXkQphaBcbCYkEduUOw961fGxkhOhyQ0dMDJ3Fa7jwB/HlnuD4WNK9
-         eFPod4Nweq0sRavkxwnG5bRwV/89OHwxH36A5qL7rdZuGUoaFk2K4BnwDAEnlqLc4gaA
-         vjX3U1sqBImFkDs6t0XHjhhyYiISdWR9Qz4rb5hghmBGbsDxRjfPnq54xihREHycdMtn
-         vN5ueZQzw7ZhKX4rE3OBtmKuCjWWU7umQQz1nBQr9Ms9IW4+Lc7SpxDZAcmdMEzf1vUz
-         lFQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758581855; x=1759186655;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4PmeTUZt1oKPH7ak6kJVKMIBti4fjRyL0GgGscNM+JY=;
-        b=kyy8v8hw9nxURwesNv6hC2OiJ2uRCvIeMEbqz6hQVGFnSXpdpNlX+a16t7A9db5xuw
-         wODSuTDyU7uUvd6aIyEOvIiGYVCdDm7bkjVThTydzzuG8yi1BCSq6RhoCtt90SqzZXue
-         Kei0E/tXWnim41pxMUxAkYKUblmciLKS0EmOabaLZCXxZtCJKXejWim8BtPtM0Hw/imv
-         AJtYWgxM2TXXiLL0XJsoJWEL35deC/ZSkdJyeeXxYnJwhYBZKhy+aEl1o0qeaJEu9c+p
-         h7CazaNCTlj9DO7A4vNcS+CfnfPzHpmNTRpfLE361gVlnXnJAS6EqInoO2xvVFoPehAv
-         ZTMA==
-X-Gm-Message-State: AOJu0Yz+9BsJ7XHy50EIdx1gSXA3KhGiFSYfv0G0JoF5QlYUpY9jBflf
-	VXioEV7FB4P5NeUANMRyXeLMqXMuB5NIQjV05uDLx1IKSh/JnZE1ZuWm
-X-Gm-Gg: ASbGnctOt4WQHTSA9f6rtr7q6cxUFrMvKQboq5ta2IJDzIJXVwWs0yC9nYtWVPEGhxt
-	S2i38lpKGITyK2rWPzrrpSqxpJ1u3QlhYt7Al9/UJkpT/wkPTZcDtUtyrEb7K0vgnusAQh5odIO
-	K7tiCiIWwPLEWpcV3rD1lDMxmxWKpdrpfR7+K4hYCdp0aw0LTSZ7vn7RKcfaNDBMkdonvG8rLgO
-	y2oVwHI1Sfl4dUOyBuG9fgn55UyVgcS5mmD12MCOwgWSoF6VIgIhhO7PlsQgqgA2Plp4uc0mxvd
-	YtBOWNstpI2lzUZpMLVaq1JSMDaibSQ1xoQ8wS2fTrGfRfO7qg6FghB66MU88yLgzYPrHyg9ipW
-	s+umx4x93cywXOb83xIEySsR/ImX0znBGe8pHUKQ=
-X-Google-Smtp-Source: AGHT+IEvT9aPO8VQeqDviuBf3xOmqzdNdU8B4VMjX/6iETFgk5faqYljbrRsv10VslcAQOzyPiUIlA==
-X-Received: by 2002:a05:6122:3187:b0:539:1dbf:3148 with SMTP id 71dfb90a1353d-54bcadf84e4mr233297e0c.2.1758581855238;
-        Mon, 22 Sep 2025 15:57:35 -0700 (PDT)
-Received: from [192.168.1.145] ([104.203.11.126])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-54a72974f24sm2963990e0c.19.2025.09.22.15.57.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Sep 2025 15:57:34 -0700 (PDT)
-Message-ID: <29f30ca3-cf45-44fc-aec7-1db6f9694e5f@gmail.com>
-Date: Mon, 22 Sep 2025 18:57:33 -0400
+	s=arc-20240116; t=1758584159; c=relaxed/simple;
+	bh=QvkvFySCol+f4OrBWqJ/V7kbVeZUeLaAPs0LUqnUKTY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nPRdUmYYsH6DEl+sWpdwMIC5904UoVeAkjKW6utv1rJavtHD1Wcn8H0pmmYGEk5rYJ4fliqCBaqNMHdLkqaaq5a5YrMBbrieJSL/PHxXZZPdNBIwmI9J0PajXXKpByp1q9nsxQD4Ir/KSuHekIAvZpZiOT+M1KPvrgWnP3TA7rM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bhknsX6/; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Mon, 22 Sep 2025 16:35:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1758584155;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YROanHWLsZyxpmkg+bbLtUTGJa8eSeOXO+0+S132Fq0=;
+	b=bhknsX6/vaxKSZnPvKsUbfdwHD6LKytZGBvllisw+rMQMMDWi/4rtFUuhfA4B3/v1aCWwx
+	Lp3TL0ZLYkFWymqq4yqURK4uTHU3iRkrYuECvy+ovmF+ipjkrCz8O7QI8VSLtwPLDJfEmb
+	fe6iGL/v60eF86/upnlOh+WZHIH3+qc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] KVM: arm64: selftests: Cover ID_AA64ISAR3_EL1 in
+ set_id_regs
+Message-ID: <aNHdVtel5VGMltJb@linux.dev>
+References: <20250920-kvm-arm64-id-aa64isar3-el1-v1-0-1764c1c1c96d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: Fix Makefile to run targets even the ones in
- SKIP_TARGETS
-To: I Viswanath <viswanathiyyappan@gmail.com>, shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev
-References: <20250920041914.7253-1-viswanathiyyappan@gmail.com>
-Content-Language: en-US
-From: David Hunter <david.hunter.linux@gmail.com>
-In-Reply-To: <20250920041914.7253-1-viswanathiyyappan@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250920-kvm-arm64-id-aa64isar3-el1-v1-0-1764c1c1c96d@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On 9/20/25 00:19, I Viswanath wrote:
-
-> Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
+On Sat, Sep 20, 2025 at 08:51:58PM +0100, Mark Brown wrote:
+> The set_id_regs selftest lacks coverag for ID_AA64ISR3_EL1 which has
+> several features exposed to KVM guests in it.  Add coverage, and while
+> we're here adjust the test to improve maintainability a bit.  
+> 
+> The test will fail without the recently applied change adding FEAT_LSFE:
+> 
+>    https://lore.kernel.org/r/175829303126.1764550.939188785634158487.b4-ty@kernel.org
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
-> make --silent summary=1 TARGETS="bpf size" kselftest
-> 
-> make[3]: Entering directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/bpf'
-> 
-> Auto-detecting system features:
-> ...                                    llvm: [ OFF ]
-> 
+> Mark Brown (2):
+>       KVM: arm64: selftests: Remove a duplicate register listing in set_id_regs
+>       KVM: arm64: selftests: Cover ID_AA64ISAR3_EL1 in set_id_regs
 
-Hi Viswaneth,
-
-After the "---" usually the change log is placed. The change log
-contains the changes from version 1. Also if this is a version 2 patch,
-it is best to note it in the subject line. The v2 helps people keep up
-with which patch is the most recent.
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
 
 Thanks,
-David Hunter
-
-
+Oliver
 
