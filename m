@@ -1,148 +1,119 @@
-Return-Path: <linux-kselftest+bounces-42087-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C34B5B93842
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 00:49:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D715B93860
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 00:57:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 816EC1886216
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 22:50:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D63F17119E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Sep 2025 22:57:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB6D27B4FA;
-	Mon, 22 Sep 2025 22:49:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C91B2C21D8;
+	Mon, 22 Sep 2025 22:57:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nYK3dyaX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dpcw6JrB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BB031A553
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Sep 2025 22:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D3B26B779
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Sep 2025 22:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758581354; cv=none; b=jx4twNgrgYzEO/txTjtItT21oJYrfwJFAAUyAeKaTINbgVBntQ+wLPRLm/9zOvi+9+oqvtq2wn4og96RMEhEn0hHR9O+rI437E56k6UXaU02IGJD1fspIwAdustBjT1D4h28gfwR4pfcVJQSiG+V/VXktfb8zmr2CZwiCSd1n+c=
+	t=1758581857; cv=none; b=WW51rKn9FDSG++qZrQfN9JDUth2wDArX7X+nHwF4Dzat+jfoyg7KLhFEJgmDvUgEQbCPGiwkaQTC1b2iXkGnObRuE2iqZxn7M4ZVJAoKi7j8nRsKD0yraTOFY7SWMPvCEVdwShqZP2Z/S6ifSUIG2IwiJpOO/nPRL9945StY948=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758581354; c=relaxed/simple;
-	bh=5QNyl6HSB4ZmEtWfJZ+xy37nKYlUmhxWx4mCsLt2NOo=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=L2jQ/f5gAQ3y7B05vJf5tcu0cyksvmfFDbYDLiL14dRUuEGNob3fchUi0kXQnGVD++PY+tQg2lBn6vOmLg+yUkkTzPsk5GBI1JARgzim02Bnfmy/0OuZQ54k7lWHDXunEKJXvXvvYIlziG0ZV59QF9jERmcOYy8ZdvPu56FxL3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nYK3dyaX; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-32eb2b284e4so7993901a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Sep 2025 15:49:12 -0700 (PDT)
+	s=arc-20240116; t=1758581857; c=relaxed/simple;
+	bh=wJcpJFENZM3XJoASue2WgV0KmkWQXXkTgGWB1tLNT3o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LeX5OC4fgxc3xAtF0i34bmC8cA7Zr5AKORbqKesZBg0/6v76y+w2pBJFb8ojCtaG/3HfT7K7gkqY1GhC4DgUccQdSlVoZKz4o5JSPZeN20ZZelgzq4HWAFFJeK3uHh1WhiPCXymLvtMUWWvvQHIMgPvMJGpClvcAjp3cUq1MZIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dpcw6JrB; arc=none smtp.client-ip=209.85.222.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-89018ea5625so1410036241.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Sep 2025 15:57:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758581352; x=1759186152; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Tg+cfyJ8iHTctEj7ru5BA/5vFiRl/ZrC7hQcrJdFfGA=;
-        b=nYK3dyaXhNNHyKYGvn2tubl8KaMcRKcYNd3Ye5NR5STCI6/O9wDM+/UaNPq0ja2qp5
-         0AfiKYjExFdLDNhno34lwnlYY0qaVGeUhJWfT1406damWSlLu9o9M9RTp6NaPrMM7lsU
-         va7nEa8co2dLX0GvVZBM7YbhEY2MwvaRPr9DbkOoa9UYkzh8hQ0XQg9VCzxX5M4zCm9g
-         ++Zeg9ijHqubYfyM9lLm7saKDhrrhmrpvNqMLu06m4HG9OzCLk8L1820zN1+FAfvHZiM
-         d2uleQgcyIoZP/B6fY2+FBsbB9eMLpzKbogCfYzOJq/VUwOAYKvFrVjtNr/GpZXcc3D8
-         Pv0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758581352; x=1759186152;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=gmail.com; s=20230601; t=1758581855; x=1759186655; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tg+cfyJ8iHTctEj7ru5BA/5vFiRl/ZrC7hQcrJdFfGA=;
-        b=j4vQBpsDRh1FJGIMahTPW0POWlzbLbtRJ1wLoD3jYdAaF9fYx+cX3A5dDSQMbgYM4X
-         JGyzVPF2yCed6eOLx8IW63aFTZpThIKAY4q2R/uzJZJ4LcCzlQ53G5uiK433w5FYkxM3
-         H6tEilv3xGJTThwgpJYoD0i6sAThUXefFVV9uB2w6xZBXHPnBGNV0w5pHFNmH3xcmId+
-         U4L/8p1lUq7uZW+JtCmT+GV+lELjvqxB4aNHxd337tFv2xrUxNth75drZ23l989eUaqr
-         H0DHdT5PxiZuOsqiaOlM4sSubw1n/wCJwbDf03JsEuE0pHi2/Fpf/dQAwp2/BLuwL7Mb
-         pZ3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXciOETLFOUhaXdLivg3ugmbE4sjQVHMTyPYmrBZR68i8yTi5eCp6OORPneFGrktY2Vv8C8Cz1I5u7A7/BpaqI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwU1dkf0Ts9e8kx49X7RZx5v5Gt0w3Av4PIE6h9mFuU5zayGuZm
-	SCr9cN6OOGR9BNGuJjaMCsD12OWMGbXZ3gke9++hXO3jf0DPipuFNIKo2PyW4gz0cKjZy33kLY0
-	sSQm9ZRfMVsZAJw==
-X-Google-Smtp-Source: AGHT+IGjxw6fs9lVd3Db6O2V15gm5vIsTH02Zn0TJdHjDmTLj28al1yn0EUqz0lmxJAOfsqMXRMLoQm1Kcspew==
-X-Received: from pjbsv5.prod.google.com ([2002:a17:90b:5385:b0:32d:a0b1:2b14])
- (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3ec6:b0:32e:1b03:6e12 with SMTP id 98e67ed59e1d1-332a9546a9dmr614277a91.13.1758581352286;
- Mon, 22 Sep 2025 15:49:12 -0700 (PDT)
-Date: Mon, 22 Sep 2025 22:48:57 +0000
+        bh=4PmeTUZt1oKPH7ak6kJVKMIBti4fjRyL0GgGscNM+JY=;
+        b=dpcw6JrBZONtlfbZf9OG2m5/KRfsla9uLol1Tw++vgQFsv4TrT1yqfiOFt+Opzb4sx
+         UyDRxhFZfPTEhKGXkQphaBcbCYkEduUOw961fGxkhOhyQ0dMDJ3Fa7jwB/HlnuD4WNK9
+         eFPod4Nweq0sRavkxwnG5bRwV/89OHwxH36A5qL7rdZuGUoaFk2K4BnwDAEnlqLc4gaA
+         vjX3U1sqBImFkDs6t0XHjhhyYiISdWR9Qz4rb5hghmBGbsDxRjfPnq54xihREHycdMtn
+         vN5ueZQzw7ZhKX4rE3OBtmKuCjWWU7umQQz1nBQr9Ms9IW4+Lc7SpxDZAcmdMEzf1vUz
+         lFQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758581855; x=1759186655;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4PmeTUZt1oKPH7ak6kJVKMIBti4fjRyL0GgGscNM+JY=;
+        b=kyy8v8hw9nxURwesNv6hC2OiJ2uRCvIeMEbqz6hQVGFnSXpdpNlX+a16t7A9db5xuw
+         wODSuTDyU7uUvd6aIyEOvIiGYVCdDm7bkjVThTydzzuG8yi1BCSq6RhoCtt90SqzZXue
+         Kei0E/tXWnim41pxMUxAkYKUblmciLKS0EmOabaLZCXxZtCJKXejWim8BtPtM0Hw/imv
+         AJtYWgxM2TXXiLL0XJsoJWEL35deC/ZSkdJyeeXxYnJwhYBZKhy+aEl1o0qeaJEu9c+p
+         h7CazaNCTlj9DO7A4vNcS+CfnfPzHpmNTRpfLE361gVlnXnJAS6EqInoO2xvVFoPehAv
+         ZTMA==
+X-Gm-Message-State: AOJu0Yz+9BsJ7XHy50EIdx1gSXA3KhGiFSYfv0G0JoF5QlYUpY9jBflf
+	VXioEV7FB4P5NeUANMRyXeLMqXMuB5NIQjV05uDLx1IKSh/JnZE1ZuWm
+X-Gm-Gg: ASbGnctOt4WQHTSA9f6rtr7q6cxUFrMvKQboq5ta2IJDzIJXVwWs0yC9nYtWVPEGhxt
+	S2i38lpKGITyK2rWPzrrpSqxpJ1u3QlhYt7Al9/UJkpT/wkPTZcDtUtyrEb7K0vgnusAQh5odIO
+	K7tiCiIWwPLEWpcV3rD1lDMxmxWKpdrpfR7+K4hYCdp0aw0LTSZ7vn7RKcfaNDBMkdonvG8rLgO
+	y2oVwHI1Sfl4dUOyBuG9fgn55UyVgcS5mmD12MCOwgWSoF6VIgIhhO7PlsQgqgA2Plp4uc0mxvd
+	YtBOWNstpI2lzUZpMLVaq1JSMDaibSQ1xoQ8wS2fTrGfRfO7qg6FghB66MU88yLgzYPrHyg9ipW
+	s+umx4x93cywXOb83xIEySsR/ImX0znBGe8pHUKQ=
+X-Google-Smtp-Source: AGHT+IEvT9aPO8VQeqDviuBf3xOmqzdNdU8B4VMjX/6iETFgk5faqYljbrRsv10VslcAQOzyPiUIlA==
+X-Received: by 2002:a05:6122:3187:b0:539:1dbf:3148 with SMTP id 71dfb90a1353d-54bcadf84e4mr233297e0c.2.1758581855238;
+        Mon, 22 Sep 2025 15:57:35 -0700 (PDT)
+Received: from [192.168.1.145] ([104.203.11.126])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-54a72974f24sm2963990e0c.19.2025.09.22.15.57.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Sep 2025 15:57:34 -0700 (PDT)
+Message-ID: <29f30ca3-cf45-44fc-aec7-1db6f9694e5f@gmail.com>
+Date: Mon, 22 Sep 2025 18:57:33 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.0.534.gc79095c0ca-goog
-Message-ID: <20250922224857.2528737-1-dmatlack@google.com>
-Subject: [PATCH] vfio: selftests: Store libvfio build outputs in $(OUTPUT)/libvfio
-From: David Matlack <dmatlack@google.com>
-To: Alex Williamson <alex.williamson@redhat.com>
-Cc: Dave Jiang <dave.jiang@intel.com>, David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: Fix Makefile to run targets even the ones in
+ SKIP_TARGETS
+To: I Viswanath <viswanathiyyappan@gmail.com>, shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev
+References: <20250920041914.7253-1-viswanathiyyappan@gmail.com>
+Content-Language: en-US
+From: David Hunter <david.hunter.linux@gmail.com>
+In-Reply-To: <20250920041914.7253-1-viswanathiyyappan@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Store the tools/testing/selftests/vfio/lib outputs (e.g. object files)
-in $(OUTPUT)/libvfio rather than in $(OUTPUT)/lib. This is in
-preparation for building the VFIO selftests library into the KVM
-selftests (see Link below).
+On 9/20/25 00:19, I Viswanath wrote:
 
-Specifically this will avoid name conflicts between
-tools/testing/selftests/{vfio,kvm/lib and also avoid leaving behind
-empty directories under tools/testing/selftests/kvm after a make clean.
+> Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
+> ---
+> make --silent summary=1 TARGETS="bpf size" kselftest
+> 
+> make[3]: Entering directory '/home/user/kernel-dev/linux-next/tools/testing/selftests/bpf'
+> 
+> Auto-detecting system features:
+> ...                                    llvm: [ OFF ]
+> 
 
-Link: https://lore.kernel.org/kvm/20250912222525.2515416-2-dmatlack@google.com/
-Signed-off-by: David Matlack <dmatlack@google.com>
----
+Hi Viswaneth,
 
-Note: This patch applies on top of vfio/next.
+After the "---" usually the change log is placed. The change log
+contains the changes from version 1. Also if this is a version 2 patch,
+it is best to note it in the subject line. The v2 helps people keep up
+with which patch is the most recent.
 
-https://github.com/awilliam/linux-vfio/tree/next
+Thanks,
+David Hunter
 
- tools/testing/selftests/vfio/lib/libvfio.mk | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
-index 5d11c3a89a28..3c0cdac30cb6 100644
---- a/tools/testing/selftests/vfio/lib/libvfio.mk
-+++ b/tools/testing/selftests/vfio/lib/libvfio.mk
-@@ -1,24 +1,26 @@
- include $(top_srcdir)/scripts/subarch.include
- ARCH ?= $(SUBARCH)
- 
--VFIO_DIR := $(selfdir)/vfio
-+LIBVFIO_SRCDIR := $(selfdir)/vfio/lib
- 
--LIBVFIO_C := lib/vfio_pci_device.c
--LIBVFIO_C += lib/vfio_pci_driver.c
-+LIBVFIO_C := vfio_pci_device.c
-+LIBVFIO_C += vfio_pci_driver.c
- 
- ifeq ($(ARCH:x86_64=x86),x86)
--LIBVFIO_C += lib/drivers/ioat/ioat.c
--LIBVFIO_C += lib/drivers/dsa/dsa.c
-+LIBVFIO_C += drivers/ioat/ioat.c
-+LIBVFIO_C += drivers/dsa/dsa.c
- endif
- 
--LIBVFIO_O := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBVFIO_C))
-+LIBVFIO_OUTPUT := $(OUTPUT)/libvfio
-+
-+LIBVFIO_O := $(patsubst %.c, $(LIBVFIO_OUTPUT)/%.o, $(LIBVFIO_C))
- 
- LIBVFIO_O_DIRS := $(shell dirname $(LIBVFIO_O) | uniq)
- $(shell mkdir -p $(LIBVFIO_O_DIRS))
- 
--CFLAGS += -I$(VFIO_DIR)/lib/include
-+CFLAGS += -I$(LIBVFIO_SRCDIR)/include
- 
--$(LIBVFIO_O): $(OUTPUT)/%.o : $(VFIO_DIR)/%.c
-+$(LIBVFIO_O): $(LIBVFIO_OUTPUT)/%.o : $(LIBVFIO_SRCDIR)/%.c
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
- 
--EXTRA_CLEAN += $(LIBVFIO_O)
-+EXTRA_CLEAN += $(LIBVFIO_OUTPUT)
-
-base-commit: acb59a4bb8ed34e738a4c3463127bf3f6b5e11a9
--- 
-2.51.0.534.gc79095c0ca-goog
 
 
