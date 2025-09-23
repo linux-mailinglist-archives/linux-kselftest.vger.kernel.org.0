@@ -1,61 +1,60 @@
-Return-Path: <linux-kselftest+bounces-42105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDE20B9454B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 07:15:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB284B9455A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 07:15:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91CAA3BEE8A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 05:15:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5AF32E2C17
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 05:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C0830E0F7;
-	Tue, 23 Sep 2025 05:14:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28DE30DEA6;
+	Tue, 23 Sep 2025 05:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="z+mdCRme"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2MjuEjaj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011046.outbound.protection.outlook.com [52.101.62.46])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013006.outbound.protection.outlook.com [40.93.201.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DB330DEA6;
-	Tue, 23 Sep 2025 05:14:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BB730CDAF;
+	Tue, 23 Sep 2025 05:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.6
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758604454; cv=fail; b=XsQXvU/rfIb0DydOlYVlab1Xa5K9I4M0uOGhspWZiwIyPTJuTgOHodssO+UMLIC6C5IMByuUaWxY7zkq0VHKON1+TJyctK+/LedxERa5BSSM6eDAsUQWUI/ccpEP3y41FbpqWCY7EQhsJUvxmVjw2LMFYHsMx9QJHmZ5qgalQxk=
+	t=1758604469; cv=fail; b=kaYNWhyUmkIU4z65Pd337awZqNAL8r2ujaH4nsF7e362Zqfz87HPp/lisKsYhKzCcTWALfmHZJU4PSnPAt0LH4hcLGbkpwHZkAdm9ynI8oLTfKJ1GGEiwNhsEeSRVDxVZF+1HoBlfTCEUoq3NX7nldUYhzLwtoQB7Fyjsiki+a4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758604454; c=relaxed/simple;
-	bh=dYB7OTHtndsE84RqpgEDqzIjhveRSEgOo5u6rscM0po=;
+	s=arc-20240116; t=1758604469; c=relaxed/simple;
+	bh=OkXjb5H/WvS3pQh17h5aC8N7YiPGNO6vOgjFGuBQoUA=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MwR9iW8wRgSwb7/hIUl3C24qFaCtLGTlVFBJn790dLvF1cNjh8GVE6MGFChNaBJRSNQUDjB6zxxTceAYESNEsfOHOUSumpWhcf9TblVs4ugChZYwv6sV6X/wDkOoqYFOtHwQnK77npWz16sGCjhKmWK8AhIJeSJrZSUteoJp8BU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=z+mdCRme; arc=fail smtp.client-ip=52.101.62.46
+	 MIME-Version:Content-Type; b=YVvsASh/2/puNcPS/f5aRwm9J7lzzgMsMlRxuXID80b0Rr6ZMwPYxQ/3qI669RLoBcqReg2gM2L8sRG+3AaPsQtTjediYqPU/qEJnfBo+jUicWBy8dvI5VRzMSzsx3j+9rNY5nOEeA0IWWhnUEKb43KTaJxhxMoEQwP1Gtre1Y4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2MjuEjaj; arc=fail smtp.client-ip=40.93.201.6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=l+6tMgwFqcPjjViox21isy+5AAA0dO/s/+dOMW41sRLXbwVjikt70dKW/jt9qvcTdafiHN+W5fRTBI/qtEI49HJx9OBLmnNx/D56K8kTwh+NY3Z7U0Y3xGOS8zVwQg9d/n8KyA8Dl/1XrqlyEmx3EG0lWeUQzBFSECDLcSbjF0teCp2GzyPoNc6L4mBZApCG2eMuFS+/eoyYEZ1QIf+foUFtjBmD3An5WprbUWXvZNx9LLe8X8hTOS6UaYByfN/kR2QTUva89i0EOfmoemX+KmB9t8f5rcbwxVkDRy6kFgpkVFBAsZdUwICK4TazD049ynMhJ4vJau2hEqMIUgCNTg==
+ b=TYuf+Il3HdpIFB1dWtueRCSZ7RwWjw+CNhy/FTk0cLzZMGTMv0tS3Tzjp/SE1oCbtwQsoT8MZ0oR0h8kqzJcUvrsh3difJPshXyjLU2W3Hm0zhHTNT6A4Y2gLOjqzw0qqQDNwKVT3itL5z8Kcz2tKrv4Le+vul6fQ03aPl8SUc5umYb4O+HkrxTvCRN/r9GWfJSjiIgA6Ry+QqlKRBn2j/5xTHp/JqC7mFyy9n76QFloAJJIndpSAz/ZtKfy9CogLf+S7ZtKMS73MqHrGCZUDy21ZnxGFQQ4Nq8DTBTdP4ZTBwk/mNlMp1sULE43Ziupl3Zxd7BJBl1SnMYzHKghZA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MwtfR0N/72g2u/+A6NqlDhnhhzAfM4oWCwA2QTxOwRk=;
- b=Krmk1Kpp9HkIC60NKzYxsGCvtF17H441l+GoIxpoXJKogD9WxBwS8x0NkeDtgYF/NDBq82Dac6H4vFtmYssm/HnCmWXi5zxdGD94U9TecdqcVz6M5/+qqRQktP5vdOtO4flVXhjLXsuAqbBzqmOSob4iTxq+/0td+/RyWkjo9L7uAJq67UACV4JpAfJWWslQmRB7BnRKEyNYoaralsgUoQ4GP+ZT263rRtklGs4JDABWwAz2toPG+izSQXu9k/4uJIlMMrdCvZ8hSyNnRPd9BXDYp+cmvnCgeJw2pwNSsdgO+B4hj+bBocKqHPJ+eZC4zul1maJ02+tWzhj8YQDVBA==
+ bh=X1eCsN1nJcf0JXsIzwAG7fjbPWHVVklu4f8DcQj4uCs=;
+ b=NKKUa6yqF/6LKJRKPJ0MJd02Jil1TNkroLGPac8buJgPIu/l4OW6zVBNp53LEvI2BPcCemDgwCACJjLcWoPTCue8aVXE0Egz/Av6rG4ANbijRBQrbP825dRKpgwTmiCPSXhu0maoss1gUMMVyeqUxbrLHHjsFUleR+N6MrxZBnaW/d/EOVOknmB5ER3uwg7JrIIbjaJWJQAbKylhV60UzwLCnkQ3Vn1LQULUsJBgNpr7q+yljArRYacMze4tfxoHQUJHEJhGA2fgWO7vlcCMVPNeiHCQM29/uZyvSji/OqXsdPKsM4uJHyhmGoJVsxcaptcvf7e0O8F8Q3wx+Ja1Lw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MwtfR0N/72g2u/+A6NqlDhnhhzAfM4oWCwA2QTxOwRk=;
- b=z+mdCRmeH/X54ExIBQjsn4IOS6wsGWvD9rbMNiKrVD6khYaE1O/90soqAzwaD12s86HTx4QYVbu0DC5kLnXd5cuLANW5Mh2OhCynRru4qyrh7Fqebd2Y/aSZRWgLmORgDbX4qWkrGgiEFPVGEOcmuViiWEOv9HbqXgxWx3ShO6k=
-Received: from CH2PR16CA0022.namprd16.prod.outlook.com (2603:10b6:610:50::32)
- by BL4PR12MB9505.namprd12.prod.outlook.com (2603:10b6:208:591::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.19; Tue, 23 Sep
- 2025 05:14:06 +0000
-Received: from CH2PEPF0000013B.namprd02.prod.outlook.com
- (2603:10b6:610:50:cafe::4f) by CH2PR16CA0022.outlook.office365.com
- (2603:10b6:610:50::32) with Microsoft SMTP Server (version=TLS1_3,
+ bh=X1eCsN1nJcf0JXsIzwAG7fjbPWHVVklu4f8DcQj4uCs=;
+ b=2MjuEjajrIul2G+UQnt8QfWpFYQAje3yQAJ9ocRss/v9MBxw3PNieNC4aOQJKjGmKhnFDR7RLzJd+9FKcC8Yn/ZfVQsbn/7NeU6pO6W2tBd8GtKERjUF++KEUdDg/9ls4CYFhX7Fo3Pj5Byjyptm8IGEiuyxDY39+fsuctjZXs0=
+Received: from CH2PR04CA0021.namprd04.prod.outlook.com (2603:10b6:610:52::31)
+ by DM4PR12MB6423.namprd12.prod.outlook.com (2603:10b6:8:bd::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9137.20; Tue, 23 Sep 2025 05:14:22 +0000
+Received: from CH2PEPF0000013F.namprd02.prod.outlook.com
+ (2603:10b6:610:52:cafe::bb) by CH2PR04CA0021.outlook.office365.com
+ (2603:10b6:610:52::31) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.20 via Frontend Transport; Tue,
- 23 Sep 2025 05:14:06 +0000
+ 23 Sep 2025 05:14:22 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +62,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
- CH2PEPF0000013B.mail.protection.outlook.com (10.167.244.68) with Microsoft
+ CH2PEPF0000013F.mail.protection.outlook.com (10.167.244.71) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9137.12 via Frontend Transport; Tue, 23 Sep 2025 05:14:06 +0000
+ 15.20.9137.12 via Frontend Transport; Tue, 23 Sep 2025 05:14:22 +0000
 Received: from BLR-L-NUPADHYA.xilinx.com (10.180.168.240) by
  satlexmb07.amd.com (10.181.42.216) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 22 Sep 2025 22:13:59 -0700
+ 15.2.2562.17; Mon, 22 Sep 2025 22:14:17 -0700
 From: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
 To: <kvm@vger.kernel.org>, <seanjc@google.com>, <pbonzini@redhat.com>
 CC: <linux-kernel@vger.kernel.org>, <Thomas.Lendacky@amd.com>,
@@ -77,9 +76,9 @@ CC: <linux-kernel@vger.kernel.org>, <Thomas.Lendacky@amd.com>,
 	<Suravee.Suthikulpanit@amd.com>, <bp@alien8.de>, <David.Kaplan@amd.com>,
 	<huibo.wang@amd.com>, <naveen.rao@amd.com>, <pgonda@google.com>,
 	<linux-kselftest@vger.kernel.org>, <shuah@kernel.org>, <tiala@microsoft.com>
-Subject: [RFC PATCH v2 14/35] KVM: selftests: Restrict instruction decoder to x86_64 only
-Date: Tue, 23 Sep 2025 10:39:21 +0530
-Message-ID: <20250923050942.206116-15-Neeraj.Upadhyay@amd.com>
+Subject: [RFC PATCH v2 15/35] KVM: selftests: Remove unneeded functions from instruction decoder
+Date: Tue, 23 Sep 2025 10:39:22 +0530
+Message-ID: <20250923050942.206116-16-Neeraj.Upadhyay@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250923050942.206116-1-Neeraj.Upadhyay@amd.com>
 References: <20250923050942.206116-1-Neeraj.Upadhyay@amd.com>
@@ -95,489 +94,532 @@ X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000013B:EE_|BL4PR12MB9505:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1720b982-1e1b-481a-53c8-08ddfa600501
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000013F:EE_|DM4PR12MB6423:EE_
+X-MS-Office365-Filtering-Correlation-Id: fdea0a07-af08-479a-012e-08ddfa600e89
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014;
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?f3rl34KkV0GWNxgFJ/wd17RDebG2ria9uckkBCgnP1JcurLQPchLSRlw6owv?=
- =?us-ascii?Q?UADfVH6MPF09UuVOFqjcu1sLQGiRAY2bM0JL1lPc+7Ml9d1RLf7JJ/oUuRPP?=
- =?us-ascii?Q?GyqBGrhZ8zil8q1VUtbUdxz/D7JLdJF5oBd30YmDEEnt5Rl5cWd3CflCQcuj?=
- =?us-ascii?Q?Me+sj30K3oLpl2fCWdNX8+QpHOe/V2P81hB8I+tJ35b7/PEWyyIddUgkDEPh?=
- =?us-ascii?Q?wFY1rbf9SvEkHOsKzXZoYkvXjsB0s4i+pdPg2NVorjYRxnOQilPwPu5B8na0?=
- =?us-ascii?Q?WAODW2lxpzvDQnx4o014Now3iAVhm3+lSvL72YqZH0+AQkEFKHJJlDUCzxWR?=
- =?us-ascii?Q?mGz6Z/DBtcrHrZmwBIJKSK4b459ZKNa258Z1xsKPg+JMXaBNzDJJenCaPvkh?=
- =?us-ascii?Q?yHaePUtOXlvOhVm5DSlg7NQtTNwU5iN/pxhU1ybyOVE6tFfZSe3Y4ir5dKdA?=
- =?us-ascii?Q?oB6Px8WDbsTtFGi6BIyGYWyR4aTRJEkv2EYnqCZQMGXySMbuv8381b+E1PUy?=
- =?us-ascii?Q?NyBA2aRha/8QYYE3I1JahZyT5Kl9liMDr8ux5WsgRQxm7VTAbJhwS+iK3zj9?=
- =?us-ascii?Q?d5DXU/aXYuwQZ9wou2Wg72ymaK3LvjJNZ/lsHrT7D4EDK/ugZ0pP0oCumrst?=
- =?us-ascii?Q?L8koK6zTmcd3L6IFC4GrjXHeHlpEq5sHDH034qeQ1Eppv3GoZfSvkyJOpmM+?=
- =?us-ascii?Q?YFp9ccmO+XpwhGmgPX6pfDs4zxKTURB41OYWYTDi7gcFzXKItHzshnWFKLGL?=
- =?us-ascii?Q?biAcB9iNaMrfFlggXz1yq5E7jQe6lE9g96278fcMK+lcMIr1p/5HO4pG2Zh8?=
- =?us-ascii?Q?/SEvjpJsonRuEzA/sqSp0bI8VXf1yshw6e7QEeIYSz64/+Q+hfPq0uzkBz7v?=
- =?us-ascii?Q?CCGqMvI9APRpddIZEZOwj1FflCNTHduaR3uA2tU3Kz3PHaU05JhldI0IpKhZ?=
- =?us-ascii?Q?DtIPUrO3hQi6T+XmnwPqQnULBjbToL5wknX65z15Pvx+JqdUShNXPpD/gjK9?=
- =?us-ascii?Q?VVPYkV+EMRO+U57/B8N9cNn3/h01h0EKL54xoQMhzFQByiX7ccT/Jt+8+0Iv?=
- =?us-ascii?Q?6YER1SzsZPk0ZZi/aoyDHhulr4wV56CWtHMgLwJGrBnj6Nvs53S6hhdIUmu0?=
- =?us-ascii?Q?eE6ZGZYFTbiT1qWyWFi789ifp2eFinVi82a7k/NNbs0iMHyFl5ZaKbkD61Ot?=
- =?us-ascii?Q?BuHRmUGBeEWDjoymoUzeI+ADzWqJ0Erk1/GfcA3iCpWR+2qN4A6ox3mqPr7U?=
- =?us-ascii?Q?0H4cIygnkkPJ5NRYO/OJW+XePrx5XpmE0/yRiBGbygi12fdm5iyR8uZ/LuLD?=
- =?us-ascii?Q?/m+u3b7rbWvTvn6EX8gguVgOSL+mE9FignqcpLoqH6EcSuJWXYxTnNwhPbCm?=
- =?us-ascii?Q?t5CHy/M3drc1AY8OdY1SxqkVfe41S4C4q9ohuapcjyrnXlB0ERgLTo39LDxB?=
- =?us-ascii?Q?iNvIb50ZUQruRGn/1th2GLhcMg21cztTdp4FLlZO/DGPQc/TSbYf5z2WYLEH?=
- =?us-ascii?Q?+8U2xmIHh6p+EW9hFmfHb3CXb5Ltd6IlaQ+O?=
+	=?us-ascii?Q?idnt3zxLSQTOZSLbu4I3MnUeO7Y7eJLB1CaHMyVMi3jUXeqMa2nzMTadmJ1V?=
+ =?us-ascii?Q?ZAbSpHg3jcwHVn9Ek9xzOrlSgSVIE5PDhW2LVwdR/kQnzinjvhI0gbb01ryJ?=
+ =?us-ascii?Q?Mn7HUQCxzOGxve0O801LH2EmCIYH+tDY0j8BW6aNz0pchHFTLso/4ohxwarp?=
+ =?us-ascii?Q?uAnhyWIiDsO4K2jB3i6yP69HBI8B8hWWdCIwxpH5jIZBHHi/U9aoYi3JFMGc?=
+ =?us-ascii?Q?GIlGPThLCLjZWnIUmL+tNOiecWBtJpvfcdpK8XpwHwRfrlU+ZF8HTqWAUqoo?=
+ =?us-ascii?Q?S/k2Jo9+1b1q+Jd2F1pGg99nuaOs3u9VyOywJXT3hTWneKfxK5oYbf5huMkV?=
+ =?us-ascii?Q?KUozX7xVNJtqwwAJPLknjGIFRACH+/i3tjOgtrHJ0yAVMFCd/WS4yZQZLwUK?=
+ =?us-ascii?Q?eoRa5alDOQRu05b8+srd+CvnUcqlnxXlb2/CZRyAHJjpV88tPNNVfvLX9YR2?=
+ =?us-ascii?Q?7jbZgIYL64nCTvfQL4jld6HZ1iB463EfRkAjxwJPYwi1mEUylBO5BwB+12Pf?=
+ =?us-ascii?Q?Ph7vVl4Wc865cKmmM4jusimr2P7ZlU6FLm2j/2x60BouDzaTXt0lI909SX8a?=
+ =?us-ascii?Q?0YahT84HEKTwC7LcE3N238k/m13gkUX2JNQAMAwEdZHjIkseqgNtEciThTr7?=
+ =?us-ascii?Q?LsgGGLJ1hgvDgckvJiWwPiwbfXyUUCYI7q1/S8JqB+2yw42Gf3teuDhTWx6I?=
+ =?us-ascii?Q?oTE4THgCf2OCamO0p/VdON3vM/UvMhdHEC+p72gnRA6VRxkJq/EV4fnYWVHk?=
+ =?us-ascii?Q?35mh4vAnFWqGZJdRCJOaNSDWZjsSVMw0wBUeDAo21NAc0PfxU9PZIlPB1g88?=
+ =?us-ascii?Q?ziKBi8DwruIrQH0K4qVqiT6/4MyQ7BYtU3mY8xRpnSVNAu1zVPRYu46Ii+T+?=
+ =?us-ascii?Q?8B9Cr3rvHjxqXUTgVgnttTcs7qevIxsgZeHMUR2asEzB1X+jXOcahAiAaCyo?=
+ =?us-ascii?Q?pe6AwOw5G53wziTWP+YlNc3qZFpFx7xKTp00nZwa9LRJIoxvrUGMvUE86NOJ?=
+ =?us-ascii?Q?tGaA1QItPqRDj4vnZrrcPOZTQcpeEIrT5TzTGmTq3nvkOL+1TCPIxGymz5XS?=
+ =?us-ascii?Q?BfGtY+VWCVvgSm94b9bMPls+6TS61K3f66T8nCqUl43QKK5NjJX7nIdsnFLf?=
+ =?us-ascii?Q?J+rM53haZYr9VotpS1ggs5KwHHZsttzcZFFYqKXh1niCLQqrTBR6bbuPfyaB?=
+ =?us-ascii?Q?P1/l6mi9WaRyo2iVBsSG7eg26jfqCSixK5GAf8FHyWSP3ZJ32JA+F1uJLjIp?=
+ =?us-ascii?Q?WtJjK5HlK3z7nAL6VYD6OSt4VixbkLmRfK7C0D3DD3x3BvC7MStfHJia734I?=
+ =?us-ascii?Q?4KQ32x54SAPnC8ZIvpHfqQ/f+418Ov541m5trJ31NKe79bq1tbxcWi/Tg+OG?=
+ =?us-ascii?Q?WsN7YRm+XVnJW5JxeTU7gend5W7XbkjvjPdGCTWAqOhtdRbJ75lmR/DTpv/K?=
+ =?us-ascii?Q?aAc1XOTtSi/OoPOWDFOElNaq8AmKd8b2FNOsqvEyx55MQAoYiz3O20kmJb/S?=
+ =?us-ascii?Q?y7vK5sQxGNA1Dkh/fncMqREiYvg34t7eoLH+?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2025 05:14:06.3708
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2025 05:14:22.3584
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1720b982-1e1b-481a-53c8-08ddfa600501
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdea0a07-af08-479a-012e-08ddfa600e89
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF0000013B.namprd02.prod.outlook.com
+	CH2PEPF0000013F.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL4PR12MB9505
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6423
 
-The insn-eval.c library was recently imported from the kernel source
-and contains a significant amount of code to support legacy x86
-operating modes, such as 32-bit protected mode, 16-bit addressing, and
-v8086 mode.
+The instruction decoder library was added to support SEV-ES #VC exception
+handling, where its only required function is to decode MMIO instructions.
+The library, as imported from the kernel, contains several high-level
+helper functions that are not needed for this purpose.
 
-The KVM selftests, particularly for features like SEV-ES, exclusively
-target the 64-bit architecture with guest kernel running in kernel
-mode.
+Remove this unneeded code to strip the library down to the minimum
+required for its purpose within the selftests, reducing its size and
+maintenance complexity.
 
-Simplify the decoder by removing all logic not relevant to 64-bit mode.
-This involves:
-- Remove all CONFIG_X86_32 and v8086_mode conditional logic.
-- Simplify resolve_default_seg to always assume 64-bit
-  segmentation rules (i.e., most segments are ignored).
-- Rework insn_get_seg_base to only handle the 64-bit model where
-  FS/GS bases are read from MSRs.
-- Delete support for 16-bit address decoding.
-- Remove complex segment descriptor lookups, which are not used in the
-  64-bit flat memory model.
-
-This makes the library smaller and easier to maintain for its intended
-purpose within the selftests.
+While at it, convert the function header comments to not be part of
+kernel documentation.
 
 Signed-off-by: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
 ---
- .../testing/selftests/kvm/lib/x86/insn-eval.c | 254 ++----------------
- 1 file changed, 28 insertions(+), 226 deletions(-)
+ .../testing/selftests/kvm/lib/x86/insn-eval.c | 297 ++----------------
+ 1 file changed, 22 insertions(+), 275 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/lib/x86/insn-eval.c b/tools/testing/selftests/kvm/lib/x86/insn-eval.c
-index a47c01977e72..cf751e4e36ec 100644
+index cf751e4e36ec..bb7845500f3c 100644
 --- a/tools/testing/selftests/kvm/lib/x86/insn-eval.c
 +++ b/tools/testing/selftests/kvm/lib/x86/insn-eval.c
-@@ -178,52 +178,7 @@ static bool check_seg_overrides(struct insn *insn, int regoff)
-  */
- static int resolve_default_seg(struct insn *insn, struct pt_regs *regs, int off)
- {
--	if (any_64bit_mode(regs))
--		return INAT_SEG_REG_IGNORE;
--	/*
--	 * Resolve the default segment register as described in Section 3.7.4
--	 * of the Intel Software Development Manual Vol. 1:
--	 *
--	 *  + DS for all references involving r[ABCD]X, and rSI.
--	 *  + If used in a string instruction, ES for rDI. Otherwise, DS.
--	 *  + AX, CX and DX are not valid register operands in 16-bit address
--	 *    encodings but are valid for 32-bit and 64-bit encodings.
--	 *  + -EDOM is reserved to identify for cases in which no register
--	 *    is used (i.e., displacement-only addressing). Use DS.
--	 *  + SS for rSP or rBP.
--	 *  + CS for rIP.
--	 */
--
--	switch (off) {
--	case offsetof(struct pt_regs, ax):
--	case offsetof(struct pt_regs, cx):
--	case offsetof(struct pt_regs, dx):
--		/* Need insn to verify address size. */
--		if (insn->addr_bytes == 2)
--			return -EINVAL;
--
--		fallthrough;
--
--	case -EDOM:
--	case offsetof(struct pt_regs, bx):
--	case offsetof(struct pt_regs, si):
--		return INAT_SEG_REG_DS;
--
--	case offsetof(struct pt_regs, di):
--		if (is_string_insn(insn))
--			return INAT_SEG_REG_ES;
--		return INAT_SEG_REG_DS;
--
--	case offsetof(struct pt_regs, bp):
--	case offsetof(struct pt_regs, sp):
--		return INAT_SEG_REG_SS;
--
--	case offsetof(struct pt_regs, ip):
--		return INAT_SEG_REG_CS;
--
--	default:
--		return -EINVAL;
--	}
-+	return INAT_SEG_REG_IGNORE;
+@@ -25,7 +25,7 @@ enum reg_type {
+ 	REG_TYPE_BASE,
+ };
+ 
+-/**
++/*
+  * is_string_insn() - Determine if instruction is a string instruction
+  * @insn:	Instruction containing the opcode to inspect
+  *
+@@ -51,7 +51,7 @@ static bool is_string_insn(struct insn *insn)
+ 	}
  }
  
- /**
-@@ -288,12 +243,8 @@ static int resolve_seg_reg(struct insn *insn, struct pt_regs *regs, int regoff)
- 	 * be used. Hence, it is not necessary to inspect the instruction,
- 	 * which may be invalid at this point.
- 	 */
--	if (regoff == offsetof(struct pt_regs, ip)) {
--		if (any_64bit_mode(regs))
--			return INAT_SEG_REG_IGNORE;
--		else
--			return INAT_SEG_REG_CS;
--	}
-+	if (regoff == offsetof(struct pt_regs, ip))
-+		return INAT_SEG_REG_IGNORE;
+-/**
++/*
+  * insn_has_rep_prefix() - Determine if instruction has a REP prefix
+  * @insn:	Instruction containing the prefix to inspect
+  *
+@@ -74,7 +74,7 @@ bool insn_has_rep_prefix(struct insn *insn)
+ 	return false;
+ }
  
- 	if (!insn)
- 		return -EINVAL;
-@@ -312,11 +263,8 @@ static int resolve_seg_reg(struct insn *insn, struct pt_regs *regs, int regoff)
- 	 * In long mode, segment override prefixes are ignored, except for
- 	 * overrides for FS and GS.
- 	 */
--	if (any_64bit_mode(regs)) {
--		if (idx != INAT_SEG_REG_FS &&
--		    idx != INAT_SEG_REG_GS)
--			idx = INAT_SEG_REG_IGNORE;
--	}
-+	if (idx != INAT_SEG_REG_FS && idx != INAT_SEG_REG_GS)
-+		idx = INAT_SEG_REG_IGNORE;
+-/**
++/*
+  * get_seg_reg_override_idx() - obtain segment register override index
+  * @insn:	Valid instruction with segment override prefixes
+  *
+@@ -137,7 +137,7 @@ static int get_seg_reg_override_idx(struct insn *insn)
+ 	return idx;
+ }
+ 
+-/**
++/*
+  * check_seg_overrides() - check if segment override prefixes are allowed
+  * @insn:	Valid instruction with segment override prefixes
+  * @regoff:	Operand offset, in pt_regs, for which the check is performed
+@@ -159,7 +159,7 @@ static bool check_seg_overrides(struct insn *insn, int regoff)
+ 	return true;
+ }
+ 
+-/**
++/*
+  * resolve_default_seg() - resolve default segment register index for an operand
+  * @insn:	Instruction with opcode and address size. Must be valid.
+  * @regs:	Register values as seen when entering kernel mode
+@@ -181,7 +181,7 @@ static int resolve_default_seg(struct insn *insn, struct pt_regs *regs, int off)
+ 	return INAT_SEG_REG_IGNORE;
+ }
+ 
+-/**
++/*
+  * resolve_seg_reg() - obtain segment register index
+  * @insn:	Instruction with operands
+  * @regs:	Register values as seen when entering kernel mode
+@@ -268,8 +268,7 @@ static int resolve_seg_reg(struct insn *insn, struct pt_regs *regs, int regoff)
  
  	return idx;
  }
-@@ -327,11 +275,9 @@ static int resolve_seg_reg(struct insn *insn, struct pt_regs *regs, int regoff)
+-
+-/**
++/*
+  * get_segment_selector() - obtain segment selector
+  * @regs:		Register values as seen when entering kernel mode
   * @seg_reg_idx:	Segment register index to use
-  *
-  * Obtain the segment selector from any of the CS, SS, DS, ES, FS, GS segment
-- * registers. In CONFIG_X86_32, the segment is obtained from either pt_regs or
-- * kernel_vm86_regs as applicable. In CONFIG_X86_64, CS and SS are obtained
-- * from pt_regs. DS, ES, FS and GS are obtained by reading the actual CPU
-- * registers. This done for only for completeness as in CONFIG_X86_64 segment
-- * registers are ignored.
-+ * registers. CS and SS are obtained from pt_regs. DS, ES, FS and GS are
-+ * obtained by reading the actual CPU registers. This done for only for
-+ * completeness as in X86_64 segment registers are ignored.
-  *
-  * Returns:
-  *
-@@ -344,7 +290,6 @@ static short get_segment_selector(struct pt_regs *regs, int seg_reg_idx)
- {
- 	unsigned short sel;
- 
--#ifdef CONFIG_X86_64
- 	switch (seg_reg_idx) {
- 	case INAT_SEG_REG_IGNORE:
- 		return 0;
-@@ -367,48 +312,6 @@ static short get_segment_selector(struct pt_regs *regs, int seg_reg_idx)
- 	default:
- 		return -EINVAL;
- 	}
--#else /* CONFIG_X86_32 */
--	struct kernel_vm86_regs *vm86regs = (struct kernel_vm86_regs *)regs;
--
--	if (v8086_mode(regs)) {
--		switch (seg_reg_idx) {
--		case INAT_SEG_REG_CS:
--			return (unsigned short)(regs->cs & 0xffff);
--		case INAT_SEG_REG_SS:
--			return (unsigned short)(regs->ss & 0xffff);
--		case INAT_SEG_REG_DS:
--			return vm86regs->ds;
--		case INAT_SEG_REG_ES:
--			return vm86regs->es;
--		case INAT_SEG_REG_FS:
--			return vm86regs->fs;
--		case INAT_SEG_REG_GS:
--			return vm86regs->gs;
--		case INAT_SEG_REG_IGNORE:
--		default:
--			return -EINVAL;
--		}
--	}
--
--	switch (seg_reg_idx) {
--	case INAT_SEG_REG_CS:
--		return (unsigned short)(regs->cs & 0xffff);
--	case INAT_SEG_REG_SS:
--		return (unsigned short)(regs->ss & 0xffff);
--	case INAT_SEG_REG_DS:
--		return (unsigned short)(regs->ds & 0xffff);
--	case INAT_SEG_REG_ES:
--		return (unsigned short)(regs->es & 0xffff);
--	case INAT_SEG_REG_FS:
--		return (unsigned short)(regs->fs & 0xffff);
--	case INAT_SEG_REG_GS:
--		savesegment(gs, sel);
--		return sel;
--	case INAT_SEG_REG_IGNORE:
--	default:
--		return -EINVAL;
--	}
--#endif /* CONFIG_X86_64 */
+@@ -423,7 +422,7 @@ static int get_reg_offset(struct insn *insn, struct pt_regs *regs,
+ 	return pt_regs_offset(regs, regno);
  }
  
- static const int pt_regoff[] = {
-@@ -420,7 +323,6 @@ static const int pt_regoff[] = {
- 	offsetof(struct pt_regs, bp),
- 	offsetof(struct pt_regs, si),
- 	offsetof(struct pt_regs, di),
--#ifdef CONFIG_X86_64
- 	offsetof(struct pt_regs, r8),
- 	offsetof(struct pt_regs, r9),
- 	offsetof(struct pt_regs, r10),
-@@ -429,12 +331,6 @@ static const int pt_regoff[] = {
- 	offsetof(struct pt_regs, r13),
- 	offsetof(struct pt_regs, r14),
- 	offsetof(struct pt_regs, r15),
--#else
--	offsetof(struct pt_regs, ds),
--	offsetof(struct pt_regs, es),
--	offsetof(struct pt_regs, fs),
--	offsetof(struct pt_regs, gs),
--#endif
- };
+-/**
++/*
+  * get_reg_offset_16() - Obtain offset of register indicated by instruction
+  * @insn:	Instruction containing ModRM byte
+  * @regs:	Register values as seen when entering kernel mode
+@@ -497,71 +496,7 @@ static int get_reg_offset_16(struct insn *insn, struct pt_regs *regs,
+ 	return 0;
+ }
  
- int pt_regs_offset(struct pt_regs *regs, int regno)
-@@ -453,9 +349,6 @@ static int get_regno(struct insn *insn, enum reg_type type)
- 	 * Don't possibly decode a 32-bit instructions as
- 	 * reading a 64-bit-only register.
- 	 */
--	if (IS_ENABLED(CONFIG_X86_64) && !insn->x86_64)
--		nr_registers -= 8;
+-/**
+- * get_desc() - Obtain contents of a segment descriptor
+- * @out:	Segment descriptor contents on success
+- * @sel:	Segment selector
+- *
+- * Given a segment selector, obtain a pointer to the segment descriptor.
+- * Both global and local descriptor tables are supported.
+- *
+- * Returns:
+- *
+- * True on success, false on failure.
+- *
+- * NULL on error.
+- */
+-static bool get_desc(struct desc_struct *out, unsigned short sel)
+-{
+-	struct desc_ptr gdt_desc = {0, 0};
+-	unsigned long desc_base;
 -
- 	switch (type) {
- 	case REG_TYPE_RM:
- 		regno = X86_MODRM_RM(insn->modrm.value);
-@@ -687,52 +580,33 @@ static bool get_desc(struct desc_struct *out, unsigned short sel)
+-#ifdef CONFIG_MODIFY_LDT_SYSCALL
+-	if ((sel & SEGMENT_TI_MASK) == SEGMENT_LDT) {
+-		bool success = false;
+-		struct ldt_struct *ldt;
+-
+-		/* Bits [15:3] contain the index of the desired entry. */
+-		sel >>= 3;
+-
+-		/*
+-		 * If we're not in a valid context with a real (not just lazy)
+-		 * user mm, then don't even try.
+-		 */
+-		if (!nmi_uaccess_okay())
+-			return false;
+-
+-		mutex_lock(&current->mm->context.lock);
+-		ldt = current->mm->context.ldt;
+-		if (ldt && sel < ldt->nr_entries) {
+-			*out = ldt->entries[sel];
+-			success = true;
+-		}
+-
+-		mutex_unlock(&current->mm->context.lock);
+-
+-		return success;
+-	}
+-#endif
+-	native_store_gdt(&gdt_desc);
+-
+-	/*
+-	 * Segment descriptors have a size of 8 bytes. Thus, the index is
+-	 * multiplied by 8 to obtain the memory offset of the desired descriptor
+-	 * from the base of the GDT. As bits [15:3] of the segment selector
+-	 * contain the index, it can be regarded as multiplied by 8 already.
+-	 * All that remains is to clear bits [2:0].
+-	 */
+-	desc_base = sel & ~(SEGMENT_RPL_MASK | SEGMENT_TI_MASK);
+-
+-	if (desc_base > gdt_desc.size)
+-		return false;
+-
+-	*out = *(struct desc_struct *)(gdt_desc.address + desc_base);
+-	return true;
+-}
+-
+-/**
++/*
+  * insn_get_seg_base() - Obtain base address of segment descriptor.
+  * @regs:		Register values as seen when entering kernel mode
+  * @seg_reg_idx:	Index of the segment register pointing to seg descriptor
+@@ -609,7 +544,7 @@ unsigned long insn_get_seg_base(struct pt_regs *regs, int seg_reg_idx)
+ 	return base;
+ }
+ 
+-/**
++/*
+  * get_seg_limit() - Obtain the limit of a segment descriptor
+  * @regs:		Register values as seen when entering kernel mode
+  * @seg_reg_idx:	Index of the segment register pointing to seg descriptor
+@@ -628,8 +563,6 @@ unsigned long insn_get_seg_base(struct pt_regs *regs, int seg_reg_idx)
   */
- unsigned long insn_get_seg_base(struct pt_regs *regs, int seg_reg_idx)
+ static unsigned long get_seg_limit(struct pt_regs *regs, int seg_reg_idx)
  {
 -	struct desc_struct desc;
-+	unsigned long base;
+-	unsigned long limit;
  	short sel;
  
  	sel = get_segment_selector(regs, seg_reg_idx);
- 	if (sel < 0)
- 		return -1L;
- 
--	if (v8086_mode(regs))
--		/*
--		 * Base is simply the segment selector shifted 4
--		 * bits to the right.
--		 */
--		return (unsigned long)(sel << 4);
-+	/*
-+	 * Only FS or GS will have a base address, the rest of
-+	 * the segments' bases are forced to 0.
-+	 */
- 
--	if (any_64bit_mode(regs)) {
-+	if (seg_reg_idx == INAT_SEG_REG_FS) {
-+		rdmsrq(MSR_FS_BASE, base);
-+	} else if (seg_reg_idx == INAT_SEG_REG_GS) {
- 		/*
--		 * Only FS or GS will have a base address, the rest of
--		 * the segments' bases are forced to 0.
-+		 * swapgs was called at the kernel entry point. Thus,
-+		 * MSR_KERNEL_GS_BASE will have the user-space GS base.
- 		 */
--		unsigned long base;
--
--		if (seg_reg_idx == INAT_SEG_REG_FS) {
--			rdmsrq(MSR_FS_BASE, base);
--		} else if (seg_reg_idx == INAT_SEG_REG_GS) {
--			/*
--			 * swapgs was called at the kernel entry point. Thus,
--			 * MSR_KERNEL_GS_BASE will have the user-space GS base.
--			 */
--			if (user_mode(regs))
--				rdmsrq(MSR_KERNEL_GS_BASE, base);
--			else
--				rdmsrq(MSR_GS_BASE, base);
--		} else {
--			base = 0;
--		}
--		return base;
-+		if (user_mode(regs))
-+			rdmsrq(MSR_KERNEL_GS_BASE, base);
-+		else
-+			rdmsrq(MSR_GS_BASE, base);
-+	} else {
-+		base = 0;
- 	}
--
--	/* In protected mode the segment selector cannot be null. */
--	if (!sel)
--		return -1L;
--
--	if (!get_desc(&desc, sel))
--		return -1L;
--
--	return get_desc_base(&desc);
-+	return base;
+@@ -639,82 +572,7 @@ static unsigned long get_seg_limit(struct pt_regs *regs, int seg_reg_idx)
+ 	return -1L;
  }
  
- /**
-@@ -762,26 +636,7 @@ static unsigned long get_seg_limit(struct pt_regs *regs, int seg_reg_idx)
- 	if (sel < 0)
- 		return 0;
- 
--	if (any_64bit_mode(regs) || v8086_mode(regs))
--		return -1L;
--
--	if (!sel)
--		return 0;
--
--	if (!get_desc(&desc, sel))
--		return 0;
--
--	/*
--	 * If the granularity bit is set, the limit is given in multiples
--	 * of 4096. This also means that the 12 least significant bits are
--	 * not tested when checking the segment limits. In practice,
--	 * this means that the segment ends in (limit << 12) + 0xfff.
--	 */
--	limit = get_desc_limit(&desc);
--	if (desc.g)
--		limit = (limit << 12) + 0xfff;
--
--	return limit;
-+	return -1L;
- }
- 
- /**
-@@ -805,10 +660,6 @@ int insn_get_code_seg_params(struct pt_regs *regs)
- 	struct desc_struct desc;
- 	short sel;
- 
--	if (v8086_mode(regs))
--		/* Address and operand size are both 16-bit. */
--		return INSN_CODE_SEG_PARAMS(2, 2);
--
- 	sel = get_segment_selector(regs, INAT_SEG_REG_CS);
- 	if (sel < 0)
- 		return sel;
-@@ -1042,10 +893,7 @@ static int get_eff_addr_modrm(struct insn *insn, struct pt_regs *regs,
- 	 * following instruction.
- 	 */
- 	if (*regoff == -EDOM) {
--		if (any_64bit_mode(regs))
--			tmp = regs->ip + insn->length;
--		else
--			tmp = 0;
-+		tmp = regs->ip + insn->length;
- 	} else if (*regoff < 0) {
- 		return -EINVAL;
- 	} else {
-@@ -1277,9 +1125,6 @@ static void __user *get_addr_ref_16(struct insn *insn, struct pt_regs *regs)
- 
- 	linear_addr = (unsigned long)(eff_addr & 0xffff) + seg_base;
- 
--	/* Limit linear address to 20 bits */
--	if (v8086_mode(regs))
--		linear_addr &= 0xfffff;
- 
- out:
- 	return (void __user *)linear_addr;
-@@ -1338,27 +1183,6 @@ static void __user *get_addr_ref_32(struct insn *insn, struct pt_regs *regs)
- 	if (ret)
- 		goto out;
- 
--	/*
--	 * In protected mode, before computing the linear address, make sure
--	 * the effective address is within the limits of the segment.
--	 * 32-bit addresses can be used in long and virtual-8086 modes if an
--	 * address override prefix is used. In such cases, segment limits are
--	 * not enforced. When in virtual-8086 mode, the segment limit is -1L
--	 * to reflect this situation.
--	 *
--	 * After computed, the effective address is treated as an unsigned
--	 * quantity.
--	 */
--	if (!any_64bit_mode(regs) && ((unsigned int)eff_addr > seg_limit))
--		goto out;
--
--	/*
--	 * Even though 32-bit address encodings are allowed in virtual-8086
--	 * mode, the address range is still limited to [0x-0xffff].
--	 */
--	if (v8086_mode(regs) && (eff_addr & ~0xffff))
--		goto out;
--
- 	/*
- 	 * Data type long could be 64 bits in size. Ensure that our 32-bit
- 	 * effective address is not sign-extended when computing the linear
-@@ -1366,9 +1190,6 @@ static void __user *get_addr_ref_32(struct insn *insn, struct pt_regs *regs)
- 	 */
- 	linear_addr = (unsigned long)(eff_addr & 0xffffffff) + seg_base;
- 
--	/* Limit linear address to 20 bits */
--	if (v8086_mode(regs))
--		linear_addr &= 0xfffff;
- 
- out:
- 	return (void __user *)linear_addr;
-@@ -1389,12 +1210,6 @@ static void __user *get_addr_ref_32(struct insn *insn, struct pt_regs *regs)
-  *
-  * -1L on error.
-  */
--#ifndef CONFIG_X86_64
--static void __user *get_addr_ref_64(struct insn *insn, struct pt_regs *regs)
+-/**
+- * insn_get_code_seg_params() - Obtain code segment parameters
+- * @regs:	Structure with register values as seen when entering kernel mode
+- *
+- * Obtain address and operand sizes of the code segment. It is obtained from the
+- * selector contained in the CS register in regs. In protected mode, the default
+- * address is determined by inspecting the L and D bits of the segment
+- * descriptor. In virtual-8086 mode, the default is always two bytes for both
+- * address and operand sizes.
+- *
+- * Returns:
+- *
+- * An int containing ORed-in default parameters on success.
+- *
+- * -EINVAL on error.
+- */
+-int insn_get_code_seg_params(struct pt_regs *regs)
 -{
--	return (void __user *)-1L;
+-	struct desc_struct desc;
+-	short sel;
+-
+-	sel = get_segment_selector(regs, INAT_SEG_REG_CS);
+-	if (sel < 0)
+-		return sel;
+-
+-	if (!get_desc(&desc, sel))
+-		return -EINVAL;
+-
+-	/*
+-	 * The most significant byte of the Type field of the segment descriptor
+-	 * determines whether a segment contains data or code. If this is a data
+-	 * segment, return error.
+-	 */
+-	if (!(desc.type & BIT(3)))
+-		return -EINVAL;
+-
+-	switch ((desc.l << 1) | desc.d) {
+-	case 0: /*
+-		 * Legacy mode. CS.L=0, CS.D=0. Address and operand size are
+-		 * both 16-bit.
+-		 */
+-		return INSN_CODE_SEG_PARAMS(2, 2);
+-	case 1: /*
+-		 * Legacy mode. CS.L=0, CS.D=1. Address and operand size are
+-		 * both 32-bit.
+-		 */
+-		return INSN_CODE_SEG_PARAMS(4, 4);
+-	case 2: /*
+-		 * IA-32e 64-bit mode. CS.L=1, CS.D=0. Address size is 64-bit;
+-		 * operand size is 32-bit.
+-		 */
+-		return INSN_CODE_SEG_PARAMS(4, 8);
+-	case 3: /* Invalid setting. CS.L=1, CS.D=1 */
+-	default:
+-		return -EINVAL;
+-	}
 -}
--#else
- static void __user *get_addr_ref_64(struct insn *insn, struct pt_regs *regs)
- {
- 	unsigned long linear_addr = -1L, seg_base;
-@@ -1431,7 +1246,6 @@ static void __user *get_addr_ref_64(struct insn *insn, struct pt_regs *regs)
- out:
+-
+-/**
+- * insn_get_modrm_rm_off() - Obtain register in r/m part of the ModRM byte
+- * @insn:	Instruction containing the ModRM byte
+- * @regs:	Register values as seen when entering kernel mode
+- *
+- * Returns:
+- *
+- * The register indicated by the r/m part of the ModRM byte. The
+- * register is obtained as an offset from the base of pt_regs. In specific
+- * cases, the returned value can be -EDOM to indicate that the particular value
+- * of ModRM does not refer to a register and shall be ignored.
+- */
+-int insn_get_modrm_rm_off(struct insn *insn, struct pt_regs *regs)
+-{
+-	return get_reg_offset(insn, regs, REG_TYPE_RM);
+-}
+-
+-/**
++/*
+  * insn_get_modrm_reg_off() - Obtain register in reg part of the ModRM byte
+  * @insn:	Instruction containing the ModRM byte
+  * @regs:	Register values as seen when entering kernel mode
+@@ -729,7 +587,7 @@ int insn_get_modrm_reg_off(struct insn *insn, struct pt_regs *regs)
+ 	return get_reg_offset(insn, regs, REG_TYPE_REG);
+ }
+ 
+-/**
++/*
+  * insn_get_modrm_reg_ptr() - Obtain register pointer based on ModRM byte
+  * @insn:	Instruction containing the ModRM byte
+  * @regs:	Register values as seen when entering kernel mode
+@@ -749,7 +607,7 @@ unsigned long *insn_get_modrm_reg_ptr(struct insn *insn, struct pt_regs *regs)
+ 	return (void *)regs + offset;
+ }
+ 
+-/**
++/*
+  * get_seg_base_limit() - obtain base address and limit of a segment
+  * @insn:	Instruction. Must be valid.
+  * @regs:	Register values as seen when entering kernel mode
+@@ -797,7 +655,7 @@ static int get_seg_base_limit(struct insn *insn, struct pt_regs *regs,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * get_eff_addr_reg() - Obtain effective address from register operand
+  * @insn:	Instruction. Must be valid.
+  * @regs:	Register values as seen when entering kernel mode
+@@ -847,7 +705,7 @@ static int get_eff_addr_reg(struct insn *insn, struct pt_regs *regs,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * get_eff_addr_modrm() - Obtain referenced effective address via ModRM
+  * @insn:	Instruction. Must be valid.
+  * @regs:	Register values as seen when entering kernel mode
+@@ -911,7 +769,7 @@ static int get_eff_addr_modrm(struct insn *insn, struct pt_regs *regs,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * get_eff_addr_modrm_16() - Obtain referenced effective address via ModRM
+  * @insn:	Instruction. Must be valid.
+  * @regs:	Register values as seen when entering kernel mode
+@@ -979,7 +837,7 @@ static int get_eff_addr_modrm_16(struct insn *insn, struct pt_regs *regs,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * get_eff_addr_sib() - Obtain referenced effective address via SIB
+  * @insn:	Instruction. Must be valid.
+  * @regs:	Register values as seen when entering kernel mode
+@@ -1068,7 +926,7 @@ static int get_eff_addr_sib(struct insn *insn, struct pt_regs *regs,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * get_addr_ref_16() - Obtain the 16-bit address referred by instruction
+  * @insn:	Instruction containing ModRM byte and displacement
+  * @regs:	Register values as seen when entering kernel mode
+@@ -1130,7 +988,7 @@ static void __user *get_addr_ref_16(struct insn *insn, struct pt_regs *regs)
  	return (void __user *)linear_addr;
  }
--#endif /* CONFIG_X86_64 */
  
- /**
+-/**
++/*
+  * get_addr_ref_32() - Obtain a 32-bit linear address
+  * @insn:	Instruction with ModRM, SIB bytes and displacement
+  * @regs:	Register values as seen when entering kernel mode
+@@ -1195,7 +1053,7 @@ static void __user *get_addr_ref_32(struct insn *insn, struct pt_regs *regs)
+ 	return (void __user *)linear_addr;
+ }
+ 
+-/**
++/*
+  * get_addr_ref_64() - Obtain a 64-bit linear address
+  * @insn:	Instruction struct with ModRM and SIB bytes and displacement
+  * @regs:	Structure with register values as seen when entering kernel mode
+@@ -1247,7 +1105,7 @@ static void __user *get_addr_ref_64(struct insn *insn, struct pt_regs *regs)
+ 	return (void __user *)linear_addr;
+ }
+ 
+-/**
++/*
   * insn_get_addr_ref() - Obtain the linear address referred by instruction
-@@ -1472,18 +1286,6 @@ int insn_get_effective_ip(struct pt_regs *regs, unsigned long *ip)
- {
- 	unsigned long seg_base = 0;
+  * @insn:	Instruction structure containing ModRM byte and displacement
+  * @regs:	Structure with register values as seen when entering kernel mode
+@@ -1282,118 +1140,7 @@ void __user *insn_get_addr_ref(struct insn *insn, struct pt_regs *regs)
+ 	}
+ }
  
--	/*
--	 * If not in user-space long mode, a custom code segment could be in
--	 * use. This is true in protected mode (if the process defined a local
--	 * descriptor table), or virtual-8086 mode. In most of the cases
--	 * seg_base will be zero as in USER_CS.
--	 */
--	if (!user_64bit_mode(regs)) {
--		seg_base = insn_get_seg_base(regs, INAT_SEG_REG_CS);
--		if (seg_base == -1L)
--			return -EINVAL;
--	}
+-int insn_get_effective_ip(struct pt_regs *regs, unsigned long *ip)
+-{
+-	unsigned long seg_base = 0;
 -
- 	*ip = seg_base + regs->ip;
- 
- 	return 0;
-@@ -1563,7 +1365,7 @@ bool insn_decode_from_regs(struct insn *insn, struct pt_regs *regs,
- {
- 	int seg_defs;
- 
--	insn_init(insn, buf, buf_size, user_64bit_mode(regs));
-+	insn_init(insn, buf, buf_size, true);
- 
- 	/*
- 	 * Override the default operand and address sizes with what is specified
+-	*ip = seg_base + regs->ip;
+-
+-	return 0;
+-}
+-
+-/**
+- * insn_fetch_from_user() - Copy instruction bytes from user-space memory
+- * @regs:	Structure with register values as seen when entering kernel mode
+- * @buf:	Array to store the fetched instruction
+- *
+- * Gets the linear address of the instruction and copies the instruction bytes
+- * to the buf.
+- *
+- * Returns:
+- *
+- * - number of instruction bytes copied.
+- * - 0 if nothing was copied.
+- * - -EINVAL if the linear address of the instruction could not be calculated
+- */
+-int insn_fetch_from_user(struct pt_regs *regs, unsigned char buf[MAX_INSN_SIZE])
+-{
+-	unsigned long ip;
+-	int not_copied;
+-
+-	if (insn_get_effective_ip(regs, &ip))
+-		return -EINVAL;
+-
+-	not_copied = copy_from_user(buf, (void __user *)ip, MAX_INSN_SIZE);
+-
+-	return MAX_INSN_SIZE - not_copied;
+-}
+-
+-/**
+- * insn_fetch_from_user_inatomic() - Copy instruction bytes from user-space memory
+- *                                   while in atomic code
+- * @regs:	Structure with register values as seen when entering kernel mode
+- * @buf:	Array to store the fetched instruction
+- *
+- * Gets the linear address of the instruction and copies the instruction bytes
+- * to the buf. This function must be used in atomic context.
+- *
+- * Returns:
+- *
+- *  - number of instruction bytes copied.
+- *  - 0 if nothing was copied.
+- *  - -EINVAL if the linear address of the instruction could not be calculated.
+- */
+-int insn_fetch_from_user_inatomic(struct pt_regs *regs, unsigned char buf[MAX_INSN_SIZE])
+-{
+-	unsigned long ip;
+-	int not_copied;
+-
+-	if (insn_get_effective_ip(regs, &ip))
+-		return -EINVAL;
+-
+-	not_copied = __copy_from_user_inatomic(buf, (void __user *)ip, MAX_INSN_SIZE);
+-
+-	return MAX_INSN_SIZE - not_copied;
+-}
+-
+-/**
+- * insn_decode_from_regs() - Decode an instruction
+- * @insn:	Structure to store decoded instruction
+- * @regs:	Structure with register values as seen when entering kernel mode
+- * @buf:	Buffer containing the instruction bytes
+- * @buf_size:   Number of instruction bytes available in buf
+- *
+- * Decodes the instruction provided in buf and stores the decoding results in
+- * insn. Also determines the correct address and operand sizes.
+- *
+- * Returns:
+- *
+- * True if instruction was decoded, False otherwise.
+- */
+-bool insn_decode_from_regs(struct insn *insn, struct pt_regs *regs,
+-			   unsigned char buf[MAX_INSN_SIZE], int buf_size)
+-{
+-	int seg_defs;
+-
+-	insn_init(insn, buf, buf_size, true);
+-
+-	/*
+-	 * Override the default operand and address sizes with what is specified
+-	 * in the code segment descriptor. The instruction decoder only sets
+-	 * the address size it to either 4 or 8 address bytes and does nothing
+-	 * for the operand bytes. This OK for most of the cases, but we could
+-	 * have special cases where, for instance, a 16-bit code segment
+-	 * descriptor is used.
+-	 * If there is an address override prefix, the instruction decoder
+-	 * correctly updates these values, even for 16-bit defaults.
+-	 */
+-	seg_defs = insn_get_code_seg_params(regs);
+-	if (seg_defs == -EINVAL)
+-		return false;
+-
+-	insn->addr_bytes = INSN_CODE_SEG_ADDR_SZ(seg_defs);
+-	insn->opnd_bytes = INSN_CODE_SEG_OPND_SZ(seg_defs);
+-
+-	if (insn_get_length(insn))
+-		return false;
+-
+-	if (buf_size < insn->length)
+-		return false;
+-
+-	return true;
+-}
+-
+-/**
++/*
+  * insn_decode_mmio() - Decode a MMIO instruction
+  * @insn:	Structure to store decoded instruction
+  * @bytes:	Returns size of memory operand
 -- 
 2.34.1
 
