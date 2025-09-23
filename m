@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-42118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C7C5B945F1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 07:20:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7786EB94609
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 07:21:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4825E4408C1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 05:20:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF41818999FF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 05:21:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B6C30DEA7;
-	Tue, 23 Sep 2025 05:18:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B5F130E82D;
+	Tue, 23 Sep 2025 05:18:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="OCO6sNRS"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="g+hddDqc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011058.outbound.protection.outlook.com [40.93.194.58])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010069.outbound.protection.outlook.com [52.101.193.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86991A3142;
-	Tue, 23 Sep 2025 05:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A0330DD00;
+	Tue, 23 Sep 2025 05:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.69
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758604693; cv=fail; b=liyXaai6g1NuJCiHhHD0fHWS9eNQVfl23/Fx1i9hmvyJSkl4u2bkLc211ZLxfqxFkBTOSJRoLg5trkwMjJ1uRguZFOnKGcmhzUwObkiiotF59iUSeqP6RiM+s94rU3g0eM7UufDwTmusFLSc4aEWicJ6esXInrNy22e2ZfZnhW0=
+	t=1758604715; cv=fail; b=VYLue8yiOU8zpcejg3gwWEMJNhIyBlmwTgDbib8+fv9bxQxzMqAlX7SXQ5dCMMJlwTh/S2k+6ZXJwKAu0Xynh08YHCX3sVl++h6+hWnb7s2ZZUfhmd4FEnNIukE8w3ArBEQ7aTrRSKVjFfl2ohPXF1aaZDiqtueVUiTQd9YjvwU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758604693; c=relaxed/simple;
-	bh=KX+QENdWtr3ZV6Mkoh/DNY6C+y9GE0Q9ijz0elMvtjs=;
+	s=arc-20240116; t=1758604715; c=relaxed/simple;
+	bh=SoBW1GXPliZAFoXuaD6SY23K6VIk1FXlAO3E5rhbtvk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hgoWuL1P3uqemoTOioMILmJcWjPINoTYphFh3g1+L4l/P2OF3fJ9e5V68VGePSF0s8UkVCEj8NBuB17UYGbQtTnaw8YqVZq2SiV17y3EgmaQHEfWaPNyJBq9O6ZoIBJN5T4kA/+3Bcum+qLKXscxQQ3Vf/Dk01YEBL8aa/aj/lc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=OCO6sNRS; arc=fail smtp.client-ip=40.93.194.58
+	 MIME-Version:Content-Type; b=ED3KQZJHoC0sxPoK4C9Ie2E666gVdDr8fnoHKH5aDYcm4aiEj126RUR1Bie3DHPaSlThB1SV6NdsgYmJwVa2tyJe1w2I6W//4qO9nX6u+PgcNAZ+PFjTwLS6wAPpIcDifngd9+3nitHw9Km2+vHbttDxo8+aDjTJRUprAJK359k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=g+hddDqc; arc=fail smtp.client-ip=52.101.193.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sRLyXXtlAIxYcdehVb64N4jk1w0r8uLc7m4xHoI6PiLXKsljCfgrJpqNHKTumyrdPZuWNIna/MRX0RQEDzaMB5pIGYCp4wwJkw85ZyGi8DW35CWe20l5dvaw/eyL2NVfPfCTZX2PecY8BH8zlkTb/TFKpbWyVi0u9oAzJRtnmguEjYlENMLnf1DrRbGuApMv0S2EW7NPh/I4/QfRGm6EMT/8olZ6Tdrfv5FsrQGJVO8KgOoJ1aePGSBdIhCE1yKSXWXftGu1N3HtreTTdTJ0Qu/ln4rm9i9b+hcWwcNU8zkY2gsPDTIzsyjRL3LLvs+5FC4uO1BwFAb1Qrn0pToJDw==
+ b=CneZ9GJMEkJyUUKxwLW3lzDxizOdcNd7JO62jkAfWC53+dF2VRCVpR5pgHmRqZG1j9uK6ZDNm6BOsmmdIgj7h0t2S/DLvr2ZMSF1wavJ0dcrU7RB8zxFiXqvwxNaJEMqr7090IxBry3wuCmoYMLyMhHv9XxjdTp2qIRkYZ0j2Kjn3T8kV0CSNziPCzpwDex36OPdEm+ZmDylhoQjyQE9rIIZdsSFPzt5lYemhlC6LO2rwgw/c7hCvjwhbhs8QSyxzXa1ow07PYyO5c4YO5ckenSagZamKn5nZr4UFa8GGn5YCBf/yzJFYXGUkMIQH65KZK2sgbP0K/8Y1pta9mwTQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fBZG+hxak/+fUz0yvuwL273kO42JHHc7TBl1uKbEjVg=;
- b=PcGhjZRiQBY+qMxpF3jXX/vezbxWE1+691d1487G2z8+YCI+wZvTY5C/SAL0qRiiW8S/hR8YJhy0iYANkY+vfUQio/iivaK3l//DV4aEl7zKlIMs9yngwsYkPXvPx3gtClZzn06i4w28n57RwPoveNm/czqO4fLPZTm1eHMkabaOkqqw0U4FidoV303BshydMtW9fE52wvH8RdNXjKbSG7c9VfMA1kSWLaS03ictFSFX6JGqpAesw1+JZVc+ocDcrJR65KWygQn7+dmw9H1N9+CervINss/ZLh7Jqt4YZwMQRU3KvESPx1Z3nK5n5hT//5ygPAqQlgsaqMH+8LqAnQ==
+ bh=s2TA0sQ7cMworMtQI4Jwe5ToMOstwAkJ41LIjnxFxLw=;
+ b=ES2Wqzjz0y/Q+ESuPPJPmSt5rdQXyConGb2g5baJc7zC/xtA0BtLrRwuc52qpTJyAjsH1OIJJDsectY0Pw+JSHvKAKzFgHqTH9wdY1bxxjjT/lsUjKWkU740+E9YiA9s4aTniqxxDeGBGmb0VJELIZXUBu4tjuhoYpHlJGIhFcMfyXa0yq4nnPdD2SUbH4jSrmbzKLvyOO3MaUgrIww3c3I2UGa5YKtaGMzJWD0/5VNcJSe6weC01qiez2ntxeo61TFbOVbrrRbUAdPFXRNbbNXCp1rQ7ZOgKgKJaS0+CdLyppxalrvpdHa0KvuFFwQlGZctfVccgTasxl/xg0oMqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fBZG+hxak/+fUz0yvuwL273kO42JHHc7TBl1uKbEjVg=;
- b=OCO6sNRS2YrrL/ipebvNxUMgmIuMclbMFihBf8n3eWyxL7JLgp7QD2ZNzgrFfstzZuzGfwQttbvQMuneGFD728CfQ51yZnOBmhSknfcDvR+HdJoYYyN7k6VRzBfBerRbudG8D5uvmVCIRWb0Xj25DOYMeF+/Dz2ky37daJrUW7s=
-Received: from SJ0PR03CA0354.namprd03.prod.outlook.com (2603:10b6:a03:39c::29)
- by DM6PR12MB4339.namprd12.prod.outlook.com (2603:10b6:5:2af::7) with
+ bh=s2TA0sQ7cMworMtQI4Jwe5ToMOstwAkJ41LIjnxFxLw=;
+ b=g+hddDqciS2z+92VHIyuMAtqAcOTVfRCKrBxLvinLkunXGrpHe/5uOaoFvrw9NoPJfdUHiXMfbUtb4x5RB3Pm8Uq5W2Z2KyF/w1ZN8o47D/OCHIWook8rOHQ5iHVNUvgEs22eqi154YriljKdDF/tC/OGumQpAnJyr5rHr6UlPw=
+Received: from SJ0PR03CA0008.namprd03.prod.outlook.com (2603:10b6:a03:33a::13)
+ by CY1PR12MB9697.namprd12.prod.outlook.com (2603:10b6:930:107::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Tue, 23 Sep
- 2025 05:18:04 +0000
-Received: from SJ5PEPF000001D1.namprd05.prod.outlook.com
- (2603:10b6:a03:39c:cafe::16) by SJ0PR03CA0354.outlook.office365.com
- (2603:10b6:a03:39c::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.20; Tue, 23 Sep
+ 2025 05:18:29 +0000
+Received: from SJ5PEPF000001D5.namprd05.prod.outlook.com
+ (2603:10b6:a03:33a:cafe::fd) by SJ0PR03CA0008.outlook.office365.com
+ (2603:10b6:a03:33a::13) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.20 via Frontend Transport; Tue,
- 23 Sep 2025 05:18:04 +0000
+ 23 Sep 2025 05:18:29 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
- SJ5PEPF000001D1.mail.protection.outlook.com (10.167.242.53) with Microsoft
+ SJ5PEPF000001D5.mail.protection.outlook.com (10.167.242.57) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9137.12 via Frontend Transport; Tue, 23 Sep 2025 05:18:04 +0000
+ 15.20.9137.12 via Frontend Transport; Tue, 23 Sep 2025 05:18:29 +0000
 Received: from BLR-L-NUPADHYA.xilinx.com (10.180.168.240) by
  satlexmb07.amd.com (10.181.42.216) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 22 Sep 2025 22:17:49 -0700
+ 15.2.2562.17; Mon, 22 Sep 2025 22:18:07 -0700
 From: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
 To: <kvm@vger.kernel.org>, <seanjc@google.com>, <pbonzini@redhat.com>
 CC: <linux-kernel@vger.kernel.org>, <Thomas.Lendacky@amd.com>,
@@ -77,9 +77,9 @@ CC: <linux-kernel@vger.kernel.org>, <Thomas.Lendacky@amd.com>,
 	<Suravee.Suthikulpanit@amd.com>, <bp@alien8.de>, <David.Kaplan@amd.com>,
 	<huibo.wang@amd.com>, <naveen.rao@amd.com>, <pgonda@google.com>,
 	<linux-kselftest@vger.kernel.org>, <shuah@kernel.org>, <tiala@microsoft.com>
-Subject: [RFC PATCH v2 27/35] KVM: selftests: Add args parameter to kvm_arch_vm_post_create()
-Date: Tue, 23 Sep 2025 10:39:34 +0530
-Message-ID: <20250923050942.206116-28-Neeraj.Upadhyay@amd.com>
+Subject: [RFC PATCH v2 28/35] KVM: selftests: Add GHCB call for SAVIC backing page notification
+Date: Tue, 23 Sep 2025 10:39:35 +0530
+Message-ID: <20250923050942.206116-29-Neeraj.Upadhyay@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250923050942.206116-1-Neeraj.Upadhyay@amd.com>
 References: <20250923050942.206116-1-Neeraj.Upadhyay@amd.com>
@@ -95,309 +95,138 @@ X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D1:EE_|DM6PR12MB4339:EE_
-X-MS-Office365-Filtering-Correlation-Id: 870b6b0d-444b-4425-ce66-08ddfa6092fd
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D5:EE_|CY1PR12MB9697:EE_
+X-MS-Office365-Filtering-Correlation-Id: a95aac2a-9ced-4a4d-c515-08ddfa60a1dc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|36860700013|82310400026;
+	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Zs0lPR0bsp//EnadEoRfOY7O8+8X0XdU3l7vlzwQg22WCxbHhkYbIdYUe8nu?=
- =?us-ascii?Q?UUQD6vejk8O3LUrPk03zc5Yvj5uoVJZ38gfFsD6PG5TTse7GehnC6OFQDmdD?=
- =?us-ascii?Q?kbXIhEmXBztZL4xjMnbMknYdoG3lkF7F+NsvoiOWaiq3hjvhpvaVsTjZyaU4?=
- =?us-ascii?Q?5zVxuLblfIBDWDmM/tkN3GTNqlRyqpxHaC5+Bh+Pl7YOyjdN2SByDVJvpdmw?=
- =?us-ascii?Q?ok+QBr4kmG5yrdMXMxNtadJxHi4VXobbr57uOyz1xthSJ9hBO1NPu2mHN6P1?=
- =?us-ascii?Q?cAqd+EM62DofVpThaOSFz4jVS4jg50Ix2uKHr0NO+Z8JNZ5p527K4mF0lAXY?=
- =?us-ascii?Q?M3sGZTnurBN8zAEsIXakHGom7AGwRo8hw4sQABZ6Qv/7mhunBwcBxC+9USNo?=
- =?us-ascii?Q?2PDLko/YfJu55DbHH1gkfuNKdfwMDChsdQ2NT4OjEEdhxC5SmnkJQX5wCJZx?=
- =?us-ascii?Q?PHp6AaD5ynxUUl1QlmHzc6v/SjQQi9awja0u0/Zy7fgun/dCfaQE5/OiXSOq?=
- =?us-ascii?Q?Q8fpJ6QOMJmaz4OwQzogqttT3OF4WJIrYD0CWzknjkiIwnr7YDsibm8WHNwU?=
- =?us-ascii?Q?wfiJ4o+gwpU/t4Jl8J0YSemE9z79EZ53laYeY7GUPM9jt+qGM7O6B9qleNml?=
- =?us-ascii?Q?x+kUxZ0zR5Os0/HGRSWRH1YSNFLOacQrMcMP99PpUeSJQTuzoRCwjQo41Jit?=
- =?us-ascii?Q?JnCS31ncPgiIrmLBC/5NKx8DjPCv0baFf0bFa654em9e9EjApBUupDvR4E3L?=
- =?us-ascii?Q?Y18Di2KzBz1GUtJrzGrl6fAIo+mTo+MTVRvX+3hYVUBQReoaFXZEd1sgA8B/?=
- =?us-ascii?Q?dZJfWTxqlfJWXlU78Jvzy0+O7rETG9dEKPtAVLnQUxk6qixy/VIuDc+eaXu2?=
- =?us-ascii?Q?poTwqeoUA6XkCddOBkw111YPJwNNQrkH/oe4kyJOxiMgXFe63QLLsPxrDc+p?=
- =?us-ascii?Q?8V3iB2ZmdVEgQc0/pmVojvFx2oyuXJADX+I+QWtIwU2DEXBAkQgcc4//cxZY?=
- =?us-ascii?Q?FwyjP2clA5d8d6dPt1HNFW1fnJP010yYyvwjLlOZY9C86M2EXWL0JhVtLnEQ?=
- =?us-ascii?Q?KZL33nPelhiM1Vr6iG3igEKuy7To2obs/FAQawYKoezW8hlnDrzYicKClUaT?=
- =?us-ascii?Q?F22uQp5CVhKUtwlFT1xRPyq7iS36yDk7N8xgOr/+BlSqk/VS5BgP9dJ02fP9?=
- =?us-ascii?Q?KlSqh4uofDXPAy9fnHwtfKmWI4Pcj81gygD5+oUhEFvrORP4opB2wJmqn4ph?=
- =?us-ascii?Q?TGHiXkMdQgeGIB2nm8xRWA3IGE+Qap469b1zeCGxsk3TMEDFZLEpEnLokcKe?=
- =?us-ascii?Q?jJgiTAPeDNg8eZHCezjX2VEJAV6bhv0lUIK6lVNa7PouJSsFurPRK7NKEACc?=
- =?us-ascii?Q?614KpaKUWutwG+vkqx+5/3ZhFmVNrihOpSdj4Kz2NqGmvQ/LYE7MrMvYYBRb?=
- =?us-ascii?Q?aQ4kOPoRpVYbl4evVicW2lu40LzdnuyRGnYzGnuy/HP8Zyr3cDFRPvZ/GDy3?=
- =?us-ascii?Q?3FOEFbU9tIoWl9zA/HPHGQnMpG0+YTR3PG9f?=
+	=?us-ascii?Q?ev+1ZW4t+abkKnzKNSgztNaKNY6BuL2f7lnWjWD71jo+s1RDdXIoIH9h8fR5?=
+ =?us-ascii?Q?uzuex2AXIpgxTbkRFWJYntH+a4CO0amC++sdb1/K4resy9n9Qeq6H0iC6MjG?=
+ =?us-ascii?Q?S43QSRsxIeDC1KQdArKfvlW1q1S+L7pqCuSf7uxkSIazoBozvhVaBj7j7Qja?=
+ =?us-ascii?Q?5+puleeRxLoFosY9wxKgvYTefCCq3NBonvmst7YBb7W/bqzPpnKk6dKjTxdk?=
+ =?us-ascii?Q?2OFYkx9dq1pINHsSd1OhTqDcfCNr2ucjEi65eirxLh7ZE6CXK12AXlN7G0/a?=
+ =?us-ascii?Q?Oh8huc1JLDIXGYT99KuDJIQeD/GSTtQdPiTHoBdP3tJjgi+k7QF2cYwNsIT3?=
+ =?us-ascii?Q?grr1puzNNwd0QYBXBUBpEC+C2nwD16k4Z5AGHiMOn4+KWTlbhbYWPCiMOO9h?=
+ =?us-ascii?Q?75Jymz9dZ9NJjUguHeqxuAaTtWcswxcDH4SgRNQPBSDHhZyBH9yNdrkTSnkZ?=
+ =?us-ascii?Q?eNNfBiTM3+nkRt6JWt7LXWtEa31YR2ic8SJvt5BfU3ZbFa0SVmeGd63gxRtC?=
+ =?us-ascii?Q?Cvr0RD1TxSDQvn1PNWShB26WngGJdaqkHXmCOKH4je5lE53KE4EoVafRqIEt?=
+ =?us-ascii?Q?oTiOmGTg53X8+dPhTZYZHhH+X9HLKtJg2F0x4SZ9mDsaCVzLaToFGKunSuRF?=
+ =?us-ascii?Q?JdJm13AswbdunZGjSTRiCyr983J4+hc2/waYCzDwJ3GkXRxWswG+H282KYhY?=
+ =?us-ascii?Q?dpRR9Tixz6Nm5cDxC6r4uRY8P//rGPVtXstvmCEj63350oKuCP4nJPmpqO4n?=
+ =?us-ascii?Q?0RBHmeSzvCY+oSsMOAAv6oYQ+R0htXXjArmPpPriKcudG9HqVAO670Jwtjq7?=
+ =?us-ascii?Q?9/l05OhswnJ1wZ80uiLxJcrmdFnUAVsvAmrB2Adjzmd8ve75Rdg6Ma2+UOGO?=
+ =?us-ascii?Q?kNxovVcNnRAa7mXMW1Rm+Z4Q8AIoxEV0M0+TMsKeV7NKvJHj3m+Nulp9rMJx?=
+ =?us-ascii?Q?XGvUs0Gnu/KtC9fhlJ7r83T5tD5XZw8wfQv5kZE98SguDLAhoiA7YytcucSs?=
+ =?us-ascii?Q?AvbJRktCZ+R0Wm9CB0hSS8UyoeTMye8Kn1tMTiloSqPMheZidT5jkoNvV2ZB?=
+ =?us-ascii?Q?gZDfcvlE29i10egGCZP9zm0v/lZaIQ8omfhpOzZ4LJdjxt0ASyka/JBRxK1H?=
+ =?us-ascii?Q?l72WsElDWv5W7UA33Z1WC4pzggRBmkWPD9e4s5MXYz1xlNi1WZt94jxm7U6Y?=
+ =?us-ascii?Q?tHFnU8sR9ql0EzoHtuEMnU6DNWTF0rsq7BoZeRY9LMy+gi4/vIQkqxcuW6lI?=
+ =?us-ascii?Q?3roS1y/vkRmHjxaPsOsLD1Xbsq8kI778Y+IFnXib7J16/EThKgybh3Tlj/le?=
+ =?us-ascii?Q?twcj/0J13T0wI12D2BrX/XsPsfGDgvzmRN2lJjeaB3CxEh2QeHs436cOYMBE?=
+ =?us-ascii?Q?qezwdm8ryXDoGkcRbaNlq3hKU5xYkygdfFXvalLRhvcfDsatuW6X9M6zCiHt?=
+ =?us-ascii?Q?F+yeAe1naap0FVDscBuC/iI/EjxqqSh5tEI+2QQoPFq2GaeK3dZtvfGi9FsD?=
+ =?us-ascii?Q?lYb5cZGsbcF6PRhB7UfnM/fcwGz/78aMRXkY?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2025 05:18:04.4983
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2025 05:18:29.4539
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 870b6b0d-444b-4425-ce66-08ddfa6092fd
+X-MS-Exchange-CrossTenant-Network-Message-Id: a95aac2a-9ced-4a4d-c515-08ddfa60a1dc
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001D1.namprd05.prod.outlook.com
+	SJ5PEPF000001D5.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4339
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY1PR12MB9697
 
-The kvm_arch_vm_post_create() hook allows for architecture-specific
-setup to be performed immediately after a VM is created. However, it
-currently lacks a mechanism to pass custom configuration data from
-the test down to this setup phase.
+When a vCPU enables Secure AVIC (SAVIC), the hardware needs to directly
+access the guest's APIC backing page. For this to work correctly, the
+hypervisor must be aware of the guest physical address (GPA) of this
+page so it can ensure the page is mapped and pinned in the nested page
+tables (NPT) while the vCPU is running.
 
-This is a limitation for features that require non-default initialization.
-For example, to test SEV-SNP with Secure AVIC (SAVIC), the desired VMSA
-features must be configured via the KVM_SEV_INIT2 ioctl. This ioctl is
-called within the x86 implementation of kvm_arch_vm_post_create(), but it
-currently uses hardcoded default values.
-
-To make this configurable, extend kvm_arch_vm_post_create() with a generic
-"void *args" parameter. The x86 implementation of kvm_arch_vm_post_create()
-now uses this argument to populate the "struct kvm_sev_init" for the
-"KVM_SEV_INIT2" ioctl.
-
-This refactoring makes the VM creation process more flexible and is a
-prerequisite for adding selftests for Secure AVIC guests.
+Introduce a paravirtual GHCB call that the guest uses to notify the
+hypervisor of the backing page's GPA before activating SAVIC.
 
 Signed-off-by: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
 ---
- .../testing/selftests/kvm/arm64/set_id_regs.c |  2 +-
- .../testing/selftests/kvm/include/kvm_util.h  |  9 +++-
- tools/testing/selftests/kvm/include/x86/sev.h |  3 ++
- tools/testing/selftests/kvm/lib/kvm_util.c    | 51 +++++++++++++------
- .../testing/selftests/kvm/lib/x86/processor.c |  6 ++-
- tools/testing/selftests/kvm/lib/x86/sev.c     | 13 +++--
- tools/testing/selftests/kvm/s390/cmma_test.c  |  2 +-
- 7 files changed, 63 insertions(+), 23 deletions(-)
+ tools/testing/selftests/kvm/include/x86/sev.h |  1 +
+ tools/testing/selftests/kvm/lib/x86/savic.c   |  1 +
+ tools/testing/selftests/kvm/lib/x86/sev.c     | 25 ++++++++++++++++++-
+ 3 files changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-index d3bf9204409c..b732ee9efbed 100644
---- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
-+++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-@@ -749,7 +749,7 @@ static void test_reset_preserves_id_regs(struct kvm_vcpu *vcpu)
- 	ksft_test_result_pass("%s\n", __func__);
- }
- 
--void kvm_arch_vm_post_create(struct kvm_vm *vm)
-+void kvm_arch_vm_post_create(struct kvm_vm *vm, void *args)
- {
- 	if (vm_check_cap(vm, KVM_CAP_ARM_MTE)) {
- 		vm_enable_cap(vm, KVM_CAP_ARM_MTE, 0);
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 4a4f9621082d..e5f322994f44 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -992,6 +992,9 @@ static inline vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
- struct kvm_vm *____vm_create(struct vm_shape shape);
- struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
- 			   uint64_t nr_extra_pages);
-+struct kvm_vm *__vm_create_with_args(struct vm_shape shape,
-+		uint32_t nr_runnable_vcpus,  uint64_t nr_extra_pages,
-+		void *args);
- 
- static inline struct kvm_vm *vm_create_barebones(void)
- {
-@@ -1016,6 +1019,10 @@ static inline struct kvm_vm *vm_create(uint32_t nr_runnable_vcpus)
- struct kvm_vm *__vm_create_with_vcpus(struct vm_shape shape, uint32_t nr_vcpus,
- 				      uint64_t extra_mem_pages,
- 				      void *guest_code, struct kvm_vcpu *vcpus[]);
-+struct kvm_vm *___vm_create_with_vcpus(struct vm_shape shape,
-+				       uint32_t nr_vcpus, uint64_t extra_mem_pages,
-+				       void *guest_code, struct kvm_vcpu *vcpus[],
-+				       void *args);
- 
- static inline struct kvm_vm *vm_create_with_vcpus(uint32_t nr_vcpus,
- 						  void *guest_code,
-@@ -1261,7 +1268,7 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
-  */
- void kvm_selftest_arch_init(void);
- 
--void kvm_arch_vm_post_create(struct kvm_vm *vm);
-+void kvm_arch_vm_post_create(struct kvm_vm *vm, void *args);
- 
- bool vm_is_gpa_protected(struct kvm_vm *vm, vm_paddr_t paddr);
- 
 diff --git a/tools/testing/selftests/kvm/include/x86/sev.h b/tools/testing/selftests/kvm/include/x86/sev.h
-index d9794f5c2c16..73a23043d6c5 100644
+index 73a23043d6c5..3a95b13fb6c0 100644
 --- a/tools/testing/selftests/kvm/include/x86/sev.h
 +++ b/tools/testing/selftests/kvm/include/x86/sev.h
-@@ -72,6 +72,9 @@ void snp_vm_launch_start(struct kvm_vm *vm, uint64_t policy);
- void snp_vm_launch_update(struct kvm_vm *vm);
- void snp_vm_launch_finish(struct kvm_vm *vm);
+@@ -171,4 +171,5 @@ void sev_es_ucall_port_write(uint32_t port, uint64_t data);
+ void sev_es_vc_handler(struct ex_regs *regs);
+ void sev_es_pv_msr_rw(uint64_t msr, uint64_t *data, bool write);
+ void sev_es_pv_mmio_rw(uint32_t *reg_gpa, uint32_t *data, bool write);
++void sev_es_savic_notify_gpa(uint64_t gpa);
+ #endif /* SELFTEST_KVM_SEV_H */
+diff --git a/tools/testing/selftests/kvm/lib/x86/savic.c b/tools/testing/selftests/kvm/lib/x86/savic.c
+index 016e5e9e43f6..24ee15cc5603 100644
+--- a/tools/testing/selftests/kvm/lib/x86/savic.c
++++ b/tools/testing/selftests/kvm/lib/x86/savic.c
+@@ -203,6 +203,7 @@ void savic_enable(void)
+ 	apic_page = &apic_page_pool->guest_apic_page[apic_id];
  
-+struct kvm_vm *_vm_sev_create_with_one_vcpu(uint32_t type, void *guest_code,
-+					   struct kvm_vcpu **cpu,
-+					   void *init_args);
- struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t type, void *guest_code,
- 					   struct kvm_vcpu **cpu);
- void vm_sev_launch(struct kvm_vm *vm, uint64_t policy, uint8_t *measurement);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 360f262f5f3f..23272f797f5f 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -473,8 +473,8 @@ static bool is_guest_memfd_required(struct vm_shape shape)
- #endif
- }
- 
--struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
--			   uint64_t nr_extra_pages)
-+static struct kvm_vm *___vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
-+			   uint64_t nr_extra_pages, void *args)
- {
- 	uint64_t nr_pages = vm_nr_pages_required(shape, nr_runnable_vcpus,
- 						 nr_extra_pages);
-@@ -519,7 +519,37 @@ struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
- 	guest_rng = new_guest_random_state(guest_random_seed);
- 	sync_global_to_guest(vm, guest_rng);
- 
--	kvm_arch_vm_post_create(vm);
-+	kvm_arch_vm_post_create(vm, args);
-+
-+	return vm;
-+}
-+
-+struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
-+			   uint64_t nr_extra_pages)
-+{
-+	return ___vm_create(shape, nr_runnable_vcpus, nr_extra_pages, NULL);
-+}
-+
-+struct kvm_vm *__vm_create_with_args(struct vm_shape shape, uint32_t nr_runnable_vcpus,
-+			   uint64_t nr_extra_pages, void *args)
-+{
-+	return ___vm_create(shape, nr_runnable_vcpus, nr_extra_pages, args);
-+}
-+
-+struct kvm_vm *___vm_create_with_vcpus(struct vm_shape shape,
-+		uint32_t nr_vcpus, uint64_t extra_mem_pages,
-+		void *guest_code, struct kvm_vcpu *vcpus[],
-+		void *args)
-+{
-+	struct kvm_vm *vm;
-+	int i;
-+
-+	TEST_ASSERT(!nr_vcpus || vcpus, "Must provide vCPU array");
-+
-+	vm = ___vm_create(shape, nr_vcpus, extra_mem_pages, args);
-+
-+	for (i = 0; i < nr_vcpus; ++i)
-+		vcpus[i] = vm_vcpu_add(vm, i, guest_code);
- 
- 	return vm;
- }
-@@ -547,17 +577,8 @@ struct kvm_vm *__vm_create_with_vcpus(struct vm_shape shape, uint32_t nr_vcpus,
- 				      uint64_t extra_mem_pages,
- 				      void *guest_code, struct kvm_vcpu *vcpus[])
- {
--	struct kvm_vm *vm;
--	int i;
--
--	TEST_ASSERT(!nr_vcpus || vcpus, "Must provide vCPU array");
--
--	vm = __vm_create(shape, nr_vcpus, extra_mem_pages);
--
--	for (i = 0; i < nr_vcpus; ++i)
--		vcpus[i] = vm_vcpu_add(vm, i, guest_code);
--
--	return vm;
-+	return ___vm_create_with_vcpus(shape, nr_vcpus, extra_mem_pages, guest_code,
-+			vcpus, NULL);
- }
- 
- struct kvm_vm *__vm_create_shape_with_one_vcpu(struct vm_shape shape,
-@@ -2357,7 +2378,7 @@ void kvm_get_stat(struct kvm_binary_stats *stats, const char *name,
- 	TEST_FAIL("Unable to find stat '%s'", name);
- }
- 
--__weak void kvm_arch_vm_post_create(struct kvm_vm *vm)
-+__weak void kvm_arch_vm_post_create(struct kvm_vm *vm, void *args)
- {
- }
- 
-diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-index a33a09a161d3..fc57b948c041 100644
---- a/tools/testing/selftests/kvm/lib/x86/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-@@ -9,6 +9,7 @@
- #include "processor.h"
- #include "sev.h"
- #include "apic.h"
-+#include "savic.h"
- 
- #ifndef NUM_INTERRUPTS
- #define NUM_INTERRUPTS 256
-@@ -631,7 +632,7 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
- 		REPORT_GUEST_ASSERT(uc);
- }
- 
--void kvm_arch_vm_post_create(struct kvm_vm *vm)
-+void kvm_arch_vm_post_create(struct kvm_vm *vm, void *sev_init_args)
- {
- 	int r;
- 
-@@ -648,7 +649,8 @@ void kvm_arch_vm_post_create(struct kvm_vm *vm)
- 	if (is_sev_vm(vm)) {
- 		struct kvm_sev_init init = { 0 };
- 
--		vm_sev_ioctl(vm, KVM_SEV_INIT2, &init);
-+		vm_sev_ioctl(vm, KVM_SEV_INIT2, sev_init_args ?
-+				(struct kvm_sev_init *)sev_init_args : &init);
- 	}
- 
- 	r = __vm_ioctl(vm, KVM_GET_TSC_KHZ, NULL);
+ 	savic_init_backing_page(apic_page, apic_id);
++	sev_es_savic_notify_gpa(apic_page->gpa);
+ 	set_savic_control_msr(apic_page, true, true);
+ 	savic_ctrl_msr_val = rdmsr(MSR_AMD64_SECURE_AVIC_CONTROL);
+ 	exp_msr_val = apic_page->gpa | BIT_ULL(MSR_AMD64_SECURE_AVIC_EN_BIT) |
 diff --git a/tools/testing/selftests/kvm/lib/x86/sev.c b/tools/testing/selftests/kvm/lib/x86/sev.c
-index 113f33ca40b2..257988fce107 100644
+index 257988fce107..840504f0243c 100644
 --- a/tools/testing/selftests/kvm/lib/x86/sev.c
 +++ b/tools/testing/selftests/kvm/lib/x86/sev.c
-@@ -260,8 +260,9 @@ void snp_vm_launch_finish(struct kvm_vm *vm)
- 	vm_sev_ioctl(vm, KVM_SEV_SNP_LAUNCH_FINISH, &launch_finish);
+@@ -8,6 +8,7 @@
+ #include "linux/bitmap.h"
+ #include "svm.h"
+ #include "svm_util.h"
++#include "savic.h"
+ 
+ #define IOIO_TYPE_STR (1 << 2)
+ #define IOIO_SEG_DS (1 << 11 | 1 << 10)
+@@ -17,7 +18,8 @@
+ #define SW_EXIT_CODE_IOIO	0x7b
+ #define SW_EXIT_CODE_MSR	0x7c
+ #define SVM_VMGEXIT_MMIO_READ		   0x80000001
+-#define SVM_VMGEXIT_MMIO_WRITE		  0x80000002
++#define SVM_VMGEXIT_MMIO_WRITE		   0x80000002
++#define SVM_VMGEXIT_SECURE_AVIC	   0x8000001a
+ 
+ struct ghcb_entry {
+ 	struct ghcb ghcb;
+@@ -727,3 +729,24 @@ void sev_es_vc_handler(struct ex_regs *regs)
+ 		__GUEST_ASSERT(0, "No VC handler\n");
+ 	}
  }
- 
--struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t type, void *guest_code,
--					   struct kvm_vcpu **cpu)
-+struct kvm_vm *_vm_sev_create_with_one_vcpu(uint32_t type, void *guest_code,
-+					   struct kvm_vcpu **cpu,
-+					   void *init_args)
- {
- 	struct vm_shape shape = {
- 		.mode = VM_MODE_DEFAULT,
-@@ -270,7 +271,7 @@ struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t type, void *guest_code,
- 	struct kvm_vm *vm;
- 	struct kvm_vcpu *cpus[1];
- 
--	vm = __vm_create_with_vcpus(shape, 1, 0, guest_code, cpus);
-+	vm = ___vm_create_with_vcpus(shape, 1, 0, guest_code, cpus, init_args);
- 	*cpu = cpus[0];
- 
- 	return vm;
-@@ -288,6 +289,12 @@ static bool is_savic_enabled(void)
- 	return supported_vmsa_features & BIT_ULL(SVM_FEAT_SECURE_AVIC);
- }
- 
-+struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t type, void *guest_code,
-+					   struct kvm_vcpu **cpu)
-+{
-+	return _vm_sev_create_with_one_vcpu(type, guest_code, cpu, NULL);
-+}
 +
- void vm_sev_launch(struct kvm_vm *vm, uint64_t policy, uint8_t *measurement)
- {
- 	if (is_sev_es_vm(vm))
-diff --git a/tools/testing/selftests/kvm/s390/cmma_test.c b/tools/testing/selftests/kvm/s390/cmma_test.c
-index 85cc8c18d6e7..0476dace3473 100644
---- a/tools/testing/selftests/kvm/s390/cmma_test.c
-+++ b/tools/testing/selftests/kvm/s390/cmma_test.c
-@@ -145,7 +145,7 @@ static void finish_vm_setup(struct kvm_vm *vm)
- 	slot0 = memslot2region(vm, 0);
- 	ucall_init(vm, slot0->region.guest_phys_addr + slot0->region.memory_size);
- 
--	kvm_arch_vm_post_create(vm);
-+	kvm_arch_vm_post_create(vm, NULL);
- }
- 
- static struct kvm_vm *create_vm_two_memslots(void)
++void sev_es_savic_notify_gpa(uint64_t gpa)
++{
++	struct ghcb_entry *entry;
++	struct ghcb *ghcb;
++	int ret;
++
++	entry = ghcb_alloc();
++	ghcb = &entry->ghcb;
++
++	register_ghcb_page(entry->gpa);
++	ghcb_set_sw_exit_code(ghcb, SVM_VMGEXIT_SECURE_AVIC);
++	ghcb_set_rax(ghcb, -1ULL);
++	ghcb_set_rbx(ghcb, gpa);
++	ghcb_set_sw_exit_info_1(ghcb, 0);
++	ghcb_set_sw_exit_info_2(ghcb, 0);
++	do_vmg_exit(entry->gpa);
++	ret = ghcb->save.sw_exit_info_1 & 0xffffffff;
++	__GUEST_ASSERT(!ret, "Secure AVIC GPA notification failed, ret: %d", ret);
++	ghcb_free(entry);
++}
 -- 
 2.34.1
 
