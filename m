@@ -1,107 +1,166 @@
-Return-Path: <linux-kselftest+bounces-42157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 371BAB975E9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 21:36:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4D86B9796E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 23:38:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D3041610FF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 19:36:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB4C01B2313A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 21:38:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CDA53043A9;
-	Tue, 23 Sep 2025 19:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F1B730C370;
+	Tue, 23 Sep 2025 21:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dLS/7CJ2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MmFNjcKz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42391F582E
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Sep 2025 19:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6454C30BB8A
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Sep 2025 21:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758656182; cv=none; b=opikZGh40YOtar2pf6+W3BgUdrVElzEgXRo3/KR0HObLH8+CjNGtKxkTvsQmkFGjvgWk//d3Hz4A+OsJctyQFNzIP5dgMUhFj2W1e4Bm9Lnfkes1HNwTa7UfvPejIprSYEMTM+2aEeh+rPNIo34hfZSZQFXx/9G5LaJTchI/rIo=
+	t=1758663500; cv=none; b=rpoO8HtJARKrOGCSRE7t/ViAQyA1PgvIq0avHD/84w5uzbkdxsliOIOGnGg7EjcL60SCnkVGxQDZsxABeovoKTrbiyilOMUnXRHfceKLqU6OPjez8srAK7u+/MMAYO2bUwNY96opA41/IPWA4u3MV+7Q7N08bkeX+TBRn/ENmes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758656182; c=relaxed/simple;
-	bh=c3tHz3xkrAjXnLneXRnB/HG4W7YEuKrsOFMkwG9NOlc=;
+	s=arc-20240116; t=1758663500; c=relaxed/simple;
+	bh=0+sTDOXCBKnKH/E8c0etG8KcxzezgfK+5x0cwjx0dXo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R9swxMdBCj27aXP3uwRtQUDIhezd8EOaWOgfBac8EdyUw5rwiAaJ+M4lv7OzbxDOUL6bLbpRI2pnomgUcAylS2OgQQQHdn2BuLA/1x8V8mjsgkL+ZQw/KtuyvZtzdvqHwvPtXDirnTnqLoK/qSMGunQf9TzHvLNU33We/yvziqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dLS/7CJ2; arc=none smtp.client-ip=209.85.221.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=pBiS8Bs0SkZFe0VpWdA6TuHozqnSUOqwEUgXqUWgtnmL2PIRHmyPQTIXxULKOo5u6Udx0H5GJ4tpJPZ1HwzYUq7U2wQUO3dYprfTuk6mqmGlC1VGabWlKaoigazVAjkflAeqiAlF36Vv5gewdmdwVcpSMrzkn3Nu0mR8QY1L6gI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MmFNjcKz; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3e8ef75b146so5600583f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Sep 2025 12:36:19 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b2ef8e00becso347064166b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Sep 2025 14:38:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758656178; x=1759260978; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1T4a0b30RkSl2NcIpe0lwjzr86jO2vZlKX0MUfW14x4=;
-        b=dLS/7CJ2LKQZDa1BZFXiEuPRhxeXqgefHMgC9HFrxaHtxm22GjakbXqbw4VtOO8kUH
-         CmIs5L8RkDCy2fQS9nrCpeVTtsp3OpZjHll4shDweygfAt7/Zh9tYYGePJJp5oC4xVyf
-         sQrBEbxvOZif7EzPF+aWRenIDlfU1wOlPsnvOlQf7q8CGjAQUacDQ5QLva1UcPn4n8Sa
-         evpWJajmQMyXr3Kw0C+VKRgAJ9wqHQ/xrmCl/ENFvhdcih036ryFD2hb85ZUiXb0Xo90
-         g8gIOsCRSCsqYxqH0OW8uHzJFsl40J4b+rwiVPuvaCIUDzqdTQzBisUz0CmnX1V3ddVg
-         F0WA==
+        d=gmail.com; s=20230601; t=1758663497; x=1759268297; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DjUCuu3OWodmRQYhhBu9wo7DG2M9yDqPmVSCIb0J94s=;
+        b=MmFNjcKz0tUCS1PBrTDugQekTj6OehYnhNXQzSY6YaSdffgYW7begB/0ph9/9sDUPO
+         dW6K7bTOCuxdvIhZqLLMGu0R0+S88Rk5LbfPqpdq+5BCasZwQXgma1+Kd8xCbpubBFmK
+         uYApODTks1LlI1b8W7DnM9vlyS3/dq9tpFV/HMQDJ0+9zSdpnvnhZ7T0o6m89VEW5mSu
+         Pq8wuNNaU/zmpL007lkCzuKh8a7WR3dcUj/v8xfG7wEBe7AFr0K0nbesU24j/qErsj3g
+         1176Hp2e+assgZzO+xYE3RqRgbjC7/12tOfnT92rhJyrYaBUCeI1o6/h6SMC1ao0LPkB
+         Wr2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758656178; x=1759260978;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1T4a0b30RkSl2NcIpe0lwjzr86jO2vZlKX0MUfW14x4=;
-        b=P8brx69/GtC4jFpuY4bokuJzUm1s6brJaM+25dHwNszUhBwKpxBtL74IoSaCyFXgFA
-         xl2hsP4OM1PTRnXConHYn4Bz8W2XQndHh1p8eojMdkriumpusx1JOZGa0ZN1d8VRrbtT
-         U8nkekEJMzng1nT8bHFqem26QH5VKJVXgCETdbW8z2HxX7h/WDWR5hqu6+CBfrPFwMhr
-         aHK61v7j8c6yWnsw6DNQGHRsPjnxTnQKHCfN0jpRuYCd8FIVldBOBfrVIa1PAOidL04y
-         YfaxWV87V5+aaMBLwHX0Dx4wCdK26bSMS/kTcOdK4DLir+TtPU9znx1peKpmz8cV/4B9
-         q9Ew==
-X-Forwarded-Encrypted: i=1; AJvYcCUM6pedYYDNtVV6wieoe1MqDPCZyAmlpqywtfjEkyL8QToasvwCxOb8zI2E3Cp8W0E0rgPxey0zPxa1SQgdCXg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvpsdInxFi0S994c87LpKXo8GWYZ16zietzDVJSFQQuvyJgq7l
-	tdt7l7wB74+qQgqYJgEcAMdi5efN5tYhIcuYVZ7eCoEsf+6W0M/snfa/
-X-Gm-Gg: ASbGnct/1L0wEYci/PXtPn17sYwtWqSK+okVSNGm/pQzYhB5jAa4I55K259uA1w/tKp
-	BdpMJo5978KCd8MQDqx+pxRifCufRUIIgiK8KHP2oU6MpEHZSGz3rALFx21+sLu779cP05DaXn1
-	2GoM8z+vtF0vbPTueuareFODOepAPFEQNIGnHk8CdrmmuUQzirewrCBQ7w+KX5m0559cK6ERk8r
-	90HQ/CVjiupB5rsmVEbvwYE2+lpXBjF0piiO6XUuO7LZpmkd4rAAuddGLr+a3SUrwCMl/AvsZj4
-	ErG4e6VKb+KlCUX1Z89ixIVACmKHeDprmmKQEDthEBIMleCszWX/KE6+J18kDNrKtxzVFwD7yJM
-	CWMK/kbwRageKXxPRJD4=
-X-Google-Smtp-Source: AGHT+IG6c6liV4ES0cNIrz92wbRM89A4so/bGcUTAzztWwZQiXZipp0oMWflG0SI8mHTbJhLxZ8nGg==
-X-Received: by 2002:a05:6000:615:b0:3ec:de3c:c56 with SMTP id ffacd0b85a97d-405c5cccfbemr2973528f8f.16.1758656177916;
-        Tue, 23 Sep 2025 12:36:17 -0700 (PDT)
-Received: from archlinux ([143.58.192.81])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee0fbfedd6sm25526397f8f.60.2025.09.23.12.36.17
+        d=1e100.net; s=20230601; t=1758663497; x=1759268297;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DjUCuu3OWodmRQYhhBu9wo7DG2M9yDqPmVSCIb0J94s=;
+        b=o+/Ij3xqXQvXZNawyN3nS5SMsjam9oF3yhnZl2o3D0E4zCLdJXTC5oTS9MT7ilXhZm
+         KOVb9crX0pHHQzU7xRSsJL4saLxkAw1fD8hmr0vX8D1sSaQ91ruz0JFx2FctTGl2mat1
+         Jy7mAxrckaYqk5ZEzAgwDhqXDICMT3bJK+pXXrw3ASK6dpl6IgPTETRv7OgX5irRTquR
+         iVL9AwdFqG1HcgcI9Lw1vYLKZ2sWejWS8JYtDH1KSvFtXn/NaVBBA8XFIIZfJWB5428i
+         7eOtKPbCV8+PjKEUj6/EGEpaRZaWpEXI/7wlOUfdguWV9HrM0Vb+14eQMfy1IKBvIy4q
+         lwIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXCzra+IBeAlT8h9PdQJat7DW8+cgUzMPuv6QJdCchgiPyGsdu9l1CgDhf/IllgYi1Vc7Xb6oj5xF1suja0lvQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxi6RASRqmTBLENzkWq4hgKdEQl3LgVwPTcsVBuVc4qexp73ARG
+	fF/Lox1ebyYk4exBiJwJ8j5Y0f2BHfXDnF6nkTv+Qg2k2LfZ8i7Pd2tDjIy8Zp+T
+X-Gm-Gg: ASbGncttvL14EWusR2QcdAKzHvBFkNDjKCKUnYqZEOQkkPbI1Ui1lZnbOIc8b3BYqtD
+	97uz8hLmOVffsGEUEt+QS2dpi5Pvbe55olgjze577sxeXTPoGKHdA1QEYQkg0CrbcySM8LGZ/J2
+	PYxiEV3IMF9GA4qG/GFow0dt5sPu2OssD5vmqhOvZ5c7Hf0kKfwYCOMf+KuTv6e0w5NWgsTysFR
+	3ok3phYkNnm7RWU4vIqpkCwCVIAoWby1G4vJNAEtc0D+/abo3LuzWo9J1JfQV2EUN0I7jxPc3E8
+	RNKvEvpx9UDhIpiOn+HZ0O+QWIrX+YPbeaKA2+XCABJ9AAiJ5IBAINeNrvH7ImcfvrobVgSQl2o
+	zIu3x1APfOrg4+bvvFIrBryQ/eFP+ErXXwzXSTI2lpMK1AY1YxHR6ACeYsaZo+D/1r9RI6XI+
+X-Google-Smtp-Source: AGHT+IHxozFTQ2+DY5RuRtE+n73rly9QqmgY4I9v3ctYiEzc8tI31JUkH2hxHnGKb+bQ1Sc7TQ8YRg==
+X-Received: by 2002:a17:907:7f92:b0:b0b:20e5:89f6 with SMTP id a640c23a62f3a-b302c4f1810mr388461766b.60.1758663496494;
+        Tue, 23 Sep 2025 14:38:16 -0700 (PDT)
+Received: from alessandro-pc (net-2-37-207-41.cust.vodafonedsl.it. [2.37.207.41])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b2adc17af65sm681037166b.19.2025.09.23.14.38.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Sep 2025 12:36:17 -0700 (PDT)
-Date: Tue, 23 Sep 2025 20:36:15 +0100
-From: Andre Carvalho <asantostc@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/6] netconsole: resume previously
- deactivated target
-Message-ID: <fasu2sp2g65b4kslaj4khckmjhaocqqbloqraaqhzmuvdotjvl@swdgrbci7jft>
-References: <20250921-netcons-retrigger-v2-0-a0e84006237f@gmail.com>
- <20250921-netcons-retrigger-v2-5-a0e84006237f@gmail.com>
- <20250922165057.70eefc6b@kernel.org>
+        Tue, 23 Sep 2025 14:38:16 -0700 (PDT)
+Date: Tue, 23 Sep 2025 23:38:13 +0200
+From: Alessandro Zanni <alessandrozanni.dev@gmail.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>, kevin.tian@intel.com, 
+	shuah@kernel.org, iommu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/iommu: prevent use of uninitialized variable
+Message-ID: <y7xzjzbquglgrmbufbbqksvshuaofod6alql6gqfbzhq6s33pk@dw4ma6kctr5s>
+References: <20250923150108.34309-1-alessandro.zanni87@gmail.com>
+ <20250923172822.GD2547959@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250922165057.70eefc6b@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250923172822.GD2547959@ziepe.ca>
 
-Hi Jakub,
+On Tue, Sep 23, 2025 at 02:28:22PM -0300, Jason Gunthorpe wrote:
+> On Tue, Sep 23, 2025 at 05:01:06PM +0200, Alessandro Zanni wrote:
+> > Fix to avoid the usage of the `res` variable uninitialized in the
+> > following macro expansions.
+> > 
+> > It solves the following warning:
+> > In function ‘iommufd_viommu_vdevice_alloc’,
+> >   inlined from ‘wrapper_iommufd_viommu_vdevice_alloc’ at
+> > iommufd.c:2889:1:
+> > ../kselftest_harness.h:760:12: warning: ‘ret’ may be used uninitialized
+> > [-Wmaybe-uninitialized]
+> >   760 |   if (!(__exp _t __seen)) { \
+> >       |      ^
+> > ../kselftest_harness.h:513:9: note: in expansion of macro ‘__EXPECT’
+> >   513 |   __EXPECT(expected, #expected, seen, #seen, ==, 1)
+> >       |   ^~~~~~~~
+> > iommufd_utils.h:1057:9: note: in expansion of macro ‘ASSERT_EQ’
+> >  1057 |   ASSERT_EQ(0, _test_cmd_trigger_vevents(self->fd, dev_id,
+> > nvevents))
+> >       |   ^~~~~~~~~
+> > iommufd.c:2924:17: note: in expansion of macro
+> > ‘test_cmd_trigger_vevents’
+> >  2924 |   test_cmd_trigger_vevents(dev_id, 3);
+> >       |   ^~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > The issue can be reproduced, building the tests, with the command:
+> > make -C tools/testing/selftests TARGETS=iommu
+> > 
+> > Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+> > ---
+> >  tools/testing/selftests/iommu/iommufd_utils.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> I think it should be like this?
+> 
+> @@ -1042,15 +1042,12 @@ static int _test_cmd_trigger_vevents(int fd, __u32 dev_id, __u32 nvevents)
+>                         .dev_id = dev_id,
+>                 },
+>         };
+> -       int ret;
+>  
+> -       while (nvevents--) {
+> -               ret = ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
+> -                           &trigger_vevent_cmd);
+> -               if (ret < 0)
+> +       while (nvevents--)
+> +               if (ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
+> +                         &trigger_vevent_cmd))
+>                         return -1;
+> -       }
+> -       return ret;
+> +       return 0;
+>  }
+> 
+> And add a fixes line?
+> 
+> Jason
 
-On Mon, Sep 22, 2025 at 04:50:57PM -0700, Jakub Kicinski wrote:
-> This gets hit in the selftest you're adding so please triple check 
-> the kernel config that you're testing with.
+Thank you for the reply.
+I'm not sure the right behavior the test should have:
+- in the version you proposed, when ioctl() returns a positive
+value the loop ends and the next tests are skipped.
+- in the original version, if the function ioctl() returns a
+positive value the loop continues with the following tests.
 
-Sorry for the silly mistake. I'll make sure to adjust my local testing to
-include running all selftests with kernel/configs/debug.config to catch these
-before sending the patches.
+Which one is the desired behavior?
+
+Thanks,
+Alessandro
 
