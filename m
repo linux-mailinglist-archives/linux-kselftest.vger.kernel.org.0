@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-42136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3AE7B94E14
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 09:56:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85CE9B94E0B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 09:55:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBD237AC3C6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 07:53:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CAF22E30A6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 07:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6827931D373;
-	Tue, 23 Sep 2025 07:54:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E482931D397;
+	Tue, 23 Sep 2025 07:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gscxRXPf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dBH9eflq"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B24A31D36B;
-	Tue, 23 Sep 2025 07:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B256031815E;
+	Tue, 23 Sep 2025 07:54:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758614053; cv=none; b=bfqTZMxlBnyxiovxsYHdRlM6or5YPTUzBHg81Q2bnQmcmRsafjQLO8ucpe4R/J3hKwxADKMcht/FYWSBPhdNhmPBIrURRkA6cqq919NBwz3aom6QSC3FgPE8EsMG6SjDr8PdVd6LdQX4EDi63YSWrsmTzqCfOMp+Az9spUjhB0Q=
+	t=1758614057; cv=none; b=gVMO/od8DYDFFm9o8kAxv2looy0fg77YH+x9X2uHIeVXkIFnSgGtSg4qffHSMcAMYiuWKI+92rOvpWZgKW7vddUj8tDdca0w23L9zQPZ2eJjpPMzpuvtqx0isYLRYfjltSaYE39mDm4hYNMbO8QsonBEGmxvjQ+sbVvDzgEEs44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758614053; c=relaxed/simple;
-	bh=B5yspoVEdUZIlz6ON6UuHHvuCsW3fWYDgueIszEOLn0=;
+	s=arc-20240116; t=1758614057; c=relaxed/simple;
+	bh=THUGc4v7Y/ExVXfzj7FTsIjB1vKSzxAYZTfacIndzW8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e3OiuvjtDCuY3wu0SWnostIu54ePRT0xn/yrLogd7ngeZxI4OZaYKTPEWDroOKPPtORf/yMlDoxhxdWtuV/w1COtP9Xd0T1r2xClH26RjPwyv83WREa7uN3e8h5fu5HTNhcLmuVPQFiHJavg1b3RPN46BvYJ4MZ3BaGlHt6ieF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gscxRXPf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69A39C4CEF7;
-	Tue, 23 Sep 2025 07:54:10 +0000 (UTC)
+	 MIME-Version; b=EQSBEC7LL52HNDK8nfAYo5AV4wGEZa/uIhtiGFFsMEZvuWOEUP9i9nlPCymmLmfNidC5Havo/rDMqvFdgwoONbjN6lGqe6Efdyi5jlHLcZcFZhepVNh9zD3NFuDpqvq2efv3OdSShXtIwx5xt2M0+IuRSikdGjBTkfjRNZDmmEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dBH9eflq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024E3C4CEF5;
+	Tue, 23 Sep 2025 07:54:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758614052;
-	bh=B5yspoVEdUZIlz6ON6UuHHvuCsW3fWYDgueIszEOLn0=;
+	s=k20201202; t=1758614055;
+	bh=THUGc4v7Y/ExVXfzj7FTsIjB1vKSzxAYZTfacIndzW8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gscxRXPfDCn/AwUv9B6wRwgV0nBMv4bx3S1sQ36EpCfXHbMI0/Xb9cORwDIATisQa
-	 3+Drjh6iQjpuaP91lu7+9dBEiY4WWnsRVqDaOad9Nt4LNje+x2bHAl8CdWuemBGIlN
-	 oHxn3XE+zTaF0pNl5j5ne8psssXjMC4+DL60Rdm06SsUqihyQpdGAcxZ9kGshlmQ9G
-	 B0uec76/pArGgSYB91WQNhVCOnz+dhrAab+WUqWdzopCeMbgxRUqfEkV0Vi0TGvob+
-	 Iz3Og+3TTJ+TepamprRpzO08+oSO94VYtVK6UH42/m3RT5HHFyeaadn1SCJ+7FBt3/
-	 N7gkL0MiKTiXw==
+	b=dBH9eflqvX69Gc/sheG0eTn6ugFiZVZPhb2LUZybOnl/zbPvNzfMydO2GTa0AmSlB
+	 ZnFebMRH0FHuotgfIO/NuRbyDRyaRi58XLjNFlKpc3wy9WQMSFKWMZQVXcftP52GJw
+	 RZSPHekjTmFR39pkhMO4+2QXKTPvk8BHjiTIiLXleoIX0EMl1EXmVq4Fzu/oUCRlyw
+	 RKypsQh12fJoN4nDsWbQC7B9haZYA83v8D3UJIVXLuBRWz6+J++VI5jNl66cQuO/Iz
+	 Qg2z50E8yQ1u39O5PUucYuZP7V1LzmUorS3YOwsEfPewSqjXOu67ckQq4IzK22vkgm
+	 rIj0249SSQRlg==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Benson Leung <bleung@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -57,9 +57,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Bartosz Golaszewski <brgl@bgdev.pl>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH v4 6/7] char: misc: Leverage revocable fops replacement
-Date: Tue, 23 Sep 2025 07:53:01 +0000
-Message-ID: <20250923075302.591026-7-tzungbi@kernel.org>
+Subject: [PATCH v4 7/7] platform/chrome: cros_ec_chardev: Secure cros_ec_device via revocable
+Date: Tue, 23 Sep 2025 07:53:02 +0000
+Message-ID: <20250923075302.591026-8-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.51.0.534.gc79095c0ca-goog
 In-Reply-To: <20250923075302.591026-1-tzungbi@kernel.org>
 References: <20250923075302.591026-1-tzungbi@kernel.org>
@@ -71,6 +71,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
+Miscdevice now supports revocable fops replacement.  Use it to secure
+the cros_ec_device.
+
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
 PoC patch.
@@ -78,49 +81,49 @@ PoC patch.
 v4:
 - New in the series.
 
- drivers/char/misc.c        | 7 +++++++
- include/linux/miscdevice.h | 3 +++
- 2 files changed, 10 insertions(+)
+ drivers/platform/chrome/cros_ec_chardev.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-index 726516fb0a3b..fcbbb0b1af35 100644
---- a/drivers/char/misc.c
-+++ b/drivers/char/misc.c
-@@ -159,6 +159,13 @@ static int misc_open(struct inode *inode, struct file *file)
+diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
+index c9d80ad5b57e..cacc73635d6b 100644
+--- a/drivers/platform/chrome/cros_ec_chardev.c
++++ b/drivers/platform/chrome/cros_ec_chardev.c
+@@ -166,7 +166,6 @@ static int cros_ec_chardev_open(struct inode *inode, struct file *filp)
+ 	if (!priv)
+ 		return -ENOMEM;
  
- 	err = 0;
- 	replace_fops(file, new_fops);
-+
-+	if (c->rp && c->rops) {
-+		err = revocable_replace_fops(file, c->rp, c->rops);
-+		if (err)
-+			goto fail;
-+	}
-+
- 	if (file->f_op->open)
- 		err = file->f_op->open(inode, file);
- fail:
-diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
-index 7d0aa718499c..00f5c878266a 100644
---- a/include/linux/miscdevice.h
-+++ b/include/linux/miscdevice.h
-@@ -5,6 +5,7 @@
- #include <linux/list.h>
- #include <linux/types.h>
- #include <linux/device.h>
-+#include <linux/revocable.h>
- 
- /*
-  *	These allocations are managed by device@lanana.org. If you need
-@@ -92,6 +93,8 @@ struct miscdevice {
- 	const struct attribute_group **groups;
- 	const char *nodename;
- 	umode_t mode;
-+	struct revocable_provider *rp;
-+	const struct revocable_operations *rops;
+-	priv->ec_dev = ec_dev;
+ 	priv->cmd_offset = ec->cmd_offset;
+ 	filp->private_data = priv;
+ 	INIT_LIST_HEAD(&priv->events);
+@@ -370,6 +369,18 @@ static const struct file_operations chardev_fops = {
+ #endif
  };
  
- extern int misc_register(struct miscdevice *misc);
++static int cros_ec_chardev_rev_try_access(struct revocable *rev, void *data)
++{
++	struct chardev_priv *priv = data;
++
++	priv->ec_dev = revocable_try_access(rev);
++	return priv->ec_dev ? 0 : -ENODEV;
++}
++
++static const struct revocable_operations cros_ec_chardev_rops = {
++	.try_access = cros_ec_chardev_rev_try_access,
++};
++
+ static int cros_ec_chardev_probe(struct platform_device *pdev)
+ {
+ 	struct cros_ec_dev *ec = dev_get_drvdata(pdev->dev.parent);
+@@ -385,6 +396,8 @@ static int cros_ec_chardev_probe(struct platform_device *pdev)
+ 	misc->fops = &chardev_fops;
+ 	misc->name = ec_platform->ec_name;
+ 	misc->parent = pdev->dev.parent;
++	misc->rp = ec->ec_dev->revocable_provider;
++	misc->rops = &cros_ec_chardev_rops;
+ 
+ 	dev_set_drvdata(&pdev->dev, misc);
+ 
 -- 
 2.51.0.534.gc79095c0ca-goog
 
