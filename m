@@ -1,164 +1,127 @@
-Return-Path: <linux-kselftest+bounces-42140-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42141-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1110B95008
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 10:32:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EB8AB952EA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 11:13:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E05B2A69CC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 08:32:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6FAA7B45BF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 09:11:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A20C3191BD;
-	Tue, 23 Sep 2025 08:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD8F53203AE;
+	Tue, 23 Sep 2025 09:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GBUjPX4Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JxkKrRYF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9D02D6E76
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Sep 2025 08:32:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7545631E88F
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Sep 2025 09:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758616350; cv=none; b=QeOPgp+lR+PIIXuT0sGerlQoLcSjv0PgwVP1nP6Y52jjCLyLu/ABmKKpFen6IhgBVpFC3j9283N2T0s7ARcQgMwJgBk28DlR3+go1e101TMJMlAmBn4AMWfg3LjjfnDG+X+61hq3y27+RNVXzCX0vZzznFcIwqFC5sCz2iS+rzI=
+	t=1758618783; cv=none; b=n5n2ztDafAEoQjE9RFS5YeXIrPgfc+hfs3HJ1rLIV3pXSldpL2FCw9a0jH1lNXmRSjr4Blc52xgeVVDXmORjQrtaJ4yWPLj9srX6KeYO9ppPGxoJycD5syUb5euYXyFLzuTjd8vQ3letu8lB35cKIOOCQjKdybLutAheEppKYeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758616350; c=relaxed/simple;
-	bh=NiZilVO952t8xhzkfD3k2tB4t5QzfJ5IvxtJx2lENi0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kgh2xQU3C77aSUW3fTrHAk8Qr4ldsID45ITcZbmwZ0SxYuVocV5syXDV8Zgo5zccIMan/IOLsAIEB5EcHpufQhqWtWQPFTnYzspaRKwiF9zjMhsaJ5fT+TvMJ2z/CDxwZWYcER9wNWlVc0wDFBf3WepwtQ66zbFc+7HaSpmuT4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GBUjPX4Q; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758616347;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AofCBIF9FsjYV+UgMxZqWzFMIGGZG+5eyuxtGxpb2KA=;
-	b=GBUjPX4QfcKVkLivVduw5rOxE3cCbhPEVDuJuuiYKXJjWNl+0YABEs6kUhRVSPp8+H+c/Z
-	i/v22SuTheLKU5cwRUMfcBe9ZdKIFqTDijLoEHimKRkMsBVlq1mKkUnjN+83rxSew35vx/
-	8HN05gnhYKN4fPldrdSXwBMYFyPr068=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-629-TNRZN28GOXS3HAOrGKrLuw-1; Tue, 23 Sep 2025 04:32:25 -0400
-X-MC-Unique: TNRZN28GOXS3HAOrGKrLuw-1
-X-Mimecast-MFC-AGG-ID: TNRZN28GOXS3HAOrGKrLuw_1758616345
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3ecdd80ea44so1591755f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Sep 2025 01:32:25 -0700 (PDT)
+	s=arc-20240116; t=1758618783; c=relaxed/simple;
+	bh=Z2IWOFXhly7czGdlFGv46kWBB6KEbOpImNkHcKF2Ygc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BINYeNU6xLzfi6khp9QdPnjyppuRISsJfTOHpzg1c4kZdAnYiSInh04Usyis1fAtXjdssCqeRG/JngrHtXgmsq7a/yhmAwTnJcVrCmm62OqflyS4B1r0o6CYz4Wf55j5BFUtaz86gpNvjFtD37rTomppINMyZqGnzH2cx5xHjDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JxkKrRYF; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-77f35113821so1748770b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Sep 2025 02:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758618781; x=1759223581; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k5KSUsAM+a2Guq01/UCd+zY46Lp+YhJNLyp0jhG/Hzg=;
+        b=JxkKrRYFYwO2A6yfsIzpVctoaJL2iGrCn/R9nqUR7HOx4W7ptwFRBO5d1GzqpwiwhF
+         4lLLvJQvbQJgu4euSlDlLmdzFf7eC+iGw7y86YXYOlCCgsN8ftn9fwrXccpvUzwrHBCN
+         Vv1vY2BDTusVl31p0yU7iBGG4XM+UkGmWiDpI69kROEYNJJnCY6ZCSnkzAFvWgWBUEhT
+         zzZ4rcsDH9cbwqhMqqXlCgAPoroAvkpc5ig+Y2IJp0cOWfW++G2BrqSgJAI/HOo6NN+t
+         sZz7gMFFkgE0k0tw6EyYi2e9X9JxvyYpIjT4I0wDqoZOh33G5g38JgsNxc5q+lGvTqZr
+         dzNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758616344; x=1759221144;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AofCBIF9FsjYV+UgMxZqWzFMIGGZG+5eyuxtGxpb2KA=;
-        b=nantlUzdAosrUY/goZZPI759JmdL9Uj9Iwo322KdtQUGC7mB6dA8BIzd2yVBaFG69s
-         6DdLG7zzEPIYh2gxogYMbbWxEC4FswkcuIbhtNdkjvNaR+bBuoRrvhMQ67DMrUBooHas
-         M++JMqGsBP4kd1Rh7jDADCTxEb2IHxH7r4oPb/mOEhWYot0bb0W0NDXziDTlX/ikMxgW
-         h9vqKR/ayfps7LNlZzAS3QffhFnyQ+kSImOgBDs0ux2CVJZ5rDOCSBizMyfIFZLUfSLE
-         +hUjwCZvTkoFgxpdE7xOI3esPSw8quM+TXN8NbLb61061mcA1GcNIIJTr6H/i5lou6f0
-         3/QA==
-X-Forwarded-Encrypted: i=1; AJvYcCXMPG0jKl4OF4aOjXQNIL82dJS0CefEVtvtUy2gmKD0Rh+Skvcu4SkV9bAb48ri7Ria7GH8FSeFBQ+jk6IWo2E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaN2IE8x86X32HzuT8Y81R4Ba1MR6OPxjh9ZwlPNacBVUaDcF8
-	YYQs2NMyFsRo7Ut2agVogNUB4rX94thKwBu3UtVtKRjroAqO+3WIcAtcHts9p3PNYFpFDCXat5f
-	29HC1sK/x6ExSozNTgWVeaY9KH4XTGH9nLNVZll46RNtSdpBu0RuSsNoUeiPTqutkZrQ3oQ==
-X-Gm-Gg: ASbGnct2cVp83kpM/V6CiMnQ4e9IZv8G7aOB6gvDAhUFZZUCitYxhtNFzbt/4CvN6Cu
-	H+NDUARjHqjGgeMiZxnldhaQ2mA1R+cN9xDHcf03Zwlkh9GZts0pPC5oomnJ7k/0cEc4FUlWSmP
-	xaOQo7vpvIRkLqqZ0jdDjQz/OHXt9eFGivWB4GtJWKCItzn1lpaFX382Wzb6yM1J0VhBYNKR2Y8
-	w5lbJL+eBLwIfyQAnkSz22NuzFODM8hiz7IMEb2ZHDEoRcYqFvkX65Y9dOhMQI/Ty50GDX4opiz
-	Aa5zoNUZYsgIy3fwHn61FmZzzXSdvKqaE0cah7jmHC8e5ZzhSmtfh7A8kj+V7RC7IJKxStjDNxO
-	1vb6AZQKyvGbr
-X-Received: by 2002:a05:6000:2484:b0:3fd:7388:28a with SMTP id ffacd0b85a97d-405cb3e57efmr1100221f8f.8.1758616344553;
-        Tue, 23 Sep 2025 01:32:24 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHNRhUtcGLLr4h24SLafmawf/1r1TuWen0JWEexdyB4FM711uxWMVzCfOmriGj/xPN14FiEAg==
-X-Received: by 2002:a05:6000:2484:b0:3fd:7388:28a with SMTP id ffacd0b85a97d-405cb3e57efmr1100193f8f.8.1758616344066;
-        Tue, 23 Sep 2025 01:32:24 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-464f0aac271sm231480095e9.3.2025.09.23.01.32.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Sep 2025 01:32:23 -0700 (PDT)
-Message-ID: <ae9f772b-d1fb-4688-a809-b4507060d205@redhat.com>
-Date: Tue, 23 Sep 2025 10:32:22 +0200
+        d=1e100.net; s=20230601; t=1758618781; x=1759223581;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k5KSUsAM+a2Guq01/UCd+zY46Lp+YhJNLyp0jhG/Hzg=;
+        b=oBaJKyjAjJ+iqT5qO173Ej7wcLZeafhwyBbjCYt+f2EgigDa31HfVpCdMZblyPYrdB
+         cWWdlawACQz4GnaXONsdGfFGwO+yTox1lwX1Wht6OgdZgMow9R0dK8N6VBThLg6GkZ1i
+         NbIen6d5iwlaEehzrkaDyTsBKLEFiIBntxRH6a4YnlsfWeHzF19iXZILZdEbXv4u1RtK
+         y0xZJl0EzEEEjxPmMAIVfciYm4gSI+kTYe6iisVP4iC4fsStHRIG74G/Gk79aA2SKuO+
+         z5reE0JeWIjY6cmmSbtYUi+H6BO/pxWOuf5g5iSnommSOFVfAitBUcSUuNI+9IgtOk/p
+         onjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXahnmyfufz3+1HYk0I2GjB0Ab3B0mlolCK1kKTiM3c0WEWeuWZsvNap8oidR9eEm+jq4viOVmSwH/f1g+8rbI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YztcQ+lDSDAAwQin+meRCX7tbJsznjlPoayZG0BhZGwtJUGXfXF
+	bpN2qcr9As5MOhoEFazZXsBIATKewu1/kLljAz0cta3h8c/3HGjCMnk2
+X-Gm-Gg: ASbGnctmPEQg0CCw81Rm8Sw/50BQJb+HzQL84h5PtsXANUFANcfe9OqlH707NmlJExC
+	vTzZXsCD23f5oFcUybbPc9Cz0Sz51meSdlmMhqE1lbcMzrSlZ8ShtJhdhKY24YpZFXbcMGrzGz6
+	pn8UplQZ+mPiAJCwZ2F9K9WAwyflk13JLXvBvT84RSKycX/j4+egRliVUpFfsncuwMuEBcRKzYa
+	CxTvzaE4dNyIsiGVd+9FXBaGMc73wDhgBSO9LbuZJinI2Z+VtFUB0vgrbL5YIRqHDhfSaiBTKbZ
+	Mjefho2qMvbb42V1awQzDD2uQCYzVkwbAX7RTIbGJm+B2j6kEuFAhdcteV1vn/MXc/xFzffOE4f
+	LTsvkJCHL+92ckmcwA4GH26qDxe9tG3xjzzBA7A==
+X-Google-Smtp-Source: AGHT+IG4lZcyzKZit/zs68rwxqzDaPk+kvZqWCucgdIMMrCFwODAl/U5RUgZFN3WUiVGtFCWrZc7ww==
+X-Received: by 2002:a05:6a00:1397:b0:772:7ddd:3fe0 with SMTP id d2e1a72fcca58-77f53855c3bmr2456640b3a.2.1758618781501;
+        Tue, 23 Sep 2025 02:13:01 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77f363ed5a0sm5646616b3a.41.2025.09.23.02.12.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Sep 2025 02:13:00 -0700 (PDT)
+Date: Tue, 23 Sep 2025 09:12:53 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv2 net 2/2] selftests: bonding: add ipsec offload test
+Message-ID: <aNJklbSInqqIkfK9@fedora>
+References: <20250918020202.440904-1-liuhangbin@gmail.com>
+ <20250918020202.440904-2-liuhangbin@gmail.com>
+ <ae9f772b-d1fb-4688-a809-b4507060d205@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv2 net 2/2] selftests: bonding: add ipsec offload test
-To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
- linux-kselftest@vger.kernel.org
-References: <20250918020202.440904-1-liuhangbin@gmail.com>
- <20250918020202.440904-2-liuhangbin@gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250918020202.440904-2-liuhangbin@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae9f772b-d1fb-4688-a809-b4507060d205@redhat.com>
 
-On 9/18/25 4:02 AM, Hangbin Liu wrote:
-> diff --git a/tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh b/tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
-> new file mode 100755
-> index 000000000000..4b19949a4c33
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
-> @@ -0,0 +1,154 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# IPsec over bonding offload test:
-> +#
-> +#  +----------------+
-> +#  |     bond0      |
-> +#  |       |        |
-> +#  |  eth0    eth1  |
-> +#  +---+-------+----+
-> +#
-> +# We use netdevsim instead of physical interfaces
-> +#-------------------------------------------------------------------
-> +# Example commands
-> +#   ip x s add proto esp src 192.0.2.1 dst 192.0.2.2 \
-> +#            spi 0x07 mode transport reqid 0x07 replay-window 32 \
-> +#            aead 'rfc4106(gcm(aes))' 1234567890123456dcba 128 \
-> +#            sel src 192.0.2.1/24 dst 192.0.2.2/24
-> +#            offload dev bond0 dir out
-> +#   ip x p add dir out src 192.0.2.1/24 dst 192.0.2.2/24 \
-> +#            tmpl proto esp src 192.0.2.1 dst 192.0.2.2 \
-> +#            spi 0x07 mode transport reqid 0x07
-> +#
-> +#-------------------------------------------------------------------
-> +
-> +lib_dir=$(dirname "$0")
-> +source "$lib_dir"/../../../net/lib.sh
-> +algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
-> +srcip=192.0.2.1
-> +dstip=192.0.2.2
-> +ipsec0=/sys/kernel/debug/netdevsim/netdevsim0/ports/0/ipsec
-> +ipsec1=/sys/kernel/debug/netdevsim/netdevsim0/ports/1/ipsec
-> +active_slave=""
-> +
-> +active_slave_changed()
-> +{
-> +        local old_active_slave=$1
-> +        local new_active_slave=$(ip -n ${ns} -d -j link show bond0 | \
-> +				 jq -r ".[].linkinfo.info_data.active_slave")
+On Tue, Sep 23, 2025 at 10:32:22AM +0200, Paolo Abeni wrote:
+> > +lib_dir=$(dirname "$0")
+> > +source "$lib_dir"/../../../net/lib.sh
+> > +algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
+> > +srcip=192.0.2.1
+> > +dstip=192.0.2.2
+> > +ipsec0=/sys/kernel/debug/netdevsim/netdevsim0/ports/0/ipsec
+> > +ipsec1=/sys/kernel/debug/netdevsim/netdevsim0/ports/1/ipsec
+> > +active_slave=""
+> > +
+> > +active_slave_changed()
+> > +{
+> > +        local old_active_slave=$1
+> > +        local new_active_slave=$(ip -n ${ns} -d -j link show bond0 | \
+> > +				 jq -r ".[].linkinfo.info_data.active_slave")
+> 
+> shell check is not super happy about the lack of double quotes  around
+> the variables (above and many places below) and about declaring the
+> variable and assigning it to a subshell in the same statement.
+> 
+> I think it's better to address such warnings for consistency.
 
-shell check is not super happy about the lack of double quotes  around
-the variables (above and many places below) and about declaring the
-variable and assigning it to a subshell in the same statement.
+Ah, this is a patch I wrote some times ago. I forgot to re-format it with
+shellcheck. I will fix the warnings.
 
-I think it's better to address such warnings for consistency.
-
-Thanks,
-
-Paolo
-
+Thanks
+hangbin
 
