@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-42114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58096B945A2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 07:18:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99FE4B945BE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 07:19:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A6C61900061
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 05:18:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92E503A70E4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Sep 2025 05:18:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A90430F800;
-	Tue, 23 Sep 2025 05:16:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68B1C30FF32;
+	Tue, 23 Sep 2025 05:17:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yUBNWNel"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wI1Xda/N"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011030.outbound.protection.outlook.com [40.93.194.30])
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013060.outbound.protection.outlook.com [40.107.201.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20B730E820;
-	Tue, 23 Sep 2025 05:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5620630FF25;
+	Tue, 23 Sep 2025 05:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.60
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758604611; cv=fail; b=W0667KoGhKmhrXwz+qoSIBx9NVLbMxgkSm7eEZXV/EWAIoHz3DDSJie8U5nkWOUo++GemRTzSLwiAkDzgX2PMTbOYWaJYPJdpbHlWH7Y54hl9NteE4xHNPiLF3vHbXkxfBvNBbWJNnZMKVoJm5WBPLU2BLaR8hZZq11VU0ERCZY=
+	t=1758604630; cv=fail; b=dIKibL7Q+lzpa7G1SV95LBZQI26veZ3gv+8OtivNRtrfzB6Gll5GjcuxhvnU/3LZiCvUvAjs3/SUIIqmGjDg2/8CV64WpIcXjhIQxtceaV+mtUqK+WHWUGbs3vRs8pnDqWHklbnUaA2MWYV5O00nk1JAJhqia5BJbm9z3MZ8HV8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758604611; c=relaxed/simple;
-	bh=0GNKsBw2jMJ+Il7KcQtZLcj6BMf4UVRyjykQi9cp888=;
+	s=arc-20240116; t=1758604630; c=relaxed/simple;
+	bh=ZsQyO58cr8x5vJqgp640jL5MzyqYxXiFHAb4JgD5CL8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gi1BlrGIApGTpZOeegJ3M7fYXcSAHxs+rEbqkz9Hiu9/5pZirKMib70rkEaTw2M2DmZNc353GjoJ69ek8Rtt7ZrRSnwQPzuOeH73UmP5d3Fpk84IICkloxZkwmP5Yc86B4N01JCaSGR01lv1CeYHRaRcamXsbGR0ph0BFgKpgQE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yUBNWNel; arc=fail smtp.client-ip=40.93.194.30
+	 MIME-Version:Content-Type; b=b2SOOtfZGG6U1wmKHDFhKEC6W/5yngqhsFQEYzfGs57BQDP4eFEdsrANorpf8HnzNHDimh7toB2qwps2P3fZjdoJ7uyyT6UkmJQys6XxcfYj5A8t9YknrcL8NTbCb+baB8GObXSdLcAs1XfmnIY7SEcqK5nqIb9JvxqKI796710=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wI1Xda/N; arc=fail smtp.client-ip=40.107.201.60
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ikWjD0Cmqu5rFN6kZLIfkaNnVZQXMIpZUEuMVxtMhtr6nQ0iM3yHlqIfJCeKWTYGuEhKxPn9Y8+ofLCrmyNO++6fUwjOEiXt7ScdunsQrEiIO+pGNfXz1gtwunqrmPdQVaLSR1iwTAeQkP8R+4BRg+Kq+OY7n4GOnPtkqu5y1VNLJHmX9rM9QyHWtGba/zDa9lP2hZc6uAdsvSMl1sTqOYQUQ6IVtZLThM3fwxNwgYegiIbug335pXOC++bvCgYNHfzDbL4dPYVZU8MgRmWpZYabGOhBVCJcTAmRi8wKRddwQ5NEiSXvtRCjzgu96abT0Vo7PiIqfqyEdFPYyDsP7A==
+ b=yo99bRxGlIDHwDJJlUctYUKwUeBGjrSumPxupOfZbdiQjg7+v/eOnRr2F/k4VepuNyWUczK144dVazC+XkE0BEz7jyyzhq4OxQ9s8dg4zWAk+mV97rgNPGrL6xZzxLy7oUHTh8mFVuwMfVZx+hECIfdFl562ynlB8PqIeoKERhZ0RZCJ9GE5NK6AQ7EMznvOCOlZb8kDKc8ANAjQFUeyJ4BB8RV3ufthvJfaadkq6yj8OkUcAAEvqatWRoEv94l90q4jBZ1EBuOxsXVs0a0b61rpqrP0k7gjoV1P6fk0McPmH/4n1lJPp1jT5qKvI8A3ZVeLRzhEphXq2z1OnAFVWA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=25fTTBu+HG56NMeQ8yEb2vfjcwFsA/5AIv+xU4n1xYE=;
- b=vKlCAE/FkSKrNYQYd3QF3OMAqd8fOsTEBQUfy7sA3HAyEf0B3I528YSGnNlEUCZ7/12CxMiInRVjEJK8ggQ9xAnSCW9vYrSpoKQA4II/sKoWaDo/8MtxUzORJ9JTylXr7YjMtz8IXmKqY2K17kZjKvVNNv1PXd8ZWqwN+C0TuFOwY40VCivpNpUB3g3jm288UtFK1K95oUqapDEkIsMxoV/yDjdtBl3DJoLm6tXnSwev9faE4dCBiJ9bkF5JpFcwa8Moy9htCln3NQ1D0hWrC4MT1nequ0tFH0LIsjt5feQGFqkAtjvbZpwkpAZ2n5mGPjguHIhvdkvqgV7jqlr72Q==
+ bh=TemSTNfe7Rc/LQx223hKXeWmU2u9uTIFRInWqTTJJto=;
+ b=AcU7VOtDXSJTexxsUbQyJqg8s2aQ1XY3ban+FmDFss6y5F8M1XEEoz3c4MAw6JL/ZGTcvD6/V81Drn9f/VAkdhhlYk3rkyWNIBdHPaeDrzcwh/iiDKpd55YM7Ev3AbfCITXs5JxY3ftP5Bm9vEr8dYPql5FIHRec7B95zOPdRdkATfslYLi0m4s2w9EfG91NJ+1ble14Kp4WxiGtPMgnICExk3g6/Nwc5ScVbQyLmxtHTMhk0q5kmr8q4gPFohbEnY2wPtus0Lzolm11+wyhK0qpk3DmxqgDZ1uZ8n7C9z+nEyIDGyEovczgnunEc78qi8QOFbGkPMNWTXMnw2z7DA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=25fTTBu+HG56NMeQ8yEb2vfjcwFsA/5AIv+xU4n1xYE=;
- b=yUBNWNelzexXDNsoL0mabLSPG4ZPPokUmEP0JQxrrOHTVjVe8pOyqK3KsBBbJuIb3zTt9PitiVO4LVFyO/K1oKI3Nz4DnQJMPLNvpT982vWf6/bH2RdCwaLJCs2GFEJhETuaJzyoivbW8jj9eWLfvpBwh+5Rn6nOJO7uhjyz+lw=
-Received: from CH2PR08CA0021.namprd08.prod.outlook.com (2603:10b6:610:5a::31)
- by BN7PPF9C6E5285F.namprd12.prod.outlook.com (2603:10b6:40f:fc02::6db) with
+ bh=TemSTNfe7Rc/LQx223hKXeWmU2u9uTIFRInWqTTJJto=;
+ b=wI1Xda/NOJmMRQfcTdnLKLzEqkTHwdP1S1pFA1536Hudmg6v8agkk+hmHRQ6mPE26rvCcaXncfujtMmVQ4DZosI0Bouu5vLoSY8UUsUGShYaIJ22RU4EbjiLaMyUajHzms1PQS4Z+piFVogQl9B2JWoA35LeFQuELaBMNkHp7jo=
+Received: from CH2PR15CA0027.namprd15.prod.outlook.com (2603:10b6:610:51::37)
+ by CY8PR12MB7634.namprd12.prod.outlook.com (2603:10b6:930:9d::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.19; Tue, 23 Sep
- 2025 05:16:44 +0000
-Received: from CH2PEPF0000013C.namprd02.prod.outlook.com
- (2603:10b6:610:5a:cafe::58) by CH2PR08CA0021.outlook.office365.com
- (2603:10b6:610:5a::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.19 via Frontend Transport; Tue,
- 23 Sep 2025 05:16:44 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Tue, 23 Sep
+ 2025 05:17:02 +0000
+Received: from CH2PEPF0000013B.namprd02.prod.outlook.com
+ (2603:10b6:610:51:cafe::76) by CH2PR15CA0027.outlook.office365.com
+ (2603:10b6:610:51::37) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.20 via Frontend Transport; Tue,
+ 23 Sep 2025 05:17:01 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
- CH2PEPF0000013C.mail.protection.outlook.com (10.167.244.73) with Microsoft
+ CH2PEPF0000013B.mail.protection.outlook.com (10.167.244.68) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9137.12 via Frontend Transport; Tue, 23 Sep 2025 05:16:43 +0000
+ 15.20.9137.12 via Frontend Transport; Tue, 23 Sep 2025 05:17:01 +0000
 Received: from BLR-L-NUPADHYA.xilinx.com (10.180.168.240) by
  satlexmb07.amd.com (10.181.42.216) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 22 Sep 2025 22:16:38 -0700
+ 15.2.2562.17; Mon, 22 Sep 2025 22:16:56 -0700
 From: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
 To: <kvm@vger.kernel.org>, <seanjc@google.com>, <pbonzini@redhat.com>
 CC: <linux-kernel@vger.kernel.org>, <Thomas.Lendacky@amd.com>,
@@ -77,9 +77,9 @@ CC: <linux-kernel@vger.kernel.org>, <Thomas.Lendacky@amd.com>,
 	<Suravee.Suthikulpanit@amd.com>, <bp@alien8.de>, <David.Kaplan@amd.com>,
 	<huibo.wang@amd.com>, <naveen.rao@amd.com>, <pgonda@google.com>,
 	<linux-kselftest@vger.kernel.org>, <shuah@kernel.org>, <tiala@microsoft.com>
-Subject: [RFC PATCH v2 23/35] KVM: selftests: Add SEV VM support in xapic_ipi_test
-Date: Tue, 23 Sep 2025 10:39:30 +0530
-Message-ID: <20250923050942.206116-24-Neeraj.Upadhyay@amd.com>
+Subject: [RFC PATCH v2 24/35] KVM: selftests: Add Secure AVIC library
+Date: Tue, 23 Sep 2025 10:39:31 +0530
+Message-ID: <20250923050942.206116-25-Neeraj.Upadhyay@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250923050942.206116-1-Neeraj.Upadhyay@amd.com>
 References: <20250923050942.206116-1-Neeraj.Upadhyay@amd.com>
@@ -95,332 +95,439 @@ X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000013C:EE_|BN7PPF9C6E5285F:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7e17d328-98f9-4626-da24-08ddfa6062f2
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000013B:EE_|CY8PR12MB7634:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76947992-e2cf-4d6f-0372-08ddfa606d96
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026;
+	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?V1roi9ISw010DgcACoyxDPDMuP2KW9QEMydWKHZ5aHCeiSEUkkAEiRZrFt8p?=
- =?us-ascii?Q?BiqmCI5L6jvRTOUjDhEdoA+q3nTgEx4SF5DFWIOQ8jYmotA7EsFFoJjygO3l?=
- =?us-ascii?Q?dEjo8AalzfMqSfyjZm9Zc2ziP6In/y1hhIdiR2gUCJC4qjKPgaM2kgjL/xUR?=
- =?us-ascii?Q?wy6sXWImyaGf9eflEAs9SrMGBiM2mIMpNAT/r8IN9x8Lrwu0/l3UTkvaRDPS?=
- =?us-ascii?Q?A/sXXPxBQck3MyYjrUopeArJx3aITL1o93yEO5JNy6xA/P5fVoypfrhW1yRx?=
- =?us-ascii?Q?XASP1UGp/+e62Nhv3mQMDrDG1CFydTpU3lvxgRPil1dM6zyar77TpUwRNMTw?=
- =?us-ascii?Q?sw35N92DF84IyoaFuEBY4PKDk7sj9Hk/MNpEM1USBjS9c0uDqFm8q+Tnwsqn?=
- =?us-ascii?Q?VF3SBU39Iq4xlZ1rNNB/NL+LDEQy51YUoZ2UAS0ZeIjnwizQTekT8ujLfwUu?=
- =?us-ascii?Q?N1qbedlTK6y4J/eZ5wK09CnG7nkXqawHn8wMqZc11mlrl/wWDhZ9pyoWww7B?=
- =?us-ascii?Q?eA7+45lT72DPPHpx2pLQnwsxieoWkpur6AlH+Q0FDrqBM70eCDs98IYFn7nW?=
- =?us-ascii?Q?yxQRHpd7ZJJpRkc7cnwmjjS5kzZRhsHXfgN+0ZH71WLLFKFnaeCK52HxzFtq?=
- =?us-ascii?Q?WzKmFQntyI8OM6/VheGLRr6bpAOCwMqpPeWaPY/6NewQxp3hYCgMpiLHGKU/?=
- =?us-ascii?Q?DRFkCk7T6v51OPrJ/1OPVXBD5GflQEruk1qh5QrYMrQ9A+5Sev/xu+U0AyjV?=
- =?us-ascii?Q?h4zZg+DghVW++1B+b2OoiHJMmPUdgehKWubxiGtv7TKZstzB/V6Yjhi2Wds9?=
- =?us-ascii?Q?Gb29hk/devlMHMq6gpLIseh2XJauDRJRf20dfZjn5EyOVto2eLPPdrZzSop3?=
- =?us-ascii?Q?tfjVOY028vNVzVU4ApJmJegGv2VhOBy5OC6s2KgPwxooU8pSzmno8i39Ah8t?=
- =?us-ascii?Q?dMmPqv8tkPwV3cXfDNP1QwMFRYKdzyi4j5XhFX/otBU3QGEwsnjREiDPT7Hz?=
- =?us-ascii?Q?jR2txDBbQfqOk7HF1prLHSxBEOW2PaUEYDUrz121/h6MYFPUQBLVCFHC6Lzs?=
- =?us-ascii?Q?7npP1UnZQRQboQX2H19wo8TW3Ag0v4gmVcoRyQd+pnQXKDUyubVlJSpZWnww?=
- =?us-ascii?Q?gT8VsdrIhLEAlv24qs8fvI8abguWT8g4z1J+WiFPQOo3ELIbEbvKmXjSnONB?=
- =?us-ascii?Q?X5COXj82DXs3slfdr46W7ipRW0kXR4lcHSDd9oVmKFHUNhM6lZmUM5DFqLMQ?=
- =?us-ascii?Q?7XV8kYD4a5v6GWd4+vq5VOnFDkkSXvdCCES7TLnHtfjwAofQfMVwF4MAly7F?=
- =?us-ascii?Q?4UpN4pNVlMP5IP5D5zgvpMthtNFE669Kary5t2bXlSXldloIrkX9KMINZrz4?=
- =?us-ascii?Q?sMpyzgolLmzi9KYdsqvjFP/7Jh2vxEfhiz7VByNVvvxn3uVsZtQ8W7rnp9fc?=
- =?us-ascii?Q?vPeqWEeCdxsDZFl6mVKoCvDx2sR9le4+RDQKD5uupInrD9jhbjU7tlaRQs2V?=
- =?us-ascii?Q?jYwy6mxAT7JjSDah5jvo1CdU8a8wdZIuwwQc?=
+	=?us-ascii?Q?bfMXATGx7H6VtnPpqZrmBnzdjVGfKfmFuFDGb9+DFhN4EShlVKWtAjLl1HwD?=
+ =?us-ascii?Q?xVUZjCJzjw4BvspQCndseTT3nBfyMXJau0RRsBevoXrxY6seeKegE1GqQ2n2?=
+ =?us-ascii?Q?XPpZRMxtW2CFRq/UPvl71NgwfUhHzfQOtVm2wmdvaAO5oEmRZIGZJOnKcDg0?=
+ =?us-ascii?Q?lLCHeG9QygrnGcRFfBx1wLI32RFYTGIw5hBO2gmpXG8okdkXG26m0UcZnuNh?=
+ =?us-ascii?Q?7fFfqQEXFPQu/vjfVLbc4sZEP0eysPHMBqc8vJAc9kie89u8I+ngGyRIIzel?=
+ =?us-ascii?Q?Ucro4G3x7MWUBFH7L6N+TbLVG3MWD8uRRQfGBcwhTXr9TxVTUpZdFe4BNTrA?=
+ =?us-ascii?Q?2PzJsMrqchD501crYB4KK1XAFoxPH3j0POacMBuNPClNJyxivvbOft/mfMgh?=
+ =?us-ascii?Q?SlN1FtPYHMDlWZadALRPkQ6DNJhPAU0kJOXmwbnyFVHGTFo5tCxeBXLpCpjZ?=
+ =?us-ascii?Q?noduxbHZ0kvXVU5xFlnmgbVihiLfpobUnb/zOmRPGoUN7tft3D/r4P2Ufr1R?=
+ =?us-ascii?Q?j/Gvj/3tfXptoHArVuFY5YsModD0Brt59liy0nURFQByiBjX0dYkrTKnjOir?=
+ =?us-ascii?Q?xvDVNO8k3MHhp/CRn2TFgoPlI+kIw7KwC6yb5WrGAgB0541IsNL1clIBIisW?=
+ =?us-ascii?Q?0iHCaQdA2J/WeJ3X2Cod/EbqjtOPpCRmwoZrFMWa6F9ZYIzYodbbed7azgtJ?=
+ =?us-ascii?Q?ePsjB4mDzRx921a4/m+i7zURB5ySxu+2n+RvFFNr/8Yi3dHVEsk7srEPP4I/?=
+ =?us-ascii?Q?ZrpJtD+7A7HmZ+8Cju5lukEB9Ra8fYb1jkWzZxtx4IuuXbfN9lbFPby3wbna?=
+ =?us-ascii?Q?CFH9Tp0jSblreCL3kSxxOVK7N8q8eVp92H9F/7jlhFfE7TKLipzaIxJqrL0g?=
+ =?us-ascii?Q?yOf2DkivCCuC3mRHCk2cmwuhXrJygTaKeX1mo4g+6Bb2mjjygiLHdNOlkL82?=
+ =?us-ascii?Q?bHZ7ib9mUvATtxDp8LmE+UVf0rZ9kITCbquXuR3cWDbGg2s0DWq9uYDwdYNZ?=
+ =?us-ascii?Q?BYrfL5H78PePcyjZVgL7/FKX3D4lFHckxIE3sCdsorc4uQkslxYcP5H39jGZ?=
+ =?us-ascii?Q?jcpCGl7LwPPTh53/3Z24Zdbufmwu+Nc6W5vSNoKQjyVMIbkzlJ9b9LmtJLiW?=
+ =?us-ascii?Q?tAkFc+LjK6VQTMOZ8L/DuXiQDy4SqoogKCM8c/OeDBI5IDlvKSRWklcWMjmv?=
+ =?us-ascii?Q?dhOl8RDjK+KdJi4A0Jvl7wil0qtA4L3x1XvCNCeYsD2+beu7V+VPnvcSaqv8?=
+ =?us-ascii?Q?z7Vpl9vDWJBJTBKz6my/VJmA1+DhbKNkdDrg0BNroMQa1CeP3jfjv8DSqB+F?=
+ =?us-ascii?Q?otFpyQf/C2xyi8QjXXYoS4NPSgNIPHYlZ1MZVwyCiMna71zX3hUtj51BF8sa?=
+ =?us-ascii?Q?bdcgTEkzKWJK28Cha3Yy8Y7klqwTPkS/gLgB8xf6nanJK1BSZDCSFtg1V/Y7?=
+ =?us-ascii?Q?Fweo/05WPTbdmrVyMmOjGmD8SYLPrmfdQPqeMHureGWkePadQkJrSuOVjfiE?=
+ =?us-ascii?Q?iHOvD86FlODfzsfAmUkKTJWW5sKDcFzrGlnb?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2025 05:16:43.9817
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2025 05:17:01.8274
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e17d328-98f9-4626-da24-08ddfa6062f2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76947992-e2cf-4d6f-0372-08ddfa606d96
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF0000013C.namprd02.prod.outlook.com
+	CH2PEPF0000013B.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PPF9C6E5285F
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7634
 
-Extend the xapic_ipi_test to support SEV, SEV-ES, and SNP guests.
-This is important for validating IPI functionality within confidential
-computing environments. The test now works in both xAPIC and x2APIC modes
-for these encrypted guest types.
+Add a new library to the KVM selftest framework to manage and enable
+Secure AVIC, providing the foundation for testing this feature.
 
-The test now uses SEV-specific VM creation and launch helpers when
-an encrypted guest is selected. For SEV-ES guests, install the generic
-for xAPIC mode to function.
+Secure AVIC (SAVIC) is an AMD SEV-SNP feature that provides each vCPU
+with a guest-owned APIC backing page in memory. This allow SEV-SNP guests
+to prevent the hypervisor from generating unexpected interrupts to a
+vCPU or otherwise violate architectural assumptions around APIC behavior.
 
-In an encrypted guest, memory is private by default and inaccessible
-to the host. To allow the host to monitor guest activity, convert the
-page used for statistics (test_data_page) to a shared (unencrypted)
-memory region. Add a convenience wrapper, vm_vaddr_alloc_page_shared(),
-to simplify the allocation of a single shared page.
+The core of the new library (lib/x86/savic.c) revolves around the
+management of these APIC backing pages:
 
-With these changes, the IPI selftest can now provide comprehensive
-coverage across both standard and confidential VM types.
+- Allocate pool of APIC backing pages during the SNP VM launch sequence
+  if the VMSA features report SAVIC support.
+- Update kvm_arch_vm_additional_pages_required() helper to ensure
+  sufficient memory is pre-allocated for these pages during VM creation.
+
+The library exposes a set of helpers for guest code:
+
+- savic_enable(): The primary function for a vCPU to switch into Secure
+  AVIC mode.
+
+- savic_read/write_reg(): Allow the guest to interact with its local
+  APIC state via the backing page once SAVIC is active.
+
+- savic_hv_read/write_reg(): Helpers that wrap the PV MSR interface for
+  communicating with KVM's view of the APIC state.
+
+This infrastructure is a prerequisite for writing selftests that verify
+the correctness of Secure AVIC.
 
 Signed-off-by: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
 ---
- .../testing/selftests/kvm/include/kvm_util.h  |  1 +
- tools/testing/selftests/kvm/lib/kvm_util.c    | 19 ++++
- .../selftests/kvm/x86/xapic_ipi_test.c        | 94 ++++++++++++++++---
- 3 files changed, 100 insertions(+), 14 deletions(-)
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../testing/selftests/kvm/include/x86/apic.h  |   6 +
+ .../testing/selftests/kvm/include/x86/savic.h |  19 ++
+ tools/testing/selftests/kvm/include/x86/svm.h |   3 +
+ .../testing/selftests/kvm/lib/x86/processor.c |   7 +-
+ tools/testing/selftests/kvm/lib/x86/savic.c   | 205 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/x86/sev.c     |  15 ++
+ 7 files changed, 254 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86/savic.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86/savic.c
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 2e27682c5077..4a4f9621082d 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -700,6 +700,7 @@ vm_vaddr_t vm_vaddr_alloc_pages_shared(struct kvm_vm *vm, int nr_pages);
- vm_vaddr_t __vm_vaddr_alloc_page(struct kvm_vm *vm,
- 				 enum kvm_mem_region_type type);
- vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm);
-+vm_vaddr_t vm_vaddr_alloc_page_shared(struct kvm_vm *vm);
- 
- void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- 	      unsigned int npages);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 00317ce5dbb9..360f262f5f3f 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1592,6 +1592,25 @@ vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm)
- 	return vm_vaddr_alloc_pages(vm, 1);
- }
- 
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 41aa99e5e0c4..b94ac1caa514 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -26,6 +26,7 @@ LIBKVM_x86 += lib/x86/insn-eval.c
+ LIBKVM_x86 += lib/x86/memstress.c
+ LIBKVM_x86 += lib/x86/pmu.c
+ LIBKVM_x86 += lib/x86/processor.c
++LIBKVM_x86 += lib/x86/savic.c
+ LIBKVM_x86 += lib/x86/sev.c
+ LIBKVM_x86 += lib/x86/svm.c
+ LIBKVM_x86 += lib/x86/ucall.c
+diff --git a/tools/testing/selftests/kvm/include/x86/apic.h b/tools/testing/selftests/kvm/include/x86/apic.h
+index 80fe9f69b38d..6ba5d0545bf8 100644
+--- a/tools/testing/selftests/kvm/include/x86/apic.h
++++ b/tools/testing/selftests/kvm/include/x86/apic.h
+@@ -29,6 +29,7 @@
+ #define	APIC_TASKPRI	0x80
+ #define	APIC_PROCPRI	0xA0
+ #define	APIC_EOI	0xB0
++#define APIC_LDR	0xD0
+ #define	APIC_SPIV	0xF0
+ #define		APIC_SPIV_FOCUS_DISABLED	(1 << 9)
+ #define		APIC_SPIV_APIC_ENABLED		(1 << 8)
+@@ -60,10 +61,15 @@
+ #define	APIC_ICR2	0x310
+ #define		SET_APIC_DEST_FIELD(x)	((x) << 24)
+ #define APIC_LVTT	0x320
++#define APIC_LVTTHMR    0x330
++#define APIC_LVTPC      0x340
++#define APIC_LVT0       0x350
+ #define		APIC_LVT_TIMER_ONESHOT		(0 << 17)
+ #define		APIC_LVT_TIMER_PERIODIC		(1 << 17)
+ #define		APIC_LVT_TIMER_TSCDEADLINE	(2 << 17)
+ #define		APIC_LVT_MASKED			(1 << 16)
++#define APIC_LVT1       0x360
++#define APIC_LVTERR     0x370
+ #define	APIC_TMICT	0x380
+ #define	APIC_TMCCT	0x390
+ #define	APIC_TDCR	0x3E0
+diff --git a/tools/testing/selftests/kvm/include/x86/savic.h b/tools/testing/selftests/kvm/include/x86/savic.h
+new file mode 100644
+index 000000000000..1ab92dad00c1
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/x86/savic.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
-+ * VM Virtual Address Allocate shared Page
++ * Helpers used for Secure AVIC guests
 + *
-+ * Input Args:
-+ *   vm - Virtual Machine
-+ *
-+ * Output Args: None
-+ *
-+ * Return:
-+ *   Starting guest virtual address
-+ *
-+ * Allocates at least one system page (in shared state) worth of bytes within the
-+ * virtual address space of the vm.
 + */
-+vm_vaddr_t vm_vaddr_alloc_page_shared(struct kvm_vm *vm)
-+{
-+	return vm_vaddr_alloc_pages_shared(vm, 1);
-+}
++#ifndef SELFTEST_KVM_SAVIC_H
++#define SELFTEST_KVM_SAVIC_H
 +
- /*
-  * Map a range of VM virtual address to the VM's physical address
-  *
-diff --git a/tools/testing/selftests/kvm/x86/xapic_ipi_test.c b/tools/testing/selftests/kvm/x86/xapic_ipi_test.c
-index e7dcf4bc0350..3d49f7798dcc 100644
---- a/tools/testing/selftests/kvm/x86/xapic_ipi_test.c
-+++ b/tools/testing/selftests/kvm/x86/xapic_ipi_test.c
-@@ -30,6 +30,7 @@
- #include "processor.h"
- #include "test_util.h"
- #include "vmx.h"
++struct guest_apic_page;
++
++void guest_apic_pages_init(struct kvm_vm *vm);
++void set_savic_control_msr(struct guest_apic_page *apic_page, bool enable, bool enable_nmi);
++void savic_write_reg(struct guest_apic_page *apic_page, uint32_t reg, uint64_t val);
++uint64_t savic_read_reg(struct guest_apic_page *apic_page, uint32_t reg);
++void savic_hv_write_reg(uint32_t reg, uint64_t val);
++uint64_t savic_hv_read_reg(uint32_t reg);
++void savic_enable(void);
++int savic_nr_pages_required(uint64_t page_size);
++#endif
+diff --git a/tools/testing/selftests/kvm/include/x86/svm.h b/tools/testing/selftests/kvm/include/x86/svm.h
+index 66dd4eaf23b9..689fefb72d06 100644
+--- a/tools/testing/selftests/kvm/include/x86/svm.h
++++ b/tools/testing/selftests/kvm/include/x86/svm.h
+@@ -179,6 +179,9 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
+ #define SVM_NESTED_CTL_NP_ENABLE	BIT(0)
+ #define SVM_NESTED_CTL_SEV_ENABLE	BIT(1)
+ 
++#define SVM_FEAT_SECURE_AVIC		16
++#define SVM_FEAT_ALLOWED_SEV_FEATURES_VALID	63
++
+ struct __attribute__ ((__packed__)) vmcb_seg {
+ 	u16 selector;
+ 	u16 attrib;
+diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+index 181f1943c4be..a33a09a161d3 100644
+--- a/tools/testing/selftests/kvm/lib/x86/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+@@ -659,10 +659,13 @@ void kvm_arch_vm_post_create(struct kvm_vm *vm)
+ 
+ int kvm_arch_vm_additional_pages_required(struct vm_shape shape, uint64_t page_size)
+ {
+-	if (shape.type == KVM_X86_SEV_ES_VM ||
+-	    shape.type == KVM_X86_SNP_VM)
++	if (shape.type == KVM_X86_SEV_ES_VM)
+ 		return  ghcb_nr_pages_required(page_size);
+ 
++	if (shape.type == KVM_X86_SNP_VM)
++		return ghcb_nr_pages_required(page_size) +
++			savic_nr_pages_required(page_size);
++
+ 	return 0;
+ }
+ 
+diff --git a/tools/testing/selftests/kvm/lib/x86/savic.c b/tools/testing/selftests/kvm/lib/x86/savic.c
+new file mode 100644
+index 000000000000..72ad43d4797e
+--- /dev/null
++++ b/tools/testing/selftests/kvm/lib/x86/savic.c
+@@ -0,0 +1,205 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/*
++ *  Copyright (C) 2024 Advanced Micro Devices, Inc.
++ *
++ */
++
++#include "apic.h"
++#include "kvm_util.h"
 +#include "sev.h"
- 
- /* Default running time for the test */
- #define DEFAULT_RUN_SECS 3
-@@ -48,7 +49,7 @@
-  * Incremented in the IPI handler. Provides evidence to the sender that the IPI
-  * arrived at the destination
-  */
--static volatile uint64_t ipis_rcvd;
-+static volatile uint64_t *ipis_rcvd;
- 
- static bool x2apic;
- 
-@@ -93,6 +94,7 @@ struct test_data_page {
- 	 *  to determine whether APIC access exits are working.
- 	 */
- 	uint32_t halter_lvr;
-+	uint64_t ipis_rcvd;
- };
- 
- struct thread_params {
-@@ -142,7 +144,7 @@ static void halter_guest_code(struct test_data_page *data)
-  */
- static void guest_ipi_handler(struct ex_regs *regs)
- {
--	ipis_rcvd++;
-+	(*ipis_rcvd)++;
- 	apic_write_reg(APIC_EOI, 77);
- }
- 
-@@ -176,7 +178,7 @@ static void sender_guest_code(struct test_data_page *data)
- 
- 	last_wake_count = data->wake_count;
- 	last_hlt_count = data->hlt_count;
--	last_ipis_rcvd_count = ipis_rcvd;
-+	last_ipis_rcvd_count = *ipis_rcvd;
- 	for (;;) {
- 		/*
- 		 * Send IPI to halter vCPU.
-@@ -201,19 +203,19 @@ static void sender_guest_code(struct test_data_page *data)
- 		 */
- 		tsc_start = rdtsc();
- 		while (rdtsc() - tsc_start < 2000000000) {
--			if ((ipis_rcvd != last_ipis_rcvd_count) &&
-+			if ((*ipis_rcvd != last_ipis_rcvd_count) &&
- 			    (data->wake_count != last_wake_count) &&
- 			    (data->hlt_count != last_hlt_count))
- 				break;
- 		}
- 
--		GUEST_ASSERT((ipis_rcvd != last_ipis_rcvd_count) &&
-+		GUEST_ASSERT((*ipis_rcvd != last_ipis_rcvd_count) &&
- 			     (data->wake_count != last_wake_count) &&
- 			     (data->hlt_count != last_hlt_count));
- 
- 		last_wake_count = data->wake_count;
- 		last_hlt_count = data->hlt_count;
--		last_ipis_rcvd_count = ipis_rcvd;
-+		last_ipis_rcvd_count = *ipis_rcvd;
- 	}
- }
- 
-@@ -384,10 +386,10 @@ void do_migrations(struct test_data_page *data, int run_secs, int delay_usecs,
- }
- 
- void get_cmdline_args(int argc, char *argv[], int *run_secs,
--		      bool *migrate, int *delay_usecs, bool *x2apic)
-+		      bool *migrate, int *delay_usecs, bool *x2apic, int *vm_type)
- {
- 	for (;;) {
--		int opt = getopt(argc, argv, "s:d:v:me:");
-+		int opt = getopt(argc, argv, "s:d:v:me:t:");
- 
- 		if (opt == -1)
- 			break;
-@@ -404,6 +406,25 @@ void get_cmdline_args(int argc, char *argv[], int *run_secs,
- 		case 'e':
- 			*x2apic = parse_size(optarg) == 1;
- 			break;
-+		case 't':
-+			*vm_type = parse_size(optarg);
-+			switch (*vm_type) {
-+			case KVM_X86_DEFAULT_VM:
-+				break;
-+			case KVM_X86_SEV_VM:
-+				TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SEV));
-+				break;
-+			case KVM_X86_SEV_ES_VM:
-+				TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SEV_ES));
-+				break;
-+			case KVM_X86_SNP_VM:
-+				TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SNP));
-+				break;
-+			default:
-+				TEST_ASSERT(false, "Unsupported VM type :%d",
-+					    *vm_type);
-+			}
-+			break;
- 		default:
- 			TEST_ASSERT(false,
- 				    "Usage: -s <runtime seconds>. Default is %d seconds.\n"
-@@ -412,12 +433,39 @@ void get_cmdline_args(int argc, char *argv[], int *run_secs,
- 				    "-d <delay microseconds> - delay between migrate_pages() calls."
- 				    " Default is %d microseconds.\n"
- 				    "-e <apic mode> - APIC mode 0 - xapic , 1 - x2apic"
--				    " Default is xAPIC.\n",
--				    DEFAULT_RUN_SECS, DEFAULT_DELAY_USECS);
-+				    " Default is xAPIC.\n"
-+				    "-t <vm type>. Default is %d.\n"
-+				    "Supported values:\n"
-+				    "0 - default\n"
-+				    "2 - SEV\n"
-+				    "3 - SEV-ES\n"
-+				    "4 - SNP",
-+				    DEFAULT_RUN_SECS, DEFAULT_DELAY_USECS, KVM_X86_DEFAULT_VM);
- 		}
- 	}
- }
- 
-+static inline bool is_sev_vm_type(int type)
-+{
-+	return type == KVM_X86_SEV_VM ||
-+		type == KVM_X86_SEV_ES_VM ||
-+		type == KVM_X86_SNP_VM;
-+}
 +
-+static inline uint64_t get_sev_policy(int vm_type)
++struct apic_page {
++	u8 apic_regs[PAGE_SIZE];
++} __packed;
++
++struct guest_apic_page {
++	struct apic_page apic_page;
++	uint64_t gpa;
++	uint64_t hva;
++} __aligned(PAGE_SIZE);
++
++struct guest_apic_pages {
++	struct guest_apic_page guest_apic_page[KVM_MAX_VCPUS];
++};
++
++static struct guest_apic_pages *apic_page_pool;
++
++enum lapic_lvt_entry {
++	LVT_TIMER,
++	LVT_THERMAL_MONITOR,
++	LVT_PERFORMANCE_COUNTER,
++	LVT_LINT0,
++	LVT_LINT1,
++	LVT_ERROR,
++	APIC_MAX_NR_LVT_ENTRIES,
++};
++
++#define MSR_AMD64_SECURE_AVIC_CONTROL      0xc0010138
++
++#define APIC_LVTx(x) (APIC_LVTT + 0x10 * (x))
++#define MSR_AMD64_SECURE_AVIC_EN_BIT       0
++#define MSR_AMD64_SECURE_AVIC_ALLOWED_NMI_BIT       1
++
++/*
++ * Initial pool of guest apic backing page.
++ */
++void guest_apic_pages_init(struct kvm_vm *vm)
 +{
-+	switch (vm_type) {
-+	case KVM_X86_SEV_VM:
-+		return SEV_POLICY_NO_DBG;
-+	case KVM_X86_SEV_ES_VM:
-+		return SEV_POLICY_ES;
-+	case KVM_X86_SNP_VM:
-+		return snp_default_policy();
-+	default:
-+		return 0;
++	struct guest_apic_pages *g_pages;
++	struct guest_apic_page *entry;
++	vm_vaddr_t vaddr;
++	int i;
++	size_t sz = align_up(sizeof(struct guest_apic_pages),
++			     vm_guest_mode_params[vm->mode].page_size);
++
++	vaddr = vm_vaddr_alloc(vm, sz, KVM_UTIL_MIN_VADDR);
++
++	g_pages = (struct guest_apic_pages *)addr_gva2hva(vm, vaddr);
++	memset(g_pages, 0, sz);
++
++	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
++		entry = &g_pages->guest_apic_page[i];
++		entry->hva = (uint64_t)entry;
++		entry->gpa = (uint64_t)addr_hva2gpa(vm, &entry->apic_page);
 +	}
++
++	apic_page_pool = (struct guest_apic_pages *)vaddr;
++	sync_global_to_guest(vm, apic_page_pool);
 +}
 +
- int main(int argc, char *argv[])
++int savic_nr_pages_required(uint64_t page_size)
++{
++	return align_up(sizeof(struct guest_apic_pages), page_size) / page_size;
++}
++
++/*
++ * Enable/disable Secure AVIC in control msr.
++ *
++ * @apic_page  : Guest APIC backing page for the CPU on which
++ *	       this function is called.
++ * @enable     : Enable/Disable Secure AVIC.
++ * @enable_nmi : Allow host to send NMI to the guest.
++ */
++void set_savic_control_msr(struct guest_apic_page *apic_page, bool enable, bool enable_nmi)
++{
++	uint64_t val = apic_page->gpa | BIT_ULL(MSR_AMD64_SECURE_AVIC_EN_BIT);
++
++	if (!enable) {
++		wrmsr(MSR_AMD64_SECURE_AVIC_CONTROL, 0);
++		return;
++	}
++
++	if (enable_nmi)
++		val |= BIT_ULL(MSR_AMD64_SECURE_AVIC_ALLOWED_NMI_BIT);
++
++	wrmsr(MSR_AMD64_SECURE_AVIC_CONTROL, val);
++}
++
++/*
++ * Write APIC reg offset in the guest APIC backing page.
++ *
++ * @apage : Backing page address.
++ * @reg   : APIC reg offset corresponding to the xapic MMIO
++ *	  offset.
++ * @val   : New value to be set for the APIC reg.
++ */
++void savic_write_reg(struct guest_apic_page *apic_page, uint32_t reg, uint64_t val)
++{
++	*(volatile uint64_t *)((uint64_t)apic_page + reg) = val;
++}
++
++/*
++ * Read APIC reg offset from the guest APIC backing page.
++ *
++ * @apage : Backing page address.
++ * @reg   : APIC reg offset corresponding to the xapic MMIO
++ *	  offset.
++ *
++ * @ret   : APIC register value in the guest APIC backing page.
++ */
++uint64_t savic_read_reg(struct guest_apic_page *apic_page, uint32_t reg)
++{
++	return *(volatile uint64_t *)((uint64_t)apic_page + reg);
++}
++
++/*
++ * Write APIC reg value to hypervisor.
++ *
++ * @reg   : APIC reg offset corresponding to the xapic MMIO
++ *	  offset.
++ * @val   : Value to be set for the APIC reg.
++ */
++void savic_hv_write_reg(uint32_t reg, uint64_t val)
++{
++	sev_es_pv_msr_rw(APIC_BASE_MSR + (reg >> 4), &val, true);
++}
++
++/*
++ * Read APIC reg offset from hypervisor.
++ *
++ * @reg   : APIC reg offset corresponding to the xapic MMIO
++ *	  offset.
++ *
++ * @ret   : APIC register value in the hypervisor's APIC state.
++ */
++uint64_t savic_hv_read_reg(uint32_t reg)
++{
++	uint64_t val;
++
++	sev_es_pv_msr_rw(APIC_BASE_MSR + (reg >> 4), &val, false);
++
++	return val;
++}
++
++static void savic_init_backing_page(struct guest_apic_page *apic_page, uint32_t apic_id)
++{
++	uint64_t regval;
++	enum lapic_lvt_entry i;
++
++	/* Update APIC ID in the backing page */
++	savic_write_reg(apic_page, APIC_ID, apic_id);
++
++	/* Set LVR, LDR, LVT* in backing page from host values */
++	regval = savic_hv_read_reg(APIC_LVR);
++	savic_write_reg(apic_page, APIC_LVR, regval);
++
++	regval = savic_hv_read_reg(APIC_LDR);
++	savic_write_reg(apic_page, APIC_LDR, regval);
++
++	for (i = LVT_THERMAL_MONITOR; i < APIC_MAX_NR_LVT_ENTRIES; i++) {
++		regval = savic_hv_read_reg(APIC_LVTx(i));
++		savic_write_reg(apic_page, APIC_LVTx(i), regval);
++	}
++
++	regval = savic_hv_read_reg(APIC_LVT0);
++	savic_write_reg(apic_page, APIC_LVT0, regval);
++
++	regval = savic_hv_read_reg(APIC_LVT1);
++	savic_write_reg(apic_page, APIC_LVT1, regval);
++}
++
++/*
++ * Initialize and enable Secure AVIC on a CPU.
++ *
++ * @context: Called from x2apic enabled context and Secure AVIC disabled.
++ */
++void savic_enable(void)
++{
++	uint64_t savic_ctrl_msr_val, exp_msr_val;
++	struct guest_apic_page *apic_page;
++	uint32_t apic_id;
++
++	__GUEST_ASSERT(apic_page_pool, "Guest APIC pages pool is not initialized");
++	apic_id = x2apic_read_reg(APIC_ID);
++	apic_page = &apic_page_pool->guest_apic_page[apic_id];
++
++	savic_init_backing_page(apic_page, apic_id);
++	set_savic_control_msr(apic_page, true, true);
++	savic_ctrl_msr_val = rdmsr(MSR_AMD64_SECURE_AVIC_CONTROL);
++	exp_msr_val = apic_page->gpa | BIT_ULL(MSR_AMD64_SECURE_AVIC_EN_BIT) |
++			BIT_ULL(MSR_AMD64_SECURE_AVIC_ALLOWED_NMI_BIT);
++	__GUEST_ASSERT(savic_ctrl_msr_val == exp_msr_val,
++			"SAVIC Control msr unexpected val : 0x%lx, expected : 0x%lx",
++			savic_ctrl_msr_val, exp_msr_val);
++}
+diff --git a/tools/testing/selftests/kvm/lib/x86/sev.c b/tools/testing/selftests/kvm/lib/x86/sev.c
+index 1e0719dfd6b0..113f33ca40b2 100644
+--- a/tools/testing/selftests/kvm/lib/x86/sev.c
++++ b/tools/testing/selftests/kvm/lib/x86/sev.c
+@@ -276,6 +276,18 @@ struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t type, void *guest_code,
+ 	return vm;
+ }
+ 
++static bool is_savic_enabled(void)
++{
++	u64 supported_vmsa_features;
++	int kvm_fd = open_kvm_dev_path_or_exit();
++
++	kvm_device_attr_get(kvm_fd, KVM_X86_GRP_SEV,
++			    KVM_X86_SEV_VMSA_FEATURES,
++			    &supported_vmsa_features);
++
++	return supported_vmsa_features & BIT_ULL(SVM_FEAT_SECURE_AVIC);
++}
++
+ void vm_sev_launch(struct kvm_vm *vm, uint64_t policy, uint8_t *measurement)
  {
- 	int r;
-@@ -432,8 +480,13 @@ int main(int argc, char *argv[])
- 	struct thread_params params[2];
- 	struct kvm_vm *vm;
- 	uint64_t *pipis_rcvd;
-+	int vm_type = KVM_X86_DEFAULT_VM;
-+	bool is_sev;
+ 	if (is_sev_es_vm(vm))
+@@ -284,6 +296,9 @@ void vm_sev_launch(struct kvm_vm *vm, uint64_t policy, uint8_t *measurement)
+ 	if (is_sev_snp_vm(vm)) {
+ 		vm_enable_cap(vm, KVM_CAP_EXIT_HYPERCALL, BIT(KVM_HC_MAP_GPA_RANGE));
+ 
++		if (is_savic_enabled())
++			guest_apic_pages_init(vm);
 +
-+	get_cmdline_args(argc, argv, &run_secs, &migrate, &delay_usecs,
-+			 &x2apic, &vm_type);
-+	is_sev = is_sev_vm_type(vm_type);
+ 		snp_vm_launch_start(vm, policy);
  
--	get_cmdline_args(argc, argv, &run_secs, &migrate, &delay_usecs, &x2apic);
- 	if (x2apic)
- 		migrate = 0;
- 
-@@ -442,9 +495,15 @@ int main(int argc, char *argv[])
- 	if (delay_usecs <= 0)
- 		delay_usecs = DEFAULT_DELAY_USECS;
- 
--	vm = vm_create_with_one_vcpu(&params[0].vcpu, halter_guest_code);
-+	if (is_sev)
-+		vm = vm_sev_create_with_one_vcpu(vm_type, halter_guest_code,
-+				&params[0].vcpu);
-+	else
-+		vm = vm_create_with_one_vcpu(&params[0].vcpu, halter_guest_code);
- 
- 	vm_install_exception_handler(vm, IPI_VECTOR, guest_ipi_handler);
-+	if (is_sev_es_vm(vm))
-+		vm_install_exception_handler(vm, 29, sev_es_vc_handler);
- 
- 	sync_global_to_guest(vm, x2apic);
- 	if (!x2apic)
-@@ -452,8 +511,10 @@ int main(int argc, char *argv[])
- 
- 	params[1].vcpu = vm_vcpu_add(vm, 1, sender_guest_code);
- 
--	test_data_page_vaddr = vm_vaddr_alloc_page(vm);
-+	test_data_page_vaddr = vm_vaddr_alloc_page_shared(vm);
- 	data = addr_gva2hva(vm, test_data_page_vaddr);
-+	if (is_sev_snp_vm(vm))
-+		vm_mem_set_shared(vm, addr_hva2gpa(vm, data), getpagesize());
- 	memset(data, 0, sizeof(*data));
- 	params[0].data = data;
- 	params[1].data = data;
-@@ -461,10 +522,15 @@ int main(int argc, char *argv[])
- 	vcpu_args_set(params[0].vcpu, 1, test_data_page_vaddr);
- 	vcpu_args_set(params[1].vcpu, 1, test_data_page_vaddr);
- 
--	pipis_rcvd = (uint64_t *)addr_gva2hva(vm, (uint64_t)&ipis_rcvd);
-+	ipis_rcvd = &((struct test_data_page *)test_data_page_vaddr)->ipis_rcvd;
-+	sync_global_to_guest(vm, ipis_rcvd);
-+	pipis_rcvd = (uint64_t *)addr_gva2hva(vm, (uint64_t)ipis_rcvd);
- 	params[0].pipis_rcvd = pipis_rcvd;
- 	params[1].pipis_rcvd = pipis_rcvd;
- 
-+	if (is_sev)
-+		vm_sev_launch(vm, get_sev_policy(vm_type), NULL);
-+
- 	/* Start halter vCPU thread and wait for it to execute first HLT. */
- 	r = pthread_create(&threads[0], NULL, vcpu_thread, &params[0]);
- 	TEST_ASSERT(r == 0,
+ 		snp_vm_launch_update(vm);
 -- 
 2.34.1
 
