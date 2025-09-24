@@ -1,182 +1,139 @@
-Return-Path: <linux-kselftest+bounces-42166-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DA42B98B0F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 09:53:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AC20B98C71
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 10:15:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C116E7B60FF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 07:51:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 054AC3A9F64
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 08:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EF94284B37;
-	Wed, 24 Sep 2025 07:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53EC825A34F;
+	Wed, 24 Sep 2025 08:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Vgo3cKoc"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="f8DZpYAG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA381284B26
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 07:48:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAD22571C7;
+	Wed, 24 Sep 2025 08:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758700133; cv=none; b=umjV+EPdTCBnUWX9TY6FYXHfy+9LJZ2eF/KuO7oNR3gUhIrreTDKHIlsqInug0DJ0tHEFkRQGkmQYnIX82VDKgeavTMlWZmut2CCZJv8Fv5excQf2cXWaDuEtRHTiPT1Nh4Ma3n2QzjCr0TkQzFtf6vDWV8NeiB3Uz4myxCn1EU=
+	t=1758701718; cv=none; b=dRyJD+bEGTg2z+RkNNMC5dMsk2fpsk1kydoJWaodptTAGSYBTn9aI0buv4nn8J2GhU9t4aiMjTwdJFd/PpldM4sKv/1l/oiMPMRpXkvUkHfkUJrVmVgqF+rnIwCHkpWepQcxzWPdgKIZD0o7Q1ekNtD0DGbzHbWLkHnEd24LQyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758700133; c=relaxed/simple;
-	bh=ntgz0WoIRVipjrzOQMbzUgc/QyjDqtJ9eBcmpETq3SI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j+KZHKzgKMwhBVvzz6KKvXLk/1qHP6w7DOJq8RVbVHY6YnuPl2yaFTZS5yVL1UiqmBrgfgFEsNHWUxcBsEuLSG4cZcgXvyRuWXeTxnngZOcPvHDRXroQud6L4Dn6SMexdyfKZMvA997z8+fMbX2VjOW0JIaPj8oBYu4/OokYzOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Vgo3cKoc; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45ddc7d5731so43715245e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 00:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1758700129; x=1759304929; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R8l3AdnOSsRSws2FudDrnNOobQlzeM81boeBiHgd3uA=;
-        b=Vgo3cKocO9IKPAvFAUXQCY1KpmVTN2f1h1FQPIA+GpkLA4VqhPu6o1VF71lkxX2sjT
-         zHfHdxfX+1Pi66GTtnma5ywW3EgNB/Ej/3mtC8EY5IEz1z5rupqzP9vlXq2RmYMLrKSR
-         eVxYeA7Uq6u/aZR0ZOQREL77KOqHgj8BN4nPj6F7H6DMuaBMKGZTwvKTg9ggwLPiXEDv
-         JW5brNLHUaM6ZHpNTb//6VTK9l6UwfzpLhDP2x1xqauShDf478VAj+74iGhiQP5Qax/L
-         Zhz5Xsi/aNWIPufa7BYGyoeT9PzuRDd0gzPahqUgE0TMOMUcTFeoi/KG4IznyHZ4tp+b
-         FU1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758700129; x=1759304929;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8l3AdnOSsRSws2FudDrnNOobQlzeM81boeBiHgd3uA=;
-        b=jzqreNk1o4UbVD0EuzCsAPR0M4SME3T6SjDjHVMmo0MqxJqmTUO6dlgr64R3r5WbbH
-         ZlpxwhtTCj3wWkPOHkbiqhu1orgwDn/A3LGBCKE6p5VHOS754Di0/SGgsL3yYvesZDwe
-         hmTEoQPgN/OXQU1Z3Iv968MSd2GY5rBoipWp/lWraZiNWMIHD09rEl9j9nz3KSSEfwt2
-         RDbwB+/uAC1dhJ/4U3r6VA33273IA41LIFrvsWceF0D7ZEbM3b8EWR9lJqemYeP06Dfm
-         XSs1vtRaehtNRowoTKVkrN41su63dUOImjMJK5WGHblSSretWPHIP39KGUBuiCKR73fz
-         vVhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVoiMKJS3w1ejHHEpOS65wShcakfs8P6/jVprZM2eyW7vZP89KPN6eftCDGIaGehCJR9mFVRte0Gb8DJ09B1Cw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSpLOqXEddcrLU2EAQCAFSPW1gem7XLE1doujKC2chhvjlBBGL
-	5Ccgzy0w2o9Uxt42s0ckkXS2tN0/zbOvf0YpE7nhQM/QA0Sebu2IsPKwelEFt6j7U7o=
-X-Gm-Gg: ASbGncv/rNYKoyeebxQWAijRWQ2AyKMVxxMnZokLMPpT5wDQAILDzIRuBMsFhaE5tDx
-	ePKqwT9Tgeq1PFUw5mwhKk7UW5CxMjvClutCukSCW2NiYE+BxBUmA5/pKoEeB/MSYoGrJ4JTtx3
-	oP2Yd9k+qLIosARyH0voNgoT9aOyzlqaqq1C1tdk5TB7EV2lU6XsBzrhjA5yZPCtT7xjg2lAxwA
-	9VzoSXxMys7NJ+16i8j7S/9JvihBfyVT1KWuJKO6jYD8I37Sx3yMzcBSrYgCmgLKG5Q1Cyj2KBb
-	XXGizghrhNjrYR6PPxRHhq4klucGd5iOI9WHzf/MT2B5b3nbV6KoYGVzaGLwqv7JpeBjdzNHGxo
-	Rn/EosUDRmD4RzlNa2+mJUW5CNInPe9HlIj0pMeLiHH93WT/clGU=
-X-Google-Smtp-Source: AGHT+IFwNQTWzI6GYN83BC1thuAIQC8cKI7ga+QSPsI75xrmILyCBppuSPCKc3GbCcHRTNLHchQcjw==
-X-Received: by 2002:a05:600c:1c87:b0:456:19eb:2e09 with SMTP id 5b1f17b1804b1-46e1d9746d5mr69959415e9.8.1758700128971;
-        Wed, 24 Sep 2025 00:48:48 -0700 (PDT)
-Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e2a9af289sm20857535e9.6.2025.09.24.00.48.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Sep 2025 00:48:48 -0700 (PDT)
-Message-ID: <2071b071-874c-4f85-8500-033c73dfaaab@suse.com>
-Date: Wed, 24 Sep 2025 09:48:47 +0200
+	s=arc-20240116; t=1758701718; c=relaxed/simple;
+	bh=D2wn6RMMBnB/+9wWDZ2/t9VQgCDz7Hs9Ndx57HE6Dsg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=iIXSeihCzUIJyVzOUI5adNWzm1PHzLfj+43YrbxCLePAR9g+ub4QL2BEiXaehK1koZ1CVaIRGOUM72SR9RZ8q7bVR2bY+0D57QviWhMatyjMFlnQMsI+RB//8tcw/8oTy5RSJNTct/0pJW3kn+dsj6nJS/F+rbKxS8E71ZAQgwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=f8DZpYAG; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=D2wn6RMMBnB/+9wWDZ2/t9VQgCDz7Hs9Ndx57HE6Dsg=;
+	t=1758701716; x=1759911316; b=f8DZpYAGqZNrtO12hrxWKoTJxIBRZIkJOU4i7mzCmdm6LoK
+	LDfy2qH1UUkyg0laJmQ8pKR9PGatQmgTbwLUQjlMbgiPtfQs4J3YAa2PtaWey6DdYc8VJlEcgWrHV
+	sjRA3I0/1zzspQIdTkkQe1i06ZBA9XOTTOpNx1ladj7X81fqa11bZPOFgTiiKVOXN+N01R8K+co1t
+	WZkqGmuxSu1kRAVfKWRw1xARslSoxjW3/3eXKAieH6+hwH2r+3Cyw9dd8Buiw0rG2GEXvp/7XIqkC
+	/e47eSY+BOly6S1I7NBjfaBukDVONxDTpHkNpcpNzizSMALKvFdnEdfIJ01v0MYw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <benjamin@sipsolutions.net>)
+	id 1v1KLs-00000008P0I-0JrN;
+	Wed, 24 Sep 2025 09:55:48 +0200
+Message-ID: <97fde69716ea4742b6cb4aca1a3ecc8788693cd3.camel@sipsolutions.net>
+Subject: Re: [PATCH v2 00/11] Start porting UML to nolibc
+From: Benjamin Berg <benjamin@sipsolutions.net>
+To: Willy Tarreau <w@1wt.eu>, Hajime Tazaki <thehajime@gmail.com>
+Cc: johannes@sipsolutions.net, hch@infradead.org,
+ linux-um@lists.infradead.org, 	linux@weissschuh.net,
+ linux-kselftest@vger.kernel.org, acme@redhat.com, 
+	linux-kernel@vger.kernel.org
+Date: Wed, 24 Sep 2025 09:55:47 +0200
+In-Reply-To: <20250924033217.GA9039@1wt.eu>
+References: <20250919153420.727385-1-benjamin@sipsolutions.net>
+	 <aM15eChUObXfxLzs@infradead.org>
+	 <4354d88c2ff7a57a7324cc39b4ce5ed4ebe5277d.camel@sipsolutions.net>
+	 <m2y0q47mbs.wl-thehajime@gmail.com> <20250924033217.GA9039@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] PCI: Support FIXUP quirks in modules
-To: Brian Norris <briannorris@chromium.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain
- <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- linux-pci@vger.kernel.org, David Gow <davidgow@google.com>,
- Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- Johannes Berg <johannes@sipsolutions.net>,
- Sami Tolvanen <samitolvanen@google.com>, Richard Weinberger
- <richard@nod.at>, Wei Liu <wei.liu@kernel.org>,
- Brendan Higgins <brendan.higgins@linux.dev>, kunit-dev@googlegroups.com,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>, linux-um@lists.infradead.org
-References: <20250912230208.967129-1-briannorris@chromium.org>
- <20250912230208.967129-2-briannorris@chromium.org>
- <c84d6952-7977-47cd-8f09-6ea223217337@suse.com> <aNLb9g0AbBXZCJ4m@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <aNLb9g0AbBXZCJ4m@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 
-On 9/23/25 7:42 PM, Brian Norris wrote:
-> Hi Petr,
-> 
-> On Tue, Sep 23, 2025 at 02:55:34PM +0200, Petr Pavlu wrote:
->> On 9/13/25 12:59 AM, Brian Norris wrote:
->>> @@ -259,6 +315,12 @@ void pci_fixup_device(enum pci_fixup_pass pass, struct pci_dev *dev)
->>>  		return;
->>>  	}
->>>  	pci_do_fixups(dev, start, end);
->>> +
->>> +	struct pci_fixup_arg arg = {
->>> +		.dev = dev,
->>> +		.pass = pass,
->>> +	};
->>> +	module_for_each_mod(pci_module_fixup, &arg);
->>
->> The function module_for_each_mod() walks not only modules that are LIVE,
->> but also those in the COMING and GOING states. This means that this code
->> can potentially execute a PCI fixup from a module before its init
->> function is invoked, and similarly, a fixup can be executed after the
->> exit function has already run. Is this intentional?
-> 
-> Thanks for the callout. I didn't really give this part much thought
-> previously.
-> 
-> Per the comments, COMING means "Full formed, running module_init". I
-> believe that is a good thing, actually; specifically for controller
-> drivers, module_init() might be probing the controller and enumerating
-> child PCI devices to which we should apply these FIXUPs. That is a key
-> case to support.
-> 
-> GOING is not clearly defined in the header comments, but it seems like
-> it's a relatively narrow window between determining there are no module
-> refcounts (and transition to GOING) and starting to really tear it down
-> (transitioning to UNFORMED before any significant teardown).
-> module_exit() runs in the GOING phase.
-> 
-> I think it does not make sense to execute FIXUPs on a GOING module; I'll
-> make that change.
+On Wed, 2025-09-24 at 05:32 +0200, Willy Tarreau wrote:
+> On Wed, Sep 24, 2025 at 08:58:47AM +0900, Hajime Tazaki wrote:
+> >=20
+> > Hello Benjamin, Johannes,
+> >=20
+> > On Mon, 22 Sep 2025 16:41:36 +0900,
+> > Johannes Berg wrote:
+> > >=20
+> > > On Fri, 2025-09-19 at 08:40 -0700, Christoph Hellwig wrote:
+> > > > On Fri, Sep 19, 2025 at 05:34:09PM +0200, Benjamin Berg wrote:
+> > > > > From: Benjamin Berg <benjamin.berg@intel.com>
+> > > > >=20
+> > > > > This patchset is an attempt to start a nolibc port of UML.
+> > > >=20
+> > > > It would be useful to explain why that is desirable.
+> > >=20
+> > > Agree, it should be here, but FWIW it's been discussed elsewhere on t=
+he
+> > > linux-um list in the past and basically there are various issues arou=
+nd
+> > > it. Off the top of my head:
+> > > =C2=A0- glibc enabling new features such as rseq that interact badly =
+with how
+> > > =C2=A0=C2=A0 UML manages memory (there were fixes for this, it worked=
+ sometimes
+> > > =C2=A0=C2=A0 and sometimes not)
+> > > =C2=A0- allocation placement for TLS is problematic (see the SMP seri=
+es)
+> > > =C2=A0- it's (too) easy to accidentally call glibc functions that req=
+uire
+> > > =C2=A0=C2=A0 huge amounts of stack space
+> > >=20
+> > > There are probably other reasons, but the mixed nature of UML being b=
+oth
+> > > kernel and "hypervisor" code in a single place doesn't mix well with
+> > > glibc.
+> >=20
+> > just curious
+> >=20
+> > - are those issues not happening in other libc implementation ? (e.g.,
+> > =C2=A0 musl-libc)
+> > - same question to nolibc: is there any possibility that nolibc will
+> > =C2=A0 evolve as glibc does, and this evolution introduces the UML issu=
+es ?
+>=20
+> Nolibc focuses on early boot programs. That does not mean it will never
+> evolve towrards more generic usage but this remains unlikely, and in any
+> case there's the goal will remain not to degrade the experience on the
+> original target (early boot). That doesn't mean there will never be any
+> breakage but we're doing our best to keep things in a clean and workable
+> state. Regarding threads, it seems unlikely that they'll arrive any time
+> soon. But if they did, assuming UML would by then be a long established
+> user, we'd certainly find a solution together (even via build-time
+> defines if needed).
 
-Note that when walking the modules list using module_for_each_mod(),
-the delete_module() operation can concurrently transition a module to
-MODULE_STATE_GOING. If you are thinking about simply having
-pci_module_fixup() check that mod->state isn't MODULE_STATE_GOING,
-I believe this won't quite work.
+Also, with nolibc it is really simple to override any functions as
+needed. We will likely want to do this for malloc/free so that nothing
+bad can happen there.
 
-> 
-> Re-quoting one piece:
->> This means that this code
->> can potentially execute a PCI fixup from a module before its init
->> function is invoked,
-> 
-> IIUC, this part is not true? A module is put into COMING state before
-> its init function is invoked.
+Actually, UML already tries to do that for glibc. However, it
+effectively fails (for dynamically linked builds) because the
+dynamically linked glibc still uses its internal version for these
+symbols.
 
-When loading a module, the load_module() function calls
-complete_formation(), which puts the module into the COMING state. At
-this point, the new code in pci_fixup_device() can see the new module
-and potentially attempt to invoke its PCI fixups. However, such a module
-has still a bit of way to go before its init function is called from
-do_init_module(). The module hasn't yet had its arguments parsed, is not
-linked in sysfs, isn't fully registered with codetag support, and hasn't
-invoked its constructors (needed for gcov/kasan support).
-
-I don't know enough about PCI fixups and what is allowable in them, but
-I suspect it would be better to ensure that no fixup can be invoked from
-the module during this period.
-
-If the above makes sense, I think using module_for_each_mod() might not
-be the right approach. Alternative options include registering a module
-notifier or having modules explicitly register their PCI fixups in their
-init function.
-
--- 
-Cheers,
-Petr
+Benjamin
 
