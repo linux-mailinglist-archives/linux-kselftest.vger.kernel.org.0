@@ -1,57 +1,57 @@
-Return-Path: <linux-kselftest+bounces-42202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47F73B9A60A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 16:54:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF801B9A604
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 16:54:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BD713A9825
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 14:53:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62C9B1B274A3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 14:54:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED163128D3;
-	Wed, 24 Sep 2025 14:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41989313281;
+	Wed, 24 Sep 2025 14:50:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PjJ2y6oG"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jOZzbbPh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA69B31282C
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 14:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B6E3126A1
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 14:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758725430; cv=none; b=U/bLStFADxjcq6LaKJI2xhmi1id21bILTQ2xhEMX29Fkn06NXloUA5oXdNlqmiiVLL6Ie0Zhaz6M9t/lbunMhjJ9NH0Sa3GRrpbFTeB/A7uDTYKYVkp669SdNyP4xNAkfn/yssin+LhLfVyIYkHBOwQkNP3bnWfM+jDM8gkLg8U=
+	t=1758725432; cv=none; b=oeTp3LMtyvboXQnqCmcvVn7rIn+7w/fe1JGvHCqmozrza9FsBi1cuIA0vXOmXIxBZkty2TuQsNtSOyEf/uzQgUUWrZICAZCTNlVYzQgm68w3ruDvguHsxnWFeCl1xfpbQS/+OKukHaRD0ccA/NPpSdknjXlzDrMw4S9g/WdfwIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758725430; c=relaxed/simple;
-	bh=tN+KK502mRn5IU2MfOua2IbsgatQICalJNBq1gn4xBU=;
+	s=arc-20240116; t=1758725432; c=relaxed/simple;
+	bh=v4Hzeqdb7Z4hEux4t+JJgDM2laAqTJTu0/gQKSRMpIU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LtGvOFpGUhs3dxAKxB7HDHQ8MFxFBBwQn5ONHDpZs9i8kf6LcVUevV9i7Eh8rFxwJtRm5kFI6mbLKXZ+DED0+4JFiz4aN13OQwgmZbez9M55z149Ge93znRUmtj5/WmOrF36o+T32Af5fLoBT3hS3EgoXwm8iZtuzK3ZUxVyFJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PjJ2y6oG; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=iMovjJ3Dz8XeEsIWXSA5fbXvxbI+atZK0xD6WIWKVHpny9+rgl1RLhAxFLIB4WrUoYaeIiWYcoLWpM2rO+r9z3z3NiugWaMdCqhXZU7hwEgJAhiJpw+BLXj6eIJu/7eOfgW1OQRD4iA/t2prfUa9rXu0MF1NW1CQ0Mgb9fUIP8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jOZzbbPh; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 482931A0F82;
-	Wed, 24 Sep 2025 14:50:26 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id E8D5D1A0F81;
+	Wed, 24 Sep 2025 14:50:28 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 1E7A160634;
-	Wed, 24 Sep 2025 14:50:26 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C92D8102F1972;
-	Wed, 24 Sep 2025 16:50:22 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id BE9DD60634;
+	Wed, 24 Sep 2025 14:50:28 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 31E5D102F1973;
+	Wed, 24 Sep 2025 16:50:25 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1758725424; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1758725427; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=WGWlPkl4pGG2y4n8r70mjy/ZV+JI6orK8Oq0psEM/Wg=;
-	b=PjJ2y6oGs6Qy4QsMcuo7ez/7P7hirhWs0vo3ASxlceKQXUjvwEH7SIUwtkRXuV7kuxJxzv
-	+8pQd/UndoztOAApaekuHPImdUIjvtEffqwdd0SVcH9titqy7gX45h21SefuRRPbaDva02
-	fHTD0LLsgpMDjBTrUNFRpxAe/2lXIT5+OUHhg3OuTuSwMlyHNsn5HFhrDS54xC70aSIg3J
-	XFVBo1ruDketINLFj6DpQ2OiFlf8kcxB7gLcWd1vDejUKfV1QB+1q0TdYlvNC/MPYOZbWB
-	wIhmRuxI1MF3HWjIHi67PefIEH8iJey7cThLsQ4qiirsGVcT4IMR0X1tCcTRRg==
+	bh=TK9L/dZGJ+Bzm/DsHznC4dwU9CdtNX9rrae1jJI01ds=;
+	b=jOZzbbPhRLBxIB3iLegxUKAU6qJ02CoWyEszBFekwkike7c6Fb1yuONGw+w0l64OreZmh7
+	ZQ2LFXlIskjwRaYui9An4O/ximJGy2xymlkKpwZl7+nfuf21C3CIQJGH7vLy0L3msLpDug
+	fupHvVFxVFr0pWda8uGM7/K/hnljDNFb6WITWbViybxpjasx9ByIdXkGQUhr6ZT3v8ITbk
+	Fm1odY2EQLw1Pcwq/C7tLm187FyOwBdKJ0B7hSZgoRtYZCKFioHsH+U+A7P7Nu8EHorGKE
+	7+KAh8oMTmC3womKVIUgaJQ5fZMaoBjDEvXS0e5XU//RtarDAp63McSdeuVSqQ==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Wed, 24 Sep 2025 16:49:44 +0200
-Subject: [PATCH bpf-next v4 09/15] selftests/bpf: test_xsk: Don't exit
- immediately when xsk_attach fails
+Date: Wed, 24 Sep 2025 16:49:45 +0200
+Subject: [PATCH bpf-next v4 10/15] selftests/bpf: test_xsk: Don't exit
+ immediately when gettimeofday fails
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250924-xsk-v4-9-20e57537b876@bootlin.com>
+Message-Id: <20250924-xsk-v4-10-20e57537b876@bootlin.com>
 References: <20250924-xsk-v4-0-20e57537b876@bootlin.com>
 In-Reply-To: <20250924-xsk-v4-0-20e57537b876@bootlin.com>
 To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
@@ -85,89 +85,55 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-xsk_reattach_xdp calls exit_with_error() on failures. This exits the
+exit_with_error() is called when gettimeofday() fails. This exits the
 program immediately. It prevents the following tests from being run and
 isn't compliant with the CI.
 
-Add a return value to the functions handling XDP attachments to handle
-errors more smoothly.
+Return TEST_FAILURE instead of calling exit_on_error().
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/test_xsk.c | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/test_xsk.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
-index 7db1d974e31511e93b05bf70be991cee4cd444c6..0adb6c0b948f6216b24d0562bcda26097dbb9dbc 100644
+index 0adb6c0b948f6216b24d0562bcda26097dbb9dbc..2c955e1099439c377cd28f5a9be2a17e65d49f78 100644
 --- a/tools/testing/selftests/bpf/test_xsk.c
 +++ b/tools/testing/selftests/bpf/test_xsk.c
-@@ -1643,7 +1643,7 @@ static bool xdp_prog_changed_tx(struct test_spec *test)
- 	return ifobj->xdp_prog != test->xdp_prog_tx || ifobj->mode != test->mode;
- }
+@@ -1096,7 +1096,7 @@ static int receive_pkts(struct test_spec *test)
  
--static void xsk_reattach_xdp(struct ifobject *ifobj, struct bpf_program *xdp_prog,
-+static int xsk_reattach_xdp(struct ifobject *ifobj, struct bpf_program *xdp_prog,
- 			     struct bpf_map *xskmap, enum test_mode mode)
- {
- 	int err;
-@@ -1652,31 +1652,40 @@ static void xsk_reattach_xdp(struct ifobject *ifobj, struct bpf_program *xdp_pro
- 	err = xsk_attach_xdp_program(xdp_prog, ifobj->ifindex, mode_to_xdp_flags(mode));
- 	if (err) {
- 		ksft_print_msg("Error attaching XDP program\n");
--		exit_with_error(-err);
-+		return err;
- 	}
- 
- 	if (ifobj->mode != mode && (mode == TEST_MODE_DRV || mode == TEST_MODE_ZC))
- 		if (!xsk_is_in_mode(ifobj->ifindex, XDP_FLAGS_DRV_MODE)) {
- 			ksft_print_msg("ERROR: XDP prog not in DRV mode\n");
--			exit_with_error(EINVAL);
-+			return -EINVAL;
- 		}
- 
- 	ifobj->xdp_prog = xdp_prog;
- 	ifobj->xskmap = xskmap;
- 	ifobj->mode = mode;
-+
-+	return 0;
- }
- 
--static void xsk_attach_xdp_progs(struct test_spec *test, struct ifobject *ifobj_rx,
-+static int xsk_attach_xdp_progs(struct test_spec *test, struct ifobject *ifobj_rx,
- 				 struct ifobject *ifobj_tx)
- {
--	if (xdp_prog_changed_rx(test))
--		xsk_reattach_xdp(ifobj_rx, test->xdp_prog_rx, test->xskmap_rx, test->mode);
-+	int err = 0;
-+
-+	if (xdp_prog_changed_rx(test)) {
-+		err = xsk_reattach_xdp(ifobj_rx, test->xdp_prog_rx, test->xskmap_rx, test->mode);
-+		if (err)
-+			return err;
-+	}
- 
- 	if (!ifobj_tx || ifobj_tx->shared_umem)
--		return;
-+		return 0;
- 
- 	if (xdp_prog_changed_tx(test))
--		xsk_reattach_xdp(ifobj_tx, test->xdp_prog_tx, test->xskmap_tx, test->mode);
-+		err = xsk_reattach_xdp(ifobj_tx, test->xdp_prog_tx, test->xskmap_tx, test->mode);
-+
-+	return err;
- }
- 
- static void clean_sockets(struct test_spec *test, struct ifobject *ifobj)
-@@ -1789,7 +1798,8 @@ static int testapp_validate_traffic(struct test_spec *test)
- 		}
- 	}
- 
--	xsk_attach_xdp_progs(test, ifobj_rx, ifobj_tx);
-+	if (xsk_attach_xdp_progs(test, ifobj_rx, ifobj_tx))
+ 	ret = gettimeofday(&tv_now, NULL);
+ 	if (ret)
+-		exit_with_error(errno);
 +		return TEST_FAILURE;
- 	return __testapp_validate_traffic(test, ifobj_rx, ifobj_tx);
- }
  
+ 	timeradd(&tv_now, &tv_timeout, &tv_end);
+ 
+@@ -1112,7 +1112,7 @@ static int receive_pkts(struct test_spec *test)
+ 
+ 		ret = gettimeofday(&tv_now, NULL);
+ 		if (ret)
+-			exit_with_error(errno);
++			return TEST_FAILURE;
+ 
+ 		if (timercmp(&tv_now, &tv_end, >)) {
+ 			ksft_print_msg("ERROR: [%s] Receive loop timed out\n", __func__);
+@@ -1255,13 +1255,13 @@ static int wait_for_tx_completion(struct xsk_socket_info *xsk)
+ 
+ 	ret = gettimeofday(&tv_now, NULL);
+ 	if (ret)
+-		exit_with_error(errno);
++		return TEST_FAILURE;
+ 	timeradd(&tv_now, &tv_timeout, &tv_end);
+ 
+ 	while (xsk->outstanding_tx) {
+ 		ret = gettimeofday(&tv_now, NULL);
+ 		if (ret)
+-			exit_with_error(errno);
++			return TEST_FAILURE;
+ 		if (timercmp(&tv_now, &tv_end, >)) {
+ 			ksft_print_msg("ERROR: [%s] Transmission loop timed out\n", __func__);
+ 			return TEST_FAILURE;
 
 -- 
 2.51.0
