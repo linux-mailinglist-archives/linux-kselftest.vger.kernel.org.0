@@ -1,128 +1,126 @@
-Return-Path: <linux-kselftest+bounces-42263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 527DCB9C70F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 01:04:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEAE7B9C88A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 01:25:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B97B17A3C0C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 23:02:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 884223B19AA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 23:25:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54F3D27FB3A;
-	Wed, 24 Sep 2025 23:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD06829D289;
+	Wed, 24 Sep 2025 23:24:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UrLRx5BJ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Nst1VxXl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9191B20CCFE
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 23:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE1817B418
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 23:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758755068; cv=none; b=mI+GJsPeS8tKudsMh4Cf7MUKiNnqhdhxhram59gu8ohwmCYX0Dqpir8HADn7A0gwsXZzH5StOkM6MyDZVl3iXPrrkmW7Irv2Fwyyc1QofWE6qs6fmZldFRk+WwoNzdJFUYxCA34UW40uMBk90EAkwMbgd0lL17m4P7dYGQKQH4k=
+	t=1758756289; cv=none; b=dcRGQBR/3Id8S7nhdl1P2tqoia7pvqSXqmnp2HWNdIwDhVPCOOakljbGzLI90FibctcgSGiod6xQDEQKXWftWral/4mjJ/exXlLMfjOCWnxFdH/UAKGdXi7akEB0hB95bHCvbfZdikGwdzLe+3VRO5LZa41MXncgI5wSCjQKcMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758755068; c=relaxed/simple;
-	bh=PUMWr1KcbhmB/IOqYU14+Ove2tvnxcz4UzVWOTY2pAU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h4LdEOnQLyXjZnIWRe/yrUZrzmAXq3hcEzwYoCd68vx1vxuWIL0Pzdqt1Dn9mIet/bc/J+xfKBmQO2LwpcdMnirF62p3ZZFWVaS2DyPwUJND223f9ShUi8zdSU/eyr6wNoSAp9koMMJO5nuTFxXO+7Dr3i0ZG+Oq0vN56EpB0B0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UrLRx5BJ; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b07883a5feeso75296566b.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 16:04:26 -0700 (PDT)
+	s=arc-20240116; t=1758756289; c=relaxed/simple;
+	bh=Jet9kq8CcDeW5yvSbvCPvhCQfK1lFKgzanZH5IgLSak=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rbCRY6OpnPvqC1XVqxVjgejPWYN6uqlb7aL4zFWKZ++6GClK4fU0qO+lL0igO4wZ9qhwAF5jmVVGWEZlmE9qm2MmiFOyHNyeqW6/pSCD4UxgTaoRSdRufkY1ZXR/kFlSUpP1EBe+eJtwJCSKIBWdwdAxMJLzuloi1XbMCjPFY34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Nst1VxXl; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-42592472002so1048465ab.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 16:24:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758755065; x=1759359865; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fnszhabCzVTZUNrenHHSvEHdol2FKszGcCj5sQfSnxE=;
-        b=UrLRx5BJGBQ+LztwingaNwl/eEbPDYfCxN5BFbeySAnj7PRfHBdqI4nH9ckd50Q7Ou
-         Fsd7ZitkKDvkXgsVmSXlKq1OXaSRaWyew2/9zVcEfkeInTmmWTa9Y3Zkuxf0zZ1Slf0A
-         fAoN0QLwbZVBuTeRoSHoCj9rQRIA+GXDNTxRhuGOpvs4QdQLhmx+cUxasqlGFSySUX7U
-         NXpOG5asC4rt78A6A/N+TJhYMo9UVQ36kXuChSrFwfxOLTbTIMHD6B5R3REJiZmvVDIO
-         MhUj8AWSqACpEgDeX8BkbEfFgE4yCH5AYTIk+fLjzk6ls0A3z8oX4iq8oMSI2Cw17tzV
-         YHZg==
+        d=linuxfoundation.org; s=google; t=1758756285; x=1759361085; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wq5rS7xIu7WGCSuxCIQa3Zphf2jLEucbvivd19Lb6wY=;
+        b=Nst1VxXlYNlMvSWhwgnAk2oTzSN//QgFfJ8ujbYkSCr8MpT4H/MpsNwzXtGnbHE3Od
+         Y+kKZX555IVCAQWqTq47KsNVydKaZ0wQNmoyMsA+32VdNzW3pMZXVx2EIzmBpAOmaqL2
+         fQhoUwQdWLVWjeOrtKUwI/4mXwMiTvA8lqJQk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758755065; x=1759359865;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fnszhabCzVTZUNrenHHSvEHdol2FKszGcCj5sQfSnxE=;
-        b=mtoH0JZVX8oHvvzZkrq1Y2KLo3lLWg1PPgYDri3cq1nZhIulw3NIM5z5DExFBd2Zcs
-         BiHz9aL8pwVEVhztUEbm04qVlY5+81yNVeYftbQL+XxviXpZcqI9gJBQ2vaeM6Kz8Lhf
-         BQOJkKYfJBUfhKNey1jccdvhwW/If2u1Jyykh4+NVuZzlORPoHQRgxLGTF0jBpyQcvxq
-         SmqaMjqEYFKs3qMlY2ggxaQp/wP2maX+reCBDgbpmLXzwj8Lyur+LV8hFe74Q7Vdfjpz
-         rre5+TngD/syMYXl3WpPQmMHQ6wPjkPS7nbMjzY+a8YCRWJI5XLxwLV8lln1Tkaq8hOR
-         Xq2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUYS9IdIU/QSRPXo60pGC/rhtE+MLGtR4GniwxXsKip6ZQ/XSLnwCmRuGtmYzUcL2LvVvN3aQmTih5UK2ZzZCw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcRyzTN+p2EnhSx0TwrNE/hcgjWtGlMCmlFUlbqn0uUInIpb1c
-	uQ9aDuLXmWW23wReBkdC27eByOYkxN450sZ9NgrsMAE6uHvf0j9nGuOhcniLyDoVHLk=
-X-Gm-Gg: ASbGncsrBCKT60PW5WLGssbqyaujxsVlxMuyA0h6ai2PT60w6mku2pPz58w59L5ASHp
-	Lyg4RLQsEaFu5xZsI6UnBF3oTOYIqdMhYwdK2ohGLXhft3+RrQoI/pOserwRZgdgyqI0+SFT/HF
-	tV8Vax8duQkmBdOPgRs9GujNkygJpr2WyGPzgrblZxaQ1CCPqQqtg7r9FUPzmh9qAtZQ9enyxwI
-	RmyaG5PU2uaNftcf/C/HFvHeF52B6f0RVfav9op6r/ehUx7XTir8TmHBZrPYXHVTLpSuE69UjSm
-	sR9xuOFTzEW3zOIpQJTFFQcYkhn42QvEB5eIahDNqkjzV18Iw0ldrP3+TujL8uTxobzxZWVQFwd
-	7HWi6HG6Wiifzm4Fo7tr8A9T4CCaRT66gU+ad8CliG+eAYZHYhHQCgko0MvZNtktMXJkf3EQOEp
-	6VifcLjyrcyvVn7XXJ
-X-Google-Smtp-Source: AGHT+IEppvE3960x6XIR7URKU78EOKSYRIAcJdBEOqPrulJnmbx5gMilskPWXare99l4J1hqwdTmQw==
-X-Received: by 2002:a17:907:6093:b0:b04:6a58:560b with SMTP id a640c23a62f3a-b34ba93ce11mr146872666b.39.1758755064614;
-        Wed, 24 Sep 2025 16:04:24 -0700 (PDT)
-Received: from alessandro-pc.station (net-2-37-207-41.cust.vodafonedsl.it. [2.37.207.41])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b353f772528sm34363266b.37.2025.09.24.16.04.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 16:04:24 -0700 (PDT)
-From: Alessandro Zanni <alessandro.zanni87@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org
-Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftest: net: Fix error message if empty variable
-Date: Thu, 25 Sep 2025 01:04:07 +0200
-Message-ID: <20250924230413.75246-1-alessandro.zanni87@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1758756285; x=1759361085;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wq5rS7xIu7WGCSuxCIQa3Zphf2jLEucbvivd19Lb6wY=;
+        b=XZenD1nnuqr5OR3RDZ7n7cctCpx6Lgwe04VBPZ089/hQ6XiOzGpuq30TBZsEaCdst/
+         ehr717+N5wZOlfHzWUzH/2C+L9PLY+FVUhPlFNkK13CQwzWiLhIs5+GpfCyjWcNyypVG
+         v9vZ2RvYi6lBqE0Y3N7Rn+drqybKa1pEZGyzgvVAHUtnv9ddzNHAXRpOErcQHJ/5OaB4
+         ox094j5DvWnX9fumAhqkihSfPLoTCrUvnqmNOz0UhAMdcYGXhqzUiaPjmirvTC/ucMo1
+         fSq7oGaVk6EU8Am9qwyINqOz43+vdLtzXPdTVTzaHF46xGrqDSBLBzsPHikj7YAAVq3m
+         phgA==
+X-Forwarded-Encrypted: i=1; AJvYcCXCzMmmNwJudK7vHMI13nXx4ytcXRW7fnSCzndm6dKHmy7h0ROcgQiquVt7elyHnH2UqAa1ACVqyWcPp2nWKg0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzfs2p88KXbwhxPBB9POvWd71nvxhNL0F/OSS6ttd6ZGylani4t
+	wOz1NXlOYGZNryD3DyHpndffmRVIBB2PMHev4qQ60ciEe7oUGdUep52Pt+qNHYdUkTQ=
+X-Gm-Gg: ASbGncuqIHbRssaayYplEj+jeI7GpvUKJI1sKTquZlvUfBjcSb06TEvUWtqc31kGEtA
+	BYI1IGno4Q1SfdKaWV8Dpe5XDvUev3EtLkqsWgrqxxD/sCyIrdSYLQ+pqWV/uMFcp+EeTksPYfx
+	FjydrUUjy1yorAzhQGUuobk9YKucsdkZ+FfMtDpDhMGLI7M/wkDuTAFOqo8y4nqGT5HjkmmMLpa
+	o+Jh+BZVHdag9bUa93MhJrEHuYoZGwJLSCBm+9Bt/8856CsUg5OzVPU9K0/nnwHc6polyYwQFqw
+	vkn/x2ZfJfay774KKPBNbDQcGbUhFae0Dz8xHw4P/oRs7qEs3H07N4U72Dhz71ZqQdbYfOO/Kzu
+	Ito0Wu5L8HwWoI1CKTJG/nxl6WS5B6vEkgJ4=
+X-Google-Smtp-Source: AGHT+IHtbdaGjSQ1EGfQsTrq38djkX8/uDp9qw42nO6KVolXPaXkx0LkjW7ug7t2nqAz5ORH3OQ7cQ==
+X-Received: by 2002:a05:6e02:8a:b0:425:7974:fe21 with SMTP id e9e14a558f8ab-4259563dd93mr20006775ab.22.1758756285448;
+        Wed, 24 Sep 2025 16:24:45 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-425c0546fd3sm2131295ab.45.2025.09.24.16.24.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Sep 2025 16:24:44 -0700 (PDT)
+Message-ID: <d8df684e-0c09-44ea-87a4-cdbaf65ab0b8@linuxfoundation.org>
+Date: Wed, 24 Sep 2025 17:24:44 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] selftests/acct: add cleanup for leftover process_log
+ binary
+To: Madhur Kumar <madhurkumar004@gmail.com>, shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250922091042.149117-1-madhurkumar004@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250922091042.149117-1-madhurkumar004@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Fix to avoid cases where the `res` shell variable is
-empty in script comparisons.
+On 9/22/25 03:10, Madhur Kumar wrote:
+> Some kselftests generate temporary binaries that are not tracked
+> by TEST_GEN_PROGS. Add EXTRA_CLEAN entry to remove process_log
+> during `make kselftest-clean`.
+> 
+> Signed-off-by: Madhur Kumar <madhurkumar004@gmail.com>
+> ---
+>   tools/testing/selftests/acct/Makefile | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/acct/Makefile b/tools/testing/selftests/acct/Makefile
+> index 7e025099cf65..16eb97079e63 100644
+> --- a/tools/testing/selftests/acct/Makefile
+> +++ b/tools/testing/selftests/acct/Makefile
+> @@ -1,5 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   TEST_GEN_PROGS := acct_syscall
+>   CFLAGS += -Wall
+> +EXTRA_CLEAN := process_log
+>   
+> -include ../lib.mk
+> \ No newline at end of file
 
-The issue can be reproduced with the command:
-make kselftest TARGETS=net
+> +include ../lib.mk
 
-It solves the error:
-./tfo_passive.sh: line 98: [: -eq: unary operator expected
+Why is this deleted and added back
 
-Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
----
- tools/testing/selftests/net/tfo_passive.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please fix the patch and send v2.
 
-diff --git a/tools/testing/selftests/net/tfo_passive.sh b/tools/testing/selftests/net/tfo_passive.sh
-index 80bf11fdc046..2655931b2396 100755
---- a/tools/testing/selftests/net/tfo_passive.sh
-+++ b/tools/testing/selftests/net/tfo_passive.sh
-@@ -95,7 +95,7 @@ wait
- res=$(cat $out_file)
- rm $out_file
- 
--if [ $res -eq 0 ]; then
-+if [ -n "$res" ] && [ $res -eq 0 ]; then
- 	echo "got invalid NAPI ID from passive TFO socket"
- 	cleanup_ns
- 	exit 1
--- 
-2.43.0
+thanks,
+-- Shuah
 
 
