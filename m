@@ -1,174 +1,171 @@
-Return-Path: <linux-kselftest+bounces-42178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F6B7B99EB1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 14:46:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C601B9A35C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 16:21:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 612403A42C3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 12:46:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E8FD19C69CF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 14:22:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13D63009E7;
-	Wed, 24 Sep 2025 12:45:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0292306499;
+	Wed, 24 Sep 2025 14:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="WExm/Z0T"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="ddDCWTMi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED01D2FD1C2
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 12:45:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1415B305E3A;
+	Wed, 24 Sep 2025 14:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758717956; cv=none; b=KDiqryINWFXv9JWbEgqODTVOgyHWTiVrMZhDfFlU04m5OBaRORYNvstpEJqqVw3lweSeC0jTh71SMvT/GexCNCHHbnNoiDxGeakXuyKUwm/Hfu/I95KUwGc1yX7h7pC+SAaASiUbBr4/n1r7EyYcbiYB5d0ySrqd0tUInv6lQfQ=
+	t=1758723714; cv=none; b=Gq4LblpGs/ArWKZCkIwpxQ5Vl2U9p8dMsq/jv6pw1qgFoduvC5CfIjGYkFgihy34w25EzxTvtf1WzQJ1LlZb22WwQIVlipUKUCIESSQ4M5dtm0QoY8eq/oYB78jL5vWiXM+YT8zMN1QZej940DAi4UiPu+bBKb85FQWrq8yzp8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758717956; c=relaxed/simple;
-	bh=t1PT40Xa4Dq+KyxteCViW5Qsz3L/IkWqFDFMBeyzK9k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UjGdUvFpn+IdzXUcZtGfGSjiIcaOmJ9xD7XOYTti/GrYlisRRS3kHkj7kSN5aftl+9zKZyalnFmRTKnw8/ZG0Oq9C8+jvNooX12ziMBKjcRZXOqDG+p+3sMEfUX/o1IRQeu+/dCEw74XioShoRtHYgafKZCShUOM5MQCMaCNJ8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=WExm/Z0T; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4b7a967a990so75415601cf.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 05:45:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1758717953; x=1759322753; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6bfo4bnSZkmykbuJKbewat5BPyEoGg+coLh0zjefBOo=;
-        b=WExm/Z0T1kJc+/LXf6Jd+Fpdo+qurPVT29ndPiY3s8m56q3qfrUw2uK8mkuf6Bh7+v
-         ONxnCnlPE+i24fUDjdAEoC/iwkUTayto2cAJSfllwi8m++cS8CMEMGjX4VbZSKmoY+j6
-         /a8VkFeor6UrA0uNV0Vnzvdtl5EEsOicmGIS0xq1HsQTP0tdmOmwiXYTRA6qTzdFo3VT
-         wTR1IaQq/reQ96Hmooc4xfjepGmOAFunCpOXBKhWW2Fk7cNsZPAfp8MP6Ao/qYELFBcC
-         1Es93UW5pv7l43yixl7raMk+sW7xaAUI7+0MGQOFFjHFpBJgjRyCa6pPkqWEF2qkb760
-         nsfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758717953; x=1759322753;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6bfo4bnSZkmykbuJKbewat5BPyEoGg+coLh0zjefBOo=;
-        b=XTT2E3Hx5aYcSGPnmNRk6f406rF3qo1Y9Wcz2jRGTZZEIfn0/JZO2qVe6RQQl/eZ5U
-         ZzKJUUk7hmpXHQhFb96uhcF1cSd1Yqj1XKALG+KYvufeNU0/PFqneTnYrtvjNYojgBr0
-         9mSaQzc3sH9wXnpj7hx97XidHphb/JyltYy5XoSTOoph5jgQL9J4Si1rECyU2yV7+Qot
-         zPZfDG/Y+7/3p2BuuWWAa/lUTtGZsJ+z4236E/d0HqRXEiN8Lsenkx5NbTLuE2rWe8hK
-         2hxehNWF/6hz9MYdZHCD19d+uQufSS0tJpfequ9QQDyeV4IDVUR6hW6igFAoiXJCW3Bc
-         ScSA==
-X-Forwarded-Encrypted: i=1; AJvYcCVoe15FWt7aORASDCUnNHINHVcoIrdPt72xt36Uk3wWSZgpCgEVsXoPUk5uuiFEK0MYgmOK57rDF8RDTVTsPLE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo4+yfWOqraNRlUHcRzW56zEICwnV6EogtW3DgLdzzfiux+b7b
-	FDN944/emYabWDIRVzsZyQVMNIr/Pi41fWA+UjazWhRoji4NTM+e/wf0a42NAWqu7zs=
-X-Gm-Gg: ASbGnctzDHSptDMHW3hM9+0nqkTfNFo5+icuEbxKL2YZJkJBM9wvVcVmZhI5q1chT7m
-	bVBehhmYjPDbxzoFzIalbUqHpFjoLk7VBKw+UeNp4TmMJHq9HpZy9skDsMma2iQ15U+fcJGd8nQ
-	vYNRwKXrsqbVgbQJQ0gglcIkzxBDShjb8FcndvWjSjpk1rmzhDdJbNY+Y+Oqf3etpCEHvZw/hdl
-	3mHxBuvsYiE2sPdtYiSTQMDjZIWNEgPg+0Q1UaKyGZlHJSZeT/UCOmZ1NzV67M4yPoKMtkECROf
-	JNuOd0YREYLbUTo6IQxDV6N8ikbDmCt+uWjYqqFyt4kCHTTC+NpzZPOSpI2TxBbFYOIcrsdG
-X-Google-Smtp-Source: AGHT+IGCrzwAZBuNZMLUevUeVR85F+Mp4gKHOXBdC/wrWMdBzNXtEI8v7/3alXA68gxLWQyrIaqIZQ==
-X-Received: by 2002:a05:622a:11c9:b0:4b5:f75c:156c with SMTP id d75a77b69052e-4d36a18b80amr70770681cf.28.1758717952649;
-        Wed, 24 Sep 2025 05:45:52 -0700 (PDT)
-Received: from ziepe.ca ([130.41.10.202])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4d0c9a15c4fsm36822761cf.2.2025.09.24.05.45.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 05:45:51 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1v1OsY-0000000B7dC-30kP;
-	Wed, 24 Sep 2025 09:45:50 -0300
-Date: Wed, 24 Sep 2025 09:45:50 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Alessandro Zanni <alessandrozanni.dev@gmail.com>
-Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>, kevin.tian@intel.com,
-	shuah@kernel.org, iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/iommu: prevent use of uninitialized variable
-Message-ID: <20250924124550.GH2547959@ziepe.ca>
-References: <20250923150108.34309-1-alessandro.zanni87@gmail.com>
- <20250923172822.GD2547959@ziepe.ca>
- <y7xzjzbquglgrmbufbbqksvshuaofod6alql6gqfbzhq6s33pk@dw4ma6kctr5s>
+	s=arc-20240116; t=1758723714; c=relaxed/simple;
+	bh=6RfkZxt9SVt0gkx84vMWHoTwWf/1relJ7CYJsChwbpk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NTt3OpOOBhrfakCy+vlLQ4580RXaeSw1Hs5s8yuAGjjL8gx6K8mJhFgzXSlpXyo7C7lx/FQqWdn0oTzb9knw6kQkwPwOEzZsPHz2VKjpN8RHcOLwlFJ5nCtfUiStfVPcI01pfYJNNYSeqXYOVObYEl73eGcj7R+rwwYDMCbXT+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=ddDCWTMi; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
+	Resent-Message-ID:In-Reply-To:References;
+	bh=yTv1BdIbryTeAGyOFxkWnnUwAIwyWmkYx+MS7rF1kYc=; t=1758723713; x=1759933313; 
+	b=ddDCWTMiVVobHcmysI2wIM577KBMgZHrNuNOM/sdxNHsbGyKwicwVQnzNm2deC3otO/4PUkZoO8
+	p0ypIBknXdpRnkJxjXNuSTN3DoLmM6QHj441qpSAhSQYPxJhVtcIswx79hgGsvPH2q24geDsBqmud
+	F2Oh3e8iEVnH2LJ6R64rAqilCdVEv/dpgxOz836oKSopnK6YlUwrMlF/QbRYekISjrRWMdR2Cr7CJ
+	rocjVxKthoohHAZ4TnbBF8gLVSFtxyRTa1u6SZkS+dsuQyzkUnaJo09XDC/bfwJvYGKwHyN43H66i
+	L2pPmdB/XVwpPXXAy6MuH5CP0H2xwG+5U61g==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <benjamin@sipsolutions.net>)
+	id 1v1QNP-000000090Bz-2xkC;
+	Wed, 24 Sep 2025 16:21:47 +0200
+From: Benjamin Berg <benjamin@sipsolutions.net>
+To: linux-um@lists.infradead.org,
+	Willy Tarreau <w@1wt.eu>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	linux-kselftest@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: linux-kernel@vger.kernel.org,
+	Benjamin Berg <benjamin.berg@intel.com>
+Subject: [PATCH v3 00/12] Start porting UML to nolibc
+Date: Wed, 24 Sep 2025 16:20:47 +0200
+Message-ID: <20250924142059.527768-1-benjamin@sipsolutions.net>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <y7xzjzbquglgrmbufbbqksvshuaofod6alql6gqfbzhq6s33pk@dw4ma6kctr5s>
+X-malware-bazaar: not-scanned
 
-On Tue, Sep 23, 2025 at 11:38:13PM +0200, Alessandro Zanni wrote:
-> On Tue, Sep 23, 2025 at 02:28:22PM -0300, Jason Gunthorpe wrote:
-> > On Tue, Sep 23, 2025 at 05:01:06PM +0200, Alessandro Zanni wrote:
-> > > Fix to avoid the usage of the `res` variable uninitialized in the
-> > > following macro expansions.
-> > > 
-> > > It solves the following warning:
-> > > In function ‘iommufd_viommu_vdevice_alloc’,
-> > >   inlined from ‘wrapper_iommufd_viommu_vdevice_alloc’ at
-> > > iommufd.c:2889:1:
-> > > ../kselftest_harness.h:760:12: warning: ‘ret’ may be used uninitialized
-> > > [-Wmaybe-uninitialized]
-> > >   760 |   if (!(__exp _t __seen)) { \
-> > >       |      ^
-> > > ../kselftest_harness.h:513:9: note: in expansion of macro ‘__EXPECT’
-> > >   513 |   __EXPECT(expected, #expected, seen, #seen, ==, 1)
-> > >       |   ^~~~~~~~
-> > > iommufd_utils.h:1057:9: note: in expansion of macro ‘ASSERT_EQ’
-> > >  1057 |   ASSERT_EQ(0, _test_cmd_trigger_vevents(self->fd, dev_id,
-> > > nvevents))
-> > >       |   ^~~~~~~~~
-> > > iommufd.c:2924:17: note: in expansion of macro
-> > > ‘test_cmd_trigger_vevents’
-> > >  2924 |   test_cmd_trigger_vevents(dev_id, 3);
-> > >       |   ^~~~~~~~~~~~~~~~~~~~~~~~
-> > > 
-> > > The issue can be reproduced, building the tests, with the command:
-> > > make -C tools/testing/selftests TARGETS=iommu
-> > > 
-> > > Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
-> > > ---
-> > >  tools/testing/selftests/iommu/iommufd_utils.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > I think it should be like this?
-> > 
-> > @@ -1042,15 +1042,12 @@ static int _test_cmd_trigger_vevents(int fd, __u32 dev_id, __u32 nvevents)
-> >                         .dev_id = dev_id,
-> >                 },
-> >         };
-> > -       int ret;
-> >  
-> > -       while (nvevents--) {
-> > -               ret = ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
-> > -                           &trigger_vevent_cmd);
-> > -               if (ret < 0)
-> > +       while (nvevents--)
-> > +               if (ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
-> > +                         &trigger_vevent_cmd))
-> >                         return -1;
-> > -       }
-> > -       return ret;
-> > +       return 0;
-> >  }
-> > 
-> > And add a fixes line?
-> > 
-> > Jason
-> 
-> Thank you for the reply.
-> I'm not sure the right behavior the test should have:
-> - in the version you proposed, when ioctl() returns a positive
-> value the loop ends and the next tests are skipped.
-> - in the original version, if the function ioctl() returns a
-> positive value the loop continues with the following tests.
-> 
-> Which one is the desired behavior?
+From: Benjamin Berg <benjamin.berg@intel.com>
 
-Sorry it should be !ioctl()
+This patchset is an attempt to start a nolibc port of UML. The goal is
+to port UML to use nolibc in smaller chunks to make the switch more
+manageable.
 
-The ioctl will only return 0 or -errno
+Using nolibc has the advantage that it is a smaller runtime and it
+allows us to be in full control about all memory mappings that are done.
+Another libc on the other hand might map memory unaware of UML, causing
+collisions with the UML memory layout. Such mappings could even happen
+before UML has fully initialized (e.g. rseq being mapped into the
+physical or vmalloc memory areas).
 
-Jason
+There are three parts to this patchset:
+ * Two patches to use tools/include headers instead of kernel headers
+   for userspace files.
+ * A few nolibc fixes and a new NOLIBC_NO_RUNTIME compile flag for it
+ * Finally nolibc build support for UML and switching two files while
+   adding the appropriate support in nolibc itself.
+
+v1 of this patchset was
+  https://lore.kernel.org/all/20250915071115.1429196-1-benjamin@sipsolutions.net
+
+v2:
+  https://lore.kernel.org/all/20250919153420.727385-1-benjamin@sipsolutions.net
+
+Changes in v3:
+- sys_ptrace is now not a varadic function
+- improve printf %m implementation
+- keep perror as function available with NOLIBC_IGNORE_ERRNO
+- change syscall guard and fix i386 build
+
+Changes in v2:
+- add sys/uio.h and sys/ptrace.h to nolibc
+- Use NOLIBC_NO_RUNTIME to disable nolibc startup code
+- Fix out-of-tree build
+- various small improvements and cleanups
+
+Benjamin
+
+Benjamin Berg (12):
+  tools compiler.h: fix __used definition
+  um: use tools/include for user files
+  tools/nolibc/stdio: let perror work when NOLIBC_IGNORE_ERRNO is set
+  tools/nolibc/dirent: avoid errno in readdir_r
+  tools/nolibc: implement %m if errno is not defined
+  tools/nolibc: use __fallthrough__ rather than fallthrough
+  tools/nolibc: add option to disable runtime
+  um: add infrastructure to build files using nolibc
+  um: use nolibc for the --showconfig implementation
+  tools/nolibc: add uio.h with readv and writev
+  tools/nolibc: add ptrace support
+  um: switch ptrace FP register access to nolibc
+
+ arch/um/Makefile                             | 38 ++++++++++++---
+ arch/um/include/shared/init.h                |  2 +-
+ arch/um/include/shared/os.h                  |  2 +
+ arch/um/include/shared/user.h                |  6 ---
+ arch/um/kernel/Makefile                      |  2 +-
+ arch/um/kernel/skas/stub.c                   |  1 +
+ arch/um/kernel/skas/stub_exe.c               |  4 +-
+ arch/um/os-Linux/skas/process.c              |  6 +--
+ arch/um/os-Linux/start_up.c                  |  4 +-
+ arch/um/scripts/Makefile.rules               | 10 +++-
+ arch/x86/um/Makefile                         |  6 ++-
+ arch/x86/um/os-Linux/Makefile                |  5 +-
+ arch/x86/um/os-Linux/registers.c             | 20 ++------
+ arch/x86/um/user-offsets.c                   |  1 -
+ tools/include/linux/compiler.h               |  2 +-
+ tools/include/nolibc/Makefile                |  2 +
+ tools/include/nolibc/arch-arm.h              |  2 +
+ tools/include/nolibc/arch-arm64.h            |  2 +
+ tools/include/nolibc/arch-loongarch.h        |  2 +
+ tools/include/nolibc/arch-m68k.h             |  2 +
+ tools/include/nolibc/arch-mips.h             |  2 +
+ tools/include/nolibc/arch-powerpc.h          |  2 +
+ tools/include/nolibc/arch-riscv.h            |  2 +
+ tools/include/nolibc/arch-s390.h             |  2 +
+ tools/include/nolibc/arch-sh.h               |  2 +
+ tools/include/nolibc/arch-sparc.h            |  2 +
+ tools/include/nolibc/arch-x86.h              |  4 ++
+ tools/include/nolibc/compiler.h              |  4 +-
+ tools/include/nolibc/crt.h                   |  3 ++
+ tools/include/nolibc/dirent.h                |  6 +--
+ tools/include/nolibc/nolibc.h                |  2 +
+ tools/include/nolibc/stackprotector.h        |  2 +
+ tools/include/nolibc/stdio.h                 | 10 +++-
+ tools/include/nolibc/stdlib.h                |  2 +
+ tools/include/nolibc/sys.h                   |  3 +-
+ tools/include/nolibc/sys/auxv.h              |  3 ++
+ tools/include/nolibc/sys/ptrace.h            | 44 ++++++++++++++++++
+ tools/include/nolibc/sys/uio.h               | 49 ++++++++++++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 11 +++++
+ 39 files changed, 221 insertions(+), 53 deletions(-)
+ create mode 100644 tools/include/nolibc/sys/ptrace.h
+ create mode 100644 tools/include/nolibc/sys/uio.h
+
+-- 
+2.51.0
+
 
