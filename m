@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-42181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B022AB9A36B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 16:22:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62DA2B9A36E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 16:22:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AD3A4C6ACE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 14:22:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C45C07ACB0C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 14:20:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07E48306D52;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C095A307AF6;
 	Wed, 24 Sep 2025 14:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="feSh+1pl"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="PR9yPJiu"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172E0305946;
-	Wed, 24 Sep 2025 14:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFBB3064A1;
+	Wed, 24 Sep 2025 14:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758723715; cv=none; b=sQ5vGgEb+6ZbxQ86/0RMYyOvu3pKLhEOqlPoAhF8FkzhVMRDaYrsjuH3ohots7j6Nxcs58SlmCQ+91YBoHUIBK8XITrAAxkn3/j9WYJ9M/k9kj5TscmYOaWeZFt2X4+trggfuuQOLT31thkt57zvzWDIxprTPcjGtFgTU59Qfso=
+	t=1758723716; cv=none; b=Z4Z74M2/Aphmozc6uPyPhUjHLQ8d8+0Fua404uAKXUdfUH/8bsi+oU30tMEjtTMpgTZPLMupJrBaB4+MTn8s35GhLbE1xLxKHLdx5ZIhd9z8JkAkYZHnE2JLgpukERnc7JbwZCIlz8j+hpfsIo0w+TJT76nY+13yivuTQLgqMDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758723715; c=relaxed/simple;
-	bh=wcLrD0WS5YjvvCsdm8gr/2mkmWKC74LSIzDcH4K3Lmw=;
+	s=arc-20240116; t=1758723716; c=relaxed/simple;
+	bh=1IvQbjw8+XR1qV62teqrY+kea2Kmn19VdAe6m4o0g1E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PhzunPocXuJqRyMsbUEpXvNnIV323tO/EHjhp4VL4MF7gIi6w+gmK/FN3DiFEwHq64ALv4/95Zx/E0HAtWVTyfm17Jrm3QY4iwRLcizJrifDpxiKSQ7teiN5a/IGhA/kSbwMJvdfpT+kLCWVp+a5ADQRQDbMCtw0Ox0GL7Gy2Yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=feSh+1pl; arc=none smtp.client-ip=168.119.38.16
+	 MIME-Version; b=ZHGOt9GSn9iNwAps9kK/zeyWxtMkiNAYBP0RzsC7UFvO7x5tGENNODa12EG7qQbk8RcZ1dXssD7A9QAQJV9wo5+XgehzI0oe6v8nNml9M1160pd9yG25a9fYmtAG/d1QSkqPVp2eMYiSTUDLA2bA2RygPfA39FAKNBQTgtoKZxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=PR9yPJiu; arc=none smtp.client-ip=168.119.38.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=XKawjy2bKBrQJPdin7KqQUscEYPsaoP0832vtVrwP/Q=;
-	t=1758723714; x=1759933314; b=feSh+1plSjYTRVJYJU2w9WYP9whRtHMI2oBIWwpeL1VILTI
-	/Rl7hQGgZjeeYqNyH+Dagg627NAzPwCnk7dSlCkvr96NbEpy9ANdAiDonAKEbdqgWpvkKzP2lnLly
-	nPnkDOYuuWDXrdhBFcXbsZbvMPlt24/pMbuC96ZTb+ukFfIknVeAUUSv2MxhRP8tJhCOmXnBDoSML
-	loHbd5Q8z6Hdv3gbie4hB8GbMDN9RWUwu626DKnjwe9LJ0JhDoPKvqBJeguwIEL+jdrtweTGogiNA
-	vWJm4mmrTLHT7wWZPVTKpFFqVP6Q6FlKPF4ibqWmP0DJNERyzXxx2hVdFXaSdrTQ==;
+	Resent-Cc:Resent-Message-ID; bh=6yjSl7NQvkiVEY35fXfoYnNnDHpwXZHvAt2SFrR0I98=;
+	t=1758723715; x=1759933315; b=PR9yPJiuL8RtmcvSTwKmVDkrQEM1RT6Qj8q6X5pIv2deXK4
+	ZJ3+ydsx+4dZ3JGwnv4DJQj4uaIfDgBgme1AYXQ+94cijTlM2u2dREzpbpNW+49ZRX2eApRM8GWvQ
+	u0dcASSf7g8SSfpmmJ0dtAC/tPl+ZmgY8dzi/uqZtyNANgQbQvyiMilAphvSbj84vgLPUGiZrCUKZ
+	rDuAlTB980tT/JbzLbM20OCIDoOTgcvMRXRIClKw/3p4AtaupPeqAKKBzqNZ41x5gZ4Tj6C6DN2ev
+	hGbhRHUbdvmsWKFwKFF42l0qYiHURHiJuVHh5ivAXvIXID6xWqswwafugS4SpToQ==;
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.98.2)
 	(envelope-from <benjamin@sipsolutions.net>)
-	id 1v1QNR-000000090Bz-32AA;
-	Wed, 24 Sep 2025 16:21:50 +0200
+	id 1v1QNT-000000090Bz-1Esg;
+	Wed, 24 Sep 2025 16:21:51 +0200
 From: Benjamin Berg <benjamin@sipsolutions.net>
 To: linux-um@lists.infradead.org,
 	Willy Tarreau <w@1wt.eu>,
@@ -54,9 +54,9 @@ To: linux-um@lists.infradead.org,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
 Cc: linux-kernel@vger.kernel.org,
 	Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH v3 02/12] um: use tools/include for user files
-Date: Wed, 24 Sep 2025 16:20:49 +0200
-Message-ID: <20250924142059.527768-3-benjamin@sipsolutions.net>
+Subject: [PATCH v3 03/12] tools/nolibc/stdio: let perror work when NOLIBC_IGNORE_ERRNO is set
+Date: Wed, 24 Sep 2025 16:20:50 +0200
+Message-ID: <20250924142059.527768-4-benjamin@sipsolutions.net>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250924142059.527768-1-benjamin@sipsolutions.net>
 References: <20250924142059.527768-1-benjamin@sipsolutions.net>
@@ -70,232 +70,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Benjamin Berg <benjamin.berg@intel.com>
 
-Using the kernel headers directly from the userspace parts of UML is
-problematic. Switch to use the headers from the tools/include
-subdirectory instead. These contain stripped down versions that work
-well for UML and only relatively small adjustments are needed to make it
-work.
+There is no errno variable when NOLIBC_IGNORE_ERRNO is defined. As such,
+simply print the message with "unknown error" rather than the integer
+value of errno.
 
-This adds code to create two symlinks so that the userspace code can
-still find asm-offsets.h and user_constants.h. Other than that, some
-includes are moved into USER_CFLAGS instead of handling them in
-Makefile.rules.
-
+Fixes: acab7bcdb1bc ("tools/nolibc/stdio: add perror() to report the errno value")
 Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 
 ---
-v2:
-- Fix out-of-tree building
+v3:
+- Change the message instead of removing perror entirely
 ---
- arch/um/Makefile                | 18 ++++++++++++------
- arch/um/include/shared/init.h   |  2 +-
- arch/um/include/shared/user.h   |  5 -----
- arch/um/kernel/skas/stub.c      |  1 +
- arch/um/kernel/skas/stub_exe.c  |  4 ++--
- arch/um/os-Linux/skas/process.c |  6 ++----
- arch/um/os-Linux/start_up.c     |  4 ++--
- arch/um/scripts/Makefile.rules  |  2 +-
- arch/x86/um/Makefile            |  6 ++++--
- arch/x86/um/user-offsets.c      |  1 -
- 10 files changed, 25 insertions(+), 24 deletions(-)
+ tools/include/nolibc/stdio.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/um/Makefile b/arch/um/Makefile
-index 7be0143b5ba3..f7c509262568 100644
---- a/arch/um/Makefile
-+++ b/arch/um/Makefile
-@@ -42,7 +42,7 @@ include $(srctree)/$(HOST_DIR)/Makefile.um
- core-y += $(HOST_DIR)/um/
+diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
+index 7630234408c5..724d05ce6962 100644
+--- a/tools/include/nolibc/stdio.h
++++ b/tools/include/nolibc/stdio.h
+@@ -600,7 +600,11 @@ int sscanf(const char *str, const char *format, ...)
+ static __attribute__((unused))
+ void perror(const char *msg)
+ {
++#ifdef NOLIBC_IGNORE_ERRNO
++	fprintf(stderr, "%s%sunknown error\n", (msg && *msg) ? msg : "", (msg && *msg) ? ": " : "");
++#else
+ 	fprintf(stderr, "%s%serrno=%d\n", (msg && *msg) ? msg : "", (msg && *msg) ? ": " : "", errno);
++#endif
+ }
  
- SHARED_HEADERS	:= $(ARCH_DIR)/include/shared
--ARCH_INCLUDE	:= -I$(srctree)/$(SHARED_HEADERS)
-+ARCH_INCLUDE	:= -I$(srctree)/$(SHARED_HEADERS) -I$(objtree)/$(SHARED_HEADERS)
- ARCH_INCLUDE	+= -I$(srctree)/$(HOST_DIR)/um/shared
- KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/um
- 
-@@ -70,10 +70,13 @@ KBUILD_AFLAGS += $(ARCH_INCLUDE)
- 
- USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
- 		$(ARCH_INCLUDE) $(MODE_INCLUDE) $(filter -I%,$(CFLAGS)) \
--		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
--		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__ \
--		-include $(srctree)/include/linux/compiler-version.h \
--		-include $(srctree)/include/linux/kconfig.h
-+		-idirafter $(srctree)/tools/include \
-+		-D__UM_HOST__ \
-+		-include $(srctree)/tools/include/linux/compiler.h \
-+		-include $(srctree)/tools/include/linux/kconfig.h \
-+		-include $(objtree)/include/generated/autoconf.h \
-+		-include $(srctree)/include/linux/kern_levels.h \
-+		-include $(srctree)/$(ARCH_DIR)/include/shared/user.h
- 
- #This will adjust *FLAGS accordingly to the platform.
- include $(srctree)/$(ARCH_DIR)/Makefile-os-Linux
-@@ -116,6 +119,9 @@ archheaders:
- 
- archprepare:
- 	$(Q)$(MAKE) $(build)=$(HOST_DIR)/um include/generated/user_constants.h
-+	$(Q)mkdir -p $(ARCH_DIR)/include/shared/generated
-+	$(Q)ln -fs ../../../../../include/generated/user_constants.h $(ARCH_DIR)/include/shared/generated/
-+	$(Q)ln -fs ../../../../../include/generated/asm-offsets.h $(ARCH_DIR)/include/shared/generated/
- 
- LINK-$(CONFIG_LD_SCRIPT_STATIC) += -static
- LINK-$(CONFIG_LD_SCRIPT_DYN) += -no-pie
-@@ -147,7 +153,7 @@ export CFLAGS_vmlinux := $(LINK-y) $(LINK_WRAPS) $(LD_FLAGS_CMDLINE) $(CC_FLAGS_
- # When cleaning we don't include .config, so we don't include
- # TT or skas makefiles and don't clean skas_ptregs.h.
- CLEAN_FILES += linux x.i gmon.out
--MRPROPER_FILES += $(HOST_DIR)/include/generated
-+MRPROPER_FILES += $(HOST_DIR)/include/generated $(ARCH_DIR)/include/shared/generated
- 
- archclean:
- 	@find . \( -name '*.bb' -o -name '*.bbg' -o -name '*.da' \
-diff --git a/arch/um/include/shared/init.h b/arch/um/include/shared/init.h
-index 1a659e2e8cc3..d201705bedb3 100644
---- a/arch/um/include/shared/init.h
-+++ b/arch/um/include/shared/init.h
-@@ -41,7 +41,7 @@
- typedef int (*initcall_t)(void);
- typedef void (*exitcall_t)(void);
- 
--#include <linux/compiler_types.h>
-+#define __section(section)	__attribute__((__section__(section)))
- 
- /* These are for everybody (although not all archs will actually
-    discard it in modules) */
-diff --git a/arch/um/include/shared/user.h b/arch/um/include/shared/user.h
-index 139eb78a4767..c9b853e1282f 100644
---- a/arch/um/include/shared/user.h
-+++ b/arch/um/include/shared/user.h
-@@ -16,13 +16,8 @@
-  */
- #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
- 
--/* This is to get size_t and NULL */
--#ifndef __UM_HOST__
- #include <linux/types.h>
--#else
- #include <stddef.h>
--#include <sys/types.h>
--#endif
- 
- extern void panic(const char *fmt, ...)
- 	__attribute__ ((format (printf, 1, 2)));
-diff --git a/arch/um/kernel/skas/stub.c b/arch/um/kernel/skas/stub.c
-index 67cab46a602c..6c9bb1511ea2 100644
---- a/arch/um/kernel/skas/stub.c
-+++ b/arch/um/kernel/skas/stub.c
-@@ -5,6 +5,7 @@
- 
- #include <sysdep/stub.h>
- 
-+#include <linux/init.h>
- #include <linux/futex.h>
- #include <sys/socket.h>
- #include <errno.h>
-diff --git a/arch/um/kernel/skas/stub_exe.c b/arch/um/kernel/skas/stub_exe.c
-index cbafaa684e66..0563838c01d1 100644
---- a/arch/um/kernel/skas/stub_exe.c
-+++ b/arch/um/kernel/skas/stub_exe.c
-@@ -4,8 +4,8 @@
- #include <asm/unistd.h>
- #include <sysdep/stub.h>
- #include <stub-data.h>
--#include <linux/filter.h>
--#include <linux/seccomp.h>
-+#include <uapi/linux/filter.h>
-+#include <uapi/linux/seccomp.h>
- #include <generated/asm-offsets.h>
- 
- void _start(void);
-diff --git a/arch/um/os-Linux/skas/process.c b/arch/um/os-Linux/skas/process.c
-index 78f48fa9db8b..8ad7e863af97 100644
---- a/arch/um/os-Linux/skas/process.c
-+++ b/arch/um/os-Linux/skas/process.c
-@@ -29,9 +29,7 @@
- #include <sysdep/stub.h>
- #include <sysdep/mcontext.h>
- #include <linux/futex.h>
--#include <linux/threads.h>
- #include <timetravel.h>
--#include <asm-generic/rwonce.h>
- #include "../internal.h"
- 
- int is_skas_winch(int pid, int fd, void *data)
-@@ -204,7 +202,7 @@ void wait_stub_done_seccomp(struct mm_id *mm_idp, int running, int wait_sigsys)
- 			 * Either way, if PID is negative, then we have no
- 			 * choice but to kill the task.
- 			 */
--			if (__READ_ONCE(mm_idp->pid) < 0)
-+			if (READ_ONCE(mm_idp->pid) < 0)
- 				goto out_kill;
- 
- 			ret = syscall(__NR_futex, &data->futex,
-@@ -217,7 +215,7 @@ void wait_stub_done_seccomp(struct mm_id *mm_idp, int running, int wait_sigsys)
- 			}
- 		} while (data->futex == FUTEX_IN_CHILD);
- 
--		if (__READ_ONCE(mm_idp->pid) < 0)
-+		if (READ_ONCE(mm_idp->pid) < 0)
- 			goto out_kill;
- 
- 		running = 0;
-diff --git a/arch/um/os-Linux/start_up.c b/arch/um/os-Linux/start_up.c
-index a827c2e01aa5..8971f4fdddab 100644
---- a/arch/um/os-Linux/start_up.c
-+++ b/arch/um/os-Linux/start_up.c
-@@ -28,8 +28,8 @@
- #include <stdbool.h>
- #include <stub-data.h>
- #include <sys/prctl.h>
--#include <linux/seccomp.h>
--#include <linux/filter.h>
-+#include <uapi/linux/seccomp.h>
-+#include <uapi/linux/filter.h>
- #include <sysdep/mcontext.h>
- #include <sysdep/stub.h>
- #include <registers.h>
-diff --git a/arch/um/scripts/Makefile.rules b/arch/um/scripts/Makefile.rules
-index a8b7d9dab0a6..b4a2e0058503 100644
---- a/arch/um/scripts/Makefile.rules
-+++ b/arch/um/scripts/Makefile.rules
-@@ -9,7 +9,7 @@ USER_OBJS += $(filter %_user.o,$(obj-y) $(USER_SINGLE_OBJS))
- USER_OBJS := $(foreach file,$(USER_OBJS),$(obj)/$(file))
- 
- $(USER_OBJS:.o=.%): \
--	c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS) -include $(srctree)/include/linux/kern_levels.h -include user.h $(CFLAGS_$(basetarget).o)
-+	c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS) $(CFLAGS_$(basetarget).o)
- 
- # These are like USER_OBJS but filter USER_CFLAGS through unprofile instead of
- # using it directly.
-diff --git a/arch/x86/um/Makefile b/arch/x86/um/Makefile
-index b42c31cd2390..d8a120bace25 100644
---- a/arch/x86/um/Makefile
-+++ b/arch/x86/um/Makefile
-@@ -38,8 +38,10 @@ subarch-$(CONFIG_MODULES) += ../kernel/module.o
- 
- USER_OBJS := bugs_$(BITS).o ptrace_user.o fault.o
- 
--$(obj)/user-offsets.s: c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS) \
--	-Iarch/x86/include/generated
-+$(obj)/user-offsets.s: c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS)	\
-+	-Iarch/x86/include/generated					\
-+	-include $(srctree)/include/linux/kbuild.h
-+
- targets += user-offsets.s
- 
- include/generated/user_constants.h: $(obj)/user-offsets.s FORCE
-diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
-index d6e1cd9956bf..74fc9763b76e 100644
---- a/arch/x86/um/user-offsets.c
-+++ b/arch/x86/um/user-offsets.c
-@@ -8,7 +8,6 @@
- #define __FRAME_OFFSETS
- #include <linux/ptrace.h>
- #include <asm/types.h>
--#include <linux/kbuild.h>
- 
- #define DEFINE_LONGS(sym, val)	\
- 	COMMENT(#val " / sizeof(unsigned long)");	\
+ static __attribute__((unused))
 -- 
 2.51.0
 
