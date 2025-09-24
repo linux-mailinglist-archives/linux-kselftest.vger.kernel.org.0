@@ -1,68 +1,68 @@
-Return-Path: <linux-kselftest+bounces-42245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0037CB9BF51
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 22:29:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B20EB9BF7B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 22:30:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A0154E113B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 20:28:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E3BA382924
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 20:29:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DF44329516;
-	Wed, 24 Sep 2025 20:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7139F32A3C0;
+	Wed, 24 Sep 2025 20:28:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="GbczshYD"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="RlTwD1PZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-014.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-014.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.199.210.3])
+Received: from fra-out-007.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-007.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.75.33.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9729E328973;
-	Wed, 24 Sep 2025 20:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.199.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF3E329F1C;
+	Wed, 24 Sep 2025 20:28:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.75.33.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758745680; cv=none; b=buuVWILS9YpOhfcXkOUHCr8hd38sq/CUzLLx3of3fgllCNonEMyBh4dn+S0QIZbvpycoD2s5IpeaTXuK57BLcCW3uKgb9fAzp2OLnyBV68R8FlwXGxXTBLF012WRDJ+/+PYg6LZJ58rwO/PCLvd917VhSs8xAK13b/7pLIXuwJ0=
+	t=1758745725; cv=none; b=cQ3fpyY2SMYGZb7t/aHPaM4jAlP5HMZ4k1CWG2gw5vg1aB/yNgZXt/7ydqknIWRDi85sKcWd4F8aBFv9/w1CZywHK9B4q2oAQxANjCbdqQFeoJM4RY4tdJNshKi88oZxkkrDv0OY0PELwwn1HK6uTkW8HGT39DGG77rwUc8Fflk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758745680; c=relaxed/simple;
-	bh=9rrGNZburNbwSCyRQLjHu8g66h+g/o2uOxzcmQkMzcc=;
+	s=arc-20240116; t=1758745725; c=relaxed/simple;
+	bh=3MhDGdV3lnYN1jM1nv9Fwity7tR1js/6VlkO/8cQACY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DLL1qaE479OQIM5vnviGi6Suth1y2tBqss3GeugZwFkGs9fpVyVQusp/U0nD/9t8yI7nZA0jnj/Cm8cQaTJ0ixGce7knAu2V+lB5qE0zpQ0PuyuUOzVptMVqjry1i066JK3bsjPywNGxOcmtmSpReYzgzDnxy2sXitsgaCi//jQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=GbczshYD; arc=none smtp.client-ip=18.199.210.3
+	 MIME-Version:Content-Type; b=L6xz1hafqY8Nxr13IjXswOpj3P2y+z+OnGN04iq6CHsAgCXUxYhCHPXn9irWApWK0Fyo6tGy8ICWLnIG9IkOPepVbp4euF3blFBkS6D9VBWKsTEkoOqvu0E8eML1gTGuNUcZx1utkcCjimM+kZ6/xPQcBeNVqxu5w1iyEkrFtgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=RlTwD1PZ; arc=none smtp.client-ip=3.75.33.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1758745678; x=1790281678;
+  t=1758745723; x=1790281723;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GIzXOOEvZKeS6UuNgkU2k1mesw4I+NOSJCqENQl3gzM=;
-  b=GbczshYD6KdOZwYerv/XBEk4xXqqUmsgwjLU03mSkwcR8xvAOojwrKC3
-   uPo0PCFEh8QfrzW2K8Tmayx+3Q+TJ2PNXupXQ1U67OHLkq0zCfTlAF2Qp
-   3uDAj76B4WzCFPWsgn7QpZh1k7q1alQTh9PpLonwm4wlkkNaGoO2lLbOR
-   ykuR0MToytynY3c+Qlg+XLnMUyvzPV5nO7ipKgwnrZkVU/BvNl8ESGg69
-   rF8tgSd/dHcJYuJ3Gecq2y0pKUQi6Six84svL1QHon/hvK3uredVu4NyK
-   eTbTAE3whitBOtfOsjghYlnOV345oFr1RjJTqTfjyeAFHbaLIjnEgng1m
-   g==;
-X-CSE-ConnectionGUID: tb+xLtZHRNyCcq5D+kLImQ==
-X-CSE-MsgGUID: Aa4QP0/wQFe1gvmMRRqu0g==
+  bh=TcGDvd353IlFr7UB0Kr3owgOL1Fvn+LLqG0G/i0vGK0=;
+  b=RlTwD1PZsHmpnAbVr2qMWTEmuG1AxMBxMZvVImL7RSTjxIRQFwY+1HlV
+   pg1/aWXG3011W7kWixjeAouTmuJKN1bJ32Hbzv0+18t9Q8n9TDwhKh8Y/
+   uZr61pCGwaUdeMfgBVAmIrlIBmeGzwTCDEi5VvisH02NFuyC24tVuXIpX
+   GLvZUyAvU3mXyYwM2ebrePx5VUlW9r/q19wI71yXvsp6timoEVCD/cWp6
+   +RYUZtdmtZ9i1UFSix2Jh4V1snlICiRL8GQ4ETRM0hTIKFNYurvLTJnoS
+   8ULZ+Mjy0yVhf28QZ9Lnvt/jwckVejCEGIC5rRMHZsfpgPLkcuHVc0C+Z
+   Q==;
+X-CSE-ConnectionGUID: P1dbznDVTIexOM6g049ZZw==
+X-CSE-MsgGUID: JVNtKnaRTBqg9c8/5NJimA==
 X-IronPort-AV: E=Sophos;i="6.18,291,1751241600"; 
-   d="scan'208";a="2523201"
-Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
-  by internal-fra-out-014.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 20:27:46 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:5140]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.23.230:2525] with esmtp (Farcaster)
- id a4476151-b5ed-4367-84c6-5e3180aa5137; Wed, 24 Sep 2025 20:27:45 +0000 (UTC)
-X-Farcaster-Flow-ID: a4476151-b5ed-4367-84c6-5e3180aa5137
+   d="scan'208";a="2633904"
+Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
+  by internal-fra-out-007.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 20:28:30 +0000
+Received: from EX19MTAEUB001.ant.amazon.com [54.240.197.226:20731]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.9.61:2525] with esmtp (Farcaster)
+ id fc69c5e0-afa1-4757-9bb0-cbef464a9cb0; Wed, 24 Sep 2025 20:28:30 +0000 (UTC)
+X-Farcaster-Flow-ID: fc69c5e0-afa1-4757-9bb0-cbef464a9cb0
 Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
- EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
+ EX19MTAEUB001.ant.amazon.com (10.252.51.28) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Wed, 24 Sep 2025 20:27:45 +0000
+ Wed, 24 Sep 2025 20:28:20 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by EX19D018EUA004.ant.amazon.com (10.252.50.85) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Wed, 24 Sep 2025
- 20:27:09 +0000
+ 20:27:45 +0000
 From: Eliav Farber <farbere@amazon.com>
 To: <linux@armlinux.org.uk>, <richard@nod.at>,
 	<anton.ivanov@cambridgegreys.com>, <johannes@sipsolutions.net>,
@@ -122,9 +122,9 @@ To: <linux@armlinux.org.uk>, <richard@nod.at>,
 	<stable@vger.kernel.org>
 CC: Linus Torvalds <torvalds@linux-foundation.org>, David Laight
 	<David.Laight@aculab.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Subject: [PATCH 06/19 v6.1.y] minmax: simplify and clarify min_t()/max_t() implementation
-Date: Wed, 24 Sep 2025 20:23:07 +0000
-Message-ID: <20250924202320.32333-7-farbere@amazon.com>
+Subject: [PATCH 07/19 v6.1.y] minmax: make generic MIN() and MAX() macros available everywhere
+Date: Wed, 24 Sep 2025 20:23:08 +0000
+Message-ID: <20250924202320.32333-8-farbere@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250924202320.32333-1-farbere@amazon.com>
 References: <20250924202320.32333-1-farbere@amazon.com>
@@ -141,73 +141,389 @@ X-ClientProxiedBy: EX19D037UWB002.ant.amazon.com (10.13.138.121) To
 
 From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 017fa3e89187848fd056af757769c9e66ac3e93d ]
+[ Upstream commit 1a251f52cfdc417c84411a056bc142cbd77baef4 ]
 
-This simplifies the min_t() and max_t() macros by no longer making them
-work in the context of a C constant expression.
+This just standardizes the use of MIN() and MAX() macros, with the very
+traditional semantics.  The goal is to use these for C constant
+expressions and for top-level / static initializers, and so be able to
+simplify the min()/max() macros.
 
-That means that you can no longer use them for static initializers or
-for array sizes in type definitions, but there were only a couple of
-such uses, and all of them were converted (famous last words) to use
-MIN_T/MAX_T instead.
+These macro names were used by various kernel code - they are very
+traditional, after all - and all such users have been fixed up, with a
+few different approaches:
+
+ - trivial duplicated macro definitions have been removed
+
+   Note that 'trivial' here means that it's obviously kernel code that
+   already included all the major kernel headers, and thus gets the new
+   generic MIN/MAX macros automatically.
+
+ - non-trivial duplicated macro definitions are guarded with #ifndef
+
+   This is the "yes, they define their own versions, but no, the include
+   situation is not entirely obvious, and maybe they don't get the
+   generic version automatically" case.
+
+ - strange use case #1
+
+   A couple of drivers decided that the way they want to describe their
+   versioning is with
+
+	#define MAJ 1
+	#define MIN 2
+	#define DRV_VERSION __stringify(MAJ) "." __stringify(MIN)
+
+   which adds zero value and I just did my Alexander the Great
+   impersonation, and rewrote that pointless Gordian knot as
+
+	#define DRV_VERSION "1.2"
+
+   instead.
+
+ - strange use case #2
+
+   A couple of drivers thought that it's a good idea to have a random
+   'MIN' or 'MAX' define for a value or index into a table, rather than
+   the traditional macro that takes arguments.
+
+   These values were re-written as C enum's instead. The new
+   function-line macros only expand when followed by an open
+   parenthesis, and thus don't clash with enum use.
+
+Happily, there weren't really all that many of these cases, and a lot of
+users already had the pattern of using '#ifndef' guarding (or in one
+case just using '#undef MIN') before defining their own private version
+that does the same thing. I left such cases alone.
 
 Cc: David Laight <David.Laight@aculab.com>
 Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- include/linux/minmax.h | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ arch/um/drivers/mconsole_user.c               |  2 ++
+ drivers/edac/skx_common.h                     |  1 -
+ .../drm/amd/display/modules/hdcp/hdcp_ddc.c   |  2 ++
+ .../drm/amd/pm/powerplay/hwmgr/ppevvmath.h    | 14 +++++++----
+ drivers/gpu/drm/radeon/evergreen_cs.c         |  2 ++
+ drivers/hwmon/adt7475.c                       | 24 +++++++++----------
+ drivers/media/dvb-frontends/stv0367_priv.h    |  3 +++
+ drivers/net/fjes/fjes_main.c                  |  4 +---
+ drivers/nfc/pn544/i2c.c                       |  2 --
+ drivers/platform/x86/sony-laptop.c            |  1 -
+ drivers/scsi/isci/init.c                      |  6 +----
+ .../pci/hive_isp_css_include/math_support.h   |  5 ----
+ include/linux/minmax.h                        |  2 ++
+ kernel/trace/preemptirq_delay_test.c          |  2 --
+ lib/btree.c                                   |  1 -
+ lib/decompress_unlzma.c                       |  2 ++
+ mm/zsmalloc.c                                 |  1 -
+ tools/testing/selftests/seccomp/seccomp_bpf.c |  2 ++
+ tools/testing/selftests/vm/mremap_test.c      |  2 ++
+ 19 files changed, 41 insertions(+), 37 deletions(-)
 
+diff --git a/arch/um/drivers/mconsole_user.c b/arch/um/drivers/mconsole_user.c
+index e24298a734be..a04cd13c6315 100644
+--- a/arch/um/drivers/mconsole_user.c
++++ b/arch/um/drivers/mconsole_user.c
+@@ -71,7 +71,9 @@ static struct mconsole_command *mconsole_parse(struct mc_request *req)
+ 	return NULL;
+ }
+ 
++#ifndef MIN
+ #define MIN(a,b) ((a)<(b) ? (a):(b))
++#endif
+ 
+ #define STRINGX(x) #x
+ #define STRING(x) STRINGX(x)
+diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
+index c0c174c101d2..c5e273bc2292 100644
+--- a/drivers/edac/skx_common.h
++++ b/drivers/edac/skx_common.h
+@@ -45,7 +45,6 @@
+ #define I10NM_NUM_CHANNELS	MAX(I10NM_NUM_DDR_CHANNELS, I10NM_NUM_HBM_CHANNELS)
+ #define I10NM_NUM_DIMMS		MAX(I10NM_NUM_DDR_DIMMS, I10NM_NUM_HBM_DIMMS)
+ 
+-#define MAX(a, b)	((a) > (b) ? (a) : (b))
+ #define NUM_IMC		MAX(SKX_NUM_IMC, I10NM_NUM_IMC)
+ #define NUM_CHANNELS	MAX(SKX_NUM_CHANNELS, I10NM_NUM_CHANNELS)
+ #define NUM_DIMMS	MAX(SKX_NUM_DIMMS, I10NM_NUM_DIMMS)
+diff --git a/drivers/gpu/drm/amd/display/modules/hdcp/hdcp_ddc.c b/drivers/gpu/drm/amd/display/modules/hdcp/hdcp_ddc.c
+index 1b2df97226a3..40286e8dd4e1 100644
+--- a/drivers/gpu/drm/amd/display/modules/hdcp/hdcp_ddc.c
++++ b/drivers/gpu/drm/amd/display/modules/hdcp/hdcp_ddc.c
+@@ -25,7 +25,9 @@
+ 
+ #include "hdcp.h"
+ 
++#ifndef MIN
+ #define MIN(a, b) ((a) < (b) ? (a) : (b))
++#endif
+ #define HDCP_I2C_ADDR 0x3a	/* 0x74 >> 1*/
+ #define KSV_READ_SIZE 0xf	/* 0x6803b - 0x6802c */
+ #define HDCP_MAX_AUX_TRANSACTION_SIZE 16
+diff --git a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/ppevvmath.h b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/ppevvmath.h
+index dac29fe6cfc6..abbdb7731996 100644
+--- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/ppevvmath.h
++++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/ppevvmath.h
+@@ -22,12 +22,18 @@
+  */
+ #include <asm/div64.h>
+ 
+-#define SHIFT_AMOUNT 16 /* We multiply all original integers with 2^SHIFT_AMOUNT to get the fInt representation */
++enum ppevvmath_constants {
++	/* We multiply all original integers with 2^SHIFT_AMOUNT to get the fInt representation */
++	SHIFT_AMOUNT	= 16,
+ 
+-#define PRECISION 5 /* Change this value to change the number of decimal places in the final output - 5 is a good default */
++	/* Change this value to change the number of decimal places in the final output - 5 is a good default */
++	PRECISION	=  5,
+ 
+-#define SHIFTED_2 (2 << SHIFT_AMOUNT)
+-#define MAX (1 << (SHIFT_AMOUNT - 1)) - 1 /* 32767 - Might change in the future */
++	SHIFTED_2	= (2 << SHIFT_AMOUNT),
++
++	/* 32767 - Might change in the future */
++	MAX		= (1 << (SHIFT_AMOUNT - 1)) - 1,
++};
+ 
+ /* -------------------------------------------------------------------------------
+  * NEW TYPE - fINT
+diff --git a/drivers/gpu/drm/radeon/evergreen_cs.c b/drivers/gpu/drm/radeon/evergreen_cs.c
+index 820c2c3641d3..1311f10fad66 100644
+--- a/drivers/gpu/drm/radeon/evergreen_cs.c
++++ b/drivers/gpu/drm/radeon/evergreen_cs.c
+@@ -33,8 +33,10 @@
+ #include "evergreen_reg_safe.h"
+ #include "cayman_reg_safe.h"
+ 
++#ifndef MIN
+ #define MAX(a,b)                   (((a)>(b))?(a):(b))
+ #define MIN(a,b)                   (((a)<(b))?(a):(b))
++#endif
+ 
+ #define REG_SAFE_BM_SIZE ARRAY_SIZE(evergreen_reg_safe_bm)
+ 
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 3ac674427675..44eb31055256 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -23,23 +23,23 @@
+ #include <linux/util_macros.h>
+ 
+ /* Indexes for the sysfs hooks */
+-
+-#define INPUT		0
+-#define MIN		1
+-#define MAX		2
+-#define CONTROL		3
+-#define OFFSET		3
+-#define AUTOMIN		4
+-#define THERM		5
+-#define HYSTERSIS	6
+-
++enum adt_sysfs_id {
++	INPUT		= 0,
++	MIN		= 1,
++	MAX		= 2,
++	CONTROL		= 3,
++	OFFSET		= 3,	// Dup
++	AUTOMIN		= 4,
++	THERM		= 5,
++	HYSTERSIS	= 6,
+ /*
+  * These are unique identifiers for the sysfs functions - unlike the
+  * numbers above, these are not also indexes into an array
+  */
++	ALARM		= 9,
++	FAULT		= 10,
++};
+ 
+-#define ALARM		9
+-#define FAULT		10
+ 
+ /* 7475 Common Registers */
+ 
+diff --git a/drivers/media/dvb-frontends/stv0367_priv.h b/drivers/media/dvb-frontends/stv0367_priv.h
+index 617f605947b2..7f056d1cce82 100644
+--- a/drivers/media/dvb-frontends/stv0367_priv.h
++++ b/drivers/media/dvb-frontends/stv0367_priv.h
+@@ -25,8 +25,11 @@
+ #endif
+ 
+ /* MACRO definitions */
++#ifndef MIN
+ #define MAX(X, Y) ((X) >= (Y) ? (X) : (Y))
+ #define MIN(X, Y) ((X) <= (Y) ? (X) : (Y))
++#endif
++
+ #define INRANGE(X, Y, Z) \
+ 	((((X) <= (Y)) && ((Y) <= (Z))) || \
+ 	(((Z) <= (Y)) && ((Y) <= (X))) ? 1 : 0)
+diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
+index 1eff202f6a1f..e050910b08a2 100644
+--- a/drivers/net/fjes/fjes_main.c
++++ b/drivers/net/fjes/fjes_main.c
+@@ -14,9 +14,7 @@
+ #include "fjes.h"
+ #include "fjes_trace.h"
+ 
+-#define MAJ 1
+-#define MIN 2
+-#define DRV_VERSION __stringify(MAJ) "." __stringify(MIN)
++#define DRV_VERSION "1.2"
+ #define DRV_NAME	"fjes"
+ char fjes_driver_name[] = DRV_NAME;
+ char fjes_driver_version[] = DRV_VERSION;
+diff --git a/drivers/nfc/pn544/i2c.c b/drivers/nfc/pn544/i2c.c
+index 9e754abcfa2a..50559d976f78 100644
+--- a/drivers/nfc/pn544/i2c.c
++++ b/drivers/nfc/pn544/i2c.c
+@@ -126,8 +126,6 @@ struct pn544_i2c_fw_secure_blob {
+ #define PN544_FW_CMD_RESULT_COMMAND_REJECTED 0xE0
+ #define PN544_FW_CMD_RESULT_CHUNK_ERROR 0xE6
+ 
+-#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
+-
+ #define PN544_FW_WRITE_BUFFER_MAX_LEN 0x9f7
+ #define PN544_FW_I2C_MAX_PAYLOAD PN544_HCI_I2C_LLC_MAX_SIZE
+ #define PN544_FW_I2C_WRITE_FRAME_HEADER_LEN 8
+diff --git a/drivers/platform/x86/sony-laptop.c b/drivers/platform/x86/sony-laptop.c
+index 5ff5aaf92b56..b80007676c2d 100644
+--- a/drivers/platform/x86/sony-laptop.c
++++ b/drivers/platform/x86/sony-laptop.c
+@@ -757,7 +757,6 @@ static union acpi_object *__call_snc_method(acpi_handle handle, char *method,
+ 	return result;
+ }
+ 
+-#define MIN(a, b)	(a > b ? b : a)
+ static int sony_nc_buffer_call(acpi_handle handle, char *name, u64 *value,
+ 		void *buffer, size_t buflen)
+ {
+diff --git a/drivers/scsi/isci/init.c b/drivers/scsi/isci/init.c
+index e294d5d961eb..012cd2dade86 100644
+--- a/drivers/scsi/isci/init.c
++++ b/drivers/scsi/isci/init.c
+@@ -65,11 +65,7 @@
+ #include "task.h"
+ #include "probe_roms.h"
+ 
+-#define MAJ 1
+-#define MIN 2
+-#define BUILD 0
+-#define DRV_VERSION __stringify(MAJ) "." __stringify(MIN) "." \
+-	__stringify(BUILD)
++#define DRV_VERSION "1.2.0"
+ 
+ MODULE_VERSION(DRV_VERSION);
+ 
+diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_include/math_support.h b/drivers/staging/media/atomisp/pci/hive_isp_css_include/math_support.h
+index a444ec14ff9d..1c17a87a8572 100644
+--- a/drivers/staging/media/atomisp/pci/hive_isp_css_include/math_support.h
++++ b/drivers/staging/media/atomisp/pci/hive_isp_css_include/math_support.h
+@@ -31,11 +31,6 @@
+ /* A => B */
+ #define IMPLIES(a, b)        (!(a) || (b))
+ 
+-/* for preprocessor and array sizing use MIN and MAX
+-   otherwise use min and max */
+-#define MAX(a, b)            (((a) > (b)) ? (a) : (b))
+-#define MIN(a, b)            (((a) < (b)) ? (a) : (b))
+-
+ #define ROUND_DIV(a, b)      (((b) != 0) ? ((a) + ((b) >> 1)) / (b) : 0)
+ #define CEIL_DIV(a, b)       (((b) != 0) ? ((a) + (b) - 1) / (b) : 0)
+ #define CEIL_MUL(a, b)       (CEIL_DIV(a, b) * (b))
 diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index a7ef65f78933..9c2848abc804 100644
+index 9c2848abc804..fc384714da45 100644
 --- a/include/linux/minmax.h
 +++ b/include/linux/minmax.h
-@@ -45,17 +45,20 @@
- 
- #define __cmp(op, x, y)	((x) __cmp_op_##op (y) ? (x) : (y))
- 
--#define __cmp_once(op, x, y, unique_x, unique_y) ({	\
--	typeof(x) unique_x = (x);			\
--	typeof(y) unique_y = (y);			\
-+#define __cmp_once_unique(op, type, x, y, ux, uy) \
-+	({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-+
-+#define __cmp_once(op, type, x, y) \
-+	__cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-+
-+#define __careful_cmp_once(op, x, y) ({			\
- 	static_assert(__types_ok(x, y),			\
- 		#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
--	__cmp(op, unique_x, unique_y); })
-+	__cmp_once(op, __auto_type, x, y); })
- 
- #define __careful_cmp(op, x, y)					\
- 	__builtin_choose_expr(__is_constexpr((x) - (y)),	\
--		__cmp(op, x, y),				\
--		__cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y)))
-+		__cmp(op, x, y), __careful_cmp_once(op, x, y))
- 
- #define __clamp(val, lo, hi)	\
- 	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
-@@ -158,7 +161,7 @@
-  * @x: first value
-  * @y: second value
+@@ -277,6 +277,8 @@ static inline bool in_range32(u32 val, u32 start, u32 len)
+  * Use these carefully: no type checking, and uses the arguments
+  * multiple times. Use for obvious constants only.
   */
--#define min_t(type, x, y)	__careful_cmp(min, (type)(x), (type)(y))
-+#define min_t(type, x, y) __cmp_once(min, type, x, y)
++#define MIN(a,b) __cmp(min,a,b)
++#define MAX(a,b) __cmp(max,a,b)
+ #define MIN_T(type,a,b) __cmp(min,(type)(a),(type)(b))
+ #define MAX_T(type,a,b) __cmp(max,(type)(a),(type)(b))
  
- /**
-  * max_t - return maximum of two values, using the specified type
-@@ -166,7 +169,7 @@
-  * @x: first value
-  * @y: second value
-  */
--#define max_t(type, x, y)	__careful_cmp(max, (type)(x), (type)(y))
-+#define max_t(type, x, y) __cmp_once(max, type, x, y)
+diff --git a/kernel/trace/preemptirq_delay_test.c b/kernel/trace/preemptirq_delay_test.c
+index 8af92dbe98f0..acb0c971a408 100644
+--- a/kernel/trace/preemptirq_delay_test.c
++++ b/kernel/trace/preemptirq_delay_test.c
+@@ -34,8 +34,6 @@ MODULE_PARM_DESC(cpu_affinity, "Cpu num test is running on");
  
- /*
-  * Do not check the array parameter using __must_be_array().
+ static struct completion done;
+ 
+-#define MIN(x, y) ((x) < (y) ? (x) : (y))
+-
+ static void busy_wait(ulong time)
+ {
+ 	u64 start, end;
+diff --git a/lib/btree.c b/lib/btree.c
+index a82100c73b55..8407ff7dca1a 100644
+--- a/lib/btree.c
++++ b/lib/btree.c
+@@ -43,7 +43,6 @@
+ #include <linux/slab.h>
+ #include <linux/module.h>
+ 
+-#define MAX(a, b) ((a) > (b) ? (a) : (b))
+ #define NODESIZE MAX(L1_CACHE_BYTES, 128)
+ 
+ struct btree_geo {
+diff --git a/lib/decompress_unlzma.c b/lib/decompress_unlzma.c
+index 20a858031f12..9d34d35908da 100644
+--- a/lib/decompress_unlzma.c
++++ b/lib/decompress_unlzma.c
+@@ -37,7 +37,9 @@
+ 
+ #include <linux/decompress/mm.h>
+ 
++#ifndef MIN
+ #define	MIN(a, b) (((a) < (b)) ? (a) : (b))
++#endif
+ 
+ static long long INIT read_int(unsigned char *ptr, int size)
+ {
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index af130e2dcea2..aede005d1adc 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -123,7 +123,6 @@
+ #define ISOLATED_BITS	3
+ #define MAGIC_VAL_BITS	8
+ 
+-#define MAX(a, b) ((a) >= (b) ? (a) : (b))
+ /* ZS_MIN_ALLOC_SIZE must be multiple of ZS_ALIGN */
+ #define ZS_MIN_ALLOC_SIZE \
+ 	MAX(32, (ZS_MAX_PAGES_PER_ZSPAGE << PAGE_SHIFT >> OBJ_INDEX_BITS))
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index b300e87404d8..b054bfef0f4f 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -60,7 +60,9 @@
+ #define SKIP(s, ...)	XFAIL(s, ##__VA_ARGS__)
+ #endif
+ 
++#ifndef MIN
+ #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
++#endif
+ 
+ #ifndef PR_SET_PTRACER
+ # define PR_SET_PTRACER 0x59616d61
+diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
+index 9496346973d4..7f674160f01e 100644
+--- a/tools/testing/selftests/vm/mremap_test.c
++++ b/tools/testing/selftests/vm/mremap_test.c
+@@ -22,7 +22,9 @@
+ #define VALIDATION_DEFAULT_THRESHOLD 4	/* 4MB */
+ #define VALIDATION_NO_THRESHOLD 0	/* Verify the entire region */
+ 
++#ifndef MIN
+ #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
++#endif
+ 
+ struct config {
+ 	unsigned long long src_alignment;
 -- 
 2.47.3
 
