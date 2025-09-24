@@ -1,153 +1,257 @@
-Return-Path: <linux-kselftest+bounces-42227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68B51B9AFF2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 19:16:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 458D3B9B1DB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 19:51:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72A13322A47
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 17:16:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 833D93B3FD0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 17:50:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F52315D2C;
-	Wed, 24 Sep 2025 17:16:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74891314A64;
+	Wed, 24 Sep 2025 17:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WRIlPEc7"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="iT8duxwz";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="m08DfW+o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E91314B78
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 17:16:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E792FBE05;
+	Wed, 24 Sep 2025 17:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758734200; cv=none; b=BqwOPfBvKi1Fx9qT8fXe/aSF5M66/JzWb/GECaZkrHkvyn1FLWhJVJeUOEsnNLD0ZJZgg3b6gZL0tnd0WX5Vd1Rin20IolzigFy/SB6BZ1MUNwt+TdKddYqaiiU9v5rJQKzXO3ZZVw5J3lqdwsU0n8oCsaC34x9fGK+b36sk0tM=
+	t=1758736238; cv=none; b=ZDS/gR1Fu7/+t9UE1YA35Fy5XXMCvvpHFAt4jKAey6RjAktbvZayOcloJQY3qb6Igwc+IrKDrw3H2xtynvSF8/zrMOBLvSDYyZjztygwciljY091JNrt1L4HnNJgVra01vsBDELma02y25F/wjDSAaMiiLosTxbjlDCW8QngNs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758734200; c=relaxed/simple;
-	bh=hsA5j6mN1Ho29wv3TqcaUo95fVf6ZgIDjmYFb88klhE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nZIXBvvAo6Ia6XrBqqGtsAGCQLAL18KQFRC/q8smKV+NgmsMgvnGr9q7pliXbeFNMQvCMnhQ2UkKPxgF//vJ9xb33J1LUf0WDhhg++VdPZL3hNgai8jhY+aT9OUqCEgCjQHqFKi/vxh7aQeP1vZk+XQUsUJHIpaHf+u5GxZE4vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WRIlPEc7; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-62fa99bcfcdso40234a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 10:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758734196; x=1759338996; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aNxQWNsaNzm07NK0oI4QfKW+i7h07TGqHOD9HRkHR7U=;
-        b=WRIlPEc7bya2iEY7a0uEEWrpqlt4AHc97i+PMV94TrFREKzT10x1y1q6Cd3kz9JOF3
-         +mJKubZddUAREsEI31FQJQjBm5IinpXXOwsyEszQMiQESSaHVo9YDpcSCZXNdP0dSCug
-         MjXgScHrdMX7F/HTLxqutGdp55YzR6zWnHATYXyvo1AZbNk0sHlyilqgvlrvbLf8/COv
-         ZnDahaL8Yffw2CksNPluQO24ZsrrmLP2/npcrjjFxXNblcbJjGx0IvJlXWyphb/aUcIc
-         G+hPNOlPs7s8drZyLqNRyIOEejjQmQss0Wogi88zO/fPfV6GTeCuGnBbH5kvxU9aMaZl
-         daPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758734196; x=1759338996;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aNxQWNsaNzm07NK0oI4QfKW+i7h07TGqHOD9HRkHR7U=;
-        b=VWIwagTybSMPWszjk0KPhyRoepGKF5MOEFmzdtbPbEvlEt0VU6BpBiUsR8R3xcXOEu
-         eGDzbp7s0H1m56VOnFn+C9Z0jfMG312ieD1kmrkdPvd1k8uHnaC53vm/ntNG0sdT5kSC
-         Z3vkcPrhBdjthGNyLiPqHuCTkj+iDQPgepwcxLFCn40dPS3n/XvgX6s/SDAlT1Wb4lo3
-         ShKDqhhQdjHAKzTKm6eq4e1hiN5KuL6mw1bpLNIcGwN+fn1yiUhpUuT3xcKH13uZWum+
-         uFHdMZuV9tzSWYClrp3pxn5G11/041aWhtTI1sDDHp4vQLTu4RHBKRa6YP1KsZOgiSjb
-         8evQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV3IsjsFZw3twADCqiPSlt9VbLQswsBsYKpPb2nSsC2+t3BeNnOStBqfK4frM23QV1voEFtpz40uvIn8zJQqqQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxgo0zTaA9+sVhFcGhem0MAwzFyN00oLEpLLdmm5/TPDOuwmFnr
-	jKcDYpbn+pQq3Conaf/nOfoDPlNfoyuVerWOI5Gy9/gWIEJweIWc0yTh
-X-Gm-Gg: ASbGncuGc4glPEBYVlUkdnMMMP26Y5Xi6n6PQSXshRzKkMC3UdnQfeFvKv0+qrEhatS
-	aEjX0RUGr4+wDszGHHUL1+CdKKV1bYTRdxREdXUaeXLKdQzqP9PJlhpALPFvfO681HrFtpGadeo
-	+ZvUK42vPVDwsczoJaG+XgIJoBlTOY2myyVDjLlhaZPbPzbX8cH9U2GfYfztk9rWbyoaPysWAi0
-	hC8uICt1XKt5f/X+3VJFWq/YIGTNu4pDnciCZX1KaZRFfvNegNIkB8rgDeseUTsaBnja8CkesaL
-	DWzdKDLa0/TcZJTxWwpN5QwP/s3b9A+/VHu8IVkyKbrTHdfModMlfXoQcTzDd03+mklleGGC76V
-	DHqe+9qpOFbi/7Ap+GBDVDj4dL98zxjrtCvJEUzVatskNw7O5+TakWbt2LGdga+u7VWzge4ewxz
-	8N/xBDIA==
-X-Google-Smtp-Source: AGHT+IGTRCVL+Vy3tfNF1MUEnXBCXWeb5Jrz0wQXqG7fNQTDEE2vWKNUIlbHrYap21jasTSQYR4WgQ==
-X-Received: by 2002:a05:6402:160c:b0:62f:41d3:ece7 with SMTP id 4fb4d7f45d1cf-6349fa1b9a4mr208376a12.14.1758734196429;
-        Wed, 24 Sep 2025 10:16:36 -0700 (PDT)
-Received: from alessandro-pc.station (net-2-37-207-41.cust.vodafonedsl.it. [2.37.207.41])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62fa5d4357esm13318691a12.23.2025.09.24.10.16.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 10:16:36 -0700 (PDT)
-From: Alessandro Zanni <alessandro.zanni87@gmail.com>
-To: jgg@ziepe.ca,
-	kevin.tian@intel.com,
-	shuah@kernel.org
-Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
-	iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests/iommu: prevent use of uninitialized variable
-Date: Wed, 24 Sep 2025 19:16:28 +0200
-Message-ID: <20250924171629.50266-1-alessandro.zanni87@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1758736238; c=relaxed/simple;
+	bh=NPGlUlaUMBUpPVyqYO4XSqsnRuXnfdEkj6waMAL1ODE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RGsSUuSzqaictzZVaEVvhmUJXyvYmGNNHzgVLrKMuIUhbCczJiH1G48aaevs85SVmMMmibqGj6RxuIJAlFse1Rtd1zEhzL3AtEWWXiOfIZlNaJWbqc68SufDvPtE3urORkzNaDsc7rEUCAo6XCSFNEwYtMBqtVMfCCGwltY9Ors=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=iT8duxwz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=m08DfW+o; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id 1C9F4EC00B6;
+	Wed, 24 Sep 2025 13:50:34 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Wed, 24 Sep 2025 13:50:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
+	 t=1758736234; x=1758822634; bh=moKr34pnawcljfj8OP/P5kJrgh1m2F+Q
+	E1r8IvMYRIM=; b=iT8duxwzuK2zGKi4NgeVmyVO/fVTTRwr61CyIAOihTyIUHEy
+	+0JGk8qYPdyr/8w0fi3gHClaLb9cCxTKY1Lw5HGvsjoSK+OlejSmgOKWDvSMe2qU
+	wD+n+Isj+KSTHCV2xRTQcpaBFmIE5x3kI2qnJJ6g1pMC0frWSccHy8I1Da+i9Wf0
+	Z+BW18gbfb1whu4XvSRrz83Dz9xegm6kI3qW3Fews0MAijGEC+ux5sxHUGfHSp+E
+	bBjr05or6d1v6Y1dYxQSNWgFBWXkrvYIHGqpPitdXPGRvZr2EcWHmuIx4CyBK5J4
+	U0gIhABn0t6ZeBvvgdEV+6eVUmpYvyde1Oa5yQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758736234; x=
+	1758822634; bh=moKr34pnawcljfj8OP/P5kJrgh1m2F+QE1r8IvMYRIM=; b=m
+	08DfW+oAcWXd+bAH7w4CvXtClNfIFKdrbEfJdJoGqOJXdih4CNLPvT7rlP2qzraR
+	BiUN7HjfIE5fNydz3Qn90Z0T9S4lkg1x4JZdqurnuNS+rWpVojmwtqz0DCIIxKa/
+	wOuMgGw36IfQqEjTTA9WNjmmSotmqa7b6YNxSpfbb4YgStqGujyfeA1mbkgZYx4E
+	cbENVTg464dXZGB4VzS0JDPrAVBYTZLKgZUJOfffI6pUtiBaRRIbJ119CiXDj6hS
+	Q97RhwB5MwPeF5mI1R06hK+NYktjQ/WwfYlA70i7NKBjspn+aGEl7n8b5K9q9X8G
+	ShYoHsfZ6Fhxd8f+mUtXQ==
+X-ME-Sender: <xms:aS_UaOUB5uQJpjGm5uW48h34b1E_2dxi0gD5q5KAdAaS-qdfhstk-g>
+    <xme:aS_UaG8Mn7F8Cuoklc-yViFbEofuML_rLGbF_wd4Q8Izj2AupMxBwm9JxlKpUWCIM
+    kE7-f4BMntzJrLRLn3gBRv-y7oCdQ_U-qGtSQegbF0Ch4fYreMOjTw>
+X-ME-Received: <xmr:aS_UaG2W84DgZpAz3cPnC1pU22cG1i2feuhigjmn0hT0fLzX9-oMK4bLw1RK>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeigedvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtugfgjgesthekrodttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnheptedttdeijeetgeelkedttedvgefhheeuffeghfdviedvheelhfdvheef
+    ffeuvdefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdr
+    nhgvthdpnhgspghrtghpthhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtth
+    hopeifihhlfhhrvggurdhophgvnhhsohhurhgtvgesghhmrghilhdrtghomhdprhgtphht
+    thhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlih
+    hnuhigqdguohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhu
+    gidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
+    hugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepvgguuhhmrgiivg
+    htsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomh
+X-ME-Proxy: <xmx:aS_UaDcPjnod5XhER5-UXNUiYuwQYTPga7OzJiISPhDluvDlyKHBKw>
+    <xmx:aS_UaFCEojX29xTEgH735Kq1bWlb59yKsTh6uFtQxHGH3V2Uj-B25A>
+    <xmx:aS_UaC9aOU6cAXPW0SC0GnN_p6FQ1VAvYHKnDR1wYX9fiGGcfqZ55Q>
+    <xmx:aS_UaBql8E6iRb-8-7Hc40vc1ivrtkysPeoGYbdSUeh8G3ycLv-02g>
+    <xmx:ai_UaItRc-UPAsQFv6kaqrW6CDmhWPMks014ZWeR9i2f-2ragQ6fUnxq>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 24 Sep 2025 13:50:32 -0400 (EDT)
+Date: Wed, 24 Sep 2025 19:50:30 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Wilfred Mallawa <wilfred.opensource@gmail.com>
+Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
+	john.fastabend@gmail.com, shuah@kernel.org,
+	Wilfred Mallawa <wilfred.mallawa@wdc.com>
+Subject: Re: [PATCH v4 2/2] selftests: tls: add tls record_size_limit test
+Message-ID: <aNQvZnCWhymiXYPO@krikkit>
+References: <20250923053207.113938-1-wilfred.opensource@gmail.com>
+ <20250923053207.113938-2-wilfred.opensource@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250923053207.113938-2-wilfred.opensource@gmail.com>
 
-Fix to avoid the usage of the `res` variable uninitialized in the
-following macro expansions.
+[got a bit distracted while writing this so Simon got to the process
+stuff before me, but I'll leave it in:]
 
-It solves the following warning:
-In function ‘iommufd_viommu_vdevice_alloc’,
-  inlined from ‘wrapper_iommufd_viommu_vdevice_alloc’ at
-iommufd.c:2889:1:
-../kselftest_harness.h:760:12: warning: ‘ret’ may be used uninitialized
-[-Wmaybe-uninitialized]
-  760 |   if (!(__exp _t __seen)) { \
-      |      ^
-../kselftest_harness.h:513:9: note: in expansion of macro ‘__EXPECT’
-  513 |   __EXPECT(expected, #expected, seen, #seen, ==, 1)
-      |   ^~~~~~~~
-iommufd_utils.h:1057:9: note: in expansion of macro ‘ASSERT_EQ’
- 1057 |   ASSERT_EQ(0, _test_cmd_trigger_vevents(self->fd, dev_id,
-nvevents))
-      |   ^~~~~~~~~
-iommufd.c:2924:17: note: in expansion of macro
-‘test_cmd_trigger_vevents’
- 2924 |   test_cmd_trigger_vevents(dev_id, 3);
-      |   ^~~~~~~~~~~~~~~~~~~~~~~~
+BTW, a few details about process: since this is a new feature, the
+subject prefix should be [PATCH net-next v4 n/m] (new stuff targets
+the net-next tree), and the patches should be based on the net-next
+tree [1] (I'm not sure what you based this on, git am complained on
+both net and net-next for this patch). More info about this in the
+docs [2].
 
-The issue can be reproduced, building the tests, with the command:
-make -C tools/testing/selftests TARGETS=iommu
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/
+[2] https://docs.kernel.org/process/maintainer-netdev.html
+    (in case you're not aware: also note the bits about "merge window"
+    which will quite likely become relevant in a few days)
 
-Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
----
- tools/testing/selftests/iommu/iommufd_utils.h | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index 3c3e08b8c90e..772ca1db6e59 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -1042,15 +1042,13 @@ static int _test_cmd_trigger_vevents(int fd, __u32 dev_id, __u32 nvevents)
- 			.dev_id = dev_id,
- 		},
- 	};
--	int ret;
- 
- 	while (nvevents--) {
--		ret = ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
--			    &trigger_vevent_cmd);
--		if (ret < 0)
-+		if (!ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
-+			    &trigger_vevent_cmd))
- 			return -1;
- 	}
--	return ret;
-+	return 0;
- }
- 
- #define test_cmd_trigger_vevents(dev_id, nvevents) \
+2025-09-23, 15:32:07 +1000, Wilfred Mallawa wrote:
+> From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+> 
+> Test that outgoing plaintext records respect the tls record_size_limit
+> set using setsockopt(). The record size limit is set to be 128, thus,
+> in all received records, the plaintext must not exceed this amount.
+> 
+> Also test that setting a new record size limit whilst a pending open
+> record exists is handled correctly by discarding the request.
+> 
+> Suggested-by: Sabrina Dubroca <sd@queasysnail.net>
+> Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+
+Thanks for adding this patch.
+(and for the tag :))
+
+> ---
+>  tools/testing/selftests/net/tls.c | 149 ++++++++++++++++++++++++++++++
+>  1 file changed, 149 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+> index 0f5640d8dc7f..c5bd431d5af3 100644
+> --- a/tools/testing/selftests/net/tls.c
+> +++ b/tools/testing/selftests/net/tls.c
+> @@ -24,6 +24,7 @@
+>  #include "../kselftest_harness.h"
+>  
+>  #define TLS_PAYLOAD_MAX_LEN 16384
+> +#define TLS_TX_RECORD_SIZE_LIM 5
+
+nit: That should not be needed if you run `make headers_install`
+before compiling the selftest:
+
+make -s headers_install ; make -C tools/testing/selftests/net tls
+make: Entering directory '/home/sab/linux/net/tools/testing/selftests/net'
+gcc -Wall -Wl,--no-as-needed -O2 -g -I../../../../usr/include/ -isystem /home/sab/linux/net/tools/testing/selftests/../../../usr/include -I../ -D_GNU_SOURCE=     tls.c   -o tls
+
+and that will find the new constant defined in the previous patch
+using the headers from the current kernel tree, instead of those in
+the system.
+
+
+[...]
+> +TEST(tx_record_size)
+> +{
+> +	struct tls_crypto_info_keys tls12;
+> +	int cfd, ret, fd, rx_len, overhead;
+> +	size_t total_plaintext_rx = 0;
+> +	__u8 tx[1024], rx[2000];
+> +	__u8 *rec;
+> +	__u16 limit = 128;
+> +	__u16 opt = 0;
+> +	__u8 rec_header_len = 5;
+
+gcc complains about unused variables, I guess leftovers from
+extracting parse_tls_records:
+
+tls.c: In function ‘tx_record_size’:
+tls.c:2840:14: warning: unused variable ‘rec_header_len’ [-Wunused-variable]
+ 2840 |         __u8 rec_header_len = 5;
+      |              ^~~~~~~~~~~~~~
+tls.c:2837:15: warning: unused variable ‘rec’ [-Wunused-variable]
+ 2837 |         __u8 *rec;
+      |               ^~~
+tls.c: In function ‘tx_record_size_open_rec’:
+tls.c:2893:14: warning: unused variable ‘rec_header_len’ [-Wunused-variable]
+ 2893 |         __u8 rec_header_len = 5;
+      |              ^~~~~~~~~~~~~~
+tls.c:2891:15: warning: unused variable ‘rec’ [-Wunused-variable]
+ 2891 |         __u8 *rec;
+      |               ^~~
+
+
+> +	unsigned int optlen = sizeof(opt);
+> +	bool notls;
+> +
+> +	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_CCM_128,
+> +			     &tls12, 0);
+> +
+> +	ulp_sock_pair(_metadata, &fd, &cfd, &notls);
+> +
+> +	if (notls)
+> +		exit(KSFT_SKIP);
+> +
+> +	/* Don't install keys on fd, we'll parse raw records */
+> +	ret = setsockopt(cfd, SOL_TLS, TLS_TX, &tls12, tls12.len);
+> +	ASSERT_EQ(ret, 0);
+> +
+> +	ret = setsockopt(cfd, SOL_TLS, TLS_TX_RECORD_SIZE_LIM, &limit, sizeof(limit));
+> +	ASSERT_EQ(ret, 0);
+> +
+> +	ret = getsockopt(cfd, SOL_TLS, TLS_TX_RECORD_SIZE_LIM, &opt, &optlen);
+> +	ASSERT_EQ(ret, 0);
+> +	ASSERT_EQ(limit, opt);
+> +	ASSERT_EQ(optlen, sizeof(limit));
+
+nit: Maybe a few of those should be EXPECT_EQ? (ASSERT_* stops the
+test, EXPECT_* will run the rest of the test)
+
+Getting the wrong value back from this getsockopt is worth noting but
+there's value in running the traffic through anyway?
+
+> +
+> +	memset(tx, 0, sizeof(tx));
+> +	EXPECT_EQ(send(cfd, tx, sizeof(tx), 0), sizeof(tx));
+
+But this one should maybe be an ASSERT because trying to parse records
+from whatever data we managed to send (if any) may not make much
+sense?
+
+(just some thoughts, this is not a "strict requirement" to change
+anything in the patch)
+
+
+> +	close(cfd);
+> +
+> +	ret = recv(fd, rx, sizeof(rx), 0);
+> +	memcpy(&rx_len, rx + 3, 2);
+> +	rx_len = htons(rx_len);
+
+nit: set but not used (also in tx_record_size_open_rec)
+
 -- 
-2.43.0
-
+Sabrina
 
