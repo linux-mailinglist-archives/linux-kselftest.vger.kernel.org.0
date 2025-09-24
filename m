@@ -1,68 +1,68 @@
-Return-Path: <linux-kselftest+bounces-42240-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42241-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9453B9BDE6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 22:25:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECB03B9BE22
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 22:26:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E92632837B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 20:25:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B9D27B0F98
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 20:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71559328999;
-	Wed, 24 Sep 2025 20:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39E28328967;
+	Wed, 24 Sep 2025 20:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="lmf2Cv+J"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="CsllQc/u"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.176.194.123])
+Received: from fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.178.143.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA06328576;
-	Wed, 24 Sep 2025 20:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.176.194.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DA319C546;
+	Wed, 24 Sep 2025 20:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.178.143.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758745492; cv=none; b=pxMKYxkgSdi9jnn1/ca7oZCnMHOj9cwUB4r55/JfaMyePExdiLYE7Etb1kwqIown52e2v04WwytdJ4byLhVP3c2UrqDEgpPQ1+PM8f327ghoqkTc6BTTI0hwikC/LhFbshOD9CDtlnY0OKR73qBMRkOZDy7U/WUAfRek6ZXZY9s=
+	t=1758745528; cv=none; b=S4o4e/AXzTdEUUd+0Rd1iHExDh8w9G7BYHtby3Hc69q1Gp9fLPPrSDFB5GAkHRpr1sseB7dyuKKZv9WHkTNIVMlQfxG88jl9PNWp4Jt7EbV01XTeUFOAjPbSpmx1Ju909j79oTNuxguS6A1/3r1ZTpXjfvxDc/YoSRUfeYkMG24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758745492; c=relaxed/simple;
-	bh=iDJV5uw/hQh8TBo0H6vtG+FNVuZ9GejjhZTXbYerM5Q=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gbf4ABEJW8cjE5dSTSTcPT6jrr2dp6D0eJlVRGbdjPmcqqbswVVgzrJkp6MXrnbM9wp7xNF0D3PZ8JxLfISmAHI17CuJqDra3sZ6Pdda4S0175dSMJpPa2+STFTNuYbJd+mH1CpE9YvBP+6zJm1bvv76YQhyLO4bm2liKkGdnCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=lmf2Cv+J; arc=none smtp.client-ip=63.176.194.123
+	s=arc-20240116; t=1758745528; c=relaxed/simple;
+	bh=MPbFimTJUFx75fJugZt/UsCD1KUboxKM93LqL2VEi5M=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WhrxjV+fjLiigqzCFUTiZAoJjv8/NJ/QgV12cGtf7G2VhxJoso1OMGYxxhFzqD+/FC3eQddnvnj+nIEdl66THiVjqXOvR25d3BBLthehuBPlk/bbojUIZClnYvIVzNd/p4cSS5JU2+m2P1V0D/JBZFjY9vtmm2C/VuW+/mGZOOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=CsllQc/u; arc=none smtp.client-ip=63.178.143.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1758745489; x=1790281489;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=8YxqVAstefiwEeBBwXrOji/xXNmlzL5LR2jr+zgZ2zI=;
-  b=lmf2Cv+JwYf5Lzuhg9f/Q8bv6nZSef5DaWh2PWabNGxLhL841qBEvoKw
-   5cXSVlRiwE4dHrrMbShwBlnzU/G5kg8cQwqj15p0qp7PdD7IZ6Y4WgME1
-   fnudr+blJvMbjpzwE8gh31Wi9v/xPEwmrTbv3YPFMNrxSv/hN/by3qf64
-   hvRCHhLzz6nZBg+S8HrrUMZOrDPw4iZADZJ99S/wrHIygBTx5CwjrQAN4
-   lZuk/TOiQELbdn+rBjiOeRNpL1XfQYUFu5mzXl/wKwKTEzGjcsTGB+tiU
-   iw3T0EwkbHskvwbRRpX7uuGkz+xNNANDBWwKH/oqK+7KvLtjUhQAzqES9
-   A==;
-X-CSE-ConnectionGUID: 9AKs/HdNQWKNk5hR/pm0MQ==
-X-CSE-MsgGUID: wEFGQccoS+SNl0ASxCSO6Q==
+  t=1758745526; x=1790281526;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CCU0o8wSJQJX56U4+pnGKdTopFZ/0WcuCtYzGhhpTrQ=;
+  b=CsllQc/uAk3rXvVseYrjwhfqk4T5vgEAKx6D+FxmFylcTmrE9abpNvjT
+   9xvLOMOm6i9fZkgxOSAcH1ZyRbfDsfMYeOJcSdjc1/HT75zCx7Ih/k+2r
+   UhQ04B4V4ENtgO2JFh7aL+ME1rMXcRfNcyNvbp0dm82LTc4LNR/nauT5r
+   kIriLRmTb8nYMawB0m6OA2SyiSMnjUNfUDd81rLsK95MrcVDHMO68M0Vy
+   ebPBkwJh95/ZtqpTfQAEGzDXCQKJ9V/VQk5wicXKUUCSBjDw81QVeOXyT
+   NR9F8/fR3Huzu3Qce1Gu/b1wazuaan6g3lI1EnoovT0qCMUHNOWERgIkJ
+   g==;
+X-CSE-ConnectionGUID: a1kayFJLT9+jylO1cmhIAQ==
+X-CSE-MsgGUID: /W5k3uF9SZ+FoDr6+hyF9A==
 X-IronPort-AV: E=Sophos;i="6.18,291,1751241600"; 
-   d="scan'208";a="2630729"
-Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
-  by internal-fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 20:24:37 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:5085]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.27.71:2525] with esmtp (Farcaster)
- id faa8ed04-2e91-468a-ba97-699cdaebd778; Wed, 24 Sep 2025 20:24:37 +0000 (UTC)
-X-Farcaster-Flow-ID: faa8ed04-2e91-468a-ba97-699cdaebd778
+   d="scan'208";a="2525115"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 20:25:20 +0000
+Received: from EX19MTAEUA002.ant.amazon.com [54.240.197.232:17421]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.23.230:2525] with esmtp (Farcaster)
+ id a321c2e3-9dbb-42fe-8549-d22fc4426b03; Wed, 24 Sep 2025 20:25:20 +0000 (UTC)
+X-Farcaster-Flow-ID: a321c2e3-9dbb-42fe-8549-d22fc4426b03
 Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
- EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
+ EX19MTAEUA002.ant.amazon.com (10.252.50.124) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Wed, 24 Sep 2025 20:24:34 +0000
+ Wed, 24 Sep 2025 20:25:09 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by EX19D018EUA004.ant.amazon.com (10.252.50.85) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Wed, 24 Sep 2025
- 20:24:00 +0000
+ 20:24:34 +0000
 From: Eliav Farber <farbere@amazon.com>
 To: <linux@armlinux.org.uk>, <richard@nod.at>,
 	<anton.ivanov@cambridgegreys.com>, <johannes@sipsolutions.net>,
@@ -120,9 +120,11 @@ To: <linux@armlinux.org.uk>, <richard@nod.at>,
 	<coreteam@netfilter.org>, <tipc-discussion@lists.sourceforge.net>,
 	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
 	<stable@vger.kernel.org>
-Subject: [PATCH 01/19 v6.1.y] minmax: add in_range() macro
-Date: Wed, 24 Sep 2025 20:23:02 +0000
-Message-ID: <20250924202320.32333-2-farbere@amazon.com>
+CC: Andy Shevchenko <andy.shevchenko@gmail.com>, Christophe Leroy
+	<christophe.leroy@csgroup.eu>
+Subject: [PATCH 02/19 v6.1.y] minmax: Introduce {min,max}_array()
+Date: Wed, 24 Sep 2025 20:23:03 +0000
+Message-ID: <20250924202320.32333-3-farbere@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250924202320.32333-1-farbere@amazon.com>
 References: <20250924202320.32333-1-farbere@amazon.com>
@@ -137,504 +139,98 @@ Content-Type: text/plain
 X-ClientProxiedBy: EX19D043UWC004.ant.amazon.com (10.13.139.206) To
  EX19D018EUA004.ant.amazon.com (10.252.50.85)
 
-From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+From: Herve Codina <herve.codina@bootlin.com>
 
-[ Upstream commit f9bff0e31881d03badf191d3b0005839391f5f2b ]
+[ Upstream commit c952c748c7a983a8bda9112984e6f2c1f6e441a5 ]
 
-Patch series "New page table range API", v6.
+Introduce min_array() (resp max_array()) in order to get the
+minimal (resp maximum) of values present in an array.
 
-This patchset changes the API used by the MM to set up page table entries.
-The four APIs are:
-
-    set_ptes(mm, addr, ptep, pte, nr)
-    update_mmu_cache_range(vma, addr, ptep, nr)
-    flush_dcache_folio(folio)
-    flush_icache_pages(vma, page, nr)
-
-flush_dcache_folio() isn't technically new, but no architecture
-implemented it, so I've done that for them.  The old APIs remain around
-but are mostly implemented by calling the new interfaces.
-
-The new APIs are based around setting up N page table entries at once.
-The N entries belong to the same PMD, the same folio and the same VMA, so
-ptep++ is a legitimate operation, and locking is taken care of for you.
-Some architectures can do a better job of it than just a loop, but I have
-hesitated to make too deep a change to architectures I don't understand
-well.
-
-One thing I have changed in every architecture is that PG_arch_1 is now a
-per-folio bit instead of a per-page bit when used for dcache clean/dirty
-tracking.  This was something that would have to happen eventually, and it
-makes sense to do it now rather than iterate over every page involved in a
-cache flush and figure out if it needs to happen.
-
-The point of all this is better performance, and Fengwei Yin has measured
-improvement on x86.  I suspect you'll see improvement on your architecture
-too.  Try the new will-it-scale test mentioned here:
-https://lore.kernel.org/linux-mm/20230206140639.538867-5-fengwei.yin@intel.com/
-You'll need to run it on an XFS filesystem and have
-CONFIG_TRANSPARENT_HUGEPAGE set.
-
-This patchset is the basis for much of the anonymous large folio work
-being done by Ryan, so it's received quite a lot of testing over the last
-few months.
-
-This patch (of 38):
-
-Determine if a value lies within a range more efficiently (subtraction +
-comparison vs two comparisons and an AND).  It also has useful (under some
-circumstances) behaviour if the range exceeds the maximum value of the
-type.  Convert all the conflicting definitions of in_range() within the
-kernel; some can use the generic definition while others need their own
-definition.
-
-Link: https://lkml.kernel.org/r/20230802151406.3735276-1-willy@infradead.org
-Link: https://lkml.kernel.org/r/20230802151406.3735276-2-willy@infradead.org
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Link: https://lore.kernel.org/r/20230623085830.749991-8-herve.codina@bootlin.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- arch/arm/mm/pageattr.c                        |  6 ++---
- .../drm/arm/display/include/malidp_utils.h    |  2 +-
- .../display/komeda/komeda_pipeline_state.c    | 24 ++++++++---------
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c         |  6 -----
- .../net/ethernet/chelsio/cxgb3/cxgb3_main.c   | 18 ++++++-------
- drivers/virt/acrn/ioreq.c                     |  4 +--
- fs/btrfs/misc.h                               |  2 --
- fs/ext2/balloc.c                              |  2 --
- fs/ext4/ext4.h                                |  2 --
- fs/ufs/util.h                                 |  6 -----
- include/linux/minmax.h                        | 27 +++++++++++++++++++
- lib/logic_pio.c                               |  3 ---
- net/netfilter/nf_nat_core.c                   |  6 ++---
- net/tipc/core.h                               |  2 +-
- net/tipc/link.c                               | 10 +++----
- .../selftests/bpf/progs/get_branch_snapshot.c |  4 +--
- 16 files changed, 65 insertions(+), 59 deletions(-)
+ include/linux/minmax.h | 64 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/arch/arm/mm/pageattr.c b/arch/arm/mm/pageattr.c
-index c3c34fe714b0..064ad508c149 100644
---- a/arch/arm/mm/pageattr.c
-+++ b/arch/arm/mm/pageattr.c
-@@ -25,7 +25,7 @@ static int change_page_range(pte_t *ptep, unsigned long addr, void *data)
- 	return 0;
- }
- 
--static bool in_range(unsigned long start, unsigned long size,
-+static bool range_in_range(unsigned long start, unsigned long size,
- 	unsigned long range_start, unsigned long range_end)
- {
- 	return start >= range_start && start < range_end &&
-@@ -63,8 +63,8 @@ static int change_memory_common(unsigned long addr, int numpages,
- 	if (!size)
- 		return 0;
- 
--	if (!in_range(start, size, MODULES_VADDR, MODULES_END) &&
--	    !in_range(start, size, VMALLOC_START, VMALLOC_END))
-+	if (!range_in_range(start, size, MODULES_VADDR, MODULES_END) &&
-+	    !range_in_range(start, size, VMALLOC_START, VMALLOC_END))
- 		return -EINVAL;
- 
- 	return __change_memory_common(start, size, set_mask, clear_mask);
-diff --git a/drivers/gpu/drm/arm/display/include/malidp_utils.h b/drivers/gpu/drm/arm/display/include/malidp_utils.h
-index 49a1d7f3539c..9f83baac6ed8 100644
---- a/drivers/gpu/drm/arm/display/include/malidp_utils.h
-+++ b/drivers/gpu/drm/arm/display/include/malidp_utils.h
-@@ -35,7 +35,7 @@ static inline void set_range(struct malidp_range *rg, u32 start, u32 end)
- 	rg->end   = end;
- }
- 
--static inline bool in_range(struct malidp_range *rg, u32 v)
-+static inline bool malidp_in_range(struct malidp_range *rg, u32 v)
- {
- 	return (v >= rg->start) && (v <= rg->end);
- }
-diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_pipeline_state.c b/drivers/gpu/drm/arm/display/komeda/komeda_pipeline_state.c
-index e200decd00c6..f4e76b46ca32 100644
---- a/drivers/gpu/drm/arm/display/komeda/komeda_pipeline_state.c
-+++ b/drivers/gpu/drm/arm/display/komeda/komeda_pipeline_state.c
-@@ -305,12 +305,12 @@ komeda_layer_check_cfg(struct komeda_layer *layer,
- 	if (komeda_fb_check_src_coords(kfb, src_x, src_y, src_w, src_h))
- 		return -EINVAL;
- 
--	if (!in_range(&layer->hsize_in, src_w)) {
-+	if (!malidp_in_range(&layer->hsize_in, src_w)) {
- 		DRM_DEBUG_ATOMIC("invalidate src_w %d.\n", src_w);
- 		return -EINVAL;
- 	}
- 
--	if (!in_range(&layer->vsize_in, src_h)) {
-+	if (!malidp_in_range(&layer->vsize_in, src_h)) {
- 		DRM_DEBUG_ATOMIC("invalidate src_h %d.\n", src_h);
- 		return -EINVAL;
- 	}
-@@ -452,14 +452,14 @@ komeda_scaler_check_cfg(struct komeda_scaler *scaler,
- 	hsize_out = dflow->out_w;
- 	vsize_out = dflow->out_h;
- 
--	if (!in_range(&scaler->hsize, hsize_in) ||
--	    !in_range(&scaler->hsize, hsize_out)) {
-+	if (!malidp_in_range(&scaler->hsize, hsize_in) ||
-+	    !malidp_in_range(&scaler->hsize, hsize_out)) {
- 		DRM_DEBUG_ATOMIC("Invalid horizontal sizes");
- 		return -EINVAL;
- 	}
- 
--	if (!in_range(&scaler->vsize, vsize_in) ||
--	    !in_range(&scaler->vsize, vsize_out)) {
-+	if (!malidp_in_range(&scaler->vsize, vsize_in) ||
-+	    !malidp_in_range(&scaler->vsize, vsize_out)) {
- 		DRM_DEBUG_ATOMIC("Invalid vertical sizes");
- 		return -EINVAL;
- 	}
-@@ -574,13 +574,13 @@ komeda_splitter_validate(struct komeda_splitter *splitter,
- 		return -EINVAL;
- 	}
- 
--	if (!in_range(&splitter->hsize, dflow->in_w)) {
-+	if (!malidp_in_range(&splitter->hsize, dflow->in_w)) {
- 		DRM_DEBUG_ATOMIC("split in_w:%d is out of the acceptable range.\n",
- 				 dflow->in_w);
- 		return -EINVAL;
- 	}
- 
--	if (!in_range(&splitter->vsize, dflow->in_h)) {
-+	if (!malidp_in_range(&splitter->vsize, dflow->in_h)) {
- 		DRM_DEBUG_ATOMIC("split in_h: %d exceeds the acceptable range.\n",
- 				 dflow->in_h);
- 		return -EINVAL;
-@@ -624,13 +624,13 @@ komeda_merger_validate(struct komeda_merger *merger,
- 		return -EINVAL;
- 	}
- 
--	if (!in_range(&merger->hsize_merged, output->out_w)) {
-+	if (!malidp_in_range(&merger->hsize_merged, output->out_w)) {
- 		DRM_DEBUG_ATOMIC("merged_w: %d is out of the accepted range.\n",
- 				 output->out_w);
- 		return -EINVAL;
- 	}
- 
--	if (!in_range(&merger->vsize_merged, output->out_h)) {
-+	if (!malidp_in_range(&merger->vsize_merged, output->out_h)) {
- 		DRM_DEBUG_ATOMIC("merged_h: %d is out of the accepted range.\n",
- 				 output->out_h);
- 		return -EINVAL;
-@@ -866,8 +866,8 @@ void komeda_complete_data_flow_cfg(struct komeda_layer *layer,
- 	 * input/output range.
- 	 */
- 	if (dflow->en_scaling && scaler)
--		dflow->en_split = !in_range(&scaler->hsize, dflow->in_w) ||
--				  !in_range(&scaler->hsize, dflow->out_w);
-+		dflow->en_split = !malidp_in_range(&scaler->hsize, dflow->in_w) ||
-+				  !malidp_in_range(&scaler->hsize, dflow->out_w);
- }
- 
- static bool merger_is_available(struct komeda_pipeline *pipe,
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 9156e673d360..cd1d11104607 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -680,12 +680,6 @@ struct block_header {
- 	u32 data[];
- };
- 
--/* this should be a general kernel helper */
--static int in_range(u32 addr, u32 start, u32 size)
--{
--	return addr >= start && addr < start + size;
--}
--
- static bool fw_block_mem(struct a6xx_gmu_bo *bo, const struct block_header *blk)
- {
- 	if (!in_range(blk->addr, bo->iova, bo->size))
-diff --git a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-index 9b84c8d8d309..d117022d15d7 100644
---- a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-+++ b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-@@ -2126,7 +2126,7 @@ static const struct ethtool_ops cxgb_ethtool_ops = {
- 	.set_link_ksettings = set_link_ksettings,
- };
- 
--static int in_range(int val, int lo, int hi)
-+static int cxgb_in_range(int val, int lo, int hi)
- {
- 	return val < 0 || (val <= hi && val >= lo);
- }
-@@ -2162,19 +2162,19 @@ static int cxgb_siocdevprivate(struct net_device *dev,
- 			return -EINVAL;
- 		if (t.qset_idx >= SGE_QSETS)
- 			return -EINVAL;
--		if (!in_range(t.intr_lat, 0, M_NEWTIMER) ||
--		    !in_range(t.cong_thres, 0, 255) ||
--		    !in_range(t.txq_size[0], MIN_TXQ_ENTRIES,
-+		if (!cxgb_in_range(t.intr_lat, 0, M_NEWTIMER) ||
-+		    !cxgb_in_range(t.cong_thres, 0, 255) ||
-+		    !cxgb_in_range(t.txq_size[0], MIN_TXQ_ENTRIES,
- 			      MAX_TXQ_ENTRIES) ||
--		    !in_range(t.txq_size[1], MIN_TXQ_ENTRIES,
-+		    !cxgb_in_range(t.txq_size[1], MIN_TXQ_ENTRIES,
- 			      MAX_TXQ_ENTRIES) ||
--		    !in_range(t.txq_size[2], MIN_CTRL_TXQ_ENTRIES,
-+		    !cxgb_in_range(t.txq_size[2], MIN_CTRL_TXQ_ENTRIES,
- 			      MAX_CTRL_TXQ_ENTRIES) ||
--		    !in_range(t.fl_size[0], MIN_FL_ENTRIES,
-+		    !cxgb_in_range(t.fl_size[0], MIN_FL_ENTRIES,
- 			      MAX_RX_BUFFERS) ||
--		    !in_range(t.fl_size[1], MIN_FL_ENTRIES,
-+		    !cxgb_in_range(t.fl_size[1], MIN_FL_ENTRIES,
- 			      MAX_RX_JUMBO_BUFFERS) ||
--		    !in_range(t.rspq_size, MIN_RSPQ_ENTRIES,
-+		    !cxgb_in_range(t.rspq_size, MIN_RSPQ_ENTRIES,
- 			      MAX_RSPQ_ENTRIES))
- 			return -EINVAL;
- 
-diff --git a/drivers/virt/acrn/ioreq.c b/drivers/virt/acrn/ioreq.c
-index d75ab3f66da4..d3d800a5cbe1 100644
---- a/drivers/virt/acrn/ioreq.c
-+++ b/drivers/virt/acrn/ioreq.c
-@@ -351,7 +351,7 @@ static bool handle_cf8cfc(struct acrn_vm *vm,
- 	return is_handled;
- }
- 
--static bool in_range(struct acrn_ioreq_range *range,
-+static bool acrn_in_range(struct acrn_ioreq_range *range,
- 		     struct acrn_io_request *req)
- {
- 	bool ret = false;
-@@ -389,7 +389,7 @@ static struct acrn_ioreq_client *find_ioreq_client(struct acrn_vm *vm,
- 	list_for_each_entry(client, &vm->ioreq_clients, list) {
- 		read_lock_bh(&client->range_lock);
- 		list_for_each_entry(range, &client->range_list, list) {
--			if (in_range(range, req)) {
-+			if (acrn_in_range(range, req)) {
- 				found = client;
- 				break;
- 			}
-diff --git a/fs/btrfs/misc.h b/fs/btrfs/misc.h
-index f9850edfd726..cadd3fb48769 100644
---- a/fs/btrfs/misc.h
-+++ b/fs/btrfs/misc.h
-@@ -8,8 +8,6 @@
- #include <linux/math64.h>
- #include <linux/rbtree.h>
- 
--#define in_range(b, first, len) ((b) >= (first) && (b) < (first) + (len))
--
- static inline void cond_wake_up(struct wait_queue_head *wq)
- {
- 	/*
-diff --git a/fs/ext2/balloc.c b/fs/ext2/balloc.c
-index d2eb4d291985..e8d5869682b2 100644
---- a/fs/ext2/balloc.c
-+++ b/fs/ext2/balloc.c
-@@ -36,8 +36,6 @@
-  */
- 
- 
--#define in_range(b, first, len)	((b) >= (first) && (b) <= (first) + (len) - 1)
--
- struct ext2_group_desc * ext2_get_group_desc(struct super_block * sb,
- 					     unsigned int block_group,
- 					     struct buffer_head ** bh)
-diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-index 903bb01e6dd2..87e223fa4ebd 100644
---- a/fs/ext4/ext4.h
-+++ b/fs/ext4/ext4.h
-@@ -3804,8 +3804,6 @@ static inline void set_bitmap_uptodate(struct buffer_head *bh)
- 	set_bit(BH_BITMAP_UPTODATE, &(bh)->b_state);
- }
- 
--#define in_range(b, first, len)	((b) >= (first) && (b) <= (first) + (len) - 1)
--
- /* For ioend & aio unwritten conversion wait queues */
- #define EXT4_WQ_HASH_SZ		37
- #define ext4_ioend_wq(v)   (&ext4__ioend_wq[((unsigned long)(v)) %\
-diff --git a/fs/ufs/util.h b/fs/ufs/util.h
-index 4931bec1a01c..89247193d96d 100644
---- a/fs/ufs/util.h
-+++ b/fs/ufs/util.h
-@@ -11,12 +11,6 @@
- #include <linux/fs.h>
- #include "swab.h"
- 
--
--/*
-- * some useful macros
-- */
--#define in_range(b,first,len)	((b)>=(first)&&(b)<(first)+(len))
--
- /*
-  * functions used for retyping
-  */
 diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index dd52969698f7..d4bc394b449e 100644
+index d4bc394b449e..aac0b7d23768 100644
 --- a/include/linux/minmax.h
 +++ b/include/linux/minmax.h
-@@ -5,6 +5,7 @@
- #include <linux/build_bug.h>
- #include <linux/compiler.h>
- #include <linux/const.h>
-+#include <linux/types.h>
- 
- /*
-  * min()/max()/clamp() macros must accomplish three things:
-@@ -192,6 +193,32 @@
+@@ -168,6 +168,70 @@
   */
- #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+ #define max_t(type, x, y)	__careful_cmp(max, (type)(x), (type)(y))
  
-+static inline bool in_range64(u64 val, u64 start, u64 len)
-+{
-+	return (val - start) < len;
-+}
++/*
++ * Remove a const qualifier from integer types
++ * _Generic(foo, type-name: association, ..., default: association) performs a
++ * comparison against the foo type (not the qualified type).
++ * Do not use the const keyword in the type-name as it will not match the
++ * unqualified type of foo.
++ */
++#define __unconst_integer_type_cases(type)	\
++	unsigned type:  (unsigned type)0,	\
++	signed type:    (signed type)0
 +
-+static inline bool in_range32(u32 val, u32 start, u32 len)
-+{
-+	return (val - start) < len;
-+}
++#define __unconst_integer_typeof(x) typeof(			\
++	_Generic((x),						\
++		char: (char)0,					\
++		__unconst_integer_type_cases(char),		\
++		__unconst_integer_type_cases(short),		\
++		__unconst_integer_type_cases(int),		\
++		__unconst_integer_type_cases(long),		\
++		__unconst_integer_type_cases(long long),	\
++		default: (x)))
++
++/*
++ * Do not check the array parameter using __must_be_array().
++ * In the following legit use-case where the "array" passed is a simple pointer,
++ * __must_be_array() will return a failure.
++ * --- 8< ---
++ * int *buff
++ * ...
++ * min = min_array(buff, nb_items);
++ * --- 8< ---
++ *
++ * The first typeof(&(array)[0]) is needed in order to support arrays of both
++ * 'int *buff' and 'int buff[N]' types.
++ *
++ * The array can be an array of const items.
++ * typeof() keeps the const qualifier. Use __unconst_integer_typeof() in order
++ * to discard the const qualifier for the __element variable.
++ */
++#define __minmax_array(op, array, len) ({				\
++	typeof(&(array)[0]) __array = (array);				\
++	typeof(len) __len = (len);					\
++	__unconst_integer_typeof(__array[0]) __element = __array[--__len]; \
++	while (__len--)							\
++		__element = op(__element, __array[__len]);		\
++	__element; })
 +
 +/**
-+ * in_range - Determine if a value lies within a range.
-+ * @val: Value to test.
-+ * @start: First value in range.
-+ * @len: Number of values in range.
++ * min_array - return minimum of values present in an array
++ * @array: array
++ * @len: array length
 + *
-+ * This is more efficient than "if (start <= val && val < (start + len))".
-+ * It also gives a different answer if @start + @len overflows the size of
-+ * the type by a sufficient amount to encompass @val.  Decide for yourself
-+ * which behaviour you want, or prove that start + len never overflow.
-+ * Do not blindly replace one form with the other.
++ * Note that @len must not be zero (empty array).
 + */
-+#define in_range(val, start, len)					\
-+	((sizeof(start) | sizeof(len) | sizeof(val)) <= sizeof(u32) ?	\
-+		in_range32(val, start, len) : in_range64(val, start, len))
++#define min_array(array, len) __minmax_array(min, array, len)
++
++/**
++ * max_array - return maximum of values present in an array
++ * @array: array
++ * @len: array length
++ *
++ * Note that @len must not be zero (empty array).
++ */
++#define max_array(array, len) __minmax_array(max, array, len)
 +
  /**
-  * swap - swap values of @a and @b
-  * @a: first value
-diff --git a/lib/logic_pio.c b/lib/logic_pio.c
-index 07b4b9a1f54b..2ea564a40064 100644
---- a/lib/logic_pio.c
-+++ b/lib/logic_pio.c
-@@ -20,9 +20,6 @@
- static LIST_HEAD(io_range_list);
- static DEFINE_MUTEX(io_range_mutex);
- 
--/* Consider a kernel general helper for this */
--#define in_range(b, first, len)        ((b) >= (first) && (b) < (first) + (len))
--
- /**
-  * logic_pio_register_range - register logical PIO range for a host
-  * @new_range: pointer to the IO range to be registered.
-diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
-index e29e4ccb5c5a..6b683ff015b9 100644
---- a/net/netfilter/nf_nat_core.c
-+++ b/net/netfilter/nf_nat_core.c
-@@ -242,7 +242,7 @@ static bool l4proto_in_range(const struct nf_conntrack_tuple *tuple,
- /* If we source map this tuple so reply looks like reply_tuple, will
-  * that meet the constraints of range.
-  */
--static int in_range(const struct nf_conntrack_tuple *tuple,
-+static int nf_in_range(const struct nf_conntrack_tuple *tuple,
- 		    const struct nf_nat_range2 *range)
- {
- 	/* If we are supposed to map IPs, then we must be in the
-@@ -291,7 +291,7 @@ find_appropriate_src(struct net *net,
- 				       &ct->tuplehash[IP_CT_DIR_REPLY].tuple);
- 			result->dst = tuple->dst;
- 
--			if (in_range(result, range))
-+			if (nf_in_range(result, range))
- 				return 1;
- 		}
- 	}
-@@ -523,7 +523,7 @@ get_unique_tuple(struct nf_conntrack_tuple *tuple,
- 	if (maniptype == NF_NAT_MANIP_SRC &&
- 	    !(range->flags & NF_NAT_RANGE_PROTO_RANDOM_ALL)) {
- 		/* try the original tuple first */
--		if (in_range(orig_tuple, range)) {
-+		if (nf_in_range(orig_tuple, range)) {
- 			if (!nf_nat_used_tuple(orig_tuple, ct)) {
- 				*tuple = *orig_tuple;
- 				return;
-diff --git a/net/tipc/core.h b/net/tipc/core.h
-index 0a3f7a70a50a..7eccd97e0609 100644
---- a/net/tipc/core.h
-+++ b/net/tipc/core.h
-@@ -197,7 +197,7 @@ static inline int less(u16 left, u16 right)
- 	return less_eq(left, right) && (mod(right) != mod(left));
- }
- 
--static inline int in_range(u16 val, u16 min, u16 max)
-+static inline int tipc_in_range(u16 val, u16 min, u16 max)
- {
- 	return !less(val, min) && !more(val, max);
- }
-diff --git a/net/tipc/link.c b/net/tipc/link.c
-index d6a8f0aa531b..6c6d8546c578 100644
---- a/net/tipc/link.c
-+++ b/net/tipc/link.c
-@@ -1624,7 +1624,7 @@ static int tipc_link_advance_transmq(struct tipc_link *l, struct tipc_link *r,
- 					  last_ga->bgack_cnt);
- 			}
- 			/* Check against the last Gap ACK block */
--			if (in_range(seqno, start, end))
-+			if (tipc_in_range(seqno, start, end))
- 				continue;
- 			/* Update/release the packet peer is acking */
- 			bc_has_acked = true;
-@@ -2252,12 +2252,12 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
- 		strncpy(if_name, data, TIPC_MAX_IF_NAME);
- 
- 		/* Update own tolerance if peer indicates a non-zero value */
--		if (in_range(peers_tol, TIPC_MIN_LINK_TOL, TIPC_MAX_LINK_TOL)) {
-+		if (tipc_in_range(peers_tol, TIPC_MIN_LINK_TOL, TIPC_MAX_LINK_TOL)) {
- 			l->tolerance = peers_tol;
- 			l->bc_rcvlink->tolerance = peers_tol;
- 		}
- 		/* Update own priority if peer's priority is higher */
--		if (in_range(peers_prio, l->priority + 1, TIPC_MAX_LINK_PRI))
-+		if (tipc_in_range(peers_prio, l->priority + 1, TIPC_MAX_LINK_PRI))
- 			l->priority = peers_prio;
- 
- 		/* If peer is going down we want full re-establish cycle */
-@@ -2300,13 +2300,13 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
- 		l->rcv_nxt_state = msg_seqno(hdr) + 1;
- 
- 		/* Update own tolerance if peer indicates a non-zero value */
--		if (in_range(peers_tol, TIPC_MIN_LINK_TOL, TIPC_MAX_LINK_TOL)) {
-+		if (tipc_in_range(peers_tol, TIPC_MIN_LINK_TOL, TIPC_MAX_LINK_TOL)) {
- 			l->tolerance = peers_tol;
- 			l->bc_rcvlink->tolerance = peers_tol;
- 		}
- 		/* Update own prio if peer indicates a different value */
- 		if ((peers_prio != l->priority) &&
--		    in_range(peers_prio, 1, TIPC_MAX_LINK_PRI)) {
-+		    tipc_in_range(peers_prio, 1, TIPC_MAX_LINK_PRI)) {
- 			l->priority = peers_prio;
- 			rc = tipc_link_fsm_evt(l, LINK_FAILURE_EVT);
- 		}
-diff --git a/tools/testing/selftests/bpf/progs/get_branch_snapshot.c b/tools/testing/selftests/bpf/progs/get_branch_snapshot.c
-index a1b139888048..511ac634eef0 100644
---- a/tools/testing/selftests/bpf/progs/get_branch_snapshot.c
-+++ b/tools/testing/selftests/bpf/progs/get_branch_snapshot.c
-@@ -15,7 +15,7 @@ long total_entries = 0;
- #define ENTRY_CNT 32
- struct perf_branch_entry entries[ENTRY_CNT] = {};
- 
--static inline bool in_range(__u64 val)
-+static inline bool gbs_in_range(__u64 val)
- {
- 	return (val >= address_low) && (val < address_high);
- }
-@@ -31,7 +31,7 @@ int BPF_PROG(test1, int n, int ret)
- 	for (i = 0; i < ENTRY_CNT; i++) {
- 		if (i >= total_entries)
- 			break;
--		if (in_range(entries[i].from) && in_range(entries[i].to))
-+		if (gbs_in_range(entries[i].from) && gbs_in_range(entries[i].to))
- 			test1_hits++;
- 		else if (!test1_hits)
- 			wasted_entries++;
+  * clamp_t - return a value clamped to a given range using a given type
+  * @type: the type of variable to use
 -- 
 2.47.3
 
