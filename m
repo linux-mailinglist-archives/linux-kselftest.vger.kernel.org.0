@@ -1,139 +1,132 @@
-Return-Path: <linux-kselftest+bounces-42168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42167-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AC20B98C71
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 10:15:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A337B98C1D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 10:08:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 054AC3A9F64
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 08:15:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FAC42A5B77
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 08:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53EC825A34F;
-	Wed, 24 Sep 2025 08:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C71927FD7C;
+	Wed, 24 Sep 2025 08:07:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="f8DZpYAG"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="31Omeb15";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="n9aMu2nr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAD22571C7;
-	Wed, 24 Sep 2025 08:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E2D44C63;
+	Wed, 24 Sep 2025 08:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758701718; cv=none; b=dRyJD+bEGTg2z+RkNNMC5dMsk2fpsk1kydoJWaodptTAGSYBTn9aI0buv4nn8J2GhU9t4aiMjTwdJFd/PpldM4sKv/1l/oiMPMRpXkvUkHfkUJrVmVgqF+rnIwCHkpWepQcxzWPdgKIZD0o7Q1ekNtD0DGbzHbWLkHnEd24LQyk=
+	t=1758701266; cv=none; b=hsw4IzJrTARJ9trTGUqxU8Qao+JVlCMVkeiHqC3NSAKWR1iHr3HNMHVUD+6MhhVLSZC6AgEHFnGGlIQjoNgyTKb6juOqgnHu+ATr/ufn1jV7Q8G++EBDr7vPcWCAy6AgpkmOIDLeG6TrYU8ZKTdohWL+3O/923CTmjlCiOiryuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758701718; c=relaxed/simple;
-	bh=D2wn6RMMBnB/+9wWDZ2/t9VQgCDz7Hs9Ndx57HE6Dsg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iIXSeihCzUIJyVzOUI5adNWzm1PHzLfj+43YrbxCLePAR9g+ub4QL2BEiXaehK1koZ1CVaIRGOUM72SR9RZ8q7bVR2bY+0D57QviWhMatyjMFlnQMsI+RB//8tcw/8oTy5RSJNTct/0pJW3kn+dsj6nJS/F+rbKxS8E71ZAQgwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=f8DZpYAG; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=D2wn6RMMBnB/+9wWDZ2/t9VQgCDz7Hs9Ndx57HE6Dsg=;
-	t=1758701716; x=1759911316; b=f8DZpYAGqZNrtO12hrxWKoTJxIBRZIkJOU4i7mzCmdm6LoK
-	LDfy2qH1UUkyg0laJmQ8pKR9PGatQmgTbwLUQjlMbgiPtfQs4J3YAa2PtaWey6DdYc8VJlEcgWrHV
-	sjRA3I0/1zzspQIdTkkQe1i06ZBA9XOTTOpNx1ladj7X81fqa11bZPOFgTiiKVOXN+N01R8K+co1t
-	WZkqGmuxSu1kRAVfKWRw1xARslSoxjW3/3eXKAieH6+hwH2r+3Cyw9dd8Buiw0rG2GEXvp/7XIqkC
-	/e47eSY+BOly6S1I7NBjfaBukDVONxDTpHkNpcpNzizSMALKvFdnEdfIJ01v0MYw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1v1KLs-00000008P0I-0JrN;
-	Wed, 24 Sep 2025 09:55:48 +0200
-Message-ID: <97fde69716ea4742b6cb4aca1a3ecc8788693cd3.camel@sipsolutions.net>
-Subject: Re: [PATCH v2 00/11] Start porting UML to nolibc
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: Willy Tarreau <w@1wt.eu>, Hajime Tazaki <thehajime@gmail.com>
-Cc: johannes@sipsolutions.net, hch@infradead.org,
- linux-um@lists.infradead.org, 	linux@weissschuh.net,
- linux-kselftest@vger.kernel.org, acme@redhat.com, 
-	linux-kernel@vger.kernel.org
-Date: Wed, 24 Sep 2025 09:55:47 +0200
-In-Reply-To: <20250924033217.GA9039@1wt.eu>
-References: <20250919153420.727385-1-benjamin@sipsolutions.net>
-	 <aM15eChUObXfxLzs@infradead.org>
-	 <4354d88c2ff7a57a7324cc39b4ce5ed4ebe5277d.camel@sipsolutions.net>
-	 <m2y0q47mbs.wl-thehajime@gmail.com> <20250924033217.GA9039@1wt.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	s=arc-20240116; t=1758701266; c=relaxed/simple;
+	bh=QgLVMteIPJ+pMUDeTmzYpa0Om88x4SzL6ygbBAQMfig=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=Df5c11VGFLTUyE2PZuFOLwh0Ghy5w2sC4ERpH5geAsRV+3ofUqKfuWcjMouJUz+ctjJGz4TJXswO+o15SsIyE0REumaiiWTopvZ+ysgsI9EgYcSyjfflaZo68Dorz9sVwqYmsyHokTbaxlXS5ZVQs3g+aPmHZfwBijTIgIbbRck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=31Omeb15; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=n9aMu2nr; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Wed, 24 Sep 2025 10:07:36 +0200 (GMT+02:00)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1758701262;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QgLVMteIPJ+pMUDeTmzYpa0Om88x4SzL6ygbBAQMfig=;
+	b=31Omeb15YqChHkBBrePL7NG3JD983FRx11Q5uWT/69RIupuUYdoTYmGARAlJia6NlrrGQN
+	5bccvQRhu9NcTZtmvjlgyrvdEj5A1CDs8zthnojoVFXb7nQgs5SpXbO8rV9L4e+rwnpaCO
+	ua2jL9ZurCRzeQvEx0XtMCN7QuKSfAfEmHL2Y+sW7stPznDDzQHvTqbRTdGYko3+/T12ye
+	j1+Ro5mKKD/7GFoBxJzLa4UvxffzbMiluz2XiPl0kMDb4Rznzr4zg9+LVFIMxv9nAN+P3+
+	XSkEVbGVGFCipqBlQpFNsRbuwLO+4Us4XFeGg8YiuoKCqT4LwQxWTqtgvVs2Lw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1758701262;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QgLVMteIPJ+pMUDeTmzYpa0Om88x4SzL6ygbBAQMfig=;
+	b=n9aMu2nrfU7/A2LOU0ndnoE+3K8jSV2X1C4MQa1OTm1DcYDn9hSt6n0FuxlpuJtK/TUJKn
+	tCL0hbarV8eUGJBg==
+From: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Nick Alcock <nick.alcock@oracle.com>,
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
+	Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-s390@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Message-ID: <bea9cc5c-7fc6-4c87-ab78-8232b2bee4dc@linutronix.de>
+In-Reply-To: <60a0af09cc1a5de3b33b9606ed07ae91b42c5432.camel@physik.fu-berlin.de>
+References: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de> <9a122c6cf3e2e0e61a62b0512eb97804acebeee9.camel@physik.fu-berlin.de> <48fd164e-959b-4263-b3c7-cef5771aa40a@linutronix.de> <60a0af09cc1a5de3b33b9606ed07ae91b42c5432.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v3 00/36] sparc64: vdso: Switch to the generic vDSO
+ library
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Correlation-ID: <bea9cc5c-7fc6-4c87-ab78-8232b2bee4dc@linutronix.de>
 
-On Wed, 2025-09-24 at 05:32 +0200, Willy Tarreau wrote:
-> On Wed, Sep 24, 2025 at 08:58:47AM +0900, Hajime Tazaki wrote:
-> >=20
-> > Hello Benjamin, Johannes,
-> >=20
-> > On Mon, 22 Sep 2025 16:41:36 +0900,
-> > Johannes Berg wrote:
-> > >=20
-> > > On Fri, 2025-09-19 at 08:40 -0700, Christoph Hellwig wrote:
-> > > > On Fri, Sep 19, 2025 at 05:34:09PM +0200, Benjamin Berg wrote:
-> > > > > From: Benjamin Berg <benjamin.berg@intel.com>
-> > > > >=20
-> > > > > This patchset is an attempt to start a nolibc port of UML.
-> > > >=20
-> > > > It would be useful to explain why that is desirable.
-> > >=20
-> > > Agree, it should be here, but FWIW it's been discussed elsewhere on t=
-he
-> > > linux-um list in the past and basically there are various issues arou=
-nd
-> > > it. Off the top of my head:
-> > > =C2=A0- glibc enabling new features such as rseq that interact badly =
-with how
-> > > =C2=A0=C2=A0 UML manages memory (there were fixes for this, it worked=
- sometimes
-> > > =C2=A0=C2=A0 and sometimes not)
-> > > =C2=A0- allocation placement for TLS is problematic (see the SMP seri=
-es)
-> > > =C2=A0- it's (too) easy to accidentally call glibc functions that req=
-uire
-> > > =C2=A0=C2=A0 huge amounts of stack space
-> > >=20
-> > > There are probably other reasons, but the mixed nature of UML being b=
-oth
-> > > kernel and "hypervisor" code in a single place doesn't mix well with
-> > > glibc.
-> >=20
-> > just curious
-> >=20
-> > - are those issues not happening in other libc implementation ? (e.g.,
-> > =C2=A0 musl-libc)
-> > - same question to nolibc: is there any possibility that nolibc will
-> > =C2=A0 evolve as glibc does, and this evolution introduces the UML issu=
-es ?
->=20
-> Nolibc focuses on early boot programs. That does not mean it will never
-> evolve towrards more generic usage but this remains unlikely, and in any
-> case there's the goal will remain not to degrade the experience on the
-> original target (early boot). That doesn't mean there will never be any
-> breakage but we're doing our best to keep things in a clean and workable
-> state. Regarding threads, it seems unlikely that they'll arrive any time
-> soon. But if they did, assuming UML would by then be a long established
-> user, we'd certainly find a solution together (even via build-time
-> defines if needed).
+Sep 24, 2025 09:40:47 John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.=
+de>:
 
-Also, with nolibc it is really simple to override any functions as
-needed. We will likely want to do this for malloc/free so that nothing
-bad can happen there.
+> Hi Thomas,
+>
+> On Sat, 2025-09-20 at 16:37 +0200, Thomas Wei=C3=9Fschuh wrote:
+>>> Could you share a version of the series based on top of 6.17.0-rcN for
+>>> testing purposes? I would like to test the series on a Sun Netra 240
+>>> which is based on the UltraSPARC IIIi.
+>>
+>> Here is the git branch based on rc4:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.=
+git/log/?h=3Db4/vdso-sparc64-generic-2
+>>
+>> Does that work for you?
+>
+> I'm getting merge conflicts with "vdso/datastore: Allocate data pages dyn=
+amically" and
+> "vdso/datapage: Remove inclusion of gettimeofday.h".
+>
+> Can these be skipped?
 
-Actually, UML already tries to do that for glibc. However, it
-effectively fails (for dynamically linked builds) because the
-dynamically linked glibc still uses its internal version for these
-symbols.
+No, these are important.
 
-Benjamin
+What are you trying to merge?
+I can probably give you a merge.
+
+
+Thomas
 
