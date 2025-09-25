@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-42398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42399-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93D2FBA0E96
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 19:37:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76E15BA0E9C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 19:37:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 317237B9EE3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 17:35:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 726FB7BA15B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 17:35:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E4E3314B7A;
-	Thu, 25 Sep 2025 17:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE08D315D3B;
+	Thu, 25 Sep 2025 17:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bhw4wvS8"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="n0VRadY9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011062.outbound.protection.outlook.com [40.93.194.62])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013057.outbound.protection.outlook.com [40.93.201.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F053A315761;
-	Thu, 25 Sep 2025 17:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A1E315D2A;
+	Thu, 25 Sep 2025 17:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758821677; cv=fail; b=r+sIT18212g3vxrYOlrdhxU+EZmw6ENzgwwDLywQFggANX2OxA2uBILoIzYyMI/yTfPNpbwbqv6rQ0oNuZHklYBWPL5EaIEAYUmqC+TwvMhaV8VVPck1e67OBOERpbgQmVnI6omrELNyyFkQbavgSl/kxDDxlKHL75iYy1X5uhc=
+	t=1758821682; cv=fail; b=PV9H45s0lSjbIzhpP78amr1QLPdQU6jSBs44n+GTRBqYwMoBlczefA5buzHLJzrlzsVFRuzDHP4QKBi7LBw5SlkVHANJd5qLW1ujG7vRTL0oUTpBOQBWCO6wGpHgXbtI6OMqV58+pLUare96QNtsWPeSq0rmp4w2BIAb9+ocRpI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758821677; c=relaxed/simple;
-	bh=JQLwVOMkPnnRAoCTORErpT8WEya+69iCgFetonCQ/CM=;
+	s=arc-20240116; t=1758821682; c=relaxed/simple;
+	bh=ui8NoFXSlKk7zYzIRuF/xwWSeCFwbWYn6WI4YChzMqU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EHOVRoW5p840wUpLiNrWXopvDuG0lxnqlSZawcIULKTzjlW+TuFvMpTtSZpL87ZoVXJlbgVxYTxU0UStE41P+thhQcR6qM7Lq5gB1U9L3arUl2NeJ1Dzp2srCieBNvdAX5cyKiQxg0dNCVwu7stQHUpANHjpjvIBOrX4PtR9Cj0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bhw4wvS8; arc=fail smtp.client-ip=40.93.194.62
+	 MIME-Version:Content-Type; b=RNOacmYRBQjcb0bZ/l88B/1dRjstHWTGRUcjL7phZjMUHvkbMCftvLvxnf54S5xvb8QHHWAXjoHI/Rq6G11N7kWXNwWHNPqm5rJbid+yguT5SasMMRoNsf4AdMhvx/N9K+mCre/HLYWSmdNeX+K5P3sTY8ETJtBndn1ifVBn6dw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=n0VRadY9; arc=fail smtp.client-ip=40.93.201.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ClwvlRKjNdOhmKBZpSqM+s+KDqI5fE7Cce/9HUwXQHzFSufnQp5jRLOgNnKw9ED+ZQcRs0Bi6eDRkCf8gok7Fnvc9RY3Icq3Pt3xPs0HBbhXgT9ABGq9m/cXh/uORZGxQfr95GnlfKwlBZHy/WKTUgSZXYsOr2SRPqZuzNcCS2cSyb3kkq/sKFAysO1ze2URUIROlftvC9ICS+2xEwPkfQC6GhV1fM5iMmjwZ1la1lUFKdNqZ5bmVwXsAAiWAZ376Q5/BprTY0GTOk5mH6XBzwUgaepuKeLeTLY5/VH8jwJf1DMLo4WFFIbhQRVuwnTXOiJ7avHJUQ8QT76NxZ40Jw==
+ b=oBZRvt1/JGwqSo9iXsg42zMWsKFh+ud51gARihaQouFwfdOeYOC2tVkJu86Y/ht1Q188JNQ5S89owCFaAONHZgmmrDI2s2VfSbxax38EKkG1y0IsavQznMCq0UrHLe7lNfCHDX6BGqx8E+r5Nk3mjn0WUgm3q6ooa6rqfIozIvpyAM9KQ0qtCaTxg5DPdH4hRxhbYcnrDOYwho4Abd97OMBj3n/D3Z9giCGMmq3oGEL5+2Eq9f9mDWWFGbu7WWtGdils4Zg3ThOO+2zYioK6FAVe7F0wMxJ1DEfLbf1D5KSF1QlBHD5hyM8XJuWIfaS/c5l+pF5CGrwp9HJTo8fMMQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k+HM0Tl62LR5uaBBNXIyvEIuH1RuUu1ItqBlB8V5kYQ=;
- b=broVj65UFWTRof9LSFO+iSuBZY4WhViQheWn0sLiqCt7oQv1Qr0nXYzsbDSOkMgrLW4Vjd7RI3Wv5a5l1caOI/Yu1HPSOY63ef4YRZvIIehYaeDF1kIvp8FzfIzqxqtfQ82UgXdwJE63U27qba8v94ELseSGAewx+X0eufuw1a/2Rxzq3LKFYEiejpwEUTndGGrMuKT0M6TZpZgpzUp8SKp6UEPaO7OOi0dh3Kvg+djzTS+SpRVtcothgyminWYln/qhWbPBzyKsliC5Xfg7T5EyX3FoTpd0vfGWLUlJyQlqljTHzS4RxWkfolNrStjBArBz5hZBVLIazeXmG12mbQ==
+ bh=3Vq+reGsThOy8crraLWc1x0tc06NXoS3euYihCtIXpk=;
+ b=fFT8T6KG3kgP+UtYfurRAI0qvnPfyoTSF+K2GwRE1zbNMIQ4ImUHOpx9owWp7x3ko+ng1eh3A7Ru2aCmHoTdDj5VeaMEx+Cazgxf4aj2eUJFTBoz9TBmOOuVtfrn3OVYnqd4KIPW8uOQGNR6S6QUmlhZdWeA2V/QU1i3iSBBZQUkAkEZsL7n30DMY0KfRA/2B7so067LQKvoq8v9HdZYA5SJDH+SwxxJNRQIrdSIXr4dlytMAXKrKdZa2bs9PPMBxx5H/o4mYmnm4vLKuhjK/oIdAqy73l34t55JlJAI2p7X+WSqqRrQ0lqkM5c6kTb3uzk8o+DD7IESeu7aGYXt1g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k+HM0Tl62LR5uaBBNXIyvEIuH1RuUu1ItqBlB8V5kYQ=;
- b=bhw4wvS8h+g+9JHzMmNivNpGZFuJYdxC2UN2FvB4utG5MhJklv4F4UJ6rEcku+mYNLSwtSgQu0ne/vFi4EJdcfp04jghhLUJziqyEzwSW8v+maVpM40aia8fJzHAXm4vq7sj8IiVAL+VmTaIQNCVIwvB2pU9izB+mIokpccd9OgOUhIn1hH/pZEH1OlB86utBtImnPDdYih8GiBVhqM2U+5RQZels02x1B5BnXwtnrv6KCovIFEZ5PKQBO/JlhHv13TE52enmmFn8KVceAic7ijfgt+hF5CWDbHeC78z7kO4VQASSSGu5cGluBoGQy1fxq/2hRThwaGuxTzFoIOyOQ==
-Received: from CH0PR07CA0020.namprd07.prod.outlook.com (2603:10b6:610:32::25)
- by DM6PR12MB4418.namprd12.prod.outlook.com (2603:10b6:5:28e::9) with
+ bh=3Vq+reGsThOy8crraLWc1x0tc06NXoS3euYihCtIXpk=;
+ b=n0VRadY9vR4q1cJomNk+wHhzNT54QLsDWbLoDdy+871G5x445lM41ZXzDXMWoJX/ZdkC6UCxUzzqngH4wnC+x39aeXtAiEtBZEG/gIjXPH9LFyX9WeMZC3zssd2YpXGzbpuk7NDB84A/awbEkAeicJtHZTAYInTdVSmqLwdKkcq8njYAzGIDi+bop0MQKCGyDTP408jXHN+n1mAFix45BKTkHfHea7FeVp6NVHX8EwGEoGJ4McOlY1whpZZU54PIXyo+F6VY5DrwJcF/EfbL4vJ3gHqU5f5wLWY94POgTNzCvQmwYNdclQTECpam9GGH1JRUBD6UVCvpd7X+Y8raGw==
+Received: from BLAPR03CA0176.namprd03.prod.outlook.com (2603:10b6:208:32f::26)
+ by MN2PR12MB4358.namprd12.prod.outlook.com (2603:10b6:208:24f::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.10; Thu, 25 Sep
- 2025 17:34:31 +0000
-Received: from CH2PEPF00000141.namprd02.prod.outlook.com
- (2603:10b6:610:32:cafe::f4) by CH0PR07CA0020.outlook.office365.com
- (2603:10b6:610:32::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9160.10 via Frontend Transport; Thu,
- 25 Sep 2025 17:34:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.11; Thu, 25 Sep
+ 2025 17:34:38 +0000
+Received: from BL6PEPF0001AB75.namprd02.prod.outlook.com
+ (2603:10b6:208:32f:cafe::82) by BLAPR03CA0176.outlook.office365.com
+ (2603:10b6:208:32f::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.21 via Frontend Transport; Thu,
+ 25 Sep 2025 17:34:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CH2PEPF00000141.mail.protection.outlook.com (10.167.244.74) with Microsoft
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BL6PEPF0001AB75.mail.protection.outlook.com (10.167.242.168) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9160.9 via Frontend Transport; Thu, 25 Sep 2025 17:34:30 +0000
+ 15.20.9160.9 via Frontend Transport; Thu, 25 Sep 2025 17:34:38 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 25 Sep
- 2025 10:34:13 -0700
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.34; Thu, 25 Sep
+ 2025 10:34:20 -0700
 Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 25 Sep
- 2025 10:34:07 -0700
+ 2025 10:34:13 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -82,10 +82,12 @@ To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 CC: Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
 	"Nikolay Aleksandrov" <razor@blackwall.org>, Petr Machata <petrm@nvidia.com>,
 	"Shuah Khan" <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<mlxsw@nvidia.com>
-Subject: [PATCH net-next 09/13] selftests: net: vlan_bridge_binding: Rename dfr_set_binding_*() to adf_*
-Date: Thu, 25 Sep 2025 19:31:52 +0200
-Message-ID: <5f0c81b39e9e1f56f706cc4b53f82238a1d1e2f9.1758821127.git.petrm@nvidia.com>
+	<mlxsw@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Alessandro Zanni
+	<alessandro.zanni87@gmail.com>, Hangbin Liu <liuhangbin@gmail.com>, "David
+ Yang" <mmyangfl@gmail.com>, Li Shuang <shuali@redhat.com>
+Subject: [PATCH net-next 10/13] selftests: forwarding: lib: Add an autodefer variant of vrf_prepare()
+Date: Thu, 25 Sep 2025 19:31:53 +0200
+Message-ID: <2f2000e54ae700d560a8d6128322dade3bd2207e.1758821127.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1758821127.git.petrm@nvidia.com>
 References: <cover.1758821127.git.petrm@nvidia.com>
@@ -101,99 +103,271 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000141:EE_|DM6PR12MB4418:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c3aac78-9e68-4c1d-6b5b-08ddfc59c8e9
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB75:EE_|MN2PR12MB4358:EE_
+X-MS-Office365-Filtering-Correlation-Id: 89a9fc82-2254-4aab-9289-08ddfc59cd56
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|82310400026|36860700013;
+	BCL:0;ARA:13230040|36860700013|82310400026|7416014|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?BncF6r4mXbIcJtvnShLpO1fir9EJgfdUoLrCc3HWKL/8IuvOaWRciz0X3dQA?=
- =?us-ascii?Q?Tv3JMqaA31gPm5MB/56M8nzA3t79kxH66mE5AmEV7TQ9AxgF50bBu8rvEH/J?=
- =?us-ascii?Q?QfyW13176DOAbmQ7xQSCxILi/Rve5t63ulMkyoORpixvQgWJNZqokwO70i1X?=
- =?us-ascii?Q?Ehi1kptc15h7YHzIQkEh9/2secPiXXJXBN56VAeWhaPM5+4hmGf5Dm8hHm33?=
- =?us-ascii?Q?mCKvUd/dknhxF3DIEyJFU9rxipmpjYe3Xfi2cNmW4G6K0gf1Efrh0eSV5BZZ?=
- =?us-ascii?Q?Yh0l+GYfz4jWApBqBdphw/xT73lpcxIJVnM4iMqlHQVdZiorWY0YYQGUdIu7?=
- =?us-ascii?Q?QxILUknVxAEQBk7ZRDr2lQvATm0lk1peypC5XaZVVJJzHgJfH4n/MZhrB1BJ?=
- =?us-ascii?Q?36v8fK2fyPisC2jNZrZ3smYjsRXsSNOVoEaJqfVfAawH+XZN+XMC+zNScN1f?=
- =?us-ascii?Q?YtDGyKsPdeAoSusQ7CFkfAXtOjAZkQRtB3mn1CXOM4FvKVWBrRiBQ4SU0hmu?=
- =?us-ascii?Q?dgaGJ0pVdR/RdZkElEWfJnQrnlNWqoo2CD7Law7VF1WzdHrb0tTJAS8RKCxl?=
- =?us-ascii?Q?RFXXytNvEYqs7+tdnf5AFqP3xeGbf2AENwidfV2AAItTAzK6g+/jnLK9pAVz?=
- =?us-ascii?Q?eTEIihQcU1GMaO/Ipmsnyw1xj2pN2Limiotkzf6Fhn0l6Dk2p7ldmHkp1rrK?=
- =?us-ascii?Q?TNGP82mLjlCw9sSQ5Zf+u7BAh0mazTZ2Yeg/qAMpJ9EE+Gjd6DFiC0JNZxAS?=
- =?us-ascii?Q?O01JTphuSlt9+20fVKl1FgsrPrvPjwMXRsTqyY+exrGzP77/phZo5IP5aT2p?=
- =?us-ascii?Q?QwSr69hF5jb0XzjFHzWxx7kAyu7oMV3xlYR5suNlNuVLjGmXNDj7IOaD/MSL?=
- =?us-ascii?Q?Ix0D61kxBGNtsLYqVbQQ4rtvvRm7xEOfIk1lyFrBZ7BljaiOnMxZyiLpQ/0f?=
- =?us-ascii?Q?ohKNcCZ2d4o66u8wApCTc1z9C3LJfV7XMitRNv+TvfWbcyHgOGG77ezCxPnE?=
- =?us-ascii?Q?a28LiHrSQjdiaBa2XM3oZ0aJCSpHCvt60hd17z+xGfABNUy7j4XTCGsBjP5b?=
- =?us-ascii?Q?gPuCguJUTrtZ03k2fJVE2c+VoceJ2TxG8Xdaq2sxQmBi1T06oIlLtPDkvyHK?=
- =?us-ascii?Q?aC5G8vp3zBpmqvZB8y8C+4dZOtOe2GfJ8LQrc7Hj4wBJClnqW5eDntpcBvbn?=
- =?us-ascii?Q?v6Y7cgctlMz/aI4LplWjAZgDNmGMY+B93JYV2EEJWUz0LIhVB1qFmHm/2YZ8?=
- =?us-ascii?Q?63/bgEQGjyx9MCa1t5TXqJ9890oqhmlseRUGJacE6+4DvC5fUndS1vZLj6oL?=
- =?us-ascii?Q?9MpZgwETXPW34nwXPnaAJsUxHJnj1Btzylau1Lo+Bz1tM+OV5RoDvyBDyHgX?=
- =?us-ascii?Q?udM7o9LNP3/aOgHP7LDW7EJqvCp8JEroWM5y69iPbAofa5Ct7S0wRQJtVCS6?=
- =?us-ascii?Q?z7mpR0efYl91EUy1u84quXzLBj02bHAneJMI4OoqPtWhMWs37Id4dmTg0Iuc?=
- =?us-ascii?Q?Md2oKo79aAEUgOUygtSVyyOcwiFHfCJ7EESCXqQOA92tUyGV3gy4ujbrBP8B?=
- =?us-ascii?Q?7d7uOkV/iqzn8jmWI0w=3D?=
+	=?us-ascii?Q?+Y+1x8ssEQqkPV/KbWJaWdfSysEOeOLmrsdfNy0FWXPsetpkKJWJPO4FAcjM?=
+ =?us-ascii?Q?JUpqjcgk4ax0xiQsFez0p8k/SeFkiVFwMC5iEjyfcFwssdBqotNREiuhPWtX?=
+ =?us-ascii?Q?r2eHacLxgFR5OLK1QkM3Wz9rtCqOvolflfKhXlzGiKSJPv4tlyRc//Qcq2d4?=
+ =?us-ascii?Q?HSL0UWRG7o451H6JTrB+LYnnxSIK9N6isuWZwwEOvFNOOzhHUYZhAb5mK/6J?=
+ =?us-ascii?Q?7iMTawf4c0MMoU7ZC/LVCBW8g/xP7i31o3Xo8moPgQgr8ut/BkC14t/nUmIW?=
+ =?us-ascii?Q?7t+5MABZgShMD0GdfdoGgqM0GLbOSkzr9Qyd3tI7+NP7NfxfI8zzEgmfOPPV?=
+ =?us-ascii?Q?qDByqhATWw0gyoyH8X6bnZFIA36Ob+s/uzewbnPcs46SSBV0e/RBUyO+igqP?=
+ =?us-ascii?Q?Ml4XD4pQisx0tqrK17f8xjgQxB+5kMSam32Y1MfTuiYKUbd7GvGB4+NfxM1l?=
+ =?us-ascii?Q?hYgz5dgDn74Tt5BXdHiW75rMDiBDWcvKnz99UV2N/t2g/AHhBJNaIpyJJLOX?=
+ =?us-ascii?Q?1MOqP+MLTsZQVvgS/f1g8+WZ8kwC2gGV535vYZoWfUrT5CMhxcgke9Rg7QnW?=
+ =?us-ascii?Q?ZOLNJFlodVv1DD7X3lkrWmgcbo5sYnCqQLddGocOFGQcR3RhwhivmVWuMQHJ?=
+ =?us-ascii?Q?P7T8wpLGJ7JV3J+Vxl47i3nYxXrNF6lVJYlHIOMEIBH84oaLHD3fUJ6Ikmdr?=
+ =?us-ascii?Q?puu9w21xZnYbmCa300tQ4HPyoHPver/oM8zIl4hUy11nKw0NBdj4oocbkDh2?=
+ =?us-ascii?Q?ZZe8ccYlQpd3ZJwdJ+mOjPeFg49rLQdYXrvNwrtiJ/pSMZGL/oSi2bp5hjLy?=
+ =?us-ascii?Q?2M684OJ9tliAtOeDUuOncW/Itb94twJUMCroG6SZN8yEjIP5oETMAXTzvBeE?=
+ =?us-ascii?Q?c5Yn/vCYWZn5AH7vVK4vrJTtSotNFq9N4aZiIr2oaqactgfvVRrvsOGzG6YG?=
+ =?us-ascii?Q?msHrSiq7dGa5Vuf8TkumU5wBWL+jgTeI+/1twlES5edx5GsoOujK4NmKw0rp?=
+ =?us-ascii?Q?0da3iKTcc0EsCNn+s5wx7sQomCEIujkwfLIrgU44tGu9UPFhgciaoLOz0Fs7?=
+ =?us-ascii?Q?w9WRW3yPETw/Z1I8DWWC9PJL4tHKIOozzFVX5Qnky6Epefn3unuVq6/VqZUO?=
+ =?us-ascii?Q?NTGJIi4nKtts5waGfMBPJHDRs74A+Qc19/TcnHUMtAFEDcN/Np2vO9sqJiQf?=
+ =?us-ascii?Q?AjEfy8mHoMf5XbchalVjXZUAoSUqcwMX3jf8cbcLiFIz4ktrlrMyw3AJgRNt?=
+ =?us-ascii?Q?sKruMcdlCaksChlJ+B8Ve2NjjKkT6MbJYEiGCaEoKT9W8CcI3OAQzfbxYm1V?=
+ =?us-ascii?Q?hc0kPQZBXOKtZjDptw7UQTOj1mUheCiFS+mM7mFjvvhDyBYgOBVxCebqGds1?=
+ =?us-ascii?Q?8ZcVm1ir64jocVPiFOCOLuXc88qUdJ/IFgy1LTqCDawgNc5cVJ6ew2pqoGpR?=
+ =?us-ascii?Q?WqXcR/uMBVLLZEDuyqZMmZA61ClIG8FR7i9HI7msNuYub8G9SCL/3J9smFUx?=
+ =?us-ascii?Q?fYKfiHRhxHoDlV+87Ex7/M+G9ioV9hIGWXw71wZ1w+c3fY59e1TN9DiBSsan?=
+ =?us-ascii?Q?e5lHfCWND+tWtJ0Iu2I=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2025 17:34:30.7909
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2025 17:34:38.1796
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c3aac78-9e68-4c1d-6b5b-08ddfc59c8e9
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89a9fc82-2254-4aab-9289-08ddfc59cd56
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000141.namprd02.prod.outlook.com
+	BL6PEPF0001AB75.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4418
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4358
 
-This test contains two autodefer-like helpers, but namespaces them as dfr_*
-instead of adf_* like this patchset. Rename them.
+Most forwarding tests invoke vrf_prepare() to set up VRF forwarding and
+vrf_cleanup() to restore the original configuration. Add a helper,
+adf_vrf_prepare(), which is like vrf_prepare(), but takes care of
+scheduling the cleanup automatically.
+
+Convert a number of tests that currently use defer to schedule the cleanup.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 ---
- tools/testing/selftests/net/vlan_bridge_binding.sh | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/vlan_bridge_binding.sh b/tools/testing/selftests/net/vlan_bridge_binding.sh
-index 794ba71c45cb..db481af9b6b3 100755
---- a/tools/testing/selftests/net/vlan_bridge_binding.sh
-+++ b/tools/testing/selftests/net/vlan_bridge_binding.sh
-@@ -207,13 +207,13 @@ test_binding_toggle_off()
- 	do_test_binding_off : "on->off"
+Notes:
+CC: Andrew Lunn <andrew+netdev@lunn.ch>
+CC: Alessandro Zanni <alessandro.zanni87@gmail.com>
+CC: Hangbin Liu <liuhangbin@gmail.com>
+CC: David Yang <mmyangfl@gmail.com>
+CC: Li Shuang <shuali@redhat.com>
+
+ .../selftests/drivers/net/mlxsw/devlink_trap_policer.sh     | 3 +--
+ tools/testing/selftests/drivers/net/mlxsw/qos_ets_strict.sh | 3 +--
+ .../selftests/drivers/net/mlxsw/qos_max_descriptors.sh      | 3 +--
+ tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh   | 3 +--
+ tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh   | 3 +--
+ .../selftests/net/forwarding/bridge_activity_notify.sh      | 3 +--
+ .../selftests/net/forwarding/bridge_fdb_local_vlan_0.sh     | 3 +--
+ tools/testing/selftests/net/forwarding/lib.sh               | 6 ++++++
+ tools/testing/selftests/net/forwarding/sch_ets_core.sh      | 3 +--
+ tools/testing/selftests/net/forwarding/sch_red.sh           | 3 +--
+ tools/testing/selftests/net/forwarding/sch_tbf_core.sh      | 3 +--
+ .../selftests/net/forwarding/vxlan_bridge_1q_mc_ul.sh       | 3 +--
+ tools/testing/selftests/net/forwarding/vxlan_reserved.sh    | 3 +--
+ 13 files changed, 18 insertions(+), 24 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_policer.sh b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_policer.sh
+index 29a672c2270f..6cb5a7a7438b 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_policer.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_policer.sh
+@@ -106,8 +106,7 @@ setup_prepare()
+ 	# Reload to ensure devlink-trap settings are back to default.
+ 	defer devlink_reload
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	h1_create
+ 	h2_create
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_ets_strict.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_ets_strict.sh
+index d5b6f2cc9a29..ed217eb63cc7 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/qos_ets_strict.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/qos_ets_strict.sh
+@@ -225,8 +225,7 @@ setup_prepare()
+ 
+ 	h3mac=$(mac_get $h3)
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	h1_create
+ 	h2_create
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_max_descriptors.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_max_descriptors.sh
+index 2b5d2c2751d5..d10df3a19300 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/qos_max_descriptors.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/qos_max_descriptors.sh
+@@ -178,8 +178,7 @@ setup_prepare()
+ 
+ 	h2mac=$(mac_get $h2)
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	h1_create
+ 	h2_create
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh
+index cd4a5c21360c..6aca01ebb1ee 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh
+@@ -196,8 +196,7 @@ setup_prepare()
+ 
+ 	h3mac=$(mac_get $h3)
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	h1_create
+ 	h2_create
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh
+index 537d6baa77b7..a88d61a84b98 100644
+--- a/tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh
+@@ -250,8 +250,7 @@ setup_prepare()
+ 
+ 	h3_mac=$(mac_get $h3)
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	h1_create
+ 	h2_create
+diff --git a/tools/testing/selftests/net/forwarding/bridge_activity_notify.sh b/tools/testing/selftests/net/forwarding/bridge_activity_notify.sh
+index 8ceb205fdca0..afce1c964d5a 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_activity_notify.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_activity_notify.sh
+@@ -57,8 +57,7 @@ setup_prepare()
+ 	swp2=${NETIFS[p3]}
+ 	h2=${NETIFS[p4]}
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	h1_create
+ 	h2_create
+diff --git a/tools/testing/selftests/net/forwarding/bridge_fdb_local_vlan_0.sh b/tools/testing/selftests/net/forwarding/bridge_fdb_local_vlan_0.sh
+index c1a506370c4a..052b2f757ff0 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_fdb_local_vlan_0.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_fdb_local_vlan_0.sh
+@@ -98,8 +98,7 @@ setup_prepare()
+ 	swp3=${NETIFS[p5]}
+ 	h3=${NETIFS[p6]}
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	forwarding_enable
+ 	defer forwarding_restore
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 2c252423b326..1370d7a32655 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -599,6 +599,12 @@ vrf_cleanup()
+ 	ip -4 rule del pref 32765
  }
  
--dfr_set_binding_on()
-+adf_set_binding_on()
- {
- 	set_vlans type vlan bridge_binding on
- 	defer set_vlans type vlan bridge_binding off
- }
++adf_vrf_prepare()
++{
++	vrf_prepare
++	defer vrf_cleanup
++}
++
+ __last_tb_id=0
+ declare -A __TB_IDS
  
--dfr_set_binding_off()
-+adf_set_binding_off()
- {
- 	set_vlans type vlan bridge_binding off
- 	defer set_vlans type vlan bridge_binding on
-@@ -223,14 +223,14 @@ test_binding_toggle_on_when_lower_down()
- {
- 	add_vlans bridge_binding off
- 	set_vlans up
--	do_test_binding_on dfr_set_binding_on "off->on when lower down"
-+	do_test_binding_on adf_set_binding_on "off->on when lower down"
- }
+diff --git a/tools/testing/selftests/net/forwarding/sch_ets_core.sh b/tools/testing/selftests/net/forwarding/sch_ets_core.sh
+index 8f9922c695b0..f9d15b2f4615 100644
+--- a/tools/testing/selftests/net/forwarding/sch_ets_core.sh
++++ b/tools/testing/selftests/net/forwarding/sch_ets_core.sh
+@@ -251,8 +251,7 @@ setup_prepare()
+ 	put=$swp2
+ 	hut=$h2
  
- test_binding_toggle_off_when_lower_down()
- {
- 	add_vlans bridge_binding on
- 	set_vlans up
--	do_test_binding_off dfr_set_binding_off "on->off when lower down"
-+	do_test_binding_off adf_set_binding_off "on->off when lower down"
- }
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
  
- test_binding_toggle_on_when_upper_down()
+ 	h1_create
+ 	h2_create
+diff --git a/tools/testing/selftests/net/forwarding/sch_red.sh b/tools/testing/selftests/net/forwarding/sch_red.sh
+index af166662b78a..8f79a86cb15b 100755
+--- a/tools/testing/selftests/net/forwarding/sch_red.sh
++++ b/tools/testing/selftests/net/forwarding/sch_red.sh
+@@ -125,8 +125,7 @@ setup_prepare()
+ 
+ 	h3_mac=$(mac_get $h3)
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	h1_create
+ 	h2_create
+diff --git a/tools/testing/selftests/net/forwarding/sch_tbf_core.sh b/tools/testing/selftests/net/forwarding/sch_tbf_core.sh
+index ec309a5086bc..bce9ab3cb24a 100644
+--- a/tools/testing/selftests/net/forwarding/sch_tbf_core.sh
++++ b/tools/testing/selftests/net/forwarding/sch_tbf_core.sh
+@@ -149,8 +149,7 @@ setup_prepare()
+ 
+ 	h2_mac=$(mac_get $h2)
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	h1_create
+ 	h2_create
+diff --git a/tools/testing/selftests/net/forwarding/vxlan_bridge_1q_mc_ul.sh b/tools/testing/selftests/net/forwarding/vxlan_bridge_1q_mc_ul.sh
+index a968a3ecbcbf..9beb5d512b8e 100755
+--- a/tools/testing/selftests/net/forwarding/vxlan_bridge_1q_mc_ul.sh
++++ b/tools/testing/selftests/net/forwarding/vxlan_bridge_1q_mc_ul.sh
+@@ -371,8 +371,7 @@ setup_prepare()
+ 	swp3=${NETIFS[p5]}
+ 	h3=${NETIFS[p6]}
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	forwarding_enable
+ 	defer forwarding_restore
+diff --git a/tools/testing/selftests/net/forwarding/vxlan_reserved.sh b/tools/testing/selftests/net/forwarding/vxlan_reserved.sh
+index 6fa1668986cc..c564d7a3af0b 100755
+--- a/tools/testing/selftests/net/forwarding/vxlan_reserved.sh
++++ b/tools/testing/selftests/net/forwarding/vxlan_reserved.sh
+@@ -88,8 +88,7 @@ setup_prepare()
+ 	rp1=${NETIFS[p3]}
+ 	rp2=${NETIFS[p4]}
+ 
+-	vrf_prepare
+-	defer vrf_cleanup
++	adf_vrf_prepare
+ 
+ 	forwarding_enable
+ 	defer forwarding_restore
 -- 
 2.49.0
 
