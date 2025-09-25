@@ -1,118 +1,124 @@
-Return-Path: <linux-kselftest+bounces-42278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C22FB9E4CE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 11:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5338B9E61B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 11:33:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F0C91B24549
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 09:25:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 684201BC7788
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 09:34:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0752B2DE1F0;
-	Thu, 25 Sep 2025 09:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97372ED846;
+	Thu, 25 Sep 2025 09:30:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kc+BWUOO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vhqk1Urd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6C1287267;
-	Thu, 25 Sep 2025 09:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4642ED15A;
+	Thu, 25 Sep 2025 09:30:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758792317; cv=none; b=gy/C9PfrqkEDPaZ3wcZVL2+y4y6Mycf1EGHfVNEDBoNEzlgEj2uQAsWfSZb8Uu0yuQUyJAG4odVkK6fv+z6/ur9RqyYN6dHLtU3pqTosRkB4JYAPAa5ciJ01mFQ1bRZbnoVXlUhr4sqe0wYZ2iRcRxlIQ9DMLi1DdiLogaGGm30=
+	t=1758792649; cv=none; b=BzEtWujI+1vOYlKSSfFQs8ZNO0MUehrPPZKCcf4IoxF2r18kWUyr/tPWwNTQW/FP5b6DfyPBpx2Uy/PNrrpgZzXvMT2TFp+XBB88hZ1wbmGBhad5ZogtuorGQSRpeyJA1GaJkvoKt2/jEBdtXBip+NVRrpj6gmV81nmGo5UF6f4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758792317; c=relaxed/simple;
-	bh=WIwi1Q5Ih8EETZG8HYgff8itSbuVENXHFclMfz2Q0a0=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VzkxCG0GTagv2YbPAzHRbyLLKNp80WsNCYsJMXQHtYrS/x9xanXAEoZjL/S2TCoUC90ylDi9fZ5QWpk/fwjC7qAnLST7v7P5vK0x1ykm1DXs8FipRO+2rZdssCIZWkti8gmyMXkGFc7pcusVQtsMXMsYChWyt4TE6vbnq9xTTW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kc+BWUOO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D3FCC4CEF0;
-	Thu, 25 Sep 2025 09:25:16 +0000 (UTC)
+	s=arc-20240116; t=1758792649; c=relaxed/simple;
+	bh=ydju+tpSwXw5mzfVJvHmui6phZSUI1Dnie6FljNls88=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=T1H4OMeuvjjmL2xc0XnbVxF3VV8NpLxqnr+sjKwtWCVA9Tw8vRzj7S0Te3zJG7IBWIefShcjvJ7py9XDtFF8621nENhGlc1xTzKmeHGr8uI7l7S3jHozW8u5quRQOE6BaHi06wfgfl7TeyFcHNTcul63yJ9t/QumaUNIEIQFqHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vhqk1Urd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1B68C4CEF7;
+	Thu, 25 Sep 2025 09:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758792316;
-	bh=WIwi1Q5Ih8EETZG8HYgff8itSbuVENXHFclMfz2Q0a0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Kc+BWUOONeKOMbp62rKkiot7ahj8P6UpbtwZ0TF2ZJvuTZ09WTcGzhe0imI4bCMcu
-	 Dk4/32nx04Fd6SnBlz9BZQf0rHIOh+tSEo8n3t6Ceu13a24LlE+lHjUx1G10s6fEno
-	 jbRx7LcLVVLHIAGF+B/oZnpUfoGCHcr+6CyPpdDvj09RHJPoT7XSd+CMNL5v0mKAdq
-	 46pdIVShhtI0n0hUAO65SUZBhaGb63ontPB9rxjowTRPRau+1PE6yj9VmqRkKojGT6
-	 HF/QB/wX5U+SafTHrthx0A6t+utuJoV+/AMN7Ef3EVUk2MJpuxFo574gKJBjK0epdn
-	 ghaSeuEHEZuTw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1v1iDx-00000009IVL-3Nku;
-	Thu, 25 Sep 2025 09:25:13 +0000
-Date: Thu, 25 Sep 2025 10:25:13 +0100
-Message-ID: <868qi228au.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Maximilian Dittgen <mdittgen@amazon.de>
-Cc: <oliver.upton@linux.dev>,
-	<pbonzini@redhat.com>,
-	<shuah@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>,
-	<kvm@vger.kernel.org>
-Subject: Re: [PATCH] kvm, selftests: ioctl to handle MSIs injected from userspace as software-bypassing vLPIs
-In-Reply-To: <20250925090116.27575-1-mdittgen@amazon.de>
-References: <20250925090116.27575-1-mdittgen@amazon.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1758792649;
+	bh=ydju+tpSwXw5mzfVJvHmui6phZSUI1Dnie6FljNls88=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Vhqk1UrdoyWEdlEKcvryz+wZQuc1+abq6h07yJqir7W87dZkiYbEiaz/C5XZb0YZP
+	 OoTi1Hodp8DeX/x1JeOliZ+dGLy+sHZIL++5Te5+L7t3yHxvxzhjt6G86cEOV8RfSk
+	 WGFRbp3C+Q6n9o17jlHnofIz22n4XKuz4MX9DwMVxX6ojaVKC/SaWjdZ9sTpkBSSmu
+	 Py8s7V2+OfWzk8AJCw5FGIfvbNwihu5RoR2MYczC3sd1e7lhp4Jlh/zWmzLtdnFEZP
+	 Lm7TQr6BBLxZFuQneJesq+7R2TPRFbcT9z146mnkOeY2OSHRRAg9iq+Ba7ooe56sc4
+	 nRX1T5Fsqi98w==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: [PATCH RFC bpf-next v2 0/5] Add the the capability to load HW RX
+ checsum in eBPF programs
+Date: Thu, 25 Sep 2025 11:30:32 +0200
+Message-Id: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: mdittgen@amazon.de, oliver.upton@linux.dev, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALgL1WgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHQUlJIzE
+ vPSU3UzU4B8JSMDI1MDSyNT3aSCNN2KlALd3NSSRN2iiuTs4tJcXUsDAzML01QjSwPLFCWg1oK
+ i1LTMCrCx0UpBbs4KIF15qRUlSrG1tQAjnIsCdAAAAA==
+X-Change-ID: 20250925-bpf-xdp-meta-rxcksum-900685e2909d
+To: Donald Hunter <donald.hunter@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Tony Nguyen <anthony.l.nguyen@intel.com>, 
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+ Alexander Lobakin <aleksander.lobakin@intel.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org, 
+ Lorenzo Bianconi <lorenzo@kernel.org>
+X-Mailer: b4 0.14.2
 
-On Thu, 25 Sep 2025 10:01:16 +0100,
-Maximilian Dittgen <mdittgen@amazon.de> wrote:
-> 
-> From: Maximilian Dittgen <mdittgen@amazon.de>
-> 
-> At the moment, all MSIs injected from userspace using KVM_SIGNAL_MSI are
-> processed as LPIs in software with a hypervisor trap and exit.
+Introduce bpf_xdp_metadata_rx_checksum() kfunc in order to load the HW
+RX cheksum results in the eBPF program binded to the NIC.
+Implement xmo_rx_checksum callback for veth and ice drivers.
 
-Not really. Injecting an interrupt preempts the guest injecting a host
-IPI, but there is no trap.
+Please note ice support changes are just compile-tested at the moment.
 
-> To
-> properly test GICv4 direct vLPI injection from KVM selftests, we write a
-> KVM_DEBUG_GIC_MSI_SETUP ioctl that manually creates an IRQ routing table
-> entry for the specified MSI, and populates ITS structures (device,
-> collection, and interrupt translation table entries) to map the MSI to a
-> vLPI. We then call GICv4 kvm_vgic_v4_set_forwarding to let the vLPI bypass
-> hypervisor traps and inject directly to the vCPU.
+---
+Changes in RFC v2:
+- Squash patch 1/6 and 2/6
+- Introduce enum xdp_checksum definitions
+- Rework ice support to reuse ice_rx_csum codebase
 
-I think that's totally overkill, and there is at least two ways to
-achieve the same thing without adding any additional code to the
-kernel:
+---
+Lorenzo Bianconi (5):
+      netlink: specs: Add XDP RX checksum capability to XDP metadata specs
+      net: veth: Add xmo_rx_checksum callback to veth driver
+      net: ice: Add xmo_rx_checksum callback
+      selftests/bpf: Add selftest support for bpf_xdp_metadata_rx_checksum
+      selftests/bpf: Add bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
 
-- your test can simulate the restore of a guest with pending
-  interrupts in the in-memory tables, start it, see the expected
-  interrupts in the guest. Additional benefit: you can now test LPI
-  restore.
+ Documentation/netlink/specs/netdev.yaml            |   5 +
+ drivers/net/ethernet/intel/ice/ice_base.c          |   1 +
+ drivers/net/ethernet/intel/ice/ice_txrx.h          |   1 +
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c      | 125 +++++++++++++--------
+ drivers/net/veth.c                                 |  20 ++++
+ include/net/xdp.h                                  |  14 +++
+ net/core/xdp.c                                     |  29 +++++
+ .../selftests/bpf/prog_tests/xdp_metadata.c        |   7 ++
+ .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   7 ++
+ tools/testing/selftests/bpf/progs/xdp_metadata.c   |   1 +
+ tools/testing/selftests/bpf/xdp_hw_metadata.c      |  27 +++++
+ tools/testing/selftests/bpf/xdp_metadata.h         |  13 +++
+ 12 files changed, 206 insertions(+), 44 deletions(-)
+---
+base-commit: 5e3fee34f626a8cb8715f5b5409416c481714ebf
+change-id: 20250925-bpf-xdp-meta-rxcksum-900685e2909d
 
-- you use the interrupt injection mechanism that has been in the core
-  code since 536e2e34bd0022, and let the GIC inject the interrupt for
-  you. In case you wonder why it is there: for the exact purpose you
-  describe.
-
-Thanks,
-
-	M.
-
+Best regards,
 -- 
-Without deviation from the norm, progress is not possible.
+Lorenzo Bianconi <lorenzo@kernel.org>
+
 
