@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-42294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42295-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDEC3B9EAFA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 12:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E607B9EB06
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 12:34:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F9181BC7930
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 10:34:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E99B61BC7C4C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 10:34:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0977A2F49FC;
-	Thu, 25 Sep 2025 10:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D302F60A0;
+	Thu, 25 Sep 2025 10:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zsntq5uZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ibg79sS4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6A92F3C38;
-	Thu, 25 Sep 2025 10:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975302F5A30;
+	Thu, 25 Sep 2025 10:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758796401; cv=none; b=NaQHr8w0yfE1GrL0ln/3eqAYwukH0FBQPuB48voeeobc78HWMdkYAu/1ILstP83zgRPv91RL+RwncGfj2N4kpBY7l6WqdVD+osF0QgtV32O7pTEL76syFS3QrNLXdQNFhZB4dLK3893m4XX7Dv4AKHGaIuTKCGukBJqL0S/5I40=
+	t=1758796404; cv=none; b=SpNL/qBIdDwpDQIgFnGsDyUg6RS1UL45tSZpExYiHMkBQrZfsGE7D6K9tjLRlevBqdjx+T8j1fupaVrhQkm4aekUbOg4FbM5ssr2/li6NorREat9tOQQasKQhrpMVMc9Tz4mBvUJa7mNpNHIqd+GWj+ZmtlWFRzIlvQNU026ArQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758796401; c=relaxed/simple;
-	bh=zWnGj1eCp8t5gumf2c9rwYgkDxIwOKnROlXH4jqgV2k=;
+	s=arc-20240116; t=1758796404; c=relaxed/simple;
+	bh=1YswCZArMoSnckSBCESwAGR8ARwncPEfUz2MMr47ZXc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hfV2iVCJUP0UA7Mp9AKMOqxVuONFnoBwHT3+yORWCZE3nf3/1QU/NQdXeZUNEoxqhXf3IB7E6vqi7MqffjCyrVleYJwrF6Fsf9QyuYgE15XGMKBFFE7m45fCoFRVwJexXDIr/dEcJ5ki3hsf+euKqDDXGZ4LDj95LfYjUKG6i9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zsntq5uZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3588C113D0;
-	Thu, 25 Sep 2025 10:33:18 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=NUkbwCQ3S7gLQx81ZG68o3kaH5FMEfkEgXylXAsLQlLNeEPfwp4AQziDBurL13HqEEpbh+Cr6JiQ97eXvU3MOkAnkWFC+bAgePcBuM3d+UiPZ4hVIVFjohcPhyMNBJ7Uw9SZQ7W5QkvQCq0SBF2tKkOyhB18keEa6Mhg7zmtPqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ibg79sS4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD284C4CEF0;
+	Thu, 25 Sep 2025 10:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758796401;
-	bh=zWnGj1eCp8t5gumf2c9rwYgkDxIwOKnROlXH4jqgV2k=;
+	s=k20201202; t=1758796404;
+	bh=1YswCZArMoSnckSBCESwAGR8ARwncPEfUz2MMr47ZXc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Zsntq5uZktPFbYwAaHpVOQ1hByVw5vGHLPmtOVw1GBpLsI7nWL5EoCEyGngtnOoyC
-	 GQgTlPlyFjabHrLELYrLJlgLJCxB1f8MjasiUpXcYD9bquvk76Gca+VXUMBwo2XGaF
-	 4ayIsQl7Ec+9XtJj2YwbZP4ViIpmm+j+vbyU2/BaC+OBbvL8XeFzciujegNWXdMWcl
-	 FppfwBJABIkqrL0gJxwm5BzlbeY5Gxx7d4xT19zE5H968JhZWBpB7CUsPrjNooojcg
-	 MRDeTCEXSZwNrNoHJa8EtcP0oKFI9HxFxCIEljzautfrkPZ18ZddaaP/HOMvAWZzaI
-	 lfGJZmXTlR1Qw==
+	b=Ibg79sS4PzdcsWvnRHovKa4Me91vwr2N3IqIx/Mw+RbyQyfVw5i+0KTkiNKzQcaOf
+	 SSrcF+JETuaFMy/M7mQfYwcWffhUTFNwYPhjyjNlr000XYnU0zMZ9bSe9VJ9Y4e4w4
+	 xJZ1kW3dlaF2qJ5jFG5CsBgn4bJXPciN7fJnwiZITZyIQrnXhrFKmeCIlJP6xNAguG
+	 O361rXFedeMN534/wg4PIPSsQAFBTFpDc+AwbIb9NzHrKb/jz86tYfu+3SWVVY/Mer
+	 4LItjwk6C0i3FRZsjQ2fl2P76wR9Lcu+IoIp4leYGjQ/ZO7GJDGqzOM6APT6HjRgss
+	 AMKn/n+L6Belg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Thu, 25 Sep 2025 12:32:37 +0200
-Subject: [PATCH net-next 02/15] selftests: mptcp: join: validate C-flag +
- def limit
+Date: Thu, 25 Sep 2025 12:32:38 +0200
+Subject: [PATCH net-next 03/15] mptcp: pm: in-kernel: refactor
+ fill_local_addresses_vec
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250925-net-next-mptcp-c-flag-laminar-v1-2-ad126cc47c6b@kernel.org>
+Message-Id: <20250925-net-next-mptcp-c-flag-laminar-v1-3-ad126cc47c6b@kernel.org>
 References: <20250925-net-next-mptcp-c-flag-laminar-v1-0-ad126cc47c6b@kernel.org>
 In-Reply-To: <20250925-net-next-mptcp-c-flag-laminar-v1-0-ad126cc47c6b@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -63,66 +63,267 @@ To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
  Martin KaFai Lau <martin.lau@linux.dev>
 Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1979; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=zWnGj1eCp8t5gumf2c9rwYgkDxIwOKnROlXH4jqgV2k=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKuSoXU3Kw2NZ8YP3euedm6+fHz1HxMfp6d/W/Kqx1Lz
- Z/90lzG3VHKwiDGxSArpsgi3RaZP/N5FW+Jl58FzBxWJpAhDFycAjCRXhWG/0na+nWbmQ54m+p3
- Gz6TCuVXsSvocvvX/zhv9eE1k7pYixn+qS8KuXFoEht33ZKtp82frmxg7/r3lrM+rIxtswfj9rs
- lrAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7187; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=1YswCZArMoSnckSBCESwAGR8ARwncPEfUz2MMr47ZXc=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKuSoWW72II4jdN86zwnep97tLCL7+/Kc/d+PHErsl/L
+ wpKH1t+qKOUhUGMi0FWTJFFui0yf+bzKt4SLz8LmDmsTCBDGLg4BWAibjWMDL0rE6+JbJrxMXPy
+ jXWxzr8Cj/7Ws45aMCP3iPS07+JM+88z/FNvig95x5P1NebNxrKles8dY5ZsZhGZnH3LVsds8t7
+ nt/kB
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-The previous commit adds an exception for the C-flag case. The
-'mptcp_join.sh' selftest is extended to validate this case.
+Before this modification, this function was quite long with many levels
+of indentations.
 
-In this subtest, there is a typical CDN deployment with a client where
-MPTCP endpoints have been 'automatically' configured:
+Each case can be split in a dedicated function: fullmesh, C flag, any.
 
-- the server set net.mptcp.allow_join_initial_addr_port=0
+No functional changes intended.
 
-- the client has multiple 'subflow' endpoints, and the default limits:
-  not accepting ADD_ADDRs.
-
-Without the parent patch, the client is not able to establish new
-subflows using its 'subflow' endpoints. The parent commit fixes that.
-
-The 'Fixes' tag here below is the same as the one from the previous
-commit: this patch here is not fixing anything wrong in the selftests,
-but it validates the previous fix for an issue introduced by this commit
-ID.
-
-Fixes: df377be38725 ("mptcp: add deny_join_id0 in mptcp_options_received")
-Cc: stable@vger.kernel.org
 Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ net/mptcp/pm_kernel.c | 199 +++++++++++++++++++++++++++++---------------------
+ 1 file changed, 116 insertions(+), 83 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 6055ee5762e13108e5e2924a0e77d58da584d008..a94b3960ad5e009dbead66b6ff2aa01f70aa3e1f 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -3306,6 +3306,17 @@ deny_join_id0_tests()
- 		run_tests $ns1 $ns2 10.0.1.1
- 		chk_join_nr 1 1 1
- 	fi
-+
-+	# default limits, server deny join id 0 + signal
-+	if reset_with_allow_join_id0 "default limits, server deny join id 0" 0 1; then
-+		pm_nl_set_limits $ns1 0 2
-+		pm_nl_set_limits $ns2 0 2
-+		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
-+		pm_nl_add_endpoint $ns2 10.0.3.2 flags subflow
-+		pm_nl_add_endpoint $ns2 10.0.4.2 flags subflow
-+		run_tests $ns1 $ns2 10.0.1.1
-+		chk_join_nr 2 2 2
-+	fi
+diff --git a/net/mptcp/pm_kernel.c b/net/mptcp/pm_kernel.c
+index 8c46493a0835b0e2d5e70950662ae6e845393777..c8f2af2277c2c28bc7ad393bc4ef8507ddd3a875 100644
+--- a/net/mptcp/pm_kernel.c
++++ b/net/mptcp/pm_kernel.c
+@@ -377,116 +377,149 @@ static void mptcp_pm_nl_subflow_established(struct mptcp_sock *msk)
+ 	mptcp_pm_create_subflow_or_signal_addr(msk);
  }
  
- fullmesh_tests()
+-/* Fill all the local addresses into the array addrs[],
+- * and return the array size.
+- */
+-static unsigned int fill_local_addresses_vec(struct mptcp_sock *msk,
+-					     struct mptcp_addr_info *remote,
+-					     struct mptcp_pm_local *locals)
++static unsigned int
++fill_local_addresses_vec_fullmesh(struct mptcp_sock *msk,
++				  struct mptcp_addr_info *remote,
++				  struct mptcp_pm_local *locals,
++				  bool c_flag_case)
+ {
++	struct pm_nl_pernet *pernet = pm_nl_get_pernet_from_msk(msk);
++	unsigned int subflows_max = mptcp_pm_get_subflows_max(msk);
+ 	struct sock *sk = (struct sock *)msk;
+ 	struct mptcp_pm_addr_entry *entry;
+ 	struct mptcp_addr_info mpc_addr;
+-	struct pm_nl_pernet *pernet;
+-	unsigned int subflows_max;
+-	bool c_flag_case;
++	struct mptcp_pm_local *local;
+ 	int i = 0;
+ 
+-	pernet = pm_nl_get_pernet_from_msk(msk);
+-	subflows_max = mptcp_pm_get_subflows_max(msk);
+-	c_flag_case = remote->id && mptcp_pm_add_addr_c_flag_case(msk);
+-
+ 	mptcp_local_address((struct sock_common *)msk, &mpc_addr);
+ 
+ 	rcu_read_lock();
+ 	list_for_each_entry_rcu(entry, &pernet->local_addr_list, list) {
++		bool is_id0;
++
+ 		if (!(entry->flags & MPTCP_PM_ADDR_FLAG_FULLMESH))
+ 			continue;
+ 
+ 		if (!mptcp_pm_addr_families_match(sk, &entry->addr, remote))
+ 			continue;
+ 
+-		if (msk->pm.subflows < subflows_max) {
+-			bool is_id0;
++		local = &locals[i];
++		local->addr = entry->addr;
++		local->flags = entry->flags;
++		local->ifindex = entry->ifindex;
+ 
+-			locals[i].addr = entry->addr;
+-			locals[i].flags = entry->flags;
+-			locals[i].ifindex = entry->ifindex;
++		is_id0 = mptcp_addresses_equal(&local->addr, &mpc_addr,
++					       local->addr.port);
+ 
+-			is_id0 = mptcp_addresses_equal(&locals[i].addr,
+-						       &mpc_addr,
+-						       locals[i].addr.port);
++		if (c_flag_case &&
++		    (entry->flags & MPTCP_PM_ADDR_FLAG_SUBFLOW)) {
++			__clear_bit(local->addr.id, msk->pm.id_avail_bitmap);
+ 
+-			if (c_flag_case &&
+-			    (entry->flags & MPTCP_PM_ADDR_FLAG_SUBFLOW)) {
+-				__clear_bit(locals[i].addr.id,
+-					    msk->pm.id_avail_bitmap);
+-
+-				if (!is_id0)
+-					msk->pm.local_addr_used++;
+-			}
+-
+-			/* Special case for ID0: set the correct ID */
+-			if (is_id0)
+-				locals[i].addr.id = 0;
+-
+-			msk->pm.subflows++;
+-			i++;
++			if (!is_id0)
++				msk->pm.local_addr_used++;
+ 		}
++
++		/* Special case for ID0: set the correct ID */
++		if (is_id0)
++			local->addr.id = 0;
++
++		msk->pm.subflows++;
++		i++;
++
++		if (msk->pm.subflows >= subflows_max)
++			break;
+ 	}
+ 	rcu_read_unlock();
+ 
++	return i;
++}
++
++static unsigned int
++fill_local_addresses_vec_c_flag(struct mptcp_sock *msk,
++				struct mptcp_addr_info *remote,
++				struct mptcp_pm_local *locals)
++{
++	unsigned int local_addr_max = mptcp_pm_get_local_addr_max(msk);
++	struct pm_nl_pernet *pernet = pm_nl_get_pernet_from_msk(msk);
++	unsigned int subflows_max = mptcp_pm_get_subflows_max(msk);
++	struct sock *sk = (struct sock *)msk;
++	struct mptcp_addr_info mpc_addr;
++	struct mptcp_pm_local *local;
++	int i = 0;
++
++	mptcp_local_address((struct sock_common *)msk, &mpc_addr);
++
++	while (msk->pm.local_addr_used < local_addr_max) {
++		local = &locals[i];
++
++		if (!select_local_address(pernet, msk, local))
++			break;
++
++		__clear_bit(local->addr.id, msk->pm.id_avail_bitmap);
++
++		if (!mptcp_pm_addr_families_match(sk, &local->addr, remote))
++			continue;
++
++		if (mptcp_addresses_equal(&local->addr, &mpc_addr,
++					  local->addr.port))
++			continue;
++
++		msk->pm.local_addr_used++;
++		msk->pm.subflows++;
++		i++;
++
++		if (msk->pm.subflows >= subflows_max)
++			break;
++	}
++
++	return i;
++}
++
++static unsigned int
++fill_local_address_any(struct mptcp_sock *msk, struct mptcp_addr_info *remote,
++		       struct mptcp_pm_local *local)
++{
++	struct sock *sk = (struct sock *)msk;
++
++	memset(local, 0, sizeof(*local));
++	local->addr.family =
++#if IS_ENABLED(CONFIG_MPTCP_IPV6)
++			remote->family == AF_INET6 &&
++			ipv6_addr_v4mapped(&remote->addr6) ? AF_INET :
++#endif
++			remote->family;
++
++	if (!mptcp_pm_addr_families_match(sk, &local->addr, remote))
++		return 0;
++
++	msk->pm.subflows++;
++
++	return 1;
++}
++
++/* Fill all the local addresses into the array addrs[],
++ * and return the array size.
++ */
++static unsigned int
++fill_local_addresses_vec(struct mptcp_sock *msk, struct mptcp_addr_info *remote,
++			 struct mptcp_pm_local *locals)
++{
++	bool c_flag_case = remote->id && mptcp_pm_add_addr_c_flag_case(msk);
++	int i;
++
++	/* If there is at least one MPTCP endpoint with a fullmesh flag */
++	i = fill_local_addresses_vec_fullmesh(msk, remote, locals, c_flag_case);
++	if (i)
++		return i;
++
+ 	/* Special case: peer sets the C flag, accept one ADD_ADDR if default
+ 	 * limits are used -- accepting no ADD_ADDR -- and use subflow endpoints
+ 	 */
+-	if (!i && c_flag_case) {
+-		unsigned int local_addr_max = mptcp_pm_get_local_addr_max(msk);
++	if (c_flag_case)
++		return fill_local_addresses_vec_c_flag(msk, remote, locals);
+ 
+-		while (msk->pm.local_addr_used < local_addr_max &&
+-		       msk->pm.subflows < subflows_max) {
+-			struct mptcp_pm_local *local = &locals[i];
+-
+-			if (!select_local_address(pernet, msk, local))
+-				break;
+-
+-			__clear_bit(local->addr.id, msk->pm.id_avail_bitmap);
+-
+-			if (!mptcp_pm_addr_families_match(sk, &local->addr,
+-							  remote))
+-				continue;
+-
+-			if (mptcp_addresses_equal(&local->addr, &mpc_addr,
+-						  local->addr.port))
+-				continue;
+-
+-			msk->pm.local_addr_used++;
+-			msk->pm.subflows++;
+-			i++;
+-		}
+-
+-		return i;
+-	}
+-
+-	/* If the array is empty, fill in the single
+-	 * 'IPADDRANY' local address
+-	 */
+-	if (!i) {
+-		memset(&locals[i], 0, sizeof(locals[i]));
+-		locals[i].addr.family =
+-#if IS_ENABLED(CONFIG_MPTCP_IPV6)
+-			       remote->family == AF_INET6 &&
+-			       ipv6_addr_v4mapped(&remote->addr6) ? AF_INET :
+-#endif
+-			       remote->family;
+-
+-		if (!mptcp_pm_addr_families_match(sk, &locals[i].addr, remote))
+-			return 0;
+-
+-		msk->pm.subflows++;
+-		i++;
+-	}
+-
+-	return i;
++	/* No special case: fill in the single 'IPADDRANY' local address */
++	return fill_local_address_any(msk, remote, &locals[0]);
+ }
+ 
+ static void mptcp_pm_nl_add_addr_received(struct mptcp_sock *msk)
 
 -- 
 2.51.0
