@@ -1,126 +1,137 @@
-Return-Path: <linux-kselftest+bounces-42264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEAE7B9C88A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 01:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1DA4B9CF93
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 03:06:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 884223B19AA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Sep 2025 23:25:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F0D33BFB46
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 01:06:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD06829D289;
-	Wed, 24 Sep 2025 23:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E66A2DCF61;
+	Thu, 25 Sep 2025 01:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Nst1VxXl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dAV2cPN0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE1817B418
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 23:24:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0742D7DE6
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 01:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758756289; cv=none; b=dcRGQBR/3Id8S7nhdl1P2tqoia7pvqSXqmnp2HWNdIwDhVPCOOakljbGzLI90FibctcgSGiod6xQDEQKXWftWral/4mjJ/exXlLMfjOCWnxFdH/UAKGdXi7akEB0hB95bHCvbfZdikGwdzLe+3VRO5LZa41MXncgI5wSCjQKcMk=
+	t=1758762361; cv=none; b=QlbxkP3Dgqa/IZzV/67OuoSF1lzM+cuJapi0okx839GTquPTZueXch6abytsY7Uh7e0bC2O7hkf7OKg3blcJ9ZpPpt1ZI7EIaKNB6Cs+29sPM+pohqc7Yo58euMCZhhHInZuiPPy+hFs+bcgo+TxWL0ELTMMeE2mYp7uzG0tlIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758756289; c=relaxed/simple;
-	bh=Jet9kq8CcDeW5yvSbvCPvhCQfK1lFKgzanZH5IgLSak=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rbCRY6OpnPvqC1XVqxVjgejPWYN6uqlb7aL4zFWKZ++6GClK4fU0qO+lL0igO4wZ9qhwAF5jmVVGWEZlmE9qm2MmiFOyHNyeqW6/pSCD4UxgTaoRSdRufkY1ZXR/kFlSUpP1EBe+eJtwJCSKIBWdwdAxMJLzuloi1XbMCjPFY34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Nst1VxXl; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-42592472002so1048465ab.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 16:24:46 -0700 (PDT)
+	s=arc-20240116; t=1758762361; c=relaxed/simple;
+	bh=QtTNRMNsCZXoPgwJxEVdzGgxg8j9AnQphmi2AsF15T0=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XDWDkr3gAir2U7NYOK0haozFlAoF/hKiAc6dGO9a5IGT7m8qidts1eEuyISoqtNKLqSzRJjaRpgZbePrVPC7+D+eKv+XIpSIQ8v3niYDaYUvQMIpGc+cjrJ4OvDMuGxDG0SI3FYdrcujPtowsUMuorGmjcd05PkaXJQUncXI7L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dAV2cPN0; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2445805aa2eso4309185ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 18:05:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1758756285; x=1759361085; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wq5rS7xIu7WGCSuxCIQa3Zphf2jLEucbvivd19Lb6wY=;
-        b=Nst1VxXlYNlMvSWhwgnAk2oTzSN//QgFfJ8ujbYkSCr8MpT4H/MpsNwzXtGnbHE3Od
-         Y+kKZX555IVCAQWqTq47KsNVydKaZ0wQNmoyMsA+32VdNzW3pMZXVx2EIzmBpAOmaqL2
-         fQhoUwQdWLVWjeOrtKUwI/4mXwMiTvA8lqJQk=
+        d=gmail.com; s=20230601; t=1758762359; x=1759367159; darn=vger.kernel.org;
+        h=mime-version:user-agent:references:in-reply-to:subject:cc:to:from
+         :message-id:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eQt75DdC8qDrtyjja2Oov+kDMmzEtd4kIyWgE1cwVHk=;
+        b=dAV2cPN0OqdwvgjQSYURQOgTMkaRxCWIgeeDWW2VpXyBDNCh00+5BscRoMoeqaDk+I
+         63bemuscX+Gvdhi9KklvLwtO4gIAOf6zI8RaInjV7VUEYS/CY73W9kt6LgRc1xvOP6rm
+         U9LDCXC+HCAqANPzvdWQwrh6JSQ6wfOXml+L7rDVDN346WiUVb38VO5KyLo/GE9eSnRs
+         M76fOW1kugq0J8/9nVuJ7UtzdhP3ofYEz58Q4x6EvaU+eZhMEEct5zMKBOBzO4HzQz9Q
+         d1sRpL1/xuB+O5acvXT8CdNy4eSjAWqhp3braJHtYNOCwMkVazk5cQQL+Q3JRgeS7Bd0
+         kb5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758756285; x=1759361085;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wq5rS7xIu7WGCSuxCIQa3Zphf2jLEucbvivd19Lb6wY=;
-        b=XZenD1nnuqr5OR3RDZ7n7cctCpx6Lgwe04VBPZ089/hQ6XiOzGpuq30TBZsEaCdst/
-         ehr717+N5wZOlfHzWUzH/2C+L9PLY+FVUhPlFNkK13CQwzWiLhIs5+GpfCyjWcNyypVG
-         v9vZ2RvYi6lBqE0Y3N7Rn+drqybKa1pEZGyzgvVAHUtnv9ddzNHAXRpOErcQHJ/5OaB4
-         ox094j5DvWnX9fumAhqkihSfPLoTCrUvnqmNOz0UhAMdcYGXhqzUiaPjmirvTC/ucMo1
-         fSq7oGaVk6EU8Am9qwyINqOz43+vdLtzXPdTVTzaHF46xGrqDSBLBzsPHikj7YAAVq3m
-         phgA==
-X-Forwarded-Encrypted: i=1; AJvYcCXCzMmmNwJudK7vHMI13nXx4ytcXRW7fnSCzndm6dKHmy7h0ROcgQiquVt7elyHnH2UqAa1ACVqyWcPp2nWKg0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzfs2p88KXbwhxPBB9POvWd71nvxhNL0F/OSS6ttd6ZGylani4t
-	wOz1NXlOYGZNryD3DyHpndffmRVIBB2PMHev4qQ60ciEe7oUGdUep52Pt+qNHYdUkTQ=
-X-Gm-Gg: ASbGncuqIHbRssaayYplEj+jeI7GpvUKJI1sKTquZlvUfBjcSb06TEvUWtqc31kGEtA
-	BYI1IGno4Q1SfdKaWV8Dpe5XDvUev3EtLkqsWgrqxxD/sCyIrdSYLQ+pqWV/uMFcp+EeTksPYfx
-	FjydrUUjy1yorAzhQGUuobk9YKucsdkZ+FfMtDpDhMGLI7M/wkDuTAFOqo8y4nqGT5HjkmmMLpa
-	o+Jh+BZVHdag9bUa93MhJrEHuYoZGwJLSCBm+9Bt/8856CsUg5OzVPU9K0/nnwHc6polyYwQFqw
-	vkn/x2ZfJfay774KKPBNbDQcGbUhFae0Dz8xHw4P/oRs7qEs3H07N4U72Dhz71ZqQdbYfOO/Kzu
-	Ito0Wu5L8HwWoI1CKTJG/nxl6WS5B6vEkgJ4=
-X-Google-Smtp-Source: AGHT+IHtbdaGjSQ1EGfQsTrq38djkX8/uDp9qw42nO6KVolXPaXkx0LkjW7ug7t2nqAz5ORH3OQ7cQ==
-X-Received: by 2002:a05:6e02:8a:b0:425:7974:fe21 with SMTP id e9e14a558f8ab-4259563dd93mr20006775ab.22.1758756285448;
-        Wed, 24 Sep 2025 16:24:45 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-425c0546fd3sm2131295ab.45.2025.09.24.16.24.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Sep 2025 16:24:44 -0700 (PDT)
-Message-ID: <d8df684e-0c09-44ea-87a4-cdbaf65ab0b8@linuxfoundation.org>
-Date: Wed, 24 Sep 2025 17:24:44 -0600
+        d=1e100.net; s=20230601; t=1758762359; x=1759367159;
+        h=mime-version:user-agent:references:in-reply-to:subject:cc:to:from
+         :message-id:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eQt75DdC8qDrtyjja2Oov+kDMmzEtd4kIyWgE1cwVHk=;
+        b=mAhhabhbnmTIJl2I7AnYFYNvEbp8M7+aWnFrLs57F6M/LHpz0grMagY1BVgT1doCxG
+         aER2IgtLYvb0wWKuo3PlcPhSW2Wmie3g0CoMJqje8Ugl8f/6m2IIOg/vOwxZwC0a1LTr
+         4LILTTdP/uSXs3sG3nkFx4pt1MyTWo41PyJrNPhOdu5Ygx1yI9JJPMxLsXaG1hGstkC0
+         vlWWAVDbtCy4nHrgtG7wT+DiXRouEDq2RnSgyibIdYRZSVvRQfhhgwmbIEtwtcJzHITX
+         rVFVAOiLNrv+g4viIz3YFpKwJwjl+cGrUxhO8fKKrHsHbLA3p6SxY5Tb2Y6l5IXCvbmJ
+         7jYw==
+X-Forwarded-Encrypted: i=1; AJvYcCUj5y9FXHZ4+8TWvrhEuVH26vx4/doG8McRcLhJ9vwvI5i98bCX+ay8uiQR9Kvc3dh4/K6HU7GznW50zxJFViY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbMuf6jmmu/H+qqd+jOxToGETjb9qC3fIUu2iGqIS4LdIXAoEF
+	nhdCOuosCAoVD9+KRSJkYlGyoHUjoQwlYBlAHLFfxRNr2ggacSdGRJGR
+X-Gm-Gg: ASbGncs2rsjnQ/AR/4JbI5nElofS5QvNUY4TiN8yJwhDNTeMP7SePYY7bnnHevIZ94t
+	T8IbwtLlCKEI0A88uv8oUpZ0E125aiqYtiRx4Qtuq3DWhUieGEzgoYFTTFm/giLdvynJ6a3fTow
+	EB6doBF/j4VeUZPwV+tRraSwPw2DDKzrK9dp8x3NQip0fsKgBIlSfx7OJMdgTNaoQ51g1ThqFYm
+	bu+cGId56e7kuHVKUcdn0RUmS6/pPQKXV3P9MS0Yq0eVMu5UQGFBgI0grlLPSaNQ+xoX73Z4FrT
+	hL9+aX4KlpceoXFpKAac+RHZgi1I4LHNJm35dtLzXawkbgc8VDr0y0OiwsjoTC91fETsaUySJ4I
+	Fu4Segs7MbJ8eCpqRPaEottIK0ezegnpkxUVZCpEYlB09nNMHfXBoInOv+iTdQvc0pi2WEOVm3D
+	qDKtkn5OnSdYI3ilFpVHcCRbDZLw==
+X-Google-Smtp-Source: AGHT+IGwHElmVODhLjzcGQwYiLLF8PustJQtiHPJXl154Q9y4nWgofjfbBNw4V3dkvm+lgwYi65hdg==
+X-Received: by 2002:a17:902:f541:b0:248:e3fb:4dc8 with SMTP id d9443c01a7336-27ed4a7eabdmr16878415ad.39.1758762358734;
+        Wed, 24 Sep 2025 18:05:58 -0700 (PDT)
+Received: from mars.local.gmail.com (p958197-ipxg03701okidate.aomori.ocn.ne.jp. [180.22.82.197])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed66d3ac4sm6088475ad.5.2025.09.24.18.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Sep 2025 18:05:58 -0700 (PDT)
+Date: Thu, 25 Sep 2025 10:05:53 +0900
+Message-ID: <m2plbf734e.wl-thehajime@gmail.com>
+From: Hajime Tazaki <thehajime@gmail.com>
+To: w@1wt.eu
+Cc: johannes@sipsolutions.net,
+	hch@infradead.org,
+	benjamin@sipsolutions.net,
+	linux-um@lists.infradead.org,
+	linux@weissschuh.net,
+	linux-kselftest@vger.kernel.org,
+	acme@redhat.com,
+	linux-kernel@vger.kernel.org,
+	benjamin.berg@intel.com
+Subject: Re: [PATCH v2 00/11] Start porting UML to nolibc
+In-Reply-To: <20250924033217.GA9039@1wt.eu>
+References: <20250919153420.727385-1-benjamin@sipsolutions.net>
+	<aM15eChUObXfxLzs@infradead.org>
+	<4354d88c2ff7a57a7324cc39b4ce5ed4ebe5277d.camel@sipsolutions.net>
+	<m2y0q47mbs.wl-thehajime@gmail.com>
+	<20250924033217.GA9039@1wt.eu>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] selftests/acct: add cleanup for leftover process_log
- binary
-To: Madhur Kumar <madhurkumar004@gmail.com>, shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250922091042.149117-1-madhurkumar004@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250922091042.149117-1-madhurkumar004@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 
-On 9/22/25 03:10, Madhur Kumar wrote:
-> Some kselftests generate temporary binaries that are not tracked
-> by TEST_GEN_PROGS. Add EXTRA_CLEAN entry to remove process_log
-> during `make kselftest-clean`.
+
+Hello Willy,
+
+On Wed, 24 Sep 2025 12:32:17 +0900,
+Willy Tarreau wrote:
+
+> > just curious
+> > 
+> > - are those issues not happening in other libc implementation ? (e.g.,
+> >   musl-libc)
+> > - same question to nolibc: is there any possibility that nolibc will
+> >   evolve as glibc does, and this evolution introduces the UML issues ?
 > 
-> Signed-off-by: Madhur Kumar <madhurkumar004@gmail.com>
-> ---
->   tools/testing/selftests/acct/Makefile | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/acct/Makefile b/tools/testing/selftests/acct/Makefile
-> index 7e025099cf65..16eb97079e63 100644
-> --- a/tools/testing/selftests/acct/Makefile
-> +++ b/tools/testing/selftests/acct/Makefile
-> @@ -1,5 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0
->   TEST_GEN_PROGS := acct_syscall
->   CFLAGS += -Wall
-> +EXTRA_CLEAN := process_log
->   
-> -include ../lib.mk
-> \ No newline at end of file
+> Nolibc focuses on early boot programs. That does not mean it will never
+> evolve towrards more generic usage but this remains unlikely, and in any
+> case there's the goal will remain not to degrade the experience on the
+> original target (early boot). That doesn't mean there will never be any
+> breakage but we're doing our best to keep things in a clean and workable
+> state. Regarding threads, it seems unlikely that they'll arrive any time
+> soon. But if they did, assuming UML would by then be a long established
+> user, we'd certainly find a solution together (even via build-time
+> defines if needed).
 
-> +include ../lib.mk
+thanks for the detail background of nolibc.
+I understand nolibc will evolve with the carefully considering the
+issues we faced with glibc.
 
-Why is this deleted and added back
+> Hoping this answers your question.
 
-Please fix the patch and send v2.
+definitely, thanks again.
 
-thanks,
--- Shuah
-
+-- Hajime
 
