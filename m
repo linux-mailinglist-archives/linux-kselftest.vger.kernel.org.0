@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-42397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 907D0BA0EB1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 19:38:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93D2FBA0E96
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 19:37:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56E616C21F4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 17:37:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 317237B9EE3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 17:35:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E8EA314B73;
-	Thu, 25 Sep 2025 17:34:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E4E3314B7A;
+	Thu, 25 Sep 2025 17:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="EInfT52d"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bhw4wvS8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010040.outbound.protection.outlook.com [52.101.56.40])
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011062.outbound.protection.outlook.com [40.93.194.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CD6314B68;
-	Thu, 25 Sep 2025 17:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F053A315761;
+	Thu, 25 Sep 2025 17:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.62
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758821672; cv=fail; b=abYPbj5Dwdk/sSlbEJE8J3mb8jMxbib4dMadR+r3yZvcWtd6ImYA1ZJS7nd0L95Qhplq263gGxEbqHgDncJuCf/f838WFBBPD6nDEAbaMAw9EBm0zVsaiyfWV8TUm+I4+53kC54W+cflzdpgtEekkhNzFJD/tR9OiABW+L4CzgQ=
+	t=1758821677; cv=fail; b=r+sIT18212g3vxrYOlrdhxU+EZmw6ENzgwwDLywQFggANX2OxA2uBILoIzYyMI/yTfPNpbwbqv6rQ0oNuZHklYBWPL5EaIEAYUmqC+TwvMhaV8VVPck1e67OBOERpbgQmVnI6omrELNyyFkQbavgSl/kxDDxlKHL75iYy1X5uhc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758821672; c=relaxed/simple;
-	bh=JvohsGnNCzCT/8kY+ukHPMdntI/XkbWeveBVJG8PMP0=;
+	s=arc-20240116; t=1758821677; c=relaxed/simple;
+	bh=JQLwVOMkPnnRAoCTORErpT8WEya+69iCgFetonCQ/CM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qAa6o4gUq9lALW5hbs8hEUHQF64iz7CJoXEAJ2rsYNdt6TpHlK/GJxcc2FBYt5YGWbIDejYfQWg1RGUblr4eUF0ayv1pJQqScb7VgPHIKTP0Yl/5Hgn7mLU0fOJ6IQoHFlKZRbdtggGdeFXZip6Om6On739lnM11ya0bIjkAyoE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=EInfT52d; arc=fail smtp.client-ip=52.101.56.40
+	 MIME-Version:Content-Type; b=EHOVRoW5p840wUpLiNrWXopvDuG0lxnqlSZawcIULKTzjlW+TuFvMpTtSZpL87ZoVXJlbgVxYTxU0UStE41P+thhQcR6qM7Lq5gB1U9L3arUl2NeJ1Dzp2srCieBNvdAX5cyKiQxg0dNCVwu7stQHUpANHjpjvIBOrX4PtR9Cj0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bhw4wvS8; arc=fail smtp.client-ip=40.93.194.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cVGatE7eHiVE/Ql2kVnjfn8jngY9JiCN8O2U76MxbKeoVgxYn+R0ewqfZ+Q9JzlcVYi4W/4IhOMdERrA2/7EQ8aKhmaPqjycRkYNAt9bN8T+sag1Zzp1JciXGYD2YY6oPjiYIdRfAxXTtXg4jcxs+pWQmuYWvRIYFFREY7vwgomRXpK6xyoODxc0OMqqbn7xQEADCy9nxVgAsR6YV57lb/YmHB5vabqOpgSBsxEmktmeQnYn9qRRtoQckxT+LfGi17KUuOVT3kchBLquStGkGbUBRTpz+6ceDH1DhzNlS9G5fJUNLM+gCFU2mOElbUeJzrO5i68bWbEM8LvKOkEbOg==
+ b=ClwvlRKjNdOhmKBZpSqM+s+KDqI5fE7Cce/9HUwXQHzFSufnQp5jRLOgNnKw9ED+ZQcRs0Bi6eDRkCf8gok7Fnvc9RY3Icq3Pt3xPs0HBbhXgT9ABGq9m/cXh/uORZGxQfr95GnlfKwlBZHy/WKTUgSZXYsOr2SRPqZuzNcCS2cSyb3kkq/sKFAysO1ze2URUIROlftvC9ICS+2xEwPkfQC6GhV1fM5iMmjwZ1la1lUFKdNqZ5bmVwXsAAiWAZ376Q5/BprTY0GTOk5mH6XBzwUgaepuKeLeTLY5/VH8jwJf1DMLo4WFFIbhQRVuwnTXOiJ7avHJUQ8QT76NxZ40Jw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2ml3St5k7OXtZqHkq3RjrmfyY1JdMEe/nUgMWm0o8rw=;
- b=iCNHti0pHAjyYMfSZ2R7YyMLguMCkXnlxETel+Ev62nkyOgGjpOfeR2VO3B677j/CsUBkGVdLqL3u0t2ULKFmWDtmxuhVOrs10YQJ6j1dhyNWtYQQZA3k7aP087Pq4AU0USJOd+/AYU/dW+saAgdJoNws6UW/yWfVhlqi09p9yyB6DbltzUo84yujKy2R25rFFcrmIGYJqrOuxvl7Wlnph/gkUrUw1EeNKU8ZtfjxdwwCQ1id7x10w1jf3c/It2xxpJ286WcZ25iNIK1L+OBheH1jhI04cpYNGfPQT6JRNSWc3TnXeJnghC3kNidLYCEM0c4qpU640Nxnc41B1FsQQ==
+ bh=k+HM0Tl62LR5uaBBNXIyvEIuH1RuUu1ItqBlB8V5kYQ=;
+ b=broVj65UFWTRof9LSFO+iSuBZY4WhViQheWn0sLiqCt7oQv1Qr0nXYzsbDSOkMgrLW4Vjd7RI3Wv5a5l1caOI/Yu1HPSOY63ef4YRZvIIehYaeDF1kIvp8FzfIzqxqtfQ82UgXdwJE63U27qba8v94ELseSGAewx+X0eufuw1a/2Rxzq3LKFYEiejpwEUTndGGrMuKT0M6TZpZgpzUp8SKp6UEPaO7OOi0dh3Kvg+djzTS+SpRVtcothgyminWYln/qhWbPBzyKsliC5Xfg7T5EyX3FoTpd0vfGWLUlJyQlqljTHzS4RxWkfolNrStjBArBz5hZBVLIazeXmG12mbQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2ml3St5k7OXtZqHkq3RjrmfyY1JdMEe/nUgMWm0o8rw=;
- b=EInfT52dTdElBQWqk3rYZjlvNJZ/h6oa57UOlZEeG0cy5q47+WiX84pDkCWwi0Cg+JSUoIieNXKuVxZiCMwk6NXOTTf97q7pySriHulLtbuU22RUHIbv33ejaiwblGclZlXk9R2bx0Ob28/xDm+jnIYYmJ6Et+GHvDFWdFwEHnXqJQ98eMNfFjBxnKz08WWsDY5ij5qoIg7vOjXeVWYzTg8HDV3K13MBfpx3ggE/1zLoOdiXdfffUYaGDR465hPMoS7ZTKdqtobTWuPvwmxErWx6BDG1ESJOT0Ee90yGYfXXBQpKQbjziUjtwzkTqnwxSW4XNkU9mld3tCgHqZYB3w==
-Received: from BLAPR03CA0154.namprd03.prod.outlook.com (2603:10b6:208:32f::28)
- by IA1PR12MB6067.namprd12.prod.outlook.com (2603:10b6:208:3ed::10) with
+ bh=k+HM0Tl62LR5uaBBNXIyvEIuH1RuUu1ItqBlB8V5kYQ=;
+ b=bhw4wvS8h+g+9JHzMmNivNpGZFuJYdxC2UN2FvB4utG5MhJklv4F4UJ6rEcku+mYNLSwtSgQu0ne/vFi4EJdcfp04jghhLUJziqyEzwSW8v+maVpM40aia8fJzHAXm4vq7sj8IiVAL+VmTaIQNCVIwvB2pU9izB+mIokpccd9OgOUhIn1hH/pZEH1OlB86utBtImnPDdYih8GiBVhqM2U+5RQZels02x1B5BnXwtnrv6KCovIFEZ5PKQBO/JlhHv13TE52enmmFn8KVceAic7ijfgt+hF5CWDbHeC78z7kO4VQASSSGu5cGluBoGQy1fxq/2hRThwaGuxTzFoIOyOQ==
+Received: from CH0PR07CA0020.namprd07.prod.outlook.com (2603:10b6:610:32::25)
+ by DM6PR12MB4418.namprd12.prod.outlook.com (2603:10b6:5:28e::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.10; Thu, 25 Sep
- 2025 17:34:27 +0000
-Received: from BL6PEPF0001AB75.namprd02.prod.outlook.com
- (2603:10b6:208:32f:cafe::e9) by BLAPR03CA0154.outlook.office365.com
- (2603:10b6:208:32f::28) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.21 via Frontend Transport; Thu,
- 25 Sep 2025 17:34:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ 2025 17:34:31 +0000
+Received: from CH2PEPF00000141.namprd02.prod.outlook.com
+ (2603:10b6:610:32:cafe::f4) by CH0PR07CA0020.outlook.office365.com
+ (2603:10b6:610:32::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9160.10 via Frontend Transport; Thu,
+ 25 Sep 2025 17:34:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL6PEPF0001AB75.mail.protection.outlook.com (10.167.242.168) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CH2PEPF00000141.mail.protection.outlook.com (10.167.244.74) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9160.9 via Frontend Transport; Thu, 25 Sep 2025 17:34:27 +0000
+ 15.20.9160.9 via Frontend Transport; Thu, 25 Sep 2025 17:34:30 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.34; Thu, 25 Sep
- 2025 10:34:08 -0700
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 25 Sep
+ 2025 10:34:13 -0700
 Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 25 Sep
- 2025 10:34:02 -0700
+ 2025 10:34:07 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -83,9 +83,9 @@ CC: Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
 	"Nikolay Aleksandrov" <razor@blackwall.org>, Petr Machata <petrm@nvidia.com>,
 	"Shuah Khan" <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
 	<mlxsw@nvidia.com>
-Subject: [PATCH net-next 08/13] selftests: net: lib: Rename bridge_vlan_add() to adf_*
-Date: Thu, 25 Sep 2025 19:31:51 +0200
-Message-ID: <93526ce79e635a3ec34753c796edf0c96711547d.1758821127.git.petrm@nvidia.com>
+Subject: [PATCH net-next 09/13] selftests: net: vlan_bridge_binding: Rename dfr_set_binding_*() to adf_*
+Date: Thu, 25 Sep 2025 19:31:52 +0200
+Message-ID: <5f0c81b39e9e1f56f706cc4b53f82238a1d1e2f9.1758821127.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1758821127.git.petrm@nvidia.com>
 References: <cover.1758821127.git.petrm@nvidia.com>
@@ -101,175 +101,99 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB75:EE_|IA1PR12MB6067:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d173654-9e77-41da-5050-08ddfc59c6cd
+X-MS-TrafficTypeDiagnostic: CH2PEPF00000141:EE_|DM6PR12MB4418:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3c3aac78-9e68-4c1d-6b5b-08ddfc59c8e9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
+	BCL:0;ARA:13230040|376014|1800799024|82310400026|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Q2WEbKqYLXO7t84lkA8wWbibG9Ob+ESSIrVsTW3afQyyGvZQOhfcfS8hLHow?=
- =?us-ascii?Q?ns6ggwiCH1FWjL5UZM/ncsaSraY02hvcka9ULUnW1/9bwZbhW4DhrYnv2OOa?=
- =?us-ascii?Q?cBirIbrTL8lm45nfxhYGFbNQCA/0LxZp9XfTKBbKUkkEq88nF/YR7EpPntCL?=
- =?us-ascii?Q?5ozCU9nM9ILdidP+u1Xl9aZJW4H7izcnV/E3ZRgh4VMbSJPFjpDo4lCvFWL5?=
- =?us-ascii?Q?nh1Bf1l9vTnRSC81Klvgi1kBE6zK32Zb9inR2wgpN3/yvxMbJzPdrZ4TAfMT?=
- =?us-ascii?Q?8F+IKX+1wykYd+VfzKFg+hOXCxDWdo92hO8bH7WnqZoFuRCBeFq2UhrbDMEk?=
- =?us-ascii?Q?g0mHDjtctepYE123/7GE/DNoc8vFMbOJp1+OEkjunreaeRXeNTyG1q53D4iR?=
- =?us-ascii?Q?fR0bEDkCnQ6z9MksIOaWSaQwKmC4fB8JEKtkBb+DxOBaxq83wfmqh71gwkHM?=
- =?us-ascii?Q?+90g0XLxiuoZzj9m0p1LWPop7Tp8pDBWHUOTAi1I2odarcZ3U2c0diaCaIwi?=
- =?us-ascii?Q?jP7wGswMKqoOrp81zFgiitJ0CEE81G8yJUcSzo2k1vhi+IzSSlWZ8eYJDdOv?=
- =?us-ascii?Q?vjh/7h0NopYgtFS8b5oeUB/QgFeZaq4VyI/MPF0xJB1CChGSy+xq7zi1TWnu?=
- =?us-ascii?Q?r4fCnHyixPg8xovi+QxGFTGFySg18NIztcprgzeYDssT0mDpmQPsKW1OEwFk?=
- =?us-ascii?Q?q5QFP3isuE1cx//Z3nMLfSY/+/0NuR4owMua/Vm42L5XfldUa0qLuN28oApq?=
- =?us-ascii?Q?DbbGjytfqv1JQKfaG9fIBhWHpecltNG1zDqojJgCkqdpljFPg388yRnhBXaq?=
- =?us-ascii?Q?VoVM+NNTzFonMj7+gQgVKmM9JeXwOnX1uOCCVaeJ+e/tEmBsKs4QYUEL6JQN?=
- =?us-ascii?Q?+6KpxtMIBl11KYJQDTK+1fqGE0tQHpP7KRXI7rxb3R15DV7nkfRAxAxDY/iT?=
- =?us-ascii?Q?6hiQQKRot/ROEfI+hi253uaDdJHKT9c1kCPFiXVpdxQ39yOtYAv9xuj5U7yX?=
- =?us-ascii?Q?N5uXM/pR0K0gm7BnePY8cWHenUt8Q3udt85P8fOgqNMa3dzifSdHL75153T7?=
- =?us-ascii?Q?b+dnB68ELJyWoeldOf9BtwXk4hT9KLW8IpX4v2/voTQ1jeHcoOQwiNq7EoZO?=
- =?us-ascii?Q?eYvr639fVfx8WpYUuqHTTmDjK6rcWtD9lYCCdCITlTHzylHeSJTB4/9dO3+h?=
- =?us-ascii?Q?76A3asyZG+WRcmVql/OoyCyPPlCfgELNuxquf+jVQd4DwUM3HHRKcQyl5+GS?=
- =?us-ascii?Q?EjTz76uauLLRdE09nx73nyQ2TZ/wv/sImxtISitrO9SEDW48PTocGg/5yJ/Z?=
- =?us-ascii?Q?v5xxCsvF5CJHHAis5ON844KnwFwzMn7Be4B5y/wOjnN0jtcoIDRI12RUXBJR?=
- =?us-ascii?Q?jadZ0k9C1WfTWuPYFa3O2L0NE7KnlLuKjZpN25/L648T26CaqdZpe1T1GBoM?=
- =?us-ascii?Q?5okRWcw+zci4+KWaHtPFKN/yRPHfm0NDyem+fpQD1aK1m2AniVHfs03lCpgN?=
- =?us-ascii?Q?7cPacrnrp+7h/ZoR9B8zAbM5/Z6PTlS5HIPvlCIBoDtH6I1Tb7rIAw90PY2F?=
- =?us-ascii?Q?tnw8hkoA+NAr1E3B1eU=3D?=
+	=?us-ascii?Q?BncF6r4mXbIcJtvnShLpO1fir9EJgfdUoLrCc3HWKL/8IuvOaWRciz0X3dQA?=
+ =?us-ascii?Q?Tv3JMqaA31gPm5MB/56M8nzA3t79kxH66mE5AmEV7TQ9AxgF50bBu8rvEH/J?=
+ =?us-ascii?Q?QfyW13176DOAbmQ7xQSCxILi/Rve5t63ulMkyoORpixvQgWJNZqokwO70i1X?=
+ =?us-ascii?Q?Ehi1kptc15h7YHzIQkEh9/2secPiXXJXBN56VAeWhaPM5+4hmGf5Dm8hHm33?=
+ =?us-ascii?Q?mCKvUd/dknhxF3DIEyJFU9rxipmpjYe3Xfi2cNmW4G6K0gf1Efrh0eSV5BZZ?=
+ =?us-ascii?Q?Yh0l+GYfz4jWApBqBdphw/xT73lpcxIJVnM4iMqlHQVdZiorWY0YYQGUdIu7?=
+ =?us-ascii?Q?QxILUknVxAEQBk7ZRDr2lQvATm0lk1peypC5XaZVVJJzHgJfH4n/MZhrB1BJ?=
+ =?us-ascii?Q?36v8fK2fyPisC2jNZrZ3smYjsRXsSNOVoEaJqfVfAawH+XZN+XMC+zNScN1f?=
+ =?us-ascii?Q?YtDGyKsPdeAoSusQ7CFkfAXtOjAZkQRtB3mn1CXOM4FvKVWBrRiBQ4SU0hmu?=
+ =?us-ascii?Q?dgaGJ0pVdR/RdZkElEWfJnQrnlNWqoo2CD7Law7VF1WzdHrb0tTJAS8RKCxl?=
+ =?us-ascii?Q?RFXXytNvEYqs7+tdnf5AFqP3xeGbf2AENwidfV2AAItTAzK6g+/jnLK9pAVz?=
+ =?us-ascii?Q?eTEIihQcU1GMaO/Ipmsnyw1xj2pN2Limiotkzf6Fhn0l6Dk2p7ldmHkp1rrK?=
+ =?us-ascii?Q?TNGP82mLjlCw9sSQ5Zf+u7BAh0mazTZ2Yeg/qAMpJ9EE+Gjd6DFiC0JNZxAS?=
+ =?us-ascii?Q?O01JTphuSlt9+20fVKl1FgsrPrvPjwMXRsTqyY+exrGzP77/phZo5IP5aT2p?=
+ =?us-ascii?Q?QwSr69hF5jb0XzjFHzWxx7kAyu7oMV3xlYR5suNlNuVLjGmXNDj7IOaD/MSL?=
+ =?us-ascii?Q?Ix0D61kxBGNtsLYqVbQQ4rtvvRm7xEOfIk1lyFrBZ7BljaiOnMxZyiLpQ/0f?=
+ =?us-ascii?Q?ohKNcCZ2d4o66u8wApCTc1z9C3LJfV7XMitRNv+TvfWbcyHgOGG77ezCxPnE?=
+ =?us-ascii?Q?a28LiHrSQjdiaBa2XM3oZ0aJCSpHCvt60hd17z+xGfABNUy7j4XTCGsBjP5b?=
+ =?us-ascii?Q?gPuCguJUTrtZ03k2fJVE2c+VoceJ2TxG8Xdaq2sxQmBi1T06oIlLtPDkvyHK?=
+ =?us-ascii?Q?aC5G8vp3zBpmqvZB8y8C+4dZOtOe2GfJ8LQrc7Hj4wBJClnqW5eDntpcBvbn?=
+ =?us-ascii?Q?v6Y7cgctlMz/aI4LplWjAZgDNmGMY+B93JYV2EEJWUz0LIhVB1qFmHm/2YZ8?=
+ =?us-ascii?Q?63/bgEQGjyx9MCa1t5TXqJ9890oqhmlseRUGJacE6+4DvC5fUndS1vZLj6oL?=
+ =?us-ascii?Q?9MpZgwETXPW34nwXPnaAJsUxHJnj1Btzylau1Lo+Bz1tM+OV5RoDvyBDyHgX?=
+ =?us-ascii?Q?udM7o9LNP3/aOgHP7LDW7EJqvCp8JEroWM5y69iPbAofa5Ct7S0wRQJtVCS6?=
+ =?us-ascii?Q?z7mpR0efYl91EUy1u84quXzLBj02bHAneJMI4OoqPtWhMWs37Id4dmTg0Iuc?=
+ =?us-ascii?Q?Md2oKo79aAEUgOUygtSVyyOcwiFHfCJ7EESCXqQOA92tUyGV3gy4ujbrBP8B?=
+ =?us-ascii?Q?7d7uOkV/iqzn8jmWI0w=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(82310400026)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2025 17:34:27.2302
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2025 17:34:30.7909
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d173654-9e77-41da-5050-08ddfc59c6cd
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c3aac78-9e68-4c1d-6b5b-08ddfc59c8e9
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB75.namprd02.prod.outlook.com
+	CH2PEPF00000141.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6067
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4418
 
-Rename this function to mark it as autodefer.
-For details, see the discussion in the cover letter.
+This test contains two autodefer-like helpers, but namespaces them as dfr_*
+instead of adf_* like this patchset. Rename them.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 ---
- .../net/forwarding/bridge_fdb_local_vlan_0.sh | 12 +++++-----
- .../net/forwarding/vxlan_bridge_1q_mc_ul.sh   | 10 ++++-----
- tools/testing/selftests/net/lib.sh            |  2 +-
- .../selftests/net/vlan_bridge_binding.sh      | 22 +++++++++----------
- 4 files changed, 23 insertions(+), 23 deletions(-)
+ tools/testing/selftests/net/vlan_bridge_binding.sh | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_fdb_local_vlan_0.sh b/tools/testing/selftests/net/forwarding/bridge_fdb_local_vlan_0.sh
-index b8fd85a20b78..c1a506370c4a 100755
---- a/tools/testing/selftests/net/forwarding/bridge_fdb_local_vlan_0.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_fdb_local_vlan_0.sh
-@@ -118,15 +118,15 @@ adf_bridge_configure()
- 	adf_ip_addr_add br 192.0.2.3/28
- 	adf_ip_addr_add br 2001:db8:1::3/64
- 
--	bridge_vlan_add dev br vid 1 pvid untagged self
--	bridge_vlan_add dev br vid 2 self
--	bridge_vlan_add dev br vid 3 self
-+	adf_bridge_vlan_add dev br vid 1 pvid untagged self
-+	adf_bridge_vlan_add dev br vid 2 self
-+	adf_bridge_vlan_add dev br vid 3 self
- 
- 	for dev in "$swp1" "$swp2"; do
- 		adf_ip_link_set_master "$dev" br
--		bridge_vlan_add dev "$dev" vid 1 pvid untagged
--		bridge_vlan_add dev "$dev" vid 2
--		bridge_vlan_add dev "$dev" vid 3
-+		adf_bridge_vlan_add dev "$dev" vid 1 pvid untagged
-+		adf_bridge_vlan_add dev "$dev" vid 2
-+		adf_bridge_vlan_add dev "$dev" vid 3
- 	done
- }
- 
-diff --git a/tools/testing/selftests/net/forwarding/vxlan_bridge_1q_mc_ul.sh b/tools/testing/selftests/net/forwarding/vxlan_bridge_1q_mc_ul.sh
-index 091833541b06..a968a3ecbcbf 100755
---- a/tools/testing/selftests/net/forwarding/vxlan_bridge_1q_mc_ul.sh
-+++ b/tools/testing/selftests/net/forwarding/vxlan_bridge_1q_mc_ul.sh
-@@ -222,8 +222,8 @@ switch_create()
- 	# $swp1
- 	adf_ip_link_set_up "$swp1"
- 	adf_ip_link_set_master "$swp1" br1
--	bridge_vlan_add vid 10 dev "$swp1"
--	bridge_vlan_add vid 20 dev "$swp1"
-+	adf_bridge_vlan_add vid 10 dev "$swp1"
-+	adf_bridge_vlan_add vid 20 dev "$swp1"
- 
- 	# $swp2
- 	adf_ip_link_set_up "$swp2"
-@@ -245,7 +245,7 @@ vx_create()
- 		nolearning noudpcsum tos inherit ttl 16 \
- 		"$@"
- 	adf_ip_link_set_master "$name" br1
--	bridge_vlan_add vid "$vid" dev "$name" pvid untagged
-+	adf_bridge_vlan_add vid "$vid" dev "$name" pvid untagged
- }
- export -f vx_create
- 
-@@ -307,8 +307,8 @@ ns_init_common()
- 	adf_ip_link_add w1 type veth peer name w2
- 	adf_ip_link_set_master w1 br1
- 	adf_ip_link_set_up w1
--	bridge_vlan_add vid 10 dev w1
--	bridge_vlan_add vid 20 dev w1
-+	adf_bridge_vlan_add vid 10 dev w1
-+	adf_bridge_vlan_add vid 20 dev w1
- 
- 	# w2
- 	simple_if_init w2
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index 208919a44703..feba4ef69a54 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -619,7 +619,7 @@ adf_ip_route_add()
- 		defer ip route del "$@"
- }
- 
--bridge_vlan_add()
-+adf_bridge_vlan_add()
- {
- 	bridge vlan add "$@" && \
- 		defer bridge vlan del "$@"
 diff --git a/tools/testing/selftests/net/vlan_bridge_binding.sh b/tools/testing/selftests/net/vlan_bridge_binding.sh
-index 09081bcbfcc7..794ba71c45cb 100755
+index 794ba71c45cb..db481af9b6b3 100755
 --- a/tools/testing/selftests/net/vlan_bridge_binding.sh
 +++ b/tools/testing/selftests/net/vlan_bridge_binding.sh
-@@ -27,20 +27,20 @@ setup_prepare()
- 		adf_ip_link_set_master $port br
- 	done
- 
--	bridge_vlan_add vid 11 dev br self
--	bridge_vlan_add vid 11 dev d1 master
-+	adf_bridge_vlan_add vid 11 dev br self
-+	adf_bridge_vlan_add vid 11 dev d1 master
- 
--	bridge_vlan_add vid 12 dev br self
--	bridge_vlan_add vid 12 dev d2 master
-+	adf_bridge_vlan_add vid 12 dev br self
-+	adf_bridge_vlan_add vid 12 dev d2 master
- 
--	bridge_vlan_add vid 13 dev br self
--	bridge_vlan_add vid 13 dev d1 master
--	bridge_vlan_add vid 13 dev d2 master
-+	adf_bridge_vlan_add vid 13 dev br self
-+	adf_bridge_vlan_add vid 13 dev d1 master
-+	adf_bridge_vlan_add vid 13 dev d2 master
- 
--	bridge_vlan_add vid 14 dev br self
--	bridge_vlan_add vid 14 dev d1 master
--	bridge_vlan_add vid 14 dev d2 master
--	bridge_vlan_add vid 14 dev d3 master
-+	adf_bridge_vlan_add vid 14 dev br self
-+	adf_bridge_vlan_add vid 14 dev d1 master
-+	adf_bridge_vlan_add vid 14 dev d2 master
-+	adf_bridge_vlan_add vid 14 dev d3 master
+@@ -207,13 +207,13 @@ test_binding_toggle_off()
+ 	do_test_binding_off : "on->off"
  }
  
- operstate_is()
+-dfr_set_binding_on()
++adf_set_binding_on()
+ {
+ 	set_vlans type vlan bridge_binding on
+ 	defer set_vlans type vlan bridge_binding off
+ }
+ 
+-dfr_set_binding_off()
++adf_set_binding_off()
+ {
+ 	set_vlans type vlan bridge_binding off
+ 	defer set_vlans type vlan bridge_binding on
+@@ -223,14 +223,14 @@ test_binding_toggle_on_when_lower_down()
+ {
+ 	add_vlans bridge_binding off
+ 	set_vlans up
+-	do_test_binding_on dfr_set_binding_on "off->on when lower down"
++	do_test_binding_on adf_set_binding_on "off->on when lower down"
+ }
+ 
+ test_binding_toggle_off_when_lower_down()
+ {
+ 	add_vlans bridge_binding on
+ 	set_vlans up
+-	do_test_binding_off dfr_set_binding_off "on->off when lower down"
++	do_test_binding_off adf_set_binding_off "on->off when lower down"
+ }
+ 
+ test_binding_toggle_on_when_upper_down()
 -- 
 2.49.0
 
