@@ -1,78 +1,77 @@
-Return-Path: <linux-kselftest+bounces-42412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42413-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DCBBBA135B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 21:35:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E423BA1415
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 21:45:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2864D4A2E64
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 19:35:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A6974C84DB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 19:45:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B59AC31BCAA;
-	Thu, 25 Sep 2025 19:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B38231E0FB;
+	Thu, 25 Sep 2025 19:44:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cAcJuioI"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GYH8pmio"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3C130F817
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 19:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C8231D748
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 19:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758828921; cv=none; b=uFcI+jdBTczmJ4BGJT3/MfqmSVsuU04ADZsGZq8fsF9koMhuLg+OGpy6ymqFSEJyuPb73uWhFl1QvKmd2D2l1ZBwmJ/LSlriEbQeNLnvP9JV9l2PKYf/BceaaMTv9+cTHzlU993mJS2uNc5OOBOzeRfXUQPm8LukdMndUacdC1E=
+	t=1758829484; cv=none; b=sPsT7xdy5kgeiaPKRIi16XhqmvPtijNzBnMDhjtzKHS6/BhRXu4/ve6Gmqcc+b8rRSkq2Ufl6TS/aJXTGt8tsq6+PvgSYqkfx7QwlBQvZT8VP3ANVltwYV/Jq3UAOnq+nG+QkAQXG2Msrjbbv0cZgNbAvwuiQQagL40xYafKvIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758828921; c=relaxed/simple;
-	bh=iRcY5i2TNwQ0CYuSO+aLPKc2LRCwSFeiQjMegc5twIM=;
+	s=arc-20240116; t=1758829484; c=relaxed/simple;
+	bh=hlXPqA9leDXyKU+a+StNvMRXfLd7Oiz0q/nTjQYZxBg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b2DVKe4Y55kYh2EjeQF90GbwCMKLhM+D4DdT3UfdYnZPAdhRUK7bP6lDoxbTd17igYqFnv9PMgojTCBR747/6kB3xYcPQ/G9Tjhn9Ka6XFNvtGnVwWdH/pY673sYFdfw1Ld4Ln1Z9nyWq+XNxYq+IJs+83toENF+u8SLPvhZ2E0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cAcJuioI; arc=none smtp.client-ip=209.85.160.47
+	 In-Reply-To:Content-Type; b=GuW9VqtHkmxIzqWBe4tnAo6Rk4agWLo8Vm97HqCQWvnOARuhmlTxGKrMVBuA7+wAAYPtKsWfyc/qpdO+Xg9g8MRyYIv+N9EjeLMYcIeS4xRQzhYyHoYkwBn8NIGCWtzFrUpUSmieic3UagoH5b5pyvtJwxjQbPU3CLvemw+WzNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GYH8pmio; arc=none smtp.client-ip=209.85.166.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-30ccec59b4bso1305828fac.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 12:35:19 -0700 (PDT)
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-4248b34fc8eso11994195ab.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 12:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1758828919; x=1759433719; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1758829480; x=1759434280; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qMiIPINiS7UfR+va5FB4w5hMBgbYjcE5hLeysv1blt0=;
-        b=cAcJuioICs6neDaswr9q8pyV6kH8BdUxoHQjwCgW2kNLGn4Z/GnLN5nMd1lzZaOrng
-         HgzDUU9nybjeCKrHx4RopYO+/bv3krgzNwS38Sv9GPlXaq0mjXD7x2tslWcSZjqtuZXq
-         wO13XimK69xokdyTONXQdDH8znq0n2/+jPU18=
+        bh=or54vQrDlSCc4oUoPw4bOHl4mIflQax8gxz1ImqODMU=;
+        b=GYH8pmiom14ZpZtigjGxS20dZbUrgA0wHsSkqgPWK69dQGxtZrQdYc1HTSts3cI/B8
+         9QPV62PzEGKjGvKKfwSsi57ZVtnRgWY2XQnPkj0FXyCFRPAjOILwu8X4rCMwP+lSybHb
+         1CiuHILRKzG+OH0yWwbsQ8gbJyNMeIhY7qDqE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758828919; x=1759433719;
+        d=1e100.net; s=20230601; t=1758829480; x=1759434280;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qMiIPINiS7UfR+va5FB4w5hMBgbYjcE5hLeysv1blt0=;
-        b=FQPtN/fYI8SsSMyWESyoH4RGgt431krn88lcaPFhYK6PQrlhhCji49uq17ady17b8V
-         Ab7M7yVyRTUZcIvUhYZiuetTR/sNkLm+xq/Prw7Bv0NsLUr7pC7iMRhY9w71u7LiRaRr
-         MLO1N5vbrhVwMmiqGAHr6z9yj628p2IDnDnUjzFEapOLXg0MALTLZqgOFJ17qzZh08cR
-         /NQbUs02RUhn9ICK7nxySl95U14lEiHC8pAcQAVvGoMSJA+9gGc745OM0Ra0aL2webZR
-         njK74n/hgaTYp4WsjOq798U9wAqlTIjTqHIDJXfKAeiFWZU3O12WXsTRoNtKmfpO3797
-         iC9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVnz2ksRpRq2kpMWDXEuVPm7pz995ipzuFm0I1w4xb7rwoZc75cGhpWX8+ycVrPPS3t9fPoJF33mh3c8FikKFM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUMd80uYyQ/QRsppxEYlbjBdIbf3aA6x8OuEUJyyJzpLfnfbD7
-	lXbBjvX5M5jHTwvawEr+LV4eoySSjMC+/mhMQT7rKndKqwCr1sn3rbIY5ljDoaVOHCOdEWu/Qum
-	cvo4h
-X-Gm-Gg: ASbGncsrg2jXugZpYDs/xQYi3CVjOcY6jn/0SZPgycultZqhKwLMKWWZ5AOI5JOrgf2
-	9wdxHB9Ac779Rt4mCMvn/8WzbHsll/KJTq3FLZ1TZstaX8ujCsIJAzvpLccTs8y3jYr37LrKKxT
-	FsEifVsdSqPm9Xm9OvcyGUwUUj5YGC37oO2EiCD+M3xL197LkSzmJkq7vCKzNlYCVPZ8dnuL9bA
-	gMhgewb7ElsgipazxZMJmpZ1vAm8MCkxmmKBVLJRBapxB5azrRd1gP8WJYBo7H05EXOStORFqVD
-	K6pRX9ngi+hohT/ULy0tmcJgQwqsbtm8B9V7qiItb1bZ6QyLkabIUt3183d54pT1kgzdOX3f3SN
-	MsqpwYyh59HamMLYaXcjnyO4IlOvia7Fbylw=
-X-Google-Smtp-Source: AGHT+IHUYbCmTvCEUBZBJyu9pkltqtHLEnktL9g/+n13LsxQOhsB7Eoi7VN/yO+5UaFq9LygowSFBA==
-X-Received: by 2002:a05:6870:200b:b0:31d:6d47:c648 with SMTP id 586e51a60fabf-35eec273adamr2406705fac.47.1758828918793;
-        Thu, 25 Sep 2025 12:35:18 -0700 (PDT)
+        bh=or54vQrDlSCc4oUoPw4bOHl4mIflQax8gxz1ImqODMU=;
+        b=qyAfk/1QR3x5FIkm/KvXvN2jChKwSbI4prRqcMl/3qxB8CDCe8536A0cfwVxDdjR9g
+         JZyQKzNckiQ6+pOHlTBHEih0t0lfBrOxb0H/37eR7vJ0YrXYw5XVp+wNYYbCEgv4IrbW
+         t2DjlFwR09iSmaGrRLtyJ38nPhmveVv7S6z0AKVovkY6hfeTF4jiApR/S9LrGQLxpCI0
+         /MFd5Bty/1fkzMZ0AmU6nDUzM7VY91gnleJAYybvqZ0Zt/NO6Ec66vIhX+VRIMBS7Ork
+         GB60LYPOTpeTGmsHB2COQgiYaO0rsyk2WD4n+w8KTiZ39wO7tJIcJj6uWNqrIY6FI4O2
+         FM2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUhEhEtQKIyqq5CVQx0OEY/8OTWfjIaNJELJ+87yyFq6EMDHFtNlYu92tt3IQI0RtndgsFfAvth8AJpxbnVQds=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxU8mhLT3VRepB07dstdz8+GepC+jI5EaSqEa3j+ihm9CT4HoUK
+	ZD3z4v1i51wnn2cho8/sOoa1qZulRIEKoBkcjQ+uN2X9SWv0mwvovTugBXUKODNY7CU=
+X-Gm-Gg: ASbGncvkRwgD5jEofIT5J8eF0006wXLZHWrpzTe0PxFUNNRIt1fZddBVjjQV0pRvmaT
+	peVZjdsW0NoO/n0u21rRNIc9V7z2aYMoSgOQ2Thhqkr9Cl3TeX+P8TQ4+xNQsGCJFjrkBn7ax8J
+	u/AUVafxMppLZDWuhZ8XoEdHGHBmZvvWe9jKx94BWwjvUi05Yck+xZajSRLmrIP854ghR7ftaJH
+	ZmxC41Il42V+nASxLC2uJztW4ANAzCdVACWo4mKm+T/w7OrqROTKnEi+tWgTAFmat3GbEUiw1OZ
+	C7Z5vUSlxJLrFWTeApmZf/8zUVUEGlqK9K9oeih5ksh0xAWvfr0XYxyeu/UbIElrDQwypUouFys
+	qtnRjl/Uh6/vda/6DJ/R157cxO2VNfWOojcTIILejXK4CTQ==
+X-Google-Smtp-Source: AGHT+IEPVyp7JzGHapxNvv4LYOPSv8tJ+j6O50sbKDaIYjBItoXAtC7pX4vo8bCfw1S4ZxWm8QkoJA==
+X-Received: by 2002:a05:6e02:1fe8:b0:424:64c7:ffae with SMTP id e9e14a558f8ab-425955ed735mr80558725ab.12.1758829480118;
+        Thu, 25 Sep 2025 12:44:40 -0700 (PDT)
 Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-363a3d46f3fsm801080fac.9.2025.09.25.12.35.18
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-56a6ae6ec6esm1116952173.76.2025.09.25.12.44.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Sep 2025 12:35:18 -0700 (PDT)
-Message-ID: <8f929b50-3b59-441c-8a6b-ba39ea9ad698@linuxfoundation.org>
-Date: Thu, 25 Sep 2025 13:35:17 -0600
+        Thu, 25 Sep 2025 12:44:39 -0700 (PDT)
+Message-ID: <3fe5d44f-cf33-42b2-bb91-6a4238f83470@linuxfoundation.org>
+Date: Thu, 25 Sep 2025 13:44:38 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,44 +79,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/cachestat: add cleanup for leftover
- tmpshmcstat binary
-To: Madhur Kumar <madhurkumar004@gmail.com>, shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250922091042.149117-1-madhurkumar004@gmail.com>
- <20250922091042.149117-2-madhurkumar004@gmail.com>
+Subject: Re: [PATCH v2] selftests/kexec: Ignore selftest binary
+To: Sohil Mehta <sohil.mehta@intel.com>, Shuah Khan <shuah@kernel.org>,
+ David Woodhouse <dwmw@amazon.co.uk>
+Cc: Simon Horman <horms@kernel.org>, Dylan Yudaken <dyudaken@gmail.com>,
+ Moon Hee Lee <moonhee.lee.ca@gmail.com>,
+ Ricardo Canuelo <ricardo.canuelo@collabora.com>,
+ Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kexec@lists.infradead.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250919170139.3452889-1-sohil.mehta@intel.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250922091042.149117-2-madhurkumar004@gmail.com>
+In-Reply-To: <20250919170139.3452889-1-sohil.mehta@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/22/25 03:10, Madhur Kumar wrote:
-> Some kselftests generate temporary binaries that are not tracked
-> by TEST_GEN_PROGS. Add EXTRA_CLEAN entry to remove tmpshmcstat
-> during `make kselftest-clean`.
-
-This isn't really accurate. tmpshmcstat is generated when when test
-runs. Include this information in the change log and send new version
-of this patch.
-
+On 9/19/25 11:01, Sohil Mehta wrote:
+> From: Dylan Yudaken <dyudaken@gmail.com>
 > 
-> Signed-off-by: Madhur Kumar <madhurkumar004@gmail.com>
+> Add a .gitignore for the test case build object.
+> 
+> Signed-off-by: Dylan Yudaken <dyudaken@gmail.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> Reviewed-by: Simon Horman <horms@kernel.org>
 > ---
->   tools/testing/selftests/cachestat/Makefile | 1 +
->   1 file changed, 1 insertion(+)
+> The binary creates some noise. The patch to fix that seems to have
+> fallen through the cracks. Sending another revision with an expanded Cc
+> list.
 > 
-> diff --git a/tools/testing/selftests/cachestat/Makefile b/tools/testing/selftests/cachestat/Makefile
-> index 778b54ebb036..c48065d791a9 100644
-> --- a/tools/testing/selftests/cachestat/Makefile
-> +++ b/tools/testing/selftests/cachestat/Makefile
-> @@ -1,5 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0
->   TEST_GEN_PROGS := test_cachestat
-> +EXTRA_CLEAN := tmpshmcstat
->   
->   CFLAGS += $(KHDR_INCLUDES)
->   CFLAGS += -Wall
+> v2:
+>   - Pick up the review tag
+> 
+> v1: https://lore.kernel.org/all/20250623232549.3263273-1-dyudaken@gmail.com/
+> ---
+
+Applied to linux-kselftest next for Linux 6.18-rc1.
 
 thanks,
 -- Shuah
