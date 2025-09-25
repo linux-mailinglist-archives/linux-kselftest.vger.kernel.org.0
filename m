@@ -1,206 +1,176 @@
-Return-Path: <linux-kselftest+bounces-42434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42435-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8F63BA1F50
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 01:22:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27808BA1FAA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 01:32:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE0C41890C84
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 23:23:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFDFE740814
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 23:32:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9D22EBB90;
-	Thu, 25 Sep 2025 23:22:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C5752ED84C;
+	Thu, 25 Sep 2025 23:32:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SeFONP/5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZyG+GsIt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F13B2D24B4;
-	Thu, 25 Sep 2025 23:22:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5C32ECE96
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 23:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758842554; cv=none; b=lpUUpF4Y3ABVTIaY4MJRM+JeSB6UzCaXMlEK1/mJX/Bs6yUD5UkVZK1HSdxRGw+8I4OGFONPyaBPtBL9q28p5O0gjaHcs8rJ2t8dTrsBr7OEOFqHdKelgbB5ujIb94STg62IFCRJQFqAaEO9bKEwnOoTq1oyFa2uLXa+iH9eqm0=
+	t=1758843148; cv=none; b=YJpa4R8ASpZwpjjihOI341W3Ch7m+tjUzALzdmll33EojB2mWQ4IgNdusyiSvHrq43jbZMWVl6lvdQw/YSR/5MtBWqulDCGjc0dcUZwBbiGg9MMsZNGpJKC9kJJC2a0BumLQEtSVGoqd1I1hZaQce0Z4vh+GKfbN/7r83IpWndA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758842554; c=relaxed/simple;
-	bh=+WTWMCHkEyBrLBMR6p4juPfS3tWXmetpxCoSqXQBQWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pWnRscxDUqxayW5bAwWJCFcH4MLyFQxMvfKIlk2kM+jjGFidZKnC61TSggInlrYLkJFvJGdXFEkprwVErwIOqNqzoCl3e3KixvE0gAGv/cC49KT987hig55gt65AB3U0oYlFsnxeGzMGAxX7j5XqEQlJPuSghvLVcNWk+VoHYAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SeFONP/5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BDF5C4CEF0;
-	Thu, 25 Sep 2025 23:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758842553;
-	bh=+WTWMCHkEyBrLBMR6p4juPfS3tWXmetpxCoSqXQBQWw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SeFONP/50tqDlP6GppaVQ69zUZAlagDe6hFS2C61MR+xN/CRq+PNq/1Jh4jqMC+oM
-	 4on2JMP1S2HbnENUCs7mbeGwuDVe/ETnmQ3I3NaT9lXcO7pzsqniPSwRlDgtNURU1T
-	 aR6JmQi7j4UBdyVRtDBMYqf2X75jrfE9ClzkTdEp2/2njaKSa0j+AOztqdlhte27as
-	 Y750FHwf53mSyY9rhcVLvCqh0L/tsbDuOhPXAfUF4UHV88maksfvccAl9lbXQfHZ/q
-	 sg4PZ4hwSpV6DPEVpbekZOg8u5Cl2qgF2gp/GeTxDJ+G/Zu0jfeUSFqDGhNH6ByK35
-	 PlyxnsQOaa+6A==
-Date: Fri, 26 Sep 2025 00:22:24 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "shuah@kernel.org" <shuah@kernel.org>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"will@kernel.org" <will@kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"adhemerval.zanella@linaro.org" <adhemerval.zanella@linaro.org>,
-	"nsz@port70.net" <nsz@port70.net>,
-	"dalias@libc.org" <dalias@libc.org>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>,
-	"jeffxu@google.com" <jeffxu@google.com>,
-	"codonell@redhat.com" <codonell@redhat.com>,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH RFC 0/3] arm64/gcs: Allow reuse of user managed shadow
- stacks
-Message-ID: <8aab0f36-52ad-4fd6-98c3-bcdba45dbe16@sirena.org.uk>
-References: <20250921-arm64-gcs-exit-token-v1-0-45cf64e648d5@kernel.org>
- <760447dc3e5805bf5668e80a94bf32356e2eb2d3.camel@intel.com>
+	s=arc-20240116; t=1758843148; c=relaxed/simple;
+	bh=l5LRunuTe/LqJ3h4k3fN0y4sQ6ZlASLvxnuyjT0c2dg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tWChtFdEiRs0XJW6iVZmzH3l1SVBWzikLIjAzlUrdYs2eCIbGVqiQnvjh+0fpxr4mHk1vBOQMkWAHJ3V3kIGgTBOiK1AVjbr+/CSIn2BqQ6bD9W1FUiUMOoIOdZDBeuSPK6Z/sPKfhS3nB3yU+Loh3tMrNy7/NbkSHDTVU7Ywew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZyG+GsIt; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3306d3ab2e4so1762646a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 16:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758843146; x=1759447946; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l8PWUy95/xwAeHXQlv9LwNQfamqkfSoV3CUxibqo+As=;
+        b=ZyG+GsItC6RmhbuH8JACJ/a7IoR6OJP0dOMRWNK37GIE72YeGq9bOU80VUidOy/+xV
+         FFPZTC4p1WnUL400zxmjuf9xoxSSJRxBDLYVCDdApqIKZ2RPKZgG9Oimd5pFa0Ir/R89
+         4Ga+AlP3e1Nvt7YwARkyptXIbmv1LyB9RYHLyBtPOXhXrbhsUy3Hf7UzjgqQJXZ02TdE
+         aN5EJrmlWroRyS49MVjjouZ7Pj+84Sa5GgAa8bhcL5aEebMIDjjV4RdVSdRuG7WMJhrF
+         Pp42dCcm+Yx0ydsh37whjpTgX19/MjrKtxRvjedmLVVDHX6lShLSnpAkeoavCzKDfE88
+         PNDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758843146; x=1759447946;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l8PWUy95/xwAeHXQlv9LwNQfamqkfSoV3CUxibqo+As=;
+        b=Lcy2eEAGPYucu+wifsDNNBmWSndtztbBU7TX3BtTmQeXSdPsH09edFaW4Jqy+HYjl+
+         /agJzb+RXrL3M75w6qnfSX/YOA2hPkufWh1RBaFoizRvFJRU1bw46TGIenMlFk0G1BwT
+         6L9UubkqAMjWqTnrJU20wWTZd6hrg3EQVudEoYptfOkveKu7dAWPtJNGi66+bJM95YGn
+         KhQAUsynnLrRR2gqJRbOl57TbKF4e56dBo9kjInYQ0B+SRXhs/xtytND14ca8vEfB4AI
+         bwMncsOXYGCr/neNg+dUAFbTVODr4dLCRWtgFQQeOVfY57CUGyfCjsM0QC7EarlIqrgN
+         46ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV4VGNLX/G1qbe2hyoyaONP2mbZn3JzlbKEmCKyYeQlddeboZjZLAO0X238n+nm/gBDyQNxBpW1VpwhWU4mzqI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaVvOHI01P3JtfHIZ58DHqtlauMGXvI34zY63Z883kVrju6auy
+	zanG00XZUgi27kko5n9cwDHPCr/OW+ogR78t98n9f4sZHtPIMX8pUUs4ceqlFqoqzv9XYx3Bq7r
+	lb3F1aaZjifxiJECOWbFrqoWN1jB1Xps=
+X-Gm-Gg: ASbGncvX5UjuMZSSTS7FEECNbFQhQkC3CG4660G6PS5M4EOH5YFHW2uRpbSA015MI9Q
+	UV/urCdM6S6ropePwGQlM8SO4b7B4OnJV1Hc83vRlY5kTpnC+MD5+GRI97N5sMQejsBWXevSxT8
+	GESg8857tyreB0IlHjCiSLF7UTIaByAYbDX0TOKNJHT/Z5/6nehIbOmTnz3d69GP+tKpWCmoQ6+
+	9asU7nVaYG0eUMWFSbzi/vIXS7IAeUVGw==
+X-Google-Smtp-Source: AGHT+IFyG6lAkXqNECGf0CPqvA5WLNFwkWpmgIcJv7d6UG7Fy+qA0wGWEdL6nyUo+sCagqxDXc40BM4LYLvFPLy3JiY=
+X-Received: by 2002:a17:90b:3ecc:b0:32e:7c34:70cf with SMTP id
+ 98e67ed59e1d1-3342a300aafmr5225649a91.36.1758843145829; Thu, 25 Sep 2025
+ 16:32:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rIZPmzQlvkyadnwb"
-Content-Disposition: inline
-In-Reply-To: <760447dc3e5805bf5668e80a94bf32356e2eb2d3.camel@intel.com>
-X-Cookie: Shipping not included.
-
-
---rIZPmzQlvkyadnwb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250925103559.14876-1-mehdi.benhadjkhelifa@gmail.com>
+In-Reply-To: <20250925103559.14876-1-mehdi.benhadjkhelifa@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 25 Sep 2025 16:32:11 -0700
+X-Gm-Features: AS18NWAPxbw3Q7HkczSi0SkphLUmd3YAUtjm9M5fUjRW3Bv2KTPZjdUhgqDqjkE
+Message-ID: <CAEf4Bzaf81OYLTzpN6E4ths_mN2gP29rMYBmbp7P2GqSMj8FbA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] selftests/bpf: Prepare to add -Wsign-compare for
+ bpf selftests
+To: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, matttbe@kernel.org, 
+	martineau@kernel.org, geliang@kernel.org, davem@davemloft.net, 
+	kuba@kernel.org, hawk@kernel.org, linux@jordanrome.com, ameryhung@gmail.com, 
+	toke@redhat.com, houtao1@huawei.com, emil@etsalapatis.com, yatsenko@meta.com, 
+	isolodrai@meta.com, a.s.protopopov@gmail.com, dxu@dxuuu.xyz, memxor@gmail.com, 
+	vmalik@redhat.com, bigeasy@linutronix.de, tj@kernel.org, 
+	gregkh@linuxfoundation.org, paul@paul-moore.com, 
+	bboscaccy@linux.microsoft.com, James.Bottomley@hansenpartnership.com, 
+	mrpre@163.com, jakub@cloudflare.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+	linux-kernel-mentees@lists.linuxfoundation.org, skhan@linuxfoundation.org, 
+	david.hunter.linux@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 25, 2025 at 08:40:56PM +0000, Edgecombe, Rick P wrote:
+On Thu, Sep 25, 2025 at 2:36=E2=80=AFAM Mehdi Ben Hadj Khelifa
+<mehdi.benhadjkhelifa@gmail.com> wrote:
+>
+> This series is preparing to add the -Wsign-compare C compilation flag to
+> the Makefile for bpf selftests as requested by a TODO to help avoid
+> implicit type conversions and have predictable behavior.
+>
+> Changelog:
+>
+> Changes from v2:
+>
+> -Split up the patch into a patch series as suggested by vivek
+>
+> -Include only changes to variable types with no casting by my mentor
+> david
+>
+> -Removed the -Wsign-compare in Makefile to avoid compilation errors
+> until adding casting for rest of comparisons.
+>
+> Link:https://lore.kernel.org/bpf/20250924195731.6374-1-mehdi.benhadjkheli=
+fa@gmail.com/T/#u
+>
+> Changes from v1:
+>
+> - Fix CI failed builds where it failed due to do missing .c and
+> .h files in my patch for working in mainline.
+>
+> Link:https://lore.kernel.org/bpf/20250924162408.815137-1-mehdi.benhadjkhe=
+lifa@gmail.com/T/#u
+>
+> Mehdi Ben Hadj Khelifa (3):
+>   selftests/bpf: Prepare to add -Wsign-compare for bpf tests
+>   selftests/bpf: Prepare to add -Wsign-compare for bpf tests
+>   selftests/bpf: Prepare to add -Wsign-compare for bpf tests
+>
 
-> Security-wise, it seems reasonable that if you are leaving a shadow stack=
-, that
-> you could leave a token behind. But for the userspace scheme to back up t=
-he SSP
-> by doing a longjmp() or similar I have some doubts. IIRC there were some =
-cross
-> stack edge cases that we never figured out how to handle.
+I see little value in these transformations. Did we catch any real
+issue here? All this type casting and replacement is just churn.
 
-I think those were around the use of alt stacks, which we don't
-currently do for shadow stacks at all because we couldn't figure out
-those edge cases.  Possibly there's others as well, though - the alt
-stacks issues dominated discussion a bit.
+I certainly don't want such churn in libbpf, and I'd leave BPF
+selftests as is as well. int vs u64 can have subtle and non-obvious
+implications for BPF code generation (for no-alu32 variants
+especially), and I think BPF CI already exposed some of those already.
 
-AFAICT those issues exist anyway, if userspace is already unwinding as
-part of thread exit then they'll exercise that code though perhaps be
-saved from any issues by virtue of not actually doing any function
-calls.  Anything that actually does a longjmp() with the intent to
-continue will do so more thoroughly.
+I think we can live without -Wsign-compare just fine.
 
-> As far as re-using allocated shadow stacks, there is always the option to=
- enable
-> WRSS (or similar) to write the shadow stack as well as longjmp at will.
 
-That's obviously a substantial downgrade in security though.
-
-> I think we should see a fuller solution from the glibc side before adding=
- new
-> kernel features like this. (apologies if I missed it). I wonder if we are
-
-I agree that we want to see some userspace code here, I'm hoping this
-can be used for prototyping.  Yury has some code for the clone3() part
-of things in glibc on arm64 already, hopefully that can be extended to
-include the shadow stack in the thread stack cache.
-
-> building something that will have an extremely complicated set of rules f=
-or what
-> types of stack operations should be expected to work.
-
-I think restricted more than complex?
-
-> Sort of related, I think we might think about msealing shadow stacks, whi=
-ch will
-> have trouble with a lot of these user managed shadow stack schemes. The r=
-eason
-> is that as long as shadow stacks can be unmapped while a thread is on the=
-m (say
-> a sleeping thread), a new shadow stack can be allocated in the same place=
- with a
-> token. Then a second thread can consume the token and possibly corrupt the
-> shadow stack for the other thread with it's own calls. I don't know how
-> realistic it is in practice, but it's something that guard gaps can't tot=
-ally
-> prevent.
-
-> But for automatic thread created shadow stacks, there is no need to allow
-> userspace to unmap a shadow stack, so the automatically created stacks co=
-uld
-> simply be msealed on creation and unmapped from the kernel. For a lot of =
-apps
-> (most?) this would work perfectly fine.
-
-Indeed, we should be able to just do that if we're mseal()ing system
-mappings I think - most likely anything that has a problem with it
-probably already has a problem the existing mseal() stuff.  Yet another
-reason we should be factoring more of this code out into the generic
-code, like I say I'll try to look at that.
-
-I do wonder if anyone would bother with those attacks if they've got
-enough control over the process to do them, but equally a lot of this is
-about how things chain together.
-
-> I think we don't want 100 modes of shadow stack. If we have two, I'd thin=
-k:
-> 1. Msealed, simple more locked down kernel allocated shadow stack. Limite=
-d or
-> none user space managed shadow stacks.
-> 2. WRSS enabled, clone3-preferred max compatibility shadow stack. Longjmp=
- via
-> token writes and don't even have to think about taking signals while unwi=
-nding
-> across stacks, or whatever other edge case.
-
-I think the important thing from a kernel ABI point of view is to give
-userspace the tools to do whatever it wants and get out of the way, and
-that ideally this should include options that don't just make the shadow
-stack writable since that's a substantial step down in protection.
-
-That said your option 2 is already supported with the existing clone3()
-on both arm64 and x86_64, policy for switching between that and kernel
-managed stacks could be set by restricting the writable stacks flag on
-the enable prctl(), and/or restricting map_shadow_stack().
-
-> This RFC seems to be going down the path of addressing one edge case at a=
- time.
-> Alone it's fine, but I'd rather punt these types of usages to (2) by defa=
-ult.=20
-
-For me this is in the category of "oh, of course you should be able to
-do that" where it feels like an obvious usability thing than an edge
-case.
-
---rIZPmzQlvkyadnwb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjVzq8ACgkQJNaLcl1U
-h9C/Zgf/YsaHKL3IuYJT4bELuSPoXHSsli0e8DMjfJmAPL6TPeun+wwdBJMlfGWn
-HViXRmQZswZOv+8Ok0G9IVXgBeuudF8GpWm+F+6TEk4pY9rZi9KSzLKdCx/SA82+
-b8eM8e2F9L2wwS4tFRilzt8EXTxqXBewa7qKd/PQPl2pr0601GooqXL2eSigqkuJ
-j/GRDiW75d5IaVlPRKgt552V26sydmaOdeecWXrqAj1BTH0R3y/xkzT5g2/oTU6B
-XZ8AFGDLHKe2Wu9HNwCHzte0E8Tzbjnrphjl0s8S2kkKq97AImKNJQ7XyE3IxoFi
-DDIGVgk6Q47ah6wmOzEglPl4gRIvCQ==
-=FhTh
------END PGP SIGNATURE-----
-
---rIZPmzQlvkyadnwb--
+>  tools/testing/selftests/bpf/progs/test_global_func11.c       | 2 +-
+>  tools/testing/selftests/bpf/progs/test_global_func12.c       | 2 +-
+>  tools/testing/selftests/bpf/progs/test_global_func13.c       | 2 +-
+>  tools/testing/selftests/bpf/progs/test_global_func9.c        | 2 +-
+>  tools/testing/selftests/bpf/progs/test_map_init.c            | 2 +-
+>  tools/testing/selftests/bpf/progs/test_parse_tcp_hdr_opt.c   | 2 +-
+>  .../selftests/bpf/progs/test_parse_tcp_hdr_opt_dynptr.c      | 2 +-
+>  tools/testing/selftests/bpf/progs/test_skb_ctx.c             | 2 +-
+>  tools/testing/selftests/bpf/progs/test_snprintf.c            | 2 +-
+>  tools/testing/selftests/bpf/progs/test_sockmap_strp.c        | 2 +-
+>  tools/testing/selftests/bpf/progs/test_tc_tunnel.c           | 2 +-
+>  tools/testing/selftests/bpf/progs/test_xdp.c                 | 2 +-
+>  tools/testing/selftests/bpf/progs/test_xdp_dynptr.c          | 2 +-
+>  tools/testing/selftests/bpf/progs/test_xdp_loop.c            | 2 +-
+>  tools/testing/selftests/bpf/progs/test_xdp_noinline.c        | 4 ++--
+>  tools/testing/selftests/bpf/progs/uprobe_multi.c             | 4 ++--
+>  .../selftests/bpf/progs/uprobe_multi_session_recursive.c     | 5 +++--
+>  .../selftests/bpf/progs/verifier_iterating_callbacks.c       | 2 +-
+>  18 files changed, 22 insertions(+), 21 deletions(-)
+>
+> --
+> 2.51.0
+>
 
