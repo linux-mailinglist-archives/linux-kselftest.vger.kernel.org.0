@@ -1,324 +1,296 @@
-Return-Path: <linux-kselftest+bounces-42351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B131CBA0045
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 16:31:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66E80BA00F9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 16:46:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 120F73AC9B8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 14:30:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B528162AB9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 14:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B7382D9794;
-	Thu, 25 Sep 2025 14:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 047DD2E06C9;
+	Thu, 25 Sep 2025 14:46:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="LhWRuoRl"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="O8jvq0Sw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011067.outbound.protection.outlook.com [40.107.130.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257A32D7DC2
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 14:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758810632; cv=none; b=IsJSJPO3cyxy8BqvWclSktB1KExqDXiWq6OiE5xslKENNOdLPBSH/j1RdAqJXhtEkPvhIirs7IpcHGUT7DtnDaEfPVR/hxQrRqq/lx8qdddUuVtMPndj/nZ5jeGzEphntrt5V3rCOFk+PamAqyPahFIwgRXp5/9rhQSXaljnBsI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758810632; c=relaxed/simple;
-	bh=C0GfpwF7RY7Xo4qa0YBZdMNr7838kNVWqEk+4k+STrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EsLpTC3InxRtygN7cP+1aK5qiw7IqqWLc/scAZ8mN3RtwcWv+WluxzYQ3+yypGeax4n+IxjuTkiUNPU9MspJi06FQWEctDO9FPJ8CXGWc5iF3rbzkKqHqP8WgtDEouhszve9BFRe3sfMCN9dRI3/0HfvXtacMraE+egl1zMdLq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=LhWRuoRl; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-273a0aeed57so25548125ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 07:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1758810629; x=1759415429; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=B/ScXH9deltQU9YLRjtGdHjjN9goLEMoCpX6Ad5jX+g=;
-        b=LhWRuoRlIOpX0Eb7orLG7HINPKL4NxpLqV8UjVFVXQ6JGBZ+/MnLWcKx2FCPuUdYWg
-         CUdKHZPhEtgBtAZRCDM4zK/wr2UYfEXXPH5SSvy6cvn6qgfvQwZhi9gWjDRO0D6LXna1
-         rj3aK27ZJ2GaUVaQVqmCyjouwM4nTJR7NcdU7lN5tIQ08Ch9x6FuWfpzVonhRtiUMi8R
-         7fv4IjYWywwHz+MshJnPKPrc4HiLahN62o7z/GrztqVydi3bMEG9crneIqkG71vU3i/O
-         AvdiVMLQAkKMhtZcSA3UmVkr8LciY1LYWdSedWs7yWj/2c+2aRjpvufIVvEBNC7LdqLv
-         d6kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758810629; x=1759415429;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/ScXH9deltQU9YLRjtGdHjjN9goLEMoCpX6Ad5jX+g=;
-        b=DZVMYVIDRsrSVxT7T8j5evSiSmDvV24C/2oB4z9QKCXzqExm4yNmDUox1Q1Vi2Xs0S
-         FxFzyj0S+SGe4Gd+6O6E54sXojQfySKsnTTWO5MWl/MPY9AiNd/lxsNM/d2lZ+62J/8G
-         VOqF0YShNsjgAxGUU7sApD4QgAaUPQt18MJ2mulxNrRgOc/dJRHg4+GpWVWXS5nI8b7s
-         RDm9LT+8YQzUnvFLK2DCtnQFjj4gOAX6iX0ULki78x1BCmsWRZtB0g9rmPB3dpxoCsYl
-         El7txdSGTFKgKzBph9sLWeu8T4meJfQi4McXenoUrjnDwrz6aLhFAru9z/7rxokZ8ZmL
-         7wRg==
-X-Forwarded-Encrypted: i=1; AJvYcCUs8M0TutqtLpQfh6OnqOzSpN4Ci/4rWxps0EFErZJum+2etHuUyc2AUDFrfakTyzBLG4N92jGGwNTib4snQbE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYg36J/UEEiOTzWDKo2bSFOHvcUA75UbRHP8t8riferRji7AgM
-	RwGG+2CEUgocA4E3OesGgmvy77bTWYKPeVN6fhcjJ2lEzXWCPauQwIbGkkwvPfB02Ms=
-X-Gm-Gg: ASbGncsy5ZlpQFl/bfgeR6UsoKTeFoy9Ndk3X6ogVJGuwGNDF7c14W5nFUgizASTygq
-	5bUeCg0nHg0dNGlPjvV87q4RThVPHbjr8uRytAfoUKoiYKc9OWqVD+rde3BU+J1ElRkb2jW9H5V
-	Sae93nJb2QTLZnIZFGoPGz6z+FgGybQoqiLMy3AlcQ+EuIkWOlHoZda95n0FOQyc6SyzOEYUJah
-	hcg6ck8IXi/B5fSJSBskLPy2ykwAjz8DBTEZw48VDrPvC9hCDh5XyemOtHC5LcqJ+/Z2SmsxnEk
-	KnEs5ojkLGxfSWCWHw6/hpCz5mnecKOWZljWlBSMwRKHQpvqpG34cIskYFD6SjerqWBZlw8LN1s
-	+8dRUOzCG/0V0uymGzMlNqzVfpdROLOL0
-X-Google-Smtp-Source: AGHT+IGw4nlcyMj0x1ophUEj8Naebsm2dV8OM2R6VcoSoV/iVH85aly4v8pa48kMi8x3QmjHpu5KEw==
-X-Received: by 2002:a17:903:3845:b0:26e:7ac9:9d3 with SMTP id d9443c01a7336-27ed722bb71mr33822815ad.18.1758810628859;
-        Thu, 25 Sep 2025 07:30:28 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed670f748sm27032895ad.42.2025.09.25.07.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 07:30:28 -0700 (PDT)
-Date: Thu, 25 Sep 2025 07:30:24 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Andy Chiu <andybnac@gmail.com>
-Cc: Paul Walmsley <pjw@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
-	richard.henderson@linaro.org, jim.shu@sifive.com,
-	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com,
-	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
-	Zong Li <zong.li@sifive.com>, David Hildenbrand <david@redhat.com>,
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-	Florian Weimer <fweimer@redhat.com>, bharrington@redhat.com,
-	Aurelien Jarno <aurel32@debian.org>
-Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
-Message-ID: <aNVSAD4Og23rNTms@debug.ba.rivosinc.com>
-References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
- <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
- <aNQ7D6_ZYMhCdkmL@debug.ba.rivosinc.com>
- <CAFTtA3Nxq0UmXcuN7jmQOiuTbrenKbR4ihH027ya1WWybgLq4Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E358F54;
+	Thu, 25 Sep 2025 14:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758811583; cv=fail; b=LhW46yKFhNUPEDO7f02cAjghGPLhco02bYHrXHpX9CfJ09m59bpIshH4ZzTP0DeN+oerXLJl27TxvrgZGZvXUvHYLugTDbMsd8mJfsZ0Uw4kaYlfjRV2DUuywulEwJbK9U+/h0awzeFqlxudtWAcw3rDPHpu4KI5tyZYLneDLxo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758811583; c=relaxed/simple;
+	bh=p5j3diULu9Spx5KaryEVmRYr7R3AI69kTAANGdfZHC0=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=q0M9RiU9icqNqkZuQ4Joa/L/J6MRnmvAFPW8migDHRpX+eIIUh/CwgxBKlzRB1UIOcdzzhvZ1bp+MmvwyMvfCsXbtfuzsRrcrGncmlSfXPPuX3hJ5H+EtJZP4cvF3g/Pi3XvDHWxtkkpyMI1IQfo2Lx8k9TN436Uo1a38A5dxO0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=O8jvq0Sw; arc=fail smtp.client-ip=40.107.130.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XlE2ZqQ3eAxP5Yz2Rlw/toHbIyv77Lo1pOb5V7gvKX+ZjreuF+BkIW7oKGvWmOJo7dV4ywyioxTKsEjLdn/MOnIR8JDdYP/v5Py/75Z5UrpvHILvnRrgH5X4mfrK/T/I6zC45Aa6NRmFgYsrET+OxctnrdITdsqU0yBW6TBI7f5RGbVMjvotppNaIdl+fOzcdMUXrdZn4hObvvnSUFIXQKxDHHR3gNwm4FH1YiOYpqlXvgtG2rlFFcVHLb9IYL9Eckr5mNiUfsQf6z7fko3PJ2vw9Csmr8LgAfMjHHzu24QpNO/iTve/fTdmdj4moQbuMAsdzsYBVL57zxbyHekOKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p5j3diULu9Spx5KaryEVmRYr7R3AI69kTAANGdfZHC0=;
+ b=FQxPn+Vx5faG8Xxfo3hnzkL0Wm/UwWGvDiS5LKBSQ/Md5tiIArAyiJPMyyMGaIh/6vc+HRlLqdF4Ud7gRkKmlYcwh9/h7jEj4EakGYLP4QPO2okdkziuuuBfO71qbgQiOgH+dzvjxFx0HnC6Ckk8e1NTfntPeU8s2I2pAmwdXSr/tjhdAKhB/0yuGlplEaFEVR9eEg6ZFyn/BFnprKXR9wN4B18MGKMUPhGQrzL3WhGkJMbhuIMCm2sSqMtRL9bHoM3pJFDgrhYE7b8ouiDhxebE20lwmXuCwiB8FAiEdw2qW8ejJgd5+DhmJK6TuRP/yUBlHChQJnto20j9p/Xwjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p5j3diULu9Spx5KaryEVmRYr7R3AI69kTAANGdfZHC0=;
+ b=O8jvq0Sw//vOmmL9H4byoDS0Ix448ejfe155FdnJEnY0Quh+PywVElIo0U32QKuM+HJwRZVoArvVZXTXvIzCanrmOdyTmOlWSVSShYKkI0WyCL4wON0JIQTAGviC0YbbPE73AQjpKKlDz07nq/RRn8BX1S5jxmlSK1tKrhMAQyaZVnw6ZM80brYmoQKXF/Rzhm0qq0CnVkP7R/iOOCVDNueBZA3mDKjubkdSaSpt6o4WzuIdGfyjsI3u+67LwI7AnRsCaxbOv2vN4/u7XMGqgiBzIJ7Jfr/LQ4TDak4pJLu5cg3N0c3d+Z9hA0NkDeoF64/sWue7yyqbv8rDuC1VyQ==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by DB9PR07MB7068.eurprd07.prod.outlook.com (2603:10a6:10:213::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.10; Thu, 25 Sep
+ 2025 14:46:16 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56%2]) with mapi id 15.20.9160.008; Thu, 25 Sep 2025
+ 14:46:16 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Paolo Abeni <pabeni@redhat.com>, "edumazet@google.com"
+	<edumazet@google.com>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
+	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "kuniyu@amazon.com" <kuniyu@amazon.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
+	"jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
+	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
+	<donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
+	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: RE: [PATCH v2 net-next 13/14] tcp: accecn: stop sending AccECN opt
+ when loss ACK w/ option
+Thread-Topic: [PATCH v2 net-next 13/14] tcp: accecn: stop sending AccECN opt
+ when loss ACK w/ option
+Thread-Index: AQHcKLhgSdByVLZCo0+IAigjdAMyPLSgnsgAgANafZA=
+Date: Thu, 25 Sep 2025 14:46:16 +0000
+Message-ID:
+ <PAXPR07MB7984B98035A3D3A1570F4AF4A31FA@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20250918162133.111922-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250918162133.111922-14-chia-yu.chang@nokia-bell-labs.com>
+ <03d6dba8-2586-4ae9-8a16-26b84cf206eb@redhat.com>
+In-Reply-To: <03d6dba8-2586-4ae9-8a16-26b84cf206eb@redhat.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-Mentions: mirja.kuehlewind@ericsson.com
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|DB9PR07MB7068:EE_
+x-ms-office365-filtering-correlation-id: 6632a4e8-654e-45a8-3631-08ddfc424838
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|376014|7416014|921020|38070700021;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?Y0oyWE95NnlrVEFyNXZuRnZXYXJMMmdWNWFpM08vSHhuL2NvMVZmbnhPS2JX?=
+ =?utf-8?B?RlhFMGRrdGFESWRRQ2UrTUpEWndobXVLNGx5YmhRcmVrMHhrT3dmcnlSZTNP?=
+ =?utf-8?B?WnpMd0V0RnQvYmlMT3lRaTZvT3NPTThBbElyZzlBeWcwVjAwV0FtOTJkMHdX?=
+ =?utf-8?B?R3J4MVJDczBjTkNiV2RHQ2M4Tklpc2FoSTZsdnQxQm9WTk1qajI0ZUgvOVM4?=
+ =?utf-8?B?TGZYSWhKYk91YTRWUEtxWURYRVpLc2NVZ3h4TktaM241NzdBUXRkUDIzQ2Q5?=
+ =?utf-8?B?RXZVRXQ3djUybGU3Q1VoTS9oOFd3Yk5DdnVkRjJjSC9mc1FyWmNxVEN3VzNP?=
+ =?utf-8?B?M1N3ekgyWi9yU0hNbDcranlIbis4ZmlqUDJLZWcrUDROSnRVUjYzeCtRekpS?=
+ =?utf-8?B?ejVlZDRvc2JFWHIvSXBERmd2Q3JHUW15Nmk4Q1YxeGNlT3U0Y2xoVE4vSUNV?=
+ =?utf-8?B?OFRGdDR2Vk1vRmpET0p5SlNNclQ0Q3d0WHU5VTN0bURycW5mZkF5Uld5a2Y4?=
+ =?utf-8?B?WHZ4ZC9UMGZNV3dxZUJWSVAyaUVCU1hZQ0V3QVpiS1NPUTRNSjYvSm0vZUow?=
+ =?utf-8?B?VlVJckR0N3pnSG44clhXaVNtTEsxVXByOHJteHF6djdhQUJteFJHbHFJcml2?=
+ =?utf-8?B?c1Y0UXdVUG81L0hJdGFiUW5IcTZlYmVFTEIrVllySWZQSUJlbyt1RGtMTGo5?=
+ =?utf-8?B?bGtSaHFlQUNvZUdHQ0FzWjBnRHY3RHF5bFNBbHo5c2laVkhOa1VOOFB2QnUy?=
+ =?utf-8?B?ZUNhNkVrYVd3ajBHNGhpR09XY3dZSHpFVWtNYlhkK3pWQ3c5Zjk0SGkvNWFt?=
+ =?utf-8?B?WDhNZHlKTHRNY2JrbzdOdU1UVGdvY1NVTGVidUdnbEpkQnkzTDFpbHZxN2Y0?=
+ =?utf-8?B?UnZZVmtxTThHU0xSKzQrZ05MWDlQTkp3RGt0eXptamxBbkI5Tm5KVGZrQlZB?=
+ =?utf-8?B?N2NtTGtBVEwwV2xHQ2hORTdxenhpbzBRRlVEMFhwaThMSlhYK25HYkpKcnJq?=
+ =?utf-8?B?S3R1T25wU2hGZUhDbFBKVExvdnByWTU5UjVRZkV2NjRWdlpjTGNSRno0VG1T?=
+ =?utf-8?B?eFB3QUI5VHhnYUdiVVBUU2J0clcwN1YzWjd6Ym5GaFZpYVJQR3RMUXh6dXRx?=
+ =?utf-8?B?S2RPWThMT1NuMHV3OVRLU1ZOdkJqTUxWZXRwRTRrZTJjQUJWSTNhVmVSNDdC?=
+ =?utf-8?B?b3RzQXh6SjE4RzAvdTNFRTVtb1kzQnhpY1Vnd1ZxbDJmTjc3cmxCWnAzak9W?=
+ =?utf-8?B?WFpkdlkralp5QmFPV3JUQVR1eHRoQWt6Z1lZdTRWZVc3TVBNbXZZV1RtdmlM?=
+ =?utf-8?B?MjVDMFhtSFpoVHFIdEhPVE9rSGJQQ2dmMnoxTzA4S2lSVkliUGdBVFI3eWg4?=
+ =?utf-8?B?MTZpVUg5RWl4ZCtJd3BMVWlyRjVWSE9tTXpBS0s1NGNsSWxsY1FwZ2pRTDRo?=
+ =?utf-8?B?dU02K3pGRGpXbHBQT1JSVkNEY1UxdmRHQ0dXeUFtSlhaMGxIUUtqczMwUlk1?=
+ =?utf-8?B?Q3IzVWNqRWNUc3NxRVFHUnhtL2hNSDlROG9lWnRvQTMvMXVOa3BNdDdNazdD?=
+ =?utf-8?B?WU5WRjZveFVzUERQTWkyNkhNRlZVOGFJUmZBT3I3WkJHNGg2S1lwU2JWU0Jr?=
+ =?utf-8?B?MHMvdUZBLzgzVmRJeG9rM2dDdTlIeE1kQVFFMEkwTFkyN0hzVFV6dk0xVFRC?=
+ =?utf-8?B?dC9xUW10QjAzVXd5U0ptY3JLdDcyV2ZmcU84ei9VUGI5anJiZkFIQWN4cWxk?=
+ =?utf-8?B?U1psak1JYXpNU3Qwem44cGN6UzdaMEE0WXNJNXJjREEzYWp6elhSelp4bWVH?=
+ =?utf-8?B?Uk54clM0THc3YWxpSkxDNXpkYlBCSUVab3VzN3NKallJR1V3VFArWFVIaCtx?=
+ =?utf-8?B?YU1XSjNrMGJrVDh4Z2VXdUxOVmtwUGF0bk9La01pY1VsTFZ5VGNDSXRVRmFJ?=
+ =?utf-8?B?L2RFLzhPMTViMWZoSTZhYldmVXdOVjFpbVFpYmJJTWZhc2JnampCVk1IQmxt?=
+ =?utf-8?B?MkwxNElpYW4xWFB0K21FeE44YWc2ODAzZnlwRWV0bSs4OG9Ya1R5Q1NmaTd5?=
+ =?utf-8?B?V1NkOFUrYW9tWXZQL081VE1vMkJOZVk3ZENBdz09?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(921020)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?bEorNlB6VTV2L2R4WnpJSHJZN1c2YSthbEppTzF1MWpQZGxTc0VhNFBaVlFG?=
+ =?utf-8?B?MVBsY0h5cSsyVVE1bFR5WllkcjBkc3NoaVU0djVIVk0yYmp5MnF5NWl5MWFQ?=
+ =?utf-8?B?djZDVEd1SGtSdTliSmpVaDRYZ1NTcGM5eWJkd2JSQ082Vm9DblhYNDR4akIr?=
+ =?utf-8?B?R0J4dXdad1B6dmwrYXdscjNFV1QrYVFyVCs5ZVhZZ0dYTjVHS0NKcFRDa2Vn?=
+ =?utf-8?B?bGQrb1FKdkliUEpNNGd6SytoYkR6MDdOVGN4OW9zNmV2SUg5T0YrNXpESW5N?=
+ =?utf-8?B?MmczVkE1anZyUEkrY2hnSDFudm4wWlBZOU14S003c0ZHL1RZU0Q2Yk9leGEz?=
+ =?utf-8?B?VjRCaUpFVTNOYm9YK004MGdtYytML0N4MUFDWGozb0FQTmtKSzBQREgzWFFE?=
+ =?utf-8?B?VjZpS0t1SnBTYzg3NTZpRm4yYXBMd0Y1MWp6MTNaNGt4M21XVTgwUGNVcTVH?=
+ =?utf-8?B?NURxOHV6RmxUY3VoaVpZKzRtVmhsQmRoMzRRdHhaTklpYmsxWGwzYkJEZ25G?=
+ =?utf-8?B?N0VGbzhnaGxEVzdDRzVISXJ4ZDk4U3Y5dlJlK1gxN0lLVlV3QmthR0pWRUJ6?=
+ =?utf-8?B?dFRqWis5MWNreEdWcUo0dHhaMGZ0djFZU2RmU1QybjgrTW5PRWkxdXF3bmNq?=
+ =?utf-8?B?Zm9nSGx5MEVaZWZKSjdkaEoxS1h1eHgwcm1UWGo1TUdaT2dKS1ppbS91N2l4?=
+ =?utf-8?B?aVEzTUpiNlV0RnFvZXFIWjYwY3RwcVV4eHNRTmU1TDhjdjZjNnlraURyNG1n?=
+ =?utf-8?B?cDlCTmJlUXVhRHcyUzVwMkoraDZTT2FsT3JIZGJhU0E4Rnh2TjBmZlk3cks0?=
+ =?utf-8?B?SUFpS2VyU09iY1dibWZzOGdWNWU0VE1HS2w2dE5NUzhHRG5wWEYvc3lMU09q?=
+ =?utf-8?B?dENEbGZjWDBSOVh2V05vQzE2c0h4djBSa25RWHlsQTVuU0wrNUE0Ti8xYnFu?=
+ =?utf-8?B?dW1Rckc0TGF4dFNUaVVLaGpIcUZwYUthbElNbTZaR0xtd3Y4Y2VpcTB3VGdS?=
+ =?utf-8?B?Z2Q4ODZXOEdoMEVVbnhaMzU4TlZ4MFVlL3h6cVdVYXlveVg5ZGlYMm1KcWRp?=
+ =?utf-8?B?RGt6REhKMTdPNXNkUThTWDV0NkkveDRnRnY0aDZIMlhJSzJrTXFhL3VESllD?=
+ =?utf-8?B?MjZIMGMrTjZXT2JvZ2Z5dVgvNjJFOFhWVmNGWGlFYmpXUHJiN0JIMkJ2UnEv?=
+ =?utf-8?B?dm8rU3RqM3d2d2lUa0w0N1RlSTJpakszUFdzK09oenlwS3lrY3lLbmRmZTNn?=
+ =?utf-8?B?eGZLWStFVEMrTmJrY3c4c3A3dGVCOHQ2d0c1b09SdVJZeGxqOFRSRTgxQit4?=
+ =?utf-8?B?YWxYcmc2MlBsQkhXQnVsLzZVUjM1YzVkUnIwYlhrK3VXRGxxeis5NFp1Nng2?=
+ =?utf-8?B?YkJWUENKQkoxaFNibEZyTHJqM2RDdVM5aGJRSHA4eXcrTXF6OE4vVnU4VWdJ?=
+ =?utf-8?B?Rlh5aldoYjdOUFZyOWd4MDB6Vk9YZjBJZERoZG5tb2V5SGpCYlRGRUkzcHI2?=
+ =?utf-8?B?dXUrTkZLbWthOHQ5NTQrY3pSYlI5bk1HSlZCcjVhdFEveHBuYkN1R1prSHlP?=
+ =?utf-8?B?T3NiYllNUGhoMnpnL0d1cWdhZGpla2krdElJMDlmUi93UmRJZUdyZi9CbkxQ?=
+ =?utf-8?B?UUt6N2Rwb0hCYnYzVExyMU9tL3Q0MlVPRmJYTDVjTU9uNmhIOTdUQXMvUGpM?=
+ =?utf-8?B?U0g2ZURDSVdqcHJrWDYwcTFBczE1RFNLdlZIQkVZY1R4NGZyS05vUFE4ZlJ4?=
+ =?utf-8?B?SDZrbHpWbEg2eXR0WTJmWDhFQWQwUGsvbTRjWWhzN1RNQnBMYmhZdHR0Q1ZI?=
+ =?utf-8?B?d2hIa2MxSDNhWW5sL0R0U1FzbXd1N3dmcElYVFpnak56K3NIbUtydjYxeTlj?=
+ =?utf-8?B?SzQ4amlHYnRLb3FCYjdaVCtsdmJNb3FQQmw3M0IvK0g2cGdkRlg2RDBjR0Yx?=
+ =?utf-8?B?bEN0U0xLMi9UZ1k2S05PUzYxSmZlNDgvYk5RMXJzbXVGMDZmWjFjaGRLNmhG?=
+ =?utf-8?B?ZkpmTW1zc0JUVjhSWXV4UnRuSXoweGRGTVgyejFyY1ZmOGVTdEJvZnBKZGx4?=
+ =?utf-8?B?OVE5UWRwOTlBd05mc2s3NUJoVk5Nem5USmVpYkJSVkd1SFRiU1M4UURmMUFu?=
+ =?utf-8?B?QXZpeEFwOVBETFE2OW1mT05HTU9DM1ZnSEc2TFl3WG1zNmN0RVEyWkVockJX?=
+ =?utf-8?B?bUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFTtA3Nxq0UmXcuN7jmQOiuTbrenKbR4ihH027ya1WWybgLq4Q@mail.gmail.com>
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6632a4e8-654e-45a8-3631-08ddfc424838
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Sep 2025 14:46:16.5921
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FoIoq0vScuhppJqZSiY4k67dXL6XDxSd86nFz/HCWAaysEVB8qea+NYngqfTG+S8EuWIa0e6y0sV2fvo1P3gBB4s8/7acucrE/B7qYbusEmh4smJ/8fh/Y2A5/sK2Ugx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB7068
 
-On Thu, Sep 25, 2025 at 07:30:08AM -0500, Andy Chiu wrote:
->Hi Deepak,
->
->On Wed, Sep 24, 2025 at 1:40 PM Deepak Gupta <debug@rivosinc.com> wrote:
->>
->> On Wed, Sep 24, 2025 at 08:36:11AM -0600, Paul Walmsley wrote:
->> >Hi,
->> >
->> >On Thu, 31 Jul 2025, Deepak Gupta wrote:
->> >
->> >[ ... ]
->> >
->> >> vDSO related Opens (in the flux)
->> >> =================================
->> >>
->> >> I am listing these opens for laying out plan and what to expect in future
->> >> patch sets. And of course for the sake of discussion.
->> >>
->> >
->> >[ ... ]
->> >
->> >> How many vDSOs
->> >> ---------------
->> >> Shadow stack instructions are carved out of zimop (may be operations) and if CPU
->> >> doesn't implement zimop, they're illegal instructions. Kernel could be running on
->> >> a CPU which may or may not implement zimop. And thus kernel will have to carry 2
->> >> different vDSOs and expose the appropriate one depending on whether CPU implements
->> >> zimop or not.
->> >
->> >If we merge this series without this, then when CFI is enabled in the
->> >Kconfig, we'll wind up with a non-portable kernel that won't run on older
->> >hardware.  We go to great lengths to enable kernel binary portability
->> >across the presence or absence of other RISC-V extensions, and I think
->> >these CFI extensions should be no different.
->> >
->> >So before considering this for merging, I'd like to see at least an
->> >attempt to implement the dual-vDSO approach (or something equivalent)
->> >where the same kernel binary with CFI enabled can run on both pre-Zimop
->> >and post-Zimop hardware, with the existing userspaces that are common
->> >today.
->>
->> Added some distro folks in this email chain.
->>
->> After patchwork meeting today, I wanted to continue discussion here. So thanks
->> Paul for looking into it and initiating a discussion here.
->>
->> This patch series has been in the queue for quite a long time and we have had
->> deliberations on vDSO topic earlier as well and after those deliberations it
->> was decided to go ahead with merge and it indeed was sent for 6.17 merge
->> window. Unfortunatley due to other unforeseen reasons, entirety of riscv
->> changes were not picked. So it's a bit disappointing to see back-paddling on
->> this topic.
->>
->> Anyways, we are here. So I'll provide a bit of context for the list about
->> deliberations and discussions we have been having for so many merge windows.
->> This so that a holistic discussion can happen on this before we make a
->> decision.
->>
->> Issue
->> ======
->>
->> Instructions in RISC-V shadow stack extension (zicfiss - [1]) are carved out of
->> "may be ops" aka zimop extension [2]. "may be ops" are illegal on non-RVA23
->> hardware. This means any existing riscv CPU or future CPU which isn't RVA23
->> compliant and not implementing zimop will treat these encodings as illegal.
->>
->> Current kernel patches enable shadow stack and landing pad support for
->> userspace using config `CONFIG_RISCV_USER_CFI`. If this config is selected then
->> vDSO that will be exposed to user space will also have shadow stack
->> instructions in them. Kernel compiled with `CONFIG_RISCV_USER_CFI`, for sake of
->> this discussion lets call it RVA23 compiled kernel.
->>
->> Issue that we discussed earlier and even today is "This RVA23 compiled kernel
->> won't be able to support non-RVA23 userspace on non-RVA23 hardware because".
->> Please note that issue exists only on non-RVA23 hardware (which is existing
->> hardware and future hardware which is not implementing zimop). RVA23 compiled
->> kernel can support any sort of userspace on RVA23 hardware.
->>
->>
->> Discussion
->> ===========
->>
->> So the issue is not really shadow stack instructions but rather may be op
->> instructions in codegen (binaries and vDSO) which aren't hidden behind any
->> flag (to hide them if hardware doesn't support). And if I can narrow down
->> further, primary issue we are discussing is that if cfi is enabled during
->> kernel compile, it is bringing in a piece of code (vDSO) which won't work
->> on existing hardware. But the counter point is if someone were to deploy
->> RVA23 compiled kernel on non-RVA23 hardware, they must have compiled
->> rest of the userspace without shadow stack instructions in them for such
->> a hardware. And thus at this point they could simply choose *not* to turn on
->> `CONFIG_RISCV_USER_CFI` when compiling such kernel. It's not that difficult to
->> do so.
->>
->> Any distro who is shipping userspace (which all of them are) along with kernel
->> will not be shipping two different userspaces (one with shadow stack and one
->> without them). If distro are shipping two different userspaces, then they might
->> as well ship two different kernels. Tagging some distro folks here to get their
->> take on shipping different userspace depending on whether hardware is RVA23 or
->> not. @Heinrich, @Florian, @redbeard and @Aurelien.
->>
->> Major distro's have already drawn a distinction here that they will drop
->> support for hardware which isn't RVA23 for the sake of keeping binary
->> distribution simple.
->>
->> Only other use case that was discussed of a powerful linux user who just wants
->> to use a single kernel on all kinds of riscv hardware. I am imagining such a
->> user knows enough about kernel and if is really dear to them, they can develop
->> their own patches and send it upstream to support their own usecase and we can
->> discuss them out. Current patchset don't prevent such a developer to send such
->> patches upstream.
->>
->> I heard the argument in meeting today that "Zbb" enabling works similar for
->> kernel today. I looked at "Zbb" enabling. It's for kernel usage and it's
->> surgically placed in kernel using asm hidden behind alternatives. vDSO isn't
->> compiled with Zbb. Shadow stack instructions are part of codegen for C files
->> compiled into vDSO.
->>
->> Furthermore,
->>
->> Kernel control flow integrity will introduce shadow stack instructions all
->> over the kernel binary. Such kernel won't be deployable on non-RVA23 hardware.
->> How to deal with this problem for a savvy kernel developer who wants to run
->> same cfi enabled kernel binary on multiple hardware?
->>
->> Coming from engineering and hacker point of view, I understand the desire here
->> but I still see that it's complexity enforced on rest of the kernel from a user
->> base which anyways can achieve such goals. For majority of usecases, I don't
->> see a reason to increase complexity in the kernel for build, possibly runtime
->> patching and thus possibly introduce more issues and errors just for the sake
->> of a science project.
->>
->> Being said that, re-iterating that currently default for `CONFIG_RISCV_USER_CFI`
->> is "n" which means it won't be breaking anything unless a user opts "Y". So even
->> though I really don't see a reason and usability to have complexity in kernel to
->> carry multiple vDSOs, current patchsets are not a hinderance for such future
->> capability (because current default is No) and motivated developer is welcome
->> to build on top of it. Bottomline is I don't see a reason to block current
->> patchset from merging in v6.18.
->
->Sorry for reiterating, I have been gone for a while, so maybe I lost a
->bit of context.
->
->In that case, should we add a comment in the Kconfig that says "it
->breaks userspace on older-than RVA23 platforms"?
-
-Its quite apparant for whoever is compiling userspace for non-RVA23 hardware.
-First sspush/sspopchk instruction in ld/libc will do illegal instruction. It
-won't even come to vDSO's sspush/sspopchk.
-
-But sure if that's what get these patches merged in, I can add that comment.
-
->
->Perhaps a very ugly way to make RVA23-compiled kernel compatible with
->pre-RVA23 platforms is to decode maybe-ops in the illegal exception
->handler...
-
-Yes that can be done but that shouldn't gate current patchset from merging in.
-
->
->Btw, I don't think kenrel-level shadow stack should be an argument
-
-Argument to block current patches is below
-"Kernel should be binary portable". That's why I gave that argument.
-A kernel compiled with shadow stack (kcfi) is not portable on non-RVA23
-hardware.
-
-Yes we can try making kernel portable by carrying two different vDSO.
-One that is for non-RVA23 (actually non-zimop) hardware and one for
-RVA23 hardware. But I don't imagine a distro shipping two different
-userspaces (ld/glibc, everything) once they start compiling their
-userspace with RVA23. If for an instance they start compiling two
-userspaces, its not that big of an effort to compile kernel differently
-as well. If for an instance they choose to only support rv64gc for
-userspace then they are not opting anyways for CFI then just not select
-that option in kernel compile. I just don't see a scenario where kernel
-is forced to carry two different libraries while rest of the userspace
-will not distribute two different binaries for same release.
-
->here, as kernel-level APIs are more flexible by nature.
-
-I didn't get it. How kernel level APIs help with binary portability
-of a kernel compiled in with shadow stack instructions to run on hardware
-where these instructions are illegal?
-
->
->Thanks,
->Andy
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBQYW9sbyBBYmVuaSA8cGFiZW5p
+QHJlZGhhdC5jb20+IA0KPiBTZW50OiBUdWVzZGF5LCBTZXB0ZW1iZXIgMjMsIDIwMjUgMTI6NTIg
+UE0NCj4gVG86IENoaWEtWXUgQ2hhbmcgKE5va2lhKSA8Y2hpYS15dS5jaGFuZ0Bub2tpYS1iZWxs
+LWxhYnMuY29tPjsgZWR1bWF6ZXRAZ29vZ2xlLmNvbTsgbGludXgtZG9jQHZnZXIua2VybmVsLm9y
+ZzsgY29yYmV0QGx3bi5uZXQ7IGhvcm1zQGtlcm5lbC5vcmc7IGRzYWhlcm5Aa2VybmVsLm9yZzsg
+a3VuaXl1QGFtYXpvbi5jb207IGJwZkB2Z2VyLmtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtlcm5l
+bC5vcmc7IGRhdmUudGFodEBnbWFpbC5jb207IGpoc0Btb2phdGF0dS5jb207IGt1YmFAa2VybmVs
+Lm9yZzsgc3RlcGhlbkBuZXR3b3JrcGx1bWJlci5vcmc7IHhpeW91Lndhbmdjb25nQGdtYWlsLmNv
+bTsgamlyaUByZXNudWxsaS51czsgZGF2ZW1AZGF2ZW1sb2Z0Lm5ldDsgYW5kcmV3K25ldGRldkBs
+dW5uLmNoOyBkb25hbGQuaHVudGVyQGdtYWlsLmNvbTsgYXN0QGZpYmVyYnkubmV0OyBsaXVoYW5n
+YmluQGdtYWlsLmNvbTsgc2h1YWhAa2VybmVsLm9yZzsgbGludXgta3NlbGZ0ZXN0QHZnZXIua2Vy
+bmVsLm9yZzsgaWpAa2VybmVsLm9yZzsgbmNhcmR3ZWxsQGdvb2dsZS5jb207IEtvZW4gRGUgU2No
+ZXBwZXIgKE5va2lhKSA8a29lbi5kZV9zY2hlcHBlckBub2tpYS1iZWxsLWxhYnMuY29tPjsgZy53
+aGl0ZUBjYWJsZWxhYnMuY29tOyBpbmdlbWFyLnMuam9oYW5zc29uQGVyaWNzc29uLmNvbTsgbWly
+amEua3VlaGxld2luZEBlcmljc3Nvbi5jb207IGNoZXNoaXJlQGFwcGxlLmNvbTsgcnMuaWV0ZkBn
+bXguYXQ7IEphc29uX0xpdmluZ29vZEBjb21jYXN0LmNvbTsgdmlkaGlfZ29lbEBhcHBsZS5jb20N
+Cj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MiBuZXQtbmV4dCAxMy8xNF0gdGNwOiBhY2NlY246IHN0
+b3Agc2VuZGluZyBBY2NFQ04gb3B0IHdoZW4gbG9zcyBBQ0sgdy8gb3B0aW9uDQo+IA0KPiANCj4g
+Q0FVVElPTjogVGhpcyBpcyBhbiBleHRlcm5hbCBlbWFpbC4gUGxlYXNlIGJlIHZlcnkgY2FyZWZ1
+bCB3aGVuIGNsaWNraW5nIGxpbmtzIG9yIG9wZW5pbmcgYXR0YWNobWVudHMuIFNlZSB0aGUgVVJM
+IG5vay5pdC9leHQgZm9yIGFkZGl0aW9uYWwgaW5mb3JtYXRpb24uDQo+IA0KPiANCj4gDQo+IE9u
+IDkvMTgvMjUgNjoyMSBQTSwgY2hpYS15dS5jaGFuZ0Bub2tpYS1iZWxsLWxhYnMuY29tIHdyb3Rl
+Og0KPiA+IEZyb206IENoaWEtWXUgQ2hhbmcgPGNoaWEteXUuY2hhbmdAbm9raWEtYmVsbC1sYWJz
+LmNvbT4NCj4gPg0KPiA+IERldGVjdCBzcHVyaW91cyByZXRyYW5zbWlzc2lvbiBvZiBhIHByZXZp
+b3VzbHkgc2VudCBBQ0sgY2FycnlpbmcgdGhlIA0KPiA+IEFjY0VDTiBvcHRpb24gYWZ0ZXIgdGhl
+IHNlY29uZCByZXRyYW5zbWlzc2lvbi4gU2luY2UgdGhpcyBtaWdodCBiZSANCj4gPiBjYXVzZWQg
+YnkgdGhlIG1pZGRsZWJveCBkcm9wcGluZyBBQ0sgd2l0aCBvcHRpb25zIGl0IGRvZXMgbm90IA0K
+PiA+IHJlY29nbml6ZSwgZGlzYWJsZSB0aGUgc2VuZGluZyBvZiB0aGUgQWNjRUNOIG9wdGlvbiBp
+biBhbGwgc3Vic2VxdWVudCANCj4gPiBBQ0tzLiBUaGlzIHBhdGNoIGZvbGxvd3MgU2VjdGlvbiAz
+LjIuMy4yLjIgb2YgQWNjRUNOIHNwZWMgKFJGQzk3NjgpLg0KPiANCj4gSXMgdGhpcyByZWFsbHkg
+dXNlZnVsL3RyaWdnZXJzIGluIHByYWN0aWNlPw0KPiANCj4gQUZBSUNTIGl0IHdpbGwgdGFrZSBl
+ZmZlY3Qgb25seSBpdCB0aGUgcmV0cmFuc21pc3Npb24gaGFwcGVucyBqdXN0IGFmdGVyIGFuIGVn
+cmVzcyBBY2NFQ04gcGFja2V0LCBpLmUuIHdpbGwgbm90IHRyaWdnZXIgaWYgdGhlIHRoZXJlIGFy
+ZSBtb3JlIGxhdGVyIG5vbiBBY2NFQ04gcGFja2V0cyBwZW5kaW5nLg0KDQpIaSBQYW9sbywNCg0K
+VGhpcyBpcyBhIHNpbXBsaWVkIGltcGxlbWVudGF0aW9uIHRoYW4gd2hhdCBpcyBtZW50aWVvbmQg
+aW4gdGhlIFJGQzk3Njg6IA0KIlN1Y2ggYSBob3N0IGRldGVjdCBsb3NzIG9mIEFDS3MgY2Fycnlp
+bmcgdGhlIEFjY0VDTiBPcHRpb24gYnkgZGV0ZWN0aW5nIHdoZXRoZXIgdGhlIGFja25vd2xlZGdl
+ZCBkYXRhIGFsd2F5c3JlYXBwZWFycyBhcyBhIHJldHJhbnNtaXNzaW9uLiBJbiBzdWNoIGNhc2Vz
+LCB0aGUgaG9zdCBkaXNhYmxlIHRoZSBzZW5kaW5nIG9mIHRoZSBBY2NFQ04gT3B0aW9uIGZvciB0
+aGlzIGhhbGYtY29ubmVjdGlvbi4iDQoNCg0KSG93ZXZlciwgdG8gaW1wbGVtZW50IHRoZSBjYXNl
+IHRoYXQgbm90IHRoYXQganVzdCBhZnRlciBlZ3Jlc3NpbmcgdGhlIEFDSyB3aXRoIEFjY0VDTiwg
+SSB3YXMgdGhpbmtpbmcgdG8gbW9kaWZ5IHN0cnVjdCB0Y3Bfc2Fja19ibG9jayBidXQgdGhhdCBt
+YXliZSBhbiBvdmVyIGVuZ2luZWVyaW5nLg0KDQpBbmQgSU1PIHRoaXMgY291bGQgYmUgdXNlZnVs
+IHdpdGggcHJvcGVyIGNvbmZpZ3VyYXRpb24gb24gc3lzY2VsIHRjcF9hY2NlY25fb3B0aW9uIGFu
+ZCB0Y3BfZWNuX29wdGlvbl9iZWFjb24gdG8gc2VlIHdoZXRoZXIgdGhlIG1pZGRsZWJveCBpcyBk
+cm9wcGluZyBhbGwgQUNLcyB3aXRoIEFjY0VDTiBvcHRpb24uDQpBbiBleGFtcGxlIHBhY2tldGRy
+aWxsIGlzIGF0Og0KaHR0cHM6Ly9naXRodWIuY29tL21pbnVzY2F0L3BhY2tldGRyaWxsX2FjY2Vj
+bi9ibG9iL21haW4vZ3Rlc3RzL25ldC90Y3AvYWNjZWNuL2ZhbGxiYWNrL2NsaWVudF9hY2NlY25f
+b3B0aW9uc19kcm9wLnBrdA0KDQpXaGF0IGRvIHlvdSB0aGluaz8gQW5kIG1heWJlIEBtaXJqYS5r
+dWVobGV3aW5kQGVyaWNzc29uLmNvbSBjb3VsZCBoZWxwIHRvIGNvbW1lbnQgZnJvbSBSRkMgcGVy
+c3BlY3RpdmUuDQoNCkNoaWEtWXUNCg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQ2hpYS1ZdSBD
+aGFuZyA8Y2hpYS15dS5jaGFuZ0Bub2tpYS1iZWxsLWxhYnMuY29tPg0KPiA+IC0tLQ0KPiA+ICBp
+bmNsdWRlL2xpbnV4L3RjcC5oICAgfCAzICsrLQ0KPiA+ICBpbmNsdWRlL25ldC90Y3BfZWNuLmgg
+fCAxICsNCj4gPiAgbmV0L2lwdjQvdGNwX2lucHV0LmMgIHwgOSArKysrKysrKysNCj4gPiAgbmV0
+L2lwdjQvdGNwX291dHB1dC5jIHwgMyArKysNCj4gPiAgNCBmaWxlcyBjaGFuZ2VkLCAxNSBpbnNl
+cnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9s
+aW51eC90Y3AuaCBiL2luY2x1ZGUvbGludXgvdGNwLmggaW5kZXggDQo+ID4gNTNhNGEwZGEzNWNj
+Li5mM2I3MmZiNmZhNzYgMTAwNjQ0DQo+ID4gLS0tIGEvaW5jbHVkZS9saW51eC90Y3AuaA0KPiA+
+ICsrKyBiL2luY2x1ZGUvbGludXgvdGNwLmgNCj4gPiBAQCAtMjk1LDcgKzI5NSw4IEBAIHN0cnVj
+dCB0Y3Bfc29jayB7DQo+ID4gICAgICAgdTggICAgICBub25hZ2xlICAgICA6IDQsLyogRGlzYWJs
+ZSBOYWdsZSBhbGdvcml0aG0/ICAgICAgICAgICAgICovDQo+ID4gICAgICAgICAgICAgICByYXRl
+X2FwcF9saW1pdGVkOjE7ICAvKiByYXRlX3tkZWxpdmVyZWQsaW50ZXJ2YWxfdXN9IGxpbWl0ZWQ/
+ICovDQo+ID4gICAgICAgdTggICAgICByZWNlaXZlZF9jZV9wZW5kaW5nOjQsIC8qIE5vdCB5ZXQg
+dHJhbnNtaXQgY250IG9mIHJlY2VpdmVkX2NlICovDQo+ID4gLSAgICAgICAgICAgICB1bnVzZWQy
+OjQ7DQo+ID4gKyAgICAgICAgICAgICBhY2NlY25fb3B0X3NlbnQ6MSwvKiBTZW50IEFjY0VDTiBv
+cHRpb24gaW4gcHJldmlvdXMgQUNLICovDQo+ID4gKyAgICAgICAgICAgICB1bnVzZWQyOjM7DQo+
+ID4gICAgICAgdTggICAgICBhY2NlY25fbWlubGVuOjIsLyogTWluaW11bSBsZW5ndGggb2YgQWNj
+RUNOIG9wdGlvbiBzZW50ICovDQo+ID4gICAgICAgICAgICAgICBlc3RfZWNuZmllbGQ6MiwvKiBF
+Q04gZmllbGQgZm9yIEFjY0VDTiBkZWxpdmVyZWQgZXN0aW1hdGVzICovDQo+ID4gICAgICAgICAg
+ICAgICBhY2NlY25fb3B0X2RlbWFuZDoyLC8qIERlbWFuZCBBY2NFQ04gb3B0aW9uIGZvciBuIG5l
+eHQgDQo+ID4gQUNLcyAqLyBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9uZXQvdGNwX2Vjbi5oIGIvaW5j
+bHVkZS9uZXQvdGNwX2Vjbi5oIA0KPiA+IGluZGV4IDgzMTdjM2YyNzljOS4uM2ViNDUwYjRiNjQ4
+IDEwMDY0NA0KPiA+IC0tLSBhL2luY2x1ZGUvbmV0L3RjcF9lY24uaA0KPiA+ICsrKyBiL2luY2x1
+ZGUvbmV0L3RjcF9lY24uaA0KPiA+IEBAIC00MDEsNiArNDAxLDcgQEAgc3RhdGljIGlubGluZSB2
+b2lkIHRjcF9hY2NlY25faW5pdF9jb3VudGVycyhzdHJ1Y3QgdGNwX3NvY2sgKnRwKQ0KPiA+ICAg
+ICAgIHRwLT5yZWNlaXZlZF9jZV9wZW5kaW5nID0gMDsNCj4gPiAgICAgICBfX3RjcF9hY2NlY25f
+aW5pdF9ieXRlc19jb3VudGVycyh0cC0+cmVjZWl2ZWRfZWNuX2J5dGVzKTsNCj4gPiAgICAgICBf
+X3RjcF9hY2NlY25faW5pdF9ieXRlc19jb3VudGVycyh0cC0+ZGVsaXZlcmVkX2Vjbl9ieXRlcyk7
+DQo+ID4gKyAgICAgdHAtPmFjY2Vjbl9vcHRfc2VudCA9IDA7DQo+ID4gICAgICAgdHAtPmFjY2Vj
+bl9taW5sZW4gPSAwOw0KPiA+ICAgICAgIHRwLT5hY2NlY25fb3B0X2RlbWFuZCA9IDA7DQo+ID4g
+ICAgICAgdHAtPmVzdF9lY25maWVsZCA9IDA7DQo+ID4gZGlmZiAtLWdpdCBhL25ldC9pcHY0L3Rj
+cF9pbnB1dC5jIGIvbmV0L2lwdjQvdGNwX2lucHV0LmMgaW5kZXggDQo+ID4gZjI1MGI0OTEyYTBi
+Li42MDgzMjYwMTMzZTkgMTAwNjQ0DQo+ID4gLS0tIGEvbmV0L2lwdjQvdGNwX2lucHV0LmMNCj4g
+PiArKysgYi9uZXQvaXB2NC90Y3BfaW5wdXQuYw0KPiA+IEBAIC00ODA0LDYgKzQ4MDQsNyBAQCBz
+dGF0aWMgdm9pZCB0Y3BfZHNhY2tfZXh0ZW5kKHN0cnVjdCBzb2NrICpzaywgDQo+ID4gdTMyIHNl
+cSwgdTMyIGVuZF9zZXEpDQo+ID4NCj4gPiAgc3RhdGljIHZvaWQgdGNwX3Jjdl9zcHVyaW91c19y
+ZXRyYW5zKHN0cnVjdCBzb2NrICpzaywgY29uc3Qgc3RydWN0IA0KPiA+IHNrX2J1ZmYgKnNrYikg
+IHsNCj4gPiArICAgICBzdHJ1Y3QgdGNwX3NvY2sgKnRwID0gdGNwX3NrKHNrKTsNCj4gDQo+IE1p
+bm9yIG5pdDogcGxlYXNlIGxlYXZlIGFuIGVtcHR5IGxpbmUgYWZ0ZXIgdmFyaWFibGUgZGVjbGFy
+YXRpb24uDQo+IA0KPiAvUA0KDQo=
 
