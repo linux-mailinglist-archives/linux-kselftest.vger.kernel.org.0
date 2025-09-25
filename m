@@ -1,248 +1,110 @@
-Return-Path: <linux-kselftest+bounces-42427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B68B3BA1A08
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 23:43:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B9B4BA1C02
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 00:12:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE2291C82777
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 21:43:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 467F87AC3FC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 22:10:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB850323F53;
-	Thu, 25 Sep 2025 21:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 551542FC864;
+	Thu, 25 Sep 2025 22:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="onw8lRvi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JTWBqhfZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B57A322C9D
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 21:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0A0235358;
+	Thu, 25 Sep 2025 22:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758836124; cv=none; b=UZLNbJryy63zyZ8qVXSZStOEH8p9kIsXh16igES+OPTIL1nbC/2+Or/ET5+We01IIXpUjDmCvmMENOHur9kjbvPsxODXr+DJxWFTWTLqpziqVq6/a7kG95oHCQhigUJtGLW1ibMQWlmh9r3IHbs85VoT+yQbpxnj0SlQXHCOoa8=
+	t=1758838340; cv=none; b=WRyxPvZSdl1f8/xFIg91nVUZqFvydUg6j9NwO4tGzdrvmHRZrLtWYeNugo+sdx9s9MZrwQE22ZCzEecDMvqhWiJzWyzQ4329SVKacJNNecoOE3mQSnNYg0QYOTT7ZYvWl+gjG2XX4Fs4aJ78R/pUi3vdEeG5abw8blVAM33LKqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758836124; c=relaxed/simple;
-	bh=Lh1tfSZ0NF/AFO/V/8hHUF+qpGzjYGIIGuaXa4zfnL4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=pXR/ZSRNufZzGCWMDDWW0IZDQTGkFkxYNquZV3XA7x32Q/d/8iEfpQO1CizEZArpVLpsk5CUKU6mlxGtGEj2C/QfkAUcj66eaiOfML9iaoXaozrZNxsNm/X6I2Sh9x8e6yybNPhIXuWq7cLAzlQeGikHKjyEItFhzhES1UrdFmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=onw8lRvi; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33428befc49so1458627a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 14:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758836121; x=1759440921; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dyD0NvHQvKcjtkMWqtARFSwsGpym7n4r8JiRe/0tuUQ=;
-        b=onw8lRvivIaqXqhZ94k9VIfBy202X1wcl6kC5wMxM4fMRMqJCFtExOOO4OSzFrs0RS
-         qHFjEeoEtQfyZAZJP6YQmMYMFNJIzjcra6ZBnCxaERFeYR408n/9Ve3aVpTYm5nPBAgJ
-         qMsrAXWPQ+p75NcDftx9/Rr0IZF8PIOZA9ltXOiwvQ3g1F5fyBcv9jTQYfnHqjrZpAF3
-         2/qagGANvpvdP7va2hYkf8cOa2EP1yIlnKne6xfHvbNp5CAlkPKUDXZTgovUwRHGL259
-         zQiCfU9XIGcVYd7ArvCRqcPxJUFH5956E3BUVCgylnJjJk5rRwHzTewMQqRNjVs5Xxff
-         mXNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758836121; x=1759440921;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dyD0NvHQvKcjtkMWqtARFSwsGpym7n4r8JiRe/0tuUQ=;
-        b=MMNlonVshFaR/37FWoydXi2Rj/6x0xUpy22oYWgm2Qh/rOCScEV+mjMsr1ZcKtR9UB
-         7VJWlp1Yc1CViEgt1NC7BtijC6Q91NRNxGrf0cJ3khr/5sWNm0RmXNmNIzxF47lEvdH4
-         w/EwG83+ISHkQKoUeWl72XC6Uw9zEC5yohHfSWcQCDhl8THxH4muyCDkdEEM49J2BiMc
-         yVhd1MumMQ28t8QbPwncDqGJHGRXD3TZbNIHIkeB0osvoao8pttgNV9D1MnNZ66ly0vk
-         NXj5sJmQdIHxOSbcZYSDNQUuNtymSS6HnAOwIFLJweOdPKhOALjgmCxh0/iDfSAiGgfI
-         fE9A==
-X-Forwarded-Encrypted: i=1; AJvYcCUs/VNyKtMg9Unm+HLuAnlgT6HfB0StLmT3sKLarXt7GktSVObLLufChjzp8MH6/feNleF3wj2i0lI60z+6c4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiXHY2j93oOk+C5kuxAedTxjr8DNaDgQkzFeDlkEvLf2PuO6fP
-	nXw+3I69CrxRyHSdsE60rG5+YRnsg99dmPuC0l6a2Z0lXdfXH4UEVOrYqlFET8wCSuThXLL7Akh
-	kUmulLA==
-X-Google-Smtp-Source: AGHT+IEF46Ap3+CoFy4DNwHeeqPSdM0QIu1/iWB0NVseFrH0JqhT9O+vdtR7XjCf1sCWIaN5eWCQMso96V4=
-X-Received: from pjj5.prod.google.com ([2002:a17:90b:5545:b0:330:6cf5:5f38])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1c07:b0:32e:ca60:6bd7
- with SMTP id 98e67ed59e1d1-334568960d8mr4094341a91.11.1758836121051; Thu, 25
- Sep 2025 14:35:21 -0700 (PDT)
-Date: Thu, 25 Sep 2025 14:35:19 -0700
-In-Reply-To: <20250827175247.83322-10-shivankg@amd.com>
+	s=arc-20240116; t=1758838340; c=relaxed/simple;
+	bh=c7108jwqpOV4+pWr+PhgmM1iKDmFVdJiyCtcy1mN2cY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=uFMc8n1x2uc33QxPaTXpwANG/F3V/KVZ66ciIgadO+oILGUaPZ1O1t98BTFu0PRn5cmJXyctiqsoGRuJ5k7bpXfWJiYIq2yeL6NqK0ZYjJCgtOi34meIvh0HnTQvFLT7jeKBeSfSlvLTgDyZdRQHoznxRtTuVq2CT1O6BqNDDSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JTWBqhfZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34ABBC4CEF0;
+	Thu, 25 Sep 2025 22:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758838339;
+	bh=c7108jwqpOV4+pWr+PhgmM1iKDmFVdJiyCtcy1mN2cY=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=JTWBqhfZxOwUEuDpU8HMg9wskI7rQ2bhGgOMM5JaFNn7OZZFkUYF4DgZwGNQkmdSW
+	 uUwJNNV218XJp0cK8cfwzwLs7Y7nccd+DXiv+vZwJwGkE0zT8ajUaBaFMKgRE9gt3J
+	 9wJxt7DaG1GR5DAVStev5fRHal9v7CCXed3tI99B/OCRd4Hn5VB67ZOu9Qx6V2G49c
+	 ygdytilAIcB13MK2jUDvK/mgpCE2ElRi29eO4U51HhfN/tOS9AdZ7GDL4qtZp63cLK
+	 RRkdPTmB5EafZ3qqXa1AHfBZRax0WxluH7Pa0aPnnXhrY9IMZpWhF2xxg8bk9Nq1xl
+	 ctKy2Ch/HdHxA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20250827175247.83322-2-shivankg@amd.com> <20250827175247.83322-10-shivankg@amd.com>
-Message-ID: <aNW1l-Wdk6wrigM8@google.com>
-Subject: Re: [PATCH kvm-next V11 7/7] KVM: guest_memfd: selftests: Add tests
- for mmap and NUMA policy support
-From: Sean Christopherson <seanjc@google.com>
-To: Shivank Garg <shivankg@amd.com>
-Cc: willy@infradead.org, akpm@linux-foundation.org, david@redhat.com, 
-	pbonzini@redhat.com, shuah@kernel.org, vbabka@suse.cz, brauner@kernel.org, 
-	viro@zeniv.linux.org.uk, dsterba@suse.com, xiang@kernel.org, chao@kernel.org, 
-	jaegeuk@kernel.org, clm@fb.com, josef@toxicpanda.com, 
-	kent.overstreet@linux.dev, zbestahu@gmail.com, jefflexu@linux.alibaba.com, 
-	dhavale@google.com, lihongbo22@huawei.com, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
-	ziy@nvidia.com, matthew.brost@intel.com, joshua.hahnjy@gmail.com, 
-	rakie.kim@sk.com, byungchul@sk.com, gourry@gourry.net, 
-	ying.huang@linux.alibaba.com, apopple@nvidia.com, tabba@google.com, 
-	ackerleytng@google.com, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, pvorel@suse.cz, bfoster@redhat.com, vannapurve@google.com, 
-	chao.gao@intel.com, bharata@amd.com, nikunj@amd.com, michael.day@amd.com, 
-	shdhiman@amd.com, yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com, 
-	thomas.lendacky@amd.com, michael.roth@amd.com, aik@amd.com, jgg@nvidia.com, 
-	kalyazin@amazon.com, peterx@redhat.com, jack@suse.cz, hch@infradead.org, 
-	cgzones@googlemail.com, ira.weiny@intel.com, rientjes@google.com, 
-	roypat@amazon.co.uk, chao.p.peng@intel.com, amit@infradead.org, 
-	ddutile@redhat.com, dan.j.williams@intel.com, ashish.kalra@amd.com, 
-	gshan@redhat.com, jgowans@amazon.com, pankaj.gupta@amd.com, papaluri@amd.com, 
-	yuzhao@google.com, suzuki.poulose@arm.com, quic_eberman@quicinc.com, 
-	linux-bcachefs@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 26 Sep 2025 00:12:06 +0200
+Message-Id: <DD285GJWLA78.10DN8N20YVHQI@kernel.org>
+Cc: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
+ <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
+ <linux-clk@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+ <linux-block@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH v2 18/19] rust: io: replace `kernel::c_str!` with
+ C-Strings
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Tamir Duberstein" <tamird@gmail.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun
+ Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
+ "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard"
+ <mripard@kernel.org>, "Thomas Zimmermann" <tzimmermann@suse.de>, "David
+ Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "FUJITA
+ Tomonori" <fujita.tomonori@gmail.com>, "Andrew Lunn" <andrew@lunn.ch>,
+ "Heiner Kallweit" <hkallweit1@gmail.com>, "Russell King"
+ <linux@armlinux.org.uk>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Breno Leitao" <leitao@debian.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Luis Chamberlain"
+ <mcgrof@kernel.org>, "Russ Weight" <russ.weight@linux.dev>, "Dave Ertman"
+ <david.m.ertman@intel.com>, "Ira Weiny" <ira.weiny@intel.com>, "Leon
+ Romanovsky" <leon@kernel.org>, "Bjorn Helgaas" <bhelgaas@google.com>,
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
+ "David Gow" <davidgow@google.com>, "Rae Moar" <rmoar@google.com>, "Jens
+ Axboe" <axboe@kernel.dk>, "Alexandre Courbot" <acourbot@nvidia.com>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>, "Christian Brauner"
+ <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>, "Liam Girdwood"
+ <lgirdwood@gmail.com>, "Mark Brown" <broonie@kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
+ <20250925-core-cstr-cstrings-v2-18-78e0aaace1cd@gmail.com>
+In-Reply-To: <20250925-core-cstr-cstrings-v2-18-78e0aaace1cd@gmail.com>
 
-On Wed, Aug 27, 2025, Shivank Garg wrote:
-> Add tests for NUMA memory policy binding and NUMA aware allocation in
-> guest_memfd. This extends the existing selftests by adding proper
-> validation for:
-> - KVM GMEM set_policy and get_policy() vm_ops functionality using
->   mbind() and get_mempolicy()
-> - NUMA policy application before and after memory allocation
-> 
-> These tests help ensure NUMA support for guest_memfd works correctly.
-> 
-> Signed-off-by: Shivank Garg <shivankg@amd.com>
+On Thu Sep 25, 2025 at 3:54 PM CEST, Tamir Duberstein wrote:
+> C-String literals were added in Rust 1.77. Replace instances of
+> `kernel::c_str!` with C-String literals where possible.
+>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+
+Reviewed-by: Benno Lossin <lossin@kernel.org>
+
+---
+Cheers,
+Benno
+
 > ---
->  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
->  .../testing/selftests/kvm/guest_memfd_test.c  | 121 ++++++++++++++++++
->  2 files changed, 122 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index 90f03f00cb04..c46cef2a7cd7 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -275,6 +275,7 @@ pgste-option = $(call try-run, echo 'int main(void) { return 0; }' | \
->  	$(CC) -Werror -Wl$(comma)--s390-pgste -x c - -o "$$TMP",-Wl$(comma)--s390-pgste)
->  
->  LDLIBS += -ldl
-> +LDLIBS += -lnuma
-
-Hrm, this is going to be very annoying.  I don't have libnuma-dev installed on
-any of my <too many> systems, and I doubt I'm alone.  Installing the package is
-trivial, but I'm a little wary of foisting that requirement on all KVM developers
-and build bots.
-
-I'd be especially curious what ARM and RISC-V think, as NUMA is likely a bit less
-prevelant there.
-
->  LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
->  
->  LIBKVM_C := $(filter %.c,$(LIBKVM))
-> diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-> index b3ca6737f304..9640d04ec293 100644
-> --- a/tools/testing/selftests/kvm/guest_memfd_test.c
-> +++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-> @@ -7,6 +7,8 @@
->  #include <stdlib.h>
->  #include <string.h>
->  #include <unistd.h>
-> +#include <numa.h>
-> +#include <numaif.h>
->  #include <errno.h>
->  #include <stdio.h>
->  #include <fcntl.h>
-> @@ -19,6 +21,7 @@
->  #include <sys/mman.h>
->  #include <sys/types.h>
->  #include <sys/stat.h>
-> +#include <sys/syscall.h>
->  
->  #include "kvm_util.h"
->  #include "test_util.h"
-> @@ -72,6 +75,122 @@ static void test_mmap_supported(int fd, size_t page_size, size_t total_size)
->  	TEST_ASSERT(!ret, "munmap() should succeed.");
->  }
->  
-> +#define TEST_REQUIRE_NUMA_MULTIPLE_NODES()	\
-> +	TEST_REQUIRE(numa_available() != -1 && numa_max_node() >= 1)
-
-Using TEST_REQUIRE() here will result in skipping the _entire_ test.  Ideally
-this test would use fixtures so that each testcase can run in a child process
-and thus can use TEST_REQUIRE(), but that's a conversion for another day.
-
-Easiest thing would probably be to turn this into a common helper and then bail
-early.
-
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 9640d04ec293..6acb186e5300 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -7,7 +7,6 @@
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
--#include <numa.h>
- #include <numaif.h>
- #include <errno.h>
- #include <stdio.h>
-@@ -75,9 +74,6 @@ static void test_mmap_supported(int fd, size_t page_size, size_t total_size)
-        TEST_ASSERT(!ret, "munmap() should succeed.");
- }
- 
--#define TEST_REQUIRE_NUMA_MULTIPLE_NODES()     \
--       TEST_REQUIRE(numa_available() != -1 && numa_max_node() >= 1)
--
- static void test_mbind(int fd, size_t page_size, size_t total_size)
- {
-        unsigned long nodemask = 1; /* nid: 0 */
-@@ -87,7 +83,8 @@ static void test_mbind(int fd, size_t page_size, size_t total_size)
-        char *mem;
-        int ret;
- 
--       TEST_REQUIRE_NUMA_MULTIPLE_NODES();
-+       if (!is_multi_numa_node_system())
-+               return;
- 
-        mem = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-        TEST_ASSERT(mem != MAP_FAILED, "mmap for mbind test should succeed");
-@@ -136,7 +133,8 @@ static void test_numa_allocation(int fd, size_t page_size, size_t total_size)
-        char *mem;
-        int ret, i;
- 
--       TEST_REQUIRE_NUMA_MULTIPLE_NODES();
-+       if (!is_multi_numa_node_system())
-+               return;
- 
-        /* Clean slate: deallocate all file space, if any */
-        ret = fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0, total_size);
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 23a506d7eca3..d7051607e6bf 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -21,6 +21,7 @@
- #include <sys/eventfd.h>
- #include <sys/ioctl.h>
- 
-+#include <numa.h>
- #include <pthread.h>
- 
- #include "kvm_util_arch.h"
-@@ -633,6 +634,11 @@ static inline bool is_smt_on(void)
-        return false;
- }
- 
-+static inline bool is_multi_numa_node_system(void)
-+{
-+       return numa_available() != -1 && numa_max_node() >= 1;
-+}
-+
- void vm_create_irqchip(struct kvm_vm *vm);
- 
- static inline int __vm_create_guest_memfd(struct kvm_vm *vm, uint64_t size,
+>  rust/kernel/io/mem.rs | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 
