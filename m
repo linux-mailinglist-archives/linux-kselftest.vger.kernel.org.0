@@ -1,124 +1,114 @@
-Return-Path: <linux-kselftest+bounces-42308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8C61B9EC4A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 12:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CD32B9ED01
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 12:50:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 387FC16F228
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 10:44:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDD4A16544D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 10:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74822EC560;
-	Thu, 25 Sep 2025 10:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E16102F1FD0;
+	Thu, 25 Sep 2025 10:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JKXhTHjE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kDwGEOIH"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94CF2EC0AC;
-	Thu, 25 Sep 2025 10:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B647620DD51;
+	Thu, 25 Sep 2025 10:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758796764; cv=none; b=rBDxfhTOoAalLWEgfOLM6gQOT5DMRev+kFi5UfC1HGTOMYqxVRBYOqbyOfJdiPCZK7nqrfHQMcNEAz9nrnM1qlEeXdLngqXwL7Geg44SvF3BvAM5WOhZ7NT7vMn/YLOZV+osmaBeiSdomAlpGqq2Dqy3sKLDOGyQDFIz2H3JiR4=
+	t=1758797374; cv=none; b=a2R7Vn52HGxQ4KWT8eLJVx1fpY5PVmZTlc/6gR7ThGXaJ2Mtg7OXqByN1Q3lzTL5OzCXFtRQlOt9g73tYmiIx9VWKWkvGw9srSs4kXMgdqxO70QhApK/9FQeuw5fmkyIfp10ySpJFvI3PkDAT0O3toh/iQ8CcPuScZyd+uo7/a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758796764; c=relaxed/simple;
-	bh=g18JgraaDXQ/oZPpU5mVP33VVHpCJok0REx5NF6LgqA=;
+	s=arc-20240116; t=1758797374; c=relaxed/simple;
+	bh=rFN5Z8FcdvSu6T/zPde/tldoP5MZ9bU5WlrMTrZ5vSY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mudY+eXKg7oqKMo7lh+wF9yZyUvdG7Ajl5o++MoXuE9wi50jK+aRdBYN/NE6y1Z0rxpXgblw7qqee0vtAQPBXxzq45nTNrc+4CxQShbJ7rt++UMn7OgSkST56/We7EXyRcXv3afXL6N1jtTIMqPzEFt3t2AtmuIEes+7b76Nqtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JKXhTHjE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA35C4CEF0;
-	Thu, 25 Sep 2025 10:39:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=cC2xVDBZ8Gi3EViOtkP9ic5ITfq7x4pM6WVx0xfeJouAhfYpNREO+xN/CgEGaR1P8NM7uiFRmMhtvrnjW9cMRfpv8pYF9J5K+uFiG6uAaWX1tvMc6TReG8GklnAoF+/qrKGrn4wOFeAMRuLyeTvH++IOTbBHfTfF7Jjb3v0Zdr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kDwGEOIH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F5BDC4CEF7;
+	Thu, 25 Sep 2025 10:49:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758796764;
-	bh=g18JgraaDXQ/oZPpU5mVP33VVHpCJok0REx5NF6LgqA=;
+	s=k20201202; t=1758797374;
+	bh=rFN5Z8FcdvSu6T/zPde/tldoP5MZ9bU5WlrMTrZ5vSY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JKXhTHjETOvq14sfdXOnYO/XPyREda+Xof8NIxesa1wK++Y+AF/pBjUJRPjQ7Klrg
-	 ibEwOX0BTX90jLJiZ90hpp12fuLC4rHrIDEYe7I37QYHBVT774PvvkNZa5lSnXoWNO
-	 WsXWfc93zU+BHT2JLvIunUNcBvf/76R+7s9DIliluN2GZf/VSIhq3muZcbCA1Ukvkv
-	 m82vLO5h14ZDC9w3/mCcQavvYsUS9EzW5d7Kuq/Ez4Pj6YM23MQH5Fh8UyP24/q1cp
-	 KsJsjSeLEqVdeZ7MmmaA/G1sRlEgFIdSD4iJLvapVawjdCc593d6Rr/svIdggbTs/J
-	 T9+DmrMol1iKw==
-Date: Thu, 25 Sep 2025 12:39:22 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC bpf-next v2 0/5] Add the the capability to load HW RX
- checsum in eBPF programs
-Message-ID: <aNUb2rB8QAJj-aUX@lore-desk>
-References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
- <87bjmy508n.fsf@cloudflare.com>
+	b=kDwGEOIHgpHjWwNi7yoFKnSXVW0jjz39A6A/iqU6mgnCowDLPEiX6pLjJm4C8zqP8
+	 27VVGQ56CpVVwIAW77CsqJ3CwajdzF4Yeg6UCIl0Nx9hR1MkY3bZ1IAq56vQkSW5jC
+	 z+EY4jh/9WGfIx4U4Xpv1j4fJ2Aq8aouErL6mvf3/9huzycgqWTctxn0c9e2gvRM7q
+	 NoIbJLpFoNc7w+pgNWPvjqFIOwT03qGHwwruJFjua5qnRzLVikElqXbbFwO0RniukD
+	 P0vga4T+ewCV+QWdYcs1QBbTkTtSDa5PfiVTFIPdY8PPDtzbAkjbi1P4EZ7F6NvVf+
+	 6P+WDmJdg5Rtw==
+Date: Thu, 25 Sep 2025 11:49:30 +0100
+From: Simon Horman <horms@kernel.org>
+To: Alessandro Zanni <alessandro.zanni87@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftest: net: Fix error message if empty variable
+Message-ID: <20250925104930.GG836419@horms.kernel.org>
+References: <20250924230413.75246-1-alessandro.zanni87@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xqGe+akQ3uuJExgr"
-Content-Disposition: inline
-In-Reply-To: <87bjmy508n.fsf@cloudflare.com>
-
-
---xqGe+akQ3uuJExgr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250924230413.75246-1-alessandro.zanni87@gmail.com>
 
-> On Thu, Sep 25, 2025 at 11:30 AM +02, Lorenzo Bianconi wrote:
-> > Introduce bpf_xdp_metadata_rx_checksum() kfunc in order to load the HW
-> > RX cheksum results in the eBPF program binded to the NIC.
-> > Implement xmo_rx_checksum callback for veth and ice drivers.
->=20
-> What are going to do with HW RX checksum once XDP prog can access it?
+On Thu, Sep 25, 2025 at 01:04:07AM +0200, Alessandro Zanni wrote:
+> Fix to avoid cases where the `res` shell variable is
+> empty in script comparisons.
+> 
+> The issue can be reproduced with the command:
+> make kselftest TARGETS=net
+> 
+> It solves the error:
+> ./tfo_passive.sh: line 98: [: -eq: unary operator expected
+> 
+> Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+> ---
+>  tools/testing/selftests/net/tfo_passive.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/tfo_passive.sh b/tools/testing/selftests/net/tfo_passive.sh
+> index 80bf11fdc046..2655931b2396 100755
+> --- a/tools/testing/selftests/net/tfo_passive.sh
+> +++ b/tools/testing/selftests/net/tfo_passive.sh
+> @@ -95,7 +95,7 @@ wait
+>  res=$(cat $out_file)
+>  rm $out_file
+>  
+> -if [ $res -eq 0 ]; then
+> +if [ -n "$res" ] && [ $res -eq 0 ]; then
+>  	echo "got invalid NAPI ID from passive TFO socket"
+>  	cleanup_ns
+>  	exit 1
 
-Hi Jakub,
+Hi Alessandro,
 
-I guess there are multiple use-cases for bpf_xdp_metadata_rx_checksum()
-kfunc. The first the I have in mind is when packets are received by an af_x=
-dp
-application. In this case I think we currently do not have any way to check=
- if
-the packet checksum is correct, right?
-I think Jesper has other use-cases in mind, I will let him comment here.
+I'm not sure what $res can be in practice.
+But as it is the contents of $out_file (or more specifically,
+the stdout of running cat $outfile), in theory it could be anything.
 
-Regards,
-Lorenzo
+So while your patch addresses one error case.
+I think there are others.
 
---xqGe+akQ3uuJExgr
-Content-Type: application/pgp-signature; name=signature.asc
+f.e. if res is not empty but not numeric, then we may see
 
------BEGIN PGP SIGNATURE-----
+bash: [: b: integer expression expected
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaNUb2gAKCRA6cBh0uS2t
-rCnmAQClyqHTRR/OnmcLAfApMAw6CE3qQxlQol1aJ4trzcdQsAD8DnOXx8cahwg9
-sjufYTjctpEZ5iSYR7AA4n6xB5OW9AQ=
-=frL2
------END PGP SIGNATURE-----
+Or if res contains a newline, then we may see
 
---xqGe+akQ3uuJExgr--
+bash: [: too many arguments
+
+
+So I wonder if it is better to treat $res as a string,
+and quote it to avoid unexpected side effects.
+
+[ "$res" = "0" ]
 
