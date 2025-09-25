@@ -1,449 +1,308 @@
-Return-Path: <linux-kselftest+bounces-42268-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42269-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC841B9D3CF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 04:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 502E4B9D70D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 07:18:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EDA51B27D2D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 02:51:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F2981890024
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Sep 2025 05:18:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EC52E6CA7;
-	Thu, 25 Sep 2025 02:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B41E52E7F07;
+	Thu, 25 Sep 2025 05:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DTL4+4/l"
+	dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b="PF1SpOQr";
+	dkim=pass (1024-bit key) header.d=sharedspace.onmicrosoft.com header.i=@sharedspace.onmicrosoft.com header.b="Uw3Pzdd/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43C42E62C3
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Sep 2025 02:50:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758768634; cv=none; b=ZXm9mVU2sSkIIEn14c1ilfESkPy6DOmgKkSfACsic1+azAj9mLoco5kd5GRcfBN/DNWayZ0Rzoxd6H1g/8en97mrg/Ne5vi3rzAOU3xoHW3jQsxN6OnVrGphJKLyJYiM6aX9ffynOFle+heBB0+oQBKzh6X2VVlMMYXDhDqIeLg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758768634; c=relaxed/simple;
-	bh=E/2zkY+laEgtf0hi012ZsFGuFgF/uxt8cYftM4Aj9CI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Cho9bMRjLntaW8dX9RXYC8Ddq8dMHBgJxKJ5UKSQNZgpAH49SsDcsvHfAdXoUAAj+OSzzkaUH4O1gJcEE4ztQ3OeeFk80z23aom/KjoDLt/RuFBRPsULEjDiqrtr3OKd29Ek4NTDXqlEEFJsRwN33ZDmv9rPGT6GRkx9XKIf870=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DTL4+4/l; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-24458345f5dso6105125ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 19:50:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09652E7BCF;
+	Thu, 25 Sep 2025 05:17:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=68.232.141.245
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758777476; cv=fail; b=epkzUuN3adC4A452kq1QSlzR5dSk36hEYLRyLJXxrKn+UhtDIVNIESM0t2+Qs/XcNKGqzrM5Eraj3j3V1FKp745XOa/3pW4CQYqjXaMLWqRWAmYMp23RdGIZnKja0Qff3j8ESSUWQmaHKfA5yQ0nPmkk6BJtZ2yrgij85YqN90Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758777476; c=relaxed/simple;
+	bh=eXLCfpSuyUfu7FLAXiAF63LYaDGag/5RE7OEuhuBCLI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=HUz5Iw8TklH4Yn/ojhOAoIjwvPdwGEZUWy2LsSGE0hFqKJrUZsPXBGDFt+/vRpjdn7e4pKwrq8LGyuZwIg0KpxGvjm+GUPd5JIPwnWyUBdsx29h0VBb3ASsHvYKKIzogLZqfFWifDmh/ECFC6/hhxa3SV1U7l1xW8gO5e3imkmE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com; spf=pass smtp.mailfrom=wdc.com; dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b=PF1SpOQr; dkim=pass (1024-bit key) header.d=sharedspace.onmicrosoft.com header.i=@sharedspace.onmicrosoft.com header.b=Uw3Pzdd/; arc=fail smtp.client-ip=68.232.141.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1758777474; x=1790313474;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=eXLCfpSuyUfu7FLAXiAF63LYaDGag/5RE7OEuhuBCLI=;
+  b=PF1SpOQrewo1nblfn9le2OUOd9QqZR/PWRzasK9Jd9u1ideB///pHZEe
+   3Dt6kN4UBtcvPFhDAVBDMXS5a/tDCphFCx5mIumD77Ackfhg9i+VsHvCj
+   6IdeZVRa5PsaEGGKMVFmtApIAlMSZrMErVUVz0pM0QQvBM/SFlQyy6za0
+   LyZGVXiFdePhelLEOLjlvYb+LxvSk+EMxJqg/pqiKExeKLo14EE+llqFE
+   3HKg/c3dQNIS7GlrajGpgoYYw6bbMABQf3kZ25D9/5a5p9u5kcdZcbSr4
+   kf1rIfYz6RKADEp5Taugt8bHMzT/fy74o7+8IttKD2FL+YGoh5DQKqdSu
+   Q==;
+X-CSE-ConnectionGUID: YXkfhNGEQcC560njpF2OHw==
+X-CSE-MsgGUID: X71m9weqRjCZoQHkAytCjA==
+X-IronPort-AV: E=Sophos;i="6.18,291,1751212800"; 
+   d="scan'208";a="129871352"
+Received: from mail-southcentralusazon11013005.outbound.protection.outlook.com (HELO SA9PR02CU001.outbound.protection.outlook.com) ([40.93.196.5])
+  by ob1.hgst.iphmx.com with ESMTP; 25 Sep 2025 13:16:46 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b4i7JRnfDbK7zzpZEa3uhC08o1adgHo7aa9yJotUo76ZPUgdlnbTwl4oEgdYWg7qhbpz4y0NhmaDYcZmucJ0bO41ebNBrupSMxZKxajHvuHKZg68B4+4HAwAtSZ961Xd84pOPJHRT9V2FBoMzAIQFsBaCLfmnM0m9OdyZsfvvdg6V6qCbnis5OLBmQBwLXEwUZdwl6OGB9YIGuT+SkMOcTudjCLaccSil+stQ77kq6eszXQsKRjLFNgiVVu09f4VUpIVIBCQ1/30AIW3p2VU8s5K0RYHBGdqQSrx0pd5t5ATaYGeRptZe9cK1BWtpnvMdy40kUE1ITTUw+6HOYYqGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eXLCfpSuyUfu7FLAXiAF63LYaDGag/5RE7OEuhuBCLI=;
+ b=HFj2zxNkEMVN1VvpdXDZ35rzs4ajw/HNO0Vypq7NRnjm5FJMomgJ3jP3NlZjOH2dS2faKT6+w98A20IhripVuWtQ2rXm2/CBm55ooiMsoVAA0FKfdkoavNvLWLSxsbcnSYzy6KRgS1XMB4Zs6W9bqAxWOB5dek6n+tAgBrng524M2ZTmMQX74t/5mtTCLIm/5zrjLAZ1eU7XG3rMP8VxPuez1nphz7L6IW2pQbhZhKJPqRj5aGC4PDcVCfD0pKd2/+HNf4/IShpE16iYzpN26vZwBrUAskePs4uXzVXsNsCDo9cBLLEOmp0d3n3HigMGBS11OcHUm9h2u7EXTyybxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758768631; x=1759373431; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WtyEMQPJo4fqytrWkgTZ3RdyfRt093nOgUIpQGdycFA=;
-        b=DTL4+4/lMjhhsDylR6AIPVgrvDE/Ruo/1CUOZZ/VvVtgSeFMOXQEDfEIzbwL67oSZK
-         mVe08kSve1q3RIr7/0hyPXaiNUs8eBZsxX+2RFR3IYHJ2t21qWyoQznBs6Qkvs9JtoQB
-         Ihu8gzRar+Hx4/42DtEkCrdl3BAqAkGsBWG9uQuPJGgrI5VHn9pYg08aaB5Tmmqfw5Fm
-         fV0mc6r5TBcXTIjk4CESUew1abD0JZhJpCETVFUsYn+IgkzMc0BQi/YJe/bz+/7W6QXy
-         R5MIEzpEPmNdI7mjlA1lQ+HTrIjl6B76I1AUnHO3wXf1LJEvcS4681rKB3unWFkb+xwa
-         nADQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758768631; x=1759373431;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WtyEMQPJo4fqytrWkgTZ3RdyfRt093nOgUIpQGdycFA=;
-        b=kPF18AHuAxPv9QfWZPb0XW/lO8lbdDcoac9vULZkGCSsaUdlhfEEV1mO+9kvqUzl+Y
-         hs9ED0o7FpyegumOYq9kgOozE0zHKAnZhAAiI7CmbnELmq2mtCjcKWngeXI7rSVuAza1
-         JCAY0D6CsS6tiA8fkUsNgDSo3trO9Rm8LNn2wGIACq1HZgJr4ZORfb0vlNH/eN/Mq9ml
-         91EaoJdtid7QQYHMjiAWjHq4og+eaZuxSVmNgtK9/SfaF+L3ej0GWpFnyofvdeUeH8bE
-         iquNONpkOU2igtM87oQZtZzm7TZzuda8/NwNVYTZfeJN/sGN++ogdmaG8UCAzLzjmWbj
-         xOBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWQPGpySluZNi8GrliNgGJhJe1Wt82n9dtkw5qZUPSyxjYTIcn0CEpRooK1fzQP8lmiA5NuOFnAyNLSgAa2Eos=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyS3rtr6kD5x6ba5ZXtIoZWpwTV9qoqPKyVBVTW7gjbODd/xcvM
-	uVN0yzsHgZ4sMLHeDzllmEkbPAP32V0TiBEG6kzIj4FU/J7/SKGseZeKJ8HiXSVYCHA+EVVC/v2
-	LLiwQXA==
-X-Google-Smtp-Source: AGHT+IFUzTzL+1uqRK/gqbR3SSwstvzUfWk/CsgKEnRDPuVsxH9OFn3e2zcGuFZY0INSLtUo/3MF8Uc68Iw=
-X-Received: from pjbnn3.prod.google.com ([2002:a17:90b:38c3:b0:32d:e264:a78e])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1b0b:b0:266:f01a:98d5
- with SMTP id d9443c01a7336-27ed4ab37a2mr23319415ad.57.1758768631155; Wed, 24
- Sep 2025 19:50:31 -0700 (PDT)
-Date: Wed, 24 Sep 2025 19:50:29 -0700
-In-Reply-To: <diqztt1sbd2v.fsf@google.com>
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eXLCfpSuyUfu7FLAXiAF63LYaDGag/5RE7OEuhuBCLI=;
+ b=Uw3Pzdd/iK9/xGKouu8MOO2/8MVBnrnUSCHJvZ7ZERJIlq4oD9s7RlTwaQLS+iSIj4LFKQsoUtMweor6BHMFhk4FLw0cHCL2FTDEDPsxshRFJq17KkPtEwYwTdPJOVKkMaajqbty7BropQn6aQj6kortJAS7Ixrrqh9hA1lAMJg=
+Received: from PH0PR04MB8549.namprd04.prod.outlook.com (2603:10b6:510:294::20)
+ by BY1PR04MB8653.namprd04.prod.outlook.com (2603:10b6:a03:525::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.9; Thu, 25 Sep
+ 2025 05:16:44 +0000
+Received: from PH0PR04MB8549.namprd04.prod.outlook.com
+ ([fe80::5b38:4ce0:937:6d5e]) by PH0PR04MB8549.namprd04.prod.outlook.com
+ ([fe80::5b38:4ce0:937:6d5e%4]) with mapi id 15.20.9031.014; Thu, 25 Sep 2025
+ 05:16:44 +0000
+From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+To: "sd@queasysnail.net" <sd@queasysnail.net>
+CC: "corbet@lwn.net" <corbet@lwn.net>, "davem@davemloft.net"
+	<davem@davemloft.net>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "john.fastabend@gmail.com"
+	<john.fastabend@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"edumazet@google.com" <edumazet@google.com>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "horms@kernel.org" <horms@kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v4 2/2] selftests: tls: add tls record_size_limit test
+Thread-Topic: [PATCH v4 2/2] selftests: tls: add tls record_size_limit test
+Thread-Index: AQHcLEt4VXp6F+Ian0Ck6xKCzQf54rSintgAgAC/uoA=
+Date: Thu, 25 Sep 2025 05:16:44 +0000
+Message-ID: <0bae4a20d499c23a80065f5cb7ba1e6a1d95417b.camel@wdc.com>
+References: <20250923053207.113938-1-wilfred.opensource@gmail.com>
+	 <20250923053207.113938-2-wilfred.opensource@gmail.com>
+	 <aNQvZnCWhymiXYPO@krikkit>
+In-Reply-To: <aNQvZnCWhymiXYPO@krikkit>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR04MB8549:EE_|BY1PR04MB8653:EE_
+x-ms-office365-filtering-correlation-id: 777a0e8d-1119-4710-7bca-08ddfbf2b7ec
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|19092799006|376014|366016|1800799024|38070700021;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?R20wZGFWN3lXNjJLTzdnUDN3eEFEc2VtRXN5dmpNTnRqTUh6K2gyK3FpSVND?=
+ =?utf-8?B?SlYwOUhFelBuamkyK0NrNzkxN3VLeDFIdjVJZU8rclUvK2NpR2FKSGFDYkt6?=
+ =?utf-8?B?eHd4R0Zha3QwcFNHem56d05KbmVLVFFmNHl5K25pNGdiSTFmc0phb0M3a3E0?=
+ =?utf-8?B?WFk5Mm1mdFE0b0FVWjF0ZWtIZEh3RXNGRzV5Z3o0M1l5bU1GR1k4elFPRTNh?=
+ =?utf-8?B?R1d1RmkwMHUvWktRUUl0dkFoMU1ZVzQ4dENTRklUakwrc0Y5L1EwZ2s0RHVx?=
+ =?utf-8?B?V2xieVJMS0oydndXQ09BWFlCSG0wZXZrM1JTa2FNbFU3UWVkbi9Ra1h4T1lV?=
+ =?utf-8?B?aDFveExUM00rcThtSHp5Mm5Id3ZiOUVHcllFVGlvOGMvM1hjOTVpWHRlUHYr?=
+ =?utf-8?B?S05ac2Z3YldGZDZNWHNuNEhFNFpPbUs5MitpODhKeUl2L0NEVksvVysxS0J6?=
+ =?utf-8?B?bCs3Y1lhWDltSllhWkNiRmNHZU4wVW5SNWkxVkFIbWtmRTlxRkJPZmVlL01B?=
+ =?utf-8?B?a1AwTk4ycWFMeC9ySnRBampVckM3Rmc4bHFDZTNFT3U2Qlk4M3d1SFhmNTUr?=
+ =?utf-8?B?VFZ0Z2NqY0ZrM2IxK0IyVitHU2FMVkpla05DQjNQNWVoWEhtMFlmQk52ZlBS?=
+ =?utf-8?B?ZUtxV2JpR3dnbWtHNWhzRUlMVCtlRHU3eHF2cnMwRUFYT3VZZjNoWWFpNk5m?=
+ =?utf-8?B?d21XNjcxWXYrUEhyZkNQOHZXSk9UTy9yWGNvY2JST1JUd0VGbXlhdUpzVFJF?=
+ =?utf-8?B?OWFTQ1kwNDBtNVFGblBlSm1ub0VaYU9SbzNlZUwveWs3T1dnMlV3K3dnK1Fp?=
+ =?utf-8?B?MlNuVVFySHp1dTFSU2RrYzgyd056UkN5Uk5zRXlwalhRK2p1UjYrRmhCNGV6?=
+ =?utf-8?B?V2Z6Rllna25UQnZtWUZ1ZXliUHJyZ0VhMnM1a2NHYndBK2NFb1I2eFowQzIz?=
+ =?utf-8?B?VERKamRtYXFMcnAvRXpkSnN2TzF3eDFXMXp4Y3pQbzNxR2tndGhxMUgzOHpv?=
+ =?utf-8?B?amppc2x3WldBVkpJTE4zNlJUanBGdFJCbzBrQXFaTVNjc3g1WHQ1czV3VmtE?=
+ =?utf-8?B?UDRBUlBHbG1JNC9MYklmU1ZwUmZsRDhXU3lhejBXZytOYXJxVkRYeXhDZ1Zu?=
+ =?utf-8?B?TXlHQXVRM2ZjbExwQVRiYWt1Y1lMTTFsMVA4RTl3WHBBRnU2N1E5R00vMmpa?=
+ =?utf-8?B?VEhFTHQyaWVYejFLVDVkb01qN3dncTRZdUNrUWxNUVRmbUFhYmxjN0c3T21J?=
+ =?utf-8?B?ODlwRGx0N0taY296Y1BpcS9nV0RkZXFJZHRaVi9EOTl6T2w3SkxVS200aXNK?=
+ =?utf-8?B?ZHNad1A0a2hxYThKV3BUTi9ST0ovaklDNFk4VURseHE1clVMS293aS9vRWpB?=
+ =?utf-8?B?dlZObytFQndtMkIzRXgvdjROWW9KUzIvY2h1YUtTdGp3ajRMbXUzY2cvNG5j?=
+ =?utf-8?B?TzR3OVZWNDRzUnBtdm16Z0pCakRtenFNTkxUeHBBUnhVOXVPTXdpS05Vb3Q4?=
+ =?utf-8?B?dExTZlN4RlNrbHJ4YzZETFJsb04rR2M5aUxQbWxZY2VNVFVqaVdMcE5mSDE3?=
+ =?utf-8?B?ZlF3K243YktSdnZvWXhBallUOXE1YWNxS3E1c2hub0JUeEJSQllwLy9JT1Zt?=
+ =?utf-8?B?VDh1c0FaNTNicUhJM2RQRFU1N25hMGlvVFhmVFUzRExjUkpIYm1kWEhVNWFn?=
+ =?utf-8?B?QUdadXg0WnFOWTBadlNoUTB0S1JNMEdPRFk4bG5VOS90RUJVNUVmUExEVEI0?=
+ =?utf-8?B?azNzSUxUaEkrTUhzeDlaRXd6YmJ3WTczdWxZWi8xamsyUWVSODIweXh0NnVh?=
+ =?utf-8?B?OVhCN1YrM0c0WmsyOHZGbEpUVFh1WCtxcGJzNTdvcklJV1Z6R2hBb2djN3I1?=
+ =?utf-8?B?ZzBtWG0yM3JXVUdKbWxxMWYzZUxTMkJVblZXMlNqMmxWY3dYbzM2YU1IMDgr?=
+ =?utf-8?Q?gzp7gfYrvL8=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB8549.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(19092799006)(376014)(366016)(1800799024)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?L202NGlpMjUyS3NjUk5POVNsTWVvdWxlTURyQVBJQUVmeWQ1U2hlUlNDejFG?=
+ =?utf-8?B?TXQrb254S0FYM1lEMEF5ZTZkRVE0T0dDMDRjS3V1UHRIM1hUNVFjRVBSenFL?=
+ =?utf-8?B?TndpWnZCRFZrMDVCMUI3eTRpS21kdkpwMnZkL25BRVBOdTV4QXRRSkllRHd4?=
+ =?utf-8?B?cXg1M1BEVnBrSXArNWp0WjRYYWRZSlkwbm1TVFhuN0REb0RQOVZqQzhzbnN2?=
+ =?utf-8?B?dGIvZ2V2M2ZkbStqcWgxZ0pSWForY2FjSUtzcnZBZTIyS3ZpMHZ3SFZmYnAr?=
+ =?utf-8?B?L1pFK1dwLy9XZm8rLzBUb0pKRG1icVVsNWFmUlZJMG5UZHZ5TldDSTc4WUZH?=
+ =?utf-8?B?YmFJVEhDcjh0Vzl4UU5HaGFXNFVld1BDaGpvWnRSckJ5dWxvWmlNakl4Sjg0?=
+ =?utf-8?B?NGNHU3V0eXNjVXFmTHBpZFJrZnZBR3NwQTUxRTlsTHB0TEhWWFIydURTamwx?=
+ =?utf-8?B?azRUdGlUM055NlowQlVya3FWbGZIOWlUVGcxeThqeEs5ejJONmIwRkthZm1U?=
+ =?utf-8?B?ZVJ3MzFKZW1PWnJlaDRDSHRzYm1KOXNIaklyWkdGcEE0Vy96K01Eczk4SjBL?=
+ =?utf-8?B?bURpQ2tYbk1HUjY2elNQSVB1N3Y3aytmTjYzRDdSOC9pZ05qWWxCNzdMcG11?=
+ =?utf-8?B?aW5XOVVlNG5GSVVnWTBsVmpaMFJCVlRhdDVsei9WTFdPZDhJNWIveFFPcFBZ?=
+ =?utf-8?B?TXltQ2RETmQ1YWN6d1lnSDRqNEYwZS9vU1NBeFRRUVdDaThMZTZQKzN1QWx3?=
+ =?utf-8?B?Wi9CL3UrM0hPcTdNQXBvUUdLbTg1ZHFNZE00WjRIVGRrY05ZV245ODQ0Z0NY?=
+ =?utf-8?B?Y3ZqWDU4a1BRQWJiQlNOTU5jYldwdG1hOU1Ld1NhcVFrdFQxZ2Fnd3VieXE3?=
+ =?utf-8?B?bjVYTStLNUc5dTdUejhPTEFDb1k2bE1KbE9WSDJZWjBJbGFzYStsZGhEcDRx?=
+ =?utf-8?B?akVjRFpMQW5mRS9RLzVMcS9NZitPVkxsMWJmVnVPVVgwSzBhTlNLMlpRWlYz?=
+ =?utf-8?B?c1o2aHdlM2Fxbnl5VDFPYVk4Nnc5M1BPWi9MaUNIbFpXM2xzcUFRcGdmdksv?=
+ =?utf-8?B?Z1Z4bWMvVWdyWEtycCtJR2FSeEpaS0doSks4NitaS1NJZ2NoNDVsNmUvVlYx?=
+ =?utf-8?B?Ti9CWUtRZ200TXl5eElYRnM2a1BaeVhTN1I4eUlBUjRUcjhwQlFWUkZ0UEtV?=
+ =?utf-8?B?RTdGV3NOUmsxSGM2RHRETmQzRzZ0K2h5NGFGMGJweUZtTWdwV0YydTg1MEpQ?=
+ =?utf-8?B?b0R4WXJ6dmhqWDNGcXNZZkRldVpteU81S1pyTDBhZTNRSVN6V3hXWXBpVUhP?=
+ =?utf-8?B?eHU5NnpNdVZoQ2Jpb0RiRHl6dnI5V2MvM0VDbWZLTkpxTHlPNkc5dDZPazB4?=
+ =?utf-8?B?SUszMnBsOThCTU1aTmJBUUdYRWtNYjhWOHVhRVdHenlIN09SME5saVlaN0pz?=
+ =?utf-8?B?T01Fck0xNDRyb2VxQVJoaWwrdnlzYUcrTlAySm1Nbk05MHMxUkxxOXlwTTNv?=
+ =?utf-8?B?QVo3RjdWWTI0SXJLQlV5NVUzN3dZa2tQWXhSdVlORmI0Q1Y0OFhNbGxNVTBk?=
+ =?utf-8?B?MTJzQVJRM2VkZ2xhbEdxaHdNUHo4SE8wb2hXV2tJTXZ3dVVhOWdnWG9EVXNN?=
+ =?utf-8?B?cVNVWklKL0tPOHM2MlF6K0VtZm0vRVJ4a1hPTkcwR1VvY1ViMGo1Q0tPbjV6?=
+ =?utf-8?B?WE5VeEwrNjdkZkVuOWhncnJCaEVBVTNOd29oY3BNZzBITnNoYVE2TTFjVUpV?=
+ =?utf-8?B?b091TytqejNkeFBmaXBGQTBkOTRUQ3BjUE9RWUVmWEJoeWkxWGxxOGF0Nml6?=
+ =?utf-8?B?anpDeVlncUx0dW9SNnNyUGpscFpvNXlKUk1CODlYR3E3amFVanRIamFMVGsz?=
+ =?utf-8?B?cU9veFptSTVTRGNQWXRDQUpOVXBhV1o1WDNNV1VBUE54YVIxeFJNNzlkWTFu?=
+ =?utf-8?B?RmEzMElRSFFhcEhtVTh4VmcrcS9qa2RacU1pckIyZmsycDlDVGxOaklmU1VZ?=
+ =?utf-8?B?ZVViUllNTGE3enpSUEpmeE5hMmJBSDZyTk5ZclY3ZVEwN0E0ZDBENGdjMHhy?=
+ =?utf-8?B?Wm5RaG5JcHVOMHNnZzYrZ0xoWWttL2pBbXJBZDBCQzA4THp5V0FWSkx6cXVP?=
+ =?utf-8?B?bGdyYnFmOG45NWNOY3huSXBGS2IzUHkzN1h5cVJiTkprTGJvMXBoU3VZM20w?=
+ =?utf-8?B?cnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DB6743EFC22D03468A43B4C3EB52272D@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250827175247.83322-2-shivankg@amd.com> <20250827175247.83322-7-shivankg@amd.com>
- <diqztt1sbd2v.fsf@google.com>
-Message-ID: <aNSt9QT8dmpDK1eE@google.com>
-Subject: Re: [PATCH kvm-next V11 4/7] KVM: guest_memfd: Use guest mem inodes
- instead of anonymous inodes
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Shivank Garg <shivankg@amd.com>, willy@infradead.org, akpm@linux-foundation.org, 
-	david@redhat.com, pbonzini@redhat.com, shuah@kernel.org, vbabka@suse.cz, 
-	brauner@kernel.org, viro@zeniv.linux.org.uk, dsterba@suse.com, 
-	xiang@kernel.org, chao@kernel.org, jaegeuk@kernel.org, clm@fb.com, 
-	josef@toxicpanda.com, kent.overstreet@linux.dev, zbestahu@gmail.com, 
-	jefflexu@linux.alibaba.com, dhavale@google.com, lihongbo22@huawei.com, 
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, rppt@kernel.org, 
-	surenb@google.com, mhocko@suse.com, ziy@nvidia.com, matthew.brost@intel.com, 
-	joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com, 
-	gourry@gourry.net, ying.huang@linux.alibaba.com, apopple@nvidia.com, 
-	tabba@google.com, paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
-	pvorel@suse.cz, bfoster@redhat.com, vannapurve@google.com, chao.gao@intel.com, 
-	bharata@amd.com, nikunj@amd.com, michael.day@amd.com, shdhiman@amd.com, 
-	yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com, thomas.lendacky@amd.com, 
-	michael.roth@amd.com, aik@amd.com, jgg@nvidia.com, kalyazin@amazon.com, 
-	peterx@redhat.com, jack@suse.cz, hch@infradead.org, cgzones@googlemail.com, 
-	ira.weiny@intel.com, rientjes@google.com, roypat@amazon.co.uk, 
-	chao.p.peng@intel.com, amit@infradead.org, ddutile@redhat.com, 
-	dan.j.williams@intel.com, ashish.kalra@amd.com, gshan@redhat.com, 
-	jgowans@amazon.com, pankaj.gupta@amd.com, papaluri@amd.com, yuzhao@google.com, 
-	suzuki.poulose@arm.com, quic_eberman@quicinc.com, 
-	linux-bcachefs@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	uWj7LVIkiaLwecF7uJj26djn1mtMPR3r7YOAJNhKEY/htkO7bVFTvftphb2ArzPmizDVYhU31o1E1R/8QY8bBrbnhm+ktDB8KvfcvNaTICQHeSVDtLj+b+b0AiLhY8SbFIab1fMr+NuPi7ixy10rVYeDtW+Wv3k2VQYPaH+UtRINNY18S4MMI95WjInT9/cuRxXf12lis//zfd/KeG1w5B3HFnV4qVqyptgAsuqslZPYtQxXZypJfCP5jdINRylXVTcxy+SJ4Rl0sfCrOmmgW7y0mwlgePscjwVULXDkAAMiqsQHsWdM98zFp+FSQhSEHmubEltBeHDi/BJcT6LoNCnbLT7DVy7tmofjrMfJBFp2z9g0BB+Yd1NMmePcyGolgEic0i3p353+8j2f424wKS93UY7axTgsteH8SW/x1Jl3OqPKBJS/bo7elU58RMn5NOmvgiqlcBwdfEnuiKlAAmSysW4nbthdsrsnHSDMLunt1UAS3qVPfBGFBQpGzxN040gSZ1IpPVCXaEgkH4BHSIm7HKjpTIbxdUdX21EFhH+d8tcZWXwS+Kcta9Jpr4WM6mreZ0ltqbisy0y8BH+BvQnmnSVdbb/HSfKybRdWii81LXqjuQ19op8sKIbfJPQw
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB8549.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 777a0e8d-1119-4710-7bca-08ddfbf2b7ec
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Sep 2025 05:16:44.2793
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: R7pBclVebrYXb3iOhttxGAbTltXdrErx6DialnDEIVqI5VWozlXM43LHjerreaJg8ROgvpENpausbnbSqMxABg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR04MB8653
 
-My apologies for the super late feedback.  None of this is critical (mechanical
-things that can be cleaned up after the fact), so if there's any urgency to
-getting this series into 6.18, just ignore it.
-
-On Wed, Aug 27, 2025, Ackerley Tng wrote:
-> Shivank Garg <shivankg@amd.com> writes:
-> @@ -463,11 +502,70 @@ bool __weak kvm_arch_supports_gmem_mmap(struct kvm *kvm)
->  	return true;
->  }
-> 
-> +static struct inode *kvm_gmem_inode_create(const char *name, loff_t size,
-> +					   u64 flags)
-> +{
-> +	struct inode *inode;
-> +
-> +	inode = anon_inode_make_secure_inode(kvm_gmem_mnt->mnt_sb, name, NULL);
-> +	if (IS_ERR(inode))
-> +		return inode;
-> +
-> +	inode->i_private = (void *)(unsigned long)flags;
-> +	inode->i_op = &kvm_gmem_iops;
-> +	inode->i_mapping->a_ops = &kvm_gmem_aops;
-> +	inode->i_mode |= S_IFREG;
-> +	inode->i_size = size;
-> +	mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
-> +	mapping_set_inaccessible(inode->i_mapping);
-> +	/* Unmovable mappings are supposed to be marked unevictable as well. */
-> +	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
-> +
-> +	return inode;
-> +}
-> +
-> +static struct file *kvm_gmem_inode_create_getfile(void *priv, loff_t size,
-> +						  u64 flags)
-> +{
-> +	static const char *name = "[kvm-gmem]";
-> +	struct inode *inode;
-> +	struct file *file;
-> +	int err;
-> +
-> +	err = -ENOENT;
-> +	/* __fput() will take care of fops_put(). */
-> +	if (!fops_get(&kvm_gmem_fops))
-> +		goto err;
-> +
-> +	inode = kvm_gmem_inode_create(name, size, flags);
-> +	if (IS_ERR(inode)) {
-> +		err = PTR_ERR(inode);
-> +		goto err_fops_put;
-> +	}
-> +
-> +	file = alloc_file_pseudo(inode, kvm_gmem_mnt, name, O_RDWR,
-> +				 &kvm_gmem_fops);
-> +	if (IS_ERR(file)) {
-> +		err = PTR_ERR(file);
-> +		goto err_put_inode;
-> +	}
-> +
-> +	file->f_flags |= O_LARGEFILE;
-> +	file->private_data = priv;
-> +
-> +	return file;
-> +
-> +err_put_inode:
-> +	iput(inode);
-> +err_fops_put:
-> +	fops_put(&kvm_gmem_fops);
-> +err:
-> +	return ERR_PTR(err);
-> +}
-
-I don't see any reason to add two helpers.  It requires quite a bit more lines
-of code due to adding more error paths and local variables, and IMO doesn't make
-the code any easier to read.
-
-Passing in "gmem" as @priv is especially ridiculous, as it adds code and
-obfuscates what file->private_data is set to.
-
-I get the sense that the code was written to be a "replacement" for common APIs,
-but that is nonsensical (no pun intended).
-
->  static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
->  {
-> -	const char *anon_name = "[kvm-gmem]";
->  	struct kvm_gmem *gmem;
-> -	struct inode *inode;
->  	struct file *file;
->  	int fd, err;
-> 
-> @@ -481,32 +579,16 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
->  		goto err_fd;
->  	}
-> 
-> -	file = anon_inode_create_getfile(anon_name, &kvm_gmem_fops, gmem,
-> -					 O_RDWR, NULL);
-> +	file = kvm_gmem_inode_create_getfile(gmem, size, flags);
->  	if (IS_ERR(file)) {
->  		err = PTR_ERR(file);
->  		goto err_gmem;
->  	}
-> 
-> -	file->f_flags |= O_LARGEFILE;
-> -
-> -	inode = file->f_inode;
-> -	WARN_ON(file->f_mapping != inode->i_mapping);
-> -
-> -	inode->i_private = (void *)(unsigned long)flags;
-> -	inode->i_op = &kvm_gmem_iops;
-> -	inode->i_mapping->a_ops = &kvm_gmem_aops;
-> -	inode->i_mode |= S_IFREG;
-> -	inode->i_size = size;
-> -	mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
-> -	mapping_set_inaccessible(inode->i_mapping);
-> -	/* Unmovable mappings are supposed to be marked unevictable as well. */
-> -	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
-> -
->  	kvm_get_kvm(kvm);
->  	gmem->kvm = kvm;
->  	xa_init(&gmem->bindings);
-> -	list_add(&gmem->entry, &inode->i_mapping->i_private_list);
-> +	list_add(&gmem->entry, &file_inode(file)->i_mapping->i_private_list);
-
-I don't understand this change?  Isn't file_inode(file) == inode?
-
-Compile tested only, and again not critical, but it's -40 LoC...
-
-
----
- include/uapi/linux/magic.h |  1 +
- virt/kvm/guest_memfd.c     | 75 ++++++++++++++++++++++++++++++++------
- virt/kvm/kvm_main.c        |  7 +++-
- virt/kvm/kvm_mm.h          |  9 +++--
- 4 files changed, 76 insertions(+), 16 deletions(-)
-
-diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
-index bb575f3ab45e..638ca21b7a90 100644
---- a/include/uapi/linux/magic.h
-+++ b/include/uapi/linux/magic.h
-@@ -103,5 +103,6 @@
- #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
- #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
- #define PID_FS_MAGIC		0x50494446	/* "PIDF" */
-+#define GUEST_MEMFD_MAGIC	0x474d454d	/* "GMEM" */
- 
- #endif /* __LINUX_MAGIC_H__ */
-diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index 08a6bc7d25b6..73c9791879d5 100644
---- a/virt/kvm/guest_memfd.c
-+++ b/virt/kvm/guest_memfd.c
-@@ -1,12 +1,16 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <linux/anon_inodes.h>
- #include <linux/backing-dev.h>
- #include <linux/falloc.h>
-+#include <linux/fs.h>
- #include <linux/kvm_host.h>
-+#include <linux/pseudo_fs.h>
- #include <linux/pagemap.h>
--#include <linux/anon_inodes.h>
- 
- #include "kvm_mm.h"
- 
-+static struct vfsmount *kvm_gmem_mnt;
-+
- struct kvm_gmem {
- 	struct kvm *kvm;
- 	struct xarray bindings;
-@@ -385,9 +389,45 @@ static struct file_operations kvm_gmem_fops = {
- 	.fallocate	= kvm_gmem_fallocate,
- };
- 
--void kvm_gmem_init(struct module *module)
-+static int kvm_gmem_init_fs_context(struct fs_context *fc)
-+{
-+	if (!init_pseudo(fc, GUEST_MEMFD_MAGIC))
-+		return -ENOMEM;
-+
-+	fc->s_iflags |= SB_I_NOEXEC;
-+	fc->s_iflags |= SB_I_NODEV;
-+
-+	return 0;
-+}
-+
-+static struct file_system_type kvm_gmem_fs = {
-+	.name		 = "guest_memfd",
-+	.init_fs_context = kvm_gmem_init_fs_context,
-+	.kill_sb	 = kill_anon_super,
-+};
-+
-+static int kvm_gmem_init_mount(void)
-+{
-+	kvm_gmem_mnt = kern_mount(&kvm_gmem_fs);
-+
-+	if (IS_ERR(kvm_gmem_mnt))
-+		return PTR_ERR(kvm_gmem_mnt);
-+
-+	kvm_gmem_mnt->mnt_flags |= MNT_NOEXEC;
-+	return 0;
-+}
-+
-+int kvm_gmem_init(struct module *module)
- {
- 	kvm_gmem_fops.owner = module;
-+
-+	return kvm_gmem_init_mount();
-+}
-+
-+void kvm_gmem_exit(void)
-+{
-+	kern_unmount(kvm_gmem_mnt);
-+	kvm_gmem_mnt = NULL;
- }
- 
- static int kvm_gmem_migrate_folio(struct address_space *mapping,
-@@ -465,7 +505,7 @@ bool __weak kvm_arch_supports_gmem_mmap(struct kvm *kvm)
- 
- static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
- {
--	const char *anon_name = "[kvm-gmem]";
-+	static const char *name = "[kvm-gmem]";
- 	struct kvm_gmem *gmem;
- 	struct inode *inode;
- 	struct file *file;
-@@ -481,17 +521,17 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
- 		goto err_fd;
- 	}
- 
--	file = anon_inode_create_getfile(anon_name, &kvm_gmem_fops, gmem,
--					 O_RDWR, NULL);
--	if (IS_ERR(file)) {
--		err = PTR_ERR(file);
-+	/* __fput() will take care of fops_put(). */
-+	if (!fops_get(&kvm_gmem_fops)) {
-+		err = -ENOENT;
- 		goto err_gmem;
- 	}
- 
--	file->f_flags |= O_LARGEFILE;
--
--	inode = file->f_inode;
--	WARN_ON(file->f_mapping != inode->i_mapping);
-+	inode = anon_inode_make_secure_inode(kvm_gmem_mnt->mnt_sb, name, NULL);
-+	if (IS_ERR(inode)) {
-+		err = PTR_ERR(inode);
-+		goto err_fops;
-+	}
- 
- 	inode->i_private = (void *)(unsigned long)flags;
- 	inode->i_op = &kvm_gmem_iops;
-@@ -503,6 +543,15 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
- 	/* Unmovable mappings are supposed to be marked unevictable as well. */
- 	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
- 
-+	file = alloc_file_pseudo(inode, kvm_gmem_mnt, name, O_RDWR, &kvm_gmem_fops);
-+	if (IS_ERR(file)) {
-+		err = PTR_ERR(file);
-+		goto err_inode;
-+	}
-+
-+	file->f_flags |= O_LARGEFILE;
-+	file->private_data = gmem;
-+
- 	kvm_get_kvm(kvm);
- 	gmem->kvm = kvm;
- 	xa_init(&gmem->bindings);
-@@ -511,6 +560,10 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
- 	fd_install(fd, file);
- 	return fd;
- 
-+err_inode:
-+	iput(inode);
-+err_fops:
-+	fops_put(&kvm_gmem_fops);
- err_gmem:
- 	kfree(gmem);
- err_fd:
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 18f29ef93543..301d48d6e00d 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -6489,7 +6489,9 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- 	if (WARN_ON_ONCE(r))
- 		goto err_vfio;
- 
--	kvm_gmem_init(module);
-+	r = kvm_gmem_init(module);
-+	if (r)
-+		goto err_gmem;
- 
- 	r = kvm_init_virtualization();
- 	if (r)
-@@ -6510,6 +6512,8 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- err_register:
- 	kvm_uninit_virtualization();
- err_virt:
-+	kvm_gmem_exit();
-+err_gmem:
- 	kvm_vfio_ops_exit();
- err_vfio:
- 	kvm_async_pf_deinit();
-@@ -6541,6 +6545,7 @@ void kvm_exit(void)
- 	for_each_possible_cpu(cpu)
- 		free_cpumask_var(per_cpu(cpu_kick_mask, cpu));
- 	kmem_cache_destroy(kvm_vcpu_cache);
-+	kvm_gmem_exit();
- 	kvm_vfio_ops_exit();
- 	kvm_async_pf_deinit();
- 	kvm_irqfd_exit();
-diff --git a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
-index 31defb08ccba..9fcc5d5b7f8d 100644
---- a/virt/kvm/kvm_mm.h
-+++ b/virt/kvm/kvm_mm.h
-@@ -68,17 +68,18 @@ static inline void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm,
- #endif /* HAVE_KVM_PFNCACHE */
- 
- #ifdef CONFIG_KVM_GUEST_MEMFD
--void kvm_gmem_init(struct module *module);
-+int kvm_gmem_init(struct module *module);
-+void kvm_gmem_exit(void);
- int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *args);
- int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
- 		  unsigned int fd, loff_t offset);
- void kvm_gmem_unbind(struct kvm_memory_slot *slot);
- #else
--static inline void kvm_gmem_init(struct module *module)
-+static inline int kvm_gmem_init(struct module *module)
- {
--
-+	return 0;
- }
--
-+static inline void kvm_gmem_exit(void) {};
- static inline int kvm_gmem_bind(struct kvm *kvm,
- 					 struct kvm_memory_slot *slot,
- 					 unsigned int fd, loff_t offset)
-
-base-commit: d133892dddd6607de651b7e32510359a6af97c4c
---
+T24gV2VkLCAyMDI1LTA5LTI0IGF0IDE5OjUwICswMjAwLCBTYWJyaW5hIER1YnJvY2Egd3JvdGU6
+DQo+IFtnb3QgYSBiaXQgZGlzdHJhY3RlZCB3aGlsZSB3cml0aW5nIHRoaXMgc28gU2ltb24gZ290
+IHRvIHRoZSBwcm9jZXNzDQo+IHN0dWZmIGJlZm9yZSBtZSwgYnV0IEknbGwgbGVhdmUgaXQgaW46
+XQ0KPiANCj4gQlRXLCBhIGZldyBkZXRhaWxzIGFib3V0IHByb2Nlc3M6IHNpbmNlIHRoaXMgaXMg
+YSBuZXcgZmVhdHVyZSwgdGhlDQo+IHN1YmplY3QgcHJlZml4IHNob3VsZCBiZSBbUEFUQ0ggbmV0
+LW5leHQgdjQgbi9tXSAobmV3IHN0dWZmIHRhcmdldHMNCj4gdGhlIG5ldC1uZXh0IHRyZWUpLCBh
+bmQgdGhlIHBhdGNoZXMgc2hvdWxkIGJlIGJhc2VkIG9uIHRoZSBuZXQtbmV4dA0KPiB0cmVlIFsx
+XSAoSSdtIG5vdCBzdXJlIHdoYXQgeW91IGJhc2VkIHRoaXMgb24sIGdpdCBhbSBjb21wbGFpbmVk
+IG9uDQo+IGJvdGggbmV0IGFuZCBuZXQtbmV4dCBmb3IgdGhpcyBwYXRjaCkuIE1vcmUgaW5mbyBh
+Ym91dCB0aGlzIGluIHRoZQ0KPiBkb2NzIFsyXS4NCj4gDQo+IFsxXQ0KPiBodHRwczovL2dpdC5r
+ZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9uZXRkZXYvbmV0LW5leHQuZ2l0Lw0K
+PiBbMl0gaHR0cHM6Ly9kb2NzLmtlcm5lbC5vcmcvcHJvY2Vzcy9tYWludGFpbmVyLW5ldGRldi5o
+dG1sDQo+IMKgwqDCoCAoaW4gY2FzZSB5b3UncmUgbm90IGF3YXJlOiBhbHNvIG5vdGUgdGhlIGJp
+dHMgYWJvdXQgIm1lcmdlDQo+IHdpbmRvdyINCj4gwqDCoMKgIHdoaWNoIHdpbGwgcXVpdGUgbGlr
+ZWx5IGJlY29tZSByZWxldmFudCBpbiBhIGZldyBkYXlzKQ0KPiANClRoYW5rcyEgSSB3aWxsIHJl
+YmFzZSB0aGlzIG9uIFsxXSBmb3IgVjUgd2l0aCB0aGUgY2hhbmdlcyB5b3UNCnNwZWNpZmllZC4N
+Cj4gDQo+IDIwMjUtMDktMjMsIDE1OjMyOjA3ICsxMDAwLCBXaWxmcmVkIE1hbGxhd2Egd3JvdGU6
+DQo+ID4gRnJvbTogV2lsZnJlZCBNYWxsYXdhIDx3aWxmcmVkLm1hbGxhd2FAd2RjLmNvbT4NCj4g
+PiANCj4gPiBUZXN0IHRoYXQgb3V0Z29pbmcgcGxhaW50ZXh0IHJlY29yZHMgcmVzcGVjdCB0aGUg
+dGxzDQo+ID4gcmVjb3JkX3NpemVfbGltaXQNCj4gPiBzZXQgdXNpbmcgc2V0c29ja29wdCgpLiBU
+aGUgcmVjb3JkIHNpemUgbGltaXQgaXMgc2V0IHRvIGJlIDEyOCwNCj4gPiB0aHVzLA0KPiA+IGlu
+IGFsbCByZWNlaXZlZCByZWNvcmRzLCB0aGUgcGxhaW50ZXh0IG11c3Qgbm90IGV4Y2VlZCB0aGlz
+IGFtb3VudC4NCj4gPiANCj4gPiBBbHNvIHRlc3QgdGhhdCBzZXR0aW5nIGEgbmV3IHJlY29yZCBz
+aXplIGxpbWl0IHdoaWxzdCBhIHBlbmRpbmcNCj4gPiBvcGVuDQo+ID4gcmVjb3JkIGV4aXN0cyBp
+cyBoYW5kbGVkIGNvcnJlY3RseSBieSBkaXNjYXJkaW5nIHRoZSByZXF1ZXN0Lg0KPiA+IA0KPiA+
+IFN1Z2dlc3RlZC1ieTogU2FicmluYSBEdWJyb2NhIDxzZEBxdWVhc3lzbmFpbC5uZXQ+DQo+ID4g
+U2lnbmVkLW9mZi1ieTogV2lsZnJlZCBNYWxsYXdhIDx3aWxmcmVkLm1hbGxhd2FAd2RjLmNvbT4N
+Cj4gDQo+IFRoYW5rcyBmb3IgYWRkaW5nIHRoaXMgcGF0Y2guDQo+IChhbmQgZm9yIHRoZSB0YWcg
+OikpDQo+IA0KPiA+IC0tLQ0KPiA+IMKgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0L3Rscy5j
+IHwgMTQ5DQo+ID4gKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gwqAxIGZpbGUg
+Y2hhbmdlZCwgMTQ5IGluc2VydGlvbnMoKykNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMv
+dGVzdGluZy9zZWxmdGVzdHMvbmV0L3Rscy5jDQo+ID4gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
+cy9uZXQvdGxzLmMNCj4gPiBpbmRleCAwZjU2NDBkOGRjN2YuLmM1YmQ0MzFkNWFmMyAxMDA2NDQN
+Cj4gPiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQvdGxzLmMNCj4gPiArKysgYi90
+b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQvdGxzLmMNCj4gPiBAQCAtMjQsNiArMjQsNyBAQA0K
+PiA+IMKgI2luY2x1ZGUgIi4uL2tzZWxmdGVzdF9oYXJuZXNzLmgiDQo+ID4gwqANCj4gPiDCoCNk
+ZWZpbmUgVExTX1BBWUxPQURfTUFYX0xFTiAxNjM4NA0KPiA+ICsjZGVmaW5lIFRMU19UWF9SRUNP
+UkRfU0laRV9MSU0gNQ0KPiANCj4gbml0OiBUaGF0IHNob3VsZCBub3QgYmUgbmVlZGVkIGlmIHlv
+dSBydW4gYG1ha2UgaGVhZGVyc19pbnN0YWxsYA0KPiBiZWZvcmUgY29tcGlsaW5nIHRoZSBzZWxm
+dGVzdDoNCj4gDQo+IG1ha2UgLXMgaGVhZGVyc19pbnN0YWxsIDsgbWFrZSAtQyB0b29scy90ZXN0
+aW5nL3NlbGZ0ZXN0cy9uZXQgdGxzDQo+IG1ha2U6IEVudGVyaW5nIGRpcmVjdG9yeQ0KPiAnL2hv
+bWUvc2FiL2xpbnV4L25ldC90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQnDQo+IGdjYyAtV2Fs
+bCAtV2wsLS1uby1hcy1uZWVkZWQgLU8yIC1nIC1JLi4vLi4vLi4vLi4vdXNyL2luY2x1ZGUvIC0N
+Cj4gaXN5c3RlbQ0KPiAvaG9tZS9zYWIvbGludXgvbmV0L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+Ly4uLy4uLy4uL3Vzci9pbmNsdWRlIC0NCj4gSS4uLyAtRF9HTlVfU09VUkNFPcKgwqDCoMKgIHRs
+cy5jwqDCoCAtbyB0bHMNCj4gDQo+IGFuZCB0aGF0IHdpbGwgZmluZCB0aGUgbmV3IGNvbnN0YW50
+IGRlZmluZWQgaW4gdGhlIHByZXZpb3VzIHBhdGNoDQo+IHVzaW5nIHRoZSBoZWFkZXJzIGZyb20g
+dGhlIGN1cnJlbnQga2VybmVsIHRyZWUsIGluc3RlYWQgb2YgdGhvc2UgaW4NCj4gdGhlIHN5c3Rl
+bS4NCj4gDQpUaGFua3MhDQo+IA0KPiBbLi4uXQ0KPiA+ICtURVNUKHR4X3JlY29yZF9zaXplKQ0K
+PiA+ICt7DQo+ID4gKwlzdHJ1Y3QgdGxzX2NyeXB0b19pbmZvX2tleXMgdGxzMTI7DQo+ID4gKwlp
+bnQgY2ZkLCByZXQsIGZkLCByeF9sZW4sIG92ZXJoZWFkOw0KPiA+ICsJc2l6ZV90IHRvdGFsX3Bs
+YWludGV4dF9yeCA9IDA7DQo+ID4gKwlfX3U4IHR4WzEwMjRdLCByeFsyMDAwXTsNCj4gPiArCV9f
+dTggKnJlYzsNCj4gPiArCV9fdTE2IGxpbWl0ID0gMTI4Ow0KPiA+ICsJX191MTYgb3B0ID0gMDsN
+Cj4gPiArCV9fdTggcmVjX2hlYWRlcl9sZW4gPSA1Ow0KPiANCj4gZ2NjIGNvbXBsYWlucyBhYm91
+dCB1bnVzZWQgdmFyaWFibGVzLCBJIGd1ZXNzIGxlZnRvdmVycyBmcm9tDQo+IGV4dHJhY3Rpbmcg
+cGFyc2VfdGxzX3JlY29yZHM6DQo+IA0KPiB0bHMuYzogSW4gZnVuY3Rpb24g4oCYdHhfcmVjb3Jk
+X3NpemXigJk6DQo+IHRscy5jOjI4NDA6MTQ6IHdhcm5pbmc6IHVudXNlZCB2YXJpYWJsZSDigJhy
+ZWNfaGVhZGVyX2xlbuKAmSBbLVd1bnVzZWQtDQo+IHZhcmlhYmxlXQ0KPiDCoDI4NDAgfMKgwqDC
+oMKgwqDCoMKgwqAgX191OCByZWNfaGVhZGVyX2xlbiA9IDU7DQo+IMKgwqDCoMKgwqAgfMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIF5+fn5+fn5+fn5+fn5+DQo+IHRscy5jOjI4Mzc6MTU6IHdh
+cm5pbmc6IHVudXNlZCB2YXJpYWJsZSDigJhyZWPigJkgWy1XdW51c2VkLXZhcmlhYmxlXQ0KPiDC
+oDI4MzcgfMKgwqDCoMKgwqDCoMKgwqAgX191OCAqcmVjOw0KPiDCoMKgwqDCoMKgIHzCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIF5+fg0KPiB0bHMuYzogSW4gZnVuY3Rpb24g4oCYdHhfcmVj
+b3JkX3NpemVfb3Blbl9yZWPigJk6DQo+IHRscy5jOjI4OTM6MTQ6IHdhcm5pbmc6IHVudXNlZCB2
+YXJpYWJsZSDigJhyZWNfaGVhZGVyX2xlbuKAmSBbLVd1bnVzZWQtDQo+IHZhcmlhYmxlXQ0KPiDC
+oDI4OTMgfMKgwqDCoMKgwqDCoMKgwqAgX191OCByZWNfaGVhZGVyX2xlbiA9IDU7DQo+IMKgwqDC
+oMKgwqAgfMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF5+fn5+fn5+fn5+fn5+DQo+IHRscy5j
+OjI4OTE6MTU6IHdhcm5pbmc6IHVudXNlZCB2YXJpYWJsZSDigJhyZWPigJkgWy1XdW51c2VkLXZh
+cmlhYmxlXQ0KPiDCoDI4OTEgfMKgwqDCoMKgwqDCoMKgwqAgX191OCAqcmVjOw0KPiDCoMKgwqDC
+oMKgIHzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF5+fg0KPiANCj4gDQo+ID4gKwl1bnNp
+Z25lZCBpbnQgb3B0bGVuID0gc2l6ZW9mKG9wdCk7DQo+ID4gKwlib29sIG5vdGxzOw0KPiA+ICsN
+Cj4gPiArCXRsc19jcnlwdG9faW5mb19pbml0KFRMU18xXzJfVkVSU0lPTiwNCj4gPiBUTFNfQ0lQ
+SEVSX0FFU19DQ01fMTI4LA0KPiA+ICsJCQnCoMKgwqDCoCAmdGxzMTIsIDApOw0KPiA+ICsNCj4g
+PiArCXVscF9zb2NrX3BhaXIoX21ldGFkYXRhLCAmZmQsICZjZmQsICZub3Rscyk7DQo+ID4gKw0K
+PiA+ICsJaWYgKG5vdGxzKQ0KPiA+ICsJCWV4aXQoS1NGVF9TS0lQKTsNCj4gPiArDQo+ID4gKwkv
+KiBEb24ndCBpbnN0YWxsIGtleXMgb24gZmQsIHdlJ2xsIHBhcnNlIHJhdyByZWNvcmRzICovDQo+
+ID4gKwlyZXQgPSBzZXRzb2Nrb3B0KGNmZCwgU09MX1RMUywgVExTX1RYLCAmdGxzMTIsIHRsczEy
+Lmxlbik7DQo+ID4gKwlBU1NFUlRfRVEocmV0LCAwKTsNCj4gPiArDQo+ID4gKwlyZXQgPSBzZXRz
+b2Nrb3B0KGNmZCwgU09MX1RMUywgVExTX1RYX1JFQ09SRF9TSVpFX0xJTSwNCj4gPiAmbGltaXQs
+IHNpemVvZihsaW1pdCkpOw0KPiA+ICsJQVNTRVJUX0VRKHJldCwgMCk7DQo+ID4gKw0KPiA+ICsJ
+cmV0ID0gZ2V0c29ja29wdChjZmQsIFNPTF9UTFMsIFRMU19UWF9SRUNPUkRfU0laRV9MSU0sDQo+
+ID4gJm9wdCwgJm9wdGxlbik7DQo+ID4gKwlBU1NFUlRfRVEocmV0LCAwKTsNCj4gPiArCUFTU0VS
+VF9FUShsaW1pdCwgb3B0KTsNCj4gPiArCUFTU0VSVF9FUShvcHRsZW4sIHNpemVvZihsaW1pdCkp
+Ow0KPiANCj4gbml0OiBNYXliZSBhIGZldyBvZiB0aG9zZSBzaG91bGQgYmUgRVhQRUNUX0VRPyAo
+QVNTRVJUXyogc3RvcHMgdGhlDQo+IHRlc3QsIEVYUEVDVF8qIHdpbGwgcnVuIHRoZSByZXN0IG9m
+IHRoZSB0ZXN0KQ0KPiANCj4gR2V0dGluZyB0aGUgd3JvbmcgdmFsdWUgYmFjayBmcm9tIHRoaXMg
+Z2V0c29ja29wdCBpcyB3b3J0aCBub3RpbmcgYnV0DQo+IHRoZXJlJ3MgdmFsdWUgaW4gcnVubmlu
+ZyB0aGUgdHJhZmZpYyB0aHJvdWdoIGFueXdheT8NCj4gDQo+ID4gKw0KPiA+ICsJbWVtc2V0KHR4
+LCAwLCBzaXplb2YodHgpKTsNCj4gPiArCUVYUEVDVF9FUShzZW5kKGNmZCwgdHgsIHNpemVvZih0
+eCksIDApLCBzaXplb2YodHgpKTsNCj4gDQo+IEJ1dCB0aGlzIG9uZSBzaG91bGQgbWF5YmUgYmUg
+YW4gQVNTRVJUIGJlY2F1c2UgdHJ5aW5nIHRvIHBhcnNlDQo+IHJlY29yZHMNCj4gZnJvbSB3aGF0
+ZXZlciBkYXRhIHdlIG1hbmFnZWQgdG8gc2VuZCAoaWYgYW55KSBtYXkgbm90IG1ha2UgbXVjaA0K
+PiBzZW5zZT8NCj4gDQo+IChqdXN0IHNvbWUgdGhvdWdodHMsIHRoaXMgaXMgbm90IGEgInN0cmlj
+dCByZXF1aXJlbWVudCIgdG8gY2hhbmdlDQo+IGFueXRoaW5nIGluIHRoZSBwYXRjaCkNCkdvb2Qg
+cG9pbnRzLCBJIHRoaW5rIHRoYXQgbWFrZXMgbW9yZSBzZW5zZS4NCg0KUmVnYXJkcywNCldpbGZy
+ZWQNCg==
 
