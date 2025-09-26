@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-42470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FABBBA3FBF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 15:56:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02A1BBA3FF2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 15:57:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABED33AFA99
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 13:55:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5FD57AF1AE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 13:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EA4C2FB08F;
-	Fri, 26 Sep 2025 13:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FC92FBDF0;
+	Fri, 26 Sep 2025 13:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GZ/YDxsK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nvM3Urmr"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C8E155C97;
-	Fri, 26 Sep 2025 13:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2992FAC12;
+	Fri, 26 Sep 2025 13:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758894842; cv=none; b=s6uouUfpUk/9n8/gRv5Po/9Iiv4I6Afn1oG/i5VCTagZ8RdyOlFdeN+S/vie40VRIqnBIUL/J7bdSpHSEBh0oZGBFNdMwjdraKaeebYthNgcCIH9GkDULmFkziplJ7xOmB9mti2Kope2wGlSe1L0B3YuSh74I9cWfApLnn0UR5U=
+	t=1758894853; cv=none; b=KYbV8/Biw6SKTmu3Ep9Eox09L+O+hZtSftdIP5C4t+A69srKEsSrrnZ8KdaZMFfm4E/dS5NvY3JiqgaG8IIglq0qjjIR4wh+0tInFO/ZAqa0tlcaaZBTvEHyOxvIwz4yHn6BKwani06YX0qGvE5uwqQKfEx9noNmZPxf7Qou6Do=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758894842; c=relaxed/simple;
-	bh=BMpYSNDUXl280WlvWVXfxBQPAyVBZcXaOcysZF/yMFs=;
+	s=arc-20240116; t=1758894853; c=relaxed/simple;
+	bh=reTwJtnJiaFvXZS4w2F+0OxQN0oWrN/MUgp/MOHPUAE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=POo13rL9rBANHx+kpT0OYFUlX3Q7xnb3qIZ6ZyVPI0Z9B6fS+J2CJT6PmDVNcTOaP4XeiL6QIApy5uZmG0HNGUWVMjDpZBErgA+HB17VzVC1elPcq/7pZbDKuxINAT8m8WC9BHcVm7qDjnHVacZVR5hFekaOmPSuN/RtxtDcp9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GZ/YDxsK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B34C6C116D0;
-	Fri, 26 Sep 2025 13:53:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=BtEwEZAPaZFN7sr9Mmf7sN5fVb8lNOcYlQWzhCmw6OFVU0tyWdUqh4qu5xL2skqbwtJlisJWvdNeSa6aPV1gbAwfXZ8cyfyrnzPdTtuAAlY0/TNnjjXS3fHWxzZcpbKeuJPZx79PnCl6s6SOAvT88ePTJumSzrrAE6e7H8hMzCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nvM3Urmr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8489FC4CEF4;
+	Fri, 26 Sep 2025 13:54:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758894841;
-	bh=BMpYSNDUXl280WlvWVXfxBQPAyVBZcXaOcysZF/yMFs=;
+	s=k20201202; t=1758894853;
+	bh=reTwJtnJiaFvXZS4w2F+0OxQN0oWrN/MUgp/MOHPUAE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GZ/YDxsKiLXAuUx+UQCDc9x0heZ8tAEY4UlUBBdhHqIQLhqS4jzN48pXunesfnbDU
-	 1h5OHCNb9JF69PmGbDIRruo/cdozS+OfLOloEvTHeJBViMOJUQHPqyTNQD0+sg6HZa
-	 K3fRZSDdW+9ejLvUepwsqcv1FgIdNlkpa3GZydpyszpckpufTt97O+J7FqLRuqRrh+
-	 v1cheK1q/xW62i0GmG9rtwnoUJGuOK7Ylmo2J4lWqI441MIEzB69xv0lWUZBQYE40e
-	 4W6Buv8aqOz2XqYsraheohjsBimofSCA7YVxJdZk0lfQemgTwYGABbrE8e4Pit/o5D
-	 Qhv5C/09SHY5g==
-Date: Fri, 26 Sep 2025 14:53:56 +0100
+	b=nvM3UrmrXxU0NooKLNEexv6iF5/dvimOyTv4SFZN86UmKsjQcbQxRDqxzPoUu7EDa
+	 JcxTd8x4fl0MIiQ7yaEmq4THzdQa0SQ9EfRgwf9mY7OCqX6gynVh5EJGW6ewbT1dZC
+	 P4k6lFxewTENUzTpYTkMVWykM5Guw+FV7VmTNcVdCFgj4hWzWt3Go75g9H4F4iUY9F
+	 AKRjyKPkA17WDKsn5eHHlhIXhevsJnIf/Gu7R/mwC8RogWmPc8KcrJWa8gwF249QrS
+	 p8q3OAGVJ/NyrSoUiYTEMfhePAGsEnIWqX4C+nuh2wsmFQVD7PCGGnuMgbnFe8mwJU
+	 9j52gHUipxuiQ==
+Date: Fri, 26 Sep 2025 14:54:09 +0100
 From: Simon Horman <horms@kernel.org>
 To: Petr Machata <petrm@nvidia.com>
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -51,11 +51,11 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Nikolay Aleksandrov <razor@blackwall.org>,
 	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
 	mlxsw@nvidia.com
-Subject: Re: [PATCH net-next 01/13] selftests: net: lib: Rename ip_link_add()
- to adf_*
-Message-ID: <aNaa9GnRPoEkwePj@horms.kernel.org>
+Subject: Re: [PATCH net-next 02/13] selftests: net: lib: Rename
+ ip_link_set_master() to adf_*
+Message-ID: <aNabAUTx8ZPtoFz3@horms.kernel.org>
 References: <cover.1758821127.git.petrm@nvidia.com>
- <0b163cca1bf2ec44270e0fc89108f488d99d9c9d.1758821127.git.petrm@nvidia.com>
+ <53ce64231faa1396a968b2869af5f1c0aebec2c9.1758821127.git.petrm@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,9 +64,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0b163cca1bf2ec44270e0fc89108f488d99d9c9d.1758821127.git.petrm@nvidia.com>
+In-Reply-To: <53ce64231faa1396a968b2869af5f1c0aebec2c9.1758821127.git.petrm@nvidia.com>
 
-On Thu, Sep 25, 2025 at 07:31:44PM +0200, Petr Machata wrote:
+On Thu, Sep 25, 2025 at 07:31:45PM +0200, Petr Machata wrote:
 > Rename this function to mark it as autodefer.
 > For details, see the discussion in the cover letter.
 > 
@@ -74,5 +74,4 @@ On Thu, Sep 25, 2025 at 07:31:44PM +0200, Petr Machata wrote:
 
 Reviewed-by: Simon Horman <horms@kernel.org>
 
-...
 
