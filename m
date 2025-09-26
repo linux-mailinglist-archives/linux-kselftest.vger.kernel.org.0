@@ -1,136 +1,116 @@
-Return-Path: <linux-kselftest+bounces-42440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD065BA28A2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 08:40:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A762FBA2914
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 08:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FE2C1C2375C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 06:40:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62EC756122C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 06:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2475427E06D;
-	Fri, 26 Sep 2025 06:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A6FA25DAEA;
+	Fri, 26 Sep 2025 06:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="n9pzeObF"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="SLCLAiPj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A334E27C150
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Sep 2025 06:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5808F6F;
+	Fri, 26 Sep 2025 06:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758868793; cv=none; b=OYi7gIvpUC2hf3ny1WS1EeXs6PWSLloVqWFnqbEiJMme6dtf/0IEwLkLSH3BbFI3B11zQ/2IQ3Uk7aOG2o/muMfAccMfHac4+f0tD+CZTryVhKceyA5Q9XBXSP0y9kxHSdUe/g9V52GPP9BUhCKpRf1eOK3FXc9QHL2h9bFXwg8=
+	t=1758869287; cv=none; b=gLb3dbRosgAgbKrx0akqPBrfwo2/WUJgfYEkf+ehGPNBoYt+HC2n6Ul29vVyTp2hF57lyzq3DD4nUPEx7lQUVUhh9qxfBVS9YhBCa0PDH3JJME+jEENpxdxe2uUKakWcK6sjN26e0aaK/04d006TDtYjTQr4UN/5Hcig9m4q0Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758868793; c=relaxed/simple;
-	bh=Cpbap+PDFOu/VEl1phJ1AaBhj44ckD2ndve8aVh1LpU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IEw6b3NNLoDW8k5jsfShjuS6f4rTrdZZgY5Jq3I5B2v+4WXee6Wr42/i5RUH9QS/ZCVT2yuloaZk8OkmOKkc+fDLUI1SxGbwXLahNJ79zFsyKiSLGkfXWe9lls5qEshB6s6TRXpF3pEqudvUtTzNVouTvTyQE4GVE7VmoPBE9N0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=n9pzeObF; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 14FD3C003F2;
-	Fri, 26 Sep 2025 06:39:26 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3ED3D606B5;
-	Fri, 26 Sep 2025 06:39:43 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 399E8102F1866;
-	Fri, 26 Sep 2025 08:39:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1758868781; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=14z+TiK5hRCFldcX29BYnmuev1AbaddAl5M7Wwnpuio=;
-	b=n9pzeObFQGhOsimHXI/Q2R5MmFDVYe7YeGAJUjDx9YdIooVqxZIhHuO1nD/e/D5hraeNp0
-	4n3HB4/ok//4cT5x1rXCethF0MoQSXvAOTMh3XgJaICaksphflgl2S987lxWSGeBYUALC/
-	zGTj31yB5SXNaOJhUi6sDbAFLmyGCaEAY+4X4F9UGTrJ0UiRT0s6HXcfLIdyKhI+yu1Ygz
-	Nq6dd9KrpXLOuNRZad4GOY7vJkFHoO9GGg8ElYQArHy8U7aY/S5e6lpduNBGTPG0oNfMpF
-	yj+KGv1qTYUPutnWbWxcJ0OtEWNthQSTNTNCEEtgR3DzfJhNeAY6Ur3DelHtOQ==
-Message-ID: <fd600cd5-062e-4806-9e8e-b7f6aacad242@bootlin.com>
-Date: Fri, 26 Sep 2025 08:39:28 +0200
+	s=arc-20240116; t=1758869287; c=relaxed/simple;
+	bh=+yA/JJLiAgN8GgnTni7nhwSz3g3A80NM5yHtKOcsFi4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fTxFIWTZB3VjOD/hJ7S+DheTs2dHnvAH2JFo2o40sJzZHhbJuYoQ3wNw7uZeoBORLG/btUef3nYfmpK9F0be4p0aOKZBV184rCY7aQxOzvqVyZJn1rrPHPTMGi7883q/zmMjmNrpsjEYs08gzSDodvv7SiMXxvkclU1t4E6hM4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=SLCLAiPj; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=K0XisOwhWijwoOa3QwHt0TYzTp5652DJvsJj1cLXIWI=; b=SLCLAiPj29jDcqxXPuaTmqA86E
+	5YmcTYDmxJWZjZSjr44Pk1Phg74DUVX3KVmfbihnjgyPkkhrddR2cb4g7bRYVYeHnbwLHoEHu4TGA
+	5rCvc/wxjMU5yrJeZHuGDwzKpI3ewlEIs0WF3FBP6kEYIP6FkKQgEOD3L7boKxClHGdvElFvN9X/u
+	OJXrFKYc0vg96vpJTd9SQak2y95eLkvlbZHuNJ2IJ0Z9fsQs/qq6hGyw6/mmjT0971eP5xwMq2rkW
+	IMy7tQl4gxCkaOaXfOHCroj5okY1+N48ltFUAD2yPc9t24nY/Mp6zRM0vgsvvr5QLF+53Hac1WiPg
+	kSjV3zLA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v22FO-00000000tSF-0E7U;
+	Fri, 26 Sep 2025 06:48:02 +0000
+Date: Fri, 26 Sep 2025 07:48:01 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Christian Brauner <brauner@kernel.org>
+Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	linux-fsdevel@vger.kernel.org, lkft-triage@lists.linaro.org,
+	Linux Regressions <regressions@lists.linux.dev>,
+	Jan Kara <jack@suse.cz>, Arnd Bergmann <arnd@arndb.de>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Ben Copeland <benjamin.copeland@linaro.org>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: next-20250924: Internal error: Oops: mnt_ns_release
+ (fs/namespace.c:148) __arm64_sys_listmount (fs/namespace.c:5936)
+Message-ID: <20250926064801.GE39973@ZenIV>
+References: <CA+G9fYueO8kP8mXVNmbHkyrFPKpt-onPfeyNXLuLGGjiO1WFfQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 04/15] selftests/bpf: test_xsk: fix memory
- leak in testapp_stats_rx_dropped()
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Jonathan Lemon <jonathan.lemon@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Alexis Lothore <alexis.lothore@bootlin.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250924-xsk-v4-0-20e57537b876@bootlin.com>
- <20250924-xsk-v4-4-20e57537b876@bootlin.com> <aNVEiTJywHNJeEzL@boxer>
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <aNVEiTJywHNJeEzL@boxer>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYueO8kP8mXVNmbHkyrFPKpt-onPfeyNXLuLGGjiO1WFfQ@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hi Maciej,
+On Fri, Sep 26, 2025 at 12:00:08AM +0530, Naresh Kamboju wrote:
 
-On 9/25/25 3:32 PM, Maciej Fijalkowski wrote:
-> On Wed, Sep 24, 2025 at 04:49:39PM +0200, Bastien Curutchet (eBPF Foundation) wrote:
->> testapp_stats_rx_dropped() generates pkt_stream twice. The last
->> generated is released by pkt_stream_restore_default() at the end of the
->> test but we lose the pointer of the first pkt_stream.
->>
->> Release the 'middle' pkt_stream when it's getting replaced to prevent
->> memory leaks.
->>
->> Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
->> ---
->>   tools/testing/selftests/bpf/test_xsk.c | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
->> index 8d7c38eb32ca3537cb019f120c3350ebd9f8c6bc..eb18288ea1e4aa1c9337d16333b7174ecaed0999 100644
->> --- a/tools/testing/selftests/bpf/test_xsk.c
->> +++ b/tools/testing/selftests/bpf/test_xsk.c
->> @@ -536,6 +536,13 @@ static void pkt_stream_receive_half(struct test_spec *test)
->>   	struct pkt_stream *pkt_stream = test->ifobj_tx->xsk->pkt_stream;
->>   	u32 i;
->>   
->> +	if (test->ifobj_rx->xsk->pkt_stream != test->rx_pkt_stream_default)
->> +		/* Packet stream has already been replaced so we have to release this one.
->> +		 * The newly created one will be freed by the restore_default() at the
->> +		 * end of the test
->> +		 */
->> +		pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
-> 
-> I don't see why this one is not addressed within test case
-> (testapp_stats_rx_dropped()) and other fix is (testapp_xdp_shared_umem()).
-> 
+[snip]
 
-pkt_stream_receive_half() can be used by other tests. I thought it would 
-be more convenient for people writing testapp_*() functions if they 
-didn't have to worry about releasing these kind of pointer themselves.
+With 59bfb6681680 "listmount: don't call path_put() under namespace semaphore"
+we get this:
 
-The same approach can't be used in testapp_xdp_shared_umem(), because we 
-need to wait for the test to complete before releasing the pointers.
+static void __free_klistmount_free(const struct klistmount *kls)
+{
+	path_put(&kls->root);
+	kvfree(kls->kmnt_ids);
+	mnt_ns_release(kls->ns);
+}
 
+...
 
--- 
-Bastien Curutchet, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+SYSCALL_DEFINE4(listmount, const struct mnt_id_req __user *, req,
+		u64 __user *, mnt_ids, size_t, nr_mnt_ids, unsigned int, flags)
+{
+	struct klistmount kls __free(klistmount_free) = {};
+	const size_t maxcount = 1000000;
+	struct mnt_id_req kreq;
+	ssize_t ret;
+		   
+	if (flags & ~LISTMOUNT_REVERSE)
+		return -EINVAL;
 
+which will oops if it takes that failure exit - if you are initializing
+something with any kind of cleanup on it, you'd better make sure
+the cleanup will survive being called for the initial value...
+
+Christian, that's your branch and I don't want to play with rebasing
+it - had it been mine, the fix would be folded into commit in question,
+with the rest of the branch cherry-picked on top of fixed commit,
+but everyone got their own preferences in how to do such stuff.
+
+Minimal fix would be to make mnt_ns_release(NULL) a no-op.
+
+BTW, I suspect that one of the sources of confusion had been the fact that
+__free(mnt_ns_release) *does* treat NULL as no-op; in statmount(2) you
+are using that and get away with NULL as initializer.  In listmount(2)),
+OTOH, you are dealing with the function call - same identifier, different
+behaviour...
 
