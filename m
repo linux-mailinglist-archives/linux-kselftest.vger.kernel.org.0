@@ -1,173 +1,151 @@
-Return-Path: <linux-kselftest+bounces-42451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42453-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CBD5BA3096
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 11:00:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 177A6BA337D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 11:47:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2840F4C0F8E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 09:00:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DE7F1B2843F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 09:47:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 463D329B8CF;
-	Fri, 26 Sep 2025 09:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B782BDC03;
+	Fri, 26 Sep 2025 09:46:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/RKfhzK"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HbHlnkNU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18670F4F1;
-	Fri, 26 Sep 2025 08:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B4A2BE041
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Sep 2025 09:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758877200; cv=none; b=mav6V2l/Wc8z/dnZ6WaijvW/6Fun8ng2ziD4TjTsnbW1wjbm7caJZaqBxgmtvDUL2dN5wB3ujgvtUKMeWIR6Nx5Iilpx5BOP/uwzkOgpJkz0g4OOBlkNyPlpDQ6ozMTY5W35/jgcR4e8znp5KS9cFX+3gf68bz588AMFk1L9hyY=
+	t=1758879999; cv=none; b=QXQbKXeMWj6079yDcPCRdta2LeBHykLot0WpaTBsLCPkBzsHLVJGDIUHX7j8yJQvFDxExm8zK6somuMGNrvida4MUuPXpyWnJbOowcB/6aEfAipA4Xe11Tzl9B76+fKDcJQ46/lIFU45ulV4pOvuF6FagI4/o3dLqwod6L9+jmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758877200; c=relaxed/simple;
-	bh=L0oABFhpwRrsTJJhUFzKMLEuhir4Lfkj64YL/jUGDeU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ag5YBmtV3Ng2K5p2fYIn3q9JesbOKHpHRRfEEFD4ItEsJ5K/q8cTpzjvcXUWteFEiEhDwNZZxpOl1YU7puGCgdYDjR/LOghghAZto8ZjbxQrLv1rARE6AqRtuPhbyf4XL56ipHcDIZRRjsA8mvtnG1Yho53heA/wjWAsW/51+cU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R/RKfhzK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CFC2C4CEF5;
-	Fri, 26 Sep 2025 08:59:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758877199;
-	bh=L0oABFhpwRrsTJJhUFzKMLEuhir4Lfkj64YL/jUGDeU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R/RKfhzKCAHUUHOUZQQWDSgUR4W9XLp4aoZd/Afp2edAjWaep1kDpOlJX2gReYj2A
-	 jKLIeyPDMVYtUt74x3sHfkfe4kqaSnD5spOFAIO0nG5UbVS9gtfc+apHJioZ/lv6s3
-	 otvv4LEC9cu1rolLxcTo1LCKrUGNMvPwD10gBAGJ+wNRJDKkRMqu+xtphkGmB2lxrr
-	 CFHNGXW+d37fQVoc+j+rvHWaYjntwimBQ0vKZViCqawTt1pUu+0lwg/php8jyujIeu
-	 rrqzPzV8NrRogP/53UvNcGN+1SbnoIyM2u3EPKUafk7ZTG0uc2cUz/AGqreYfF+FLp
-	 MdMhUzVHxolUw==
-Message-ID: <e03d6d69-73ea-46dc-b632-149ef5831f85@kernel.org>
-Date: Fri, 26 Sep 2025 10:59:51 +0200
+	s=arc-20240116; t=1758879999; c=relaxed/simple;
+	bh=kfIi6VrIE2lEa92dIkJL1fhpPaEmO6naVvpOiV6YbKc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jWyHx01lJbA9Y4sroFB/41wlg6Czj0pJAgqGIpl/mMi7Q05xYIsjZbY9+qZfjNkAGWGMbv0eTgqYsb75cXLyjhh6x+S0Q7e4UcRkn71FtLPz6cA+HKHphR2ZfhpLxYrTkU41UAW6SsNBmMF7h794xfDYYBJ1e6CAqs5lr1iNSug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HbHlnkNU; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758879996;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rSya+H0jA/G4MDTH6lvX00akKIqMxNianJVPL7t72DQ=;
+	b=HbHlnkNU6S+yt2Itxcmgvozny2o4nvxBbH8800hcldcFQirO/2N0aK2oZjsy2O3o+oEG6/
+	rYHoaKxZyTS+BseDvZ/vMZNuN86h9561UqTgonsUn1B7oDhgA+4PIgogbPkXiNfXfLH3x/
+	OqPOGYo+K3sks7elhvhD8uQeBhMvTn8=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-63-e4MAtEV7Mj2HfGs7lxr5tA-1; Fri,
+ 26 Sep 2025 05:46:32 -0400
+X-MC-Unique: e4MAtEV7Mj2HfGs7lxr5tA-1
+X-Mimecast-MFC-AGG-ID: e4MAtEV7Mj2HfGs7lxr5tA_1758879991
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70856195609F;
+	Fri, 26 Sep 2025 09:46:31 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb (unknown [10.45.225.225])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 84B9318003FC;
+	Fri, 26 Sep 2025 09:46:27 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Nam Cao <namcao@linutronix.de>
+Cc: Gabriele Monaco <gmonaco@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	John Kacur <jkacur@redhat.com>,
+	Waylon Cude <wcude@redhat.com>,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] selftests/verification: Add initial RV tests
+Date: Fri, 26 Sep 2025 11:46:11 +0200
+Message-ID: <20250926094613.34030-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next v2 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-To: Stanislav Fomichev <stfomichev@gmail.com>,
- Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-kselftest@vger.kernel.org
-References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
- <20250925-bpf-xdp-meta-rxcksum-v2-1-6b3fe987ce91@kernel.org>
- <aNYUqdaIJV1cvFCb@mini-arch>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <aNYUqdaIJV1cvFCb@mini-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+
+Add a series of tests to validate the RV tracefs API and basic
+functionality.
+
+* available monitors:
+    Check that all monitors (from the monitors folder) appear as
+    available and have a description. Works with nested monitors.
+
+* enable/disable:
+    Enable and disable all monitors and validate both the enabled file
+    and the enabled_monitors. Check that enabling container monitors
+    enables all nested monitors.
+
+* reactors:
+    Set all reactors and validate the setting, also for nested monitors.
+
+* wwnr with printk:
+    wwnr is broken on purpose, run it with a load and check that the
+    printk reactor works. Also validate disabling reacting_on or
+    monitoring_on prevents reactions.
+
+These tests use the ftracetest suite. The first patch of the series
+adapts ftracetest to make this possible.
+
+The enable/disable test cannot pass on upstream without the application
+of the fix in [1].
+
+[1] - https://lore.kernel.org/lkml/87tt0t4u19.fsf@yellow.woof
+
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Nam Cao <namcao@linutronix.de>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: John Kacur <jkacur@redhat.com>
+Cc: Waylon Cude <wcude@redhat.com>
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+Gabriele Monaco (2):
+  selftest/ftrace: Generalise ftracetest to use with RV
+  selftests/verification: Add initial RV tests
+
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/ftrace/ftracetest     | 34 ++++++---
+ .../ftrace/test.d/00basic/mount_options.tc    |  2 +-
+ .../testing/selftests/ftrace/test.d/functions |  6 +-
+ .../testing/selftests/verification/.gitignore |  2 +
+ tools/testing/selftests/verification/Makefile |  8 ++
+ tools/testing/selftests/verification/config   |  1 +
+ tools/testing/selftests/verification/settings |  1 +
+ .../selftests/verification/test.d/functions   | 39 ++++++++++
+ .../test.d/rv_monitor_enable_disable.tc       | 75 +++++++++++++++++++
+ .../verification/test.d/rv_monitor_reactor.tc | 68 +++++++++++++++++
+ .../test.d/rv_monitors_available.tc           | 18 +++++
+ .../verification/test.d/rv_wwnr_printk.tc     | 29 +++++++
+ .../verification/verificationtest-ktap        |  8 ++
+ 14 files changed, 278 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/verification/.gitignore
+ create mode 100644 tools/testing/selftests/verification/Makefile
+ create mode 100644 tools/testing/selftests/verification/config
+ create mode 100644 tools/testing/selftests/verification/settings
+ create mode 100644 tools/testing/selftests/verification/test.d/functions
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_monitors_available.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
+ create mode 100644 tools/testing/selftests/verification/verificationtest-ktap
 
 
-
-On 26/09/2025 06.20, Stanislav Fomichev wrote:
-> On 09/25, Lorenzo Bianconi wrote:
->> Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
->> checksum will be use by devices capable of exposing receive checksum
->> result via bpf_xdp_metadata_rx_checksum().
->> Moreover, introduce xmo_rx_checksum netdev callback in order allow the
->> eBPF program bounded to the device to retrieve the RX checksum result
->> computed by the hw NIC.
->>
->> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->> ---
->>   Documentation/netlink/specs/netdev.yaml |  5 +++++
->>   include/net/xdp.h                       | 14 ++++++++++++++
->>   net/core/xdp.c                          | 29 +++++++++++++++++++++++++++++
->>   3 files changed, 48 insertions(+)
->>
->> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
->> index e00d3fa1c152d7165e9485d6d383a2cc9cef7cfd..00699bf4a7fdb67c6b9ee3548098b0c933fd39a4 100644
->> --- a/Documentation/netlink/specs/netdev.yaml
->> +++ b/Documentation/netlink/specs/netdev.yaml
->> @@ -61,6 +61,11 @@ definitions:
->>           doc: |
->>             Device is capable of exposing receive packet VLAN tag via
->>             bpf_xdp_metadata_rx_vlan_tag().
->> +      -
->> +        name: checksum
->> +        doc: |
->> +          Device is capable of exposing receive checksum result via
->> +          bpf_xdp_metadata_rx_checksum().
->>     -
->>       type: flags
->>       name: xsk-flags
->> diff --git a/include/net/xdp.h b/include/net/xdp.h
->> index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2074b70618a9d4f32544d8b9a30b63 100644
->> --- a/include/net/xdp.h
->> +++ b/include/net/xdp.h
->> @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
->>   			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
->>   			   bpf_xdp_metadata_rx_vlan_tag, \
->>   			   xmo_rx_vlan_tag) \
->> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
->> +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
->> +			   bpf_xdp_metadata_rx_checksum, \
->> +			   xmo_rx_checksum)
->>   
->>   enum xdp_rx_metadata {
->>   #define XDP_METADATA_KFUNC(name, _, __, ___) name,
->> @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
->>   	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
->>   };
->>   
->> +enum xdp_checksum {
->> +	XDP_CHECKSUM_NONE		= CHECKSUM_NONE,
->> +	XDP_CHECKSUM_UNNECESSARY	= CHECKSUM_UNNECESSARY,
->> +	XDP_CHECKSUM_COMPLETE		= CHECKSUM_COMPLETE,
->> +	XDP_CHECKSUM_PARTIAL		= CHECKSUM_PARTIAL,
->> +};
-> 
-> Btw, might be worth mentioning, awhile ago we had settled on a smaller set of
-> exposed types:
-> 
-> https://lore.kernel.org/netdev/20230811161509.19722-13-larysa.zaremba@intel.com/
-> 
-> Maybe go through the previous postings and check if the arguments are
-> still relevant? (or explain why we want more checksum now)
-
-IHMO the linked proposal reduced the types too much.
-
-I think Lorenzo's suggested types are much better. One argument is of-
-cause that the types corresponds directly to the (time proven) types
-used by the SKB.
-
-I could argue, that we are lacking a type that indicate hardware
-"failed" to do the checksum, but that is indirectly covered by
-CHECKSUM_NONE case.  And having BPF-developers deal with both
-CHECKSUM_NONE and CHECKSUM_FAIL correctly is a recipe for bugs.
-
-I will explain in another email, why we need to document what
-CHECKSUM_NONE actually means.
-
---Jesper
-
-
-
-
-
+base-commit: cec1e6e5d1ab33403b809f79cd20d6aff124ccfe
+-- 
+2.51.0
 
 
