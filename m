@@ -1,89 +1,50 @@
-Return-Path: <linux-kselftest+bounces-42510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6357BA5343
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 23:27:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8F6EBA5379
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 23:31:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FE2D3251D2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 21:27:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17659188BFE6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Sep 2025 21:31:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B97327F01B;
-	Fri, 26 Sep 2025 21:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77EE63002CA;
+	Fri, 26 Sep 2025 21:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U2ik5e76"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u/e+NpXW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC7E283145
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Sep 2025 21:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381A528D8D1;
+	Fri, 26 Sep 2025 21:30:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758922023; cv=none; b=VKTm/sWBiOhzQBW8e06ox1yxh1GwimtU82/U1+mEfAKt9vCYSkxY7U6J5OmZcNAqlc3ctGInoYClB2g/2bK/g1NYugLPtOHjOpBS3/CEaFX2zarND+lPphtEQDbTkeooDyjXM34O9tOxcuHZcnf5B8GFCdzKc6ipudl5yyOalOk=
+	t=1758922213; cv=none; b=CDptWOF3/AHKp5oopicwqQj4aveIQB/NYFJzcyL+6+KmXREWvq61QuXD1bHFDyp5bDlYw/dMw95qwMQ2eCjmlwhRnXulXhyo9Kq8dXMhlsOPBYslOxN6vP8WjBQQprLS6z1XsBkLgL2IN1gIm2d4icSD7c5UR+wr9T86IRTXpjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758922023; c=relaxed/simple;
-	bh=G1cYqelfWjz3TjSh+JGPX14LLVReCZN0uMRhfP+qQ/I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p6lEJeErsRpF+jKO3PHf5yaq88Ul5nuIK/s46bYzDeoE28VxOKdxathiS3LPuncALmT/z9v3oQYs1c+Hi/PUehwawufsLaKUiZOeYmspXYyPEqIP/fbb+OxluYKz/rVivUMccK+9zfxZNkoQ7NIkOvxvLLjeeyENS220xU4HrXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U2ik5e76; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-b4ee87cc81eso2368573a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Sep 2025 14:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758922021; x=1759526821; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BgNilygMgwHdZEs1ZnH5984F+hiJNsFdGmwbqZj2EaU=;
-        b=U2ik5e76HuQGCQVSTsnTuSYVWnK2YhIa2FH9Pj6N+qtEL1P7CAwXdbSOWm14fjSUrp
-         A+LF3R/l7e97/SnAaPQ6D2L9FEjpb2lyFOdBDgscYQ+u2XH7jm+l4RQaaxV5aVIOwpdU
-         ZGtiQMmfcizNOMwFD69Kj1z+hjd6vv/2fDpysaqvsoeGVHz+hJ+ihP2+7gFoJ6HqLX8c
-         P2rq7MdWiqZZiFzMN/4hv2qj6t/iOjstct9xuBsdIRPkI/SR5zzKk67J6tCx5hHt/uWS
-         HiCxETx8kijpm7nQ2lSCD11S4lbhSmENRb4fYEVb7ILtxSEUv61qkj4k4EdznubDWyKG
-         OEAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758922021; x=1759526821;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BgNilygMgwHdZEs1ZnH5984F+hiJNsFdGmwbqZj2EaU=;
-        b=XNfiY/cNeFteatuaschROS801J5uft9OtbH5UwBZC9+hVrdSaB/RRVRW4rf63/dpLx
-         hEW8OOQRHBmtfD8HwbNNdepiJmQ6LCoIByZ+Tg8RN+CzITv8sCoJmzQJQ1eF5jHMhAwa
-         GCchePr6Bfqft5uRlogh0EBqH0xvL8mPTOblOpDRF7yIl/JEdhEEH9c6a1w06e/F9imy
-         ssyNwrwbmPrqwgj/AYmEkcFwc8zjRQ1PCorw5gmBOrbL9i/Jf5D9S18jPIRqbrLaTAYC
-         SNTatEt+T885ytUES+VVulszSXNPCG33XOYyIm2nWBaAKPIH9BR0EyekXOUir4ZV9ldG
-         zp8A==
-X-Forwarded-Encrypted: i=1; AJvYcCXGVrm/HQKlweCYfQT0YeNSohEClAN8Zp9eP8FMy6EnF3i2Wpx1A6FJbrKgwvAQk3WRVUTNfJFMbZMSE4trRek=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/1pumM+1ZwGXaDYym7PZgcTwty6oGE8F/eUfEl8ckGOLc2vkX
-	R8A2g3FmRdUMNcnykwhWdt68hUvPM+161D0bJ/wbydL5RFP5TD+R44t6
-X-Gm-Gg: ASbGncudhDC4PbGc0+DtYkCvEZc2//Gw9PbQ2eGGmbhx5uzq0XKZHIqEux/mAd+jdp1
-	WcI2k8aK4DazhvunG04uFWDh2TnrktAkxl2jYADPJR9ckUAHdRWtYwSQgM2Mu8mAPdwVUGpHvpd
-	LZEeRzRU514uOUOIq14QYB9uGixN3xpYvSZBYKzZu/QKTJyxVx4Hwf77o1UWNUu7H6sneerqyHE
-	++kYMpcGL2SUcfi/samV68GUkLM0o0GoJON0jtR+Ym4MsFL5QyWNrXyM/rrNkgiSpjDDfKUAb5B
-	0PxtR9oe7SOUORWC6k8dPVWwYr50IAukn1uy4Isd/n83Vdifdrr/9lWuiaMg+IrWd2Nzmzk44Vd
-	0x4GRPpaST6JXxb5dPza+2QsXMjCC
-X-Google-Smtp-Source: AGHT+IGTzlIKcFo4sqkt3yWBD+x+KPNdidVuwiGXfNI0rgF3mQzrIl9N7B2rNacRAdOjJu/uukKemA==
-X-Received: by 2002:a17:903:1a2b:b0:24c:ea17:e322 with SMTP id d9443c01a7336-27ed49df28dmr99920545ad.3.1758922021066;
-        Fri, 26 Sep 2025 14:27:01 -0700 (PDT)
-Received: from archlinux ([2406:7400:113:d078:5679:3e8d:9b65:9f1e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed671d8c6sm62722275ad.56.2025.09.26.14.26.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Sep 2025 14:27:00 -0700 (PDT)
-From: Madhur Kumar <madhurkumar004@gmail.com>
-To: shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Madhur Kumar <madhurkumar004@gmail.com>
-Subject: [PATCH v3 1/2] selftests/acct: add cleanup for leftover process_log binary
-Date: Sat, 27 Sep 2025 02:56:14 +0530
-Message-ID: <20250926212614.684998-1-madhurkumar004@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250922091042.149117-1-madhurkumar004@gmail.com>
-References: <20250922091042.149117-1-madhurkumar004@gmail.com>
+	s=arc-20240116; t=1758922213; c=relaxed/simple;
+	bh=iPBkIsznMKr6GtXKDcBN0UdYe1bAeiH4sQ8BicTV9/w=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=czowydIGg7wCaMmFJdrd0M9Qscb1AZxByrsIkUu3HD77Hpdp2hgNZJZhYMxOeu3gYw9x7oQN/b5D684GdMj3yc/Evcp6o/YD7wdCeBEq8+cmKEx4zKUgPJiHoSY+L4CYGXFsSbP7LaXJEflHFxLc4fir5OBCEBxliftwcHGt6jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u/e+NpXW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D97C4CEF4;
+	Fri, 26 Sep 2025 21:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758922212;
+	bh=iPBkIsznMKr6GtXKDcBN0UdYe1bAeiH4sQ8BicTV9/w=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=u/e+NpXWqolTyDMsYTuCGpT6LpTw4nsUIibAE1tOIsPJZpwoLVYQsmArkNOJo0+MJ
+	 52Ks5I08+L/BseLAFnRNf+RQohbixMoArmqTCbNoKIPZUsgO9nZ+gnOcz1wRV+YKMN
+	 ar44KBtL7WoC0OWLR8YrPsmm1jMFkYCcInzeTcdQ5EnFZYPxVoaEESPniliaxFXeAk
+	 uGj/hEWm8qlS8H35RfBu85jwatv0OHwI8Zirik3KQyR3uC0KCz79iKe5ubyeX7D+Md
+	 KxIs6X/OWRqxOyrSOs4YyjvHBBWRlR16KTM/VyjnshLzo9a6ImadUt8im3hjD1P0NB
+	 V+ZjBV2bkRNUw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 31E6039D0C3F;
+	Fri, 26 Sep 2025 21:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,38 +52,75 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: drv-net: Enable BTF
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175892220800.64518.6633677086051129890.git-patchwork-notify@kernel.org>
+Date: Fri, 26 Sep 2025 21:30:08 +0000
+References: <20250924222518.1826863-1-sdf@fomichev.me>
+In-Reply-To: <20250924222518.1826863-1-sdf@fomichev.me>
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch, shuah@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 
-The acct_syscall test generates a process_log binary after it runs,
-but this file is not removed by 'make kselftest-clean'. Add an
-EXTRA_CLEAN entry to ensure the binary gets cleaned up properly.
+Hello:
 
-Signed-off-by: Madhur Kumar <madhurkumar004@gmail.com>
----
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-v3:
-- refined changed log wording
-- Removed patch version info from commit log (kept only problem/fix).
+On Wed, 24 Sep 2025 15:25:18 -0700 you wrote:
+> Commit fec2e55bdef ("selftests: drv-net: Pull data before parsing headers")
+> added __ksym external symbol to xdp_native.bpf.c which now requires
+> a kernel with BTF. Enable BTF for driver selftests.
+> 
+> Before:
+> 
+>   # TAP version 13
+>   # 1..10
+>   # # Exception| Traceback (most recent call last):
+>   # # Exception|   File "/home/sdf/src/linux/tools/testing/selftests/net/lib/py/ksft.py", line 244, in ksft_run
+>   # # Exception|     case(*args)
+>   # # Exception|     ~~~~^^^^^^^
+>   # # Exception|   File "/home/sdf/src/linux/tools/testing/selftests/drivers/net/./xdp.py", line 231, in test_xdp_native_pass_sb
+>   # # Exception|     _test_pass(cfg, bpf_info, 256)
+>   # # Exception|     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+>   # # Exception|   File "/home/sdf/src/linux/tools/testing/selftests/drivers/net/./xdp.py", line 209, in _test_pass
+>   # # Exception|     prog_info = _load_xdp_prog(cfg, bpf_info)
+>   # # Exception|   File "/home/sdf/src/linux/tools/testing/selftests/drivers/net/./xdp.py", line 114, in _load_xdp_prog
+>   # # Exception|     cmd(
+>   # # Exception|     ~~~^
+>   # # Exception|     f"ip link set dev {cfg.ifname} mtu {bpf_info.mtu} xdpdrv obj {abs_path} sec {bpf_info.xdp_sec}",
+>   # # Exception|     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   # # Exception|     shell=True
+>   # # Exception|     ^^^^^^^^^^
+>   # # Exception|     )
+>   # # Exception|     ^
+>   # # Exception|   File "/home/sdf/src/linux/tools/testing/selftests/net/lib/py/utils.py", line 75, in __init__
+>   # # Exception|     self.process(terminate=False, fail=fail, timeout=timeout)
+>   # # Exception|     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   # # Exception|   File "/home/sdf/src/linux/tools/testing/selftests/net/lib/py/utils.py", line 95, in process
+>   # # Exception|     raise CmdExitFailure("Command failed: %s\nSTDOUT: %s\nSTDERR: %s" %
+>   # # Exception|                          (self.proc.args, stdout, stderr), self)
+>   # # Exception| net.lib.py.utils.CmdExitFailure: Command failed: ip link set dev eni30773np1 mtu 1500 xdpdrv obj /home/sdf/src/linux/tools/testing/selftests/net/lib/xdp_native.bpf.o sec xdp
+>   # # Exception| STDOUT: b''
+>   # # Exception| STDERR: b"libbpf: kernel BTF is missing at '/sys/kernel/btf/vmlinux', was CONFIG_DEBUG_INFO_BTF enabled?\nlibbpf: failed to find '.BTF' ELF section in /lib/modules/6.17.0-rc6-virtme/build/vmlinux\nlibbpf: failed to find valid kernel BTF\nlib
+>   bpf: Error loading vmlinux BTF: -3\nlibbpf: failed to load object '/home/sdf/src/linux/tools/testing/selftests/net/lib/xdp_native.bpf.o'\n"
+>   # not ok 1 xdp.test_xdp_native_pass_sb
+>   ...
+> 
+> [...]
 
-v2:
-- Fix newline issue at end of Makefile (caused add/delete in git diff)
-- Code otherwise unchanged
----
- tools/testing/selftests/acct/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+Here is the summary with links:
+  - [net-next] selftests: drv-net: Enable BTF
+    https://git.kernel.org/netdev/net-next/c/47f78a67d35e
 
-diff --git a/tools/testing/selftests/acct/Makefile b/tools/testing/selftests/acct/Makefile
-index 7e025099cf65..fd14128bbddb 100644
---- a/tools/testing/selftests/acct/Makefile
-+++ b/tools/testing/selftests/acct/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- TEST_GEN_PROGS := acct_syscall
- CFLAGS += -Wall
-+EXTRA_CLEAN := process_log
- 
- include ../lib.mk
-\ No newline at end of file
+You are awesome, thank you!
 -- 
-2.51.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
