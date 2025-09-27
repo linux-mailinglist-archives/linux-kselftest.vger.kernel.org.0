@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-42514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4133DBA56CB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Sep 2025 02:35:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49572BA56DD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Sep 2025 02:41:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9CF33B032C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Sep 2025 00:35:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F241B4C52C6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Sep 2025 00:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7D91D435F;
-	Sat, 27 Sep 2025 00:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0527B1D6193;
+	Sat, 27 Sep 2025 00:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O2AiDi3P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUxvY52P"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF854282E1;
-	Sat, 27 Sep 2025 00:35:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC307282E1;
+	Sat, 27 Sep 2025 00:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758933342; cv=none; b=YCKDKjeF72pZ5XFQJVhSLZP4aGaf2NhV+qLyMgPzq2qIhR3Pe66E86UvXvSunw4r90Azc99jcdGxDAGWe6RyNTuEovwJiklu2czTjmslfbwYr55h9g9Bzx/NXIJqA3CZ0fWkU4X29UJCcIPduepJA8H0B7dh01Oti9zQenZNlm4=
+	t=1758933680; cv=none; b=TG5veg4dR+FcR1I5Qn6m6OZDV2dLAlXxe7dbYuDJxAaZsn6EV5vV4dktnfdJNUQaLgXBAOTcT3zLHs6lkdT5FL4StsErbb8u68FSt4IgkxhYMWAprOIkTIgJFdBQIXUs7KihXz53CT1pGBzChYhpHnSxFOMm5Oa5e++GL6C6+OM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758933342; c=relaxed/simple;
-	bh=6LZQOG26MoTzz2WiVd7VfoJ2nPId6GoJXe3Q2HKktN8=;
+	s=arc-20240116; t=1758933680; c=relaxed/simple;
+	bh=g5wTDCdkm3VSKuvWD/nVJLosXsdzTuSUkxk7ig06G1s=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pccx/P6vRjfEsYtc2YcBUe3XMT8wsI4bPbFvEJcuBQQIbWOShHw+mqxlKaImAg5r8jkZyl7B5wDyUSuQmWjnRm64emC4iQksG2pgsLLcFHod6RgcKCXmqdlA6mf5Xlboe62IeRUW870S8Ai588yTZGWPBsL309/TasnxcwBni1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O2AiDi3P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 512A2C4CEF4;
-	Sat, 27 Sep 2025 00:35:40 +0000 (UTC)
+	 MIME-Version:Content-Type; b=fhEBoaC2x1nUvy+x3BijKRI8/Day+54v7XC44eqxmr4Ii9GvnBTTHKgGlC8JzHtS8br+d6il1GzHPG6VL1mjo5q1ZwDro1rRr7XkUA4C2lpYFhESE8AV1+a1yuCbxHzPKlIQqp8wQjhOyPz2/nkh41XHoggahV8wfbDrfrIFz8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUxvY52P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886A7C4CEF4;
+	Sat, 27 Sep 2025 00:41:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758933341;
-	bh=6LZQOG26MoTzz2WiVd7VfoJ2nPId6GoJXe3Q2HKktN8=;
+	s=k20201202; t=1758933680;
+	bh=g5wTDCdkm3VSKuvWD/nVJLosXsdzTuSUkxk7ig06G1s=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=O2AiDi3PUCkALX6/ryb+c/2gTaAulq08805GgjYhgjLQWuQ+HZuvS5hV3bXoze4qa
-	 KeHqxqXMToSklYCbuntu1G89K5uD0aF8uX3CLl08p5oIdTKwlh7TTL0YlR5mBJ5Tq8
-	 AjG0OkjH3t/8TmQs06naA4DMQ4vggNelv1NdAox+4zEyzMtvfMbfG7+2ROqa3LLS+S
-	 2YmDqubGDpnUwmIyGJ51Vd5kkZnJT42Bk/Q7jSTgGP1MlcLssfFMtd4cB5McpWCLBF
-	 M1Gavgvd78hMrmrjB8JNTeeJwFlFPPTE5rurZA/M54dU0HLr8gEBvb3baC5WVCoMF3
-	 P89DHt3ATZwxg==
-Date: Fri, 26 Sep 2025 17:35:39 -0700
+	b=gUxvY52P2ChIDgRfp15cahlHnhYPmWDcS4EjNqQtUPZQt6w+kZVK/ahEnvtBxLLW4
+	 e9vu9m2OpUpb5yINGjZIJNCXOcR4BhfXYX8U9OBLXXCQdmJid0zBM9F1GLnHBm3Sc/
+	 gFLFFBwDH2glgqyCvuuJn3atl0PfZ7Rbn8VyDksJX4ZkQcpvYrwTYybYCYGQfUeFAZ
+	 0ScdHjwj49rJ2thZLAk4Bm4GASGcFtrh6pKnoNPSeb79S7Cf2Y5T8+fHt9dqxk6rb1
+	 E/X4ez/ai13eqL+oWaJca3y6UB0bgmHtqmW0ns2gqysftVBocBxVMb9JbDZSu06R/S
+	 qBiUApX0Zz21A==
+Date: Fri, 26 Sep 2025 17:41:18 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Jesper Dangaard Brouer <hawk@kernel.org>
 Cc: Lorenzo Bianconi <lorenzo@kernel.org>, Donald Hunter
@@ -62,7 +62,7 @@ Cc: Lorenzo Bianconi <lorenzo@kernel.org>, Donald Hunter
  linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH RFC bpf-next v2 1/5] netlink: specs: Add XDP RX checksum
  capability to XDP metadata specs
-Message-ID: <20250926173539.17403e94@kernel.org>
+Message-ID: <20250926174118.23a054a7@kernel.org>
 In-Reply-To: <0608935c-1c1c-4374-a058-bc78d114c630@kernel.org>
 References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
 	<20250925-bpf-xdp-meta-rxcksum-v2-1-6b3fe987ce91@kernel.org>
@@ -77,15 +77,11 @@ Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
 On Fri, 26 Sep 2025 11:53:25 +0200 Jesper Dangaard Brouer wrote:
-> > + * In case of success, ``cksum_meta`` contains the hw computed checksum value
-> > + * for ``XDP_CHECKSUM_COMPLETE`` or the ``csum_level`` for
-> > + * ``XDP_CHECKSUM_UNNECESSARY``. It is set to 0 for ``XDP_CHECKSUM_NONE`` and
-> > + * ``XDP_CHECKSUM_PARTIAL``.
-> > + *  
-> 
-> It is very important that we explain the meaning of XDP_CHECKSUM_NONE.
-> As I hinted in other email, this also covers the non-existing FAIL case.
+> What do people think: Do we leave it as an exercise to the BPF-developer
+> to deduct hardware detected a wrong/failed checksum, as that is possible
+> as described above.  Or do we introduce a CHECKSUM_FAILED?
 
-Good idea, perhaps we should add this to the big comment about
-checksums in skbuff.h and point to that? Avoid the duplication?
+I vote we leave it unless someone has a strong use case for FAILED.
+Checksumming and dropping packets should be pretty cheap, it's not
+worth complicating the stack with another option.
 
