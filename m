@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-42550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C052BA6498
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 00:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EB2DBA64A1
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 00:55:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 288921887BEC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Sep 2025 22:55:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4252E1898944
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Sep 2025 22:55:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D27124676A;
-	Sat, 27 Sep 2025 22:54:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A9FF248166;
+	Sat, 27 Sep 2025 22:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sTKbMx1n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCdRDsgh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73928241673;
-	Sat, 27 Sep 2025 22:54:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72782244687;
+	Sat, 27 Sep 2025 22:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759013672; cv=none; b=rB0oCPRS1WMcV5ysRCZUAv4AUxF0WfGeA+LB4v4jZic00w3D5LXqwcHgftzps7hn+MUW3MnepyjjT/6DDYlQY1gkIFU287UPuVjvd3VUMZydeyLNNr4NP28ABzAs/fNJyeJNSXO6jcXt8dslFjFl/W4uUiS0+HXD0xF5DKPgQcA=
+	t=1759013673; cv=none; b=uUq/1NMZkYpvwMsFPyC0jZU1EQ4MQBlkcMcZsNl9tUyP93b2AobNFiNpOdBq8tKvhSdosbN17zf9XrGL8n7+GXpVroLsCZMki2PVi9Yw4pG1cw2r3MtDXX4WoWO0K9HTrDoOXMXnkto2IaOQH8voRSZWLWp9dATVziIn5Rp8BIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759013672; c=relaxed/simple;
-	bh=8pgVu2v3wURSf/gAPzywSsOS4eirW99VnIKWsBYuXlI=;
+	s=arc-20240116; t=1759013673; c=relaxed/simple;
+	bh=GneB0ThLHbVtLS0XbnCrB32Rb5d5BSNKT7g7GRQxoU8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H1yhfdGrJrVfTDxwVuXQ3EFnN9fe7FkJV6Zd92Mj2wR1dKZ2zrGNU7g4gdWRLRXRsuo2569QprLWxyVNyiZcCmnmLU79oGjitytOXg4MrFHqjelNDE71wZFIIp0G7E0KDHGax9EIwyZAVMkPm2Bp/rdlagBfYrCGoC1OgmVD6Rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sTKbMx1n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24FAC4CEF5;
-	Sat, 27 Sep 2025 22:54:31 +0000 (UTC)
+	 MIME-Version; b=lEqwhtqln+JCLgRrzvm9T+h66kAGn8u8RP/RsYtNhbDQ/x2TJD9l3LYc1bvob9Q20B/ftaTC8+09YxPAmfVOoKJLrtb83Eg8NkU8wGm6DzZ225l93MdFRMtFsYcJaI+K1Z0Loi9uEEsbcLVoCxQT8tKH3sWNDPkjnlUUcuoER5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCdRDsgh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5D8C4CEE7;
+	Sat, 27 Sep 2025 22:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759013672;
-	bh=8pgVu2v3wURSf/gAPzywSsOS4eirW99VnIKWsBYuXlI=;
+	s=k20201202; t=1759013673;
+	bh=GneB0ThLHbVtLS0XbnCrB32Rb5d5BSNKT7g7GRQxoU8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sTKbMx1n+E3TA5Is0XKJPVAxBqzUgarhT7cGEKax3fdghi/VBHbKjXRPTOqsdzGUY
-	 pfGorlSIe9nyQ0ubXSRhQ92uFOzdHBFLRXYVsGz5xUImD6iH/o3riKto09cL/AXInP
-	 clTZarkHI+b29X8xYYHnykn1fsnHtjqb/YYOGxh5JAQCpdvHk4StZHVhz2mgSsLyVo
-	 1VjNPv6KJfNLwMOhnWxA279/FxEAa1hRDgdHT6ojIEzY1ALyhMXL5Ho+epOsf66t0m
-	 buqYPeu3mqDCklf2PGQUJMo8RevrZ4gpB3fG02QGvKb7UkpG7JVDlMxgZQV6db/rm3
-	 nFlf4dJoDOuZg==
+	b=YCdRDsghuMCpGuHrmcCCucJvDUstx1O5yWcglgKl9IMVtrHDyWh397LvukltTcE5O
+	 G4UGdCEXraxOyocjrI7JAhpHSXPBr86fbWIvON9ZEHiYQdx3KmZxXOVH6Ae6+V1NHE
+	 AbQ2hxGgjohqw/iZPS4N1edg3cV8hJkfaTvALanxTGM2bbcYDRtgjGXZoGhb9vxo80
+	 LhbjiJPjT1v1CQpcAWh8VTpXuxFZdX2QTnfvpgxO6+spnTwP9s+9X5a3b5peJMhh2L
+	 0GGtXxBO00A1JJv23Z0JTw/Donc9BHjHkJMPdPjDf0oqk9OFpS2960yncuuNYEtN1L
+	 QFeWa62VOPk/Q==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: netdev@vger.kernel.org,
 	daniel.zahka@gmail.com,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v3 6/8] selftests: drv-net: psp: add connection breaking tests
-Date: Sat, 27 Sep 2025 15:54:18 -0700
-Message-ID: <20250927225420.1443468-7-kuba@kernel.org>
+Subject: [PATCH net-next v3 7/8] selftests: drv-net: psp: add test for auto-adjusting TCP MSS
+Date: Sat, 27 Sep 2025 15:54:19 -0700
+Message-ID: <20250927225420.1443468-8-kuba@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250927225420.1443468-1-kuba@kernel.org>
 References: <20250927225420.1443468-1-kuba@kernel.org>
@@ -68,95 +68,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add test checking conditions which lead to connections breaking.
-Using bad key or connection gets stuck if device key is rotated
-twice.
+Test TCP MSS getting auto-adjusted. PSP adds an encapsulation overhead
+of 40B per packet, when used in transport mode without any
+virtualization cookie or other optional PSP header fields. The kernel
+should adjust the MSS for a connection after PSP tx state is reached.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
- tools/testing/selftests/drivers/net/psp.py | 92 +++++++++++++++++++++-
- 1 file changed, 91 insertions(+), 1 deletion(-)
+ tools/testing/selftests/drivers/net/psp.py | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
 diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index c817553cc5e8..e8c80ebfa2f6 100755
+index e8c80ebfa2f6..37953838abf8 100755
 --- a/tools/testing/selftests/drivers/net/psp.py
 +++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -98,6 +98,16 @@ from lib.py import bkg, rand_port, wait_port_listen
-         time.sleep(0.01)
-     ksft_eq(read_len, exp_len)
- 
-+
-+def _check_data_outq(s, exp_len, force_wait=False):
-+    outq = 0
-+    for _ in range(10):
-+        outq = _get_outq(s)
-+        if not force_wait and outq == exp_len:
-+            break
-+        time.sleep(0.01)
-+    ksft_eq(outq, exp_len)
-+
- #
- # Test case boiler plate
- #
-@@ -372,6 +382,85 @@ from lib.py import bkg, rand_port, wait_port_listen
-     _close_psp_conn(cfg, s)
+@@ -431,6 +431,45 @@ from lib.py import bkg, rand_port, wait_port_listen
+         s.close()
  
  
-+def __bad_xfer_do(cfg, s, tx, version='hdr0-aes-gcm-128'):
-+    # Make sure we accept the ACK for the SPI before we seal with the bad assoc
-+    _check_data_outq(s, 0)
-+
-+    cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-+                        "version": version,
-+                        "tx-key": tx,
-+                        "sock-fd": s.fileno()})
-+
-+    data_len = _send_careful(cfg, s, 20)
-+    _check_data_outq(s, data_len, force_wait=True)
-+    _check_data_rx(cfg, 0)
-+    _close_psp_conn(cfg, s)
-+
-+
-+def data_send_bad_key(cfg):
-+    """ Test send data with bad key """
++def _data_mss_adjust(cfg, ipver):
 +    _init_psp_dev(cfg)
 +
-+    s = _make_psp_conn(cfg)
++    # First figure out what the MSS would be without any adjustments
++    s = _make_clr_conn(cfg, ipver)
++    s.send(b"0123456789abcdef" * 1024)
++    _check_data_rx(cfg, 16 * 1024)
++    mss = s.getsockopt(socket.IPPROTO_TCP, socket.TCP_MAXSEG)
++    _close_conn(cfg, s)
 +
-+    rx_assoc = cfg.pspnl.rx_assoc({"version": 0,
-+                                   "dev-id": cfg.psp_dev_id,
-+                                   "sock-fd": s.fileno()})
-+    rx = rx_assoc['rx-key']
-+    tx = _spi_xchg(s, rx)
-+    tx['key'] = (tx['key'][0] ^ 0xff).to_bytes(1, 'little') + tx['key'][1:]
-+    __bad_xfer_do(cfg, s, tx)
-+
-+
-+def data_send_disconnect(cfg):
-+    """ Test socket close after sending data """
-+    _init_psp_dev(cfg)
-+
-+    with _make_psp_conn(cfg) as s:
-+        assoc = cfg.pspnl.rx_assoc({"version": 0,
-+                                  "sock-fd": s.fileno()})
-+        tx = _spi_xchg(s, assoc['rx-key'])
-+        cfg.pspnl.tx_assoc({"version": 0,
-+                          "tx-key": tx,
-+                          "sock-fd": s.fileno()})
-+
-+        data_len = _send_careful(cfg, s, 100)
-+        _check_data_rx(cfg, data_len)
-+
-+        s.shutdown(socket.SHUT_RDWR)
-+        s.close()
-+
-+
-+def data_stale_key(cfg):
-+    """ Test send on a double-rotated key """
-+    _init_psp_dev(cfg)
-+
-+    s = _make_psp_conn(cfg)
++    s = _make_psp_conn(cfg, 0, ipver)
 +    try:
 +        rx_assoc = cfg.pspnl.rx_assoc({"version": 0,
 +                                     "dev-id": cfg.psp_dev_id,
@@ -164,37 +105,57 @@ index c817553cc5e8..e8c80ebfa2f6 100755
 +        rx = rx_assoc['rx-key']
 +        tx = _spi_xchg(s, rx)
 +
++        rxmss = s.getsockopt(socket.IPPROTO_TCP, socket.TCP_MAXSEG)
++        ksft_eq(mss, rxmss)
++
 +        cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
 +                          "version": 0,
 +                          "tx-key": tx,
 +                          "sock-fd": s.fileno()})
 +
++        txmss = s.getsockopt(socket.IPPROTO_TCP, socket.TCP_MAXSEG)
++        ksft_eq(mss, txmss + 40)
++
 +        data_len = _send_careful(cfg, s, 100)
 +        _check_data_rx(cfg, data_len)
 +        _check_data_outq(s, 0)
 +
-+        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
-+        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
-+
-+        s.send(b'0123456789' * 200)
-+        _check_data_outq(s, 2000, force_wait=True)
++        txmss = s.getsockopt(socket.IPPROTO_TCP, socket.TCP_MAXSEG)
++        ksft_eq(mss, txmss + 40)
 +    finally:
 +        _close_psp_conn(cfg, s)
 +
 +
- def psp_ip_ver_test_builder(name, test_func, psp_ver, ipver):
-     """Build test cases for each combo of PSP version and IP version"""
-     def test_case(cfg):
-@@ -410,7 +499,8 @@ from lib.py import bkg, rand_port, wait_port_listen
+ def data_stale_key(cfg):
+     """ Test send on a double-rotated key """
+     _init_psp_dev(cfg)
+@@ -470,6 +509,15 @@ from lib.py import bkg, rand_port, wait_port_listen
+     return test_case
+ 
+ 
++def ipver_test_builder(name, test_func, ipver):
++    """Build test cases for each IP version"""
++    def test_case(cfg):
++        cfg.require_ipver(ipver)
++        test_case.__name__ = f"{name}_ip{ipver}"
++        test_func(cfg, ipver)
++    return test_case
++
++
+ def main() -> None:
+     """ Ksft boiler plate main """
+ 
+@@ -497,6 +545,10 @@ from lib.py import bkg, rand_port, wait_port_listen
+                     for version in range(0, 4)
+                     for ipver in ("4", "6")
                  ]
++                cases += [
++                    ipver_test_builder("data_mss_adjust", _data_mss_adjust, ipver)
++                    for ipver in ("4", "6")
++                ]
  
                  ksft_run(cases=cases, globs=globals(),
--                         case_pfx={"dev_", "assoc_"}, args=(cfg, ))
-+                         case_pfx={"dev_", "data_", "assoc_"},
-+                         args=(cfg, ))
- 
-                 cfg.comm_sock.send(b"exit\0")
-                 cfg.comm_sock.close()
+                          case_pfx={"dev_", "data_", "assoc_"},
 -- 
 2.51.0
 
