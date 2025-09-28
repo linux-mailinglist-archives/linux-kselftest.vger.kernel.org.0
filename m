@@ -1,139 +1,162 @@
-Return-Path: <linux-kselftest+bounces-42559-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25D4EBA784A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 23:22:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1940BA78CD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 23:45:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A6FB3B7484
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 21:22:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0696F188BF57
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 21:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020A329E0ED;
-	Sun, 28 Sep 2025 21:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8BC5257848;
+	Sun, 28 Sep 2025 21:44:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FlkpWXh3"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="ubAQnLIl";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FjY9XfEQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1061B246BDE
-	for <linux-kselftest@vger.kernel.org>; Sun, 28 Sep 2025 21:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1055227;
+	Sun, 28 Sep 2025 21:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759094536; cv=none; b=EY0szFrV2F4i+5SxlVIZcYXcaIqLtmedsm3l66+yd1jcZ54GGfJzrXsJcNX2p3jtaUDUoIWwhcnXytW9+pgDz83rt3clxALe0Xk7XqlMwPf5rdUmjcFqv+QQLR7pBJGUPrpTe3xyNPovx5W6/fk9eDLCO7ATKgeuEtQs+Kf01yk=
+	t=1759095895; cv=none; b=lsXvDtZ80gsFINy/Z5cCbErwShmG6qQg/uDwgzzeruUf4WbjVtfkC+Hx2+cApma2C/iTL0n3dSKK7xvD1e3IYU2J61h+fco7KxBUnbSKQskYW9+HRobLtEJk7GaIWI9LgGH1yj2+K78Y17dj7ilsaYITB8paPO5BMVviVem6ttI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759094536; c=relaxed/simple;
-	bh=+Q5MesR7HdAhD0+v/uWSgN1Y3iib8z+4eaDVW2M7wZQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IMQ1VjD/ITYKeOhSi0uAXqj2CUL9St9z/Qk/bdcsX3LmxeGiHUElpL8VOpIHM2SsagtLqpbqbo4WdL/N/vZ9LFeyb4IlcMron37AxHiKMY+Bi+QRLKhbubtnMjQF/OlXy504Apzx/GhJAaYZZ7evYLGEGhUFA0QocRWqs0ZRPKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FlkpWXh3; arc=none smtp.client-ip=209.85.166.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-9194a0241aaso62017539f.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Sep 2025 14:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1759094533; x=1759699333; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g09tOhd8i3LGVO3Ma+R2GpKg7N6ID+Lej0H4iQzvBbw=;
-        b=FlkpWXh3+DOnoDSNGQzuid9R4h67kS99Oy566cm/sBMnimb/0s9iJjFK+mA347UBjz
-         GT5HUwRgex1M8clGI91GJlrLldYImV9D12aNb9Qdai5uaKLYdmi5XHPIQbSY+UNx83ZU
-         eFoepmveUTSyIXvs3UyN2bXxbWpf+X/rV/p9c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759094533; x=1759699333;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g09tOhd8i3LGVO3Ma+R2GpKg7N6ID+Lej0H4iQzvBbw=;
-        b=WdVNI7pFeFck795dbrSGoZCfPFRFozwBAJZxy7vIxswbTTCPaAbuIgPG+Qxu7KXYnt
-         VakAjbuU0O/gFDsvvNs6oJibFMTn9RwnWUK+d0oAGC5OVnoid6jKF0O1Xk24YK4UifJl
-         EkXgVJxiuv5Tt4+B2xb21NuZmgdEjf3gukJ82ALyxekDESjX2k5IJM0BNhOqi6DoO9z9
-         sGiwu1AQDk2J5I53TtVmgGVHFQW/4Qu0OCIyw9VwTOLgR00wFcH4jFamJqDZNDNY+UAU
-         1cwh06z5Q7CEvLyZIutphIo2OVla2L/SHCZeQayy3zW6fAsgA15KnJ2qih21QkJNG/XG
-         4D5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWATeSgCBH4Jet7qeunCCfOeWjOJ+lI8UVMfMxAsBx6EPe2L/NGNHMmwD9WKXO5VdUuaHgpHgxwu95VIga5uBI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMvsPTQUWHt501MVNuD9NhiyOl4sBaDOxJKmRWp6tJzCa3CHZ6
-	AZEcDyHKOmUD88mEBcEfim+JO3SfXJlu7kl4dHGqHD99H2yfzpsiLQ0kWRpmMTGXN1s=
-X-Gm-Gg: ASbGncvHlgh4Gjk+Mk9E3h8PbHj+xNWPP1Z3uKRowKWvVoT12g87Y/C/JnkcO7Ej8GC
-	fP/5VCHPJUXYpHufitGZaeEmOA8T6l8+OflihgTYD6Ucj3Ly0iKwnQKtQAyBImxd4DE929XRaNJ
-	nTvC8465ilwdrn5NAbvremx3vzOozuvyYFPvXKue/8q4H9co/xe3/gI7whlSDMZlq2tLWHTZZLV
-	ctwF9i5itKSmA54H3vAYo0fJ3Qp6gZxJ0rqA4nQ5OgUrLuNuht7aodAygvoimj7d5R06YQjekcX
-	ZYsShY1wx1j0UAewzSL9wmH4FG+EN94ZgVmCb31NtBj86mzslalJxsqL176J3JbPUdW7XoHeINk
-	bSVGHPC92Kd9XSeoIymu85C8Y5yevEIog4KI=
-X-Google-Smtp-Source: AGHT+IGEE6j1ea7mA3zg2sHrANU4yNXVvLqMdz000SknmhP5748vqXwCYZrU1usN/WK2x4r+PZX3cg==
-X-Received: by 2002:a05:6e02:12cf:b0:424:9926:a97b with SMTP id e9e14a558f8ab-42595654326mr227342465ab.25.1759094533081;
-        Sun, 28 Sep 2025 14:22:13 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-425bc68e6fbsm50246345ab.17.2025.09.28.14.22.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Sep 2025 14:22:12 -0700 (PDT)
-Message-ID: <6e0d5120-868c-45fd-9ec5-67764a257ab5@linuxfoundation.org>
-Date: Sun, 28 Sep 2025 15:22:11 -0600
+	s=arc-20240116; t=1759095895; c=relaxed/simple;
+	bh=mnyp6ggCgjhXODC8DRmRebtTZhDxTAmYNjSsq6/rszk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jOBvZ1fLz6+Sm3IFuDw9EaKryzxrbMHLtiJ/Ow/UsXfeferm5K8PB7b35SH0i+bPcCDc7AElmab8y15M3wR/rjJIuzUbfMZIIFvVdWwYuCeWbpcLIXvVfA2kxnaTTEztsUDWgJAwFGZ/57IiIr6yiiZxj7/H9oJbvmm/uXa4WfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=ubAQnLIl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FjY9XfEQ; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id A19B1140007F;
+	Sun, 28 Sep 2025 17:44:50 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-12.internal (MEProxy); Sun, 28 Sep 2025 17:44:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
+	 t=1759095890; x=1759182290; bh=bqOTAR5nmMnMgij4YPWgX8pCUapbTKor
+	rwgCldxv+vU=; b=ubAQnLIlgJQ1csTNEk0wgB/6b8xAIBcAh3HAtChheo9HoHka
+	y1atsvu/42Izd4b2fBSQoiKMLzML9zb1WeUSBzWsLSTXN+nYOelctywIiojyWLMN
+	iMeqtfWOKSbZ3l6yjyy2VL1GQAriEcyefB0V6dkY99Jy0Uv7b8Gy0V0LrRxxC3A3
+	e7TLyGGemBzqSykJjOYxIjLFTlb5Jg/eNuBvwbd4eNQUL90lAmy1B4Dv1edgLj29
+	25yPrfxoRN8l98AgwRFC2AjT1LyDmaV9OA9SrtdLWy41/peOdCzylTdFVzd5LKB0
+	g4caHgErLUE9GSaOPn8C1VOgzMQXRprljGHEzA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1759095890; x=
+	1759182290; bh=bqOTAR5nmMnMgij4YPWgX8pCUapbTKorrwgCldxv+vU=; b=F
+	jY9XfEQjG6yfmbOmL2Vj8EPbmT5xAmu4gke9b1j85rC1LOOJlcG6aN1ODMeBwJ2z
+	xaASKdii38aoVpJDPFOBLO29VsjqG2MpTbWMaBAjN/7Rot0ibUbFWUCoRfvy4qNM
+	2Bu3ng9lgQIuIAdaCAB/A9i6Y4Ui4C8HDW09dW5noIaTHqkhoKAy7NfjnADNyHrb
+	MLQ6eTyaazXUGNKzoepixQFbPmvs06Mw6Px0/F/XyvMo4g646RXl4qKQ5quienZy
+	ijniryLx5XR7Fmcf6s39wTqPjBDZzxza5e4nYOFTV0pYtNBULb0m94ACvU1vC9O5
+	xHE7Smp9KcqB9qvGSlf4g==
+X-ME-Sender: <xms:UqzZaLuVCHaHL1dXWWo7gVpW4XAoST_uWK80ReVuNbFTJYWALUwoIg>
+    <xme:UqzZaAK2V8jXLCXeJmxSRnw7XOHDSWVLV6pi_eZRJdsv7tonagKc4iPErelWzp1Sl
+    tDnKMkQV4RuiIomLUeD7P1y69riVIVtDJop1FOMIMPFMHYpHQTI4-g>
+X-ME-Received: <xmr:UqzZaHaYLWiXPmNodfaK5rmH91R1SxuLbJ5AlH6hM9P8SRXZbYfsMyR7MjIq>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdejiedvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepgfdvgeeitefffedvgfdutdelgeeihfegueehteevveegveejudelfeff
+    ieehledvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedufedpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtohepfihilhhfrhgvugdrmhgrlhhlrgifrgesfi
+    gutgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthht
+    oheptghorhgsvghtsehlfihnrdhnvghtpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmh
+    hlohhfthdrnhgvthdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgv
+    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhguse
+    hgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomh
+X-ME-Proxy: <xmx:UqzZaLk1rGOmyO1He8MPxqi3CohSvlkQe3_A6Rrgz3pDiTWgyubwXg>
+    <xmx:UqzZaNWdjTzP7gUnltCcDMJUVASQjOhX1Z6neVB08YXj6nu4ljdFCA>
+    <xmx:UqzZaNLQk9i3WJOHwZbrBRCpFZ_5HLoh4oN8t0tGAo8kW2aVBdq1Bw>
+    <xmx:UqzZaNsooISRzeh5yEtyXLgG1yj-3McLdWJsn3tH3mRzfPsHEAR1YQ>
+    <xmx:UqzZaMbvTxZHOoDBETUgoDK8OSId_1e5rsgxH58kReMnD7JbGMnWKD_v>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 28 Sep 2025 17:44:49 -0400 (EDT)
+Date: Sun, 28 Sep 2025 23:44:47 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Wilfred Mallawa <wilfred.mallawa@wdc.com>,
+	"kuba@kernel.org" <kuba@kernel.org>
+Cc: "corbet@lwn.net" <corbet@lwn.net>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"horms@kernel.org" <horms@kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] net/tls: support maximum record size limit
+Message-ID: <aNmsTxyg75HHkmIJ@krikkit>
+References: <20250923053207.113938-1-wilfred.opensource@gmail.com>
+ <aNQvgD7AvFe7-sAv@krikkit>
+ <4a83e2f526013516e2827a4ff8899b0437d08a25.camel@wdc.com>
+ <aNW0OxiN8M2hv7Qu@krikkit>
+ <bfc1bab9a8f2f51e19ba4fd57a6b8bdf69683d42.camel@wdc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Error during building on next-20250926 - kunit.py run --alltests
- run
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- David Gow <davidgow@google.com>, johannes.berg@intel.com
-Cc: shuah <shuah@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- KUnit Development <kunit-dev@googlegroups.com>,
- Networking <netdev@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
-References: <47b370c2-9ab2-419f-9d43-8da310fedb4a@linuxfoundation.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <47b370c2-9ab2-419f-9d43-8da310fedb4a@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <bfc1bab9a8f2f51e19ba4fd57a6b8bdf69683d42.camel@wdc.com>
 
-On 9/28/25 15:11, Shuah Khan wrote:
-> Hi Thomas and David,
-> 
-> I am seeing the following error during "kunit.py run --alltests run"
-> next-20250926.
-> 
-> $ make all compile_commands.json scripts_gdb ARCH=um O=.kunit --jobs=16
-> ERROR:root:/usr/bin/ld: drivers/net/wireless/intel/iwlwifi/tests/devinfo.o: in function `devinfo_pci_ids_config':
-> devinfo.c:(.text+0x2d): undefined reference to `iwl_bz_mac_cfg'
-> collect2: error: ld returned 1 exit status
-> make[3]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
-> make[2]: *** [/linux/linux_next/Makefile:1242: vmlinux] Error 2
-> make[1]: *** [/linux/linux_next/Makefile:248: __sub-make] Error 2
-> make: *** [Makefile:248: __sub-make] Error 2
+2025-09-25, 23:37:09 +0000, Wilfred Mallawa wrote:
+> On Thu, 2025-09-25 at 23:29 +0200, Sabrina Dubroca wrote:
+> > 2025-09-25, 05:39:14 +0000, Wilfred Mallawa wrote:
+> > > On Wed, 2025-09-24 at 19:50 +0200, Sabrina Dubroca wrote:
+> > > > > @@ -1111,6 +1180,11 @@ static int tls_get_info(struct sock *sk,
+> > > > > struct sk_buff *skb, bool net_admin)
+> > > > >  			goto nla_failure;
+> > > > >  	}
+> > > > >  
+> > > > > +	err = nla_put_u16(skb, TLS_INFO_TX_RECORD_SIZE_LIM,
+> > > > > +			  ctx->tx_record_size_limit);
+> > > > 
+> > > > I'm not sure here: if we do the +1 adjustment we'd be consistent
+> > > > with
+> > > > the value reported by getsockopt, but OTOH users may get confused
+> > > > about seeing a value larger than TLS_MAX_PAYLOAD_SIZE.
+> > > Makes sense to keep the behaviour the same as getsockopt() right?
+> > > So
+> > > add the +1 changes here based on version (same as getsockopt()). In
+> > > which case, it should never exceed TLS_MAX_PAYLOAD_SIZE.
+> > 
+> > The max value for 1.3 is TLS_MAX_PAYLOAD_SIZE+1 (after adjustment),
+> > since it's the max value that will be accepted by setsockopt (after
+> > passing the "value - 1 > TLS_MAX_PAYLOAD_SIZE" check). And it's the
+> > value most users will see since it's the default.
+>
+> Ah I see what you mean.  In regards to "but OTOH users may get confused
+> about seeing a value larger than TLS_MAX_PAYLOAD_SIZE.", do you think
+> it's sufficient to document TLS_MAX_PAYLOAD_SIZE and specify that for
+> TLS 1.3 this doesn't include the ContentType byte?
 
-Same problem when running - kunit.py run --alltests --arch x86_64
-> 
-> Possile intearction between these two commits: Note: linux-kselftext
-> kunit branch is fine I am going send kunit pr to Linus later today.
-> Heads up that "kunit.py run --alltests run" is failing on next-20250926
-> 
-> 
-> commit 031cdd3bc3f369553933c1b0f4cb18000162c8ff
-> Author: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> Date:   Mon Sep 8 09:03:38 2025 +0200
-> 
->      kunit: Enable PCI on UML without triggering WARN()
-> 
-> 
-> commit 137b0bb916f1addb2ffbefd09a6e3e9d15fe6100
-> Author: Johannes Berg <johannes.berg@intel.com>
-> Date:   Mon Sep 15 11:34:28 2025 +0300
-> 
->      wifi: iwlwifi: tests: check listed PCI IDs have configs
-> 
-> Note: linux-kselftext build just fine.
+I guess it will have to do. Otherwise, unless someone has another
+idea, we're back to the discussion on v3 (ie setting the actual
+payload size instead of the record limit).
 
-linux-kselftect kunit branch is fine.
-
-thanks,
--- Shuah
+-- 
+Sabrina
 
