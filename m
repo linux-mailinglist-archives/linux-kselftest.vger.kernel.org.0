@@ -1,652 +1,486 @@
-Return-Path: <linux-kselftest+bounces-42555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AF9FBA7486
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 18:05:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A3A0BA77BC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 22:47:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C257D3A7C72
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 16:05:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 350943B4C93
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 20:47:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9FA23507C;
-	Sun, 28 Sep 2025 16:05:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8D3A28C5B1;
+	Sun, 28 Sep 2025 20:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T8FeKHBO"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="ero7vbJG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A275F134AB
-	for <linux-kselftest@vger.kernel.org>; Sun, 28 Sep 2025 16:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8758821FF36;
+	Sun, 28 Sep 2025 20:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759075532; cv=none; b=kELlykVkwGFzRJjPBILiUSl9sWBvTpZT/Z8O9gKa9Zlemfp7U5yJF1EKvmAPUSzgOIKb3v4ZieE3xqDXZBv4ddEbksN7zrognmzNDOZ6q2kkmjoFC31lGE0QBoFMlUCG+Cfyuxg+iYmgR4/VaxqcPy57+bs8WCljEuymvSR/oX0=
+	t=1759092461; cv=none; b=OLfjNAJulX+sU4an81bhiHJgwwrmwMXL73gWiIKee8AtyBY5IIX5C2ml6GvG9wzBwVH5vi/1Sn4DiUKrn+glVMza3nYKIALkHC9NqZJyBky8QgAmt59a61wqBkcQgPVvy4dG7vTbFregLRRCZ/CGdNDyPl1e0fRvBWoHnM50MNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759075532; c=relaxed/simple;
-	bh=xS06CZsnsZAJDKSLkTR21prF5nIWjZCeOQH1o5JWwas=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=C/IvXT/WEwFP00KyGCmewHlLti7+UEjE9MrYzs9DW0Q/+F4BdqBTOk4HrYX/+t2KGCnvE3ZuG4x+ZkTqj71BZMhXGMZzt1Y8dSHS8mycw5zunpAggQP8xeGCuhD4yu9Zy1YgsjZftvzFkLlpKTTf38CRHA96Ky9LSH5tYtAPaq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T8FeKHBO; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-85780d76b48so404552085a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Sep 2025 09:05:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759075528; x=1759680328; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wi0WOb7K8cgYoD8A2f30ICNA+mX/xckLI9C8AsvRACA=;
-        b=T8FeKHBOcLIzTAbF6Q5j0ambtD6L5ws999f+864wdlFIpmQE8A5NRlAi0xY1RJ6d0x
-         muJrcpQpkmJRlPEl8KYo9cnrv6LOvc02xsnbZwaXlN2EqoYM0KGfacPk44flhTl4QCTL
-         +TaD4zKwQR/8zKQVlsA4rEI/5nNGmWI45NfDP7DXD+IYyB/zWiFaGfeQi+TELDa8dS56
-         8BkZszO5b9Y3SQHB395HQXksV+cfonQ094Sv/pvEg5LMnFlnt7vHNNpE3mlDmaEEinab
-         W1j15pZDY5IuwUpUswLtwJhoV2+okz3wCE1F6q6WGFh0UH0j/yFkhc+cr1VdP5CgVoN8
-         z3fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759075528; x=1759680328;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Wi0WOb7K8cgYoD8A2f30ICNA+mX/xckLI9C8AsvRACA=;
-        b=HZId405mdo3TEVwjIrBoijI2+BiZcHNp+o/lOolhKnQ4ANYxPThF3GMC2mI8R/nlH/
-         oqZkldFeAjdqmNI9Wg34w3wuweciC33YwAETTBmmPyre/70uz9nVlRDNvAbZASFazSdA
-         TaeyxyhqkCLnSodqbHvlZpyaRowZXY4YZqvEhRzgFg6GZWxIsfgrIRcN5O74S5+KwuxD
-         E5N4kE1yCuejSes5Oi33y5+tRHidSEW9dStWAvjEWqAhN3L67lLReBe4oairQso+ZCvc
-         VhcV61ex9VxNaN+9RfSPvzLG+D9VTpF0nCiTWZjxWg0/AlwMmtMYUpc9du1kQoyZwxHt
-         68vw==
-X-Forwarded-Encrypted: i=1; AJvYcCX42uiiR2q05oM7nbr0j0C9x8Aa4728fPy1FQQaRIX2x+myUkno5EivKGHMplY3FBa0az+EnPCvttRFafIKSxE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTuVgG4RdRohMIXqfZ4wDMTlwZV2LHGlKFXbWpdtgDetU61nNi
-	LTNGidQet5G3RhY54t1pV/lNH8qQCyPJNv0IOdraF6ak/5wfgO806Fro
-X-Gm-Gg: ASbGncvwJRfZs/bq4l/o67+GQwwq5vGHMqYMwTetkHGsbhxz0UDVatsfA1233bhsWzr
-	+aR7IqURDgDBtmbePQVgt7ZwSD6DZrmYXDsSc4NbiFk6GR+OX2HApTon9o9cCpE6aDfu/8Unf3S
-	MmiEMDdv+jqixoeiyF1pghayLkBLeVIIG7CKFRkTFZ2MFg7/Zcak8mvxTyXBatoICWcMmic0cFS
-	SM5CKiQ4sjMpRnsS+6rKFQ/C1pA98GTfra8q7rAlMYuEug+qrLK5TDHavelz+V2+acwUvxn8VdH
-	pbeR6I6Lkw0hx5+dm0gNu7Xw8xRSsuARQteSdjx57DaznmR5eCvRe+heiiXfYB/cbb6p+yfoGVK
-	mw75dDfYz3ZOzQAoYblfh8ax60bcovGoOe/raprhrG+KaXjC+1Ufid3c5prFUQ1apG2dxwg==
-X-Google-Smtp-Source: AGHT+IHUovQ4Q2dXcqO+KESXmWgxf5N64nFFYIxU9/DeAzDETJDgR9D5qrN4wDfDoJVVFjiLYYwpfg==
-X-Received: by 2002:a05:620a:2686:b0:848:ce89:b8f6 with SMTP id af79cd13be357-85aea320d9bmr1555227885a.74.1759075528453;
-        Sun, 28 Sep 2025 09:05:28 -0700 (PDT)
-Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-85c306b641asm603534585a.37.2025.09.28.09.05.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Sep 2025 09:05:27 -0700 (PDT)
-Date: Sun, 28 Sep 2025 12:05:27 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- petrm@nvidia.com, 
- willemb@google.com, 
- shuah@kernel.org, 
- daniel.zahka@gmail.com, 
- linux-kselftest@vger.kernel.org, 
- Jakub Kicinski <kuba@kernel.org>
-Message-ID: <willemdebruijn.kernel.b88097f659ab@gmail.com>
-In-Reply-To: <20250927225420.1443468-4-kuba@kernel.org>
-References: <20250927225420.1443468-1-kuba@kernel.org>
- <20250927225420.1443468-4-kuba@kernel.org>
-Subject: Re: [PATCH net-next v3 3/8] selftests: drv-net: add PSP responder
+	s=arc-20240116; t=1759092461; c=relaxed/simple;
+	bh=LAd4pDAYWJI1MVxKOTfz9WXudLornuXRcsFgsrd6nkk=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gYbyyizibZA6Pli0EYJtoj9CdF4/AF8TPbwNIwCbf1gou1He9zmQ+TqGiooHrMCwiQfuXScI6N6xM5yZKO2K4OhkxwM9UpCMdqCJhJ3YYNqWRq5SvDU9UCu+mM9t9cXMlA7ehYww1LQFOfdO1l7MJXA6HuoX0iB2E1je/0oJvmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=ero7vbJG; arc=none smtp.client-ip=185.70.43.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1759092450; x=1759351650;
+	bh=0Fgh3rFZS9ggeNfJATMjKlsZ3YfQYTLPRpXEp/NnVY8=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=ero7vbJGAflBQS2fYbfDlHmRqI2OytrrAL1uXkC4CkmBdTTcwVDillFKHSjETWUzR
+	 I/a35LRAxUedTEmxh7Wnewlsp2h0M57UekC2jJfMOXOuKGpYK9aCJ/gA0VVlW1aMCz
+	 DdlvIg49cS1fBWW4IRBQYgroGvC4/00iZKR/15t9RnlHepCXIh08sBtJfRnat8MU5P
+	 FeOEVQ2LN8y133ELqQGioJzaH/bl9sBFHdgRbxfHHujqMjq5JzSem78x/g3uyy4AGs
+	 Pnx59jmGDCwtWbgaH46yXY6v0I9ZPtwGfzlj5ftXX3RSf2He7Dj8lFzWCgJ+e7OXOh
+	 IayugxX2F2ipA==
+Date: Sun, 28 Sep 2025 20:47:24 +0000
+To: kuba@kernel.org, pabeni@redhat.com
+From: Maksimilijan Marosevic <maksimilijan.marosevic@proton.me>
+Cc: Maksimilijan Marosevic <maksimilijan.marosevic@proton.me>, davem@davemloft.net, dsahern@kernel.org, kuniyu@google.com, kuniyu@amazon.com, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org, syzbot+a259a17220263c2d73fc@syzkaller.appspotmail.com
+Subject: [PATCH v2 1/2] selftests/net: add netdevsim.c
+Message-ID: <20250928204708.1613737-1-maksimilijan.marosevic@proton.me>
+In-Reply-To: <u3HUdiCPiMCv5kkEVMXU9bKhZLDParnZCqUybez-bALHM78ymOclmc2pzUXgAGu-Bdwi30aV_LJkhicY2rwhZdjBzvYWyErXQpDQN3w4Ihs=@proton.me>
+References: <20250804204233.1332529-1-maksimilijan.marosevic@proton.me> <20250904090301.552ef178@kernel.org> <u3HUdiCPiMCv5kkEVMXU9bKhZLDParnZCqUybez-bALHM78ymOclmc2pzUXgAGu-Bdwi30aV_LJkhicY2rwhZdjBzvYWyErXQpDQN3w4Ihs=@proton.me>
+Feedback-ID: 97766065:user:proton
+X-Pm-Message-ID: 6992aaf3280881befdfc42d314b6bf4ab2e50cd3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Jakub Kicinski wrote:
-> PSP tests need the remote system to support PSP, and some PSP capable
-> application to exchange data with. Create a simple PSP responder app
-> which we can build and deploy to the remote host. The tests themselves
-> can be written in Python but for ease of deploying the responder is in C
-> (using C YNL).
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
-> ---
->  tools/testing/selftests/drivers/net/Makefile  |   9 +
->  .../selftests/drivers/net/psp_responder.c     | 483 ++++++++++++++++++
->  .../testing/selftests/drivers/net/.gitignore  |   1 +
->  3 files changed, 493 insertions(+)
->  create mode 100644 tools/testing/selftests/drivers/net/psp_responder.c
-> 
-> diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-> index 102cfb36846c..bd3af9a34e2f 100644
-> --- a/tools/testing/selftests/drivers/net/Makefile
-> +++ b/tools/testing/selftests/drivers/net/Makefile
-> @@ -27,4 +27,13 @@ TEST_PROGS := \
->  	xdp.py \
->  # end of TEST_PROGS
->  
-> +# YNL files, must be before "include ..lib.mk"
-> +YNL_GEN_FILES := psp_responder
-> +TEST_GEN_FILES += $(YNL_GEN_FILES)
-> +
->  include ../../lib.mk
-> +
-> +# YNL build
-> +YNL_GENS := psp
-> +
-> +include ../../net/ynl.mk
-> diff --git a/tools/testing/selftests/drivers/net/psp_responder.c b/tools/testing/selftests/drivers/net/psp_responder.c
-> new file mode 100644
-> index 000000000000..f309e0d73cbf
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/psp_responder.c
-> @@ -0,0 +1,483 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <stdio.h>
-> +#include <string.h>
-> +#include <sys/poll.h>
-> +#include <sys/socket.h>
-> +#include <sys/time.h>
-> +#include <netinet/in.h>
-> +#include <unistd.h>
-> +
-> +#include <ynl.h>
-> +
-> +#include "psp-user.h"
-> +
-> +#define dbg(msg...)				\
-> +do {						\
-> +	if (opts->verbose)			\
-> +		fprintf(stderr, "DEBUG: " msg);	\
-> +} while (0)
-> +
-> +static bool should_quit;
-> +
-> +struct opts {
-> +	int port;
-> +	int devid;
-> +	bool verbose;
-> +};
-> +
-> +enum accept_cfg {
-> +	ACCEPT_CFG_NONE = 0,
-> +	ACCEPT_CFG_CLEAR,
-> +	ACCEPT_CFG_PSP,
-> +};
-> +
-> +static struct {
-> +	unsigned char tx;
-> +	unsigned char rx;
-> +} psp_vers;
-> +
-> +static int conn_setup_psp(struct ynl_sock *ys, struct opts *opts, int data_sock)
-> +{
-> +	struct psp_rx_assoc_rsp *rsp;
-> +	struct psp_rx_assoc_req *req;
-> +	struct psp_tx_assoc_rsp *tsp;
-> +	struct psp_tx_assoc_req *teq;
-> +	char info[300];
+Tests an edge case in the nsim module where gw_family =3D=3D AF_UNSPEC.
 
-Optionally a clearer upper bound, e.g., based on PSP_MAX_KEY.
-And a struct, to avoid having to cast to beyond the SPI field.
+Works by creating a new nsim device and then sending a multipath
+path message to it and loopback. In unpatched kernels, this triggers
+a WARN_ON_ONCE in netdevsim/fib.c.
 
-> +	int key_len;
-> +	ssize_t sz;
-> +	__u32 spi;
-> +
-> +	dbg("create PSP connection\n");
-> +
-> +	// Rx assoc alloc
-> +	req = psp_rx_assoc_req_alloc();
-> +
-> +	psp_rx_assoc_req_set_sock_fd(req, data_sock);
-> +	psp_rx_assoc_req_set_version(req, psp_vers.rx);
-> +
-> +	rsp = psp_rx_assoc(ys, req);
-> +	psp_rx_assoc_req_free(req);
-> +
-> +	if (!rsp) {
-> +		perror("ERROR: failed to Rx assoc");
-> +		return -1;
-> +	}
-> +
-> +	// SPI exchange
-> +	key_len = rsp->rx_key._len.key;
-> +	memcpy(info, &rsp->rx_key.spi, sizeof(spi));
-> +	memcpy(&info[sizeof(spi)], rsp->rx_key.key, key_len);
-> +	sz = sizeof(spi) + key_len;
-> +
-> +	send(data_sock, info, sz, MSG_WAITALL);
+Reported-by: syzbot+a259a17220263c2d73fc@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=3Da259a17220263c2d73fc
+Fixes: e6f497955fb6 ("ipv6: Check GATEWAY in rtm_to_fib6_multipath_config()=
+.")
+Signed-off-by: Maksimilijan Marosevic <maksimilijan.marosevic@proton.me>
+---
+ tools/testing/selftests/net/netdevsim.c | 391 ++++++++++++++++++++++++
+ 1 file changed, 391 insertions(+)
+ create mode 100644 tools/testing/selftests/net/netdevsim.c
 
-Return value not checked
-
-> +	psp_rx_assoc_rsp_free(rsp);
-> +
-> +	sz = recv(data_sock, info, sz, MSG_WAITALL);
-> +	if (sz < 0) {
-> +		perror("ERROR: failed to read PSP key from sock");
-> +		return -1;
-> +	}
-> +	memcpy(&spi, info, sizeof(spi));
-> +
-> +	// Setup Tx assoc
-> +	teq = psp_tx_assoc_req_alloc();
-> +
-> +	psp_tx_assoc_req_set_sock_fd(teq, data_sock);
-> +	psp_tx_assoc_req_set_version(teq, psp_vers.tx);
-> +	psp_tx_assoc_req_set_tx_key_spi(teq, spi);
-> +	psp_tx_assoc_req_set_tx_key_key(teq, &info[sizeof(spi)], key_len);
-> +
-> +	tsp = psp_tx_assoc(ys, teq);
-> +	psp_tx_assoc_req_free(teq);
-> +	if (!tsp) {
-> +		perror("ERROR: failed to Tx assoc");
-> +		return -1;
-> +	}
-> +	psp_tx_assoc_rsp_free(tsp);
-> +
-> +	return 0;
-> +}
-> +
-> +static void send_ack(int sock)
-> +{
-> +	send(sock, "ack", 4, MSG_WAITALL);
-> +}
-> +
-> +static void send_err(int sock)
-> +{
-> +	send(sock, "err", 4, MSG_WAITALL);
-> +}
-> +
-> +static void send_str(int sock, int value)
-> +{
-> +	char buf[128];
-> +	int ret;
-> +
-> +	ret = snprintf(buf, sizeof(buf), "%d", value);
-> +	send(sock, buf, ret + 1, MSG_WAITALL);
-> +}
-> +
-> +static void
-> +run_session(struct ynl_sock *ys, struct opts *opts,
-> +	    int server_sock, int comm_sock)
-> +{
-> +	enum accept_cfg accept_cfg = ACCEPT_CFG_NONE;
-> +	struct pollfd pfds[3];
-> +	size_t data_read = 0;
-> +	int data_sock = -1;
-> +
-> +	while (true) {
-> +		bool race_close = false;
-> +		int nfds;
-> +
-> +		memset(pfds, 0, sizeof(pfds));
-> +
-> +		pfds[0].fd = server_sock;
-> +		pfds[0].events = POLLIN;
-> +
-> +		pfds[1].fd = comm_sock;
-> +		pfds[1].events = POLLIN;
-> +
-> +		nfds = 2;
-> +		if (data_sock >= 0) {
-> +			pfds[2].fd = data_sock;
-> +			pfds[2].events = POLLIN;
-> +			nfds++;
-> +		}
-> +
-> +		dbg(" ...\n");
-> +		if (poll(pfds, nfds, -1) < 0) {
-> +			perror("poll");
-> +			break;
-> +		}
-> +
-> +		/* data sock */
-> +		if (pfds[2].revents & POLLIN) {
-> +			char buf[8192];
-> +			ssize_t n;
-> +
-> +			n = recv(data_sock, buf, sizeof(buf), 0);
-> +			if (n <= 0) {
-> +				if (n < 0)
-> +					perror("data read");
-> +				close(data_sock);
-> +				data_sock = -1;
-> +				dbg("data sock closed\n");
-> +			} else {
-> +				data_read += n;
-> +				dbg("data read %zd\n", data_read);
-> +			}
-> +		}
-> +
-> +		/* comm sock */
-> +		if (pfds[1].revents & POLLIN) {
-> +			static char buf[4096];
-> +			static ssize_t off;
-> +			bool consumed;
-> +			ssize_t n;
-> +
-> +			n = recv(comm_sock, &buf[off], sizeof(buf) - off, 0);
-> +			if (n <= 0) {
-> +				if (n < 0)
-> +					perror("comm read");
-> +				return;
-> +			}
-> +
-> +			off += n;
-> +			n = off;
-> +
-> +#define __consume(sz)						\
-> +		({						\
-> +			if (n == (sz)) {			\
-> +				off = 0;			\
-> +			} else {				\
-> +				off -= (sz);			\
-> +				memmove(buf, &buf[(sz)], off);	\
-> +			}					\
-> +		})
-> +
-> +#define cmd(_name)							\
-> +		({							\
-> +			ssize_t sz = sizeof(_name);			\
-> +			bool match = n >= sz &&	!memcmp(buf, _name, sz); \
-> +									\
-> +			if (match) {					\
-> +				dbg("command: " _name "\n");		\
-> +				__consume(sz);				\
-> +			}						\
-> +			consumed |= match;				\
-> +			match;						\
-> +		})
-> +
-> +			do {
-> +				consumed = false;
-> +
-> +				if (cmd("read len"))
-> +					send_str(comm_sock, data_read);
-> +
-> +				if (cmd("data echo")) {
-> +					if (data_sock >= 0)
-> +						send(data_sock, "echo", 5,
-> +						     MSG_WAITALL);
-> +					else
-> +						fprintf(stderr, "WARN: echo but no data sock\n");
-> +					send_ack(comm_sock);
-> +				}
-> +				if (cmd("data close")) {
-> +					if (data_sock >= 0) {
-> +						close(data_sock);
-> +						data_sock = -1;
-> +						send_ack(comm_sock);
-> +					} else {
-> +						race_close = true;
-> +					}
-> +				}
-> +				if (cmd("conn psp")) {
-> +					if (accept_cfg != ACCEPT_CFG_NONE)
-> +						fprintf(stderr, "WARN: old conn config still set!\n");
-> +					accept_cfg = ACCEPT_CFG_PSP;
-> +					send_ack(comm_sock);
-> +					/* next two bytes are versions */
-> +					if (off >= 2) {
-> +						memcpy(&psp_vers, buf, 2);
-> +						__consume(2);
-> +					} else {
-> +						fprintf(stderr, "WARN: short conn psp command!\n");
-> +					}
-> +				}
-> +				if (cmd("conn clr")) {
-> +					if (accept_cfg != ACCEPT_CFG_NONE)
-> +						fprintf(stderr, "WARN: old conn config still set!\n");
-> +					accept_cfg = ACCEPT_CFG_CLEAR;
-> +					send_ack(comm_sock);
-> +				}
-> +				if (cmd("exit"))
-> +					should_quit = true;
-> +#undef cmd
-> +
-> +				if (!consumed) {
-> +					fprintf(stderr, "WARN: unknown cmd: [%zd] %s\n",
-> +						off, buf);
-> +				}
-> +			} while (consumed && off);
-> +		}
-> +
-> +		/* server sock */
-> +		if (pfds[0].revents & POLLIN) {
-> +			if (data_sock >= 0) {
-> +				fprintf(stderr, "WARN: new data sock but old one still here\n");
-> +				close(data_sock);
-> +				data_sock = -1;
-> +			}
-> +			data_sock = accept(server_sock, NULL, NULL);
-> +			if (data_sock < 0) {
-> +				perror("accept");
-> +				continue;
-> +			}
-> +			data_read = 0;
-> +
-> +			if (accept_cfg == ACCEPT_CFG_CLEAR) {
-> +				dbg("new data sock: clear\n");
-> +				/* nothing to do */
-> +			} else if (accept_cfg == ACCEPT_CFG_PSP) {
-> +				dbg("new data sock: psp\n");
-> +				conn_setup_psp(ys, opts, data_sock);
-> +			} else {
-> +				fprintf(stderr, "WARN: new data sock but no config\n");
-> +			}
-> +			accept_cfg = ACCEPT_CFG_NONE;
-> +		}
-> +
-> +		if (race_close) {
-> +			if (data_sock >= 0) {
-> +				/* indeed, ordering problem, handle the close */
-> +				close(data_sock);
-> +				data_sock = -1;
-> +				send_ack(comm_sock);
-> +			} else {
-> +				fprintf(stderr, "WARN: close but no data sock\n");
-> +				send_err(comm_sock);
-> +			}
-> +		}
-> +	}
-> +	dbg("session ending\n");
-> +}
-> +
-> +static int spawn_server(struct opts *opts)
-> +{
-> +	struct sockaddr_in6 addr;
-> +	int fd;
-> +
-> +	fd = socket(AF_INET6, SOCK_STREAM, 0);
-> +	if (fd < 0) {
-> +		perror("can't open socket");
-> +		return -1;
-> +	}
-> +
-> +	memset(&addr, 0, sizeof(addr));
-> +
-> +	addr.sin6_family = AF_INET6;
-> +	addr.sin6_addr = in6addr_any;
-> +	addr.sin6_port = htons(opts->port);
-> +
-> +	if (bind(fd, (struct sockaddr *)&addr, sizeof(addr))) {
-> +		perror("can't bind socket");
-> +		return -1;
-> +	}
-> +
-> +	if (listen(fd, 5)) {
-> +		perror("can't listen");
-> +		return -1;
-> +	}
-> +
-> +	return fd;
-> +}
-> +
-> +static int run_responder(struct ynl_sock *ys, struct opts *opts)
-> +{
-> +	int server_sock, comm;
-> +
-> +	server_sock = spawn_server(opts);
-> +	if (server_sock < 0)
-> +		return 4;
-> +
-> +	while (!should_quit) {
-> +		comm = accept(server_sock, NULL, NULL);
-> +		if (comm < 0) {
-> +			perror("accept failed");
-> +		} else {
-> +			run_session(ys, opts, server_sock, comm);
-> +			close(comm);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void usage(const char *name, const char *miss)
-> +{
-> +	if (miss)
-> +		fprintf(stderr, "Missing argument: %s\n", miss);
-> +
-> +	fprintf(stderr, "Usage: %s -p port [-v] [-d psp-dev-id]\n", name);
-> +	exit(EXIT_FAILURE);
-> +}
-> +
-> +static void parse_cmd_opts(int argc, char **argv, struct opts *opts)
-> +{
-> +	int opt;
-> +
-> +	while ((opt = getopt(argc, argv, "vp:d:")) != -1) {
-> +		switch (opt) {
-> +		case 'v':
-> +			opts->verbose = 1;
-> +			break;
-> +		case 'p':
-> +			opts->port = atoi(optarg);
-> +			break;
-> +		case 'd':
-> +			opts->devid = atoi(optarg);
-> +			break;
-> +		default:
-> +			usage(argv[0], NULL);
-> +		}
-> +	}
-> +}
-> +
-> +static int psp_dev_set_ena(struct ynl_sock *ys, __u32 dev_id, __u32 versions)
-> +{
-> +	struct psp_dev_set_req *sreq;
-> +	struct psp_dev_set_rsp *srsp;
-> +
-> +	fprintf(stderr, "Set PSP enable on device %d to 0x%x\n",
-> +		dev_id, versions);
-> +
-> +	sreq = psp_dev_set_req_alloc();
-> +
-> +	psp_dev_set_req_set_id(sreq, dev_id);
-> +	psp_dev_set_req_set_psp_versions_ena(sreq, versions);
-> +
-> +	srsp = psp_dev_set(ys, sreq);
-> +	psp_dev_set_req_free(sreq);
-> +	if (!srsp)
-> +		return 10;
-
-typo, return 1 intended? (does not matter functionally, of course)
-
-> +
-> +	psp_dev_set_rsp_free(srsp);
-> +	return 0;
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	struct psp_dev_get_list *dev_list;
-> +	bool devid_found = false;
-> +	__u32 ver_ena, ver_cap;
-> +	struct opts opts = {};
-> +	struct ynl_error yerr;
-> +	struct ynl_sock *ys;
-> +	int first_id = 0;
-> +	int ret;
-> +
-> +	parse_cmd_opts(argc, argv, &opts);
-> +	if (!opts.port)
-> +		usage(argv[0], "port"); // exits
-> +
-> +	ys = ynl_sock_create(&ynl_psp_family, &yerr);
-> +	if (!ys) {
-> +		fprintf(stderr, "YNL: %s\n", yerr.msg);
-> +		return 1;
-> +	}
-> +
-> +	dev_list = psp_dev_get_dump(ys);
-> +	if (ynl_dump_empty(dev_list)) {
-> +		if (ys->err.code)
-> +			goto err_close;
-> +		fprintf(stderr, "No PSP devices\n");
-> +		goto err_close_silent;
-> +	}
-> +
-> +	ynl_dump_foreach(dev_list, d) {
-> +		if (opts.devid) {
-> +			devid_found = true;
-> +			ver_ena = d->psp_versions_ena;
-> +			ver_cap = d->psp_versions_cap;
-> +		} else if (!first_id) {
-> +			first_id = d->id;
-> +			ver_ena = d->psp_versions_ena;
-> +			ver_cap = d->psp_versions_cap;
-> +		} else {
-> +			fprintf(stderr, "Multiple PSP devices found\n");
-> +			goto err_close_silent;
-> +		}
-> +	}
-> +	psp_dev_get_list_free(dev_list);
-> +
-> +	if (opts.devid && !devid_found) {
-> +		fprintf(stderr, "PSP device %d requested on cmdline, not found\n",
-> +			opts.devid);
-> +		goto err_close_silent;
-> +	} else if (!opts.devid) {
-> +		opts.devid = first_id;
-> +	}
-> +
-> +	if (ver_ena != ver_cap) {
-> +		ret = psp_dev_set_ena(ys, opts.devid, ver_cap);
-> +		if (ret)
-> +			goto err_close;
-> +	}
-> +
-> +	ret = run_responder(ys, &opts);
-> +
-> +	if (ver_ena != ver_cap && psp_dev_set_ena(ys, opts.devid, ver_ena))
-> +		fprintf(stderr, "WARN: failed to set the PSP versions back\n");
-> +
-> +	ynl_sock_destroy(ys);
-> +
-> +	return ret;
-> +
-> +err_close:
-> +	fprintf(stderr, "YNL: %s\n", ys->err.msg);
-> +err_close_silent:
-> +	ynl_sock_destroy(ys);
-> +	return 2;
-> +}
-> diff --git a/tools/testing/selftests/drivers/net/.gitignore b/tools/testing/selftests/drivers/net/.gitignore
-> index d634d8395d90..585ecb4d5dc4 100644
-> --- a/tools/testing/selftests/drivers/net/.gitignore
-> +++ b/tools/testing/selftests/drivers/net/.gitignore
-> @@ -1,2 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  napi_id_helper
-> +psp_responder
-> -- 
-> 2.51.0
-> 
+diff --git a/tools/testing/selftests/net/netdevsim.c b/tools/testing/selfte=
+sts/net/netdevsim.c
+new file mode 100644
+index 000000000000..cdc8ebef4dac
+--- /dev/null
++++ b/tools/testing/selftests/net/netdevsim.c
+@@ -0,0 +1,391 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This test creates a new netdevsim device and then sends
++ * an IPv6 multipath netlink message to it and the loopback
++ * interface.
++ *
++ * This triggers an edge case where the routing table is
++ * constructed with an entry where gw_family =3D AF_UNSPEC.
++ * If not caught, this causes an unexpected nsiblings count
++ * in netdevsim/fib.c: nsim_fib6_event_init(), raising a
++ * warning.
++ *
++ * NOTE: The warning in question is raised by WARN_ON_ONCE.
++ * Therefore, this test reports a false negative if the
++ * warning has already been triggered.
++ *
++ */
++
++#include <arpa/inet.h>
++#include <bits/types/struct_iovec.h>
++#include <linux/netlink.h>
++#include <linux/rtnetlink.h>
++#include <netinet/in.h>
++#include <stdio.h>
++#include <fcntl.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <unistd.h>
++#include <dirent.h>
++#include <stdbool.h>
++#include <net/if.h>
++
++#define RTF_UP 0x0001 // route usable
++#define RTF_HOST 0x0004 // host entry (net otherwise)
++
++#define NSIM_PORTS 1
++#define NETDEVSIM_DEV_DIR "/sys/bus/netdevsim/devices"
++#define NSIM_DEV_DIR_BUFFER_SIZE 128
++#define LO_DEV "lo"
++
++#define BUFSIZE 4096
++#define DST_PREFIX "2001:db8::"
++#define GW1 "fe80::1"
++#define GW2 "::1"
++
++#define PID_LEN 16
++
++int get_free_idx(void)
++{
++=09int idx =3D 0;
++=09int tmp =3D 0;
++=09DIR *nsim_dir =3D opendir(NETDEVSIM_DEV_DIR);
++=09struct dirent *entry =3D NULL;
++
++=09if (nsim_dir =3D=3D NULL) {
++=09=09fprintf(stderr, "Unable to open nsim directory\n");
++=09=09return -1;
++=09}
++
++=09do {
++=09=09entry =3D readdir(nsim_dir);
++=09=09if (entry !=3D NULL &&
++=09=09    sscanf(entry->d_name, "netdevsim%d", &tmp) > 0) {
++=09=09=09if (tmp >=3D idx)
++=09=09=09=09idx =3D tmp + 1;
++=09=09}
++=09} while (entry !=3D NULL);
++
++=09closedir(nsim_dir);
++=09return idx;
++}
++
++int create_netdevsim_device(int id, int num_ports)
++{
++=09const char *path =3D "/sys/bus/netdevsim/new_device";
++=09char buffer[64];
++=09int fd;
++
++=09fd =3D open(path, O_WRONLY);
++=09if (fd < 0) {
++=09=09fprintf(stderr, "Failed to open new_device\n");
++=09=09return -1;
++=09}
++
++=09snprintf(buffer, sizeof(buffer), "%d %d", id, num_ports);
++=09if (write(fd, buffer, strlen(buffer)) < 0) {
++=09=09fprintf(stderr, "Failed to write to new_device\n");
++=09=09close(fd);
++=09=09return -1;
++=09}
++
++=09close(fd);
++=09return 0;
++}
++
++int ensure_nsim_dev_exists(void)
++{
++=09int ret;
++=09int nsim_idx;
++
++=09nsim_idx =3D get_free_idx();
++=09ret =3D create_netdevsim_device(nsim_idx, NSIM_PORTS);
++=09if (ret !=3D 0) {
++=09=09fprintf(stderr, "Failed to create nsim device\n");
++=09=09return -1;
++=09}
++
++=09return nsim_idx;
++}
++
++char *get_nsim_dev_link(int nsim_idx)
++{
++=09char nsim_dev_dir_buffer[NSIM_DEV_DIR_BUFFER_SIZE];
++=09DIR *nsim_dev_dir;
++=09struct dirent *entry;
++
++=09sprintf(nsim_dev_dir_buffer, "%s/netdevsim%d/%s", NETDEVSIM_DEV_DIR,
++=09=09nsim_idx, "net");
++
++=09nsim_dev_dir =3D opendir(nsim_dev_dir_buffer);
++
++=09if (nsim_dev_dir =3D=3D NULL) {
++=09=09fprintf(stderr, "Unable to open %s\n", nsim_dev_dir_buffer);
++=09=09return NULL;
++=09}
++
++=09do {
++=09=09entry =3D readdir(nsim_dev_dir);
++=09=09if (entry !=3D NULL && entry->d_name[0] !=3D '.')
++=09=09=09break;
++
++=09} while (entry !=3D NULL);
++
++=09if (entry =3D=3D NULL || entry->d_name[0] =3D=3D '.') {
++=09=09fprintf(stderr, "Device has no ports\n");
++=09=09return NULL;
++=09}
++
++=09closedir(nsim_dev_dir);
++
++=09return entry->d_name;
++}
++
++int get_nsim_dev(char **nsim_link)
++{
++=09int nsim_idx;
++=09char *nsim_dev_link;
++
++=09nsim_idx =3D ensure_nsim_dev_exists();
++=09if (nsim_idx < 0)
++=09=09return -1;
++
++=09nsim_dev_link =3D get_nsim_dev_link(nsim_idx);
++=09if (nsim_dev_link =3D=3D NULL)
++=09=09return -1;
++
++=09*nsim_link =3D nsim_dev_link;
++=09return 0;
++}
++
++int prepare_socket(void)
++{
++=09struct sockaddr_nl sa;
++=09int fd =3D socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
++
++=09if (fd < 0) {
++=09=09fprintf(stderr, "Failed to open socket\n");
++=09=09return -1;
++=09}
++
++=09sa.nl_family =3D AF_NETLINK;
++
++=09if (bind(fd, (struct sockaddr *)&sa, sizeof(sa)) < 0)
++=09=09fprintf(stderr, "Failed to bind socket\n");
++
++=09return fd;
++}
++
++struct nlmsghdr *construct_header(char **pos)
++{
++=09struct nlmsghdr *nlh =3D (struct nlmsghdr *)(*pos);
++
++=09nlh->nlmsg_type =3D RTM_NEWROUTE;
++=09nlh->nlmsg_flags =3D NLM_F_REQUEST | NLM_F_ACK | NLM_F_CREATE;
++
++=09*pos +=3D NLMSG_HDRLEN;
++
++=09return nlh;
++}
++
++void construct_rtmsg(char **pos)
++{
++=09struct rtmsg *rtm =3D (struct rtmsg *)(*pos);
++
++=09rtm->rtm_family =3D AF_INET6;
++=09rtm->rtm_table =3D RT_TABLE_MAIN;
++=09rtm->rtm_protocol =3D RTPROT_STATIC;
++=09rtm->rtm_type =3D RTN_UNICAST;
++=09rtm->rtm_scope =3D RT_SCOPE_UNIVERSE;
++=09rtm->rtm_dst_len =3D 128;
++=09rtm->rtm_flags |=3D RTF_HOST | RTF_UP;
++
++=09*pos +=3D NLMSG_ALIGN(sizeof(struct rtmsg));
++}
++
++void construct_dest(char **pos)
++{
++=09struct rtattr *rta_dest =3D (struct rtattr *)(*pos);
++=09struct in6_addr dst6;
++
++=09rta_dest->rta_type =3D RTA_DST;
++=09rta_dest->rta_len =3D RTA_LENGTH(sizeof(struct in6_addr));
++=09inet_pton(AF_INET6, DST_PREFIX, &dst6);
++=09memcpy(RTA_DATA(rta_dest), &dst6, sizeof(dst6));
++=09*pos +=3D RTA_ALIGN(rta_dest->rta_len);
++}
++
++struct rtattr *construct_multipath_hdr(char **pos)
++{
++=09struct rtattr *rta_mp =3D (struct rtattr *)(*pos);
++
++=09rta_mp->rta_type =3D RTA_MULTIPATH;
++=09*pos +=3D sizeof(struct rtattr);
++
++=09return rta_mp;
++}
++
++void add_nexthop(char **pos, int ifindex, char *gw_addr)
++{
++=09struct rtnexthop *rtnh =3D (struct rtnexthop *)(*pos);
++
++=09rtnh->rtnh_hops =3D 0;
++=09rtnh->rtnh_ifindex =3D ifindex;
++=09char *rtnh_pos =3D (char *)rtnh + RTNH_ALIGN(sizeof(struct rtnexthop));
++
++=09struct rtattr *attr =3D (struct rtattr *)rtnh_pos;
++
++=09attr->rta_type =3D RTA_GATEWAY;
++=09attr->rta_len =3D RTA_LENGTH(sizeof(struct in6_addr));
++
++=09struct in6_addr gw;
++
++=09inet_pton(AF_INET6, gw_addr, &gw);
++=09memcpy(RTA_DATA(attr), &gw, sizeof(gw));
++
++=09rtnh_pos +=3D RTA_ALIGN(attr->rta_len);
++=09rtnh->rtnh_len =3D rtnh_pos - (char *)rtnh;
++
++=09*pos =3D rtnh_pos;
++}
++
++struct nlmsghdr *construct_message(char *buf, int nsim_ifindex, int lo_ifi=
+ndex)
++{
++=09char *pos =3D buf;
++=09struct nlmsghdr *nlh =3D construct_header(&pos);
++
++=09construct_rtmsg(&pos);
++=09construct_dest(&pos);
++
++=09struct rtattr *rta_mp =3D construct_multipath_hdr(&pos);
++
++=09add_nexthop(&pos, nsim_ifindex, GW1);
++=09add_nexthop(&pos, lo_ifindex, GW2);
++
++=09rta_mp->rta_len =3D pos - (char *)rta_mp;
++=09nlh->nlmsg_len =3D pos - buf;
++
++=09return nlh;
++}
++
++int send_nl_msg(struct nlmsghdr *nlh, int socket)
++{
++=09struct iovec iov =3D { .iov_base =3D nlh, .iov_len =3D nlh->nlmsg_len }=
+;
++=09struct msghdr msg =3D {
++=09=09.msg_iov =3D &iov,
++=09=09.msg_iovlen =3D 1,
++=09};
++
++=09if (sendmsg(socket, (struct msghdr *)&msg, 0) < 0) {
++=09=09fprintf(stderr, "Failed to send message\n");
++=09=09return 1;
++=09}
++
++=09return 0;
++}
++
++int open_kmsg(void)
++{
++=09int fd =3D open("/dev/kmsg", O_RDONLY | O_NONBLOCK);
++
++=09if (fd < 0) {
++=09=09fprintf(stderr, "Failed to open kmsg\n");
++=09=09return -1;
++=09}
++
++=09return fd;
++}
++
++int move_cursor_to_end(int fd)
++{
++=09if (lseek(fd, 0, SEEK_END) =3D=3D -1) {
++=09=09fprintf(stderr, "Failed to lseek kmsg\n");
++=09=09return -1;
++=09}
++
++=09return 0;
++}
++
++int look_for_warn(int kmsg_fd)
++{
++=09char buffer[1024];
++=09int bytes_read;
++=09int pid =3D getpid();
++=09char pid_str[PID_LEN];
++
++=09snprintf(pid_str, PID_LEN, "%d", pid);
++
++=09while ((bytes_read =3D read(kmsg_fd, buffer, sizeof(buffer) - 1)) > 0) =
+{
++=09=09buffer[bytes_read] =3D '\0';
++=09=09if (strstr(buffer, "WARNING") && strstr(buffer, pid_str)) {
++=09=09=09printf("Kernel warning detected\n");
++=09=09=09return 1;
++=09=09}
++=09}
++
++=09return 0;
++}
++
++int main(void)
++{
++=09char *nsim_dev;
++=09int if_lo, if_nsim;
++=09int fd;
++=09int kmsg_fd;
++=09struct nlmsghdr *nlh;
++=09char buf[BUFSIZE];
++
++=09if (get_nsim_dev(&nsim_dev) !=3D 0)
++=09=09return EXIT_FAILURE;
++
++=09sleep(1); // Doesn't work without a delay
++
++=09if_lo =3D if_nametoindex(LO_DEV);
++=09if_nsim =3D if_nametoindex(nsim_dev);
++
++=09if (!if_lo || !if_nsim) {
++=09=09fprintf(stderr, "Failed to get interface index\n");
++=09=09return EXIT_FAILURE;
++=09}
++
++=09memset(buf, 0, sizeof(buf));
++=09nlh =3D construct_message(buf, if_nsim, if_lo);
++
++=09fd =3D prepare_socket();
++=09if (fd < 0) {
++=09=09fprintf(stderr, "Failed to open socket\n");
++=09=09close(fd);
++=09=09return EXIT_FAILURE;
++=09}
++
++=09kmsg_fd =3D open_kmsg();
++=09if (kmsg_fd < 0) {
++=09=09fprintf(stderr, "Failed to open kmsg\n");
++=09=09close(fd);
++=09=09return EXIT_FAILURE;
++=09}
++
++=09if (move_cursor_to_end(kmsg_fd) < 0) {
++=09=09fprintf(stderr, "Failed to open kmsg\n");
++=09=09close(fd);
++=09=09close(kmsg_fd);
++=09=09return EXIT_FAILURE;
++=09}
++
++=09if (send_nl_msg(nlh, fd) !=3D 0) {
++=09=09close(fd);
++=09=09close(kmsg_fd);
++=09=09return EXIT_FAILURE;
++=09}
++
++=09if (look_for_warn(kmsg_fd) !=3D 0) {
++=09=09close(fd);
++=09=09close(kmsg_fd);
++=09=09return EXIT_FAILURE;
++=09}
++
++=09close(kmsg_fd);
++=09close(fd);
++=09return EXIT_SUCCESS;
++}
+--=20
+2.43.0
 
 
 
