@@ -1,80 +1,79 @@
-Return-Path: <linux-kselftest+bounces-42553-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E630BA746E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 18:00:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E31BBA747A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 18:02:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1CB63A3E59
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 16:00:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB7A8171CF2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Sep 2025 16:02:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5107D22F77B;
-	Sun, 28 Sep 2025 16:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3CC212FB3;
+	Sun, 28 Sep 2025 16:02:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N16VP0Pg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UXCZEpLV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8FC134AB
-	for <linux-kselftest@vger.kernel.org>; Sun, 28 Sep 2025 16:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C8A1FCF41
+	for <linux-kselftest@vger.kernel.org>; Sun, 28 Sep 2025 16:02:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759075220; cv=none; b=MGW1g1rhKywWQFmP1f46XJvWSjiMF++2xR+MFDIB3IR9712hp6iHy9Rv1Kam+yDI+bQm3CguHziOyTZcno1wUUMCI/JXKFe9zp6zVAA0bsf2g799lX8KndIjUgqA6Mf9k35BwV46eKWABvXtwQFljYZdmb3xAUu0KAw+23nGhPE=
+	t=1759075368; cv=none; b=t6NbU+Zm5/slFIPT+DOYE16eeUCRhwRkkf1+Xvx7G5jZWpalpTr8VAPDjH5WdlbYWQElDQ30cH6SAUc33RhPo2UbycDz7rPMjJFnjKG7+YU917sD3CUWbYizMP7J0XZoBAI/spR5vxHjtW0/doVTbp2a3iAhlR8AoZrBEY3qegU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759075220; c=relaxed/simple;
-	bh=qS/T0bA5Nab7JjhSU/T0oHF4h9/VtZyfnVkiF2bOXak=;
+	s=arc-20240116; t=1759075368; c=relaxed/simple;
+	bh=rrjA+mE5GymwprAVBzGYmEhKQq5a9mT04lcGJdkdrBE=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=nbo7h4/4q5g1fN8N7oS5X7eUStiL6Ynj1bSYKdg+PbVr72xHdWpRTlYRiONh9rMagNBvYJqs7yMFgXLfogr64V6Bsd1z31uYoJVuQU3a61SVohjiizjX0zF6jsqHVpX4rPxCu+oBBuP9LzbWecVmncOM+V5kSlRqwpbEFYwj5b4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N16VP0Pg; arc=none smtp.client-ip=209.85.222.46
+	 Mime-Version:Content-Type; b=sZWG0U9KIAcmlKwPl5NAvyFeTLqoo+s9Cz3RuZvJWUk0vzEZqsUBt3cqbiVy1kWxN1BGjzDcn/gGfzDuZKtnIu3wvP6kHN1krJVM5Hdt9w0f5akwKFIvqNcOUtgyi0MsMK6P/WijvydGNZNAbQxX7e8KsMy5VY5krvtVf2CWmG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UXCZEpLV; arc=none smtp.client-ip=209.85.221.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-923f46f6c59so455419241.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Sep 2025 09:00:18 -0700 (PDT)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-54c09f417e2so775133e0c.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 Sep 2025 09:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759075217; x=1759680017; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1759075365; x=1759680165; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AQij3aadeY0LAW28lv4eYbkkFZan9y9iCIkzV96eR0E=;
-        b=N16VP0PgjuSntLiIcRJVugJiBjkYaU92I8ppxc40S86eFz/6EFb30t+djUm3kyPm6X
-         acEv2YH8SiBxb84L+1AmP1O4xEptEFSghnzcfx1fxD8/9VOi3CJMnJ37aR6KTmbz8/U1
-         KnCeVpU4VoJazGfeD2bcfeiayHhKw7BTxOmwGqa5iksBEGq2GSu/2kaG9b0bfZY50X/s
-         Ra+3hGQHNguWsT0Gq4OFGjcI87RtHCa9xbcmCvA8sNSmpAFL7ePhEcy19kF3Cv6N4q/z
-         hVlIw8SYGG3ufZdB88uLWjTySM59xng10gwfEVZ1Q8M96XeNXHq+/jSekEcLGCY9TfWf
-         L7Wg==
+        bh=WrCATCO4EbZHGComli7FmMD7LhS3vdJu4twjs5Vt93g=;
+        b=UXCZEpLVJXuJtGsWvJ3byV3f+aTQC7PyMkhWWPdke3gg/aqGzvhljQHytSngSNAg2l
+         aT3JcMjTjDKBloAH1yDDddKyMSKgVM45CV6io2wTMgTC0XGPVF7EG9h8wZFWCAFa4+qJ
+         RvM2AntISW108BhUqqMFrvTB39F4Wdv6xfLjmnTExpltWqp4c6/CaVFld30GPbysjgF7
+         BqAglzRCWyGwEw5iNSIWYGyPAFz4M30Km2ViUJTtJQC5lkdNoLtQeGx4xNsV7R+WxBw5
+         Q/KFtPkLSQ9pUMSYU/g2rAB58NxYQcdTWSkHkRDw4fS2US8v6egiHJgxCJUdVWEpXosy
+         pobw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759075217; x=1759680017;
+        d=1e100.net; s=20230601; t=1759075365; x=1759680165;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=AQij3aadeY0LAW28lv4eYbkkFZan9y9iCIkzV96eR0E=;
-        b=pWdyIRXLMfM0oxw93i+0sJ7hm45jiucHFcAuBnLz2jDWMVDnX7Y2RYryf71QT9BEL+
-         nZ/T8lTYqmKxQh0EWK6U/2jsUcJr1XKbmLNImXTJZgu0g9yihaYihte3rUSjZYqLFYA8
-         MyfTuQ5hoXvDFsmshp98mAfCD8ohg9uogBMjvwDuKR8JBpxyU87WdVYT8UOysrwy3crZ
-         ynEbVfW5BRwC0SKeXJ2VVkzY1Ks7OuNUrgnBX0VFfjkTQPpu0HsblH0Tnyihsk6FzgSv
-         r5BgTInHx1JttIFL/bkakEhzGl0lqF4XNaPeEZ0f1ow4pVQ2JV3am2X3PN7KNUfKlmlY
-         ucnw==
-X-Forwarded-Encrypted: i=1; AJvYcCUYKdD8rdglJRCXsaGAh9SopjYyDby3qx6HsEag+NWjX+0UPHQD6G5vD4hbhr67aMPrH+Ca5ADLPJtpuppjs7c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDhck3T7gturqYA1WYax/TpMG2xrna+wOxJ/v78AV6+h8N70sN
-	1Iue8JUA9sS3JFelGKl4YAZgWGGvoRkHk0QBas7hh3ABOstoPVCv8dBw
-X-Gm-Gg: ASbGnctcGVJ/3qgtXprwxVeD9YCGkdJsxX82t8HIIn/5Xuw9wgI3Gvifc46KKw6rjXG
-	u4dg1gwFnCugF4EKo7/LSJMF0EspBBycPVdrNs/hzjP0OGANCxSWAn/vuztPhiKRUV6hcIA4aLj
-	KOertzza6+4DabzYEFUZcIv2q9QF4S30WuPyG8XGP18Z92lj3NkS+VY3pJ6BA6Eg6vN8iBIK27Y
-	xkna/VvXYKpyiF9SCnDdPD/UTM9aj26PPx4t8aVAp1oR1jHQnj6Dhi2vd/CEIBQh/EfbX3H1F61
-	LTF5JYrXrOkJJnNdn1ltulQbg+Cw0CLOHX6F7QHHrgAl6QXY6H3YRM+Gg+mGmoxqWDF88Xh/uWu
-	APWjBvLtzmCKAc8WKcLNhEmrM2Fs9yqzexnUKBQE7Ytdm3QO2NN+smaBve9axgI5VizF0vMBd1q
-	nmrzeBXIMZD8VkfWw=
-X-Google-Smtp-Source: AGHT+IF1U+3kTmlbysfzmndYvyQ7HgwEMnwNp44lzddu4VE3gWj4a/8VkEfWQHbq0trE/hmDz9Vw1g==
-X-Received: by 2002:a05:6102:41ab:b0:596:9fd8:9268 with SMTP id ada2fe7eead31-5bae22fa7e0mr2488741137.8.1759075217265;
-        Sun, 28 Sep 2025 09:00:17 -0700 (PDT)
+        bh=WrCATCO4EbZHGComli7FmMD7LhS3vdJu4twjs5Vt93g=;
+        b=XwllsP4FP+pvzJli2IXAOG2Z9ioe9nF3QusazxLFKZdVyMczvwfqCgw5MXSqOWZvzU
+         3xOLwkSC+GLVARCqiBoIsClu4v2ymuXALHKRs3g0afoggvwNLyyBysfr2ZxOAF1NaUBz
+         m25FgC5gItwg5nf+OJED2IfBTpd7G9hdxgxVOIPO0xG0HZ3uvj94z8JuDaSwrA2txPxS
+         rI4wrAvmAJ+f+BOa2Xw6cCwPXFjGCdBZUEeodIK5BjcTtbGVgDlCdwwhefyieE5ILuF6
+         rgQwu6gKeSyZ0RQ6GPzZC1EQT892Od4TcVh79ATwjXvFhVPe6guJuubc9A/0EkH347hB
+         2hfw==
+X-Forwarded-Encrypted: i=1; AJvYcCU8ppd0xyEcCmxSjIZp5AwwGh92qTkGoFykmhKdWH1pGw9uOuNgaHDPvLAWtfGDqsNX4wYsluIGtanVJ0KjYuE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmXQv/v0gohkFrFyNfjdQfON8Y8RdnknIPgi4Hnc8PdLMwd1mh
+	+POAdvKdLVx5Uax0xZlhYYqqamR1xTM5DhpWhnvZWdn7hXLL28M3eIg1
+X-Gm-Gg: ASbGncsOfIApsnVfx7LuMvsNTQRJqrCBJE1RakCvC/bUSZc9dLPxslziAcX2648zl8z
+	aa7UutC6XutJE0BtXCBHNy+FykbpUTxNG7FyA7gCqX/4ki4L7rkkc89sGtm7S5PZzMs90q0c9zG
+	UsdGvvnT2av0A4jnn5TIm7xbVyxDa97aehAwRfDe4VNODbLzJ7NUfXPj4ib7k/J+YJBD/nV0Fk9
+	O+kAH/QwVaIrpN9FUd9erbLArzSuIkZEm+akOdeLnqKx7S6CxDgI5YIJPVTjiA92QsVGpPIrzYc
+	o9QEOrcCsJEPQ6M54U8V714cmBEixm6rvQf3CNJEg2oUGRYcFPM8G3HwmUVusJQE3xKrfNrnVFf
+	iCQvRbVTk8zGD7Xhz8JSBcEa0Jn+85eJMx+M3QHNRxRPla6qlsLFQ0V7IZa99lhnUV4JqoQ==
+X-Google-Smtp-Source: AGHT+IHtadwqQLY5klEWJl82ilwmo9CbLIG7knyuqw0F17Rkir3uPu7qkIl3jp9hBnjqniqz+88rhw==
+X-Received: by 2002:a05:6122:a02:b0:53c:6d68:1d2f with SMTP id 71dfb90a1353d-54bea22d9d6mr6049411e0c.13.1759075365133;
+        Sun, 28 Sep 2025 09:02:45 -0700 (PDT)
 Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id 71dfb90a1353d-54beddbc629sm1831374e0c.24.2025.09.28.09.00.16
+        by smtp.gmail.com with UTF8SMTPSA id 71dfb90a1353d-54beddbb84bsm2021392e0c.21.2025.09.28.09.02.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Sep 2025 09:00:16 -0700 (PDT)
-Date: Sun, 28 Sep 2025 12:00:15 -0400
+        Sun, 28 Sep 2025 09:02:44 -0700 (PDT)
+Date: Sun, 28 Sep 2025 12:02:43 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Jakub Kicinski <kuba@kernel.org>, 
  davem@davemloft.net
@@ -89,10 +88,11 @@ Cc: netdev@vger.kernel.org,
  daniel.zahka@gmail.com, 
  linux-kselftest@vger.kernel.org, 
  Jakub Kicinski <kuba@kernel.org>
-Message-ID: <willemdebruijn.kernel.2e2661b9a8ae9@gmail.com>
-In-Reply-To: <20250927225420.1443468-1-kuba@kernel.org>
+Message-ID: <willemdebruijn.kernel.3092f23a51d54@gmail.com>
+In-Reply-To: <20250927225420.1443468-2-kuba@kernel.org>
 References: <20250927225420.1443468-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next v3 0/8] psp: add a kselftest suite and netdevsim
+ <20250927225420.1443468-2-kuba@kernel.org>
+Subject: Re: [PATCH net-next v3 1/8] netdevsim: a basic test PSP
  implementation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -105,102 +105,323 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Jakub Kicinski wrote:
-> Add a basic test suite for drivers that support PSP. Also, add a PSP
-> implementation in the netdevsim driver.
+> Provide a PSP implementation for netdevsim.
 > 
-> The netdevsim implementation does encapsulation and decapsulation of
-> PSP packets, but no crypto.
+> Use psp_dev_encapsulate() and psp_dev_rcv() to do actual encapsulation
+> and decapsulation on skbs, but perform no encryption or decryption. In
+> order to make encryption with a bad key result in a drop on the peer's
+> rx side, we stash our psd's generation number in the first byte of each
+> key before handing to the peer.
 > 
-> The tests cover the basic usage of the uapi, and demonstrate key
-> exchange and connection setup. The tests and netdevsim support IPv4
-> and IPv6. Here is an example run on a system with a CX7 NIC.
-> 
->     TAP version 13
->     1..28
->     ok 1 psp.data_basic_send_v0_ip4
->     ok 2 psp.data_basic_send_v0_ip6
->     ok 3 psp.data_basic_send_v1_ip4
->     ok 4 psp.data_basic_send_v1_ip6
->     ok 5 psp.data_basic_send_v2_ip4 # SKIP ('PSP version not supported', 'hdr0-aes-gmac-128')
->     ok 6 psp.data_basic_send_v2_ip6 # SKIP ('PSP version not supported', 'hdr0-aes-gmac-128')
->     ok 7 psp.data_basic_send_v3_ip4 # SKIP ('PSP version not supported', 'hdr0-aes-gmac-256')
->     ok 8 psp.data_basic_send_v3_ip6 # SKIP ('PSP version not supported', 'hdr0-aes-gmac-256')
->     ok 9 psp.data_mss_adjust_ip4
->     ok 10 psp.data_mss_adjust_ip6
->     ok 11 psp.dev_list_devices
->     ok 12 psp.dev_get_device
->     ok 13 psp.dev_get_device_bad
->     ok 14 psp.dev_rotate
->     ok 15 psp.dev_rotate_spi
->     ok 16 psp.assoc_basic
->     ok 17 psp.assoc_bad_dev
->     ok 18 psp.assoc_sk_only_conn
->     ok 19 psp.assoc_sk_only_mismatch
->     ok 20 psp.assoc_sk_only_mismatch_tx
->     ok 21 psp.assoc_sk_only_unconn
->     ok 22 psp.assoc_version_mismatch
->     ok 23 psp.assoc_twice
->     ok 24 psp.data_send_bad_key
->     ok 25 psp.data_send_disconnect
->     ok 26 psp.data_stale_key
->     ok 27 psp.removal_device_rx # XFAIL Test only works on netdevsim
->     ok 28 psp.removal_device_bi # XFAIL Test only works on netdevsim
->     # Totals: pass:22 fail:0 xfail:2 xpass:0 skip:4 error:0
->     # 
->     # Responder logs (0):
->     # STDERR:
->     #  Set PSP enable on device 1 to 0x3
->     #  Set PSP enable on device 1 to 0x0
-> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Co-developed-by: Daniel Zahka <daniel.zahka@gmail.com>
+> Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+> ---
 > v3:
->  - fix netdevsim bugs
->  - rework the skipping
->  - use errno
->  - remove duplicated condition
-> v2: https://lore.kernel.org/20250925211647.3450332-1-daniel.zahka@gmail.com
->   - fix pylint warnings
->   - insert CONFIG_INET_PSP in alphebetical order
->   - use branch to skip all tests
->   - fix compilation error when CONFIG_INET_PSP is not set
-> v1: https://lore.kernel.org/20250924194959.2845473-1-daniel.zahka@gmail.com
-> 
-> Jakub Kicinski (8):
->   netdevsim: a basic test PSP implementation
->   selftests: drv-net: base device access API test
->   selftests: drv-net: add PSP responder
->   selftests: drv-net: psp: add basic data transfer and key rotation
->     tests
->   selftests: drv-net: psp: add association tests
->   selftests: drv-net: psp: add connection breaking tests
->   selftests: drv-net: psp: add test for auto-adjusting TCP MSS
->   selftests: drv-net: psp: add tests for destroying devices
-> 
->  drivers/net/netdevsim/Makefile                |   4 +
->  tools/testing/selftests/drivers/net/Makefile  |  10 +
->  drivers/net/netdevsim/netdevsim.h             |  27 +
->  drivers/net/netdevsim/netdev.c                |  43 +-
->  drivers/net/netdevsim/psp.c                   | 225 +++++++
->  net/core/skbuff.c                             |   1 +
->  .../selftests/drivers/net/psp_responder.c     | 483 ++++++++++++++
->  .../testing/selftests/drivers/net/.gitignore  |   1 +
->  tools/testing/selftests/drivers/net/config    |   1 +
->  .../drivers/net/hw/lib/py/__init__.py         |   4 +-
->  .../selftests/drivers/net/lib/py/__init__.py  |   4 +-
->  .../selftests/drivers/net/lib/py/env.py       |   4 +
->  tools/testing/selftests/drivers/net/psp.py    | 627 ++++++++++++++++++
->  .../testing/selftests/net/lib/py/__init__.py  |   2 +-
->  tools/testing/selftests/net/lib/py/ksft.py    |  10 +
->  tools/testing/selftests/net/lib/py/ynl.py     |   5 +
->  16 files changed, 1440 insertions(+), 11 deletions(-)
+>  - fix init error path
+>  - fix unused variable with ipv6=n (__maybe_unused, all options seem
+>    equally bad here)
+> ---
+>  drivers/net/netdevsim/Makefile    |   4 +
+>  drivers/net/netdevsim/netdevsim.h |  27 ++++
+>  drivers/net/netdevsim/netdev.c    |  43 +++++-
+>  drivers/net/netdevsim/psp.c       | 225 ++++++++++++++++++++++++++++++
+>  net/core/skbuff.c                 |   1 +
+>  5 files changed, 294 insertions(+), 6 deletions(-)
 >  create mode 100644 drivers/net/netdevsim/psp.c
->  create mode 100644 tools/testing/selftests/drivers/net/psp_responder.c
->  create mode 100755 tools/testing/selftests/drivers/net/psp.py
+> 
+> diff --git a/drivers/net/netdevsim/Makefile b/drivers/net/netdevsim/Makefile
+> index f8de93bc5f5b..14a553e000ec 100644
+> --- a/drivers/net/netdevsim/Makefile
+> +++ b/drivers/net/netdevsim/Makefile
+> @@ -18,6 +18,10 @@ ifneq ($(CONFIG_PSAMPLE),)
+>  netdevsim-objs += psample.o
+>  endif
+>  
+> +ifneq ($(CONFIG_INET_PSP),)
+> +netdevsim-objs += psp.o
+> +endif
+> +
+>  ifneq ($(CONFIG_MACSEC),)
+>  netdevsim-objs += macsec.o
+>  endif
+> diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
+> index bddd24c1389d..02c1c97b7008 100644
+> --- a/drivers/net/netdevsim/netdevsim.h
+> +++ b/drivers/net/netdevsim/netdevsim.h
+> @@ -108,6 +108,12 @@ struct netdevsim {
+>  
+>  	int rq_reset_mode;
+>  
+> +	struct {
+> +		struct psp_dev *dev;
+> +		u32 spi;
+> +		u32 assoc_cnt;
+> +	} psp;
+> +
+>  	struct nsim_bus_dev *nsim_bus_dev;
+>  
+>  	struct bpf_prog	*bpf_offloaded;
+> @@ -421,6 +427,27 @@ static inline void nsim_macsec_teardown(struct netdevsim *ns)
+>  }
+>  #endif
+>  
+> +#if IS_ENABLED(CONFIG_INET_PSP)
+> +int nsim_psp_init(struct netdevsim *ns);
+> +void nsim_psp_uninit(struct netdevsim *ns);
+> +void nsim_psp_handle_ext(struct sk_buff *skb, struct skb_ext *psp_ext);
+> +enum skb_drop_reason
+> +nsim_do_psp(struct sk_buff *skb, struct netdevsim *ns,
+> +	    struct netdevsim *peer_ns, struct skb_ext **psp_ext);
+> +#else
+> +static inline int nsim_psp_init(struct netdevsim *ns) { return 0; }
+> +static inline void nsim_psp_uninit(struct netdevsim *ns) {}
+> +static inline enum skb_drop_reason
+> +nsim_do_psp(struct sk_buff *skb, struct netdevsim *ns,
+> +	    struct netdevsim *peer_ns, struct skb_ext **psp_ext)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void
+> +nsim_psp_handle_ext(struct sk_buff *skb, struct skb_ext *psp_ext) {}
+> +#endif
+> +
+>  struct nsim_bus_dev {
+>  	struct device dev;
+>  	struct list_head list;
+> diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
+> index 0178219f0db5..ebc3833e95b4 100644
+> --- a/drivers/net/netdevsim/netdev.c
+> +++ b/drivers/net/netdevsim/netdev.c
+> @@ -103,28 +103,42 @@ static int nsim_napi_rx(struct net_device *tx_dev, struct net_device *rx_dev,
+>  static int nsim_forward_skb(struct net_device *tx_dev,
+>  			    struct net_device *rx_dev,
+>  			    struct sk_buff *skb,
+> -			    struct nsim_rq *rq)
+> +			    struct nsim_rq *rq,
+> +			    struct skb_ext *psp_ext)
+>  {
+> -	return __dev_forward_skb(rx_dev, skb) ?:
+> -		nsim_napi_rx(tx_dev, rx_dev, rq, skb);
+> +	int ret;
+> +
+> +	ret = __dev_forward_skb(rx_dev, skb);
+> +	if (ret)
+> +		return ret;
+> +
+> +	nsim_psp_handle_ext(skb, psp_ext);
+> +
+> +	return nsim_napi_rx(tx_dev, rx_dev, rq, skb);
+>  }
+>  
+>  static netdev_tx_t nsim_start_xmit(struct sk_buff *skb, struct net_device *dev)
+>  {
+>  	struct netdevsim *ns = netdev_priv(dev);
+> +	struct skb_ext *psp_ext = NULL;
+>  	struct net_device *peer_dev;
+>  	unsigned int len = skb->len;
+>  	struct netdevsim *peer_ns;
+>  	struct netdev_config *cfg;
+>  	struct nsim_rq *rq;
+>  	int rxq;
+> +	int dr;
+>  
+>  	rcu_read_lock();
+>  	if (!nsim_ipsec_tx(ns, skb))
+> -		goto out_drop_free;
+> +		goto out_drop_any;
+>  
+>  	peer_ns = rcu_dereference(ns->peer);
+>  	if (!peer_ns)
+> +		goto out_drop_any;
+> +
+> +	dr = nsim_do_psp(skb, ns, peer_ns, &psp_ext);
+> +	if (dr)
+>  		goto out_drop_free;
+>  
+>  	peer_dev = peer_ns->netdev;
+> @@ -141,7 +155,8 @@ static netdev_tx_t nsim_start_xmit(struct sk_buff *skb, struct net_device *dev)
+>  		skb_linearize(skb);
+>  
+>  	skb_tx_timestamp(skb);
+> -	if (unlikely(nsim_forward_skb(dev, peer_dev, skb, rq) == NET_RX_DROP))
+> +	if (unlikely(nsim_forward_skb(dev, peer_dev,
+> +				      skb, rq, psp_ext) == NET_RX_DROP))
+>  		goto out_drop_cnt;
+>  
+>  	if (!hrtimer_active(&rq->napi_timer))
+> @@ -151,8 +166,10 @@ static netdev_tx_t nsim_start_xmit(struct sk_buff *skb, struct net_device *dev)
+>  	dev_dstats_tx_add(dev, len);
+>  	return NETDEV_TX_OK;
+>  
+> +out_drop_any:
+> +	dr = SKB_DROP_REASON_NOT_SPECIFIED;
+>  out_drop_free:
+> -	dev_kfree_skb(skb);
+> +	kfree_skb_reason(skb, dr);
+>  out_drop_cnt:
+>  	rcu_read_unlock();
+>  	dev_dstats_tx_dropped(dev);
+> @@ -1002,6 +1019,7 @@ static void nsim_queue_uninit(struct netdevsim *ns)
+>  
+>  static int nsim_init_netdevsim(struct netdevsim *ns)
+>  {
+> +	struct netdevsim *peer;
+>  	struct mock_phc *phc;
+>  	int err;
+>  
+> @@ -1036,6 +1054,10 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
+>  		goto err_ipsec_teardown;
+>  	rtnl_unlock();
+>  
+> +	err = nsim_psp_init(ns);
+> +	if (err)
+> +		goto err_unregister_netdev;
+> +
+>  	if (IS_ENABLED(CONFIG_DEBUG_NET)) {
+>  		ns->nb.notifier_call = netdev_debug_event;
+>  		if (register_netdevice_notifier_dev_net(ns->netdev, &ns->nb,
+> @@ -1045,6 +1067,13 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
+>  
+>  	return 0;
+>  
+> +err_unregister_netdev:
+> +	rtnl_lock();
+> +	peer = rtnl_dereference(ns->peer);
+> +	if (peer)
+> +		RCU_INIT_POINTER(peer->peer, NULL);
+> +	RCU_INIT_POINTER(ns->peer, NULL);
+> +	unregister_netdevice(ns->netdev);
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Could maybe use a shared helper with the same logic in nsim_destroy
 
-Great both for coverage and as an example device implementation,
-thanks.
+>  err_ipsec_teardown:
+>  	nsim_ipsec_teardown(ns);
+>  	nsim_macsec_teardown(ns);
+> @@ -1132,6 +1161,8 @@ void nsim_destroy(struct netdevsim *ns)
+>  		unregister_netdevice_notifier_dev_net(ns->netdev, &ns->nb,
+>  						      &ns->nn);
+>  
+> +	nsim_psp_uninit(ns);
+> +
+>  	rtnl_lock();
+>  	peer = rtnl_dereference(ns->peer);
+>  	if (peer)
+> diff --git a/drivers/net/netdevsim/psp.c b/drivers/net/netdevsim/psp.c
+> new file mode 100644
+> index 000000000000..332b5b744f01
+> --- /dev/null
+> +++ b/drivers/net/netdevsim/psp.c
+> @@ -0,0 +1,225 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/ip.h>
+> +#include <linux/skbuff.h>
+> +#include <net/ip6_checksum.h>
+> +#include <net/psp.h>
+> +#include <net/sock.h>
+> +
+> +#include "netdevsim.h"
+> +
+> +void nsim_psp_handle_ext(struct sk_buff *skb, struct skb_ext *psp_ext)
+> +{
+> +	if (psp_ext)
+> +		__skb_ext_set(skb, SKB_EXT_PSP, psp_ext);
+> +}
+> +
+> +enum skb_drop_reason
+> +nsim_do_psp(struct sk_buff *skb, struct netdevsim *ns,
+> +	    struct netdevsim *peer_ns, struct skb_ext **psp_ext)
+> +{
+> +	enum skb_drop_reason rc = 0;
+> +	struct psp_assoc *pas;
+> +	struct net *net;
+> +	void **ptr;
+> +
+> +	rcu_read_lock();
+> +	pas = psp_skb_get_assoc_rcu(skb);
+> +	if (!pas) {
+> +		rc = SKB_NOT_DROPPED_YET;
+> +		goto out_unlock;
+> +	}
+> +
+> +	if (!skb_transport_header_was_set(skb)) {
+> +		rc = SKB_DROP_REASON_PSP_OUTPUT;
+> +		goto out_unlock;
+> +	}
+> +
+> +	ptr = psp_assoc_drv_data(pas);
+> +	if (*ptr != ns) {
+> +		rc = SKB_DROP_REASON_PSP_OUTPUT;
+> +		goto out_unlock;
+> +	}
+> +
+> +	net = sock_net(skb->sk);
+> +	if (!psp_dev_encapsulate(net, skb, pas->tx.spi, pas->version, 0)) {
+> +		rc = SKB_DROP_REASON_PSP_OUTPUT;
+> +		goto out_unlock;
+> +	}
+> +
+> +	/* Now pretend we just received this frame */
+> +	if (peer_ns->psp.dev->config.versions & (1 << pas->version)) {
+> +		bool strip_icv = false;
 
-I'll leave a few minor comments inline, but nothing that really needs
-a respin and/or cannot be a minor fixup later.
+Here for readability? Never modified, could be dropped.
+
+> +		u8 generation;
+> +
+> +		/* We cheat a bit and put the generation in the key.
+> +		 * In real life if generation was too old, then decryption would
+> +		 * fail. Here, we just make it so a bad key causes a bad
+> +		 * generation too, and psp_sk_rx_policy_check() will fail.
+> +		 */
+> +		generation = pas->tx.key[0];
+> +
+> +		skb_ext_reset(skb);
+> +		skb->mac_len = ETH_HLEN;
+> +		if (psp_dev_rcv(skb, peer_ns->psp.dev->id, generation,
+> +				strip_icv)) {
+> +			rc = SKB_DROP_REASON_PSP_OUTPUT;
+> +			goto out_unlock;
+> +		}
+> +
+> +		*psp_ext = skb->extensions;
+> +		refcount_inc(&(*psp_ext)->refcnt);
+> +		skb->decrypted = 1;
+> +	} else {
+> +		struct ipv6hdr *ip6h __maybe_unused;
+> +		struct iphdr *iph;
+> +		struct udphdr *uh;
+> +		__wsum csum;
+> +
+> +		/* Do not decapsulate. Receive the skb with the udp and psp
+> +		 * headers still there as if this is a normal udp packet.
+> +		 * psp_dev_encapsulate() sets udp checksum to 0, so we need to
+> +		 * provide a valid checksum here, so the skb isn't dropped.
+> +		 */
+> +		uh = udp_hdr(skb);
+> +		csum = skb_checksum(skb, skb_transport_offset(skb),
+> +				    ntohs(uh->len), 0);
+> +
+> +		switch (skb->protocol) {
+> +		case htons(ETH_P_IP):
+> +			iph = ip_hdr(skb);
+> +			uh->check = udp_v4_check(ntohs(uh->len), iph->saddr,
+> +						 iph->daddr, csum);
+> +			break;
+> +#if IS_ENABLED(CONFIG_IPV6)
+> +		case htons(ETH_P_IPV6):
+> +			ip6h = ipv6_hdr(skb);
+> +			uh->check = udp_v6_check(ntohs(uh->len), &ip6h->saddr,
+> +						 &ip6h->daddr, csum);
+> +			break;
+> +#endif
+> +		}
+> +
+> +		uh->check	= uh->check ?: CSUM_MANGLED_0;
+> +		skb->ip_summed	= CHECKSUM_NONE;
+
+Could just set CHECKSUM_UNNECESSARY and forgo the checksum
+calculation?
 
