@@ -1,320 +1,349 @@
-Return-Path: <linux-kselftest+bounces-42569-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42570-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85E8BBA8DF4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 12:21:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8DDEBA915F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 13:43:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0537189D5DE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 10:21:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E175D3BB7C9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 11:43:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1CE2EC56F;
-	Mon, 29 Sep 2025 10:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA2F3016F7;
+	Mon, 29 Sep 2025 11:43:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fIiSjgq1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZSj0gg2I"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D382E9EC8
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Sep 2025 10:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A7730275A
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Sep 2025 11:43:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759141278; cv=none; b=TL+RpjWbxJWQm91eEQ9L8gjOWEU2y5QWL2MIb3hhwrAeOqcBqlJL9G1igXT+ffKIUb5SulDbhJifYfRJjpYPlyKcrtyAmf7atFBWl2t6pO8rLRMFVUH3yCVLoGgE7KFyaTiWlts3olLBzALGPb0k9sDxz8pzAYAeA+6D58UfA2I=
+	t=1759146182; cv=none; b=gt9+fUSeViMhCTggCI7iAGmV5VPGKWTMcV4DlMWz1SSCq2O1c1SyKlKviNMRyQojtMjUUd5bNw+7XP+wwf96eP8qWkoemo4I9re65lZMHEP9mcIEJdqLB6rr1MxYiCy5jqgdV6xFcxL1GUQfqSUR5BJHanX+j7ztSn2u/VipjC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759141278; c=relaxed/simple;
-	bh=WcvQCY0+UwCaIb6eCl0gssuyRiHF3sXxtaZi0SsyUzg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uh1z+mVojatcEBHmjnLIVDjUKwnBZWJeS/xR7lW3wujfHLN0jximWd8GJjsz3lH66bShWbScUNlXVI2DpLVEolcsq4fFhuw1MHVU+gs/0jjlQR4eSZUtxY7hMPsWpJsT27YRbOcg+Tai3VTN4h7swt2xus+9z69R3JmrcmdJ4Ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fIiSjgq1; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1759146182; c=relaxed/simple;
+	bh=nEtyUr3R4f130JvlekB1xv6q2n31hAktv+O+ORIhXF8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=E68a9WIsi53wOKcQmlsn5gaqHUZLDRNSiS/Y0hARwqCGvZb6ORYxOAbipSrDYrm2NCv62slNzzBkCmf2JGpFhkTj0DJVPnVblUHq24HJK5qFZFjSHwJXFihwdSDiVfvdleuasxyMibkQrZRd5caHAEBDmieEec4X6awg2614byg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZSj0gg2I; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1759141275;
+	s=mimecast20190719; t=1759146179;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Z3YKN3zIRZfonnEHUxLu7FAkkWR5YdTCLJYZ6VEYM8Y=;
-	b=fIiSjgq1ZZvEn7q1nKH1Ac+rmlfEHDp6FfOjtqYfZmTZlXFE11ugcoahidcKpJpfDiykMQ
-	ybuT5Za8yfjHkedTdQQCQrv18izvZnHulIX5YkV2fvtuUZnyz7jLvoRxAGK1G0d2FqJW8Q
-	kPF7LIZrlgfSr3HofI4u6V+BCTbxdpc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-581-i11CU71jOFOc3JOQDHLhXw-1; Mon, 29 Sep 2025 06:21:14 -0400
-X-MC-Unique: i11CU71jOFOc3JOQDHLhXw-1
-X-Mimecast-MFC-AGG-ID: i11CU71jOFOc3JOQDHLhXw_1759141273
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3f3c118cbb3so2848876f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Sep 2025 03:21:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759141273; x=1759746073;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z3YKN3zIRZfonnEHUxLu7FAkkWR5YdTCLJYZ6VEYM8Y=;
-        b=uL7+n1Tfsi/WDYGO73oUy8L34jiPfS8zAFO6xvDdp11XnAjk8czIGnWrTyhSaE/yAE
-         Wr6OrdX8jabsaAnSEP8pkPLZHxoKqTOY4o+XodZvubMW2KQUAC7iK5bzJ2FEgaCvCwbA
-         ZN+MDQdsHvg1IPz4N4GbJR0G7ETN7l+givyOdckU3eZiNfmYyJ0AEm4u+IjPzWqoZBH9
-         PslxAzDxQyw8sMbaIVy6rrCgxqFme4cTzJ/kwKtTOq8CNsQn8ebhe1KzWLqWFloEAGLl
-         xC4KerMzifis+n1QMxuW1unrDwP8PyKumlmK3/nK+JuUYq5Yvuzyi7PSHNHyZ9EPuikg
-         dzRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUe+ysEMnlseiXKT+vEhYX0qW4oKTxiC+rz+HrFup3NK11ZGXKdtCP0fPN/ZsNHJIstxEYUHRc1GpHimL1eHj8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9Jq7vIzjgkoJzrWQ1Wdky5GkSztpk3RUjr9jCLM0zswZjKhbo
-	FWuac05Ikrkncd5vNEge9DQRHl8C9Xb4n3g1KhUccIQV5NG1gcS/EukPcJ3tGRX/cuEipp4//0d
-	XqLP3TVa8co5Z3K6lSrtQ9+9osuag7YxAHqFej/zfp/95C0/eRhxexhivAbVRaq6PeEiiTw==
-X-Gm-Gg: ASbGnctbP2ssAp5TAzrlBym7Y77L9khOXFLepByOci6WR1/QAi4yI/9/u2v02Xe4tM4
-	yOmvUHQPRBdS4tPEaHRSheF9boOJIJVo6FS7m0+ABcBXijmfasIdQh5cVhd3PNn8Tf2WxmoIs6P
-	qlrDpr+N9qk3lpMKSvS5aQ2luWlhF+MUU9ttxLyFIdfNR5foetbp1eLt7j1OmFk9woyFpMS13Xg
-	ZWvIfOsJ2+mgxQDxxC1623HKIcOmYT8Ju93KVvhTBH53+EduAruCtLkK+4w2LiHeTnYijaFu4Jh
-	rGniIC8xKsnrDHFW97pFVhmKnLY8JE21c6qAleFkayg2NiPPDitvqXW2Jobeu8hASiVCFgo7
-X-Received: by 2002:a05:6000:2410:b0:3ec:d80d:e59b with SMTP id ffacd0b85a97d-40e4354d936mr17145953f8f.10.1759141273186;
-        Mon, 29 Sep 2025 03:21:13 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHseD/VRuRD8/5XkmKc+WsswLQN2PeBfIKRcSn+dzEpfuntBaoyeW14SJHlBROwxevLjLT9Aw==
-X-Received: by 2002:a05:6000:2410:b0:3ec:d80d:e59b with SMTP id ffacd0b85a97d-40e4354d936mr17145899f8f.10.1759141272561;
-        Mon, 29 Sep 2025 03:21:12 -0700 (PDT)
-Received: from [192.168.3.141] (p4ff1fa94.dip0.t-ipconnect.de. [79.241.250.148])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fc5603161sm17745080f8f.35.2025.09.29.03.21.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Sep 2025 03:21:11 -0700 (PDT)
-Message-ID: <f13e06f3-3c7b-4993-b33a-a6921c14231b@redhat.com>
-Date: Mon, 29 Sep 2025 12:20:57 +0200
+	 in-reply-to:in-reply-to:references:references;
+	bh=wK8XYbna/kr6s7zcm8omtA4zXQRbuBS4F3NKIioLVWg=;
+	b=ZSj0gg2IF5T5OourZ/PTpeO5rkku+sRf+lggUxUBchF/ZQRBYEfCnj9npeJ5bIvcg+qF8D
+	l4J1Hz3cob6SgUaYq/DDryAmMHmcPvuSnPqyVDDbwBqzhBJd9o/jkj5JzDF3MT2ZuLGMFY
+	VLBYOUXj/y6Unk5ZzU2Xl3HuMcr5vLM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-613-10rq5rxoPQanakT1q6Lsrw-1; Mon,
+ 29 Sep 2025 07:42:56 -0400
+X-MC-Unique: 10rq5rxoPQanakT1q6Lsrw-1
+X-Mimecast-MFC-AGG-ID: 10rq5rxoPQanakT1q6Lsrw_1759146174
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C239180057C;
+	Mon, 29 Sep 2025 11:42:54 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb (unknown [10.44.32.41])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EC3AE19560B9;
+	Mon, 29 Sep 2025 11:42:49 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Cc: Gabriele Monaco <gmonaco@redhat.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v3 4/4] selftests/rseq: Add test for mm_cid compaction
+Date: Mon, 29 Sep 2025 13:42:25 +0200
+Message-ID: <20250929114225.36172-5-gmonaco@redhat.com>
+In-Reply-To: <20250929114225.36172-1-gmonaco@redhat.com>
+References: <20250929114225.36172-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 06/12] KVM: guest_memfd: add module param for disabling
- TLB flushing
-To: Patrick Roy <patrick.roy@linux.dev>, Will Deacon <will@kernel.org>
-Cc: Dave Hansen <dave.hansen@intel.com>, "Roy, Patrick"
- <roypat@amazon.co.uk>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
- "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
- "joey.gouly@arm.com" <joey.gouly@arm.com>,
- "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
- "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "tglx@linutronix.de" <tglx@linutronix.de>,
- "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "luto@kernel.org" <luto@kernel.org>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "willy@infradead.org" <willy@infradead.org>,
- "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
- "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
- "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
- "vbabka@suse.cz" <vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>,
- "surenb@google.com" <surenb@google.com>, "mhocko@suse.com"
- <mhocko@suse.com>, "song@kernel.org" <song@kernel.org>,
- "jolsa@kernel.org" <jolsa@kernel.org>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>,
- "andrii@kernel.org" <andrii@kernel.org>,
- "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "eddyz87@gmail.com" <eddyz87@gmail.com>,
- "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
- "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
- "kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
- <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
- "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
- "peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com"
- <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
- "shuah@kernel.org" <shuah@kernel.org>, "seanjc@google.com"
- <seanjc@google.com>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-mm@kvack.org" <linux-mm@kvack.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "Cali, Marco" <xmarcalx@amazon.co.uk>,
- "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
- "Thomson, Jack" <jackabt@amazon.co.uk>,
- "derekmn@amazon.co.uk" <derekmn@amazon.co.uk>,
- "tabba@google.com" <tabba@google.com>,
- "ackerleytng@google.com" <ackerleytng@google.com>
-References: <20250924151101.2225820-4-patrick.roy@campus.lmu.de>
- <20250924152214.7292-1-roypat@amazon.co.uk>
- <20250924152214.7292-3-roypat@amazon.co.uk>
- <e25867b6-ffc0-4c7c-9635-9b3f47b186ca@intel.com>
- <c1875a54-0c87-450f-9370-29e7ec4fea3d@redhat.com>
- <82bff1c4-987f-46cb-833c-bd99eaa46e7a@intel.com>
- <c79173d8-6f18-40fa-9621-e691990501e4@redhat.com>
- <c88514c3-e15f-4853-8acf-15e7b4b979f4@linux.dev>
- <aNZwmPFAxm_HRYpC@willie-the-truck>
- <5d11b5f7-3208-4ea8-bbff-f535cf62d576@redhat.com>
- <be89abc6-97ca-47d8-b8e7-95f58ab9cc67@linux.dev>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- qIws/H2t
-In-Reply-To: <be89abc6-97ca-47d8-b8e7-95f58ab9cc67@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 27.09.25 09:38, Patrick Roy wrote:
-> 
-> 
-> On Fri, 2025-09-26 at 21:09 +0100, David Hildenbrand wrote:
->> On 26.09.25 12:53, Will Deacon wrote:
->>> On Fri, Sep 26, 2025 at 10:46:15AM +0100, Patrick Roy wrote:
->>>>
->>>>
->>>> On Thu, 2025-09-25 at 21:13 +0100, David Hildenbrand wrote:
->>>>> On 25.09.25 21:59, Dave Hansen wrote:
->>>>>> On 9/25/25 12:20, David Hildenbrand wrote:
->>>>>>> On 25.09.25 20:27, Dave Hansen wrote:
->>>>>>>> On 9/24/25 08:22, Roy, Patrick wrote:
->>>>>>>>> Add an option to not perform TLB flushes after direct map manipulations.
->>>>>>>>
->>>>>>>> I'd really prefer this be left out for now. It's a massive can of worms.
->>>>>>>> Let's agree on something that works and has well-defined behavior before
->>>>>>>> we go breaking it on purpose.
->>>>>>>
->>>>>>> May I ask what the big concern here is?
->>>>>>
->>>>>> It's not a _big_ concern.
->>>>>
->>>>> Oh, I read "can of worms" and thought there is something seriously problematic :)
->>>>>
->>>>>> I just think we want to start on something
->>>>>> like this as simple, secure, and deterministic as possible.
->>>>>
->>>>> Yes, I agree. And it should be the default. Less secure would have to be opt-in and documented thoroughly.
->>>>
->>>> Yes, I am definitely happy to have the 100% secure behavior be the
->>>> default, and the skipping of TLB flushes be an opt-in, with thorough
->>>> documentation!
->>>>
->>>> But I would like to include the "skip tlb flushes" option as part of
->>>> this patch series straight away, because as I was alluding to in the
->>>> commit message, with TLB flushes this is not usable for Firecracker for
->>>> performance reasons :(
->>>
->>> I really don't want that option for arm64. If we're going to bother
->>> unmapping from the linear map, we should invalidate the TLB.
->>
->> Reading "TLB flushes result in a up to 40x elongation of page faults in
->> guest_memfd (scaling with the number of CPU cores), or a 5x elongation
->> of memory population,", I can understand why one would want that optimization :)
->>
->> @Patrick, couldn't we use fallocate() to preallocate memory and batch the TLB flush within such an operation?
->>
->> That is, we wouldn't flush after each individual direct-map modification but after multiple ones part of a single operation like fallocate of a larger range.
->>
->> Likely wouldn't make all use cases happy.
->>
-> 
-> For Firecracker, we rely a lot on not preallocating _all_ VM memory, and
-> trying to ensure only the actual "working set" of a VM is faulted in (we
-> pack a lot more VMs onto a physical host than there is actual physical
-> memory available). For VMs that are restored from a snapshot, we know
-> pretty well what memory needs to be faulted in (that's where @Nikita's
-> write syscall comes in), so there we could try such an optimization. But
-> for everything else we very much rely on the on-demand nature of guest
-> memory allocation (and hence direct map removal). And even right now,
-> the long pole performance-wise are these on-demand faults, so really, we
-> don't want them to become even slower :(
+A task in the kernel (task_mm_cid_work) runs somewhat periodically to
+compact the mm_cid for each process. Add a test to validate that it runs
+correctly and timely.
 
-Makes sense. I guess even without support for large folios one could 
-implement a kind of "fault" around: for example, on access to one addr, 
-allocate+prepare all pages in the same 2 M chunk, flushing the tlb only 
-once after adjusting all the direct map entries.
+The test spawns 1 thread pinned to each CPU, then each thread, including
+the main one, runs in short bursts for some time. During this period, the
+mm_cids should be spanning all numbers between 0 and nproc.
 
-> 
-> Also, can we really batch multiple TLB flushes as you suggest? Even if
-> pages are at consecutive indices in guest_memfd, they're not guaranteed
-> to be continguous physically, e.g. we couldn't just coalesce multiple
-> TLB flushes into a single TLB flush of a larger range.
+At the end of this phase, a thread with high enough mm_cid (>= nproc/2)
+is selected to be the new leader, all other threads terminate.
 
-Well, you there is the option on just flushing the complete tlb of 
-course :) When trying to flush a range you would indeed run into the 
-problem of flushing an ever growing range.
+After some time, the only running thread should see 0 as mm_cid, if that
+doesn't happen, the compaction mechanism didn't work and the test fails.
 
-> 
-> There's probably other things we can try. Backing guest_memfd with
-> hugepages would reduce the number TLB flushes by 512x (although not all
-> users of Firecracker at Amazon [can] use hugepages).
+The test never fails if only 1 core is available, in which case, we
+cannot test anything as the only available mm_cid is 0.
 
-Right.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+---
+ tools/testing/selftests/rseq/.gitignore       |   1 +
+ tools/testing/selftests/rseq/Makefile         |   2 +-
+ .../selftests/rseq/mm_cid_compaction_test.c   | 204 ++++++++++++++++++
+ 3 files changed, 206 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/rseq/mm_cid_compaction_test.c
 
-> 
-> And I do still wonder if it's possible to have "async TLB flushes" where
-> we simply don't wait for the IPI (x86 terminology, not sure what the
-> mechanism on arm64 is). Looking at
-> smp_call_function_many_cond()/invlpgb_kernel_range_flush() on x86, it
-> seems so? Although seems like on ARM it's actually just handled by a
-> single instruction (TLBI) and not some interprocess communication
-> thingy. Maybe there's a variant that's faster / better for this usecase?
-
-Right, some architectures (and IIRC also x86 with some extension) are 
-able to flush remote TLBs without IPIs.
-
-Doing a quick search, there seems to be some research on async TLB 
-flushing, e.g., [1].
-
-In the context here, I wonder whether an async TLB flush would be 
-significantly better than not doing an explicit TLB flush: in both 
-cases, it's not really deterministic when the relevant TLB entries will 
-vanish: with the async variant it might happen faster on average I guess.
-
-
-[1] https://cs.yale.edu/homes/abhishek/kumar-taco20.pdf
-
+diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
+index 0fda241fa62b..b3920c59bf40 100644
+--- a/tools/testing/selftests/rseq/.gitignore
++++ b/tools/testing/selftests/rseq/.gitignore
+@@ -3,6 +3,7 @@ basic_percpu_ops_test
+ basic_percpu_ops_mm_cid_test
+ basic_test
+ basic_rseq_op_test
++mm_cid_compaction_test
+ param_test
+ param_test_benchmark
+ param_test_compare_twice
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index 0d0a5fae5954..bc4d940f66d4 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -17,7 +17,7 @@ OVERRIDE_TARGETS = 1
+ TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
+ 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
+ 		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice \
+-		syscall_errors_test
++		syscall_errors_test mm_cid_compaction_test
+ 
+ TEST_GEN_PROGS_EXTENDED = librseq.so
+ 
+diff --git a/tools/testing/selftests/rseq/mm_cid_compaction_test.c b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
+new file mode 100644
+index 000000000000..d13623625f5a
+--- /dev/null
++++ b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
+@@ -0,0 +1,204 @@
++// SPDX-License-Identifier: LGPL-2.1
++#define _GNU_SOURCE
++#include <assert.h>
++#include <pthread.h>
++#include <sched.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <stddef.h>
++
++#include "../kselftest.h"
++#include "rseq.h"
++
++#define VERBOSE 0
++#define printf_verbose(fmt, ...)                    \
++	do {                                        \
++		if (VERBOSE)                        \
++			printf(fmt, ##__VA_ARGS__); \
++	} while (0)
++
++/* 50 ms */
++#define RUNNER_PERIOD 50000
++/*
++ * Number of runs before we terminate or get the token.
++ * The number is slowly increasing with the number of CPUs as the compaction
++ * process can take longer on larger systems. This is an arbitrary value.
++ */
++#define THREAD_RUNS (3 + args->num_cpus/8)
++
++/*
++ * Number of times we check that the mm_cid were compacted.
++ * Checks are repeated every RUNNER_PERIOD.
++ */
++#define MM_CID_COMPACT_TIMEOUT 10
++
++struct thread_args {
++	int cpu;
++	int num_cpus;
++	pthread_mutex_t *token;
++	pthread_barrier_t *barrier;
++	pthread_t *tinfo;
++	struct thread_args *args_head;
++};
++
++static void __noreturn *thread_runner(void *arg)
++{
++	struct thread_args *args = arg;
++	int i, ret, curr_mm_cid;
++	cpu_set_t cpumask;
++
++	CPU_ZERO(&cpumask);
++	CPU_SET(args->cpu, &cpumask);
++	ret = pthread_setaffinity_np(pthread_self(), sizeof(cpumask), &cpumask);
++	if (ret) {
++		errno = ret;
++		perror("Error: failed to set affinity");
++		abort();
++	}
++	pthread_barrier_wait(args->barrier);
++
++	for (i = 0; i < THREAD_RUNS; i++)
++		usleep(RUNNER_PERIOD);
++	curr_mm_cid = rseq_current_mm_cid();
++	/*
++	 * We select one thread with high enough mm_cid to be the new leader.
++	 * All other threads (including the main thread) will terminate.
++	 * After some time, the mm_cid of the only remaining thread should
++	 * converge to 0, if not, the test fails.
++	 */
++	if (curr_mm_cid >= args->num_cpus / 2 &&
++	    !pthread_mutex_trylock(args->token)) {
++		printf_verbose(
++			"cpu%d has mm_cid=%d and will be the new leader.\n",
++			sched_getcpu(), curr_mm_cid);
++		for (i = 0; i < args->num_cpus; i++) {
++			if (args->tinfo[i] == pthread_self())
++				continue;
++			ret = pthread_join(args->tinfo[i], NULL);
++			if (ret) {
++				errno = ret;
++				perror("Error: failed to join thread");
++				abort();
++			}
++		}
++		pthread_barrier_destroy(args->barrier);
++		free(args->tinfo);
++		free(args->token);
++		free(args->barrier);
++		free(args->args_head);
++
++		for (i = 0; i < MM_CID_COMPACT_TIMEOUT; i++) {
++			curr_mm_cid = rseq_current_mm_cid();
++			printf_verbose("run %d: mm_cid=%d on cpu%d.\n", i,
++				       curr_mm_cid, sched_getcpu());
++			if (curr_mm_cid == 0)
++				exit(EXIT_SUCCESS);
++			usleep(RUNNER_PERIOD);
++		}
++		exit(EXIT_FAILURE);
++	}
++	printf_verbose("cpu%d has mm_cid=%d and is going to terminate.\n",
++		       sched_getcpu(), curr_mm_cid);
++	pthread_exit(NULL);
++}
++
++int test_mm_cid_compaction(void)
++{
++	cpu_set_t affinity;
++	int i, j, ret = 0, num_threads;
++	pthread_t *tinfo;
++	pthread_mutex_t *token;
++	pthread_barrier_t *barrier;
++	struct thread_args *args;
++
++	sched_getaffinity(0, sizeof(affinity), &affinity);
++	num_threads = CPU_COUNT(&affinity);
++	tinfo = calloc(num_threads, sizeof(*tinfo));
++	if (!tinfo) {
++		perror("Error: failed to allocate tinfo");
++		return -1;
++	}
++	args = calloc(num_threads, sizeof(*args));
++	if (!args) {
++		perror("Error: failed to allocate args");
++		ret = -1;
++		goto out_free_tinfo;
++	}
++	token = malloc(sizeof(*token));
++	if (!token) {
++		perror("Error: failed to allocate token");
++		ret = -1;
++		goto out_free_args;
++	}
++	barrier = malloc(sizeof(*barrier));
++	if (!barrier) {
++		perror("Error: failed to allocate barrier");
++		ret = -1;
++		goto out_free_token;
++	}
++	if (num_threads == 1) {
++		fprintf(stderr, "Cannot test on a single cpu. "
++				"Skipping mm_cid_compaction test.\n");
++		/* only skipping the test, this is not a failure */
++		goto out_free_barrier;
++	}
++	pthread_mutex_init(token, NULL);
++	ret = pthread_barrier_init(barrier, NULL, num_threads);
++	if (ret) {
++		errno = ret;
++		perror("Error: failed to initialise barrier");
++		goto out_free_barrier;
++	}
++	for (i = 0, j = 0; i < CPU_SETSIZE && j < num_threads; i++) {
++		if (!CPU_ISSET(i, &affinity))
++			continue;
++		args[j].num_cpus = num_threads;
++		args[j].tinfo = tinfo;
++		args[j].token = token;
++		args[j].barrier = barrier;
++		args[j].cpu = i;
++		args[j].args_head = args;
++		if (!j) {
++			/* The first thread is the main one */
++			tinfo[0] = pthread_self();
++			++j;
++			continue;
++		}
++		ret = pthread_create(&tinfo[j], NULL, thread_runner, &args[j]);
++		if (ret) {
++			errno = ret;
++			perror("Error: failed to create thread");
++			abort();
++		}
++		++j;
++	}
++	printf_verbose("Started %d threads.\n", num_threads);
++
++	/* Also main thread will terminate if it is not selected as leader */
++	thread_runner(&args[0]);
++
++	/* only reached in case of errors */
++out_free_barrier:
++	free(barrier);
++out_free_token:
++	free(token);
++out_free_args:
++	free(args);
++out_free_tinfo:
++	free(tinfo);
++
++	return ret;
++}
++
++int main(int argc, char **argv)
++{
++	if (!rseq_mm_cid_available()) {
++		fprintf(stderr, "Error: rseq_mm_cid unavailable\n");
++		return -1;
++	}
++	if (test_mm_cid_compaction())
++		return -1;
++	return 0;
++}
 -- 
-Cheers
-
-David / dhildenb
+2.51.0
 
 
