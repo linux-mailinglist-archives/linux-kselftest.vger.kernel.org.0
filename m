@@ -1,153 +1,112 @@
-Return-Path: <linux-kselftest+bounces-42584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42585-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01553BA9D86
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 17:47:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B110EBA9E79
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 17:58:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70B227A4E74
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 15:46:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C4C13A50E7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 15:58:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B126830ACF1;
-	Mon, 29 Sep 2025 15:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C30F30C106;
+	Mon, 29 Sep 2025 15:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PxuNIqIS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZWJBQvKT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86947301015;
-	Mon, 29 Sep 2025 15:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C5030C0F6
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Sep 2025 15:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759160863; cv=none; b=l+gcYueZSvSBQHTsySuXi0vU/IG4+d89jfb4Dndm/yy11lJy1vWz5YM42z3lvqn3FtVui5PHM7ZeAicXAS/q7QFy1SllexyqG81CCto48iEI8oCK/g+3UXgyzCT2Z65HVumrodAtx2xdTVImGLPTX+qlgcCfZfqxvZGv1O86EPg=
+	t=1759161531; cv=none; b=uWS/prP5WzXIAiUHWPZqHzRSfRtRVtOual/DIntZivwCPivHOjM9ExkRO714Q01U86n5V1pcIsScl7OVsHygrTAIia1odSSShyzhA2qAlwEDJOFkFq6LJOJSpZqSG621FjBtMRWMm8dhWHGmsA6V4ECjNOcXRNVvyiT1Q6ralDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759160863; c=relaxed/simple;
-	bh=URoRiJpvfzY/qJO4BWJD2PxiH4IP1gLR8iG4C2gTC4k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NGFtKqO6v89qkZQTj9nbEJMIrJ1gNflM4hqdRSolvHqxCqDos6r/SdlKQHQzD/tqQ1mtPMCOt/4DboX/YG8WJIPxtVf3BqYnGsN2fB16YYpct44LbuAPlB9JVWfEu80EHH5XNyxFN/p2bYDC0TSTOHuCFeic6qIw7Z5S19Awuys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PxuNIqIS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B373C4CEF4;
-	Mon, 29 Sep 2025 15:47:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759160863;
-	bh=URoRiJpvfzY/qJO4BWJD2PxiH4IP1gLR8iG4C2gTC4k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PxuNIqIS/y7SFX7DqksrGpsfRi9OmW7w639bH4FW/ongQuHKKAzK/QBZSW+olYIz5
-	 FTxX7MSXzTPgjY/QcTjdIqQCZ2ojwg/kzzik0fz+w31Z3NG6RMiXeOThNCLfR6b9pI
-	 DlwUsmMHbnMoe78TDnk7tYxes59781XRKoMtE9QTJL6zMMAJJWr7Mt7jRdrT4x2sf8
-	 XFlBEfm1l8KYAB3v6l2LDNC+jfrtjFMbLSC/qFAaG6aKtP1E1enccObKCzYHc9wSTn
-	 v/4FlelTf8huZjN2kdlZIHn+2uz1YxOAIb+5KDpZ18q0YlnHjWO3XvHI3UdSgvz/M3
-	 NqqegVZIdoG4w==
-Date: Mon, 29 Sep 2025 16:47:36 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "adhemerval.zanella@linaro.org" <adhemerval.zanella@linaro.org>,
-	"nsz@port70.net" <nsz@port70.net>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"dalias@libc.org" <dalias@libc.org>,
-	"jeffxu@google.com" <jeffxu@google.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"yury.khrustalev@arm.com" <yury.khrustalev@arm.com>,
-	"wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"codonell@redhat.com" <codonell@redhat.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"libc-alpha@sourceware.org" <libc-alpha@sourceware.org>
-Subject: Re: [PATCH RFC 0/3] arm64/gcs: Allow reuse of user managed shadow
- stacks
-Message-ID: <edd79fba-c5e0-4020-aef3-57dc01c077d2@sirena.org.uk>
-References: <20250921-arm64-gcs-exit-token-v1-0-45cf64e648d5@kernel.org>
- <760447dc3e5805bf5668e80a94bf32356e2eb2d3.camel@intel.com>
- <aNasTpkYm8n1AHZ7@arm.com>
- <04dc6271e11b453204255779fcd3c29573c9c296.camel@intel.com>
- <5c616340-2767-48f0-8727-326deebf718f@sirena.org.uk>
- <80f8389c5c136ce21d922be10e4978d1ae5f1139.camel@intel.com>
+	s=arc-20240116; t=1759161531; c=relaxed/simple;
+	bh=KP5kx0VRuRBxNT9JPTkeTOUgylYmXovvWpGXUsY+dqk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X4923dZ0VdCxRRMvW288IEOtIf5AXbLrPj5S90b3Ap8d81iC4/NPo+pbJq3Mgft5AiiXTsweysuM7E+tpAS9X5vSsFLktW8rogDJgdmRJq4aDjQxQutaw5jjP6CkI3GGJb0sOuzzyxx2mZi/sdBRrjnb4opP3LRpPSxwfR27pUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZWJBQvKT; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b07d4d24d09so952430866b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Sep 2025 08:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759161528; x=1759766328; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KP5kx0VRuRBxNT9JPTkeTOUgylYmXovvWpGXUsY+dqk=;
+        b=ZWJBQvKT9Qc5PmNyldyHZaLCt3fwNojyu977328l5tFx8x1FT10gVhl8DQFhgpBpuW
+         wKoP8TajHfA3LEezjyvdudvDtyJpPLd4nQ1l6EP3rMvjgRT97rWShu2jP6YgeH+jMSiT
+         jZGaBmt3cPJneNkKbaLPDm/T6/JnehPZQNrw0DV/+8/BVclpkEUyexlc1wjjMhl8OX+c
+         /JNPJQD4vKsVnFs+StQM92uXQWiyG2+KlJVF+8Fwd+Yg/b6SSUnbiDnUC+4bwW+U1pSh
+         4rDQpya8OMl10l91QqpUNLfYXD2bEYp8XZQ+Qh25jHzLL9NnCZ5RcRJcAbVMJFDBzaNO
+         /SGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759161528; x=1759766328;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KP5kx0VRuRBxNT9JPTkeTOUgylYmXovvWpGXUsY+dqk=;
+        b=cc23joRwVj+l4kNhUI6dBLTpNw9Bf1eUFkHBYeEA85KlisuwdFU3OEetzTMXRsvG8C
+         sZNAl+EOc2dVpBfQSwSUwCNfSMGPAgiFNG4ehsAZrYU7JkQ6ugchHUgleDe0iMpGUA2R
+         VnHmmSgYf8/it5D+/caD6VykonZuAqYV78h2mmSNjv34jGOfeC0xw1Q0oHnrkaMBEGKP
+         iuskw0dB4m1zIYfxe/9Y+/TgirJtqF/2h04hNzDgcsxjztgxF9jVy+myKy+wkh8wxwmN
+         76X+zFcXFHyDEdYFqC4Tdjgzwwhz2iYFdJUfYKFcGSqVho9GIOcWt7O1yZZ24ACpWPRE
+         JAuw==
+X-Forwarded-Encrypted: i=1; AJvYcCUJwREI4JjSCmkIfCqAgi2dN8QhzlOgHjOyHPvDj4qTWxcK3WuZIyMBmiFdoohLzN0gvey9EPJwFFcg5lL5q4w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMgufB2LjDCw/oKKnTAM9BcF86HFVl+/rj1xvkKVhsFSUXCHV2
+	hiJuIirb0WRc+XYG3IODvYJ9OSGE3IPrK0tzc6HU4tXET+Tqm8OorewFms6wAPW2gAyfafTH2eR
+	uomRbyR5HdzYszp9OW0MpSPAGmhIOvNI=
+X-Gm-Gg: ASbGncv9nI5Vc8SEuIii4UCOZ6sd5ml3jhq9cD74btqG8EsxoVqvY+M93oEiy39BBO6
+	2eGP5mdjrEzO69NkZ6Luu0reAut4LTfaHFFuaKWOGK/+Vn503PP2rspuOmec58rvZ72E7NzzgKA
+	HbOBL+h8RgPYj9Am5xyFZpM1AjI3KRxJzxTonrfUydcbp0mmatKMMKfcXN5+7izs9IqUpbdFROh
+	TybyQ08T3ZqlmmhgS2yWc7ATLA2RV/q2tJo8SF4NQ==
+X-Google-Smtp-Source: AGHT+IEyCADO6J8WiEBVdrcDX+0EvoZzPtvlyZ0fcAEpiz0fGzu77FQXIwzegr8XJ0+/55shLRsQasieeKC3kMA42EI=
+X-Received: by 2002:a17:907:9706:b0:b3f:6e5:256 with SMTP id
+ a640c23a62f3a-b3f06e527cemr412737666b.32.1759161527436; Mon, 29 Sep 2025
+ 08:58:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="TB4gd7jcOJO5ieTv"
-Content-Disposition: inline
-In-Reply-To: <80f8389c5c136ce21d922be10e4978d1ae5f1139.camel@intel.com>
-X-Cookie: Stay away from hurricanes for a while.
-
-
---TB4gd7jcOJO5ieTv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+References: <20250929114356.25261-2-sidharthseela@gmail.com> <willemdebruijn.kernel.a37b90bf9586@gmail.com>
+In-Reply-To: <willemdebruijn.kernel.a37b90bf9586@gmail.com>
+From: Sidharth Seela <sidharthseela@gmail.com>
+Date: Mon, 29 Sep 2025 21:28:36 +0530
+X-Gm-Features: AS18NWCgnPycz7t2entTrmTu5YC-DafC0Q0uYk2zgNL_KC7OWEjNYY7xyUDcjPI
+Message-ID: <CAJE-K+C9_En-QWYrTJmMH-H8CP_1wgpREjFst1ybiE-bJtF13g@mail.gmail.com>
+Subject: Re: [PATCH] selftest:net: Fix uninit pointers and return values
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: antonio@openvpn.net, sd@queasysnail.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, 
+	kernelxing@tencent.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
+	morbo@google.com, justinstitt@google.com, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 26, 2025 at 07:17:16PM +0000, Edgecombe, Rick P wrote:
-> On Fri, 2025-09-26 at 17:03 +0100, Mark Brown wrote:
-> > On Fri, Sep 26, 2025 at 03:39:46PM +0000, Edgecombe, Rick P wrote:
+On Mon, Sep 29, 2025 at 7:49=E2=80=AFPM Willem de Bruijn
+<willemdebruijn.kernel@gmail.com> wrote:
+> [PATCH net]
+> and a Fixes tag
+Thankyou, I'll add that.
 
-> > > > What do you mean by "a fuller solution from the glibc side"? A
-> > > > solution
-> > > > for re-using shadow stacks?=A0
+> Does not need a fix. The default statement calls error() which exits the =
+program.
+> Same.
+Yes, you are correct.
 
-> > > I mean some code or a fuller explained solution that uses this new
-> > > kernel functionality. I think the scheme that Florian suggested in
-> > > the
-> > > thread linked above (longjmp() to the start of the stack) will have
-> > > trouble if the thread pivots to a new shadow stack before exiting
-> > > (e.g.
-> > > ucontext).
-
-> > Is that supported even without user managed stacks?
-
-> IIUC longjmp() is sometimes used to implement user level thread
-> switching. So for non-shadow stack my understanding is that longjmp()
-> between user level threads is supported.
-
-Yes, that was more a "does it actually work?" query than a "might
-someone reasonably want to do this?".
-
-> For shadow stack, I think user level threads are intended to be
-> supported. So I don't see why a thread could never exit from another
-> shadow stack? Is that what you are asking? Maybe we need to discuss
-> this with the glibc folks.
-
-There's a selection of them directly on this thread, and libc-alpha on
-CC, so hopefully they'll chime in.  Unless I'm getting confused the code
-does appear to be doing an unwind, there's a lot of layers there so I
-might've got turned around though.
-
-> Again, I'm just thinking that we should vet the solution a bit more
-> before actually adding this to the kernel. If the combined shadow stack
-> effort eventually throws its hands up in frustration and goes with
-> WRSS/GCSSTR for apps that want to do more advanced threading patterns,
-> then we are already done on the kernel side.
-
-Some more input from the glibc side would indeed be useful, I've not
-seen any thoughts on either this series or just turning on writability
-both of which are kind of orthogonal to clone3() (which has been dropped
-=66rom -next today).
-
---TB4gd7jcOJO5ieTv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjaqhgACgkQJNaLcl1U
-h9CVxQf/eWHRRunA9pDbxljpsxxDZVq5oza9BFSJWETarOjElVwdpN0C1zOuNgV9
-Of4pK7kfkOO7cGw5HNxZlCvk/ixi78Fw7K9EA2WPxKb6JsbbCB6C2ZeCNNl112Y2
-yBSweBPKCMLVl/hjC8vE5RjPX0K5eNsifF1FT75fvouXnl0vrUE1dG160d0C1dps
-3Cy5m1OS4AiqHJFWNmm3j6wXDSwpuWjcJXQWG7A7+5ZZvlbxv8u2ThZ1xs77NgGZ
-ZRteYOMjf6cjg0E+yexveJn7Ld/IMo6iz2NAgJV7Fk4iNkQiKRaT52ultSgwvdsK
-CY3CZYU96MfAGENjVVWWwjWuxTJaEw==
-=J5MO
------END PGP SIGNATURE-----
-
---TB4gd7jcOJO5ieTv--
+> Agreed on all the occurrences and the ovpn fixes.
+Alright, I'll send v2, with improvements and a changelog.
+--=20
+Thanks,
+Sidharth Seela
+www.realtimedesign.org
 
