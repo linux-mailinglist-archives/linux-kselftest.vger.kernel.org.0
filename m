@@ -1,946 +1,913 @@
-Return-Path: <linux-kselftest+bounces-42562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AC4CBA79D8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 02:06:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE2EBA7CBA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 04:22:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3A327A6E6A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 00:04:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F1151896B19
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Sep 2025 02:22:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC4E04A07;
-	Mon, 29 Sep 2025 00:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AqXF2gmt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A781A3178;
+	Mon, 29 Sep 2025 02:22:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03F383FF1
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Sep 2025 00:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BEF22C859;
+	Mon, 29 Sep 2025 02:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759104385; cv=none; b=qaKC+rAZ/cEecC/WqdTiP9U9DxjXUepgvBwnVJJhFaf59Wnq1Fpm/qckVG0L1mU6rL8RFsWBA3nWN9zAsAkwuKQRWRqEWLti4o3mjEuuguHnG4OEqBxs3cz4CUZUIR7uF5eSTlTLk5D7B44dfKU3GDSZuY03dUOxLHPU7sRng2c=
+	t=1759112534; cv=none; b=fOuJEClxESveOlZXyF+stpbYXwv75CxWTwElbiDGPksXJHh/gVgv6kBk3otmiAqWSnO273hHPrLgwsRzAfAIIyFcDRZx9F6HIcudcoU3LwbgKITwaPtDzX+q4eEDqEGP/+yskCeE3bRM6sIg7xKG/GSo7aL5IxdH2vAk93VQQlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759104385; c=relaxed/simple;
-	bh=d2QvFCSUfe+Fp+M6nQLGLPWHY2SCA5gNT2dUY1nN8nk=;
-	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=cxi3WhabKgqFLmT8P2npxWCmiVSSSF3/TrWYaMDFumm5FDL0557FOpSzBU9nDgane4LWtkIl1uuV7owA/px6/IEXtzFs8+9FX3UpXWr2YUrwfVFD978JK9uXYnSVquxUQHLsEYE33mWqJjoKt04tla9/L940PDODdv3wkvfnGSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AqXF2gmt; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b5a631b9c82so559366a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Sep 2025 17:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759104382; x=1759709182; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:user-agent:references:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=W9d16OjcTsBmIwTgXwPK+sgRWZxZSJXVdCuiKPgCoeY=;
-        b=AqXF2gmta+fa4a2MKBYxATiB0ypNBOdeGYxiPPQ+0GfYQIfGvf9LtaIuvj5LI28iP7
-         iSIwzK8nl3Pq+HY8uPnNdOnjapZaGXxNfcPzP9us5yos6/b2M+TQMkTtqvyUNyqoSb7T
-         fhQXRLXroaXA/hYkl7d4I4W1edAUGVTNG89UnayQMiGAhL17KtRhYg2XqpH/LNRi3i8w
-         4l17kajx7AHZMBKqty/qwzVGke8OEauTk4bLq+luJefAosySe5nBfIn2oQsgnuG+LsAM
-         CIG4ajv1sy5eeaGFRccO5lGghzuQGLUgHYjws9Ao+ycilH1yFtKJLW/NVM+mwo9bSgVe
-         DXpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759104382; x=1759709182;
-        h=mime-version:message-id:in-reply-to:user-agent:references:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W9d16OjcTsBmIwTgXwPK+sgRWZxZSJXVdCuiKPgCoeY=;
-        b=otU7Yppm2aQ1XrbPgy+9myA4DdRgOHU+2l07KoIB9ZO6DBNoyHRtX81yi34VvcXP2h
-         7qDRvK2jEL1n0x6dEwRHXHEH0AOWEKz6o9PhrQfi/YeygcYIql09B55UU1vaRtqRpmkJ
-         n3NCB5t5GAJyW6nEWIv7uOOlvJ+zeMuG9XbF+Sw+CWgUdvuZJIJPa67LbS2cYrKELo/E
-         qn3a3cOqSWgCqDTO28NEHbtmsiLMYCck3JFYMXaae+INmtwd+flnsZNzvW6RHfuFdMWr
-         Jlq4JdOTzMMN8MDeAc9Kjs684aCIQcb29p7VkIKSL1jYxkbV0fJotZ8Pu9Elrp/WxK8a
-         QBPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXiOi1rg+gLorUtxrS+TjALsayivoy0kYBB5jWdW+eaD4MCIemzRiiOl0NAWCydyvyYZdGzflfkO0WZIqJlqGE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMa4acLtHotM8SaZnIlnjHisPWjsySaeLhCzEFLGOst2hFPPok
-	YodhAPybmxjyNwXGI5kXU1GNlGN6vNjYLVpspnY1Jb/PdCqNrcuaeFA2
-X-Gm-Gg: ASbGnct0lzngE0iNVSCaoT79MMdGdw+9VV/v9XFhHRkRF5Q1nfVUGeqiJpmaIcgtWE4
-	HGZjohb+/UEWlPWFsmsZ68CQZDH1J8vU4BVn92ZXxCt5saVbAglpsek9kykXRAI8ya3tK0rjsl5
-	2sU8Zvrlo/y7KMpDGiIL1D36aBTlNiX1TLw5tU99kcLfzclCTW1rEMreyc8EMbLMan6xFhIioWb
-	Z1I6pqLC7Bpv8UYctn9ga+FT7eDXvm+Y6fM8bgjwdRdNqY3CjPYEokjxvtEaMI6uAuKQqD1L9/j
-	ZnMps6iZIIihtMFddL/kgBywGU6ww5+N6f5bxU1MJVkxhv8cjGW9M/VFLt0keWry8mQrioQzCAM
-	tj0gDzSY2Y+KIL8aHv+vdvejTftVHo+T8Dw==
-X-Google-Smtp-Source: AGHT+IE/D0XyEIZodoNhI7sLk75vJYfy3zHDsDKPd1gidLDEqKMqJvyxvqI9UN2FdcdnKRfXCUCUxg==
-X-Received: by 2002:a17:903:5c6:b0:27c:3b07:5812 with SMTP id d9443c01a7336-27ed4a31712mr108415345ad.36.1759104382210;
-        Sun, 28 Sep 2025 17:06:22 -0700 (PDT)
-Received: from 1337 ([136.159.213.179])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27eed0961b1sm82000685ad.50.2025.09.28.17.06.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Sep 2025 17:06:21 -0700 (PDT)
-From: Abhinav Saxena <xandfury@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Paul Moore
- <paul@paul-moore.com>, Kees Cook <kees@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
- linux-serial@vger.kernel.org
-Subject: Re: [PATCH RESEND v4] selftests/tty: add TIOCSTI test suite
-Date: Sun, 28 Sep 2025 18:00:19 -0600
-References: <20250903-toicsti-bug-v4-1-4894b6649ef8@gmail.com>
-User-agent: mu4e 1.10.8; emacs 30.2
-In-reply-to: <20250903-toicsti-bug-v4-1-4894b6649ef8@gmail.com>
-Message-ID: <877bxi2kcj.fsf@gmail.com>
+	s=arc-20240116; t=1759112534; c=relaxed/simple;
+	bh=AL/U8uLnIY0Y04XJz7+roQdzIGUSDZpNifVmV474+Qs=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=P7/RyyRaCPYcBXYgPtqa0zl7wBvCyQh9QR880NniZcyrEAgt6WTtmhhYTRM4QEK5UBQt92VGRcLqFYk4MWwAltLPA3b+LXVuiVSmKJlS6qncVqWlyLNz1UcM4/xh6v3tZ6Y0pl2KjFTXnsdBWRIMV7nao53TZF36vXHMOvQns0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4cZlLm4XctzYQv4j;
+	Mon, 29 Sep 2025 10:21:52 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id CD4B91A0EB7;
+	Mon, 29 Sep 2025 10:22:07 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP2 (Coremail) with SMTP id Syh0CgCHHRJO7dloKbWjBA--.34026S2;
+	Mon, 29 Sep 2025 10:22:07 +0800 (CST)
+Message-ID: <9c0b56b1-168f-4970-a945-e4440c9e0d9f@huaweicloud.com>
+Date: Mon, 29 Sep 2025 10:22:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
+User-Agent: Mozilla Thunderbird
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Add overwrite mode for bpf ring
+ buffer
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Yonghong Song <yhs@fb.com>, Song Liu <song@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>,
+ Jason Xing <kerneljasonxing@gmail.com>,
+ Paul Chaignon <paul.chaignon@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin Kelly <martin.kelly@crowdstrike.com>
+References: <20250905150641.2078838-1-xukuohai@huaweicloud.com>
+ <20250905150641.2078838-2-xukuohai@huaweicloud.com>
+ <CAEf4BzaSEjQzF47BZeh0de9pFbKpaB8JqCs629hV9xZDhMyTgw@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAEf4BzaSEjQzF47BZeh0de9pFbKpaB8JqCs629hV9xZDhMyTgw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgCHHRJO7dloKbWjBA--.34026S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfCw13Ar4xXFyfuw4UWr1xXwb_yoW5XF1rto
+	WSva17uF48Cr1UZrWUKasrGF1rAryDG3W7Gr45uw17CFyUtFW2qry3JFs5W3Z0qrn8tF4U
+	Ca45Jr1Yyan8Jr15n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUY27kC6x804xWl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7
+	CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
+	e7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+	WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+	jIksgUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 9/20/2025 6:10 AM, Andrii Nakryiko wrote:
+> On Fri, Sep 5, 2025 at 8:13 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+>>
+>> From: Xu Kuohai <xukuohai@huawei.com>
+>>
+>> When the bpf ring buffer is full, new events can not be recorded util
+> 
+> typo: until
+>
 
-Abhinav Saxena <xandfury@gmail.com> writes:
+ACK
 
-> TIOCSTI is a TTY ioctl command that allows inserting characters into
-> the terminal input queue, making it appear as if the user typed those
-> characters. This functionality has behavior that varies based on system
-> configuration and process credentials.
+>> the consumer consumes some events to free space. This may cause critical
+>> events to be discarded, such as in fault diagnostic, where recent events
+>> are more critical than older ones.
+>>
+>> So add ovewrite mode for bpf ring buffer. In this mode, the new event
+> 
+> overwrite, BPF
+
+ACK
+
+> 
+>> overwrites the oldest event when the buffer is full.
+>>
+>> The scheme is as follows:
+>>
+>> 1. producer_pos tracks the next position to write new data. When there
+>>     is enough free space, producer simply moves producer_pos forward to
+>>     make space for the new event.
+>>
+>> 2. To avoid waiting for consumer to free space when the buffer is full,
+>>     a new variable overwrite_pos is introduced for producer. overwrite_pos
+>>     tracks the next event to be overwritten (the oldest event committed) in
+>>     the buffer. producer moves it forward to discard the oldest events when
+>>     the buffer is full.
+>>
+>> 3. pending_pos tracks the oldest event under committing. producer ensures
+> 
+> "under committing" is confusing. Oldest event to be committed?
+
+Yes, 'the oldest event to be committed'. Thanks!
+
+> 
+>>     producers_pos never passes pending_pos when making space for new events.
+>>     So multiple producers never write to the same position at the same time.
+>>
+>> 4. producer wakes up consumer every half a round ahead to give it a chance
+>>     to retrieve data. However, for an overwrite-mode ring buffer, users
+>>     typically only cares about the ring buffer snapshot before a fault occurs.
+>>     In this case, the producer should commit data with BPF_RB_NO_WAKEUP flag
+>>     to avoid unnecessary wakeups.
+>>
+>> To make it clear, here are some example diagrams.
+>>
+>> 1. Let's say we have a ring buffer with size 4096.
+>>
+>>      At first, {producer,overwrite,pending,consumer}_pos are all set to 0
+>>
+>>      0       512      1024    1536     2048     2560     3072     3584       4096
+>>      +-----------------------------------------------------------------------+
+>>      |                                                                       |
+>>      |                                                                       |
+>>      |                                                                       |
+>>      +-----------------------------------------------------------------------+
+>>      ^
+>>      |
+>>      |
+>> producer_pos = 0
+>> overwrite_pos = 0
+>> pending_pos = 0
+>> consumer_pos = 0
+>>
+>> 2. Reserve event A, size 512.
+>>
+>>      There is enough free space, so A is allocated at offset 0 and producer_pos
+>>      is moved to 512, the end of A. Since A is not submitted, the BUSY bit is
+>>      set.
+>>
+>>      0       512      1024    1536     2048     2560     3072     3584       4096
+>>      +-----------------------------------------------------------------------+
+>>      |        |                                                              |
+>>      |   A    |                                                              |
+>>      | [BUSY] |                                                              |
+>>      +-----------------------------------------------------------------------+
+>>      ^        ^
+>>      |        |
+>>      |        |
+>>      |    producer_pos = 512
+>>      |
+>> overwrite_pos = 0
+>> pending_pos = 0
+>> consumer_pos = 0
+>>
+>> 3. Reserve event B, size 1024.
+>>
+>>      B is allocated at offset 512 with BUSY bit set, and producer_pos is moved
+>>      to the end of B.
+>>
+>>      0       512      1024    1536     2048     2560     3072     3584       4096
+>>      +-----------------------------------------------------------------------+
+>>      |        |                 |                                            |
+>>      |   A    |        B        |                                            |
+>>      | [BUSY] |      [BUSY]     |                                            |
+>>      +-----------------------------------------------------------------------+
+>>      ^                          ^
+>>      |                          |
+>>      |                          |
+>>      |                   producer_pos = 1536
+>>      |
+>> overwrite_pos = 0
+>> pending_pos = 0
+>> consumer_pos = 0
+>>
+>> 4. Reserve event C, size 2048.
+>>
+>>      C is allocated at offset 1536 and producer_pos becomes 3584.
+>>
+>>      0       512      1024    1536     2048     2560     3072     3584       4096
+>>      +-----------------------------------------------------------------------+
+>>      |        |                 |                                   |        |
+>>      |    A   |        B        |                 C                 |        |
+>>      | [BUSY] |      [BUSY]     |               [BUSY]              |        |
+>>      +-----------------------------------------------------------------------+
+>>      ^                                                              ^
+>>      |                                                              |
+>>      |                                                              |
+>>      |                                                    producer_pos = 3584
+>>      |
+>> overwrite_pos = 0
+>> pending_pos = 0
+>> consumer_pos = 0
+>>
+>> 5. Submit event A.
+>>
+>>      The BUSY bit of A is cleared. B becomes the oldest event under writing, so
+> 
+> Now it's "under writing" :) To be committed? Or "pending committing"
+> or just "pending", I guess. But not under anything, it just confuses
+> readers. IMO.
+
+Once again, 'oldest event to be committed'.
+
+I should check it with an AI agent first.
+
+> 
+>>      pending_pos is moved to 512, the start of B.
+>>
+>>      0       512      1024    1536     2048     2560     3072     3584       4096
+>>      +-----------------------------------------------------------------------+
+>>      |        |                 |                                   |        |
+>>      |    A   |        B        |                 C                 |        |
+>>      |        |      [BUSY]     |               [BUSY]              |        |
+>>      +-----------------------------------------------------------------------+
+>>      ^        ^                                                     ^
+>>      |        |                                                     |
+>>      |        |                                                     |
+>>      |   pending_pos = 512                                  producer_pos = 3584
+>>      |
+>> overwrite_pos = 0
+>> consumer_pos = 0
+>>
+>> 6. Submit event B.
+>>
+>>      The BUSY bit of B is cleared, and pending_pos is moved to the start of C,
+>>      which is the oldest event under writing now.
+> 
+> ditto
 >
-> The dev.tty.legacy_tiocsti sysctl introduced in commit 83efeeeb3d04
-> (=E2=80=9Ctty: Allow TIOCSTI to be disabled=E2=80=9D) controls TIOCSTI us=
-age. When
-> disabled, TIOCSTI requires CAP_SYS_ADMIN capability.
+
+Again and again :(
+
+>>
+>>      0       512      1024    1536     2048     2560     3072     3584       4096
+>>      +-----------------------------------------------------------------------+
+>>      |        |                 |                                   |        |
+>>      |    A   |        B        |                 C                 |        |
+>>      |        |                 |               [BUSY]              |        |
+>>      +-----------------------------------------------------------------------+
+>>      ^                          ^                                   ^
+>>      |                          |                                   |
+>>      |                          |                                   |
+>>      |                     pending_pos = 1536               producer_pos = 3584
+>>      |
+>> overwrite_pos = 0
+>> consumer_pos = 0
+>>
+>> 7. Reserve event D, size 1536 (3 * 512).
+>>
+>>      There are 2048 bytes not under writing between producer_pos and pending_pos,
+>>      so D is allocated at offset 3584, and producer_pos is moved from 3584 to
+>>      5120.
+>>
+>>      Since event D will overwrite all bytes of event A and the begining 512 bytes
+> 
+> typo: beginning, but really "first 512 bytes" would be clearer
+
+OK, I’ll switch to 'first 512 bytes' for clarity.
+
+> 
+>>      of event B, overwrite_pos is moved to the start of event C, the oldest event
+>>      that is not overwritten.
+>>
+>>      0       512      1024    1536     2048     2560     3072     3584       4096
+>>      +-----------------------------------------------------------------------+
+>>      |                 |        |                                   |        |
+>>      |      D End      |        |                 C                 | D Begin|
+>>      |      [BUSY]     |        |               [BUSY]              | [BUSY] |
+>>      +-----------------------------------------------------------------------+
+>>      ^                 ^        ^
+>>      |                 |        |
+>>      |                 |   pending_pos = 1536
+>>      |                 |   overwrite_pos = 1536
+>>      |                 |
+>>      |             producer_pos=5120
+>>      |
+>> consumer_pos = 0
+>>
+>> 8. Reserve event E, size 1024.
+>>
+>>      Though there are 512 bytes not under writing between producer_pos and
+>>      pending_pos, E can not be reserved, as it would overwrite the first 512
+>>      bytes of event C, which is still under writing.
+>>
+>> 9. Submit event C and D.
+>>
+>>      pending_pos is moved to the end of D.
+>>
+>>      0       512      1024    1536     2048     2560     3072     3584       4096
+>>      +-----------------------------------------------------------------------+
+>>      |                 |        |                                   |        |
+>>      |      D End      |        |                 C                 | D Begin|
+>>      |                 |        |                                   |        |
+>>      +-----------------------------------------------------------------------+
+>>      ^                 ^        ^
+>>      |                 |        |
+>>      |                 |   overwrite_pos = 1536
+>>      |                 |
+>>      |             producer_pos=5120
+>>      |             pending_pos=5120
+>>      |
+>> consumer_pos = 0
+>>
+>> The performance data for overwrite mode will be provided in a follow-up
+>> patch that adds overwrite mode benchs.
+>>
+>> A sample of performance data for non-overwrite mode on an x86_64 and arm64
+>> CPU, before and after this patch, is shown below. As we can see, no obvious
+>> performance regression occurs.
+>>
+>> - x86_64 (AMD EPYC 9654)
+>>
+>> Before:
+>>
+>> Ringbuf, multi-producer contention
+>> ==================================
+>>    rb-libbpf nr_prod 1  13.218 ± 0.039M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 2  15.684 ± 0.015M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 3  7.771 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 4  6.281 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 8  2.842 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 12 2.001 ± 0.004M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 16 1.833 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 20 1.508 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 24 1.421 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 28 1.309 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 32 1.265 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 36 1.198 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 40 1.174 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 44 1.113 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 48 1.097 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 52 1.070 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>
+>> After:
+>>
+>> Ringbuf, multi-producer contention
+>> ==================================
+>>    rb-libbpf nr_prod 1  13.751 ± 0.673M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 2  15.592 ± 0.008M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 3  7.776 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 4  6.463 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 8  2.883 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 12 2.017 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 16 1.816 ± 0.004M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 20 1.512 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 24 1.396 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 28 1.303 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 32 1.267 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 36 1.210 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 40 1.181 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 44 1.136 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 48 1.090 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 52 1.091 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>
+>> - arm64 (HiSilicon Kunpeng 920)
+>>
+>> Before:
+>>
+>>    Ringbuf, multi-producer contention
+>>    ==================================
+>>    rb-libbpf nr_prod 1  11.602 ± 0.423M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 2  9.599 ± 0.007M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 3  6.669 ± 0.008M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 4  4.806 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 8  3.856 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 12 3.368 ± 0.003M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 16 3.210 ± 0.007M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 20 3.003 ± 0.007M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 24 2.944 ± 0.007M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 28 2.863 ± 0.008M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 32 2.819 ± 0.007M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 36 2.887 ± 0.008M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 40 2.837 ± 0.008M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 44 2.787 ± 0.012M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 48 2.738 ± 0.010M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 52 2.700 ± 0.007M/s (drops 0.000 ± 0.000M/s)
+>>
+>> After:
+>>
+>>    Ringbuf, multi-producer contention
+>>    ==================================
+>>    rb-libbpf nr_prod 1  11.614 ± 0.268M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 2  9.917 ± 0.007M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 3  6.920 ± 0.008M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 4  4.803 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 8  3.898 ± 0.002M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 12 3.426 ± 0.008M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 16 3.320 ± 0.008M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 20 3.029 ± 0.013M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 24 3.068 ± 0.012M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 28 2.890 ± 0.009M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 32 2.950 ± 0.012M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 36 2.812 ± 0.006M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 40 2.834 ± 0.009M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 44 2.803 ± 0.010M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 48 2.766 ± 0.010M/s (drops 0.000 ± 0.000M/s)
+>>    rb-libbpf nr_prod 52 2.754 ± 0.009M/s (drops 0.000 ± 0.000M/s)
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> ---
+>>   include/uapi/linux/bpf.h       |   4 +
+>>   kernel/bpf/ringbuf.c           | 159 +++++++++++++++++++++++++++------
+>>   tools/include/uapi/linux/bpf.h |   4 +
+>>   3 files changed, 141 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>> index 233de8677382..d3b2fd2ae527 100644
+>> --- a/include/uapi/linux/bpf.h
+>> +++ b/include/uapi/linux/bpf.h
+>> @@ -1430,6 +1430,9 @@ enum {
+>>
+>>   /* Do not translate kernel bpf_arena pointers to user pointers */
+>>          BPF_F_NO_USER_CONV      = (1U << 18),
+>> +
+>> +/* bpf ringbuf works in overwrite mode? */
+>> +       BPF_F_OVERWRITE         = (1U << 19),
+> 
+> let's call it BPF_F_RB_OVERWRITE as this is ringbuf-specific? And use
+> imperative voice in the comment:
+> 
+> /* Enable BPF ringbuf overwrite mode */
 >
-> The current implementation checks the current process=E2=80=99s credentia=
-ls via
-> capable(CAP_SYS_ADMIN), but does not validate against the file opener=E2=
-=80=99s
-> credentials stored in file->f_cred. This creates different behavior when
-> file descriptors are passed between processes via SCM_RIGHTS.
+
+OK
+
+>>   };
+>>
+>>   /* Flags for BPF_PROG_QUERY. */
+>> @@ -6215,6 +6218,7 @@ enum {
+>>          BPF_RB_RING_SIZE = 1,
+>>          BPF_RB_CONS_POS = 2,
+>>          BPF_RB_PROD_POS = 3,
+>> +       BPF_RB_OVER_POS = 4,
+> 
+> nit: BPF_RB_OVERWITE_POS?
 >
-> Add a test suite with 16 test variants using fixture variants to verify
-> TIOCSTI behavior when dev.tty.legacy_tiocsti is enabled/disabled:
+
+ACK
+
+>>   };
+>>
+>>   /* BPF ring buffer constants */
+>> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+>> index 719d73299397..6ca41d01f187 100644
+>> --- a/kernel/bpf/ringbuf.c
+>> +++ b/kernel/bpf/ringbuf.c
+>> @@ -13,7 +13,7 @@
+>>   #include <linux/btf_ids.h>
+>>   #include <asm/rqspinlock.h>
+>>
+>> -#define RINGBUF_CREATE_FLAG_MASK (BPF_F_NUMA_NODE)
+>> +#define RINGBUF_CREATE_FLAG_MASK (BPF_F_NUMA_NODE | BPF_F_OVERWRITE)
+>>
+>>   /* non-mmap()'able part of bpf_ringbuf (everything up to consumer page) */
+>>   #define RINGBUF_PGOFF \
+>> @@ -27,7 +27,8 @@
+>>   struct bpf_ringbuf {
+>>          wait_queue_head_t waitq;
+>>          struct irq_work work;
+>> -       u64 mask;
+>> +       u64 mask:48;
+>> +       u64 overwrite_mode:1;
+> 
+> Please, don't touch the mask field, it's a very hot field, no need to
+> make it a bit field. Just add a separate bool for overwrite_mode.
+> 
+
+ACK
+
+>>          struct page **pages;
+>>          int nr_pages;
+>>          rqspinlock_t spinlock ____cacheline_aligned_in_smp;
+>> @@ -72,6 +73,7 @@ struct bpf_ringbuf {
+>>           */
+>>          unsigned long consumer_pos __aligned(PAGE_SIZE);
+>>          unsigned long producer_pos __aligned(PAGE_SIZE);
+>> +       unsigned long overwrite_pos;  /* to be overwritten in overwrite mode */
+> 
+> Not a really precise comment, IMO. This is a position pointing to
+> after the last overwritten record, no?
+
+Yes, It’s actually the position after the last overwritten record.
+I'll update the comment for clarity.
+
+> 
+>>          unsigned long pending_pos;
+>>          char data[] __aligned(PAGE_SIZE);
+>>   };
+>> @@ -166,7 +168,8 @@ static void bpf_ringbuf_notify(struct irq_work *work)
+>>    * considering that the maximum value of data_sz is (4GB - 1), there
+>>    * will be no overflow, so just note the size limit in the comments.
+>>    */
+>> -static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
+>> +static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node,
+>> +                                            int overwrite_mode)
+>>   {
+>>          struct bpf_ringbuf *rb;
+>>
+>> @@ -183,17 +186,25 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
+>>          rb->consumer_pos = 0;
+>>          rb->producer_pos = 0;
+>>          rb->pending_pos = 0;
+>> +       rb->overwrite_mode = overwrite_mode;
+>>
+>>          return rb;
+>>   }
+>>
+>>   static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
+>>   {
+>> +       int overwrite_mode = 0;
+>>          struct bpf_ringbuf_map *rb_map;
+>>
+>>          if (attr->map_flags & ~RINGBUF_CREATE_FLAG_MASK)
+>>                  return ERR_PTR(-EINVAL);
+>>
+>> +       if (attr->map_flags & BPF_F_OVERWRITE) {
+>> +               if (attr->map_type == BPF_MAP_TYPE_USER_RINGBUF)
+>> +                       return ERR_PTR(-EINVAL);
+>> +               overwrite_mode = 1;
+>> +       }
+>> +
+>>          if (attr->key_size || attr->value_size ||
+>>              !is_power_of_2(attr->max_entries) ||
+>>              !PAGE_ALIGNED(attr->max_entries))
+>> @@ -205,7 +216,8 @@ static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
+>>
+>>          bpf_map_init_from_attr(&rb_map->map, attr);
+>>
+>> -       rb_map->rb = bpf_ringbuf_alloc(attr->max_entries, rb_map->map.numa_node);
+>> +       rb_map->rb = bpf_ringbuf_alloc(attr->max_entries, rb_map->map.numa_node,
+>> +                                      overwrite_mode);
+> 
+> keep on single line, it fits under 100 characters
 >
-> - Basic TIOCSTI tests (8 variants): Direct testing with different
->   capability and controlling terminal combinations
-> - FD passing tests (8 variants): Test behavior when file descriptors
->   are passed between processes with different capabilities
+
+OK
+
+>>          if (!rb_map->rb) {
+>>                  bpf_map_area_free(rb_map);
+>>                  return ERR_PTR(-ENOMEM);
+>> @@ -295,11 +307,16 @@ static int ringbuf_map_mmap_user(struct bpf_map *map, struct vm_area_struct *vma
+>>
+>>   static unsigned long ringbuf_avail_data_sz(struct bpf_ringbuf *rb)
+>>   {
+>> -       unsigned long cons_pos, prod_pos;
+>> +       unsigned long cons_pos, prod_pos, over_pos;
+>>
+>>          cons_pos = smp_load_acquire(&rb->consumer_pos);
+>>          prod_pos = smp_load_acquire(&rb->producer_pos);
+>> -       return prod_pos - cons_pos;
+>> +
+>> +       if (likely(!rb->overwrite_mode))
+>> +               return prod_pos - cons_pos;
+> 
+> nit: invert the condition to unlikely and handle that special case in
+> a nested if, moving "over_pos" inside the if itself
 >
-> The FD passing tests document this behavior - some tests show different
-> results than expected based on file opener credentials, demonstrating
-> that TIOCSTI uses current process credentials rather than file opener
-> credentials.
->
-> The tests validate proper enforcement of the legacy_tiocsti sysctl. Test
-> implementation uses openpty(3) with TIOCSCTTY for isolated PTY
-> environments. See tty_ioctl(4) for details on TIOCSTI behavior and
-> security requirements.
->
-> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
-> =E2=80=94
-> RESEND: add TTY/serial maintainers and linux-serial CCs. No code changes.
-> - Link to orignal v4: <https://lore.kernel.org/r/20250902-toicsti-bug-v4-=
-1-e5c960e0b3d6@gmail.com>
->
-> Changes in v4:
-> - Moved skip conditions and sysctl setup from TEST_F to FIXTURE_SETUP (Ke=
-es Cook)
-> - Fixed fclose() error handling in set_legacy_tiocsti_setting (Kees Cook)
-> - Extracted run_basic_tiocsti_test() and run_fdpass_tiocsti_test function=
-s (Kees Cook)
-> - Removed redundant sysctl restore logic from TEST_F (Kees Cook)
-> - Simplified FIXTURE_TEARDOWN (Kees Cook)
-> - Replace drop_to_nobody() to drop_all_privs() which should be more porta=
-ble (Justin Stitt)
-> - Link to v3: <https://lore.kernel.org/r/20250730-toicsti-bug-v3-1-dd2dac=
-97f27a@gmail.com>
->
-> Add selftests for TIOCSTI ioctl
->
-> To run all tests:
-> $ sudo ./tools/testing/selftests/tty/tty_tiocsti_test
->
-> Test Results:
-> - PASSED: 13/16 tests
-> - Different behavior: 3/16 tests (documenting credential checking behavio=
-r)
->
-> All tests validated using:
-> - scripts/checkpatch.pl =E2=80=93strict (clean output)
-> - Functional testing on kernel v6.16-rc2
->
-> Changes in v3:
-> - Replaced all printf() calls with TH_LOG() for proper test logging (Kees=
- Cook)
-> - Added struct __test_metadata parameter to helper functions
-> - Moved common legacy_tiocsti availability check to FIXTURE_SETUP()
-> - Implemented sysctl modification/restoration in FIXTURE_SETUP/TEARDOWN
-> - Used openpty() with TIOCSCTTY for reliable PTY testing environment
-> - Fixed child/parent synchronization in FD passing tests
-> - Replaced manual _exit(1) handling with proper ASSERT statements
-> - Switched // comments to /* */ format throughout
-> - Expanded to 16 test variants using fixture variants
-> - Enhanced error handling and test reliability
-> - Link to v2: <https://lore.kernel.org/r/20250713-toicsti-bug-v2-1-b18378=
-7eea29@gmail.com>
-> - Link to v1: <https://lore.kernel.org/r/20250622-toicsti-bug-v1-0-f37437=
-3b04b2@gmail.com>
->
-> References:
-> - tty_ioctl(4) - documents TIOCSTI ioctl and capability requirements
-> - openpty(3) - pseudo-terminal creation and management
-> - commit 83efeeeb3d04 (=E2=80=9Ctty: Allow TIOCSTI to be disabled=E2=80=
-=9D)
-> - Documentation/security/credentials.rst
-> - <https://github.com/KSPP/linux/issues/156>
-> - <https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad/>
-> - drivers/tty/Kconfig
-> - Documentation/driver-api/tty/
-> =E2=80=94
->  tools/testing/selftests/tty/Makefile           |   6 +-
->  tools/testing/selftests/tty/config             |   1 +
->  tools/testing/selftests/tty/tty_tiocsti_test.c | 650 +++++++++++++++++++=
-++++++
->  3 files changed, 656 insertions(+), 1 deletion(-)
->
-> diff =E2=80=93git a/tools/testing/selftests/tty/Makefile b/tools/testing/=
-selftests/tty/Makefile
-> index 50d7027b2ae3fb495dd1c0684363fa8f426be42c..7f6fbe5a0cd5663310e334d9d=
-068b21dab9136ec 100644
-> =E2=80=94 a/tools/testing/selftests/tty/Makefile
-> +++ b/tools/testing/selftests/tty/Makefile
-> @@ -1,5 +1,9 @@
->  # SPDX-License-Identifier: GPL-2.0
->  CFLAGS =3D -O2 -Wall
-> -TEST_GEN_PROGS :=3D tty_tstamp_update
-> +TEST_GEN_PROGS :=3D tty_tstamp_update tty_tiocsti_test
-> +LDLIBS +=3D -lcap
->=20=20
->  include ../lib.mk
-> +
-> +# Add libcap for TIOCSTI test
-> +$(OUTPUT)/tty_tiocsti_test: LDLIBS +=3D -lcap
-> diff =E2=80=93git a/tools/testing/selftests/tty/config b/tools/testing/se=
-lftests/tty/config
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..c6373aba66366c82435bb26c0=
-19eb360eb6310eb
-> =E2=80=94 /dev/null
-> +++ b/tools/testing/selftests/tty/config
-> @@ -0,0 +1 @@
-> +CONFIG_LEGACY_TIOCSTI=3Dy
-> diff =E2=80=93git a/tools/testing/selftests/tty/tty_tiocsti_test.c b/tool=
-s/testing/selftests/tty/tty_tiocsti_test.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..5e767e6cb3ef8f05c5430eb0f=
-cc792064c446c03
-> =E2=80=94 /dev/null
-> +++ b/tools/testing/selftests/tty/tty_tiocsti_test.c
-> @@ -0,0 +1,650 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * TTY Tests - TIOCSTI
-> + *
-> + * Copyright =C2=A9 2025 Abhinav Saxena <xandfury@gmail.com>
-> + */
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <fcntl.h>
-> +#include <sys/ioctl.h>
-> +#include <errno.h>
-> +#include <stdbool.h>
-> +#include <string.h>
-> +#include <sys/socket.h>
-> +#include <sys/wait.h>
-> +#include <pwd.h>
-> +#include <termios.h>
-> +#include <grp.h>
-> +#include <sys/capability.h>
-> +#include <sys/prctl.h>
-> +#include <pty.h>
-> +#include <utmp.h>
-> +
-> +#include =E2=80=9C../kselftest_harness.h=E2=80=9D
-> +
-> +enum test_type {
-> +	TEST_PTY_TIOCSTI_BASIC,
-> +	TEST_PTY_TIOCSTI_FD_PASSING,
-> +	/* other tests cases such as serial may be added. */
-> +};
-> +
-> +/*
-> + * Test Strategy:
-> + * - Basic tests: Use PTY with/without TIOCSCTTY (controlling terminal f=
-or
-> + *   current process)
-> + * - FD passing tests: Child creates PTY, parent receives FD (demonstrat=
-es
-> + *   security issue)
-> + *
-> + * SECURITY VULNERABILITY DEMONSTRATION:
-> + * FD passing tests show that TIOCSTI uses CURRENT process credentials, =
-not
-> + * opener credentials. This means privileged processes can be given FDs =
-from
-> + * unprivileged processes and successfully perform TIOCSTI operations th=
-at the
-> + * unprivileged process couldn=E2=80=99t do directly.
-> + *
-> + * Attack scenario:
-> + * 1. Unprivileged process opens TTY (direct TIOCSTI fails due to lack of
-> + *    privileges)
-> + * 2. Unprivileged process passes FD to privileged process via SCM_RIGHTS
-> + * 3. Privileged process can use TIOCSTI on the FD (succeeds due to its
-> + *    privileges)
-> + * 4. Result: Effective privilege escalation via file descriptor passing
-> + *
-> + * This matches the kernel logic in tiocsti():
-> + * 1. if (!tty_legacy_tiocsti && !capable(CAP_SYS_ADMIN)) return -EIO;
-> + * 2. if ((current->signal->tty !=3D tty) && !capable(CAP_SYS_ADMIN))
-> + *        return -EPERM;
-> + * Note: Both checks use capable() on CURRENT process, not FD opener!
-> + *
-> + * If the file credentials were also checked along with the capable() ch=
-ecks
-> + * then the results for FD pass tests would be consistent with the basic=
- tests.
-> + */
-> +
-> +FIXTURE(tiocsti)
-> +{
-> +	int pty_master_fd; /* PTY - for basic tests */
-> +	int pty_slave_fd;
-> +	bool has_pty;
-> +	bool initial_cap_sys_admin;
-> +	int original_legacy_tiocsti_setting;
-> +	bool can_modify_sysctl;
-> +};
-> +
-> +FIXTURE_VARIANT(tiocsti)
-> +{
-> +	const enum test_type test_type;
-> +	const bool controlling_tty; /* true=3Dcurrent->signal->tty `=3D tty */
-> +	const int legacy_tiocsti; /* 0=3Drestricted, 1=3Dpermissive */
-> +	const bool requires_cap; /* true=3Dwith CAP_SYS_ADMIN, false=3Dwithout =
-*/
-> +	const int expected_success; /* 0=3Dsuccess, -EIO/-EPERM=3Dspecific erro=
-r */
-> +};
-> +
-> +/*
-> + * Tests Controlling Terminal Variants (current->signal->tty =3D' tty)
-> + *
-> + * TIOCSTI Test Matrix:
-> + *
-> + * | legacy_tiocsti | CAP_SYS_ADMIN | Expected Result | Error |
-> + * |=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94-|=E2=80=94=E2=80=94=E2=
-=80=94=E2=80=94=E2=80=94|=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=
-=80=93|=E2=80=94=E2=80=94-|
-> + * | 1 (permissive) | true          | SUCCESS         | -     |
-> + * | 1 (permissive) | false         | SUCCESS         | -     |
-> + * | 0 (restricted) | true          | SUCCESS         | -     |
-> + * | 0 (restricted) | false         | FAILURE         | -EIO  |
-> + */
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_permissive_withcap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty =3D true,
-> +	.legacy_tiocsti =3D 1,
-> +	.requires_cap =3D true,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_permissive_nocap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty =3D true,
-> +	.legacy_tiocsti =3D 1,
-> +	.requires_cap =3D false,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_restricted_withcap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty =3D true,
-> +	.legacy_tiocsti =3D 0,
-> +	.requires_cap =3D true,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_pty_restricted_nocap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty =3D true,
-> +	.legacy_tiocsti =3D 0,
-> +	.requires_cap =3D false,
-> +	.expected_success =3D -EIO, /* FAILURE: legacy restriction */
-> +}; /* clang-format on */
-> +
-> +/*
-> + * Note for FD Passing Test Variants
-> + * Since we=E2=80=99re testing the scenario where an unprivileged proces=
-s pass an FD
-> + * to a privileged one, .requires_cap here means the caps of the child p=
-rocess.
-> + * Not the parent; parent would always be privileged.
-> + */
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_permissive_withcap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty =3D true,
-> +	.legacy_tiocsti =3D 1,
-> +	.requires_cap =3D true,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_permissive_nocap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty =3D true,
-> +	.legacy_tiocsti =3D 1,
-> +	.requires_cap =3D false,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_restricted_withcap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty =3D true,
-> +	.legacy_tiocsti =3D 0,
-> +	.requires_cap =3D true,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_restricted_nocap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty =3D true,
-> +	.legacy_tiocsti =3D 0,
-> +	.requires_cap =3D false,
-> +	.expected_success =3D -EIO,
-> +}; /* clang-format on */
-> +
-> +/*
-> + * Non-Controlling Terminal Variants (current->signal->tty !=3D tty)
-> + *
-> + * TIOCSTI Test Matrix:
-> + *
-> + * | legacy_tiocsti | CAP_SYS_ADMIN | Expected Result | Error |
-> + * |=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94-|=E2=80=94=E2=80=94=E2=
-=80=94=E2=80=94=E2=80=94|=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=
-=80=93|=E2=80=94=E2=80=94-|
-> + * | 1 (permissive) | true          | SUCCESS         | -     |
-> + * | 1 (permissive) | false         | FAILURE         | -EPERM|
-> + * | 0 (restricted) | true          | SUCCESS         | -     |
-> + * | 0 (restricted) | false         | FAILURE         | -EIO  |
-> + */
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_permissive_withcap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty =3D false,
-> +	.legacy_tiocsti =3D 1,
-> +	.requires_cap =3D true,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_permissive_nocap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty =3D false,
-> +	.legacy_tiocsti =3D 1,
-> +	.requires_cap =3D false,
-> +	.expected_success =3D -EPERM,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_restricted_withcap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty =3D false,
-> +	.legacy_tiocsti =3D 0,
-> +	.requires_cap =3D true,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_restricted_nocap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_BASIC,
-> +	.controlling_tty =3D false,
-> +	.legacy_tiocsti =3D 0,
-> +	.requires_cap =3D false,
-> +	.expected_success =3D -EIO,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_permissive_withcap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty =3D false,
-> +	.legacy_tiocsti =3D 1,
-> +	.requires_cap =3D true,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_permissive_nocap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty =3D false,
-> +	.legacy_tiocsti =3D 1,
-> +	.requires_cap =3D false,
-> +	.expected_success =3D -EPERM,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_restricted_withcap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty =3D false,
-> +	.legacy_tiocsti =3D 0,
-> +	.requires_cap =3D true,
-> +	.expected_success =3D 0,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_restricted_nocap) {
-> +	.test_type =3D TEST_PTY_TIOCSTI_FD_PASSING,
-> +	.controlling_tty =3D false,
-> +	.legacy_tiocsti =3D 0,
-> +	.requires_cap =3D false,
-> +	.expected_success =3D -EIO,
-> +}; /* clang-format on */
-> +
-> +/* Helper function to send FD via SCM_RIGHTS */
-> +static int send_fd_via_socket(int socket_fd, int fd_to_send)
-> +{
-> +	struct msghdr msg =3D { 0 };
-> +	struct cmsghdr *cmsg;
-> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
-> +	char dummy_data =3D =E2=80=99F=E2=80=99;
-> +	struct iovec iov =3D { .iov_base =3D &dummy_data, .iov_len =3D 1 };
-> +
-> +	msg.msg_iov =3D &iov;
-> +	msg.msg_iovlen =3D 1;
-> +	msg.msg_control =3D cmsg_buf;
-> +	msg.msg_controllen =3D sizeof(cmsg_buf);
-> +
-> +	cmsg =3D CMSG_FIRSTHDR(&msg);
-> +	cmsg->cmsg_level =3D SOL_SOCKET;
-> +	cmsg->cmsg_type =3D SCM_RIGHTS;
-> +	cmsg->cmsg_len =3D CMSG_LEN(sizeof(int));
-> +
-> +	memcpy(CMSG_DATA(cmsg), &fd_to_send, sizeof(int));
-> +
-> +	return sendmsg(socket_fd, &msg, 0) < 0 ? -1 : 0;
-> +}
-> +
-> +/* Helper function to receive FD via SCM_RIGHTS */
-> +static int recv_fd_via_socket(int socket_fd)
-> +{
-> +	struct msghdr msg =3D { 0 };
-> +	struct cmsghdr *cmsg;
-> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
-> +	char dummy_data;
-> +	struct iovec iov =3D { .iov_base =3D &dummy_data, .iov_len =3D 1 };
-> +	int received_fd =3D -1;
-> +
-> +	msg.msg_iov =3D &iov;
-> +	msg.msg_iovlen =3D 1;
-> +	msg.msg_control =3D cmsg_buf;
-> +	msg.msg_controllen =3D sizeof(cmsg_buf);
-> +
-> +	if (recvmsg(socket_fd, &msg, 0) < 0)
-> +		return -1;
-> +
-> +	for (cmsg =3D CMSG_FIRSTHDR(&msg); cmsg; cmsg =3D CMSG_NXTHDR(&msg, cms=
-g)) {
-> +		if (cmsg->cmsg_level `=3D SOL_SOCKET &&
-> +		    cmsg->cmsg_type =3D' SCM_RIGHTS) {
-> +			memcpy(&received_fd, CMSG_DATA(cmsg), sizeof(int));
-> +			break;
-> +		}
-> +	}
-> +
-> +	return received_fd;
-> +}
-> +
-> +static inline bool has_cap_sys_admin(void)
-> +{
-> +	cap_t caps =3D cap_get_proc();
-> +
-> +	if (!caps)
-> +		return false;
-> +
-> +	cap_flag_value_t cap_val;
-> +	bool has_cap =3D (cap_get_flag(caps, CAP_SYS_ADMIN, CAP_EFFECTIVE,
-> +				     &cap_val) `=3D 0) &&
-> +		       (cap_val =3D' CAP_SET);
-> +
-> +	cap_free(caps);
-> +	return has_cap;
-> +}
-> +
-> +/*
-> + * Switch to non-root user and clear all capabilities
-> + */
-> +static inline bool drop_all_privs(struct __test_metadata *_metadata)
-> +{
-> +	/* Drop supplementary groups */
-> +	ASSERT_EQ(setgroups(0, NULL), 0);
-> +
-> +	/* Switch to non-root user */
-> +	ASSERT_EQ(setgid(1000), 0);
-> +	ASSERT_EQ(setuid(1000), 0);
-> +
-> +	/* Clear all capabilities */
-> +	cap_t empty =3D cap_init();
-> +
-> +	ASSERT_NE(empty, NULL);
-> +	ASSERT_EQ(cap_set_proc(empty), 0);
-> +	cap_free(empty);
-> +
-> +	/* Prevent privilege regain */
-> +	ASSERT_EQ(prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0), 0);
-> +
-> +	/* Verify privilege drop */
-> +	ASSERT_FALSE(has_cap_sys_admin());
-> +	return true;
-> +}
-> +
-> +static inline int get_legacy_tiocsti_setting(struct __test_metadata *_me=
-tadata)
-> +{
-> +	FILE *fp;
-> +	int value =3D -1;
-> +
-> +	fp =3D fopen(=E2=80=9C/proc/sys/dev/tty/legacy_tiocsti=E2=80=9D, =E2=80=
-=9Cr=E2=80=9D);
-> +	if (!fp) {
-> +		/* legacy_tiocsti sysctl not available (kernel < 6.2) */
-> +		return -1;
-> +	}
-> +
-> +	if (fscanf(fp, =E2=80=9C%d=E2=80=9D, &value) `=3D 1 && fclose(fp) =3D' =
-0) {
-> +		if (value < 0 || value > 1)
-> +			value =3D -1; /* Invalid value */
-> +	} else {
-> +		value =3D -1; /* Failed to parse */
-> +	}
-> +
-> +	return value;
-> +}
-> +
-> +static inline bool set_legacy_tiocsti_setting(struct __test_metadata *_m=
-etadata,
-> +					      int value)
-> +{
-> +	FILE *fp;
-> +	bool success =3D false;
-> +
-> +	/* Sanity-check the value */
-> +	ASSERT_GE(value, 0);
-> +	ASSERT_LE(value, 1);
-> +
-> +	/*
-> +	 * Try to open for writing; if we lack permission, return false so
-> +	 * the test harness will skip variants that need to change it
-> +	 */
-> +	fp =3D fopen(=E2=80=9C/proc/sys/dev/tty/legacy_tiocsti=E2=80=9D, =E2=80=
-=9Cw=E2=80=9D);
-> +	if (!fp)
-> +		return false;
-> +
-> +	/* Write the new setting */
-> +	if (fprintf(fp, =E2=80=9C%d\n=E2=80=9D, value) > 0 && fclose(fp) =3D=3D=
- 0)
-> +		success =3D true;
-> +	else
-> +		TH_LOG(=E2=80=9CFailed to write legacy_tiocsti: %s=E2=80=9D, strerror(=
-errno));
-> +
-> +	return success;
-> +}
-> +
-> +/*
-> + * TIOCSTI injection test function
-> + * @tty_fd: TTY slave file descriptor to test TIOCSTI on
-> + * Returns: 0 on success, -errno on failure
-> + */
-> +static inline int test_tiocsti_injection(struct __test_metadata *_metada=
-ta,
-> +					 int tty_fd)
-> +{
-> +	int ret;
-> +	char inject_char =3D =E2=80=99V=E2=80=99;
-> +
-> +	errno =3D 0;
-> +	ret =3D ioctl(tty_fd, TIOCSTI, &inject_char);
-> +	return ret =3D=3D 0 ? 0 : -errno;
-> +}
-> +
-> +/*
-> + * Child process: test TIOCSTI directly with capability/controlling
-> + * terminal setup
-> + */
-> +static void run_basic_tiocsti_test(struct __test_metadata *_metadata,
-> +				   FIXTURE_DATA(tiocsti) * self,
-> +				   const FIXTURE_VARIANT(tiocsti) * variant)
-> +{
-> +	/* Handle capability requirements */
-> +	if (self->initial_cap_sys_admin && !variant->requires_cap)
-> +		ASSERT_TRUE(drop_all_privs(_metadata));
-> +
-> +	if (variant->controlling_tty) {
-> +		/*
-> +		 * Create new session and set PTY as
-> +		 * controlling terminal
-> +		 */
-> +		pid_t sid =3D setsid();
-> +
-> +		ASSERT_GE(sid, 0);
-> +		ASSERT_EQ(ioctl(self->pty_slave_fd, TIOCSCTTY, 0), 0);
-> +	}
-> +
-> +	/*
-> +	 * Validate test environment setup and verify final
-> +	 * capability state matches expectation
-> +	 * after potential drop.
-> +	 */
-> +	ASSERT_TRUE(self->has_pty);
-> +	ASSERT_EQ(has_cap_sys_admin(), variant->requires_cap);
-> +
-> +	/* Test TIOCSTI and validate result */
-> +	int result =3D test_tiocsti_injection(_metadata, self->pty_slave_fd);
-> +
-> +	/* Check against expected result from variant */
-> +	EXPECT_EQ(result, variant->expected_success);
-> +	_exit(0);
-> +}
-> +
-> +/*
-> + * Child process: create PTY and then pass FD to parent via SCM_RIGHTS
-> + */
-> +static void run_fdpass_tiocsti_test(struct __test_metadata *_metadata,
-> +				    const FIXTURE_VARIANT(tiocsti) * variant,
-> +				    int sockfd)
-> +{
-> +	signal(SIGHUP, SIG_IGN);
-> +
-> +	/* Handle privilege dropping */
-> +	if (!variant->requires_cap && has_cap_sys_admin())
-> +		ASSERT_TRUE(drop_all_privs(_metadata));
-> +
-> +	/* Create child=E2=80=99s PTY */
-> +	int child_master_fd, child_slave_fd;
-> +
-> +	ASSERT_EQ(openpty(&child_master_fd, &child_slave_fd, NULL, NULL, NULL),
-> +		  0);
-> +
-> +	if (variant->controlling_tty) {
-> +		pid_t sid =3D setsid();
-> +
-> +		ASSERT_GE(sid, 0);
-> +		ASSERT_EQ(ioctl(child_slave_fd, TIOCSCTTY, 0), 0);
-> +	}
-> +
-> +	/* Test child=E2=80=99s direct TIOCSTI for reference */
-> +	int direct_result =3D test_tiocsti_injection(_metadata, child_slave_fd);
-> +
-> +	EXPECT_EQ(direct_result, variant->expected_success);
-> +
-> +	/* Send FD to parent */
-> +	ASSERT_EQ(send_fd_via_socket(sockfd, child_slave_fd), 0);
-> +
-> +	/* Wait for parent completion signal */
-> +	char sync_byte;
-> +	ssize_t bytes_read =3D read(sockfd, &sync_byte, 1);
-> +
-> +	ASSERT_EQ(bytes_read, 1);
-> +
-> +	close(child_master_fd);
-> +	close(child_slave_fd);
-> +	close(sockfd);
-> +	_exit(0);
-> +}
-> +
-> +FIXTURE_SETUP(tiocsti)
-> +{
-> +	/* Create PTY pair for basic tests */
-> +	self->has_pty =3D (openpty(&self->pty_master_fd, &self->pty_slave_fd,
-> +				 NULL, NULL, NULL) =3D=3D 0);
-> +	if (!self->has_pty) {
-> +		self->pty_master_fd =3D -1;
-> +		self->pty_slave_fd =3D -1;
-> +	}
-> +
-> +	self->initial_cap_sys_admin =3D has_cap_sys_admin();
-> +	self->original_legacy_tiocsti_setting =3D
-> +		get_legacy_tiocsti_setting(_metadata);
-> +
-> +	if (self->original_legacy_tiocsti_setting < 0)
-> +		SKIP(return,
-> +			   =E2=80=9Clegacy_tiocsti sysctl not available (kernel < 6.2)=E2=80=
-=9D);
-> +
-> +	/* Common skip conditions */
-> +	if (variant->test_type `=3D TEST_PTY_TIOCSTI_BASIC && !self->has_pty)
-> +		SKIP(return, "PTY not available for controlling terminal test");
-> +
-> +	if (variant->test_type =3D' TEST_PTY_TIOCSTI_FD_PASSING &&
-> +	    !self->initial_cap_sys_admin)
-> +		SKIP(return, =E2=80=9CFD Pass tests require CAP_SYS_ADMIN=E2=80=9D);
-> +
-> +	if (variant->requires_cap && !self->initial_cap_sys_admin)
-> +		SKIP(return, =E2=80=9CTest requires initial CAP_SYS_ADMIN=E2=80=9D);
-> +
-> +	/* Test if we can modify the sysctl (requires appropriate privileges) */
-> +	self->can_modify_sysctl =3D set_legacy_tiocsti_setting(
-> +		_metadata, self->original_legacy_tiocsti_setting);
-> +
-> +	/* Sysctl setup based on variant */
-> +	if (self->can_modify_sysctl &&
-> +	    self->original_legacy_tiocsti_setting !=3D variant->legacy_tiocsti)=
- {
-> +		if (!set_legacy_tiocsti_setting(_metadata,
-> +						variant->legacy_tiocsti))
-> +			SKIP(return, =E2=80=9CFailed to set legacy_tiocsti sysctl=E2=80=9D);
-> +
-> +	} else if (!self->can_modify_sysctl &&
-> +		   self->original_legacy_tiocsti_setting !=3D
-> +			   variant->legacy_tiocsti)
-> +		SKIP(return, =E2=80=9Clegacy_tiocsti setting mismatch=E2=80=9D);
-> +}
-> +
-> +FIXTURE_TEARDOWN(tiocsti)
-> +{
-> +	/*
-> +	 * Backup restoration -
-> +	 * each test should restore its own sysctl changes
-> +	 */
-> +	if (self->can_modify_sysctl) {
-> +		int current_value =3D get_legacy_tiocsti_setting(_metadata);
-> +
-> +		if (current_value !=3D self->original_legacy_tiocsti_setting) {
-> +			TH_LOG(=E2=80=9CBackup: Restoring legacy_tiocsti from %d to %d=E2=80=
-=9D,
-> +			       current_value,
-> +			       self->original_legacy_tiocsti_setting);
-> +			set_legacy_tiocsti_setting(
-> +				_metadata,
-> +				self->original_legacy_tiocsti_setting);
-> +		}
-> +	}
-> +
-> +	if (self->has_pty) {
-> +		if (self->pty_master_fd >=3D 0)
-> +			close(self->pty_master_fd);
-> +		if (self->pty_slave_fd >=3D 0)
-> +			close(self->pty_slave_fd);
-> +	}
-> +}
-> +
-> +TEST_F(tiocsti, test)
-> +{
-> +	int status;
-> +	pid_t child_pid;
-> +
-> +	if (variant->test_type =3D=3D TEST_PTY_TIOCSTI_BASIC) {
-> +		/* `=3D=3D=3D' BASIC TIOCSTI TEST `=3D=3D=3D' */
-> +		child_pid =3D fork();
-> +		ASSERT_GE(child_pid, 0);
-> +
-> +		/* Perform the actual test in the child process */
-> +		if (child_pid =3D=3D 0)
-> +			run_basic_tiocsti_test(_metadata, self, variant);
-> +
-> +	} else {
-> +		/* `=3D=3D=3D' FD PASSING SECURITY TEST `=3D=3D=3D' */
-> +		int sockpair[2];
-> +
-> +		ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, sockpair), 0);
-> +
-> +		child_pid =3D fork();
-> +		ASSERT_GE(child_pid, 0);
-> +
-> +		if (child_pid =3D=3D 0) {
-> +			/* Child process - create PTY and send FD */
-> +			close(sockpair[0]);
-> +			run_fdpass_tiocsti_test(_metadata, variant,
-> +						sockpair[1]);
-> +		}
-> +
-> +		/* Parent process - receive FD and test TIOCSTI */
-> +		close(sockpair[1]);
-> +
-> +		int received_fd =3D recv_fd_via_socket(sockpair[0]);
-> +
-> +		ASSERT_GE(received_fd, 0);
-> +
-> +		bool parent_has_cap =3D self->initial_cap_sys_admin;
-> +
-> +		TH_LOG(=E2=80=9C`=3D' TIOCSTI FD Passing Test Context `=3D'=E2=80=9D);
-> +		TH_LOG(=E2=80=9Clegacy_tiocsti: %d, Parent CAP_SYS_ADMIN: %s, Child: %=
-s=E2=80=9D,
-> +		       variant->legacy_tiocsti, parent_has_cap ? =E2=80=9Cyes=E2=80=9D=
- : =E2=80=9Cno=E2=80=9D,
-> +		       variant->requires_cap ? =E2=80=9Ckept=E2=80=9D : =E2=80=9Cdropp=
-ed=E2=80=9D);
-> +
-> +		/* SECURITY TEST: Try TIOCSTI with FD opened by child */
-> +		int result =3D test_tiocsti_injection(_metadata, received_fd);
-> +
-> +		/* Log security concern if demonstrated */
-> +		if (result =3D=3D 0 && !variant->requires_cap) {
-> +			TH_LOG("*** SECURITY CONCERN DEMONSTRATED ***=E2=80=9C);
-> +			TH_LOG(=E2=80=9DPrivileged parent can use TIOCSTI on FD from unprivil=
-eged child=E2=80=9C);
-> +			TH_LOG(=E2=80=9DThis shows current process credentials are used, not =
-opener credentials=E2=80=9C);
-> +		}
-> +
-> +		EXPECT_EQ(result, variant->expected_success)
-> +		{
-> +			TH_LOG(=E2=80=9DFD passing: expected error %d, got %d=E2=80=9C,
-> +			       variant->expected_success, result);
-> +		}
-> +
-> +		/* Signal child completion */
-> +		char sync_byte =3D =E2=80=98D=E2=80=99;
-> +		ssize_t bytes_written =3D write(sockpair[0], &sync_byte, 1);
-> +
-> +		ASSERT_EQ(bytes_written, 1);
-> +
-> +		close(received_fd);
-> +		close(sockpair[0]);
-> +	}
-> +
-> +	/* Common child process cleanup for both test types */
-> +	ASSERT_EQ(waitpid(child_pid, &status, 0), child_pid);
-> +
-> +	if (WIFSIGNALED(status)) {
-> +		TH_LOG(=E2=80=9DChild terminated by signal %d=E2=80=9C, WTERMSIG(statu=
-s));
-> +		ASSERT_FALSE(WIFSIGNALED(status))
-> +		{
-> +			TH_LOG(=E2=80=9DChild process failed assertion");
-> +		}
-> +	} else {
-> +		EXPECT_EQ(WEXITSTATUS(status), 0);
-> +	}
-> +}
-> +
-> +TEST_HARNESS_MAIN
->
-> =E2=80=94
-> base-commit: e6b9dce0aeeb91dfc0974ab87f02454e24566182
-> change-id: 20250618-toicsti-bug-7822b8e94a32
->
-> Best regards,
+
+OK
+
+>> +
+>> +       over_pos = READ_ONCE(rb->overwrite_pos);
+>> +       return min(prod_pos - max(cons_pos, over_pos), rb->mask + 1);
+> 
+> I'm trying to understand why you need to min with `rb->mask + 1`, can
+> you please elaborate?
 
 
-Hi TTY Maintainers,
-
-I had submitted this patch series a couple of weeks ago and wanted to
-gently ping to see if you=E2=80=99ve had a chance to review it.
-
-Also, if you have any other concerns or questions, I would be happy to
-address them.
+We need the min because rb->producer_pos and rb->overwrite_pos are read
+at different times. During this gap, a fast producer may wrap once or
+more, making over_pos larger than prod_pos.
 
 
-Best,
-Abhinav
+> And also, at least for consistency, use smp_load_acquire() for overwrite_pos?
 
---=-=-=--
+Using READ_ONCE here is to stay symmetric with __bpf_ringbuf_reserve(),
+where overwrite_pos is WRITE_ONCE first, followed by smp_store_release(producer_pos).
+So here we do smp_load_acquire(producer_pos) first, then READ_ONCE(overwrite_pos)
+to ensure a consistent view of the ring buffer.
+
+For consistency when reading consumer_pos and producer_pos, I’m fine with
+switching READ_ONCE to smp_load_acquire for overwrite_pos.
+
+>>   }
+>>
+>>   static u32 ringbuf_total_data_sz(const struct bpf_ringbuf *rb)
+>> @@ -402,11 +419,43 @@ bpf_ringbuf_restore_from_rec(struct bpf_ringbuf_hdr *hdr)
+>>          return (void*)((addr & PAGE_MASK) - off);
+>>   }
+>>
+>> +
+>> +static bool bpf_ringbuf_has_space(const struct bpf_ringbuf *rb,
+>> +                                 unsigned long new_prod_pos,
+>> +                                 unsigned long cons_pos,
+>> +                                 unsigned long pend_pos)
+>> +{
+>> +       /* no space if oldest not yet committed record until the newest
+>> +        * record span more than (ringbuf_size - 1)
+>> +        */
+>> +       if (new_prod_pos - pend_pos > rb->mask)
+>> +               return false;
+>> +
+>> +       /* ok, we have space in ovewrite mode */
+> 
+> typo: overwrite
+
+OK
+
+> 
+>> +       if (unlikely(rb->overwrite_mode))
+>> +               return true;
+>> +
+>> +       /* no space if producer position advances more than (ringbuf_size - 1)
+>> +        * ahead than consumer position when not in overwrite mode
+> 
+> typo: ahead of consumer position
+>
+
+OK
+
+>> +        */
+>> +       if (new_prod_pos - cons_pos > rb->mask)
+>> +               return false;
+>> +
+>> +       return true;
+>> +}
+>> +
+>> +static u32 ringbuf_round_up_hdr_len(u32 hdr_len)
+> 
+> use consistent naming, if you have bpf_ringbuf_has_space, then this
+> should have been bpf_ringbuf_round_up_len() or something like that.
+>
+
+OK, will add "bpf_" prefix
+
+>> +{
+>> +       hdr_len &= ~BPF_RINGBUF_DISCARD_BIT;
+>> +       return round_up(hdr_len + BPF_RINGBUF_HDR_SZ, 8);
+>> +}
+>> +
+>>   static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
+>>   {
+>> -       unsigned long cons_pos, prod_pos, new_prod_pos, pend_pos, flags;
+>> +       unsigned long flags;
+>>          struct bpf_ringbuf_hdr *hdr;
+>> -       u32 len, pg_off, tmp_size, hdr_len;
+>> +       u32 len, pg_off, hdr_len;
+>> +       unsigned long cons_pos, prod_pos, new_prod_pos, pend_pos, over_pos;
+> 
+> 100 character line length limit, just add over_pos to original single
+> line declaration
+>
+
+OK
+
+>>
+>>          if (unlikely(size > RINGBUF_MAX_RECORD_SZ))
+>>                  return NULL;
+>> @@ -429,24 +478,39 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
+>>                  hdr_len = READ_ONCE(hdr->len);
+>>                  if (hdr_len & BPF_RINGBUF_BUSY_BIT)
+>>                          break;
+>> -               tmp_size = hdr_len & ~BPF_RINGBUF_DISCARD_BIT;
+>> -               tmp_size = round_up(tmp_size + BPF_RINGBUF_HDR_SZ, 8);
+>> -               pend_pos += tmp_size;
+>> +               pend_pos += ringbuf_round_up_hdr_len(hdr_len);
+>>          }
+>>          rb->pending_pos = pend_pos;
+>>
+>> -       /* check for out of ringbuf space:
+>> -        * - by ensuring producer position doesn't advance more than
+>> -        *   (ringbuf_size - 1) ahead
+>> -        * - by ensuring oldest not yet committed record until newest
+>> -        *   record does not span more than (ringbuf_size - 1)
+>> -        */
+>> -       if (new_prod_pos - cons_pos > rb->mask ||
+>> -           new_prod_pos - pend_pos > rb->mask) {
+>> +       if (!bpf_ringbuf_has_space(rb, new_prod_pos, cons_pos, pend_pos)) {
+>>                  raw_res_spin_unlock_irqrestore(&rb->spinlock, flags);
+>>                  return NULL;
+>>          }
+>>
+>> +       /* In overwrite mode, move overwrite_pos to the next record to be
+>> +        * overwritten if the ring buffer is full
+>> +        */
+> 
+> hm... here I think the important point is that we search for the next
+> record boundary until which we need to overwrite data such that it
+> fits newly reserved record. "next record to be overwritten" isn't that
+> important (we might never need to overwrite it). Important are those
+> aspects of a) staying on record boundary and b) consuming enough
+> records to reserve the new one.
+> 
+> Can you please update the comment to mention the above points?
+>
+
+Sure, I'll update the comment to:
+
+In overwrite mode, advance overwrite_pos when the ring buffer is full.
+The key points are to stay on record boundaries and consume enough
+records to fit the new one.
+
+
+>> +       if (unlikely(rb->overwrite_mode)) {
+>> +               over_pos = rb->overwrite_pos;
+>> +               while (new_prod_pos - over_pos > rb->mask) {
+>> +                       hdr = (void *)rb->data + (over_pos & rb->mask);
+>> +                       hdr_len = READ_ONCE(hdr->len);
+>> +                       /* since pending_pos is the first record with BUSY
+>> +                        * bit set and overwrite_pos is never bigger than
+>> +                        * pending_pos, no need to check BUSY bit here.
+>> +                        */
+> 
+> honestly, this comment just confused me by implying that BUSY bit
+> might be important (and set) here. But in reality, we are just
+> overwriting already committed data which can't have BUSY bit set. It
+> would be more helpful to mention that bpf_ringbuf_has_space() check
+> above made sure we are not going to step over record that is being
+> actively worked on by some other producer.
+>
+
+Sorry for the confusion, and thanks for the clarification. I’ll update
+the comment to:
+
+The bpf_ringbuf_has_space() check above ensures we won’t step over
+a record currently being worked on by another producer.
+
+>> +                       over_pos += ringbuf_round_up_hdr_len(hdr_len);
+>> +               }
+>> +               /* smp_store_release(&rb->producer_pos, new_prod_pos) at
+>> +                * the end of the function ensures that when consumer sees
+>> +                * the updated rb->producer_pos, it always sees the updated
+>> +                * rb->overwrite_pos, so when consumer reads overwrite_pos
+>> +                * after smp_load_acquire(r->producer_pos), the overwrite_pos
+>> +                * will always be valid.
+>> +                */
+>> +               WRITE_ONCE(rb->overwrite_pos, over_pos);
+>> +       }
+>> +
+>>          hdr = (void *)rb->data + (prod_pos & rb->mask);
+>>          pg_off = bpf_ringbuf_rec_pg_off(rb, hdr);
+>>          hdr->len = size | BPF_RINGBUF_BUSY_BIT;
+>> @@ -479,7 +543,50 @@ const struct bpf_func_proto bpf_ringbuf_reserve_proto = {
+>>          .arg3_type      = ARG_ANYTHING,
+>>   };
+>>
+>> -static void bpf_ringbuf_commit(void *sample, u64 flags, bool discard)
+>> +static __always_inline
+>> +bool ringbuf_should_wakeup(const struct bpf_ringbuf *rb,
+> 
+> consistent naming: bpf_ringbuf_should_wakeup
+> 
+>> +                          unsigned long rec_pos,
+>> +                          unsigned long cons_pos,
+>> +                          u32 len, u64 flags)
+>> +{
+>> +       unsigned long rec_end;
+>> +
+>> +       if (flags & BPF_RB_FORCE_WAKEUP)
+>> +               return true;
+>> +
+>> +       if (flags & BPF_RB_NO_WAKEUP)
+>> +               return false;
+>> +
+>> +       /* for non-overwrite mode, if consumer caught up and is waiting for
+>> +        * our record, notify about new data availability
+>> +        */
+>> +       if (likely(!rb->overwrite_mode))
+>> +               return cons_pos == rec_pos;
+>> +
+>> +       /* for overwrite mode, to give the consumer a chance to catch up
+>> +        * before being overwritten, wake up consumer every half a round
+>> +        * ahead.
+>> +        */
+>> +       rec_end = rec_pos + ringbuf_round_up_hdr_len(len);
+>> +
+>> +       cons_pos &= (rb->mask >> 1);
+>> +       rec_pos &= (rb->mask >> 1);
+>> +       rec_end &= (rb->mask >> 1);
+>> +
+>> +       if (cons_pos == rec_pos)
+>> +               return true;
+>> +
+>> +       if (rec_pos < cons_pos && cons_pos < rec_end)
+>> +               return true;
+>> +
+>> +       if (rec_end < rec_pos && (cons_pos > rec_pos || cons_pos < rec_end))
+>> +               return true;
+>> +
+> 
+> hm... ok, let's discuss this. Why do we need to do some half-round
+> heuristic for overwrite mode? If a consumer is falling behind it
+> should be actively trying to catch up and they don't need notification
+> (that's the non-overwrite mode logic already).
+> 
+> So there is more to this than a brief comment you left, can you please
+> elaborate?
+> 
+> pw-bot: cr
+> 
+>> +       return false;
+>> +}
+>> +
+>> +static __always_inline
+> 
+> we didn't have always_inline before, any strong reason to add it now?
+> 
+>> +void bpf_ringbuf_commit(void *sample, u64 flags, bool discard)
+>>   {
+>>          unsigned long rec_pos, cons_pos;
+>>          struct bpf_ringbuf_hdr *hdr;
+>> @@ -495,15 +602,10 @@ static void bpf_ringbuf_commit(void *sample, u64 flags, bool discard)
+>>          /* update record header with correct final size prefix */
+>>          xchg(&hdr->len, new_len);
+>>
+>> -       /* if consumer caught up and is waiting for our record, notify about
+>> -        * new data availability
+>> -        */
+>>          rec_pos = (void *)hdr - (void *)rb->data;
+>>          cons_pos = smp_load_acquire(&rb->consumer_pos) & rb->mask;
+>>
+>> -       if (flags & BPF_RB_FORCE_WAKEUP)
+>> -               irq_work_queue(&rb->work);
+>> -       else if (cons_pos == rec_pos && !(flags & BPF_RB_NO_WAKEUP))
+>> +       if (ringbuf_should_wakeup(rb, rec_pos, cons_pos, new_len, flags))
+>>                  irq_work_queue(&rb->work);
+>>   }
+>>
+>> @@ -576,6 +678,8 @@ BPF_CALL_2(bpf_ringbuf_query, struct bpf_map *, map, u64, flags)
+>>                  return smp_load_acquire(&rb->consumer_pos);
+>>          case BPF_RB_PROD_POS:
+>>                  return smp_load_acquire(&rb->producer_pos);
+>> +       case BPF_RB_OVER_POS:
+>> +               return READ_ONCE(rb->overwrite_pos);
+> 
+> do the smp_load_acquire() here just like with all other positions?
+> 
+>>          default:
+>>                  return 0;
+>>          }
+>> @@ -749,6 +853,9 @@ BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
+>>
+>>          rb = container_of(map, struct bpf_ringbuf_map, map)->rb;
+>>
+>> +       if (unlikely(rb->overwrite_mode))
+>> +               return -EOPNOTSUPP;
+> 
+> why this check? We don't allow rb->overwrite_mode to be set for user
+> ringbuf, no?
+> 
+>> +
+>>          /* If another consumer is already consuming a sample, wait for them to finish. */
+>>          if (!atomic_try_cmpxchg(&rb->busy, &busy, 1))
+>>                  return -EBUSY;
+>> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+>> index 233de8677382..d3b2fd2ae527 100644
+>> --- a/tools/include/uapi/linux/bpf.h
+>> +++ b/tools/include/uapi/linux/bpf.h
+>> @@ -1430,6 +1430,9 @@ enum {
+>>
+>>   /* Do not translate kernel bpf_arena pointers to user pointers */
+>>          BPF_F_NO_USER_CONV      = (1U << 18),
+>> +
+>> +/* bpf ringbuf works in overwrite mode? */
+>> +       BPF_F_OVERWRITE         = (1U << 19),
+>>   };
+>>
+>>   /* Flags for BPF_PROG_QUERY. */
+>> @@ -6215,6 +6218,7 @@ enum {
+>>          BPF_RB_RING_SIZE = 1,
+>>          BPF_RB_CONS_POS = 2,
+>>          BPF_RB_PROD_POS = 3,
+>> +       BPF_RB_OVER_POS = 4,
+>>   };
+>>
+>>   /* BPF ring buffer constants */
+>> --
+>> 2.43.0
+>>
+
 
