@@ -1,131 +1,130 @@
-Return-Path: <linux-kselftest+bounces-42624-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AC69BAC970
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 13:00:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA6DFBACA00
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 13:03:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C41191925FDE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 11:00:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 795BD1C2BEF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 11:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDEF62FB989;
-	Tue, 30 Sep 2025 11:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902621FE47C;
+	Tue, 30 Sep 2025 11:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xKBOP4yR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bwnznzr4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454C1248F57
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Sep 2025 11:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FE61E1A05
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Sep 2025 11:03:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759230009; cv=none; b=a8WTCS2jW8Ez4/pXl1MWsoqNJKTMzQU/DMJhM0ChPQfPJF77YsQXZiN6A7vANxnzdHEOCC9yMInSb3IjxpI913dhnN8umKFcNSLO7I3dh4vJlK4meMNxnNEWBTUYogM4jN5P9J3WZOXMRwPk5fTi1WMF6wgbTKzcEM/rpgYINtY=
+	t=1759230195; cv=none; b=Bm4sLyD+/fupt07ZFTbHyuQvzLurv0SZsM8/DdB2qsUh59JxAhBHj/P2/Fw3yYZgooj5+T0IqbNnyMYcUJHuBhJIfprHsqaWfCJT5cK4vivlMeE5zGoVkm0bmW14+56ewEstta1+6Kvgl0zl2W5dnNgTVMJ6KYrihjIbptewnXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759230009; c=relaxed/simple;
-	bh=wFnoy4QXjxAmYJyA1+5t7l0ikN0i8PEuNczTcDuAws4=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=rZei607N8kLC18Fx64grYgPrbuS/tQMvQetYC27SdQ1grMRdgmsejVYlyEnqy09lSVLLfW+ngI4kOtjByZNgY7nKAmgtUl8rIXKfOap/IBPv0rD5xjdI7UIm8dHDSYpfwmhWXSWNNXDZ/VAwGRRFV0tV+zBMHE//wOtFXutDL2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xKBOP4yR; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-b556284db11so5572969a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Sep 2025 04:00:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1759230007; x=1759834807; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BW2Qtj+KVSZo32MbcvWapFjwhM8eljdM2/EMaeJKXfU=;
-        b=xKBOP4yRxXeQil4xoiFV+ATZKn67HZHAjxJfuvQGgoRXgpCMdYKCA3S3w43F/bqs31
-         NYQcTDCvo43m1wkVYVNiR+VuX+kGghzsyEsFZJyL8jFvektUCnmjYluMrvzL7lEZFZ2C
-         uwgtkLshxchhEWbdowqd2bh/lEuxRgumxZZCTQDOg5w8A601g9qQyVLRczBrWRGr8gUt
-         Kn9/M+jJ9lkyVhAjmxm6khjaq2EerP4nvaOG/A0j1BpQYkZw1vXmL5+/tBH/+4H7v2ts
-         HdLh3I977Ot2w2S3S/DoFgB3Dmacp8unEUH3rE9pZ2i5yUi5bhd6BRQljyQ5WOGTvFYJ
-         8WnA==
+	s=arc-20240116; t=1759230195; c=relaxed/simple;
+	bh=5u6BGMyZg0ZeuMYiYi7YTJmV+4yktA30/Ri8cWBKCfM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=g6uF05BNAyjhWvb8KNotMKRS8K1ldHnphiULVHOOpcDvq2uKMuWSpEXCRJj3L7PEpMNc6/Va8KRBSOwmC9BL1htOI2VghD7w3TzKeXl3SISdU+k4xhiqa9u0tHld6JN0uI2sHpp/csSooFoz7FlYNGMJWFNDTRkmvuFfPCiZo5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Bwnznzr4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1759230192;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c3hCo/D5uBvIFt5tzpRk70r2TMeNU+1RWRpfUU5oV6g=;
+	b=Bwnznzr4DzDI/AYLdCD3Ce+gdlY+Hf4mcXr40J1x2pYeehIksbAZPZ4LmjsqHtQKZhlyqw
+	YHD9ndlOQ0YYeK3oAbVyiv68wWojc+d0fveSa421++EoHaMNXqSg03eC2TSJnFkuCItitX
+	orqsQbjcTvIR67aM2Eb0GD23hULE8Nk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-530-Z82UUoEIOQuE1n9hoCMrvg-1; Tue, 30 Sep 2025 07:03:11 -0400
+X-MC-Unique: Z82UUoEIOQuE1n9hoCMrvg-1
+X-Mimecast-MFC-AGG-ID: Z82UUoEIOQuE1n9hoCMrvg_1759230190
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-46e509374dcso12358275e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Sep 2025 04:03:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759230007; x=1759834807;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BW2Qtj+KVSZo32MbcvWapFjwhM8eljdM2/EMaeJKXfU=;
-        b=HKDQUalJDWdhYOHFoKmyhtcTFD/c60uBqC36BPbcSEVN9qqLBdR/07wQN/vR/3LKBB
-         P4R33ohi0wZZp3E71mzGsrkyEt560KJKDaMU7+OsSdzLU6z+qk5dR/HoURE4Be+ZS7hV
-         EWiqAkkFm1eibMEa+8FUhhQ3Ma7sK1bjNpv2xymy+wt97MFWOCm6FZsnXwfYDL1LL4jz
-         spMhyWSQFPjE8vWN+69XuYm/Zgr4pox5Rrg/sKdS4XpPoBwqH9Fnj87GPxiFmrHBmP+M
-         263yugc4j427+naDT5c6st3npj7F7Dp8OLyYL3KsFiU0guD1ToVXf5GaH4JyArr/GY/L
-         oWkw==
-X-Gm-Message-State: AOJu0YxL+kPzTgclZ7w0BheT1DM46qESdg+p6gTiyxzmOfJa0Gxq8Zi9
-	MemBMRshm9IE+OWEnhI7y9x7gQsYwFRQMxkhgA/6F/FvOPrwb2I3qzz+pgJA64dnkZG+MhBRvQM
-	ZebRu5lV5xuVengd2MehxfW+3J+Vcm5q9qhckkqlfVhZxQER6nziTPJYgfg==
-X-Gm-Gg: ASbGncuGtQKLc4FwFQtZPzS27Gw14YgN0sngNv5UX0VH7QjGwLCAiZ3aWV45CaKD5Tw
-	+sj521FvhxARpgs/HRgYa1OAdlChKzCyItqiW4+lmKRzNezOa+7Rd+NJujD50xshD1c0Nb7tGUz
-	F3b+d43r2mGspm18kY3qVsOYjNAMcu9bON8Wt8VzrhTqJ9qKXO+nG+r8VsjgniXPOUP5g3lpa1N
-	haevsUrohP1gPfHXQqj2eeeimoa3LJEMVkmr1cT+9gXEKIteXUHZS1AIRU5gbVTYL25LSwJdyZ+
-	NWfJTaQiTa1AD9tGIAi0PlY1Hjk9Zw==
-X-Google-Smtp-Source: AGHT+IHtPuZgSVMGlUzaI5vj/KwcQ6zTwdUWSWUwa6mgNiKsVgXu8raJbRpSbZR/+jnNv3jtSjo9LDhitaHxBXunC00=
-X-Received: by 2002:a17:902:e809:b0:24e:3cf2:2453 with SMTP id
- d9443c01a7336-27ed4a89ac5mr212915705ad.61.1759230006932; Tue, 30 Sep 2025
- 04:00:06 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759230190; x=1759834990;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c3hCo/D5uBvIFt5tzpRk70r2TMeNU+1RWRpfUU5oV6g=;
+        b=pv9bRS7tYBRGNAZct+r+0Y3+p1zaOB3hNLjn2K+uroDrmfyzwPOh1zCibZ5Ak76MML
+         aRvXGIFEmyNObwArqZfVsWRKV38EemBeybxy4GWNpZXsDufRyfU50HnqWhfo0kLSo8xM
+         Z7+sJ9NUTv2dvThFgbdh1d9y/H3//j8aWXLAZf9sZAzlOOrzzGy8ftuhcSqWoRJXPGQp
+         0TnkxNTP2Set3pql0BcRaV9g4VrZhFLWJ1o0/oglHJ9T4PpTVcNfpm/4HcwOyY0cdM6b
+         nZ5eIX9rlYNDyzeV2q2AKFgPGXIzycLTTrf2v2FvkG7gzTwDbgwTdQ7v6FnhiyQNH4Aw
+         sN7w==
+X-Forwarded-Encrypted: i=1; AJvYcCVm4lqv7J6Xgr8QMdqoS4tjqugr4rsovPOEJp3pdIwB7G9IhuRuNOajcnAVvnXatFIZjREBhE/XDticQRCh3WE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgxbQG00fev3NTfwCnpIRo5U6jgRId8rjEDH+q+IJDmXkw+szi
+	UErG3AVsCwT8W8Y0Re+XQkb8ukfsA8j6EW1GJMGBuf1fVTSUcACOmj6majz47/4jt76PE2BYKmN
+	oIb3W1cerQNzqN5VTydzCMTg959cOG5ZH3MQYIqbnWE+WuFhNOrewuB2vegYq+liGR7zigA==
+X-Gm-Gg: ASbGnctYtMgH92DocdqQ4Rq49wGfc1u63Yk2XKGNJFqvArXnSROdet3gp1C3JKYSrDb
+	llznqTrslvw0q3THsdcNkJX+V+2NTMeyy3/HBTcxsoxP8OnfbMsTHFEf0vgU9EztbtL34fNUn2z
+	OyDEVzXSrwgMjmrKgnYuDnfUNY4YqhYEG5lrYXyRCAhNF1vCCVhg4JPXUVcYMq914XXSwvFbyBE
+	PHFfbrZ3ElD0+jz0Oj8ROr3093PXkqAu/zTMV3JjwgYL3VMmo2jU4+2bK90fm98R/9w8s8qQ5kq
+	Re176OUshb1xOWASEsTJJWSFqL78/J+CJsTElNtsFuu+jKs1E5/YjYkVTU/6vjv7kjqMY7KrUxy
+	WIVO5gB/p4nrg5/h2VA==
+X-Received: by 2002:a05:600c:34ce:b0:45b:47e1:ef6d with SMTP id 5b1f17b1804b1-46e32a2c1d6mr192326215e9.36.1759230190172;
+        Tue, 30 Sep 2025 04:03:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEFj7mxj8Yl0hTsBFdCmnwOPVTMRa5dKLaiRfxfgQ9PMsc+FPZrq9aAN3rhTAERQcDc04InRg==
+X-Received: by 2002:a05:600c:34ce:b0:45b:47e1:ef6d with SMTP id 5b1f17b1804b1-46e32a2c1d6mr192325725e9.36.1759230189782;
+        Tue, 30 Sep 2025 04:03:09 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e56f3dab0sm51237975e9.1.2025.09.30.04.03.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Sep 2025 04:03:09 -0700 (PDT)
+Message-ID: <49f887d8-a34d-4154-af94-84a3f77700e1@redhat.com>
+Date: Tue, 30 Sep 2025 13:03:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 30 Sep 2025 16:29:54 +0530
-X-Gm-Features: AS18NWA_909avJZvTE7jLbzzAOBb2Sb9YrnKfuZvYcjUAeZSImH28wlpR68IqJ4
-Message-ID: <CA+G9fYuUcs_-SKWSbiAgyzuhE9-oqSAGDQOU6pTPfwq57+cWSw@mail.gmail.com>
-Subject: selftests: kvm: irqfd_test: KVM_IRQFD failed, rc: -1 errno: 11
- (Resource temporarily unavailable)
-To: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kvmarm@lists.linux.dev, 
-	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>
-Cc: kvm list <kvm@vger.kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Anders Roxell <anders.roxell@linaro.org>, Ben Copeland <benjamin.copeland@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 net-next 00/12] AccECN protocol case handling series
+To: chia-yu.chang@nokia-bell-labs.com, edumazet@google.com,
+ linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+ dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+ kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+References: <20250927084803.17784-1-chia-yu.chang@nokia-bell-labs.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250927084803.17784-1-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The selftests: kvm: irqfd_test consistently fails across all test platforms
-since its introduction in Linux next-20250625. The failure occurs due to
-a KVM_IRQFD ioctl returning errno 11 (Resource temporarily unavailable).
-This has been observed from day one and is reproducible on all test runs.
+Hello,
 
-Reproducibility: 100% failure on all test platforms since
-next-20250625..next-20250929
+On 9/27/25 10:47 AM, chia-yu.chang@nokia-bell-labs.com wrote:
+> Plesae find the v2 AccECN case handling patch series, which covers
+> several excpetional case handling of Accurate ECN spec (RFC9768),
+> adds new identifiers to be used by CC modules, adds ecn_delta into
+> rate_sample, and keeps the ACE counter for computation, etc.
+> 
+> This patch series is part of the full AccECN patch series, which is available at
+> https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
 
-Test fails on the below list
- * graviton4
- * rk3399-rock-pi-4b
+This is a quite large series, touching core part bits of the stack, and
+we are very late in the cycle - finalizing the net-next PR right now.
 
-## Initial Observations:
-The test is attempting to register an IRQFD but fails with EAGAIN (errno 11).
-This likely indicates resource exhaustion or unsupported behavior on
-affected ARM-based platforms.
+Let's defer it to the next cycle, thanks!
 
-Could you please advise on the way forward for this test?
-Should we treat this as an unsupported case on ARM platforms,
-or is there a missing implementation/configuration that needs to be addressed?
+Paolo
 
-## Test log
-selftests: kvm: irqfd_test
-Random seed: 0x6b8b4567
-==== Test Assertion Failure ====
-  include/kvm_util.h:527: !ret
-  pid=721 tid=721 errno=11 - Resource temporarily unavailable
-     1 0x000000000040250f: kvm_irqfd at kvm_util.h:527
-     2 0x000000000040222f: main at irqfd_test.c:100
-     3 0x0000ffffbd43229b: ?? ??:0
-     4 0x0000ffffbd43237b: ?? ??:0
-addr2line:      5 0x000000000040206f: DWARF error: mangled line number
-section (bad file number)
-addr2line: DWARF error: mangled line number section (bad file number)
-_start at ??:?
-  KVM_IRQFD failed, rc: -1 errno: 11 (Resource temporarily unavailable)
-not ok 4 selftests: kvm: irqfd_test exit=254
-
-## Links
-   * https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250929/testrun/30048394/suite/kselftest-kvm/test/kvm_irqfd_test/log
-   * https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250929/testrun/30048394/suite/kselftest-kvm/test/kvm_irqfd_test/details/
 
