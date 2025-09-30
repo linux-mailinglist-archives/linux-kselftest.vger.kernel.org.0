@@ -1,246 +1,242 @@
-Return-Path: <linux-kselftest+bounces-42627-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42628-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5B3DBACAB2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 13:20:25 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3901BACB27
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 13:35:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30D51188B06E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 11:20:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B83AF4E1C47
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 11:35:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3005627B328;
-	Tue, 30 Sep 2025 11:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C86825CC42;
+	Tue, 30 Sep 2025 11:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="RD7indjH"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="jtDuKGxp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013069.outbound.protection.outlook.com [52.101.83.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD582242D97
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Sep 2025 11:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759231221; cv=none; b=lzZwWXL//S2dfqqKM3pOW9wk74mtoipp5Z519OEDimKJwB6CBsqWrW0oJfgAF0G78yuyXHKra7zD+8ZrP8YYes3PV3O1BVwxs6sHjG6cw4PtIpqutSrDa65WjaGRZK1dXz3id+4x/ThhOY3X+kfQHDyf5U9OtYkVGmI1avmoeHQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759231221; c=relaxed/simple;
-	bh=aGyJPngcI2GUynbKEOhKOF674Rzhog3Ql+uj/AK6Rbg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WZfa2slOyDQPXkA8Xr5aSI6kPsr1jB3rE9uHM7dRS2AffKQryjDMXPGTKaWNmqVzDJg6aXkyTLw/z9CS1dummNNoTXXOXw4hEqdhMGD2yYcq8/w4a/82Guf0Sy4hl/EQpNylOdw1xIvnkWURgYpKG+h3d29eXlUC164GF5qjpC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=RD7indjH; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3f99ac9acc4so865508f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Sep 2025 04:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1759231217; x=1759836017; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WYHBTgmdmHErC6+UjFY3X1Y//FB5ql6lj7rgayPtwFg=;
-        b=RD7indjHYPL9dbNqUMd5GJnUVqKSWUOdBDe6f5aJciVE+Tw0TrnmWWHWJUZnt/N2Gx
-         FlVQspCqR0Ss+lFsGBc1Dj8LR3GH4FWVML3EM+PkANZzIzMSa4recFtQneKun5SMu4/6
-         v0imlsBqet5V7TSk2x2LxCOYjeV8Vq/dhjIs1a56OOPQkFIx7DQmv5oVHQrFwg+tyOh2
-         vAcosyrJcspK+UVIFmDrk8I4iBdZuGInzJD2ncdMkfAHGr9itjLRol2n141p1T+Grc0/
-         GSLg4zM7ZWKtNlagEy/GRTgQ+R9myW4CkCwB4QCk08tONdhG9LJSPFKWay10lZPLSVdF
-         /+QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759231217; x=1759836017;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WYHBTgmdmHErC6+UjFY3X1Y//FB5ql6lj7rgayPtwFg=;
-        b=PnNbn92pAVWNHx7csMGvLar41Ndp1FBrTR/V4M8fX/jw6KzUJNIZ/wr8Lgl5fV4SE9
-         4dGL43tUB3pwyuaBhOmcHsp4/lOYE2PDt4QgVpZRqzvVrJ8YDN4KBuCl7QW25+ix3svB
-         PkGBdVOcGHEvCuiBJK5IiiS+8Nzk8vcd4o4aj0r3Bs1mbocy26j10e89EIXYbhj1Grg2
-         jo+Ley0khpZH4I2+ZV1btoXqGsrZSgtHs7zCWdkklQYJ80+wU0RJfERIVnPyCdP/RA3C
-         KcKTCakNClI74AZ1T0UhvCjJa2kENukwvecalFjeTsG+6wMdzIkdiyFq9uJbXfAgk6lx
-         6g2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUZCE01UDorMT7OOOczupm1KWK64Z0Q6YViPMl0LwbDUU/1JhHSjZCKYIZF+3UPc/moaS/keM6nkP2pjLChHdc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmC8XHBMyINC4G4SOZtmjVXmxABeeMpRe50mMC5znrio/erGFb
-	3VZ//jv1a1k91rIhijQ8MToXVjH1gsaH2oC8fut0N2ttS2W/8gUESaV1e05wfsGXiz0pbMlNdmO
-	GbXQTOOqwubJ+Bq5iuVKuWlCvHiw9bi0wuXvQZC1AoGcEytiEqiT5Adre/8dVqvY=
-X-Gm-Gg: ASbGncvdDR4dNwDMArGObIMyMalIYSEfL2H54srtizwfpH7XpcEEeshNiVpfQf9CLnD
-	99sii7k3jhQUxrEy+DipOt5FOHon1fx/SVhryDEOA+zxpOJj9u9xKzK+Aogvq3kmTTCACJnPK8H
-	hTPkQFiyzR2wAPI21X0uenuc/4Pi8GKGkOTXgYvU81yzMKiCsRO8guySL7sTp3+60+dx0sGtLPP
-	9CyOTr3eLyDkhhkPAak9Gw8THQgwLcfJ63uPqZo77Qr9amSCDkMQT9SPnnwVFdRHqJlg38JpNpM
-	+dUNEyldshVNdz8mivugXysyxV/pLydjOBwdh+oTK/ly82W/us2Oq+aaJX8MHD85mg6JFSiKAIc
-	vKK+CY+2TyuNckQoffuAa5H4YH0xMKWsnfS9oXjbbf83mijFl12DELP9MraTGJiNOQIgDZpZ9LN
-	M2/gmSGdG12N4e+NMEMg==
-X-Google-Smtp-Source: AGHT+IHokmu9/1ydi7cUDt2vPOg7tfZKU3YLML2+mLVZJ7ibXUdPL5HAOmJK7eRxubhFSfT6/8bbew==
-X-Received: by 2002:a05:6000:2dc9:b0:3ec:ce37:3a6a with SMTP id ffacd0b85a97d-40e4458ce65mr18578876f8f.22.1759231203909;
-        Tue, 30 Sep 2025 04:20:03 -0700 (PDT)
-Received: from ?IPV6:2001:67c:2fbc:1:8f94:27ec:8b3:19cd? ([2001:67c:2fbc:1:8f94:27ec:8b3:19cd])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e56f64849sm51890465e9.11.2025.09.30.04.20.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Sep 2025 04:20:03 -0700 (PDT)
-Message-ID: <a21498ff-4dd0-4b3a-9b2e-9b932b5925ad@openvpn.net>
-Date: Tue, 30 Sep 2025 13:20:02 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA8925A359;
+	Tue, 30 Sep 2025 11:34:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759232098; cv=fail; b=lCyxsCfINap1OCb7v2tDZR+fgqZTSLSyb8T2YgWcyV0HmOCVNw3uJ/gYbux/7GEF1l1eaC0tZ8EuevgzNA5c2Gyf7ozu0+6L9EQ5H9J3KSCHb9Bs6hxSVvLk/0/mxS/6n9jOQJaFWm0KzkydzP/RHddmjYaBS60CO5qbDyWd6Vk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759232098; c=relaxed/simple;
+	bh=BRbawmjdCdVnul4M6wxIZCda8bw9T9ju0+DNZwBETAA=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ULdXf+bjsNztFI+97ojpFFuNagWYoceLtpMfTygxUtJcwhUKJVDywL6AOHsusCIlCPH+Y9YFYbXq6WQ2DBDJaJtrBo+PCJWEz8D/ktFZRF1y6Dj7ZrCZs9/al+sSMF06wGo1WZ4VVTFNp3xDklBWXeFB3ykb/OdgD3W2LqhZNQY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=jtDuKGxp; arc=fail smtp.client-ip=52.101.83.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VsVEyrmNrgJzgQMVvtUg0P7j6FW+G/+tdxd/+QZYzMBaaNLWnh9ga2V312FVQpnKb72tLmM43e5mpE2R0uaJy0jE0jrSyi+8Z3tI1B1og6V1R5bhaM/fKcWKCy8FqfM5+uq4SxnzCyp8NSfMxULxFbAG/WMteEciY011l2OqjIpuy5Pz7ocB0u/UeUbQotfjKOjgX5/bPj0jap4FHw/TLl2WEy3lYvbWxrYovJxDiWCvcUnWZAGrGYKYcakXsGztDfHdw/TUEj3NpDw+JONsMTpNm/2t04qzTMtXwM7y5REqs6ta3MjAPJYq+nS6r2LKD8hgUS8tqN9S4OnP3vem3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BRbawmjdCdVnul4M6wxIZCda8bw9T9ju0+DNZwBETAA=;
+ b=WdGJBcGZfQZgVf/+CI3uQzra543vqTD0RZsAnKtSULrt61yHsJ5iRs58V0F564RFwUHXveEiReKIviM8Pqo+VIyUBSDeJYLswYACN3t/iyx2k4Hl6F87m9SvifJiiXemfwmEe9WgoEXV6vGAlcXVn4o3KE75IoTDFFaqu8/9MWZcOGYYyXQJuv5YwC7v5Vg+SSnDjwNCZSj0Ol0XxAK9jOD9vTDH4WnQFlFMMTYA/bwKMNvW83y7ARtietmi/i3jZLtaoDhjz9w6Yhcku5waiBqEHFkLvtZIbNwS7meDfwPoxwjeNDWWPlyUuHuHw94a2eEvTGX4fMLu3qtBrrdQ1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BRbawmjdCdVnul4M6wxIZCda8bw9T9ju0+DNZwBETAA=;
+ b=jtDuKGxpuJ98lv9j+vUCjtyKoVrEpt6WXTgNywKW/bT2aeiDmB1tY8yTSrVxAFC73ilkOO76kPw1KWpcOIlFGOApn8j7WtD9gg1iD1VuvYf4votfk/VP4mb/mfBFQGp+thoOz3kkk1kRMLn5fCOFKB0DDadQhYbjtUSVmTxfMe13nyX1I6asNtgyE1UMC0OSJR1NImCo0piEHV2QYxK3i4pB+TdeP0bzkEjm5EG2DvOWqwE7XufX+G2+eF/m/8gKCLQ2KRTZMQ+A7WiATvb3fvKHAlb2ATopSQDWgkXTliP9zBbfutM9B5b3xRmcNYuA61rJqe5//a6QtJ3NkiMXdg==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by AM9PR07MB7795.eurprd07.prod.outlook.com (2603:10a6:20b:30a::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.16; Tue, 30 Sep
+ 2025 11:34:52 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56%2]) with mapi id 15.20.9160.015; Tue, 30 Sep 2025
+ 11:34:52 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Paolo Abeni <pabeni@redhat.com>, "edumazet@google.com"
+	<edumazet@google.com>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
+	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "kuniyu@amazon.com" <kuniyu@amazon.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
+	"jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
+	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
+	<donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
+	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: RE: [PATCH v3 net-next 00/12] AccECN protocol case handling series
+Thread-Topic: [PATCH v3 net-next 00/12] AccECN protocol case handling series
+Thread-Index: AQHcL4t0/dHZGRl6+k61HV5EZO6Z67SrlIOAgAAIlGA=
+Date: Tue, 30 Sep 2025 11:34:52 +0000
+Message-ID:
+ <PAXPR07MB798402AC2BE729A075AC63ADA31AA@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20250927084803.17784-1-chia-yu.chang@nokia-bell-labs.com>
+ <49f887d8-a34d-4154-af94-84a3f77700e1@redhat.com>
+In-Reply-To: <49f887d8-a34d-4154-af94-84a3f77700e1@redhat.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|AM9PR07MB7795:EE_
+x-ms-office365-filtering-correlation-id: 9cc50953-d17b-4864-8d5d-08de00155f0e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020|38070700021;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?TvQazAcv/B1RopH2RseDMqDYW0oyz8Nn7gMUZF2v1MD7j9e+IXpcSdGol+gr?=
+ =?us-ascii?Q?IWw+kVYfj3G8+2pXDQK+LjzbDJhpTND3LB1V/isSboI10CjDijUzjSpnMHPy?=
+ =?us-ascii?Q?j9g0EVWPOW6qXNh3tDSnBJPlY0hMoOYSGy681YGTkUPTDsxHQfptM6qUJ0jz?=
+ =?us-ascii?Q?bdw3N/5cQncZ2ohjhYjjl5EMHsGqHwRBU6K+p4fwpMJDZmbVzFlBQ8JzGDzy?=
+ =?us-ascii?Q?I6jvrZ5E+TkFcLehQ/DnTJLbO7YwPcWuEtgKBBmFSJl3YCmgbntK5+yioK9M?=
+ =?us-ascii?Q?CIeg+4HwbPMN6wS3gklsbSg0eM/CvWQpRDxrbgBIr0X6t2GZqGxUdfXP4Q82?=
+ =?us-ascii?Q?VXR6nQxHSEMlbynjs9QYzEpHWd6TrMYRhUCyewpfgkbxeKrVRhFgDB993I62?=
+ =?us-ascii?Q?n9MFuj8IPd+lBupz8+e3wUPLbgeEqcCJpO7GE2He2wooOjYRw+Halbtz4Nev?=
+ =?us-ascii?Q?Ztyd9Dc0YCpxWNmT8Q6j2rKys1geAOMRLwZ8h15uxel1WPt144ql2ydvP1em?=
+ =?us-ascii?Q?hNVUIvdPAo64eXLCsQtV7r9LwQdapjUy3lwuuwXJ3DD8o9Q306W5Rc70zWh0?=
+ =?us-ascii?Q?l3tnKJC+H9OKGBW+c9/oLoZXFKM9wtHNK+ldzPtJ8RPJb9ZAMDsBnJIXY6lQ?=
+ =?us-ascii?Q?ok1PdUUjM3XnlzCJiDdoXxxpyZA6SiBL1Z8guV/m9VwBMI9sfeUcDmFAN8JD?=
+ =?us-ascii?Q?5+YwBrQis3yYJz4jhEvBnXIwl1mkz6nt8f3O8n3pppn92sDxUs05tm2PsO8x?=
+ =?us-ascii?Q?HPTXBQneRLYU799RLpI1Ckwf7hjpzpbT3uMw8SqPh2km1K+nZfQBb1qB6bsE?=
+ =?us-ascii?Q?9JMCjxt8p0FKXGPzMYaZWUSxINLGakvrdMBZB4coHO0/LgYgTAZRj3Zsnrj2?=
+ =?us-ascii?Q?obIBEEqlLj9iMGuy4UlJo4+3evaU0mbk62hyPp8CsPeDNnYGYcdWOPlZ9gfg?=
+ =?us-ascii?Q?NrBgrQke5ib2qGZ/4wDr6CEkinaqN+wNK8VWppti1hLv5Kep5yxVTUkdc+GP?=
+ =?us-ascii?Q?kQCM8rZ/akF6iMCmsdZM+tKTIZyfssaepkOE8NRaIoZwoqLAN5ws6pjlkrYQ?=
+ =?us-ascii?Q?GasbRi9uQZdutR9zFfcyzjgGX2TBeHqTB/peEZS4xr5hRIzgrsvSaeoMBBb1?=
+ =?us-ascii?Q?gA8wR809bMuZu1f3Vd/LVL6WAHFfTRUJVK7HXOobH5Mt8QbvJhddhx/JTqf2?=
+ =?us-ascii?Q?5mg5+iOBuxztBim6SmJlZRjSzw3y7PBh9wrB5ZCi4sKaj9CZoolM7jK3w1Sh?=
+ =?us-ascii?Q?jzKdmG2zYR4uELodFQkolb4UTgDU4HJrsp17Q+Ecms7yvTpGvf/1BqW/acPj?=
+ =?us-ascii?Q?CS964x2314D3oHR0QxXWDpxnjg04qJzBJBdeinkvIRGo+V9qfCP3S+1Kb865?=
+ =?us-ascii?Q?qCgb6MWVJ3eMGprxWpVc5pZUR9rIjm53Ibdc63yEaAzZBQ5R6kotPkVwNxad?=
+ =?us-ascii?Q?a0z9vFqn3hv2LmFw0R1WPlS+qzWGNSSb0WQpxgQn/dzsUbUyuMbffchTbrM7?=
+ =?us-ascii?Q?lH7t9GaoUL4KQ31wrAVWMlx3X5+DhYplfPQQY9OgEuDG7ApwEAXtTU+bqg?=
+ =?us-ascii?Q?=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?FKinTTJ9g+pRX4hKul5Cu56wKsDMVccuSEo8WOhdaTdje080poKiINnb3yfH?=
+ =?us-ascii?Q?6e0kT4UZjp1u6H5eXK7p3b5UTupru7Rn45diKcTfaSyD5tvPYfin5AeYD3Hs?=
+ =?us-ascii?Q?9hBF6zpFV6b4DT1XwXq1u7TUthfWhq2rJSo3LaerTcXvudxThriNyFR3mI+t?=
+ =?us-ascii?Q?+a3Zk4vlcAQ4AludIaKdKrmuAq3V8v4tyQXYgIYaZzFBGuDp9Xb3UETgOdBO?=
+ =?us-ascii?Q?gEWg8QO+Qu+6Q7GUHXrDHUbq1phvUoabrG0PyCDLvGqG0QPT3Bj0+fhuIE37?=
+ =?us-ascii?Q?AQIQDYHuBSQQv/iV7gU8fH755ufSXjaTWh/m1l6y7dzIojhvzL+nJ+1xOW7O?=
+ =?us-ascii?Q?VV41KfrZjxZcqu0Iwted7RMrN7ZvLIkCyI42uLvJ/LL84BcRmK2ttilfy4y7?=
+ =?us-ascii?Q?jUMEYoP38CHGmajKzdoPvv9GcmzLJq4EWXreH35dTpPvVBJfGdeEdivNy3cg?=
+ =?us-ascii?Q?rzub4EZMI1p30/SQugqmH+7xEixRoH4V8TxJiRFFn45ABv1K1b+84JdI9eZD?=
+ =?us-ascii?Q?0CXUpdn4T7pobmIzyB1bPHqCRLmbGJB++1sMCegmkD22SeFvRZd4R0KdESdt?=
+ =?us-ascii?Q?+//z8C6MNLl/d5iEv5cyj4LHnuV7OnsNybWL1+K1B9eQdI+bPsQ/w93CNXKC?=
+ =?us-ascii?Q?ny3w76APK7pmZEFEkc9C3ksBinkGZZRVhmn770VeG+/7hFe7tWy0PSYUvGHq?=
+ =?us-ascii?Q?0oQHgUvXrB5Ya6SnIqku/uophgAuW+dKYPos6eCgRR10KUldBeIKb41R7rD8?=
+ =?us-ascii?Q?UfPT64OALJw4eUEH+DU8r2vztISsN549upF/nrERFND1BSe/6ft8xmb1G72H?=
+ =?us-ascii?Q?uD4ET4ktMIORTYSbcLTjEi6bkUyPhNAJ9a1aJmfQI9Sohgm06XphLv4zRP/0?=
+ =?us-ascii?Q?eSL9rxPYN+g3SFABY9uO1fPR+V+Yu5mCSqpmsPUBxLIVzY1XKvjZYv8jEuGY?=
+ =?us-ascii?Q?qzo15szw3mr9NHPQT90Zs17IIuONwUdXJ5sxAjy6o6FbSKoChpxqbRxUbDvk?=
+ =?us-ascii?Q?4IrOSpTYDD4fv7WViyUHY/OFLiC0cAgO5yNxRKH7bdFb7EKaZ3IiX+tOA6p9?=
+ =?us-ascii?Q?uQAm2stliUInAHH9/bvgGOsMW1lmTVvR5Z+I9F6Skb1T8TboZP6OnQt/4agY?=
+ =?us-ascii?Q?C9HL++GAJHROcWB8ANT0aN0dEyujXfrPKNSv95sXqeEY50BAkrxJV5jewWOi?=
+ =?us-ascii?Q?heLrfyyAOCBviwzyhWfEDMmUJBG5zsxNiQ4EQF6Pzi0XbSHkSNSNTdogfOqe?=
+ =?us-ascii?Q?4DNGNQOnWZCBogb7qjYfwojJcTeprt7ErcuPx5hkI+fRNX7FEvsjOau3KRy0?=
+ =?us-ascii?Q?EFBZn2UWHauxKB7UkbFdoXWk7eR0Yv7nZWGfU2vB8uyvKvqzOAidcwtiWgxh?=
+ =?us-ascii?Q?tPsNe/yn4pOplmi4EuZpHUaEUMFG+W3IrwC2bczC7pLlroHSWy1+86D9MIgZ?=
+ =?us-ascii?Q?O2tnwiRBybxqOQxwb0oP5qOn+TBB/4jK8YVAfEr+dBZBGEBcu2Ee4xRIujue?=
+ =?us-ascii?Q?G9okubtGdJny5u4PZcKL6qO9uuyS5AEDB8ReQ4NceFXP5ZXWH/yESCVRYW4l?=
+ =?us-ascii?Q?HjMnnD8i0bYnP05i60bel2/DrDvZLBCNFpZmSkYJkWkySqHTVQBlZeNVSGXE?=
+ =?us-ascii?Q?dw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v4] selftest:net: Fix uninit return values
-To: Sidharth Seela <sidharthseela@gmail.com>, sd@queasysnail.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, willemdebruijn.kernel@gmail.com, kernelxing@tencent.com,
- nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
- justinstitt@google.com
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20250930100656.80420-2-sidharthseela@gmail.com>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <20250930100656.80420-2-sidharthseela@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cc50953-d17b-4864-8d5d-08de00155f0e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2025 11:34:52.1935
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LvNBmGTew151H81p97/hwx/l/v8HEFj3kCfgfWlIzWBA5p1COxwxZ/br23nJYn+oiBpkH/IiIgRh/L3OMYmQBrO2Nw6vOfuNZQ36+Xr5miqG3bqpfU50SVxDA4DUtYqG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR07MB7795
 
-Hi,
+> -----Original Message-----
+> From: Paolo Abeni <pabeni@redhat.com>=20
+> Sent: Tuesday, September 30, 2025 1:03 PM
+> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; edumazet@g=
+oogle.com; linux-doc@vger.kernel.org; corbet@lwn.net; horms@kernel.org; dsa=
+hern@kernel.org; kuniyu@amazon.com; bpf@vger.kernel.org; netdev@vger.kernel=
+.org; dave.taht@gmail.com; jhs@mojatatu.com; kuba@kernel.org; stephen@netwo=
+rkplumber.org; xiyou.wangcong@gmail.com; jiri@resnulli.us; davem@davemloft.=
+net; andrew+netdev@lunn.ch; donald.hunter@gmail.com; ast@fiberby.net; liuha=
+ngbin@gmail.com; shuah@kernel.org; linux-kselftest@vger.kernel.org; ij@kern=
+el.org; ncardwell@google.com; Koen De Schepper (Nokia) <koen.de_schepper@no=
+kia-bell-labs.com>; g.white@cablelabs.com; ingemar.s.johansson@ericsson.com=
+; mirja.kuehlewind@ericsson.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_=
+Livingood@comcast.com; vidhi_goel@apple.com
+> Subject: Re: [PATCH v3 net-next 00/12] AccECN protocol case handling seri=
+es
+>=20
+>=20
+> CAUTION: This is an external email. Please be very careful when clicking =
+links or opening attachments. See the URL nok.it/ext for additional informa=
+tion.
+>=20
+>=20
+>=20
+> Hello,
+>=20
+> On 9/27/25 10:47 AM, chia-yu.chang@nokia-bell-labs.com wrote:
+> > Plesae find the v2 AccECN case handling patch series, which covers=20
+> > several excpetional case handling of Accurate ECN spec (RFC9768), adds=
+=20
+> > new identifiers to be used by CC modules, adds ecn_delta into=20
+> > rate_sample, and keeps the ACE counter for computation, etc.
+> >
+> > This patch series is part of the full AccECN patch series, which is=20
+> > available at
+> > https://eur03.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit=
+h
+> > ub.com%2FL4STeam%2Flinux-net-next%2Fcommits%2Fupstream_l4steam%2F&data
+> > =3D05%7C02%7Cchia-yu.chang%40nokia-bell-labs.com%7C228d6b16774840cfc5b2=
+0
+> > 8de0010f394%7C5d4717519675428d917b70f44f9630b0%7C0%7C0%7C6389482699719
+> > 97461%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAw
+> > MCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdat
+> > a=3DUai2aLfUVJuJC3NWu8R2rGQ78XWYFsjEnVZo6u%2BSqaU%3D&reserved=3D0
+>=20
+> This is a quite large series, touching core part bits of the stack, and w=
+e are very late in the cycle - finalizing the net-next PR right now.
+>=20
+> Let's defer it to the next cycle, thanks!
+>=20
+> Paolo
 
-Thanks a lot for fixing this - I hadn't see the warnings with gcc.
+No problem, thanks for notification and we will ocntinue for the next cycle=
+.
 
-On 30/09/2025 12:06, Sidharth Seela wrote:
-> Fix functions that return undefined values. These issues were caught by
-> running clang using LLVM=1 option.
-> 
-> 
-> Clang warnings are as follows:
-> ovpn-cli.c:1587:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->   1587 |         if (!sock) {
->        |             ^~~~~
-> ovpn-cli.c:1635:9: note: uninitialized use occurs here
->   1635 |         return ret;
->        |                ^~~
-> ovpn-cli.c:1587:2: note: remove the 'if' if its condition is always false
->   1587 |         if (!sock) {
->        |         ^~~~~~~~~~~~
->   1588 |                 fprintf(stderr, "cannot allocate netlink socket\n");
->        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   1589 |                 goto err_free;
->        |                 ~~~~~~~~~~~~~~
->   1590 |         }
->        |         ~
-> ovpn-cli.c:1584:15: note: initialize the variable 'ret' to silence this warning
->   1584 |         int mcid, ret;
->        |                      ^
->        |                       = 0
-> ovpn-cli.c:2107:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
->   2107 |         case CMD_INVALID:
->        |              ^~~~~~~~~~~
-> ovpn-cli.c:2111:9: note: uninitialized use occurs here
->   2111 |         return ret;
->        |                ^~~
-> ovpn-cli.c:1939:12: note: initialize the variable 'ret' to silence this warning
->   1939 |         int n, ret;
->        |                   ^
->        |
-> 
-> 
-> Fixes: 959bc330a439 ("testing/selftests: add test tool and scripts for ovpn module")
-> ovpn module")
-> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
-> ---
-> v4:
-> 	- Move changelog below sign-off.
-> 	- Remove double-hyphens in commit description.
-> v3:
-> 	- Use prefix net.
-> 	- Remove so_txtime fix as default case calls error().
-> 	- Changelog before sign-off.
-> 	- Three dashes after sign-off
-> v2:
-> 	- Use subsystem name "net".
-> 	- Add fixes tags.
-> 	- Remove txtimestamp fix as default case calls error.
-> 	- Assign constant error string instead of NULL.
-> 
-> 
-> diff --git a/tools/testing/selftests/net/ovpn/ovpn-cli.c b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-> index 9201f2905f2c..20d00378f34a 100644
-> --- a/tools/testing/selftests/net/ovpn/ovpn-cli.c
-> +++ b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-> @@ -1581,7 +1581,7 @@ static int ovpn_listen_mcast(void)
->   {
->   	struct nl_sock *sock;
->   	struct nl_cb *cb;
-> -	int mcid, ret;
-> +	int mcid, ret = -1;
-
-ret goes uninitialized only under the "if (!sock)" condition, therefore 
-I'd rather assign ret a meaningful value instead of -1.
-
-How about adding "err = -ENOMEM;" directly inside the if block?
-
->   
->   	sock = nl_socket_alloc();
->   	if (!sock) {
-> @@ -1936,7 +1936,7 @@ static int ovpn_run_cmd(struct ovpn_ctx *ovpn)
->   {
->   	char peer_id[10], vpnip[INET6_ADDRSTRLEN], laddr[128], lport[10];
->   	char raddr[128], rport[10];
-> -	int n, ret;
-> +	int n, ret = -1;
-
-Same here.
-ret goes uninitialized only under the "CMD_INVALID" case.
-
-How about adding "ret = -EINVAL;" inside the affected case?
-
-
-Both values are returned by ovpn_run_cmd() and then printed as 
-strerror(-ret).
-If we blindly use -1 we will get "Operation not permitted" which will 
-confuse the user IMHO.
-
-Thanks a lot!
-
->   	FILE *fp;
->   
->   	switch (ovpn->cmd) {
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
+Chia-Yu
 
 
