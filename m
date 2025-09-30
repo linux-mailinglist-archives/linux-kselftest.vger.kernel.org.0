@@ -1,50 +1,102 @@
-Return-Path: <linux-kselftest+bounces-42610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42611-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E574BAAE4E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 03:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B06D2BAB288
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 05:32:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B7DE3AB449
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 01:30:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6961B3A73EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Sep 2025 03:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35FBB1C5F27;
-	Tue, 30 Sep 2025 01:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3031322F74E;
+	Tue, 30 Sep 2025 03:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vLbHj/cF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TYbkka0U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01AEF1C01;
-	Tue, 30 Sep 2025 01:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9802B20FA81
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Sep 2025 03:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759195823; cv=none; b=D1mC+pZQFcEiF+LPz152AJQ0N+jDbJxpI/8fRJHQBzgujz3T7BWNo1UpyDCgv/LmculBtX3fk3NhojXUEkvjQ8QZezCu0domGsYNY4B2vKU/+avahle0TG1jl6gQ+ft4C0qEJ8HI7uaNJ5Aqbjm6KPhM1nEKWwWJlFd7WfhUMSk=
+	t=1759203128; cv=none; b=GkoRx1ePH2TF5WBiDDKEgB5LQuRLHT5aYOJE3p6KGx7UvP8qyTWrFY9w4/jT4afIFplJKu0Qg4WyTTB9I3OnGN0FEsoPH17j9NYVHdYql5YxKqZMu2RALUsmRXSKFjp9l85frENav205FqxAwWVhrKCcPbNpjzWpg9BRegasErw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759195823; c=relaxed/simple;
-	bh=+m6a0mJNIZHUGPK68kjgVgfdAf1S+2tcQrltC6ZN/Zw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=hTbrzZzvXIybigXUcx0mCC5eNM7YP+xXIq5uk6PDlqLRck4j6dtyFsE7BlnnI1lHT+uSP/jNCa7PHHtQ8mbScKtxMHsdA+Q4TCCER+wARoxSFYuTCTRiCU/XUIf2Qs/Qkj+TfCczUIt+oRxQuX0LQmDQ8pYWYW4sARLTt34UUWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vLbHj/cF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8883FC4CEF4;
-	Tue, 30 Sep 2025 01:30:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759195822;
-	bh=+m6a0mJNIZHUGPK68kjgVgfdAf1S+2tcQrltC6ZN/Zw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=vLbHj/cFj7INjTUa3aDf/2Ntdldg+kPhUcp5L4EtGtLfXP97ig+ADc/redJFuyWHS
-	 RI4Vuzrc0txVVy746eWEUL2SGo6ssgwT0bWlDvpqWM1GZ+2aD6sRP9WuKwQb5DhteS
-	 +JG2MUxOBKq8cA35OKvGGx5h6v0bw7WLbVKJ4uEVNYF3lVQWYRt6N69sjDsIqsC7nw
-	 s94MuiGMVkUj5R/y+DYQ8eM/Zn63cK5SxvrkRGUnjU0mRRzEuPz95UT7ZWoR24FqA5
-	 fv94x56hJ8ZxVZk29uzj8tMJeGNhWG99SVpDqnCdjKEls0EUbVaDuOKe0AArz+2h08
-	 Veh5r/tzDrQAQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3458639D0C1A;
-	Tue, 30 Sep 2025 01:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1759203128; c=relaxed/simple;
+	bh=Y+lQgfVtEaVz7kZQiydB7t0gpe+2jiEEcUOe7R2jlA8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=juHbnfgTZmKt6mHssKiBJX+jRzLsXjl3JNVvfaDUgZ7GeooM5JI7UeSsNgWQ4u7m5AO8Ei0n4k4ZYif72HhPh6fOj24jMdIs8GAWwmXECPg6N6UGt9Ewh3HMLKzIfI7P/5EuzrJjDDFqT9EQ6JstaPVWgStQRI+FgKioOqMC1JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TYbkka0U; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-781251eec51so2688124b3a.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Sep 2025 20:32:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759203126; x=1759807926; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ipg2xSQ+y9eG+cY+ycWtarKVzuOf0KH86wwLmftXUAk=;
+        b=TYbkka0UOXhpDbUmwAwR4fT69omLNHcYhshOIVdIyWzej8p7IoHNM5I9u5deo3vw9v
+         18gKXoOFH37JIXSSOuNVzZve3092htk/s2qnw/YjReD4IHKML7LTwZX4BMrKK49Je/vi
+         UC8tyTGiD4T1H8vkt0xaLcukFfZhWth1oWYHyi1s/DozsmIMDmdhwUCRIwKE33k3bxZH
+         QMQ9KTT4JjPzPxe/+CjNcNNBezJ5R8b9ankxokyGwS7nxraF5Wgg7grcoKe70h1Sg8M9
+         ERvvvWY9fDMnqDOZs/XdWxU3u39IcxZwAOJah7Ox9+JnpY+cXG1iH5D2PsCaU0EvnqLc
+         rqmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759203126; x=1759807926;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ipg2xSQ+y9eG+cY+ycWtarKVzuOf0KH86wwLmftXUAk=;
+        b=CsyY3wpstmcRnmnDUZP0VIPehn3NDCmZXpl90/Gnu6OETkyN1/IdsdSWM/PaVTHqUp
+         MK3lNlTsvs+2Cmek7zkdCValH5EYJ1e+IRKStEOdAvf4XvxZH+S+8WAzULS5H8g3zlZG
+         CHDQpAwpSjAH0CPOGBeEbTjWHhVDIcll4l8W8ur5VI5WuqN3mskrGNdAHiRVBZ5xB9pT
+         FsE5ER3V89zFrrCgc5ktgBJNWoYr+l+p+Cgu/6gv4JIFno4HVkz0hqmsJfH61I/0Zb7w
+         VCoZV2qPWK/VeRk/sidZamjvr3ntYMim/3FdbgeynZbAj/XYpahrlccPxAgIphv7jddi
+         VUIg==
+X-Forwarded-Encrypted: i=1; AJvYcCVycxyiCN3uxzvuK61vLlqm2Py73RuQbC5SX0J0NaGlDmHmqxwU3eSlJkp9fCvbNn16Fmk/LjPusB9pBJ5mOBk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyJcZwPzyumpPbzaBdRoB3v4U5u4IAYr/i0uK1scRpFMHDV+hs
+	SxozP5VwYwMDNhMiooTr0Pv3IaVK8Q9KxHQTWHKv4N4LdVY3n11uo+EvJNkQn0P/
+X-Gm-Gg: ASbGnctXw/6yQu2ZATD0WBcLnASDR6Gt3GcNpyXNK6CAZfhNsfUkmhlE6x/4y5Pwx65
+	yB2M2sYT2a/ll33PS/u4VHN+p8BsR+qGTj3/WX89IWmJdCWZT87diypoSktDzSU3p56fssTp0k+
+	7Wywpz7n01CKNvpLipjBye1ya0dJQIKbSTpJOPA2xJEI2cMWFWR16lg3y8Vqt7thkjsdgRGh4E6
+	/Bu0+JE9cD4P/NLOgHbLw3EAvxGqPoh5jU4V3uzU32griyH03rRmVDRQBjqwknKvVE0DycFCuBr
+	xUroksv5gCY7a858P8z2yAydA+ly0QzaNz8cFGd3iXcu20SjzNISnyAzMVtgPVuBr4/R3WOnQjr
+	iMuVajPOFXukeyT3ZT7jEMfWlHWogQWAm8naCttXbiNTU02uXBO9MCvZdjWpbGSK76me0IvP97q
+	Jtfz4=
+X-Google-Smtp-Source: AGHT+IH6LhWbk9ue158EeoJf03eqT7m8bYm+d7vM0ErLdQPaLK8hlGYtsJv7ZK2fU0mzhBBLUHqIUg==
+X-Received: by 2002:a05:6a00:b53:b0:77d:6a00:1cd1 with SMTP id d2e1a72fcca58-780fce27f29mr20086588b3a.12.1759203125932;
+        Mon, 29 Sep 2025 20:32:05 -0700 (PDT)
+Received: from localhost.localdomain ([2409:8900:7cd:1d59:4483:ece3:c019:40f4])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78102b23634sm12557741b3a.66.2025.09.29.20.32.00
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 29 Sep 2025 20:32:05 -0700 (PDT)
+From: lianux <lianux.mm@gmail.com>
+X-Google-Original-From: lianux <lianux@lianux.local>
+To: sj@kernel.org
+Cc: david.hunter.linux@gmail.com,
+	hannes@cmpxchg.org,
+	justinstitt@google.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev,
+	morbo@google.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	nphamcs@gmail.com,
+	shuah@kernel.org,
+	sidharthseela@gmail.com,
+	wang lian <lianux.mm@gmail.com>
+Subject: Re: [PATCH v1] selftests: cachestat: Fix warning on declaration under label
+Date: Tue, 30 Sep 2025 11:31:11 +0800
+Message-ID: <20250930033111.63465-1-lianux@lianux.local>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250929172724.75108-1-sj@kernel.org>
+References: <20250929172724.75108-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,62 +104,21 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/8] mptcp: receive path improvement
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175919581600.1779167.13357618344128087599.git-patchwork-notify@kernel.org>
-Date: Tue, 30 Sep 2025 01:30:16 +0000
-References: 
- <20250927-net-next-mptcp-rcv-path-imp-v1-0-5da266aa9c1a@kernel.org>
-In-Reply-To: 
- <20250927-net-next-mptcp-rcv-path-imp-v1-0-5da266aa9c1a@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- ncardwell@google.com, kuniyu@google.com, dsahern@kernel.org,
- shuah@kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Hello:
+From: wang lian <lianux.mm@gmail.com>
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Reviewed-by: wang lian <lianux.mm@gmail.com>
 
-On Sat, 27 Sep 2025 11:40:36 +0200 you wrote:
-> This series includes several changes to the MPTCP RX path. The main
-> goals are improving the RX performances, and increase the long term
-> maintainability.
+> Fix warning caused from declaration under a case label. The proper way
+> is to declare variable at the beginning of the function. The warning
+> came from running clang using LLVM=1; and is as follows:
+> --
+> -test_cachestat.c:260:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+>   260 |                 char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE,
+>       |
 > 
-> Some changes reflects recent(ish) improvements introduced in the TCP
-> stack: patch 1, 2 and 3 are the MPTCP counter part of SKB deferral free
-> and auto-tuning improvements. Note that patch 3 could possibly fix
-> additional issues, and overall such patch should protect from similar
-> issues to arise in the future.
-> 
-> [...]
+> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
 
-Here is the summary with links:
-  - [net-next,1/8] mptcp: leverage skb deferral free
-    https://git.kernel.org/netdev/net-next/c/9aa59323f270
-  - [net-next,2/8] tcp: make tcp_rcvbuf_grow() accessible to mptcp code
-    https://git.kernel.org/netdev/net-next/c/a7556779745c
-  - [net-next,3/8] mptcp: rcvbuf auto-tuning improvement
-    https://git.kernel.org/netdev/net-next/c/e118cdc34dd1
-  - [net-next,4/8] mptcp: introduce the mptcp_init_skb helper
-    https://git.kernel.org/netdev/net-next/c/9a0afe0db467
-  - [net-next,5/8] mptcp: remove unneeded mptcp_move_skb()
-    https://git.kernel.org/netdev/net-next/c/c4ebc4ee4e75
-  - [net-next,6/8] mptcp: factor out a basic skb coalesce helper
-    https://git.kernel.org/netdev/net-next/c/68c7af988bd1
-  - [net-next,7/8] mptcp: minor move_skbs_to_msk() cleanup
-    https://git.kernel.org/netdev/net-next/c/59701b187003
-  - [net-next,8/8] selftests: mptcp: join: validate new laminar endp
-    https://git.kernel.org/netdev/net-next/c/c912f935a5c7
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Best regards,
+wang lian
 
