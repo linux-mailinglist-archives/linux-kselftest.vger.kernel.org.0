@@ -1,49 +1,48 @@
-Return-Path: <linux-kselftest+bounces-42649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42650-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF314BAFA9F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 01 Oct 2025 10:38:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16F8CBAFBB6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 01 Oct 2025 10:50:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F919189B039
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Oct 2025 08:38:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C057C2A0497
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Oct 2025 08:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1C9C27D771;
-	Wed,  1 Oct 2025 08:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B99284899;
+	Wed,  1 Oct 2025 08:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kerq8nor"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kUgHsc9L"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58B01494CC;
-	Wed,  1 Oct 2025 08:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF46235C01;
+	Wed,  1 Oct 2025 08:50:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759307878; cv=none; b=oe55HPjw5d8jnsxh9ueyjLqUR2EOuFFzKYr4QN+QV2qm+jvYik2marIpNdIdRyzrjSIVFd6X3D//gXNoNfxCtpt8qJRkinWCpvOFWNuImXArHAvnj3IiZFP4gZ8KBaBEReLMxMgd0viUiv5PTBEQgkKXzQFGphilIs/f9X7KjnQ=
+	t=1759308615; cv=none; b=NNoT0vpRGJe5qjr98BtMv2afrH9a03DqH240sR9pQiyq+MMkZQRj0hdnD4/f67QbyN8B4RC7pgiABB38132Enx0vFgkSECfZtENiz+qeAMXg0s+duOlLrumt0IBoeIgDqE/58tD2EiRS1CRvEPJh02u6png3/RJFt1laBuE6afE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759307878; c=relaxed/simple;
-	bh=mg8UiB6wdQGu3zTb7R5Wx/V4adl+iymRXpWpAYP0EnI=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=Y3dV1rb6MiXvRfpm3SaaW6GtYNiqaX/SWt6lsW9fXB6nw+hIN752yGojuMCIRWutGAhf4gSZav2uT8Z43Qb84p6qoaPb/ogt4YPGMs97AhzyT2Xvc7+ePEgTYh4+MglfPdxuVhbtuYbktqdjTJihXgXzj+7zeA+cUlDQwUEoYxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kerq8nor; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25932C4CEF4;
-	Wed,  1 Oct 2025 08:37:54 +0000 (UTC)
+	s=arc-20240116; t=1759308615; c=relaxed/simple;
+	bh=127sFKVwSFGHlaWI8Ni/hIckmu1j7UEDZK+h8LdQLn8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rULl7A1CK8BNyp84x6YpTtF0QiWVxBfNvT6wM5JyVs28AL3rYsIOo5C6mMhIcA+LS5ZVlkqPBX9MhygkCq1668zhI16zrJUg0VD0QPgz4r7REkXm2OlysGeS7gfWSWyDp6Aqg/zWIOBH5beVj1t3O8v7S5A/YjCi2b2XBn4dFK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kUgHsc9L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4B43C4CEF4;
+	Wed,  1 Oct 2025 08:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759307878;
-	bh=mg8UiB6wdQGu3zTb7R5Wx/V4adl+iymRXpWpAYP0EnI=;
+	s=k20201202; t=1759308614;
+	bh=127sFKVwSFGHlaWI8Ni/hIckmu1j7UEDZK+h8LdQLn8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Kerq8norwwc65nplji5P06vHUAQ72Go4jlHXy4Vr/kQXEF4bjxVipZliXk3DCIQpc
-	 V8FK64RGZNGTQqEruN47FWy+BxQhQ4xnYB4yciKrkoBcsv84kSkjt/GyxSD5wpWasg
-	 9lDLgHdmVnNW2HCkI1lNe48zRRF6sdiZGmEttCCL7XmImweKYzfVQPku68RmlJd0cx
-	 Lzff2UBRG1lI/gxyqLxjKGAtmInC9fD4ScpW4lDUExm4AifovmJkXTZig4l/JxpqIH
-	 LFIqe2r63nDWu9nH50hAiLX1A2yCJUDl2yDwSAGhy85OybKbKX8t98rSDhT2uyJFy8
-	 PsVfsXO2WQpXQ==
-Content-Type: multipart/mixed; boundary="------------CcZe0S5aOE1mEgDfh6XW0NWA"
-Message-ID: <f4f61cb1-a2f5-4105-b051-0b16427fb12b@kernel.org>
-Date: Wed, 1 Oct 2025 10:37:51 +0200
+	b=kUgHsc9L6qO0j7wvRK9/66dTOxDaVyAJig/a4L31SHR0SwDIlVqToCUHlB4U9wEHi
+	 fiT8Jfjz5f49hwvWD3Ycav3SAX2P1a8yhB/cTi4kwzMisg34S6jg54zJkUgnzDGVZJ
+	 KFeboZz0Yyt7Gfw94ZlIyKE5VCkjrdCd2HjTXgsJmNVNu6RY+3ijgYMnLDkj98q7wH
+	 IjRzxd1oYNKFYXLxmOSVecb7Vo2pKlsb3cDyZ6hw8x+Obrysj49C8uRwd/Q0bxpA6S
+	 DLhNYj7w658YbJkms4zOTtXvM9lOQZqpGjleorQTPghaRw5wRnKj4WiL5GdAFNwmoQ
+	 3ioe/cc5ULwBg==
+Message-ID: <5ee6e86a-298b-41e9-971a-a40c1f96ec83@kernel.org>
+Date: Wed, 1 Oct 2025 10:50:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,18 +50,18 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCHv3 net 2/2] selftests: bonding: add ipsec offload test:
- manual merge
+Subject: Re: [PATCH net-next 0/8] mptcp: receive path improvement
 Content-Language: en-GB, fr-BE
-To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Petr Machata <petrm@nvidia.com>, linux-kselftest@vger.kernel.org,
- Stephen Rothwell <sfr@canb.auug.org.au>, Mark Brown <broonie@kernel.org>
-References: <20250925023304.472186-1-liuhangbin@gmail.com>
- <20250925023304.472186-2-liuhangbin@gmail.com>
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+ David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20250927-net-next-mptcp-rcv-path-imp-v1-0-5da266aa9c1a@kernel.org>
+ <20250929182705.1583702f@kernel.org>
 From: Matthieu Baerts <matttbe@kernel.org>
 Autocrypt: addr=matttbe@kernel.org; keydata=
  xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
@@ -108,106 +107,43 @@ Autocrypt: addr=matttbe@kernel.org; keydata=
  JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
  lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
 Organization: NGI0 Core
-In-Reply-To: <20250925023304.472186-2-liuhangbin@gmail.com>
-
-This is a multi-part message in MIME format.
---------------CcZe0S5aOE1mEgDfh6XW0NWA
+In-Reply-To: <20250929182705.1583702f@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hello,
+Hi Jakub,
 
-On 25/09/2025 04:33, Hangbin Liu wrote:
-> This introduces a test for IPSec offload over bonding, utilizing netdevsim
-> for the testing process, as veth interfaces do not support IPSec offload.
-> The test will ensure that the IPSec offload functionality remains operational
-> even after a failover event occurs in the bonding configuration.
+On 30/09/2025 03:27, Jakub Kicinski wrote:
+> On Sat, 27 Sep 2025 11:40:36 +0200 Matthieu Baerts (NGI0) wrote:
+>> This series includes several changes to the MPTCP RX path. The main
+>> goals are improving the RX performances, and increase the long term
+>> maintainability.
+>>
+>> Some changes reflects recent(ish) improvements introduced in the TCP
+>> stack: patch 1, 2 and 3 are the MPTCP counter part of SKB deferral free
+>> and auto-tuning improvements. Note that patch 3 could possibly fix
+>> additional issues, and overall such patch should protect from similar
+>> issues to arise in the future.
+>>
+>> Patches 4-7 are aimed at introducing the socket backlog usage which will
+>> be done in a later series to process the packets received by the
+>> different subflows while the msk socket is owned.
+>>
+>> Patch 8 is not related to the RX path, but it contains additional tests
+>> for new features recently introduced in net-next.
 > 
-> Here is the test result:
-> 
-> TEST: bond_ipsec_offload (active_slave eth0)                        [ OK ]
-> TEST: bond_ipsec_offload (active_slave eth1)                        [ OK ]
-> 
-> Reviewed-by: Petr Machata <petrm@nvidia.com>
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> ---
-> v3: fix shellcheck errors
-> v2: rebase to latest net, no code update
-> ---
->  .../selftests/drivers/net/bonding/Makefile    |   3 +-
->  .../drivers/net/bonding/bond_ipsec_offload.sh | 156 ++++++++++++++++++
->  .../selftests/drivers/net/bonding/config      |   4 +
->  3 files changed, 162 insertions(+), 1 deletion(-)
->  create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
-> 
-> diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-> index 44b98f17f8ff..c13ef40e7db1 100644
-> --- a/tools/testing/selftests/drivers/net/bonding/Makefile
-> +++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-> @@ -11,7 +11,8 @@ TEST_PROGS := \
->  	bond_options.sh \
->  	bond-eth-type-change.sh \
->  	bond_macvlan_ipvlan.sh \
-> -	bond_passive_lacp.sh
-> +	bond_passive_lacp.sh \
-> +	bond_ipsec_offload.sh
+> Could be a coincidence but we got 3 simult_flows.sh flakes since this
+> was posted. Previous one was 20+ days ago:
+> https://netdev.bots.linux.dev/contest.html?ld_cnt=250&pw-pass=n&pass=0&test=simult-flows-sh
 
-FYI, we got a small conflict when merging 'net' in 'net-next' in the
-MPTCP tree due to this patch applied in 'net':
-
-  99e4c35eada9 ("selftests: bonding: add ipsec offload test")
-
-and this one from 'net-next':
-
-  c2377f1763e9 ("selftests: bonding: add test for LACP actor port priority")
-
------ Generic Message -----
-The best is to avoid conflicts between 'net' and 'net-next' trees but if
-they cannot be avoided when preparing patches, a note about how to fix
-them is much appreciated.
-
-The conflict has been resolved on our side [1] and the resolution we
-suggest is attached to this email. Please report any issues linked to
-this conflict resolution as it might be used by others. If you worked on
-the mentioned patches, don't hesitate to ACK this conflict resolution.
----------------------------
-
-Regarding this conflict, I simply added the new files from both trees:
-
-  bond_passive_lacp.sh \
-  bond_ipsec_offload.sh \
-  bond_lacp_prio.sh
-
-Note: A way to reduce such conflicts in the future is to sort each entry
-by alphabetical order instead of adding new ones at the end. Same in the
-'config' file that is also modified in this patch.
-
-Rerere cache is available in [2].
-
-1: https://github.com/multipath-tcp/mptcp_net-next/commit/f6c62892b853
-2: https://github.com/multipath-tcp/mptcp-upstream-rr-cache/commit/65a75
+Thank you for this message! Our CI didn't spot this issue in the last 2
+weeks. I see it happened again on NIPA (sorry for that, and thank you
+for having ignored this selftest) so I guess it is not a coincidence,
+I'm going to investigate this issue ASAP.
 
 Cheers,
 Matt
 -- 
 Sponsored by the NGI0 Core fund.
 
---------------CcZe0S5aOE1mEgDfh6XW0NWA
-Content-Type: text/x-patch; charset=UTF-8;
- name="f6c62892b853cd5ddc6d4ceb41e732bc2e0d0c12.patch"
-Content-Disposition: attachment;
- filename="f6c62892b853cd5ddc6d4ceb41e732bc2e0d0c12.patch"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWNjIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2RyaXZlcnMvbmV0L2JvbmRpbmcv
-TWFrZWZpbGUKaW5kZXggMzQ2Mjc4M2VkM2FjLGMxM2VmNDBlN2RiMS4uZjk4NGQ3ZGJiYTBh
-Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2RyaXZlcnMvbmV0L2JvbmRpbmcvTWFr
-ZWZpbGUKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZHJpdmVycy9uZXQvYm9uZGlu
-Zy9NYWtlZmlsZQpAQEAgLTEyLDcgLTEyLDcgKzEyLDggQEBAIFRFU1RfUFJPR1MgOj0gCiAg
-CWJvbmQtZXRoLXR5cGUtY2hhbmdlLnNoIFwKICAJYm9uZF9tYWN2bGFuX2lwdmxhbi5zaCBc
-CiAgCWJvbmRfcGFzc2l2ZV9sYWNwLnNoIFwKIC0JYm9uZF9pcHNlY19vZmZsb2FkLnNoCisr
-CWJvbmRfaXBzZWNfb2ZmbG9hZC5zaCBcCiArCWJvbmRfbGFjcF9wcmlvLnNoCiAgCiAgVEVT
-VF9GSUxFUyA6PSBcCiAgCWxhZ19saWIuc2ggXAo=
-
---------------CcZe0S5aOE1mEgDfh6XW0NWA--
 
