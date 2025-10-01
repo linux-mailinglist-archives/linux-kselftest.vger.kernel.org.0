@@ -1,88 +1,87 @@
-Return-Path: <linux-kselftest+bounces-42651-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE47EBAFD8B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 01 Oct 2025 11:28:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5EC4BAFDBE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 01 Oct 2025 11:29:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9A9624E233D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Oct 2025 09:28:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 376503C7C93
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Oct 2025 09:29:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D7A2D7DFF;
-	Wed,  1 Oct 2025 09:28:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DBD32D9EC8;
+	Wed,  1 Oct 2025 09:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SZk4BoDg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TVBaEkyI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68068283FEE
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Oct 2025 09:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04E4277C94
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 Oct 2025 09:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759310919; cv=none; b=InHEZxP6UmRayrsHwQhA9GW/v3MgRh/WRIXu6ZeXt+U1pnPMfI5YgZczxAuZwA3X5rsX6IdR+AYOfTlAn4krxKBWReKBWe91msCFnYyE8pjBvrSxS7QRlI9YBPP1qW67ytX3TFSUDQWBDAbyS/MkV2z3P1GjzkRKQp+4JZnVmC4=
+	t=1759310965; cv=none; b=ha3aWaMzEh6E8MATSfuX2mQ7YpYKiALGZVcJ8ilfio3qu7PBU0oRupJOq6ux1BorBdRJBzcfKct9kAbi1eD6OOt0fL2PJcYmfAvZ50gMChvPPKZDJpIFwuaxSJcFIkPo/YOxiGBTvrd+KmeJfRms8h/MLZQe+L+Oz7+fIlYyXMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759310919; c=relaxed/simple;
+	s=arc-20240116; t=1759310965; c=relaxed/simple;
 	bh=eWhaWIh1Ch5W+HrhvE/7nWxIJ4BqD2s5kUI/3gBmyEA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TAhlMFLVcD6m6Q57xma2OiPwieagDJl4dSwg42wuoeW/Ikv+Rg2gNv1YEKd7eDbIfN4dqBOtF7NY2i+VTvna/77vdjaih0TmbEEKXEFbspYRWKH9pFa+m0YJMEmaiVO2Ul3X04RWzD5edP91ckZMu1hfGlJFhQrvcDqQGR5O6M4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SZk4BoDg; arc=none smtp.client-ip=209.85.128.51
+	 To:Cc:Content-Type; b=C7Nc2LknkDmr0r0SnDQu8Q8w4LeoFid3GrfFBxQ2v2PO+7q3018QL237wvIWl/DJrqQofA7V8O7hiwJD/ysFiKoPQeD4+hY51b8HekjbbijyS8Smm/BAsA4Tz1xTI8xaS0g+5fxvSB3jjQ0WtTzJfYQNk5imG1bYoR9y3IemjHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TVBaEkyI; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-46e504975dbso26381855e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Oct 2025 02:28:37 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3ece1102998so4745850f8f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Oct 2025 02:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759310916; x=1759915716; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1759310961; x=1759915761; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
         bh=eWhaWIh1Ch5W+HrhvE/7nWxIJ4BqD2s5kUI/3gBmyEA=;
-        b=SZk4BoDgsFAf5kMvr7CbXBjcwCX04Gigy/5uI9mf3QxITYphuXHHOPFGqSL+otUVU0
-         2S+ooXPjysDGDq5LyrNPJHYnCXbCx6H/PQoEKlPmttcSprij44r05SUx7xUq7wQ2zxYw
-         nfFKg2EPAo2A2HpO0LMagnc18VPUsVaw9ualx5ys9clXOxrxYzqV/vNwKXVXf9+la+tC
-         nqJ54pGhDvCFFMcNYqLV1bA1Es7uY6AOJ910q57gfDxP3FhMZrQHPHl1RhY2WEHlXP9T
-         aEuYrwYCfYP16Y7s1ETYGvYUfW0Sa3RHGsEsE1dAcO9uF+AXd/FQtKom+Xfidit8qAOy
-         v7sw==
+        b=TVBaEkyIVsWpPgc25PthN0dgMizQ6ejHVgbgY4cBzyNmtAMFUxALL2/XSvvKJkBJsb
+         nDMVrtUeFd3OpEfW3EoEcn7zKGgKwSzKK6TBOSXbDglCX4YaAdh419jxyWs9gSIew1u7
+         br3pPtBGPK+11HqzUpIOPf0//hSkV2Qmie5YLPhJ5K/5BYBVZH17YsA1yhe0dQRlNJti
+         Rp26I6LcqZUn5saUboAhSALCKrU0y0bvtQl3gk/xIzSlF6laY9r6Y6+h2zODmLkxIDEm
+         Yul6SYPIAC96/iUa230+xFVkC1Ne7w6ghfm0lj7XZyxe0v7vCRrHZWnlBDr0k3Plu8Ci
+         C4KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759310916; x=1759915716;
+        d=1e100.net; s=20230601; t=1759310961; x=1759915761;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=eWhaWIh1Ch5W+HrhvE/7nWxIJ4BqD2s5kUI/3gBmyEA=;
-        b=BhyTkpq6SXJqfAHcfShm1irqRfSI4Ie+8f/Iv6/xDu9qGa1lbvp53NU9FKZwiJ2ar0
-         r7u+k1vSEOatqOFKFra/bZ6SFrX/YP6551ucEPFAr8K2iRGnc9Q3wzx5q8k83ziqIdE7
-         vDbEFlp4sZ0wY0tudeegf4BiuNeDFleU8gvJvgZaQwdEAoM+YoKvt0Ofa+RemPbmKYkv
-         CtLGKrNWeRDZHCyYWpfVXowPPU/3rLtFkF05EI97/IgNa9OnSIo74LSSPuWMzsjGeccb
-         uBYfmLbTtYBGZf2OJBUVO/iDlEALsz4OXlQIkp9AfpfG1CrA/XvVEbFgqFvvVWSGaRMQ
-         HJ1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWfkHAeVYOaOSa9ZJS5xS3CxWoHrKk6pvL4hjwCQjADx0FlmpJ7kJKfc7V/bb6mPFwZSdvUfV9RigmeBDGudGE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeP/DjY1MxnXPyyQ6LeJG416UmrMQ81FMaQ93Lc5CrqZhyAlIy
-	kfcJm9n5mLg69xW+5olk60L8BCR0YU0gkS7N5PJsUdWSCTEfxE2gtMES5tsq01YU3+gKWyp/4uZ
-	oN2jPByM57RXgoZtN5BsX3vlSN6nxg3VzcFcf7dgU
-X-Gm-Gg: ASbGncu5LBHyTA4x26bM8I+mtlbzCb+RaYQCbatzsuZtQMv4V4zoVLyPmxPf+h2PCEd
-	Wv3yh04cf2ScuNvy6iNac6FaUgCN1cvEVXEB2LvTJWUny/LheIFyHTnRb/qdx68gPj7/mgAcybb
-	McblOvT5lVDv3tJ7kIYa291e6I+Zyfe5jadriKmCdJ7Nz+OlpDsyLVpZ4kqtC+0B9WsSjhzFQKZ
-	eHTGr3y5vZIl4pzTYCGL4yBopUweno7MJIWrPN1+QqJqEjaixvtOx1Yv41IrVuPGbYAXLJtv+Ho
-	ND0=
-X-Google-Smtp-Source: AGHT+IFcom3ihUiZsvQc7Ctd6T7AFUDP+BI45kum3YBKQg7Ja8eF4g1jmM9Rz4a7lPBApkzRM7m3vX/ZWyyP9taYRzo=
-X-Received: by 2002:a05:600c:1d12:b0:46e:3d41:5fe7 with SMTP id
- 5b1f17b1804b1-46e612dcff2mr22205905e9.29.1759310915370; Wed, 01 Oct 2025
- 02:28:35 -0700 (PDT)
+        b=E5KNVPUbNWsjKR2i7ya5m/qzcvXjWn7RBbd/Xi6m3AIbZRjkMH55X6NkbiChhn7bzd
+         wtutKuAO8K3y1cJa8qeMoO9cyaNCd2oiCgeX7lb+X29YRKfA4Sov3AuaFK0VRn+X0T6W
+         uxfyOOwt6/wGvOuUupVIY8OT3YqVgYBh5fdD2G6g5Hct0rsOSdAonEKfGYv38TEqnEQq
+         yNpkC5ZYGVBQLE+aBWPxg4NtWnM7SOJ601cskRNJ8TjoKvN9XbcAYZJ5IhAcVrZ+K/r5
+         oLLY65uMA21Pqatvr3MYoa/xnGorTehw5+i8XN2m4CoetRmQeNV0Fk9b1cOxhlpzLcY9
+         iVQg==
+X-Forwarded-Encrypted: i=1; AJvYcCXtj6wQWFJECJeCggs/M9QhewUibc4a9NswUcoIwZFwGPa9ocHWAAuUbE16C0oGA+xDoyr9R5YysU56qMgMzRo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/RqH7SWyIXBoo6ruzjzq6du/J4i2Y4rT8bEdPvpSHjoa42EQD
+	HjONzl0YF/oMDUxiSUUnnmQRitJ+LzJ+CRjPOD2eBiZGCCdyz4t4WrtPbAhmjGM4mvwPRpzig9F
+	dB8DQix326STEv1eF9uwcjozB0Ikua6EGGwzo5uB/
+X-Gm-Gg: ASbGnctnHhf5gPPYmdiqK9FKI8hQ68XIAscO3W0w8FbATHesQPzYF/elVXKNxQEgz+F
+	IN3QdlACRnzfd260n5jv+ejYh/dgLIrZxJbDGJO4JTXFYI/mPLh6GVNqzM9++t9dNVYAyeOxMGa
+	dPhPR2rdCxD5h8Mp13f+M7EFW3P/3sPPlbauKCv1dGHqHzkRiaIU9vm3ti0g0mugDoSBcfPm3F3
+	paahO11grQ5PJ9X6aCuWhPmdrOIzit0zTTIlDMvRPYJBP5x+XCc71XCMe4vzStq/NhP
+X-Google-Smtp-Source: AGHT+IEGTvzQBJ51h7EDzxRa/Kisf+BfY+7cpvTrlEhl/iMUN4+q2HPEwsb4ysW4cM34kR4mPUadGwVDBMTe2U90ivY=
+X-Received: by 2002:a05:6000:610:b0:408:9c48:e27b with SMTP id
+ ffacd0b85a97d-42557820c81mr2042096f8f.62.1759310960773; Wed, 01 Oct 2025
+ 02:29:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com> <20250925-core-cstr-cstrings-v2-18-78e0aaace1cd@gmail.com>
-In-Reply-To: <20250925-core-cstr-cstrings-v2-18-78e0aaace1cd@gmail.com>
+References: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com> <20250925-core-cstr-cstrings-v2-19-78e0aaace1cd@gmail.com>
+In-Reply-To: <20250925-core-cstr-cstrings-v2-19-78e0aaace1cd@gmail.com>
 From: Alice Ryhl <aliceryhl@google.com>
-Date: Wed, 1 Oct 2025 11:28:23 +0200
-X-Gm-Features: AS18NWC0UIhXtF3ngdaaXlg7HajAeA8SvMGIxlOaATZh6gKK8pvCVQpA1AHU2RE
-Message-ID: <CAH5fLgh84SZznuv_BHMxSe4riF=YZekCp1Kx6KmiipzTOHmRsw@mail.gmail.com>
-Subject: Re: [PATCH v2 18/19] rust: io: replace `kernel::c_str!` with C-Strings
+Date: Wed, 1 Oct 2025 11:29:08 +0200
+X-Gm-Features: AS18NWCOfBcX2Vbfhr-fnk5GPcApSeOL4C5SAm45sMYmzlcHM8gTiQQ5VZSiyfk
+Message-ID: <CAH5fLggd09hodiDAdNRy6aXK9ANCP==YSJwy-GMbhNAAMm731A@mail.gmail.com>
+Subject: Re: [PATCH v2 19/19] rust: regulator: replace `kernel::c_str!` with C-Strings
 To: Tamir Duberstein <tamird@gmail.com>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
 	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
