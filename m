@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-42677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15C27BB4522
-	for <lists+linux-kselftest@lfdr.de>; Thu, 02 Oct 2025 17:27:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 729CDBB4525
+	for <lists+linux-kselftest@lfdr.de>; Thu, 02 Oct 2025 17:27:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB68F32526C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Oct 2025 15:27:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 347FF32506A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Oct 2025 15:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ECD81ACEDC;
-	Thu,  2 Oct 2025 15:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 447331DF994;
+	Thu,  2 Oct 2025 15:26:46 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65FC41C84BD
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Oct 2025 15:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3DA1D6188
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Oct 2025 15:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759418805; cv=none; b=uLvOCyyOj/ddK0ucqC4FeqQzlTNy+V+VC0AdjCs9qLca9saqbAGC4BVrRlo2Pj0Rr+s480eYi1BO0r9kRZuJb4P39uoACzlhaUM8M54G9dIicOJnFByriCa+XZxWe++4ZqwtPZTgU2bYoo4duYpeuPKJAplN7Go2CWQDz5TnNqg=
+	t=1759418806; cv=none; b=diQ11S8vPthxn2f2gH15U7EcmcBzh0cAf/vcjARz9ROr1HUrJeE56b4hqnCmXsxAAlh2qELnQgCCG6f51VtdHbvTlfN0y789AieekKW+RVnhhn3BWr2acKeb/mP6N3Q64l2MHzI8i8pW68+IVOASimLgiyVfCpU7E43Z1XwyOKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759418805; c=relaxed/simple;
-	bh=Z86lLnI5Tm3fzb69918VDPeWt3usJ2k/s66dsD2rV1E=;
+	s=arc-20240116; t=1759418806; c=relaxed/simple;
+	bh=wCTCXuF1yxmEp/u/Sr4POeQXqdQsOxIg5TvZ/SJ3ls0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=B2UNQSbEx69pk7Te2sRq8WacD6F2QAcCgef6SnSu+E7hS/eyL5e54MAuQQMtp+lJ2XDcT1tC/rlRAdm8RXU/AAs/VDcGv7wn0CcMpxfXZLTw0HpwV3C6H7Il0wpS0ghBhpBVDvQQjo0QQ7cgv6tj0d8W1sbMSKNYLLcVWZy47YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.53
+	 In-Reply-To:To:Cc; b=K6MBfQwGlBhYIBKyw/q2OkrBhHH1arJIFdqNdwGRPlayCf+W0gjI1YcsFju3rF5vYp/4LDiIvVAk5Q0TvOeXheb0dTD7aam4FHHE6Ako1AwPbpUdFxByWAVpG7X1BsIW87ED2p/Jy18Qeco9FnUo5wnO9mwXBapZwVzF6OSiwOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-63163a6556bso2472837a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Oct 2025 08:26:42 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-62fb48315ddso2026821a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Oct 2025 08:26:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759418801; x=1760023601;
+        d=1e100.net; s=20230601; t=1759418802; x=1760023602;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fV7gueGwrkVggKjpKT46wk+Vba2utbQt9f8Z8d2dnHs=;
-        b=vt3aIayNRUKrQs9Mn5JgG8a7cFrs+YMP6Thl078YFNs2BTCMoi0ImYNSUlMlFD0kX9
-         Gq1Ouec0QpsE4XW1y5gl4B9qyqLPmECZjqvMp8SESl0lkiu/Jnr6wMnYKKNBL8Fuav3V
-         hSf0VuY/VwoAKYNYMMb09o8I6o8Yiy/bCNqHLHvgPt/i4MD6DJEcSnYxlYx++keI3XWM
-         JLm68HAJ3OezUC5jgmIcLVs9BUbBWBxk0LcR+BN3lh9YIHVyPfcA2OxK3sR6spmqco22
-         7McSqL8GB5wOlMeMT4lNCUxPeM/vNW2XiP8XX2s6r+S0lrkYoSE/6d3hgY8pG4jQtMJH
-         VTLg==
-X-Forwarded-Encrypted: i=1; AJvYcCVy/tvhZWgCYv0AQWIT9svifyv5ID2QGi8SoO8j42RsSnLpaO9wr0F+mPgkBWENh6veh+zYgNOTRusDrEjakwM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywDb8/d6A4OxKKsDeyLaocE2AkNglXWdkgeqL/kDIBWmFpQDsu
-	cqJUAcuFmkKbSRkxHkC50jbiDWEbg9iPBFKqGPXUC9OJE/Pomhv4cbss
-X-Gm-Gg: ASbGncsxBNLvMsVa74Ol91oSpM/6ZMfoOLcj6O79Ot1kV+FWskgB0s6MMj5AD3DrVWa
-	8H7mo6ByIAGUAA+5IlnwApIyGnfLKj8lHqD08TR+RvUOpMgEAkAeSbiAi3OGbsZGBBdXjGPlpn0
-	pWYuxqjFFNJG2IQwuZMtQ5XkQNiL5fZILtmrTeNgBPdTzxYyEBoagjpD4rBLe/87s7SAgaT2uPJ
-	6zxn8NDmMvqgJtKZ/WzlPrIIZOL4i6hezyfm1paXfFVx7N2GvM05Sgkt5Xa7QcIhULwjrmgRXPn
-	ZFTHIb/hmnmqWPA3I6fSmM2ZtsA6ph8uxfCJBs/0FtjcN2SfEDgTkgqn8NR43uLLKNkeeeVnGAN
-	AVaGd84FcLP0zZEDoapydcj6Ns2pijxMZgkHp0w==
-X-Google-Smtp-Source: AGHT+IHu4WE80t/90uYDNyDhdDM+IRvgxuoF7rHrcmkwwOikdOlCR5zfrTQPjaAV6zMrz5FIvlZlJA==
-X-Received: by 2002:a17:907:728e:b0:b3d:73e1:d809 with SMTP id a640c23a62f3a-b46ea414aefmr989484766b.48.1759418800558;
-        Thu, 02 Oct 2025 08:26:40 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:73::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b4869c4e613sm217854966b.81.2025.10.02.08.26.39
+        bh=GXgombtdf1pG/9E0pDd7PwlfJe24y1WoCU+6S182X6w=;
+        b=KgRNusjkMlL0hMB8FkIvk68xADVUaIoIMnTR7FtSDsFgSfsM1ReJuuTqH3inyfzWUv
+         633iqJgiS7mqCcLxv+hX7EOhKSQGpDRR57OTXb9d4T5NW/n1267sh0qfLhqhLRsXiL4e
+         LEhc33WiC1KFKaR5xNsng0kqGXBVe1xtucBdBKhoTTYotohiZm2QzcCt5YLZma2wN5dx
+         GESgQxlXkmc16Zqz1BLMzlvXjDL4FjcoQTBK7BefAVqfqlZkoVj/NSu415wITjit4MBD
+         9UOiBvYKwRxaGZixGnHAbgtNFyNgRWGXJcx7mS+WT2yLibMlgMSThh2NKE1nBSNHC9m7
+         OJ6g==
+X-Forwarded-Encrypted: i=1; AJvYcCWny8wE6w+eZErdZTSSn1MSZpyUdV6W9OoYxfn95zV5W9o0udyhnoW2gyv8tT6BMQ4d22JK7zplAwfK55VRAh0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2ENocWOaWXvnpmNEHO4attlHqFNyoHJOOs2dkCuTZ3qhAn7r1
+	Vahkw4PrW1nfbLZqnFHTKx39wGsdEtHF5TQxtKxhTgG3QpBW7bD3++xl
+X-Gm-Gg: ASbGncu94F3cPJgrkHNafzZecjxGjZqzxAebmN4vXM3U5D6s5i+yJgTVFa8AiIXvX2X
+	dyMUjeorA6qIBe3Ui1INuivCxt3TGjHfIk7nevyoZl2PZDN6Rp+rTYHYgzENxwT1wr21kQiZV1r
+	23TPfh39YBLfQ+IkQ2y+dylx15QMT2vyuJW/wQ5OHlVuYBEu1vKKrm3+YJ1RyMdP345T9+BMW+o
+	D6OBG6VG1n/u8PeunoB4C7xF0BghHRpcraSCqiHJWIB+uuSrkW185CTpK6SvhH++6YmIEgdmLeO
+	nNoeKO0WhWTqNPWDDIG+3T6M1hOI4Ja2hG2nkFaADx8dLJnyfxeg+W1Fnv9VeCLXhLmL43gcQSa
+	yBAHWyxK6QdcvD24wkjfbYtpiG67G6ooPCVz9xSbCVVAHvrs=
+X-Google-Smtp-Source: AGHT+IGwJ7GX2udijpZY8tC506RtKUpv5oAxJ0Wta3SK+EKAIFSchsaTuH5oq1K3c4XJNvkVHHckCQ==
+X-Received: by 2002:a17:906:6a1e:b0:b46:1db9:cb76 with SMTP id a640c23a62f3a-b46e6031e32mr947212166b.39.1759418802114;
+        Thu, 02 Oct 2025 08:26:42 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:7::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b486606dc84sm222645366b.45.2025.10.02.08.26.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Oct 2025 08:26:40 -0700 (PDT)
+        Thu, 02 Oct 2025 08:26:41 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Date: Thu, 02 Oct 2025 08:26:26 -0700
-Subject: [PATCH net v6 2/4] selftest: netcons: refactor target creation
+Date: Thu, 02 Oct 2025 08:26:27 -0700
+Subject: [PATCH net v6 3/4] selftest: netcons: create a torture test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251002-netconsole_torture-v6-2-543bf52f6b46@debian.org>
+Message-Id: <20251002-netconsole_torture-v6-3-543bf52f6b46@debian.org>
 References: <20251002-netconsole_torture-v6-0-543bf52f6b46@debian.org>
 In-Reply-To: <20251002-netconsole_torture-v6-0-543bf52f6b46@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -83,92 +83,194 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  calvin@wbinvd.org, kernel-team@meta.com, calvin@wbinvd.org, 
  jv@jvosburgh.net, Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.15-dev-dd21f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2493; i=leitao@debian.org;
- h=from:subject:message-id; bh=Z86lLnI5Tm3fzb69918VDPeWt3usJ2k/s66dsD2rV1E=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBo3pmspZB8YD2VU7zArjltNHoR3Lv5JL4ulcLK/
- 0QwucYTe+CJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaN6ZrAAKCRA1o5Of/Hh3
- bQu3EACLUz67wGRPN9BfvCvd4welZkaPX5R64wU0e0JPLIx8IybZT4DThQgjZo+SHbCPnOyyPev
- ci4ZZlxLvQY4DX3zszY5Hj9mgzp87uLLiP3U76hnN8sKyVemm4b/JOmIxlYBkHmRzBozg/3BIdf
- M/zs9uXms2MrN5+lkmoN9+d6hyA/fmULTbHc2nH3ZRI2VJsembz116cS2ncRS1Df00uSRZrvt0d
- XCrlOLp/Rj3oUD8wDWzBE6ou7D8RLTS5TKLlZh+GxiRiBnUk4ycTfVu7tenhr/16hseDacUDnr8
- +eyro2kmx3Ipi5gdesBRat4P7xzhiIuIkNYvNPUc0bnUiD75e2XSdBOk9kNofP4i1oisZcU8pMX
- QaQVX0mVWr4URMEkJTgOSU6it8h2vsVmQCZgKdnJAHZ5s293JNNuzjGHXuLsmvg5mJDRP/lp2jQ
- rmSrW4caPmcJpPSFFTBkkKF/1dFHCfBx5gX3Z/9Dvv/xdGJx/kB1CBLG+JfQybzTuKzZom7g2xV
- UjxMbgw9yk/XNOKu+02TMxwBhdZeQwEgf5xefelb5sMfUAE/0dQUUE6SoL+LgDLxZuAfkGerS7i
- +xnCrjc34r35cViwnYkLXkMwz7VhF82gBaoTm+n6I8zi+pakdwjeBX+lACJc+LFmVMxMP3DNmci
- 1+VcNwkEQj2XmLw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5371; i=leitao@debian.org;
+ h=from:subject:message-id; bh=wCTCXuF1yxmEp/u/Sr4POeQXqdQsOxIg5TvZ/SJ3ls0=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBo3pmsmmMGNKcgEnavHC2jMEtdvF8yeZdoGp4aZ
+ 3JHNKKmj6SJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaN6ZrAAKCRA1o5Of/Hh3
+ bd4lD/9+O4IHa2bZy6+3RktskQcbeHj09CYSlsackDR0zeECGyMpFB9wUmmDQMJW0foPBqCXB5F
+ PrsVB83q1YgEsLu4mfivqXDYoBuYHVAImibFrRzwkWuLaAPNJnE/cN7niP885NMl6Ydrjrn5ySM
+ FEx3yPsG1f6td68+Qzy9nKvNQmL/ImM6/ndzpvXuknJqYb3XWGa+8QpuZzOxemQYj0XFUoOO7rI
+ h+tILR8p55nF+3AAilLeMBJfipr+WqGklE6+WbbvPzP4WlHlJypCZeuJBusi/gEbwwXmv4THtlx
+ 0/CjRNY3ufwtPFg0k+JfR+agGr7Pnfqlimayzxh92fMKp3DgU034derwx4K0edlAXc2vb+uh5Kq
+ AKVQI352huzOxTrMHMaczB9zQkV4czj+BUYLOn8NUyj75HC/UL8FgPLqRGXCQGW0z4AZKp205/M
+ ptqPctj1EEYeHoo7njjgUC5liEhdCvZ+FfWXiWdkjPjbq60Eu6PKS6Kho5jaYC7SPo7T9TV2+QX
+ TarXwGH5FIfbck8Vca1C9DYEitV1IKf70mBxFXSzwQn1MBnahxE5WJTXWBT4I5axFynAZpapC3U
+ SlXCzgalhj+34nNzXjy7wahhcOlSTGioynvN2TMsd7YY710BXiJEahoL6MejHXyq8K6/CmrN1k0
+ n5ldAGaPgN8Bq0Q==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Extract the netconsole target creation from create_dynamic_target(), by
-moving it from create_dynamic_target() into a new helper function. This
-enables other tests to use the creation of netconsole targets with
-arbitrary parameters and no sleep.
+Create a netconsole test that puts a lot of pressure on the netconsole
+list manipulation. Do it by creating dynamic targets and deleting
+targets while messages are being sent. Also put interface down while the
+messages are being sent, as creating parallel targets.
 
-The new helper will be utilized by forthcoming torture-type selftests
-that require dynamic target management.
+The code launches three background jobs on distinct schedules:
 
+ * Toggle netcons target every 30 iterations
+ * create and delete random_target every 50 iterations
+ * toggle iface every 70 iterations
+
+This creates multiple concurrency sources that interact with netconsole
+states. This is good practice to simulate stress, and exercise netpoll
+and netconsole locks.
+
+This test already found an issue as reported in [1]
+
+Link: https://lore.kernel.org/all/20250901-netpoll_memleak-v1-1-34a181977dfc@debian.org/ [1]
 Signed-off-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Andre Carvalho <asantostc@gmail.com>
 Reviewed-by: Simon Horman <horms@kernel.org>
 ---
- tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh | 30 +++++++++++++++++++-----------
- 1 file changed, 19 insertions(+), 11 deletions(-)
+ tools/testing/selftests/drivers/net/Makefile           |   1 +
+ tools/testing/selftests/drivers/net/netcons_torture.sh | 127 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 128 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-index 8e1085e896472..9b5ef8074440c 100644
---- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-+++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-@@ -113,31 +113,39 @@ function set_network() {
- 	configure_ip
- }
- 
--function create_dynamic_target() {
--	local FORMAT=${1:-"extended"}
-+function _create_dynamic_target() {
-+	local FORMAT="${1:?FORMAT parameter required}"
-+	local NCPATH="${2:?NCPATH parameter required}"
- 
- 	DSTMAC=$(ip netns exec "${NAMESPACE}" \
- 		 ip link show "${DSTIF}" | awk '/ether/ {print $2}')
- 
- 	# Create a dynamic target
--	mkdir "${NETCONS_PATH}"
-+	mkdir "${NCPATH}"
- 
--	echo "${DSTIP}" > "${NETCONS_PATH}"/remote_ip
--	echo "${SRCIP}" > "${NETCONS_PATH}"/local_ip
--	echo "${DSTMAC}" > "${NETCONS_PATH}"/remote_mac
--	echo "${SRCIF}" > "${NETCONS_PATH}"/dev_name
-+	echo "${DSTIP}" > "${NCPATH}"/remote_ip
-+	echo "${SRCIP}" > "${NCPATH}"/local_ip
-+	echo "${DSTMAC}" > "${NCPATH}"/remote_mac
-+	echo "${SRCIF}" > "${NCPATH}"/dev_name
- 
- 	if [ "${FORMAT}" == "basic" ]
- 	then
- 		# Basic target does not support release
--		echo 0 > "${NETCONS_PATH}"/release
--		echo 0 > "${NETCONS_PATH}"/extended
-+		echo 0 > "${NCPATH}"/release
-+		echo 0 > "${NCPATH}"/extended
- 	elif [ "${FORMAT}" == "extended" ]
- 	then
--		echo 1 > "${NETCONS_PATH}"/extended
-+		echo 1 > "${NCPATH}"/extended
- 	fi
- 
--	echo 1 > "${NETCONS_PATH}"/enabled
-+	echo 1 > "${NCPATH}"/enabled
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index bd3af9a34e2f2..42b3fb049f868 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -17,6 +17,7 @@ TEST_PROGS := \
+ 	netcons_fragmented_msg.sh \
+ 	netcons_overflow.sh \
+ 	netcons_sysdata.sh \
++	netcons_torture.sh \
+ 	netpoll_basic.py \
+ 	ping.py \
+ 	psp.py \
+diff --git a/tools/testing/selftests/drivers/net/netcons_torture.sh b/tools/testing/selftests/drivers/net/netcons_torture.sh
+new file mode 100755
+index 0000000000000..723aa2488c19a
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/netcons_torture.sh
+@@ -0,0 +1,127 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: GPL-2.0
 +
++# Repeatedly send kernel messages, toggles netconsole targets on and off,
++# creates and deletes targets in parallel, and toggles the source interface to
++# simulate stress conditions.
++#
++# This test aims to verify the robustness of netconsole under dynamic
++# configurations and concurrent operations.
++#
++# The major goal is to run this test with LOCKDEP, Kmemleak and KASAN to make
++# sure no issues is reported.
++#
++# Author: Breno Leitao <leitao@debian.org>
++
++set -euo pipefail
++
++SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
++
++source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
++
++# Number of times the main loop run
++ITERATIONS=${1:-1000}
++
++# Only test extended format
++FORMAT="extended"
++# And ipv6 only
++IP_VERSION="ipv6"
++
++# Create, enable and delete some targets.
++create_and_delete_random_target() {
++	COUNT=2
++	RND_PREFIX=$(mktemp -u netcons_rnd_XXXX_)
++
++	if [ -d "${NETCONS_CONFIGFS}/${RND_PREFIX}${COUNT}"  ] || \
++	   [ -d "${NETCONS_CONFIGFS}/${RND_PREFIX}0" ]; then
++		echo "Function didn't finish yet, skipping it." >&2
++		return
++	fi
++
++	# enable COUNT targets
++	for i in $(seq ${COUNT})
++	do
++		RND_TARGET="${RND_PREFIX}"${i}
++		RND_TARGET_PATH="${NETCONS_CONFIGFS}"/"${RND_TARGET}"
++
++		# Basic population so the target can come up
++		_create_dynamic_target "${FORMAT}" "${RND_TARGET_PATH}"
++	done
++
++	echo "netconsole selftest: ${COUNT} additional targets were created" > /dev/kmsg
++	# disable them all
++	for i in $(seq ${COUNT})
++	do
++		RND_TARGET="${RND_PREFIX}"${i}
++		RND_TARGET_PATH="${NETCONS_CONFIGFS}"/"${RND_TARGET}"
++		echo 0 > "${RND_TARGET_PATH}"/enabled
++		rmdir "${RND_TARGET_PATH}"
++	done
 +}
 +
-+function create_dynamic_target() {
-+	local FORMAT=${1:-"extended"}
-+	local NCPATH=${2:-"$NETCONS_PATH"}
-+	_create_dynamic_target "${FORMAT}" "${NCPATH}"
- 
- 	# This will make sure that the kernel was able to
- 	# load the netconsole driver configuration. The console message
++# Disable and enable the target mid-air, while messages
++# are being transmitted.
++toggle_netcons_target() {
++	for i in $(seq 2)
++	do
++		if [ ! -d "${NETCONS_PATH}" ]
++		then
++			break
++		fi
++		echo 0 > "${NETCONS_PATH}"/enabled 2> /dev/null || true
++		# Try to enable a bit harder, given it might fail to enable
++		# Write to `enabled` might fail depending on the lock, which is
++		# highly contentious here
++		for _ in $(seq 5)
++		do
++			echo 1 > "${NETCONS_PATH}"/enabled 2> /dev/null || true
++		done
++	done
++}
++
++toggle_iface(){
++	ip link set "${SRCIF}" down
++	ip link set "${SRCIF}" up
++}
++
++# Start here
++
++modprobe netdevsim 2> /dev/null || true
++modprobe netconsole 2> /dev/null || true
++
++# Check for basic system dependency and exit if not found
++check_for_dependencies
++# Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
++echo "6 5" > /proc/sys/kernel/printk
++# Remove the namespace, interfaces and netconsole target on exit
++trap cleanup EXIT
++# Create one namespace and two interfaces
++set_network "${IP_VERSION}"
++# Create a dynamic target for netconsole
++create_dynamic_target "${FORMAT}"
++
++for i in $(seq "$ITERATIONS")
++do
++	for _ in $(seq 10)
++	do
++		echo "${MSG}: ${TARGET} ${i}" > /dev/kmsg
++	done
++	wait
++
++	if (( i % 30 == 0 )); then
++		toggle_netcons_target &
++	fi
++
++	if (( i % 50 == 0 )); then
++		# create some targets, enable them, send msg and disable
++		# all in a parallel thread
++		create_and_delete_random_target &
++	fi
++
++	if (( i % 70 == 0 )); then
++		toggle_iface &
++	fi
++done
++wait
++
++exit "${EXIT_STATUS}"
 
 -- 
 2.47.3
