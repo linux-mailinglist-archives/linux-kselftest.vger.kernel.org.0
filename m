@@ -1,143 +1,170 @@
-Return-Path: <linux-kselftest+bounces-42674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42675-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E567BB3CE5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 02 Oct 2025 13:46:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 983C4BB4501
+	for <lists+linux-kselftest@lfdr.de>; Thu, 02 Oct 2025 17:26:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A412A16A7E2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Oct 2025 11:46:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F0B57ADCDB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Oct 2025 15:25:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D41296BD3;
-	Thu,  2 Oct 2025 11:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gm28gEs6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28291A317D;
+	Thu,  2 Oct 2025 15:26:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2801921770C
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Oct 2025 11:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CD0156230
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Oct 2025 15:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759405576; cv=none; b=oASEOmOtzp97gVbhaPVbi68bxPBknqp2c72+u9JxumGbq777Xiy6wTAWaDX9dPdm9C0nWwXc5u6owhEhlCLx4TpE0i/q8iNDHkZBTW+BxOfcF3A6lxbgfHMUSC8CSXIBHrzrXNPsjS+v0IH6JBWvnQ+2e5a0x1NCypUlpBAfmXg=
+	t=1759418801; cv=none; b=rFliECWDogVH6ZR+i8j+n+H86+We48u0O9lNLCEHcqkmZE9ZceDOYa8UPFtvXenlddwtKllqb61rHhoRdMWCZualV01OvXEEWqpvwweyFiEnQPa8PKG9Vs0vEL4Udu7oyJ4DOEHNW1usJHRh76ibdwJNTpA/Muw0imA3DYSUAyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759405576; c=relaxed/simple;
-	bh=XAW7j/GiCX4Ldk1pbIGoe/EzygOj7TZ3MCMZKOX1tCA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=YI/luwjUfofvRh6TnOfQ7BpNGZ+0isMRcYRqEtFs9d+znwXx5Xp+e0yRVglgXFJEVsrDZlOC5CkeBvSNYaDogY1RogGBejdo7p+XxG91emfCgiVb6SR1joOhb2ozXSiiTYk1XkKiWBw5hsDGk0rorlLUFyUIYFlZFJfTjottW38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gm28gEs6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1759405574;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XAW7j/GiCX4Ldk1pbIGoe/EzygOj7TZ3MCMZKOX1tCA=;
-	b=gm28gEs6nDbBVRqG+2nqsWCgOcBZOgGKn38QkNLF66xYS8ienqpBdIv8FhO5arbVPgQNQt
-	TomUeJIKSIxJgwg8W8V4Pyq/LtmTgG1fQLcFUrIo3Va8qJBqPQQLI3eMTdr2e4YZgaxYzR
-	ODoCWtoo/TJbmh8lpuD8SQFVG8yFL8o=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-389-r_CZXO_aN_O1Oc8BoJrm0Q-1; Thu,
- 02 Oct 2025 07:46:11 -0400
-X-MC-Unique: r_CZXO_aN_O1Oc8BoJrm0Q-1
-X-Mimecast-MFC-AGG-ID: r_CZXO_aN_O1Oc8BoJrm0Q_1759405570
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 49A29180034D;
-	Thu,  2 Oct 2025 11:46:10 +0000 (UTC)
-Received: from fweimer-oldenburg.csb.redhat.com (unknown [10.44.32.225])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 83FCA300018D;
-	Thu,  2 Oct 2025 11:45:51 +0000 (UTC)
-From: Florian Weimer <fweimer@redhat.com>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Charles Mirabile <cmirabil@redhat.com>,  pjw@kernel.org,
-  Liam.Howlett@oracle.com,  a.hindborg@kernel.org,
-  akpm@linux-foundation.org,  alex.gaynor@gmail.com,
-  alexghiti@rivosinc.com,  aliceryhl@google.com,  alistair.francis@wdc.com,
-  andybnac@gmail.com,  aou@eecs.berkeley.edu,  arnd@arndb.de,
-  atishp@rivosinc.com,  bjorn3_gh@protonmail.com,  boqun.feng@gmail.com,
-  bp@alien8.de,  brauner@kernel.org,  broonie@kernel.org,
-  charlie@rivosinc.com,  cleger@rivosinc.com,  conor+dt@kernel.org,
-  conor@kernel.org,  corbet@lwn.net,  dave.hansen@linux.intel.com,
-  david@redhat.com,  devicetree@vger.kernel.org,  ebiederm@xmission.com,
-  evan@rivosinc.com,  gary@garyguo.net,  hpa@zytor.com,  jannh@google.com,
-  jim.shu@sifive.com,  kees@kernel.org,  kito.cheng@sifive.com,
-  krzk+dt@kernel.org,  linux-arch@vger.kernel.org,
-  linux-doc@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-mm@kvack.org,  linux-riscv@lists.infradead.org,
-  lorenzo.stoakes@oracle.com,  lossin@kernel.org,  mingo@redhat.com,
-  ojeda@kernel.org,  oleg@redhat.com,  palmer@dabbelt.com,
-  paul.walmsley@sifive.com,  peterz@infradead.org,
-  richard.henderson@linaro.org,  rick.p.edgecombe@intel.com,
-  robh@kernel.org,  rust-for-linux@vger.kernel.org,
-  samitolvanen@google.com,  shuah@kernel.org,  tglx@linutronix.de,
-  tmgross@umich.edu,  vbabka@suse.cz,  x86@kernel.org,  zong.li@sifive.com
-Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
-In-Reply-To: <aNxsWYYnj22G5xuX@debug.ba.rivosinc.com> (Deepak Gupta's message
-	of "Tue, 30 Sep 2025 16:48:41 -0700")
-References: <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
-	<20250926192919.349578-1-cmirabil@redhat.com>
-	<aNbwNN_st4bxwdwx@debug.ba.rivosinc.com>
-	<CABe3_aE4+06Um2x3e1D=M6Z1uX4wX8OjdcT48FueXRp+=KD=-w@mail.gmail.com>
-	<aNcAela5tln5KTUI@debug.ba.rivosinc.com>
-	<lhu3484i9en.fsf@oldenburg.str.redhat.com>
-	<aNxsWYYnj22G5xuX@debug.ba.rivosinc.com>
-Date: Thu, 02 Oct 2025 13:45:48 +0200
-Message-ID: <lhuwm5dh6hf.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1759418801; c=relaxed/simple;
+	bh=o97ssWS1XLnkBDbG8UDuOY3aKVcNvG347gRIilI4pS8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pKvm+Bhcn4fcdV4VsTYlA4xg6wp2wYqqWBsM4C+M3GbeZfpP9iPu5S5ERJpguSOBa8gahZgv13/LQgGPL2j+KIRYCTNs6+NNYdkKZG+rrdZ+34xLXn6bx18ihfJ3ayLE8sJca/sjkGbB2Q0RMNJCjewfYu2b+ttQHkoFycvPwEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b3e9d633b78so255863666b.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Oct 2025 08:26:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759418798; x=1760023598;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vbBEdwOKCu0k96xIOmCVZhuXhz2bKiR0OgCLj9FWUXM=;
+        b=Avp4hGFYcyfV8WreAOrebz1vCoi60k3nHbPuSwaYLYXniGqQurPac3KV2AjYyKyHfi
+         WJHyvw0M3YJhV6aUdUp4lJkJJPzo/TvjYpV90JhvQXNbm0WqkJmG3NPqGv2yc8ua93+F
+         huWn97QsCIAWTvHR68M2k4WSXQ6YVrlZPr/W77F6suRX9SsVn8lAVddaMhkpVzQnbf1T
+         3vljBg3wAib3pTCqPmISOWM3LMSr5EehJcU1jR38GpeLD5mqE2OG4lhZc20QTgCTLE5J
+         rYvZ9lTWodhrw/ZpD7A9Or+q90L/56d0l9ZiL0PLgg20oWDsa4mfURO8WXl3HI7DaQH2
+         gIzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/R1/yfRbBe1mvNkYo2FUOKaFdY2P7YAGbMhq1R0NERVAJfZ/L6BYhVbgnoMRz0rTJZWPpzGUS8E35YE0qG10=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxqb6uAPcie2YwVuHjxx01fcwVIp9uUeuhVgHIO+Ws6Csnv/yPO
+	KepsJw8EPKCMeI54I1jtZjiR9zBJyMAmwhBsS3LFNQy2HJHhOJdOOKrU
+X-Gm-Gg: ASbGncs4Etw6ALUaBLdc6v+GvWNn1afBARPhMI2gm6W5LEATk9V7nYb95m63vFVbDka
+	yjCGFwMvaiRzIqn2fm2Y/bzNDyarSW22c7SaOmt4bSdw0//ndGw1n335tk3rUX8f1Rh7zW38zSA
+	KVVpsMI0Fk/Qd9a8jPuq+p+8Hbl2xLV2cgts3+xA5YYex9l/Wj2Kas9cwes0CVp5V+XRUd5Sxsq
+	biejaOKuhZRtgu3u/4e0z+QQW9IG8NHWweMkqu9E+1ekrq69jgPlIPcVAQn3k2Or4DRtOJ7HpvG
+	xEBnQtAlIiOO4J2UhO3+ZOUKWcznvQFDCT/CNAdUAfAsApqVTEjxLztMitQrESXSmEhQ1ubiHn6
+	NgORqw7NPKvNFtwmaIC7bVgUT0oMKbW21Kq4o
+X-Google-Smtp-Source: AGHT+IHJubONATMqOpM0aphE/8E9mxBxm+qVR6z0xeXhHSIOScfHf6lN7uyPcMlhiwlXUofQ7HBbrg==
+X-Received: by 2002:a17:907:9444:b0:b3c:d31:31d9 with SMTP id a640c23a62f3a-b485b2a6401mr471849866b.20.1759418797676;
+        Thu, 02 Oct 2025 08:26:37 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:6::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b48652aa62csm228377666b.19.2025.10.02.08.26.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Oct 2025 08:26:37 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net v6 0/4] net: netpoll: fix memory leak and add
+ comprehensive selftests
+Date: Thu, 02 Oct 2025 08:26:24 -0700
+Message-Id: <20251002-netconsole_torture-v6-0-543bf52f6b46@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKCZ3mgC/33OzWqEMBSG4VsJZ+0pJ4n50VXvo5QS43EmUJIhW
+ mkZvPeCK4vS9QfP9z5h5pp4hl48ofKa5lQy9MI2AuI95BtjGqEXoEgZ6khh5iWWPJdP/lhKXb4
+ qo5+i0hOFGLoOGgGPylP63tE3yLzAeyPgnual1J/9aJX79J+5SpRIOlqy1nSeu9eRhxTyS6m33
+ VvV0WgvDYWExjnDoxmjtvZk6KNhLg2NhN6Z6CYeRi3PRnswpLs0WiSkYAY9+MnLyCfDHA1/aRg
+ kdI6VYQotD387tm37BQGrs5TKAQAA
+X-Change-ID: 20250902-netconsole_torture-8fc23f0aca99
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+ david decotigny <decot@googlers.com>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de, 
+ calvin@wbinvd.org, kernel-team@meta.com, calvin@wbinvd.org, 
+ jv@jvosburgh.net, Breno Leitao <leitao@debian.org>, stable@vger.kernel.org
+X-Mailer: b4 0.15-dev-dd21f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3275; i=leitao@debian.org;
+ h=from:subject:message-id; bh=o97ssWS1XLnkBDbG8UDuOY3aKVcNvG347gRIilI4pS8=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBo3pms6lJKB0FbSWZRJJCtCqNJP88m2CpjoW/J7
+ jG7j5+mRsyJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaN6ZrAAKCRA1o5Of/Hh3
+ bdP2D/9FhhvEn5Y4fs/RB3oFPb9J3lK/v58q3Nj2XkSLehybA33BF0L/qXA7Vccy+BAaVLHj15W
+ GgpzyXp7UeLTA2lOh8BsxkVdbY69nHgJiQy1neHu6zCzCqb2kwE1pOzEz39NDY5or6pDTXVfr0g
+ DjQVyi4+EEfG+fpq1J68wMPzCt8kDNgr0wkGMF502lBjohK5DWRqQ+YhKkdvaJ5RCi2tM2W78mG
+ ellyrqS9wpo/RvCg/ytHcM6xa0MS3W/Vdt5f/Xwx44KA5/Of9pJt500n0dSZpDnihJmeCE4mfBY
+ Ww5O0KEKomUh87ysenyshXN0ZgIQQJtxtx45PiJw1B491oyULAZv50xG8ylUj1+4uibA1CqViqb
+ NWBD1hpHeVoVUxFToltgrCoJUiOqg+peTBihZqiQtz3RSYt94miFBifb2yD7kWaOilM3QmwWEc/
+ F/MTO2Nv7OAmbCZUo/DY5abqfn/Tv3rki5ZAqhLrqZ0ou9XNx+H+xsYOTJvV62f3F0nGRH9Cs46
+ A57Ls8J1IqP4JOlm8Da/ybKWjsO/hAW+VCKnPS1NENhsIGIEOceyPm8e9afiJYCGV0AjLo63jVH
+ OhQFurRrJwuaznF0cqw2IyM/QzDIEvlNVO5sVbUJrMyHufZAI9X7b7CpFJxmAP7vyF1cSeZv+/I
+ BNwHnmFrqGEXZgA==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-* Deepak Gupta:
+Fix a memory leak in netpoll and introduce netconsole selftests that
+expose the issue when running with kmemleak detection enabled.
 
-> On Tue, Sep 30, 2025 at 11:20:32AM +0200, Florian Weimer wrote:
->>* Deepak Gupta:
->>
->>> In case of shadow stack, it similar situation. If enabled compiler
->>> decides to insert sspush and sspopchk. They necessarily won't be
->>> prologue or epilogue but somewhere in function body as deemed fit by
->>> compiler, thus increasing the complexity of runtime patching.
->>>
->>> More so, here are wishing for kernel to do this patching for usermode
->>> vDSO when there is no guarantee of such of rest of usermode (which if
->>> was compiled with shadow stack would have faulted before vDSO's
->>> sspush/sspopchk if ran on pre-zimop hardware)
->>
->>I think this capability is desirable so that you can use a distribution
->>kernel during CFI userspace bringup.
->
-> I didn't get it, can you elaborate more.
->
-> Why having kernel carry two vDSO (one with shadow stack and one without) would
-> be required to for CFI userspace bringup?
->
-> If Distro is compiling for RVA23 CONFIG_RISCV_USERCFI has to be selected yes,
-> kernel can have vDSO with shadow stack. Distro can light this option only when
-> its compiling entire distro for RVA23.
+This patchset includes a selftest for netpoll with multiple concurrent
+users (netconsole + bonding), which simulates the scenario from test[1]
+that originally demonstrated the issue allegedly fixed by commit
+efa95b01da18 ("netpoll: fix use after free") - a commit that is now
+being reverted.
 
-I think it boils down to whether you want CFI bringup contributions from
-people who do not want to or cannot build their own custom RVA23
-kernels.
+Sending this to "net" branch because this is a fix, and the selftest
+might help with the backports validation.
 
-Another use case would be running container images with CFI on a
-distribution kernel which supports pre-RVA23 hardware.
+Link: https://lore.kernel.org/lkml/96b940137a50e5c387687bb4f57de8b0435a653f.1404857349.git.decot@googlers.com/ [1]
 
-Thanks,
-Florian
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v6:
+- Expand the tests even more and some small fixups
+- Moved the test to bonding selftests
+- Link to v5: https://lore.kernel.org/r/20250918-netconsole_torture-v5-0-77e25e0a4eb6@debian.org
+
+Changes in v5:
+- Set CONFIG_BONDING=m in selftests/drivers/net/config.
+- Link to v4: https://lore.kernel.org/r/20250917-netconsole_torture-v4-0-0a5b3b8f81ce@debian.org
+
+Changes in v4:
+- Added an additional selftest to test multiple netpoll users in
+  parallel
+- Link to v3: https://lore.kernel.org/r/20250905-netconsole_torture-v3-0-875c7febd316@debian.org
+
+Changes in v3:
+- This patchset is a merge of the fix and the selftest together as
+  recommended by Jakub.
+
+Changes in v2:
+- Reuse the netconsole creation from lib_netcons.sh. Thus, refactoring
+  the create_dynamic_target() (Jakub)
+- Move the "wait" to after all the messages has been sent.
+- Link to v1: https://lore.kernel.org/r/20250902-netconsole_torture-v1-1-03c6066598e9@debian.org
+
+---
+Breno Leitao (4):
+      net: netpoll: fix incorrect refcount handling causing incorrect cleanup
+      selftest: netcons: refactor target creation
+      selftest: netcons: create a torture test
+      selftest: netcons: add test for netconsole over bonded interfaces
+
+ net/core/netpoll.c                                                  |   7 +++++--
+ tools/testing/selftests/drivers/net/Makefile                        |   1 +
+ tools/testing/selftests/drivers/net/bonding/Makefile                |   2 ++
+ tools/testing/selftests/drivers/net/bonding/config                  |   4 ++++
+ tools/testing/selftests/drivers/net/bonding/netcons_over_bonding.sh | 221 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh           | 189 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------------
+ tools/testing/selftests/drivers/net/netcons_torture.sh              | 127 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 7 files changed, 531 insertions(+), 20 deletions(-)
+---
+base-commit: f1455695d2d99894b65db233877acac9a0e120b9
+change-id: 20250902-netconsole_torture-8fc23f0aca99
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
 
