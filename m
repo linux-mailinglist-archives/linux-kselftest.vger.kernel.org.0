@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-42746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42747-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBE81BB868B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 04 Oct 2025 01:31:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2F2BBB86A6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 04 Oct 2025 01:32:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DBFF94ED144
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Oct 2025 23:31:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41B0618988B4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Oct 2025 23:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 382822BD02A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69CD2C2364;
 	Fri,  3 Oct 2025 23:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EHU+3CnZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7/SROxC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACAD29B8D0;
-	Fri,  3 Oct 2025 23:31:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8B92C21CF;
+	Fri,  3 Oct 2025 23:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759534261; cv=none; b=BCDPNH7W25y9vIYCr+/VTQMTteStVsgUBFHTko8deR/Mv8CsNm9OXybguzLKS9tM3k91zGEsPQ8EZRnw+Xlw7LsssjuTsZgQ4g8KXgYsyvl5FkRafqHReeU/tO9EJMOU0c/BVIqTvAnoVk3YFD+ePHY2IFFOJ7Xu6dd+kJBeAVo=
+	t=1759534261; cv=none; b=fTNX4EoW0+gFzWxnx88T46sR09ff1e8FYrVEbGKOcHmw+co82XSmH7eHoSqjb7vz1tW10iH6L4dtY3sVISVEIlEw2GY+hDVWjuDVgz9Tu2/tNT4rfWi9OxnM1fwRjtrPHyM7E3E0cgs6odpuiCmJRcZOdz/smL3hVw+0bN7Pbjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759534261; c=relaxed/simple;
-	bh=RzvBYuPoFOcVCR8Wu02ofZBfqwQw9wY33Ux5rMBW8fc=;
+	bh=OOOWbFfjvKsuYankKxFL3OTuPBM7d5eXqKzIV87L0Tg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DkYDXbYZVkcPaDjOzKT5vBQ+2eXddZqhZFFaPeT7kGAu9iREiZ9tYjyEBgLBCOtYwnhYQaEPGKRtAKVVTdnlJDJZ358leG5q4wFOrWFlADQNGDhYnLikyN0zNhWows7Gk3bIEJ+8+oS+dQh5t7BqglHXZxb+a7jtzqYgZih0iP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EHU+3CnZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDCABC4CEF5;
-	Fri,  3 Oct 2025 23:30:59 +0000 (UTC)
+	 MIME-Version; b=KoArdGAipPzqtJDiWuttkY0su0upFGH9h8uuPDKxpz6nmyks27HO4IO0n1sDixpA8/SgtBAH4j4LxcZ0Qb0BVOIoOtvsZwl5qn5ulhHlQKeyX1EfQLvdRLK+BNDs6NbC5Wrl1xpjQfrSiuvIgp95rWQGVB3G2H8oH9cXbqGlcOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7/SROxC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB2CC4CEFD;
+	Fri,  3 Oct 2025 23:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759534260;
-	bh=RzvBYuPoFOcVCR8Wu02ofZBfqwQw9wY33Ux5rMBW8fc=;
+	s=k20201202; t=1759534261;
+	bh=OOOWbFfjvKsuYankKxFL3OTuPBM7d5eXqKzIV87L0Tg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EHU+3CnZTo8SFPiZ+Gapy5/RJywM4p6BOqGDAoaRgtnqw6UNXWnRCLxcxDM9ZmNGZ
-	 z/2OFEQX+fH6+Eoinea6rpHP/faTIbOyPPhjWCchU6Yqs9nyhIRr/2gQtdps5ejp+6
-	 jLhmmQ0x+UilL98/NWrF4r7FPRZQDKO1vhBTHm6BZSfdOuwbXssMC6QlYnc0+DEylJ
-	 4veBYgP9XCCecY1xDEeCiS7gmnpez7wNS+hcMZVFIpEr4bELj3XMbdYC/KcMytv7fu
-	 4FvoUe7EPCp+3DFe0lhDhpsrTP9RiW96VmJEEwR3eqsL4I8qRw/8l7AmZgruAuyBo6
-	 vy9QnVRjSVjwA==
+	b=i7/SROxCar4MQ/2Kurg1ShLUUTwEy1WhtqbUckj/2LxupfZYI3R5KAF2HZKsNCHVs
+	 +slWzjpiaC9kXPQpr7SxqA46mlrfSxqlww9YQz4dyWcnos+8+FdkxLlpwKMEeIMxiS
+	 CzwC0ExLLllCWGWO5inYqKUhCHN/XfPvotk9LVST/rlEl18BqjhE5gRuKXgXlGk0wk
+	 w/L4VmsQxm+wqG0/mDJPPTOdQC+Glu4gjyIle5Q+YsalvCLZyySAcWgez3j8Jn+C6X
+	 wlTbl3E2QHBrqpjQSFjfEKigO3dUJmcjO/bDYYUsLKx8t0fkubGIvfwNeM2oiqQtiq
+	 Uppnc9F9nunLQ==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: netdev@vger.kernel.org,
 	shuah@kernel.org,
 	johndale@cisco.com,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 7/9] selftests: drv-net: fix linter warnings in pp_alloc_fail
-Date: Fri,  3 Oct 2025 16:30:23 -0700
-Message-ID: <20251003233025.1157158-8-kuba@kernel.org>
+Subject: [PATCH net 8/9] selftests: drv-net: pp_alloc_fail: lower traffic expectations
+Date: Fri,  3 Oct 2025 16:30:24 -0700
+Message-ID: <20251003233025.1157158-9-kuba@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251003233025.1157158-1-kuba@kernel.org>
 References: <20251003233025.1157158-1-kuba@kernel.org>
@@ -67,12 +67,15 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix linter warnings, it's a bit hard to check for new ones otherwise.
+Lower the expected level of traffic in the pp_alloc_fail test
+and calculate failure counter thresholds based on the traffic
+rather than using a fixed constant.
 
-  W0311: Bad indentation. Found 16 spaces, expected 12 (bad-indentation)
-  C0114: Missing module docstring (missing-module-docstring)
-  W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
-  C0116: Missing function or method docstring (missing-function-docstring)
+We only have "QEMU HW" in NIPA right now, and the test (due to
+debug dependencies) only works on debug kernels in the first place.
+We need some place for it to pass otherwise it seems to be bit
+rotting. So lower the traffic threshold so that it passes on QEMU
+and with a debug kernel...
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
@@ -80,82 +83,48 @@ CC: shuah@kernel.org
 CC: johndale@cisco.com
 CC: linux-kselftest@vger.kernel.org
 ---
- .../selftests/drivers/net/hw/pp_alloc_fail.py | 20 +++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ .../selftests/drivers/net/hw/pp_alloc_fail.py      | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
-index ad192fef3117..fc66b7a7b149 100755
+index fc66b7a7b149..a4521a912d61 100755
 --- a/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
 +++ b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
-@@ -1,6 +1,10 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
+@@ -7,6 +7,7 @@ Test driver resilience vs page pool allocation failures.
  
-+"""
-+Test driver resilience vs page pool allocation failures.
-+"""
-+
  import errno
  import time
++import math
  import os
-@@ -13,7 +17,8 @@ from lib.py import cmd, tool, GenerateTraffic
- 
- def _write_fail_config(config):
-     for key, value in config.items():
--        with open("/sys/kernel/debug/fail_function/" + key, "w") as fp:
-+        path = "/sys/kernel/debug/fail_function/"
-+        with open(path + key, "w", encoding='ascii') as fp:
-             fp.write(str(value) + "\n")
- 
- 
-@@ -22,8 +27,7 @@ from lib.py import cmd, tool, GenerateTraffic
-         raise KsftSkipEx("Kernel built without function error injection (or DebugFS)")
- 
-     if not os.path.exists("/sys/kernel/debug/fail_function/page_pool_alloc_netmems"):
--        with open("/sys/kernel/debug/fail_function/inject", "w") as fp:
--            fp.write("page_pool_alloc_netmems\n")
-+        _write_fail_config({"inject": "page_pool_alloc_netmems"})
- 
-     _write_fail_config({
-         "verbose": 0,
-@@ -38,8 +42,7 @@ from lib.py import cmd, tool, GenerateTraffic
-         return
- 
-     if os.path.exists("/sys/kernel/debug/fail_function/page_pool_alloc_netmems"):
--        with open("/sys/kernel/debug/fail_function/inject", "w") as fp:
--            fp.write("\n")
-+        _write_fail_config({"inject": ""})
- 
-     _write_fail_config({
-         "probability": 0,
-@@ -48,6 +51,10 @@ from lib.py import cmd, tool, GenerateTraffic
+ from lib.py import ksft_run, ksft_exit, ksft_pr
+ from lib.py import KsftSkipEx, KsftFailEx
+@@ -62,7 +63,7 @@ from lib.py import cmd, tool, GenerateTraffic
+         stat1 = get_stats()
+         time.sleep(1)
+         stat2 = get_stats()
+-        if stat2['rx-packets'] - stat1['rx-packets'] < 15000:
++        if stat2['rx-packets'] - stat1['rx-packets'] < 4000:
+             raise KsftFailEx("Traffic seems low:", stat2['rx-packets'] - stat1['rx-packets'])
  
  
- def test_pp_alloc(cfg, netdevnl):
-+    """
-+    Configure page pool allocation fail injection while traffic is running.
-+    """
-+
-     def get_stats():
-         return netdevnl.qstats_get({"ifindex": cfg.ifindex}, dump=True)[0]
+@@ -91,9 +92,14 @@ from lib.py import cmd, tool, GenerateTraffic
  
-@@ -105,7 +112,7 @@ from lib.py import cmd, tool, GenerateTraffic
-             else:
-                 ksft_pr("ethtool -G change retval: did not succeed", new_g)
-         else:
--                ksft_pr("ethtool -G change retval: did not try")
-+            ksft_pr("ethtool -G change retval: did not try")
+         if s2['rx-alloc-fail'] - s1['rx-alloc-fail'] < 1:
+             raise KsftSkipEx("Allocation failures not increasing")
+-        if s2['rx-alloc-fail'] - s1['rx-alloc-fail'] < 100:
+-            raise KsftSkipEx("Allocation increasing too slowly", s2['rx-alloc-fail'] - s1['rx-alloc-fail'],
+-                             "packets:", s2['rx-packets'] - s1['rx-packets'])
++        pkts = s2['rx-packets'] - s1['rx-packets']
++        # Expecting one failure per 512 buffers, 3.1x safety margin
++        want_fails = math.floor(pkts / 512 / 3.1)
++        seen_fails = s2['rx-alloc-fail'] - s1['rx-alloc-fail']
++        if s2['rx-alloc-fail'] - s1['rx-alloc-fail'] < want_fails:
++            raise KsftSkipEx("Allocation increasing too slowly", seen_fails,
++                             "packets:", pkts)
++        ksft_pr(f"Seen: pkts:{pkts} fails:{seen_fails} (pass thrs:{want_fails})")
  
-         time.sleep(0.1)
+         # Basic failures are fine, try to wobble some settings to catch extra failures
          check_traffic_flowing()
-@@ -119,6 +126,7 @@ from lib.py import cmd, tool, GenerateTraffic
- 
- 
- def main() -> None:
-+    """ Ksft boiler plate main """
-     netdevnl = NetdevFamily()
-     with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
- 
 -- 
 2.51.0
 
