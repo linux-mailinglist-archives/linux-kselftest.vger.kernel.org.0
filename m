@@ -1,68 +1,68 @@
-Return-Path: <linux-kselftest+bounces-42720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C89E5BB6BC5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 03 Oct 2025 15:03:21 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24CA2BB6BD1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 03 Oct 2025 15:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD7AF19E2B2C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Oct 2025 13:03:08 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D05464E120F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Oct 2025 13:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0189B1C6FF4;
-	Fri,  3 Oct 2025 13:02:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918351BD4F7;
+	Fri,  3 Oct 2025 13:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="mLIuaWOf"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="nPQ9H+CO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.64.237.68])
+Received: from fra-out-002.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-002.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.65.3.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58B9175BF;
-	Fri,  3 Oct 2025 13:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.64.237.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1105919F135;
+	Fri,  3 Oct 2025 13:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.65.3.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759496530; cv=none; b=RfJ8WZI6KDEXxd5Gvs0+pNKlrdTg2xqMta3WUgdjNGLU+Zol+furJHEzSM5PGYOUzNwKqt8eLPMMD8J3X4riYxLs5k7+aJBmfL9bQKLB5Se3NHEOmSEgA/p7vLWG46rVmv1vZzJM0euSDI8qlsLhm788rHh4xYmDys23pzZUPMY=
+	t=1759496567; cv=none; b=hVffgmA/ihiBn0rZSUMTefuB3MzXPWTbsLiWjY0r7v6SFRYZFKXd7hZaKIz/aEKRONKKQs3MhAq5rhIdMGI3e9YURGE2lE+nJpyfujTx3sDhi6L7+iWd5z9Rxg6GZAyAtq0d2Bevi9DlTfgb0+kH6ia2O/fh3wq1ULjd/K3ereg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759496530; c=relaxed/simple;
-	bh=N3zOXM40zSrl+b4WQthgyi7GvAt4vCFCARfcCCx1WmM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OC4yC3EVAEpnNGkdWSl6yJN+bR5GIh9mp2P5pQacYctWMJoKSgD0gxuOYCZxt6/fw9z+WUHtrCzaz6GePV8BwxVL4+SVBpV7XTK8w+t5MT6PRDvzm6uqrXWZDLOZuaMc4s7NjzjOQrbZXf0xq9e06TM0sm803uQuAzeDvZmH+qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=mLIuaWOf; arc=none smtp.client-ip=3.64.237.68
+	s=arc-20240116; t=1759496567; c=relaxed/simple;
+	bh=pN6xHynU3dxSSOEd6+/U7k0fkrp3twy3S4zrtKuGEN4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HwnBAwP6prr/HaVg1smhSCRg0wzvctmCegWHrWiop4QhlkhCE/QngGL3eiVgdZA5H1Hr/tRoIS4QDrAKXQORtnAHbUhbA9tT/n9f92zR55Xq0dhkNmTH8UYYRyKOxsaTjMvDSwZ7i7Tx6YXHwRZjUjpP7mXMO5KbA7DcdSLuv50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=nPQ9H+CO; arc=none smtp.client-ip=3.65.3.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1759496529; x=1791032529;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=/92zpxyjeHvGlOVhJoOGNENC+jRdBRPJKKvWmFCfMhU=;
-  b=mLIuaWOfGvd3l2+Ixx3MwlEVmkHykjvnmt6HpYECB9KWOKJvRQ7itnVy
-   4Xg7eifLsryCc4kzxnSDx9epLqO0XS6Q9wyuGQ0EQ9UNBqXpa7oFkBh4b
-   fdHoTSL9gFWeS5A7HATrPa4lr4wiPPN1JQUWyeU3I1pWXYYz+yAeNUJxd
-   1raXiBLlQ/HpZWtNjzG5RUfDKeo5xxbdGHK1Nccj/vvFjDShLAudFATpD
-   EQUsFlXO4K7b1fkBDDcmR0lrjCmjhcgedeL1g0eMJ5aWA6N/Evy1La6wD
-   Zev7gtnpuFf24VphXftkCZmVI42Ug0nZiYOuCqoClPO6rVFxLljWe3fM2
-   A==;
-X-CSE-ConnectionGUID: RafEjVVVTqyIShPdYFqaRg==
-X-CSE-MsgGUID: gTGjwIVySfCFf42Ccz7DtA==
+  t=1759496565; x=1791032565;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4vb6NSqQR6ex3kWRbhDvcIC1XoiVTA7hMRv6Rl9gJRM=;
+  b=nPQ9H+COE95TOvigNLmV8y8WwXc6r6QEoDFYYd4EReFAbVCQPViW9JLM
+   f9XEdFjyweoP6XoQpojzFcU+cba+auT6RqKLePE3haxO7CRCxTL2Gtk04
+   C+pGk08lhAE89En/r5E9v5ex/DfWU8+Sf57nc330Jyukizj29MALktEFy
+   tNiJ9WWMJ92saHWiuuqzFM6R1abrFeGrO1HsIgABtmV8cN3aSTtO0i/9S
+   r1qh7MyNVq/YVfymT+FyRrM0NrR0CYVcZlPOkkm6Tz6goMpxMLydfaQU9
+   hPJReHOm6OYqlTGmQaGSZ+vZiqqHr5/yLl3MKkMlfu9Uqd71ub+PKtKwS
+   w==;
+X-CSE-ConnectionGUID: 41ClxvC8S8aAD1BJSu4SsQ==
+X-CSE-MsgGUID: LhM5pSuERA2b/lFqNkQAPQ==
 X-IronPort-AV: E=Sophos;i="6.18,312,1751241600"; 
-   d="scan'208";a="2963638"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 13:01:56 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:5896]
+   d="scan'208";a="3069152"
+Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
+  by internal-fra-out-002.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 13:02:32 +0000
+Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:5043]
  by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.21.15:2525] with esmtp (Farcaster)
- id a2369264-a95c-402e-aa2d-d6344cca8b56; Fri, 3 Oct 2025 13:01:56 +0000 (UTC)
-X-Farcaster-Flow-ID: a2369264-a95c-402e-aa2d-d6344cca8b56
+ id 9688e442-2cfa-4aa0-b6aa-8d3525798e44; Fri, 3 Oct 2025 13:02:32 +0000 (UTC)
+X-Farcaster-Flow-ID: 9688e442-2cfa-4aa0-b6aa-8d3525798e44
 Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
  EX19MTAEUC002.ant.amazon.com (10.252.51.245) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Fri, 3 Oct 2025 13:01:53 +0000
+ Fri, 3 Oct 2025 13:02:31 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by EX19D018EUA004.ant.amazon.com (10.252.50.85) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Fri, 3 Oct 2025
- 13:01:28 +0000
+ 13:02:06 +0000
 From: Eliav Farber <farbere@amazon.com>
 To: <gregkh@linuxfoundation.org>, <jdike@addtoit.com>, <richard@nod.at>,
 	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
@@ -104,9 +104,11 @@ To: <gregkh@linuxfoundation.org>, <jdike@addtoit.com>, <richard@nod.at>,
 	<linux-mm@kvack.org>, <netfilter-devel@vger.kernel.org>,
 	<coreteam@netfilter.org>, <tipc-discussion@lists.sourceforge.net>,
 	<linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: [PATCH v2 03/19 5.15.y] minmax: deduplicate __unconst_integer_typeof()
-Date: Fri, 3 Oct 2025 12:59:50 +0000
-Message-ID: <20251003130006.41681-4-farbere@amazon.com>
+CC: Christoph Hellwig <hch@infradead.org>, "Jason A. Donenfeld"
+	<Jason@zx2c4.com>, Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v2 04/19 5.15.y] minmax: fix indentation of __cmp_once() and __clamp_once()
+Date: Fri, 3 Oct 2025 12:59:51 +0000
+Message-ID: <20251003130006.41681-5-farbere@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251003130006.41681-1-farbere@amazon.com>
 References: <20251003130006.41681-1-farbere@amazon.com>
@@ -118,74 +120,76 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D032UWA002.ant.amazon.com (10.13.139.81) To
+X-ClientProxiedBy: EX19D043UWA002.ant.amazon.com (10.13.139.53) To
  EX19D018EUA004.ant.amazon.com (10.252.50.85)
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: David Laight <David.Laight@ACULAB.COM>
 
-[ Upstream commit 5e57418a2031cd5e1863efdf3d7447a16a368172 ]
+[ Upstream commit f4b84b2ff851f01d0fac619eadef47eb41648534 ]
 
-It appears that compiler_types.h already have an implementation of the
-__unconst_integer_typeof() called __unqual_scalar_typeof().  Use it
-instead of the copy.
+Remove the extra indentation and align continuation markers.
 
-Link: https://lkml.kernel.org/r/20230911154913.4176033-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Herve Codina <herve.codina@bootlin.com>
+Link: https://lkml.kernel.org/r/bed41317a05c498ea0209eafbcab45a5@AcuMS.aculab.com
+Signed-off-by: David Laight <david.laight@aculab.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- include/linux/minmax.h | 25 ++-----------------------
- 1 file changed, 2 insertions(+), 23 deletions(-)
+ include/linux/minmax.h | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index aac0b7d23768..62b0c0a3cf30 100644
+index 62b0c0a3cf30..2ec559284a9f 100644
 --- a/include/linux/minmax.h
 +++ b/include/linux/minmax.h
-@@ -168,27 +168,6 @@
-  */
- #define max_t(type, x, y)	__careful_cmp(max, (type)(x), (type)(y))
+@@ -46,11 +46,11 @@
+ #define __cmp(op, x, y)	((x) __cmp_op_##op (y) ? (x) : (y))
  
--/*
-- * Remove a const qualifier from integer types
-- * _Generic(foo, type-name: association, ..., default: association) performs a
-- * comparison against the foo type (not the qualified type).
-- * Do not use the const keyword in the type-name as it will not match the
-- * unqualified type of foo.
-- */
--#define __unconst_integer_type_cases(type)	\
--	unsigned type:  (unsigned type)0,	\
--	signed type:    (signed type)0
--
--#define __unconst_integer_typeof(x) typeof(			\
--	_Generic((x),						\
--		char: (char)0,					\
--		__unconst_integer_type_cases(char),		\
--		__unconst_integer_type_cases(short),		\
--		__unconst_integer_type_cases(int),		\
--		__unconst_integer_type_cases(long),		\
--		__unconst_integer_type_cases(long long),	\
--		default: (x)))
--
- /*
-  * Do not check the array parameter using __must_be_array().
-  * In the following legit use-case where the "array" passed is a simple pointer,
-@@ -203,13 +182,13 @@
-  * 'int *buff' and 'int buff[N]' types.
-  *
-  * The array can be an array of const items.
-- * typeof() keeps the const qualifier. Use __unconst_integer_typeof() in order
-+ * typeof() keeps the const qualifier. Use __unqual_scalar_typeof() in order
-  * to discard the const qualifier for the __element variable.
-  */
- #define __minmax_array(op, array, len) ({				\
- 	typeof(&(array)[0]) __array = (array);				\
- 	typeof(len) __len = (len);					\
--	__unconst_integer_typeof(__array[0]) __element = __array[--__len]; \
-+	__unqual_scalar_typeof(__array[0]) __element = __array[--__len];\
- 	while (__len--)							\
- 		__element = op(__element, __array[__len]);		\
- 	__element; })
+ #define __cmp_once(op, x, y, unique_x, unique_y) ({	\
+-		typeof(x) unique_x = (x);		\
+-		typeof(y) unique_y = (y);		\
+-		static_assert(__types_ok(x, y),		\
+-			#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
+-		__cmp(op, unique_x, unique_y); })
++	typeof(x) unique_x = (x);			\
++	typeof(y) unique_y = (y);			\
++	static_assert(__types_ok(x, y),			\
++		#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
++	__cmp(op, unique_x, unique_y); })
+ 
+ #define __careful_cmp(op, x, y)					\
+ 	__builtin_choose_expr(__is_constexpr((x) - (y)),	\
+@@ -60,16 +60,16 @@
+ #define __clamp(val, lo, hi)	\
+ 	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
+ 
+-#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({	\
+-		typeof(val) unique_val = (val);				\
+-		typeof(lo) unique_lo = (lo);				\
+-		typeof(hi) unique_hi = (hi);				\
+-		static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
+-				(lo) <= (hi), true),					\
+-			"clamp() low limit " #lo " greater than high limit " #hi);	\
+-		static_assert(__types_ok(val, lo), "clamp() 'lo' signedness error");	\
+-		static_assert(__types_ok(val, hi), "clamp() 'hi' signedness error");	\
+-		__clamp(unique_val, unique_lo, unique_hi); })
++#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({		\
++	typeof(val) unique_val = (val);						\
++	typeof(lo) unique_lo = (lo);						\
++	typeof(hi) unique_hi = (hi);						\
++	static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
++			(lo) <= (hi), true),					\
++		"clamp() low limit " #lo " greater than high limit " #hi);	\
++	static_assert(__types_ok(val, lo), "clamp() 'lo' signedness error");	\
++	static_assert(__types_ok(val, hi), "clamp() 'hi' signedness error");	\
++	__clamp(unique_val, unique_lo, unique_hi); })
+ 
+ #define __careful_clamp(val, lo, hi) ({					\
+ 	__builtin_choose_expr(__is_constexpr((val) - (lo) + (hi)),	\
 -- 
 2.47.3
 
