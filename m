@@ -1,260 +1,174 @@
-Return-Path: <linux-kselftest+bounces-42711-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E5A8BB66FF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 03 Oct 2025 12:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BE06BB6911
+	for <lists+linux-kselftest@lfdr.de>; Fri, 03 Oct 2025 13:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A20D619E6A58
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Oct 2025 10:23:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DAC819E2616
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Oct 2025 11:57:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EFB02E9729;
-	Fri,  3 Oct 2025 10:22:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cJHztxpx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8787B280014;
+	Fri,  3 Oct 2025 11:57:22 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DF32E7F2D
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Oct 2025 10:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9D6266B59
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Oct 2025 11:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759486977; cv=none; b=MOKb8vhi/u6hh+PSlCSS4L3ck5O3bm8RsRZwIJ4KCeQHYWr5D9hDSQu77qLB2xGb8haYCh2tA/fVEGZkKS+fP+aEq0ZX+5UQp2zfqYRHYwwFQbOvgE4QNCEXcvC8YiECycigxyJTkX+wgCOdRUg2v2QL69kuBt5JJSyTfRKfx8s=
+	t=1759492642; cv=none; b=qqJLNCp9uyrtDy2BRHleFAfSC72nm/+vt1OochDW7/u3WtDcTX0LxkalPmZ+y/Kb0F+imO6i2BIGLZxspxG0BZt4JpuF48hma9JBgiDgNv0JPoj3Zfj3Mrk1iz22r331x+zBk6sLgqKTGLbvEO0YZteWK4FV6XOdzwSMrk/9gQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759486977; c=relaxed/simple;
-	bh=3xxXRyy3Jq92ZQAfd3xiufGuemMTntOY4GZPwSM1RdA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ICI3i4i3fxdwZXWLZHZTmzLxtznvlBuU5Yso/owCLozvjxVVmhLNHZ6a+cROwFh6VUgfNIgsCub0/5Z+KZV/JLMynkdRRbpETmtQU2T6S/XO061FjaA0XHzYO1hFypCTtTHgmw3hnSTvbDSs8Y61BSJf3c4yjpTuiZzJa/5Z3OY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cJHztxpx; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1759492642; c=relaxed/simple;
+	bh=h6er2ckpwVF7GuNqAHxEQy4OA/+J1C6yr4ND2RJuFwM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fyHduCaghZd3g70g/MG1brJHG5HCr3rrh5d1o6KM9JpSnLBB7Qz5+eVKCdN1y41514vJVrA14hJTCU2HQ5bEZU4IO/UQ4SdM0zIRqh/mjKCRLyTWh53vuJfM7pmqxFBqqG0eETn9AMv0ETftPGf5C/z/2IyVFlz5Oz9poZN+CV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-46e310e64f4so2458825e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Oct 2025 03:22:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759486973; x=1760091773; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/EmsAJimqXkpHX/eRAgnIzY2He0pg7LXBAkhLwOqkjM=;
-        b=cJHztxpx641ZTNDWh+gaT/c4lT8TKHIHwnbhiTUT91JvCH0t4RrGiMSddDp6n8kZVn
-         5k056BFG2aTaW7QxfoPm2sEt7KDwbeaYdG+GZIlk+5bsnRd4swFM755I1FV734lhmR2v
-         h1S6b8UzSA5AaSasFYcSMbUcyRLZQHU9uJ0z872QPnGRzbuKGTeltVUY16MatI5/0GL0
-         6Kso98o4tHimWbNVX+N7/z5/EOE34c2QoIkI6K4HYYKROZScPfDlM8TQ/pSAnzHZ0Tkk
-         WWsUl1PgTqVeNIiZeP4rCY/Wky8Ux9q+RkGqQN2E287BD7C0/4hxPwwvzjS6wULzeX+n
-         L4jg==
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b256c8ca246so475011266b.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Oct 2025 04:57:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759486973; x=1760091773;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/EmsAJimqXkpHX/eRAgnIzY2He0pg7LXBAkhLwOqkjM=;
-        b=PJyqyUExCGoXM95xw1WVy55AclVWweAPShm+RL29lLbLPF3ZzEQ2ddzBwwsCGaMXrz
-         LfsD8ofGyPM4DmCPxp9g1jeqw5DOLnu/czLACdkEWCrTs98U3h3c5Q4blcE3fqPIZi4c
-         4SJFa5m3tZLWqoOaOWi0MdmTUI1pSfjiw7rxTIbAZIZw6EMfyfMzCVpl+Fko3k2VQsk6
-         gB/iBz2Pq6uSK4KPe4TVrRgacu9DK3Z0GyB28JJN1PD0IQPsax+gAIZTclyTJJgts628
-         pu28yHqMIMznmUUgEl6cSi4N0fXEqZmqVcS6GIe7rA1lp6kKIVZ5GMQULyxNeQRlWsM1
-         7jng==
-X-Forwarded-Encrypted: i=1; AJvYcCW1saghANwNTFJBQpXD8WiLAcfQdmA3A2n3WFhtSS1Jv8M+yf84wfk8mhjPWez8937w3glbMvbqcfHMUxGxtgY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJC7H1Yi3HOPWVvSyegFU+n6HIqJRJdz1s7TS6P5QLovgyLgFl
-	gR23QRswuMemh6J0y0D1DnggbtTC4vqeJE63IowPJlKPmX1PTqBpwyKB
-X-Gm-Gg: ASbGncsvtv1UavplwRWZczalW8WliU+5MrIbSC0DgMZSKUdExYGR/35iKCx8EybVEy3
-	uFLLFoLMvUdmqsqHmE+3ZdmieBwzqcn8y5w/ay1q97lmqv2lSz2tbVBrtHNuO0dNMdC57+0osfA
-	wtHjJ4t7vjQ6NmEFaIanrsH7+1Xy0j+iBFKXECaFQGb9akHR5ni1C50/t+x2mHV2qST7ALJQkzy
-	ktte0H5Wtz1NSeK/uJOsVjcF/n31P4559UCBhlHgdpn2CYDkpJAyKpTHdI4Y68T2QdfWNTKTH9n
-	fDQ60hPBYWKkhGO3qS9hRJiYXoKFboyH7MkZLAPTNsAU/EpmaZ+g43kN4mRSkm7pOeD4taYluXw
-	t6c5qz0gUAu0Xdmfg6ijpXaMcIiVrFG5mscvXDKI135i3CZCyIj6RpVAJdBSwvHKQ+r7sTmQ=
-X-Google-Smtp-Source: AGHT+IFt4JMwkbHAeDRH+Dl59b7w80xOYVWqcuo4WePcDsLt6VvfV3mFWwVaPjA3o9A7APxzKtcgQQ==
-X-Received: by 2002:a05:600c:3b21:b0:46e:32d8:3f4f with SMTP id 5b1f17b1804b1-46e7115cf80mr8170935e9.8.1759486973128;
-        Fri, 03 Oct 2025 03:22:53 -0700 (PDT)
-Received: from [192.168.100.179] ([102.171.6.65])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e723593d8sm27790825e9.11.2025.10.03.03.22.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Oct 2025 03:22:52 -0700 (PDT)
-Message-ID: <870cb6c9-3bd5-4251-8c61-7327b8a6f9f9@gmail.com>
-Date: Fri, 3 Oct 2025 11:23:00 +0100
+        d=1e100.net; s=20230601; t=1759492639; x=1760097439;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z/RwV8Q4hBWil9Gk7UQBXPk1Pu4CPKtI2/nJ64HEYjA=;
+        b=FNabyMdYqHAVvLVcFLa7A8lQcwTLbgrCYE1WNWMRCzFkWWmnTMunCy7w01K57fhpne
+         d8TKvOmqKHXQH0S8hV3GiGnKfhgAiiaFzqWHE0aLjZ3RGoq2arvDbscHc5CpcWekuNsU
+         UiwEA/mTWz0uGgVzAjaPnI7JGdi+wzokC0As2Io4Ci+ZD49VW4M4bOSVWjN5Gvb/wsdX
+         /M2Mjh0heFAQkDSYG4fU8fsSZmZMfP+NCFy3S2Wqsp68wSpGa0+KH8ellMmXv+iYFTeJ
+         Tad5mnKJrnk2QxjPdiFdMCMYCy5D7a78zolubK9LH0DF/AC7ez19qZauu5PD/b9veaKq
+         7M6w==
+X-Forwarded-Encrypted: i=1; AJvYcCU9P3dn7qpW6/uBuf2k1/j+wLP8iB8e7HnMoKNGzNAsPYff/9us6TRLnwf36YshkpP8nqON6U6U7LHkx2X2rVc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyi7DgphvHCt7bmOeeHdBVmNN0WxC0otfn+t+BlyjZA6TWaFAt4
+	euSITdbpC8imdd64MHnC/qwjinW1AaX4XqkcDcvGh0uou5wiMQgP2T6X
+X-Gm-Gg: ASbGnctCNQbhi2E+0R2bwXontUo8m1K8p4LI8bFOwhnR7YjvcLxTzDHTU1iBVzMz7q7
+	rMcTNm+PPTTqACAvwWLAEhdcNlilyuBjcBChalM/p7Fou7DB8GDr0nsol52sVFCXu1CuPTWD4h8
+	NK5Q8fjY51fnk6vdT+6oe/EnHX26VEVibBPSGXvEKEAi25afwNMVS8+8mUfhfs+mbgjyKtLRypu
+	qwOqcqlSkN8GMOPQ1kZfKegcaMzLh0ViKp281EhA/v2imatuhX45a5D0GcSyGqXkRvzHz6bsm/o
+	jD84FvsAHuB/l33zHZKQC4J6cSeogIfHm6dsusoBvdTDIY0/hMz+DNmin95HdqCJ9Efg0lqIQrA
+	+gBhfgiWNCsa2B56ij+/b/HAAtOB1+zu5d8FtUz4kjqkDOZ4=
+X-Google-Smtp-Source: AGHT+IEBrRSxx7/yWNcZNy8YRDCLrMWcGHLTzaM2/PNk5nSyIVA/cP+iPZEBnhkQGX8ARqi8DjEZGg==
+X-Received: by 2002:a17:907:3ea1:b0:b0f:4ae:c83 with SMTP id a640c23a62f3a-b49c4498ba6mr344101166b.63.1759492638759;
+        Fri, 03 Oct 2025 04:57:18 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b486970a684sm421586966b.52.2025.10.03.04.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Oct 2025 04:57:18 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net v7 0/4] net: netpoll: fix memory leak and add
+ comprehensive selftests
+Date: Fri, 03 Oct 2025 04:57:11 -0700
+Message-Id: <20251003-netconsole_torture-v7-0-aa92fcce62a9@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/bpf: Add -Wsign-compare C compilation flag
-To: David Laight <david.laight.linux@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- matttbe@kernel.org, martineau@kernel.org, geliang@kernel.org,
- davem@davemloft.net, kuba@kernel.org, hawk@kernel.org, linux@jordanrome.com,
- ameryhung@gmail.com, toke@redhat.com, houtao1@huawei.com,
- emil@etsalapatis.com, yatsenko@meta.com, isolodrai@meta.com,
- a.s.protopopov@gmail.com, dxu@dxuuu.xyz, memxor@gmail.com,
- vmalik@redhat.com, bigeasy@linutronix.de, tj@kernel.org,
- gregkh@linuxfoundation.org, paul@paul-moore.com,
- bboscaccy@linux.microsoft.com, James.Bottomley@HansenPartnership.com,
- mrpre@163.com, jakub@cloudflare.com, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kernel-mentees@lists.linuxfoundation.org, skhan@linuxfoundation.org,
- david.hunter.linux@gmail.com
-References: <20250924162408.815137-1-mehdi.benhadjkhelifa@gmail.com>
- <20250926124555.009bfcd6@pumpkin>
- <e3a0d8ff-d03d-4854-bf04-8ff8265b0257@gmail.com>
- <20251002200047.2b9f9ef9@pumpkin>
-Content-Language: en-US
-From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
-In-Reply-To: <20251002200047.2b9f9ef9@pumpkin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABe632gC/33QzUrEMBQF4FcJWc+Vm/+0K99DRJL0ZiYgjaS1K
+ EPfXexCKq2uD3zncO58olZo4j2780ZLmUodec/chfF0C+OVoAy8Z1yiNNihhJHmVMepvtLLXNv
+ 83gh8TlJlDCl0Hb8w/tYol48NfeIjzfz5wvitTHNtn1vRIrboP3MRIABVsmit6Tx1jwPFEsaH2
+ q6bt8i9oU8NCQjGOUODGZKy9mCovWFODQUI3pnkMsVBiaOhd4Zwp4YGBAwmquizF4kOhtkb/tQ
+ wgOAcSUMYNMXjDvtjCPzjU/v9h1YxG5lt1L+NdV2/AHrD85kOAgAA
+X-Change-ID: 20250902-netconsole_torture-8fc23f0aca99
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+ david decotigny <decot@googlers.com>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de, 
+ calvin@wbinvd.org, kernel-team@meta.com, calvin@wbinvd.org, 
+ jv@jvosburgh.net, Breno Leitao <leitao@debian.org>, stable@vger.kernel.org
+X-Mailer: b4 0.15-dev-dd21f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2814; i=leitao@debian.org;
+ h=from:subject:message-id; bh=h6er2ckpwVF7GuNqAHxEQy4OA/+J1C6yr4ND2RJuFwM=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBo37odxqpA+Bf5hgG25++y6b8FaPNRtqZCUr/ay
+ 00v+QBdVMWJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaN+6HQAKCRA1o5Of/Hh3
+ bRkNEACIT6uj/iC4elMIBuLj5AIVM8ML+EhKcTH/EJDXfFAWwVViRTCJYYOwnKP114T/phZVedn
+ ARbxrO/CAiuVV/KE4XX5cov3N0oD0IixD4b6+Pzyi1FxdRMbpsJ1C6pZx5kwXm75/rf21BS0vkM
+ Lv08oYaIKrbtotGthCuEWjSWLpu3lUV5xAjd4VmZrYrXncXsCNOs0nUEknpjLmy2cobwDY0gOox
+ m9bJPSVKK4EFGhjdAoM5FECpO6CXpWUbik4nenqtTJrnZNQtdEbBIyEJcW1a5nhZUwVB3cZz8Yd
+ NOfuGIkACRF64A3sfOx2uayTHJpPY8eDNmIub1P13fIJEPhb2QZ5qNWkb9aliVM0xj3QcYAhaKK
+ RXkrlLDyoXgOWF2GC3Ehi+MoCYLR8EinZaegb411cBoljTaSTEULI3D98XZYmIk0J+IHgwdjnCG
+ O8g6ixgqTYN58QS989ZXvjL/b/Qpw3D0Rt8xct2GcmJeNRNwqokkfJP5iPNHIBfLcztq+NhhrQ4
+ W2shjO7Hj8wqHJ/xlX37LZeK0yUYJH213IpE1Jx1DikKB7IDl8ozxlsrmk04Tjt2XsoQ3bE/zzH
+ mufB1QtG301tMBRR0aek0m5VTNrTwwT8MbhGaJEHygNKBhoDDzWIvkiH+8Utnf1r10ixPMxfXCI
+ JYl5qYFAhntecAQ==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-On 10/2/25 8:00 PM, David Laight wrote:
-> On Mon, 29 Sep 2025 17:03:29 +0100
-> Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com> wrote:
-> 
->> On 9/26/25 12:45 PM, David Laight wrote:
->>> On Wed, 24 Sep 2025 17:23:49 +0100
->>> Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com> wrote:
->>>    
->>>> -Change all the source files and the corresponding headers
->>>> to having matching sign comparisons.
->>
->> Hi david,
->> sorry for the late reply.
->>
->>> 'Fixing' -Wsign-compare by adding loads of casts doesn't seem right.
->>> The only real way is to change all the types to unsigned ones.
->> The last v3 did only do that with no casting as it was suggested by
->> David too.
->>
->>> Consider the following:
->>> 	int x = read(fd, buf, len);
->>> 	if (x < 0)
->>> 		return -1;
->>> 	if (x > sizeof (struct fubar))
->>> 		return -1;
->>> That will generate a 'sign-compare' error, but min(x, sizeof (struct fubar))
->>> doesn't generate an error because the compiler knows 'x' isn't negative.
->>
->>    Yes,-Wsign-compare does add errors with -Werror enabled in that case
->> and many other cases where the code is perfectly fine which is one of
->> it's drawbacks.
->> Also I though that because of GCC/Clang heuristics
->> sometimes min() suppress the warning not because that the compiler knows
->> that x isn't negative.I'm probably wrong here.
-> 
-> That sentence doesn't make sense.
-> The statically_true() test in min() uses the 'value' tracking done by modern
-> versions of gcc and clang.
-> This means it can let signed types be promoted to unsigned ones because the
-> compiler knows the value isn't negative.
-> OTOH -Wsign-compare is a much older warning and is only based on the types.
+Fix a memory leak in netpoll and introduce netconsole selftests that
+expose the issue when running with kmemleak detection enabled.
 
-Ah, I Understand now. Didn't know about value tracking in modern 
-compilers before.
->>> A well known compiler also rejects:
->>> 	unsigned char a;
->>> 	unsigned int b;
->>> 	if (b > a)
->>> 		return;
->>> because 'a' is promoted to 'signed int' before it does the check.
->>
->> In my knowledge,compilers don't necessarily reject the above code by
->> default. Since -Wall in GCC includes -Wsign-compare but -Wall in clang
->> doesn't, doing -Wall -Werror for clang compiler won't trigger an error
->> in the case above not even a warning.My changes are to make those
->> comparisons produce an error since the -Werror flag is already enabled
->> in the Makefile.
-> 
-> This isn't about whether -Wsign-compare is enabled or not (or even what
-> the option is called).
-> It is about whether the compiler's 'sign-compare' warning triggers for that code.
-> The one that detects the warning/error isn't gcc or clang but is probably
-> used far more than clang.
-> 
-Yes, -Wsign-compare will trigger a warning for that code. And an error 
-if -Werror is enabled. And also yes, tools like sparse which I think is 
-what you are referring to here would catch that warning as well.
+This patchset includes a selftest for netpoll with multiple concurrent
+users (netconsole + bonding), which simulates the scenario from test[1]
+that originally demonstrated the issue allegedly fixed by commit
+efa95b01da18 ("netpoll: fix use after free") - a commit that is now
+being reverted.
 
->>
->>> So until the compilers start looking at the known domain of the value
->>> (not just the type) I enabling -Wsign-compare' is pretty pointless.
->>
->> I agree that enabling -Wsign-compare is pretty noisy. But it does have
->> some usefulness. Take for example this code:
->> 	int n = -5;
->> 	for (unsigned i = 0; i < n; i++) {
->>       	// ...
->> 	}
->> Since this is valid code by the compiler, it will allow it but n here is
->> promoted to an unsigned which converts -5 to being 4294967291 thus
->> making the loop run more than what was desired.of course,here the
->> example is much easy to follow and variables are very well set but the
->> point is that these could cause issues when hidden inside a lot of macro
->> code.
-> 
-> There is plenty of broken code out there.
-> It isn't hard to find places where explicit casts make things worse.
-> The problem is that, even for the above example, the -5 could come from
-> way earlier up the code.
-> If you 'fix' the warning by changing it to 'i < (unsigned)n' the code is
-> still just as likely to be buggy.
+Sending this to "net" branch because this is a fix, and the selftest
+might help with the backports validation.
 
-Yes,But we aren't changing a buggy code. We are changing normal running 
-code for the sake of future code to not have those bugs which wouldn't 
-cause any issue (espacially when only changing variable types and not 
-casting like in my V3 of this patch[1]).
+Link: https://lore.kernel.org/lkml/96b940137a50e5c387687bb4f57de8b0435a653f.1404857349.git.decot@googlers.com/ [1]
 
-> 
->>
->>> As a matter of interest did you actually find any bugs?
->>
->> No,I have not found any bug related to the current state of code in bpf
->> selftests but It works as a prevention mechanism for future bugs.Rather
->> than wait until something breaks in future code.
-> 
-> That's what I expected...
-> 
-I'm by no means trying to fix buggy code.Although I searched for bugs 
-when changing before and after and found none. But as I said the patch 
-is to prevent future bugs from occurring.
-You think I should abort working on this since the benefit is minimal?
-Regards,
-Mehdi>>> 	David
->>>    
->>
->> Thank you for your time David.I would appreciate if you suggest on how I
->> can have a useful patch on this or if I should drop this.
->> Best Regards,
->> Mehdi
->>>    
->>>>
->>>> Signed-off-by: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
->>>> ---
->>>> As suggested by the TODO, -Wsign-compare was added to the C compilation
->>>> flags for the selftests/bpf/Makefile and all corresponding files in
->>>> selftests and a single file under tools/lib/bpf/usdt.bpf.h have been
->>>> carefully changed to account for correct sign comparisons either by
->>>> explicit casting or changing the variable type.Only local variables
->>>> and variables which are in limited scope have been changed in cases
->>>> where it doesn't break the code.Other struct variables or global ones
->>>> have left untouched to avoid other conflicts and opted to explicit
->>>> casting in this case.This change will help avoid implicit type
->>>> conversions and have predictable behavior.
->>>>
->>>> I have already compiled all bpf tests with no errors as well as the
->>>> kernel and have ran all the selftests with no obvious side effects.
->>>> I would like to know if it's more convinient to have all changes as
->>>> a single patch like here or if it needs to be divided in some way
->>>> and sent as a patch series.
->>>>
->>>> Best Regards,
->>>> Mehdi Ben Hadj Khelifa
->>> ...
->>
-> 
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v7:
+- Rebased on top of `net`
+- Link to v6: https://lore.kernel.org/r/20251002-netconsole_torture-v6-0-543bf52f6b46@debian.org
+
+Changes in v6:
+- Expand the tests even more and some small fixups
+- Moved the test to bonding selftests
+- Link to v5: https://lore.kernel.org/r/20250918-netconsole_torture-v5-0-77e25e0a4eb6@debian.org
+
+Changes in v5:
+- Set CONFIG_BONDING=m in selftests/drivers/net/config.
+- Link to v4: https://lore.kernel.org/r/20250917-netconsole_torture-v4-0-0a5b3b8f81ce@debian.org
+
+Changes in v4:
+- Added an additional selftest to test multiple netpoll users in
+  parallel
+- Link to v3: https://lore.kernel.org/r/20250905-netconsole_torture-v3-0-875c7febd316@debian.org
+
+Changes in v3:
+- This patchset is a merge of the fix and the selftest together as
+  recommended by Jakub.
+
+Changes in v2:
+- Reuse the netconsole creation from lib_netcons.sh. Thus, refactoring
+  the create_dynamic_target() (Jakub)
+- Move the "wait" to after all the messages has been sent.
+- Link to v1: https://lore.kernel.org/r/20250902-netconsole_torture-v1-1-03c6066598e9@debian.org
+
+---
+Breno Leitao (4):
+      net: netpoll: fix incorrect refcount handling causing incorrect cleanup
+      selftest: netcons: refactor target creation
+      selftest: netcons: create a torture test
+      selftest: netcons: add test for netconsole over bonded interfaces
+
+ net/core/netpoll.c                                 |   7 +-
+ tools/testing/selftests/drivers/net/Makefile       |   1 +
+ .../testing/selftests/drivers/net/bonding/Makefile |   2 +
+ tools/testing/selftests/drivers/net/bonding/config |   4 +
+ .../drivers/net/bonding/netcons_over_bonding.sh    | 221 +++++++++++++++++++++
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 188 ++++++++++++++++--
+ .../selftests/drivers/net/netcons_torture.sh       | 127 ++++++++++++
+ 7 files changed, 530 insertions(+), 20 deletions(-)
+---
+base-commit: 7ae421cf78bd795513ec3a7d7ef7ac9437693e23
+change-id: 20250902-netconsole_torture-8fc23f0aca99
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
 
