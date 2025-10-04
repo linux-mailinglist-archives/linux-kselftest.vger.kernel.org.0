@@ -1,165 +1,159 @@
-Return-Path: <linux-kselftest+bounces-42753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C32F1BB8B6A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 04 Oct 2025 10:52:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 006A5BB8C97
+	for <lists+linux-kselftest@lfdr.de>; Sat, 04 Oct 2025 13:02:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51B033C62AC
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Oct 2025 08:52:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2DDE19C16C4
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Oct 2025 11:02:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FEB523183F;
-	Sat,  4 Oct 2025 08:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 259A325DCE0;
+	Sat,  4 Oct 2025 11:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MCBa5Enz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CGzeRGkT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1D8A95E;
-	Sat,  4 Oct 2025 08:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A4D22A4DB
+	for <linux-kselftest@vger.kernel.org>; Sat,  4 Oct 2025 11:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759567959; cv=none; b=mZdxWAEmsK8JW54j6vWd3nR+ZKKzJp4X7Zu2D2778Z1mtT+NP2bHvd/izveBR5H4e53VS1eA/X6z6pqL/rk6IdUsl/5M7st1T9vyDC1/27+g6ThBo+Bk3LQpTiNO2dejoW3ebNrIIGCvNOVASWMcveJlkpLGsX31cLDDUf6oYIU=
+	t=1759575722; cv=none; b=qge1zgLKknlhZLxYOOcEIfGqwYe96WYw97+bWDjKl17WNUT7UO3YAbGjSCK+4vgr/yWUYTcYb5DRFvcxU0GlM9sj5fzEpO3Otq9GuaTDo3o7QhjuOjSIUih7Z7xHp3MYImqV1SlovlfvosoI2boZID1xuDYIVEWtvkp8ni/g9uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759567959; c=relaxed/simple;
-	bh=+1FuWl5I+o5vbR6D5URC87uuqNI/3M12IrDJO+LT0OQ=;
+	s=arc-20240116; t=1759575722; c=relaxed/simple;
+	bh=LYoZFBgZzefaOIuKaaDC31/zxDNS2XhFvOLcaFmZ55c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mhNSx3GPxvunujsg5k+xg8IXiv2wgcL/KfGLIcP0UVk8rcWMVDIxQPi8uq0Yc0/qTSQP8tb3bcRlyVzcd5dt6/7QodtGIwypjNyBsXHY2O0U7JvHr9xguk3zKaUmmRLLdoovaENnJnjNt2cw0B0Sq8hQENKPlxKWKuaDw8WSbeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MCBa5Enz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CF1BC4CEF1;
-	Sat,  4 Oct 2025 08:52:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759567957;
-	bh=+1FuWl5I+o5vbR6D5URC87uuqNI/3M12IrDJO+LT0OQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MCBa5EnzvrNE2XD0RZVc9DpeettsJJsWvVHlxanra6AUSpJ/ONhJVpOlaZyKOltu6
-	 Qr3nhsYIthHi6rigCotZtbLALHUWvORKW7ei4djuN0EzqiRcZai86dshJlv+tW/u0f
-	 WulJxxGup1X2bm35D9EZ1idkMBFK67S8zoPsvhznazac7fXCNoNl66vnjEREHBZiC4
-	 LDx6l84vVFF6iT8qDky5sUZqZSCPdNVOIJMssj+hN+o7KliRrR/z8JqhmNBgrnktPa
-	 rP8fGiPDpFFXnVtSwU9cueJk4p6xApjz53APTIr90S9Uk7drUOnuYOJ1bmjdpGbRhO
-	 izQTZdyfEHW5A==
-Message-ID: <a6b7b46b-6959-458f-a975-866443351f87@kernel.org>
-Date: Sat, 4 Oct 2025 10:52:28 +0200
+	 In-Reply-To:Content-Type; b=qmn+wdb2o9X33duQGB/rdYZQvkrgeGROIz87d3vt0xfEWa77t+d7BQmPqPEjzI2z0ApuEgFbM3FQrzQxd3E/R2IF/PAHtcKUEsrAq4PcTSlUX5G7HZLWSzt70ZXawFmDzCsi2y+3+Ptoqbr9Lw2HzoRlnthhEAqAP2/wDtRRjRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CGzeRGkT; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b3c2db014easo295664666b.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Oct 2025 04:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759575719; x=1760180519; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4JEPtWfH/pmqT0IiioQlJm8QQAb8IOQ6u1KYhuGkN+0=;
+        b=CGzeRGkT32xUV8C6ggsuYBeUMuZ7NDK1IWuHSpKQa9b+JK48aChjOxY2TDZr/O4Iml
+         PPIN7axexXoqvcNLgiSoZOpoHhQeyaBNyxJhGmgC7SSeurqN5bh34SO1LOWyVVmTRf6E
+         ZHZxrU9xN1EWYpYeKMz5mGzKliFUHmnT6wTt/GuHuxS0G6navxM3aALLWIU1FTT/30Sf
+         tKxWTJqApE/sTihmu5UNFuvOOU4O/biGtvAe1olVoI67KZVGmpjLAgxlAWvnlzrIFWBJ
+         +tLEBTlmd9zGtuEHMmfjI5h2W7eH0ks1Aph4Awn3L95O4sjPbC1gx6oh2MoTuDJ17dVM
+         8JkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759575719; x=1760180519;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4JEPtWfH/pmqT0IiioQlJm8QQAb8IOQ6u1KYhuGkN+0=;
+        b=lBRdbakxREDkre1ty2m5daA1UwowF+sL7iMJaQAJn8WZOP7QJG3iRUPLzr0vJDuSes
+         ztoyXlVmRX+1kOTSr3eybJiW25rwJ35RqElYq7I6ehequrFGtAgF7ZRDGMIZk877xiU+
+         pnbNGMbnsi89qA8la1aJzWeKmBlSq3mPolpsyKGS0bx8IrNd+W+2yxvfooJP49tdbcC0
+         yT9p8ffa1N2um8jvWu5AbL7Nh8n1wkv1YnkdZOanxxbBrL1IB+hgeLSZIpsKJ/KAxeMn
+         QVJbj7DRCCM1HGkFaib6kP7F3X7SU6JrIRvALA44aXYoTUwe3U6EkAvK/u6n87cGbHmf
+         +j9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU/GxTjWaIfIGdb9sM9cw/rIg32X3VXPN861S4UYWD8sVzAusmD20dDs8ikxKcyo9h4BatMmowGzxcmYZVrEzY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFP4841JKeoo5Gw7SF/m4iEcYx+V1n688c8xG7NEZUsIKyp87k
+	NjaXgB8oNwAty+KdH057GcuYBUKYTG5/XDfZw9hVmvz5Ws6ApX7Yg/Ih
+X-Gm-Gg: ASbGnctMjKbaOx+eSw+Lhsmgy22eE0w9qdYS98oeVMb6mLvn4VqqIdLTXo4pGFixcan
+	0R6kBeXBVZukXsT2RXk1gPREd73piMjruXRtsfd0Ej0qnn20ccPhyzLTPALW4m/gSBWWa0GYvS/
+	QWb76CLU4aIpX7QXsVrIN8r3Ixo0PWKpyaPPxPuFjgQa6ZJ6bG7HB1JdfFvEiB3v5a3rSo3giR/
+	vxArl36R1TZ8zCwNjs9GuPpWseiY8VBH7vrRauNx5HS0rMViERO15M6SEQgry7f1/EParlbc+9D
+	4GoeuIKCh70rxqQZPJZpBE10WYXRba2gjEYYDYlc0ae6gdBJzBmJPIgLdLowSx/EWw9V/yK7VTI
+	DftsaXPpfIY2dOVkqTFQB83x8en5vC+y/kflnWT2KSjm79skt1/JsrZ08RfN61eb8juhy6SMvPE
+	tPj8sq0ux9moEte5ybSlh4z1yGVbMHFRITfVEI7L1K/dXCtHVBAEvEfqvOKMVUf23gDzTMr8LS1
+	f55lDlkJm/GkzjHjNjHEmFomVMweYQfX+Q=
+X-Google-Smtp-Source: AGHT+IG+nqJ0/vTFLgg0Wbdw2FCh/o7R7pBu3UjE7P4IHI5UG5xywNMKwlwYe8p93L5hubwR/YKojA==
+X-Received: by 2002:a17:907:3f21:b0:afe:b311:a274 with SMTP id a640c23a62f3a-b49c2c5e006mr742545466b.46.1759575718273;
+        Sat, 04 Oct 2025 04:01:58 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:20d:1300:1b1c:4449:176a:89ea? (2001-1c00-020d-1300-1b1c-4449-176a-89ea.cable.dynamic.v6.ziggo.nl. [2001:1c00:20d:1300:1b1c:4449:176a:89ea])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b486970b30asm678443766b.59.2025.10.04.04.01.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Oct 2025 04:01:57 -0700 (PDT)
+Message-ID: <be179c64-8c14-4f38-bab2-4597afc63341@gmail.com>
+Date: Sat, 4 Oct 2025 13:01:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf] selftests/bpf: fix implicit-function-declaration
- errors
-Content-Language: en-GB, fr-BE
-To: Ihor Solodrai <ihor.solodrai@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, alan.maguire@oracle.com
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <20251003-bpf-sft-fix-build-err-6-18-v1-1-2a71170861ef@kernel.org>
- <d108d59be611a63c73303347d07fe0ba5f2b74b7.camel@gmail.com>
- <43eebdf1-5ea9-4991-88c3-f0780d7c42c6@linux.dev>
- <c8b609ef-2d46-46b3-89ac-5ae84122cb93@linux.dev>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <c8b609ef-2d46-46b3-89ac-5ae84122cb93@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v3 nf-next] selftests: netfilter: Add
+ bridge_fastpath.sh
+To: Florian Westphal <fw@strlen.de>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
+ Jozsef Kadlecsik <kadlec@netfilter.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Nikolay Aleksandrov <razor@blackwall.org>,
+ Vladimir Oltean <olteanv@gmail.com>, netfilter-devel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250925183341.115008-1-ericwouds@gmail.com>
+ <aNwtMiC22yOAO4Y6@strlen.de>
+From: Eric Woudstra <ericwouds@gmail.com>
+Content-Language: en-US
+In-Reply-To: <aNwtMiC22yOAO4Y6@strlen.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Ihor,
 
-On 04/10/2025 05:19, Ihor Solodrai wrote:
+
+On 9/30/25 9:19 PM, Florian Westphal wrote:
+> Eric Woudstra <ericwouds@gmail.com> wrote:
+>> Add a script to test various scenarios where a bridge is involved
+>> in the fastpath. It runs tests in the forward path, and also in
+>> a bridged path.
 > 
+> Why is this still an RFC, what is missing to appy this?
+
+Changes in the patchset "conntrack: bridge: add double vlan, pppoe and
+pppoe-in-q" has lead to changes in this script. I'm waiting for that
+patch-set is to be accepted. Then I will send this script without the
+rfc tag.
+> Also:
 > 
-> On 10/3/25 8:08 PM, Ihor Solodrai wrote:
->>
->>
->> On 10/3/25 4:37 PM, Eduard Zingerman wrote:
->>> On Fri, 2025-10-03 at 17:24 +0200, Matthieu Baerts (NGI0) wrote:
->>> [...]
->>>
->>> Alan, Ihor, does this sound familiar?
->>
->> This is most likely the issue addressed in this patch:
->> https://lore.kernel.org/dwarves/f7553b3f-5827-4f50-81a9-9bd0802734b9@linux.dev/
->>
->> There wasn't a new pahole release with it yet.
+> PASS:  forward,        without vlan-device, without vlan encap, client1, without fastpath
 > 
-> Not the best link, sorry. That patch wasn't picked up by lore, only
-> discussion remains.
+> net/bridge/br_private.h:1627 suspicious rcu_dereference_protected() usage!
 > 
-> Here is the commit pushed to pahole/next:
-> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next&id=09c1e9c924da02dc02bba0a3e59490e64449df96
-
-Thank you for the links!
-
-OK so I guess to be (fully) able to use BTF in the future v6.18, we
-should use the future Pahole v1.31, and not include extra kfuncs. Is
-that correct?
-
-If yes, we can drop this patch. (The MPTCP CI will use it internally not
-to have to depend on a dev version of Pahole.)
-
-Also, should this dependency be more explicit somehow, to help people
-having errors when not using a recent enough Pahole version?
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+> other info that might help us debug this:
+> 
+> rcu_scheduler_active = 2, debug_locks = 1
+> 7 locks held by socat/410:
+>  #0: ffff88800d7a9c90 (sk_lock-AF_INET){+.+.}-{0:0}, at: inet_stream_connect+0x43/0xa0
+>  #1: ffffffff9a779900 (rcu_read_lock){....}-{1:3}, at: __ip_queue_xmit+0x62/0x1830
+>  #2: ffffffff9a779900 (rcu_read_lock){....}-{1:3}, at: ip_output+0x57/0x3c0
+>  #3: ffffffff9a779900 (rcu_read_lock){....}-{1:3}, at: ip_finish_output2+0x263/0x17d0
+>  #4: ffffffff9a779900 (rcu_read_lock){....}-{1:3}, at: process_backlog+0x38a/0x14b0
+>  #5: ffffffff9a779900 (rcu_read_lock){....}-{1:3}, at: netif_receive_skb_internal+0x83/0x330
+>  #6: ffffffff9a779900 (rcu_read_lock){....}-{1:3}, at: nf_hook.constprop.0+0x8a/0x440
+> 
+> stack backtrace:
+> CPU: 0 UID: 0 PID: 410 Comm: socat Not tainted 6.17.0-rc7-virtme #1 PREEMPT(full)
+> Hardware name: Bochs Bochs, BIOS Bochs 01/01/2011
+> Call Trace:
+>  <IRQ>
+>  dump_stack_lvl+0x6f/0xb0
+>  lockdep_rcu_suspicious.cold+0x4f/0xb1
+>  br_vlan_fill_forward_path_pvid+0x32c/0x410 [bridge]
+>  br_fill_forward_path+0x7a/0x4d0 [bridge]
+>  ...
+> 
+> I did not see a mention of this, nor a bug fix.
+> 
+> Its a pre-existing bug, br_vlan_fill_forward_path_pvid uses
+> br_vlan_group() instead of _rcu version.
+> 
+> Will you send a patch for this?
+I had this as part of an upcoming patch-set, but I will remove it from
+there and send it as a separate patch. I assume this can go to nf
+instead of nf-next, as it is a bugfix?
 
 
