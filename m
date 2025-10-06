@@ -1,213 +1,155 @@
-Return-Path: <linux-kselftest+bounces-42781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42780-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1073EBBDCA6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 06 Oct 2025 12:50:51 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A2FABBDC62
+	for <lists+linux-kselftest@lfdr.de>; Mon, 06 Oct 2025 12:49:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C824B3A580F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Oct 2025 10:50:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3E40B4EC4CA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Oct 2025 10:49:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955BB274B42;
-	Mon,  6 Oct 2025 10:48:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A9226CE06;
+	Mon,  6 Oct 2025 10:47:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Jx3dcUQ6"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E597mMN/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010039.outbound.protection.outlook.com [52.101.61.39])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB4526F46C;
-	Mon,  6 Oct 2025 10:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.39
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759747713; cv=fail; b=PmOPS9dKJyJBNAmJJ6kFZTt5eVtY89m/3kmU7hcGUS2s07vL6eY6SWD6vT77RUtcsPGQ4zhU2smXhnePHL5cdzOk7XptBJ+fRup1Oqb5/iGXle9hlR8qA163WWcuAvEep7C1TwZw3yxdeGrvresbFWkvgPRIddq/sWLlsUpHxu8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759747713; c=relaxed/simple;
-	bh=9DZfrjE620Agx1BPG4V7N/s1ljTQfXSZ1kByRkC9+xI=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=hC0S8UTd8N3bgO5Q7m6+LCO25I4ZZlVG4Ypq0+YKFL3ak+k1O2QyXfkcvw1tEdkz7s7f9XmvB+acpkw/uCR0k1gSQkKAgeuqiqDv75HrBftm0/CQGYjdBXkx8Zetsq+i7UM71O6q1y6NyWftY/wan+cbdhHIL2HB5+8lmjFxyBk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Jx3dcUQ6; arc=fail smtp.client-ip=52.101.61.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PLgLowpWA0M6GVKM02Z5se/6X+J2EF9ESb9ce1ZGGR6FYqQ029kDsWnuxLvF3FSTZ32ZMivY2IANiSrB64EZj1A8pmXPlI11iH9NnSqR9kVSzV4lBoKLwO/eD1IY/pX5LiT/PTxMdQFgZNSeUs3yyt9LZQG02DQLO01/V80f0LCbPl3G5O80sP6rYyaX0km1IKkx+C+7qW/P5P1AA/lMjHE+9g5VlA0Vz56TlGwGQa5Cls+M7N6bxMv9PQKS88svj3w/ClpQKBuo2kx3VOJeStbZzdJRiV7QQTovkBK3OHsRtlsPBOZ/0DNZeURvF5DPSqrQvie72IsTLOQO8domaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3ojB9u4d7uTq9yuVcGIvbZ47VqyEknRCZdeur5sjuWo=;
- b=tAGh7sUf2P/pxBWA1xi+721+UiD2gUEkhx6oGTdvf0cEsFd5rNtCNqACTPTAIygTBPSYXQNJgNQC9yAWstqufg7VTNmzbt1B4HVAmY0t/YLOKKM/YJYxtmwgzFPxg2OD3SbGczMEX7BQvyBxgAXgrERs9WM4OEccTIWXmMVCjei2u3DupV8XP4cmKrKWMgjKMAzLBUdyAWhY9HRDcS/wHmwnQCQpFJ25CqS+dw9PDFtf64EgZay/EILgHfjJqeA+nQMsgaUoiUHHe9nwZqGq9vAxLwS3W3oUhvVZPsu4ICW2PHqh/fSc/Bl+rhBt9A9T6EEN9RHIvlAWiqK1rdw+RA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=netfilter.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3ojB9u4d7uTq9yuVcGIvbZ47VqyEknRCZdeur5sjuWo=;
- b=Jx3dcUQ6JoAN/oIhc1WI6k1nyAfT9wCRiiPp4bFy+uDnI3zAWeJBspoK1jT9Rmpzz132BZTWZ8ND5yeh9M7gvfBndnnKMU+UBDF/Efef9jJKzdQgEd+ytlSA11DZDiqg5ZEOV1pe28ZFTo0enGX6qjVSkPj8X4S8Bq4jBjoxSuYbp2FKAHBGGNzcYH1lnjVn2UJz9TUtOjVjSgMvijzeSYbuRyHxau7xjSACvLlkj7dfMj02I5jCm46pylDZRYDu9x2t7sYgk77huMdy0wwhnyFuVDiK8Oew5nDrOHR2MEFl/aMLD9E3zI+TliFP36wNliA6pmMVvSuGz5qkCR7hjQ==
-Received: from BN9PR03CA0445.namprd03.prod.outlook.com (2603:10b6:408:113::30)
- by CY5PR12MB6203.namprd12.prod.outlook.com (2603:10b6:930:24::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9182.20; Mon, 6 Oct
- 2025 10:48:21 +0000
-Received: from BL6PEPF0001AB53.namprd02.prod.outlook.com
- (2603:10b6:408:113:cafe::f4) by BN9PR03CA0445.outlook.office365.com
- (2603:10b6:408:113::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9182.20 via Frontend Transport; Mon,
- 6 Oct 2025 10:48:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL6PEPF0001AB53.mail.protection.outlook.com (10.167.241.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9182.15 via Frontend Transport; Mon, 6 Oct 2025 10:48:20 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.34; Mon, 6 Oct
- 2025 03:48:06 -0700
-Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 6 Oct
- 2025 03:47:54 -0700
-References: <20251003210127.1021918-1-kuba@kernel.org>
-User-agent: mu4e 1.8.14; emacs 30.2
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>, "Antonio
- Quartulli" <antonio@openvpn.net>, "Matthieu Baerts (NGI0)"
-	<matttbe@kernel.org>, Allison Henderson <allison.henderson@oracle.com>,
-	<shuah@kernel.org>, <jv@jvosburgh.net>, <olteanv@gmail.com>,
-	<jiri@resnulli.us>, <mst@redhat.com>, <jasowang@redhat.com>,
-	<xuanzhuo@linux.alibaba.com>, <eperezma@redhat.com>, <kuniyu@google.com>,
-	<martineau@kernel.org>, <pablo@netfilter.org>, <kadlec@netfilter.org>,
-	<fw@strlen.de>, <petrm@nvidia.com>, <razor@blackwall.org>,
-	<idosch@nvidia.com>, <linux-kselftest@vger.kernel.org>,
-	<mptcp@lists.linux.dev>, <netfilter-devel@vger.kernel.org>,
-	<coreteam@netfilter.org>
-Subject: Re: [PATCH net v2] selftests: net: unify the Makefile formats
-Date: Mon, 6 Oct 2025 11:40:59 +0200
-In-Reply-To: <20251003210127.1021918-1-kuba@kernel.org>
-Message-ID: <87o6qkcnol.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8D4259C83;
+	Mon,  6 Oct 2025 10:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759747669; cv=none; b=tml4xtVwYWs7mwKu465pxaD9M1wNYmsIhsvhYxtQe8J4IYyauWoIwFyBOajIomUKRi+FbYs4heASeBAJovYd3/4qXOaToPNs2uKLWlmDGAxuudifybv/pb6Jz16G0BR61jbzOUzpKpUlXQcLdtryVBvskiTo1m9DbqRTPnXAq0k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759747669; c=relaxed/simple;
+	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=miDG5M6zH2nR+N4KhMGspZyicQXFTmDEh9ybswXjTlXN3HR+mLrxpPwebHxHysiiOqDHjMS/H8EKFHhQdNj4df9F7p4DBzVyfAygw1GCUL1GC9xovSEVk5dzcfGjbrAE8tYY2km5ucrFKZ8EY44tph7O1wcpbAS0IbE7mE7jP10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E597mMN/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDD7C4CEF5;
+	Mon,  6 Oct 2025 10:47:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1759747669;
+	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E597mMN/x7YVkjNX1Bc0G8W7GHt89kk8u2seksXgi5q2H3Gw9DqBry/MoIgd7Hl/f
+	 QcuYuZ/DwxfZxXg04LwRoNwgtiAl8T7SsOstK7UXK8SyqkUmffohAckrwzORjzcTe+
+	 /i/1SV3Pn0pttPu3dXePy8Hlmyjuwx9fL801o6Qw=
+Date: Mon, 6 Oct 2025 12:47:45 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Eliav Farber <farbere@amazon.com>
+Cc: jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+	dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+	hpa@zytor.com, tony.luck@intel.com, qiuxu.zhuo@intel.com,
+	james.morse@arm.com, rric@kernel.org, airlied@linux.ie,
+	daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, robdclark@gmail.com,
+	sean@poorly.run, jdelvare@suse.com, linux@roeck-us.net,
+	linus.walleij@linaro.org, dmitry.torokhov@gmail.com, maz@kernel.org,
+	wens@csie.org, jernej.skrabec@gmail.com, agk@redhat.com,
+	snitzer@redhat.com, dm-devel@redhat.com, davem@davemloft.net,
+	kuba@kernel.org, mcoquelin.stm32@gmail.com,
+	krzysztof.kozlowski@canonical.com, malattia@linux.it,
+	hdegoede@redhat.com, mgross@linux.intel.com, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, sakari.ailus@linux.intel.com,
+	clm@fb.com, josef@toxicpanda.com, dsterba@suse.com, jack@suse.com,
+	tytso@mit.edu, adilger.kernel@dilger.ca, dushistov@mail.ru,
+	luc.vanoostenryck@gmail.com, rostedt@goodmis.org, pmladek@suse.com,
+	senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
+	linux@rasmusvillemoes.dk, minchan@kernel.org, ngupta@vflare.org,
+	akpm@linux-foundation.org, yoshfuji@linux-ipv6.org,
+	dsahern@kernel.org, pablo@netfilter.org, kadlec@netfilter.org,
+	fw@strlen.de, jmaloy@redhat.com, ying.xue@windriver.com,
+	shuah@kernel.org, willy@infradead.org, sashal@kernel.org,
+	quic_akhilpo@quicinc.com, ruanjinjie@huawei.com,
+	David.Laight@aculab.com, herve.codina@bootlin.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-edac@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-sparse@vger.kernel.org,
+	linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, tipc-discussion@lists.sourceforge.net,
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Subject: Re: [PATCH v2 07/19 5.15.y] minmax: simplify and clarify
+ min_t()/max_t() implementation
+Message-ID: <2025100648-capable-register-101b@gregkh>
+References: <20251003130006.41681-1-farbere@amazon.com>
+ <20251003130006.41681-8-farbere@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB53:EE_|CY5PR12MB6203:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c4ba46d-b29e-4133-4458-08de04c5ddd1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|7416014|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?q51C6cjIfeyiixJ9RvcKhlEzMtK4Bl10CBzcI15KFaPjvFWKUAn1HWNb2pyD?=
- =?us-ascii?Q?IJQPu1p6v60XD5HQiPJaNFQ8Tnpt3EbvTDJkSHwHj1etiHWiZpSCLkymyWEA?=
- =?us-ascii?Q?N6WpQVUamSmZ0nzcvxy48NZWs4ysVgiz6DXvmOddSGHyhVD7K1NkI7hi6N68?=
- =?us-ascii?Q?u87NvvNg//9z8Pt0Ld1vIOwEVU1ecIa1NFI6HFDnji5UuRip/IgrzlwLa/yY?=
- =?us-ascii?Q?Jlmr9F+GSPQaZpllRZnlcIzw1IL1Gm8pkp4U59q6tjf5zx9I9mUmWjNTZJ5h?=
- =?us-ascii?Q?mvCzqXVMYVkCpw4mTc31d2dkyYATWVNpW63/zQJLhSQ0CUKzw6JzZ2iKJxnb?=
- =?us-ascii?Q?QM5UtwF4A5U2Je0crSLARaOpp8efVXM3/CwGyj+CY4ByRLPGxpioILWa/owl?=
- =?us-ascii?Q?gtgzxt9szwBdGbMlWXQomEw6zo8Fi3oLntqWrK9RW0AiaTwTPHGFi3MlQx/5?=
- =?us-ascii?Q?KQrnqcJrc0vgwZF1EL0BM3b+tGolY4NKB/2pUxxW4L3mxW0OSjX0Lh1I1wya?=
- =?us-ascii?Q?ZujekhByoy5cjGPj/J9yFhUaQD+eve0zNEMsinlaS9PIudkvUPQexv1UE9O+?=
- =?us-ascii?Q?EHDX6WNDWlMahQ4rvggSKPH3/lrtn4hnSj1oygPcO1SjdhAEq0AV5HSWr6zi?=
- =?us-ascii?Q?p74aPOqF5VBAcZiZutpthbIhkda65S26chYoKMdyclxiib4sw+rrnDOq3aU5?=
- =?us-ascii?Q?1SQMRYDYT6jloFqPlotXFb24e79wPjqip1FnjwNcqeATrbJ5Qfedmd1av+6i?=
- =?us-ascii?Q?sO2okF7XycIaEAyRXf9+NloiL8YrwHf+/erNgYl7SbahQEoqW9I1Meink7UK?=
- =?us-ascii?Q?U3+/ALYb2Kd3ukfgnGkIN+vLo05BU1FBAUfZ8N+4EpOz1tT4OMUjO3E0fT/D?=
- =?us-ascii?Q?NvA7ZcIdGUJMIkHtXQz89zFF0MeQh8VS7DW77/NLjyHOxLU2DI3539iMCUg8?=
- =?us-ascii?Q?QMXBoAmObplcxD4zsluXpI7ouRggI4ILWZLh+2KSLICDfiHvjgb6evpFUXMQ?=
- =?us-ascii?Q?vlXpYtsaj0YqVhq0SE7OCm11xWBO+8w3sqrce2iUUX3X2WoM9YA8ZscUpOYH?=
- =?us-ascii?Q?BBZCD8fxSe92XVYezoUjHw2RESvqvn3x/unhijWQhebkCXfP3gwpIv456C63?=
- =?us-ascii?Q?Rglaq38RkuxxZNiFXaDoXtCuHksI/csWSwC61Ogf9hNdg0zZTy7icNwoumAz?=
- =?us-ascii?Q?VaVegl53kINPpTTL2rHeR2GqT+hRANMWvMBHnz9Yg5AJ1qdJrBsDHGLtk5tz?=
- =?us-ascii?Q?MbuXGMc+ugfWk7HxZxcwcoIe3FeyS/6WKSL5i7clmdcULbsz7T82+ygB8Y//?=
- =?us-ascii?Q?AmQQNM3vdNAWhdEE/SKva5cU6qss3BPIMwOS7aKYsASD2DfHe1lFLHWj8gfK?=
- =?us-ascii?Q?IOxB/865i0hF2kKQiQJXLBdORpULVvTbbjJWTByryuMTgGXH5B6UQMXnxMrW?=
- =?us-ascii?Q?PWb6cyPIg4tCebZ45LZPy0zNM0wm8DhtPa7ZGMepOfAwp+K5bH8GK2Q7JrIn?=
- =?us-ascii?Q?jQs7MEOAK8iHYupNsC+gCEntRWWamRXU0dBdktM5QpaeAGtiBfdZ+KXTvFR1?=
- =?us-ascii?Q?+jF6xzcZc7D6x7/p4r8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2025 10:48:20.8877
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c4ba46d-b29e-4133-4458-08de04c5ddd1
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB53.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6203
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251003130006.41681-8-farbere@amazon.com>
+
+On Fri, Oct 03, 2025 at 12:59:54PM +0000, Eliav Farber wrote:
+> From: Linus Torvalds <torvalds@linux-foundation.org>
+> 
+> [ Upstream commit 017fa3e89187848fd056af757769c9e66ac3e93d ]
+> 
+> This simplifies the min_t() and max_t() macros by no longer making them
+> work in the context of a C constant expression.
+> 
+> That means that you can no longer use them for static initializers or
+> for array sizes in type definitions, but there were only a couple of
+> such uses, and all of them were converted (famous last words) to use
+> MIN_T/MAX_T instead.
+> 
+> Cc: David Laight <David.Laight@aculab.com>
+> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+
+Eliav, your testing infrastructure needs some work, this patch breaks
+the build on this kernel tree:
+
+In file included from ./include/linux/kernel.h:16,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/wait.h:7,
+                 from ./include/linux/wait_bit.h:8,
+                 from ./include/linux/fs.h:6,
+                 from fs/erofs/internal.h:10,
+                 from fs/erofs/zdata.h:9,
+                 from fs/erofs/zdata.c:6:
+fs/erofs/zdata.c: In function ‘z_erofs_decompress_pcluster’:
+fs/erofs/zdata.h:185:61: error: ISO C90 forbids variable length array ‘pages_onstack’ [-Werror=vla]
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |                                                             ^~~~
+./include/linux/minmax.h:49:23: note: in definition of macro ‘__cmp_once_unique’
+   49 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
+      |                       ^
+./include/linux/minmax.h:164:27: note: in expansion of macro ‘__cmp_once’
+  164 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
+      |                           ^~~~~~~~~~
+fs/erofs/zdata.h:185:9: note: in expansion of macro ‘min_t’
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |         ^~~~~
+fs/erofs/zdata.c:847:36: note: in expansion of macro ‘Z_EROFS_VMAP_ONSTACK_PAGES’
+  847 |         struct page *pages_onstack[Z_EROFS_VMAP_ONSTACK_PAGES];
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
 
-Jakub Kicinski <kuba@kernel.org> writes:
+I'll drop this whole series, please do a bit more testing before sending
+out a new version.
 
-> We get a significant number of conflicts between net and net-next
-> because of selftests Makefile changes. People tend to append new
-> test cases at the end of the Makefile when there's no clear sort
-> order. Sort all networking selftests Makefiles, use the following
-> format:
+thanks,
 
-If we see weird errors in CI, it might be because tests now run in a
-different order and previously masked missed cleanups are now exposed.
-
->
->  VAR_NAME := \
-> 	 entry1 \
-> 	 entry2 \
-> 	 entry3 \
->  # end of VAR_NAME
->
-> Some Makefiles are already pretty close to this.
->
-> Acked-by: Antonio Quartulli <antonio@openvpn.net>
-> Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> Acked-by: Allison Henderson <allison.henderson@oracle.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-
-But there's a missed nit below.
-
-> diff --git a/tools/testing/selftests/drivers/net/dsa/Makefile b/tools/testing/selftests/drivers/net/dsa/Makefile
-> index cd6817fe5be6..699e3565d735 100644
-> --- a/tools/testing/selftests/drivers/net/dsa/Makefile
-> +++ b/tools/testing/selftests/drivers/net/dsa/Makefile
-> @@ -9,11 +9,13 @@ TEST_PROGS = bridge_locked_port.sh \
-
-This should have the header converted as well:
-
-TEST_PROGS := \
-	bridge_locked_port.sh \
-
->  	local_termination.sh \
->  	no_forwarding.sh \
->  	tc_actions.sh \
-> -	test_bridge_fdb_stress.sh
-> +	test_bridge_fdb_stress.sh \
-> +# end of TEST_PROGS
->  
->  TEST_FILES := \
-> +	forwarding.config \
->  	run_net_forwarding_test.sh \
-> -	forwarding.config
-> +# end of TEST_FILES
->  
->  TEST_INCLUDES := \
->  	../../../net/forwarding/bridge_locked_port.sh \
+greg k-h
 
