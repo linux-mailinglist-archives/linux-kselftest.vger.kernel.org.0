@@ -1,73 +1,87 @@
-Return-Path: <linux-kselftest+bounces-42814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9152BC0330
-	for <lists+linux-kselftest@lfdr.de>; Tue, 07 Oct 2025 07:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 72CF3BC0E97
+	for <lists+linux-kselftest@lfdr.de>; Tue, 07 Oct 2025 11:49:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59B513BD580
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Oct 2025 05:29:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAD9B3C7B15
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Oct 2025 09:48:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 722AB1FECAB;
-	Tue,  7 Oct 2025 05:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAB42D7DE3;
+	Tue,  7 Oct 2025 09:47:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="O8AIiczh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FIvY3Czw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8771F13C914;
-	Tue,  7 Oct 2025 05:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B717646BF
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Oct 2025 09:47:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759814964; cv=none; b=qyI+HFmqtZk6U3ni/FKcjA+4KKRnJDIYBr/ArbL+yMnpvb5BBYk/+hAf+QUkeZ5ppA176vxhNPDEnI3ak3RJEKckHg5nsQNjHL6L3qAKewK+HIbnLPVIzDX/3VgwItsvEbvN1kT+tT6qMsxsTdS4YW5O+PGAKB+E+LR73ZFaLF4=
+	t=1759830451; cv=none; b=Hc9pcl3SgSlSOXE/iPBX+RClQzbX3RlTdLC+Bklzo+rSIZchl/SE3S/pFwO2bAcoIYTbE0HjnCv7IaYj5gTW8nqhSD+Mprh1Gm6e28rsyMOLWX8gAtsCYD7O/vFO7+mYEYmicdrUq5+iXOdvXgmVYUF11kRWbwZYG7cC4NAxgSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759814964; c=relaxed/simple;
-	bh=0Kl+DZ/tc3LE3RVoiRvgwtqMaQkds4Urq32hQZZN8rE=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=u6dIqLFVZCTY77EmdvzyRl6tcp7fINqbJwNBKoqAlNaF4D1jJk78nCcyAs6ceBXiG3CVArYtPoOMTCHtmqAT5HmpK0cSN9EUUnq5q2MHXUR9m7ahUIXKIowf1lPETVD8uTi5f+q+EnIFMjuGwj3NVSSw7X7cYnI0L3uVLPjK5co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=O8AIiczh; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 596NktMr007671;
-	Tue, 7 Oct 2025 05:29:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
-	content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=BAtC0w6ddeGX7BZOYk+5ICrNsjc3
-	qhw9wh5z9OzF+E8=; b=O8AIiczhDihTrZCXkGl9pdy+mSmr5WZOhwD+4Q30rXhw
-	7QE65euY5kE6CjNDka2x01kSjdUiJ4T9JBJFiTDtKLxPYCZ7B32GpLnuTcphoDya
-	WdR028sWzrJPM8XX5Yo0c22ULT/Qwr+vm5yI+/coDVHibQ60VIVGSz0gwyy4IMjX
-	JkYvVNriMpS0eh5EAqrsTzHufomZz4ceLcouPvoau82s1nyi41En3Z3mkrm8VRTs
-	1MZ9vI59AAec+XioyJd/ldYj6Z5KY4v5RPFPoZpLqpZIiDqEdhOm0qgMoGXCIkoN
-	ifMUdadMOwgYV9gpjYUKkKVR1gaRHDp+L/DpxCtXLA==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49js0scyt2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 07 Oct 2025 05:29:17 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5970pbX9031419;
-	Tue, 7 Oct 2025 05:29:16 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 49kfdk1m7a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 07 Oct 2025 05:29:16 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5975TGLH20185776
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 7 Oct 2025 05:29:16 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1B34258056;
-	Tue,  7 Oct 2025 05:29:16 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 691C45803F;
-	Tue,  7 Oct 2025 05:29:14 +0000 (GMT)
-Received: from [9.98.109.65] (unknown [9.98.109.65])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  7 Oct 2025 05:29:14 +0000 (GMT)
-Message-ID: <88f1df7e-8347-45f7-a2a1-e321e72e4009@linux.ibm.com>
-Date: Tue, 7 Oct 2025 10:59:12 +0530
+	s=arc-20240116; t=1759830451; c=relaxed/simple;
+	bh=SjicVC6G1miKTiX+KBEYiF7UME/0QKcEwbVeDB1svNU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mf1+AmtrUblmv/b8pg6ZD9B8U+3BLB/tFQc7932nlzI31eC4amfQw7Qb0MByeoQkFnwKBXI3E7lOfu52sOiKqoWC08ce8l/7gXV5EKqfPB/T1nROmLpftwbxU5jHgtZg7bixDIShj33T72K1c/x4wHtVK7pxJY5qcDjyyFM1t9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FIvY3Czw; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1759830447;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VbihWzaC35GhBeQwi8LRgNFDsCsoNSTKHzcqQbFMT10=;
+	b=FIvY3Czwz2Q6WeFQ2CLe9YEsT9Rb+1peRAQQ403i+gcL54LUeR0sXya2pvbUBDDzYs121C
+	sfg65KnCtaQR8QsLd+hCTfR+ZKyNnKuSwZ4pfViiEoQdxAaaN7Rl0my72tSy02YaWR4iTe
+	eaahdBcCy5xKdXzaBOvg4VsmEYlhn5w=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-589-ZP3sp9QHM5qmYxCAlZod7Q-1; Tue, 07 Oct 2025 05:47:26 -0400
+X-MC-Unique: ZP3sp9QHM5qmYxCAlZod7Q-1
+X-Mimecast-MFC-AGG-ID: ZP3sp9QHM5qmYxCAlZod7Q_1759830445
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-46e2d845ebeso32354235e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Oct 2025 02:47:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759830445; x=1760435245;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VbihWzaC35GhBeQwi8LRgNFDsCsoNSTKHzcqQbFMT10=;
+        b=Y8XiqGbvELVcbrNXL60Os1zyAGGeP08eWgpHRD3KsBoxduOeEDUAUPwddSp6urHXel
+         Xmz3trcrFG0dLd2EKMf4MGG8aJzjRS4Soqinsk8OB9cqbUXXV79OA2k4RpMLIOH/quhK
+         mY8uhAj/2pAXRzYKOVnMcnlNSffqZ8yCyl+MmQy06FzW+Y6k4dXdAkROj+Ar0RGCcVM9
+         ZsHe7CpIavxhmgwDimsILLaB+A6cnWm5ozbel+2xfZCaAmsC1mD2/fDvE1hEoloAcMaw
+         MbO9WlJysMIwZQcDlyJNIgNqTj4KGjlacP5ZQo8VrbYKPpTRQ2CkR1RQiVzscJBCLdUG
+         P0GA==
+X-Forwarded-Encrypted: i=1; AJvYcCWCPPyduzL4q99Y+oFjKEUjhFdygAGomcGibU6lnmke144OqkL/mwiNXvMuc/PR1Tpyr0B+giluR+aI56+ZYo0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJi+wa/OpCfyXb2XPcLE+fCp8NacH7TnKupVisPPJnaj4AfCrp
+	umfUQICitMZHS8ZD4C86K8MCV312vajdSNAtioq+QkAHAaG1b/GoSY/ikpXAzbxshUC/Ba7NJp2
+	3xC3BHJDBhLrUU5O/jDnTiDU2eK7AAGmu569NnPcCN5F9IRiIr3mKDeS1Pnqq2+JsTQE2dQ==
+X-Gm-Gg: ASbGncvq/VsxJWmUSMr4BgnZLObsaGAHh857sC+mOekFw5fr892Z/54kpOVPgAQ3SK/
+	PfJ9ry0SpX51Wjlaw97FDn/7MmRv0ZOrIwr1/7yNXIim6CJM+cMBJCcWvk2utMTkCGbfwqi/qC1
+	nQ+vS/7QZRX6CKMPJdWz71Yx4DUN3izfzXOpwkma6aqeSnkh9pu8CX4JYpFZPOLu9v/SHEJGta9
+	GvIA0su8ffEEjB6zZWP6hL4cW/1l41W6O8m4XPb6aNyfjQqNRbK5VQAPICbZi8UsRaJEscvriz/
+	7JvdRCEaOpXtvP7DXUozWWFPAVy9yESLPNUM0qOr1gahL2/2HidSo5wMGEL7J0Zk9UywA2kIM0/
+	4inGhs+VtVEw6Vu1aqw==
+X-Received: by 2002:a05:600c:c4a8:b0:46e:4372:5395 with SMTP id 5b1f17b1804b1-46e711525b0mr101139375e9.25.1759830445195;
+        Tue, 07 Oct 2025 02:47:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE0qstkQLD4f3rHHu9sfxKJO5+olk6dYA8Hcq/FgDh0sJaS5xre6yM8TYc5jsNMZS6c+9ocfg==
+X-Received: by 2002:a05:600c:c4a8:b0:46e:4372:5395 with SMTP id 5b1f17b1804b1-46e711525b0mr101139195e9.25.1759830444746;
+        Tue, 07 Oct 2025 02:47:24 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e619c3a58sm295658455e9.6.2025.10.07.02.47.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Oct 2025 02:47:24 -0700 (PDT)
+Message-ID: <e6764450-b0f8-4f50-b761-6321dfe2ad71@redhat.com>
+Date: Tue, 7 Oct 2025 11:47:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,290 +89,275 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: LKML <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: [linux-next20251003] tmp2 selftests resulting in Kernel OOPs
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=EqnfbCcA c=1 sm=1 tr=0 ts=68e4a52d cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VnNF1IyMAAAA:8 a=SFsY72qJKfksyYy68MgA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: ebr90XJ14DZht262LQfZO3Y8My_ywbwG
-X-Proofpoint-ORIG-GUID: ebr90XJ14DZht262LQfZO3Y8My_ywbwG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDAzMDIwMSBTYWx0ZWRfX9ui6U7Rw0QEJ
- YWtcihaCnZASBFRY756Ziy6swXBQZAxT9yha3QCyfbc8rwIz4kfT1OF8iQs/92kLk+tuLf8Pq8V
- LVGWlPKaMUivkINIXIg7QMF6kRcy40+GQ0rzKQlNCie52LTCP89qwMiVI5XwIknlKPyEWDoYWKC
- P6iht8pyVoHirkYqBLafJLem7nDQ3T7IjXb8sA2xjveHxDjaYKX70GYX4eTT38Te5WcA7qq+DIF
- SFn9o13d+0cE6wS4SuBJdMENlKC4K6ZUzQsws1qC+e+3IVYc7Yk16qOLWB2v67esI9r2So3iw8w
- ugljuLMecuk116SA+pPdTwMB/upL43q50m97SuO6OAFxpwwmjrb618/J22OfG4J7EEWKkGzZR5n
- Jy3FRAlJYF/8MwmW9K0MKyXGsZlPmA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-06_07,2025-10-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 malwarescore=0 impostorscore=0 adultscore=0 phishscore=0
- priorityscore=1501 bulkscore=0 clxscore=1011 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2510030201
+Subject: Re: [PATCH net v7 4/4] selftest: netcons: add test for netconsole
+ over bonded interfaces
+To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Simon Horman <horms@kernel.org>, david decotigny <decot@googlers.com>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de,
+ calvin@wbinvd.org, kernel-team@meta.com, jv@jvosburgh.net
+References: <20251003-netconsole_torture-v7-0-aa92fcce62a9@debian.org>
+ <20251003-netconsole_torture-v7-4-aa92fcce62a9@debian.org>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20251003-netconsole_torture-v7-4-aa92fcce62a9@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Greetings!!!
+On 10/3/25 1:57 PM, Breno Leitao wrote:
+> +# Test #1 : Create an bonding interface and attach netpoll into
+> +# the bonding interface. Netconsole/netpoll should work on
+> +# the bonding interface.
+> +send_netcons_msg_through_bond_iface
+> +echo "test #1: netpoll on bonding interface worked. Test passed" >&2
+> +
+> +# Test #2: Attach netpoll to an enslaved interface
+> +# Try to attach netpoll to an enslaved sub-interface (while still being part of
+> +# a bonding interface), which shouldn't be allowed
+> +enable_netpoll_on_enslaved_iface
+> +echo "test #2: netpoll correctly rejected enslaved interface (expected behavior). Test passed." >&2
+> +
+> +# Test #3: Unplug the sub-interface from bond and enable netconsole
+> +# Detach the interface from a bonding interface and attach netpoll again
+> +delete_bond_and_reenable_target
+> +echo "test #3: Able to attach to an unbound interface. Test passed." >&2
+> +
+> +# Test #4: Enslave a sub-interface that had netconsole enabled
+> +# Try to enslave an interface that has netconsole/netpoll enabled.
+> +# Previous test has netconsole enabled in BOND_TX1_SLAVE_IF, try to enslave it
+> +enslave_netcons_enabled_iface
+> +echo "test #4: Enslaving an interface with netpoll attached. Test passed." >&2
+> +
+> +# Test #5: Enslave a sub-interface to a bonding interface
+> +# Enslave an interface to a bond interface that has netpoll attached
+> +# At this stage, BOND_TX_MAIN_IF is created and BOND_TX1_SLAVE_IF is part of
+> +# it. Netconsole is currently disabled
+> +enslave_iface_to_bond
+> +echo "test #5: Enslaving an interface to bond+netpoll. Test passed." >&2
 
+I think this is missing the negative/fail to add test case asked by
+Jakub. AFAICS you should be able to trigger such case trying to add a
+veth device to the netpoll enabled bond (since the latter carries the
+IFF_DISABLE_NETPOLL priv_flag).
 
-IBM CI has reported a kernel OOPs while running TPM2selftests on IBM 
-Power11 system with linux-next20251002 kernel.
+> +
+> +cleanup_bond
+> +trap - EXIT
+> +exit "${EXIT_STATUS}"
+> diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+> index 9b5ef8074440c..30e4f357b47e9 100644
+> --- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+> +++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+> @@ -28,17 +28,24 @@ NETCONS_PATH="${NETCONS_CONFIGFS}"/"${TARGET}"
+>  # NAMESPACE will be populated by setup_ns with a random value
+>  NAMESPACE=""
+>  
+> -# IDs for netdevsim
+> +# IDs for netdevsim. We either use NSIM_DEV_{1,2}_ID for standard test
+> +# or NSIM_BOND_{T,R}X_{1,2} for the bonding tests. Not both at the
+> +# same time.
+>  NSIM_DEV_1_ID=$((256 + RANDOM % 256))
+>  NSIM_DEV_2_ID=$((512 + RANDOM % 256))
+> +NSIM_BOND_TX_1=$((768 + RANDOM % 256))
+> +NSIM_BOND_TX_2=$((1024 + RANDOM % 256))
+> +NSIM_BOND_RX_1=$((1280 + RANDOM % 256))
+> +NSIM_BOND_RX_2=$((1536 + RANDOM % 256))
+>  NSIM_DEV_SYS_NEW="/sys/bus/netdevsim/new_device"
+> +NSIM_DEV_SYS_LINK="/sys/bus/netdevsim/link_device"
+> +NSIM_DEV_SYS_DEL="/sys/bus/netdevsim/del_device"
+>  
+>  # Used to create and delete namespaces
+>  source "${LIBDIR}"/../../../../net/lib.sh
+>  
+>  # Create netdevsim interfaces
+>  create_ifaces() {
+> -
+>  	echo "$NSIM_DEV_2_ID" > "$NSIM_DEV_SYS_NEW"
+>  	echo "$NSIM_DEV_1_ID" > "$NSIM_DEV_SYS_NEW"
+>  	udevadm settle 2> /dev/null || true
+> @@ -54,7 +61,6 @@ create_ifaces() {
+>  }
+>  
+>  link_ifaces() {
+> -	local NSIM_DEV_SYS_LINK="/sys/bus/netdevsim/link_device"
+>  	local SRCIF_IFIDX=$(cat /sys/class/net/"$SRCIF"/ifindex)
+>  	local DSTIF_IFIDX=$(cat /sys/class/net/"$DSTIF"/ifindex)
+>  
+> @@ -96,6 +102,33 @@ function select_ipv4_or_ipv6()
+>  	fi
+>  }
+>  
+> +# Create 4 netdevsim interfaces. Two of them will be bound to TX bonding iface
+> +# and the other two will be bond to the RX interface (on the other namespace)
+> +function create_ifaces_bond() {
+> +	echo "$NSIM_BOND_TX_1" > "$NSIM_DEV_SYS_NEW"
+> +	echo "$NSIM_BOND_TX_2" > "$NSIM_DEV_SYS_NEW"
+> +	echo "$NSIM_BOND_RX_1" > "$NSIM_DEV_SYS_NEW"
+> +	echo "$NSIM_BOND_RX_2" > "$NSIM_DEV_SYS_NEW"
+> +	udevadm settle 2> /dev/null || true
+> +
+> +	local BOND_TX1=/sys/bus/netdevsim/devices/netdevsim"$NSIM_BOND_TX_1"
+> +	local BOND_TX2=/sys/bus/netdevsim/devices/netdevsim"$NSIM_BOND_TX_2"
+> +	local BOND_RX1=/sys/bus/netdevsim/devices/netdevsim"$NSIM_BOND_RX_1"
+> +	local BOND_RX2=/sys/bus/netdevsim/devices/netdevsim"$NSIM_BOND_RX_2"
 
+Note that with the create_netdevsim() helper from
+tools/testing/selftests/net/lib.sh you could create the netdevsim device
+directly in the target namespace and avoid some duplicate code.
 
-Test Case:
+It would be probably safer to create both rx and tx devices in child
+namespaces.
 
-make run_tests
-TAP version 13
-1..3
-# timeout set to 600
-# selftests: tpm2: test_smoke.sh
-# test_read_partial_overwrite (tpm2_tests.SmokeTest) ... ok
-# test_read_partial_resp (tpm2_tests.SmokeTest) ... ok
-# test_seal_with_auth (tpm2_tests.SmokeTest) ... ok
-# test_seal_with_policy (tpm2_tests.SmokeTest) ... ok
-# test_seal_with_too_long_auth (tpm2_tests.SmokeTest) ... ok
-# test_send_two_cmds (tpm2_tests.SmokeTest) ... ok
-# test_too_short_cmd (tpm2_tests.SmokeTest) ... ok
-# test_unseal_with_wrong_auth (tpm2_tests.SmokeTest) ... ok
-# test_unseal_with_wrong_policy (tpm2_tests.SmokeTest) ... ERROR
-#
-# ======================================================================
-# ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
-# -----------------------------------------------------
+> +
+> +	# TX
+> +	BOND_TX1_SLAVE_IF=$(find "$BOND_TX1"/net -maxdepth 1 -type d ! \
+> +		-path "$BOND_TX1"/net -exec basename {} \; | grep -v net)
+> +	BOND_TX2_SLAVE_IF=$(find "$BOND_TX2"/net -maxdepth 1 -type d ! \
+> +		-path "$BOND_TX2"/net -exec basename {} \; | grep -v net)
+> +
+> +	# RX
+> +	BOND_RX1_SLAVE_IF=$(find "$BOND_RX1"/net -maxdepth 1 -type d ! \
+> +		-path "$BOND_RX1"/net -exec basename {} \; | grep -v net)
+> +	BOND_RX2_SLAVE_IF=$(find "$BOND_RX2"/net -maxdepth 1 -type d ! \
+> +		-path "$BOND_RX2"/net -exec basename {} \; | grep -v net)
+> +}
+> +
+>  function set_network() {
+>  	local IP_VERSION=${1:-"ipv4"}
+>  
+> @@ -180,8 +213,6 @@ function disable_release_append() {
+>  }
+>  
+>  function do_cleanup() {
+> -	local NSIM_DEV_SYS_DEL="/sys/bus/netdevsim/del_device"
+> -
+>  	# Delete netdevsim devices
+>  	echo "$NSIM_DEV_2_ID" > "$NSIM_DEV_SYS_DEL"
+>  	echo "$NSIM_DEV_1_ID" > "$NSIM_DEV_SYS_DEL"
+> @@ -193,14 +224,26 @@ function do_cleanup() {
+>  	echo "${DEFAULT_PRINTK_VALUES}" > /proc/sys/kernel/printk
+>  }
+>  
+> -function cleanup() {
+> +function cleanup_netcons() {
+>  	# delete netconsole dynamic reconfiguration
+> -	echo 0 > "${NETCONS_PATH}"/enabled
+> +	# do not fail if the target is already disabled
+> +	if [[ ! -d "${NETCONS_PATH}" ]]
+> +	then
+> +		# in some cases this is called before netcons path is created
+> +		return
+> +	fi
+> +	if [[ $(cat "${NETCONS_PATH}"/enabled) != 0 ]]
+> +	then
+> +		echo 0 > "${NETCONS_PATH}"/enabled || true
+> +	fi
+>  	# Remove all the keys that got created during the selftest
+>  	find "${NETCONS_PATH}/userdata/" -mindepth 1 -type d -delete
+>  	# Remove the configfs entry
+>  	rmdir "${NETCONS_PATH}"
+> +}
+>  
+> +function cleanup() {
+> +	cleanup_netcons
+>  	do_cleanup
+>  }
+>  
+> @@ -377,3 +420,104 @@ function wait_for_port() {
+>  	# more frequently on IPv6
+>  	sleep 1
+>  }
+> +
+> +# netdevsim link BOND_TX to BOND_RX interfaces
+> +function link_ifaces_bond() {
+> +	local BOND_TX1_SLAVE_IFIDX
+> +	local BOND_TX2_SLAVE_IFIDX
+> +	local BOND_RX1_SLAVE_IFIDX
+> +	local BOND_RX2_SLAVE_IFIDX
+> +
+> +	BOND_TX1_SLAVE_IFIDX=$(cat /sys/class/net/"$BOND_TX1_SLAVE_IF"/ifindex)
+> +	BOND_TX2_SLAVE_IFIDX=$(cat /sys/class/net/"$BOND_TX2_SLAVE_IF"/ifindex)
+> +	BOND_RX1_SLAVE_IFIDX=$(cat /sys/class/net/"$BOND_RX1_SLAVE_IF"/ifindex)
+> +	BOND_RX2_SLAVE_IFIDX=$(cat /sys/class/net/"$BOND_RX2_SLAVE_IF"/ifindex)
+> +
+> +	exec {NAMESPACE_FD}</var/run/netns/"${NAMESPACE}"
+> +	exec {INITNS_FD}</proc/self/ns/net
+> +
+> +	# Bind the dst interfaces to namespace
+> +	ip link set "${BOND_RX1_SLAVE_IF}" netns "${NAMESPACE}"
+> +	ip link set "${BOND_RX2_SLAVE_IF}" netns "${NAMESPACE}"
+> +
+> +	# Linking TX ifaces to the RX ones (on the other namespace)
+> +	echo "${INITNS_FD}:$BOND_TX1_SLAVE_IFIDX $NAMESPACE_FD:$BOND_RX1_SLAVE_IFIDX"  \
+> +		> "$NSIM_DEV_SYS_LINK"
+> +	echo "${INITNS_FD}:$BOND_TX2_SLAVE_IFIDX $NAMESPACE_FD:$BOND_RX2_SLAVE_IFIDX"  \
+> +		> "$NSIM_DEV_SYS_LINK"
+> +}
+> +
+> +# Create "bond_tx_XX" and "bond_rx_XX" interfaces, and set DSTIF and SRCIF with
+> +# the bonding interfaces
+> +function setup_bonding_ifaces() {
+> +	local RAND=$(( RANDOM % 100 ))
+> +	BOND_TX_MAIN_IF="bond_tx_$RAND"
+> +	BOND_RX_MAIN_IF="bond_rx_$RAND"
+> +
+> +	if ! ip link add "${BOND_TX_MAIN_IF}" type bond mode balance-rr
+> +	then
+> +		echo "Failed to create bond TX interface. Is CONFIG_BONDING set?" >&2
+> +		# only clean nsim ifaces and namespace. Nothing else has been
+> +		# initialized
+> +		cleanup_bond_nsim
+> +		trap - EXIT
+> +		exit "${ksft_skip}"
+> +	fi
+> +	ip link set "${BOND_TX1_SLAVE_IF}" down
+> +	ip link set "${BOND_TX2_SLAVE_IF}" down
+> +
+> +	ip link set "${BOND_TX1_SLAVE_IF}" master "${BOND_TX_MAIN_IF}"
+> +	ip link set "${BOND_TX2_SLAVE_IF}" master "${BOND_TX_MAIN_IF}"
+> +	ip link set "${BOND_TX_MAIN_IF}" up
+> +
+> +	# now create the RX bonding iface
+> +	ip netns exec "${NAMESPACE}" \
+> +		ip link add "${BOND_RX_MAIN_IF}" type bond mode balance-rr
 
+Minor nit:
 
-Traces:
+	ip -n "${NAMESPACE}" link ...
 
-
-[  452.604333] BUG: KASAN: slab-use-after-free in tpmrm_release+0x78/0xa8
-[  452.604345] Read of size 8 at addr c00000001c650000 by task python3/1856
-[  452.604353]
-[  452.604358] CPU: 24 UID: 0 PID: 1856 Comm: python3 Kdump: loaded Not 
-tainted 6.17.0-next-20251003 #1 VOLUNTARY
-[  452.604364] Hardware name: IBM,9080-HEX Power11 (architected) 
-0x820200 0xf000007 of:IBM,FW1110.01 (NH1110_069) hv:phyp pSeries
-[  452.604368] Call Trace:
-[  452.604370] [c0000000c1867840] [c00000000187ea4c] 
-dump_stack_lvl+0x84/0xe8 (unreliable)
-[  452.604380] [c0000000c1867870] [c000000000803754] 
-print_address_description.constprop.0+0x11c/0x56c
-[  452.604388] [c0000000c1867910] [c000000000803c84] print_report+0xe0/0x358
-[  452.604394] [c0000000c18679e0] [c000000000804124] 
-kasan_report+0x128/0x1f4
-[  452.604400] [c0000000c1867af0] [c0000000008062b4] __asan_load8+0xa8/0xe0
-[  452.604406] [c0000000c1867b10] [c000000000f2ec18] tpmrm_release+0x78/0xa8
-[  452.604412] [c0000000c1867b40] [c0000000008b6a2c] __fput+0x21c/0x60c
-[  452.604417] [c0000000c1867bc0] [c0000000008ada70] sys_close+0x74/0xd0
-[  452.604424] [c0000000c1867bf0] [c000000000039270] 
-system_call_exception+0x1e0/0x460
-[  452.604431] [c0000000c1867e50] [c00000000000d05c] 
-system_call_vectored_common+0x15c/0x2ec
-[  452.604438] ---- interrupt: 3000 at 0x7fffb7534ab4
-[  452.604443] NIP:  00007fffb7534ab4 LR: 00007fffb7534ab4 CTR: 
-0000000000000000
-[  452.604446] REGS: c0000000c1867e80 TRAP: 3000   Not tainted 
-(6.17.0-next-20251003)
-[  452.604449] MSR:  800000000280f033 
-<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 44284422  XER: 00000000
-[  452.604466] IRQMASK: 0
-[  452.604466] GPR00: 0000000000000006 00007ffff65d76b0 00007fffb7c17700 
-0000000000000006
-[  452.604466] GPR04: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000004
-[  452.604466] GPR08: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000000
-[  452.604466] GPR12: 0000000000000000 00007fffb7e6b8e0 00000000000000a1 
-00007fffb67acec0
-[  452.604466] GPR16: 0000000164032ad0 00007fffb67aceb0 00007fffb76f6a90 
-0000000000000000
-[  452.604466] GPR20: 00007fffb6f21850 0000000000000000 00007fffb71062c0 
-0000000164034490
-[  452.604466] GPR24: 00007fffb6f2fea0 00007fffb67acea8 0000000164032b18 
-00007fffb7c45b32
-[  452.604466] GPR28: 00007fffb7c678e0 00007fffb67aceb8 0000000000000006 
-0000000164034490
-[  452.604510] NIP [00007fffb7534ab4] 0x7fffb7534ab4
-[  452.604513] LR [00007fffb7534ab4] 0x7fffb7534ab4
-[  452.604516] ---- interrupt: 3000
-[  452.604518]
-[  452.604601] Allocated by task 1856:
-[  452.604607]  kasan_save_stack+0x34/0x64
-[  452.604614]  kasan_save_track+0x2c/0x50
-[  452.604621]  kasan_save_alloc_info+0x58/0x74
-[  452.604628]  __kasan_kmalloc+0x12c/0x168
-[  452.604635]  __kmalloc_cache_noprof+0x1d8/0x71c
-[  452.604643]  tpmrm_open+0x88/0x168
-[  452.604649]  chrdev_open+0x1f4/0x484
-[  452.604656]  do_dentry_open+0x578/0x9cc
-[  452.604663]  vfs_open+0x68/0x23c
-[  452.604670]  do_open+0x514/0x74c
-[  452.604676]  path_openat+0x16c/0x380
-[  452.604682]  do_filp_open+0x104/0x230
-[  452.604689]  do_sys_openat2+0xb8/0x154
-[  452.604696]  sys_openat+0xcc/0x130
-[  452.604703]  system_call_exception+0x1e0/0x460
-[  452.604710]  system_call_vectored_common+0x15c/0x2ec
-[  452.604718]
-[  452.604722] Freed by task 1856:
-[  452.604726]  kasan_save_stack+0x34/0x64
-[  452.604733]  kasan_save_track+0x2c/0x50
-[  452.604739]  __kasan_save_free_info+0x64/0x110
-[  452.604747]  __kasan_slab_free+0xb0/0x10c
-[  452.604753]  kfree+0x220/0x624
-[  452.604760]  tpmrm_release+0x6c/0xa8
-[  452.604766]  __fput+0x21c/0x60c
-[  452.604772]  sys_close+0x74/0xd0
-[  452.604779]  system_call_exception+0x1e0/0x460
-[  452.604786]  system_call_vectored_common+0x15c/0x2ec
-[  452.604794]
-[  452.604797] The buggy address belongs to the object at c00000001c650000
-[  452.604797]  which belongs to the cache kmalloc-8k of size 8192
-[  452.604806] The buggy address is located 0 bytes inside of
-[  452.604806]  freed 8192-byte region [c00000001c650000, c00000001c652000)
-[  452.604815]
-[  452.604818] The buggy address belongs to the physical page:
-[  452.604824] page: refcount:0 mapcount:0 mapping:0000000000000000 
-index:0xc00000001c644000 pfn:0x1c60
-[  452.604833] head: order:3 mapcount:0 entire_mapcount:0 
-nr_pages_mapped:0 pincount:0
-[  452.604840] flags: 
-0x3ffffe00000040(head|node=0|zone=0|lastcpupid=0x1fffff)
-[  452.604849] page_type: f5(slab)
-[  452.604856] raw: 003ffffe00000040 c000000007012300 5deadbeef0000122 
-0000000000000000
-[  452.604864] raw: c00000001c644000 000000008020001e 00000000f5000000 
-0000000000000000
-[  452.604872] head: 003ffffe00000040 c000000007012300 5deadbeef0000122 
-0000000000000000
-[  452.604879] head: c00000001c644000 000000008020001e 00000000f5000000 
-0000000000000000
-[  452.604887] head: 003ffffe00000003 c00c000000071801 00000000ffffffff 
-00000000ffffffff
-[  452.604894] head: ffffffffffffffff 0000000000000000 00000000ffffffff 
-0000000000000008
-[  452.604900] page dumped because: kasan: bad access detected
-[  452.604905]
-[  452.604908] Memory state around the buggy address:
-[  452.604914]  c00000001c64ff00: fc fc fc fc fc fc fc fc fc fc fc fc fc 
-fc fc fc
-[  452.604920]  c00000001c64ff80: fc fc fc fc fc fc fc fc fc fc fc fc fc 
-fc fc fc
-[  452.604927] >c00000001c650000: fa fb fb fb fb fb fb fb fb fb fb fb fb 
-fb fb fb
-[  452.604933]                    ^
-[  452.604937]  c00000001c650080: fb fb fb fb fb fb fb fb fb fb fb fb fb 
-fb fb fb
-[  452.604944]  c00000001c650100: fb fb fb fb fb fb fb fb fb fb fb fb fb 
-fb fb fb
-[  452.604950] 
-==================================================================
-[  452.604955] Disabling lock debugging due to kernel taint
-[  452.604961] Kernel attempted to read user page (770) - exploit 
-attempt? (uid: 0)
-[  452.604969] BUG: Kernel NULL pointer dereference on read at 0x00000770
-[  452.604975] Faulting instruction address: 0xc0000000002b2e0c
-[  452.604982] Oops: Kernel access of bad area, sig: 11 [#1]
-[  452.604987] LE PAGE_SIZE=64K MMU=Radix  SMP NR_CPUS=8192 NUMA pSeries
-[  452.604996] Modules linked in: nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 
-nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct 
-nft_chain_nat nf_nat bonding nf_conntrack tls nf_defrag_ipv6 
-nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink sunrpc pseries_rng 
-vmx_crypto fuse ext4 crc16 mbcache jbd2 sd_mod sg ibmvscsi ibmveth 
-scsi_transport_srp pseries_wdt
-[  452.605073] CPU: 24 UID: 0 PID: 1856 Comm: python3 Kdump: loaded 
-Tainted: G    B               6.17.0-next-20251003 #1 VOLUNTARY
-[  452.605084] Tainted: [B]=BAD_PAGE
-[  452.605089] Hardware name: IBM,9080-HEX Power11 (architected) 
-0x820200 0xf000007 of:IBM,FW1110.01 (NH1110_069) hv:phyp pSeries
-[  452.605096] NIP:  c0000000002b2e0c LR: c0000000002b2e08 CTR: 
-0000000000000000
-[  452.605103] REGS: c0000000c1867820 TRAP: 0300   Tainted: G B          
-       (6.17.0-next-20251003)
-[  452.605110] MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 
-28284420  XER: 0000000d
-[  452.605132] CFAR: c000000000807920 DAR: 0000000000000770 DSISR: 
-40000000 IRQMASK: 0
-[  452.605132] GPR00: c0000000002b2e08 c0000000c1867ac0 c00000000234a500 
-0000000000000001
-[  452.605132] GPR04: 0000000000000008 0000000000000000 c0000000002b2e08 
-0000000000000001
-[  452.605132] GPR08: 0000000000000020 0000000000000001 0000000000000001 
-a80e000000000000
-[  452.605132] GPR12: c00e0000009b1c8c c000000d0ddeb700 0000000000000000 
-0000000000000000
-[  452.605132] GPR16: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000000
-[  452.605132] GPR20: 0000000000000008 0000000000000000 c000000008202f00 
-c00000007b9ff620
-[  452.605132] GPR24: c00000008a76cb20 c00000008a76cb40 c00000008a76cb08 
-c000000002201e80
-[  452.605132] GPR28: c000000061569248 0000000000000770 c00000008a76cb00 
-0000000000000768
-[  452.605227] NIP [c0000000002b2e0c] up_read+0x50/0x17c
-[  452.605237] LR [c0000000002b2e08] up_read+0x4c/0x17c
-[  452.605245] Call Trace:
-[  452.605249] [c0000000c1867ac0] [c0000000002b2e08] up_read+0x4c/0x17c 
-(unreliable)
-[  452.605261] [c0000000c1867b10] [c000000000f2ec28] tpmrm_release+0x88/0xa8
-[  452.605271] [c0000000c1867b40] [c0000000008b6a2c] __fput+0x21c/0x60c
-[  452.605280] [c0000000c1867bc0] [c0000000008ada70] sys_close+0x74/0xd0
-[  452.605291] [c0000000c1867bf0] [c000000000039270] 
-system_call_exception+0x1e0/0x460
-[  452.605301] [c0000000c1867e50] [c00000000000d05c] 
-system_call_vectored_common+0x15c/0x2ec
-[  452.605312] ---- interrupt: 3000 at 0x7fffb7534ab4
-[  452.605319] NIP:  00007fffb7534ab4 LR: 00007fffb7534ab4 CTR: 
-0000000000000000
-[  452.605326] REGS: c0000000c1867e80 TRAP: 3000   Tainted: G B          
-       (6.17.0-next-20251003)
-[  452.605333] MSR:  800000000280f033 
-<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 44284422  XER: 00000000
-[  452.605362] IRQMASK: 0
-[  452.605362] GPR00: 0000000000000006 00007ffff65d76b0 00007fffb7c17700 
-0000000000000006
-[  452.605362] GPR04: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000004
-[  452.605362] GPR08: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000000
-[  452.605362] GPR12: 0000000000000000 00007fffb7e6b8e0 00000000000000a1 
-00007fffb67acec0
-[  452.605362] GPR16: 0000000164032ad0 00007fffb67aceb0 00007fffb76f6a90 
-0000000000000000
-[  452.605362] GPR20: 00007fffb6f21850 0000000000000000 00007fffb71062c0 
-0000000164034490
-[  452.605362] GPR24: 00007fffb6f2fea0 00007fffb67acea8 0000000164032b18 
-00007fffb7c45b32
-[  452.605362] GPR28: 00007fffb7c678e0 00007fffb67aceb8 0000000000000006 
-0000000164034490
-[  452.605450] NIP [00007fffb7534ab4] 0x7fffb7534ab4
-[  452.605456] LR [00007fffb7534ab4] 0x7fffb7534ab4
-[  452.605462] ---- interrupt: 3000
-[  452.605467] Code: fbc1fff0 7c7f1b78 f8010010 f821ffb1 e92d0c78 
-f9210028 39200000 3ba30008 38800008 7fa3eb78 48554af5 60000000 
-<ebdf0008> eb8d0908 7bc90764 fbc10020
-[  452.605501] ---[ end trace 0000000000000000 ]---
-[  452.613685] pstore: backend (nvram) writing error (-1)
-[  452.613691]
+will yield the same result with a little less wording.
 
 
+> +	ip netns exec "${NAMESPACE}" \
+> +		ip link set "${BOND_RX1_SLAVE_IF}" down
+> +	ip netns exec "${NAMESPACE}" \
+> +		ip link set "${BOND_RX2_SLAVE_IF}" down
+> +
+> +	ip netns exec "${NAMESPACE}" \
+> +		ip link set "${BOND_RX1_SLAVE_IF}" master "${BOND_RX_MAIN_IF}"
+> +	ip netns exec "${NAMESPACE}" \
+> +		ip link set "${BOND_RX2_SLAVE_IF}" master "${BOND_RX_MAIN_IF}"
+> +	ip netns exec "${NAMESPACE}" \
+> +		ip link set "${BOND_RX_MAIN_IF}" up
+> +	ip netns exec "${NAMESPACE}" \
+> +		ip link set "${BOND_RX1_SLAVE_IF}" up
+> +	ip netns exec "${NAMESPACE}" \
+> +		ip link set "${BOND_RX2_SLAVE_IF}" up
+> +}
+> +
+> +# Clean up netdevsim ifaces created for bonding test
+> +function cleanup_bond_nsim() {
+> +	echo "$NSIM_BOND_TX_1" > "$NSIM_DEV_SYS_DEL"
+> +	echo "$NSIM_BOND_TX_2" > "$NSIM_DEV_SYS_DEL"
+> +	echo "$NSIM_BOND_RX_1" > "$NSIM_DEV_SYS_DEL"
+> +	echo "$NSIM_BOND_RX_2" > "$NSIM_DEV_SYS_DEL"
+> +	cleanup_all_ns
 
-If you happen to fix this, please add below tag.
+If all devices are created in child netns, you will not need explicit
+per device cleanup.
 
-
-Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-
-
-Regards,
-
-Venkat.
+/P
 
 
