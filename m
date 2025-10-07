@@ -1,166 +1,125 @@
-Return-Path: <linux-kselftest+bounces-42854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42855-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44C19BC2BEC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 07 Oct 2025 23:28:42 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ADBEBC2EFD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 08 Oct 2025 01:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 35DDD4E1327
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Oct 2025 21:28:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1DFFD4E9B49
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Oct 2025 23:27:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7F12475F7;
-	Tue,  7 Oct 2025 21:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF1B262FCD;
+	Tue,  7 Oct 2025 23:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HKdhchtk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WTGQlyro"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC0B23C513
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Oct 2025 21:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BB225B1D2;
+	Tue,  7 Oct 2025 23:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759872515; cv=none; b=Kphfie6TwrcDAlVFHzFjly3DB+GiQW6Dhrd9vTwp+4KHIWNzs4GImH18GOHN1l+xXgDC+8Sq0SmVRVG+O1jlWLjwqgF98UeUhZ9WJCzsPPvpczu3iOiyOnurlTNmEfnK7V6lvo+0nbaCQcxisEL1/dAccFMn7Ofh8P9praXOu2E=
+	t=1759879629; cv=none; b=dRFKd4flYSqhuRE95D2Oj8m4cl2TwCemFMWeyDfsPuoCDkbmNI3x26R2myUzH3KsCKwDCu0Ns7YScuYk+K0JCHMlDzY2RSWfKBPzqqOf0MuL1vB0bENBe31O23mw1iklmInqE8ocGqDX2xas8TBsV+b1iMcD69wmAn7ENwAJLcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759872515; c=relaxed/simple;
-	bh=ybSy4Tv5iFVM78XbJXlpVrFeVjI9pBLjjyVsYoM1g0M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ef+qfCywAtf5CMBfKR1VhD7aZRxGRE/BI2/b+nLc5WwDAeMVWTJrnvoAnRd1pmAwb50cZeWtkZooBGF1bEo7fWutoSj3M48TwxKnDp+P4yLQMvG5FecMvLcSV6Ntpe77+QbwoeGmmtJ1XaX1jl3crkIW8uTkDHtdp2MI/11ucf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HKdhchtk; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-42e2c336adcso23805285ab.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Oct 2025 14:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1759872511; x=1760477311; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZRsJlXyUS+y130OtDxYwG/Abbe7/BVe6s/xFEvukloE=;
-        b=HKdhchtkR+FWMaUfn5zONBMeu+VhWhi53TMZrA7/83MebU3c9P9bgS8Ah8EHmrRws6
-         /eTWHI5acSctuzM7qgvtsyMd1CQP+4ltox1zFD9rosk0ophxZZ2O6OCsv15WKDM8GaQF
-         X7LYkvxTND08APB3nzA0XeF/bZ/4MhU53ga4I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759872511; x=1760477311;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZRsJlXyUS+y130OtDxYwG/Abbe7/BVe6s/xFEvukloE=;
-        b=LFbmpu9AOWgBqy5oFHPiv8CVkozkk71BsKaPQ5Qvpz96dE0Y604s18QJXIygsXIajP
-         img3AR41S0uPMt2xvhsm5iqYjIy4dEIouI/zHsSXiirCW1SAWM9+JCFh4qCRFTTTdIDv
-         oFHAOBRR4u0QlYs4YbyNaqxdh+KA5TRwVIk6H6J6v/UQXfM/cOn8UmR5XCu5ku6buy57
-         LYLLx3qFsDibM/WHihAhtxdHKgULGVNwRvj8GQwHQywlUhIXBsGHI9lg+sJm4wpjfScA
-         t2T942IUp9XZ3qa0F3mEz5922cB/w7xcDMx7yJ5wsX6tm5ToSlh2IHDytExvxkx8AH0c
-         IIog==
-X-Forwarded-Encrypted: i=1; AJvYcCV5Be0Y1TfSl4WbjITZVJyUr9csmcKAgwvPSYy+Qd1h7sYdP9iI8+NKnp80L4cq6EoHp5stnulBv4VJJiZj1gs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeiM18mycxuC0UKdK4AFzufCBmnhDXdjQ1gog7Z3JPJf0UCZa1
-	Rbp+9/mOqHCJJ5ZSeRwal18Ujwc6hV9aA/iG7DB3eMDcI3+iThI/3BMGwa4lT62+y9iHhHuony/
-	dKZFX
-X-Gm-Gg: ASbGnctlUqZPLryrvIsC8r5ltmuV3g7L0BBYEybYv5aekkYXA61waqKJthbsVvKUry7
-	+wxOoneLaOXenj8joWTu3LwYvka5V1kAVB+cIkByXuPnQpzI+HQDP8owra1vVipkTuyvVnvreln
-	zCsN1iXJDzTIbKaw5KbrQimAxNllg4S4hpmY671ffkwl5rTdwQZDhW9kVKhdN6J2c535ylH2L5J
-	FaVUi7TLtGfN/DB3p56u7zmVeki4ciLJo+FSUOnLUpuQF/YJxH5RT2UxxZ2B6Wtafa+Thw3oz4j
-	tck+ux4WoEmj4a3CA65OzwsU0QcXa//sTQ+DiEsm8s659LLqpYaRjxtrmd+5VxGG3lgqpL6Ya4c
-	afRUU/vE2qZBe9SyZlotbvZ7NWMEEwIq+4lNv3j8ImzJ81vJxi+gRUFJZNb0=
-X-Google-Smtp-Source: AGHT+IHeHTgxlltTMg2jkQR8M4ckc7kuuLQqcNCSqE/YdELv/3ZHWfkOaY8nRgco+jsklhYgevWYbA==
-X-Received: by 2002:a05:6e02:18cc:b0:425:8744:de7d with SMTP id e9e14a558f8ab-42f87419a6amr8445705ab.30.1759872511151;
-        Tue, 07 Oct 2025 14:28:31 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-42d8b294f91sm67698345ab.34.2025.10.07.14.28.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Oct 2025 14:28:30 -0700 (PDT)
-Message-ID: <dc360969-c1af-4b87-a259-cc265a8d553d@linuxfoundation.org>
-Date: Tue, 7 Oct 2025 15:28:29 -0600
+	s=arc-20240116; t=1759879629; c=relaxed/simple;
+	bh=46Ig921NesgEPgJC9fbuNGV6NsV6HAEaVWzqIOIyckI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=X+oeZUsGjOBNOFZXYkLr/8O4TiUa/ogdjassPQ04ftdZAsGaGVUubfozW/UdjBFBJ4UPRxt/OSEsBAvxF0cbM8dhJbbsnsLAAk3nNgEQraKBeK9Hjls3SiVavylUn9hEr31qnbykvG241hR8uUsfpNSf197BcXrZOYAZxjyKIwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WTGQlyro; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EFF2C4CEFE;
+	Tue,  7 Oct 2025 23:27:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759879628;
+	bh=46Ig921NesgEPgJC9fbuNGV6NsV6HAEaVWzqIOIyckI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WTGQlyrokbd0XrZcp+ms8/AkmrAUMgzJ4I28m8AEhZeqX0kH036BzVMgzkTwD2cmy
+	 9nRVrVimjvSyDIz9Qh8zvEhk2yInmrn+njji2K8+PASJVrRo6KndPffZjIh4xXT1mj
+	 QyOhWU3lSJN2Tw38TfMW1SZwhwQADTv3pCkhbB+qrh2hSgnu+KpD3VdOQQjFDaPbPZ
+	 kHT91xICOq6GK5vSoezaIsew/Ga7z2thOr08LFz55mMk3RZswy8Pyk7qzqjmrPveJc
+	 tyIiKbFq1UWG7qB1dqAp8VsIHJBiuS9H7qb97RKAf/rjymy+SCgFmgvXsYH/uQB+Ir
+	 v62OSGFZYTASQ==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	bpf@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	sdf@fomichev.me,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v2 4/9] selftests: drv-net: xdp: rename netnl to ethnl
+Date: Tue,  7 Oct 2025 16:26:48 -0700
+Message-ID: <20251007232653.2099376-5-kuba@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251007232653.2099376-1-kuba@kernel.org>
+References: <20251007232653.2099376-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] Fix to avoid the usage of the `res` variable
- uninitialized in the following macro expansions.
-To: Alessandro Zanni <alessandro.zanni87@gmail.com>, jgg@ziepe.ca,
- kevin.tian@intel.com, shuah@kernel.org
-Cc: iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250924165801.49523-1-alessandro.zanni87@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250924165801.49523-1-alessandro.zanni87@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 9/24/25 10:57, Alessandro Zanni wrote:
+Test uses "netnl" for the ethtool family which is quite confusing
+(one would expect netdev family would use this name).
 
-Fix to avoid the usage of the `res` variable uninitialized in the following macro expansions.
+No functional changes.
 
-ret not res?
+Reviewed-by: Simon Horman <horms@kernel.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: shuah@kernel.org
+CC: sdf@fomichev.me
+CC: linux-kselftest@vger.kernel.org
+CC: bpf@vger.kernel.org
+---
+ tools/testing/selftests/drivers/net/xdp.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-You can simplify the shortlog "Fix ret unitialized warning" perhaps.
-
-
-> It solves the following warning:
-
-Fix the following warning.
-
-> In function ‘iommufd_viommu_vdevice_alloc’,
->    inlined from ‘wrapper_iommufd_viommu_vdevice_alloc’ at
-> iommufd.c:2889:1:
-> ../kselftest_harness.h:760:12: warning: ‘ret’ may be used uninitialized
-> [-Wmaybe-uninitialized]
->    760 |   if (!(__exp _t __seen)) { \
->        |      ^
-> ../kselftest_harness.h:513:9: note: in expansion of macro ‘__EXPECT’
->    513 |   __EXPECT(expected, #expected, seen, #seen, ==, 1)
->        |   ^~~~~~~~
-> iommufd_utils.h:1057:9: note: in expansion of macro ‘ASSERT_EQ’
->   1057 |   ASSERT_EQ(0, _test_cmd_trigger_vevents(self->fd, dev_id,
-> nvevents))
->        |   ^~~~~~~~~
-> iommufd.c:2924:17: note: in expansion of macro
-> ‘test_cmd_trigger_vevents’
->   2924 |   test_cmd_trigger_vevents(dev_id, 3);
->        |   ^~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> The issue can be reproduced, building the tests, with the command:
-> make -C tools/testing/selftests TARGETS=iommu
-> 
-> Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
-> ---
->   tools/testing/selftests/iommu/iommufd_utils.h | 8 +++-----
->   1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-> index 3c3e08b8c90e..772ca1db6e59 100644
-> --- a/tools/testing/selftests/iommu/iommufd_utils.h
-> +++ b/tools/testing/selftests/iommu/iommufd_utils.h
-> @@ -1042,15 +1042,13 @@ static int _test_cmd_trigger_vevents(int fd, __u32 dev_id, __u32 nvevents)
->   			.dev_id = dev_id,
->   		},
->   	};
-> -	int ret;
->   
->   	while (nvevents--) {
-> -		ret = ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
-> -			    &trigger_vevent_cmd);
-> -		if (ret < 0)
-> +		if (!ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
-> +			    &trigger_vevent_cmd))
->   			return -1;
->   	}
-> -	return ret;
-
-Hmm. with this change -1 is returned instead of ret
-
-> +	return 0;
->   }
->   
->   #define test_cmd_trigger_vevents(dev_id, nvevents) \
-
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
+index 08fea4230759..a7a4d97aa228 100755
+--- a/tools/testing/selftests/drivers/net/xdp.py
++++ b/tools/testing/selftests/drivers/net/xdp.py
+@@ -541,11 +541,11 @@ from lib.py import ip, bpftool, defer
+         The HDS threshold value. If the threshold is not supported or an error occurs,
+         a default value of 1500 is returned.
+     """
+-    netnl = cfg.netnl
++    ethnl = cfg.ethnl
+     hds_thresh = 1500
+ 
+     try:
+-        rings = netnl.rings_get({'header': {'dev-index': cfg.ifindex}})
++        rings = ethnl.rings_get({'header': {'dev-index': cfg.ifindex}})
+         if 'hds-thresh' not in rings:
+             ksft_pr(f'hds-thresh not supported. Using default: {hds_thresh}')
+             return hds_thresh
+@@ -562,7 +562,7 @@ from lib.py import ip, bpftool, defer
+ 
+     Args:
+         cfg: Configuration object containing network settings.
+-        netnl: Network namespace or link object (not used in this function).
++        ethnl: Network namespace or link object (not used in this function).
+ 
+     This function sets up the packet size and offset lists, then performs
+     the head adjustment test by sending and receiving UDP packets.
+@@ -681,7 +681,7 @@ from lib.py import ip, bpftool, defer
+     function to execute the tests.
+     """
+     with NetDrvEpEnv(__file__) as cfg:
+-        cfg.netnl = EthtoolFamily()
++        cfg.ethnl = EthtoolFamily()
+         ksft_run(
+             [
+                 test_xdp_native_pass_sb,
+-- 
+2.51.0
 
 
