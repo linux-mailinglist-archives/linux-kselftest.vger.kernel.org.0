@@ -1,148 +1,117 @@
-Return-Path: <linux-kselftest+bounces-42797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42798-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80E41BBFF37
-	for <lists+linux-kselftest@lfdr.de>; Tue, 07 Oct 2025 03:26:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08F23BC00D5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 07 Oct 2025 05:00:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A5893B8037
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Oct 2025 01:26:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DC933C0219
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Oct 2025 03:00:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 930E31F12F8;
-	Tue,  7 Oct 2025 01:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEA5620010C;
+	Tue,  7 Oct 2025 03:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cBzN/kPC"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="nXRZ5aT/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C33E196C7C;
-	Tue,  7 Oct 2025 01:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A1416F288;
+	Tue,  7 Oct 2025 03:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759800369; cv=none; b=jLRjeYVXEYrE18DHbjOWpZ4IxaLnyp4XEg2OCYSaqUvzkljTHyjsNnDkQ3y+UIxI17vKr48YIvI1s1kKmRUIwQ+ZHvLzZrKNeAASyrSe3DuBIG48bpzD23g18TuCuQ1e72MDPb3rmLn2ROcdBPOdCyvbkRDdcg0X7Ivqp5YXh8c=
+	t=1759806005; cv=none; b=cjglv1hdmavwbEALVlHmV3ywx8Sg/bYQ2TiufrYfrqx+/82OxpeZEM9JfrmkQJJAtYtAmbN8K8k2PP3OckZz+W6v05PGr5uvpL688koOb+g6Ybe6MLxSUQr0WkvL1n41/hRiIvga3VyMPDJFSJ6C3ChLHVwhcwVF21U5eKHWORw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759800369; c=relaxed/simple;
-	bh=uOMat6atBpB9CzH0j4UgHm20CJlM2/lwXSkOsos6dZA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QaRaC8Dv8IURg2FGcgCg6803Wvh+D2G9Fv5K07vcXWcmAd+cYQ+GQS6zErmRI1BdI7Xeju5XTEUr67whXSAfCQJAAeX4OraE7tWYyxLtVk+0kA1LRx7tii0TDnfrCFcJMDnjYkq7JWH8Tg/D+7BqXoKZFPH+SM+srRcDShujc8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cBzN/kPC; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <9671e39c68dd45736dcd1547baba9616e6a07ed2.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1759800364;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uOMat6atBpB9CzH0j4UgHm20CJlM2/lwXSkOsos6dZA=;
-	b=cBzN/kPCgfpW5NxFVU/utzMF9WYyfFGxHbiDERfxl4aGwpTk2IY97G6yjmUFdAbjSlCNDE
-	nKmNkN0G7Z25YdiSJqxl9O3hnhir33j0AtmKG9bkGKnr9Inv+alGw8cNmsNqjgS8tKRRcU
-	x5suXX/V2+JkM3zhXBO5pyMRaHgj1HQ=
-Subject: Re: [PATCH bpf 1/2] bpf: Avoid RCU context warning when unpinning
- htab with internal structs
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev,  eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev,  john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com,  jolsa@kernel.org, shuah@kernel.org,
- toke@redhat.com, linux-kernel@vger.kernel.org,  bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Le Chen <tom2cat@sjtu.edu.cn>
-Date: Tue, 07 Oct 2025 09:25:54 +0800
-In-Reply-To: <CAEf4BzZhGEgW82gweZtW1Cp5L1_pafUwML8jMifBvjzBtnWWeA@mail.gmail.com>
-References: <20251003084528.502518-1-kafai.wan@linux.dev>
-	 <20251003084528.502518-2-kafai.wan@linux.dev>
-	 <CAEf4BzZhGEgW82gweZtW1Cp5L1_pafUwML8jMifBvjzBtnWWeA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1759806005; c=relaxed/simple;
+	bh=/vlPcppKnGJ+lW+fcnPdTnUXgjsbxcARfgThppHSPsI=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=QH73Jj7hyFRdnA7X+yZVpOAuWf31trf8kwgrCmi3EPPxpKVUnV74TFwSHl6uzVSFHgb7Pv+xknf7zEbsdVZ5UQxcDPfaU0wT6dc4bli49wtmfJ86BIdWu0Kn4imhpflS8mbMnPUxVdL80mhviNsyEb+QCS2gRNhJSiAC0dfj/64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=nXRZ5aT/; arc=none smtp.client-ip=43.163.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1759805998;
+	bh=HFlDB8BZr5BFQQSrOj+U3Shf7L1iVHMAKdZeBl2bj9k=;
+	h=From:To:Cc:Subject:Date;
+	b=nXRZ5aT/WPIk/fvBexoV74g2YZdB8nuF6HbBX5opc16cpzJITClxcF5PbxQhLd3s/
+	 lr+HCEhQnAFrI1Pn9G4TdLRF23qzTPnFHSV09VEnCI4bm1LK2B724NRK3JqOUWOIM/
+	 rbhHur79jU7FwCcrWVHYIlSccFPgn49OMUaddlVg=
+Received: from rtoax ([183.198.135.10])
+	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
+	id EF6A0012; Tue, 07 Oct 2025 10:59:54 +0800
+X-QQ-mid: xmsmtpt1759805994t3ps3mief
+Message-ID: <tencent_15BBCAE66BDD681D629FC197104C56D46506@qq.com>
+X-QQ-XMAILINFO: MyirvGjpKb1jzQXL55XH0cEBIDzApW4UBEbjjnudb84o3fzG5QGOgBuUG9NFcb
+	 zF63ViWooPEgulZDkorwyR4Wb1ANIqqnABapVtOFBojHyOz6xn/A2lRjit9JR64pKWWXzeteMe4o
+	 NN+lMXYUutxnXI+hh2ff48sQGM8bhXfYA3zcvnKPrr3AHtq+ZCwTuRY77bGbLTSnsQtPaHb/axOQ
+	 zSR3vMvEaMwUbm2rVx6i47csjT31SpYN/pjD4y1fpfBbU+3R4Du+Po0ki0LlWAUK0Kp8/aRFup0g
+	 m3PsaPw6oM6lO3Nro6gUd1yNZalDnm9CBjMi78cOTJODnuQfYITSUK0xKGcLCSB4KBrewVETJCS3
+	 IN2bCmtUDZAcXDbPaeU1m41iRg4DfqLIzvk8IAPS4R6YxKK2OTm9GgOLmlmGHlNs7kuIKJF69exN
+	 sfQm8Xxp7PJ2cgVjQzJQw72CD1gRFK5hXMHo8PMdILsCOGVhAricE7XVAz506JrIXIJ1Sct+F8YW
+	 /X+wvi2vZhqxQ+H3gxhhYgQkfgeh7J3/XY9Z3RzCaMZ9YCPMmBqqLooql3ZOAwj7HCmL6eIRYMz/
+	 POg2ghJzSmRyCmHu/gV6BSrYD4x6+af/kl1lFmkBK/WGDSW+EngjD8wmup2VvZLVYsw1aMb01Qba
+	 CBh1y8PstBEA0ImjLV8g74qvkN62xmotpsB4dGdohJFYoINj9+AX6gktUIOuI8SJmRrs3L25RXYa
+	 SUdmzXko9iz+MCOzsm2pG+7/hXBpis9pPPSAryNdz6rhdXK7yBz1Hnw1ebBWtaycwn7t2TjjviP7
+	 +zM1W3I6epzQAEvxA+m8OzJy06RZZzcNqpnUkN42xyeWCEPuwvjj1imeXZeaopRk3kW4lF00faDx
+	 rIFw/OPfov5k5TaqrVhOczzO9Q8WLqffs84VrKtVjEi64Y/rXCngkURXx7R6plaL+SKcW6MNENs5
+	 BT1Nw3RygeL+Q7I87YMuzC9f/3m5IpTtF+88L6jZEGyIXKzlP8KStEcNG71tsmi+Idr/T6MCU7Wb
+	 Tt/OKs0HNwIe9IeAFcc71lEShMzT0hl3P9f0LyFQ==
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+From: Rong Tao <rtoax@foxmail.com>
+To: vmalik@redhat.com,
+	ast@kernel.org,
+	eddyz87@gmail.com
+Cc: rtoax@foxmail.com,
+	Rong Tao <rongtao@cestc.cn>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH bpf-next v3 0/2] Add kfuncs bpf_strcasestr and bpf_strncasestr
+Date: Tue,  7 Oct 2025 10:59:27 +0800
+X-OQ-MSGID: <cover.1759804822.git.rongtao@cestc.cn>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2025-10-06 at 16:58 -0700, Andrii Nakryiko wrote:
-> On Fri, Oct 3, 2025 at 1:47=E2=80=AFAM KaFai Wan <kafai.wan@linux.dev> wr=
-ote:
-> >=20
-> > When unpinning a BPF hash table (htab or htab_lru) that contains intern=
-al
-> > structures (timer, workqueue, or task_work) in its values, a BUG warnin=
-g
-> > is triggered:
-> > =C2=A0BUG: sleeping function called from invalid context at
-> > kernel/bpf/hashtab.c:244
-> > =C2=A0in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 14, name:
-> > ksoftirqd/0
-> > =C2=A0...
-> >=20
-> > The issue arises from the interaction between BPF object unpinning and
-> > RCU callback mechanisms:
-> > 1. BPF object unpinning uses ->free_inode() which schedules cleanup via
-> > =C2=A0=C2=A0 call_rcu(), deferring the actual freeing to an RCU callbac=
-k that
-> > =C2=A0=C2=A0 executes within the RCU_SOFTIRQ context.
-> > 2. During cleanup of hash tables containing internal structures,
-> > =C2=A0=C2=A0 htab_map_free_internal_structs() is invoked, which include=
-s
-> > =C2=A0=C2=A0 cond_resched() or cond_resched_rcu() calls to yield the CP=
-U during
-> > =C2=A0=C2=A0 potentially long operations.
-> >=20
-> > However, cond_resched() or cond_resched_rcu() cannot be safely called f=
-rom
-> > atomic RCU softirq context, leading to the BUG warning when attempting
-> > to reschedule.
-> >=20
-> > Fix this by changing from ->free_inode() to ->destroy_inode() for BPF
-> > objects (prog, map, link). This allows direct inode freeing without
-> > RCU callback scheduling, avoiding the invalid context warning.
-> >=20
-> > Reported-by: Le Chen <tom2cat@sjtu.edu.cn>
-> > Closes:
-> > https://lore.kernel.org/all/1444123482.1827743.1750996347470.JavaMail.z=
-imbra@sjtu.edu.cn/
-> > Fixes: 68134668c17f ("bpf: Add map side support for bpf timers.")
-> > Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
-> > ---
-> > =C2=A0kernel/bpf/inode.c | 2 +-
-> > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-> > index f90bdcc0a047..65c2a71d7de1 100644
-> > --- a/kernel/bpf/inode.c
-> > +++ b/kernel/bpf/inode.c
-> > @@ -790,7 +790,7 @@ const struct super_operations bpf_super_ops =3D {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .statfs=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D simple_statfs,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .drop_inode=C2=A0=C2=A0=C2=
-=A0=C2=A0 =3D inode_just_drop,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .show_options=C2=A0=C2=A0 =
-=3D bpf_show_options,
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .free_inode=C2=A0=C2=A0=C2=A0=C2=
-=A0 =3D bpf_free_inode,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .destroy_inode=C2=A0 =3D bpf_free=
-_inode,
->=20
-> s/bpf_free_inode/bpf_destroy_inode/ then?
-ok, done in v2.
->=20
-> > =C2=A0};
-> >=20
-> > =C2=A0enum {
-> > --
-> > 2.43.0
-> >=20
+From: Rong Tao <rongtao@cestc.cn>
 
---=20
-Thanks,
-KaFai
+Add kfuncs bpf_strcasestr and bpf_strncasestr, which are extensions of
+bpf_strstr and bpf_strnstr, suitable for more scenarios.
+
+Rong Tao (2):
+  bpf: add bpf_strcasestr,bpf_strncasestr kfuncs
+  selftests/bpf: Test bpf_strcasestr,bpf_strncasestr kfuncs
+
+ kernel/bpf/helpers.c                          | 97 +++++++++++++++----
+ .../selftests/bpf/prog_tests/string_kfuncs.c  |  2 +
+ .../bpf/progs/string_kfuncs_failure1.c        | 12 +++
+ .../bpf/progs/string_kfuncs_failure2.c        |  2 +
+ .../bpf/progs/string_kfuncs_success.c         | 10 ++
+ 5 files changed, 102 insertions(+), 21 deletions(-)
+
+--- 
+v3: keep __bpf_strnstr() static and compress some tests.
+v2: remove extra __bpf_kfunc and fix comment of bpf_strncasestr().
+    https://lore.kernel.org/all/tencent_6D228941AB904DD6E1E58C8ACDEBEC280C06@qq.com/
+v1: https://lore.kernel.org/all/tencent_8AF4D15B4475031E2185ACDE4B1495995707@qq.com/
+-- 
+2.51.0
+
 
