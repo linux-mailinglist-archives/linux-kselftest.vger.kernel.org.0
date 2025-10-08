@@ -1,197 +1,260 @@
-Return-Path: <linux-kselftest+bounces-42880-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D38BC571E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 08 Oct 2025 16:37:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23E98BC5940
+	for <lists+linux-kselftest@lfdr.de>; Wed, 08 Oct 2025 17:30:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67B2D189EACC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Oct 2025 14:38:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1819A40552C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Oct 2025 15:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC68B2EC0B0;
-	Wed,  8 Oct 2025 14:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE85329D279;
+	Wed,  8 Oct 2025 15:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lbXpI3Bw"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ZffK1v+V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010027.outbound.protection.outlook.com [52.101.201.27])
+Received: from pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.83.148.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270032EC08F;
-	Wed,  8 Oct 2025 14:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759934239; cv=fail; b=Ark/wV0da7uywV5F3m7IDfjHefzWt/1qklJujOrMQaf4Xt06bpbY0wem92kE6iq/cmYTBB58OslLdkBIOV4FalD7oFCwQF6IuaA4+ZCV60NYMxwtVDppRO3klilJgve6gXnVWEBoO0cybgwQGLiayV4GT0KbhvsMTfckZM3z42g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759934239; c=relaxed/simple;
-	bh=3xGpiXypi/whgNjhnpC8Vt0S3rp8EvOaF5FqA7Jpsao=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=pp65tgmFY6cUoHHtr6RwrCWXd5AJswZlCKDVnw3DgmGrlWFZjAoU4buHLOoHVrPwhiC/EuSYPOSlczoZxgnLlLqYgoIEFMDIfY9JzAdfjYTJpi/ESCLCom95E12h2LOr5T5oFD0I5nBd1a2GquERKH5JNB3FSbdRHpR9Ig5Dt4Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=lbXpI3Bw; arc=fail smtp.client-ip=52.101.201.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BWsmA4tXZIYwQ9qWGecOpCahO1WwDMrREq8PbdFypF5fBx5GaWP0O6Oi1rQc3JhXPS+cKq/oHKJA38+1zITXsKR5807tCF4oj6HRhWOXB7aBwFqbXJWddsk33EGiUzpKUSJYjLVkfJlSLDLKnM+l+cCnVAPLuCmV5AyuH6lUxbVw/3Ft5Y2yBLvFkcBP7EVLXHxFScbDdqWVniPAdzwTnEHCnPqKJXnJfsJ+wURuPNqMT/5Ybe7+/942o3ENIieb7Rjr7OIAI61ziOWdDkLhi0wnuVptQ/dSP+HRmN8aZIMqH/ws+dFgVm/KvZUonaYeiGbX6SCKlJuQhnhjPGRTJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ikOQbbzTEQipqOUY3jrKzzou3e2s6M2X7ERZi7b2ybE=;
- b=tyRUvVXvnHOtiBeJKXySj4KMPzrK5LwpDYU4dbri1zN0fzoFU2ZHcfIjEw4LzfSYIrfp0eUEOTxSwlgnk1q/iCn76fQH9Un+qPtAVjoh6ZZwrsAgcsGptrOYnLof5pejdRRixFl9ikaaFPuypYQoj8XSXuLIoFYVZhfLDV41k5pFm1cJsbpRcT24Ae9yu1CjLSK4T0KgeOiER39OkaL6dNHNIuSQPteYMzv5jemR16FdS/8gr/oICoMFb2z9zIhEMRtqLAyYKma4SwV2+cs+N3KFXKBW5mewIj+h7PNLukRHj+SpuVY0XAG9um5af2xPs7YTmx4rt26tQaEJ2RhbNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ikOQbbzTEQipqOUY3jrKzzou3e2s6M2X7ERZi7b2ybE=;
- b=lbXpI3BwpWzeDB56Jvqd2z6UevmCfcmjzFo63RqkV5Qqg3efaJc7UmblsRwGEeCfPT4jvec9wbWzj/srAfhPKZLlxSem8yLKNWYSi/C0Ki47QIOyd3cRfcoYIb9wvPcw7A0dFa0VVM+Cme0qH34IeaM/ySeS4yXMfPKH5iTQim7YiD983S39NkPeuNsVEyFm5SmGm1gXtFJblQwkWDFs4YAfm3NnKqPwGei7RQ1756nNI4RGTcWBeocmN+zPDtTOqebMhVGx3J3fR0NmwhEO31XCh+Yn62uk5nn55KYgsmFqpLFRY9A0Rggi3110A+rJcEkfsPlfV3myr52RKLIvRA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BN8PR12MB3604.namprd12.prod.outlook.com (2603:10b6:408:45::31)
- by MW4PR12MB7384.namprd12.prod.outlook.com (2603:10b6:303:22b::15) with
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A7E1369B4;
+	Wed,  8 Oct 2025 15:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.83.148.184
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759937410; cv=none; b=isBXDnmXV65LuN/vBr06I4y4wDdlMpxYCIlfSPdVlnKi4lOhpUsym34j4vPtJcsqYyJsaWQ3OYsQbSc8ObQJhAUVn2Llr/nqmHTMuKMgoUP0GzAieERXshiy5suPZTsc7xVzrHg5QBG6E047Eo3f+o2k8dpqlLUkGWDUbfmIdZA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759937410; c=relaxed/simple;
+	bh=6340XCFQyQytI7TkwLqakkxrDScFOp1b0uWEs4s6VVg=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=biBmfZoSDh7nHInd8MceQgHN1YlF34jfbUWkeF1F2lLPgLPrprFaqFUQwDKMLOfZRy/uHrK4lVpTEGtNrvd3DNy5CAqid4Ey+hlucWY+fqi9iBqxKVY04HM46n63QW1Pr3TxRK7VO5dTDnXlfnswIl/HBersJFJbWCY8TqJL4FM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ZffK1v+V; arc=none smtp.client-ip=35.83.148.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1759937408; x=1791473408;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6cTKEV+ZWAzAeKhYDhuZKam17XzSPB7XFB7f4qhxTuM=;
+  b=ZffK1v+V9cJk7Ln8PPoM6h32O7MmClcv5CvqttJ3ezOtVpg3ceTKKofD
+   MI0qhOR35KSlZ1gw6zAddFAlNn7hyRi6VoqQv9pdpXE5WIAbWt5+lVZen
+   913JUgk8yxnpwLJh/kcJyZnagZYufS6jO3T1zQzsP9xfNXoMiIlup2Iiv
+   0FeZ1t6dn8lw5ZTW4LvyKtsXBLRIBUAiybjkzsjli8MZPQIeAp9wH410x
+   ks9hX38K3o0J50CQ+dnuhPdTulot05nBxVeHFB4mv00lnbcerjW7r0Iuj
+   8P+RudYuXWOFm2/nEDztt+QelsVXJldGLlI/3O0mKRculOd4x9ULgJ4Vs
+   g==;
+X-CSE-ConnectionGUID: +r/ORJCDT3mdkeM9bLhVCA==
+X-CSE-MsgGUID: 5xwXbkFvQYqm5UYp+BBs7A==
+X-IronPort-AV: E=Sophos;i="6.19,213,1754956800"; 
+   d="scan'208";a="4330400"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 15:30:06 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [10.0.38.20:22420]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.27.3:2525] with esmtp (Farcaster)
+ id 93ca9f84-9d14-4911-90f5-a97300a639c2; Wed, 8 Oct 2025 15:30:06 +0000 (UTC)
+X-Farcaster-Flow-ID: 93ca9f84-9d14-4911-90f5-a97300a639c2
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Wed, 8 Oct 2025 15:30:05 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9182.20; Wed, 8 Oct
- 2025 14:37:13 +0000
-Received: from BN8PR12MB3604.namprd12.prod.outlook.com
- ([fe80::9629:2c9f:f386:841f]) by BN8PR12MB3604.namprd12.prod.outlook.com
- ([fe80::9629:2c9f:f386:841f%5]) with mapi id 15.20.9182.017; Wed, 8 Oct 2025
- 14:37:13 +0000
-Date: Wed, 8 Oct 2025 11:37:09 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>
-Cc: Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v6 01/15] genpt: Generic Page Table base API
-Message-ID: <20251008143709.GA3833755@nvidia.com>
-References: <0-v6-0fb54a1d9850+36b-iommu_pt_jgg@nvidia.com>
- <1-v6-0fb54a1d9850+36b-iommu_pt_jgg@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1-v6-0fb54a1d9850+36b-iommu_pt_jgg@nvidia.com>
-X-ClientProxiedBy: SN7PR04CA0203.namprd04.prod.outlook.com
- (2603:10b6:806:126::28) To BN8PR12MB3604.namprd12.prod.outlook.com
- (2603:10b6:408:45::31)
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Wed, 8 Oct 2025
+ 15:29:52 +0000
+From: Eliav Farber <farbere@amazon.com>
+To: <gregkh@linuxfoundation.org>, <jdike@addtoit.com>, <richard@nod.at>,
+	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
+	<luto@kernel.org>, <peterz@infradead.org>, <tglx@linutronix.de>,
+	<mingo@redhat.com>, <bp@alien8.de>, <x86@kernel.org>, <hpa@zytor.com>,
+	<tony.luck@intel.com>, <qiuxu.zhuo@intel.com>, <james.morse@arm.com>,
+	<rric@kernel.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+	<maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+	<tzimmermann@suse.de>, <robdclark@gmail.com>, <sean@poorly.run>,
+	<jdelvare@suse.com>, <linux@roeck-us.net>, <linus.walleij@linaro.org>,
+	<dmitry.torokhov@gmail.com>, <maz@kernel.org>, <wens@csie.org>,
+	<jernej.skrabec@gmail.com>, <agk@redhat.com>, <snitzer@redhat.com>,
+	<dm-devel@redhat.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+	<mcoquelin.stm32@gmail.com>, <krzysztof.kozlowski@canonical.com>,
+	<malattia@linux.it>, <hdegoede@redhat.com>, <mgross@linux.intel.com>,
+	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+	<sakari.ailus@linux.intel.com>, <clm@fb.com>, <josef@toxicpanda.com>,
+	<dsterba@suse.com>, <jack@suse.com>, <tytso@mit.edu>,
+	<adilger.kernel@dilger.ca>, <dushistov@mail.ru>,
+	<luc.vanoostenryck@gmail.com>, <rostedt@goodmis.org>, <pmladek@suse.com>,
+	<senozhatsky@chromium.org>, <andriy.shevchenko@linux.intel.com>,
+	<linux@rasmusvillemoes.dk>, <minchan@kernel.org>, <ngupta@vflare.org>,
+	<akpm@linux-foundation.org>, <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
+	<pablo@netfilter.org>, <kadlec@netfilter.org>, <fw@strlen.de>,
+	<jmaloy@redhat.com>, <ying.xue@windriver.com>, <shuah@kernel.org>,
+	<willy@infradead.org>, <farbere@amazon.com>, <sashal@kernel.org>,
+	<quic_akhilpo@quicinc.com>, <ruanjinjie@huawei.com>,
+	<David.Laight@ACULAB.COM>, <herve.codina@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-um@lists.infradead.org>, <linux-edac@vger.kernel.org>,
+	<amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+	<linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-input@vger.kernel.org>,
+	<linux-sunxi@lists.linux.dev>, <linux-media@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+	<platform-driver-x86@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+	<linux-staging@lists.linux.dev>, <linux-btrfs@vger.kernel.org>,
+	<linux-ext4@vger.kernel.org>, <linux-sparse@vger.kernel.org>,
+	<linux-mm@kvack.org>, <netfilter-devel@vger.kernel.org>,
+	<coreteam@netfilter.org>, <tipc-discussion@lists.sourceforge.net>,
+	<linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: [PATCH v3 00/19 5.15.y] Backport minmax.h updates from v6.17-rc7
+Date: Wed, 8 Oct 2025 15:29:25 +0000
+Message-ID: <20251008152946.29285-1-farbere@amazon.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3604:EE_|MW4PR12MB7384:EE_
-X-MS-Office365-Filtering-Correlation-Id: 680c57a8-eb7b-4ed5-1685-08de06782ab6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|366016|1800799024|376014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?wQpFH4yvtDxQCsS5+Vemn/8EDsPgg0KCV6wIrjZj/mko9NDppGA9yVly5g/0?=
- =?us-ascii?Q?e+nf7JWOmbpA/hnL5UEy9TApBICVjQjeT5jCE5OHwx+UOs7BHsbfUdlkZuHY?=
- =?us-ascii?Q?7PvjoDlzjhG2P+vDVJMeAusHbCbdd3ErpwZgPsWIt9asp89/BEjKr0WKdDK4?=
- =?us-ascii?Q?M0A6blwQ4lOrrpbdJ9eaT96wnci4ZzpH4n9/FDP9F13M8/p7mebWHciFfdAf?=
- =?us-ascii?Q?7wysP5+38uq86i7NbvCl4vZntHrMj2pl9Nl4sSBm6a6TxhSUIX2ysi/CjBod?=
- =?us-ascii?Q?kHUkHPkSmynNgoWLxYlDrNP0pvXPJn0w3F3VR3eRRvrq9R4XYiqf0Y0YlYIQ?=
- =?us-ascii?Q?bkpzoKtj/JAP8l8n9T4Ai8HWoIFnofXoBw7F/Rob6Sr2ZJnBbbSDpsS2MdfE?=
- =?us-ascii?Q?rdSHEf2LJBfFl1i6DMeCHhbNP1v1+M8ng0dxPWWwf0xby64NxzTqIIFuw/95?=
- =?us-ascii?Q?iFe5pqwWblH3Nk1u1B24CFviacuOwaTW/GeS7Dg3LfzSR+Ul6kbDFRH2FgiT?=
- =?us-ascii?Q?EAmz1ROwL0Teu6tRAG+sYnOstQbxPmrihmTOv9SSmy8srtpWex+9YZu1o08P?=
- =?us-ascii?Q?NucOxsJbRURHv7rtvEBd8Ge0PTFS22CSjrrU3rfmuj6O8RN+pTf6WSuUKJX0?=
- =?us-ascii?Q?Ou0v+q7IKFDcCe4Q//2ByfXZZWyEUQ2qJEU8GhNAmk5V8mbS1rm5JobXjzE8?=
- =?us-ascii?Q?Ht8PVVZ9l6CMMgK/j95RhDFMeEPqo5sKTVfNoPZuvpZvW3D5XlK1dG2e+GZm?=
- =?us-ascii?Q?b3iqDvysUEeckbqAWmaqymKi5+sqQ+86rkEEBRr5nnUpgO/gjwP0c+q5vQkc?=
- =?us-ascii?Q?99UWYUJme6ABQRUdcUclvy+W9F1lovZRTkhiilAPlrdKHUaoIRKp+RnAM0Xg?=
- =?us-ascii?Q?eyNqHD5qlOLJYBhPyihhoUHB6wx4HFY1dKoTBFzkyH1+gbqcDXn6qfDXZiiF?=
- =?us-ascii?Q?5Otk5kipqzqiOL/ORXtNsIeZYHYizTVoSQbXXGxIP2KJjw9D4HtWDhuvGvuo?=
- =?us-ascii?Q?eUP+paZW3395G9HaRLgdrHSPWIpGzDfWNx/8Gw7/ecp1s9qH/qSbmmUMwDgR?=
- =?us-ascii?Q?rsPcl95hoXrkGUluTWIYt02XDVLwd7IbLq0REmiYvrjiDrtkLO3n2xnMdFNT?=
- =?us-ascii?Q?1HZYBq7uMlT81DU6kiiRzEx3M/nvtYcHETI/vSa/iBkguJA1n45D4TywPXCy?=
- =?us-ascii?Q?G1u3sDKKwiEfetrUDJdB7wgmvSy9FoApz9crYqQjEu/iuMKbf8noiFHlYp5i?=
- =?us-ascii?Q?Og1LpruvXgXEl4kwJTqoY4zeRMTBXKwzkM9cmW9OpUt7DSP5TW/XofhEvHmZ?=
- =?us-ascii?Q?/KmthPGA0S+CQo5Vk+hQ5hIY7bokl1zkvkA5tUlyxlpzDHix2Hjx+QQPPs68?=
- =?us-ascii?Q?kFfy+boBqBrQIrGOhQmoITvqFwQAxxyDJHsOir7olBmkq5fmqylrrkWUTIiW?=
- =?us-ascii?Q?VFEELgdWBR2vXSnMj58qdptXD2PwCJO/ii9VCRtRS6T01lBIs0ICstndlxtC?=
- =?us-ascii?Q?8Sx67w2MwCsIN+4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(1800799024)(376014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?WYb/t56tag2fJwD6Ry8p47BFv+PDgJX7ShVRd05Hhr0OtJh6Do9ivd2g32Ux?=
- =?us-ascii?Q?6VUj+9fgmr+UOyV3oNPZ1ED9xUDnpzqh+vuxF2S2/I/hycUneLQcJcrYpi6x?=
- =?us-ascii?Q?wFyCGs2tCOPUyvWNwrFfYTNL3xyoMfg79eV9NDkiY7hY2nP4eXa1uIdhJKQD?=
- =?us-ascii?Q?BtbuSe8YAUUxhWbglXdTlH1qRTKLq6piuscb9+paYEQR98g0n1ISt/qPj5Un?=
- =?us-ascii?Q?Dm4PyOIrWtViVgkp8LZKKqPSkqc5ahjBdFfm9RqqFgBrz4hor9oU0wEZmZc7?=
- =?us-ascii?Q?vYCScI6pPgol4nYkdX2ToragQpaqiqjVX04uHD65SakX62Tieo5qcpBE37Be?=
- =?us-ascii?Q?5WYxrh78GrykBXtn77YWw59dEQB/Zy5pgT5QVJ0uS+iHirT+N4bCYmdMuzys?=
- =?us-ascii?Q?aqTn7cBpX6fIIxfQ9IZkWhByNPDMwg+l5HZsJEllxJj2uXOwgzA6Rjz7TiXZ?=
- =?us-ascii?Q?vMAYwEaj7E+OjrWSnIKevNQ25yy0d8ablMz84bCE+XKbGHOj5PjyKW2/leBb?=
- =?us-ascii?Q?/3r96K7B9yskjBC2b3PPIxGKgK5bNcCbOpnsdcJ48zicbqSaGQZ+5f8PqxVs?=
- =?us-ascii?Q?gyn0QFLm36eGJBIOquimLLpyUdp9EBfxNQntn/po2KwupFsJv5tUKI4qclBv?=
- =?us-ascii?Q?fM7hZqnVPQU0X5bHsnKy+MSOUZpu69nl2d51taVxtTGLLv3KS/UAb/g4auvc?=
- =?us-ascii?Q?ZaqcwPC9mHcJLIf6Er68f4i8sgoYgsZwCTN63O3LMWpPEMfj/xVORMJHm10K?=
- =?us-ascii?Q?MTnlpeahdpi2UmpE3fglFKCVKqrODWJbBl6VMjFcxzhzafwzhFTsGsck82tk?=
- =?us-ascii?Q?FG7fMGGNfwTdCERls9BkmDtr5/FKOkRCdC1pU83A8LPucflHA2xhD0hD40cw?=
- =?us-ascii?Q?DUqbIahGAz+yhdnupTcLghK5ranJUNcQdnBbjxCqPL8llDhMSxMEafWyMjKx?=
- =?us-ascii?Q?lCCihGv+Ai1OIwESKJgKex75AsFHszSJyGzLmsY8tjtm2gMrh7EOaqkdXfWG?=
- =?us-ascii?Q?x1l6kyviYlrvU42TxOb0BrjbvHFryCBCyimNnK9tGUkl9EsSXZ6iIQjkkWy2?=
- =?us-ascii?Q?ed9rCODLQduwrhx/GqtAYDXRSH23+sQ2l9bH/EOqu2Se1MEO1KbnKKq4ChMR?=
- =?us-ascii?Q?vTCK0cQ5FRA8Ebj3uM0z1dRg5/dLwIgt6cS4p068DGrYBCWucaTqMPvglSNa?=
- =?us-ascii?Q?+8SsPFRMHZM/ruoEwo+W46C2HfRuFSmO1ilFg5qMkJ/eyH1sN/6tFo4IWjgV?=
- =?us-ascii?Q?NBjK4YW71tFn/r6scv69lTTCfPleM01pimUwrhv11rOBzLGFUfq3UYfNS6VN?=
- =?us-ascii?Q?wmwtgHg9bQkq5w3MK8ql/vQoi3iKeeywHYZFvLjCu7WYa+EScKcD4KF1geHD?=
- =?us-ascii?Q?hF0FdySR6pE17tUNiOnWQnbvC637i+4QdlJ/vLBBb0ao3u0nXAcgAbTSzvqY?=
- =?us-ascii?Q?3/Oaqt/0SpkBgPAgUSlDgk77dWGbGmcdSrXeNvseZuFeeOkzjbHj2yR77mvU?=
- =?us-ascii?Q?q2NQz5regBDkCwkAbHcAbCRd1f2xezA3aaWGgCRQtfMduD1OEzh7wYFttjWh?=
- =?us-ascii?Q?B6ex16bfkakSlmGCbMaNWVGkuECv0gtUTRra9MPX?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 680c57a8-eb7b-4ed5-1685-08de06782ab6
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3604.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2025 14:37:13.1117
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: g2FVT3cfWddSEIHPxwjCBaxwjFQnv1oTfR1XFbfJOUT7/c7mydQlPSCRRSKc1qwM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7384
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EX19D032UWA001.ant.amazon.com (10.13.139.62) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Tue, Oct 07, 2025 at 01:11:46PM -0300, Jason Gunthorpe wrote:
+This series backports 19 patches to update minmax.h in the 5.15.y branch,
+aligning it with v6.17-rc7.
 
-> +/*
-> + * Return the highest value such that:
-> + *    ffz_t(u32, U32_MAX) == UNDEFINED
-> + *    ffz_t(u32, 0) == 0
-> + *    ffz_t(u32, 1) == 1
-> + *    log_mod(a, ret) == log_to_max_int(ret)
-> + * aka find first zero bit
-> + */
-> +static inline unsigned int ffz32(u32 a)
-> +{
-> +	return ffz(a);
-> +}
-> +static inline unsigned int ffz64(u64 a)
-> +{
-> +	if (sizeof(u64) == sizeof(unsigned long))
-> +		return ffz32(a);
+The ultimate goal is to synchronize all longterm branches so that they
+include the full set of minmax.h changes.
 
-This should be ffz(a), it breaks everything like this. I must have
-run the kunits out of sequence to have missed this.
+6.12.y was already backported and changes are part of v6.12.49.
+6.6.y was already backported and changes are part of v6.6.109.
+6.1.y was already backported and changes are currently in the 6.1-stable
+tree.
 
-I updated the github
+The key motivation is to bring in commit d03eba99f5bf ("minmax: allow
+min()/max()/clamp() if the arguments have the same signedness"), which
+is missing in kernel 5.10.y.
 
-Jason
+In mainline, this change enables min()/max()/clamp() to accept mixed
+argument types, provided both have the same signedness. Without it,
+backported patches that use these forms may trigger compiler warnings,
+which escalate to build failures when -Werror is enabled.
+
+Changes in v3:
+- Fix fs/erofs/zdata.h in patch 06/19 to use MIN_T instead of min_t to
+  fix build on the following patch (07/19):
+In file included from ./include/linux/kernel.h:16,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/wait.h:7,
+                 from ./include/linux/wait_bit.h:8,
+                 from ./include/linux/fs.h:6,
+                 from fs/erofs/internal.h:10,
+                 from fs/erofs/zdata.h:9,
+                 from fs/erofs/zdata.c:6:
+fs/erofs/zdata.c: In function ‘z_erofs_decompress_pcluster’:
+fs/erofs/zdata.h:185:61: error: ISO C90 forbids variable length array ‘pages_onstack’ [-Werror=vla]
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |                                                             ^~~~
+./include/linux/minmax.h:49:23: note: in definition of macro ‘__cmp_once_unique’
+   49 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
+      |                       ^
+./include/linux/minmax.h:164:27: note: in expansion of macro ‘__cmp_once’
+  164 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
+      |                           ^~~~~~~~~~
+fs/erofs/zdata.h:185:9: note: in expansion of macro ‘min_t’
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |         ^~~~~
+fs/erofs/zdata.c:847:36: note: in expansion of macro ‘Z_EROFS_VMAP_ONSTACK_PAGES’
+  847 |         struct page *pages_onstack[Z_EROFS_VMAP_ONSTACK_PAGES];
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+- Increase test coverage using `make allyesconfig` and
+  `make allmodconfig` for arm64, arm, x86_64 and i386 architectures.
+
+Changes in v2:
+- Fix the order of patches 6 - 10 according to order in mainline branch.
+- Use same style of [ Upstream commit <HASH> ] in all patches.
+
+Andy Shevchenko (1):
+  minmax: deduplicate __unconst_integer_typeof()
+
+David Laight (8):
+  minmax: fix indentation of __cmp_once() and __clamp_once()
+  minmax.h: add whitespace around operators and after commas
+  minmax.h: update some comments
+  minmax.h: reduce the #define expansion of min(), max() and clamp()
+  minmax.h: use BUILD_BUG_ON_MSG() for the lo < hi test in clamp()
+  minmax.h: move all the clamp() definitions after the min/max() ones
+  minmax.h: simplify the variants of clamp()
+  minmax.h: remove some #defines that are only expanded once
+
+Herve Codina (1):
+  minmax: Introduce {min,max}_array()
+
+Linus Torvalds (8):
+  minmax: avoid overly complicated constant expressions in VM code
+  minmax: add a few more MIN_T/MAX_T users
+  minmax: simplify and clarify min_t()/max_t() implementation
+  minmax: make generic MIN() and MAX() macros available everywhere
+  minmax: don't use max() in situations that want a C constant
+    expression
+  minmax: simplify min()/max()/clamp() implementation
+  minmax: improve macro expansion and type checking
+  minmax: fix up min3() and max3() too
+
+Matthew Wilcox (Oracle) (1):
+  minmax: add in_range() macro
+
+ arch/arm/mm/pageattr.c                        |   6 +-
+ arch/um/drivers/mconsole_user.c               |   2 +
+ arch/x86/mm/pgtable.c                         |   2 +-
+ drivers/edac/sb_edac.c                        |   4 +-
+ drivers/edac/skx_common.h                     |   1 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h           |   2 +
+ .../drm/amd/display/modules/hdcp/hdcp_ddc.c   |   2 +
+ .../drm/amd/pm/powerplay/hwmgr/ppevvmath.h    |  14 +-
+ .../amd/pm/swsmu/smu11/sienna_cichlid_ppt.c   |   2 +
+ .../drm/arm/display/include/malidp_utils.h    |   2 +-
+ .../display/komeda/komeda_pipeline_state.c    |  24 +-
+ drivers/gpu/drm/drm_color_mgmt.c              |   2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c         |   6 -
+ drivers/gpu/drm/radeon/evergreen_cs.c         |   2 +
+ drivers/hwmon/adt7475.c                       |  24 +-
+ drivers/input/touchscreen/cyttsp4_core.c      |   2 +-
+ drivers/irqchip/irq-sun6i-r.c                 |   2 +-
+ drivers/md/dm-integrity.c                     |   4 +-
+ drivers/media/dvb-frontends/stv0367_priv.h    |   3 +
+ .../net/ethernet/chelsio/cxgb3/cxgb3_main.c   |  18 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |   2 +-
+ drivers/net/fjes/fjes_main.c                  |   4 +-
+ drivers/nfc/pn544/i2c.c                       |   2 -
+ drivers/platform/x86/sony-laptop.c            |   1 -
+ drivers/scsi/isci/init.c                      |   6 +-
+ .../pci/hive_isp_css_include/math_support.h   |   5 -
+ drivers/virt/acrn/ioreq.c                     |   4 +-
+ fs/btrfs/misc.h                               |   2 -
+ fs/btrfs/tree-checker.c                       |   2 +-
+ fs/erofs/zdata.h                              |   2 +-
+ fs/ext2/balloc.c                              |   2 -
+ fs/ext4/ext4.h                                |   2 -
+ fs/ufs/util.h                                 |   6 -
+ include/linux/compiler.h                      |   9 +
+ include/linux/minmax.h                        | 264 +++++++++++++-----
+ kernel/trace/preemptirq_delay_test.c          |   2 -
+ lib/btree.c                                   |   1 -
+ lib/decompress_unlzma.c                       |   2 +
+ lib/logic_pio.c                               |   3 -
+ lib/vsprintf.c                                |   2 +-
+ lib/zstd/zstd_internal.h                      |   2 -
+ mm/zsmalloc.c                                 |   1 -
+ net/ipv4/proc.c                               |   2 +-
+ net/ipv6/proc.c                               |   2 +-
+ net/netfilter/nf_nat_core.c                   |   6 +-
+ net/tipc/core.h                               |   2 +-
+ net/tipc/link.c                               |  10 +-
+ tools/testing/selftests/vm/mremap_test.c      |   2 +
+ 48 files changed, 290 insertions(+), 184 deletions(-)
+
+-- 
+2.47.3
+
 
