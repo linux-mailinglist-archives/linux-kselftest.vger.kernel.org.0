@@ -1,68 +1,68 @@
-Return-Path: <linux-kselftest+bounces-42890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42891-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F402BBC5CF7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 08 Oct 2025 17:45:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2B95BC5AD8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 08 Oct 2025 17:35:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48E43423C05
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Oct 2025 15:35:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A376E19E3A4C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Oct 2025 15:36:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 159952F9D9E;
-	Wed,  8 Oct 2025 15:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 460A42F83BB;
+	Wed,  8 Oct 2025 15:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="T3shwXpg"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="qOB8Bsg3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.162.73.231])
+Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BC12F530E;
-	Wed,  8 Oct 2025 15:32:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.162.73.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC612F7AD2;
+	Wed,  8 Oct 2025 15:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.245.243.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759937550; cv=none; b=JxiRcZeZuGx3Vj8V3jD3wZF7aejB+982WknN2TAjdEUgqzL9KkU86VZeFcQbZPM3WUGE9Wdn168Ay1DUTRHZTtATWNToV17t4+Y6E0ODg6/p51qdAmEEgVGreb/++wsW9h7c643fhw9Ftlquwytwoqrr3XCDvF/IWB2/9pQK1+c=
+	t=1759937564; cv=none; b=hM+qu6PQDBcnbyrg1zi9n9DDA6rk7BCibU5r6DiN+Krqc5T/q8iRSsE3bEyo1t7ine5ThEBOe6yuEMYw70ZQezR9S5XZemYT78GFmPWirMw8wkK6id5oFchy6Xe5kf7Dlb43kz0UvPZaIT8Lt2cvnAFyguGjT5NkD8Ca9sq341g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759937550; c=relaxed/simple;
-	bh=JzQvrzm+cSwkI78ne1th+Af5OP6qKK4PGWTMyb6vkD0=;
+	s=arc-20240116; t=1759937564; c=relaxed/simple;
+	bh=P0/5K4itgZIzRKJXbbY7AyT0CEFiidrkrNPidMshKPg=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=APFW46VGxuqLbvpOusc6K4FpMZiLPncOu/4AGhEoBrfMX1qxbA8C9G6D7kIUMzZmTdNqU/SBt+8Y5qwDAXSiK/96yWT02pox4jww/BNyZCk5I6XsYAgDKk3JSEXflR7v2N9jC5CrM/MZ2XVDOXr3Ds7MnlszJT3IP0Yc5aS2ib4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=T3shwXpg; arc=none smtp.client-ip=35.162.73.231
+	 MIME-Version:Content-Type; b=jk63gIO7/HZLyrGeKFrTHv894o2Rvnoue/AtRm9ZxcxnziwUPQhL8JvsazzERD3zgbE4P0JNqJywWZvm1yALuMXyh2rtaKjVN7RjfNcdiVR5MxeLEY45SLbZAcscKKXGadJdECJj4PjG1Fd3dYTiEDnbuHPatoMcYkkVnFl83fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=qOB8Bsg3; arc=none smtp.client-ip=44.245.243.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1759937548; x=1791473548;
+  t=1759937562; x=1791473562;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Un1JE7toeI83ffXaasUfHmeV127z9Znvwu1ZeiNJbjk=;
-  b=T3shwXpgu9n7pj5AZUZU+HNmomdsOVksE+PwL+fBQbDREJdTKfhEAjo9
-   p0NXHBhudFtOKkM9ZmjXulLDuGOK1eIm1nl4iiaoVW1WyOkH4GUHWN6HJ
-   xlwyWUpiKk3xXX3HmKLIR7KIjWZ97gnfQX8a448OSvSls8gpsvC7mujxk
-   g24TwA5Ywov4WJZB/yElVwVwKUQ1FyMKlKthuYhW6YLySpSNVAA84VIQM
-   lwvoQOwCzUQVT2hoPF8d+Hx/oJUAdXn0AoGEf2VF0KhY8brX4p9NGqV1m
-   KbzV6G2uh2UFI/HKnRvxCFj1IqxaLrx4sdgUFY4eFRSn5HwiHtRRM/x+l
+  bh=xkEPvUKyQPfYOtTnd+JXsEAKoNLEM/0U49oHM5nqIDU=;
+  b=qOB8Bsg3iQ21zaQq2SGOIvNADPu2krznip7aopYN7wZm9NNxgEYG0+hj
+   TuRTcQ6aNNAPpDbU88MhQ710coleSfZV2/Z7gaMp8siHZYR5ZR4LMdXU/
+   zdJWF2bj04+BxZJaymLred2aP/SHGk7fGhCZPvGimQOWDJMqTBy6MUCTb
+   Xk853C8m5uo0OYQHApZ5f4aNCZci6yqKEqHUj1aScCgK2a5ElPWsj8yzH
+   zyOJYgiDO6R4rZelh51mmym5SY0enRqVjVndwz3xtkgOQDE3ngyT5//Jt
+   LLY0JiC841GCT3Z2j1V/LiMJPntwssovSNHpO0KMhkULgneTwd7IBBHWF
    g==;
-X-CSE-ConnectionGUID: VO6YsBsNSXaANBvNlh+3gQ==
-X-CSE-MsgGUID: KH8LymOlQiKz7uJMMzNaRw==
-X-IronPort-AV: E=Sophos;i="6.19,213,1754956800"; 
-   d="scan'208";a="4335008"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 15:32:27 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [10.0.7.35:55614]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.25.156:2525] with esmtp (Farcaster)
- id 34c61748-f67e-47c8-8940-60a3a38f0fe7; Wed, 8 Oct 2025 15:32:27 +0000 (UTC)
-X-Farcaster-Flow-ID: 34c61748-f67e-47c8-8940-60a3a38f0fe7
+X-CSE-ConnectionGUID: 1l1j8F8/R0O5YqH9bBt9dg==
+X-CSE-MsgGUID: 9jhKXSElS+C4fdkMXST5jw==
+X-IronPort-AV: E=Sophos;i="6.18,281,1751241600"; 
+   d="scan'208";a="4534017"
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 15:32:40 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [10.0.21.151:29235]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.32.215:2525] with esmtp (Farcaster)
+ id 598c4386-b8dd-4a9e-bdb3-5a41bd32dd6d; Wed, 8 Oct 2025 15:32:40 +0000 (UTC)
+X-Farcaster-Flow-ID: 598c4386-b8dd-4a9e-bdb3-5a41bd32dd6d
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Wed, 8 Oct 2025 15:32:26 +0000
+ Wed, 8 Oct 2025 15:32:39 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Wed, 8 Oct 2025
- 15:32:13 +0000
+ 15:32:26 +0000
 From: Eliav Farber <farbere@amazon.com>
 To: <gregkh@linuxfoundation.org>, <jdike@addtoit.com>, <richard@nod.at>,
 	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
@@ -106,9 +106,9 @@ To: <gregkh@linuxfoundation.org>, <jdike@addtoit.com>, <richard@nod.at>,
 	<linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>
 CC: Linus Torvalds <torvalds@linux-foundation.org>, David Laight
 	<David.Laight@aculab.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Subject: [PATCH v3 09/19 5.15.y] minmax: don't use max() in situations that want a C constant expression
-Date: Wed, 8 Oct 2025 15:29:34 +0000
-Message-ID: <20251008152946.29285-10-farbere@amazon.com>
+Subject: [PATCH v3 10/19 5.15.y] minmax: simplify min()/max()/clamp() implementation
+Date: Wed, 8 Oct 2025 15:29:35 +0000
+Message-ID: <20251008152946.29285-11-farbere@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251008152946.29285-1-farbere@amazon.com>
 References: <20251008152946.29285-1-farbere@amazon.com>
@@ -125,92 +125,137 @@ X-ClientProxiedBy: EX19D042UWB004.ant.amazon.com (10.13.139.150) To
 
 From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit cb04e8b1d2f24c4c2c92f7b7529031fc35a16fed ]
+[ Upstream commit dc1c8034e31b14a2e5e212104ec508aec44ce1b9 ]
 
-We only had a couple of array[] declarations, and changing them to just
-use 'MAX()' instead of 'max()' fixes the issue.
+Now that we no longer have any C constant expression contexts (ie array
+size declarations or static initializers) that use min() or max(), we
+can simpify the implementation by not having to worry about the result
+staying as a C constant expression.
 
-This will allow us to simplify our min/max macros enormously, since they
-can now unconditionally use temporary variables to avoid using the
-argument values multiple times.
+So now we can unconditionally just use temporary variables of the right
+type, and get rid of the excessive expansion that used to come from the
+use of
+
+   __builtin_choose_expr(__is_constexpr(...), ..
+
+to pick the specialized code for constant expressions.
+
+Another expansion simplification is to pass the temporary variables (in
+addition to the original expression) to our __types_ok() macro.  That
+may superficially look like it complicates the macro, but when we only
+want the type of the expression, expanding the temporary variable names
+is much simpler and smaller than expanding the potentially complicated
+original expression.
+
+As a result, on my machine, doing a
+
+  $ time make drivers/staging/media/atomisp/pci/isp/kernels/ynr/ynr_1.0/ia_css_ynr.host.i
+
+goes from
+
+	real	0m16.621s
+	user	0m15.360s
+	sys	0m1.221s
+
+to
+
+	real	0m2.532s
+	user	0m2.091s
+	sys	0m0.452s
+
+because the token expansion goes down dramatically.
+
+In particular, the longest line expansion (which was line 71 of that
+'ia_css_ynr.host.c' file) shrinks from 23,338kB (yes, 23MB for one
+single line) to "just" 1,444kB (now "only" 1.4MB).
+
+And yes, that line is still the line from hell, because it's doing
+multiple levels of "min()/max()" expansion thanks to some of them being
+hidden inside the uDIGIT_FITTING() macro.
+
+Lorenzo has a nice cleanup patch that makes that driver use inline
+functions instead of macros for sDIGIT_FITTING() and uDIGIT_FITTING(),
+which will fix that line once and for all, but the 16-fold reduction in
+this case does show why we need to simplify these helpers.
 
 Cc: David Laight <David.Laight@aculab.com>
 Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- drivers/input/touchscreen/cyttsp4_core.c | 2 +-
- drivers/irqchip/irq-sun6i-r.c            | 2 +-
- drivers/md/dm-integrity.c                | 2 +-
- fs/btrfs/tree-checker.c                  | 2 +-
- lib/vsprintf.c                           | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ include/linux/minmax.h | 43 ++++++++++++++++++++----------------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/input/touchscreen/cyttsp4_core.c b/drivers/input/touchscreen/cyttsp4_core.c
-index dccbcb942fe5..936d69da3bda 100644
---- a/drivers/input/touchscreen/cyttsp4_core.c
-+++ b/drivers/input/touchscreen/cyttsp4_core.c
-@@ -871,7 +871,7 @@ static void cyttsp4_get_mt_touches(struct cyttsp4_mt_data *md, int num_cur_tch)
- 	struct cyttsp4_touch tch;
- 	int sig;
- 	int i, j, t = 0;
--	int ids[max(CY_TMA1036_MAX_TCH, CY_TMA4XX_MAX_TCH)];
-+	int ids[MAX(CY_TMA1036_MAX_TCH, CY_TMA4XX_MAX_TCH)];
+diff --git a/include/linux/minmax.h b/include/linux/minmax.h
+index fc384714da45..e3e4353df983 100644
+--- a/include/linux/minmax.h
++++ b/include/linux/minmax.h
+@@ -35,10 +35,10 @@
+ #define __is_noneg_int(x)	\
+ 	(__builtin_choose_expr(__is_constexpr(x) && __is_signed(x), x, -1) >= 0)
  
- 	memset(ids, 0, si->si_ofs.tch_abs[CY_TCH_T].max * sizeof(int));
- 	for (i = 0; i < num_cur_tch; i++) {
-diff --git a/drivers/irqchip/irq-sun6i-r.c b/drivers/irqchip/irq-sun6i-r.c
-index 4cd3e533740b..74b1bd331425 100644
---- a/drivers/irqchip/irq-sun6i-r.c
-+++ b/drivers/irqchip/irq-sun6i-r.c
-@@ -268,7 +268,7 @@ static const struct irq_domain_ops sun6i_r_intc_domain_ops = {
+-#define __types_ok(x, y) 					\
+-	(__is_signed(x) == __is_signed(y) ||			\
+-		__is_signed((x) + 0) == __is_signed((y) + 0) ||	\
+-		__is_noneg_int(x) || __is_noneg_int(y))
++#define __types_ok(x, y, ux, uy) 				\
++	(__is_signed(ux) == __is_signed(uy) ||			\
++	 __is_signed((ux) + 0) == __is_signed((uy) + 0) ||	\
++	 __is_noneg_int(x) || __is_noneg_int(y))
  
- static int sun6i_r_intc_suspend(void)
- {
--	u32 buf[BITS_TO_U32(max(SUN6I_NR_TOP_LEVEL_IRQS, SUN6I_NR_MUX_BITS))];
-+	u32 buf[BITS_TO_U32(MAX(SUN6I_NR_TOP_LEVEL_IRQS, SUN6I_NR_MUX_BITS))];
- 	int i;
+ #define __cmp_op_min <
+ #define __cmp_op_max >
+@@ -51,34 +51,31 @@
+ #define __cmp_once(op, type, x, y) \
+ 	__cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
  
- 	/* Wake IRQs are enabled during system sleep and shutdown. */
-diff --git a/drivers/md/dm-integrity.c b/drivers/md/dm-integrity.c
-index 8e2b00536c3e..9e2bbfe328f0 100644
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -1705,7 +1705,7 @@ static void integrity_metadata(struct work_struct *w)
- 		struct bio *bio = dm_bio_from_per_bio_data(dio, sizeof(struct dm_integrity_io));
- 		char *checksums;
- 		unsigned extra_space = unlikely(digest_size > ic->tag_size) ? digest_size - ic->tag_size : 0;
--		char checksums_onstack[max((size_t)HASH_MAX_DIGESTSIZE, MAX_TAG_SIZE)];
-+		char checksums_onstack[MAX(HASH_MAX_DIGESTSIZE, MAX_TAG_SIZE)];
- 		sector_t sector;
- 		unsigned sectors_to_process;
+-#define __careful_cmp_once(op, x, y) ({			\
+-	static_assert(__types_ok(x, y),			\
++#define __careful_cmp_once(op, x, y, ux, uy) ({		\
++	__auto_type ux = (x); __auto_type uy = (y);	\
++	static_assert(__types_ok(x, y, ux, uy),		\
+ 		#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
+-	__cmp_once(op, __auto_type, x, y); })
++	__cmp(op, ux, uy); })
  
-diff --git a/fs/btrfs/tree-checker.c b/fs/btrfs/tree-checker.c
-index 51e04efe3e20..8f96ddaceb9a 100644
---- a/fs/btrfs/tree-checker.c
-+++ b/fs/btrfs/tree-checker.c
-@@ -608,7 +608,7 @@ static int check_dir_item(struct extent_buffer *leaf,
- 		 */
- 		if (key->type == BTRFS_DIR_ITEM_KEY ||
- 		    key->type == BTRFS_XATTR_ITEM_KEY) {
--			char namebuf[max(BTRFS_NAME_LEN, XATTR_NAME_MAX)];
-+			char namebuf[MAX(BTRFS_NAME_LEN, XATTR_NAME_MAX)];
+-#define __careful_cmp(op, x, y)					\
+-	__builtin_choose_expr(__is_constexpr((x) - (y)),	\
+-		__cmp(op, x, y), __careful_cmp_once(op, x, y))
++#define __careful_cmp(op, x, y) \
++	__careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
  
- 			read_extent_buffer(leaf, namebuf,
- 					(unsigned long)(di + 1), name_len);
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index d86abdc77c26..e46eb93c115d 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1100,7 +1100,7 @@ char *resource_string(char *buf, char *end, struct resource *res,
- #define FLAG_BUF_SIZE		(2 * sizeof(res->flags))
- #define DECODED_BUF_SIZE	sizeof("[mem - 64bit pref window disabled]")
- #define RAW_BUF_SIZE		sizeof("[mem - flags 0x]")
--	char sym[max(2*RSRC_BUF_SIZE + DECODED_BUF_SIZE,
-+	char sym[MAX(2*RSRC_BUF_SIZE + DECODED_BUF_SIZE,
- 		     2*RSRC_BUF_SIZE + FLAG_BUF_SIZE + RAW_BUF_SIZE)];
+ #define __clamp(val, lo, hi)	\
+ 	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
  
- 	char *p = sym, *pend = sym + sizeof(sym);
+-#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({		\
+-	typeof(val) unique_val = (val);						\
+-	typeof(lo) unique_lo = (lo);						\
+-	typeof(hi) unique_hi = (hi);						\
++#define __clamp_once(val, lo, hi, uval, ulo, uhi) ({				\
++	__auto_type uval = (val);						\
++	__auto_type ulo = (lo);							\
++	__auto_type uhi = (hi);							\
+ 	static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
+ 			(lo) <= (hi), true),					\
+ 		"clamp() low limit " #lo " greater than high limit " #hi);	\
+-	static_assert(__types_ok(val, lo), "clamp() 'lo' signedness error");	\
+-	static_assert(__types_ok(val, hi), "clamp() 'hi' signedness error");	\
+-	__clamp(unique_val, unique_lo, unique_hi); })
+-
+-#define __careful_clamp(val, lo, hi) ({					\
+-	__builtin_choose_expr(__is_constexpr((val) - (lo) + (hi)),	\
+-		__clamp(val, lo, hi),					\
+-		__clamp_once(val, lo, hi, __UNIQUE_ID(__val),		\
+-			     __UNIQUE_ID(__lo), __UNIQUE_ID(__hi))); })
++	static_assert(__types_ok(uval, lo, uval, ulo), "clamp() 'lo' signedness error");	\
++	static_assert(__types_ok(uval, hi, uval, uhi), "clamp() 'hi' signedness error");	\
++	__clamp(uval, ulo, uhi); })
++
++#define __careful_clamp(val, lo, hi) \
++	__clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+ 
+ /**
+  * min - return minimum of two values of the same or compatible types
 -- 
 2.47.3
 
