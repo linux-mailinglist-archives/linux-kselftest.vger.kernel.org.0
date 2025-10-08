@@ -1,182 +1,191 @@
-Return-Path: <linux-kselftest+bounces-42872-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A86CCBC51D8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 08 Oct 2025 15:04:48 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD8DFBC51E7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 08 Oct 2025 15:05:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7D53C4F7729
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Oct 2025 13:03:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 08C754F6865
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Oct 2025 13:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 202ED276052;
-	Wed,  8 Oct 2025 13:03:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D193241691;
+	Wed,  8 Oct 2025 13:03:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aapsnG3B"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011007.outbound.protection.outlook.com [40.93.194.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C042727E5
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Oct 2025 13:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759928584; cv=none; b=r4yIE35uif4ojsurgx1gau/eFRGwrww/YW6ss9Z2lnFrKAfwanoSTgGAwO1uj5SVmv9qI5Ri6JhykVJPF6kYPbVWcftgXchPWcZCEBSk330pmFAQHfVOOo4aoNctn0s5K08I/NWP0cOwQNUy4SAyYPmq1t6brlo2zKdouJt/O+c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759928584; c=relaxed/simple;
-	bh=EIAWGhW8A2v+ZxqAjP2xba0nfScSMoScw5np+T9vffE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qp0QqPhvC5qxWR17qA0dm9oZZ0NXj6lNeRgyraPBlA1nlE2y4hBqq7+k/3WLWauC+pQgrQteoK4RcwVwCSYEUZflaTMjbuG9GmqoTpbaujqBlE67d8ka2nml4MIH3nDZtarSTx93GmTsbBbRbxzvthPhM9KFOeeK5DnbD1Cqr2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b00a9989633so211252766b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Oct 2025 06:03:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759928580; x=1760533380;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ddtNPUJibRxzuhh3dSgUV8Un+ayK9jnQFI5eAYadmU0=;
-        b=Un8B9tEm6/SZUAVQLTY4bqfTkf1vWIGtWXzQSoWt1sgb3VOXAYkK2AXZqc0Gnw4GYB
-         R7y2a5PHkIVZ7JVY6pTZEAM3IQKJ8pRWcMVnC0VRtiZb4/ldVtIQgz2y2VisL3e2H2mP
-         f0vxocIhWg/qTIAcoLBdjEg6GoIXUVpDIu42TetWq494FbtLR1tFc8r9noA4pSQEdmL5
-         h8Z6qU3LxTF4DAiQ4Y7frBxpakSsUdLzQQXOkJNtTUWApo4BuXmLZdPamxboI5MCscYR
-         R1F5rIolXbaOxnHa+s/tR6ghiP1L9FhPbLVbqmpXLWVyf5Wj/HaYSf58O9E0LM0v4Itk
-         EFrg==
-X-Forwarded-Encrypted: i=1; AJvYcCXaKrDkw+UtBohS09rSlcPmDCUgzFtJ6THI/xTyS1MENF+7iWwE2LlmAPlv8BBtpg9p8XIzB21aAbCh4FBBsTA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWbJ5eCoKM3y/U+u0xyeuaF7PlD1q8hGiiFT7o0VFGg00Gv7nQ
-	W4NnCtjAkMNFxJ4YtWtUD07Shiqp7+/WKerU5nghPybhbUGuB64YIGne
-X-Gm-Gg: ASbGncuk6sjIPBOUVy1QCDcZDng49iU7sTyD2DUkBqhI6wHnRctwFrQeTUE/JYHCDXN
-	yEYN4pcO6WsucSctk3GO5DDEJZZGXeALT+0oZIShvbKPBEGHGQcGZaU8JP5nakz5Ctz3tGNe5yd
-	IQ2uVdApWOPigJwskc6PIiW6Wz+TRx8V6+ARd3GcnIH9pOFmF8dBYDlWfNk4bAYuzHmI4EESiZp
-	hlPMMGA5u1B8FP28A5J+8dTH4RyoEWXlq9glw477bXTwVzmIxUD1QbYZNo9qxkKd7VVIDLw7xWI
-	mun211IegvOm+Fj5f/iqRyVPtOMN7PT/4FW5XbpU2RWyvISKv1SoAJGlFo0tBE6GIu6wI2DzBYF
-	CkGdArKr5HRyhW8kfq0IZber3kw7vArQdTw2WphISPQ==
-X-Google-Smtp-Source: AGHT+IFCsOv+E+hkE/ODWPwUMsik0P5C7r77C29nZTRyMVSRUaIvoxt5GdpsOgvdOE/VgE3kaUEYsQ==
-X-Received: by 2002:a17:906:6a1f:b0:b04:3cd2:265b with SMTP id a640c23a62f3a-b50bcc09d8dmr365835566b.5.1759928579841;
-        Wed, 08 Oct 2025 06:02:59 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:40::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b486970a60dsm1631679466b.63.2025.10.08.06.02.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Oct 2025 06:02:59 -0700 (PDT)
-Date: Wed, 8 Oct 2025 06:02:56 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	david decotigny <decot@googlers.com>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de, calvin@wbinvd.org, 
-	kernel-team@meta.com, jv@jvosburgh.net
-Subject: Re: [PATCH net v7 4/4] selftest: netcons: add test for netconsole
- over bonded interfaces
-Message-ID: <m2dwihyj3vddvipam555ewxej663brejyv5gdnsw4ks5mis2y7@2mu2gus2o7ys>
-References: <20251003-netconsole_torture-v7-0-aa92fcce62a9@debian.org>
- <20251003-netconsole_torture-v7-4-aa92fcce62a9@debian.org>
- <e6764450-b0f8-4f50-b761-6321dfe2ad71@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C4622A7E6;
+	Wed,  8 Oct 2025 13:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759928618; cv=fail; b=NYyvenk9TN3uXQoH026edaIxKEfWAUGOW/1O2QXEMsnf7BcEri8V4xknGMBd1/BQ8UIsqObpSXTTyUUddgFm1LjX84fIJY/skOFqzfsLyAtapNws2Yl1QajXvUT6pwTuU3pWMjUHdGGQL2FqEjd6pP8Z6wY6e7kSmLvYjc+asW0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759928618; c=relaxed/simple;
+	bh=btmyfTvM8DSi3SA/vzO4A5wlAsbFtSLtbBV8FI7mp5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=dQB7TrZonxnR5oQyd59Vg/ExX31WZjpkuRN6DInLh58eEfLTrbAJ07HuOlU4tuTUfo72UALYUiwW8xU289NWFsNHT/DN9hxP/xJMLLJpGSlOgS+Ghbxg5Z0wqx0hcms5NNeQSPngk92U3UVEPwgWeRLYpiwSO8Ct4x1ErJ9PAxU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aapsnG3B; arc=fail smtp.client-ip=40.93.194.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NeXv7oIBwZlHkNyu1qrTUJDz0liZN1sQbCFh2QyAMAeqkrDqApXk6HkR3wHjkjRmdftxSlJf/ia2tMZK12Uarek4Y3eonqwxvNxyjy9rN/MrE7u8TTnTA535u+drpcNqMnBi5OA+rHCv0ZMfJk+1HHKK9wjXtM71jDpwcojnicNyQNIt/J5VSlik6F3QKJ1i0/qpC6nRWFYD6mbbD64WW3kQSpUGybIa2BR01XvfDgXLV+0uR2GHhEEBvalGXIizTVA/3jMVsqRHvPSaJWakKquJRbEvWIwoFpkGjGlpT399ptcFc5phJIaFNVYd5PdottVY8PinS8HQtJVGX4fKtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SUbduJXsC+iJBpr21Iqyan7Wiohuxmiqg6sjLT886As=;
+ b=h3K5QuJQ0d5IP9DowKmYHOU/ch4DMAC1urXK4qEMfIhEgu7zinYgJ5wtzI8EYVpbO/zVt55TAYUCFcc0epv3GnOqS9BXPFjvkujARWhJ8IpbYSlpZOzjPkrjWJuRpvkGymkGxCnTA5DEEFrxIkd2fvL6xHI5fXT4vh0LGb8I+RYH5N4TX48uUU9uQkwtCOo9R7NwefAucwNaDBwKMx1uuTRSQggNvNQwiYupsZ+XxhcovuRcsIqjr1L3+MAGDlnscz5sE2nyhl295Q5DbR1DZ8VIFnSmkvq5FcBrNZn2XHNcUuMCbKa832IykgO2WcwSZRGUg5AxhCWVNPFLbElpsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SUbduJXsC+iJBpr21Iqyan7Wiohuxmiqg6sjLT886As=;
+ b=aapsnG3BJ+Wh2pSzJryrahiYW4Z8/vfDsh8WzoVAZ5kArvauF4r2nhxL0b952hgvYyyWZ1nHjWo7eVl4Mdo+uBJtQLfAf9NPhXW0T8XNNM3Pgncmp4Q9pvLUx6bpO/OHRxjFBcysIXqG/dEiZW9SVVgBX9NLoqaE2iaI003il74/3p/5hcehE+TqcUWbDny/2TQuPYLyuwPWxAV2jLhpEr8n87J+r/sPT/B5UJrUdQjfBvSxk5nYyu4RD2x/MwLqClnQ79bvIR/C7YFNawTGvyqIA+s3zA51eRXHB3YzS53jyIAquCFOdeleU9zEkZqNX0yPlPuYwPRCAhSoYlyIXA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB3604.namprd12.prod.outlook.com (2603:10b6:408:45::31)
+ by MN0PR12MB6032.namprd12.prod.outlook.com (2603:10b6:208:3cc::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.9; Wed, 8 Oct
+ 2025 13:03:30 +0000
+Received: from BN8PR12MB3604.namprd12.prod.outlook.com
+ ([fe80::9629:2c9f:f386:841f]) by BN8PR12MB3604.namprd12.prod.outlook.com
+ ([fe80::9629:2c9f:f386:841f%5]) with mapi id 15.20.9182.017; Wed, 8 Oct 2025
+ 13:03:30 +0000
+Date: Wed, 8 Oct 2025 10:03:28 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Vasant Hegde <vasant.hegde@amd.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+Subject: Re: [PATCH v5 12/15] iommupt: Add the x86 64 bit page table format
+Message-ID: <20251008130328.GA3765120@nvidia.com>
+References: <12-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <2daa4e59-f5ea-43ca-bfc0-4a29e904e29a@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2daa4e59-f5ea-43ca-bfc0-4a29e904e29a@amd.com>
+X-ClientProxiedBy: DS7PR03CA0061.namprd03.prod.outlook.com
+ (2603:10b6:5:3bb::6) To BN8PR12MB3604.namprd12.prod.outlook.com
+ (2603:10b6:408:45::31)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6764450-b0f8-4f50-b761-6321dfe2ad71@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3604:EE_|MN0PR12MB6032:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14716d21-23ca-4088-1cc4-08de066b13be
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ZppJY55GrH+BqI5eF2WTRzaYi1bCDn2x7VxMHvq7tDFdH1ddgFFMuI/vI4N9?=
+ =?us-ascii?Q?+gCAllPfIehD/VcAl7WRDcLlnFu9xAwtdzVGwVvVutXJNoeakw5Jr4fvdwRW?=
+ =?us-ascii?Q?l4BPUCXTI0FTulVJxNDFypUDXn71oCqzlS5BF4c1qCqm55BzeRrMc6+EAobh?=
+ =?us-ascii?Q?KsmDrqY5NbYw80WhnRz0b21OtRNQ6hXHR6BUt1Javyi8lgE2AccDcpime2vB?=
+ =?us-ascii?Q?CtYlMlIx0lEjRpwdZyZwx4wv85rOF1co94+rR8KuK/+ZVGoSNZwQkRXKO4cu?=
+ =?us-ascii?Q?2VjPst1GaNUhXemjqgWlmEjNqwI1vXNaizJkZ+em5ZmzJ/h9dTQS9WASY5Ms?=
+ =?us-ascii?Q?VDB1EHY8UHHKKVyeK2imPOSiQwPLb76nv1BbgDHAZw0z/Tlb+wL6O3uKpRIn?=
+ =?us-ascii?Q?ZFC7joqcvxErPRK2WHSwGUkQGrGj5wxnuzUeAsdrtyY1xAeK6qmvy6gtfuT5?=
+ =?us-ascii?Q?ki8anX9pw3d8nKBDWRMiHBr12/jUGeSXXD9i8C3qNsKYGuIrydJPbBaV1uH0?=
+ =?us-ascii?Q?TGz6xfUmZoC2pxNZyCDc0KgV6zg4IUDvkLyr05rFqzNQgu7lB7B8YCY0z3i6?=
+ =?us-ascii?Q?YqVE5L3Ee7icF2On3//KOV/Np+3YL/zymc/m91ItNdeIbORofYyhu/l9GoeD?=
+ =?us-ascii?Q?r9snd/KiaFIZ65kjl+Q30arKo54XdCsZJFLRYQ/YnkeoXPC31bVccqgTZ+QN?=
+ =?us-ascii?Q?ULDD//uzRoZeaUriO/AOnm1+App+SaLu1+ZW5S3AN299R1EiGJK3GJly91aM?=
+ =?us-ascii?Q?jm08JJc9Qhp7/MQikcq1QLQMGuQJM46FqXhiBQQ59aPeT83P519swekHchQ1?=
+ =?us-ascii?Q?6vNSd6tKFyT4DhJu1vwrao/Vq7vIiXE1aeO5qQOgGflS3UYu5MNgf90MbBn7?=
+ =?us-ascii?Q?PbNRZ4s1yAi5dYEo5s53bNy+NnHFfVpGJX0gzkSEZ6DIBrH7MXTiZ1mtkB1S?=
+ =?us-ascii?Q?RfWXbd/EOLwWilMfR45dVMBxo9HXVzaNPP0GFO+KKtepyl9jGDF42tzOH+s0?=
+ =?us-ascii?Q?owxohmIKRhKPT/FztO1nIergCH4aaZUrs8m4wWkiehOHL1E8H5et26uAXZ9W?=
+ =?us-ascii?Q?E0FX0JPJ0f5V6ylZjwtVhf6xFnu7ctmbotrodIR2Xybe3dGNouKycDMffEC2?=
+ =?us-ascii?Q?oEtcoFXLb7kuUjdVB/J/rTZEcxAuykMHQK1N0rUrcSQzfWnjMJBf8L6Llv6j?=
+ =?us-ascii?Q?DCBehqStvPNI3WVlK7DsGGD+YKsuJJxmV1GMKbb05Lt7zwFIzFaTtZTHk2F8?=
+ =?us-ascii?Q?JK/X0kG7V/fK4cleWFizkcCvuzXf8Kep/y4IvgEON5w4WTVEPoPBbkH1OIVL?=
+ =?us-ascii?Q?WWVcxmzsLhdZYBFW7ZT+uTLy7cuOgfRQPFtmDMdR044dMBn9/pzPdhApFV+x?=
+ =?us-ascii?Q?RP5RQ8FrxRHk8poySK4bQX2AHg6SrtyjO1zQAVBeizGZmwNCkE5T3LL35u2Z?=
+ =?us-ascii?Q?DqO+bGnYKcv79qQCuoYxz04mBp5fnKUI?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?OfvDchG52VIXgnsezEHiVP4EghbLNDUejxxVmqD7dZRH8siMdcG4Rq9JS5D4?=
+ =?us-ascii?Q?pSMx+ecsmNWxYDiiCpcYDDgGJ+xGKmlw9OJihfX1i2kwQQtkl7STnGA5ym/H?=
+ =?us-ascii?Q?kOGeRnWpM5+P7/ghcrwIAJMJeY/KDGWg4fmEHTL0Tmy1V2PbkT9SwXoCUGxl?=
+ =?us-ascii?Q?BV21bE6mYY8KI60kLBdC6JLcXUB+STVdot6NgcbLFYJ8YTZ2O+PebVQHyyJ0?=
+ =?us-ascii?Q?kN7Zc95GMfJZJvrBlw5XRoJEuZ/9PjqdZbdDfpZad2xHURupyghAVpnBGvvP?=
+ =?us-ascii?Q?bc4piOase28+WG2hFn13QwjF3mJW9uw5AGHVQPOgm9OPtbfgVhvy5Z/vZYJM?=
+ =?us-ascii?Q?oBrTqKWITj9n94boHBEUKmKXPNdA8s8Rr8pImgb8+NjwcWWZXqYGaw804LN7?=
+ =?us-ascii?Q?ewWvePGyvJPpzD7A+ABHAc2MdxNbR3vzbBX7foyfB2174PV48fRQx56+SM7B?=
+ =?us-ascii?Q?VjzlefNM7UJ0fLhNAwvrzkK+97i1iSKHi1XG6RBU9rCXkp6ILnf8F6QEu2xp?=
+ =?us-ascii?Q?hzlYhhGbJrBDJus5qu97Gxzhayyh/e3QSFo0ZnkfBcbruIhKFjPgT8gthPwT?=
+ =?us-ascii?Q?zicxz0o88yy2+oO0fVshPLE5q/108KiFfe4KQPcQL3Typ9NciR0voYO/UYdZ?=
+ =?us-ascii?Q?Z4XW+dsKrE50SkpCJiLgM2twStlMyp2WP1Yn6Gxkm1TGTjFKj0UCNbyqt6sG?=
+ =?us-ascii?Q?2iBmjJuJzZ9cwnfWCM0fiNtbICs86ujNSYSSwr1wkgyHOVuMCkReHRwgMA0S?=
+ =?us-ascii?Q?WwQNrWaVuzt8ynFx+wH6iYzbzMj2cdPhAx1P+QbGd6OV3w5HBuh8uWEO0431?=
+ =?us-ascii?Q?uqlt5PyWub1qke77C1wY8jc+h0kK86o7/5tdyxo2fiGtLvco74CkoBlM/Wdn?=
+ =?us-ascii?Q?QDvxv7/IPSTF+nOyzfxD8gLW/6DePIm2pP/p/rAegE4/7mr+VVTuBgs7xidb?=
+ =?us-ascii?Q?GxnUackEfXmavQPymGxq35NG+SRkfm3MQ6jfuD2TLTxMW5MOqL9C1aZxmsEE?=
+ =?us-ascii?Q?J8erWAUcysP4EKq8ATmOnZFkMLJ1GLijpx7lQ2XUhY7S6fU94HNTVlwHoRTb?=
+ =?us-ascii?Q?4ifIxKVEI0P0DL/fEe8C1EdPkqC37kDOXXxvZ6ga0+0oWSP9VNbcYwjpOse2?=
+ =?us-ascii?Q?xqvhyT5JgW+/AXYUAZdzDKPeJ7Ahhajf7dgGpsP3G15/JkQjaY8SzexDbS89?=
+ =?us-ascii?Q?v0hgF7QDPsFK9lVvxfsireN32s/xDm5l6uLpyLhA4btmFndUYZLsVrerOxHF?=
+ =?us-ascii?Q?sZkSFvqD1Az+IsFpoQ8gpQi3ZT/ATeIcOdPJ9xbG9OfvzKy0G2SEGbOu/i2B?=
+ =?us-ascii?Q?kFhtRqeQuHy0nS0bZ0KuZPIN0LY/HLkWsQ8040KeMXh/mzczqySnG5RLovR0?=
+ =?us-ascii?Q?HBpEE42ki8+jq/EA5scvx4upTjcsTPIHvmD0PJF7wB6SIJ6yM8UE8WdEpGJ8?=
+ =?us-ascii?Q?IIn91ld683YZ4UDOBa+9cUZSygrkKdua5FlF/BQkZ8qJgYnbuKfBUdiGhTqG?=
+ =?us-ascii?Q?uh9SCyr99MgYZGvZtRnCQLcmJRosFMThqgLm1pCBywujdRgrt7OHTz/rdsSq?=
+ =?us-ascii?Q?dN0Yt801L5gcN8kwPT12MGgl0/ISF0k26PPm9Fg4?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14716d21-23ca-4088-1cc4-08de066b13be
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3604.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2025 13:03:30.5346
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dlmqfM/rhAwc1zlsubdNnucxfTSdxU95E+nKGTEDj6QCfG2bsjYVzzBHV+IYTtEQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6032
 
-Hello Paolo,
+On Wed, Oct 08, 2025 at 03:35:39PM +0530, Vasant Hegde wrote:
 
-On Tue, Oct 07, 2025 at 11:47:22AM +0200, Paolo Abeni wrote:
-> On 10/3/25 1:57 PM, Breno Leitao wrote:
-
-> > +# Test #5: Enslave a sub-interface to a bonding interface
-> > +# Enslave an interface to a bond interface that has netpoll attached
-> > +# At this stage, BOND_TX_MAIN_IF is created and BOND_TX1_SLAVE_IF is part of
-> > +# it. Netconsole is currently disabled
-> > +enslave_iface_to_bond
-> > +echo "test #5: Enslaving an interface to bond+netpoll. Test passed." >&2
+> > +static inline pt_oaddr_t x86_64_pt_entry_oa(const struct pt_state *pts)
+> > +{
+> > +	return oalog2_mul(FIELD_GET(X86_64_FMT_OA, pts->entry),
+> > +			  PT_GRANULE_LG2SZ);
 > 
-> I think this is missing the negative/fail to add test case asked by
-> Jakub. AFAICS you should be able to trigger such case trying to add a
-> veth device to the netpoll enabled bond (since the latter carries the
-> IFF_DISABLE_NETPOLL priv_flag).
+> Also here.
 
-Thanks for the review. I misunderstood what Jakub said, sorry about it.
+Presumably this as well?
 
-I've tried to enslave a veth interface manually into a bonding
-interface, and I can see:
+@@ -2166,7 +2166,7 @@ static int init_gcr3_table(struct iommu_dev_data *dev_data,
+                return ret;
+ 
+        pt_iommu_x86_64_hw_info(&pdom->amdv2, &pt_info);
+-       ret = update_gcr3(dev_data, 0, pt_info.gcr3_pt, true);
++       ret = update_gcr3(dev_data, 0, __sme_set(pt_info.gcr3_pt), true);
+        if (ret)
+                free_gcr3_table(&dev_data->gcr3_info);
 
-	# ip link set veth0 master bond_tx_78
-	 aborting
-	 RTNETLINK answers: Device or resource busy
-	
-and dmesg shows:
-
-	netpoll: (null): veth0 doesn't support polling,
-
-If that is the test case that is missing, I will add it as an additional
-test in the selftest, and send a new version.
-
-> > +function create_ifaces_bond() {
-> > +	echo "$NSIM_BOND_TX_1" > "$NSIM_DEV_SYS_NEW"
-> > +	echo "$NSIM_BOND_TX_2" > "$NSIM_DEV_SYS_NEW"
-> > +	echo "$NSIM_BOND_RX_1" > "$NSIM_DEV_SYS_NEW"
-> > +	echo "$NSIM_BOND_RX_2" > "$NSIM_DEV_SYS_NEW"
-> > +	udevadm settle 2> /dev/null || true
-> > +
-> > +	local BOND_TX1=/sys/bus/netdevsim/devices/netdevsim"$NSIM_BOND_TX_1"
-> > +	local BOND_TX2=/sys/bus/netdevsim/devices/netdevsim"$NSIM_BOND_TX_2"
-> > +	local BOND_RX1=/sys/bus/netdevsim/devices/netdevsim"$NSIM_BOND_RX_1"
-> > +	local BOND_RX2=/sys/bus/netdevsim/devices/netdevsim"$NSIM_BOND_RX_2"
-> 
-> Note that with the create_netdevsim() helper from
-> tools/testing/selftests/net/lib.sh you could create the netdevsim device
-> directly in the target namespace and avoid some duplicate code.
-
-Awesome. I am more than happy to create_netdevsim() in this selftest,
-and move the others to use it as well.
-
-> It would be probably safer to create both rx and tx devices in child
-> namespaces.
-
-Sure, that is doable, but, I need to change a few common helpers, to
-start netconsole from inside the "tx namespace" instead of the default
-namespace.
-
-Given all the other netconsole selftest uses TX from the default net
-namespace, I would like to move them at all the same time.
-
-Do you think it is Ok to have this test using TX interfaces from the
-main net namespace (as is now), and then I submit a follow patch to
-migrate all the netcons tests (including this one) to use a TX
-namespace? Then I can change the helpers at the same time, simplifying
-the code review.
-
-> > +	# now create the RX bonding iface
-> > +	ip netns exec "${NAMESPACE}" \
-> > +		ip link add "${BOND_RX_MAIN_IF}" type bond mode balance-rr
-> 
-> Minor nit:
-> 
-> 	ip -n "${NAMESPACE}" link ...
-> 
-> will yield the same result with a little less wording.
-
-Ack. I will update. Thanks
-
-> > +# Clean up netdevsim ifaces created for bonding test
-> > +function cleanup_bond_nsim() {
-> > +	echo "$NSIM_BOND_TX_1" > "$NSIM_DEV_SYS_DEL"
-> > +	echo "$NSIM_BOND_TX_2" > "$NSIM_DEV_SYS_DEL"
-> > +	echo "$NSIM_BOND_RX_1" > "$NSIM_DEV_SYS_DEL"
-> > +	echo "$NSIM_BOND_RX_2" > "$NSIM_DEV_SYS_DEL"
-> > +	cleanup_all_ns
-> 
-> If all devices are created in child netns, you will not need explicit
-> per device cleanup.
-
-Ack!
-
-Thanks for the review,
---breno
+Jason
 
