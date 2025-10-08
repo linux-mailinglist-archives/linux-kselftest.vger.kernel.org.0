@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-42878-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42879-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8980BC5623
-	for <lists+linux-kselftest@lfdr.de>; Wed, 08 Oct 2025 16:07:34 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ABBDBC564D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 08 Oct 2025 16:10:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 162AD3E48FA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Oct 2025 14:07:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 296884FB14D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Oct 2025 14:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F78C296BDE;
-	Wed,  8 Oct 2025 14:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDFD29AAEA;
+	Wed,  8 Oct 2025 14:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hG+EKJMj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ut11yE86"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E64328B407;
-	Wed,  8 Oct 2025 14:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A453729993A;
+	Wed,  8 Oct 2025 14:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759932432; cv=none; b=DdleXJuMs+MRN7yta2XNy1szjBKaKhJLSIQDCAcIpecCsxlJ69XnaGJu3HUEm064mfKNoPhj4fGjfTBhe4QF5QytUwbP4aqNHaDQnA43M9AjI4INZXnErfzslUZuKPN4x2UT93vMZ8bCLBqqZSN16KI6hePOFisHyg4h69NBKks=
+	t=1759932433; cv=none; b=pmP3BHPaB2OCfXVMx4C6wIdKYukAziFJ6phfhdTEOGMjqH+ihJeDzQEeyYfV44UH6cOPlKZ8JUF++2LyeskXVKbp37/57eE22VdN58OsLHGNLTwEtx3bcvWQWOrbmDDpUQyCtG4ZCF2O9iStjq+dGBrBma2xP1b05soZFWdVD7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759932432; c=relaxed/simple;
-	bh=8/6WonwVUK28ZDpzUjC7vuBo+6VbQAZcnla9obkGu5s=;
+	s=arc-20240116; t=1759932433; c=relaxed/simple;
+	bh=Uqc/kLJQy55H6bnTrhnxEfGjhf286WP1v2c3zjoMyx4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=F0BY0dlq0K7x0ZhV9dYi23bI75z/GcaVsG47MopRNayDMFCAJ20HXl/hZxBapX8CAxZfVnDj88nUbCbssJLTqPflu3K0S9q41eHjnmHMMd4t0LGrNLKinAkADbR9u9mt+IkzXS62X3Its9dQs0hixxbXXrMXgOW7f23NUdgb1Qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hG+EKJMj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19051C4CEFF;
-	Wed,  8 Oct 2025 14:07:09 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=AR3RAYsTcnnYeu2K8tFgfFFW16TH59dCnisNZ2MzTInp5Zd3MWT0bngobx85xJ6DptJ9DRhsvEY1Bq2APUbVm5VHDByX0Dg6tCPQ4eqoB+ot91PjqVqrglxzBDITLk9JDdTbqv2KYW9cWKE5EWtEVox0WLdbMNrJUWi3s2eW0Os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ut11yE86; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E490C4CEF5;
+	Wed,  8 Oct 2025 14:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759932431;
-	bh=8/6WonwVUK28ZDpzUjC7vuBo+6VbQAZcnla9obkGu5s=;
+	s=k20201202; t=1759932433;
+	bh=Uqc/kLJQy55H6bnTrhnxEfGjhf286WP1v2c3zjoMyx4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=hG+EKJMjAGZw0DovquxOGJBOg9Q0kXIAl0YDQldqJrlgA7ydTqEGFoe83sF6qI2wP
-	 gK07NhReYcnYPK3foD9tVU4jx6BUdWupO1Bl/DcMJpZVDQWgGGsGqEsxhj8E/XmfOs
-	 L8E/jC4stEBOCPXcYDFtQb2NM9B52UIfELAKwn2SquWj2xWX8U1LeCkv/xoVb+tBpU
-	 eJZUN1e5Fya6nAs8nAykrosoirHtuzj7IZqOv8wnSPuh1Mv6VqB+avRv/OPkFFQb97
-	 koWovfgTA4AfmxQE5goJ7j5mp6e5XR7Ej64/H9PHmEZFfD4pBsQUjxL5v90VDN7bna
-	 VZ0+RY9j8jRQg==
+	b=Ut11yE86J8IoE7mxYoqQpkN/v+Pa7sQGTHpeEYCGmj9Ax94Xsklg1TlqDYcM3/toM
+	 SxiZugEnzOk+esAum3pVSXxFoNfTovF2c6bGtWfGoh4UoH8CBhjyArrzwQXKyhzDrT
+	 SFUwcLhjyXN2AUud9POC+VTa9W09E8cj2VdpoamNJRTUgizzoNQPwtF4LMy8A5QXM9
+	 AL+TiWHogfULKJLuOfRJEzQapsrp07nCMP3+UDHX9fIlYvQPFLp7qRRkGivRxLwGub
+	 sXaKp0lcWWX3VEV1RIHIzghftn4WFZ1x26Nb9QzfuzPgfIR6Ydffyug3CyxBr3toLS
+	 n3PDlfig/9OMw==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 08 Oct 2025 16:06:58 +0200
-Subject: [PATCH 1/2] HID: multitouch: fix sticky fingers
+Date: Wed, 08 Oct 2025 16:06:59 +0200
+Subject: [PATCH 2/2] selftests/hid: add tests for missing release on the
+ Dell Synaptics
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,124 +53,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251008-fix-sticky-fingers-v1-1-760f1f26fce3@kernel.org>
+Message-Id: <20251008-fix-sticky-fingers-v1-2-760f1f26fce3@kernel.org>
 References: <20251008-fix-sticky-fingers-v1-0-760f1f26fce3@kernel.org>
 In-Reply-To: <20251008-fix-sticky-fingers-v1-0-760f1f26fce3@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc: Peter Hutterer <peter.hutterer@who-t.net>, linux-input@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Benjamin Tissoires <bentiss@kernel.org>, stable@vger.kernel.org
+ Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1759932427; l=4325;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1759932427; l=7534;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=8/6WonwVUK28ZDpzUjC7vuBo+6VbQAZcnla9obkGu5s=;
- b=GhMjybiqnJlkmfjF6TNlMyBlxCF8o8lWhA6oHJUZyLPJbvQ7mR6TlyYI3fcuPvTtUFOb03WvX
- TzIFAffUJztAqSJ98fM36kVIjYdLKF+0rWtZjB6rxwY/Q29dks843O7
+ bh=Uqc/kLJQy55H6bnTrhnxEfGjhf286WP1v2c3zjoMyx4=;
+ b=HM+woDX5bgiVNyXttgO3cJHrrGOPvuveDmdMS5F+Bvl3bKyIdkd+xQAjQDu/UMQGntneuSUTo
+ Xix0x1+bJVDCnXEoRmb1Zp9km0UfVChuqKt1jP8zOlRG1KAXrRw5bKJ
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-The sticky fingers quirk (MT_QUIRK_STICKY_FINGERS) was only considering
-the case when slots were not released during the last report.
-This can be problematic if the firmware forgets to release a finger
-while others are still present.
+Add a simple test for the corner case not currently covered by the
+sticky fingers quirk. Because it's a corner case test, we only test this
+on a couple of devices, not on all of them because the value of adding
+the same test over and over is rather moot.
 
-This was observed on the Synaptics DLL0945 touchpad found on the Dell
-XPS 9310 and the Dell Inspiron 5406.
-
-Fixes: 4f4001bc76fd ("HID: multitouch: fix rare Win 8 cases when the touch up event gets missing")
-Cc: stable@vger.kernel.org
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- drivers/hid/hid-multitouch.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ .../testing/selftests/hid/tests/test_multitouch.py | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 2879e65cf303b1456311ac06115adda5a78a2600..e1a5c7f3a25132094ed643910337474025852b22 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -94,9 +94,8 @@ enum report_mode {
- 	TOUCHPAD_REPORT_ALL = TOUCHPAD_REPORT_BUTTONS | TOUCHPAD_REPORT_CONTACTS,
- };
+diff --git a/tools/testing/selftests/hid/tests/test_multitouch.py b/tools/testing/selftests/hid/tests/test_multitouch.py
+index 5d2ffa3d59777e3cd93d1d7aebabc2a6b7ecb42a..ece0ba8e7d34b75d42245e5936ecf804c46b0846 100644
+--- a/tools/testing/selftests/hid/tests/test_multitouch.py
++++ b/tools/testing/selftests/hid/tests/test_multitouch.py
+@@ -1752,6 +1752,52 @@ class TestWin8TSConfidence(BaseTest.TestWin8Multitouch):
+         assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
  
--#define MT_IO_FLAGS_RUNNING		0
--#define MT_IO_FLAGS_ACTIVE_SLOTS	1
--#define MT_IO_FLAGS_PENDING_SLOTS	2
-+#define MT_IO_SLOTS_MASK		GENMASK(7, 0) /* reserve first 8 bits for slot tracking */
-+#define MT_IO_FLAGS_RUNNING		32
  
- static const bool mtrue = true;		/* default for true */
- static const bool mfalse;		/* default for false */
-@@ -172,7 +171,11 @@ struct mt_device {
- 	struct timer_list release_timer;	/* to release sticky fingers */
- 	struct hid_haptic_device *haptic;	/* haptic related configuration */
- 	struct hid_device *hdev;	/* hid_device we're attached to */
--	unsigned long mt_io_flags;	/* mt flags (MT_IO_FLAGS_*) */
-+	unsigned long mt_io_flags;	/* mt flags (MT_IO_FLAGS_RUNNING)
-+					 * first 8 bits are reserved for keeping the slot
-+					 * states, this is fine because we only support up
-+					 * to 250 slots (MT_MAX_MAXCONTACT)
-+					 */
- 	__u8 inputmode_value;	/* InputMode HID feature value */
- 	__u8 maxcontacts;
- 	bool is_buttonpad;	/* is this device a button pad? */
-@@ -986,6 +989,7 @@ static void mt_release_pending_palms(struct mt_device *td,
- 
- 	for_each_set_bit(slotnum, app->pending_palm_slots, td->maxcontacts) {
- 		clear_bit(slotnum, app->pending_palm_slots);
-+		clear_bit(slotnum, &td->mt_io_flags);
- 
- 		input_mt_slot(input, slotnum);
- 		input_mt_report_slot_inactive(input);
-@@ -1019,12 +1023,6 @@ static void mt_sync_frame(struct mt_device *td, struct mt_application *app,
- 	app->left_button_state = 0;
- 	if (td->is_haptic_touchpad)
- 		hid_haptic_pressure_reset(td->haptic);
--
--	if (test_bit(MT_IO_FLAGS_ACTIVE_SLOTS, &td->mt_io_flags))
--		set_bit(MT_IO_FLAGS_PENDING_SLOTS, &td->mt_io_flags);
--	else
--		clear_bit(MT_IO_FLAGS_PENDING_SLOTS, &td->mt_io_flags);
--	clear_bit(MT_IO_FLAGS_ACTIVE_SLOTS, &td->mt_io_flags);
- }
- 
- static int mt_compute_timestamp(struct mt_application *app, __s32 value)
-@@ -1202,7 +1200,9 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
- 		input_event(input, EV_ABS, ABS_MT_TOUCH_MAJOR, major);
- 		input_event(input, EV_ABS, ABS_MT_TOUCH_MINOR, minor);
- 
--		set_bit(MT_IO_FLAGS_ACTIVE_SLOTS, &td->mt_io_flags);
-+		set_bit(slotnum, &td->mt_io_flags);
-+	} else {
-+		clear_bit(slotnum, &td->mt_io_flags);
- 	}
- 
- 	return 0;
-@@ -1337,7 +1337,7 @@ static void mt_touch_report(struct hid_device *hid,
- 	 * defect.
- 	 */
- 	if (app->quirks & MT_QUIRK_STICKY_FINGERS) {
--		if (test_bit(MT_IO_FLAGS_PENDING_SLOTS, &td->mt_io_flags))
-+		if (td->mt_io_flags & MT_IO_SLOTS_MASK)
- 			mod_timer(&td->release_timer,
- 				  jiffies + msecs_to_jiffies(100));
- 		else
-@@ -1813,6 +1813,7 @@ static void mt_release_contacts(struct hid_device *hid)
- 			for (i = 0; i < mt->num_slots; i++) {
- 				input_mt_slot(input_dev, i);
- 				input_mt_report_slot_inactive(input_dev);
-+				clear_bit(i, &td->mt_io_flags);
- 			}
- 			input_mt_sync_frame(input_dev);
- 			input_sync(input_dev);
-@@ -1835,7 +1836,7 @@ static void mt_expired_timeout(struct timer_list *t)
- 	 */
- 	if (test_and_set_bit_lock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
- 		return;
--	if (test_bit(MT_IO_FLAGS_PENDING_SLOTS, &td->mt_io_flags))
-+	if (td->mt_io_flags & MT_IO_SLOTS_MASK)
- 		mt_release_contacts(hdev);
- 	clear_bit_unlock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
- }
++    @pytest.mark.skip_if_uhdev(
++        lambda uhdev: "Confidence" not in uhdev.fields,
++        "Device not compatible, missing Confidence usage",
++    )
++    def test_mt_confidence_bad_multi_release(self):
++        """Check for the sticky finger being properly detected.
++
++        We first inject 3 fingers, then release only the second.
++        After 100 ms, we should receive a generated event about the
++        2 missing fingers being released.
++        """
++        uhdev = self.uhdev
++        evdev = uhdev.get_evdev()
++
++        # send 3 touches
++        t0 = Touch(1, 50, 10)
++        t1 = Touch(2, 150, 100)
++        t2 = Touch(3, 250, 200)
++        r = uhdev.event([t0, t1, t2])
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++
++        # release the second
++        t1.tipswitch = False
++        r = uhdev.event([t1])
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++
++        # only the second is released
++        assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_TRACKING_ID] != -1
++        assert evdev.slots[1][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
++        assert evdev.slots[2][libevdev.EV_ABS.ABS_MT_TRACKING_ID] != -1
++
++        # wait for the timer to kick in
++        time.sleep(0.2)
++
++        events = uhdev.next_sync_events()
++        self.debug_reports([], uhdev, events)
++
++        # now all 3 fingers are released
++        assert libevdev.InputEvent(libevdev.EV_KEY.BTN_TOUCH, 0) in events
++        assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
++        assert evdev.slots[1][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
++        assert evdev.slots[2][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
++
++
+ class TestElanXPS9360(BaseTest.TestWin8Multitouch):
+     def create_device(self):
+         return Digitizer(
+@@ -2086,3 +2132,12 @@ class Testsynaptics_06cb_ce08(BaseTest.TestPTP):
+             input_info=(BusType.I2C, 0x06CB, 0xCE08),
+             rdesc="05 01 09 02 a1 01 85 02 09 01 a1 00 05 09 19 01 29 02 15 00 25 01 75 01 95 02 81 02 95 06 81 01 05 01 09 30 09 31 15 81 25 7f 75 08 95 02 81 06 c0 c0 05 01 09 02 a1 01 85 18 09 01 a1 00 05 09 19 01 29 03 46 00 00 15 00 25 01 75 01 95 03 81 02 95 05 81 01 05 01 09 30 09 31 15 81 25 7f 75 08 95 02 81 06 c0 c0 06 00 ff 09 02 a1 01 85 20 09 01 a1 00 09 03 15 00 26 ff 00 35 00 46 ff 00 75 08 95 05 81 02 c0 c0 05 0d 09 05 a1 01 85 03 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 26 f8 04 75 10 55 0e 65 11 09 30 35 00 46 24 04 95 01 81 02 46 30 02 26 a0 02 09 31 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 26 f8 04 75 10 55 0e 65 11 09 30 35 00 46 24 04 95 01 81 02 46 30 02 26 a0 02 09 31 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 
+ 26 f8 04 75 10 55 0e 65 11 09 30 35 00 46 24 04 95 01 81 02 46 30 02 26 a0 02 09 31 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 26 f8 04 75 10 55 0e 65 11 09 30 35 00 46 24 04 95 01 81 02 46 30 02 26 a0 02 09 31 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 26 f8 04 75 10 55 0e 65 11 09 30 35 00 46 24 04 95 01 81 02 46 30 02 26 a0 02 09 31 81 02 c0 05 0d 55 0c 66 01 10 47 ff ff 00 00 27 ff ff 00 00 75 10 95 01 09 56 81 02 09 54 25 7f 95 01 75 08 81 02 05 09 09 01 25 01 75 01 95 01 81 02 95 07 81 03 05 0d 85 08 09 55 09 59 75 04 95 02 25 0f b1 02 85 0d 09 60 75 01 95 01 15 00 25 01 b1 02 95 07 b1 03 85 07 06 00 ff 09 c5 15 00 26 ff 00 75 08 96 00 01 b1 02 c0 05 0d 09 0e a1 01 85 04 09 22 a1 02 09 52 15 00 25 0a 75 08 95 01 b1 02 c0 09 22 a1 00 85 06 09 57 09 58 75 01 95 02 25 01 b1 02 95 06 b1 03 c0 c0 06 00 ff 09 01 a
+ 1 01 85 09 09 02 15 00 26 ff 00 75 08 95 14 91 02 85 0a 09 03 15 00 26 ff 00 75 08 95 14 91 02 85 0b 09 04 15 00 26 ff 00 75 08 95 45 81 02 85 0c 09 05 15 00 26 ff 00 75 08 95 45 81 02 85 0f 09 06 15 00 26 ff 00 75 08 95 03 b1 02 85 0e 09 07 15 00 26 ff 00 75 08 95 01 b1 02 c0",
+         )
++
++class Testsynaptics_06cb_ce26(TestWin8TSConfidence):
++    def create_device(self):
++        return PTP(
++            "uhid test synaptics_06cb_ce26",
++            max_contacts=5,
++            input_info=(BusType.I2C, 0x06CB, 0xCE26),
++            rdesc="05 01 09 02 a1 01 85 02 09 01 a1 00 05 09 19 01 29 02 15 00 25 01 75 01 95 02 81 02 95 06 81 01 05 01 09 30 09 31 15 81 25 7f 75 08 95 02 81 06 c0 c0 05 0d 09 05 a1 01 85 03 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 26 45 05 75 10 55 0e 65 11 09 30 35 00 46 64 04 95 01 81 02 46 a2 02 26 29 03 09 31 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 26 45 05 75 10 55 0e 65 11 09 30 35 00 46 64 04 95 01 81 02 46 a2 02 26 29 03 09 31 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 26 45 05 75 10 55 0e 65 11 09 30 35 00 46 64 04 95 01 81 02 46 a2 02 26 29 03 09 31 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 26 45 05 75 10 55 0e 65 11 09 30 35 00 46 64 
+ 04 95 01 81 02 46 a2 02 26 29 03 09 31 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 75 01 95 03 81 03 05 01 15 00 26 45 05 75 10 55 0e 65 11 09 30 35 00 46 64 04 95 01 81 02 46 a2 02 26 29 03 09 31 81 02 c0 05 0d 55 0c 66 01 10 47 ff ff 00 00 27 ff ff 00 00 75 10 95 01 09 56 81 02 09 54 25 7f 95 01 75 08 81 02 05 09 09 01 25 01 75 01 95 01 81 02 95 07 81 03 05 0d 85 08 09 55 09 59 75 04 95 02 25 0f b1 02 85 0d 09 60 75 01 95 01 15 00 25 01 b1 02 95 07 b1 03 85 07 06 00 ff 09 c5 15 00 26 ff 00 75 08 96 00 01 b1 02 c0 05 0d 09 0e a1 01 85 04 09 22 a1 02 09 52 15 00 25 0a 75 08 95 01 b1 02 c0 09 22 a1 00 85 06 09 57 09 58 75 01 95 02 25 01 b1 02 95 06 b1 03 c0 c0 06 00 ff 09 01 a1 01 85 09 09 02 15 00 26 ff 00 75 08 95 14 91 02 85 0a 09 03 15 00 26 ff 00 75 08 95 14 91 02 85 0b 09 04 15 00 26 ff 00 75 08 95 3d 81 02 85 0c 09 05 15 00 26 ff 00 75 08 95 3d 81 02 85 0f 09 06 15 00 26 ff 00 75 08 95 03 b1 02 85 0e 09 07 15 00 26 ff 00 7
+ 5 08 95 01 b1 02 c0",
++        )
 
 -- 
 2.51.0
