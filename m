@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-42909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C965EBC70D0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 09 Oct 2025 03:07:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75A57BC714E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 09 Oct 2025 03:09:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2C073E4DCD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Oct 2025 01:07:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6666C19E47EE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Oct 2025 01:09:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281FC13E02A;
-	Thu,  9 Oct 2025 01:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF53E1E3DCD;
+	Thu,  9 Oct 2025 01:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z85MDq7b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rIX5UnrQ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C697082D;
-	Thu,  9 Oct 2025 01:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD2D155C82;
+	Thu,  9 Oct 2025 01:07:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759972028; cv=none; b=D84JNm438dyr9ZH9mBrdve6x2rw+Kh1q7L3QWthJ9GcsdSiIPot62PWAJe2H8uyq5B9+MUJqwphe7kDaPctcl2XXN1GLmPRMCD2/wstfvc5x2haBK34Pto7VM2w0pxq5wDa3ccmZfOIBVp93jB5krrpC2CZKJj+wIZU1v7PYYxE=
+	t=1759972042; cv=none; b=LNZAwBhNqjUC2gcQFKkdHAG2AGPMGiW1IaIIhcOZOJNC5FVFpxn1wKQocITFfucHzBFDTzLmxA0QHQwjQdXWeenoOpN1doDMNrqH0JYdkJTpr/6cW9K223PDXHImlEh0Zx579kUs5sU4E2gEMyu6f4k5nQxuDqZyNCucZfN/fW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759972028; c=relaxed/simple;
-	bh=VISjCl3028ZdolLBlNDZGd4lu4o1butuKMV03AtZBlw=;
+	s=arc-20240116; t=1759972042; c=relaxed/simple;
+	bh=gOZMzGofq4mPMi4a6FfMrSXrrYqWnEJSEe2U4H+HIxI=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BNUU0AANUHqccrRIptTrY9gZjtGJEozA74zp58XfSB9qOwfrBpucQQB47KmDptEOE/XZoNqgfL74FPmHKPHJK3rxyCkzsyCWbYBSjjFGUy9oDP8fVuaJ/pJ4v6/sjN3ALQdagnbr/R8acTRTr1Ehb3jgPMk6RvRoNMW5OpiyG+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z85MDq7b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE42C4CEF8;
-	Thu,  9 Oct 2025 01:07:07 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=VNRVrwE8YDMhefRAzP72LLs9XrHatPRPhbae+zcBfVI1fXzjEkhr99sZpyHVwOIKOZCbN33K9xaeJwFDLu5bA9QsWxQQrnS9JdfHZvdUlZhFCznwgLQTIEtgdV7KBokaCrY71szTQKfcmCy8aAMGyIrySdBz7Bu6Ljn+GWqDVDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rIX5UnrQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EFE9C4CEE7;
+	Thu,  9 Oct 2025 01:07:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759972027;
-	bh=VISjCl3028ZdolLBlNDZGd4lu4o1butuKMV03AtZBlw=;
+	s=k20201202; t=1759972041;
+	bh=gOZMzGofq4mPMi4a6FfMrSXrrYqWnEJSEe2U4H+HIxI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Z85MDq7bFHAVb7Rv7QvW4jT9Y15cPiI0WVlhCJV3Hb8KzH2ZYtKDIugmNBfAaGySd
-	 z5ewF5rNJ+Eg/0lDf4iQ7eqlYgIW0QFXYttqFueGd0EyH0q3YxGVMid01GmetPjhLw
-	 CLKH4BhiZk2QE9ZHGNcP1R+Uu7twuBVmXVU7JX+WU6Qkgezekw/tfTay9IqLn/03qv
-	 fGM0puNNPNlEwlNS8diIH3zKif6A6uWsftAXlyDWexxIsHVq/Ua4/nh1U3nC4uYics
-	 +WuF25l1nNqeg2I6RnH6RhbrrEuRMwXBeUzGy3elVssgawfAsHG1eRRK1qPPGapFZ4
-	 MDqB4RaRlBhng==
+	b=rIX5UnrQuVtPUja4Kq/zNxiwyTbf5s+hCzHT8aH9/VUdnNlKWh8D4mSKFL/eXwlaD
+	 7z8+SEmVkcAfo9fmiSSyJ11EAUKKRJcwMVTb9iuWDWBwheam1F4EfrpnDWIzUjmitV
+	 mpUbtUtSbqOH/UnhpYe9i14SkLmyq3I1gfKlnnkK+sqgEdkc4pLZ6mWhV/a0ryPI+M
+	 cnqFIsiLX5CDpbNJvCwTuxPNZCjZR+B1mOV2TKr1ssRJwK/PuLD12JWWzuO1dLp+oX
+	 6de792lhNHw6SaLSFK1kZpeE0QJJFPFLV/HILKfJuySwcXVffLr7XVkoyczsYsHHIo
+	 /dSAJt7cVsj/Q==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB00C3A41017;
-	Thu,  9 Oct 2025 01:06:56 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADDA93A41017;
+	Thu,  9 Oct 2025 01:07:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,69 +52,53 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/11] vdso: Various cleanups
+Subject: Re: update kernel-doc for MEMBLOCK_RSRV_NOINIT (was: Re: [PATCH RFC
+ 10/35] mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap())
 From: patchwork-bot+linux-riscv@kernel.org
 Message-Id: 
- <175997201575.3661959.11378704835584004005.git-patchwork-notify@kernel.org>
-Date: Thu, 09 Oct 2025 01:06:55 +0000
-References: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
-In-Reply-To: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh_=3Cthomas=2Eweissschuh=40linutronix=2Ede=3E?=@codeaurora.org
-Cc: linux-riscv@lists.infradead.org, luto@kernel.org, tglx@linutronix.de,
- vincenzo.frascino@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, namcao@linutronix.de,
- linux@armlinux.org.uk, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
- kernel@xen0n.name, tsbogend@alpha.franken.de, maddy@linux.ibm.com,
- mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
- hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
- borntraeger@linux.ibm.com, svens@linux.ibm.com, arnd@arndb.de,
- brauner@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux@rasmusvillemoes.dk
+ <175997202925.3661959.5694356441030280085.git-patchwork-notify@kernel.org>
+Date: Thu, 09 Oct 2025 01:07:09 +0000
+References: <aKyWIriZ1bmnIrBW@kernel.org>
+In-Reply-To: <aKyWIriZ1bmnIrBW@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-riscv@lists.infradead.org, david@redhat.com, mpenttil@redhat.com,
+ linux-kernel@vger.kernel.org, glider@google.com, akpm@linux-foundation.org,
+ jackmanb@google.com, cl@gentwo.org, dennis@kernel.org, dvyukov@google.com,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org, jgg@nvidia.com,
+ axboe@kernel.dk, hannes@cmpxchg.org, jhubbard@nvidia.com,
+ kasan-dev@googlegroups.com, kvm@vger.kernel.org, Liam.Howlett@oracle.com,
+ torvalds@linux-foundation.org, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, elver@google.com, m.szyprowski@samsung.com,
+ mhocko@suse.com, muchun.song@linux.dev, netdev@vger.kernel.org,
+ osalvador@suse.de, peterx@redhat.com, robin.murphy@arm.com,
+ surenb@google.com, tj@kernel.org, virtualization@lists.linux.dev,
+ vbabka@suse.cz, wireguard@lists.zx2c4.com, x86@kernel.org, ziy@nvidia.com
 
 Hello:
 
-This series was applied to riscv/linux.git (for-next)
-by Thomas Gleixner <tglx@linutronix.de>:
+This patch was applied to riscv/linux.git (for-next)
+by Mike Rapoport (Microsoft) <rppt@kernel.org>:
 
-On Tue, 26 Aug 2025 08:17:03 +0200 you wrote:
-> Various cleanups to the generic vDSO infrastructure and a patch for ARM
-> which was never applied.
-> 
-> This series has one trivial syntactic conflict with "dso/datastore: Allow
-> prefaulting by mlockall()" [0] and a semantic one with "sparc64: vdso:
-> Switch to generic vDSO library" [1], which still uses the removed
-> GENERIC_VDSO_DATA_STORE.
+On Mon, 25 Aug 2025 19:58:10 +0300 you wrote:
+> On Mon, Aug 25, 2025 at 06:23:48PM +0200, David Hildenbrand wrote:
+> >
+> > I don't quite understand the interaction with PG_Reserved and why anybody
+> > using this function should care.
+> >
+> > So maybe you can rephrase in a way that is easier to digest, and rather
+> > focuses on what callers of this function are supposed to do vs. have the
+> > liberty of not doing?
 > 
 > [...]
 
 Here is the summary with links:
-  - [01/11] vdso/datastore: Gate time data behind CONFIG_GENERIC_GETTIMEOFDAY
-    https://git.kernel.org/riscv/c/7c0c01a216e6
-  - [02/11] ARM: VDSO: remove cntvct_ok global variable
-    https://git.kernel.org/riscv/c/39f1ee1299c9
-  - [03/11] vdso: Move ENABLE_COMPAT_VDSO from core to arm64
-    https://git.kernel.org/riscv/c/7d298d25ce81
-  - [04/11] vdso/gettimeofday: Remove !CONFIG_TIME_NS stubs
-    https://git.kernel.org/riscv/c/f145d6bf8d59
-  - [05/11] time: Build generic update_vsyscall() only with generic time vDSO
-    https://git.kernel.org/riscv/c/ea1a1fa919a5
-  - [06/11] riscv: vdso: Untangle kconfig logic
-    https://git.kernel.org/riscv/c/eb3b66aab72c
-  - [07/11] vdso: Drop kconfig GENERIC_VDSO_32
-    https://git.kernel.org/riscv/c/278f1c933c3f
-  - [08/11] vdso: Drop kconfig GENERIC_COMPAT_VDSO
-    https://git.kernel.org/riscv/c/bb5bc7bfab06
-  - [09/11] vdso: Drop kconfig GENERIC_VDSO_DATA_STORE
-    https://git.kernel.org/riscv/c/7b338f6d4e3d
-  - [10/11] vdso: Drop kconfig GENERIC_VDSO_TIME_NS
-    https://git.kernel.org/riscv/c/bad53ae2dc42
-  - [11/11] vdso: Gate VDSO_GETRANDOM behind HAVE_GENERIC_VDSO
-    https://git.kernel.org/riscv/c/258b37c6e626
+  - update kernel-doc for MEMBLOCK_RSRV_NOINIT (was: Re: [PATCH RFC 10/35] mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap())
+    https://git.kernel.org/riscv/c/b3dcc9d1d806
 
 You are awesome, thank you!
 -- 
