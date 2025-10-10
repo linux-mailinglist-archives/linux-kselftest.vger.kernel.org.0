@@ -1,125 +1,356 @@
-Return-Path: <linux-kselftest+bounces-42940-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42941-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FB21BCB797
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Oct 2025 05:07:29 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 401D8BCB8E5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Oct 2025 05:35:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A0374055A3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Oct 2025 03:07:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 505C84FC04B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Oct 2025 03:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55CDB23D7E8;
-	Fri, 10 Oct 2025 03:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4657295DA6;
+	Fri, 10 Oct 2025 03:32:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="o/TK5PsD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f872pfdK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B0113C3CD;
-	Fri, 10 Oct 2025 03:07:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5822951A7;
+	Fri, 10 Oct 2025 03:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760065644; cv=none; b=S7l7BHnmz6CMYlAg2e3/hm8axe7QpoESihoMjoFgb98mbMas/+DbR9/167kprD/cDu0C0OK1lb1xXyH+BNnmFj+OgXmNEBnrGtmVIjdcNir9KJenc48jxnXTam2Ms76oqTZ8csFvtxNQ83mhCWyF6dP3ApKLwhDxgJiicsmQyyU=
+	t=1760067143; cv=none; b=f6TyDW2Pysgfzos9P5Pnwq9KxDkf/0G6UjQ9KG/oLgAu1KEOGhHXbxPY/vZngaB9pw8Jzxehr13uY0mIyvhtsulJLG/Hfv4+5S7/nrIZbzmo8UGpuweiokDHcfIvXtsLn3RMeIluh8v6qvhEEJvEl07qK/d4KowInkLuowrBq+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760065644; c=relaxed/simple;
-	bh=E+PedWIYDXGpsw54lL5cH1Zzlx9PmLHNpe4sM40g0WA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CA8OClBfl9+CbgW7rnzIytzn3x7gc20T1ESJ2kVByGKHBkxes9k7sLW+0fqAdrhvDRIE07xEIDHcL2Gw3gCwwdlRKSXYyRG7Sny4mNJUhsh/pilJHfYDSWU6Y6AkScK3u3kAmRIa4VopxpEDq949ZeFHDxqbO2CuUG0JBPa6RAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=o/TK5PsD; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=obnXO4y70/lmfDM42dcgMfBq8dtpoCphEXp8xd3mUMI=;
-	b=o/TK5PsDM+FVyVpmgeBh1TYKBpOn2O2gkfuCMPKQrVRfWzfJAnZLCoangZXzu5KUaOwNFwnpO
-	mpsDI1Bh6MSg/eMAkYc00eiCEpucxISqMQd/tBsN0BMBwQyHJHXWfVcftjwlpQ0gZbxsr4Igy3v
-	JsioA7MS9RqYsvNVxShN/xs=
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4cjWq909YYzcb0Q;
-	Fri, 10 Oct 2025 11:06:29 +0800 (CST)
-Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
-	by mail.maildlp.com (Postfix) with ESMTPS id C04A81402E9;
-	Fri, 10 Oct 2025 11:07:17 +0800 (CST)
-Received: from huawei.com (10.50.85.128) by dggpemf500016.china.huawei.com
- (7.185.36.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 10 Oct
- 2025 11:07:16 +0800
-From: Wang Liang <wangliang74@huawei.com>
-To: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <horms@kernel.org>, <shuah@kernel.org>
-CC: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <yuehaibing@huawei.com>,
-	<zhangchangzhong@huawei.com>, <wangliang74@huawei.com>
-Subject: [PATCH net-next] selftests: net: check jq command is supported
-Date: Fri, 10 Oct 2025 11:30:43 +0800
-Message-ID: <20251010033043.140501-1-wangliang74@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1760067143; c=relaxed/simple;
+	bh=eo/kpWRdhX4Pc3Lf2U+5ymsFU3Eqj+uk20mUkZP1wFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DGQmi4yHvhNPN4O0a5b+BiU/quPluowWMU79vVIDnmXhYZpscE1ZpsFVylLuTgBWcRlWVxgrmJvTEaGjSazGCzEKLuaHJZTo9dmcn9yCDlkuzFA5h2+7CUMJvdCg8mvqEXdZWEKN0cUEmekgBl9ehePpf4Jkuv7uYi38IInSS70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f872pfdK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F26FC4CEF9;
+	Fri, 10 Oct 2025 03:32:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760067143;
+	bh=eo/kpWRdhX4Pc3Lf2U+5ymsFU3Eqj+uk20mUkZP1wFc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f872pfdK+LzwxpWgddKpBDcb1V62JXpRN4SLPy5NMcuygwhhjb928WXfy3461tg0L
+	 lRg0C+fWMFSjNW9NucMqxcS+BAmljN612cvyEQs7kStfz0Apwv/NfMqLxzi0LmoW2S
+	 33WzR2VJqtgpxfbpAsld9uWQSz5PzvDO88Cq2h/n+Z+rwRTD5BUWBgW0IRuYwBL7qh
+	 ijVoxkaNWcHfK42JNDR4ZTMnqUfCHZZqUfdiDKUc2qq8CTdBFHixx4uMkVKu3rom+7
+	 6gSU5ZCuJsiUrnx2QV6p3D8zwg36artxEfdaK0PdywImkS25gesIj1mm3ZZvnpFeHM
+	 /unZxxOrmmqcA==
+Date: Fri, 10 Oct 2025 06:32:19 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Venkat <venkat88@linux.ibm.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	linux-kselftest@vger.kernel.org, daleksan@redhat.com,
+	jstancek@redhat.com, pmenzel@molgen.mpg.de
+Subject: Re: [bisected][linux-next20251003] tmp2 selftests resulting in
+ Kernel OOPs
+Message-ID: <aOh-Q7Ly_zoTLi8g@kernel.org>
+References: <88f1df7e-8347-45f7-a2a1-e321e72e4009@linux.ibm.com>
+ <3d7a5f70-7ece-48ba-92bd-8b6473fd8b6c@linux.ibm.com>
+ <feadc4f6-839b-4c04-b6df-dedf279fb315@csgroup.eu>
+ <8540AB99-D3C8-42B1-9A1F-BCB74C8F5F20@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- dggpemf500016.china.huawei.com (7.185.36.197)
+In-Reply-To: <8540AB99-D3C8-42B1-9A1F-BCB74C8F5F20@linux.ibm.com>
 
-The jq command is used in vlan_bridge_binding.sh, if it is not supported,
-the test will spam the following log.
+On Wed, Oct 08, 2025 at 02:54:22PM +0530, Venkat wrote:
+> 
+> 
+> > On 7 Oct 2025, at 9:29 PM, Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+> > 
+> > 
+> > 
+> > Le 07/10/2025 à 17:08, Venkat Rao Bagalkote a écrit :
+> >> On 07/10/25 10:59 am, Venkat Rao Bagalkote wrote:
+> >>> Greetings!!!
+> >>> 
+> >>> 
+> >>> IBM CI has reported a kernel OOPs while running TPM2selftests on IBM Power11 system with linux-next20251002 kernel.
+> >>> 
+> >>> 
+> >>> Test Case:
+> >>> 
+> >>> make run_tests
+> >>> TAP version 13
+> >>> 1..3
+> >>> # timeout set to 600
+> >>> # selftests: tpm2: test_smoke.sh
+> >>> # test_read_partial_overwrite (tpm2_tests.SmokeTest) ... ok
+> >>> # test_read_partial_resp (tpm2_tests.SmokeTest) ... ok
+> >>> # test_seal_with_auth (tpm2_tests.SmokeTest) ... ok
+> >>> # test_seal_with_policy (tpm2_tests.SmokeTest) ... ok
+> >>> # test_seal_with_too_long_auth (tpm2_tests.SmokeTest) ... ok
+> >>> # test_send_two_cmds (tpm2_tests.SmokeTest) ... ok
+> >>> # test_too_short_cmd (tpm2_tests.SmokeTest) ... ok
+> >>> # test_unseal_with_wrong_auth (tpm2_tests.SmokeTest) ... ok
+> >>> # test_unseal_with_wrong_policy (tpm2_tests.SmokeTest) ... ERROR
+> >>> #
+> >>> # ======================================================================
+> >>> # ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
+> >>> # -----------------------------------------------------
+> >>> 
+> >>> 
+> >>> Traces:
+> >>> 
+> >>> 
+> >>> [  452.604333] BUG: KASAN: slab-use-after-free in tpmrm_release+0x78/0xa8
+> >>> [  452.604345] Read of size 8 at addr c00000001c650000 by task python3/1856
+> >>> [  452.604353]
+> >>> [  452.604358] CPU: 24 UID: 0 PID: 1856 Comm: python3 Kdump: loaded Not tainted 6.17.0-next-20251003 #1 VOLUNTARY
+> >>> [  452.604364] Hardware name: IBM,9080-HEX Power11 (architected) 0x820200 0xf000007 of:IBM,FW1110.01 (NH1110_069) hv:phyp pSeries
+> >>> [  452.604368] Call Trace:
+> >>> [  452.604370] [c0000000c1867840] [c00000000187ea4c] dump_stack_lvl+0x84/0xe8 (unreliable)
+> >>> [  452.604380] [c0000000c1867870] [c000000000803754] print_address_description.constprop.0+0x11c/0x56c
+> >>> [  452.604388] [c0000000c1867910] [c000000000803c84] print_report+0xe0/0x358
+> >>> [  452.604394] [c0000000c18679e0] [c000000000804124] kasan_report+0x128/0x1f4
+> >>> [  452.604400] [c0000000c1867af0] [c0000000008062b4] __asan_load8+0xa8/0xe0
+> >>> [  452.604406] [c0000000c1867b10] [c000000000f2ec18] tpmrm_release+0x78/0xa8
+> >>> [  452.604412] [c0000000c1867b40] [c0000000008b6a2c] __fput+0x21c/0x60c
+> >>> [  452.604417] [c0000000c1867bc0] [c0000000008ada70] sys_close+0x74/0xd0
+> >>> [  452.604424] [c0000000c1867bf0] [c000000000039270] system_call_exception+0x1e0/0x460
+> >>> [  452.604431] [c0000000c1867e50] [c00000000000d05c] system_call_vectored_common+0x15c/0x2ec
+> >>> [  452.604438] ---- interrupt: 3000 at 0x7fffb7534ab4
+> >>> [  452.604443] NIP:  00007fffb7534ab4 LR: 00007fffb7534ab4 CTR: 0000000000000000
+> >>> [  452.604446] REGS: c0000000c1867e80 TRAP: 3000   Not tainted (6.17.0-next-20251003)
+> >>> [  452.604449] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 44284422  XER: 00000000
+> >>> [  452.604466] IRQMASK: 0
+> >>> [  452.604466] GPR00: 0000000000000006 00007ffff65d76b0 00007fffb7c17700 0000000000000006
+> >>> [  452.604466] GPR04: 0000000000000000 0000000000000000 0000000000000000 0000000000000004
+> >>> [  452.604466] GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> >>> [  452.604466] GPR12: 0000000000000000 00007fffb7e6b8e0 00000000000000a1 00007fffb67acec0
+> >>> [  452.604466] GPR16: 0000000164032ad0 00007fffb67aceb0 00007fffb76f6a90 0000000000000000
+> >>> [  452.604466] GPR20: 00007fffb6f21850 0000000000000000 00007fffb71062c0 0000000164034490
+> >>> [  452.604466] GPR24: 00007fffb6f2fea0 00007fffb67acea8 0000000164032b18 00007fffb7c45b32
+> >>> [  452.604466] GPR28: 00007fffb7c678e0 00007fffb67aceb8 0000000000000006 0000000164034490
+> >>> [  452.604510] NIP [00007fffb7534ab4] 0x7fffb7534ab4
+> >>> [  452.604513] LR [00007fffb7534ab4] 0x7fffb7534ab4
+> >>> [  452.604516] ---- interrupt: 3000
+> >>> [  452.604518]
+> >>> [  452.604601] Allocated by task 1856:
+> >>> [  452.604607]  kasan_save_stack+0x34/0x64
+> >>> [  452.604614]  kasan_save_track+0x2c/0x50
+> >>> [  452.604621]  kasan_save_alloc_info+0x58/0x74
+> >>> [  452.604628]  __kasan_kmalloc+0x12c/0x168
+> >>> [  452.604635]  __kmalloc_cache_noprof+0x1d8/0x71c
+> >>> [  452.604643]  tpmrm_open+0x88/0x168
+> >>> [  452.604649]  chrdev_open+0x1f4/0x484
+> >>> [  452.604656]  do_dentry_open+0x578/0x9cc
+> >>> [  452.604663]  vfs_open+0x68/0x23c
+> >>> [  452.604670]  do_open+0x514/0x74c
+> >>> [  452.604676]  path_openat+0x16c/0x380
+> >>> [  452.604682]  do_filp_open+0x104/0x230
+> >>> [  452.604689]  do_sys_openat2+0xb8/0x154
+> >>> [  452.604696]  sys_openat+0xcc/0x130
+> >>> [  452.604703]  system_call_exception+0x1e0/0x460
+> >>> [  452.604710]  system_call_vectored_common+0x15c/0x2ec
+> >>> [  452.604718]
+> >>> [  452.604722] Freed by task 1856:
+> >>> [  452.604726]  kasan_save_stack+0x34/0x64
+> >>> [  452.604733]  kasan_save_track+0x2c/0x50
+> >>> [  452.604739]  __kasan_save_free_info+0x64/0x110
+> >>> [  452.604747]  __kasan_slab_free+0xb0/0x10c
+> >>> [  452.604753]  kfree+0x220/0x624
+> >>> [  452.604760]  tpmrm_release+0x6c/0xa8
+> >>> [  452.604766]  __fput+0x21c/0x60c
+> >>> [  452.604772]  sys_close+0x74/0xd0
+> >>> [  452.604779]  system_call_exception+0x1e0/0x460
+> >>> [  452.604786]  system_call_vectored_common+0x15c/0x2ec
+> >>> [  452.604794]
+> >>> [  452.604797] The buggy address belongs to the object at c00000001c650000
+> >>> [  452.604797]  which belongs to the cache kmalloc-8k of size 8192
+> >>> [  452.604806] The buggy address is located 0 bytes inside of
+> >>> [  452.604806]  freed 8192-byte region [c00000001c650000, c00000001c652000)
+> >>> [  452.604815]
+> >>> [  452.604818] The buggy address belongs to the physical page:
+> >>> [  452.604824] page: refcount:0 mapcount:0 mapping:0000000000000000 index:0xc00000001c644000 pfn:0x1c60
+> >>> [  452.604833] head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+> >>> [  452.604840] flags: 0x3ffffe00000040(head|node=0|zone=0| lastcpupid=0x1fffff)
+> >>> [  452.604849] page_type: f5(slab)
+> >>> [  452.604856] raw: 003ffffe00000040 c000000007012300 5deadbeef0000122 0000000000000000
+> >>> [  452.604864] raw: c00000001c644000 000000008020001e 00000000f5000000 0000000000000000
+> >>> [  452.604872] head: 003ffffe00000040 c000000007012300 5deadbeef0000122 0000000000000000
+> >>> [  452.604879] head: c00000001c644000 000000008020001e 00000000f5000000 0000000000000000
+> >>> [  452.604887] head: 003ffffe00000003 c00c000000071801 00000000ffffffff 00000000ffffffff
+> >>> [  452.604894] head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000008
+> >>> [  452.604900] page dumped because: kasan: bad access detected
+> >>> [  452.604905]
+> >>> [  452.604908] Memory state around the buggy address:
+> >>> [  452.604914]  c00000001c64ff00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> >>> [  452.604920]  c00000001c64ff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> >>> [  452.604927] >c00000001c650000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> >>> [  452.604933]                    ^
+> >>> [  452.604937]  c00000001c650080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> >>> [  452.604944]  c00000001c650100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> >>> [  452.604950] ==================================================================
+> >>> [  452.604955] Disabling lock debugging due to kernel taint
+> >>> [  452.604961] Kernel attempted to read user page (770) - exploit attempt? (uid: 0)
+> >>> [  452.604969] BUG: Kernel NULL pointer dereference on read at 0x00000770
+> >>> [  452.604975] Faulting instruction address: 0xc0000000002b2e0c
+> >>> [  452.604982] Oops: Kernel access of bad area, sig: 11 [#1]
+> >>> [  452.604987] LE PAGE_SIZE=64K MMU=Radix  SMP NR_CPUS=8192 NUMA pSeries
+> >>> [  452.604996] Modules linked in: nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat bonding nf_conntrack tls nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink sunrpc pseries_rng vmx_crypto fuse ext4 crc16 mbcache jbd2 sd_mod sg ibmvscsi ibmveth scsi_transport_srp pseries_wdt
+> >>> [  452.605073] CPU: 24 UID: 0 PID: 1856 Comm: python3 Kdump: loaded Tainted: G    B               6.17.0-next-20251003 #1 VOLUNTARY
+> >>> [  452.605084] Tainted: [B]=BAD_PAGE
+> >>> [  452.605089] Hardware name: IBM,9080-HEX Power11 (architected) 0x820200 0xf000007 of:IBM,FW1110.01 (NH1110_069) hv:phyp pSeries
+> >>> [  452.605096] NIP:  c0000000002b2e0c LR: c0000000002b2e08 CTR: 0000000000000000
+> >>> [  452.605103] REGS: c0000000c1867820 TRAP: 0300   Tainted: G B       (6.17.0-next-20251003)
+> >>> [  452.605110] MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 28284420  XER: 0000000d
+> >>> [  452.605132] CFAR: c000000000807920 DAR: 0000000000000770 DSISR: 40000000 IRQMASK: 0
+> >>> [  452.605132] GPR00: c0000000002b2e08 c0000000c1867ac0 c00000000234a500 0000000000000001
+> >>> [  452.605132] GPR04: 0000000000000008 0000000000000000 c0000000002b2e08 0000000000000001
+> >>> [  452.605132] GPR08: 0000000000000020 0000000000000001 0000000000000001 a80e000000000000
+> >>> [  452.605132] GPR12: c00e0000009b1c8c c000000d0ddeb700 0000000000000000 0000000000000000
+> >>> [  452.605132] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> >>> [  452.605132] GPR20: 0000000000000008 0000000000000000 c000000008202f00 c00000007b9ff620
+> >>> [  452.605132] GPR24: c00000008a76cb20 c00000008a76cb40 c00000008a76cb08 c000000002201e80
+> >>> [  452.605132] GPR28: c000000061569248 0000000000000770 c00000008a76cb00 0000000000000768
+> >>> [  452.605227] NIP [c0000000002b2e0c] up_read+0x50/0x17c
+> >>> [  452.605237] LR [c0000000002b2e08] up_read+0x4c/0x17c
+> >>> [  452.605245] Call Trace:
+> >>> [  452.605249] [c0000000c1867ac0] [c0000000002b2e08] up_read+0x4c/0x17c (unreliable)
+> >>> [  452.605261] [c0000000c1867b10] [c000000000f2ec28] tpmrm_release+0x88/0xa8
+> >>> [  452.605271] [c0000000c1867b40] [c0000000008b6a2c] __fput+0x21c/0x60c
+> >>> [  452.605280] [c0000000c1867bc0] [c0000000008ada70] sys_close+0x74/0xd0
+> >>> [  452.605291] [c0000000c1867bf0] [c000000000039270] system_call_exception+0x1e0/0x460
+> >>> [  452.605301] [c0000000c1867e50] [c00000000000d05c] system_call_vectored_common+0x15c/0x2ec
+> >>> [  452.605312] ---- interrupt: 3000 at 0x7fffb7534ab4
+> >>> [  452.605319] NIP:  00007fffb7534ab4 LR: 00007fffb7534ab4 CTR: 0000000000000000
+> >>> [  452.605326] REGS: c0000000c1867e80 TRAP: 3000   Tainted: G B       (6.17.0-next-20251003)
+> >>> [  452.605333] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 44284422  XER: 00000000
+> >>> [  452.605362] IRQMASK: 0
+> >>> [  452.605362] GPR00: 0000000000000006 00007ffff65d76b0 00007fffb7c17700 0000000000000006
+> >>> [  452.605362] GPR04: 0000000000000000 0000000000000000 0000000000000000 0000000000000004
+> >>> [  452.605362] GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> >>> [  452.605362] GPR12: 0000000000000000 00007fffb7e6b8e0 00000000000000a1 00007fffb67acec0
+> >>> [  452.605362] GPR16: 0000000164032ad0 00007fffb67aceb0 00007fffb76f6a90 0000000000000000
+> >>> [  452.605362] GPR20: 00007fffb6f21850 0000000000000000 00007fffb71062c0 0000000164034490
+> >>> [  452.605362] GPR24: 00007fffb6f2fea0 00007fffb67acea8 0000000164032b18 00007fffb7c45b32
+> >>> [  452.605362] GPR28: 00007fffb7c678e0 00007fffb67aceb8 0000000000000006 0000000164034490
+> >>> [  452.605450] NIP [00007fffb7534ab4] 0x7fffb7534ab4
+> >>> [  452.605456] LR [00007fffb7534ab4] 0x7fffb7534ab4
+> >>> [  452.605462] ---- interrupt: 3000
+> >>> [  452.605467] Code: fbc1fff0 7c7f1b78 f8010010 f821ffb1 e92d0c78 f9210028 39200000 3ba30008 38800008 7fa3eb78 48554af5 60000000 <ebdf0008> eb8d0908 7bc90764 fbc10020
+> >>> [  452.605501] ---[ end trace 0000000000000000 ]---
+> >>> [  452.613685] pstore: backend (nvram) writing error (-1)
+> >>> [  452.613691]
+> >>> 
+> >>> 
+> >> Git bisect is pointing to eb28a2adba0654878bcfd909b429bf567b35922b as first bad commit.
+> > 
+> > Should be fixed by the following change ?
+> > 
+> > diff --git a/drivers/char/tpm/tpmrm-dev.c b/drivers/char/tpm/tpmrm-dev.c
+> > index 13322dd9ac9e0..334b3ec2b36a5 100644
+> > --- a/drivers/char/tpm/tpmrm-dev.c
+> > +++ b/drivers/char/tpm/tpmrm-dev.c
+> > @@ -54,8 +54,8 @@ static int tpmrm_release(struct inode *inode, struct file *file)
+> > 
+> > tpm_common_release(file, fpriv);
+> > tpm2_del_space(fpriv->chip, &priv->space);
+> > - kfree(priv);
+> > up_read(&fpriv->chip->open_lock);
+> > + kfree(priv);
+> > 
+> > return 0;
+> > }
+> 
+> Thanks for the fix. It fixes reported issue.
+> 
+> Please add below tag also, while sending out the patch.
+> 
+> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> 
+> Regards,
+> Venkat.
+> > 
+> > 
+> >> eb28a2adba0654878bcfd909b429bf567b35922b is the first bad commit
+> >> commit eb28a2adba0654878bcfd909b429bf567b35922b
+> >> Author: Jonathan McDowell <noodles@meta.com>
+> >> Date:   Tue Sep 23 18:10:00 2025 +0100
+> >>     tpm: Ensure exclusive userspace access when using /dev/tpm<n>
+> >>     There is an is_open lock on /dev/tpm<n> that dates back to at least
+> >>     2013, but it only prevents multiple accesses via *this* interface. It is
+> >>     perfectly possible for userspace to use /dev/tpmrm<n>, or the kernel to
+> >>     use the internal interfaces, to access the TPM. For tooling expecting
+> >>     exclusive access, such as firmware updates, this can cause issues.
+> >>     Close the userspace loophole by changing the simple bit lock to a full
+> >>     read/write mutex. Direct /dev/tpm<n> access needs an exclusive write
+> >>     lock, the resource broker continues to allow concurrent access *except*
+> >>     when /dev/tpm<n> is open.
+> >>     Signed-off-by: Jonathan McDowell <noodles@meta.com>
+> >>     Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> >>     Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> >>  drivers/char/tpm/tpm-chip.c  |  1 +
+> >>  drivers/char/tpm/tpm-dev.c   | 14 ++++++++------
+> >>  drivers/char/tpm/tpmrm-dev.c | 20 ++++++++++++++++++--
+> >>  include/linux/tpm.h          |  3 ++-
+> >>  4 files changed, 29 insertions(+), 9 deletions(-)
+> >> Git bisect log:
+> >> git bisect log
+> >> git bisect start
+> >> # status: waiting for both good and bad commits
+> >> # good: [e5f0a698b34ed76002dc5cff3804a61c80233a7a] Linux 6.17
+> >> git bisect good e5f0a698b34ed76002dc5cff3804a61c80233a7a
+> >> # status: waiting for bad commit, 1 good commit known
+> >> # bad: [47a8d4b89844f5974f634b4189a39d5ccbacd81c] Add linux-next specific files for 20251003
+> >> git bisect bad 47a8d4b89844f5974f634b4189a39d5ccbacd81c
+> >> # good: [f79e772258df311c2cb21594ca0996318e720d28] Merge tag 'media/ v6.18-1' of git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux- media
+> >> git bisect good f79e772258df311c2cb21594ca0996318e720d28
+> >> # good: [6bda5a67f6a2ae4c0153e693e96bd408d054c732] Merge branch 'xtensa- for-next' of https://eur01.safelinks.protection.outlook.com/? url=https%3A%2F%2Fgithub.com%2Fjcmvbkbc%2Flinux- xtensa.git&data=05%7C02%7Cchristophe.leroy2%40cs- soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485179363%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=0Y%2BuK%2B%2BkZRoXNH%2FK4Ni4hd3RVZJmX8c2SqoLd40qq2Q%3D&reserved=0
+> >> git bisect good 6bda5a67f6a2ae4c0153e693e96bd408d054c732
+> >> # bad: [09026363ffabf7bb33e0ce000d8bff3e41b0c3de] Merge branch 'next' of https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fpcmoore%2Faudit.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485205361%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=XuvSxtgtEAPPm3jl6X02nRyTfSh0EXMCUorpI21Y6Cs%3D&reserved=0
+> >> git bisect bad 09026363ffabf7bb33e0ce000d8bff3e41b0c3de
+> >> # good: [c32d529ea3e39ba4918f3865ef90ef6bddaa498c] Merge branch 'for- next' of https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fhid%2Fhid.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485215132%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=eOflHx6SriPsE%2FEwEURKIEzRciXVlmsDJ7F%2F1tTJVtk%3D&reserved=0
+> >> git bisect good c32d529ea3e39ba4918f3865ef90ef6bddaa498c
+> >> # good: [3fa51882336f09d1a8a03edf107ef43e3b872fc1] Merge branch 'next' of https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fiwlwifi%2Fiwlwifi-next.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485223439%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=kf7T2nWCNZ3zKqCl%2FFyIMWoWDqerBMMJJmwEDC3dldo%3D&reserved=0
+> >> git bisect good 3fa51882336f09d1a8a03edf107ef43e3b872fc1
+> >> # good: [acc26ceeebaa1880ceb70379abb3fac92d1007d5] Merge branch 'drm-xe- next' of https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgitlab.freedesktop.org%2Fdrm%2Fxe%2Fkernel.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485231891%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=rAhIU15LaLZVLiCngMMd%2FD8WZFNbBbxlqb95l4ZqN3E%3D&reserved=0
+> >> git bisect good acc26ceeebaa1880ceb70379abb3fac92d1007d5
+> >> # good: [3e06c10cef8079782836155d66c2a91798600cfc] Merge branch 'for- next' of https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fdevice-mapper%2Flinux-dm.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485239888%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=96H7h%2FqU8AOA6BMX3gRIqFvbwree0RrwBKFiyAbbWqw%3D&reserved=0
+> >> git bisect good 3e06c10cef8079782836155d66c2a91798600cfc
+> >> # bad: [cf305bb4070bef42cea469a6c4e751a63f5cacf2] Merge branch 'next' of https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fjarkko%2Flinux-tpmdd.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485248529%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=aYTIA07yF9iCvHBin54NcH7%2Bhcn4wpuUR1%2BCGncndKQ%3D&reserved=0
+> >> git bisect bad cf305bb4070bef42cea469a6c4e751a63f5cacf2
+> >> # good: [19766d4984c39d75393d22cbdad14974cb7f9366] Merge branch 'next' of https://eur01.safelinks.protection.outlook.com/? url=https%3A%2F%2Fgithub.com%2Fcschaufler%2Fsmack- next&data=05%7C02%7Cchristophe.leroy2%40cs- soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485256294%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=SAfMhKzF9h2YURPEqPu6ze2oIUJ87TNyRIFC%2B1JjWGE%3D&reserved=0
+> >> git bisect good 19766d4984c39d75393d22cbdad14974cb7f9366
+> >> # good: [4e349e68974e71da13d4b34988f795f4cfe29650] tpm: use a map for tpm2_calc_ordinal_duration()
+> >> git bisect good 4e349e68974e71da13d4b34988f795f4cfe29650
+> >> # bad: [b6889908d493fe03a1db28aa9afdade6bceda158] tpm: Allow for exclusive TPM access when using /dev/tpm<n>
+> >> git bisect bad b6889908d493fe03a1db28aa9afdade6bceda158
+> >> # bad: [eb28a2adba0654878bcfd909b429bf567b35922b] tpm: Ensure exclusive userspace access when using /dev/tpm<n>
+> >> git bisect bad eb28a2adba0654878bcfd909b429bf567b35922b
+> >> # good: [11baa7201b1baefd281e5a7faf7de5b7e407364c] tpm: Prevent local DOS via tpm/tpm0/ppi/*operations
+> >> git bisect good 11baa7201b1baefd281e5a7faf7de5b7e407364c
+> >> # first bad commit: [eb28a2adba0654878bcfd909b429bf567b35922b] tpm: Ensure exclusive userspace access when using /dev/tpm<n>
+> >>> 
+> >>> If you happen to fix this, please add below tag.
+> >>> 
+> >>> 
+> >>> Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> >>> 
+> >>> 
+> >>> Regards,
+> >>> 
+> >>> Venkat.
+> 
+> 
 
-  # ./vlan_bridge_binding.sh: line 51: jq: command not found
-  # ./vlan_bridge_binding.sh: line 51: jq: command not found
-  # ./vlan_bridge_binding.sh: line 51: jq: command not found
-  # ./vlan_bridge_binding.sh: line 51: jq: command not found
-  # ./vlan_bridge_binding.sh: line 51: jq: command not found
-  # TEST: Test bridge_binding on->off when lower down                   [FAIL]
-  #       Got operstate of , expected 0
+It's no longer in -next, feature is postponed to 6.19.
 
-The rtnetlink.sh has the same problem. It makes sense to check if jq is
-installed before running these tests. After this patch, the
-vlan_bridge_binding.sh skipped if jq is not supported:
-
-  # timeout set to 3600
-  # selftests: net: vlan_bridge_binding.sh
-  # TEST: jq not installed                                              [SKIP]
-
-Signed-off-by: Wang Liang <wangliang74@huawei.com>
----
- tools/testing/selftests/net/rtnetlink.sh           | 2 ++
- tools/testing/selftests/net/vlan_bridge_binding.sh | 2 ++
- 2 files changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index dbf77513f617..163a084d525d 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -1466,6 +1466,8 @@ usage: ${0##*/} OPTS
- EOF
- }
- 
-+require_command jq
-+
- #check for needed privileges
- if [ "$(id -u)" -ne 0 ];then
- 	end_test "SKIP: Need root privileges"
-diff --git a/tools/testing/selftests/net/vlan_bridge_binding.sh b/tools/testing/selftests/net/vlan_bridge_binding.sh
-index db481af9b6b3..e8c02c64e03a 100755
---- a/tools/testing/selftests/net/vlan_bridge_binding.sh
-+++ b/tools/testing/selftests/net/vlan_bridge_binding.sh
-@@ -249,6 +249,8 @@ test_binding_toggle_off_when_upper_down()
- 	do_test_binding_off : "on->off when upper down"
- }
- 
-+require_command jq
-+
- trap defer_scopes_cleanup EXIT
- setup_prepare
- tests_run
--- 
-2.34.1
-
+BR, Jarkko
 
