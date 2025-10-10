@@ -1,100 +1,121 @@
-Return-Path: <linux-kselftest+bounces-42969-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42970-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01041BCE0B8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Oct 2025 19:10:57 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E553BCE0C7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Oct 2025 19:11:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 84C2F4E936B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Oct 2025 17:10:51 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2B4A03564C6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Oct 2025 17:11:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16320212557;
-	Fri, 10 Oct 2025 17:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F0FC20D4FC;
+	Fri, 10 Oct 2025 17:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/ZLFkrk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DNsGdKKw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAD820FA9C;
-	Fri, 10 Oct 2025 17:10:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19ED720409A
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Oct 2025 17:11:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760116232; cv=none; b=Y7TzxsGwBNQ77Bk4wvUQ6tmsr0+LeHzljuYEnnD7P4U9AN0XeNBCYR9x45fw+ZW1dHQHjce2Z+m396342AsPA8VPpsrqfK4bME1+NF0k8II7uc/iQkYRkPKxlu0GgxoYKEPbgjVxbKuUgviP/DKIvO6ES0kegrWjiU7R5hC8IMY=
+	t=1760116274; cv=none; b=LvWemKeIEHcO2xutaV29bZ+ofxRqxJtC+UCCo6L7+Zphx8SEBo2+DKzepXRSaBRKD2WIrqs1uGgE7SfDfbb2rpoUqLovRhFInlqBis5B0LzJLAtmzzT3sjg+ktTD2+U95GM5B4mZ4+NkuIreKvQOAQlO/t1BSef3X9EV5fjlwt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760116232; c=relaxed/simple;
-	bh=MTOUQJOaFYT9wm2KcVznCUdjNkH1CcP2WC4l4j/5iAU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=B/fG7GdQvCddoQEdRJBp69sW7kLwxXZEcSlFwmRkUG1tqbTl9Qf5s9gdgHlY2AVYVgCtxPbp2iYNaRj07rMa3zMKFafgnNW+Q/8o/4eFqnc0rpzaI2cpNZI+InQsSNSeXaea2iE2JY5AGPFG7iehOfDcU9YZk9B+j71sVJVjNEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/ZLFkrk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB6DAC4CEF1;
-	Fri, 10 Oct 2025 17:10:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760116231;
-	bh=MTOUQJOaFYT9wm2KcVznCUdjNkH1CcP2WC4l4j/5iAU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=j/ZLFkrkyd1EZkqglwJS9yMmoWxN3tf1hF9Vl87PX83LRjHZLGmHd8hwqB+UcB1jX
-	 3bUpxjWp2YhRfR1xrJh2GYM/fV30QLYWb3fXYVO95g/O9ocXWlU6aNKisBQmvbcgGs
-	 UcxfNHEhDutLj7l4G0pfk/RPSZ04PjlEQLVLEHMlXLsMQgD5QOWGR9vsjyxFUBMkZW
-	 LJReCLWBffImiVEM6wQ1fknsi9QGf/1vUou7AEypdzXGPLYrl/f6nwy8+7SvvSUXyd
-	 90DbWC0bN/aApvznCDt9j/CbwafN4PUVBwNhgJkp7KUkX92IPFSuCJwNmbWnPp8RyL
-	 0ogRKpUmNDefw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 71C853809A00;
-	Fri, 10 Oct 2025 17:10:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1760116274; c=relaxed/simple;
+	bh=MyGwhpm2qnDDcClWGxcw4aEpoDSw4r7sYiFcziRnQT8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UFDFS+UypN2WVkmnVYIP1e3H5fBfsiSp5VvCWYV50g06lV9LyrPXBR/ZvYUlzanRqvRn5DqxamVZS7pcpZcGDFC+cS5cKkDUvOaR43Ma5B4uJfg3OvQAmLarouYF3+awq8qyVXsA9RXjRWn1g5GmcAU2FuCiW6Bw3s/pMoBShBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DNsGdKKw; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b5f2c1a7e48so1541994a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Oct 2025 10:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760116272; x=1760721072; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z1Gc1PWI6j3YDPD0EWgLKXMB0oKPpLTGf9J5v8/+n1w=;
+        b=DNsGdKKwpQKxx0ahEALxJ7E5K79wly1m/Ah3XdpHlBzM1GrEGe0nzFUav+riTwGWGp
+         hjIMuMo4zume+4skI3q8RIg6iPzmm4HhiYD2efUX/2OGGG01+Vr3PNUpKXgfLVmlHFW4
+         L6GAJdEW86R6EqqyROEk5FnXDJUKdfl7Xl+T8qLKdnrxubXVc1kY03SZTKTwj7Yyyqf9
+         DFGY7gIicpxWE6KKyeL5b/Dk5sP+CKv1qVkkR4sWqD3MlBtTvGMEk4O8/F9XctGRG/9E
+         mRyBWDKFjTDV7Q4a2j94ep7gNAN/i/RRIPtf9yvce+JbQNpMSI7QvaiKFUcgdo8rB3Nc
+         xWLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760116272; x=1760721072;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z1Gc1PWI6j3YDPD0EWgLKXMB0oKPpLTGf9J5v8/+n1w=;
+        b=lhMcT6UNFA4+ZQWX6ynXUF4VS+GZZkl6l3mzLQActWDdRncipni25eylHJOv3PeqvH
+         C1M8E2ZcPWTJbUfabLTAmYwva86RW6flUMqW2N+JowqAijDKaZCsZaYMkuzmxpl9dKOA
+         Ukk+tEdxiZytiPk5vsEkK02dyOnKuv97UAfECOfQ7Pm9FkITj0XYC/OO5O/2VeXqvIE+
+         6lZtGvyYpeObyhYSAYLlyqOFcnxHJNsgEGs/xmBaMk8bQrp6kMVL0oy29Ao9W2lS3oWZ
+         vgUV3BZeVZ5WutDdR9sF5ir5Gdr2Auo2M75tpm1QpSHGuKdxlSTApUfDKcyLnl+12Yll
+         bGTQ==
+X-Gm-Message-State: AOJu0YzJhPP77jqjZbkqRDm6pp4VgIUPqnIU0O/HbnnenoIRPT6261OL
+	9NWful64S99jeItJo5+n9Q//WEAkcNPC7IVC5A1Nla1HarGXyKEhrXE2Kn6RxNYPgliBTE+mdqB
+	9T2penQtqEBHPMnBhKQhvvrf1luGY64g=
+X-Gm-Gg: ASbGncvRt/M+XgpiV0cvYpgrpDKnTIu7MUQTbpzhWHCTW/vj7OgqxKXKV3x70cyXa3E
+	JisW0d4vAZ4Y+OVFwEA1OjLrNU4BB0yMxW634FFnec9tEIODt0T5gOAxyz9B8Zdwi0a5kiaqngs
+	bdKjdGT2JW0XpZM2vy50oFoEnx4jt2ujzLJUnqEfZt6vC+plEicIk6tRRn7p5HOWTEbD3esNmie
+	QojMmZUZ2FmVeb98WnL0S+u5DQ/FIF/NCrxICmpgUmPLSDLx+UyqaOW40Ccp7/3tq7efQAYomfk
+	K5wq7kLlB1I=
+X-Google-Smtp-Source: AGHT+IEeH87Fvb2m3fT5OUMEYcPRH9zbKkmf0z30ACW09GOgSlCrJAFRGtrIRAseikmrK919axDC/CMZ4XfiUw5sGIE=
+X-Received: by 2002:a17:903:2f83:b0:25c:392c:33be with SMTP id
+ d9443c01a7336-290273a415cmr165870945ad.59.1760116272223; Fri, 10 Oct 2025
+ 10:11:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/2] Add kfuncs bpf_strcasestr and
- bpf_strncasestr
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176011621899.1050631.5241409064469976369.git-patchwork-notify@kernel.org>
-Date: Fri, 10 Oct 2025 17:10:18 +0000
-References: <tencent_98ABC9680EA2A20198904316DAE5A84AD906@qq.com>
-In-Reply-To: <tencent_98ABC9680EA2A20198904316DAE5A84AD906@qq.com>
-To: Rong Tao <rtoax@foxmail.com>
-Cc: vmalik@redhat.com, ast@kernel.org, eddyz87@gmail.com, rongtao@cestc.cn,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- shuah@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+References: <20250929171712.1161253-1-kriish.sharma2006@gmail.com>
+In-Reply-To: <20250929171712.1161253-1-kriish.sharma2006@gmail.com>
+From: Kriish Sharma <kriish.sharma2006@gmail.com>
+Date: Fri, 10 Oct 2025 22:41:00 +0530
+X-Gm-Features: AS18NWCmvBjKJp4WZGHdYCqIDHlcVY9wXyW21NIrKEfEehZDcQUT900Zo4DUft8
+Message-ID: <CAL4kbRNDvPkNO=bnjKDD357mdQ4Jzbw5ds4RgaJfL71DtSxSvA@mail.gmail.com>
+Subject: Re: [PATCH] filelock: add .gitignore
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Hi ,
+Just checking if there=E2=80=99s any feedback on my patch
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Thanks,
+Kriish Sharma
 
-On Thu,  9 Oct 2025 09:20:14 +0800 you wrote:
-> From: Rong Tao <rongtao@cestc.cn>
-> 
-> Add kfuncs bpf_strcasestr and bpf_strncasestr, which are extensions of
-> bpf_strstr and bpf_strnstr, suitable for more scenarios.
-> 
-> Rong Tao (2):
->   bpf: add bpf_strcasestr,bpf_strncasestr kfuncs
->   selftests/bpf: Test bpf_strcasestr,bpf_strncasestr kfuncs
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v4,1/2] bpf: add bpf_strcasestr,bpf_strncasestr kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/b5b693f73589
-  - [bpf-next,v4,2/2] selftests/bpf: Test bpf_strcasestr,bpf_strncasestr kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/eca0b643efc9
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+On Mon, Sep 29, 2025 at 10:48=E2=80=AFPM Kriish Sharma
+<kriish.sharma2006@gmail.com> wrote:
+>
+> Add a .gitignore to tools/testing/selftests/filelock to ignore build
+> artifacts. This prevents accidental commits of object files or binaries.
+>
+> Signed-off-by: Kriish Sharma <kriish.sharma2006@gmail.com>
+> ---
+>  tools/testing/selftests/filelock/.gitignore | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 tools/testing/selftests/filelock/.gitignore
+>
+> diff --git a/tools/testing/selftests/filelock/.gitignore b/tools/testing/=
+selftests/filelock/.gitignore
+> new file mode 100644
+> index 000000000000..410842f05f90
+> --- /dev/null
+> +++ b/tools/testing/selftests/filelock/.gitignore
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +ofdlocks
+> \ No newline at end of file
+> --
+> 2.34.1
+>
 
