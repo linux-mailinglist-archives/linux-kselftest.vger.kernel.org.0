@@ -1,204 +1,276 @@
-Return-Path: <linux-kselftest+bounces-42977-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68EBFBCFE36
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Oct 2025 03:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC2F9BD0195
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Oct 2025 13:54:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 025643BEC49
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Oct 2025 01:50:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74D3B3B656D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Oct 2025 11:54:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FEDD1A317D;
-	Sun, 12 Oct 2025 01:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qw7umEDo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9232737EA;
+	Sun, 12 Oct 2025 11:54:17 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from baidu.com (mx22.baidu.com [220.181.50.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B668B13A258
-	for <linux-kselftest@vger.kernel.org>; Sun, 12 Oct 2025 01:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F16214807;
+	Sun, 12 Oct 2025 11:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.181.50.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760233802; cv=none; b=T9nwfKkIhhkuailQnsjQbllc1KIxJJjKlINFSM/5OV3BsA3p96pmcKwCp3B70YXXQIDP2QAbL/a3Zee/PEBD8/lRfobISeyySwBLs892H5WHPe/tnIZASDHa/08/2FW1ghDaXDX2ZXmbPABX7SCgKyPF1HcenJXk806Hdy9Aul8=
+	t=1760270057; cv=none; b=hB1Ivlh/nLr6j/wAXhw8e/jisT6M16V62mTXCY26Zpk+aT9QTvDuhpkOzcu51tKptYaF2MkYEwNjDsbCOlYd9jeSSyAHt9z+xmCoMti6avpr83NIdKE/6C2N/1HaPidlyDsat5fttHHaxuhAqyuSJRI/jWPPFt1vGFQoqe9S5rY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760233802; c=relaxed/simple;
-	bh=GwEwPqxRUTg7MFQelyNf4d+Vw8oD9w/6xNdsusLFnAs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PWTp+Ay4KnpTwFZ1/KDhEn5X/m1bJcF+lYKOjEnr2jsc6JlRQIVzdKc009I+Z9kXTqYIAr1HAk1pFI6sa/+kQFBTNVoXiannWOpO802Ed5KiTy7m0n8xURFeMKu2jOJIA5mmWyjVcObnCDFDql3u7O7uu2/Af/BpfxtunafWzHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qw7umEDo; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-7e3148a8928so36563156d6.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Oct 2025 18:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760233800; x=1760838600; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pXc8uJoaf03/WrAtzQqCEQN2vdeh87i/2lbcZm6q1bg=;
-        b=Qw7umEDo67QTqhTfgEmRF5NyNmPimbOCn3AeXRMbmt6MT1Kt1C9VT39jXY/GyTK3Oq
-         vGW0JrO88dFSqM5IOj4HItenQaeWdNwYYY2nJZlmbunewloUt47tCIZj65AYxtQ4/jax
-         yk2Zuksufen52p9Qx534ULPfZU9KG4QLNuOnJwjIBC4v6Uj1T7Ahjg30h5wPtGdcBi6L
-         28HYHWMKlK/fHls7CdLKJWGZzWTojRoZisYp7V43hTwAY0pOY8lTsnB+albx/S2sAToQ
-         au3/iHsSQC0MGrUPgxXVrs4sEl1vRHYeAJl46MwYgoRblu4gXCRPw0wv4InDG/J4fqam
-         kdCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760233800; x=1760838600;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pXc8uJoaf03/WrAtzQqCEQN2vdeh87i/2lbcZm6q1bg=;
-        b=dsFiJSgd/uDYogSa94On9HsClDkN6xgjufSgUS2l1Wd4msJ51JQNW9G0UQ5OiAPSql
-         yjLx49dMIQsaXJTt7PF1h0Z6mFOnpIEqlT8A/qXB3EYUDij4NiIYjp8H1X9/4+4ez0Lo
-         Kom2eZzybfBvxETjze3DSxOsN516BJ8r+vQIfeIT7FrhAgFYbHyCciyD9p4i/xMZDmJA
-         PawLvgKQwQq29NmgjLKZ/ruKXEspnfbdHIbVys3jHeiqTFqPylNHPyamKgc3+4LgiG7b
-         N174KRr1xd7N5yCt7Md0gQtXzg5c0QUWTdSMAd+Xd2sDEBReF5pCF4Y/JI92C/edRApC
-         bKig==
-X-Forwarded-Encrypted: i=1; AJvYcCULwjJyEHCFRbHbon7/KkBuJWP8FmGJEfxa9ToixFbWI72sKw5MMqyCIoEPeS+XE29hmlalXVLa8LNygtbuQ5A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy99QRLLxgSo2GwVhYZdT57KRCfsLF/myJ/sOkriQVLvaCe/+9D
-	cYStXvLn6TatgAD9Z4sdzWZ2sVpbA3bK+g/ARBC10cBw2rGvITJm4zoq
-X-Gm-Gg: ASbGnctlqAR+/TjnZqmsWhbnRqc7JQgH4ILC3obuvA2sxSzZ7DNHQwpWNTwGlN5xIaF
-	6OZwh7NF7pBqy/mOBJzqLApgrdeo8M7jd6JPp+Ioq2dfUvL/MZfeoFdQg/4XVLYYRUOeckDSriw
-	tebIrTI877apG0Y5O/qw6QWCV0IywOIcFNULbB453ewsU/HmIfXe143QfonyoNOwjNcuw4e5VhB
-	zrhHIDyrihzbTmchEd8UGT9nB8Jx8p86+NXamJKC7Y8VIwtrZ2XEUG2r+yydNCPVbDXwdlHilNs
-	+Nk9yeVLB1M1mshY7zQeAGcPFA+Q9icTpTuJ7+BgyrdnKk2g74Fl5UqfpwnbGFFGcY17DrBFDjC
-	U0xI1JawdEym9OhXghcqcXj8hTu56SYFQpe8cQ7pWkST7D0X1eHKDBewzqnhy
-X-Google-Smtp-Source: AGHT+IE9eDjN8qiC2CBml63k30/pJPBpkqgYgHXrbEQP5D/Xfz4Ph8hYr31jfcSgiLzmPEPGXHXV9w==
-X-Received: by 2002:a05:622a:1828:b0:4e5:6f10:5aec with SMTP id d75a77b69052e-4e6ead5afcfmr225132761cf.63.1760233799442;
-        Sat, 11 Oct 2025 18:49:59 -0700 (PDT)
-Received: from gmail.com ([2600:4041:4491:2000:4a9:9d37:4046:41e])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e706d5f704sm49290051cf.26.2025.10.11.18.49.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Oct 2025 18:49:58 -0700 (PDT)
-Date: Sun, 12 Oct 2025 10:49:55 +0900
-From: Ryan Chung <seokwoo.chung130@gmail.com>
-To: Masami Hiramatsu <mhiramat@kernel.org>, g@gmail.com
-Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com, shuah@kernel.org,
-	hca@linux.ibm.com, corbet@lwn.net,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] tracing: fprobe: list-style filters,
-Message-ID: <aOsJQ3gMcg5oKy94@gmail.com>
-References: <20251004235001.133111-1-seokwoo.chung130@gmail.com>
- <20251008095111.5732b065dcebe53fc80063c5@kernel.org>
+	s=arc-20240116; t=1760270057; c=relaxed/simple;
+	bh=g/lsp42oyDVgXy4RMAqncFSNCkuiqBE+xgpVOAv+6cc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZnvYQIajnYRmJ9tWsqNfP0l+K7/Dg6bWUIqgTWYRlZ5KoCoFR+KBPycDLOLgy6JpveKbEnpLmtAQe7dyF2GbMofZ9gBgZLO9zfcNlZPx8ReLBDUQQyXOreJDSlf7lJWs5M9OybBIA4vpodwPsKmHTPRt+2sJ1fX1GggEpRZV9sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; arc=none smtp.client-ip=220.181.50.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
+From: lirongqing <lirongqing@baidu.com>
+To: Jonathan Corbet <corbet@lwn.net>, Russell King <linux@armlinux.org.uk>,
+	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Andrew Morton <akpm@linux-foundation.org>, Lance Yang <lance.yang@linux.dev>,
+	Masami Hiramatsu <mhiramat@kernel.org>, "Jason A . Donenfeld"
+	<Jason@zx2c4.com>, Shuah Khan <shuah@kernel.org>, "Paul E . McKenney"
+	<paulmck@kernel.org>, Petr Mladek <pmladek@suse.com>, Randy Dunlap
+	<rdunlap@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, Feng Tang
+	<feng.tang@linux.alibaba.com>, Pawan Gupta
+	<pawan.kumar.gupta@linux.intel.com>, Kees Cook <kees@kernel.org>, Arnd
+ Bergmann <arnd@arndb.de>, Li RongQing <lirongqing@baidu.com>, Phil Auld
+	<pauld@redhat.com>, Joel Granados <joel.granados@kernel.org>, Jakub Kicinski
+	<kuba@kernel.org>, Simon Horman <horms@kernel.org>, Anshuman Khandual
+	<anshuman.khandual@arm.com>, Stanislav Fomichev <sdf@fomichev.me>, "Liam R .
+ Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes
+	<lorenzo.stoakes@oracle.com>, David Hildenbrand <david@redhat.com>, Florian
+ Westphal <fw@strlen.de>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-aspeed@lists.ozlabs.org>, <wireguard@lists.zx2c4.com>,
+	<netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH][v3] hung_task: Panic after fixed number of hung tasks
+Date: Sun, 12 Oct 2025 19:50:35 +0800
+Message-ID: <20251012115035.2169-1-lirongqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251008095111.5732b065dcebe53fc80063c5@kernel.org>
+Content-Type: text/plain
+X-ClientProxiedBy: bjkjy-exc11.internal.baidu.com (172.31.51.11) To
+ bjkjy-exc3.internal.baidu.com (172.31.50.47)
+X-FEAS-Client-IP: 172.31.50.47
+X-FE-Policy-ID: 52:10:53:SYSTEM
 
-Hi. Thanks for the review.
+From: Li RongQing <lirongqing@baidu.com>
 
-On Wed, Oct 08, 2025 at 09:51:11AM +0900, Masami Hiramatsu wrote:
-> Hi Ryan,
-> 
-> Thanks for update!
-> 
-> On Sun,  5 Oct 2025 08:46:54 +0900
-> Ryan Chung <seokwoo.chung130@gmail.com> wrote:
-> 
-> > This series aims to extend fprobe with list-style filters and a clear
-> > entry/exist qualifier. Users can now specify a comma-separated symbol
-> > list with ! exclusions, and use a spec-level suffix to select probe
-> > type:
-> > 
-> > - funcA*, !funcAB, funcC -> entry probes
-> > - funcA*, !funcAB, funcC:entry -> explicit entry
-> > - funcA*, !funcAB, funcC:exit -> return/exit across the whole list
-> 
-> 
-> Just a note, it should not accept spaces in the list. The space
-> is the highest level delimiter. I hope actual implementation
-> does not accept spaces. So something like:
-> 
->  "funcA*,!funcAB,funcC"
->  "funcA*,!funcAB,funcC:entry"
->  "funcA*,!funcAB,funcC:exit"
-> 
-> 
-I see. I will adjust the code so that the parser reject any whitespace.
+Currently, when 'hung_task_panic' is enabled, the kernel panics
+immediately upon detecting the first hung task. However, some hung
+tasks are transient and the system can recover, while others are
+persistent and may accumulate progressively.
 
-> > 
-> > For compatibility, %return remains supported for single, literal
-> > symbols. When a list or wildcard is used, an explicit [GROUP/EVENT is
-> > required and autogeneration is disabled. Autogen names are kept for
-> > single-symbol specs, with wildcard sanitization. For list/wildcard forms
-> > we set ctx->funcname = NULL so BTF lookups are not attempted.
-> 
-> OK. So "funcA*%return" and "funcA,funcB%return" will fail.
-> 
+This patch extends the 'hung_task_panic' sysctl to allow specifying
+the number of hung tasks that must be detected before triggering
+a kernel panic. This provides finer control for environments where
+transient hangs may occur but persistent hangs should still be fatal.
 
-Yes. %return is only accepted for a single literal symbol.
+The sysctl can be set to:
+- 0: disabled (never panic)
+- 1: original behavior (panic on first hung task)
+- N: panic when N hung tasks are detected
 
-> > 
-> > The series moves parsing to the parse path, documents the new syntax,
-> > and adds selftests that accept valid list cases and reject empty tokens,
-> > stray commas, and %return mixed with lists or wildcards. Selftests also
-> > verify enable/disable flow and that entry+exit on the same set do not
-> > double-count attached functions.
-> 
-> Thanks for adding selftests and document, that is important to maintain
-> features.
-> 
-> > 
-> > Help wanted: This is my first time contributing ftrace selftests. I
-> > would appreciate comments and recommendations on test structure and
-> > coverage.
-> 
-> OK, let me review it.
-> 
-> Thanks,
-> 
+This maintains backward compatibility while providing more flexibility
+for handling different hang scenarios.
 
-Thank you.
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+---
+Diff with v2: not add new sysctl, extend hung_task_panic
 
-> 
-> > 
-> > Basic coverage is included, but this likely needs broader testing across
-> > architectures. Feedback and additional test ideas are welcome.
-> > 
-> > Changes since v2:
-> > - Introduce spec-level: :entry/:exit; reject %return with
-> >   lists/wildcards
-> > - Require explict [GROUP/]EVENT for list/wildcard; keep autogen only for
-> >   single literal.
-> > - Sanitize autogen names for single-symbol wildcards
-> > - Set ctx->funcname = NULL for list/wildcard to bypass BTF
-> > - Move list parsing out of __register_trace_fprobe() and into the parse
-> >   path
-> > - Update docs and tracefs README and add dynevent selftests for
-> >   accept/reject and enable/disable flow
-> > 
-> > Link: https://lore.kernel.org/lkml/20250904103219.f4937968362bfff1ecd3f004@kernel.org/
-> > 
-> > Ryan Chung (5):
-> >   docs: tracing: fprobe: document list filters and :entry/:exit
-> >   tracing: fprobe: require explicit [GROUP/]EVENT for list/wildcard
-> >   tracing: fprobe: support comma-separated symbols and :entry/:exit
-> >   selftests/ftrace: dynevent: add reject cases for list/:entry/:exit
-> >   selftests/ftrace: dynevent: add reject cases
-> > 
-> >  Documentation/trace/fprobetrace.rst           |  27 +-
-> >  kernel/trace/trace.c                          |   3 +-
-> >  kernel/trace/trace_fprobe.c                   | 247 ++++++++++++++----
-> >  .../test.d/dynevent/add_remove_fprobe.tc      | 121 +++++++++
-> >  .../test.d/dynevent/fprobe_syntax_errors.tc   |  13 +
-> >  5 files changed, 349 insertions(+), 62 deletions(-)
-> > 
-> > -- 
-> > 2.43.0
-> > 
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+ Documentation/admin-guide/kernel-parameters.txt      | 20 +++++++++++++-------
+ Documentation/admin-guide/sysctl/kernel.rst          |  3 ++-
+ arch/arm/configs/aspeed_g5_defconfig                 |  2 +-
+ kernel/configs/debug.config                          |  2 +-
+ kernel/hung_task.c                                   | 16 +++++++++++-----
+ lib/Kconfig.debug                                    | 10 ++++++----
+ tools/testing/selftests/wireguard/qemu/kernel.config |  2 +-
+ 7 files changed, 35 insertions(+), 20 deletions(-)
 
-Best regards,
-Ryan Chung
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index a51ab46..7d9a8ee 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1992,14 +1992,20 @@
+ 			the added memory block itself do not be affected.
+ 
+ 	hung_task_panic=
+-			[KNL] Should the hung task detector generate panics.
+-			Format: 0 | 1
++			[KNL] Number of hung tasks to trigger kernel panic.
++			Format: <int>
++
++			Set this to the number of hung tasks that must be
++			detected before triggering a kernel panic.
++
++			0: don't panic
++			1: panic immediately on first hung task
++			N: panic after N hung tasks are detect
+ 
+-			A value of 1 instructs the kernel to panic when a
+-			hung task is detected. The default value is controlled
+-			by the CONFIG_BOOTPARAM_HUNG_TASK_PANIC build-time
+-			option. The value selected by this boot parameter can
+-			be changed later by the kernel.hung_task_panic sysctl.
++			The default value is controlled by the
++			CONFIG_BOOTPARAM_HUNG_TASK_PANIC build-time option. The value
++			selected by this boot parameter can be changed later by the
++			kernel.hung_task_panic sysctl.
+ 
+ 	hvc_iucv=	[S390]	Number of z/VM IUCV hypervisor console (HVC)
+ 				terminal devices. Valid values: 0..8
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index f3ee807..0a8dfab 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -397,7 +397,8 @@ a hung task is detected.
+ hung_task_panic
+ ===============
+ 
+-Controls the kernel's behavior when a hung task is detected.
++When set to a non-zero value, a kernel panic will be triggered if the
++number of detected hung tasks reaches this value
+ This file shows up if ``CONFIG_DETECT_HUNG_TASK`` is enabled.
+ 
+ = =================================================
+diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
+index 61cee1e..c3b0d5f 100644
+--- a/arch/arm/configs/aspeed_g5_defconfig
++++ b/arch/arm/configs/aspeed_g5_defconfig
+@@ -308,7 +308,7 @@ CONFIG_PANIC_ON_OOPS=y
+ CONFIG_PANIC_TIMEOUT=-1
+ CONFIG_SOFTLOCKUP_DETECTOR=y
+ CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+-CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
++CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
+ CONFIG_WQ_WATCHDOG=y
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_FUNCTION_TRACER=y
+diff --git a/kernel/configs/debug.config b/kernel/configs/debug.config
+index e81327d..9f6ab7d 100644
+--- a/kernel/configs/debug.config
++++ b/kernel/configs/debug.config
+@@ -83,7 +83,7 @@ CONFIG_SLUB_DEBUG_ON=y
+ #
+ # Debug Oops, Lockups and Hangs
+ #
+-# CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
++CONFIG_BOOTPARAM_HUNG_TASK_PANIC=0
+ # CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
+ CONFIG_DEBUG_ATOMIC_SLEEP=y
+ CONFIG_DETECT_HUNG_TASK=y
+diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+index b2c1f14..3929ed9 100644
+--- a/kernel/hung_task.c
++++ b/kernel/hung_task.c
+@@ -81,7 +81,7 @@ static unsigned int __read_mostly sysctl_hung_task_all_cpu_backtrace;
+  * hung task is detected:
+  */
+ static unsigned int __read_mostly sysctl_hung_task_panic =
+-	IS_ENABLED(CONFIG_BOOTPARAM_HUNG_TASK_PANIC);
++	CONFIG_BOOTPARAM_HUNG_TASK_PANIC;
+ 
+ static int
+ hung_task_panic(struct notifier_block *this, unsigned long event, void *ptr)
+@@ -218,8 +218,11 @@ static inline void debug_show_blocker(struct task_struct *task, unsigned long ti
+ }
+ #endif
+ 
+-static void check_hung_task(struct task_struct *t, unsigned long timeout)
++static void check_hung_task(struct task_struct *t, unsigned long timeout,
++		unsigned long prev_detect_count)
+ {
++	unsigned long total_hung_task;
++
+ 	if (!task_is_hung(t, timeout))
+ 		return;
+ 
+@@ -229,9 +232,11 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
+ 	 */
+ 	sysctl_hung_task_detect_count++;
+ 
++	total_hung_task = sysctl_hung_task_detect_count - prev_detect_count;
+ 	trace_sched_process_hang(t);
+ 
+-	if (sysctl_hung_task_panic) {
++	if (sysctl_hung_task_panic &&
++			(total_hung_task >= sysctl_hung_task_panic)) {
+ 		console_verbose();
+ 		hung_task_show_lock = true;
+ 		hung_task_call_panic = true;
+@@ -300,6 +305,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+ 	int max_count = sysctl_hung_task_check_count;
+ 	unsigned long last_break = jiffies;
+ 	struct task_struct *g, *t;
++	unsigned long prev_detect_count = sysctl_hung_task_detect_count;
+ 
+ 	/*
+ 	 * If the system crashed already then all bets are off,
+@@ -320,7 +326,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+ 			last_break = jiffies;
+ 		}
+ 
+-		check_hung_task(t, timeout);
++		check_hung_task(t, timeout, prev_detect_count);
+ 	}
+  unlock:
+ 	rcu_read_unlock();
+@@ -389,7 +395,7 @@ static const struct ctl_table hung_task_sysctls[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
++		.extra2		= SYSCTL_INT_MAX,
+ 	},
+ 	{
+ 		.procname	= "hung_task_check_count",
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 3034e294..077b9e4 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1258,12 +1258,14 @@ config DEFAULT_HUNG_TASK_TIMEOUT
+ 	  Keeping the default should be fine in most cases.
+ 
+ config BOOTPARAM_HUNG_TASK_PANIC
+-	bool "Panic (Reboot) On Hung Tasks"
++	int "Number of hung tasks to trigger kernel panic"
+ 	depends on DETECT_HUNG_TASK
++	default 0
+ 	help
+-	  Say Y here to enable the kernel to panic on "hung tasks",
+-	  which are bugs that cause the kernel to leave a task stuck
+-	  in uninterruptible "D" state.
++	  The number of hung tasks must be detected to trigger kernel panic.
++
++	  - 0: Don't trigger panic
++	  - N: Panic when N hung tasks are detected
+ 
+ 	  The panic can be used in combination with panic_timeout,
+ 	  to cause the system to reboot automatically after a
+diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
+index 936b18b..0504c11 100644
+--- a/tools/testing/selftests/wireguard/qemu/kernel.config
++++ b/tools/testing/selftests/wireguard/qemu/kernel.config
+@@ -81,7 +81,7 @@ CONFIG_WQ_WATCHDOG=y
+ CONFIG_DETECT_HUNG_TASK=y
+ CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
+ CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+-CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
++CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
+ CONFIG_PANIC_TIMEOUT=-1
+ CONFIG_STACKTRACE=y
+ CONFIG_EARLY_PRINTK=y
+-- 
+2.9.4
+
 
