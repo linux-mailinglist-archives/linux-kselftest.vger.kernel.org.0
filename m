@@ -1,159 +1,96 @@
-Return-Path: <linux-kselftest+bounces-42999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92FD2BD4CB1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 18:09:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0434BD5110
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 18:32:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3D9424FE1C9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 15:27:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25476542930
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 15:56:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5922F83D8;
-	Mon, 13 Oct 2025 15:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA8D3101D5;
+	Mon, 13 Oct 2025 15:36:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Igei7WhK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VixOhuDl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CFF326E6F6
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 15:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE113101C5
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 15:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760368532; cv=none; b=g1+IxxvrlKXdPM+VwYrBKkFcHHySSfPt3zUPEI1jw32aAjF4IPiNBA8p4d+ljlshPXrHZZAKM+K9oF0IsBMUHq7E8TJjIcb1m3uraZ1EFBGsGtbiB3sEZID3oILg09mpgPYLsOSfQGn84U6Fl/yqXgiEsMoR9UugRnyF/x3e21k=
+	t=1760369780; cv=none; b=bPBWCPaHsT/F1koIU1L+ja4VvSTIp4H+OhZCvL3xMp3INSBIhUio5HHV4tDsqsfvWI6AvhGEvv4EcQIVESYK7Dh/ivZGq5tCv6o2gCf3j1SURfUtk2G0npyY8Rpe2htbeKm8B4bfTbCpvSi4RgDtYqDJ8BKNKwB5xEqMLvO1eEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760368532; c=relaxed/simple;
-	bh=u9a3zosxSdz3WZpPJYTywNjxVaWRBJXzveMfBERek7A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EX3P4Ug0OR4ALBCtGFqsEa+vGK0bPXtAygfweqR0INlK90A0YMsTC0uCjQIfLMoIvpEfyarXzxTc2TUIvGQgGERKZ/iJuKhjn23x3aKu+LC32miBWqVNTnIVuIzPWGAYm0UHYkGf1l/OOhCpmX2LjyweKj3ns9ffU3a8EyFKbeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Igei7WhK; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-46e34052bb7so52228525e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 08:15:30 -0700 (PDT)
+	s=arc-20240116; t=1760369780; c=relaxed/simple;
+	bh=KnbiNEI6jdfFoyCXFlvrrBN2LNaWnjAsJojkaDAb3zY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=G93oHhcsxgcNM4U2NeAnwfgVYHa+xsqn+SEl3iPfQU78BXvS0RLgWCZvvRbUKI8uOyJ9xQ2iHDmG/Xe/s2hllAsTiOTftbLLVypoXpfWckXLogG47yyhkNFyEMSECWSWn61CmnejOI/cNCpYB3r+l4/KmEvHP4FiG7al7fpoCeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VixOhuDl; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-46e3e177893so29497855e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 08:36:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760368529; x=1760973329; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=H9v2BaCzqTwwaKihxHneX2NKtRg+AsrUK2wCvz8acXU=;
-        b=Igei7WhKP5Kaz1JuzN2EnBPWGVEewypfuD6vJmbwH+Cy3T41RVr8URMXUjWTgRF3PM
-         cMz/L8mjH3/Li2MzJp3LKA5yCja0tqM6K0aLswC2VsgG3UXB9OUHE7R6j9lPEZdGC2bc
-         942h+8L/L5bhnhpgrEA0DSlR5m9s/jO+a1xWnELlCLsFRPC75S6nwvxHj0/PRwxtGgjI
-         6GtnsDzDnEYr2YO7fWy3e1lOeTYqo8RgLvwbTno3K9BHRL+UWbVM9mWCFqppK9b7Oy29
-         aj5FxRNjG3XhwwAo1L551Moa2Vm+Dp8LAKgcR7DVWcFkHdiKWb5bb5Fff1iAAwBl2G9V
-         888A==
+        d=google.com; s=20230601; t=1760369777; x=1760974577; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FlFedRueswZiwwJSvXOIyDnT3oPzpw1Sfa+/cqnl83o=;
+        b=VixOhuDlRMASSH2Ew9mehjOzjWokkcGCCRdHf8AMO5OClJ0Fr0LOTdvRH0mi5A5XiH
+         kO4fsUFGI4vYu5qL7MloeBxssldw0PWI7+Zdu2aThISPeR89vLFbGncEXToXv9yEIht/
+         4qUoDYr2tizImnE9U5fOHCKUFwq/tB6vesJe8GcD9dorknx3kOaJqXvUuINv/xkiWkkA
+         m5n4yMELxn/8vlGCti/YwJdzZQccm6U64lVXjalFRZugh+iTkNibpfuwjmpyg4O8ztkr
+         UHRdtGiHjtK6ovbfur5eTWOaEGucxrG/oG9q4+pdXWVn9t3pDL2kdj/dVSoNGpQiDLeB
+         hhvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760368529; x=1760973329;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H9v2BaCzqTwwaKihxHneX2NKtRg+AsrUK2wCvz8acXU=;
-        b=BCjQCCbBfmadKLhNUd/d8px7/K50sMqfHGvix6t6PeFjL4SZy+p7I9pJyJu6dt6VYV
-         shO5Jdc6CP0IPDemsvE0xbdfW9wihxAMRTBCcJbWLk4rHzTmG8uQXa/GWWvmuWT6atka
-         55k+yEEoiSmTBfcOulKPnwUoZHZZNlbCHFhHYYGxAMwZeQuVOObwcHuaiKB6D7tm3FT5
-         QxR+CKDgnFhyu0V6QZSEN3MWEFYvv0q8kz2aFlB4mQLc4BzIII+4/fD93plat1aPh1km
-         UMDMUxZiZan4OYqXU1X0qHx1LVjIwZeWheYlwz96AdqGtehhbHtOmlUPec8kNq4iDBVw
-         tjow==
-X-Forwarded-Encrypted: i=1; AJvYcCVUURAMfIgdjkFLFynlHd6ezrmy0Nt9qt/VriG9t4qJXqN7FbklILqTYyBdY8B+2QiCc7VEgPHodpV+5g99w28=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLMZSZJY2qt6Bcr1SHjdAMXEmesblN+bRLWVc7mQX+F+hki5JS
-	+xooazV10tq5koZzEavVMnnfiOqtWSk8TtwAqxiNRL1UzsZ9s2tNv65G
-X-Gm-Gg: ASbGncs3XbRJybkROu3PHJORYtp6G52fzVJ6ZXQ6Z4Ab69vOVoJGXGYFKQ3TMrGvao9
-	9uAcx8SSePf7TN/e9Cjy+gFp/48QDdEbj+gNy9dxkuo1Hw9kMQslgfiHM6p9VFWXgjxd3nWMAlX
-	sN+O4hEza+rdP+gok3kobqyM556xKOTh9dGPlZryhNKyCbnfBGQa5X0vfkWm9NEDLrXwnjQLX68
-	8gKZaJfOsHJ5aC05HghmXUU+wikPMQXZS4r84h/7W912aUJ4M9Lu9sPqPiaxdQI/VkqNK3E14ro
-	8CkhXbUMuG9x2s2bQeTtxe5/D6O9iFW6oQxJmn8azwmJkFV8v3sJeeOAtzklvkol9QqLr2n/gJx
-	btNPNF7CYbEv8W3OHuShS4NHpwXDJ9W0HHUAKHDEjMjAUXcARVV4lVzXZfgSZmMiX8bDzLSXGdL
-	qJhQA77nKEkBCV9SY=
-X-Google-Smtp-Source: AGHT+IFb9QSIj2pT5DqJHOGWLZeoKzR1HcGUwSCz8TPcIH2zmr4COlYJoCPacXO6TFFsZZUZ1uzZWw==
-X-Received: by 2002:a05:600c:1c23:b0:46e:32a5:bd8d with SMTP id 5b1f17b1804b1-46fa9a892d7mr154828545e9.3.1760368529113;
-        Mon, 13 Oct 2025 08:15:29 -0700 (PDT)
-Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.3.91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fab36a773sm135545825e9.0.2025.10.13.08.15.28
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 13 Oct 2025 08:15:28 -0700 (PDT)
-From: Jack Thomson <jackabt.amazon@gmail.com>
-To: maz@kernel.org,
-	oliver.upton@linux.dev,
-	pbonzini@redhat.com
-Cc: joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	isaku.yamahata@intel.com,
-	roypat@amazon.co.uk,
-	kalyazin@amazon.co.uk,
-	jackabt@amazon.com
-Subject: [PATCH v2 0/4] KVM ARM64 pre_fault_memory
-Date: Mon, 13 Oct 2025 16:14:57 +0100
-Message-ID: <20251013151502.6679-1-jackabt.amazon@gmail.com>
-X-Mailer: git-send-email 2.50.1
+        d=1e100.net; s=20230601; t=1760369777; x=1760974577;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FlFedRueswZiwwJSvXOIyDnT3oPzpw1Sfa+/cqnl83o=;
+        b=KMMu94PRRwiSP951tnf1I5vmehh9cHHSIagw/dkUsk/BuP8ShGE+xttAGFI9f8yFaE
+         oaPVMN9NFNYOa6UcRVnVX/I+/uSPx8gPrfvUBANAL5lhgrGYc5Hm3sri1sgRq7a83I3H
+         CSsnt8Gln9QkgXoFlpLEhN2ab0eTuyf3PTa7cEkcKguIUXo24hyDFf7BRvvC4ycIPHDL
+         kJxP7OHQOX4764ag2D/uC3luQvbi8LS5kjdKMF2S3MVVi/gqv5SuHAtwmyD1XpOjKY9G
+         HeAAk0+6LzM4L+a/183BxXL5QigA+C/dGvcvTO+OLvHEvY0v4V/13yKz3v9PjNfSFpby
+         Y/Xw==
+X-Forwarded-Encrypted: i=1; AJvYcCVvIm/Q6QRU9+1R+jXg0FZJ6mOLHkBmqMK3c7HsMJxv5o27N01sMl0ujf0Rsnm8csQJXqJuyISl5FGib8PdGjk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7i26GkdBU0x9sYcke44N1h6D8XmzrOoolqeQluyTZe9XZMRG7
+	L6UCRVY1N5ffK5iZ7e1N89eWxwJIF2b1NrsAI1gm++AbUyJuUZCY4M/pdu6mwZWfnuAMYqRMkkv
+	mvVZ3zLGloLB5Ug==
+X-Google-Smtp-Source: AGHT+IHe33aTc6DLr2QuBitaWmdhOm2nkmbEu0YxgnPqOB4zoPd1RlYBlwwAqBGdVpW1YUG3fMQrmSmUYvbqkQ==
+X-Received: from wmby12.prod.google.com ([2002:a05:600c:c04c:b0:46e:3771:b9c9])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:a341:b0:46e:74bb:6bc with SMTP id 5b1f17b1804b1-46fa9a8932cmr136710475e9.5.1760369776743;
+ Mon, 13 Oct 2025 08:36:16 -0700 (PDT)
+Date: Mon, 13 Oct 2025 15:36:16 +0000
+In-Reply-To: <20251013-l1tf-test-v1-2-583fb664836d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20251013-l1tf-test-v1-0-583fb664836d@google.com> <20251013-l1tf-test-v1-2-583fb664836d@google.com>
+X-Mailer: aerc 0.21.0
+Message-ID: <DDHB06W60S97.3GDEC7DRZFQEJ@google.com>
+Subject: Re: [PATCH 2/2] KVM: x86: selftests: add an L1TF exploit test
+From: Brendan Jackman <jackmanb@google.com>
+To: Brendan Jackman <jackmanb@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>
+Cc: Alexandra Sandulescu <aesa@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>, 
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<kvm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Jack Thomson <jackabt@amazon.com>
+On Mon Oct 13, 2025 at 3:13 PM UTC, Brendan Jackman wrote:
+> The test requirements are: the machine is vulnerable to L1TF and the
+> helper kernel module is loaded prior to the test execution.
+> The test should pass when the kernel enables asi (asi=on). 
 
-This patch series adds ARM64 support for the KVM_PRE_FAULT_MEMORY
-feature, which was previously only available on x86 [1]. This allows us
-to reduce the number of stage-2 faults during execution. This is of
-benefit in post-copy migration scenarios, particularly in memory
-intensive applications, where we are experiencing high latencies due to
-the stage-2 faults.
-
-Patch Overview:
-
- - The first patch adds support for the KVM_PRE_FAULT_MEMORY ioctl
-   on arm64.
-
- - The second patch fixes an issue with unaligned mmap allocations
-   in the selftests.
-
- - The third patch updates the pre_fault_memory_test to support
-   arm64.
-
- - The last patch extends the pre_fault_memory_test to cover
-   different vm memory backings.
-
-=== Changes Since v1 [2] ===
-
-Addressing feedback from Oliver:
-
- - No pre-fault flag is passed to user_mem_abort() or gmem_abort() now
-   aborts are synthesized.
- - Remove retry loop from kvm_arch_vcpu_pre_fault_memory()
-
-[1]: https://lore.kernel.org/kvm/20240710174031.312055-1-pbonzini@redhat.com
-[2]: https://lore.kernel.org/all/20250911134648.58945-1-jackabt.amazon@gmail.com
-
-Jack Thomson (4):
-  KVM: arm64: Add pre_fault_memory implementation
-  KVM: selftests: Fix unaligned mmap allocations
-  KVM: selftests: Enable pre_fault_memory_test for arm64
-  KVM: selftests: Add option for different backing in pre-fault tests
-
- Documentation/virt/kvm/api.rst                |   3 +-
- arch/arm64/kvm/Kconfig                        |   1 +
- arch/arm64/kvm/arm.c                          |   1 +
- arch/arm64/kvm/mmu.c                          |  73 +++++++++++-
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +-
- .../selftests/kvm/pre_fault_memory_test.c     | 110 +++++++++++++-----
- 7 files changed, 163 insertions(+), 38 deletions(-)
-
-
-base-commit: 42188667be387867d2bf763d028654cbad046f7b
--- 
-2.43.0
-
+Agh, sorry, I missed a bit when scrubbing the commit message, there
+should not be mentions of ASI in here.
 
