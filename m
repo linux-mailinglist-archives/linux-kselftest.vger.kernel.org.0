@@ -1,97 +1,128 @@
-Return-Path: <linux-kselftest+bounces-42984-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42985-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9849ABD134F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 04:19:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 351ADBD1D65
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 09:37:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A58FB3B2004
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 02:19:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52B7118987FF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 07:38:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C20B2586E8;
-	Mon, 13 Oct 2025 02:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA902E8B71;
+	Mon, 13 Oct 2025 07:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="wpD7FE8Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from baidu.com (mx24.baidu.com [111.206.215.185])
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DDC169AE6;
-	Mon, 13 Oct 2025 02:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.206.215.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8CD27BF6C;
+	Mon, 13 Oct 2025 07:37:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760321950; cv=none; b=h8Pq/sEDezJzCSiMN2YL+IY41U+jY77VJhTNfwmYygXIEiO1OXTEWl/f9QNmMvklY903XoAWP+WsDkLG69eRt6DtvlqArzaQvOXYwSVBWxDL8DZbgIUWQVXOwWmJwLZ2E2D4hO3tRWMm9Tnjl2nC7hBSbtvlvP66DZ8rK7k/vRc=
+	t=1760341054; cv=none; b=f2X0SMZTGlmVXWeH0BdP7Zw9BLvdJ3w1z5zThP8s8Eu4phIYjjbaKXU68rGunmLluA9FiJaeMylF3kuZyCuDOqvuYzWkLSxN2Cn06xzZoD8iEuwsNxSmkuNCp+VC1pW56xsLC4UQpHs1XjJJKvlQYlvrDZcK1jYOMbzyxoMyf7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760321950; c=relaxed/simple;
-	bh=wckOwuj24Ij1V2m401eRdyD2GopDhpl7foF6Yjx/7Fk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ECUIfhaOSJ9cn8W4cV1nwFaKHQPSaY5LIJYe1pJAuuhBY0Ez4lfamf8X5GP1E5dDAdtHeO8QeD2b+5QxeQsu31LYqOWZ8Pib9nwnW8h5C5qgC4rUbuYSBra38FCvoFWbjrVocq4zma3LPl6O2HbrrWe1UMPH0GKdNhgfphMoIjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; arc=none smtp.client-ip=111.206.215.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
-From: "Li,Rongqing" <lirongqing@baidu.com>
-To: Markus Elfring <Markus.Elfring@web.de>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "wireguard@lists.zx2c4.com"
-	<wireguard@lists.zx2c4.com>, Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Andrew Morton <akpm@linux-foundation.org>, Anshuman Khandual
-	<anshuman.khandual@arm.com>, Arnd Bergmann <arnd@arndb.de>, David Hildenbrand
-	<david@redhat.com>, Feng Tang <feng.tang@linux.alibaba.com>, Florian Westphal
-	<fw@strlen.de>, Jakub Kicinski <kuba@kernel.org>, "Jason A . Donenfeld"
-	<Jason@zx2c4.com>, Joel Granados <joel.granados@kernel.org>, Joel Stanley
-	<joel@jms.id.au>, Jonathan Corbet <corbet@lwn.net>, Kees Cook
-	<kees@kernel.org>, Lance Yang <lance.yang@linux.dev>, "Liam R . Howlett"
-	<Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>, "Paul E . McKenney"
-	<paulmck@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, "Petr
- Mladek" <pmladek@suse.com>, Phil Auld <pauld@redhat.com>, Randy Dunlap
-	<rdunlap@infradead.org>, Russell King <linux@armlinux.org.uk>, Shuah Khan
-	<shuah@kernel.org>, Simon Horman <horms@kernel.org>, Stanislav Fomichev
-	<sdf@fomichev.me>, Steven Rostedt <rostedt@goodmis.org>
-CC: LKML <linux-kernel@vger.kernel.org>, "kernel-janitors@vger.kernel.org"
-	<kernel-janitors@vger.kernel.org>
-Subject: =?utf-8?B?UkU6IFvlpJbpg6jpgq7ku7ZdIFJlOiBbUEFUQ0ggdjNdIGh1bmdfdGFzazog?=
- =?utf-8?Q?Panic_after_fixed_number_of_hung_tasks?=
-Thread-Topic: =?utf-8?B?W+WklumDqOmCruS7tl0gUmU6IFtQQVRDSCB2M10gaHVuZ190YXNrOiBQYW5p?=
- =?utf-8?Q?c_after_fixed_number_of_hung_tasks?=
-Thread-Index: AQHcO3v66ZG2hk4PtE6ORt/xqoKtirS/VpVw
-Date: Mon, 13 Oct 2025 02:14:58 +0000
-Message-ID: <2b19bac7de174fe6baa07234b88c8156@baidu.com>
-References: <20251012115035.2169-1-lirongqing@baidu.com>
- <0aea408f-f6d7-4e2d-8cee-1801ad7f3139@web.de>
-In-Reply-To: <0aea408f-f6d7-4e2d-8cee-1801ad7f3139@web.de>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1760341054; c=relaxed/simple;
+	bh=Ga+qOkS7SIjz/ub6snCjlz+yMTYuLoApdIVfxTfpaAM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bnGpSf4EGqAhpMGRQ0hhyFcoz8tO/jffQSJSRpY+OR7W5yXqe0Gm3Yl2CEJEcF8jN/XcK4512zy7PQccdkOTAT8+wu4M6jZ4xmTmKs7mfOt5dnextWjuVETKtH8e1LhfhOHHJb6sWf6s40g/bXsHBTgfIA0Ykhqr6QSnDi47eJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=wpD7FE8Y; arc=none smtp.client-ip=113.46.200.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=2P7UD8Fnfu8+8RYTF/YIlrkjqnC4Y7kmFuUDRyS3S4E=;
+	b=wpD7FE8YoPzFhkqSLKHqEYZ887cUOqSw4+XyO+2zvynVcSFaPOPyHP+yy5ZXZwW8WuZHzaDlY
+	BWNHuu6RNUYdKp4cuitcKzyjAkmlpOM/WyvsXAbdg2QXX+y69etjb2UxNOVnTO29RCHPOusckOE
+	a7Abp8+cFA2pLMNZO+sfLFI=
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4clTh01qkTzmV66;
+	Mon, 13 Oct 2025 15:37:04 +0800 (CST)
+Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3F6EF1400F4;
+	Mon, 13 Oct 2025 15:37:23 +0800 (CST)
+Received: from huawei.com (10.50.85.128) by dggpemf500016.china.huawei.com
+ (7.185.36.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 13 Oct
+ 2025 15:37:22 +0800
+From: Wang Liang <wangliang74@huawei.com>
+To: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <horms@kernel.org>, <shuah@kernel.org>
+CC: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <yuehaibing@huawei.com>,
+	<zhangchangzhong@huawei.com>, <wangliang74@huawei.com>
+Subject: [PATCH net repost] selftests: net: check jq command is supported
+Date: Mon, 13 Oct 2025 16:00:39 +0800
+Message-ID: <20251013080039.3035898-1-wangliang74@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-FEAS-Client-IP: 172.31.50.45
-X-FE-Policy-ID: 52:10:53:SYSTEM
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ dggpemf500016.china.huawei.com (7.185.36.197)
 
-PiDigKYNCj4gPiBUaGlzIHBhdGNoIGV4dGVuZHMgdGhlIOKApg0KPiANCj4gV2lsbCBhbm90aGVy
-IGltcGVyYXRpdmUgd29yZGluZyBhcHByb2FjaCBiZWNvbWUgbW9yZSBoZWxwZnVsIGZvciBhbg0K
-PiBpbXByb3ZlZCBjaGFuZ2UgZGVzY3JpcHRpb24/DQo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcv
-cHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVlL0RvY3VtDQo+
-IGVudGF0aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1wYXRjaGVzLnJzdD9oPXY2LjE3I245NA0KPiAN
-Cg0Kd2lsbCBmaXggaW4gbmV4dCB2ZXJzaW9uDQo+IA0KPiDigKYNCj4gPiArKysgYi9rZXJuZWwv
-aHVuZ190YXNrLmMNCj4g4oCmDQo+IEBAIC0yMjksOSArMjMyLDExIEBAIHN0YXRpYyB2b2lkIGNo
-ZWNrX2h1bmdfdGFzayhzdHJ1Y3QgdGFza19zdHJ1Y3QgKnQsDQo+IHVuc2lnbmVkIGxvbmcgdGlt
-ZW91dCkg4oCmDQo+ID4gIAl0cmFjZV9zY2hlZF9wcm9jZXNzX2hhbmcodCk7DQo+ID4NCj4gPiAt
-CWlmIChzeXNjdGxfaHVuZ190YXNrX3BhbmljKSB7DQo+ID4gKwlpZiAoc3lzY3RsX2h1bmdfdGFz
-a19wYW5pYyAmJg0KPiA+ICsJCQkodG90YWxfaHVuZ190YXNrID49IHN5c2N0bF9odW5nX3Rhc2tf
-cGFuaWMpKSB7DQo+IOKApg0KPiANCj4gSSBzdWdnZXN0IHRvIHVzZSB0aGUgZm9sbG93aW5nIHNv
-dXJjZSBjb2RlIHZhcmlhbnQgaW5zdGVhZC4NCj4gDQo+IAlpZiAoc3lzY3RsX2h1bmdfdGFza19w
-YW5pYyAmJiB0b3RhbF9odW5nX3Rhc2sgPj0gc3lzY3RsX2h1bmdfdGFza19wYW5pYykNCj4gew0K
-PiANCg0Kd2lsbCBmaXggaW4gbmV4dCB2ZXJzaW9uDQoNCnRoYW5rcw0KDQotTGkNCg0KPiANCj4g
-UmVnYXJkcywNCj4gTWFya3VzDQoNCg==
+The jq command is used in vlan_bridge_binding.sh, if it is not supported,
+the test will spam the following log.
+
+  # ./vlan_bridge_binding.sh: line 51: jq: command not found
+  # ./vlan_bridge_binding.sh: line 51: jq: command not found
+  # ./vlan_bridge_binding.sh: line 51: jq: command not found
+  # ./vlan_bridge_binding.sh: line 51: jq: command not found
+  # ./vlan_bridge_binding.sh: line 51: jq: command not found
+  # TEST: Test bridge_binding on->off when lower down                   [FAIL]
+  #       Got operstate of , expected 0
+
+The rtnetlink.sh has the same problem. It makes sense to check if jq is
+installed before running these tests. After this patch, the
+vlan_bridge_binding.sh skipped if jq is not supported:
+
+  # timeout set to 3600
+  # selftests: net: vlan_bridge_binding.sh
+  # TEST: jq not installed                                              [SKIP]
+
+Fixes: dca12e9ab760 ("selftests: net: Add a VLAN bridge binding selftest")
+Fixes: 6a414fd77f61 ("selftests: rtnetlink: Add an address proto test")
+Signed-off-by: Wang Liang <wangliang74@huawei.com>
+Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ tools/testing/selftests/net/rtnetlink.sh           | 2 ++
+ tools/testing/selftests/net/vlan_bridge_binding.sh | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index dbf77513f617..163a084d525d 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -1466,6 +1466,8 @@ usage: ${0##*/} OPTS
+ EOF
+ }
+ 
++require_command jq
++
+ #check for needed privileges
+ if [ "$(id -u)" -ne 0 ];then
+ 	end_test "SKIP: Need root privileges"
+diff --git a/tools/testing/selftests/net/vlan_bridge_binding.sh b/tools/testing/selftests/net/vlan_bridge_binding.sh
+index db481af9b6b3..e8c02c64e03a 100755
+--- a/tools/testing/selftests/net/vlan_bridge_binding.sh
++++ b/tools/testing/selftests/net/vlan_bridge_binding.sh
+@@ -249,6 +249,8 @@ test_binding_toggle_off_when_upper_down()
+ 	do_test_binding_off : "on->off when upper down"
+ }
+ 
++require_command jq
++
+ trap defer_scopes_cleanup EXIT
+ setup_prepare
+ tests_run
+-- 
+2.34.1
+
 
