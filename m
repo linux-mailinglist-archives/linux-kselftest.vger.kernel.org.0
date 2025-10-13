@@ -1,112 +1,123 @@
-Return-Path: <linux-kselftest+bounces-43023-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78510BD58D6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 19:41:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C1F2BD5A84
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 20:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF1FD1893C87
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 17:41:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A5D540219A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 18:11:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B664F304BDD;
-	Mon, 13 Oct 2025 17:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="SqHb8g6I"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46D482D12E2;
+	Mon, 13 Oct 2025 18:11:07 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3220C238176
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 17:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AF0259CA5
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 18:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760377274; cv=none; b=L7F8fBTCTIAPC+adVVdDUZ6kaTyoD/VBaUE2BAiLEbNL+BuT0xT9vYnf+XjMNR2sJgTaBL0N3/ytwjfd+AqeF9YhoRbcS1+PHgoqrBvG7YGcaelg9bUFxBxXU5Si+PD3oDQMdK6rAqAMCeWaFLDvUZXwA0DmG/YwL4ERwyzPyHM=
+	t=1760379067; cv=none; b=ZQnj4bXDRZ5OjlM1R65B1lwF2fEll2wchnpTfr03hcpj3Y5fSwKCcm3juevcZJqmtPInNT0HOx7T1MIpvIVYEEH3ROgR6v7cL0WCtoxEtXsB+5WJql7QPIV2pIs70cNjTaRSVYZ+p0rnCPgt7wEPB8X1lVxBSRTMx45Oa87avyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760377274; c=relaxed/simple;
-	bh=94egnTRdgLc30wdtlVSvU7tat0yXpqCx45KEvuUD7wI=;
+	s=arc-20240116; t=1760379067; c=relaxed/simple;
+	bh=0Bzuud3fbzTgE93y68oTL55XoEOeH0xhkZtO0YadA28=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fhrHPC8Qs1Hvl5NtUWtpYhXvhV7lH93YPmJyqbf/ZmNYsnBjV6j4g2BAN9d2Wu1oudTtL9IXVTDLJw4aIXtHBSSKNO8QZrdXPhUfBN+bpcqXGu8wgySaPXjCYpe7o0yCuwVt6XvuOkDli0bgEf9mTzd1Lldu2j4vq0UJO7rYq0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=SqHb8g6I; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-930a6c601b3so443249139f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 10:41:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1760377272; x=1760982072; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UltuTfLMWFwExhawJAiiHDqM2t3dFAy15foosSKHKoI=;
-        b=SqHb8g6IHYPewx+ScxjYTRkkxkp1SalWwNZ0S6e6udUNu6W0gP5aZBf6VF7jO13oRv
-         7Zy0cMbIwdZTWL/g3oGM4nJLmGqbzWZAUCbkp1uZuxbPJPtslYlNRXxNTcYSMIwCC95l
-         NiN/og5jaRCrhe7R4LmlzP+qqwCEXBynCkbmU2QJLHqQ9CQXxoKRaVRimNSweUaKiG26
-         lMv/H8q+Zhvynu0RN+0rpQQQFFY/7zKd9lPoROfJ5fHwm2OhYt9Ez/dYQxdsRRswJuh3
-         vtFTS999VfW5VbXwmKRjEPPttLBZZkF4VU6dF/dsC2N23hY1ro7MLrsUWTS3AvqiaGIH
-         0SIw==
+	 Content-Type:Content-Disposition:In-Reply-To; b=JjDeDSC7V3CFLjvd6dpStbDGZ9NKVcmgJzIyezRLdMJs3oNfQ86essTYLjPFIJpxsnvsPoBcHHlB1bp0NZeu6wRvz21vlHDpDLHoGRm/KMdCCVkci0w0i723zQdu6tFHbwUoY9Gkpp13EbKQwVRnYZrrsXwvBQQYHVNIrJZlj3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b3b27b50090so838621466b.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 11:11:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760377272; x=1760982072;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UltuTfLMWFwExhawJAiiHDqM2t3dFAy15foosSKHKoI=;
-        b=SdDFAwH+CGQeO7RNhVBB5kljmmZeIV6OU9L8VCqaYLB6jdHl4ULj0GnuWvjlA2zLvv
-         T2DbiKIJL53rgE5g/eulyicFZ2L8oGSt8chdhdCpRI7pweLAETi9JLe8qAvxpgM2XDOV
-         Wd8KZW5dbPAQXYBM8eMoa7ITgsXXdl5hztSQmexbu4VMua24WzSmEssTctou/zODZA3n
-         s2q0u4oJAKI4iCI+9GnLaKZ9FhKV0EtuEb1OYTFP6NkxOpswFw0wUmJH0q2toPWxSTCU
-         QA8sPtAapjCank2LCK+5Ng1nRFzRnKUYKXHR8PyQ+Lpx070j0529zYgEBeiv2i6iiRMg
-         Xomg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3vksbJa7nlQO5UJXtqn/Uh+Q4nSljWWf8fs3n0uasqpMi2jtgVRwzs1uYlMf0wogQIBPoRSOF3hA20I0Rau4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMHXMD8D8+wBpbXdj2345HTix3gmjUIo7vF4CXgF8UEqkan3KM
-	r9Mmo9a+tF9SLxsN+zEbDlOdzS9QmRsfF1bEXzLgkWwnTkfX2JTJvNVMxMgepRqJnjg=
-X-Gm-Gg: ASbGncsKk4xsoxnhe5XiMLaNk8zoqFsfdwgoJJ3r0W2JPGt9Sf05v4yIkqodkMW4/rD
-	G6QvTXVGDyJLMMMGbZYur61cR39OU+ClXSBrrt9f+2uqjlusk/A9leOpwjCod6Sd2rCXSnZqkSK
-	wQ65h3uJzk4BONMf+xfbllE2/F5Ku0NxadfrbVZljvyDgnstLMxPy3I9X3stio+Dp/FeBrteXhG
-	etGDR+Np6hJFq3rLHnG3dHk06lWihrFu6RbeqzKvp1+1xa4cBRN0md290OEX7TofL9+6ODkubU9
-	juJI6IbchWY/r1l+TVSkr6+OoRo2KkNQ3ry/LAQz0FAJcJrC5Mkdkl9gCDdqkxG6CNRXilMvbDx
-	3ERNJl75xGilC/IXxhCOutUxn435KqsNa30dQh69PcMM=
-X-Google-Smtp-Source: AGHT+IGksZJATtR9dICb9YFDLoYCnIOn9SbEaI89/f+xN2pNKg219Slp1yc0ndJtssXs/Ex7tkdSVw==
-X-Received: by 2002:a05:6602:740e:b0:887:638a:29b5 with SMTP id ca18e2360f4ac-93bd1975876mr2285945239f.9.1760377272238;
-        Mon, 13 Oct 2025 10:41:12 -0700 (PDT)
-Received: from localhost ([140.82.166.162])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-58f729ce111sm3807015173.58.2025.10.13.10.41.11
+        d=1e100.net; s=20230601; t=1760379064; x=1760983864;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NktohjsRp1hmfKBBZVJM9FY0NL3mIXRdvn/tPXzoAnk=;
+        b=upRG2PA+fxeuJnt/b4IO7l600TsO+MPsGqxxTFGD7gECSKNgfR2qp9dXWQM7fj3tYs
+         8Bpmnoej1zXtupBUHeLv9ZdUJwQcwR3XRAWm7S2hxQZ7WtjClYDMuOOl1ipw9aBCqAA3
+         U/7JE6OuKN3ePil6tkmzJ/Va4dReLW9QUL00Q3SYTjpmpxkjOPkwRCOL+lYDrqn75i+G
+         YptQHuoyWSarLH4r3HlbYO0v2qDjcVlfhi8wffAE00tp1bGY3qK5/PBAA9q8BBKRGXy9
+         rczAhKutEzYrksYcpw5yKqZIBVmfqG+HJP8F/lLitniwzJnrsrO52uB+73C6UpQhuzdA
+         E7uw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/ABiF3ZNAxuP6zIQePTaSFfevjCAl/mJgLojQ8B8GtLkpUEBw0XT44RAWdxpKsvYlvWiyt8MwYfGpRXcHvAg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjzSD3dPmkLKF01PTwD0R1NpcntnjYv2Tk0uBk96k0Qypa2fuo
+	9Ku09fRJsJXs2NBppc8h6iqrw7Yc/HrZdtpbL1e0WAgfhvW5ZBzTU7KK
+X-Gm-Gg: ASbGncu6CgfDaZMA/WOxqX01yM/NvX1ykzvUJW9tqXFBtO/D9kbxjYNtgHF27HpJhR5
+	pnmDNSVpGeBXVWlWdnN+DGbUiV0HvCYBPbRJTduIoEPc/U5ouinzpzMvqwNZjTsj25gqKb+32Nm
+	lxqPJ6GTCZq7yGwg9fnaSFPH+SLw9/ymFmL8qP769PxIeTRKZb/gN+4X2lRNNp7JjNLQYToW1De
+	44GT4nUkiZ6t8CIgR44iiOEjeJ/eTg06IazuTePKrtLLBRZGp/J3vRhJIYsedxhFwCMv9HFKT49
+	xm9csKQlA3Gq80qY+AV9HFULu+z7loiffsS3z6qeKmVovh8MOAqE7+fm/ZtiOPTiyI/rcgzYDcH
+	0LCTy6NqzUXAIxSkh33ec/LKyfxoUN5JKEU9C89MbAXsAnw==
+X-Google-Smtp-Source: AGHT+IHbes+6c9B6vBDGbbc0VnnI9qPJtLLBClW/BkZx58Er6Zqt3ZVOHaRjm9I+D9i4QTYnlUSGfA==
+X-Received: by 2002:a17:907:7f8f:b0:b4e:a47f:7157 with SMTP id a640c23a62f3a-b50aa9a1d23mr2461363366b.19.1760379063674;
+        Mon, 13 Oct 2025 11:11:03 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:7::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b55d8c12c48sm980952466b.50.2025.10.13.11.11.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Oct 2025 10:41:11 -0700 (PDT)
-Date: Mon, 13 Oct 2025 12:41:11 -0500
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Yao Zihong <zihong.plct@isrc.iscas.ac.cn>
-Cc: alex@ghiti.fr, alexghiti@rivosinc.com, aou@eecs.berkeley.edu, 
-	cleger@rivosinc.com, evan@rivosinc.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, palmer@dabbelt.com, 
-	pjw@kernel.org, samuel.holland@sifive.com, shuah@kernel.org, 
-	zhangyin2018@iscas.ac.cn, zihongyao@outlook.com
-Subject: Re: [PATCH v2 4/4] selftests/riscv: Add Zicbop prefetch test
-Message-ID: <20251013-b0cf6d4c5952c56cd489eca9@orel>
-References: <20251009-49032bae395a1c26cbe80928@orel>
- <20251013161645.29357-1-zihong.plct@isrc.iscas.ac.cn>
+        Mon, 13 Oct 2025 11:11:03 -0700 (PDT)
+Date: Mon, 13 Oct 2025 11:11:00 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	david decotigny <decot@googlers.com>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de, calvin@wbinvd.org, 
+	kernel-team@meta.com, jv@jvosburgh.net
+Subject: Re: [PATCH net v7 4/4] selftest: netcons: add test for netconsole
+ over bonded interfaces
+Message-ID: <3aozzslkx7jpiabyvey3562i57ogqkw2wb4xfp7uazidj572p6@jg6lw5dzxxto>
+References: <20251003-netconsole_torture-v7-0-aa92fcce62a9@debian.org>
+ <20251003-netconsole_torture-v7-4-aa92fcce62a9@debian.org>
+ <e6764450-b0f8-4f50-b761-6321dfe2ad71@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251013161645.29357-1-zihong.plct@isrc.iscas.ac.cn>
+In-Reply-To: <e6764450-b0f8-4f50-b761-6321dfe2ad71@redhat.com>
 
-On Tue, Oct 14, 2025 at 12:16:41AM +0800, Yao Zihong wrote:
-> Thanks for the review, I’ll fix those issues in the next revision.
+On Tue, Oct 07, 2025 at 11:47:22AM +0200, Paolo Abeni wrote:
+> On 10/3/25 1:57 PM, Breno Leitao wrote:
+> > +# Clean up netdevsim ifaces created for bonding test
+> > +function cleanup_bond_nsim() {
+> > +	echo "$NSIM_BOND_TX_1" > "$NSIM_DEV_SYS_DEL"
+> > +	echo "$NSIM_BOND_TX_2" > "$NSIM_DEV_SYS_DEL"
+> > +	echo "$NSIM_BOND_RX_1" > "$NSIM_DEV_SYS_DEL"
+> > +	echo "$NSIM_BOND_RX_2" > "$NSIM_DEV_SYS_DEL"
+> > +	cleanup_all_ns
 > 
-> Also, do you think it’s worth renaming cbo.c to something more generic
-> (like zicbo.c), or should I keep the current name for consistency?
+> If all devices are created in child netns, you will not need explicit
+> per device cleanup.
 
-The cbo (cache-block operations) name represents all the cbo.*
-instructions and all the prefetch.* instructions, just as section 2.2
-"Cache-Block Operations" of the CMO spec introduces all of them under
-the same heading.
+Humm, that is what I was expecting as well, but, when I tried it, I found that
+the interfaces got re-pareted by the main network namespace when the namespace
+is deleted.
 
-Thanks,
-drew
+
+For instance, in the following example, eth1 belongs to namespace `ns1`, and
+when I delete it, it then moves to the main network namespace:
+
+	# ip link
+
+	# ip -n ns1 link
+	3: eth1: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+	link/ether d2:3d:b3:3b:59:37 brd ff:ff:ff:ff:ff:ff
+	altname eni1np1
+
+	# ip netns delete ns1
+
+	# ip link
+	1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+	link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+	3: eth1: <BROADCAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+	link/ether d2:3d:b3:3b:59:37 brd ff:ff:ff:ff:ff:ff
+	altname eni1np1
 
